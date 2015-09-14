@@ -113,7 +113,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkTreeViewColumn" id="printer_name_column">
-                                    <property name="title" translatable="1">Printer</property>
+                                    <property name="title" translatable="yes">Printer</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="printer_name_renderer"/>
                                       <attributes>
@@ -124,7 +124,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkTreeViewColumn" id="printer_location_column">
-                                    <property name="title" translatable="1" comments="this is the header for the location column in the print dialog">Location</property>
+                                    <property name="title" translatable="yes" comments="this is the header for the location column in the print dialog">Location</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="printer_location_renderer"/>
                                       <attributes>
@@ -135,7 +135,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkTreeViewColumn" id="printer_status_column">
-                                    <property name="title" translatable="1" comments="this is the header for the printer status column in the print dialog">Status</property>
+                                    <property name="title" translatable="yes" comments="this is the header for the printer status column in the print dialog">Status</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="printer_status_renderer">
                                         <property name="ellipsize">end</property>
@@ -182,7 +182,7 @@
                                 <property name="visible">1</property>
                                 <property name="halign">start</property>
                                 <property name="valign">center</property>
-                                <property name="label" translatable="1">Range</property>
+                                <property name="label" translatable="yes">Range</property>
                                 <attributes>
                                   <attribute name="weight" value="bold"/>
                                 </attributes>
@@ -202,7 +202,7 @@
                                 <property name="column_spacing">12</property>
                                 <child>
                                   <object class="GtkRadioButton" id="all_pages_radio">
-                                    <property name="label" translatable="1">_All Pages</property>
+                                    <property name="label" translatable="yes">_All Pages</property>
                                     <property name="visible">1</property>
                                     <property name="can_focus">1</property>
                                     <property name="use_underline">1</property>
@@ -217,7 +217,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkRadioButton" id="current_page_radio">
-                                    <property name="label" translatable="1">C_urrent Page</property>
+                                    <property name="label" translatable="yes">C_urrent Page</property>
                                     <property name="visible">1</property>
                                     <property name="sensitive">0</property>
                                     <property name="can_focus">1</property>
@@ -234,7 +234,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkRadioButton" id="selection_radio">
-                                    <property name="label" translatable="1">Se_lection</property>
+                                    <property name="label" translatable="yes">Se_lection</property>
                                     <property name="sensitive">0</property>
                                     <property name="can_focus">1</property>
                                     <property name="use_underline">1</property>
@@ -250,10 +250,10 @@
                                 </child>
                                 <child>
                                   <object class="GtkRadioButton" id="page_range_radio">
-                                    <property name="label" translatable="1">Pag_es:</property>
+                                    <property name="label" translatable="yes">Pag_es:</property>
                                     <property name="visible">1</property>
                                     <property name="can_focus">1</property>
-                                    <property name="tooltip_text" translatable="1">Specify one or more page ranges,
+                                    <property name="tooltip_text" translatable="yes">Specify one or more page ranges,
  e.g. 1–3, 7, 11</property>
                                     <property name="use_underline">1</property>
                                     <property name="active">1</property>
@@ -271,14 +271,14 @@
                                     <property name="visible">1</property>
                                     <property name="sensitive">0</property>
                                     <property name="can_focus">1</property>
-                                    <property name="tooltip_text" translatable="1">Specify one or more page ranges,
+                                    <property name="tooltip_text" translatable="yes">Specify one or more page ranges,
  e.g. 1–3, 7, 11</property>
                                     <property name="invisible_char">•</property>
                                     <property name="activates_default">1</property>
                                     <child internal-child="accessible">
                                       <object class="AtkObject" id="page_range_entry-atkobject">
-                                        <property name="AtkObject::accessible-name" translatable="1">Pages</property>
-                                        <property name="AtkObject::accessible-description" translatable="1">Specify one or more page ranges,
+                                        <property name="AtkObject::accessible-name" translatable="yes">Pages</property>
+                                        <property name="AtkObject::accessible-description" translatable="yes">Specify one or more page ranges,
  e.g. 1–3, 7, 11</property>
                                       </object>
                                     </child>
@@ -312,7 +312,7 @@
                                 <property name="visible">1</property>
                                 <property name="halign">start</property>
                                 <property name="valign">center</property>
-                                <property name="label" translatable="1">Copies</property>
+                                <property name="label" translatable="yes">Copies</property>
                                 <attributes>
                                   <attribute name="weight" value="bold"/>
                                 </attributes>
@@ -335,7 +335,7 @@
                                     <property name="visible">1</property>
                                     <property name="halign">start</property>
                                     <property name="valign">center</property>
-                                    <property name="label" translatable="1">Copie_s:</property>
+                                    <property name="label" translatable="yes">Copie_s:</property>
                                     <property name="use_underline">1</property>
                                     <property name="mnemonic_widget">copies_spin</property>
                                   </object>
@@ -361,7 +361,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="collate_check">
-                                    <property name="label" translatable="1">C_ollate</property>
+                                    <property name="label" translatable="yes">C_ollate</property>
                                     <property name="visible">1</property>
                                     <property name="can_focus">1</property>
                                     <property name="use_underline">1</property>
@@ -375,7 +375,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="reverse_check">
-                                    <property name="label" translatable="1">_Reverse</property>
+                                    <property name="label" translatable="yes">_Reverse</property>
                                     <property name="visible">1</property>
                                     <property name="can_focus">1</property>
                                     <property name="use_underline">1</property>
@@ -426,7 +426,7 @@
                 <child type="tab">
                   <object class="GtkLabel" id="label1">
                     <property name="visible">1</property>
-                    <property name="label" translatable="1">General</property>
+                    <property name="label" translatable="yes">General</property>
                   </object>
                   <packing>
                     <property name="tab_fill">0</property>
@@ -452,7 +452,7 @@
                                 <property name="visible">1</property>
                                 <property name="halign">start</property>
                                 <property name="valign">center</property>
-                                <property name="label" translatable="1">Layout</property>
+                                <property name="label" translatable="yes">Layout</property>
                                 <attributes>
                                   <attribute name="weight" value="bold"/>
                                 </attributes>
@@ -475,7 +475,7 @@
                                     <property name="visible">1</property>
                                     <property name="halign">start</property>
                                     <property name="valign">baseline</property>
-                                    <property name="label" translatable="1">T_wo-sided:</property>
+                                    <property name="label" translatable="yes">T_wo-sided:</property>
                                     <property name="use_underline">1</property>
                                     <property name="mnemonic_widget">duplex</property>
                                   </object>
@@ -500,7 +500,7 @@
                                     <property name="visible">1</property>
                                     <property name="halign">start</property>
                                     <property name="valign">baseline</property>
-                                    <property name="label" translatable="1">Pages per _side:</property>
+                                    <property name="label" translatable="yes">Pages per _side:</property>
                                     <property name="use_underline">1</property>
                                     <property name="mnemonic_widget">pages_per_sheet</property>
                                   </object>
@@ -527,7 +527,7 @@
                                     <property name="visible">1</property>
                                     <property name="halign">start</property>
                                     <property name="valign">baseline</property>
-                                    <property name="label" translatable="1">Page or_dering:</property>
+                                    <property name="label" translatable="yes">Page or_dering:</property>
                                     <property name="use_underline">1</property>
                                     <property name="mnemonic_widget">number_up_layout</property>
                                   </object>
@@ -553,7 +553,7 @@
                                     <property name="visible">1</property>
                                     <property name="halign">start</property>
                                     <property name="valign">baseline</property>
-                                    <property name="label" translatable="1">_Only print:</property>
+                                    <property name="label" translatable="yes">_Only print:</property>
                                     <property name="use_underline">1</property>
                                     <property name="mnemonic_widget">page_set_combo</property>
                                   </object>
@@ -585,7 +585,7 @@
                                     <property name="visible">1</property>
                                     <property name="halign">start</property>
                                     <property name="valign">baseline</property>
-                                    <property name="label" translatable="1">Sc_ale:</property>
+                                    <property name="label" translatable="yes">Sc_ale:</property>
                                     <property name="use_underline">1</property>
                                     <property name="mnemonic_widget">scale_spin</property>
                                   </object>
@@ -648,7 +648,7 @@
                                 <property name="visible">1</property>
                                 <property name="halign">start</property>
                                 <property name="valign">center</property>
-                                <property name="label" translatable="1">Paper</property>
+                                <property name="label" translatable="yes">Paper</property>
                                 <attributes>
                                   <attribute name="weight" value="bold"/>
                                 </attributes>
@@ -671,7 +671,7 @@
                                     <property name="visible">1</property>
                                     <property name="halign">start</property>
                                     <property name="valign">baseline</property>
-                                    <property name="label" translatable="1">Paper _type:</property>
+                                    <property name="label" translatable="yes">Paper _type:</property>
                                     <property name="use_underline">1</property>
                                     <property name="mnemonic_widget">paper_type</property>
                                   </object>
@@ -696,7 +696,7 @@
                                     <property name="visible">1</property>
                                     <property name="halign">start</property>
                                     <property name="valign">baseline</property>
-                                    <property name="label" translatable="1">Paper _source:</property>
+                                    <property name="label" translatable="yes">Paper _source:</property>
                                     <property name="use_underline">1</property>
                                     <property name="mnemonic_widget">paper_source</property>
                                   </object>
@@ -721,7 +721,7 @@
                                     <property name="visible">1</property>
                                     <property name="halign">start</property>
                                     <property name="valign">baseline</property>
-                                    <property name="label" translatable="1">Output t_ray:</property>
+                                    <property name="label" translatable="yes">Output t_ray:</property>
                                     <property name="use_underline">1</property>
                                     <property name="mnemonic_widget">output_tray</property>
                                   </object>
@@ -746,7 +746,7 @@
                                     <property name="visible">1</property>
                                     <property name="halign">start</property>
                                     <property name="valign">baseline</property>
-                                    <property name="label" translatable="1">_Paper size:</property>
+                                    <property name="label" translatable="yes">_Paper size:</property>
                                     <property name="use_underline">1</property>
                                     <property name="mnemonic_widget">paper_size_combo</property>
                                   </object>
@@ -775,7 +775,7 @@
                                     <property name="visible">1</property>
                                     <property name="halign">start</property>
                                     <property name="valign">baseline</property>
-                                    <property name="label" translatable="1">Or_ientation:</property>
+                                    <property name="label" translatable="yes">Or_ientation:</property>
                                     <property name="use_underline">1</property>
                                     <property name="mnemonic_widget">orientation_combo</property>
                                   </object>
@@ -853,7 +853,7 @@
                 <child type="tab">
                   <object class="GtkLabel" id="label2">
                     <property name="visible">1</property>
-                    <property name="label" translatable="1">Page Setup</property>
+                    <property name="label" translatable="yes">Page Setup</property>
                   </object>
                   <packing>
                     <property name="position">1</property>
@@ -875,7 +875,7 @@
                             <property name="visible">1</property>
                             <property name="halign">start</property>
                             <property name="valign">center</property>
-                            <property name="label" translatable="1">Job Details</property>
+                            <property name="label" translatable="yes">Job Details</property>
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>
@@ -898,7 +898,7 @@
                                 <property name="visible">1</property>
                                 <property name="halign">start</property>
                                 <property name="valign">center</property>
-                                <property name="label" translatable="1">Pri_ority:</property>
+                                <property name="label" translatable="yes">Pri_ority:</property>
                                 <property name="use_underline">1</property>
                                 <property name="mnemonic_widget">job_prio</property>
                               </object>
@@ -922,7 +922,7 @@
                                 <property name="visible">1</property>
                                 <property name="halign">start</property>
                                 <property name="valign">center</property>
-                                <property name="label" translatable="1">_Billing info:</property>
+                                <property name="label" translatable="yes">_Billing info:</property>
                                 <property name="use_underline">1</property>
                                 <property name="mnemonic_widget">billing_info</property>
                               </object>
@@ -966,7 +966,7 @@
                             <property name="visible">1</property>
                             <property name="halign">start</property>
                             <property name="valign">center</property>
-                            <property name="label" translatable="1">Print Document</property>
+                            <property name="label" translatable="yes">Print Document</property>
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>
@@ -986,7 +986,7 @@
                             <property name="column_spacing">12</property>
                             <child>
                               <object class="GtkRadioButton" id="print_now_radio">
-                                <property name="label" translatable="1" comments="this is one of the choices for the print at option in the print dialog">_Now</property>
+                                <property name="label" translatable="yes" comments="this is one of the choices for the print at option in the print dialog">_Now</property>
                                 <property name="visible">1</property>
                                 <property name="can_focus">1</property>
                                 <property name="use_underline">1</property>
@@ -1002,13 +1002,13 @@
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="print_at_radio">
-                                <property name="label" translatable="1" comments="this is one of the choices for the print at option in the print dialog. It also serves as the label for an entry that allows the user to enter a time.">A_t:</property>
+                                <property name="label" translatable="yes" comments="this is one of the choices for the print at option in the print dialog. It also serves as the label for an entry that allows the user to enter a time.">A_t:</property>
                                 <property name="visible">1</property>
                                 <property name="can_focus">1</property>
                                 <property name="has_tooltip">1</property>
-                                <property name="tooltip_markup" translatable="1">Specify the time of print,
+                                <property name="tooltip_markup" translatable="yes">Specify the time of print,
  e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm</property>
-                                <property name="tooltip_text" translatable="1" comments="Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.">Specify the time of print,
+                                <property name="tooltip_text" translatable="yes" comments="Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.">Specify the time of print,
  e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm</property>
                                 <property name="use_underline">1</property>
                                 <property name="draw_indicator">1</property>
@@ -1027,16 +1027,16 @@
                                 <property name="sensitive">0</property>
                                 <property name="can_focus">1</property>
                                 <property name="has_tooltip">1</property>
-                                <property name="tooltip_markup" translatable="1">Specify the time of print,
+                                <property name="tooltip_markup" translatable="yes">Specify the time of print,
  e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm</property>
-                                <property name="tooltip_text" translatable="1" comments="Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.">Specify the time of print,
+                                <property name="tooltip_text" translatable="yes" comments="Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.">Specify the time of print,
  e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm</property>
                                 <property name="invisible_char">•</property>
                                 <property name="invisible_char_set">1</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="print_at_entry-atkobject">
-                                    <property name="AtkObject::accessible-name" translatable="1">Time of print</property>
-                                    <property name="AtkObject::accessible-description" translatable="1">Specify the time of print,
+                                    <property name="AtkObject::accessible-name" translatable="yes">Time of print</property>
+                                    <property name="AtkObject::accessible-description" translatable="yes">Specify the time of print,
  e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm</property>
                                   </object>
                                 </child>
@@ -1049,12 +1049,12 @@
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="print_hold_radio">
-                                <property name="label" translatable="1" comments="this is one of the choices for the print at option in the print dialog. It means that the print job will not be printed until it explicitly gets &apos;released&apos;.">On _hold</property>
+                                <property name="label" translatable="yes" comments="this is one of the choices for the print at option in the print dialog. It means that the print job will not be printed until it explicitly gets &apos;released&apos;.">On _hold</property>
                                 <property name="visible">1</property>
                                 <property name="can_focus">1</property>
                                 <property name="has_tooltip">1</property>
-                                <property name="tooltip_markup" translatable="1">Hold the job until it is explicitly released</property>
-                                <property name="tooltip_text" translatable="1">Hold the job until it is explicitly released</property>
+                                <property name="tooltip_markup" translatable="yes">Hold the job until it is explicitly released</property>
+                                <property name="tooltip_text" translatable="yes">Hold the job until it is explicitly released</property>
                                 <property name="use_underline">1</property>
                                 <property name="draw_indicator">1</property>
                                 <property name="group">print_now_radio</property>
@@ -1091,7 +1091,7 @@
                             <property name="visible">1</property>
                             <property name="halign">start</property>
                             <property name="valign">center</property>
-                            <property name="label" translatable="1">Add Cover Page</property>
+                            <property name="label" translatable="yes">Add Cover Page</property>
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>
@@ -1114,7 +1114,7 @@
                                 <property name="visible">1</property>
                                 <property name="halign">start</property>
                                 <property name="valign">center</property>
-                                <property name="label" translatable="1" comments="this is the label used for the option in the print dialog that controls the front cover page.">Be_fore:</property>
+                                <property name="label" translatable="yes" comments="this is the label used for the option in the print dialog that controls the front cover page.">Be_fore:</property>
                                 <property name="use_underline">1</property>
                                 <property name="mnemonic_widget">cover_before</property>
                               </object>
@@ -1138,7 +1138,7 @@
                                 <property name="visible">1</property>
                                 <property name="halign">start</property>
                                 <property name="valign">center</property>
-                                <property name="label" translatable="1" comments="this is the label used for the option in the print dialog that controls the back cover page.">_After:</property>
+                                <property name="label" translatable="yes" comments="this is the label used for the option in the print dialog that controls the back cover page.">_After:</property>
                                 <property name="use_underline">1</property>
                                 <property name="mnemonic_widget">cover_after</property>
                               </object>
@@ -1180,7 +1180,7 @@
                 <child type="tab">
                   <object class="GtkLabel" id="label3">
                     <property name="visible">1</property>
-                    <property name="label" translatable="1">Job</property>
+                    <property name="label" translatable="yes">Job</property>
                   </object>
                   <packing>
                     <property name="position">2</property>
@@ -1213,7 +1213,7 @@
                 <child type="tab">
                   <object class="GtkLabel" id="label20">
                     <property name="visible">1</property>
-                    <property name="label" translatable="1" comments="This will appear as a tab label in the print dialog.">Image Quality</property>
+                    <property name="label" translatable="yes" comments="This will appear as a tab label in the print dialog.">Image Quality</property>
                   </object>
                   <packing>
                     <property name="position">3</property>
@@ -1246,7 +1246,7 @@
                 <child type="tab">
                   <object class="GtkLabel" id="label21">
                     <property name="visible">1</property>
-                    <property name="label" translatable="1" comments="This will appear as a tab label in the print dialog.">Color</property>
+                    <property name="label" translatable="yes" comments="This will appear as a tab label in the print dialog.">Color</property>
                   </object>
                   <packing>
                     <property name="position">4</property>
@@ -1279,7 +1279,7 @@
                 <child type="tab">
                   <object class="GtkLabel" id="label22">
                     <property name="visible">1</property>
-                    <property name="label" translatable="1" comments="This will appear as a tab label in the print dialog. It&apos;s a typographical term, as in &quot;Binding and finishing&quot;">Finishing</property>
+                    <property name="label" translatable="yes" comments="This will appear as a tab label in the print dialog. It&apos;s a typographical term, as in &quot;Binding and finishing&quot;">Finishing</property>
                   </object>
                   <packing>
                     <property name="position">5</property>
@@ -1312,7 +1312,7 @@
                 <child type="tab">
                   <object class="GtkLabel" id="label23">
                     <property name="visible">1</property>
-                    <property name="label" translatable="1">Advanced</property>
+                    <property name="label" translatable="yes">Advanced</property>
                   </object>
                   <packing>
                     <property name="position">6</property>
@@ -1336,7 +1336,7 @@
                 <child>
                   <object class="GtkLabel" id="label24">
                     <property name="visible">1</property>
-                    <property name="label" translatable="1">Some of the settings in the dialog conflict</property>
+                    <property name="label" translatable="yes">Some of the settings in the dialog conflict</property>
                   </object>
                 </child>
               </object>

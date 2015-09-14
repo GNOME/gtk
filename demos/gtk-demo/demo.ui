@@ -24,8 +24,8 @@
     </data>
   </object>
   <object class="GtkAboutDialog" id="aboutdialog1">
-    <property name="program-name" translatable="1">Builder demo</property>
-    <property name="logo-icon-name" translatable="1">gtk3-demo</property>
+    <property name="program-name" translatable="yes">Builder demo</property>
+    <property name="logo-icon-name" translatable="yes">gtk3-demo</property>
     <accessibility>
       <relation target="window1" type="subwindow-of"/>
     </accessibility>
@@ -33,7 +33,7 @@
   <object class="GtkWindow" id="window1">
     <property name="default_height">250</property>
     <property name="default_width">440</property>
-    <property name="title" translatable="1">Builder</property>
+    <property name="title" translatable="yes">Builder</property>
     <child>
       <object class="GtkVBox" id="vbox1">
         <property name="visible">1</property>
@@ -48,35 +48,35 @@
             <child>
               <object class="GtkMenuItem">
                 <property name="visible">1</property>
-                <property name="label" translatable="1">_File</property>
+                <property name="label" translatable="yes">_File</property>
                 <property name="use-underline">1</property>
                 <child type="submenu">
                   <object class="GtkMenu">
                     <child>
                       <object class="GtkMenuItem" id="new_item">
                         <property name="visible">1</property>
-                        <property name="label" translatable="1">_New</property>
+                        <property name="label" translatable="yes">_New</property>
                         <property name="use-underline">1</property>
                       </object>
                     </child>
                     <child>
                       <object class="GtkMenuItem" id="open_item">
                         <property name="visible">1</property>
-                        <property name="label" translatable="1">_Open</property>
+                        <property name="label" translatable="yes">_Open</property>
                         <property name="use-underline">1</property>
                       </object>
                     </child>
                     <child>
                       <object class="GtkMenuItem" id="save_item">
                         <property name="visible">1</property>
-                        <property name="label" translatable="1">_Save</property>
+                        <property name="label" translatable="yes">_Save</property>
                         <property name="use-underline">1</property>
                       </object>
                     </child>
                     <child>
                       <object class="GtkMenuItem" id="save_as_item">
                         <property name="visible">1</property>
-                        <property name="label" translatable="1">Save _As</property>
+                        <property name="label" translatable="yes">Save _As</property>
                         <property name="use-underline">1</property>
                       </object>
                     </child>
@@ -88,7 +88,7 @@
                     <child>
                       <object class="GtkMenuItem" id="quit_item">
                         <property name="visible">1</property>
-                        <property name="label" translatable="1">_Quit</property>
+                        <property name="label" translatable="yes">_Quit</property>
                         <property name="use-underline">1</property>
                         <property name="action-name">win.quit</property>
                       </object>
@@ -100,28 +100,28 @@
             <child>
               <object class="GtkMenuItem">
                 <property name="visible">1</property>
-                <property name="label" translatable="1">_Edit</property>
+                <property name="label" translatable="yes">_Edit</property>
                 <property name="use-underline">1</property>
                 <child type="submenu">
                   <object class="GtkMenu">
                     <child>
                       <object class="GtkMenuItem" id="copy_item">
                         <property name="visible">1</property>
-                        <property name="label" translatable="1">_Copy</property>
+                        <property name="label" translatable="yes">_Copy</property>
                         <property name="use-underline">1</property>
                       </object>
                     </child>
                     <child>
                       <object class="GtkMenuItem" id="cut_item">
                         <property name="visible">1</property>
-                        <property name="label" translatable="1">_Cut</property>
+                        <property name="label" translatable="yes">_Cut</property>
                         <property name="use-underline">1</property>
                       </object>
                     </child>
                     <child>
                       <object class="GtkMenuItem" id="paste_item">
                         <property name="visible">1</property>
-                        <property name="label" translatable="1">_Paste</property>
+                        <property name="label" translatable="yes">_Paste</property>
                         <property name="use-underline">1</property>
                       </object>
                     </child>
@@ -132,14 +132,14 @@
             <child>
               <object class="GtkMenuItem">
                 <property name="visible">1</property>
-                <property name="label" translatable="1">_Help</property>
+                <property name="label" translatable="yes">_Help</property>
                 <property name="use-underline">1</property>
                 <child type="submenu">
                   <object class="GtkMenu">
                     <child>
                       <object class="GtkMenuItem" id="help_item">
                         <property name="visible">1</property>
-                        <property name="label" translatable="1">_Help</property>
+                        <property name="label" translatable="yes">_Help</property>
                         <property name="use-underline">1</property>
                         <property name="action-name">win.help</property>
                       </object>
@@ -147,7 +147,7 @@
                     <child>
                       <object class="GtkMenuItem" id="about_item">
                         <property name="visible">1</property>
-                        <property name="label" translatable="1">_About</property>
+                        <property name="label" translatable="yes">_About</property>
                         <property name="use-underline">1</property>
                         <property name="action-name">win.about</property>
                       </object>
@@ -169,24 +169,24 @@
             <child>
               <object class="GtkToolButton">
                 <property name="visible">1</property>
-                <property name="label" translatable="1">New</property>
-                <property name="tooltip-text" translatable="1">Create a new file</property>
+                <property name="label" translatable="yes">New</property>
+                <property name="tooltip-text" translatable="yes">Create a new file</property>
                 <property name="icon-name">document-new</property>
               </object>
             </child>
             <child>
               <object class="GtkToolButton">
                 <property name="visible">1</property>
-                <property name="label" translatable="1">Open</property>
-                <property name="tooltip-text" translatable="1">Open a file</property>
+                <property name="label" translatable="yes">Open</property>
+                <property name="tooltip-text" translatable="yes">Open a file</property>
                 <property name="icon-name">document-open</property>
               </object>
             </child>
             <child>
               <object class="GtkToolButton">
                 <property name="visible">1</property>
-                <property name="label" translatable="1">Save</property>
-                <property name="tooltip-text" translatable="1">Save a file</property>
+                <property name="label" translatable="yes">Save</property>
+                <property name="tooltip-text" translatable="yes">Save a file</property>
                 <property name="icon-name">document-save</property>
                 <property name="is-important">1</property>
               </object>
@@ -199,24 +199,24 @@
             <child>
               <object class="GtkToolButton">
                 <property name="visible">1</property>
-                <property name="label" translatable="1">Copy</property>
-                <property name="tooltip-text" translatable="1">Copy selected object into the clipboard</property>
+                <property name="label" translatable="yes">Copy</property>
+                <property name="tooltip-text" translatable="yes">Copy selected object into the clipboard</property>
                 <property name="icon-name">edit-copy</property>
               </object>
             </child>
             <child>
               <object class="GtkToolButton">
                 <property name="visible">1</property>
-                <property name="label" translatable="1">Cut</property>
-                <property name="tooltip-text" translatable="1">Cut selected object into the clipboard</property>
+                <property name="label" translatable="yes">Cut</property>
+                <property name="tooltip-text" translatable="yes">Cut selected object into the clipboard</property>
                 <property name="icon-name">edit-cut</property>
               </object>
             </child>
             <child>
               <object class="GtkToolButton">
                 <property name="visible">1</property>
-                <property name="label" translatable="1">Paste</property>
-                <property name="tooltip-text" translatable="1">Paste object from the clipboard</property>
+                <property name="label" translatable="yes">Paste</property>
+                <property name="tooltip-text" translatable="yes">Paste object from the clipboard</property>
                 <property name="icon-name">edit-paste</property>
               </object>
             </child>

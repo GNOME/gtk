@@ -16,7 +16,7 @@
             <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
             <property name="use_action_appearance">0</property>
-            <property name="label" translatable="1">Normal</property>
+            <property name="label" translatable="yes">Normal</property>
             <property name="use_underline">1</property>
             <property name="is_important">1</property>
             <property name="icon_name">edit-find</property>
@@ -30,7 +30,7 @@
             <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
             <property name="use_action_appearance">0</property>
-            <property name="label" translatable="1">Active</property>
+            <property name="label" translatable="yes">Active</property>
             <property name="use_underline">1</property>
             <property name="is_important">1</property>
             <property name="icon_name">edit-find</property>
@@ -45,7 +45,7 @@
             <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
             <property name="sensitive">0</property>
-            <property name="label" translatable="1">Insensitive</property>
+            <property name="label" translatable="yes">Insensitive</property>
             <property name="use_underline">1</property>
             <property name="is_important">1</property>
             <property name="icon_name">edit-find</property>
@@ -58,7 +58,7 @@
           <object class="GtkToggleToolButton" id="toolbutton5">
             <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
-            <property name="label" translatable="1">Raised</property>
+            <property name="label" translatable="yes">Raised</property>
             <property name="use_underline">1</property>
             <property name="is_important">1</property>
             <property name="icon_name">edit-find-symbolic</property>
@@ -74,7 +74,7 @@
           <object class="GtkToggleToolButton" id="toolbutton6">
             <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
-            <property name="label" translatable="1">Raised Active</property>
+            <property name="label" translatable="yes">Raised Active</property>
             <property name="use_underline">1</property>
             <property name="is_important">1</property>
             <property name="icon_name">edit-find-symbolic</property>
@@ -92,7 +92,7 @@
             <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
             <property name="sensitive">0</property>
-            <property name="label" translatable="1">Insensitive Active</property>
+            <property name="label" translatable="yes">Insensitive Active</property>
             <property name="use_underline">1</property>
             <property name="icon_name">edit-find</property>
             <property name="is_important">1</property>
@@ -111,7 +111,7 @@
                 <property name="visible">1</property>
                 <property name="can_focus">1</property>
                 <property name="invisible_char">•</property>
-                <property name="placeholder-text" translatable="1">Search...</property>
+                <property name="placeholder-text" translatable="yes">Search...</property>
                 <property name="secondary-icon-name">edit-find-symbolic</property>
               </object>
             </child>
@@ -141,7 +141,7 @@
         </style>
         <child>
           <object class="GtkButton" id="button1">
-            <property name="label" translatable="1">Hi, I am a button</property>
+            <property name="label" translatable="yes">Hi, I am a button</property>
             <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
             <property name="can_focus">1</property>
@@ -151,7 +151,7 @@
         </child>
         <child>
           <object class="GtkButton" id="button2">
-            <property name="label" translatable="1">And I&apos;m another button</property>
+            <property name="label" translatable="yes">And I&apos;m another button</property>
             <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
             <property name="can_focus">1</property>
@@ -164,7 +164,7 @@
         </child>
         <child>
           <object class="GtkButton" id="button3">
-            <property name="label" translatable="1">This is a button party!</property>
+            <property name="label" translatable="yes">This is a button party!</property>
             <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
             <property name="can_focus">1</property>
@@ -190,7 +190,7 @@
             <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
             <property name="use_action_appearance">0</property>
-            <property name="label" translatable="1">Normal</property>
+            <property name="label" translatable="yes">Normal</property>
             <property name="use_underline">1</property>
             <property name="icon_name">list-add-symbolic</property>
           </object>
@@ -203,7 +203,7 @@
             <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
             <property name="use_action_appearance">0</property>
-            <property name="label" translatable="1">Normal</property>
+            <property name="label" translatable="yes">Normal</property>
             <property name="use_underline">1</property>
             <property name="icon_name">list-add-symbolic</property>
           </object>
@@ -216,7 +216,7 @@
             <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
             <property name="use_action_appearance">0</property>
-            <property name="label" translatable="1">Active</property>
+            <property name="label" translatable="yes">Active</property>
             <property name="use_underline">1</property>
             <property name="icon_name">list-remove-symbolic</property>
             <property name="active">1</property>
@@ -230,7 +230,7 @@
             <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
             <property name="use_action_appearance">0</property>
-            <property name="label" translatable="1">Active</property>
+            <property name="label" translatable="yes">Active</property>
             <property name="use_underline">1</property>
             <property name="icon_name">list-remove-symbolic</property>
             <property name="active">1</property>
@@ -245,7 +245,7 @@
             <property name="visible">1</property>
             <property name="sensitive">0</property>
             <property name="use_action_appearance">0</property>
-            <property name="label" translatable="1">Insensitive</property>
+            <property name="label" translatable="yes">Insensitive</property>
             <property name="use_underline">1</property>
             <property name="icon_name">edit-find-symbolic</property>
           </object>
@@ -259,7 +259,7 @@
             <property name="visible">1</property>
             <property name="sensitive">0</property>
             <property name="use_action_appearance">0</property>
-            <property name="label" translatable="1">Insensitive Active</property>
+            <property name="label" translatable="yes">Insensitive Active</property>
             <property name="use_underline">1</property>
             <property name="icon_name">go-up-symbolic</property>
             <property name="active">1</property>

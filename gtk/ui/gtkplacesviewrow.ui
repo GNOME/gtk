@@ -55,7 +55,7 @@
               <object class="GtkButton" id="eject_button">
                 <property name="halign">end</property>
                 <property name="valign">center</property>
-                <property name="tooltip-text" translatable="1">Unmount</property>
+                <property name="tooltip-text" translatable="yes">Unmount</property>
                 <child>
                   <object class="GtkImage" id="eject_icon">
                     <property name="visible">1</property>

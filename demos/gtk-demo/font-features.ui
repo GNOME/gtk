@@ -77,7 +77,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="kern">
-                                    <property name="label" translatable="1">Enabled</property>
+                                    <property name="label" translatable="yes">Enabled</property>
                                     <property name="visible">1</property>
                                     <property name="can_focus">1</property>
                                     <property name="draw_indicator">1</property>
@@ -95,7 +95,7 @@
                         <child type="label">
                           <object class="GtkLabel" id="label2">
                             <property name="visible">1</property>
-                            <property name="label" translatable="1">Kerning</property>
+                            <property name="label" translatable="yes">Kerning</property>
                           </object>
                         </child>
                       </object>
@@ -127,7 +127,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="liga">
-                                    <property name="label" translatable="1">Common</property>
+                                    <property name="label" translatable="yes">Common</property>
                                     <property name="visible">1</property>
                                     <property name="can_focus">1</property>
                                     <property name="draw_indicator">1</property>
@@ -153,7 +153,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="dlig">
-                                    <property name="label" translatable="1">Discretionary</property>
+                                    <property name="label" translatable="yes">Discretionary</property>
                                     <property name="visible">1</property>
                                     <property name="can_focus">1</property>
                                     <property name="draw_indicator">1</property>
@@ -182,7 +182,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="hlig">
-                                    <property name="label" translatable="1">Historical</property>
+                                    <property name="label" translatable="yes">Historical</property>
                                     <property name="visible">1</property>
                                     <property name="can_focus">1</property>
                                     <property name="draw_indicator">1</property>
@@ -211,7 +211,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="clig">
-                                    <property name="label" translatable="1">Contextual</property>
+                                    <property name="label" translatable="yes">Contextual</property>
                                     <property name="visible">1</property>
                                     <property name="can_focus">1</property>
                                     <property name="draw_indicator">1</property>
@@ -232,7 +232,7 @@
                         <child type="label">
                           <object class="GtkLabel" id="label3">
                             <property name="visible">1</property>
-                            <property name="label" translatable="1">Ligatures</property>
+                            <property name="label" translatable="yes">Ligatures</property>
                           </object>
                         </child>
                       </object>
@@ -264,7 +264,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="smcp">
-                                    <property name="label" translatable="1">Small Caps</property>
+                                    <property name="label" translatable="yes">Small Caps</property>
                                     <property name="visible">1</property>
                                     <property name="can_focus">1</property>
                                     <property name="draw_indicator">1</property>
@@ -290,7 +290,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="c2sc">
-                                    <property name="label" translatable="1">Small Caps from Caps</property>
+                                    <property name="label" translatable="yes">Small Caps from Caps</property>
                                     <property name="visible">1</property>
                                     <property name="can_focus">1</property>
                                     <property name="draw_indicator">1</property>
@@ -311,7 +311,7 @@
                         <child type="label">
                           <object class="GtkLabel" id="label4">
                             <property name="visible">1</property>
-                            <property name="label" translatable="1">Letter Case</property>
+                            <property name="label" translatable="yes">Letter Case</property>
                           </object>
                         </child>
                       </object>
@@ -332,7 +332,7 @@
                             <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkRadioButton" id="numcasedefault">
-                                <property name="label" translatable="1">Default</property>
+                                <property name="label" translatable="yes">Default</property>
                                 <property name="visible">1</property>
                                 <property name="can_focus">1</property>
                                 <property name="active">1</property>
@@ -342,7 +342,7 @@
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="lnum">
-                                <property name="label" translatable="1">Lining</property>
+                                <property name="label" translatable="yes">Lining</property>
                                 <property name="visible">1</property>
                                 <property name="can_focus">1</property>
                                 <property name="active">1</property>
@@ -356,7 +356,7 @@
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="onum">
-                                <property name="label" translatable="1">Old-Style</property>
+                                <property name="label" translatable="yes">Old-Style</property>
                                 <property name="visible">1</property>
                                 <property name="can_focus">1</property>
                                 <property name="active">1</property>
@@ -373,7 +373,7 @@
                         <child type="label">
                           <object class="GtkLabel" id="label8">
                             <property name="visible">1</property>
-                            <property name="label" translatable="1">Number Case</property>
+                            <property name="label" translatable="yes">Number Case</property>
                           </object>
                         </child>
                       </object>
@@ -394,7 +394,7 @@
                             <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkRadioButton" id="numspacedefault">
-                                <property name="label" translatable="1">Default</property>
+                                <property name="label" translatable="yes">Default</property>
                                 <property name="visible">1</property>
                                 <property name="can_focus">1</property>
                                 <property name="active">1</property>
@@ -404,7 +404,7 @@
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="pnum">
-                                <property name="label" translatable="1">Proportional</property>
+                                <property name="label" translatable="yes">Proportional</property>
                                 <property name="visible">1</property>
                                 <property name="can_focus">1</property>
                                 <property name="active">1</property>
@@ -418,7 +418,7 @@
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="tnum">
-                                <property name="label" translatable="1">Tabular</property>
+                                <property name="label" translatable="yes">Tabular</property>
                                 <property name="visible">1</property>
                                 <property name="can_focus">1</property>
                                 <property name="active">1</property>
@@ -435,7 +435,7 @@
                         <child type="label">
                           <object class="GtkLabel" id="label9">
                             <property name="visible">1</property>
-                            <property name="label" translatable="1">Number Spacing</property>
+                            <property name="label" translatable="yes">Number Spacing</property>
                           </object>
                         </child>
                       </object>
@@ -456,7 +456,7 @@
                             <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkRadioButton" id="fractiondefault">
-                                <property name="label" translatable="1">Off</property>
+                                <property name="label" translatable="yes">Off</property>
                                 <property name="visible">1</property>
                                 <property name="can_focus">1</property>
                                 <property name="active">1</property>
@@ -466,7 +466,7 @@
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="frac">
-                                <property name="label" translatable="1">Normal</property>
+                                <property name="label" translatable="yes">Normal</property>
                                 <property name="visible">1</property>
                                 <property name="can_focus">1</property>
                                 <property name="active">1</property>
@@ -480,7 +480,7 @@
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="afrc">
-                                <property name="label" translatable="1">Alternate</property>
+                                <property name="label" translatable="yes">Alternate</property>
                                 <property name="visible">1</property>
                                 <property name="can_focus">1</property>
                                 <property name="active">1</property>
@@ -497,7 +497,7 @@
                         <child type="label">
                           <object class="GtkLabel" id="label10">
                             <property name="visible">1</property>
-                            <property name="label" translatable="1">Fractions</property>
+                            <property name="label" translatable="yes">Fractions</property>
                           </object>
                         </child>
                       </object>
@@ -529,7 +529,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="zero">
-                                    <property name="label" translatable="1">Slashed Zero</property>
+                                    <property name="label" translatable="yes">Slashed Zero</property>
                                     <property name="visible">1</property>
                                     <property name="can_focus">1</property>
                                     <property name="draw_indicator">1</property>
@@ -555,7 +555,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="nalt">
-                                    <property name="label" translatable="1">Alt. Annotation</property>
+                                    <property name="label" translatable="yes">Alt. Annotation</property>
                                     <property name="visible">1</property>
                                     <property name="can_focus">1</property>
                                     <property name="draw_indicator">1</property>
@@ -576,7 +576,7 @@
                         <child type="label">
                           <object class="GtkLabel" id="label11">
                             <property name="visible">1</property>
-                            <property name="label" translatable="1">Numeric Extras</property>
+                            <property name="label" translatable="yes">Numeric Extras</property>
                           </object>
                         </child>
                       </object>
@@ -608,7 +608,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="swsh">
-                                    <property name="label" translatable="1">Swash</property>
+                                    <property name="label" translatable="yes">Swash</property>
                                     <property name="visible">1</property>
                                     <property name="can_focus">1</property>
                                     <property name="draw_indicator">1</property>
@@ -634,7 +634,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="calt">
-                                    <property name="label" translatable="1">Contextual</property>
+                                    <property name="label" translatable="yes">Contextual</property>
                                     <property name="visible">1</property>
                                     <property name="can_focus">1</property>
                                     <property name="draw_indicator">1</property>
@@ -663,7 +663,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="hist">
-                                    <property name="label" translatable="1">Historical</property>
+                                    <property name="label" translatable="yes">Historical</property>
                                     <property name="visible">1</property>
                                     <property name="can_focus">1</property>
                                     <property name="draw_indicator">1</property>
@@ -692,7 +692,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="salt">
-                                    <property name="label" translatable="1">Stylistic</property>
+                                    <property name="label" translatable="yes">Stylistic</property>
                                     <property name="visible">1</property>
                                     <property name="can_focus">1</property>
                                     <property name="draw_indicator">1</property>
@@ -713,7 +713,7 @@
                         <child type="label">
                           <object class="GtkLabel" id="label12">
                             <property name="visible">1</property>
-                            <property name="label" translatable="1">Character Alternatives</property>
+                            <property name="label" translatable="yes">Character Alternatives</property>
                           </object>
                         </child>
                       </object>
@@ -745,7 +745,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="ss01">
-                                    <property name="label" translatable="1">Set 1</property>
+                                    <property name="label" translatable="yes">Set 1</property>
                                     <property name="visible">1</property>
                                     <property name="can_focus">1</property>
                                     <property name="draw_indicator">1</property>
@@ -771,7 +771,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="ss02">
-                                    <property name="label" translatable="1">Set 2</property>
+                                    <property name="label" translatable="yes">Set 2</property>
                                     <property name="visible">1</property>
                                     <property name="can_focus">1</property>
                                     <property name="draw_indicator">1</property>
@@ -800,7 +800,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="ss03">
-                                    <property name="label" translatable="1">Set 3</property>
+                                    <property name="label" translatable="yes">Set 3</property>
                                     <property name="visible">1</property>
                                     <property name="can_focus">1</property>
                                     <property name="draw_indicator">1</property>
@@ -829,7 +829,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="ss04">
-                                    <property name="label" translatable="1">Set 4</property>
+                                    <property name="label" translatable="yes">Set 4</property>
                                     <property name="visible">1</property>
                                     <property name="can_focus">1</property>
                                     <property name="draw_indicator">1</property>
@@ -858,7 +858,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="ss05">
-                                    <property name="label" translatable="1">Set 5</property>
+                                    <property name="label" translatable="yes">Set 5</property>
                                     <property name="visible">1</property>
                                     <property name="can_focus">1</property>
                                     <property name="draw_indicator">1</property>
@@ -879,7 +879,7 @@
                         <child type="label">
                           <object class="GtkLabel" id="label13">
                             <property name="visible">1</property>
-                            <property name="label" translatable="1">Alternative Stylistic Sets</property>
+                            <property name="label" translatable="yes">Alternative Stylistic Sets</property>
                           </object>
                         </child>
                       </object>

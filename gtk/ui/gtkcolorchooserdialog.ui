@@ -3,7 +3,7 @@
   <!-- interface-requires gtk+ 3.10 -->
   <template class="GtkColorChooserDialog" parent="GtkDialog">
     <property name="border_width">5</property>
-    <property name="title" translatable="1">Select a Color</property>
+    <property name="title" translatable="yes">Select a Color</property>
     <property name="type_hint">dialog</property>
     <property name="resizable">0</property>
     <child internal-child="vbox">
@@ -31,13 +31,13 @@
       <object class="GtkButton" id="cancel_button">
         <property name="visible">1</property>
         <property name="use_underline">1</property>
-        <property name="label" translatable="1">_Cancel</property>
+        <property name="label" translatable="yes">_Cancel</property>
       </object>
     </child>
     <child type="action">
       <object class="GtkButton" id="ok_button">
         <property name="visible">1</property>
-        <property name="label" translatable="1">_Select</property>
+        <property name="label" translatable="yes">_Select</property>
         <property name="use_underline">1</property>
         <property name="can_default">1</property>
       </object>

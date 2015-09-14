@@ -21,8 +21,8 @@ audio-volume-low
 audio-volume-medium</property>
     <child internal-child="accessible">
       <object class="AtkObject" id="GtkVolumeButton-atkobject">
-        <property name="AtkObject::accessible-name" translatable="1">Volume</property>
-        <property name="AtkObject::accessible-description" translatable="1">Turns volume up or down</property>
+        <property name="AtkObject::accessible-name" translatable="yes">Volume</property>
+        <property name="AtkObject::accessible-description" translatable="yes">Turns volume up or down</property>
       </object>
     </child>
     <signal name="query-tooltip" handler="cb_query_tooltip" swapped="no"/>
@@ -31,8 +31,8 @@ audio-volume-medium</property>
       <object class="GtkButton" id="scalebutton-plus_button1">
         <child internal-child="accessible">
           <object class="AtkObject" id="scalebutton-plus_button1-atkobject">
-            <property name="AtkObject::accessible-name" translatable="1">Volume Up</property>
-            <property name="AtkObject::accessible-description" translatable="1">Increases the volume</property>
+            <property name="AtkObject::accessible-name" translatable="yes">Volume Up</property>
+            <property name="AtkObject::accessible-description" translatable="yes">Increases the volume</property>
           </object>
         </child>
       </object>
@@ -41,8 +41,8 @@ audio-volume-medium</property>
       <object class="GtkButton" id="scalebutton-minus_button1">
         <child internal-child="accessible">
           <object class="AtkObject" id="scalebutton-minus_button1-atkobject">
-            <property name="AtkObject::accessible-name" translatable="1">Volume Down</property>
-            <property name="AtkObject::accessible-description" translatable="1">Decreases the volume</property>
+            <property name="AtkObject::accessible-name" translatable="yes">Volume Down</property>
+            <property name="AtkObject::accessible-description" translatable="yes">Decreases the volume</property>
           </object>
         </child>
       </object>

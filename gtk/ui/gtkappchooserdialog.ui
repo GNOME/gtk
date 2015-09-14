@@ -2,7 +2,7 @@
 <interface domain="gtk30">
   <!-- interface-requires gtk+ 3.10 -->
   <template class="GtkAppChooserDialog" parent="GtkDialog">
-    <property name="title" translatable="1">Select Application</property>
+    <property name="title" translatable="yes">Select Application</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -58,13 +58,13 @@
       <object class="GtkButton" id="cancel_button">
         <property name="visible">1</property>
         <property name="use_underline">1</property>
-        <property name="label" translatable="1">_Cancel</property>
+        <property name="label" translatable="yes">_Cancel</property>
       </object>
     </child>
     <child type="action">
       <object class="GtkButton" id="ok_button">
         <property name="visible">1</property>
-        <property name="label" translatable="1">_Select</property>
+        <property name="label" translatable="yes">_Select</property>
         <property name="use_underline">1</property>
         <property name="can_default">1</property>
       </object>
@@ -75,7 +75,7 @@
     </action-widgets>
   </template>
   <object class="GtkButton" id="show_more_button">
-    <property name="label" translatable="1">_View All Applications</property>
+    <property name="label" translatable="yes">_View All Applications</property>
     <property name="visible">1</property>
     <property name="use_underline">1</property>
     <property name="can_focus">1</property>
@@ -83,7 +83,7 @@
     <signal name="clicked" handler="show_more_button_clicked_cb" swapped="no"/>
   </object>
   <object class="GtkButton" id="software_button">
-    <property name="label" translatable="1">_Find New Applications</property>
+    <property name="label" translatable="yes">_Find New Applications</property>
     <property name="visible">1</property>
     <property name="use_underline">1</property>
     <property name="can_focus">1</property>

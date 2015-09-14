@@ -53,7 +53,7 @@
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkButton" id="apply">
-                    <property name="label" translatable="1">_Apply</property>
+                    <property name="label" translatable="yes">_Apply</property>
                     <property name="can_focus">1</property>
                     <property name="can_default">1</property>
                     <property name="receives_default">1</property>
@@ -71,7 +71,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="forward">
-                    <property name="label" translatable="1">_Next</property>
+                    <property name="label" translatable="yes">_Next</property>
                     <property name="visible">1</property>
                     <property name="can_focus">1</property>
                     <property name="can_default">1</property>
@@ -91,7 +91,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="back">
-                    <property name="label" translatable="1">_Back</property>
+                    <property name="label" translatable="yes">_Back</property>
                     <property name="visible">1</property>
                     <property name="can_focus">1</property>
                     <property name="receives_default">1</property>
@@ -110,7 +110,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="last">
-                    <property name="label" translatable="1">_Finish</property>
+                    <property name="label" translatable="yes">_Finish</property>
                     <property name="can_focus">1</property>
                     <property name="receives_default">1</property>
                     <property name="no_show_all">1</property>
@@ -128,7 +128,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="cancel">
-                    <property name="label" translatable="1">_Cancel</property>
+                    <property name="label" translatable="yes">_Cancel</property>
                     <property name="visible">1</property>
                     <property name="can_focus">1</property>
                     <property name="receives_default">1</property>
@@ -147,7 +147,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="close">
-                    <property name="label" translatable="1">_Close</property>
+                    <property name="label" translatable="yes">_Close</property>
                     <property name="can_focus">1</property>
                     <property name="can_default">1</property>
                     <property name="receives_default">1</property>

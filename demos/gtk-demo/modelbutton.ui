@@ -6,7 +6,7 @@
       <object class="GtkHeaderBar">
         <property name="visible">1</property>
         <property name="show-close-button">1</property>
-        <property name="title" translatable="1">Model Button</property>
+        <property name="title" translatable="yes">Model Button</property>
       </object>
     </child>
     <child>

@@ -24,7 +24,7 @@
     <property name="page_increment">5</property>
   </object>
   <object class="GtkWindow" id="window">
-    <property name="title" translatable="1">Spin Button</property>
+    <property name="title" translatable="yes">Spin Button</property>
     <child>
       <object class="GtkGrid">
         <property name="visible">1</property>

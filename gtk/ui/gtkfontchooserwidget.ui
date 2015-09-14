@@ -47,7 +47,7 @@
             <property name="secondary_icon_activatable">0</property>
             <property name="primary_icon_sensitive">0</property>
             <property name="secondary_icon_sensitive">0</property>
-            <property name="placeholder_text" translatable="1">Search font name</property>
+            <property name="placeholder_text" translatable="yes">Search font name</property>
             <signal name="search-changed" handler="text_changed_cb" swapped="no"/>
             <signal name="stop-search" handler="stop_search_cb" swapped="no"/>
           </object>
@@ -94,7 +94,7 @@
                         <child>
                           <object class="GtkTreeViewColumn" id="family_face_column">
                             <property name="sizing">fixed</property>
-                            <property name="title" translatable="1">Font Family</property>
+                            <property name="title" translatable="yes">Font Family</property>
                             <child>
                               <object class="GtkCellRendererText" id="family_face_cell">
                                 <property name="ellipsize">end</property>
@@ -116,7 +116,7 @@
                     <property name="visible">1</property>
                     <property name="can_focus">1</property>
                     <property name="invisible_char">•</property>
-                    <property name="placeholder-text" translatable="1">Preview text</property>
+                    <property name="placeholder-text" translatable="yes">Preview text</property>
                     <signal name="scroll-event" handler="resize_by_scroll_cb" swapped="no"/>
                   </object>
                   <packing>
@@ -183,7 +183,7 @@
                 <child>
                   <object class="GtkLabel">
                     <property name="visible">1</property>
-                    <property name="label" translatable="1">No Fonts Found</property>
+                    <property name="label" translatable="yes">No Fonts Found</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                       <attribute name="scale" value="1.2"/>

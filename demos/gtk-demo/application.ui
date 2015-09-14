@@ -53,7 +53,7 @@
               <object class="GtkButton" id="button">
                 <property name="visible">1</property>
                 <property name="valign">center</property>
-                <property name="label" translatable="1">_OK</property>
+                <property name="label" translatable="yes">_OK</property>
                 <property name="use_underline">1</property>
               </object>
             </child>

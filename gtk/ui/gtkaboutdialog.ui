@@ -145,7 +145,7 @@
                   </object>
                   <packing>
                     <property name="name">main</property>
-                    <property name="title" translatable="1">About</property>
+                    <property name="title" translatable="yes">About</property>
                   </packing>
                 </child>
                 <child>
@@ -185,7 +185,7 @@
                   </object>
                   <packing>
                     <property name="name">credits</property>
-                    <property name="title" translatable="1">Credits</property>
+                    <property name="title" translatable="yes">Credits</property>
                   </packing>
                 </child>
                 <child>
@@ -218,7 +218,7 @@
                   </object>
                   <packing>
                     <property name="name">license</property>
-                    <property name="title" translatable="1">License</property>
+                    <property name="title" translatable="yes">License</property>
                   </packing>
                 </child>
               </object>

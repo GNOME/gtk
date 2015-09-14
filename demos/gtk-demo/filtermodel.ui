@@ -25,7 +25,7 @@
     </data>
   </object>
   <object class="GtkWindow" id="window1">
-    <property name="title" translatable="1">Filter Model</property>
+    <property name="title" translatable="yes">Filter Model</property>
     <child>
       <object class="GtkGrid" id="grid1">
         <property name="visible">1</property>
@@ -39,7 +39,7 @@
         <child>
           <object class="GtkLabel" id="label1">
             <property name="visible">1</property>
-            <property name="label" translatable="1">Original</property>
+            <property name="label" translatable="yes">Original</property>
             <property name="xalign">0</property>
             <attributes>
               <attribute name="weight" value="bold"/>
@@ -61,7 +61,7 @@
             </child>
             <child>
               <object class="GtkTreeViewColumn" id="treeviewcolumn1">
-                <property name="title" translatable="1">Width</property>
+                <property name="title" translatable="yes">Width</property>
                 <child>
                   <object class="GtkCellRendererText" id="cellrenderertext1"/>
                 </child>
@@ -69,7 +69,7 @@
             </child>
             <child>
               <object class="GtkTreeViewColumn" id="treeviewcolumn2">
-                <property name="title" translatable="1">Height</property>
+                <property name="title" translatable="yes">Height</property>
                 <child>
                   <object class="GtkCellRendererText" id="cellrenderertext2"/>
                 </child>
@@ -92,7 +92,7 @@
             </child>
             <child>
               <object class="GtkTreeViewColumn" id="treeviewcolumn3">
-                <property name="title" translatable="1">Width</property>
+                <property name="title" translatable="yes">Width</property>
                 <child>
                   <object class="GtkCellRendererText" id="cellrenderertext3"/>
                 </child>
@@ -100,7 +100,7 @@
             </child>
             <child>
               <object class="GtkTreeViewColumn" id="treeviewcolumn4">
-                <property name="title" translatable="1">Height</property>
+                <property name="title" translatable="yes">Height</property>
                 <child>
                   <object class="GtkCellRendererText" id="cellrenderertext4"/>
                 </child>
@@ -108,7 +108,7 @@
             </child>
             <child>
               <object class="GtkTreeViewColumn" id="treeviewcolumn5">
-                <property name="title" translatable="1">Area</property>
+                <property name="title" translatable="yes">Area</property>
                 <child>
                   <object class="GtkCellRendererText" id="cellrenderertext5"/>
                 </child>
@@ -116,7 +116,7 @@
             </child>
             <child>
               <object class="GtkTreeViewColumn" id="treeviewcolumn6">
-                <property name="title" translatable="1">Square</property>
+                <property name="title" translatable="yes">Square</property>
                 <child>
                   <object class="GtkCellRendererPixbuf" id="cellrendererpixbuf1">
                     <property name="icon-name">object-select-symbolic</property>
@@ -133,7 +133,7 @@
         <child>
           <object class="GtkLabel" id="label2">
             <property name="visible">1</property>
-            <property name="label" translatable="1">Computed Columns</property>
+            <property name="label" translatable="yes">Computed Columns</property>
             <property name="xalign">0</property>
             <attributes>
               <attribute name="weight" value="bold"/>
@@ -147,7 +147,7 @@
         <child>
           <object class="GtkLabel" id="label3">
             <property name="visible">1</property>
-            <property name="label" translatable="1">Filtered</property>
+            <property name="label" translatable="yes">Filtered</property>
             <property name="xalign">0</property>
             <attributes>
               <attribute name="weight" value="bold"/>
@@ -169,7 +169,7 @@
             </child>
             <child>
               <object class="GtkTreeViewColumn" id="treeviewcolumn7">
-                <property name="title" translatable="1">Width</property>
+                <property name="title" translatable="yes">Width</property>
                 <child>
                   <object class="GtkCellRendererText" id="cellrenderertext6"/>
                 </child>
@@ -177,7 +177,7 @@
             </child>
             <child>
               <object class="GtkTreeViewColumn" id="treeviewcolumn8">
-                <property name="title" translatable="1">Height</property>
+                <property name="title" translatable="yes">Height</property>
                 <child>
                   <object class="GtkCellRendererText" id="cellrenderertext7"/>
                 </child>
