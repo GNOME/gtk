@@ -5553,6 +5553,7 @@ gtk_widget_get_allocated_height
 gtk_widget_get_allocation
 gtk_widget_set_allocation
 gtk_widget_get_allocated_baseline
+gtk_widget_get_allocated_size
 gtk_widget_get_clip
 gtk_widget_set_clip
 gtk_widget_get_app_paintable
