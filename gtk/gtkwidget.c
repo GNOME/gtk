@@ -6834,9 +6834,18 @@ _gtk_widget_draw_internal (GtkWidget *widget,
 
       gdk_window_mark_paint_from_clip (window, cr);
 
-      g_signal_emit (widget, widget_signals[DRAW],
-                     0, cr,
-                     &result);
+      if (g_signal_has_handler_pending (widget, widget_signals[DRAW], 0, FALSE))
+        {
+          g_signal_emit (widget, widget_signals[DRAW],
+                         0, cr,
+                         &result);
+        }
+      else if (GTK_WIDGET_GET_CLASS (widget)->draw)
+        {
+          cairo_save (cr);
+          GTK_WIDGET_GET_CLASS (widget)->draw (widget, cr);
+          cairo_restore (cr);
+        }
 
 #ifdef G_ENABLE_DEBUG
       if (GTK_DEBUG_CHECK (BASELINES))
