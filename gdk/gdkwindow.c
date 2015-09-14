@@ -3541,7 +3541,10 @@ _gdk_window_process_updates_recurse_helper (GdkWindow *window,
 {
   GdkWindow *child;
   cairo_region_t *clipped_expose_region;
-  GList *l, *children;
+  GdkWindow **children;
+  GdkWindow **free_children = NULL;
+  int i, n_children;
+  GList *l;
 
   if (window->destroyed)
     return;
@@ -3575,23 +3578,23 @@ _gdk_window_process_updates_recurse_helper (GdkWindow *window,
       GdkEvent event;
 
       event.expose.type = GDK_EXPOSE;
-      event.expose.window = g_object_ref (window);
+      event.expose.window = window; /* we already hold a ref */
       event.expose.send_event = FALSE;
       event.expose.count = 0;
       event.expose.region = clipped_expose_region;
       cairo_region_get_extents (clipped_expose_region, &event.expose.area);
 
       _gdk_event_emit (&event);
-
-      g_object_unref (window);
     }
 
-  /* Make this reentrancy safe for expose handlers freeing windows */
-  children = g_list_copy (window->children);
-  g_list_foreach (children, (GFunc)g_object_ref, NULL);
+  n_children = g_list_length (window->children);
+  children = g_newa (GdkWindow *, n_children);
+  if (children == NULL)
+    children = free_children = g_new (GdkWindow *, n_children);
 
+  n_children = 0;
   /* Iterate over children, starting at bottommost */
-  for (l = g_list_last (children); l != NULL; l = l->prev)
+  for (l = g_list_last (window->children); l != NULL; l = l->prev)
     {
       child = l->data;
 
@@ -3605,10 +3608,22 @@ _gdk_window_process_updates_recurse_helper (GdkWindow *window,
 
       /* Client side child, expose */
       if (child->impl == window->impl)
-        _gdk_window_process_updates_recurse_helper ((GdkWindow *)child, clipped_expose_region);
+        {
+          /* ref the child to make this reentrancy safe for expose
+             handlers freeing other windows */
+          children[n_children++] = g_object_ref (child);
+        }
     }
 
-  g_list_free_full (children, g_object_unref);
+  for (i = 0; i < n_children; i++)
+    {
+      _gdk_window_process_updates_recurse_helper ((GdkWindow *)children[i],
+                                                  clipped_expose_region);
+      g_object_unref (children[i]);
+    }
+
+
+  g_free (free_children);
 
  out:
   cairo_region_destroy (clipped_expose_region);
