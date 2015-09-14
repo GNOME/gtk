@@ -284,7 +284,7 @@ gtk_gl_area_realize (GtkWidget *widget)
   attributes.width = allocation.width;
   attributes.height = allocation.height;
   attributes.wclass = GDK_INPUT_ONLY;
-  attributes.event_mask = gtk_widget_get_events (widget) | GDK_EXPOSURE_MASK;
+  attributes.event_mask = gtk_widget_get_events (widget);
 
   attributes_mask = GDK_WA_X | GDK_WA_Y;
 

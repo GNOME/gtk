@@ -1300,8 +1300,7 @@ gtk_icon_view_realize (GtkWidget *widget)
   attributes.y = 0;
   attributes.width = MAX (icon_view->priv->width, allocation.width);
   attributes.height = MAX (icon_view->priv->height, allocation.height);
-  attributes.event_mask = (GDK_EXPOSURE_MASK |
-                           GDK_SCROLL_MASK |
+  attributes.event_mask = (GDK_SCROLL_MASK |
                            GDK_SMOOTH_SCROLL_MASK |
                            GDK_POINTER_MOTION_MASK |
                            GDK_LEAVE_NOTIFY_MASK |
