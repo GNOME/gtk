@@ -8402,7 +8402,7 @@ gtk_widget_set_can_default (GtkWidget *widget,
       widget->priv->can_default = can_default;
 
       gtk_widget_queue_resize (widget);
-      g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_CAN_FOCUS]);
+      g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_CAN_DEFAULT]);
     }
 }
 
