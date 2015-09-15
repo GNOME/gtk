@@ -878,7 +878,7 @@ gtk_get_option_group (gboolean open_default_display)
  *    `programname [OPTION...]`
  * @entries: (array zero-terminated=1): a %NULL-terminated array
  *    of #GOptionEntrys describing the options of your program
- * @translation_domain: a translation domain to use for translating
+ * @translation_domain: (nullable): a translation domain to use for translating
  *    the `--help` output for the options in @entries
  *    and the @parameter_string with gettext(), or %NULL
  * @error: a return location for errors
@@ -2180,7 +2180,7 @@ gtk_grab_add (GtkWidget *widget)
  *
  * Queries the current grab of the default window group.
  *
- * Returns: (transfer none): The widget which currently
+ * Returns: (transfer none) (nullable): The widget which currently
  *     has the grab or %NULL if no grab is active
  */
 GtkWidget*
@@ -2382,7 +2382,7 @@ gtk_invoke_key_snoopers (GtkWidget *grab_widget,
  * the current event will be the #GdkEventButton that triggered
  * the ::clicked signal.
  *
- * Returns: (transfer full): a copy of the current event, or
+ * Returns: (transfer full) (nullable): a copy of the current event, or
  *     %NULL if there is no current event. The returned event must be
  *     freed with gdk_event_free().
  */
@@ -2444,7 +2444,7 @@ gtk_get_current_event_state (GdkModifierType *state)
  * If there is a current event and it has a device, return that
  * device, otherwise return %NULL.
  *
- * Returns: (transfer none): a #GdkDevice, or %NULL
+ * Returns: (transfer none) (nullable): a #GdkDevice, or %NULL
  */
 GdkDevice *
 gtk_get_current_event_device (void)
@@ -2463,7 +2463,7 @@ gtk_get_current_event_device (void)
  * returns %NULL, otherwise returns the widget that received the event
  * originally.
  *
- * Returns: (transfer none): the widget that originally
+ * Returns: (transfer none) (nullable): the widget that originally
  *     received @event, or %NULL
  */
 GtkWidget*
