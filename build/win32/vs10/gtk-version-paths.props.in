@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="UserMacros">
+    <VSVer>10</VSVer>
+    <GlibEtcInstallRoot>$(SolutionDir)\..\..\..\..\vs$(VSVer)\$(Platform)</GlibEtcInstallRoot>
+    <CopyDir>..\..\..\..\vs$(VSVer)\$(Platform)</CopyDir>
+    <ApiVersion>3.0</ApiVersion>
+    <GtkVersion>@GTK_VERSION@</GtkVersion>
+    <GtkLibtoolCompatibleDllPrefix>lib</GtkLibtoolCompatibleDllPrefix>
+    <GtkLibtoolCompatibleDllSuffix>-$(ApiVersion)-0</GtkLibtoolCompatibleDllSuffix>
+    <GtkSeparateVSDllPrefix />
+    <GtkSeparateVSDllSuffix>-3-vs$(VSVer)</GtkSeparateVSDllSuffix>
+    <GtkDllPrefix>$(GtkSeparateVSDllPrefix)</GtkDllPrefix>
+    <GtkDllSuffix>$(GtkSeparateVSDllSuffix)</GtkDllSuffix>
+    <PythonPath>c:\python27</PythonPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <_PropertySheetDisplayName>gtkversionpathsprops</_PropertySheetDisplayName>
+  </PropertyGroup>
+  <ItemGroup>
+    <BuildMacro Include="VSVer">
+      <Value>$(VSVer)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GlibEtcInstallRoot">
+      <Value>$(GlibEtcInstallRoot)</Value>
+    </BuildMacro>
+    <BuildMacro Include="CopyDir">
+      <Value>$(CopyDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="ApiVersion">
+      <Value>$(ApiVersion)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GtkVersion">
+      <Value>$(GtkVersion)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GtkLibtoolCompatibleDllPrefix">
+      <Value>$(GtkLibtoolCompatibleDllPrefix)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GtkLibtoolCompatibleDllSuffix">
+      <Value>$(GtkLibtoolCompatibleDllSuffix)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GtkSeparateVSDllPrefix">
+      <Value>$(GtkSeparateVSDllPrefix)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GtkSeparateVSDllSuffix">
+      <Value>$(GtkSeparateVSDllSuffix)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GtkDllPrefix">
+      <Value>$(GtkDllPrefix)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GtkDllSuffix">
+      <Value>$(GtkDllSuffix)</Value>
+    </BuildMacro>
+    <BuildMacro Include="PythonPath">
+      <Value>$(PythonPath)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

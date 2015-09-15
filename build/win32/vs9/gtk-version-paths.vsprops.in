@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="gtkversionpathsprops"
+	>
+	<UserMacro
+		Name="VSVer"
+		Value="9"
+	/>
+	<UserMacro
+		Name="GlibEtcInstallRoot"
+		Value="$(SolutionDir)\..\..\..\..\vs$(VSVer)\$(PlatformName)"
+	/>
+	<UserMacro
+		Name="CopyDir"
+		Value="..\..\..\..\vs$(VSVer)\$(PlatformName)"
+	/>
+	<UserMacro
+		Name="ApiVersion"
+		Value="3.0"
+	/>
+	<UserMacro
+		Name="GtkVersion"
+		Value="@GTK_VERSION@"
+	/>
+	<UserMacro
+		Name="GtkLibtoolCompatibleDllPrefix"
+		Value="lib"
+	/>
+	<UserMacro
+		Name="GtkLibtoolCompatibleDllSuffix"
+		Value="-$(ApiVersion)-0"
+	/>
+	<UserMacro
+		Name="GtkSeparateVSDllPrefix"
+		Value=""
+	/>
+	<UserMacro
+		Name="GtkSeparateVSDllSuffix"
+		Value="-3-vs$(VSVer)"
+	/>
+	<!-- Change these two to GtkLibtoolCompatibleDllPrefix and
+	GtkLibtoolCompatibleDllSuffix if that is what you want -->
+	<UserMacro
+		Name="GtkDllPrefix"
+		Value="$(GtkSeparateVSDllPrefix)"
+	/>
+	<UserMacro
+		Name="GtkDllSuffix"
+		Value="$(GtkSeparateVSDllSuffix)"
+	/>
+	<UserMacro
+		Name="PythonPath"
+		Value="c:\python27"
+	/>
+</VisualStudioPropertySheet>
