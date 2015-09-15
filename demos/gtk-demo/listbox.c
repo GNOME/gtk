@@ -164,6 +164,7 @@ gtk_message_row_update (GtkMessageRow *row)
   s = g_date_time_format (t, "%X - %e %b %Y");
   gtk_label_set_text (priv->detailed_time_label, s);
   g_free (s);
+  g_date_time_unref (t);
 
   gtk_widget_set_visible (GTK_WIDGET(priv->n_favorites_label),
                           priv->message->n_favorites != 0);
