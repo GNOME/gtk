@@ -358,6 +358,7 @@ do_listbox (GtkWidget *do_widget)
         }
 
       g_strfreev (lines);
+      g_bytes_unref (data);
     }
 
   if (!gtk_widget_get_visible (window))
