@@ -628,6 +628,29 @@ draw_shadow (const GtkCssValue   *shadow,
     gtk_css_shadow_value_finish_drawing (shadow, shadow_cr, blur_flags);
 }
 
+typedef struct {
+  double radius;
+  GtkRoundedBoxCorner corner;
+} CornerMask;
+
+static guint
+corner_mask_hash (CornerMask *mask)
+{
+  return ((guint)mask->radius << 24) ^
+    ((guint)(mask->corner.horizontal*4)) << 12 ^
+    ((guint)(mask->corner.vertical*4)) << 0;
+}
+
+static gboolean
+corner_mask_equal (CornerMask *mask1,
+                   CornerMask *mask2)
+{
+  return
+    mask1->radius == mask2->radius &&
+    mask1->corner.horizontal == mask2->corner.horizontal &&
+    mask1->corner.vertical == mask2->corner.vertical;
+}
+
 static void
 draw_shadow_corner (const GtkCssValue   *shadow,
                     cairo_t             *cr,
@@ -637,31 +660,66 @@ draw_shadow_corner (const GtkCssValue   *shadow,
                     cairo_rectangle_int_t *drawn_rect)
 {
   gdouble radius, clip_radius;
-  int x1, x2, y1, y2;
+  int x1, x2, x3, y1, y2, y3, x, y;
+  GtkRoundedBox corner_box;
+  cairo_t *mask_cr;
+  cairo_surface_t *mask;
+  cairo_pattern_t *pattern;
+  cairo_matrix_t matrix;
+  double sx, sy;
+  static GHashTable *corner_mask_cache = NULL;
+  double max_other;
+  CornerMask key;
+  gboolean overlapped;
 
   radius = _gtk_css_number_value_get (shadow->radius, 0);
   clip_radius = _gtk_cairo_blur_compute_pixels (radius);
 
+  overlapped = FALSE;
   if (corner == GTK_CSS_TOP_LEFT || corner == GTK_CSS_BOTTOM_LEFT)
     {
       x1 = floor (box->box.x - clip_radius);
       x2 = ceil (box->box.x + box->corner[corner].horizontal + clip_radius);
+      x = x1;
+      sx = 1;
+      max_other = MAX(box->corner[GTK_CSS_TOP_RIGHT].horizontal, box->corner[GTK_CSS_TOP_RIGHT].horizontal);
+      x3 = floor (box->box.x + box->box.width - max_other - clip_radius);
+      if (x2 > x3)
+        overlapped = TRUE;
     }
   else
     {
       x1 = floor (box->box.x + box->box.width - box->corner[corner].horizontal - clip_radius);
       x2 = ceil (box->box.x + box->box.width + clip_radius);
+      x = x2;
+      sx = -1;
+      max_other = MAX(box->corner[GTK_CSS_TOP_LEFT].horizontal, box->corner[GTK_CSS_TOP_LEFT].horizontal);
+      x3 = ceil (box->box.x + max_other + clip_radius);
+      if (x3 > x1)
+        overlapped = TRUE;
     }
 
   if (corner == GTK_CSS_TOP_LEFT || corner == GTK_CSS_TOP_RIGHT)
     {
       y1 = floor (box->box.y - clip_radius);
       y2 = ceil (box->box.y + box->corner[corner].vertical + clip_radius);
+      y = y1;
+      sy = 1;
+      max_other = MAX(box->corner[GTK_CSS_BOTTOM_LEFT].vertical, box->corner[GTK_CSS_BOTTOM_RIGHT].vertical);
+      y3 = floor (box->box.y + box->box.height - max_other - clip_radius);
+      if (y2 > y3)
+        overlapped = TRUE;
     }
   else
     {
       y1 = floor (box->box.y + box->box.height - box->corner[corner].vertical - clip_radius);
       y2 = ceil (box->box.y + box->box.height + clip_radius);
+      y = y2;
+      sy = -1;
+      max_other = MAX(box->corner[GTK_CSS_TOP_LEFT].vertical, box->corner[GTK_CSS_TOP_RIGHT].vertical);
+      y3 = ceil (box->box.y + max_other + clip_radius);
+      if (y3 > y1)
+        overlapped = TRUE;
     }
 
   drawn_rect->x = x1;
@@ -672,7 +730,64 @@ draw_shadow_corner (const GtkCssValue   *shadow,
   cairo_rectangle (cr, x1, y1, x2 - x1, y2 - y1);
   cairo_clip (cr);
 
-  draw_shadow (shadow, cr, box, clip_box, GTK_BLUR_X | GTK_BLUR_Y);
+  if (shadow->inset || overlapped)
+    {
+      /* Fall back to generic path if inset or if the corner radius
+         runs into each other */
+      draw_shadow (shadow, cr, box, clip_box, GTK_BLUR_X | GTK_BLUR_Y);
+      return;
+    }
+
+  if (has_empty_clip (cr))
+    return;
+
+  /* At this point we're drawing a blurred outset corner. The only
+   * things that affect the output of the blurred mask in this case
+   * is:
+   *
+   * What corner this is, which defines the orientation (sx,sy)
+   * and position (x,y)
+   *
+   * The blur radius (which also defines the clip_radius)
+   *
+   * The the horizontal and vertical corner radius
+   *
+   * We apply the first position and orientation when drawing the
+   * mask, so we cache rendered masks based on the blur radius and the
+   * corner radius.
+   */
+  if (corner_mask_cache == NULL)
+    corner_mask_cache = g_hash_table_new_full ((GHashFunc)corner_mask_hash,
+                                               (GEqualFunc)corner_mask_equal,
+                                               g_free, (GDestroyNotify)cairo_surface_destroy);
+
+  key.radius = radius;
+  key.corner = box->corner[corner];
+
+  mask = g_hash_table_lookup (corner_mask_cache, &key);
+  if (mask == NULL)
+    {
+      mask = cairo_surface_create_similar_image (cairo_get_target (cr), CAIRO_FORMAT_A8,
+                                                 drawn_rect->width + clip_radius,
+                                                 drawn_rect->height + clip_radius);
+      mask_cr = cairo_create (mask);
+      _gtk_rounded_box_init_rect (&corner_box, clip_radius, clip_radius, 2*drawn_rect->width, 2*drawn_rect->height);
+      corner_box.corner[0] = box->corner[corner];
+      _gtk_rounded_box_path (&corner_box, mask_cr);
+      cairo_fill (mask_cr);
+      _gtk_cairo_blur_surface (mask, radius, GTK_BLUR_X | GTK_BLUR_Y);
+      cairo_destroy (mask_cr);
+      g_hash_table_insert (corner_mask_cache, g_memdup (&key, sizeof (key)), mask);
+    }
+
+  gdk_cairo_set_source_rgba (cr, _gtk_css_rgba_value_get_rgba (shadow->color));
+  pattern = cairo_pattern_create_for_surface (mask);
+  cairo_matrix_init_identity (&matrix);
+  cairo_matrix_scale (&matrix, sx, sy);
+  cairo_matrix_translate (&matrix, -x, -y);
+  cairo_pattern_set_matrix (pattern, &matrix);
+  cairo_mask (cr, pattern);
+  cairo_pattern_destroy (pattern);
 }
 
 static void
