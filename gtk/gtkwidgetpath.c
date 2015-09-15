@@ -217,6 +217,8 @@ gtk_widget_path_unref (GtkWidgetPath *path)
       elem = &g_array_index (path->elems, GtkPathElement, i);
 
       gtk_css_node_declaration_unref (elem->decl);
+      if (elem->siblings)
+        gtk_widget_path_unref (elem->siblings);
     }
 
   g_array_free (path->elems, TRUE);
