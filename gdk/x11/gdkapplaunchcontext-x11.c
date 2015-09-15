@@ -463,10 +463,17 @@ GdkAppLaunchContext *
 _gdk_x11_display_get_app_launch_context (GdkDisplay *display)
 {
   GdkAppLaunchContext *ctx;
+  static gchar *display_name;
 
   ctx = g_object_new (GDK_TYPE_X11_APP_LAUNCH_CONTEXT,
                       "display", display,
                       NULL);
+
+  display_name = g_app_launch_context_get_display (G_APP_LAUNCH_CONTEXT (ctx),
+                                                   NULL, NULL);
+  if (display_name)
+    g_app_launch_context_setenv (G_APP_LAUNCH_CONTEXT (ctx),
+                                 "DISPLAY", display_name);
 
   return ctx;
 }
