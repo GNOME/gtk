@@ -25,7 +25,7 @@
 G_BEGIN_DECLS
 
 
-void     _gtk_container_queue_resize           (GtkContainer *container);
+void     gtk_container_queue_resize_handler    (GtkContainer *container);
 void     _gtk_container_queue_restyle          (GtkContainer *container);
 void     _gtk_container_clear_resize_widgets   (GtkContainer *container);
 gchar*   _gtk_container_child_composite_name   (GtkContainer *container,

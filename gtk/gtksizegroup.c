@@ -204,6 +204,33 @@ _gtk_size_group_get_widget_peers (GtkWidget      *for_widget,
 }
 
 static void
+gtk_container_queue_resize (GtkContainer *container)
+{
+  GtkWidget *widget;
+
+  g_return_if_fail (GTK_IS_CONTAINER (container));
+
+  widget = GTK_WIDGET (container);
+
+  do
+    {
+      _gtk_widget_set_alloc_needed (widget, TRUE);
+      _gtk_size_request_cache_clear (_gtk_widget_peek_request_cache (widget));
+
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+      if (GTK_IS_RESIZE_CONTAINER (widget))
+        break;
+      G_GNUC_END_IGNORE_DEPRECATIONS;
+
+      widget = gtk_widget_get_parent (widget);
+    }
+  while (widget);
+
+  if (widget)
+    gtk_container_queue_resize_handler (GTK_CONTAINER (widget));
+}
+
+static void
 real_queue_resize (GtkWidget *widget)
 {
   GtkWidget *container;
@@ -218,7 +245,7 @@ real_queue_resize (GtkWidget *widget)
 
   if (container)
     {
-      _gtk_container_queue_resize (GTK_CONTAINER (container));
+      gtk_container_queue_resize (GTK_CONTAINER (container));
     }
 }
 

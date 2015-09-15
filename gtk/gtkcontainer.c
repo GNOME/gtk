@@ -2068,7 +2068,7 @@ _gtk_container_stop_idle_sizer (GtkContainer *container)
   container->priv->resize_clock = NULL;
 }
 
-static void
+void
 gtk_container_queue_resize_handler (GtkContainer *container)
 {
   GtkWidget *widget;
@@ -2119,44 +2119,6 @@ _gtk_container_queue_restyle (GtkContainer *container)
 
   gtk_container_start_idle_sizer (container);
   priv->restyle_pending = TRUE;
-}
-
-/**
- * _gtk_container_queue_resize:
- * @container: a #GtkContainer
- *
- * Determines the “resize container” in the hierarchy above this container
- * (typically the toplevel, but other containers can be set as resize
- * containers with gtk_container_set_resize_mode()), marks the container
- * and all parents up to and including the resize container as needing
- * to have sizes recomputed, and if necessary adds the resize container
- * to the queue of containers that will be resized out at idle.
- */
-void
-_gtk_container_queue_resize (GtkContainer *container)
-{
-  GtkWidget *widget;
-
-  g_return_if_fail (GTK_IS_CONTAINER (container));
-
-  widget = GTK_WIDGET (container);
-
-  do
-    {
-      _gtk_widget_set_alloc_needed (widget, TRUE);
-      _gtk_size_request_cache_clear (_gtk_widget_peek_request_cache (widget));
-
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      if (GTK_IS_RESIZE_CONTAINER (widget))
-        break;
-      G_GNUC_END_IGNORE_DEPRECATIONS;
-
-      widget = gtk_widget_get_parent (widget);
-    }
-  while (widget);
-
-  if (widget)
-    gtk_container_queue_resize_handler (GTK_CONTAINER (widget));
 }
 
 void
