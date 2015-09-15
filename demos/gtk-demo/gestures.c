@@ -86,9 +86,10 @@ drawing_area_draw (GtkWidget *widget,
       cairo_matrix_t matrix;
       gdouble angle, scale;
 
-      cairo_matrix_init_translate (&matrix,
-                                   allocation.width / 2,
-                                   allocation.height / 2);
+      cairo_get_matrix (cr, &matrix);
+      cairo_matrix_translate (&matrix,
+                              allocation.width / 2,
+                              allocation.height / 2);
 
       cairo_save (cr);
 
