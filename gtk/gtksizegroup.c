@@ -227,15 +227,15 @@ real_queue_resize (GtkWidget *widget)
 
           G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
           if (GTK_IS_RESIZE_CONTAINER (widget))
-            break;
+            {
+              gtk_container_queue_resize_handler (GTK_CONTAINER (widget));
+              break;
+            }
           G_GNUC_END_IGNORE_DEPRECATIONS;
 
           widget = gtk_widget_get_parent (widget);
         }
       while (widget);
-
-      if (widget)
-        gtk_container_queue_resize_handler (GTK_CONTAINER (widget));
     }
 }
 
