@@ -14,6 +14,7 @@
     <child>
       <object class="GtkBox" id="vbox">
         <property name="visible">1</property>
+        <property name="border_width">0</property>
         <property name="orientation">vertical</property>
         <style>
           <class name="dialog-vbox"/>
