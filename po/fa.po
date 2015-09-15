@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-11 22:04+0000\n"
-"PO-Revision-Date: 2015-09-15 21:00+0430\n"
+"POT-Creation-Date: 2015-09-15 16:40+0000\n"
+"PO-Revision-Date: 2015-09-15 21:15+0430\n"
 "Last-Translator: Arash Mousavi <mousavi.arash@gmail.com>\n"
 "Language-Team: Persian <>\n"
 "Language: fa\n"
@@ -87,7 +87,7 @@ msgstr "FLAGS"
 msgid "GDK debugging flags to unset"
 msgstr "پرچم‌های اشکال‌زدایی GDK که باید صفر شوند"
 
-#: gdk/gdkwindow.c:2734
+#: gdk/gdkwindow.c:2767
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "پشتیبانی از GL توسط GDK_DEBUG غیرفعال شده است"
 
@@ -464,7 +464,8 @@ msgid "Core GL is not available on EGL implementation"
 msgstr "Core GL بر روی پیاده‌سازی EGL موجود نیست"
 
 #: gdk/win32/gdkglcontext-win32.c:536
-msgid "The WGL_ARB_create_context extension needed to create core profiles is not available"
+msgid ""
+"The WGL_ARB_create_context extension needed to create core profiles is not available"
 msgstr "افزونه WGL_ARB_create_context برای ساخت نمای‌های هسته موجود نیست"
 
 #. Description of --sync in --help output
@@ -522,7 +523,8 @@ msgstr "هیچ پیکربندی‌ای برای قالب نقطه‌ای RGBA و
 msgid ""
 "The GLX_ARB_create_context_profile extension needed to create core profiles is not "
 "available"
-msgstr "افزونه GLX_ARB_create_context_profile که برای ساخت نمایه هسته لازم است، موجود نیست"
+msgstr ""
+"افزونه GLX_ARB_create_context_profile که برای ساخت نمایه هسته لازم است، موجود نیست"
 
 #: gtk/a11y/gtkbooleancellaccessible.c:43
 msgctxt "Action description"
@@ -1072,8 +1074,8 @@ msgstr "تغییر وضعیت کلید"
 
 #: gtk/deprecated/gtkcolorsel.c:423
 msgid ""
-"Select the color you want from the outer ring. Select the darkness or lightness of that "
-"color using the inner triangle."
+"Select the color you want from the outer ring. Select the darkness or lightness of "
+"that color using the inner triangle."
 msgstr ""
 "رنگی را که می‌خواهید از حلقه‌ی خارجی انتخاب کنید. تیرگی یا روشنی آن رنگ را با استفاده از "
 "مثلث داخلی انتخاب کنید."
@@ -1149,8 +1151,8 @@ msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name such as "
 "“orange” in this entry."
 msgstr ""
-"می‌توانید یک مقدار رنگ شانزده‌شانزدهی به سبک HTML وارد کنید، یا به سادگی نام انگلیسی یک رنگ "
-"مثل «orange» را برای نارنجی را وارد کنید."
+"می‌توانید یک مقدار رنگ شانزده‌شانزدهی به سبک HTML وارد کنید، یا به سادگی نام انگلیسی یک "
+"رنگ مثل «orange» را برای نارنجی را وارد کنید."
 
 #: gtk/deprecated/gtkcolorsel.c:546
 msgid "_Palette:"
@@ -1162,21 +1164,21 @@ msgstr "چرخ رنگ"
 
 #: gtk/deprecated/gtkcolorsel.c:1070
 msgid ""
-"The previously-selected color, for comparison to the color you’re selecting now. You can "
-"drag this color to a palette entry, or select this color as current by dragging it to the "
-"other color swatch alongside."
+"The previously-selected color, for comparison to the color you’re selecting now. You "
+"can drag this color to a palette entry, or select this color as current by dragging it "
+"to the other color swatch alongside."
 msgstr ""
-"رنگی که پیش‌تر انتخاب شده بود، برای مقایسه با رنگی که حالا انتخاب کردید. می‌توانید این رنگ "
-"را تا یک مدخل تخته‌رنگ بکشید، یا با کشیدنش به نمونه‌ی دیگر در کنار آن، این رنگ را به عنوان "
-"رنگ فعلی انتخاب کنید."
+"رنگی که پیش‌تر انتخاب شده بود، برای مقایسه با رنگی که حالا انتخاب کردید. می‌توانید این "
+"رنگ را تا یک مدخل تخته‌رنگ بکشید، یا با کشیدنش به نمونه‌ی دیگر در کنار آن، این رنگ را به "
+"عنوان رنگ فعلی انتخاب کنید."
 
 #: gtk/deprecated/gtkcolorsel.c:1076
 msgid ""
-"The color you’ve chosen. You can drag this color to a palette entry to save it for use in "
-"the future."
+"The color you’ve chosen. You can drag this color to a palette entry to save it for use "
+"in the future."
 msgstr ""
-"رنگی که انتخاب کرده‌اید. می‌توانید این رنگ را به یک مدخل تخته‌رنگ بکشید تا برای استفاده در "
-"آینده ذخیره شود."
+"رنگی که انتخاب کرده‌اید. می‌توانید این رنگ را به یک مدخل تخته‌رنگ بکشید تا برای استفاده "
+"در آینده ذخیره شود."
 
 #: gtk/deprecated/gtkcolorsel.c:1082
 msgid "The previously-selected color, for comparison to the color you’re selecting now."
@@ -1190,21 +1192,21 @@ msgstr "رنگی که انتخاب کرده‌اید."
 msgid "_Save color here"
 msgstr "_ذخیره‌ی رنگ در اینجا"
 
-#: gtk/deprecated/gtkcolorsel.c:1694
+#: gtk/deprecated/gtkcolorsel.c:1693
 msgid ""
-"Click this palette entry to make it the current color. To change this entry, drag a color "
-"swatch here or right-click it and select “Save color here.”"
+"Click this palette entry to make it the current color. To change this entry, drag a "
+"color swatch here or right-click it and select “Save color here.”"
 msgstr ""
-"روی این مدخل تخته‌رنگ کلیک کنید تا رنگ فعلی شود. برای تغییر این مدخل، یک نمونه‌ی رنگ را به "
-"اینجا بکشید یا روی آن کلیک راست کنید و «ذخیره‌ی رنگ در اینجا» را انتخاب کنید."
+"روی این مدخل تخته‌رنگ کلیک کنید تا رنگ فعلی شود. برای تغییر این مدخل، یک نمونه‌ی رنگ را "
+"به اینجا بکشید یا روی آن کلیک راست کنید و «ذخیره‌ی رنگ در اینجا» را انتخاب کنید."
 
 #: gtk/deprecated/gtkcolorseldialog.c:191 gtk/deprecated/gtkfontsel.c:1689
 #: gtk/gtkfilechooserbutton.c:795 gtk/gtkfilechooserwidget.c:1448
 #: gtk/gtkfilechooserwidget.c:6301 gtk/gtkmessagedialog.c:942 gtk/gtkmessagedialog.c:955
-#: gtk/gtkmountoperation.c:543 gtk/gtkpagesetupunixdialog.c:196 gtk/gtkprintbackend.c:759
+#: gtk/gtkmountoperation.c:543 gtk/gtkpagesetupunixdialog.c:196 gtk/gtkprintbackend.c:763
 #: gtk/gtkprinteroptionwidget.c:545 gtk/gtkprintunixdialog.c:665
-#: gtk/gtkprintunixdialog.c:738 gtk/gtkwindow.c:12070 gtk/inspector/css-editor.c:199
-#: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:136
+#: gtk/gtkprintunixdialog.c:738 gtk/gtkwindow.c:12075 gtk/inspector/css-editor.c:199
+#: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:131
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
 msgstr "_انصراف"
@@ -1247,12 +1249,12 @@ msgid "_Preview:"
 msgstr "_پیش‌نمایش:"
 
 #: gtk/deprecated/gtkfontsel.c:1693 gtk/gtkpagesetupunixdialog.c:197
-#: gtk/ui/gtkassistant.ui:61
+#: gtk/ui/gtkassistant.ui:56
 msgid "_Apply"
 msgstr "_اعمال"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:934 gtk/gtkmessagedialog.c:956
-#: gtk/gtkprintbackend.c:760 gtk/gtkwindow.c:12071 gtk/inspector/classes-list.c:127
+#: gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12076 gtk/inspector/classes-list.c:127
 msgid "_OK"
 msgstr "_تأیید"
 
@@ -1401,7 +1403,7 @@ msgstr "به‌جای شاخه فعلی در این شاخه خارج شود"
 msgid "Invalid size %s\n"
 msgstr "اندازه نامعتبر: %s\n"
 
-#: gtk/encodesymbolic.c:279 gtk/gtk-builder-tool.c:540
+#: gtk/encodesymbolic.c:279 gtk/gtk-builder-tool.c:591
 #, c-format
 msgid "Can't load file: %s\n"
 msgstr "نمی‌توان پرونده را بارگیری کرد: %s\n"
@@ -1428,7 +1430,7 @@ msgstr ""
 "این برنامه بدون هیچ‌گونه ضمانتی ارائه شده است؛\n"
 "برای جزئیات بیشتر <a href=\"%s\">%s</a> را ببینید"
 
-#: gtk/gtkaboutdialog.c:118 gtk/ui/gtkaboutdialog.ui:285
+#: gtk/gtkaboutdialog.c:118 gtk/ui/gtkaboutdialog.ui:221
 msgid "License"
 msgstr "مجوز"
 
@@ -1489,7 +1491,7 @@ msgid "_License"
 msgstr "_مجوز"
 
 #: gtk/gtkaboutdialog.c:716 gtk/gtkcustompaperunixdialog.c:329 gtk/gtkmessagedialog.c:938
-#: gtk/ui/gtkassistant.ui:155
+#: gtk/ui/gtkassistant.ui:150
 msgid "_Close"
 msgstr "_بستن"
 
@@ -1597,8 +1599,8 @@ msgstr "ممیز وارونه"
 msgid "Other application…"
 msgstr "برنامه‌ی دیگر..."
 
-#: gtk/gtkappchooserdialog.c:206 gtk/gtkappchooserdialog.c:213 gtk/gtkappchooserdialog.c:230
-#: gtk/ui/gtkappchooserdialog.ui:5
+#: gtk/gtkappchooserdialog.c:206 gtk/gtkappchooserdialog.c:213
+#: gtk/gtkappchooserdialog.c:230 gtk/ui/gtkappchooserdialog.ui:5
 msgid "Select Application"
 msgstr "انتخاب برنامه"
 
@@ -1683,32 +1685,32 @@ msgstr "عنصر <%s> به عنوان سطح بالا (toplevel) مجاز نیس
 msgid "Text may not appear inside <%s>"
 msgstr "متن ممکن است درون «%s» نمایان نشود"
 
-#: gtk/gtk-builder-tool.c:89
+#: gtk/gtk-builder-tool.c:97
 #, c-format
 msgid "Packing property %s::%s not found\n"
 msgstr "مشخصه %s::%s پیدا نشد\n"
 
-#: gtk/gtk-builder-tool.c:91
+#: gtk/gtk-builder-tool.c:99
 #, c-format
 msgid "Cell property %s::%s not found\n"
 msgstr "مشخص فراخوان %s::%s پیدا نشد\n"
 
-#: gtk/gtk-builder-tool.c:93
+#: gtk/gtk-builder-tool.c:101
 #, c-format
 msgid "Property %s::%s not found\n"
 msgstr "مشخصه %s::%s پیدا نشد\n"
 
-#: gtk/gtk-builder-tool.c:101
+#: gtk/gtk-builder-tool.c:109
 #, c-format
-msgid "Couldn't parse value: %s\n"
-msgstr "نمی‌توان مقدار را تجزیه کرد: %s\n"
+msgid "Couldn't parse value for %s::%s: %s\n"
+msgstr "نمی‌توان مقدار مربوط به %s::%s را تجزیه کرد: %s\n"
 
-#: gtk/gtk-builder-tool.c:561
+#: gtk/gtk-builder-tool.c:612
 #, c-format
 msgid "Can't parse file: %s\n"
 msgstr "نمی‌توان پرونده را تجزیه کرد: %s\n"
 
-#: gtk/gtk-builder-tool.c:732
+#: gtk/gtk-builder-tool.c:783
 #, c-format
 msgid ""
 "Usage:\n"
@@ -1752,7 +1754,7 @@ msgstr "calendar:week_start:6"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1862
+#: gtk/gtkcalendar.c:1861
 msgctxt "year measurement template"
 msgid "2000"
 msgstr "2000"
@@ -1767,7 +1769,7 @@ msgstr "2000"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1893 gtk/gtkcalendar.c:2571
+#: gtk/gtkcalendar.c:1892 gtk/gtkcalendar.c:2570
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -1783,7 +1785,7 @@ msgstr "%Id"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1925 gtk/gtkcalendar.c:2437
+#: gtk/gtkcalendar.c:1924 gtk/gtkcalendar.c:2436
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -1799,7 +1801,7 @@ msgstr "%Id"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:2216
+#: gtk/gtkcalendar.c:2215
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%OY"
@@ -2133,44 +2135,44 @@ msgstr "_راست:"
 msgid "Paper Margins"
 msgstr "حاشیه‌های کاغذ"
 
-#: gtk/gtkentry.c:9637 gtk/gtklabel.c:6602 gtk/gtktextview.c:9370
+#: gtk/gtkentry.c:9633 gtk/gtklabel.c:6612 gtk/gtktextview.c:9374
 msgid "Cu_t"
 msgstr "_برش"
 
-#: gtk/gtkentry.c:9641 gtk/gtklabel.c:6603 gtk/gtktextview.c:9374
+#: gtk/gtkentry.c:9637 gtk/gtklabel.c:6613 gtk/gtktextview.c:9378
 msgid "_Copy"
 msgstr "_رونوشت"
 
-#: gtk/gtkentry.c:9645 gtk/gtklabel.c:6604 gtk/gtktextview.c:9376
+#: gtk/gtkentry.c:9641 gtk/gtklabel.c:6614 gtk/gtktextview.c:9380
 msgid "_Paste"
 msgstr "_چسباندن"
 
-#: gtk/gtkentry.c:9648 gtk/gtkfilechooserwidget.c:1449 gtk/gtkfilechooserwidget.c:2247
-#: gtk/gtklabel.c:6606 gtk/gtktextview.c:9379
+#: gtk/gtkentry.c:9644 gtk/gtkfilechooserwidget.c:1449 gtk/gtkfilechooserwidget.c:2247
+#: gtk/gtklabel.c:6616 gtk/gtktextview.c:9383
 msgid "_Delete"
 msgstr "_حذف"
 
-#: gtk/gtkentry.c:9659 gtk/gtklabel.c:6615 gtk/gtktextview.c:9393
+#: gtk/gtkentry.c:9655 gtk/gtklabel.c:6625 gtk/gtktextview.c:9397
 msgid "Select _All"
 msgstr "انتخاب _همه"
 
-#: gtk/gtkentry.c:9837 gtk/gtktextview.c:9603
+#: gtk/gtkentry.c:9833 gtk/gtktextview.c:9607
 msgid "Select all"
 msgstr "انتخاب همه"
 
-#: gtk/gtkentry.c:9840 gtk/gtktextview.c:9606
+#: gtk/gtkentry.c:9836 gtk/gtktextview.c:9610
 msgid "Cut"
 msgstr "برش"
 
-#: gtk/gtkentry.c:9843 gtk/gtktextview.c:9609
+#: gtk/gtkentry.c:9839 gtk/gtktextview.c:9613
 msgid "Copy"
 msgstr "رونوشت"
 
-#: gtk/gtkentry.c:9846 gtk/gtktextview.c:9612
+#: gtk/gtkentry.c:9842 gtk/gtktextview.c:9616
 msgid "Paste"
 msgstr "چسباندن"
 
-#: gtk/gtkentry.c:10933
+#: gtk/gtkentry.c:10929
 msgid "Caps Lock is on"
 msgstr "قفل تبدیل روشن است"
 
@@ -2188,7 +2190,7 @@ msgid "(None)"
 msgstr "(هیچ‌کدام)"
 
 #. Open item is always present
-#: gtk/gtkfilechooserbutton.c:796 gtk/gtkplacessidebar.c:3351 gtk/gtkplacesview.c:1618
+#: gtk/gtkfilechooserbutton.c:796 gtk/gtkplacessidebar.c:3401 gtk/gtkplacesview.c:1618
 msgid "_Open"
 msgstr "_باز کردن"
 
@@ -2219,8 +2221,8 @@ msgstr "نمی‌توان پوشه را ایجاد کرد"
 
 #: gtk/gtkfilechooserwidget.c:785
 msgid ""
-"The folder could not be created, as a file with the same name already exists.  Try using "
-"a different name for the folder, or rename the file first."
+"The folder could not be created, as a file with the same name already exists.  Try "
+"using a different name for the folder, or rename the file first."
 msgstr ""
 "پوشه نمی‌تواند ایجاد شود، چون پرونده‌ای با همین نام از قبل وجود دارد.  از نام‌ دیگری برای "
 "پوشه استفاده کنید، یا نام پرونده را تغییر دهید."
@@ -2357,7 +2359,7 @@ msgid "_Add to Bookmarks"
 msgstr "_افزودن به نشانک‌ها"
 
 #: gtk/gtkfilechooserwidget.c:2246 gtk/gtkplacessidebar.c:2450
-#: gtk/ui/gtkfilechooserwidget.ui:526
+#: gtk/ui/gtkfilechooserwidget.ui:524
 msgid "_Rename"
 msgstr "_تغییر نام"
 
@@ -2383,7 +2385,7 @@ msgstr "نمایش _پوشه‌ها قبل از پرونده‌ها"
 
 #. this is the header for the location column in the print dialog
 #: gtk/gtkfilechooserwidget.c:2558 gtk/inspector/style-prop-list.ui:118
-#: gtk/ui/gtkfilechooserwidget.ui:208 gtk/ui/gtkprintunixdialog.ui:128
+#: gtk/ui/gtkfilechooserwidget.ui:206 gtk/ui/gtkprintunixdialog.ui:128
 msgid "Location"
 msgstr "مکان"
 
@@ -2410,7 +2412,7 @@ msgid "Enter location or URL"
 msgstr "وارد کردن مکان یا URL"
 
 #: gtk/gtkfilechooserwidget.c:4334 gtk/gtkfilechooserwidget.c:7215
-#: gtk/ui/gtkfilechooserwidget.ui:236
+#: gtk/ui/gtkfilechooserwidget.ui:234
 msgid "Modified"
 msgstr "تغییریافته"
 
@@ -2482,8 +2484,8 @@ msgstr "نمی‌توان فرآیند جستجو رو شروع کرد"
 
 #: gtk/gtkfilechooserwidget.c:7127
 msgid ""
-"The program was not able to create a connection to the indexer daemon. Please make sure "
-"it is running."
+"The program was not able to create a connection to the indexer daemon. Please make "
+"sure it is running."
 msgstr ""
 "برنامه نتوانست اتصالی به شبح نمایه‌گذار برقرار کند. لطفا مطمئن شوید که در حال اجرا است."
 
@@ -2500,7 +2502,7 @@ msgstr "در دسترس"
 #. * token for the fake “File System” volume.  So, we’ll return a pointer to
 #. * this particular string.
 #.
-#: gtk/gtkfilesystem.c:47
+#: gtk/gtkfilesystem.c:48
 msgid "File System"
 msgstr "سیستم پرونده‌ها"
 
@@ -2530,7 +2532,7 @@ msgstr "ساخت زمینه OpenGL شکست خورد"
 msgid "Application menu"
 msgstr "منو برنامه"
 
-#: gtk/gtkheaderbar.c:450 gtk/gtkwindow.c:8666
+#: gtk/gtkheaderbar.c:450 gtk/gtkwindow.c:8665
 msgid "Close"
 msgstr "بستن"
 
@@ -2582,12 +2584,12 @@ msgid "Error"
 msgstr "خطا"
 
 #. Open Link
-#: gtk/gtklabel.c:6583
+#: gtk/gtklabel.c:6593
 msgid "_Open Link"
 msgstr "_باز کردن پیوند"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6592
+#: gtk/gtklabel.c:6602
 msgid "Copy _Link Address"
 msgstr "_رونوشت از نشانی پیوند"
 
@@ -2932,11 +2934,11 @@ msgid "Show other locations"
 msgstr "نمایش مکان‌های دیگر"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: gtk/gtkplacessidebar.c:2099 gtk/gtkplacessidebar.c:3371
+#: gtk/gtkplacessidebar.c:2099 gtk/gtkplacessidebar.c:3421
 msgid "_Start"
 msgstr "_شروع"
 
-#: gtk/gtkplacessidebar.c:2100 gtk/gtkplacessidebar.c:3372
+#: gtk/gtkplacessidebar.c:2100 gtk/gtkplacessidebar.c:3422
 msgid "_Stop"
 msgstr "تو_قف"
 
@@ -2974,7 +2976,7 @@ msgstr "_بازکردن دستگاه‌ها"
 msgid "_Lock Device"
 msgstr "ق_فل کردن دستگاه"
 
-#: gtk/gtkplacessidebar.c:2162 gtk/gtkplacessidebar.c:3132
+#: gtk/gtkplacessidebar.c:2162 gtk/gtkplacessidebar.c:3180
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "شروع «%s» ممکن نبود"
@@ -2988,75 +2990,75 @@ msgstr "دسترسی به «%s» ممکن نیست"
 msgid "This name is already taken"
 msgstr "این نام از قبل گرفته شده است"
 
-#: gtk/gtkplacessidebar.c:2444 gtk/inspector/actions.ui:52 gtk/inspector/classes-list.ui:80
-#: gtk/inspector/css-node-tree.ui:17 gtk/inspector/object-tree.ui:109
-#: gtk/inspector/signals-list.ui:90 gtk/ui/gtkfilechooserwidget.ui:190
-#: gtk/ui/gtkfilechooserwidget.ui:500
+#: gtk/gtkplacessidebar.c:2444 gtk/inspector/actions.ui:52
+#: gtk/inspector/classes-list.ui:80 gtk/inspector/css-node-tree.ui:17
+#: gtk/inspector/object-tree.ui:109 gtk/inspector/signals-list.ui:90
+#: gtk/ui/gtkfilechooserwidget.ui:188 gtk/ui/gtkfilechooserwidget.ui:498
 msgid "Name"
 msgstr "نام"
 
-#: gtk/gtkplacessidebar.c:2596
+#: gtk/gtkplacessidebar.c:2644
 #, c-format
 msgid "Unable to unmount “%s”"
 msgstr "پیاده‌کردن «%s» ممکن نیست"
 
-#: gtk/gtkplacessidebar.c:2849
+#: gtk/gtkplacessidebar.c:2897
 #, c-format
 msgid "Unable to stop “%s”"
 msgstr "نمی‌توان «%s» را متوقف کرد"
 
-#: gtk/gtkplacessidebar.c:2878
+#: gtk/gtkplacessidebar.c:2926
 #, c-format
 msgid "Unable to eject “%s”"
 msgstr "بیرون‌دادن «%s» ممکن نبود"
 
-#: gtk/gtkplacessidebar.c:2907 gtk/gtkplacessidebar.c:2936
+#: gtk/gtkplacessidebar.c:2955 gtk/gtkplacessidebar.c:2984
 #, c-format
 msgid "Unable to eject %s"
 msgstr "بیرون‌دادن %s ممکن نبود"
 
-#: gtk/gtkplacessidebar.c:3084
+#: gtk/gtkplacessidebar.c:3132
 #, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr "نمی‌توان «%s» را برای تغییرات رسانه‌ای بررسی کرد"
 
-#: gtk/gtkplacessidebar.c:3354 gtk/gtkplacesview.c:1628
+#: gtk/gtkplacessidebar.c:3404 gtk/gtkplacesview.c:1628
 msgid "Open in New _Tab"
 msgstr "بازکردن در _زبانه جدید"
 
-#: gtk/gtkplacessidebar.c:3357 gtk/gtkplacesview.c:1639
+#: gtk/gtkplacessidebar.c:3407 gtk/gtkplacesview.c:1639
 msgid "Open in New _Window"
 msgstr "بازکردن در _پنجره جدید"
 
-#: gtk/gtkplacessidebar.c:3361
+#: gtk/gtkplacessidebar.c:3411
 msgid "_Add Bookmark"
 msgstr "_افزودن نشانک"
 
-#: gtk/gtkplacessidebar.c:3362
+#: gtk/gtkplacessidebar.c:3412
 msgid "_Remove"
 msgstr "_حذف"
 
-#: gtk/gtkplacessidebar.c:3363
+#: gtk/gtkplacessidebar.c:3413
 msgid "Rename…"
 msgstr "تغییر نام..."
 
-#: gtk/gtkplacessidebar.c:3367 gtk/gtkplacesview.c:1673
+#: gtk/gtkplacessidebar.c:3417 gtk/gtkplacesview.c:1673
 msgid "_Mount"
 msgstr "_سوار کردن"
 
-#: gtk/gtkplacessidebar.c:3368 gtk/gtkplacesview.c:1663
+#: gtk/gtkplacessidebar.c:3418 gtk/gtkplacesview.c:1663
 msgid "_Unmount"
 msgstr "_پیاده کردن"
 
-#: gtk/gtkplacessidebar.c:3369
+#: gtk/gtkplacessidebar.c:3419
 msgid "_Eject"
 msgstr "_بیرون دادن"
 
-#: gtk/gtkplacessidebar.c:3370
+#: gtk/gtkplacessidebar.c:3420
 msgid "_Detect Media"
 msgstr "_تشخیص رسانه"
 
-#: gtk/gtkplacessidebar.c:3819 gtk/gtkplacesview.c:1071
+#: gtk/gtkplacessidebar.c:3869 gtk/gtkplacesview.c:1071
 msgid "Computer"
 msgstr "رایانه"
 
@@ -3074,7 +3076,7 @@ msgid "Unable to access location"
 msgstr "دسترسی به مکان ممکن نبود"
 
 #. Restore from Cancel to Connect
-#: gtk/gtkplacesview.c:1198 gtk/ui/gtkplacesview.ui:263
+#: gtk/gtkplacesview.c:1198 gtk/ui/gtkplacesview.ui:224
 msgid "Con_nect"
 msgstr "ات_صال"
 
@@ -3112,15 +3114,15 @@ msgstr "بر روی این رایانه"
 msgid "Disconnect"
 msgstr "قطع ارتباط"
 
-#: gtk/gtkplacesviewrow.c:323 gtk/ui/gtkplacesviewrow.ui:73
+#: gtk/gtkplacesviewrow.c:323 gtk/ui/gtkplacesviewrow.ui:58
 msgid "Unmount"
 msgstr "پیاده کردن"
 
-#: gtk/gtkprintbackend.c:758
+#: gtk/gtkprintbackend.c:762
 msgid "Authentication"
 msgstr "تصدیق هویت"
 
-#: gtk/gtkprintbackend.c:829
+#: gtk/gtkprintbackend.c:833
 msgid "_Remember password"
 msgstr "_به‌خاطرسپاری گذرواژه"
 
@@ -3224,7 +3226,8 @@ msgid "Out of paper"
 msgstr "بدون کاغذ"
 
 #. Translators: this is a printer status.
-#: gtk/gtkprintoperation-win32.c:621 modules/printbackends/cups/gtkprintbackendcups.c:2524
+#: gtk/gtkprintoperation-win32.c:621
+#: modules/printbackends/cups/gtkprintbackendcups.c:2524
 msgid "Paused"
 msgstr "مکث"
 
@@ -3646,21 +3649,22 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%Id ٪"
 
-#: gtk/gtkwindow.c:12058
+#: gtk/gtkwindow.c:12063
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "آیا میخواهید از بازرس +GTK استفاده کنید؟"
 
-#: gtk/gtkwindow.c:12060
+#: gtk/gtkwindow.c:12065
 #, c-format
 msgid ""
-"GTK+ Inspector is an interactive debugger that lets you explore and modify the internals "
-"of any GTK+ application. Using it may cause the application to break or crash."
+"GTK+ Inspector is an interactive debugger that lets you explore and modify the "
+"internals of any GTK+ application. Using it may cause the application to break or "
+"crash."
 msgstr ""
 "بازرس +GTK یک بازرس تعاملی است که به شما اجازه پیمایش و تغییر هسته برنامه‌های +GTK را "
 "می‌دهد. استفاده از آن ممکن است باعث شود که برنامه‌ها قفل کنند یا از هم بپاشند."
 
-#: gtk/gtkwindow.c:12065
+#: gtk/gtkwindow.c:12070
 msgid "Don't show this message again"
 msgstr "این پیام را دوباره نمایش نده"
 
@@ -3710,9 +3714,11 @@ msgid "You can type here any CSS rule recognized by GTK+."
 msgstr "در اینجا می‌توانید هر نوع قاعده‌ی CSS قابل شناسایی برای +GTK را وارد کنید."
 
 #: gtk/inspector/css-editor.c:91 gtk/inspector/css-editor.c:97
-msgid "You can temporarily disable this custom CSS by clicking on the “Pause” button above."
+msgid ""
+"You can temporarily disable this custom CSS by clicking on the “Pause” button above."
 msgstr ""
-"شما می‌توانید بطور موقت این CSS سفارشی را با کلیک بر روی دکمه «مکث» در بالا غیرفعال کنید."
+"شما می‌توانید بطور موقت این CSS سفارشی را با کلیک بر روی دکمه «مکث» در بالا غیرفعال "
+"کنید."
 
 #: gtk/inspector/css-editor.c:92
 msgid "Changes are applied instantly and globally, for the whole application."
@@ -4001,7 +4007,7 @@ msgstr "مسیر"
 msgid "Count"
 msgstr "تعداد"
 
-#: gtk/inspector/resource-list.ui:129 gtk/ui/gtkfilechooserwidget.ui:224
+#: gtk/inspector/resource-list.ui:129 gtk/ui/gtkfilechooserwidget.ui:222
 msgid "Size"
 msgstr "اندازه"
 
@@ -4633,15 +4639,11 @@ msgid "RA2"
 msgstr "RA2"
 
 #: gtk/paper_names_offsets.c:69
-#| msgctxt "paper size"
-#| msgid "A3"
 msgctxt "paper size"
 msgid "RA3"
 msgstr "RA3"
 
 #: gtk/paper_names_offsets.c:70
-#| msgctxt "paper size"
-#| msgid "A4"
 msgctxt "paper size"
 msgid "RA4"
 msgstr "RA4"
@@ -5221,11 +5223,11 @@ msgctxt "paper size"
 msgid "ROC 8k"
 msgstr "ROC 8k"
 
-#: gtk/ui/gtkaboutdialog.ui:175
+#: gtk/ui/gtkaboutdialog.ui:148
 msgid "About"
 msgstr "درباره"
 
-#: gtk/ui/gtkaboutdialog.ui:248
+#: gtk/ui/gtkaboutdialog.ui:188
 msgid "Credits"
 msgstr "دست‌اندرکاران"
 
@@ -5271,15 +5273,15 @@ msgstr "نمایش همه"
 msgid "Quit %s"
 msgstr "خروج از %s"
 
-#: gtk/ui/gtkassistant.ui:79
+#: gtk/ui/gtkassistant.ui:74
 msgid "_Next"
 msgstr "_بعدی"
 
-#: gtk/ui/gtkassistant.ui:99
+#: gtk/ui/gtkassistant.ui:94
 msgid "_Back"
 msgstr "_قبلی"
 
-#: gtk/ui/gtkassistant.ui:118
+#: gtk/ui/gtkassistant.ui:113
 msgid "_Finish"
 msgstr "_پایان"
 
@@ -5323,35 +5325,35 @@ msgstr "V"
 msgid "Saturation"
 msgstr "غلظت"
 
-#: gtk/ui/gtkfilechooserwidget.ui:69
+#: gtk/ui/gtkfilechooserwidget.ui:68
 msgid "Create Folder"
 msgstr "ایجاد پوشه"
 
-#: gtk/ui/gtkfilechooserwidget.ui:169
+#: gtk/ui/gtkfilechooserwidget.ui:167
 msgid "Files"
 msgstr "پرونده‌ها"
 
-#: gtk/ui/gtkfilechooserwidget.ui:262
+#: gtk/ui/gtkfilechooserwidget.ui:260
 msgid "Remote location — only searching the current folder"
 msgstr "مکان دوردست — تنها با جست‌وجو در پوشه فعلی"
 
-#: gtk/ui/gtkfilechooserwidget.ui:311
+#: gtk/ui/gtkfilechooserwidget.ui:309
 msgid "No Results Found"
 msgstr "هیچ نتیجه‌ای پیدا نشد"
 
-#: gtk/ui/gtkfilechooserwidget.ui:325 gtk/ui/gtkplacesview.ui:219
+#: gtk/ui/gtkfilechooserwidget.ui:323 gtk/ui/gtkplacesview.ui:184
 msgid "Try a different search"
 msgstr "جست‌وجو دیگری را امتحان کنید"
 
-#: gtk/ui/gtkfilechooserwidget.ui:393
+#: gtk/ui/gtkfilechooserwidget.ui:391
 msgid "Select which types of files are shown"
 msgstr "انتخاب این که کدام نوع پرونده‌ها نمایش داده شوند"
 
-#: gtk/ui/gtkfilechooserwidget.ui:434
+#: gtk/ui/gtkfilechooserwidget.ui:432
 msgid "Folder Name"
 msgstr "نام پوشه"
 
-#: gtk/ui/gtkfilechooserwidget.ui:461
+#: gtk/ui/gtkfilechooserwidget.ui:459
 msgid "_Create"
 msgstr "_ایجاد"
 
@@ -5367,11 +5369,11 @@ msgstr "جستجو نام قلم"
 msgid "Font Family"
 msgstr "خانواده قلم"
 
-#: gtk/ui/gtkfontchooserwidget.ui:120
+#: gtk/ui/gtkfontchooserwidget.ui:119
 msgid "Preview text"
 msgstr "پیش‌نمایش متن"
 
-#: gtk/ui/gtkfontchooserwidget.ui:187
+#: gtk/ui/gtkfontchooserwidget.ui:186
 msgid "No Fonts Found"
 msgstr "هیچ قلمی پیدا نشد"
 
@@ -5412,23 +5414,23 @@ msgid "Up Path"
 msgstr "مسیر بالا"
 
 #. Translators: Server as any successfully connected network address
-#: gtk/ui/gtkplacesview.ui:51
+#: gtk/ui/gtkplacesview.ui:42
 msgid "No recent servers found"
 msgstr "هیچ کارگزاری که اخیرا استفاده شده باشد پیدا نشد"
 
-#: gtk/ui/gtkplacesview.ui:77
+#: gtk/ui/gtkplacesview.ui:65
 msgid "Recent Servers"
 msgstr "کارگزارهای اخیر"
 
-#: gtk/ui/gtkplacesview.ui:203
+#: gtk/ui/gtkplacesview.ui:171
 msgid "No results found"
 msgstr "هیچ نتیجه‌ای پیدا نشد"
 
-#: gtk/ui/gtkplacesview.ui:253
+#: gtk/ui/gtkplacesview.ui:214
 msgid "Connect to _Server"
 msgstr "اتصال به _کارگزار"
 
-#: gtk/ui/gtkplacesview.ui:286
+#: gtk/ui/gtkplacesview.ui:246
 msgid "Enter server address…"
 msgstr "وارد کردن آدرس کارگزار"
 
@@ -5629,11 +5631,11 @@ msgstr "رنگ"
 msgid "Finishing"
 msgstr "در حال پایان بردن"
 
-#: gtk/ui/gtkprintunixdialog.ui:1317
+#: gtk/ui/gtkprintunixdialog.ui:1316
 msgid "Advanced"
 msgstr "پیشرفته"
 
-#: gtk/ui/gtkprintunixdialog.ui:1341
+#: gtk/ui/gtkprintunixdialog.ui:1340
 msgid "Some of the settings in the dialog conflict"
 msgstr "بعضی از تنظیمات در محاوره ناسازگارند"
 
@@ -6597,8 +6599,8 @@ msgstr "چاپ به چاپگر آزمایشی"
 
 #~ msgid "No fonts matched your search. You can revise your search and try again."
 #~ msgstr ""
-#~ "هیچ قلمی با جستجو شما تطابق ندارد. می‌توانید در جستجو خود تجدید نظر کنید و مجددا تلاش "
-#~ "کنید."
+#~ "هیچ قلمی با جستجو شما تطابق ندارد. می‌توانید در جستجو خود تجدید نظر کنید و مجددا "
+#~ "تلاش کنید."
 
 #~ msgid "Failed to look for applications online"
 #~ msgstr "جستجو برای برنامه بصورت برخط شکست خورد"
@@ -6612,8 +6614,8 @@ msgstr "چاپ به چاپگر آزمایشی"
 #~ msgstr "هیچ برنامه‌ای برای باز کردن پرونده‌های «%s» موجود نیست"
 
 #~ msgid ""
-#~ "Click \"Show other applications\", for more options, or \"Find applications online\" "
-#~ "to install a new application"
+#~ "Click \"Show other applications\", for more options, or \"Find applications online"
+#~ "\" to install a new application"
 #~ msgstr ""
 #~ "برای گزینه‌های بیشتر بر روی «نمایش برنامه‌های دیگر»، یا برای نصب یک برنامه جدید «پیدا "
 #~ "کردن برنامه‌ها بصورت برخط» را کلیک کنید"
@@ -6864,8 +6866,8 @@ msgstr "چاپ به چاپگر آزمایشی"
 #~ msgid ""
 #~ "Failed to load animation '%s': reason not known, probably a corrupt animation file"
 #~ msgstr ""
-#~ "بار کردن پویانمایی «%s» شکست خورد: دلیل آن معلوم نیست، احتمالاً پرونده‌ی پویانمایی خراب "
-#~ "است"
+#~ "بار کردن پویانمایی «%s» شکست خورد: دلیل آن معلوم نیست، احتمالاً پرونده‌ی پویانمایی "
+#~ "خراب است"
 
 #~ msgid "Unable to load image-loading module: %s: %s"
 #~ msgstr "نمی‌توان پیمانه‌ی تصویربارکن را بار کرد: %s: %s"
@@ -6874,7 +6876,8 @@ msgstr "چاپ به چاپگر آزمایشی"
 #~ "Image-loading module %s does not export the proper interface; perhaps it's from a "
 #~ "different GTK version?"
 #~ msgstr ""
-#~ "پیمانه‌ی بار کردن پرونده %s رابط مناسب را صادر نمی‌کند؛ شاید از نسخه‌ی دیگری از GTK است؟"
+#~ "پیمانه‌ی بار کردن پرونده %s رابط مناسب را صادر نمی‌کند؛ شاید از نسخه‌ی دیگری از GTK "
+#~ "است؟"
 
 #~ msgid "Image type '%s' is not supported"
 #~ msgstr "تصویر نوع «%s» پشتیبانی نمی‌شود"
@@ -6904,7 +6907,8 @@ msgstr "چاپ به چاپگر آزمایشی"
 #~ msgstr "نمی‌توان «%s» را برای نوشتن باز کرد: %s"
 
 #~ msgid "Failed to close '%s' while writing image, all data may not have been saved: %s"
-#~ msgstr "بستن «%s» هنگام نوشتن تصویر شکست خورد، ممکن است همه‌ی داده‌ها ذخیره نشده باشند: %s"
+#~ msgstr ""
+#~ "بستن «%s» هنگام نوشتن تصویر شکست خورد، ممکن است همه‌ی داده‌ها ذخیره نشده باشند: %s"
 
 #~ msgid "Insufficient memory to save image into a buffer"
 #~ msgstr "حافظه برای ذخیره کردن تصویر در میان‌گیر کافی نیست"
@@ -6915,11 +6919,11 @@ msgstr "چاپ به چاپگر آزمایشی"
 
 #, fuzzy
 #~ msgid ""
-#~ "Internal error: Image loader module '%s' failed to complete an operation, but didn't "
-#~ "give a reason for the failure"
+#~ "Internal error: Image loader module '%s' failed to complete an operation, but "
+#~ "didn't give a reason for the failure"
 #~ msgstr ""
-#~ "خطای داخلی: پیمانه‌ی بارکننده‌ی تصویر «%s» در بار کردن یک تصویر شکست خورد،ولی دلیلی برای "
-#~ "این شکست اعلام نکرد"
+#~ "خطای داخلی: پیمانه‌ی بارکننده‌ی تصویر «%s» در بار کردن یک تصویر شکست خورد،ولی دلیلی "
+#~ "برای این شکست اعلام نکرد"
 
 #~ msgid "Incremental loading of image type '%s' is not supported"
 #~ msgstr "بار کردن افزایشی تصویر نوع «%s» پشتیبانی نمی‌شود"
@@ -7019,7 +7023,8 @@ msgstr "چاپ به چاپگر آزمایشی"
 #~ msgstr "نسخه‌ی %s از قالب پرونده‌ی GIF پشتیبانی نمی‌شود"
 
 #~ msgid "GIF image has no global colormap, and a frame inside it has no local colormap."
-#~ msgstr "تصویر GIF نقشه‌رنگ سراسری‌ای ندارد، و یکی از چارچوب‌های داخل آن نقشه‌رنگ محلی ندارد."
+#~ msgstr ""
+#~ "تصویر GIF نقشه‌رنگ سراسری‌ای ندارد، و یکی از چارچوب‌های داخل آن نقشه‌رنگ محلی ندارد."
 
 #~ msgid "GIF image was truncated or incomplete."
 #~ msgstr "تصویر GIF قطع شده یا ناقص است."
@@ -7107,7 +7112,8 @@ msgstr "چاپ به چاپگر آزمایشی"
 #~ msgid "Error interpreting JPEG image file (%s)"
 #~ msgstr "خطا در تفسیر پرونده‌ی JPEG ‏(%s)"
 
-#~ msgid "Insufficient memory to load image, try exiting some applications to free memory"
+#~ msgid ""
+#~ "Insufficient memory to load image, try exiting some applications to free memory"
 #~ msgstr ""
 #~ "حافظه برای بار کردن تصویر کافی نیست، برای آزاد کردن حافظه خروج از بعضی برنامه‌ها را "
 #~ "امتحان کنید"
@@ -7122,7 +7128,8 @@ msgstr "چاپ به چاپگر آزمایشی"
 #~ msgid "Transformed JPEG has zero width or height."
 #~ msgstr "عرض یا ارتفاع PNG تبدیل‌شده صفر است."
 
-#~ msgid "JPEG quality must be a value between 0 and 100; value '%s' could not be parsed."
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%s' could not be parsed."
 #~ msgstr "کیفیت JPEG باید مقداری بین ۰ و ۱۰۰ باشد؛ مقدار «%s» قابل درک نیست."
 
 #~ msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
@@ -7189,8 +7196,8 @@ msgstr "چاپ به چاپگر آزمایشی"
 #~ "Insufficient memory to store a %ld by %ld image; try exiting some applications to "
 #~ "reduce memory usage"
 #~ msgstr ""
-#~ "حافظه برای ذخیره‌ی یک تصویر %Ild در %Ild کافی نیست؛ برای کاهش مصرف حافظه خروج از بعضی "
-#~ "برنامه‌ها را امتحان کنید"
+#~ "حافظه برای ذخیره‌ی یک تصویر %Ild در %Ild کافی نیست؛ برای کاهش مصرف حافظه خروج از "
+#~ "بعضی برنامه‌ها را امتحان کنید"
 
 #~ msgid "Fatal error reading PNG image file"
 #~ msgstr "خطای مهلک در خواندن پرونده‌ی تصویری PNG"
@@ -7206,11 +7213,13 @@ msgstr "چاپ به چاپگر آزمایشی"
 
 #, fuzzy
 #~ msgid ""
-#~ "PNG compression level must be a value between 0 and 9; value '%s' could not be parsed."
+#~ "PNG compression level must be a value between 0 and 9; value '%s' could not be "
+#~ "parsed."
 #~ msgstr "کیفیت JPEG باید مقداری بین ۰ و ۱۰۰ باشد؛ مقدار «%s» قابل درک نیست."
 
 #, fuzzy
-#~ msgid "PNG compression level must be a value between 0 and 9; value '%d' is not allowed."
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%d' is not allowed."
 #~ msgstr "کیفیت JPEG باید مقداری بین ۰ و ۱۰۰ باشد؛ مقدار «%Id» مجاز نیست."
 
 #~ msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
@@ -7496,8 +7505,8 @@ msgstr "چاپ به چاپگر آزمایشی"
 #~ "this program.\n"
 #~ "Are you sure that you want to select it?"
 #~ msgstr ""
-#~ "پرونده‌ی «%s» روی دستگاه دیگری (به نام %s) است و ممکن است برای این برنامه قابل دسترسی "
-#~ "نباشد.\n"
+#~ "پرونده‌ی «%s» روی دستگاه دیگری (به نام %s) است و ممکن است برای این برنامه قابل "
+#~ "دسترسی نباشد.\n"
 #~ "آیا مطمئنید می‌خواهید انتخابش کنید؟"
 
 #~ msgid "_New Folder"
@@ -7553,8 +7562,8 @@ msgstr "چاپ به چاپگر آزمایشی"
 #~ "The filename \"%s\" couldn't be converted to UTF-8. (try setting the environment "
 #~ "variable G_FILENAME_ENCODING): %s"
 #~ msgstr ""
-#~ "نام پرونده‌ی «%s» را نمی‌توان به UTF-8 تبدیل کرد. (تنظیم متغیر محیطی G_FILENAME_ENCODING "
-#~ "را امتحان کنید): %s"
+#~ "نام پرونده‌ی «%s» را نمی‌توان به UTF-8 تبدیل کرد. (تنظیم متغیر محیطی "
+#~ "G_FILENAME_ENCODING را امتحان کنید): %s"
 
 #~ msgid "Invalid UTF-8"
 #~ msgstr "‏UTF-8 نامعتبر"
