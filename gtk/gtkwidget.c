@@ -7367,8 +7367,7 @@ event_check_cancel_sequence_on_hierarchy (GtkWidget *widget,
   if (source_device &&
       gdk_device_get_source (source_device) != GDK_SOURCE_KEYBOARD &&
       event->type != GDK_ENTER_NOTIFY && event->type != GDK_LEAVE_NOTIFY)
-    cancel_event_sequence_on_hierarchy (widget,
-                                        gtk_get_event_widget (event),
+    cancel_event_sequence_on_hierarchy (NULL, widget,
                                         gdk_event_get_event_sequence (event));
 }
 
@@ -7378,9 +7377,12 @@ _gtk_widget_captured_event (GtkWidget *widget,
 {
   gboolean return_val = FALSE;
   GtkCapturedEventHandler handler;
+  GtkWidget *parent;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), TRUE);
   g_return_val_if_fail (WIDGET_REALIZED_FOR_EVENT (widget, event), TRUE);
+
+  parent = gtk_widget_get_parent (widget);
 
   if (event->type == GDK_EXPOSE)
     {
@@ -7408,7 +7410,7 @@ _gtk_widget_captured_event (GtkWidget *widget,
       /* We stop event propagation, but still we must ensure the sequence is
        * cancelled across the widget hierarchy.
        */
-      event_check_cancel_sequence_on_hierarchy (widget, event);
+      event_check_cancel_sequence_on_hierarchy (parent, event);
       return_val = TRUE;
     }
 
@@ -7596,6 +7598,7 @@ gtk_widget_event_internal (GtkWidget *widget,
 			   GdkEvent  *event)
 {
   gboolean return_val = FALSE, handled;
+  GtkWidget *parent;
 
   /* We check only once for is-still-visible; if someone
    * hides the window in on of the signals on the widget,
@@ -7606,6 +7609,7 @@ gtk_widget_event_internal (GtkWidget *widget,
     return TRUE;
 
   g_object_ref (widget);
+  parent = gtk_widget_get_parent (widget);
 
   if (widget == gtk_get_event_widget (event))
     return_val |= _gtk_widget_run_controllers (widget, event, GTK_PHASE_TARGET);
@@ -7729,7 +7733,7 @@ gtk_widget_event_internal (GtkWidget *widget,
       /* We stop event propagation, but still we must ensure the sequence is
        * cancelled across the widget hierarchy.
        */
-      event_check_cancel_sequence_on_hierarchy (widget, event);
+      event_check_cancel_sequence_on_hierarchy (parent, event);
       return_val = TRUE;
     }
 
