@@ -94,6 +94,7 @@ struct _GdkWaylandDeviceData
   GdkCursor *grab_cursor;
   guint cursor_timeout_id;
   guint cursor_image_index;
+  guint cursor_image_delay;
 
   GdkDragContext *drop_context;
 
@@ -188,6 +189,7 @@ gdk_wayland_device_stop_window_cursor_animation (GdkWaylandDeviceData *wd)
       wd->cursor_timeout_id = 0;
     }
   wd->cursor_image_index = 0;
+  wd->cursor_image_delay = 0;
 }
 
 static gboolean
@@ -196,6 +198,7 @@ gdk_wayland_device_update_window_cursor (GdkWaylandDeviceData *wd)
   struct wl_buffer *buffer;
   int x, y, w, h, scale;
   guint next_image_index, next_image_delay;
+  gboolean retval = G_SOURCE_REMOVE;
 
   if (wd->grab_cursor)
     {
@@ -210,11 +213,11 @@ gdk_wayland_device_update_window_cursor (GdkWaylandDeviceData *wd)
   else
     {
       wd->cursor_timeout_id = 0;
-      return TRUE;
+      return retval;
     }
 
   if (!wd->wl_pointer)
-    return FALSE;
+    return retval;
 
   wl_pointer_set_cursor (wd->wl_pointer,
                          wd->enter_serial,
@@ -232,7 +235,7 @@ gdk_wayland_device_update_window_cursor (GdkWaylandDeviceData *wd)
     {
       /* We admit only static icons during drags so far */
       gdk_wayland_device_stop_window_cursor_animation (wd);
-      return TRUE;
+      return retval;
     }
 
   next_image_index =
@@ -242,21 +245,29 @@ gdk_wayland_device_update_window_cursor (GdkWaylandDeviceData *wd)
 
   if (next_image_index != wd->cursor_image_index)
     {
-      guint id;
+      if (next_image_delay != wd->cursor_image_delay)
+        {
+          guint id;
 
-      /* Queue timeout for next frame */
-      id = g_timeout_add (next_image_delay,
-                          (GSourceFunc)gdk_wayland_device_update_window_cursor,
-                          wd);
-      g_source_set_name_by_id (id, "[gtk+] gdk_wayland_device_update_window_cursor");
+          gdk_wayland_device_stop_window_cursor_animation (wd);
 
-      wd->cursor_timeout_id = id;
+          /* Queue timeout for next frame */
+          id = g_timeout_add (next_image_delay,
+                              (GSourceFunc)gdk_wayland_device_update_window_cursor,
+                              wd);
+          g_source_set_name_by_id (id, "[gtk+] gdk_wayland_device_update_window_cursor");
+          wd->cursor_timeout_id = id;
+        }
+      else
+        retval = G_SOURCE_CONTINUE;
+
       wd->cursor_image_index = next_image_index;
+      wd->cursor_image_delay = next_image_delay;
     }
   else
-    wd->cursor_timeout_id = 0;
+    gdk_wayland_device_stop_window_cursor_animation (wd);
 
-  return FALSE;
+  return retval;
 }
 
 static void
