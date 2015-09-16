@@ -2312,18 +2312,27 @@ file_list_show_popover (GtkFileChooserWidget *impl,
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->browse_files_tree_view));
   list = gtk_tree_selection_get_selected_rows (selection, &model);
-  path = list->data;
-  gtk_tree_view_get_cell_area (GTK_TREE_VIEW (priv->browse_files_tree_view), path, NULL, &rect);
-  gtk_tree_view_convert_bin_window_to_widget_coords (GTK_TREE_VIEW (priv->browse_files_tree_view),
+  if (list)
+    {
+      path = list->data;
+      gtk_tree_view_get_cell_area (GTK_TREE_VIEW (priv->browse_files_tree_view), path, NULL, &rect);
+      gtk_tree_view_convert_bin_window_to_widget_coords (GTK_TREE_VIEW (priv->browse_files_tree_view),
                                                      rect.x, rect.y, &rect.x, &rect.y);
 
-  rect.x = CLAMP (x - 20, 0, gtk_widget_get_allocated_width (priv->browse_files_tree_view) - 40);
-  rect.width = 40;
+      rect.x = CLAMP (x - 20, 0, gtk_widget_get_allocated_width (priv->browse_files_tree_view) - 40);
+      rect.width = 40;
 
-  g_list_free_full (list, (GDestroyNotify) gtk_tree_path_free);
+      g_list_free_full (list, (GDestroyNotify) gtk_tree_path_free);
+    }
+  else
+    {
+      rect.x = x;
+      rect.y = y;
+      rect.width = 1;
+      rect.height = 1;
+    }
 
   gtk_popover_set_pointing_to (GTK_POPOVER (priv->browse_files_popover), &rect);
-
   gtk_widget_show (priv->browse_files_popover);
 }
 
