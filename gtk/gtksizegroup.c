@@ -237,7 +237,7 @@ queue_resize_on_widget (GtkWidget *widget,
 
   parent = widget;
 
-  while (parent)
+  do
     {
       if (widget == parent)
         real_queue_resize (widget);
@@ -271,8 +271,14 @@ queue_resize_on_widget (GtkWidget *widget,
             }
 	}
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+      if (GTK_IS_RESIZE_CONTAINER (parent))
+        break;
+G_GNUC_END_IGNORE_DEPRECATIONS;
+
       parent = _gtk_widget_get_parent (parent);
     }
+  while (parent);
 
   g_hash_table_destroy (widgets);
   g_hash_table_destroy (groups);
