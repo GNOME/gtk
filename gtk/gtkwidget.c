@@ -8150,16 +8150,19 @@ gtk_widget_real_style_updated (GtkWidget *widget)
 
       if (widget->priv->anchored)
         {
-          static GtkBitmask *affects_size, *affects_redraw;
+          static GtkBitmask *affects_size, *affects_redraw, *affects_allocate;
 
           if (G_UNLIKELY (affects_size == NULL))
             {
-              affects_size = _gtk_css_style_property_get_mask_affecting (GTK_CSS_AFFECTS_SIZE | GTK_CSS_AFFECTS_CLIP);
+              affects_size = _gtk_css_style_property_get_mask_affecting (GTK_CSS_AFFECTS_SIZE);
+              affects_allocate = _gtk_css_style_property_get_mask_affecting (GTK_CSS_AFFECTS_CLIP);
               affects_redraw = _gtk_css_style_property_get_mask_affecting (GTK_CSS_AFFECTS_REDRAW);
             }
 
           if (changes == NULL || _gtk_bitmask_intersects (changes, affects_size))
             gtk_widget_queue_resize (widget);
+          else if (_gtk_bitmask_intersects (changes, affects_allocate))
+            gtk_widget_queue_allocate (widget);
           else if (_gtk_bitmask_intersects (changes, affects_redraw))
             gtk_widget_queue_draw (widget);
         }
