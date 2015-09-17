@@ -61,6 +61,7 @@
 #include "a11y/gtkwindowaccessible.h"
 #include "a11y/gtkcontaineraccessibleprivate.h"
 #include "gtkapplicationprivate.h"
+#include "gtkgestureprivate.h"
 #include "inspector/init.h"
 #include "inspector/window.h"
 
@@ -1450,6 +1451,14 @@ multipress_gesture_pressed_cb (GtkGestureMultiPress *gesture,
         {
           gtk_gesture_set_sequence_state (GTK_GESTURE (gesture),
                                           sequence, GTK_EVENT_SEQUENCE_DENIED);
+
+          /* Reset immediately the gestures, here we don't get many guarantees
+           * about whether the target window event mask will be complete enough
+           * to keep gestures consistent, or whether any widget across the
+           * hierarchy will be inconsistent about event handler return values.
+           */
+          gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
+          gtk_event_controller_reset (GTK_EVENT_CONTROLLER (priv->drag_gesture));
           return;
         }
       /* fall thru */
