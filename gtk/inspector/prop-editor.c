@@ -1535,12 +1535,20 @@ add_settings_info (GtkInspectorPropEditor *editor)
 }
 
 static void
+reset_setting (GtkInspectorPropEditor *editor)
+{
+  gtk_settings_reset_property (GTK_SETTINGS (editor->priv->object),
+                               editor->priv->name);
+}
+
+static void
 add_gtk_settings_info (GtkInspectorPropEditor *editor)
 {
   GObject *object;
   const gchar *name;
   GtkWidget *row;
   const gchar *source;
+  GtkWidget *button;
 
   object = editor->priv->object;
   name = editor->priv->name;
@@ -1550,6 +1558,14 @@ add_gtk_settings_info (GtkInspectorPropEditor *editor)
 
   row = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   gtk_container_add (GTK_CONTAINER (row), gtk_label_new (_("Source:")));
+
+  button = gtk_button_new_with_label (_("Reset"));
+  g_signal_connect_swapped (button, "clicked", G_CALLBACK (reset_setting), editor);
+
+  gtk_widget_set_halign (button, GTK_ALIGN_END);
+  gtk_widget_show (button);
+  gtk_widget_set_sensitive (button, FALSE);
+  gtk_box_pack_end (GTK_BOX (row), button, FALSE, FALSE, 0);
 
   switch (_gtk_settings_get_setting_source (GTK_SETTINGS (object), name))
     {
@@ -1563,6 +1579,7 @@ add_gtk_settings_info (GtkInspectorPropEditor *editor)
       source = _("XSettings");
       break;
     case GTK_SETTINGS_SOURCE_APPLICATION:
+      gtk_widget_set_sensitive (button, TRUE);
       source = _("Application");
       break;
     default:
