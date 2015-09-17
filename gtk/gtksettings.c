@@ -3395,3 +3395,31 @@ _gtk_settings_get_setting_source (GtkSettings *settings,
 
   return priv->property_values[pspec->param_id - 1].source;  
 }
+
+/**
+ * gtk_settings_reset_property:
+ * @settings: a #GtkSettings object
+ * @name: the name of the setting to reset
+ *
+ * Undoes the effect of calling g_object_set() to install an
+ * application-specific value for a setting. After this call,
+ * the setting will again follow the session-wide value for
+ * this setting.
+ *
+ * Since: 3.20
+ */
+void
+gtk_settings_reset_property (GtkSettings *settings,
+                             const gchar *name)
+{
+  GtkSettingsPrivate *priv = settings->priv;
+  GParamSpec *pspec;
+
+  pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (settings), name);
+
+  g_return_if_fail (pspec != NULL);
+
+  g_param_value_set_default (pspec, &priv->property_values[pspec->param_id - 1].value);
+
+  priv->property_values[pspec->param_id - 1].source = GTK_SETTINGS_SOURCE_DEFAULT;
+}

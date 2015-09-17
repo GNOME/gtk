@@ -3294,6 +3294,7 @@ gtk_settings_set_property_value
 gtk_settings_set_string_property
 gtk_settings_set_long_property
 gtk_settings_set_double_property
+gtk_settings_reset_property
 GtkIMPreeditStyle
 GtkIMStatusStyle
 <SUBSECTION Standard>

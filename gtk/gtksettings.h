@@ -140,6 +140,9 @@ void     gtk_settings_set_double_property  (GtkSettings            *settings,
                                             gdouble                 v_double,
                                             const gchar            *origin);
 
+GDK_AVAILABLE_IN_3_20
+void     gtk_settings_reset_property       (GtkSettings            *settings,
+                                            const gchar            *name);
 
 G_END_DECLS
 
