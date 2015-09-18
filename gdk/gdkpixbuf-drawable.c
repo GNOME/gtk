@@ -93,6 +93,14 @@ gdk_pixbuf_get_from_window (GdkWindow *src,
   g_return_val_if_fail (gdk_window_is_viewable (src), NULL);
 
   surface = _gdk_window_ref_cairo_surface (src);
+
+  /* We do not know what happened to this surface outside of GDK.
+   * Especially for foreign windows, they will have been modified
+   * by external applications.
+   * So be on the safe side and:
+   */
+  cairo_surface_mark_dirty (surface);
+
   dest = gdk_pixbuf_get_from_surface (surface,
                                       src_x, src_y,
                                       width, height);
