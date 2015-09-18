@@ -242,10 +242,12 @@ queue_resize_on_widget (GtkWidget *widget,
       GSList *widget_groups;
       GHashTableIter iter;
       gpointer current;
+      
+      if (widget == parent)
+        real_queue_resize (widget);
 
       if (widget == parent && !check_siblings)
 	{
-	  real_queue_resize (widget);
           parent = _gtk_widget_get_parent (parent);
 	  continue;
 	}
@@ -253,9 +255,6 @@ queue_resize_on_widget (GtkWidget *widget,
       widget_groups = _gtk_widget_get_sizegroups (parent);
       if (!widget_groups)
 	{
-	  if (widget == parent)
-	    real_queue_resize (widget);
-
           parent = _gtk_widget_get_parent (parent);
 	  continue;
 	}
@@ -269,8 +268,7 @@ queue_resize_on_widget (GtkWidget *widget,
 	{
 	  if (current == parent)
 	    {
-	      if (widget == parent)
-		real_queue_resize (parent);
+              /* do nothing */
 	    }
 	  else if (current == widget)
             {
