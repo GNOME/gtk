@@ -1,3 +1,27 @@
+Overview of changes in GTK+ 3.16.7
+==================================
+
+* Bugs fixed:
+ 345345 PrintOperation::paginate is not emitted for class handler
+ 579466 gtk_entry_completion_insert_action documentation is misleading
+ 751721 No release event for shift key when both shift keys were pressed
+ 753621 Calculate screen physical size
+ 753628 user options of wrong printer are used
+ 753644 Switching from Multipress input method to None immediately kills...
+ 754535 Cursor disappears only on adding characters
+
+* Translation updates:
+ Brazilian Portuguese
+ Czech
+ German
+ Hungarian
+ Indonesian
+ Lithuanian
+ Polish
+ Portuguese
+ Swedish
+
+
 Overview of changes in GTK+ 3.16.6
 ==================================
 
