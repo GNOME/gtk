@@ -239,43 +239,36 @@ queue_resize_on_widget (GtkWidget *widget,
 
   while (parent)
     {
-      GSList *widget_groups;
-      GHashTableIter iter;
-      gpointer current;
-      
       if (widget == parent)
         real_queue_resize (widget);
 
-      if (widget == parent && !check_siblings)
+      if (!check_siblings || _gtk_widget_get_sizegroups (parent) == NULL)
 	{
-          parent = _gtk_widget_get_parent (parent);
-	  continue;
+          check_siblings = TRUE;
 	}
+      else
+        {
+          GHashTableIter iter;
+          gpointer current;
+          
+          g_hash_table_remove_all (widgets);
+          g_hash_table_remove_all (groups);
+          add_widget_to_closure (widgets, groups, parent, -1);
 
-      widget_groups = _gtk_widget_get_sizegroups (parent);
-      if (!widget_groups)
-	{
-          parent = _gtk_widget_get_parent (parent);
-	  continue;
-	}
-
-      g_hash_table_remove_all (widgets);
-      g_hash_table_remove_all (groups);
-      add_widget_to_closure (widgets, groups, parent, -1);
-
-      g_hash_table_iter_init (&iter, widgets);
-      while (g_hash_table_iter_next (&iter, &current, NULL))
-	{
-	  if (current == parent)
-	    {
-              /* do nothing */
-	    }
-	  else if (current == widget)
+          g_hash_table_iter_init (&iter, widgets);
+          while (g_hash_table_iter_next (&iter, &current, NULL))
             {
-              g_warning ("A container and its child are part of this SizeGroup");
+              if (current == parent)
+                {
+                  /* do nothing */
+                }
+              else if (current == widget)
+                {
+                  g_warning ("A container and its child are part of this SizeGroup");
+                }
+              else
+                queue_resize_on_widget (current, FALSE);
             }
-	  else
-	    queue_resize_on_widget (current, FALSE);
 	}
 
       parent = _gtk_widget_get_parent (parent);
