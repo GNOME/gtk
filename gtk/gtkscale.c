@@ -28,7 +28,6 @@
 #include <math.h>
 #include <stdlib.h>
 
-#include "gtkscaleprivate.h"
 #include "gtkrangeprivate.h"
 
 #include "gtkadjustment.h"
@@ -162,6 +161,12 @@ static void     gtk_scale_buildable_custom_finished  (GtkBuildable  *buildable,
                                                       GObject       *child,
                                                       const gchar   *tagname,
                                                       gpointer       user_data);
+static void     gtk_scale_clear_layout               (GtkScale      *scale);
+static void     gtk_scale_get_value_size             (GtkScale      *scale,
+                                                      gint          *width,
+                                                      gint          *height);
+static gchar  * gtk_scale_format_value               (GtkScale      *scale,
+                                                      gdouble        value);
 
 
 G_DEFINE_TYPE_WITH_CODE (GtkScale, gtk_scale, GTK_TYPE_RANGE,
@@ -229,7 +234,7 @@ gtk_scale_update_style (GtkScale *scale)
                         NULL);
 
   gtk_range_set_min_slider_size (range, slider_length);
-  _gtk_scale_clear_layout (scale);
+  gtk_scale_clear_layout (scale);
 }
 
 #define add_slider_binding(binding_set, keyval, mask, scroll)              \
@@ -661,7 +666,7 @@ gtk_scale_set_digits (GtkScale *scale,
       if (priv->draw_value)
         gtk_range_set_round_digits (range, digits);
 
-      _gtk_scale_clear_layout (scale);
+      gtk_scale_clear_layout (scale);
       gtk_widget_queue_resize (GTK_WIDGET (scale));
 
       g_object_notify_by_pspec (G_OBJECT (scale), properties[PROP_DIGITS]);
@@ -712,7 +717,7 @@ gtk_scale_set_draw_value (GtkScale *scale,
       else
         gtk_range_set_round_digits (GTK_RANGE (scale), -1);
 
-      _gtk_scale_clear_layout (scale);
+      gtk_scale_clear_layout (scale);
 
       gtk_widget_queue_resize (GTK_WIDGET (scale));
 
@@ -808,7 +813,7 @@ gtk_scale_set_value_pos (GtkScale        *scale,
       priv->value_pos = pos;
       widget = GTK_WIDGET (scale);
 
-      _gtk_scale_clear_layout (scale);
+      gtk_scale_clear_layout (scale);
       if (gtk_widget_get_visible (widget) && gtk_widget_get_mapped (widget))
 	gtk_widget_queue_resize (widget);
 
@@ -845,7 +850,7 @@ gtk_scale_get_range_border (GtkRange  *range,
   scale = GTK_SCALE (range);
   priv = scale->priv;
 
-  _gtk_scale_get_value_size (scale, &w, &h);
+  gtk_scale_get_value_size (scale, &w, &h);
 
   border->left = 0;
   border->right = 0;
@@ -902,11 +907,10 @@ gtk_scale_get_range_border (GtkRange  *range,
     }
 }
 
-/* FIXME this could actually be static at the moment. */
-void
-_gtk_scale_get_value_size (GtkScale *scale,
-                           gint     *width,
-                           gint     *height)
+static void
+gtk_scale_get_value_size (GtkScale *scale,
+                          gint     *width,
+                          gint     *height)
 {
   GtkScalePrivate *priv = scale->priv;
   GtkRange *range;
@@ -923,7 +927,7 @@ _gtk_scale_get_value_size (GtkScale *scale,
       layout = gtk_widget_create_pango_layout (GTK_WIDGET (scale), NULL);
       adjustment = gtk_range_get_adjustment (range);
 
-      txt = _gtk_scale_format_value (scale, gtk_adjustment_get_lower (adjustment));
+      txt = gtk_scale_format_value (scale, gtk_adjustment_get_lower (adjustment));
       pango_layout_set_text (layout, txt, -1);
       g_free (txt);
       
@@ -934,7 +938,7 @@ _gtk_scale_get_value_size (GtkScale *scale,
       if (height)
 	*height = logical_rect.height;
 
-      txt = _gtk_scale_format_value (scale, gtk_adjustment_get_upper (adjustment));
+      txt = gtk_scale_format_value (scale, gtk_adjustment_get_upper (adjustment));
       pango_layout_set_text (layout, txt, -1);
       g_free (txt);
       
@@ -1026,7 +1030,7 @@ static void
 gtk_scale_screen_changed (GtkWidget *widget,
                           GdkScreen *old_screen)
 {
-  _gtk_scale_clear_layout (GTK_SCALE (widget));
+  gtk_scale_clear_layout (GTK_SCALE (widget));
 }
 
 static void
@@ -1382,33 +1386,24 @@ gtk_scale_real_get_layout_offsets (GtkScale *scale,
   *y += allocation.y;
 }
 
-/**
- * _gtk_scale_format_value:
- * @scale: a #GtkScale
- * @value: adjustment value
- * 
- * Emits #GtkScale::format-value signal to format the value, 
+/*
+ * Emits #GtkScale::format-value signal to format the value,
  * if no user signal handlers, falls back to a default format.
- * 
+ *
  * Returns: formatted value
  */
-gchar*
-_gtk_scale_format_value (GtkScale *scale,
-                         gdouble   value)
+static gchar *
+gtk_scale_format_value (GtkScale *scale,
+                        gdouble   value)
 {
-  GtkScalePrivate *priv = scale->priv;
   gchar *fmt = NULL;
 
-  g_signal_emit (scale,
-                 signals[FORMAT_VALUE],
-                 0,
-                 value,
-                 &fmt);
+  g_signal_emit (scale, signals[FORMAT_VALUE], 0, value, &fmt);
 
   if (fmt)
     return fmt;
   else
-    return g_strdup_printf ("%0.*f", priv->digits, value);
+    return g_strdup_printf ("%0.*f", scale->priv->digits, value);
 }
 
 static void
@@ -1416,7 +1411,7 @@ gtk_scale_finalize (GObject *object)
 {
   GtkScale *scale = GTK_SCALE (object);
 
-  _gtk_scale_clear_layout (scale);
+  gtk_scale_clear_layout (scale);
   gtk_scale_clear_marks (scale);
 
   G_OBJECT_CLASS (gtk_scale_parent_class)->finalize (object);
@@ -1453,8 +1448,8 @@ gtk_scale_get_layout (GtkScale *scale)
 
   if (priv->draw_value)
     {
-      txt = _gtk_scale_format_value (scale,
-				     gtk_adjustment_get_value (gtk_range_get_adjustment (GTK_RANGE (scale))));
+      txt = gtk_scale_format_value (scale,
+                                    gtk_adjustment_get_value (gtk_range_get_adjustment (GTK_RANGE (scale))));
       pango_layout_set_text (priv->layout, txt, -1);
       g_free (txt);
     }
@@ -1498,18 +1493,10 @@ gtk_scale_get_layout_offsets (GtkScale *scale,
     *y = local_y;
 }
 
-void
-_gtk_scale_clear_layout (GtkScale *scale)
+static void
+gtk_scale_clear_layout (GtkScale *scale)
 {
-  GtkScalePrivate *priv = scale->priv;
-
-  g_return_if_fail (GTK_IS_SCALE (scale));
-
-  if (priv->layout)
-    {
-      g_object_unref (priv->layout);
-      priv->layout = NULL;
-    }
+  g_set_object (&scale->priv->layout, NULL);
 }
 
 static void

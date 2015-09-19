@@ -365,7 +365,6 @@ gtk_private_h_sources =		\
 	gtkcolorswatchprivate.h	\
 	gtkcoloreditorprivate.h	\
 	gtkcolorplaneprivate.h	\
-	gtkcolorscaleprivate.h	\
 	gtkcolorchooserprivate.h	\
 	gtkcomboboxprivate.h	\
 	gtkcontainerprivate.h   \
