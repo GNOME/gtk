@@ -999,8 +999,6 @@ set_current_page (GtkAssistant *assistant,
             }
         }
     }
-
-  gtk_widget_queue_resize (GTK_WIDGET (assistant));
 }
 
 static gint
@@ -2020,7 +2018,6 @@ gtk_assistant_set_page_title (GtkAssistant *assistant,
   gtk_label_set_text ((GtkLabel*) page_info->regular_title, title);
   gtk_label_set_text ((GtkLabel*) page_info->current_title, title);
 
-  gtk_widget_queue_resize (GTK_WIDGET (assistant));
   gtk_container_child_notify (GTK_CONTAINER (assistant), page, "title");
 }
 
