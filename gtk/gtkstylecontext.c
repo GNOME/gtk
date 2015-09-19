@@ -2026,22 +2026,11 @@ void
 gtk_style_context_set_frame_clock (GtkStyleContext *context,
                                    GdkFrameClock   *frame_clock)
 {
-  GtkStyleContextPrivate *priv;
-
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (frame_clock == NULL || GDK_IS_FRAME_CLOCK (frame_clock));
 
-  priv = context->priv;
-  if (priv->frame_clock == frame_clock)
-    return;
-
-  if (priv->frame_clock)
-    g_object_unref (priv->frame_clock);
-  priv->frame_clock = frame_clock;
-  if (priv->frame_clock)
-    g_object_ref (priv->frame_clock);
-
-  g_object_notify_by_pspec (G_OBJECT (context), properties[PROP_FRAME_CLOCK]);
+  if (g_set_object (&context->priv->frame_clock, frame_clock))
+    g_object_notify_by_pspec (G_OBJECT (context), properties[PROP_FRAME_CLOCK]);
 }
 
 /**
