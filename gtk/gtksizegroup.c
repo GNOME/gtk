@@ -152,10 +152,10 @@ G_DEFINE_TYPE_WITH_CODE (GtkSizeGroup, gtk_size_group, G_TYPE_OBJECT,
 						gtk_size_group_buildable_init))
 
 static void
-add_widget_to_closure (GHashTable     *widgets,
-                       GHashTable     *groups,
-                       GtkWidget      *widget,
-		       GtkOrientation  orientation)
+add_widget_to_closure (GHashTable *widgets,
+                       GHashTable *groups,
+                       GtkWidget  *widget,
+		       gint        orientation)
 {
   GSList *tmp_groups, *tmp_widgets;
   gboolean hidden;
@@ -177,7 +177,7 @@ add_widget_to_closure (GHashTable     *widgets,
       if (tmp_priv->ignore_hidden && hidden)
         continue;
 
-      if (!(tmp_priv->mode & (1 << orientation)))
+      if (orientation >= 0 && !(tmp_priv->mode & (1 << orientation)))
         continue;
 
       g_hash_table_add (groups, tmp_group);
@@ -193,8 +193,8 @@ _gtk_size_group_get_widget_peers (GtkWidget      *for_widget,
 {
   GHashTable *widgets, *groups;
 
-  widgets = g_hash_table_new (g_direct_hash, g_direct_equal);
-  groups = g_hash_table_new (g_direct_hash, g_direct_equal);
+  widgets = g_hash_table_new (NULL, NULL);
+  groups = g_hash_table_new (NULL, NULL);
 
   add_widget_to_closure (widgets, groups, for_widget, orientation);
 
@@ -202,7 +202,7 @@ _gtk_size_group_get_widget_peers (GtkWidget      *for_widget,
 
   return widgets;
 }
-                                     
+
 static void
 real_queue_resize (GtkWidget          *widget,
 		   GtkQueueResizeFlags flags)
@@ -231,22 +231,28 @@ queue_resize_on_widget (GtkWidget          *widget,
 			gboolean            check_siblings,
 			GtkQueueResizeFlags flags)
 {
-  GtkWidget *parent = widget;
+  GHashTable *widgets;
+  GHashTable *groups;
+  GtkWidget *parent;
+
+  widgets = g_hash_table_new (NULL, NULL);
+  groups = g_hash_table_new (NULL, NULL);
+
+  parent = widget;
 
   while (parent)
     {
       GSList *widget_groups;
-      GHashTable *widgets;
       GHashTableIter iter;
       gpointer current;
-      
+
       if (widget == parent && !check_siblings)
 	{
 	  real_queue_resize (widget, flags);
           parent = _gtk_widget_get_parent (parent);
 	  continue;
 	}
-      
+
       widget_groups = _gtk_widget_get_sizegroups (parent);
       if (!widget_groups)
 	{
@@ -257,7 +263,9 @@ queue_resize_on_widget (GtkWidget          *widget,
 	  continue;
 	}
 
-      widgets = _gtk_size_group_get_widget_peers (parent, GTK_ORIENTATION_HORIZONTAL);
+      g_hash_table_remove_all (widgets);
+      g_hash_table_remove_all (groups);
+      add_widget_to_closure (widgets, groups, parent, -1);
 
       g_hash_table_iter_init (&iter, widgets);
       while (g_hash_table_iter_next (&iter, &current, NULL))
@@ -274,31 +282,12 @@ queue_resize_on_widget (GtkWidget          *widget,
 	  else
 	    queue_resize_on_widget (current, FALSE, flags);
 	}
-      
-      g_hash_table_destroy (widgets);
-      
-      widgets = _gtk_size_group_get_widget_peers (parent, GTK_ORIENTATION_VERTICAL);
-
-      g_hash_table_iter_init (&iter, widgets);
-      while (g_hash_table_iter_next (&iter, &current, NULL))
-	{
-	  if (current == parent)
-	    {
-	      if (widget == parent)
-		real_queue_resize (parent, flags);
-	    }
-	  else if (current == widget)
-            {
-              g_warning ("A container and its child are part of this SizeGroup");
-            }
-	  else
-	    queue_resize_on_widget (current, FALSE, flags);
-	}
-      
-      g_hash_table_destroy (widgets);
 
       parent = _gtk_widget_get_parent (parent);
     }
+
+  g_hash_table_destroy (widgets);
+  g_hash_table_destroy (groups);
 }
 
 static void
