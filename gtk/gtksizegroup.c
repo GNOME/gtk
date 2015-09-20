@@ -518,13 +518,6 @@ gtk_size_group_get_ignore_hidden (GtkSizeGroup *size_group)
   return size_group->priv->ignore_hidden;
 }
 
-static void
-gtk_size_group_widget_destroyed (GtkWidget    *widget,
-				 GtkSizeGroup *size_group)
-{
-  gtk_size_group_remove_widget (size_group, widget);
-}
-
 /**
  * gtk_size_group_add_widget:
  * @size_group: a #GtkSizeGroup
@@ -540,8 +533,8 @@ gtk_size_group_widget_destroyed (GtkWidget    *widget,
  * be removed from the size group.
  */
 void
-gtk_size_group_add_widget (GtkSizeGroup     *size_group,
-			   GtkWidget        *widget)
+gtk_size_group_add_widget (GtkSizeGroup *size_group,
+			   GtkWidget    *widget)
 {
   GtkSizeGroupPrivate *priv;
   GSList *groups;
@@ -558,10 +551,6 @@ gtk_size_group_add_widget (GtkSizeGroup     *size_group,
       _gtk_widget_add_sizegroup (widget, size_group);
 
       priv->widgets = g_slist_prepend (priv->widgets, widget);
-
-      g_signal_connect (widget, "destroy",
-			G_CALLBACK (gtk_size_group_widget_destroyed),
-			size_group);
 
       g_object_ref (size_group);
     }
@@ -589,10 +578,6 @@ gtk_size_group_remove_widget (GtkSizeGroup *size_group,
 
   g_return_if_fail (g_slist_find (priv->widgets, widget));
 
-  g_signal_handlers_disconnect_by_func (widget,
-					gtk_size_group_widget_destroyed,
-					size_group);
-  
   _gtk_widget_remove_sizegroup (widget, size_group);
 
   priv->widgets = g_slist_remove (priv->widgets, widget);

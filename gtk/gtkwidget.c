@@ -11999,6 +11999,7 @@ gtk_widget_dispose (GObject *object)
 {
   GtkWidget *widget = GTK_WIDGET (object);
   GtkWidgetPrivate *priv = widget->priv;
+  GSList *sizegroups;
 
   if (priv->parent)
     gtk_container_remove (GTK_CONTAINER (priv->parent), widget);
@@ -12014,6 +12015,16 @@ gtk_widget_dispose (GObject *object)
       priv->in_destruction = TRUE;
       g_signal_emit (object, widget_signals[DESTROY], 0);
       priv->in_destruction = FALSE;
+    }
+
+  sizegroups = _gtk_widget_get_sizegroups (widget);
+  while (sizegroups)
+    {
+      GtkSizeGroup *size_group;
+
+      size_group = sizegroups->data;
+      sizegroups = sizegroups->next;
+      gtk_size_group_remove_widget (size_group, widget);
     }
 
   g_object_set_qdata (object, quark_action_muxer, NULL);
