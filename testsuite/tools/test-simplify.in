@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/bash
 
 GTK_BUILDER_TOOL=${GTK_BUILDER_TOOL:-gtk-builder-tool}
 TEST_DATA_DIR=${TEST_DATA_DIR:-./simplify}
