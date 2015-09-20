@@ -18,9 +18,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-18 11:04+0000\n"
-"PO-Revision-Date: 2015-03-25 16:40+0900\n"
-"Last-Translator: Hajime Taira <htaira@redhat.com>\n"
+"POT-Creation-Date: 2015-09-20 10:06+0000\n"
+"PO-Revision-Date: 2015-09-20 20:25+0900\n"
+"Last-Translator: Jiro Matsuzawa <jmatsuzawa@gnome.org>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -2052,11 +2052,8 @@ msgid "Alpha"
 msgstr "アルファ"
 
 #: gtk/gtkcolorswatch.c:417
-#, fuzzy
-#| msgctxt "Action name"
-#| msgid "Customize"
 msgid "C_ustomize"
-msgstr "カスタマイズ"
+msgstr "カスタマイズ(_U)"
 
 #. Translate to the default units to use for presenting
 #. * lengths to the user. Translate to default:inch if you
@@ -2144,28 +2141,20 @@ msgid "Select _All"
 msgstr "すべて選択(_A)"
 
 #: gtk/gtkentry.c:9833 gtk/gtktextview.c:9607
-#, fuzzy
-#| msgid "Select _All"
 msgid "Select all"
-msgstr "すべて選択(_A)"
+msgstr "すべて選択"
 
 #: gtk/gtkentry.c:9836 gtk/gtktextview.c:9610
-#, fuzzy
-#| msgid "Cu_t"
 msgid "Cut"
-msgstr "切り取り(_T)"
+msgstr "切り取り"
 
 #: gtk/gtkentry.c:9839 gtk/gtktextview.c:9613
-#, fuzzy
-#| msgid "_Copy"
 msgid "Copy"
-msgstr "コピー(_C)"
+msgstr "コピー"
 
 #: gtk/gtkentry.c:9842 gtk/gtktextview.c:9616
-#, fuzzy
-#| msgid "_Paste"
 msgid "Paste"
-msgstr "貼り付け(_P)"
+msgstr "貼り付け"
 
 #: gtk/gtkentry.c:10929
 msgid "Caps Lock is on"
@@ -2194,10 +2183,8 @@ msgid "Other…"
 msgstr "その他…"
 
 #: gtk/gtkfilechooserdialog.c:570
-#, fuzzy
-#| msgid "_Name:"
 msgid "_Name"
-msgstr "名前(_N):"
+msgstr "名前(_N)"
 
 #. Translators: the first string is a path and the second string
 #. * is a hostname. Nautilus and the panel contain the same string
@@ -2214,11 +2201,11 @@ msgstr "新しいフォルダー名を入力してください"
 
 #: gtk/gtkfilechooserwidget.c:772
 msgid "The folder could not be created"
-msgstr "フォルダーを生成できませんでした"
+msgstr "フォルダーを作成できませんでした"
 
 #: gtk/gtkfilechooserwidget.c:785
 msgid "The folder could not be created, as a file with the same name already exists.  Try using a different name for the folder, or rename the file first."
-msgstr "同名のファイルがすでに存在しているので、そのフォルダーを生成できませんでした。別の名前にするか、ファイル名を変更するなどして、もう一度実行してください。"
+msgstr "同名のファイルが既に存在しているので、そのフォルダーを作成できませんでした。別のフォルダー名を使用するか、ファイルの名前を変更するなどして、もう一度実行してください。"
 
 #: gtk/gtkfilechooserwidget.c:799
 msgid "You need to choose a valid filename."
@@ -2254,96 +2241,82 @@ msgid "The folder contents could not be displayed"
 msgstr "フォルダーの内容を表示できませんでした"
 
 #: gtk/gtkfilechooserwidget.c:849
-#, fuzzy
-#| msgid "The folder could not be created"
 msgid "The file could not be deleted"
-msgstr "フォルダーを生成できませんでした"
+msgstr "ファイルを削除できませんでした"
 
 #: gtk/gtkfilechooserwidget.c:857
-#, fuzzy
-#| msgid "The folder could not be created"
 msgid "The file could not be moved to the Trash"
-msgstr "フォルダーを生成できませんでした"
+msgstr "ファイルをゴミ箱へ移動できませんでした"
 
 #: gtk/gtkfilechooserwidget.c:1002
 msgid "A folder with that name already exists"
-msgstr ""
+msgstr "同じ名前のフォルダーが既に存在します"
 
 #: gtk/gtkfilechooserwidget.c:1004
 msgid "A file with that name already exists"
-msgstr ""
+msgstr "同じ名前のファイルが既に存在します"
 
 #: gtk/gtkfilechooserwidget.c:1039
-#, fuzzy
-#| msgid "The folder could not be created"
 msgid "A folder cannot be called “.”"
-msgstr "フォルダーを生成できませんでした"
+msgstr "“.”という名前のフォルダーは作成できません"
 
 #: gtk/gtkfilechooserwidget.c:1040
 msgid "A file cannot be called “.”"
-msgstr ""
+msgstr "“.”という名前のファイルは作成できません"
 
 #: gtk/gtkfilechooserwidget.c:1043
-#, fuzzy
-#| msgid "The folder could not be created"
 msgid "A folder cannot be called “..”"
-msgstr "フォルダーを生成できませんでした"
+msgstr "“..”という名前のフォルダーは作成できません"
 
 #: gtk/gtkfilechooserwidget.c:1044
 msgid "A file cannot be called “..”"
-msgstr ""
+msgstr "“..”という名前のファイルは作成できません"
 
 #: gtk/gtkfilechooserwidget.c:1047
 msgid "Folder names cannot contain “/”"
-msgstr ""
+msgstr "フォルダー名に“/”は含められません"
 
 #: gtk/gtkfilechooserwidget.c:1048
 msgid "File names cannot contain “/”"
-msgstr ""
+msgstr "ファイル名に“/”は含められません"
 
 #: gtk/gtkfilechooserwidget.c:1074
-#, fuzzy
-#| msgid "The folder contents could not be displayed"
 msgid "Folder names should not begin with a space"
-msgstr "フォルダーの内容を表示できませんでした"
+msgstr "空白で始まるフォルダー名は推奨されません"
 
 #: gtk/gtkfilechooserwidget.c:1075
 msgid "File names should not begin with a space"
-msgstr ""
+msgstr "空白で始まるファイル名は推奨されません"
 
 #: gtk/gtkfilechooserwidget.c:1079
-#, fuzzy
-#| msgid "The folder contents could not be displayed"
 msgid "Folder names should not end with a space"
-msgstr "フォルダーの内容を表示できませんでした"
+msgstr "空白で終わるフォルダー名は推奨されません"
 
 #: gtk/gtkfilechooserwidget.c:1080
 msgid "File names should not end with a space"
-msgstr ""
+msgstr "空白で終わるファイル名は推奨されません"
 
 #: gtk/gtkfilechooserwidget.c:1083
 msgid "Folder names starting with a “.” are hidden"
-msgstr ""
+msgstr "“.”で始まるフォルダーは隠しフォルダーになります"
 
 #: gtk/gtkfilechooserwidget.c:1084
 msgid "File names starting with a “.” are hidden"
-msgstr ""
+msgstr "“.”で始まるファイルは隠しファイルになります"
 
 #: gtk/gtkfilechooserwidget.c:1444
 #, c-format
 msgid "Are you sure you want to permanently delete “%s”?"
-msgstr ""
+msgstr "“%s”を完全に削除してもよろしいですか?"
 
 #: gtk/gtkfilechooserwidget.c:1447
 #, c-format
 msgid "If you delete an item, it will be permanently lost."
-msgstr ""
+msgstr "削除すると、アイテムは完全に失われます。"
 
 #: gtk/gtkfilechooserwidget.c:1581
-#, fuzzy
-#| msgid "The folder could not be created"
 msgid "The file could not be renamed"
-msgstr "フォルダーを生成できませんでした"
+msgstr "ファイル名を変更できませんでした"
 
 #: gtk/gtkfilechooserwidget.c:1893
 msgid "Could not select file"
@@ -2367,14 +2340,12 @@ msgstr "ブックマークへ追加(_A)"
 
 #: gtk/gtkfilechooserwidget.c:2246 gtk/gtkplacessidebar.c:2450
 #: gtk/ui/gtkfilechooserwidget.ui:524
-#, fuzzy
-#| msgid "Rename…"
 msgid "_Rename"
-msgstr "名前の変更…"
+msgstr "名前の変更(_R)"
 
 #: gtk/gtkfilechooserwidget.c:2248
 msgid "_Move to Trash"
-msgstr ""
+msgstr "ゴミ箱へ移動する(_M)"
 
 #: gtk/gtkfilechooserwidget.c:2252
 msgid "Show _Hidden Files"
@@ -2386,7 +2357,7 @@ msgstr "サイズを表示する(_S)"
 
 #: gtk/gtkfilechooserwidget.c:2254
 msgid "Show _Time"
-msgstr ""
+msgstr "時刻を表示する(_T)"
 
 #: gtk/gtkfilechooserwidget.c:2255
 msgid "Sort _Folders before Files"
@@ -2404,28 +2375,21 @@ msgid "_Name:"
 msgstr "名前(_N):"
 
 #: gtk/gtkfilechooserwidget.c:3274
-#, fuzzy
-#| msgid "Search"
 msgid "Searching"
 msgstr "検索"
 
 #: gtk/gtkfilechooserwidget.c:3279 gtk/gtkfilechooserwidget.c:3293
-#, fuzzy, c-format
-#| msgid "Starting %s"
+#, c-format
 msgid "Searching in %s"
-msgstr "%s の起動中です"
+msgstr "%s 内を検索"
 
 #: gtk/gtkfilechooserwidget.c:3303
-#, fuzzy
-#| msgid "Enter Location"
 msgid "Enter location"
 msgstr "場所を指定する"
 
 #: gtk/gtkfilechooserwidget.c:3305
-#, fuzzy
-#| msgid "Enter Location"
 msgid "Enter location or URL"
-msgstr "場所を指定する"
+msgstr "場所または URL を指定する"
 
 #: gtk/gtkfilechooserwidget.c:4343 gtk/gtkfilechooserwidget.c:7224
 #: gtk/ui/gtkfilechooserwidget.ui:234
@@ -2446,24 +2410,20 @@ msgid "%H:%M"
 msgstr "%H:%M"
 
 #: gtk/gtkfilechooserwidget.c:4745 gtk/gtkfilechooserwidget.c:4791
-#, fuzzy
-#| msgid "%-I:%M %P"
 msgid "%l:%M %p"
 msgstr "%P%I:%M"
 
 #: gtk/gtkfilechooserwidget.c:4749
-#, fuzzy
-#| msgid "Yesterday at %H:%M"
 msgid "Yesterday"
-msgstr "昨日 %H:%M"
+msgstr "昨日"
 
 #: gtk/gtkfilechooserwidget.c:4757
 msgid "%-e %b"
-msgstr ""
+msgstr "%-m月%-d日"
 
 #: gtk/gtkfilechooserwidget.c:4761
 msgid "%-e %b %Y"
-msgstr ""
+msgstr "%Y年%-m月%-d日"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
@@ -2495,10 +2455,8 @@ msgid "_Replace"
 msgstr "置き換える(_R)"
 
 #: gtk/gtkfilechooserwidget.c:6521
-#, fuzzy
-#| msgid "Could not read the contents of the folder"
 msgid "You do not have access to the specified folder."
-msgstr "フォルダーの内容を読み込めませんでした"
+msgstr "指定したフォルダーへのアクセス権がありません。"
 
 #: gtk/gtkfilechooserwidget.c:7135
 msgid "Could not start the search process"
@@ -2933,10 +2891,8 @@ msgid "New bookmark"
 msgstr "新しいブックマーク"
 
 #: gtk/gtkplacessidebar.c:1231
-#, fuzzy
-#| msgid "New bookmark"
 msgid "Add a new bookmark"
-msgstr "新しいブックマーク"
+msgstr "新しいブックマークを追加する"
 
 #: gtk/gtkplacessidebar.c:1244
 msgid "Connect to Server"
@@ -2947,16 +2903,12 @@ msgid "Connect to a network server address"
 msgstr "アドレスを指定してサーバーへ接続します"
 
 #: gtk/gtkplacessidebar.c:1308
-#, fuzzy
-#| msgid "Enter Location"
 msgid "Other Locations"
-msgstr "場所を指定する"
+msgstr "他の場所"
 
 #: gtk/gtkplacessidebar.c:1309
-#, fuzzy
-#| msgid "Other Applications"
 msgid "Show other locations"
-msgstr "別のアプリケーション"
+msgstr "他の場所を表示する"
 
 #. Adjust start/stop items to reflect the type of the drive
 #: gtk/gtkplacessidebar.c:2099 gtk/gtkplacessidebar.c:3421
@@ -2994,16 +2946,12 @@ msgstr "マルチディスクデバイスを停止(_S)"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
 #: gtk/gtkplacessidebar.c:2123
-#, fuzzy
-#| msgid "_Unlock Drive"
 msgid "_Unlock Device"
-msgstr "ドライブのロック解除(_U)"
+msgstr "デバイスのロック解除(_U)"
 
 #: gtk/gtkplacessidebar.c:2124
-#, fuzzy
-#| msgid "_Lock Drive"
 msgid "_Lock Device"
-msgstr "ドライブのロック(_L)"
+msgstr "デバイスのロック(_L)"
 
 #: gtk/gtkplacessidebar.c:2162 gtk/gtkplacessidebar.c:3180
 #, c-format
@@ -3066,9 +3014,6 @@ msgid "_Add Bookmark"
 msgstr "ブックマークを追加(_A)"
 
 #: gtk/gtkplacessidebar.c:3412
-#, fuzzy
-#| msgctxt "Stock label"
-#| msgid "_Remove"
 msgid "_Remove"
 msgstr "削除(_R)"
 
@@ -3098,83 +3043,59 @@ msgstr "コンピューター"
 
 #: gtk/gtkplacesview.c:900
 msgid "Searching for network locations"
-msgstr ""
+msgstr "ネットワークの場所を探しています"
 
 #: gtk/gtkplacesview.c:907
-#, fuzzy
-#| msgid "No applications found."
 msgid "No network locations found"
-msgstr "アプリケーションが見つかりません。"
+msgstr "ネットワークの場所が見つかりませんでした"
 
 #. if it wasn't cancelled show a dialog
 #: gtk/gtkplacesview.c:1181 gtk/gtkplacesview.c:1225 gtk/gtkplacesview.c:1276
-#, fuzzy
-#| msgid "Unable to access “%s”"
 msgid "Unable to access location"
-msgstr "“%s” にアクセスできません"
+msgstr "要求された場所にアクセスできません"
 
 #. Restore from Cancel to Connect
 #: gtk/gtkplacesview.c:1198 gtk/ui/gtkplacesview.ui:224
-#, fuzzy
-#| msgid "Co_nnect"
 msgid "Con_nect"
-msgstr "接続する(_N)"
+msgstr "接続(_N)"
 
 #. if it wasn't cancelled show a dialog
 #: gtk/gtkplacesview.c:1339
-#, fuzzy
-#| msgid "Unable to unmount “%s”"
 msgid "Unable to unmount volume"
-msgstr "“%s”をアンマウントできません"
+msgstr "ボリュームをアンマウントできません"
 
 #. Allow to cancel the operation
 #: gtk/gtkplacesview.c:1421
-#, fuzzy
-#| msgid "Cancel"
 msgid "Cance_l"
-msgstr "キャンセル"
+msgstr "キャンセル(_L)"
 
 #: gtk/gtkplacesview.c:1663
-#, fuzzy
-#| msgctxt "Stock label"
-#| msgid "_Disconnect"
 msgid "_Disconnect"
 msgstr "切断(_D)"
 
 #: gtk/gtkplacesview.c:1673
-#, fuzzy
-#| msgid "Co_nnect"
 msgid "_Connect"
-msgstr "接続する(_N)"
+msgstr "接続(_C)"
 
 #: gtk/gtkplacesview.c:1838
 msgid "Unable to get remote server location"
-msgstr ""
+msgstr "指定したリモートサーバーの場所にアクセスできません"
 
 #: gtk/gtkplacesview.c:1957 gtk/gtkplacesview.c:1966
-#, fuzzy
-#| msgid "Network"
 msgid "Networks"
 msgstr "ネットワーク"
 
 #: gtk/gtkplacesview.c:1957 gtk/gtkplacesview.c:1966
-#, fuzzy
-#| msgid "Computer"
 msgid "On This Computer"
-msgstr "コンピューター"
+msgstr "このコンピューター"
 
 #: gtk/gtkplacesviewrow.c:323
-#, fuzzy
-#| msgctxt "Stock label"
-#| msgid "_Disconnect"
 msgid "Disconnect"
-msgstr "切断(_D)"
+msgstr "切断"
 
 #: gtk/gtkplacesviewrow.c:323 gtk/ui/gtkplacesviewrow.ui:58
-#, fuzzy
-#| msgid "_Unmount"
 msgid "Unmount"
-msgstr "アンマウント(_U)"
+msgstr "アンマウント"
 
 #: gtk/gtkprintbackend.c:762
 msgid "Authentication"
@@ -5411,33 +5332,27 @@ msgstr "ファイル"
 
 #: gtk/ui/gtkfilechooserwidget.ui:260
 msgid "Remote location — only searching the current folder"
-msgstr ""
+msgstr "リモートの場所 — 現在のフォルダーのみ検索"
 
 #: gtk/ui/gtkfilechooserwidget.ui:309
-#, fuzzy
-#| msgid "No items found"
 msgid "No Results Found"
-msgstr "(該当なし)"
+msgstr "見つかりませんでした"
 
 #: gtk/ui/gtkfilechooserwidget.ui:323 gtk/ui/gtkplacesview.ui:184
 msgid "Try a different search"
-msgstr ""
+msgstr "他のキーワードを試してください"
 
 #: gtk/ui/gtkfilechooserwidget.ui:391
 msgid "Select which types of files are shown"
 msgstr "表示するファイルの種類を選択してください"
 
 #: gtk/ui/gtkfilechooserwidget.ui:432
-#, fuzzy
-#| msgid "Color Name"
 msgid "Folder Name"
-msgstr "色の名称"
+msgstr "フォルダー名"
 
 #: gtk/ui/gtkfilechooserwidget.ui:459
-#, fuzzy
-#| msgid "Created by"
 msgid "_Create"
-msgstr "作成者"
+msgstr "作成(_C)"
 
 #: gtk/ui/gtkfontchooserdialog.ui:6
 msgid "Select Font"
@@ -5501,34 +5416,24 @@ msgstr "上のパス"
 
 #. Translators: Server as any successfully connected network address
 #: gtk/ui/gtkplacesview.ui:42
-#, fuzzy
-#| msgid "No printer found"
 msgid "No recent servers found"
-msgstr "プリンターが見つかりません"
+msgstr "最近使用したサーバーなし"
 
 #: gtk/ui/gtkplacesview.ui:65
-#, fuzzy
-#| msgid "Recent files"
 msgid "Recent Servers"
-msgstr "最近開いたファイル"
+msgstr "最近使用したサーバー"
 
 #: gtk/ui/gtkplacesview.ui:171
-#, fuzzy
-#| msgid "No items found"
 msgid "No results found"
-msgstr "(該当なし)"
+msgstr "見つかりませんでした"
 
 #: gtk/ui/gtkplacesview.ui:214
-#, fuzzy
-#| msgid "Connect to Server"
 msgid "Connect to _Server"
-msgstr "サーバーへ接続"
+msgstr "サーバーへ接続(_S)"
 
 #: gtk/ui/gtkplacesview.ui:246
-#, fuzzy
-#| msgid "Connect to a network server address"
 msgid "Enter server address…"
-msgstr "アドレスを指定してサーバーへ接続します"
+msgstr "サーバーのアドレスを入力…"
 
 #: gtk/ui/gtkprintunixdialog.ui:117
 msgid "Printer"
