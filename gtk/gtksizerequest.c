@@ -393,8 +393,6 @@ gtk_widget_compute_size_for_orientation (GtkWidget        *widget,
 
   widgets = _gtk_size_group_get_widget_peers (widget, orientation);
 
-  g_hash_table_foreach (widgets, (GHFunc) g_object_ref, NULL);
-  
   g_hash_table_iter_init (&iter, widgets);
   while (g_hash_table_iter_next (&iter, &key, NULL))
     {
@@ -406,8 +404,6 @@ gtk_widget_compute_size_for_orientation (GtkWidget        *widget,
       min_result = MAX (min_result, min_dimension);
       nat_result = MAX (nat_result, nat_dimension);
     }
-
-  g_hash_table_foreach (widgets, (GHFunc) g_object_unref, NULL);
 
   g_hash_table_destroy (widgets);
 
