@@ -341,6 +341,8 @@ enum
 };
 
 static GQuark quark_text_selection_data = 0;
+static GQuark quark_gtk_signal = 0;
+static GQuark quark_text_view_child = 0;
 
 static void gtk_text_view_finalize             (GObject          *object);
 static void gtk_text_view_set_property         (GObject         *object,
@@ -1634,8 +1636,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_TEXT_VIEW_ACCESSIBLE);
 
-  quark_text_selection_data =
-    g_quark_from_static_string ("gtk-text-view-text-selection-data");
+  quark_text_selection_data = g_quark_from_static_string ("gtk-text-view-text-selection-data");
+  quark_gtk_signal = g_quark_from_static_string ("gtk-signal");
+  quark_text_view_child = g_quark_from_static_string ("gtk-text-view-child");
 }
 
 static void
@@ -4049,8 +4052,7 @@ gtk_text_view_child_allocated (GtkTextLayout *layout,
    * window coordinates, then size_allocate the child.
    */
 
-  vc = g_object_get_data (G_OBJECT (child),
-                          "gtk-text-view-child");
+  vc = g_object_get_qdata (G_OBJECT (child), quark_text_view_child);
 
   g_assert (vc != NULL);
 
@@ -9154,7 +9156,9 @@ static void
 activate_cb (GtkWidget   *menuitem,
 	     GtkTextView *text_view)
 {
-  const gchar *signal = g_object_get_data (G_OBJECT (menuitem), "gtk-signal");
+  const gchar *signal;
+
+  signal = g_object_get_qdata (G_OBJECT (menuitem), quark_gtk_signal);
   g_signal_emit_by_name (text_view, signal);
 }
 
@@ -9167,7 +9171,7 @@ append_action_signal (GtkTextView  *text_view,
 {
   GtkWidget *menuitem = gtk_menu_item_new_with_mnemonic (label);
 
-  g_object_set_data (G_OBJECT (menuitem), I_("gtk-signal"), (char *)signal);
+  g_object_set_qdata (G_OBJECT (menuitem), quark_gtk_signal, (char *)signal);
   g_signal_connect (menuitem, "activate",
 		    G_CALLBACK (activate_cb), text_view);
 
@@ -9519,7 +9523,7 @@ activate_bubble_cb (GtkWidget   *item,
 {
   const gchar *signal;
 
-  signal = g_object_get_data (G_OBJECT (item), "gtk-signal");
+  signal = g_object_get_qdata (G_OBJECT (item), quark_gtk_signal);
   gtk_widget_hide (text_view->priv->selection_bubble);
   g_signal_emit_by_name (text_view, signal);
 }
@@ -9541,7 +9545,7 @@ append_bubble_action (GtkTextView  *text_view,
   gtk_container_add (GTK_CONTAINER (item), image);
   gtk_widget_set_tooltip_text (item, label);
   gtk_style_context_add_class (gtk_widget_get_style_context (item), "image-button");
-  g_object_set_data (G_OBJECT (item), I_("gtk-signal"), (char *)signal);
+  g_object_set_qdata (G_OBJECT (item), quark_gtk_signal, (char *)signal);
   g_signal_connect (item, "clicked", G_CALLBACK (activate_bubble_cb), text_view);
   gtk_widget_set_sensitive (GTK_WIDGET (item), sensitive);
   gtk_widget_show (GTK_WIDGET (item));
@@ -10655,9 +10659,7 @@ text_view_child_new_anchored (GtkWidget          *child,
   g_object_ref (vc->widget);
   g_object_ref (vc->anchor);
 
-  g_object_set_data (G_OBJECT (child),
-                     I_("gtk-text-view-child"),
-                     vc);
+  g_object_set_qdata (G_OBJECT (child), quark_text_view_child, vc);
 
   gtk_text_child_anchor_register_child (anchor, child, layout);
   
@@ -10686,9 +10688,7 @@ text_view_child_new_window (GtkWidget          *child,
   vc->x = x;
   vc->y = y;
 
-  g_object_set_data (G_OBJECT (child),
-                     I_("gtk-text-view-child"),
-                     vc);
+  g_object_set_qdata (G_OBJECT (child), quark_text_view_child, vc);
   
   return vc;
 }
@@ -10696,8 +10696,7 @@ text_view_child_new_window (GtkWidget          *child,
 static void
 text_view_child_free (GtkTextViewChild *child)
 {
-  g_object_set_data (G_OBJECT (child->widget),
-                     I_("gtk-text-view-child"), NULL);
+  g_object_set_qdata (G_OBJECT (child->widget), quark_text_view_child, NULL);
 
   if (child->anchor)
     {
@@ -10833,8 +10832,7 @@ gtk_text_view_move_child (GtkTextView *text_view,
   g_return_if_fail (GTK_IS_WIDGET (child));
   g_return_if_fail (gtk_widget_get_parent (child) == GTK_WIDGET (text_view));
 
-  vc = g_object_get_data (G_OBJECT (child),
-                          "gtk-text-view-child");
+  vc = g_object_get_qdata (G_OBJECT (child), quark_text_view_child);
 
   g_assert (vc != NULL);
 
