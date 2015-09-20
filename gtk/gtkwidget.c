@@ -3711,7 +3711,7 @@ gtk_widget_set_property (GObject         *object,
       G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
     case PROP_EVENTS:
-      if (!_gtk_widget_get_realized (widget) && gtk_widget_get_has_window (widget))
+      if (!_gtk_widget_get_realized (widget) && _gtk_widget_get_has_window (widget))
 	gtk_widget_set_events (widget, g_value_get_flags (value));
       break;
     case PROP_NO_SHOW_ALL:
@@ -4503,7 +4503,7 @@ gtk_widget_queue_draw_child (GtkWidget *widget)
   GtkWidget *parent;
 
   parent = priv->parent;
-  if (parent && gtk_widget_is_drawable (parent))
+  if (parent && _gtk_widget_is_drawable (parent))
     gtk_widget_queue_draw_area (parent,
 				priv->clip.x,
 				priv->clip.y,
@@ -4919,7 +4919,7 @@ gtk_widget_map (GtkWidget *widget)
 
       g_signal_emit (widget, widget_signals[MAP], 0);
 
-      if (!gtk_widget_get_has_window (widget))
+      if (!_gtk_widget_get_has_window (widget))
         gdk_window_invalidate_rect (priv->window, &priv->clip, FALSE);
 
       gtk_widget_pop_verify_invariants (widget);
@@ -4947,7 +4947,7 @@ gtk_widget_unmap (GtkWidget *widget)
       g_object_ref (widget);
       gtk_widget_push_verify_invariants (widget);
 
-      if (!gtk_widget_get_has_window (widget))
+      if (!_gtk_widget_get_has_window (widget))
 	gdk_window_invalidate_rect (priv->window, &priv->clip, FALSE);
       _gtk_tooltip_hide (widget);
 
@@ -4988,7 +4988,7 @@ get_widget_windows (GtkWidget *widget)
 {
   GList *window_list, *last, *l, *children, *ret;
 
-  if (gtk_widget_get_has_window (widget))
+  if (_gtk_widget_get_has_window (widget))
     window_list = g_list_prepend (NULL, gtk_widget_get_window (widget));
   else
     window_list = gdk_window_get_children (gtk_widget_get_window (widget));
@@ -5379,7 +5379,7 @@ gtk_widget_realize (GtkWidget *widget)
       gtk_widget_push_verify_invariants (widget);
 
       /*
-	if (GTK_IS_CONTAINER (widget) && gtk_widget_get_has_window (widget))
+	if (GTK_IS_CONTAINER (widget) && _gtk_widget_get_has_window (widget))
 	  g_message ("gtk_widget_realize(%s)", G_OBJECT_TYPE_NAME (widget));
       */
 
@@ -5582,7 +5582,7 @@ gtk_widget_queue_draw (GtkWidget *widget)
 
   gtk_widget_get_clip (widget, &rect);
 
-  if (!gtk_widget_get_has_window (widget))
+  if (!_gtk_widget_get_has_window (widget))
     gtk_widget_queue_draw_area (widget,
                                 rect.x, rect.y, rect.width, rect.height);
   else
@@ -5776,7 +5776,7 @@ gtk_widget_invalidate_widget_windows (GtkWidget      *widget,
   if (!_gtk_widget_get_realized (widget))
     return;
 
-  if (gtk_widget_get_has_window (widget) && priv->parent)
+  if (_gtk_widget_get_has_window (widget) && priv->parent)
     {
       int x, y;
 
@@ -5982,7 +5982,7 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
 
   if (_gtk_widget_get_mapped (widget) && priv->redraw_on_alloc)
     {
-      if (!gtk_widget_get_has_window (widget) && position_changed)
+      if (!_gtk_widget_get_has_window (widget) && position_changed)
 	{
 	  /* Invalidate union(old_clip,priv->clip) in priv->window
 	   */
@@ -6141,7 +6141,7 @@ gtk_widget_translate_coordinates (GtkWidget  *src_widget,
     return FALSE;
 
   /* Translate from allocation relative to window relative */
-  if (gtk_widget_get_has_window (src_widget) && src_priv->parent)
+  if (_gtk_widget_get_has_window (src_widget) && src_priv->parent)
     {
       gint wx, wy;
       gdk_window_get_position (src_priv->window, &wx, &wy);
@@ -6200,7 +6200,7 @@ gtk_widget_translate_coordinates (GtkWidget  *src_widget,
     }
 
   /* Translate from window relative to allocation relative */
-  if (gtk_widget_get_has_window (dest_widget) && dest_priv->parent)
+  if (_gtk_widget_get_has_window (dest_widget) && dest_priv->parent)
     {
       gint wx, wy;
       gdk_window_get_position (dest_priv->window, &wx, &wy);
@@ -6231,7 +6231,7 @@ gtk_widget_real_size_allocate (GtkWidget     *widget,
   gtk_widget_set_allocation (widget, allocation);
 
   if (_gtk_widget_get_realized (widget) &&
-      gtk_widget_get_has_window (widget))
+      _gtk_widget_get_has_window (widget))
      {
 	gdk_window_move_resize (priv->window,
 				allocation->x, allocation->y,
@@ -6348,7 +6348,7 @@ gtk_widget_real_can_activate_accel (GtkWidget *widget,
 
   /* widgets must be onscreen for accels to take effect */
   return gtk_widget_is_sensitive (widget) &&
-         gtk_widget_is_drawable (widget) &&
+         _gtk_widget_is_drawable (widget) &&
          gdk_window_is_viewable (priv->window);
 }
 
@@ -6813,7 +6813,7 @@ _gtk_widget_draw_internal (GtkWidget *widget,
 {
   GdkWindow *tmp_event_window;
 
-  if (!gtk_widget_is_drawable (widget))
+  if (!_gtk_widget_is_drawable (widget))
     return;
 
   tmp_event_window = _gtk_cairo_get_event_window (cr);
@@ -7012,7 +7012,7 @@ _gtk_widget_draw (GtkWidget *widget,
     cairo_push_group (cr);
 
   window = gtk_widget_get_window (widget);
-  if (gtk_widget_get_has_window (widget))
+  if (_gtk_widget_get_has_window (widget))
     {
       /* The widget will be completely contained in its window, so just
        * expose that (and any child window belonging to the widget) */
@@ -7415,7 +7415,7 @@ _gtk_widget_get_translation_to_window (GtkWidget      *widget,
 {
   GdkWindow *w, *widget_window;
 
-  if (!gtk_widget_get_has_window (widget))
+  if (!_gtk_widget_get_has_window (widget))
     {
       *x = -widget->priv->allocation.x;
       *y = -widget->priv->allocation.y;
@@ -7743,7 +7743,7 @@ gtk_widget_reparent_subwindows (GtkWidget *widget,
 {
   GtkWidgetPrivate *priv = widget->priv;
 
-  if (!gtk_widget_get_has_window (widget))
+  if (!_gtk_widget_get_has_window (widget))
     {
       GList *children = gdk_window_get_children (priv->window);
       GList *tmp_list;
@@ -7800,7 +7800,7 @@ gtk_widget_reparent_fixup_child (GtkWidget *widget,
 
   g_assert (client_data != NULL);
 
-  if (!gtk_widget_get_has_window (widget))
+  if (!_gtk_widget_get_has_window (widget))
     {
       if (priv->window)
 	g_object_unref (priv->window);
@@ -7898,7 +7898,7 @@ gtk_widget_intersect (GtkWidget	         *widget,
 
   return_val = gdk_rectangle_intersect (&priv->allocation, area, dest);
 
-  if (return_val && intersection && gtk_widget_get_has_window (widget))
+  if (return_val && intersection && _gtk_widget_get_has_window (widget))
     {
       intersection->x -= priv->allocation.x;
       intersection->y -= priv->allocation.y;
@@ -9167,7 +9167,7 @@ gtk_widget_set_app_paintable (GtkWidget *widget,
     {
       widget->priv->app_paintable = app_paintable;
 
-      if (gtk_widget_is_drawable (widget))
+      if (_gtk_widget_is_drawable (widget))
 	gtk_widget_queue_draw (widget);
 
       g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_APP_PAINTABLE]);
@@ -11355,7 +11355,7 @@ gtk_widget_add_events_internal (GtkWidget *widget,
   GtkWidgetPrivate *priv = widget->priv;
   GList *window_list;
 
-  if (!gtk_widget_get_has_window (widget))
+  if (!_gtk_widget_get_has_window (widget))
     window_list = gdk_window_get_children (priv->window);
   else
     window_list = g_list_prepend (NULL, priv->window);
@@ -11558,7 +11558,7 @@ gtk_widget_get_visual (GtkWidget *widget)
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  if (gtk_widget_get_has_window (widget) &&
+  if (!_gtk_widget_get_has_window (widget) &&
       widget->priv->window)
     return gdk_window_get_visual (widget->priv->window);
 
@@ -11690,7 +11690,7 @@ gtk_widget_get_pointer (GtkWidget *widget,
                                           gtk_widget_get_display (widget))),
                                       x, y, NULL);
 
-      if (!gtk_widget_get_has_window (widget))
+      if (!_gtk_widget_get_has_window (widget))
 	{
 	  if (x)
 	    *x -= priv->allocation.x;
@@ -12277,7 +12277,7 @@ gtk_widget_real_map (GtkWidget *widget)
     {
       gtk_widget_set_mapped (widget, TRUE);
 
-      if (gtk_widget_get_has_window (widget))
+      if (_gtk_widget_get_has_window (widget))
 	gdk_window_show (priv->window);
     }
 }
@@ -12299,7 +12299,7 @@ gtk_widget_real_unmap (GtkWidget *widget)
     {
       gtk_widget_set_mapped (widget, FALSE);
 
-      if (gtk_widget_get_has_window (widget))
+      if (_gtk_widget_get_has_window (widget))
 	gdk_window_hide (priv->window);
     }
 }
@@ -12317,7 +12317,7 @@ gtk_widget_real_realize (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = widget->priv;
 
-  g_assert (!gtk_widget_get_has_window (widget));
+  g_assert (!_gtk_widget_get_has_window (widget));
 
   gtk_widget_set_realized (widget, TRUE);
   if (priv->parent)
@@ -12356,7 +12356,7 @@ gtk_widget_real_unrealize (GtkWidget *widget)
 			  (GtkCallback) gtk_widget_unrealize,
 			  NULL);
 
-  if (gtk_widget_get_has_window (widget))
+  if (_gtk_widget_get_has_window (widget))
     {
       gtk_widget_unregister_window (widget, priv->window);
       gdk_window_destroy (priv->window);
@@ -12871,7 +12871,7 @@ gtk_widget_shape_combine_region (GtkWidget *widget,
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   /*  set_shape doesn't work on widgets without GDK window */
-  g_return_if_fail (gtk_widget_get_has_window (widget));
+  g_return_if_fail (_gtk_widget_get_has_window (widget));
 
   priv = widget->priv;
 
@@ -12970,7 +12970,7 @@ gtk_widget_input_shape_combine_region (GtkWidget      *widget,
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
   /*  set_shape doesn't work on widgets without GDK window */
-  g_return_if_fail (gtk_widget_get_has_window (widget));
+  g_return_if_fail (_gtk_widget_get_has_window (widget));
 
   if (region == NULL)
     g_object_set_qdata (G_OBJECT (widget), quark_input_shape_info, NULL);
@@ -15166,13 +15166,13 @@ gtk_widget_real_set_has_tooltip (GtkWidget *widget,
 
       if (priv_has_tooltip)
         {
-	  if (_gtk_widget_get_realized (widget) && !gtk_widget_get_has_window (widget))
+	  if (_gtk_widget_get_realized (widget) && !_gtk_widget_get_has_window (widget))
 	    gdk_window_set_events (priv->window,
 				   gdk_window_get_events (priv->window) |
 				   GDK_LEAVE_NOTIFY_MASK |
 				   GDK_POINTER_MOTION_MASK);
 
-	  if (gtk_widget_get_has_window (widget))
+	  if (_gtk_widget_get_has_window (widget))
 	      gtk_widget_add_events (widget,
 				     GDK_LEAVE_NOTIFY_MASK |
 				     GDK_POINTER_MOTION_MASK);
@@ -15574,7 +15574,7 @@ _gtk_widget_set_simple_clip (GtkWidget     *widget,
 
   if (GTK_IS_CONTAINER (widget))
     {
-      if (gtk_widget_get_has_window (widget))
+      if (_gtk_widget_get_has_window (widget))
         {
           clip.x -= allocation.x;
           clip.y -= allocation.y;
@@ -15582,7 +15582,7 @@ _gtk_widget_set_simple_clip (GtkWidget     *widget,
 
       gtk_container_forall (GTK_CONTAINER (widget), union_with_clip, &clip);
 
-      if (gtk_widget_get_has_window (widget))
+      if (_gtk_widget_get_has_window (widget))
         {
           clip.x += allocation.x;
           clip.y += allocation.y;

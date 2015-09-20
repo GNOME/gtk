@@ -3057,13 +3057,13 @@ gtk_container_focus_sort_up_down (GtkContainer     *container,
         }
       else
         {
-          if (!gtk_widget_get_has_window (widget))
+          if (!_gtk_widget_get_has_window (widget))
             compare.x = allocation.x + allocation.width / 2;
           else
             compare.x = allocation.width / 2;
         }
 
-      if (!gtk_widget_get_has_window (widget))
+      if (!_gtk_widget_get_has_window (widget))
         compare.y = (direction == GTK_DIR_DOWN) ? allocation.y : allocation.y + allocation.height;
       else
         compare.y = (direction == GTK_DIR_DOWN) ? 0 : + allocation.height;
@@ -3187,13 +3187,13 @@ gtk_container_focus_sort_left_right (GtkContainer     *container,
         }
       else
         {
-          if (!gtk_widget_get_has_window (widget))
+          if (!_gtk_widget_get_has_window (widget))
             compare.y = allocation.y + allocation.height / 2;
           else
             compare.y = allocation.height / 2;
         }
 
-      if (!gtk_widget_get_has_window (widget))
+      if (!_gtk_widget_get_has_window (widget))
         compare.x = (direction == GTK_DIR_RIGHT) ? allocation.x : allocation.x + allocation.width;
       else
         compare.x = (direction == GTK_DIR_RIGHT) ? 0 : allocation.width;
@@ -3288,7 +3288,7 @@ gtk_container_focus_move (GtkContainer     *container,
                   return TRUE;
             }
         }
-      else if (gtk_widget_is_drawable (child) &&
+      else if (_gtk_widget_is_drawable (child) &&
                gtk_widget_is_ancestor (child, GTK_WIDGET (container)))
         {
           if (gtk_widget_child_focus (child, direction))
@@ -3620,7 +3620,7 @@ gtk_container_draw_forall (GtkWidget *widget,
     {
       info.child = widget;
       info.window_depth = G_MAXINT;
-      if (gtk_widget_get_has_window (widget))
+      if (_gtk_widget_get_has_window (widget))
         {
           window = gtk_widget_get_window (widget);
           siblings = gdk_window_peek_children (gdk_window_get_parent (window));
@@ -3696,7 +3696,7 @@ gtk_container_map (GtkWidget *widget)
                         gtk_container_map_child,
                         NULL);
 
-  if (gtk_widget_get_has_window (widget))
+  if (_gtk_widget_get_has_window (widget))
     gdk_window_show (gtk_widget_get_window (widget));
 }
 
@@ -3710,7 +3710,7 @@ gtk_container_unmap (GtkWidget *widget)
    * children has an actual native window instead of client-side
    * window, e.g. a GtkSocket would)
    */
-  if (gtk_widget_get_has_window (widget))
+  if (_gtk_widget_get_has_window (widget))
     gdk_window_hide (gtk_widget_get_window (widget));
 
   gtk_container_forall (GTK_CONTAINER (widget),
@@ -3726,21 +3726,23 @@ gtk_container_should_propagate_draw (GtkContainer   *container,
   GdkEventExpose *event;
   GdkWindow *event_window, *child_in_window;
 
-  if (!gtk_widget_is_drawable (child))
+  if (!_gtk_widget_is_drawable (child))
     return FALSE;
 
   /* Only propagate to native child window if we're not handling
-     an expose (i.e. in a pure gtk_widget_draw() call */
+   * an expose (i.e. in a pure gtk_widget_draw() call
+   */
   event = _gtk_cairo_get_event (cr);
   if (event &&
-      (gtk_widget_get_has_window (child) &&
+      (_gtk_widget_get_has_window (child) &&
        gdk_window_has_native (gtk_widget_get_window (child))))
     return FALSE;
 
   /* Never propagate to a child window when exposing a window
-     that is not the one the child widget is in. */
+   * that is not the one the child widget is in.
+   */
   event_window = _gtk_cairo_get_event_window (cr);
-  if (gtk_widget_get_has_window (child))
+  if (_gtk_widget_get_has_window (child))
     child_in_window = gdk_window_get_parent (gtk_widget_get_window (child));
   else
     child_in_window = gtk_widget_get_window (child);
@@ -3796,7 +3798,7 @@ gtk_container_propagate_draw (GtkContainer   *container,
   cairo_save (cr);
 
   /* translate coordinates. Ugly business, that. */
-  if (!gtk_widget_get_has_window (GTK_WIDGET (container)))
+  if (!_gtk_widget_get_has_window (GTK_WIDGET (container)))
     {
       gtk_widget_get_allocation (GTK_WIDGET (container), &allocation);
       x = -allocation.x;
@@ -3824,7 +3826,7 @@ gtk_container_propagate_draw (GtkContainer   *container,
       y = 0;
     }
 
-  if (!gtk_widget_get_has_window (child))
+  if (!_gtk_widget_get_has_window (child))
     {
       gtk_widget_get_allocation (child, &allocation);
       x += allocation.x;
