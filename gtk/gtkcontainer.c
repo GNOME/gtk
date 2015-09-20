@@ -380,10 +380,9 @@ static gboolean gtk_container_should_propagate_draw (GtkContainer   *container,
                                                      cairo_t        *cr);
 
 /* --- variables --- */
-static const gchar           vadjustment_key[] = "gtk-vadjustment";
-static guint                 vadjustment_key_id = 0;
-static const gchar           hadjustment_key[] = "gtk-hadjustment";
-static guint                 hadjustment_key_id = 0;
+static GQuark                vadjustment_key_id;
+static GQuark                hadjustment_key_id;
+static GQuark                quark_focus_chain;
 static guint                 container_signals[LAST_SIGNAL] = { 0 };
 static gint                  GtkContainer_private_offset;
 static GtkWidgetClass       *parent_class = NULL;
@@ -476,8 +475,9 @@ gtk_container_class_init (GtkContainerClass *class)
 
   parent_class = g_type_class_peek_parent (class);
 
-  vadjustment_key_id = g_quark_from_static_string (vadjustment_key);
-  hadjustment_key_id = g_quark_from_static_string (hadjustment_key);
+  vadjustment_key_id = g_quark_from_static_string ("gtk-vadjustment");
+  hadjustment_key_id = g_quark_from_static_string ("gtk-hadjustment");
+  quark_focus_chain = g_quark_from_static_string ("gtk-container-focus-chain");
 
   gobject_class->set_property = gtk_container_set_property;
   gobject_class->get_property = gtk_container_get_property;
@@ -2734,7 +2734,7 @@ gtk_container_real_set_focus_child (GtkContainer     *container,
 static GList*
 get_focus_chain (GtkContainer *container)
 {
-  return g_object_get_data (G_OBJECT (container), "gtk-container-focus-chain");
+  return g_object_get_qdata (G_OBJECT (container), quark_focus_chain);
 }
 
 /* same as gtk_container_get_children, except it includes internals
@@ -3319,8 +3319,7 @@ chain_widget_destroyed (GtkWidget *widget,
 
   container = GTK_CONTAINER (user_data);
 
-  chain = g_object_get_data (G_OBJECT (container),
-                             "gtk-container-focus-chain");
+  chain = g_object_get_qdata (G_OBJECT (container), quark_focus_chain);
 
   chain = g_list_remove (chain, widget);
 
@@ -3328,9 +3327,7 @@ chain_widget_destroyed (GtkWidget *widget,
                                         chain_widget_destroyed,
                                         user_data);
 
-  g_object_set_data (G_OBJECT (container),
-                     I_("gtk-container-focus-chain"),
-                     chain);
+  g_object_set_qdata (G_OBJECT (container), quark_focus_chain, chain);
 }
 
 /**
@@ -3389,9 +3386,7 @@ gtk_container_set_focus_chain (GtkContainer *container,
 
   chain = g_list_reverse (chain);
 
-  g_object_set_data (G_OBJECT (container),
-                     I_("gtk-container-focus-chain"),
-                     chain);
+  g_object_set_qdata (G_OBJECT (container), quark_focus_chain, chain);
 }
 
 /**
@@ -3458,9 +3453,7 @@ gtk_container_unset_focus_chain (GtkContainer  *container)
 
       priv->has_focus_chain = FALSE;
 
-      g_object_set_data (G_OBJECT (container),
-                         I_("gtk-container-focus-chain"),
-                         NULL);
+      g_object_set_qdata (G_OBJECT (container), quark_focus_chain, NULL);
 
       tmp_list = chain;
       while (tmp_list != NULL)
