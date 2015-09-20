@@ -447,7 +447,7 @@ gtk_cell_view_set_property (GObject      *object,
 	else if (gdk_rgba_parse (&color, g_value_get_string (value)))
           gtk_cell_view_set_background_rgba (view, &color);
 	else
-	  g_warning ("Don't know color `%s'", g_value_get_string (value));
+	  g_warning ("Don't know color '%s'", g_value_get_string (value));
 
         g_object_notify (object, "background-rgba");
         g_object_notify (object, "background-gdk");

@@ -671,7 +671,7 @@ _gtk_css_number_value_parse (GtkCssParser           *parser,
 
       if (i >= G_N_ELEMENTS (units))
         {
-          _gtk_css_parser_error (parser, "`%s' is not a valid unit.", unit_name);
+          _gtk_css_parser_error (parser, "'%s' is not a valid unit.", unit_name);
           g_free (unit_name);
           return NULL;
         }

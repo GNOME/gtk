@@ -6488,7 +6488,7 @@ gtk_widget_add_accelerator (GtkWidget      *widget,
       query.n_params)
     {
       /* hmm, should be elaborate enough */
-      g_warning (G_STRLOC ": widget `%s' has no activatable signal \"%s\" without arguments",
+      g_warning (G_STRLOC ": widget '%s' has no activatable signal \"%s\" without arguments",
 		 G_OBJECT_TYPE_NAME (widget), accel_signal);
       return;
     }
@@ -6729,7 +6729,7 @@ gtk_widget_real_mnemonic_activate (GtkWidget *widget,
     gtk_widget_grab_focus (widget);
   else
     {
-      g_warning ("widget `%s' isn't suitable for mnemonic activation",
+      g_warning ("widget '%s' isn't suitable for mnemonic activation",
 		 G_OBJECT_TYPE_NAME (widget));
       gtk_widget_error_bell (widget);
     }
@@ -6876,7 +6876,7 @@ _gtk_widget_draw_internal (GtkWidget *widget,
            * we don't want to spam stderr in that case.
            * We do want to catch errors from
            */
-          g_warning ("drawing failure for widget `%s': %s",
+          g_warning ("drawing failure for widget '%s': %s",
                      G_OBJECT_TYPE_NAME (widget),
                      cairo_status_to_string (cairo_status (cr)));
         }
@@ -11572,7 +11572,7 @@ gtk_widget_get_visual (GtkWidget *widget)
           if (gdk_visual_get_screen (visual) == screen)
             return visual;
 
-          g_warning ("Ignoring visual set on widget `%s' that is not on the correct screen.",
+          g_warning ("Ignoring visual set on widget '%s' that is not on the correct screen.",
                      gtk_widget_get_name (widget));
         }
     }
@@ -12065,7 +12065,7 @@ finalize_assertion_new (GtkWidget           *widget,
    */
   g_assert (object);
   if (!G_IS_OBJECT (object))
-    g_critical ("Automated component `%s' of class `%s' seems to have been prematurely finalized",
+    g_critical ("Automated component '%s' of class '%s' seems to have been prematurely finalized",
 		child_class->name, g_type_name (widget_type));
   else
     {
@@ -12147,7 +12147,7 @@ gtk_widget_real_destroy (GtkWidget *object)
 	  FinalizeAssertion *assertion = l->data;
 
 	  if (!assertion->did_finalize)
-	    g_critical ("Automated component `%s' of class `%s' did not finalize in gtk_widget_destroy(). "
+	    g_critical ("Automated component '%s' of class '%s' did not finalize in gtk_widget_destroy(). "
 			"Current reference count is %d",
 			assertion->child_class->name,
 			g_type_name (assertion->widget_type),
@@ -13005,7 +13005,7 @@ gtk_widget_class_install_style_property_parser (GtkWidgetClass     *klass,
 
   if (g_param_spec_pool_lookup (style_property_spec_pool, pspec->name, G_OBJECT_CLASS_TYPE (klass), FALSE))
     {
-      g_warning (G_STRLOC ": class `%s' already contains a style property named `%s'",
+      g_warning (G_STRLOC ": class '%s' already contains a style property named '%s'",
 		 G_OBJECT_CLASS_NAME (klass),
 		 pspec->name);
       return;
@@ -13116,7 +13116,7 @@ gtk_widget_style_get_property (GtkWidget   *widget,
 				    G_OBJECT_TYPE (widget),
 				    TRUE);
   if (!pspec)
-    g_warning ("%s: widget class `%s' has no property named `%s'",
+    g_warning ("%s: widget class '%s' has no property named '%s'",
 	       G_STRLOC,
 	       G_OBJECT_TYPE_NAME (widget),
 	       property_name);
@@ -13138,7 +13138,7 @@ gtk_widget_style_get_property (GtkWidget   *widget,
       else if (g_value_type_transformable (G_PARAM_SPEC_VALUE_TYPE (pspec), G_VALUE_TYPE (value)))
 	g_value_transform (peek_value, value);
       else
-	g_warning ("can't retrieve style property `%s' of type `%s' as value of type `%s'",
+	g_warning ("can't retrieve style property '%s' of type '%s' as value of type '%s'",
 		   pspec->name,
 		   g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),
 		   G_VALUE_TYPE_NAME (value));
@@ -13183,7 +13183,7 @@ gtk_widget_style_get_valist (GtkWidget   *widget,
 					TRUE);
       if (!pspec)
 	{
-	  g_warning ("%s: widget class `%s' has no property named `%s'",
+	  g_warning ("%s: widget class '%s' has no property named '%s'",
 		     G_STRLOC,
 		     G_OBJECT_TYPE_NAME (widget),
 		     name);

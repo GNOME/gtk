@@ -2164,7 +2164,7 @@ apply_queued_setting (GtkSettings             *settings,
     {
       gchar *debug = g_strdup_value_contents (&qvalue->public.value);
 
-      g_message ("%s: failed to retrieve property `%s' of type `%s' from rc file value \"%s\" of type `%s'",
+      g_message ("%s: failed to retrieve property '%s' of type '%s' from rc file value \"%s\" of type '%s'",
                  qvalue->public.origin ? qvalue->public.origin : "(for origin information, set GTK_DEBUG)",
                  pspec->name,
                  g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),
@@ -2205,7 +2205,7 @@ settings_install_property_parser (GtkSettingsClass   *class,
     default:
       if (!parser)
         {
-          g_warning (G_STRLOC ": parser needs to be specified for property \"%s\" of type `%s'",
+          g_warning (G_STRLOC ": parser needs to be specified for property \"%s\" of type '%s'",
                      pspec->name, g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)));
           return 0;
         }

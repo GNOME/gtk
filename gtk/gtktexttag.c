@@ -1344,7 +1344,7 @@ gtk_text_tag_set_property (GObject      *object,
         else if (gdk_rgba_parse (&rgba, g_value_get_string (value)))
           set_bg_rgba (text_tag, &rgba);
         else
-          g_warning ("Don't know color `%s'", g_value_get_string (value));
+          g_warning ("Don't know color '%s'", g_value_get_string (value));
 
         g_object_notify (object, "background-gdk");
       }
@@ -1359,7 +1359,7 @@ gtk_text_tag_set_property (GObject      *object,
         else if (gdk_rgba_parse (&rgba, g_value_get_string (value)))
           set_fg_rgba (text_tag, &rgba);
         else
-          g_warning ("Don't know color `%s'", g_value_get_string (value));
+          g_warning ("Don't know color '%s'", g_value_get_string (value));
 
         g_object_notify (object, "foreground-gdk");
       }
@@ -1631,7 +1631,7 @@ gtk_text_tag_set_property (GObject      *object,
         else if (gdk_rgba_parse (&rgba, g_value_get_string (value)))
           set_pg_bg_rgba (text_tag, &rgba);
         else
-          g_warning ("Don't know color `%s'", g_value_get_string (value));
+          g_warning ("Don't know color '%s'", g_value_get_string (value));
 
         g_object_notify (object, "paragraph-background-gdk");
       }

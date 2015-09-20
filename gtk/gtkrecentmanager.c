@@ -501,7 +501,7 @@ gtk_recent_manager_real_changed (GtkRecentManager *manager)
           g_bookmark_file_to_file (priv->recent_items, priv->filename, &write_error);
           if (write_error)
             {
-              filename_warning ("Attempting to store changes into `%s', but failed: %s",
+              filename_warning ("Attempting to store changes into '%s', but failed: %s",
                                 priv->filename,
                                 write_error->message);
               g_error_free (write_error);
@@ -509,7 +509,7 @@ gtk_recent_manager_real_changed (GtkRecentManager *manager)
 
           if (g_chmod (priv->filename, 0600) < 0)
             {
-              filename_warning ("Attempting to set the permissions of `%s', but failed: %s",
+              filename_warning ("Attempting to set the permissions of '%s', but failed: %s",
                                 priv->filename,
                                 g_strerror (errno));
             }
@@ -629,7 +629,7 @@ gtk_recent_manager_set_filename (GtkRecentManager *manager,
       priv->monitor = g_file_monitor_file (file, G_FILE_MONITOR_NONE, NULL, &error);
       if (error)
         {
-          filename_warning ("Unable to monitor `%s': %s\n"
+          filename_warning ("Unable to monitor '%s': %s\n"
                             "The GtkRecentManager will not update its contents "
                             "if the file is changed from other instances",
                             priv->filename,
@@ -683,7 +683,7 @@ build_recent_items_list (GtkRecentManager *manager)
           if (read_error->domain == G_FILE_ERROR &&
             read_error->code != G_FILE_ERROR_NOENT)
             filename_warning ("Attempting to read the recently used resources "
-                              "file at `%s', but the parser failed: %s.",
+                              "file at '%s', but the parser failed: %s.",
                               priv->filename,
                               read_error->message);
 
@@ -911,7 +911,7 @@ gtk_recent_manager_add_full (GtkRecentManager    *manager,
   if ((data->display_name) &&
       (!g_utf8_validate (data->display_name, -1, NULL)))
     {
-      g_warning ("Attempting to add `%s' to the list of recently used "
+      g_warning ("Attempting to add '%s' to the list of recently used "
                  "resources, but the display name is not a valid UTF-8 "
                  "encoded string",
                  uri);
@@ -921,7 +921,7 @@ gtk_recent_manager_add_full (GtkRecentManager    *manager,
   if ((data->description) &&
       (!g_utf8_validate (data->description, -1, NULL)))
     {
-      g_warning ("Attempting to add `%s' to the list of recently used "
+      g_warning ("Attempting to add '%s' to the list of recently used "
                  "resources, but the description is not a valid UTF-8 "
                  "encoded string",
                  uri);
@@ -931,7 +931,7 @@ gtk_recent_manager_add_full (GtkRecentManager    *manager,
 
   if (!data->mime_type)
     {
-      g_warning ("Attempting to add `%s' to the list of recently used "
+      g_warning ("Attempting to add '%s' to the list of recently used "
                  "resources, but no MIME type was defined",
                  uri);
       return FALSE;
@@ -939,7 +939,7 @@ gtk_recent_manager_add_full (GtkRecentManager    *manager,
 
   if (!data->app_name)
     {
-      g_warning ("Attempting to add `%s' to the list of recently used "
+      g_warning ("Attempting to add '%s' to the list of recently used "
                  "resources, but no name of the application that is "
                  "registering it was defined",
                  uri);
@@ -948,7 +948,7 @@ gtk_recent_manager_add_full (GtkRecentManager    *manager,
 
   if (!data->app_exec)
     {
-      g_warning ("Attempting to add `%s' to the list of recently used "
+      g_warning ("Attempting to add '%s' to the list of recently used "
                  "resources, but no command line for the application "
                  "that is registering it was defined",
                  uri);

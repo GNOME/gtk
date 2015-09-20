@@ -562,7 +562,7 @@ gtk_link_button_new (const gchar *uri)
       utf8_uri = g_locale_to_utf8 (uri, -1, NULL, NULL, &conv_err);
       if (conv_err)
         {
-          g_warning ("Attempting to convert URI `%s' to UTF-8, but failed "
+          g_warning ("Attempting to convert URI '%s' to UTF-8, but failed "
                      "with error: %s\n",
                      uri,
                      conv_err->message);

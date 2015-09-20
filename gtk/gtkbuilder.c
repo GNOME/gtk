@@ -493,7 +493,7 @@ gtk_builder_get_parameters (GtkBuilder  *builder,
               if (prop->pspec->flags & G_PARAM_CONSTRUCT_ONLY)
                 {
                   g_warning ("Failed to get construct only property "
-                             "%s of %s with value `%s'",
+                             "%s of %s with value '%s'",
                              prop->pspec->name, object_name, prop->text->str);
                   continue;
                 }
@@ -634,8 +634,8 @@ _gtk_builder_construct (GtkBuilder  *builder,
       g_set_error (error,
                    GTK_BUILDER_ERROR,
                    GTK_BUILDER_ERROR_OBJECT_TYPE_REFUSED,
-                   "Refused to build object of type `%s' because it "
-                   "conforms to the template type `%s', avoiding infinite recursion.",
+                   "Refused to build object of type '%s' because it "
+                   "conforms to the template type '%s', avoiding infinite recursion.",
                    g_type_name (info->type), g_type_name (builder->priv->template_type));
       return NULL;
     }
@@ -1885,7 +1885,7 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
             g_set_error (error,
                          GTK_BUILDER_ERROR,
                          GTK_BUILDER_ERROR_INVALID_VALUE,
-                         "Could not parse integer `%s'",
+                         "Could not parse integer '%s'",
                          string);
             ret = FALSE;
             break;
@@ -1911,7 +1911,7 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
             g_set_error (error,
                          GTK_BUILDER_ERROR,
                          GTK_BUILDER_ERROR_INVALID_VALUE,
-                         "Could not parse unsigned integer `%s'",
+                         "Could not parse unsigned integer '%s'",
                          string);
             ret = FALSE;
             break;
@@ -1959,7 +1959,7 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
             g_set_error (error,
                          GTK_BUILDER_ERROR,
                          GTK_BUILDER_ERROR_INVALID_VALUE,
-                         "Could not parse double `%s'",
+                         "Could not parse double '%s'",
                          string);
             ret = FALSE;
             break;
@@ -1997,7 +1997,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
               g_set_error (error,
                            GTK_BUILDER_ERROR,
                            GTK_BUILDER_ERROR_INVALID_VALUE,
-                           "Could not parse color `%s'",
+                           "Could not parse color '%s'",
                            string);
               ret = FALSE;
             }
@@ -2111,7 +2111,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
     g_set_error (error,
                  GTK_BUILDER_ERROR,
                  GTK_BUILDER_ERROR_INVALID_VALUE,
-                 "Unsupported GType `%s'", g_type_name (type));
+                 "Unsupported GType '%s'", g_type_name (type));
 
   return ret;
 }
@@ -2152,7 +2152,7 @@ _gtk_builder_enum_from_string (GType         type,
           g_set_error (error,
                        GTK_BUILDER_ERROR,
                        GTK_BUILDER_ERROR_INVALID_VALUE,
-                       "Could not parse enum: `%s'",
+                       "Could not parse enum: '%s'",
                        string);
           ret = FALSE;
         }
@@ -2243,7 +2243,7 @@ _gtk_builder_flags_from_string (GType         type,
                   g_set_error (error,
                                GTK_BUILDER_ERROR,
                                GTK_BUILDER_ERROR_INVALID_VALUE,
-                               "Unknown flag: `%s'",
+                               "Unknown flag: '%s'",
                                flag);
                   ret = FALSE;
                   break;

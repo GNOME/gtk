@@ -1755,7 +1755,7 @@ gtk_style_context_get_style_property (GtkStyleContext *context,
 
       if (!g_type_is_a (widget_type, GTK_TYPE_WIDGET))
         {
-          g_warning ("%s: can't get style properties for non-widget class `%s'",
+          g_warning ("%s: can't get style properties for non-widget class '%s'",
                      G_STRLOC,
                      g_type_name (widget_type));
           return;
@@ -1772,7 +1772,7 @@ gtk_style_context_get_style_property (GtkStyleContext *context,
 
   if (!pspec)
     {
-      g_warning ("%s: widget class `%s' has no style property named `%s'",
+      g_warning ("%s: widget class '%s' has no style property named '%s'",
                  G_STRLOC,
                  g_type_name (widget_type),
                  property_name);
@@ -1786,7 +1786,7 @@ gtk_style_context_get_style_property (GtkStyleContext *context,
   else if (g_value_type_transformable (G_VALUE_TYPE (peek_value), G_VALUE_TYPE (value)))
     g_value_transform (peek_value, value);
   else
-    g_warning ("can't retrieve style property `%s' of type `%s' as value of type `%s'",
+    g_warning ("can't retrieve style property '%s' of type '%s' as value of type '%s'",
                pspec->name,
                G_VALUE_TYPE_NAME (peek_value),
                G_VALUE_TYPE_NAME (value));
@@ -1837,7 +1837,7 @@ gtk_style_context_get_style_valist (GtkStyleContext *context,
 
       if (!g_type_is_a (widget_type, GTK_TYPE_WIDGET))
         {
-          g_warning ("%s: can't get style properties for non-widget class `%s'",
+          g_warning ("%s: can't get style properties for non-widget class '%s'",
                      G_STRLOC,
                      g_type_name (widget_type));
           return;
@@ -1861,7 +1861,7 @@ gtk_style_context_get_style_valist (GtkStyleContext *context,
 
       if (!pspec)
         {
-          g_warning ("%s: widget class `%s' has no style property named `%s'",
+          g_warning ("%s: widget class '%s' has no style property named '%s'",
                      G_STRLOC,
                      g_type_name (widget_type),
                      prop_name);
@@ -1874,7 +1874,7 @@ gtk_style_context_get_style_valist (GtkStyleContext *context,
 
       if (error)
         {
-          g_warning ("can't retrieve style property `%s' of type `%s': %s",
+          g_warning ("can't retrieve style property '%s' of type '%s': %s",
                      pspec->name,
                      G_VALUE_TYPE_NAME (peek_value),
                      error);

@@ -615,7 +615,7 @@ container_set_child_property (GtkContainer       *container,
   /* provide a copy to work from, convert (if necessary) and validate */
   g_value_init (&tmp_value, G_PARAM_SPEC_VALUE_TYPE (pspec));
   if (!g_value_transform (value, &tmp_value))
-    g_warning ("unable to set child property `%s' of type `%s' from value of type `%s'",
+    g_warning ("unable to set child property '%s' of type '%s' from value of type '%s'",
                pspec->name,
                g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),
                G_VALUE_TYPE_NAME (value));
@@ -623,7 +623,7 @@ container_set_child_property (GtkContainer       *container,
     {
       gchar *contents = g_strdup_value_contents (value);
 
-      g_warning ("value \"%s\" of type `%s' is invalid for property `%s' of type `%s'",
+      g_warning ("value \"%s\" of type '%s' is invalid for property '%s' of type '%s'",
                  contents,
                  G_VALUE_TYPE_NAME (value),
                  pspec->name,
@@ -671,7 +671,7 @@ gtk_container_buildable_set_child_property (GtkContainer *container,
     }
   else if (!(pspec->flags & G_PARAM_WRITABLE))
     {
-      g_warning ("Child property `%s' of container class `%s' is not writable",
+      g_warning ("Child property '%s' of container class '%s' is not writable",
                  name, G_OBJECT_TYPE_NAME (container));
       return;
     }
@@ -1075,7 +1075,7 @@ gtk_container_child_notify (GtkContainer *container,
 
   if (pspec == NULL)
     {
-      g_warning ("%s: container class `%s' has no child property named `%s'",
+      g_warning ("%s: container class '%s' has no child property named '%s'",
                  G_STRLOC,
                  G_OBJECT_TYPE_NAME (container),
                  child_property);
@@ -1181,7 +1181,7 @@ gtk_container_child_get_valist (GtkContainer *container,
                                         TRUE);
       if (!pspec)
         {
-          g_warning ("%s: container class `%s' has no child property named `%s'",
+          g_warning ("%s: container class '%s' has no child property named '%s'",
                      G_STRLOC,
                      G_OBJECT_TYPE_NAME (container),
                      name);
@@ -1189,7 +1189,7 @@ gtk_container_child_get_valist (GtkContainer *container,
         }
       if (!(pspec->flags & G_PARAM_READABLE))
         {
-          g_warning ("%s: child property `%s' of container class `%s' is not readable",
+          g_warning ("%s: child property '%s' of container class '%s' is not readable",
                      G_STRLOC,
                      pspec->name,
                      G_OBJECT_TYPE_NAME (container));
@@ -1240,12 +1240,12 @@ gtk_container_child_get_property (GtkContainer *container,
   pspec = g_param_spec_pool_lookup (_gtk_widget_child_property_pool, property_name,
                                     G_OBJECT_TYPE (container), TRUE);
   if (!pspec)
-    g_warning ("%s: container class `%s' has no child property named `%s'",
+    g_warning ("%s: container class '%s' has no child property named '%s'",
                G_STRLOC,
                G_OBJECT_TYPE_NAME (container),
                property_name);
   else if (!(pspec->flags & G_PARAM_READABLE))
-    g_warning ("%s: child property `%s' of container class `%s' is not readable",
+    g_warning ("%s: child property '%s' of container class '%s' is not readable",
                G_STRLOC,
                pspec->name,
                G_OBJECT_TYPE_NAME (container));
@@ -1262,7 +1262,7 @@ gtk_container_child_get_property (GtkContainer *container,
         }
       else if (!g_value_type_transformable (G_PARAM_SPEC_VALUE_TYPE (pspec), G_VALUE_TYPE (value)))
         {
-          g_warning ("can't retrieve child property `%s' of type `%s' as value of type `%s'",
+          g_warning ("can't retrieve child property '%s' of type '%s' as value of type '%s'",
                      pspec->name,
                      g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),
                      G_VALUE_TYPE_NAME (value));
@@ -1323,7 +1323,7 @@ gtk_container_child_set_valist (GtkContainer *container,
                                                     TRUE);
       if (!pspec)
         {
-          g_warning ("%s: container class `%s' has no child property named `%s'",
+          g_warning ("%s: container class '%s' has no child property named '%s'",
                      G_STRLOC,
                      G_OBJECT_TYPE_NAME (container),
                      name);
@@ -1331,7 +1331,7 @@ gtk_container_child_set_valist (GtkContainer *container,
         }
       if (!(pspec->flags & G_PARAM_WRITABLE))
         {
-          g_warning ("%s: child property `%s' of container class `%s' is not writable",
+          g_warning ("%s: child property '%s' of container class '%s' is not writable",
                      G_STRLOC,
                      pspec->name,
                      G_OBJECT_TYPE_NAME (container));
@@ -1390,12 +1390,12 @@ gtk_container_child_set_property (GtkContainer *container,
   pspec = g_param_spec_pool_lookup (_gtk_widget_child_property_pool, property_name,
                                     G_OBJECT_TYPE (container), TRUE);
   if (!pspec)
-    g_warning ("%s: container class `%s' has no child property named `%s'",
+    g_warning ("%s: container class '%s' has no child property named '%s'",
                G_STRLOC,
                G_OBJECT_TYPE_NAME (container),
                property_name);
   else if (!(pspec->flags & G_PARAM_WRITABLE))
-    g_warning ("%s: child property `%s' of container class `%s' is not writable",
+    g_warning ("%s: child property '%s' of container class '%s' is not writable",
                G_STRLOC,
                pspec->name,
                G_OBJECT_TYPE_NAME (container));
@@ -1636,14 +1636,14 @@ static void
 gtk_container_add_unimplemented (GtkContainer     *container,
                                  GtkWidget        *widget)
 {
-  g_warning ("GtkContainerClass::add not implemented for `%s'", g_type_name (G_TYPE_FROM_INSTANCE (container)));
+  g_warning ("GtkContainerClass::add not implemented for '%s'", g_type_name (G_TYPE_FROM_INSTANCE (container)));
 }
 
 static void
 gtk_container_remove_unimplemented (GtkContainer     *container,
                                     GtkWidget        *widget)
 {
-  g_warning ("GtkContainerClass::remove not implemented for `%s'", g_type_name (G_TYPE_FROM_INSTANCE (container)));
+  g_warning ("GtkContainerClass::remove not implemented for '%s'", g_type_name (G_TYPE_FROM_INSTANCE (container)));
 }
 
 static void

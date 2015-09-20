@@ -266,7 +266,7 @@ gtk_css_image_linear_parse (GtkCssImage  *image,
             {
               if (side & ((1 << GTK_CSS_LEFT) | (1 << GTK_CSS_RIGHT)))
                 {
-                  _gtk_css_parser_error (parser, "Expected `top', `bottom' or comma");
+                  _gtk_css_parser_error (parser, "Expected 'top', 'bottom' or comma");
                   return FALSE;
                 }
               side |= (1 << GTK_CSS_LEFT);
@@ -275,7 +275,7 @@ gtk_css_image_linear_parse (GtkCssImage  *image,
             {
               if (side & ((1 << GTK_CSS_LEFT) | (1 << GTK_CSS_RIGHT)))
                 {
-                  _gtk_css_parser_error (parser, "Expected `top', `bottom' or comma");
+                  _gtk_css_parser_error (parser, "Expected 'top', 'bottom' or comma");
                   return FALSE;
                 }
               side |= (1 << GTK_CSS_RIGHT);
@@ -284,7 +284,7 @@ gtk_css_image_linear_parse (GtkCssImage  *image,
             {
               if (side & ((1 << GTK_CSS_TOP) | (1 << GTK_CSS_BOTTOM)))
                 {
-                  _gtk_css_parser_error (parser, "Expected `left', `right' or comma");
+                  _gtk_css_parser_error (parser, "Expected 'left', 'right' or comma");
                   return FALSE;
                 }
               side |= (1 << GTK_CSS_TOP);
@@ -293,7 +293,7 @@ gtk_css_image_linear_parse (GtkCssImage  *image,
             {
               if (side & ((1 << GTK_CSS_TOP) | (1 << GTK_CSS_BOTTOM)))
                 {
-                  _gtk_css_parser_error (parser, "Expected `left', `right' or comma");
+                  _gtk_css_parser_error (parser, "Expected 'left', 'right' or comma");
                   return FALSE;
                 }
               side |= (1 << GTK_CSS_BOTTOM);

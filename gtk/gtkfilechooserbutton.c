@@ -903,7 +903,7 @@ gtk_file_chooser_button_set_property (GObject      *object,
 
 	    eclass = g_type_class_peek (GTK_TYPE_FILE_CHOOSER_ACTION);
 	    eval = g_enum_get_value (eclass, g_value_get_enum (value));
-	    g_warning ("%s: Choosers of type `%s' do not support `%s'.",
+	    g_warning ("%s: Choosers of type '%s' do not support '%s'.",
 		       G_STRFUNC, G_OBJECT_TYPE_NAME (object), eval->value_name);
 
 	    g_value_set_enum ((GValue *) value, GTK_FILE_CHOOSER_ACTION_OPEN);
@@ -950,7 +950,7 @@ gtk_file_chooser_button_set_property (GObject      *object,
       break;
 
     case GTK_FILE_CHOOSER_PROP_SELECT_MULTIPLE:
-      g_warning ("%s: Choosers of type `%s` do not support selecting multiple files.",
+      g_warning ("%s: Choosers of type '%s' do not support selecting multiple files.",
 		 G_STRFUNC, G_OBJECT_TYPE_NAME (object));
       break;
     default:

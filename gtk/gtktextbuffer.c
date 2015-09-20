@@ -2684,7 +2684,7 @@ gtk_text_buffer_apply_tag_by_name (GtkTextBuffer     *buffer,
 
   if (tag == NULL)
     {
-      g_warning ("Unknown tag `%s'", name);
+      g_warning ("Unknown tag '%s'", name);
       return;
     }
 
@@ -2721,7 +2721,7 @@ gtk_text_buffer_remove_tag_by_name (GtkTextBuffer     *buffer,
 
   if (tag == NULL)
     {
-      g_warning ("Unknown tag `%s'", name);
+      g_warning ("Unknown tag '%s'", name);
       return;
     }
 

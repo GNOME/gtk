@@ -1187,7 +1187,7 @@ gtk_cell_renderer_text_set_property (GObject      *object,
         else if (gdk_rgba_parse (&rgba, g_value_get_string (value)))
           set_bg_color (celltext, &rgba);
         else
-          g_warning ("Don't know color `%s'", g_value_get_string (value));
+          g_warning ("Don't know color '%s'", g_value_get_string (value));
 
         g_object_notify_by_pspec (object, text_cell_renderer_props[PROP_BACKGROUND_GDK]);
       }
@@ -1202,7 +1202,7 @@ gtk_cell_renderer_text_set_property (GObject      *object,
         else if (gdk_rgba_parse (&rgba, g_value_get_string (value)))
           set_fg_color (celltext, &rgba);
         else
-          g_warning ("Don't know color `%s'", g_value_get_string (value));
+          g_warning ("Don't know color '%s'", g_value_get_string (value));
 
         g_object_notify_by_pspec (object, text_cell_renderer_props[PROP_FOREGROUND_GDK]);
       }

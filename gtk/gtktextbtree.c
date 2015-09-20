@@ -2734,7 +2734,7 @@ real_set_mark (GtkTextBTree      *tree,
 
   if (should_exist && mark == NULL)
     {
-      g_warning ("No mark `%s' exists!", name);
+      g_warning ("No mark '%s' exists!", name);
       return NULL;
     }
 
@@ -2967,7 +2967,7 @@ _gtk_text_btree_remove_mark (GtkTextBTree *tree,
 
   if (segment->body.mark.not_deleteable)
     {
-      g_warning ("Can't delete special mark `%s'", segment->body.mark.name);
+      g_warning ("Can't delete special mark '%s'", segment->body.mark.name);
       return;
     }
 
@@ -7142,7 +7142,7 @@ _gtk_text_btree_spew (GtkTextBTree *tree)
 
         info = list->data;
 
-        printf ("  tag `%s': root at %p, toggle count %d\n",
+        printf ("  tag '%s': root at %p, toggle count %d\n",
                 info->tag->priv->name, info->tag_root, info->toggle_count);
 
         list = g_slist_next (list);
@@ -7188,19 +7188,19 @@ _gtk_text_btree_spew_line_short (GtkTextLine *line, int indent)
                 *s = '\\';
               ++s;
             }
-          printf ("%s chars `%s'...\n", spaces, str);
+          printf ("%s chars '%s'...\n", spaces, str);
           g_free (str);
         }
       else if (seg->type == &gtk_text_right_mark_type)
         {
-          printf ("%s right mark `%s' visible: %d\n",
+          printf ("%s right mark '%s' visible: %d\n",
                   spaces,
                   seg->body.mark.name,
                   seg->body.mark.visible);
         }
       else if (seg->type == &gtk_text_left_mark_type)
         {
-          printf ("%s left mark `%s' visible: %d\n",
+          printf ("%s left mark '%s' visible: %d\n",
                   spaces,
                   seg->body.mark.name,
                   seg->body.mark.visible);
@@ -7208,7 +7208,7 @@ _gtk_text_btree_spew_line_short (GtkTextLine *line, int indent)
       else if (seg->type == &gtk_text_toggle_on_type ||
                seg->type == &gtk_text_toggle_off_type)
         {
-          printf ("%s tag `%s' %s\n",
+          printf ("%s tag '%s' %s\n",
                   spaces, seg->body.toggle.info->tag->priv->name,
                   seg->type == &gtk_text_toggle_off_type ? "off" : "on");
         }
@@ -7235,7 +7235,7 @@ _gtk_text_btree_spew_node (GtkTextBTreeNode *node, int indent)
   s = node->summary;
   while (s)
     {
-      printf ("%s %d toggles of `%s' below this node\n",
+      printf ("%s %d toggles of '%s' below this node\n",
               spaces, s->toggle_count, s->info->tag->priv->name);
       s = s->next;
     }
@@ -7290,19 +7290,19 @@ _gtk_text_btree_spew_segment (GtkTextBTree* tree, GtkTextLineSegment * seg)
   if (seg->type == &gtk_text_char_type)
     {
       gchar* str = g_strndup (seg->body.chars, seg->byte_count);
-      printf ("       `%s'\n", str);
+      printf ("       '%s'\n", str);
       g_free (str);
     }
   else if (seg->type == &gtk_text_right_mark_type)
     {
-      printf ("       right mark `%s' visible: %d not_deleteable: %d\n",
+      printf ("       right mark '%s' visible: %d not_deleteable: %d\n",
               seg->body.mark.name,
               seg->body.mark.visible,
               seg->body.mark.not_deleteable);
     }
   else if (seg->type == &gtk_text_left_mark_type)
     {
-      printf ("       left mark `%s' visible: %d not_deleteable: %d\n",
+      printf ("       left mark '%s' visible: %d not_deleteable: %d\n",
               seg->body.mark.name,
               seg->body.mark.visible,
               seg->body.mark.not_deleteable);
@@ -7310,7 +7310,7 @@ _gtk_text_btree_spew_segment (GtkTextBTree* tree, GtkTextLineSegment * seg)
   else if (seg->type == &gtk_text_toggle_on_type ||
            seg->type == &gtk_text_toggle_off_type)
     {
-      printf ("       tag `%s' priority %d\n",
+      printf ("       tag '%s' priority %d\n",
               seg->body.toggle.info->tag->priv->name,
               seg->body.toggle.info->tag->priv->priority);
     }

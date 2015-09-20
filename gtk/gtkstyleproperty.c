@@ -41,7 +41,7 @@ gtk_style_property_finalize (GObject *object)
 {
   GtkStyleProperty *property = GTK_STYLE_PROPERTY (object);
 
-  g_warning ("finalizing %s `%s', how could this happen?", G_OBJECT_TYPE_NAME (object), property->name);
+  g_warning ("finalizing %s '%s', how could this happen?", G_OBJECT_TYPE_NAME (object), property->name);
 
   G_OBJECT_CLASS (_gtk_style_property_parent_class)->finalize (object);
 }

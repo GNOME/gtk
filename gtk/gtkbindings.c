@@ -595,7 +595,7 @@ gtk_binding_entry_activate (GtkBindingEntry *entry,
         {
           accelerator = gtk_accelerator_name (entry->keyval, entry->modifiers);
           g_warning ("gtk_binding_entry_activate(): binding \"%s::%s\": "
-                     "could not find signal \"%s\" in the `%s' class ancestry",
+                     "could not find signal \"%s\" in the '%s' class ancestry",
                      entry->binding_set->set_name,
                      accelerator,
                      sig->signal_name,
@@ -611,7 +611,7 @@ gtk_binding_entry_activate (GtkBindingEntry *entry,
         {
           accelerator = gtk_accelerator_name (entry->keyval, entry->modifiers);
           g_warning ("gtk_binding_entry_activate(): binding \"%s::%s\": "
-                     "signature mismatch for signal \"%s\" in the `%s' class ancestry",
+                     "signature mismatch for signal \"%s\" in the '%s' class ancestry",
                      entry->binding_set->set_name,
                      accelerator,
                      sig->signal_name,
@@ -621,7 +621,7 @@ gtk_binding_entry_activate (GtkBindingEntry *entry,
         {
           accelerator = gtk_accelerator_name (entry->keyval, entry->modifiers);
           g_warning ("gtk_binding_entry_activate(): binding \"%s::%s\": "
-                     "signal \"%s\" in the `%s' class ancestry cannot be used for action emissions",
+                     "signal \"%s\" in the '%s' class ancestry cannot be used for action emissions",
                      entry->binding_set->set_name,
                      accelerator,
                      sig->signal_name,
@@ -922,7 +922,7 @@ _gtk_binding_entry_add_signall (GtkBindingSet  *binding_set,
       tmp_arg = slist->data;
       if (!tmp_arg)
         {
-          g_warning ("gtk_binding_entry_add_signall(): arg[%u] is `NULL'", n);
+          g_warning ("gtk_binding_entry_add_signall(): arg[%u] is 'NULL'", n);
           binding_signal_free (signal);
           return;
         }
@@ -944,13 +944,13 @@ _gtk_binding_entry_add_signall (GtkBindingSet  *binding_set,
           arg->d.string_data = g_strdup (tmp_arg->d.string_data);
           if (!arg->d.string_data)
             {
-              g_warning ("gtk_binding_entry_add_signall(): value of `string' arg[%u] is `NULL'", n);
+              g_warning ("gtk_binding_entry_add_signall(): value of 'string' arg[%u] is 'NULL'", n);
               binding_signal_free (signal);
               return;
             }
           break;
         default:
-          g_warning ("gtk_binding_entry_add_signall(): unsupported type `%s' for arg[%u]",
+          g_warning ("gtk_binding_entry_add_signall(): unsupported type '%s' for arg[%u]",
                      g_type_name (arg->arg_type), n);
           binding_signal_free (signal);
           return;
@@ -1038,14 +1038,14 @@ gtk_binding_entry_add_signal (GtkBindingSet  *binding_set,
           arg->d.string_data = va_arg (args, gchar*);
           if (!arg->d.string_data)
             {
-              g_warning ("gtk_binding_entry_add_signal(): type `%s' arg[%u] is `NULL'",
+              g_warning ("gtk_binding_entry_add_signal(): type '%s' arg[%u] is 'NULL'",
                          g_type_name (arg->arg_type),
                          i);
               i += n_args + 1;
             }
           break;
         default:
-          g_warning ("gtk_binding_entry_add_signal(): unsupported type `%s' for arg[%u]",
+          g_warning ("gtk_binding_entry_add_signal(): unsupported type '%s' for arg[%u]",
                      g_type_name (arg->arg_type), i);
           i += n_args + 1;
           break;

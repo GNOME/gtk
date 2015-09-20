@@ -993,7 +993,7 @@ static void
 gtk_cell_area_real_add (GtkCellArea         *area,
 			GtkCellRenderer     *renderer)
 {
-    g_warning ("GtkCellAreaClass::add not implemented for `%s'",
+    g_warning ("GtkCellAreaClass::add not implemented for '%s'",
                g_type_name (G_TYPE_FROM_INSTANCE (area)));
 }
 
@@ -1001,7 +1001,7 @@ static void
 gtk_cell_area_real_remove (GtkCellArea         *area,
 			   GtkCellRenderer     *renderer)
 {
-    g_warning ("GtkCellAreaClass::remove not implemented for `%s'",
+    g_warning ("GtkCellAreaClass::remove not implemented for '%s'",
                g_type_name (G_TYPE_FROM_INSTANCE (area)));
 }
 
@@ -1010,7 +1010,7 @@ gtk_cell_area_real_foreach (GtkCellArea         *area,
 			    GtkCellCallback      callback,
 			    gpointer             callback_data)
 {
-    g_warning ("GtkCellAreaClass::foreach not implemented for `%s'",
+    g_warning ("GtkCellAreaClass::foreach not implemented for '%s'",
                g_type_name (G_TYPE_FROM_INSTANCE (area)));
 }
 
@@ -1023,7 +1023,7 @@ gtk_cell_area_real_foreach_alloc (GtkCellArea         *area,
 				  GtkCellAllocCallback callback,
 				  gpointer             callback_data)
 {
-    g_warning ("GtkCellAreaClass::foreach_alloc not implemented for `%s'",
+    g_warning ("GtkCellAreaClass::foreach_alloc not implemented for '%s'",
                g_type_name (G_TYPE_FROM_INSTANCE (area)));
 }
 
@@ -1295,7 +1295,7 @@ gtk_cell_area_real_apply_attributes (GtkCellArea           *area,
 static GtkCellAreaContext *
 gtk_cell_area_real_create_context (GtkCellArea *area)
 {
-  g_warning ("GtkCellAreaClass::create_context not implemented for `%s'",
+  g_warning ("GtkCellAreaClass::create_context not implemented for '%s'",
              g_type_name (G_TYPE_FROM_INSTANCE (area)));
 
   return NULL;
@@ -1305,7 +1305,7 @@ static GtkCellAreaContext *
 gtk_cell_area_real_copy_context (GtkCellArea        *area,
 				 GtkCellAreaContext *context)
 {
-  g_warning ("GtkCellAreaClass::copy_context not implemented for `%s'",
+  g_warning ("GtkCellAreaClass::copy_context not implemented for '%s'",
              g_type_name (G_TYPE_FROM_INSTANCE (area)));
 
   return NULL;
@@ -1325,7 +1325,7 @@ gtk_cell_area_real_get_preferred_width (GtkCellArea        *area,
 					gint               *minimum_width,
 					gint               *natural_width)
 {
-  g_warning ("GtkCellAreaClass::get_preferred_width not implemented for `%s'",
+  g_warning ("GtkCellAreaClass::get_preferred_width not implemented for '%s'",
 	     g_type_name (G_TYPE_FROM_INSTANCE (area)));
 }
 
@@ -1336,7 +1336,7 @@ gtk_cell_area_real_get_preferred_height (GtkCellArea        *area,
 					 gint               *minimum_height,
 					 gint               *natural_height)
 {
-  g_warning ("GtkCellAreaClass::get_preferred_height not implemented for `%s'",
+  g_warning ("GtkCellAreaClass::get_preferred_height not implemented for '%s'",
 	     g_type_name (G_TYPE_FROM_INSTANCE (area)));
 }
 
@@ -1459,7 +1459,7 @@ static gboolean
 gtk_cell_area_real_focus (GtkCellArea           *area,
 			  GtkDirectionType       direction)
 {
-  g_warning ("GtkCellAreaClass::focus not implemented for `%s'",
+  g_warning ("GtkCellAreaClass::focus not implemented for '%s'",
              g_type_name (G_TYPE_FROM_INSTANCE (area)));
   return FALSE;
 }
@@ -1549,7 +1549,7 @@ gtk_cell_area_reorder (GtkCellLayout   *cell_layout,
                        GtkCellRenderer *cell,
                        gint             position)
 {
-  g_warning ("GtkCellLayout::reorder not implemented for `%s'",
+  g_warning ("GtkCellLayout::reorder not implemented for '%s'",
              g_type_name (G_TYPE_FROM_INSTANCE (cell_layout)));
 }
 
@@ -1798,7 +1798,7 @@ gtk_cell_area_event (GtkCellArea          *area,
   if (class->event)
     return class->event (area, context, widget, event, cell_area, flags);
 
-  g_warning ("GtkCellAreaClass::event not implemented for `%s'",
+  g_warning ("GtkCellAreaClass::event not implemented for '%s'",
              g_type_name (G_TYPE_FROM_INSTANCE (area)));
   return 0;
 }
@@ -1843,7 +1843,7 @@ gtk_cell_area_render (GtkCellArea          *area,
   if (class->render)
     class->render (area, context, widget, cr, background_area, cell_area, flags, paint_focus);
   else
-    g_warning ("GtkCellAreaClass::render not implemented for `%s'",
+    g_warning ("GtkCellAreaClass::render not implemented for '%s'",
                g_type_name (G_TYPE_FROM_INSTANCE (area)));
 }
 
@@ -2237,8 +2237,8 @@ gtk_cell_area_attribute_connect (GtkCellArea        *area,
         {
           cell_attribute = node->data;
 
-          g_warning ("Cannot connect attribute `%s' for cell renderer class `%s' "
-                     "since `%s' is already attributed to column %d",
+          g_warning ("Cannot connect attribute '%s' for cell renderer class '%s' "
+                     "since '%s' is already attributed to column %d",
                      attribute,
                      G_OBJECT_TYPE_NAME (renderer),
                      attribute, cell_attribute->column);
@@ -2250,7 +2250,7 @@ gtk_cell_area_attribute_connect (GtkCellArea        *area,
 
   if (!cell_attribute)
     {
-      g_warning ("Cannot connect attribute `%s' for cell renderer class `%s' "
+      g_warning ("Cannot connect attribute '%s' for cell renderer class '%s' "
                  "since attribute does not exist",
                  attribute,
                  G_OBJECT_TYPE_NAME (renderer));
@@ -2433,7 +2433,7 @@ gtk_cell_area_class_install_cell_property (GtkCellAreaClass   *aclass,
 
   if (g_param_spec_pool_lookup (cell_property_pool, pspec->name, G_OBJECT_CLASS_TYPE (aclass), TRUE))
     {
-      g_warning (G_STRLOC ": class `%s' already contains a cell property named `%s'",
+      g_warning (G_STRLOC ": class '%s' already contains a cell property named '%s'",
                  G_OBJECT_CLASS_NAME (aclass), pspec->name);
       return;
     }
@@ -2536,7 +2536,7 @@ gtk_cell_area_add_with_properties (GtkCellArea        *area,
       va_end (var_args);
     }
   else
-    g_warning ("GtkCellAreaClass::add not implemented for `%s'",
+    g_warning ("GtkCellAreaClass::add not implemented for '%s'",
                g_type_name (G_TYPE_FROM_INSTANCE (area)));
 }
 
@@ -2619,7 +2619,7 @@ area_set_cell_property (GtkCellArea     *area,
   /* provide a copy to work from, convert (if necessary) and validate */
   g_value_init (&tmp_value, G_PARAM_SPEC_VALUE_TYPE (pspec));
   if (!g_value_transform (value, &tmp_value))
-    g_warning ("unable to set cell property `%s' of type `%s' from value of type `%s'",
+    g_warning ("unable to set cell property '%s' of type '%s' from value of type '%s'",
                pspec->name,
                g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),
                G_VALUE_TYPE_NAME (value));
@@ -2627,7 +2627,7 @@ area_set_cell_property (GtkCellArea     *area,
     {
       gchar *contents = g_strdup_value_contents (value);
 
-      g_warning ("value \"%s\" of type `%s' is invalid for property `%s' of type `%s'",
+      g_warning ("value \"%s\" of type '%s' is invalid for property '%s' of type '%s'",
                  contents,
                  G_VALUE_TYPE_NAME (value),
                  pspec->name,
@@ -2674,13 +2674,13 @@ gtk_cell_area_cell_set_valist (GtkCellArea        *area,
                                   G_OBJECT_TYPE (area), TRUE);
       if (!pspec)
         {
-          g_warning ("%s: cell area class `%s' has no cell property named `%s'",
+          g_warning ("%s: cell area class '%s' has no cell property named '%s'",
                      G_STRLOC, G_OBJECT_TYPE_NAME (area), name);
           break;
         }
       if (!(pspec->flags & G_PARAM_WRITABLE))
         {
-          g_warning ("%s: cell property `%s' of cell area class `%s' is not writable",
+          g_warning ("%s: cell property '%s' of cell area class '%s' is not writable",
                      G_STRLOC, pspec->name, G_OBJECT_TYPE_NAME (area));
           break;
         }
@@ -2737,13 +2737,13 @@ gtk_cell_area_cell_get_valist (GtkCellArea        *area,
                                         G_OBJECT_TYPE (area), TRUE);
       if (!pspec)
         {
-          g_warning ("%s: cell area class `%s' has no cell property named `%s'",
+          g_warning ("%s: cell area class '%s' has no cell property named '%s'",
                      G_STRLOC, G_OBJECT_TYPE_NAME (area), name);
           break;
         }
       if (!(pspec->flags & G_PARAM_READABLE))
         {
-          g_warning ("%s: cell property `%s' of cell area class `%s' is not readable",
+          g_warning ("%s: cell property '%s' of cell area class '%s' is not readable",
                      G_STRLOC, pspec->name, G_OBJECT_TYPE_NAME (area));
           break;
         }
@@ -2790,10 +2790,10 @@ gtk_cell_area_cell_set_property (GtkCellArea        *area,
   pspec = g_param_spec_pool_lookup (cell_property_pool, property_name,
                                     G_OBJECT_TYPE (area), TRUE);
   if (!pspec)
-    g_warning ("%s: cell area class `%s' has no cell property named `%s'",
+    g_warning ("%s: cell area class '%s' has no cell property named '%s'",
                G_STRLOC, G_OBJECT_TYPE_NAME (area), property_name);
   else if (!(pspec->flags & G_PARAM_WRITABLE))
-    g_warning ("%s: cell property `%s' of cell area class `%s' is not writable",
+    g_warning ("%s: cell property '%s' of cell area class '%s' is not writable",
                G_STRLOC, pspec->name, G_OBJECT_TYPE_NAME (area));
   else
     {
@@ -2828,10 +2828,10 @@ gtk_cell_area_cell_get_property (GtkCellArea        *area,
   pspec = g_param_spec_pool_lookup (cell_property_pool, property_name,
                                     G_OBJECT_TYPE (area), TRUE);
   if (!pspec)
-    g_warning ("%s: cell area class `%s' has no cell property named `%s'",
+    g_warning ("%s: cell area class '%s' has no cell property named '%s'",
                G_STRLOC, G_OBJECT_TYPE_NAME (area), property_name);
   else if (!(pspec->flags & G_PARAM_READABLE))
-    g_warning ("%s: cell property `%s' of cell area class `%s' is not readable",
+    g_warning ("%s: cell property '%s' of cell area class '%s' is not readable",
                G_STRLOC, pspec->name, G_OBJECT_TYPE_NAME (area));
   else
     {
@@ -2846,7 +2846,7 @@ gtk_cell_area_cell_get_property (GtkCellArea        *area,
         }
       else if (!g_value_type_transformable (G_PARAM_SPEC_VALUE_TYPE (pspec), G_VALUE_TYPE (value)))
         {
-          g_warning ("can't retrieve cell property `%s' of type `%s' as value of type `%s'",
+          g_warning ("can't retrieve cell property '%s' of type '%s' as value of type '%s'",
                      pspec->name,
                      g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),
                      G_VALUE_TYPE_NAME (value));

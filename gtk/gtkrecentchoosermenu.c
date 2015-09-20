@@ -400,7 +400,7 @@ gtk_recent_chooser_menu_set_property (GObject      *object,
         }
       break;
     case GTK_RECENT_CHOOSER_PROP_SELECT_MULTIPLE:
-      g_warning ("%s: Choosers of type `%s' do not support selecting multiple items.",
+      g_warning ("%s: Choosers of type '%s' do not support selecting multiple items.",
                  G_STRFUNC,
                  G_OBJECT_TYPE_NAME (object));
       break;
