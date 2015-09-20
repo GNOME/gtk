@@ -115,8 +115,6 @@
  */
 
 
-#define GTK_ENTRY_COMPLETION_KEY "gtk-entry-completion-key"
-
 #define MIN_ENTRY_WIDTH  150
 #define DRAW_TIMEOUT     20
 #define PASSWORD_HINT_MAX 8
@@ -131,6 +129,8 @@ static GQuark          quark_inner_border   = 0;
 static GQuark          quark_password_hint  = 0;
 static GQuark          quark_cursor_hadjustment = 0;
 static GQuark          quark_capslock_feedback = 0;
+static GQuark          quark_gtk_signal = 0;
+static GQuark          quark_entry_completion = 0;
 
 typedef struct _EntryIconInfo EntryIconInfo;
 typedef struct _GtkEntryPasswordHint GtkEntryPasswordHint;
@@ -763,6 +763,8 @@ gtk_entry_class_init (GtkEntryClass *class)
   quark_password_hint = g_quark_from_static_string ("gtk-entry-password-hint");
   quark_cursor_hadjustment = g_quark_from_static_string ("gtk-hadjustment");
   quark_capslock_feedback = g_quark_from_static_string ("gtk-entry-capslock-feedback");
+  quark_gtk_signal = g_quark_from_static_string ("gtk-signal");
+  quark_entry_completion = g_quark_from_static_string ("gtk-entry-completion-key");
 
   g_object_class_override_property (gobject_class,
                                     PROP_EDITING_CANCELED,
@@ -9475,7 +9477,9 @@ static void
 activate_cb (GtkWidget *menuitem,
 	     GtkEntry  *entry)
 {
-  const gchar *signal = g_object_get_data (G_OBJECT (menuitem), "gtk-signal");
+  const gchar *signal;
+
+  signal = g_object_get_qdata (G_OBJECT (menuitem), quark_gtk_signal);
   g_signal_emit_by_name (entry, signal);
 }
 
@@ -9526,7 +9530,7 @@ append_action_signal (GtkEntry     *entry,
 {
   GtkWidget *menuitem = gtk_menu_item_new_with_mnemonic (label);
 
-  g_object_set_data (G_OBJECT (menuitem), I_("gtk-signal"), (char *)signal);
+  g_object_set_qdata (G_OBJECT (menuitem), quark_gtk_signal, (char *)signal);
   g_signal_connect (menuitem, "activate",
 		    G_CALLBACK (activate_cb), entry);
 
@@ -9747,7 +9751,7 @@ activate_bubble_cb (GtkWidget *item,
 {
   const gchar *signal;
 
-  signal = g_object_get_data (G_OBJECT (item), "gtk-signal");
+  signal = g_object_get_qdata (G_OBJECT (item), quark_gtk_signal);
   gtk_widget_hide (entry->priv->selection_bubble);
   if (strcmp (signal, "select-all") == 0)
     gtk_entry_select_all (entry);
@@ -9772,7 +9776,7 @@ append_bubble_action (GtkEntry     *entry,
   gtk_container_add (GTK_CONTAINER (item), image);
   gtk_widget_set_tooltip_text (item, label);
   gtk_style_context_add_class (gtk_widget_get_style_context (item), "image-button");
-  g_object_set_data (G_OBJECT (item), I_("gtk-signal"), (char *)signal);
+  g_object_set_qdata (G_OBJECT (item), quark_gtk_signal, (char *)signal);
   g_signal_connect (item, "clicked", G_CALLBACK (activate_bubble_cb), entry);
   gtk_widget_set_sensitive (GTK_WIDGET (item), sensitive);
   gtk_widget_show (GTK_WIDGET (item));
@@ -10485,7 +10489,7 @@ gtk_entry_set_completion (GtkEntry           *entry,
 
   if (!completion)
     {
-      g_object_set_data (G_OBJECT (entry), I_(GTK_ENTRY_COMPLETION_KEY), NULL);
+      g_object_set_qdata (G_OBJECT (entry), quark_entry_completion, NULL);
       return;
     }
 
@@ -10494,7 +10498,7 @@ gtk_entry_set_completion (GtkEntry           *entry,
 
   _gtk_entry_completion_connect (completion, entry);
 
-  g_object_set_data (G_OBJECT (entry), I_(GTK_ENTRY_COMPLETION_KEY), completion);
+  g_object_set_qdata (G_OBJECT (entry), quark_entry_completion, completion);
 
   g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_COMPLETION]);
 }
@@ -10517,8 +10521,7 @@ gtk_entry_get_completion (GtkEntry *entry)
 
   g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);
 
-  completion = GTK_ENTRY_COMPLETION (g_object_get_data (G_OBJECT (entry),
-                                     GTK_ENTRY_COMPLETION_KEY));
+  completion = GTK_ENTRY_COMPLETION (g_object_get_qdata (G_OBJECT (entry), quark_entry_completion));
 
   return completion;
 }
