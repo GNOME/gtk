@@ -412,10 +412,10 @@ static void gtk_label_set_text_internal          (GtkLabel      *label,
 						  gchar         *str);
 static void gtk_label_set_label_internal         (GtkLabel      *label,
 						  gchar         *str);
-static void gtk_label_set_use_markup_internal    (GtkLabel      *label,
-						  gboolean       val);
-static void gtk_label_set_use_underline_internal (GtkLabel      *label,
-						  gboolean       val);
+static gboolean gtk_label_set_use_markup_internal    (GtkLabel  *label,
+                                                      gboolean   val);
+static gboolean gtk_label_set_use_underline_internal (GtkLabel  *label,
+                                                      gboolean   val);
 static void gtk_label_set_uline_text_internal    (GtkLabel      *label,
 						  const gchar   *str);
 static void gtk_label_set_pattern_internal       (GtkLabel      *label,
@@ -2129,9 +2129,9 @@ gtk_label_set_label_internal (GtkLabel *label,
   g_object_notify_by_pspec (G_OBJECT (label), label_props[PROP_LABEL]);
 }
 
-static void
+static gboolean
 gtk_label_set_use_markup_internal (GtkLabel *label,
-				   gboolean  val)
+                                   gboolean  val)
 {
   GtkLabelPrivate *priv = label->priv;
 
@@ -2141,12 +2141,16 @@ gtk_label_set_use_markup_internal (GtkLabel *label,
       priv->use_markup = val;
 
       g_object_notify_by_pspec (G_OBJECT (label), label_props[PROP_USE_MARKUP]);
+
+      return TRUE;
     }
+
+  return FALSE;
 }
 
-static void
+static gboolean
 gtk_label_set_use_underline_internal (GtkLabel *label,
-				      gboolean val)
+                                      gboolean  val)
 {
   GtkLabelPrivate *priv = label->priv;
 
@@ -2156,7 +2160,11 @@ gtk_label_set_use_underline_internal (GtkLabel *label,
       priv->use_underline = val;
 
       g_object_notify_by_pspec (G_OBJECT (label), label_props[PROP_USE_UNDERLINE]);
+
+      return TRUE;
     }
+
+  return FALSE;
 }
 
 /* Calculates text, attrs and mnemonic_keyval from
@@ -5947,8 +5955,8 @@ gtk_label_set_use_markup (GtkLabel *label,
 
   g_object_freeze_notify (G_OBJECT (label));
 
-  gtk_label_set_use_markup_internal (label, setting);
-  gtk_label_recalculate (label);
+  if (gtk_label_set_use_markup_internal (label, setting))
+    gtk_label_recalculate (label);
 
   g_object_thaw_notify (G_OBJECT (label));
 }
@@ -5987,8 +5995,8 @@ gtk_label_set_use_underline (GtkLabel *label,
 
   g_object_freeze_notify (G_OBJECT (label));
 
-  gtk_label_set_use_underline_internal (label, setting);
-  gtk_label_recalculate (label);
+  if (gtk_label_set_use_underline_internal (label, setting))
+    gtk_label_recalculate (label);
 
   g_object_thaw_notify (G_OBJECT (label));
 }
