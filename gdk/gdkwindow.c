@@ -267,6 +267,9 @@ list_insert_link_before (GList *list,
       link->prev = sibling->prev;
       sibling->prev = link;
 
+      if (link->prev)
+        link->prev->next = link;
+
       return list;
     }
 }
