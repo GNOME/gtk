@@ -102,6 +102,7 @@ struct _GtkFlowBoxChildClass
 /**
  * GtkFlowBoxCreateWidgetFunc:
  * @item: the item from the model for which to create a widget for
+ * @user_data: user data from gtk_flow_box_bind_model()
  *
  * Called for flow boxes that are bound to a #GListModel with
  * gtk_flow_box_bind_model() for each item that gets added to the model.
