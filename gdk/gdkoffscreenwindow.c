@@ -195,7 +195,7 @@ gdk_offscreen_window_reparent (GdkWindow *window,
   gdk_window_hide (window);
 
   if (window->parent)
-    window->parent->children = g_list_remove (window->parent->children, window);
+    window->parent->children = g_list_remove_link (window->parent->children, &window->children_list_node);
 
   old_parent = window->parent;
   window->parent = new_parent;
@@ -203,7 +203,7 @@ gdk_offscreen_window_reparent (GdkWindow *window,
   window->y = y;
 
   if (new_parent)
-    window->parent->children = g_list_prepend (window->parent->children, window);
+    window->parent->children = g_list_concat (&window->children_list_node, window->parent->children);
 
   _gdk_synthesize_crossing_events_for_geometry_change (window);
   if (old_parent)

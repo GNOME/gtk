@@ -760,7 +760,7 @@ gdk_win32_window_foreign_new_for_display (GdkDisplay      *display,
   if (!window->parent || GDK_WINDOW_TYPE (window->parent) == GDK_WINDOW_FOREIGN)
     window->parent = _gdk_root;
 
-  window->parent->children = g_list_prepend (window->parent->children, window);
+  window->parent->children = g_list_concat (&window->children_list_node, window->parent->children);
   window->parent->impl_window->native_children =
     g_list_prepend (window->parent->impl_window->native_children, window);
 
@@ -1504,10 +1504,9 @@ gdk_win32_window_reparent (GdkWindow *window,
     }
 
   if (old_parent)
-    old_parent->children =
-      g_list_remove (old_parent->children, window);
+    old_parent->children = g_list_remove_link (old_parent->children, &window->children_list_node);
 
-  parent->children = g_list_prepend (parent->children, window);
+  parent->children = g_list_concat (&window->children_list_node, parent->children);
 
   return FALSE;
 }
