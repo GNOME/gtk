@@ -5387,7 +5387,6 @@ GtkWidgetClass
 GtkCallback
 GtkRequisition
 GtkAllocation
-GtkWidgetAuxInfo
 GtkWidgetHelpType
 gtk_widget_new
 gtk_widget_destroy
