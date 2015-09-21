@@ -4991,8 +4991,7 @@ get_widget_windows (GtkWidget *widget)
   if (gtk_widget_get_has_window (widget))
     window_list = g_list_prepend (NULL, gtk_widget_get_window (widget));
   else
-    window_list = gdk_window_peek_children (gtk_widget_get_window (widget));
-
+    window_list = gdk_window_get_children (gtk_widget_get_window (widget));
   last = g_list_last (window_list);
   ret = NULL;
 
@@ -5006,7 +5005,7 @@ get_widget_windows (GtkWidget *widget)
         continue;
 
       ret = g_list_prepend (ret, l->data);
-      children = gdk_window_peek_children (GDK_WINDOW (l->data));
+      children = gdk_window_get_children (GDK_WINDOW (l->data));
 
       if (children)
         {
