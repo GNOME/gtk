@@ -233,7 +233,6 @@ struct _GtkEntryPrivate
   guint         cursor_visible          : 1;
   guint         editing_canceled        : 1; /* Only used by GtkCellRendererText */
   guint         in_click                : 1; /* Flag so we don't select all when clicking in entry to focus in */
-  guint         is_cell_renderer        : 1;
   guint         invisible_char_set      : 1;
   guint         mouse_cursor_obscured   : 1;
   guint         need_im_reset           : 1;
@@ -2670,7 +2669,6 @@ gtk_entry_init (GtkEntry *entry)
   priv->dnd_position = -1;
   priv->width_chars = -1;
   priv->max_width_chars = -1;
-  priv->is_cell_renderer = FALSE;
   priv->editing_canceled = FALSE;
   priv->truncate_multiline = FALSE;
   priv->shadow_type = GTK_SHADOW_IN;
@@ -3611,45 +3609,25 @@ gtk_entry_get_frame_size (GtkEntry *entry,
                           gint     *width,
                           gint     *height)
 {
-  GtkEntryPrivate *priv = entry->priv;
   GtkAllocation allocation;
   GtkWidget *widget = GTK_WIDGET (entry);
-  gint baseline;
   gint req_height, req_baseline, unused;
 
   gtk_entry_get_preferred_height_and_baseline_for_width (widget, -1, &req_height, &unused, &req_baseline, &unused);
 
   gtk_widget_get_allocation (widget, &allocation);
-  baseline = gtk_widget_get_allocated_baseline (widget);
 
   if (x)
     *x = allocation.x;
 
   if (y)
-    {
-      if (priv->is_cell_renderer)
-        *y = 0;
-      else
-        {
-          if (baseline == -1)
-            *y = (allocation.height - req_height) / 2;
-          else
-            *y = baseline - req_baseline;
-        }
-
-      *y += allocation.y;
-    }
+    *y = allocation.y;
 
   if (width)
     *width = allocation.width;
 
   if (height)
-    {
-      if (priv->is_cell_renderer)
-        *height = allocation.height;
-      else
-        *height = req_height;
-    }
+    *height = allocation.height;
 }
 
 static void
@@ -5284,11 +5262,6 @@ static void
 gtk_entry_start_editing (GtkCellEditable *cell_editable,
 			 GdkEvent        *event)
 {
-  GtkEntry *entry = GTK_ENTRY (cell_editable);
-  GtkEntryPrivate *priv = entry->priv;
-
-  priv->is_cell_renderer = TRUE;
-
   g_signal_connect (cell_editable, "activate",
 		    G_CALLBACK (gtk_cell_editable_entry_activated), NULL);
   g_signal_connect (cell_editable, "key-press-event",
@@ -10994,24 +10967,6 @@ keymap_state_changed (GdkKeymap *keymap,
     show_capslock_feedback (entry, text);
   else
     remove_capslock_feedback (entry);
-}
-
-/*
- * _gtk_entry_set_is_cell_renderer:
- * @entry: a #GtkEntry
- * @is_cell_renderer: new value
- *
- * This is a helper function for GtkComboBox. A GtkEntry in a GtkComboBox
- * is supposed to behave like a GtkCellEditable when placed in a combo box.
- *
- * I.e take up its allocation and get GtkEntry->is_cell_renderer = TRUE.
- *
- */
-void
-_gtk_entry_set_is_cell_renderer (GtkEntry *entry,
-                                 gboolean  is_cell_renderer)
-{
-  entry->priv->is_cell_renderer = is_cell_renderer;
 }
 
 /**

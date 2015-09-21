@@ -86,8 +86,6 @@ gchar*   _gtk_entry_get_display_text       (GtkEntry *entry,
 void     _gtk_entry_get_borders            (GtkEntry  *entry,
                                             GtkBorder *borders);
 GtkIMContext* _gtk_entry_get_im_context    (GtkEntry  *entry);
-void     _gtk_entry_set_is_cell_renderer   (GtkEntry  *entry,
-                                            gboolean   is_cell_renderer);
 void     _gtk_entry_grab_focus             (GtkEntry  *entry,
                                             gboolean   select_all);
 
