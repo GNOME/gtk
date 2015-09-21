@@ -400,7 +400,7 @@ _find_widget_window (GtkGesture *gesture,
 
   widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
 
-  while (window)
+  while (window && !gdk_window_is_destroyed (window))
     {
       gdk_window_get_user_data (window, (gpointer*) &window_widget);
 
@@ -474,6 +474,10 @@ _update_widget_coordinates (GtkGesture *gesture,
   gint wx, wy, x, y;
 
   event_widget = gtk_get_event_widget (data->event);
+
+  if (!event_widget)
+    return;
+
   widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
   event_widget_window = gtk_widget_get_window (event_widget);
   _get_event_coordinates (data, &event_x, &event_y);
