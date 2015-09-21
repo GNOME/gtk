@@ -22,9 +22,6 @@
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
-#ifdef HAVE_LIBCANBERRA
-#include <canberra-gtk.h>
-#endif
 
 static void
 change_theme_state (GSimpleAction *action,
@@ -658,11 +655,6 @@ overshot (GtkScrolledWindow *sw, GtkPositionType pos, GtkWidget *widget)
           g_object_set_data (G_OBJECT (widget), "Gold", NULL);
         }
 
-#ifdef HAVE_LIBCANBERRA
-      if (silver || gold)
-        ca_gtk_play_for_widget (widget, 0, "event.id", "message", NULL); 
-#endif
-
       return;
     }
 
@@ -703,9 +695,6 @@ overshot (GtkScrolledWindow *sw, GtkPositionType pos, GtkWidget *widget)
   row = gtk_widget_get_parent (row);
   gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
   g_object_set_data (G_OBJECT (widget), color, row);
-#ifdef HAVE_LIBCANBERRA
-  ca_gtk_play_for_widget (widget, 0, "event.id", "complete", NULL); 
-#endif
 }
 
 static void
