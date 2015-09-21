@@ -960,7 +960,6 @@ network_enumeration_next_files_finished (GObject      *source_object,
   priv = gtk_places_view_get_instance_private (view);
   error = NULL;
 
-  gtk_places_view_set_fetching_networks (view, FALSE);
   detected_networks = g_file_enumerator_next_files_finish (G_FILE_ENUMERATOR (source_object),
                                                            res, &error);
 
@@ -973,16 +972,18 @@ network_enumeration_next_files_finished (GObject      *source_object,
     }
   else
     {
+      gtk_places_view_set_fetching_networks (view, FALSE);
       populate_networks (view, G_FILE_ENUMERATOR (source_object), detected_networks);
 
       g_list_free_full (detected_networks, g_object_unref);
     }
 
-    /* avoid to update widgets if the operation was cancelled in finalize */
-    if (priv->listbox != NULL)
+  /* avoid to update widgets if the operation was cancelled in finalize */
+  if (priv->listbox != NULL)
+    {
       update_network_state (view);
-
-  update_loading (view);
+      update_loading (view);
+    }
 }
 
 static void
