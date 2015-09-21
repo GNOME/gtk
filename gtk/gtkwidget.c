@@ -7425,6 +7425,9 @@ _gtk_widget_run_controllers (GtkWidget           *widget,
     {
       GList *next = l->next;
 
+      if (!WIDGET_REALIZED_FOR_EVENT (widget, event))
+        break;
+
       data = l->data;
 
       if (data->controller == NULL)
