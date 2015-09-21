@@ -1,3 +1,41 @@
+Overview of Changes in GTK+ 3.18.0
+==================================
+
+* Speed up shadow drawing by caching corner shadows
+
+* Memory leak fixes
+
+* Bugs fixed:
+ 681965 Clean up the autotools files on the parts used for Visual C++...
+ 754098 Cannot resize window with destroyed EventBox
+ 754629 gtk-demo: $(EXEEXT) is missing
+ 754745 overlay scrollbar shouldn't hide when the slider is being grabbed
+ 754952 gdk_pixbuf_get_from_window: always returns same image
+ 755021 context menu in empty file folder -> crash
+ 755274 test-simplify uses bashism in /bin/sh script
+ 755352 Crash on widget destruction during event handling
+
+* Translation updates:
+ Brazilian Portuguese
+ Czech
+ Danish
+ French
+ Greek
+ Hungarian
+ Japanese
+ Kazakh
+ Latvian
+ Lithuanian
+ Norwegian bokmål
+ Persian
+ Russian
+ Serbian
+ Serbian Latin
+ Spanish
+ Swedish
+ Turkish
+
+
 Overview of Changes in GTK+ 3.17.9
 ==================================
 
