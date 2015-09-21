@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9.00"
 	Name="gtk3-install"
-	ProjectGUID="{2093D218-190E-4194-9421-3BA7CBF33B15}"
+	ProjectGUID="{23BBF35F-78AF-4E8C-983F-7B90448CD7DF}"
 	RootNamespace="gtk3install"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="131072"

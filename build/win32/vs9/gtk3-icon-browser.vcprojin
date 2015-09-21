@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9.00"
 	Name="gtk3-icon-browser"
-	ProjectGUID="{3281202A-CD26-4C67-B892-EB34BDBC612E}"
+	ProjectGUID="{343333C4-D46C-4C97-A986-959CCA6F1DE0}"
 	RootNamespace="gtk3iconbrowser"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"

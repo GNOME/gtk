@@ -21,7 +21,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073F5}</ProjectGuid>
+    <ProjectGuid>{95A4B53D-2773-4406-A2C1-8FD2840BBAD8}</ProjectGuid>
     <RootNamespace>gtk3</RootNamespace>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
@@ -218,7 +218,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="gdk-3.vcxproj">
-      <Project>{fc5aadb5-95cd-4bf0-ba8b-0c16fe7073f7}</Project>
+      <Project>{5ae8f5ce-9103-4951-aede-ea2f3b573be8}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
   </ItemGroup>

@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{3281202A-CD26-4C67-B892-EB34BDBC612E}</ProjectGuid>
+    <ProjectGuid>{343333C4-D46C-4C97-A986-959CCA6F1DE0}</ProjectGuid>
     <RootNamespace>gtk3iconbrowser</RootNamespace>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
@@ -163,11 +163,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="gdk-3.vcxproj">
-      <Project>{fc5aadb5-95cd-4bf0-ba8b-0c16fe7073f7}</Project>
+      <Project>{5ae8f5ce-9103-4951-aede-ea2f3b573be8}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="gtk-3.vcxproj">
-      <Project>{fc5aadb5-95cd-4bf0-ba8b-0c16fe7073f5}</Project>
+      <Project>{95a4b53d-2773-4406-a2c1-8fd2840bbad8}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
   </ItemGroup>

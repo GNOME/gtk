@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9.00"
 	Name="gtk3-prebuild"
-	ProjectGUID="{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073FF}"
+	ProjectGUID="{B98FBE68-B03C-48E3-8F32-C3C010720D30}"
 	RootNamespace="gtk3prebuild"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="131072"

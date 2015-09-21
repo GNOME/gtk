@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9.00"
 	Name="gtk-encode-symbolic-svg"
-	ProjectGUID="{3281202A-CD26-4C67-B892-EB34BDBC6131}"
+	ProjectGUID="{F280BF1A-777A-4FB5-8005-DFBE04621EDB}"
 	RootNamespace="gtkencodesymbolicsvg"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"

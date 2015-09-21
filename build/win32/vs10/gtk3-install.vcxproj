@@ -35,7 +35,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{2093D218-190E-4194-9421-3BA7CBF33B15}</ProjectGuid>
+    <ProjectGuid>{23BBF35F-78AF-4E8C-983F-7B90448CD7DF}</ProjectGuid>
     <RootNamespace>gtkinstall</RootNamespace>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
@@ -184,35 +184,35 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="gdk-3.vcxproj">
-      <Project>{fc5aadb5-95cd-4bf0-ba8b-0c16fe7073f7}</Project>
+      <Project>{5ae8f5ce-9103-4951-aede-ea2f3b573be8}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="gtk3-demo.vcxproj">
-      <Project>{fc5aadb5-95cd-4bf0-ba8b-0c16fe7073fc}</Project>
+      <Project>{bdae6de2-6bcc-4107-94f0-da12214a02de}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="gtk-3.vcxproj">
-      <Project>{fc5aadb5-95cd-4bf0-ba8b-0c16fe7073f5}</Project>
+      <Project>{95a4b53d-2773-4406-a2c1-8fd2840bbad8}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="gailutil-3.vcxproj">
-      <Project>{29e3e814-1ba3-4ad7-a3a7-3669cb80a942}</Project>
+      <Project>{a1fced61-4e51-4015-a70c-5373404d1ba0}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="gtk3-demo-application.vcxproj">
-      <Project>{3281202a-cd26-4c67-b892-eb34bdbc612f}</Project>
+      <Project>{be6b4973-c6ff-4c8f-8e97-a47793c50f44}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="gtk3-icon-browser.vcxproj">
-      <Project>{3281202a-cd26-4c67-b892-eb34bdbc612e}</Project>
+      <Project>{343333c4-d46c-4c97-a986-959cca6f1de0}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="broadwayd.vcxproj">
-      <Project>{3281202a-cd26-4c67-b892-eb34bdbc6130}</Project>
+      <Project>{e9687d21-e214-4a0c-9eb4-8b38ebb783e5}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="gtk-encode-symbolic-svg.vcxproj">
-      <Project>{3281202a-cd26-4c67-b892-eb34bdbc6131}</Project>
+      <Project>{f280bf1a-777a-4fb5-8005-dfbe04621edb}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
   </ItemGroup>

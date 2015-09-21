@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9.00"
 	Name="gailutil-3"
-	ProjectGUID="{29E3E814-1BA3-4AD7-A3A7-3669CB80A942}"
+	ProjectGUID="{A1FCED61-4E51-4015-A70C-5373404D1BA0}"
 	RootNamespace="gailutil3"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"

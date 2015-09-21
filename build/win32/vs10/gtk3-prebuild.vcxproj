@@ -35,7 +35,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073FF}</ProjectGuid>
+    <ProjectGuid>{B98FBE68-B03C-48E3-8F32-C3C010720D30}</ProjectGuid>
     <RootNamespace>gtkprebuild</RootNamespace>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>

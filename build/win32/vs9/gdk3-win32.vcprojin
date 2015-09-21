@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9.00"
 	Name="gdk3-win32"
-	ProjectGUID="{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073FA}"
+	ProjectGUID="{ABA7685A-7CBB-4626-B5E5-6EEEA5B489EF}"
 	RootNamespace="gdk3win32"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="0"

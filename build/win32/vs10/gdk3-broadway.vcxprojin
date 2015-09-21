@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073FE}</ProjectGuid>
+    <ProjectGuid>{1DF4C475-4472-4EE4-AC2B-3AB5A4C1A453}</ProjectGuid>
     <RootNamespace>gdkbroadway</RootNamespace>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
@@ -121,7 +121,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="gtk3-prebuild.vcxproj">
-      <Project>{fc5aadb5-95cd-4bf0-ba8b-0c16fe7073ff}</Project>
+      <Project>{b98fbe68-b03c-48e3-8f32-c3c010720d30}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
   </ItemGroup>

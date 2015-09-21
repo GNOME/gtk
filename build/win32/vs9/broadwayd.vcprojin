@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9.00"
 	Name="broadwayd"
-	ProjectGUID="{3281202A-CD26-4C67-B892-EB34BDBC6130}"
+	ProjectGUID="{E9687D21-E214-4A0C-9EB4-8B38EBB783E5}"
 	RootNamespace="broadwayd"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"

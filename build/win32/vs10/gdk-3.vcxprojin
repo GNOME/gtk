@@ -35,7 +35,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073F7}</ProjectGuid>
+    <ProjectGuid>{5AE8F5CE-9103-4951-AEDE-EA2F3B573BE8}</ProjectGuid>
     <RootNamespace>gdk3</RootNamespace>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
@@ -319,11 +319,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="gdk3-broadway.vcxproj">
-      <Project>{fc5aadb5-95cd-4bf0-ba8b-0c16fe7073fe}</Project>
+      <Project>{1df4c475-4472-4ee4-ac2b-3ab5a4c1a453}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="gdk3-win32.vcxproj">
-      <Project>{fc5aadb5-95cd-4bf0-ba8b-0c16fe7073fa}</Project>
+      <Project>{aba7685a-7cbb-4626-b5e5-6eeea5b489ef}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
   </ItemGroup>

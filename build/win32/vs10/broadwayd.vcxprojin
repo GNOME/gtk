@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{3281202A-CD26-4C67-B892-EB34BDBC6130}</ProjectGuid>
+    <ProjectGuid>{E9687D21-E214-4A0C-9EB4-8B38EBB783E5}</ProjectGuid>
     <RootNamespace>broadwayd</RootNamespace>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
@@ -167,7 +167,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="gtk3-prebuild.vcxproj">
-      <Project>{fc5aadb5-95cd-4bf0-ba8b-0c16fe7073ff}</Project>
+      <Project>{b98fbe68-b03c-48e3-8f32-c3c010720d30}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
   </ItemGroup>
