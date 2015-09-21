@@ -1451,14 +1451,6 @@ multipress_gesture_pressed_cb (GtkGestureMultiPress *gesture,
         {
           gtk_gesture_set_sequence_state (GTK_GESTURE (gesture),
                                           sequence, GTK_EVENT_SEQUENCE_DENIED);
-
-          /* Reset immediately the gestures, here we don't get many guarantees
-           * about whether the target window event mask will be complete enough
-           * to keep gestures consistent, or whether any widget across the
-           * hierarchy will be inconsistent about event handler return values.
-           */
-          gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
-          gtk_event_controller_reset (GTK_EVENT_CONTROLLER (priv->drag_gesture));
           return;
         }
       /* fall thru */
@@ -7867,6 +7859,28 @@ get_active_region_type (GtkWindow *window, GdkEventAny *event, gint x, gint y)
 }
 
 static gboolean
+controller_handle_wm_event (GtkGesture     *gesture,
+                            const GdkEvent *event)
+{
+  GdkEventSequence *seq;
+  gboolean retval;
+
+  seq = gdk_event_get_event_sequence (event);
+  retval = gtk_event_controller_handle_event (GTK_EVENT_CONTROLLER (gesture),
+                                              event);
+
+  /* Reset immediately the gestures, here we don't get many guarantees
+   * about whether the target window event mask will be complete enough
+   * to keep gestures consistent, or whether any widget across the
+   * hierarchy will be inconsistent about event handler return values.
+   */
+  if (gtk_gesture_get_sequence_state (gesture, seq) == GTK_EVENT_SEQUENCE_DENIED)
+    gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
+
+  return retval;
+}
+
+static gboolean
 gtk_window_handle_wm_event (GtkWindow *window,
                             GdkEvent  *event,
                             gboolean   run_drag)
@@ -7881,12 +7895,12 @@ gtk_window_handle_wm_event (GtkWindow *window,
       priv = window->priv;
 
       if (run_drag && priv->drag_gesture)
-        retval |= gtk_event_controller_handle_event (GTK_EVENT_CONTROLLER (priv->drag_gesture),
-                                                     (const GdkEvent*) event);
+        retval |= controller_handle_wm_event (priv->drag_gesture,
+                                              (const GdkEvent*) event);
 
       if (priv->multipress_gesture)
-        retval |= gtk_event_controller_handle_event (GTK_EVENT_CONTROLLER (priv->multipress_gesture),
-                                                     (const GdkEvent*) event);
+        retval |= controller_handle_wm_event (priv->multipress_gesture,
+                                              (const GdkEvent*) event);
     }
 
   return retval;
