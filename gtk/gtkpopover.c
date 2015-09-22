@@ -616,22 +616,6 @@ gtk_popover_unmap (GtkWidget *widget)
   g_clear_object (&priv->prev_default);
 }
 
-static void
-gtk_popover_get_pointed_to_coords (GtkPopover   *popover,
-                                   GdkRectangle *rect_out)
-{
-  GtkPopoverPrivate *priv = popover->priv;
-  GdkRectangle rect;
-
-  if (!rect_out)
-    return;
-
-  gtk_popover_get_pointing_to (popover, &rect);
-  gtk_widget_translate_coordinates (priv->widget, GTK_WIDGET (priv->window),
-                                    rect.x, rect.y, &rect.x, &rect.y);
-  *rect_out = rect;
-}
-
 static GtkPositionType
 get_effective_position (GtkPopover      *popover,
                         GtkPositionType  pos)
@@ -972,7 +956,10 @@ gtk_popover_update_position (GtkPopover *popover)
   gtk_widget_get_allocation (GTK_WIDGET (priv->window), &window_alloc);
   priv->final_position = priv->preferred_position;
 
-  gtk_popover_get_pointed_to_coords (popover, &rect);
+  gtk_popover_get_pointing_to (popover, &rect);
+  gtk_widget_translate_coordinates (priv->widget, GTK_WIDGET (priv->window),
+                                    rect.x, rect.y, &rect.x, &rect.y);
+
   pos = get_effective_position (popover, priv->preferred_position);
 
   overshoot[GTK_POS_TOP] = req.height - rect.y;
