@@ -5648,14 +5648,21 @@ _gtk_text_btree_get_iter_at_last_toggle  (GtkTextBTree   *tree,
                                           GtkTextIter    *iter,
                                           GtkTextTag     *tag)
 {
+  gboolean found;
+
   g_return_val_if_fail (iter != NULL, FALSE);
   g_return_val_if_fail (tree != NULL, FALSE);
 
   _gtk_text_btree_get_end_iter (tree, iter);
-  gtk_text_iter_backward_to_tag_toggle (iter, tag);
+
+  if (gtk_text_iter_toggles_tag (iter, tag))
+    found = TRUE;
+  else
+    found = gtk_text_iter_backward_to_tag_toggle (iter, tag);
+
   check_invariants (iter);
   
-  return TRUE;
+  return found;
 }
 
 gboolean
