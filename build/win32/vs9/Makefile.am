@@ -9,9 +9,14 @@ GENERATED_ITEMS = \
 	gtk3-demo.vcproj		\
 	gtk3-demo-application.vcproj	\
 	gtk3-icon-browser.vcproj	\
-	gailutil-3.vcproj			\
+	gailutil-3.vcproj		\
 	gtk3-install.vsprops		\
-	gtk3-version-paths.vsprops
+	gtk3-version-paths.vsprops	\
+	gdk3-win32.headers		\
+	gailutil-3.headers		\
+	gdk-3.headers			\
+	gdk3-broadway.headers		\
+	gtk-3.headers
 
 EXTRA_DIST += \
 	README.txt			\
