@@ -813,7 +813,7 @@ gtk_app_chooser_widget_initialize_items (GtkAppChooserWidget *self)
                 NULL);
 
   /* populate the widget */
-  gtk_app_chooser_widget_real_add_items (self);
+  gtk_app_chooser_refresh (GTK_APP_CHOOSER (self));
 }
 
 static void
