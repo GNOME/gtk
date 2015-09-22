@@ -2217,24 +2217,43 @@ GtkSidebarRow {
 }
 
 // Places sidebar is a special case, since the view here have to look like chrome not content, so we override text color
-GtkPlacesSidebar.sidebar .view {
+GtkPlacesSidebar.sidebar {
 
-  color: $fg_color;
-  background-color: transparent;
+  @at-root .sidebar-button.button { // @at-root needded to not change the specificity making button styling inheritance broken
+                                    // so istead of "GtkPlacesSidebar.sidebar .sidebar-button.button" [specificity 0,0,3,1]
+                                    // the extended selector ".sidebar-button.button" [specificity 0,0,2,0]
 
-  .separator,
-  .separator:backdrop { @extend .separator; }
+    &.image-button { padding: 5px; }
 
-  .image { // icons color
-    color: mix($fg_color, $bg_color, 70%);
+    @extend .button.flat;
+    border-radius: 100%;
+    outline-radius: 100%;
+    &:not(:hover):not(:active) > GtkImage,
+    &:backdrop > GtkImage { opacity: $_placesidebar_icons_opacity };
+  }
+  // this is for indicating which sidebar row generated a popover
+  // see https://bugzilla.gnome.org/show_bug.cgi?id=754411
+  .has-open-popup { @extend .list-row.activatable:hover; }
+
+  .view {
+
+    color: $fg_color;
+    background-color: transparent;
+
+    .separator,
+    .separator:backdrop { @extend .separator; }
+
+    .image { // icons color
+      color: mix($fg_color, $bg_color, 70%);
+
+      &:selected {
+        color: mix($selected_fg_color, $selected_bg_color, 90%);
+      }
+    }
 
     &:selected {
-      color: mix($selected_fg_color, $selected_bg_color, 90%);
+      @extend %selected_items;
     }
-  }
-
-  &:selected {
-    @extend %selected_items;
   }
 }
 
