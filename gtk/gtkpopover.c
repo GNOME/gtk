@@ -517,7 +517,7 @@ show_animate_cb (GtkWidget     *widget,
       gtk_widget_set_opacity (widget, 1.0 - t);
     }
 
-  gtk_widget_queue_resize (GTK_WIDGET (popover));
+  gtk_popover_update_position (popover);
 
   if (t >= 1.0)
     {
