@@ -75,7 +75,7 @@
                 <property name="vexpand">1</property>
                 <property name="shadow_type">in</property>
                 <property name="min_content_width">250</property>
-                <property name="min_content_height">150</property>
+                <property name="min_content_height">200</property>
                 <child>
                   <object class="GtkViewport">
                     <property name="visible">1</property>
