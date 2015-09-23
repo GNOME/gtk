@@ -153,7 +153,6 @@ struct _GtkPopoverPrivate
   guint current_position   : 2;
   guint modal              : 1;
   guint button_pressed     : 1;
-  guint apply_shape        : 1;
   guint grab_notify_blocked : 1;
   guint transitions_enabled : 1;
   guint state               : 2;
@@ -183,7 +182,6 @@ gtk_popover_init (GtkPopover *popover)
   gtk_widget_set_has_window (widget, TRUE);
   popover->priv = gtk_popover_get_instance_private (popover);
   popover->priv->modal = TRUE;
-  popover->priv->apply_shape = TRUE;
   popover->priv->tick_id = 0;
   popover->priv->transitions_enabled = TRUE;
 
@@ -1019,7 +1017,7 @@ gtk_popover_update_position (GtkPopover *popover)
 
   if (priv->final_position != priv->current_position)
     {
-      if (priv->apply_shape && gtk_widget_is_drawable (widget))
+      if (gtk_widget_is_drawable (widget))
         gtk_popover_update_shape (popover);
 
       priv->current_position = priv->final_position;
@@ -1335,7 +1333,6 @@ gtk_popover_size_allocate (GtkWidget     *widget,
                            GtkAllocation *allocation)
 {
   GtkPopover *popover = GTK_POPOVER (widget);
-  GtkPopoverPrivate *priv = popover->priv;
   GtkWidget *child;
 
   gtk_widget_set_allocation (widget, allocation);
@@ -1360,8 +1357,7 @@ gtk_popover_size_allocate (GtkWidget     *widget,
     {
       gdk_window_move_resize (gtk_widget_get_window (widget),
                               0, 0, allocation->width, allocation->height);
-      if (priv->apply_shape)
-        gtk_popover_update_shape (popover);
+      gtk_popover_update_shape (popover);
     }
 }
 
