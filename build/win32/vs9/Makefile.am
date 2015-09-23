@@ -1,5 +1,12 @@
 include $(top_srcdir)/Makefile.decl
 
+MSVC_HEADERS_LISTS =	\
+	gdk3-win32.headers	\
+	gdk3-broadway.headers	\
+	gdk-3.headers		\
+	gtk-3.headers		\
+	gailutil-3.headers
+
 GENERATED_ITEMS = \
 	gdk3-win32.vcproj		\
 	gdk3-broadway.vcproj		\
@@ -11,12 +18,7 @@ GENERATED_ITEMS = \
 	gtk3-icon-browser.vcproj	\
 	gailutil-3.vcproj		\
 	gtk3-install.vsprops		\
-	gtk3-version-paths.vsprops	\
-	gdk3-win32.headers		\
-	gailutil-3.headers		\
-	gdk-3.headers			\
-	gdk3-broadway.headers		\
-	gtk-3.headers
+	gtk3-version-paths.vsprops
 
 EXTRA_DIST += \
 	README.txt			\
@@ -41,13 +43,9 @@ EXTRA_DIST += \
 	gtk3-version-paths.vsprops.in	\
 	$(GENERATED_ITEMS)
 
-gtk3-install.vsprops: $(top_srcdir)/build/win32/vs9/gtk3-install.vspropsin
+gtk3-install.vsprops: $(top_srcdir)/build/win32/vs9/gtk3-install.vspropsin $(MSVC_HEADERS_LISTS)
 	$(CPP) -P - <$(top_srcdir)/build/win32/vs9/gtk3-install.vspropsin >$@
-	rm gdk-3.headers
-	rm gdk3-win32.headers
-	rm gdk3-broadway.headers
-	rm gtk-3.headers
-	rm gailutil-3.headers
+	rm $(MSVC_HEADERS_LISTS)
 
 DISTCLEANFILES = $(GENERATED_ITEMS)
 

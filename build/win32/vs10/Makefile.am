@@ -20,12 +20,14 @@ GENERATED_ITEMS = \
 	gailutil-3.vcxproj			\
 	gailutil-3.vcxproj.filters		\
 	gtk3-install.props			\
-	gtk3-version-paths.props		\
-	gdk3-broadway.vs10.headers		\
-	gdk-3.vs10.headers			\
-	gtk-3.vs10.headers			\
-	gailutil-3.vs10.headers			\
-	gdk3-win32.vs10.headers
+	gtk3-version-paths.props
+
+MSVC10_HEADERS_LISTS =	\
+	gdk3-win32.vs10.headers		\
+	gdk3-broadway.vs10.headers	\
+	gdk-3.vs10.headers		\
+	gtk-3.vs10.headers		\
+	gailutil-3.vs10.headers
 
 EXTRA_DIST += \
 	README.txt				\
@@ -60,12 +62,8 @@ EXTRA_DIST += \
 	gtk3-version-paths.props.in		\
 	$(GENERATED_ITEMS)
 
-gtk3-install.props: $(top_srcdir)/build/win32/vs10/gtk3-install.propsin
+gtk3-install.props: $(top_srcdir)/build/win32/vs10/gtk3-install.propsin $(MSVC10_HEADERS_LISTS)
 	$(CPP) -P - <$(top_srcdir)/build/win32/vs10/gtk3-install.propsin >$@
-	rm gdk-3.vs10.headers
-	rm gdk3-win32.vs10.headers
-	rm gdk3-broadway.vs10.headers
-	rm gtk-3.vs10.headers
-	rm gailutil-3.vs10.headers
+	rm $(MSVC10_HEADERS_LISTS)
 
 -include $(top_srcdir)/git.mk
