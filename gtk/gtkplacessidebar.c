@@ -2412,7 +2412,21 @@ do_rename (GtkButton        *button,
 
   g_clear_pointer (&sidebar->rename_uri, g_free);
 
-  gtk_widget_hide (sidebar->rename_popover);
+  if (sidebar->rename_popover)
+    gtk_widget_hide (sidebar->rename_popover);
+}
+
+static void
+on_rename_popover_destroy (GtkWidget        *rename_popover,
+                           GtkPlacesSidebar *sidebar)
+{
+  if (sidebar)
+    {
+      sidebar->rename_popover = NULL;
+      sidebar->rename_entry = NULL;
+      sidebar->rename_button = NULL;
+      sidebar->rename_error = NULL;
+    }
 }
 
 static void
@@ -2430,6 +2444,9 @@ create_rename_popover (GtkPlacesSidebar *sidebar)
     return;
 
   popover = gtk_popover_new (GTK_WIDGET (sidebar));
+  /* Clean sidebar pointer when its destroyed, most of the times due to its
+   * relative_to associated row being destroyed */
+  g_signal_connect (popover, "destroy", G_CALLBACK (on_rename_popover_destroy), sidebar);
   gtk_popover_set_position (GTK_POPOVER (popover), GTK_POS_RIGHT);
   grid = gtk_grid_new ();
   gtk_container_add (GTK_CONTAINER (popover), grid);
@@ -3383,6 +3400,14 @@ add_open_button (GtkWidget          *box,
   return item;
 }
 
+static void
+on_row_popover_destroy (GtkWidget        *row_popover,
+                        GtkPlacesSidebar *sidebar)
+{
+  if (sidebar)
+    sidebar->popover = NULL;
+}
+
 /* Constructs the popover for the sidebar row if needed */
 static void
 create_row_popover (GtkPlacesSidebar *sidebar,
@@ -3392,6 +3417,9 @@ create_row_popover (GtkPlacesSidebar *sidebar,
   GtkWidget *box;
 
   sidebar->popover = gtk_popover_new (GTK_WIDGET (sidebar));
+  /* Clean sidebar pointer when its destroyed, most of the times due to its
+   * relative_to associated row being destroyed */
+  g_signal_connect (sidebar->popover, "destroy", G_CALLBACK (on_row_popover_destroy), sidebar);
   setup_popover_shadowing (sidebar->popover);
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   g_object_set (box, "margin", 10, NULL);
