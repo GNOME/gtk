@@ -11886,7 +11886,7 @@ _gtk_window_remove_popover (GtkWindow *window,
 
   popover_unmap (popover, data);
 
-  if (_gtk_widget_get_realized (GTK_WIDGET (window)))
+  if (_gtk_widget_get_realized (GTK_WIDGET (popover)))
     popover_unrealize (popover, data, window);
 
   priv->popovers = g_list_remove (priv->popovers, data);
