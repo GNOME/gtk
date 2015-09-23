@@ -723,7 +723,8 @@ gtk_application_window_removed (GtkApplication *application,
 
   old_active = priv->windows;
 
-  gtk_application_impl_window_removed (application->priv->impl, window);
+  if (priv->impl)
+    gtk_application_impl_window_removed (priv->impl, window);
 
   g_signal_handlers_disconnect_by_func (window,
                                         gtk_application_focus_in_event_cb,
@@ -733,9 +734,9 @@ gtk_application_window_removed (GtkApplication *application,
   priv->windows = g_list_remove (priv->windows, window);
   gtk_window_set_application (window, NULL);
 
-  if (priv->windows != old_active)
+  if (priv->windows != old_active && priv->impl)
     {
-      gtk_application_impl_active_window_changed (application->priv->impl, priv->windows ? priv->windows->data : NULL);
+      gtk_application_impl_active_window_changed (priv->impl, priv->windows ? priv->windows->data : NULL);
       g_object_notify_by_pspec (G_OBJECT (application), gtk_application_props[PROP_ACTIVE_WINDOW]);
     }
 }
