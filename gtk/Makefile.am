@@ -365,6 +365,7 @@ gtk_private_h_sources =		\
 	gtkcolorswatchprivate.h	\
 	gtkcoloreditorprivate.h	\
 	gtkcolorplaneprivate.h	\
+	gtkcolorscaleprivate.h	\
 	gtkcolorchooserprivate.h	\
 	gtkcomboboxprivate.h	\
 	gtkcontainerprivate.h   \
@@ -494,7 +495,6 @@ gtk_private_h_sources =		\
 	gtkrenderprivate.h	\
 	gtkresources.h		\
 	gtkroundedboxprivate.h	\
-	gtkscaleprivate.h	\
 	gtksearchengine.h	\
 	gtksearchenginesimple.h	\
 	gtksearchenginemodel.h	\
