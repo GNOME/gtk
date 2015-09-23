@@ -25,6 +25,11 @@
 #include "gtkcssprovider.h"
 #include "gtkstylecontextprivate.h"
 
+#if defined(_MSC_VER) && _MSC_VER > 1500
+# include <intrin.h>
+# define __builtin_popcount(n) __popcount(n)
+#endif
+
 typedef struct _GtkCssSelectorClass GtkCssSelectorClass;
 typedef gboolean (* GtkCssSelectorForeachFunc) (const GtkCssSelector *selector,
                                                 const GtkCssMatcher  *matcher,
@@ -749,7 +754,11 @@ gtk_css_selector_region_get_change (const GtkCssSelector *selector, GtkCssChange
 static inline guint
 count_bits (guint n)
 {
-#if defined(__GNUC__)
+#if defined(__GNUC__) && (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 5))
+  return (guint) __builtin_popcount (n);
+#elif defined(__clang__) && (__clang_major__ > 3 || (__clang_major__ == 3 && __clang_minor__ >= 1))
+  return (guint) __builtin_popcount (n);
+#elif defined(_MSC_VER) && _MSC_VER > 1500
   return (guint) __builtin_popcount (n);
 #else
   guint result = 0;
