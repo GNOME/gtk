@@ -153,55 +153,6 @@ typedef enum
   GDK_HINT_USER_SIZE   = 1 << 8
 } GdkWindowHints;
 
-
-/**
- * GdkWindowTypeHint:
- * @GDK_WINDOW_TYPE_HINT_NORMAL: Normal toplevel window.
- * @GDK_WINDOW_TYPE_HINT_DIALOG: Dialog window.
- * @GDK_WINDOW_TYPE_HINT_MENU: Window used to implement a menu; GTK+ uses
- *  this hint only for torn-off menus, see #GtkTearoffMenuItem.
- * @GDK_WINDOW_TYPE_HINT_TOOLBAR: Window used to implement toolbars.
- * @GDK_WINDOW_TYPE_HINT_SPLASHSCREEN: Window used to display a splash
- *  screen during application startup.
- * @GDK_WINDOW_TYPE_HINT_UTILITY: Utility windows which are not detached
- *  toolbars or dialogs.
- * @GDK_WINDOW_TYPE_HINT_DOCK: Used for creating dock or panel windows.
- * @GDK_WINDOW_TYPE_HINT_DESKTOP: Used for creating the desktop background
- *  window.
- * @GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU: A menu that belongs to a menubar.
- * @GDK_WINDOW_TYPE_HINT_POPUP_MENU: A menu that does not belong to a menubar,
- *  e.g. a context menu.
- * @GDK_WINDOW_TYPE_HINT_TOOLTIP: A tooltip.
- * @GDK_WINDOW_TYPE_HINT_NOTIFICATION: A notification - typically a “bubble”
- *  that belongs to a status icon.
- * @GDK_WINDOW_TYPE_HINT_COMBO: A popup from a combo box.
- * @GDK_WINDOW_TYPE_HINT_DND: A window that is used to implement a DND cursor.
- *
- * These are hints for the window manager that indicate what type of function
- * the window has. The window manager can use this when determining decoration
- * and behaviour of the window. The hint must be set before mapping the window.
- *
- * See the [Extended Window Manager Hints](http://www.freedesktop.org/Standards/wm-spec)
- * specification for more details about window types.
- */
-typedef enum
-{
-  GDK_WINDOW_TYPE_HINT_NORMAL,
-  GDK_WINDOW_TYPE_HINT_DIALOG,
-  GDK_WINDOW_TYPE_HINT_MENU,		/* Torn off menu */
-  GDK_WINDOW_TYPE_HINT_TOOLBAR,
-  GDK_WINDOW_TYPE_HINT_SPLASHSCREEN,
-  GDK_WINDOW_TYPE_HINT_UTILITY,
-  GDK_WINDOW_TYPE_HINT_DOCK,
-  GDK_WINDOW_TYPE_HINT_DESKTOP,
-  GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU,	/* A drop down menu (from a menubar) */
-  GDK_WINDOW_TYPE_HINT_POPUP_MENU,	/* A popup menu (from right-click) */
-  GDK_WINDOW_TYPE_HINT_TOOLTIP,
-  GDK_WINDOW_TYPE_HINT_NOTIFICATION,
-  GDK_WINDOW_TYPE_HINT_COMBO,
-  GDK_WINDOW_TYPE_HINT_DND
-} GdkWindowTypeHint;
-
 /* The next two enumeration values current match the
  * Motif constants. If this is changed, the implementation
  * of gdk_window_set_decorations/gdk_window_set_functions
