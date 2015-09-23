@@ -25,9 +25,8 @@
 #include "gtkcssprovider.h"
 #include "gtkstylecontextprivate.h"
 
-#if defined(_MSC_VER) && _MSC_VER > 1500
+#if defined(_MSC_VER) && _MSC_VER >= 1500
 # include <intrin.h>
-# define __builtin_popcount(n) __popcount(n)
 #endif
 
 typedef struct _GtkCssSelectorClass GtkCssSelectorClass;
@@ -758,8 +757,8 @@ count_bits (guint n)
   return (guint) __builtin_popcount (n);
 #elif defined(__clang__) && (__clang_major__ > 3 || (__clang_major__ == 3 && __clang_minor__ >= 1))
   return (guint) __builtin_popcount (n);
-#elif defined(_MSC_VER) && _MSC_VER > 1500
-  return (guint) __builtin_popcount (n);
+#elif defined(_MSC_VER) && _MSC_VER >= 1500
+  return (guint) __popcnt (n);
 #else
   guint result = 0;
 
