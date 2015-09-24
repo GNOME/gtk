@@ -256,10 +256,13 @@
                 <property name="receives_default">1</property>
                 <property name="direction">up</property>
                 <property name="popover">recent_servers_popover</property>
+                <style>
+                  <class name="server-list-button"/>
+                </style>
                 <child>
                   <object class="GtkImage">
                     <property name="visible">1</property>
-                    <property name="icon_name">pan-up-symbolic</property>
+                    <property name="icon_name">pan-down-symbolic</property>
                   </object>
                 </child>
               </object>
