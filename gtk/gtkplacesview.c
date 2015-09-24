@@ -1828,11 +1828,19 @@ on_address_entry_text_changed (GtkPlacesView *view)
   priv = gtk_places_view_get_instance_private (view);
   supported = FALSE;
   supported_protocols = g_vfs_get_supported_uri_schemes (g_vfs_get_default ());
+  address = g_strdup (gtk_entry_get_text (GTK_ENTRY (priv->address_entry)));
+  if (strlen (address) > 0)
+    gtk_entry_set_icon_from_icon_name (GTK_ENTRY (priv->address_entry),
+                                       GTK_ENTRY_ICON_SECONDARY,
+                                       "edit-clear-symbolic");
+  else
+    gtk_entry_set_icon_from_icon_name (GTK_ENTRY (priv->address_entry),
+                                       GTK_ENTRY_ICON_SECONDARY,
+                                       NULL);
 
   if (!supported_protocols)
-    return;
+    goto out;
 
-  address = g_strdup (gtk_entry_get_text (GTK_ENTRY (priv->address_entry)));
   scheme = g_uri_parse_scheme (address);
 
   if (!scheme)
@@ -1844,6 +1852,15 @@ on_address_entry_text_changed (GtkPlacesView *view)
 out:
   gtk_widget_set_sensitive (priv->connect_button, supported);
   g_free (address);
+}
+
+static void
+on_address_entry_clear_pressed (GtkPlacesView        *view,
+                                GtkEntryIconPosition  icon_pos,
+                                GdkEvent             *event,
+                                GtkEntry             *entry)
+{
+  gtk_entry_set_text (entry, "");
 }
 
 static void
@@ -2220,6 +2237,7 @@ gtk_places_view_class_init (GtkPlacesViewClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkPlacesView, stack);
 
   gtk_widget_class_bind_template_callback (widget_class, on_address_entry_text_changed);
+  gtk_widget_class_bind_template_callback (widget_class, on_address_entry_clear_pressed);
   gtk_widget_class_bind_template_callback (widget_class, on_connect_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_key_press_event);
   gtk_widget_class_bind_template_callback (widget_class, on_listbox_row_activated);

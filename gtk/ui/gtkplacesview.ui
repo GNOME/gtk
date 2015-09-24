@@ -247,6 +247,7 @@
                 <property name="completion">address_entry_completion</property>
                 <signal name="notify::text" handler="on_address_entry_text_changed" object="GtkPlacesView" swapped="yes"/>
                 <signal name="activate" handler="on_connect_button_clicked" object="GtkPlacesView" swapped="yes"/>
+                <signal name="icon-press" handler="on_address_entry_clear_pressed" object="GtkPlacesView" swapped="yes"/>
               </object>
             </child>
             <child>
