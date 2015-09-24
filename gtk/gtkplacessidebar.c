@@ -2397,10 +2397,10 @@ static void
 do_rename (GtkButton        *button,
            GtkPlacesSidebar *sidebar)
 {
-  const gchar *new_text;
+  gchar *new_text;
   GFile *file;
 
-  new_text = gtk_entry_get_text (GTK_ENTRY (sidebar->rename_entry));
+  new_text = g_strdup (gtk_entry_get_text (GTK_ENTRY (sidebar->rename_entry)));
 
   file = g_file_new_for_uri (sidebar->rename_uri);
   if (!_gtk_bookmarks_manager_has_bookmark (sidebar->bookmarks_manager, file))
@@ -2409,6 +2409,7 @@ do_rename (GtkButton        *button,
   _gtk_bookmarks_manager_set_bookmark_label (sidebar->bookmarks_manager, file, new_text, NULL);
 
   g_object_unref (file);
+  g_free (new_text);
 
   g_clear_pointer (&sidebar->rename_uri, g_free);
 
