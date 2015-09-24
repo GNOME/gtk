@@ -1969,12 +1969,12 @@ listbox_header_func (GtkListBoxRow *row,
       GtkWidget *separator;
 
       header = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
+      gtk_widget_set_margin_top (header, 6);
 
       separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
 
       label = g_object_new (GTK_TYPE_LABEL,
                             "use_markup", TRUE,
-                            "margin-top", 6,
                             "margin-start", 12,
                             "label", text,
                             "xalign", 0.0f,
