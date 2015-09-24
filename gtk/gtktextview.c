@@ -8243,6 +8243,9 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
       y > (target_rect.y + target_rect.height))
     return FALSE; /* outside the text window, allow parent widgets to handle event */
 
+  x -= target_rect.x;
+  y -= target_rect.y;
+
   gtk_text_view_window_to_buffer_coords (text_view,
                                          GTK_TEXT_WINDOW_WIDGET,
                                          x, y,
