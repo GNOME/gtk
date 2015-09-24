@@ -30,6 +30,8 @@ libgdkbroadwayinclude_HEADERS = 	\
 	gdkbroadwaycursor.h		\
 	gdkbroadwayvisual.h
 
+EXTRA_DIST += toarray.pl
+
 clienthtml.h: client.html
 	$(AM_V_GEN) $(PERL) $(srcdir)/toarray.pl client_html $(srcdir)/client.html > $@
 
