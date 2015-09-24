@@ -2967,6 +2967,10 @@ GtkPlacesView {
     transition: 200ms $ease-out-quad;
     -gtk-icon-transform: rotate(-0.5turn);
   }
+
+  .list-row.activatable:hover {
+    background-color: transparent;
+  }
 }
 
 /*********
