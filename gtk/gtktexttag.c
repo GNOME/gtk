@@ -1822,20 +1822,12 @@ gtk_text_tag_set_property (GObject      *object,
       break;
     }
 
-  /* FIXME I would like to do this after all set_property in a single
-   * g_object_set () have been called. But an idle function won't
-   * work; we need to emit when the tag is changed, not when we get
-   * around to the event loop. So blah, we eat some inefficiency.
+  /* The signal is emitted for each set_property(). A possible optimization is
+   * to send the signal only once when several properties are set at the same
+   * time with e.g. g_object_set(). The signal could be emitted when the notify
+   * signal is thawed.
    */
-
-  /* This is also somewhat weird since we emit another object's
-   * signal here, but the two objects are already tightly bound.
-   */
-
-  if (priv->table)
-    g_signal_emit_by_name (priv->table,
-                           "tag_changed",
-                           text_tag, size_changed);
+  gtk_text_tag_changed (text_tag, size_changed);
 }
 
 static void
@@ -2292,6 +2284,40 @@ gtk_text_tag_event (GtkTextTag        *tag,
                  &retval);
 
   return retval;
+}
+
+/**
+ * gtk_text_tag_changed:
+ * @tag: a #GtkTextTag.
+ * @size_changed: whether the change affects the #GtkTextView layout.
+ *
+ * Emits the #GtkTextTagTable::tag-changed signal on the #GtkTextTagTable where
+ * the tag is included.
+ *
+ * The signal is already emitted when setting a #GtkTextTag property. This
+ * function is useful for a #GtkTextTag subclass.
+ *
+ * Since: 3.20
+ */
+void
+gtk_text_tag_changed (GtkTextTag *tag,
+                      gboolean    size_changed)
+{
+  GtkTextTagPrivate *priv;
+
+  g_return_if_fail (GTK_IS_TEXT_TAG (tag));
+
+  priv = tag->priv;
+
+  /* This is somewhat weird since we emit another object's signal here, but the
+   * two objects are already tightly bound. If a GtkTextTag::changed signal is
+   * added, this would increase significantly the number of signal connections.
+   */
+  if (priv->table != NULL)
+    g_signal_emit_by_name (priv->table,
+                           "tag-changed",
+                           tag,
+                           size_changed);
 }
 
 static int

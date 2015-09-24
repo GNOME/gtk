@@ -103,7 +103,7 @@ gtk_text_tag_table_class_init (GtkTextTagTableClass *klass)
    * GtkTextTagTable::tag-changed:
    * @texttagtable: the object which received the signal.
    * @tag: the changed tag.
-   * @size_changed: whether the size has been changed.
+   * @size_changed: whether the change affects the #GtkTextView layout.
    */
   signals[TAG_CHANGED] =
     g_signal_new (I_("tag-changed"),

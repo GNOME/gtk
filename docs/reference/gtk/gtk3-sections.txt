@@ -3809,6 +3809,7 @@ gtk_text_tag_new
 gtk_text_tag_get_priority
 gtk_text_tag_set_priority
 gtk_text_tag_event
+gtk_text_tag_changed
 GtkTextAttributes
 GtkTextAppearance
 gtk_text_attributes_new

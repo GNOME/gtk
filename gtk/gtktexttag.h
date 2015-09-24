@@ -112,7 +112,9 @@ gboolean     gtk_text_tag_event        (GtkTextTag        *tag,
                                         GObject           *event_object,
                                         GdkEvent          *event,
                                         const GtkTextIter *iter);
-
+GDK_AVAILABLE_IN_3_20
+void         gtk_text_tag_changed      (GtkTextTag        *tag,
+                                        gboolean           size_changed);
 
 G_END_DECLS
 
