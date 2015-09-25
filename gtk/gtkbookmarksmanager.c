@@ -145,7 +145,7 @@ save_bookmarks (GFile  *bookmarks_file,
 
       g_string_append (contents, uri);
 
-      if (bookmark->label)
+      if (bookmark->label && g_utf8_validate (bookmark->label, -1, NULL))
 	g_string_append_printf (contents, " %s", bookmark->label);
 
       g_string_append_c (contents, '\n');
