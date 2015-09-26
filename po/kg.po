@@ -1675,7 +1675,7 @@ msgstr "solae nitu"
 #.
 #: ../gtk/gtkcustompaperunixdialog.c:118
 msgid "default:mm"
-msgstr "wankulu:fiafu fianla"
+msgstr "default:mm"
 
 #. And show the custom paper dialog
 #: ../gtk/gtkcustompaperunixdialog.c:373
