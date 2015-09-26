@@ -2134,7 +2134,7 @@ msgstr "_Фармоишдиҳӣ"
 #.
 #: gtk/gtkcustompaperunixdialog.c:117
 msgid "default:mm"
-msgstr "пешфарз:мм"
+msgstr "default:mm"
 
 #. And show the custom paper dialog
 #: gtk/gtkcustompaperunixdialog.c:405 gtk/gtkprintunixdialog.c:3322
