@@ -1284,7 +1284,7 @@ msgstr "ئۆزلەشتۈر(_C)"
 #.
 #: ../gtk/gtkcustompaperunixdialog.c:115
 msgid "default:mm"
-msgstr "كۆڭۈلدىكى:mm"
+msgstr "default:mm"
 
 #. And show the custom paper dialog
 #: ../gtk/gtkcustompaperunixdialog.c:397 ../gtk/gtkprintunixdialog.c:3275
