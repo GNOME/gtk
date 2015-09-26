@@ -1296,7 +1296,7 @@ msgstr "ផ្ទាល់​ខ្លួន"
 #.
 #: ../gtk/gtkcustompaperunixdialog.c:115
 msgid "default:mm"
-msgstr "លំនាំដើម ៖​ម.ម."
+msgstr "default:mm"
 
 #. And show the custom paper dialog
 #: ../gtk/gtkcustompaperunixdialog.c:397 ../gtk/gtkprintunixdialog.c:3275
