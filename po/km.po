@@ -1885,7 +1885,7 @@ msgstr "មិន​កំណត់​ទង់​បំបាត់​កំហ
 #.
 #: ../gtk/gtkmain.c:704
 msgid "default:LTR"
-msgstr "លំនាំដើម ៖​LTR"
+msgstr "default:LTR"
 
 #: ../gtk/gtkmain.c:772
 #, c-format
