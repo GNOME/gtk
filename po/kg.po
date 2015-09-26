@@ -2453,7 +2453,7 @@ msgstr "bendila muna londa GTK+(ku sasila bio ko)"
 #.
 #: ../gtk/gtkmain.c:713
 msgid "default:LTR"
-msgstr "mankulu:LTR"
+msgstr "default:LTR"
 
 #: ../gtk/gtkmain.c:778
 #, c-format
