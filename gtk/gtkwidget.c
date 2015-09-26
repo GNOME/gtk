@@ -11292,10 +11292,10 @@ gtk_widget_get_device_enabled (GtkWidget *widget,
 }
 
 static void
-gtk_widget_add_events_internal_list (GtkWidget *widget,
-                                     GdkDevice *device,
-                                     gint       events,
-                                     GList     *window_list)
+gtk_widget_add_events_internal_list (GtkWidget    *widget,
+                                     GdkDevice    *device,
+                                     GdkEventMask  events,
+                                     GList        *window_list)
 {
   GdkEventMask controllers_mask;
   GList *l;
@@ -11305,28 +11305,26 @@ gtk_widget_add_events_internal_list (GtkWidget *widget,
   for (l = window_list; l != NULL; l = l->next)
     {
       GdkWindow *window = l->data;
-      gpointer user_data;
+      GtkWidget *window_widget;
 
-      gdk_window_get_user_data (window, &user_data);
-      if (user_data == widget)
+      gdk_window_get_user_data (window, (gpointer *)&window_widget);
+      if (window_widget == widget)
         {
           GList *children;
 
           if (device)
-            {
-              gdk_window_set_device_events (window, device,
-                                            gdk_window_get_events (window) |
-                                            events | controllers_mask);
-            }
+            gdk_window_set_device_events (window, device,
+                                          gdk_window_get_events (window)
+                                          | events
+                                          | controllers_mask);
           else
-            {
-              gdk_window_set_events (window, gdk_window_get_events (window) |
-                                     events | controllers_mask);
-            }
+            gdk_window_set_events (window,
+                                   gdk_window_get_events (window)
+                                   | events
+                                   | controllers_mask);
 
-          children = gdk_window_get_children (window);
+          children = gdk_window_peek_children (window);
           gtk_widget_add_events_internal_list (widget, device, events, children);
-          g_list_free (children);
         }
     }
 }
@@ -11338,15 +11336,18 @@ gtk_widget_add_events_internal (GtkWidget *widget,
 {
   GtkWidgetPrivate *priv = widget->priv;
   GList *window_list;
+  GList win;
 
   if (!_gtk_widget_get_has_window (widget))
-    window_list = gdk_window_get_children (priv->window);
+    window_list = gdk_window_peek_children (priv->window);
   else
-    window_list = g_list_prepend (NULL, priv->window);
+    {
+      win.data = priv->window;
+      win.prev = win.next = NULL;
+      window_list = &win;
+    }
 
   gtk_widget_add_events_internal_list (widget, device, events, window_list);
-
-  g_list_free (window_list);
 }
 
 /**
