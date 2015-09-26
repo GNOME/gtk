@@ -4983,90 +4983,74 @@ _gtk_widget_enable_device_events (GtkWidget *widget)
     }
 }
 
-static GList *
-get_widget_windows (GtkWidget *widget)
-{
-  GList *window_list, *last, *l, *children, *ret;
-
-  if (_gtk_widget_get_has_window (widget))
-    window_list = g_list_prepend (NULL, gtk_widget_get_window (widget));
-  else
-    window_list = gdk_window_get_children (gtk_widget_get_window (widget));
-  last = g_list_last (window_list);
-  ret = NULL;
-
-  for (l = window_list; l; l = l->next)
-    {
-      GtkWidget *window_widget = NULL;
-
-      gdk_window_get_user_data (l->data, (gpointer *) &window_widget);
-
-      if (widget != window_widget)
-        continue;
-
-      ret = g_list_prepend (ret, l->data);
-      children = gdk_window_get_children (GDK_WINDOW (l->data));
-
-      if (children)
-        {
-          last = g_list_concat (last, children);
-          last = g_list_last (last);
-        }
-    }
-
-  g_list_free (window_list);
-
-  return ret;
-}
+typedef struct {
+  GtkWidget *widget;
+  GdkDevice *device;
+  gboolean enabled;
+} DeviceEnableData;
 
 static void
 device_enable_foreach (GtkWidget *widget,
                        gpointer   user_data)
 {
-  GdkDevice *device = user_data;
-  gtk_widget_set_device_enabled_internal (widget, device, TRUE, TRUE);
+  DeviceEnableData *data = user_data;
+  gtk_widget_set_device_enabled_internal (widget, data->device, TRUE, data->enabled);
 }
 
 static void
-device_disable_foreach (GtkWidget *widget,
-                        gpointer   user_data)
+device_enable_foreach_window (gpointer win,
+                              gpointer user_data)
 {
-  GdkDevice *device = user_data;
-  gtk_widget_set_device_enabled_internal (widget, device, TRUE, FALSE);
+  GdkWindow *window = win;
+  DeviceEnableData *data = user_data;
+  GdkEventMask events;
+  GtkWidget *window_widget;
+  GList *window_list;
+
+  gdk_window_get_user_data (window, (gpointer *) &window_widget);
+  if (data->widget != window_widget)
+    return;
+
+  if (data->enabled)
+    events = gdk_window_get_events (window);
+  else
+    events = 0;
+
+  gdk_window_set_device_events (window, data->device, events);
+
+  window_list = gdk_window_peek_children (window);
+  g_list_foreach (window_list, device_enable_foreach_window, data);
 }
 
-static void
+void
 gtk_widget_set_device_enabled_internal (GtkWidget *widget,
                                         GdkDevice *device,
                                         gboolean   recurse,
                                         gboolean   enabled)
 {
-  GList *window_list, *l;
+  DeviceEnableData data;
 
-  window_list = get_widget_windows (widget);
+  data.widget = widget;
+  data.device = device;
+  data.enabled = enabled;
 
-  for (l = window_list; l; l = l->next)
+  if (_gtk_widget_get_has_window (widget))
     {
-      GdkEventMask events = 0;
       GdkWindow *window;
 
-      window = l->data;
+      window = gtk_widget_get_window (widget);
+      device_enable_foreach_window (window, &data);
+    }
+  else
+    {
+      GList *window_list;
 
-      if (enabled)
-        events = gdk_window_get_events (window);
-
-      gdk_window_set_device_events (window, device, events);
+      window_list = gdk_window_peek_children (gtk_widget_get_window (widget));
+      g_list_foreach (window_list, device_enable_foreach_window, &data);
     }
 
   if (recurse && GTK_IS_CONTAINER (widget))
-    {
-      if (enabled)
-        gtk_container_forall (GTK_CONTAINER (widget), device_enable_foreach, device);
-      else
-        gtk_container_forall (GTK_CONTAINER (widget), device_disable_foreach, device);
-    }
-
-  g_list_free (window_list);
+    gtk_container_forall (GTK_CONTAINER (widget), device_enable_foreach, &data);
 }
 
 static void
