@@ -72,6 +72,7 @@ struct _GtkWidgetPrivate
   guint in_reparent           : 1;
 
   /* Queue-resize related flags */
+  guint resize_needed         : 1; /* queue_resize() has been called but no get_preferred_size() yet */
   guint alloc_needed          : 1;
 
   /* Expand-related flags */
@@ -165,8 +166,7 @@ gboolean     _gtk_widget_get_shadowed       (GtkWidget *widget);
 void         _gtk_widget_set_shadowed       (GtkWidget *widget,
                                              gboolean   shadowed);
 gboolean     _gtk_widget_get_alloc_needed   (GtkWidget *widget);
-void         _gtk_widget_set_alloc_needed   (GtkWidget *widget,
-                                             gboolean   alloc_needed);
+void         gtk_widget_queue_resize_on_widget (GtkWidget *widget);
 void         _gtk_widget_draw               (GtkWidget *widget,
 					     cairo_t   *cr);
 void          _gtk_widget_scale_changed     (GtkWidget *widget);

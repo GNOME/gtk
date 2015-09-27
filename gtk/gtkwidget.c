@@ -16154,10 +16154,12 @@ _gtk_widget_get_alloc_needed (GtkWidget *widget)
 }
 
 void
-_gtk_widget_set_alloc_needed (GtkWidget *widget,
-                              gboolean   alloc_needed)
+gtk_widget_queue_resize_on_widget (GtkWidget *widget)
 {
-  widget->priv->alloc_needed = alloc_needed;
+  GtkWidgetPrivate *priv = widget->priv;
+
+  priv->alloc_needed = TRUE;
+  _gtk_size_request_cache_clear (&priv->requests);
 }
 
 void
