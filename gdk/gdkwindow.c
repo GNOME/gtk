@@ -2174,8 +2174,6 @@ void
 gdk_window_get_user_data (GdkWindow *window,
 			  gpointer  *data)
 {
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
   *data = window->user_data;
 }
 
