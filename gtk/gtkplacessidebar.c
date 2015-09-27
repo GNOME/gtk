@@ -840,7 +840,10 @@ is_removable_volume (GVolume *volume)
   is_removable |= !id;
 
   if (drive)
-    is_removable |= g_drive_can_eject (drive);
+    {
+      is_removable |= g_drive_can_eject (drive);
+      is_removable |= g_drive_is_media_removable (drive);
+    }
 
   if (mount)
     is_removable |= (g_mount_can_eject (mount) && !g_mount_can_unmount (mount));
