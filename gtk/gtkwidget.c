@@ -6870,13 +6870,14 @@ _gtk_widget_draw_internal (GtkWidget *widget,
 }
 
 /* Emit draw() on the widget that owns window,
-   and on any child windows that also belong
-   to the widget. */
+ * and on any child windows that also belong
+ * to the widget.
+ */
 static void
 _gtk_widget_draw_windows (GdkWindow *window,
-			  cairo_t *cr,
-			  int window_x,
-			  int window_y)
+			  cairo_t   *cr,
+			  int        window_x,
+			  int        window_y)
 {
   cairo_pattern_t *pattern;
   gboolean do_clip;
@@ -6894,9 +6895,10 @@ _gtk_widget_draw_windows (GdkWindow *window,
   window_clip.height = gdk_window_get_height (window);
 
   /* Cairo paths are fixed point 24.8, but GDK supports 32-bit window
-     sizes, so we can't feed window_clip to e.g. cairo_rectangle()
-     directly. Instead, we pre-clip the window clip to the existing
-     clip regions in full 32-bit precision and feed that to cairo. */
+   * sizes, so we can't feed window_clip to e.g. cairo_rectangle()
+   * directly. Instead, we pre-clip the window clip to the existing
+   * clip regions in full 32-bit precision and feed that to cairo.
+   */
   if (!gdk_cairo_get_clip_rectangle (cr, &current_clip) ||
       !gdk_rectangle_intersect (&window_clip, &current_clip, &window_clip))
     return;
@@ -6914,44 +6916,47 @@ _gtk_widget_draw_windows (GdkWindow *window,
       gdk_window_get_user_data (window, (gpointer *) &widget);
 
       /* Only clear bg if double buffered. This is what we used
-	 to do before, where begin_paint() did the clearing. */
+       * to do before, where begin_paint() did the clearing.
+       */
       pattern = gdk_window_get_background_pattern (window);
-      if (pattern != NULL &&
-	  widget->priv->double_buffered)
-	{
-	  cairo_save (cr);
-	  cairo_set_source (cr, pattern);
-	  cairo_paint (cr);
-	  cairo_restore (cr);
-	}
+      if (pattern != NULL && widget->priv->double_buffered)
+        {
+          cairo_save (cr);
+          cairo_set_source (cr, pattern);
+          cairo_paint (cr);
+          cairo_restore (cr);
+        }
 
-      do_clip = _gtk_widget_get_translation_to_window (widget, window,
-						       &x, &y);
+      do_clip = _gtk_widget_get_translation_to_window (widget, window, &x, &y);
       cairo_save (cr);
       cairo_translate (cr, -x, -y);
       _gtk_widget_draw_internal (widget, cr, do_clip, window);
       cairo_restore (cr);
 
-      children = gdk_window_get_children_with_user_data (window, widget);
-      for (l = children; l != NULL; l = l->next)
-	{
-	  GdkWindow *child_window = l->data;
-	  GdkWindowType type;
-	  int wx, wy;
+      children = gdk_window_peek_children (window);
+      for (l = g_list_last (children); l != NULL; l = l->prev)
+        {
+          GdkWindow *child_window = l->data;
+          GdkWindowType type;
+          int wx, wy;
+          GtkWidget *window_widget;
 
-	  if (!gdk_window_is_visible (child_window) ||
-	      gdk_window_is_input_only (child_window))
-	    continue;
+          gdk_window_get_user_data (child_window, (gpointer *)&window_widget);
+          if (window_widget != widget)
+            continue;
 
-	  type = gdk_window_get_window_type (child_window);
-	  if (type == GDK_WINDOW_OFFSCREEN ||
-	      type == GDK_WINDOW_FOREIGN)
-	    continue;
+          if (!gdk_window_is_visible (child_window) ||
+              gdk_window_is_input_only (child_window))
+            continue;
 
-	  gdk_window_get_position (child_window, &wx, &wy);
-	  _gtk_widget_draw_windows (child_window, cr, wx, wy);
-	}
-      g_list_free (children);
+          type = gdk_window_get_window_type (child_window);
+          if (type == GDK_WINDOW_OFFSCREEN ||
+              type == GDK_WINDOW_FOREIGN)
+            continue;
+
+          gdk_window_get_position (child_window, &wx, &wy);
+          _gtk_widget_draw_windows (child_window, cr, wx, wy);
+        }
     }
 
   cairo_restore (cr);
@@ -6961,7 +6966,7 @@ void
 _gtk_widget_draw (GtkWidget *widget,
 		  cairo_t   *cr)
 {
-  GdkWindow *window, *child_window;
+  GdkWindow *window;
   GList *children, *l;
   int wx, wy;
   gboolean push_group;
@@ -6999,7 +7004,8 @@ _gtk_widget_draw (GtkWidget *widget,
   if (_gtk_widget_get_has_window (widget))
     {
       /* The widget will be completely contained in its window, so just
-       * expose that (and any child window belonging to the widget) */
+       * expose that (and any child window belonging to the widget)
+       */
       _gtk_widget_draw_windows (window, cr, 0, 0);
     }
   else
@@ -7009,27 +7015,32 @@ _gtk_widget_draw (GtkWidget *widget,
       _gtk_widget_draw_internal (widget, cr, TRUE, window);
 
       /* But, it may also have child windows in the parent which we should
-       * draw (after having drawn on the parent) */
-      children = gdk_window_get_children_with_user_data (window, widget);
-      for (l = children; l != NULL; l = l->next)
+       * draw (after having drawn on the parent)
+       */
+      children = gdk_window_peek_children (window);
+      for (l = g_list_last (children); l != NULL; l = l->prev)
 	{
-	  child_window = l->data;
+          GdkWindow *child_window = l->data;
+          GtkWidget *window_widget;
 
-	  if (!gdk_window_is_visible (child_window) ||
-	      gdk_window_is_input_only (child_window))
-	    continue;
+          gdk_window_get_user_data (child_window, (gpointer *)&window_widget);
+          if (window_widget != widget)
+            continue;
 
-	  type = gdk_window_get_window_type (child_window);
-	  if (type == GDK_WINDOW_OFFSCREEN ||
-	      type == GDK_WINDOW_FOREIGN)
-	    continue;
+          if (!gdk_window_is_visible (child_window) ||
+              gdk_window_is_input_only (child_window))
+            continue;
 
-	  gdk_window_get_position (child_window, &wx, &wy);
-	  _gtk_widget_draw_windows (child_window, cr,
-				    wx - widget->priv->allocation.x,
-				    wy - widget->priv->allocation.y);
-	}
-      g_list_free (children);
+          type = gdk_window_get_window_type (child_window);
+          if (type == GDK_WINDOW_OFFSCREEN ||
+              type == GDK_WINDOW_FOREIGN)
+            continue;
+
+          gdk_window_get_position (child_window, &wx, &wy);
+          _gtk_widget_draw_windows (child_window, cr,
+                                    wx - widget->priv->allocation.x,
+                                    wy - widget->priv->allocation.y);
+        }
     }
 
   if (push_group)
