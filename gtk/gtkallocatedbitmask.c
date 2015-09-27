@@ -312,7 +312,7 @@ _gtk_allocated_bitmask_invert_range (GtkBitmask *mask,
   for (i = start_word; i <= end_word; i++)
     mask->data[i] ^= ALL_BITS;
   mask->data[start_word] ^= (((VALUE_TYPE) 1) << start_bit) - 1;
-  if (end_bit != 63)
+  if (end_bit != VALUE_SIZE_BITS - 1)
     mask->data[end_word] ^= ALL_BITS << (end_bit + 1);
 
   return gtk_allocated_bitmask_shrink (mask);
