@@ -26,7 +26,6 @@
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 #include "gtksizegroup-private.h"
-#include "gtksizerequestcacheprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkcontainerprivate.h"
 
@@ -218,8 +217,7 @@ queue_resize_on_widget (GtkWidget *widget,
 
   do
     {
-      _gtk_widget_set_alloc_needed (parent, TRUE);
-      _gtk_size_request_cache_clear (_gtk_widget_peek_request_cache (parent));
+      gtk_widget_queue_resize_on_widget (parent);
 
       if (!check_siblings || _gtk_widget_get_sizegroups (parent) == NULL)
 	{
