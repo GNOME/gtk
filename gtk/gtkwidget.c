@@ -16158,7 +16158,19 @@ gtk_widget_queue_resize_on_widget (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = widget->priv;
 
+  priv->resize_needed = TRUE;
   priv->alloc_needed = TRUE;
+}
+
+void
+gtk_widget_ensure_resize (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = widget->priv;
+
+  if (!priv->resize_needed)
+    return;
+
+  priv->resize_needed = FALSE;
   _gtk_size_request_cache_clear (&priv->requests);
 }
 
