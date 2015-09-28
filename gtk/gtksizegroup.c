@@ -203,15 +203,22 @@ _gtk_size_group_get_widget_peers (GtkWidget      *for_widget,
 }
 
 static void
+queue_resize_on_group (GtkSizeGroup *size_group)
+{
+  GtkSizeGroupPrivate *priv = size_group->priv;
+  GSList *list;
+
+  for (list = priv->widgets; list; list = list->next)
+    {
+      gtk_widget_queue_resize (list->data);
+    }
+}
+
+static void
 queue_resize_on_widget (GtkWidget *widget,
 			gboolean   check_siblings)
 {
-  GHashTable *widgets;
-  GHashTable *groups;
   GtkWidget *parent;
-
-  widgets = g_hash_table_new (NULL, NULL);
-  groups = g_hash_table_new (NULL, NULL);
 
   parent = widget;
 
@@ -222,34 +229,24 @@ queue_resize_on_widget (GtkWidget *widget,
 
       gtk_widget_queue_resize_on_widget (parent);
 
-      if (!check_siblings || _gtk_widget_get_sizegroups (parent) == NULL)
+      if (!check_siblings)
 	{
           check_siblings = TRUE;
 	}
       else
         {
-          GHashTableIter iter;
-          gpointer current;
-          
-          g_hash_table_remove_all (widgets);
-          g_hash_table_remove_all (groups);
-          add_widget_to_closure (widgets, groups, parent, -1);
+          GSList *groups, *l;
 
-          g_hash_table_iter_init (&iter, widgets);
-          while (g_hash_table_iter_next (&iter, &current, NULL))
-            {
-              if (current == parent)
-                {
-                  /* do nothing */
-                }
-              else if (current == widget)
-                {
-                  g_warning ("A container and its child are part of this SizeGroup");
-                }
-              else
-                queue_resize_on_widget (current, FALSE);
-            }
-	}
+          groups = _gtk_widget_get_sizegroups (parent);
+
+          for (l = groups; l; l = l->next)
+          {
+            if (((GtkSizeGroup *) (l->data))->priv->ignore_hidden && !gtk_widget_is_visible (widget))
+              continue;
+
+            queue_resize_on_group (l->data);
+	  }
+        }
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       if (GTK_IS_RESIZE_CONTAINER (parent))
@@ -262,21 +259,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS;
       parent = _gtk_widget_get_parent (parent);
     }
   while (parent);
-
-  g_hash_table_destroy (widgets);
-  g_hash_table_destroy (groups);
-}
-
-static void
-queue_resize_on_group (GtkSizeGroup *size_group)
-{
-  GtkSizeGroupPrivate *priv = size_group->priv;
-  GSList *list;
-
-  for (list = priv->widgets; list; list = list->next)
-    {
-      gtk_widget_queue_resize (list->data);
-    }
 }
 
 static void
