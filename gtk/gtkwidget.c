@@ -5988,6 +5988,13 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
     GTK_WIDGET_GET_CLASS (widget)->size_allocate (widget, &real_allocation);
 
   /* Size allocation is god... after consulting god, no further requests or allocations are needed */
+#ifdef G_ENABLE_DEBUG
+  if (GTK_DEBUG_CHECK (GEOMETRY) && gtk_widget_get_resize_needed (widget))
+    {
+      g_warning ("%s %p or a child called gtk_widget_queue_resize() during size_allocte().",
+                 gtk_widget_get_name (widget), widget);
+    }
+#endif
   gtk_widget_ensure_resize (widget);
   priv->alloc_needed = FALSE;
 
