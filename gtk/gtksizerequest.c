@@ -149,6 +149,8 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
   gint nat_baseline = -1;
   gboolean found_in_cache;
 
+  gtk_widget_ensure_resize (widget);
+
   if (gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_CONSTANT_SIZE)
     for_size = -1;
 
