@@ -2209,7 +2209,6 @@ gtk_container_real_check_resize (GtkContainer *container)
       if (GTK_IS_RESIZE_CONTAINER (container))
         {
           gtk_widget_size_allocate (widget, &allocation);
-          gtk_widget_set_allocation (widget, &allocation);
         }
       else
         gtk_widget_queue_resize (widget);
@@ -2218,7 +2217,6 @@ gtk_container_real_check_resize (GtkContainer *container)
   else
     {
       gtk_widget_size_allocate (widget, &allocation);
-      gtk_widget_set_allocation (widget, &allocation);
     }
 }
 
@@ -2252,7 +2250,6 @@ gtk_container_resize_children (GtkContainer *container)
   _gtk_widget_get_allocation (widget, &allocation);
 
   gtk_widget_size_allocate (widget, &allocation);
-  gtk_widget_set_allocation (widget, &allocation);
 }
 
 static void
