@@ -6990,8 +6990,6 @@ _gtk_widget_draw (GtkWidget *widget,
    * the window hierarchy.
    */
 
-  cairo_save (cr);
-
   push_group =
     widget->priv->alpha != 255 &&
     (!_gtk_widget_is_toplevel (widget) ||
@@ -7049,8 +7047,6 @@ _gtk_widget_draw (GtkWidget *widget,
       cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
       cairo_paint_with_alpha (cr, widget->priv->alpha / 255.0);
     }
-
-  cairo_restore (cr);
 }
 
 
@@ -7088,7 +7084,9 @@ gtk_widget_draw (GtkWidget *widget,
   g_return_if_fail (!widget->priv->alloc_needed);
   g_return_if_fail (cr != NULL);
 
+  cairo_save (cr);
   _gtk_widget_draw (widget, cr);
+  cairo_restore (cr);
 }
 
 static gboolean
