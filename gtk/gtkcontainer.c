@@ -3787,8 +3787,6 @@ gtk_container_propagate_draw (GtkContainer   *container,
   if (!gtk_container_should_propagate_draw (container, child, cr))
     return;
 
-  cairo_save (cr);
-
   /* translate coordinates. Ugly business, that. */
   if (!_gtk_widget_get_has_window (GTK_WIDGET (container)))
     {
@@ -3825,6 +3823,7 @@ gtk_container_propagate_draw (GtkContainer   *container,
       y += allocation.y;
     }
 
+  cairo_save (cr);
   cairo_translate (cr, x, y);
 
   _gtk_widget_draw (child, cr);
