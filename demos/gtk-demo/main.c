@@ -1073,7 +1073,7 @@ list_demos (void)
     }
 }
 
-static void
+static gint
 command_line (GApplication            *app,
               GApplicationCommandLine *cmdline)
 {
@@ -1096,7 +1096,7 @@ command_line (GApplication            *app,
     {
       list_demos ();
       g_application_quit (app);
-      return;
+      return 0;
     }
 
   if (name == NULL)
@@ -1137,6 +1137,8 @@ out:
 
   if (autoquit)
     g_timeout_add_seconds (1, auto_quit, app);
+
+  return 0;
 }
 
 int
