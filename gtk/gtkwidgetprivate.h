@@ -288,6 +288,12 @@ gboolean          gtk_widget_has_size_request              (GtkWidget *widget);
 
 /* inline getters */
 
+static inline gboolean
+gtk_widget_get_resize_needed (GtkWidget *widget)
+{
+  return widget->priv->resize_needed;
+}
+
 static inline GtkWidget *
 _gtk_widget_get_parent (GtkWidget *widget)
 {
