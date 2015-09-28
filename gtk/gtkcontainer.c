@@ -2180,9 +2180,10 @@ gtk_container_real_check_resize (GtkContainer *container)
   GtkWidget *widget = GTK_WIDGET (container);
   GtkAllocation allocation;
   GtkRequisition requisition;
+  int baseline;
 
   gtk_widget_get_preferred_size (widget, &requisition, NULL);
-  _gtk_widget_get_allocation (widget, &allocation);
+  gtk_widget_get_allocated_size (widget, &allocation, &baseline);
 
   if (requisition.width > allocation.width ||
       requisition.height > allocation.height)
@@ -2198,7 +2199,7 @@ gtk_container_real_check_resize (GtkContainer *container)
     }
   else
     {
-      gtk_widget_size_allocate (widget, &allocation);
+      gtk_widget_size_allocate_with_baseline (widget, &allocation, baseline);
     }
 }
 
@@ -2220,6 +2221,7 @@ gtk_container_resize_children (GtkContainer *container)
 {
   GtkAllocation allocation;
   GtkWidget *widget;
+  gint baseline;
 
   /* resizing invariants:
    * toplevels have *always* resize_mode != GTK_RESIZE_PARENT set.
@@ -2229,9 +2231,9 @@ gtk_container_resize_children (GtkContainer *container)
   g_return_if_fail (GTK_IS_CONTAINER (container));
 
   widget = GTK_WIDGET (container);
-  _gtk_widget_get_allocation (widget, &allocation);
+  gtk_widget_get_allocated_size (widget, &allocation, &baseline);
 
-  gtk_widget_size_allocate (widget, &allocation);
+  gtk_widget_size_allocate_with_baseline (widget, &allocation, baseline);
 }
 
 static void
