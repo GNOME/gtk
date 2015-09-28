@@ -5604,42 +5604,38 @@ gtk_widget_queue_allocate (GtkWidget *widget)
 void
 gtk_widget_queue_resize_internal (GtkWidget *widget)
 {
-  GtkWidget *parent;
   GSList *groups, *l, *widgets;
 
-  parent = widget;
+  if (gtk_widget_get_resize_needed (widget))
+    return;
 
-  do
-    {
-      if (gtk_widget_get_resize_needed (parent))
-        return;
+  gtk_widget_queue_resize_on_widget (widget);
 
-      gtk_widget_queue_resize_on_widget (parent);
+  groups = _gtk_widget_get_sizegroups (widget);
 
-      groups = _gtk_widget_get_sizegroups (parent);
+  for (l = groups; l; l = l->next)
+  {
+    if (gtk_size_group_get_ignore_hidden (l->data) && !gtk_widget_is_visible (widget))
+      continue;
 
-      for (l = groups; l; l = l->next)
+    for (widgets = gtk_size_group_get_widgets (l->data); widgets; widgets = widgets->next)
       {
-        if (gtk_size_group_get_ignore_hidden (l->data) && !gtk_widget_is_visible (widget))
-          continue;
-
-        for (widgets = gtk_size_group_get_widgets (l->data); widgets; widgets = widgets->next)
-          {
-            gtk_widget_queue_resize_internal (widgets->data);
-          }
+        gtk_widget_queue_resize_internal (widgets->data);
       }
+  }
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      if (GTK_IS_RESIZE_CONTAINER (parent))
-        {
-          gtk_container_queue_resize_handler (GTK_CONTAINER (parent));
-          break;
-        }
+  if (GTK_IS_RESIZE_CONTAINER (widget))
+    {
+      gtk_container_queue_resize_handler (GTK_CONTAINER (widget));
 G_GNUC_END_IGNORE_DEPRECATIONS;
-
-      parent = _gtk_widget_get_parent (parent);
     }
-  while (parent);
+  else
+    {
+      GtkWidget *parent = _gtk_widget_get_parent (widget);
+      if (parent)
+        gtk_widget_queue_resize_internal (parent);
+    }
 }
 
 /**
