@@ -5988,6 +5988,7 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
     GTK_WIDGET_GET_CLASS (widget)->size_allocate (widget, &real_allocation);
 
   /* Size allocation is god... after consulting god, no further requests or allocations are needed */
+  gtk_widget_ensure_resize (widget);
   priv->alloc_needed = FALSE;
 
   size_changed |= (old_clip.width != priv->clip.width ||
