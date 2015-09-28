@@ -5599,6 +5599,53 @@ gtk_widget_queue_allocate (GtkWidget *widget)
 }
 
 /**
+ * gtk_widget_queue_resize_internal:
+ * @widget: a #GtkWidget
+ * 
+ * Queue a resize on a widget, and on all other widgets grouped with this widget.
+ **/
+void
+gtk_widget_queue_resize_internal (GtkWidget *widget)
+{
+  GtkWidget *parent;
+  GSList *groups, *l, *widgets;
+
+  parent = widget;
+
+  do
+    {
+      if (gtk_widget_get_resize_needed (parent))
+        return;
+
+      gtk_widget_queue_resize_on_widget (parent);
+
+      groups = _gtk_widget_get_sizegroups (parent);
+
+      for (l = groups; l; l = l->next)
+      {
+        if (gtk_size_group_get_ignore_hidden (l->data) && !gtk_widget_is_visible (widget))
+          continue;
+
+        for (widgets = gtk_size_group_get_widgets (l->data); widgets; widgets = widgets->next)
+          {
+            gtk_widget_queue_resize_internal (widgets->data);
+          }
+      }
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+      if (GTK_IS_RESIZE_CONTAINER (parent))
+        {
+          gtk_container_queue_resize_handler (GTK_CONTAINER (parent));
+          break;
+        }
+G_GNUC_END_IGNORE_DEPRECATIONS;
+
+      parent = _gtk_widget_get_parent (parent);
+    }
+  while (parent);
+}
+
+/**
  * gtk_widget_queue_resize:
  * @widget: a #GtkWidget
  *
@@ -5621,7 +5668,7 @@ gtk_widget_queue_resize (GtkWidget *widget)
   if (_gtk_widget_get_realized (widget))
     gtk_widget_queue_draw (widget);
 
-  _gtk_size_group_queue_resize (widget);
+  gtk_widget_queue_resize_internal (widget);
 }
 
 /**
@@ -5638,7 +5685,7 @@ gtk_widget_queue_resize_no_redraw (GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  _gtk_size_group_queue_resize (widget);
+  gtk_widget_queue_resize_internal (widget);
 }
 
 /**
