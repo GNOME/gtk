@@ -50,7 +50,6 @@ gtk_css_widget_node_style_changed (GtkCssNode   *cssnode,
                                    GtkCssStyle  *new_style)
 {
   GtkCssWidgetNode *node;
-  GtkBitmask *diff;
 
   node = GTK_CSS_WIDGET_NODE (cssnode);
 
@@ -59,9 +58,7 @@ gtk_css_widget_node_style_changed (GtkCssNode   *cssnode,
 
   GTK_CSS_NODE_CLASS (gtk_css_widget_node_parent_class)->style_changed (cssnode, old_style, new_style);
 
-  diff = gtk_css_style_get_difference (new_style, old_style);
-  node->accumulated_changes = _gtk_bitmask_union (node->accumulated_changes, diff);
-  _gtk_bitmask_free (diff);
+  node->accumulated_changes = gtk_css_style_add_difference (node->accumulated_changes, new_style, old_style);
 }
 
 static gboolean
@@ -70,7 +67,7 @@ gtk_css_widget_node_queue_callback (GtkWidget     *widget,
                                     gpointer       user_data)
 {
   GtkCssNode *node = user_data;
-  
+
   gtk_css_node_invalidate_frame_clock (node, TRUE);
   _gtk_container_queue_restyle (GTK_CONTAINER (widget));
 

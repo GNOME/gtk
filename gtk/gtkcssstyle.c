@@ -83,25 +83,27 @@ gtk_css_style_get_section (GtkCssStyle *style,
 }
 
 GtkBitmask *
-gtk_css_style_get_difference (GtkCssStyle *style,
+gtk_css_style_add_difference (GtkBitmask  *accumulated,
+                              GtkCssStyle *style,
                               GtkCssStyle *other)
 {
-  GtkBitmask *result;
-  guint i, len;
+  gint len, i;
 
   if (style == other)
-    return _gtk_bitmask_new ();
+    return accumulated;
 
-  result = _gtk_bitmask_new ();
   len = _gtk_css_style_property_get_n_properties ();
   for (i = 0; i < len; i++)
     {
+      if (_gtk_bitmask_get (accumulated, i))
+        continue;
+
       if (!_gtk_css_value_equal (gtk_css_style_get_value (style, i),
                                  gtk_css_style_get_value (other, i)))
-        result = _gtk_bitmask_set (result, i, TRUE);
+        accumulated = _gtk_bitmask_set (accumulated, i, TRUE);
     }
 
-  return result;
+  return accumulated;
 }
 
 gboolean

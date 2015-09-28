@@ -64,7 +64,8 @@ GtkCssValue *           gtk_css_style_get_value                 (GtkCssStyle    
                                                                  guint                   id);
 GtkCssSection *         gtk_css_style_get_section               (GtkCssStyle            *style,
                                                                  guint                   id);
-GtkBitmask *            gtk_css_style_get_difference            (GtkCssStyle            *style,
+GtkBitmask *            gtk_css_style_add_difference            (GtkBitmask             *accumulated,
+                                                                 GtkCssStyle            *style,
                                                                  GtkCssStyle            *other);
 gboolean                gtk_css_style_is_static                 (GtkCssStyle            *style);
 
