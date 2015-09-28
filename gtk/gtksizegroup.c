@@ -215,53 +215,6 @@ queue_resize_on_group (GtkSizeGroup *size_group)
 }
 
 static void
-queue_resize_on_widget (GtkWidget *widget,
-			gboolean   check_siblings)
-{
-  GtkWidget *parent;
-
-  parent = widget;
-
-  do
-    {
-      if (gtk_widget_get_resize_needed (parent))
-        return;
-
-      gtk_widget_queue_resize_on_widget (parent);
-
-      if (!check_siblings)
-	{
-          check_siblings = TRUE;
-	}
-      else
-        {
-          GSList *groups, *l;
-
-          groups = _gtk_widget_get_sizegroups (parent);
-
-          for (l = groups; l; l = l->next)
-          {
-            if (((GtkSizeGroup *) (l->data))->priv->ignore_hidden && !gtk_widget_is_visible (widget))
-              continue;
-
-            queue_resize_on_group (l->data);
-	  }
-        }
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      if (GTK_IS_RESIZE_CONTAINER (parent))
-        {
-          gtk_container_queue_resize_handler (GTK_CONTAINER (parent));
-          break;
-        }
-G_GNUC_END_IGNORE_DEPRECATIONS;
-
-      parent = _gtk_widget_get_parent (parent);
-    }
-  while (parent);
-}
-
-static void
 gtk_size_group_class_init (GtkSizeGroupClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
@@ -575,7 +528,40 @@ gtk_size_group_get_widgets (GtkSizeGroup *size_group)
 void
 _gtk_size_group_queue_resize (GtkWidget *widget)
 {
-  queue_resize_on_widget (widget, TRUE);
+  GtkWidget *parent;
+  GSList *groups, *l;
+
+  parent = widget;
+
+  do
+    {
+      if (gtk_widget_get_resize_needed (parent))
+        return;
+
+      gtk_widget_queue_resize_on_widget (parent);
+
+
+      groups = _gtk_widget_get_sizegroups (parent);
+
+      for (l = groups; l; l = l->next)
+      {
+        if (((GtkSizeGroup *) (l->data))->priv->ignore_hidden && !gtk_widget_is_visible (widget))
+          continue;
+
+        queue_resize_on_group (l->data);
+      }
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+      if (GTK_IS_RESIZE_CONTAINER (parent))
+        {
+          gtk_container_queue_resize_handler (GTK_CONTAINER (parent));
+          break;
+        }
+G_GNUC_END_IGNORE_DEPRECATIONS;
+
+      parent = _gtk_widget_get_parent (parent);
+    }
+  while (parent);
 }
 
 typedef struct {
