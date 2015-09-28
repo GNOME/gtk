@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-27 21:13+0000\n"
-"PO-Revision-Date: 2015-09-27 23:15+0200\n"
+"POT-Creation-Date: 2015-09-28 13:25+0000\n"
+"PO-Revision-Date: 2015-09-28 16:32+0200\n"
 "Last-Translator: Milo Casagrande <milo@milo.name>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -86,7 +86,7 @@ msgstr "FLAG"
 msgid "GDK debugging flags to unset"
 msgstr "Flag per il debug di GDK da disattivare"
 
-#: gdk/gdkwindow.c:2770
+#: gdk/gdkwindow.c:2768
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "Supporto GL disabilitato via GDK_DEBUG"
 
@@ -3119,7 +3119,7 @@ msgstr "Computer"
 
 #: gtk/gtkplacesview.c:900
 msgid "Searching for network locations"
-msgstr "Ricerca di posizioni di rete in corso"
+msgstr "Ricerca posizioni di rete in corso"
 
 #: gtk/gtkplacesview.c:907
 msgid "No network locations found"
