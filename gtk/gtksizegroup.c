@@ -519,51 +519,6 @@ gtk_size_group_get_widgets (GtkSizeGroup *size_group)
   return size_group->priv->widgets;
 }
 
-/**
- * _gtk_size_group_queue_resize:
- * @widget: a #GtkWidget
- * 
- * Queue a resize on a widget, and on all other widgets grouped with this widget.
- **/
-void
-_gtk_size_group_queue_resize (GtkWidget *widget)
-{
-  GtkWidget *parent;
-  GSList *groups, *l;
-
-  parent = widget;
-
-  do
-    {
-      if (gtk_widget_get_resize_needed (parent))
-        return;
-
-      gtk_widget_queue_resize_on_widget (parent);
-
-
-      groups = _gtk_widget_get_sizegroups (parent);
-
-      for (l = groups; l; l = l->next)
-      {
-        if (((GtkSizeGroup *) (l->data))->priv->ignore_hidden && !gtk_widget_is_visible (widget))
-          continue;
-
-        queue_resize_on_group (l->data);
-      }
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      if (GTK_IS_RESIZE_CONTAINER (parent))
-        {
-          gtk_container_queue_resize_handler (GTK_CONTAINER (parent));
-          break;
-        }
-G_GNUC_END_IGNORE_DEPRECATIONS;
-
-      parent = _gtk_widget_get_parent (parent);
-    }
-  while (parent);
-}
-
 typedef struct {
   gchar *name;
   gint line;

@@ -25,7 +25,6 @@ G_BEGIN_DECLS
 
 GHashTable * _gtk_size_group_get_widget_peers (GtkWidget           *for_widget,
                                                GtkOrientation       orientation);
-void _gtk_size_group_queue_resize             (GtkWidget           *widget);
 
 G_END_DECLS
 
