@@ -217,6 +217,9 @@ queue_resize_on_widget (GtkWidget *widget,
 
   do
     {
+      if (gtk_widget_get_resize_needed (parent))
+        return;
+
       gtk_widget_queue_resize_on_widget (parent);
 
       if (!check_siblings || _gtk_widget_get_sizegroups (parent) == NULL)
@@ -268,9 +271,12 @@ static void
 queue_resize_on_group (GtkSizeGroup *size_group)
 {
   GtkSizeGroupPrivate *priv = size_group->priv;
+  GSList *list;
 
-  if (priv->widgets)
-    queue_resize_on_widget (priv->widgets->data, TRUE);
+  for (list = priv->widgets; list; list = list->next)
+    {
+      gtk_widget_queue_resize (list->data);
+    }
 }
 
 static void
