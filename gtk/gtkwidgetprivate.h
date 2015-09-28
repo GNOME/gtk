@@ -382,6 +382,19 @@ _gtk_widget_peek_request_cache (GtkWidget *widget)
   return &widget->priv->requests;
 }
 
+static inline GdkWindow *
+_gtk_widget_get_window (GtkWidget *widget)
+{
+  return widget->priv->window;
+}
+
+static inline void
+_gtk_widget_get_allocation (GtkWidget     *widget,
+                            GtkAllocation *allocation)
+{
+  *allocation = widget->priv->allocation;
+}
+
 G_END_DECLS
 
 #endif /* __GTK_WIDGET_PRIVATE_H__ */

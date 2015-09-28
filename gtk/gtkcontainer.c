@@ -2196,9 +2196,8 @@ gtk_container_real_check_resize (GtkContainer *container)
   GtkAllocation allocation;
   GtkRequisition requisition;
 
-  gtk_widget_get_preferred_size (widget,
-                                 &requisition, NULL);
-  gtk_widget_get_allocation (widget, &allocation);
+  gtk_widget_get_preferred_size (widget, &requisition, NULL);
+  _gtk_widget_get_allocation (widget, &allocation);
 
   if (requisition.width > allocation.width ||
       requisition.height > allocation.height)
@@ -2247,7 +2246,7 @@ gtk_container_resize_children (GtkContainer *container)
   g_return_if_fail (GTK_IS_CONTAINER (container));
 
   widget = GTK_WIDGET (container);
-  gtk_widget_get_allocation (widget, &allocation);
+  _gtk_widget_get_allocation (widget, &allocation);
 
   gtk_widget_size_allocate (widget, &allocation);
   gtk_widget_set_allocation (widget, &allocation);
@@ -2716,11 +2715,11 @@ gtk_container_real_set_focus_child (GtkContainer     *container,
           gtk_widget_translate_coordinates (focus_child, priv->focus_child,
                                             0, 0, &x, &y);
 
-          gtk_widget_get_allocation (priv->focus_child, &allocation);
+          _gtk_widget_get_allocation (priv->focus_child, &allocation);
           x += allocation.x;
           y += allocation.y;
 
-          gtk_widget_get_allocation (focus_child, &allocation);
+          _gtk_widget_get_allocation (focus_child, &allocation);
 
           if (vadj)
             gtk_adjustment_clamp_page (vadj, y, y + allocation.height);
@@ -2832,8 +2831,8 @@ tab_compare (gconstpointer a,
   GtkTextDirection text_direction = GPOINTER_TO_INT (data);
   gint y1, y2;
 
-  gtk_widget_get_allocation ((GtkWidget *) child1, &child1_allocation);
-  gtk_widget_get_allocation ((GtkWidget *) child2, &child2_allocation);
+  _gtk_widget_get_allocation ((GtkWidget *) child1, &child1_allocation);
+  _gtk_widget_get_allocation ((GtkWidget *) child2, &child2_allocation);
 
   y1 = child1_allocation.y + child1_allocation.height / 2;
   y2 = child2_allocation.y + child2_allocation.height / 2;
@@ -3049,7 +3048,7 @@ gtk_container_focus_sort_up_down (GtkContainer     *container,
       GtkWidget *widget = GTK_WIDGET (container);
       GdkRectangle old_focus_rect;
 
-      gtk_widget_get_allocation (widget, &allocation);
+      _gtk_widget_get_allocation (widget, &allocation);
 
       if (old_focus_coords (container, &old_focus_rect))
         {
@@ -3179,7 +3178,7 @@ gtk_container_focus_sort_left_right (GtkContainer     *container,
       GtkWidget *widget = GTK_WIDGET (container);
       GdkRectangle old_focus_rect;
 
-      gtk_widget_get_allocation (widget, &allocation);
+      _gtk_widget_get_allocation (widget, &allocation);
 
       if (old_focus_coords (container, &old_focus_rect))
         {
@@ -3615,7 +3614,7 @@ gtk_container_draw_forall (GtkWidget *widget,
       info.window_depth = G_MAXINT;
       if (_gtk_widget_get_has_window (widget))
         {
-          window = gtk_widget_get_window (widget);
+          window = _gtk_widget_get_window (widget);
           siblings = gdk_window_peek_children (gdk_window_get_parent (window));
           info.window_depth = g_list_index (siblings, window);
         }
@@ -3690,7 +3689,7 @@ gtk_container_map (GtkWidget *widget)
                         NULL);
 
   if (_gtk_widget_get_has_window (widget))
-    gdk_window_show (gtk_widget_get_window (widget));
+    gdk_window_show (_gtk_widget_get_window (widget));
 }
 
 static void
@@ -3704,7 +3703,7 @@ gtk_container_unmap (GtkWidget *widget)
    * window, e.g. a GtkSocket would)
    */
   if (_gtk_widget_get_has_window (widget))
-    gdk_window_hide (gtk_widget_get_window (widget));
+    gdk_window_hide (_gtk_widget_get_window (widget));
 
   gtk_container_forall (GTK_CONTAINER (widget),
                         (GtkCallback)gtk_widget_unmap,
@@ -3727,8 +3726,8 @@ gtk_container_should_propagate_draw (GtkContainer   *container,
    */
   event = _gtk_cairo_get_event (cr);
   if (event &&
-      (_gtk_widget_get_has_window (child) &&
-       gdk_window_has_native (gtk_widget_get_window (child))))
+      _gtk_widget_get_has_window (child) &&
+      gdk_window_has_native (_gtk_widget_get_window (child)))
     return FALSE;
 
   /* Never propagate to a child window when exposing a window
@@ -3736,9 +3735,9 @@ gtk_container_should_propagate_draw (GtkContainer   *container,
    */
   event_window = _gtk_cairo_get_event_window (cr);
   if (_gtk_widget_get_has_window (child))
-    child_in_window = gdk_window_get_parent (gtk_widget_get_window (child));
+    child_in_window = gdk_window_get_parent (_gtk_widget_get_window (child));
   else
-    child_in_window = gtk_widget_get_window (child);
+    child_in_window = _gtk_widget_get_window (child);
   if (event_window != NULL && child_in_window != event_window)
     return FALSE;
 
@@ -3793,7 +3792,7 @@ gtk_container_propagate_draw (GtkContainer   *container,
   /* translate coordinates. Ugly business, that. */
   if (!_gtk_widget_get_has_window (GTK_WIDGET (container)))
     {
-      gtk_widget_get_allocation (GTK_WIDGET (container), &allocation);
+      _gtk_widget_get_allocation (GTK_WIDGET (container), &allocation);
       x = -allocation.x;
       y = -allocation.y;
     }
@@ -3803,9 +3802,9 @@ gtk_container_propagate_draw (GtkContainer   *container,
       y = 0;
     }
 
-  window = gtk_widget_get_window (GTK_WIDGET (container));
+  window = _gtk_widget_get_window (GTK_WIDGET (container));
 
-  for (w = gtk_widget_get_window (child); w && w != window; w = gdk_window_get_parent (w))
+  for (w = _gtk_widget_get_window (child); w && w != window; w = gdk_window_get_parent (w))
     {
       int wx, wy;
       gdk_window_get_position (w, &wx, &wy);
@@ -3821,7 +3820,7 @@ gtk_container_propagate_draw (GtkContainer   *container,
 
   if (!_gtk_widget_get_has_window (child))
     {
-      gtk_widget_get_allocation (child, &allocation);
+      _gtk_widget_get_allocation (child, &allocation);
       x += allocation.x;
       y += allocation.y;
     }

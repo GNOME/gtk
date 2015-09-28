@@ -3927,7 +3927,7 @@ gtk_widget_get_property (GObject         *object,
       g_value_set_string (value, g_object_get_qdata (object, quark_tooltip_markup));
       break;
     case PROP_WINDOW:
-      g_value_set_object (value, gtk_widget_get_window (widget));
+      g_value_set_object (value, _gtk_widget_get_window (widget));
       break;
     case PROP_DOUBLE_BUFFERED:
       G_GNUC_BEGIN_IGNORE_DEPRECATIONS
@@ -5038,14 +5038,14 @@ gtk_widget_set_device_enabled_internal (GtkWidget *widget,
     {
       GdkWindow *window;
 
-      window = gtk_widget_get_window (widget);
+      window = _gtk_widget_get_window (widget);
       device_enable_foreach_window (window, &data);
     }
   else
     {
       GList *window_list;
 
-      window_list = gdk_window_peek_children (gtk_widget_get_window (widget));
+      window_list = gdk_window_peek_children (_gtk_widget_get_window (widget));
       g_list_foreach (window_list, device_enable_foreach_window, &data);
     }
 
@@ -5661,7 +5661,7 @@ gtk_widget_get_frame_clock (GtkWidget *widget)
        * reparenting windows and widgets.
        */
       GtkWidget *toplevel = _gtk_widget_get_toplevel (widget);
-      GdkWindow *window = gtk_widget_get_window (toplevel);
+      GdkWindow *window = _gtk_widget_get_window (toplevel);
       g_assert (window != NULL);
 
       return gdk_window_get_frame_clock (window);
@@ -7000,7 +7000,7 @@ _gtk_widget_draw (GtkWidget *widget,
   if (push_group)
     cairo_push_group (cr);
 
-  window = gtk_widget_get_window (widget);
+  window = _gtk_widget_get_window (widget);
   if (_gtk_widget_get_has_window (widget))
     {
       /* The widget will be completely contained in its window, so just
@@ -7421,7 +7421,7 @@ _gtk_widget_get_translation_to_window (GtkWidget      *widget,
       *y = 0;
     }
 
-  widget_window = gtk_widget_get_window (widget);
+  widget_window = _gtk_widget_get_window (widget);
 
   for (w = window; w && w != widget_window; w = gdk_window_get_parent (w))
     {
@@ -7921,7 +7921,7 @@ gtk_widget_intersect (GtkWidget	         *widget,
  *     cairo_region_intersect_rectangle() to get the same behavior.
  */
 cairo_region_t *
-gtk_widget_region_intersect (GtkWidget       *widget,
+gtk_widget_region_intersect (GtkWidget            *widget,
 			     const cairo_region_t *region)
 {
   GdkRectangle rect;
@@ -7930,7 +7930,7 @@ gtk_widget_region_intersect (GtkWidget       *widget,
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   g_return_val_if_fail (region != NULL, NULL);
 
-  gtk_widget_get_allocation (widget, &rect);
+  _gtk_widget_get_allocation (widget, &rect);
 
   dest = cairo_region_create_rectangle (&rect);
 
@@ -10773,7 +10773,7 @@ gtk_widget_get_scale_factor (GtkWidget *widget)
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 1);
 
   if (_gtk_widget_get_realized (widget))
-    return gdk_window_get_scale_factor (gtk_widget_get_window (widget));
+    return gdk_window_get_scale_factor (_gtk_widget_get_window (widget));
 
   toplevel = _gtk_widget_get_toplevel (widget);
   if (toplevel && toplevel != widget)
@@ -13585,8 +13585,8 @@ gtk_widget_queue_compute_expand (GtkWidget *widget)
  * Returns: whether widget tree rooted here should be expanded
  */
 gboolean
-gtk_widget_compute_expand (GtkWidget     *widget,
-                           GtkOrientation orientation)
+gtk_widget_compute_expand (GtkWidget      *widget,
+                           GtkOrientation  orientation)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
@@ -13597,13 +13597,9 @@ gtk_widget_compute_expand (GtkWidget     *widget,
   gtk_widget_update_computed_expand (widget);
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    {
-      return widget->priv->computed_hexpand;
-    }
+    return widget->priv->computed_hexpand;
   else
-    {
-      return widget->priv->computed_vexpand;
-    }
+    return widget->priv->computed_vexpand;
 }
 
 static void
@@ -15553,7 +15549,7 @@ _gtk_widget_set_simple_clip (GtkWidget     *widget,
 
   context = _gtk_widget_get_style_context (widget);
 
-  gtk_widget_get_allocation (widget, &allocation);
+  _gtk_widget_get_allocation (widget, &allocation);
 
   _gtk_css_shadows_value_get_extents (_gtk_style_context_peek_property (context,
                                                                         GTK_CSS_PROPERTY_BOX_SHADOW),
@@ -16049,7 +16045,7 @@ _gtk_widget_set_has_focus (GtkWidget *widget,
  *
  *   fevent->focus_change.type = GDK_FOCUS_CHANGE;
  *   fevent->focus_change.in = TRUE;
- *   fevent->focus_change.window = gtk_widget_get_window (widget);
+ *   fevent->focus_change.window = _gtk_widget_get_window (widget);
  *   if (fevent->focus_change.window != NULL)
  *     g_object_ref (fevent->focus_change.window);
  *
