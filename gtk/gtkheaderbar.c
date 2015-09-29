@@ -299,6 +299,8 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
       priv->titlebar_end_separator = NULL;
     }
 
+  priv->titlebar_icon = NULL;
+
   if (!priv->shows_wm_decorations)
     return;
 
