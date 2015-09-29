@@ -169,6 +169,7 @@ void         _gtk_widget_set_shadowed       (GtkWidget *widget,
 gboolean     _gtk_widget_get_alloc_needed   (GtkWidget *widget);
 void         gtk_widget_queue_resize_on_widget (GtkWidget *widget);
 void         gtk_widget_ensure_resize       (GtkWidget *widget);
+void         gtk_widget_ensure_allocate     (GtkWidget *widget);
 void         _gtk_widget_draw               (GtkWidget *widget,
 					     cairo_t   *cr);
 void          _gtk_widget_scale_changed     (GtkWidget *widget);

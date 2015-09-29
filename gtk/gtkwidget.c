@@ -5574,6 +5574,8 @@ gtk_widget_queue_draw (GtkWidget *widget)
                                 0, 0, rect.width, rect.height);
 }
 
+static void
+gtk_widget_set_alloc_needed (GtkWidget *widget);
 /**
  * gtk_widget_queue_allocate:
  * @widget: a #GtkWidget
@@ -5592,8 +5594,7 @@ gtk_widget_queue_allocate (GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  /* for now... */
-  gtk_widget_queue_resize (widget);
+  gtk_widget_set_alloc_needed (widget);
 }
 
 /**
@@ -6082,6 +6083,9 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
     }
 
 out:
+  if (priv->alloc_needed_on_child)
+    gtk_widget_ensure_allocate (widget);
+
   gtk_widget_pop_verify_invariants (widget);
 }
 
@@ -16231,6 +16235,14 @@ gtk_widget_set_alloc_needed (GtkWidget *widget)
       if (!priv->visible)
         break;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+      if (GTK_IS_RESIZE_CONTAINER (widget))
+        {
+          gtk_container_queue_resize_handler (GTK_CONTAINER (widget));
+          break;
+        }
+G_GNUC_END_IGNORE_DEPRECATIONS;
+
       widget = priv->parent;
       if (widget == NULL)
         break;
@@ -16238,6 +16250,40 @@ gtk_widget_set_alloc_needed (GtkWidget *widget)
       priv = widget->priv;
     }
   while (TRUE);
+}
+
+void
+gtk_widget_ensure_allocate (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = widget->priv;
+
+  gtk_widget_ensure_resize (widget);
+
+  if (!priv->visible || !priv->child_visible)
+    return;
+
+  /*  This code assumes that we only reach here if the previous
+   *  allocation is still valid (ie no resize was queued).
+   *  If that wasn't true, the parent would have taken care of
+   *  things.
+   */
+  if (priv->alloc_needed)
+    {
+      GtkAllocation allocation;
+      int baseline;
+
+      gtk_widget_get_allocated_size (widget, &allocation, &baseline);
+      gtk_widget_size_allocate_with_baseline (widget, &allocation, baseline);
+    }
+  else if (priv->alloc_needed_on_child)
+    {
+      priv->alloc_needed_on_child = FALSE;
+
+      if (GTK_IS_CONTAINER (widget))
+        gtk_container_foreach (GTK_CONTAINER (widget),
+                               (GtkCallback) gtk_widget_ensure_allocate,
+                               NULL);
+    }
 }
 
 void

@@ -2144,24 +2144,31 @@ gtk_container_real_check_resize (GtkContainer *container)
   GtkRequisition requisition;
   int baseline;
 
-  gtk_widget_get_preferred_size (widget, &requisition, NULL);
-  gtk_widget_get_allocated_size (widget, &allocation, &baseline);
-
-  if (requisition.width > allocation.width ||
-      requisition.height > allocation.height)
+  if (_gtk_widget_get_alloc_needed (widget))
     {
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      if (GTK_IS_RESIZE_CONTAINER (container))
+      gtk_widget_get_preferred_size (widget, &requisition, NULL);
+      gtk_widget_get_allocated_size (widget, &allocation, &baseline);
+
+      if (requisition.width > allocation.width ||
+          requisition.height > allocation.height)
         {
-          gtk_widget_size_allocate (widget, &allocation);
+          G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+          if (GTK_IS_RESIZE_CONTAINER (container))
+            {
+              gtk_widget_size_allocate (widget, &allocation);
+            }
+          else
+            gtk_widget_queue_resize (widget);
+          G_GNUC_END_IGNORE_DEPRECATIONS;
         }
       else
-        gtk_widget_queue_resize (widget);
-      G_GNUC_END_IGNORE_DEPRECATIONS;
+        {
+          gtk_widget_size_allocate_with_baseline (widget, &allocation, baseline);
+        }
     }
   else
     {
-      gtk_widget_size_allocate_with_baseline (widget, &allocation, baseline);
+      gtk_widget_ensure_allocate (widget);
     }
 }
 
