@@ -1126,6 +1126,7 @@ stamp-gtkmarshalers.h: gtkmarshalers.list
 	&& echo timestamp > $(@F)
 gtkmarshalers.c: gtkmarshalers.list
 	$(AM_V_GEN) (echo "#include \"gtkmarshalers.h\""; \
+	 echo "#undef G_ENABLE_DEBUG"; \
 	 $(GLIB_GENMARSHAL) --prefix=_gtk_marshal $(srcdir)/gtkmarshalers.list --body  --valist-marshallers) >> xgen-gmlc \
 	&& cp xgen-gmlc gtkmarshalers.c \
 	&& rm -f xgen-gmlc
