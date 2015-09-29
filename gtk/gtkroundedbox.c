@@ -215,6 +215,80 @@ _gtk_rounded_box_move (GtkRoundedBox *box,
   box->box.y += dy;
 }
 
+typedef struct {
+  double angle1;
+  double angle2;
+  gboolean negative;
+} Arc;
+
+static guint
+arc_path_hash (Arc *arc)
+{
+  return g_double_hash (&arc->angle1) ^ g_double_hash (&arc->angle2) ^ arc->negative;
+}
+
+static gboolean
+arc_path_equal (Arc *arc1,
+                Arc *arc2)
+{
+  return arc1->angle1 == arc2->angle1 &&
+         arc1->angle2 == arc2->angle2 &&
+         arc1->negative == arc2->negative;
+}
+
+/* We need the path to start with a line-to */
+static cairo_path_t *
+fixup_path (cairo_path_t *path)
+{
+  cairo_path_data_t *data;
+
+  data = &path->data[0];
+  if (data->header.type == CAIRO_PATH_MOVE_TO)
+    data->header.type = CAIRO_PATH_LINE_TO;
+
+  return path;
+}
+
+static void
+append_arc (cairo_t *cr, double angle1, double angle2, gboolean negative)
+{
+  static GHashTable *arc_path_cache;
+  Arc key;
+  cairo_path_t *arc;
+
+  key.angle1 = angle1;
+  key.angle2 = angle2;
+  key.negative = negative;
+
+  if (arc_path_cache == NULL)
+    arc_path_cache = g_hash_table_new_full ((GHashFunc)arc_path_hash,
+                                            (GEqualFunc)arc_path_equal,
+                                            g_free, (GDestroyNotify)cairo_path_destroy);
+
+  arc = g_hash_table_lookup (arc_path_cache, &key);
+  if (arc == NULL)
+    {
+      cairo_surface_t *surface;
+      cairo_t *tmp;
+
+      surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 1, 1);
+      tmp = cairo_create (surface);
+
+      if (negative)
+        cairo_arc_negative (tmp, 0.0, 0.0, 1.0, angle1, angle2);
+      else
+        cairo_arc (tmp, 0.0, 0.0, 1.0, angle1, angle2);
+
+      arc = fixup_path (cairo_copy_path (tmp));
+      g_hash_table_insert (arc_path_cache, g_memdup (&key, sizeof (key)), arc);
+
+      cairo_destroy (tmp);
+      cairo_surface_destroy (surface);
+    }
+
+  cairo_append_path (cr, arc);
+}
+
 static void
 _cairo_ellipsis (cairo_t *cr,
 	         double xc, double yc,
@@ -232,7 +306,7 @@ _cairo_ellipsis (cairo_t *cr,
   cairo_get_matrix (cr, &save);
   cairo_translate (cr, xc, yc);
   cairo_scale (cr, xradius, yradius);
-  cairo_arc (cr, 0, 0, 1.0, angle1, angle2);
+  append_arc (cr, angle1, angle2, FALSE);
   cairo_set_matrix (cr, &save);
 }
 
@@ -253,7 +327,7 @@ _cairo_ellipsis_negative (cairo_t *cr,
   cairo_get_matrix (cr, &save);
   cairo_translate (cr, xc, yc);
   cairo_scale (cr, xradius, yradius);
-  cairo_arc_negative (cr, 0, 0, 1.0, angle1, angle2);
+  append_arc (cr, angle1, angle2, TRUE);
   cairo_set_matrix (cr, &save);
 }
 
