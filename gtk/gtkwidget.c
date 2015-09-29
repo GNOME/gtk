@@ -4327,6 +4327,7 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   priv->double_buffered = TRUE;
   priv->redraw_on_alloc = TRUE;
   priv->alloc_needed = TRUE;
+  priv->alloc_needed_on_child = TRUE;
  
   switch (_gtk_widget_get_direction (widget))
     {
@@ -6040,6 +6041,7 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
 #endif
   gtk_widget_ensure_resize (widget);
   priv->alloc_needed = FALSE;
+  priv->alloc_needed_on_child = FALSE;
 
   size_changed |= (old_clip.width != priv->clip.width ||
                    old_clip.height != priv->clip.height);
@@ -7164,6 +7166,7 @@ gtk_widget_draw (GtkWidget *widget,
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (!widget->priv->alloc_needed);
+  g_return_if_fail (!widget->priv->alloc_needed_on_child);
   g_return_if_fail (cr != NULL);
 
   cairo_save (cr);
@@ -16211,13 +16214,39 @@ _gtk_widget_get_alloc_needed (GtkWidget *widget)
   return widget->priv->alloc_needed;
 }
 
+static void
+gtk_widget_set_alloc_needed (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = widget->priv;
+
+  priv->alloc_needed = TRUE;
+
+  do
+    {
+      if (priv->alloc_needed_on_child)
+        break;
+
+      priv->alloc_needed_on_child = TRUE;
+
+      if (!priv->visible)
+        break;
+
+      widget = priv->parent;
+      if (widget == NULL)
+        break;
+
+      priv = widget->priv;
+    }
+  while (TRUE);
+}
+
 void
 gtk_widget_queue_resize_on_widget (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = widget->priv;
 
   priv->resize_needed = TRUE;
-  priv->alloc_needed = TRUE;
+  gtk_widget_set_alloc_needed (widget);
 }
 
 void
