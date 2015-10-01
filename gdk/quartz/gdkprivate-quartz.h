@@ -125,6 +125,12 @@ void       _gdk_quartz_display_create_window_impl (GdkDisplay    *display,
                                                    GdkWindowAttr *attributes,
                                                    gint           attributes_mask);
 
+/* Display methods - frame clock */
+void        _gdk_quartz_display_add_frame_callback    (GdkDisplay             *display,
+                                                       GdkWindow              *window);
+void        _gdk_quartz_display_remove_frame_callback (GdkDisplay             *display,
+                                                       GdkWindow              *window);
+
 /* Display methods - keymap */
 GdkKeymap * _gdk_quartz_display_get_keymap (GdkDisplay *display);
 
