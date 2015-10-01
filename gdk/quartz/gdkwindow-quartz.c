@@ -47,8 +47,6 @@ static gboolean  in_process_all_updates = FALSE;
 
 static GSList *main_window_stack;
 
-void _gdk_quartz_window_flush (GdkWindowImplQuartz *window_impl);
-
 typedef struct
 {
   gint            x, y;
@@ -160,19 +158,17 @@ gdk_window_impl_quartz_get_context (GdkWindowImplQuartz *window_impl,
    * and for widgets that send fake expose events like the arrow
    * buttons in spinbuttons or the position marker in rulers.
    */
-#if MAC_OS_X_VERSION_MIN_REQUIRED < 101400
-  if (window_impl->in_paint_rect_count == 0)
+#if MAC_OS_X_VERSION_MAX_ALLOWED < 101400
+  if (gdk_quartz_osx_version() < GDK_OSX_MOJAVE &&
+      window_impl->in_paint_rect_count == 0)
     {
       /* The NSView focus-locking API set was deprecated in MacOS 10.14 and
        * has a significant cost in MacOS 11 - every lock/unlock seems to
        * trigger a drawRect: call for the entire window.  To return the
        * lost performance, do not use the locking API in MacOS 11+
        */
-      if(gdk_quartz_osx_version() < GDK_OSX_MOJAVE)
-        {
-          if (![window_impl->view lockFocusIfCanDraw])
+         if (![window_impl->view lockFocusIfCanDraw])
             return NULL;
-        }
     }
 #endif
 #if MAC_OS_X_VERSION_MIN_REQUIRED < 101000
@@ -206,19 +202,14 @@ gdk_window_impl_quartz_release_context (GdkWindowImplQuartz *window_impl,
     }
 
   /* See comment in gdk_quartz_window_get_context(). */
-  if (window_impl->in_paint_rect_count == 0)
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 101400
+  if (gdk_quartz_osx_version() < GDK_OSX_MOJAVE &&
+      window_impl->in_paint_rect_count == 0)
     {
-      _gdk_quartz_window_flush (window_impl);
-
-      /* As per gdk_window_impl_quartz_get_context(), the NSView
-        * focus-locking API set was deprecated in MacOS 10.14 and has
-        * a significant cost in MacOS 11 - every lock/unlock seems to 
-        * trigger a drawRect: call for the entire window.  To return the
-        * lost performance, do not use the locking API in MacOS 11+
-        */
-      if(gdk_quartz_osx_version() < GDK_OSX_BIGSUR)
-        [window_impl->view unlockFocus];
+      [window_impl->toplevel flushWindow];
+      [window_impl->view unlockFocus];
     }
+#endif
 }
 
 static void
@@ -239,52 +230,6 @@ gdk_window_impl_quartz_finalize (GObject *object)
                                      object: impl->view];
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
-}
-
-/* Help preventing "beam sync penalty" where CG makes all graphics code
- * block until the next vsync if we try to flush (including call display on
- * a view) too often. We do this by limiting the manual flushing done
- * outside of expose calls to less than some frequency when measured over
- * the last 4 flushes. This is a bit arbitray, but seems to make it possible
- * for some quick manual flushes (such as gtkruler or gimp’s marching ants)
- * without hitting the max flush frequency.
- *
- * If drawable NULL, no flushing is done, only registering that a flush was
- * done externally.
- *
- * Note: As of MacOS 10.14 NSWindow flushWindow is deprecated because
- * Quartz has the ability to handle deferred drawing on its own.
- */
-void
-_gdk_quartz_window_flush (GdkWindowImplQuartz *window_impl)
-{
-#if MAC_OS_X_VERSION_MIN_REQUIRED < 101400
-  static struct timeval prev_tv;
-  static gint intervals[4];
-  static gint index;
-  struct timeval tv;
-  gint ms;
-
-  gettimeofday (&tv, NULL);
-  ms = (tv.tv_sec - prev_tv.tv_sec) * 1000 + (tv.tv_usec - prev_tv.tv_usec) / 1000;
-  intervals[index++ % 4] = ms;
-
-  if (window_impl)
-    {
-      ms = intervals[0] + intervals[1] + intervals[2] + intervals[3];
-
-      /* ~25Hz on average. */
-      if (ms > 4*40)
-        {
-          if (window_impl)
-            [window_impl->toplevel flushWindow];
-
-          prev_tv = tv;
-        }
-    }
-  else
-    prev_tv = tv;
-#endif
 }
 
 static cairo_user_data_key_t gdk_quartz_cairo_key;
@@ -420,13 +365,14 @@ _gdk_quartz_window_process_updates_recurse (GdkWindow *window,
           /* In theory, we could skip the flush disabling, since we only
            * have one NSView.
            */
-          if (nswindow && ![nswindow isFlushWindowDisabled]) 
+          if (gdk_quartz_osx_version() < GDK_OSX_MOJAVE &&
+               nswindow && ![nswindow isFlushWindowDisabled])
             {
               [nswindow retain];
               [nswindow disableFlushWindow];
-              update_nswindows = g_slist_prepend (update_nswindows, nswindow);
             }
 #endif
+          update_nswindows = g_slist_prepend (update_nswindows, nswindow);
         }
     }
 
@@ -471,10 +417,12 @@ _gdk_quartz_display_after_process_all_updates (GdkDisplay *display)
 
       [[nswindow contentView] displayIfNeeded];
 
-      _gdk_quartz_window_flush (NULL);
 #if MAC_OS_X_VERSION_MIN_REQUIRED < 101400
-      [nswindow enableFlushWindow];
-      [nswindow flushWindow];
+      if(gdk_quartz_osx_version() < GDK_OSX_BIGSUR)
+        {
+          [nswindow enableFlushWindow];
+          [nswindow flushWindow];
+        }
 #endif
       [nswindow release];
 
