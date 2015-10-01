@@ -7544,7 +7544,7 @@ gtk_window_configure_event (GtkWidget         *widget,
   
   priv->configure_notify_received = TRUE;
 
-  gtk_widget_queue_resize (widget);
+  gtk_widget_queue_allocate (widget);
   gtk_container_queue_resize_handler (GTK_CONTAINER (widget));
   
   return TRUE;
@@ -9486,13 +9486,6 @@ gtk_window_move_resize (GtkWindow *window)
 	   * FIXME: we should also dequeue the pending redraws here, since
 	   * we handle those ourselves upon ->configure_notify_received==TRUE.
 	   */
-          G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-	  if (gtk_container_get_resize_mode (container) == GTK_RESIZE_QUEUE)
-	    {
-	      gtk_widget_queue_resize_no_redraw (widget);
-	      _gtk_container_dequeue_resize_handler (container);
-	    }
-          G_GNUC_END_IGNORE_DEPRECATIONS;
 	}
     }
   else
