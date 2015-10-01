@@ -1020,6 +1020,10 @@ gtk_application_new (const gchar       *application_id,
  *
  * Adds a window to @application.
  *
+ * This call can only happen after the @application has started;
+ * typically, you should add new application windows in response
+ * to the emission of the #GApplication::activate signal.
+ *
  * This call is equivalent to setting the #GtkWindow:application
  * property of @window to @application.
  *
@@ -1027,7 +1031,7 @@ gtk_application_new (const gchar       *application_id,
  * will remain until the window is destroyed, but you can explicitly
  * remove it with gtk_application_remove_window().
  *
- * GTK+ will keep the application running as long as it has
+ * GTK+ will keep the @application running as long as it has
  * any windows.
  *
  * Since: 3.0
@@ -1037,6 +1041,13 @@ gtk_application_add_window (GtkApplication *application,
                             GtkWindow      *window)
 {
   g_return_if_fail (GTK_IS_APPLICATION (application));
+
+  if (!g_application_get_is_registered (G_APPLICATION (application)))
+    {
+      g_critical ("New application windows must be added after the "
+                  "GApplication::startup signal has been emitted.");
+      return;
+    }
 
   if (!g_list_find (application->priv->windows, window))
     g_signal_emit (application,
