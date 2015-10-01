@@ -252,7 +252,7 @@
                              screen:screen];
 
   [self setAcceptsMouseMovedEvents:YES];
-  [self setDelegate:self];
+  [self setDelegate:(id)self];
   [self setReleasedWhenClosed:YES];
 
   return self;
