@@ -8799,7 +8799,12 @@ gtk_window_compute_configure_request_size (GtkWindow   *window,
     }
 
   /* Override any size with gtk_window_resize() values */
-  if (info)
+  if (priv->maximized || priv->fullscreen)
+    {
+      /* Unless we are maximized or fullscreen */
+      gtk_window_get_remembered_size (window, width, height);
+    }
+  else if (info)
     {
       if (info->resize_width > 0)
        *width = info->resize_width;
