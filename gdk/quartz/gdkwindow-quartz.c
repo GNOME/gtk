@@ -376,7 +376,6 @@ _gdk_quartz_display_before_process_all_updates (GdkDisplay *display)
 void
 _gdk_quartz_display_after_process_all_updates (GdkDisplay *display)
 {
-  GSList *old_update_nswindows = update_nswindows;
   GSList *tmp_list = update_nswindows;
 
   update_nswindows = NULL;
@@ -391,10 +390,8 @@ _gdk_quartz_display_after_process_all_updates (GdkDisplay *display)
       [nswindow flushWindow];
       [nswindow release];
 
-      tmp_list = tmp_list->next;
+      tmp_list = g_slist_remove_link (tmp_list, tmp_list);
     }
-
-  g_slist_free (old_update_nswindows);
 
   in_process_all_updates = FALSE;
 
