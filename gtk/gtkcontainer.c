@@ -1670,9 +1670,6 @@ gtk_container_destroy (GtkWidget *widget)
   GtkContainer *container = GTK_CONTAINER (widget);
   GtkContainerPrivate *priv = container->priv;
 
-  if (priv->resize_pending)
-    _gtk_container_dequeue_resize_handler (container);
-
   if (priv->restyle_pending)
     priv->restyle_pending = FALSE;
 
@@ -1899,15 +1896,6 @@ gtk_container_remove (GtkContainer *container,
 
   g_object_unref (widget);
   g_object_unref (container);
-}
-
-void
-_gtk_container_dequeue_resize_handler (GtkContainer *container)
-{
-  g_return_if_fail (GTK_IS_CONTAINER (container));
-  g_return_if_fail (container->priv->resize_pending);
-
-  container->priv->resize_pending = FALSE;
 }
 
 /**
