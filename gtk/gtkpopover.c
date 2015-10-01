@@ -871,6 +871,11 @@ gtk_popover_update_shape (GtkPopover *popover)
   GdkWindow *win;
   cairo_t *cr;
 
+#ifdef GDK_WINDOWING_WAYLAND
+  if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)))
+    return;
+#endif
+
   win = gtk_widget_get_window (widget);
   surface =
     gdk_window_create_similar_surface (win,
