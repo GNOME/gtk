@@ -3135,18 +3135,21 @@ gdk_root_window_impl_quartz_get_context (GdkWindowImplQuartz *window,
 {
   CGColorSpaceRef colorspace;
   CGContextRef cg_context;
-  GdkWindowImplQuartz *window_impl = GDK_WINDOW_IMPL_QUARTZ (window);
 
-  if (GDK_WINDOW_DESTROYED (window_impl->wrapper))
+  if (GDK_WINDOW_DESTROYED (window->wrapper))
     return NULL;
+
+  colorspace = CGDisplayCopyColorSpace (CGMainDisplayID ());
+  if (!colorspace)
+    colorspace = CGColorSpaceCreateDeviceRGB ();
 
   /* We do not have the notion of a root window on OS X.  We fake this
    * by creating a 1x1 bitmap and return a context to that.
    */
-  colorspace = CGColorSpaceCreateWithName (kCGColorSpaceGenericRGB);
   cg_context = CGBitmapContextCreate (NULL,
                                       1, 1, 8, 4, colorspace,
-                                      (CGBitmapInfo)kCGImageAlphaPremultipliedLast);
+                                      (CGBitmapInfo)(kCGBitmapByteOrder32Host | kCGImageAlphaPremultipliedLast));
+
   CGColorSpaceRelease (colorspace);
 
   return cg_context;
