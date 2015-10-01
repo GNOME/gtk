@@ -116,6 +116,12 @@ void       _gdk_quartz_display_get_maximal_cursor_size (GdkDisplay *display,
                                                         guint      *width,
                                                         guint      *height);
 
+/* Display methods - frame clock */
+void        _gdk_quartz_display_add_frame_callback    (GdkDisplay             *display,
+                                                       GdkWindow              *window);
+void        _gdk_quartz_display_remove_frame_callback (GdkDisplay             *display,
+                                                       GdkWindow              *window);
+
 /* Display methods - keymap */
 GdkKeymap * _gdk_quartz_display_get_keymap (GdkDisplay *display);
 
