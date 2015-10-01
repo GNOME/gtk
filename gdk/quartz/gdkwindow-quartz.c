@@ -44,8 +44,6 @@ static gboolean  in_process_all_updates = FALSE;
 
 static GSList *main_window_stack;
 
-void _gdk_quartz_window_flush (GdkWindowImplQuartz *window_impl);
-
 typedef struct
 {
   gint            x, y;
@@ -155,7 +153,7 @@ gdk_window_impl_quartz_release_context (GdkWindowImplQuartz *window_impl,
   /* See comment in gdk_quartz_window_get_context(). */
   if (window_impl->in_paint_rect_count == 0)
     {
-      _gdk_quartz_window_flush (window_impl);
+      [window_impl->toplevel flushWindow];
       [window_impl->view unlockFocus];
     }
 }
@@ -217,47 +215,6 @@ gdk_window_impl_quartz_finalize (GObject *object)
     g_object_unref (impl->transient_for);
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
-}
-
-/* Help preventing "beam sync penalty" where CG makes all graphics code
- * block until the next vsync if we try to flush (including call display on
- * a view) too often. We do this by limiting the manual flushing done
- * outside of expose calls to less than some frequency when measured over
- * the last 4 flushes. This is a bit arbitray, but seems to make it possible
- * for some quick manual flushes (such as gtkruler or gimp’s marching ants)
- * without hitting the max flush frequency.
- *
- * If drawable NULL, no flushing is done, only registering that a flush was
- * done externally.
- */
-void
-_gdk_quartz_window_flush (GdkWindowImplQuartz *window_impl)
-{
-  static struct timeval prev_tv;
-  static gint intervals[4];
-  static gint index;
-  struct timeval tv;
-  gint ms;
-
-  gettimeofday (&tv, NULL);
-  ms = (tv.tv_sec - prev_tv.tv_sec) * 1000 + (tv.tv_usec - prev_tv.tv_usec) / 1000;
-  intervals[index++ % 4] = ms;
-
-  if (window_impl)
-    {
-      ms = intervals[0] + intervals[1] + intervals[2] + intervals[3];
-
-      /* ~25Hz on average. */
-      if (ms > 4*40)
-        {
-          if (window_impl)
-            [window_impl->toplevel flushWindow];
-
-          prev_tv = tv;
-        }
-    }
-  else
-    prev_tv = tv;
 }
 
 static cairo_user_data_key_t gdk_quartz_cairo_key;
@@ -429,8 +386,6 @@ _gdk_quartz_display_after_process_all_updates (GdkDisplay *display)
       NSWindow *nswindow = tmp_list->data;
 
       [[nswindow contentView] displayIfNeeded];
-
-      _gdk_quartz_window_flush (NULL);
 
       [nswindow enableFlushWindow];
       [nswindow flushWindow];
