@@ -5632,7 +5632,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gtk_container_queue_resize_handler (GTK_CONTAINER (widget));
 G_GNUC_END_IGNORE_DEPRECATIONS;
     }
-  else
+  else if (_gtk_widget_get_visible (widget))
     {
       GtkWidget *parent = _gtk_widget_get_parent (widget);
       if (parent)
