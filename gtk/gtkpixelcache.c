@@ -18,8 +18,14 @@
 #include "config.h"
 
 #include "gtkdebug.h"
+#include "gtkstylecontextprivate.h"
 #include "gtkpixelcacheprivate.h"
 #include "gtkstylecontextprivate.h"
+
+#ifdef GDK_WINDOWING_QUARTZ
+# include <cairo/cairo-quartz.h>
+# include <gdk/quartz/gdkquartz.h>
+#endif
 
 #define BLOW_CACHE_TIMEOUT_SEC 20
 
@@ -243,6 +249,18 @@ _gtk_pixel_cache_create_surface_if_needed (GtkPixelCache         *cache,
       cache->surface =
         gdk_window_create_similar_surface (window, content,
                                            surface_w, surface_h);
+
+#ifdef GDK_WINDOWING_QUARTZ
+      if (GDK_IS_QUARTZ_WINDOW (window))
+        {
+          cairo_surface_t *base;
+
+          base = cache->surface;
+          cache->surface = cairo_quartz_surface_create_cg_layer (base, content, surface_w, surface_h);
+          cairo_surface_destroy (base);
+        }
+#endif
+
       rect.x = 0;
       rect.y = 0;
       rect.width = surface_w;
