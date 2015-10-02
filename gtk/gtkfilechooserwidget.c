@@ -4646,7 +4646,10 @@ browse_files_model_finished_loading_cb (GtkFileSystemModel   *model,
   profile_start ("start", NULL);
 
   if (error)
-    show_error_on_reading_current_folder (impl, error);
+    {
+      set_busy_cursor (impl, FALSE);
+      show_error_on_reading_current_folder (impl, error);
+    }
 
   if (priv->load_state == LOAD_PRELOAD)
     {
