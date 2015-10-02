@@ -590,6 +590,11 @@ gtk_application_load_resources (GtkApplication *application)
   }
 }
 
+static void
+gtk_application_quit_cb (GApplication *g_application)
+{
+  g_application_quit (g_application);
+}
 
 static void
 gtk_application_startup (GApplication *g_application)
@@ -607,6 +612,18 @@ gtk_application_startup (GApplication *g_application)
   gtk_application_impl_startup (application->priv->impl, application->priv->register_session);
 
   gtk_application_load_resources (application);
+
+  {
+    static const char *quit_accels[2] = { "<Primary>q", NULL };
+
+    GAction *quit_action = g_simple_action_new ("quit", NULL);
+    g_signal_connect_swapped (quit_action, "activate", G_CALLBACK (gtk_application_quit_cb), application);
+
+    g_action_map_add_action (G_ACTION_MAP (application), quit_action);
+    g_object_unref (quit_action);
+
+    gtk_application_set_accels_for_action (application, "app.quit", quit_accels);
+  }
 }
 
 static void
