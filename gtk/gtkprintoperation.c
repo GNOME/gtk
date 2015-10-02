@@ -1606,6 +1606,7 @@ gtk_print_operation_set_job_name (GtkPrintOperation *op,
 				  const gchar       *job_name)
 {
   GtkPrintOperationPrivate *priv;
+  gchar *end;
 
   g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
   g_return_if_fail (job_name != NULL);
@@ -1613,7 +1614,25 @@ gtk_print_operation_set_job_name (GtkPrintOperation *op,
   priv = op->priv;
 
   g_free (priv->job_name);
-  priv->job_name = g_strdup (job_name);
+  /*
+   * according to http://datatracker.ietf.org/doc/rfc2911/,
+   * job names MUST NOT exceed 255 (MAX) octets.
+   *
+   * CUPS will not print jobs with names exceeding 255 chars.
+   */
+  if (strlen (job_name) > 255)
+    {
+      end = g_utf8_find_prev_char (job_name, job_name + 255);
+      priv->job_name = g_utf8_substring (job_name,
+                                         0,
+                                         g_utf8_pointer_to_offset (job_name,
+                                                                   end));
+    }
+  else
+    {
+      priv->job_name = g_strdup (job_name);
+    }
+
 
   g_object_notify (G_OBJECT (op), "job-name");
 }
