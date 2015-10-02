@@ -1,3 +1,51 @@
+Overview of Changes in GTK+ 3.18.1
+==================================
+
+* Speed up rounded rectangle drawing by caching arcs
+
+* Make popover animations faster
+
+* Bug fixes:
+ 582747 Print dialog sets wrong printer options
+ 751368 wayland: gnome-terminal does not fill entire area when fullscreen...
+ 751787 Images of refresh button and logo are pixelated on scaled outputs
+ 753628 user options of wrong printer are used
+ 755038 Add some (nullable) annotations to gtkmain.c
+ 755215 Crash when renaming a sidebar’s folder (function that shouldn’t b...
+ 755268 [HighContrast] GtkPlacesSidebar’s “eject” button should probably ...
+ 755432 gtkapplication: segfault when destroying window
+ 755435 Optimize GtkPopover positioning
+ 755444 Rename bookmark crashes nautilus
+ 755455 undefined reference to `__builtin_popcount'
+ 755473 segfault freeing popover from no parent
+ 755528 Popover transitions are rather slow
+ 755691 /bitmask/invert_range_hardcoded test fails
+ 755692 gtk-demo bad return value for the callback function for the "comm...
+ 755926 Directory navigation awkward with search in the file chooser
+ 755931 File chooser: interactive search drops the 1st character when use...
+ 755954 Crash when accessing Gtk.Application.add_window()
+        Robustness fixes in GtkAppChooser
+        Avoid showing duplicate entries in GtkAppChooser
+        Inspector: ellipsize accessible names
+
+* Translation updates:
+ Arabic
+ Bosnian
+ Finnish
+ German
+ Hebrew
+ Irish
+ Italian
+ Khmer
+ Kikongo
+ Russian
+ Serbian
+ Serbian Latin
+ Tajik
+ Uyghur
+ Vietnamese
+
+
 Overview of Changes in GTK+ 3.18.0
 ==================================
 
