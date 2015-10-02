@@ -1353,6 +1353,13 @@ browse_files_key_press_event_cb (GtkWidget   *widget,
         }
     }
 
+  if (event->keyval == GDK_KEY_Escape &&
+      priv->operation_mode == OPERATION_MODE_SEARCH)
+    {
+      gtk_search_entry_handle_event (GTK_SEARCH_ENTRY (priv->search_entry), (GdkEvent *)event);
+      return TRUE;
+    }
+
   return FALSE;
 }
 
@@ -7074,6 +7081,10 @@ search_engine_hits_added_cb (GtkSearchEngine      *engine,
 {
   GList *l, *files, *files_with_info, *infos;
   GFile *file;
+  gboolean select = FALSE;
+
+  if (gtk_tree_model_iter_n_children (GTK_TREE_MODEL (impl->priv->search_model), NULL) == 0)
+    select = TRUE;
 
   files = NULL;
   files_with_info = NULL;
@@ -7101,6 +7112,8 @@ search_engine_hits_added_cb (GtkSearchEngine      *engine,
   g_list_free_full (infos, g_object_unref);
 
   gtk_stack_set_visible_child_name (GTK_STACK (impl->priv->browse_files_stack), "list");
+  if (select)
+    gtk_widget_grab_focus (impl->priv->browse_files_tree_view);
 }
 
 /* Callback used from GtkSearchEngine when the query is done running */
@@ -7121,7 +7134,10 @@ search_engine_finished_cb (GtkSearchEngine *engine,
     }
 
   if (gtk_tree_model_iter_n_children (GTK_TREE_MODEL (priv->search_model), NULL) == 0)
-    gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_files_stack), "empty");
+    {
+      gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_files_stack), "empty");
+      gtk_entry_grab_focus_without_selecting (GTK_ENTRY (priv->search_entry));
+    }
 }
 
 /* Displays a generic error when we cannot create a GtkSearchEngine.
