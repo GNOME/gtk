@@ -3128,11 +3128,11 @@ operation_mode_set_search (GtkFileChooserWidget *impl)
       gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_files_stack), "list");
     }
 
+  gtk_entry_grab_focus_without_selecting (GTK_ENTRY (priv->search_entry));
   gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_header_stack), "search");
   gtk_revealer_set_reveal_child (GTK_REVEALER (priv->browse_header_revealer), TRUE);
   location_bar_update (impl);
   search_setup_widgets (impl);
-  gtk_entry_grab_focus_without_selecting (GTK_ENTRY (priv->search_entry));
   gtk_widget_set_sensitive (priv->filter_combo, FALSE);
 }
 
