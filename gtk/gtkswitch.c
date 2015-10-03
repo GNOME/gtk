@@ -52,6 +52,8 @@
 #include "a11y/gtkswitchaccessible.h"
 #include "gtkactionhelper.h"
 #include "gtkwidgetprivate.h"
+#include "gtkcssshadowsvalueprivate.h"
+#include "gtkstylecontextprivate.h"
 
 #include "fallback-c89.c"
 
@@ -447,6 +449,9 @@ gtk_switch_size_allocate (GtkWidget     *widget,
                           GtkAllocation *allocation)
 {
   GtkSwitchPrivate *priv = GTK_SWITCH (widget)->priv;
+  GtkStyleContext *context;
+  GtkBorder extents;
+  GtkAllocation clip;
 
   gtk_widget_set_allocation (widget, allocation);
 
@@ -457,7 +462,26 @@ gtk_switch_size_allocate (GtkWidget     *widget,
                             allocation->width,
                             allocation->height);
 
-  _gtk_widget_set_simple_clip (widget, NULL);
+  context = gtk_widget_get_style_context (widget);
+
+  gtk_style_context_save (context);
+
+  gtk_style_context_remove_class (context, GTK_STYLE_CLASS_TROUGH);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_SLIDER);
+
+  _gtk_css_shadows_value_get_extents (_gtk_style_context_peek_property (context,
+                                                                        GTK_CSS_PROPERTY_BOX_SHADOW),
+                                      &extents);
+
+  gtk_style_context_restore (context);
+
+  clip = *allocation;
+  clip.x -= extents.left;
+  clip.y -= extents.top;
+  clip.width += extents.left + extents.right;
+  clip.height += extents.top + extents.bottom;
+
+  _gtk_widget_set_simple_clip (widget, &clip);
 }
 
 static void
