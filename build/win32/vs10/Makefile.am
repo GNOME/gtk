@@ -54,12 +54,15 @@ EXTRA_DIST += \
 	gailutil-3.vcxprojin			\
 	gailutil-3.vcxproj.filtersin		\
 	gtk3-install.vcxproj			\
-	gtk3-build-defines.props			\
+	gtk3-build-defines.props		\
 	gtk3-copy-gdk-broadway.props		\
 	gtk3-gen-srcs.props			\
 	gtk3-ignore-broadway.props		\
 	gtk3-install.propsin			\
 	gtk3-version-paths.props.in		\
+	$(GENERATED_ITEMS)
+
+DISTCLEANFILES = \
 	$(GENERATED_ITEMS)
 
 gtk3-install.props: $(top_srcdir)/build/win32/vs10/gtk3-install.propsin $(MSVC10_HEADERS_LISTS)
