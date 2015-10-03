@@ -366,6 +366,46 @@ test_widget_path_parent (void)
   g_object_unref (context);
 }
 
+static void
+test_style_classes (void)
+{
+  GtkStyleContext *context;
+  GList *classes;
+
+  context = gtk_style_context_new ();
+
+  classes = gtk_style_context_list_classes (context);
+  g_assert_null (classes);
+
+  gtk_style_context_add_class (context, "A");
+
+  classes = gtk_style_context_list_classes (context);
+  g_assert (classes);
+  g_assert_null (classes->next);
+  g_assert_cmpstr (classes->data, ==, "A");
+  g_list_free (classes);
+
+  gtk_style_context_add_class (context, "B");
+
+  classes = gtk_style_context_list_classes (context);
+  g_assert (classes);
+  g_assert_cmpstr (classes->data, ==, "A");
+  g_assert (classes->next);
+  g_assert_cmpstr (classes->next->data, ==, "B");
+  g_assert_null (classes->next->next);
+  g_list_free (classes);
+
+  gtk_style_context_remove_class (context, "A");
+
+  classes = gtk_style_context_list_classes (context);
+  g_assert (classes);
+  g_assert_null (classes->next);
+  g_assert_cmpstr (classes->data, ==, "B");
+  g_list_free (classes);
+
+  g_object_unref (context);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -379,6 +419,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/style/invalidate-saved", test_invalidate_saved);
   g_test_add_func ("/style/set-widget-path-saved", test_set_widget_path_saved);
   g_test_add_func ("/style/widget-path-parent", test_widget_path_parent);
+  g_test_add_func ("/style/classes", test_style_classes);
 
   return g_test_run ();
 }
