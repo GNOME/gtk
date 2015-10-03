@@ -1,2 +1,2 @@
 ERROR: gtk-builder-error-quark 6
-.:5:41 Could not parse double `xyzzy'
+.:5:41 Could not parse double 'xyzzy'
