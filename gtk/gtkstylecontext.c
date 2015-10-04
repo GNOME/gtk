@@ -1354,7 +1354,7 @@ gtk_style_context_list_classes (GtkStyleContext *context)
 
   classes = gtk_css_node_list_classes (context->priv->cssnode, &n_classes);
   for (i = n_classes; i > 0; i--)
-    classes_list = g_list_prepend (classes_list, g_quark_to_string (classes[i - 1]));
+    classes_list = g_list_prepend (classes_list, (gchar *)g_quark_to_string (classes[i - 1]));
 
   return classes_list;
 }
