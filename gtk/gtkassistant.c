@@ -88,6 +88,7 @@ struct _GtkAssistantPage
 
   gchar *title;
 
+  GtkWidget *box;
   GtkWidget *page;
   GtkWidget *regular_title;
   GtkWidget *current_title;
@@ -184,7 +185,7 @@ static void       on_assistant_cancel                        (GtkWidget     *wid
 							      GtkAssistant  *assistant);
 static void       on_assistant_last                          (GtkWidget     *widget,
 							      GtkAssistant  *assistant);
-static void       assistant_remove_page_cb                   (GtkNotebook   *notebook,
+static void       assistant_remove_page_cb                   (GtkContainer  *container,
 							      GtkWidget     *page,
 							      GtkAssistant  *assistant);
 
@@ -1113,7 +1114,7 @@ on_page_notify_visibility (GtkWidget  *widget,
 }
 
 static void
-assistant_remove_page_cb (GtkNotebook  *notebook,
+assistant_remove_page_cb (GtkContainer *container,
                           GtkWidget    *page,
                           GtkAssistant *assistant)
 {
@@ -1121,15 +1122,6 @@ assistant_remove_page_cb (GtkNotebook  *notebook,
   GtkAssistantPage *page_info;
   GList *page_node;
   GList *element;
-
-  if (GTK_IS_BOX (page))
-    {
-      GList *children;
-
-      children = gtk_container_get_children (GTK_CONTAINER (page));
-      page = GTK_WIDGET (children->data);
-      g_list_free (children);
-    }
 
   element = find_page (assistant, page);
   if (!element)
@@ -1367,7 +1359,7 @@ find_page (GtkAssistant  *assistant,
   while (child)
     {
       GtkAssistantPage *page_info = child->data;
-      if (page_info->page == page)
+      if (page_info->page == page || page_info->box == page)
         return child;
 
       child = child->next;
@@ -1816,8 +1808,11 @@ gtk_assistant_insert_page (GtkAssistant *assistant,
   gtk_widget_show (box);
   gtk_box_pack_start (GTK_BOX (box), page, TRUE, TRUE, 0);
   g_object_set (box, "margin", 12, NULL);
+  g_signal_connect (box, "remove", G_CALLBACK (assistant_remove_page_cb), assistant);
 
   gtk_notebook_insert_page (GTK_NOTEBOOK (priv->content), box, NULL, position);
+
+  page_info->box = box;
 
   if (gtk_widget_get_mapped (GTK_WIDGET (assistant)))
     {
@@ -2415,7 +2410,7 @@ gtk_assistant_set_page_has_padding (GtkAssistant *assistant,
     {
       page_info->has_padding = has_padding;
 
-      g_object_set (gtk_widget_get_parent (page),
+      g_object_set (page_info->box,
                     "margin", has_padding ? 12 : 0,
                     NULL);
 
