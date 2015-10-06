@@ -638,7 +638,8 @@ gdk_x11_gl_context_realize (GdkGLContext  *context,
   compat_bit = gdk_gl_context_get_forward_compatible (context);
 
   /* If there is no glXCreateContextAttribsARB() then we default to legacy */
-  legacy_bit = !GDK_X11_DISPLAY (display)->has_glx_create_context;
+  legacy_bit = !GDK_X11_DISPLAY (display)->has_glx_create_context ||
+               (_gdk_gl_flags & GDK_GL_LEGACY) != 0;
 
   /* We cannot share legacy contexts with core profile ones, so the
    * shared context is the one that decides if we're going to create
