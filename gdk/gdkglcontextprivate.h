@@ -67,6 +67,8 @@ typedef struct {
   GdkGLContextProgram texture_rect_quad_program;
 
   GdkGLContextProgram *current_program;
+
+  guint is_legacy : 1;
 } GdkGLContextPaintData;
 
 void                    gdk_gl_context_set_is_legacy            (GdkGLContext    *context,
