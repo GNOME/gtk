@@ -80,7 +80,7 @@ create_shader (int type, const char *src)
   return shader;
 }
 
-static const char *vertex_shader_code =
+static const char *vertex_shader_code_330 =
 "#version 330\n" \
 "\n" \
 "layout(location = 0) in vec4 position;\n" \
@@ -89,7 +89,16 @@ static const char *vertex_shader_code =
 "  gl_Position = mvp * position;\n" \
 "}";
 
-static const char *fragment_shader_code =
+static const char *vertex_shader_code_legacy =
+"#version 130\n" \
+"\n" \
+"attribute vec4 position;\n" \
+"uniform mat4 mvp;\n" \
+"void main() {\n" \
+"  gl_Position = mvp * position;\n" \
+"}";
+
+static const char *fragment_shader_code_330 =
 "#version 330\n" \
 "\n" \
 "out vec4 outputColor;\n" \
@@ -98,8 +107,18 @@ static const char *fragment_shader_code =
 "  outputColor = mix(vec4(1.0f, 0.85f, 0.35f, 1.0f), vec4(0.2f, 0.2f, 0.2f, 1.0f), lerpVal);\n" \
 "}";
 
+static const char *fragment_shader_code_legacy =
+"#version 130\n" \
+"\n" \
+"void main() {\n" \
+"  float lerpVal = gl_FragCoord.y / 400.0f;\n" \
+"  gl_FragColor = mix(vec4(1.0f, 0.85f, 0.35f, 1.0f), vec4(0.2f, 0.2, 0.2f, 1.0f), lerpVal);\n" \
+"}";
+
 static void
-init_shaders (GLuint *program_out,
+init_shaders (const char *vertex_shader_code,
+              const char *fragment_shader_code,
+              GLuint *program_out,
               GLuint *mvp_out)
 {
   GLuint vertex, fragment;
@@ -215,16 +234,37 @@ static GLuint mvp_location;
 static void
 realize (GtkWidget *widget)
 {
+  const char *fragment, *vertex;
+  GdkGLContext *context;
+
   gtk_gl_area_make_current (GTK_GL_AREA (widget));
 
+  if (gtk_gl_area_get_error (GTK_GL_AREA (widget)) != NULL)
+    return;
+
+  context = gtk_gl_area_get_context (GTK_GL_AREA (widget));
+  if (!gdk_gl_context_is_legacy (context))
+    {
+      vertex = vertex_shader_code_330;
+      fragment = fragment_shader_code_330;
+    }
+  else
+    {
+      vertex = vertex_shader_code_legacy;
+      fragment = fragment_shader_code_legacy;
+    }
+
   init_buffers (&position_buffer, NULL);
-  init_shaders (&program, &mvp_location);
+  init_shaders (vertex, fragment, &program, &mvp_location);
 }
 
 static void
 unrealize (GtkWidget *widget)
 {
   gtk_gl_area_make_current (GTK_GL_AREA (widget));
+
+  if (gtk_gl_area_get_error (GTK_GL_AREA (widget)) != NULL)
+    return;
 
   glDeleteBuffers (1, &position_buffer);
   glDeleteProgram (program);
