@@ -1191,14 +1191,13 @@ keyboard_handle_leave (void               *data,
   GdkEvent *event;
   GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (device->display);
 
-  if (!surface)
-    return;
-
-  if (!GDK_IS_WINDOW (wl_surface_get_user_data (surface)))
-    return;
-
   if (!device->keyboard_focus)
     return;
+
+  /* gdk_window_is_destroyed() might already return TRUE for
+   * device->keyboard_focus here, which would happen if we destroyed the
+   * window before loosing keyboard focus.
+   */
 
   stop_key_repeat (device);
 
