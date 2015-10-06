@@ -103,6 +103,7 @@ typedef struct {
   guint extensions_checked : 1;
   guint debug_enabled : 1;
   guint forward_compatible : 1;
+  guint is_legacy : 1;
 
   GdkGLContextPaintData *paint_data;
 } GdkGLContextPrivate;
@@ -552,6 +553,38 @@ gdk_gl_context_get_required_version (GdkGLContext *context,
     *major = maj;
   if (minor != NULL)
     *minor = min;
+}
+
+/**
+ * gdk_gl_context_is_legacy:
+ * @context: a #GdkGLContext
+ *
+ * Whether the #GdkGLContext is in legacy mode or not.
+ *
+ * The #GdkGLContext must be realized.
+ *
+ * Returns: %TRUE if the GL context is in legacy mode
+ *
+ * Since: 3.20
+ */
+gboolean
+gdk_gl_context_is_legacy (GdkGLContext *context)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+
+  g_return_val_if_fail (GDK_IS_GL_CONTEXT (context), FALSE);
+  g_return_val_if_fail (priv->realized, FALSE);
+
+  return priv->is_legacy;
+}
+
+void
+gdk_gl_context_set_is_legacy (GdkGLContext *context,
+                              gboolean      is_legacy)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+
+  priv->is_legacy = !!is_legacy;
 }
 
 /**

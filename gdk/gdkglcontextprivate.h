@@ -69,6 +69,9 @@ typedef struct {
   GdkGLContextProgram *current_program;
 } GdkGLContextPaintData;
 
+void                    gdk_gl_context_set_is_legacy            (GdkGLContext    *context,
+                                                                 gboolean         is_legacy);
+
 void                    gdk_gl_context_upload_texture           (GdkGLContext    *context,
                                                                  cairo_surface_t *image_surface,
                                                                  int              width,

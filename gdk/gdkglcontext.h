@@ -52,6 +52,8 @@ GDK_AVAILABLE_IN_3_16
 void                    gdk_gl_context_get_version              (GdkGLContext  *context,
                                                                  int           *major,
                                                                  int           *minor);
+GDK_AVAILABLE_IN_3_20
+gboolean                gdk_gl_context_is_legacy                (GdkGLContext  *context);
 
 GDK_AVAILABLE_IN_3_16
 void                    gdk_gl_context_set_required_version     (GdkGLContext  *context,
