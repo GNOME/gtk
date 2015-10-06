@@ -698,6 +698,8 @@ static void
 do_post_parse_initialization (int    *argc,
                               char ***argv)
 {
+  GdkDisplayManager *display_manager;
+
   if (gtk_initialized)
     return;
 
@@ -737,7 +739,11 @@ do_post_parse_initialization (int    *argc,
       _gtk_modules_init (argc, argv, NULL);
     }
 
-  g_signal_connect (gdk_display_manager_get (), "notify::default-display",
+  display_manager = gdk_display_manager_get ();
+  if (gdk_display_manager_get_default_display (display_manager) != NULL)
+    _gtk_accessibility_init ();
+
+  g_signal_connect (display_manager, "notify::default-display",
                     G_CALLBACK (default_display_notify_cb),
                     NULL);
 }
