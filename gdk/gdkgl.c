@@ -147,8 +147,26 @@ bind_vao (GdkGLContextPaintData *paint_data)
 static void
 use_texture_2d_program (GdkGLContextPaintData *paint_data)
 {
-  static const char *vertex_shader_code =
+  static const char *vertex_shader_code_150 =
     "#version 150\n"
+    "uniform sampler2D map;"
+    "in vec2 position;\n"
+    "in vec2 uv;\n"
+    "out vec2 vUv;\n"
+    "void main() {\n"
+    "  gl_Position = vec4(position, 0, 1);\n"
+    "  vUv = uv;\n"
+    "}\n";
+  static const char *fragment_shader_code_150 =
+    "#version 150\n"
+    "in vec2 vUv;\n"
+    "out vec4 vertexColor;\n"
+    "uniform sampler2D map;\n"
+    "void main() {\n"
+    "  vertexColor = texture2D (map, vUv);\n"
+    "}\n";
+  static const char *vertex_shader_code_130 =
+    "#version 130\n"
     "uniform sampler2D map;"
     "attribute vec2 position;\n"
     "attribute vec2 uv;\n"
@@ -157,13 +175,20 @@ use_texture_2d_program (GdkGLContextPaintData *paint_data)
     "  gl_Position = vec4(position, 0, 1);\n"
     "  vUv = uv;\n"
     "}\n";
-  static const char *fragment_shader_code =
-    "#version 150\n"
+  static const char *fragment_shader_code_130 =
+    "#version 130\n"
     "varying vec2 vUv;\n"
     "uniform sampler2D map;\n"
     "void main() {\n"
     "  gl_FragColor = texture2D (map, vUv);\n"
     "}\n";
+
+  const char *vertex_shader_code = paint_data->is_legacy
+                                 ? vertex_shader_code_130
+                                 : vertex_shader_code_150;
+  const char *fragment_shader_code = paint_data->is_legacy
+                                   ? fragment_shader_code_130
+                                   : fragment_shader_code_150;
 
   if (paint_data->texture_2d_quad_program.program == 0)
     make_program (&paint_data->texture_2d_quad_program, vertex_shader_code, fragment_shader_code);
@@ -178,9 +203,9 @@ use_texture_2d_program (GdkGLContextPaintData *paint_data)
 static void
 use_texture_rect_program (GdkGLContextPaintData *paint_data)
 {
-  static const char *vertex_shader_code =
+  static const char *vertex_shader_code_150 =
     "#version 150\n"
-    "uniform sampler2DRect map;"
+    "uniform sampler2DRect map;\n"
     "attribute vec2 position;\n"
     "attribute vec2 uv;\n"
     "varying vec2 vUv;\n"
@@ -188,13 +213,37 @@ use_texture_rect_program (GdkGLContextPaintData *paint_data)
     "  gl_Position = vec4(position, 0, 1);\n"
     "  vUv = uv;\n"
     "}\n";
-  static const char *fragment_shader_code =
+  static const char *fragment_shader_code_150 =
     "#version 150\n"
     "varying vec2 vUv;\n"
     "uniform sampler2DRect map;\n"
     "void main() {\n"
     "  gl_FragColor = texture2DRect (map, vUv);\n"
     "}\n";
+  static const char *vertex_shader_code_130 =
+    "#version 130\n"
+    "uniform sampler2DRect map;\n"
+    "attribute vec2 position;\n"
+    "attribute vec2 uv;\n"
+    "varying vec2 vUv;\n"
+    "void main() {\n"
+    "  gl_Position = vec4(position, 0, 1);\n"
+    "  vUv = uv;\n"
+    "}\n";
+  static const char *fragment_shader_code_130 =
+    "#version 130\n"
+    "varying vec2 vUv;\n"
+    "uniform sampler2DRect map;\n"
+    "void main() {\n"
+    "  gl_FragColor = texture2DRect (map, vUv);\n"
+    "}\n";
+
+  const char *vertex_shader_code = paint_data->is_legacy
+                                 ? vertex_shader_code_130
+                                 : vertex_shader_code_150;
+  const char *fragment_shader_code = paint_data->is_legacy
+                                   ? fragment_shader_code_130
+                                   : fragment_shader_code_150;
 
   if (paint_data->texture_rect_quad_program.program == 0)
     make_program (&paint_data->texture_rect_quad_program, vertex_shader_code, fragment_shader_code);
