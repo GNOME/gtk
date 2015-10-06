@@ -345,7 +345,10 @@ gdk_gl_context_get_paint_data (GdkGLContext *context)
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
 
   if (priv->paint_data == NULL)
-    priv->paint_data = g_new0 (GdkGLContextPaintData, 1);
+    {
+      priv->paint_data = g_new0 (GdkGLContextPaintData, 1);
+      priv->paint_data->is_legacy = priv->is_legacy;
+    }
 
   return priv->paint_data;
 }
