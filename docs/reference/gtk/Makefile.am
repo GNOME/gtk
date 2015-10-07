@@ -315,7 +315,8 @@ content_files =					\
 	input-handling.xml			\
 	visual_index.xml			\
 	getting_started.xml			\
-	overview.xml
+	overview.xml 				\
+	gtk-query-settings.xml
 
 expand_content_files = 				\
 	compiling.sgml				\
@@ -499,7 +500,8 @@ man_MANS = 				\
 	gtk3-widget-factory.1		\
 	gtk3-icon-browser.1		\
 	broadwayd.1			\
-	gtk-builder-tool.1
+	gtk-builder-tool.1 		\
+	gtk-query-settings.1
 
 if ENABLE_MAN
 

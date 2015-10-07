@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+               "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+]>
+<refentry id="gtk-query-settings">
+
+<refentryinfo>
+  <title>gtk-query-settings</title>
+  <productname>GTK+</productname>
+  <authorgroup>
+    <author>
+      <contrib>Developer</contrib>
+      <firstname>Timm</firstname>
+      <surname>Bäder</surname>
+    </author>
+  </authorgroup>
+</refentryinfo>
+
+<refmeta>
+  <refentrytitle>gtk-query-settings</refentrytitle>
+  <manvolnum>1</manvolnum>
+  <refmiscinfo class="manual">User Commands</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+  <refname>gtk-query-settings</refname>
+  <refpurpose>Utility to print name and value of all GtkSettings properties</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+<cmdsynopsis>
+<command>gtk-query-settings</command>
+<arg choice="opt"><replaceable>PATTERN</replaceable></arg>
+</cmdsynopsis>
+</refsynopsisdiv>
+
+<refsect1><title>Description</title>
+<para>
+  <command>gtk-query-settings</command> prints both name and value of all properties
+  available in the GtkSettings class. Optionally, you can filter which properties
+  to list by specifying a PATTERN.
+</para>
+</refsect1>
+
+</refentry>

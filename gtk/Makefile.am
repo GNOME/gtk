@@ -1404,6 +1404,7 @@ bin_PROGRAMS = \
 	gtk-update-icon-cache \
 	gtk-encode-symbolic-svg \
 	gtk-builder-tool \
+	gtk-query-settings \
 	gtk-launch
 
 gtk_query_immodules_3_0_SOURCES = queryimmodules.c
@@ -1424,6 +1425,12 @@ gtk_encode_symbolic_svg_LDADD =			\
 
 gtk_builder_tool_SOURCES = gtk-builder-tool.c
 gtk_builder_tool_LDADD =			\
+	libgtk-3.la				\
+	$(top_builddir)/gdk/libgdk-3.la		\
+	$(GTK_DEP_LIBS)
+
+gtk_query_settings_SOURCES = gtk-query-settings.c
+gtk_query_settings_LDADD= 			\
 	libgtk-3.la				\
 	$(top_builddir)/gdk/libgdk-3.la		\
 	$(GTK_DEP_LIBS)
