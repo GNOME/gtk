@@ -2059,7 +2059,7 @@ column-header .titlebar .button.titlebutton,
  * Popovers   *
  ***************/
 .popover {
-  padding: 2px;
+  padding: 3px;
   border: 1px solid #1c1f1f;
   border-radius: 5px;
   background-color: #313434;
