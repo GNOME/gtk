@@ -774,17 +774,16 @@ $_dot_color: if($variant=='light', $selected_bg_color,
 }
 
 /* menu buttons */
-.menuitem.button {
-  .label {
+.menuitem.button.flat {
+ .label {
     padding-left: 0;  // label side paddings here need to be reset
     padding-right: 0; //
   }
-  &.flat {
-    @extend %undecorated_button;
-    outline-offset: -1px;
-    &:hover { background-color: mix($fg_color, $bg_color, 10%); }
-    &:selected { @extend %selected_items; }
-    &:backdrop, &:backdrop:hover {
+  @extend %undecorated_button;
+  outline-offset: -1px;
+  &:hover { background-color: mix($fg_color, $bg_color, 10%); }
+  &:selected { @extend %selected_items; }
+  &:backdrop, &:backdrop:hover {
     @extend %undecorated_button;
   }
 }
