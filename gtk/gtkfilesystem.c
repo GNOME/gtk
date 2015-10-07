@@ -947,7 +947,10 @@ _gtk_file_consider_as_remote (GFile *file)
       const gchar *type;
 
       type = g_file_info_get_attribute_string (info, "filesystem::type");
-      is_remote = g_strv_contains (remote_types, type);
+      if (type != NULL)
+        is_remote = g_strv_contains (remote_types, type);
+      else
+        is_remote = FALSE;
 
       g_object_unref (info);
     }
