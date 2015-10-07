@@ -564,7 +564,20 @@ gdk_gl_context_get_required_version (GdkGLContext *context,
  *
  * Whether the #GdkGLContext is in legacy mode or not.
  *
- * The #GdkGLContext must be realized.
+ * The #GdkGLContext must be realized before calling this function.
+ *
+ * When realizing a GL context, GDK will try to use the OpenGL 3.2 core
+ * profile; this profile removes all the OpenGL API that was deprecated
+ * prior to the 3.2 version of the specification. If the realization is
+ * successful, this function will return %FALSE.
+ *
+ * If the underlying OpenGL implementation does not support core profiles,
+ * GDK will fall back to a pre-3.2 compatibility profile, and this function
+ * will return %TRUE.
+ *
+ * You can use the value returned by this function to decide which kind
+ * of OpenGL API to use, or whether to do extension discovery, or what
+ * kind of shader programs to load.
  *
  * Returns: %TRUE if the GL context is in legacy mode
  *
