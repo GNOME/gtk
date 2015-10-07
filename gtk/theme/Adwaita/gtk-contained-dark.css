@@ -154,7 +154,7 @@ GtkTextView {
  ****************/
 .entry {
   border: 1px solid;
-  padding: 4px 8px 5px;
+  padding: 6px 12px 7px;
   border-radius: 3px;
   transition: all 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
   background-color: transparent;
@@ -314,7 +314,7 @@ GtkTextView {
     background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(#215d9c), to(transparent)); } }
 .button, .header-bar .button.titlebutton,
 .titlebar .button.titlebutton {
-  padding: 4px;
+  padding: 6px;
   border: 1px solid;
   border-radius: 3px;
   transition: all 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -945,13 +945,13 @@ GtkTextView {
     padding-left: 0; }
   .stack-switcher > .button, .header-bar .stack-switcher > .button.titlebutton,
   .titlebar .stack-switcher > .button.titlebutton {
-    padding: 4px;
+    padding: 6px;
     outline-offset: -3px; }
     .stack-switcher > .button > GtkImage, .header-bar .stack-switcher > .button.titlebutton > GtkImage,
     .titlebar .stack-switcher > .button.titlebutton > GtkImage {
-      padding-left: 5px;
-      padding-right: 5px;
-      padding-top: 6px; }
+      padding-left: 7px;
+      padding-right: 7px;
+      padding-top: 8px; }
     .stack-switcher > .button.image-button, .header-bar .stack-switcher > .titlebutton.button,
     .titlebar .stack-switcher > .titlebutton.button {
       padding-left: 2px;
@@ -1273,7 +1273,7 @@ GtkColorButton.button GtkColorSwatch:first-child:last-child {
   color: #dadad9;
   border-radius: 0;
   box-shadow: none;
-  padding: 7px; }
+  padding: 9px; }
   .spinbutton .button:dir(rtl) {
     border-style: none solid none none; }
   .spinbutton .button:hover {
@@ -1468,8 +1468,8 @@ GtkComboBox {
   text-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
   icon-shadow: 0 -1px rgba(0, 0, 0, 0.81176); }
   GtkComboBox:not(.combobox-entry) .the-button-in-the-combobox {
-    padding-top: 2px;
-    padding-bottom: 3px;
+    padding-top: 4px;
+    padding-bottom: 5px;
     padding-left: 6px;
     padding-right: 6px; }
   GtkComboBox:insensitive {
@@ -1506,7 +1506,7 @@ GtkComboBox {
  ************/
 .toolbar, .inline-toolbar, .search-bar, .location-bar {
   -GtkWidget-window-dragging: true;
-  padding: 4px;
+  padding: 6px;
   background-color: #393f3f; }
   .osd .toolbar, .osd .inline-toolbar, .osd .search-bar, .osd .location-bar, .toolbar.osd, .osd.inline-toolbar, .osd.search-bar, .osd.location-bar {
     padding: 13px;
@@ -1538,7 +1538,7 @@ GtkComboBox {
  ***************/
 .titlebar,
 .header-bar {
-  padding: 4px;
+  padding: 6px;
   border-width: 0 0 1px;
   border-style: solid;
   border-color: #1c1f1f;
@@ -1555,13 +1555,13 @@ GtkComboBox {
   .titlebar .title,
   .header-bar .title {
     font-weight: bold;
-    padding-left: 12px;
-    padding-right: 12px; }
+    padding-left: 18px;
+    padding-right: 18px; }
   .titlebar .subtitle,
   .header-bar .subtitle {
     font-size: smaller;
-    padding-left: 12px;
-    padding-right: 12px; }
+    padding-left: 18px;
+    padding-right: 18px; }
   .titlebar .header-bar-separator, .titlebar > GtkBox > .separator.vertical,
   .header-bar .header-bar-separator,
   .header-bar > GtkBox > .separator.vertical {
