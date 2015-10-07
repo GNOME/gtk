@@ -114,12 +114,14 @@ gdk_wayland_gl_context_realize (GdkGLContext *context,
   EGLContext ctx;
   EGLint context_attribs[N_EGL_ATTRS];
   int major, minor, flags;
-  gboolean debug_bit, forward_bit;
+  gboolean debug_bit, forward_bit, legacy_bit;
   int i = 0;
 
   gdk_gl_context_get_required_version (context, &major, &minor);
   debug_bit = gdk_gl_context_get_debug_enabled (context);
   forward_bit = gdk_gl_context_get_forward_compatible (context);
+  legacy_bit = (_gdk_gl_flags & GDK_GL_LEGACY) != 0 ||
+               (share != NULL && gdk_gl_context_is_legacy (share));
 
   flags = 0;
 
@@ -128,15 +130,17 @@ gdk_wayland_gl_context_realize (GdkGLContext *context,
   if (forward_bit)
     flags |= EGL_CONTEXT_OPENGL_FORWARD_COMPATIBLE_BIT_KHR;
 
-  /* We want a core profile */
+  /* We want a core profile, unless in legacy mode */
   context_attribs[i++] = EGL_CONTEXT_OPENGL_PROFILE_MASK_KHR;
-  context_attribs[i++] = EGL_CONTEXT_OPENGL_CORE_PROFILE_BIT_KHR;
+  context_attribs[i++] = legacy_bit
+                       ? EGL_CONTEXT_OPENGL_COMPATIBILITY_PROFILE_BIT_KHR
+                       : EGL_CONTEXT_OPENGL_CORE_PROFILE_BIT_KHR;
 
   /* Specify the version */
   context_attribs[i++] = EGL_CONTEXT_MAJOR_VERSION_KHR;
-  context_attribs[i++] = major;
+  context_attribs[i++] = legacy_bit ? 3 : major;
   context_attribs[i++] = EGL_CONTEXT_MINOR_VERSION_KHR;
-  context_attribs[i++] = minor;
+  context_attribs[i++] = legacy_bit ? 0 : minor;
 
   /* Specify the flags */
   context_attribs[i++] = EGL_CONTEXT_FLAGS_KHR;
@@ -150,6 +154,25 @@ gdk_wayland_gl_context_realize (GdkGLContext *context,
                           share != NULL ? GDK_WAYLAND_GL_CONTEXT (share)->egl_context
                                         : EGL_NO_CONTEXT,
                           context_attribs);
+
+  /* If context creation failed without the legacy bit, let's try again with it */
+  if (ctx == NULL && !legacy_bit)
+    {
+      /* Ensure that re-ordering does not break the offsets */
+      g_assert (context_attribs[0] == EGL_CONTEXT_OPENGL_PROFILE_MASK_KHR);
+      context_attribs[1] = EGL_CONTEXT_OPENGL_COMPATIBILITY_PROFILE_BIT_KHR;
+      context_attribs[3] = 3;
+      context_attribs[5] = 0;
+
+      legacy_bit = TRUE;
+
+      ctx = eglCreateContext (display_wayland->egl_display,
+                              context_wayland->egl_config,
+                              share != NULL ? GDK_WAYLAND_GL_CONTEXT (share)->egl_context
+                                            : EGL_NO_CONTEXT,
+                              context_attribs);
+    }
+
   if (ctx == NULL)
     {
       g_set_error_literal (error, GDK_GL_ERROR,
@@ -161,6 +184,8 @@ gdk_wayland_gl_context_realize (GdkGLContext *context,
   GDK_NOTE (OPENGL, g_print ("Created EGL context[%p]\n", ctx));
 
   context_wayland->egl_context = ctx;
+
+  gdk_gl_context_set_is_legacy (context, legacy_bit);
 
   return TRUE;
 }
