@@ -914,7 +914,10 @@ _gtk_icon_helper_set_icon_name (GtkIconHelper *self,
       icon_name[0] != '\0')
     {
       self->priv->storage_type = GTK_IMAGE_ICON_NAME;
-      self->priv->gicon = g_themed_icon_new (icon_name);
+      if (self->priv->use_fallback)
+        self->priv->gicon = g_themed_icon_new_with_default_fallbacks (icon_name);
+      else
+        self->priv->gicon = g_themed_icon_new (icon_name);
       _gtk_icon_helper_set_icon_size (self, icon_size);
     }
 }
@@ -1025,6 +1028,16 @@ _gtk_icon_helper_set_use_fallback (GtkIconHelper *self,
     {
       self->priv->use_fallback = use_fallback;
       _gtk_icon_helper_invalidate (self);
+      if (self->priv->storage_type == GTK_IMAGE_ICON_NAME)
+        {
+          GIcon *old_icon = self->priv->gicon;
+          const char *icon_name = g_themed_icon_get_names (G_THEMED_ICON (self->priv->gicon))[0];
+          if (self->priv->use_fallback)
+            self->priv->gicon = g_themed_icon_new_with_default_fallbacks (icon_name);
+          else
+            self->priv->gicon = g_themed_icon_new (icon_name);
+          g_object_unref (old_icon);
+        }
       return TRUE;
     }
   return FALSE;
