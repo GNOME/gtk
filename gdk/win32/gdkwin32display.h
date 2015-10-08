@@ -52,7 +52,7 @@ GType      gdk_win32_display_get_type            (void);
 
 GDK_AVAILABLE_IN_3_18
 void       gdk_win32_display_set_cursor_theme    (GdkDisplay  *display,
-                                                  const gchar *theme,
+                                                  const gchar *name,
                                                   gint         size);
 
 G_END_DECLS
