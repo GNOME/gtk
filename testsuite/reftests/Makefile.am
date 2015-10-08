@@ -265,8 +265,6 @@ testdata = \
 	gtk-icontheme-sizing.css \
 	gtk-icontheme-sizing.ref.ui \
 	gtk-icontheme-sizing.ui \
-	gtk-image.ui \
-	gtk-image.ref.ui \
 	icon-shadow-no-transform.css \
 	icon-shadow-no-transform.ref.ui \
 	icon-shadow-no-transform.ui \
@@ -279,6 +277,8 @@ testdata = \
 	iconview-empty.css \
 	iconview-empty.ui \
 	iconview-empty.ref.ui \
+	image-icon-name-use-fallback.ui \
+	image-icon-name-use-fallback.ref.ui \
 	image-icon-shadow-clipping.css \
 	image-icon-shadow-clipping.ref.ui \
 	image-icon-shadow-clipping.ui \
