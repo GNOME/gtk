@@ -826,37 +826,37 @@ GtkColorButton.button {
  *****************/
 
 .spinbutton {
-  .button {
-    background-image: none;
-    border-style: none none none solid;
-    border-color: transparentize($borders_color, 0.7);
-    color: mix($fg_color, $base_color, 90%);
-    border-radius: 0;
-    box-shadow: none;
-  //  padding-left: 6px;
-  //  padding-right: 6px;
-    &:dir(rtl) { border-style: none solid none none; }
-    &:hover {
-      color: $fg_color;
-      background-color: transparentize($fg_color, 0.95);
-    }
-    &:insensitive {
-      color: transparentize($insensitive_fg_color, 0.7);
-    }
-    &:active {
-      box-shadow: inset 0 2px 3px -1px transparentize(black, 0.8);
-      background-color: transparentize(black, 0.9);
-    }
-    &:backdrop {
-      color: mix($backdrop_fg_color, $backdrop_base_color, 90%);
-      border-color: transparentize($backdrop_borders_color, 0.7);
-      background-color: transparent;
-    }
-    &:backdrop:insensitive {
+  &:not(.vertical) {
+    .button {
       background-image: none;
-      color: transparentize($backdrop_insensitive_color,0.7);
-      border-style: none none none solid; // It is needed or it gets overridden
+      border-style: none none none solid;
+      border-color: transparentize($borders_color, 0.7);
+      color: mix($fg_color, $base_color, 90%);
+      border-radius: 0;
+      box-shadow: none;
       &:dir(rtl) { border-style: none solid none none; }
+      &:hover {
+        color: $fg_color;
+        background-color: transparentize($fg_color, 0.95);
+      }
+      &:insensitive {
+        color: transparentize($insensitive_fg_color, 0.7);
+      }
+      &:active {
+        box-shadow: inset 0 2px 3px -1px transparentize(black, 0.8);
+        background-color: transparentize(black, 0.9);
+      }
+      &:backdrop {
+        color: mix($backdrop_fg_color, $backdrop_base_color, 90%);
+        border-color: transparentize($backdrop_borders_color, 0.7);
+        background-color: transparent;
+      }
+      &:backdrop:insensitive {
+        background-image: none;
+        color: transparentize($backdrop_insensitive_color,0.7);
+        border-style: none none none solid; // It is needed or it gets overridden
+        &:dir(rtl) { border-style: none solid none none; }
+      }
     }
   }
   .osd & {
@@ -895,7 +895,7 @@ GtkColorButton.button {
       &:dir(rtl):first-child { border-radius: 3px 0 0 3px; }
     }
   }
-  &.vertical, &.vertical:dir(rtl) { //FIXME: try using linking templates for vertically linked stuff
+  &.vertical {
     .button {
       padding-top: 8px;    //  Same vertical padding as image-buttons
       padding-bottom: 8px; //
@@ -919,29 +919,7 @@ GtkColorButton.button {
           @include button(backdrop, $edge:none);
         }
       }
-      &:last-child {
-        @extend %bottom_button;
-        @include button(normal);
-        &:active {
-          @extend %bottom_button;
-          @include button(active);
-        }
-        &:hover {
-          @extend %bottom_button;
-          @include button(hover);
-        }
-        &:insensitive {
-          @extend %bottom_button;
-          @include button(insensitive);
-        }
-        &:backdrop {
-          @extend %bottom_button;
-          @include button(backdrop);
-        }
-      }
-      &:backdrop:insensitive {
-        @include button(backdrop-insensitive);
-      }
+      &:last-child { @extend %bottom_button; }
     }
     &.entry {
       // we should remove the bottom edge hilight here, but seems
