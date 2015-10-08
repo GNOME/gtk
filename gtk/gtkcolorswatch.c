@@ -118,6 +118,7 @@ swatch_draw (GtkWidget *widget,
   GtkBorder border, padding;
   GdkRectangle rect;
   GtkIconInfo *icon_info = NULL;
+  gint scale;
 
   theme = gtk_icon_theme_get_default ();
   context = gtk_widget_get_style_context (widget);
@@ -168,11 +169,13 @@ swatch_draw (GtkWidget *widget,
 
   gtk_render_frame (context, cr, 0, 0, width, height);
 
+  scale = gtk_widget_get_scale_factor (widget);
   if (swatch->priv->icon)
     {
-      icon_info = gtk_icon_theme_lookup_icon (theme, swatch->priv->icon, PIXBUF_SIZE,
-                                              GTK_ICON_LOOKUP_GENERIC_FALLBACK
-                                              | GTK_ICON_LOOKUP_USE_BUILTIN);
+      icon_info = gtk_icon_theme_lookup_icon_for_scale (theme, swatch->priv->icon, PIXBUF_SIZE,
+                                                        scale,
+                                                        GTK_ICON_LOOKUP_GENERIC_FALLBACK
+                                                        | GTK_ICON_LOOKUP_USE_BUILTIN);
     }
   else if ((state & GTK_STATE_FLAG_SELECTED) != 0)
     {
@@ -182,9 +185,10 @@ swatch_draw (GtkWidget *widget,
       /* fallback for themes that don't have object-select-symbolic */
       g_themed_icon_append_name (G_THEMED_ICON (gicon), "gtk-apply");
 
-      icon_info = gtk_icon_theme_lookup_by_gicon (theme, gicon, PIXBUF_SIZE,
-                                                  GTK_ICON_LOOKUP_GENERIC_FALLBACK
-                                                  | GTK_ICON_LOOKUP_USE_BUILTIN);
+      icon_info = gtk_icon_theme_lookup_by_gicon_for_scale (theme, gicon, PIXBUF_SIZE,
+                                                            scale,
+                                                            GTK_ICON_LOOKUP_GENERIC_FALLBACK
+                                                            | GTK_ICON_LOOKUP_USE_BUILTIN);
       g_object_unref (gicon);
     }
 
@@ -206,14 +210,16 @@ swatch_draw (GtkWidget *widget,
     {
       GdkPixbuf *pixbuf;
 
-      pixbuf = gtk_icon_info_load_symbolic_for_context (icon_info, context,
-                                                        NULL, NULL);
-
+      pixbuf = gtk_icon_info_load_symbolic_for_context (icon_info, context, NULL, NULL);
       if (pixbuf != NULL)
         {
-          gtk_render_icon (context, cr, pixbuf,
-                           rect.x + (rect.width - gdk_pixbuf_get_width (pixbuf)) / 2,
-                           rect.y + (rect.height - gdk_pixbuf_get_height (pixbuf)) / 2);
+          cairo_surface_t *surface;
+
+          surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, scale, gtk_widget_get_window (widget));
+          gtk_render_icon_surface (context, cr, surface,
+                                   rect.x + (rect.width - (gdk_pixbuf_get_width (pixbuf) / scale)) / 2,
+                                   rect.y + (rect.height - (gdk_pixbuf_get_height (pixbuf) / scale)) / 2);
+          cairo_surface_destroy (surface);
           g_object_unref (pixbuf);
         }
 
