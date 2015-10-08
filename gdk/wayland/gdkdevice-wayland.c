@@ -69,6 +69,7 @@ struct _GdkWaylandDeviceData
   GdkDevice *master_keyboard;
   GdkDevice *pointer;
   GdkDevice *keyboard;
+  GdkDevice *touch_master;
   GdkDevice *touch;
   GdkCursor *cursor;
   GdkKeymap *keymap;
@@ -118,6 +119,7 @@ struct _GdkWaylandDevice
 {
   GdkDevice parent_instance;
   GdkWaylandDeviceData *device;
+  GdkWaylandTouchData *emulating_touch; /* Only used on wd->touch_master */
 };
 
 struct _GdkWaylandDeviceClass
@@ -398,6 +400,35 @@ emulate_crossing (GdkWindow       *window,
   gdk_window_get_device_position_double (window, device,
                                          &event->crossing.x, &event->crossing.y,
                                          &event->crossing.state);
+  event->crossing.x_root = event->crossing.x;
+  event->crossing.y_root = event->crossing.y;
+
+  _gdk_wayland_display_deliver_event (gdk_window_get_display (window), event);
+}
+
+static void
+emulate_touch_crossing (GdkWindow           *window,
+                        GdkWindow           *subwindow,
+                        GdkDevice           *device,
+                        GdkDevice           *source,
+                        GdkWaylandTouchData *touch,
+                        GdkEventType         type,
+                        GdkCrossingMode      mode,
+                        guint32              time_)
+{
+  GdkEvent *event;
+
+  event = gdk_event_new (type);
+  event->crossing.window = window ? g_object_ref (window) : NULL;
+  event->crossing.subwindow = subwindow ? g_object_ref (subwindow) : NULL;
+  event->crossing.time = time_;
+  event->crossing.mode = mode;
+  event->crossing.detail = GDK_NOTIFY_NONLINEAR;
+  gdk_event_set_device (event, device);
+  gdk_event_set_source_device (event, source);
+
+  event->crossing.x = touch->x;
+  event->crossing.y = touch->y;
   event->crossing.x_root = event->crossing.x;
   event->crossing.y_root = event->crossing.y;
 
@@ -1555,7 +1586,7 @@ _create_touch_event (GdkWaylandDeviceData *device,
 
   event = gdk_event_new (evtype);
   event->touch.window = g_object_ref (touch->window);
-  gdk_event_set_device (event, device->master_pointer);
+  gdk_event_set_device (event, device->touch_master);
   gdk_event_set_source_device (event, device->touch);
   event->touch.time = time;
   event->touch.state = device->button_modifiers | device->key_modifiers;
@@ -1604,6 +1635,14 @@ touch_handle_down (void              *data,
 
   event = _create_touch_event (device, touch, GDK_TOUCH_BEGIN, time);
 
+  if (touch->initial_touch)
+    {
+      emulate_touch_crossing (touch->window, NULL,
+                              device->touch_master, device->touch, touch,
+                              GDK_ENTER_NOTIFY, GDK_CROSSING_NORMAL, time);
+      GDK_WAYLAND_DEVICE(device->touch_master)->emulating_touch = touch;
+    }
+
   GDK_NOTE (EVENTS,
             g_message ("touch begin %f %f", event->touch.x, event->touch.y));
 
@@ -1631,6 +1670,15 @@ touch_handle_up (void            *data,
             g_message ("touch end %f %f", event->touch.x, event->touch.y));
 
   _gdk_wayland_display_deliver_event (device->display, event);
+
+  if (touch->initial_touch)
+    {
+      emulate_touch_crossing (touch->window, NULL,
+                              device->touch_master, device->touch, touch,
+                              GDK_LEAVE_NOTIFY, GDK_CROSSING_NORMAL, time);
+      GDK_WAYLAND_DEVICE(device->touch_master)->emulating_touch = NULL;
+    }
+
   gdk_wayland_device_remove_touch (device, id);
 }
 
@@ -2049,6 +2097,22 @@ seat_handle_capabilities (void                    *data,
       wl_touch_set_user_data (device->wl_touch, device);
       wl_touch_add_listener (device->wl_touch, &touch_listener, device);
 
+      device->touch_master = g_object_new (GDK_TYPE_WAYLAND_DEVICE,
+                                           "name", "Wayland Touch Master Pointer",
+                                           "type", GDK_DEVICE_TYPE_MASTER,
+                                           "input-source", GDK_SOURCE_MOUSE,
+                                           "input-mode", GDK_MODE_SCREEN,
+                                           "has-cursor", TRUE,
+                                           "display", device->display,
+                                           "device-manager", device->device_manager,
+                                           NULL);
+      GDK_WAYLAND_DEVICE (device->touch_master)->device = device;
+      _gdk_device_set_associated_device (device->touch_master, device->master_keyboard);
+
+      device_manager->devices =
+        g_list_prepend (device_manager->devices, device->touch_master);
+      g_signal_emit_by_name (device_manager, "device-added", device->touch_master);
+
       device->touch = g_object_new (GDK_TYPE_WAYLAND_DEVICE,
                                     "name", "Wayland Touch",
                                     "type", GDK_DEVICE_TYPE_SLAVE,
@@ -2058,7 +2122,7 @@ seat_handle_capabilities (void                    *data,
                                     "display", device->display,
                                     "device-manager", device->device_manager,
                                     NULL);
-      _gdk_device_set_associated_device (device->touch, device->master_pointer);
+      _gdk_device_set_associated_device (device->touch, device->touch_master);
       GDK_WAYLAND_DEVICE (device->touch)->device = device;
 
       device_manager->devices =
@@ -2070,13 +2134,19 @@ seat_handle_capabilities (void                    *data,
     {
       wl_touch_release (device->wl_touch);
       device->wl_touch = NULL;
+      _gdk_device_set_associated_device (device->touch_master, NULL);
       _gdk_device_set_associated_device (device->touch, NULL);
 
       device_manager->devices =
+        g_list_remove (device_manager->devices, device->touch_master);
+      device_manager->devices =
         g_list_remove (device_manager->devices, device->touch);
 
+      g_signal_emit_by_name (device_manager, "device-removed", device->touch_master);
       g_signal_emit_by_name (device_manager, "device-removed", device->touch);
+      g_object_unref (device->touch_master);
       g_object_unref (device->touch);
+      device->touch_master = NULL;
       device->touch = NULL;
     }
 }
