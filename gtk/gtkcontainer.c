@@ -264,7 +264,6 @@ struct _GtkContainerPrivate
 
   guint has_focus_chain    : 1;
   guint reallocate_redraws : 1;
-  guint resize_pending     : 1;
   guint restyle_pending    : 1;
   guint resize_mode        : 2;
   guint request_mode       : 2;
@@ -2008,13 +2007,12 @@ gtk_container_idle_sizer (GdkFrameClock *clock,
    * than trying to explicitly work around them with some extra flags,
    * since it doesn't cause any actual harm.
    */
-  if (container->priv->resize_pending)
+  if (gtk_widget_needs_allocate (GTK_WIDGET (container)))
     {
-      container->priv->resize_pending = FALSE;
       gtk_container_check_resize (container);
     }
 
-  if (!container->priv->restyle_pending && !container->priv->resize_pending)
+  if (!container->priv->restyle_pending && !gtk_widget_needs_allocate (GTK_WIDGET (container)))
     {
       _gtk_container_stop_idle_sizer (container);
     }
@@ -2074,11 +2072,8 @@ gtk_container_queue_resize_handler (GtkContainer *container)
       switch (container->priv->resize_mode)
         {
         case GTK_RESIZE_QUEUE:
-          if (!container->priv->resize_pending)
-            {
-              container->priv->resize_pending = TRUE;
-              gtk_container_start_idle_sizer (container);
-            }
+          if (gtk_widget_needs_allocate (widget))
+            gtk_container_start_idle_sizer (container);
           break;
 
         case GTK_RESIZE_IMMEDIATE:
@@ -2112,7 +2107,10 @@ _gtk_container_queue_restyle (GtkContainer *container)
 void
 _gtk_container_maybe_start_idle_sizer (GtkContainer *container)
 {
-  if (container->priv->restyle_pending || container->priv->resize_pending)
+  if (!GTK_IS_RESIZE_CONTAINER (container))
+    return;
+
+  if (container->priv->restyle_pending || gtk_widget_needs_allocate (GTK_WIDGET (container)))
     gtk_container_start_idle_sizer (container);
 }
 

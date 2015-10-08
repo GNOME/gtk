@@ -16252,15 +16252,29 @@ G_GNUC_END_IGNORE_DEPRECATIONS;
   while (TRUE);
 }
 
+gboolean
+gtk_widget_needs_allocate (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = widget->priv;
+
+  if (!priv->visible || !priv->child_visible)
+    return FALSE;
+
+  if (priv->resize_needed || priv->alloc_needed || priv->alloc_needed_on_child)
+    return TRUE;
+
+  return FALSE;
+}
+
 void
 gtk_widget_ensure_allocate (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = widget->priv;
 
-  gtk_widget_ensure_resize (widget);
-
-  if (!priv->visible || !priv->child_visible)
+  if (!gtk_widget_needs_allocate (widget))
     return;
+
+  gtk_widget_ensure_resize (widget);
 
   /*  This code assumes that we only reach here if the previous
    *  allocation is still valid (ie no resize was queued).
