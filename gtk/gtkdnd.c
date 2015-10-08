@@ -848,18 +848,14 @@ gtk_drag_get_cursor (GtkWidget         *widget,
   gint i;
 
   /* reconstruct the cursors for each new drag (thus !info),
-   * to catch cursor theme changes 
-   */ 
+   * to catch cursor theme changes
+   */
   if (!info)
     {
       for (i = 0 ; i < G_N_ELEMENTS (drag_cursors) - 1; i++)
-        if (drag_cursors[i].cursor != NULL)
-          {
-            g_object_unref (drag_cursors[i].cursor);
-            drag_cursors[i].cursor = NULL;
-          }
+        g_clear_object (&drag_cursors[i].cursor);
     }
- 
+
   for (i = 0 ; i < G_N_ELEMENTS (drag_cursors) - 1; i++)
     if (drag_cursors[i].action == action)
       break;
@@ -867,22 +863,19 @@ gtk_drag_get_cursor (GtkWidget         *widget,
   if (drag_cursors[i].cursor != NULL)
     {
       if (display != gdk_cursor_get_display (drag_cursors[i].cursor))
-        {
-          g_object_unref (drag_cursors[i].cursor);
-          drag_cursors[i].cursor = NULL;
-        }
+        g_clear_object (&drag_cursors[i].cursor);
     }
-  
+
   if (drag_cursors[i].cursor == NULL)
     drag_cursors[i].cursor = gdk_cursor_new_from_name (display, drag_cursors[i].name);
-  
+
   if (drag_cursors[i].cursor == NULL)
     {
       ensure_drag_cursor_pixbuf (i);
       drag_cursors[i].cursor = gdk_cursor_new_from_pixbuf (display, drag_cursors[i].pixbuf, 0, 0);
     }
 
-  if (info && info->icon_helper) 
+  if (info && info->icon_helper)
     {
       gint cursor_width, cursor_height;
       gint icon_width, icon_height;
@@ -896,9 +889,8 @@ gtk_drag_get_cursor (GtkWidget         *widget,
         {
           if (display == gdk_cursor_get_display (info->drag_cursors[i]))
             return info->drag_cursors[i];
-          
-          g_object_unref (info->drag_cursors[i]);
-          info->drag_cursors[i] = NULL;
+
+          g_clear_object (&info->drag_cursors[i]);
         }
 
       scale = gtk_widget_get_scale_factor (widget);
@@ -921,7 +913,7 @@ gtk_drag_get_cursor (GtkWidget         *widget,
         }
 
       get_surface_size (cursor_surface, &cursor_width, &cursor_height);
-      
+
       ref_x = MAX (hot_x, icon_x);
       ref_y = MAX (hot_y, icon_y);
       width = ref_x + MAX (cursor_width - hot_x, icon_width - icon_x);
@@ -951,19 +943,19 @@ gtk_drag_get_cursor (GtkWidget         *widget,
 
           cairo_destroy (cr);
 
-          info->drag_cursors[i] = 
+          info->drag_cursors[i] =
             gdk_cursor_new_from_surface (display, surface, ref_x, ref_y);
-          
+
           cairo_surface_destroy (surface);
         }
-      
+
       cairo_surface_destroy (cursor_surface);
       cairo_surface_destroy (icon_surface);
-      
+
       if (info->drag_cursors[i] != NULL)
         return info->drag_cursors[i];
     }
- 
+
   return drag_cursors[i].cursor;
 }
 
