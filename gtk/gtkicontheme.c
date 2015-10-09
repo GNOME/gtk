@@ -2155,6 +2155,7 @@ gtk_icon_theme_choose_icon (GtkIconTheme       *icon_theme,
   g_return_val_if_fail (icon_names != NULL, NULL);
   g_return_val_if_fail ((flags & GTK_ICON_LOOKUP_NO_SVG) == 0 ||
                         (flags & GTK_ICON_LOOKUP_FORCE_SVG) == 0, NULL);
+  g_warn_if_fail ((flags & GTK_ICON_LOOKUP_GENERIC_FALLBACK) == 0);
 
   return choose_icon (icon_theme, icon_names, size, 1, flags);
 }
@@ -2196,6 +2197,7 @@ gtk_icon_theme_choose_icon_for_scale (GtkIconTheme       *icon_theme,
   g_return_val_if_fail ((flags & GTK_ICON_LOOKUP_NO_SVG) == 0 ||
                         (flags & GTK_ICON_LOOKUP_FORCE_SVG) == 0, NULL);
   g_return_val_if_fail (scale >= 1, NULL);
+  g_warn_if_fail ((flags & GTK_ICON_LOOKUP_GENERIC_FALLBACK) == 0);
 
   return choose_icon (icon_theme, icon_names, size, scale, flags);
 }
@@ -5423,6 +5425,7 @@ gtk_icon_theme_lookup_by_gicon_for_scale (GtkIconTheme       *icon_theme,
 
   g_return_val_if_fail (GTK_IS_ICON_THEME (icon_theme), NULL);
   g_return_val_if_fail (G_IS_ICON (icon), NULL);
+  g_warn_if_fail ((flags & GTK_ICON_LOOKUP_GENERIC_FALLBACK) == 0);
 
   if (GDK_IS_PIXBUF (icon))
     {

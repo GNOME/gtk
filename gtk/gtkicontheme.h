@@ -109,7 +109,8 @@ struct _GtkIconThemeClass
  *   as well as files. For a builtin icon, gtk_icon_info_get_filename()
  *   is %NULL and you need to call gtk_icon_info_get_builtin_pixbuf().
  * @GTK_ICON_LOOKUP_GENERIC_FALLBACK: Try to shorten icon name at '-'
- *   characters before looking at inherited themes. For more general
+ *   characters before looking at inherited themes. This flag is only
+ *   supported in functions that take a single icon name. For more general
  *   fallback, see gtk_icon_theme_choose_icon(). Since 2.12.
  * @GTK_ICON_LOOKUP_FORCE_SIZE: Always get the icon scaled to the
  *   requested size. Since 2.14.
