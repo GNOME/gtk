@@ -881,7 +881,7 @@ pointer_handle_enter (void              *data,
   event->crossing.subwindow = NULL;
   event->crossing.time = (guint32)(g_get_monotonic_time () / 1000);
   event->crossing.mode = GDK_CROSSING_NORMAL;
-  event->crossing.detail = GDK_NOTIFY_ANCESTOR;
+  event->crossing.detail = GDK_NOTIFY_NONLINEAR;
   event->crossing.focus = TRUE;
   event->crossing.state = 0;
 
@@ -928,7 +928,7 @@ pointer_handle_leave (void              *data,
   event->crossing.subwindow = NULL;
   event->crossing.time = (guint32)(g_get_monotonic_time () / 1000);
   event->crossing.mode = GDK_CROSSING_NORMAL;
-  event->crossing.detail = GDK_NOTIFY_ANCESTOR;
+  event->crossing.detail = GDK_NOTIFY_NONLINEAR;
   event->crossing.focus = TRUE;
   event->crossing.state = 0;
 
