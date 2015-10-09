@@ -44,6 +44,21 @@
  * SECTION:gtkimcontextsimple
  * @Short_description: An input method context supporting table-based input methods
  * @Title: GtkIMContextSimple
+ *
+ * GtkIMContextSimple is a simple input method context supporting table-based
+ * input methods. It has a built-in table of compose sequences that is derived
+ * from the X11 Compose files.
+ *
+ * GtkIMContextSimple reads additional compose sequences from the first of the
+ * following files that is found: ~/.config/gtk-3.0/Compose, ~/.XCompose,
+ * /usr/share/X11/locale/$locale/Compose (for locales that have a nontrivial
+ * Compose file). The syntax of these files is described in the Compose(5)
+ * manual page.
+ *
+ * GtkIMContextSimple also supports numeric entry of Unicode characters
+ * by typing Ctrl-Shift-u, followed by a hexadecimal Unicode codepoint.
+ * For example, Ctrl-Shift-u 1 2 3 Enter yields U+0123 LATIN SMALL LETTER
+ * G WITH CEDILLA, i.e. ģ.
  */
 
 
