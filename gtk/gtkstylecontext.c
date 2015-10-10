@@ -1621,6 +1621,9 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
 
   priv = context->priv;
 
+  /* ensure the style cache is valid by forcing a validation */
+  gtk_style_context_lookup_style (context);
+
   key.widget_type = widget_type;
   key.pspec = pspec;
 
