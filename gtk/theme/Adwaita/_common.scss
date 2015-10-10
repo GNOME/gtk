@@ -825,7 +825,9 @@ GtkColorButton.button {
       }
     }
   }
-  .osd & {
+
+  // OSD horizontal
+  .osd &:not(.vertical) {
     .button {
       @include button(undecorated);
       color: $osd_fg_color;
@@ -861,6 +863,8 @@ GtkColorButton.button {
       &:dir(rtl):first-child { border-radius: 3px 0 0 3px; }
     }
   }
+
+  // Vertical
   &.vertical {
     .button {
       padding-top: 8px;    //  Same vertical padding as image-buttons
@@ -883,6 +887,7 @@ GtkColorButton.button {
         &:backdrop {
           @extend %top_button;
           @include button(backdrop, $edge:none);
+          &:insensitive { @include button(backdrop-insensitive, $edge:none); }
         }
       }
       &:last-child { @extend %bottom_button; }
@@ -903,6 +908,17 @@ GtkColorButton.button {
       border-style: none solid solid solid;
     }
   }
+
+  // OSD vertical
+  .osd &.vertical .button:first-child {
+    @include button(osd);
+    &:hover { @include button(osd-hover);}
+    &:active { @include button(osd-active); }
+    &:insensitive { @include button(osd-insensitive); }
+    &:backdrop { @include button(osd-backdrop); }
+  }
+
+  // Misc
   GtkTreeView & {
     &.entry, &.entry:focus {
       padding: 1px;
