@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.17 -->
+  <object class="GFileIcon" id="left-swipe-icon">
+    <property name="file">resource:///icons/gesture-two-finger-swipe-left.svg</property>
+  </object>
+  <object class="GFileIcon" id="right-swipe-icon">
+    <property name="file">resource:///icons/gesture-two-finger-swipe-right.svg</property>
+  </object>
+  <object class="GtkShortcutsWindow" id="window1">
+    <views>
+      <view name="editor">
+        <property name="title" translatable="yes">Editor Shortcuts</property>
+        <page>
+          <column>
+            <group>
+              <property name="title" translatable="yes">General</property>
+              <shortcut>
+                <property name="title" translatable="yes">Global Search</property>
+                <property name="accelerator">&lt;ctrl&gt;period</property>
+              </shortcut>
+              <shortcut>
+                <property name="title" translatable="yes">Preferences</property>
+                <property name="accelerator">&lt;ctrl&gt;comma</property>
+              </shortcut>
+              <shortcut>
+                <property name="title" translatable="yes">Command Bar</property>
+                <property name="accelerator">&lt;ctrl&gt;Return</property>
+              </shortcut>
+              <shortcut>
+                <property name="title" translatable="yes">Terminal</property>
+                <property name="accelerator">&lt;ctrl&gt;&lt;shift&gt;t</property>
+              </shortcut>
+              <shortcut>
+                <property name="title" translatable="yes">Keyboard Shortcuts</property>
+                <property name="accelerator">&lt;ctrl&gt;&lt;shift&gt;question</property>
+              </shortcut>
+            </group>
+            <group>
+              <property name="title" translatable="yes">Panels</property>
+              <shortcut>
+                <property name="title" translatable="yes">Toggle left panel</property>
+                <property name="accelerator">F9</property>
+              </shortcut>
+              <shortcut>
+                <property name="title" translatable="yes">Toggle right panel</property>
+                <property name="accelerator">&lt;shift&gt;F9</property>
+              </shortcut>
+              <shortcut>
+                <property name="title" translatable="yes">Toggle bottom panel</property>
+                <property name="accelerator">&lt;ctrl&gt;F9</property>
+              </shortcut>
+            </group>
+            <group>
+              <property name="title" translatable="yes">Touchpad gestures</property>
+              <gesture>
+                <property name="title" translatable="yes">Switch to the next document</property>
+                <property name="subtitle" translatable="yes">Two finger swipe right</property>
+                <property name="gicon">right-swipe-icon</property>
+              </gesture>
+              <gesture>
+                <property name="title" translatable="yes">Switch to the previous document</property>
+                <property name="subtitle" translatable="yes">Two finger swipe left</property>
+                <property name="gicon">left-swipe-icon</property>
+              </gesture>
+            </group>
+          </column>
+          <column>
+            <group>
+              <property name="title" translatable="yes">Files</property>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;n</property>
+                <property name="title" translatable="yes">Create new document</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;o</property>
+                <property name="title" translatable="yes">Open a document</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;s</property>
+                <property name="title" translatable="yes">Save the document</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;w</property>
+                <property name="title" translatable="yes">Close the document</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;&lt;alt&gt;Page_Down</property>
+                <property name="title" translatable="yes">Switch to the next document</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;&lt;alt&gt;Page_Up</property>
+                <property name="title" translatable="yes">Switch to the previous document</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;k</property>
+                <property name="title" translatable="yes">Show list of open files</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">F4</property>
+                <property name="title" translatable="yes">Switch to source or header</property>
+              </shortcut>
+            </group>
+            <group>
+              <property name="title" translatable="yes">Find and replace</property>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;f</property>
+                <property name="title" translatable="yes">Find</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;g</property>
+                <property name="title" translatable="yes">Find the next match</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;&lt;shift&gt;g</property>
+                <property name="title" translatable="yes">Find the previous match</property>
+              </shortcut>
+              <!-- not implemented
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;h</property>
+                <property name="title" translatable="yes">Find and replace</property>
+              </shortcut>
+              -->
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;&lt;shift&gt;k</property>
+                <property name="title" translatable="yes">Clear highlight</property>
+              </shortcut>
+              <!-- not implemented
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;l</property>
+                <property name="title" translatable="yes">Go to line</property>
+              </shortcut>
+              -->
+            </group>
+          </column>
+        </page>
+        <page>
+          <column>
+            <group>
+              <property name="title" translatable="yes">Copy and Paste</property>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;c</property>
+                <property name="title" translatable="yes">Copy selected text to clipboard</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;x</property>
+                <property name="title" translatable="yes">Cut selected text to clipboard</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;v</property>
+                <property name="title" translatable="yes">Paste text from clipboard</property>
+              </shortcut>
+            </group>
+            <group>
+              <property name="title" translatable="yes">Undo and Redo</property>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;z</property>
+                <property name="title" translatable="yes">Undo previous command</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;&lt;shift&gt;z</property>
+                <property name="title" translatable="yes">Redo previous command</property>
+              </shortcut>
+            </group>
+            <group>
+              <property name="title" translatable="yes">Editing</property>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;&lt;shift&gt;a</property>
+                <property name="title" translatable="yes">Increment number at cursor</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;&lt;shift&gt;x</property>
+                <property name="title" translatable="yes">Decrement number at cursor</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;j</property>
+                <property name="title" translatable="yes">Join selected lines</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;space</property>
+                <property name="title" translatable="yes">Show completion window</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">Insert</property>
+                <property name="title" translatable="yes">Toggle overwrite</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;&lt;alt&gt;i</property>
+                <property name="title" translatable="yes">Reindent line</property>
+              </shortcut>
+            </group>
+          </column>
+          <column>
+            <group>
+              <property name="title" translatable="yes">Navigation</property>
+              <shortcut>
+                <property name="accelerator">&lt;alt&gt;n</property>
+                <property name="title" translatable="yes">Move to next error in file</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">&lt;alt&gt;p</property>
+                <property name="title" translatable="yes">Move to previous error in file</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">&lt;shift&gt;&lt;alt&gt;Left</property>
+                <property name="title" translatable="yes">Move to previous edit location</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">&lt;shift&gt;&lt;alt&gt;Right</property>
+                <property name="title" translatable="yes">Move to next edit location</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">&lt;alt&gt;period</property>
+                <property name="title" translatable="yes">Jump to definition of symbol</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">&lt;alt&gt;&lt;shift&gt;Up</property>
+                <property name="title" translatable="yes">Move viewport up within the file</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">&lt;alt&gt;&lt;shift&gt;Down</property>
+                <property name="title" translatable="yes">Move viewport down within the file</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">&lt;alt&gt;&lt;shift&gt;End</property>
+                <property name="title" translatable="yes">Move viewport to end of file</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">&lt;alt&gt;&lt;shift&gt;Home</property>
+                <property name="title" translatable="yes">Move viewport to beginning of file</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;percent</property>
+                <property name="title" translatable="yes">Move to matching bracket</property>
+              </shortcut>
+            </group>
+            <group>
+              <property name="title" translatable="yes">Selections</property>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;a</property>
+                <property name="title" translatable="yes">Select all</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;backslash</property>
+                <property name="title" translatable="yes">Unselect all</property>
+              </shortcut>
+            </group>
+          </column>
+        </page>
+      </view>
+      <view name="terminal">
+        <property name="title" translatable="yes">Terminal Shortcuts</property>
+        <page>
+          <column>
+            <group>
+              <property name="title" translatable="yes">General</property>
+              <shortcut>
+                <property name="title" translatable="yes">Global Search</property>
+                <property name="accelerator">&lt;ctrl&gt;period</property>
+              </shortcut>
+              <shortcut>
+                <property name="title" translatable="yes">Preferences</property>
+                <property name="accelerator">&lt;ctrl&gt;comma</property>
+              </shortcut>
+              <shortcut>
+                <property name="title" translatable="yes">Command Bar</property>
+                <property name="accelerator">&lt;ctrl&gt;Return</property>
+              </shortcut>
+              <shortcut>
+                <property name="title" translatable="yes">Terminal</property>
+                <property name="accelerator">&lt;ctrl&gt;&lt;shift&gt;t</property>
+              </shortcut>
+              <shortcut>
+                <property name="title" translatable="yes">Keyboard Shortcuts</property>
+                <property name="accelerator">&lt;ctrl&gt;&lt;shift&gt;question</property>
+              </shortcut>
+            </group>
+          </column>
+          <column>
+            <group>
+              <property name="title" translatable="yes">Copy and Paste</property>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;&lt;shift&gt;c</property>
+                <property name="title" translatable="yes">Copy selected text to clipboard</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;&lt;shift&gt;v</property>
+                <property name="title" translatable="yes">Paste text from clipboard</property>
+              </shortcut>
+            </group>
+          </column>
+        </page>
+      </view>
+    </views>
+    <property name="view-name">editor</property>
+  </object>
+</interface>

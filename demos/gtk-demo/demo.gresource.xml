@@ -91,6 +91,9 @@
   <gresource prefix="/stack">
     <file>stack.ui</file>
   </gresource>
+  <gresource prefix="/shortcuts">
+    <file>shortcuts.ui</file>
+  </gresource>
   <gresource prefix="/revealer">
     <file>revealer.ui</file>
   </gresource>
@@ -163,6 +166,7 @@
     <file>scale.c</file>
     <file>search_entry.c</file>
     <file>search_entry2.c</file>
+    <file>shortcutswindow.c</file>
     <file>sizegroup.c</file>
     <file>sidebar.c</file>
     <file>stack.c</file>
@@ -212,5 +216,9 @@
   </gresource>
   <gresource prefix="/modelbutton">
     <file>modelbutton.ui</file>
+  </gresource>
+  <gresource prefix="/icons">
+    <file>gesture-two-finger-swipe-right.svg</file>
+    <file>gesture-two-finger-swipe-left.svg</file>
   </gresource>
 </gresources>

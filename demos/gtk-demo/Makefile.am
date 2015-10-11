@@ -56,6 +56,7 @@ demos_base =					\
 	scale.c					\
 	search_entry.c				\
 	search_entry2.c				\
+	shortcutswindow.c			\
 	sidebar.c				\
 	sizegroup.c				\
 	spinbutton.c				\
