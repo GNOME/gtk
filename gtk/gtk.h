@@ -183,6 +183,7 @@
 #include <gtk/gtkseparatormenuitem.h>
 #include <gtk/gtkseparatortoolitem.h>
 #include <gtk/gtksettings.h>
+#include <gtk/gtkshortcutswindow.h>
 #include <gtk/gtkshow.h>
 #include <gtk/gtkstacksidebar.h>
 #include <gtk/gtksizegroup.h>
