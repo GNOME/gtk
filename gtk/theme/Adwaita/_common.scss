@@ -3436,3 +3436,23 @@ GtkVolumeButton.button {
     @include undershoot(right);
   }
 }
+
+GtkShortcutsWindow .round .button {
+  border-radius: 20px;
+  outline-radius: 20px;
+}
+
+GtkShortcutsWindow .round .button .label {
+  padding: 0;
+}
+
+GtkShortcutsWindow GtkShortcutLabel .frame {
+  background-color: #fefefe;
+  border: 1px solid #cecece;
+  border-radius: 5px;
+  box-shadow: 0px 1px 0px #fff inset,
+              0px -2px 0px #dedede inset;
+  color: #555753;
+  padding: 3px 8px 3px 8px;
+}
+
