@@ -478,7 +478,8 @@ gtk_builder_get_parameters (GtkBuilder  *builder,
       parameter.name = prop->pspec->name;
 
       if (G_IS_PARAM_SPEC_OBJECT (prop->pspec) &&
-          (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) != GDK_TYPE_PIXBUF))
+          (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) != GDK_TYPE_PIXBUF) &&
+          (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) != G_TYPE_FILE))
         {
           GObject *object = g_hash_table_lookup (builder->priv->objects,
                                                  prop->text->str);
@@ -2035,6 +2036,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         }
       break;
     case G_TYPE_OBJECT:
+    case G_TYPE_INTERFACE:
       if (G_VALUE_HOLDS (value, GDK_TYPE_PIXBUF))
         {
           gchar *filename;
@@ -2092,6 +2094,27 @@ G_GNUC_END_IGNORE_DEPRECATIONS
             }
 
           g_free (filename);
+
+          ret = TRUE;
+        }
+      else if (G_VALUE_HOLDS (value, G_TYPE_FILE))
+        {
+          GFile *file;
+
+          if (g_hash_table_contains (builder->priv->objects, string))
+            {
+              g_set_error (error,
+                           GTK_BUILDER_ERROR,
+                           GTK_BUILDER_ERROR_INVALID_VALUE,
+                           "Could not create file '%s': "
+                           " '%s' is already used as object id",
+                           string, string);
+              return FALSE;
+            }
+
+          file = g_file_new_for_uri (string);
+          g_value_set_object (value, file);
+          g_object_unref (G_OBJECT (file));
 
           ret = TRUE;
         }
