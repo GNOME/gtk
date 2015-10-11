@@ -239,6 +239,15 @@
       <xi:include href="xml/gtkpagesetupunixdialog.xml" />
     </chapter>
 
+    <chapter id="ShortcutsOverview">
+      <title>Shortcuts Overview</title>
+      <xi:include href="xml/gtkshortcutswindow.xml" />
+      <xi:include href="xml/gtkshortcutssection.xml" />
+      <xi:include href="xml/gtkshortcutsgroup.xml" />
+      <xi:include href="xml/gtkshortcutsshortcut.xml" />
+      <xi:include href="xml/gtkshortcutsgesture.xml" />
+    </chapter>
+
     <chapter id="MiscObjects">
       <title>Miscellaneous</title>
       <xi:include href="xml/gtkadjustment.xml" />
