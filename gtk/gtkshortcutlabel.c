@@ -46,11 +46,103 @@ enum {
 
 static GParamSpec *properties[LAST_PROP];
 
+static gchar **
+get_labels (guint key, GdkModifierType modifier)
+{
+  const gchar *labels[16];
+  gchar key_label[6];
+  gchar *tmp;
+  gunichar ch;
+  gint i = 0;
+
+  if (modifier & GDK_SHIFT_MASK)
+    labels[i++] = C_("keyboard label", "Shift");
+  if (modifier & GDK_CONTROL_MASK)
+    labels[i++] = C_("keyboard label", "Ctrl");
+  if (modifier & GDK_MOD1_MASK)
+    labels[i++] = C_("keyboard label", "Alt");
+  if (modifier & GDK_MOD2_MASK)
+    labels[i++] = "Mod2";
+  if (modifier & GDK_MOD3_MASK)
+    labels[i++] = "Mod3";
+  if (modifier & GDK_MOD4_MASK)
+    labels[i++] = "Mod4";
+  if (modifier & GDK_MOD5_MASK)
+    labels[i++] = "Mod5";
+  if (modifier & GDK_SUPER_MASK)
+    labels[i++] = C_("keyboard label", "Super");
+  if (modifier & GDK_HYPER_MASK)
+    labels[i++] = C_("keyboard label", "Hyper");
+  if (modifier & GDK_META_MASK)
+    labels[i++] = C_("keyboard label", "Meta");
+
+  ch = gdk_keyval_to_unicode (key);
+  if (ch && ch < 0x80 && (g_unichar_isgraph (ch) || ch == ' '))
+    {
+      switch (ch)
+        {
+        case ' ':
+          labels[i++] = C_("keyboard label", "Space");
+          break;
+        case '\\':
+          labels[i++] = C_("keyboard label", "Backslash");
+          break;
+        default:
+          memset (key_label, 0, 6);
+          g_unichar_to_utf8 (g_unichar_toupper (ch), key_label);
+          labels[i++] = key_label;
+          break;
+        }
+    }
+  else
+    {
+      switch (key)
+        {
+        case GDK_KEY_Left:
+          labels[i++] = "\xe2\x86\x90";
+          break;
+        case GDK_KEY_Up:
+          labels[i++] = "\xe2\x86\x91";
+          break;
+        case GDK_KEY_Right:
+          labels[i++] = "\xe2\x86\x92";
+          break;
+        case GDK_KEY_Down:
+          labels[i++] = "\xe2\x86\x93";
+          break;
+        case GDK_KEY_Page_Up:
+          labels[i++] = C_("keyboard label", "Page_Up");
+          break;
+        case GDK_KEY_Page_Down:
+          labels[i++] = C_("keyboard label", "Page_Down");
+          break;
+        default:
+          tmp = gdk_keyval_name (gdk_keyval_to_lower (key));
+          if (tmp != NULL)
+            {
+              if (tmp[0] != 0 && tmp[1] == 0)
+                {
+                  key_label[0] = g_ascii_toupper (tmp[0]);
+                  key_label[1] = '\0';
+                  labels[i++] = key_label;
+                }
+              else
+                {
+                  labels[i++] = g_dpgettext2 (GETTEXT_PACKAGE, "keyboard label", tmp);
+                }
+            }
+        }
+    }
+
+  labels[i] = NULL;
+
+  return g_strdupv ((gchar **)labels);
+}
+
 static void
 gtk_shortcut_label_rebuild (GtkShortcutLabel *self)
 {
   gchar **keys = NULL;
-  gchar *label = NULL;
   GdkModifierType modifier = 0;
   guint key = 0;
   guint i;
@@ -62,13 +154,12 @@ gtk_shortcut_label_rebuild (GtkShortcutLabel *self)
 
   gtk_accelerator_parse (self->accelerator, &key, &modifier);
   if ((key == 0) && (modifier == 0))
-    return;
+    {
+      g_warning ("Failed to parse accelerator '%s'", self->accelerator);
+      return;
+    }
 
-  label = gtk_accelerator_get_label (key, modifier);
-  if (label == NULL)
-    return;
-
-  keys = g_strsplit (label, "+", 0);
+  keys = get_labels (key, modifier);
   for (i = 0; keys[i]; i++)
     {
       GtkFrame *frame;
@@ -105,14 +196,13 @@ gtk_shortcut_label_rebuild (GtkShortcutLabel *self)
         gtk_widget_set_size_request (GTK_WIDGET (frame), 50, -1);
 
       disp = g_object_new (GTK_TYPE_LABEL,
-                           "label", keys [i],
+                           "label", keys[i],
                            "visible", TRUE,
                            NULL);
       gtk_container_add (GTK_CONTAINER (frame), GTK_WIDGET (disp));
     }
 
   g_strfreev (keys);
-  g_free (label);
 }
 
 static void
