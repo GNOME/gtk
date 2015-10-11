@@ -29,6 +29,18 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
+/**
+ * SECTION:gtkshortcutswindow
+ * @title: GtkShortcutsWindow
+ * @short_description: Toplevel which shows help for shortcuts
+ *
+ * A GtkShortcutsWindow shows brief information about keyboard shortcuts
+ * and gestures, sorted in pages, columns and groups.
+ *
+ * The recommended way to construct a GtkShortcutsWindow is with GtkBuilder:
+ *
+ * [A simple example](https://git.gnome.org/browse/gtk+/tree/demos/gtk-demo/shortcuts.ui)
+ */
 
 typedef struct
 {
