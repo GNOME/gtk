@@ -7,7 +7,32 @@
   <object class="GFileIcon" id="right-swipe-icon">
     <property name="file">resource:///icons/gesture-two-finger-swipe-right.svg</property>
   </object>
-  <object class="GtkShortcutsWindow" id="window1">
+  <object class="GtkWindow" id="window1">
+    <child>
+      <object class="GtkBox">
+        <property name="visible">1</property>
+        <property name="margin">50</property>
+        <property name="spacing">10</property>
+        <child>
+          <object class="GtkButton">
+            <property name="visible">1</property>
+            <property name="label">Builder</property>
+            <signal name="clicked" handler="gtk_widget_show" swapped="1" object="builder-shortcuts"/>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton">
+            <property name="visible">1</property>
+            <property name="label">Clocks</property>
+            <signal name="clicked" handler="gtk_widget_show" swapped="1" object="clocks-shortcuts"/>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkShortcutsWindow" id="builder-shortcuts">
+    <property name="transient-for">window1</property>
+    <property name="modal">1</property>
     <views>
       <view name="editor">
         <property name="title" translatable="yes">Editor Shortcuts</property>
@@ -293,5 +318,77 @@
       </view>
     </views>
     <property name="view-name">editor</property>
+  </object>
+  <object class="GtkShortcutsWindow" id="clocks-shortcuts">
+    <property name="transient-for">window1</property>
+    <property name="modal">1</property>
+    <views>
+      <view name="shortcuts">
+        <property name="title" translatable="yes">Shortcuts</property>
+        <page>
+          <column>
+            <group>
+              <property name="title" translatable="yes">General</property>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;Page_Down</property>
+                <property name="title" translatable="yes">Go to the next view</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;Page_Up</property>
+                <property name="title" translatable="yes">Go to the previous view</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">&lt;alt&gt;Q</property>
+                <property name="title" translatable="yes">Quit</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">&lt;alt&gt;Left</property>
+                <property name="title" translatable="yes">Forward</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;Right</property>
+                <property name="title" translatable="yes">Back</property>
+              </shortcut>
+            </group>
+            <group>
+              <property name="title" translatable="yes">World Clocks</property>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;N</property>
+                <property name="title" translatable="yes">Add a world clock</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;S</property>
+                <property name="title" translatable="yes">Select world clocks</property>
+              </shortcut>
+            </group>
+          </column>
+          <column>
+            <group>
+              <property name="title" translatable="yes">Alarm</property>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;N</property>
+                <property name="title" translatable="yes">Add an alarm</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;S</property>
+                <property name="title" translatable="yes">Select alarms</property>
+              </shortcut>
+            </group>
+            <group>
+              <property name="title" translatable="yes">Stopwatch</property>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;N</property>
+                <property name="title" translatable="yes">Add an alarm</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;S</property>
+                <property name="title" translatable="yes">Select alarms</property>
+              </shortcut>
+            </group>
+          </column>
+        </page>
+      </view>
+    </views>
+    <property name="view-name">shortcuts</property>
   </object>
 </interface>
