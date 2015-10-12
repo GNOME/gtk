@@ -5048,9 +5048,12 @@ gtk_text_view_show_magnifier (GtkTextView *text_view,
 {
   cairo_rectangle_int_t rect;
   GtkTextViewPrivate *priv;
+  GtkAllocation allocation;
   GtkRequisition req;
 
 #define N_LINES 1
+
+  gtk_widget_get_allocation (GTK_WIDGET (text_view), &allocation);
 
   priv = text_view->priv;
   _gtk_text_view_ensure_magnifier (text_view);
@@ -5070,6 +5073,7 @@ gtk_text_view_show_magnifier (GtkTextView *text_view,
   _gtk_magnifier_set_coords (GTK_MAGNIFIER (priv->magnifier),
                              rect.x, rect.y + rect.height / 2);
 
+  rect.x = CLAMP (rect.x, 0, allocation.width);
   rect.y += rect.height / 4;
   rect.height -= rect.height / 4;
   gtk_popover_set_pointing_to (GTK_POPOVER (priv->magnifier_popover),
