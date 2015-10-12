@@ -1,3 +1,20 @@
+Overview of Changes in GTK+ 3.18.2
+==================================
+
+* Bug fixes:
+ 753371 Bad focus order in GtkFlowBox
+ 755413 Bug in _gtk_text_btree_get_iter_at_last_toggle()
+ 755791 GtkSwitch: unclip css box-shadow on the slider
+ 755927 Occasional "stuck key" after closing window using keyboard shortcut...
+ 755988 gtk printer dialog won't print jobs with names exceeding 255 charac...
+ 756042 GtkAssistant: Segfault after g_object_run_dispose(page)
+ 756195 GtkColorChooser: Plus/checkmark icons are blurry in hidpi
+ 756338 applications segfaults on 3.18.1 when using external themes
+
+* Translation updates:
+ Finnish
+ German
+
 Overview of Changes in GTK+ 3.18.1
 ==================================
 
