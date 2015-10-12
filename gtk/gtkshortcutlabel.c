@@ -77,13 +77,10 @@ get_labels (guint key, GdkModifierType modifier)
     labels[i++] = C_("keyboard label", "Meta");
 
   ch = gdk_keyval_to_unicode (key);
-  if (ch && ch < 0x80 && (g_unichar_isgraph (ch) || ch == ' '))
+  if (ch && ch < 0x80 && g_unichar_isgraph (ch))
     {
       switch (ch)
         {
-        case ' ':
-          labels[i++] = C_("keyboard label", "Space");
-          break;
         case '\\':
           labels[i++] = C_("keyboard label", "Backslash");
           break;
@@ -109,6 +106,9 @@ get_labels (guint key, GdkModifierType modifier)
           break;
         case GDK_KEY_Down:
           labels[i++] = "\xe2\x86\x93";
+          break;
+        case GDK_KEY_space:
+          labels[i++] = "\xe2\x90\xa3";
           break;
         case GDK_KEY_Page_Up:
           labels[i++] = C_("keyboard label", "Page_Up");
