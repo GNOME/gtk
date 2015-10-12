@@ -112,7 +112,7 @@ copy ..\..\..\gtk\org.gtk.Settings.Debug.gschema.xml $(CopyDir)\share\glib-2.0\s
 copy ..\..\..\demos\gtk-demo\org.gtk.Demo.gschema.xml $(CopyDir)\share\glib-2.0\schemas&#x0D;&#x0A;
 
 echo &quot;Compiling gsettings XML Files...&quot;&#x0D;&#x0A;
-$(CopyDir)\bin\glib-compile-schemas.exe $(CopyDir)\share\glib-2.0\schemas&#x0D;&#x0A;
+$(GlibEtcInstallRoot)\bin\glib-compile-schemas.exe $(CopyDir)\share\glib-2.0\schemas&#x0D;&#x0A;
 "
  />
  <UserMacro

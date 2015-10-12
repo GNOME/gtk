@@ -109,7 +109,7 @@ copy ..\..\..\gtk\org.gtk.Settings.ColorChooser.gschema.xml $(CopyDir)\share\gli
 copy ..\..\..\gtk\org.gtk.Settings.Debug.gschema.xml $(CopyDir)\share\glib-2.0\schemas
 copy ..\..\..\demos\gtk-demo\org.gtk.Demo.gschema.xml $(CopyDir)\share\glib-2.0\schemas
 echo "Compiling gsettings XML Files..."
-$(CopyDir)\bin\glib-compile-schemas.exe $(CopyDir)\share\glib-2.0\schemas
+$(GlibEtcInstallRoot)\bin\glib-compile-schemas.exe $(CopyDir)\share\glib-2.0\schemas
     </GtkDoInstall>
     <GtkDoInstallBroadwayHeaders>
 copy ..\..\..\gdk\broadway\gdkbroadway.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
