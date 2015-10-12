@@ -253,6 +253,7 @@
       <xi:include href="xml/gtktooltip.xml" />
       <xi:include href="xml/gtkviewport.xml" />
       <xi:include href="xml/gtkaccessible.xml" />
+      <xi:include href="xml/gtkshortcutswindow.xml" />
     </chapter>
 
     <chapter id="AbstractObjects">

@@ -8422,3 +8422,10 @@ GTK_IS_GL_AREA_CLASS
 <SUBSECTION Private>
 gtk_gl_area_get_type
 </SECTION>
+
+<SECTION>
+<FILE>gtkshortcutswindow</FILE>
+GtkShortcutsWindow
+<SUBSECTION Private>
+gtk_shortcuts_window_get_type
+</SECTION>

@@ -377,12 +377,27 @@
             <group>
               <property name="title" translatable="yes">Stopwatch</property>
               <shortcut>
-                <property name="accelerator">&lt;ctrl&gt;N</property>
-                <property name="title" translatable="yes">Add an alarm</property>
+                <property name="accelerator">space</property>
+                <property name="title" translatable="yes">Start / Stop / Continue</property>
               </shortcut>
               <shortcut>
-                <property name="accelerator">&lt;ctrl&gt;S</property>
-                <property name="title" translatable="yes">Select alarms</property>
+                <property name="accelerator">L</property>
+                <property name="title" translatable="yes">Lap</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">Delete</property>
+                <property name="title" translatable="yes">Reset</property>
+              </shortcut>
+            </group>
+            <group>
+              <property name="title" translatable="yes">Timer</property>
+              <shortcut>
+                <property name="accelerator">space</property>
+                <property name="title" translatable="yes">Start / Stop / Pause</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">Delete</property>
+                <property name="title" translatable="yes">Reset</property>
               </shortcut>
             </group>
           </column>
