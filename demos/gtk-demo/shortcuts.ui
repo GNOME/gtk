@@ -3,6 +3,7 @@
   <!-- interface-requires gtk+ 3.17 -->
 
   <object class="GtkWindow" id="window1">
+    <property name="title" translatable="yes">Shortcuts</property>
     <child>
       <object class="GtkBox">
         <property name="visible">1</property>
