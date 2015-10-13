@@ -1221,7 +1221,12 @@ should_be_mapped (GdkWindow *window)
 static gboolean
 should_map_as_subsurface (GdkWindow *window)
 {
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
   if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_SUBSURFACE)
+    return TRUE;
+
+  if (impl->hint == GDK_WINDOW_TYPE_HINT_TOOLTIP)
     return TRUE;
 
   return FALSE;
