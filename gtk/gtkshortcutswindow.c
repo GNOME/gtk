@@ -97,6 +97,48 @@ enum {
 static GParamSpec *properties[LAST_PROP];
 static guint signals[LAST_SIGNAL];
 
+
+static gint
+number_of_children (GtkContainer *container)
+{
+  GList *children;
+  gint n;
+
+  children = gtk_container_get_children (container);
+  n = g_list_length (children);
+  g_list_free (children);
+
+  return n;
+}
+
+static void
+update_title_stack (GtkShortcutsWindow *self)
+{
+  GtkShortcutsWindowPrivate *priv = gtk_shortcuts_window_get_instance_private (self);
+  GtkWidget *visible_child;
+
+  visible_child = gtk_stack_get_visible_child (priv->stack);
+
+  if (GTK_IS_SHORTCUTS_SECTION (visible_child))
+    {
+      if (number_of_children (GTK_CONTAINER (priv->stack)) > 3)
+        {
+          const gchar *title;
+          gtk_stack_set_visible_child_name (priv->title_stack, "sections");
+          title = gtk_shortcuts_section_get_title (GTK_SHORTCUTS_SECTION (visible_child));
+          gtk_label_set_label (priv->menu_label, title);
+        }
+      else
+        {
+          gtk_stack_set_visible_child_name (priv->title_stack, "title");
+        }
+    }
+  else if (visible_child != NULL)
+    {
+      gtk_stack_set_visible_child_name (priv->title_stack, "search");
+    }
+}
+
 static void
 gtk_shortcuts_window_add_section (GtkShortcutsWindow  *self,
                                   GtkShortcutsSection *section)
@@ -105,13 +147,18 @@ gtk_shortcuts_window_add_section (GtkShortcutsWindow  *self,
   GtkListBoxRow *row;
   const gchar *title;
   const gchar *name;
+  const gchar *visible_section;
   GtkWidget *label;
 
   name = gtk_shortcuts_section_get_section_name (section);
   title = gtk_shortcuts_section_get_title (section);
-  gtk_shortcuts_section_set_view_name (section, priv->view_name);
 
   gtk_stack_add_titled (priv->stack, GTK_WIDGET (section), name, title);
+
+  visible_section = gtk_stack_get_visible_child_name (priv->stack);
+  if (strcmp (visible_section, "internal-search") == 0 ||
+      (priv->initial_section && strcmp (priv->initial_section, visible_section) == 0))
+    gtk_stack_set_visible_child (priv->stack, GTK_WIDGET (section));
 
   row = g_object_new (GTK_TYPE_LIST_BOX_ROW,
                       "visible", TRUE,
@@ -125,6 +172,8 @@ gtk_shortcuts_window_add_section (GtkShortcutsWindow  *self,
                         NULL);
   gtk_container_add (GTK_CONTAINER (row), GTK_WIDGET (label));
   gtk_container_add (GTK_CONTAINER (priv->list_box), GTK_WIDGET (row));
+
+  update_title_stack (self);
 }
 
 static void
@@ -160,47 +209,19 @@ gtk_shortcuts_window_set_view_name (GtkShortcutsWindow *self,
   g_list_free (sections);
 }
 
-static gint
-number_of_children (GtkContainer *container)
-{
-  GList *children;
-  gint n;
-
-  children = gtk_container_get_children (container);
-  n = g_list_length (children);
-  g_list_free (children);
-
-  return n;
-}
-
 static void
-gtk_shortcuts_window__stack__notify_visible_child (GtkShortcutsWindow *self,
-                                                   GParamSpec         *pspec,
-                                                   GtkStack           *stack)
+gtk_shortcuts_window_set_section_name (GtkShortcutsWindow *self,
+                                       const gchar        *section_name)
 {
   GtkShortcutsWindowPrivate *priv = gtk_shortcuts_window_get_instance_private (self);
-  GtkWidget *visible_child;
+  GtkWidget *section;
 
-  visible_child = gtk_stack_get_visible_child (stack);
+  g_free (priv->initial_section);
+  priv->initial_section = g_strdup (section_name);
 
-  if (GTK_IS_SHORTCUTS_SECTION (visible_child))
-    {
-      if (number_of_children (GTK_CONTAINER (stack)) > 3)
-        {
-          const gchar *title;
-          gtk_stack_set_visible_child_name (priv->title_stack, "sections");
-          title = gtk_shortcuts_section_get_title (GTK_SHORTCUTS_SECTION (visible_child));
-          gtk_label_set_label (priv->menu_label, title);
-        }
-      else
-        {
-          gtk_stack_set_visible_child_name (priv->title_stack, "title");
-        }
-    }
-  else if (visible_child != NULL)
-    {
-      gtk_stack_set_visible_child_name (priv->title_stack, "search");
-    }
+  section = gtk_stack_get_child_by_name (priv->stack, section_name);
+  if (section)
+    gtk_stack_set_visible_child (priv->stack, section);
 }
 
 static void
@@ -413,6 +434,7 @@ sections_parser_start_element (GMarkupParseContext  *context,
                             GError              **error)
 {
   ViewsParserData *parser_data = user_data;
+  GtkShortcutsWindowPrivate *priv = gtk_shortcuts_window_get_instance_private (parser_data->self);
   GtkWidget *item;
 
   if (g_strcmp0 (element_name, "sections") == 0)
@@ -433,8 +455,8 @@ sections_parser_start_element (GMarkupParseContext  *context,
       item = g_object_new (GTK_TYPE_SHORTCUTS_SECTION,
                            "section-name", name,
                            "visible", TRUE,
+                           "view-name", priv->view_name,
                            NULL);
-
       g_queue_push_head (parser_data->stack, g_object_ref_sink (item));
     }
   else if (g_strcmp0 (element_name, "page") == 0)
@@ -834,14 +856,11 @@ gtk_shortcuts_window_set_property (GObject      *object,
                                   GParamSpec   *pspec)
 {
   GtkShortcutsWindow *self = (GtkShortcutsWindow *)object;
-  GtkShortcutsWindowPrivate *priv = gtk_shortcuts_window_get_instance_private (self);
 
   switch (prop_id)
     {
     case PROP_SECTION_NAME:
-      g_free (priv->initial_section);
-      priv->initial_section = g_value_dup_string (value);
-      gtk_stack_set_visible_child_name (priv->stack, g_value_get_string (value));
+      gtk_shortcuts_window_set_section_name (self, g_value_get_string (value));
       break;
 
     case PROP_VIEW_NAME:
@@ -1048,11 +1067,8 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
                            self,
                            G_CONNECT_SWAPPED);
 
-  g_signal_connect_object (priv->stack,
-                           "notify::visible-child",
-                           G_CALLBACK (gtk_shortcuts_window__stack__notify_visible_child),
-                           self,
-                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (priv->stack, "notify::visible-child",
+                           G_CALLBACK (update_title_stack), self, G_CONNECT_SWAPPED);
 
   scroller = g_object_new (GTK_TYPE_SCROLLED_WINDOW,
                            "visible", TRUE,
