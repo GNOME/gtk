@@ -227,11 +227,6 @@ struct _GtkWindowPrivate
   guint    stick_initially           : 1;
   guint    transient_parent_group    : 1;
   guint    type                      : 4; /* GtkWindowType */
-  guint    type_hint                 : 3; /* GdkWindowTypeHint if the hint is
-                                           * one of the original eight. If not,
-                                           * then it contains
-                                           * GDK_WINDOW_TYPE_HINT_NORMAL
-                                           */
   guint    urgent                    : 1;
   guint    gravity                   : 5; /* GdkGravity */
   guint    csd_requested             : 1;
@@ -242,6 +237,8 @@ struct _GtkWindowPrivate
   guint    tiled                     : 1;
 
   guint    use_subsurface            : 1;
+
+  GdkWindowTypeHint type_hint;
 
   GtkGesture *multipress_gesture;
   GtkGesture *drag_gesture;
