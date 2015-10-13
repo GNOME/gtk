@@ -19,6 +19,13 @@
         <child>
           <object class="GtkButton">
             <property name="visible">1</property>
+            <property name="label">GEdit</property>
+            <signal name="clicked" handler="gtk_widget_show" swapped="1" object="gedit-shortcuts"/>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton">
+            <property name="visible">1</property>
             <property name="label">Clocks - all</property>
             <signal name="clicked" handler="show_clock_shortcuts" swapped="1" object="clocks-shortcuts"/>
           </object>
@@ -416,7 +423,115 @@
         </page>
       </section>
     </sections>
-    <property name="view-name">stopwatch</property>
+  </object>
+
+  <object class="GtkShortcutsWindow" id="gedit-shortcuts">
+    <property name="transient-for">window1</property>
+    <property name="modal">1</property>
+    <signal name="delete-event" handler="gtk_widget_hide_on_delete"/>
+    <sections>
+      <section name="shortcuts">
+        <page>
+          <column>
+            <group>
+              <property name="title" translatable="yes">Touchpad gestures</property>
+              <gesture>
+                <property name="title" translatable="yes">Switch to the next document</property>
+                <property name="subtitle" translatable="yes">Two finger swipe right</property>
+                <property name="gicon">right-swipe-icon</property>
+              </gesture>
+              <gesture>
+                <property name="title" translatable="yes">Switch to the previous document</property>
+                <property name="subtitle" translatable="yes">Two finger swipe left</property>
+                <property name="gicon">left-swipe-icon</property>
+              </gesture>
+            </group>
+            <group>
+              <property name="title" translatable="yes">Documents</property>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;N</property>
+                <property name="title" translatable="yes">Create new document</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;O</property>
+                <property name="title" translatable="yes">Open a document</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;S</property>
+                <property name="title" translatable="yes">Save the document</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;W</property>
+                <property name="title" translatable="yes">Close the document</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;&lt;Alt&gt;Page_Down</property>
+                <property name="title" translatable="yes">Switch to the next document</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;&lt;Alt&gt;Page_Up</property>
+                <property name="title" translatable="yes">Switch to the previous document</property>
+              </shortcut>
+            </group>
+          </column>
+          <column>
+            <group>
+              <property name="title" translatable="yes">Find and Replace</property>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;F</property>
+                <property name="title" translatable="yes">Find</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;G</property>
+                <property name="title" translatable="yes">Find the next match</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;&lt;Shift&gt;G</property>
+                <property name="title" translatable="yes">Find the previous match</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;H</property>
+                <property name="title" translatable="yes">Find and Replace</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;&lt;Shift&gt;K</property>
+                <property name="title" translatable="yes">Clear highlight</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;I</property>
+                <property name="title" translatable="yes">Go to line</property>
+              </shortcut>
+            </group>
+            <group>
+              <property name="title" translatable="yes">Tools</property>
+              <shortcut>
+                <property name="accelerator">&lt;shift&gt;F7</property>
+                <property name="title" translatable="yes">Check spelling</property>
+              </shortcut>
+            </group>
+          </column>
+        </page>
+        <page>
+          <column>
+            <group>
+              <property name="title" translatable="yes">Miscellaneous</property>
+              <shortcut>
+                <property name="accelerator">F11</property>
+                <property name="title" translatable="yes">Fullscreen on / off</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">&lt;ctrl&gt;P</property>
+                <property name="title" translatable="yes">Print the document</property>
+              </shortcut>
+              <shortcut>
+                <property name="accelerator">Insert</property>
+                <property name="title" translatable="yes">Toggle insert / overwrite</property>
+              </shortcut>
+            </group>
+          </column>
+        </page>
+      </section>
+    </sections>
   </object>
 
 </interface>
