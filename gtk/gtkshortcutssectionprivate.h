@@ -39,6 +39,8 @@ GType        gtk_shortcuts_section_get_type (void) G_GNUC_CONST;
 
 const gchar *gtk_shortcuts_section_get_section_name (GtkShortcutsSection *self);
 const gchar *gtk_shortcuts_section_get_title        (GtkShortcutsSection *self);
+void         gtk_shortcuts_section_set_view_name    (GtkShortcutsSection *self,
+                                                     const gchar         *view_name);
 
 G_END_DECLS
 

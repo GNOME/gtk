@@ -21,6 +21,8 @@
 #include "gtkshortcutssectionprivate.h"
 
 #include "gtkshortcutspageprivate.h"
+#include "gtkshortcutsgroupprivate.h"
+#include "gtktogglebutton.h"
 #include "gtkstack.h"
 #include "gtkstackswitcher.h"
 #include "gtkstylecontext.h"
@@ -34,10 +36,13 @@ struct _GtkShortcutsSection
 
   gchar            *name;
   gchar            *title;
+  gchar            *view_name;
 
   GtkStack         *stack;
   GtkStackSwitcher *switcher;
+  GtkWidget        *show_all;
 
+  gboolean          has_filtered_group;
   guint             last_page_num;
 };
 
@@ -52,6 +57,7 @@ enum {
   PROP_0,
   PROP_TITLE,
   PROP_SECTION_NAME,
+  PROP_VIEW_NAME,
   LAST_PROP
 };
 
@@ -124,6 +130,10 @@ gtk_shortcuts_section_get_property (GObject    *object,
       g_value_set_string (value, self->name);
       break;
 
+    case PROP_VIEW_NAME:
+      g_value_set_string (value, self->view_name);
+      break;
+
     case PROP_TITLE:
       g_value_set_string (value, self->title);
       break;
@@ -146,6 +156,10 @@ gtk_shortcuts_section_set_property (GObject      *object,
     case PROP_SECTION_NAME:
       g_free (self->name);
       self->name = g_value_dup_string (value);
+      break;
+
+    case PROP_VIEW_NAME:
+      gtk_shortcuts_section_set_view_name (self, g_value_get_string (value));
       break;
 
     case PROP_TITLE:
@@ -171,16 +185,17 @@ gtk_shortcuts_section_class_init (GtkShortcutsSectionClass *klass)
   container_class->add = gtk_shortcuts_section_add;
 
   properties[PROP_SECTION_NAME] =
-    g_param_spec_string ("section-name",
-                         P_("Section Name"),
-                         P_("Section Name"),
+    g_param_spec_string ("section-name", P_("Section Name"), P_("Section Name"),
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  properties[PROP_VIEW_NAME] =
+    g_param_spec_string ("view-name", P_("View Name"), P_("View Name"),
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties[PROP_TITLE] =
-    g_param_spec_string ("title",
-                         P_("Title"),
-                         P_("Title"),
+    g_param_spec_string ("title", P_("Title"), P_("Title"),
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
@@ -188,8 +203,44 @@ gtk_shortcuts_section_class_init (GtkShortcutsSectionClass *klass)
 }
 
 static void
+update_group_visibility (GtkWidget *child, gpointer data)
+{
+  GtkShortcutsSection *self = data;
+
+  if (GTK_IS_SHORTCUTS_GROUP (child))
+    {
+      gchar *view;
+      gboolean match;
+
+      g_object_get (child, "view", &view, NULL);
+      match = view == NULL || self->view_name == NULL ||
+              strcmp (view, self->view_name) == 0;
+
+      gtk_widget_set_visible (child,
+                              match || gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->show_all)));
+      self->has_filtered_group |= !match;
+
+      g_free (view);
+    }
+  else if (GTK_IS_CONTAINER (child))
+    {
+      gtk_container_foreach (GTK_CONTAINER (child), update_group_visibility, data);
+    }
+}
+
+static void
+filter_groups_by_view (GtkShortcutsSection *self)
+{
+  self->has_filtered_group = FALSE;
+  gtk_container_foreach (GTK_CONTAINER (self), update_group_visibility, self);
+  gtk_widget_set_visible (GTK_WIDGET (self->show_all), self->has_filtered_group);
+}
+
+static void
 gtk_shortcuts_section_init (GtkShortcutsSection *self)
 {
+  GtkWidget *box;
+
   gtk_orientable_set_orientation (GTK_ORIENTABLE (self), GTK_ORIENTATION_VERTICAL);
   gtk_box_set_homogeneous (GTK_BOX (self), FALSE);
   gtk_box_set_spacing (GTK_BOX (self), 22);
@@ -211,7 +262,19 @@ gtk_shortcuts_section_init (GtkShortcutsSection *self)
                                  NULL);
   gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (self->switcher)), "round");
   gtk_style_context_remove_class (gtk_widget_get_style_context (GTK_WIDGET (self->switcher)), "linked");
-  gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (self->switcher));
+
+  self->show_all = gtk_toggle_button_new_with_label (_("Show All"));
+  gtk_widget_set_no_show_all (self->show_all, TRUE);
+  g_signal_connect_swapped (self->show_all, "toggled",
+                            G_CALLBACK (filter_groups_by_view), self);
+
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 20);
+  gtk_widget_show (box);
+  gtk_container_add (GTK_CONTAINER (self), box);
+
+  gtk_box_set_center_widget (GTK_BOX (box), GTK_WIDGET (self->switcher));
+  gtk_box_pack_end (GTK_BOX (box), self->show_all, TRUE, TRUE, 0);
+  gtk_widget_set_halign (self->show_all, GTK_ALIGN_END);
 }
 
 const gchar *
@@ -228,4 +291,18 @@ gtk_shortcuts_section_get_title (GtkShortcutsSection *self)
   g_return_val_if_fail (GTK_IS_SHORTCUTS_SECTION (self), NULL);
 
   return self->title;
+}
+
+void
+gtk_shortcuts_section_set_view_name (GtkShortcutsSection *self,
+                                     const gchar         *view_name)
+{
+  g_return_if_fail (GTK_IS_SHORTCUTS_SECTION (self));
+
+  g_free (self->view_name);
+  self->view_name = g_strdup (view_name);
+
+  filter_groups_by_view (self);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_VIEW_NAME]);
 }

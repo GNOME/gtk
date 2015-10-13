@@ -30,6 +30,7 @@ struct _GtkShortcutsGroup
   GtkBox    parent_instance;
 
   GtkLabel *title;
+  gchar *view;
 };
 
 struct _GtkShortcutsGroupClass
@@ -42,6 +43,7 @@ G_DEFINE_TYPE (GtkShortcutsGroup, gtk_shortcuts_group, GTK_TYPE_BOX)
 enum {
   PROP_0,
   PROP_TITLE,
+  PROP_VIEW,
   LAST_PROP
 };
 
@@ -59,6 +61,10 @@ gtk_shortcuts_group_get_property (GObject    *object,
     {
     case PROP_TITLE:
       g_value_set_string (value, gtk_label_get_label (self->title));
+      break;
+
+    case PROP_VIEW:
+      g_value_set_string (value, self->view);
       break;
 
     default:
@@ -80,9 +86,24 @@ gtk_shortcuts_group_set_property (GObject      *object,
       gtk_label_set_label (self->title, g_value_get_string (value));
       break;
 
+    case PROP_VIEW:
+      g_free (self->view);
+      self->view = g_value_dup_string (value);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
+}
+
+static void
+gtk_shortcuts_group_finalize (GObject *object)
+{
+  GtkShortcutsGroup *self = GTK_SHORTCUTS_GROUP (object);
+
+  g_free (self->view);
+
+  G_OBJECT_CLASS (gtk_shortcuts_group_parent_class)->finalize (object);
 }
 
 static void
@@ -90,13 +111,16 @@ gtk_shortcuts_group_class_init (GtkShortcutsGroupClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->finalize = gtk_shortcuts_group_finalize;
   object_class->get_property = gtk_shortcuts_group_get_property;
   object_class->set_property = gtk_shortcuts_group_set_property;
 
   properties[PROP_TITLE] =
-    g_param_spec_string ("title",
-                         P_("Title"),
-                         P_("Title"),
+    g_param_spec_string ("title", P_("Title"), P_("Title"),
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  properties[PROP_VIEW] =
+    g_param_spec_string ("view", P_("View"), P_("View"),
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 

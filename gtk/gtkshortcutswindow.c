@@ -47,6 +47,7 @@ typedef struct
   GHashTable     *keywords;
   gchar          *initial_section;
   gchar          *last_section_name;
+  gchar          *view_name;
   GtkSizeGroup   *search_text_group;
   GtkSizeGroup   *search_image_group;
   GHashTable     *search_items_hash;
@@ -89,6 +90,7 @@ enum {
 enum {
   PROP_0,
   PROP_SECTION_NAME,
+  PROP_VIEW_NAME,
   LAST_PROP
 };
 
@@ -107,6 +109,7 @@ gtk_shortcuts_window_add_section (GtkShortcutsWindow  *self,
 
   name = gtk_shortcuts_section_get_section_name (section);
   title = gtk_shortcuts_section_get_title (section);
+  gtk_shortcuts_section_set_view_name (section, priv->view_name);
 
   gtk_stack_add_titled (priv->stack, GTK_WIDGET (section), name, title);
 
@@ -134,6 +137,27 @@ gtk_shortcuts_window_add (GtkContainer *container,
     gtk_shortcuts_window_add_section (self, GTK_SHORTCUTS_SECTION (widget));
   else
     GTK_CONTAINER_CLASS (gtk_shortcuts_window_parent_class)->add (container, widget);
+}
+
+static void
+gtk_shortcuts_window_set_view_name (GtkShortcutsWindow *self,
+                                    const gchar        *view_name)
+{
+  GtkShortcutsWindowPrivate *priv = gtk_shortcuts_window_get_instance_private (self);
+  GList *sections, *l;
+
+  g_free (priv->view_name);
+  priv->view_name = g_strdup (view_name);
+
+  sections = gtk_container_get_children (GTK_CONTAINER (priv->stack));
+  for (l = sections; l; l = l->next)
+    {
+      GtkShortcutsSection *section = l->data;
+
+      if (GTK_IS_SHORTCUTS_SECTION (section))
+        gtk_shortcuts_section_set_view_name (section, priv->view_name);
+    }
+  g_list_free (sections);
 }
 
 static gint
@@ -443,11 +467,19 @@ sections_parser_start_element (GMarkupParseContext  *context,
     }
   else if (g_strcmp0 (element_name, "group") == 0)
     {
+      const gchar *view = NULL;
+
       if (!check_parent (context, "column", error))
+        return;
+
+      if (!g_markup_collect_attributes (element_name, attribute_names, attribute_values, error,
+                                        G_MARKUP_COLLECT_STRING | G_MARKUP_COLLECT_OPTIONAL, "view", &view,
+                                        G_MARKUP_COLLECT_INVALID))
         return;
 
       item = g_object_new (GTK_TYPE_SHORTCUTS_GROUP,
                            "visible", TRUE,
+                           "view", view,
                            NULL);
       g_queue_push_head (parser_data->stack, g_object_ref_sink (item));
     }
@@ -742,6 +774,7 @@ gtk_shortcuts_window_finalize (GObject *object)
 
   g_clear_pointer (&priv->keywords, g_hash_table_unref);
   g_clear_pointer (&priv->initial_section, g_free);
+  g_clear_pointer (&priv->view_name, g_free);
   g_clear_pointer (&priv->last_section_name, g_free);
   g_clear_pointer (&priv->search_items_hash, g_hash_table_unref);
 
@@ -785,6 +818,10 @@ gtk_shortcuts_window_get_property (GObject    *object,
       }
       break;
 
+    case PROP_VIEW_NAME:
+      g_value_set_string (value, priv->view_name);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -805,6 +842,10 @@ gtk_shortcuts_window_set_property (GObject      *object,
       g_free (priv->initial_section);
       priv->initial_section = g_value_dup_string (value);
       gtk_stack_set_visible_child_name (priv->stack, g_value_get_string (value));
+      break;
+
+    case PROP_VIEW_NAME:
+      gtk_shortcuts_window_set_view_name (self, g_value_get_string (value));
       break;
 
     default:
@@ -829,9 +870,11 @@ gtk_shortcuts_window_class_init (GtkShortcutsWindowClass *klass)
   klass->close = gtk_shortcuts_window_real_close;
 
   properties[PROP_SECTION_NAME] =
-    g_param_spec_string ("section-name",
-                         P_("View Name"),
-                         P_("View Name"),
+    g_param_spec_string ("section-name", P_("Section Name"), P_("Section Name"),
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  properties[PROP_VIEW_NAME] =
+    g_param_spec_string ("view-name", P_("View Name"), P_("View Name"),
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
