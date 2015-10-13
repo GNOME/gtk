@@ -351,7 +351,7 @@
                 <property name="title" translatable="yes">Back</property>
               </shortcut>
             </group>
-            <group>
+            <group view="world">
               <property name="title" translatable="yes">World Clocks</property>
               <shortcut>
                 <property name="accelerator">&lt;ctrl&gt;N</property>
@@ -364,7 +364,7 @@
             </group>
           </column>
           <column>
-            <group>
+            <group view="alarm">
               <property name="title" translatable="yes">Alarm</property>
               <shortcut>
                 <property name="accelerator">&lt;ctrl&gt;N</property>
@@ -375,7 +375,7 @@
                 <property name="title" translatable="yes">Select alarms</property>
               </shortcut>
             </group>
-            <group>
+            <group view="stopwatch">
               <property name="title" translatable="yes">Stopwatch</property>
               <shortcut>
                 <property name="accelerator">Return space</property>
@@ -390,7 +390,7 @@
                 <property name="title" translatable="yes">Reset</property>
               </shortcut>
             </group>
-            <group>
+            <group view="timer">
               <property name="title" translatable="yes">Timer</property>
               <shortcut>
                 <property name="accelerator">Return space</property>
@@ -406,6 +406,7 @@
       </section>
     </sections>
     <property name="section-name">shortcuts</property>
+    <property name="view-name">stopwatch</property>
   </object>
 
 </interface>
