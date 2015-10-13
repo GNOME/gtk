@@ -423,7 +423,42 @@ gdk_mir_window_impl_ref_cairo_surface (GdkWindow *window)
       ensure_surface (window);
 
       mir_buffer_stream_get_graphics_region (mir_surface_get_buffer_stream (impl->surface), &region);
-      g_assert (region.pixel_format == mir_pixel_format_argb_8888);
+
+      switch (region.pixel_format)
+        {
+        case mir_pixel_format_abgr_8888:
+          g_warning ("pixel format ABGR 8888 not supported, using ARGB 8888");
+          pixel_format = CAIRO_FORMAT_ARGB32;
+          break;
+        case mir_pixel_format_xbgr_8888:
+          g_warning ("pixel format XBGR 8888 not supported, using XRGB 8888");
+          pixel_format = CAIRO_FORMAT_RGB24;
+          break;
+        case mir_pixel_format_argb_8888:
+          pixel_format = CAIRO_FORMAT_ARGB32;
+          break;
+        case mir_pixel_format_xrgb_8888:
+          pixel_format = CAIRO_FORMAT_RGB24;
+          break;
+        case mir_pixel_format_bgr_888:
+          g_error ("pixel format BGR 888 not supported");
+          break;
+        case mir_pixel_format_rgb_888:
+          g_error ("pixel format RGB 888 not supported");
+          break;
+        case mir_pixel_format_rgb_565:
+          pixel_format = CAIRO_FORMAT_RGB16_565;
+          break;
+        case mir_pixel_format_rgba_5551:
+          g_error ("pixel format RGBA 5551 not supported");
+          break;
+        case mir_pixel_format_rgba_4444:
+          g_error ("pixel format RGBA 4444 not supported");
+          break;
+        default:
+          g_error ("unknown pixel format");
+          break;
+        }
 
       cairo_surface = cairo_image_surface_create_for_data ((unsigned char *) region.vaddr,
                                                            pixel_format,

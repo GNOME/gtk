@@ -539,11 +539,18 @@ get_pixel_formats (MirConnection *connection,
     {
       *sw_pixel_format = mir_pixel_format_invalid;
 
-      for (i = 0; i < n_formats; i++)
+      for (i = 0; i < n_formats && *sw_pixel_format == mir_pixel_format_invalid; i++)
         {
-          if (formats[i] == mir_pixel_format_argb_8888)
+          switch (formats[i])
             {
+            case mir_pixel_format_abgr_8888:
+            case mir_pixel_format_xbgr_8888:
+            case mir_pixel_format_argb_8888:
+            case mir_pixel_format_xrgb_8888:
+            case mir_pixel_format_rgb_565:
               *sw_pixel_format = formats[i];
+              break;
+            default:
               break;
             }
         }
@@ -553,22 +560,20 @@ get_pixel_formats (MirConnection *connection,
     {
       *hw_pixel_format = mir_pixel_format_invalid;
 
-      for (i = 0; i < n_formats; i++)
+      for (i = 0; i < n_formats && *hw_pixel_format == mir_pixel_format_invalid; i++)
         {
           switch (formats[i])
-          {
+            {
             case mir_pixel_format_abgr_8888:
             case mir_pixel_format_xbgr_8888:
             case mir_pixel_format_argb_8888:
             case mir_pixel_format_xrgb_8888:
+            case mir_pixel_format_rgb_565:
               *hw_pixel_format = formats[i];
               break;
             default:
-              continue;
-          }
-
-          if (*hw_pixel_format != mir_pixel_format_invalid)
-            break;
+              break;
+            }
         }
     }
 }
