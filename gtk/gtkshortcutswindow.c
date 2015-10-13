@@ -52,6 +52,7 @@ typedef struct
   GHashTable     *search_items_hash;
 
   GtkStack       *stack;
+  GtkStack       *title_stack;
   GtkMenuButton  *menu_button;
   GtkLabel       *menu_label;
   GtkSearchBar   *search_bar;
@@ -135,6 +136,19 @@ gtk_shortcuts_window_add (GtkContainer *container,
     GTK_CONTAINER_CLASS (gtk_shortcuts_window_parent_class)->add (container, widget);
 }
 
+static gint
+number_of_children (GtkContainer *container)
+{
+  GList *children;
+  gint n;
+
+  children = gtk_container_get_children (container);
+  n = g_list_length (children);
+  g_list_free (children);
+
+  return n;
+}
+
 static void
 gtk_shortcuts_window__stack__notify_visible_child (GtkShortcutsWindow *self,
                                                    GParamSpec         *pspec,
@@ -147,20 +161,21 @@ gtk_shortcuts_window__stack__notify_visible_child (GtkShortcutsWindow *self,
 
   if (GTK_IS_SHORTCUTS_VIEW (visible_child))
     {
-      const gchar *title;
-
-      title = gtk_shortcuts_view_get_title (GTK_SHORTCUTS_VIEW (visible_child));
-      gtk_label_set_label (priv->menu_label, title);
+      if (number_of_children (GTK_CONTAINER (stack)) > 2)
+        {
+          const gchar *title;
+          gtk_stack_set_visible_child_name (priv->title_stack, "views");
+          title = gtk_shortcuts_view_get_title (GTK_SHORTCUTS_VIEW (visible_child));
+          gtk_label_set_label (priv->menu_label, title);
+        }
+      else
+        {
+          gtk_stack_set_visible_child_name (priv->title_stack, "title");
+        }
     }
   else if (visible_child != NULL)
     {
-      gchar *title = NULL;
-
-      gtk_container_child_get (GTK_CONTAINER (stack), visible_child,
-                               "title", &title,
-                               NULL);
-      gtk_label_set_label (priv->menu_label, title);
-      g_free (title);
+      gtk_stack_set_visible_child_name (priv->title_stack, "search");
     }
 }
 
@@ -836,6 +851,7 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
   GtkArrow *arrow;
   GtkWidget *entry;
   GtkWidget *scroller;
+  GtkWidget *label;
 
   gtk_window_set_resizable (GTK_WINDOW (self), FALSE);
 
@@ -885,13 +901,27 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
                               NULL);
   gtk_container_add (GTK_CONTAINER (main_box), GTK_WIDGET (priv->stack));
 
+  priv->title_stack = g_object_new (GTK_TYPE_STACK,
+                                    "visible", TRUE,
+                                    NULL);
+  gtk_header_bar_set_custom_title (priv->header_bar, GTK_WIDGET (priv->title_stack));
+
+  label = gtk_label_new (_("Shortcuts"));
+  gtk_widget_show (label);
+  gtk_style_context_add_class (gtk_widget_get_style_context (label), "title");
+  gtk_stack_add_named (priv->title_stack, label, "title");
+
+  label = gtk_label_new (_("Search Results"));
+  gtk_widget_show (label);
+  gtk_style_context_add_class (gtk_widget_get_style_context (label), "title");
+  gtk_stack_add_named (priv->title_stack, label, "search");
+
   priv->menu_button = g_object_new (GTK_TYPE_MENU_BUTTON,
                                     "focus-on-click", FALSE,
                                     "visible", TRUE,
                                     NULL);
-  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (priv->menu_button)),
-                               "flat");
-  gtk_header_bar_set_custom_title (priv->header_bar, GTK_WIDGET (priv->menu_button));
+  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (priv->menu_button)), "flat");
+  gtk_stack_add_named (priv->title_stack, GTK_WIDGET (priv->menu_button), "views");
 
   menu_box = g_object_new (GTK_TYPE_BOX,
                            "orientation", GTK_ORIENTATION_HORIZONTAL,
