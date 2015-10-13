@@ -317,7 +317,6 @@
         </page>
       </section>
     </sections>
-    <property name="section-name">editor</property>
   </object>
 
   <object class="GtkShortcutsWindow" id="clocks-shortcuts">
@@ -325,7 +324,6 @@
     <property name="modal">1</property>
     <sections>
       <section name="shortcuts">
-        <property name="title" translatable="yes">Shortcuts</property>
         <page>
           <column>
             <group>
@@ -405,7 +403,6 @@
         </page>
       </section>
     </sections>
-    <property name="section-name">shortcuts</property>
     <property name="view-name">stopwatch</property>
   </object>
 
