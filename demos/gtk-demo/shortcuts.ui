@@ -319,6 +319,7 @@
     </views>
     <property name="view-name">editor</property>
   </object>
+
   <object class="GtkShortcutsWindow" id="clocks-shortcuts">
     <property name="transient-for">window1</property>
     <property name="modal">1</property>
@@ -377,7 +378,7 @@
             <group>
               <property name="title" translatable="yes">Stopwatch</property>
               <shortcut>
-                <property name="accelerator">space</property>
+                <property name="accelerator">Return space</property>
                 <property name="title" translatable="yes">Start / Stop / Continue</property>
               </shortcut>
               <shortcut>
@@ -392,7 +393,7 @@
             <group>
               <property name="title" translatable="yes">Timer</property>
               <shortcut>
-                <property name="accelerator">space</property>
+                <property name="accelerator">Return space</property>
                 <property name="title" translatable="yes">Start / Stop / Pause</property>
               </shortcut>
               <shortcut>
@@ -406,4 +407,5 @@
     </views>
     <property name="view-name">shortcuts</property>
   </object>
+
 </interface>
