@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.17 -->
-  <object class="GFileIcon" id="left-swipe-icon">
-    <property name="file">resource:///icons/gesture-two-finger-swipe-left.svg</property>
-  </object>
-  <object class="GFileIcon" id="right-swipe-icon">
-    <property name="file">resource:///icons/gesture-two-finger-swipe-right.svg</property>
-  </object>
+
   <object class="GtkWindow" id="window1">
     <child>
       <object class="GtkBox">
         <property name="visible">1</property>
+        <property name="orientation">vertical</property>
         <property name="margin">50</property>
         <property name="spacing">10</property>
         <child>
@@ -23,16 +19,32 @@
         <child>
           <object class="GtkButton">
             <property name="visible">1</property>
-            <property name="label">Clocks</property>
-            <signal name="clicked" handler="gtk_widget_show" swapped="1" object="clocks-shortcuts"/>
+            <property name="label">Clocks - all</property>
+            <signal name="clicked" handler="show_clock_shortcuts" swapped="1" object="clocks-shortcuts"/>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton">
+            <property name="visible">1</property>
+            <property name="label">Clocks - Stopwatch</property>
+            <signal name="clicked" handler="show_clock_shortcuts_stopwatch" swapped="1" object="clocks-shortcuts"/>
           </object>
         </child>
       </object>
     </child>
   </object>
+
+  <object class="GFileIcon" id="left-swipe-icon">
+    <property name="file">resource:///icons/gesture-two-finger-swipe-left.svg</property>
+  </object>
+  <object class="GFileIcon" id="right-swipe-icon">
+    <property name="file">resource:///icons/gesture-two-finger-swipe-right.svg</property>
+  </object>
+
   <object class="GtkShortcutsWindow" id="builder-shortcuts">
     <property name="transient-for">window1</property>
     <property name="modal">1</property>
+    <signal name="delete-event" handler="gtk_widget_hide_on_delete"/>
     <sections>
       <section name="editor">
         <property name="title" translatable="yes">Editor Shortcuts</property>
@@ -322,6 +334,7 @@
   <object class="GtkShortcutsWindow" id="clocks-shortcuts">
     <property name="transient-for">window1</property>
     <property name="modal">1</property>
+    <signal name="delete-event" handler="gtk_widget_hide_on_delete"/>
     <sections>
       <section name="shortcuts">
         <page>
