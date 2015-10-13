@@ -47,7 +47,7 @@ enum {
 static GParamSpec *properties[LAST_PROP];
 
 static gchar **
-get_labels (guint key, GdkModifierType modifier)
+get_labels (guint key, GdkModifierType modifier, guint *n_mods)
 {
   const gchar *labels[16];
   gchar key_label[6];
@@ -75,6 +75,8 @@ get_labels (guint key, GdkModifierType modifier)
     labels[i++] = C_("keyboard label", "Hyper");
   if (modifier & GDK_META_MASK)
     labels[i++] = C_("keyboard label", "Meta");
+
+  *n_mods = i;
 
   ch = gdk_keyval_to_unicode (key);
   if (ch && ch < 0x80 && g_unichar_isgraph (ch))
@@ -110,6 +112,9 @@ get_labels (guint key, GdkModifierType modifier)
         case GDK_KEY_space:
           labels[i++] = "\xe2\x90\xa3";
           break;
+        case GDK_KEY_Return:
+          labels[i++] = "\xe2\x8f\x8e";
+          break;
         case GDK_KEY_Page_Up:
           labels[i++] = C_("keyboard label", "Page_Up");
           break;
@@ -139,70 +144,71 @@ get_labels (guint key, GdkModifierType modifier)
   return g_strdupv ((gchar **)labels);
 }
 
+static GtkWidget *
+dim_label (const gchar *text)
+{
+  GtkWidget *label;
+
+  label = gtk_label_new (text);
+  gtk_widget_show (label);
+  gtk_style_context_add_class (gtk_widget_get_style_context (label), "dim-label");
+
+  return label;
+}
+
 static void
 gtk_shortcut_label_rebuild (GtkShortcutLabel *self)
 {
+  gchar **accels = NULL;
   gchar **keys = NULL;
   GdkModifierType modifier = 0;
   guint key = 0;
-  guint i;
+  guint i, k;
+  guint n_mods;
 
   gtk_container_foreach (GTK_CONTAINER (self), (GtkCallback)gtk_widget_destroy, NULL);
 
   if (self->accelerator == NULL)
     return;
 
-  gtk_accelerator_parse (self->accelerator, &key, &modifier);
-  if ((key == 0) && (modifier == 0))
+  accels = g_strsplit (self->accelerator, " ", 0);
+  for (k = 0; accels[k]; k++)
     {
-      g_warning ("Failed to parse accelerator '%s'", self->accelerator);
-      return;
-    }
-
-  keys = get_labels (key, modifier);
-  for (i = 0; keys[i]; i++)
-    {
-      GtkFrame *frame;
-      GtkLabel *disp;
-
-      if (i > 0)
+      gtk_accelerator_parse (accels[k], &key, &modifier);
+      if ((key == 0) && (modifier == 0))
         {
-          GtkLabel *plus;
-          GtkStyleContext *context;
-
-          plus = g_object_new (GTK_TYPE_LABEL,
-                               "label", "+",
-                               "visible", TRUE,
-                               NULL);
-          context = gtk_widget_get_style_context (GTK_WIDGET (plus));
-          gtk_style_context_add_class (context, "dim-label");
-          gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (plus));
+          g_warning ("Failed to parse accelerator '%s'", self->accelerator);
+          goto out;
         }
 
-      frame = g_object_new (GTK_TYPE_FRAME,
-                            "visible", TRUE,
-                            NULL);
-      gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (frame));
+      if (k > 0)
+        gtk_container_add (GTK_CONTAINER (self), dim_label ("/"));
 
-      /*
-       * FIXME: Check if the item is a modifier.
-       *
-       * If we have a size group, size everything the same except for the
-       * last item. This has the side effect of basically matching all
-       * modifiers together. Not always the case, but simple and easy
-       * hack.
-       */
-      if (keys[i + 1] != NULL)
-        gtk_widget_set_size_request (GTK_WIDGET (frame), 50, -1);
+      keys = get_labels (key, modifier, &n_mods);
+      for (i = 0; keys[i]; i++)
+        {
+          GtkWidget *frame;
+          GtkWidget *disp;
 
-      disp = g_object_new (GTK_TYPE_LABEL,
-                           "label", keys[i],
-                           "visible", TRUE,
-                           NULL);
-      gtk_container_add (GTK_CONTAINER (frame), GTK_WIDGET (disp));
+          if (i > 0)
+            gtk_container_add (GTK_CONTAINER (self), dim_label ("+"));
+
+          frame = gtk_frame_new (NULL);
+          gtk_widget_show (frame);
+          gtk_container_add (GTK_CONTAINER (self), frame);
+
+          if (i < n_mods)
+            gtk_widget_set_size_request (frame, 50, -1);
+
+          disp = gtk_label_new (keys[i]);
+          gtk_widget_show (disp);
+          gtk_container_add (GTK_CONTAINER (frame), disp);
+        }
+       g_strfreev (keys);
     }
 
-  g_strfreev (keys);
+out:
+  g_strfreev (accels);
 }
 
 static void
