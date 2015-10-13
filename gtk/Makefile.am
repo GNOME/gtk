@@ -512,7 +512,7 @@ gtk_private_h_sources =		\
 	gtkshortcutlabelprivate.h	\
 	gtkshortcutsshortcutprivate.h	\
 	gtkshortcutspageprivate.h	\
-	gtkshortcutsviewprivate.h	\
+	gtkshortcutssectionprivate.h	\
 	gtksizegroup-private.h	\
 	gtksizerequestcacheprivate.h	\
 	gtksocketprivate.h	\
@@ -819,7 +819,7 @@ gtk_base_c_sources = 		\
 	gtkshortcutlabel.c	\
 	gtkshortcutspage.c	\
 	gtkshortcutsshortcut.c	\
-	gtkshortcutsview.c	\
+	gtkshortcutssection.c	\
 	gtkshortcutswindow.c	\
 	gtksidebarrow.c		\
 	gtksizegroup.c		\

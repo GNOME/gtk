@@ -33,8 +33,8 @@
   <object class="GtkShortcutsWindow" id="builder-shortcuts">
     <property name="transient-for">window1</property>
     <property name="modal">1</property>
-    <views>
-      <view name="editor">
+    <sections>
+      <section name="editor">
         <property name="title" translatable="yes">Editor Shortcuts</property>
         <page>
           <column>
@@ -240,19 +240,19 @@
               </shortcut>
               <shortcut>
                 <property name="accelerator">&lt;alt&gt;&lt;shift&gt;Up</property>
-                <property name="title" translatable="yes">Move viewport up within the file</property>
+                <property name="title" translatable="yes">Move sectionport up within the file</property>
               </shortcut>
               <shortcut>
                 <property name="accelerator">&lt;alt&gt;&lt;shift&gt;Down</property>
-                <property name="title" translatable="yes">Move viewport down within the file</property>
+                <property name="title" translatable="yes">Move sectionport down within the file</property>
               </shortcut>
               <shortcut>
                 <property name="accelerator">&lt;alt&gt;&lt;shift&gt;End</property>
-                <property name="title" translatable="yes">Move viewport to end of file</property>
+                <property name="title" translatable="yes">Move sectionport to end of file</property>
               </shortcut>
               <shortcut>
                 <property name="accelerator">&lt;alt&gt;&lt;shift&gt;Home</property>
-                <property name="title" translatable="yes">Move viewport to beginning of file</property>
+                <property name="title" translatable="yes">Move sectionport to beginning of file</property>
               </shortcut>
               <shortcut>
                 <property name="accelerator">&lt;ctrl&gt;percent</property>
@@ -272,8 +272,8 @@
             </group>
           </column>
         </page>
-      </view>
-      <view name="terminal">
+      </section>
+      <section name="terminal">
         <property name="title" translatable="yes">Terminal Shortcuts</property>
         <page>
           <column>
@@ -315,16 +315,16 @@
             </group>
           </column>
         </page>
-      </view>
-    </views>
-    <property name="view-name">editor</property>
+      </section>
+    </sections>
+    <property name="section-name">editor</property>
   </object>
 
   <object class="GtkShortcutsWindow" id="clocks-shortcuts">
     <property name="transient-for">window1</property>
     <property name="modal">1</property>
-    <views>
-      <view name="shortcuts">
+    <sections>
+      <section name="shortcuts">
         <property name="title" translatable="yes">Shortcuts</property>
         <page>
           <column>
@@ -332,11 +332,11 @@
               <property name="title" translatable="yes">General</property>
               <shortcut>
                 <property name="accelerator">&lt;ctrl&gt;Page_Down</property>
-                <property name="title" translatable="yes">Go to the next view</property>
+                <property name="title" translatable="yes">Go to the next section</property>
               </shortcut>
               <shortcut>
                 <property name="accelerator">&lt;ctrl&gt;Page_Up</property>
-                <property name="title" translatable="yes">Go to the previous view</property>
+                <property name="title" translatable="yes">Go to the previous section</property>
               </shortcut>
               <shortcut>
                 <property name="accelerator">&lt;alt&gt;Q</property>
@@ -403,9 +403,9 @@
             </group>
           </column>
         </page>
-      </view>
-    </views>
-    <property name="view-name">shortcuts</property>
+      </section>
+    </sections>
+    <property name="section-name">shortcuts</property>
   </object>
 
 </interface>

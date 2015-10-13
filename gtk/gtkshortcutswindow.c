@@ -25,7 +25,7 @@
 #include "gtkshortcutsgroupprivate.h"
 #include "gtkshortcutspageprivate.h"
 #include "gtkshortcutsshortcutprivate.h"
-#include "gtkshortcutsviewprivate.h"
+#include "gtkshortcutssectionprivate.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
@@ -45,8 +45,8 @@
 typedef struct
 {
   GHashTable     *keywords;
-  gchar          *initial_view;
-  gchar          *last_view_name;
+  gchar          *initial_section;
+  gchar          *last_section_name;
   GtkSizeGroup   *search_text_group;
   GtkSizeGroup   *search_image_group;
   GHashTable     *search_items_hash;
@@ -88,7 +88,7 @@ enum {
 
 enum {
   PROP_0,
-  PROP_VIEW_NAME,
+  PROP_SECTION_NAME,
   LAST_PROP
 };
 
@@ -96,8 +96,8 @@ static GParamSpec *properties[LAST_PROP];
 static guint signals[LAST_SIGNAL];
 
 static void
-gtk_shortcuts_window_add_view (GtkShortcutsWindow *self,
-                               GtkShortcutsView   *view)
+gtk_shortcuts_window_add_section (GtkShortcutsWindow  *self,
+                                  GtkShortcutsSection *section)
 {
   GtkShortcutsWindowPrivate *priv = gtk_shortcuts_window_get_instance_private (self);
   GtkListBoxRow *row;
@@ -105,15 +105,15 @@ gtk_shortcuts_window_add_view (GtkShortcutsWindow *self,
   const gchar *name;
   GtkWidget *label;
 
-  name = gtk_shortcuts_view_get_view_name (view);
-  title = gtk_shortcuts_view_get_title (view);
+  name = gtk_shortcuts_section_get_section_name (section);
+  title = gtk_shortcuts_section_get_title (section);
 
-  gtk_stack_add_titled (priv->stack, GTK_WIDGET (view), name, title);
+  gtk_stack_add_titled (priv->stack, GTK_WIDGET (section), name, title);
 
   row = g_object_new (GTK_TYPE_LIST_BOX_ROW,
                       "visible", TRUE,
                       NULL);
-  g_object_set_data_full (G_OBJECT (row), "GTK_SHORTCUTS_VIEW_NAME", g_strdup (name), g_free);
+  g_object_set_data_full (G_OBJECT (row), "GTK_SHORTCUTS_SECTION_NAME", g_strdup (name), g_free);
   label = g_object_new (GTK_TYPE_LABEL,
                         "margin", 6,
                         "label", title,
@@ -130,8 +130,8 @@ gtk_shortcuts_window_add (GtkContainer *container,
 {
   GtkShortcutsWindow *self = (GtkShortcutsWindow *)container;
 
-  if (GTK_IS_SHORTCUTS_VIEW (widget))
-    gtk_shortcuts_window_add_view (self, GTK_SHORTCUTS_VIEW (widget));
+  if (GTK_IS_SHORTCUTS_SECTION (widget))
+    gtk_shortcuts_window_add_section (self, GTK_SHORTCUTS_SECTION (widget));
   else
     GTK_CONTAINER_CLASS (gtk_shortcuts_window_parent_class)->add (container, widget);
 }
@@ -159,13 +159,13 @@ gtk_shortcuts_window__stack__notify_visible_child (GtkShortcutsWindow *self,
 
   visible_child = gtk_stack_get_visible_child (stack);
 
-  if (GTK_IS_SHORTCUTS_VIEW (visible_child))
+  if (GTK_IS_SHORTCUTS_SECTION (visible_child))
     {
       if (number_of_children (GTK_CONTAINER (stack)) > 3)
         {
           const gchar *title;
-          gtk_stack_set_visible_child_name (priv->title_stack, "views");
-          title = gtk_shortcuts_view_get_title (GTK_SHORTCUTS_VIEW (visible_child));
+          gtk_stack_set_visible_child_name (priv->title_stack, "sections");
+          title = gtk_shortcuts_section_get_title (GTK_SHORTCUTS_SECTION (visible_child));
           gtk_label_set_label (priv->menu_label, title);
         }
       else
@@ -187,7 +187,7 @@ gtk_shortcuts_window__list_box__row_activated (GtkShortcutsWindow *self,
   GtkShortcutsWindowPrivate *priv = gtk_shortcuts_window_get_instance_private (self);
   const gchar *name;
 
-  name = g_object_get_data (G_OBJECT (row), "GTK_SHORTCUTS_VIEW_NAME");
+  name = g_object_get_data (G_OBJECT (row), "GTK_SHORTCUTS_SECTION_NAME");
   gtk_stack_set_visible_child_name (priv->stack, name);
   gtk_widget_hide (GTK_WIDGET (priv->popover));
 }
@@ -286,7 +286,7 @@ gtk_shortcuts_window__entry__changed (GtkShortcutsWindow *self,
   gchar *downcase = NULL;
   GHashTableIter iter;
   const gchar *text;
-  const gchar *last_view_name;
+  const gchar *last_section_name;
   gpointer key;
   gpointer value;
   gboolean has_result;
@@ -295,20 +295,20 @@ gtk_shortcuts_window__entry__changed (GtkShortcutsWindow *self,
 
   if (!text || !*text)
     {
-      if (priv->last_view_name != NULL)
+      if (priv->last_section_name != NULL)
         {
-          gtk_stack_set_visible_child_name (priv->stack, priv->last_view_name);
+          gtk_stack_set_visible_child_name (priv->stack, priv->last_section_name);
           return;
         }
     }
 
-  last_view_name = gtk_stack_get_visible_child_name (priv->stack);
+  last_section_name = gtk_stack_get_visible_child_name (priv->stack);
 
-  if (g_strcmp0 (last_view_name, "internal-search") != 0 &&
-      g_strcmp0 (last_view_name, "no-search-results") != 0)
+  if (g_strcmp0 (last_section_name, "internal-search") != 0 &&
+      g_strcmp0 (last_section_name, "no-search-results") != 0)
     {
-      g_free (priv->last_view_name);
-      priv->last_view_name = g_strdup (last_view_name);
+      g_free (priv->last_section_name);
+      priv->last_section_name = g_strdup (last_section_name);
     }
 
   downcase = g_utf8_strdown (text, -1);
@@ -342,9 +342,9 @@ gtk_shortcuts_window__search_mode__changed (GtkShortcutsWindow *self)
 
   if (!gtk_search_bar_get_search_mode (priv->search_bar))
     {
-      if (priv->last_view_name != NULL)
+      if (priv->last_section_name != NULL)
         {
-          gtk_stack_set_visible_child_name (priv->stack, priv->last_view_name);
+          gtk_stack_set_visible_child_name (priv->stack, priv->last_section_name);
           return;
         }
     }
@@ -381,7 +381,7 @@ check_parent (GMarkupParseContext  *context,
 }
 
 static void
-views_parser_start_element (GMarkupParseContext  *context,
+sections_parser_start_element (GMarkupParseContext  *context,
                             const gchar          *element_name,
                             const gchar         **attribute_names,
                             const gchar         **attribute_values,
@@ -391,14 +391,14 @@ views_parser_start_element (GMarkupParseContext  *context,
   ViewsParserData *parser_data = user_data;
   GtkWidget *item;
 
-  if (g_strcmp0 (element_name, "views") == 0)
+  if (g_strcmp0 (element_name, "sections") == 0)
     {
     }
-  else if (g_strcmp0 (element_name, "view") == 0)
+  else if (g_strcmp0 (element_name, "section") == 0)
     {
       const gchar *name = NULL;
 
-      if (!check_parent (context, "views", error))
+      if (!check_parent (context, "sections", error))
         return;
 
       if (!g_markup_collect_attributes (element_name, attribute_names, attribute_values, error,
@@ -406,8 +406,8 @@ views_parser_start_element (GMarkupParseContext  *context,
                                         G_MARKUP_COLLECT_INVALID))
         return;
 
-      item = g_object_new (GTK_TYPE_SHORTCUTS_VIEW,
-                           "view-name", name,
+      item = g_object_new (GTK_TYPE_SHORTCUTS_SECTION,
+                           "section-name", name,
                            "visible", TRUE,
                            NULL);
 
@@ -415,7 +415,7 @@ views_parser_start_element (GMarkupParseContext  *context,
     }
   else if (g_strcmp0 (element_name, "page") == 0)
     {
-      if (!check_parent (context, "view", error))
+      if (!check_parent (context, "section", error))
         return;
 
       item = g_object_new (GTK_TYPE_SHORTCUTS_PAGE,
@@ -543,7 +543,7 @@ views_parser_start_element (GMarkupParseContext  *context,
 }
 
 static void
-views_parser_end_element (GMarkupParseContext  *context,
+sections_parser_end_element (GMarkupParseContext  *context,
                           const gchar          *element_name,
                           gpointer              user_data,
                           GError              **error)
@@ -551,10 +551,10 @@ views_parser_end_element (GMarkupParseContext  *context,
   ViewsParserData *parser_data = user_data;
   GtkWidget *item;
 
-  if (g_strcmp0 (element_name, "view") == 0)
+  if (g_strcmp0 (element_name, "section") == 0)
     {
       item = g_queue_pop_head (parser_data->stack);
-      gtk_shortcuts_window_add_view (parser_data->self, GTK_SHORTCUTS_VIEW (item));
+      gtk_shortcuts_window_add_section (parser_data->self, GTK_SHORTCUTS_SECTION (item));
       g_object_unref (item);
     }
   else if ((g_strcmp0 (element_name, "page") == 0) ||
@@ -596,7 +596,7 @@ views_parser_end_element (GMarkupParseContext  *context,
 }
 
 static void
-views_parser_text (GMarkupParseContext  *context,
+sections_parser_text (GMarkupParseContext  *context,
                    const gchar          *text,
                    gsize                 text_len,
                    gpointer              user_data,
@@ -663,9 +663,9 @@ views_parser_text (GMarkupParseContext  *context,
 }
 
 static GMarkupParser ViewsParser = {
-  views_parser_start_element,
-  views_parser_end_element,
-  views_parser_text,
+  sections_parser_start_element,
+  sections_parser_end_element,
+  sections_parser_text,
 };
 
 static gboolean
@@ -676,7 +676,7 @@ gtk_shortcuts_window_custom_tag_start (GtkBuildable  *buildable,
                                       GMarkupParser *parser,
                                       gpointer      *data)
 {
-  if (g_strcmp0 (tagname, "views") == 0)
+  if (g_strcmp0 (tagname, "sections") == 0)
     {
       ViewsParserData *parser_data;
 
@@ -703,7 +703,7 @@ gtk_shortcuts_window_custom_finished (GtkBuildable *buildable,
                                      const gchar  *tagname,
                                      gpointer      user_data)
 {
-  if (g_strcmp0 (tagname, "views") == 0)
+  if (g_strcmp0 (tagname, "sections") == 0)
     {
       ViewsParserData *parser_data = user_data;
 
@@ -730,8 +730,8 @@ gtk_shortcuts_window_constructed (GObject *object)
 
   G_OBJECT_CLASS (gtk_shortcuts_window_parent_class)->constructed (object);
 
-  if (priv->initial_view != NULL)
-    gtk_stack_set_visible_child_name (priv->stack, priv->initial_view);
+  if (priv->initial_section != NULL)
+    gtk_stack_set_visible_child_name (priv->stack, priv->initial_section);
 }
 
 static void
@@ -741,8 +741,8 @@ gtk_shortcuts_window_finalize (GObject *object)
   GtkShortcutsWindowPrivate *priv = gtk_shortcuts_window_get_instance_private (self);
 
   g_clear_pointer (&priv->keywords, g_hash_table_unref);
-  g_clear_pointer (&priv->initial_view, g_free);
-  g_clear_pointer (&priv->last_view_name, g_free);
+  g_clear_pointer (&priv->initial_section, g_free);
+  g_clear_pointer (&priv->last_section_name, g_free);
   g_clear_pointer (&priv->search_items_hash, g_hash_table_unref);
 
   g_clear_object (&priv->search_image_group);
@@ -769,7 +769,7 @@ gtk_shortcuts_window_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_VIEW_NAME:
+    case PROP_SECTION_NAME:
       {
         GtkWidget *child = gtk_stack_get_visible_child (priv->stack);
 
@@ -801,9 +801,9 @@ gtk_shortcuts_window_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_VIEW_NAME:
-      g_free (priv->initial_view);
-      priv->initial_view = g_value_dup_string (value);
+    case PROP_SECTION_NAME:
+      g_free (priv->initial_section);
+      priv->initial_section = g_value_dup_string (value);
       gtk_stack_set_visible_child_name (priv->stack, g_value_get_string (value));
       break;
 
@@ -828,8 +828,8 @@ gtk_shortcuts_window_class_init (GtkShortcutsWindowClass *klass)
 
   klass->close = gtk_shortcuts_window_real_close;
 
-  properties[PROP_VIEW_NAME] =
-    g_param_spec_string ("view-name",
+  properties[PROP_SECTION_NAME] =
+    g_param_spec_string ("section-name",
                          P_("View Name"),
                          P_("View Name"),
                          NULL,
@@ -947,7 +947,7 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
                                     "visible", TRUE,
                                     NULL);
   gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (priv->menu_button)), "flat");
-  gtk_stack_add_named (priv->title_stack, GTK_WIDGET (priv->menu_button), "views");
+  gtk_stack_add_named (priv->title_stack, GTK_WIDGET (priv->menu_button), "sections");
 
   menu_box = g_object_new (GTK_TYPE_BOX,
                            "orientation", GTK_ORIENTATION_HORIZONTAL,

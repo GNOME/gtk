@@ -1,4 +1,4 @@
-/* gtkshortcutsview.c
+/* gtkshortcutssection.c
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
@@ -18,7 +18,7 @@
 
 #include "config.h"
 
-#include "gtkshortcutsviewprivate.h"
+#include "gtkshortcutssectionprivate.h"
 
 #include "gtkshortcutspageprivate.h"
 #include "gtkstack.h"
@@ -28,7 +28,7 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
-struct _GtkShortcutsView
+struct _GtkShortcutsSection
 {
   GtkBox            parent_instance;
 
@@ -41,17 +41,17 @@ struct _GtkShortcutsView
   guint             last_page_num;
 };
 
-struct _GtkShortcutsViewClass
+struct _GtkShortcutsSectionClass
 {
   GtkBoxClass parent_class;
 };
 
-G_DEFINE_TYPE (GtkShortcutsView, gtk_shortcuts_view, GTK_TYPE_BOX)
+G_DEFINE_TYPE (GtkShortcutsSection, gtk_shortcuts_section, GTK_TYPE_BOX)
 
 enum {
   PROP_0,
   PROP_TITLE,
-  PROP_VIEW_NAME,
+  PROP_SECTION_NAME,
   LAST_PROP
 };
 
@@ -74,10 +74,10 @@ adjust_page_buttons (GtkWidget *widget,
 }
 
 static void
-gtk_shortcuts_view_add (GtkContainer *container,
-                        GtkWidget    *child)
+gtk_shortcuts_section_add (GtkContainer *container,
+                           GtkWidget    *child)
 {
-  GtkShortcutsView *self = (GtkShortcutsView *)container;
+  GtkShortcutsSection *self = (GtkShortcutsSection *)container;
 
   if (GTK_IS_SHORTCUTS_PAGE (child))
     {
@@ -95,32 +95,32 @@ gtk_shortcuts_view_add (GtkContainer *container,
     }
   else
     {
-      GTK_CONTAINER_CLASS (gtk_shortcuts_view_parent_class)->add (container, child);
+      GTK_CONTAINER_CLASS (gtk_shortcuts_section_parent_class)->add (container, child);
     }
 }
 
 static void
-gtk_shortcuts_view_finalize (GObject *object)
+gtk_shortcuts_section_finalize (GObject *object)
 {
-  GtkShortcutsView *self = (GtkShortcutsView *)object;
+  GtkShortcutsSection *self = (GtkShortcutsSection *)object;
 
   g_clear_pointer (&self->name, g_free);
   g_clear_pointer (&self->title, g_free);
 
-  G_OBJECT_CLASS (gtk_shortcuts_view_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_shortcuts_section_parent_class)->finalize (object);
 }
 
 static void
-gtk_shortcuts_view_get_property (GObject    *object,
-                                 guint       prop_id,
-                                 GValue     *value,
-                                 GParamSpec *pspec)
+gtk_shortcuts_section_get_property (GObject    *object,
+                                    guint       prop_id,
+                                    GValue     *value,
+                                    GParamSpec *pspec)
 {
-  GtkShortcutsView *self = (GtkShortcutsView *)object;
+  GtkShortcutsSection *self = (GtkShortcutsSection *)object;
 
   switch (prop_id)
     {
-    case PROP_VIEW_NAME:
+    case PROP_SECTION_NAME:
       g_value_set_string (value, self->name);
       break;
 
@@ -134,16 +134,16 @@ gtk_shortcuts_view_get_property (GObject    *object,
 }
 
 static void
-gtk_shortcuts_view_set_property (GObject      *object,
-                                 guint         prop_id,
-                                 const GValue *value,
-                                 GParamSpec   *pspec)
+gtk_shortcuts_section_set_property (GObject      *object,
+                                    guint         prop_id,
+                                    const GValue *value,
+                                    GParamSpec   *pspec)
 {
-  GtkShortcutsView *self = (GtkShortcutsView *)object;
+  GtkShortcutsSection *self = (GtkShortcutsSection *)object;
 
   switch (prop_id)
     {
-    case PROP_VIEW_NAME:
+    case PROP_SECTION_NAME:
       g_free (self->name);
       self->name = g_value_dup_string (value);
       break;
@@ -159,21 +159,21 @@ gtk_shortcuts_view_set_property (GObject      *object,
 }
 
 static void
-gtk_shortcuts_view_class_init (GtkShortcutsViewClass *klass)
+gtk_shortcuts_section_class_init (GtkShortcutsSectionClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
 
-  object_class->finalize = gtk_shortcuts_view_finalize;
-  object_class->get_property = gtk_shortcuts_view_get_property;
-  object_class->set_property = gtk_shortcuts_view_set_property;
+  object_class->finalize = gtk_shortcuts_section_finalize;
+  object_class->get_property = gtk_shortcuts_section_get_property;
+  object_class->set_property = gtk_shortcuts_section_set_property;
 
-  container_class->add = gtk_shortcuts_view_add;
+  container_class->add = gtk_shortcuts_section_add;
 
-  properties[PROP_VIEW_NAME] =
-    g_param_spec_string ("view-name",
-                         P_("View Name"),
-                         P_("View Name"),
+  properties[PROP_SECTION_NAME] =
+    g_param_spec_string ("section-name",
+                         P_("Section Name"),
+                         P_("Section Name"),
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
@@ -188,7 +188,7 @@ gtk_shortcuts_view_class_init (GtkShortcutsViewClass *klass)
 }
 
 static void
-gtk_shortcuts_view_init (GtkShortcutsView *self)
+gtk_shortcuts_section_init (GtkShortcutsSection *self)
 {
   gtk_orientable_set_orientation (GTK_ORIENTABLE (self), GTK_ORIENTATION_VERTICAL);
   gtk_box_set_homogeneous (GTK_BOX (self), FALSE);
@@ -215,17 +215,17 @@ gtk_shortcuts_view_init (GtkShortcutsView *self)
 }
 
 const gchar *
-gtk_shortcuts_view_get_view_name (GtkShortcutsView *self)
+gtk_shortcuts_section_get_section_name (GtkShortcutsSection *self)
 {
-  g_return_val_if_fail (GTK_IS_SHORTCUTS_VIEW (self), NULL);
+  g_return_val_if_fail (GTK_IS_SHORTCUTS_SECTION (self), NULL);
 
   return self->name;
 }
 
 const gchar *
-gtk_shortcuts_view_get_title (GtkShortcutsView *self)
+gtk_shortcuts_section_get_title (GtkShortcutsSection *self)
 {
-  g_return_val_if_fail (GTK_IS_SHORTCUTS_VIEW (self), NULL);
+  g_return_val_if_fail (GTK_IS_SHORTCUTS_SECTION (self), NULL);
 
   return self->title;
 }
