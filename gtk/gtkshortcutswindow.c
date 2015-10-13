@@ -161,7 +161,7 @@ gtk_shortcuts_window__stack__notify_visible_child (GtkShortcutsWindow *self,
 
   if (GTK_IS_SHORTCUTS_VIEW (visible_child))
     {
-      if (number_of_children (GTK_CONTAINER (stack)) > 2)
+      if (number_of_children (GTK_CONTAINER (stack)) > 3)
         {
           const gchar *title;
           gtk_stack_set_visible_child_name (priv->title_stack, "views");
@@ -289,6 +289,7 @@ gtk_shortcuts_window__entry__changed (GtkShortcutsWindow *self,
   const gchar *last_view_name;
   gpointer key;
   gpointer value;
+  gboolean has_result;
 
   text = gtk_entry_get_text (GTK_ENTRY (search_entry));
 
@@ -303,27 +304,50 @@ gtk_shortcuts_window__entry__changed (GtkShortcutsWindow *self,
 
   last_view_name = gtk_stack_get_visible_child_name (priv->stack);
 
-  if (g_strcmp0 (last_view_name, "internal-search") != 0)
+  if (g_strcmp0 (last_view_name, "internal-search") != 0 &&
+      g_strcmp0 (last_view_name, "no-search-results") != 0)
     {
       g_free (priv->last_view_name);
       priv->last_view_name = g_strdup (last_view_name);
     }
 
-  gtk_stack_set_visible_child_name (priv->stack, "internal-search");
-
   downcase = g_utf8_strdown (text, -1);
 
   g_hash_table_iter_init (&iter, priv->keywords);
 
+  has_result = FALSE;
   while (g_hash_table_iter_next (&iter, &key, &value))
     {
       GtkWidget *widget = key;
       const gchar *keywords = value;
+      gboolean match;
 
-      gtk_widget_set_visible (widget, strstr (keywords, downcase) != NULL);
+      match = strstr (keywords, downcase) != NULL;
+      gtk_widget_set_visible (widget, match);
+      has_result |= match;
     }
 
   g_free (downcase);
+
+  if (has_result)
+    gtk_stack_set_visible_child_name (priv->stack, "internal-search");
+  else
+    gtk_stack_set_visible_child_name (priv->stack, "no-search-results");
+}
+
+static void
+gtk_shortcuts_window__search_mode__changed (GtkShortcutsWindow *self)
+{
+  GtkShortcutsWindowPrivate *priv = gtk_shortcuts_window_get_instance_private (self);
+
+  if (!gtk_search_bar_get_search_mode (priv->search_bar))
+    {
+      if (priv->last_view_name != NULL)
+        {
+          gtk_stack_set_visible_child_name (priv->stack, priv->last_view_name);
+          return;
+        }
+    }
 }
 
 static gboolean
@@ -852,6 +876,8 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
   GtkWidget *entry;
   GtkWidget *scroller;
   GtkWidget *label;
+  GtkWidget *empty;
+  PangoAttrList *attributes;
 
   gtk_window_set_resizable (GTK_WINDOW (self), FALSE);
 
@@ -973,6 +999,11 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
                            G_CALLBACK (gtk_shortcuts_window__entry__changed),
                            self,
                            G_CONNECT_SWAPPED);
+  g_signal_connect_object (priv->search_bar,
+                           "notify::search-mode-enabled",
+                           G_CALLBACK (gtk_shortcuts_window__search_mode__changed),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   g_signal_connect_object (priv->stack,
                            "notify::visible-child",
@@ -991,8 +1022,7 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
                       "visible", TRUE,
                       NULL);
   gtk_container_add (GTK_CONTAINER (scroller), GTK_WIDGET (box));
-  gtk_stack_add_titled (priv->stack, scroller,
-                        "internal-search", _("Search Results"));
+  gtk_stack_add_named (priv->stack, scroller, "internal-search");
 
   priv->search_shortcuts = g_object_new (GTK_TYPE_BOX,
                                          "halign", GTK_ALIGN_CENTER,
@@ -1009,4 +1039,38 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
                                         "visible", TRUE,
                                         NULL);
   gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (priv->search_gestures));
+
+  empty = g_object_new (GTK_TYPE_GRID,
+                        "visible", TRUE,
+                        "row-spacing", 12,
+                        "hexpand", TRUE,
+                        "vexpand", TRUE,
+                        "halign", GTK_ALIGN_CENTER,
+                        "valign", GTK_ALIGN_CENTER,
+                        NULL);
+  gtk_style_context_add_class (gtk_widget_get_style_context (empty), "dim-label");
+  gtk_grid_attach (GTK_GRID (empty),
+                   g_object_new (GTK_TYPE_IMAGE,
+                                 "visible", TRUE,
+                                 "icon-name", "edit-find-symbolic",
+                                 "pixel-size", 72,
+                                 NULL),
+                   0, 0, 1, 1);
+  attributes = pango_attr_list_new ();
+  pango_attr_list_insert (attributes, pango_attr_weight_new (PANGO_WEIGHT_BOLD));
+  pango_attr_list_insert (attributes, pango_attr_scale_new (1.44));
+  label = g_object_new (GTK_TYPE_LABEL,
+                        "visible", TRUE,
+                        "label", _("No Results Found"),
+                        "attributes", attributes,
+                        NULL);
+  pango_attr_list_unref (attributes);
+  gtk_grid_attach (GTK_GRID (empty), label, 0, 1, 1, 1);
+  label = g_object_new (GTK_TYPE_LABEL,
+                        "visible", TRUE,
+                        "label", _("Try a different search"),
+                        NULL);
+  gtk_grid_attach (GTK_GRID (empty), label, 0, 2, 1, 1);
+
+  gtk_stack_add_named (priv->stack, empty, "no-search-results");
 }
