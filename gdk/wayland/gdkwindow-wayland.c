@@ -888,9 +888,6 @@ gdk_wayland_window_create_subsurface (GdkWindow *window)
   GdkWindowImplWayland *impl, *parent_impl = NULL;
   GdkWaylandDisplay *display_wayland;
 
-  if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_SUBSURFACE)
-    return;
-
   impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
   if (!impl->surface)
@@ -1209,11 +1206,39 @@ find_grab_input_seat (GdkWindow *window, GdkWindow *transient_for)
 static gboolean
 should_be_mapped (GdkWindow *window)
 {
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
   /* Don't map crazy temp that GTK+ uses for internal X11 shenanigans. */
   if (window->window_type == GDK_WINDOW_TEMP && window->x < 0 && window->y < 0)
     return FALSE;
 
+  if (impl->hint == GDK_WINDOW_TYPE_HINT_DND)
+    return FALSE;
+
   return TRUE;
+}
+
+static gboolean
+should_map_as_subsurface (GdkWindow *window)
+{
+  if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_SUBSURFACE)
+    return TRUE;
+
+  return FALSE;
+}
+
+static gboolean
+should_map_as_popup (GdkWindow *window)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  if (impl->hint == GDK_WINDOW_TYPE_HINT_POPUP_MENU ||
+      impl->hint == GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU ||
+      impl->hint == GDK_WINDOW_TYPE_HINT_UTILITY ||
+      impl->hint == GDK_WINDOW_TYPE_HINT_COMBO)
+    return TRUE;
+
+  return FALSE;
 }
 
 static void
@@ -1225,8 +1250,22 @@ gdk_wayland_window_map (GdkWindow *window)
   if (!should_be_mapped (window))
     return;
 
-  if (!impl->mapped && !impl->use_custom_surface)
+  if (impl->mapped || impl->use_custom_surface)
+    return;
+
+  if (should_map_as_subsurface (window))
     {
+      if (impl->transient_for)
+        gdk_wayland_window_create_subsurface (window);
+      else
+        g_warning ("Couldn't map as window %p as susburface yet because it doesn't have a parent",
+                   window);
+    }
+  else if (should_map_as_popup (window))
+    {
+      gboolean create_fallback = FALSE;
+      struct wl_seat *grab_input_seat;
+
       /* Popup menus can appear without a transient parent, which means they
        * cannot be positioned properly on Wayland. This attempts to guess the
        * surface they should be positioned with by finding the surface beneath
@@ -1278,29 +1317,43 @@ gdk_wayland_window_map (GdkWindow *window)
       else
         transient_for = impl->transient_for;
 
-      if (transient_for &&
-          GDK_WINDOW_TYPE (window) != GDK_WINDOW_SUBSURFACE)
+      if (!transient_for)
         {
-          struct wl_seat *grab_input_seat = find_grab_input_seat (window, transient_for);
-          if (grab_input_seat &&
-              (impl->hint == GDK_WINDOW_TYPE_HINT_POPUP_MENU ||
-               impl->hint == GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU ||
-               impl->hint == GDK_WINDOW_TYPE_HINT_COMBO))
+          g_warning ("Couldn't map as window %p as popup because it doesn't have a parent",
+                     window);
+
+          create_fallback = TRUE;
+        }
+      else
+        {
+          grab_input_seat = find_grab_input_seat (window, transient_for);
+
+          if (!grab_input_seat)
             {
-              gdk_wayland_window_create_xdg_popup (window,
-						   transient_for,
-						   grab_input_seat);
-              goto mapped;
+              g_warning ("Couldn't map window %p as popup because no grabbed seat found",
+                         window);
+
+              create_fallback = TRUE;
             }
         }
 
-      if (impl->hint != GDK_WINDOW_TYPE_HINT_DND &&
-          GDK_WINDOW_TYPE (window) != GDK_WINDOW_SUBSURFACE)
-        gdk_wayland_window_create_xdg_surface (window);
-
-    mapped:
-      impl->mapped = TRUE;
+      if (!create_fallback)
+        {
+          gdk_wayland_window_create_xdg_popup (window,
+                                               transient_for,
+                                               grab_input_seat);
+        }
+      else
+        {
+          gdk_wayland_window_create_xdg_surface (window);
+        }
     }
+  else
+    {
+      gdk_wayland_window_create_xdg_surface (window);
+    }
+
+  impl->mapped = TRUE;
 }
 
 static void
@@ -1311,9 +1364,6 @@ gdk_wayland_window_show (GdkWindow *window,
 
   if (!impl->surface)
     gdk_wayland_window_create_surface (window);
-
-  if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_SUBSURFACE)
-    gdk_wayland_window_create_subsurface (window);
 
   gdk_wayland_window_map (window);
 
@@ -1846,7 +1896,7 @@ gdk_wayland_window_set_transient_for (GdkWindow *window,
 
   gdk_wayland_window_sync_parent (window);
 
-  if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_SUBSURFACE &&
+  if (should_map_as_subsurface (window) &&
       parent && gdk_window_is_visible (window))
     gdk_wayland_window_create_subsurface (window);
 }
