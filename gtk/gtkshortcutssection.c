@@ -97,6 +97,8 @@ gtk_shortcuts_section_add (GtkContainer *container,
 
       gtk_container_foreach (GTK_CONTAINER (self->switcher), adjust_page_buttons, &count);
       gtk_widget_set_visible (GTK_WIDGET (self->switcher), (count > 1));
+      if (count > 1)
+        gtk_widget_show (gtk_widget_get_parent (GTK_WIDGET (self->switcher)));
       g_free (title);
     }
   else
@@ -234,6 +236,8 @@ filter_groups_by_view (GtkShortcutsSection *self)
   self->has_filtered_group = FALSE;
   gtk_container_foreach (GTK_CONTAINER (self), update_group_visibility, self);
   gtk_widget_set_visible (GTK_WIDGET (self->show_all), self->has_filtered_group);
+  if (self->has_filtered_group)
+    gtk_widget_show (gtk_widget_get_parent (GTK_WIDGET (self->show_all)));
 }
 
 static void
@@ -269,7 +273,6 @@ gtk_shortcuts_section_init (GtkShortcutsSection *self)
                             G_CALLBACK (filter_groups_by_view), self);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 20);
-  gtk_widget_show (box);
   gtk_container_add (GTK_CONTAINER (self), box);
 
   gtk_box_set_center_widget (GTK_BOX (box), GTK_WIDGET (self->switcher));
