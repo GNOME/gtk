@@ -1829,6 +1829,8 @@ on_address_entry_text_changed (GtkPlacesView *view)
   supported = FALSE;
   supported_protocols = g_vfs_get_supported_uri_schemes (g_vfs_get_default ());
   address = g_strdup (gtk_entry_get_text (GTK_ENTRY (priv->address_entry)));
+  scheme = g_uri_parse_scheme (address);
+
   if (strlen (address) > 0)
     gtk_entry_set_icon_from_icon_name (GTK_ENTRY (priv->address_entry),
                                        GTK_ENTRY_ICON_SECONDARY,
@@ -1841,8 +1843,6 @@ on_address_entry_text_changed (GtkPlacesView *view)
   if (!supported_protocols)
     goto out;
 
-  scheme = g_uri_parse_scheme (address);
-
   if (!scheme)
     goto out;
 
@@ -1852,6 +1852,7 @@ on_address_entry_text_changed (GtkPlacesView *view)
 out:
   gtk_widget_set_sensitive (priv->connect_button, supported);
   g_free (address);
+  g_free (scheme);
 }
 
 static void
