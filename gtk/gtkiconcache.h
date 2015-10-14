@@ -21,19 +21,6 @@
 #include <gdk/gdk.h>
 
 typedef struct _GtkIconCache GtkIconCache;
-typedef struct _GtkIconData GtkIconData;
-
-struct _GtkIconData
-{
-  gint ref;
-  gboolean has_embedded_rect;
-  gint x0, y0, x1, y1;
-  
-  GdkPoint *attach_points;
-  gint n_attach_points;
-
-  gchar *display_name;
-};
 
 GtkIconCache *_gtk_icon_cache_new            (const gchar  *data);
 GtkIconCache *_gtk_icon_cache_new_for_path   (const gchar  *path);
@@ -56,9 +43,6 @@ gint          _gtk_icon_cache_get_icon_flags (GtkIconCache *cache,
 GdkPixbuf    *_gtk_icon_cache_get_icon       (GtkIconCache *cache,
 					      const gchar  *icon_name,
 					      gint          directory_index);
-GtkIconData  *_gtk_icon_cache_get_icon_data  (GtkIconCache *cache,
- 					      const gchar  *icon_name,
- 					      gint          directory_index);
 
 GtkIconCache *_gtk_icon_cache_ref            (GtkIconCache *cache);
 void          _gtk_icon_cache_unref          (GtkIconCache *cache);
