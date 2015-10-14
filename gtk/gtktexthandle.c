@@ -242,18 +242,33 @@ gtk_text_handle_widget_event (GtkWidget     *widget,
            event->motion.state & GDK_BUTTON1_MASK &&
            priv->windows[pos].dragged)
     {
-      gint x, y, width, handle_height;
+      gint x, y, handle_width, handle_height;
+      cairo_rectangle_int_t rect;
       GtkAllocation allocation;
+      GtkWidget *window;
 
+      window = gtk_widget_get_parent (priv->windows[pos].widget);
       gtk_widget_get_allocation (priv->windows[pos].widget, &allocation);
-      width = allocation.width;
-      _gtk_text_handle_get_size (handle, NULL, &handle_height);
+      _gtk_text_handle_get_size (handle, &handle_width, &handle_height);
 
-      x = event->motion.x - priv->windows[pos].dx + (width / 2);
-      y = event->motion.y - priv->windows[pos].dy +
-        priv->windows[pos].pointing_to.height / 2;
+      _gtk_window_get_popover_position (GTK_WINDOW (window),
+                                        priv->windows[pos].widget,
+                                        NULL, &rect);
 
-      gtk_widget_translate_coordinates (widget, priv->parent, x, y, &x, &y);
+      x = rect.x + event->motion.x - priv->windows[pos].dx;
+      y = rect.y + event->motion.y - priv->windows[pos].dy +
+        priv->windows[pos].border.top / 2;
+
+      if (pos == GTK_TEXT_HANDLE_POSITION_CURSOR &&
+          priv->mode == GTK_TEXT_HANDLE_MODE_CURSOR)
+        x += handle_width / 2;
+      else if ((pos == GTK_TEXT_HANDLE_POSITION_CURSOR &&
+                priv->windows[pos].dir == GTK_TEXT_DIR_RTL) ||
+               (pos == GTK_TEXT_HANDLE_POSITION_SELECTION_START &&
+                priv->windows[pos].dir != GTK_TEXT_DIR_RTL))
+        x += handle_width;
+
+      gtk_widget_translate_coordinates (window, priv->parent, x, y, &x, &y);
       g_signal_emit (handle, signals[HANDLE_DRAGGED], 0, pos, x, y);
     }
 
@@ -400,7 +415,7 @@ _gtk_text_handle_update (GtkTextHandle         *handle,
         rect.x -= rect.width;
 
       border->top = height;
-      border->bottom = handle_window->pointing_to.height;
+      border->bottom = height;
 
       /* The goal is to make the window 3 times as wide and high. The handle
        * will be rendered in the center, making the rest an invisible border.
