@@ -20,10 +20,8 @@
 
 #include "gtkshortcutswindow.h"
 #include "gtkscrolledwindow.h"
-#include "gtkshortcutscolumnprivate.h"
 #include "gtkshortcutsgestureprivate.h"
 #include "gtkshortcutsgroupprivate.h"
-#include "gtkshortcutspageprivate.h"
 #include "gtkshortcutsshortcutprivate.h"
 #include "gtkshortcutssectionprivate.h"
 #include "gtkprivate.h"
@@ -69,18 +67,13 @@ typedef struct
   GtkShortcutsWindow *self;
   GtkBuilder        *builder;
   GQueue            *stack;
-  GtkWidget         *search_item;
-  GQueue            *column_image_size_groups;
-  GQueue            *column_desc_size_groups;
   gchar             *property_name;
   guint              translatable : 1;
 } ViewsParserData;
 
-static void gtk_buildable_iface_init (GtkBuildableIface *iface);
 
-G_DEFINE_TYPE_EXTENDED (GtkShortcutsWindow, gtk_shortcuts_window, GTK_TYPE_WINDOW, 0,
-                        G_ADD_PRIVATE (GtkShortcutsWindow)
-                        G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, gtk_buildable_iface_init))
+G_DEFINE_TYPE_WITH_PRIVATE (GtkShortcutsWindow, gtk_shortcuts_window, GTK_TYPE_WINDOW)
+
 
 enum {
   CLOSE,
@@ -140,6 +133,102 @@ update_title_stack (GtkShortcutsWindow *self)
 }
 
 static void
+gtk_shortcuts_window_add_search_item (GtkWidget *child, gpointer data)
+{
+  GtkShortcutsWindow *self = data;
+  GtkShortcutsWindowPrivate *priv = gtk_shortcuts_window_get_instance_private (self);
+  GtkWidget *item;
+  gchar *subtitle = NULL;
+  gchar *accelerator = NULL;
+  gchar *title = NULL;
+  gchar *hash_key = NULL;
+  GIcon *icon = NULL;
+  gchar *str;
+  gchar *keywords;
+
+  if (GTK_IS_SHORTCUTS_SHORTCUT (child))
+    {
+      g_object_get (child,
+                    "accelerator", &accelerator,
+                    "title", &title,
+                    NULL);
+
+      hash_key = g_strdup_printf ("%s-%s", title, accelerator);
+      if (g_hash_table_contains (priv->search_items_hash, hash_key))
+        {
+          g_free (hash_key);
+          g_free (title);
+          g_free (accelerator);
+          return;
+        }
+
+      g_hash_table_insert (priv->search_items_hash, hash_key, GINT_TO_POINTER (1));
+
+      item = g_object_new (GTK_TYPE_SHORTCUTS_SHORTCUT,
+                           "visible", TRUE,
+                           "accelerator", accelerator,
+                           "title", title,
+                           "accel-size-group", priv->search_image_group,
+                           "title-size-group", priv->search_text_group,
+                           NULL);
+
+      str = g_strdup_printf ("%s %s", accelerator, title);
+      keywords = g_utf8_strdown (str, -1);
+
+      g_hash_table_insert (priv->keywords, item, keywords);
+      gtk_container_add (GTK_CONTAINER (priv->search_shortcuts), item);
+
+      g_free (title);
+      g_free (accelerator);
+      g_free (str);
+    }
+  else if (GTK_IS_SHORTCUTS_GESTURE (child))
+    {
+      g_object_get (child,
+                    "title", &title,
+                    "subtitle", &subtitle,
+                    "icon", &icon,
+                    NULL);
+
+      hash_key = g_strdup_printf ("%s-%s", title, subtitle);
+      if (g_hash_table_contains (priv->search_items_hash, hash_key))
+        {
+          g_free (subtitle);
+          g_free (title);
+          g_free (hash_key);
+          g_clear_object (&icon);
+          return;
+        }
+
+      g_hash_table_insert (priv->search_items_hash, hash_key, GINT_TO_POINTER (1));
+
+      item = g_object_new (GTK_TYPE_SHORTCUTS_GESTURE,
+                           "visible", TRUE,
+                           "title", title,
+                           "subtitle", subtitle,
+                           "icon", icon,
+                           "icon-size-group", priv->search_image_group,
+                           "desc-size-group", priv->search_text_group,
+                           NULL);
+
+      str = g_strdup_printf ("%s %s", title, subtitle);
+      keywords = g_utf8_strdown (str, -1);
+
+      g_hash_table_insert (priv->keywords, item, keywords);
+      gtk_container_add (GTK_CONTAINER (priv->search_gestures), item);
+
+      g_free (subtitle);
+      g_free (title);
+      g_clear_object (&icon);
+      g_free (str);
+    }
+  else if (GTK_IS_CONTAINER (child))
+    {
+      gtk_container_foreach (GTK_CONTAINER (child), gtk_shortcuts_window_add_search_item, self);
+    }
+}
+
+static void
 gtk_shortcuts_window_add_section (GtkShortcutsWindow  *self,
                                   GtkShortcutsSection *section)
 {
@@ -149,6 +238,8 @@ gtk_shortcuts_window_add_section (GtkShortcutsWindow  *self,
   const gchar *name;
   const gchar *visible_section;
   GtkWidget *label;
+
+  gtk_container_foreach (GTK_CONTAINER (section), gtk_shortcuts_window_add_search_item, self);
 
   name = gtk_shortcuts_section_get_section_name (section);
   title = gtk_shortcuts_section_get_title (section);
@@ -238,92 +329,6 @@ gtk_shortcuts_window__list_box__row_activated (GtkShortcutsWindow *self,
 }
 
 static void
-gtk_shortcuts_window_add_search_item (GtkShortcutsWindow *self,
-                                      GtkWidget          *search_item)
-{
-  GtkShortcutsWindowPrivate *priv = gtk_shortcuts_window_get_instance_private (self);
-  GString *str;
-  gchar *downcase;
-
-  str = g_string_new (NULL);
-
-  if (GTK_IS_SHORTCUTS_SHORTCUT (search_item))
-    {
-      gchar *accelerator = NULL;
-      gchar *title = NULL;
-      gchar *hash_key = NULL;
-
-      g_object_get (search_item,
-                    "accelerator", &accelerator,
-                    "title", &title,
-                    NULL);
-
-      hash_key = g_strdup_printf ("%s-%s", title, accelerator);
-      if (g_hash_table_contains (priv->search_items_hash, hash_key))
-        {
-          g_free (hash_key);
-          g_free (title);
-          g_free (accelerator);
-
-          return;
-        }
-
-      g_hash_table_insert (priv->search_items_hash, hash_key, GINT_TO_POINTER (1));
-
-      g_object_set (search_item,
-                    "accelerator-size-group", priv->search_image_group,
-                    "title-size-group", priv->search_text_group,
-                    NULL);
-
-      g_string_append_printf (str, "%s %s", accelerator, title);
-
-      gtk_container_add (GTK_CONTAINER (priv->search_shortcuts), search_item);
-
-      g_free (title);
-      g_free (accelerator);
-    }
-  else if (GTK_IS_SHORTCUTS_GESTURE (search_item))
-    {
-      gchar *subtitle = NULL;
-      gchar *title = NULL;
-      gchar *hash_key = NULL;
-
-      g_object_get (search_item,
-                    "subtitle", &subtitle,
-                    "title", &title,
-                    NULL);
-
-      hash_key = g_strdup_printf ("%s-%s", title, subtitle);
-      if (g_hash_table_contains (priv->search_items_hash, hash_key))
-        {
-          g_free (subtitle);
-          g_free (title);
-          g_free (hash_key);
-
-          return;
-        }
-
-      g_hash_table_insert (priv->search_items_hash, hash_key, GINT_TO_POINTER (1));
-
-      g_object_set (search_item,
-                    "icon-size-group", priv->search_image_group,
-                    "desc-size-group", priv->search_text_group,
-                    NULL);
-
-      g_string_append_printf (str, "%s %s", title, subtitle);
-
-      gtk_container_add (GTK_CONTAINER (priv->search_gestures), search_item);
-
-      g_free (subtitle);
-      g_free (title);
-    }
-
-  downcase = g_utf8_strdown (str->str, str->len);
-  g_hash_table_insert (priv->keywords, search_item, downcase);
-  g_string_free (str, TRUE);
-}
-
-static void
 gtk_shortcuts_window__entry__changed (GtkShortcutsWindow *self,
                                      GtkSearchEntry      *search_entry)
 {
@@ -388,385 +393,7 @@ gtk_shortcuts_window__search_mode__changed (GtkShortcutsWindow *self)
   if (!gtk_search_bar_get_search_mode (priv->search_bar))
     {
       if (priv->last_section_name != NULL)
-        {
-          gtk_stack_set_visible_child_name (priv->stack, priv->last_section_name);
-          return;
-        }
-    }
-}
-
-static gboolean
-check_parent (GMarkupParseContext  *context,
-              const gchar          *element_name,
-              GError              **error)
-{
-  const GSList *stack;
-  const gchar *parent_name;
-  const gchar *our_name;
-
-  stack = g_markup_parse_context_get_element_stack (context);
-  our_name = stack->data;
-  parent_name = stack->next ? stack->next->data : "";
-
-  if (g_strcmp0 (parent_name, element_name) != 0)
-    {
-      gint line;
-      gint col;
-
-      g_markup_parse_context_get_position (context, &line, &col);
-      g_set_error (error,
-                   GTK_BUILDER_ERROR,
-                   GTK_BUILDER_ERROR_INVALID_TAG,
-                   "%d:%d: Element <%s> found in <%s>, expected <%s>.",
-                   line, col, our_name, parent_name, element_name);
-      return FALSE;
-    }
-
-  return TRUE;
-}
-
-static void
-sections_parser_start_element (GMarkupParseContext  *context,
-                            const gchar          *element_name,
-                            const gchar         **attribute_names,
-                            const gchar         **attribute_values,
-                            gpointer              user_data,
-                            GError              **error)
-{
-  ViewsParserData *parser_data = user_data;
-  GtkShortcutsWindowPrivate *priv = gtk_shortcuts_window_get_instance_private (parser_data->self);
-  GtkWidget *item;
-
-  if (g_strcmp0 (element_name, "sections") == 0)
-    {
-    }
-  else if (g_strcmp0 (element_name, "section") == 0)
-    {
-      const gchar *name = NULL;
-
-      if (!check_parent (context, "sections", error))
-        return;
-
-      if (!g_markup_collect_attributes (element_name, attribute_names, attribute_values, error,
-                                        G_MARKUP_COLLECT_STRING, "name", &name,
-                                        G_MARKUP_COLLECT_INVALID))
-        return;
-
-      item = g_object_new (GTK_TYPE_SHORTCUTS_SECTION,
-                           "section-name", name,
-                           "visible", TRUE,
-                           "view-name", priv->view_name,
-                           NULL);
-      g_queue_push_head (parser_data->stack, g_object_ref_sink (item));
-    }
-  else if (g_strcmp0 (element_name, "page") == 0)
-    {
-      if (!check_parent (context, "section", error))
-        return;
-
-      item = g_object_new (GTK_TYPE_SHORTCUTS_PAGE,
-                           "visible", TRUE,
-                           NULL);
-      g_queue_push_head (parser_data->stack, g_object_ref_sink (item));
-    }
-  else if (g_strcmp0 (element_name, "column") == 0)
-    {
-      GtkSizeGroup *size_group;
-
-      if (!check_parent (context, "page", error))
-        return;
-
-      size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-      g_queue_push_head (parser_data->column_image_size_groups, size_group);
-
-      size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-      g_queue_push_head (parser_data->column_desc_size_groups, size_group);
-
-      item = g_object_new (GTK_TYPE_SHORTCUTS_COLUMN,
-                           "visible", TRUE,
-                           NULL);
-      g_queue_push_head (parser_data->stack, g_object_ref_sink (item));
-    }
-  else if (g_strcmp0 (element_name, "group") == 0)
-    {
-      const gchar *view = NULL;
-
-      if (!check_parent (context, "column", error))
-        return;
-
-      if (!g_markup_collect_attributes (element_name, attribute_names, attribute_values, error,
-                                        G_MARKUP_COLLECT_STRING | G_MARKUP_COLLECT_OPTIONAL, "view", &view,
-                                        G_MARKUP_COLLECT_INVALID))
-        return;
-
-      item = g_object_new (GTK_TYPE_SHORTCUTS_GROUP,
-                           "visible", TRUE,
-                           "view", view,
-                           NULL);
-      g_queue_push_head (parser_data->stack, g_object_ref_sink (item));
-    }
-  else if (g_strcmp0 (element_name, "shortcut") == 0)
-    {
-      GtkSizeGroup *accel_size_group;
-      GtkSizeGroup *desc_size_group;
-
-      if (!check_parent (context, "group", error))
-        return;
-
-      accel_size_group = g_queue_peek_head (parser_data->column_image_size_groups);
-      desc_size_group = g_queue_peek_head (parser_data->column_desc_size_groups);
-
-      parser_data->search_item = g_object_new (GTK_TYPE_SHORTCUTS_SHORTCUT,
-                                               "visible", TRUE,
-                                               NULL);
-
-      item = g_object_new (GTK_TYPE_SHORTCUTS_SHORTCUT,
-                           "accelerator-size-group", accel_size_group,
-                           "title-size-group", desc_size_group,
-                           "visible", TRUE,
-                           NULL);
-      g_queue_push_head (parser_data->stack, g_object_ref_sink (item));
-    }
-  else if (g_strcmp0 (element_name, "gesture") == 0)
-    {
-      GtkSizeGroup *accel_size_group;
-      GtkSizeGroup *desc_size_group;
-
-      if (!check_parent (context, "group", error))
-        return;
-
-      accel_size_group = g_queue_peek_head (parser_data->column_image_size_groups);
-      desc_size_group = g_queue_peek_head (parser_data->column_desc_size_groups);
-
-      parser_data->search_item = g_object_new (GTK_TYPE_SHORTCUTS_GESTURE,
-                                               "visible", TRUE,
-                                               NULL);
-
-      item = g_object_new (GTK_TYPE_SHORTCUTS_GESTURE,
-                           "desc-size-group", desc_size_group,
-                           "icon-size-group", accel_size_group,
-                           "visible", TRUE,
-                           NULL);
-      g_queue_push_head (parser_data->stack, g_object_ref_sink (item));
-    }
-  else if (g_strcmp0 (element_name, "property") == 0)
-    {
-      const gchar *name = NULL;
-      const gchar *translatable = NULL;
-
-      item = g_queue_peek_head (parser_data->stack);
-
-      if (item == NULL)
-        {
-          g_set_error (error,
-                       GTK_BUILDER_ERROR,
-                       GTK_BUILDER_ERROR_INVALID_TAG,
-                       "Property called without a parent object");
-          return;
-        }
-
-      if (!g_markup_collect_attributes (element_name, attribute_names, attribute_values, error,
-                                        G_MARKUP_COLLECT_STRING, "name", &name,
-                                        G_MARKUP_COLLECT_OPTIONAL | G_MARKUP_COLLECT_STRING, "translatable", &translatable,
-                                        G_MARKUP_COLLECT_INVALID))
-        return;
-
-      g_free (parser_data->property_name);
-      parser_data->property_name = g_strdup (name);
-      parser_data->translatable = (g_strcmp0 (translatable, "yes") == 0);
-    }
-  else
-    {
-      const GSList *stack;
-      const gchar *parent_name;
-      const gchar *our_name;
-      gint line;
-      gint col;
-
-      stack = g_markup_parse_context_get_element_stack (context);
-      our_name = stack->data;
-      parent_name = stack->next ? stack->next->data : "";
-
-      g_markup_parse_context_get_position (context, &line, &col);
-      g_set_error (error,
-                   GTK_BUILDER_ERROR,
-                   GTK_BUILDER_ERROR_INVALID_TAG,
-                   "%d:%d: Unknown element <%s> found in <%s>.",
-                   line, col, our_name, parent_name);
-    }
-}
-
-static void
-sections_parser_end_element (GMarkupParseContext  *context,
-                          const gchar          *element_name,
-                          gpointer              user_data,
-                          GError              **error)
-{
-  ViewsParserData *parser_data = user_data;
-  GtkWidget *item;
-
-  if (g_strcmp0 (element_name, "section") == 0)
-    {
-      item = g_queue_pop_head (parser_data->stack);
-      gtk_shortcuts_window_add_section (parser_data->self, GTK_SHORTCUTS_SECTION (item));
-      g_object_unref (item);
-    }
-  else if ((g_strcmp0 (element_name, "page") == 0) ||
-           (g_strcmp0 (element_name, "column") == 0) ||
-           (g_strcmp0 (element_name, "group") == 0) ||
-           (g_strcmp0 (element_name, "shortcut") == 0) ||
-           (g_strcmp0 (element_name, "gesture") == 0))
-    {
-      GtkWidget *parent;
-
-      item = g_queue_pop_head (parser_data->stack);
-      parent = g_queue_peek_head (parser_data->stack);
-      if (item != NULL && parent != NULL)
-        gtk_container_add (GTK_CONTAINER (parent), GTK_WIDGET (item));
-      g_clear_object (&item);
-
-      if ((g_strcmp0 (element_name, "shortcut") == 0) ||
-          (g_strcmp0 (element_name, "gesture") == 0))
-        {
-          gtk_shortcuts_window_add_search_item (parser_data->self, parser_data->search_item);
-          parser_data->search_item = NULL;
-        }
-
-      if (g_strcmp0 (element_name, "column") == 0)
-        {
-          GtkSizeGroup *size_group;
-
-          size_group = g_queue_pop_head (parser_data->column_image_size_groups);
-          g_clear_object (&size_group);
-
-          size_group = g_queue_pop_head (parser_data->column_desc_size_groups);
-          g_clear_object (&size_group);
-        }
-    }
-  else if (g_strcmp0 (element_name, "property") == 0)
-    {
-      g_clear_pointer (&parser_data->property_name, g_free);
-    }
-}
-
-static void
-sections_parser_text (GMarkupParseContext  *context,
-                   const gchar          *text,
-                   gsize                 text_len,
-                   gpointer              user_data,
-                   GError              **error)
-{
-  ViewsParserData *parser_data = user_data;
-  GParamSpec *pspec;
-  GtkWidget *item;
-  GValue value = { 0 };
-
-  if (parser_data->property_name == NULL)
-    return;
-
-  item = g_queue_peek_head (parser_data->stack);
-
-  if (item == NULL)
-    return;
-
-  pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (item), parser_data->property_name);
-
-  if (pspec == NULL)
-    {
-      g_set_error (error,
-                   GTK_BUILDER_ERROR,
-                   GTK_BUILDER_ERROR_INVALID_PROPERTY,
-                   "No such property: %s",
-                   parser_data->property_name);
-      return;
-    }
-
-  if (parser_data->translatable)
-    text = _(text);
-
-  if (g_type_is_a (pspec->value_type, G_TYPE_OBJECT))
-    {
-      GObject *relative;
-
-      relative = gtk_builder_get_object (parser_data->builder, text);
-
-      if (relative == NULL)
-        {
-          g_set_error (error,
-                       GTK_BUILDER_ERROR,
-                       GTK_BUILDER_ERROR_INVALID_VALUE,
-                       "Unknown object for property '%s': %s",
-                       parser_data->property_name,
-                       text);
-          return;
-        }
-
-      g_value_init (&value, pspec->value_type);
-      g_value_set_object (&value, relative);
-    }
-  else if (!gtk_builder_value_from_string (parser_data->builder,
-                                           pspec, text, &value, error))
-    return;
-
-  if (parser_data->search_item != NULL)
-    g_object_set_property (G_OBJECT (parser_data->search_item),
-                           parser_data->property_name,
-                           &value);
-  g_object_set_property (G_OBJECT (item), parser_data->property_name, &value);
-  g_value_unset (&value);
-}
-
-static GMarkupParser ViewsParser = {
-  sections_parser_start_element,
-  sections_parser_end_element,
-  sections_parser_text,
-};
-
-static gboolean
-gtk_shortcuts_window_custom_tag_start (GtkBuildable  *buildable,
-                                      GtkBuilder    *builder,
-                                      GObject       *child,
-                                      const gchar   *tagname,
-                                      GMarkupParser *parser,
-                                      gpointer      *data)
-{
-  if (g_strcmp0 (tagname, "sections") == 0)
-    {
-      ViewsParserData *parser_data;
-
-      parser_data = g_slice_new0 (ViewsParserData);
-      parser_data->self = g_object_ref (buildable);
-      parser_data->builder = g_object_ref (builder);
-      parser_data->stack = g_queue_new ();
-      parser_data->column_image_size_groups = g_queue_new ();
-      parser_data->column_desc_size_groups = g_queue_new ();
-
-      *parser = ViewsParser;
-      *data = parser_data;
-
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-static void
-gtk_shortcuts_window_custom_finished (GtkBuildable *buildable,
-                                     GtkBuilder   *builder,
-                                     GObject      *child,
-                                     const gchar  *tagname,
-                                     gpointer      user_data)
-{
-  if (g_strcmp0 (tagname, "sections") == 0)
-    {
-      ViewsParserData *parser_data = user_data;
-
-      g_object_unref (parser_data->self);
-      g_object_unref (parser_data->builder);
-      g_queue_free_full (parser_data->stack, (GDestroyNotify)g_object_unref);
-      g_queue_free_full (parser_data->column_image_size_groups, (GDestroyNotify)g_object_unref);
-      g_queue_free_full (parser_data->column_desc_size_groups, (GDestroyNotify)g_object_unref);
-      g_slice_free (ViewsParserData, parser_data);
+        gtk_stack_set_visible_child_name (priv->stack, priv->last_section_name);
     }
 }
 
@@ -804,13 +431,6 @@ gtk_shortcuts_window_finalize (GObject *object)
   g_clear_object (&priv->search_text_group);
 
   G_OBJECT_CLASS (gtk_shortcuts_window_parent_class)->finalize (object);
-}
-
-static void
-gtk_buildable_iface_init (GtkBuildableIface *iface)
-{
-  iface->custom_tag_start = gtk_shortcuts_window_custom_tag_start;
-  iface->custom_finished = gtk_shortcuts_window_custom_finished;
 }
 
 static void
@@ -908,8 +528,6 @@ gtk_shortcuts_window_class_init (GtkShortcutsWindowClass *klass)
                                  0);
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_Escape, 0, "close", 0);
 
-  g_type_ensure (GTK_TYPE_SHORTCUTS_PAGE);
-  g_type_ensure (GTK_TYPE_SHORTCUTS_COLUMN);
   g_type_ensure (GTK_TYPE_SHORTCUTS_GROUP);
   g_type_ensure (GTK_TYPE_SHORTCUTS_GESTURE);
   g_type_ensure (GTK_TYPE_SHORTCUTS_SHORTCUT);

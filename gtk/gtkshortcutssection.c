@@ -20,13 +20,13 @@
 
 #include "gtkshortcutssectionprivate.h"
 
-#include "gtkshortcutspageprivate.h"
 #include "gtkshortcutsgroupprivate.h"
 #include "gtktogglebutton.h"
 #include "gtkstack.h"
 #include "gtkstackswitcher.h"
 #include "gtkstylecontext.h"
 #include "gtkorientable.h"
+#include "gtksizegroup.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
@@ -37,6 +37,7 @@ struct _GtkShortcutsSection
   gchar            *name;
   gchar            *title;
   gchar            *view_name;
+  guint             max_height;
 
   GtkStack         *stack;
   GtkStackSwitcher *switcher;
@@ -44,6 +45,11 @@ struct _GtkShortcutsSection
 
   gboolean          has_filtered_group;
   guint             last_page_num;
+
+  GtkWidget        *current_page;
+  GtkWidget        *current_column;
+  guint             n_columns;
+  guint             n_rows;
 };
 
 struct _GtkShortcutsSectionClass
@@ -58,6 +64,7 @@ enum {
   PROP_TITLE,
   PROP_SECTION_NAME,
   PROP_VIEW_NAME,
+  PROP_MAX_HEIGHT,
   LAST_PROP
 };
 
@@ -85,26 +92,10 @@ gtk_shortcuts_section_add (GtkContainer *container,
 {
   GtkShortcutsSection *self = (GtkShortcutsSection *)container;
 
-  if (GTK_IS_SHORTCUTS_PAGE (child))
-    {
-      gchar *title = NULL;
-      guint count = 0;
-
-      title = g_strdup_printf ("%u", ++self->last_page_num);
-      gtk_container_add_with_properties (GTK_CONTAINER (self->stack), child,
-                                         "title", title,
-                                         NULL);
-
-      gtk_container_foreach (GTK_CONTAINER (self->switcher), adjust_page_buttons, &count);
-      gtk_widget_set_visible (GTK_WIDGET (self->switcher), (count > 1));
-      if (count > 1)
-        gtk_widget_show (gtk_widget_get_parent (GTK_WIDGET (self->switcher)));
-      g_free (title);
-    }
+  if (GTK_IS_SHORTCUTS_GROUP (child))
+    gtk_shortcuts_section_add_group (self, GTK_SHORTCUTS_GROUP (child));
   else
-    {
-      GTK_CONTAINER_CLASS (gtk_shortcuts_section_parent_class)->add (container, child);
-    }
+    GTK_CONTAINER_CLASS (gtk_shortcuts_section_parent_class)->add (container, child);
 }
 
 static void
@@ -140,6 +131,10 @@ gtk_shortcuts_section_get_property (GObject    *object,
       g_value_set_string (value, self->title);
       break;
 
+    case PROP_MAX_HEIGHT:
+      g_value_set_uint (value, self->max_height);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -167,6 +162,10 @@ gtk_shortcuts_section_set_property (GObject      *object,
     case PROP_TITLE:
       g_free (self->title);
       self->title = g_value_dup_string (value);
+      break;
+
+    case PROP_MAX_HEIGHT:
+      self->max_height = g_value_get_uint (value);
       break;
 
     default:
@@ -200,6 +199,11 @@ gtk_shortcuts_section_class_init (GtkShortcutsSectionClass *klass)
     g_param_spec_string ("title", P_("Title"), P_("Title"),
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  properties[PROP_MAX_HEIGHT] =
+    g_param_spec_uint ("max-height", P_("Maximum Height"), P_("Maximum Height"),
+                       0, G_MAXUINT, 15,
+                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
@@ -244,6 +248,8 @@ static void
 gtk_shortcuts_section_init (GtkShortcutsSection *self)
 {
   GtkWidget *box;
+
+  self->max_height = 15;
 
   gtk_orientable_set_orientation (GTK_ORIENTABLE (self), GTK_ORIENTATION_VERTICAL);
   gtk_box_set_homogeneous (GTK_BOX (self), FALSE);
@@ -308,4 +314,62 @@ gtk_shortcuts_section_set_view_name (GtkShortcutsSection *self,
   filter_groups_by_view (self);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_VIEW_NAME]);
+}
+
+void
+gtk_shortcuts_section_add_group (GtkShortcutsSection *self,
+                                 GtkShortcutsGroup   *group)
+{
+  guint height;
+
+  g_return_if_fail (GTK_IS_SHORTCUTS_SECTION (self));
+  g_return_if_fail (GTK_IS_SHORTCUTS_GROUP (group));
+
+  g_object_get (group, "height", &height, NULL);
+
+  if (self->n_rows == 0 || self->n_rows + height > self->max_height)
+    {
+      GtkWidget *column;
+
+      column = gtk_box_new (GTK_ORIENTATION_VERTICAL, 22);
+      gtk_widget_show (column);
+
+      g_object_set_data_full (G_OBJECT (column), "accel-size-group", gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL), g_object_unref);
+      g_object_set_data_full (G_OBJECT (column), "title-size-group", gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL), g_object_unref);
+
+      if (self->n_columns % 2 == 0)
+        {
+          GtkWidget *page;
+          gchar *title = NULL;
+          guint count = 0;
+
+          page = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 22);
+          gtk_widget_show (page);
+
+          title = g_strdup_printf ("%u", ++self->last_page_num);
+          gtk_container_add_with_properties (GTK_CONTAINER (self->stack), page,
+                                             "title", title,
+                                             NULL);
+
+          gtk_container_foreach (GTK_CONTAINER (self->switcher), adjust_page_buttons, &count);
+          gtk_widget_set_visible (GTK_WIDGET (self->switcher), (count > 1));
+          if (count > 1)
+            gtk_widget_show (gtk_widget_get_parent (GTK_WIDGET (self->switcher)));
+          g_free (title);
+
+          self->current_page = page;
+        }
+
+      gtk_container_add (GTK_CONTAINER (self->current_page), column);
+      self->current_column = column;
+      self->n_columns += 1;
+      self->n_rows = 0;
+    }
+
+  self->n_rows += height;
+
+  g_object_set (group, "accel-size-group", g_object_get_data (G_OBJECT (self->current_column), "accel-size-group"), NULL);
+  g_object_set (group, "title-size-group", g_object_get_data (G_OBJECT (self->current_column), "title-size-group"), NULL);
+
+  gtk_container_add (GTK_CONTAINER (self->current_column), GTK_WIDGET (group));
 }

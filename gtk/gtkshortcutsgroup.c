@@ -20,8 +20,11 @@
 
 #include "gtkshortcutsgroupprivate.h"
 
+#include "gtkshortcutsshortcutprivate.h"
+#include "gtkshortcutsgestureprivate.h"
 #include "gtklabel.h"
 #include "gtkorientable.h"
+#include "gtksizegroup.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
@@ -30,7 +33,8 @@ struct _GtkShortcutsGroup
   GtkBox    parent_instance;
 
   GtkLabel *title;
-  gchar *view;
+  gchar    *view;
+  guint     height;
 };
 
 struct _GtkShortcutsGroupClass
@@ -44,10 +48,68 @@ enum {
   PROP_0,
   PROP_TITLE,
   PROP_VIEW,
+  PROP_ACCEL_SIZE_GROUP,
+  PROP_TITLE_SIZE_GROUP,
+  PROP_HEIGHT,
   LAST_PROP
 };
 
 static GParamSpec *properties[LAST_PROP];
+
+static void
+gtk_shortcuts_group_set_accel_size_group (GtkShortcutsGroup *group,
+                                          GtkSizeGroup      *size_group)
+{
+  GList *children, *l;
+
+  children = gtk_container_get_children (GTK_CONTAINER (group));
+  for (l = children; l; l = l->next)
+    {
+      if (GTK_IS_SHORTCUTS_SHORTCUT (l->data))
+        g_object_set (l->data, "accel-size-group", size_group, NULL);
+      else if (GTK_IS_SHORTCUTS_GESTURE (l->data))
+        g_object_set (l->data, "icon-size-group", size_group, NULL);
+    }
+  g_list_free (children);
+}
+
+static void
+gtk_shortcuts_group_set_title_size_group (GtkShortcutsGroup *group,
+                                          GtkSizeGroup      *size_group)
+{
+  GList *children, *l;
+
+  children = gtk_container_get_children (GTK_CONTAINER (group));
+  for (l = children; l; l = l->next)
+    {
+      if (GTK_IS_SHORTCUTS_SHORTCUT (l->data))
+        g_object_set (l->data, "title-size-group", size_group, NULL);
+      else if (GTK_IS_SHORTCUTS_GESTURE (l->data))
+        g_object_set (l->data, "desc-size-group", size_group, NULL);
+    }
+  g_list_free (children);
+}
+
+static guint
+gtk_shortcuts_group_get_height (GtkShortcutsGroup *group)
+{
+  GList *children, *l;
+  guint height;
+
+  height = 1;
+
+  children = gtk_container_get_children (GTK_CONTAINER (group));
+  for (l = children; l; l = l->next)
+    {
+      if (GTK_IS_SHORTCUTS_SHORTCUT (l->data))
+        height += 1;
+      else if (GTK_IS_SHORTCUTS_GESTURE (l->data))
+        height += 2;
+    }
+  g_list_free (children);
+
+  return height;
+}
 
 static void
 gtk_shortcuts_group_get_property (GObject    *object,
@@ -65,6 +127,10 @@ gtk_shortcuts_group_get_property (GObject    *object,
 
     case PROP_VIEW:
       g_value_set_string (value, self->view);
+      break;
+
+    case PROP_HEIGHT:
+      g_value_set_uint (value, gtk_shortcuts_group_get_height (self));
       break;
 
     default:
@@ -89,6 +155,14 @@ gtk_shortcuts_group_set_property (GObject      *object,
     case PROP_VIEW:
       g_free (self->view);
       self->view = g_value_dup_string (value);
+      break;
+
+    case PROP_ACCEL_SIZE_GROUP:
+      gtk_shortcuts_group_set_accel_size_group (self, GTK_SIZE_GROUP (g_value_get_object (value)));
+      break;
+
+    case PROP_TITLE_SIZE_GROUP:
+      gtk_shortcuts_group_set_title_size_group (self, GTK_SIZE_GROUP (g_value_get_object (value)));
       break;
 
     default:
@@ -123,6 +197,25 @@ gtk_shortcuts_group_class_init (GtkShortcutsGroupClass *klass)
     g_param_spec_string ("view", P_("View"), P_("View"),
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  properties[PROP_ACCEL_SIZE_GROUP] =
+    g_param_spec_object ("accel-size-group",
+                         P_("Accelerator Size Group"),
+                         P_("Accelerator Size Group"),
+                         GTK_TYPE_SIZE_GROUP,
+                         (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
+
+  properties[PROP_TITLE_SIZE_GROUP] =
+    g_param_spec_object ("title-size-group",
+                         P_("Title Size Group"),
+                         P_("Title Size Group"),
+                         GTK_TYPE_SIZE_GROUP,
+                         (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
+
+  properties[PROP_HEIGHT] =
+    g_param_spec_uint ("height", P_("Height"), P_("Height"),
+                       0, G_MAXUINT, 0,
+                       (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 }

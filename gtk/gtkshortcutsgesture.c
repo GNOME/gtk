@@ -35,6 +35,9 @@ struct _GtkShortcutsGesture
   GtkLabel *title;
   GtkLabel *subtitle;
   GtkBox   *desc_box;
+
+  GtkSizeGroup *desc_size_group;
+  GtkSizeGroup *icon_size_group;
 };
 
 struct _GtkShortcutsGestureClass
@@ -47,7 +50,7 @@ G_DEFINE_TYPE (GtkShortcutsGesture, gtk_shortcuts_gesture, GTK_TYPE_BOX)
 enum {
   PROP_0,
   PROP_DESC_SIZE_GROUP,
-  PROP_GICON,
+  PROP_ICON,
   PROP_ICON_SIZE_GROUP,
   PROP_SUBTITLE,
   PROP_TITLE,
@@ -57,8 +60,32 @@ enum {
 static GParamSpec *properties[LAST_PROP];
 
 static void
-gtk_shortcuts_gesture_set_gicon (GtkShortcutsGesture *self,
-                                 GIcon               *gicon)
+gtk_shortcuts_gesture_set_desc_size_group (GtkShortcutsGesture *self,
+                                           GtkSizeGroup       *group)
+{
+  if (self->desc_size_group)
+    gtk_size_group_remove_widget (self->desc_size_group, GTK_WIDGET (self->desc_box));
+  if (group)
+    gtk_size_group_add_widget (group, GTK_WIDGET (self->desc_box));
+
+  g_set_object (&self->desc_size_group, group);
+}
+
+static void
+gtk_shortcuts_gesture_set_icon_size_group (GtkShortcutsGesture *self,
+                                           GtkSizeGroup        *group)
+{
+  if (self->icon_size_group)
+    gtk_size_group_remove_widget (self->icon_size_group, GTK_WIDGET (self->image));
+  if (group)
+    gtk_size_group_add_widget (group, GTK_WIDGET (self->image));
+
+  g_set_object (&self->icon_size_group, group);
+}
+
+static void
+gtk_shortcuts_gesture_set_icon (GtkShortcutsGesture *self,
+                                GIcon               *gicon)
 {
   gtk_image_set_from_gicon (self->image, gicon, GTK_ICON_SIZE_DIALOG);
 }
@@ -81,6 +108,15 @@ gtk_shortcuts_gesture_get_property (GObject    *object,
       g_value_set_string (value, gtk_label_get_label (self->title));
       break;
 
+    case PROP_ICON:
+      {
+        GIcon *icon;
+
+        gtk_image_get_gicon (self->image, &icon, NULL);
+        g_value_set_object (value, icon);
+      }
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -97,26 +133,16 @@ gtk_shortcuts_gesture_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_DESC_SIZE_GROUP:
-      {
-        GtkSizeGroup *group = g_value_get_object (value);
+      gtk_shortcuts_gesture_set_desc_size_group (self, GTK_SIZE_GROUP (g_value_get_object (value)));
+      break;
 
-        if (group != NULL)
-          gtk_size_group_add_widget (group, GTK_WIDGET (self->desc_box));
-        break;
-      }
-
-    case PROP_GICON:
-      gtk_shortcuts_gesture_set_gicon (self, g_value_get_object (value));
+    case PROP_ICON:
+      gtk_shortcuts_gesture_set_icon (self, g_value_get_object (value));
       break;
 
     case PROP_ICON_SIZE_GROUP:
-      {
-        GtkSizeGroup *group = g_value_get_object (value);
-
-        if (group != NULL)
-          gtk_size_group_add_widget (group, GTK_WIDGET (self->image));
-        break;
-      }
+      gtk_shortcuts_gesture_set_icon_size_group (self, GTK_SIZE_GROUP (g_value_get_object (value)));
+      break;
 
     case PROP_SUBTITLE:
       gtk_label_set_label (self->subtitle, g_value_get_string (value));
@@ -132,10 +158,22 @@ gtk_shortcuts_gesture_set_property (GObject      *object,
 }
 
 static void
+gtk_shortcuts_gesture_finalize (GObject *object)
+{
+  GtkShortcutsGesture *self = GTK_SHORTCUTS_GESTURE (object);
+
+  g_clear_object (&self->desc_size_group);
+  g_clear_object (&self->icon_size_group);
+
+  G_OBJECT_CLASS (gtk_shortcuts_gesture_parent_class)->finalize (object);
+}
+
+static void
 gtk_shortcuts_gesture_class_init (GtkShortcutsGestureClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->finalize = gtk_shortcuts_gesture_finalize;
   object_class->get_property = gtk_shortcuts_gesture_get_property;
   object_class->set_property = gtk_shortcuts_gesture_set_property;
 
@@ -146,12 +184,12 @@ gtk_shortcuts_gesture_class_init (GtkShortcutsGestureClass *klass)
                          GTK_TYPE_SIZE_GROUP,
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
-  properties[PROP_GICON] =
-    g_param_spec_object ("gicon",
-                         P_("GIcon"),
-                         P_("GIcon"),
+  properties[PROP_ICON] =
+    g_param_spec_object ("icon",
+                         P_("Icon"),
+                         P_("Icon"),
                          G_TYPE_ICON,
-                         (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties[PROP_ICON_SIZE_GROUP] =
     g_param_spec_object ("icon-size-group",

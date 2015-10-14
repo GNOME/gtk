@@ -20,6 +20,7 @@
 #define __GTK_SHORTCUTS_SECTION_H__
 
 #include <gtk/gtkbox.h>
+#include <gtk/gtkshortcutsgroupprivate.h>
 
 G_BEGIN_DECLS
 
@@ -41,6 +42,8 @@ const gchar *gtk_shortcuts_section_get_section_name (GtkShortcutsSection *self);
 const gchar *gtk_shortcuts_section_get_title        (GtkShortcutsSection *self);
 void         gtk_shortcuts_section_set_view_name    (GtkShortcutsSection *self,
                                                      const gchar         *view_name);
+void         gtk_shortcuts_section_add_group        (GtkShortcutsSection *self,
+                                                     GtkShortcutsGroup   *group);
 
 G_END_DECLS
 

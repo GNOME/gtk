@@ -31,6 +31,9 @@ struct _GtkShortcutsShortcut
 
   GtkShortcutLabel *accelerator;
   GtkLabel         *title;
+
+  GtkSizeGroup *accel_size_group;
+  GtkSizeGroup *title_size_group;
 };
 
 struct _GtkShortcutsShortcutClass
@@ -43,13 +46,37 @@ G_DEFINE_TYPE (GtkShortcutsShortcut, gtk_shortcuts_shortcut, GTK_TYPE_BOX)
 enum {
   PROP_0,
   PROP_ACCELERATOR,
-  PROP_ACCELERATOR_SIZE_GROUP,
+  PROP_ACCEL_SIZE_GROUP,
   PROP_TITLE,
   PROP_TITLE_SIZE_GROUP,
   LAST_PROP
 };
 
 static GParamSpec *properties[LAST_PROP];
+
+static void
+gtk_shortcuts_shortcut_set_accel_size_group (GtkShortcutsShortcut *self,
+                                             GtkSizeGroup         *group)
+{
+  if (self->accel_size_group)
+    gtk_size_group_remove_widget (self->accel_size_group, GTK_WIDGET (self->accelerator));
+  if (group)
+    gtk_size_group_add_widget (group, GTK_WIDGET (self->accelerator));
+
+  g_set_object (&self->accel_size_group, group);
+}
+
+static void
+gtk_shortcuts_shortcut_set_title_size_group (GtkShortcutsShortcut *self,
+                                             GtkSizeGroup         *group)
+{
+  if (self->title_size_group)
+    gtk_size_group_remove_widget (self->title_size_group, GTK_WIDGET (self->accelerator));
+  if (group)
+    gtk_size_group_add_widget (group, GTK_WIDGET (self->title));
+
+  g_set_object (&self->title_size_group, group);
+}
 
 static void
 gtk_shortcuts_shortcut_get_property (GObject    *object,
@@ -88,31 +115,33 @@ gtk_shortcuts_shortcut_set_property (GObject      *object,
       gtk_shortcut_label_set_accelerator (self->accelerator, g_value_get_string (value));
       break;
 
-    case PROP_ACCELERATOR_SIZE_GROUP:
-      {
-        GtkSizeGroup *group = g_value_get_object (value);
-
-        if (group != NULL)
-          gtk_size_group_add_widget (group, GTK_WIDGET (self->accelerator));
-        break;
-      }
+    case PROP_ACCEL_SIZE_GROUP:
+      gtk_shortcuts_shortcut_set_accel_size_group (self, GTK_SIZE_GROUP (g_value_get_object (value)));
+      break;
 
     case PROP_TITLE:
       gtk_label_set_label (self->title, g_value_get_string (value));
       break;
 
     case PROP_TITLE_SIZE_GROUP:
-      {
-        GtkSizeGroup *group = g_value_get_object (value);
-
-        if (group != NULL)
-          gtk_size_group_add_widget (group, GTK_WIDGET (self->title));
-        break;
-      }
+      gtk_shortcuts_shortcut_set_title_size_group (self, GTK_SIZE_GROUP (g_value_get_object (value)));
+      break;
 
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
     }
+}
+
+static void
+gtk_shortcuts_shortcut_finalize (GObject *object)
+{
+  GtkShortcutsShortcut *self = GTK_SHORTCUTS_SHORTCUT (object);
+
+  g_clear_object (&self->accel_size_group);
+  g_clear_object (&self->title_size_group);
+
+  G_OBJECT_CLASS (gtk_shortcuts_shortcut_parent_class)->finalize (object);
 }
 
 static void
@@ -120,6 +149,7 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->finalize = gtk_shortcuts_shortcut_finalize;
   object_class->get_property = gtk_shortcuts_shortcut_get_property;
   object_class->set_property = gtk_shortcuts_shortcut_set_property;
 
@@ -130,8 +160,8 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  properties[PROP_ACCELERATOR_SIZE_GROUP] =
-    g_param_spec_object ("accelerator-size-group",
+  properties[PROP_ACCEL_SIZE_GROUP] =
+    g_param_spec_object ("accel-size-group",
                          P_("Accelerator Size Group"),
                          P_("Accelerator Size Group"),
                          GTK_TYPE_SIZE_GROUP,
