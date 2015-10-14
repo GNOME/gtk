@@ -739,6 +739,7 @@ _gtk_text_handle_set_mode (GtkTextHandle     *handle,
                            GtkTextHandleMode  mode)
 {
   GtkTextHandlePrivate *priv;
+  HandleWindow *start, *end;
 
   g_return_if_fail (GTK_IS_TEXT_HANDLE (handle));
 
@@ -748,21 +749,24 @@ _gtk_text_handle_set_mode (GtkTextHandle     *handle,
     return;
 
   priv->mode = mode;
+  start = &priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START];
+  end = &priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_END];
 
   switch (mode)
     {
     case GTK_TEXT_HANDLE_MODE_CURSOR:
-      priv->windows[GTK_TEXT_HANDLE_POSITION_CURSOR].mode_visible = TRUE;
-      priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START].mode_visible = FALSE;
+      start->mode_visible = FALSE;
+      /* end = cursor */
+      end->mode_visible = TRUE;
       break;
     case GTK_TEXT_HANDLE_MODE_SELECTION:
-      priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START].mode_visible = TRUE;
-      priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_END].mode_visible = TRUE;
+      start->mode_visible = TRUE;
+      end->mode_visible = TRUE;
       break;
     case GTK_TEXT_HANDLE_MODE_NONE:
     default:
-      priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START].mode_visible = FALSE;
-      priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_END].mode_visible = FALSE;
+      start->mode_visible = FALSE;
+      end->mode_visible = FALSE;
       break;
     }
 
