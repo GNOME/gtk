@@ -457,33 +457,29 @@ gtk_places_view_set_property (GObject      *object,
 }
 
 static gboolean
-is_removable_volume (GVolume *volume)
+is_external_volume (GVolume *volume)
 {
-  gboolean is_removable;
+  gboolean is_external;
   GDrive *drive;
-  GMount *mount;
   gchar *id;
 
   drive = g_volume_get_drive (volume);
-  mount = g_volume_get_mount (volume);
   id = g_volume_get_identifier (volume, G_VOLUME_IDENTIFIER_KIND_CLASS);
 
-  is_removable = g_volume_can_eject (volume);
+  is_external = g_volume_can_eject (volume);
 
   /* NULL volume identifier only happens on removable devices */
-  is_removable |= !id;
+  is_external |= !id;
 
   if (drive)
-    is_removable |= g_drive_can_eject (drive);
-
-  if (mount)
-    is_removable |= (g_mount_can_eject (mount) && !g_mount_can_unmount (mount));
+    is_external |= g_drive_can_eject (drive) ||
+                   g_drive_is_media_removable (drive) ||
+                   g_drive_can_stop (drive);
 
   g_clear_object (&drive);
-  g_clear_object (&mount);
   g_free (id);
 
-  return is_removable;
+  return is_external;
 }
 
 typedef struct
@@ -693,7 +689,7 @@ add_volume (GtkPlacesView *view,
   gchar *name;
   gchar *path;
 
-  if (is_removable_volume (volume))
+  if (is_external_volume (volume))
     return;
 
   identifier = g_volume_get_identifier (volume, G_VOLUME_IDENTIFIER_KIND_CLASS);
