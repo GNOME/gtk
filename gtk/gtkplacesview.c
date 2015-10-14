@@ -786,10 +786,6 @@ add_drive (GtkPlacesView *view,
   GList *volumes;
   GList *l;
 
-  /* Removable devices won't appear here */
-  if (g_drive_can_eject (drive))
-    return;
-
   volumes = g_drive_get_volumes (drive);
 
   for (l = volumes; l != NULL; l = l->next)
