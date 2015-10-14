@@ -686,7 +686,6 @@ add_volume (GtkPlacesView *view,
             GVolume       *volume)
 {
   gboolean is_network;
-  GDrive *drive;
   GMount *mount;
   GFile *root;
   GIcon *icon;
@@ -696,20 +695,6 @@ add_volume (GtkPlacesView *view,
 
   if (is_removable_volume (volume))
     return;
-
-  drive = g_volume_get_drive (volume);
-
-  if (drive)
-    {
-      gboolean is_removable;
-
-      is_removable = g_drive_is_media_removable (drive) ||
-                     g_volume_can_eject (volume);
-      g_object_unref (drive);
-
-      if (is_removable)
-        return;
-    }
 
   identifier = g_volume_get_identifier (volume, G_VOLUME_IDENTIFIER_KIND_CLASS);
   is_network = g_strcmp0 (identifier, "network") == 0;
