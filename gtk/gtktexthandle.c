@@ -391,13 +391,16 @@ _gtk_text_handle_update (GtkTextHandle         *handle,
 
       _gtk_text_handle_ensure_widget (handle, pos);
       _gtk_text_handle_get_size (handle, &width, &height);
-      rect.x = handle_window->pointing_to.x;
-      rect.y = handle_window->pointing_to.y;
-      rect.width = width;
-      rect.height = 0;
 
+      border->top = height;
+      border->bottom = height;
       border->left = width;
       border->right = width;
+
+      rect.x = handle_window->pointing_to.x;
+      rect.y = handle_window->pointing_to.y + handle_window->pointing_to.height - handle_window->border.top;
+      rect.width = width;
+      rect.height = 0;
 
       _handle_update_child_visible (handle, pos);
 
@@ -413,9 +416,6 @@ _gtk_text_handle_update (GtkTextHandle         *handle,
                (pos == GTK_TEXT_HANDLE_POSITION_SELECTION_START &&
                 handle_window->dir != GTK_TEXT_DIR_RTL))
         rect.x -= rect.width;
-
-      border->top = height;
-      border->bottom = height;
 
       /* The goal is to make the window 3 times as wide and high. The handle
        * will be rendered in the center, making the rest an invisible border.
