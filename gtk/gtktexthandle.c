@@ -772,6 +772,11 @@ _gtk_text_handle_set_mode (GtkTextHandle     *handle,
 
   _gtk_text_handle_update (handle, GTK_TEXT_HANDLE_POSITION_SELECTION_START);
   _gtk_text_handle_update (handle, GTK_TEXT_HANDLE_POSITION_SELECTION_END);
+
+  if (start->widget && start->mode_visible)
+    gtk_widget_queue_draw (start->widget);
+  if (end->widget && end->mode_visible)
+    gtk_widget_queue_draw (end->widget);
 }
 
 GtkTextHandleMode
