@@ -5190,6 +5190,43 @@ gtk_window_get_default_size (GtkWindow *window,
     *height = info ? info->default_height : -1;
 }
 
+#define INCLUDE_CSD_SIZE 1
+#define EXCLUDE_CSD_SIZE -1
+
+static void
+gtk_window_update_csd_size (GtkWindow *window,
+                            gint      *width,
+                            gint      *height,
+                            gint       apply)
+{
+  GtkWindowPrivate *priv = window->priv;
+  GtkBorder window_border = { 0 };
+
+  if (priv->decorated &&
+      !priv->fullscreen)
+    {
+      get_shadow_width (window, &window_border);
+      *width += apply * (window_border.left + window_border.right);
+      *height += apply * (window_border.top + window_border.bottom);
+
+      if (priv->title_box != NULL &&
+          gtk_widget_get_visible (priv->title_box) &&
+          gtk_widget_get_child_visible (priv->title_box))
+        {
+          gint minimum_height;
+          gint natural_height;
+
+          gtk_widget_get_preferred_height (priv->title_box, &minimum_height, &natural_height);
+          *height += apply * natural_height;
+        }
+    }
+  /* Make sure the size remains acceptable */
+  if (*width < 1)
+    *width = 1;
+  if (*height < 1)
+    *height = 1;
+}
+
 /**
  * gtk_window_resize:
  * @window: a #GtkWindow
@@ -5208,6 +5245,14 @@ gtk_window_get_default_size (GtkWindow *window,
  *
  * Windows may not be resized smaller than 1 by 1 pixels.
  * 
+ * When using client side decorations, GTK+ will do its best to adjust
+ * the given size so that the resulting window size matches the
+ * requested size without the title bar, borders and shadows added for
+ * the client side decorations, but there is no garantee that the
+ * result will be totally accurate because these widgets added for
+ * client side decorations depend on the theme and may not be realized
+ * or visible at the time gtk_window_resize() is issued.
+ *
  **/
 void
 gtk_window_resize (GtkWindow *window,
@@ -5221,6 +5266,7 @@ gtk_window_resize (GtkWindow *window,
   g_return_if_fail (height > 0);
 
   info = gtk_window_get_geometry_info (window, TRUE);
+  gtk_window_update_csd_size (window, &width, &height, INCLUDE_CSD_SIZE);
 
   info->resize_width = width;
   info->resize_height = height;
@@ -5308,6 +5354,13 @@ gtk_window_resize_to_geometry (GtkWindow *window,
  * of the window decorations/border into account, while your
  * application cannot.
  *
+ * Note 4: When using client side decorations, GTK+ will do its best to
+ * adjust the returned values to match the logical size of the window
+ * excluding the widgets added for client side decorations, but there
+ * is no garantee that the result will be totally accurate because
+ * these widgets depend on the theme and may not be realized or
+ * visible at the time gtk_window_get_size() is invoked.
+ *
  * In any case, if you insist on application-specified window
  * positioning, there’s still a better way than
  * doing it yourself - gtk_window_set_position() will frequently
@@ -5342,12 +5395,17 @@ gtk_window_get_size (GtkWindow *window,
       w = configure_request.width;
       h = configure_request.height;
     }
-  
+
+  gtk_window_update_csd_size (window, &w, &h, EXCLUDE_CSD_SIZE);
+
   if (width)
     *width = w;
   if (height)
     *height = h;
 }
+
+#undef INCLUDE_CSD_SIZE
+#undef EXCLUDE_CSD_SIZE
 
 /**
  * gtk_window_move:
