@@ -298,6 +298,43 @@ handle_key_event (GdkWindow *window, const MirInputEvent *event)
     }
 }
 
+static void
+handle_touch_event (GdkWindow           *window,
+                    const MirTouchEvent *mir_touch_event)
+{
+  const MirInputEvent *mir_input_event = mir_touch_event_input_event (mir_touch_event);
+  guint n = mir_touch_event_point_count (mir_touch_event);
+  GdkEvent *gdk_event;
+  guint i;
+
+  for (i = 0; i < n; i++)
+    {
+      switch (mir_touch_event_action (mir_touch_event, i))
+        {
+        case mir_touch_action_up:
+          gdk_event = gdk_event_new (GDK_TOUCH_END);
+          break;
+        case mir_touch_action_down:
+          gdk_event = gdk_event_new (GDK_TOUCH_BEGIN);
+          break;
+        case mir_touch_action_change:
+          gdk_event = gdk_event_new (GDK_TOUCH_UPDATE);
+          break;
+        }
+
+      gdk_event->touch.window = window;
+      gdk_event->touch.sequence = GINT_TO_POINTER (mir_touch_event_id (mir_touch_event, i));
+      gdk_event->touch.time = mir_input_event_get_event_time (mir_input_event);
+      gdk_event->touch.state = get_modifier_state (mir_touch_event_modifiers (mir_touch_event), 0);
+      gdk_event->touch.x = mir_touch_event_axis_value (mir_touch_event, i, mir_touch_axis_x);
+      gdk_event->touch.y = mir_touch_event_axis_value (mir_touch_event, i, mir_touch_axis_y);
+      gdk_event->touch.x_root = mir_touch_event_axis_value (mir_touch_event, i, mir_touch_axis_x);
+      gdk_event->touch.y_root = mir_touch_event_axis_value (mir_touch_event, i, mir_touch_axis_y);
+
+      send_event (window, get_pointer (window), gdk_event);
+    }
+}
+
 static guint
 get_button_state (const MirPointerEvent *event)
 {
@@ -515,7 +552,7 @@ gdk_mir_event_source_queue_event (GdkDisplay     *display,
           handle_key_event (window, input_event);
           break;
         case mir_input_event_type_touch:
-          handle_motion_event (window, input_event);
+          handle_touch_event (window, mir_input_event_get_touch_event (input_event));
           break;
         case mir_input_event_type_pointer:
           handle_motion_event (window, input_event);
