@@ -195,6 +195,8 @@ _gdk_mir_print_motion_event (const MirInputEvent *event)
   g_printerr ("\n");
   g_printerr (" Offset (%f, %f)\n", mir_pointer_event_axis_value (pointer_event, mir_pointer_axis_x),
                                     mir_pointer_event_axis_value (pointer_event, mir_pointer_axis_y));
+  g_printerr (" Scroll (%f, %f)\n", mir_pointer_event_axis_value (pointer_event, mir_pointer_axis_hscroll),
+                                    mir_pointer_event_axis_value (pointer_event, mir_pointer_axis_vscroll));
   g_printerr (" Event Time %lli\n", (long long int) mir_input_event_get_event_time (event));
 }
 
