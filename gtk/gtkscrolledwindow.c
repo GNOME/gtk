@@ -1224,6 +1224,7 @@ captured_event_cb (GtkWidget *widget,
   GdkDevice *source_device;
   GtkWidget *event_widget;
   gboolean on_scrollbar;
+  const gchar *device_name;
 
   sw = GTK_SCROLLED_WINDOW (widget);
   priv = sw->priv;
@@ -1243,6 +1244,7 @@ captured_event_cb (GtkWidget *widget,
     return GDK_EVENT_PROPAGATE;
 
   input_source = gdk_device_get_source (source_device);
+  device_name = gdk_device_get_name (source_device);
 
   if (input_source == GDK_SOURCE_KEYBOARD ||
       input_source == GDK_SOURCE_TOUCHSCREEN)
@@ -1268,8 +1270,8 @@ captured_event_cb (GtkWidget *widget,
         }
       else if (input_source == GDK_SOURCE_PEN ||
                input_source == GDK_SOURCE_ERASER ||
-               strstr (gdk_device_get_name (source_device), "TrackPoint") ||
-               strstr (gdk_device_get_name (source_device), "DualPoint Stick"))
+               (device_name != NULL && strstr (device_name, "TrackPoint")) ||
+               (device_name != NULL && strstr (device_name, "DualPoint Stick")))
         {
           indicator_set_over (&priv->hindicator, TRUE);
           indicator_set_over (&priv->vindicator, TRUE);
