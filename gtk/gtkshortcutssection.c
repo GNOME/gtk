@@ -27,6 +27,7 @@
 #include "gtkstylecontext.h"
 #include "gtkorientable.h"
 #include "gtksizegroup.h"
+#include "gtkwidget.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
@@ -44,12 +45,8 @@ struct _GtkShortcutsSection
   GtkWidget        *show_all;
 
   gboolean          has_filtered_group;
-  guint             last_page_num;
-
-  GtkWidget        *current_page;
-  GtkWidget        *current_column;
-  guint             n_columns;
-  guint             n_rows;
+  gboolean          need_filter;
+  gboolean          need_reflow;
 };
 
 struct _GtkShortcutsSectionClass
@@ -70,27 +67,32 @@ enum {
 
 static GParamSpec *properties[LAST_PROP];
 
+static void show_all_changed (GtkShortcutsSection *self);
+static void maybe_filter     (GtkShortcutsSection *self);
+static void filter_groups    (GtkShortcutsSection *self);
+static void reflow_groups    (GtkShortcutsSection *self);
+static void maybe_reflow     (GtkShortcutsSection *self);
+
+
 static void
-adjust_page_buttons (GtkWidget *widget,
-                     gpointer   data)
+gtk_shortcuts_section_map (GtkWidget *widget)
 {
-  gint *count = data;
+  GtkShortcutsSection *self = GTK_SHORTCUTS_SECTION (widget);
 
-  /*
-   * TODO: This is a hack to get the GtkStackSwitcher radio
-   *       buttons to look how we want. However, it's very
-   *       much font size specific.
-   */
-  gtk_widget_set_size_request (widget, 34, 34);
+  if (self->need_filter)
+    filter_groups (self);
 
-  (*count)++;
+  if (self->need_reflow)
+    reflow_groups (self);
+
+  GTK_WIDGET_CLASS (gtk_shortcuts_section_parent_class)->map (widget);
 }
 
 static void
 gtk_shortcuts_section_add (GtkContainer *container,
                            GtkWidget    *child)
 {
-  GtkShortcutsSection *self = (GtkShortcutsSection *)container;
+  GtkShortcutsSection *self = GTK_SHORTCUTS_SECTION (container);
 
   if (GTK_IS_SHORTCUTS_GROUP (child))
     gtk_shortcuts_section_add_group (self, GTK_SHORTCUTS_GROUP (child));
@@ -177,11 +179,14 @@ static void
 gtk_shortcuts_section_class_init (GtkShortcutsSectionClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
 
   object_class->finalize = gtk_shortcuts_section_finalize;
   object_class->get_property = gtk_shortcuts_section_get_property;
   object_class->set_property = gtk_shortcuts_section_set_property;
+
+  widget_class->map = gtk_shortcuts_section_map;
 
   container_class->add = gtk_shortcuts_section_add;
 
@@ -206,42 +211,6 @@ gtk_shortcuts_section_class_init (GtkShortcutsSectionClass *klass)
                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
-}
-
-static void
-update_group_visibility (GtkWidget *child, gpointer data)
-{
-  GtkShortcutsSection *self = data;
-
-  if (GTK_IS_SHORTCUTS_GROUP (child))
-    {
-      gchar *view;
-      gboolean match;
-
-      g_object_get (child, "view", &view, NULL);
-      match = view == NULL || self->view_name == NULL ||
-              strcmp (view, self->view_name) == 0;
-
-      gtk_widget_set_visible (child,
-                              match || gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->show_all)));
-      self->has_filtered_group |= !match;
-
-      g_free (view);
-    }
-  else if (GTK_IS_CONTAINER (child))
-    {
-      gtk_container_foreach (GTK_CONTAINER (child), update_group_visibility, data);
-    }
-}
-
-static void
-filter_groups_by_view (GtkShortcutsSection *self)
-{
-  self->has_filtered_group = FALSE;
-  gtk_container_foreach (GTK_CONTAINER (self), update_group_visibility, self);
-  gtk_widget_set_visible (GTK_WIDGET (self->show_all), self->has_filtered_group);
-  if (self->has_filtered_group)
-    gtk_widget_show (gtk_widget_get_parent (GTK_WIDGET (self->show_all)));
 }
 
 static void
@@ -276,7 +245,7 @@ gtk_shortcuts_section_init (GtkShortcutsSection *self)
   self->show_all = gtk_toggle_button_new_with_label (_("Show All"));
   gtk_widget_set_no_show_all (self->show_all, TRUE);
   g_signal_connect_swapped (self->show_all, "toggled",
-                            G_CALLBACK (filter_groups_by_view), self);
+                            G_CALLBACK (show_all_changed), self);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 20);
   gtk_container_add (GTK_CONTAINER (self), box);
@@ -311,7 +280,8 @@ gtk_shortcuts_section_set_view_name (GtkShortcutsSection *self,
   g_free (self->view_name);
   self->view_name = g_strdup (view_name);
 
-  filter_groups_by_view (self);
+  maybe_filter (self);
+  maybe_reflow (self);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_VIEW_NAME]);
 }
@@ -320,16 +290,207 @@ void
 gtk_shortcuts_section_add_group (GtkShortcutsSection *self,
                                  GtkShortcutsGroup   *group)
 {
-  guint height;
+  GtkWidget *page, *column;
 
   g_return_if_fail (GTK_IS_SHORTCUTS_SECTION (self));
   g_return_if_fail (GTK_IS_SHORTCUTS_GROUP (group));
 
-  g_object_get (group, "height", &height, NULL);
+  children = gtk_container_get_children (GTK_CONTAINER (self->stack));
+  if (children)
+    page = children->data;
+  else
+    {
+      page = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 22);
+      gtk_stack_add_named (self->stack, page, "1");
+    }
+  g_list_free (children);
+  children = gtk_container_get_children (GTK_CONTAINER (page));
+  if (children)
+    column = children->data;
+  else
+    {
+      column = gtk_box_new (GTK_ORIENTATION_VERTICAL, 22);
+      gtk_container_add (GTK_CONTAINER (page), column);
+    }
+  g_list_free (children);
 
-  if (self->n_rows == 0 || self->n_rows + height > self->max_height)
+  gtk_container_add (GTK_CONTAINER (column), GTK_WIDGET (group));
+
+  maybe_reflow (self);
+}
+
+static void
+show_all_changed (GtkShortcutsSection *self)
+{
+  maybe_filter (self);
+  maybe_reflow (self);
+}
+
+static void
+maybe_filter (GtkShortcutsSection *self)
+{
+  if (gtk_widget_get_mapped (GTK_WIDGET (self)))
+    filter_groups (self);
+  else
+    self->need_filter = TRUE;
+}
+
+static void
+update_group_visibility (GtkWidget *child, gpointer data)
+{
+  GtkShortcutsSection *self = data;
+
+  if (GTK_IS_SHORTCUTS_GROUP (child))
+    {
+      gchar *view;
+      gboolean match;
+
+      g_object_get (child, "view", &view, NULL);
+      match = view == NULL ||
+              self->view_name == NULL ||
+              strcmp (view, self->view_name) == 0;
+
+      gtk_widget_set_visible (child,
+                              match || gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->show_all)));
+      self->has_filtered_group |= !match;
+
+      g_free (view);
+    }
+  else if (GTK_IS_CONTAINER (child))
+    {
+      gtk_container_foreach (GTK_CONTAINER (child), update_group_visibility, data);
+    }
+}
+
+static void
+filter_groups (GtkShortcutsSection *self)
+{
+  self->has_filtered_group = FALSE;
+
+  gtk_container_foreach (GTK_CONTAINER (self), update_group_visibility, self);
+
+  gtk_widget_set_visible (GTK_WIDGET (self->show_all), self->has_filtered_group);
+  gtk_widget_set_visible (gtk_widget_get_parent (GTK_WIDGET (self->show_all)),
+                          gtk_widget_get_visible (GTK_WIDGET (self->show_all)) ||
+                          gtk_widget_get_visible (GTK_WIDGET (self->switcher)));
+
+  self->need_filter = FALSE;
+}
+
+static void
+maybe_reflow (GtkShortcutsSection *self)
+{
+  if (gtk_widget_get_mapped (GTK_WIDGET (self)))
+    reflow_groups (self);
+  else
+    self->need_reflow = TRUE;
+}
+
+static void
+adjust_page_buttons (GtkWidget *widget,
+                     gpointer   data)
+{
+  /*
+   * TODO: This is a hack to get the GtkStackSwitcher radio
+   *       buttons to look how we want. However, it's very
+   *       much font size specific.
+   */
+  gtk_widget_set_size_request (widget, 34, 34);
+}
+
+static void
+reflow_groups (GtkShortcutsSection *self)
+{
+  GList *pages, *p;
+  GList *columns, *c;
+  GList *groups, *g;
+  GList *children;
+  guint n_rows;
+  guint n_columns;
+  guint n_pages;
+  GtkWidget *current_page, *current_column;
+
+  /* collect all groups from the current pages */
+  groups = NULL;
+  pages = gtk_container_get_children (GTK_CONTAINER (self->stack));
+  for (p = pages; p; p = p->next)
+    {
+      columns = gtk_container_get_children (GTK_CONTAINER (p->data));
+      for (c = columns; c; c = c->next)
+        {
+          children = gtk_container_get_children (GTK_CONTAINER (c->data));
+          groups = g_list_concat (groups, children);
+        }
+      g_list_free (columns);
+    }
+  g_list_free (pages);
+
+  /* create new pages */
+  current_page = NULL;
+  current_column = NULL;
+  pages = NULL;
+  n_rows = 0;
+  n_columns = 0;
+  n_pages = 0;
+  for (g = groups; g; g = g->next)
+    {
+      GtkShortcutsGroup *group = g->data;
+      guint height;
+      gboolean visible;
+
+      g_object_get (group,
+                    "visible", &visible,
+                    "height", &height,
+                    NULL);
+      if (!visible)
+        height = 0;
+
+      if (n_rows == 0 || n_rows + height > self->max_height)
+        {
+          GtkWidget *column;
+
+          column = gtk_box_new (GTK_ORIENTATION_VERTICAL, 22);
+          gtk_widget_show (column);
+
+          g_object_set_data_full (G_OBJECT (column), "accel-size-group", gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL), g_object_unref);
+          g_object_set_data_full (G_OBJECT (column), "title-size-group", gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL), g_object_unref);
+
+          if (n_columns % 2 == 0)
+            {
+              GtkWidget *page;
+
+              page = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 22);
+              gtk_widget_show (page);
+
+              pages = g_list_append (pages, page);
+              current_page = page;
+            }
+
+          gtk_container_add (GTK_CONTAINER (current_page), column);
+          current_column = column;
+          n_columns += 1;
+          n_rows = 0;
+        }
+
+      n_rows += height;
+
+      g_object_set (group,
+                    "accel-size-group", g_object_get_data (G_OBJECT (current_column), "accel-size-group"),
+                    "title-size-group", g_object_get_data (G_OBJECT (current_column), "title-size-group"),
+                    NULL);
+
+      g_object_ref (group);
+      gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (GTK_WIDGET (group))), GTK_WIDGET (group));
+      gtk_container_add (GTK_CONTAINER (current_column), GTK_WIDGET (group));
+      g_object_unref (group);
+    }
+
+  /* balance the last page */
+  if (n_columns % 2 == 1)
     {
       GtkWidget *column;
+      GList *content;
+      guint n;
 
       column = gtk_box_new (GTK_ORIENTATION_VERTICAL, 22);
       gtk_widget_show (column);
@@ -337,39 +498,75 @@ gtk_shortcuts_section_add_group (GtkShortcutsSection *self,
       g_object_set_data_full (G_OBJECT (column), "accel-size-group", gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL), g_object_unref);
       g_object_set_data_full (G_OBJECT (column), "title-size-group", gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL), g_object_unref);
 
-      if (self->n_columns % 2 == 0)
+      gtk_container_add (GTK_CONTAINER (current_page), column);
+
+      content = gtk_container_get_children (GTK_CONTAINER (current_column));
+      n = 0;
+
+      for (g = g_list_last (content); g; g = g->prev)
         {
-          GtkWidget *page;
-          gchar *title = NULL;
-          guint count = 0;
+          GtkShortcutsGroup *group = g->data;
+          guint height;
+          gboolean visible;
 
-          page = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 22);
-          gtk_widget_show (page);
+          g_object_get (group,
+                        "visible", &visible,
+                        "height", &height,
+                        NULL);
+          if (!visible)
+            height = 0;
 
-          title = g_strdup_printf ("%u", ++self->last_page_num);
-          gtk_container_add_with_properties (GTK_CONTAINER (self->stack), page,
-                                             "title", title,
-                                             NULL);
+          if (n_rows - height == 0)
+            break;
+          if (ABS (n_rows - n) < ABS ((n_rows - height) - (n + height)))
+            break;
 
-          gtk_container_foreach (GTK_CONTAINER (self->switcher), adjust_page_buttons, &count);
-          gtk_widget_set_visible (GTK_WIDGET (self->switcher), (count > 1));
-          if (count > 1)
-            gtk_widget_show (gtk_widget_get_parent (GTK_WIDGET (self->switcher)));
-          g_free (title);
-
-          self->current_page = page;
+          n_rows -= height;
+          n += height;
         }
 
-      gtk_container_add (GTK_CONTAINER (self->current_page), column);
-      self->current_column = column;
-      self->n_columns += 1;
-      self->n_rows = 0;
+      for (g = g->next; g; g = g->next)
+        {
+          GtkShortcutsGroup *group = g->data;
+
+          g_object_set (group,
+                        "accel-size-group", g_object_get_data (G_OBJECT (column), "accel-size-group"),
+                        "title-size-group", g_object_get_data (G_OBJECT (column), "title-size-group"),
+                        NULL);
+
+          g_object_ref (group);
+          gtk_container_remove (GTK_CONTAINER (current_column), GTK_WIDGET (group));
+          gtk_container_add (GTK_CONTAINER (column), GTK_WIDGET (group));
+          g_object_unref (group);
+        }
+
+      g_list_free (content);
     }
 
-  self->n_rows += height;
+  /* replace the current pages with the new pages */
+  children = gtk_container_get_children (GTK_CONTAINER (self->stack));
+  g_list_free_full (children, (GDestroyNotify)gtk_widget_destroy);
 
-  g_object_set (group, "accel-size-group", g_object_get_data (G_OBJECT (self->current_column), "accel-size-group"), NULL);
-  g_object_set (group, "title-size-group", g_object_get_data (G_OBJECT (self->current_column), "title-size-group"), NULL);
+  for (p = pages, n_pages = 0; p; p = p->next, n_pages++)
+    {
+      GtkWidget *page = p->data;
+      gchar *title;
 
-  gtk_container_add (GTK_CONTAINER (self->current_column), GTK_WIDGET (group));
+      title = g_strdup_printf ("%u", n_pages + 1);
+      gtk_stack_add_titled (self->stack, page, title, title);
+      g_free (title);
+    }
+
+  /* fix up stack switcher */
+  gtk_container_foreach (GTK_CONTAINER (self->switcher), adjust_page_buttons, NULL);
+  gtk_widget_set_visible (GTK_WIDGET (self->switcher), (n_pages > 1));
+  gtk_widget_set_visible (gtk_widget_get_parent (GTK_WIDGET (self->switcher)),
+                          gtk_widget_get_visible (GTK_WIDGET (self->show_all)) ||
+                          gtk_widget_get_visible (GTK_WIDGET (self->switcher)));
+
+  /* clean up */
+  g_list_free (groups);
+  g_list_free (pages);
+
+  self->need_reflow = FALSE;
 }
