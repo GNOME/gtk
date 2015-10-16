@@ -515,6 +515,7 @@ gtk_private_h_sources =		\
 	gtkstyleproviderprivate.h \
 	gtktextattributesprivate.h \
 	gtktextbtree.h		\
+	gtktextbufferprivate.h \
 	gtktextbufferserialize.h \
 	gtktextchildprivate.h	\
 	gtktexthandleprivate.h	\

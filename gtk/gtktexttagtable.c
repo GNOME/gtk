@@ -29,7 +29,7 @@
 #include "gtkbuildable.h"
 #include "gtktexttagprivate.h"
 #include "gtkmarshalers.h"
-#include "gtktextbuffer.h" /* just for the lame notify_will_remove_tag hack */
+#include "gtktextbufferprivate.h" /* just for the lame notify_will_remove_tag hack */
 #include "gtkintl.h"
 
 #include <stdlib.h>

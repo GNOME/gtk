@@ -468,33 +468,6 @@ GtkTargetList * gtk_text_buffer_get_copy_target_list    (GtkTextBuffer *buffer);
 GDK_AVAILABLE_IN_ALL
 GtkTargetList * gtk_text_buffer_get_paste_target_list   (GtkTextBuffer *buffer);
 
-/* INTERNAL private stuff */
-void            _gtk_text_buffer_spew                  (GtkTextBuffer      *buffer);
-
-GtkTextBTree*   _gtk_text_buffer_get_btree             (GtkTextBuffer      *buffer);
-
-const PangoLogAttr* _gtk_text_buffer_get_line_log_attrs (GtkTextBuffer     *buffer,
-                                                         const GtkTextIter *anywhere_in_line,
-                                                         gint              *char_len);
-
-void _gtk_text_buffer_notify_will_remove_tag (GtkTextBuffer *buffer,
-                                              GtkTextTag    *tag);
-
-void _gtk_text_buffer_get_text_before (GtkTextBuffer   *buffer,
-                                       AtkTextBoundary  boundary_type,
-                                       GtkTextIter     *position,
-                                       GtkTextIter     *start,
-                                       GtkTextIter     *end);
-void _gtk_text_buffer_get_text_at     (GtkTextBuffer   *buffer,
-                                       AtkTextBoundary  boundary_type,
-                                       GtkTextIter     *position,
-                                       GtkTextIter     *start,
-                                       GtkTextIter     *end);
-void _gtk_text_buffer_get_text_after  (GtkTextBuffer   *buffer,
-                                       AtkTextBoundary  boundary_type,
-                                       GtkTextIter     *position,
-                                       GtkTextIter     *start,
-                                       GtkTextIter     *end);
 
 G_END_DECLS
 

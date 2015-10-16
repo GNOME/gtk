@@ -80,6 +80,7 @@
 #include "gtkmarshalers.h"
 #include "gtktextlayout.h"
 #include "gtktextbtree.h"
+#include "gtktextbufferprivate.h"
 #include "gtktextiterprivate.h"
 #include "gtktextattributesprivate.h"
 #include "gtktextutil.h"

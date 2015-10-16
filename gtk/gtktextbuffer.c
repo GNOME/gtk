@@ -33,6 +33,7 @@
 #include "gtkinvisible.h"
 #include "gtkmarshalers.h"
 #include "gtktextbuffer.h"
+#include "gtktextbufferprivate.h"
 #include "gtktextbufferrichtext.h"
 #include "gtktextbtree.h"
 #include "gtktextiterprivate.h"

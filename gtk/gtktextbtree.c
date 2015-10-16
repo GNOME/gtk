@@ -58,6 +58,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "gtktextbufferprivate.h"
 #include "gtktexttag.h"
 #include "gtktexttagprivate.h"
 #include "gtktexttagtable.h"
