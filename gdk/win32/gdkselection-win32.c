@@ -664,7 +664,7 @@ _gdk_win32_display_convert_selection (GdkDisplay *display,
 		    {
 		      BITMAPV5HEADER *bV5 = (BITMAPV5HEADER *) ((char *) data + sizeof (BITMAPFILEHEADER));
 		      guchar *p;
-		      int i;
+		      guint i;
 
 		      bV5->bV5Size = sizeof (BITMAPV5HEADER);
 		      bV5->bV5Width = bi->biWidth;

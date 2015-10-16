@@ -382,7 +382,8 @@ _gdk_input_wintab_init_check (GdkDeviceManager *_device_manager)
   BOOL active;
   DWORD physid;
   AXIS axis_x, axis_y, axis_npressure, axis_or[3];
-  int i, devix, cursorix, num_axes = 0;
+  UINT devix, cursorix;
+  int i, num_axes = 0;
   wchar_t devname[100], csrname[100];
   gchar *devname_utf8, *csrname_utf8, *device_name;
   BOOL defcontext_done;
@@ -481,7 +482,7 @@ _gdk_input_wintab_init_check (GdkDeviceManager *_device_manager)
       (*p_WTInfoW) (WTI_DEVICES + devix, DVC_NAME, devname);
       devname_utf8 = g_utf16_to_utf8 (devname, -1, NULL, NULL, NULL);
 #ifdef DEBUG_WINTAB
-      GDK_NOTE (INPUT, (g_print("Device %d: %s\n", devix, devname_utf8)));
+      GDK_NOTE (INPUT, (g_print("Device %u: %s\n", devix, devname_utf8)));
 #endif
       (*p_WTInfoA) (WTI_DEVICES + devix, DVC_NCSRTYPES, &ncsrtypes);
       (*p_WTInfoA) (WTI_DEVICES + devix, DVC_FIRSTCSR, &firstcsr);
@@ -525,7 +526,7 @@ _gdk_input_wintab_init_check (GdkDeviceManager *_device_manager)
       lc.lcOutExtY = axis_y.axMax - axis_y.axMin + 1;
       lc.lcOutExtY = -lc.lcOutExtY; /* We want Y growing downward */
 #if DEBUG_WINTAB
-      GDK_NOTE (INPUT, (g_print("context for device %d:\n", devix),
+      GDK_NOTE (INPUT, (g_print("context for device %u:\n", devix),
 			print_lc(&lc)));
 #endif
       hctx = g_new (HCTX, 1);
@@ -534,7 +535,7 @@ _gdk_input_wintab_init_check (GdkDeviceManager *_device_manager)
           g_warning ("gdk_input_wintab_init: WTOpen failed");
           return;
         }
-      GDK_NOTE (INPUT, g_print ("opened Wintab device %d %p\n",
+      GDK_NOTE (INPUT, g_print ("opened Wintab device %u %p\n",
                                 devix, *hctx));
 
       wintab_contexts = g_list_append (wintab_contexts, hctx);
@@ -544,7 +545,7 @@ _gdk_input_wintab_init_check (GdkDeviceManager *_device_manager)
       (*p_WTOverlap) (*hctx, TRUE);
 
 #if DEBUG_WINTAB
-      GDK_NOTE (INPUT, (g_print("context for device %d after WTOpen:\n", devix),
+      GDK_NOTE (INPUT, (g_print("context for device %u after WTOpen:\n", devix),
 			print_lc(&lc)));
 #endif
       /* Increase packet queue size to reduce the risk of lost packets.
@@ -565,7 +566,7 @@ _gdk_input_wintab_init_check (GdkDeviceManager *_device_manager)
       for (cursorix = firstcsr; cursorix < firstcsr + ncsrtypes; cursorix++)
         {
 #ifdef DEBUG_WINTAB
-          GDK_NOTE (INPUT, (g_print("Cursor %d:\n", cursorix), print_cursor (cursorix)));
+          GDK_NOTE (INPUT, (g_print("Cursor %u:\n", cursorix), print_cursor (cursorix)));
 #endif
           active = FALSE;
           (*p_WTInfoA) (WTI_CURSORS + cursorix, CSR_ACTIVE, &active);
@@ -676,7 +677,7 @@ _gdk_input_wintab_init_check (GdkDeviceManager *_device_manager)
 
           device->last_axis_data = g_new (gint, num_axes);
 
-          GDK_NOTE (INPUT, g_print ("device: (%d) %s axes: %d\n",
+          GDK_NOTE (INPUT, g_print ("device: (%u) %s axes: %d\n",
                                     cursorix,
                                     device_name,
                                     num_axes));

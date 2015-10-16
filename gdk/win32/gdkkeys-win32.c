@@ -618,7 +618,7 @@ gdk_win32_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
 #ifdef G_ENABLE_DEBUG
   if (_gdk_debug_flags & GDK_DEBUG_EVENTS)
     {
-      gint i;
+      guint i;
 
       g_print ("gdk_keymap_get_entries_for_keyval: %#.04x (%s):",
 	       keyval, gdk_keyval_name (keyval));

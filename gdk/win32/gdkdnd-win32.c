@@ -1043,7 +1043,7 @@ ienumformatetc_next (LPENUMFORMATETC This,
 		     ULONG	    *nelt)
 {
   enum_formats *en = (enum_formats *) This;
-  int i, n;
+  ULONG i, n;
 
   GDK_NOTE (DND, g_print ("ienumformatetc_next %p %d %ld ", This, en->ix, celt));
 
