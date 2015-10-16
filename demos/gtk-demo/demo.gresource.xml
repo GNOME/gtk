@@ -93,6 +93,9 @@
   </gresource>
   <gresource prefix="/shortcuts">
     <file>shortcuts.ui</file>
+    <file>shortcuts-builder.ui</file>
+    <file>shortcuts-gedit.ui</file>
+    <file>shortcuts-clocks.ui</file>
   </gresource>
   <gresource prefix="/revealer">
     <file>revealer.ui</file>
@@ -166,7 +169,7 @@
     <file>scale.c</file>
     <file>search_entry.c</file>
     <file>search_entry2.c</file>
-    <file>shortcutswindow.c</file>
+    <file>shortcuts.c</file>
     <file>sizegroup.c</file>
     <file>sidebar.c</file>
     <file>stack.c</file>
