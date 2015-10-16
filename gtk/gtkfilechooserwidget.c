@@ -1278,13 +1278,16 @@ key_is_left_or_right (GdkEventKey *event)
 }
 
 static gboolean
-should_trigger_location_entry (GtkWidget   *widget,
-                               GdkEventKey *event)
+should_trigger_location_entry (GtkFileChooserWidget *impl,
+                               GdkEventKey          *event)
 {
   GdkModifierType no_text_input_mask;
 
+  if (impl->priv->operation_mode == OPERATION_MODE_SEARCH)
+    return FALSE;
+
   no_text_input_mask =
-    gtk_widget_get_modifier_mask (widget, GDK_MODIFIER_INTENT_NO_TEXT_INPUT);
+    gtk_widget_get_modifier_mask (GTK_WIDGET (impl), GDK_MODIFIER_INTENT_NO_TEXT_INPUT);
 
   if ((event->keyval == GDK_KEY_slash
        || event->keyval == GDK_KEY_KP_Divide
@@ -1310,7 +1313,7 @@ browse_files_key_press_event_cb (GtkWidget   *widget,
   GtkFileChooserWidget *impl = (GtkFileChooserWidget *) data;
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
-  if (should_trigger_location_entry (widget, event) &&
+  if (should_trigger_location_entry (impl, event) &&
       (priv->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
        priv->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER))
     {
@@ -1370,7 +1373,7 @@ gtk_file_chooser_widget_key_press_event (GtkWidget   *widget,
   GtkFileChooserWidget *impl = (GtkFileChooserWidget *) widget;
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
-  if (should_trigger_location_entry (widget, event))
+  if (should_trigger_location_entry (impl, event))
     {
       if (priv->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
           priv->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
