@@ -50,7 +50,7 @@
 void
 gdk_win32_display_set_cursor_theme (GdkDisplay  *display,
                                     const gchar *name,
-                                    const gint   size)
+                                    gint         size)
 {
   gint cursor_size;
   gint w, h;
