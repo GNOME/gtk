@@ -36,6 +36,39 @@ set_text (GtkWidget   *widget,
 }
 
 static void
+append_text (GtkWidget   *widget,
+             const gchar *text)
+{
+  if (GTK_IS_LABEL (widget))
+    {
+      gchar *tmp;
+
+      tmp = g_strconcat (gtk_label_get_text (GTK_LABEL (widget)), text, NULL);
+      gtk_label_set_text (GTK_LABEL (widget), tmp);
+      g_free (tmp);
+    }
+  else if (GTK_IS_ENTRY (widget))
+    {
+      gchar *tmp;
+
+      tmp = g_strconcat (gtk_entry_get_text (GTK_ENTRY (widget)), text, NULL);
+      gtk_entry_set_text (GTK_ENTRY (widget), tmp);
+      g_free (tmp);
+    }
+  else if (GTK_IS_TEXT_VIEW (widget))
+    {
+      GtkTextBuffer *buffer;
+      GtkTextIter end;
+
+      buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget));
+      gtk_text_buffer_get_end_iter (buffer, &end);
+      gtk_text_buffer_insert (buffer, &end, text, -1);
+    }
+  else
+    g_assert_not_reached ();
+}
+
+static void
 test_basic (GtkWidget *widget)
 {
   AtkText *atk_text;
@@ -95,10 +128,14 @@ static void
 test_text_changed (GtkWidget *widget)
 {
   AtkText *atk_text;
-  const gchar *text = "Text goes here";
-  const gchar *text2 = "Text again";
+  const gchar *text = "Täxt goes here";
+  const gchar *text2 = "Täxt again";
   SignalData delete_data;
   SignalData insert_data;
+  gboolean cant_append = FALSE;
+
+  if (GTK_IS_LABEL (widget) || GTK_IS_ENTRY (widget))
+    cant_append = TRUE;
 
   atk_text = ATK_TEXT (gtk_widget_get_accessible (widget));
 
@@ -118,23 +155,40 @@ test_text_changed (GtkWidget *widget)
   g_assert_cmpint (insert_data.position, ==, 0);
   g_assert_cmpint (insert_data.length, ==, g_utf8_strlen (text, -1));
 
-  set_text (widget, text2);
+  delete_data.count = 0;
+  insert_data.count = 0;
 
-  g_assert_cmpint (delete_data.count, ==, 1);
-  g_assert_cmpint (delete_data.position, ==, 0);
-  g_assert_cmpint (delete_data.length, ==, g_utf8_strlen (text, -1));
+  append_text (widget, text2);
 
-  g_assert_cmpint (insert_data.count, ==, 2);
-  g_assert_cmpint (insert_data.position, ==, 0);
-  g_assert_cmpint (insert_data.length, ==, g_utf8_strlen (text2, -1));
+  if (cant_append)
+    {
+      g_assert_cmpint (delete_data.count, ==, 1);
+      g_assert_cmpint (delete_data.position, ==, 0);
+      g_assert_cmpint (delete_data.length, ==, g_utf8_strlen (text, -1));
+
+      g_assert_cmpint (insert_data.count, ==, 1);
+      g_assert_cmpint (insert_data.position, ==, 0);
+      g_assert_cmpint (insert_data.length, ==, g_utf8_strlen (text, -1) + g_utf8_strlen (text2, -1));
+    }
+  else
+    {
+      g_assert_cmpint (delete_data.count, ==, 0);
+
+      g_assert_cmpint (insert_data.count, ==, 1);
+      g_assert_cmpint (insert_data.position, ==, g_utf8_strlen (text, -1));
+      g_assert_cmpint (insert_data.length, ==, g_utf8_strlen (text2, -1));
+    }
+
+  delete_data.count = 0;
+  insert_data.count = 0;
 
   set_text (widget, "");
 
-  g_assert_cmpint (delete_data.count, ==, 2);
+  g_assert_cmpint (delete_data.count, ==, 1);
   g_assert_cmpint (delete_data.position, ==, 0);
-  g_assert_cmpint (delete_data.length, ==, g_utf8_strlen (text2, -1));
+  g_assert_cmpint (delete_data.length, ==, g_utf8_strlen (text, -1) + g_utf8_strlen (text2, -1));
 
-  g_assert_cmpint (insert_data.count, ==, 2);
+  g_assert_cmpint (insert_data.count, ==, 0);
 
   g_signal_handlers_disconnect_by_func (atk_text, G_CALLBACK (text_deleted), &delete_data);
   g_signal_handlers_disconnect_by_func (atk_text, G_CALLBACK (text_inserted), &insert_data);
