@@ -150,10 +150,12 @@ update_title_stack (GtkShortcutsWindow *self)
     {
       if (number_of_children (GTK_CONTAINER (priv->stack)) > 3)
         {
-          const gchar *title;
+          gchar *title;
+
           gtk_stack_set_visible_child_name (priv->title_stack, "sections");
-          title = gtk_shortcuts_section_get_title (GTK_SHORTCUTS_SECTION (visible_child));
+          g_object_get (visible_child, "title", &title, NULL);
           gtk_label_set_label (priv->menu_label, title);
+          g_free (title);
         }
       else
         {
@@ -268,15 +270,17 @@ gtk_shortcuts_window_add_section (GtkShortcutsWindow  *self,
 {
   GtkShortcutsWindowPrivate *priv = gtk_shortcuts_window_get_instance_private (self);
   GtkListBoxRow *row;
-  const gchar *title;
-  const gchar *name;
+  gchar *title;
+  gchar *name;
   const gchar *visible_section;
   GtkWidget *label;
 
   gtk_container_foreach (GTK_CONTAINER (section), gtk_shortcuts_window_add_search_item, self);
 
-  name = gtk_shortcuts_section_get_section_name (section);
-  title = gtk_shortcuts_section_get_title (section);
+  g_object_get (section,
+                "section-name", &name,
+                "title", &title,
+                NULL);
 
   gtk_stack_add_titled (priv->stack, GTK_WIDGET (section), name, title);
 
@@ -299,6 +303,9 @@ gtk_shortcuts_window_add_section (GtkShortcutsWindow  *self,
   gtk_container_add (GTK_CONTAINER (priv->list_box), GTK_WIDGET (row));
 
   update_title_stack (self);
+
+  g_free (name);
+  g_free (title);
 }
 
 static void
@@ -331,7 +338,7 @@ gtk_shortcuts_window_set_view_name (GtkShortcutsWindow *self,
       GtkShortcutsSection *section = l->data;
 
       if (GTK_IS_SHORTCUTS_SECTION (section))
-        gtk_shortcuts_section_set_view_name (section, priv->view_name);
+        g_object_set (section, "view-name", priv->view_name, NULL);
     }
   g_list_free (sections);
 }

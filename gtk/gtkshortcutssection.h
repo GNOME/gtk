@@ -38,13 +38,6 @@ typedef struct _GtkShortcutsSectionClass GtkShortcutsSectionClass;
 GDK_AVAILABLE_IN_3_20
 GType        gtk_shortcuts_section_get_type (void) G_GNUC_CONST;
 
-const gchar *gtk_shortcuts_section_get_section_name (GtkShortcutsSection *self);
-const gchar *gtk_shortcuts_section_get_title        (GtkShortcutsSection *self);
-void         gtk_shortcuts_section_set_view_name    (GtkShortcutsSection *self,
-                                                     const gchar         *view_name);
-void         gtk_shortcuts_section_add_group        (GtkShortcutsSection *self,
-                                                     GtkShortcutsGroup   *group);
-
 G_END_DECLS
 
 #endif /* __GTK_SHORTCUTS_SECTION_H__ */

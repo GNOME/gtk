@@ -84,11 +84,16 @@ enum {
 
 static GParamSpec *properties[LAST_PROP];
 
-static void show_all_changed (GtkShortcutsSection *self);
-static void maybe_filter     (GtkShortcutsSection *self);
-static void filter_groups    (GtkShortcutsSection *self);
-static void reflow_groups    (GtkShortcutsSection *self);
-static void maybe_reflow     (GtkShortcutsSection *self);
+static void gtk_shortcuts_section_set_view_name    (GtkShortcutsSection *self,
+                                                    const gchar         *view_name);
+static void gtk_shortcuts_section_add_group        (GtkShortcutsSection *self,
+                                                    GtkShortcutsGroup   *group);
+
+static void gtk_shortcuts_section_show_all_changed (GtkShortcutsSection *self);
+static void gtk_shortcuts_section_filter_groups    (GtkShortcutsSection *self);
+static void gtk_shortcuts_section_maybe_filter     (GtkShortcutsSection *self);
+static void gtk_shortcuts_section_reflow_groups    (GtkShortcutsSection *self);
+static void gtk_shortcuts_section_maybe_reflow     (GtkShortcutsSection *self);
 
 
 static void
@@ -97,10 +102,10 @@ gtk_shortcuts_section_map (GtkWidget *widget)
   GtkShortcutsSection *self = GTK_SHORTCUTS_SECTION (widget);
 
   if (self->need_filter)
-    filter_groups (self);
+    gtk_shortcuts_section_filter_groups (self);
 
   if (self->need_reflow)
-    reflow_groups (self);
+    gtk_shortcuts_section_reflow_groups (self);
 
   GTK_WIDGET_CLASS (gtk_shortcuts_section_parent_class)->map (widget);
 }
@@ -303,7 +308,7 @@ gtk_shortcuts_section_init (GtkShortcutsSection *self)
   self->show_all = gtk_toggle_button_new_with_label (_("Show All"));
   gtk_widget_set_no_show_all (self->show_all, TRUE);
   g_signal_connect_swapped (self->show_all, "toggled",
-                            G_CALLBACK (show_all_changed), self);
+                            G_CALLBACK (gtk_shortcuts_section_show_all_changed), self);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 20);
   GTK_CONTAINER_CLASS (gtk_shortcuts_section_parent_class)->add (GTK_CONTAINER (self), box);
@@ -313,23 +318,7 @@ gtk_shortcuts_section_init (GtkShortcutsSection *self)
   gtk_widget_set_halign (self->show_all, GTK_ALIGN_END);
 }
 
-const gchar *
-gtk_shortcuts_section_get_section_name (GtkShortcutsSection *self)
-{
-  g_return_val_if_fail (GTK_IS_SHORTCUTS_SECTION (self), NULL);
-
-  return self->name;
-}
-
-const gchar *
-gtk_shortcuts_section_get_title (GtkShortcutsSection *self)
-{
-  g_return_val_if_fail (GTK_IS_SHORTCUTS_SECTION (self), NULL);
-
-  return self->title;
-}
-
-void
+static void
 gtk_shortcuts_section_set_view_name (GtkShortcutsSection *self,
                                      const gchar         *view_name)
 {
@@ -338,13 +327,13 @@ gtk_shortcuts_section_set_view_name (GtkShortcutsSection *self,
   g_free (self->view_name);
   self->view_name = g_strdup (view_name);
 
-  maybe_filter (self);
-  maybe_reflow (self);
+  gtk_shortcuts_section_maybe_filter (self);
+  gtk_shortcuts_section_maybe_reflow (self);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_VIEW_NAME]);
 }
 
-void
+static void
 gtk_shortcuts_section_add_group (GtkShortcutsSection *self,
                                  GtkShortcutsGroup   *group)
 {
@@ -375,21 +364,21 @@ gtk_shortcuts_section_add_group (GtkShortcutsSection *self,
 
   gtk_container_add (GTK_CONTAINER (column), GTK_WIDGET (group));
 
-  maybe_reflow (self);
+  gtk_shortcuts_section_maybe_reflow (self);
 }
 
 static void
-show_all_changed (GtkShortcutsSection *self)
+gtk_shortcuts_section_show_all_changed (GtkShortcutsSection *self)
 {
-  maybe_filter (self);
-  maybe_reflow (self);
+  gtk_shortcuts_section_maybe_filter (self);
+  gtk_shortcuts_section_maybe_reflow (self);
 }
 
 static void
-maybe_filter (GtkShortcutsSection *self)
+gtk_shortcuts_section_maybe_filter (GtkShortcutsSection *self)
 {
   if (gtk_widget_get_mapped (GTK_WIDGET (self)))
-    filter_groups (self);
+    gtk_shortcuts_section_filter_groups (self);
   else
     self->need_filter = TRUE;
 }
@@ -422,7 +411,7 @@ update_group_visibility (GtkWidget *child, gpointer data)
 }
 
 static void
-filter_groups (GtkShortcutsSection *self)
+gtk_shortcuts_section_filter_groups (GtkShortcutsSection *self)
 {
   self->has_filtered_group = FALSE;
 
@@ -437,10 +426,10 @@ filter_groups (GtkShortcutsSection *self)
 }
 
 static void
-maybe_reflow (GtkShortcutsSection *self)
+gtk_shortcuts_section_maybe_reflow (GtkShortcutsSection *self)
 {
   if (gtk_widget_get_mapped (GTK_WIDGET (self)))
-    reflow_groups (self);
+    gtk_shortcuts_section_reflow_groups (self);
   else
     self->need_reflow = TRUE;
 }
@@ -458,7 +447,7 @@ adjust_page_buttons (GtkWidget *widget,
 }
 
 static void
-reflow_groups (GtkShortcutsSection *self)
+gtk_shortcuts_section_reflow_groups (GtkShortcutsSection *self)
 {
   GList *pages, *p;
   GList *columns, *c;
