@@ -290,6 +290,7 @@ void
 gtk_shortcuts_section_add_group (GtkShortcutsSection *self,
                                  GtkShortcutsGroup   *group)
 {
+  GList *children;
   GtkWidget *page, *column;
 
   g_return_if_fail (GTK_IS_SHORTCUTS_SECTION (self));
