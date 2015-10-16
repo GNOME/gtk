@@ -63,6 +63,7 @@ enum {
 static guint signals [LAST_SIGNAL] = { 0 };
 
 
+static void gdk_device_finalize     (GObject      *object);
 static void gdk_device_dispose      (GObject      *object);
 static void gdk_device_set_property (GObject      *object,
                                      guint         prop_id,
@@ -99,6 +100,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->finalize = gdk_device_finalize;
   object_class->dispose = gdk_device_dispose;
   object_class->set_property = gdk_device_set_property;
   object_class->get_property = gdk_device_get_property;
@@ -299,6 +301,25 @@ gdk_device_init (GdkDevice *device)
 }
 
 static void
+gdk_device_finalize (GObject *object)
+{
+  GdkDevice *device = GDK_DEVICE (object);
+
+  if (device->axes)
+    {
+      g_array_free (device->axes, TRUE);
+      device->axes = NULL;
+    }
+
+  g_clear_pointer (&device->name, g_free);
+  g_clear_pointer (&device->keys, g_free);
+  g_clear_pointer (&device->vendor_id, g_free);
+  g_clear_pointer (&device->product_id, g_free);
+
+  G_OBJECT_CLASS (gdk_device_parent_class)->finalize (object);
+}
+
+static void
 gdk_device_dispose (GObject *object)
 {
   GdkDevice *device = GDK_DEVICE (object);
@@ -314,21 +335,6 @@ gdk_device_dispose (GObject *object)
       g_object_unref (device->associated);
       device->associated = NULL;
     }
-
-  if (device->axes)
-    {
-      g_array_free (device->axes, TRUE);
-      device->axes = NULL;
-    }
-
-  g_free (device->name);
-  g_free (device->keys);
-
-  device->name = NULL;
-  device->keys = NULL;
-
-  g_clear_pointer (&device->vendor_id, g_free);
-  g_clear_pointer (&device->product_id, g_free);
 
   G_OBJECT_CLASS (gdk_device_parent_class)->dispose (object);
 }
