@@ -71,7 +71,7 @@ gtk_shortcuts_shortcut_set_title_size_group (GtkShortcutsShortcut *self,
                                              GtkSizeGroup         *group)
 {
   if (self->title_size_group)
-    gtk_size_group_remove_widget (self->title_size_group, GTK_WIDGET (self->accelerator));
+    gtk_size_group_remove_widget (self->title_size_group, GTK_WIDGET (self->title));
   if (group)
     gtk_size_group_add_widget (group, GTK_WIDGET (self->title));
 
