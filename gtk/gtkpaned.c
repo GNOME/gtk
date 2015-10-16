@@ -1484,9 +1484,8 @@ gtk_paned_size_allocate (GtkWidget     *widget,
 
       if (priv->child1 && gtk_widget_get_visible (priv->child1))
         {
-          gtk_paned_set_child_visible (paned, 0, TRUE);
-          if (priv->child2)
-            gtk_paned_set_child_visible (paned, 1, FALSE);
+          gtk_paned_set_child_visible (paned, CHILD1, TRUE);
+          gtk_paned_set_child_visible (paned, CHILD2, FALSE);
 
           gtk_paned_child_allocate (priv->child1,
                                     priv->child1_window,
@@ -1495,9 +1494,8 @@ gtk_paned_size_allocate (GtkWidget     *widget,
         }
       else if (priv->child2 && gtk_widget_get_visible (priv->child2))
         {
-          gtk_paned_set_child_visible (paned, 1, TRUE);
-          if (priv->child1)
-            gtk_paned_set_child_visible (paned, 0, FALSE);
+          gtk_paned_set_child_visible (paned, CHILD1, FALSE);
+          gtk_paned_set_child_visible (paned, CHILD2, TRUE);
 
           gtk_paned_child_allocate (priv->child2,
                                     priv->child2_window,
@@ -1506,10 +1504,8 @@ gtk_paned_size_allocate (GtkWidget     *widget,
         }
       else
         {
-          if (priv->child1)
-            gtk_paned_set_child_visible (paned, 0, FALSE);
-          if (priv->child2)
-            gtk_paned_set_child_visible (paned, 1, FALSE);
+          gtk_paned_set_child_visible (paned, CHILD1, FALSE);
+          gtk_paned_set_child_visible (paned, CHILD2, FALSE);
         }
     }
 }
@@ -2212,11 +2208,8 @@ gtk_paned_calc_position (GtkPaned *paned,
                               &priv->min_position, &priv->max_position,
                               &priv->child1_size);
 
-  if (priv->child1)
-    gtk_paned_set_child_visible (paned, 0, priv->child1_size != 0);
-  
-  if (priv->child2)
-    gtk_paned_set_child_visible (paned, 1, priv->child1_size != allocation); 
+  gtk_paned_set_child_visible (paned, CHILD1, priv->child1_size != 0);
+  gtk_paned_set_child_visible (paned, CHILD2, priv->child1_size != allocation);
 
   g_object_freeze_notify (G_OBJECT (paned));
   if (priv->child1_size != old_position)
