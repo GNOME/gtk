@@ -1654,15 +1654,18 @@ gtk_entry_completion_popup (GtkEntryCompletion *completion)
 
   gtk_widget_show (completion->priv->popup_window);
 
-  gtk_device_grab_add (completion->priv->popup_window, completion->priv->device, TRUE);
-  gdk_device_grab (completion->priv->device, gtk_widget_get_window (completion->priv->popup_window),
-                   GDK_OWNERSHIP_WINDOW, TRUE,
-                   GDK_BUTTON_PRESS_MASK |
-                   GDK_BUTTON_RELEASE_MASK |
-                   GDK_POINTER_MOTION_MASK,
-                   NULL, GDK_CURRENT_TIME);
+  if (completion->priv->device)
+    {
+      gtk_device_grab_add (completion->priv->popup_window, completion->priv->device, TRUE);
+      gdk_device_grab (completion->priv->device, gtk_widget_get_window (completion->priv->popup_window),
+                       GDK_OWNERSHIP_WINDOW, TRUE,
+                       GDK_BUTTON_PRESS_MASK |
+                       GDK_BUTTON_RELEASE_MASK |
+                       GDK_POINTER_MOTION_MASK,
+                       NULL, GDK_CURRENT_TIME);
 
-  completion->priv->has_grab = TRUE;
+      completion->priv->has_grab = TRUE;
+    }
 }
 
 void
