@@ -18,12 +18,21 @@
 
 #include "config.h"
 
-#include "gtkshortcutsshortcutprivate.h"
+#include "gtkshortcutsshortcut.h"
 
 #include "gtkshortcutlabelprivate.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
+/**
+ * SECTION:gtkshortcutsshortcut
+ * @Title: GtkShortcutsShortcut
+ * @Short_description: Represents a keyboard shortcut in a GtkShortcutsWindow
+ *
+ * A GtkShortcutsShortcut represents a single keyboard shortcut with
+ * a short text. This widget is only meant to be used with
+ * #GtkShortcutsWindow.
+ */
 
 struct _GtkShortcutsShortcut
 {
@@ -46,8 +55,8 @@ G_DEFINE_TYPE (GtkShortcutsShortcut, gtk_shortcuts_shortcut, GTK_TYPE_BOX)
 enum {
   PROP_0,
   PROP_ACCELERATOR,
-  PROP_ACCEL_SIZE_GROUP,
   PROP_TITLE,
+  PROP_ACCEL_SIZE_GROUP,
   PROP_TITLE_SIZE_GROUP,
   LAST_PROP
 };
@@ -145,14 +154,44 @@ gtk_shortcuts_shortcut_finalize (GObject *object)
 }
 
 static void
+gtk_shortcuts_shortcut_add (GtkContainer *container,
+                            GtkWidget    *widget)
+{
+  g_warning ("Can't add children to %s", G_OBJECT_TYPE_NAME (container));
+}
+
+static GType
+gtk_shortcuts_shortcut_child_type (GtkContainer *container)
+{
+  return G_TYPE_NONE;
+}
+
+static void
 gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
 {
+  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = gtk_shortcuts_shortcut_finalize;
   object_class->get_property = gtk_shortcuts_shortcut_get_property;
   object_class->set_property = gtk_shortcuts_shortcut_set_property;
 
+  container_class->add = gtk_shortcuts_shortcut_add;
+  container_class->child_type = gtk_shortcuts_shortcut_child_type;
+
+  /**
+   * GtkShortcutsShortcut:accelerator:
+   *
+   * The accelerator(s) represented by this object, in the syntax
+   * understood by gtk_accelerator_parse(). Multiple accelerators
+   * can be specified by separating them with a space, but keep in
+   * mind that the available width is limited.
+   *
+   * Here is an example: <ctrl>? F1
+   *
+   * Note that < and > need to escaped as &lt; and &gt; when used
+   * in .ui files.
+   */
   properties[PROP_ACCELERATOR] =
     g_param_spec_string ("accelerator",
                          P_("Accelerator"),
@@ -160,13 +199,13 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  properties[PROP_ACCEL_SIZE_GROUP] =
-    g_param_spec_object ("accel-size-group",
-                         P_("Accelerator Size Group"),
-                         P_("Accelerator Size Group"),
-                         GTK_TYPE_SIZE_GROUP,
-                         (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
-
+  /**
+   * GtkShortcutsShortcut:title:
+   *
+   * The textual description for the accelerators represented by
+   * this object. This should be a short string that can fit in
+   * a single line.
+   */
   properties[PROP_TITLE] =
     g_param_spec_string ("title",
                          P_("Title"),
@@ -174,6 +213,27 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
+  /**
+   * GtkShortcutsShortcut:accel-size-group:
+   *
+   * The size group for the accelerator portion of this shortcut.
+   *
+   * This is used internally by GTK+, and must not be modified by applications.
+   */
+  properties[PROP_ACCEL_SIZE_GROUP] =
+    g_param_spec_object ("accel-size-group",
+                         P_("Accelerator Size Group"),
+                         P_("Accelerator Size Group"),
+                         GTK_TYPE_SIZE_GROUP,
+                         (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
+
+  /**
+   * GtkShortcutsShortcut:title-size-group:
+   *
+   * The size group for the textual portion of this shortcut.
+   *
+   * This is used internally by GTK+, and must not be modified by applications.
+   */
   properties[PROP_TITLE_SIZE_GROUP] =
     g_param_spec_object ("title-size-group",
                          P_("Title Size Group"),
@@ -193,12 +253,12 @@ gtk_shortcuts_shortcut_init (GtkShortcutsShortcut *self)
   self->accelerator = g_object_new (GTK_TYPE_SHORTCUT_LABEL,
                                     "visible", TRUE,
                                     NULL);
-  gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (self->accelerator));
+  GTK_CONTAINER_CLASS (gtk_shortcuts_shortcut_parent_class)->add (GTK_CONTAINER (self), GTK_WIDGET (self->accelerator));
 
   self->title = g_object_new (GTK_TYPE_LABEL,
                               "hexpand", TRUE,
                               "visible", TRUE,
                               "xalign", 0.0f,
                               NULL);
-  gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (self->title));
+  GTK_CONTAINER_CLASS (gtk_shortcuts_shortcut_parent_class)->add (GTK_CONTAINER (self), GTK_WIDGET (self->title));
 }

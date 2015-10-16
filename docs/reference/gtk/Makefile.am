@@ -470,7 +470,10 @@ HTML_IMAGES = \
 	$(srcdir)/images/getting-started-app10.png			\
 	$(srcdir)/images/exampleapp.png					\
 	$(srcdir)/images/flow-box.png					\
-	$(srcdir)/images/inspector.png
+	$(srcdir)/images/inspector.png					\
+	$(srcdir)/images/gedit-shortcuts.png				\
+	$(srcdir)/images/clocks-shortcuts.png				\
+	$(srcdir)/images/builder-shortcuts.png
 
 if ENABLE_DOC_CROSS_REFERENCES
 # Extra options to supply to gtkdoc-fixref

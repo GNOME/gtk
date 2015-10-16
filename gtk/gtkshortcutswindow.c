@@ -20,24 +20,58 @@
 
 #include "gtkshortcutswindow.h"
 #include "gtkscrolledwindow.h"
-#include "gtkshortcutsgestureprivate.h"
-#include "gtkshortcutsgroupprivate.h"
-#include "gtkshortcutsshortcutprivate.h"
-#include "gtkshortcutssectionprivate.h"
+#include "gtkshortcutssection.h"
+#include "gtkshortcutsgroup.h"
+#include "gtkshortcutsgesture.h"
+#include "gtkshortcutsshortcut.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
 /**
  * SECTION:gtkshortcutswindow
- * @title: GtkShortcutsWindow
- * @short_description: Toplevel which shows help for shortcuts
+ * @Title: GtkShortcutsWindow
+ * @Short_description: Toplevel which shows help for shortcuts
  *
- * A GtkShortcutsWindow shows brief information about keyboard shortcuts
- * and gestures, sorted in pages, columns and groups.
+ * A GtkShortcutsWindow shows brief information about the keyboard shortcuts
+ * and gestures of an application. The shortcuts can be grouped, and you can
+ * have multiple sections in this window, corresponding to the major modes of
+ * your application.
  *
- * The recommended way to construct a GtkShortcutsWindow is with GtkBuilder:
+ * Additionally, the shortcuts can be filtered by the current view, to avoid
+ * showing information that is not relevant in the current application context.
  *
- * [A simple example](https://git.gnome.org/browse/gtk+/tree/demos/gtk-demo/shortcuts.ui)
+ * The recommended way to construct a GtkShortcutsWindow is with GtkBuilder,
+ * by populating a #GtkShortcutsWindow with one or more #GtkShortcutsSection
+ * objects, which contain #GtkShortcutsGroups that in turn contain objects of
+ * class #GtkShortcutsShortcut or #GtkShortcutsGesture.
+ *
+ * # A simple example:
+ *
+ * ![](gedit-shortcuts.png)
+ *
+ * This example has as single section. As you can see, the shortcut groups
+ * are arranged in columns, and spread across several pages if there are too
+ * many to find on a single page.
+ *
+ * The .ui file for this example can be found [here](https://git.gnome.org/browse/gtk+/tree/demos/gtk-demo/shortcuts-gedit.ui).
+ *
+ * # An example with multiple views:
+ *
+ * ![](clocks-shortcuts.png)
+ *
+ * This example shows a #GtkShortcutsWindow that has been configured to show only
+ * the shortcuts relevant to the "stopwatch" view.
+ *
+ * The .ui file for this example can be found [here](https://git.gnome.org/browse/gtk+/tree/demos/gtk-demo/shortcuts-clocks.ui).
+ *
+ * # An example with multiple sections:
+ *
+ * ![](builder-shortcuts.png)
+ *
+ * This example shows a #GtkShortcutsWindow with two sections, "Editor Shortcuts"
+ * and "Terminal Shortcuts".
+ *
+ * The .ui file for this example can be found [here](https://git.gnome.org/browse/gtk+/tree/demos/gtk-demo/shortcuts-clocks.ui).
  */
 
 typedef struct
@@ -208,7 +242,7 @@ gtk_shortcuts_window_add_search_item (GtkWidget *child, gpointer data)
                            "subtitle", subtitle,
                            "icon", icon,
                            "icon-size-group", priv->search_image_group,
-                           "desc-size-group", priv->search_text_group,
+                           "title-size-group", priv->search_text_group,
                            NULL);
 
       str = g_strdup_printf ("%s %s", title, subtitle);
@@ -269,14 +303,16 @@ gtk_shortcuts_window_add_section (GtkShortcutsWindow  *self,
 
 static void
 gtk_shortcuts_window_add (GtkContainer *container,
-                         GtkWidget    *widget)
+                          GtkWidget    *widget)
 {
   GtkShortcutsWindow *self = (GtkShortcutsWindow *)container;
 
   if (GTK_IS_SHORTCUTS_SECTION (widget))
     gtk_shortcuts_window_add_section (self, GTK_SHORTCUTS_SECTION (widget));
   else
-    GTK_CONTAINER_CLASS (gtk_shortcuts_window_parent_class)->add (container, widget);
+    g_warning ("Can't add children of type %s to %s",
+               G_OBJECT_TYPE_NAME (widget),
+               G_OBJECT_TYPE_NAME (container));
 }
 
 static void
@@ -492,6 +528,12 @@ gtk_shortcuts_window_set_property (GObject      *object,
     }
 }
 
+static GType
+gtk_shortcuts_window_child_type (GtkContainer *container)
+{
+  return GTK_TYPE_SHORTCUTS_SECTION;
+}
+
 static void
 gtk_shortcuts_window_class_init (GtkShortcutsWindowClass *klass)
 {
@@ -505,13 +547,33 @@ gtk_shortcuts_window_class_init (GtkShortcutsWindowClass *klass)
   object_class->set_property = gtk_shortcuts_window_set_property;
 
   container_class->add = gtk_shortcuts_window_add;
+  container_class->child_type = gtk_shortcuts_window_child_type;
 
   klass->close = gtk_shortcuts_window_real_close;
 
+  /**
+   * GtkShortcutsWindow:section-name:
+   *
+   * The name of the section to show.
+   *
+   * This should be the section-name of one of the #GtkShortcutsSection
+   * objects that are in this shortcuts window.
+   */
   properties[PROP_SECTION_NAME] =
     g_param_spec_string ("section-name", P_("Section Name"), P_("Section Name"),
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  /**
+   * GtkShortcutsWindow:view-name:
+   *
+   * The view name by which to filter the contents.
+   *
+   * This should correspond to the #GtkShortcutsGroup:view property of some of
+   * the #GtkShortcutsGroup objects that are inside this shortcuts window.
+   *
+   * Set this to %NULL to show all groups.
+   */
   properties[PROP_VIEW_NAME] =
     g_param_spec_string ("view-name", P_("View Name"), P_("View Name"),
                          NULL,
@@ -519,6 +581,16 @@ gtk_shortcuts_window_class_init (GtkShortcutsWindowClass *klass)
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
+  /**
+   * GtkShortcutsWindow::close:
+   *
+   * The ::close signal is a
+   * [keybinding signal][GtkBindingSignal]
+   * which gets emitted when the user uses a keybinding to close
+   * the window.
+   *
+   * The default binding for this signal is the Escape key.
+   */
   signals[CLOSE] = g_signal_new (I_("close"),
                                  G_TYPE_FROM_CLASS (klass),
                                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -589,7 +661,7 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
                            "orientation", GTK_ORIENTATION_VERTICAL,
                            "visible", TRUE,
                            NULL);
-  gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (main_box));
+  GTK_CONTAINER_CLASS (gtk_shortcuts_window_parent_class)->add (GTK_CONTAINER (self), GTK_WIDGET (main_box));
 
   priv->search_bar = g_object_new (GTK_TYPE_SEARCH_BAR,
                                    "visible", TRUE,

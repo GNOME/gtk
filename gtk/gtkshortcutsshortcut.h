@@ -35,6 +35,7 @@ typedef struct _GtkShortcutsShortcut      GtkShortcutsShortcut;
 typedef struct _GtkShortcutsShortcutClass GtkShortcutsShortcutClass;
 
 
+GDK_AVAILABLE_IN_3_20
 GType        gtk_shortcuts_shortcut_get_type (void) G_GNUC_CONST;
 
 G_END_DECLS

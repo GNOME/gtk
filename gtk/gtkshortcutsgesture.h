@@ -34,7 +34,7 @@ G_BEGIN_DECLS
 typedef struct _GtkShortcutsGesture      GtkShortcutsGesture;
 typedef struct _GtkShortcutsGestureClass GtkShortcutsGestureClass;
 
-
+GDK_AVAILABLE_IN_3_20
 GType        gtk_shortcuts_gesture_get_type (void) G_GNUC_CONST;
 
 G_END_DECLS

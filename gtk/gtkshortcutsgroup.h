@@ -34,6 +34,7 @@ G_BEGIN_DECLS
 typedef struct _GtkShortcutsGroup         GtkShortcutsGroup;
 typedef struct _GtkShortcutsGroupClass    GtkShortcutsGroupClass;
 
+GDK_AVAILABLE_IN_3_20
 GType gtk_shortcuts_group_get_type (void) G_GNUC_CONST;
 
 G_END_DECLS

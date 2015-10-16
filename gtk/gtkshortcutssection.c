@@ -18,9 +18,9 @@
 
 #include "config.h"
 
-#include "gtkshortcutssectionprivate.h"
+#include "gtkshortcutssection.h"
 
-#include "gtkshortcutsgroupprivate.h"
+#include "gtkshortcutsgroup.h"
 #include "gtktogglebutton.h"
 #include "gtkstack.h"
 #include "gtkstackswitcher.h"
@@ -30,6 +30,23 @@
 #include "gtkwidget.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
+
+/**
+ * SECTION:gtkshortcutssection
+ * @Title: GtkShortcutsSection
+ * @Short_description: Represents an application mode in a GtkShortcutsWindow
+ *
+ * A GtkShortcutsSection collects all the keyboard shortcuts and gestures
+ * for a major application mode. If your application needs multiple sections,
+ * you should give each section a unique #GtkShortcutsSection:section-name and
+ * a #GtkShortcutsSection:title that can be shown in the section selector of
+ * the GtkShortcutsWindow.
+ *
+ * The #GtkShortcutsSection:max-height property can be used to influence how
+ * the groups in the section are distributed over pages and columns.
+ *
+ * This widget is only meant to be used with #GtkShortcutsWindow.
+ */
 
 struct _GtkShortcutsSection
 {
@@ -97,7 +114,9 @@ gtk_shortcuts_section_add (GtkContainer *container,
   if (GTK_IS_SHORTCUTS_GROUP (child))
     gtk_shortcuts_section_add_group (self, GTK_SHORTCUTS_GROUP (child));
   else
-    GTK_CONTAINER_CLASS (gtk_shortcuts_section_parent_class)->add (container, child);
+    g_warning ("Can't add children of type %s to %s",
+               G_OBJECT_TYPE_NAME (child),
+               G_OBJECT_TYPE_NAME (container));
 }
 
 static void
@@ -175,6 +194,12 @@ gtk_shortcuts_section_set_property (GObject      *object,
     }
 }
 
+static GType
+gtk_shortcuts_section_child_type (GtkContainer *container)
+{
+  return GTK_TYPE_SHORTCUTS_GROUP;
+}
+
 static void
 gtk_shortcuts_section_class_init (GtkShortcutsSectionClass *klass)
 {
@@ -189,22 +214,55 @@ gtk_shortcuts_section_class_init (GtkShortcutsSectionClass *klass)
   widget_class->map = gtk_shortcuts_section_map;
 
   container_class->add = gtk_shortcuts_section_add;
+  container_class->child_type = gtk_shortcuts_section_child_type;
 
+  /**
+   * GtkShortcutsSection:section-name:
+   *
+   * A unique name to identify this section among the sections
+   * added to the GtkShortcutsWindow. Setting the #GtkShortcutsWindow:section-name
+   * property to this string will make this section shown in the
+   * GtkShortcutsWindow.
+   */
   properties[PROP_SECTION_NAME] =
     g_param_spec_string ("section-name", P_("Section Name"), P_("Section Name"),
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
+  /**
+   * GtkShortcutsSection:view-name:
+   *
+   * A view name to filter the groups in this section by.
+   * See #GtkShortcutsGroup:view.
+   *
+   * Applications are expected to use the #GtkShortcutsWindow:view-name
+   * property for this purpose.
+   */
   properties[PROP_VIEW_NAME] =
     g_param_spec_string ("view-name", P_("View Name"), P_("View Name"),
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
+  /**
+   * GtkShortcutsSection:title:
+   *
+   * The string to show in the section selector of the GtkShortcutsWindow
+   * for this section. If there is only one section, you don't need to
+   * set a title, since the section selector will not be shown in this case.
+   */
   properties[PROP_TITLE] =
     g_param_spec_string ("title", P_("Title"), P_("Title"),
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
+  /**
+   * GtkShortcutsSection:max-height:
+   *
+   * The maximum number of lines to allow per column. This property can
+   * be used to influence how the groups in this section are distributed
+   * across pages and columns. The default value of 15 should work in
+   * for most cases.
+   */
   properties[PROP_MAX_HEIGHT] =
     g_param_spec_uint ("max-height", P_("Maximum Height"), P_("Maximum Height"),
                        0, G_MAXUINT, 15,
@@ -231,7 +289,7 @@ gtk_shortcuts_section_init (GtkShortcutsSection *self)
                               "vexpand", TRUE,
                               "visible", TRUE,
                               NULL);
-  gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (self->stack));
+  GTK_CONTAINER_CLASS (gtk_shortcuts_section_parent_class)->add (GTK_CONTAINER (self), GTK_WIDGET (self->stack));
 
   self->switcher = g_object_new (GTK_TYPE_STACK_SWITCHER,
                                  "halign", GTK_ALIGN_CENTER,
@@ -248,7 +306,7 @@ gtk_shortcuts_section_init (GtkShortcutsSection *self)
                             G_CALLBACK (show_all_changed), self);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 20);
-  gtk_container_add (GTK_CONTAINER (self), box);
+  GTK_CONTAINER_CLASS (gtk_shortcuts_section_parent_class)->add (GTK_CONTAINER (self), box);
 
   gtk_box_set_center_widget (GTK_BOX (box), GTK_WIDGET (self->switcher));
   gtk_box_pack_end (GTK_BOX (box), self->show_all, TRUE, TRUE, 0);

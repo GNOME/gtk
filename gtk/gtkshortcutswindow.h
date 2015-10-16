@@ -47,6 +47,7 @@ struct _GtkShortcutsWindowClass
   void (*close) (GtkShortcutsWindow *self);
 };
 
+GDK_AVAILABLE_IN_3_20
 GType gtk_shortcuts_window_get_type (void) G_GNUC_CONST;
 
 

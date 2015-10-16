@@ -269,6 +269,10 @@ gtk_public_h_sources = 		\
 	gtkseparatormenuitem.h	\
 	gtkseparatortoolitem.h	\
 	gtksettings.h		\
+	gtkshortcutsgesture.h	\
+	gtkshortcutsgroup.h	\
+	gtkshortcutssection.h	\
+	gtkshortcutsshortcut.h	\
 	gtkshortcutswindow.h	\
 	gtkshow.h		\
 	gtkstacksidebar.h	\
@@ -507,10 +511,8 @@ gtk_private_h_sources =		\
 	gtksidebarrowprivate.h	\
 	gtksettingsprivate.h	\
 	gtkshortcutsgestureprivate.h	\
-	gtkshortcutsgrouprivate.h	\
 	gtkshortcutlabelprivate.h	\
 	gtkshortcutsshortcutprivate.h	\
-	gtkshortcutssectionprivate.h	\
 	gtksizegroup-private.h	\
 	gtksizerequestcacheprivate.h	\
 	gtksocketprivate.h	\

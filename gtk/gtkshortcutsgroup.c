@@ -18,15 +18,28 @@
 
 #include "config.h"
 
-#include "gtkshortcutsgroupprivate.h"
+#include "gtkshortcutsgroup.h"
 
-#include "gtkshortcutsshortcutprivate.h"
-#include "gtkshortcutsgestureprivate.h"
+#include "gtkshortcutsshortcut.h"
+#include "gtkshortcutsgesture.h"
 #include "gtklabel.h"
 #include "gtkorientable.h"
 #include "gtksizegroup.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
+
+/**
+ * SECTION:gtkshortcutsgroup
+ * @Title: GtkShortcutsGroup
+ * @Short_description: Represents a group of shortcuts in a GtkShortcutsWindow
+ *
+ * A GtkShortcutsGroup represents a group of related keyboard shortcuts
+ * or gestures. The group has a title. It may optionally be associated with
+ * a view of the application, which can be used to show only relevant shortcuts
+ * depending on the application context.
+ *
+ * This widget is only meant to be used with #GtkShortcutsWindow.
+ */
 
 struct _GtkShortcutsGroup
 {
@@ -85,7 +98,7 @@ gtk_shortcuts_group_set_title_size_group (GtkShortcutsGroup *group,
       if (GTK_IS_SHORTCUTS_SHORTCUT (l->data))
         g_object_set (l->data, "title-size-group", size_group, NULL);
       else if (GTK_IS_SHORTCUTS_GESTURE (l->data))
-        g_object_set (l->data, "desc-size-group", size_group, NULL);
+        g_object_set (l->data, "title-size-group", size_group, NULL);
     }
   g_list_free (children);
 }
@@ -109,6 +122,19 @@ gtk_shortcuts_group_get_height (GtkShortcutsGroup *group)
   g_list_free (children);
 
   return height;
+}
+
+static void
+gtk_shortcuts_group_add (GtkContainer *container,
+                         GtkWidget    *widget)
+{
+  if (GTK_IS_SHORTCUTS_SHORTCUT (widget) ||
+      GTK_IS_SHORTCUTS_GESTURE (widget))
+    GTK_CONTAINER_CLASS (gtk_shortcuts_group_parent_class)->add (container, widget);
+  else
+    g_warning ("Can't add children of type %s to %s",
+               G_OBJECT_TYPE_NAME (widget),
+               G_OBJECT_TYPE_NAME (container));
 }
 
 static void
@@ -183,21 +209,46 @@ gtk_shortcuts_group_finalize (GObject *object)
 static void
 gtk_shortcuts_group_class_init (GtkShortcutsGroupClass *klass)
 {
+  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = gtk_shortcuts_group_finalize;
   object_class->get_property = gtk_shortcuts_group_get_property;
   object_class->set_property = gtk_shortcuts_group_set_property;
 
+  container_class->add = gtk_shortcuts_group_add;
+
+  /**
+   * GtkShortcutsGroup:title:
+   *
+   * The title for this group of shortcuts.
+   */
   properties[PROP_TITLE] =
     g_param_spec_string ("title", P_("Title"), P_("Title"),
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  /**
+   * GtkShortcutsGroup:view:
+   *
+   * An optional view that the shortcuts in this group are relevant for.
+   * The group will be hidden if the #GtkShortcutsWindow:view-name property
+   * does not match the view of this group.
+   *
+   * Set this to %NULL to make the group always visible.
+   */
   properties[PROP_VIEW] =
     g_param_spec_string ("view", P_("View"), P_("View"),
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
+  /**
+   * GtkShortcutsGroup:accel-size-group:
+   *
+   * The size group for the accelerator portion of shortcuts in this group.
+   *
+   * This is used internally by GTK+, and must not be modified by applications.
+   */
   properties[PROP_ACCEL_SIZE_GROUP] =
     g_param_spec_object ("accel-size-group",
                          P_("Accelerator Size Group"),
@@ -205,6 +256,13 @@ gtk_shortcuts_group_class_init (GtkShortcutsGroupClass *klass)
                          GTK_TYPE_SIZE_GROUP,
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
+  /**
+   * GtkShortcutsGroup:title-size-group:
+   *
+   * The size group for the textual portion of shortcuts in this group.
+   *
+   * This is used internally by GTK+, and must not be modified by applications.
+   */
   properties[PROP_TITLE_SIZE_GROUP] =
     g_param_spec_object ("title-size-group",
                          P_("Title Size Group"),
@@ -212,6 +270,13 @@ gtk_shortcuts_group_class_init (GtkShortcutsGroupClass *klass)
                          GTK_TYPE_SIZE_GROUP,
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
+  /**
+   * GtkShortcutsGroup:height:
+   *
+   * A rough measure for the number of lines in this group.
+   *
+   * This is used internally by GTK+, and is not useful for applications.
+   */
   properties[PROP_HEIGHT] =
     g_param_spec_uint ("height", P_("Height"), P_("Height"),
                        0, G_MAXUINT, 0,
@@ -235,6 +300,7 @@ gtk_shortcuts_group_init (GtkShortcutsGroup *self)
                               "visible", TRUE,
                               "xalign", 0.0f,
                               NULL);
-  gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (self->title));
   pango_attr_list_unref (attrs);
+
+  GTK_CONTAINER_CLASS (gtk_shortcuts_group_parent_class)->add (GTK_CONTAINER (self), GTK_WIDGET (self->title));
 }

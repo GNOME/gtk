@@ -18,7 +18,7 @@
 
 #include "config.h"
 
-#include "gtkshortcutsgestureprivate.h"
+#include "gtkshortcutsgesture.h"
 #include "gtkimage.h"
 #include "gtklabel.h"
 #include "gtksizegroup.h"
@@ -27,6 +27,16 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
+/**
+ * SECTION:gtkshortcutsgesture
+ * @Title: GtkShortcutsGesture
+ * @Short_description: Represents a gesture in a GtkShortcutsWindow
+ *
+ * A GtkShortcutsGesture represents a single gesture with an image
+ * an a short text.
+ *
+ * This widget is only meant to be used with #GtkShortcutsWindow.
+ */
 struct _GtkShortcutsGesture
 {
   GtkBox    parent_instance;
@@ -34,9 +44,9 @@ struct _GtkShortcutsGesture
   GtkImage *image;
   GtkLabel *title;
   GtkLabel *subtitle;
-  GtkBox   *desc_box;
+  GtkBox   *title_box;
 
-  GtkSizeGroup *desc_size_group;
+  GtkSizeGroup *title_size_group;
   GtkSizeGroup *icon_size_group;
 };
 
@@ -49,26 +59,26 @@ G_DEFINE_TYPE (GtkShortcutsGesture, gtk_shortcuts_gesture, GTK_TYPE_BOX)
 
 enum {
   PROP_0,
-  PROP_DESC_SIZE_GROUP,
   PROP_ICON,
-  PROP_ICON_SIZE_GROUP,
-  PROP_SUBTITLE,
   PROP_TITLE,
+  PROP_SUBTITLE,
+  PROP_ICON_SIZE_GROUP,
+  PROP_TITLE_SIZE_GROUP,
   LAST_PROP
 };
 
 static GParamSpec *properties[LAST_PROP];
 
 static void
-gtk_shortcuts_gesture_set_desc_size_group (GtkShortcutsGesture *self,
-                                           GtkSizeGroup       *group)
+gtk_shortcuts_gesture_set_title_size_group (GtkShortcutsGesture *self,
+                                            GtkSizeGroup        *group)
 {
-  if (self->desc_size_group)
-    gtk_size_group_remove_widget (self->desc_size_group, GTK_WIDGET (self->desc_box));
+  if (self->title_size_group)
+    gtk_size_group_remove_widget (self->title_size_group, GTK_WIDGET (self->title_box));
   if (group)
-    gtk_size_group_add_widget (group, GTK_WIDGET (self->desc_box));
+    gtk_size_group_add_widget (group, GTK_WIDGET (self->title_box));
 
-  g_set_object (&self->desc_size_group, group);
+  g_set_object (&self->title_size_group, group);
 }
 
 static void
@@ -100,14 +110,6 @@ gtk_shortcuts_gesture_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_SUBTITLE:
-      g_value_set_string (value, gtk_label_get_label (self->subtitle));
-      break;
-
-    case PROP_TITLE:
-      g_value_set_string (value, gtk_label_get_label (self->title));
-      break;
-
     case PROP_ICON:
       {
         GIcon *icon;
@@ -115,6 +117,14 @@ gtk_shortcuts_gesture_get_property (GObject    *object,
         gtk_image_get_gicon (self->image, &icon, NULL);
         g_value_set_object (value, icon);
       }
+      break;
+
+    case PROP_TITLE:
+      g_value_set_string (value, gtk_label_get_label (self->title));
+      break;
+
+    case PROP_SUBTITLE:
+      g_value_set_string (value, gtk_label_get_label (self->subtitle));
       break;
 
     default:
@@ -132,24 +142,24 @@ gtk_shortcuts_gesture_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_DESC_SIZE_GROUP:
-      gtk_shortcuts_gesture_set_desc_size_group (self, GTK_SIZE_GROUP (g_value_get_object (value)));
-      break;
-
     case PROP_ICON:
       gtk_shortcuts_gesture_set_icon (self, g_value_get_object (value));
       break;
 
-    case PROP_ICON_SIZE_GROUP:
-      gtk_shortcuts_gesture_set_icon_size_group (self, GTK_SIZE_GROUP (g_value_get_object (value)));
+    case PROP_TITLE:
+      gtk_label_set_label (self->title, g_value_get_string (value));
       break;
 
     case PROP_SUBTITLE:
       gtk_label_set_label (self->subtitle, g_value_get_string (value));
       break;
 
-    case PROP_TITLE:
-      gtk_label_set_label (self->title, g_value_get_string (value));
+    case PROP_TITLE_SIZE_GROUP:
+      gtk_shortcuts_gesture_set_title_size_group (self, GTK_SIZE_GROUP (g_value_get_object (value)));
+      break;
+
+    case PROP_ICON_SIZE_GROUP:
+      gtk_shortcuts_gesture_set_icon_size_group (self, GTK_SIZE_GROUP (g_value_get_object (value)));
       break;
 
     default:
@@ -162,28 +172,43 @@ gtk_shortcuts_gesture_finalize (GObject *object)
 {
   GtkShortcutsGesture *self = GTK_SHORTCUTS_GESTURE (object);
 
-  g_clear_object (&self->desc_size_group);
+  g_clear_object (&self->title_size_group);
   g_clear_object (&self->icon_size_group);
 
   G_OBJECT_CLASS (gtk_shortcuts_gesture_parent_class)->finalize (object);
 }
 
 static void
+gtk_shortcuts_gesture_add (GtkContainer *container,
+                           GtkWidget    *widget)
+{
+  g_warning ("Can't add children to %s", G_OBJECT_TYPE_NAME (container));
+}
+
+static GType
+gtk_shortcuts_gesture_child_type (GtkContainer *container)
+{
+  return G_TYPE_NONE;
+}
+
+static void
 gtk_shortcuts_gesture_class_init (GtkShortcutsGestureClass *klass)
 {
+  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = gtk_shortcuts_gesture_finalize;
   object_class->get_property = gtk_shortcuts_gesture_get_property;
   object_class->set_property = gtk_shortcuts_gesture_set_property;
 
-  properties[PROP_DESC_SIZE_GROUP] =
-    g_param_spec_object ("desc-size-group",
-                         P_("Description Size Group"),
-                         P_("Description Size Group"),
-                         GTK_TYPE_SIZE_GROUP,
-                         (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
+  container_class->add = gtk_shortcuts_gesture_add;
+  container_class->child_type = gtk_shortcuts_gesture_child_type;
 
+  /**
+   * GtkShortcutsGesture:icon:
+   *
+   * The icon used to represent the gesture.
+   */
   properties[PROP_ICON] =
     g_param_spec_object ("icon",
                          P_("Icon"),
@@ -191,13 +216,29 @@ gtk_shortcuts_gesture_class_init (GtkShortcutsGestureClass *klass)
                          G_TYPE_ICON,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  properties[PROP_ICON_SIZE_GROUP] =
-    g_param_spec_object ("icon-size-group",
-                         P_("Icon Size Group"),
-                         P_("Icon Size Group"),
-                         GTK_TYPE_SIZE_GROUP,
-                         (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
+  /**
+   * GtkShortcutsGesture:title:
+   *
+   * The title for the gesture.
+   *
+   * This should be a short, one-line text that describes the action
+   * associated with the gesture.
+   */
+  properties[PROP_TITLE] =
+    g_param_spec_string ("title",
+                         P_("Title"),
+                         P_("Title"),
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
+  /**
+   * GtkShortcutsGesture:subtitle:
+   *
+   * The subtitle for the gesture.
+   *
+   * This should be a short, one-line text that describes the gesture
+   * itself, e.g. "Two-finger swipe".
+   */
   properties[PROP_SUBTITLE] =
     g_param_spec_string ("subtitle",
                          P_("Subtitle"),
@@ -205,12 +246,33 @@ gtk_shortcuts_gesture_class_init (GtkShortcutsGestureClass *klass)
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  properties[PROP_TITLE] =
-    g_param_spec_string ("title",
-                         P_("Title"),
-                         P_("Title"),
-                         NULL,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  /**
+   * GtkShortcutsGesture:title-size-group:
+   *
+   * The size group for the textual portion of this gesture.
+   *
+   * This is used internally by GTK+, and must not be modified by applications.
+   */
+  properties[PROP_TITLE_SIZE_GROUP] =
+    g_param_spec_object ("title-size-group",
+                         P_("Title Size Group"),
+                         P_("Title Size Group"),
+                         GTK_TYPE_SIZE_GROUP,
+                         (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
+
+  /**
+   * GtkShortcutsShortcut:icon-size-group:
+   *
+   * The size group for the image portion of this gesture.
+   *
+   * This is used internally by GTK+, and must not be modified by applications.
+   */
+  properties[PROP_ICON_SIZE_GROUP] =
+    g_param_spec_object ("icon-size-group",
+                         P_("Icon Size Group"),
+                         P_("Icon Size Group"),
+                         GTK_TYPE_SIZE_GROUP,
+                         (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
@@ -224,20 +286,20 @@ gtk_shortcuts_gesture_init (GtkShortcutsGesture *self)
   self->image = g_object_new (GTK_TYPE_IMAGE,
                               "visible", TRUE,
                               NULL);
-  gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (self->image));
+  GTK_CONTAINER_CLASS (gtk_shortcuts_gesture_parent_class)->add (GTK_CONTAINER (self), GTK_WIDGET (self->image));
 
-  self->desc_box = g_object_new (GTK_TYPE_BOX,
-                                 "hexpand", TRUE,
-                                 "orientation", GTK_ORIENTATION_VERTICAL,
-                                 "visible", TRUE,
-                                 NULL);
-  gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (self->desc_box));
+  self->title_box = g_object_new (GTK_TYPE_BOX,
+                                  "hexpand", TRUE,
+                                  "orientation", GTK_ORIENTATION_VERTICAL,
+                                  "visible", TRUE,
+                                  NULL);
+  GTK_CONTAINER_CLASS (gtk_shortcuts_gesture_parent_class)->add (GTK_CONTAINER (self), GTK_WIDGET (self->title_box));
 
   self->title = g_object_new (GTK_TYPE_LABEL,
                               "visible", TRUE,
                               "xalign", 0.0f,
                               NULL);
-  gtk_container_add (GTK_CONTAINER (self->desc_box), GTK_WIDGET (self->title));
+  gtk_container_add (GTK_CONTAINER (self->title_box), GTK_WIDGET (self->title));
 
   self->subtitle = g_object_new (GTK_TYPE_LABEL,
                                  "visible", TRUE,
@@ -245,5 +307,5 @@ gtk_shortcuts_gesture_init (GtkShortcutsGesture *self)
                                  NULL);
   gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (self->subtitle)),
                                "dim-label");
-  gtk_container_add (GTK_CONTAINER (self->desc_box), GTK_WIDGET (self->subtitle));
+  gtk_container_add (GTK_CONTAINER (self->title_box), GTK_WIDGET (self->subtitle));
 }
