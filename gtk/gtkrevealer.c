@@ -675,8 +675,6 @@ gtk_revealer_real_map (GtkWidget *widget)
 
       if (allocation.width > 0 && allocation.height > 0)
         gdk_window_show (priv->view_window);
-
-      gtk_revealer_start_animation (revealer, priv->target_pos);
     }
 
   GTK_WIDGET_CLASS (gtk_revealer_parent_class)->map (widget);
