@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 3.16.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-09-20 21:45+0200\n"
-"PO-Revision-Date: 2015-10-17 12:32+0200\n"
+"PO-Revision-Date: 2015-10-17 12:33+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: no\n"
@@ -1696,7 +1696,7 @@ msgstr "Tekst kan ikke plasseres inne i <%s>"
 #: gtk/gtk-builder-tool.c:97
 #, c-format
 msgid "Packing property %s::%s not found\n"
-msgstr "Ugyldig egenskap: %s.%s på linje %d"
+msgstr "Pakke-egenskap: %s::%s ikke funnet\n"
 
 #: gtk/gtk-builder-tool.c:99
 #, fuzzy, c-format
