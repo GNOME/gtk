@@ -266,10 +266,9 @@ gdk_device_virtual_grab (GdkDevice    *device,
 	{
 	  if (GetCursor () == GDK_WIN32_CURSOR (_gdk_win32_grab_cursor)->hcursor)
 	    SetCursor (NULL);
-	  g_clear_object (&_gdk_win32_grab_cursor);
 	}
 
-      _gdk_win32_grab_cursor = (cursor == NULL) ? NULL : g_object_ref (cursor);
+      g_set_object (&_gdk_win32_grab_cursor, cursor);
 
       if (_gdk_win32_grab_cursor != NULL)
 	SetCursor (GDK_WIN32_CURSOR (_gdk_win32_grab_cursor)->hcursor);
@@ -303,9 +302,8 @@ gdk_device_virtual_ungrab (GdkDevice *device,
 	{
 	  if (GetCursor () == GDK_WIN32_CURSOR (_gdk_win32_grab_cursor)->hcursor)
 	    SetCursor (NULL);
-	  g_clear_object (&_gdk_win32_grab_cursor);
 	}
-      _gdk_win32_grab_cursor = NULL;
+      g_clear_object (&_gdk_win32_grab_cursor);
 
       ReleaseCapture ();
     }
