@@ -4933,8 +4933,7 @@ finish_drag (MoveResizeData *mv_resize)
 {
   gdk_window_destroy (mv_resize->moveresize_emulation_window);
   mv_resize->moveresize_emulation_window = NULL;
-  g_object_unref (mv_resize->moveresize_window);
-  mv_resize->moveresize_window = NULL;
+  g_clear_object (&mv_resize->moveresize_window);
   g_clear_pointer (&mv_resize->moveresize_pending_event, g_free);
 }
 
