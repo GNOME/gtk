@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 3.16.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-09-20 21:45+0200\n"
-"PO-Revision-Date: 2015-09-20 22:18+0200\n"
+"PO-Revision-Date: 2015-10-17 12:32+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: no\n"
@@ -1694,7 +1694,7 @@ msgid "Text may not appear inside <%s>"
 msgstr "Tekst kan ikke plasseres inne i <%s>"
 
 #: gtk/gtk-builder-tool.c:97
-#, fuzzy, c-format
+#, c-format
 msgid "Packing property %s::%s not found\n"
 msgstr "Ugyldig egenskap: %s.%s på linje %d"
 
@@ -3799,9 +3799,8 @@ msgid "RGBA visual"
 msgstr "RGBA-visual"
 
 #: gtk/inspector/general.ui:442
-#, fuzzy
 msgid "Composited"
-msgstr "Datamaskin"
+msgstr "Sammenslått"
 
 #: gtk/inspector/general.ui:489
 msgid "GL Version"
@@ -3809,7 +3808,7 @@ msgstr "GL-versjon"
 
 #: gtk/inspector/general.ui:524
 msgid "GL Vendor"
-msgstr ""
+msgstr "GL-leverandør"
 
 #: gtk/inspector/gestures.c:129
 msgid "Capture"
@@ -4032,9 +4031,8 @@ msgid "Path"
 msgstr "Sti"
 
 #: gtk/inspector/resource-list.ui:117 gtk/inspector/signals-list.ui:117
-#, fuzzy
 msgid "Count"
-msgstr "_Monter"
+msgstr "Antall"
 
 #: gtk/inspector/resource-list.ui:129 gtk/ui/gtkfilechooserwidget.ui:222
 msgid "Size"
@@ -4053,9 +4051,8 @@ msgid "Size:"
 msgstr "Størrelse:"
 
 #: gtk/inspector/selector.ui:32 gtk/inspector/window.ui:305
-#, fuzzy
 msgid "Selector"
-msgstr "Velg"
+msgstr "Velger"
 
 #: gtk/inspector/signals-list.c:111
 msgid "Yes"
@@ -5468,14 +5465,12 @@ msgid "No results found"
 msgstr "Ingen resultater funnet"
 
 #: gtk/ui/gtkplacesview.ui:214
-#, fuzzy
 msgid "Connect to _Server"
-msgstr "Koble til tjener"
+msgstr "Koble til _tjener"
 
 #: gtk/ui/gtkplacesview.ui:246
-#, fuzzy
 msgid "Enter server address…"
-msgstr "Koble til en nettverkstjeneradresse"
+msgstr "Oppgi adresse til tjener …"
 
 #: gtk/ui/gtkprintunixdialog.ui:117
 msgid "Printer"
@@ -5492,11 +5487,11 @@ msgstr "Område"
 
 #: gtk/ui/gtkprintunixdialog.ui:206
 msgid "_All Pages"
-msgstr ""
+msgstr "_Alle sider"
 
 #: gtk/ui/gtkprintunixdialog.ui:221
 msgid "C_urrent Page"
-msgstr ""
+msgstr "_Denne siden"
 
 #: gtk/ui/gtkprintunixdialog.ui:238
 msgid "Se_lection"
@@ -5512,6 +5507,8 @@ msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1–3, 7, 11"
 msgstr ""
+"Oppgi et eller flere sideområder,\n"
+" f.eks. 1-3, 7, 11"
 
 #: gtk/ui/gtkprintunixdialog.ui:281
 msgid "Pages"
@@ -5526,54 +5523,48 @@ msgid "Copie_s:"
 msgstr "Kopie_r:"
 
 #: gtk/ui/gtkprintunixdialog.ui:365
-#, fuzzy
 msgid "C_ollate"
-msgstr "Sjokolade"
+msgstr "Sl_å sammen"
 
 #: gtk/ui/gtkprintunixdialog.ui:379
-#, fuzzy
 msgid "_Reverse"
-msgstr "Fo_rkast"
+msgstr "_Omvendt"
 
 #: gtk/ui/gtkprintunixdialog.ui:456
 msgid "Layout"
 msgstr "Utforming"
 
 #: gtk/ui/gtkprintunixdialog.ui:479
-#, fuzzy
 msgid "T_wo-sided:"
-msgstr "Tosidig"
+msgstr "T_osidig:"
 
 #: gtk/ui/gtkprintunixdialog.ui:504
-#, fuzzy
 msgid "Pages per _side:"
-msgstr "_Sider per ark:"
+msgstr "Sider per _side:"
 
 #: gtk/ui/gtkprintunixdialog.ui:531
-#, fuzzy
 msgid "Page or_dering:"
-msgstr "Siderekkefølge"
+msgstr "Side_rekkefølge:"
 
 #: gtk/ui/gtkprintunixdialog.ui:557
-#, fuzzy
 msgid "_Only print:"
-msgstr "Alle skrivere"
+msgstr "Skriv _ut bare:"
 
 #: gtk/ui/gtkprintunixdialog.ui:574
 msgid "All sheets"
-msgstr ""
+msgstr "Alle sider"
 
 #: gtk/ui/gtkprintunixdialog.ui:575
 msgid "Even sheets"
-msgstr ""
+msgstr "Sider med like tall"
 
 #: gtk/ui/gtkprintunixdialog.ui:576
 msgid "Odd sheets"
-msgstr ""
+msgstr "Sider med oddetall"
 
 #: gtk/ui/gtkprintunixdialog.ui:589
 msgid "Sc_ale:"
-msgstr ""
+msgstr "Sk_aler:"
 
 #: gtk/ui/gtkprintunixdialog.ui:652
 msgid "Paper"
@@ -5584,14 +5575,12 @@ msgid "Paper _type:"
 msgstr "Papir_type:"
 
 #: gtk/ui/gtkprintunixdialog.ui:700
-#, fuzzy
 msgid "Paper _source:"
-msgstr "Papirkilde"
+msgstr "Papir_kilde:"
 
 #: gtk/ui/gtkprintunixdialog.ui:725
-#, fuzzy
 msgid "Output t_ray:"
-msgstr "Utskuff"
+msgstr "_Utskuff:"
 
 #: gtk/ui/gtkprintunixdialog.ui:779
 msgid "Or_ientation:"
@@ -5599,16 +5588,15 @@ msgstr "Or_ientering:"
 
 #: gtk/ui/gtkprintunixdialog.ui:879
 msgid "Job Details"
-msgstr ""
+msgstr "Detaljer om jobb"
 
 #: gtk/ui/gtkprintunixdialog.ui:902
 msgid "Pri_ority:"
 msgstr "Pri_oritet:"
 
 #: gtk/ui/gtkprintunixdialog.ui:926
-#, fuzzy
 msgid "_Billing info:"
-msgstr "Faktureringsinformasjon:"
+msgstr "_Faktureringsinformasjon:"
 
 #: gtk/ui/gtkprintunixdialog.ui:970
 msgid "Print Document"
@@ -5622,7 +5610,7 @@ msgstr "_Nå"
 #. this is one of the choices for the print at option in the print dialog. It also serves as the label for an entry that allows the user to enter a time.
 #: gtk/ui/gtkprintunixdialog.ui:1006
 msgid "A_t:"
-msgstr ""
+msgstr "_Senere:"
 
 #. Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.
 #: gtk/ui/gtkprintunixdialog.ui:1010 gtk/ui/gtkprintunixdialog.ui:1012
@@ -5634,22 +5622,21 @@ msgid ""
 msgstr ""
 
 #: gtk/ui/gtkprintunixdialog.ui:1039
-#, fuzzy
 msgid "Time of print"
-msgstr "klar til å skrive ut"
+msgstr "Tid for utskrift"
 
 #. this is one of the choices for the print at option in the print dialog. It means that the print job will not be printed until it explicitly gets 'released'.
 #: gtk/ui/gtkprintunixdialog.ui:1053
 msgid "On _hold"
-msgstr ""
+msgstr "På _vent"
 
 #: gtk/ui/gtkprintunixdialog.ui:1057 gtk/ui/gtkprintunixdialog.ui:1058
 msgid "Hold the job until it is explicitly released"
-msgstr ""
+msgstr "Sett jobben på vent til en eksplisitt slippes løs"
 
 #: gtk/ui/gtkprintunixdialog.ui:1095
 msgid "Add Cover Page"
-msgstr ""
+msgstr "Legg til omslagsside"
 
 #. this is the label used for the option in the print dialog that controls the front cover page.
 #: gtk/ui/gtkprintunixdialog.ui:1118
