@@ -800,6 +800,9 @@ static void     gtk_tree_view_search_disable_popdown    (GtkEntry         *entry
 							 gpointer          data);
 static void     gtk_tree_view_search_preedit_changed    (GtkIMContext     *im_context,
 							 GtkTreeView      *tree_view);
+static void     gtk_tree_view_search_commit             (GtkIMContext     *im_context,
+                                                         gchar            *buf,
+                                                         GtkTreeView      *tree_view);
 static void     gtk_tree_view_search_activate           (GtkEntry         *entry,
 							 GtkTreeView      *tree_view);
 static gboolean gtk_tree_view_real_search_enable_popdown(gpointer          data);
@@ -6016,73 +6019,73 @@ gtk_tree_view_key_press (GtkWidget   *widget,
       return FALSE;
     }
 
-  /* We pass the event to the search_entry.  If its text changes, then we start
-   * the typeahead find capabilities. */
+  /* Initially, before the search window is visible, we pass the event to the
+   * IM context of the search entry box. If it triggers a commit or a preedit,
+   * we then show the search window without loosing tree view focus.
+   * If the seach window is already visible, we forward the events to it,
+   * keeping the focus on the tree view.
+   */
   if (gtk_widget_has_focus (GTK_WIDGET (tree_view))
       && tree_view->priv->enable_search
       && !tree_view->priv->search_custom_entry_set
       && !gtk_tree_view_search_key_cancels_search (event->keyval))
     {
-      GdkEvent *new_event;
-      char *old_text;
-      const char *new_text;
-      gboolean retval;
-      GdkScreen *screen;
-      gboolean text_modified;
-      gulong popup_menu_id;
+      GtkWidget *search_window;
 
       gtk_tree_view_ensure_interactive_directory (tree_view);
 
-      /* Make a copy of the current text */
-      old_text = g_strdup (gtk_entry_get_text (GTK_ENTRY (tree_view->priv->search_entry)));
-      new_event = gdk_event_copy ((GdkEvent *) event);
-      g_object_unref (((GdkEventKey *) new_event)->window);
-      ((GdkEventKey *) new_event)->window = g_object_ref (gtk_widget_get_window (tree_view->priv->search_window));
-      gtk_widget_realize (tree_view->priv->search_window);
+      search_window = tree_view->priv->search_window;
+      if (!gtk_widget_is_visible (search_window))
+        {
+          GtkIMContext *im_context =
+            _gtk_entry_get_im_context (GTK_ENTRY (tree_view->priv->search_entry));
 
-      popup_menu_id = g_signal_connect (tree_view->priv->search_entry, 
-					"popup-menu", G_CALLBACK (gtk_true),
-                                        NULL);
+          tree_view->priv->imcontext_changed = FALSE;
+          gtk_im_context_filter_keypress (im_context, event);
 
-      /* Move the entry off screen */
-      screen = gtk_widget_get_screen (GTK_WIDGET (tree_view));
-      gtk_window_move (GTK_WINDOW (tree_view->priv->search_window),
-		       gdk_screen_get_width (screen) + 1,
-		       gdk_screen_get_height (screen) + 1);
-      gtk_widget_show (tree_view->priv->search_window);
+          if (tree_view->priv->imcontext_changed)
+            {
+              GdkDevice *device;
 
-      /* Send the event to the window.  If the preedit_changed signal is emitted
-       * during this event, we will set priv->imcontext_changed  */
-      tree_view->priv->imcontext_changed = FALSE;
-      retval = gtk_widget_event (tree_view->priv->search_window, new_event);
-      gdk_event_free (new_event);
-      gtk_widget_hide (tree_view->priv->search_window);
+              device = gdk_event_get_device ((GdkEvent *) event);
+              if (gtk_tree_view_real_start_interactive_search (tree_view,
+                                                               device,
+                                                               FALSE))
+                {
+                  gtk_widget_grab_focus (GTK_WIDGET (tree_view));
+                  return TRUE;
+                }
+              else
+                {
+                  gtk_entry_set_text (GTK_ENTRY (tree_view->priv->search_entry), "");
+                  return FALSE;
+                }
+            }
+        }
+      else
+        {
+          GdkEvent *new_event;
+          gulong popup_menu_id;
 
-      g_signal_handler_disconnect (tree_view->priv->search_entry, 
-				   popup_menu_id);
+          new_event = gdk_event_copy ((GdkEvent *) event);
+          g_object_unref (((GdkEventKey *) new_event)->window);
+          ((GdkEventKey *) new_event)->window =
+            g_object_ref (gtk_widget_get_window (search_window));
+          gtk_widget_realize (search_window);
 
-      /* We check to make sure that the entry tried to handle the text, and that
-       * the text has changed.
-       */
-      new_text = gtk_entry_get_text (GTK_ENTRY (tree_view->priv->search_entry));
-      text_modified = strcmp (old_text, new_text) != 0;
-      g_free (old_text);
-      if (tree_view->priv->imcontext_changed ||    /* we're in a preedit */
-	  (retval && text_modified))               /* ...or the text was modified */
-	{
-	  if (gtk_tree_view_real_start_interactive_search (tree_view,
-                                                           gdk_event_get_device ((GdkEvent *) event),
-                                                           FALSE))
-	    {
-	      gtk_widget_grab_focus (GTK_WIDGET (tree_view));
-	      return TRUE;
-	    }
-	  else
-	    {
-	      gtk_entry_set_text (GTK_ENTRY (tree_view->priv->search_entry), "");
-	      return FALSE;
-	    }
-	}
+          popup_menu_id = g_signal_connect (tree_view->priv->search_entry,
+                                            "popup-menu", G_CALLBACK (gtk_true),
+                                            NULL);
+
+          /* Because we keep the focus on the treeview, we need to forward the
+           * key events to the entry, when it is visible. */
+          gtk_widget_event (search_window, new_event);
+          gdk_event_free (new_event);
+
+          g_signal_handler_disconnect (tree_view->priv->search_entry,
+                                       popup_menu_id);
+
+        }
     }
 
   return FALSE;
@@ -11162,8 +11165,11 @@ gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_view)
 				 GTK_WINDOW (tree_view->priv->search_window));
 
   gtk_window_set_type_hint (GTK_WINDOW (tree_view->priv->search_window),
-			    GDK_WINDOW_TYPE_HINT_UTILITY);
+                            GDK_WINDOW_TYPE_HINT_UTILITY);
   gtk_window_set_modal (GTK_WINDOW (tree_view->priv->search_window), TRUE);
+  gtk_window_set_transient_for (GTK_WINDOW (tree_view->priv->search_window),
+                                GTK_WINDOW (toplevel));
+
   g_signal_connect (tree_view->priv->search_window, "delete-event",
 		    G_CALLBACK (gtk_tree_view_search_delete_event),
 		    tree_view);
@@ -11200,6 +11206,10 @@ gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_view)
   g_signal_connect (_gtk_entry_get_im_context (GTK_ENTRY (tree_view->priv->search_entry)),
 		    "preedit-changed",
 		    G_CALLBACK (gtk_tree_view_search_preedit_changed),
+		    tree_view);
+  g_signal_connect (_gtk_entry_get_im_context (GTK_ENTRY (tree_view->priv->search_entry)),
+		    "commit",
+		    G_CALLBACK (gtk_tree_view_search_commit),
 		    tree_view);
 
   gtk_container_add (GTK_CONTAINER (vbox),
@@ -11266,6 +11276,10 @@ gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view,
 
   /* done, show it */
   tree_view->priv->search_position_func (tree_view, tree_view->priv->search_window, tree_view->priv->search_position_user_data);
+
+  /* Grab focus without selecting all the text. */
+  gtk_entry_grab_focus_without_selecting (GTK_ENTRY (tree_view->priv->search_entry));
+
   gtk_widget_show (tree_view->priv->search_window);
   if (tree_view->priv->search_entry_changed_id == 0)
     {
@@ -11280,9 +11294,6 @@ gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view,
 		   (GSourceFunc) gtk_tree_view_search_entry_flush_timeout,
 		   tree_view);
   g_source_set_name_by_id (tree_view->priv->typeselect_flush_timeout, "[gtk+] gtk_tree_view_search_entry_flush_timeout");
-
-  /* Grab focus without selecting all the text. */
-  _gtk_entry_grab_focus (GTK_ENTRY (tree_view->priv->search_entry), FALSE);
 
   /* send focus-in event */
   send_focus_change (tree_view->priv->search_entry, device, TRUE);
