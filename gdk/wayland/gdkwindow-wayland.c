@@ -1231,6 +1231,11 @@ should_map_as_subsurface (GdkWindow *window)
     case GDK_WINDOW_TYPE_HINT_TOOLTIP:
       return TRUE;
 
+    case GDK_WINDOW_TYPE_HINT_UTILITY:
+      if (gtk_window_get_window_type (window) == GTK_WINDOW_POPUP)
+        return TRUE;
+      break;
+
     default:
       break;
     }
@@ -1247,9 +1252,13 @@ should_map_as_popup (GdkWindow *window)
     {
     case GDK_WINDOW_TYPE_HINT_POPUP_MENU:
     case GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU:
-    case GDK_WINDOW_TYPE_HINT_UTILITY:
     case GDK_WINDOW_TYPE_HINT_COMBO:
       return TRUE;
+
+    case GDK_WINDOW_TYPE_HINT_UTILITY:
+      if (gtk_window_get_window_type (window) != GTK_WINDOW_POPUP)
+        return TRUE;
+      break;
 
     default:
       break;
