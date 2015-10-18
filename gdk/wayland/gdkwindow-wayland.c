@@ -1258,6 +1258,27 @@ should_map_as_popup (GdkWindow *window)
   return FALSE;
 }
 
+/* Get the window that can be used as a parent for a popup, i.e. a xdg_surface
+ * or xdg_popup. If the window is not, traverse up the transiency parents until
+ * we find one.
+ */
+static GdkWindow *
+get_popup_parent (GdkWindow *window)
+{
+  do
+    {
+      GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+      if (impl->xdg_popup || impl->xdg_surface)
+        return window;
+
+      window = impl->transient_for;
+    }
+  while (window);
+
+  return NULL;
+}
+
 static void
 gdk_wayland_window_map (GdkWindow *window)
 {
@@ -1322,6 +1343,8 @@ gdk_wayland_window_map (GdkWindow *window)
 
           if (transient_for)
             transient_for = gdk_window_get_toplevel (transient_for);
+          if (transient_for)
+            transient_for = get_popup_parent (transient_for);
 
           /* If the position was not explicitly set, start the popup at the
            * position of the device that holds the grab.
@@ -1332,7 +1355,7 @@ gdk_wayland_window_map (GdkWindow *window)
                                             &window->x, &window->y, NULL);
         }
       else
-        transient_for = impl->transient_for;
+        transient_for = get_popup_parent (impl->transient_for);
 
       if (!transient_for)
         {
