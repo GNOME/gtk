@@ -1226,8 +1226,14 @@ should_map_as_subsurface (GdkWindow *window)
   if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_SUBSURFACE)
     return TRUE;
 
-  if (impl->hint == GDK_WINDOW_TYPE_HINT_TOOLTIP)
-    return TRUE;
+  switch (impl->hint)
+    {
+    case GDK_WINDOW_TYPE_HINT_TOOLTIP:
+      return TRUE;
+
+    default:
+      break;
+    }
 
   return FALSE;
 }
@@ -1237,11 +1243,17 @@ should_map_as_popup (GdkWindow *window)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
-  if (impl->hint == GDK_WINDOW_TYPE_HINT_POPUP_MENU ||
-      impl->hint == GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU ||
-      impl->hint == GDK_WINDOW_TYPE_HINT_UTILITY ||
-      impl->hint == GDK_WINDOW_TYPE_HINT_COMBO)
-    return TRUE;
+  switch (impl->hint)
+    {
+    case GDK_WINDOW_TYPE_HINT_POPUP_MENU:
+    case GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU:
+    case GDK_WINDOW_TYPE_HINT_UTILITY:
+    case GDK_WINDOW_TYPE_HINT_COMBO:
+      return TRUE;
+
+    default:
+      break;
+    }
 
   return FALSE;
 }
