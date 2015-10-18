@@ -2108,6 +2108,16 @@ gtk_tree_view_free_rbtree (GtkTreeView *tree_view)
 }
 
 static void
+gtk_tree_view_destroy_search_window (GtkTreeView *tree_view)
+{
+  gtk_widget_destroy (tree_view->priv->search_window);
+
+  tree_view->priv->search_window = NULL;
+  tree_view->priv->search_entry = NULL;
+  tree_view->priv->search_entry_changed_id = 0;
+}
+
+static void
 gtk_tree_view_destroy (GtkWidget *widget)
 {
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
@@ -2181,9 +2191,7 @@ gtk_tree_view_destroy (GtkWidget *widget)
   /* destroy interactive search dialog */
   if (tree_view->priv->search_window)
     {
-      gtk_widget_destroy (tree_view->priv->search_window);
-      tree_view->priv->search_window = NULL;
-      tree_view->priv->search_entry = NULL;
+      gtk_tree_view_destroy_search_window (tree_view);
       if (tree_view->priv->typeselect_flush_timeout)
 	{
 	  g_source_remove (tree_view->priv->typeselect_flush_timeout);
@@ -15011,10 +15019,7 @@ gtk_tree_view_set_search_entry (GtkTreeView *tree_view,
     }
   else if (tree_view->priv->search_window)
     {
-      gtk_widget_destroy (tree_view->priv->search_window);
-
-      tree_view->priv->search_window = NULL;
-      tree_view->priv->search_entry_changed_id = 0;
+      gtk_tree_view_destroy_search_window (tree_view);
     }
 
   if (entry)
