@@ -1170,7 +1170,7 @@ gtk_dialog_set_response_sensitive (GtkDialog *dialog,
       if (rd && rd->response_id == response_id)
         gtk_widget_set_sensitive (widget, setting);
 
-      tmp_list = g_list_next (tmp_list);
+      tmp_list = tmp_list->next;
     }
 
   g_list_free (children);
@@ -1205,7 +1205,7 @@ gtk_dialog_set_default_response (GtkDialog *dialog,
       if (rd && rd->response_id == response_id)
 	gtk_widget_grab_default (widget);
 
-      tmp_list = g_list_next (tmp_list);
+      tmp_list = tmp_list->next;
     }
 
   g_list_free (children);
@@ -1451,7 +1451,7 @@ gtk_dialog_get_widget_for_response (GtkDialog *dialog,
           return widget;
         }
 
-      tmp_list = g_list_next (tmp_list);
+      tmp_list = tmp_list->next;
     }
 
   g_list_free (children);
