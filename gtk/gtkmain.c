@@ -2553,7 +2553,7 @@ propagate_event_down (GtkWidget *widget,
         break;
     }
 
-  for (l = widgets; l && !handled_event; l = g_list_next (l))
+  for (l = widgets; l && !handled_event; l = l->next)
     {
       widget = (GtkWidget *)l->data;
 
