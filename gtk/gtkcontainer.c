@@ -3383,7 +3383,7 @@ gtk_container_set_focus_chain (GtkContainer *container,
                         G_CALLBACK (chain_widget_destroyed),
                         container);
 
-      tmp_list = g_list_next (tmp_list);
+      tmp_list = tmp_list->next;
     }
 
   chain = g_list_reverse (chain);
@@ -3464,7 +3464,7 @@ gtk_container_unset_focus_chain (GtkContainer  *container)
                                                 chain_widget_destroyed,
                                                 container);
 
-          tmp_list = g_list_next (tmp_list);
+          tmp_list = tmp_list->next;
         }
 
       g_list_free (chain);
