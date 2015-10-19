@@ -10399,7 +10399,7 @@ gtk_widget_create_pango_context (GtkWidget *widget)
   if (!screen)
     {
       GTK_NOTE (MULTIHEAD,
-		g_warning ("gtk_widget_create_pango_context ()) called without screen"));
+                g_warning ("gtk_widget_create_pango_context () called without screen"));
 
       screen = gdk_screen_get_default ();
     }
