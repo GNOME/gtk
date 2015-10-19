@@ -1445,14 +1445,6 @@ gtk_builder_get_object (GtkBuilder  *builder,
   return g_hash_table_lookup (builder->priv->objects, name);
 }
 
-static void
-object_add_to_list (gchar    *object_id,
-                    GObject  *object,
-                    GSList  **list)
-{
-  *list = g_slist_prepend (*list, object);
-}
-
 /**
  * gtk_builder_get_objects:
  * @builder: a #GtkBuilder
@@ -1471,10 +1463,14 @@ GSList *
 gtk_builder_get_objects (GtkBuilder *builder)
 {
   GSList *objects = NULL;
+  GObject *object;
+  GHashTableIter iter;
 
   g_return_val_if_fail (GTK_IS_BUILDER (builder), NULL);
 
-  g_hash_table_foreach (builder->priv->objects, (GHFunc)object_add_to_list, &objects);
+  g_hash_table_iter_init (&iter, builder->priv->objects);
+  while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&object))
+    objects = g_slist_prepend (objects, object);
 
   return g_slist_reverse (objects);
 }
