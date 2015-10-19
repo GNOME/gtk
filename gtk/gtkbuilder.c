@@ -597,14 +597,14 @@ _gtk_builder_add_object (GtkBuilder  *builder,
   g_hash_table_insert (builder->priv->objects, g_strdup (id), g_object_ref (object));
 }
 
-static inline void
+static void
 gtk_builder_take_bindings (GtkBuilder *builder,
                            GObject    *target,
                            GSList     *bindings)
 {
   GSList *l;
 
-  for (l = bindings; l; l = g_slist_next (l))
+  for (l = bindings; l; l = l->next)
     {
       BindingInfo *info = l->data;
       info->target = target;
@@ -926,7 +926,7 @@ gtk_builder_create_bindings (GtkBuilder *builder)
 {
   GSList *l;
 
-  for (l = builder->priv->bindings; l; l = g_slist_next (l))
+  for (l = builder->priv->bindings; l; l = l->next)
     {
       BindingInfo *info = l->data;
       GObject *source;
