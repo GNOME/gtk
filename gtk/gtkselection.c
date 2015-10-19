@@ -628,9 +628,7 @@ gtk_target_table_new_from_list (GtkTargetList *list,
   *n_targets = g_list_length (list->list);
   targets = g_new0 (GtkTargetEntry, *n_targets);
 
-  for (i = 0, tmp_list = list->list;
-       i < *n_targets;
-       i++, tmp_list = g_list_next (tmp_list))
+  for (tmp_list = list->list, i = 0; tmp_list; tmp_list = tmp_list->next, i++)
     {
       GtkTargetPair *pair = tmp_list->data;
 
