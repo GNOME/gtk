@@ -279,7 +279,7 @@ parse_object (GMarkupParseContext  *context,
                        "Invalid object type '%s'", object_class);
           _gtk_builder_prefix_error (data->builder, context, error);
           return;
-        }
+       }
     }
   else if (type_func)
     {
@@ -297,8 +297,7 @@ parse_object (GMarkupParseContext  *context,
           return;
         }
     }
-
-  if (object_type == G_TYPE_INVALID)
+  else
     {
       error_missing_attribute (data, element_name, "class", error);
       return;
@@ -332,15 +331,13 @@ parse_object (GMarkupParseContext  *context,
     }
 
   object_info = g_slice_new0 (ObjectInfo);
+  object_info->tag.name = element_name;
   object_info->type = object_type;
   object_info->oclass = g_type_class_ref (object_type);
   object_info->id = (internal_id) ? internal_id : g_strdup (object_id);
   object_info->constructor = g_strdup (constructor);
+  object_info->parent = (CommonInfo*)child_info;
   state_push (data, object_info);
-  object_info->tag.name = element_name;
-
-  if (child_info)
-    object_info->parent = (CommonInfo*)child_info;
 
   line = GPOINTER_TO_INT (g_hash_table_lookup (data->object_ids, object_id));
   if (line != 0)
@@ -439,12 +436,12 @@ parse_template (GMarkupParseContext  *context,
   ++data->cur_object_level;
 
   object_info = g_slice_new0 (ObjectInfo);
+  object_info->tag.name = element_name;
   object_info->type = parsed_type;
   object_info->oclass = g_type_class_ref (parsed_type);
   object_info->id = g_strdup (object_class);
   object_info->object = gtk_builder_get_object (data->builder, object_class);
   state_push (data, object_info);
-  object_info->tag.name = element_name;
 
   line = GPOINTER_TO_INT (g_hash_table_lookup (data->object_ids, object_class));
   if (line != 0)
@@ -515,11 +512,11 @@ parse_child (ParserData   *data,
     }
 
   child_info = g_slice_new0 (ChildInfo);
-  state_push (data, child_info);
   child_info->tag.name = element_name;
   child_info->type = g_strdup (type);
   child_info->internal_child = g_strdup (internal_child);
   child_info->parent = (CommonInfo*)object_info;
+  state_push (data, child_info);
 
   object_info->object = builder_construct (data, object_info, error);
 }
@@ -596,15 +593,20 @@ parse_property (ParserData   *data,
         }
     }
 
+  g_markup_parse_context_get_position (data->ctx, &line, &col);
+
   if (bind_source && bind_property)
     {
-      BindingInfo *binfo = g_slice_new0 (BindingInfo);
+      BindingInfo *binfo;
 
+      binfo = g_slice_new (BindingInfo);
+      binfo->target = NULL;
       binfo->target_pspec = pspec;
       binfo->source = g_strdup (bind_source);
       binfo->source_property = g_strdup (bind_property);
       binfo->flags = bind_flags;
-      g_markup_parse_context_get_position (data->ctx, &binfo->line, &binfo->col);
+      binfo->line = line;
+      binfo->col = col;
 
       object_info->bindings = g_slist_prepend (object_info->bindings, binfo);
     }
@@ -615,8 +617,6 @@ parse_property (ParserData   *data,
                                error);
       return;
     }
-
-  g_markup_parse_context_get_position (data->ctx, &line, &col);
 
   info = g_slice_new (PropertyInfo);
   info->tag.name = element_name;
