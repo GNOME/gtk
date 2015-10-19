@@ -333,6 +333,7 @@ parse_object (GMarkupParseContext  *context,
 
   object_info = g_slice_new0 (ObjectInfo);
   object_info->type = object_type;
+  object_info->oclass = g_type_class_ref (object_type);
   object_info->id = (internal_id) ? internal_id : g_strdup (object_id);
   object_info->constructor = g_strdup (constructor);
   state_push (data, object_info);
@@ -439,6 +440,7 @@ parse_template (GMarkupParseContext  *context,
 
   object_info = g_slice_new0 (ObjectInfo);
   object_info->type = parsed_type;
+  object_info->oclass = g_type_class_ref (parsed_type);
   object_info->id = g_strdup (object_class);
   object_info->object = gtk_builder_get_object (data->builder, object_class);
   state_push (data, object_info);
@@ -465,6 +467,7 @@ static void
 free_object_info (ObjectInfo *info)
 {
   /* Do not free the signal items, which GtkBuilder takes ownership of */
+  g_type_class_unref (info->oclass);
   g_slist_free (info->signals);
   g_slist_free_full (info->properties, (GDestroyNotify)free_property_info);
   g_free (info->constructor);
@@ -546,8 +549,7 @@ parse_property (ParserData   *data,
   gboolean translatable = FALSE;
   ObjectInfo *object_info;
   GParamSpec *pspec = NULL;
-  GObjectClass *oclass;
-  gchar *canonical;
+  gint line, col;
 
   object_info = state_peek_info (data, ObjectInfo);
   if (!object_info ||
@@ -572,13 +574,7 @@ parse_property (ParserData   *data,
       return;
     }
 
-  oclass = g_type_class_ref (object_info->type);
-  canonical = g_strdelimit (g_strdup (name), "_", '-');
-
-  g_assert (oclass != NULL);
-  pspec = g_object_class_find_property (oclass, canonical);
-  g_type_class_unref (oclass);
-  g_free (canonical);
+  pspec = g_object_class_find_property (object_info->oclass, name);
 
   if (!pspec)
     {
@@ -620,16 +616,19 @@ parse_property (ParserData   *data,
       return;
     }
 
-  info = g_slice_new0 (PropertyInfo);
+  g_markup_parse_context_get_position (data->ctx, &line, &col);
+
+  info = g_slice_new (PropertyInfo);
+  info->tag.name = element_name;
   info->pspec = pspec;
+  info->text = g_string_new ("");
   info->translatable = translatable;
   info->bound = (bind_source && bind_property);
   info->context = g_strdup (context);
-  info->text = g_string_new ("");
-  state_push (data, info);
+  info->line = line;
+  info->col = col;
 
-  info->tag.name = element_name;
-  g_markup_parse_context_get_position (data->ctx, &info->line, &info->col);
+  state_push (data, info);
 }
 
 static void
@@ -1147,11 +1146,11 @@ end_element (GMarkupParseContext  *context,
 /* Called for character data */
 /* text is not nul-terminated */
 static void
-text (GMarkupParseContext *context,
-      const gchar         *text,
-      gsize                text_len,
-      gpointer             user_data,
-      GError             **error)
+text (GMarkupParseContext  *context,
+      const gchar          *text,
+      gsize                 text_len,
+      gpointer              user_data,
+      GError              **error)
 {
   ParserData *data = (ParserData*)user_data;
   CommonInfo *info;

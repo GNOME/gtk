@@ -32,6 +32,7 @@ typedef struct {
 typedef struct {
   TagInfo tag;
   GType type;
+  GObjectClass *oclass;
   gchar *id;
   gchar *constructor;
   GSList *properties;
