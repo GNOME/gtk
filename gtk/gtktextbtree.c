@@ -1539,7 +1539,7 @@ _gtk_text_btree_find_line_top (GtkTextBTree *tree,
                                        ran out of nodes */
         }
 
-      iter = g_slist_next (iter);
+      iter = iter->next;
     }
 
   g_assert_not_reached (); /* we return when we find the target line */
@@ -4601,7 +4601,7 @@ _gtk_text_line_previous_could_contain_tag (GtkTextLine  *line,
                   goto found;
                 }
 
-              tmp = g_slist_next (tmp);
+              tmp = tmp->next;
             }
 
           g_slist_free (child_nodes);
@@ -4676,7 +4676,7 @@ _gtk_text_line_previous_could_contain_tag (GtkTextLine  *line,
               break;
             }
 
-          iter = g_slist_next (iter);
+          iter = iter->next;
         }
 
       g_slist_free (child_nodes);
@@ -6015,7 +6015,7 @@ gtk_text_btree_get_existing_tag_info (GtkTextBTree *tree,
       if (info->tag == tag)
         return info;
 
-      list = g_slist_next (list);
+      list = list->next;
     }
 
   return NULL;
@@ -6091,7 +6091,7 @@ gtk_text_btree_remove_tag_info (GtkTextBTree *tree,
         }
 
       prev = list;
-      list = g_slist_next (list);
+      list = list->next;
     }
 }
 
@@ -7146,7 +7146,7 @@ _gtk_text_btree_spew (GtkTextBTree *tree)
         printf ("  tag '%s': root at %p, toggle count %d\n",
                 info->tag->priv->name, info->tag_root, info->toggle_count);
 
-        list = g_slist_next (list);
+        list = list->next;
       }
 
     if (tree->tag_infos == NULL)
