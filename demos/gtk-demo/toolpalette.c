@@ -645,7 +645,7 @@ load_icon_items (GtkToolPalette *palette)
   icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (palette)));
 
   contexts = gtk_icon_theme_list_contexts (icon_theme);
-  for (l = contexts; l; l = g_list_next (l))
+  for (l = contexts; l; l = l->next)
     {
       gchar *context = l->data;
       GList *icon_names;
@@ -663,7 +663,7 @@ load_icon_items (GtkToolPalette *palette)
       icon_names = gtk_icon_theme_list_icons (icon_theme, context);
       icon_names = g_list_sort (icon_names, (GCompareFunc) strcmp);
 
-      for (ll = icon_names; ll; ll = g_list_next (ll))
+      for (ll = icon_names; ll; ll = ll->next)
         {
           GtkToolItem *item;
           gchar *id = ll->data;
