@@ -9923,7 +9923,7 @@ gtk_tree_view_set_column_drag_info (GtkTreeView       *tree_view,
   while (tmp_list)
     {
       cur_column = GTK_TREE_VIEW_COLUMN (tmp_list->data);
-      tmp_list = rtl?g_list_previous (tmp_list):g_list_next (tmp_list);
+      tmp_list = rtl ? tmp_list->prev : tmp_list->next;
 
       if (gtk_tree_view_column_get_visible (cur_column) == FALSE)
 	continue;
