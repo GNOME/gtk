@@ -826,7 +826,7 @@ gdk_win32_window_destroy (GdkWindow *window,
       GdkWindowImplWin32 *child_impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW (child)->impl);
 
       child_impl->transient_owner = NULL;
-      tmp = g_slist_next (tmp);
+      tmp = tmp->next;
     }
   g_slist_free (window_impl->transient_children);
   window_impl->transient_children = NULL;
@@ -2299,7 +2299,7 @@ gdk_win32_window_set_icon_list (GdkWindow *window,
 	  small_diff = diff;
 	}
 
-      pixbufs = g_list_next (pixbufs);
+      pixbufs = pixbufs->next;
     }
 
   /* Create the icons */
