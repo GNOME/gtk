@@ -129,6 +129,22 @@ on_alpha_window_draw (GtkWidget *widget,
   cairo_pattern_t *pattern;
   int radius, width, height;
 
+  /* Get the child allocation to avoid painting over the borders */
+  GtkWidget *child = gtk_bin_get_child (GTK_BIN (widget));
+  GtkAllocation child_allocation;
+  int border_width = gtk_container_get_border_width (GTK_CONTAINER (child));
+
+  gtk_widget_get_allocation (child, &child_allocation);
+  child_allocation.x -= border_width;
+  child_allocation.y -= border_width;
+  child_allocation.width += 2 * border_width;
+  child_allocation.height += 2 * border_width;
+
+  cairo_translate (cr, child_allocation.x, child_allocation.y);
+
+  cairo_rectangle (cr, 0, 0, child_allocation.width, child_allocation.height);
+  cairo_clip (cr);
+
   width = gtk_widget_get_allocated_width (widget);
   height = gtk_widget_get_allocated_height (widget);
   radius = MIN (width, height) / 2;
