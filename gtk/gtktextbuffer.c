@@ -1329,8 +1329,8 @@ insert_range_not_inside_self (GtkTextBuffer     *buffer,
                                      tmp_list->data,
                                      &start_iter,
                                      iter);
-          
-          tmp_list = g_slist_next (tmp_list);
+
+          tmp_list = tmp_list->next;
         }
       g_slist_free (tags);
 
@@ -2798,7 +2798,7 @@ gtk_text_buffer_remove_all_tags (GtkTextBuffer     *buffer,
         {
           tags = g_slist_prepend (tags, tmp_list2->data);
 
-          tmp_list2 = g_slist_next (tmp_list2);
+          tmp_list2 = tmp_list2->next;
         }
 
       g_slist_free (toggled);
