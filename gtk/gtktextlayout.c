@@ -1743,7 +1743,7 @@ add_child_attrs (GtkTextLayout      *layout,
           break;
         }
       
-      tmp_list = g_slist_next (tmp_list);
+      tmp_list = tmp_list->next;
     }
 
   if (tmp_list == NULL)
