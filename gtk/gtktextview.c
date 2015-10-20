@@ -1843,7 +1843,7 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
               /* vc may now be invalid! */
             }
 
-          tmp_list = g_slist_next (tmp_list);
+          tmp_list = tmp_list->next;
         }
 
       g_slist_free (copy);
@@ -3959,7 +3959,7 @@ gtk_text_view_size_request (GtkWidget      *widget,
                                          &child_req, NULL);
         }
 
-      tmp_list = g_slist_next (tmp_list);
+      tmp_list = tmp_list->next;
     }
 
   /* Cache the requested size of the text view so we can 
@@ -4130,7 +4130,7 @@ gtk_text_view_allocate_children (GtkTextView *text_view)
           gtk_widget_size_allocate (child->widget, &allocation);          
         }
 
-      tmp_list = g_slist_next (tmp_list);
+      tmp_list = tmp_list->next;
     }
 }
 
@@ -4557,7 +4557,7 @@ changed_handler (GtkTextLayout     *layout,
           if (child->anchor)
             gtk_text_view_update_child_allocation (text_view, child);
 
-          tmp_list = g_slist_next (tmp_list);
+          tmp_list = tmp_list->next;
         }
     }
 
@@ -4962,7 +4962,7 @@ emit_event_on_tags (GtkWidget   *widget,
           break;
         }
 
-      tmp = g_slist_next (tmp);
+      tmp = tmp->next;
     }
 
   g_slist_free (tags);
@@ -5996,7 +5996,7 @@ gtk_text_view_remove (GtkContainer *container,
       if (vc->widget == child)
         break;
 
-      iter = g_slist_next (iter);
+      iter = iter->next;
     }
 
   g_assert (iter != NULL); /* be sure we had the child in the list */
@@ -6032,7 +6032,7 @@ gtk_text_view_forall (GtkContainer *container,
 
       (* callback) (vc->widget, callback_data);
 
-      iter = g_slist_next (iter);
+      iter = iter->next;
     }
 
   g_slist_free (copy);
@@ -7922,7 +7922,7 @@ gtk_text_view_ensure_layout (GtkTextView *text_view)
               /* vc may now be invalid! */
             }
 
-          tmp_list = g_slist_next (tmp_list);
+          tmp_list = tmp_list->next;
         }
     }
 }
@@ -7982,7 +7982,7 @@ gtk_text_view_destroy_layout (GtkTextView *text_view)
               /* vc may now be invalid! */
             }
 
-          tmp_list = g_slist_next (tmp_list);
+          tmp_list = tmp_list->next;
         }
 
       gtk_text_view_stop_cursor_blink (text_view);
@@ -8449,7 +8449,7 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
 
           atoms = gtk_text_buffer_get_deserialize_formats (buffer, &n_atoms);
 
-          for (list = gdk_drag_context_list_targets (context); list; list = g_list_next (list))
+          for (list = gdk_drag_context_list_targets (context); list; list = list->next)
             {
               gint i;
 
@@ -8822,7 +8822,7 @@ gtk_text_view_value_changed (GtkAdjustment *adjustment,
           if (child_dx != 0 || child_dy != 0)
             adjust_allocation (child->widget, child_dx, child_dy);
 
-          tmp_list = g_slist_next (tmp_list);
+          tmp_list = tmp_list->next;
         }
     }
 
@@ -9081,7 +9081,7 @@ gtk_text_view_target_list_notify (GtkTextBuffer    *buffer,
     {
       GtkTargetPair *pair = list->data;
 
-      list = g_list_next (list); /* get next element before removing */
+      list = list->next; /* get next element before removing */
 
       if (pair->info >= GTK_TEXT_BUFFER_TARGET_INFO_TEXT &&
           pair->info <= GTK_TEXT_BUFFER_TARGET_INFO_BUFFER_CONTENTS)
@@ -9090,7 +9090,7 @@ gtk_text_view_target_list_notify (GtkTextBuffer    *buffer,
         }
     }
 
-  for (list = buffer_list->list; list; list = g_list_next (list))
+  for (list = buffer_list->list; list; list = list->next)
     {
       GtkTargetPair *pair = list->data;
 
