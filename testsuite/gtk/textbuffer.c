@@ -111,7 +111,7 @@ count_toggles_at_iter (GtkTextIter *iter,
       else if (of_tag == tmp->data)
         ++count;
       
-      tmp = g_slist_next (tmp);
+      tmp = tmp->next;
     }
   
   g_slist_free (tags);
@@ -480,7 +480,7 @@ run_tests (GtkTextBuffer *buffer)
 
               g_hash_table_insert (tag_states, tag, GINT_TO_POINTER (TRUE));
           
-              tmp = g_slist_next (tmp);
+              tmp = tmp->next;
             }
 
           g_slist_free (tags);
@@ -503,7 +503,7 @@ run_tests (GtkTextBuffer *buffer)
 
               g_hash_table_remove (tag_states, tag);
           
-              tmp = g_slist_next (tmp);
+              tmp = tmp->next;
             }
 
           g_slist_free (tags);
@@ -556,7 +556,7 @@ run_tests (GtkTextBuffer *buffer)
           
               g_hash_table_insert (tag_states, tag, GINT_TO_POINTER (TRUE));
           
-              tmp = g_slist_next (tmp);
+              tmp = tmp->next;
             }
 
           g_slist_free (tags);
@@ -579,7 +579,7 @@ run_tests (GtkTextBuffer *buffer)
 
               g_hash_table_remove (tag_states, tag);
           
-              tmp = g_slist_next (tmp);
+              tmp = tmp->next;
             }
 
           g_slist_free (tags);
