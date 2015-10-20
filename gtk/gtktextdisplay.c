@@ -970,7 +970,7 @@ gtk_text_layout_draw (GtkTextLayout *layout,
       cairo_translate (cr, 0, line_display->height);
       gtk_text_layout_free_line_display (layout, line_display);
       
-      tmp_list = g_slist_next (tmp_list);
+      tmp_list = tmp_list->next;
     }
 
   gtk_text_layout_wrap_loop_end (layout);
