@@ -457,7 +457,7 @@ gtk_icon_factory_lookup_default (const gchar *stock_id)
       if (icon_set)
         return icon_set;
 
-      tmp_list = g_slist_next (tmp_list);
+      tmp_list = tmp_list->next;
     }
 
   default_icons = _gtk_icon_factory_get_default_icons ();
@@ -1125,7 +1125,7 @@ gtk_icon_set_unref (GtkIconSet *icon_set)
         {
           gtk_icon_source_free (tmp_list->data);
 
-          tmp_list = g_slist_next (tmp_list);
+          tmp_list = tmp_list->next;
         }
       g_slist_free (icon_set->sources);
 
@@ -1163,7 +1163,7 @@ gtk_icon_set_copy (GtkIconSet *icon_set)
       copy->sources = g_slist_prepend (copy->sources,
                                        gtk_icon_source_copy (tmp_list->data));
 
-      tmp_list = g_slist_next (tmp_list);
+      tmp_list = tmp_list->next;
     }
 
   copy->sources = g_slist_reverse (copy->sources);
@@ -1233,7 +1233,7 @@ find_best_matching_source (GtkIconSet       *icon_set,
 	    }
 	}
 
-      tmp_list = g_slist_next (tmp_list);
+      tmp_list = tmp_list->next;
     }
 
   return source;
@@ -1798,7 +1798,7 @@ gtk_icon_set_get_sizes (GtkIconSet   *icon_set,
       else
         specifics = g_slist_prepend (specifics, GINT_TO_POINTER (source->size));
 
-      tmp_list = g_slist_next (tmp_list);
+      tmp_list = tmp_list->next;
     }
 
   if (all_sizes)
@@ -1832,7 +1832,7 @@ gtk_icon_set_get_sizes (GtkIconSet   *icon_set,
           (*sizes)[i] = GPOINTER_TO_INT (tmp_list->data);
 
           ++i;
-          tmp_list = g_slist_next (tmp_list);
+          tmp_list = tmp_list->next;
         }
     }
 
@@ -2504,7 +2504,7 @@ find_in_cache (GtkIconSet       *icon_set,
         }
 
       prev = tmp_list;
-      tmp_list = g_slist_next (tmp_list);
+      tmp_list = tmp_list->next;
     }
 
   return NULL;
@@ -2596,7 +2596,7 @@ clear_cache (GtkIconSet *icon_set,
 
       cached_icon_free (icon);
 
-      tmp_list = g_slist_next (tmp_list);
+      tmp_list = tmp_list->next;
     }
 
   g_slist_free (cache);
@@ -2628,7 +2628,7 @@ copy_cache (GtkIconSet *icon_set,
 
       copy = g_slist_prepend (copy, icon_copy);
 
-      tmp_list = g_slist_next (tmp_list);
+      tmp_list = tmp_list->next;
     }
 
   return g_slist_reverse (copy);
@@ -2734,7 +2734,7 @@ _gtk_icon_factory_list_ids (void)
 
       ids = g_list_concat (ids, these_ids);
 
-      tmp_list = g_slist_next (tmp_list);
+      tmp_list = tmp_list->next;
     }
 
   return ids;
