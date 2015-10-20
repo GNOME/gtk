@@ -474,7 +474,7 @@ gdk_x11_device_core_window_at_position (GdkDevice       *device,
       pointer_window = None;
       screen = gdk_display_get_screen (display, 0);
       toplevels = gdk_screen_get_toplevel_windows (screen);
-      for (list = toplevels; list != NULL; list = g_list_next (list))
+      for (list = toplevels; list != NULL; list = list->next)
         {
           window = GDK_WINDOW (list->data);
           impl = GDK_WINDOW_IMPL_X11 (window->impl);

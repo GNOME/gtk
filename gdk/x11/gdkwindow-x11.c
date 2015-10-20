@@ -3864,7 +3864,7 @@ gdk_x11_window_set_icon_list (GdkWindow *window,
       n++;
       size += 2 + width * height;
       
-      l = g_list_next (l);
+      l = l->next;
     }
 
   data = g_malloc (size * sizeof (gulong));
@@ -3903,7 +3903,7 @@ gdk_x11_window_set_icon_list (GdkWindow *window,
 	    }
 	}
 
-      l = g_list_next (l);
+      l = l->next;
       n--;
     }
 

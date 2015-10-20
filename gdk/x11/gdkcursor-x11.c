@@ -155,13 +155,13 @@ _gdk_x11_cursor_display_finalize (GdkDisplay *display)
           /* Remove this item from the list */
           *(itemp) = item->next;
           olditem = item;
-          item = g_slist_next (item);
+          item = item->next;
           g_slist_free_1 (olditem);
-        } 
-      else 
+        }
+      else
         {
           itemp = &(item->next);
-          item = g_slist_next (item);
+          item = item->next;
         }
     }
 }
