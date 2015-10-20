@@ -2474,23 +2474,27 @@ _gtk_selection_request (GtkWidget *widget,
 	  info->conversions[i].data = data;
 	  info->num_incrs++;
 	  
+	  gdk_error_trap_push ();
 	  gdk_property_change (info->requestor, 
 			       info->conversions[i].property,
 			       gtk_selection_atoms[INCR],
 			       32,
 			       GDK_PROP_MODE_REPLACE,
 			       (guchar *)&items, 1);
+	  gdk_error_trap_pop_ignored ();
 	}
       else
 	{
 	  info->conversions[i].offset = -1;
 	  
+	  gdk_error_trap_push ();
 	  gdk_property_change (info->requestor, 
 			       info->conversions[i].property,
 			       data.type,
 			       data.format,
 			       GDK_PROP_MODE_REPLACE,
 			       data.data, items);
+	  gdk_error_trap_pop_ignored ();
 	  
 	  g_free (data.data);
 	}
@@ -2510,9 +2514,11 @@ _gtk_selection_request (GtkWidget *widget,
       g_message ("Starting INCR...");
 #endif
       
+      gdk_error_trap_push ();
       gdk_window_set_events (info->requestor,
 			     gdk_window_get_events (info->requestor) |
 			     GDK_PROPERTY_CHANGE_MASK);
+      gdk_error_trap_pop_ignored ();
       current_incrs = g_list_append (current_incrs, info);
       id = gdk_threads_add_timeout (1000, (GSourceFunc) gtk_selection_incr_timeout, info);
       g_source_set_name_by_id (id, "[gtk+] gtk_selection_incr_timeout");
@@ -2528,11 +2534,13 @@ _gtk_selection_request (GtkWidget *widget,
 	  mult_atoms[2*i] = info->conversions[i].target;
 	  mult_atoms[2*i+1] = info->conversions[i].property;
 	}
-      
+
+      gdk_error_trap_push ();
       gdk_property_change (info->requestor, event->property,
 			   gdk_atom_intern_static_string ("ATOM_PAIR"), 32, 
 			   GDK_PROP_MODE_REPLACE,
 			   (guchar *)mult_atoms, 2*info->num_conversions);
+      gdk_error_trap_pop_ignored ();
       g_free (mult_atoms);
     }
 
@@ -2656,12 +2664,14 @@ _gtk_selection_incr_event (GdkWindow	   *window,
 #endif
 
 	  bytes_per_item = gtk_selection_bytes_per_item (info->conversions[i].data.format);
+	  gdk_error_trap_push ();
 	  gdk_property_change (info->requestor, event->atom,
 			       info->conversions[i].data.type,
 			       info->conversions[i].data.format,
 			       GDK_PROP_MODE_REPLACE,
 			       buffer,
 			       num_bytes / bytes_per_item);
+	  gdk_error_trap_pop_ignored ();
 	  
 	  if (info->conversions[i].offset == -2)
 	    {
