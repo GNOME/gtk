@@ -182,7 +182,7 @@ child_segment_delete_func (GtkTextLineSegment *seg,
 
       gtk_widget_destroy (child);
       
-      tmp_list = g_slist_next (tmp_list);
+      tmp_list = tmp_list->next;
     }
 
   /* On removal from the widget's parents (GtkTextView),
@@ -397,7 +397,7 @@ gtk_text_child_anchor_get_widgets (GtkTextChildAnchor *anchor)
     {
       list = g_list_prepend (list, iter->data);
 
-      iter = g_slist_next (iter);
+      iter = iter->next;
     }
 
   /* Order is not relevant, so we don't need to reverse the list
