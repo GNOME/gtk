@@ -7,9 +7,9 @@
 # Iñaki Larrañaga Murgoitio <dooteo@zundan.com>, 2004 - 2015.
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ gtk-3-18\n"
+"Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-14 12:43+0200\n"
+"POT-Creation-Date: 2015-10-20 10:02+0200\n"
 "PO-Revision-Date: 2015-10-11 18:16+0200\n"
 "Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@zundan.com>\n"
 "Language-Team: Basque <Basque <librezale@librezale.org>>\n"
@@ -1208,7 +1208,7 @@ msgstr ""
 
 #: ../gtk/deprecated/gtkcolorseldialog.c:191
 #: ../gtk/deprecated/gtkfontsel.c:1689 ../gtk/gtkfilechooserbutton.c:795
-#: ../gtk/gtkfilechooserwidget.c:1455 ../gtk/gtkfilechooserwidget.c:6320
+#: ../gtk/gtkfilechooserwidget.c:1458 ../gtk/gtkfilechooserwidget.c:6323
 #: ../gtk/gtkmessagedialog.c:942 ../gtk/gtkmessagedialog.c:955
 #: ../gtk/gtkmountoperation.c:543 ../gtk/gtkpagesetupunixdialog.c:196
 #: ../gtk/gtkprintbackend.c:763 ../gtk/gtkprinteroptionwidget.c:545
@@ -2161,8 +2161,8 @@ msgstr "_Kopiatu"
 msgid "_Paste"
 msgstr "_Itsatsi"
 
-#: ../gtk/gtkentry.c:9648 ../gtk/gtkfilechooserwidget.c:1456
-#: ../gtk/gtkfilechooserwidget.c:2254 ../gtk/gtklabel.c:6624
+#: ../gtk/gtkentry.c:9648 ../gtk/gtkfilechooserwidget.c:1459
+#: ../gtk/gtkfilechooserwidget.c:2257 ../gtk/gtklabel.c:6624
 #: ../gtk/gtktextview.c:9394
 msgid "_Delete"
 msgstr "E_zabatu"
@@ -2195,7 +2195,7 @@ msgstr "Blok.maius. aktibatuta dago"
 msgid "Select a File"
 msgstr "Hautatu fitxategia"
 
-#: ../gtk/gtkfilechooserbutton.c:105 ../gtk/gtkplacessidebar.c:930
+#: ../gtk/gtkfilechooserbutton.c:105 ../gtk/gtkplacessidebar.c:926
 msgid "Desktop"
 msgstr "Mahaigaina"
 
@@ -2204,8 +2204,8 @@ msgid "(None)"
 msgstr "(bat ere ez)"
 
 #. Open item is always present
-#: ../gtk/gtkfilechooserbutton.c:796 ../gtk/gtkplacessidebar.c:3430
-#: ../gtk/gtkplacesview.c:1619
+#: ../gtk/gtkfilechooserbutton.c:796 ../gtk/gtkplacessidebar.c:3426
+#: ../gtk/gtkplacesview.c:1596
 msgid "_Open"
 msgstr "_Ireki"
 
@@ -2342,143 +2342,143 @@ msgstr "'.' karaktere batekin hasten diren karpeta-izenak ezkutukoak dira"
 msgid "File names starting with a “.” are hidden"
 msgstr "'.' karaktere batekin hasten diren fitxategi-izenak ezkutukoak dira"
 
-#: ../gtk/gtkfilechooserwidget.c:1451
+#: ../gtk/gtkfilechooserwidget.c:1454
 #, c-format
 msgid "Are you sure you want to permanently delete “%s”?"
 msgstr "Ziur zaude '%s' betirako ezabatzea nahi duzula?"
 
-#: ../gtk/gtkfilechooserwidget.c:1454
+#: ../gtk/gtkfilechooserwidget.c:1457
 msgid "If you delete an item, it will be permanently lost."
 msgstr "Elementu bat ezabatzen baduzu, betirako galduko da."
 
-#: ../gtk/gtkfilechooserwidget.c:1588
+#: ../gtk/gtkfilechooserwidget.c:1591
 msgid "The file could not be renamed"
 msgstr "Ezin izan da fitxategia berrizendatu"
 
-#: ../gtk/gtkfilechooserwidget.c:1900
+#: ../gtk/gtkfilechooserwidget.c:1903
 msgid "Could not select file"
 msgstr "Ezin izan da fitxategia hautatu"
 
-#: ../gtk/gtkfilechooserwidget.c:2249
+#: ../gtk/gtkfilechooserwidget.c:2252
 msgid "_Visit File"
 msgstr "_Bisitatu fitxategia"
 
-#: ../gtk/gtkfilechooserwidget.c:2250
+#: ../gtk/gtkfilechooserwidget.c:2253
 msgid "_Open With File Manager"
 msgstr "_Ireki fitxategi-kudeatzailearekin"
 
-#: ../gtk/gtkfilechooserwidget.c:2251
+#: ../gtk/gtkfilechooserwidget.c:2254
 msgid "_Copy Location"
 msgstr "Kopiatu _helbidea"
 
-#: ../gtk/gtkfilechooserwidget.c:2252
+#: ../gtk/gtkfilechooserwidget.c:2255
 msgid "_Add to Bookmarks"
 msgstr "_Gehitu laster-markei"
 
-#: ../gtk/gtkfilechooserwidget.c:2253 ../gtk/gtkplacessidebar.c:2468
+#: ../gtk/gtkfilechooserwidget.c:2256 ../gtk/gtkplacessidebar.c:2464
 msgid "_Rename"
 msgstr "_Aldatu izena"
 
-#: ../gtk/gtkfilechooserwidget.c:2255
+#: ../gtk/gtkfilechooserwidget.c:2258
 msgid "_Move to Trash"
 msgstr "_Bota zakarrontzira"
 
-#: ../gtk/gtkfilechooserwidget.c:2259
+#: ../gtk/gtkfilechooserwidget.c:2262
 msgid "Show _Hidden Files"
 msgstr "Erakutsi fitxategi _ezkutuak"
 
-#: ../gtk/gtkfilechooserwidget.c:2260
+#: ../gtk/gtkfilechooserwidget.c:2263
 msgid "Show _Size Column"
 msgstr "Erakutsi zutabearen _tamaina"
 
-#: ../gtk/gtkfilechooserwidget.c:2261
+#: ../gtk/gtkfilechooserwidget.c:2264
 msgid "Show _Time"
 msgstr "Erakutsi _ordua"
 
-#: ../gtk/gtkfilechooserwidget.c:2262
+#: ../gtk/gtkfilechooserwidget.c:2265
 msgid "Sort _Folders before Files"
 msgstr "_Ordenatu karpetak fitxategiak baino lehen"
 
-#: ../gtk/gtkfilechooserwidget.c:2574
+#: ../gtk/gtkfilechooserwidget.c:2577
 msgid "Location"
 msgstr "Kokalekua"
 
 #. Label
-#: ../gtk/gtkfilechooserwidget.c:2660
+#: ../gtk/gtkfilechooserwidget.c:2663
 msgid "_Name:"
 msgstr "_Izena:"
 
-#: ../gtk/gtkfilechooserwidget.c:3281
+#: ../gtk/gtkfilechooserwidget.c:3284
 msgid "Searching"
 msgstr "Bilaketa"
 
-#: ../gtk/gtkfilechooserwidget.c:3286 ../gtk/gtkfilechooserwidget.c:3300
+#: ../gtk/gtkfilechooserwidget.c:3289 ../gtk/gtkfilechooserwidget.c:3303
 #, c-format
 msgid "Searching in %s"
 msgstr "Hemen bilatzen: %s"
 
-#: ../gtk/gtkfilechooserwidget.c:3310
+#: ../gtk/gtkfilechooserwidget.c:3313
 msgid "Enter location"
 msgstr "Sartu kokalekua"
 
-#: ../gtk/gtkfilechooserwidget.c:3312
+#: ../gtk/gtkfilechooserwidget.c:3315
 msgid "Enter location or URL"
 msgstr "Sartu kokalekua edo URLa"
 
-#: ../gtk/gtkfilechooserwidget.c:4350 ../gtk/gtkfilechooserwidget.c:7243
+#: ../gtk/gtkfilechooserwidget.c:4353 ../gtk/gtkfilechooserwidget.c:7246
 msgid "Modified"
 msgstr "Aldatua"
 
-#: ../gtk/gtkfilechooserwidget.c:4628
+#: ../gtk/gtkfilechooserwidget.c:4631
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Ezin izan da %s(r)en edukia irakurri"
 
-#: ../gtk/gtkfilechooserwidget.c:4632
+#: ../gtk/gtkfilechooserwidget.c:4635
 msgid "Could not read the contents of the folder"
 msgstr "Ezin izan da karpetaren edukia irakurri"
 
-#: ../gtk/gtkfilechooserwidget.c:4753 ../gtk/gtkfilechooserwidget.c:4799
+#: ../gtk/gtkfilechooserwidget.c:4756 ../gtk/gtkfilechooserwidget.c:4802
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserwidget.c:4755 ../gtk/gtkfilechooserwidget.c:4801
+#: ../gtk/gtkfilechooserwidget.c:4758 ../gtk/gtkfilechooserwidget.c:4804
 msgid "%l:%M %p"
 msgstr "%l:%M %p"
 
-#: ../gtk/gtkfilechooserwidget.c:4759
+#: ../gtk/gtkfilechooserwidget.c:4762
 msgid "Yesterday"
 msgstr "Atzo"
 
-#: ../gtk/gtkfilechooserwidget.c:4767
+#: ../gtk/gtkfilechooserwidget.c:4770
 msgid "%-e %b"
 msgstr "%b %e"
 
-#: ../gtk/gtkfilechooserwidget.c:4771
+#: ../gtk/gtkfilechooserwidget.c:4774
 msgid "%-e %b %Y"
 msgstr "%Y %b %e"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: ../gtk/gtkfilechooserwidget.c:5004 ../gtk/inspector/prop-editor.c:1586
+#: ../gtk/gtkfilechooserwidget.c:5007 ../gtk/inspector/prop-editor.c:1586
 #: ../modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
 msgstr "Ezezaguna"
 
-#: ../gtk/gtkfilechooserwidget.c:5043 ../gtk/gtkplacessidebar.c:915
+#: ../gtk/gtkfilechooserwidget.c:5046 ../gtk/gtkplacessidebar.c:911
 msgid "Home"
 msgstr "karpeta nagusia"
 
-#: ../gtk/gtkfilechooserwidget.c:5536
+#: ../gtk/gtkfilechooserwidget.c:5539
 msgid "Cannot change to folder because it is not local"
 msgstr "Ezin aldatu karpetara, lokala ez delako."
 
-#: ../gtk/gtkfilechooserwidget.c:6313 ../gtk/gtkprintunixdialog.c:656
+#: ../gtk/gtkfilechooserwidget.c:6316 ../gtk/gtkprintunixdialog.c:656
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "'%s' izeneko fitxategia badago lehendik. Ordeztea nahi duzu?"
 
-#: ../gtk/gtkfilechooserwidget.c:6316 ../gtk/gtkprintunixdialog.c:660
+#: ../gtk/gtkfilechooserwidget.c:6319 ../gtk/gtkprintunixdialog.c:660
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
@@ -2486,19 +2486,19 @@ msgstr ""
 "'%s'(e)n badago fitxategia lehendik. Hau ordeztean bere eduki guztia "
 "gainidatziko da."
 
-#: ../gtk/gtkfilechooserwidget.c:6321 ../gtk/gtkprintunixdialog.c:668
+#: ../gtk/gtkfilechooserwidget.c:6324 ../gtk/gtkprintunixdialog.c:668
 msgid "_Replace"
 msgstr "_Ordeztu"
 
-#: ../gtk/gtkfilechooserwidget.c:6531
+#: ../gtk/gtkfilechooserwidget.c:6534
 msgid "You do not have access to the specified folder."
 msgstr "Ez daukazu atzipenik zehaztutako karpetara."
 
-#: ../gtk/gtkfilechooserwidget.c:7154
+#: ../gtk/gtkfilechooserwidget.c:7157
 msgid "Could not start the search process"
 msgstr "Ezin izan da bilaketako prozesua abiarazi"
 
-#: ../gtk/gtkfilechooserwidget.c:7155
+#: ../gtk/gtkfilechooserwidget.c:7158
 msgid ""
 "The program was not able to create a connection to the indexer daemon. "
 "Please make sure it is running."
@@ -2506,11 +2506,11 @@ msgstr ""
 "Programak ezin izan du indexatzaile daemonarekin konexiorik sortu. Ziurtatu "
 "exekutatzen ari dela."
 
-#: ../gtk/gtkfilechooserwidget.c:7167
+#: ../gtk/gtkfilechooserwidget.c:7170
 msgid "Could not send the search request"
 msgstr "Ezin izan da bilaketako eskaera bidali"
 
-#: ../gtk/gtkfilechooserwidget.c:7460
+#: ../gtk/gtkfilechooserwidget.c:7463
 msgid "Accessed"
 msgstr "Atzituta"
 
@@ -2886,244 +2886,244 @@ msgstr "Prestatu orrialdea"
 msgid "File System Root"
 msgstr "Erroko fitxategi-sistema"
 
-#: ../gtk/gtkplacessidebar.c:904
+#: ../gtk/gtkplacessidebar.c:900
 msgid "Recent"
 msgstr "Duela gutxi erabilita"
 
-#: ../gtk/gtkplacessidebar.c:906
+#: ../gtk/gtkplacessidebar.c:902
 msgid "Recent files"
 msgstr "Azken fitxategiak"
 
-#: ../gtk/gtkplacessidebar.c:917
+#: ../gtk/gtkplacessidebar.c:913
 msgid "Open your personal folder"
 msgstr "Ireki zure karpeta pertsonala"
 
-#: ../gtk/gtkplacessidebar.c:932
+#: ../gtk/gtkplacessidebar.c:928
 msgid "Open the contents of your desktop in a folder"
 msgstr "Ireki mahaigaineko edukia karpeta batean"
 
-#: ../gtk/gtkplacessidebar.c:946
+#: ../gtk/gtkplacessidebar.c:942
 msgid "Enter Location"
 msgstr "Sartu kokalekua"
 
-#: ../gtk/gtkplacessidebar.c:948
+#: ../gtk/gtkplacessidebar.c:944
 msgid "Manually enter a location"
 msgstr "Sartu kokalekua eskuz"
 
-#: ../gtk/gtkplacessidebar.c:959
+#: ../gtk/gtkplacessidebar.c:955
 msgid "Trash"
 msgstr "Zakarrontzia"
 
-#: ../gtk/gtkplacessidebar.c:961
+#: ../gtk/gtkplacessidebar.c:957
 msgid "Open the trash"
 msgstr "Ireki zakarrontzia"
 
-#: ../gtk/gtkplacessidebar.c:1030 ../gtk/gtkplacessidebar.c:1058
-#: ../gtk/gtkplacessidebar.c:1265
+#: ../gtk/gtkplacessidebar.c:1026 ../gtk/gtkplacessidebar.c:1054
+#: ../gtk/gtkplacessidebar.c:1261
 #, c-format
 msgid "Mount and open “%s”"
 msgstr "Muntatu eta ireki '%s'"
 
-#: ../gtk/gtkplacessidebar.c:1145
+#: ../gtk/gtkplacessidebar.c:1141
 msgid "Open the contents of the file system"
 msgstr "Ireki fitxategi-sistemako edukia"
 
-#: ../gtk/gtkplacessidebar.c:1229
+#: ../gtk/gtkplacessidebar.c:1225
 msgid "New bookmark"
 msgstr "Laster-marka berria"
 
-#: ../gtk/gtkplacessidebar.c:1231
+#: ../gtk/gtkplacessidebar.c:1227
 msgid "Add a new bookmark"
 msgstr "Gehitu laster-marka berria"
 
-#: ../gtk/gtkplacessidebar.c:1244
+#: ../gtk/gtkplacessidebar.c:1240
 msgid "Connect to Server"
 msgstr "Konektatu zerbitzarira"
 
-#: ../gtk/gtkplacessidebar.c:1246
+#: ../gtk/gtkplacessidebar.c:1242
 msgid "Connect to a network server address"
 msgstr "Konektatu sareko zerbitzariaren helbidera"
 
-#: ../gtk/gtkplacessidebar.c:1308
+#: ../gtk/gtkplacessidebar.c:1304
 msgid "Other Locations"
 msgstr "Beste kokalekuak"
 
-#: ../gtk/gtkplacessidebar.c:1309
+#: ../gtk/gtkplacessidebar.c:1305
 msgid "Show other locations"
 msgstr "Erakutsi beste kokalekuak"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: ../gtk/gtkplacessidebar.c:2099 ../gtk/gtkplacessidebar.c:3450
+#: ../gtk/gtkplacessidebar.c:2095 ../gtk/gtkplacessidebar.c:3446
 msgid "_Start"
 msgstr "_Abiatu"
 
-#: ../gtk/gtkplacessidebar.c:2100 ../gtk/gtkplacessidebar.c:3451
+#: ../gtk/gtkplacessidebar.c:2096 ../gtk/gtkplacessidebar.c:3447
 msgid "_Stop"
 msgstr "_Gelditu"
 
 #. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
-#: ../gtk/gtkplacessidebar.c:2107
+#: ../gtk/gtkplacessidebar.c:2103
 msgid "_Power On"
 msgstr "_Itzali"
 
-#: ../gtk/gtkplacessidebar.c:2108
+#: ../gtk/gtkplacessidebar.c:2104
 msgid "_Safely Remove Drive"
 msgstr "Kendu unitatea modu seguruan"
 
-#: ../gtk/gtkplacessidebar.c:2112
+#: ../gtk/gtkplacessidebar.c:2108
 msgid "_Connect Drive"
 msgstr "_Konektatu unitatea"
 
-#: ../gtk/gtkplacessidebar.c:2113
+#: ../gtk/gtkplacessidebar.c:2109
 msgid "_Disconnect Drive"
 msgstr "_Deskonektatu unitatea"
 
-#: ../gtk/gtkplacessidebar.c:2117
+#: ../gtk/gtkplacessidebar.c:2113
 msgid "_Start Multi-disk Device"
 msgstr "_Abiatu disko anitzeko gailua"
 
-#: ../gtk/gtkplacessidebar.c:2118
+#: ../gtk/gtkplacessidebar.c:2114
 msgid "_Stop Multi-disk Device"
 msgstr "_Gelditu disko anitzeko gailua"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
-#: ../gtk/gtkplacessidebar.c:2123
+#: ../gtk/gtkplacessidebar.c:2119
 msgid "_Unlock Device"
 msgstr "_Desblokeatu gailua"
 
-#: ../gtk/gtkplacessidebar.c:2124
+#: ../gtk/gtkplacessidebar.c:2120
 msgid "_Lock Device"
 msgstr "_Blokeatu gailua"
 
-#: ../gtk/gtkplacessidebar.c:2162 ../gtk/gtkplacessidebar.c:3198
+#: ../gtk/gtkplacessidebar.c:2158 ../gtk/gtkplacessidebar.c:3194
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "Ezin da '%s' abiarazi"
 
-#: ../gtk/gtkplacessidebar.c:2192
+#: ../gtk/gtkplacessidebar.c:2188
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "Ezin da '%s' atzitu"
 
-#: ../gtk/gtkplacessidebar.c:2393
+#: ../gtk/gtkplacessidebar.c:2389
 msgid "This name is already taken"
 msgstr "Izen hori jadanik erabilita dago"
 
-#: ../gtk/gtkplacessidebar.c:2462
+#: ../gtk/gtkplacessidebar.c:2458
 msgid "Name"
 msgstr "Izena"
 
-#: ../gtk/gtkplacessidebar.c:2662
+#: ../gtk/gtkplacessidebar.c:2658
 #, c-format
 msgid "Unable to unmount “%s”"
 msgstr "Ezin da '%s' desmuntatu"
 
-#: ../gtk/gtkplacessidebar.c:2915
+#: ../gtk/gtkplacessidebar.c:2911
 #, c-format
 msgid "Unable to stop “%s”"
 msgstr "Ezin da '%s' gelditu"
 
-#: ../gtk/gtkplacessidebar.c:2944
+#: ../gtk/gtkplacessidebar.c:2940
 #, c-format
 msgid "Unable to eject “%s”"
 msgstr "Ezin da '%s' egotzi"
 
-#: ../gtk/gtkplacessidebar.c:2973 ../gtk/gtkplacessidebar.c:3002
+#: ../gtk/gtkplacessidebar.c:2969 ../gtk/gtkplacessidebar.c:2998
 #, c-format
 msgid "Unable to eject %s"
 msgstr "Ezin da '%s' egotzi"
 
-#: ../gtk/gtkplacessidebar.c:3150
+#: ../gtk/gtkplacessidebar.c:3146
 #, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr "Ezin da euskarri aldakorren '%s' berreskuratu"
 
-#: ../gtk/gtkplacessidebar.c:3433 ../gtk/gtkplacesview.c:1629
+#: ../gtk/gtkplacessidebar.c:3429 ../gtk/gtkplacesview.c:1606
 msgid "Open in New _Tab"
 msgstr "Ireki _fitxa berrian"
 
-#: ../gtk/gtkplacessidebar.c:3436 ../gtk/gtkplacesview.c:1640
+#: ../gtk/gtkplacessidebar.c:3432 ../gtk/gtkplacesview.c:1617
 msgid "Open in New _Window"
 msgstr "Ireki _leiho berrian"
 
-#: ../gtk/gtkplacessidebar.c:3440
+#: ../gtk/gtkplacessidebar.c:3436
 msgid "_Add Bookmark"
 msgstr "_Gehitu laster-marka"
 
-#: ../gtk/gtkplacessidebar.c:3441
+#: ../gtk/gtkplacessidebar.c:3437
 msgid "_Remove"
 msgstr "_Kendu"
 
-#: ../gtk/gtkplacessidebar.c:3442
+#: ../gtk/gtkplacessidebar.c:3438
 msgid "Rename…"
 msgstr "Aldatu izena…"
 
-#: ../gtk/gtkplacessidebar.c:3446 ../gtk/gtkplacesview.c:1674
+#: ../gtk/gtkplacessidebar.c:3442 ../gtk/gtkplacesview.c:1651
 msgid "_Mount"
 msgstr "_Muntatu"
 
-#: ../gtk/gtkplacessidebar.c:3447 ../gtk/gtkplacesview.c:1664
+#: ../gtk/gtkplacessidebar.c:3443 ../gtk/gtkplacesview.c:1641
 msgid "_Unmount"
 msgstr "_Desmuntatu"
 
-#: ../gtk/gtkplacessidebar.c:3448
+#: ../gtk/gtkplacessidebar.c:3444
 msgid "_Eject"
 msgstr "_Egotzi"
 
-#: ../gtk/gtkplacessidebar.c:3449
+#: ../gtk/gtkplacessidebar.c:3445
 msgid "_Detect Media"
 msgstr "_Detektatu euskarria"
 
-#: ../gtk/gtkplacessidebar.c:3898 ../gtk/gtkplacesview.c:1072
+#: ../gtk/gtkplacessidebar.c:3894 ../gtk/gtkplacesview.c:1049
 msgid "Computer"
 msgstr "Ordenagailua"
 
-#: ../gtk/gtkplacesview.c:900
+#: ../gtk/gtkplacesview.c:877
 msgid "Searching for network locations"
 msgstr "Sareko kokalekuak bilatzen"
 
-#: ../gtk/gtkplacesview.c:907
+#: ../gtk/gtkplacesview.c:884
 msgid "No network locations found"
 msgstr "Ez da sareko kokalekurik aurkitu"
 
 #. if it wasn't cancelled show a dialog
-#: ../gtk/gtkplacesview.c:1182 ../gtk/gtkplacesview.c:1226
-#: ../gtk/gtkplacesview.c:1277
+#: ../gtk/gtkplacesview.c:1159 ../gtk/gtkplacesview.c:1203
+#: ../gtk/gtkplacesview.c:1254
 msgid "Unable to access location"
 msgstr "Ezin da kokalekua atzitu"
 
 #. Restore from Cancel to Connect
-#: ../gtk/gtkplacesview.c:1199
+#: ../gtk/gtkplacesview.c:1176
 msgid "Con_nect"
 msgstr "_Konektatu"
 
 #. if it wasn't cancelled show a dialog
-#: ../gtk/gtkplacesview.c:1340
+#: ../gtk/gtkplacesview.c:1317
 msgid "Unable to unmount volume"
 msgstr "Ezin da bolumena desmuntatu"
 
 #. Allow to cancel the operation
-#: ../gtk/gtkplacesview.c:1422
+#: ../gtk/gtkplacesview.c:1399
 msgid "Cance_l"
 msgstr "_Utzi"
 
-#: ../gtk/gtkplacesview.c:1664
+#: ../gtk/gtkplacesview.c:1641
 msgid "_Disconnect"
 msgstr "_Deskonektatu"
 
-#: ../gtk/gtkplacesview.c:1674
+#: ../gtk/gtkplacesview.c:1651
 msgid "_Connect"
 msgstr "_Konektatu"
 
-#: ../gtk/gtkplacesview.c:1839
+#: ../gtk/gtkplacesview.c:1816
 msgid "Unable to get remote server location"
 msgstr "Ezin da urruneko zerbitzariaren kokalekua lortu"
 
-#: ../gtk/gtkplacesview.c:1958 ../gtk/gtkplacesview.c:1967
+#: ../gtk/gtkplacesview.c:1953 ../gtk/gtkplacesview.c:1962
 msgid "Networks"
 msgstr "Sareak"
 
-#: ../gtk/gtkplacesview.c:1958 ../gtk/gtkplacesview.c:1967
+#: ../gtk/gtkplacesview.c:1953 ../gtk/gtkplacesview.c:1962
 msgid "On This Computer"
 msgstr "Ordenagailu honetan"
 
