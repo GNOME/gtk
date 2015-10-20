@@ -7712,8 +7712,8 @@ find_common_ancestor (GdkWindow *win1,
   while (list1 && list2 && (list1->data == list2->data))
     {
       tmp = list1->data;
-      list1 = g_list_next (list1);
-      list2 = g_list_next (list2);
+      list1 = list1->next;
+      list2 = list2->next;
     }
   g_list_free (path1);
   g_list_free (path2);
@@ -8083,7 +8083,7 @@ _gdk_synthesize_crossing_events (GdkDisplay                 *display,
 	  while (list)
 	    {
 	      win = list->data;
-	      list = g_list_next (list);
+	      list = list->next;
 	      if (list)
 		next = list->data;
 	      else

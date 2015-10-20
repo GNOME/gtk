@@ -108,7 +108,7 @@ _gdk_event_queue_find_first (GdkDisplay *display)
             return tmp_list;
         }
 
-      tmp_list = g_list_next (tmp_list);
+      tmp_list = tmp_list->next;
     }
 
   return NULL;
