@@ -212,8 +212,10 @@ _gdk_wayland_display_add_seat (GdkWaylandDisplay *display_wayland,
   GdkDisplay *gdk_display = GDK_DISPLAY_OBJECT (display_wayland);
   struct wl_seat *seat;
 
+  display_wayland->seat_version = MIN (version, 5);
   seat = wl_registry_bind (display_wayland->wl_registry,
-                           id, &wl_seat_interface, MIN (version, 4));
+                           id, &wl_seat_interface,
+                           display_wayland->seat_version);
   _gdk_wayland_device_manager_add_seat (gdk_display->device_manager,
                                         id, seat);
   _gdk_wayland_display_async_roundtrip (display_wayland);
