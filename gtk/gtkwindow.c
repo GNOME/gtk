@@ -9784,8 +9784,7 @@ gtk_window_draw (GtkWidget *widget,
   get_shadow_width (GTK_WINDOW (widget), &window_border);
   _gtk_widget_get_allocation (widget, &allocation);
 
-  if (!gtk_widget_get_app_paintable (widget) &&
-      gtk_cairo_should_draw_window (cr, _gtk_widget_get_window (widget)))
+  if (gtk_cairo_should_draw_window (cr, _gtk_widget_get_window (widget)))
     {
       if (priv->client_decorated &&
           priv->decorated &&
@@ -9825,14 +9824,24 @@ gtk_window_draw (GtkWidget *widget,
           gtk_style_context_restore (context);
         }
 
-      if (priv->title_box &&
-          gtk_widget_get_visible (priv->title_box) &&
-          gtk_widget_get_child_visible (priv->title_box))
-        title_height = priv->title_height;
-      else
-        title_height = 0;
+      if (!gtk_widget_get_app_paintable (widget))
+        {
+           if (priv->title_box &&
+               gtk_widget_get_visible (priv->title_box) &&
+               gtk_widget_get_child_visible (priv->title_box))
+             title_height = priv->title_height;
+           else
+             title_height = 0;
 
-      gtk_render_background (context, cr,
+           gtk_render_background (context, cr,
+                                  window_border.left,
+                                  window_border.top + title_height,
+                                  allocation.width -
+                                  (window_border.left + window_border.right),
+                                  allocation.height -
+                                  (window_border.top + window_border.bottom +
+                                   title_height));
+           gtk_render_frame (context, cr,
                              window_border.left,
                              window_border.top + title_height,
                              allocation.width -
@@ -9840,14 +9849,7 @@ gtk_window_draw (GtkWidget *widget,
                              allocation.height -
                              (window_border.top + window_border.bottom +
                               title_height));
-      gtk_render_frame (context, cr,
-                        window_border.left,
-                        window_border.top + title_height,
-                        allocation.width -
-                        (window_border.left + window_border.right),
-                        allocation.height -
-                        (window_border.top + window_border.bottom +
-                         title_height));
+        }
     }
 
   if (GTK_WIDGET_CLASS (gtk_window_parent_class)->draw)
