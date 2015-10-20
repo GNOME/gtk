@@ -2073,7 +2073,7 @@ release_row_references (gpointer data)
 
       /* we don't free the reference, users are responsible for that. */
 
-      tmp_list = g_slist_next (tmp_list);
+      tmp_list = tmp_list->next;
     }
 
   g_slist_free (refs->list);
@@ -2128,7 +2128,7 @@ gtk_tree_row_ref_inserted (RowRefList  *refs,
             reference->path->indices[path->depth-1] += 1;
         }
     done:
-      tmp_list = g_slist_next (tmp_list);
+      tmp_list = tmp_list->next;
     }
 }
 
@@ -2187,7 +2187,7 @@ gtk_tree_row_ref_deleted (RowRefList  *refs,
         }
 
 next:
-      tmp_list = g_slist_next (tmp_list);
+      tmp_list = tmp_list->next;
     }
 }
 
@@ -2236,7 +2236,7 @@ gtk_tree_row_ref_reordered (RowRefList  *refs,
             }
         }
 
-      tmp_list = g_slist_next (tmp_list);
+      tmp_list = tmp_list->next;
     }
 }
 
