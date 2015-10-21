@@ -32,6 +32,7 @@
 #include "gtkbindings.h"
 #include "gtkprivate.h"
 #include "gtkmarshalers.h"
+#include "gtkgesturepan.h"
 #include "gtkintl.h"
 
 /**
@@ -67,6 +68,8 @@ struct _GtkShortcutsSection
   gboolean          has_filtered_group;
   gboolean          need_filter;
   gboolean          need_reflow;
+
+  GtkGesture       *pan_gesture;
 };
 
 struct _GtkShortcutsSectionClass
@@ -111,6 +114,11 @@ static void gtk_shortcuts_section_maybe_reflow     (GtkShortcutsSection *self);
 static gboolean gtk_shortcuts_section_change_current_page (GtkShortcutsSection *self,
                                                            gint                 offset);
 
+static void gtk_shortcuts_section_pan_gesture_pan (GtkGesturePan       *gesture,
+                                                   GtkPanDirection      direction,
+                                                   gdouble              offset,
+                                                   GtkShortcutsSection *self);
+
 static void
 gtk_shortcuts_section_map (GtkWidget *widget)
 {
@@ -146,6 +154,7 @@ gtk_shortcuts_section_finalize (GObject *object)
 
   g_clear_pointer (&self->name, g_free);
   g_clear_pointer (&self->title, g_free);
+  g_clear_object (&self->pan_gesture);
 
   G_OBJECT_CLASS (gtk_shortcuts_section_parent_class)->finalize (object);
 }
@@ -362,6 +371,10 @@ gtk_shortcuts_section_init (GtkShortcutsSection *self)
   gtk_box_set_center_widget (GTK_BOX (box), GTK_WIDGET (self->switcher));
   gtk_box_pack_end (GTK_BOX (box), self->show_all, TRUE, TRUE, 0);
   gtk_widget_set_halign (self->show_all, GTK_ALIGN_END);
+
+  self->pan_gesture = gtk_gesture_pan_new (GTK_WIDGET (self->stack), GTK_ORIENTATION_HORIZONTAL);
+  g_signal_connect (self->pan_gesture, "pan",
+                    G_CALLBACK (gtk_shortcuts_section_pan_gesture_pan), self);
 }
 
 static void
@@ -694,4 +707,23 @@ gtk_shortcuts_section_change_current_page (GtkShortcutsSection *self,
   g_list_free (children);
 
   return TRUE;
+}
+
+static void
+gtk_shortcuts_section_pan_gesture_pan (GtkGesturePan       *gesture,
+                                       GtkPanDirection      direction,
+                                       gdouble              offset,
+                                       GtkShortcutsSection *self)
+{
+  if (offset < 50)
+    return;
+
+  if (direction == GTK_PAN_DIRECTION_LEFT)
+    gtk_shortcuts_section_change_current_page (self, 1);
+  else if (direction == GTK_PAN_DIRECTION_RIGHT)
+    gtk_shortcuts_section_change_current_page (self, -1);
+  else
+    g_assert_not_reached ();
+
+  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
 }
