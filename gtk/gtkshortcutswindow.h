@@ -44,7 +44,8 @@ struct _GtkShortcutsWindowClass
 {
   GtkWindowClass parent_class;
 
-  void (*close) (GtkShortcutsWindow *self);
+  void (*close)  (GtkShortcutsWindow *self);
+  void (*search) (GtkShortcutsWindow *self);
 };
 
 GDK_AVAILABLE_IN_3_20

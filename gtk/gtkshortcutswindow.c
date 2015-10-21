@@ -114,6 +114,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkShortcutsWindow, gtk_shortcuts_window, GTK_TYPE_W
 
 enum {
   CLOSE,
+  SEARCH,
   LAST_SIGNAL
 };
 
@@ -447,9 +448,17 @@ gtk_shortcuts_window__search_mode__changed (GtkShortcutsWindow *self)
 }
 
 static void
-gtk_shortcuts_window_real_close (GtkShortcutsWindow *self)
+gtk_shortcuts_window_close (GtkShortcutsWindow *self)
 {
   gtk_window_close (GTK_WINDOW (self));
+}
+
+static void
+gtk_shortcuts_window_search (GtkShortcutsWindow *self)
+{
+  GtkShortcutsWindowPrivate *priv = gtk_shortcuts_window_get_instance_private (self);
+
+  gtk_search_bar_set_search_mode (priv->search_bar, TRUE);
 }
 
 static void
@@ -575,7 +584,8 @@ gtk_shortcuts_window_class_init (GtkShortcutsWindowClass *klass)
   container_class->add = gtk_shortcuts_window_add;
   container_class->child_type = gtk_shortcuts_window_child_type;
 
-  klass->close = gtk_shortcuts_window_real_close;
+  klass->close = gtk_shortcuts_window_close;
+  klass->search = gtk_shortcuts_window_search;
 
   /**
    * GtkShortcutsWindow:section-name:
@@ -624,8 +634,28 @@ gtk_shortcuts_window_class_init (GtkShortcutsWindowClass *klass)
                                  NULL, NULL, NULL,
                                  G_TYPE_NONE,
                                  0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Escape, 0, "close", 0);
 
+  /**
+   * GtkShortcutsWindow::search:
+   *
+   * The ::search signal is a
+   * [keybinding signal][GtkBindingSignal]
+   * which gets emitted when the user uses a keybinding to start a search.
+   *
+   * The default binding for this signal is Control-F.
+   */
+  signals[SEARCH] = g_signal_new (I_("search"),
+                                 G_TYPE_FROM_CLASS (klass),
+                                 G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                                 G_STRUCT_OFFSET (GtkShortcutsWindowClass, search),
+                                 NULL, NULL, NULL,
+                                 G_TYPE_NONE,
+                                 0);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Escape, 0, "close", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_f, GDK_CONTROL_MASK, "search", 0);
+
+  g_type_ensure (GTK_TYPE_SHORTCUTS_GROUP);
   g_type_ensure (GTK_TYPE_SHORTCUTS_GROUP);
   g_type_ensure (GTK_TYPE_SHORTCUTS_GESTURE);
   g_type_ensure (GTK_TYPE_SHORTCUTS_SHORTCUT);
