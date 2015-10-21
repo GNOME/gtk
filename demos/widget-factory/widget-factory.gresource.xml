@@ -9,4 +9,7 @@
   <gresource prefix="/org/gtk/WidgetFactory/gtk">
     <file preprocess="xml-stripblanks">menus.ui</file>
   </gresource>
+  <gresource prefix="/org/gtk/WidgetFactory/gtk">
+    <file preprocess="xml-stripblanks">help-overlay.ui</file>
+  </gresource>
 </gresources>

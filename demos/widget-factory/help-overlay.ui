@@ -1,0 +1,22 @@
+<interface>
+  <object class="GtkShortcutsWindow" id="help_overlay">
+    <child>
+      <object class="GtkShortcutsSection">
+        <property name="visible">1</property>
+        <child>
+          <object class="GtkShortcutsGroup">
+            <property name="visible">1</property>
+            <property name="title">Group</property>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">1</property>
+                <property name="accelerator">1</property>
+                <property name="title">One</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
