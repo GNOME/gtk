@@ -66,7 +66,6 @@ struct _GtkShortcutsSection
   GtkWidget        *show_all;
 
   gboolean          has_filtered_group;
-  gboolean          need_filter;
   gboolean          need_reflow;
 
   GtkGesture       *pan_gesture;
@@ -107,7 +106,6 @@ static void gtk_shortcuts_section_add_group        (GtkShortcutsSection *self,
 
 static void gtk_shortcuts_section_show_all         (GtkShortcutsSection *self);
 static void gtk_shortcuts_section_filter_groups    (GtkShortcutsSection *self);
-static void gtk_shortcuts_section_maybe_filter     (GtkShortcutsSection *self);
 static void gtk_shortcuts_section_reflow_groups    (GtkShortcutsSection *self);
 static void gtk_shortcuts_section_maybe_reflow     (GtkShortcutsSection *self);
 
@@ -123,9 +121,6 @@ static void
 gtk_shortcuts_section_map (GtkWidget *widget)
 {
   GtkShortcutsSection *self = GTK_SHORTCUTS_SECTION (widget);
-
-  if (self->need_filter)
-    gtk_shortcuts_section_filter_groups (self);
 
   if (self->need_reflow)
     gtk_shortcuts_section_reflow_groups (self);
@@ -383,11 +378,14 @@ gtk_shortcuts_section_set_view_name (GtkShortcutsSection *self,
 {
   g_return_if_fail (GTK_IS_SHORTCUTS_SECTION (self));
 
+  if (g_strcmp0 (self->view_name, view_name) == 0)
+    return;
+
   g_free (self->view_name);
   self->view_name = g_strdup (view_name);
 
-  gtk_shortcuts_section_maybe_filter (self);
-  gtk_shortcuts_section_maybe_reflow (self);
+  gtk_shortcuts_section_filter_groups (self);
+  gtk_shortcuts_section_reflow_groups (self);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_VIEW_NAME]);
 }
@@ -433,15 +431,6 @@ gtk_shortcuts_section_show_all (GtkShortcutsSection *self)
 }
 
 static void
-gtk_shortcuts_section_maybe_filter (GtkShortcutsSection *self)
-{
-  if (gtk_widget_get_mapped (GTK_WIDGET (self)))
-    gtk_shortcuts_section_filter_groups (self);
-  else
-    self->need_filter = TRUE;
-}
-
-static void
 update_group_visibility (GtkWidget *child, gpointer data)
 {
   GtkShortcutsSection *self = data;
@@ -478,8 +467,6 @@ gtk_shortcuts_section_filter_groups (GtkShortcutsSection *self)
   gtk_widget_set_visible (gtk_widget_get_parent (GTK_WIDGET (self->show_all)),
                           gtk_widget_get_visible (GTK_WIDGET (self->show_all)) ||
                           gtk_widget_get_visible (GTK_WIDGET (self->switcher)));
-
-  self->need_filter = FALSE;
 }
 
 static void
