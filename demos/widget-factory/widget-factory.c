@@ -128,6 +128,51 @@ activate_background (GSimpleAction *action,
 }
 
 static void
+activate_open (GSimpleAction *action,
+               GVariant      *parameter,
+               gpointer       user_data)
+{
+  GtkWidget *window = user_data;
+  GtkWidget *button;
+
+  if (!on_page (3))
+    return;
+
+  button = GTK_WIDGET (g_object_get_data (G_OBJECT (window), "open_menubutton"));
+  gtk_button_clicked (GTK_BUTTON (button));
+}
+
+static void
+activate_record (GSimpleAction *action,
+                 GVariant      *parameter,
+                 gpointer       user_data)
+{
+  GtkWidget *window = user_data;
+  GtkWidget *button;
+
+  if (!on_page (3))
+    return;
+
+  button = GTK_WIDGET (g_object_get_data (G_OBJECT (window), "record_button"));
+  gtk_button_clicked (GTK_BUTTON (button));
+}
+
+static void
+activate_lock (GSimpleAction *action,
+               GVariant      *parameter,
+               gpointer       user_data)
+{
+  GtkWidget *window = user_data;
+  GtkWidget *button;
+
+  if (!on_page (3))
+    return;
+
+  button = GTK_WIDGET (g_object_get_data (G_OBJECT (window), "lockbutton"));
+  gtk_button_clicked (GTK_BUTTON (button));
+}
+
+static void
 activate_about (GSimpleAction *action,
                 GVariant      *parameter,
                 gpointer       user_data)
@@ -1430,6 +1475,9 @@ activate (GApplication *app)
     { "delete", activate_delete, NULL, NULL, NULL },
     { "busy", get_busy, NULL, NULL, NULL },
     { "background", activate_background, NULL, NULL, NULL },
+    { "open", activate_open, NULL, NULL, NULL },
+    { "record", activate_record, NULL, NULL, NULL },
+    { "lock", activate_lock, NULL, NULL, NULL },
   };
   struct {
     const gchar *action_and_target;
@@ -1441,9 +1489,13 @@ activate (GApplication *app)
     { "win.search", { "<Primary>s", NULL } },
     { "win.delete", { "Delete", NULL } },
     { "win.background", { "<Primary>b", NULL } },
+    { "win.open", { "<Primary>o", NULL } },
+    { "win.record", { "<Primary>r", NULL } },
+    { "win.lock", { "<Primary>l", NULL } },
   };
   gint i;
   GPermission *permission;
+  GAction *action;
 
   g_type_ensure (my_text_view_get_type ());
 
@@ -1635,12 +1687,25 @@ activate (GApplication *app)
   gtk_popover_set_default_widget (GTK_POPOVER (widget), widget3);
   g_signal_connect (widget2, "notify::text", G_CALLBACK (open_popover_text_changed), widget3);
   g_signal_connect_swapped (widget3, "clicked", G_CALLBACK (gtk_widget_hide), widget);
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "open_menubutton");
+  g_object_set_data (G_OBJECT (window), "open_menubutton", widget);
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "record_button");
+  g_object_set_data (G_OBJECT (window), "record_button", widget);
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "lockbox");
   widget2 = (GtkWidget *)gtk_builder_get_object (builder, "lockbutton");
+  g_object_set_data (G_OBJECT (window), "lockbutton", widget2);
   permission = g_object_new (g_test_permission_get_type (), NULL);
   g_object_bind_property (permission, "allowed",
                           widget, "sensitive",
+                          G_BINDING_SYNC_CREATE);
+  action = g_action_map_lookup_action (G_ACTION_MAP (window), "open");
+  g_object_bind_property (permission, "allowed",
+                          action, "enabled",
+                          G_BINDING_SYNC_CREATE);
+  action = g_action_map_lookup_action (G_ACTION_MAP (window), "record");
+  g_object_bind_property (permission, "allowed",
+                          action, "enabled",
                           G_BINDING_SYNC_CREATE);
   gtk_lock_button_set_permission (GTK_LOCK_BUTTON (widget2), permission);
   g_object_unref (permission);

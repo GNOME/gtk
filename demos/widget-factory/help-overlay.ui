@@ -58,6 +58,34 @@
             </child>
           </object>
         </child>
+        <child>
+          <object class="GtkShortcutsGroup">
+            <property name="visible">1</property>
+            <property name="title">Modern</property>
+            <property name="view">page3</property>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">1</property>
+                <property name="accelerator">&lt;Primary&gt;o</property>
+                <property name="title">Open a file</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">1</property>
+                <property name="accelerator">&lt;Primary&gt;r</property>
+                <property name="title">Start recording</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">1</property>
+                <property name="accelerator">&lt;Primary&gt;l</property>
+                <property name="title">Lock or unlock</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
     </child>
   </object>

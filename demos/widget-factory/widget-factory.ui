@@ -2911,7 +2911,7 @@ microphone-sensitivity-medium-symbolic</property>
                             <property name="halign">start</property>
                             <property name="spacing">6</property>
                             <child>
-                              <object class="GtkMenuButton">
+                              <object class="GtkMenuButton" id="open_menubutton">
                                 <property name="visible">1</property>
                                 <property name="halign">center</property>
                                 <property name="popover">open_popover</property>
