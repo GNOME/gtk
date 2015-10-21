@@ -1004,7 +1004,7 @@ gtk_application_window_set_help_overlay (GtkApplicationWindow *window,
   g_signal_connect (help_overlay, "delete-event",
                     G_CALLBACK (gtk_widget_hide_on_delete), NULL);
 
-  if (!g_action_map_lookup_action (window->priv->actions, "show-help-overlay"))
+  if (!g_action_map_lookup_action (G_ACTION_MAP (window->priv->actions), "show-help-overlay"))
     {
       GSimpleAction *action;
 
