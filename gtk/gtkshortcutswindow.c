@@ -24,6 +24,8 @@
 #include "gtkshortcutsgroup.h"
 #include "gtkshortcutsgesture.h"
 #include "gtkshortcutsshortcut.h"
+#include "gtksearchbar.h"
+#include "gtksearchentry.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
@@ -89,6 +91,7 @@ typedef struct
   GtkMenuButton  *menu_button;
   GtkLabel       *menu_label;
   GtkSearchBar   *search_bar;
+  GtkSearchEntry *search_entry;
   GtkHeaderBar   *header_bar;
   GtkPopover     *popover;
   GtkListBox     *list_box;
@@ -281,6 +284,9 @@ gtk_shortcuts_window_add_section (GtkShortcutsWindow  *self,
                 "section-name", &name,
                 "title", &title,
                 NULL);
+
+  if (name == NULL)
+    name = g_strdup ("shortcuts");
 
   gtk_stack_add_titled (priv->stack, GTK_WIDGET (section), name, title);
 
@@ -535,6 +541,17 @@ gtk_shortcuts_window_set_property (GObject      *object,
     }
 }
 
+static void
+gtk_shortcuts_window_unmap (GtkWidget *widget)
+{
+  GtkShortcutsWindow *self = (GtkShortcutsWindow *)widget;
+  GtkShortcutsWindowPrivate *priv = gtk_shortcuts_window_get_instance_private (self);
+
+  gtk_search_bar_set_search_mode (priv->search_bar, FALSE);
+
+  GTK_WIDGET_CLASS (gtk_shortcuts_window_parent_class)->unmap (widget);
+}
+
 static GType
 gtk_shortcuts_window_child_type (GtkContainer *container)
 {
@@ -544,15 +561,17 @@ gtk_shortcuts_window_child_type (GtkContainer *container)
 static void
 gtk_shortcuts_window_class_init (GtkShortcutsWindowClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
   GtkBindingSet *binding_set = gtk_binding_set_by_class (klass);
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->constructed = gtk_shortcuts_window_constructed;
   object_class->finalize = gtk_shortcuts_window_finalize;
   object_class->get_property = gtk_shortcuts_window_get_property;
   object_class->set_property = gtk_shortcuts_window_set_property;
 
+  widget_class->unmap = gtk_shortcuts_window_unmap;
   container_class->add = gtk_shortcuts_window_add;
   container_class->child_type = gtk_shortcuts_window_child_type;
 
@@ -632,7 +651,6 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
   GtkBox *menu_box;
   GtkBox *box;
   GtkArrow *arrow;
-  GtkWidget *entry;
   GtkWidget *scroller;
   GtkWidget *label;
   GtkWidget *empty;
@@ -747,14 +765,14 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
                            G_CONNECT_SWAPPED);
   gtk_container_add (GTK_CONTAINER (priv->popover), GTK_WIDGET (priv->list_box));
 
-  entry = gtk_search_entry_new ();
-  gtk_widget_show (entry);
-  gtk_container_add (GTK_CONTAINER (priv->search_bar), entry);
-  g_object_set (entry,
+  priv->search_entry = GTK_SEARCH_ENTRY (gtk_search_entry_new ());
+  gtk_widget_show (GTK_WIDGET (priv->search_entry));
+  gtk_container_add (GTK_CONTAINER (priv->search_bar), GTK_WIDGET (priv->search_entry));
+  g_object_set (priv->search_entry,
                 "placeholder-text", _("Search Shortcuts"),
                 "width-chars", 40,
                 NULL);
-  g_signal_connect_object (entry,
+  g_signal_connect_object (priv->search_entry,
                            "search-changed",
                            G_CALLBACK (gtk_shortcuts_window__entry__changed),
                            self,
