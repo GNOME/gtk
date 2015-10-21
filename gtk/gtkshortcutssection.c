@@ -21,7 +21,7 @@
 #include "gtkshortcutssection.h"
 
 #include "gtkshortcutsgroup.h"
-#include "gtktogglebutton.h"
+#include "gtkbutton.h"
 #include "gtkstack.h"
 #include "gtkstackswitcher.h"
 #include "gtkstylecontext.h"
@@ -89,7 +89,7 @@ static void gtk_shortcuts_section_set_view_name    (GtkShortcutsSection *self,
 static void gtk_shortcuts_section_add_group        (GtkShortcutsSection *self,
                                                     GtkShortcutsGroup   *group);
 
-static void gtk_shortcuts_section_show_all_changed (GtkShortcutsSection *self);
+static void gtk_shortcuts_section_show_all         (GtkShortcutsSection *self);
 static void gtk_shortcuts_section_filter_groups    (GtkShortcutsSection *self);
 static void gtk_shortcuts_section_maybe_filter     (GtkShortcutsSection *self);
 static void gtk_shortcuts_section_reflow_groups    (GtkShortcutsSection *self);
@@ -305,10 +305,10 @@ gtk_shortcuts_section_init (GtkShortcutsSection *self)
   gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (self->switcher)), "round");
   gtk_style_context_remove_class (gtk_widget_get_style_context (GTK_WIDGET (self->switcher)), "linked");
 
-  self->show_all = gtk_toggle_button_new_with_label (_("Show All"));
+  self->show_all = gtk_button_new_with_label (_("Show All"));
   gtk_widget_set_no_show_all (self->show_all, TRUE);
-  g_signal_connect_swapped (self->show_all, "toggled",
-                            G_CALLBACK (gtk_shortcuts_section_show_all_changed), self);
+  g_signal_connect_swapped (self->show_all, "clicked",
+                            G_CALLBACK (gtk_shortcuts_section_show_all), self);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 20);
   GTK_CONTAINER_CLASS (gtk_shortcuts_section_parent_class)->add (GTK_CONTAINER (self), box);
@@ -368,10 +368,9 @@ gtk_shortcuts_section_add_group (GtkShortcutsSection *self,
 }
 
 static void
-gtk_shortcuts_section_show_all_changed (GtkShortcutsSection *self)
+gtk_shortcuts_section_show_all (GtkShortcutsSection *self)
 {
-  gtk_shortcuts_section_maybe_filter (self);
-  gtk_shortcuts_section_maybe_reflow (self);
+  gtk_shortcuts_section_set_view_name (self, NULL);
 }
 
 static void
@@ -398,8 +397,7 @@ update_group_visibility (GtkWidget *child, gpointer data)
               self->view_name == NULL ||
               strcmp (view, self->view_name) == 0;
 
-      gtk_widget_set_visible (child,
-                              match || gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->show_all)));
+      gtk_widget_set_visible (child, match);
       self->has_filtered_group |= !match;
 
       g_free (view);
