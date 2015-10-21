@@ -69,7 +69,7 @@ get_busy (GSimpleAction *action,
   gtk_widget_set_sensitive (window, FALSE);
 }
 
-static gint current_page = 1;
+static gint current_page = 0;
 static gboolean
 on_page (gint i)
 {
@@ -104,6 +104,27 @@ activate_delete (GSimpleAction *action,
 
   infobar = GTK_WIDGET (g_object_get_data (G_OBJECT (window), "infobar"));
   gtk_widget_show (infobar);
+}
+
+static void populate_flowbox (GtkWidget *flowbox);
+
+static void
+activate_background (GSimpleAction *action,
+                     GVariant      *parameter,
+                     gpointer       user_data)
+{
+  GtkWidget *window = user_data;
+  GtkWidget *dialog;
+  GtkWidget *flowbox;
+
+  if (!on_page (2))
+    return;
+
+  dialog = GTK_WIDGET (g_object_get_data (G_OBJECT (window), "selection_dialog"));
+  flowbox = GTK_WIDGET (g_object_get_data (G_OBJECT (window), "selection_flowbox"));
+
+  gtk_widget_show (dialog);
+  populate_flowbox (flowbox);
 }
 
 static void
@@ -482,12 +503,19 @@ static void
 page_changed_cb (GtkWidget *stack, GParamSpec *pspec, gpointer data)
 {
   const gchar *name;
+  GtkWidget *window;
   GtkWidget *page;
 
   if (gtk_widget_in_destruction (stack))
     return;
 
   name = gtk_stack_get_visible_child_name (GTK_STACK (stack));
+
+  window = gtk_widget_get_ancestor (stack, GTK_TYPE_APPLICATION_WINDOW);
+  g_object_set (gtk_application_window_get_help_overlay (GTK_APPLICATION_WINDOW (window)),
+                "view-name", name,
+                NULL);
+
   if (g_str_equal (name, "page1"))
     current_page = 1;
   else if (g_str_equal (name, "page2"))
@@ -836,7 +864,7 @@ background_loaded_cb (GObject      *source,
 }
 
 static void
-populate_flowbox (GtkWidget *button, GtkWidget *flowbox)
+populate_flowbox (GtkWidget *flowbox)
 {
   const gchar *location;
   GDir *dir;
@@ -849,7 +877,10 @@ populate_flowbox (GtkWidget *button, GtkWidget *flowbox)
   GdkPixbuf *pixbuf;
   GtkWidget *child;
 
-  g_signal_handlers_disconnect_by_func (button, populate_flowbox, flowbox);
+  if (GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (flowbox), "populated")))
+    return;
+
+  g_object_set_data (G_OBJECT (flowbox), "populated", GUINT_TO_POINTER (1));
 
   pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, 110, 70);
   gdk_pixbuf_fill (pixbuf, 0xffffffff);
@@ -1397,7 +1428,8 @@ activate (GApplication *app)
     { "dark", NULL, NULL, "false", change_theme_state },
     { "search", activate_search, NULL, NULL, NULL },
     { "delete", activate_delete, NULL, NULL, NULL },
-    { "busy", get_busy, NULL, NULL, NULL }
+    { "busy", get_busy, NULL, NULL, NULL },
+    { "background", activate_background, NULL, NULL, NULL },
   };
   struct {
     const gchar *action_and_target;
@@ -1407,7 +1439,8 @@ activate (GApplication *app)
     { "app.quit", { "<Primary>q", NULL } },
     { "win.dark", { "<Primary>d", NULL } },
     { "win.search", { "<Primary>s", NULL } },
-    { "win.delete", { "Delete", NULL } }
+    { "win.delete", { "Delete", NULL } },
+    { "win.background", { "<Primary>b", NULL } },
   };
   gint i;
   GPermission *permission;
@@ -1516,6 +1549,7 @@ activate (GApplication *app)
   stack = (GtkWidget *)gtk_builder_get_object (builder, "toplevel_stack");
   g_signal_connect (widget, "clicked", G_CALLBACK (action_dialog_button_clicked), stack);
   g_signal_connect (stack, "notify::visible-child-name", G_CALLBACK (page_changed_cb), NULL);
+  page_changed_cb (stack, NULL, NULL);
 
   dialog = (GtkWidget *)gtk_builder_get_object (builder, "preference_dialog");
   g_signal_connect (dialog, "response", G_CALLBACK (close_dialog), NULL);
@@ -1525,13 +1559,15 @@ activate (GApplication *app)
   g_signal_connect (widget, "clicked", G_CALLBACK (show_dialog), dialog);
 
   dialog = (GtkWidget *)gtk_builder_get_object (builder, "selection_dialog");
+  g_object_set_data (G_OBJECT (window), "selection_dialog", dialog);
   widget = (GtkWidget *)gtk_builder_get_object (builder, "text3");
   g_signal_connect (dialog, "response", G_CALLBACK (close_selection_dialog), widget);
   widget = (GtkWidget *)gtk_builder_get_object (builder, "selection_dialog_button");
   g_signal_connect (widget, "clicked", G_CALLBACK (show_dialog), dialog);
 
   widget2 = (GtkWidget *)gtk_builder_get_object (builder, "selection_flowbox");
-  g_signal_connect (widget, "clicked", G_CALLBACK (populate_flowbox), widget2);
+  g_object_set_data (G_OBJECT (window), "selection_flowbox", widget2);
+  g_signal_connect_swapped (widget, "clicked", G_CALLBACK (populate_flowbox), widget2);
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "charletree");
   populate_model ((GtkTreeStore *)gtk_tree_view_get_model (GTK_TREE_VIEW (widget)));
@@ -1556,6 +1592,7 @@ activate (GApplication *app)
   set_accel (GTK_APPLICATION (app), GTK_WIDGET (gtk_builder_get_object (builder, "searchmenuitem")));
   set_accel (GTK_APPLICATION (app), GTK_WIDGET (gtk_builder_get_object (builder, "darkmenuitem")));
   set_accel (GTK_APPLICATION (app), GTK_WIDGET (gtk_builder_get_object (builder, "aboutmenuitem")));
+  set_accel (GTK_APPLICATION (app), GTK_WIDGET (gtk_builder_get_object (builder, "bgmenuitem")));
 
   widget2 = (GtkWidget *)gtk_builder_get_object (builder, "tooltextview");
 

@@ -34,6 +34,7 @@
           <object class="GtkShortcutsGroup">
             <property name="visible">1</property>
             <property name="title">Traditional</property>
+            <property name="view">page2</property>
             <child>
               <object class="GtkShortcutsShortcut">
                 <property name="visible">1</property>
@@ -46,6 +47,13 @@
                 <property name="visible">1</property>
                 <property name="accelerator">Delete</property>
                 <property name="title">Delete</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">1</property>
+                <property name="accelerator">&lt;Primary&gt;b</property>
+                <property name="title">Set background</property>
               </object>
             </child>
           </object>
