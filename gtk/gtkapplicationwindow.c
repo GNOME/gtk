@@ -228,6 +228,9 @@ struct _GtkApplicationWindowPrivate
   GMenu *menubar_section;
 
   guint            id;
+
+  GtkShortcutsWindow *help_overlay;
+  gboolean            has_help_overlay_action;
 };
 
 static void
@@ -788,9 +791,9 @@ gtk_application_window_dispose (GObject *object)
 
   g_clear_object (&window->priv->app_menu_section);
   g_clear_object (&window->priv->menubar_section);
+  g_clear_object (&window->priv->help_overlay);
 
-  G_OBJECT_CLASS (gtk_application_window_parent_class)
-    ->dispose (object);
+  G_OBJECT_CLASS (gtk_application_window_parent_class)->dispose (object);
 
   /* We do this below the chain-up above to give us a chance to be
    * removed from the GtkApplication (which is done in the dispose
@@ -958,4 +961,57 @@ gtk_application_window_set_id (GtkApplicationWindow *window,
 {
   g_return_if_fail (GTK_IS_APPLICATION_WINDOW (window));
   window->priv->id = id;
+}
+
+static void
+show_help_overlay (GSimpleAction *action,
+                   GVariant      *parameter,
+                   gpointer       user_data)
+{
+  GtkApplicationWindow *window = user_data;
+
+  if (window->priv->help_overlay)
+    gtk_widget_show (GTK_WIDGET (window->priv->help_overlay));
+}
+
+void
+gtk_application_window_set_help_overlay (GtkApplicationWindow *window,
+                                         GtkShortcutsWindow   *help_overlay)
+{
+  g_return_if_fail (GTK_IS_APPLICATION_WINDOW (window));
+  g_return_if_fail (help_overlay == NULL || GTK_IS_SHORTCUTS_WINDOW (help_overlay));
+
+  if (window->priv->help_overlay)
+    g_signal_handlers_disconnect_by_func (window->priv->help_overlay,
+                                          G_CALLBACK (gtk_widget_hide_on_delete), NULL);
+  g_set_object (&window->priv->help_overlay, help_overlay);
+
+  if (!window->priv->help_overlay)
+    return;
+
+  gtk_window_set_modal (GTK_WINDOW (help_overlay), TRUE);
+  gtk_window_set_transient_for (GTK_WINDOW (help_overlay), GTK_WINDOW (window));
+  g_signal_connect (help_overlay, "delete-event",
+                    G_CALLBACK (gtk_widget_hide_on_delete), NULL);
+
+  if (!window->priv->has_help_overlay_action)
+    {
+      GActionEntry entries[1] = {
+        { "show-help-overlay", show_help_overlay, NULL, NULL, NULL },
+      };
+
+      g_action_map_add_action_entries (G_ACTION_MAP (window->priv->actions),
+                                       entries, 1,
+                                       window);
+
+      window->priv->has_help_overlay_action = TRUE;
+    }
+}
+
+GtkShortcutsWindow *
+gtk_application_window_get_help_overlay (GtkApplicationWindow *window)
+{
+  g_return_val_if_fail (GTK_IS_APPLICATION_WINDOW (window), NULL);
+
+  return window->priv->help_overlay;
 }

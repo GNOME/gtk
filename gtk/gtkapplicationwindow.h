@@ -25,6 +25,7 @@
 #endif
 
 #include <gtk/gtkwindow.h>
+#include <gtk/gtkshortcutswindow.h>
 
 G_BEGIN_DECLS
 
@@ -77,6 +78,13 @@ gboolean    gtk_application_window_get_show_menubar (GtkApplicationWindow *windo
 
 GDK_AVAILABLE_IN_3_6
 guint       gtk_application_window_get_id           (GtkApplicationWindow *window);
+
+GDK_AVAILABLE_IN_3_20
+void        gtk_application_window_set_help_overlay (GtkApplicationWindow *window,
+                                                     GtkShortcutsWindow   *help_overlay);
+GDK_AVAILABLE_IN_3_20
+GtkShortcutsWindow *
+            gtk_application_window_get_help_overlay (GtkApplicationWindow *window);
 
 G_END_DECLS
 

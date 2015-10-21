@@ -38,6 +38,7 @@
 #include "gtkaccelmapprivate.h"
 #include "gtkicontheme.h"
 #include "gtkbuilder.h"
+#include "gtkshortcutswindow.h"
 #include "gtkintl.h"
 
 /* NB: please do not add backend-specific GDK headers here.  This should
@@ -485,9 +486,10 @@ struct _GtkApplicationPrivate
   Accels           accels;
   guint            last_window_id;
 
-  gboolean register_session;
+  gboolean         register_session;
   GtkActionMuxer  *muxer;
   GtkBuilder      *menus_builder;
+  gchar           *help_overlay_path;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkApplication, gtk_application, G_TYPE_APPLICATION)
@@ -587,6 +589,22 @@ gtk_application_load_resources (GtkApplication *application)
         if (menu != NULL && G_IS_MENU_MODEL (menu))
           gtk_application_set_menubar (application, G_MENU_MODEL (menu));
       }
+  }
+
+  /* Help overlay */
+  {
+    gchar *path;
+
+    path = g_strconcat (base_path, "/gtk/help-overlay.ui", NULL);
+    if (g_resources_get_info (path, G_RESOURCE_LOOKUP_FLAGS_NONE, NULL, NULL, NULL))
+    {
+      const gchar * const accels[] = { "<Primary>F1", "<Primary>question", NULL };
+
+      application->priv->help_overlay_path = path;
+      gtk_application_set_accels_for_action (application, "win.show-help-overlay", accels);
+    }
+  else
+    g_free (path);
   }
 }
 
@@ -698,7 +716,21 @@ gtk_application_window_added (GtkApplication *application,
   GtkApplicationPrivate *priv = application->priv;
 
   if (GTK_IS_APPLICATION_WINDOW (window))
-    gtk_application_window_set_id (GTK_APPLICATION_WINDOW (window), ++application->priv->last_window_id);
+    {
+      gtk_application_window_set_id (GTK_APPLICATION_WINDOW (window), ++priv->last_window_id);
+      if (priv->help_overlay_path)
+        {
+          GtkBuilder *builder;
+          GtkWidget *help_overlay;
+
+          builder = gtk_builder_new_from_resource (priv->help_overlay_path);
+          help_overlay = GTK_WIDGET (gtk_builder_get_object (builder, "help_overlay"));
+          if (GTK_IS_SHORTCUTS_WINDOW (help_overlay))
+            gtk_application_window_set_help_overlay (GTK_APPLICATION_WINDOW (window),
+                                                     GTK_SHORTCUTS_WINDOW (help_overlay));
+          g_object_unref (builder);
+        }
+    }
 
   priv->windows = g_list_prepend (priv->windows, window);
   gtk_window_set_application (window, application);
@@ -708,9 +740,10 @@ gtk_application_window_added (GtkApplication *application,
                     G_CALLBACK (gtk_application_focus_in_event_cb),
                     application);
 
-  gtk_application_impl_window_added (application->priv->impl, window);
+  gtk_application_impl_window_added (priv->impl, window);
 
-  gtk_application_impl_active_window_changed (application->priv->impl, window);
+  gtk_application_impl_active_window_changed (priv->impl, window);
+
   g_object_notify_by_pspec (G_OBJECT (application), gtk_application_props[PROP_ACTIVE_WINDOW]);
 }
 
@@ -870,8 +903,9 @@ gtk_application_finalize (GObject *object)
 
   accels_finalize (&application->priv->accels);
 
-  G_OBJECT_CLASS (gtk_application_parent_class)
-    ->finalize (object);
+  g_free (application->priv->help_overlay_path);
+
+  G_OBJECT_CLASS (gtk_application_parent_class)->finalize (object);
 }
 
 static void
