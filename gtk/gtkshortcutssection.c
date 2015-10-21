@@ -29,7 +29,9 @@
 #include "gtkorientable.h"
 #include "gtksizegroup.h"
 #include "gtkwidget.h"
+#include "gtkbindings.h"
 #include "gtkprivate.h"
+#include "gtkmarshalers.h"
 #include "gtkintl.h"
 
 /**
@@ -70,6 +72,10 @@ struct _GtkShortcutsSection
 struct _GtkShortcutsSectionClass
 {
   GtkBoxClass parent_class;
+
+  gboolean (* change_current_page) (GtkShortcutsSection *self,
+                                    gint                 offset);
+
 };
 
 G_DEFINE_TYPE (GtkShortcutsSection, gtk_shortcuts_section, GTK_TYPE_BOX)
@@ -83,7 +89,13 @@ enum {
   LAST_PROP
 };
 
+enum {
+  CHANGE_CURRENT_PAGE,
+  LAST_SIGNAL
+};
+
 static GParamSpec *properties[LAST_PROP];
+static guint signals[LAST_SIGNAL];
 
 static void gtk_shortcuts_section_set_view_name    (GtkShortcutsSection *self,
                                                     const gchar         *view_name);
@@ -96,6 +108,8 @@ static void gtk_shortcuts_section_maybe_filter     (GtkShortcutsSection *self);
 static void gtk_shortcuts_section_reflow_groups    (GtkShortcutsSection *self);
 static void gtk_shortcuts_section_maybe_reflow     (GtkShortcutsSection *self);
 
+static gboolean gtk_shortcuts_section_change_current_page (GtkShortcutsSection *self,
+                                                           gint                 offset);
 
 static void
 gtk_shortcuts_section_map (GtkWidget *widget)
@@ -212,6 +226,7 @@ gtk_shortcuts_section_class_init (GtkShortcutsSectionClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
+  GtkBindingSet *binding_set;
 
   object_class->finalize = gtk_shortcuts_section_finalize;
   object_class->get_property = gtk_shortcuts_section_get_property;
@@ -221,6 +236,8 @@ gtk_shortcuts_section_class_init (GtkShortcutsSectionClass *klass)
 
   container_class->add = gtk_shortcuts_section_add;
   container_class->child_type = gtk_shortcuts_section_child_type;
+
+  klass->change_current_page = gtk_shortcuts_section_change_current_page;
 
   /**
    * GtkShortcutsSection:section-name:
@@ -275,6 +292,34 @@ gtk_shortcuts_section_class_init (GtkShortcutsSectionClass *klass)
                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
+
+  signals[CHANGE_CURRENT_PAGE] =
+    g_signal_new (I_("change-current-page"),
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (GtkShortcutsSectionClass, change_current_page),
+                  NULL, NULL,
+                  _gtk_marshal_BOOLEAN__INT,
+                  G_TYPE_BOOLEAN, 1,
+                  G_TYPE_INT);
+
+  binding_set = gtk_binding_set_by_class (klass);
+  gtk_binding_entry_add_signal (binding_set,
+                                GDK_KEY_Page_Up, 0,
+                                "change-current-page", 1,
+                                G_TYPE_INT, -1);
+  gtk_binding_entry_add_signal (binding_set,
+                                GDK_KEY_Page_Down, 0,
+                                "change-current-page", 1,
+                                G_TYPE_INT, 1);
+  gtk_binding_entry_add_signal (binding_set,
+                                GDK_KEY_Page_Up, GDK_CONTROL_MASK,
+                                "change-current-page", 1,
+                                G_TYPE_INT, -1);
+  gtk_binding_entry_add_signal (binding_set,
+                                GDK_KEY_Page_Down, GDK_CONTROL_MASK,
+                                "change-current-page", 1,
+                                G_TYPE_INT, 1);
 }
 
 static void
@@ -621,4 +666,32 @@ gtk_shortcuts_section_reflow_groups (GtkShortcutsSection *self)
   g_list_free (pages);
 
   self->need_reflow = FALSE;
+}
+
+static gboolean
+gtk_shortcuts_section_change_current_page (GtkShortcutsSection *self,
+                                           gint                 offset)
+{
+  GtkWidget *child;
+  GList *children, *l;
+
+  child = gtk_stack_get_visible_child (self->stack);
+  children = gtk_container_get_children (GTK_CONTAINER (self->stack));
+  l = g_list_find (children, child);
+
+  if (offset == 1)
+    l = l->next;
+  else if (offset == -1)
+    l = l->prev;
+  else
+    g_assert_not_reached ();
+
+  if (l)
+    gtk_stack_set_visible_child (self->stack, GTK_WIDGET (l->data));
+  else
+    gtk_widget_error_bell (GTK_WIDGET (self));
+
+  g_list_free (children);
+
+  return TRUE;
 }
