@@ -69,6 +69,13 @@ get_busy (GSimpleAction *action,
   gtk_widget_set_sensitive (window, FALSE);
 }
 
+static gint current_page = 1;
+static gboolean
+on_page (gint i)
+{
+  return current_page == i;
+}
+
 static void
 activate_search (GSimpleAction *action,
                  GVariant      *parameter,
@@ -76,6 +83,9 @@ activate_search (GSimpleAction *action,
 {
   GtkWidget *window = user_data;
   GtkWidget *searchbar;
+
+  if (!on_page (2))
+    return;
 
   searchbar = GTK_WIDGET (g_object_get_data (G_OBJECT (window), "searchbar"));
   gtk_search_bar_set_search_mode (GTK_SEARCH_BAR (searchbar), TRUE);
@@ -88,6 +98,9 @@ activate_delete (GSimpleAction *action,
 {
   GtkWidget *window = user_data;
   GtkWidget *infobar;
+
+  if (!on_page (2))
+    return;
 
   infobar = GTK_WIDGET (g_object_get_data (G_OBJECT (window), "infobar"));
   gtk_widget_show (infobar);
@@ -475,8 +488,13 @@ page_changed_cb (GtkWidget *stack, GParamSpec *pspec, gpointer data)
     return;
 
   name = gtk_stack_get_visible_child_name (GTK_STACK (stack));
+  if (g_str_equal (name, "page1"))
+    current_page = 1;
+  else if (g_str_equal (name, "page2"))
+    current_page = 2;
   if (g_str_equal (name, "page3"))
     {
+      current_page = 3;
       page = gtk_stack_get_visible_child (GTK_STACK (stack));
       set_needs_attention (GTK_WIDGET (page), FALSE);
     }
