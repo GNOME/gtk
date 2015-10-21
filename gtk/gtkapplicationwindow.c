@@ -230,7 +230,6 @@ struct _GtkApplicationWindowPrivate
   guint            id;
 
   GtkShortcutsWindow *help_overlay;
-  gboolean            has_help_overlay_action;
 };
 
 static void
@@ -994,17 +993,14 @@ gtk_application_window_set_help_overlay (GtkApplicationWindow *window,
   g_signal_connect (help_overlay, "delete-event",
                     G_CALLBACK (gtk_widget_hide_on_delete), NULL);
 
-  if (!window->priv->has_help_overlay_action)
+  if (!g_action_map_lookup_action (window->priv->actions, "show-help-overlay"))
     {
-      GActionEntry entries[1] = {
-        { "show-help-overlay", show_help_overlay, NULL, NULL, NULL },
-      };
+      GSimpleAction *action;
 
-      g_action_map_add_action_entries (G_ACTION_MAP (window->priv->actions),
-                                       entries, 1,
-                                       window);
+      action = g_simple_action_new ("show-help-overlay", NULL);
+      g_signal_connect (action, "activate", G_CALLBACK (show_help_overlay), window);
 
-      window->priv->has_help_overlay_action = TRUE;
+      g_action_map_add_action (G_ACTION_MAP (window->priv->actions), G_ACTION (action));
     }
 }
 
