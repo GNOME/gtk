@@ -64,6 +64,7 @@ EXTRA_DIST += 				\
 	widget-factory.ui 		\
 	widget-factory.css		\
 	menus.ui 			\
+	help-overlay.ui			\
 	widget-factory.gresource.xml	\
 	data/source.svg			\
 	data/symbolic-source.svg
