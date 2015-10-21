@@ -562,6 +562,7 @@ gdk_event_new (GdkEventType type)
       new_event->scroll.y_root = 0.;
       new_event->scroll.delta_x = 0.;
       new_event->scroll.delta_y = 0.;
+      new_event->scroll.is_stop = FALSE;
       break;
     case GDK_ENTER_NOTIFY:
     case GDK_LEAVE_NOTIFY:
@@ -1416,6 +1417,28 @@ gdk_event_get_scroll_deltas (const GdkEvent *event,
     *delta_y = dy;
 
   return fetched;
+}
+
+/**
+ * gdk_event_is_scroll_stop_event
+ * @event: a #GdkEvent
+ *
+ * Check whether a scroll event is a stop scroll event. Scroll sequences
+ * with smooth scroll information may provide a stop scroll event once the
+ * interaction with the device finishes, e.g. by lifting a finger. This
+ * stop scroll event is the signal that a widget may trigger kinetic
+ * scrolling based on the current velocity.
+ *
+ * Stop scroll events always have a a delta of 0/0.
+ *
+ * Returns: %TRUE if the event is a scroll stop event
+ *
+ * Since: 3.20
+ */
+gboolean
+gdk_event_is_scroll_stop_event (const GdkEvent *event)
+{
+  return event->scroll.is_stop;
 }
 
 /**

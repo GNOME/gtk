@@ -9328,6 +9328,7 @@ proxy_button_event (GdkEvent *source_event,
       event->scroll.device = source_event->scroll.device;
       event->scroll.delta_x = source_event->scroll.delta_x;
       event->scroll.delta_y = source_event->scroll.delta_y;
+      event->scroll.is_stop = source_event->scroll.is_stop;
       gdk_event_set_source_device (event, source_device);
       return TRUE;
 

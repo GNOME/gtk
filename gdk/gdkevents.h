@@ -824,6 +824,7 @@ struct _GdkEventScroll
   gdouble x_root, y_root;
   gdouble delta_x;
   gdouble delta_y;
+  guint is_stop : 1;
 };
 
 /**
@@ -1376,6 +1377,9 @@ GDK_AVAILABLE_IN_3_4
 gboolean  gdk_event_get_scroll_deltas   (const GdkEvent *event,
                                          gdouble         *delta_x,
                                          gdouble         *delta_y);
+
+GDK_AVAILABLE_IN_3_20
+gboolean  gdk_event_is_scroll_stop_event (const GdkEvent *event);
 
 GDK_AVAILABLE_IN_ALL
 gboolean  gdk_event_get_axis            (const GdkEvent  *event,

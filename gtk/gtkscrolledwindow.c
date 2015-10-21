@@ -3321,7 +3321,7 @@ gtk_scrolled_window_scroll_event (GtkWidget      *widget,
        * after scrolling finished, start kinetic scrolling when this
        * happens.
        */
-      if (delta_y == 0 && delta_x == 0)
+      if (gdk_event_is_scroll_stop_event ((GdkEvent *) event))
         {
           handled = TRUE;
           start_deceleration = TRUE;

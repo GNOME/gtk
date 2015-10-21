@@ -62,6 +62,7 @@ struct _GdkWaylandPointerFrameData
   /* Specific to the scroll event */
   gdouble delta_x, delta_y;
   int32_t discrete_x, discrete_y;
+  gint8 is_scroll_stop;
 };
 
 struct _GdkWaylandSeat
@@ -972,7 +973,8 @@ flush_discrete_scroll_event (GdkWaylandSeat     *seat,
 static void
 flush_smooth_scroll_event (GdkWaylandSeat *seat,
                            gdouble         delta_x,
-                           gdouble         delta_y)
+                           gdouble         delta_y,
+                           gboolean        is_stop)
 {
   GdkEvent *event;
 
@@ -980,6 +982,7 @@ flush_smooth_scroll_event (GdkWaylandSeat *seat,
   event->scroll.direction = GDK_SCROLL_SMOOTH;
   event->scroll.delta_x = delta_x;
   event->scroll.delta_y = delta_y;
+  event->scroll.is_stop = is_stop;
 
   _gdk_wayland_display_deliver_event (seat->display, event);
 }
@@ -988,6 +991,8 @@ static void
 flush_scroll_event (GdkWaylandSeat             *seat,
                     GdkWaylandPointerFrameData *pointer_frame)
 {
+  gboolean is_stop = FALSE;
+
   if (pointer_frame->discrete_x || pointer_frame->discrete_y)
     {
       GdkScrollDirection direction;
@@ -1004,14 +1009,24 @@ flush_scroll_event (GdkWaylandSeat             *seat,
       flush_discrete_scroll_event (seat, direction);
     }
 
+  /* Axes can stop independently, if we stop on one axis but have a
+   * delta on the other, we don't count it as a stop event.
+   */
+  if (pointer_frame->is_scroll_stop &&
+      pointer_frame->delta_x == 0 &&
+      pointer_frame->delta_y == 0)
+    is_stop = TRUE;
+
   flush_smooth_scroll_event (seat,
                              pointer_frame->delta_x,
-                             pointer_frame->delta_y);
+                             pointer_frame->delta_y,
+                             is_stop);
 
   pointer_frame->delta_x = 0;
   pointer_frame->delta_y = 0;
   pointer_frame->discrete_x = 0;
   pointer_frame->discrete_y = 0;
+  pointer_frame->is_scroll_stop = FALSE;
 }
 
 static void
@@ -1368,6 +1383,8 @@ pointer_handle_axis_stop (void              *data,
     default:
       g_return_if_reached ();
     }
+
+  pointer_frame->is_scroll_stop = TRUE;
 
   GDK_NOTE (EVENTS,
             g_message ("axis stop, seat %p", seat));
