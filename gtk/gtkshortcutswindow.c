@@ -800,6 +800,7 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
   empty = g_object_new (GTK_TYPE_GRID,
                         "visible", TRUE,
                         "row-spacing", 12,
+                        "margin", 12,
                         "hexpand", TRUE,
                         "vexpand", TRUE,
                         "halign", GTK_ALIGN_CENTER,
