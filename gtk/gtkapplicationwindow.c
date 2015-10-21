@@ -973,6 +973,17 @@ show_help_overlay (GSimpleAction *action,
     gtk_widget_show (GTK_WIDGET (window->priv->help_overlay));
 }
 
+/**
+ * gtk_application_window_set_help_overlay:
+ * @window: a #GtkApplicationWindow
+ * @help_overlay: a #GtkShortcutsWindow
+ *
+ * Associates a shortcuts window with the application window, and
+ * sets up a action with the name win.show-help-overay to present
+ * it.
+ *
+ * Since: 3.20
+ */
 void
 gtk_application_window_set_help_overlay (GtkApplicationWindow *window,
                                          GtkShortcutsWindow   *help_overlay)
@@ -1004,6 +1015,17 @@ gtk_application_window_set_help_overlay (GtkApplicationWindow *window,
     }
 }
 
+/**
+ * gtk_application_window_get_help_overlay:
+ * @window: a #GtkApplicationWindow
+ *
+ * Gets the #GtkShortcutsWindow that has been set up with
+ * a prior call to gtk_application_window_set_help_overlay().
+ *
+ * Returns: the help overlay associated with @window, or %NULL
+ *
+ * Since: 3.20
+ */
 GtkShortcutsWindow *
 gtk_application_window_get_help_overlay (GtkApplicationWindow *window)
 {

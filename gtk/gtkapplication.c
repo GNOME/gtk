@@ -75,7 +75,7 @@
  * ## Automatic resources ## {#automatic-resources}
  *
  * #GtkApplication will automatically load menus from the #GtkBuilder
- * file located at "gtk/menus.ui", relative to the application's
+ * resource located at "gtk/menus.ui", relative to the application's
  * resource base path (see g_application_set_resource_base_path()).  The
  * menu with the ID "app-menu" is taken as the application's app menu
  * and the menu with the ID "menubar" is taken as the application's
@@ -83,7 +83,7 @@
  * and accessed via gtk_application_get_menu_by_id() which allows for
  * dynamic population of a part of the menu structure.
  *
- * If the files "gtk/menus-appmenu.ui" or "gtk/menus-traditional.ui" are
+ * If the resources "gtk/menus-appmenu.ui" or "gtk/menus-traditional.ui" are
  * present then these files will be used in preference, depending on the
  * value of gtk_application_prefers_app_menu().
  *
@@ -95,6 +95,12 @@
  * path.  This allows your application to easily store its icons as
  * resources.  See gtk_icon_theme_add_resource_path() for more
  * information.
+ *
+ * If there is a resource located at "gtk/help-overlay.ui" which is
+ * defining a #GtkShortcutsWindow with ID "help_overlay" then GtkApplication
+ * will associate an instance of this shortcuts window with each
+ * #GtkApplicationWindow and set up accelerators Control-F1 and Control-?
+ * to open it.
  *
  * ## A simple application ## {#gtkapplication}
  *
