@@ -22,6 +22,7 @@
 
 #include "gtkshortcutsgroup.h"
 #include "gtkbutton.h"
+#include "gtklabel.h"
 #include "gtkstack.h"
 #include "gtkstackswitcher.h"
 #include "gtkstylecontext.h"
@@ -436,12 +437,17 @@ static void
 adjust_page_buttons (GtkWidget *widget,
                      gpointer   data)
 {
+  GtkWidget *label;
+
   /*
    * TODO: This is a hack to get the GtkStackSwitcher radio
    *       buttons to look how we want. However, it's very
    *       much font size specific.
    */
   gtk_widget_set_size_request (widget, 34, 34);
+
+  label = gtk_bin_get_child (GTK_BIN (widget));
+  gtk_label_set_use_underline (GTK_LABEL (label), TRUE);
 }
 
 static void
@@ -598,7 +604,7 @@ gtk_shortcuts_section_reflow_groups (GtkShortcutsSection *self)
       GtkWidget *page = p->data;
       gchar *title;
 
-      title = g_strdup_printf ("%u", n_pages + 1);
+      title = g_strdup_printf ("_%u", n_pages + 1);
       gtk_stack_add_titled (self->stack, page, title, title);
       g_free (title);
     }
