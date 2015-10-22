@@ -1022,7 +1022,7 @@ gtk_application_window_set_help_overlay (GtkApplicationWindow *window,
  * Gets the #GtkShortcutsWindow that has been set up with
  * a prior call to gtk_application_window_set_help_overlay().
  *
- * Returns: the help overlay associated with @window, or %NULL
+ * Returns: (transfer none) (nullable): the help overlay associated with @window, or %NULL
  *
  * Since: 3.20
  */
