@@ -22,6 +22,10 @@ demos/gtk-demo/popover.ui
 demos/gtk-demo/revealer.ui
 demos/gtk-demo/scale.ui
 demos/gtk-demo/search_entry.c
+demos/gtk-demo/shortcuts-builder.ui
+demos/gtk-demo/shortcuts-clocks.ui
+demos/gtk-demo/shortcuts-gedit.ui
+demos/gtk-demo/shortcuts.ui
 demos/gtk-demo/sizegroup.c
 demos/gtk-demo/spinbutton.ui
 demos/gtk-demo/spinner.c
