@@ -1501,6 +1501,7 @@ gdk_display_get_n_screens (GdkDisplay *display)
  * Returns: (transfer none): the #GdkScreen object
  *
  * Since: 2.2
+ * Deprecated: 3.20: There is only one screen; use gdk_display_get_default_screen() to get it.
  */
 GdkScreen *
 gdk_display_get_screen (GdkDisplay *display,

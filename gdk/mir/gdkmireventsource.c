@@ -54,7 +54,7 @@ send_event (GdkWindow *window, GdkDevice *device, GdkEvent *event)
 
   gdk_event_set_device (event, device);
   gdk_event_set_source_device (event, device);
-  gdk_event_set_screen (event, gdk_display_get_screen (gdk_window_get_display (window), 0));
+  gdk_event_set_screen (event, gdk_display_get_default_screen (gdk_window_get_display (window)));
   event->any.window = g_object_ref (window);
 
   display = gdk_window_get_display (window);

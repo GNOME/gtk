@@ -472,7 +472,7 @@ gdk_x11_device_core_window_at_position (GdkDevice       *device,
 
       /* FIXME: untrusted clients case not multidevice-safe */
       pointer_window = None;
-      screen = gdk_display_get_screen (display, 0);
+      screen = gdk_display_get_default_screen (display);
       toplevels = gdk_screen_get_toplevel_windows (screen);
       for (list = toplevels; list != NULL; list = list->next)
         {

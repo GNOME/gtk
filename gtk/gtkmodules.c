@@ -464,7 +464,7 @@ display_closed_cb (GdkDisplay *display,
   GdkScreen *screen;
   GtkSettings *settings;
 
-  screen = gdk_display_get_screen (display, 0);
+  screen = gdk_display_get_default_screen (display);
   settings = gtk_settings_get_for_screen (screen);
 
   g_object_set_data_full (G_OBJECT (settings),
@@ -494,7 +494,7 @@ display_opened_cb (GdkDisplayManager *display_manager,
     }
   
   g_value_init (&value, G_TYPE_STRING);
-  screen = gdk_display_get_screen (display, 0);
+  screen = gdk_display_get_default_screen (display);
 
   if (gdk_screen_get_setting (screen, "gtk-modules", &value))
     {

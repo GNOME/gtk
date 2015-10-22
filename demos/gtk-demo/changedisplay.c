@@ -171,7 +171,7 @@ query_change_display (ChangeDisplayInfo *info)
                                  "to move to the new screen");
 
   if (toplevel)
-    gtk_window_set_screen (GTK_WINDOW (toplevel), gdk_display_get_screen (info->current_display, 0));
+    gtk_window_set_screen (GTK_WINDOW (toplevel), gdk_display_get_default_screen (info->current_display));
   else
     gdk_display_beep (gdk_screen_get_display (screen));
 }
