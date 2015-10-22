@@ -31,7 +31,7 @@ static int debug_indent = 0;
 /**
  * gdk_win32_display_set_cursor_theme:
  * @display: (type GdkWin32Display): a #GdkDisplay
- * @name: (allow-none) the name of the cursor theme to use, or %NULL to unset
+ * @name: (allow-none): the name of the cursor theme to use, or %NULL to unset
  *         a previously set value
  * @size: the cursor size to use, or 0 to keep the previous size
  *
