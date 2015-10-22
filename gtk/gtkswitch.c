@@ -250,7 +250,6 @@ gtk_switch_pan_gesture_pan (GtkGesturePan   *gesture,
   GtkWidget *widget = GTK_WIDGET (sw);
   GtkSwitchPrivate *priv = sw->priv;
   GtkStyleContext *context;
-  GtkStateFlags state;
   GtkBorder padding;
   gint width;
 
@@ -260,10 +259,9 @@ gtk_switch_pan_gesture_pan (GtkGesturePan   *gesture,
   gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
 
   gtk_style_context_save_to_node (context, priv->slider_node);
-  gtk_style_context_get_padding (context, state, &padding);
+  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
   gtk_style_context_restore (context);
 
   width = gtk_widget_get_allocated_width (widget);
@@ -357,7 +355,6 @@ gtk_switch_get_preferred_width (GtkWidget *widget,
   GtkSwitch *self;
   GtkSwitchPrivate *priv;
   GtkStyleContext *context;
-  GtkStateFlags state;
   GtkBorder padding;
   gint width, slider_width;
   PangoLayout *layout;
@@ -366,10 +363,9 @@ gtk_switch_get_preferred_width (GtkWidget *widget,
   self = GTK_SWITCH (widget);
   priv = self->priv;
   context = gtk_widget_get_style_context (widget);
-  state = gtk_style_context_get_state (context);
 
   gtk_style_context_save_to_node (context, priv->slider_node);
-  gtk_style_context_get_padding (context, state, &padding);
+  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
 
   width = padding.left + padding.right;
 
@@ -410,7 +406,6 @@ gtk_switch_get_preferred_height (GtkWidget *widget,
   GtkSwitch *self;
   GtkSwitchPrivate *priv;
   GtkStyleContext *context;
-  GtkStateFlags state;
   GtkBorder padding;
   gint height, slider_height;
   PangoLayout *layout;
@@ -420,11 +415,10 @@ gtk_switch_get_preferred_height (GtkWidget *widget,
   self = GTK_SWITCH (widget);
   priv = self->priv;
   context = gtk_widget_get_style_context (widget);
-  state = gtk_style_context_get_state (context);
 
   gtk_style_context_save_to_node (context, priv->slider_node);
 
-  gtk_style_context_get_padding (context, state, &padding);
+  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
 
   height = padding.top + padding.bottom;
 
@@ -592,15 +586,13 @@ gtk_switch_draw (GtkWidget *widget,
   PangoRectangle rect;
   gint label_x, label_y;
   GtkBorder padding;
-  GtkStateFlags state;
   gint x, y, width, height;
 
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
 
   gtk_style_context_save_to_node (context, priv->slider_node);
 
-  gtk_style_context_get_padding (context, state, &padding);
+  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
 
   gtk_style_context_restore (context);
 
