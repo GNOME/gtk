@@ -3091,6 +3091,7 @@ hide_drag_window (GtkNotebook        *notebook,
       else
         gtk_widget_unparent (page->tab_label);
 
+      gtk_css_node_set_parent (gtk_widget_get_css_node (page->tab_label), page->cssnode);
       gtk_widget_set_parent (page->tab_label, widget);
       g_object_unref (page->tab_label);
     }
