@@ -102,6 +102,7 @@
 #include <gtk/gtkfilechoosernative.h>
 #include <gtk/gtkfilechooserwidget.h>
 #include <gtk/gtkfilefilter.h>
+#include <gtk/gtkfilespathbar.h>
 #include <gtk/gtkflowbox.h>
 #include <gtk/gtkfontbutton.h>
 #include <gtk/gtkfontchooser.h>
@@ -154,6 +155,7 @@
 #include <gtk/gtkoverlay.h>
 #include <gtk/gtkpagesetup.h>
 #include <gtk/gtkpapersize.h>
+#include <gtk/gtkpathbar.h>
 #include <gtk/gtkpaned.h>
 #include <gtk/gtkplacessidebar.h>
 #include <gtk/gtkpopover.h>

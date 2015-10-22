@@ -1594,31 +1594,31 @@ headerbar {
 /************
  * Pathbars *
  ************/
-.path-bar button {
-  &.text-button, &.image-button, & {
-    padding-left: 4px;
-    padding-right: 4px;
-  }
 
-  &.text-button.image-button label {
-    padding-left: 0;
-    padding-right: 0;
-  }
+path-bar button.flat, .path-bar-overflow-popover button.flat {
+    background-image: none;
+    border-radius: 0px;
+    border-color: transparent;
+    border-width: 2px 0px 2px 0px;
+    box-shadow: 0px 0px 0px;
+    margin: 0px;
+    opacity: 0.55;
+    padding: 3px 8px 4px;
+    background-color: transparent;
 
-  &.text-button.image-button, & {
-    label:last-child { padding-right: 8px; }
-    label:first-child { padding-left: 8px; }
-  }
+    &:checked {
+      opacity: 1;
+    }
 
-  image {
-    padding-left: 4px;
-    padding-right: 4px;
-  }
+    &:hover {
+      border-bottom-color: mix($selected_bg_color, $selected_fg_color, 75%);
+    }
 
-  &.slider-button {
-    padding-left: 0;
-    padding-right: 0;
-  }
+    &:backdrop, &:backdrop:checked {
+      background-color: transparent;
+      border-color: transparent;
+      background-image: none;
+    }
 }
 
 /**************

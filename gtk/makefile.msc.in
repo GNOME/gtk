@@ -446,6 +446,7 @@ gtk_public_h_sources = 		\
 	gtkpagesetup.h		\
 	gtkpaned.h		\
 	gtkpapersize.h		\
+	gtkpathbar.h		\
 	gtkplug.h		\
 	gtkprintcontext.h	\
 	gtkprintoperation.h	\
