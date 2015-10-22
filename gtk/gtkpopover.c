@@ -1545,6 +1545,9 @@ gtk_popover_show (GtkWidget *widget)
 {
   GtkPopoverPrivate *priv = GTK_POPOVER (widget)->priv;
 
+  if (priv->window)
+    _gtk_window_raise_popover (priv->window, widget);
+
   priv->visible = TRUE;
 
   GTK_WIDGET_CLASS (gtk_popover_parent_class)->show (widget);
