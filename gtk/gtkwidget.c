@@ -16321,11 +16321,13 @@ gtk_widget_clear_path (GtkWidget *widget)
  * @widget_class: class to set the name on
  * @name: name to use
  *
- * Sets the name to be used for CSS matching of widgets. 
+ * Sets the name to be used for CSS matching of widgets.
  *
- * If this function is not calles for a given class, the name
+ * If this function is not called for a given class, the name
  * of the parent class is used.
- **/
+ *
+ * Since: 3.20
+ */
 void
 gtk_widget_class_set_css_name (GtkWidgetClass *widget_class,
                                const char     *name)
@@ -16344,10 +16346,12 @@ gtk_widget_class_set_css_name (GtkWidgetClass *widget_class,
  * gtk_widget_class_get_css_name:
  * @widget_class: class to set the name on
  *
- * Gets the name used by this class for matching in CSS code. See 
+ * Gets the name used by this class for matching in CSS code. See
  * gtk_widget_class_set_css_name() for details.
  *
- * Returns: the CSS name of the given class.
+ * Returns: the CSS name of the given class
+ *
+ * Since: 3.20
  */
 const char *
 gtk_widget_class_get_css_name (GtkWidgetClass *widget_class)
