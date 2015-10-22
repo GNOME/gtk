@@ -5404,8 +5404,84 @@ gtk_window_get_size (GtkWindow *window,
     *height = h;
 }
 
-#undef INCLUDE_CSD_SIZE
-#undef EXCLUDE_CSD_SIZE
+static void
+gtk_window_translate_csd_pos (GtkWindow *window,
+                              gint      *root_x,
+                              gint      *root_y,
+                              gint       apply)
+{
+  GtkWindowPrivate *priv = window->priv;
+
+  if (priv->decorated)
+    {
+      GtkBorder window_border = { 0 };
+      gint title_height = 0;
+      gint dx;
+      gint dy;
+
+      get_shadow_width (window, &window_border);
+      if (priv->title_box != NULL &&
+          gtk_widget_get_visible (priv->title_box) &&
+          gtk_widget_get_child_visible (priv->title_box))
+        {
+          gint minimum_height;
+
+          gtk_widget_get_preferred_height (priv->title_box, &minimum_height, &title_height);
+        }
+
+      switch (priv->gravity)
+        {
+        case GDK_GRAVITY_NORTH:
+        case GDK_GRAVITY_CENTER:
+        case GDK_GRAVITY_SOUTH:
+          dx = (window_border.left + window_border.right) / 2;
+          break;
+
+        case GDK_GRAVITY_NORTH_WEST:
+        case GDK_GRAVITY_WEST:
+        case GDK_GRAVITY_SOUTH_WEST:
+        case GDK_GRAVITY_SOUTH_EAST:
+        case GDK_GRAVITY_EAST:
+        case GDK_GRAVITY_NORTH_EAST:
+          dx = window_border.left;
+          break;
+
+        default:
+          dx = 0;
+          break;
+        }
+
+      switch (priv->gravity)
+        {
+        case GDK_GRAVITY_WEST:
+        case GDK_GRAVITY_CENTER:
+        case GDK_GRAVITY_EAST:
+          dy = (window_border.top + title_height + window_border.bottom) / 2;
+          break;
+
+        case GDK_GRAVITY_NORTH_WEST:
+        case GDK_GRAVITY_NORTH:
+        case GDK_GRAVITY_NORTH_EAST:
+          dy = window_border.top;
+          break;
+
+        case GDK_GRAVITY_SOUTH_WEST:
+        case GDK_GRAVITY_SOUTH:
+        case GDK_GRAVITY_SOUTH_EAST:
+          dy = window_border.top + title_height;
+          break;
+
+        default:
+          dy = 0;
+          break;
+        }
+
+      if (root_x)
+        *root_x = *root_x + (dx * apply);
+      if (root_y)
+        *root_y = *root_y + (dy * apply);
+    }
+}
 
 /**
  * gtk_window_move:
@@ -5460,6 +5536,7 @@ gtk_window_move (GtkWindow *window,
   widget = GTK_WIDGET (window);
 
   info = gtk_window_get_geometry_info (window, TRUE);  
+  gtk_window_translate_csd_pos (window, &x, &y, EXCLUDE_CSD_SIZE);
 
   if (_gtk_widget_get_mapped (widget))
     {
@@ -5591,6 +5668,7 @@ gtk_window_get_position (GtkWindow *window,
           *root_x = configure_request.x;
           *root_y = configure_request.y;
         }
+      gtk_window_translate_csd_pos (window, root_x, root_y, INCLUDE_CSD_SIZE);
     }
   else
     {
@@ -5605,6 +5683,11 @@ gtk_window_get_position (GtkWindow *window,
           x = frame_extents.x;
           y = frame_extents.y;
           gtk_window_get_size (window, &w, &h);
+          /* gtk_window_get_size() will have already taken into account
+           * the padding added by the CSD shadow and title bar, so we need
+           * to revert it here, otherwise we'll end up counting it twice...
+           */
+          gtk_window_update_csd_size (window, &w, &h, INCLUDE_CSD_SIZE);
         }
       else
         {
@@ -5620,6 +5703,7 @@ gtk_window_get_position (GtkWindow *window,
           h = frame_extents.height;
         }
       
+      gtk_window_translate_csd_pos (window, &x, &y, INCLUDE_CSD_SIZE);
       switch (priv->gravity)
         {
         case GDK_GRAVITY_NORTH:
@@ -5671,6 +5755,9 @@ gtk_window_get_position (GtkWindow *window,
         *root_y = y;
     }
 }
+
+#undef INCLUDE_CSD_SIZE
+#undef EXCLUDE_CSD_SIZE
 
 /**
  * gtk_window_reshow_with_initial_size:
