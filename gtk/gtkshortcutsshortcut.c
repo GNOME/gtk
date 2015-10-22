@@ -185,9 +185,14 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
    * The accelerator(s) represented by this object, in the syntax
    * understood by gtk_accelerator_parse(). Multiple accelerators
    * can be specified by separating them with a space, but keep in
-   * mind that the available width is limited.
+   * mind that the available width is limited. It is also possible
+   * to specify ranges of shortcuts, using ... between the keys.
    *
-   * Here is an example: <ctrl>? F1
+   * Examples:
+   *
+   * - A single shortcut: <ctrl><alt>delete
+   * - Two alternative shortcuts: <shift>a Home
+   * - A range: <alt>1...9
    *
    * Note that < and > need to escaped as &lt; and &gt; when used
    * in .ui files.

@@ -157,14 +157,47 @@ dim_label (const gchar *text)
 }
 
 static void
+display_shortcut (GtkContainer    *self,
+                  guint            key,
+                  GdkModifierType  modifier)
+{
+  gchar **keys = NULL;
+  gint i;
+  guint n_mods;
+
+  keys = get_labels (key, modifier, &n_mods);
+  for (i = 0; keys[i]; i++)
+    {
+      GtkWidget *frame;
+      GtkWidget *disp;
+
+      if (i > 0)
+        gtk_container_add (self, dim_label ("+"));
+
+      frame = gtk_frame_new (NULL);
+      gtk_widget_show (frame);
+
+      gtk_container_add (self, frame);
+
+      if (i < n_mods)
+        gtk_widget_set_size_request (frame, 50, -1);
+
+      disp = gtk_label_new (keys[i]);
+      gtk_widget_show (disp);
+      gtk_container_add (GTK_CONTAINER (frame), disp);
+    }
+  g_strfreev (keys);
+}
+
+static void
 gtk_shortcut_label_rebuild (GtkShortcutLabel *self)
 {
   gchar **accels = NULL;
-  gchar **keys = NULL;
   GdkModifierType modifier = 0;
+  GdkModifierType modifier2 = 0;
   guint key = 0;
-  guint i, k;
-  guint n_mods;
+  guint key2 = 0;
+  guint k;
 
   gtk_container_foreach (GTK_CONTAINER (self), (GtkCallback)gtk_widget_destroy, NULL);
 
@@ -174,37 +207,43 @@ gtk_shortcut_label_rebuild (GtkShortcutLabel *self)
   accels = g_strsplit (self->accelerator, " ", 0);
   for (k = 0; accels[k]; k++)
     {
+      gchar *dots;
+
+      dots = strstr (accels[k], "...");
+      if (dots)
+        {
+          dots[0] = '\0';
+          gtk_accelerator_parse (dots + 3, &key2, &modifier2);
+          if ((key2 == 0) && (modifier2 == 0))
+            {
+              g_warning ("Failed to parse %s, part of accelerator '%s'", dots + 3, self->accelerator);
+              goto out;
+            }
+        }
+      else
+        key2 = 0;
+
       gtk_accelerator_parse (accels[k], &key, &modifier);
       if ((key == 0) && (modifier == 0))
         {
-          g_warning ("Failed to parse accelerator '%s'", self->accelerator);
+          g_warning ("Failed to parse %s, part of accelerator '%s'", accels[k], self->accelerator);
           goto out;
         }
 
       if (k > 0)
         gtk_container_add (GTK_CONTAINER (self), dim_label ("/"));
 
-      keys = get_labels (key, modifier, &n_mods);
-      for (i = 0; keys[i]; i++)
-        {
-          GtkWidget *frame;
-          GtkWidget *disp;
+      display_shortcut (GTK_CONTAINER (self), key, modifier);
 
-          if (i > 0)
-            gtk_container_add (GTK_CONTAINER (self), dim_label ("+"));
+       if (key2 == 0)
+         continue;
 
-          frame = gtk_frame_new (NULL);
-          gtk_widget_show (frame);
-          gtk_container_add (GTK_CONTAINER (self), frame);
+       if (modifier2 == modifier)
+         modifier2 = 0;
 
-          if (i < n_mods)
-            gtk_widget_set_size_request (frame, 50, -1);
+      gtk_container_add (GTK_CONTAINER (self), dim_label ("…"));
 
-          disp = gtk_label_new (keys[i]);
-          gtk_widget_show (disp);
-          gtk_container_add (GTK_CONTAINER (frame), disp);
-        }
-       g_strfreev (keys);
+      display_shortcut (GTK_CONTAINER (self), key2, modifier2);
     }
 
 out:
