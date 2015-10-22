@@ -443,6 +443,7 @@ _gtk_text_handle_update (GtkTextHandle         *handle,
 
       gtk_widget_set_size_request (handle_window->widget, width, height);
       gtk_widget_show (handle_window->widget);
+      _gtk_window_raise_popover (GTK_WINDOW (window), handle_window->widget);
       _gtk_window_set_popover_position (GTK_WINDOW (window),
                                         handle_window->widget,
                                         GTK_POS_BOTTOM, &rect);
