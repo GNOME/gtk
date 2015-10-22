@@ -638,6 +638,9 @@ gdk_rectangle_intersect
 gdk_rectangle_union
 gdk_rectangle_equal
 
+<SUBSECTION>
+GdkBorder
+
 <SUBSECTION Private>
 gdk_rectangle_get_type
 </SECTION>

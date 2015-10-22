@@ -34,8 +34,6 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GtkBorder GtkBorder;
-
 #define GTK_TYPE_BORDER (gtk_border_get_type ())
 
 /**
@@ -48,13 +46,7 @@ typedef struct _GtkBorder GtkBorder;
  * A struct that specifies a border around a rectangular area
  * that can be of different width on each side.
  */
-struct _GtkBorder
-{
-  gint16 left;
-  gint16 right;
-  gint16 top;
-  gint16 bottom;
-};
+typedef GdkBorder GtkBorder;
 
 GDK_AVAILABLE_IN_ALL
 GType      gtk_border_get_type (void) G_GNUC_CONST;

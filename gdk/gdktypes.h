@@ -93,6 +93,26 @@ typedef struct _GdkRectangle          GdkRectangle;
 typedef cairo_rectangle_int_t         GdkRectangle;
 #endif
 
+typedef struct _GdkBorder GdkBorder;
+
+/**
+ * GdkBorder:
+ * @left: The width of the left border
+ * @right: The width of the right border
+ * @top: The width of the top border
+ * @bottom: The width of the bottom border
+ *
+ * A struct that specifies a border around a rectangular area
+ * that can be of different width on each side.
+ */
+struct _GdkBorder
+{
+  gint16 left;
+  gint16 right;
+  gint16 top;
+  gint16 bottom;
+};
+
 /**
  * GdkAtom:
  *
