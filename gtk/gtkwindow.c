@@ -6146,7 +6146,7 @@ popover_map (GtkWidget        *widget,
 {
   if (popover->window && gtk_widget_get_visible (popover->widget))
     {
-      gdk_window_show (popover->window);
+      gdk_window_show_unraised (popover->window);
       gtk_widget_map (popover->widget);
       popover->unmap_id = g_signal_connect (popover->widget, "unmap",
                                             G_CALLBACK (popover_unmap), popover);
@@ -7503,7 +7503,7 @@ popover_size_allocate (GtkWidget        *widget,
       gtk_widget_is_visible (widget))
     {
       if (!gdk_window_is_visible (popover->window))
-        gdk_window_show (popover->window);
+        gdk_window_show_unraised (popover->window);
     }
   else if (gdk_window_is_visible (popover->window))
     gdk_window_hide (popover->window);
@@ -7617,6 +7617,22 @@ _gtk_window_set_allocation (GtkWindow           *window,
 }
 
 static void
+gtk_window_restack_popovers (GtkWindow *window)
+{
+  GtkWindowPrivate *priv = window->priv;
+  GList *link = priv->popovers;
+
+  while (link)
+    {
+      GtkWindowPopover *popover = link->data;
+      link = link->next;
+
+      if (popover->window && gdk_window_is_visible (popover->window))
+        gdk_window_raise (popover->window);
+    }
+}
+
+static void
 gtk_window_size_allocate (GtkWidget     *widget,
                           GtkAllocation *allocation)
 {
@@ -7629,6 +7645,8 @@ gtk_window_size_allocate (GtkWidget     *widget,
   child = gtk_bin_get_child (GTK_BIN (window));
   if (child && gtk_widget_get_visible (child))
     gtk_widget_size_allocate (child, &child_allocation);
+
+  gtk_window_restack_popovers (window);
 }
 
 static gint
@@ -12106,6 +12124,27 @@ _gtk_window_is_popover_widget (GtkWindow *window,
   g_return_val_if_fail (GTK_IS_WIDGET (possible_popover), FALSE);
 
   return _gtk_window_has_popover (window, possible_popover) != NULL;
+}
+
+void
+_gtk_window_raise_popover (GtkWindow *window,
+                           GtkWidget *widget)
+{
+  GtkWindowPrivate *priv = window->priv;
+  GList *link;
+
+  for (link = priv->popovers; link; link = link->next)
+    {
+      GtkWindowPopover *popover = link->data;
+
+      if (popover->widget != widget)
+        continue;
+
+      priv->popovers = g_list_remove_link (priv->popovers, link);
+      priv->popovers = g_list_append (priv->popovers, link->data);
+      g_list_free (link);
+      break;
+    }
 }
 
 static GtkWidget *inspector_window = NULL;

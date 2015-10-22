@@ -117,6 +117,8 @@ void    _gtk_window_get_popover_position (GtkWindow                   *window,
                                           GtkWidget                   *popover,
                                           GtkPositionType             *pos,
                                           cairo_rectangle_int_t       *rect);
+void    _gtk_window_raise_popover        (GtkWindow                   *window,
+                                          GtkWidget                   *popover);
 
 GtkWidget * _gtk_window_get_popover_parent (GtkWindow *window,
                                             GtkWidget *popover);
