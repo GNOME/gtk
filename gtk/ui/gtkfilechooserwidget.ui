@@ -56,9 +56,9 @@
                                 <property name="spacing">6</property>
                                 <property name="border-width">6</property>
                                 <child>
-                                  <object class="GtkPathBar" id="browse_path_bar">
+                                  <object class="GtkFilesPathBar" id="browse_path_bar">
                                     <property name="visible">True</property>
-                                    <signal name="path-clicked" handler="path_bar_clicked" after="yes" swapped="no"/>
+                                    <signal name="notify::file" handler="on_path_bar_file"/>
                                   </object>
                                   <packing>
                                     <property name="expand">1</property>

@@ -49,7 +49,7 @@
 #include "gtkmessagedialog.h"
 #include "gtkmountoperation.h"
 #include "gtkpaned.h"
-#include "gtkpathbar.h"
+#include "gtkfilespathbar.h"
 #include "gtkplacessidebar.h"
 #include "gtkplacessidebarprivate.h"
 #include "gtkplacesviewprivate.h"
@@ -550,11 +550,9 @@ static void list_row_activated         (GtkTreeView           *tree_view,
 static void list_cursor_changed        (GtkTreeView           *treeview,
                                         GtkFileChooserWidget  *impl);
 
-static void path_bar_clicked (GtkPathBar            *path_bar,
-                              GFile                 *file,
-                              GFile                 *child,
-                              gboolean               child_is_hidden,
-                              GtkFileChooserWidget *impl);
+static void on_path_bar_file (GtkFilesPathBar            *path_bar,
+                              GParamSpec                 *pspec,
+                              GtkFileChooserWidget       *impl);
 
 static void update_cell_renderer_attributes (GtkFileChooserWidget *impl);
 
@@ -3034,7 +3032,7 @@ put_recent_folder_in_pathbar (GtkFileChooserWidget *impl, GtkTreeIter *iter)
   gtk_tree_model_get (GTK_TREE_MODEL (priv->recent_model), iter,
                       MODEL_COL_FILE, &file,
                       -1);
-  _gtk_path_bar_set_file (GTK_PATH_BAR (priv->browse_path_bar), file, FALSE);
+  gtk_files_path_bar_set_file (GTK_FILES_PATH_BAR (priv->browse_path_bar), file);
   g_object_unref (file);
 }
 
@@ -5482,7 +5480,7 @@ update_current_folder_get_info_cb (GCancellable *cancellable,
   if (! _gtk_file_info_consider_as_directory (info))
     goto out;
 
-  _gtk_path_bar_set_file (GTK_PATH_BAR (priv->browse_path_bar), data->file, data->keep_trail);
+  gtk_files_path_bar_set_file (GTK_FILES_PATH_BAR (priv->browse_path_bar), data->file);
 
   if (priv->current_folder != data->file)
     {
@@ -7845,24 +7843,15 @@ list_row_activated (GtkTreeView          *tree_view,
 }
 
 static void
-path_bar_clicked (GtkPathBar           *path_bar,
-                  GFile                *file,
-                  GFile                *child_file,
-                  gboolean              child_is_hidden,
+on_path_bar_file (GtkFilesPathBar      *path_bar,
+                  GParamSpec           *pspec,
                   GtkFileChooserWidget *impl)
 {
-  if (child_file)
-    pending_select_files_add (impl, child_file);
+  GFile *file;
 
-  if (!change_folder_and_display_error (impl, file, FALSE))
-    return;
+  file = gtk_files_path_bar_get_file (path_bar);
 
-  /* Say we have "/foo/bar/[.baz]" and the user clicks on "bar".  We should then
-   * show hidden files so that ".baz" appears in the file list, as it will still
-   * be shown in the path bar: "/foo/[bar]/.baz"
-   */
-  if (child_is_hidden)
-    g_object_set (impl, "show-hidden", TRUE, NULL);
+  change_folder_and_display_error (impl, file, FALSE);
 }
 
 static void
@@ -7960,7 +7949,7 @@ up_folder_handler (GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
-  _gtk_path_bar_up (GTK_PATH_BAR (priv->browse_path_bar));
+  //_gtk_path_bar_up (GTK_PATH_BAR (priv->browse_path_bar));
 }
 
 /* Handler for the "down-folder" keybinding signal */
@@ -7969,7 +7958,7 @@ down_folder_handler (GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
-  _gtk_path_bar_down (GTK_PATH_BAR (priv->browse_path_bar));
+  //_gtk_path_bar_down (GTK_PATH_BAR (priv->browse_path_bar));
 }
 
 /* Handler for the "home-folder" keybinding signal */
@@ -8498,7 +8487,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_callback (widget_class, list_selection_changed);
   gtk_widget_class_bind_template_callback (widget_class, list_cursor_changed);
   gtk_widget_class_bind_template_callback (widget_class, filter_combo_changed);
-  gtk_widget_class_bind_template_callback (widget_class, path_bar_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, on_path_bar_file);
   gtk_widget_class_bind_template_callback (widget_class, places_sidebar_open_location_cb);
   gtk_widget_class_bind_template_callback (widget_class, places_sidebar_show_error_message_cb);
   gtk_widget_class_bind_template_callback (widget_class, places_sidebar_show_other_locations_with_flags_cb);
@@ -8564,10 +8553,8 @@ post_process_ui (GtkFileChooserWidget *impl)
 
   g_list_free (cells);
 
-  /* Set the GtkPathBar file system backend */
-  _gtk_path_bar_set_file_system (GTK_PATH_BAR (impl->priv->browse_path_bar), impl->priv->file_system);
   file = g_file_new_for_path ("/");
-  _gtk_path_bar_set_file (GTK_PATH_BAR (impl->priv->browse_path_bar), file, FALSE);
+  gtk_files_path_bar_set_file (GTK_FILES_PATH_BAR (impl->priv->browse_path_bar), file);
   g_object_unref (file);
 
   /* Set the fixed size icon renderer, this requires
@@ -8634,7 +8621,7 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *impl)
   /* Ensure GTK+ private types used by the template
    * definition before calling gtk_widget_init_template()
    */
-  g_type_ensure (GTK_TYPE_PATH_BAR);
+  g_type_ensure (GTK_TYPE_FILES_PATH_BAR);
   g_type_ensure (GTK_TYPE_PLACES_VIEW);
 
   gtk_widget_init_template (GTK_WIDGET (impl));

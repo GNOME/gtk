@@ -197,6 +197,7 @@ gtk_public_h_sources = 		\
 	gtkfilechoosernative.h	\
 	gtkfilechooserwidget.h	\
 	gtkfilefilter.h		\
+	gtkfilespathbar.h	\
 	gtkfixed.h		\
 	gtkflowbox.h		\
 	gtkfontbutton.h		\
@@ -252,6 +253,7 @@ gtk_public_h_sources = 		\
 	gtkpagesetup.h		\
 	gtkpaned.h		\
 	gtkpapersize.h		\
+	gtkpathbar.h		\
 	gtkplacessidebar.h	\
 	gtkplug.h		\
 	gtkpopover.h		\
@@ -519,8 +521,8 @@ gtk_private_h_sources =		\
 	gtkmountoperationprivate.h \
 	gtknativedialogprivate.h \
 	gtkorientableprivate.h	\
+	gtkpathbarcontainerprivate.h \
 	gtkpango.h		\
-	gtkpathbar.h		\
 	gtkplacessidebarprivate.h	\
 	gtkplacesviewprivate.h	\
 	gtkplacesviewrowprivate.h	\
@@ -757,6 +759,7 @@ gtk_base_c_sources = 		\
 	gtkfilechooserutils.c	\
 	gtkfilechooserwidget.c	\
 	gtkfilefilter.c		\
+	gtkfilespathbar.c	\
 	gtkfilesystem.c		\
 	gtkfilesystemmodel.c	\
 	gtkfixed.c		\
@@ -830,6 +833,7 @@ gtk_base_c_sources = 		\
 	gtkorientable.c		\
 	gtkoverlay.c		\
 	gtkpagesetup.c		\
+	gtkpathbarcontainer.c	\
 	gtkpaned.c		\
 	gtkpango.c		\
 	gtkpapersize.c		\
