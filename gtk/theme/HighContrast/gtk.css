@@ -1184,7 +1184,7 @@ GtkComboBox {
   .path-bar .button label:only-child {
     padding-right: 0;
     padding-left: 0; }
-  .path-bar .button GtkImage {
+  .path-bar .button image {
     padding-top: 1px; }
 
 /**************
@@ -1645,7 +1645,7 @@ GtkTreeView.view.progressbar {
         color: rgba(0, 0, 0, 0.3);
         border-color: transparent;
         border-width: 2px; }
-      .notebook tab .button > GtkImage {
+      .notebook tab .button > image {
         padding: 2px; }
 
 /**************
@@ -2417,7 +2417,7 @@ GtkSidebarRow .sidebar-label:dir(rtl) {
   outline-radius: 100%; }
   .sidebar-button.button.image-button {
     padding: 5px; }
-  .sidebar-button.button:not(:hover):not(:active) > GtkImage, .sidebar-button.button:backdrop > GtkImage {
+  .sidebar-button.button:not(:hover):not(:active) > image, .sidebar-button.button:backdrop > image {
     opacity: 0.9; }
 GtkPlacesSidebar.sidebar .view {
   color: #000;

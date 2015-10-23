@@ -958,7 +958,7 @@ GtkComboBox {
   & label:last-child { padding-left: 2px; }
   & label:first-child { padding-right: 2px; }
   & label:only-child { padding-right: 0; padding-left: 0; }
-  GtkImage { padding-top: 1px; }
+  image { padding-top: 1px; }
 }
 
 
@@ -1454,7 +1454,7 @@ GtkTreeView.view.progressbar { //Progressbar in treeview cells
         border-color: transparent;
         border-width: 2px;
       }
-      & > GtkImage { // this is a hack which makes tabs grow
+      & > image { // this is a hack which makes tabs grow
         padding: 2px;
       }
     }
@@ -2229,8 +2229,8 @@ GtkPlacesSidebar.sidebar {
     @extend .button.flat;
     border-radius: 100%;
     outline-radius: 100%;
-    &:not(:hover):not(:active) > GtkImage,
-    &:backdrop > GtkImage { opacity: $_placesidebar_icons_opacity };
+    &:not(:hover):not(:active) > image,
+    &:backdrop > image { opacity: $_placesidebar_icons_opacity };
   }
   // this is for indicating which sidebar row generated a popover
   // see https://bugzilla.gnome.org/show_bug.cgi?id=754411
