@@ -113,6 +113,18 @@
  * able to use a mouse or other pointing device. It is therefore recommended
  * that any such functionality should also be available by other means, e.g.
  * via the context menu of the entry.
+ *
+ * # CSS nodes
+ *
+ * GtkEntry has a main node with the name entry. Depending on the properties
+ * of the entry, the style classes .read-only and .flat may appear. The style
+ * classes .warning and .error may also be used with entries.
+ *
+ * When the entry shows icons, it adds subnodes with the name image and the
+ * style class .left or .right, depending on where the icon appears.
+ *
+ * When the entry shows progress, it adds a subnode with the name progressbar.
+ * The node has the style class .pulse when the shown progress is pulsing.
  */
 
 
