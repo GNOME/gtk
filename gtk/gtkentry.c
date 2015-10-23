@@ -2006,6 +2006,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                                G_PARAM_DEPRECATED));
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_ENTRY_ACCESSIBLE);
+  gtk_widget_class_set_css_name (widget_class, "entry");
 }
 
 static void
@@ -2640,7 +2641,6 @@ find_invisible_char (GtkWidget *widget)
 static void
 gtk_entry_init (GtkEntry *entry)
 {
-  GtkStyleContext *context;
   GtkEntryPrivate *priv;
 
   entry->priv = gtk_entry_get_instance_private (entry);
@@ -2683,9 +2683,6 @@ gtk_entry_init (GtkEntry *entry)
 		    G_CALLBACK (gtk_entry_retrieve_surrounding_cb), entry);
   g_signal_connect (priv->im_context, "delete-surrounding",
 		    G_CALLBACK (gtk_entry_delete_surrounding_cb), entry);
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (entry));
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_ENTRY);
 
   gtk_entry_update_cached_style_values (entry);
 
