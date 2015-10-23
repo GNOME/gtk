@@ -124,7 +124,7 @@ $asset_suffix: if($variant=='dark', '-dark', '');
   background-color: transparentize(darken($selected_bg_color, 10%), 0.8);
 }
 
-.label {
+label {
   &.separator {
     color: $fg_color;
     @extend .dim-label;
@@ -158,10 +158,10 @@ GtkAssistant {
     }
   }
   &.csd .sidebar { border-top-style: none; }
-  .sidebar .label {
+  .sidebar label {
     padding: 6px 12px;
   }
-  .sidebar .label.highlight {
+  .sidebar label.highlight {
     background-color: mix($bg_color, $fg_color, 80%);
   }
 }
@@ -547,8 +547,8 @@ $_dot_color: if($variant=='light', $selected_bg_color,
     // one, so we're adding the missing padding to the label depending on
     // its position inside the button
     padding: 5px 8px 6px; // same as .button
-    .label:first-child { padding-left: 8px; }
-    .label:last-child { padding-right: 8px; }
+    & label:first-child { padding-left: 8px; }
+    & label:last-child { padding-right: 8px; }
   }
 
   .stack-switcher > & {
@@ -558,7 +558,7 @@ $_dot_color: if($variant=='light', $selected_bg_color,
 
     outline-offset: -3px; // needs to be set or it gets overriden by GtkRadioButton outline-offset
 
-    > .label {
+    > label {
       padding-left: 6px;  // label padding
       padding-right: 6px; //
     }
@@ -576,11 +576,11 @@ $_dot_color: if($variant=='light', $selected_bg_color,
       // of the padding added to the GtkImage is needed
       padding: 5px 2px;
     }
-    &.needs-attention > .label,
+    &.needs-attention > label,
     &.needs-attention > GtkImage { @extend %needs_attention; }
-    &.needs-attention:active > .label,
+    &.needs-attention:active > label,
     &.needs-attention:active > GtkImage,
-    &.needs-attention:checked > .label,
+    &.needs-attention:checked > label,
     &.needs-attention:checked > GtkImage {
       animation: none;
       background-image: none;
@@ -782,7 +782,7 @@ GtkColorButton.button {
                                  //a weird transition which for some reason
                                  //makes borders blink on hover
   }
-  & > .label {
+  & > label {
     text-decoration-line: underline;
   }
 }
@@ -1251,9 +1251,9 @@ GtkComboBox {
   }
 
   // the following is for spacing the icon and the label inside the home button
-  .label:last-child { padding-left: 2px; }
-  .label:first-child { padding-right: 2px; }
-  .label:only-child { padding-right: 0; padding-left: 0; }
+  & label:last-child { padding-left: 2px; }
+  & label:first-child { padding-right: 2px; }
+  & label:only-child { padding-right: 0; padding-left: 0; }
   GtkImage { padding-top: 1px; }
 }
 
@@ -1738,7 +1738,7 @@ column-header.button.dnd { // for treeview-like derive widgets
         }
       }
     }
-    .label { //tab text
+    & label { //tab text
       padding: 0 2px; // needed for a nicer focus ring
       font-weight: bold;
       color: $insensitive_fg_color;
@@ -1746,14 +1746,14 @@ column-header.button.dnd { // for treeview-like derive widgets
         color: mix($backdrop_fg_color, $backdrop_insensitive_color, 50%);
       }
     }
-    &:hover .label {
+    &:hover label {
       // prelight tab text
       color: mix($fg_color, $insensitive_fg_color, 50%);
       &:backdrop { // FIXME, it's the same as .label:backdrop up here
         color: mix($backdrop_fg_color, $backdrop_insensitive_color, 50%);
       }
     }
-    &:active .label {
+    &:active label {
       // active tab text
       color: $fg_color;
       &:backdrop { color: $backdrop_fg_color; }
@@ -2872,8 +2872,8 @@ GtkPlacesSidebar.sidebar {
   .list-row:selected:active { box-shadow: none; }
 
    // looks like the label doesn't get all the states so work around
-  .list-row:selected:insensitive .label { @extend %selected_items:insensitive; }
-  .list-row:selected:backdrop:insensitive .label { @extend %selected_items:backdrop:insensitive; }
+  .list-row:selected:insensitive label { @extend %selected_items:insensitive; }
+  .list-row:selected:backdrop:insensitive label { @extend %selected_items:backdrop:insensitive; }
 
   .sidebar-placeholder-row {
     border: solid 1px $selected_bg_color;
@@ -2902,11 +2902,11 @@ GtkPlacesSidebar.sidebar {
 
 .sidebar-item {
   padding: 10px 4px;
-  > .label {
+  > label {
     padding-left: 6px;
     padding-right: 6px;
   }
-  &.needs-attention > .label {
+  &.needs-attention > label {
     @extend %needs_attention;
     background-size: 6px 6px, 0 0;
   }
@@ -3002,9 +3002,9 @@ GtkInfoBar {
       }
     }
   }
-  .label:selected,
-  .label:selected:focus,
-  .label:selected:hover {
+  & label:selected,
+  & label:selected:focus,
+  & label:selected:hover {
     background-color: darken($selected_bg_color, 10%);
   }
 }
@@ -3441,7 +3441,7 @@ GtkShortcutsWindow .round .button {
   outline-radius: 20px;
 }
 
-GtkShortcutsWindow .round .button .label {
+GtkShortcutsWindow .round .button label {
   padding: 0;
 }
 

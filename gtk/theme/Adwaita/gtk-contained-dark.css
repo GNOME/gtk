@@ -77,16 +77,16 @@
   border: 1px solid #184472;
   background-color: rgba(24, 68, 114, 0.2); }
 
-.label.separator {
+label.separator {
   color: #eeeeec; }
-  .label.separator:backdrop {
+  label.separator:backdrop {
     color: #949796; }
-.label:insensitive {
+label:insensitive {
   color: #949796; }
-  .label:insensitive:backdrop {
+  label:insensitive:backdrop {
     color: #5d6767; }
 
-.dim-label, .label.separator, .titlebar .subtitle,
+.dim-label, label.separator, .titlebar .subtitle,
 .header-bar .subtitle {
   opacity: 0.55;
   text-shadow: none; }
@@ -103,9 +103,9 @@ GtkAssistant .sidebar {
     border-color: #1f2222; }
 GtkAssistant.csd .sidebar {
   border-top-style: none; }
-GtkAssistant .sidebar .label {
+GtkAssistant .sidebar label {
   padding: 6px 12px; }
-GtkAssistant .sidebar .label.highlight {
+GtkAssistant .sidebar label.highlight {
   background-color: #5d6262; }
 
 GtkTextView {
@@ -909,18 +909,19 @@ GtkTextView {
   GtkVolumeButton.button.text-button, .header-bar .text-button.titlebutton.button,
   .titlebar .text-button.titlebutton.button {
     padding: 5px 8px 6px; }
-    .button.text-button.image-button .label:first-child, GtkScaleButton.button.text-button .label:first-child,
-    GtkVolumeButton.button.text-button .label:first-child, .header-bar .text-button.titlebutton.button .label:first-child,
-    .titlebar .text-button.titlebutton.button .label:first-child {
+    .button.text-button.image-button label:first-child, GtkScaleButton.button.text-button label:first-child,
+    GtkVolumeButton.button.text-button label:first-child, .header-bar .text-button.titlebutton.button label:first-child,
+    .titlebar .text-button.titlebutton.button label:first-child {
       padding-left: 8px; }
-    .button.text-button.image-button .label:last-child, GtkScaleButton.button.text-button .label:last-child,
-    GtkVolumeButton.button.text-button .label:last-child, .header-bar .text-button.titlebutton.button .label:last-child,
-    .titlebar .text-button.titlebutton.button .label:last-child {
+    .button.text-button.image-button label:last-child, GtkScaleButton.button.text-button label:last-child,
+    GtkVolumeButton.button.text-button label:last-child, .header-bar .text-button.titlebutton.button label:last-child,
+    .titlebar .text-button.titlebutton.button label:last-child {
       padding-right: 8px; }
   .stack-switcher > .button, .header-bar .stack-switcher > .button.titlebutton,
   .titlebar .stack-switcher > .button.titlebutton {
     outline-offset: -3px; }
-    .stack-switcher > .button > .label {
+    .stack-switcher > .button > label, .header-bar .stack-switcher > .button.titlebutton > label,
+    .titlebar .stack-switcher > .button.titlebutton > label {
       padding-left: 6px;
       padding-right: 6px; }
     .stack-switcher > .button > GtkImage, .header-bar .stack-switcher > .button.titlebutton > GtkImage,
@@ -936,7 +937,7 @@ GtkTextView {
     .stack-switcher > GtkVolumeButton.button, .header-bar .stack-switcher > .titlebutton.button,
     .titlebar .stack-switcher > .titlebutton.button {
       padding: 5px 2px; }
-    .stack-switcher > .button.needs-attention:active > .label, .stack-switcher > .button.needs-attention:active > GtkImage, .stack-switcher > .button.needs-attention:checked > .label, .stack-switcher > .button.needs-attention:checked > GtkImage {
+    .stack-switcher > .button.needs-attention:active > label, .stack-switcher > .button.needs-attention:active > GtkImage, .stack-switcher > .button.needs-attention:checked > label, .stack-switcher > .button.needs-attention:checked > GtkImage {
       animation: none;
       background-image: none; }
   .inline-toolbar .button, .inline-toolbar .header-bar .button.titlebutton, .header-bar .inline-toolbar .button.titlebutton,
@@ -949,15 +950,15 @@ GtkTextView {
   .titlebar .primary-toolbar .button.titlebutton {
     icon-shadow: none; }
 
-.stack-switcher > .button.needs-attention > .label, .stack-switcher > .button.needs-attention > GtkImage, .sidebar-item.needs-attention > .label {
+.stack-switcher > .button.needs-attention > label, .stack-switcher > .button.needs-attention > GtkImage, .sidebar-item.needs-attention > label {
   animation: needs_attention 150ms ease-in;
   background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(#3583d5), to(transparent)), -gtk-gradient(radial, center center, 0, center center, 0.45, to(rgba(0, 0, 0, 0.81176)), to(transparent));
   background-size: 6px 6px, 6px 6px;
   background-repeat: no-repeat;
   background-position: right 3px, right 2px; }
-  .stack-switcher > .button.needs-attention > .label:backdrop, .stack-switcher > .button.needs-attention > GtkImage:backdrop, .sidebar-item.needs-attention > .label:backdrop {
+  .stack-switcher > .button.needs-attention > label:backdrop, .stack-switcher > .button.needs-attention > GtkImage:backdrop, .sidebar-item.needs-attention > label:backdrop {
     background-size: 6px 6px, 0 0; }
-  .stack-switcher > .button.needs-attention > .label:dir(rtl), .stack-switcher > .button.needs-attention > GtkImage:dir(rtl), .sidebar-item.needs-attention > .label:dir(rtl) {
+  .stack-switcher > .button.needs-attention > label:dir(rtl), .stack-switcher > .button.needs-attention > GtkImage:dir(rtl), .sidebar-item.needs-attention > label:dir(rtl) {
     background-position: left 3px, left 2px; }
 
 .inline-toolbar GtkToolButton > .button, .inline-toolbar .header-bar GtkToolButton > .button.titlebutton, .header-bar .inline-toolbar GtkToolButton > .button.titlebutton,
@@ -1234,9 +1235,9 @@ GtkColorButton.button, .header-bar GtkColorButton.button.titlebutton,
   text-shadow: none; }
   .button:link:hover, .button:link:active, .button:link:checked, .button:visited:hover, .button:visited:active, .button:visited:checked {
     text-shadow: none; }
-  .button:link > .label, .header-bar .button.titlebutton:link > .label,
-  .titlebar .button.titlebutton:link > .label, .button:visited > .label, .header-bar .button.titlebutton:visited > .label,
-  .titlebar .button.titlebutton:visited > .label {
+  .button:link > label, .header-bar .button.titlebutton:link > label,
+  .titlebar .button.titlebutton:link > label, .button:visited > label, .header-bar .button.titlebutton:visited > label,
+  .titlebar .button.titlebutton:visited > label {
     text-decoration-line: underline; }
 
 /*****************
@@ -1833,11 +1834,11 @@ GtkComboBox {
   .path-bar .button:only-child {
     padding-left: 12px;
     padding-right: 12px; }
-  .path-bar .button .label:last-child {
+  .path-bar .button label:last-child {
     padding-left: 2px; }
-  .path-bar .button .label:first-child {
+  .path-bar .button label:first-child {
     padding-right: 2px; }
-  .path-bar .button .label:only-child {
+  .path-bar .button label:only-child {
     padding-right: 0;
     padding-left: 0; }
   .path-bar .button GtkImage, .path-bar .header-bar .button.titlebutton GtkImage, .header-bar .path-bar .button.titlebutton GtkImage,
@@ -2266,19 +2267,19 @@ column-header .titlebar .button.titlebutton,
       .notebook tab.reorderable-page.right:backdrop {
         border-color: transparent;
         background-color: transparent; }
-    .notebook tab .label {
+    .notebook tab label {
       padding: 0 2px;
       font-weight: bold;
       color: #949796; }
-      .notebook tab .label:backdrop {
+      .notebook tab label:backdrop {
         color: #797f7f; }
-    .notebook tab:hover .label {
+    .notebook tab:hover label {
       color: #c1c3c1; }
-      .notebook tab:hover .label:backdrop {
+      .notebook tab:hover label:backdrop {
         color: #797f7f; }
-    .notebook tab:active .label {
+    .notebook tab:active label {
       color: #eeeeec; }
-      .notebook tab:active .label:backdrop {
+      .notebook tab:active label:backdrop {
         color: #949796; }
     .notebook tab .button, .notebook tab .header-bar .button.titlebutton, .header-bar .notebook tab .button.titlebutton,
     .notebook tab .titlebar .button.titlebutton,
@@ -3961,10 +3962,10 @@ GtkPlacesSidebar.sidebar .sidebar-new-bookmark-row {
 
 .sidebar-item {
   padding: 10px 4px; }
-  .sidebar-item > .label {
+  .sidebar-item > label {
     padding-left: 6px;
     padding-right: 6px; }
-  .sidebar-item.needs-attention > .label {
+  .sidebar-item.needs-attention > label {
     background-size: 6px 6px, 0 0; }
 
 /****************
@@ -4124,18 +4125,16 @@ GtkInfoBar {
         .error .header-bar .button.titlebutton:backdrop:insensitive > .label,
         .error .titlebar .button.titlebutton:backdrop:insensitive > .label {
           color: inherit; }
-  .info .label:selected,
-  .info .label:selected:focus,
-  .info .label:selected:hover,
-  .question .label:selected,
-  .question .label:selected:focus,
-  .question .label:selected:hover,
-  .warning .label:selected,
-  .warning .label:selected:focus,
-  .warning .label:selected:hover,
-  .error .label:selected,
-  .error .label:selected:focus,
-  .error .label:selected:hover {
+  .info label:selected, .info label:selected:focus, .info label:selected:hover,
+  .question label:selected,
+  .question label:selected:focus,
+  .question label:selected:hover,
+  .warning label:selected,
+  .warning label:selected:focus,
+  .warning label:selected:hover,
+  .error label:selected,
+  .error label:selected:focus,
+  .error label:selected:hover {
     background-color: #184472; }
 
 /************
@@ -4335,18 +4334,18 @@ decoration {
   .titlebar.selection-mode .titlebutton.button:backdrop {
     icon-shadow: none; }
 
-.view:selected, GtkCalendar:selected, .label:selected, .label:selected:focus, .label:selected:hover, .grid-child:selected, .entry:selected, .entry:selected:focus, .menuitem.button.flat:selected, .menuitem.sidebar-button.button:selected, .header-bar .menuitem.titlebutton.button:selected,
+.view:selected, GtkCalendar:selected, label:selected, label:selected:focus, label:selected:hover, .grid-child:selected, .entry:selected, .entry:selected:focus, .menuitem.button.flat:selected, .menuitem.sidebar-button.button:selected, .header-bar .menuitem.titlebutton.button:selected,
 .titlebar .menuitem.titlebutton.button:selected, .list-row:selected, .sidebar:selected {
   background-color: #215d9c;
   color: #ffffff; }
-  .view:insensitive:selected, GtkCalendar:insensitive:selected, .label:insensitive:selected, .grid-child:insensitive:selected, .entry:insensitive:selected, .menuitem.button.flat:insensitive:selected, .menuitem.sidebar-button.button:insensitive:selected, .header-bar .menuitem.titlebutton.button:insensitive:selected,
-  .titlebar .menuitem.titlebutton.button:insensitive:selected, .list-row:insensitive:selected, .sidebar:insensitive:selected, GtkPlacesSidebar.sidebar .list-row:selected:insensitive .label {
+  .view:insensitive:selected, GtkCalendar:insensitive:selected, label:insensitive:selected, .grid-child:insensitive:selected, .entry:insensitive:selected, .menuitem.button.flat:insensitive:selected, .menuitem.sidebar-button.button:insensitive:selected, .header-bar .menuitem.titlebutton.button:insensitive:selected,
+  .titlebar .menuitem.titlebutton.button:insensitive:selected, .list-row:insensitive:selected, .sidebar:insensitive:selected, GtkPlacesSidebar.sidebar .list-row:selected:insensitive label {
     color: #90aece; }
-  .view:backdrop:selected, GtkCalendar:backdrop:selected, .label:backdrop:selected, .grid-child:backdrop:selected, .entry:backdrop:selected, .menuitem.button.flat:backdrop:selected, .menuitem.sidebar-button.button:backdrop:selected, .header-bar .menuitem.titlebutton.button:backdrop:selected,
+  .view:backdrop:selected, GtkCalendar:backdrop:selected, label:backdrop:selected, .grid-child:backdrop:selected, .entry:backdrop:selected, .menuitem.button.flat:backdrop:selected, .menuitem.sidebar-button.button:backdrop:selected, .header-bar .menuitem.titlebutton.button:backdrop:selected,
   .titlebar .menuitem.titlebutton.button:backdrop:selected, .list-row:backdrop:selected, .sidebar:backdrop:selected {
     color: #ffffff; }
-    .view:backdrop:insensitive:selected, GtkCalendar:backdrop:insensitive:selected, .label:backdrop:insensitive:selected, .grid-child:backdrop:insensitive:selected, .entry:backdrop:insensitive:selected, .menuitem.button.flat:backdrop:insensitive:selected, .menuitem.sidebar-button.button:backdrop:insensitive:selected, .header-bar .menuitem.titlebutton.button:backdrop:insensitive:selected,
-    .titlebar .menuitem.titlebutton.button:backdrop:insensitive:selected, .list-row:backdrop:insensitive:selected, .sidebar:backdrop:insensitive:selected, GtkPlacesSidebar.sidebar .list-row:selected:insensitive .label:backdrop, GtkPlacesSidebar.sidebar .list-row:selected:backdrop:insensitive .label {
+    .view:backdrop:insensitive:selected, GtkCalendar:backdrop:insensitive:selected, label:backdrop:insensitive:selected, .grid-child:backdrop:insensitive:selected, .entry:backdrop:insensitive:selected, .menuitem.button.flat:backdrop:insensitive:selected, .menuitem.sidebar-button.button:backdrop:insensitive:selected, .header-bar .menuitem.titlebutton.button:backdrop:insensitive:selected,
+    .titlebar .menuitem.titlebutton.button:backdrop:insensitive:selected, .list-row:backdrop:insensitive:selected, .sidebar:backdrop:insensitive:selected, GtkPlacesSidebar.sidebar .list-row:selected:insensitive label:backdrop, GtkPlacesSidebar.sidebar .list-row:selected:backdrop:insensitive label {
       color: #648eba; }
 
 .monospace {
@@ -4648,7 +4647,9 @@ GtkShortcutsWindow .round .titlebar .button.titlebutton,
   border-radius: 20px;
   outline-radius: 20px; }
 
-GtkShortcutsWindow .round .button .label {
+GtkShortcutsWindow .round .button label, GtkShortcutsWindow .round .header-bar .button.titlebutton label, .header-bar GtkShortcutsWindow .round .button.titlebutton label,
+GtkShortcutsWindow .round .titlebar .button.titlebutton label,
+.titlebar GtkShortcutsWindow .round .button.titlebutton label {
   padding: 0; }
 
 GtkShortcutsWindow GtkShortcutLabel .frame {
