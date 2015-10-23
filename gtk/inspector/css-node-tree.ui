@@ -12,40 +12,53 @@
           <object class="GtkTreeView" id="tree_view">
             <property name="visible">True</property>
             <child>
-              <object class="GtkTreeViewColumn" id="treeviewcolumn1">
+              <object class="GtkTreeViewColumn">
+                <property name="resizable">True</property>
+                <property name="title" translatable="yes">Type</property>
+                <child>
+                  <object class="GtkCellRendererText"/>
+                  <attributes>
+                    <attribute name="text">1</attribute>
+                    <attribute name="sensitive">2</attribute>
+                  </attributes>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn">
                 <property name="resizable">True</property>
                 <property name="title" translatable="yes">Name</property>
                 <child>
                   <object class="GtkCellRendererText"/>
                   <attributes>
                     <attribute name="text">0</attribute>
-                    <attribute name="sensitive">1</attribute>
+                    <attribute name="sensitive">2</attribute>
                   </attributes>
                 </child>
               </object>
             </child>
             <child>
-              <object class="GtkTreeViewColumn" id="treeviewcolumn2">
+              <object class="GtkTreeViewColumn">
                 <property name="resizable">True</property>
                 <property name="title" translatable="yes">ID</property>
                 <child>
                   <object class="GtkCellRendererText"/>
                   <attributes>
-                    <attribute name="text">3</attribute>
-                    <attribute name="sensitive">1</attribute>
+                    <attribute name="text">4</attribute>
+                    <attribute name="sensitive">2</attribute>
                   </attributes>
                 </child>
               </object>
             </child>
             <child>
-              <object class="GtkTreeViewColumn" id="treeviewcolumn3">
+              <object class="GtkTreeViewColumn">
                 <property name="resizable">True</property>
                 <property name="title" translatable="yes">Classes</property>
                 <child>
                   <object class="GtkCellRendererText"/>
                   <attributes>
-                    <attribute name="text">2</attribute>
-                    <attribute name="sensitive">1</attribute>
+                    <attribute name="text">3</attribute>
+                    <attribute name="sensitive">2</attribute>
                   </attributes>
                 </child>
               </object>

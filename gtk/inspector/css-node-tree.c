@@ -31,6 +31,7 @@
 
 enum {
   COLUMN_NAME,
+  COLUMN_TYPE,
   COLUMN_VISIBLE,
   COLUMN_CLASSES,
   COLUMN_ID,
@@ -99,6 +100,10 @@ gtk_inspector_css_node_tree_get_node_value (GtkTreeModelCssNode *model,
   switch (column)
     {
     case COLUMN_NAME:
+      g_value_set_string (value, gtk_css_node_get_name (node));
+      break;
+
+    case COLUMN_TYPE:
       g_value_set_string (value, g_type_name (gtk_css_node_get_widget_type (node)));
       break;
 
@@ -135,6 +140,7 @@ gtk_inspector_css_node_tree_init (GtkInspectorCssNodeTree *cnt)
 
   priv->model = gtk_tree_model_css_node_new (gtk_inspector_css_node_tree_get_node_value,
                                              N_COLUMNS,
+                                             G_TYPE_STRING,
                                              G_TYPE_STRING,
                                              G_TYPE_BOOLEAN,
                                              G_TYPE_STRING,
