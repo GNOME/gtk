@@ -562,7 +562,7 @@ $_dot_color: if($variant=='light', $selected_bg_color,
       padding-left: 6px;  // label padding
       padding-right: 6px; //
     }
-    > GtkImage {
+    > image {
       padding-left: 6px;   // image padding
       padding-right: 6px;  //
       padding-top: 3px;    //
@@ -577,11 +577,11 @@ $_dot_color: if($variant=='light', $selected_bg_color,
       padding: 5px 2px;
     }
     &.needs-attention > label,
-    &.needs-attention > GtkImage { @extend %needs_attention; }
+    &.needs-attention > image { @extend %needs_attention; }
     &.needs-attention:active > label,
-    &.needs-attention:active > GtkImage,
+    &.needs-attention:active > image,
     &.needs-attention:checked > label,
-    &.needs-attention:checked > GtkImage {
+    &.needs-attention:checked > image {
       animation: none;
       background-image: none;
     }
@@ -1254,7 +1254,7 @@ GtkComboBox {
   & label:last-child { padding-left: 2px; }
   & label:first-child { padding-right: 2px; }
   & label:only-child { padding-right: 0; padding-left: 0; }
-  GtkImage { padding-top: 1px; }
+  image { padding-top: 1px; }
 }
 
 /**************
@@ -1778,7 +1778,7 @@ column-header.button.dnd { // for treeview-like derive widgets
         color: transparentize($backdrop_fg_color,0.7);
         border-color: transparent;
       }
-      & > GtkImage { // this is a hack which makes tabs grow
+      & > image { // this is a hack which makes tabs grow
         padding: 2px;
       }
     }
@@ -2892,8 +2892,8 @@ GtkPlacesSidebar.sidebar {
     @extend .button.flat;
     border-radius: 100%;
     outline-radius: 100%;
-    &:not(:hover):not(:active) > GtkImage,
-    &:backdrop > GtkImage { opacity: $_placesidebar_icons_opacity };
+    &:not(:hover):not(:active) > image,
+    &:backdrop > image { opacity: $_placesidebar_icons_opacity };
   }
   // this is for indicating which sidebar row generated a popover
   // see https://bugzilla.gnome.org/show_bug.cgi?id=754411
@@ -2917,12 +2917,12 @@ GtkPlacesSidebar.sidebar {
  ****************/
 
 GtkPlacesView {
-  .server-list-button > GtkImage {
+  .server-list-button > image {
     transition: 200ms $ease-out-quad;
     -gtk-icon-transform: rotate(0turn);
   }
 
-  .server-list-button:checked > GtkImage {
+  .server-list-button:checked > image {
     transition: 200ms $ease-out-quad;
     -gtk-icon-transform: rotate(-0.5turn);
   }

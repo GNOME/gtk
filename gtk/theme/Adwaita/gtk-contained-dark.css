@@ -924,8 +924,8 @@ GtkTextView {
     .titlebar .stack-switcher > .button.titlebutton > label {
       padding-left: 6px;
       padding-right: 6px; }
-    .stack-switcher > .button > GtkImage, .header-bar .stack-switcher > .button.titlebutton > GtkImage,
-    .titlebar .stack-switcher > .button.titlebutton > GtkImage {
+    .stack-switcher > .button > image, .header-bar .stack-switcher > .button.titlebutton > image,
+    .titlebar .stack-switcher > .button.titlebutton > image {
       padding-left: 6px;
       padding-right: 6px;
       padding-top: 3px;
@@ -937,7 +937,7 @@ GtkTextView {
     .stack-switcher > GtkVolumeButton.button, .header-bar .stack-switcher > .titlebutton.button,
     .titlebar .stack-switcher > .titlebutton.button {
       padding: 5px 2px; }
-    .stack-switcher > .button.needs-attention:active > label, .stack-switcher > .button.needs-attention:active > GtkImage, .stack-switcher > .button.needs-attention:checked > label, .stack-switcher > .button.needs-attention:checked > GtkImage {
+    .stack-switcher > .button.needs-attention:active > label, .stack-switcher > .button.needs-attention:active > image, .stack-switcher > .button.needs-attention:checked > label, .stack-switcher > .button.needs-attention:checked > image {
       animation: none;
       background-image: none; }
   .inline-toolbar .button, .inline-toolbar .header-bar .button.titlebutton, .header-bar .inline-toolbar .button.titlebutton,
@@ -950,15 +950,15 @@ GtkTextView {
   .titlebar .primary-toolbar .button.titlebutton {
     icon-shadow: none; }
 
-.stack-switcher > .button.needs-attention > label, .stack-switcher > .button.needs-attention > GtkImage, .sidebar-item.needs-attention > label {
+.stack-switcher > .button.needs-attention > label, .stack-switcher > .button.needs-attention > image, .sidebar-item.needs-attention > label {
   animation: needs_attention 150ms ease-in;
   background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(#3583d5), to(transparent)), -gtk-gradient(radial, center center, 0, center center, 0.45, to(rgba(0, 0, 0, 0.81176)), to(transparent));
   background-size: 6px 6px, 6px 6px;
   background-repeat: no-repeat;
   background-position: right 3px, right 2px; }
-  .stack-switcher > .button.needs-attention > label:backdrop, .stack-switcher > .button.needs-attention > GtkImage:backdrop, .sidebar-item.needs-attention > label:backdrop {
+  .stack-switcher > .button.needs-attention > label:backdrop, .stack-switcher > .button.needs-attention > image:backdrop, .sidebar-item.needs-attention > label:backdrop {
     background-size: 6px 6px, 0 0; }
-  .stack-switcher > .button.needs-attention > label:dir(rtl), .stack-switcher > .button.needs-attention > GtkImage:dir(rtl), .sidebar-item.needs-attention > label:dir(rtl) {
+  .stack-switcher > .button.needs-attention > label:dir(rtl), .stack-switcher > .button.needs-attention > image:dir(rtl), .sidebar-item.needs-attention > label:dir(rtl) {
     background-position: left 3px, left 2px; }
 
 .inline-toolbar GtkToolButton > .button, .inline-toolbar .header-bar GtkToolButton > .button.titlebutton, .header-bar .inline-toolbar GtkToolButton > .button.titlebutton,
@@ -1841,9 +1841,9 @@ GtkComboBox {
   .path-bar .button label:only-child {
     padding-right: 0;
     padding-left: 0; }
-  .path-bar .button GtkImage, .path-bar .header-bar .button.titlebutton GtkImage, .header-bar .path-bar .button.titlebutton GtkImage,
-  .path-bar .titlebar .button.titlebutton GtkImage,
-  .titlebar .path-bar .button.titlebutton GtkImage {
+  .path-bar .button image, .path-bar .header-bar .button.titlebutton image, .header-bar .path-bar .button.titlebutton image,
+  .path-bar .titlebar .button.titlebutton image,
+  .titlebar .path-bar .button.titlebutton image {
     padding-top: 1px; }
 
 /**************
@@ -2311,9 +2311,9 @@ column-header .titlebar .button.titlebutton,
       .notebook tab .button:backdrop {
         color: rgba(148, 151, 150, 0.3);
         border-color: transparent; }
-      .notebook tab .button > GtkImage, .notebook tab .header-bar .button.titlebutton > GtkImage, .header-bar .notebook tab .button.titlebutton > GtkImage,
-      .notebook tab .titlebar .button.titlebutton > GtkImage,
-      .titlebar .notebook tab .button.titlebutton > GtkImage {
+      .notebook tab .button > image, .notebook tab .header-bar .button.titlebutton > image, .header-bar .notebook tab .button.titlebutton > image,
+      .notebook tab .titlebar .button.titlebutton > image,
+      .titlebar .notebook tab .button.titlebutton > image {
         padding: 2px; }
   .notebook.arrow {
     color: #949796; }
@@ -3955,9 +3955,9 @@ GtkPlacesSidebar.sidebar .sidebar-new-bookmark-row {
   GtkVolumeButton.sidebar-button.button, .header-bar .sidebar-button.titlebutton.button,
   .titlebar .sidebar-button.titlebutton.button {
     padding: 5px; }
-  .sidebar-button.button:not(:hover):not(:active) > GtkImage, .header-bar .sidebar-button.button.titlebutton:not(:hover):not(:active) > GtkImage,
-  .titlebar .sidebar-button.button.titlebutton:not(:hover):not(:active) > GtkImage, .sidebar-button.button:backdrop > GtkImage, .header-bar .sidebar-button.button.titlebutton:backdrop > GtkImage,
-  .titlebar .sidebar-button.button.titlebutton:backdrop > GtkImage {
+  .sidebar-button.button:not(:hover):not(:active) > image, .header-bar .sidebar-button.button.titlebutton:not(:hover):not(:active) > image,
+  .titlebar .sidebar-button.button.titlebutton:not(:hover):not(:active) > image, .sidebar-button.button:backdrop > image, .header-bar .sidebar-button.button.titlebutton:backdrop > image,
+  .titlebar .sidebar-button.button.titlebutton:backdrop > image {
     opacity: 0.7; }
 
 .sidebar-item {
@@ -3971,10 +3971,10 @@ GtkPlacesSidebar.sidebar .sidebar-new-bookmark-row {
 /****************
  * File chooser *
  ****************/
-GtkPlacesView .server-list-button > GtkImage {
+GtkPlacesView .server-list-button > image {
   transition: 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
   -gtk-icon-transform: rotate(0turn); }
-GtkPlacesView .server-list-button:checked > GtkImage {
+GtkPlacesView .server-list-button:checked > image {
   transition: 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
   -gtk-icon-transform: rotate(-0.5turn); }
 GtkPlacesView .list-row.activatable:hover, GtkPlacesView GtkPlacesSidebar.sidebar .has-open-popup, GtkPlacesSidebar.sidebar GtkPlacesView .has-open-popup {
