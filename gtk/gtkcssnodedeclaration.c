@@ -170,12 +170,10 @@ gboolean
 gtk_css_node_declaration_set_type (GtkCssNodeDeclaration **decl,
                                    GType                   type)
 {
-  if ((*decl)->type == type &&
-      (*decl)->name == NULL)
+  if ((*decl)->type == type)
     return FALSE;
 
   gtk_css_node_declaration_make_writable (decl);
-  (*decl)->name = NULL;
   (*decl)->type = type;
 
   return TRUE;
@@ -191,12 +189,10 @@ gboolean
 gtk_css_node_declaration_set_name (GtkCssNodeDeclaration   **decl,
                                    /*interned*/ const char  *name)
 {
-  if ((*decl)->type == 0 &&
-      (*decl)->name == name)
+  if ((*decl)->name == name)
     return FALSE;
 
   gtk_css_node_declaration_make_writable (decl);
-  (*decl)->type = 0;
   (*decl)->name = name;
 
   return TRUE;
