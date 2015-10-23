@@ -219,7 +219,7 @@ GtkTextView { // This will get overridden by .view, needed by gedit line numbers
  * Text Entries *
  ****************/
 
-.entry {
+entry {
   border: 1px solid;
   padding: 5px 8px 6px;
 
@@ -263,7 +263,7 @@ GtkTextView { // This will get overridden by .view, needed by gedit line numbers
 
   .linked:not(.vertical) > & { @extend %linked; }
 
-  .linked:not(.vertical) > &:focus + .entry,
+  .linked:not(.vertical) > &:focus + entry,
   .linked:not(.vertical) > &:focus + .button,
   .linked:not(.vertical) > &:focus + GtkComboBox > .the-button-in-the-combobox,
   .linked:not(.vertical) > &:focus + GtkComboBoxText > .the-button-in-the-combobox {
@@ -299,15 +299,15 @@ GtkTextView { // This will get overridden by .view, needed by gedit line numbers
 // Vertically linked entries
 // FIXME: take care of "colored" entries
 .linked.vertical {
-  > .entry { @extend %linked_vertical; }
+  > entry { @extend %linked_vertical; }
 
   // remove the edge hilight and the focus shadow (unfortunatelly)
-  > .entry:not(:last-child) { box-shadow: none; }
+  > entry:not(:last-child) { box-shadow: none; }
   // add back the focus shadow
-  > .entry:focus:not(:last-child) { box-shadow: entry_focus_shadow(); }
+  > entry:focus:not(:last-child) { box-shadow: entry_focus_shadow(); }
 
   // brighter border between linked entries
-  > .entry:not(:insensitive) + .entry:not(:insensitive) {
+  > entry:not(:insensitive) + .entry:not(:insensitive) {
     border-top-color: mix($borders_color, $base_color, 30%);
     background-image: linear-gradient(to bottom, $base_color);
     &:backdrop {
@@ -317,22 +317,22 @@ GtkTextView { // This will get overridden by .view, needed by gedit line numbers
   }
 
   // color back the top border of a linked focused entry following another entry and add back the focus shadow.
-  > .entry + .entry:focus:not(:last-child) {
+  > entry + entry:focus:not(:last-child) {
     border-top-color: entry_focus_border();
     box-shadow: entry_focus_shadow();
   }
   // just recolor the top border on the last focused entry, since we don't reset the shadow here letting that be
   // inherited by the entry styling.
-  > .entry + .entry:focus:last-child {
+  > entry + entry:focus:last-child {
     border-top-color: entry_focus_border();
   }
 
   // this takes care of coloring the top border of the focused entry subsequent widget.
   // :not(:only-child) is a specificity bump hack.
-  > .entry:focus:not(:only-child) + .entry,
-  > .entry:focus:not(:only-child) + .button,
-  > .entry:focus:not(:only-child) + GtkComboBox > .the-button-in-the-combobox,
-  > .entry:focus:not(:only-child) + GtkComboBoxText > .the-button-in-the-combobox { border-top-color: entry_focus_border(); }
+  > entry:focus:not(:only-child) + entry,
+  > entry:focus:not(:only-child) + .button,
+  > entry:focus:not(:only-child) + GtkComboBox > .the-button-in-the-combobox,
+  > entry:focus:not(:only-child) + GtkComboBoxText > .the-button-in-the-combobox { border-top-color: entry_focus_border(); }
 }
 
 
@@ -920,7 +920,7 @@ GtkColorButton.button {
 
   // Misc
   GtkTreeView & {
-    &.entry, &.entry:focus {
+    & entry, & entry:focus {
       padding: 1px;
       border-width: 1px 0;
       border-color: $selected_bg_color;
@@ -960,7 +960,7 @@ GtkComboBox {
     // always disable separators
     -GtkWidget-wide-separators: true;
   }
-  &.combobox-entry .entry {
+  &.combobox-entry entry {
     &:dir(ltr) {
       border-top-right-radius: 0;
       border-bottom-right-radius: 0;
