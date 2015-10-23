@@ -2474,46 +2474,46 @@ switch {
     icon-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
     box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 1px rgba(238, 238, 236, 0.1);
     box-shadow: inset 0 1px rgba(255, 255, 255, 0.15), inset 0 -2px rgba(57, 63, 63, 0.6), inset 0 -1px #2b2f2f; }
-    switch slider:hover {
-      color: #eeeeec;
-      outline-color: rgba(238, 238, 236, 0.3);
-      border-color: #1c1f1f;
-      background-image: linear-gradient(to bottom, #5b6464, #434a4a 40%, #393f3f);
-      text-shadow: 0 -1px rgba(0, 0, 0, 0.77976);
-      icon-shadow: 0 -1px rgba(0, 0, 0, 0.77976);
-      box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 1px rgba(238, 238, 236, 0.1);
-      box-shadow: inset 0 1px rgba(255, 255, 255, 0.15), inset 0 -2px rgba(57, 63, 63, 0.6), inset 0 -1px #2b2f2f; }
-    switch slider:active {
-      border: 1px solid #0f2b48; }
-    switch slider:insensitive {
-      color: #949796;
-      border-color: #1c1f1f;
-      background-image: linear-gradient(to bottom, #333636);
-      text-shadow: none;
-      icon-shadow: none;
-      box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
-      switch slider:insensitive > .label {
-        color: inherit; }
-    switch slider:backdrop {
-      color: #949796;
-      border-color: #1f2222;
-      background-image: linear-gradient(to bottom, #393f3f);
-      text-shadow: none;
-      icon-shadow: none;
-      box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(238, 238, 236, 0);
-      box-shadow: none; }
-      switch slider:backdrop:active {
-        border-color: #0f2b48; }
-      switch slider:backdrop:insensitive {
-        color: #5d6767;
-        border-color: #1f2222;
-        background-image: linear-gradient(to bottom, #333636);
-        text-shadow: none;
-        icon-shadow: none;
-        box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(238, 238, 236, 0);
-        box-shadow: none; }
-        switch slider:backdrop:insensitive > .label {
-          color: inherit; }
+  switch:hover slider {
+    color: #eeeeec;
+    outline-color: rgba(238, 238, 236, 0.3);
+    border-color: #1c1f1f;
+    background-image: linear-gradient(to bottom, #5b6464, #434a4a 40%, #393f3f);
+    text-shadow: 0 -1px rgba(0, 0, 0, 0.77976);
+    icon-shadow: 0 -1px rgba(0, 0, 0, 0.77976);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 1px rgba(238, 238, 236, 0.1);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.15), inset 0 -2px rgba(57, 63, 63, 0.6), inset 0 -1px #2b2f2f; }
+  switch:active slider {
+    border: 1px solid #0f2b48; }
+  switch:insensitive slider {
+    color: #949796;
+    border-color: #1c1f1f;
+    background-image: linear-gradient(to bottom, #333636);
+    text-shadow: none;
+    icon-shadow: none;
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
+    switch:insensitive slider > .label {
+      color: inherit; }
+  switch:backdrop slider {
+    color: #949796;
+    border-color: #1f2222;
+    background-image: linear-gradient(to bottom, #393f3f);
+    text-shadow: none;
+    icon-shadow: none;
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(238, 238, 236, 0);
+    box-shadow: none; }
+  switch:backdrop:active slider {
+    border-color: #0f2b48; }
+  switch:backdrop:insensitive slider {
+    color: #5d6767;
+    border-color: #1f2222;
+    background-image: linear-gradient(to bottom, #333636);
+    text-shadow: none;
+    icon-shadow: none;
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(238, 238, 236, 0);
+    box-shadow: none; }
+    switch:backdrop:insensitive slider > .label {
+      color: inherit; }
 
 /*************************
  * Check and Radio items *
