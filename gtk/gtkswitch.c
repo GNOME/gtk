@@ -35,6 +35,11 @@
  *
  * GtkSwitch can also handle situations where the underlying state changes with
  * a delay. See #GtkSwitch::state-set for details.
+ *
+ * # CSS nodes
+ *
+ * GtkSwitch has two css nodes, the main node with the name switch and a subnode
+ * named slider. Neither of them is using any style classes.
  */
 
 #include "config.h"
