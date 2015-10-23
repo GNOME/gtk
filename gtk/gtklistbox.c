@@ -1618,15 +1618,18 @@ gtk_list_box_select_all_between (GtkListBox    *box,
     }
 }
 
+#define gtk_list_box_update_selection(b,r,m,e) \
+  gtk_list_box_update_selection_full((b), (r), (m), (e), TRUE)
 static void
-gtk_list_box_update_selection (GtkListBox    *box,
-                               GtkListBoxRow *row,
-                               gboolean       modify,
-                               gboolean       extend)
+gtk_list_box_update_selection_full (GtkListBox    *box,
+                                    GtkListBoxRow *row,
+                                    gboolean       modify,
+                                    gboolean       extend,
+                                    gboolean       grab_cursor)
 {
   GtkListBoxPrivate *priv = BOX_PRIV (box);
 
-  gtk_list_box_update_cursor (box, row, TRUE);
+  gtk_list_box_update_cursor (box, row, grab_cursor);
 
   if (priv->selection_mode == GTK_SELECTION_NONE)
     return;
@@ -1699,14 +1702,17 @@ gtk_list_box_activate (GtkListBox    *box,
     g_signal_emit (box, signals[ROW_ACTIVATED], 0, row);
 }
 
+#define gtk_list_box_select_and_activate(b,r) \
+  gtk_list_box_select_and_activate_full ((b), (r), TRUE)
 static void
-gtk_list_box_select_and_activate (GtkListBox    *box,
-                                  GtkListBoxRow *row)
+gtk_list_box_select_and_activate_full (GtkListBox    *box,
+                                       GtkListBoxRow *row,
+                                       gboolean       grab_focus)
 {
   if (row != NULL)
     {
       gtk_list_box_select_row_internal (box, row);
-      gtk_list_box_update_cursor (box, row, TRUE);
+      gtk_list_box_update_cursor (box, row, grab_focus);
       gtk_list_box_activate (box, row);
     }
 }
@@ -1898,11 +1904,13 @@ gtk_list_box_multipress_gesture_released (GtkGestureMultiPress *gesture,
 
   if (priv->active_row != NULL && priv->active_row_active)
     {
+      gboolean focus_on_click = gtk_widget_get_focus_on_click (GTK_WIDGET (box));
+
       gtk_widget_unset_state_flags (GTK_WIDGET (priv->active_row),
                                     GTK_STATE_FLAG_ACTIVE);
 
       if (n_press == 1 && priv->activate_single_click)
-        gtk_list_box_select_and_activate (box, priv->active_row);
+        gtk_list_box_select_and_activate_full (box, priv->active_row, focus_on_click);
       else
         {
           GdkEventSequence *sequence;
@@ -1923,7 +1931,7 @@ gtk_list_box_multipress_gesture_released (GtkGestureMultiPress *gesture,
           if (source == GDK_SOURCE_TOUCHSCREEN)
             modify = !modify;
 
-          gtk_list_box_update_selection (box, priv->active_row, modify, extend);
+          gtk_list_box_update_selection_full (box, priv->active_row, modify, extend, focus_on_click);
         }
     }
 
