@@ -223,7 +223,7 @@ entry {
   border: 1px solid;
   padding: 5px 8px 6px;
 
-  &.image { // icons inside the entry
+  & image { // icons inside the entry
     &.left { padding-left: 0; }
     &.right { padding-right: 0; }
   }
@@ -281,7 +281,7 @@ entry {
     }
   }
 
-  &.image { // entry icons colors
+  & image { // entry icons colors
     color: mix($fg_color, $base_color, 80%);
     &:hover { color: $fg_color; }
     &:active { color: $selected_bg_color; }

@@ -162,9 +162,9 @@ entry {
   color: white;
   border-color: #1c1f1f;
   box-shadow: inset 0 0 0 1px rgba(33, 93, 156, 0), 0 1px rgba(238, 238, 236, 0.1); }
-  entry.image.left {
+  entry image.left {
     padding-left: 0; }
-  entry.image.right {
+  entry image.right {
     padding-right: 0; }
   entry.flat, entry.flat:focus {
     padding: 2px;
@@ -234,13 +234,13 @@ entry {
       border-color: #432100; }
     entry.warning:selected, entry.warning:selected:focus {
       background-color: #f57900; }
-  entry.image {
+  entry image {
     color: #c7c7c5; }
-    entry.image:hover {
+    entry image:hover {
       color: #eeeeec; }
-    entry.image:active {
+    entry image:active {
       color: #215d9c; }
-    entry.image:backdrop {
+    entry image:backdrop {
       color: #7f8281; }
   .osd entry {
     background-color: transparent;
