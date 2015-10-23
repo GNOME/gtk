@@ -249,7 +249,7 @@ entry {
     @extend %selected_items;
   }
 
-  &.progressbar {
+  & progressbar {
     margin: 1px;
     border-radius: 0;
     border-width: 0 0 2px;
