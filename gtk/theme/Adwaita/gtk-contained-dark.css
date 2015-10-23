@@ -3471,15 +3471,15 @@ GtkScrolledWindow GtkViewport.frame {
 .grid-child {
   padding: 2px; }
 
-.list-row.activatable:hover, GtkPlacesSidebar.sidebar .has-open-popup {
+.list-row.activatable.has-open-popup, .list-row.activatable:hover {
   background-color: rgba(238, 238, 236, 0.05); }
 .list-row.activatable:active {
   box-shadow: inset 0 2px 2px -2px rgba(0, 0, 0, 0.2); }
-.list-row.activatable:backdrop:hover, GtkPlacesSidebar.sidebar .has-open-popup:backdrop {
+.list-row.activatable:backdrop:hover {
   background-color: transparent; }
 .list-row.activatable:selected:active {
   box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.5); }
-.list-row.activatable:selected:hover, GtkPlacesSidebar.sidebar .has-open-popup:selected {
+.list-row.activatable:selected.has-open-popup, .list-row.activatable:selected:hover {
   background-color: #366ca4; }
 .list-row.activatable:selected:backdrop {
   background-color: #215d9c; }
@@ -3977,7 +3977,7 @@ GtkPlacesView .server-list-button > image {
 GtkPlacesView .server-list-button:checked > image {
   transition: 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
   -gtk-icon-transform: rotate(-0.5turn); }
-GtkPlacesView .list-row.activatable:hover, GtkPlacesView GtkPlacesSidebar.sidebar .has-open-popup, GtkPlacesSidebar.sidebar GtkPlacesView .has-open-popup {
+GtkPlacesView .list-row.activatable:hover {
   background-color: transparent; }
 
 /*********

@@ -2542,20 +2542,19 @@ GtkScrolledWindow {
 }
 
 .list-row.activatable {
-  // let's take care of background colors
-  &:hover {
-    //background-color: mix($fg_color, $base_color, 5%);
-    background-color: if(variant == light, transparentize($fg_color, 0.9), transparentize($fg_color, 0.95));
-  }
-  &:active {
-    box-shadow: inset 0 2px 2px -2px transparentize(black, 0.8);
-  }
+  &.has-open-popup, // this is for indicathing which row generated a popover see https://bugzilla.gnome.org/show_bug.cgi?id=754411
+  &:hover { background-color: if(variant == light, transparentize($fg_color, 0.9), transparentize($fg_color, 0.95)); }
+
+  &:active { box-shadow: inset 0 2px 2px -2px transparentize(black, 0.8); }
+
   &:backdrop:hover { background-color: transparent; }
+
   &:selected {
     &:active { box-shadow: inset 0 2px 3px -1px transparentize(black, 0.5); }
-    &:hover {
-      background-color: mix($fg_color, $selected_bg_color, 10%);
-    }
+
+    &.has-open-popup,
+    &:hover { background-color: mix($fg_color, $selected_bg_color, 10%); }
+
     &:backdrop { background-color: $selected_bg_color; }
   }
 }
@@ -2895,9 +2894,6 @@ GtkPlacesSidebar.sidebar {
     &:not(:hover):not(:active) > image,
     &:backdrop > image { opacity: $_placesidebar_icons_opacity };
   }
-  // this is for indicating which sidebar row generated a popover
-  // see https://bugzilla.gnome.org/show_bug.cgi?id=754411
-  .has-open-popup { @extend .list-row.activatable:hover; }
 }
 
 .sidebar-item {
