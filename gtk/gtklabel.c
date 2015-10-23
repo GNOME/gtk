@@ -71,6 +71,10 @@
  * implies, most labels are used to label another widget such as a
  * #GtkButton, a #GtkMenuItem, or a #GtkComboBox.
  *
+ * # CSS nodes
+ *
+ * GtkLabel has a single CSS node with the name label.
+ *
  * # GtkLabel as GtkBuildable
  *
  * The GtkLabel implementation of the GtkBuildable interface supports a
@@ -1146,6 +1150,8 @@ gtk_label_class_init (GtkLabelClass *class)
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_LABEL_ACCESSIBLE);
 
+  gtk_widget_class_set_css_name (widget_class, "label");
+
   quark_shortcuts_connected = g_quark_from_static_string ("gtk-label-shortcuts-connected");
   quark_mnemonic_menu = g_quark_from_static_string ("gtk-mnemonic-menu");
   quark_mnemonics_visible_connected = g_quark_from_static_string ("gtk-label-mnemonics-visible-connected");
@@ -1310,7 +1316,6 @@ static void
 gtk_label_init (GtkLabel *label)
 {
   GtkLabelPrivate *priv;
-  GtkStyleContext *context;
 
   label->priv = gtk_label_get_instance_private (label);
   priv = label->priv;
@@ -1346,9 +1351,6 @@ gtk_label_init (GtkLabel *label)
   priv->mnemonics_visible = TRUE;
 
   gtk_label_set_text (label, "");
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (label));
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_LABEL);
 
   priv->drag_gesture = gtk_gesture_drag_new (GTK_WIDGET (label));
   g_signal_connect (priv->drag_gesture, "drag-begin",
