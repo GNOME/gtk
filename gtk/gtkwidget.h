@@ -783,6 +783,11 @@ GDK_AVAILABLE_IN_3_2
 gboolean   gtk_widget_has_visible_focus   (GtkWidget           *widget);
 GDK_AVAILABLE_IN_ALL
 void       gtk_widget_grab_focus          (GtkWidget           *widget);
+GDK_AVAILABLE_IN_3_20
+void       gtk_widget_set_focus_on_click  (GtkWidget           *widget,
+                                           gboolean             focus_on_click);
+GDK_AVAILABLE_IN_3_20
+gboolean   gtk_widget_get_focus_on_click  (GtkWidget           *widget);
 
 GDK_AVAILABLE_IN_ALL
 void       gtk_widget_set_can_default     (GtkWidget           *widget,

@@ -575,6 +575,7 @@ enum {
   PROP_CAN_FOCUS,
   PROP_HAS_FOCUS,
   PROP_IS_FOCUS,
+  PROP_FOCUS_ON_CLICK,
   PROP_CAN_DEFAULT,
   PROP_HAS_DEFAULT,
   PROP_RECEIVES_DEFAULT,
@@ -1195,6 +1196,25 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                             P_("Whether the widget is the focus widget within the toplevel"),
                             FALSE,
                             GTK_PARAM_READWRITE);
+
+  /**
+   * GtkWidget:focus-on-click:
+   *
+   * Whether the widget should grab focus when it is clicked with the mouse.
+   *
+   * This property is only relevant for widgets that can take focus.
+   *
+   * Before 3.20, several widgets (GtkButton, GtkFileChooserButton,
+   * GtkComboBox) implemented this property individually.
+   *
+   * Since: 3.20
+   */
+  widget_props[PROP_FOCUS_ON_CLICK] =
+      g_param_spec_boolean ("focus-on-click",
+                            P_("Focus on click"),
+                            P_("Whether the widget should grab focus when it is clicked with the mouse"),
+                            TRUE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   widget_props[PROP_CAN_DEFAULT] =
       g_param_spec_boolean ("can-default",
@@ -3695,6 +3715,9 @@ gtk_widget_set_property (GObject         *object,
       if (g_value_get_boolean (value))
 	gtk_widget_grab_focus (widget);
       break;
+    case PROP_FOCUS_ON_CLICK:
+      gtk_widget_set_focus_on_click (widget, g_value_get_boolean (value));
+      break;
     case PROP_CAN_DEFAULT:
       gtk_widget_set_can_default (widget, g_value_get_boolean (value));
       break;
@@ -3884,6 +3907,9 @@ gtk_widget_get_property (GObject         *object,
       break;
     case PROP_IS_FOCUS:
       g_value_set_boolean (value, gtk_widget_is_focus (widget));
+      break;
+    case PROP_FOCUS_ON_CLICK:
+      g_value_set_boolean (value, gtk_widget_get_focus_on_click (widget));
       break;
     case PROP_CAN_DEFAULT:
       g_value_set_boolean (value, gtk_widget_get_can_default (widget));
@@ -4329,7 +4355,8 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   priv->redraw_on_alloc = TRUE;
   priv->alloc_needed = TRUE;
   priv->alloc_needed_on_child = TRUE;
- 
+  priv->focus_on_click = TRUE;
+
   switch (_gtk_widget_get_direction (widget))
     {
     case GTK_TEXT_DIR_LTR:
@@ -8447,6 +8474,59 @@ gtk_widget_is_focus (GtkWidget *widget)
   else
     return FALSE;
 }
+
+/**
+ * gtk_widget_set_focus_on_click:
+ * @widget: a #GtkWidget
+ * @focus_on_click: whether the widget should grab focus when clicked with the mouse
+ *
+ * Sets whether the widget should grab focus when it is clicked with the mouse.
+ * Making mouse clicks not grab focus is useful in places like toolbars where
+ * you don’t want the keyboard focus removed from the main area of the
+ * application.
+ *
+ * Since: 3.20
+ **/
+void
+gtk_widget_set_focus_on_click (GtkWidget *widget,
+			       gboolean   focus_on_click)
+{
+  GtkWidgetPrivate *priv;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  priv = widget->priv;
+
+  focus_on_click = focus_on_click != FALSE;
+
+  if (priv->focus_on_click != focus_on_click)
+    {
+      priv->focus_on_click = focus_on_click;
+
+      g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_FOCUS_ON_CLICK]);
+    }
+}
+
+/**
+ * gtk_widget_get_focus_on_click:
+ * @widget: a #GtkWidget
+ *
+ * Returns whether the widget should grab focus when it is clicked with the mouse.
+ * See gtk_widget_set_focus_on_click().
+ *
+ * Returns: %TRUE if the widget should grab focus when it is clicked with
+ *               the mouse.
+ *
+ * Since: 3.20
+ **/
+gboolean
+gtk_widget_get_focus_on_click (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  return widget->priv->focus_on_click;
+}
+
 
 /**
  * gtk_widget_set_can_default:
