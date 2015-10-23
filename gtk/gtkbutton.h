@@ -134,10 +134,10 @@ void                  gtk_button_set_use_stock      (GtkButton      *button,
 						     gboolean        use_stock);
 GDK_DEPRECATED_IN_3_10
 gboolean              gtk_button_get_use_stock      (GtkButton      *button);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_20_FOR(gtk_widget_set_focus_on_click)
 void                  gtk_button_set_focus_on_click (GtkButton      *button,
 						     gboolean        focus_on_click);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_20_FOR(gtk_widget_get_focus_on_click)
 gboolean              gtk_button_get_focus_on_click (GtkButton      *button);
 GDK_DEPRECATED_IN_3_14
 void                  gtk_button_set_alignment      (GtkButton      *button,

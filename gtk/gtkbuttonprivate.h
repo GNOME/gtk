@@ -53,7 +53,6 @@ struct _GtkButtonPrivate
   guint          align_set             : 1;
   guint          button_down           : 1;
   guint          constructed           : 1;
-  guint          focus_on_click        : 1;
   guint          image_is_stock        : 1;
   guint          in_button             : 1;
   guint          use_action_appearance : 1;

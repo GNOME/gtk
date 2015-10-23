@@ -116,7 +116,6 @@ enum
   PROP_0,
 
   PROP_DIALOG,
-  PROP_FOCUS_ON_CLICK,
   PROP_TITLE,
   PROP_WIDTH_CHARS
 };
@@ -204,8 +203,6 @@ struct _GtkFileChooserButtonPrivate
 
   /* Used for hiding/showing the dialog when the button is hidden */
   guint  active                       : 1;
-
-  guint  focus_on_click               : 1;
 
   /* Whether the next async callback from GIO should emit the "selection-changed" signal */
   guint  is_changing_selection        : 1;
@@ -419,22 +416,6 @@ gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
 							 G_PARAM_CONSTRUCT_ONLY)));
 
   /**
-   * GtkFileChooserButton:focus-on-click:
-   *
-   * Whether the #GtkFileChooserButton button grabs focus when it is clicked
-   * with the mouse.
-   *
-   * Since: 2.10
-   */
-  g_object_class_install_property (gobject_class,
-                                   PROP_FOCUS_ON_CLICK,
-                                   g_param_spec_boolean ("focus-on-click",
-							 P_("Focus on click"),
-							 P_("Whether the button grabs focus when it is clicked with the mouse"),
-							 TRUE,
-							 GTK_PARAM_READWRITE));
-
-  /**
    * GtkFileChooserButton:title:
    *
    * Title to put on the #GtkFileChooserDialog associated with the button.
@@ -491,7 +472,6 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
   priv = button->priv = gtk_file_chooser_button_get_instance_private (button);
 
   priv->icon_size = FALLBACK_ICON_SIZE;
-  priv->focus_on_click = TRUE;
 
   gtk_widget_init_template (GTK_WIDGET (button));
 
@@ -885,9 +865,6 @@ gtk_file_chooser_button_set_property (GObject      *object,
       /* Construct-only */
       priv->dialog = g_value_get_object (value);
       break;
-    case PROP_FOCUS_ON_CLICK:
-      gtk_file_chooser_button_set_focus_on_click (button, g_value_get_boolean (value));
-      break;
     case PROP_WIDTH_CHARS:
       gtk_file_chooser_button_set_width_chars (GTK_FILE_CHOOSER_BUTTON (object),
 					       g_value_get_int (value));
@@ -973,10 +950,6 @@ gtk_file_chooser_button_get_property (GObject    *object,
     case PROP_WIDTH_CHARS:
       g_value_set_int (value,
 		       gtk_label_get_width_chars (GTK_LABEL (priv->label)));
-      break;
-    case PROP_FOCUS_ON_CLICK:
-      g_value_set_boolean (value,
-                           gtk_file_chooser_button_get_focus_on_click (button));
       break;
 
     case PROP_TITLE:
@@ -3063,18 +3036,7 @@ gtk_file_chooser_button_set_focus_on_click (GtkFileChooserButton *button,
 
   g_return_if_fail (GTK_IS_FILE_CHOOSER_BUTTON (button));
 
-  priv = button->priv;
-
-  focus_on_click = focus_on_click != FALSE;
-
-  if (priv->focus_on_click != focus_on_click)
-    {
-      priv->focus_on_click = focus_on_click;
-      gtk_button_set_focus_on_click (GTK_BUTTON (priv->button), focus_on_click);
-      gtk_combo_box_set_focus_on_click (GTK_COMBO_BOX (priv->combo_box), focus_on_click);
-
-      g_object_notify (G_OBJECT (button), "focus-on-click");
-    }
+  gtk_widget_set_focus_on_click (GTK_WIDGET (button), focus_on_click);
 }
 
 /**
@@ -3094,5 +3056,5 @@ gtk_file_chooser_button_get_focus_on_click (GtkFileChooserButton *button)
 {
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER_BUTTON (button), FALSE);
 
-  return button->priv->focus_on_click;
+  return gtk_widget_get_focus_on_click (GTK_WIDGET (button));
 }

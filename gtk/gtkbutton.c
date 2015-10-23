@@ -99,7 +99,6 @@ enum {
   PROP_RELIEF,
   PROP_USE_UNDERLINE,
   PROP_USE_STOCK,
-  PROP_FOCUS_ON_CLICK,
   PROP_XALIGN,
   PROP_YALIGN,
   PROP_IMAGE_POSITION,
@@ -281,13 +280,6 @@ gtk_button_class_init (GtkButtonClass *klass)
                           P_("If set, the label is used to pick a stock item instead of being displayed"),
                           FALSE,
                           GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED);
-  
-  props[PROP_FOCUS_ON_CLICK] =
-    g_param_spec_boolean ("focus-on-click",
-                          P_("Focus on click"),
-                          P_("Whether the button grabs focus when it is clicked with the mouse"),
-                          TRUE,
-                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
   
   props[PROP_RELIEF] =
     g_param_spec_enum ("relief",
@@ -606,7 +598,7 @@ multipress_pressed_cb (GtkGestureMultiPress *gesture,
   GtkButton *button = GTK_BUTTON (widget);
   GtkButtonPrivate *priv = button->priv;
 
-  if (priv->focus_on_click && !gtk_widget_has_focus (widget))
+  if (gtk_widget_get_focus_on_click (widget) && !gtk_widget_has_focus (widget))
     gtk_widget_grab_focus (widget);
 
   priv->in_button = TRUE;
@@ -688,7 +680,6 @@ gtk_button_init (GtkButton *button)
   priv->button_down = FALSE;
   priv->use_stock = FALSE;
   priv->use_underline = FALSE;
-  priv->focus_on_click = TRUE;
 
   priv->xalign = 0.5;
   priv->yalign = 0.5;
@@ -852,9 +843,6 @@ gtk_button_set_property (GObject         *object,
       gtk_button_set_use_stock (button, g_value_get_boolean (value));
       G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
-    case PROP_FOCUS_ON_CLICK:
-      gtk_button_set_focus_on_click (button, g_value_get_boolean (value));
-      break;
     case PROP_XALIGN:
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gtk_button_set_alignment (button, g_value_get_float (value), priv->yalign);
@@ -914,9 +902,6 @@ gtk_button_get_property (GObject         *object,
       break;
     case PROP_USE_STOCK:
       g_value_set_boolean (value, priv->use_stock);
-      break;
-    case PROP_FOCUS_ON_CLICK:
-      g_value_set_boolean (value, priv->focus_on_click);
       break;
     case PROP_XALIGN:
       g_value_set_float (value, priv->xalign);
@@ -2390,20 +2375,9 @@ void
 gtk_button_set_focus_on_click (GtkButton *button,
 			       gboolean   focus_on_click)
 {
-  GtkButtonPrivate *priv;
-
   g_return_if_fail (GTK_IS_BUTTON (button));
 
-  priv = button->priv;
-
-  focus_on_click = focus_on_click != FALSE;
-
-  if (priv->focus_on_click != focus_on_click)
-    {
-      priv->focus_on_click = focus_on_click;
-      
-      g_object_notify_by_pspec (G_OBJECT (button), props[PROP_FOCUS_ON_CLICK]);
-    }
+  gtk_widget_set_focus_on_click (GTK_WIDGET (button), focus_on_click);
 }
 
 /**
@@ -2423,7 +2397,7 @@ gtk_button_get_focus_on_click (GtkButton *button)
 {
   g_return_val_if_fail (GTK_IS_BUTTON (button), FALSE);
   
-  return button->priv->focus_on_click;
+  return gtk_widget_get_focus_on_click (GTK_WIDGET (button));
 }
 
 /**

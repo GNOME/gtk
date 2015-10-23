@@ -119,9 +119,9 @@ GDK_DEPRECATED_IN_3_10
 void          gtk_combo_box_set_title              (GtkComboBox *combo_box,
                                                     const gchar *title);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_20_FOR(gtk_widget_get_focus_on_click)
 gboolean      gtk_combo_box_get_focus_on_click     (GtkComboBox *combo);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_20_FOR(gtk_widget_set_focus_on_click)
 void          gtk_combo_box_set_focus_on_click     (GtkComboBox *combo,
                                                     gboolean     focus_on_click);
 

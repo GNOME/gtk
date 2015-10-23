@@ -148,7 +148,6 @@ struct _GtkComboBoxPrivate
   guint is_cell_renderer : 1;
   guint editing_canceled : 1;
   guint auto_scroll : 1;
-  guint focus_on_click : 1;
   guint button_sensitivity : 2;
   guint has_entry : 1;
   guint popup_fixed_width : 1;
@@ -228,7 +227,6 @@ enum {
   PROP_ADD_TEAROFFS,
   PROP_TEAROFF_TITLE,
   PROP_HAS_FRAME,
-  PROP_FOCUS_ON_CLICK,
   PROP_POPUP_SHOWN,
   PROP_BUTTON_SENSITIVITY,
   PROP_EDITING_CANCELED,
@@ -843,14 +841,6 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                          TRUE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
-  g_object_class_install_property (object_class,
-                                   PROP_FOCUS_ON_CLICK,
-                                   g_param_spec_boolean ("focus-on-click",
-                                                         P_("Focus on click"),
-                                                         P_("Whether the combo box grabs focus when it is clicked with the mouse"),
-                                                         TRUE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-
   /**
    * GtkComboBox:tearoff-title:
    *
@@ -1118,7 +1108,6 @@ gtk_combo_box_init (GtkComboBox *combo_box)
   priv->is_cell_renderer = FALSE;
   priv->editing_canceled = FALSE;
   priv->auto_scroll = FALSE;
-  priv->focus_on_click = TRUE;
   priv->button_sensitivity = GTK_SENSITIVITY_AUTO;
   priv->has_entry = FALSE;
   priv->popup_fixed_width = TRUE;
@@ -1183,11 +1172,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS;
                                      priv->has_frame);
           g_object_notify (object, "has-frame");
         }
-      break;
-
-    case PROP_FOCUS_ON_CLICK:
-      gtk_combo_box_set_focus_on_click (combo_box,
-                                        g_value_get_boolean (value));
       break;
 
     case PROP_TEAROFF_TITLE:
@@ -1298,10 +1282,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS;
 
       case PROP_HAS_FRAME:
         g_value_set_boolean (value, combo_box->priv->has_frame);
-        break;
-
-      case PROP_FOCUS_ON_CLICK:
-        g_value_set_boolean (value, combo_box->priv->focus_on_click);
         break;
 
       case PROP_TEAROFF_TITLE:
@@ -2925,7 +2905,7 @@ gtk_combo_box_menu_button_press (GtkWidget      *widget,
   if (GTK_IS_MENU (priv->popup_widget) &&
       event->type == GDK_BUTTON_PRESS && event->button == GDK_BUTTON_PRIMARY)
     {
-      if (priv->focus_on_click &&
+      if (gtk_widget_get_focus_on_click (GTK_WIDGET (combo_box)) &&
           !gtk_widget_has_focus (priv->button))
         gtk_widget_grab_focus (priv->button);
 
@@ -3259,7 +3239,7 @@ gtk_combo_box_list_button_pressed (GtkWidget      *widget,
       gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->button)))
     return FALSE;
 
-  if (priv->focus_on_click &&
+  if (gtk_widget_get_focus_on_click (GTK_WIDGET (combo_box)) &&
       !gtk_widget_has_focus (priv->button))
     gtk_widget_grab_focus (priv->button);
 
@@ -5006,18 +4986,7 @@ gtk_combo_box_set_focus_on_click (GtkComboBox *combo_box,
 {
   g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
 
-  focus_on_click = focus_on_click != FALSE;
-
-  if (combo_box->priv->focus_on_click != focus_on_click)
-    {
-      combo_box->priv->focus_on_click = focus_on_click;
-
-      if (combo_box->priv->button)
-        gtk_button_set_focus_on_click (GTK_BUTTON (combo_box->priv->button),
-                                       focus_on_click);
-
-      g_object_notify (G_OBJECT (combo_box), "focus-on-click");
-    }
+  gtk_widget_set_focus_on_click (GTK_WIDGET (combo_box), focus_on_click);
 }
 
 /**
@@ -5037,7 +5006,7 @@ gtk_combo_box_get_focus_on_click (GtkComboBox *combo_box)
 {
   g_return_val_if_fail (GTK_IS_COMBO_BOX (combo_box), FALSE);
   
-  return combo_box->priv->focus_on_click;
+  return gtk_widget_get_focus_on_click (GTK_WIDGET (combo_box));
 }
 
 static void
