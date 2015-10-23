@@ -68,6 +68,7 @@
 #include "gtkpopover.h"
 #include "gtktoolbar.h"
 #include "gtkmagnifierprivate.h"
+#include "gtkcssnodeprivate.h"
 
 #include "a11y/gtkentryaccessible.h"
 
@@ -250,6 +251,7 @@ struct _EntryIconInfo
   GtkIconHelper *icon_helper;
   GdkEventSequence *current_sequence;
   GdkDevice *device;
+  GtkCssNode *css_node;
 };
 
 struct _GtkEntryPasswordHint
@@ -2752,32 +2754,15 @@ gtk_entry_prepare_context_for_icon (GtkEntry             *entry,
   widget = GTK_WIDGET (entry);
   state = gtk_widget_get_state_flags (widget);
 
-  state &= ~(GTK_STATE_FLAG_PRELIGHT);
+  state &= ~GTK_STATE_FLAG_PRELIGHT;
 
   if ((state & GTK_STATE_FLAG_INSENSITIVE) || icon_info->insensitive)
     state |= GTK_STATE_FLAG_INSENSITIVE;
   else if (icon_info->prelight)
     state |= GTK_STATE_FLAG_PRELIGHT;
 
-  gtk_style_context_save (context);
-
+  gtk_style_context_save_to_node (context, icon_info->css_node);
   gtk_style_context_set_state (context, state);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_IMAGE);
-
-  if (gtk_widget_get_direction (GTK_WIDGET (entry)) == GTK_TEXT_DIR_RTL) 
-    {
-      if (icon_pos == GTK_ENTRY_ICON_PRIMARY)
-        gtk_style_context_add_class (context, GTK_STYLE_CLASS_RIGHT);
-      else
-        gtk_style_context_add_class (context, GTK_STYLE_CLASS_LEFT);
-    }
-  else
-    {
-      if (icon_pos == GTK_ENTRY_ICON_PRIMARY)
-        gtk_style_context_add_class (context, GTK_STYLE_CLASS_LEFT);
-      else
-        gtk_style_context_add_class (context, GTK_STYLE_CLASS_RIGHT);
-    }
 }
 
 static gint
@@ -3163,13 +3148,42 @@ realize_icon_info (GtkWidget            *widget,
 
 }
 
+static void
+update_icon_style (GtkWidget            *widget,
+                   GtkEntryIconPosition  icon_pos)
+{
+  GtkEntry *entry = GTK_ENTRY (widget);
+  GtkEntryPrivate *priv = entry->priv;
+  EntryIconInfo *icon_info = priv->icons[icon_pos];
+  const gchar *side;
+
+  if (icon_info == NULL)
+    return;
+
+  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+    {
+      side = icon_pos == GTK_ENTRY_ICON_PRIMARY
+             ? GTK_STYLE_CLASS_RIGHT
+             : GTK_STYLE_CLASS_LEFT;
+    }
+  else
+    {
+      side = icon_pos == GTK_ENTRY_ICON_PRIMARY
+             ? GTK_STYLE_CLASS_LEFT
+             : GTK_STYLE_CLASS_RIGHT;
+    }
+
+  gtk_css_node_add_class (icon_info->css_node, g_quark_from_static_string (side));
+}
+
 static EntryIconInfo*
-construct_icon_info (GtkWidget            *widget, 
+construct_icon_info (GtkWidget            *widget,
                      GtkEntryIconPosition  icon_pos)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = entry->priv;
   EntryIconInfo *icon_info;
+  GtkCssNode *widget_node;
 
   g_return_val_if_fail (priv->icons[icon_pos] == NULL, NULL);
 
@@ -3178,6 +3192,14 @@ construct_icon_info (GtkWidget            *widget,
 
   icon_info->icon_helper = _gtk_icon_helper_new ();
   _gtk_icon_helper_set_force_scale_pixbuf (icon_info->icon_helper, TRUE);
+
+  widget_node = gtk_widget_get_css_node (widget);
+  icon_info->css_node = gtk_css_node_new ();
+  gtk_css_node_set_name (icon_info->css_node, I_("image"));
+  gtk_css_node_set_parent (icon_info->css_node, widget_node);
+  gtk_css_node_set_state (icon_info->css_node, gtk_css_node_get_state (widget_node));
+  g_object_unref (icon_info->css_node);
+  update_icon_style (widget, icon_pos);
 
   if (gtk_widget_get_realized (widget))
     realize_icon_info (widget, icon_pos);
@@ -5002,6 +5024,9 @@ gtk_entry_direction_changed (GtkWidget        *widget,
   GtkEntry *entry = GTK_ENTRY (widget);
 
   gtk_entry_recompute (entry);
+
+  update_icon_style (widget, GTK_ENTRY_ICON_PRIMARY);
+  update_icon_style (widget, GTK_ENTRY_ICON_SECONDARY);
 
   GTK_WIDGET_CLASS (gtk_entry_parent_class)->direction_changed (widget, previous_dir);
 }
