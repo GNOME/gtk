@@ -144,7 +144,7 @@ $ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 }
 
-.label {
+label {
   &:selected,
   &:selected:focus,
   &:selected:hover,
@@ -824,7 +824,7 @@ GtkComboBox {
     background-color: $osd_bg_color;
     border-radius: 6px;
     padding: 12px;
-    .label { color: $osd_fg_color; }
+    & label { color: $osd_fg_color; }
   }
   //searchbar & inline-toolbar
   &.inline-toolbar {
@@ -955,9 +955,9 @@ GtkComboBox {
   }
 
   // the following is for spacing the icon and the label inside the home button
-  .label:last-child { padding-left: 2px; }
-  .label:first-child { padding-right: 2px; }
-  .label:only-child { padding-right: 0; padding-left: 0; }
+  & label:last-child { padding-left: 2px; }
+  & label:first-child { padding-right: 2px; }
+  & label:only-child { padding-right: 0; padding-left: 0; }
   GtkImage { padding-top: 1px; }
 }
 
@@ -2261,11 +2261,11 @@ GtkPlacesSidebar.sidebar {
 
 .sidebar-item {
   padding: 10px 4px;
-  > .label {
+  > label {
     padding-left: 6px;
     padding-right: 6px;
   }
-  &.needs-attention > .label {
+  &.needs-attention > label {
     @extend %needs_attention;
     background-size: 6px 6px, 0 0;
   }
@@ -2331,9 +2331,9 @@ GtkInfoBar {
     &:backdrop { @include button(backdrop, $selected_bg_color, $selected_fg_color, $edge: none); }
     &:backdrop:insensitive { @include button(backdrop-insensitive, $selected_bg_color, $selected_fg_color, $edge: none); }
   }
-  .label:selected,
-  .label:selected:focus,
-  .label:selected:hover {
+  label:selected,
+  label:selected:focus,
+  label:selected:hover {
     background-color: lighten($selected_bg_color, 20%);
   }
 }

@@ -173,7 +173,7 @@
     border: none;
     box-shadow: none; }
 
-.label:insensitive, .label:backdrop:insensitive {
+label:insensitive, label:backdrop:insensitive {
   color: gray; }
 
 /*********************
@@ -697,15 +697,15 @@
   border-radius: 3px;
   border-style: solid; }
 
-.sidebar-item.needs-attention > .label {
+.sidebar-item.needs-attention > label {
   animation: needs_attention 150ms ease-in;
   background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(#000), to(transparent)), -gtk-gradient(radial, center center, 0, center center, 0.5, to(#000), to(transparent));
   background-size: 6px 6px, 6px 6px;
   background-repeat: no-repeat;
   background-position: right 3px, right 4px; }
-  .sidebar-item.needs-attention > .label:backdrop {
+  .sidebar-item.needs-attention > label:backdrop {
     background-size: 6px 6px, 0 0; }
-  .sidebar-item.needs-attention > .label:dir(rtl) {
+  .sidebar-item.needs-attention > label:dir(rtl) {
     background-position: left 3px, left 4px; }
 
 .osd .button, .osd .button:hover, .osd .button:active, .osd .button:checked, .osd .button:insensitive, .osd .button:backdrop, .inline-toolbar .button, .inline-toolbar .button:backdrop, .linked > .button, .linked > .button:hover, .linked > .button:active, .linked > .button:checked, .linked > .button:backdrop, .linked > GtkComboBox > .button:dir(ltr) {
@@ -982,7 +982,7 @@ GtkComboBox {
     background-color: rgba(0, 0, 0, 0.8);
     border-radius: 6px;
     padding: 12px; }
-    .toolbar.osd .label {
+    .toolbar.osd label {
       color: #fff; }
   .toolbar.inline-toolbar {
     border-width: 0 1px 1px;
@@ -1177,11 +1177,11 @@ GtkComboBox {
   .path-bar .button:only-child {
     padding-left: 12px;
     padding-right: 12px; }
-  .path-bar .button .label:last-child {
+  .path-bar .button label:last-child {
     padding-left: 2px; }
-  .path-bar .button .label:first-child {
+  .path-bar .button label:first-child {
     padding-right: 2px; }
-  .path-bar .button .label:only-child {
+  .path-bar .button label:only-child {
     padding-right: 0;
     padding-left: 0; }
   .path-bar .button GtkImage {
@@ -2067,11 +2067,11 @@ GtkLevelBar.vertical {
     .level-bar.fill-block.empty-fill-block:backdrop {
       border-color: rgba(0, 0, 0, 0.15); }
 
-.view:selected, GtkCalendar:selected, .view:selected:focus, GtkCalendar:focus:selected, .view:selected:hover, GtkCalendar:hover:selected, .label:selected, .label:selected:focus, .label:selected:hover, .label:backdrop:selected, .entry:selected, .entry:selected:focus, .menuitem.button.flat:hover, .menuitem.sidebar-button.button:hover, .menuitem.button.flat:selected, .menuitem.sidebar-button.button:selected, .list-row.activatable:selected, .sidebar:selected, GtkPlacesSidebar.sidebar .view:selected, GtkPlacesSidebar.sidebar GtkCalendar:selected {
+.view:selected, GtkCalendar:selected, .view:selected:focus, GtkCalendar:focus:selected, .view:selected:hover, GtkCalendar:hover:selected, label:selected, label:selected:focus, label:selected:hover, label:backdrop:selected, .entry:selected, .entry:selected:focus, .menuitem.button.flat:hover, .menuitem.sidebar-button.button:hover, .menuitem.button.flat:selected, .menuitem.sidebar-button.button:selected, .list-row.activatable:selected, .sidebar:selected, GtkPlacesSidebar.sidebar .view:selected, GtkPlacesSidebar.sidebar GtkCalendar:selected {
   background-color: #000;
   color: #fff;
   outline-color: rgba(255, 255, 255, 0.3); }
-  .view:backdrop:selected, GtkCalendar:backdrop:selected, GtkCalendar:backdrop:focus:selected, GtkCalendar:backdrop:hover:selected, .label:backdrop:selected, .entry:backdrop:selected, .menuitem.button.flat:backdrop:hover, .menuitem.sidebar-button.button:backdrop:hover, .menuitem.button.flat:backdrop:selected, .menuitem.sidebar-button.button:backdrop:selected, .list-row.activatable:backdrop:selected, .sidebar:backdrop:selected, GtkPlacesSidebar.sidebar .view:backdrop:selected, GtkPlacesSidebar.sidebar GtkCalendar:backdrop:selected {
+  .view:backdrop:selected, GtkCalendar:backdrop:selected, GtkCalendar:backdrop:focus:selected, GtkCalendar:backdrop:hover:selected, label:backdrop:selected, .entry:backdrop:selected, .menuitem.button.flat:backdrop:hover, .menuitem.sidebar-button.button:backdrop:hover, .menuitem.button.flat:backdrop:selected, .menuitem.sidebar-button.button:backdrop:selected, .list-row.activatable:backdrop:selected, .sidebar:backdrop:selected, GtkPlacesSidebar.sidebar .view:backdrop:selected, GtkPlacesSidebar.sidebar GtkCalendar:backdrop:selected {
     background-color: gray;
     color: #fff; }
 
@@ -2429,10 +2429,10 @@ GtkPlacesSidebar.sidebar .view {
 
 .sidebar-item {
   padding: 10px 4px; }
-  .sidebar-item > .label {
+  .sidebar-item > label {
     padding-left: 6px;
     padding-right: 6px; }
-  .sidebar-item.needs-attention > .label {
+  .sidebar-item.needs-attention > label {
     background-size: 6px 6px, 0 0; }
 
 /*********
@@ -2541,18 +2541,18 @@ GtkInfoBar {
       background-color: white;
       border-color: #8d8d8d;
       background-image: none; }
-  .info .label:selected,
-  .info .label:selected:focus,
-  .info .label:selected:hover,
-  .question .label:selected,
-  .question .label:selected:focus,
-  .question .label:selected:hover,
-  .warning .label:selected,
-  .warning .label:selected:focus,
-  .warning .label:selected:hover,
-  .error .label:selected,
-  .error .label:selected:focus,
-  .error .label:selected:hover {
+  .info label:selected,
+  .info label:selected:focus,
+  .info label:selected:hover,
+  .question label:selected,
+  .question label:selected:focus,
+  .question label:selected:hover,
+  .warning label:selected,
+  .warning label:selected:focus,
+  .warning label:selected:hover,
+  .error label:selected,
+  .error label:selected:focus,
+  .error label:selected:hover {
     background-color: #333333; }
 
 /************
