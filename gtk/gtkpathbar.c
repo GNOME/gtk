@@ -1575,7 +1575,7 @@ make_directory_button (GtkPathBar  *path_bar,
   button_data->type = find_button_type (path_bar, file);
   button_data->button = gtk_toggle_button_new ();
   atk_obj = gtk_widget_get_accessible (button_data->button);
-  gtk_button_set_focus_on_click (GTK_BUTTON (button_data->button), FALSE);
+  gtk_widget_set_focus_on_click (button_data->button, FALSE);
   gtk_widget_add_events (button_data->button, GDK_SCROLL_MASK);
 
   switch (button_data->type)

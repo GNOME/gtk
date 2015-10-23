@@ -516,7 +516,7 @@ setup_search (GtkFileChooserDialog *dialog)
       GtkWidget *header;
 
       button = gtk_toggle_button_new ();
-      gtk_button_set_focus_on_click (GTK_BUTTON (button), FALSE);
+      gtk_widget_set_focus_on_click (button, FALSE);
       gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
       image = gtk_image_new_from_icon_name ("edit-find-symbolic", GTK_ICON_SIZE_MENU);
       gtk_container_add (GTK_CONTAINER (button), image);

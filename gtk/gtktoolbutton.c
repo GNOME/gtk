@@ -352,7 +352,7 @@ gtk_tool_button_init (GtkToolButton      *button,
 
   /* create button */
   button->priv->button = g_object_new (klass->button_type, NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (button->priv->button), FALSE);
+  gtk_widget_set_focus_on_click (GTK_WIDGET (button->priv->button), FALSE);
   g_signal_connect_object (button->priv->button, "clicked",
 			   G_CALLBACK (button_clicked), button, 0);
 

@@ -406,7 +406,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
   priv->header = gtk_button_new ();
   g_object_ref_sink (priv->header);
-  gtk_button_set_focus_on_click (GTK_BUTTON (priv->header), FALSE);
+  gtk_widget_set_focus_on_click (priv->header, FALSE);
   gtk_container_add (GTK_CONTAINER (priv->header), alignment);
   gtk_widget_set_parent (priv->header, GTK_WIDGET (group));
 
@@ -2109,8 +2109,7 @@ gtk_tool_item_group_insert (GtkToolItemGroup *group,
 
   child_widget = gtk_bin_get_child (GTK_BIN (item));
 
-  if (GTK_IS_BUTTON (child_widget))
-    gtk_button_set_focus_on_click (GTK_BUTTON (child_widget), TRUE);
+  gtk_widget_set_focus_on_click (child_widget, TRUE);
 
   gtk_widget_set_parent (GTK_WIDGET (item), GTK_WIDGET (group));
 }

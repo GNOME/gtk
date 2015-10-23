@@ -698,7 +698,7 @@ gtk_toolbar_init (GtkToolbar *toolbar)
   gtk_button_set_relief (GTK_BUTTON (priv->arrow_button),
 			 get_button_relief (toolbar));
 
-  gtk_button_set_focus_on_click (GTK_BUTTON (priv->arrow_button), FALSE);
+  gtk_widget_set_focus_on_click (priv->arrow_button, FALSE);
 
   priv->arrow = gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
   gtk_widget_set_name (priv->arrow, "gtk-toolbar-arrow");
