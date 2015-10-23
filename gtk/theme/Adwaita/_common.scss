@@ -1955,37 +1955,38 @@ GtkSwitch {
   -GtkSwitch-slider-width: 45px; // 55px is the right value to make it as tall
                                  // as buttons, not doing that for now
   -GtkSwitch-slider-height: 27px;
+}
 
+switch {
   font-weight: bold;
   font-size: smaller;
   outline-offset: -4px;
   box-shadow: inset 0 1px transparentize(black, 0.9), // needs to be set here
               _widget_edge();                         // otherwise it gets
                                                       // clipped
-  &.trough {
-    // similar to the .scale
-    border: 1px solid $borders_color;
-    border-radius: 3px;
-    color: $fg_color;
-    background-image: linear-gradient(to bottom, mix($bg_color, $borders_color, 60%));
-    text-shadow: 0 1px transparentize(black, 0.9);
-    &:active {
+  // similar to the .scale
+  border: 1px solid $borders_color;
+  border-radius: 3px;
+  color: $fg_color;
+  background-image: linear-gradient(to bottom, mix($bg_color, $borders_color, 60%));
+  text-shadow: 0 1px transparentize(black, 0.9);
+  &:active {
       @include progressbar_fill;
       color: white;
       border-color: $selected_borders_color;
       box-shadow: _widget_edge();
       text-shadow: 0 1px transparentize($selected_borders_color, 0.5),
                    0 0 2px transparentize(white, 0.4);
-    }
-    &:insensitive {
+  }
+  &:insensitive {
       color: $insensitive_fg_color;
       border-color: $borders_color;
       background-image: none;
       background-color: $insensitive_bg_color;
       box-shadow: _widget_edge();
       text-shadow: none;
-    }
-    &:backdrop {
+  }
+  &:backdrop {
       color: $backdrop_fg_color;
       border-color: $backdrop_borders_color;
       background-image: linear-gradient(to bottom, $backdrop_dark_fill);
@@ -1998,15 +1999,14 @@ GtkSwitch {
         background-image: linear-gradient(to bottom, $selected_bg_color);
         box-shadow: none;
       }
-      &:insensitive {
+  }
+  &:insensitive {
         color: $backdrop_insensitive_color;
         border-color: $backdrop_borders_color;
         background-image: none;
         background-color: $insensitive_bg_color;
-      }
-    }
   }
-  &.slider {
+  & slider {
     border: 1px solid;
     border-radius: 3px;
     @include button(normal);
@@ -2047,7 +2047,6 @@ GtkSwitch {
       &.slider:active { border-color: $selected_borders_color; }
     }
   }
-
 }
 
 /*************************
