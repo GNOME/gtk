@@ -464,10 +464,7 @@ gtk_switch_size_allocate (GtkWidget     *widget,
 
   context = gtk_widget_get_style_context (widget);
 
-  gtk_style_context_save (context);
-
-  gtk_style_context_remove_class (context, GTK_STYLE_CLASS_TROUGH);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_SLIDER);
+  gtk_style_context_save_to_node (context, priv->slider_node);
 
   _gtk_css_shadows_value_get_extents (_gtk_style_context_peek_property (context,
                                                                         GTK_CSS_PROPERTY_BOX_SHADOW),
@@ -1040,13 +1037,14 @@ gtk_switch_class_init (GtkSwitchClass *klass)
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_SWITCH_ACCESSIBLE);
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_TOGGLE_BUTTON);
+
+  gtk_widget_class_set_css_name (widget_class, "switch");
 }
 
 static void
 gtk_switch_init (GtkSwitch *self)
 {
   GtkSwitchPrivate *priv;
-  GtkStyleContext *context;
   GtkGesture *gesture;
   GtkCssNode *widget_node;
 
@@ -1058,8 +1056,7 @@ gtk_switch_init (GtkSwitch *self)
 
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (self));
   priv->slider_node = gtk_css_node_new ();
-  gtk_css_node_set_widget_type (priv->slider_node, GTK_TYPE_SWITCH);
-  gtk_css_node_add_class (priv->slider_node, g_quark_from_string (GTK_STYLE_CLASS_SLIDER));
+  gtk_css_node_set_name (priv->slider_node, I_("slider"));
   gtk_css_node_set_parent (priv->slider_node, widget_node);
   gtk_css_node_set_state (priv->slider_node, gtk_css_node_get_state (widget_node));
   g_signal_connect_object (priv->slider_node, "style-changed", G_CALLBACK (node_style_changed_cb), self, 0);
@@ -1087,9 +1084,6 @@ gtk_switch_init (GtkSwitch *self)
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
                                               GTK_PHASE_BUBBLE);
   priv->pan_gesture = gesture;
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (self));
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_TROUGH);
 }
 
 /**
