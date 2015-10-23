@@ -241,7 +241,7 @@ gtk_shortcut_label_rebuild (GtkShortcutLabel *self)
        if (modifier2 == modifier)
          modifier2 = 0;
 
-      gtk_container_add (GTK_CONTAINER (self), dim_label ("…"));
+      gtk_container_add (GTK_CONTAINER (self), dim_label ("⋯"));
 
       display_shortcut (GTK_CONTAINER (self), key2, modifier2);
     }
