@@ -175,6 +175,8 @@ struct _GtkEntryPrivate
   GtkGesture    *drag_gesture;
   GtkGesture    *multipress_gesture;
 
+  GtkCssNode    *progress_node;
+
   gfloat        xalign;
 
   gint          ascent;                     /* font ascent in pango units  */
@@ -3811,18 +3813,6 @@ gtk_entry_draw_frame (GtkWidget       *widget,
 }
 
 static void
-gtk_entry_prepare_context_for_progress (GtkEntry *entry,
-                                        GtkStyleContext *context)
-{
-  GtkEntryPrivate *private = entry->priv;
-
-  gtk_style_context_save (context);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_PROGRESSBAR);
-  if (private->progress_pulse_mode)
-    gtk_style_context_add_class (context, GTK_STYLE_CLASS_PULSE);
-}
-
-static void
 get_progress_area (GtkWidget *widget,
                    gint       *x,
                    gint       *y,
@@ -3832,7 +3822,7 @@ get_progress_area (GtkWidget *widget,
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *private = entry->priv;
   GtkStyleContext *context;
-  GtkBorder margin, border, entry_borders;
+  GtkBorder border, entry_borders;
   gint frame_width, text_area_width, text_area_height;
   GtkStateFlags state;
 
@@ -3870,15 +3860,19 @@ get_progress_area (GtkWidget *widget,
         }
     }
 
-  gtk_entry_prepare_context_for_progress (entry, context);
-  gtk_style_context_get_margin (context, state, &margin);
+  if (private->progress_node)
+    {
+      GtkBorder margin;
 
-  gtk_style_context_restore (context);
+      gtk_style_context_save_to_node (context, private->progress_node);
+      gtk_style_context_get_margin (context, state, &margin);
+      gtk_style_context_restore (context);
 
-  *x += margin.left;
-  *y += margin.top;
-  *width -= margin.left + margin.right;
-  *height -= margin.top + margin.bottom;
+      *x += margin.left;
+      *y += margin.top;
+      *width -= margin.left + margin.right;
+      *height -= margin.top + margin.bottom;
+    }
 
   if (private->progress_pulse_mode)
     {
@@ -3923,11 +3917,10 @@ gtk_entry_draw_progress (GtkWidget       *widget,
 
   if ((width <= 0) || (height <= 0))
     return;
- 
-  gtk_entry_prepare_context_for_progress (entry, context);
+
+  gtk_style_context_save_to_node (context, entry->priv->progress_node);
   gtk_render_background (context, cr, x, y, width, height);
   gtk_render_frame (context, cr, x, y, width, height);
-
   gtk_style_context_restore (context);
 }
 
@@ -6480,7 +6473,8 @@ gtk_entry_draw_text (GtkEntry *entry,
   GtkEntryPrivate *priv = entry->priv;
   GtkWidget *widget = GTK_WIDGET (entry);
   GtkStateFlags state = 0;
-  GdkRGBA text_color, bar_text_color;
+  GdkRGBA text_color;
+  GdkRGBA bar_text_color = { 0 };
   GtkStyleContext *context;
   gint width, height;
   gint progress_x, progress_y, progress_width, progress_height;
@@ -6496,9 +6490,12 @@ gtk_entry_draw_text (GtkEntry *entry,
   gtk_style_context_get_color (context, state, &text_color);
 
   /* Get foreground color for progressbars */
-  gtk_entry_prepare_context_for_progress (entry, context);
-  gtk_style_context_get_color (context, state, &bar_text_color);
-  gtk_style_context_restore (context);
+  if (priv->progress_node)
+    {
+      gtk_style_context_save_to_node (context, priv->progress_node);
+      gtk_style_context_get_color (context, state, &bar_text_color);
+      gtk_style_context_restore (context);
+    }
 
   get_progress_area (widget,
                      &progress_x, &progress_y,
@@ -6512,9 +6509,10 @@ gtk_entry_draw_text (GtkEntry *entry,
   cairo_clip (cr);
 
   /* If the color is the same, or the progress area has a zero
-   * size, then we only need to draw once. */
-  if (gdk_rgba_equal (&text_color, &bar_text_color) ||
-      ((progress_width == 0) || (progress_height == 0)))
+   * size, then we only need to draw once.
+   */
+  if (progress_width == 0 || progress_height == 0 ||
+      gdk_rgba_equal (&text_color, &bar_text_color))
     {
       draw_text_with_color (entry, cr, &text_color);
     }
@@ -10662,23 +10660,44 @@ tick_cb (GtkWidget     *widget,
 }
 
 static void
+gtk_entry_ensure_progress_node (GtkEntry *entry)
+{
+  GtkEntryPrivate *priv = entry->priv;
+  GtkCssNode *widget_node;
+
+  if (priv->progress_node)
+    return;
+
+  widget_node = gtk_widget_get_css_node (GTK_WIDGET (entry));
+  priv->progress_node = gtk_css_node_new ();
+  gtk_css_node_set_name (priv->progress_node, I_("progressbar"));
+  gtk_css_node_set_parent (priv->progress_node, widget_node);
+  gtk_css_node_set_state (priv->progress_node, gtk_css_node_get_state (widget_node));
+  g_object_unref (priv->progress_node);
+}
+
+static void
 gtk_entry_start_pulse_mode (GtkEntry *entry)
 {
   GtkEntryPrivate *priv = entry->priv;
 
-  if (!priv->progress_pulse_mode)
-    {
-      priv->progress_pulse_mode = TRUE;
-      priv->tick_id = gtk_widget_add_tick_callback (GTK_WIDGET (entry), tick_cb, NULL, NULL);
+  if (priv->progress_pulse_mode)
+    return;
 
-      priv->progress_fraction = 0.0;
-      priv->progress_pulse_way_back = FALSE;
-      priv->progress_pulse_current = 0.0;
+  gtk_entry_ensure_progress_node (entry);
+  gtk_css_node_set_visible (priv->progress_node, TRUE);
+  gtk_css_node_add_class (priv->progress_node, g_quark_from_static_string (GTK_STYLE_CLASS_PULSE));
 
-      priv->pulse2 = 0;
-      priv->pulse1 = 0;
-      priv->frame1 = 0;
-    }
+  priv->progress_pulse_mode = TRUE;
+  priv->tick_id = gtk_widget_add_tick_callback (GTK_WIDGET (entry), tick_cb, NULL, NULL);
+
+  priv->progress_fraction = 0.0;
+  priv->progress_pulse_way_back = FALSE;
+  priv->progress_pulse_current = 0.0;
+
+  priv->pulse2 = 0;
+  priv->pulse1 = 0;
+  priv->frame1 = 0;
 }
 
 static void
@@ -10688,6 +10707,9 @@ gtk_entry_stop_pulse_mode (GtkEntry *entry)
 
   if (priv->progress_pulse_mode)
     {
+      gtk_css_node_set_visible (priv->progress_node, FALSE);
+      gtk_css_node_remove_class (priv->progress_node, g_quark_from_static_string (GTK_STYLE_CLASS_PULSE));
+
       priv->progress_pulse_mode = FALSE;
       gtk_widget_remove_tick_callback (GTK_WIDGET (entry), priv->tick_id);
       priv->tick_id = 0;
@@ -10729,6 +10751,10 @@ gtk_entry_set_progress_fraction (GtkEntry *entry,
 
   widget = GTK_WIDGET (entry);
   private = entry->priv;
+
+  gtk_entry_ensure_progress_node (entry);
+  gtk_css_node_set_visible (private->progress_node, TRUE);
+  gtk_css_node_remove_class (private->progress_node, g_quark_from_static_string (GTK_STYLE_CLASS_PULSE));
 
   was_pulse = private->progress_pulse_mode;
 
