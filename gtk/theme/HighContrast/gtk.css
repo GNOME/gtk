@@ -196,7 +196,7 @@ label:insensitive, label:backdrop:insensitive {
 /****************
  * Text Entries *
  ****************/
-.entry {
+entry {
   padding: 7px 4px;
   border-radius: 3px;
   border-width: 1px;
@@ -206,7 +206,7 @@ label:insensitive, label:backdrop:insensitive {
   background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
   border-color: gray;
   box-shadow: inset 0 2px 2px -2px gray; }
-  .entry.flat, .entry.flat:focus {
+  entry.flat, entry.flat:focus {
     padding: 2px;
     background-color: transparent;
     border-style: solid;
@@ -215,13 +215,13 @@ label:insensitive, label:backdrop:insensitive {
     box-shadow: inset 0 2px 2px -2px gray;
     border: none;
     border-radius: 0; }
-  .entry:focus {
+  entry:focus {
     background-color: transparent;
     border-style: solid;
     background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
     border-color: #000;
     box-shadow: inset 0 2px 2px -2px gray, inset 0 0 2px 1px #cccccc; }
-  .entry:insensitive {
+  entry:insensitive {
     background-color: transparent;
     border-style: solid;
     background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
@@ -229,24 +229,24 @@ label:insensitive, label:backdrop:insensitive {
     border-color: gray;
     background-image: linear-gradient(to bottom, white);
     box-shadow: none; }
-  .entry:backdrop {
+  entry:backdrop {
     background-color: transparent;
     border-style: solid;
     background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
     color: #000;
     background-image: linear-gradient(to bottom, #fff);
     box-shadow: 0 1px rgba(255, 255, 255, 0); }
-  .entry:backdrop:insensitive {
+  entry:backdrop:insensitive {
     background-color: transparent;
     border-style: solid;
     background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
     color: gray;
     background-image: linear-gradient(to bottom, #fff);
     box-shadow: 0 1px rgba(255, 255, 255, 0); }
-  .entry:selected, .entry:backdrop:selected {
+  entry:selected, entry:backdrop:selected {
     background-color: #000;
     color: #fff; }
-  .entry.progressbar {
+  entry.progressbar {
     margin: 1px;
     border-radius: 0;
     border-width: 0 0 2px;
@@ -255,20 +255,20 @@ label:insensitive, label:backdrop:insensitive {
     background-image: none;
     background-color: transparent;
     box-shadow: none; }
-    .entry.progressbar:backdrop {
+    entry.progressbar:backdrop {
       background-color: transparent; }
-  .linked .entry:first-child {
+  .linked entry:first-child {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0; }
-    .linked .entry:first-child:dir(rtl) {
+    .linked entry:first-child:dir(rtl) {
       border-right-style: none; }
-  .linked .entry:last-child {
+  .linked entry:last-child {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
     border-left-style: none; }
-    .linked .entry:last-child:dir(rtl) {
+    .linked entry:last-child:dir(rtl) {
       border-left-style: solid; }
-  .linked.vertical .entry {
+  .linked.vertical entry {
     background-color: transparent;
     border-style: solid;
     background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
@@ -277,10 +277,10 @@ label:insensitive, label:backdrop:insensitive {
     background-image: linear-gradient(to bottom, #fff);
     border-bottom-color: #d9d9d9;
     box-shadow: none; }
-    .linked.vertical .entry:focus {
+    .linked.vertical entry:focus {
       border-color: #000;
       box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15), 0 -1px 0 0 #000; }
-    .linked.vertical .entry:insensitive {
+    .linked.vertical entry:insensitive {
       background-color: transparent;
       border-style: solid;
       background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
@@ -289,7 +289,7 @@ label:insensitive, label:backdrop:insensitive {
       background-image: linear-gradient(to bottom, white);
       box-shadow: none;
       border-bottom-color: #d9d9d9; }
-      .linked.vertical .entry:insensitive:backdrop {
+      .linked.vertical entry:insensitive:backdrop {
         background-color: transparent;
         border-style: solid;
         background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
@@ -297,7 +297,7 @@ label:insensitive, label:backdrop:insensitive {
         background-image: linear-gradient(to bottom, #fff);
         box-shadow: 0 1px rgba(255, 255, 255, 0);
         border-bottom-color: #dddddd; }
-    .linked.vertical .entry:backdrop {
+    .linked.vertical entry:backdrop {
       background-color: transparent;
       border-style: solid;
       background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
@@ -305,20 +305,20 @@ label:insensitive, label:backdrop:insensitive {
       background-image: linear-gradient(to bottom, #fff);
       box-shadow: 0 1px rgba(255, 255, 255, 0);
       border-bottom-color: #dddddd; }
-    .linked.vertical .entry:first-child {
+    .linked.vertical entry:first-child {
       background-color: transparent;
       border-style: solid;
       background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
       border-color: gray;
       box-shadow: inset 0 2px 2px -2px gray;
       border-bottom-color: #d9d9d9; }
-      .linked.vertical .entry:first-child:focus {
+      .linked.vertical entry:first-child:focus {
         background-color: transparent;
         border-style: solid;
         background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
         border-color: #000;
         box-shadow: inset 0 2px 2px -2px gray, inset 0 0 2px 1px #cccccc; }
-      .linked.vertical .entry:first-child:insensitive {
+      .linked.vertical entry:first-child:insensitive {
         background-color: transparent;
         border-style: solid;
         background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
@@ -327,7 +327,7 @@ label:insensitive, label:backdrop:insensitive {
         background-image: linear-gradient(to bottom, white);
         box-shadow: none;
         border-bottom-color: #dddddd; }
-        .linked.vertical .entry:first-child:insensitive:backdrop {
+        .linked.vertical entry:first-child:insensitive:backdrop {
           background-color: transparent;
           border-style: solid;
           background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
@@ -336,7 +336,7 @@ label:insensitive, label:backdrop:insensitive {
           box-shadow: 0 1px rgba(255, 255, 255, 0);
           border-bottom-color: #dddddd;
           border-top-style: solid; }
-      .linked.vertical .entry:first-child:backdrop {
+      .linked.vertical entry:first-child:backdrop {
         background-color: transparent;
         border-style: solid;
         background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
@@ -344,7 +344,7 @@ label:insensitive, label:backdrop:insensitive {
         background-image: linear-gradient(to bottom, #fff);
         box-shadow: 0 1px rgba(255, 255, 255, 0);
         border-bottom-color: #dddddd; }
-    .linked.vertical .entry:last-child {
+    .linked.vertical entry:last-child {
       background-color: transparent;
       border-style: solid;
       background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
@@ -353,10 +353,10 @@ label:insensitive, label:backdrop:insensitive {
       border-top-width: 0;
       background-image: linear-gradient(to bottom, #fff);
       box-shadow: none; }
-      .linked.vertical .entry:last-child:focus {
+      .linked.vertical entry:last-child:focus {
         border-color: #000;
         box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15), 0 -1px 0 0 #000; }
-      .linked.vertical .entry:last-child:insensitive {
+      .linked.vertical entry:last-child:insensitive {
         background-color: transparent;
         border-style: solid;
         background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
@@ -364,41 +364,41 @@ label:insensitive, label:backdrop:insensitive {
         border-color: gray;
         background-image: linear-gradient(to bottom, white);
         box-shadow: none; }
-        .linked.vertical .entry:last-child:insensitive:backdrop {
+        .linked.vertical entry:last-child:insensitive:backdrop {
           background-color: transparent;
           border-style: solid;
           background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
           color: gray;
           background-image: linear-gradient(to bottom, #fff);
           box-shadow: 0 1px rgba(255, 255, 255, 0); }
-      .linked.vertical .entry:last-child:backdrop {
+      .linked.vertical entry:last-child:backdrop {
         background-color: transparent;
         border-style: solid;
         background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
         color: #000;
         background-image: linear-gradient(to bottom, #fff);
         box-shadow: 0 1px rgba(255, 255, 255, 0); }
-  .entry.error {
+  entry.error {
     color: #cc0000;
     border-color: #cc0000; }
-    .entry.error:focus {
+    entry.error:focus {
       background-color: transparent;
       border-style: solid;
       background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
       border-color: #cc0000;
       box-shadow: inset 0 2px 2px -2px gray, inset 0 0 2px 1px #f5cccc; }
-    .entry.error:selected, .entry.error:selected:focus {
+    entry.error:selected, entry.error:selected:focus {
       background-color: #cc0000; }
-  .entry.warning {
+  entry.warning {
     color: #f57900;
     border-color: #f57900; }
-    .entry.warning:focus {
+    entry.warning:focus {
       background-color: transparent;
       border-style: solid;
       background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
       border-color: #f57900;
       box-shadow: inset 0 2px 2px -2px gray, inset 0 0 2px 1px #fde4cc; }
-    .entry.warning:selected, .entry.warning:selected:focus {
+    entry.warning:selected, entry.warning:selected:focus {
       background-color: #f57900; }
 
 /***********
@@ -727,20 +727,20 @@ label:insensitive, label:backdrop:insensitive {
   border-radius: 3px;
   border-style: solid; }
 
-.linked.vertical .entry, .linked.vertical .entry:focus, .linked.vertical .entry:insensitive, .linked.vertical .entry:insensitive:backdrop, .linked.vertical .entry:backdrop, .linked.vertical > .button, .linked.vertical > .button:hover, .linked.vertical > .button:active, .linked.vertical > .button:checked, .linked.vertical > .button:backdrop, .linked.vertical > GtkComboBoxText > .button,
+.linked.vertical entry, .linked.vertical entry:focus, .linked.vertical entry:insensitive, .linked.vertical entry:insensitive:backdrop, .linked.vertical entry:backdrop, .linked.vertical > .button, .linked.vertical > .button:hover, .linked.vertical > .button:active, .linked.vertical > .button:checked, .linked.vertical > .button:backdrop, .linked.vertical > GtkComboBoxText > .button,
 .linked.vertical > GtkComboBox > .button {
   border-left-style: solid;
   border-top-style: none;
   border-radius: 0; }
 
-.linked.vertical .entry:first-child, .linked.vertical > .button:first-child, .linked.vertical > GtkComboBoxText:first-child > .button,
+.linked.vertical entry:first-child, .linked.vertical > .button:first-child, .linked.vertical > GtkComboBoxText:first-child > .button,
 .linked.vertical > GtkComboBox:first-child > .button {
   border-style: solid;
   border-radius: 3px 3px 0 0; }
-.linked.vertical .entry:last-child, .linked.vertical > .button:last-child, .linked.vertical > GtkComboBoxText:last-child > .button,
+.linked.vertical entry:last-child, .linked.vertical > .button:last-child, .linked.vertical > GtkComboBoxText:last-child > .button,
 .linked.vertical > GtkComboBox:last-child > .button {
   border-radius: 0 0 3px 3px; }
-.linked.vertical .entry:only-child, .linked.vertical > .button:only-child, .linked.vertical > GtkComboBoxText:only-child > .button,
+.linked.vertical entry:only-child, .linked.vertical > .button:only-child, .linked.vertical > GtkComboBoxText:only-child > .button,
 .linked.vertical > GtkComboBox:only-child > .button {
   border-radius: 3px;
   border-style: solid; }
@@ -801,7 +801,7 @@ GtkColorButton.button {
   /* This is to fix spinbuttons in entries, but I feel like hiding code issues
    * hence it's commented atm.
    *  GtkTreeView & {
-   *   &.entry, &.entry:focus {
+   *   & entry, & entry:focus {
    *     padding: 1px;
    *     border-width: 1px 0;
    *     border-color: $selected_bg_color;
@@ -960,9 +960,9 @@ GtkComboBox {
     text-shadow: none; }
   GtkComboBox .separator.vertical, GtkComboBox GtkPlacesSidebar.sidebar .view .vertical.separator, GtkPlacesSidebar.sidebar .view GtkComboBox .vertical.separator {
     -GtkWidget-wide-separators: true; }
-  GtkComboBox.combobox-entry .entry {
+  GtkComboBox.combobox-entry entry {
     border-radius: 3px 0 0 3px; }
-    GtkComboBox.combobox-entry .entry:dir(rtl) {
+    GtkComboBox.combobox-entry entry:dir(rtl) {
       border-radius: 0 3px 3px 0; }
   GtkComboBox.combobox-entry .button, GtkComboBox.combobox-entry .button:backdrop {
     border-radius: 0 3px 3px 0;
@@ -2067,11 +2067,11 @@ GtkLevelBar.vertical {
     .level-bar.fill-block.empty-fill-block:backdrop {
       border-color: rgba(0, 0, 0, 0.15); }
 
-.view:selected, GtkCalendar:selected, .view:selected:focus, GtkCalendar:focus:selected, .view:selected:hover, GtkCalendar:hover:selected, label:selected, label:selected:focus, label:selected:hover, label:backdrop:selected, .entry:selected, .entry:selected:focus, .menuitem.button.flat:hover, .menuitem.sidebar-button.button:hover, .menuitem.button.flat:selected, .menuitem.sidebar-button.button:selected, .list-row.activatable:selected, .sidebar:selected, GtkPlacesSidebar.sidebar .view:selected, GtkPlacesSidebar.sidebar GtkCalendar:selected {
+.view:selected, GtkCalendar:selected, .view:selected:focus, GtkCalendar:focus:selected, .view:selected:hover, GtkCalendar:hover:selected, label:selected, label:selected:focus, label:selected:hover, label:backdrop:selected, entry:selected, entry:selected:focus, .menuitem.button.flat:hover, .menuitem.sidebar-button.button:hover, .menuitem.button.flat:selected, .menuitem.sidebar-button.button:selected, .list-row.activatable:selected, .sidebar:selected, GtkPlacesSidebar.sidebar .view:selected, GtkPlacesSidebar.sidebar GtkCalendar:selected {
   background-color: #000;
   color: #fff;
   outline-color: rgba(255, 255, 255, 0.3); }
-  .view:backdrop:selected, GtkCalendar:backdrop:selected, GtkCalendar:backdrop:focus:selected, GtkCalendar:backdrop:hover:selected, label:backdrop:selected, .entry:backdrop:selected, .menuitem.button.flat:backdrop:hover, .menuitem.sidebar-button.button:backdrop:hover, .menuitem.button.flat:backdrop:selected, .menuitem.sidebar-button.button:backdrop:selected, .list-row.activatable:backdrop:selected, .sidebar:backdrop:selected, GtkPlacesSidebar.sidebar .view:backdrop:selected, GtkPlacesSidebar.sidebar GtkCalendar:backdrop:selected {
+  .view:backdrop:selected, GtkCalendar:backdrop:selected, GtkCalendar:backdrop:focus:selected, GtkCalendar:backdrop:hover:selected, label:backdrop:selected, entry:backdrop:selected, .menuitem.button.flat:backdrop:hover, .menuitem.sidebar-button.button:backdrop:hover, .menuitem.button.flat:backdrop:selected, .menuitem.sidebar-button.button:backdrop:selected, .list-row.activatable:backdrop:selected, .sidebar:backdrop:selected, GtkPlacesSidebar.sidebar .view:backdrop:selected, GtkPlacesSidebar.sidebar GtkCalendar:backdrop:selected {
     background-color: gray;
     color: #fff; }
 

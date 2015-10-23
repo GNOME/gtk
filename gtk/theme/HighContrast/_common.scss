@@ -182,7 +182,7 @@ label {
  * Text Entries *
  ****************/
 
-.entry {
+entry {
   padding: 7px 4px;
   border-radius: 3px;
   border-width: 1px;
@@ -726,7 +726,7 @@ GtkColorButton.button { padding: 4px; } // Uniform padding on the
 /* This is to fix spinbuttons in entries, but I feel like hiding code issues
  * hence it's commented atm.
  *  GtkTreeView & {
- *   &.entry, &.entry:focus {
+ *   & entry, & entry:focus {
  *     padding: 1px;
  *     border-width: 1px 0;
  *     border-color: $selected_bg_color;
@@ -770,7 +770,7 @@ GtkComboBox {
     // always disable separators
     -GtkWidget-wide-separators: true;
   }
-  &.combobox-entry .entry {
+  &.combobox-entry entry {
     border-radius: 3px 0 0 3px;
     &:dir(rtl) {
       border-radius: 0 3px 3px 0;
