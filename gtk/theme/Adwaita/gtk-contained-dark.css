@@ -1154,9 +1154,9 @@ entry {
 .titlebar .menuitem.titlebutton.button:backdrop:hover, .button:link, .header-bar .button.titlebutton:link,
 .titlebar .button.titlebutton:link, .button:visited, .header-bar .button.titlebutton:visited,
 .titlebar .button.titlebutton:visited, .button:link:hover, .button:link:active, .button:link:checked, .button:visited:hover, .button:visited:active, .button:visited:checked, .button:link:backdrop, .button:visited:backdrop, .menu.button, .header-bar .menu.button.titlebutton,
-.titlebar .menu.button.titlebutton, .notebook tab .button, .notebook tab .header-bar .button.titlebutton, .header-bar .notebook tab .button.titlebutton,
-.notebook tab .titlebar .button.titlebutton,
-.titlebar .notebook tab .button.titlebutton, .app-notification .button.flat, .app-notification .sidebar-button.button, .app-notification .header-bar .titlebutton.button, .header-bar .app-notification .titlebutton.button,
+.titlebar .menu.button.titlebutton, notebook tab .button, notebook tab .header-bar .button.titlebutton, .header-bar notebook tab .button.titlebutton,
+notebook tab .titlebar .button.titlebutton,
+.titlebar notebook tab .button.titlebutton, .app-notification .button.flat, .app-notification .sidebar-button.button, .app-notification .header-bar .titlebutton.button, .header-bar .app-notification .titlebutton.button,
 .app-notification .titlebar .titlebutton.button,
 .titlebar .app-notification .titlebutton.button,
 .app-notification.frame .button.flat,
@@ -2071,65 +2071,67 @@ column-header .titlebar .button.titlebutton,
  * Notebooks and *
  * Tabs          *
  *****************/
-.notebook {
-  padding: 0;
-  background-color: #292929;
+GtkNotebook {
   -GtkNotebook-initial-gap: 10;
   -GtkNotebook-arrow-spacing: 5;
   -GtkNotebook-tab-curvature: 0;
   -GtkNotebook-tab-overlap: -8;
   -GtkNotebook-has-tab-gap: false;
   -GtkWidget-focus-padding: 0;
-  -GtkWidget-focus-line-width: 0;
+  -GtkWidget-focus-line-width: 0; }
+
+notebook {
+  padding: 0;
+  background-color: #292929;
   transition: all 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94); }
-  .notebook:backdrop {
+  notebook:backdrop {
     background-color: #2c2c2c; }
-  .notebook.frame {
+  notebook.frame {
     border: 1px solid #1c1f1f; }
-    .notebook.frame.top {
+    notebook.frame.top {
       border-top-width: 0; }
-    .notebook.frame.bottom {
+    notebook.frame.bottom {
       border-bottom-width: 0; }
-    .notebook.frame.right {
+    notebook.frame.right {
       border-right-width: 0; }
-    .notebook.frame.left {
+    notebook.frame.left {
       border-left-width: 0; }
-    .notebook.frame:backdrop {
+    notebook.frame:backdrop {
       border-color: #1f2222; }
-  .notebook.header {
+  notebook.header {
     background-color: #303535; }
-    .notebook.header.frame {
+    notebook.header.frame {
       border: 1px solid #1c1f1f; }
-      .notebook.header.frame.top {
+      notebook.header.frame.top {
         border-bottom-width: 0; }
-      .notebook.header.frame.bottom {
+      notebook.header.frame.bottom {
         border-top-width: 0; }
-      .notebook.header.frame.right {
+      notebook.header.frame.right {
         border-left-width: 0; }
-      .notebook.header.frame.left {
+      notebook.header.frame.left {
         border-right-width: 0; }
-      .notebook.header.frame:backdrop {
+      notebook.header.frame:backdrop {
         border-color: #1f2222; }
-    .notebook.header.top {
+    notebook.header.top {
       box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.15), inset 0 -1px #1c1f1f; }
-      .notebook.header.top:backdrop {
+      notebook.header.top:backdrop {
         box-shadow: inset 0 -1px #1f2222; }
-    .notebook.header.bottom {
+    notebook.header.bottom {
       box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.15), inset 0 1px #1c1f1f; }
-      .notebook.header.bottom:backdrop {
+      notebook.header.bottom:backdrop {
         box-shadow: inset 0 1px #1f2222; }
-    .notebook.header.right {
+    notebook.header.right {
       box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.15), inset 1px 0 #1c1f1f; }
-      .notebook.header.right:backdrop {
+      notebook.header.right:backdrop {
         box-shadow: inset 1px 0 #1f2222; }
-    .notebook.header.left {
+    notebook.header.left {
       box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.15), inset -1px 0 #1c1f1f; }
-      .notebook.header.left:backdrop {
+      notebook.header.left:backdrop {
         box-shadow: inset -1px 0 #1f2222; }
-    .notebook.header:backdrop {
+    notebook.header:backdrop {
       background-color: #303535;
       box-shadow: none; }
-  .notebook tab {
+  notebook tab {
     border-width: 0;
     border-style: solid;
     border-color: transparent;
@@ -2164,132 +2166,134 @@ column-header .titlebar .button.titlebutton,
       }
     }
     */ }
-    .notebook tab.top, .notebook tab.bottom {
+    notebook tab.top, notebook tab.bottom {
       padding: 8px 20px; }
-    .notebook tab.left, .notebook tab.right {
+    notebook tab.left, notebook tab.right {
       padding: 5px 20px; }
-    .notebook tab.reorderable-page.top, .notebook tab.reorderable-page.bottom {
+    notebook tab.reorderable-page.top, notebook tab.reorderable-page.bottom {
       padding-left: 12px;
       padding-right: 12px;
       border-left-width: 1px;
       border-right-width: 1px; }
-    .notebook tab.reorderable-page.left, .notebook tab.reorderable-page.right {
+    notebook tab.reorderable-page.left, notebook tab.reorderable-page.right {
       border-bottom-width: 1px;
       border-top-width: 1px; }
-    .notebook tab.top {
+    notebook tab.top {
       border-bottom-width: 3px; }
-    .notebook tab.bottom {
+    notebook tab.bottom {
       border-top-width: 3px; }
-    .notebook tab.left {
+    notebook tab.left {
       border-right-width: 3px; }
-    .notebook tab.right {
+    notebook tab.right {
       border-left-width: 3px; }
-    .notebook tab:hover {
+    notebook tab:hover {
       border-color: #1c1f1f; }
-    .notebook tab:active, .notebook tab:backdrop:active {
+    notebook tab:active, notebook tab:backdrop:active {
       border-color: #215d9c; }
-    .notebook tab:backdrop {
+    notebook tab:backdrop {
       background-color: transparent;
       border-color: transparent; }
-    .notebook tab.reorderable-page.top {
+    notebook tab.reorderable-page.top {
       border-color: transparent; }
-      .notebook tab.reorderable-page.top:hover {
+      notebook tab.reorderable-page.top:hover {
         border-color: rgba(28, 31, 31, 0.3);
         border-bottom-color: #1c1f1f;
         background-color: rgba(57, 63, 63, 0.2); }
-      .notebook tab.reorderable-page.top:active {
+      notebook tab.reorderable-page.top:active {
         background-color: rgba(57, 63, 63, 0.5);
         border-color: rgba(28, 31, 31, 0.5);
         border-bottom-color: #215d9c; }
-        .notebook tab.reorderable-page.top:active:hover {
+        notebook tab.reorderable-page.top:active:hover {
           background-color: rgba(57, 63, 63, 0.7); }
-        .notebook tab.reorderable-page.top:active:backdrop {
+        notebook tab.reorderable-page.top:active:backdrop {
           border-color: #1f2222;
           background-color: #393f3f;
           border-bottom-color: #215d9c; }
-      .notebook tab.reorderable-page.top:backdrop {
+      notebook tab.reorderable-page.top:backdrop {
         border-color: transparent;
         background-color: transparent; }
-    .notebook tab.reorderable-page.bottom {
+    notebook tab.reorderable-page.bottom {
       border-color: transparent; }
-      .notebook tab.reorderable-page.bottom:hover {
+      notebook tab.reorderable-page.bottom:hover {
         border-color: rgba(28, 31, 31, 0.3);
         border-top-color: #1c1f1f;
         background-color: rgba(57, 63, 63, 0.2); }
-      .notebook tab.reorderable-page.bottom:active {
+      notebook tab.reorderable-page.bottom:active {
         background-color: rgba(57, 63, 63, 0.5);
         border-color: rgba(28, 31, 31, 0.5);
         border-top-color: #215d9c; }
-        .notebook tab.reorderable-page.bottom:active:hover {
+        notebook tab.reorderable-page.bottom:active:hover {
           background-color: rgba(57, 63, 63, 0.7); }
-        .notebook tab.reorderable-page.bottom:active:backdrop {
+        notebook tab.reorderable-page.bottom:active:backdrop {
           border-color: #1f2222;
           background-color: #393f3f;
           border-top-color: #215d9c; }
-      .notebook tab.reorderable-page.bottom:backdrop {
+      notebook tab.reorderable-page.bottom:backdrop {
         border-color: transparent;
         background-color: transparent; }
-    .notebook tab.reorderable-page.left {
+    notebook tab.reorderable-page.left {
       border-color: transparent; }
-      .notebook tab.reorderable-page.left:hover {
+      notebook tab.reorderable-page.left:hover {
         border-color: rgba(28, 31, 31, 0.3);
         border-right-color: #1c1f1f;
         background-color: rgba(57, 63, 63, 0.2); }
-      .notebook tab.reorderable-page.left:active {
+      notebook tab.reorderable-page.left:active {
         background-color: rgba(57, 63, 63, 0.5);
         border-color: rgba(28, 31, 31, 0.5);
         border-right-color: #215d9c; }
-        .notebook tab.reorderable-page.left:active:hover {
+        notebook tab.reorderable-page.left:active:hover {
           background-color: rgba(57, 63, 63, 0.7); }
-        .notebook tab.reorderable-page.left:active:backdrop {
+        notebook tab.reorderable-page.left:active:backdrop {
           border-color: #1f2222;
           background-color: #393f3f;
           border-right-color: #215d9c; }
-      .notebook tab.reorderable-page.left:backdrop {
+      notebook tab.reorderable-page.left:backdrop {
         border-color: transparent;
         background-color: transparent; }
-    .notebook tab.reorderable-page.right {
+    notebook tab.reorderable-page.right {
       border-color: transparent; }
-      .notebook tab.reorderable-page.right:hover {
+      notebook tab.reorderable-page.right:hover {
         border-color: rgba(28, 31, 31, 0.3);
         border-left-color: #1c1f1f;
         background-color: rgba(57, 63, 63, 0.2); }
-      .notebook tab.reorderable-page.right:active {
+      notebook tab.reorderable-page.right:active {
         background-color: rgba(57, 63, 63, 0.5);
         border-color: rgba(28, 31, 31, 0.5);
         border-left-color: #215d9c; }
-        .notebook tab.reorderable-page.right:active:hover {
+        notebook tab.reorderable-page.right:active:hover {
           background-color: rgba(57, 63, 63, 0.7); }
-        .notebook tab.reorderable-page.right:active:backdrop {
+        notebook tab.reorderable-page.right:active:backdrop {
           border-color: #1f2222;
           background-color: #393f3f;
           border-left-color: #215d9c; }
-      .notebook tab.reorderable-page.right:backdrop {
+      notebook tab.reorderable-page.right:backdrop {
         border-color: transparent;
         background-color: transparent; }
-    .notebook tab label {
+    notebook tab label {
       padding: 0 2px;
       font-weight: bold;
       color: #949796; }
-      .notebook tab label:backdrop {
+      notebook tab label:backdrop {
         color: #797f7f; }
-    .notebook tab:hover label {
+    notebook tab:hover label {
       color: #c1c3c1; }
-      .notebook tab:hover label:backdrop {
+      notebook tab:hover label:backdrop {
         color: #797f7f; }
-    .notebook tab:active label {
+    notebook tab:active label {
       color: #eeeeec; }
-      .notebook tab:active label:backdrop {
+      notebook tab:active label:backdrop {
         color: #949796; }
-    .notebook tab .button, .notebook tab .header-bar .button.titlebutton, .header-bar .notebook tab .button.titlebutton,
-    .notebook tab .titlebar .button.titlebutton,
-    .titlebar .notebook tab .button.titlebutton {
+    notebook tab .button, notebook tab .header-bar .button.titlebutton, .header-bar notebook tab .button.titlebutton,
+    notebook tab .titlebar .button.titlebutton,
+    .titlebar notebook tab .button.titlebutton {
       padding: 0;
       border: 1px solid transparent;
       icon-shadow: none;
       transition: none;
       color: rgba(238, 238, 236, 0.3); }
-      .notebook tab .button:hover {
+      notebook tab .button:hover, notebook tab .header-bar .button.titlebutton:hover, .header-bar notebook tab .button.titlebutton:hover,
+      notebook tab .titlebar .button.titlebutton:hover,
+      .titlebar notebook tab .button.titlebutton:hover {
         color: #eeeeec;
         color: #eeeeec;
         outline-color: rgba(238, 238, 236, 0.3);
@@ -2300,7 +2304,9 @@ column-header .titlebar .button.titlebutton,
         box-shadow: inset 0 1px rgba(255, 255, 255, 0.1);
         background-image: none;
         box-shadow: none; }
-      .notebook tab .button:active {
+      notebook tab .button:active, notebook tab .header-bar .button.titlebutton:active, .header-bar notebook tab .button.titlebutton:active,
+      notebook tab .titlebar .button.titlebutton:active,
+      .titlebar notebook tab .button.titlebutton:active {
         color: #eeeeec;
         outline-color: rgba(238, 238, 236, 0.3);
         border-color: #1c1f1f;
@@ -2308,24 +2314,26 @@ column-header .titlebar .button.titlebutton,
         text-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
         icon-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
         box-shadow: inset 0 1px rgba(0, 0, 0, 0.07), inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
-      .notebook tab .button:backdrop {
+      notebook tab .button:backdrop, notebook tab .header-bar .button.titlebutton:backdrop, .header-bar notebook tab .button.titlebutton:backdrop,
+      notebook tab .titlebar .button.titlebutton:backdrop,
+      .titlebar notebook tab .button.titlebutton:backdrop {
         color: rgba(148, 151, 150, 0.3);
         border-color: transparent; }
-      .notebook tab .button > image, .notebook tab .header-bar .button.titlebutton > image, .header-bar .notebook tab .button.titlebutton > image,
-      .notebook tab .titlebar .button.titlebutton > image,
-      .titlebar .notebook tab .button.titlebutton > image {
+      notebook tab .button > image, notebook tab .header-bar .button.titlebutton > image, .header-bar notebook tab .button.titlebutton > image,
+      notebook tab .titlebar .button.titlebutton > image,
+      .titlebar notebook tab .button.titlebutton > image {
         padding: 2px; }
-  .notebook.arrow {
+  notebook.arrow {
     color: #949796; }
-    .notebook.arrow:hover {
+    notebook.arrow:hover {
       color: #c1c3c1; }
-    .notebook.arrow:active {
+    notebook.arrow:active {
       color: #eeeeec; }
-    .notebook.arrow:insensitive {
+    notebook.arrow:insensitive {
       color: rgba(148, 151, 150, 0.3); }
-    .notebook.arrow:backdrop {
+    notebook.arrow:backdrop {
       color: rgba(148, 151, 150, 0.4); }
-      .notebook.arrow:backdrop:insensitive {
+      notebook.arrow:backdrop:insensitive {
         color: #5d6767; }
 
 /**************

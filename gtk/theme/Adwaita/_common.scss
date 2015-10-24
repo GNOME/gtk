@@ -1549,14 +1549,7 @@ column-header.button.dnd { // for treeview-like derive widgets
  * Tabs          *
  *****************/
 
-.notebook {
-  // Through me you go to the grief wracked city;
-  // Through me you go to everlasting pain;
-  // Through me you go a pass among lost souls.
-  // ...
-  // Abandon all hope — Ye Who Enter Here
-  padding: 0;
-  background-color: $base_color;
+GtkNotebook {
   -GtkNotebook-initial-gap: 10;
   -GtkNotebook-arrow-spacing: 5;
   -GtkNotebook-tab-curvature: 0;
@@ -1564,6 +1557,16 @@ column-header.button.dnd { // for treeview-like derive widgets
   -GtkNotebook-has-tab-gap: false;
   -GtkWidget-focus-padding: 0;
   -GtkWidget-focus-line-width: 0;
+}
+
+notebook {
+  // Through me you go to the grief wracked city;
+  // Through me you go to everlasting pain;
+  // Through me you go a pass among lost souls.
+  // ...
+  // Abandon all hope — Ye Who Enter Here
+  padding: 0;
+  background-color: $base_color;
   transition: all 200ms $ease-out-quad;
   &:backdrop {
     background-color: $backdrop_base_color;
