@@ -4566,10 +4566,10 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
   gint nchildren;
   GList *list;
   GQuark tab_pos_names[] = {
-    I_(GTK_STYLE_CLASS_LEFT),
-    I_(GTK_STYLE_CLASS_RIGHT),
-    I_(GTK_STYLE_CLASS_TOP),
-    I_(GTK_STYLE_CLASS_BOTTOM)
+    g_quark_from_static_string (GTK_STYLE_CLASS_LEFT),
+    g_quark_from_static_string (GTK_STYLE_CLASS_RIGHT),
+    g_quark_from_static_string (GTK_STYLE_CLASS_TOP),
+    g_quark_from_static_string (GTK_STYLE_CLASS_BOTTOM)
   };
 
   gtk_widget_freeze_child_notify (child);
@@ -7362,7 +7362,6 @@ gtk_notebook_set_show_tabs (GtkNotebook *notebook,
 {
   GtkNotebookPrivate *priv;
   GtkNotebookPage *page;
-  GtkStyleContext *context;
   GList *children;
   gint i;
 
@@ -7377,7 +7376,6 @@ gtk_notebook_set_show_tabs (GtkNotebook *notebook,
 
   priv->show_tabs = show_tabs;
   children = priv->children;
-  context = gtk_widget_get_style_context (GTK_WIDGET (notebook));
 
   if (!show_tabs)
     {
@@ -8247,9 +8245,9 @@ gtk_notebook_set_tab_reorderable (GtkNotebook *notebook,
     {
       page->reorderable = reorderable;
       if (reorderable)
-        gtk_css_node_add_class (page->cssnode, I_("reorderable-page"));
+        gtk_css_node_add_class (page->cssnode, g_quark_from_static_string ("reorderable-page"));
       else
-        gtk_css_node_remove_class (page->cssnode, I_("reorderable-page"));
+        gtk_css_node_remove_class (page->cssnode, g_quark_from_static_string ("reorderable-page"));
       gtk_widget_child_notify (child, "reorderable");
     }
 }
