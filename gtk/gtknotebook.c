@@ -1225,7 +1225,7 @@ gtk_notebook_init (GtkNotebook *notebook)
 
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (notebook));
   priv->tabs_node = gtk_css_node_new ();
-  gtk_css_node_set_name (priv->tabs_node, g_intern_string ("tabs"));
+  gtk_css_node_set_name (priv->tabs_node, I_("tabs"));
   gtk_css_node_set_parent (priv->tabs_node, widget_node);
   gtk_css_node_set_state (priv->tabs_node, gtk_css_node_get_state (widget_node));
   g_object_unref (priv->tabs_node);
@@ -4578,10 +4578,10 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
   gint nchildren;
   GList *list;
   GQuark tab_pos_names[] = {
-    g_quark_from_static_string (GTK_STYLE_CLASS_LEFT),
-    g_quark_from_static_string (GTK_STYLE_CLASS_RIGHT),
-    g_quark_from_static_string (GTK_STYLE_CLASS_TOP),
-    g_quark_from_static_string (GTK_STYLE_CLASS_BOTTOM)
+    I_(GTK_STYLE_CLASS_LEFT),
+    I_(GTK_STYLE_CLASS_RIGHT),
+    I_(GTK_STYLE_CLASS_TOP),
+    I_(GTK_STYLE_CLASS_BOTTOM)
   };
 
   gtk_widget_freeze_child_notify (child);
@@ -4596,7 +4596,7 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
   priv->children = g_list_insert (priv->children, page, position);
 
   page->cssnode = gtk_css_node_new ();
-  gtk_css_node_set_name (page->cssnode, g_intern_string ("tab"));
+  gtk_css_node_set_name (page->cssnode, I_("tab"));
   gtk_css_node_add_class (page->cssnode, tab_pos_names[get_effective_tab_pos (notebook)]);
   gtk_css_node_set_state (page->cssnode, gtk_css_node_get_state (priv->tabs_node));
   gtk_css_node_insert_after (priv->tabs_node,
@@ -8266,9 +8266,9 @@ gtk_notebook_set_tab_reorderable (GtkNotebook *notebook,
     {
       page->reorderable = reorderable;
       if (reorderable)
-        gtk_css_node_add_class (page->cssnode, g_quark_from_static_string ("reorderable-page"));
+        gtk_css_node_add_class (page->cssnode, I_("reorderable-page"));
       else
-        gtk_css_node_remove_class (page->cssnode, g_quark_from_static_string ("reorderable-page"));
+        gtk_css_node_remove_class (page->cssnode, I_("reorderable-page"));
       gtk_widget_child_notify (child, "reorderable");
     }
 }
