@@ -745,7 +745,7 @@ entry {
   border-radius: 3px;
   border-style: solid; }
 
-.button.flat, .sidebar-button.button, .button.flat:backdrop, .sidebar-button.button:backdrop, .button.flat:insensitive:backdrop, .sidebar-button.button:insensitive:backdrop, .menuitem.button.flat, .menuitem.sidebar-button.button, .menuitem.button.flat:backdrop, .menuitem.sidebar-button.button:backdrop, .button:link, .button:visited, .button:link:hover, .button:link:active, .button:visited:hover, .button:visited:active, .button:link:backdrop, .button:visited:backdrop, .notebook tab .button, .list-row.activatable,
+.button.flat, .sidebar-button.button, .button.flat:backdrop, .sidebar-button.button:backdrop, .button.flat:insensitive:backdrop, .sidebar-button.button:insensitive:backdrop, .menuitem.button.flat, .menuitem.sidebar-button.button, .menuitem.button.flat:backdrop, .menuitem.sidebar-button.button:backdrop, .button:link, .button:visited, .button:link:hover, .button:link:active, .button:visited:hover, .button:visited:active, .button:link:backdrop, .button:visited:backdrop, notebook tab .button, .list-row.activatable,
 .list-row.activatable:backdrop,
 .list-row.activatable:backdrop:active,
 .list-row.activatable:backdrop:checked,
@@ -1408,65 +1408,67 @@ GtkTreeView.view.progressbar {
  * Notebooks and *
  * Tabs          *
  *****************/
-.notebook {
-  padding: 0;
-  background-color: #fff;
+GtkNotebook {
   -GtkNotebook-initial-gap: 10;
   -GtkNotebook-arrow-spacing: 5;
   -GtkNotebook-tab-curvature: 0;
   -GtkNotebook-tab-overlap: -8;
   -GtkNotebook-has-tab-gap: false;
   -GtkWidget-focus-padding: 0;
-  -GtkWidget-focus-line-width: 0;
+  -GtkWidget-focus-line-width: 0; }
+
+notebook {
+  padding: 0;
+  background-color: #fff;
   transition: all 200ms ease-out; }
-  .notebook:backdrop {
+  notebook:backdrop {
     background-color: #fff; }
-  .notebook.frame {
+  notebook.frame {
     border: 1px solid gray; }
-    .notebook.frame.top {
+    notebook.frame.top {
       border-top-width: 0; }
-    .notebook.frame.bottom {
+    notebook.frame.bottom {
       border-bottom-width: 0; }
-    .notebook.frame.right {
+    notebook.frame.right {
       border-right-width: 0; }
-    .notebook.frame.left {
+    notebook.frame.left {
       border-left-width: 0; }
-    .notebook.frame:backdrop {
+    notebook.frame:backdrop {
       border-color: #8d8d8d; }
-  .notebook.header {
+  notebook.header {
     background-color: #d9d9d9; }
-    .notebook.header.frame {
+    notebook.header.frame {
       border: 1px solid gray; }
-      .notebook.header.frame.top {
+      notebook.header.frame.top {
         border-bottom-width: 0; }
-      .notebook.header.frame.bottom {
+      notebook.header.frame.bottom {
         border-top-width: 0; }
-      .notebook.header.frame.right {
+      notebook.header.frame.right {
         border-left-width: 0; }
-      .notebook.header.frame.left {
+      notebook.header.frame.left {
         border-right-width: 0; }
-      .notebook.header.frame:backdrop {
+      notebook.header.frame:backdrop {
         border-color: #8d8d8d; }
-    .notebook.header.top {
+    notebook.header.top {
       box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.15), inset 0 -1px gray; }
-      .notebook.header.top:backdrop {
+      notebook.header.top:backdrop {
         box-shadow: inset 0 -1px #8d8d8d; }
-    .notebook.header.bottom {
+    notebook.header.bottom {
       box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.15), inset 0 1px gray; }
-      .notebook.header.bottom:backdrop {
+      notebook.header.bottom:backdrop {
         box-shadow: inset 0 1px #8d8d8d; }
-    .notebook.header.right {
+    notebook.header.right {
       box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.15), inset 1px 0 gray; }
-      .notebook.header.right:backdrop {
+      notebook.header.right:backdrop {
         box-shadow: inset 1px 0 #8d8d8d; }
-    .notebook.header.left {
+    notebook.header.left {
       box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.15), inset -1px 0 gray; }
-      .notebook.header.left:backdrop {
+      notebook.header.left:backdrop {
         box-shadow: inset -1px 0 #8d8d8d; }
-    .notebook.header:backdrop {
+    notebook.header:backdrop {
       background-color: #d7d7d7;
       box-shadow: none; }
-  .notebook tab {
+  notebook tab {
     border-width: 0;
     border-style: solid;
     border-color: transparent;
@@ -1501,128 +1503,128 @@ GtkTreeView.view.progressbar {
       }
     }
     */ }
-    .notebook tab.top, .notebook tab.bottom {
+    notebook tab.top, notebook tab.bottom {
       padding: 8px 20px; }
-    .notebook tab.left, .notebook tab.right {
+    notebook tab.left, notebook tab.right {
       padding: 5px 20px; }
-    .notebook tab.reorderable-page.top, .notebook tab.reorderable-page.bottom {
+    notebook tab.reorderable-page.top, notebook tab.reorderable-page.bottom {
       padding-left: 12px;
       padding-right: 12px;
       border-left-width: 1px;
       border-right-width: 1px; }
-    .notebook tab.reorderable-page.left, .notebook tab.reorderable-page.right {
+    notebook tab.reorderable-page.left, notebook tab.reorderable-page.right {
       border-bottom-width: 1px;
       border-top-width: 1px; }
-    .notebook tab.top {
+    notebook tab.top {
       border-bottom-width: 3px; }
-    .notebook tab.bottom {
+    notebook tab.bottom {
       border-top-width: 3px; }
-    .notebook tab.left {
+    notebook tab.left {
       border-right-width: 3px; }
-    .notebook tab.right {
+    notebook tab.right {
       border-left-width: 3px; }
-    .notebook tab:hover {
+    notebook tab:hover {
       border-color: gray; }
-    .notebook tab:active, .notebook tab:backdrop:active {
+    notebook tab:active, notebook tab:backdrop:active {
       border-color: #000; }
-    .notebook tab:backdrop {
+    notebook tab:backdrop {
       background-color: transparent;
       border-color: transparent; }
-    .notebook tab.reorderable-page.top {
+    notebook tab.reorderable-page.top {
       border-color: transparent; }
-      .notebook tab.reorderable-page.top:hover {
+      notebook tab.reorderable-page.top:hover {
         border-color: rgba(128, 128, 128, 0.3);
         border-bottom-color: gray;
         background-color: rgba(255, 255, 255, 0.2); }
-      .notebook tab.reorderable-page.top:active {
+      notebook tab.reorderable-page.top:active {
         background-color: rgba(255, 255, 255, 0.5);
         border-color: rgba(128, 128, 128, 0.5);
         border-bottom-color: #000; }
-        .notebook tab.reorderable-page.top:active:hover {
+        notebook tab.reorderable-page.top:active:hover {
           background-color: rgba(255, 255, 255, 0.7); }
-        .notebook tab.reorderable-page.top:active:backdrop {
+        notebook tab.reorderable-page.top:active:backdrop {
           border-color: #8d8d8d;
           background-color: #fff;
           border-bottom-color: #000; }
-      .notebook tab.reorderable-page.top:backdrop {
+      notebook tab.reorderable-page.top:backdrop {
         border-color: transparent;
         background-color: transparent; }
-    .notebook tab.reorderable-page.bottom {
+    notebook tab.reorderable-page.bottom {
       border-color: transparent; }
-      .notebook tab.reorderable-page.bottom:hover {
+      notebook tab.reorderable-page.bottom:hover {
         border-color: rgba(128, 128, 128, 0.3);
         border-top-color: gray;
         background-color: rgba(255, 255, 255, 0.2); }
-      .notebook tab.reorderable-page.bottom:active {
+      notebook tab.reorderable-page.bottom:active {
         background-color: rgba(255, 255, 255, 0.5);
         border-color: rgba(128, 128, 128, 0.5);
         border-top-color: #000; }
-        .notebook tab.reorderable-page.bottom:active:hover {
+        notebook tab.reorderable-page.bottom:active:hover {
           background-color: rgba(255, 255, 255, 0.7); }
-        .notebook tab.reorderable-page.bottom:active:backdrop {
+        notebook tab.reorderable-page.bottom:active:backdrop {
           border-color: #8d8d8d;
           background-color: #fff;
           border-top-color: #000; }
-      .notebook tab.reorderable-page.bottom:backdrop {
+      notebook tab.reorderable-page.bottom:backdrop {
         border-color: transparent;
         background-color: transparent; }
-    .notebook tab.reorderable-page.left {
+    notebook tab.reorderable-page.left {
       border-color: transparent; }
-      .notebook tab.reorderable-page.left:hover {
+      notebook tab.reorderable-page.left:hover {
         border-color: rgba(128, 128, 128, 0.3);
         border-right-color: gray;
         background-color: rgba(255, 255, 255, 0.2); }
-      .notebook tab.reorderable-page.left:active {
+      notebook tab.reorderable-page.left:active {
         background-color: rgba(255, 255, 255, 0.5);
         border-color: rgba(128, 128, 128, 0.5);
         border-right-color: #000; }
-        .notebook tab.reorderable-page.left:active:hover {
+        notebook tab.reorderable-page.left:active:hover {
           background-color: rgba(255, 255, 255, 0.7); }
-        .notebook tab.reorderable-page.left:active:backdrop {
+        notebook tab.reorderable-page.left:active:backdrop {
           border-color: #8d8d8d;
           background-color: #fff;
           border-right-color: #000; }
-      .notebook tab.reorderable-page.left:backdrop {
+      notebook tab.reorderable-page.left:backdrop {
         border-color: transparent;
         background-color: transparent; }
-    .notebook tab.reorderable-page.right {
+    notebook tab.reorderable-page.right {
       border-color: transparent; }
-      .notebook tab.reorderable-page.right:hover {
+      notebook tab.reorderable-page.right:hover {
         border-color: rgba(128, 128, 128, 0.3);
         border-left-color: gray;
         background-color: rgba(255, 255, 255, 0.2); }
-      .notebook tab.reorderable-page.right:active {
+      notebook tab.reorderable-page.right:active {
         background-color: rgba(255, 255, 255, 0.5);
         border-color: rgba(128, 128, 128, 0.5);
         border-left-color: #000; }
-        .notebook tab.reorderable-page.right:active:hover {
+        notebook tab.reorderable-page.right:active:hover {
           background-color: rgba(255, 255, 255, 0.7); }
-        .notebook tab.reorderable-page.right:active:backdrop {
+        notebook tab.reorderable-page.right:active:backdrop {
           border-color: #8d8d8d;
           background-color: #fff;
           border-left-color: #000; }
-      .notebook tab.reorderable-page.right:backdrop {
+      notebook tab.reorderable-page.right:backdrop {
         border-color: transparent;
         background-color: transparent; }
-    .notebook tab GtkLabel {
+    notebook tab GtkLabel {
       padding: 0 2px;
       font-weight: bold;
       color: gray;
       /* color: inherit doesn't work here */ }
-      .notebook tab GtkLabel:backdrop {
+      notebook tab GtkLabel:backdrop {
         color: gray; }
-    .notebook tab:hover GtkLabel {
+    notebook tab:hover GtkLabel {
       color: #404040; }
-    .notebook tab:active GtkLabel {
+    notebook tab:active GtkLabel {
       color: #000; }
-      .notebook tab:active GtkLabel:backdrop {
+      notebook tab:active GtkLabel:backdrop {
         color: #000; }
-    .notebook tab .button {
+    notebook tab .button {
       border: 2px solid transparent;
       icon-shadow: none;
       transition: none;
       color: rgba(0, 0, 0, 0.3); }
-      .notebook tab .button:hover {
+      notebook tab .button:hover {
         color: #000;
         border-width: 2px;
         border-style: solid;
@@ -1633,7 +1635,7 @@ GtkTreeView.view.progressbar {
         border-width: 2px;
         background-image: none;
         box-shadow: none; }
-      .notebook tab .button:active {
+      notebook tab .button:active {
         border-width: 2px;
         border-style: solid;
         background-image: none;
@@ -1641,11 +1643,11 @@ GtkTreeView.view.progressbar {
         background-color: black;
         border-color: gray;
         border-width: 2px; }
-      .notebook tab .button:backdrop, .notebook tab .button:backdrop:hover {
+      notebook tab .button:backdrop, notebook tab .button:backdrop:hover {
         color: rgba(0, 0, 0, 0.3);
         border-color: transparent;
         border-width: 2px; }
-      .notebook tab .button > image {
+      notebook tab .button > image {
         padding: 2px; }
 
 /**************

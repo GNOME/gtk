@@ -1226,14 +1226,7 @@ GtkTreeView.view.progressbar { //Progressbar in treeview cells
  * Tabs          *
  *****************/
 
-.notebook {
-  // Through me you go to the grief wracked city;
-  // Through me you go to everlasting pain;
-  // Through me you go a pass among lost souls.
-  // ...
-  // Abandon all hope — Ye Who Enter Here
-  padding: 0;
-  background-color: $base_color;
+GtkNotebook {
   -GtkNotebook-initial-gap: 10;
   -GtkNotebook-arrow-spacing: 5;
   -GtkNotebook-tab-curvature: 0;
@@ -1241,6 +1234,16 @@ GtkTreeView.view.progressbar { //Progressbar in treeview cells
   -GtkNotebook-has-tab-gap: false;
   -GtkWidget-focus-padding: 0;
   -GtkWidget-focus-line-width: 0;
+}
+
+notebook {
+  // Through me you go to the grief wracked city;
+  // Through me you go to everlasting pain;
+  // Through me you go a pass among lost souls.
+  // ...
+  // Abandon all hope — Ye Who Enter Here
+  padding: 0;
+  background-color: $base_color;
   transition: all 200ms ease-out;
   &:backdrop {
     background-color: $backdrop_base_color;
