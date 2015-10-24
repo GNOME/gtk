@@ -94,6 +94,20 @@
  *   </child>
  * </object>
  * ]|
+ *
+ * # CSS nodes
+ *
+ * GtkNotebook has a main CSS node with name notebook, a subnode
+ * with name tabs, and below that one subnode per tab with name
+ * tab.
+ *
+ * The main node gets the .frame style class when rendering the
+ * background of a notebook with border. It gets the .header
+ * style class for rendering the tab area background.
+ *
+ * The per-tab nodes get one of the style class .top, .bottom,
+ * .left or .right, depending on where the tabs are placed. For
+ * reorderable pages, the tab also gets the .reorderable-page class.
  */
 
 
