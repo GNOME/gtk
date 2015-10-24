@@ -1165,13 +1165,13 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   add_tab_bindings (binding_set, GDK_CONTROL_MASK | GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_NOTEBOOK_ACCESSIBLE);
+  gtk_widget_class_set_css_name (widget_class, "notebook");
 }
 
 static void
 gtk_notebook_init (GtkNotebook *notebook)
 {
   GtkNotebookPrivate *priv;
-  GtkStyleContext *context;
   GtkCssNode *widget_node;
 
   gtk_widget_set_can_focus (GTK_WIDGET (notebook), TRUE);
@@ -1219,9 +1219,6 @@ gtk_notebook_init (GtkNotebook *notebook)
                      GDK_ACTION_MOVE);
 
   gtk_drag_dest_set_track_motion (GTK_WIDGET (notebook), TRUE);
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (notebook));
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_NOTEBOOK);
 
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (notebook));
   priv->tabs_node = gtk_css_node_new ();
@@ -7411,14 +7408,11 @@ gtk_notebook_set_show_tabs (GtkNotebook *notebook,
           else
             gtk_widget_hide (page->tab_label);
         }
-
-      gtk_style_context_remove_class (context, GTK_STYLE_CLASS_NOTEBOOK);
     }
   else
     {
       gtk_widget_set_can_focus (GTK_WIDGET (notebook), TRUE);
       gtk_notebook_update_labels (notebook);
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_NOTEBOOK);
     }
 
   for (i = 0; i < N_ACTION_WIDGETS; i++)
