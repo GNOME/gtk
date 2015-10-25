@@ -607,14 +607,32 @@ on_selection_changed (GtkTreeSelection       *selection,
   g_signal_emit (wt, signals[OBJECT_SELECTED], 0, object);
 }
 
+static gboolean
+remove_cb (GtkTreeModel *model,
+           GtkTreePath  *path,
+           GtkTreeIter  *iter,
+           gpointer      data)
+{
+  GObject *dead_object = data;
+  GObject *lookup;
+
+  gtk_tree_model_get (model, iter, OBJECT, &lookup, -1);
+
+  if (lookup == dead_object)
+    {
+      gtk_tree_store_remove (GTK_TREE_STORE (model), iter);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 gtk_object_tree_remove_dead_object (gpointer data, GObject *dead_object)
 {
   GtkInspectorObjectTree *wt = data;
-  GtkTreeIter iter;
 
-  if (gtk_inspector_object_tree_find_object (wt, dead_object, &iter))
-    gtk_tree_store_remove (wt->priv->model, &iter);
+  gtk_tree_model_foreach (GTK_TREE_MODEL (wt->priv->model), remove_cb, dead_object);
 }
 
 static gboolean
