@@ -52,6 +52,10 @@
  *
  * To start the animation, use gtk_spinner_start(), to stop it
  * use gtk_spinner_stop().
+ *
+ * # CSS nodes
+ *
+ * GtkSpinner has a single CSS node with the name spinner.
  */
 
 
@@ -122,6 +126,7 @@ gtk_spinner_class_init (GtkSpinnerClass *klass)
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_SPINNER_ACCESSIBLE);
+  gtk_widget_class_set_css_name (widget_class, "spinner");
 }
 
 static void
@@ -163,14 +168,9 @@ gtk_spinner_set_property (GObject      *object,
 static void
 gtk_spinner_init (GtkSpinner *spinner)
 {
-  GtkStyleContext *context;
-
   spinner->priv = gtk_spinner_get_instance_private (spinner);
 
   gtk_widget_set_has_window (GTK_WIDGET (spinner), FALSE);
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (spinner));
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_SPINNER);
 }
 
 static void
