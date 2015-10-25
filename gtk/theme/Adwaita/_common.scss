@@ -956,7 +956,7 @@ GtkComboBox {
     color: $backdrop_insensitive_color;
   }
   .menuitem { text-shadow: none; }
-  .separator.vertical {
+  & separator.vertical {
     // always disable separators
     -GtkWidget-wide-separators: true;
   }
@@ -1095,7 +1095,7 @@ GtkComboBox {
   }
 
   .header-bar-separator,
-  & > GtkBox > .separator.vertical {
+  & > GtkBox > separator.vertical {
     -GtkWidget-wide-separators: true;
     -GtkWidget-separator-width: 1px;
     border-width: 0 1px;
@@ -2518,7 +2518,7 @@ GtkScrolledWindow {
 }
 
 //vbox and hbox separators
-.separator {
+separator {
   // always disable separators
   // -GtkWidget-wide-separators: true;
   color: transparentize(black, 0.9);

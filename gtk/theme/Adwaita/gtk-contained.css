@@ -1460,7 +1460,7 @@ GtkComboBox {
     color: #c7c7c7; }
   GtkComboBox .menuitem {
     text-shadow: none; }
-  GtkComboBox .separator.vertical {
+  GtkComboBox separator.vertical {
     -GtkWidget-wide-separators: true; }
   GtkComboBox.combobox-entry entry:dir(ltr) {
     border-top-right-radius: 0;
@@ -1538,16 +1538,16 @@ GtkComboBox {
     font-size: smaller;
     padding-left: 12px;
     padding-right: 12px; }
-  .titlebar .header-bar-separator, .titlebar > GtkBox > .separator.vertical,
+  .titlebar .header-bar-separator, .titlebar > GtkBox > separator.vertical,
   .header-bar .header-bar-separator,
-  .header-bar > GtkBox > .separator.vertical {
+  .header-bar > GtkBox > separator.vertical {
     -GtkWidget-wide-separators: true;
     -GtkWidget-separator-width: 1px;
     border-width: 0 1px;
     border-image: linear-gradient(to bottom, rgba(161, 161, 161, 0), #a1a1a1 30%, #a1a1a1 70%, rgba(161, 161, 161, 0) 100%) 0 1/0 1px stretch; }
-    .titlebar .header-bar-separator:backdrop, .titlebar > GtkBox > .separator.vertical:backdrop,
+    .titlebar .header-bar-separator:backdrop, .titlebar > GtkBox > separator.vertical:backdrop,
     .header-bar .header-bar-separator:backdrop,
-    .header-bar > GtkBox > .separator.vertical:backdrop {
+    .header-bar > GtkBox > separator.vertical:backdrop {
       border-image: linear-gradient(to bottom, rgba(169, 169, 169, 0.5)) 0 1/1px 1px; }
   .titlebar.selection-mode,
   .header-bar.selection-mode {
@@ -3622,9 +3622,9 @@ GtkProgressBar {
 GtkScrolledWindow GtkViewport.frame {
   border-style: none; }
 
-.separator {
+separator {
   color: rgba(0, 0, 0, 0.1); }
-  GtkFileChooserButton .separator.vertical, GtkFontButton .separator.vertical {
+  GtkFileChooserButton separator.vertical, GtkFontButton separator.vertical {
     -GtkWidget-wide-separators: true; }
 
 /*********
