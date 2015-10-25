@@ -182,15 +182,15 @@ label:insensitive, label:backdrop:insensitive {
 @keyframes spin {
   to {
     -gtk-icon-transform: rotate(1turn); } }
-.spinner {
+spinner {
   background-image: none;
   background-color: blue;
   opacity: 0;
   -gtk-icon-source: -gtk-icontheme("process-working-symbolic"); }
-  .spinner:active {
+  spinner:active {
     opacity: 1;
     animation: spin 1s linear infinite; }
-    .spinner:active:insensitive {
+    spinner:active:insensitive {
       opacity: 0.5; }
 
 /****************
