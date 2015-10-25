@@ -73,7 +73,9 @@
  *
  * # CSS nodes
  *
- * GtkLabel has a single CSS node with the name label.
+ * GtkLabel has a single CSS node with the name label. A wide variety
+ * of style classes may be applied to labels, such as .title, .subtitle,
+ * .dim-label, etc.
  *
  * # GtkLabel as GtkBuildable
  *
