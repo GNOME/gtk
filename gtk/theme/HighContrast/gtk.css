@@ -2467,7 +2467,7 @@ GtkPaned.wide {
 /**************
  * GtkInfoBar *
  **************/
-GtkInfoBar {
+infobar {
   border-width: 0;
   border-style: none; }
 
