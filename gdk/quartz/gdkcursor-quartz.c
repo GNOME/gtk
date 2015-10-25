@@ -300,7 +300,7 @@ _gdk_quartz_display_get_cursor_for_surface (GdkDisplay      *display,
 }
 
 #define CUSTOM_CURSOR_CTOR(name, id) \
-	+ (instancetype)name \
+	+ (gdkCoreCursor *)name \
 	{ \
 		gdkCoreCursor *obj; \
 		obj = [self new]; \
