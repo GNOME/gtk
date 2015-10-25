@@ -26,7 +26,8 @@
 #include "css-node-tree.h"
 
 #include "gtktreemodelcssnode.h"
-#include <gtk/gtktreeview.h>
+#include "gtk/gtktreeview.h"
+#include "gtk/gtklabel.h"
 #include "gtk/gtkwidgetprivate.h"
 
 enum {
@@ -43,6 +44,7 @@ struct _GtkInspectorCssNodeTreePrivate
 {
   GtkWidget *tree_view;
   GtkTreeModel *model;
+  GtkWidget *object_title;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorCssNodeTree, gtk_inspector_css_node_tree, GTK_TYPE_BOX)
@@ -65,6 +67,7 @@ gtk_inspector_css_node_tree_class_init (GtkInspectorCssNodeTreeClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/css-node-tree.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssNodeTree, tree_view);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssNodeTree, object_title);
 }
 
 static int
@@ -154,10 +157,14 @@ gtk_inspector_css_node_tree_set_object (GtkInspectorCssNodeTree *cnt,
                                         GObject                 *object)
 {
   GtkInspectorCssNodeTreePrivate *priv;
-  
+  const gchar *title;
+
   g_return_if_fail (GTK_INSPECTOR_IS_CSS_NODE_TREE (cnt));
 
   priv = cnt->priv;
+
+  title = (const gchar *)g_object_get_data (object, "gtk-inspector-object-title");
+  gtk_label_set_label (GTK_LABEL (priv->object_title), title);
 
   if (!GTK_IS_WIDGET (object))
     {
