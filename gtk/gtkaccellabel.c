@@ -36,6 +36,9 @@
 #include "gtkrender.h"
 #include "gtksizerequest.h"
 #include "gtkstylecontextprivate.h"
+#include "gtkwidgetprivate.h"
+#include "gtkcssnodeprivate.h"
+#include "gtkcssstylepropertyprivate.h"
 
 /**
  * SECTION:gtkaccellabel
@@ -91,6 +94,11 @@
  *   gtk_widget_add_accelerator (save_item, "activate", accel_group,
  *                               GDK_KEY_s, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
  * ]|
+ *
+ * # CSS nodes
+ *
+ * Like #GtkLabel, GtkAccelLabel has a main CSS node with the name label.
+ * It adds a subnode with name accelerator.
  */
 
 enum {
@@ -106,6 +114,7 @@ struct _GtkAccelLabelPrivate
   GClosure      *accel_closure;      /* has set function */
   GtkAccelGroup *accel_group;        /* set by set_accel_closure() */
   gchar         *accel_string;       /* has set function */
+  GtkCssNode    *accel_node;
   guint          accel_padding;      /* should be style property? */
   guint16        accel_string_width; /* seems to be private */
 
@@ -254,9 +263,33 @@ gtk_accel_label_get_property (GObject    *object,
 }
 
 static void
+node_style_changed_cb (GtkCssNode  *node,
+                       GtkCssStyle *old_style,
+                       GtkCssStyle *new_style,
+                       GtkWidget    *widget)
+{
+  GtkBitmask *changes;
+  static GtkBitmask *affects_size = NULL;
+
+  if (G_UNLIKELY (affects_size == NULL))
+    affects_size = _gtk_css_style_property_get_mask_affecting (GTK_CSS_AFFECTS_SIZE | GTK_CSS_AFFECTS_CLIP);
+
+  changes = _gtk_bitmask_new ();
+  changes = gtk_css_style_add_difference (changes, old_style, new_style);
+
+  if (_gtk_bitmask_intersects (changes, affects_size))
+    gtk_widget_queue_resize (widget);
+  else
+    gtk_widget_queue_draw (widget);
+
+  _gtk_bitmask_free (changes);
+}
+
+static void
 gtk_accel_label_init (GtkAccelLabel *accel_label)
 {
   GtkAccelLabelPrivate *priv;
+  GtkCssNode *widget_node;
 
   accel_label->priv = gtk_accel_label_get_instance_private (accel_label);
   priv = accel_label->priv;
@@ -266,6 +299,14 @@ gtk_accel_label_init (GtkAccelLabel *accel_label)
   priv->accel_closure = NULL;
   priv->accel_group = NULL;
   priv->accel_string = NULL;
+
+  widget_node = gtk_widget_get_css_node (GTK_WIDGET (accel_label));
+  priv->accel_node = gtk_css_node_new ();
+  gtk_css_node_set_name (priv->accel_node, I_("accelerator"));
+  gtk_css_node_set_parent (priv->accel_node, widget_node);
+  gtk_css_node_set_state (priv->accel_node, gtk_css_node_get_state (widget_node));
+  g_signal_connect_object (priv->accel_node, "style-changed", G_CALLBACK (node_style_changed_cb), accel_label, 0);
+  g_object_unref (priv->accel_node);
 }
 
 /**
@@ -358,8 +399,7 @@ gtk_accel_label_get_accel_layout (GtkAccelLabel *accel_label)
 
   context = gtk_widget_get_style_context (widget);
 
-  gtk_style_context_save (context);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_ACCELERATOR);
+  gtk_style_context_save_to_node (context, accel_label->priv->accel_node);
 
   layout = gtk_widget_create_pango_layout (widget, gtk_accel_label_get_string (accel_label));
 
@@ -473,8 +513,7 @@ gtk_accel_label_draw (GtkWidget *widget,
       accel_layout = gtk_accel_label_get_accel_layout (accel_label);
       y += get_first_baseline (label_layout) - get_first_baseline (accel_layout) - allocation.y;
 
-      gtk_style_context_save (context);
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_ACCELERATOR);
+      gtk_style_context_save_to_node (context, accel_label->priv->accel_node);
       gtk_render_layout (context, cr, x, y, accel_layout);
       gtk_style_context_restore (context);
 
