@@ -25,6 +25,7 @@ inspector_c_sources = 			\
 	inspector/size-groups.c		\
 	inspector/statistics.c		\
 	inspector/style-prop-list.c	\
+        inspector/strv-editor.c         \
 	inspector/treewalk.c		\
 	inspector/visual.c		\
 	inspector/window.c
@@ -55,6 +56,7 @@ inspector_h_sources = 			\
 	inspector/size-groups.h		\
 	inspector/statistics.h		\
 	inspector/style-prop-list.h	\
+        inspector/strv-editor.h         \
 	inspector/treewalk.h		\
 	inspector/visual.h		\
 	inspector/window.h
