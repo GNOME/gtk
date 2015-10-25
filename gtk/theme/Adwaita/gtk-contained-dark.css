@@ -4019,7 +4019,7 @@ GtkPaned.wide {
 /**************
  * GtkInfoBar *
  **************/
-GtkInfoBar {
+infobar {
   border-style: none; }
 
 .info,
