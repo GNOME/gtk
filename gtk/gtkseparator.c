@@ -36,10 +36,15 @@
  * @Short_description: A separator widget
  * @Title: GtkSeparator
  *
- * GtkSeparator is a horizontal or vertical separator widget, depending on the 
+ * GtkSeparator is a horizontal or vertical separator widget, depending on the
  * value of the #GtkOrientable:orientation property, used to group the widgets
  * within a window. It displays a line with a shadow to make it appear sunken
  * into the interface.
+ *
+ * # CSS nodes
+ *
+ * GtkSeparator has a single CSS node with name separator. The node
+ * gets one of the .horizontal or .vertical style classes.
  */
 
 
@@ -205,15 +210,11 @@ gtk_separator_draw (GtkWidget *widget,
 static void
 gtk_separator_init (GtkSeparator *separator)
 {
-  GtkStyleContext *context;
-
   separator->priv = gtk_separator_get_instance_private (separator);
   separator->priv->orientation = GTK_ORIENTATION_HORIZONTAL;
 
   gtk_widget_set_has_window (GTK_WIDGET (separator), FALSE);
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (separator));
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_SEPARATOR);
   _gtk_orientable_set_style_classes (GTK_ORIENTABLE (separator));
 }
 
@@ -231,9 +232,10 @@ gtk_separator_class_init (GtkSeparatorClass *class)
 
   widget_class->draw = gtk_separator_draw;
 
-  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_SEPARATOR);
-
   g_object_class_override_property (object_class, PROP_ORIENTATION, "orientation");
+
+  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_SEPARATOR);
+  gtk_widget_class_set_css_name (widget_class, "separator");
 }
 
 /**
