@@ -2033,7 +2033,7 @@ column-header .titlebar .button.titlebutton,
       background-color: transparent;
       border-color: transparent; }
 
-.menuitem .accelerator {
+.menuitem accelerator {
   color: alpha(currentColor,0.55); }
 
 /***************

@@ -1508,7 +1508,7 @@ column-header.button.dnd { // for treeview-like derive widgets
   }
 }
 
-.menuitem .accelerator { color: gtkalpha(currentColor,0.55); }
+.menuitem accelerator { color: gtkalpha(currentColor,0.55); }
 
 
 /***************
