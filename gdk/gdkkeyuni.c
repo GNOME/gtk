@@ -28,6 +28,8 @@
 #include "gdk.h"
 #include "gdkalias.h"
 
+#include <locale.h>
+
 /* Thanks to Markus G. Kuhn <mkuhn@acm.org> for the ksysym<->Unicode
  * mapping functions, from the xterm sources.
  */
@@ -1654,6 +1656,23 @@ static const struct {
   { 0x0ef7, 0x318e }, /*               Hangul_AraeAE ㆎ HANGUL LETTER ARAEAE */
 };
 
+static gunichar
+get_decimal_point (void)
+{
+  struct lconv *locale_data;
+  const gchar *decimal_point;
+  gunichar ret;
+
+  locale_data = localeconv ();
+  decimal_point = locale_data->decimal_point;
+
+  ret = g_utf8_get_char_validated (decimal_point, -1);
+  if (ret != (gunichar)-2 && ret != (gunichar)-1)
+    return ret;
+
+  return (gunichar) '.';
+}
+
 /**
  * gdk_unicode_to_keyval:
  * @wc: a ISO10646 encoded character
@@ -1675,6 +1694,9 @@ gdk_unicode_to_keyval (guint32 wc)
   if ((wc >= 0x0020 && wc <= 0x007e) ||
       (wc >= 0x00a0 && wc <= 0x00ff))
     return wc;
+
+  if (wc == 0xffae)
+    return (guint32) get_decimal_point ();
 
   /* Binary search in table */
   while (max >= min) {
