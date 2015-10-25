@@ -766,7 +766,7 @@ GtkComboBox {
     color: $insensitive_fg_color;
   }
   .menuitem { text-shadow: none; }
-  .separator.vertical {
+  & separator.vertical {
     // always disable separators
     -GtkWidget-wide-separators: true;
   }
@@ -896,7 +896,7 @@ GtkComboBox {
     padding: 0 12px;
   }
   .header-bar-separator,
-  & > GtkBox > .separator.vertical {
+  & > GtkBox > separator.vertical {
     -GtkWidget-wide-separators: true;
     -GtkWidget-separator-width: 1px;
     border-width: 0 1px;
@@ -1193,7 +1193,7 @@ GtkTreeView.view.progressbar { //Progressbar in treeview cells
   & > .toolbar {
     background-color: transparent;
   }
-  .separator {
+  separator {
     color: $fg_color;
     background-color: transparent;
     border: 0;
@@ -1922,7 +1922,7 @@ GtkScrolledWindow {
 }
 
 //vbox and hbox separators
-.separator {
+separator {
   // always disable separators
   // -GtkWidget-wide-separators: true;
   color: $borders_color;
@@ -2244,8 +2244,8 @@ GtkPlacesSidebar.sidebar {
     color: $fg_color;
     background-color: transparent;
 
-    .separator,
-    .separator:backdrop { @extend .separator; }
+    separator,
+    separator:backdrop { @extend separator; }
 
     .image { // icons color
       color: mix($fg_color, $bg_color, 70%);

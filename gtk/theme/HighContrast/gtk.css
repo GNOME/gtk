@@ -958,7 +958,7 @@ GtkComboBox {
     color: gray; }
   GtkComboBox .menuitem {
     text-shadow: none; }
-  GtkComboBox .separator.vertical, GtkComboBox GtkPlacesSidebar.sidebar .view .vertical.separator, GtkPlacesSidebar.sidebar .view GtkComboBox .vertical.separator {
+  GtkComboBox separator.vertical, GtkComboBox GtkPlacesSidebar.sidebar .view separator.vertical, GtkPlacesSidebar.sidebar .view GtkComboBox separator.vertical {
     -GtkWidget-wide-separators: true; }
   GtkComboBox.combobox-entry entry {
     border-radius: 3px 0 0 3px; }
@@ -1034,11 +1034,11 @@ GtkComboBox {
   .header-bar .subtitle {
     font-size: 80%;
     padding: 0 12px; }
-  .titlebar .header-bar-separator, .titlebar > GtkBox > .separator.vertical,
-  GtkPlacesSidebar.sidebar .view .titlebar > GtkBox > .vertical.separator:backdrop,
+  .titlebar .header-bar-separator, .titlebar > GtkBox > separator.vertical,
+  GtkPlacesSidebar.sidebar .view .titlebar > GtkBox > separator.vertical:backdrop,
   .header-bar .header-bar-separator,
-  .header-bar > GtkBox > .separator.vertical,
-  GtkPlacesSidebar.sidebar .view .header-bar > GtkBox > .vertical.separator:backdrop {
+  .header-bar > GtkBox > separator.vertical,
+  GtkPlacesSidebar.sidebar .view .header-bar > GtkBox > separator.vertical:backdrop {
     -GtkWidget-wide-separators: true;
     -GtkWidget-separator-width: 1px;
     border-width: 0 1px;
@@ -1359,7 +1359,7 @@ GtkTreeView.view.progressbar {
     box-shadow: none; }
   .popover > .list, .popover > .view, .popover > .toolbar {
     background-color: transparent; }
-  .popover .separator, .popover GtkPlacesSidebar.sidebar .view .separator, GtkPlacesSidebar.sidebar .view .popover .separator {
+  .popover separator, .popover GtkPlacesSidebar.sidebar .view separator, GtkPlacesSidebar.sidebar .view .popover separator {
     color: #000;
     background-color: transparent;
     border: 0; }
@@ -2096,10 +2096,10 @@ GtkScrolledWindow .frame {
 GtkScrolledWindow GtkViewport.frame {
   border-style: none; }
 
-.separator, GtkPlacesSidebar.sidebar .view .separator,
-GtkPlacesSidebar.sidebar .view .separator:backdrop {
+separator, GtkPlacesSidebar.sidebar .view separator,
+GtkPlacesSidebar.sidebar .view separator:backdrop {
   color: gray; }
-  GtkFileChooserButton .separator.vertical, GtkFileChooserButton GtkPlacesSidebar.sidebar .view .vertical.separator, GtkPlacesSidebar.sidebar .view GtkFileChooserButton .vertical.separator, GtkFontButton .separator.vertical, GtkFontButton GtkPlacesSidebar.sidebar .view .vertical.separator, GtkPlacesSidebar.sidebar .view GtkFontButton .vertical.separator {
+  GtkFileChooserButton separator.vertical, GtkFileChooserButton GtkPlacesSidebar.sidebar .view separator.vertical, GtkPlacesSidebar.sidebar .view GtkFileChooserButton separator.vertical, GtkFontButton separator.vertical, GtkFontButton GtkPlacesSidebar.sidebar .view separator.vertical, GtkPlacesSidebar.sidebar .view GtkFontButton separator.vertical {
     -GtkWidget-wide-separators: true; }
 
 /*********
