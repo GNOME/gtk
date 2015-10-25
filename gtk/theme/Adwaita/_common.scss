@@ -201,7 +201,7 @@ GtkTextView { // This will get overridden by .view, needed by gedit line numbers
   to { -gtk-icon-transform: rotate(1turn); }
 }
 
-.spinner {
+spinner {
   background-image: none;
   background-color: blue;
   opacity: 0; // non spinning spinner makes no sense
