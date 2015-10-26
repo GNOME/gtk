@@ -1100,9 +1100,9 @@ alternative_button_order (GtkAssistant *assistant)
 }
 
 static void
-on_page_notify_visibility (GtkWidget  *widget,
-                           GParamSpec *arg,
-                           gpointer    data)
+on_page_notify (GtkWidget  *widget,
+                GParamSpec *arg,
+                gpointer    data)
 {
   GtkAssistant *assistant = GTK_ASSISTANT (data);
 
@@ -1128,6 +1128,7 @@ assistant_remove_page_cb (GtkContainer *container,
     return;
 
   page_info = element->data;
+g_print ("remove page cb: %s\n", page_info->title);
 
   /* If this is the current page, we need to switch away. */
   if (page_info == priv->current_page)
@@ -1153,7 +1154,7 @@ assistant_remove_page_cb (GtkContainer *container,
         }
     }
 
-  g_signal_handlers_disconnect_by_func (page_info->page, on_page_notify_visibility, assistant);
+  g_signal_handlers_disconnect_by_func (page_info->page, on_page_notify, assistant);
 
   gtk_size_group_remove_widget (priv->title_size_group, page_info->regular_title);
   gtk_size_group_remove_widget (priv->title_size_group, page_info->current_title);
@@ -1790,7 +1791,13 @@ gtk_assistant_insert_page (GtkAssistant *assistant,
   gtk_size_group_add_widget (priv->title_size_group, page_info->current_title);
 
   g_signal_connect (G_OBJECT (page), "notify::visible",
-                    G_CALLBACK (on_page_notify_visibility), assistant);
+                    G_CALLBACK (on_page_notify), assistant);
+
+  g_signal_connect (G_OBJECT (page), "child-notify::page-title",
+                    G_CALLBACK (on_page_notify), assistant);
+
+  g_signal_connect (G_OBJECT (page), "child-notify::page-type",
+                    G_CALLBACK (on_page_notify), assistant);
 
   n_pages = g_list_length (priv->pages);
 
@@ -2012,6 +2019,8 @@ gtk_assistant_set_page_title (GtkAssistant *assistant,
 
   gtk_label_set_text ((GtkLabel*) page_info->regular_title, title);
   gtk_label_set_text ((GtkLabel*) page_info->current_title, title);
+
+  update_title_state (assistant);
 
   gtk_container_child_notify (GTK_CONTAINER (assistant), page, "title");
 }
