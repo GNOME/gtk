@@ -119,7 +119,6 @@ gdk_cairo_format_for_content (cairo_content_t content)
     {
     case CAIRO_CONTENT_COLOR:
       return CAIRO_FORMAT_RGB24;
-    case CAIRO_CONTENT_ALPHA:
       return CAIRO_FORMAT_A8;
     case CAIRO_CONTENT_COLOR_ALPHA:
     default:
