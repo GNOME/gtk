@@ -26,6 +26,7 @@
 #include "gtkshortcutsshortcut.h"
 #include "gtksearchbar.h"
 #include "gtksearchentry.h"
+#include "gtkwidgetprivate.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
@@ -753,8 +754,8 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
   priv->menu_button = g_object_new (GTK_TYPE_MENU_BUTTON,
                                     "focus-on-click", FALSE,
                                     "visible", TRUE,
+                                    "relief", GTK_RELIEF_NONE,
                                     NULL);
-  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (priv->menu_button)), "flat");
   gtk_stack_add_named (priv->title_stack, GTK_WIDGET (priv->menu_button), "sections");
 
   menu_box = g_object_new (GTK_TYPE_BOX,
