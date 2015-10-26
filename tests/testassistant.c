@@ -592,6 +592,93 @@ create_full_featured_assistant (GtkWidget *widget)
     }
 }
 
+static void
+flip_pages (GtkButton *button, GtkAssistant *assistant)
+{
+  GtkWidget *page;
+  gchar *title;
+
+  page = gtk_assistant_get_nth_page (assistant, 1);
+
+  g_object_ref (page);
+
+  title = g_strdup (gtk_assistant_get_page_title (assistant, page));
+
+  gtk_assistant_remove_page (assistant, 1);
+  gtk_assistant_insert_page (assistant, page, 2);
+
+  gtk_widget_show (page);
+  gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), page, title);
+  gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), page, TRUE);
+
+  g_object_unref (page);
+  g_free (title);
+}
+
+
+static void
+create_page_flipping_assistant (GtkWidget *widget)
+{
+  static GtkWidget *assistant = NULL;
+
+  if (!assistant)
+    {
+      GtkWidget *page, *button;
+
+      assistant = gtk_assistant_new ();
+      gtk_window_set_default_size (GTK_WINDOW (assistant), 400, 300);
+
+      button = gtk_button_new_with_label ("_Flip");
+      gtk_button_set_use_underline (GTK_BUTTON (button), TRUE);
+      gtk_widget_show (button);
+      gtk_assistant_add_action_widget (GTK_ASSISTANT (assistant), button);
+      g_signal_connect (button, "clicked",
+                        G_CALLBACK (flip_pages), assistant);
+
+      g_signal_connect (G_OBJECT (assistant), "cancel",
+			G_CALLBACK (cancel_callback), NULL);
+      g_signal_connect (G_OBJECT (assistant), "close",
+			G_CALLBACK (close_callback), NULL);
+      g_signal_connect (G_OBJECT (assistant), "apply",
+			G_CALLBACK (apply_callback), NULL);
+      g_signal_connect (G_OBJECT (assistant), "prepare",
+			G_CALLBACK (prepare_callback), NULL);
+
+      page = get_test_page ("Page 1");
+      gtk_widget_show (page);
+      gtk_assistant_append_page (GTK_ASSISTANT (assistant), page);
+      gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), page, "Page 1");
+      gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), page, TRUE);
+
+      page = get_test_page ("Page 2");
+      gtk_widget_show (page);
+      gtk_assistant_append_page (GTK_ASSISTANT (assistant), page);
+      gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), page, "Page 2");
+      gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), page, TRUE);
+
+      page = get_test_page ("Page 3");
+      gtk_widget_show (page);
+      gtk_assistant_append_page (GTK_ASSISTANT (assistant), page);
+      gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), page, "Page 3");
+      gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), page, TRUE);
+
+      page = get_test_page ("Summary");
+      gtk_widget_show (page);
+      gtk_assistant_append_page (GTK_ASSISTANT (assistant), page);
+      gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), page, "Summary");
+      gtk_assistant_set_page_type  (GTK_ASSISTANT (assistant), page, GTK_ASSISTANT_PAGE_SUMMARY);
+      gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), page, TRUE);
+    }
+
+  if (!gtk_widget_get_visible (assistant))
+    gtk_widget_show (assistant);
+  else
+    {
+      gtk_widget_destroy (assistant);
+      assistant = NULL;
+    }
+}
+
 struct {
   gchar *text;
   void  (*func) (GtkWidget *widget);
@@ -603,6 +690,7 @@ struct {
     { "nonlinear assistant",     create_nonlinear_assistant },
     { "looping assistant",       create_looping_assistant },
     { "full featured assistant", create_full_featured_assistant },
+    { "page-flipping assistant", create_page_flipping_assistant },
   };
 
 int
