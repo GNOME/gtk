@@ -607,7 +607,7 @@ flip_pages (GtkButton *button, GtkAssistant *assistant)
   gtk_assistant_remove_page (assistant, 1);
   gtk_assistant_insert_page (assistant, page, 2);
 
-  gtk_widget_show (page);
+  gtk_widget_show_all (page);
   gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), page, title);
   gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), page, TRUE);
 
@@ -650,8 +650,13 @@ create_page_flipping_assistant (GtkWidget *widget)
       gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), page, "Page 1");
       gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), page, TRUE);
 
-      page = get_test_page ("Page 2");
-      gtk_widget_show (page);
+      page = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+      gtk_box_pack_start (GTK_BOX (page),
+                          get_test_page ("Page 2"),
+                          TRUE,
+                          TRUE,
+                          0);
+      gtk_widget_show_all (page);
       gtk_assistant_append_page (GTK_ASSISTANT (assistant), page);
       gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), page, "Page 2");
       gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), page, TRUE);

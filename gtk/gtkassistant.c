@@ -1134,7 +1134,6 @@ assistant_remove_page_cb (GtkContainer *container,
     return;
 
   page_info = element->data;
-g_print ("remove page cb: %s\n", page_info->title);
 
   /* If this is the current page, we need to switch away. */
   if (page_info == priv->current_page)
