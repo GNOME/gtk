@@ -3169,25 +3169,16 @@ update_icon_style (GtkWidget            *widget,
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = entry->priv;
   EntryIconInfo *icon_info = priv->icons[icon_pos];
-  const gchar *side;
+  const gchar *sides[2] = { GTK_STYLE_CLASS_LEFT, GTK_STYLE_CLASS_RIGHT };
 
   if (icon_info == NULL)
     return;
 
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-    {
-      side = icon_pos == GTK_ENTRY_ICON_PRIMARY
-             ? GTK_STYLE_CLASS_RIGHT
-             : GTK_STYLE_CLASS_LEFT;
-    }
-  else
-    {
-      side = icon_pos == GTK_ENTRY_ICON_PRIMARY
-             ? GTK_STYLE_CLASS_LEFT
-             : GTK_STYLE_CLASS_RIGHT;
-    }
+    icon_pos = 1 - icon_pos;
 
-  gtk_css_node_add_class (icon_info->css_node, g_quark_from_static_string (side));
+  gtk_css_node_add_class (icon_info->css_node, g_quark_from_static_string (sides[icon_pos]));
+  gtk_css_node_remove_class (icon_info->css_node, g_quark_from_static_string (sides[1 - icon_pos]));
 }
 
 static EntryIconInfo*
