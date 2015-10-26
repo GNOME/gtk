@@ -163,8 +163,10 @@ entry {
   border-color: #a1a1a1;
   box-shadow: inset 0 0 0 1px rgba(74, 144, 217, 0), 0 1px white; }
   entry image.left {
-    padding-left: 0; }
+    padding-left: 0;
+    padding-right: 6px; }
   entry image.right {
+    padding-left: 6px;
     padding-right: 0; }
   entry.flat, entry.flat:focus {
     padding: 2px;
