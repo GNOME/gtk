@@ -1,7 +1,86 @@
 Overview of Changes in GTK+ 3.19.1
 ==================================
 
-* Support for help overlays to document keyboard shortcuts and gestures.
+* Support for help overlays to document keyboard shortcuts and gestures
+  has been added
+
+* GdkAppLaunchContext is now setting the DISPLAY environment variable
+  for X11
+
+* Support for GL legacy profiles has been added back
+
+* GTK+ now loads compose tables in the format used by XLib from
+  ~/.config/gtk-3.0/Compose, ~/.XCompose and the X11 locale information
+
+* GtkBuilder can now create GFile objects, for use in e.g. GFileIcons.
+
+* New APIs:
+ - GtkShortcutsWindow
+ - gtk_text_tag_changed
+ - gtk_settings_reset_property
+ - gdk_rectangle_equal
+ - gdk_gl_context_is_legacy
+
+* A new commandline utility, gtk-query-settings, to query GTK+ settings,
+  has been added
+
+* Theming: Element names are now supported.
+  A number of widgets have already been changed to use element names for
+  the widget itself and its various subelements. This effort will continue
+  in next development releases.
+  This change will require adjustments in themes and custom css - as part of
+  this transition, the element names and style classes in use are documented
+  and will be stable going forward.
+
+* Debugging: GtkInspector can now edit string-array-valued properties
+
+* Wayland:
+ - Fix transparent terminals
+ - Fix treeview search popups
+ - Fix CSD window resizing / moving
+
+* Bugs fixed:
+ 721120 GtkIMContextSimple needs locale compose tables similar with X11.
+ 735341 Fix/improve gtk_text_buffer_get_iter_at_*() functions
+ 753371 Bad focus order in GtkFlowBox
+ 753992 im-quartz discard_preedit segmentation fault
+ 754983 Wayland: g_desktop_app_info_launch_uris_with_spawn() forces DISPLAY...
+ 755008 API to reset a gtksettings property
+ 755413 Bug in _gtk_text_btree_get_iter_at_last_toggle()
+ 755416 Be able to subclass GtkTextTag cleanly
+ 755654 mmc/sd drive does not appear in Nautilus
+ 755791 GtkSwitch: unclip css box-shadow on the slider
+ 755927 Occasional "stuck key" after closing window using keyboard shortcut...
+ 755988 gtk printer dialog won't print jobs with names exceeding 255 charac...
+ 756042 GtkAssistant: Segfault after g_object_run_dispose(page)
+ 756142 Bring back support for legacy OpenGL contexts
+ 756160 Crash/segfault when dragging tabs (after 2nd/3rd/4th+ drag)
+ 756174 Add a tool to inspect all xsettings from the command line
+ 756195 GtkColorChooser: Plus/checkmark icons are blurry in hidpi
+ 756338 applications segfaults on 3.18.1 when using external themes
+ 756428 Add a help overlay widget
+ 756439 Regression: Critical warning "g_app_launch_context_get_display: ass...
+ 756449 GtkTextHandle artifacts under Wayland
+ 756496 wayland: Make it possible to use a window type hint to map as a sub...
+ 756505 Entering a dot removes all other characters from input
+ 756568 Some improvements to gtkplacesview
+ 756589 Improve the heuristics for external drives
+ 756618 GtkWindow CSD: gtk_window_resize() also includes client side decora...
+ 756625 segfault in captured_event_cb
+ 756751 Keypad decimal point patch prevents entry of comma in german keypad...
+ 756770 GTK+ 3.18.2 doesn't compile on OS X 10.6 (but so close!)
+ 756852 GtkInspector segfaults when you respond to a GtkFileChooserDialog
+ 756881 Guard against selection requestor disappearing
+ 756886 The GtkWindow patch here is necessary to make transparent terminals...
+ 756780 wayland: Fix GtkTreeView's search window
+ 757147 gdk_pixbuf_get_from_window: honor device scale
+
+* Translation updates:
+ Basque
+ Czech
+ German
+ Norwegian bokmål
+ Slovak
 
 
 Overview of Changes in GTK+ 3.18.1
