@@ -2387,10 +2387,6 @@ gdk_wayland_window_set_shadow_width (GdkWindow *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  if (left == impl->margin_left && right == impl->margin_right &&
-      top == impl->margin_top && bottom == impl->margin_bottom)
-    return;
-
   /* Reconfigure window to keep the same window geometry */
   new_width = window->width -
     (impl->margin_left + impl->margin_right) + (left + right);
