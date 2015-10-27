@@ -661,6 +661,10 @@ test_type (gconstpointer data)
           pspec->owner_type == GTK_TYPE_BUTTON)
         continue;
 
+      if (g_type_is_a (type, GTK_TYPE_SHORTCUTS_SHORTCUT) &&
+	  g_str_equal (pspec->name, "accelerator"))
+	continue;
+
       if (g_test_verbose ())
         g_print ("Property %s.%s\n", g_type_name (pspec->owner_type), pspec->name);
 
