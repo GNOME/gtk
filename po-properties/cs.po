@@ -13,7 +13,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+-properties\n"
+"Project-Id-Version: gtk+-properties gtk+-3.18\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-10-25 11:52+0000\n"
 "PO-Revision-Date: 2015-10-27 07:17+0100\n"
