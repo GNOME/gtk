@@ -6,6 +6,6 @@ GtkBox {
   background: red; /* should also never be seen */
 }
 
-GtkLabel {
+label {
   background: green;
 }

@@ -5,7 +5,7 @@
   100% { text-shadow: 20px 20px tomato; }
 }
 
-GtkLabel {
+label {
   font-size: 40px;
   animation-name: foo;
   animation-duration: 100s;

@@ -20,7 +20,7 @@
     background-color: white;
 }
 
-GtkImage, GtkLabel, .menuitem {
+image, label, .menuitem {
     background-color: transparent;
 }
 

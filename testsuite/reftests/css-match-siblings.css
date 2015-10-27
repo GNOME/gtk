@@ -3,17 +3,17 @@
   color: red
 }
 
-* ~ * ~ GtkLabel,
+* ~ * ~ label,
 #lime {
   color: lime;
 }
 
-* ~ * + GtkLabel ~ *,
+* ~ * + label ~ *,
 #blue {
   color: blue;
 }
 
-* + GtkLabel ~ * ~ GtkLabel + *,
+* + label ~ * ~ label + *,
 #purple {
   color: purple;
 }

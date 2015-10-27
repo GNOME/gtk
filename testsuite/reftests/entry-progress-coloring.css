@@ -4,11 +4,11 @@
   font: Monospace;
 }
 
-GtkEntry #padded {
+entry #padded {
   padding: 10px;
 }
 
-.progressbar {
+progress {
   background-color: rgba(0,0,0,0);
   background-image: none;
   border-color: rgba(0,0,0,0);

@@ -1,6 +1,6 @@
 @import "reset-to-defaults.css";
 
-GtkLabel {
+label {
   font-size: 40px;
   font-style: italic;
 }

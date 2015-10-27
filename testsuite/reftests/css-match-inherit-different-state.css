@@ -7,6 +7,6 @@
   color: red;
 }
 
-GtkLabel:insensitive {
+label:insensitive {
   color: inherit;
 }

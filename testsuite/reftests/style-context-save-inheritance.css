@@ -4,12 +4,12 @@
   color: red;
 }
 
-GtkLabel {
+label {
   color: green;
 }
 
-GtkLabel:link,
-GtkLabel:visited {
+label:link,
+label:visited {
   color: inherit;
 }
 
