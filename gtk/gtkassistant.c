@@ -50,6 +50,10 @@
  * To add pages to an assistant in #GtkBuilder, simply add it as a
  * child to the GtkAssistant object, and set its child properties
  * as necessary.
+ *
+ * # CSS nodes
+ *
+ * GtkAssistant has a single CSS node with the name assistant.
  */
 
 #include "config.h"
@@ -655,6 +659,8 @@ gtk_assistant_class_init (GtkAssistantClass *class)
   gtk_widget_class_bind_template_callback (widget_class, on_assistant_back);
   gtk_widget_class_bind_template_callback (widget_class, on_assistant_cancel);
   gtk_widget_class_bind_template_callback (widget_class, on_assistant_last);
+
+  gtk_widget_class_set_css_name (widget_class, "assistant");
 }
 
 static gint
