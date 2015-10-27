@@ -122,8 +122,8 @@ void                    gtk_css_node_set_widget_type    (GtkCssNode            *
                                                          GType                  widget_type);
 GType                   gtk_css_node_get_widget_type    (GtkCssNode            *cssnode);
 void                    gtk_css_node_set_id             (GtkCssNode            *cssnode,
-                                                         const char            *id);
-const char *            gtk_css_node_get_id             (GtkCssNode            *cssnode);
+                                                         /*interned*/const char*id);
+/*interned*/const char *gtk_css_node_get_id             (GtkCssNode            *cssnode);
 void                    gtk_css_node_set_state          (GtkCssNode            *cssnode,
                                                          GtkStateFlags          state_flags);
 GtkStateFlags           gtk_css_node_get_state          (GtkCssNode            *cssnode);

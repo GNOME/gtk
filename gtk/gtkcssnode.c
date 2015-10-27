@@ -1052,8 +1052,8 @@ gtk_css_node_get_widget_type (GtkCssNode *cssnode)
 }
 
 void
-gtk_css_node_set_id (GtkCssNode *cssnode,
-                     const char *id)
+gtk_css_node_set_id (GtkCssNode                *cssnode,
+                     /* interned */ const char *id)
 {
   if (gtk_css_node_declaration_set_id (&cssnode->decl, id))
     {
@@ -1062,7 +1062,7 @@ gtk_css_node_set_id (GtkCssNode *cssnode,
     }
 }
 
-const char *
+/* interned */ const char *
 gtk_css_node_get_id (GtkCssNode *cssnode)
 {
   return gtk_css_node_declaration_get_id (cssnode->decl);
