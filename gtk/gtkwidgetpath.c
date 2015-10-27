@@ -512,6 +512,65 @@ gtk_widget_path_iter_get_sibling_index (const GtkWidgetPath *path,
 }
 
 /**
+ * gtk_widget_path_iter_get_object_name:
+ * @path: a #GtkWidgetPath
+ * @pos: position to get the object name for, -1 for the path head
+ *
+ * Returns the object name that is at position @pos in the widget
+ * hierarchy defined in @path.
+ *
+ * Returns: the name or %NULL
+ *
+ * Since: 3.20
+ **/
+const char *
+gtk_widget_path_iter_get_object_name (const GtkWidgetPath *path,
+                                      gint                 pos)
+{
+  GtkPathElement *elem;
+
+  gtk_internal_return_val_if_fail (path != NULL, NULL);
+  gtk_internal_return_val_if_fail (path->elems->len != 0, NULL);
+
+  if (pos < 0 || pos >= path->elems->len)
+    pos = path->elems->len - 1;
+
+  elem = &g_array_index (path->elems, GtkPathElement, pos);
+  return gtk_css_node_declaration_get_name (elem->decl);
+}
+
+/**
+ * gtk_widget_path_iter_set_object_name:
+ * @path: a #GtkWidgetPath
+ * @pos: position to modify, -1 for the path head
+ * @name: (allow-none): object name to set or %NULL to unset
+ *
+ * Sets the object name for a given position in the widget hierarchy
+ * defined by @path.
+ *
+ * When set, the object name overrides the object type when matching
+ * CSS.
+ *
+ * Since: 3.20
+ **/
+void
+gtk_widget_path_iter_set_object_name (GtkWidgetPath *path,
+                                      gint           pos,
+                                      const char    *name)
+{
+  GtkPathElement *elem;
+
+  gtk_internal_return_if_fail (path != NULL);
+  gtk_internal_return_if_fail (path->elems->len != 0);
+
+  if (pos < 0 || pos >= path->elems->len)
+    pos = path->elems->len - 1;
+
+  elem = &g_array_index (path->elems, GtkPathElement, pos);
+  gtk_css_node_declaration_set_name (&elem->decl, g_intern_string (name));
+}
+
+/**
  * gtk_widget_path_iter_get_object_type:
  * @path: a #GtkWidgetPath
  * @pos: position to get the object type for, -1 for the path head

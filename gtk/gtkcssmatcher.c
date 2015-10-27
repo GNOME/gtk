@@ -84,9 +84,23 @@ gtk_css_matcher_widget_path_has_name (const GtkCssMatcher     *matcher,
 
   siblings = gtk_widget_path_iter_get_siblings (matcher->path.path, matcher->path.index);
   if (siblings && matcher->path.sibling_index != gtk_widget_path_iter_get_sibling_index (matcher->path.path, matcher->path.index))
-    return g_type_is_a (gtk_widget_path_iter_get_object_type (siblings, matcher->path.sibling_index), type);
+    {
+      const char *path_name = gtk_widget_path_iter_get_object_name (siblings, matcher->path.sibling_index);
+
+      if (path_name == NULL)
+        return g_type_is_a (gtk_widget_path_iter_get_object_type (siblings, matcher->path.sibling_index), type);
+
+      return path_name == name;
+    }
   else
-    return g_type_is_a (gtk_widget_path_iter_get_object_type (matcher->path.path, matcher->path.index), type);
+    {
+      const char *path_name = gtk_widget_path_iter_get_object_name (matcher->path.path, matcher->path.index);
+
+      if (path_name == NULL)
+        return g_type_is_a (gtk_widget_path_iter_get_object_type (matcher->path.path, matcher->path.index), type);
+
+      return path_name == name;
+    }
 }
 
 static gboolean
