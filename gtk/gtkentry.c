@@ -2755,30 +2755,6 @@ gtk_entry_ensure_text_handles (GtkEntry *entry)
                     G_CALLBACK (gtk_entry_handle_drag_finished), entry);
 }
 
-static void
-gtk_entry_prepare_context_for_icon (GtkEntry             *entry,
-                                    GtkStyleContext      *context,
-                                    GtkEntryIconPosition  icon_pos)
-{
-  GtkEntryPrivate *priv = entry->priv;
-  EntryIconInfo *icon_info = priv->icons[icon_pos];
-  GtkWidget *widget;
-  GtkStateFlags state;
-
-  widget = GTK_WIDGET (entry);
-  state = gtk_widget_get_state_flags (widget);
-
-  state &= ~GTK_STATE_FLAG_PRELIGHT;
-
-  if ((state & GTK_STATE_FLAG_INSENSITIVE) || icon_info->insensitive)
-    state |= GTK_STATE_FLAG_INSENSITIVE;
-  else if (icon_info->prelight)
-    state |= GTK_STATE_FLAG_PRELIGHT;
-
-  gtk_style_context_save_to_node (context, icon_info->css_node);
-  gtk_style_context_set_state (context, state);
-}
-
 static gint
 get_icon_width (GtkEntry             *entry,
                 GtkEntryIconPosition  icon_pos)
@@ -2794,7 +2770,7 @@ get_icon_width (GtkEntry             *entry,
     return 0;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (entry));
-  gtk_entry_prepare_context_for_icon (entry, context, icon_pos);
+  gtk_style_context_save_to_node (context, icon_info->css_node);
   state = gtk_style_context_get_state (context);
   gtk_style_context_get_padding (context, state, &padding);
 
@@ -3181,6 +3157,29 @@ update_icon_style (GtkWidget            *widget,
   gtk_css_node_remove_class (icon_info->css_node, g_quark_from_static_string (sides[1 - icon_pos]));
 }
 
+static void
+update_icon_state (GtkWidget            *widget,
+                   GtkEntryIconPosition  icon_pos)
+{
+  GtkEntry *entry = GTK_ENTRY (widget);
+  GtkEntryPrivate *priv = entry->priv;
+  EntryIconInfo *icon_info = priv->icons[icon_pos];
+  GtkStateFlags state;
+
+  if (icon_info == NULL)
+    return;
+
+  state = gtk_widget_get_state_flags (widget);
+  state &= ~GTK_STATE_FLAG_PRELIGHT;
+
+  if ((state & GTK_STATE_FLAG_INSENSITIVE) || icon_info->insensitive)
+    state |= GTK_STATE_FLAG_INSENSITIVE;
+  else if (icon_info->prelight)
+    state |= GTK_STATE_FLAG_PRELIGHT;
+
+  gtk_css_node_set_state (icon_info->css_node, state);
+}
+
 static EntryIconInfo*
 construct_icon_info (GtkWidget            *widget,
                      GtkEntryIconPosition  icon_pos)
@@ -3202,9 +3201,9 @@ construct_icon_info (GtkWidget            *widget,
   icon_info->css_node = gtk_css_node_new ();
   gtk_css_node_set_name (icon_info->css_node, I_("image"));
   gtk_css_node_set_parent (icon_info->css_node, widget_node);
-  gtk_css_node_set_state (icon_info->css_node, gtk_css_node_get_state (widget_node));
-  g_object_unref (icon_info->css_node);
+  update_icon_state (widget, icon_pos);
   update_icon_style (widget, icon_pos);
+  g_object_unref (icon_info->css_node);
 
   if (gtk_widget_get_realized (widget))
     realize_icon_info (widget, icon_pos);
@@ -3758,7 +3757,7 @@ draw_icon (GtkWidget            *widget,
   gtk_cairo_transform_to_window (cr, widget, icon_info->window);
 
   context = gtk_widget_get_style_context (widget);
-  gtk_entry_prepare_context_for_icon (entry, context, icon_pos);
+  gtk_style_context_save_to_node (context, icon_info->css_node);
   _gtk_icon_helper_get_size (icon_info->icon_helper, context,
                              &pix_width, &pix_height);
   state = gtk_style_context_get_state (context);
@@ -3976,7 +3975,7 @@ gtk_entry_draw (GtkWidget *widget,
 }
 
 static gint
-gtk_entry_enter_notify (GtkWidget *widget,
+gtk_entry_enter_notify (GtkWidget        *widget,
                         GdkEventCrossing *event)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
@@ -3992,6 +3991,7 @@ gtk_entry_enter_notify (GtkWidget *widget,
           if (should_prelight (entry, i))
             {
               icon_info->prelight = TRUE;
+              update_icon_state (widget, i);
               gtk_widget_queue_draw (widget);
             }
 
@@ -4023,6 +4023,7 @@ gtk_entry_leave_notify (GtkWidget        *widget,
           if (should_prelight (entry, i))
             {
               icon_info->prelight = FALSE;
+              update_icon_state (widget, i);
               gtk_widget_queue_draw (widget);
             }
 
@@ -4268,6 +4269,7 @@ gtk_entry_event (GtkWidget *widget,
       if (should_prelight (GTK_ENTRY (widget), i))
         {
           icon_info->prelight = FALSE;
+          update_icon_state (widget, i);
           gtk_widget_queue_draw (widget);
         }
 
@@ -4321,6 +4323,7 @@ gtk_entry_event (GtkWidget *widget,
           y < gdk_window_get_height (icon_info->window))
         {
           icon_info->prelight = TRUE;
+          update_icon_state (widget, i);
           gtk_widget_queue_draw (widget);
         }
 
@@ -5057,6 +5060,9 @@ gtk_entry_state_flags_changed (GtkWidget     *widget,
       /* Clear any selection */
       gtk_editable_select_region (GTK_EDITABLE (entry), priv->current_pos, priv->current_pos);
     }
+
+  update_icon_state (widget, GTK_ENTRY_ICON_PRIMARY);
+  update_icon_state (widget, GTK_ENTRY_ICON_SECONDARY);
 
   gtk_entry_update_cached_style_values (entry);
 }
@@ -7521,7 +7527,7 @@ gtk_entry_ensure_pixbuf (GtkEntry             *entry,
   GdkPixbuf *pix;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (entry));
-  gtk_entry_prepare_context_for_icon (entry, context, icon_pos);
+  gtk_style_context_save_to_node (context, icon_info->css_node);
 
   pix = _gtk_icon_helper_ensure_pixbuf (icon_info->icon_helper,
                                         context);
@@ -9002,6 +9008,7 @@ gtk_entry_set_icon_sensitive (GtkEntry             *entry,
       if (gtk_widget_get_realized (GTK_WIDGET (entry)))
         update_cursors (GTK_WIDGET (entry));
 
+      update_icon_state (GTK_WIDGET (entry), icon_pos);
       gtk_widget_queue_draw (GTK_WIDGET (entry));
 
       g_object_notify_by_pspec (G_OBJECT (entry),
