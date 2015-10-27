@@ -1700,15 +1700,41 @@ void
 _gtk_css_selector_tree_match_print (const GtkCssSelectorTree *tree,
 				    GString *str)
 {
-  const GtkCssSelectorTree *parent;
+  const GtkCssSelectorTree *iter;
 
   g_return_if_fail (tree != NULL);
 
-  tree->selector.class->print (&tree->selector, str);
+  /* print name and * selector before others */
+  for (iter = tree; 
+       iter && iter->selector.class->is_simple;
+       iter = gtk_css_selector_tree_get_parent (iter))
+    {
+      if (iter->selector.class == &GTK_CSS_SELECTOR_NAME ||
+          iter->selector.class == &GTK_CSS_SELECTOR_ANY)
+        {
+          iter->selector.class->print (&iter->selector, str);
+        }
+    }
+  /* now print other simple selectors */
+  for (iter = tree; 
+       iter && iter->selector.class->is_simple;
+       iter = gtk_css_selector_tree_get_parent (iter))
+    {
+      if (iter->selector.class != &GTK_CSS_SELECTOR_NAME &&
+          iter->selector.class != &GTK_CSS_SELECTOR_ANY)
+        {
+          iter->selector.class->print (&iter->selector, str);
+        }
+    }
 
-  parent = gtk_css_selector_tree_get_parent (tree);
-  if (parent != NULL)
-    _gtk_css_selector_tree_match_print (parent, str);
+  /* now if there's a combinator, print that one */
+  if (iter != NULL)
+    {
+      iter->selector.class->print (&iter->selector, str);
+      tree = gtk_css_selector_tree_get_parent (iter);
+      if (tree)
+        _gtk_css_selector_tree_match_print (tree, str);
+    }
 }
 
 void
