@@ -2,6 +2,7 @@
 # Copyright (C) 1999, 2008, 2009, 2010, 2011 the author(s) of GTK+.
 # Copyright (C) 2003, 2004, 2005 Miloslav Trmac <mitr@volny.cz>.
 # This file is distributed under the same license as the gtk+ package.
+#
 # Stanislav Brabec <utx@k332.feld.cvut.cz>, 1998.
 # Jiří Pavlovský <pavlovsk@ff.cuni.cz>, 1998.
 # Jiří Lebl <jirka@5z.com>, 2002.
@@ -15,7 +16,7 @@ msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-10-25 11:52+0000\n"
-"PO-Revision-Date: 2015-10-26 07:52+0100\n"
+"PO-Revision-Date: 2015-10-27 07:17+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -5287,12 +5288,10 @@ msgid "Pass through input, does not affect main child"
 msgstr "Předávat vstup skrz, aniž by ovlivnil hlavního potomka"
 
 #: gtk/gtkoverlay.c:769
-#| msgid "Indent"
 msgid "Index"
 msgstr "Index"
 
 #: gtk/gtkoverlay.c:770
-#| msgid "The index of the child in the parent"
 msgid "The index of the overlay in the parent, -1 for the main child"
 msgstr "Index vrstvy v rodiči, -1 pro hlavního potomka"
 
@@ -5446,12 +5445,10 @@ msgstr ""
 "namají nabídky"
 
 #: gtk/gtkplacesview.c:2204
-#| msgid "Heading"
 msgid "Loading"
 msgstr "Načítání"
 
 #: gtk/gtkplacesview.c:2205
-#| msgid "Whether the widget should show all applications"
 msgid "Whether the view is loading locations"
 msgstr "Jestli zobrazením je načítání umístění"
 
@@ -5460,15 +5457,12 @@ msgid "Fetching networks"
 msgstr "Získávání sítí"
 
 #: gtk/gtkplacesview.c:2212
-#| msgid "Whether the switch is on or off"
 msgid "Whether the view is fetching networks"
 msgstr "Jestli zobrazením je získávání sítí"
 
 #: gtk/gtkplacesviewrow.c:181
-#, fuzzy
-#| msgid "Icon for this window"
 msgid "Icon of the row"
-msgstr "Ikona tohoto okna"
+msgstr "Ikona řádku"
 
 #: gtk/gtkplacesviewrow.c:182
 msgid "The icon representing the volume"
@@ -5492,43 +5486,31 @@ msgstr "Cesta k svazku"
 
 #: gtk/gtkplacesviewrow.c:202
 msgid "Volume represented by the row"
-msgstr ""
+msgstr "Svazek představovaný řádkem"
 
 #: gtk/gtkplacesviewrow.c:203
-#, fuzzy
-#| msgid "The amount of space used by the arrow"
 msgid "The volume represented by the row"
-msgstr "Množství prostoru použitého šipkou"
+msgstr "Svazek, který je řádkem reprezentován"
 
 #: gtk/gtkplacesviewrow.c:209
-#, fuzzy
-#| msgid "The amount of space used by the arrow"
 msgid "Mount represented by the row"
-msgstr "Množství prostoru použitého šipkou"
+msgstr "Připojení představované řádkem"
 
 #: gtk/gtkplacesviewrow.c:210
-#, fuzzy
-#| msgid "The amount of space used by the arrow"
 msgid "The mount point represented by the row, if any"
-msgstr "Množství prostoru použitého šipkou"
+msgstr "Přípojný bod, pokud nějaký je, který je řádkem reprezentován"
 
 #: gtk/gtkplacesviewrow.c:216
-#, fuzzy
-#| msgid "The amount of space used by the arrow"
 msgid "File represented by the row"
-msgstr "Množství prostoru použitého šipkou"
+msgstr "Soubor představovaný řádkem"
 
 #: gtk/gtkplacesviewrow.c:217
-#, fuzzy
-#| msgid "The amount of space used by the arrow"
 msgid "The file represented by the row, if any"
-msgstr "Množství prostoru použitého šipkou"
+msgstr "Soubor, pokud nějaký je, který je řádkem reprezentován"
 
 #: gtk/gtkplacesviewrow.c:223 gtk/gtkplacesviewrow.c:224
-#, fuzzy
-#| msgid "Whether the dialog supports selection"
 msgid "Whether the row represents a network location"
-msgstr "Jestli dialogové okno podporuje výběr"
+msgstr "Jestli řádek reprezentuje síťové připojení"
 
 #: gtk/gtkplug.c:197
 msgid "Whether the plug is embedded"
@@ -7867,12 +7849,10 @@ msgid "Whether this tag affects letter spacing"
 msgstr "Jestli tato značka ovlivňuje rozpal písma"
 
 #: gtk/gtktexttag.c:855
-#| msgid "Font stretch set"
 msgid "Font features set"
 msgstr "Vlastnosti písma jsou nastaveny"
 
 #: gtk/gtktexttag.c:856
-#| msgid "Whether this tag affects font fallback"
 msgid "Whether this tag affects font features"
 msgstr "Jestli tato značka ovlivňuje vlastnosti písma"
 
