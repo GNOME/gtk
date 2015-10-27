@@ -21,6 +21,7 @@
           <object class="GtkTreeView" id="tree_view">
             <property name="visible">True</property>
             <property name="enable-search">False</property>
+            <signal name="row-activated" handler="row_activated"/>
             <child>
               <object class="GtkTreeViewColumn">
                 <property name="resizable">True</property>
@@ -35,7 +36,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkTreeViewColumn">
+              <object class="GtkTreeViewColumn" id="name_column">
                 <property name="resizable">True</property>
                 <property name="title" translatable="yes">Name</property>
                 <child>
@@ -48,7 +49,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkTreeViewColumn">
+              <object class="GtkTreeViewColumn" id="id_column">
                 <property name="resizable">True</property>
                 <property name="title" translatable="yes">ID</property>
                 <child>
@@ -61,7 +62,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkTreeViewColumn">
+              <object class="GtkTreeViewColumn" id="classes_column">
                 <property name="resizable">True</property>
                 <property name="title" translatable="yes">Classes</property>
                 <child>
