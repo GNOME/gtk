@@ -103,7 +103,7 @@ _gdk_mir_print_touch_event (const MirInputEvent *event)
 
   g_printerr ("TOUCH\n");
   g_printerr (" Device %lld\n", (long long int) mir_input_event_get_device_id (event));
-  g_printerr (" Cookie %llu %llu\n", mir_touch_event_get_cookie (touch_event).timestamp, mir_touch_event_get_cookie (touch_event).mac);
+  g_printerr (" Cookie %lu %lu\n", mir_touch_event_get_cookie (touch_event).timestamp, mir_touch_event_get_cookie (touch_event).mac);
   g_printerr (" Event Time %lld\n", (long long int) mir_input_event_get_event_time (event));
   _gdk_mir_print_modifiers (mir_touch_event_modifiers (touch_event));
   n = mir_touch_event_point_count (touch_event);
