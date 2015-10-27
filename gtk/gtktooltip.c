@@ -36,6 +36,8 @@
 #include "gtkstylecontext.h"
 #include "gtkwindowprivate.h"
 #include "gtkaccessible.h"
+#include "gtkcssnodeprivate.h"
+#include "gtkwidgetprivate.h"
 
 
 #ifdef GDK_WINDOWING_WAYLAND
@@ -57,7 +59,7 @@
  * When you need a tooltip with a little more fancy contents, like adding an
  * image, or you want the tooltip to have different contents per #GtkTreeView
  * row or cell, you will have to do a little more work:
- * 
+ *
  * - Set the #GtkWidget:has-tooltip property to %TRUE, this will make GTK+
  *   monitor the widget for motion and related events which are needed to
  *   determine when and where to show a tooltip.
@@ -76,7 +78,7 @@
  * In the probably rare case where you want to have even more control over the
  * tooltip that is about to be shown, you can set your own #GtkWindow which
  * will be used as tooltip window.  This works as follows:
- * 
+ *
  * - Set #GtkWidget:has-tooltip and connect to #GtkWidget::query-tooltip as before.
  *   Use gtk_widget_set_tooltip_window() to set a #GtkWindow created by you as
  *   tooltip window.
@@ -85,6 +87,10 @@
  *   gtk_widget_get_tooltip_window() and manipulate as you wish. The semantics of
  *   the return value are exactly as before, return %TRUE to show the window,
  *   %FALSE to not show it.
+ *
+ * # CSS nodes
+ *
+ * The toplevel used for tooltips has a single CSS node with name tooltip.
  */
 
 
@@ -169,12 +175,12 @@ gtk_tooltip_class_init (GtkTooltipClass *klass)
 static void
 gtk_tooltip_init (GtkTooltip *tooltip)
 {
-  GtkStyleContext *context;
   GtkWidget *window;
   GtkWidget *box;
   GtkWidget *image;
   GtkWidget *label;
   AtkObject *atk_obj;
+  GtkCssNode *cssnode;
 
   tooltip->timeout_id = 0;
   tooltip->browse_mode_timeout_id = 0;
@@ -197,8 +203,8 @@ gtk_tooltip_init (GtkTooltip *tooltip)
                     G_CALLBACK (gtk_tooltip_window_hide), tooltip);
 
   _gtk_window_request_csd (GTK_WINDOW (window));
-  context = gtk_widget_get_style_context (window);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_TOOLTIP);
+  cssnode = gtk_widget_get_css_node (window);
+  gtk_css_node_set_name (cssnode, I_("tooltip"));
 
   atk_obj = gtk_widget_get_accessible (window);
   if (GTK_IS_ACCESSIBLE (atk_obj))
