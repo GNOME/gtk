@@ -91,6 +91,63 @@ _gdk_mir_print_key_event (const MirInputEvent *event)
   g_printerr (" Event Time %lli\n", (long long int) mir_input_event_get_event_time (event));
 }
 
+static void
+_gdk_mir_print_touch_event (const MirInputEvent *event)
+{
+  const MirTouchEvent *touch_event = mir_input_event_get_touch_event (event);
+  guint i;
+  guint n;
+
+  if (!touch_event)
+    return;
+
+  g_printerr ("TOUCH\n");
+  g_printerr (" Device %lld\n", (long long int) mir_input_event_get_device_id (event));
+  g_printerr (" Cookie %llu %llu\n", mir_touch_event_get_cookie (touch_event).timestamp, mir_touch_event_get_cookie (touch_event).mac);
+  g_printerr (" Event Time %lld\n", (long long int) mir_input_event_get_event_time (event));
+  _gdk_mir_print_modifiers (mir_touch_event_modifiers (touch_event));
+  n = mir_touch_event_point_count (touch_event);
+
+  for (i = 0; i < n; i++)
+    {
+      g_printerr (" [%u] (%u/%u) ", mir_touch_event_id (touch_event, i), i + 1, n);
+      switch (mir_touch_event_action (touch_event, i))
+        {
+        case mir_touch_action_down:
+          g_printerr ("Down");
+          break;
+        case mir_touch_action_up:
+          g_printerr ("Up");
+          break;
+        case mir_touch_action_change:
+          g_printerr ("Change");
+          break;
+        default:
+          g_printerr ("%u", mir_touch_event_action (touch_event, i));
+          break;
+        }
+      switch (mir_touch_event_tooltype (touch_event, i))
+        {
+        case mir_touch_tooltype_unknown:
+          g_printerr (" ? ");
+          break;
+        case mir_touch_tooltype_finger:
+          g_printerr (" finger ");
+          break;
+        case mir_touch_tooltype_stylus:
+          g_printerr (" stylus ");
+          break;
+        }
+      g_printerr ("\n  x: %f y: %f P: %f A: %f B: %f d: %f\n",
+                  mir_touch_event_axis_value (touch_event, i, mir_touch_axis_x),
+                  mir_touch_event_axis_value (touch_event, i, mir_touch_axis_y),
+                  mir_touch_event_axis_value (touch_event, i, mir_touch_axis_pressure),
+                  mir_touch_event_axis_value (touch_event, i, mir_touch_axis_touch_major),
+                  mir_touch_event_axis_value (touch_event, i, mir_touch_axis_touch_minor),
+                  mir_touch_event_axis_value (touch_event, i, mir_touch_axis_size));
+    }
+}
+
 void
 _gdk_mir_print_motion_event (const MirInputEvent *event)
 {
@@ -197,7 +254,7 @@ _gdk_mir_print_event (const MirEvent *event)
             _gdk_mir_print_key_event (mir_event_get_input_event (event));
             break;
           case mir_input_event_type_touch:
-            _gdk_mir_print_motion_event (mir_event_get_input_event (event));
+            _gdk_mir_print_touch_event (mir_event_get_input_event (event));
             break;
           case mir_input_event_type_pointer:
             _gdk_mir_print_motion_event (mir_event_get_input_event (event));
