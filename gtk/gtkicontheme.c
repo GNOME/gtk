@@ -4441,7 +4441,11 @@ gtk_icon_info_load_symbolic_svg (GtkIconInfo    *icon_info,
     return NULL;
 
   if (!icon_info_ensure_scale_and_pixbuf (icon_info))
-    return NULL;
+    {
+      g_propagate_error (error, icon_info->load_error);
+      icon_info->load_error = NULL;
+      return NULL;
+    }
 
   if (icon_info->symbolic_width == 0 ||
       icon_info->symbolic_height == 0)
