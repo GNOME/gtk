@@ -1232,7 +1232,7 @@ should_map_as_subsurface (GdkWindow *window)
       return TRUE;
 
     case GDK_WINDOW_TYPE_HINT_UTILITY:
-      if (gtk_window_get_window_type (window) == GTK_WINDOW_POPUP)
+      if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP)
         return TRUE;
       break;
 
@@ -1256,7 +1256,7 @@ should_map_as_popup (GdkWindow *window)
       return TRUE;
 
     case GDK_WINDOW_TYPE_HINT_UTILITY:
-      if (gtk_window_get_window_type (window) != GTK_WINDOW_POPUP)
+      if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_TEMP)
         return TRUE;
       break;
 
