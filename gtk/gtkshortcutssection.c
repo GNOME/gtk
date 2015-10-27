@@ -101,6 +101,8 @@ static guint signals[LAST_SIGNAL];
 
 static void gtk_shortcuts_section_set_view_name    (GtkShortcutsSection *self,
                                                     const gchar         *view_name);
+static void gtk_shortcuts_section_set_max_height   (GtkShortcutsSection *self,
+                                                    guint                max_height);
 static void gtk_shortcuts_section_add_group        (GtkShortcutsSection *self,
                                                     GtkShortcutsGroup   *group);
 
@@ -210,7 +212,7 @@ gtk_shortcuts_section_set_property (GObject      *object,
       break;
 
     case PROP_MAX_HEIGHT:
-      self->max_height = g_value_get_uint (value);
+      gtk_shortcuts_section_set_max_height (self, g_value_get_uint (value));
       break;
 
     default:
@@ -268,7 +270,7 @@ gtk_shortcuts_section_class_init (GtkShortcutsSectionClass *klass)
   properties[PROP_VIEW_NAME] =
     g_param_spec_string ("view-name", P_("View Name"), P_("View Name"),
                          NULL,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkShortcutsSection:title:
@@ -293,7 +295,7 @@ gtk_shortcuts_section_class_init (GtkShortcutsSectionClass *klass)
   properties[PROP_MAX_HEIGHT] =
     g_param_spec_uint ("max-height", P_("Maximum Height"), P_("Maximum Height"),
                        0, G_MAXUINT, 15,
-                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
@@ -376,8 +378,6 @@ static void
 gtk_shortcuts_section_set_view_name (GtkShortcutsSection *self,
                                      const gchar         *view_name)
 {
-  g_return_if_fail (GTK_IS_SHORTCUTS_SECTION (self));
-
   if (g_strcmp0 (self->view_name, view_name) == 0)
     return;
 
@@ -391,14 +391,25 @@ gtk_shortcuts_section_set_view_name (GtkShortcutsSection *self,
 }
 
 static void
+gtk_shortcuts_section_set_max_height (GtkShortcutsSection *self,
+                                      guint                max_height)
+{
+  if (self->max_height == max_height)
+    return;
+
+  self->max_height = max_height;
+
+  gtk_shortcuts_section_maybe_reflow (self);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MAX_HEIGHT]);
+}
+
+static void
 gtk_shortcuts_section_add_group (GtkShortcutsSection *self,
                                  GtkShortcutsGroup   *group)
 {
   GList *children;
   GtkWidget *page, *column;
-
-  g_return_if_fail (GTK_IS_SHORTCUTS_SECTION (self));
-  g_return_if_fail (GTK_IS_SHORTCUTS_GROUP (group));
 
   children = gtk_container_get_children (GTK_CONTAINER (self->stack));
   if (children)

@@ -228,7 +228,7 @@ gtk_shortcuts_gesture_class_init (GtkShortcutsGestureClass *klass)
     g_param_spec_string ("title",
                          P_("Title"),
                          P_("Title"),
-                         NULL,
+                         "",
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   /**
@@ -243,7 +243,7 @@ gtk_shortcuts_gesture_class_init (GtkShortcutsGestureClass *klass)
     g_param_spec_string ("subtitle",
                          P_("Subtitle"),
                          P_("Subtitle"),
-                         NULL,
+                         "",
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   /**

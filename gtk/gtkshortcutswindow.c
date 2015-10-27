@@ -598,7 +598,7 @@ gtk_shortcuts_window_class_init (GtkShortcutsWindowClass *klass)
    */
   properties[PROP_SECTION_NAME] =
     g_param_spec_string ("section-name", P_("Section Name"), P_("Section Name"),
-                         NULL,
+                         "internal-search",
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   /**

@@ -215,7 +215,7 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
     g_param_spec_string ("title",
                          P_("Title"),
                          P_("Title"),
-                         NULL,
+                         "",
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   /**

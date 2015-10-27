@@ -225,7 +225,7 @@ gtk_shortcuts_group_class_init (GtkShortcutsGroupClass *klass)
    */
   properties[PROP_TITLE] =
     g_param_spec_string ("title", P_("Title"), P_("Title"),
-                         NULL,
+                         "",
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   /**
@@ -279,7 +279,7 @@ gtk_shortcuts_group_class_init (GtkShortcutsGroupClass *klass)
    */
   properties[PROP_HEIGHT] =
     g_param_spec_uint ("height", P_("Height"), P_("Height"),
-                       0, G_MAXUINT, 0,
+                       0, G_MAXUINT, 1,
                        (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
