@@ -246,7 +246,7 @@ entry {
   entry:selected, entry:backdrop:selected {
     background-color: #000;
     color: #fff; }
-  entry progressbar {
+  entry progress {
     margin: 1px;
     border-radius: 0;
     border-width: 0 0 2px;
@@ -255,7 +255,7 @@ entry {
     background-image: none;
     background-color: transparent;
     box-shadow: none; }
-    entry progressbar:backdrop {
+    entry progress:backdrop {
       background-color: transparent; }
   .linked entry:first-child {
     border-top-right-radius: 0;

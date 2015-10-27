@@ -203,7 +203,7 @@ entry {
     border-color: darkgray;
     background-image: linear-gradient(to bottom, #f4f4f4);
     box-shadow: 0 1px rgba(255, 255, 255, 0); }
-  entry progressbar {
+  entry progress {
     margin: 1px;
     border-radius: 0;
     border-width: 0 0 2px;
@@ -212,7 +212,7 @@ entry {
     background-image: none;
     background-color: transparent;
     box-shadow: none; }
-    entry progressbar:backdrop {
+    entry progress:backdrop {
       background-color: transparent; }
   .linked:not(.vertical) > entry:focus + entry, .linked:not(.vertical) > entry:focus + .button, .linked:not(.vertical) > entry:focus + GtkComboBox > .the-button-in-the-combobox, .linked:not(.vertical) > entry:focus + GtkComboBoxText > .the-button-in-the-combobox {
     border-left-color: #4a90d9; }

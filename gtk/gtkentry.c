@@ -123,7 +123,7 @@
  * When the entry shows icons, it adds subnodes with the name image and the
  * style class .left or .right, depending on where the icon appears.
  *
- * When the entry shows progress, it adds a subnode with the name progressbar.
+ * When the entry shows progress, it adds a subnode with the name progress.
  * The node has the style class .pulse when the shown progress is pulsing.
  */
 
@@ -10673,7 +10673,7 @@ gtk_entry_ensure_progress_node (GtkEntry *entry)
 
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (entry));
   priv->progress_node = gtk_css_node_new ();
-  gtk_css_node_set_name (priv->progress_node, I_("progressbar"));
+  gtk_css_node_set_name (priv->progress_node, I_("progress"));
   gtk_css_node_set_parent (priv->progress_node, widget_node);
   gtk_css_node_set_state (priv->progress_node, gtk_css_node_get_state (widget_node));
   g_object_unref (priv->progress_node);
