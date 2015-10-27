@@ -42,6 +42,7 @@
 #include "gtksettingsprivate.h"
 #include "gtktogglebutton.h"
 #include "gtkwidgetprivate.h"
+#include "gtkcssnodeprivate.h"
 
 struct _GtkInspectorPropEditorPrivate
 {
@@ -391,6 +392,18 @@ string_modified (GtkEntry *entry, ObjectProperty *p)
   g_value_set_static_string (&val, gtk_entry_get_text (entry));
   set_property_value (p->obj, p->spec, &val);
   g_value_unset (&val);
+}
+
+static void
+intern_string_modified (GtkEntry *entry, ObjectProperty *p)
+{
+  const gchar *s;
+
+  s = g_intern_string (gtk_entry_get_text (entry));
+  if (g_str_equal (p->spec->name, "id"))
+    gtk_css_node_set_id (GTK_CSS_NODE (p->obj), s);
+  else if (g_str_equal (p->spec->name, "name"))
+    gtk_css_node_set_name (GTK_CSS_NODE (p->obj), s);
 }
 
 static void
@@ -922,8 +935,12 @@ property_editor (GObject                *object,
                                  G_CALLBACK (string_changed),
                                  prop_edit, G_OBJECT (prop_edit));
 
-      connect_controller (G_OBJECT (prop_edit), "changed",
-                          object, spec, G_CALLBACK (string_modified));
+      if (GTK_IS_CSS_NODE (object))
+        connect_controller (G_OBJECT (prop_edit), "changed",
+                            object, spec, G_CALLBACK (intern_string_modified));
+      else
+        connect_controller (G_OBJECT (prop_edit), "changed",
+                            object, spec, G_CALLBACK (string_modified));
     }
   else if (type == G_TYPE_PARAM_BOOLEAN)
     {
