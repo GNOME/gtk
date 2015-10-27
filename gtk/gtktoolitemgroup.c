@@ -495,11 +495,7 @@ gtk_tool_item_group_finalize (GObject *object)
 {
   GtkToolItemGroup *group = GTK_TOOL_ITEM_GROUP (object);
 
-  if (group->priv->children)
-    {
-      g_list_free (group->priv->children);
-      group->priv->children = NULL;
-    }
+  g_list_free (group->priv->children);
 
   G_OBJECT_CLASS (gtk_tool_item_group_parent_class)->finalize (object);
 }
@@ -527,6 +523,8 @@ gtk_tool_item_group_dispose (GObject *object)
     }
 
   g_clear_object (&priv->settings);
+  gtk_widget_destroy (priv->header);
+  g_clear_object (&priv->header);
 
   G_OBJECT_CLASS (gtk_tool_item_group_parent_class)->dispose (object);
 }
