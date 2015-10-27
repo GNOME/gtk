@@ -82,14 +82,11 @@ dnl
 int 
 main ()
 {
-  int major, minor, micro;
-  char *tmp_version;
+  unsigned int major, minor, micro;
 
   fclose (fopen ("conf.gtktest", "w"));
 
-  /* HP/UX 9 (%@#!) writes to sscanf strings */
-  tmp_version = g_strdup("$min_gtk_version");
-  if (sscanf(tmp_version, "%d.%d.%d", &major, &minor, &micro) != 3) {
+  if (sscanf("$min_gtk_version", "%u.%u.%u", &major, &minor, &micro) != 3) {
      printf("%s, bad version string\n", "$min_gtk_version");
      exit(1);
    }
@@ -128,9 +125,9 @@ main ()
        }
      else
       {
-        printf("\n*** An old version of GTK+ (%d.%d.%d) was found.\n",
+        printf("\n*** An old version of GTK+ (%u.%u.%u) was found.\n",
                gtk_major_version, gtk_minor_version, gtk_micro_version);
-        printf("*** You need a version of GTK+ newer than %d.%d.%d. The latest version of\n",
+        printf("*** You need a version of GTK+ newer than %u.%u.%u. The latest version of\n",
 	       major, minor, micro);
         printf("*** GTK+ is always available from ftp://ftp.gtk.org.\n");
         printf("***\n");
