@@ -523,7 +523,8 @@ gtk_tool_item_group_dispose (GObject *object)
     }
 
   g_clear_object (&priv->settings);
-  gtk_widget_destroy (priv->header);
+  if (priv->header)
+    gtk_widget_destroy (priv->header);
   g_clear_object (&priv->header);
 
   G_OBJECT_CLASS (gtk_tool_item_group_parent_class)->dispose (object);
