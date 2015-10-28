@@ -99,10 +99,18 @@ gtk_inspector_object_hierarchy_set_object (GtkInspectorObjectHierarchy *oh,
     }
   while ((type = g_type_parent (type)));
 
+  if (g_hash_table_size (interfaces) > 0)
+    {
+      gtk_tree_store_append (oh->priv->model, &iter, NULL);
+      gtk_tree_store_set (oh->priv->model, &iter,
+                          COLUMN_OBJECT_NAME, "GInterface",
+                          -1);
+      parent = iter;
+    }
   g_hash_table_iter_init (&hit, interfaces);
   while (g_hash_table_iter_next (&hit, (gpointer *)&class_name, NULL))
     {
-      gtk_tree_store_append (oh->priv->model, &iter, NULL);
+      gtk_tree_store_append (oh->priv->model, &iter, &parent);
       gtk_tree_store_set (oh->priv->model, &iter,
                           COLUMN_OBJECT_NAME, class_name,
                           -1);
