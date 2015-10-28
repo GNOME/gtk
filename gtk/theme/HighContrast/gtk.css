@@ -2558,7 +2558,7 @@ infobar {
 /************
  * Tooltips *
  ************/
-tooltip {
+.tooltip {
   color: white;
   padding: 4px;
   /* not working */
@@ -2566,7 +2566,7 @@ tooltip {
   background-color: rgba(0, 0, 0, 0.8);
   text-shadow: 0 1px black; }
 
-tooltip * {
+.tooltip * {
   padding: 4px;
   background-color: transparent;
   color: inherit; }
