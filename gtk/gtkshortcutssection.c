@@ -355,7 +355,7 @@ gtk_shortcuts_section_init (GtkShortcutsSection *self)
                                  "no-show-all", TRUE,
                                  NULL);
   gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (self->switcher)), "round");
-  gtk_style_context_remove_class (gtk_widget_get_style_context (GTK_WIDGET (self->switcher)), "linked");
+  gtk_style_context_remove_class (gtk_widget_get_style_context (GTK_WIDGET (self->switcher)), GTK_STYLE_CLASS_LINKED);
 
   self->show_all = gtk_button_new_with_mnemonic (_("_Show All"));
   gtk_widget_set_no_show_all (self->show_all, TRUE);

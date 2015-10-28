@@ -743,12 +743,12 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
 
   label = gtk_label_new (_("Shortcuts"));
   gtk_widget_show (label);
-  gtk_style_context_add_class (gtk_widget_get_style_context (label), "title");
+  gtk_style_context_add_class (gtk_widget_get_style_context (label), GTK_STYLE_CLASS_TITLE);
   gtk_stack_add_named (priv->title_stack, label, "title");
 
   label = gtk_label_new (_("Search Results"));
   gtk_widget_show (label);
-  gtk_style_context_add_class (gtk_widget_get_style_context (label), "title");
+  gtk_style_context_add_class (gtk_widget_get_style_context (label), GTK_STYLE_CLASS_TITLE);
   gtk_stack_add_named (priv->title_stack, label, "search");
 
   priv->menu_button = g_object_new (GTK_TYPE_MENU_BUTTON,
@@ -855,7 +855,7 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
                         "halign", GTK_ALIGN_CENTER,
                         "valign", GTK_ALIGN_CENTER,
                         NULL);
-  gtk_style_context_add_class (gtk_widget_get_style_context (empty), "dim-label");
+  gtk_style_context_add_class (gtk_widget_get_style_context (empty), GTK_STYLE_CLASS_DIM_LABEL);
   gtk_grid_attach (GTK_GRID (empty),
                    g_object_new (GTK_TYPE_IMAGE,
                                  "visible", TRUE,
