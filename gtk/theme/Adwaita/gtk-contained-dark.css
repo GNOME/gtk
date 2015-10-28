@@ -4649,18 +4649,18 @@ decoration {
   background-origin: content-box;
   background-position: right center; }
 
-GtkShortcutsWindow .round .button, GtkShortcutsWindow .round .header-bar .button.titlebutton, .header-bar GtkShortcutsWindow .round .button.titlebutton,
-GtkShortcutsWindow .round .titlebar .button.titlebutton,
-.titlebar GtkShortcutsWindow .round .button.titlebutton {
+shortcutswindow .round .button, shortcutswindow .round .header-bar .button.titlebutton, .header-bar shortcutswindow .round .button.titlebutton,
+shortcutswindow .round .titlebar .button.titlebutton,
+.titlebar shortcutswindow .round .button.titlebutton {
   border-radius: 20px;
   outline-radius: 20px; }
 
-GtkShortcutsWindow .round .button label, GtkShortcutsWindow .round .header-bar .button.titlebutton label, .header-bar GtkShortcutsWindow .round .button.titlebutton label,
-GtkShortcutsWindow .round .titlebar .button.titlebutton label,
-.titlebar GtkShortcutsWindow .round .button.titlebutton label {
+shortcutswindow .round .button label, shortcutswindow .round .header-bar .button.titlebutton label, .header-bar shortcutswindow .round .button.titlebutton label,
+shortcutswindow .round .titlebar .button.titlebutton label,
+.titlebar shortcutswindow .round .button.titlebutton label {
   padding: 0; }
 
-GtkShortcutsWindow GtkShortcutLabel .frame {
+shortcutswindow GtkShortcutLabel .frame {
   background-color: #fefefe;
   border: 1px solid #cecece;
   border-radius: 5px;

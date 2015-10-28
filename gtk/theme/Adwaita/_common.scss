@@ -3438,16 +3438,16 @@ decoration {
   }
 }
 
-GtkShortcutsWindow .round .button {
+shortcutswindow .round .button {
   border-radius: 20px;
   outline-radius: 20px;
 }
 
-GtkShortcutsWindow .round .button label {
+shortcutswindow .round .button label {
   padding: 0;
 }
 
-GtkShortcutsWindow GtkShortcutLabel .frame {
+shortcutswindow GtkShortcutLabel .frame {
   background-color: #fefefe;
   border: 1px solid #cecece;
   border-radius: 5px;
