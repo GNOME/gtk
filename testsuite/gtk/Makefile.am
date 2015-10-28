@@ -41,6 +41,7 @@ TEST_PROGS += 			\
 	cellarea		\
 	check-icon-names	\
 	clipboard		\
+	cssprovider		\
 	defaultvalue		\
 	entry			\
 	expander		\
