@@ -188,11 +188,11 @@ GtkTextView {
   gtk-key-bindings: gtk-mac-alt-arrows, gtk-mac-alt-delete, gtk-mac-cmd-c, gtk-mac-text-view;
 }
 
-GtkEntry {
+entry {
   gtk-key-bindings: gtk-mac-alt-arrows, gtk-mac-alt-delete, gtk-mac-cmd-c, gtk-mac-entry;
 }
 
-GtkLabel {
+label {
   gtk-key-bindings: gtk-mac-alt-arrows, gtk-mac-label;
 }
 

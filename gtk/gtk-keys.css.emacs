@@ -104,7 +104,7 @@
   bind "<ctrl>b" { "move-current" (parent) };
 }
 
-GtkEntry {
+entry {
   gtk-key-bindings: gtk-emacs-text-entry;
 }
 
