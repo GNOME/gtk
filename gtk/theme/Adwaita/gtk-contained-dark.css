@@ -70,7 +70,7 @@
   .view:backdrop {
     color: #d5d5d5;
     background-color: #2c2c2c; }
-  .view:selected, GtkCalendar:selected {
+  .view:selected, calendar:selected {
     border-radius: 3px; }
 
 .rubberband, GtkTreeView.view.rubberband, .content-view.rubberband {
@@ -1178,8 +1178,8 @@ notebook tab .titlebar .button.titlebutton,
 .app-notification.frame .titlebar .button.titlebutton:insensitive,
 .titlebar .app-notification.frame .button.titlebutton:insensitive,
 .app-notification.frame .button.flat:backdrop:insensitive,
-.app-notification.frame .sidebar-button.button:backdrop:insensitive, GtkCalendar.button, .header-bar GtkCalendar.button.titlebutton,
-.titlebar GtkCalendar.button.titlebutton, GtkCalendar.button:hover, GtkCalendar.button:backdrop, GtkCalendar.button:insensitive, .scale-popup .button:hover, .scale-popup .button:backdrop, .scale-popup .button:backdrop:hover, .scale-popup .button:backdrop:insensitive {
+.app-notification.frame .sidebar-button.button:backdrop:insensitive, calendar.button, .header-bar calendar.button.titlebutton,
+.titlebar calendar.button.titlebutton, calendar.button:hover, calendar.button:backdrop, calendar.button:insensitive, .scale-popup .button:hover, .scale-popup .button:backdrop, .scale-popup .button:backdrop:hover, .scale-popup .button:backdrop:insensitive {
   border-color: transparent;
   background-color: transparent;
   background-image: none;
@@ -2807,7 +2807,7 @@ switch {
 .view.check, .view.radio,
 .list-row .check, list-row .radio {
   icon-shadow: none; }
-  .view.check:selected, GtkCalendar.check:selected, .view.check:hover, .view.radio:selected, GtkCalendar.radio:selected, .view.radio:hover,
+  .view.check:selected, calendar.check:selected, .view.check:hover, .view.radio:selected, calendar.radio:selected, .view.radio:hover,
   .list-row .check:selected,
   .list-row .check:hover, list-row .radio:selected, list-row .radio:hover {
     icon-shadow: none; }
@@ -3705,32 +3705,32 @@ separator {
 /************
  * Calendar *
  ***********/
-GtkCalendar {
+calendar {
   color: white;
   border: 1px solid #1c1f1f; }
-  GtkCalendar.header {
+  calendar.header {
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 0; }
-    GtkCalendar.header:backdrop {
+    calendar.header:backdrop {
       border-color: rgba(0, 0, 0, 0.1); }
-  GtkCalendar.button, .header-bar GtkCalendar.button.titlebutton,
-  .titlebar GtkCalendar.button.titlebutton {
+  calendar.button, .header-bar calendar.button.titlebutton,
+  .titlebar calendar.button.titlebutton {
     color: rgba(238, 238, 236, 0.45); }
-    GtkCalendar.button:hover, .header-bar GtkCalendar.button.titlebutton:hover,
-    .titlebar GtkCalendar.button.titlebutton:hover {
+    calendar.button:hover, .header-bar calendar.button.titlebutton:hover,
+    .titlebar calendar.button.titlebutton:hover {
       color: #eeeeec; }
-    GtkCalendar.button:backdrop, .header-bar GtkCalendar.button.titlebutton:backdrop,
-    .titlebar GtkCalendar.button.titlebutton:backdrop {
+    calendar.button:backdrop, .header-bar calendar.button.titlebutton:backdrop,
+    .titlebar calendar.button.titlebutton:backdrop {
       color: rgba(148, 151, 150, 0.45); }
-    GtkCalendar.button:insensitive, .header-bar GtkCalendar.button.titlebutton:insensitive,
-    .titlebar GtkCalendar.button.titlebutton:insensitive {
+    calendar.button:insensitive, .header-bar calendar.button.titlebutton:insensitive,
+    .titlebar calendar.button.titlebutton:insensitive {
       color: rgba(148, 151, 150, 0.45); }
-  GtkCalendar:inconsistent, GtkCalendar:inconsistent:backdrop {
+  calendar:inconsistent, calendar:inconsistent:backdrop {
     color: alpha(currentColor,0.55); }
-  GtkCalendar.highlight, GtkCalendar.highlight:backdrop {
+  calendar.highlight, calendar.highlight:backdrop {
     font-size: smaller;
     color: #eeeeec; }
-  GtkCalendar:backdrop {
+  calendar:backdrop {
     color: #d5d5d5;
     border-color: #1f2222; }
 
@@ -4342,17 +4342,17 @@ decoration {
   .titlebar.selection-mode .titlebutton.button:backdrop {
     icon-shadow: none; }
 
-.view:selected, GtkCalendar:selected, label:selected, label:selected:focus, label:selected:hover, .grid-child:selected, entry:selected, entry:selected:focus, .menuitem.button.flat:selected, .menuitem.sidebar-button.button:selected, .header-bar .menuitem.titlebutton.button:selected,
+.view:selected, calendar:selected, label:selected, label:selected:focus, label:selected:hover, .grid-child:selected, entry:selected, entry:selected:focus, .menuitem.button.flat:selected, .menuitem.sidebar-button.button:selected, .header-bar .menuitem.titlebutton.button:selected,
 .titlebar .menuitem.titlebutton.button:selected, .list-row:selected, .sidebar:selected {
   background-color: #215d9c;
   color: #ffffff; }
-  .view:insensitive:selected, GtkCalendar:insensitive:selected, label:insensitive:selected, .grid-child:insensitive:selected, entry:insensitive:selected, .menuitem.button.flat:insensitive:selected, .menuitem.sidebar-button.button:insensitive:selected, .header-bar .menuitem.titlebutton.button:insensitive:selected,
+  .view:insensitive:selected, calendar:insensitive:selected, label:insensitive:selected, .grid-child:insensitive:selected, entry:insensitive:selected, .menuitem.button.flat:insensitive:selected, .menuitem.sidebar-button.button:insensitive:selected, .header-bar .menuitem.titlebutton.button:insensitive:selected,
   .titlebar .menuitem.titlebutton.button:insensitive:selected, .list-row:insensitive:selected, .sidebar:insensitive:selected, GtkPlacesSidebar.sidebar .list-row:selected:insensitive label {
     color: #90aece; }
-  .view:backdrop:selected, GtkCalendar:backdrop:selected, label:backdrop:selected, .grid-child:backdrop:selected, entry:backdrop:selected, .menuitem.button.flat:backdrop:selected, .menuitem.sidebar-button.button:backdrop:selected, .header-bar .menuitem.titlebutton.button:backdrop:selected,
+  .view:backdrop:selected, calendar:backdrop:selected, label:backdrop:selected, .grid-child:backdrop:selected, entry:backdrop:selected, .menuitem.button.flat:backdrop:selected, .menuitem.sidebar-button.button:backdrop:selected, .header-bar .menuitem.titlebutton.button:backdrop:selected,
   .titlebar .menuitem.titlebutton.button:backdrop:selected, .list-row:backdrop:selected, .sidebar:backdrop:selected {
     color: #ffffff; }
-    .view:backdrop:insensitive:selected, GtkCalendar:backdrop:insensitive:selected, label:backdrop:insensitive:selected, .grid-child:backdrop:insensitive:selected, entry:backdrop:insensitive:selected, .menuitem.button.flat:backdrop:insensitive:selected, .menuitem.sidebar-button.button:backdrop:insensitive:selected, .header-bar .menuitem.titlebutton.button:backdrop:insensitive:selected,
+    .view:backdrop:insensitive:selected, calendar:backdrop:insensitive:selected, label:backdrop:insensitive:selected, .grid-child:backdrop:insensitive:selected, entry:backdrop:insensitive:selected, .menuitem.button.flat:backdrop:insensitive:selected, .menuitem.sidebar-button.button:backdrop:insensitive:selected, .header-bar .menuitem.titlebutton.button:backdrop:insensitive:selected,
     .titlebar .menuitem.titlebutton.button:backdrop:insensitive:selected, .list-row:backdrop:insensitive:selected, .sidebar:backdrop:insensitive:selected, GtkPlacesSidebar.sidebar .list-row:selected:insensitive label:backdrop, GtkPlacesSidebar.sidebar .list-row:selected:backdrop:insensitive label {
       color: #648eba; }
 
