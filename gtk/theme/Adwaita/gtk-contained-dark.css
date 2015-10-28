@@ -4660,7 +4660,7 @@ shortcutswindow .round .titlebar .button.titlebutton label,
 .titlebar shortcutswindow .round .button.titlebutton label {
   padding: 0; }
 
-shortcutswindow GtkShortcutLabel .frame {
+.frame.keycap {
   background-color: #fefefe;
   border: 1px solid #cecece;
   border-radius: 5px;

@@ -175,6 +175,7 @@ display_shortcut (GtkContainer    *self,
         gtk_container_add (self, dim_label ("+"));
 
       frame = gtk_frame_new (NULL);
+      gtk_style_context_add_class (gtk_widget_get_style_context (frame), "keycap");
       gtk_widget_show (frame);
 
       gtk_container_add (self, frame);
