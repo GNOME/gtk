@@ -508,11 +508,9 @@ gtk_private_h_sources =		\
 	gtksearchenginemodel.h	\
 	gtksearchentryprivate.h \
 	gtkselectionprivate.h	\
-	gtksidebarrowprivate.h	\
 	gtksettingsprivate.h	\
-	gtkshortcutsgestureprivate.h	\
 	gtkshortcutlabelprivate.h	\
-	gtkshortcutsshortcutprivate.h	\
+	gtksidebarrowprivate.h	\
 	gtksizegroup-private.h	\
 	gtksizerequestcacheprivate.h	\
 	gtksocketprivate.h	\
