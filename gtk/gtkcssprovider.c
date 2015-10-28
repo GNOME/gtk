@@ -1740,7 +1740,11 @@ gtk_css_provider_get_style_property (GtkStyleProvider *provider,
                                                  val->section,
                                                  val->section != NULL ? gtk_css_section_get_file (val->section) : NULL,
                                                  val->value);
+                  if (!val->section)
+                    gtk_css_scanner_push_section (scanner, GTK_CSS_SECTION_VALUE);
                   found = _gtk_css_style_funcs_parse_value (value, scanner->parser);
+                  if (!val->section)
+                    gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_VALUE);
                   gtk_css_scanner_destroy (scanner);
 	          break;
                 }
