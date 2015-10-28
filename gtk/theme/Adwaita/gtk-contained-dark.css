@@ -4649,15 +4649,13 @@ decoration {
   background-origin: content-box;
   background-position: right center; }
 
-shortcutswindow .round .button, shortcutswindow .round .header-bar .button.titlebutton, .header-bar shortcutswindow .round .button.titlebutton,
-shortcutswindow .round .titlebar .button.titlebutton,
-.titlebar shortcutswindow .round .button.titlebutton {
+.button.circular, .header-bar .circular.button.titlebutton,
+.titlebar .circular.button.titlebutton {
   border-radius: 20px;
   outline-radius: 20px; }
 
-shortcutswindow .round .button label, shortcutswindow .round .header-bar .button.titlebutton label, .header-bar shortcutswindow .round .button.titlebutton label,
-shortcutswindow .round .titlebar .button.titlebutton label,
-.titlebar shortcutswindow .round .button.titlebutton label {
+.button.circular label, .header-bar .circular.button.titlebutton label,
+.titlebar .circular.button.titlebutton label {
   padding: 0; }
 
 .frame.keycap {
