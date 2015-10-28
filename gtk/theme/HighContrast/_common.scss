@@ -2039,7 +2039,7 @@ GtkExpander {
 /************
  * Calendar *
  ***********/
-GtkCalendar {
+calendar {
   border: 1px solid $borders_color;
   &:selected {
     @extend .view:selected;

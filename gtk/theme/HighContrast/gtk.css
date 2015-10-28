@@ -753,7 +753,7 @@ entry {
 .list-row.activatable:backdrop:insensitive:active,
 .list-row.activatable:backdrop:insensitive:checked,
 .list-row.activatable:insensitive:active,
-.list-row.activatable:insensitive:checked, GtkCalendar.button, GtkCalendar.button:hover, GtkCalendar.button:backdrop, GtkCalendar.button:backdrop:hover {
+.list-row.activatable:insensitive:checked, calendar.button, calendar.button:hover, calendar.button:backdrop, calendar.button:backdrop:hover {
   border-color: transparent;
   background-color: transparent;
   background-image: none;
@@ -2067,11 +2067,11 @@ GtkLevelBar.vertical {
     .level-bar.fill-block.empty-fill-block:backdrop {
       border-color: rgba(0, 0, 0, 0.15); }
 
-.view:selected, GtkCalendar:selected, .view:selected:focus, GtkCalendar:focus:selected, .view:selected:hover, GtkCalendar:hover:selected, label:selected, label:selected:focus, label:selected:hover, label:backdrop:selected, entry:selected, entry:selected:focus, .menuitem.button.flat:hover, .menuitem.sidebar-button.button:hover, .menuitem.button.flat:selected, .menuitem.sidebar-button.button:selected, .list-row.activatable:selected, .sidebar:selected, GtkPlacesSidebar.sidebar .view:selected, GtkPlacesSidebar.sidebar GtkCalendar:selected {
+.view:selected, calendar:selected, .view:selected:focus, calendar:focus:selected, .view:selected:hover, calendar:hover:selected, label:selected, label:selected:focus, label:selected:hover, label:backdrop:selected, entry:selected, entry:selected:focus, .menuitem.button.flat:hover, .menuitem.sidebar-button.button:hover, .menuitem.button.flat:selected, .menuitem.sidebar-button.button:selected, .list-row.activatable:selected, .sidebar:selected, GtkPlacesSidebar.sidebar .view:selected, GtkPlacesSidebar.sidebar calendar:selected {
   background-color: #000;
   color: #fff;
   outline-color: rgba(255, 255, 255, 0.3); }
-  .view:backdrop:selected, GtkCalendar:backdrop:selected, GtkCalendar:backdrop:focus:selected, GtkCalendar:backdrop:hover:selected, label:backdrop:selected, entry:backdrop:selected, .menuitem.button.flat:backdrop:hover, .menuitem.sidebar-button.button:backdrop:hover, .menuitem.button.flat:backdrop:selected, .menuitem.sidebar-button.button:backdrop:selected, .list-row.activatable:backdrop:selected, .sidebar:backdrop:selected, GtkPlacesSidebar.sidebar .view:backdrop:selected, GtkPlacesSidebar.sidebar GtkCalendar:backdrop:selected {
+  .view:backdrop:selected, calendar:backdrop:selected, calendar:backdrop:focus:selected, calendar:backdrop:hover:selected, label:backdrop:selected, entry:backdrop:selected, .menuitem.button.flat:backdrop:hover, .menuitem.sidebar-button.button:backdrop:hover, .menuitem.button.flat:backdrop:selected, .menuitem.sidebar-button.button:backdrop:selected, .list-row.activatable:backdrop:selected, .sidebar:backdrop:selected, GtkPlacesSidebar.sidebar .view:backdrop:selected, GtkPlacesSidebar.sidebar calendar:backdrop:selected {
     background-color: gray;
     color: #fff; }
 
@@ -2189,26 +2189,26 @@ GtkExpander {
 /************
  * Calendar *
  ***********/
-GtkCalendar {
+calendar {
   border: 1px solid gray; }
-  GtkCalendar.button {
+  calendar.button {
     padding: 0 4px;
     color: #999999; }
-    GtkCalendar.button:hover {
+    calendar.button:hover {
       color: #000; }
-    GtkCalendar.button:backdrop, GtkCalendar.button:backdrop:hover {
+    calendar.button:backdrop, calendar.button:backdrop:hover {
       color: gray; }
-  GtkCalendar.view {
+  calendar.view {
     border-radius: 2px; }
-  GtkCalendar.header {
+  calendar.header {
     background: linear-gradient(to bottom, white, #fafafa);
     border-bottom-color: silver; }
-    GtkCalendar.header:backdrop {
+    calendar.header:backdrop {
       background-image: linear-gradient(to bottom, #fff);
       border-bottom-color: #c6c6c6; }
-  GtkCalendar:inconsistent, GtkCalendar:inconsistent:backdrop {
+  calendar:inconsistent, calendar:inconsistent:backdrop {
     color: alpha(currentColor,0.55); }
-  GtkCalendar.highlight, GtkCalendar.highlight:backdrop {
+  calendar.highlight, calendar.highlight:backdrop {
     color: #000; }
 
 /***********
