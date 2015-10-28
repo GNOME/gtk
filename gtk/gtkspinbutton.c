@@ -736,11 +736,8 @@ gtk_spin_button_finalize (GObject *object)
 
   gtk_spin_button_unset_adjustment (spin_button);
 
-  if (priv->down_panel_context)
-    g_object_unref (priv->down_panel_context);
-
-  if (priv->up_panel_context)
-    g_object_unref (priv->up_panel_context);
+  g_clear_object (&priv->up_panel_context);
+  g_clear_object (&priv->down_panel_context);
 
   g_object_unref (priv->swipe_gesture);
 
