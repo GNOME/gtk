@@ -4320,21 +4320,21 @@ infobar {
 /************
  * Tooltips *
  ************/
-tooltip {
+.tooltip {
   color: white;
   padding: 4px;
   /* not working */
   border-radius: 5px;
   box-shadow: none;
   text-shadow: 0 1px black; }
-  tooltip.background {
+  .tooltip.background {
     background-color: rgba(0, 0, 0, 0.8);
     background-clip: padding-box;
     border: 1px solid rgba(255, 255, 255, 0.1); }
-  tooltip decoration.csd {
+  .tooltip decoration.csd {
     background-color: transparent; }
 
-tooltip * {
+.tooltip * {
   padding: 4px;
   background-color: transparent;
   color: inherit; }
