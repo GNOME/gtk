@@ -45,7 +45,7 @@
  *
  * The #GtkViewport widget acts as an adaptor class, implementing
  * scrollability for child widgets that lack their own scrolling
- * capabilities. Use #GtkViewport to scroll child widgets such as
+ * capabilities. Use GtkViewport to scroll child widgets such as
  * #GtkGrid, #GtkBox, and so on.
  *
  * If a widget has native scrolling abilities, such as #GtkTextView,
@@ -56,8 +56,12 @@
  * implement #GtkScrollable is added to a #GtkScrolledWindow, so you can
  * ignore the presence of the viewport.
  *
- * The #GtkViewport will start scrolling content only if allocated less
+ * The GtkViewport will start scrolling content only if allocated less
  * than the child widget’s minimum size in a given orientation.
+ *
+ * # CSS nodes
+ *
+ * GtkViewport has a single CSS node with name viewport.
  */
 
 struct _GtkViewportPrivate
@@ -179,6 +183,8 @@ gtk_viewport_class_init (GtkViewportClass *class)
 						      GTK_TYPE_SHADOW_TYPE,
 						      GTK_SHADOW_IN,
 						      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
+  gtk_widget_class_set_css_name (widget_class, "viewport");
 }
 
 static void
