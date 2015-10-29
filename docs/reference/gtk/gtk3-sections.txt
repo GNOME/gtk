@@ -1433,6 +1433,25 @@ gtk_file_chooser_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkfilechoosernative</FILE>
+<TITLE>GtkFileChooserNative</TITLE>
+gtk_file_chooser_native_new
+gtk_file_chooser_native_get_accept_label
+gtk_file_chooser_native_set_accept_label
+gtk_file_chooser_native_get_cancel_label
+gtk_file_chooser_native_set_cancel_label
+<SUBSECTION Standard>
+GTK_FILE_CHOOSER_NATIVE
+GTK_IS_FILE_CHOOSER_NATIVE
+GTK_TYPE_FILE_CHOOSER_NATIVE
+GTK_FILE_CHOOSER_NATIVE_CLASS
+GTK_IS_FILE_CHOOSER_NATIVE_CLASS
+GTK_FILE_CHOOSER_NATIVE_GET_CLASS
+<SUBSECTION Private>
+gtk_file_chooser_native_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkfilechooserdialog</FILE>
 <TITLE>GtkFileChooserDialog</TITLE>
 GtkFileChooserDialog

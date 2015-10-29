@@ -97,6 +97,7 @@
 #include <gtk/gtkfilechooser.h>
 #include <gtk/gtkfilechooserbutton.h>
 #include <gtk/gtkfilechooserdialog.h>
+#include <gtk/gtkfilechoosernative.h>
 #include <gtk/gtkfilechooserwidget.h>
 #include <gtk/gtkfilefilter.h>
 #include <gtk/gtkflowbox.h>

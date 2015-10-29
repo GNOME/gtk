@@ -1,0 +1,778 @@
+/* -*- Mode: C; c-file-style: "gnu"; tab-width: 8 -*- */
+/* GTK - The GIMP Toolkit
+ * gtkfilechoosernativewin32.c: Win32 Native File selector dialog
+ * Copyright (C) 2015, Red Hat, Inc.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include "config.h"
+
+#include "gtkfilechoosernativeprivate.h"
+#include "gtknativedialogprivate.h"
+
+#include "gtkprivate.h"
+#include "gtkfilechooserdialog.h"
+#include "gtkfilechooserprivate.h"
+#include "gtkfilechooserwidget.h"
+#include "gtkfilechooserwidgetprivate.h"
+#include "gtkfilechooserutils.h"
+#include "gtkfilechooserembed.h"
+#include "gtkfilesystem.h"
+#include "gtksizerequest.h"
+#include "gtktypebuiltins.h"
+#include "gtkintl.h"
+#include "gtksettings.h"
+#include "gtktogglebutton.h"
+#include "gtkstylecontext.h"
+#include "gtkheaderbar.h"
+#include "gtklabel.h"
+#include "gtkfilechooserentry.h"
+#include "gtkfilefilterprivate.h"
+
+/* Vista or newer */
+#define _WIN32_WINNT 0x0600
+#define WINVER _WIN32_WINNT
+#define NTDDI_VERSION NTDDI_VISTA
+#define COBJMACROS
+
+#include "win32/gdkwin32.h"
+#include <shlobj.h>
+#include <windows.h>
+
+typedef struct {
+  GtkFileChooserNative *self;
+  IFileDialogEvents *events;
+
+  HWND parent;
+  gboolean skip_response;
+  gboolean save;
+  gboolean folder;
+  gboolean modal;
+  gboolean overwrite_confirmation;
+  gboolean select_multiple;
+  gboolean show_hidden;
+
+  char *accept_label;
+  char *cancel_label;
+  char *title;
+
+  GSList *shortcut_uris;
+
+  GFile *current_folder;
+  GFile *current_file;
+  char *current_name;
+
+  COMDLG_FILTERSPEC *filters;
+
+  GSList *files;
+  int response;
+} FilechooserWin32ThreadData;
+
+static void
+g_warning_hr (const char *msg, HRESULT hr)
+{
+  char *errmsg;
+  errmsg = g_win32_error_message (hr);
+  g_warning ("%s: %s\n", msg, errmsg);
+  g_free (errmsg);
+}
+
+/* {3CAFD12E-82AE-4184-8309-848C0104B4DC} */
+static const GUID myIID_IFileDialogEvents =
+{ 0x3cafd12e, 0x82ae, 0x4184, { 0x83, 0x9, 0x84, 0x8c, 0x1, 0x4, 0xb4, 0xdc } };
+
+/* Protects access to dialog_hwnd, do_close and ref_count */
+G_LOCK_DEFINE_STATIC(FileDialogEvents);
+
+typedef struct {
+  IFileDialogEvents iFileDialogEvents;
+  int ref_count;
+  gboolean enable_owner;
+  gboolean got_hwnd;
+  HWND dialog_hwnd;
+  gboolean do_close; /* Set if hide was called before dialog_hwnd was set */
+} FileDialogEvents;
+
+
+static ULONG STDMETHODCALLTYPE
+ifiledialogevents_AddRef (IFileDialogEvents *self)
+{
+  FileDialogEvents *events = (FileDialogEvents *)self;
+  ULONG ref_count;
+
+  G_LOCK (FileDialogEvents);
+  ref_count = ++events->ref_count;
+  G_UNLOCK (FileDialogEvents);
+
+  return ref_count;
+}
+
+static ULONG STDMETHODCALLTYPE
+ifiledialogevents_Release (IFileDialogEvents *self)
+{
+  FileDialogEvents *events = (FileDialogEvents *)self;
+  int ref_count;
+
+  G_LOCK (FileDialogEvents);
+  ref_count = --events->ref_count;
+  G_UNLOCK (FileDialogEvents);
+
+  if (ref_count == 0)
+    g_free (self);
+
+  return ref_count;
+}
+
+static HRESULT STDMETHODCALLTYPE
+ifiledialogevents_QueryInterface (IFileDialogEvents *self,
+                                  REFIID       riid,
+                                  LPVOID      *ppvObject)
+{
+  if (IsEqualIID (riid, &IID_IUnknown) ||
+      IsEqualIID (riid, &myIID_IFileDialogEvents))
+    {
+      *ppvObject = self;
+      IUnknown_AddRef ((IUnknown *)self);
+      return NOERROR;
+    }
+  else
+    {
+      *ppvObject = NULL;
+      return E_NOINTERFACE;
+    }
+}
+
+static HRESULT STDMETHODCALLTYPE
+ifiledialogevents_OnFileOk (IFileDialogEvents *self,
+                            IFileDialog *pfd)
+{
+  return S_OK;
+}
+
+static HRESULT STDMETHODCALLTYPE
+ifiledialogevents_OnFolderChanging (IFileDialogEvents *self,
+                                    IFileDialog *pfd,
+                                    IShellItem *psiFolder)
+{
+  return S_OK;
+}
+
+static HRESULT STDMETHODCALLTYPE
+ifiledialogevents_OnFolderChange (IFileDialogEvents *self,
+                                  IFileDialog *pfd)
+{
+  FileDialogEvents *events = (FileDialogEvents *)self;
+  IOleWindow *olew = NULL;
+  HWND dialog_hwnd;
+  HRESULT hr;
+
+  if (!events->got_hwnd)
+    {
+      events->got_hwnd = TRUE;
+
+      hr = IFileDialog_QueryInterface (pfd, &IID_IOleWindow, &olew);
+      if (SUCCEEDED (hr))
+        {
+          hr = IOleWindow_GetWindow (olew, &dialog_hwnd);
+          if (SUCCEEDED (hr))
+            {
+              G_LOCK (FileDialogEvents);
+              events->dialog_hwnd = dialog_hwnd;
+              if (events->do_close)
+                SendMessage (events->dialog_hwnd, WM_CLOSE, 0, 0);
+              G_UNLOCK (FileDialogEvents);
+            }
+          else
+            g_warning_hr ("Can't get HWND", hr);
+
+          hr = IOleWindow_Release (olew);
+          if (FAILED (hr))
+            g_warning_hr ("Can't unref IOleWindow", hr);
+        }
+      else
+        g_warning_hr ("Can't get IOleWindow", hr);
+
+      if (events->enable_owner && events->dialog_hwnd)
+        {
+          HWND owner = GetWindow (events->dialog_hwnd, GW_OWNER);
+          if (owner)
+            EnableWindow (owner, TRUE);
+        }
+    }
+
+  return S_OK;
+}
+
+static HRESULT STDMETHODCALLTYPE
+ifiledialogevents_OnSelectionChange (IFileDialogEvents * self,
+                                     IFileDialog *pfd)
+{
+  return S_OK;
+}
+
+static HRESULT STDMETHODCALLTYPE
+ifiledialogevents_OnShareViolation (IFileDialogEvents * self,
+                                    IFileDialog *pfd,
+                                    IShellItem *psi,
+                                    FDE_SHAREVIOLATION_RESPONSE *pResponse)
+{
+  return E_NOTIMPL;
+}
+
+static HRESULT STDMETHODCALLTYPE
+ifiledialogevents_OnTypeChange (IFileDialogEvents * self,
+                                IFileDialog *pfd)
+{
+  return S_OK;
+}
+
+static HRESULT STDMETHODCALLTYPE
+ifiledialogevents_OnOverwrite (IFileDialogEvents * self,
+                               IFileDialog *pfd,
+                               IShellItem *psi,
+                               FDE_OVERWRITE_RESPONSE *pResponse)
+{
+  return E_NOTIMPL;
+}
+
+static IFileDialogEventsVtbl ifde_vtbl = {
+  ifiledialogevents_QueryInterface,
+  ifiledialogevents_AddRef,
+  ifiledialogevents_Release,
+  ifiledialogevents_OnFileOk,
+  ifiledialogevents_OnFolderChanging,
+  ifiledialogevents_OnFolderChange,
+  ifiledialogevents_OnSelectionChange,
+  ifiledialogevents_OnShareViolation,
+  ifiledialogevents_OnTypeChange,
+  ifiledialogevents_OnOverwrite
+};
+
+file_dialog_events_send_close (IFileDialogEvents *self)
+{
+  FileDialogEvents *events = (FileDialogEvents *)self;
+
+  G_LOCK (FileDialogEvents);
+
+  if (events->dialog_hwnd)
+    SendMessage (events->dialog_hwnd, WM_CLOSE, 0, 0);
+  else
+    events->do_close = TRUE;
+
+  G_UNLOCK (FileDialogEvents);
+}
+
+static IFileDialogEvents *
+file_dialog_events_new (gboolean enable_owner)
+{
+  FileDialogEvents *events;
+
+  events = g_new0 (FileDialogEvents, 1);
+  events->iFileDialogEvents.lpVtbl = &ifde_vtbl;
+  events->ref_count = 1;
+  events->enable_owner = enable_owner;
+
+  return &events->iFileDialogEvents;
+}
+
+static void
+filechooser_win32_thread_data_free (FilechooserWin32ThreadData *data)
+{
+  int i;
+  if (data->filters)
+    {
+      for (i = 0; data->filters[i].pszName != NULL; i++)
+        {
+          g_free ((char *)data->filters[i].pszName);
+          g_free ((char *)data->filters[i].pszSpec);
+        }
+      g_free (data->filters);
+    }
+
+  if (data->events)
+    IFileDialogEvents_Release (data->events);
+
+  g_clear_object (&data->current_folder);
+  g_clear_object (&data->current_file);
+  g_free (data->current_name);
+
+  g_slist_free_full (data->shortcut_uris, g_free);
+  g_slist_free_full (data->files, g_object_unref);
+  if (data->self)
+    g_object_unref (data->self);
+  g_free (data->accept_label);
+  g_free (data->cancel_label);
+  g_free (data->title);
+  g_free (data);
+}
+
+static gboolean
+filechooser_win32_thread_done (gpointer _data)
+{
+  FilechooserWin32ThreadData *data = _data;
+  GtkFileChooserNative *self = data->self;
+
+  self->mode_data = NULL;
+
+  if (!data->skip_response)
+    {
+      g_slist_free_full (self->custom_files, g_object_unref);
+      self->custom_files = data->files;
+      data->files = NULL;
+
+      _gtk_native_dialog_emit_response (GTK_NATIVE_DIALOG (data->self),
+                                        data->response);
+    }
+
+  filechooser_win32_thread_data_free (data);
+
+  return FALSE;
+}
+
+static void
+data_add_shell_item (FilechooserWin32ThreadData *data,
+                     IShellItem *item)
+{
+  HRESULT hr;
+  PWSTR urlw = NULL;
+  char *url;
+
+  hr = IShellItem_GetDisplayName (item, SIGDN_URL, &urlw);
+  if (SUCCEEDED (hr))
+    {
+      url = g_utf16_to_utf8 (urlw, -1, NULL, NULL, NULL);
+      CoTaskMemFree (urlw);
+      data->files = g_slist_prepend (data->files, g_file_new_for_uri (url));
+      data->response = GTK_RESPONSE_ACCEPT;
+      g_free (url);
+    }
+}
+
+static IShellItem *
+get_shell_item_for_uri (const char *uri)
+{
+  IShellItem *item;
+  HRESULT hr;
+  gunichar2 *uri_w = g_utf8_to_utf16 (uri, -1, NULL, NULL, NULL);
+
+  hr = SHCreateItemFromParsingName(uri_w, 0, &IID_IShellItem, &item);
+  if (SUCCEEDED (hr))
+    return item;
+  else
+    g_warning_hr ("Can't create shell item from shortcut", hr);
+
+  return NULL;
+}
+
+static IShellItem *
+get_shell_item_for_file (GFile *file)
+{
+  char *uri;
+  IShellItem *item;
+
+  uri = g_file_get_uri (file);
+  item = get_shell_item_for_uri (uri);
+  g_free (uri);
+
+  return item;
+}
+
+static gpointer
+filechooser_win32_thread (gpointer _data)
+{
+  FilechooserWin32ThreadData *data = _data;
+  HRESULT hr;
+  IFileDialog *pfd = NULL;
+  IFileDialog2 *pfd2 = NULL;
+  gboolean res = FALSE;
+  DWORD flags;
+  HWND parent = NULL;
+  HWND dialog_hwnd;
+  GtkWindow *transient_for;
+  DWORD cookie;
+  GSList *l;
+
+  CoInitializeEx (NULL, COINIT_APARTMENTTHREADED);
+
+  if (data->save && !data->folder)
+    hr = CoCreateInstance (&CLSID_FileSaveDialog,
+                           NULL, CLSCTX_INPROC_SERVER,
+                           &IID_IFileSaveDialog, &pfd);
+  else
+    hr = CoCreateInstance (&CLSID_FileOpenDialog,
+                           NULL, CLSCTX_INPROC_SERVER,
+                           &IID_IFileOpenDialog, &pfd);
+
+  if (FAILED (hr))
+    g_error ("Can't create FileOpenDialog: %s\n", g_win32_error_message (hr));
+
+  hr = IFileDialog_GetOptions (pfd, &flags);
+  if (FAILED (hr))
+    g_error ("Can't get FileDialog options: %s\n", g_win32_error_message (hr));
+
+  flags |= FOS_FORCEFILESYSTEM;
+
+  if (data->folder)
+    flags |= FOS_PICKFOLDERS;
+
+  if (data->folder && data->save)
+    flags &= ~(FOS_FILEMUSTEXIST);
+
+  if (data->select_multiple)
+    flags |= FOS_ALLOWMULTISELECT;
+
+  if (data->show_hidden)
+    flags |= FOS_FORCESHOWHIDDEN;
+
+  if (data->overwrite_confirmation)
+    flags |= FOS_OVERWRITEPROMPT;
+  else
+    flags &= ~(FOS_OVERWRITEPROMPT);
+
+  hr = IFileDialog_SetOptions (pfd, flags);
+  if (FAILED (hr))
+    g_error ("Can't set FileDialog options: %s\n", g_win32_error_message (hr));
+
+  if (data->title)
+    {
+      gunichar2 *label = g_utf8_to_utf16 (data->title, -1,
+                                        NULL, NULL, NULL);
+      IFileDialog_SetTitle (pfd, label);
+      g_free (label);
+    }
+
+  if (data->accept_label)
+    {
+      gunichar2 *label = g_utf8_to_utf16 (data->accept_label, -1,
+                                        NULL, NULL, NULL);
+      IFileDialog_SetOkButtonLabel (pfd, label);
+      g_free (label);
+    }
+
+  if (data->cancel_label)
+    {
+      gunichar2 *label = g_utf8_to_utf16 (data->cancel_label, -1,
+                                        NULL, NULL, NULL);
+      hr = IFileDialog_QueryInterface (pfd, &IID_IFileDialog2, &pfd2);
+      if (SUCCEEDED (hr))
+        {
+          IFileDialog2_SetCancelButtonLabel (pfd2, label);
+          IFileDialog2_Release (pfd2);
+        }
+      g_free (label);
+    }
+
+  for (l = data->shortcut_uris; l != NULL; l = l->next)
+    {
+      IShellItem *item = get_shell_item_for_uri (l->data);
+      if (item)
+        {
+          hr = IFileDialog_AddPlace (pfd, item, FDAP_BOTTOM);
+          if (FAILED (hr))
+            g_warning_hr ("Can't add dialog shortcut", hr);
+          IShellItem_Release (item);
+        }
+    }
+
+  if (data->current_file)
+    {
+      IFileSaveDialog *pfsd;
+      hr = IFileDialog_QueryInterface (pfd, &IID_IFileSaveDialog, &pfsd);
+      if (SUCCEEDED (hr))
+        {
+          IShellItem *item = get_shell_item_for_file (data->current_file);
+          if (item)
+            {
+              hr = IFileSaveDialog_SetSaveAsItem (pfsd, item);
+              if (FAILED (hr))
+                g_warning_hr ("Can't set save as item", hr);
+              IShellItem_Release (item);
+            }
+          IFileSaveDialog_Release (pfsd);
+        }
+    }
+
+  if (data->current_folder)
+    {
+      IShellItem *item = get_shell_item_for_file (data->current_folder);
+      if (item)
+        {
+          hr = IFileDialog_SetFolder (pfd, item);
+          if (FAILED (hr))
+            g_warning_hr ("Can't set folder", hr);
+          IShellItem_Release (item);
+        }
+    }
+
+  if (data->current_name)
+    {
+      gunichar2 *name = g_utf8_to_utf16 (data->current_name, -1, NULL, NULL, NULL);
+      hr = IFileDialog_SetFileName (pfd, name);
+      if (FAILED (hr))
+        g_warning_hr ("Can't set file name", hr);
+      g_free (name);
+    }
+
+  if (data->filters)
+    {
+      int n;
+      for (n = 0; data->filters[n].pszName != NULL; n++)
+        {}
+      hr = IFileDialog_SetFileTypes (pfd, n, data->filters);
+      if (FAILED (hr))
+        g_warning_hr ("Can't set file types", hr);
+    }
+
+  data->response = GTK_RESPONSE_CANCEL;
+
+  hr = IFileDialog_Advise (pfd, data->events, &cookie);
+  if (FAILED (hr))
+    g_error ("Can't Advise FileDialog: %s\n", g_win32_error_message (hr));
+
+  hr = IFileDialog_Show (pfd, data->parent);
+  if (SUCCEEDED (hr))
+    {
+      IFileOpenDialog *pfod = NULL;
+      hr = IFileDialog_QueryInterface (pfd,&IID_IFileOpenDialog, &pfod);
+
+      if (SUCCEEDED (hr))
+        {
+          IShellItemArray *res;
+          DWORD i, count;
+
+          hr = IFileOpenDialog_GetResults (pfod, &res);
+          if (FAILED (hr))
+            g_error ("Can't get FileOpenDialog results: %s\n", g_win32_error_message (hr));
+
+          hr = IShellItemArray_GetCount (res, &count);
+          if (FAILED (hr))
+            g_error ("Can't get FileOpenDialog count: %s\n", g_win32_error_message (hr));
+
+          for (i = 0; i < count; i++)
+            {
+              IShellItem *item;
+              hr = IShellItemArray_GetItemAt (res, i, &item);
+              if (FAILED (hr))
+                g_error ("Can't get item at %d: %s\n", i, g_win32_error_message (hr));
+              data_add_shell_item (data, item);
+              IShellItem_Release (item);
+            }
+          IShellItemArray_Release (res);
+
+          IFileOpenDialog_Release (pfod);
+        }
+      else
+        {
+          IShellItem *item;
+          hr = IFileDialog_GetResult (pfd, &item);
+          if (FAILED (hr))
+            g_error ("Can't get FileDialog result: %s\n", g_win32_error_message (hr));
+
+          data_add_shell_item (data, item);
+          IShellItem_Release (item);
+        }
+    }
+
+  hr = IFileDialog_Unadvise (pfd, cookie);
+  if (FAILED (hr))
+    g_error ("Can't Unadvise FileDialog: %s\n", g_win32_error_message (hr));
+
+  IFileDialog_Release ((IUnknown *)pfd);
+
+  g_main_context_invoke (NULL,
+                         filechooser_win32_thread_done,
+                         data);
+
+  return NULL;
+}
+
+static gboolean
+file_filter_to_win32 (GtkFileFilter *filter,
+                      COMDLG_FILTERSPEC *spec)
+{
+  const char *name;
+  char **patterns;
+  char *pattern_list;
+
+  patterns = _gtk_file_filter_get_as_patterns (filter);
+  if (patterns == NULL)
+    return FALSE;
+
+  pattern_list = g_strjoinv (";", patterns);
+  g_strfreev (patterns);
+
+  name = gtk_file_filter_get_name (filter);
+  if (name == NULL)
+    name = pattern_list;
+  spec->pszName = g_utf8_to_utf16 (name, -1, NULL, NULL, NULL);
+  spec->pszSpec = g_utf8_to_utf16 (pattern_list, -1, NULL, NULL, NULL);
+
+  g_free (pattern_list);
+
+  return TRUE;
+}
+
+static char *
+translate_mnemonics (const char *src)
+{
+  GString *s;
+  const char *p;
+  char c;
+
+  if (src == NULL)
+    return NULL;
+
+  s = g_string_sized_new (strlen (src));
+
+  for (p = src; *p; p++)
+    {
+      c = *p;
+      switch (c)
+        {
+        case '_':
+          /* __ is _ escaped */
+          if (*(p+1) == '_')
+            {
+              g_string_append_c (s, '_');
+              p++;
+            }
+          else
+            g_string_append_c (s, '&');
+          break;
+        case '&':
+          /* Win32 needs ampersands escaped */
+          g_string_append (s, "&&");
+        default:
+          g_string_append_c (s, c);
+        }
+    }
+
+  return g_string_free (s, FALSE);
+}
+
+gboolean
+gtk_file_chooser_native_win32_show (GtkFileChooserNative *self)
+{
+  GThread *thread;
+  FilechooserWin32ThreadData *data;
+  GtkWindow *transient_for;
+  GtkFileChooserAction action;
+  guint update_preview_signal;
+  GSList *filters, *l;
+  int n_filters, i;
+  COMDLG_FILTERSPEC *win32_filters;
+
+  if (gtk_file_chooser_get_extra_widget (GTK_FILE_CHOOSER (self)) != NULL)
+    return FALSE;
+
+  update_preview_signal = g_signal_lookup ("update-preview", GTK_TYPE_FILE_CHOOSER);
+  if (g_signal_has_handler_pending (self, update_preview_signal, 0, TRUE))
+    return FALSE;
+
+  data = g_new0 (FilechooserWin32ThreadData, 1);
+
+  filters = gtk_file_chooser_list_filters (GTK_FILE_CHOOSER (self));
+  n_filters = g_slist_length (filters);
+  if (n_filters > 0)
+    {
+      data->filters = g_new0 (COMDLG_FILTERSPEC, n_filters + 1);
+
+      for (l = filters, i = 0; l != NULL; l = l->next, i++)
+        {
+          if (!file_filter_to_win32 (l->data, &data->filters[i]))
+            {
+              filechooser_win32_thread_data_free (data);
+              return FALSE;
+            }
+        }
+    }
+
+  self->mode_data = data;
+  data->self = g_object_ref (self);
+
+  data->shortcut_uris =
+    gtk_file_chooser_list_shortcut_folder_uris (GTK_FILE_CHOOSER (self->dialog));
+
+  data->accept_label = translate_mnemonics (self->accept_label);
+  data->cancel_label = translate_mnemonics (self->cancel_label);
+
+  action = gtk_file_chooser_get_action (GTK_FILE_CHOOSER (self->dialog));
+  if (action == GTK_FILE_CHOOSER_ACTION_SAVE ||
+      action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
+    data->save = TRUE;
+
+  if (action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
+      action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
+    data->folder = TRUE;
+
+  if ((action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
+       action == GTK_FILE_CHOOSER_ACTION_OPEN) &&
+      gtk_file_chooser_get_select_multiple (GTK_FILE_CHOOSER (self->dialog)))
+    data->select_multiple = TRUE;
+
+  if (gtk_file_chooser_get_do_overwrite_confirmation (GTK_FILE_CHOOSER (self->dialog)))
+    data->overwrite_confirmation = TRUE;
+
+  if (gtk_file_chooser_get_show_hidden (GTK_FILE_CHOOSER (self->dialog)))
+    data->show_hidden = TRUE;
+
+  transient_for = gtk_native_dialog_get_transient_for (GTK_NATIVE_DIALOG (self));
+  if (transient_for)
+    {
+      gtk_widget_realize (GTK_WIDGET (transient_for));
+      data->parent = gdk_win32_window_get_handle (gtk_widget_get_window (GTK_WIDGET (transient_for)));
+
+      if (gtk_native_dialog_get_modal (GTK_NATIVE_DIALOG (self)))
+        data->modal = TRUE;
+    }
+
+  data->title =
+    g_strdup (gtk_native_dialog_get_title (GTK_NATIVE_DIALOG (self)));
+
+  if (self->current_file)
+    data->current_file = g_object_ref (self->current_file);
+  else
+    {
+      if (self->current_folder)
+        data->current_folder = g_object_ref (self->current_folder);
+
+      if (action == GTK_FILE_CHOOSER_ACTION_SAVE ||
+          action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
+        data->current_name = g_strdup (self->current_name);
+    }
+
+  data->events = file_dialog_events_new (!data->modal);
+
+  thread = g_thread_new ("win32 filechooser", filechooser_win32_thread, data);
+  if (thread == NULL)
+    {
+      filechooser_win32_thread_data_free (data);
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
+void
+gtk_file_chooser_native_win32_hide (GtkFileChooserNative *self)
+{
+  FilechooserWin32ThreadData *data = self->mode_data;
+
+  /* This is always set while dialog visible */
+  g_assert (data != NULL);
+
+  data->skip_response = TRUE;
+  file_dialog_events_send_close (data->events);
+}

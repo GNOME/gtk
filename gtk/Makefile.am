@@ -180,6 +180,7 @@ gtk_public_h_sources = 		\
 	gtkfilechooser.h	\
 	gtkfilechooserbutton.h	\
 	gtkfilechooserdialog.h	\
+	gtkfilechoosernative.h	\
 	gtkfilechooserwidget.h	\
 	gtkfilefilter.h		\
 	gtkfixed.h		\
@@ -440,6 +441,7 @@ gtk_private_h_sources =		\
 	gtkfilechooserembed.h	\
 	gtkfilechooserentry.h	\
 	gtkfilechooserprivate.h	\
+	gtkfilechoosernativeprivate.h	\
 	gtkfilechooserwidgetprivate.h	\
 	gtkfilechooserutils.h	\
 	gtkfilefilterprivate.h	\
@@ -696,6 +698,7 @@ gtk_base_c_sources = 		\
 	gtkfilechooserdialog.c	\
 	gtkfilechooserembed.c	\
 	gtkfilechooserentry.c	\
+	gtkfilechoosernative.c	\
 	gtkfilechooserutils.c	\
 	gtkfilechooserwidget.c	\
 	gtkfilefilter.c		\
@@ -940,6 +943,7 @@ endif
 gtk_os_win32_c_sources = \
 	gtkprint-win32.c		\
 	gtkprintoperation-win32.c	\
+	gtkfilechoosernativewin32.c	\
 	gtkwin32.c
 if OS_WIN32
 gtk_private_h_sources += gtkprint-win32.h
