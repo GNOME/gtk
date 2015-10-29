@@ -1466,8 +1466,8 @@ gtk_assistant_remove (GtkContainer *container,
       assistant->priv->content != NULL &&
       gtk_widget_get_parent (box) == assistant->priv->content)
     {
-      container = (GtkContainer *) assistant->priv->content;
-      gtk_container_remove (container, box);
+      gtk_container_remove (GTK_CONTAINER (box), page);
+      gtk_container_remove (GTK_CONTAINER (assistant->priv->content), box);
     }
 }
 
