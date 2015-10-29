@@ -150,7 +150,15 @@ gtk_places_view_row_set_property (GObject      *object,
 
     case PROP_MOUNT:
       g_set_object (&self->mount, g_value_get_object (value));
-      gtk_widget_set_visible (GTK_WIDGET (self->eject_button), self->mount != NULL);
+
+      /*
+       * When we hide the eject button, no size is allocated for it. Since
+       * we want to have alignment between rows, it needs an empty space
+       * when the eject button is not available. So, call then
+       * gtk_widget_set_child_visible(), which makes the button allocate the
+       * size but it stays hidden when needed.
+       */
+      gtk_widget_set_child_visible (GTK_WIDGET (self->eject_button), self->mount != NULL);
       break;
 
     case PROP_FILE:
@@ -322,4 +330,12 @@ gtk_places_view_row_set_is_network (GtkPlacesViewRow *row,
       gtk_image_set_from_icon_name (row->eject_icon, "media-eject-symbolic", GTK_ICON_SIZE_BUTTON);
       gtk_widget_set_tooltip_text (GTK_WIDGET (row->eject_button), is_network ? _("Disconnect") : _("Unmount"));
     }
+}
+
+void
+gtk_places_view_row_set_path_size_group (GtkPlacesViewRow *row,
+                                         GtkSizeGroup     *group)
+{
+  if (group)
+    gtk_size_group_add_widget (group, GTK_WIDGET (row->path_label));
 }
