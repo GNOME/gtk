@@ -3197,6 +3197,37 @@ get_entry_node (GtkWidget *widget)
   return gtk_widget_get_css_node (widget);
 }
 
+static void
+update_node_ordering (GtkEntry *entry)
+{
+  GtkEntryPrivate *priv = entry->priv;
+  EntryIconInfo *icon_info;
+  GtkEntryIconPosition icon_pos;
+  GtkCssNode *sibling, *parent;
+
+  if (priv->progress_node)
+    {
+      parent = gtk_css_node_get_parent (priv->progress_node);
+      sibling = gtk_css_node_get_last_child (parent);
+      if (priv->progress_node != sibling)
+        gtk_css_node_insert_after (parent, priv->progress_node, sibling);
+    }
+
+  if (gtk_widget_get_direction (GTK_WIDGET (entry)) == GTK_TEXT_DIR_RTL)
+    icon_pos = GTK_ENTRY_ICON_SECONDARY;
+  else
+    icon_pos = GTK_ENTRY_ICON_PRIMARY;
+
+  icon_info = priv->icons[icon_pos];
+  if (icon_info && icon_info->css_node)
+    {
+      parent = gtk_css_node_get_parent (icon_info->css_node);
+      sibling = gtk_css_node_get_first_child (parent);
+      if (icon_info->css_node != sibling)
+        gtk_css_node_insert_before (parent, icon_info->css_node, sibling);
+    }
+}
+
 static EntryIconInfo*
 construct_icon_info (GtkWidget            *widget,
                      GtkEntryIconPosition  icon_pos)
@@ -3221,6 +3252,8 @@ construct_icon_info (GtkWidget            *widget,
   update_icon_state (widget, icon_pos);
   update_icon_style (widget, icon_pos);
   g_object_unref (icon_info->css_node);
+
+  update_node_ordering (entry);
 
   if (gtk_widget_get_realized (widget))
     realize_icon_info (widget, icon_pos);
@@ -3827,14 +3860,14 @@ get_progress_area (GtkWidget *widget,
   context = gtk_widget_get_style_context (widget);
   _gtk_entry_get_borders (entry, &entry_borders);
   get_text_area_size (entry,
-                      NULL, NULL,
+                      x, y,
                       &text_area_width, &text_area_height);
   get_frame_size (entry, FALSE,
                   NULL, NULL,
                   &frame_width, NULL);
 
-  *x = 0;
-  *y = 0;
+  *x -= entry_borders.left;
+  *y -= entry_borders.top;
   *width = text_area_width + entry_borders.left + entry_borders.right;
   *height = text_area_height + entry_borders.top + entry_borders.bottom;
 
@@ -5021,6 +5054,8 @@ gtk_entry_direction_changed (GtkWidget        *widget,
 
   update_icon_style (widget, GTK_ENTRY_ICON_PRIMARY);
   update_icon_style (widget, GTK_ENTRY_ICON_SECONDARY);
+
+  update_node_ordering (entry);
 
   GTK_WIDGET_CLASS (gtk_entry_parent_class)->direction_changed (widget, previous_dir);
 }
@@ -10674,6 +10709,8 @@ gtk_entry_ensure_progress_node (GtkEntry *entry)
   gtk_css_node_set_parent (priv->progress_node, widget_node);
   gtk_css_node_set_state (priv->progress_node, gtk_css_node_get_state (widget_node));
   g_object_unref (priv->progress_node);
+
+  update_node_ordering (entry);
 }
 
 static void

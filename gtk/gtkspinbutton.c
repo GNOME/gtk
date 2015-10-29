@@ -80,6 +80,14 @@
  * See the #GtkAdjustment section for more details about an adjustment's
  * properties.
  *
+ * # CSS nodes
+ *
+ * GtkSpinButtons main CSS node has the name spinbutton. It creates subnodes
+ * for the entry and the two buttons, with these names. The button nodes have
+ * the style classes .up and .down. The GtkEntry subnodes (if present) are put
+ * below the entry node. The orientation of the spin button is reflected in
+ * the .vertical or .horizontal style class on the main node.
+ *
  * ## Using a GtkSpinButton to get an integer
  *
  * |[<!-- language="C" -->
@@ -750,7 +758,6 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
 {
   GtkSpinButtonPrivate *priv;
   GtkCssNode *widget_node;
-  GtkStyleContext *context;
 
   spin_button->priv = gtk_spin_button_get_instance_private (spin_button);
   priv = spin_button->priv;
@@ -774,11 +781,11 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
 
   priv->orientation = GTK_ORIENTATION_HORIZONTAL;
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (spin_button));
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_SPINBUTTON);
   _gtk_orientable_set_style_classes (GTK_ORIENTABLE (spin_button));
 
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (spin_button));
+  gtk_css_node_add_class (widget_node, g_quark_from_static_string (GTK_STYLE_CLASS_ENTRY));
+
   priv->entry_node = gtk_css_node_new ();
   gtk_css_node_set_name (priv->entry_node, I_("entry"));
   gtk_css_node_set_parent (priv->entry_node, widget_node);
@@ -788,16 +795,16 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
 
   priv->down_node = gtk_css_node_new ();
   gtk_css_node_set_name (priv->down_node, I_("button"));
-  gtk_css_node_add_class (priv->down_node, g_quark_from_static_string (GTK_STYLE_CLASS_BUTTON));
   gtk_css_node_set_parent (priv->down_node, widget_node);
+  gtk_css_node_add_class (priv->down_node, g_quark_from_static_string ("down"));
   gtk_css_node_set_state (priv->down_node, gtk_css_node_get_state (widget_node));
   g_signal_connect_object (priv->down_node, "style-changed", G_CALLBACK (node_style_changed_cb), spin_button, 0);
   g_object_unref (priv->down_node);
 
   priv->up_node = gtk_css_node_new ();
   gtk_css_node_set_name (priv->up_node, I_("button"));
-  gtk_css_node_add_class (priv->up_node, g_quark_from_static_string (GTK_STYLE_CLASS_BUTTON));
   gtk_css_node_set_parent (priv->up_node, widget_node);
+  gtk_css_node_add_class (priv->up_node, g_quark_from_static_string ("up"));
   gtk_css_node_set_state (priv->up_node, gtk_css_node_get_state (widget_node));
   g_signal_connect_object (priv->up_node, "style-changed", G_CALLBACK (node_style_changed_cb), spin_button, 0);
   g_object_unref (priv->up_node);
@@ -1266,12 +1273,8 @@ gtk_spin_button_get_preferred_width (GtkWidget *widget,
   GtkSpinButton *spin_button = GTK_SPIN_BUTTON (widget);
   GtkSpinButtonPrivate *priv = spin_button->priv;
   GtkEntry *entry = GTK_ENTRY (widget);
-  GtkStyleContext *context;
 
-  context = gtk_widget_get_style_context (widget);
-  gtk_style_context_save_to_node (context, priv->entry_node);
   GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->get_preferred_width (widget, minimum, natural);
-  gtk_style_context_restore (context);
 
   if (gtk_entry_get_width_chars (entry) < 0)
     {
@@ -1329,15 +1332,11 @@ gtk_spin_button_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
 {
   GtkSpinButton *spin_button = GTK_SPIN_BUTTON (widget);
   GtkSpinButtonPrivate *priv = spin_button->priv;
-  GtkStyleContext *context;
 
-  context = gtk_widget_get_style_context (widget);
-  gtk_style_context_save_to_node (context, priv->entry_node);
   GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->get_preferred_height_and_baseline_for_width (widget, width,
 												minimum, natural,
 												minimum_baseline,
 												natural_baseline);
-  gtk_style_context_restore (context);
 
   if (priv->orientation == GTK_ORIENTATION_VERTICAL)
     {
@@ -1372,14 +1371,10 @@ gtk_spin_button_size_allocate (GtkWidget     *widget,
   GtkSpinButton *spin = GTK_SPIN_BUTTON (widget);
   GtkSpinButtonPrivate *priv = spin->priv;
   GtkAllocation down_panel_allocation, up_panel_allocation;
-  GtkStyleContext *context;
 
   gtk_widget_set_allocation (widget, allocation);
 
-  context = gtk_widget_get_style_context (widget);
-  gtk_style_context_save_to_node (context, priv->entry_node);
   GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->size_allocate (widget, allocation);
-  gtk_style_context_restore (context);
 
   gtk_spin_button_panel_get_allocations (spin, &down_panel_allocation, &up_panel_allocation);
 
@@ -1407,13 +1402,8 @@ gtk_spin_button_draw (GtkWidget *widget,
 {
   GtkSpinButton *spin = GTK_SPIN_BUTTON (widget);
   GtkSpinButtonPrivate *priv = spin->priv;
-  GtkStyleContext *context;
 
-  context = gtk_widget_get_style_context (widget);
-
-  gtk_style_context_save_to_node (context, priv->entry_node);
   GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->draw (widget, cr);
-  gtk_style_context_restore (context);
 
   /* Draw the buttons */
   gtk_spin_button_panel_draw (spin, cr, priv->down_panel);
