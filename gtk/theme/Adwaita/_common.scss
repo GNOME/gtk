@@ -2502,7 +2502,7 @@ GtkProgressBar {
 }
 
 GtkScrolledWindow {
-  GtkViewport.frame { // avoid double borders when viewport inside
+  viewport.frame { // avoid double borders when viewport inside
                       // scrolled window
     border-style: none;
   }

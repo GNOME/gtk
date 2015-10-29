@@ -3863,7 +3863,7 @@ GtkProgressBar {
     padding: 6px;
     border-width: 1px 0 0; }
 
-GtkScrolledWindow GtkViewport.frame {
+GtkScrolledWindow viewport.frame {
   border-style: none; }
 
 separator {
