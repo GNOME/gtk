@@ -791,9 +791,9 @@ GtkColorButton.button {
  * GtkSpinButton *
  *****************/
 
-.spinbutton {
+spinbutton {
   &:not(.vertical) {
-    .button {
+    button {
       background-image: none;
       border-style: none none none solid;
       border-color: transparentize($borders_color, 0.7);
@@ -828,7 +828,7 @@ GtkColorButton.button {
 
   // OSD horizontal
   .osd &:not(.vertical) {
-    .button {
+     button {
       @include button(undecorated);
       color: $osd_fg_color;
       border-style: none none none solid;
@@ -866,7 +866,7 @@ GtkColorButton.button {
 
   // Vertical
   &.vertical {
-    .button {
+    button {
       padding-top: 8px;    //  Same vertical padding as image-buttons
       padding-bottom: 8px; //
       &:first-child {
@@ -910,7 +910,7 @@ GtkColorButton.button {
   }
 
   // OSD vertical
-  .osd &.vertical .button:first-child {
+  .osd &.vertical button:first-child {
     @include button(osd);
     &:hover { @include button(osd-hover);}
     &:active { @include button(osd-active); }

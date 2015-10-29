@@ -3178,6 +3178,25 @@ update_icon_state (GtkWidget            *widget,
   gtk_css_node_set_state (icon_info->css_node, state);
 }
 
+static GtkCssNode *
+get_entry_node (GtkWidget *widget)
+{
+  if (GTK_IS_SPIN_BUTTON (widget))
+    {
+      const gchar *name;
+      GtkCssNode *node;
+
+      name = I_("entry");
+      node = gtk_css_node_get_first_child (gtk_widget_get_css_node (widget));
+      do {
+        if (gtk_css_node_get_name (node) == name)
+          return node;
+      } while ((node = gtk_css_node_get_next_sibling (node)) != NULL);
+    }
+
+  return gtk_widget_get_css_node (widget);
+}
+
 static EntryIconInfo*
 construct_icon_info (GtkWidget            *widget,
                      GtkEntryIconPosition  icon_pos)
@@ -3195,7 +3214,7 @@ construct_icon_info (GtkWidget            *widget,
   icon_info->icon_helper = _gtk_icon_helper_new ();
   _gtk_icon_helper_set_force_scale_pixbuf (icon_info->icon_helper, TRUE);
 
-  widget_node = gtk_widget_get_css_node (widget);
+  widget_node = get_entry_node (widget);
   icon_info->css_node = gtk_css_node_new ();
   gtk_css_node_set_name (icon_info->css_node, I_("image"));
   gtk_css_node_set_parent (icon_info->css_node, widget_node);
@@ -3771,21 +3790,20 @@ gtk_entry_draw_frame (GtkWidget       *widget,
    * width equals widget->window's width
    * http://bugzilla.gnome.org/show_bug.cgi?id=466000
    */
-  if (GTK_IS_SPIN_BUTTON (widget))
+  if (GTK_IS_SPIN_BUTTON (widget) &&
+      gtk_orientable_get_orientation (GTK_ORIENTABLE (widget)) == GTK_ORIENTATION_VERTICAL)
     {
       GtkBorder borders;
 
-      gtk_entry_get_text_area_size (GTK_ENTRY (widget), &x, NULL, &width, NULL);
+      gtk_entry_get_text_area_size (GTK_ENTRY (widget), NULL, &y, NULL, &height);
       _gtk_entry_get_borders (GTK_ENTRY (widget), &borders);
 
-      x -= borders.left;
-      width += borders.left + borders.right;
+      y -= borders.top;
+      height += borders.top + borders.bottom;
     }
 
-  gtk_render_background (context, cr,
-                         x, y, width, height);
-  gtk_render_frame (context, cr,
-		    x, y, width, height);
+  gtk_render_background (context, cr, x, y, width, height);
+  gtk_render_frame (context, cr, x, y, width, height);
 
   gtk_entry_draw_progress (widget, context, cr);
 
@@ -3913,8 +3931,7 @@ gtk_entry_draw (GtkWidget *widget,
   GtkEntryPrivate *priv = entry->priv;
   int i;
 
-  if (gtk_cairo_should_draw_window (cr,
-                                    gtk_widget_get_window (widget)))
+  if (gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)))
     {
       context = gtk_widget_get_style_context (widget);
 
@@ -10651,7 +10668,7 @@ gtk_entry_ensure_progress_node (GtkEntry *entry)
   if (priv->progress_node)
     return;
 
-  widget_node = gtk_widget_get_css_node (GTK_WIDGET (entry));
+  widget_node = get_entry_node (GTK_WIDGET (entry));
   priv->progress_node = gtk_css_node_new ();
   gtk_css_node_set_name (priv->progress_node, I_("progress"));
   gtk_css_node_set_parent (priv->progress_node, widget_node);
