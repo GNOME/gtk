@@ -1357,20 +1357,20 @@ gtk_tree_model_filter_check_ancestors (GtkTreeModelFilter *filter,
   int *indices = gtk_tree_path_get_indices (path);
   FilterElt *elt;
   FilterLevel *level;
-  GtkTreeIter c_iter, tmp_iter;
+  GtkTreeIter c_iter, tmp_iter, *root_iter;
 
   level = FILTER_LEVEL (filter->priv->root);
 
   if (!level)
     return;
 
-  if (filter->priv->virtual_root)
-    gtk_tree_model_get_iter (filter->priv->child_model, &c_iter,
-                             filter->priv->virtual_root);
-
-  tmp_iter = c_iter;
+  root_iter = NULL;
+  if (filter->priv->virtual_root &&
+      gtk_tree_model_get_iter (filter->priv->child_model, &tmp_iter,
+                               filter->priv->virtual_root))
+    root_iter = &tmp_iter;
   gtk_tree_model_iter_nth_child (filter->priv->child_model, &c_iter,
-                                 filter->priv->virtual_root ? &tmp_iter : NULL,
+                                 root_iter,
                                  indices[i]);
 
   while (i < gtk_tree_path_get_depth (path) - 1)
