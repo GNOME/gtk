@@ -1883,7 +1883,7 @@ build_file_list_from_uris (const gchar **uris)
   gint i;
 
   result = NULL;
-  for (i = 0; uris[i]; i++)
+  for (i = 0; uris && uris[i]; i++)
     {
       GFile *file;
 
