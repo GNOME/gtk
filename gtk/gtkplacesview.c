@@ -72,6 +72,8 @@ struct _GtkPlacesViewPrivate
   GtkWidget                     *network_placeholder;
   GtkWidget                     *network_placeholder_label;
 
+  GtkSizeGroup                  *path_size_group;
+
   GtkEntryCompletion            *address_entry_completion;
   GtkListStore                  *completion_store;
 
@@ -406,6 +408,7 @@ gtk_places_view_finalize (GObject *object)
   g_clear_object (&priv->volume_monitor);
   g_clear_object (&priv->cancellable);
   g_clear_object (&priv->networks_fetching_cancellable);
+  g_clear_object (&priv->path_size_group);
 
   G_OBJECT_CLASS (gtk_places_view_parent_class)->finalize (object);
 }
@@ -673,6 +676,8 @@ insert_row (GtkPlacesView *view,
                     "clicked",
                     G_CALLBACK (on_eject_button_clicked),
                     row);
+
+  gtk_places_view_row_set_path_size_group (GTK_PLACES_VIEW_ROW (row), priv->path_size_group);
 
   gtk_container_add (GTK_CONTAINER (priv->listbox), row);
 }
@@ -2254,6 +2259,7 @@ gtk_places_view_init (GtkPlacesView *self)
 
   priv->volume_monitor = g_volume_monitor_get ();
   priv->open_flags = GTK_PLACES_OPEN_NORMAL;
+  priv->path_size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
 
   gtk_widget_init_template (GTK_WIDGET (self));
 }

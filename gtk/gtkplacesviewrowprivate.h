@@ -24,6 +24,7 @@
 #endif
 
 #include "gtkwidget.h"
+#include "gtksizegroup.h"
 #include "gtklistbox.h"
 
 G_BEGIN_DECLS
@@ -52,6 +53,9 @@ gboolean           gtk_places_view_row_get_is_network            (GtkPlacesViewR
 
 void               gtk_places_view_row_set_is_network            (GtkPlacesViewRow   *row,
                                                                   gboolean            is_network);
+
+void               gtk_places_view_row_set_path_size_group       (GtkPlacesViewRow   *row,
+                                                                  GtkSizeGroup       *group);
 
 G_END_DECLS
 
