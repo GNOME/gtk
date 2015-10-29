@@ -219,7 +219,7 @@ spinner {
  * Text Entries *
  ****************/
 
-entry, .entry {
+entry, spinbutton {
   border: 1px solid;
   padding: 5px 8px 6px;
 
@@ -307,7 +307,7 @@ entry, .entry {
   > entry:focus:not(:last-child) { box-shadow: entry_focus_shadow(); }
 
   // brighter border between linked entries
-  > entry:not(:insensitive) + .entry:not(:insensitive) {
+  > entry:not(:insensitive) + entry:not(:insensitive) {
     border-top-color: mix($borders_color, $base_color, 30%);
     background-image: linear-gradient(to bottom, $base_color);
     &:backdrop {
@@ -891,13 +891,6 @@ spinbutton {
         }
       }
       &:last-child { @extend %bottom_button; }
-    }
-    &.entry {
-      // we should remove the bottom edge hilight here, but seems
-      // like buttons are on top of it so it doesn't show up
-      border-radius: 0;
-      padding-left: 3px;
-      padding-right: 3px;
     }
     %top_button {
       border-radius: 3px 3px 0 0;
@@ -3321,7 +3314,7 @@ decoration {
  *********************/
 
 //touch selection handlebars for the Popover.osd above
-.entry.cursor-handle,
+entry.cursor-handle,
 .cursor-handle {
   background-color: transparent;
   background-image: none;

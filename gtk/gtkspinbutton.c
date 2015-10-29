@@ -784,7 +784,6 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   _gtk_orientable_set_style_classes (GTK_ORIENTABLE (spin_button));
 
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (spin_button));
-  gtk_css_node_add_class (widget_node, g_quark_from_static_string (GTK_STYLE_CLASS_ENTRY));
 
   priv->entry_node = gtk_css_node_new ();
   gtk_css_node_set_name (priv->entry_node, I_("entry"));
