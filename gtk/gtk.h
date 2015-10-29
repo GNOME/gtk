@@ -144,6 +144,7 @@
 #include <gtk/gtkmodelbutton.h>
 #include <gtk/gtkmodules.h>
 #include <gtk/gtkmountoperation.h>
+#include <gtk/gtknativedialog.h>
 #include <gtk/gtknotebook.h>
 #include <gtk/gtkoffscreenwindow.h>
 #include <gtk/gtkorientable.h>

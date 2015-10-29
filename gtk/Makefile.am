@@ -229,6 +229,7 @@ gtk_public_h_sources = 		\
 	gtkmodelbutton.h	\
 	gtkmodules.h		\
 	gtkmountoperation.h	\
+	gtknativedialog.h	\
 	gtknotebook.h		\
 	gtkoffscreenwindow.h	\
 	gtkorientable.h		\
@@ -481,6 +482,7 @@ gtk_private_h_sources =		\
 	gtkmodifierstyle.h	\
 	gtkmodulesprivate.h	\
 	gtkmountoperationprivate.h \
+	gtknativedialogprivate.h \
 	gtkorientableprivate.h	\
 	gtkpango.h		\
 	gtkpathbar.h		\
@@ -760,6 +762,7 @@ gtk_base_c_sources = 		\
 	gtkmodifierstyle.c	\
 	gtkmodules.c		\
 	gtkmountoperation.c	\
+	gtknativedialog.c	\
 	gtknotebook.c		\
 	gtkoffscreenwindow.c	\
 	gtkorientable.c		\

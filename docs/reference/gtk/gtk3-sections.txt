@@ -2494,6 +2494,27 @@ gtk_misc_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtknativedialog</FILE>
+<TITLE>GtkNativeDialog</TITLE>
+GTK_TYPE_NATIVE_DIALOG
+GtkNativeDialogClass
+gtk_native_dialog_show
+gtk_native_dialog_hide
+gtk_native_dialog_get_visible
+gtk_native_dialog_set_modal
+gtk_native_dialog_get_modal
+gtk_native_dialog_set_title
+gtk_native_dialog_get_title
+gtk_native_dialog_set_transient_for
+gtk_native_dialog_get_transient_for
+gtk_native_dialog_run
+<SUBSECTION Standard>
+GtkNativeDialog
+<SUBSECTION Private>
+gtk_native_dialog_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtknotebook</FILE>
 <TITLE>GtkNotebook</TITLE>
 GtkNotebook
