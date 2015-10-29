@@ -56,6 +56,10 @@
  * The following example shows you how to create a more complex search
  * entry.
  *
+ * # CSS nodes
+ *
+ * GtkSearchBar has a single CSS node with name searchbar.
+ *
  * ## Creating a search bar
  *
  * [A simple example](https://git.gnome.org/browse/gtk+/tree/examples/search-bar.c)
@@ -421,6 +425,8 @@ gtk_search_bar_class_init (GtkSearchBarClass *klass)
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkSearchBar, revealer);
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkSearchBar, box_center);
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkSearchBar, close_button);
+
+  gtk_widget_class_set_css_name (widget_class, "searchbar");
 }
 
 static void
