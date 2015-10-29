@@ -31,6 +31,8 @@ struct _GdkWin32Display
   int cursor_theme_size;
   GHashTable *cursor_cache;
 
+  HWND hwnd;
+
   /* WGL/OpenGL Items */
   guint have_wgl : 1;
   guint gl_version;

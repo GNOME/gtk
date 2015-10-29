@@ -1611,14 +1611,6 @@ sync_timer_proc (HWND     hwnd,
   KillTimer (hwnd, sync_timer);
 }
 
-static void
-handle_display_change (void)
-{
-  _gdk_monitor_init ();
-  _gdk_root_window_size_init ();
-  g_signal_emit_by_name (_gdk_screen, "size_changed");
-}
-
 static gboolean
 handle_nchittest (HWND hwnd,
                   GdkWindow *window,
@@ -3200,10 +3192,6 @@ gdk_event_translate (MSG  *msg,
       _gdk_win32_append_event (event);
 
       return_val = TRUE;
-      break;
-
-    case WM_DISPLAYCHANGE:
-      handle_display_change ();
       break;
 
     case WM_DWMCOMPOSITIONCHANGED:
