@@ -159,7 +159,7 @@
 
 
 typedef GtkFileChooserIface GtkFileChooserInterface;
-G_DEFINE_INTERFACE (GtkFileChooser, gtk_file_chooser, GTK_TYPE_WIDGET);
+G_DEFINE_INTERFACE (GtkFileChooser, gtk_file_chooser, G_TYPE_OBJECT);
 
 static gboolean
 confirm_overwrite_accumulator (GSignalInvocationHint *ihint,
