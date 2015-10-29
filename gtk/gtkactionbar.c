@@ -43,6 +43,10 @@
  * contains an internal centered box which is centered with respect to
  * the full width of the box, even if the children at either side take
  * up different amounts of space.
+ *
+ * # CSS nodes
+ *
+ * GtkActionBar has a single CSS node with name actionbar.
  */
 
 struct _GtkActionBarPrivate
@@ -251,6 +255,7 @@ gtk_action_bar_class_init (GtkActionBarClass *klass)
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkActionBar, revealer);
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_PANEL);
+  gtk_widget_class_set_css_name (widget_class, "actionbar");
 }
 
 static void
