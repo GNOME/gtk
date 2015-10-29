@@ -27,11 +27,13 @@
 
 #include "config.h"
 
-#include "gtkaccessible.h"
 #include "gtksearchentry.h"
-#include "gtkmarshalers.h"
-#include "gtkintl.h"
+
+#include "gtkaccessible.h"
 #include "gtkbindings.h"
+#include "gtkintl.h"
+#include "gtkmarshalers.h"
+#include "gtkstylecontext.h"
 
 /**
  * SECTION:gtksearchentry
