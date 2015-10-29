@@ -367,6 +367,8 @@ gtk_search_entry_init (GtkSearchEntry *entry)
   atk_obj = gtk_widget_get_accessible (GTK_WIDGET (entry));
   if (GTK_IS_ACCESSIBLE (atk_obj))
     atk_object_set_name (atk_obj, _("Search"));
+
+  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (entry)), "search");
 }
 
 /**
