@@ -4707,21 +4707,23 @@ gtk_widget_show (GtkWidget *widget)
 
   if (!_gtk_widget_get_visible (widget))
     {
+      GtkWidget *parent;
+
       g_object_ref (widget);
       gtk_widget_push_verify_invariants (widget);
 
-      if (!_gtk_widget_is_toplevel (widget))
-        gtk_widget_queue_resize (widget);
-
-      /* see comment in set_parent() for why this should and can be
-       * conditional
-       */
-      if (widget->priv->need_compute_expand ||
-          widget->priv->computed_hexpand ||
-          widget->priv->computed_vexpand)
+      parent = _gtk_widget_get_parent (widget);
+      if (parent)
         {
-          if (widget->priv->parent != NULL)
-            gtk_widget_queue_compute_expand (widget->priv->parent);
+          gtk_widget_queue_resize (parent);
+
+          /* see comment in set_parent() for why this should and can be
+           * conditional
+           */
+          if (widget->priv->need_compute_expand ||
+              widget->priv->computed_hexpand ||
+              widget->priv->computed_vexpand)
+            gtk_widget_queue_compute_expand (parent);
         }
 
       gtk_css_node_set_visible (widget->priv->cssnode, TRUE);
@@ -4809,6 +4811,7 @@ gtk_widget_hide (GtkWidget *widget)
   if (_gtk_widget_get_visible (widget))
     {
       GtkWidget *toplevel = _gtk_widget_get_toplevel (widget);
+      GtkWidget *parent;
 
       g_object_ref (widget);
       gtk_widget_push_verify_invariants (widget);
@@ -4827,9 +4830,11 @@ gtk_widget_hide (GtkWidget *widget)
       gtk_css_node_set_visible (widget->priv->cssnode, FALSE);
 
       g_signal_emit (widget, widget_signals[HIDE], 0);
-      if (!_gtk_widget_is_toplevel (widget))
-	gtk_widget_queue_resize (widget);
       g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_VISIBLE]);
+
+      parent = gtk_widget_get_parent (widget);
+      if (parent)
+	gtk_widget_queue_resize (parent);
 
       gtk_widget_pop_verify_invariants (widget);
       g_object_unref (widget);
