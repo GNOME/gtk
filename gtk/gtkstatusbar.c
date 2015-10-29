@@ -72,7 +72,12 @@
  * gtk_statusbar_pop(). A message can be removed from anywhere in the
  * stack if its message id was recorded at the time it was added. This
  * is done using gtk_statusbar_remove().
+ *
+ * # CSS node
+ *
+ * GtkStatusbar has a single CSS node with name statusbar.
  */
+
 typedef struct _GtkStatusbarMsg GtkStatusbarMsg;
 
 struct _GtkStatusbarPrivate
@@ -176,6 +181,7 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
   gtk_widget_class_bind_template_child_private (widget_class, GtkStatusbar, label);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_STATUSBAR_ACCESSIBLE);
+  gtk_widget_class_set_css_name (widget_class, "statusbar");
 }
 
 static void
@@ -183,13 +189,9 @@ gtk_statusbar_init (GtkStatusbar *statusbar)
 {
   GtkStatusbarPrivate *priv;
   GtkShadowType shadow_type;
-  GtkStyleContext *context;
 
   statusbar->priv = gtk_statusbar_get_instance_private (statusbar);
   priv = statusbar->priv;
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (statusbar));
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_STATUSBAR);
 
   priv->seq_context_id = 1;
   priv->seq_message_id = 1;
