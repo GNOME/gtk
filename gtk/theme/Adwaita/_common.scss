@@ -104,6 +104,7 @@ $asset_suffix: if($variant=='dark', '-dark', '');
   }
 }
 
+textview text,
 .view {
   color: $text_color;
   background-color: $base_color;
@@ -166,7 +167,7 @@ assistant {
   }
 }
 
-GtkTextView { // This will get overridden by .view, needed by gedit line numbers
+textview { // This will get overridden by .view, needed by gedit line numbers
   background-color: mix($bg_color, $base_color, 50%);
   &:backdrop { background-color: mix($backdrop_bg_color,
                                      $backdrop_base_color, 50%); }
