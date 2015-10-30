@@ -102,6 +102,10 @@
  *
  *     ![](right-end.png)
  *
+ * # CSS nodes
+ *
+ * GtkMenuButton has a single CSS node with name button. To differentiate
+ * it from a plain #GtkButton, it gets the .menu style class.
  */
 
 #include "config.h"
@@ -614,6 +618,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
   g_object_class_install_properties (gobject_class, LAST_PROP, menu_button_props);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_MENU_BUTTON_ACCESSIBLE);
+  gtk_widget_class_set_css_name (widget_class, "button");
 }
 
 static void
@@ -656,6 +661,7 @@ static void
 gtk_menu_button_init (GtkMenuButton *menu_button)
 {
   GtkMenuButtonPrivate *priv;
+  GtkStyleContext *context;
 
   priv = gtk_menu_button_get_instance_private (menu_button);
   menu_button->priv = priv;
@@ -665,6 +671,9 @@ gtk_menu_button_init (GtkMenuButton *menu_button)
   add_arrow (menu_button);
 
   gtk_widget_set_sensitive (GTK_WIDGET (menu_button), FALSE);
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (menu_button));
+  gtk_style_context_add_class (context, "menu");
 }
 
 /**
@@ -764,7 +773,6 @@ _gtk_menu_button_set_popup_with_func (GtkMenuButton                 *menu_button
 
       g_signal_connect_swapped (priv->menu, "deactivate",
                                 G_CALLBACK (menu_deactivate_cb), menu_button);
-      gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (menu_button)), "menu-button");
     }
 
   update_sensitivity (menu_button);
