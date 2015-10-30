@@ -3553,7 +3553,7 @@ GtkScrolledWindow viewport.frame {
 
 separator {
   color: rgba(0, 0, 0, 0.1); }
-  GtkFileChooserButton separator.vertical, GtkFontButton separator.vertical {
+  GtkFileChooserButton separator.vertical, button.font separator.vertical {
     -GtkWidget-wide-separators: true; }
 
 /*********
