@@ -65,6 +65,11 @@
  * This kind of widget is commonly used for volume controls in multimedia
  * applications, and GTK+ provides a #GtkVolumeButton subclass that
  * is tailored for this use case.
+ *
+ * # CSS nodes
+ *
+ * GtkScaleButton has a single CSS node with name button. To differentiate
+ * it from a plain #GtkButton, it gets the .scale style class.
  */
 
 
@@ -338,12 +343,14 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, cb_popup_mapped);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_SCALE_BUTTON_ACCESSIBLE);
+  gtk_widget_class_set_css_name (widget_class, "button");
 }
 
 static void
 gtk_scale_button_init (GtkScaleButton *button)
 {
   GtkScaleButtonPrivate *priv;
+  GtkStyleContext *context;
 
   button->priv = priv = gtk_scale_button_get_instance_private (button);
 
@@ -358,6 +365,9 @@ gtk_scale_button_init (GtkScaleButton *button)
   g_object_ref (priv->adjustment);
 
   gtk_widget_add_events (GTK_WIDGET (button), GDK_SMOOTH_SCROLL_MASK);
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (button));
+  gtk_style_context_add_class (context, "scale");
 }
 
 static void
