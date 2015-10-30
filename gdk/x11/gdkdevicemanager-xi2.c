@@ -302,6 +302,39 @@ is_touch_device (XIAnyClassInfo **classes,
 }
 
 static gboolean
+has_abs_axes (GdkDisplay      *display,
+              XIAnyClassInfo **classes,
+              guint            n_classes)
+{
+  gboolean has_x = FALSE, has_y = FALSE;
+  Atom abs_x, abs_y;
+  guint i;
+
+  abs_x = gdk_x11_get_xatom_by_name_for_display (display, "Abs X");
+  abs_y = gdk_x11_get_xatom_by_name_for_display (display, "Abs Y");
+
+  for (i = 0; i < n_classes; i++)
+    {
+      XIValuatorClassInfo *class = (XIValuatorClassInfo *) classes[i];
+
+      if (class->type != XIValuatorClass)
+        continue;
+      if (class->mode != XIModeAbsolute)
+        continue;
+
+      if (class->label == abs_x)
+        has_x = TRUE;
+      else if (class->label == abs_y)
+        has_y = TRUE;
+
+      if (has_x && has_y)
+        break;
+    }
+
+  return (has_x && has_y);
+}
+
+static gboolean
 get_device_ids (GdkDisplay    *display,
                 XIDeviceInfo  *info,
                 gchar        **vendor_id,
@@ -393,6 +426,8 @@ create_device (GdkDeviceManager *device_manager,
       else if (strstr (tmp_name, "wacom") ||
                strstr (tmp_name, "pen"))
         input_source = GDK_SOURCE_PEN;
+      else if (has_abs_axes (display, dev->classes, dev->num_classes))
+        input_source = GDK_SOURCE_TOUCHSCREEN;
       else
         input_source = GDK_SOURCE_MOUSE;
 
