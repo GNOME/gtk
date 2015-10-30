@@ -196,7 +196,7 @@ spinner {
 /****************
  * Text Entries *
  ****************/
-entry {
+entry, spinbutton {
   padding: 7px 4px;
   border-radius: 3px;
   border-width: 1px;
@@ -206,7 +206,7 @@ entry {
   background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
   border-color: gray;
   box-shadow: inset 0 2px 2px -2px gray; }
-  entry.flat, entry.flat:focus {
+  entry.flat, entry.flat:focus, spinbutton.flat, spinbutton.flat:focus {
     padding: 2px;
     background-color: transparent;
     border-style: solid;
@@ -215,13 +215,13 @@ entry {
     box-shadow: inset 0 2px 2px -2px gray;
     border: none;
     border-radius: 0; }
-  entry:focus {
+  entry:focus, spinbutton:focus {
     background-color: transparent;
     border-style: solid;
     background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
     border-color: #000;
     box-shadow: inset 0 2px 2px -2px gray, inset 0 0 2px 1px #cccccc; }
-  entry:insensitive {
+  entry:insensitive, spinbutton:insensitive {
     background-color: transparent;
     border-style: solid;
     background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
@@ -229,24 +229,24 @@ entry {
     border-color: gray;
     background-image: linear-gradient(to bottom, white);
     box-shadow: none; }
-  entry:backdrop {
+  entry:backdrop, spinbutton:backdrop {
     background-color: transparent;
     border-style: solid;
     background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
     color: #000;
     background-image: linear-gradient(to bottom, #fff);
     box-shadow: 0 1px rgba(255, 255, 255, 0); }
-  entry:backdrop:insensitive {
+  entry:backdrop:insensitive, spinbutton:backdrop:insensitive {
     background-color: transparent;
     border-style: solid;
     background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
     color: gray;
     background-image: linear-gradient(to bottom, #fff);
     box-shadow: 0 1px rgba(255, 255, 255, 0); }
-  entry:selected, entry:backdrop:selected {
+  entry:selected, entry:backdrop:selected, spinbutton:selected, spinbutton:backdrop:selected {
     background-color: #000;
     color: #fff; }
-  entry progress {
+  entry progress, spinbutton progress {
     margin: 1px;
     border-radius: 0;
     border-width: 0 0 2px;
@@ -255,20 +255,20 @@ entry {
     background-image: none;
     background-color: transparent;
     box-shadow: none; }
-    entry progress:backdrop {
+    entry progress:backdrop, spinbutton progress:backdrop {
       background-color: transparent; }
-  .linked entry:first-child {
+  .linked entry:first-child, .linked spinbutton:first-child {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0; }
-    .linked entry:first-child:dir(rtl) {
+    .linked entry:first-child:dir(rtl), .linked spinbutton:first-child:dir(rtl) {
       border-right-style: none; }
-  .linked entry:last-child {
+  .linked entry:last-child, .linked spinbutton:last-child {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
     border-left-style: none; }
-    .linked entry:last-child:dir(rtl) {
+    .linked entry:last-child:dir(rtl), .linked spinbutton:last-child:dir(rtl) {
       border-left-style: solid; }
-  .linked.vertical entry {
+  .linked.vertical entry, .linked.vertical spinbutton {
     background-color: transparent;
     border-style: solid;
     background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
@@ -277,10 +277,10 @@ entry {
     background-image: linear-gradient(to bottom, #fff);
     border-bottom-color: #d9d9d9;
     box-shadow: none; }
-    .linked.vertical entry:focus {
+    .linked.vertical entry:focus, .linked.vertical spinbutton:focus {
       border-color: #000;
       box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15), 0 -1px 0 0 #000; }
-    .linked.vertical entry:insensitive {
+    .linked.vertical entry:insensitive, .linked.vertical spinbutton:insensitive {
       background-color: transparent;
       border-style: solid;
       background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
@@ -289,7 +289,7 @@ entry {
       background-image: linear-gradient(to bottom, white);
       box-shadow: none;
       border-bottom-color: #d9d9d9; }
-      .linked.vertical entry:insensitive:backdrop {
+      .linked.vertical entry:insensitive:backdrop, .linked.vertical spinbutton:insensitive:backdrop {
         background-color: transparent;
         border-style: solid;
         background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
@@ -297,7 +297,7 @@ entry {
         background-image: linear-gradient(to bottom, #fff);
         box-shadow: 0 1px rgba(255, 255, 255, 0);
         border-bottom-color: #dddddd; }
-    .linked.vertical entry:backdrop {
+    .linked.vertical entry:backdrop, .linked.vertical spinbutton:backdrop {
       background-color: transparent;
       border-style: solid;
       background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
@@ -305,20 +305,20 @@ entry {
       background-image: linear-gradient(to bottom, #fff);
       box-shadow: 0 1px rgba(255, 255, 255, 0);
       border-bottom-color: #dddddd; }
-    .linked.vertical entry:first-child {
+    .linked.vertical entry:first-child, .linked.vertical spinbutton:first-child {
       background-color: transparent;
       border-style: solid;
       background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
       border-color: gray;
       box-shadow: inset 0 2px 2px -2px gray;
       border-bottom-color: #d9d9d9; }
-      .linked.vertical entry:first-child:focus {
+      .linked.vertical entry:first-child:focus, .linked.vertical spinbutton:first-child:focus {
         background-color: transparent;
         border-style: solid;
         background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
         border-color: #000;
         box-shadow: inset 0 2px 2px -2px gray, inset 0 0 2px 1px #cccccc; }
-      .linked.vertical entry:first-child:insensitive {
+      .linked.vertical entry:first-child:insensitive, .linked.vertical spinbutton:first-child:insensitive {
         background-color: transparent;
         border-style: solid;
         background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
@@ -327,7 +327,7 @@ entry {
         background-image: linear-gradient(to bottom, white);
         box-shadow: none;
         border-bottom-color: #dddddd; }
-        .linked.vertical entry:first-child:insensitive:backdrop {
+        .linked.vertical entry:first-child:insensitive:backdrop, .linked.vertical spinbutton:first-child:insensitive:backdrop {
           background-color: transparent;
           border-style: solid;
           background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
@@ -336,7 +336,7 @@ entry {
           box-shadow: 0 1px rgba(255, 255, 255, 0);
           border-bottom-color: #dddddd;
           border-top-style: solid; }
-      .linked.vertical entry:first-child:backdrop {
+      .linked.vertical entry:first-child:backdrop, .linked.vertical spinbutton:first-child:backdrop {
         background-color: transparent;
         border-style: solid;
         background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
@@ -344,7 +344,7 @@ entry {
         background-image: linear-gradient(to bottom, #fff);
         box-shadow: 0 1px rgba(255, 255, 255, 0);
         border-bottom-color: #dddddd; }
-    .linked.vertical entry:last-child {
+    .linked.vertical entry:last-child, .linked.vertical spinbutton:last-child {
       background-color: transparent;
       border-style: solid;
       background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
@@ -353,10 +353,10 @@ entry {
       border-top-width: 0;
       background-image: linear-gradient(to bottom, #fff);
       box-shadow: none; }
-      .linked.vertical entry:last-child:focus {
+      .linked.vertical entry:last-child:focus, .linked.vertical spinbutton:last-child:focus {
         border-color: #000;
         box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15), 0 -1px 0 0 #000; }
-      .linked.vertical entry:last-child:insensitive {
+      .linked.vertical entry:last-child:insensitive, .linked.vertical spinbutton:last-child:insensitive {
         background-color: transparent;
         border-style: solid;
         background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
@@ -364,41 +364,41 @@ entry {
         border-color: gray;
         background-image: linear-gradient(to bottom, white);
         box-shadow: none; }
-        .linked.vertical entry:last-child:insensitive:backdrop {
+        .linked.vertical entry:last-child:insensitive:backdrop, .linked.vertical spinbutton:last-child:insensitive:backdrop {
           background-color: transparent;
           border-style: solid;
           background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
           color: gray;
           background-image: linear-gradient(to bottom, #fff);
           box-shadow: 0 1px rgba(255, 255, 255, 0); }
-      .linked.vertical entry:last-child:backdrop {
+      .linked.vertical entry:last-child:backdrop, .linked.vertical spinbutton:last-child:backdrop {
         background-color: transparent;
         border-style: solid;
         background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
         color: #000;
         background-image: linear-gradient(to bottom, #fff);
         box-shadow: 0 1px rgba(255, 255, 255, 0); }
-  entry.error {
+  entry.error, spinbutton.error {
     color: #cc0000;
     border-color: #cc0000; }
-    entry.error:focus {
+    entry.error:focus, spinbutton.error:focus {
       background-color: transparent;
       border-style: solid;
       background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
       border-color: #cc0000;
       box-shadow: inset 0 2px 2px -2px gray, inset 0 0 2px 1px #f5cccc; }
-    entry.error:selected, entry.error:selected:focus {
+    entry.error:selected, entry.error:selected:focus, spinbutton.error:selected, spinbutton.error:selected:focus {
       background-color: #cc0000; }
-  entry.warning {
+  entry.warning, spinbutton.warning {
     color: #f57900;
     border-color: #f57900; }
-    entry.warning:focus {
+    entry.warning:focus, spinbutton.warning:focus {
       background-color: transparent;
       border-style: solid;
       background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
       border-color: #f57900;
       box-shadow: inset 0 2px 2px -2px gray, inset 0 0 2px 1px #fde4cc; }
-    entry.warning:selected, entry.warning:selected:focus {
+    entry.warning:selected, entry.warning:selected:focus, spinbutton.warning:selected, spinbutton.warning:selected:focus {
       background-color: #f57900; }
 
 /***********
@@ -409,7 +409,7 @@ entry {
     background-image: -gtk-gradient(radial, center center, 0, center center, 0.01, to(#000), to(transparent)); }
   to {
     background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(#000), to(transparent)); } }
-.button {
+button {
   border-radius: 3px;
   transition: all 200ms ease-out;
   padding: 4px 6px;
@@ -419,7 +419,7 @@ entry {
   background-image: none;
   background-color: #fff;
   border-color: gray; }
-  .button:hover, .button.flat:hover, .sidebar-button.button:hover {
+  button:hover, button.flat:hover, .sidebar-button.button:hover {
     border-width: 2px;
     border-style: solid;
     color: #000;
@@ -427,7 +427,7 @@ entry {
     border-color: gray;
     background-image: none;
     -gtk-image-effect: highlight; }
-  .button:active, .button.flat:active, .sidebar-button.button:active, .button:checked, .button.flat:checked, .sidebar-button.button:checked {
+  button:active, button.flat:active, .sidebar-button.button:active, button:checked, button.flat:checked, .sidebar-button.button:checked {
     border-width: 2px;
     border-style: solid;
     background-image: none;
@@ -435,7 +435,7 @@ entry {
     background-color: black;
     border-color: gray;
     transition-duration: 50ms; }
-  .button:backdrop, .button.flat:backdrop, .sidebar-button.button:backdrop {
+  button:backdrop, button.flat:backdrop, .sidebar-button.button:backdrop {
     border-width: 2px;
     border-style: solid;
     color: #000;
@@ -444,28 +444,28 @@ entry {
     background-image: none;
     text-shadow: none;
     icon-shadow: none; }
-    .button:backdrop:active, .button:backdrop:checked, .button.flat:backdrop:active, .sidebar-button.button:backdrop:active, .button.flat:backdrop:checked, .sidebar-button.button:backdrop:checked {
+    button:backdrop:active, button:backdrop:checked, button.flat:backdrop:active, .sidebar-button.button:backdrop:active, button.flat:backdrop:checked, .sidebar-button.button:backdrop:checked {
       border-width: 2px;
       border-style: solid;
       color: white;
       background-color: #8d8d8d;
       border-color: #8d8d8d;
       background-image: none; }
-    .button:backdrop:insensitive, .button.flat:backdrop:insensitive, .sidebar-button.button:backdrop:insensitive {
+    button:backdrop:insensitive, button.flat:backdrop:insensitive, .sidebar-button.button:backdrop:insensitive {
       border-width: 2px;
       border-style: solid;
       color: gray;
       background-color: white;
       border-color: #8d8d8d;
       background-image: none; }
-    .button:backdrop:insensitive:active, .button.flat:backdrop:insensitive:active, .sidebar-button.button:backdrop:insensitive:active {
+    button:backdrop:insensitive:active, button.flat:backdrop:insensitive:active, .sidebar-button.button:backdrop:insensitive:active {
       border-width: 2px;
       border-style: solid;
       color: gray;
       border-color: #8d8d8d;
       background-image: none;
       background-color: #f6f6f6; }
-  .button:insensitive {
+  button:insensitive {
     border-width: 2px;
     border-style: solid;
     color: gray;
@@ -474,14 +474,14 @@ entry {
     background-image: none;
     text-shadow: none;
     icon-shadow: none; }
-    .button:insensitive:active, .button:insensitive.flat:active, .sidebar-button.button:insensitive:active {
+    button:insensitive:active, button:insensitive.flat:active, .sidebar-button.button:insensitive:active {
       border-width: 2px;
       border-style: solid;
       color: gray;
       border-color: gray;
       background-image: none;
       background-color: white; }
-  .osd .button {
+  .osd button {
     padding: 6px;
     border-width: 1px 1px 2px 1px;
     border-width: 2px;
@@ -491,50 +491,50 @@ entry {
     background-color: rgba(0, 0, 0, 0.8);
     border-color: rgba(255, 255, 255, 0.2);
     box-shadow: none; }
-    .osd .button:hover {
+    .osd button:hover {
       border-width: 2px;
       border-style: solid;
       color: #fff;
       background-color: rgba(77, 77, 77, 0.8);
       border-color: rgba(255, 255, 255, 0.2);
       box-shadow: none; }
-    .osd .button:active, .osd .button:checked {
+    .osd button:active, .osd button:checked {
       border-width: 2px;
       border-style: solid;
       color: rgba(0, 0, 0, 0.8);
       background-color: #fff;
       border-color: rgba(255, 255, 255, 0.2);
       box-shadow: none; }
-    .osd .button:insensitive {
+    .osd button:insensitive {
       border-width: 2px;
       border-style: solid;
       border-color: rgba(255, 255, 255, 0.2);
       color: gray; }
-    .osd .button:backdrop {
+    .osd button:backdrop {
       border-width: 2px;
       border-style: solid; }
-  .button.suggested-action {
+  button.suggested-action {
     border-width: 2px;
     border-style: solid;
     color: white;
     background-image: none;
     background-color: #4a90d9;
     border-color: #1c5187; }
-    .button.suggested-action:hover {
+    button.suggested-action:hover {
       border-width: 2px;
       border-style: solid;
       color: white;
       background-color: #4a90d9;
       border-color: #1c5187;
       background-image: none; }
-    .button.suggested-action:active, .button.suggested-action:checked {
+    button.suggested-action:active, button.suggested-action:checked {
       border-width: 2px;
       border-style: solid;
       background-image: none;
       color: black;
       background-color: #b56f26;
       border-color: #1c5187; }
-    .button.suggested-action:backdrop {
+    button.suggested-action:backdrop {
       border-width: 2px;
       border-style: solid;
       color: white;
@@ -543,14 +543,14 @@ entry {
       background-image: none;
       text-shadow: none;
       icon-shadow: none; }
-      .button.suggested-action:backdrop:insensitive {
+      button.suggested-action:backdrop:insensitive {
         border-width: 2px;
         border-style: solid;
         color: gray;
         background-color: white;
         border-color: #8d8d8d;
         background-image: none; }
-    .button.suggested-action:insensitive {
+    button.suggested-action:insensitive {
       border-width: 2px;
       border-style: solid;
       color: gray;
@@ -559,28 +559,28 @@ entry {
       background-image: none;
       text-shadow: none;
       icon-shadow: none; }
-  .button.destructive-action {
+  button.destructive-action {
     border-width: 2px;
     border-style: solid;
     color: white;
     background-image: none;
     background-color: #ef2929;
     border-color: #8e0b0b; }
-    .button.destructive-action:hover {
+    button.destructive-action:hover {
       border-width: 2px;
       border-style: solid;
       color: white;
       background-color: #ef2929;
       border-color: #8e0b0b;
       background-image: none; }
-    .button.destructive-action:active, .button.destructive-action:checked {
+    button.destructive-action:active, button.destructive-action:checked {
       border-width: 2px;
       border-style: solid;
       background-image: none;
       color: black;
       background-color: #10d6d6;
       border-color: #8e0b0b; }
-    .button.destructive-action:backdrop {
+    button.destructive-action:backdrop {
       border-width: 2px;
       border-style: solid;
       color: white;
@@ -589,14 +589,14 @@ entry {
       background-image: none;
       text-shadow: none;
       icon-shadow: none; }
-      .button.destructive-action:backdrop:insensitive {
+      button.destructive-action:backdrop:insensitive {
         border-width: 2px;
         border-style: solid;
         color: gray;
         background-color: white;
         border-color: #8d8d8d;
         background-image: none; }
-    .button.destructive-action:insensitive {
+    button.destructive-action:insensitive {
       border-width: 2px;
       border-style: solid;
       color: gray;
@@ -605,38 +605,38 @@ entry {
       background-image: none;
       text-shadow: none;
       icon-shadow: none; }
-  .button.image-button {
+  button.image-button {
     padding: 8px; }
-  .button.text-button {
+  button.text-button {
     padding: 6px 8px 5px; }
-  .inline-toolbar .button, .inline-toolbar .button:backdrop {
+  .inline-toolbar button, .inline-toolbar button:backdrop {
     border-radius: 2px;
     border-width: 1px; }
-  .primary-toolbar .button {
+  .primary-toolbar button {
     icon-shadow: none; }
 
-.inline-toolbar GtkToolButton > .button {
+.inline-toolbar GtkToolButton > button {
   border-width: 2px;
   border-style: solid;
   color: #000;
   background-image: none;
   background-color: #fff;
   border-color: gray; }
-  .inline-toolbar GtkToolButton > .button:hover {
+  .inline-toolbar GtkToolButton > button:hover {
     border-width: 2px;
     border-style: solid;
     color: #000;
     background-color: #fff;
     border-color: gray;
     background-image: none; }
-  .inline-toolbar GtkToolButton > .button:active {
+  .inline-toolbar GtkToolButton > button:active {
     border-width: 2px;
     border-style: solid;
     background-image: none;
     color: white;
     background-color: black;
     border-color: gray; }
-  .inline-toolbar GtkToolButton > .button:insensitive {
+  .inline-toolbar GtkToolButton > button:insensitive {
     border-width: 2px;
     border-style: solid;
     color: gray;
@@ -645,14 +645,14 @@ entry {
     background-image: none;
     text-shadow: none;
     icon-shadow: none; }
-  .inline-toolbar GtkToolButton > .button:insensitive:active {
+  .inline-toolbar GtkToolButton > button:insensitive:active {
     border-width: 2px;
     border-style: solid;
     color: gray;
     border-color: gray;
     background-image: none;
     background-color: white; }
-  .inline-toolbar GtkToolButton > .button:backdrop {
+  .inline-toolbar GtkToolButton > button:backdrop {
     border-width: 2px;
     border-style: solid;
     color: #000;
@@ -661,21 +661,21 @@ entry {
     background-image: none;
     text-shadow: none;
     icon-shadow: none; }
-  .inline-toolbar GtkToolButton > .button:backdrop:active {
+  .inline-toolbar GtkToolButton > button:backdrop:active {
     border-width: 2px;
     border-style: solid;
     color: white;
     background-color: #8d8d8d;
     border-color: #8d8d8d;
     background-image: none; }
-  .inline-toolbar GtkToolButton > .button:backdrop:insensitive {
+  .inline-toolbar GtkToolButton > button:backdrop:insensitive {
     border-width: 2px;
     border-style: solid;
     color: gray;
     background-color: white;
     border-color: #8d8d8d;
     background-image: none; }
-  .inline-toolbar GtkToolButton > .button:backdrop:insensitive:active {
+  .inline-toolbar GtkToolButton > button:backdrop:insensitive:active {
     border-width: 2px;
     border-style: solid;
     color: gray;
@@ -683,17 +683,17 @@ entry {
     background-image: none;
     background-color: #f6f6f6; }
 
-.inline-toolbar.toolbar GtkToolButton > .button.flat, .inline-toolbar.toolbar GtkToolButton > .sidebar-button.button {
+.inline-toolbar.toolbar GtkToolButton > button.flat, .inline-toolbar.toolbar GtkToolButton > .sidebar-button.button {
   border-radius: 0;
   border-left-style: none; }
-.inline-toolbar.toolbar GtkToolButton:first-child > .button.flat, .inline-toolbar.toolbar GtkToolButton:first-child > .sidebar-button.button {
+.inline-toolbar.toolbar GtkToolButton:first-child > button.flat, .inline-toolbar.toolbar GtkToolButton:first-child > .sidebar-button.button {
   border-radius: 3px 0 0 3px;
   border-left-style: solid; }
-.inline-toolbar.toolbar GtkToolButton:last-child > .button.flat, .inline-toolbar.toolbar GtkToolButton:last-child > .sidebar-button.button {
+.inline-toolbar.toolbar GtkToolButton:last-child > button.flat, .inline-toolbar.toolbar GtkToolButton:last-child > .sidebar-button.button {
   border-radius: 0 3px 3px 0; }
-.inline-toolbar.toolbar GtkToolButton:last-child:dir(rtl) > .button.flat, .inline-toolbar.toolbar GtkToolButton:last-child:dir(rtl) > .sidebar-button.button {
+.inline-toolbar.toolbar GtkToolButton:last-child:dir(rtl) > button.flat, .inline-toolbar.toolbar GtkToolButton:last-child:dir(rtl) > .sidebar-button.button {
   border-right-style: solid; }
-.inline-toolbar.toolbar GtkToolButton:only-child > .button.flat, .inline-toolbar.toolbar GtkToolButton:only-child > .sidebar-button.button {
+.inline-toolbar.toolbar GtkToolButton:only-child > button.flat, .inline-toolbar.toolbar GtkToolButton:only-child > .sidebar-button.button {
   border-radius: 3px;
   border-style: solid; }
 
@@ -708,44 +708,46 @@ entry {
   .sidebar-item.needs-attention > label:dir(rtl) {
     background-position: left 3px, left 4px; }
 
-.osd .button, .osd .button:hover, .osd .button:active, .osd .button:checked, .osd .button:insensitive, .osd .button:backdrop, .inline-toolbar .button, .inline-toolbar .button:backdrop, .linked > .button, .linked > .button:hover, .linked > .button:active, .linked > .button:checked, .linked > .button:backdrop, .linked > GtkComboBox > .button:dir(ltr) {
+.osd button, .osd button:hover, .osd button:active, .osd button:checked, .osd button:insensitive, .osd button:backdrop, .inline-toolbar button, .inline-toolbar button:backdrop, .linked > button, .linked > button:hover, .linked > button:active, .linked > button:checked, .linked > button:backdrop, .linked > GtkComboBox > button:dir(ltr) {
   border-radius: 0;
   border-left-style: none; }
-  .osd .button:dir(rtl), .inline-toolbar .button:dir(rtl), .linked > .button:dir(rtl), .linked > GtkComboBox > .button:dir(rtl) {
+  .osd button:dir(rtl), .inline-toolbar button:dir(rtl), .linked > button:dir(rtl), .linked > GtkComboBox > button:dir(rtl) {
     border-radius: 0;
     border-right-style: none;
     border-left-style: solid; }
 
-.osd .button:first-child, .inline-toolbar .button:first-child, .linked > .button:first-child, .linked > GtkComboBox:first-child > .button {
+.osd button:first-child, .inline-toolbar button:first-child, .linked > button:first-child, .linked > GtkComboBox:first-child > button {
   border-radius: 3px 0 0 3px;
   border-left-style: solid; }
-.osd .button:last-child, .inline-toolbar .button:last-child, .linked > .button:last-child, .linked > GtkComboBox:last-child > .button {
+.osd button:last-child, .inline-toolbar button:last-child, .linked > button:last-child, .linked > GtkComboBox:last-child > button {
   border-radius: 0 3px 3px 0; }
-  .osd .button:last-child:dir(rtl), .inline-toolbar .button:last-child:dir(rtl), .linked > .button:last-child:dir(rtl), .linked > GtkComboBox:last-child > .button:dir(rtl) {
+  .osd button:last-child:dir(rtl), .inline-toolbar button:last-child:dir(rtl), .linked > button:last-child:dir(rtl), .linked > GtkComboBox:last-child > button:dir(rtl) {
     border-right-style: solid; }
-.osd .button:only-child, .inline-toolbar .button:only-child, .linked > .button:only-child, .linked > GtkComboBox:only-child > .button {
+.osd button:only-child, .inline-toolbar button:only-child, .linked > button:only-child, .linked > GtkComboBox:only-child > button {
   border-radius: 3px;
   border-style: solid; }
 
-.linked.vertical entry, .linked.vertical entry:focus, .linked.vertical entry:insensitive, .linked.vertical entry:insensitive:backdrop, .linked.vertical entry:backdrop, .linked.vertical > .button, .linked.vertical > .button:hover, .linked.vertical > .button:active, .linked.vertical > .button:checked, .linked.vertical > .button:backdrop, .linked.vertical > GtkComboBoxText > .button,
-.linked.vertical > GtkComboBox > .button {
+.linked.vertical entry, .linked.vertical spinbutton, .linked.vertical entry:focus, .linked.vertical spinbutton:focus, .linked.vertical entry:insensitive, .linked.vertical spinbutton:insensitive, .linked.vertical entry:insensitive:backdrop, .linked.vertical spinbutton:insensitive:backdrop, .linked.vertical entry:backdrop, .linked.vertical spinbutton:backdrop, .linked.vertical > button, .linked.vertical > button:hover, .linked.vertical > button:active, .linked.vertical > button:checked, .linked.vertical > button:backdrop, .linked.vertical > GtkComboBoxText > button,
+.linked.vertical > GtkComboBox > button {
   border-left-style: solid;
   border-top-style: none;
   border-radius: 0; }
 
-.linked.vertical entry:first-child, .linked.vertical > .button:first-child, .linked.vertical > GtkComboBoxText:first-child > .button,
-.linked.vertical > GtkComboBox:first-child > .button {
+.linked.vertical entry:first-child, .linked.vertical spinbutton:first-child, .linked.vertical > button:first-child, .linked.vertical > GtkComboBoxText:first-child > button,
+.linked.vertical > GtkComboBox:first-child > button {
   border-style: solid;
   border-radius: 3px 3px 0 0; }
-.linked.vertical entry:last-child, .linked.vertical > .button:last-child, .linked.vertical > GtkComboBoxText:last-child > .button,
-.linked.vertical > GtkComboBox:last-child > .button {
+.linked.vertical entry:last-child, .linked.vertical spinbutton:last-child, .linked.vertical > button:last-child, .linked.vertical > GtkComboBoxText:last-child > button,
+.linked.vertical > GtkComboBox:last-child > button {
   border-radius: 0 0 3px 3px; }
-.linked.vertical entry:only-child, .linked.vertical > .button:only-child, .linked.vertical > GtkComboBoxText:only-child > .button,
-.linked.vertical > GtkComboBox:only-child > .button {
+.linked.vertical entry:only-child, .linked.vertical spinbutton:only-child, .linked.vertical > button:only-child, .linked.vertical > GtkComboBoxText:only-child > button,
+.linked.vertical > GtkComboBox:only-child > button {
   border-radius: 3px;
   border-style: solid; }
 
-.button.flat, .sidebar-button.button, .button.flat:backdrop, .sidebar-button.button:backdrop, .button.flat:insensitive:backdrop, .sidebar-button.button:insensitive:backdrop, .menuitem.button.flat, .menuitem.sidebar-button.button, .menuitem.button.flat:backdrop, .menuitem.sidebar-button.button:backdrop, .button:link, .button:visited, .button:link:hover, .button:link:active, .button:visited:hover, .button:visited:active, .button:link:backdrop, .button:visited:backdrop, notebook tab .button, .list-row.activatable,
+button.flat, .sidebar-button.button, button.flat:backdrop, .sidebar-button.button:backdrop, button.flat:insensitive:backdrop, .sidebar-button.button:insensitive:backdrop, modelbutton.flat,
+.menuitem.button.flat, modelbutton.flat:backdrop,
+.menuitem.button.flat:backdrop, button:link, button:visited, button:link:hover, button:link:active, button:visited:hover, button:visited:active, button:link:backdrop, button:visited:backdrop, notebook tab button, .list-row.activatable,
 .list-row.activatable:backdrop,
 .list-row.activatable:backdrop:active,
 .list-row.activatable:backdrop:checked,
@@ -761,14 +763,18 @@ entry {
   icon-shadow: none; }
 
 /* menu buttons */
-.menuitem.button.flat, .menuitem.sidebar-button.button {
+modelbutton.flat,
+.menuitem.button.flat {
   outline-offset: -1px; }
-  .menuitem.button.flat:backdrop, .menuitem.sidebar-button.button:backdrop {
+  modelbutton.flat:backdrop,
+  .menuitem.button.flat:backdrop {
     color: #000; }
-    .menuitem.button.flat:backdrop:hover, .menuitem.sidebar-button.button:backdrop:hover {
+    modelbutton.flat:backdrop:hover,
+    .menuitem.button.flat:backdrop:hover {
       color: #fff;
       background-color: #000; }
-  .menuitem.button.flat:insensitive, .menuitem.sidebar-button.button:insensitive {
+  modelbutton.flat:insensitive,
+  .menuitem.button.flat:insensitive {
     color: gray; }
 
 GtkColorButton.button {
@@ -784,20 +790,20 @@ GtkColorButton.button {
   *:link:backdrop, *:link:backdrop:hover {
     color: #000; }
 
-.button:link, .button:visited {
+button:link, button:visited {
   color: #4a90d9;
   font-weight: bold;
   text-shadow: none; }
-  .button:link:hover, .button:link:active, .button:visited:hover, .button:visited:active {
+  button:link:hover, button:link:active, button:visited:hover, button:visited:active {
     color: black;
     text-shadow: none; }
-  .button:link:backdrop, .button:visited:backdrop {
+  button:link:backdrop, button:visited:backdrop {
     color: #000; }
 
 /*****************
  * GtkSpinButton *
  *****************/
-.spinbutton {
+spinbutton {
   /* This is to fix spinbuttons in entries, but I feel like hiding code issues
    * hence it's commented atm.
    *  GtkTreeView & {
@@ -810,7 +816,7 @@ GtkColorButton.button {
    *   }
    * }
    */ }
-  .spinbutton .button {
+  spinbutton button {
     background-color: transparent;
     border-style: solid;
     background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
@@ -821,49 +827,49 @@ GtkColorButton.button {
     border-color: rgba(128, 128, 128, 0.3);
     color: #0d0d0d;
     border-radius: 0; }
-    .spinbutton .button:dir(rtl) {
+    spinbutton button:dir(rtl) {
       border-width: 0 1px 0 0; }
-    .spinbutton .button:hover {
+    spinbutton button:hover {
       color: #000;
       background-color: rgba(0, 0, 0, 0.05); }
-    .spinbutton .button:insensitive {
+    spinbutton button:insensitive {
       box-shadow: none;
       color: rgba(128, 128, 128, 0.3); }
-    .spinbutton .button:active {
+    spinbutton button:active {
       box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.2);
       background-color: rgba(0, 0, 0, 0.1); }
-    .spinbutton .button:backdrop {
+    spinbutton button:backdrop {
       border-color: rgba(141, 141, 141, 0.3);
       background-color: #fff;
       box-shadow: none; }
-    .spinbutton .button:backdrop:insensitive {
+    spinbutton button:backdrop:insensitive {
       box-shadow: none;
       color: rgba(128, 128, 128, 0.3);
       border-width: 0 0 0 1px; }
-      .spinbutton .button:backdrop:insensitive:dir(rtl) {
+      spinbutton button:backdrop:insensitive:dir(rtl) {
         border-width: 0 1px 0 0; }
-  .spinbutton.vertical .button:first-child {
+  spinbutton.vertical button:first-child {
     border-width: 2px;
     border-style: solid;
     color: #000;
     background-image: none;
     background-color: #fff;
     border-color: gray; }
-    .spinbutton.vertical .button:first-child:active {
+    spinbutton.vertical button:first-child:active {
       border-width: 2px;
       border-style: solid;
       background-image: none;
       color: white;
       background-color: black;
       border-color: gray; }
-    .spinbutton.vertical .button:first-child:hover {
+    spinbutton.vertical button:first-child:hover {
       border-width: 2px;
       border-style: solid;
       color: #000;
       background-color: #fff;
       border-color: gray;
       background-image: none; }
-    .spinbutton.vertical .button:first-child:insensitive {
+    spinbutton.vertical button:first-child:insensitive {
       border-width: 2px;
       border-style: solid;
       color: gray;
@@ -872,7 +878,7 @@ GtkColorButton.button {
       background-image: none;
       text-shadow: none;
       icon-shadow: none; }
-    .spinbutton.vertical .button:first-child:backdrop {
+    spinbutton.vertical button:first-child:backdrop {
       border-width: 2px;
       border-style: solid;
       color: #000;
@@ -881,28 +887,28 @@ GtkColorButton.button {
       background-image: none;
       text-shadow: none;
       icon-shadow: none; }
-  .spinbutton.vertical .button:last-child {
+  spinbutton.vertical button:last-child {
     border-width: 2px;
     border-style: solid;
     color: #000;
     background-image: none;
     background-color: #fff;
     border-color: gray; }
-    .spinbutton.vertical .button:last-child:active {
+    spinbutton.vertical button:last-child:active {
       border-width: 2px;
       border-style: solid;
       background-image: none;
       color: white;
       background-color: black;
       border-color: gray; }
-    .spinbutton.vertical .button:last-child:hover {
+    spinbutton.vertical button:last-child:hover {
       border-width: 2px;
       border-style: solid;
       color: #000;
       background-color: #fff;
       border-color: gray;
       background-image: none; }
-    .spinbutton.vertical .button:last-child:insensitive {
+    spinbutton.vertical button:last-child:insensitive {
       border-width: 2px;
       border-style: solid;
       color: gray;
@@ -911,7 +917,7 @@ GtkColorButton.button {
       background-image: none;
       text-shadow: none;
       icon-shadow: none; }
-    .spinbutton.vertical .button:last-child:backdrop {
+    spinbutton.vertical button:last-child:backdrop {
       border-width: 2px;
       border-style: solid;
       color: #000;
@@ -920,19 +926,19 @@ GtkColorButton.button {
       background-image: none;
       text-shadow: none;
       icon-shadow: none; }
-  .spinbutton.vertical .button:backdrop:insensitive {
+  spinbutton.vertical button:backdrop:insensitive {
     border-width: 2px;
     border-style: solid;
     color: gray;
     background-color: white;
     border-color: #8d8d8d;
     background-image: none; }
-  .spinbutton.vertical.entry {
+  spinbutton.vertical.entry {
     border-radius: 0; }
-  .spinbutton.vertical .button:first-child, .spinbutton.vertical .button:first-child:active, .spinbutton.vertical .button:first-child:hover, .spinbutton.vertical .button:first-child:insensitive, .spinbutton.vertical .button:first-child:backdrop {
+  spinbutton.vertical button:first-child, spinbutton.vertical button:first-child:active, spinbutton.vertical button:first-child:hover, spinbutton.vertical button:first-child:insensitive, spinbutton.vertical button:first-child:backdrop {
     border-radius: 3px 3px 0 0;
     border-bottom-width: 0; }
-  .spinbutton.vertical .button:last-child, .spinbutton.vertical .button:last-child:active, .spinbutton.vertical .button:last-child:hover, .spinbutton.vertical .button:last-child:insensitive, .spinbutton.vertical .button:last-child:backdrop {
+  spinbutton.vertical button:last-child, spinbutton.vertical button:last-child:active, spinbutton.vertical button:last-child:hover, spinbutton.vertical button:last-child:insensitive, spinbutton.vertical button:last-child:backdrop {
     border-radius: 0 0 3px 3px;
     border-top-width: 0; }
 
@@ -964,10 +970,10 @@ GtkComboBox {
     border-radius: 3px 0 0 3px; }
     GtkComboBox.combobox-entry entry:dir(rtl) {
       border-radius: 0 3px 3px 0; }
-  GtkComboBox.combobox-entry .button, GtkComboBox.combobox-entry .button:backdrop {
+  GtkComboBox.combobox-entry button, GtkComboBox.combobox-entry button:backdrop {
     border-radius: 0 3px 3px 0;
     border-left-style: none; }
-    GtkComboBox.combobox-entry .button:dir(rtl), GtkComboBox.combobox-entry .button:backdrop:dir(rtl) {
+    GtkComboBox.combobox-entry button:dir(rtl), GtkComboBox.combobox-entry button:backdrop:dir(rtl) {
       border-radius: 3px 0 0 3px;
       border-left-style: solid;
       border-right-style: none; }
@@ -1050,32 +1056,32 @@ GtkComboBox {
     text-shadow: 0 1px rgba(0, 0, 0, 0.5);
     background-image: linear-gradient(to bottom, #0d0d0d, #050505);
     box-shadow: inset 0 -1px #d9d9d9, inset 0 1px gray; }
-    .titlebar.selection-mode .button,
-    .header-bar.selection-mode .button {
+    .titlebar.selection-mode button,
+    .header-bar.selection-mode button {
       border-width: 2px;
       border-style: solid;
       color: #fff;
       background-image: none;
       background-color: #000;
       border-color: black; }
-      .titlebar.selection-mode .button:hover,
-      .header-bar.selection-mode .button:hover {
+      .titlebar.selection-mode button:hover,
+      .header-bar.selection-mode button:hover {
         border-width: 2px;
         border-style: solid;
         color: #fff;
         background-color: #000;
         border-color: black;
         background-image: none; }
-      .titlebar.selection-mode .button:active,
-      .header-bar.selection-mode .button:active {
+      .titlebar.selection-mode button:active,
+      .header-bar.selection-mode button:active {
         border-width: 2px;
         border-style: solid;
         background-image: none;
         color: black;
         background-color: white;
         border-color: black; }
-      .titlebar.selection-mode .button:insensitive,
-      .header-bar.selection-mode .button:insensitive {
+      .titlebar.selection-mode button:insensitive,
+      .header-bar.selection-mode button:insensitive {
         border-width: 2px;
         border-style: solid;
         color: gray;
@@ -1084,8 +1090,8 @@ GtkComboBox {
         background-image: none;
         text-shadow: none;
         icon-shadow: none; }
-      .titlebar.selection-mode .button:backdrop,
-      .header-bar.selection-mode .button:backdrop {
+      .titlebar.selection-mode button:backdrop,
+      .header-bar.selection-mode button:backdrop {
         border-width: 2px;
         border-style: solid;
         color: #fff;
@@ -1095,40 +1101,40 @@ GtkComboBox {
         text-shadow: none;
         icon-shadow: none;
         border-color: black; }
-      .titlebar.selection-mode .button:backdrop:insensitive,
-      .header-bar.selection-mode .button:backdrop:insensitive {
+      .titlebar.selection-mode button:backdrop:insensitive,
+      .header-bar.selection-mode button:backdrop:insensitive {
         border-width: 2px;
         border-style: solid;
         color: gray;
         background-color: white;
         border-color: #8d8d8d;
         background-image: none; }
-      .titlebar.selection-mode .button.suggested-action,
-      .header-bar.selection-mode .button.suggested-action {
+      .titlebar.selection-mode button.suggested-action,
+      .header-bar.selection-mode button.suggested-action {
         border-width: 2px;
         border-style: solid;
         color: #000;
         background-image: none;
         background-color: #fff;
         border-color: gray; }
-        .titlebar.selection-mode .button.suggested-action:hover,
-        .header-bar.selection-mode .button.suggested-action:hover {
+        .titlebar.selection-mode button.suggested-action:hover,
+        .header-bar.selection-mode button.suggested-action:hover {
           border-width: 2px;
           border-style: solid;
           color: #000;
           background-color: #fff;
           border-color: gray;
           background-image: none; }
-        .titlebar.selection-mode .button.suggested-action:active,
-        .header-bar.selection-mode .button.suggested-action:active {
+        .titlebar.selection-mode button.suggested-action:active,
+        .header-bar.selection-mode button.suggested-action:active {
           border-width: 2px;
           border-style: solid;
           background-image: none;
           color: white;
           background-color: black;
           border-color: gray; }
-        .titlebar.selection-mode .button.suggested-action:insensitive,
-        .header-bar.selection-mode .button.suggested-action:insensitive {
+        .titlebar.selection-mode button.suggested-action:insensitive,
+        .header-bar.selection-mode button.suggested-action:insensitive {
           border-width: 2px;
           border-style: solid;
           color: gray;
@@ -1137,8 +1143,8 @@ GtkComboBox {
           background-image: none;
           text-shadow: none;
           icon-shadow: none; }
-        .titlebar.selection-mode .button.suggested-action:backdrop,
-        .header-bar.selection-mode .button.suggested-action:backdrop {
+        .titlebar.selection-mode button.suggested-action:backdrop,
+        .header-bar.selection-mode button.suggested-action:backdrop {
           border-width: 2px;
           border-style: solid;
           color: #000;
@@ -1147,8 +1153,8 @@ GtkComboBox {
           background-image: none;
           text-shadow: none;
           icon-shadow: none; }
-        .titlebar.selection-mode .button.suggested-action:backdrop:insensitive,
-        .header-bar.selection-mode .button.suggested-action:backdrop:insensitive {
+        .titlebar.selection-mode button.suggested-action:backdrop:insensitive,
+        .header-bar.selection-mode button.suggested-action:backdrop:insensitive {
           border-width: 2px;
           border-style: solid;
           color: gray;
@@ -1168,23 +1174,23 @@ GtkComboBox {
 /************
  * Pathbars *
  ************/
-.path-bar .button {
+.path-bar button {
   padding: 5px 6px 6px; }
-  .path-bar .button:first-child {
+  .path-bar button:first-child {
     padding-left: 8px; }
-  .path-bar .button:last-child {
+  .path-bar button:last-child {
     padding-right: 8px; }
-  .path-bar .button:only-child {
+  .path-bar button:only-child {
     padding-left: 12px;
     padding-right: 12px; }
-  .path-bar .button label:last-child {
+  .path-bar button label:last-child {
     padding-left: 2px; }
-  .path-bar .button label:first-child {
+  .path-bar button label:first-child {
     padding-right: 2px; }
-  .path-bar .button label:only-child {
+  .path-bar button label:only-child {
     padding-right: 0;
     padding-left: 0; }
-  .path-bar .button image {
+  .path-bar button image {
     padding-top: 1px; }
 
 /**************
@@ -1258,35 +1264,35 @@ GtkTreeView.view {
       border-style: solid;
       border-color: #000; }
 
-column-header .button {
+column-header button {
   color: gray;
   font-weight: bold;
   text-shadow: none;
   box-shadow: none; }
-  column-header .button:hover {
+  column-header button:hover {
     color: #404040;
     box-shadow: none; }
-  column-header .button:active {
+  column-header button:active {
     color: #fff; }
 column-header :last-child.button, column-header:last-child.button {
   border-right-style: none; }
 
-column-header .button, column-header .button:hover, column-header .button:active {
+column-header button, column-header button:hover, column-header button:active {
   border-width: 0 1px 1px 0;
   border-radius: 0;
   background-image: none;
   border-color: #fff;
   text-shadow: none; }
-  column-header .button:insensitive {
+  column-header button:insensitive {
     border-width: 0 1px 1px 0;
     border-color: #fff;
     background-image: none; }
-  column-header .button:backdrop {
+  column-header button:backdrop {
     border-color: #fff;
     border-width: 0 1px 1px 0;
     color: gray;
     background-image: none; }
-    column-header .button:backdrop:insensitive {
+    column-header button:backdrop:insensitive {
       border-width: 0 1px 1px 0;
       border-color: #fff;
       background-image: none; }
@@ -1363,8 +1369,8 @@ GtkTreeView.view.progressbar {
     color: #000;
     background-color: transparent;
     border: 0; }
-  .popover .button.flat, .popover .sidebar-button.button,
-  .popover .button.flat:hover,
+  .popover button.flat, .popover .sidebar-button.button,
+  .popover button.flat:hover,
   .popover .sidebar-button.button:hover {
     color: #000;
     text-shadow: none;
@@ -1374,7 +1380,7 @@ GtkTreeView.view.progressbar {
     background-color: rgba(0, 0, 0, 0.8);
     border: 1px solid gray;
     color: #fff; }
-    .popover.osd .button {
+    .popover.osd button {
       color: white;
       text-shadow: none;
       border-width: 2px;
@@ -1384,21 +1390,21 @@ GtkTreeView.view.progressbar {
       background-color: rgba(0, 0, 0, 0.8);
       border-color: rgba(255, 255, 255, 0.2);
       box-shadow: none; }
-      .popover.osd .button:hover {
+      .popover.osd button:hover {
         border-width: 2px;
         border-style: solid;
         color: #fff;
         background-color: rgba(77, 77, 77, 0.8);
         border-color: rgba(255, 255, 255, 0.2);
         box-shadow: none; }
-      .popover.osd .button:active {
+      .popover.osd button:active {
         border-width: 2px;
         border-style: solid;
         color: rgba(0, 0, 0, 0.8);
         background-color: #fff;
         border-color: rgba(255, 255, 255, 0.2);
         box-shadow: none; }
-      .popover.osd .button:insensitive {
+      .popover.osd button:insensitive {
         border-width: 2px;
         border-style: solid;
         border-color: rgba(255, 255, 255, 0.2);
@@ -1604,25 +1610,25 @@ notebook {
       notebook tab.reorderable-page.right:backdrop {
         border-color: transparent;
         background-color: transparent; }
-    notebook tab GtkLabel {
+    notebook tab label {
       padding: 0 2px;
       font-weight: bold;
       color: gray;
       /* color: inherit doesn't work here */ }
-      notebook tab GtkLabel:backdrop {
+      notebook tab label:backdrop {
         color: gray; }
-    notebook tab:hover GtkLabel {
+    notebook tab:hover label {
       color: #404040; }
-    notebook tab:active GtkLabel {
+    notebook tab:active label {
       color: #000; }
-      notebook tab:active GtkLabel:backdrop {
+      notebook tab:active label:backdrop {
         color: #000; }
-    notebook tab .button {
+    notebook tab button {
       border: 2px solid transparent;
       icon-shadow: none;
       transition: none;
       color: rgba(0, 0, 0, 0.3); }
-      notebook tab .button:hover {
+      notebook tab button:hover {
         color: #000;
         border-width: 2px;
         border-style: solid;
@@ -1633,7 +1639,7 @@ notebook {
         border-width: 2px;
         background-image: none;
         box-shadow: none; }
-      notebook tab .button:active {
+      notebook tab button:active {
         border-width: 2px;
         border-style: solid;
         background-image: none;
@@ -1641,11 +1647,11 @@ notebook {
         background-color: black;
         border-color: gray;
         border-width: 2px; }
-      notebook tab .button:backdrop, notebook tab .button:backdrop:hover {
+      notebook tab button:backdrop, notebook tab button:backdrop:hover {
         color: rgba(0, 0, 0, 0.3);
         border-color: transparent;
         border-width: 2px; }
-      notebook tab .button > image {
+      notebook tab button > image {
         padding: 2px; }
 
 /**************
@@ -2067,11 +2073,15 @@ GtkLevelBar.vertical {
     .level-bar.fill-block.empty-fill-block:backdrop {
       border-color: rgba(0, 0, 0, 0.15); }
 
-.view:selected, calendar:selected, .view:selected:focus, calendar:focus:selected, .view:selected:hover, calendar:hover:selected, label:selected, label:selected:focus, label:selected:hover, label:backdrop:selected, entry:selected, entry:selected:focus, .menuitem.button.flat:hover, .menuitem.sidebar-button.button:hover, .menuitem.button.flat:selected, .menuitem.sidebar-button.button:selected, .list-row.activatable:selected, .sidebar:selected, GtkPlacesSidebar.sidebar .view:selected, GtkPlacesSidebar.sidebar calendar:selected {
+.view:selected, calendar:selected, .view:selected:focus, calendar:focus:selected, .view:selected:hover, calendar:hover:selected, label:selected, label:selected:focus, label:selected:hover, label:backdrop:selected, entry:selected, entry:selected:focus, spinbutton:selected, spinbutton:selected:focus, modelbutton.flat:hover, modelbutton.flat:selected,
+.menuitem.button.flat:hover,
+.menuitem.button.flat:selected, .list-row.activatable:selected, .sidebar:selected, GtkPlacesSidebar.sidebar .view:selected, GtkPlacesSidebar.sidebar calendar:selected {
   background-color: #000;
   color: #fff;
   outline-color: rgba(255, 255, 255, 0.3); }
-  .view:backdrop:selected, calendar:backdrop:selected, calendar:backdrop:focus:selected, calendar:backdrop:hover:selected, label:backdrop:selected, entry:backdrop:selected, .menuitem.button.flat:backdrop:hover, .menuitem.sidebar-button.button:backdrop:hover, .menuitem.button.flat:backdrop:selected, .menuitem.sidebar-button.button:backdrop:selected, .list-row.activatable:backdrop:selected, .sidebar:backdrop:selected, GtkPlacesSidebar.sidebar .view:backdrop:selected, GtkPlacesSidebar.sidebar calendar:backdrop:selected {
+  .view:backdrop:selected, calendar:backdrop:selected, calendar:backdrop:focus:selected, calendar:backdrop:hover:selected, label:backdrop:selected, entry:backdrop:selected, spinbutton:backdrop:selected, modelbutton.flat:backdrop:hover, modelbutton.flat:backdrop:selected,
+  .menuitem.button.flat:backdrop:hover,
+  .menuitem.button.flat:backdrop:selected, .list-row.activatable:backdrop:selected, .sidebar:backdrop:selected, GtkPlacesSidebar.sidebar .view:backdrop:selected, GtkPlacesSidebar.sidebar calendar:backdrop:selected {
     background-color: gray;
     color: #fff; }
 
@@ -2143,15 +2153,15 @@ GtkPlacesSidebar.sidebar .view separator:backdrop {
       background-color: black; }
     .list-row.activatable:selected:backdrop {
       background-color: gray; }
-    .list-row.activatable:selected .button.flat, .list-row.activatable:selected .sidebar-button.button {
+    .list-row.activatable:selected .button.flat {
       color: #fff; }
-      .list-row.activatable:selected .button.flat:hover, .list-row.activatable:selected .sidebar-button.button:hover {
+      .list-row.activatable:selected .button.flat:hover {
         color: #000; }
-      .list-row.activatable:selected .button.flat:active, .list-row.activatable:selected .sidebar-button.button:active {
+      .list-row.activatable:selected .button.flat:active {
         color: #fff; }
-.list-row .button.flat, .list-row .sidebar-button.button {
+.list-row .button.flat {
   color: #000; }
-  .list-row .button.flat:active, .list-row .sidebar-button.button:active {
+  .list-row .button.flat:active {
     color: #fff; }
 
 .list-row, .list-row.activatable {
@@ -2214,7 +2224,7 @@ calendar {
 /***********
  * Dialogs *
  ***********/
-.message-dialog .dialog-action-area .button {
+.message-dialog .dialog-action-area button {
   padding: 8px; }
 
 .message-dialog .titlebar {
@@ -2223,7 +2233,7 @@ calendar {
 .message-dialog.csd {
   border-bottom-left-radius: 9px;
   border-bottom-right-radius: 9px; }
-  .message-dialog.csd .dialog-action-area .button {
+  .message-dialog.csd .dialog-action-area button {
     padding: 12px;
     border-radius: 0;
     border-width: 2px;
@@ -2232,21 +2242,21 @@ calendar {
     background-image: none;
     background-color: #fff;
     border-color: gray; }
-    .message-dialog.csd .dialog-action-area .button:hover {
+    .message-dialog.csd .dialog-action-area button:hover {
       border-width: 2px;
       border-style: solid;
       color: #000;
       background-color: #fff;
       border-color: gray;
       background-image: none; }
-    .message-dialog.csd .dialog-action-area .button:active {
+    .message-dialog.csd .dialog-action-area button:active {
       border-width: 2px;
       border-style: solid;
       background-image: none;
       color: white;
       background-color: black;
       border-color: gray; }
-    .message-dialog.csd .dialog-action-area .button:insensitive {
+    .message-dialog.csd .dialog-action-area button:insensitive {
       border-width: 2px;
       border-style: solid;
       color: gray;
@@ -2255,7 +2265,7 @@ calendar {
       background-image: none;
       text-shadow: none;
       icon-shadow: none; }
-    .message-dialog.csd .dialog-action-area .button:backdrop {
+    .message-dialog.csd .dialog-action-area button:backdrop {
       border-width: 2px;
       border-style: solid;
       color: #000;
@@ -2264,35 +2274,35 @@ calendar {
       background-image: none;
       text-shadow: none;
       icon-shadow: none; }
-    .message-dialog.csd .dialog-action-area .button:backdrop:insensitive {
+    .message-dialog.csd .dialog-action-area button:backdrop:insensitive {
       border-width: 2px;
       border-style: solid;
       color: gray;
       background-color: white;
       border-color: #8d8d8d;
       background-image: none; }
-    .message-dialog.csd .dialog-action-area .button.suggested-action {
+    .message-dialog.csd .dialog-action-area button.suggested-action {
       border-width: 2px;
       border-style: solid;
       color: white;
       background-image: none;
       background-color: #4a90d9;
       border-color: #1c5187; }
-      .message-dialog.csd .dialog-action-area .button.suggested-action:hover {
+      .message-dialog.csd .dialog-action-area button.suggested-action:hover {
         border-width: 2px;
         border-style: solid;
         color: white;
         background-color: #4a90d9;
         border-color: #1c5187;
         background-image: none; }
-      .message-dialog.csd .dialog-action-area .button.suggested-action:active {
+      .message-dialog.csd .dialog-action-area button.suggested-action:active {
         border-width: 2px;
         border-style: solid;
         background-image: none;
         color: black;
         background-color: #b56f26;
         border-color: #1c5187; }
-      .message-dialog.csd .dialog-action-area .button.suggested-action:backdrop {
+      .message-dialog.csd .dialog-action-area button.suggested-action:backdrop {
         border-width: 2px;
         border-style: solid;
         color: white;
@@ -2301,14 +2311,14 @@ calendar {
         background-image: none;
         text-shadow: none;
         icon-shadow: none; }
-        .message-dialog.csd .dialog-action-area .button.suggested-action:backdrop:insensitive {
+        .message-dialog.csd .dialog-action-area button.suggested-action:backdrop:insensitive {
           border-width: 2px;
           border-style: solid;
           color: gray;
           background-color: white;
           border-color: #8d8d8d;
           background-image: none; }
-      .message-dialog.csd .dialog-action-area .button.suggested-action:insensitive {
+      .message-dialog.csd .dialog-action-area button.suggested-action:insensitive {
         border-width: 2px;
         border-style: solid;
         color: gray;
@@ -2317,28 +2327,28 @@ calendar {
         background-image: none;
         text-shadow: none;
         icon-shadow: none; }
-    .message-dialog.csd .dialog-action-area .button.destructive-action {
+    .message-dialog.csd .dialog-action-area button.destructive-action {
       border-width: 2px;
       border-style: solid;
       color: white;
       background-image: none;
       background-color: #ef2929;
       border-color: #8e0b0b; }
-      .message-dialog.csd .dialog-action-area .button.destructive-action:hover {
+      .message-dialog.csd .dialog-action-area button.destructive-action:hover {
         border-width: 2px;
         border-style: solid;
         color: white;
         background-color: #ef2929;
         border-color: #8e0b0b;
         background-image: none; }
-      .message-dialog.csd .dialog-action-area .button.destructive-action:active {
+      .message-dialog.csd .dialog-action-area button.destructive-action:active {
         border-width: 2px;
         border-style: solid;
         background-image: none;
         color: black;
         background-color: #10d6d6;
         border-color: #8e0b0b; }
-      .message-dialog.csd .dialog-action-area .button.destructive-action:backdrop {
+      .message-dialog.csd .dialog-action-area button.destructive-action:backdrop {
         border-width: 2px;
         border-style: solid;
         color: white;
@@ -2347,14 +2357,14 @@ calendar {
         background-image: none;
         text-shadow: none;
         icon-shadow: none; }
-        .message-dialog.csd .dialog-action-area .button.destructive-action:backdrop:insensitive {
+        .message-dialog.csd .dialog-action-area button.destructive-action:backdrop:insensitive {
           border-width: 2px;
           border-style: solid;
           color: gray;
           background-color: white;
           border-color: #8d8d8d;
           background-image: none; }
-      .message-dialog.csd .dialog-action-area .button.destructive-action:insensitive {
+      .message-dialog.csd .dialog-action-area button.destructive-action:insensitive {
         border-width: 2px;
         border-style: solid;
         color: gray;
@@ -2363,12 +2373,12 @@ calendar {
         background-image: none;
         text-shadow: none;
         icon-shadow: none; }
-  .message-dialog.csd .dialog-action-area .button, .message-dialog.csd .dialog-action-area .button:hover, .message-dialog.csd .dialog-action-area .button:active, .message-dialog.csd .dialog-action-area .button:insensitive, .message-dialog.csd .dialog-action-area .button:backdrop, .message-dialog.csd .dialog-action-area .button:backdrop:insensitive, .message-dialog.csd .dialog-action-area .button.suggested-action, .message-dialog.csd .dialog-action-area .button.suggested-action:hover, .message-dialog.csd .dialog-action-area .button.suggested-action:active, .message-dialog.csd .dialog-action-area .button.suggested-action:backdrop, .message-dialog.csd .dialog-action-area .button.suggested-action:backdrop:insensitive, .message-dialog.csd .dialog-action-area .button.suggested-action:insensitive, .message-dialog.csd .dialog-action-area .button.destructive-action, .message-dialog.csd .dialog-action-area .button.destructive-action:hover, .message-dialog.csd .dialog-action-area .button.destructive-action:active, .message-dialog.csd .dialog-action-area .button.destructive-action:backdrop, .message-dialog.csd .dialog-action-area .button.destructive-action:backdrop:insensitive, .message-dialog.csd .dialog-action-area .button.destructive-action:insensitive {
+  .message-dialog.csd .dialog-action-area button, .message-dialog.csd .dialog-action-area button:hover, .message-dialog.csd .dialog-action-area button:active, .message-dialog.csd .dialog-action-area button:insensitive, .message-dialog.csd .dialog-action-area button:backdrop, .message-dialog.csd .dialog-action-area button:backdrop:insensitive, .message-dialog.csd .dialog-action-area button.suggested-action, .message-dialog.csd .dialog-action-area button.suggested-action:hover, .message-dialog.csd .dialog-action-area button.suggested-action:active, .message-dialog.csd .dialog-action-area button.suggested-action:backdrop, .message-dialog.csd .dialog-action-area button.suggested-action:backdrop:insensitive, .message-dialog.csd .dialog-action-area button.suggested-action:insensitive, .message-dialog.csd .dialog-action-area button.destructive-action, .message-dialog.csd .dialog-action-area button.destructive-action:hover, .message-dialog.csd .dialog-action-area button.destructive-action:active, .message-dialog.csd .dialog-action-area button.destructive-action:backdrop, .message-dialog.csd .dialog-action-area button.destructive-action:backdrop:insensitive, .message-dialog.csd .dialog-action-area button.destructive-action:insensitive {
     border-right-style: none;
     border-bottom-style: none; }
-  .message-dialog.csd .dialog-action-area .button:last-child {
+  .message-dialog.csd .dialog-action-area button:last-child {
     border-bottom-right-radius: 7px; }
-  .message-dialog.csd .dialog-action-area .button:first-child {
+  .message-dialog.csd .dialog-action-area button:first-child {
     border-left-style: none;
     border-bottom-left-radius: 7px; }
 
@@ -2477,40 +2487,40 @@ infobar {
   color: #fff;
   text-shadow: 0 1px black;
   border-color: black; }
-  .info .button,
-  .question .button,
-  .warning .button,
-  .error .button {
+  .info button,
+  .question button,
+  .warning button,
+  .error button {
     border-width: 2px;
     border-style: solid;
     color: #fff;
     background-image: none;
     background-color: #000;
     border-color: black; }
-    .info .button:hover,
-    .question .button:hover,
-    .warning .button:hover,
-    .error .button:hover {
+    .info button:hover,
+    .question button:hover,
+    .warning button:hover,
+    .error button:hover {
       border-width: 2px;
       border-style: solid;
       color: #fff;
       background-color: #000;
       border-color: black;
       background-image: none; }
-    .info .button:active,
-    .question .button:active,
-    .warning .button:active,
-    .error .button:active {
+    .info button:active,
+    .question button:active,
+    .warning button:active,
+    .error button:active {
       border-width: 2px;
       border-style: solid;
       background-image: none;
       color: black;
       background-color: white;
       border-color: black; }
-    .info .button:insensitive,
-    .question .button:insensitive,
-    .warning .button:insensitive,
-    .error .button:insensitive {
+    .info button:insensitive,
+    .question button:insensitive,
+    .warning button:insensitive,
+    .error button:insensitive {
       border-width: 2px;
       border-style: solid;
       color: gray;
@@ -2519,10 +2529,10 @@ infobar {
       background-image: none;
       text-shadow: none;
       icon-shadow: none; }
-    .info .button:backdrop,
-    .question .button:backdrop,
-    .warning .button:backdrop,
-    .error .button:backdrop {
+    .info button:backdrop,
+    .question button:backdrop,
+    .warning button:backdrop,
+    .error button:backdrop {
       border-width: 2px;
       border-style: solid;
       color: #fff;
@@ -2531,10 +2541,10 @@ infobar {
       background-image: none;
       text-shadow: none;
       icon-shadow: none; }
-    .info .button:backdrop:insensitive,
-    .question .button:backdrop:insensitive,
-    .warning .button:backdrop:insensitive,
-    .error .button:backdrop:insensitive {
+    .info button:backdrop:insensitive,
+    .question button:backdrop:insensitive,
+    .warning button:backdrop:insensitive,
+    .error button:backdrop:insensitive {
       border-width: 2px;
       border-style: solid;
       color: gray;
@@ -2684,27 +2694,27 @@ decoration {
     border: solid 1px #8d8d8d;
     box-shadow: none; }
 
-.button.titlebutton {
+button.titlebutton {
   padding: 8px;
   border-color: transparent;
   background-image: none;
   transition-property: border, box-shadow, color;
   box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
-  .button.titlebutton:hover {
+  button.titlebutton:hover {
     border-width: 2px;
     border-style: solid;
     color: #000;
     background-image: none;
     background-color: #fff;
     border-color: gray; }
-  .button.titlebutton:active {
+  button.titlebutton:active {
     border-width: 2px;
     border-style: solid;
     background-image: none;
     color: white;
     background-color: black;
     border-color: gray; }
-  .button.titlebutton:backdrop {
+  button.titlebutton:backdrop {
     border-width: 2px;
     border-style: solid;
     color: #000;
@@ -2787,7 +2797,7 @@ decoration {
   icon-shadow: 0 1px black; }
   .touch-selection:backdrop {
     text-shadow: none; }
-  .touch-selection .button {
+  .touch-selection button {
     border-width: 2px;
     border-style: solid;
     color: #fff;
@@ -2795,26 +2805,26 @@ decoration {
     background-color: rgba(0, 0, 0, 0.8);
     border-color: rgba(255, 255, 255, 0.2);
     box-shadow: none; }
-    .touch-selection .button:hover {
+    .touch-selection button:hover {
       border-width: 2px;
       border-style: solid;
       color: #fff;
       background-color: rgba(77, 77, 77, 0.8);
       border-color: rgba(255, 255, 255, 0.2);
       box-shadow: none; }
-    .touch-selection .button:active, .touch-selection .button:checked {
+    .touch-selection button:active, .touch-selection button:checked {
       border-width: 2px;
       border-style: solid;
       color: rgba(0, 0, 0, 0.8);
       background-color: #fff;
       border-color: rgba(255, 255, 255, 0.2);
       box-shadow: none; }
-    .touch-selection .button:insensitive, .touch-selection .button:backdrop:insensitive {
+    .touch-selection button:insensitive, .touch-selection button:backdrop:insensitive {
       border-width: 2px;
       border-style: solid;
       border-color: rgba(255, 255, 255, 0.2);
       color: gray; }
-    .touch-selection .button:backdrop {
+    .touch-selection button:backdrop {
       border-width: 2px;
       border-style: solid; }
   .touch-selection .check {

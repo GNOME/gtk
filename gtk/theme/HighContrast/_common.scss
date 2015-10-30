@@ -182,7 +182,7 @@ spinner {
  * Text Entries *
  ****************/
 
-entry {
+entry, spinbutton {
   padding: 7px 4px;
   border-radius: 3px;
   border-width: 1px;
@@ -344,7 +344,7 @@ $_dot_color: $selected_bg_color;
   }
 }
 
-.button {
+button {
   border-radius: 3px;
   transition: all 200ms ease-out;
   padding: 4px 6px;
@@ -460,7 +460,7 @@ $_dot_color: $selected_bg_color;
 
 // all the following is for the +|- buttons on inline toolbars, that way
 // should really be reprecated...
-.inline-toolbar GtkToolButton > .button { // redefining the button look is
+.inline-toolbar GtkToolButton > button { // redefining the button look is
                                                // needed since those are flat...
   @include button(normal, $edge: none); // the box-shadow outset doesn't work
                                           // in this case, hence $edge: none
@@ -476,22 +476,22 @@ $_dot_color: $selected_bg_color;
 .inline-toolbar.toolbar GtkToolButton { // .inline-toolbar.toolbar here for
                                         // higher specificity than the previous
                                         // "button look" selector
-  & > .button.flat {
+  & > button.flat {
     border-radius: 0;
     border-left-style: none;
   }
-  &:dir(rtl) > .button.flat {}
-  &:first-child > .button.flat {
+  &:dir(rtl) > button.flat {}
+  &:first-child > button.flat {
     border-radius: 3px 0 0 3px;
     border-left-style: solid;
   }
-  &:last-child > .button.flat {
+  &:last-child > button.flat {
     border-radius: 0 3px 3px 0;
   }
-  &:last-child:dir(rtl) > .button.flat {
+  &:last-child:dir(rtl) > button.flat {
     border-right-style: solid;
   }
-  &:only-child > .button.flat {
+  &:only-child > button.flat {
     border-radius: 3px;
     border-style: solid;
   }
@@ -577,6 +577,7 @@ $_dot_color: $selected_bg_color;
 }
 
 /* menu buttons */
+modelbutton.flat,
 .menuitem.button.flat {
   @extend %undecorated_button;
   outline-offset: -1px;
@@ -606,7 +607,7 @@ GtkColorButton.button { padding: 4px; } // Uniform padding on the
   }
 }
 
-.button:link, .button:visited {
+button:link, button:visited {
   color: $suggested_color;
   font-weight: bold;
   @extend %undecorated_button;
@@ -628,8 +629,8 @@ GtkColorButton.button { padding: 4px; } // Uniform padding on the
  * GtkSpinButton *
  *****************/
 
-.spinbutton {
-  .button {
+spinbutton {
+  button {
     @include entry(normal);
     background-image: none;
     border-width: 0 0 0 1px;
@@ -664,7 +665,7 @@ GtkColorButton.button { padding: 4px; } // Uniform padding on the
     }
   }
   &.vertical {
-    .button {
+    button {
       &:first-child {
         @extend %top_button;
         @include button(normal, $edge: none);
@@ -776,7 +777,7 @@ GtkComboBox {
       border-radius: 0 3px 3px 0;
     }
   }
-  &.combobox-entry .button, &.combobox-entry .button:backdrop {
+  &.combobox-entry button, &.combobox-entry button:backdrop {
     // It is needed to specify the backdrop button or it gets overridden
     border-radius: 0 3px 3px 0;
     border-left-style: none;
@@ -788,31 +789,31 @@ GtkComboBox {
   }
 }
 
-.linked > GtkComboBox > .button {
+.linked > GtkComboBox > button {
   // The combo is a composite widget so the way we do
   // button linking doesn't work, special case needed.
   // See https://bugzilla.gnome.org/show_bug.cgi?id=733979
   &:dir(ltr) { @extend %linked_middle; } // specificity bump
   &:dir(rtl) { @extend %linked_middle:dir(rtl); }
 }
-.linked > GtkComboBox:first-child > .button {
+.linked > GtkComboBox:first-child > button {
   @extend %linked:first-child;
 }
-.linked > GtkComboBox:last-child > .button {
+.linked > GtkComboBox:last-child > button {
   @extend %linked:last-child;
 }
-.linked > GtkComboBox:only-child > .button {
+.linked > GtkComboBox:only-child > button {
   @extend %linked:only-child;
 }
 
-.linked.vertical > GtkComboBoxText > .button,
-.linked.vertical > GtkComboBox > .button { @extend %linked_vertical_middle; }
-.linked.vertical > GtkComboBoxText:first-child > .button,
-.linked.vertical > GtkComboBox:first-child > .button { @extend %linked_vertical:first-child; }
-.linked.vertical > GtkComboBoxText:last-child > .button,
-.linked.vertical > GtkComboBox:last-child > .button { @extend %linked_vertical:last-child; }
-.linked.vertical > GtkComboBoxText:only-child > .button,
-.linked.vertical > GtkComboBox:only-child > .button { @extend %linked_vertical:only-child; }
+.linked.vertical > GtkComboBoxText > button,
+.linked.vertical > GtkComboBox > button { @extend %linked_vertical_middle; }
+.linked.vertical > GtkComboBoxText:first-child > button,
+.linked.vertical > GtkComboBox:first-child > button { @extend %linked_vertical:first-child; }
+.linked.vertical > GtkComboBoxText:last-child > button,
+.linked.vertical > GtkComboBox:last-child > button { @extend %linked_vertical:last-child; }
+.linked.vertical > GtkComboBoxText:only-child > button,
+.linked.vertical > GtkComboBox:only-child > button { @extend %linked_vertical:only-child; }
 
 /************
  * Toolbars *
@@ -911,7 +912,7 @@ GtkComboBox {
                                     lighten($selected_bg_color,2%));
     box-shadow: inset 0 -1px mix($borders_color,$bg_color, 30%), //bottom shade
                 inset 0 1px mix($borders_edge,$selected_bg_color, 50%); //top highlight
-    .button {
+    button {
       @include button(normal, $selected_bg_color, $selected_fg_color, $edge: none);
       &:hover { @include button(hover, $selected_bg_color, $selected_fg_color, $edge: none); }
       &:active { @include button(active, $selected_bg_color, $selected_fg_color, $edge: none); }
@@ -945,7 +946,7 @@ GtkComboBox {
  * Pathbars *
  ************/
 
-.path-bar .button {
+.path-bar button {
   padding: 5px 6px 6px;
   &:first-child { padding-left: 8px; }
   &:last-child { padding-right: 8px; }
@@ -1055,7 +1056,7 @@ GtkTreeView.view {
 }
 
 column-header {
-  .button {
+  button {
     @extend %column_header_button;
     $_column_header_color: mix($fg_color,$base_color,50%);
     color: $_column_header_color;
@@ -1198,8 +1199,8 @@ GtkTreeView.view.progressbar { //Progressbar in treeview cells
     background-color: transparent;
     border: 0;
   }
-  .button.flat,
-  .button.flat:hover {
+  button.flat,
+  button.flat:hover {
     color: $fg_color;
     text-shadow: none;
     transition: none;
@@ -1210,7 +1211,7 @@ GtkTreeView.view.progressbar { //Progressbar in treeview cells
     background-color: $osd_bg_color;
     border: 1px solid $borders_color;
     color: $osd_fg_color;
-    .button {
+    button {
       color: white;
       text-shadow: none;
       @include button(osd);
@@ -1416,7 +1417,7 @@ notebook {
         }
       }
     }
-    GtkLabel { //tab text
+    label { //tab text
       padding: 0 2px; // needed for a nicer focus ring
       font-weight: bold;
       color: $insensitive_fg_color; /* color: inherit doesn't work here */
@@ -1424,16 +1425,16 @@ notebook {
         color: $insensitive_fg_color;
       }
     }
-    &:hover GtkLabel {
+    &:hover label {
       // prelight tab text
       color: mix($fg_color, $insensitive_fg_color, 50%);
     }
-    &:active GtkLabel {
+    &:active label {
       // active tab text
       color: $fg_color;
       &:backdrop { color: $backdrop_fg_color; }
     }
-    .button { //tab close button
+    button { //tab close button
       border: 2px solid transparent;
       @extend %undecorated_button;
       icon-shadow: none;
@@ -2077,7 +2078,7 @@ calendar {
  * Dialogs *
  ***********/
 
-.message-dialog .dialog-action-area .button {
+.message-dialog .dialog-action-area button {
   padding: 8px;
 }
 
@@ -2090,7 +2091,7 @@ calendar {
     // bigger radius for better antialiasing
     border-bottom-left-radius: 9px;
     border-bottom-right-radius: 9px;
-    .dialog-action-area .button {
+    .dialog-action-area button {
       padding: 12px;
       border-radius: 0;
       @include button(normal, $edge: none);
@@ -2227,7 +2228,7 @@ GtkPlacesSidebar.sidebar {
 
     &.image-button { padding: 5px; }
 
-    @extend .button.flat;
+    @extend button.flat;
     border-radius: 100%;
     outline-radius: 100%;
     &:not(:hover):not(:active) > image,
@@ -2324,7 +2325,7 @@ infobar {
   color: $selected_fg_color;
   text-shadow: 0 1px darken($selected_bg_color, 10%);
   border-color: darken($selected_bg_color, 10%);
-  .button {
+  button {
     @include button(normal, $selected_bg_color, $selected_fg_color, $edge: none);
     &:hover { @include button(hover, $selected_bg_color, $selected_fg_color, $edge: none); }
     &:active { @include button(active, $selected_bg_color, $selected_fg_color, $edge: none); }
@@ -2516,7 +2517,7 @@ decoration {
 }
 
 // Window Close button
-.button.titlebutton {
+button.titlebutton {
   padding: 8px;
   border-color: transparent;
   background-image: none;
@@ -2579,7 +2580,7 @@ decoration {
   text-shadow: 0 1px black;
   icon-shadow: 0 1px black;
   &:backdrop { text-shadow: none; }
-  .button {
+  button {
     @include button(osd);
     &:hover { @include button(osd-hover); }
     &:active, &:checked { @include button(osd-active); }
