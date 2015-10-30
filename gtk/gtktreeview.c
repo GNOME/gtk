@@ -123,6 +123,12 @@
  *   </child>
  * </object>
  * ]|
+ *
+ * # CSS nodes
+ *
+ * GtkTreeView has a main CSS node with name treeview and style class .view.
+ * It has a subnode with name header, which is the parent for all the column
+ * header widgets' CSS nodes.
  */
 
 enum
@@ -295,7 +301,7 @@ struct _GtkTreeViewPrivate
   GtkPixelCache *pixel_cache;
 
   /* CSS nodes */
-  GtkCssNode *column_header_node;
+  GtkCssNode *header_node;
 
   /* Scroll position state keeping */
   GtkTreeRowReference *top_row;
@@ -1755,6 +1761,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_F, GDK_CONTROL_MASK, "start-interactive-search", 0);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_TREE_VIEW_ACCESSIBLE);
+  gtk_widget_class_set_css_name (widget_class, "treeview");
 }
 
 static void
@@ -1825,11 +1832,11 @@ gtk_tree_view_init (GtkTreeView *tree_view)
                                GTK_STYLE_CLASS_VIEW);
 
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (tree_view));
-  priv->column_header_node = gtk_css_node_new ();
-  gtk_css_node_set_name (priv->column_header_node, g_intern_string ("column-header"));
-  gtk_css_node_set_parent (priv->column_header_node, widget_node);
-  gtk_css_node_set_state (priv->column_header_node, gtk_css_node_get_state (widget_node));
-  g_object_unref (priv->column_header_node);
+  priv->header_node = gtk_css_node_new ();
+  gtk_css_node_set_name (priv->header_node, I_("header"));
+  gtk_css_node_set_parent (priv->header_node, widget_node);
+  gtk_css_node_set_state (priv->header_node, gtk_css_node_get_state (widget_node));
+  g_object_unref (priv->header_node);
 
   priv->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (tree_view));
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->multipress_gesture), 0);
@@ -12014,7 +12021,7 @@ gtk_tree_view_update_button_position (GtkTreeView       *tree_view,
   column_el = g_list_find (priv->columns, column);
   g_return_if_fail (column_el != NULL);
 
-  gtk_css_node_insert_after (priv->column_header_node,
+  gtk_css_node_insert_after (priv->header_node,
                              gtk_widget_get_css_node (gtk_tree_view_column_get_button (column)),
                              column_el->prev ? gtk_widget_get_css_node (
                                 gtk_tree_view_column_get_button (column_el->prev->data)) : NULL);
