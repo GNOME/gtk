@@ -34,6 +34,9 @@
 #include "gtkstack.h"
 #include "gtkpopover.h"
 #include "gtkintl.h"
+#include "gtkcssnodeprivate.h"
+#include "gtkstylecontextprivate.h"
+#include "gtkcssstylepropertyprivate.h"
 
 /**
  * SECTION:gtkmodelbutton
@@ -111,6 +114,7 @@ struct _GtkModelButton
   GtkWidget *box;
   GtkWidget *image;
   GtkWidget *label;
+  GtkCssNode *indicator_node;
   gboolean active;
   gboolean centered;
   gboolean inverted;
@@ -155,6 +159,7 @@ gtk_model_button_update_state (GtkModelButton *button)
     state |= GTK_STATE_FLAG_CHECKED;
 
   gtk_widget_set_state_flags (GTK_WIDGET (button), state, TRUE);
+  gtk_css_node_set_state (button->indicator_node, state);
 }
 
 
@@ -164,6 +169,8 @@ gtk_model_button_set_role (GtkModelButton *button,
 {
   AtkObject *accessible;
   AtkRole a11y_role;
+  const gchar *name;
+  gboolean visible;
 
   if (role == button->role)
     return;
@@ -175,14 +182,20 @@ gtk_model_button_set_role (GtkModelButton *button,
     {
     case GTK_BUTTON_ROLE_NORMAL:
       a11y_role = ATK_ROLE_PUSH_BUTTON;
+      name = I_("check");
+      visible = FALSE;
       break;
 
     case GTK_BUTTON_ROLE_CHECK:
       a11y_role = ATK_ROLE_CHECK_BOX;
+      name = I_("check");
+      visible = TRUE;
       break;
 
     case GTK_BUTTON_ROLE_RADIO:
       a11y_role = ATK_ROLE_RADIO_BUTTON;
+      name = I_("radio");
+      visible = TRUE;
       break;
 
     default:
@@ -190,6 +203,8 @@ gtk_model_button_set_role (GtkModelButton *button,
     }
 
   atk_object_set_role (accessible, a11y_role);
+  gtk_css_node_set_name (button->indicator_node, name);
+  gtk_css_node_set_visible (button->indicator_node, visible);
 
   gtk_model_button_update_state (button);
   gtk_widget_queue_draw (GTK_WIDGET (button));
@@ -280,24 +295,24 @@ static void
 gtk_model_button_set_iconic (GtkModelButton *button,
                              gboolean        iconic)
 {
-  GtkStyleContext *context;
+  GtkCssNode *widget_node;
 
   if (button->iconic == iconic)
     return;
 
   button->iconic = iconic;
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (button));
+  widget_node = gtk_widget_get_css_node (GTK_WIDGET (button));
   if (iconic)
     {
-      gtk_style_context_remove_class (context, GTK_STYLE_CLASS_MENUITEM);
-      gtk_style_context_add_class (context, "image-button");
+      gtk_css_node_set_name (widget_node, I_("button"));
+      gtk_css_node_add_class (widget_node, g_quark_from_static_string ("image-button"));
       gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NORMAL);
     }
   else
     {
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_MENUITEM);
-      gtk_style_context_remove_class (context, "image-button");
+      gtk_css_node_set_name (widget_node, I_("modelbutton"));
+      gtk_css_node_remove_class (widget_node, g_quark_from_static_string ("image-button"));
       gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
     }
 
@@ -746,7 +761,7 @@ gtk_model_button_draw (GtkWidget *widget,
     {
       GtkStateFlags state;
 
-      gtk_style_context_save (context);
+      gtk_style_context_save_named (context, "arrow");
       state = gtk_style_context_get_state (context);
       state = state & ~(GTK_STATE_FLAG_DIR_LTR|GTK_STATE_FLAG_DIR_RTL);
       if (indicator_is_left (widget))
@@ -761,15 +776,13 @@ gtk_model_button_draw (GtkWidget *widget,
     }
   else if (model_button->role == GTK_BUTTON_ROLE_CHECK)
     {
-      gtk_style_context_save (context);
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_CHECK);
+      gtk_style_context_save_to_node (context, model_button->indicator_node);
       gtk_render_check (context, cr, x, y, indicator_size, indicator_size);
       gtk_style_context_restore (context);
     }
   else if (model_button->role == GTK_BUTTON_ROLE_RADIO)
     {
-      gtk_style_context_save (context);
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_RADIO);
+      gtk_style_context_save_to_node (context, model_button->indicator_node);
       gtk_render_option (context, cr, x, y, indicator_size, indicator_size);
       gtk_style_context_restore (context);
     }
@@ -972,11 +985,37 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
   g_object_class_install_properties (object_class, LAST_PROPERTY, properties);
 
   gtk_widget_class_set_accessible_role (GTK_WIDGET_CLASS (class), ATK_ROLE_PUSH_BUTTON);
+  gtk_widget_class_set_css_name (GTK_WIDGET_CLASS (class), "modelbutton");
+}
+
+static void
+node_style_changed_cb (GtkCssNode  *node,
+                       GtkCssStyle *old_style,
+                       GtkCssStyle *new_style,
+                       GtkWidget    *widget)
+{
+  GtkBitmask *changes;
+  static GtkBitmask *affects_size = NULL;
+
+  if (G_UNLIKELY (affects_size == NULL))
+    affects_size = _gtk_css_style_property_get_mask_affecting (GTK_CSS_AFFECTS_SIZE | GTK_CSS_AFFECTS_CLIP);
+
+  changes = _gtk_bitmask_new ();
+  changes = gtk_css_style_add_difference (changes, old_style, new_style);
+
+  if (_gtk_bitmask_intersects (changes, affects_size))
+    gtk_widget_queue_resize (widget);
+  else
+    gtk_widget_queue_draw (widget);
+  
+  _gtk_bitmask_free (changes);
 }
 
 static void
 gtk_model_button_init (GtkModelButton *button)
 {
+  GtkCssNode *widget_node;
+
   gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
   button->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   gtk_widget_set_margin_start (button->box, 12);
@@ -993,8 +1032,15 @@ gtk_model_button_init (GtkModelButton *button)
   gtk_container_add (GTK_CONTAINER (button->box), button->image);
   gtk_container_add (GTK_CONTAINER (button->box), button->label);
   gtk_container_add (GTK_CONTAINER (button), button->box);
-  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (button)),
-                               GTK_STYLE_CLASS_MENUITEM);
+
+  widget_node = gtk_widget_get_css_node (GTK_WIDGET (button));
+  button->indicator_node = gtk_css_node_new ();
+  gtk_css_node_set_name (button->indicator_node, I_("check"));
+  gtk_css_node_set_visible (button->indicator_node, FALSE);
+  gtk_css_node_set_parent (button->indicator_node, widget_node);
+  gtk_css_node_set_state (button->indicator_node, gtk_css_node_get_state (widget_node));
+  g_signal_connect_object (button->indicator_node, "style-changed", G_CALLBACK (node_style_changed_cb), button, 0);
+  g_object_unref (button->indicator_node);
 }
 
 /**
