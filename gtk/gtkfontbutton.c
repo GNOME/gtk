@@ -55,6 +55,10 @@
  * The #GtkFontButton is a button which displays the currently selected
  * font an allows to open a font chooser dialog to change the font.
  * It is suitable widget for selecting a font in a preference dialog.
+ *
+ * # CSS nodes
+ *
+ * GtkFontButton has a single CSS node with name button and style class .font.
  */
 
 
@@ -582,11 +586,15 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontButton, font_label);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontButton, size_label);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontButton, font_size_box);
+
+  gtk_widget_class_set_css_name (widget_class, "button");
 }
 
 static void
 gtk_font_button_init (GtkFontButton *font_button)
 {
+  GtkStyleContext *context;
+
   font_button->priv = gtk_font_button_get_instance_private (font_button);
 
   /* Initialize fields */
@@ -604,6 +612,9 @@ gtk_font_button_init (GtkFontButton *font_button)
   gtk_widget_init_template (GTK_WIDGET (font_button));
 
   gtk_font_button_take_font_desc (font_button, NULL);
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (font_button));
+  gtk_style_context_add_class (context, "font");
 }
 
 static void
