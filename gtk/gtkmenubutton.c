@@ -105,7 +105,7 @@
  * # CSS nodes
  *
  * GtkMenuButton has a single CSS node with name button. To differentiate
- * it from a plain #GtkButton, it gets the .menu style class.
+ * it from a plain #GtkButton, it gets the .menubutton style class.
  */
 
 #include "config.h"
@@ -673,7 +673,7 @@ gtk_menu_button_init (GtkMenuButton *menu_button)
   gtk_widget_set_sensitive (GTK_WIDGET (menu_button), FALSE);
 
   context = gtk_widget_get_style_context (GTK_WIDGET (menu_button));
-  gtk_style_context_add_class (context, "menu");
+  gtk_style_context_add_class (context, "menubutton");
 }
 
 /**
