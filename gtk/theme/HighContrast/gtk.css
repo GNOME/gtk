@@ -2450,28 +2450,31 @@ GtkPlacesSidebar.sidebar .view {
 /*********
  * Paned *
  *********/
-GtkPaned {
+paned {
   margin: 0 8px 8px 0; }
-  GtkPaned:dir(rtl) {
+  paned:dir(rtl) {
     margin-right: 0;
     margin-left: 8px; }
+  paned separator, paned GtkPlacesSidebar.sidebar .view separator, GtkPlacesSidebar.sidebar .view paned separator,
+  paned GtkPlacesSidebar.sidebar .view separator:backdrop,
+  GtkPlacesSidebar.sidebar .view paned separator:backdrop {
+    background-image: linear-gradient(to bottom, gray); }
+    paned separator:backdrop, paned GtkPlacesSidebar.sidebar .view separator:backdrop, GtkPlacesSidebar.sidebar .view paned separator:backdrop {
+      background-image: linear-gradient(to bottom, #8d8d8d); }
 
-.pane-separator {
-  background-image: linear-gradient(to bottom, gray); }
-  .pane-separator:backdrop {
-    background-image: linear-gradient(to bottom, #8d8d8d); }
-
-GtkPaned.wide {
+paned.wide {
   -GtkPaned-handle-size: 5;
   margin: 0; }
-  GtkPaned.wide .pane-separator {
+  paned.wide separator, paned.wide GtkPlacesSidebar.sidebar .view separator, GtkPlacesSidebar.sidebar .view paned.wide separator {
     background-color: transparent;
     border-style: none solid;
     border-color: gray;
     border-width: 1px; }
-  GtkPaned.wide.vertical .pane-separator {
+  paned.wide.vertical separator,
+  paned.wide.vertical GtkPlacesSidebar.sidebar .view separator:backdrop,
+  GtkPlacesSidebar.sidebar .view paned.wide.vertical separator:backdrop {
     border-style: solid none; }
-  GtkPaned.wide .pane-separator:backdrop {
+  paned.wide separator:backdrop {
     border-color: #8d8d8d; }
 
 /**************
