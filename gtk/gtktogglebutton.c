@@ -220,9 +220,14 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
 static void
 gtk_toggle_button_init (GtkToggleButton *toggle_button)
 {
+  GtkStyleContext *context;
+
   toggle_button->priv = gtk_toggle_button_get_instance_private (toggle_button);
   toggle_button->priv->active = FALSE;
   toggle_button->priv->draw_indicator = FALSE;
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (toggle_button));
+  gtk_style_context_add_class (context, "toggle");
 }
 
 static void
