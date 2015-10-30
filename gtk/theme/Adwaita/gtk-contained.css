@@ -1152,7 +1152,10 @@ button, .header-bar button.titlebutton,
   border-radius: 3px;
   border-style: solid; }
 
-.menuitem.button.flat, .menuitem.button.flat:backdrop, .menuitem.button.flat:backdrop:hover, button:link, .header-bar button.titlebutton:link,
+modelbutton.flat,
+.menuitem.button.flat, modelbutton.flat:backdrop, modelbutton.flat:backdrop:hover,
+.menuitem.button.flat:backdrop,
+.menuitem.button.flat:backdrop:hover, button:link, .header-bar button.titlebutton:link,
 .titlebar button.titlebutton:link, button:visited, .header-bar button.titlebutton:visited,
 .titlebar button.titlebutton:visited, button:link:hover, button:link:active, button:link:checked, button:visited:hover, button:visited:active, button:visited:checked, button:link:backdrop, button:visited:backdrop, .menu button, .menu .header-bar button.titlebutton, .header-bar .menu button.titlebutton,
 .menu .titlebar button.titlebutton,
@@ -1187,8 +1190,10 @@ notebook tab .titlebar button.titlebutton,
   icon-shadow: none; }
 
 /* menu buttons */
+modelbutton.flat,
 .menuitem.button.flat {
   outline-offset: -1px; }
+  modelbutton.flat:hover,
   .menuitem.button.flat:hover {
     background-color: #dadbdb; }
 
@@ -2543,220 +2548,220 @@ switch {
 /*************************
  * Check and Radio items *
  *************************/
-.check {
+check {
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-unchecked.png"), url("assets/checkbox-unchecked@2.png"));
   icon-shadow: 0 1px 0 white; }
-  .check button.flat, .check .sidebar-button.button, .check .header-bar button.titlebutton, .header-bar .check button.titlebutton,
-  .check .titlebar button.titlebutton,
-  .titlebar .check button.titlebutton {
+  check button.flat, check .sidebar-button.button, check .header-bar button.titlebutton, .header-bar check button.titlebutton,
+  check .titlebar button.titlebutton,
+  .titlebar check button.titlebutton {
     icon-shadow: none; }
 
-.view.check:selected, calendar.check:selected,
-.list-row:selected .check {
+.view check:selected,
+.list-row:selected check {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-unchecked.png"), url("assets/selected-checkbox-unchecked@2.png")); }
 
-.check:hover {
+check:hover {
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-unchecked-hover.png"), url("assets/checkbox-unchecked-hover@2.png"));
   icon-shadow: 0 1px 0 white; }
-  .check:hover button.flat, .check:hover .sidebar-button.button, .check:hover .header-bar button.titlebutton, .header-bar .check:hover button.titlebutton,
-  .check:hover .titlebar button.titlebutton,
-  .titlebar .check:hover button.titlebutton {
+  check:hover button.flat, check:hover .sidebar-button.button, check:hover .header-bar button.titlebutton, .header-bar check:hover button.titlebutton,
+  check:hover .titlebar button.titlebutton,
+  .titlebar check:hover button.titlebutton {
     icon-shadow: none; }
 
-.view.check:hover:selected, calendar.check:hover:selected,
-.list-row:selected .check:hover {
+.view check:hover:selected,
+.list-row:selected check:hover {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-unchecked-hover.png"), url("assets/selected-checkbox-unchecked-hover@2.png")); }
 
-.check:active {
+check:active {
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-unchecked-active.png"), url("assets/checkbox-unchecked-active@2.png"));
   icon-shadow: 0 1px 0 white; }
-  .check:active button.flat, .check:active .sidebar-button.button, .check:active .header-bar button.titlebutton, .header-bar .check:active button.titlebutton,
-  .check:active .titlebar button.titlebutton,
-  .titlebar .check:active button.titlebutton {
+  check:active button.flat, check:active .sidebar-button.button, check:active .header-bar button.titlebutton, .header-bar check:active button.titlebutton,
+  check:active .titlebar button.titlebutton,
+  .titlebar check:active button.titlebutton {
     icon-shadow: none; }
 
-.view.check:active:selected, calendar.check:active:selected,
-.list-row:selected .check:active {
+.view check:active:selected,
+.list-row:selected check:active {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-unchecked-active.png"), url("assets/selected-checkbox-unchecked-active@2.png")); }
 
-.check:insensitive {
+check:insensitive {
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-unchecked-insensitive.png"), url("assets/checkbox-unchecked-insensitive@2.png"));
   icon-shadow: 0 1px 0 white; }
-  .check:insensitive button.flat, .check:insensitive .sidebar-button.button, .check:insensitive .header-bar button.titlebutton, .header-bar .check:insensitive button.titlebutton,
-  .check:insensitive .titlebar button.titlebutton,
-  .titlebar .check:insensitive button.titlebutton {
+  check:insensitive button.flat, check:insensitive .sidebar-button.button, check:insensitive .header-bar button.titlebutton, .header-bar check:insensitive button.titlebutton,
+  check:insensitive .titlebar button.titlebutton,
+  .titlebar check:insensitive button.titlebutton {
     icon-shadow: none; }
 
-.view.check:insensitive:selected, calendar.check:insensitive:selected,
-.list-row:selected .check:insensitive {
+.view check:insensitive:selected,
+.list-row:selected check:insensitive {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-unchecked-insensitive.png"), url("assets/selected-checkbox-unchecked-insensitive@2.png")); }
 
-.check:backdrop {
+check:backdrop {
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-unchecked-backdrop.png"), url("assets/checkbox-unchecked-backdrop@2.png"));
   icon-shadow: none; }
-  .check:backdrop button.flat, .check:backdrop .sidebar-button.button, .check:backdrop .header-bar button.titlebutton, .header-bar .check:backdrop button.titlebutton,
-  .check:backdrop .titlebar button.titlebutton,
-  .titlebar .check:backdrop button.titlebutton {
+  check:backdrop button.flat, check:backdrop .sidebar-button.button, check:backdrop .header-bar button.titlebutton, .header-bar check:backdrop button.titlebutton,
+  check:backdrop .titlebar button.titlebutton,
+  .titlebar check:backdrop button.titlebutton {
     icon-shadow: none; }
 
-.view.check:backdrop:selected, calendar.check:backdrop:selected,
-.list-row:selected .check:backdrop {
+.view check:backdrop:selected,
+.list-row:selected check:backdrop {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-unchecked-backdrop.png"), url("assets/selected-checkbox-unchecked-backdrop@2.png")); }
 
-.check:backdrop:insensitive {
+check:backdrop:insensitive {
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-unchecked-backdrop-insensitive.png"), url("assets/checkbox-unchecked-backdrop-insensitive@2.png"));
   icon-shadow: none; }
-  .check:backdrop:insensitive button.flat, .check:backdrop:insensitive .sidebar-button.button, .check:backdrop:insensitive .header-bar button.titlebutton, .header-bar .check:backdrop:insensitive button.titlebutton,
-  .check:backdrop:insensitive .titlebar button.titlebutton,
-  .titlebar .check:backdrop:insensitive button.titlebutton {
+  check:backdrop:insensitive button.flat, check:backdrop:insensitive .sidebar-button.button, check:backdrop:insensitive .header-bar button.titlebutton, .header-bar check:backdrop:insensitive button.titlebutton,
+  check:backdrop:insensitive .titlebar button.titlebutton,
+  .titlebar check:backdrop:insensitive button.titlebutton {
     icon-shadow: none; }
 
-.view.check:backdrop:insensitive:selected, calendar.check:backdrop:insensitive:selected,
-.list-row:selected .check:backdrop:insensitive {
+.view check:backdrop:insensitive:selected,
+.list-row:selected check:backdrop:insensitive {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-unchecked-backdrop-insensitive.png"), url("assets/selected-checkbox-unchecked-backdrop-insensitive@2.png")); }
 
-.check:inconsistent {
+check:inconsistent {
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-mixed.png"), url("assets/checkbox-mixed@2.png"));
   icon-shadow: 0 1px 0 white; }
-  .check:inconsistent button.flat, .check:inconsistent .sidebar-button.button, .check:inconsistent .header-bar button.titlebutton, .header-bar .check:inconsistent button.titlebutton,
-  .check:inconsistent .titlebar button.titlebutton,
-  .titlebar .check:inconsistent button.titlebutton {
+  check:inconsistent button.flat, check:inconsistent .sidebar-button.button, check:inconsistent .header-bar button.titlebutton, .header-bar check:inconsistent button.titlebutton,
+  check:inconsistent .titlebar button.titlebutton,
+  .titlebar check:inconsistent button.titlebutton {
     icon-shadow: none; }
 
-.view.check:inconsistent:selected, calendar.check:inconsistent:selected,
-.list-row:selected .check:inconsistent {
+.view check:inconsistent:selected,
+.list-row:selected check:inconsistent {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-mixed.png"), url("assets/selected-checkbox-mixed@2.png")); }
 
-.check:inconsistent:hover {
+check:inconsistent:hover {
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-mixed-hover.png"), url("assets/checkbox-mixed-hover@2.png"));
   icon-shadow: 0 1px 0 white; }
-  .check:inconsistent:hover button.flat, .check:inconsistent:hover .sidebar-button.button, .check:inconsistent:hover .header-bar button.titlebutton, .header-bar .check:inconsistent:hover button.titlebutton,
-  .check:inconsistent:hover .titlebar button.titlebutton,
-  .titlebar .check:inconsistent:hover button.titlebutton {
+  check:inconsistent:hover button.flat, check:inconsistent:hover .sidebar-button.button, check:inconsistent:hover .header-bar button.titlebutton, .header-bar check:inconsistent:hover button.titlebutton,
+  check:inconsistent:hover .titlebar button.titlebutton,
+  .titlebar check:inconsistent:hover button.titlebutton {
     icon-shadow: none; }
 
-.view.check:inconsistent:hover:selected, calendar.check:inconsistent:hover:selected,
-.list-row:selected .check:inconsistent:hover {
+.view check:inconsistent:hover:selected,
+.list-row:selected check:inconsistent:hover {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-mixed-hover.png"), url("assets/selected-checkbox-mixed-hover@2.png")); }
 
-.check:inconsistent:selected {
+check:inconsistent:selected {
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-mixed-active.png"), url("assets/checkbox-mixed-active@2.png"));
   icon-shadow: 0 1px 0 white; }
-  .check:inconsistent:selected button.flat, .check:inconsistent:selected .sidebar-button.button, .check:inconsistent:selected .header-bar button.titlebutton, .header-bar .check:inconsistent:selected button.titlebutton,
-  .check:inconsistent:selected .titlebar button.titlebutton,
-  .titlebar .check:inconsistent:selected button.titlebutton {
+  check:inconsistent:selected button.flat, check:inconsistent:selected .sidebar-button.button, check:inconsistent:selected .header-bar button.titlebutton, .header-bar check:inconsistent:selected button.titlebutton,
+  check:inconsistent:selected .titlebar button.titlebutton,
+  .titlebar check:inconsistent:selected button.titlebutton {
     icon-shadow: none; }
 
-.view.check:inconsistent:selected:selected, calendar.check:inconsistent:selected,
-.list-row:selected .check:inconsistent:selected {
+.view check:inconsistent:selected:selected,
+.list-row:selected check:inconsistent:selected {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-mixed-active.png"), url("assets/selected-checkbox-mixed-active@2.png")); }
 
-.check:inconsistent:backdrop {
+check:inconsistent:backdrop {
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-mixed-backdrop.png"), url("assets/checkbox-mixed-backdrop@2.png"));
   icon-shadow: none; }
-  .check:inconsistent:backdrop button.flat, .check:inconsistent:backdrop .sidebar-button.button, .check:inconsistent:backdrop .header-bar button.titlebutton, .header-bar .check:inconsistent:backdrop button.titlebutton,
-  .check:inconsistent:backdrop .titlebar button.titlebutton,
-  .titlebar .check:inconsistent:backdrop button.titlebutton {
+  check:inconsistent:backdrop button.flat, check:inconsistent:backdrop .sidebar-button.button, check:inconsistent:backdrop .header-bar button.titlebutton, .header-bar check:inconsistent:backdrop button.titlebutton,
+  check:inconsistent:backdrop .titlebar button.titlebutton,
+  .titlebar check:inconsistent:backdrop button.titlebutton {
     icon-shadow: none; }
 
-.view.check:inconsistent:backdrop:selected, calendar.check:inconsistent:backdrop:selected,
-.list-row:selected .check:inconsistent:backdrop {
+.view check:inconsistent:backdrop:selected,
+.list-row:selected check:inconsistent:backdrop {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-mixed-backdrop.png"), url("assets/selected-checkbox-mixed-backdrop@2.png")); }
 
-.check:inconsistent:insensitive {
+check:inconsistent:insensitive {
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-mixed-insensitive.png"), url("assets/checkbox-mixed-insensitive@2.png"));
   icon-shadow: 0 1px 0 white; }
-  .check:inconsistent:insensitive button.flat, .check:inconsistent:insensitive .sidebar-button.button, .check:inconsistent:insensitive .header-bar button.titlebutton, .header-bar .check:inconsistent:insensitive button.titlebutton,
-  .check:inconsistent:insensitive .titlebar button.titlebutton,
-  .titlebar .check:inconsistent:insensitive button.titlebutton {
+  check:inconsistent:insensitive button.flat, check:inconsistent:insensitive .sidebar-button.button, check:inconsistent:insensitive .header-bar button.titlebutton, .header-bar check:inconsistent:insensitive button.titlebutton,
+  check:inconsistent:insensitive .titlebar button.titlebutton,
+  .titlebar check:inconsistent:insensitive button.titlebutton {
     icon-shadow: none; }
 
-.view.check:inconsistent:insensitive:selected, calendar.check:inconsistent:insensitive:selected,
-.list-row:selected .check:inconsistent:insensitive {
+.view check:inconsistent:insensitive:selected,
+.list-row:selected check:inconsistent:insensitive {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-mixed-insensitive.png"), url("assets/selected-checkbox-mixed-insensitive@2.png")); }
 
-.check:inconsistent:insensitive:backdrop {
+check:inconsistent:insensitive:backdrop {
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-mixed-backdrop-insensitive.png"), url("assets/checkbox-mixed-backdrop-insensitive@2.png"));
   icon-shadow: none; }
-  .check:inconsistent:insensitive:backdrop button.flat, .check:inconsistent:insensitive:backdrop .sidebar-button.button, .check:inconsistent:insensitive:backdrop .header-bar button.titlebutton, .header-bar .check:inconsistent:insensitive:backdrop button.titlebutton,
-  .check:inconsistent:insensitive:backdrop .titlebar button.titlebutton,
-  .titlebar .check:inconsistent:insensitive:backdrop button.titlebutton {
+  check:inconsistent:insensitive:backdrop button.flat, check:inconsistent:insensitive:backdrop .sidebar-button.button, check:inconsistent:insensitive:backdrop .header-bar button.titlebutton, .header-bar check:inconsistent:insensitive:backdrop button.titlebutton,
+  check:inconsistent:insensitive:backdrop .titlebar button.titlebutton,
+  .titlebar check:inconsistent:insensitive:backdrop button.titlebutton {
     icon-shadow: none; }
 
-.view.check:inconsistent:insensitive:backdrop:selected, calendar.check:inconsistent:insensitive:backdrop:selected,
-.list-row:selected .check:inconsistent:insensitive:backdrop {
+.view check:inconsistent:insensitive:backdrop:selected,
+.list-row:selected check:inconsistent:insensitive:backdrop {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-mixed-backdrop-insensitive.png"), url("assets/selected-checkbox-mixed-backdrop-insensitive@2.png")); }
 
-.check:checked {
+check:checked {
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked.png"), url("assets/checkbox-checked@2.png"));
   icon-shadow: 0 1px 0 white; }
-  .check:checked button.flat, .check:checked .sidebar-button.button, .check:checked .header-bar button.titlebutton, .header-bar .check:checked button.titlebutton,
-  .check:checked .titlebar button.titlebutton,
-  .titlebar .check:checked button.titlebutton {
+  check:checked button.flat, check:checked .sidebar-button.button, check:checked .header-bar button.titlebutton, .header-bar check:checked button.titlebutton,
+  check:checked .titlebar button.titlebutton,
+  .titlebar check:checked button.titlebutton {
     icon-shadow: none; }
 
-.view.check:checked:selected, calendar.check:checked:selected,
-.list-row:selected .check:checked {
+.view check:checked:selected,
+.list-row:selected check:checked {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-checked.png"), url("assets/selected-checkbox-checked@2.png")); }
 
-.check:checked:insensitive {
+check:checked:insensitive {
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-insensitive.png"), url("assets/checkbox-checked-insensitive@2.png"));
   icon-shadow: 0 1px 0 white; }
-  .check:checked:insensitive button.flat, .check:checked:insensitive .sidebar-button.button, .check:checked:insensitive .header-bar button.titlebutton, .header-bar .check:checked:insensitive button.titlebutton,
-  .check:checked:insensitive .titlebar button.titlebutton,
-  .titlebar .check:checked:insensitive button.titlebutton {
+  check:checked:insensitive button.flat, check:checked:insensitive .sidebar-button.button, check:checked:insensitive .header-bar button.titlebutton, .header-bar check:checked:insensitive button.titlebutton,
+  check:checked:insensitive .titlebar button.titlebutton,
+  .titlebar check:checked:insensitive button.titlebutton {
     icon-shadow: none; }
 
-.view.check:checked:insensitive:selected, calendar.check:checked:insensitive:selected,
-.list-row:selected .check:checked:insensitive {
+.view check:checked:insensitive:selected,
+.list-row:selected check:checked:insensitive {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-checked-insensitive.png"), url("assets/selected-checkbox-checked-insensitive@2.png")); }
 
-.check:checked:hover {
+check:checked:hover {
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-hover.png"), url("assets/checkbox-checked-hover@2.png"));
   icon-shadow: 0 1px 0 white; }
-  .check:checked:hover button.flat, .check:checked:hover .sidebar-button.button, .check:checked:hover .header-bar button.titlebutton, .header-bar .check:checked:hover button.titlebutton,
-  .check:checked:hover .titlebar button.titlebutton,
-  .titlebar .check:checked:hover button.titlebutton {
+  check:checked:hover button.flat, check:checked:hover .sidebar-button.button, check:checked:hover .header-bar button.titlebutton, .header-bar check:checked:hover button.titlebutton,
+  check:checked:hover .titlebar button.titlebutton,
+  .titlebar check:checked:hover button.titlebutton {
     icon-shadow: none; }
 
-.view.check:checked:hover:selected, calendar.check:checked:hover:selected,
-.list-row:selected .check:checked:hover {
+.view check:checked:hover:selected,
+.list-row:selected check:checked:hover {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-checked-hover.png"), url("assets/selected-checkbox-checked-hover@2.png")); }
 
-.check:checked:active {
+check:checked:active {
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-active.png"), url("assets/checkbox-checked-active@2.png"));
   icon-shadow: 0 1px 0 white; }
-  .check:checked:active button.flat, .check:checked:active .sidebar-button.button, .check:checked:active .header-bar button.titlebutton, .header-bar .check:checked:active button.titlebutton,
-  .check:checked:active .titlebar button.titlebutton,
-  .titlebar .check:checked:active button.titlebutton {
+  check:checked:active button.flat, check:checked:active .sidebar-button.button, check:checked:active .header-bar button.titlebutton, .header-bar check:checked:active button.titlebutton,
+  check:checked:active .titlebar button.titlebutton,
+  .titlebar check:checked:active button.titlebutton {
     icon-shadow: none; }
 
-.view.check:checked:active:selected, calendar.check:checked:active:selected,
-.list-row:selected .check:checked:active {
+.view check:checked:active:selected,
+.list-row:selected check:checked:active {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-checked-active.png"), url("assets/selected-checkbox-checked-active@2.png")); }
 
-.check:backdrop:checked {
+check:backdrop:checked {
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-backdrop.png"), url("assets/checkbox-checked-backdrop@2.png"));
   icon-shadow: none; }
-  .check:backdrop:checked button.flat, .check:backdrop:checked .sidebar-button.button, .check:backdrop:checked .header-bar button.titlebutton, .header-bar .check:backdrop:checked button.titlebutton,
-  .check:backdrop:checked .titlebar button.titlebutton,
-  .titlebar .check:backdrop:checked button.titlebutton {
+  check:backdrop:checked button.flat, check:backdrop:checked .sidebar-button.button, check:backdrop:checked .header-bar button.titlebutton, .header-bar check:backdrop:checked button.titlebutton,
+  check:backdrop:checked .titlebar button.titlebutton,
+  .titlebar check:backdrop:checked button.titlebutton {
     icon-shadow: none; }
 
-.view.check:backdrop:checked:selected, calendar.check:backdrop:checked:selected,
-.list-row:selected .check:backdrop:checked {
+.view check:backdrop:checked:selected,
+.list-row:selected check:backdrop:checked {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-checked-backdrop.png"), url("assets/selected-checkbox-checked-backdrop@2.png")); }
 
-.check:backdrop:checked:insensitive {
+check:backdrop:checked:insensitive {
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-backdrop-insensitive.png"), url("assets/checkbox-checked-backdrop-insensitive@2.png"));
   icon-shadow: none; }
-  .check:backdrop:checked:insensitive button.flat, .check:backdrop:checked:insensitive .sidebar-button.button, .check:backdrop:checked:insensitive .header-bar button.titlebutton, .header-bar .check:backdrop:checked:insensitive button.titlebutton,
-  .check:backdrop:checked:insensitive .titlebar button.titlebutton,
-  .titlebar .check:backdrop:checked:insensitive button.titlebutton {
+  check:backdrop:checked:insensitive button.flat, check:backdrop:checked:insensitive .sidebar-button.button, check:backdrop:checked:insensitive .header-bar button.titlebutton, .header-bar check:backdrop:checked:insensitive button.titlebutton,
+  check:backdrop:checked:insensitive .titlebar button.titlebutton,
+  .titlebar check:backdrop:checked:insensitive button.titlebutton {
     icon-shadow: none; }
 
-.view.check:backdrop:checked:insensitive:selected, calendar.check:backdrop:checked:insensitive:selected,
-.list-row:selected .check:backdrop:checked:insensitive {
+.view check:backdrop:checked:insensitive:selected,
+.list-row:selected check:backdrop:checked:insensitive {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-checked-backdrop-insensitive.png"), url("assets/selected-checkbox-checked-backdrop-insensitive@2.png")); }
 
 .menu .menuitem.check {
@@ -2772,220 +2777,220 @@ switch {
   .menu .menuitem.check:insensitive {
     color: #bebfc0; }
 
-.radio {
+radio {
   -gtk-icon-source: -gtk-scaled(url("assets/radio-unchecked.png"), url("assets/radio-unchecked@2.png"));
   icon-shadow: 0 1px 0 white; }
-  .radio button.flat, .radio .sidebar-button.button, .radio .header-bar button.titlebutton, .header-bar .radio button.titlebutton,
-  .radio .titlebar button.titlebutton,
-  .titlebar .radio button.titlebutton {
+  radio button.flat, radio .sidebar-button.button, radio .header-bar button.titlebutton, .header-bar radio button.titlebutton,
+  radio .titlebar button.titlebutton,
+  .titlebar radio button.titlebutton {
     icon-shadow: none; }
 
-.view.radio:selected, calendar.radio:selected,
-.list-row:selected .radio {
+.view radio:selected,
+.list-row:selected radio {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-unchecked.png"), url("assets/selected-radio-unchecked@2.png")); }
 
-.radio:hover {
+radio:hover {
   -gtk-icon-source: -gtk-scaled(url("assets/radio-unchecked-hover.png"), url("assets/radio-unchecked-hover@2.png"));
   icon-shadow: 0 1px 0 white; }
-  .radio:hover button.flat, .radio:hover .sidebar-button.button, .radio:hover .header-bar button.titlebutton, .header-bar .radio:hover button.titlebutton,
-  .radio:hover .titlebar button.titlebutton,
-  .titlebar .radio:hover button.titlebutton {
+  radio:hover button.flat, radio:hover .sidebar-button.button, radio:hover .header-bar button.titlebutton, .header-bar radio:hover button.titlebutton,
+  radio:hover .titlebar button.titlebutton,
+  .titlebar radio:hover button.titlebutton {
     icon-shadow: none; }
 
-.view.radio:hover:selected, calendar.radio:hover:selected,
-.list-row:selected .radio:hover {
+.view radio:hover:selected,
+.list-row:selected radio:hover {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-unchecked-hover.png"), url("assets/selected-radio-unchecked-hover@2.png")); }
 
-.radio:active {
+radio:active {
   -gtk-icon-source: -gtk-scaled(url("assets/radio-unchecked-active.png"), url("assets/radio-unchecked-active@2.png"));
   icon-shadow: 0 1px 0 white; }
-  .radio:active button.flat, .radio:active .sidebar-button.button, .radio:active .header-bar button.titlebutton, .header-bar .radio:active button.titlebutton,
-  .radio:active .titlebar button.titlebutton,
-  .titlebar .radio:active button.titlebutton {
+  radio:active button.flat, radio:active .sidebar-button.button, radio:active .header-bar button.titlebutton, .header-bar radio:active button.titlebutton,
+  radio:active .titlebar button.titlebutton,
+  .titlebar radio:active button.titlebutton {
     icon-shadow: none; }
 
-.view.radio:active:selected, calendar.radio:active:selected,
-.list-row:selected .radio:active {
+.view radio:active:selected,
+.list-row:selected radio:active {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-unchecked-active.png"), url("assets/selected-radio-unchecked-active@2.png")); }
 
-.radio:insensitive {
+radio:insensitive {
   -gtk-icon-source: -gtk-scaled(url("assets/radio-unchecked-insensitive.png"), url("assets/radio-unchecked-insensitive@2.png"));
   icon-shadow: 0 1px 0 white; }
-  .radio:insensitive button.flat, .radio:insensitive .sidebar-button.button, .radio:insensitive .header-bar button.titlebutton, .header-bar .radio:insensitive button.titlebutton,
-  .radio:insensitive .titlebar button.titlebutton,
-  .titlebar .radio:insensitive button.titlebutton {
+  radio:insensitive button.flat, radio:insensitive .sidebar-button.button, radio:insensitive .header-bar button.titlebutton, .header-bar radio:insensitive button.titlebutton,
+  radio:insensitive .titlebar button.titlebutton,
+  .titlebar radio:insensitive button.titlebutton {
     icon-shadow: none; }
 
-.view.radio:insensitive:selected, calendar.radio:insensitive:selected,
-.list-row:selected .radio:insensitive {
+.view radio:insensitive:selected,
+.list-row:selected radio:insensitive {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-unchecked-insensitive.png"), url("assets/selected-radio-unchecked-insensitive@2.png")); }
 
-.radio:backdrop {
+radio:backdrop {
   -gtk-icon-source: -gtk-scaled(url("assets/radio-unchecked-backdrop.png"), url("assets/radio-unchecked-backdrop@2.png"));
   icon-shadow: none; }
-  .radio:backdrop button.flat, .radio:backdrop .sidebar-button.button, .radio:backdrop .header-bar button.titlebutton, .header-bar .radio:backdrop button.titlebutton,
-  .radio:backdrop .titlebar button.titlebutton,
-  .titlebar .radio:backdrop button.titlebutton {
+  radio:backdrop button.flat, radio:backdrop .sidebar-button.button, radio:backdrop .header-bar button.titlebutton, .header-bar radio:backdrop button.titlebutton,
+  radio:backdrop .titlebar button.titlebutton,
+  .titlebar radio:backdrop button.titlebutton {
     icon-shadow: none; }
 
-.view.radio:backdrop:selected, calendar.radio:backdrop:selected,
-.list-row:selected .radio:backdrop {
+.view radio:backdrop:selected,
+.list-row:selected radio:backdrop {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-unchecked-backdrop.png"), url("assets/selected-radio-unchecked-backdrop@2.png")); }
 
-.radio:backdrop:insensitive {
+radio:backdrop:insensitive {
   -gtk-icon-source: -gtk-scaled(url("assets/radio-unchecked-backdrop-insensitive.png"), url("assets/radio-unchecked-backdrop-insensitive@2.png"));
   icon-shadow: none; }
-  .radio:backdrop:insensitive button.flat, .radio:backdrop:insensitive .sidebar-button.button, .radio:backdrop:insensitive .header-bar button.titlebutton, .header-bar .radio:backdrop:insensitive button.titlebutton,
-  .radio:backdrop:insensitive .titlebar button.titlebutton,
-  .titlebar .radio:backdrop:insensitive button.titlebutton {
+  radio:backdrop:insensitive button.flat, radio:backdrop:insensitive .sidebar-button.button, radio:backdrop:insensitive .header-bar button.titlebutton, .header-bar radio:backdrop:insensitive button.titlebutton,
+  radio:backdrop:insensitive .titlebar button.titlebutton,
+  .titlebar radio:backdrop:insensitive button.titlebutton {
     icon-shadow: none; }
 
-.view.radio:backdrop:insensitive:selected, calendar.radio:backdrop:insensitive:selected,
-.list-row:selected .radio:backdrop:insensitive {
+.view radio:backdrop:insensitive:selected,
+.list-row:selected radio:backdrop:insensitive {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-unchecked-backdrop-insensitive.png"), url("assets/selected-radio-unchecked-backdrop-insensitive@2.png")); }
 
-.radio:inconsistent {
+radio:inconsistent {
   -gtk-icon-source: -gtk-scaled(url("assets/radio-mixed.png"), url("assets/radio-mixed@2.png"));
   icon-shadow: 0 1px 0 white; }
-  .radio:inconsistent button.flat, .radio:inconsistent .sidebar-button.button, .radio:inconsistent .header-bar button.titlebutton, .header-bar .radio:inconsistent button.titlebutton,
-  .radio:inconsistent .titlebar button.titlebutton,
-  .titlebar .radio:inconsistent button.titlebutton {
+  radio:inconsistent button.flat, radio:inconsistent .sidebar-button.button, radio:inconsistent .header-bar button.titlebutton, .header-bar radio:inconsistent button.titlebutton,
+  radio:inconsistent .titlebar button.titlebutton,
+  .titlebar radio:inconsistent button.titlebutton {
     icon-shadow: none; }
 
-.view.radio:inconsistent:selected, calendar.radio:inconsistent:selected,
-.list-row:selected .radio:inconsistent {
+.view radio:inconsistent:selected,
+.list-row:selected radio:inconsistent {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-mixed.png"), url("assets/selected-radio-mixed@2.png")); }
 
-.radio:inconsistent:hover {
+radio:inconsistent:hover {
   -gtk-icon-source: -gtk-scaled(url("assets/radio-mixed-hover.png"), url("assets/radio-mixed-hover@2.png"));
   icon-shadow: 0 1px 0 white; }
-  .radio:inconsistent:hover button.flat, .radio:inconsistent:hover .sidebar-button.button, .radio:inconsistent:hover .header-bar button.titlebutton, .header-bar .radio:inconsistent:hover button.titlebutton,
-  .radio:inconsistent:hover .titlebar button.titlebutton,
-  .titlebar .radio:inconsistent:hover button.titlebutton {
+  radio:inconsistent:hover button.flat, radio:inconsistent:hover .sidebar-button.button, radio:inconsistent:hover .header-bar button.titlebutton, .header-bar radio:inconsistent:hover button.titlebutton,
+  radio:inconsistent:hover .titlebar button.titlebutton,
+  .titlebar radio:inconsistent:hover button.titlebutton {
     icon-shadow: none; }
 
-.view.radio:inconsistent:hover:selected, calendar.radio:inconsistent:hover:selected,
-.list-row:selected .radio:inconsistent:hover {
+.view radio:inconsistent:hover:selected,
+.list-row:selected radio:inconsistent:hover {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-mixed-hover.png"), url("assets/selected-radio-mixed-hover@2.png")); }
 
-.radio:inconsistent:selected {
+radio:inconsistent:selected {
   -gtk-icon-source: -gtk-scaled(url("assets/radio-mixed-active.png"), url("assets/radio-mixed-active@2.png"));
   icon-shadow: 0 1px 0 white; }
-  .radio:inconsistent:selected button.flat, .radio:inconsistent:selected .sidebar-button.button, .radio:inconsistent:selected .header-bar button.titlebutton, .header-bar .radio:inconsistent:selected button.titlebutton,
-  .radio:inconsistent:selected .titlebar button.titlebutton,
-  .titlebar .radio:inconsistent:selected button.titlebutton {
+  radio:inconsistent:selected button.flat, radio:inconsistent:selected .sidebar-button.button, radio:inconsistent:selected .header-bar button.titlebutton, .header-bar radio:inconsistent:selected button.titlebutton,
+  radio:inconsistent:selected .titlebar button.titlebutton,
+  .titlebar radio:inconsistent:selected button.titlebutton {
     icon-shadow: none; }
 
-.view.radio:inconsistent:selected:selected, calendar.radio:inconsistent:selected,
-.list-row:selected .radio:inconsistent:selected {
+.view radio:inconsistent:selected:selected,
+.list-row:selected radio:inconsistent:selected {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-mixed-active.png"), url("assets/selected-radio-mixed-active@2.png")); }
 
-.radio:inconsistent:backdrop {
+radio:inconsistent:backdrop {
   -gtk-icon-source: -gtk-scaled(url("assets/radio-mixed-backdrop.png"), url("assets/radio-mixed-backdrop@2.png"));
   icon-shadow: none; }
-  .radio:inconsistent:backdrop button.flat, .radio:inconsistent:backdrop .sidebar-button.button, .radio:inconsistent:backdrop .header-bar button.titlebutton, .header-bar .radio:inconsistent:backdrop button.titlebutton,
-  .radio:inconsistent:backdrop .titlebar button.titlebutton,
-  .titlebar .radio:inconsistent:backdrop button.titlebutton {
+  radio:inconsistent:backdrop button.flat, radio:inconsistent:backdrop .sidebar-button.button, radio:inconsistent:backdrop .header-bar button.titlebutton, .header-bar radio:inconsistent:backdrop button.titlebutton,
+  radio:inconsistent:backdrop .titlebar button.titlebutton,
+  .titlebar radio:inconsistent:backdrop button.titlebutton {
     icon-shadow: none; }
 
-.view.radio:inconsistent:backdrop:selected, calendar.radio:inconsistent:backdrop:selected,
-.list-row:selected .radio:inconsistent:backdrop {
+.view radio:inconsistent:backdrop:selected,
+.list-row:selected radio:inconsistent:backdrop {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-mixed-backdrop.png"), url("assets/selected-radio-mixed-backdrop@2.png")); }
 
-.radio:inconsistent:insensitive {
+radio:inconsistent:insensitive {
   -gtk-icon-source: -gtk-scaled(url("assets/radio-mixed-insensitive.png"), url("assets/radio-mixed-insensitive@2.png"));
   icon-shadow: 0 1px 0 white; }
-  .radio:inconsistent:insensitive button.flat, .radio:inconsistent:insensitive .sidebar-button.button, .radio:inconsistent:insensitive .header-bar button.titlebutton, .header-bar .radio:inconsistent:insensitive button.titlebutton,
-  .radio:inconsistent:insensitive .titlebar button.titlebutton,
-  .titlebar .radio:inconsistent:insensitive button.titlebutton {
+  radio:inconsistent:insensitive button.flat, radio:inconsistent:insensitive .sidebar-button.button, radio:inconsistent:insensitive .header-bar button.titlebutton, .header-bar radio:inconsistent:insensitive button.titlebutton,
+  radio:inconsistent:insensitive .titlebar button.titlebutton,
+  .titlebar radio:inconsistent:insensitive button.titlebutton {
     icon-shadow: none; }
 
-.view.radio:inconsistent:insensitive:selected, calendar.radio:inconsistent:insensitive:selected,
-.list-row:selected .radio:inconsistent:insensitive {
+.view radio:inconsistent:insensitive:selected,
+.list-row:selected radio:inconsistent:insensitive {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-mixed-insensitive.png"), url("assets/selected-radio-mixed-insensitive@2.png")); }
 
-.radio:inconsistent:insensitive:backdrop {
+radio:inconsistent:insensitive:backdrop {
   -gtk-icon-source: -gtk-scaled(url("assets/radio-mixed-backdrop-insensitive.png"), url("assets/radio-mixed-backdrop-insensitive@2.png"));
   icon-shadow: none; }
-  .radio:inconsistent:insensitive:backdrop button.flat, .radio:inconsistent:insensitive:backdrop .sidebar-button.button, .radio:inconsistent:insensitive:backdrop .header-bar button.titlebutton, .header-bar .radio:inconsistent:insensitive:backdrop button.titlebutton,
-  .radio:inconsistent:insensitive:backdrop .titlebar button.titlebutton,
-  .titlebar .radio:inconsistent:insensitive:backdrop button.titlebutton {
+  radio:inconsistent:insensitive:backdrop button.flat, radio:inconsistent:insensitive:backdrop .sidebar-button.button, radio:inconsistent:insensitive:backdrop .header-bar button.titlebutton, .header-bar radio:inconsistent:insensitive:backdrop button.titlebutton,
+  radio:inconsistent:insensitive:backdrop .titlebar button.titlebutton,
+  .titlebar radio:inconsistent:insensitive:backdrop button.titlebutton {
     icon-shadow: none; }
 
-.view.radio:inconsistent:insensitive:backdrop:selected, calendar.radio:inconsistent:insensitive:backdrop:selected,
-.list-row:selected .radio:inconsistent:insensitive:backdrop {
+.view radio:inconsistent:insensitive:backdrop:selected,
+.list-row:selected radio:inconsistent:insensitive:backdrop {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-mixed-backdrop-insensitive.png"), url("assets/selected-radio-mixed-backdrop-insensitive@2.png")); }
 
-.radio:checked {
+radio:checked {
   -gtk-icon-source: -gtk-scaled(url("assets/radio-checked.png"), url("assets/radio-checked@2.png"));
   icon-shadow: 0 1px 0 white; }
-  .radio:checked button.flat, .radio:checked .sidebar-button.button, .radio:checked .header-bar button.titlebutton, .header-bar .radio:checked button.titlebutton,
-  .radio:checked .titlebar button.titlebutton,
-  .titlebar .radio:checked button.titlebutton {
+  radio:checked button.flat, radio:checked .sidebar-button.button, radio:checked .header-bar button.titlebutton, .header-bar radio:checked button.titlebutton,
+  radio:checked .titlebar button.titlebutton,
+  .titlebar radio:checked button.titlebutton {
     icon-shadow: none; }
 
-.view.radio:checked:selected, calendar.radio:checked:selected,
-.list-row:selected .radio:checked {
+.view radio:checked:selected,
+.list-row:selected radio:checked {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-checked.png"), url("assets/selected-radio-checked@2.png")); }
 
-.radio:checked:insensitive {
+radio:checked:insensitive {
   -gtk-icon-source: -gtk-scaled(url("assets/radio-checked-insensitive.png"), url("assets/radio-checked-insensitive@2.png"));
   icon-shadow: 0 1px 0 white; }
-  .radio:checked:insensitive button.flat, .radio:checked:insensitive .sidebar-button.button, .radio:checked:insensitive .header-bar button.titlebutton, .header-bar .radio:checked:insensitive button.titlebutton,
-  .radio:checked:insensitive .titlebar button.titlebutton,
-  .titlebar .radio:checked:insensitive button.titlebutton {
+  radio:checked:insensitive button.flat, radio:checked:insensitive .sidebar-button.button, radio:checked:insensitive .header-bar button.titlebutton, .header-bar radio:checked:insensitive button.titlebutton,
+  radio:checked:insensitive .titlebar button.titlebutton,
+  .titlebar radio:checked:insensitive button.titlebutton {
     icon-shadow: none; }
 
-.view.radio:checked:insensitive:selected, calendar.radio:checked:insensitive:selected,
-.list-row:selected .radio:checked:insensitive {
+.view radio:checked:insensitive:selected,
+.list-row:selected radio:checked:insensitive {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-checked-insensitive.png"), url("assets/selected-radio-checked-insensitive@2.png")); }
 
-.radio:checked:hover {
+radio:checked:hover {
   -gtk-icon-source: -gtk-scaled(url("assets/radio-checked-hover.png"), url("assets/radio-checked-hover@2.png"));
   icon-shadow: 0 1px 0 white; }
-  .radio:checked:hover button.flat, .radio:checked:hover .sidebar-button.button, .radio:checked:hover .header-bar button.titlebutton, .header-bar .radio:checked:hover button.titlebutton,
-  .radio:checked:hover .titlebar button.titlebutton,
-  .titlebar .radio:checked:hover button.titlebutton {
+  radio:checked:hover button.flat, radio:checked:hover .sidebar-button.button, radio:checked:hover .header-bar button.titlebutton, .header-bar radio:checked:hover button.titlebutton,
+  radio:checked:hover .titlebar button.titlebutton,
+  .titlebar radio:checked:hover button.titlebutton {
     icon-shadow: none; }
 
-.view.radio:checked:hover:selected, calendar.radio:checked:hover:selected,
-.list-row:selected .radio:checked:hover {
+.view radio:checked:hover:selected,
+.list-row:selected radio:checked:hover {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-checked-hover.png"), url("assets/selected-radio-checked-hover@2.png")); }
 
-.radio:checked:active {
+radio:checked:active {
   -gtk-icon-source: -gtk-scaled(url("assets/radio-checked-active.png"), url("assets/radio-checked-active@2.png"));
   icon-shadow: 0 1px 0 white; }
-  .radio:checked:active button.flat, .radio:checked:active .sidebar-button.button, .radio:checked:active .header-bar button.titlebutton, .header-bar .radio:checked:active button.titlebutton,
-  .radio:checked:active .titlebar button.titlebutton,
-  .titlebar .radio:checked:active button.titlebutton {
+  radio:checked:active button.flat, radio:checked:active .sidebar-button.button, radio:checked:active .header-bar button.titlebutton, .header-bar radio:checked:active button.titlebutton,
+  radio:checked:active .titlebar button.titlebutton,
+  .titlebar radio:checked:active button.titlebutton {
     icon-shadow: none; }
 
-.view.radio:checked:active:selected, calendar.radio:checked:active:selected,
-.list-row:selected .radio:checked:active {
+.view radio:checked:active:selected,
+.list-row:selected radio:checked:active {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-checked-active.png"), url("assets/selected-radio-checked-active@2.png")); }
 
-.radio:backdrop:checked {
+radio:backdrop:checked {
   -gtk-icon-source: -gtk-scaled(url("assets/radio-checked-backdrop.png"), url("assets/radio-checked-backdrop@2.png"));
   icon-shadow: none; }
-  .radio:backdrop:checked button.flat, .radio:backdrop:checked .sidebar-button.button, .radio:backdrop:checked .header-bar button.titlebutton, .header-bar .radio:backdrop:checked button.titlebutton,
-  .radio:backdrop:checked .titlebar button.titlebutton,
-  .titlebar .radio:backdrop:checked button.titlebutton {
+  radio:backdrop:checked button.flat, radio:backdrop:checked .sidebar-button.button, radio:backdrop:checked .header-bar button.titlebutton, .header-bar radio:backdrop:checked button.titlebutton,
+  radio:backdrop:checked .titlebar button.titlebutton,
+  .titlebar radio:backdrop:checked button.titlebutton {
     icon-shadow: none; }
 
-.view.radio:backdrop:checked:selected, calendar.radio:backdrop:checked:selected,
-.list-row:selected .radio:backdrop:checked {
+.view radio:backdrop:checked:selected,
+.list-row:selected radio:backdrop:checked {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-checked-backdrop.png"), url("assets/selected-radio-checked-backdrop@2.png")); }
 
-.radio:backdrop:checked:insensitive {
+radio:backdrop:checked:insensitive {
   -gtk-icon-source: -gtk-scaled(url("assets/radio-checked-backdrop-insensitive.png"), url("assets/radio-checked-backdrop-insensitive@2.png"));
   icon-shadow: none; }
-  .radio:backdrop:checked:insensitive button.flat, .radio:backdrop:checked:insensitive .sidebar-button.button, .radio:backdrop:checked:insensitive .header-bar button.titlebutton, .header-bar .radio:backdrop:checked:insensitive button.titlebutton,
-  .radio:backdrop:checked:insensitive .titlebar button.titlebutton,
-  .titlebar .radio:backdrop:checked:insensitive button.titlebutton {
+  radio:backdrop:checked:insensitive button.flat, radio:backdrop:checked:insensitive .sidebar-button.button, radio:backdrop:checked:insensitive .header-bar button.titlebutton, .header-bar radio:backdrop:checked:insensitive button.titlebutton,
+  radio:backdrop:checked:insensitive .titlebar button.titlebutton,
+  .titlebar radio:backdrop:checked:insensitive button.titlebutton {
     icon-shadow: none; }
 
-.view.radio:backdrop:checked:insensitive:selected, calendar.radio:backdrop:checked:insensitive:selected,
-.list-row:selected .radio:backdrop:checked:insensitive {
+.view radio:backdrop:checked:insensitive:selected,
+.list-row:selected radio:backdrop:checked:insensitive {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-checked-backdrop-insensitive.png"), url("assets/selected-radio-checked-backdrop-insensitive@2.png")); }
 
 .menu .menuitem.radio {
@@ -3049,12 +3054,12 @@ switch {
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-backdrop-selectionmode.png"), url("assets/checkbox-checked-backdrop-selectionmode@2.png"));
   background-color: transparent; }
 
-GtkCheckButton.text-button, GtkRadioButton.text-button {
+checkbutton.text-button, radiobutton.text-button {
   padding: 1px 2px 4px;
   outline-offset: 0; }
-  GtkCheckButton.text-button:insensitive, GtkCheckButton.text-button:insensitive:active, GtkCheckButton.text-button:insensitive:inconsistent, GtkRadioButton.text-button:insensitive, GtkRadioButton.text-button:insensitive:active, GtkRadioButton.text-button:insensitive:inconsistent {
+  checkbutton.text-button:insensitive, checkbutton.text-button:insensitive:active, checkbutton.text-button:insensitive:inconsistent, radiobutton.text-button:insensitive, radiobutton.text-button:insensitive:active, radiobutton.text-button:insensitive:inconsistent {
     color: #8e9192; }
-    GtkCheckButton.text-button:insensitive:backdrop, GtkCheckButton.text-button:insensitive:active:backdrop, GtkCheckButton.text-button:insensitive:inconsistent:backdrop, GtkRadioButton.text-button:insensitive:backdrop, GtkRadioButton.text-button:insensitive:active:backdrop, GtkRadioButton.text-button:insensitive:inconsistent:backdrop {
+    checkbutton.text-button:insensitive:backdrop, checkbutton.text-button:insensitive:active:backdrop, checkbutton.text-button:insensitive:inconsistent:backdrop, radiobutton.text-button:insensitive:backdrop, radiobutton.text-button:insensitive:active:backdrop, radiobutton.text-button:insensitive:inconsistent:backdrop {
       color: #c7c7c7; }
 
 /************
@@ -4542,15 +4547,19 @@ decoration {
   .titlebar.selection-mode button.titlebutton:backdrop {
     icon-shadow: none; }
 
-.view:selected, calendar:selected, label:selected, label:selected:focus, label:selected:hover, .grid-child:selected, entry:selected, entry:selected:focus, spinbutton:selected, spinbutton:selected:focus, .menuitem.button.flat:selected, .list-row:selected, .sidebar:selected {
+.view:selected, calendar:selected, label:selected, label:selected:focus, label:selected:hover, .grid-child:selected, entry:selected, entry:selected:focus, spinbutton:selected, spinbutton:selected:focus, modelbutton.flat:selected,
+.menuitem.button.flat:selected, .list-row:selected, .sidebar:selected {
   background-color: #4a90d9;
   color: #ffffff;
   outline-color: rgba(255, 255, 255, 0.3); }
-  .view:insensitive:selected, calendar:insensitive:selected, label:insensitive:selected, .grid-child:insensitive:selected, entry:insensitive:selected, spinbutton:insensitive:selected, .menuitem.button.flat:insensitive:selected, .list-row:insensitive:selected, .sidebar:insensitive:selected, GtkPlacesSidebar.sidebar .list-row:selected:insensitive label {
+  .view:insensitive:selected, calendar:insensitive:selected, label:insensitive:selected, .grid-child:insensitive:selected, entry:insensitive:selected, spinbutton:insensitive:selected, modelbutton.flat:insensitive:selected,
+  .menuitem.button.flat:insensitive:selected, .list-row:insensitive:selected, .sidebar:insensitive:selected, GtkPlacesSidebar.sidebar .list-row:selected:insensitive label {
     color: #a5c8ec; }
-  .view:backdrop:selected, calendar:backdrop:selected, label:backdrop:selected, .grid-child:backdrop:selected, entry:backdrop:selected, spinbutton:backdrop:selected, .menuitem.button.flat:backdrop:selected, .list-row:backdrop:selected, .sidebar:backdrop:selected {
+  .view:backdrop:selected, calendar:backdrop:selected, label:backdrop:selected, .grid-child:backdrop:selected, entry:backdrop:selected, spinbutton:backdrop:selected, modelbutton.flat:backdrop:selected,
+  .menuitem.button.flat:backdrop:selected, .list-row:backdrop:selected, .sidebar:backdrop:selected {
     color: #ffffff; }
-    .view:backdrop:insensitive:selected, calendar:backdrop:insensitive:selected, label:backdrop:insensitive:selected, .grid-child:backdrop:insensitive:selected, entry:backdrop:insensitive:selected, spinbutton:backdrop:insensitive:selected, .menuitem.button.flat:backdrop:insensitive:selected, .list-row:backdrop:insensitive:selected, .sidebar:backdrop:insensitive:selected, GtkPlacesSidebar.sidebar .list-row:selected:insensitive label:backdrop, GtkPlacesSidebar.sidebar .list-row:selected:backdrop:insensitive label {
+    .view:backdrop:insensitive:selected, calendar:backdrop:insensitive:selected, label:backdrop:insensitive:selected, .grid-child:backdrop:insensitive:selected, entry:backdrop:insensitive:selected, spinbutton:backdrop:insensitive:selected, modelbutton.flat:backdrop:insensitive:selected,
+    .menuitem.button.flat:backdrop:insensitive:selected, .list-row:backdrop:insensitive:selected, .sidebar:backdrop:insensitive:selected, GtkPlacesSidebar.sidebar .list-row:selected:insensitive label:backdrop, GtkPlacesSidebar.sidebar .list-row:selected:backdrop:insensitive label {
       color: #80b1e4; }
 
 .monospace {
