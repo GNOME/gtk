@@ -5948,14 +5948,17 @@ gtk_window_should_use_csd (GtkWindow *window)
   GtkWindowPrivate *priv = window->priv;
   const gchar *csd_env;
 
-  if (priv->csd_requested)
-    return TRUE;
-
   if (!priv->decorated)
     return FALSE;
 
   if (priv->type == GTK_WINDOW_POPUP)
     return FALSE;
+
+  if (priv->csd_requested)
+    return TRUE;
+
+  if (priv->use_client_shadow)
+    return TRUE;
 
 #ifdef GDK_WINDOWING_BROADWAY
   if (GDK_IS_BROADWAY_DISPLAY (gtk_widget_get_display (GTK_WIDGET (window))))
@@ -6676,8 +6679,10 @@ get_shadow_width (GtkWindow *window,
   if (!priv->decorated)
     return;
 
-  if (!priv->client_decorated &&
-      !(gtk_window_should_use_csd (window) &&
+  if (!priv->client_decorated)
+    return;
+
+  if (!(gtk_window_should_use_csd (window) &&
         gtk_window_supports_client_shadow (window)))
     return;
 
