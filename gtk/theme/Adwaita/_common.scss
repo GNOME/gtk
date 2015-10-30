@@ -730,7 +730,7 @@ modelbutton.flat,
 }
 
 
-GtkColorButton.button {
+button.color {
   padding: 5px; // Uniform padding on the GtkColorButton
 
   GtkColorSwatch:first-child:last-child { // :first-child:last-child for a specificity bump, it gets overridden by the
