@@ -73,7 +73,7 @@
   .view:selected, calendar:selected {
     border-radius: 3px; }
 
-.rubberband, GtkTreeView.view.rubberband, .content-view.rubberband {
+.rubberband, treeview.view.rubberband, .content-view.rubberband {
   border: 1px solid #184472;
   background-color: rgba(24, 68, 114, 0.2); }
 
@@ -1479,7 +1479,7 @@ spinbutton.vertical {
     box-shadow: none;
     text-shadow: none;
     icon-shadow: none; }
-GtkTreeView spinbutton entry, GtkTreeView spinbutton spinbutton, GtkTreeView spinbutton entry:focus, GtkTreeView spinbutton spinbutton:focus {
+treeview spinbutton entry, treeview spinbutton spinbutton, treeview spinbutton entry:focus, treeview spinbutton spinbutton:focus {
   padding: 1px;
   border-width: 1px 0;
   border-color: #215d9c;
@@ -1906,7 +1906,7 @@ headerbar {
 /**************
  * Tree Views *
  **************/
-GtkTreeView.view {
+treeview.view {
   -GtkTreeView-grid-line-width: 1;
   -GtkTreeView-grid-line-pattern: '';
   -GtkTreeView-tree-line-width: 1;
@@ -1914,122 +1914,106 @@ GtkTreeView.view {
   -GtkTreeView-expander-size: 16;
   border-left-color: #8c8c8b;
   border-top-color: #393f3f; }
-  GtkTreeView.view:selected {
+  treeview.view:selected {
     border-radius: 0; }
-  GtkTreeView.view:selected, GtkTreeView.view:backdrop:selected {
+  treeview.view:selected, treeview.view:backdrop:selected {
     border-left-color: #90aece;
     border-top-color: rgba(238, 238, 236, 0.1); }
-  GtkTreeView.view:insensitive {
+  treeview.view:insensitive {
     color: #949796; }
-    GtkTreeView.view:insensitive:selected {
+    treeview.view:insensitive:selected {
       color: #7a9ec4; }
-      GtkTreeView.view:insensitive:selected:backdrop {
+      treeview.view:insensitive:selected:backdrop {
         color: #648eba; }
-    GtkTreeView.view:insensitive:backdrop {
+    treeview.view:insensitive:backdrop {
       color: #5d6767; }
-  GtkTreeView.view.separator:backdrop {
+  treeview.view.separator:backdrop {
     color: rgba(0, 0, 0, 0.1); }
-  GtkTreeView.view:backdrop {
+  treeview.view:backdrop {
     border-left-color: #676b6b;
     border-top: #393f3f; }
-  GtkTreeView.view.dnd {
+  treeview.view.dnd {
     border-style: solid none;
     border-width: 1px;
     border-color: #88a6c4; }
-  GtkTreeView.view.expander {
+  treeview.view.expander {
     -gtk-icon-source: -gtk-icontheme("pan-end-symbolic");
     color: #b3b3b2; }
-    GtkTreeView.view.expander:dir(rtl) {
+    treeview.view.expander:dir(rtl) {
       -gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl"); }
-    GtkTreeView.view.expander:hover {
+    treeview.view.expander:hover {
       color: #eeeeec; }
-    GtkTreeView.view.expander:selected {
+    treeview.view.expander:selected {
       color: #bccee1; }
-      GtkTreeView.view.expander:selected:hover {
+      treeview.view.expander:selected:hover {
         color: #ffffff; }
-      GtkTreeView.view.expander:selected:backdrop {
+      treeview.view.expander:selected:backdrop {
         color: #bccee1; }
-    GtkTreeView.view.expander:checked {
+    treeview.view.expander:checked {
       -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); }
-    GtkTreeView.view.expander:backdrop {
+    treeview.view.expander:backdrop {
       color: #757776; }
-  GtkTreeView.view.progressbar {
+  treeview.view.progressbar {
     border: 1px solid #0f2b48;
     border-radius: 4px;
     background-image: linear-gradient(to bottom, #215d9c, #184472);
     box-shadow: inset 0 1px rgba(255, 255, 255, 0.15), 0 1px rgba(0, 0, 0, 0.1); }
-    GtkTreeView.view.progressbar:selected {
+    treeview.view.progressbar:selected {
       box-shadow: inset 0 1px rgba(255, 255, 255, 0.05);
       background-image: linear-gradient(to bottom, #292929, #101010); }
-      GtkTreeView.view.progressbar:selected:backdrop {
+      treeview.view.progressbar:selected:backdrop {
         border-color: #2c2c2c;
         background-color: #2c2c2c; }
-    GtkTreeView.view.progressbar:backdrop {
+    treeview.view.progressbar:backdrop {
       border-color: #2c2c2c;
       background-image: none;
       box-shadow: none; }
-  GtkTreeView.view.trough {
+  treeview.view.trough {
     background-color: rgba(238, 238, 236, 0.1);
     border-radius: 4px; }
-    GtkTreeView.view.trough:selected {
+    treeview.view.trough:selected {
       background-color: #184472; }
+  treeview.view header button,
+  treeview.view header .titlebar button.titlebutton,
+  .titlebar treeview.view header button.titlebutton {
+    color: #8c8c8b;
+    background-color: #292929;
+    font-weight: bold;
+    text-shadow: none;
+    box-shadow: none; }
+    treeview.view header button:hover {
+      color: #bdbdbc;
+      box-shadow: none;
+      transition: none; }
+    treeview.view header button:active {
+      color: #eeeeec;
+      transition: none; }
+  treeview.view header button:last-child, treeview.view header button:last-child:backdrop, treeview.view header:last-child button, treeview.view header:last-child button:backdrop {
+    border-right-style: none; }
+  treeview.view header.button.dnd, treeview.view header button.dnd, treeview.view header.button.dnd:active, treeview.view header.button.dnd:selected, treeview.view header.button.dnd:hover {
+    transition: none;
+    color: #215d9c;
+    box-shadow: inset 1px 1px 0 1px #215d9c, inset -1px 0 0 1px #215d9c, inset 1px 1px #292929, inset -1px 0 #292929; }
 
-column-header button, column-header headerbar button.titlebutton, headerbar column-header button.titlebutton,
-column-header .titlebar button.titlebutton,
-.titlebar column-header button.titlebutton {
-  color: #8c8c8b;
-  background-color: #292929;
-  font-weight: bold;
-  text-shadow: none;
-  box-shadow: none; }
-  column-header button:hover,
-  column-header .titlebar button.titlebutton:hover,
-  .titlebar column-header button.titlebutton:hover {
-    color: #bdbdbc;
-    box-shadow: none;
-    transition: none; }
-  column-header button:active,
-  column-header .titlebar button.titlebutton:active,
-  .titlebar column-header button.titlebutton:active {
-    color: #eeeeec;
-    transition: none; }
-column-header button:last-child,
-column-header .titlebar button.titlebutton:last-child,
-.titlebar column-header button.titlebutton:last-child, column-header button:last-child:backdrop, column-header:last-child button,
-column-header:last-child .titlebar button.titlebutton,
-.titlebar column-header:last-child button.titlebutton, column-header:last-child button:backdrop {
-  border-right-style: none; }
-
-column-header.button.dnd, column-header button.dnd,
-column-header .titlebar button.dnd.titlebutton,
-.titlebar column-header button.dnd.titlebutton, column-header.button.dnd:active, column-header.button.dnd:selected, column-header.button.dnd:hover {
-  transition: none;
-  color: #215d9c;
-  box-shadow: inset 1px 1px 0 1px #215d9c, inset -1px 0 0 1px #215d9c, inset 1px 1px #292929, inset -1px 0 #292929; }
-
-column-header button, column-header headerbar button.titlebutton, headerbar column-header button.titlebutton,
-column-header .titlebar button.titlebutton,
-.titlebar column-header button.titlebutton, column-header button:hover, column-header button:active {
+treeview.view header button,
+treeview.view header .titlebar button.titlebutton,
+.titlebar treeview.view header button.titlebutton, treeview.view header button:hover, treeview.view header button:active {
   padding: 3px 6px;
   border-style: none solid solid none;
   border-radius: 0;
   background-image: none;
   border-color: #393f3f;
   text-shadow: none; }
-  column-header button:insensitive,
-  column-header .titlebar button.titlebutton:insensitive,
-  .titlebar column-header button.titlebutton:insensitive {
+  treeview.view header button:insensitive {
     border-color: #393f3f;
     background-image: none; }
-  column-header button:backdrop,
-  column-header .titlebar button.titlebutton:backdrop,
-  .titlebar column-header button.titlebutton:backdrop {
+  treeview.view header button:backdrop {
     border-color: #393f3f;
     border-style: none solid solid none;
     color: #676b6b;
     background-image: none;
     background-color: #2c2c2c; }
-    column-header button:backdrop:insensitive {
+    treeview.view header button:backdrop:insensitive {
       border-color: #393f3f;
       background-image: none; }
 
