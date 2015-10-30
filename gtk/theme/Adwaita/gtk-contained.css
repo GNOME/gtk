@@ -4247,29 +4247,31 @@ GtkPlacesView .list-row.activatable:hover {
 /*********
  * Paned *
  *********/
-GtkPaned {
+paned {
   -GtkPaned-handle-size: 1;
   -gtk-icon-source: none;
   margin: 0 8px 8px 0; }
-  GtkPaned:dir(rtl) {
+  paned:dir(rtl) {
     margin-right: 0;
     margin-left: 8px; }
-  GtkPaned .pane-separator {
+  paned separator {
     background-color: #a1a1a1; }
-    GtkPaned .pane-separator:backdrop {
+    paned separator:backdrop {
       background-color: darkgray; }
+  paned separator:selected {
+    background-color: #4a90d9; }
 
-GtkPaned.wide {
+paned.wide {
   -GtkPaned-handle-size: 5;
   margin: 0; }
-  GtkPaned.wide .pane-separator {
+  paned.wide separator {
     background-color: transparent;
     border-style: none solid;
     border-color: #a1a1a1;
     border-width: 1px; }
-  GtkPaned.wide.vertical .pane-separator {
+  paned.wide.vertical separator {
     border-style: solid none; }
-  GtkPaned.wide .pane-separator:backdrop {
+  paned.wide separator:backdrop {
     border-color: darkgray; }
 
 /**************
