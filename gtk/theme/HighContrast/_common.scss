@@ -1928,7 +1928,7 @@ separator {
 
   // Font and File button separators
   GtkFileChooserButton &.vertical,
-  GtkFontButton &.vertical {
+  button.font &.vertical {
     // always disable separators
     -GtkWidget-wide-separators: true;
   }

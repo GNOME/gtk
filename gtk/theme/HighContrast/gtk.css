@@ -2109,7 +2109,9 @@ GtkScrolledWindow GtkViewport.frame {
 separator, GtkPlacesSidebar.sidebar .view separator,
 GtkPlacesSidebar.sidebar .view separator:backdrop {
   color: gray; }
-  GtkFileChooserButton separator.vertical, GtkFileChooserButton GtkPlacesSidebar.sidebar .view separator.vertical, GtkPlacesSidebar.sidebar .view GtkFileChooserButton separator.vertical, GtkFontButton separator.vertical, GtkFontButton GtkPlacesSidebar.sidebar .view separator.vertical, GtkPlacesSidebar.sidebar .view GtkFontButton separator.vertical {
+  GtkFileChooserButton separator.vertical, GtkFileChooserButton GtkPlacesSidebar.sidebar .view separator.vertical, GtkPlacesSidebar.sidebar .view GtkFileChooserButton separator.vertical, button.font separator.vertical,
+  button.font GtkPlacesSidebar.sidebar .view separator.vertical:backdrop,
+  GtkPlacesSidebar.sidebar .view button.font separator.vertical:backdrop {
     -GtkWidget-wide-separators: true; }
 
 /*********
