@@ -34,6 +34,15 @@
  * The #GtkButton widget can hold any valid child widget.  That is, it can hold
  * almost any other standard #GtkWidget.  The most commonly used child is the
  * #GtkLabel.
+ *
+ * # CSS nodes
+ *
+ * GtkButton has a single CSS node with name button. The node will get the
+ * style classes .image-button or .text-button, if the content is just an
+ * image or label, respectively. It may also receive the .flat style class.
+ *
+ * Other style classes that are commonly used with GtkButton include
+ * .suggested-action and .destructive-action.
  */
 
 #include "config.h"
@@ -579,6 +588,7 @@ gtk_button_class_init (GtkButtonClass *klass)
 							     GTK_PARAM_READABLE));
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_BUTTON_ACCESSIBLE);
+  gtk_widget_class_set_css_name (widget_class, "button");
 }
 
 static void
@@ -658,7 +668,6 @@ static void
 gtk_button_init (GtkButton *button)
 {
   GtkButtonPrivate *priv;
-  GtkStyleContext *context;
 
   button->priv = gtk_button_get_instance_private (button);
   priv = button->priv;
@@ -682,9 +691,6 @@ gtk_button_init (GtkButton *button)
   priv->image_is_stock = TRUE;
   priv->image_position = GTK_POS_LEFT;
   priv->use_action_appearance = TRUE;
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (button));
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_BUTTON);
 
   priv->gesture = gtk_gesture_multi_press_new (GTK_WIDGET (button));
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->gesture), FALSE);
