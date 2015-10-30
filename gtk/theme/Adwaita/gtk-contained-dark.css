@@ -2478,10 +2478,6 @@ notebook {
 /**********
  * Switch *
  **********/
-GtkSwitch {
-  -GtkSwitch-slider-width: 45px;
-  -GtkSwitch-slider-height: 27px; }
-
 switch {
   font-weight: bold;
   font-size: smaller;
@@ -2492,6 +2488,9 @@ switch {
   color: #eeeeec;
   background-image: linear-gradient(to bottom, #2d3232);
   text-shadow: 0 1px rgba(0, 0, 0, 0.1); }
+  * {
+    -GtkSwitch-slider-width: 45px;
+    -GtkSwitch-slider-height: 27px; }
   switch:active {
     background-image: linear-gradient(to bottom, #215d9c 2px, #266cb5);
     color: white;

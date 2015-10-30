@@ -1945,13 +1945,12 @@ notebook {
  * Switch *
  **********/
 
-GtkSwitch {
-  -GtkSwitch-slider-width: 45px; // 55px is the right value to make it as tall
-                                 // as buttons, not doing that for now
-  -GtkSwitch-slider-height: 27px;
-}
-
 switch {
+  @at-root * {
+    -GtkSwitch-slider-width: 45px;
+    -GtkSwitch-slider-height: 27px;
+  }
+
   font-weight: bold;
   font-size: smaller;
   outline-offset: -4px;
