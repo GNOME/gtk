@@ -643,6 +643,7 @@ struct _GtkTextWindow
   GtkWidget *widget;
   GdkWindow *window;
   GdkWindow *bin_window;
+  GtkCssNode *css_node;
   GtkRequisition requisition;
   GdkRectangle allocation;
 };
@@ -1648,7 +1649,7 @@ gtk_text_view_init (GtkTextView *text_view)
   GtkWidget *widget = GTK_WIDGET (text_view);
   GtkTargetList *target_list;
   GtkTextViewPrivate *priv;
-  GtkStyleContext *style_context;
+  GtkStyleContext *context;
 
   text_view->priv = gtk_text_view_get_instance_private (text_view);
   priv = text_view->priv;
@@ -1657,8 +1658,9 @@ gtk_text_view_init (GtkTextView *text_view)
 
   priv->pixel_cache = _gtk_pixel_cache_new ();
 
-  style_context = gtk_widget_get_style_context (GTK_WIDGET (text_view));
-  _gtk_pixel_cache_set_style_context (priv->pixel_cache, style_context);
+  context = gtk_widget_get_style_context (GTK_WIDGET (text_view));
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_VIEW);
+  _gtk_pixel_cache_set_style_context (priv->pixel_cache, context);
 
   /* Set up default style */
   priv->wrap_mode = GTK_WRAP_NONE;
@@ -4731,13 +4733,8 @@ text_window_set_padding (GtkTextView     *text_view,
 
   priv = text_view->priv;
 
-  gtk_style_context_save (style_context);
-  gtk_style_context_add_class (style_context, GTK_STYLE_CLASS_VIEW);
-
   state = gtk_widget_get_state_flags (GTK_WIDGET (text_view));
   gtk_style_context_get_padding (style_context, state, &padding);
-
-  gtk_style_context_restore (style_context);
 
   if (padding.left != priv->left_padding ||
       padding.right != priv->right_padding ||
@@ -5789,8 +5786,7 @@ draw_text (cairo_t  *cr,
   gdk_cairo_get_clip_rectangle (cr, &bg_rect);
 
   context = gtk_widget_get_style_context (widget);
-  gtk_style_context_save (context);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_VIEW);
+  gtk_style_context_save_to_node (context, text_view->priv->text_window->css_node);
   gtk_render_background (context, cr,
                          bg_rect.x, bg_rect.y,
                          bg_rect.width, bg_rect.height);
@@ -5814,23 +5810,22 @@ draw_text (cairo_t  *cr,
 }
 
 static void
-paint_border_window (GtkTextView       *text_view,
-                     cairo_t           *cr,
-                     GtkTextWindowType  type,
-                     GtkStyleContext   *context,
-                     const char        *class)
+paint_border_window (GtkTextView     *text_view,
+                     cairo_t         *cr,
+                     GtkTextWindow   *text_window,
+                     GtkStyleContext *context)
 {
   GdkWindow *window;
 
-  window = gtk_text_view_get_window (text_view, type);
+  if (text_window == NULL)
+    return;
 
-  if (window != NULL &&
-      gtk_cairo_should_draw_window (cr, window))
+  window = gtk_text_view_get_window (text_view, text_window->type);
+  if (gtk_cairo_should_draw_window (cr, window))
     {
       gint w, h;
 
-      gtk_style_context_save (context);
-      gtk_style_context_add_class (context, class);
+      gtk_style_context_save_to_node (context, text_window->css_node);
 
       w = gdk_window_get_width (window);
       h = gdk_window_get_height (window);
@@ -5860,12 +5855,10 @@ gtk_text_view_draw (GtkWidget *widget,
 
   if (gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)))
     {
-      gtk_style_context_save (context);
       gtk_render_background (context, cr,
 			     0, 0,
 			     gtk_widget_get_allocated_width (widget),
 			     gtk_widget_get_allocated_height (widget));
-      gtk_style_context_restore (context);
     }
 
   window = gtk_text_view_get_window (GTK_TEXT_VIEW (widget),
@@ -5898,10 +5891,10 @@ gtk_text_view_draw (GtkWidget *widget,
       cairo_restore (cr);
     }
 
-  paint_border_window (GTK_TEXT_VIEW (widget), cr, GTK_TEXT_WINDOW_LEFT, context, GTK_STYLE_CLASS_LEFT);
-  paint_border_window (GTK_TEXT_VIEW (widget), cr, GTK_TEXT_WINDOW_RIGHT, context, GTK_STYLE_CLASS_RIGHT);
-  paint_border_window (GTK_TEXT_VIEW (widget), cr, GTK_TEXT_WINDOW_TOP, context, GTK_STYLE_CLASS_TOP);
-  paint_border_window (GTK_TEXT_VIEW (widget), cr, GTK_TEXT_WINDOW_BOTTOM, context, GTK_STYLE_CLASS_BOTTOM);
+  paint_border_window (GTK_TEXT_VIEW (widget), cr, priv->left_window, context);
+  paint_border_window (GTK_TEXT_VIEW (widget), cr, priv->right_window, context);
+  paint_border_window (GTK_TEXT_VIEW (widget), cr, priv->top_window, context);
+  paint_border_window (GTK_TEXT_VIEW (widget), cr, priv->bottom_window, context);
 
   /* Propagate exposes to all unanchored children. 
    * Anchored children are handled in gtk_text_view_paint(). 
@@ -7772,9 +7765,6 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
   context = gtk_widget_get_style_context (GTK_WIDGET (text_view));
   state = gtk_widget_get_state_flags (GTK_WIDGET (text_view));
 
-  gtk_style_context_save (context);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_VIEW);
-
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_style_context_get_background_color (context, state, &bg_color);
 G_GNUC_END_IGNORE_DEPRECATIONS
@@ -7792,8 +7782,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
     pango_font_description_free (values->font);
 
   gtk_style_context_get (context, state, "font", &values->font, NULL);
-
-  gtk_style_context_restore (context);
 }
 
 static void
@@ -9694,6 +9682,62 @@ gtk_text_view_selection_bubble_popup_set (GtkTextView *text_view)
 
 /* Child GdkWindows */
 
+static void
+node_style_changed_cb (GtkCssNode  *node,
+                       GtkCssStyle *old_style,
+                       GtkCssStyle *new_style,
+                       GtkWidget    *widget)
+{
+  GtkBitmask *changes;
+  static GtkBitmask *affects_size = NULL;
+
+  if (G_UNLIKELY (affects_size == NULL))
+    affects_size = _gtk_css_style_property_get_mask_affecting (GTK_CSS_AFFECTS_SIZE | GTK_CSS_AFFECTS_CLIP);
+
+  changes = _gtk_bitmask_new ();
+  changes = gtk_css_style_add_difference (changes, old_style, new_style);
+
+  if (_gtk_bitmask_intersects (changes, affects_size))
+    gtk_widget_queue_resize (widget);
+  else
+    gtk_widget_queue_draw (widget);
+
+  _gtk_bitmask_free (changes);
+}
+
+static void
+update_node_ordering (GtkWidget *widget)
+{
+  GtkTextViewPrivate *priv = GTK_TEXT_VIEW (widget)->priv;
+  GtkCssNode *widget_node, *sibling;
+
+  if (priv->text_window == NULL)
+    return;
+
+  widget_node = gtk_widget_get_css_node (widget);
+  sibling = priv->text_window->css_node;
+
+  if (priv->left_window)
+    {
+      gtk_css_node_insert_before (widget_node, priv->left_window->css_node, sibling);
+      sibling = priv->left_window->css_node;
+    }
+  if (priv->top_window)
+    {
+      gtk_css_node_insert_before (widget_node, priv->top_window->css_node, sibling);
+    }
+
+  sibling = priv->text_window->css_node;
+  if (priv->right_window)
+    {
+      gtk_css_node_insert_after (widget_node, priv->right_window->css_node, sibling);
+      sibling = priv->right_window->css_node;
+    }
+  if (priv->bottom_window)
+    {
+      gtk_css_node_insert_after (widget_node, priv->bottom_window->css_node, sibling);
+    }
+}
 
 static GtkTextWindow*
 text_window_new (GtkTextWindowType  type,
@@ -9702,6 +9746,7 @@ text_window_new (GtkTextWindowType  type,
                  gint               height_request)
 {
   GtkTextWindow *win;
+  GtkCssNode *widget_node;
 
   win = g_slice_new (GtkTextWindow);
 
@@ -9716,6 +9761,37 @@ text_window_new (GtkTextWindowType  type,
   win->allocation.x = 0;
   win->allocation.y = 0;
 
+  widget_node = gtk_widget_get_css_node (widget);
+  win->css_node = gtk_css_node_new ();
+  gtk_css_node_set_parent (win->css_node, widget_node);
+  gtk_css_node_set_state (win->css_node, gtk_css_node_get_state (widget_node));
+  g_signal_connect_object (win->css_node, "style-changed", G_CALLBACK (node_style_changed_cb), widget, 0);
+  if (type == GTK_TEXT_WINDOW_TEXT)
+    {
+      gtk_css_node_set_name (win->css_node, I_("text"));
+    }
+  else
+    {
+      gtk_css_node_set_name (win->css_node, I_("border"));
+      switch (type)
+        {
+        case GTK_TEXT_WINDOW_LEFT:
+          gtk_css_node_add_class (win->css_node, g_quark_from_static_string (GTK_STYLE_CLASS_LEFT));
+          break;
+        case GTK_TEXT_WINDOW_RIGHT:
+          gtk_css_node_add_class (win->css_node, g_quark_from_static_string (GTK_STYLE_CLASS_RIGHT));
+          break;
+        case GTK_TEXT_WINDOW_TOP:
+          gtk_css_node_add_class (win->css_node, g_quark_from_static_string (GTK_STYLE_CLASS_TOP));
+          break;
+        case GTK_TEXT_WINDOW_BOTTOM:
+          gtk_css_node_add_class (win->css_node, g_quark_from_static_string (GTK_STYLE_CLASS_BOTTOM));
+          break;
+        default: /* no extra style class */ ;
+        }
+    }
+  g_object_unref (win->css_node);
+
   return win;
 }
 
@@ -9724,6 +9800,8 @@ text_window_free (GtkTextWindow *win)
 {
   if (win->window)
     text_window_unrealize (win);
+
+  gtk_css_node_set_parent (win->css_node, NULL);
 
   g_slice_free (GtkTextWindow, win);
 }
@@ -9761,8 +9839,7 @@ gtk_text_view_queue_draw_region (GtkWidget            *widget,
      in normal scrolling cases anyway. */
   _gtk_pixel_cache_invalidate (text_view->priv->pixel_cache, NULL);
 
-  GTK_WIDGET_CLASS (gtk_text_view_parent_class)->queue_draw_region (widget,
-                                                                    region);
+  GTK_WIDGET_CLASS (gtk_text_view_parent_class)->queue_draw_region (widget, region);
 }
 
 static void
@@ -10145,6 +10222,47 @@ gtk_text_view_get_window (GtkTextView *text_view,
   return NULL;
 }
 
+static GtkCssNode *
+gtk_text_view_get_css_node (GtkTextView       *text_view,
+                            GtkTextWindowType  win)
+{
+  GtkTextViewPrivate *priv = text_view->priv;
+
+  switch (win)
+    {
+    case GTK_TEXT_WINDOW_WIDGET:
+      return gtk_widget_get_css_node (GTK_WIDGET (text_view));
+
+    case GTK_TEXT_WINDOW_TEXT:
+      return priv->text_window->css_node;
+
+    case GTK_TEXT_WINDOW_LEFT:
+      if (priv->left_window)
+        return priv->left_window->css_node;
+      break;
+
+    case GTK_TEXT_WINDOW_RIGHT:
+      if (priv->right_window)
+        return priv->right_window->css_node;
+      break;
+
+    case GTK_TEXT_WINDOW_TOP:
+      if (priv->top_window)
+        return priv->top_window->css_node;
+      break;
+
+    case GTK_TEXT_WINDOW_BOTTOM:
+      if (priv->bottom_window)
+        return priv->bottom_window->css_node;
+      break;
+
+    default:
+      break;
+    }
+
+  return NULL;
+}
+
 /**
  * gtk_text_view_get_window_type:
  * @text_view: a #GtkTextView
@@ -10485,12 +10603,11 @@ set_window_width (GtkTextView      *text_view,
     {
       if (*winp == NULL)
         {
-          *winp = text_window_new (type,
-                                   GTK_WIDGET (text_view),
-                                   width, 0);
+          *winp = text_window_new (type, GTK_WIDGET (text_view), width, 0);
           /* if the widget is already realized we need to realize the child manually */
           if (gtk_widget_get_realized (GTK_WIDGET (text_view)))
             text_window_realize (*winp, GTK_WIDGET (text_view));
+          update_node_ordering (GTK_WIDGET (text_view));
         }
       else
         {
@@ -10524,13 +10641,12 @@ set_window_height (GtkTextView      *text_view,
     {
       if (*winp == NULL)
         {
-          *winp = text_window_new (type,
-                                   GTK_WIDGET (text_view),
-                                   0, height);
+          *winp = text_window_new (type, GTK_WIDGET (text_view), 0, height);
 
           /* if the widget is already realized we need to realize the child manually */
           if (gtk_widget_get_realized (GTK_WIDGET (text_view)))
             text_window_realize (*winp, GTK_WIDGET (text_view));
+          update_node_ordering (GTK_WIDGET (text_view));
         }
       else
         {
@@ -10738,12 +10854,19 @@ static void
 add_child (GtkTextView      *text_view,
            GtkTextViewChild *vc)
 {
-  text_view->priv->children = g_slist_prepend (text_view->priv->children,
-                                               vc);
+  GtkCssNode *parent;
+
+  text_view->priv->children = g_slist_prepend (text_view->priv->children, vc);
 
   if (gtk_widget_get_realized (GTK_WIDGET (text_view)))
     text_view_child_set_parent_window (text_view, vc);
-  
+
+  parent = gtk_text_view_get_css_node (text_view, vc->type);
+  if (parent == NULL)
+    parent = gtk_widget_get_css_node (GTK_WIDGET (text_view));
+
+  gtk_css_node_set_parent (gtk_widget_get_css_node (vc->widget), parent);
+
   gtk_widget_set_parent (vc->widget, GTK_WIDGET (text_view));
 }
 
@@ -11151,7 +11274,7 @@ gtk_text_view_set_monospace (GtkTextView *text_view,
 
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (text_view));  
+  context = gtk_widget_get_style_context (GTK_WIDGET (text_view));
   has_monospace = gtk_style_context_has_class (context, GTK_STYLE_CLASS_MONOSPACE);
 
   if (has_monospace != monospace)
