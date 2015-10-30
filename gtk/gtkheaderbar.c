@@ -585,7 +585,6 @@ construct_label_box (GtkHeaderBar *bar)
 static void
 gtk_header_bar_init (GtkHeaderBar *bar)
 {
-  GtkStyleContext *context;
   GtkHeaderBarPrivate *priv;
 
   priv = gtk_header_bar_get_instance_private (bar);
@@ -604,10 +603,6 @@ gtk_header_bar_init (GtkHeaderBar *bar)
 
   init_sizing_box (bar);
   construct_label_box (bar);
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (bar));
-  gtk_style_context_add_class (context, "header-bar");
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_HORIZONTAL);
 }
 
 static gint
@@ -1975,6 +1970,7 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
   g_object_class_install_properties (object_class, LAST_PROP, header_bar_props);
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_PANEL);
+  gtk_widget_class_set_css_name (widget_class, "headerbar");
 }
 
 static void
