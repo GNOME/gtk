@@ -264,7 +264,7 @@ entry, spinbutton {
   .linked:not(.vertical) > & { @extend %linked; }
 
   .linked:not(.vertical) > &:focus + entry,
-  .linked:not(.vertical) > &:focus + .button,
+  .linked:not(.vertical) > &:focus + button,
   .linked:not(.vertical) > &:focus + GtkComboBox > .the-button-in-the-combobox,
   .linked:not(.vertical) > &:focus + GtkComboBoxText > .the-button-in-the-combobox {
     border-left-color: entry_focus_border(); // colors the border of the widget following a focused entry
@@ -330,7 +330,7 @@ entry, spinbutton {
   // this takes care of coloring the top border of the focused entry subsequent widget.
   // :not(:only-child) is a specificity bump hack.
   > entry:focus:not(:only-child) + entry,
-  > entry:focus:not(:only-child) + .button,
+  > entry:focus:not(:only-child) + button,
   > entry:focus:not(:only-child) + GtkComboBox > .the-button-in-the-combobox,
   > entry:focus:not(:only-child) + GtkComboBoxText > .the-button-in-the-combobox { border-top-color: entry_focus_border(); }
 }
@@ -360,8 +360,7 @@ $_dot_color: if($variant=='light', $selected_bg_color,
   }
 }
 
-button,
-.button {
+button {
 
   $_button_transition: all 200ms $ease-out-quad;
 
@@ -637,7 +636,7 @@ button,
 
 // all the following is for the +|- buttons on inline toolbars, that way
 // should really be deprecated...
-.inline-toolbar GtkToolButton > .button { // redefining the button look is
+.inline-toolbar GtkToolButton > button { // redefining the button look is
                                           // needed since those are flat...
   @include button(normal);
   &:hover { @include button(hover); }
@@ -658,10 +657,10 @@ button,
 // More inline toolbar buttons
 .inline-toolbar.toolbar GtkToolButton,
 .inline-toolbar.toolbar GtkToolButton:backdrop {
-  & > .button.flat { @extend %linked_middle; }
-  &:first-child > .button.flat { @extend %linked:first-child; }
-  &:last-child > .button.flat { @extend %linked:last-child; }
-  &:only-child > .button.flat { @extend %linked:only-child; }
+  & > button.flat { @extend %linked_middle; }
+  &:first-child > button.flat { @extend %linked:first-child; }
+  &:last-child > button.flat { @extend %linked:last-child; }
+  &:only-child > button.flat { @extend %linked:only-child; }
 }
 
 %linked_middle {
@@ -769,7 +768,7 @@ GtkColorButton.button {
   }
 }
 
-.button:link, .button:visited {
+button:link, button:visited {
   @extend %undecorated_button;
   @extend *:link;
   text-shadow: none;
@@ -963,7 +962,7 @@ GtkComboBox {
       border-bottom-left-radius: 0;
     }
   }
-  &.combobox-entry .button {
+  &.combobox-entry button {
     &:dir(ltr) {
       border-top-left-radius: 0;
       border-bottom-left-radius: 0;
@@ -1124,7 +1123,7 @@ GtkComboBox {
 
     .subtitle:link { @extend *:link:selected;  }
 
-    .button {
+    button {
       @include button(normal, $selected_bg_color, $selected_fg_color, $_hc);
 
       &.flat { @include button(undecorated); }
@@ -1226,7 +1225,7 @@ GtkComboBox {
 
   &.default-decoration {
     padding: 4px;
-    .button { padding: 5px; }
+    button { padding: 5px; }
   }
 }
 
@@ -1234,7 +1233,7 @@ GtkComboBox {
  * Pathbars *
  ************/
 
-.path-bar .button {
+.path-bar button {
   padding: 5px 6px 6px;
   &:first-child { padding-left: 8px; }
   &:last-child { padding-right: 8px; }
@@ -1373,7 +1372,7 @@ GtkTreeView.view {
 }
 
 column-header {
-  .button {
+  button {
     @extend %column_header_button;
     $_column_header_color: mix($fg_color, $base_color, 50%);
     color: $_column_header_color;
@@ -1396,10 +1395,10 @@ column-header {
       @extend column-header.button.dnd;
     }
   }
-  & .button:last-child,
-  & .button:last-child:backdrop, // set :backdrop too or the border will be visibile there
-  &:last-child.button,
-  &:last-child.button:backdrop { //treeview-like derived widgets in Banshee and Evolution
+  & button:last-child,
+  & button:last-child:backdrop, // set :backdrop too or the border will be visibile there
+  &:last-child button,
+  &:last-child button:backdrop { //treeview-like derived widgets in Banshee and Evolution
     border-right-style: none;
   }
 }
@@ -1486,7 +1485,7 @@ column-header.button.dnd { // for treeview-like derive widgets
     &.arrow { -gtk-icon-source: -gtk-icontheme('pan-end-symbolic'); }
     &.arrow:dir(rtl) {-gtk-icon-source:-gtk-icontheme('pan-end-symbolic-rtl'); }
   }
-  &.button { // overlow buttons
+  & button { // overlow buttons
     @extend %undecorated_button;
     border-style: none;
     border-radius: 0;
@@ -1528,8 +1527,8 @@ column-header.button.dnd { // for treeview-like derive widgets
     background-color: transparent;
   }
 
-  .button.flat,
-  .button.flat:hover {
+  button.flat,
+  button.flat:hover {
     text-shadow: none;
     transition: none;
   }
@@ -1752,7 +1751,7 @@ notebook {
       color: $fg_color;
       &:backdrop { color: $backdrop_fg_color; }
     }
-    .button { //tab close button
+    button { //tab close button
       padding: 0;
       border: 1px solid transparent;
       @extend %undecorated_button;
@@ -1811,7 +1810,7 @@ notebook {
   $_slider_margin: 3px;
   $_slider_fine_tune_margin: 4px;
 
-  .button {
+  button {
     border: none;
   }
 
@@ -2081,7 +2080,7 @@ switch {
       -gtk-icon-source: -gtk-scaled(url("assets/#{$a}#{$as}#{$asset_suffix}.png"),
                                     url("assets/#{$a}#{$as}#{$asset_suffix}@2.png"));
       icon-shadow: if(str-index($s,"backdrop"), none, 0 1px 0 $borders_edge); //no edge highlight for :backdrop
-      &.button.flat { icon-shadow: none; }
+      & button.flat { icon-shadow: none; }
     }
     @if $variant == 'light' {
       // the borders of the light variant versions of checks and radios are
@@ -2560,7 +2559,7 @@ separator {
 
 .list-row:selected {
   @extend %selected_items;
-  .button {
+  button {
     @include button(normal, $edge:none);
     @if $variant == 'light' { border-color: $selected_borders_color; }
     &.flat {
@@ -2627,7 +2626,7 @@ separator {
                                                transparent 2px);
   background-clip: padding-box;
   &:backdrop { background-image: none; }
-  .button {
+  button {
     @include button(osd);
     &.flat {
       @extend %undecorated_button;
@@ -2718,7 +2717,7 @@ calendar {
  * Dialogs *
  ***********/
 
-.message-dialog .dialog-action-area .button {
+.message-dialog .dialog-action-area button {
   padding: 8px;
 }
 
@@ -2738,7 +2737,7 @@ calendar {
       border-bottom-left-radius: 9px;
       border-bottom-right-radius: 9px;
     }
-    .dialog-action-area .button {
+    .dialog-action-area button {
       padding: 12px;
       border-radius: 0;
       @include button(normal, $edge:none);
@@ -2887,7 +2886,7 @@ GtkPlacesSidebar.sidebar {
 
     &.image-button { padding: 5px; }
 
-    @extend .button.flat;
+    @extend button.flat;
     border-radius: 100%;
     outline-radius: 100%;
     &:not(:hover):not(:active) > image,
@@ -2978,7 +2977,7 @@ infobar {
   color: $selected_fg_color;
   text-shadow: 0 1px darken($selected_bg_color, 10%);
   border-color: darken($selected_bg_color, 10%);
-  .button {
+  button {
     // FIXME: extend selection mode buttons
     @include button(normal, $selected_bg_color, $selected_fg_color, none);
     &:hover {
@@ -3182,13 +3181,13 @@ GtkColorSwatch {
 
    .osd & { @extend %osd; }
 
-   .osd & .button.flat {  //FIXME: quick hack, redo properly
+   .osd & button.flat {  //FIXME: quick hack, redo properly
      padding: 6px;
      border-style: none;
      border-radius: 5px;
    }
 
-  .button { // +/- buttons on GtkVolumeButton popup
+  button { // +/- buttons on GtkVolumeButton popup
     padding: 6px;
     &:hover {
       @extend %undecorated_button;
@@ -3207,7 +3206,7 @@ GtkVolumeButton.button {
   // with the image-button/text-button classes automagically applied depending on the button child these selectors can be deleted.
   @extend .image-button;
 
-  &.text-button { @extend .text-button }
+  &.text-button { @extend button.text-button }
 }
 
 /**********************
@@ -3272,17 +3271,17 @@ decoration {
 }
 
 // Window Close button
-.header-bar .button.titlebutton,
-.titlebar .button.titlebutton {
-  @extend .button;
-  @extend .button.flat;
+.header-bar button.titlebutton,
+.titlebar button.titlebutton {
+  @extend button;
+  @extend button.flat;
   @extend .image-button;
   @include _button_text_shadow;
   &:backdrop { icon-shadow: none; }
 }
 
-.header-bar.selection-mode .button.titlebutton,
-.titlebar.selection-mode .button.titlebutton {
+.header-bar.selection-mode button.titlebutton,
+.titlebar.selection-mode button.titlebutton {
   @include _button_text_shadow(white, $selected_bg_color);
   &:backdrop { icon-shadow: none; }
 }
@@ -3359,7 +3358,7 @@ entry.cursor-handle,
   text-shadow: 0 1px black;
   icon-shadow: 0 1px black;
   &:backdrop { text-shadow: none; }
-  .button {
+  button {
     @include button(osd);
     &:hover { @include button(osd-hover); }
     &:active, &:checked { @include button(osd-active); }
@@ -3431,12 +3430,12 @@ entry.cursor-handle,
   }
 }
 
-.button.circular {
+button.circular {
   border-radius: 20px;
   outline-radius: 20px;
 }
 
-.button.circular label {
+button.circular label {
   padding: 0;
 }
 
