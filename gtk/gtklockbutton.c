@@ -226,6 +226,7 @@ gtk_lock_button_init (GtkLockButton *button)
 {
   GtkLockButtonPrivate *priv;
   gchar *names[3];
+  GtkStyleContext *context;
 
   button->priv = priv = gtk_lock_button_get_instance_private (button);
 
@@ -242,6 +243,9 @@ gtk_lock_button_init (GtkLockButton *button)
   priv->icon_lock = g_themed_icon_new_from_names (names, -1);
 
   update_state (button);
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (button));
+  gtk_style_context_add_class (context, "lock");
 }
 
 static void
@@ -320,7 +324,7 @@ gtk_lock_button_class_init (GtkLockButtonClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkLockButton, label_group);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_LOCK_BUTTON_ACCESSIBLE);
-  gtk_widget_class_set_css_name (widget_class, "lockbutton");
+  gtk_widget_class_set_css_name (widget_class, "button");
 }
 
 static void
