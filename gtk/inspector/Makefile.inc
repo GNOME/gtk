@@ -23,7 +23,6 @@ inspector_c_sources = 			\
 	inspector/signals-list.c	\
 	inspector/size-groups.c		\
 	inspector/statistics.c		\
-	inspector/style-prop-list.c	\
         inspector/strv-editor.c         \
 	inspector/treewalk.c		\
 	inspector/visual.c		\
@@ -53,7 +52,6 @@ inspector_h_sources = 			\
 	inspector/signals-list.h	\
 	inspector/size-groups.h		\
 	inspector/statistics.h		\
-	inspector/style-prop-list.h	\
         inspector/strv-editor.h         \
 	inspector/treewalk.h		\
 	inspector/visual.h		\
@@ -75,6 +73,5 @@ inspector_templates =			\
 	inspector/selector.ui		\
 	inspector/signals-list.ui	\
 	inspector/statistics.ui		\
-	inspector/style-prop-list.ui	\
 	inspector/visual.ui		\
 	inspector/window.ui

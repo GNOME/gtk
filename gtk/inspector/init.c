@@ -43,7 +43,6 @@
 #include "signals-list.h"
 #include "size-groups.h"
 #include "statistics.h"
-#include "style-prop-list.h"
 #include "visual.h"
 #include "window.h"
 
@@ -76,7 +75,6 @@ gtk_inspector_init (void)
   g_type_ensure (GTK_TYPE_INSPECTOR_SIGNALS_LIST);
   g_type_ensure (GTK_TYPE_INSPECTOR_SIZE_GROUPS);
   g_type_ensure (GTK_TYPE_INSPECTOR_STATISTICS);
-  g_type_ensure (GTK_TYPE_INSPECTOR_STYLE_PROP_LIST);
   g_type_ensure (GTK_TYPE_INSPECTOR_VISUAL);
   g_type_ensure (GTK_TYPE_INSPECTOR_WINDOW);
 
