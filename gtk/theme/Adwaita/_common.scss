@@ -219,7 +219,7 @@ spinner {
  * Text Entries *
  ****************/
 
-entry, spinbutton {
+entry {
   border: 1px solid;
   padding: 5px 8px 6px;
 
@@ -792,6 +792,7 @@ button:link, button:visited {
  *****************/
 
 spinbutton {
+  @extend entry;
   &:not(.vertical) {
     button {
       background-image: none;
@@ -866,6 +867,9 @@ spinbutton {
 
   // Vertical
   &.vertical {
+    border-radius: 0;
+    padding-left: 4px;
+    padding-right: 4px;
     button {
       padding-top: 8px;    //  Same vertical padding as image-buttons
       padding-bottom: 8px; //
