@@ -62,6 +62,10 @@
  * opposed to a flat list where the mapping to icons is obvious),
  * #GtkIconView will only display the first level of the tree and
  * ignore the tree’s branches.
+ *
+ * # CSS nodes
+ *
+ * GtkIconView has a single CSS node with name iconview and style class .view.
  */
 
 #define SCROLL_EDGE_SIZE 15
@@ -930,6 +934,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 				  GTK_MOVEMENT_VISUAL_POSITIONS, -1);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_ICON_VIEW_ACCESSIBLE);
+  gtk_widget_class_set_css_name (widget_class, "iconview");
 }
 
 static void
