@@ -5602,6 +5602,9 @@ gtk_widget_queue_allocate (GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
+  if (_gtk_widget_get_realized (widget))
+    gtk_widget_queue_draw (widget);
+
   gtk_widget_set_alloc_needed (widget);
 }
 
