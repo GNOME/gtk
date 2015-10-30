@@ -71,6 +71,10 @@
  * </section>
  * ]|
  *
+ * A popover has a single css node called "popover" and gets the
+ * .menu style class in case it has been created using
+ * gtk_popover_new_from_model.
+ *
  * Since: 3.12
  */
 
@@ -180,7 +184,6 @@ static void
 gtk_popover_init (GtkPopover *popover)
 {
   GtkWidget *widget;
-  GtkStyleContext *context;
 
   widget = GTK_WIDGET (popover);
   gtk_widget_set_has_window (widget, TRUE);
@@ -188,10 +191,6 @@ gtk_popover_init (GtkPopover *popover)
   popover->priv->modal = TRUE;
   popover->priv->tick_id = 0;
   popover->priv->transitions_enabled = TRUE;
-
-  context = gtk_widget_get_style_context (widget);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_BACKGROUND);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_POPOVER);
 }
 
 static void
@@ -1694,6 +1693,7 @@ gtk_popover_class_init (GtkPopoverClass *klass)
 
   quark_widget_popovers = g_quark_from_static_string ("gtk-quark-widget-popovers");
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_POPOVER_ACCESSIBLE);
+  gtk_widget_class_set_css_name (widget_class, "popover");
 }
 
 static void
@@ -2397,12 +2397,16 @@ gtk_popover_new_from_model (GtkWidget  *relative_to,
                             GMenuModel *model)
 {
   GtkWidget *popover;
+  GtkStyleContext *style_context;
 
   g_return_val_if_fail (relative_to == NULL || GTK_IS_WIDGET (relative_to), NULL);
   g_return_val_if_fail (G_IS_MENU_MODEL (model), NULL);
 
   popover = gtk_popover_new (relative_to);
   gtk_popover_bind_model (GTK_POPOVER (popover), model, NULL);
+
+  style_context = gtk_widget_get_style_context (GTK_WIDGET (popover));
+  gtk_style_context_add_class (style_context, GTK_STYLE_CLASS_MENU);
 
   return popover;
 }
