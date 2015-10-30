@@ -1057,7 +1057,7 @@ GtkComboBox {
  ***************/
 
 .titlebar,
-.header-bar {
+headerbar {
   padding: 6px;
   border-width: 0 0 1px;
   border-style: solid;
@@ -3272,7 +3272,7 @@ decoration {
 }
 
 // Window Close button
-.header-bar button.titlebutton,
+headerbar button.titlebutton,
 .titlebar button.titlebutton {
   @extend button;
   @extend button.flat;
@@ -3281,7 +3281,7 @@ decoration {
   &:backdrop { icon-shadow: none; }
 }
 
-.header-bar.selection-mode button.titlebutton,
+headerbar.selection-mode button.titlebutton,
 .titlebar.selection-mode button.titlebutton {
   @include _button_text_shadow(white, $selected_bg_color);
   &:backdrop { icon-shadow: none; }
