@@ -2,7 +2,6 @@ inspector_c_sources = 			\
 	inspector/action-editor.c	\
 	inspector/actions.c		\
 	inspector/cellrenderergraph.c	\
-	inspector/classes-list.c	\
 	inspector/css-editor.c		\
 	inspector/css-node-tree.c	\
 	inspector/data-list.c		\
@@ -34,7 +33,6 @@ inspector_h_sources = 			\
 	inspector/action-editor.h	\
 	inspector/actions.h		\
 	inspector/cellrenderergraph.h	\
-	inspector/classes-list.h	\
 	inspector/css-editor.h		\
 	inspector/css-node-tree.h	\
 	inspector/data-list.h		\
@@ -63,7 +61,6 @@ inspector_h_sources = 			\
 
 inspector_templates =			\
 	inspector/actions.ui 		\
-	inspector/classes-list.ui 	\
 	inspector/css-editor.ui 	\
 	inspector/css-node-tree.ui	\
 	inspector/data-list.ui 		\

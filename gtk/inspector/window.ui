@@ -306,13 +306,6 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkInspectorClassesList" id="classes_list"/>
-                          <packing>
-                            <property name="name">css-classes</property>
-                            <property name="title" translatable="yes">Style Classes</property>
-                          </packing>
-                        </child>
-                        <child>
                           <object class="GtkInspectorStylePropList" id="style_prop_list"/>
                           <packing>
                             <property name="name">style-properties</property>
