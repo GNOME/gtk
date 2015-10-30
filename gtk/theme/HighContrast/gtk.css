@@ -1017,7 +1017,7 @@ GtkComboBox {
  * Header bars *
  ***************/
 .titlebar,
-.header-bar {
+headerbar {
   border-width: 0 0 1px;
   border-style: solid;
   border-color: gray;
@@ -1027,37 +1027,37 @@ GtkComboBox {
   box-shadow: inset 0 -1px #d9d9d9, inset 0 1px #fff;
   padding: 6px; }
   .titlebar:backdrop,
-  .header-bar:backdrop {
+  headerbar:backdrop {
     border-color: #8d8d8d;
     background-color: #fff;
     background-image: none;
     box-shadow: none; }
   .titlebar .title,
-  .header-bar .title {
+  headerbar .title {
     font: Bold;
     padding: 0px 12px; }
   .titlebar .subtitle,
-  .header-bar .subtitle {
+  headerbar .subtitle {
     font-size: 80%;
     padding: 0 12px; }
   .titlebar .header-bar-separator, .titlebar > GtkBox > separator.vertical,
   GtkPlacesSidebar.sidebar .view .titlebar > GtkBox > separator.vertical:backdrop,
-  .header-bar .header-bar-separator,
-  .header-bar > GtkBox > separator.vertical,
-  GtkPlacesSidebar.sidebar .view .header-bar > GtkBox > separator.vertical:backdrop {
+  headerbar .header-bar-separator,
+  headerbar > GtkBox > separator.vertical,
+  GtkPlacesSidebar.sidebar .view headerbar > GtkBox > separator.vertical {
     -GtkWidget-wide-separators: true;
     -GtkWidget-separator-width: 1px;
     border-width: 0 1px;
     border-color: #000;
     border-style: solid; }
   .titlebar.selection-mode,
-  .header-bar.selection-mode {
+  headerbar.selection-mode {
     color: black;
     text-shadow: 0 1px rgba(0, 0, 0, 0.5);
     background-image: linear-gradient(to bottom, #0d0d0d, #050505);
     box-shadow: inset 0 -1px #d9d9d9, inset 0 1px gray; }
     .titlebar.selection-mode button,
-    .header-bar.selection-mode button {
+    headerbar.selection-mode button {
       border-width: 2px;
       border-style: solid;
       color: #fff;
@@ -1065,7 +1065,7 @@ GtkComboBox {
       background-color: #000;
       border-color: black; }
       .titlebar.selection-mode button:hover,
-      .header-bar.selection-mode button:hover {
+      headerbar.selection-mode button:hover {
         border-width: 2px;
         border-style: solid;
         color: #fff;
@@ -1073,7 +1073,7 @@ GtkComboBox {
         border-color: black;
         background-image: none; }
       .titlebar.selection-mode button:active,
-      .header-bar.selection-mode button:active {
+      headerbar.selection-mode button:active {
         border-width: 2px;
         border-style: solid;
         background-image: none;
@@ -1081,7 +1081,7 @@ GtkComboBox {
         background-color: white;
         border-color: black; }
       .titlebar.selection-mode button:insensitive,
-      .header-bar.selection-mode button:insensitive {
+      headerbar.selection-mode button:insensitive {
         border-width: 2px;
         border-style: solid;
         color: gray;
@@ -1091,7 +1091,7 @@ GtkComboBox {
         text-shadow: none;
         icon-shadow: none; }
       .titlebar.selection-mode button:backdrop,
-      .header-bar.selection-mode button:backdrop {
+      headerbar.selection-mode button:backdrop {
         border-width: 2px;
         border-style: solid;
         color: #fff;
@@ -1102,7 +1102,7 @@ GtkComboBox {
         icon-shadow: none;
         border-color: black; }
       .titlebar.selection-mode button:backdrop:insensitive,
-      .header-bar.selection-mode button:backdrop:insensitive {
+      headerbar.selection-mode button:backdrop:insensitive {
         border-width: 2px;
         border-style: solid;
         color: gray;
@@ -1110,7 +1110,7 @@ GtkComboBox {
         border-color: #8d8d8d;
         background-image: none; }
       .titlebar.selection-mode button.suggested-action,
-      .header-bar.selection-mode button.suggested-action {
+      headerbar.selection-mode button.suggested-action {
         border-width: 2px;
         border-style: solid;
         color: #000;
@@ -1118,7 +1118,7 @@ GtkComboBox {
         background-color: #fff;
         border-color: gray; }
         .titlebar.selection-mode button.suggested-action:hover,
-        .header-bar.selection-mode button.suggested-action:hover {
+        headerbar.selection-mode button.suggested-action:hover {
           border-width: 2px;
           border-style: solid;
           color: #000;
@@ -1126,7 +1126,7 @@ GtkComboBox {
           border-color: gray;
           background-image: none; }
         .titlebar.selection-mode button.suggested-action:active,
-        .header-bar.selection-mode button.suggested-action:active {
+        headerbar.selection-mode button.suggested-action:active {
           border-width: 2px;
           border-style: solid;
           background-image: none;
@@ -1134,7 +1134,7 @@ GtkComboBox {
           background-color: black;
           border-color: gray; }
         .titlebar.selection-mode button.suggested-action:insensitive,
-        .header-bar.selection-mode button.suggested-action:insensitive {
+        headerbar.selection-mode button.suggested-action:insensitive {
           border-width: 2px;
           border-style: solid;
           color: gray;
@@ -1144,7 +1144,7 @@ GtkComboBox {
           text-shadow: none;
           icon-shadow: none; }
         .titlebar.selection-mode button.suggested-action:backdrop,
-        .header-bar.selection-mode button.suggested-action:backdrop {
+        headerbar.selection-mode button.suggested-action:backdrop {
           border-width: 2px;
           border-style: solid;
           color: #000;
@@ -1154,7 +1154,7 @@ GtkComboBox {
           text-shadow: none;
           icon-shadow: none; }
         .titlebar.selection-mode button.suggested-action:backdrop:insensitive,
-        .header-bar.selection-mode button.suggested-action:backdrop:insensitive {
+        headerbar.selection-mode button.suggested-action:backdrop:insensitive {
           border-width: 2px;
           border-style: solid;
           color: gray;
@@ -1162,13 +1162,13 @@ GtkComboBox {
           border-color: #8d8d8d;
           background-image: none; }
     .titlebar.selection-mode .selection-menu,
-    .header-bar.selection-mode .selection-menu {
+    headerbar.selection-mode .selection-menu {
       border-width: 0;
       background-image: none;
       box-shadow: none; }
   .tiled .titlebar, .maximized .titlebar, .tiled
-  .header-bar, .maximized
-  .header-bar {
+  headerbar, .maximized
+  headerbar {
     border-radius: 0; }
 
 /************
