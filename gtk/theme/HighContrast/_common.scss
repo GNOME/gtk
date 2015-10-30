@@ -590,7 +590,7 @@ modelbutton.flat,
   &:insensitive { color: $insensitive_fg_color; }
 }
 
-GtkColorButton.button { padding: 4px; } // Uniform padding on the
+button.color { padding: 4px; } // Uniform padding on the
                                         // GtkColorButton.button
 
 /*********
@@ -2382,7 +2382,7 @@ GtkColorSwatch {
 
   // we need to re-set the shadow here since it get axed by the previous bit
   &:selected { box-shadow: $_colorswatch_shadow; }
-  GtkColorButton > & { box-shadow: none; }
+  button.color > & { box-shadow: none; }
 
   // border rounding
   &.top {

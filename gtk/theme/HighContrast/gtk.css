@@ -777,7 +777,7 @@ modelbutton.flat,
   .menuitem.button.flat:insensitive {
     color: gray; }
 
-GtkColorButton.button {
+button.color {
   padding: 4px; }
 
 /*********
@@ -2592,7 +2592,7 @@ GtkColorSwatch {
       border-color: #fff; }
   GtkColorSwatch:selected {
     box-shadow: inset 0 1px rgba(0, 0, 0, 0.1), 0 1px #fff; }
-  GtkColorButton > GtkColorSwatch {
+  button.color > GtkColorSwatch {
     box-shadow: none; }
   GtkColorSwatch.top {
     border-top-left-radius: 5px;
