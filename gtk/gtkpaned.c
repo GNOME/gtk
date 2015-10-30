@@ -37,6 +37,9 @@
 #include "gtkintl.h"
 #include "gtkwidgetprivate.h"
 #include "a11y/gtkpanedaccessible.h"
+#include "gtkcssnodeprivate.h"
+#include "gtkcssstylepropertyprivate.h"
+#include "gtkstylecontextprivate.h"
 
 /**
  * SECTION:gtkpaned
@@ -72,6 +75,11 @@
  *
  * The application can set the position of the slider as if it were set
  * by the user, by calling gtk_paned_set_position().
+ *
+ * # CSS nodes
+ *
+ * GtkPaned has a main CSS node with name paned, and a subnode for
+ * the separator with name separator.
  *
  * ## Creating a paned widget with minimum sizes.
  *
@@ -111,6 +119,7 @@ struct _GtkPanedPrivate
 
   GdkRectangle   handle_pos;
   GdkWindow     *handle;
+  GtkCssNode    *handle_node;
 
   GtkGesture    *pan_gesture;
 
@@ -654,6 +663,7 @@ gtk_paned_class_init (GtkPanedClass *class)
   add_move_binding (binding_set, GDK_KEY_KP_End, 0, GTK_SCROLL_END);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_PANED_ACCESSIBLE);
+  gtk_widget_class_set_css_name (widget_class, "paned");
 }
 
 static GType
@@ -769,10 +779,34 @@ pan_gesture_drag_end_cb (GtkGestureDrag *gesture,
 }
 
 static void
+node_style_changed_cb (GtkCssNode  *node,
+                       GtkCssStyle *old_style,
+                       GtkCssStyle *new_style,
+                       GtkWidget    *widget)
+{
+  GtkBitmask *changes;
+  static GtkBitmask *affects_size = NULL;
+
+  if (G_UNLIKELY (affects_size == NULL))
+    affects_size = _gtk_css_style_property_get_mask_affecting (GTK_CSS_AFFECTS_SIZE | GTK_CSS_AFFECTS_CLIP);
+
+  changes = _gtk_bitmask_new ();
+  changes = gtk_css_style_add_difference (changes, old_style, new_style);
+
+  if (_gtk_bitmask_intersects (changes, affects_size))
+    gtk_widget_queue_resize (widget);
+  else
+    gtk_widget_queue_draw (widget);
+
+  _gtk_bitmask_free (changes);
+}
+
+static void
 gtk_paned_init (GtkPaned *paned)
 {
   GtkPanedPrivate *priv;
   GtkGesture *gesture;
+  GtkCssNode *widget_node;
 
   gtk_widget_set_has_window (GTK_WIDGET (paned), FALSE);
   gtk_widget_set_can_focus (GTK_WIDGET (paned), TRUE);
@@ -819,6 +853,14 @@ gtk_paned_init (GtkPaned *paned)
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
                                               GTK_PHASE_CAPTURE);
   priv->pan_gesture = gesture;
+
+  widget_node = gtk_widget_get_css_node (GTK_WIDGET (paned));
+  priv->handle_node = gtk_css_node_new ();
+  gtk_css_node_set_name (priv->handle_node, I_("separator"));
+  gtk_css_node_set_parent (priv->handle_node, widget_node);
+  gtk_css_node_set_state (priv->handle_node, gtk_css_node_get_state (widget_node));
+  g_signal_connect_object (priv->handle_node, "style-changed", G_CALLBACK (node_style_changed_cb), paned, 0);
+  g_object_unref (priv->handle_node);
 }
 
 static void
@@ -1722,24 +1764,12 @@ gtk_paned_draw (GtkWidget *widget,
       priv->child1 && gtk_widget_get_visible (priv->child1) &&
       priv->child2 && gtk_widget_get_visible (priv->child2))
     {
-      GtkStateFlags state;
-
-      state = gtk_widget_get_state_flags (widget);
-
-      if (gtk_widget_is_focus (widget))
-	state |= GTK_STATE_FLAG_SELECTED;
-      if (priv->handle_prelit)
-	state |= GTK_STATE_FLAG_PRELIGHT;
-
-      gtk_style_context_save (context);
-      gtk_style_context_set_state (context, state);
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_PANE_SEPARATOR);
+      gtk_style_context_save_to_node (context, priv->handle_node);
       gtk_render_handle (context, cr,
                          priv->handle_pos.x - allocation.x,
                          priv->handle_pos.y - allocation.y,
                          priv->handle_pos.width,
                          priv->handle_pos.height);
-
       gtk_style_context_restore (context);
     }
 
@@ -1804,6 +1834,23 @@ update_drag (GtkPaned *paned,
     gtk_paned_set_position (paned, size);
 }
 
+static void
+update_node_state (GtkWidget *widget)
+{
+  GtkPaned *paned = GTK_PANED (widget);
+  GtkPanedPrivate *priv = paned->priv;
+  GtkStateFlags state;
+
+  state = gtk_widget_get_state_flags (widget);
+
+  if (gtk_widget_is_focus (widget))
+    state |= GTK_STATE_FLAG_SELECTED;
+  if (priv->handle_prelit)
+    state |= GTK_STATE_FLAG_PRELIGHT;
+
+  gtk_css_node_set_state (priv->handle_node, state);
+}
+
 static gboolean
 gtk_paned_enter (GtkWidget        *widget,
 		 GdkEventCrossing *event)
@@ -1814,6 +1861,7 @@ gtk_paned_enter (GtkWidget        *widget,
   if (!gtk_gesture_is_active (priv->pan_gesture))
     {
       priv->handle_prelit = TRUE;
+      update_node_state (widget);
       gtk_widget_queue_draw_area (widget,
 				  priv->handle_pos.x,
 				  priv->handle_pos.y,
@@ -1834,6 +1882,7 @@ gtk_paned_leave (GtkWidget        *widget,
   if (!gtk_gesture_is_active (priv->pan_gesture))
     {
       priv->handle_prelit = FALSE;
+      update_node_state (widget);
       gtk_widget_queue_draw_area (widget,
 				  priv->handle_pos.x,
 				  priv->handle_pos.y,
@@ -1884,6 +1933,8 @@ gtk_paned_state_flags_changed (GtkWidget     *widget,
       if (cursor)
         g_object_unref (cursor);
     }
+
+  update_node_state (widget);
 }
 
 /**
@@ -1952,6 +2003,8 @@ gtk_paned_pack1 (GtkPaned  *paned,
 		 gboolean   shrink)
 {
   GtkPanedPrivate *priv;
+  GtkCssNode *widget_node;
+  GtkCssNode *child_node;
 
   g_return_if_fail (GTK_IS_PANED (paned));
   g_return_if_fail (GTK_IS_WIDGET (child));
@@ -1963,6 +2016,10 @@ gtk_paned_pack1 (GtkPaned  *paned,
       priv->child1 = child;
       priv->child1_resize = resize;
       priv->child1_shrink = shrink;
+
+      widget_node = gtk_widget_get_css_node (GTK_WIDGET (paned));
+      child_node = gtk_widget_get_css_node (child);
+      gtk_css_node_insert_before (widget_node, child_node, priv->handle_node);
 
       gtk_widget_set_parent_window (child, priv->child1_window);
       gtk_widget_set_parent (child, GTK_WIDGET (paned));
@@ -1985,6 +2042,8 @@ gtk_paned_pack2 (GtkPaned  *paned,
 		 gboolean   shrink)
 {
   GtkPanedPrivate *priv;
+  GtkCssNode *widget_node;
+  GtkCssNode *child_node;
 
   g_return_if_fail (GTK_IS_PANED (paned));
   g_return_if_fail (GTK_IS_WIDGET (child));
@@ -1996,6 +2055,10 @@ gtk_paned_pack2 (GtkPaned  *paned,
       priv->child2 = child;
       priv->child2_resize = resize;
       priv->child2_shrink = shrink;
+
+      widget_node = gtk_widget_get_css_node (GTK_WIDGET (paned));
+      child_node = gtk_widget_get_css_node (child);
+      gtk_css_node_insert_after (widget_node, child_node, priv->handle_node);
 
       gtk_widget_set_parent_window (child, priv->child2_window);
       gtk_widget_set_parent (child, GTK_WIDGET (paned));
