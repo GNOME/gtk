@@ -65,8 +65,6 @@ examples/bp/gtk/menus.ui
 examples/plugman.c
 gtk/inspector/actions.ui
 gtk/inspector/actions.ui.h
-gtk/inspector/classes-list.ui
-gtk/inspector/classes-list.ui.h
 gtk/inspector/css-editor.ui
 gtk/inspector/css-editor.ui.h
 gtk/inspector/css-node-tree.ui
