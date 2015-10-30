@@ -97,9 +97,11 @@
     background-color: #000;
     color: #fff; }
 
+textview text,
 .view {
   color: #000;
   background-color: #fff; }
+  textview text:backdrop,
   .view:backdrop {
     color: #000;
     background-color: #fff; }
@@ -2074,13 +2076,23 @@ GtkLevelBar.vertical {
     .level-bar.fill-block.empty-fill-block:backdrop {
       border-color: rgba(0, 0, 0, 0.15); }
 
-.view:selected, calendar:selected, .view:selected:focus, calendar:focus:selected, .view:selected:hover, calendar:hover:selected, label:selected, label:selected:focus, label:selected:hover, label:backdrop:selected, entry:selected, entry:selected:focus, spinbutton:selected, spinbutton:selected:focus, modelbutton.flat:hover, modelbutton.flat:selected,
+textview text:selected, textview text:selected:focus, textview text:selected:hover,
+.view:selected,
+calendar:selected,
+.view:selected:focus,
+calendar:focus:selected,
+.view:selected:hover,
+calendar:hover:selected, label:selected, label:selected:focus, label:selected:hover, label:backdrop:selected, entry:selected, entry:selected:focus, spinbutton:selected, spinbutton:selected:focus, modelbutton.flat:hover, modelbutton.flat:selected,
 .menuitem.button.flat:hover,
 .menuitem.button.flat:selected, .list-row.activatable:selected, .sidebar:selected, GtkPlacesSidebar.sidebar .view:selected, GtkPlacesSidebar.sidebar calendar:selected {
   background-color: #000;
   color: #fff;
   outline-color: rgba(255, 255, 255, 0.3); }
-  .view:backdrop:selected, calendar:backdrop:selected, calendar:backdrop:focus:selected, calendar:backdrop:hover:selected, label:backdrop:selected, entry:backdrop:selected, spinbutton:backdrop:selected, modelbutton.flat:backdrop:hover, modelbutton.flat:backdrop:selected,
+  textview text:backdrop:selected,
+  .view:backdrop:selected,
+  calendar:backdrop:selected,
+  calendar:backdrop:focus:selected,
+  calendar:backdrop:hover:selected, label:backdrop:selected, entry:backdrop:selected, spinbutton:backdrop:selected, modelbutton.flat:backdrop:hover, modelbutton.flat:backdrop:selected,
   .menuitem.button.flat:backdrop:hover,
   .menuitem.button.flat:backdrop:selected, .list-row.activatable:backdrop:selected, .sidebar:backdrop:selected, GtkPlacesSidebar.sidebar .view:backdrop:selected, GtkPlacesSidebar.sidebar calendar:backdrop:selected {
     background-color: gray;
