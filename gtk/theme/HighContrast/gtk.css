@@ -1352,7 +1352,7 @@ GtkTreeView.view.progressbar {
 /***************
  * Popovers   *
  ***************/
-.popover {
+popover {
   margin: 10px;
   padding: 2px;
   border-color: gray;
@@ -1361,26 +1361,28 @@ GtkTreeView.view.progressbar {
   border-radius: 5px;
   background-color: #fff;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.5); }
-  .popover:backdrop {
+  popover:backdrop {
     box-shadow: none; }
-  .popover > .list, .popover > .view, .popover > .toolbar {
+  popover > .list, popover > .view, popover > .toolbar {
     background-color: transparent; }
-  .popover separator, .popover GtkPlacesSidebar.sidebar .view separator, GtkPlacesSidebar.sidebar .view .popover separator {
+  popover separator, popover GtkPlacesSidebar.sidebar .view separator, GtkPlacesSidebar.sidebar .view popover separator,
+  popover GtkPlacesSidebar.sidebar .view separator:backdrop,
+  GtkPlacesSidebar.sidebar .view popover separator:backdrop {
     color: #000;
     background-color: transparent;
     border: 0; }
-  .popover button.flat, .popover .sidebar-button.button,
-  .popover button.flat:hover,
-  .popover .sidebar-button.button:hover {
+  popover button.flat, popover .sidebar-button.button,
+  popover button.flat:hover,
+  popover .sidebar-button.button:hover {
     color: #000;
     text-shadow: none;
     transition: none; }
-  .popover.osd {
+  popover.osd {
     background-image: none;
     background-color: rgba(0, 0, 0, 0.8);
     border: 1px solid gray;
     color: #fff; }
-    .popover.osd button {
+    popover.osd button {
       color: white;
       text-shadow: none;
       border-width: 2px;
@@ -1390,21 +1392,21 @@ GtkTreeView.view.progressbar {
       background-color: rgba(0, 0, 0, 0.8);
       border-color: rgba(255, 255, 255, 0.2);
       box-shadow: none; }
-      .popover.osd button:hover {
+      popover.osd button:hover {
         border-width: 2px;
         border-style: solid;
         color: #fff;
         background-color: rgba(77, 77, 77, 0.8);
         border-color: rgba(255, 255, 255, 0.2);
         box-shadow: none; }
-      .popover.osd button:active {
+      popover.osd button:active {
         border-width: 2px;
         border-style: solid;
         color: rgba(0, 0, 0, 0.8);
         background-color: #fff;
         border-color: rgba(255, 255, 255, 0.2);
         box-shadow: none; }
-      .popover.osd button:insensitive {
+      popover.osd button:insensitive {
         border-width: 2px;
         border-style: solid;
         border-color: rgba(255, 255, 255, 0.2);

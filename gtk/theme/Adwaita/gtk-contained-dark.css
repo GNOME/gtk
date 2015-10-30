@@ -119,7 +119,7 @@ GtkTextView {
   .grid-child:selected {
     outline-offset: -2px; }
 
-.popover.osd, .app-notification,
+popover.osd, .app-notification,
 .app-notification.frame, .osd .scale-popup, .osd {
   color: #eeeeec;
   border: none;
@@ -129,7 +129,7 @@ GtkTextView {
   box-shadow: none;
   text-shadow: 0 1px black;
   icon-shadow: 0 1px black; }
-  .popover.osd:backdrop, .app-notification:backdrop, .osd .scale-popup:backdrop, .osd:backdrop {
+  popover.osd:backdrop, .app-notification:backdrop, .osd .scale-popup:backdrop, .osd:backdrop {
     text-shadow: none; }
 
 /*********************
@@ -2097,31 +2097,31 @@ column-header .titlebar button.titlebutton,
 /***************
  * Popovers   *
  ***************/
-.popover {
+popover {
   padding: 2px;
   border: 1px solid #1c1f1f;
   border-radius: 5px;
   background-color: #313434;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); }
-  .popover:backdrop {
+  popover:backdrop {
     box-shadow: none; }
-  .popover > .list,
-  .popover > .view,
-  .popover > .toolbar,
-  .popover > .inline-toolbar,
-  .popover > .search-bar,
-  .popover > .location-bar, .popover.osd > .toolbar, .popover.osd > .inline-toolbar, .popover.osd > .search-bar, .popover.osd > .location-bar {
+  popover > .list,
+  popover > .view,
+  popover > .toolbar,
+  popover > .inline-toolbar,
+  popover > .search-bar,
+  popover > .location-bar, popover.osd > .toolbar, popover.osd > .inline-toolbar, popover.osd > .search-bar, popover.osd > .location-bar {
     border-style: none;
     background-color: transparent; }
-  .popover button.flat, .popover .sidebar-button.button, .popover headerbar button.titlebutton, headerbar .popover button.titlebutton,
-  .popover .titlebar button.titlebutton,
-  .titlebar .popover button.titlebutton,
-  .popover button.flat:hover,
-  .popover .sidebar-button.button:hover,
-  .popover headerbar button.titlebutton:hover,
-  headerbar .popover button.titlebutton:hover,
-  .popover .titlebar button.titlebutton:hover,
-  .titlebar .popover button.titlebutton:hover {
+  popover button.flat, popover .sidebar-button.button, popover headerbar button.titlebutton, headerbar popover button.titlebutton,
+  popover .titlebar button.titlebutton,
+  .titlebar popover button.titlebutton,
+  popover button.flat:hover,
+  popover .sidebar-button.button:hover,
+  popover headerbar button.titlebutton:hover,
+  headerbar popover button.titlebutton:hover,
+  popover .titlebar button.titlebutton:hover,
+  .titlebar popover button.titlebutton:hover {
     text-shadow: none;
     transition: none; }
 
