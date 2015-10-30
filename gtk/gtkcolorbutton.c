@@ -51,6 +51,11 @@
  * The #GtkColorButton is a button which displays the currently selected
  * color and allows to open a color selection dialog to change the color.
  * It is suitable widget for selecting a color in a preference dialog.
+ *
+ * # CSS nodes
+ *
+ * GtkColorButton has a single CSS node with name button. To differentiate
+ * it from a plain #GtkButton, it gets the .color style class.
  */
 
 
@@ -366,6 +371,7 @@ gtk_color_button_init (GtkColorButton *button)
   GtkColorButtonPrivate *priv;
   PangoLayout *layout;
   PangoRectangle rect;
+  GtkStyleContext *context;
 
   /* Create the widgets */
   priv = button->priv = gtk_color_button_get_instance_private (button);
@@ -404,6 +410,9 @@ gtk_color_button_init (GtkColorButton *button)
                     G_CALLBACK (gtk_color_button_drag_data_received), button);
   g_signal_connect (button, "drag-data-get",
                     G_CALLBACK (gtk_color_button_drag_data_get), button);
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (button));
+  gtk_style_context_add_class (context, "color");
 }
 
 static void
