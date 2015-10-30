@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-24 11:07+0000\n"
-"PO-Revision-Date: 2015-10-25 00:18+0200\n"
+"POT-Creation-Date: 2015-10-30 00:07+0000\n"
+"PO-Revision-Date: 2015-10-30 07:11+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -1214,7 +1214,7 @@ msgstr ""
 #: gtk/gtkmessagedialog.c:955 gtk/gtkmountoperation.c:543
 #: gtk/gtkpagesetupunixdialog.c:196 gtk/gtkprintbackend.c:763
 #: gtk/gtkprinteroptionwidget.c:545 gtk/gtkprintunixdialog.c:665
-#: gtk/gtkprintunixdialog.c:738 gtk/gtkwindow.c:12112
+#: gtk/gtkprintunixdialog.c:738 gtk/gtkwindow.c:12188
 #: gtk/inspector/css-editor.c:199 gtk/ui/gtkappchooserdialog.ui:61
 #: gtk/ui/gtkassistant.ui:131 gtk/ui/gtkcolorchooserdialog.ui:34
 #: gtk/ui/gtkfontchooserdialog.ui:31
@@ -1264,7 +1264,7 @@ msgid "_Apply"
 msgstr "_Použít"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:934
-#: gtk/gtkmessagedialog.c:956 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12113
+#: gtk/gtkmessagedialog.c:956 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12189
 #: gtk/inspector/classes-list.c:127
 msgid "_OK"
 msgstr "_Budiž"
@@ -1541,7 +1541,7 @@ msgstr "Grafika"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:165 gtk/gtkshortcutlabel.c:59
+#: gtk/gtkaccellabel.c:174 gtk/gtkshortcutlabel.c:59
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "Shift"
@@ -1551,7 +1551,7 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:171 gtk/gtkshortcutlabel.c:61
+#: gtk/gtkaccellabel.c:180 gtk/gtkshortcutlabel.c:61
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "Ctrl"
@@ -1561,7 +1561,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:177 gtk/gtkshortcutlabel.c:63
+#: gtk/gtkaccellabel.c:186 gtk/gtkshortcutlabel.c:63
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "Alt"
@@ -1571,7 +1571,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:828 gtk/gtkshortcutlabel.c:73
+#: gtk/gtkaccellabel.c:867 gtk/gtkshortcutlabel.c:73
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -1581,7 +1581,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:841 gtk/gtkshortcutlabel.c:75
+#: gtk/gtkaccellabel.c:880 gtk/gtkshortcutlabel.c:75
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hyper"
@@ -1591,17 +1591,17 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:855 gtk/gtkshortcutlabel.c:77
+#: gtk/gtkaccellabel.c:894 gtk/gtkshortcutlabel.c:77
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: gtk/gtkaccellabel.c:872
+#: gtk/gtkaccellabel.c:911
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Mezerník"
 
-#: gtk/gtkaccellabel.c:875 gtk/gtkshortcutlabel.c:87
+#: gtk/gtkaccellabel.c:914 gtk/gtkshortcutlabel.c:87
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Zpětné lomítko"
@@ -1667,7 +1667,7 @@ msgid "Other Applications"
 msgstr "Další aplikace"
 
 #: gtk/gtkapplicationwindow.c:341 gtk/gtkprintoperation-unix.c:481
-#: gtk/gtkprintoperation-win32.c:1453 gtk/inspector/prop-editor.c:1583
+#: gtk/gtkprintoperation-win32.c:1453 gtk/inspector/prop-editor.c:1668
 msgid "Application"
 msgstr "Aplikace"
 
@@ -1754,7 +1754,7 @@ msgstr ""
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: gtk/gtkcalendar.c:798
+#: gtk/gtkcalendar.c:799
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -1762,7 +1762,7 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:836
+#: gtk/gtkcalendar.c:837
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
@@ -1771,7 +1771,7 @@ msgstr "calendar:week_start:1"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1861
+#: gtk/gtkcalendar.c:1862
 msgctxt "year measurement template"
 msgid "2000"
 msgstr "2000"
@@ -1786,7 +1786,7 @@ msgstr "2000"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1892 gtk/gtkcalendar.c:2570
+#: gtk/gtkcalendar.c:1893 gtk/gtkcalendar.c:2571
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -1802,7 +1802,7 @@ msgstr "%d"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1924 gtk/gtkcalendar.c:2436
+#: gtk/gtkcalendar.c:1925 gtk/gtkcalendar.c:2437
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -1818,7 +1818,7 @@ msgstr "%d"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:2215
+#: gtk/gtkcalendar.c:2216
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -2152,44 +2152,44 @@ msgstr "P_ravý:"
 msgid "Paper Margins"
 msgstr "Okraje papíru"
 
-#: gtk/gtkentry.c:9669 gtk/gtklabel.c:6622 gtk/gtktextview.c:9385
+#: gtk/gtkentry.c:9692 gtk/gtklabel.c:6624 gtk/gtktextview.c:9385
 msgid "Cu_t"
 msgstr "_Vyjmout"
 
-#: gtk/gtkentry.c:9673 gtk/gtklabel.c:6623 gtk/gtktextview.c:9389
+#: gtk/gtkentry.c:9696 gtk/gtklabel.c:6625 gtk/gtktextview.c:9389
 msgid "_Copy"
 msgstr "_Kopírovat"
 
-#: gtk/gtkentry.c:9677 gtk/gtklabel.c:6624 gtk/gtktextview.c:9391
+#: gtk/gtkentry.c:9700 gtk/gtklabel.c:6626 gtk/gtktextview.c:9391
 msgid "_Paste"
 msgstr "V_ložit"
 
-#: gtk/gtkentry.c:9680 gtk/gtkfilechooserwidget.c:1459
-#: gtk/gtkfilechooserwidget.c:2257 gtk/gtklabel.c:6626 gtk/gtktextview.c:9394
+#: gtk/gtkentry.c:9703 gtk/gtkfilechooserwidget.c:1459
+#: gtk/gtkfilechooserwidget.c:2257 gtk/gtklabel.c:6628 gtk/gtktextview.c:9394
 msgid "_Delete"
 msgstr "_Smazat"
 
-#: gtk/gtkentry.c:9691 gtk/gtklabel.c:6635 gtk/gtktextview.c:9408
+#: gtk/gtkentry.c:9714 gtk/gtklabel.c:6637 gtk/gtktextview.c:9408
 msgid "Select _All"
 msgstr "Vybr_at vše"
 
-#: gtk/gtkentry.c:9869 gtk/gtktextview.c:9618
+#: gtk/gtkentry.c:9892 gtk/gtktextview.c:9618
 msgid "Select all"
 msgstr "Vybrat vše"
 
-#: gtk/gtkentry.c:9872 gtk/gtktextview.c:9621
+#: gtk/gtkentry.c:9895 gtk/gtktextview.c:9621
 msgid "Cut"
 msgstr "Vyjmout"
 
-#: gtk/gtkentry.c:9875 gtk/gtktextview.c:9624
+#: gtk/gtkentry.c:9898 gtk/gtktextview.c:9624
 msgid "Copy"
 msgstr "Kopírovat"
 
-#: gtk/gtkentry.c:9878 gtk/gtktextview.c:9627
+#: gtk/gtkentry.c:9901 gtk/gtktextview.c:9627
 msgid "Paste"
 msgstr "Vložit"
 
-#: gtk/gtkentry.c:10992
+#: gtk/gtkentry.c:11017
 msgid "Caps Lock is on"
 msgstr "Funkce Caps Lock je zapnuta"
 
@@ -2401,8 +2401,9 @@ msgid "Sort _Folders before Files"
 msgstr "_Složky řadit před soubory"
 
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2577 gtk/inspector/style-prop-list.ui:118
-#: gtk/ui/gtkfilechooserwidget.ui:206 gtk/ui/gtkprintunixdialog.ui:128
+#: gtk/gtkfilechooserwidget.c:2577 gtk/inspector/css-node-tree.ui:144
+#: gtk/inspector/style-prop-list.ui:118 gtk/ui/gtkfilechooserwidget.ui:206
+#: gtk/ui/gtkprintunixdialog.ui:128
 msgid "Location"
 msgstr "Umístění"
 
@@ -2464,7 +2465,7 @@ msgstr "%-e. %B %Y"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: gtk/gtkfilechooserwidget.c:5007 gtk/inspector/prop-editor.c:1586
+#: gtk/gtkfilechooserwidget.c:5007 gtk/inspector/prop-editor.c:1671
 #: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
 msgstr "Neznámé"
@@ -2539,7 +2540,7 @@ msgstr "Vybrat písmo"
 #.
 #: gtk/gtkfontbutton.c:1213 gtk/inspector/general.c:226
 #: gtk/inspector/general.c:227 gtk/inspector/gestures.c:128
-#: gtk/inspector/prop-editor.c:1200 gtk/inspector/size-groups.c:252
+#: gtk/inspector/prop-editor.c:1285 gtk/inspector/size-groups.c:252
 #: modules/printbackends/cups/gtkprintbackendcups.c:5322
 msgid "None"
 msgstr "Žádné"
@@ -2552,16 +2553,16 @@ msgstr "Vytvoření kontextu GL selhalo"
 msgid "Application menu"
 msgstr "Nabídka aplikace"
 
-#: gtk/gtkheaderbar.c:459 gtk/gtkwindow.c:8684
+#: gtk/gtkheaderbar.c:459 gtk/gtkwindow.c:8817
 msgid "Close"
 msgstr "Zavřít"
 
-#: gtk/gtkicontheme.c:2313 gtk/gtkicontheme.c:2377
+#: gtk/gtkicontheme.c:2315 gtk/gtkicontheme.c:2379
 #, c-format
 msgid "Icon '%s' not present in theme %s"
 msgstr "Ikona „%s“ není obsažena v motivu %s"
 
-#: gtk/gtkicontheme.c:4016 gtk/gtkicontheme.c:4383
+#: gtk/gtkicontheme.c:4018 gtk/gtkicontheme.c:4385
 msgid "Failed to load icon"
 msgstr "Nelze načíst ikonu"
 
@@ -2586,29 +2587,29 @@ msgctxt "input method menu"
 msgid "System (%s)"
 msgstr "Systémová (%s)"
 
-#: gtk/gtkinfobar.c:1242 gtk/gtkmessagedialog.c:376
+#: gtk/gtkinfobar.c:1250 gtk/gtkmessagedialog.c:376
 msgid "Information"
 msgstr "Informace"
 
-#: gtk/gtkinfobar.c:1246 gtk/gtkmessagedialog.c:380
+#: gtk/gtkinfobar.c:1254 gtk/gtkmessagedialog.c:380
 msgid "Question"
 msgstr "Otázka"
 
-#: gtk/gtkinfobar.c:1250 gtk/gtkmessagedialog.c:384
+#: gtk/gtkinfobar.c:1258 gtk/gtkmessagedialog.c:384
 msgid "Warning"
 msgstr "Varování"
 
-#: gtk/gtkinfobar.c:1254 gtk/gtkmessagedialog.c:388
+#: gtk/gtkinfobar.c:1262 gtk/gtkmessagedialog.c:388
 msgid "Error"
 msgstr "Chyba"
 
 #. Open Link
-#: gtk/gtklabel.c:6603
+#: gtk/gtklabel.c:6605
 msgid "_Open Link"
 msgstr "_Otevřít odkaz"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6612
+#: gtk/gtklabel.c:6614
 msgid "Copy _Link Address"
 msgstr "Ko_pírovat adresu odkazu"
 
@@ -2843,7 +2844,7 @@ msgstr "Z Shell"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Nelze ukončit proces s PID %d: %s"
 
-#: gtk/gtknotebook.c:5064 gtk/gtknotebook.c:7787
+#: gtk/gtknotebook.c:5052 gtk/gtknotebook.c:7766
 #, c-format
 msgid "Page %u"
 msgstr "Strana %u"
@@ -3012,7 +3013,7 @@ msgid "This name is already taken"
 msgstr "Název je již použit"
 
 #: gtk/gtkplacessidebar.c:2458 gtk/inspector/actions.ui:52
-#: gtk/inspector/classes-list.ui:80 gtk/inspector/css-node-tree.ui:30
+#: gtk/inspector/classes-list.ui:80 gtk/inspector/css-node-tree.ui:60
 #: gtk/inspector/object-tree.ui:109 gtk/inspector/signals-list.ui:90
 #: gtk/ui/gtkfilechooserwidget.ui:188 gtk/ui/gtkfilechooserwidget.ui:498
 msgid "Name"
@@ -3484,31 +3485,31 @@ msgid "No registered application with name '%s' for item with URI '%s' found"
 msgstr ""
 "Nenalezena žádná registrovaná aplikace s názvem „%s“ k položce s URI „%s“"
 
-#: gtk/gtksearchentry.c:369
+#: gtk/gtksearchentry.c:371
 msgid "Search"
 msgstr "Hledat"
 
-#: gtk/gtkshortcutssection.c:358
+#: gtk/gtkshortcutssection.c:360
 msgid "_Show All"
 msgstr "Zobrazit _všechny"
 
-#: gtk/gtkshortcutswindow.c:743
+#: gtk/gtkshortcutswindow.c:744
 msgid "Shortcuts"
 msgstr "Klávesové zkratky"
 
-#: gtk/gtkshortcutswindow.c:748
+#: gtk/gtkshortcutswindow.c:749
 msgid "Search Results"
 msgstr "Výsledky hledání"
 
-#: gtk/gtkshortcutswindow.c:802
+#: gtk/gtkshortcutswindow.c:803
 msgid "Search Shortcuts"
 msgstr "hledat zkratku"
 
-#: gtk/gtkshortcutswindow.c:870 gtk/ui/gtkfilechooserwidget.ui:309
+#: gtk/gtkshortcutswindow.c:871 gtk/ui/gtkfilechooserwidget.ui:309
 msgid "No Results Found"
 msgstr "Nebyly nalezeny žádné výsledky"
 
-#: gtk/gtkshortcutswindow.c:877 gtk/ui/gtkfilechooserwidget.ui:323
+#: gtk/gtkshortcutswindow.c:878 gtk/ui/gtkfilechooserwidget.ui:323
 #: gtk/ui/gtkplacesview.ui:184
 msgid "Try a different search"
 msgstr "Zkuste zadat jiný termín k vyhledání"
@@ -3709,12 +3710,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:12100
+#: gtk/gtkwindow.c:12176
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Chcete použít GTK+ Inspector?"
 
-#: gtk/gtkwindow.c:12102
+#: gtk/gtkwindow.c:12178
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3725,7 +3726,7 @@ msgstr ""
 "změnit vnitřní strukturu jakékoliv aplikace GTK+. Použití tohoto programu "
 "může vést k přerušení běhu nebo pádu aplikace."
 
-#: gtk/gtkwindow.c:12107
+#: gtk/gtkwindow.c:12183
 msgid "Don't show this message again"
 msgstr "Tuto zprávu znovu nezobrazovat"
 
@@ -3807,17 +3808,27 @@ msgstr "Vypnout toto vlastní CSS"
 msgid "Save the current CSS"
 msgstr "Uložit aktuální CSS"
 
-#: gtk/inspector/css-node-tree.ui:17 gtk/inspector/statistics.ui:53
+#: gtk/inspector/css-node-tree.ui:47 gtk/inspector/statistics.ui:53
 msgid "Type"
 msgstr "Typ"
 
-#: gtk/inspector/css-node-tree.ui:43
+#: gtk/inspector/css-node-tree.ui:73
 msgid "ID"
 msgstr "ID"
 
-#: gtk/inspector/css-node-tree.ui:56
+#: gtk/inspector/css-node-tree.ui:86
 msgid "Classes"
 msgstr "Třídy"
+
+#: gtk/inspector/css-node-tree.ui:113 gtk/inspector/prop-list.ui:89
+#: gtk/inspector/style-prop-list.ui:86
+msgid "Property"
+msgstr "Vlastnost"
+
+#: gtk/inspector/css-node-tree.ui:128 gtk/inspector/prop-list.ui:105
+#: gtk/inspector/style-prop-list.ui:101 gtk/ui/gtkcoloreditor.ui:291
+msgid "Value"
+msgstr "Hodnota"
 
 #: gtk/inspector/data-list.ui:15
 msgid "Show data"
@@ -3871,7 +3882,7 @@ msgstr "Sekce bez názvu"
 msgid "Label"
 msgstr "Popisek"
 
-#: gtk/inspector/menu.ui:48 gtk/inspector/prop-editor.c:1300
+#: gtk/inspector/menu.ui:48 gtk/inspector/prop-editor.c:1385
 msgid "Action"
 msgstr "Akce"
 
@@ -3896,8 +3907,8 @@ msgid "Default Widget"
 msgstr "Výchozí widget"
 
 #: gtk/inspector/misc-info.ui:200 gtk/inspector/misc-info.ui:244
-#: gtk/inspector/prop-editor.c:1003 gtk/inspector/prop-editor.c:1183
-#: gtk/inspector/prop-editor.c:1308 gtk/inspector/prop-editor.c:1419
+#: gtk/inspector/prop-editor.c:1071 gtk/inspector/prop-editor.c:1268
+#: gtk/inspector/prop-editor.c:1393 gtk/inspector/prop-editor.c:1504
 #: gtk/inspector/window.ui:268
 msgid "Properties"
 msgstr "Vlastnosti"
@@ -3959,8 +3970,8 @@ msgid "Child Visible"
 msgstr "Viditelnost potomka"
 
 #: gtk/inspector/object-hierarchy.ui:32
-msgid "Object Hierarchy"
-msgstr "Hierarchie objektu"
+msgid "Class Hierarchy"
+msgstr "Hierarchie tříd"
 
 #: gtk/inspector/object-tree.ui:94
 msgid "Object"
@@ -3970,96 +3981,87 @@ msgstr "Objekt"
 msgid "Style Classes"
 msgstr "Třídy stylů"
 
-#: gtk/inspector/prop-editor.c:615
+#: gtk/inspector/prop-editor.c:679
 #, c-format
 msgid "Pointer: %p"
 msgstr "Ukazatel: %p"
 
-#: gtk/inspector/prop-editor.c:630
+#: gtk/inspector/prop-editor.c:694
 msgctxt "type name"
 msgid "Unknown"
 msgstr "Neznámé"
 
-#: gtk/inspector/prop-editor.c:631
+#: gtk/inspector/prop-editor.c:695
 #, c-format
 msgid "Object: %p (%s)"
 msgstr "Objekt: %p (%s)"
 
-#: gtk/inspector/prop-editor.c:1056
+#: gtk/inspector/prop-editor.c:1141
 #, c-format
 msgid "Uneditable property type: %s"
 msgstr "Neupravitelný typ vlastnosti: %s"
 
-#: gtk/inspector/prop-editor.c:1174
+#: gtk/inspector/prop-editor.c:1259
 msgid "Attribute mapping"
 msgstr "Mapování atributů"
 
-#: gtk/inspector/prop-editor.c:1179
+#: gtk/inspector/prop-editor.c:1264
 msgid "Model:"
 msgstr "Model:"
 
-#: gtk/inspector/prop-editor.c:1180
+#: gtk/inspector/prop-editor.c:1265
 #, c-format
 msgid "%p (%s)"
 msgstr "%p (%s)"
 
-#: gtk/inspector/prop-editor.c:1190
+#: gtk/inspector/prop-editor.c:1275
 msgid "Column:"
 msgstr "Sloupec:"
 
-#: gtk/inspector/prop-editor.c:1304
+#: gtk/inspector/prop-editor.c:1389
 #, c-format
 msgid "Defined at: %p (%s)"
 msgstr "Definováno na: %p (%s)"
 
-#: gtk/inspector/prop-editor.c:1368 gtk/inspector/prop-editor.c:1384
+#: gtk/inspector/prop-editor.c:1453 gtk/inspector/prop-editor.c:1469
 msgid "inverted"
 msgstr "obrácené"
 
-#: gtk/inspector/prop-editor.c:1400
+#: gtk/inspector/prop-editor.c:1485
 msgid "bidirectional, inverted"
 msgstr "obousměrné, obrácené"
 
-#: gtk/inspector/prop-editor.c:1405 gtk/inspector/prop-editor.c:1501
+#: gtk/inspector/prop-editor.c:1490 gtk/inspector/prop-editor.c:1586
 msgid "bidirectional"
 msgstr "obousměrné"
 
-#: gtk/inspector/prop-editor.c:1410
+#: gtk/inspector/prop-editor.c:1495
 msgid "Binding:"
 msgstr "Vazba:"
 
-#: gtk/inspector/prop-editor.c:1520
+#: gtk/inspector/prop-editor.c:1605
 msgid "Setting:"
 msgstr "Nastavení:"
 
-#: gtk/inspector/prop-editor.c:1560
+#: gtk/inspector/prop-editor.c:1645
 msgid "Source:"
 msgstr "Zdroj:"
 
-#: gtk/inspector/prop-editor.c:1562
+#: gtk/inspector/prop-editor.c:1647
 msgid "Reset"
 msgstr "Původní"
 
-#: gtk/inspector/prop-editor.c:1573
+#: gtk/inspector/prop-editor.c:1658
 msgid "Default"
 msgstr "Výchozí"
 
-#: gtk/inspector/prop-editor.c:1576
+#: gtk/inspector/prop-editor.c:1661
 msgid "Theme"
 msgstr "Motiv"
 
-#: gtk/inspector/prop-editor.c:1579
+#: gtk/inspector/prop-editor.c:1664
 msgid "XSettings"
 msgstr "Nastavení X"
-
-#: gtk/inspector/prop-list.ui:89 gtk/inspector/style-prop-list.ui:86
-msgid "Property"
-msgstr "Vlastnost"
-
-#: gtk/inspector/prop-list.ui:105 gtk/inspector/style-prop-list.ui:101
-#: gtk/ui/gtkcoloreditor.ui:291
-msgid "Value"
-msgstr "Hodnota"
 
 #: gtk/inspector/prop-list.ui:123
 msgid "Attribute"
