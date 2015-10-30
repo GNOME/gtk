@@ -33,6 +33,9 @@
 #include "gtkprivate.h"
 #include "gtkrender.h"
 #include "gtkwidgetprivate.h"
+#include "gtkcssnodeprivate.h"
+#include "gtkcssstylepropertyprivate.h"
+#include "gtkradiobutton.h"
 
 
 /**
@@ -47,6 +50,15 @@
  *
  * The important signal ( #GtkToggleButton::toggled ) is also inherited from
  * #GtkToggleButton.
+ *
+ * # CSS nodes
+ *
+ * A GtkCheckButton with indicator (see gtk_toggle_button_set_mode()) has a
+ * main CSS node with name checkbutton and a subnode with name check.
+ *
+ * A GtkCheckButton without indicator changes the name of its main node
+ * to button and adds a .check style class to it. The subnode is invisible
+ * in this case.
  */
 
 
@@ -85,23 +97,19 @@ static void gtk_check_button_draw_indicator      (GtkCheckButton      *check_but
 static void gtk_real_check_button_draw_indicator (GtkCheckButton      *check_button,
 						  cairo_t             *cr);
 
-G_DEFINE_TYPE (GtkCheckButton, gtk_check_button, GTK_TYPE_TOGGLE_BUTTON)
+typedef struct {
+  GtkCssNode *indicator_node;
+} GtkCheckButtonPrivate;
+
+G_DEFINE_TYPE_WITH_PRIVATE (GtkCheckButton, gtk_check_button, GTK_TYPE_TOGGLE_BUTTON)
 
 static void
 gtk_check_button_state_flags_changed (GtkWidget     *widget,
 				      GtkStateFlags  previous_state_flags)
 {
-  /* FIXME
-   * This is a hack to get around the optimizations done by the CSS engine.
-   *
-   * The CSS engine will notice that no CSS properties changed on the
-   * widget itself when going from one state to another and not queue
-   * a redraw.
-   * And the reason for no properties changing will be that only the
-   * checkmark itself changes, but that is hidden behind a
-   * gtk_style_context_save()/_restore() pair, so it won't be caught.
-   */
-  gtk_widget_queue_draw (widget);
+  GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (GTK_CHECK_BUTTON (widget));
+
+  gtk_css_node_set_state (priv->indicator_node, gtk_widget_get_state_flags (widget));
 
   GTK_WIDGET_CLASS (gtk_check_button_parent_class)->state_flags_changed (widget, previous_state_flags);
 }
@@ -124,8 +132,6 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
 
   class->draw_indicator = gtk_real_check_button_draw_indicator;
 
-  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_CHECK_BOX);
-
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("indicator-size",
 							     P_("Indicator Size"),
@@ -142,6 +148,9 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
 							     G_MAXINT,
 							     INDICATOR_SPACING,
 							     GTK_PARAM_READABLE));
+
+  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_CHECK_BOX);
+  gtk_widget_class_set_css_name (widget_class, "checkbutton");
 }
 
 static void
@@ -150,21 +159,72 @@ draw_indicator_changed (GObject    *object,
                         gpointer    user_data)
 {
   GtkButton *button = GTK_BUTTON (object);
+  GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (GTK_CHECK_BUTTON (button));
+  GtkCssNode *widget_node;
+
+  widget_node = gtk_widget_get_css_node (GTK_WIDGET (button));
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (gtk_toggle_button_get_mode (GTK_TOGGLE_BUTTON (button)))
-    gtk_button_set_alignment (button, 0.0, 0.5);
+    {
+      gtk_button_set_alignment (button, 0.0, 0.5);
+      gtk_css_node_set_visible (priv->indicator_node, TRUE);
+      if (GTK_IS_CHECK_BUTTON (button))
+        gtk_css_node_set_name (widget_node, I_("checkbutton"));
+      else if (GTK_IS_RADIO_BUTTON (button))
+        gtk_css_node_set_name (widget_node, I_("radiobutton"));
+    }
   else
-    gtk_button_set_alignment (button, 0.5, 0.5);
+    {
+      gtk_button_set_alignment (button, 0.5, 0.5);
+      gtk_css_node_set_visible (priv->indicator_node, FALSE);
+      gtk_css_node_set_name (widget_node, I_("button"));
+    }
 G_GNUC_END_IGNORE_DEPRECATIONS
+}
+
+static void
+node_style_changed_cb (GtkCssNode  *node,
+                       GtkCssStyle *old_style,
+                       GtkCssStyle *new_style,
+                       GtkWidget    *widget)
+{
+  GtkBitmask *changes;
+  static GtkBitmask *affects_size = NULL;
+
+  if (G_UNLIKELY (affects_size == NULL))
+    affects_size = _gtk_css_style_property_get_mask_affecting (GTK_CSS_AFFECTS_SIZE | GTK_CSS_AFFECTS_CLIP);
+
+  changes = _gtk_bitmask_new ();
+  changes = gtk_css_style_add_difference (changes, old_style, new_style);
+
+  if (_gtk_bitmask_intersects (changes, affects_size))
+    gtk_widget_queue_resize (widget);
+  else
+    gtk_widget_queue_draw (widget);
+
+  _gtk_bitmask_free (changes);
 }
 
 static void
 gtk_check_button_init (GtkCheckButton *check_button)
 {
+  GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (check_button);
+  GtkCssNode *widget_node;
+
   gtk_widget_set_receives_default (GTK_WIDGET (check_button), FALSE);
   g_signal_connect (check_button, "notify::draw-indicator", G_CALLBACK (draw_indicator_changed), NULL);
   gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (check_button), TRUE);
+
+  gtk_style_context_remove_class (gtk_widget_get_style_context (GTK_WIDGET (check_button)), "toggle");
+
+  widget_node = gtk_widget_get_css_node (GTK_WIDGET (check_button));
+  priv->indicator_node = gtk_css_node_new ();
+  gtk_css_node_set_name (priv->indicator_node, I_("check"));
+  gtk_css_node_set_parent (priv->indicator_node, widget_node);
+  gtk_css_node_set_state (priv->indicator_node, gtk_css_node_get_state (widget_node));
+  g_signal_connect_object (priv->indicator_node, "style-changed", G_CALLBACK (node_style_changed_cb), check_button, 0);
+  g_object_unref (priv->indicator_node);
 }
 
 /**
@@ -548,6 +608,7 @@ static void
 gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
 				      cairo_t        *cr)
 {
+  GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (check_button);
   GtkWidget *widget;
   GtkButton *button;
   gint x, y;
@@ -579,17 +640,23 @@ gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
     x = allocation.width - (indicator_size + x);
 
-  gtk_style_context_save (context);
+  gtk_style_context_save_to_node (context, priv->indicator_node);
 
   gtk_render_background (context, cr,
                          border_width, border_width,
                          allocation.width - (2 * border_width),
                          allocation.height - (2 * border_width));
 
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_CHECK);
-
   gtk_render_check (context, cr,
 		    x, y, indicator_size, indicator_size);
 
   gtk_style_context_restore (context);
+}
+
+GtkCssNode *
+gtk_check_button_get_indicator_node (GtkCheckButton *check_button)
+{
+  GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (check_button);
+
+  return priv->indicator_node;
 }
