@@ -42,6 +42,11 @@
  * clicked. This behaviour can be overridden by connecting to the
  * #GtkLinkButton::activate-link signal and returning %TRUE from the
  * signal handler.
+ *
+ * # CSS nodes
+ *
+ * GtkLinkButton has a single CSS node with name button. To differentiate
+ * it from a plain #GtkButton, it gets the .link style class.
  */
 
 #include "config.h"
@@ -205,11 +210,14 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
                   G_TYPE_BOOLEAN, 0);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_LINK_BUTTON_ACCESSIBLE);
+  gtk_widget_class_set_css_name (widget_class, "button");
 }
 
 static void
 gtk_link_button_init (GtkLinkButton *link_button)
 {
+  GtkStyleContext *context;
+
   link_button->priv = gtk_link_button_get_instance_private (link_button);
 
   gtk_button_set_relief (GTK_BUTTON (link_button), GTK_RELIEF_NONE);
@@ -231,6 +239,9 @@ gtk_link_button_init (GtkLinkButton *link_button)
   		       GDK_BUTTON1_MASK,
   		       link_drop_types, G_N_ELEMENTS (link_drop_types),
   		       GDK_ACTION_COPY);
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (link_button));
+  gtk_style_context_add_class (context, "link");
 }
 
 static void
