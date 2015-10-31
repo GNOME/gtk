@@ -3687,13 +3687,17 @@ GtkProgressBar {
 /**********
  * Frames *
  **********/
+frame,
 .frame {
   border: 1px solid #a1a1a1;
   padding: 0; }
+  frame.flat,
   .frame.flat {
     border-style: none; }
+  frame:backdrop,
   .frame:backdrop {
     border-color: darkgray; }
+  frame.action-bar,
   .frame.action-bar {
     padding: 6px;
     border-width: 1px 0 0; }
@@ -4910,7 +4914,7 @@ button.circular label,
 .titlebar button.circular.titlebutton label {
   padding: 0; }
 
-.frame.keycap {
+frame.keycap {
   background-color: #fefefe;
   border: 1px solid #cecece;
   border-radius: 5px;

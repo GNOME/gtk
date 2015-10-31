@@ -2494,6 +2494,7 @@ GtkProgressBar {
 /**********
  * Frames *
  **********/
+frame,
 .frame {
   border: 1px solid $borders_color;
   &.flat { border-style: none; }
@@ -3437,7 +3438,7 @@ button.circular label {
   padding: 0;
 }
 
-.frame.keycap {
+frame.keycap {
   background-color: #fefefe;
   border: 1px solid #cecece;
   border-radius: 5px;
