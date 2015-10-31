@@ -31,6 +31,7 @@
 #include "gtkrenderprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkwidgetprivate.h"
+#include "gtkstylecontextprivate.h"
 #include "a11y/gtkcolorswatchaccessibleprivate.h"
 
 
@@ -39,6 +40,9 @@
  * and a subnode named overlay. The main node gets the .light or .dark
  * style classes added depending on the brightness of the color that
  * the swatch is showing.
+ *
+ * The color swatch has the .activatable style class by default. It can
+ * be removed for non-activatable swatches.
  */
 
 struct _GtkColorSwatchPrivate
@@ -93,6 +97,7 @@ static void
 gtk_color_swatch_init (GtkColorSwatch *swatch)
 {
   GtkCssNode *widget_node;
+  GtkStyleContext *context;
 
   swatch->priv = gtk_color_swatch_get_instance_private (swatch);
   swatch->priv->use_alpha = TRUE;
@@ -119,6 +124,9 @@ gtk_color_swatch_init (GtkColorSwatch *swatch)
   gtk_css_node_set_parent (swatch->priv->overlay_node, widget_node);
   gtk_css_node_set_state (swatch->priv->overlay_node, gtk_css_node_get_state (widget_node));
   g_object_unref (swatch->priv->overlay_node);
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (swatch));
+  gtk_style_context_add_class (context, "activatable");
 }
 
 #define INTENSITY(r, g, b) ((r) * 0.30 + (g) * 0.59 + (b) * 0.11)

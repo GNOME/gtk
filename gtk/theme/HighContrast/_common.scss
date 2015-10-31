@@ -2408,8 +2408,8 @@ colorswatch {
   // and GtkColorSwatch.overlay, I know it's weird, but this is gtk+.
 
   // hover effect
-  &:hover,
-  &:hover:selected {
+  &.activatable:hover,
+  &.activatable:hover:selected {
     background-image: linear-gradient(135deg, transparentize(white, 0.3),
                                               transparentize(white, 1) 50%);
     box-shadow: inset 0 1px transparentize(white, 0.6),
@@ -2419,16 +2419,6 @@ colorswatch {
   &:backdrop:selected {
     background-image: none;
     box-shadow: none;
-  }
-
-  // no hover effect for the colorswatch in the color editor
-  GtkColorEditor & {
-    border-radius: 3px; // same radius as the entry
-    &:hover {
-      background-image: none;
-      box-shadow: inset 0 1px transparentize(black, 0.9), _widget_edge();
-    }
-    &:backdrop { box-shadow: none; }
   }
 
   // indicator and keynav outline colors, color-dark is a color with luminosity lower then 50%

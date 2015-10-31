@@ -4452,22 +4452,15 @@ colorswatch {
     border-bottom-right-radius: 5px; }
   colorswatch:only-child > overlay {
     border-radius: 5px; }
-  colorswatch:hover, colorswatch:hover:selected {
+  colorswatch.activatable:hover, colorswatch.activatable:hover:selected {
     background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0) 50%);
     box-shadow: inset 0 1px rgba(255, 255, 255, 0.4), inset 0 -1px rgba(0, 0, 0, 0.1); }
-    colorswatch:hover.dark overlay, colorswatch:hover:selected.dark overlay {
+    colorswatch.activatable:hover.dark overlay, colorswatch.activatable:hover:selected.dark overlay {
       background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0) 50%); }
   colorswatch:backdrop, colorswatch:backdrop:selected
   colorswatch.dark:backdrop, colorswatch.dark:backdrop:selected {
     background-image: none;
     box-shadow: none; }
-  GtkColorEditor colorswatch {
-    border-radius: 3px; }
-    GtkColorEditor colorswatch:hover {
-      background-image: none;
-      box-shadow: inset 0 1px rgba(0, 0, 0, 0.1), 0 1px white; }
-    GtkColorEditor colorswatch:backdrop {
-      box-shadow: none; }
   colorswatch.dark overlay {
     color: white;
     outline-color: rgba(255, 255, 255, 0.5); }

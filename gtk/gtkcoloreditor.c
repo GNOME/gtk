@@ -377,6 +377,8 @@ gtk_color_editor_init (GtkColorEditor *editor)
   gtk_overlay_add_overlay (GTK_OVERLAY (editor->priv->overlay), editor->priv->sv_popup);
   gtk_overlay_add_overlay (GTK_OVERLAY (editor->priv->overlay), editor->priv->h_popup);
   gtk_overlay_add_overlay (GTK_OVERLAY (editor->priv->overlay), editor->priv->a_popup);
+
+  gtk_style_context_remove_class (gtk_widget_get_style_context (editor->priv->swatch), "activatable");
 }
 
 static void
