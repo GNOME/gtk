@@ -36,7 +36,7 @@
 
 /*
  * GtkColorSwatch has two CSS nodes, the main one named colorswatch
- * and a subnode named image. The main node gets the .light or .dark
+ * and a subnode named overlay. The main node gets the .light or .dark
  * style classes added depending on the brightness of the color that
  * the swatch is showing.
  */
@@ -55,7 +55,7 @@ struct _GtkColorSwatchPrivate
 
   GtkGesture *long_press_gesture;
   GtkGesture *multipress_gesture;
-  GtkCssNode *icon_node;
+  GtkCssNode *overlay_node;
 
   GtkWidget *popover;
 };
@@ -114,11 +114,11 @@ gtk_color_swatch_init (GtkColorSwatch *swatch)
                     G_CALLBACK (tap_action), swatch);
 
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (swatch));
-  swatch->priv->icon_node = gtk_css_node_new ();
-  gtk_css_node_set_name (swatch->priv->icon_node, I_("image"));
-  gtk_css_node_set_parent (swatch->priv->icon_node, widget_node);
-  gtk_css_node_set_state (swatch->priv->icon_node, gtk_css_node_get_state (widget_node));
-  g_object_unref (swatch->priv->icon_node);
+  swatch->priv->overlay_node = gtk_css_node_new ();
+  gtk_css_node_set_name (swatch->priv->overlay_node, I_("overlay"));
+  gtk_css_node_set_parent (swatch->priv->overlay_node, widget_node);
+  gtk_css_node_set_state (swatch->priv->overlay_node, gtk_css_node_get_state (widget_node));
+  g_object_unref (swatch->priv->overlay_node);
 }
 
 #define INTENSITY(r, g, b) ((r) * 0.30 + (g) * 0.59 + (b) * 0.11)
@@ -218,7 +218,7 @@ swatch_draw (GtkWidget *widget,
   rect.x = border.left + padding.left;
   rect.y = border.top + padding.top;
 
-  gtk_style_context_save_to_node (context, swatch->priv->icon_node);
+  gtk_style_context_save_to_node (context, swatch->priv->overlay_node);
 
   gtk_render_background (context, cr, rect.x, rect.y, rect.width, rect.height);
   gtk_render_frame (context, cr, rect.x, rect.y, rect.width, rect.height);
@@ -608,7 +608,7 @@ swatch_state_flags_changed (GtkWidget     *widget,
 {
   GtkColorSwatch *swatch = GTK_COLOR_SWATCH (widget);
 
-  gtk_css_node_set_state (swatch->priv->icon_node, gtk_widget_get_state_flags (widget));
+  gtk_css_node_set_state (swatch->priv->overlay_node, gtk_widget_get_state_flags (widget));
 }
 
 /* GObject implementation {{{1 */
