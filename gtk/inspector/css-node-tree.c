@@ -40,6 +40,7 @@
 #include "gtksettings.h"
 #include "gtktreeview.h"
 #include "gtktreeselection.h"
+#include "gtktypebuiltins.h"
 
 enum {
   COLUMN_NODE_NAME,
@@ -47,6 +48,7 @@ enum {
   COLUMN_NODE_VISIBLE,
   COLUMN_NODE_CLASSES,
   COLUMN_NODE_ID,
+  COLUMN_NODE_STATE,
   /* add more */
   N_NODE_COLUMNS
 };
@@ -194,6 +196,35 @@ strv_sort (char **strv)
                      NULL);
 }
 
+static gchar *
+format_state_flags (GtkStateFlags state)
+{
+  GFlagsClass *fclass;
+  GString *str;
+  gint i;
+
+  str = g_string_new ("");
+
+  if (state)
+    {
+      fclass = g_type_class_ref (GTK_TYPE_STATE_FLAGS);
+      for (i = 0; i < fclass->n_values; i++)
+        {
+          if (state & fclass->values[i].value)
+            {
+              if (str->len)
+                g_string_append (str, " | ");
+              g_string_append (str, fclass->values[i].value_nick);
+            }
+        }
+      g_type_class_unref (fclass);
+    }
+  else
+    g_string_append (str, "normal");
+
+  return g_string_free (str, FALSE);
+}
+
 static void
 gtk_inspector_css_node_tree_get_node_value (GtkTreeModelCssNode *model,
                                             GtkCssNode          *node,
@@ -229,6 +260,10 @@ gtk_inspector_css_node_tree_get_node_value (GtkTreeModelCssNode *model,
       g_value_set_string (value, gtk_css_node_get_id (node));
       break;
 
+    case COLUMN_NODE_STATE:
+      g_value_take_string (value, format_state_flags (gtk_css_node_get_state (node)));
+      break;
+
     default:
       g_assert_not_reached ();
       break;
@@ -250,6 +285,7 @@ gtk_inspector_css_node_tree_init (GtkInspectorCssNodeTree *cnt)
                                                   G_TYPE_STRING,
                                                   G_TYPE_STRING,
                                                   G_TYPE_BOOLEAN,
+                                                  G_TYPE_STRING,
                                                   G_TYPE_STRING,
                                                   G_TYPE_STRING);
   gtk_tree_view_set_model (GTK_TREE_VIEW (priv->node_tree), priv->node_model);
