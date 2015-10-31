@@ -158,10 +158,15 @@ gtk_model_button_update_state (GtkModelButton *button)
   if (button->active && !button->menu_name)
     state |= GTK_STATE_FLAG_CHECKED;
 
-  gtk_widget_set_state_flags (GTK_WIDGET (button), state, TRUE);
   gtk_css_node_set_state (button->indicator_node, state);
 }
 
+static void
+gtk_model_button_state_flags_changed (GtkWidget     *widget,
+                                      GtkStateFlags  previous_flags)
+{
+  gtk_model_button_update_state (GTK_MODEL_BUTTON (widget));
+}
 
 static void
 gtk_model_button_set_role (GtkModelButton *button,
@@ -857,6 +862,7 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
   widget_class->size_allocate = gtk_model_button_size_allocate;
   widget_class->draw = gtk_model_button_draw;
   widget_class->destroy = gtk_model_button_destroy;
+  widget_class->state_flags_changed = gtk_model_button_state_flags_changed;
 
   button_class->clicked = gtk_model_button_clicked;
 
