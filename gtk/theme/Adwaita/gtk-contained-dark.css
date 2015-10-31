@@ -3812,16 +3812,18 @@ calendar {
 /***********
  * Dialogs *
  ***********/
-.message-dialog .dialog-action-area button {
+messagedialog .dialog-action-area button,
+messagedialog .dialog-action-area .titlebar button.titlebutton,
+.titlebar messagedialog .dialog-action-area button.titlebutton {
   padding: 8px; }
 
-.message-dialog .titlebar {
+messagedialog .titlebar {
   border-style: none;
   box-shadow: inset 0 1px rgba(238, 238, 236, 0.1); }
-.message-dialog.csd.background {
+messagedialog.csd.background {
   border-bottom-left-radius: 9px;
   border-bottom-right-radius: 9px; }
-.message-dialog.csd .dialog-action-area button {
+messagedialog.csd .dialog-action-area button {
   padding: 12px;
   border-radius: 0;
   color: #eeeeec;
@@ -3831,7 +3833,7 @@ calendar {
   text-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
   icon-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
   box-shadow: inset 0 1px rgba(255, 255, 255, 0.1); }
-  .message-dialog.csd .dialog-action-area button:hover {
+  messagedialog.csd .dialog-action-area button:hover {
     color: #eeeeec;
     outline-color: rgba(238, 238, 236, 0.3);
     border-color: #1c1f1f;
@@ -3839,7 +3841,7 @@ calendar {
     text-shadow: 0 -1px rgba(0, 0, 0, 0.77976);
     icon-shadow: 0 -1px rgba(0, 0, 0, 0.77976);
     box-shadow: inset 0 1px rgba(255, 255, 255, 0.1); }
-  .message-dialog.csd .dialog-action-area button:active {
+  messagedialog.csd .dialog-action-area button:active {
     color: #eeeeec;
     outline-color: rgba(238, 238, 236, 0.3);
     border-color: #1c1f1f;
@@ -3847,34 +3849,34 @@ calendar {
     text-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
     icon-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
     box-shadow: inset 0 1px rgba(0, 0, 0, 0.07), inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
-  .message-dialog.csd .dialog-action-area button:insensitive {
+  messagedialog.csd .dialog-action-area button:insensitive {
     color: #949796;
     border-color: #1c1f1f;
     background-image: linear-gradient(to bottom, #333636);
     text-shadow: none;
     icon-shadow: none;
     box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
-    .message-dialog.csd .dialog-action-area button:insensitive > .label, .message-dialog.csd .dialog-action-area headerbar button.titlebutton:insensitive > .label,
-    .message-dialog.csd .dialog-action-area .titlebar button.titlebutton:insensitive > .label {
+    messagedialog.csd .dialog-action-area button:insensitive > .label, messagedialog.csd .dialog-action-area headerbar button.titlebutton:insensitive > .label,
+    messagedialog.csd .dialog-action-area .titlebar button.titlebutton:insensitive > .label {
       color: inherit; }
-  .message-dialog.csd .dialog-action-area button:backdrop {
+  messagedialog.csd .dialog-action-area button:backdrop {
     color: #949796;
     border-color: #1f2222;
     background-image: linear-gradient(to bottom, #393f3f);
     text-shadow: none;
     icon-shadow: none;
     box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
-  .message-dialog.csd .dialog-action-area button:backdrop:insensitive {
+  messagedialog.csd .dialog-action-area button:backdrop:insensitive {
     color: #5d6767;
     border-color: #1f2222;
     background-image: linear-gradient(to bottom, #333636);
     text-shadow: none;
     icon-shadow: none;
     box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
-    .message-dialog.csd .dialog-action-area button:backdrop:insensitive > .label, .message-dialog.csd .dialog-action-area headerbar button.titlebutton:backdrop:insensitive > .label,
-    .message-dialog.csd .dialog-action-area .titlebar button.titlebutton:backdrop:insensitive > .label {
+    messagedialog.csd .dialog-action-area button:backdrop:insensitive > .label, messagedialog.csd .dialog-action-area headerbar button.titlebutton:backdrop:insensitive > .label,
+    messagedialog.csd .dialog-action-area .titlebar button.titlebutton:backdrop:insensitive > .label {
       color: inherit; }
-  .message-dialog.csd .dialog-action-area button.suggested-action {
+  messagedialog.csd .dialog-action-area button.suggested-action {
     color: white;
     outline-color: rgba(255, 255, 255, 0.3);
     border-color: #0b1e33;
@@ -3882,7 +3884,7 @@ calendar {
     text-shadow: 0 -1px rgba(0, 0, 0, 0.70353);
     icon-shadow: 0 -1px rgba(0, 0, 0, 0.70353);
     box-shadow: inset 0 1px rgba(255, 255, 255, 0.1); }
-    .message-dialog.csd .dialog-action-area button.suggested-action:hover {
+    messagedialog.csd .dialog-action-area button.suggested-action:hover {
       color: white;
       outline-color: rgba(255, 255, 255, 0.3);
       border-color: #0b1e33;
@@ -3890,7 +3892,7 @@ calendar {
       text-shadow: 0 -1px rgba(0, 0, 0, 0.67153);
       icon-shadow: 0 -1px rgba(0, 0, 0, 0.67153);
       box-shadow: inset 0 1px rgba(255, 255, 255, 0.1); }
-    .message-dialog.csd .dialog-action-area button.suggested-action:active {
+    messagedialog.csd .dialog-action-area button.suggested-action:active {
       color: white;
       outline-color: rgba(255, 255, 255, 0.3);
       border-color: #0b1e33;
@@ -3898,34 +3900,34 @@ calendar {
       text-shadow: 0 -1px rgba(0, 0, 0, 0.78353);
       icon-shadow: 0 -1px rgba(0, 0, 0, 0.78353);
       box-shadow: inset 0 1px rgba(0, 0, 0, 0.07), inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
-    .message-dialog.csd .dialog-action-area button.suggested-action:backdrop {
+    messagedialog.csd .dialog-action-area button.suggested-action:backdrop {
       color: #d3dfeb;
       border-color: #0b1e33;
       background-image: linear-gradient(to bottom, #215d9c);
       text-shadow: none;
       icon-shadow: none;
       box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
-      .message-dialog.csd .dialog-action-area button.suggested-action:backdrop:insensitive {
+      messagedialog.csd .dialog-action-area button.suggested-action:backdrop:insensitive {
         color: #5d6767;
         border-color: #1f2222;
         background-image: linear-gradient(to bottom, #333636);
         text-shadow: none;
         icon-shadow: none;
         box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
-        .message-dialog.csd .dialog-action-area button.suggested-action:backdrop:insensitive > .label, .message-dialog.csd .dialog-action-area headerbar button.suggested-action.titlebutton:backdrop:insensitive > .label,
-        .message-dialog.csd .dialog-action-area .titlebar button.suggested-action.titlebutton:backdrop:insensitive > .label {
+        messagedialog.csd .dialog-action-area button.suggested-action:backdrop:insensitive > .label, messagedialog.csd .dialog-action-area headerbar button.suggested-action.titlebutton:backdrop:insensitive > .label,
+        messagedialog.csd .dialog-action-area .titlebar button.suggested-action.titlebutton:backdrop:insensitive > .label {
           color: inherit; }
-    .message-dialog.csd .dialog-action-area button.suggested-action:insensitive {
+    messagedialog.csd .dialog-action-area button.suggested-action:insensitive {
       color: #949796;
       border-color: #1c1f1f;
       background-image: linear-gradient(to bottom, #333636);
       text-shadow: none;
       icon-shadow: none;
       box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
-      .message-dialog.csd .dialog-action-area button.suggested-action:insensitive > .label, .message-dialog.csd .dialog-action-area headerbar button.suggested-action.titlebutton:insensitive > .label,
-      .message-dialog.csd .dialog-action-area .titlebar button.suggested-action.titlebutton:insensitive > .label {
+      messagedialog.csd .dialog-action-area button.suggested-action:insensitive > .label, messagedialog.csd .dialog-action-area headerbar button.suggested-action.titlebutton:insensitive > .label,
+      messagedialog.csd .dialog-action-area .titlebar button.suggested-action.titlebutton:insensitive > .label {
         color: inherit; }
-  .message-dialog.csd .dialog-action-area button.destructive-action {
+  messagedialog.csd .dialog-action-area button.destructive-action {
     color: white;
     outline-color: rgba(255, 255, 255, 0.3);
     border-color: #5e0707;
@@ -3933,7 +3935,7 @@ calendar {
     text-shadow: 0 -1px rgba(0, 0, 0, 0.64078);
     icon-shadow: 0 -1px rgba(0, 0, 0, 0.64078);
     box-shadow: inset 0 1px rgba(255, 255, 255, 0.3); }
-    .message-dialog.csd .dialog-action-area button.destructive-action:hover {
+    messagedialog.csd .dialog-action-area button.destructive-action:hover {
       color: white;
       outline-color: rgba(255, 255, 255, 0.3);
       border-color: #5e0707;
@@ -3941,7 +3943,7 @@ calendar {
       text-shadow: 0 -1px rgba(0, 0, 0, 0.60878);
       icon-shadow: 0 -1px rgba(0, 0, 0, 0.60878);
       box-shadow: inset 0 1px rgba(255, 255, 255, 0.3); }
-    .message-dialog.csd .dialog-action-area button.destructive-action:active {
+    messagedialog.csd .dialog-action-area button.destructive-action:active {
       color: white;
       outline-color: rgba(255, 255, 255, 0.3);
       border-color: #5e0707;
@@ -3949,41 +3951,41 @@ calendar {
       text-shadow: 0 -1px rgba(0, 0, 0, 0.72078);
       icon-shadow: 0 -1px rgba(0, 0, 0, 0.72078);
       box-shadow: inset 0 1px rgba(0, 0, 0, 0.07), inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
-    .message-dialog.csd .dialog-action-area button.destructive-action:backdrop {
+    messagedialog.csd .dialog-action-area button.destructive-action:backdrop {
       color: #f7cfcf;
       border-color: #5e0707;
       background-image: linear-gradient(to bottom, #d51010);
       text-shadow: none;
       icon-shadow: none;
       box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
-      .message-dialog.csd .dialog-action-area button.destructive-action:backdrop:insensitive {
+      messagedialog.csd .dialog-action-area button.destructive-action:backdrop:insensitive {
         color: #5d6767;
         border-color: #1f2222;
         background-image: linear-gradient(to bottom, #333636);
         text-shadow: none;
         icon-shadow: none;
         box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
-        .message-dialog.csd .dialog-action-area button.destructive-action:backdrop:insensitive > .label, .message-dialog.csd .dialog-action-area headerbar button.destructive-action.titlebutton:backdrop:insensitive > .label,
-        .message-dialog.csd .dialog-action-area .titlebar button.destructive-action.titlebutton:backdrop:insensitive > .label {
+        messagedialog.csd .dialog-action-area button.destructive-action:backdrop:insensitive > .label, messagedialog.csd .dialog-action-area headerbar button.destructive-action.titlebutton:backdrop:insensitive > .label,
+        messagedialog.csd .dialog-action-area .titlebar button.destructive-action.titlebutton:backdrop:insensitive > .label {
           color: inherit; }
-    .message-dialog.csd .dialog-action-area button.destructive-action:insensitive {
+    messagedialog.csd .dialog-action-area button.destructive-action:insensitive {
       color: #949796;
       border-color: #1c1f1f;
       background-image: linear-gradient(to bottom, #333636);
       text-shadow: none;
       icon-shadow: none;
       box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
-      .message-dialog.csd .dialog-action-area button.destructive-action:insensitive > .label, .message-dialog.csd .dialog-action-area headerbar button.destructive-action.titlebutton:insensitive > .label,
-      .message-dialog.csd .dialog-action-area .titlebar button.destructive-action.titlebutton:insensitive > .label {
+      messagedialog.csd .dialog-action-area button.destructive-action:insensitive > .label, messagedialog.csd .dialog-action-area headerbar button.destructive-action.titlebutton:insensitive > .label,
+      messagedialog.csd .dialog-action-area .titlebar button.destructive-action.titlebutton:insensitive > .label {
         color: inherit; }
-.message-dialog.csd .dialog-action-area button, .message-dialog.csd .dialog-action-area button:hover, .message-dialog.csd .dialog-action-area button:active, .message-dialog.csd .dialog-action-area button:insensitive, .message-dialog.csd .dialog-action-area button:backdrop, .message-dialog.csd .dialog-action-area button:backdrop:insensitive, .message-dialog.csd .dialog-action-area button.suggested-action, .message-dialog.csd .dialog-action-area button.suggested-action:hover, .message-dialog.csd .dialog-action-area button.suggested-action:active, .message-dialog.csd .dialog-action-area button.suggested-action:backdrop, .message-dialog.csd .dialog-action-area button.suggested-action:backdrop:insensitive, .message-dialog.csd .dialog-action-area button.suggested-action:insensitive, .message-dialog.csd .dialog-action-area button.destructive-action, .message-dialog.csd .dialog-action-area button.destructive-action:hover, .message-dialog.csd .dialog-action-area button.destructive-action:active, .message-dialog.csd .dialog-action-area button.destructive-action:backdrop, .message-dialog.csd .dialog-action-area button.destructive-action:backdrop:insensitive, .message-dialog.csd .dialog-action-area button.destructive-action:insensitive {
+messagedialog.csd .dialog-action-area button, messagedialog.csd .dialog-action-area button:hover, messagedialog.csd .dialog-action-area button:active, messagedialog.csd .dialog-action-area button:insensitive, messagedialog.csd .dialog-action-area button:backdrop, messagedialog.csd .dialog-action-area button:backdrop:insensitive, messagedialog.csd .dialog-action-area button.suggested-action, messagedialog.csd .dialog-action-area button.suggested-action:hover, messagedialog.csd .dialog-action-area button.suggested-action:active, messagedialog.csd .dialog-action-area button.suggested-action:backdrop, messagedialog.csd .dialog-action-area button.suggested-action:backdrop:insensitive, messagedialog.csd .dialog-action-area button.suggested-action:insensitive, messagedialog.csd .dialog-action-area button.destructive-action, messagedialog.csd .dialog-action-area button.destructive-action:hover, messagedialog.csd .dialog-action-area button.destructive-action:active, messagedialog.csd .dialog-action-area button.destructive-action:backdrop, messagedialog.csd .dialog-action-area button.destructive-action:backdrop:insensitive, messagedialog.csd .dialog-action-area button.destructive-action:insensitive {
   border-left-style: solid;
   border-right-style: none;
   border-bottom-style: none; }
-.message-dialog.csd .dialog-action-area button:last-child {
+messagedialog.csd .dialog-action-area button:last-child {
   border-bottom-right-radius: 7px;
   outline-bottom-right-radius: 5px; }
-.message-dialog.csd .dialog-action-area button:first-child {
+messagedialog.csd .dialog-action-area button:first-child {
   border-left-style: none;
   border-bottom-left-radius: 7px;
   outline-bottom-left-radius: 5px; }
@@ -4383,7 +4385,7 @@ decoration {
   decoration.csd.tooltip {
     border-radius: 5px;
     box-shadow: none; }
-  decoration.csd.message-dialog {
+  messagedialog decoration.csd {
     border-radius: 7px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(28, 31, 31, 0.8); }
   decoration.solid-csd {

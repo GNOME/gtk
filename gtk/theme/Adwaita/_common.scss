@@ -2722,11 +2722,11 @@ calendar {
  * Dialogs *
  ***********/
 
-.message-dialog .dialog-action-area button {
+messagedialog .dialog-action-area button {
   padding: 8px;
 }
 
-.message-dialog { // Message Dialog styling
+messagedialog { // Message Dialog styling
   @if $variant==light {
     // the bright variant as a slightly darker bg which in this case clashes with the window decoration, overriding
     &.background { background-color: $bg_color; }
@@ -3253,7 +3253,7 @@ decoration {
       border-radius: 5px;
       box-shadow: none;
     }
-    &.message-dialog {
+    messagedialog & {
       border-radius: 7px;
       box-shadow: 0 1px 2px transparentize(black, 0.8),
                   0 0 0 1px transparentize($_wm_border,0.1);
