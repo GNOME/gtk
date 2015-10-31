@@ -39,11 +39,10 @@
  * @Short_description: A bin with a decorative frame and optional label
  * @Title: GtkFrame
  *
- * The frame widget is a Bin that surrounds its child
- * with a decorative frame and an optional label.
- * If present, the label is drawn in a gap in the
- * top side of the frame. The position of the
- * label can be controlled with gtk_frame_set_label_align().
+ * The frame widget is a bin that surrounds its child with a decorative
+ * frame and an optional label. If present, the label is drawn in a gap
+ * in the top side of the frame. The position of the label can be
+ * controlled with gtk_frame_set_label_align().
  *
  * # GtkFrame as GtkBuildable
  *
@@ -63,6 +62,12 @@
  *   </child>
  * </object>
  * ]|
+ *
+ * # CSS nodes
+ *
+ * GtkFrame has a single CSS node with name frame. The style class
+ * .flat can appear with it. In the #GtkShortcutsWindow, frames
+ * are used with the .keycap style class.
  */
 
 
@@ -214,6 +219,7 @@ gtk_frame_class_init (GtkFrameClass *class)
   class->compute_child_allocation = gtk_frame_real_compute_child_allocation;
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_FRAME_ACCESSIBLE);
+  gtk_widget_class_set_css_name (widget_class, "frame");
 }
 
 static void
@@ -240,7 +246,6 @@ static void
 gtk_frame_init (GtkFrame *frame)
 {
   GtkFramePrivate *priv;
-  GtkStyleContext *context;
 
   frame->priv = gtk_frame_get_instance_private (frame); 
   priv = frame->priv;
@@ -249,9 +254,6 @@ gtk_frame_init (GtkFrame *frame)
   priv->shadow_type = GTK_SHADOW_ETCHED_IN;
   priv->label_xalign = 0.0;
   priv->label_yalign = 0.5;
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (frame));
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_FRAME);
 }
 
 static void 
