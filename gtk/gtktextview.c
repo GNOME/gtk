@@ -70,6 +70,13 @@
  * [text widget conceptual overview][TextWidget]
  * which gives an overview of all the objects and data
  * types related to the text widget and how they work together.
+ *
+ * # CSS nodes
+ *
+ * GtkTextView has a main css node with name textview and style class .view,
+ * and subnodes for each of the border windows, and the main text area,
+ * with names border and text, respectively. The border nodes each get
+ * one of the style classes .left, .right, .top or .bottom.
  */
 
 
