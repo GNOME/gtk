@@ -29,9 +29,17 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkrenderprivate.h"
+#include "gtkcssnodeprivate.h"
 #include "gtkwidgetprivate.h"
 #include "a11y/gtkcolorswatchaccessibleprivate.h"
 
+
+/*
+ * GtkColorSwatch has two CSS nodes, the main one named colorswatch
+ * and a subnode named image. The main node gets the .light or .dark
+ * style classes added depending on the brightness of the color that
+ * the swatch is showing.
+ */
 
 struct _GtkColorSwatchPrivate
 {
@@ -47,6 +55,7 @@ struct _GtkColorSwatchPrivate
 
   GtkGesture *long_press_gesture;
   GtkGesture *multipress_gesture;
+  GtkCssNode *icon_node;
 
   GtkWidget *popover;
 };
@@ -83,6 +92,8 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkColorSwatch, gtk_color_swatch, GTK_TYPE_WIDGET)
 static void
 gtk_color_swatch_init (GtkColorSwatch *swatch)
 {
+  GtkCssNode *widget_node;
+
   swatch->priv = gtk_color_swatch_get_instance_private (swatch);
   swatch->priv->use_alpha = TRUE;
   swatch->priv->selectable = TRUE;
@@ -101,6 +112,13 @@ gtk_color_swatch_init (GtkColorSwatch *swatch)
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (swatch->priv->multipress_gesture), 0);
   g_signal_connect (swatch->priv->multipress_gesture, "pressed",
                     G_CALLBACK (tap_action), swatch);
+
+  widget_node = gtk_widget_get_css_node (GTK_WIDGET (swatch));
+  swatch->priv->icon_node = gtk_css_node_new ();
+  gtk_css_node_set_name (swatch->priv->icon_node, I_("image"));
+  gtk_css_node_set_parent (swatch->priv->icon_node, widget_node);
+  gtk_css_node_set_state (swatch->priv->icon_node, gtk_css_node_get_state (widget_node));
+  g_object_unref (swatch->priv->icon_node);
 }
 
 #define INTENSITY(r, g, b) ((r) * 0.30 + (g) * 0.59 + (b) * 0.11)
@@ -200,9 +218,8 @@ swatch_draw (GtkWidget *widget,
   rect.x = border.left + padding.left;
   rect.y = border.top + padding.top;
 
-  gtk_style_context_save (context);
-  gtk_style_context_add_class (context, "overlay");
-  
+  gtk_style_context_save_to_node (context, swatch->priv->icon_node);
+
   gtk_render_background (context, cr, rect.x, rect.y, rect.width, rect.height);
   gtk_render_frame (context, cr, rect.x, rect.y, rect.width, rect.height);
 
@@ -227,9 +244,7 @@ swatch_draw (GtkWidget *widget,
     }
 
   if (gtk_widget_has_visible_focus (widget))
-    {
-      gtk_render_focus (context, cr, 0, 0, width, height);
-    }
+    gtk_render_focus (context, cr, 0, 0, width, height);
 
   gtk_style_context_restore (context);
 
@@ -587,6 +602,15 @@ swatch_popup_menu (GtkWidget *widget)
   return TRUE;
 }
 
+static void
+swatch_state_flags_changed (GtkWidget     *widget,
+                            GtkStateFlags  previous_state)
+{
+  GtkColorSwatch *swatch = GTK_COLOR_SWATCH (widget);
+
+  gtk_css_node_set_state (swatch->priv->icon_node, gtk_widget_get_state_flags (widget));
+}
+
 /* GObject implementation {{{1 */
 
 static void
@@ -694,6 +718,7 @@ gtk_color_swatch_class_init (GtkColorSwatchClass *class)
   widget_class->map = swatch_map;
   widget_class->unmap = swatch_unmap;
   widget_class->size_allocate = swatch_size_allocate;
+  widget_class->state_flags_changed = swatch_state_flags_changed;
 
   signals[ACTIVATE] =
     g_signal_new (I_("activate"),
@@ -720,6 +745,7 @@ gtk_color_swatch_class_init (GtkColorSwatchClass *class)
                             TRUE, GTK_PARAM_READWRITE));
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_COLOR_SWATCH_ACCESSIBLE);
+  gtk_widget_class_set_css_name (widget_class, "colorswatch");
 }
 
 
@@ -750,19 +776,20 @@ gtk_color_swatch_set_rgba (GtkColorSwatch *swatch,
                            dnd_targets, G_N_ELEMENTS (dnd_targets),
                            GDK_ACTION_COPY | GDK_ACTION_MOVE);
     }
-  else
-    {
-      gtk_style_context_remove_class (context, "color-light");
-      gtk_style_context_remove_class (context, "color-dark");
-    }
 
   swatch->priv->has_color = TRUE;
   swatch->priv->color = *color;
 
   if (INTENSITY (swatch->priv->color.red, swatch->priv->color.green, swatch->priv->color.blue) > 0.5)
-    gtk_style_context_add_class (context, "color-light");
+    {
+      gtk_style_context_add_class (context, "light");
+      gtk_style_context_remove_class (context, "dark");
+    }
   else
-    gtk_style_context_add_class (context, "color-dark");
+    {
+      gtk_style_context_add_class (context, "dark");
+      gtk_style_context_remove_class (context, "light");
+    }
 
   gtk_widget_queue_draw (GTK_WIDGET (swatch));
   g_object_notify (G_OBJECT (swatch), "rgba");
