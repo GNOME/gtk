@@ -338,20 +338,9 @@ gtk_inspector_css_node_tree_set_object (GtkInspectorCssNodeTree *cnt,
 }
 
 static void
-populate_properties (GtkInspectorCssNodeTree *cnt)
+gtk_inspector_css_node_tree_set_node (GtkInspectorCssNodeTree *cnt,
+                                      GtkCssNode              *node)
 {
-  GtkInspectorCssNodeTreePrivate *priv = cnt->priv;
-  GtkTreeSelection *selection;
-  GtkTreeIter titer;
-  GtkCssNode *node;
-  GtkCssStyle *style;
-  gint i;
-
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->node_tree));
-  if (!gtk_tree_selection_get_selected (selection, NULL, &titer))
-    return;
-
-  node = gtk_tree_model_css_node_get_node_from_iter (GTK_TREE_MODEL_CSS_NODE (priv->node_model), &titer);
   style = gtk_css_node_get_style (node);
 
   for (i = 0; i < _gtk_css_style_property_get_n_properties (); i++)
@@ -385,6 +374,24 @@ populate_properties (GtkInspectorCssNodeTree *cnt)
       g_free (location);
       g_free (value);
     }
+}
+
+static void
+populate_properties (GtkInspectorCssNodeTree *cnt)
+{
+  GtkInspectorCssNodeTreePrivate *priv = cnt->priv;
+  GtkTreeSelection *selection;
+  GtkTreeIter titer;
+  GtkCssNode *node;
+  GtkCssStyle *style;
+  gint i;
+
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->node_tree));
+  if (!gtk_tree_selection_get_selected (selection, NULL, &titer))
+    return;
+
+  node = gtk_tree_model_css_node_get_node_from_iter (GTK_TREE_MODEL_CSS_NODE (priv->node_model), &titer);
+  gtk_inspector_css_node_tree_set_node (cnt, node);
 }
 
 // vim: set et sw=2 ts=2:
