@@ -4416,73 +4416,73 @@ infobar {
 /*****************
  * Color Chooser *
  *****************/
-GtkColorSwatch {
+colorswatch {
   box-shadow: inset 0 1px rgba(0, 0, 0, 0.1), 0 1px white; }
-  :selected GtkColorSwatch {
+  :selected colorswatch {
     box-shadow: none; }
-    :selected GtkColorSwatch.overlay, :selected GtkColorSwatch.overlay:hover {
+    :selected colorswatch overlay, :selected colorswatch overlay:hover {
       border-color: #ffffff; }
-  GtkColorSwatch:selected {
+  colorswatch:selected {
     box-shadow: inset 0 1px rgba(0, 0, 0, 0.1), 0 1px white; }
-  GtkColorSwatch.top {
+  colorswatch.top {
     border-top-left-radius: 6px;
     border-top-right-radius: 6px; }
-  GtkColorSwatch.bottom {
+  colorswatch.bottom {
     border-bottom-left-radius: 6px;
     border-bottom-right-radius: 6px; }
-  GtkColorSwatch.left, GtkColorSwatch:first-child:not(.overlay):not(.top) {
+  colorswatch.left, colorswatch:first-child:not(overlay):not(.top) {
     border-top-left-radius: 6px;
     border-bottom-left-radius: 6px; }
-  GtkColorSwatch.right, GtkColorSwatch:last-child:not(.overlay):not(.bottom) {
+  colorswatch.right, colorswatch:last-child:not(overlay):not(.bottom) {
     border-top-right-radius: 6px;
     border-bottom-right-radius: 6px; }
-  GtkColorSwatch:only-child:not(.overlay) {
+  colorswatch:only-child:not(overlay) {
     border-radius: 6px; }
-  GtkColorSwatch.top > .overlay {
+  colorswatch.top > overlay {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px; }
-  GtkColorSwatch.bottom > .overlay {
+  colorswatch.bottom > overlay {
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px; }
-  GtkColorSwatch:first-child:not(.top) > .overlay {
+  colorswatch:first-child:not(.top) > overlay {
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px; }
-  GtkColorSwatch:last-child:not(.bottom) > .overlay {
+  colorswatch:last-child:not(.bottom) > overlay {
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px; }
-  GtkColorSwatch:only-child > .overlay {
+  colorswatch:only-child > overlay {
     border-radius: 5px; }
-  GtkColorSwatch:hover, GtkColorSwatch:hover:selected {
+  colorswatch:hover, colorswatch:hover:selected {
     background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0) 50%);
     box-shadow: inset 0 1px rgba(255, 255, 255, 0.4), inset 0 -1px rgba(0, 0, 0, 0.1); }
-    GtkColorSwatch:hover.color-dark, GtkColorSwatch:hover:selected.color-dark {
+    colorswatch:hover.dark overlay, colorswatch:hover:selected.dark overlay {
       background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0) 50%); }
-  GtkColorSwatch:backdrop, GtkColorSwatch:backdrop:selected
-  GtkColorSwatch.color-dark:backdrop, GtkColorSwatch.color-dark:backdrop:selected {
+  colorswatch:backdrop, colorswatch:backdrop:selected
+  colorswatch.dark:backdrop, colorswatch.dark:backdrop:selected {
     background-image: none;
     box-shadow: none; }
-  GtkColorEditor GtkColorSwatch {
+  GtkColorEditor colorswatch {
     border-radius: 3px; }
-    GtkColorEditor GtkColorSwatch:hover {
+    GtkColorEditor colorswatch:hover {
       background-image: none;
       box-shadow: inset 0 1px rgba(0, 0, 0, 0.1), 0 1px white; }
-    GtkColorEditor GtkColorSwatch:backdrop {
+    GtkColorEditor colorswatch:backdrop {
       box-shadow: none; }
-  GtkColorSwatch.color-dark {
+  colorswatch.dark overlay {
     color: white;
     outline-color: rgba(255, 255, 255, 0.5); }
-    GtkColorSwatch.color-dark:backdrop {
+    colorswatch.dark overlay:backdrop {
       color: rgba(255, 255, 255, 0.3); }
-  GtkColorSwatch.color-light {
+  colorswatch.light overlay {
     color: black;
     outline-color: rgba(0, 0, 0, 0.5); }
-    GtkColorSwatch.color-light:backdrop {
+    colorswatch.light overlay:backdrop {
       color: rgba(0, 0, 0, 0.3); }
-  GtkColorSwatch.overlay, GtkColorSwatch.overlay:selected {
+  colorswatch overlay, colorswatch overlay:selected {
     border: 1px solid rgba(0, 0, 0, 0.3); }
-    GtkColorSwatch.overlay:hover, GtkColorSwatch.overlay:selected:hover {
+    colorswatch overlay:hover, colorswatch overlay:selected:hover {
       border-color: rgba(0, 0, 0, 0.5); }
-  GtkColorSwatch#add-color-button {
+  colorswatch#add-color-button {
     border-style: solid;
     border-width: 1px;
     color: #2e3436;
@@ -4492,7 +4492,7 @@ GtkColorSwatch {
     text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
     icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
     box-shadow: inset 0 1px white, 0 1px white; }
-    GtkColorSwatch#add-color-button:hover {
+    colorswatch#add-color-button:hover {
       color: #2e3436;
       outline-color: rgba(46, 52, 54, 0.3);
       border-color: #a1a1a1;
@@ -4500,14 +4500,14 @@ GtkColorSwatch {
       text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
       icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
       box-shadow: inset 0 1px white, 0 1px white; }
-    GtkColorSwatch#add-color-button:backdrop {
+    colorswatch#add-color-button:backdrop {
       color: #8e9192;
       border-color: darkgray;
       background-image: linear-gradient(to bottom, #ededed);
       text-shadow: none;
       icon-shadow: none;
       box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
-    GtkColorSwatch#add-color-button .overlay {
+    colorswatch#add-color-button overlay {
       border-color: transparent;
       background-color: transparent;
       background-image: none;
