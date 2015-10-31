@@ -61,7 +61,6 @@
 #include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkcssshadowsvalueprivate.h"
-#include "gtkstylecontextprivate.h"
 
 #include "fallback-c89.c"
 
