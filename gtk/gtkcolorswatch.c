@@ -213,8 +213,7 @@ swatch_draw (GtkWidget *widget,
 
       icon_info = gtk_icon_theme_lookup_by_gicon_for_scale (theme, gicon, PIXBUF_SIZE,
                                                             scale,
-                                                            GTK_ICON_LOOKUP_GENERIC_FALLBACK
-                                                            | GTK_ICON_LOOKUP_USE_BUILTIN);
+                                                            GTK_ICON_LOOKUP_USE_BUILTIN);
       g_object_unref (gicon);
     }
 
