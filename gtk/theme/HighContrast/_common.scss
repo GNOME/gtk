@@ -2080,11 +2080,11 @@ calendar {
  * Dialogs *
  ***********/
 
-.message-dialog .dialog-action-area button {
+messagedialog .dialog-action-area button {
   padding: 8px;
 }
 
-.message-dialog { // Message Dialog styling
+messagedialog { // Message Dialog styling
   .titlebar {
     border-style: none;
     box-shadow: inset 0 1px $borders_edge;
