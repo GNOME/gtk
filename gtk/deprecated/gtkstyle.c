@@ -1289,8 +1289,8 @@ gtk_style_real_set_background (GtkStyle    *style,
  * @source: the #GtkIconSource specifying the icon to render
  * @direction: a text direction
  * @state: a state
- * @size: (type int): the size to render the icon at. A size of
- *     (GtkIconSize)-1 means render at the size of the source and
+ * @size: (type int): the size to render the icon at (#GtkIconSize). A size of
+ *     `(GtkIconSize)-1` means render at the size of the source and
  *     don’t scale.
  * @widget: (allow-none): the widget
  * @detail: (allow-none): a style detail
@@ -4736,8 +4736,8 @@ gtk_widget_class_path (GtkWidget *widget,
  * gtk_widget_render_icon:
  * @widget: a #GtkWidget
  * @stock_id: a stock ID
- * @size: (type int): a stock size. A size of (GtkIconSize)-1 means
- *     render at the size of the source and don’t scale (if there are
+ * @size: (type int): a stock size (#GtkIconSize). A size of `(GtkIconSize)-1`
+ *     means render at the size of the source and don’t scale (if there are
  *     multiple source sizes, GTK+ picks one of the available sizes).
  * @detail: (allow-none): render detail to pass to theme engine
  *

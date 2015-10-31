@@ -746,7 +746,7 @@ icon_size_lookup_intern (GtkIconSize  size,
  * gtk_icon_size_lookup_for_settings:
  * @settings: a #GtkSettings object, used to determine
  *   which set of user preferences to used.
- * @size: (type int): an icon size
+ * @size: (type int): an icon size (#GtkIconSize)
  * @width: (out) (allow-none): location to store icon width
  * @height: (out) (allow-none): location to store icon height
  *
@@ -780,7 +780,7 @@ gtk_icon_size_lookup_for_settings (GtkSettings *settings,
 
 /**
  * gtk_icon_size_lookup:
- * @size: (type int): an icon size
+ * @size: (type int): an icon size (#GtkIconSize)
  * @width: (out) (allow-none): location to store icon width
  * @height: (out) (allow-none): location to store icon height
  *
@@ -859,7 +859,7 @@ icon_size_register_intern (const gchar *name,
  * Registers a new icon size, along the same lines as #GTK_ICON_SIZE_MENU,
  * etc. Returns the integer value for the size.
  *
- * Returns: (type int): integer value representing the size
+ * Returns: (type int): integer value representing the size (#GtkIconSize)
  *
  * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
@@ -878,7 +878,7 @@ gtk_icon_size_register (const gchar *name,
 /**
  * gtk_icon_size_register_alias:
  * @alias: an alias for @target
- * @target: (type int): an existing icon size
+ * @target: (type int): an existing icon size (#GtkIconSize)
  *
  * Registers @alias as another name for @target.
  * So calling gtk_icon_size_from_name() with @alias as argument
@@ -927,7 +927,7 @@ gtk_icon_size_register_alias (const gchar *alias,
  *
  * Looks up the icon size associated with @name.
  *
- * Returns: (type int): the icon size
+ * Returns: (type int): the icon size (#GtkIconSize)
  *
  * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
@@ -1477,7 +1477,7 @@ gtk_icon_set_render_icon_pixbuf_for_scale (GtkIconSet       *icon_set,
  * gtk_icon_set_render_icon_pixbuf:
  * @icon_set: a #GtkIconSet
  * @context: a #GtkStyleContext
- * @size: (type int): icon size. A size of (GtkIconSize)-1
+ * @size: (type int): icon size (#GtkIconSize). A size of `(GtkIconSize)-1`
  *        means render at the size of the source and don’t scale.
  *
  * Renders an icon using gtk_render_icon_pixbuf(). In most cases,
@@ -1514,7 +1514,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS;
  * gtk_icon_set_render_icon_surface:
  * @icon_set: a #GtkIconSet
  * @context: a #GtkStyleContext
- * @size: (type int): icon size. A size of (GtkIconSize)-1
+ * @size: (type int): icon size (#GtkIconSize). A size of `(GtkIconSize)-1`
  *        means render at the size of the source and don’t scale.
  * @scale: the window scale to render for
  * @for_window: (allow-none): #GdkWindow to optimize drawing for, or %NULL
@@ -1562,7 +1562,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS;
  * @style: (allow-none): a #GtkStyle associated with @widget, or %NULL
  * @direction: text direction
  * @state: widget state
- * @size: (type int): icon size. A size of (GtkIconSize)-1
+ * @size: (type int): icon size (#GtkIconSize). A size of `(GtkIconSize)-1`
  *        means render at the size of the source and don’t scale.
  * @widget: (allow-none): widget that will display the icon, or %NULL.
  *          The only use that is typically made of this
@@ -1724,7 +1724,7 @@ gtk_icon_set_add_source (GtkIconSet          *icon_set,
  * gtk_icon_set_get_sizes:
  * @icon_set: a #GtkIconSet
  * @sizes: (array length=n_sizes) (out) (type int): return location
- *     for array of sizes
+ *     for array of sizes (#GtkIconSize)
  * @n_sizes: location to store number of elements in returned array
  *
  * Obtains a list of icon sizes this icon set can render. The returned
@@ -2310,7 +2310,7 @@ gtk_icon_source_set_state (GtkIconSource *source,
 /**
  * gtk_icon_source_set_size:
  * @source: a #GtkIconSource
- * @size: (type int): icon size this source applies to
+ * @size: (type int): icon size (#GtkIconSize) this source applies to
  *
  * Sets the icon size this icon source is intended to be used
  * with.
@@ -2378,7 +2378,7 @@ gtk_icon_source_get_state (const GtkIconSource *source)
  * Obtains the icon size this source applies to. The return value
  * is only useful/meaningful if the icon size is not wildcarded.
  *
- * Returns: (type int): icon size this source matches.
+ * Returns: (type int): icon size (#GtkIconSize) this source matches.
  *
  * Deprecated: 3.10: Use #GtkIconTheme instead.
  */

@@ -988,7 +988,8 @@ gtk_action_unblock_activate (GtkAction *action)
 /**
  * gtk_action_create_icon:
  * @action: the action object
- * @icon_size: (type int): the size of the icon that should be created.
+ * @icon_size: (type int): the size of the icon (#GtkIconSize) that should
+ *      be created.
  *
  * This function is intended for use by action implementations to
  * create icons displayed in the proxy widgets.

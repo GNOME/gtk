@@ -1097,8 +1097,9 @@ gtk_render_icon_pixbuf_unpacked (GdkPixbuf           *base_pixbuf,
  * gtk_render_icon_pixbuf:
  * @context: a #GtkStyleContext
  * @source: the #GtkIconSource specifying the icon to render
- * @size: (type int): the size to render the icon at. A size of (GtkIconSize) -1
- *        means render at the size of the source and don’t scale.
+ * @size: (type int): the size (#GtkIconSize) to render the icon at.
+ *        A size of `(GtkIconSize) -1` means render at the size of the source
+ *        and don’t scale.
  *
  * Renders the icon specified by @source at the given @size, returning the result
  * in a pixbuf.

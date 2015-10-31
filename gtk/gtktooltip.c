@@ -288,7 +288,7 @@ gtk_tooltip_set_icon (GtkTooltip *tooltip,
  * gtk_tooltip_set_icon_from_stock:
  * @tooltip: a #GtkTooltip
  * @stock_id: (allow-none): a stock id, or %NULL
- * @size: (type int): a stock icon size
+ * @size: (type int): a stock icon size (#GtkIconSize)
  *
  * Sets the icon of the tooltip (which is in front of the text) to be
  * the stock item indicated by @stock_id with the size indicated
@@ -314,7 +314,7 @@ gtk_tooltip_set_icon_from_stock (GtkTooltip  *tooltip,
  * gtk_tooltip_set_icon_from_icon_name:
  * @tooltip: a #GtkTooltip
  * @icon_name: (allow-none): an icon name, or %NULL
- * @size: (type int): a stock icon size
+ * @size: (type int): a stock icon size (#GtkIconSize)
  *
  * Sets the icon of the tooltip (which is in front of the text) to be
  * the icon indicated by @icon_name with the size indicated
@@ -338,7 +338,7 @@ gtk_tooltip_set_icon_from_icon_name (GtkTooltip  *tooltip,
  * gtk_tooltip_set_icon_from_gicon:
  * @tooltip: a #GtkTooltip
  * @gicon: (allow-none): a #GIcon representing the icon, or %NULL
- * @size: (type int): a stock icon size
+ * @size: (type int): a stock icon size (#GtkIconSize)
  *
  * Sets the icon of the tooltip (which is in front of the text)
  * to be the icon indicated by @gicon with the size indicated
