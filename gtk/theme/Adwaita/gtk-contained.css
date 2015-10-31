@@ -1243,10 +1243,10 @@ modelbutton.flat,
 button.color, headerbar button.color.titlebutton,
 .titlebar button.color.titlebutton {
   padding: 5px; }
-  button.color GtkColorSwatch:first-child:last-child {
+  button.color colorswatch:first-child:last-child {
     border-radius: 0;
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.1), 0 1px white; }
-    button.color GtkColorSwatch:first-child:last-child:insensitive, button.color GtkColorSwatch:first-child:last-child:backdrop {
+    button.color colorswatch:first-child:last-child:insensitive, button.color colorswatch:first-child:last-child:backdrop {
       box-shadow: none; }
 
 /*********
