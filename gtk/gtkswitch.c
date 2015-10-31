@@ -868,7 +868,7 @@ static void
 node_style_changed_cb (GtkCssNode  *node,
                        GtkCssStyle *old_style,
                        GtkCssStyle *new_style,
-                       GtkWidget    *widget)
+                       GtkWidget   *widget)
 {
   GtkBitmask *changes;
   static GtkBitmask *affects_size = NULL;
