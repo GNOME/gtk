@@ -72,6 +72,7 @@ struct _GtkInspectorCssNodeTreePrivate
   GtkWidget *prop_tree;
   GtkTreeViewColumn *prop_name_column;
   GHashTable *prop_iters;
+  GtkCssNode *node;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorCssNodeTree, gtk_inspector_css_node_tree, GTK_TYPE_BOX)
@@ -128,9 +129,23 @@ selection_changed (GtkTreeSelection *selection, GtkInspectorCssNodeTree *cnt)
 }
 
 static void
+gtk_inspector_css_node_tree_unset_node (GtkInspectorCssNodeTree *cnt)
+{
+  GtkInspectorCssNodeTreePrivate *priv = cnt->priv;
+
+  if (priv->node)
+    {
+      g_object_unref (priv->node);
+      priv->node = NULL;
+    }
+}
+
+static void
 gtk_inspector_css_node_tree_finalize (GObject *object)
 {
   GtkInspectorCssNodeTree *cnt = GTK_INSPECTOR_CSS_NODE_TREE (object);
+
+  gtk_inspector_css_node_tree_unset_node (cnt);
 
   g_hash_table_unref (cnt->priv->prop_iters);
 
@@ -341,6 +356,20 @@ static void
 gtk_inspector_css_node_tree_set_node (GtkInspectorCssNodeTree *cnt,
                                       GtkCssNode              *node)
 {
+  GtkInspectorCssNodeTreePrivate *priv = cnt->priv;
+  GtkCssStyle *style;
+  gint i;
+
+  if (priv->node == node)
+    return;
+
+  if (node)
+    g_object_ref (node);
+
+  gtk_inspector_css_node_tree_unset_node (cnt);
+
+  priv->node = node;
+
   style = gtk_css_node_get_style (node);
 
   for (i = 0; i < _gtk_css_style_property_get_n_properties (); i++)
@@ -383,8 +412,6 @@ populate_properties (GtkInspectorCssNodeTree *cnt)
   GtkTreeSelection *selection;
   GtkTreeIter titer;
   GtkCssNode *node;
-  GtkCssStyle *style;
-  gint i;
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->node_tree));
   if (!gtk_tree_selection_get_selected (selection, NULL, &titer))
