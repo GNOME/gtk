@@ -135,6 +135,10 @@ gtk_inspector_css_node_tree_unset_node (GtkInspectorCssNodeTree *cnt)
 
   if (priv->node)
     {
+      g_signal_handlers_disconnect_matched (priv->node,
+                                            G_SIGNAL_MATCH_DATA,
+                                            0, 0, NULL, NULL,
+                                            cnt);
       g_object_unref (priv->node);
       priv->node = NULL;
     }
@@ -353,24 +357,13 @@ gtk_inspector_css_node_tree_set_object (GtkInspectorCssNodeTree *cnt,
 }
 
 static void
-gtk_inspector_css_node_tree_set_node (GtkInspectorCssNodeTree *cnt,
-                                      GtkCssNode              *node)
+gtk_inspector_css_node_tree_update_style (GtkCssNode              *node,
+                                          GtkCssStyle             *old_style,
+                                          GtkCssStyle             *new_style,
+                                          GtkInspectorCssNodeTree *cnt)
 {
   GtkInspectorCssNodeTreePrivate *priv = cnt->priv;
-  GtkCssStyle *style;
   gint i;
-
-  if (priv->node == node)
-    return;
-
-  if (node)
-    g_object_ref (node);
-
-  gtk_inspector_css_node_tree_unset_node (cnt);
-
-  priv->node = node;
-
-  style = gtk_css_node_get_style (node);
 
   for (i = 0; i < _gtk_css_style_property_get_n_properties (); i++)
     {
@@ -386,13 +379,21 @@ gtk_inspector_css_node_tree_set_node (GtkInspectorCssNodeTree *cnt,
 
       iter = (GtkTreeIter *)g_hash_table_lookup (priv->prop_iters, name);
 
-      value = _gtk_css_value_to_string (gtk_css_style_get_value (style, i));
+      if (new_style)
+        {
+          value = _gtk_css_value_to_string (gtk_css_style_get_value (new_style, i));
 
-      section = gtk_css_style_get_section (style, i);
-      if (section)
-        location = _gtk_css_section_to_string (section);
+          section = gtk_css_style_get_section (new_style, i);
+          if (section)
+            location = _gtk_css_section_to_string (section);
+          else
+            location = NULL;
+        }
       else
-        location = NULL;
+        {
+          value = NULL;
+          location = NULL;
+        }
 
       gtk_list_store_set (priv->prop_model,
                           iter,
@@ -403,6 +404,30 @@ gtk_inspector_css_node_tree_set_node (GtkInspectorCssNodeTree *cnt,
       g_free (location);
       g_free (value);
     }
+}
+
+static void
+gtk_inspector_css_node_tree_set_node (GtkInspectorCssNodeTree *cnt,
+                                      GtkCssNode              *node)
+{
+  GtkInspectorCssNodeTreePrivate *priv = cnt->priv;
+
+  if (priv->node == node)
+    return;
+
+  if (node)
+    g_object_ref (node);
+
+  gtk_inspector_css_node_tree_update_style (node,
+                                            node ? gtk_css_node_get_style (node) : NULL,
+                                            priv->node ? gtk_css_node_get_style (priv->node) : NULL,
+                                            cnt);
+
+  gtk_inspector_css_node_tree_unset_node (cnt);
+
+  priv->node = node;
+
+  g_signal_connect (node, "style-changed", G_CALLBACK (gtk_inspector_css_node_tree_update_style), cnt);
 }
 
 static void
