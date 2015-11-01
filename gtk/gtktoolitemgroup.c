@@ -48,6 +48,10 @@
  * #GtkToolItems to a palette like container with different
  * categories and drag and drop support.
  *
+ * # CSS nodes
+ *
+ * GtkToolItemGroup has a single CSS node named toolitemgroup.
+ *
  * Since: 2.20
  */
 
@@ -1684,6 +1688,8 @@ gtk_tool_item_group_class_init (GtkToolItemGroupClass *cls)
                                                                 G_MAXINT,
                                                                 0,
                                                                 GTK_PARAM_READWRITE));
+
+  gtk_widget_class_set_css_name (wclass, "toolitemgroup");
 }
 
 /**

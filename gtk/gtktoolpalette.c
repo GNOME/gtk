@@ -109,6 +109,10 @@
  *                                 GDK_ACTION_COPY);
  * ]|
  *
+ * # CSS nodes
+ *
+ * GtkToolPalette has a single CSS node named toolpalette.
+ *
  * Since: 2.20
  */
 
@@ -1024,6 +1028,8 @@ gtk_tool_palette_class_init (GtkToolPaletteClass *cls)
                                                                     P_("Whether the item group should receive extra space when the palette grows"),
                                                                     DEFAULT_CHILD_EXPAND,
                                                                     GTK_PARAM_READWRITE));
+
+  gtk_widget_class_set_css_name (wclass, "toolpalette");
 }
 
 /**
