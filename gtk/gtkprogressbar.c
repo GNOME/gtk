@@ -65,6 +65,13 @@
  * of the #GtkProgressBar. Functions are provided to control the orientation
  * of the bar, optional text can be displayed along with the bar, and the
  * step size used in activity mode can be set.
+ *
+ * # CSS nodes
+ *
+ * GtkProgressBar has a main CSS node with name progressbar and a subnode
+ * with name progress. The subnode has the style class .pulse when in activity
+ * mode. It gets the style classes .left, .right, .top or .bottom added when
+ * the progress 'touches' the corresponding end of the GtkProgressBar.
  */
 
 #define MIN_HORIZONTAL_BAR_WIDTH   150
