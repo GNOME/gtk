@@ -81,6 +81,10 @@
  *
  * Creating a context menu for the toolbar can be done by connecting to
  * the #GtkToolbar::popup-context-menu signal.
+ *
+ * # CSS nodes
+ *
+ * GtkToolbar has a single CSS node with name toolbar.
  */
 
 
@@ -654,6 +658,8 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
   
   add_ctrl_tab_bindings (binding_set, 0, GTK_DIR_TAB_FORWARD);
   add_ctrl_tab_bindings (binding_set, GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
+
+  gtk_widget_class_set_css_name (widget_class, "toolbar");
 }
 
 static void
@@ -670,13 +676,9 @@ static void
 gtk_toolbar_init (GtkToolbar *toolbar)
 {
   GtkToolbarPrivate *priv;
-  GtkStyleContext *context;
 
   toolbar->priv = gtk_toolbar_get_instance_private (toolbar);
   priv = toolbar->priv;
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (toolbar));
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_TOOLBAR);
 
   gtk_widget_set_can_focus (GTK_WIDGET (toolbar), FALSE);
   gtk_widget_set_has_window (GTK_WIDGET (toolbar), FALSE);
