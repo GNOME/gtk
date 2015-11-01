@@ -60,6 +60,10 @@
  * that widget is used as the icon. Otherwise, if #GtkToolButton:stock-id is
  * non-%NULL, the icon is determined by the stock item. Otherwise,
  * the button does not have a icon.
+ *
+ * # CSS nodes
+ *
+ * GtkToolButton has a single CSS node with name toolbutton.
  */
 
 
@@ -328,6 +332,8 @@ gtk_tool_button_class_init (GtkToolButtonClass *klass)
 		  G_TYPE_NONE, 0);
   
   g_type_class_add_private (object_class, sizeof (GtkToolButtonPrivate));
+
+  gtk_widget_class_set_css_name (widget_class, "toolbutton");
 }
 
 static void
