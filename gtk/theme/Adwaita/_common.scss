@@ -656,8 +656,8 @@ button {
 }
 
 // More inline toolbar buttons
-.inline-toolbar.toolbar GtkToolButton,
-.inline-toolbar.toolbar GtkToolButton:backdrop {
+toolbar.inline-toolbar GtkToolButton,
+toolbar.inline-toolbar GtkToolButton:backdrop {
   & > button.flat { @extend %linked_middle; }
   &:first-child > button.flat { @extend %linked:first-child; }
   &:last-child > button.flat { @extend %linked:last-child; }
@@ -1015,7 +1015,7 @@ GtkComboBox {
 /************
  * Toolbars *
  ************/
-.toolbar {
+toolbar {
   -GtkWidget-window-dragging: true;
   padding: 4px;
   background-color: $bg_color;
@@ -1029,14 +1029,14 @@ GtkComboBox {
 
 //searchbar, location-bar & inline-toolbar
 .inline-toolbar {
-  @extend .toolbar;
+  @extend toolbar;
   @extend %inset-bar;
   border-width: 0 1px 1px;
   padding: 3px;
   border-radius: 0  0 5px 5px;
 }
 .search-bar, .location-bar {
-  @extend .toolbar;
+  @extend toolbar;
   @extend %inset-bar;
   border-width: 0 0 1px;
   padding: 3px;
@@ -1527,8 +1527,8 @@ popover {
 
   > .list,
   > .view,
-  > .toolbar,
-  &.osd > .toolbar {
+  > toolbar,
+  &.osd > toolbar {
     border-style: none;
     background-color: transparent;
   }

@@ -1054,27 +1054,14 @@ button, headerbar button.titlebutton,
     .inline-toolbar GtkToolButton > button:backdrop:insensitive:active > .label, .inline-toolbar GtkToolButton > button:backdrop:insensitive:checked > .label {
       color: inherit; }
 
-.inline-toolbar.toolbar GtkToolButton > button.flat, .inline-toolbar GtkToolButton > button.flat, .inline-toolbar.search-bar GtkToolButton > button.flat, .inline-toolbar.location-bar GtkToolButton > button.flat, .inline-toolbar.toolbar GtkToolButton > .sidebar-button.button, .inline-toolbar GtkToolButton > .sidebar-button.button, .inline-toolbar.search-bar GtkToolButton > .sidebar-button.button, .inline-toolbar.location-bar GtkToolButton > .sidebar-button.button, .inline-toolbar.toolbar headerbar GtkToolButton > button.titlebutton, headerbar .inline-toolbar.toolbar GtkToolButton > button.titlebutton, .inline-toolbar headerbar GtkToolButton > button.titlebutton, headerbar .inline-toolbar GtkToolButton > button.titlebutton, .inline-toolbar.search-bar headerbar GtkToolButton > button.titlebutton, headerbar .inline-toolbar.search-bar GtkToolButton > button.titlebutton, .inline-toolbar.location-bar headerbar GtkToolButton > button.titlebutton, headerbar .inline-toolbar.location-bar GtkToolButton > button.titlebutton,
-.inline-toolbar .titlebar headerbar GtkToolButton > button.titlebutton,
-.inline-toolbar .titlebar GtkToolButton > button.titlebutton,
-.titlebar .inline-toolbar GtkToolButton > button.titlebutton,
-.inline-toolbar.toolbar GtkToolButton:backdrop > button.flat,
+toolbar.inline-toolbar GtkToolButton > button.flat, .inline-toolbar GtkToolButton > button.flat, .inline-toolbar.search-bar GtkToolButton > button.flat, .inline-toolbar.location-bar GtkToolButton > button.flat, .inline-toolbar GtkToolButton > .sidebar-button.button, .inline-toolbar headerbar GtkToolButton > button.titlebutton, headerbar .inline-toolbar GtkToolButton > button.titlebutton,
+toolbar.inline-toolbar GtkToolButton:backdrop > button.flat,
 .inline-toolbar GtkToolButton:backdrop > button.flat,
 .inline-toolbar.search-bar GtkToolButton:backdrop > button.flat,
 .inline-toolbar.location-bar GtkToolButton:backdrop > button.flat,
-.inline-toolbar.toolbar GtkToolButton:backdrop > .sidebar-button.button,
 .inline-toolbar GtkToolButton:backdrop > .sidebar-button.button,
-.inline-toolbar.search-bar GtkToolButton:backdrop > .sidebar-button.button,
-.inline-toolbar.location-bar GtkToolButton:backdrop > .sidebar-button.button,
-.inline-toolbar.toolbar headerbar GtkToolButton:backdrop > button.titlebutton,
-headerbar .inline-toolbar.toolbar GtkToolButton:backdrop > button.titlebutton,
 .inline-toolbar headerbar GtkToolButton:backdrop > button.titlebutton,
 headerbar .inline-toolbar GtkToolButton:backdrop > button.titlebutton,
-.inline-toolbar.search-bar headerbar GtkToolButton:backdrop > button.titlebutton,
-headerbar .inline-toolbar.search-bar GtkToolButton:backdrop > button.titlebutton,
-.inline-toolbar.location-bar headerbar GtkToolButton:backdrop > button.titlebutton,
-headerbar .inline-toolbar.location-bar GtkToolButton:backdrop > button.titlebutton,
-.inline-toolbar .titlebar headerbar GtkToolButton:backdrop > button.titlebutton,
 .inline-toolbar .titlebar GtkToolButton:backdrop > button.titlebutton,
 .titlebar .inline-toolbar GtkToolButton:backdrop > button.titlebutton, .linked:not(.vertical) > entry, .linked:not(.vertical) > spinbutton, .inline-toolbar button, .inline-toolbar headerbar button.titlebutton, headerbar .inline-toolbar button.titlebutton,
 .inline-toolbar .titlebar button.titlebutton,
@@ -1086,54 +1073,32 @@ headerbar .inline-toolbar.location-bar GtkToolButton:backdrop > button.titlebutt
   border-right-style: none; }
 
 .linked:not(.vertical) > entry:first-child, .linked:not(.vertical) > spinbutton:first-child, .inline-toolbar button:first-child, .linked > button:first-child, headerbar .linked > button.titlebutton:first-child,
-.titlebar .linked > button.titlebutton:first-child, .inline-toolbar.toolbar GtkToolButton:first-child > button.flat, .inline-toolbar GtkToolButton:first-child > button.flat, .inline-toolbar.search-bar GtkToolButton:first-child > button.flat, .inline-toolbar.location-bar GtkToolButton:first-child > button.flat, .inline-toolbar.toolbar GtkToolButton:first-child > .sidebar-button.button, .inline-toolbar GtkToolButton:first-child > .sidebar-button.button, .inline-toolbar.search-bar GtkToolButton:first-child > .sidebar-button.button, .inline-toolbar.location-bar GtkToolButton:first-child > .sidebar-button.button, .inline-toolbar.toolbar headerbar GtkToolButton:first-child > button.titlebutton, headerbar .inline-toolbar.toolbar GtkToolButton:first-child > button.titlebutton, .inline-toolbar headerbar GtkToolButton:first-child > button.titlebutton, headerbar .inline-toolbar GtkToolButton:first-child > button.titlebutton, .inline-toolbar.search-bar headerbar GtkToolButton:first-child > button.titlebutton, headerbar .inline-toolbar.search-bar GtkToolButton:first-child > button.titlebutton, .inline-toolbar.location-bar headerbar GtkToolButton:first-child > button.titlebutton, headerbar .inline-toolbar.location-bar GtkToolButton:first-child > button.titlebutton,
-.inline-toolbar .titlebar headerbar GtkToolButton:first-child > button.titlebutton,
+.titlebar .linked > button.titlebutton:first-child, toolbar.inline-toolbar GtkToolButton:first-child > button.flat, .inline-toolbar GtkToolButton:first-child > button.flat, .inline-toolbar.search-bar GtkToolButton:first-child > button.flat, .inline-toolbar.location-bar GtkToolButton:first-child > button.flat, .inline-toolbar GtkToolButton:first-child > .sidebar-button.button, .inline-toolbar headerbar GtkToolButton:first-child > button.titlebutton, headerbar .inline-toolbar GtkToolButton:first-child > button.titlebutton,
 .inline-toolbar .titlebar GtkToolButton:first-child > button.titlebutton,
 .titlebar .inline-toolbar GtkToolButton:first-child > button.titlebutton,
-.inline-toolbar.toolbar GtkToolButton:backdrop:first-child > button.flat,
+toolbar.inline-toolbar GtkToolButton:backdrop:first-child > button.flat,
 .inline-toolbar GtkToolButton:backdrop:first-child > button.flat,
 .inline-toolbar.search-bar GtkToolButton:backdrop:first-child > button.flat,
 .inline-toolbar.location-bar GtkToolButton:backdrop:first-child > button.flat,
-.inline-toolbar.toolbar GtkToolButton:backdrop:first-child > .sidebar-button.button,
 .inline-toolbar GtkToolButton:backdrop:first-child > .sidebar-button.button,
-.inline-toolbar.search-bar GtkToolButton:backdrop:first-child > .sidebar-button.button,
-.inline-toolbar.location-bar GtkToolButton:backdrop:first-child > .sidebar-button.button,
-.inline-toolbar.toolbar headerbar GtkToolButton:backdrop:first-child > button.titlebutton,
-headerbar .inline-toolbar.toolbar GtkToolButton:backdrop:first-child > button.titlebutton,
 .inline-toolbar headerbar GtkToolButton:backdrop:first-child > button.titlebutton,
 headerbar .inline-toolbar GtkToolButton:backdrop:first-child > button.titlebutton,
-.inline-toolbar.search-bar headerbar GtkToolButton:backdrop:first-child > button.titlebutton,
-headerbar .inline-toolbar.search-bar GtkToolButton:backdrop:first-child > button.titlebutton,
-.inline-toolbar.location-bar headerbar GtkToolButton:backdrop:first-child > button.titlebutton,
-headerbar .inline-toolbar.location-bar GtkToolButton:backdrop:first-child > button.titlebutton,
-.inline-toolbar .titlebar headerbar GtkToolButton:backdrop:first-child > button.titlebutton,
 .inline-toolbar .titlebar GtkToolButton:backdrop:first-child > button.titlebutton,
 .titlebar .inline-toolbar GtkToolButton:backdrop:first-child > button.titlebutton, .linked > GtkComboBox:first-child > .the-button-in-the-combobox,
 .linked > GtkComboBoxText:first-child > .the-button-in-the-combobox {
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px; }
 .linked:not(.vertical) > entry:last-child, .linked:not(.vertical) > spinbutton:last-child, .inline-toolbar button:last-child, .linked > button:last-child, headerbar .linked > button.titlebutton:last-child,
-.titlebar .linked > button.titlebutton:last-child, .inline-toolbar.toolbar GtkToolButton:last-child > button.flat, .inline-toolbar GtkToolButton:last-child > button.flat, .inline-toolbar.search-bar GtkToolButton:last-child > button.flat, .inline-toolbar.location-bar GtkToolButton:last-child > button.flat, .inline-toolbar.toolbar GtkToolButton:last-child > .sidebar-button.button, .inline-toolbar GtkToolButton:last-child > .sidebar-button.button, .inline-toolbar.search-bar GtkToolButton:last-child > .sidebar-button.button, .inline-toolbar.location-bar GtkToolButton:last-child > .sidebar-button.button, .inline-toolbar.toolbar headerbar GtkToolButton:last-child > button.titlebutton, headerbar .inline-toolbar.toolbar GtkToolButton:last-child > button.titlebutton, .inline-toolbar headerbar GtkToolButton:last-child > button.titlebutton, headerbar .inline-toolbar GtkToolButton:last-child > button.titlebutton, .inline-toolbar.search-bar headerbar GtkToolButton:last-child > button.titlebutton, headerbar .inline-toolbar.search-bar GtkToolButton:last-child > button.titlebutton, .inline-toolbar.location-bar headerbar GtkToolButton:last-child > button.titlebutton, headerbar .inline-toolbar.location-bar GtkToolButton:last-child > button.titlebutton,
-.inline-toolbar .titlebar headerbar GtkToolButton:last-child > button.titlebutton,
+.titlebar .linked > button.titlebutton:last-child, toolbar.inline-toolbar GtkToolButton:last-child > button.flat, .inline-toolbar GtkToolButton:last-child > button.flat, .inline-toolbar.search-bar GtkToolButton:last-child > button.flat, .inline-toolbar.location-bar GtkToolButton:last-child > button.flat, .inline-toolbar GtkToolButton:last-child > .sidebar-button.button, .inline-toolbar headerbar GtkToolButton:last-child > button.titlebutton, headerbar .inline-toolbar GtkToolButton:last-child > button.titlebutton,
 .inline-toolbar .titlebar GtkToolButton:last-child > button.titlebutton,
 .titlebar .inline-toolbar GtkToolButton:last-child > button.titlebutton,
-.inline-toolbar.toolbar GtkToolButton:backdrop:last-child > button.flat,
+toolbar.inline-toolbar GtkToolButton:backdrop:last-child > button.flat,
 .inline-toolbar GtkToolButton:backdrop:last-child > button.flat,
 .inline-toolbar.search-bar GtkToolButton:backdrop:last-child > button.flat,
 .inline-toolbar.location-bar GtkToolButton:backdrop:last-child > button.flat,
-.inline-toolbar.toolbar GtkToolButton:backdrop:last-child > .sidebar-button.button,
 .inline-toolbar GtkToolButton:backdrop:last-child > .sidebar-button.button,
-.inline-toolbar.search-bar GtkToolButton:backdrop:last-child > .sidebar-button.button,
-.inline-toolbar.location-bar GtkToolButton:backdrop:last-child > .sidebar-button.button,
-.inline-toolbar.toolbar headerbar GtkToolButton:backdrop:last-child > button.titlebutton,
-headerbar .inline-toolbar.toolbar GtkToolButton:backdrop:last-child > button.titlebutton,
 .inline-toolbar headerbar GtkToolButton:backdrop:last-child > button.titlebutton,
 headerbar .inline-toolbar GtkToolButton:backdrop:last-child > button.titlebutton,
-.inline-toolbar.search-bar headerbar GtkToolButton:backdrop:last-child > button.titlebutton,
-headerbar .inline-toolbar.search-bar GtkToolButton:backdrop:last-child > button.titlebutton,
-.inline-toolbar.location-bar headerbar GtkToolButton:backdrop:last-child > button.titlebutton,
-headerbar .inline-toolbar.location-bar GtkToolButton:backdrop:last-child > button.titlebutton,
-.inline-toolbar .titlebar headerbar GtkToolButton:backdrop:last-child > button.titlebutton,
 .inline-toolbar .titlebar GtkToolButton:backdrop:last-child > button.titlebutton,
 .titlebar .inline-toolbar GtkToolButton:backdrop:last-child > button.titlebutton, .linked > GtkComboBox:last-child > .the-button-in-the-combobox,
 .linked > GtkComboBoxText:last-child > .the-button-in-the-combobox {
@@ -1141,27 +1106,16 @@ headerbar .inline-toolbar.location-bar GtkToolButton:backdrop:last-child > butto
   border-bottom-right-radius: 3px;
   border-right-style: solid; }
 .linked:not(.vertical) > entry:only-child, .linked:not(.vertical) > spinbutton:only-child, .inline-toolbar button:only-child, .linked > button:only-child, headerbar .linked > button.titlebutton:only-child,
-.titlebar .linked > button.titlebutton:only-child, .inline-toolbar.toolbar GtkToolButton:only-child > button.flat, .inline-toolbar GtkToolButton:only-child > button.flat, .inline-toolbar.search-bar GtkToolButton:only-child > button.flat, .inline-toolbar.location-bar GtkToolButton:only-child > button.flat, .inline-toolbar.toolbar GtkToolButton:only-child > .sidebar-button.button, .inline-toolbar GtkToolButton:only-child > .sidebar-button.button, .inline-toolbar.search-bar GtkToolButton:only-child > .sidebar-button.button, .inline-toolbar.location-bar GtkToolButton:only-child > .sidebar-button.button, .inline-toolbar.toolbar headerbar GtkToolButton:only-child > button.titlebutton, headerbar .inline-toolbar.toolbar GtkToolButton:only-child > button.titlebutton, .inline-toolbar headerbar GtkToolButton:only-child > button.titlebutton, headerbar .inline-toolbar GtkToolButton:only-child > button.titlebutton, .inline-toolbar.search-bar headerbar GtkToolButton:only-child > button.titlebutton, headerbar .inline-toolbar.search-bar GtkToolButton:only-child > button.titlebutton, .inline-toolbar.location-bar headerbar GtkToolButton:only-child > button.titlebutton, headerbar .inline-toolbar.location-bar GtkToolButton:only-child > button.titlebutton,
-.inline-toolbar .titlebar headerbar GtkToolButton:only-child > button.titlebutton,
+.titlebar .linked > button.titlebutton:only-child, toolbar.inline-toolbar GtkToolButton:only-child > button.flat, .inline-toolbar GtkToolButton:only-child > button.flat, .inline-toolbar.search-bar GtkToolButton:only-child > button.flat, .inline-toolbar.location-bar GtkToolButton:only-child > button.flat, .inline-toolbar GtkToolButton:only-child > .sidebar-button.button, .inline-toolbar headerbar GtkToolButton:only-child > button.titlebutton, headerbar .inline-toolbar GtkToolButton:only-child > button.titlebutton,
 .inline-toolbar .titlebar GtkToolButton:only-child > button.titlebutton,
 .titlebar .inline-toolbar GtkToolButton:only-child > button.titlebutton,
-.inline-toolbar.toolbar GtkToolButton:backdrop:only-child > button.flat,
+toolbar.inline-toolbar GtkToolButton:backdrop:only-child > button.flat,
 .inline-toolbar GtkToolButton:backdrop:only-child > button.flat,
 .inline-toolbar.search-bar GtkToolButton:backdrop:only-child > button.flat,
 .inline-toolbar.location-bar GtkToolButton:backdrop:only-child > button.flat,
-.inline-toolbar.toolbar GtkToolButton:backdrop:only-child > .sidebar-button.button,
 .inline-toolbar GtkToolButton:backdrop:only-child > .sidebar-button.button,
-.inline-toolbar.search-bar GtkToolButton:backdrop:only-child > .sidebar-button.button,
-.inline-toolbar.location-bar GtkToolButton:backdrop:only-child > .sidebar-button.button,
-.inline-toolbar.toolbar headerbar GtkToolButton:backdrop:only-child > button.titlebutton,
-headerbar .inline-toolbar.toolbar GtkToolButton:backdrop:only-child > button.titlebutton,
 .inline-toolbar headerbar GtkToolButton:backdrop:only-child > button.titlebutton,
 headerbar .inline-toolbar GtkToolButton:backdrop:only-child > button.titlebutton,
-.inline-toolbar.search-bar headerbar GtkToolButton:backdrop:only-child > button.titlebutton,
-headerbar .inline-toolbar.search-bar GtkToolButton:backdrop:only-child > button.titlebutton,
-.inline-toolbar.location-bar headerbar GtkToolButton:backdrop:only-child > button.titlebutton,
-headerbar .inline-toolbar.location-bar GtkToolButton:backdrop:only-child > button.titlebutton,
-.inline-toolbar .titlebar headerbar GtkToolButton:backdrop:only-child > button.titlebutton,
 .inline-toolbar .titlebar GtkToolButton:backdrop:only-child > button.titlebutton,
 .titlebar .inline-toolbar GtkToolButton:backdrop:only-child > button.titlebutton, .linked > GtkComboBox:only-child > .the-button-in-the-combobox,
 .linked > GtkComboBoxText:only-child > .the-button-in-the-combobox {
@@ -1533,11 +1487,11 @@ GtkComboBox {
 /************
  * Toolbars *
  ************/
-.toolbar, .inline-toolbar, .search-bar, .location-bar {
+toolbar, .inline-toolbar, .search-bar, .location-bar {
   -GtkWidget-window-dragging: true;
   padding: 4px;
   background-color: #ededed; }
-  .osd .toolbar, .osd .inline-toolbar, .osd .search-bar, .osd .location-bar, .toolbar.osd, .osd.inline-toolbar, .osd.search-bar, .osd.location-bar {
+  .osd toolbar, .osd .inline-toolbar, .osd .search-bar, .osd .location-bar, toolbar.osd, .osd.inline-toolbar, .osd.search-bar, .osd.location-bar {
     padding: 13px;
     border: none;
     border-radius: 5px;
@@ -2101,10 +2055,10 @@ popover {
     box-shadow: none; }
   popover > .list,
   popover > .view,
-  popover > .toolbar,
+  popover > toolbar,
   popover > .inline-toolbar,
   popover > .search-bar,
-  popover > .location-bar, popover.osd > .toolbar, popover.osd > .inline-toolbar, popover.osd > .search-bar, popover.osd > .location-bar {
+  popover > .location-bar, popover.osd > toolbar, popover.osd > .inline-toolbar, popover.osd > .search-bar, popover.osd > .location-bar {
     border-style: none;
     background-color: transparent; }
   popover button.flat, popover .sidebar-button.button, popover headerbar button.titlebutton, headerbar popover button.titlebutton,
