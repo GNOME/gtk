@@ -971,9 +971,9 @@ button, headerbar button.titlebutton,
   .stack-switcher > button.needs-attention > label:dir(rtl), .stack-switcher > button.needs-attention > image:dir(rtl), .sidebar-item.needs-attention > label:dir(rtl) {
     background-position: left 3px, left 2px; }
 
-.inline-toolbar GtkToolButton > button, .inline-toolbar headerbar GtkToolButton > button.titlebutton,
-.inline-toolbar .titlebar GtkToolButton > button.titlebutton,
-.titlebar .inline-toolbar GtkToolButton > button.titlebutton {
+.inline-toolbar toolbutton > button, .inline-toolbar headerbar toolbutton > button.titlebutton,
+.inline-toolbar .titlebar toolbutton > button.titlebutton,
+.titlebar .inline-toolbar toolbutton > button.titlebutton {
   color: #eeeeec;
   outline-color: rgba(238, 238, 236, 0.3);
   border-color: #1c1f1f;
@@ -981,8 +981,8 @@ button, headerbar button.titlebutton,
   text-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
   icon-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
   box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 1px rgba(238, 238, 236, 0.1); }
-  .inline-toolbar GtkToolButton > button:hover, .inline-toolbar headerbar GtkToolButton > button.titlebutton:hover,
-  .inline-toolbar .titlebar GtkToolButton > button.titlebutton:hover {
+  .inline-toolbar toolbutton > button:hover, .inline-toolbar headerbar toolbutton > button.titlebutton:hover,
+  .inline-toolbar .titlebar toolbutton > button.titlebutton:hover {
     color: #eeeeec;
     outline-color: rgba(238, 238, 236, 0.3);
     border-color: #1c1f1f;
@@ -990,9 +990,9 @@ button, headerbar button.titlebutton,
     text-shadow: 0 -1px rgba(0, 0, 0, 0.77976);
     icon-shadow: 0 -1px rgba(0, 0, 0, 0.77976);
     box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 1px rgba(238, 238, 236, 0.1); }
-  .inline-toolbar GtkToolButton > button:active, .inline-toolbar headerbar GtkToolButton > button.titlebutton:active,
-  .inline-toolbar .titlebar GtkToolButton > button.titlebutton:active, .inline-toolbar GtkToolButton > button:checked, .inline-toolbar headerbar GtkToolButton > button.titlebutton:checked,
-  .inline-toolbar .titlebar GtkToolButton > button.titlebutton:checked {
+  .inline-toolbar toolbutton > button:active, .inline-toolbar headerbar toolbutton > button.titlebutton:active,
+  .inline-toolbar .titlebar toolbutton > button.titlebutton:active, .inline-toolbar toolbutton > button:checked, .inline-toolbar headerbar toolbutton > button.titlebutton:checked,
+  .inline-toolbar .titlebar toolbutton > button.titlebutton:checked {
     color: #eeeeec;
     outline-color: rgba(238, 238, 236, 0.3);
     border-color: #1c1f1f;
@@ -1000,70 +1000,70 @@ button, headerbar button.titlebutton,
     text-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
     icon-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
     box-shadow: inset 0 1px rgba(0, 0, 0, 0.07), inset 0 2px 1px -2px rgba(0, 0, 0, 0.6), 0 1px rgba(238, 238, 236, 0.1); }
-  .inline-toolbar GtkToolButton > button:insensitive, .inline-toolbar headerbar GtkToolButton > button.titlebutton:insensitive,
-  .inline-toolbar .titlebar GtkToolButton > button.titlebutton:insensitive {
+  .inline-toolbar toolbutton > button:insensitive, .inline-toolbar headerbar toolbutton > button.titlebutton:insensitive,
+  .inline-toolbar .titlebar toolbutton > button.titlebutton:insensitive {
     color: #949796;
     border-color: #1c1f1f;
     background-image: linear-gradient(to bottom, #333636);
     text-shadow: none;
     icon-shadow: none;
     box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(238, 238, 236, 0.1); }
-    .inline-toolbar GtkToolButton > button:insensitive > .label {
+    .inline-toolbar toolbutton > button:insensitive > .label {
       color: inherit; }
-  .inline-toolbar GtkToolButton > button:insensitive:active, .inline-toolbar headerbar GtkToolButton > button.titlebutton:insensitive:active,
-  .inline-toolbar .titlebar GtkToolButton > button.titlebutton:insensitive:active, .inline-toolbar GtkToolButton > button:insensitive:checked, .inline-toolbar headerbar GtkToolButton > button.titlebutton:insensitive:checked,
-  .inline-toolbar .titlebar GtkToolButton > button.titlebutton:insensitive:checked {
+  .inline-toolbar toolbutton > button:insensitive:active, .inline-toolbar headerbar toolbutton > button.titlebutton:insensitive:active,
+  .inline-toolbar .titlebar toolbutton > button.titlebutton:insensitive:active, .inline-toolbar toolbutton > button:insensitive:checked, .inline-toolbar headerbar toolbutton > button.titlebutton:insensitive:checked,
+  .inline-toolbar .titlebar toolbutton > button.titlebutton:insensitive:checked {
     color: #949796;
     border-color: #1c1f1f;
     background-image: linear-gradient(to bottom, #313434, #333636);
     box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(238, 238, 236, 0.1); }
-    .inline-toolbar GtkToolButton > button:insensitive:active > .label, .inline-toolbar GtkToolButton > button:insensitive:checked > .label {
+    .inline-toolbar toolbutton > button:insensitive:active > .label, .inline-toolbar toolbutton > button:insensitive:checked > .label {
       color: inherit; }
-  .inline-toolbar GtkToolButton > button:backdrop, .inline-toolbar headerbar GtkToolButton > button.titlebutton:backdrop,
-  .inline-toolbar .titlebar GtkToolButton > button.titlebutton:backdrop {
+  .inline-toolbar toolbutton > button:backdrop, .inline-toolbar headerbar toolbutton > button.titlebutton:backdrop,
+  .inline-toolbar .titlebar toolbutton > button.titlebutton:backdrop {
     color: #949796;
     border-color: #1f2222;
     background-image: linear-gradient(to bottom, #393f3f);
     text-shadow: none;
     icon-shadow: none;
     box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(238, 238, 236, 0); }
-  .inline-toolbar GtkToolButton > button:backdrop:active, .inline-toolbar headerbar GtkToolButton > button.titlebutton:backdrop:active,
-  .inline-toolbar .titlebar GtkToolButton > button.titlebutton:backdrop:active, .inline-toolbar GtkToolButton > button:backdrop:checked, .inline-toolbar headerbar GtkToolButton > button.titlebutton:backdrop:checked,
-  .inline-toolbar .titlebar GtkToolButton > button.titlebutton:backdrop:checked {
+  .inline-toolbar toolbutton > button:backdrop:active, .inline-toolbar headerbar toolbutton > button.titlebutton:backdrop:active,
+  .inline-toolbar .titlebar toolbutton > button.titlebutton:backdrop:active, .inline-toolbar toolbutton > button:backdrop:checked, .inline-toolbar headerbar toolbutton > button.titlebutton:backdrop:checked,
+  .inline-toolbar .titlebar toolbutton > button.titlebutton:backdrop:checked {
     color: #949796;
     border-color: #1f2222;
     background-image: linear-gradient(to bottom, #303535);
     box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(238, 238, 236, 0); }
-  .inline-toolbar GtkToolButton > button:backdrop:insensitive, .inline-toolbar headerbar GtkToolButton > button.titlebutton:backdrop:insensitive,
-  .inline-toolbar .titlebar GtkToolButton > button.titlebutton:backdrop:insensitive {
+  .inline-toolbar toolbutton > button:backdrop:insensitive, .inline-toolbar headerbar toolbutton > button.titlebutton:backdrop:insensitive,
+  .inline-toolbar .titlebar toolbutton > button.titlebutton:backdrop:insensitive {
     color: #5d6767;
     border-color: #1f2222;
     background-image: linear-gradient(to bottom, #333636);
     text-shadow: none;
     icon-shadow: none;
     box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(238, 238, 236, 0); }
-    .inline-toolbar GtkToolButton > button:backdrop:insensitive > .label {
+    .inline-toolbar toolbutton > button:backdrop:insensitive > .label {
       color: inherit; }
-  .inline-toolbar GtkToolButton > button:backdrop:insensitive:active, .inline-toolbar headerbar GtkToolButton > button.titlebutton:backdrop:insensitive:active,
-  .inline-toolbar .titlebar GtkToolButton > button.titlebutton:backdrop:insensitive:active, .inline-toolbar GtkToolButton > button:backdrop:insensitive:checked, .inline-toolbar headerbar GtkToolButton > button.titlebutton:backdrop:insensitive:checked,
-  .inline-toolbar .titlebar GtkToolButton > button.titlebutton:backdrop:insensitive:checked {
+  .inline-toolbar toolbutton > button:backdrop:insensitive:active, .inline-toolbar headerbar toolbutton > button.titlebutton:backdrop:insensitive:active,
+  .inline-toolbar .titlebar toolbutton > button.titlebutton:backdrop:insensitive:active, .inline-toolbar toolbutton > button:backdrop:insensitive:checked, .inline-toolbar headerbar toolbutton > button.titlebutton:backdrop:insensitive:checked,
+  .inline-toolbar .titlebar toolbutton > button.titlebutton:backdrop:insensitive:checked {
     color: #5d6767;
     border-color: #1f2222;
     background-image: linear-gradient(to bottom, #272929);
     box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(238, 238, 236, 0); }
-    .inline-toolbar GtkToolButton > button:backdrop:insensitive:active > .label, .inline-toolbar GtkToolButton > button:backdrop:insensitive:checked > .label {
+    .inline-toolbar toolbutton > button:backdrop:insensitive:active > .label, .inline-toolbar toolbutton > button:backdrop:insensitive:checked > .label {
       color: inherit; }
 
-toolbar.inline-toolbar GtkToolButton > button.flat, .inline-toolbar GtkToolButton > button.flat, .inline-toolbar.search-bar GtkToolButton > button.flat, .inline-toolbar.location-bar GtkToolButton > button.flat, .inline-toolbar GtkToolButton > .sidebar-button.button, .inline-toolbar headerbar GtkToolButton > button.titlebutton, headerbar .inline-toolbar GtkToolButton > button.titlebutton,
-toolbar.inline-toolbar GtkToolButton:backdrop > button.flat,
-.inline-toolbar GtkToolButton:backdrop > button.flat,
-.inline-toolbar.search-bar GtkToolButton:backdrop > button.flat,
-.inline-toolbar.location-bar GtkToolButton:backdrop > button.flat,
-.inline-toolbar GtkToolButton:backdrop > .sidebar-button.button,
-.inline-toolbar headerbar GtkToolButton:backdrop > button.titlebutton,
-headerbar .inline-toolbar GtkToolButton:backdrop > button.titlebutton,
-.inline-toolbar .titlebar GtkToolButton:backdrop > button.titlebutton,
-.titlebar .inline-toolbar GtkToolButton:backdrop > button.titlebutton, .linked:not(.vertical) > entry, .linked:not(.vertical) > spinbutton, .inline-toolbar button, .inline-toolbar headerbar button.titlebutton, headerbar .inline-toolbar button.titlebutton,
+toolbar.inline-toolbar toolbutton > button.flat, .inline-toolbar toolbutton > button.flat, .inline-toolbar.search-bar toolbutton > button.flat, .inline-toolbar.location-bar toolbutton > button.flat, .inline-toolbar toolbutton > .sidebar-button.button, .inline-toolbar headerbar toolbutton > button.titlebutton, headerbar .inline-toolbar toolbutton > button.titlebutton,
+toolbar.inline-toolbar toolbutton:backdrop > button.flat,
+.inline-toolbar toolbutton:backdrop > button.flat,
+.inline-toolbar.search-bar toolbutton:backdrop > button.flat,
+.inline-toolbar.location-bar toolbutton:backdrop > button.flat,
+.inline-toolbar toolbutton:backdrop > .sidebar-button.button,
+.inline-toolbar headerbar toolbutton:backdrop > button.titlebutton,
+headerbar .inline-toolbar toolbutton:backdrop > button.titlebutton,
+.inline-toolbar .titlebar toolbutton:backdrop > button.titlebutton,
+.titlebar .inline-toolbar toolbutton:backdrop > button.titlebutton, .linked:not(.vertical) > entry, .linked:not(.vertical) > spinbutton, .inline-toolbar button, .inline-toolbar headerbar button.titlebutton, headerbar .inline-toolbar button.titlebutton,
 .inline-toolbar .titlebar button.titlebutton,
 .titlebar .inline-toolbar button.titlebutton, .inline-toolbar button:backdrop, .linked > button, headerbar .linked > button.titlebutton,
 .titlebar .linked > button.titlebutton, .linked > button:hover, .linked > button:active, .linked > button:checked, .linked > button:backdrop, .linked > GtkComboBox > .the-button-in-the-combobox:dir(ltr), .linked > GtkComboBox > .the-button-in-the-combobox:dir(rtl),
@@ -1073,51 +1073,51 @@ headerbar .inline-toolbar GtkToolButton:backdrop > button.titlebutton,
   border-right-style: none; }
 
 .linked:not(.vertical) > entry:first-child, .linked:not(.vertical) > spinbutton:first-child, .inline-toolbar button:first-child, .linked > button:first-child, headerbar .linked > button.titlebutton:first-child,
-.titlebar .linked > button.titlebutton:first-child, toolbar.inline-toolbar GtkToolButton:first-child > button.flat, .inline-toolbar GtkToolButton:first-child > button.flat, .inline-toolbar.search-bar GtkToolButton:first-child > button.flat, .inline-toolbar.location-bar GtkToolButton:first-child > button.flat, .inline-toolbar GtkToolButton:first-child > .sidebar-button.button, .inline-toolbar headerbar GtkToolButton:first-child > button.titlebutton, headerbar .inline-toolbar GtkToolButton:first-child > button.titlebutton,
-.inline-toolbar .titlebar GtkToolButton:first-child > button.titlebutton,
-.titlebar .inline-toolbar GtkToolButton:first-child > button.titlebutton,
-toolbar.inline-toolbar GtkToolButton:backdrop:first-child > button.flat,
-.inline-toolbar GtkToolButton:backdrop:first-child > button.flat,
-.inline-toolbar.search-bar GtkToolButton:backdrop:first-child > button.flat,
-.inline-toolbar.location-bar GtkToolButton:backdrop:first-child > button.flat,
-.inline-toolbar GtkToolButton:backdrop:first-child > .sidebar-button.button,
-.inline-toolbar headerbar GtkToolButton:backdrop:first-child > button.titlebutton,
-headerbar .inline-toolbar GtkToolButton:backdrop:first-child > button.titlebutton,
-.inline-toolbar .titlebar GtkToolButton:backdrop:first-child > button.titlebutton,
-.titlebar .inline-toolbar GtkToolButton:backdrop:first-child > button.titlebutton, .linked > GtkComboBox:first-child > .the-button-in-the-combobox,
+.titlebar .linked > button.titlebutton:first-child, toolbar.inline-toolbar toolbutton:first-child > button.flat, .inline-toolbar toolbutton:first-child > button.flat, .inline-toolbar.search-bar toolbutton:first-child > button.flat, .inline-toolbar.location-bar toolbutton:first-child > button.flat, .inline-toolbar toolbutton:first-child > .sidebar-button.button, .inline-toolbar headerbar toolbutton:first-child > button.titlebutton, headerbar .inline-toolbar toolbutton:first-child > button.titlebutton,
+.inline-toolbar .titlebar toolbutton:first-child > button.titlebutton,
+.titlebar .inline-toolbar toolbutton:first-child > button.titlebutton,
+toolbar.inline-toolbar toolbutton:backdrop:first-child > button.flat,
+.inline-toolbar toolbutton:backdrop:first-child > button.flat,
+.inline-toolbar.search-bar toolbutton:backdrop:first-child > button.flat,
+.inline-toolbar.location-bar toolbutton:backdrop:first-child > button.flat,
+.inline-toolbar toolbutton:backdrop:first-child > .sidebar-button.button,
+.inline-toolbar headerbar toolbutton:backdrop:first-child > button.titlebutton,
+headerbar .inline-toolbar toolbutton:backdrop:first-child > button.titlebutton,
+.inline-toolbar .titlebar toolbutton:backdrop:first-child > button.titlebutton,
+.titlebar .inline-toolbar toolbutton:backdrop:first-child > button.titlebutton, .linked > GtkComboBox:first-child > .the-button-in-the-combobox,
 .linked > GtkComboBoxText:first-child > .the-button-in-the-combobox {
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px; }
 .linked:not(.vertical) > entry:last-child, .linked:not(.vertical) > spinbutton:last-child, .inline-toolbar button:last-child, .linked > button:last-child, headerbar .linked > button.titlebutton:last-child,
-.titlebar .linked > button.titlebutton:last-child, toolbar.inline-toolbar GtkToolButton:last-child > button.flat, .inline-toolbar GtkToolButton:last-child > button.flat, .inline-toolbar.search-bar GtkToolButton:last-child > button.flat, .inline-toolbar.location-bar GtkToolButton:last-child > button.flat, .inline-toolbar GtkToolButton:last-child > .sidebar-button.button, .inline-toolbar headerbar GtkToolButton:last-child > button.titlebutton, headerbar .inline-toolbar GtkToolButton:last-child > button.titlebutton,
-.inline-toolbar .titlebar GtkToolButton:last-child > button.titlebutton,
-.titlebar .inline-toolbar GtkToolButton:last-child > button.titlebutton,
-toolbar.inline-toolbar GtkToolButton:backdrop:last-child > button.flat,
-.inline-toolbar GtkToolButton:backdrop:last-child > button.flat,
-.inline-toolbar.search-bar GtkToolButton:backdrop:last-child > button.flat,
-.inline-toolbar.location-bar GtkToolButton:backdrop:last-child > button.flat,
-.inline-toolbar GtkToolButton:backdrop:last-child > .sidebar-button.button,
-.inline-toolbar headerbar GtkToolButton:backdrop:last-child > button.titlebutton,
-headerbar .inline-toolbar GtkToolButton:backdrop:last-child > button.titlebutton,
-.inline-toolbar .titlebar GtkToolButton:backdrop:last-child > button.titlebutton,
-.titlebar .inline-toolbar GtkToolButton:backdrop:last-child > button.titlebutton, .linked > GtkComboBox:last-child > .the-button-in-the-combobox,
+.titlebar .linked > button.titlebutton:last-child, toolbar.inline-toolbar toolbutton:last-child > button.flat, .inline-toolbar toolbutton:last-child > button.flat, .inline-toolbar.search-bar toolbutton:last-child > button.flat, .inline-toolbar.location-bar toolbutton:last-child > button.flat, .inline-toolbar toolbutton:last-child > .sidebar-button.button, .inline-toolbar headerbar toolbutton:last-child > button.titlebutton, headerbar .inline-toolbar toolbutton:last-child > button.titlebutton,
+.inline-toolbar .titlebar toolbutton:last-child > button.titlebutton,
+.titlebar .inline-toolbar toolbutton:last-child > button.titlebutton,
+toolbar.inline-toolbar toolbutton:backdrop:last-child > button.flat,
+.inline-toolbar toolbutton:backdrop:last-child > button.flat,
+.inline-toolbar.search-bar toolbutton:backdrop:last-child > button.flat,
+.inline-toolbar.location-bar toolbutton:backdrop:last-child > button.flat,
+.inline-toolbar toolbutton:backdrop:last-child > .sidebar-button.button,
+.inline-toolbar headerbar toolbutton:backdrop:last-child > button.titlebutton,
+headerbar .inline-toolbar toolbutton:backdrop:last-child > button.titlebutton,
+.inline-toolbar .titlebar toolbutton:backdrop:last-child > button.titlebutton,
+.titlebar .inline-toolbar toolbutton:backdrop:last-child > button.titlebutton, .linked > GtkComboBox:last-child > .the-button-in-the-combobox,
 .linked > GtkComboBoxText:last-child > .the-button-in-the-combobox {
   border-top-right-radius: 3px;
   border-bottom-right-radius: 3px;
   border-right-style: solid; }
 .linked:not(.vertical) > entry:only-child, .linked:not(.vertical) > spinbutton:only-child, .inline-toolbar button:only-child, .linked > button:only-child, headerbar .linked > button.titlebutton:only-child,
-.titlebar .linked > button.titlebutton:only-child, toolbar.inline-toolbar GtkToolButton:only-child > button.flat, .inline-toolbar GtkToolButton:only-child > button.flat, .inline-toolbar.search-bar GtkToolButton:only-child > button.flat, .inline-toolbar.location-bar GtkToolButton:only-child > button.flat, .inline-toolbar GtkToolButton:only-child > .sidebar-button.button, .inline-toolbar headerbar GtkToolButton:only-child > button.titlebutton, headerbar .inline-toolbar GtkToolButton:only-child > button.titlebutton,
-.inline-toolbar .titlebar GtkToolButton:only-child > button.titlebutton,
-.titlebar .inline-toolbar GtkToolButton:only-child > button.titlebutton,
-toolbar.inline-toolbar GtkToolButton:backdrop:only-child > button.flat,
-.inline-toolbar GtkToolButton:backdrop:only-child > button.flat,
-.inline-toolbar.search-bar GtkToolButton:backdrop:only-child > button.flat,
-.inline-toolbar.location-bar GtkToolButton:backdrop:only-child > button.flat,
-.inline-toolbar GtkToolButton:backdrop:only-child > .sidebar-button.button,
-.inline-toolbar headerbar GtkToolButton:backdrop:only-child > button.titlebutton,
-headerbar .inline-toolbar GtkToolButton:backdrop:only-child > button.titlebutton,
-.inline-toolbar .titlebar GtkToolButton:backdrop:only-child > button.titlebutton,
-.titlebar .inline-toolbar GtkToolButton:backdrop:only-child > button.titlebutton, .linked > GtkComboBox:only-child > .the-button-in-the-combobox,
+.titlebar .linked > button.titlebutton:only-child, toolbar.inline-toolbar toolbutton:only-child > button.flat, .inline-toolbar toolbutton:only-child > button.flat, .inline-toolbar.search-bar toolbutton:only-child > button.flat, .inline-toolbar.location-bar toolbutton:only-child > button.flat, .inline-toolbar toolbutton:only-child > .sidebar-button.button, .inline-toolbar headerbar toolbutton:only-child > button.titlebutton, headerbar .inline-toolbar toolbutton:only-child > button.titlebutton,
+.inline-toolbar .titlebar toolbutton:only-child > button.titlebutton,
+.titlebar .inline-toolbar toolbutton:only-child > button.titlebutton,
+toolbar.inline-toolbar toolbutton:backdrop:only-child > button.flat,
+.inline-toolbar toolbutton:backdrop:only-child > button.flat,
+.inline-toolbar.search-bar toolbutton:backdrop:only-child > button.flat,
+.inline-toolbar.location-bar toolbutton:backdrop:only-child > button.flat,
+.inline-toolbar toolbutton:backdrop:only-child > .sidebar-button.button,
+.inline-toolbar headerbar toolbutton:backdrop:only-child > button.titlebutton,
+headerbar .inline-toolbar toolbutton:backdrop:only-child > button.titlebutton,
+.inline-toolbar .titlebar toolbutton:backdrop:only-child > button.titlebutton,
+.titlebar .inline-toolbar toolbutton:backdrop:only-child > button.titlebutton, .linked > GtkComboBox:only-child > .the-button-in-the-combobox,
 .linked > GtkComboBoxText:only-child > .the-button-in-the-combobox {
   border-radius: 3px;
   border-style: solid; }

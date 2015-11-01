@@ -637,7 +637,7 @@ button {
 
 // all the following is for the +|- buttons on inline toolbars, that way
 // should really be deprecated...
-.inline-toolbar GtkToolButton > button { // redefining the button look is
+.inline-toolbar toolbutton > button { // redefining the button look is
                                           // needed since those are flat...
   @include button(normal);
   &:hover { @include button(hover); }
@@ -656,8 +656,8 @@ button {
 }
 
 // More inline toolbar buttons
-toolbar.inline-toolbar GtkToolButton,
-toolbar.inline-toolbar GtkToolButton:backdrop {
+toolbar.inline-toolbar toolbutton,
+toolbar.inline-toolbar toolbutton:backdrop {
   & > button.flat { @extend %linked_middle; }
   &:first-child > button.flat { @extend %linked:first-child; }
   &:last-child > button.flat { @extend %linked:last-child; }
