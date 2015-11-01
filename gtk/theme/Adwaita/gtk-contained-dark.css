@@ -3410,58 +3410,59 @@ checkbutton.text-button, radiobutton.text-button {
 /*****************
  * Progress bars *
  *****************/
-GtkProgressBar {
+progressbar {
   padding: 0;
   font-size: smaller;
   color: rgba(238, 238, 236, 0.4);
-  box-shadow: inset 1px 1px rgba(0, 0, 0, 0.1), 0 1px rgba(238, 238, 236, 0.1); }
-  GtkProgressBar:backdrop {
-    color: #5d6767; }
-  GtkProgressBar.osd {
+  box-shadow: inset 1px 1px rgba(0, 0, 0, 0.1), 0 1px rgba(238, 238, 236, 0.1);
+  border: 1px solid #1c1f1f;
+  border-radius: 3px;
+  background-color: #2f3434; }
+  progressbar:backdrop {
+    color: #5d6767;
+    border-color: #1f2222;
+    background-color: #303535;
+    box-shadow: 0 1px rgba(255, 255, 255, 0); }
+  progressbar.osd {
     -GtkProgressBar-xspacing: 0;
     -GtkProgressBar-yspacing: 0;
-    -GtkProgressBar-min-horizontal-bar-height: 3; }
-  GtkProgressBar.trough {
-    border: 1px solid #1c1f1f;
-    border-radius: 3px;
-    background-color: #2f3434; }
-    GtkProgressBar.trough:backdrop {
-      border-color: #1f2222;
-      background-color: #303535;
-      box-shadow: 0 1px rgba(255, 255, 255, 0); }
-    GtkProgressBar.trough.osd {
-      border-style: none;
-      background-color: transparent;
-      box-shadow: none; }
+    -GtkProgressBar-min-horizontal-bar-height: 3;
+    border-style: none;
+    background-color: transparent;
+    box-shadow: none; }
 
-.progressbar {
+progressbar.horizontal progress {
   background-image: linear-gradient(to bottom, #215d9c 2px, #266cb5);
   border: 1px solid #0f2b48;
   border-radius: 1.5px;
   box-shadow: none; }
-  .progressbar.left {
+  progressbar.horizontal progress.left {
     border-top-left-radius: 3px;
     border-bottom-left-radius: 3px; }
-  .progressbar.right {
+  progressbar.horizontal progress.right {
     border-top-right-radius: 3px;
     border-bottom-right-radius: 3px; }
-  .progressbar.left.right {
+  progressbar.horizontal progress.left.right {
     box-shadow: none; }
-  .progressbar.vertical {
-    background-image: linear-gradient(to right, #215d9c 2px, #266cb5); }
-    .progressbar.vertical.bottom {
-      border-bottom-left-radius: 3px;
-      border-bottom-right-radius: 3px;
-      box-shadow: none; }
-    .progressbar.vertical.top {
-      border-top-left-radius: 3px;
-      border-top-right-radius: 3px; }
-  .progressbar:backdrop {
+
+progressbar.vertical progress {
+  background-image: linear-gradient(to right, #215d9c 2px, #266cb5);
+  border: 1px solid #0f2b48;
+  border-radius: 1.5px;
+  box-shadow: none; }
+  progressbar.vertical progress.bottom {
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    box-shadow: none; }
+  progressbar.vertical progress.top {
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px; }
+  progressbar.vertical progress:backdrop {
     border-color: #0f2b48;
     background-image: none;
     background-color: #215d9c;
     box-shadow: none; }
-  .progressbar.osd {
+  progressbar.vertical progress.osd {
     background-image: none;
     background-color: #215d9c;
     border-style: none;
