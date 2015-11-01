@@ -2107,8 +2107,10 @@ _gtk_container_queue_restyle (GtkContainer *container)
 void
 _gtk_container_maybe_start_idle_sizer (GtkContainer *container)
 {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   if (!GTK_IS_RESIZE_CONTAINER (container))
     return;
+G_GNUC_END_IGNORE_DEPRECATIONS;
 
   if (container->priv->restyle_pending || gtk_widget_needs_allocate (GTK_WIDGET (container)))
     gtk_container_start_idle_sizer (container);
