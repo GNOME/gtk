@@ -11,14 +11,15 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=.General\n"
 "POT-Creation-Date: 2015-10-31 23:41+0000\n"
-"PO-Revision-Date: 2015-11-01 08:24+0000\n"
-"Last-Translator:  <>\n"
-"Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
+"PO-Revision-Date: 2015-11-01 09:25+0000\n"
+"Last-Translator: Pedro Albuquerque <palbuquerque73@gmail.com>\n"
+"Language-Team: Português <palbuquerque73@gmail.com>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\\n\n"
+"X-Generator: Gtranslator 2.91.6\n"
 
 #: ../gdk/gdkapplaunchcontext.c:127 ../gdk/gdkcursor.c:139
 #: ../gdk/gdkdevicemanager.c:181
@@ -1125,13 +1126,11 @@ msgid "Comments about the program"
 msgstr "Comentários sobre a aplicação"
 
 #: ../gtk/gtkaboutdialog.c:408
-#, fuzzy
 #| msgid "License Type"
 msgid "License"
 msgstr "Licença"
 
 #: ../gtk/gtkaboutdialog.c:409
-#, fuzzy
 #| msgid "The license type of the program"
 msgid "The license of the program"
 msgstr "O tipo de licença da aplicação"
@@ -2934,13 +2933,11 @@ msgid "Whether the swatch is selectable"
 msgstr "Se o seletor é ou não selecionável"
 
 #: ../gtk/gtkcolorswatch.c:775
-#, fuzzy
 #| msgid "Menu"
 msgid "Has Menu"
 msgstr "Tem menu"
 
 #: ../gtk/gtkcolorswatch.c:775
-#, fuzzy
 #| msgid "Whether the widget should show other applications"
 msgid "Whether the swatch should offer customization"
 msgstr "Se o swatch deve oferecer personalização"
@@ -3700,7 +3697,6 @@ msgstr ""
 "widget filho, por oposição a abaixo desta."
 
 #: ../gtk/gtkeventcontroller.c:166
-#, fuzzy
 #| msgid "Widget the bubble window points to"
 msgid "Widget the gesture relates to"
 msgstr "Widget para o qual a janela bolha aponta"
@@ -4061,7 +4057,6 @@ msgid "A widget to display in place of the usual frame label"
 msgstr "Um widget a mostrar em vez da etiqueta de moldura comum"
 
 #: ../gtk/gtkgesture.c:695
-#, fuzzy
 #| msgid "Number of lines"
 msgid "Number of points"
 msgstr "Número de pontos"
@@ -4076,7 +4071,6 @@ msgid "GdkWindow to receive events about"
 msgstr "GdkWindow para receber eventos sobre"
 
 #: ../gtk/gtkgesturelongpress.c:284
-#, fuzzy
 #| msgid "Scale factor"
 msgid "Delay factor"
 msgstr "Fator de atraso"
@@ -4086,10 +4080,9 @@ msgid "Factor by which to modify the default timeout"
 msgstr "Fator pelo qual modificar o atraso predefinido"
 
 #: ../gtk/gtkgesturepan.c:238
-#, fuzzy
 #| msgid "Allow folder creation"
 msgid "Allowed orientations"
-msgstr "Permitir a criação de pastas"
+msgstr "Orientações permitidas"
 
 #: ../gtk/gtkgesturesingle.c:253
 msgid "Handle only touch events"
@@ -4955,7 +4948,8 @@ msgstr "Obtém o foco"
 
 #: ../gtk/gtkmenushell.c:416
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
-msgstr "Um valor booliano que determina se este menu obtém ou não o foco de teclado"
+msgstr ""
+"Um valor booliano que determina se este menu obtém ou não o foco de teclado"
 
 #: ../gtk/gtkmenutoolbutton.c:266
 msgid "Menu"
@@ -5337,7 +5331,6 @@ msgstr ""
 "servidor\""
 
 #: ../gtk/gtkplacessidebar.c:4609
-#, fuzzy
 #| msgid "Show decorations"
 msgid "Show 'Enter Location'"
 msgstr "Mostrar \"Inserir localização\""
@@ -5605,7 +5598,8 @@ msgstr "Mostrar diálogo"
 
 #: ../gtk/gtkprintoperation.c:1252
 msgid "TRUE if a progress dialog is shown while printing."
-msgstr "VERDADEIRO se um diálogo de progresso for mostrado durante a impressão."
+msgstr ""
+"VERDADEIRO se um diálogo de progresso for mostrado durante a impressão."
 
 #: ../gtk/gtkprintoperation.c:1275
 msgid "Allow Async"
@@ -6637,7 +6631,8 @@ msgstr "Só cursor de navegação por teclas"
 
 #: ../gtk/gtksettings.c:870
 msgid "When TRUE, there are only cursor keys available to navigate widgets"
-msgstr "Quando VERDADEIRO, apenas as teclas de cursor permitem navegar pelos widgets"
+msgstr ""
+"Quando VERDADEIRO, apenas as teclas de cursor permitem navegar pelos widgets"
 
 #: ../gtk/gtksettings.c:889
 msgid "Keynav Wrap Around"
@@ -6653,7 +6648,8 @@ msgstr "Som de erro"
 
 #: ../gtk/gtksettings.c:911
 msgid "When TRUE, keyboard navigation and other errors will cause a beep"
-msgstr "Quando VERDADEIRO, a navegação com as teclas e outros erros causarão um "
+msgstr ""
+"Quando VERDADEIRO, a navegação com as teclas e outros erros causarão um "
 "\"beep\""
 
 #: ../gtk/gtksettings.c:930
@@ -6718,7 +6714,8 @@ msgstr "Módulo de IC predefinido"
 
 #: ../gtk/gtksettings.c:1067
 msgid "Which IM module should be used by default"
-msgstr "Que módulo de introdução de caracteres deverá ser utilizado como predefinição"
+msgstr ""
+"Que módulo de introdução de caracteres deverá ser utilizado como predefinição"
 
 #: ../gtk/gtksettings.c:1085
 msgid "Recent Files Max Age"
@@ -6855,7 +6852,8 @@ msgstr "Tempo de expiração da dica de senha"
 
 #: ../gtk/gtksettings.c:1343
 msgid "How long to show the last input character in hidden entries"
-msgstr "Durante quanto tempo mostrar o último carácter introduzido em entradas "
+msgstr ""
+"Durante quanto tempo mostrar o último carácter introduzido em entradas "
 "ocultas"
 
 #: ../gtk/gtksettings.c:1359
@@ -8846,7 +8844,8 @@ msgstr "Urgente"
 
 #: ../gtk/gtkwindow.c:917
 msgid "TRUE if the window should be brought to the user's attention."
-msgstr "VERDADEIRO se a atenção do utilizador deverá ser chamada para a janela."
+msgstr ""
+"VERDADEIRO se a atenção do utilizador deverá ser chamada para a janela."
 
 #: ../gtk/gtkwindow.c:931
 msgid "Accept focus"
