@@ -685,17 +685,17 @@ button {
     background-image: none;
     background-color: #f6f6f6; }
 
-.inline-toolbar.toolbar GtkToolButton > button.flat, .inline-toolbar.toolbar GtkToolButton > .sidebar-button.button {
+toolbar.inline-toolbar GtkToolButton > button.flat, toolbar.inline-toolbar GtkToolButton > .sidebar-button.button {
   border-radius: 0;
   border-left-style: none; }
-.inline-toolbar.toolbar GtkToolButton:first-child > button.flat, .inline-toolbar.toolbar GtkToolButton:first-child > .sidebar-button.button {
+toolbar.inline-toolbar GtkToolButton:first-child > button.flat, toolbar.inline-toolbar GtkToolButton:first-child > .sidebar-button.button {
   border-radius: 3px 0 0 3px;
   border-left-style: solid; }
-.inline-toolbar.toolbar GtkToolButton:last-child > button.flat, .inline-toolbar.toolbar GtkToolButton:last-child > .sidebar-button.button {
+toolbar.inline-toolbar GtkToolButton:last-child > button.flat, toolbar.inline-toolbar GtkToolButton:last-child > .sidebar-button.button {
   border-radius: 0 3px 3px 0; }
-.inline-toolbar.toolbar GtkToolButton:last-child:dir(rtl) > button.flat, .inline-toolbar.toolbar GtkToolButton:last-child:dir(rtl) > .sidebar-button.button {
+toolbar.inline-toolbar GtkToolButton:last-child:dir(rtl) > button.flat, toolbar.inline-toolbar GtkToolButton:last-child:dir(rtl) > .sidebar-button.button {
   border-right-style: solid; }
-.inline-toolbar.toolbar GtkToolButton:only-child > button.flat, .inline-toolbar.toolbar GtkToolButton:only-child > .sidebar-button.button {
+toolbar.inline-toolbar GtkToolButton:only-child > button.flat, toolbar.inline-toolbar GtkToolButton:only-child > .sidebar-button.button {
   border-radius: 3px;
   border-style: solid; }
 
@@ -983,34 +983,34 @@ GtkComboBox {
 /************
  * Toolbars *
  ************/
-.toolbar {
+toolbar {
   padding: 6px;
   background-color: #fff; }
-  .toolbar.osd {
+  toolbar.osd {
     background-color: rgba(0, 0, 0, 0.8);
     border-radius: 6px;
     padding: 12px; }
-    .toolbar.osd label {
+    toolbar.osd label {
       color: #fff; }
-  .toolbar.inline-toolbar {
+  toolbar.inline-toolbar {
     border-width: 0 1px 1px;
     padding: 3px;
     border-radius: 0  0 4px 4px; }
-  .toolbar.search-bar {
+  toolbar.search-bar {
     border-width: 0 0 1px;
     padding: 3px; }
-  .toolbar.vertical {
+  toolbar.vertical {
     border-right: 1px solid gray; }
-    .toolbar.vertical:dir(rtl) {
+    toolbar.vertical:dir(rtl) {
       border-right: none;
       border-left: 1px solid gray; }
 
-.toolbar.inline-toolbar, .toolbar.search-bar {
+toolbar.inline-toolbar, toolbar.search-bar {
   border-style: solid;
   border-color: gray;
   background-color: #d9d9d9;
   box-shadow: inset 0 2px 3px -1px #a4a4a4; }
-  .toolbar.inline-toolbar:backdrop, .toolbar.search-bar:backdrop {
+  toolbar.inline-toolbar:backdrop, toolbar.search-bar:backdrop {
     border-color: #8d8d8d;
     background-color: #d7d7d7;
     box-shadow: none; }
@@ -1364,7 +1364,7 @@ popover {
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.5); }
   popover:backdrop {
     box-shadow: none; }
-  popover > .list, popover > .view, popover > .toolbar {
+  popover > .list, popover > .view, popover > toolbar {
     background-color: transparent; }
   popover separator, popover GtkPlacesSidebar.sidebar .view separator, GtkPlacesSidebar.sidebar .view popover separator,
   popover GtkPlacesSidebar.sidebar .view separator:backdrop,

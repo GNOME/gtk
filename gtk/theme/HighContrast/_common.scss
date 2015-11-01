@@ -474,7 +474,7 @@ button {
   &:backdrop:insensitive { @include button(backdrop-insensitive); }
   &:backdrop:insensitive:active { @include button(backdrop-insensitive-active);}
 }
-.inline-toolbar.toolbar GtkToolButton { // .inline-toolbar.toolbar here for
+toolbar.inline-toolbar GtkToolButton { // .inline-toolbar.toolbar here for
                                         // higher specificity than the previous
                                         // "button look" selector
   & > button.flat {
@@ -819,7 +819,7 @@ GtkComboBox {
 /************
  * Toolbars *
  ************/
-.toolbar { //FIXME: why is all this being ignored?
+toolbar { //FIXME: why is all this being ignored?
   padding: 6px;
   background-color: $bg_color;
   &.osd {
@@ -1193,7 +1193,7 @@ popover {
   }
   & > .list,
   & > .view,
-  & > .toolbar {
+  & > toolbar {
     background-color: transparent;
   }
   separator {
