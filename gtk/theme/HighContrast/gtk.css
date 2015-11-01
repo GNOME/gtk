@@ -617,28 +617,28 @@ button {
   .primary-toolbar button {
     icon-shadow: none; }
 
-.inline-toolbar GtkToolButton > button {
+.inline-toolbar toolbutton > button {
   border-width: 2px;
   border-style: solid;
   color: #000;
   background-image: none;
   background-color: #fff;
   border-color: gray; }
-  .inline-toolbar GtkToolButton > button:hover {
+  .inline-toolbar toolbutton > button:hover {
     border-width: 2px;
     border-style: solid;
     color: #000;
     background-color: #fff;
     border-color: gray;
     background-image: none; }
-  .inline-toolbar GtkToolButton > button:active {
+  .inline-toolbar toolbutton > button:active {
     border-width: 2px;
     border-style: solid;
     background-image: none;
     color: white;
     background-color: black;
     border-color: gray; }
-  .inline-toolbar GtkToolButton > button:insensitive {
+  .inline-toolbar toolbutton > button:insensitive {
     border-width: 2px;
     border-style: solid;
     color: gray;
@@ -647,14 +647,14 @@ button {
     background-image: none;
     text-shadow: none;
     icon-shadow: none; }
-  .inline-toolbar GtkToolButton > button:insensitive:active {
+  .inline-toolbar toolbutton > button:insensitive:active {
     border-width: 2px;
     border-style: solid;
     color: gray;
     border-color: gray;
     background-image: none;
     background-color: white; }
-  .inline-toolbar GtkToolButton > button:backdrop {
+  .inline-toolbar toolbutton > button:backdrop {
     border-width: 2px;
     border-style: solid;
     color: #000;
@@ -663,21 +663,21 @@ button {
     background-image: none;
     text-shadow: none;
     icon-shadow: none; }
-  .inline-toolbar GtkToolButton > button:backdrop:active {
+  .inline-toolbar toolbutton > button:backdrop:active {
     border-width: 2px;
     border-style: solid;
     color: white;
     background-color: #8d8d8d;
     border-color: #8d8d8d;
     background-image: none; }
-  .inline-toolbar GtkToolButton > button:backdrop:insensitive {
+  .inline-toolbar toolbutton > button:backdrop:insensitive {
     border-width: 2px;
     border-style: solid;
     color: gray;
     background-color: white;
     border-color: #8d8d8d;
     background-image: none; }
-  .inline-toolbar GtkToolButton > button:backdrop:insensitive:active {
+  .inline-toolbar toolbutton > button:backdrop:insensitive:active {
     border-width: 2px;
     border-style: solid;
     color: gray;
@@ -685,17 +685,17 @@ button {
     background-image: none;
     background-color: #f6f6f6; }
 
-toolbar.inline-toolbar GtkToolButton > button.flat, toolbar.inline-toolbar GtkToolButton > .sidebar-button.button {
+toolbar.inline-toolbar toolbutton > button.flat, toolbar.inline-toolbar toolbutton > .sidebar-button.button {
   border-radius: 0;
   border-left-style: none; }
-toolbar.inline-toolbar GtkToolButton:first-child > button.flat, toolbar.inline-toolbar GtkToolButton:first-child > .sidebar-button.button {
+toolbar.inline-toolbar toolbutton:first-child > button.flat, toolbar.inline-toolbar toolbutton:first-child > .sidebar-button.button {
   border-radius: 3px 0 0 3px;
   border-left-style: solid; }
-toolbar.inline-toolbar GtkToolButton:last-child > button.flat, toolbar.inline-toolbar GtkToolButton:last-child > .sidebar-button.button {
+toolbar.inline-toolbar toolbutton:last-child > button.flat, toolbar.inline-toolbar toolbutton:last-child > .sidebar-button.button {
   border-radius: 0 3px 3px 0; }
-toolbar.inline-toolbar GtkToolButton:last-child:dir(rtl) > button.flat, toolbar.inline-toolbar GtkToolButton:last-child:dir(rtl) > .sidebar-button.button {
+toolbar.inline-toolbar toolbutton:last-child:dir(rtl) > button.flat, toolbar.inline-toolbar toolbutton:last-child:dir(rtl) > .sidebar-button.button {
   border-right-style: solid; }
-toolbar.inline-toolbar GtkToolButton:only-child > button.flat, toolbar.inline-toolbar GtkToolButton:only-child > .sidebar-button.button {
+toolbar.inline-toolbar toolbutton:only-child > button.flat, toolbar.inline-toolbar toolbutton:only-child > .sidebar-button.button {
   border-radius: 3px;
   border-style: solid; }
 

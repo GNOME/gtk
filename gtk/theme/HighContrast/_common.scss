@@ -461,7 +461,7 @@ button {
 
 // all the following is for the +|- buttons on inline toolbars, that way
 // should really be reprecated...
-.inline-toolbar GtkToolButton > button { // redefining the button look is
+.inline-toolbar toolbutton > button { // redefining the button look is
                                                // needed since those are flat...
   @include button(normal, $edge: none); // the box-shadow outset doesn't work
                                           // in this case, hence $edge: none
@@ -474,7 +474,7 @@ button {
   &:backdrop:insensitive { @include button(backdrop-insensitive); }
   &:backdrop:insensitive:active { @include button(backdrop-insensitive-active);}
 }
-toolbar.inline-toolbar GtkToolButton { // .inline-toolbar.toolbar here for
+toolbar.inline-toolbar toolbutton { // .inline-toolbar.toolbar here for
                                         // higher specificity than the previous
                                         // "button look" selector
   & > button.flat {
