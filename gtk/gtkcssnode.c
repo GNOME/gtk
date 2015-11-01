@@ -263,7 +263,7 @@ static guint
 gtk_global_parent_cache_hash (gconstpointer item)
 {
   return gtk_css_node_declaration_hash (UNPACK_DECLARATION (item)) << 2
-    || UNPACK_FLAGS (item);
+    | UNPACK_FLAGS (item);
 }
 
 static gboolean
