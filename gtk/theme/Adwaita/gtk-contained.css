@@ -224,7 +224,7 @@ entry, spinbutton {
     box-shadow: none; }
     entry progress:backdrop, spinbutton progress:backdrop {
       background-color: transparent; }
-  .linked:not(.vertical) > entry:focus + entry, .linked:not(.vertical) > spinbutton:focus + entry, .linked:not(.vertical) > entry:focus + spinbutton, .linked:not(.vertical) > spinbutton:focus + spinbutton, .linked:not(.vertical) > entry:focus + button, .linked:not(.vertical) > spinbutton:focus + button, .linked:not(.vertical) > entry:focus + GtkComboBox > .the-button-in-the-combobox, .linked:not(.vertical) > spinbutton:focus + GtkComboBox > .the-button-in-the-combobox, .linked:not(.vertical) > entry:focus + GtkComboBoxText > .the-button-in-the-combobox, .linked:not(.vertical) > spinbutton:focus + GtkComboBoxText > .the-button-in-the-combobox {
+  .linked:not(.vertical) > entry:focus + entry, .linked:not(.vertical) > spinbutton:focus + entry, .linked:not(.vertical) > entry:focus + spinbutton, .linked:not(.vertical) > spinbutton:focus + spinbutton, .linked:not(.vertical) > entry:focus + button, .linked:not(.vertical) > spinbutton:focus + button, .linked:not(.vertical) > entry:focus + combobox > butotn.combo, .linked:not(.vertical) > spinbutton:focus + combobox > butotn.combo {
     border-left-color: #4a90d9; }
   entry.error, spinbutton.error {
     color: #cc0000;
@@ -313,10 +313,8 @@ entry, spinbutton {
 .linked.vertical > entry:focus:not(:only-child) + entry, .linked.vertical > spinbutton:focus:not(:only-child) + entry, .linked.vertical > entry:focus:not(:only-child) + spinbutton, .linked.vertical > spinbutton:focus:not(:only-child) + spinbutton,
 .linked.vertical > entry:focus:not(:only-child) + button,
 .linked.vertical > spinbutton:focus:not(:only-child) + button,
-.linked.vertical > entry:focus:not(:only-child) + GtkComboBox > .the-button-in-the-combobox,
-.linked.vertical > spinbutton:focus:not(:only-child) + GtkComboBox > .the-button-in-the-combobox,
-.linked.vertical > entry:focus:not(:only-child) + GtkComboBoxText > .the-button-in-the-combobox,
-.linked.vertical > spinbutton:focus:not(:only-child) + GtkComboBoxText > .the-button-in-the-combobox {
+.linked.vertical > entry:focus:not(:only-child) + combobox > button.combo,
+.linked.vertical > spinbutton:focus:not(:only-child) + combobox > button.combo {
   border-top-color: #4a90d9; }
 
 /***********
@@ -1072,9 +1070,7 @@ headerbar .inline-toolbar toolbutton:backdrop > button.titlebutton,
 .titlebar .inline-toolbar toolbutton:backdrop > button.titlebutton, .linked:not(.vertical) > entry, .linked:not(.vertical) > spinbutton, .inline-toolbar button, .inline-toolbar headerbar button.titlebutton, headerbar .inline-toolbar button.titlebutton,
 .inline-toolbar .titlebar button.titlebutton,
 .titlebar .inline-toolbar button.titlebutton, .inline-toolbar button:backdrop, .linked > button, headerbar .linked > button.titlebutton,
-.titlebar .linked > button.titlebutton, .linked > button:hover, .linked > button:active, .linked > button:checked, .linked > button:backdrop, .linked > GtkComboBox > .the-button-in-the-combobox:dir(ltr), .linked > GtkComboBox > .the-button-in-the-combobox:dir(rtl),
-.linked > GtkComboBoxText > .the-button-in-the-combobox:dir(ltr),
-.linked > GtkComboBoxText > .the-button-in-the-combobox:dir(rtl) {
+.titlebar .linked > button.titlebutton, .linked > button:hover, .linked > button:active, .linked > button:checked, .linked > button:backdrop, .linked > combobox > button.combo:dir(ltr), .linked > combobox > button.combo:dir(rtl) {
   border-radius: 0;
   border-right-style: none; }
 
@@ -1090,8 +1086,7 @@ toolbar.inline-toolbar toolbutton:backdrop:first-child > button.flat,
 .inline-toolbar headerbar toolbutton:backdrop:first-child > button.titlebutton,
 headerbar .inline-toolbar toolbutton:backdrop:first-child > button.titlebutton,
 .inline-toolbar .titlebar toolbutton:backdrop:first-child > button.titlebutton,
-.titlebar .inline-toolbar toolbutton:backdrop:first-child > button.titlebutton, .linked > GtkComboBox:first-child > .the-button-in-the-combobox,
-.linked > GtkComboBoxText:first-child > .the-button-in-the-combobox {
+.titlebar .inline-toolbar toolbutton:backdrop:first-child > button.titlebutton, .linked > combobox:first-child > button.combo {
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px; }
 .linked:not(.vertical) > entry:last-child, .linked:not(.vertical) > spinbutton:last-child, .inline-toolbar button:last-child, .linked > button:last-child, headerbar .linked > button.titlebutton:last-child,
@@ -1106,8 +1101,7 @@ toolbar.inline-toolbar toolbutton:backdrop:last-child > button.flat,
 .inline-toolbar headerbar toolbutton:backdrop:last-child > button.titlebutton,
 headerbar .inline-toolbar toolbutton:backdrop:last-child > button.titlebutton,
 .inline-toolbar .titlebar toolbutton:backdrop:last-child > button.titlebutton,
-.titlebar .inline-toolbar toolbutton:backdrop:last-child > button.titlebutton, .linked > GtkComboBox:last-child > .the-button-in-the-combobox,
-.linked > GtkComboBoxText:last-child > .the-button-in-the-combobox {
+.titlebar .inline-toolbar toolbutton:backdrop:last-child > button.titlebutton, .linked > combobox:last-child > button.combo {
   border-top-right-radius: 3px;
   border-bottom-right-radius: 3px;
   border-right-style: solid; }
@@ -1123,31 +1117,26 @@ toolbar.inline-toolbar toolbutton:backdrop:only-child > button.flat,
 .inline-toolbar headerbar toolbutton:backdrop:only-child > button.titlebutton,
 headerbar .inline-toolbar toolbutton:backdrop:only-child > button.titlebutton,
 .inline-toolbar .titlebar toolbutton:backdrop:only-child > button.titlebutton,
-.titlebar .inline-toolbar toolbutton:backdrop:only-child > button.titlebutton, .linked > GtkComboBox:only-child > .the-button-in-the-combobox,
-.linked > GtkComboBoxText:only-child > .the-button-in-the-combobox {
+.titlebar .inline-toolbar toolbutton:backdrop:only-child > button.titlebutton, .linked > combobox:only-child > button.combo {
   border-radius: 3px;
   border-style: solid; }
 
 .linked.vertical > entry, .linked.vertical > spinbutton, .linked.vertical > button, headerbar .linked.vertical > button.titlebutton,
-.titlebar .linked.vertical > button.titlebutton, .linked.vertical > button:hover, .linked.vertical > button:active, .linked.vertical > button:checked, .linked.vertical > button:backdrop, .linked.vertical > GtkComboBoxText > .the-button-in-the-combobox,
-.linked.vertical > GtkComboBox > .the-button-in-the-combobox {
+.titlebar .linked.vertical > button.titlebutton, .linked.vertical > button:hover, .linked.vertical > button:active, .linked.vertical > button:checked, .linked.vertical > button:backdrop, .linked.vertical > combobox > button.combo {
   border-style: solid solid none solid;
   border-radius: 0; }
 
 .linked.vertical > entry:first-child, .linked.vertical > spinbutton:first-child, .linked.vertical > button:first-child, headerbar .linked.vertical > button.titlebutton:first-child,
-.titlebar .linked.vertical > button.titlebutton:first-child, .linked.vertical > GtkComboBoxText:first-child > .the-button-in-the-combobox,
-.linked.vertical > GtkComboBox:first-child > .the-button-in-the-combobox {
+.titlebar .linked.vertical > button.titlebutton:first-child, .linked.vertical > combobox:first-child > button.combo {
   border-top-left-radius: 3px;
   border-top-right-radius: 3px; }
 .linked.vertical > entry:last-child, .linked.vertical > spinbutton:last-child, .linked.vertical > button:last-child, headerbar .linked.vertical > button.titlebutton:last-child,
-.titlebar .linked.vertical > button.titlebutton:last-child, .linked.vertical > GtkComboBoxText:last-child > .the-button-in-the-combobox,
-.linked.vertical > GtkComboBox:last-child > .the-button-in-the-combobox {
+.titlebar .linked.vertical > button.titlebutton:last-child, .linked.vertical > combobox:last-child > button.combo {
   border-bottom-left-radius: 3px;
   border-bottom-right-radius: 3px;
   border-style: solid; }
 .linked.vertical > entry:only-child, .linked.vertical > spinbutton:only-child, .linked.vertical > button:only-child, headerbar .linked.vertical > button.titlebutton:only-child,
-.titlebar .linked.vertical > button.titlebutton:only-child, .linked.vertical > GtkComboBoxText:only-child > .the-button-in-the-combobox,
-.linked.vertical > GtkComboBox:only-child > .the-button-in-the-combobox {
+.titlebar .linked.vertical > button.titlebutton:only-child, .linked.vertical > combobox:only-child > button.combo {
   border-radius: 3px;
   border-style: solid; }
 
@@ -1453,39 +1442,40 @@ treeview spinbutton entry, treeview spinbutton spinbutton, treeview spinbutton e
 /**************
  * ComboBoxes *
  **************/
-GtkComboBox {
+combobox {
   -GtkComboBox-arrow-scaling: 0.5;
   -GtkComboBox-shadow-type: none;
   text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
   icon-shadow: 0 1px rgba(255, 255, 255, 0.76923); }
-  GtkComboBox > .the-button-in-the-combobox {
+  combobox > button.combo, headerbar combobox > button.combo.titlebutton,
+  .titlebar combobox > button.combo.titlebutton {
     padding-top: 3px;
     padding-bottom: 4px; }
-  GtkComboBox:insensitive {
+  combobox:insensitive {
     color: #8e9192;
     text-shadow: none;
     icon-shadow: none; }
-  GtkComboBox:backdrop {
+  combobox:backdrop {
     color: #8e9192;
     text-shadow: none;
     icon-shadow: none; }
-  GtkComboBox:backdrop:insensitive {
+  combobox:backdrop:insensitive {
     color: #c7c7c7; }
-  GtkComboBox .menuitem {
+  combobox .menuitem {
     text-shadow: none; }
-  GtkComboBox.separator.vertical {
+  combobox.separator.vertical {
     -GtkWidget-wide-separators: true; }
-  GtkComboBox.combobox-entry entry:dir(ltr), GtkComboBox.combobox-entry spinbutton:dir(ltr) {
+  combobox entry.combo:dir(ltr), combobox spinbutton.combo:dir(ltr) {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0; }
-  GtkComboBox.combobox-entry entry:dir(rtl), GtkComboBox.combobox-entry spinbutton:dir(rtl) {
+  combobox entry.combo:dir(rtl), combobox spinbutton.combo:dir(rtl) {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0; }
-  GtkComboBox.combobox-entry button:dir(ltr) {
+  combobox button.combo:dir(ltr) {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
     border-left-style: none; }
-  GtkComboBox.combobox-entry button:dir(rtl) {
+  combobox button.combo:dir(rtl) {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
     border-right-style: none; }
