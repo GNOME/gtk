@@ -1378,12 +1378,12 @@ popover {
     color: #000;
     text-shadow: none;
     transition: none; }
-  popover.osd {
+  popover.magnifier, popover.osd {
     background-image: none;
     background-color: rgba(0, 0, 0, 0.8);
     border: 1px solid gray;
     color: #fff; }
-    popover.osd button {
+    popover.magnifier button, popover.osd button {
       color: white;
       text-shadow: none;
       border-width: 2px;
@@ -1393,21 +1393,21 @@ popover {
       background-color: rgba(0, 0, 0, 0.8);
       border-color: rgba(255, 255, 255, 0.2);
       box-shadow: none; }
-      popover.osd button:hover {
+      popover.magnifier button:hover, popover.osd button:hover {
         border-width: 2px;
         border-style: solid;
         color: #fff;
         background-color: rgba(77, 77, 77, 0.8);
         border-color: rgba(255, 255, 255, 0.2);
         box-shadow: none; }
-      popover.osd button:active {
+      popover.magnifier button:active, popover.osd button:active {
         border-width: 2px;
         border-style: solid;
         color: rgba(0, 0, 0, 0.8);
         background-color: #fff;
         border-color: rgba(255, 255, 255, 0.2);
         box-shadow: none; }
-      popover.osd button:insensitive {
+      popover.magnifier button:insensitive, popover.osd button:insensitive {
         border-width: 2px;
         border-style: solid;
         border-color: rgba(255, 255, 255, 0.2);

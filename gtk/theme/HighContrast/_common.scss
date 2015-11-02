@@ -1207,6 +1207,7 @@ popover {
     text-shadow: none;
     transition: none;
   }
+  &.magnifier,
   &.osd { // Also used for touch cutnpaste overlays
           // FIXME Doesn't work
     background-image: none;
