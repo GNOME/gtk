@@ -43,6 +43,11 @@
  *
  * Other style classes that are commonly used with GtkButton include
  * .suggested-action and .destructive-action.
+ *
+ * Button-like widgets like #GtkToggleButton, #GtkMenuButton, #GtkVolumeButton,
+ * #GtkLockButton, #GtkColorButton, #GtkFontButton or #GtkFileChooserButton use
+ * style classes such as .toggle, .popup, .scale, .lock, .color, .font, .file
+ * to differentiate themselves from a plain GtkButton.
  */
 
 #include "config.h"
