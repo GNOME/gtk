@@ -338,6 +338,9 @@ gtk_inspector_css_node_tree_set_object (GtkInspectorCssNodeTree *cnt,
 {
   GtkInspectorCssNodeTreePrivate *priv;
   const gchar *title;
+  GtkCssNode *node, *root;
+  GtkTreePath *path;
+  GtkTreeIter iter;
 
   g_return_if_fail (GTK_INSPECTOR_IS_CSS_NODE_TREE (cnt));
 
@@ -352,8 +355,20 @@ gtk_inspector_css_node_tree_set_object (GtkInspectorCssNodeTree *cnt,
       return;
     }
 
-  gtk_tree_model_css_node_set_root_node (GTK_TREE_MODEL_CSS_NODE (priv->node_model),
-                                         gtk_widget_get_css_node (GTK_WIDGET (object)));
+  root = node = gtk_widget_get_css_node (GTK_WIDGET (object));
+  while (gtk_css_node_get_parent (root))
+    root = gtk_css_node_get_parent (root);
+
+  gtk_tree_model_css_node_set_root_node (GTK_TREE_MODEL_CSS_NODE (priv->node_model), root);
+
+  gtk_tree_model_css_node_get_iter_from_node (GTK_TREE_MODEL_CSS_NODE (priv->node_model), &iter, node);
+  path = gtk_tree_model_get_path (priv->node_model, &iter);
+
+  gtk_tree_view_expand_to_path (GTK_TREE_VIEW (priv->node_tree), path);
+  gtk_tree_view_set_cursor (GTK_TREE_VIEW (priv->node_tree), path, NULL, FALSE);
+  gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (priv->node_tree), path, NULL, FALSE, 0.0, 0.0);
+
+  gtk_tree_path_free (path);
 }
 
 static void
