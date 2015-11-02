@@ -8,6 +8,9 @@
         <property name="can_focus">1</property>
         <property name="receives_default">1</property>
         <signal name="clicked" handler="button_clicked_cb" swapped="no"/>
+        <style>
+          <class name="file"/>
+        </style>
         <child>
           <object class="GtkBox" id="box2">
             <property name="visible">1</property>
