@@ -71,9 +71,16 @@
  * </section>
  * ]|
  *
- * A popover has a single css node called "popover" and gets the
- * .menu style class in case it has been created using
- * gtk_popover_new_from_model.
+ * # CSS nodes
+ *
+ * GtkPopover has a single css node called popover and gets the
+ * .menu style class if it is menu-like (e.g. #GtkPopoverMenu or
+ * created using gtk_popover_new_from_model().
+ *
+ * Particular uses of GtkPopover, such as touch selection popups
+ * or magnifiers in #GtkEntry or #GtkTextView get style classes
+ * like .touch-selection or .magnifier to differentiate from
+ * plain popovers.
  *
  * Since: 3.12
  */
