@@ -2728,7 +2728,7 @@ gtk_entry_ensure_magnifier (GtkEntry *entry)
   _gtk_magnifier_set_magnification (GTK_MAGNIFIER (priv->magnifier), 2.0);
   priv->magnifier_popover = gtk_popover_new (GTK_WIDGET (entry));
   gtk_style_context_add_class (gtk_widget_get_style_context (priv->magnifier_popover),
-                               GTK_STYLE_CLASS_OSD);
+                               "magnifier");
   gtk_popover_set_modal (GTK_POPOVER (priv->magnifier_popover), FALSE);
   gtk_container_add (GTK_CONTAINER (priv->magnifier_popover),
                      priv->magnifier);
