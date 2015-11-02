@@ -1467,7 +1467,7 @@ GtkComboBox {
     color: #c7c7c7; }
   GtkComboBox .menuitem {
     text-shadow: none; }
-  GtkComboBox separator.vertical {
+  GtkComboBox.separator.vertical {
     -GtkWidget-wide-separators: true; }
   GtkComboBox.combobox-entry entry:dir(ltr), GtkComboBox.combobox-entry spinbutton:dir(ltr) {
     border-top-right-radius: 0;
@@ -3660,9 +3660,12 @@ frame,
 GtkScrolledWindow viewport.frame {
   border-style: none; }
 
+.menuitem.separator,
 separator {
   color: rgba(0, 0, 0, 0.1); }
-  GtkFileChooserButton separator.vertical, button.font separator.vertical {
+  GtkFileChooserButton .menuitem.separator.vertical, button.font .menuitem.separator.vertical, GtkFileChooserButton
+  separator.vertical, button.font
+  separator.vertical {
     -GtkWidget-wide-separators: true; }
 
 /*********
