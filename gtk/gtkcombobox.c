@@ -87,6 +87,11 @@
  * can be a bit overwhelming. In this case, #GtkComboBoxText offers a
  * simple alternative. Both GtkComboBox and #GtkComboBoxText can contain
  * an entry.
+ *
+ * # CSS nodes
+ *
+ * GtkComboBox has a single CSS node with name combobox. It adds the
+ * .combo style class to the button (and entry) that it contains.
  */
 
 
@@ -1066,6 +1071,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, gtk_combo_box_button_toggled);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_COMBO_BOX_ACCESSIBLE);
+  gtk_widget_class_set_css_name (widget_class, "combobox");
 }
 
 static void
@@ -1094,6 +1100,7 @@ static void
 gtk_combo_box_init (GtkComboBox *combo_box)
 {
   GtkComboBoxPrivate *priv;
+  GtkStyleContext *context;
 
   combo_box->priv = gtk_combo_box_get_instance_private (combo_box);
   priv = combo_box->priv;
@@ -1123,6 +1130,10 @@ gtk_combo_box_init (GtkComboBox *combo_box)
   gtk_widget_init_template (GTK_WIDGET (combo_box));
 
   gtk_widget_add_events (priv->button, GDK_SCROLL_MASK);
+
+  context = gtk_widget_get_style_context (priv->button);
+  gtk_style_context_remove_class (context, "toggle");
+  gtk_style_context_add_class (context, "combo");
 }
 
 static void
@@ -4400,8 +4411,11 @@ gtk_combo_box_constructed (GObject *object)
       gtk_widget_show (entry);
       gtk_container_add (GTK_CONTAINER (combo_box), entry);
 
+      context = gtk_widget_get_style_context (GTK_WIDGET (entry));
+      gtk_style_context_add_class (context, "combo");
+
       context = gtk_widget_get_style_context (GTK_WIDGET (combo_box));
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_COMBOBOX_ENTRY);
+      gtk_style_context_add_class (context, "linked");
 
       priv->text_renderer = gtk_cell_renderer_text_new ();
       gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo_box),

@@ -6,9 +6,6 @@
       <object class="GtkToggleButton" id="button">
         <property name="visible">1</property>
         <signal name="toggled" handler="gtk_combo_box_button_toggled" swapped="no"/>
-        <style>
-          <class name="the-button-in-the-combobox"/>
-        </style>
         <child>
           <object class="GtkBox">
             <property name="visible">1</property>
