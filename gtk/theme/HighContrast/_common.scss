@@ -742,7 +742,7 @@ spinbutton {
 /**************
  * ComboBoxes *
  **************/
-GtkComboBox {
+combobox {
 
   //FIXME padding issue
   padding: 0;
@@ -790,31 +790,34 @@ GtkComboBox {
   }
 }
 
-.linked > GtkComboBox > button {
+.linked > combobox > button {
   // The combo is a composite widget so the way we do
   // button linking doesn't work, special case needed.
   // See https://bugzilla.gnome.org/show_bug.cgi?id=733979
   &:dir(ltr) { @extend %linked_middle; } // specificity bump
   &:dir(rtl) { @extend %linked_middle:dir(rtl); }
 }
-.linked > GtkComboBox:first-child > button {
+.linked > combobox:first-child > button {
   @extend %linked:first-child;
 }
-.linked > GtkComboBox:last-child > button {
+.linked > combobox:last-child > button {
   @extend %linked:last-child;
 }
-.linked > GtkComboBox:only-child > button {
+.linked > combobox:only-child > button {
   @extend %linked:only-child;
 }
-
-.linked.vertical > GtkComboBoxText > button,
-.linked.vertical > GtkComboBox > button { @extend %linked_vertical_middle; }
-.linked.vertical > GtkComboBoxText:first-child > button,
-.linked.vertical > GtkComboBox:first-child > button { @extend %linked_vertical:first-child; }
-.linked.vertical > GtkComboBoxText:last-child > button,
-.linked.vertical > GtkComboBox:last-child > button { @extend %linked_vertical:last-child; }
-.linked.vertical > GtkComboBoxText:only-child > button,
-.linked.vertical > GtkComboBox:only-child > button { @extend %linked_vertical:only-child; }
+.linked.vertical > combobox  > button {
+  @extend %linked_vertical_middle;
+}
+.linked.vertical > combobox:first-child > button {
+  @extend %linked_vertical:first-child;
+}
+.linked.vertical > combobox:last-child > button {
+  @extend %linked_vertical:last-child;
+}
+.linked.vertical > combobox:only-child > button {
+  @extend %linked_vertical:only-child;
+}
 
 /************
  * Toolbars *
