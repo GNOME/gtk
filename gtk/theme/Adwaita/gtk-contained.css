@@ -123,8 +123,11 @@ textview {
   .grid-child:selected {
     outline-offset: -2px; }
 
-popover.osd, .app-notification,
-.app-notification.frame, .osd .scale-popup, .osd {
+popover.magnifier,
+popover.osd,
+.app-notification,
+.app-notification.frame,
+.osd .scale-popup, .osd {
   color: #eeeeec;
   border: none;
   background-color: rgba(32, 37, 38, 0.7);
@@ -133,7 +136,10 @@ popover.osd, .app-notification,
   box-shadow: none;
   text-shadow: 0 1px black;
   icon-shadow: 0 1px black; }
-  popover.osd:backdrop, .app-notification:backdrop, .osd .scale-popup:backdrop, .osd:backdrop {
+  popover.magnifier:backdrop,
+  popover.osd:backdrop,
+  .app-notification:backdrop,
+  .osd .scale-popup:backdrop, .osd:backdrop {
     text-shadow: none; }
 
 /*********************
@@ -4629,7 +4635,7 @@ entry.cursor-handle, spinbutton.cursor-handle,
 .context-menu {
   font: initial; }
 
-.touch-selection {
+popover.touch-selection {
   font: initial;
   color: #eeeeec;
   border: none;
@@ -4639,11 +4645,11 @@ entry.cursor-handle, spinbutton.cursor-handle,
   box-shadow: none;
   text-shadow: 0 1px black;
   icon-shadow: 0 1px black; }
-  .touch-selection:backdrop {
+  popover.touch-selection:backdrop {
     text-shadow: none; }
-  .touch-selection button, .touch-selection headerbar button.titlebutton, headerbar .touch-selection button.titlebutton,
-  .touch-selection .titlebar button.titlebutton,
-  .titlebar .touch-selection button.titlebutton {
+  popover.touch-selection button,
+  popover.touch-selection .titlebar button.titlebutton,
+  .titlebar popover.touch-selection button.titlebutton {
     color: #eeeeec;
     border-color: rgba(0, 0, 0, 0.7);
     background-image: linear-gradient(to bottom, rgba(32, 37, 38, 0.7));
@@ -4652,7 +4658,7 @@ entry.cursor-handle, spinbutton.cursor-handle,
     text-shadow: 0 1px black;
     icon-shadow: 0 1px black;
     outline-color: rgba(238, 238, 236, 0.3); }
-    .touch-selection button:hover {
+    popover.touch-selection button:hover {
       color: white;
       border-color: rgba(0, 0, 0, 0.7);
       background-image: linear-gradient(to bottom, rgba(60, 69, 71, 0.7));
@@ -4661,7 +4667,7 @@ entry.cursor-handle, spinbutton.cursor-handle,
       text-shadow: 0 1px black;
       icon-shadow: 0 1px black;
       outline-color: rgba(238, 238, 236, 0.3); }
-    .touch-selection button:active, .touch-selection button:checked {
+    popover.touch-selection button:active, popover.touch-selection button:checked {
       color: white;
       border-color: rgba(0, 0, 0, 0.7);
       background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7));
@@ -4670,7 +4676,7 @@ entry.cursor-handle, spinbutton.cursor-handle,
       text-shadow: none;
       icon-shadow: none;
       outline-color: rgba(238, 238, 236, 0.3); }
-    .touch-selection button:insensitive, .touch-selection button:backdrop:insensitive {
+    popover.touch-selection button:insensitive, popover.touch-selection button:backdrop:insensitive {
       color: #878a89;
       border-color: rgba(0, 0, 0, 0.7);
       background-image: linear-gradient(to bottom, rgba(53, 57, 58, 0.5));
@@ -4678,7 +4684,7 @@ entry.cursor-handle, spinbutton.cursor-handle,
       box-shadow: none;
       text-shadow: none;
       icon-shadow: none; }
-    .touch-selection button:backdrop {
+    popover.touch-selection button:backdrop {
       color: #eeeeec;
       border-color: rgba(0, 0, 0, 0.7);
       background-image: linear-gradient(to bottom, rgba(32, 37, 38, 0.7));
@@ -4686,82 +4692,82 @@ entry.cursor-handle, spinbutton.cursor-handle,
       box-shadow: none;
       text-shadow: none;
       icon-shadow: none; }
-  .touch-selection .check {
+  popover.touch-selection .check {
     icon-shadow: none;
     -gtk-icon-source: -gtk-scaled(url("assets/checkbox-unchecked-dark.png"), url("assets/checkbox-unchecked-dark@2.png")); }
-  .touch-selection .check:hover {
+  popover.touch-selection .check:hover {
     icon-shadow: none;
     -gtk-icon-source: -gtk-scaled(url("assets/checkbox-unchecked-hover-dark.png"), url("assets/checkbox-unchecked-hover-dark@2.png")); }
-  .touch-selection .check:active {
+  popover.touch-selection .check:active {
     icon-shadow: none;
     -gtk-icon-source: -gtk-scaled(url("assets/checkbox-unchecked-active-dark.png"), url("assets/checkbox-unchecked-active-dark@2.png")); }
-  .touch-selection .check:insensitive {
+  popover.touch-selection .check:insensitive {
     icon-shadow: none;
     -gtk-icon-source: -gtk-scaled(url("assets/checkbox-unchecked-insensitive-dark.png"), url("assets/checkbox-unchecked-insensitive-dark@2.png")); }
-  .touch-selection .check:inconsistent {
+  popover.touch-selection .check:inconsistent {
     icon-shadow: none;
     -gtk-icon-source: -gtk-scaled(url("assets/checkbox-mixed-dark.png"), url("assets/checkbox-mixed-dark@2.png")); }
-  .touch-selection .check:inconsistent:hover {
+  popover.touch-selection .check:inconsistent:hover {
     icon-shadow: none;
     -gtk-icon-source: -gtk-scaled(url("assets/checkbox-mixed-hover-dark.png"), url("assets/checkbox-mixed-hover-dark@2.png")); }
-  .touch-selection .check:inconsistent:selected {
+  popover.touch-selection .check:inconsistent:selected {
     icon-shadow: none;
     -gtk-icon-source: -gtk-scaled(url("assets/checkbox-mixed-active-dark.png"), url("assets/checkbox-mixed-active-dark@2.png")); }
-  .touch-selection .check:inconsistent:insensitive {
+  popover.touch-selection .check:inconsistent:insensitive {
     icon-shadow: none;
     -gtk-icon-source: -gtk-scaled(url("assets/checkbox-mixed-insensitive-dark.png"), url("assets/checkbox-mixed-insensitive-dark@2.png")); }
-  .touch-selection .check:checked {
+  popover.touch-selection .check:checked {
     icon-shadow: none;
     -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-dark.png"), url("assets/checkbox-checked-dark@2.png")); }
-  .touch-selection .check:checked:insensitive {
+  popover.touch-selection .check:checked:insensitive {
     icon-shadow: none;
     -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-insensitive-dark.png"), url("assets/checkbox-checked-insensitive-dark@2.png")); }
-  .touch-selection .check:checked:hover {
+  popover.touch-selection .check:checked:hover {
     icon-shadow: none;
     -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-hover-dark.png"), url("assets/checkbox-checked-hover-dark@2.png")); }
-  .touch-selection .check:checked:active {
+  popover.touch-selection .check:checked:active {
     icon-shadow: none;
     -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-active-dark.png"), url("assets/checkbox-checked-active-dark@2.png")); }
-  .touch-selection .check:backdrop:checked {
+  popover.touch-selection .check:backdrop:checked {
     icon-shadow: none;
     -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-backdrop-dark.png"), url("assets/checkbox-checked-backdrop-dark@2.png")); }
-  .touch-selection .radio {
+  popover.touch-selection .radio {
     icon-shadow: none;
     -gtk-icon-source: -gtk-scaled(url("assets/radio-unchecked-dark.png"), url("assets/radio-unchecked-dark@2.png")); }
-  .touch-selection .radio:hover {
+  popover.touch-selection .radio:hover {
     icon-shadow: none;
     -gtk-icon-source: -gtk-scaled(url("assets/radio-unchecked-hover-dark.png"), url("assets/radio-unchecked-hover-dark@2.png")); }
-  .touch-selection .radio:active {
+  popover.touch-selection .radio:active {
     icon-shadow: none;
     -gtk-icon-source: -gtk-scaled(url("assets/radio-unchecked-active-dark.png"), url("assets/radio-unchecked-active-dark@2.png")); }
-  .touch-selection .radio:insensitive {
+  popover.touch-selection .radio:insensitive {
     icon-shadow: none;
     -gtk-icon-source: -gtk-scaled(url("assets/radio-unchecked-insensitive-dark.png"), url("assets/radio-unchecked-insensitive-dark@2.png")); }
-  .touch-selection .radio:inconsistent {
+  popover.touch-selection .radio:inconsistent {
     icon-shadow: none;
     -gtk-icon-source: -gtk-scaled(url("assets/radio-mixed-dark.png"), url("assets/radio-mixed-dark@2.png")); }
-  .touch-selection .radio:inconsistent:hover {
+  popover.touch-selection .radio:inconsistent:hover {
     icon-shadow: none;
     -gtk-icon-source: -gtk-scaled(url("assets/radio-mixed-hover-dark.png"), url("assets/radio-mixed-hover-dark@2.png")); }
-  .touch-selection .radio:inconsistent:selected {
+  popover.touch-selection .radio:inconsistent:selected {
     icon-shadow: none;
     -gtk-icon-source: -gtk-scaled(url("assets/radio-mixed-active-dark.png"), url("assets/radio-mixed-active-dark@2.png")); }
-  .touch-selection .radio:inconsistent:insensitive {
+  popover.touch-selection .radio:inconsistent:insensitive {
     icon-shadow: none;
     -gtk-icon-source: -gtk-scaled(url("assets/radio-mixed-insensitive-dark.png"), url("assets/radio-mixed-insensitive-dark@2.png")); }
-  .touch-selection .radio:checked {
+  popover.touch-selection .radio:checked {
     icon-shadow: none;
     -gtk-icon-source: -gtk-scaled(url("assets/radio-checked-dark.png"), url("assets/radio-checked-dark@2.png")); }
-  .touch-selection .radio:checked:insensitive {
+  popover.touch-selection .radio:checked:insensitive {
     icon-shadow: none;
     -gtk-icon-source: -gtk-scaled(url("assets/radio-checked-insensitive-dark.png"), url("assets/radio-checked-insensitive-dark@2.png")); }
-  .touch-selection .radio:checked:hover {
+  popover.touch-selection .radio:checked:hover {
     icon-shadow: none;
     -gtk-icon-source: -gtk-scaled(url("assets/radio-checked-hover-dark.png"), url("assets/radio-checked-hover-dark@2.png")); }
-  .touch-selection .radio:checked:active {
+  popover.touch-selection .radio:checked:active {
     icon-shadow: none;
     -gtk-icon-source: -gtk-scaled(url("assets/radio-checked-active-dark.png"), url("assets/radio-checked-active-dark@2.png")); }
-  .touch-selection .radio:backdrop:checked {
+  popover.touch-selection .radio:backdrop:checked {
     icon-shadow: none;
     -gtk-icon-source: -gtk-scaled(url("assets/radio-checked-backdrop-dark.png"), url("assets/radio-checked-backdrop-dark@2.png")); }
 

@@ -182,6 +182,7 @@ textview { // This will get overridden by .view, needed by gedit line numbers
   }
 }
 
+popover.magnifier,
 %osd, .osd {
   color: $osd_fg_color;
   border: none;
@@ -3345,7 +3346,7 @@ entry.cursor-handle,
   font: initial;
 }
 
-.touch-selection {
+popover.touch-selection {
   font: initial;
   color: $osd_fg_color;
   border: none;
