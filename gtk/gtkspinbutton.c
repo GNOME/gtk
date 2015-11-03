@@ -82,6 +82,22 @@
  *
  * # CSS nodes
  *
+ * |[<!-- language="plain" -->
+ * spinbutton.horizontal
+ * ├── entry
+ * │   ╰── ...
+ * ├── button.down
+ * ╰── button.up
+ * ]|
+ *
+ * |[<!-- language="plain" -->
+ * spinbutton.vertical
+ * ├── button.up
+ * ├── entry
+ * │   ╰── ...
+ * ╰── button.down
+ * ]|
+ *
  * GtkSpinButtons main CSS node has the name spinbutton. It creates subnodes
  * for the entry and the two buttons, with these names. The button nodes have
  * the style classes .up and .down. The GtkEntry subnodes (if present) are put
