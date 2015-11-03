@@ -176,8 +176,6 @@ static void                 gtk_list_box_add_move_binding             (GtkBindin
 static void                 gtk_list_box_update_cursor                (GtkListBox          *box,
                                                                        GtkListBoxRow       *row,
                                                                        gboolean             grab_focus);
-static void                 gtk_list_box_select_and_activate          (GtkListBox          *box,
-                                                                       GtkListBoxRow       *row);
 static void                 gtk_list_box_update_prelight              (GtkListBox          *box,
                                                                        GtkListBoxRow       *row);
 static void                 gtk_list_box_update_active                (GtkListBox          *box,
