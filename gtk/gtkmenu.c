@@ -112,6 +112,9 @@
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindowprivate.h"
+#include "gtkcssnodeprivate.h"
+#include "gtkstylecontextprivate.h"
+#include "gtkcssstylepropertyprivate.h"
 
 #include "deprecated/gtktearoffmenuitem.h"
 
@@ -878,6 +881,7 @@ gtk_menu_class_init (GtkMenuClass *class)
                                 GTK_SCROLL_PAGE_DOWN);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_MENU_ACCESSIBLE);
+  gtk_widget_class_set_css_name (widget_class, "menu");
 }
 
 
@@ -1078,10 +1082,33 @@ gtk_menu_window_event (GtkWidget *window,
 }
 
 static void
+node_style_changed_cb (GtkCssNode  *node,
+                       GtkCssStyle *old_style,
+                       GtkCssStyle *new_style,
+                       GtkWidget   *widget)
+{
+  GtkBitmask *changes;
+  static GtkBitmask *affects_size = NULL;
+  
+  if (G_UNLIKELY (affects_size == NULL))
+    affects_size = _gtk_css_style_property_get_mask_affecting (GTK_CSS_AFFECTS_SIZE | GTK_CSS_AFFECTS_CLIP);
+  
+  changes = _gtk_bitmask_new ();
+  changes = gtk_css_style_add_difference (changes, old_style, new_style);
+  
+  if (_gtk_bitmask_intersects (changes, affects_size))
+    gtk_widget_queue_resize (widget);
+  else
+    gtk_widget_queue_draw (widget);
+  
+  _gtk_bitmask_free (changes);
+}
+
+static void
 gtk_menu_init (GtkMenu *menu)
 {
   GtkMenuPrivate *priv;
-  GtkStyleContext *context;
+  GtkCssNode *widget_node;
 
   priv = gtk_menu_get_instance_private (menu);
 
@@ -1110,10 +1137,26 @@ gtk_menu_init (GtkMenu *menu)
   priv->monitor_num = -1;
   priv->drag_start_y = -1;
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (menu));
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_MENU);
-
   _gtk_widget_set_captured_event_handler (GTK_WIDGET (menu), gtk_menu_captured_event);
+
+  widget_node = gtk_widget_get_css_node (GTK_WIDGET (menu));
+  priv->top_arrow = gtk_css_node_new ();
+  gtk_css_node_set_name (priv->top_arrow, I_("arrow"));
+  gtk_css_node_add_class (priv->top_arrow, g_quark_from_static_string (GTK_STYLE_CLASS_TOP));
+  gtk_css_node_set_parent (priv->top_arrow, widget_node);
+  gtk_css_node_set_visible (priv->top_arrow, FALSE);
+  gtk_css_node_set_state (priv->top_arrow, gtk_css_node_get_state (widget_node));
+  g_signal_connect_object (priv->top_arrow, "style-changed", G_CALLBACK (node_style_changed_cb), menu, 0);
+  g_object_unref (priv->top_arrow);
+
+  priv->bottom_arrow = gtk_css_node_new ();
+  gtk_css_node_set_name (priv->bottom_arrow, I_("arrow"));
+  gtk_css_node_add_class (priv->bottom_arrow, g_quark_from_static_string (GTK_STYLE_CLASS_BOTTOM));
+  gtk_css_node_set_parent (priv->bottom_arrow, widget_node);
+  gtk_css_node_set_visible (priv->bottom_arrow, FALSE);
+  gtk_css_node_set_state (priv->bottom_arrow, gtk_css_node_get_state (widget_node));
+  g_signal_connect_object (priv->bottom_arrow, "style-changed", G_CALLBACK (node_style_changed_cb), menu, 0);
+  g_object_unref (priv->bottom_arrow);
 }
 
 static void
@@ -3071,14 +3114,9 @@ gtk_menu_draw (GtkWidget *widget,
                         gtk_widget_get_allocated_width (widget),
                         gtk_widget_get_allocated_height (widget));
 
-      gtk_style_context_save (context);
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_BUTTON);
-
       if (priv->upper_arrow_visible && !priv->tearoff_active)
         {
-          gtk_style_context_save (context);
-          gtk_style_context_set_state (context, priv->upper_arrow_state);
-          gtk_style_context_add_class (context, GTK_STYLE_CLASS_TOP);
+          gtk_style_context_save_to_node (context, priv->top_arrow);
 
           gtk_render_background (context, cr,
                                  upper.x, upper.y,
@@ -3097,9 +3135,7 @@ gtk_menu_draw (GtkWidget *widget,
 
       if (priv->lower_arrow_visible && !priv->tearoff_active)
         {
-          gtk_style_context_save (context);
-          gtk_style_context_set_state (context, priv->lower_arrow_state);
-          gtk_style_context_add_class (context, GTK_STYLE_CLASS_BOTTOM);
+          gtk_style_context_save_to_node (context, priv->bottom_arrow);
 
           gtk_render_background (context, cr,
                                  lower.x, lower.y,
@@ -3115,8 +3151,6 @@ gtk_menu_draw (GtkWidget *widget,
 
           gtk_style_context_restore (context);
         }
-
-      gtk_style_context_restore (context);
     }
 
   if (gtk_cairo_should_draw_window (cr, priv->bin_window))
@@ -3904,6 +3938,7 @@ gtk_menu_handle_scrolling (GtkMenu *menu,
           if (arrow_state != priv->upper_arrow_state)
             {
               priv->upper_arrow_state = arrow_state;
+              gtk_css_node_set_state (priv->top_arrow, arrow_state);
 
               gdk_window_invalidate_rect (gtk_widget_get_window (GTK_WIDGET (menu)),
                                           &rect, FALSE);
@@ -3977,6 +4012,7 @@ gtk_menu_handle_scrolling (GtkMenu *menu,
           if (arrow_state != priv->lower_arrow_state)
             {
               priv->lower_arrow_state = arrow_state;
+              gtk_css_node_set_state (priv->bottom_arrow, arrow_state);
 
               gdk_window_invalidate_rect (gtk_widget_get_window (GTK_WIDGET (menu)),
                                           &rect, FALSE);
@@ -4704,10 +4740,16 @@ static void
 gtk_menu_stop_scrolling (GtkMenu *menu)
 {
   GtkMenuPrivate *priv = menu->priv;
+  GtkStateFlags state;
 
   gtk_menu_remove_scroll_timeout (menu);
   priv->upper_arrow_prelight = FALSE;
   priv->lower_arrow_prelight = FALSE;
+
+  state = gtk_css_node_get_state (priv->top_arrow);
+  gtk_css_node_set_state (priv->top_arrow, state & ~GTK_STATE_FLAG_PRELIGHT);
+  state = gtk_css_node_get_state (priv->bottom_arrow);
+  gtk_css_node_set_state (priv->bottom_arrow, state & ~GTK_STATE_FLAG_PRELIGHT);
 }
 
 static void
@@ -4870,6 +4912,11 @@ gtk_menu_scroll_to (GtkMenu *menu,
 
       y += arrow_border.top;
     }
+
+  gtk_css_node_set_visible (priv->top_arrow, priv->upper_arrow_visible);
+  gtk_css_node_set_visible (priv->bottom_arrow, priv->lower_arrow_visible);
+  gtk_css_node_set_state (priv->top_arrow, priv->upper_arrow_state);
+  gtk_css_node_set_state (priv->bottom_arrow, priv->lower_arrow_state);
 
   /* Scroll the menu: */
   if (gtk_widget_get_realized (widget))
