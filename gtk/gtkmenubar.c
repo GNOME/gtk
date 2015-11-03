@@ -31,6 +31,10 @@
  * The #GtkMenuBar is a subclass of #GtkMenuShell which contains one or
  * more #GtkMenuItems. The result is a standard menu bar which can hold
  * many menu items.
+ *
+ * # CSS nodes
+ *
+ * GtkMenuBar has a single CSS node with name menubar.
  */
 
 #include "config.h"
@@ -128,8 +132,6 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
   widget_class->size_allocate = gtk_menu_bar_size_allocate;
   widget_class->draw = gtk_menu_bar_draw;
   widget_class->hierarchy_changed = gtk_menu_bar_hierarchy_changed;
-  
-  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_MENU_BAR);
 
   menu_shell_class->submenu_placement = GTK_TOP_BOTTOM;
   menu_shell_class->get_popup_delay = gtk_menu_bar_get_popup_delay;
@@ -238,17 +240,15 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
                                                              0,
                                                              GTK_PARAM_READABLE |
                                                              G_PARAM_DEPRECATED));
+
+  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_MENU_BAR);
+  gtk_widget_class_set_css_name (widget_class, "menubar");
 }
 
 static void
 gtk_menu_bar_init (GtkMenuBar *menu_bar)
 {
-  GtkStyleContext *context;
-
   menu_bar->priv = gtk_menu_bar_get_instance_private (menu_bar);
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (menu_bar));
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_MENUBAR);
 }
 
 /**
