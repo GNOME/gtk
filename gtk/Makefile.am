@@ -442,6 +442,7 @@ gtk_private_h_sources =		\
 	gtkfilechooserprivate.h	\
 	gtkfilechooserwidgetprivate.h	\
 	gtkfilechooserutils.h	\
+	gtkfilefilterprivate.h	\
 	gtkfilesystem.h		\
 	gtkfilesystemmodel.h	\
 	gtkfontchooserprivate.h	\

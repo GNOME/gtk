@@ -67,7 +67,7 @@
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
-#include "gtkfilefilter.h"
+#include "gtkfilefilterprivate.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
 #include "gtkintl.h"
@@ -590,6 +590,53 @@ GtkFileFilterFlags
 gtk_file_filter_get_needed (GtkFileFilter *filter)
 {
   return filter->needed;
+}
+
+char **
+_gtk_file_filter_get_as_patterns (GtkFileFilter      *filter)
+{
+  GPtrArray *array;
+  GSList *tmp_list;
+
+  array = g_ptr_array_new_with_free_func (g_free);
+
+  for (tmp_list = filter->rules; tmp_list; tmp_list = tmp_list->next)
+    {
+      FilterRule *rule = tmp_list->data;
+
+      switch (rule->type)
+	{
+	case FILTER_RULE_CUSTOM:
+	case FILTER_RULE_MIME_TYPE:
+          g_ptr_array_free (array, TRUE);
+          return NULL;
+	  break;
+	case FILTER_RULE_PATTERN:
+          g_ptr_array_add (array, g_strdup (rule->u.pattern));
+	  break;
+	case FILTER_RULE_PIXBUF_FORMATS:
+	  {
+	    GSList *list;
+
+	    for (list = rule->u.pixbuf_formats; list; list = list->next)
+	      {
+		int i;
+		gchar **extensions;
+
+		extensions = gdk_pixbuf_format_get_extensions (list->data);
+
+		for (i = 0; extensions[i] != NULL; i++)
+                  g_ptr_array_add (array, g_strdup_printf ("*.%s", extensions[i]));
+
+		g_strfreev (extensions);
+	      }
+	    break;
+	  }
+	}
+    }
+
+  g_ptr_array_add (array, NULL); /* Null terminate */
+  return (char **)g_ptr_array_free (array, FALSE);
 }
 
 /**
