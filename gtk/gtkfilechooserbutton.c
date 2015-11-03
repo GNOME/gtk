@@ -3032,8 +3032,6 @@ void
 gtk_file_chooser_button_set_focus_on_click (GtkFileChooserButton *button,
 					    gboolean              focus_on_click)
 {
-  GtkFileChooserButtonPrivate *priv;
-
   g_return_if_fail (GTK_IS_FILE_CHOOSER_BUTTON (button));
 
   gtk_widget_set_focus_on_click (GTK_WIDGET (button), focus_on_click);
