@@ -96,7 +96,7 @@ gtk_inspector_strv_editor_init (GtkInspectorStrvEditor *editor)
   gtk_widget_show (editor->box);
 
   editor->button = gtk_button_new_from_icon_name ("list-add-symbolic", GTK_ICON_SIZE_MENU);
-  gtk_button_set_focus_on_click (GTK_BUTTON (editor->button), FALSE);
+  gtk_widget_set_focus_on_click (editor->button, FALSE);
   gtk_widget_set_halign (editor->button, GTK_ALIGN_END);
   gtk_widget_show (editor->button);
   g_signal_connect (editor->button, "clicked", G_CALLBACK (add_cb), editor);
