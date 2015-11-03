@@ -1460,7 +1460,7 @@ combobox {
     icon-shadow: none; }
   combobox:backdrop:insensitive {
     color: #c7c7c7; }
-  combobox .menuitem {
+  combobox menuitem {
     text-shadow: none; }
   combobox.separator.vertical {
     -GtkWidget-wide-separators: true; }
@@ -1985,12 +1985,12 @@ treeview.view header .titlebar button.titlebutton,
   box-shadow: inset 0 -1px rgba(0, 0, 0, 0.1); }
   .menubar:backdrop {
     background-color: #ededed; }
-  .menubar > .menuitem {
+  .menubar > menuitem {
     padding: 4px 8px; }
-    .menubar > .menuitem:hover {
+    .menubar > menuitem:hover {
       box-shadow: inset 0 -3px #4a90d9;
       color: #2a76c6; }
-    .menubar > .menuitem:insensitive {
+    .menubar > menuitem:insensitive {
       color: #8e9192;
       box-shadow: none; }
 
@@ -2003,30 +2003,30 @@ menu,
   .csd menu, .csd
   .menu {
     border: none; }
-  menu .menuitem,
-  .menu .menuitem {
+  menu menuitem,
+  .menu menuitem {
     text-shadow: none;
     padding: 4px; }
-    menu .menuitem:hover,
-    .menu .menuitem:hover {
+    menu menuitem:hover,
+    .menu menuitem:hover {
       color: #ffffff;
       background-color: #4a90d9; }
-    menu .menuitem:insensitive,
-    .menu .menuitem:insensitive {
+    menu menuitem:insensitive,
+    .menu menuitem:insensitive {
       color: #8e9192; }
-      menu .menuitem:insensitive:backdrop,
-      .menu .menuitem:insensitive:backdrop {
+      menu menuitem:insensitive:backdrop,
+      .menu menuitem:insensitive:backdrop {
         color: #c7c7c7; }
-    menu .menuitem:backdrop, menu .menuitem:backdrop:hover,
-    .menu .menuitem:backdrop,
-    .menu .menuitem:backdrop:hover {
+    menu menuitem:backdrop, menu menuitem:backdrop:hover,
+    .menu menuitem:backdrop,
+    .menu menuitem:backdrop:hover {
       color: #8e9192;
       background-color: white; }
-    menu .menuitem.arrow,
-    .menu .menuitem.arrow {
+    menu menuitem arrow,
+    .menu menuitem arrow {
       -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
-    menu .menuitem.arrow:dir(rtl),
-    .menu .menuitem.arrow:dir(rtl) {
+    menu menuitem arrow:dir(rtl),
+    .menu menuitem arrow:dir(rtl) {
       -gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl"); }
   menu arrow,
   .menu arrow {
@@ -2047,7 +2047,7 @@ menu,
       background-color: transparent;
       border-color: transparent; }
 
-.menuitem accelerator {
+menuitem accelerator {
   color: alpha(currentColor,0.55); }
 
 /***************
@@ -2765,17 +2765,17 @@ check:backdrop:checked:insensitive {
 .list-row:selected check:backdrop:checked:insensitive {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-checked-backdrop-insensitive.png"), url("assets/selected-checkbox-checked-backdrop-insensitive@2.png")); }
 
-.menu .menuitem.check {
+menu menuitem.check {
   -gtk-icon-source: -gtk-icontheme("checkbox-symbolic");
   color: #7a7e7f;
   icon-shadow: none; }
-  .menu .menuitem.check:active, .menu .menuitem.check:checked {
+  menu menuitem.check:active, menu menuitem.check:checked {
     -gtk-icon-source: -gtk-icontheme("checkbox-checked-symbolic"); }
-  .menu .menuitem.check:inconsistent {
+  menu menuitem.check:inconsistent {
     -gtk-icon-source: -gtk-icontheme("checkbox-mixed-symbolic"); }
-  .menu .menuitem.check:hover {
+  menu menuitem.check:hover {
     color: #ffffff; }
-  .menu .menuitem.check:insensitive {
+  menu menuitem.check:insensitive {
     color: #bebfc0; }
 
 radio {
@@ -2994,17 +2994,17 @@ radio:backdrop:checked:insensitive {
 .list-row:selected radio:backdrop:checked:insensitive {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-checked-backdrop-insensitive.png"), url("assets/selected-radio-checked-backdrop-insensitive@2.png")); }
 
-.menu .menuitem.radio {
+menu menuitem.radio {
   -gtk-icon-source: -gtk-icontheme("radio-symbolic");
   color: #7a7e7f;
   icon-shadow: none; }
-  .menu .menuitem.radio:active, .menu .menuitem.radio:checked {
+  menu menuitem.radio:active, menu menuitem.radio:checked {
     -gtk-icon-source: -gtk-icontheme("radio-checked-symbolic"); }
-  .menu .menuitem.radio:inconsistent {
+  menu menuitem.radio:inconsistent {
     -gtk-icon-source: -gtk-icontheme("radio-mixed-symbolic"); }
-  .menu .menuitem.radio:hover {
+  menu menuitem.radio:hover {
     color: #ffffff; }
-  .menu .menuitem.radio:insensitive {
+  menu menuitem.radio:insensitive {
     color: #bebfc0; }
 
 .view.check, .view.radio,
@@ -3668,12 +3668,9 @@ frame,
 GtkScrolledWindow viewport.frame {
   border-style: none; }
 
-.menuitem.separator,
 separator {
   color: rgba(0, 0, 0, 0.1); }
-  GtkFileChooserButton .menuitem.separator.vertical, button.font .menuitem.separator.vertical, GtkFileChooserButton
-  separator.vertical, button.font
-  separator.vertical {
+  GtkFileChooserButton separator.vertical, button.font separator.vertical {
     -GtkWidget-wide-separators: true; }
 
 /*********
