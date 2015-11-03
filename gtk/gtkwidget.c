@@ -4863,6 +4863,8 @@ gtk_widget_hide (GtkWidget *widget)
       if (parent)
 	gtk_widget_queue_resize (parent);
 
+      gtk_widget_queue_allocate (widget);
+
       gtk_widget_pop_verify_invariants (widget);
       g_object_unref (widget);
     }
