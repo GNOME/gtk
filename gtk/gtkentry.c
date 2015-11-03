@@ -116,6 +116,13 @@
  *
  * # CSS nodes
  *
+ * |[<!-- language="plain" -->
+ * entry
+ * ├── image.left
+ * ├── image.right
+ * ╰── progress[.pulse]
+ * ]|
+ *
  * GtkEntry has a main node with the name entry. Depending on the properties
  * of the entry, the style classes .read-only and .flat may appear. The style
  * classes .warning and .error may also be used with entries.
