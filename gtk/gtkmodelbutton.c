@@ -143,22 +143,68 @@ enum
 
 static GParamSpec *properties[LAST_PROPERTY] = { NULL, };
 
+static gboolean
+indicator_is_left (GtkWidget *widget)
+{
+  GtkModelButton *button = GTK_MODEL_BUTTON (widget);
+
+  return ((gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL && !button->inverted) ||
+          (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR && button->inverted));
+}
+
 static void
 gtk_model_button_update_state (GtkModelButton *button)
 {
   GtkStateFlags state;
 
-  if (button->role == GTK_BUTTON_ROLE_NORMAL)
-    return;
-
   state = gtk_widget_get_state_flags (GTK_WIDGET (button));
 
-  state &= ~GTK_STATE_FLAG_CHECKED;
+  if (button->role == GTK_BUTTON_ROLE_CHECK ||
+      button->role == GTK_BUTTON_ROLE_RADIO)
+    {
+      state &= ~GTK_STATE_FLAG_CHECKED;
 
-  if (button->active && !button->menu_name)
-    state |= GTK_STATE_FLAG_CHECKED;
+      if (button->active && !button->menu_name)
+        state |= GTK_STATE_FLAG_CHECKED;
+    }
+
+  if (button->menu_name)
+    {
+      state = state & ~(GTK_STATE_FLAG_DIR_LTR|GTK_STATE_FLAG_DIR_RTL);
+      if (indicator_is_left (GTK_WIDGET (button)))
+        state = state | GTK_STATE_FLAG_DIR_RTL;
+      else
+        state = state | GTK_STATE_FLAG_DIR_LTR;
+    }
 
   gtk_css_node_set_state (button->indicator_node, state);
+}
+
+static void
+update_node_ordering (GtkModelButton *button)
+{
+  GtkCssNode *widget_node, *node;
+
+  widget_node = gtk_widget_get_css_node (GTK_WIDGET (button));
+
+  if (indicator_is_left (GTK_WIDGET (button)))
+    {
+      gtk_css_node_add_class (button->indicator_node, g_quark_from_static_string (GTK_STYLE_CLASS_LEFT));
+      gtk_css_node_remove_class (button->indicator_node, g_quark_from_static_string (GTK_STYLE_CLASS_RIGHT));
+
+      node = gtk_css_node_get_first_child (widget_node);
+      if (node != button->indicator_node)
+        gtk_css_node_insert_before (widget_node, button->indicator_node, node);
+    }
+  else
+    {
+      gtk_css_node_remove_class (button->indicator_node, g_quark_from_static_string (GTK_STYLE_CLASS_LEFT));
+      gtk_css_node_add_class (button->indicator_node, g_quark_from_static_string (GTK_STYLE_CLASS_RIGHT));
+
+      node = gtk_css_node_get_last_child (widget_node);
+      if (node != button->indicator_node)
+        gtk_css_node_insert_after (widget_node, button->indicator_node, node);
+    }
 }
 
 static void
@@ -169,26 +215,40 @@ gtk_model_button_state_flags_changed (GtkWidget     *widget,
 }
 
 static void
-gtk_model_button_set_role (GtkModelButton *button,
-                           GtkButtonRole   role)
+gtk_model_button_direction_changed (GtkWidget        *widget,
+                                    GtkTextDirection  previous_dir)
+{
+  GtkModelButton *button = GTK_MODEL_BUTTON (widget);
+
+  gtk_model_button_update_state (button);
+  update_node_ordering (button);
+
+  GTK_WIDGET_CLASS (gtk_model_button_parent_class)->direction_changed (widget, previous_dir);
+}
+
+static void
+update_node_name (GtkModelButton *button)
 {
   AtkObject *accessible;
   AtkRole a11y_role;
   const gchar *name;
   gboolean visible;
 
-  if (role == button->role)
-    return;
-
-  button->role = role;
-
   accessible = gtk_widget_get_accessible (GTK_WIDGET (button));
-  switch (role)
+  switch (button->role)
     {
     case GTK_BUTTON_ROLE_NORMAL:
       a11y_role = ATK_ROLE_PUSH_BUTTON;
-      name = I_("check");
-      visible = FALSE;
+      if (button->menu_name)
+        {
+          name = I_("arrow");
+          visible = TRUE;
+        }
+      else
+        {
+          name = I_("check");
+          visible = FALSE;
+        }
       break;
 
     case GTK_BUTTON_ROLE_CHECK:
@@ -210,6 +270,18 @@ gtk_model_button_set_role (GtkModelButton *button,
   atk_object_set_role (accessible, a11y_role);
   gtk_css_node_set_name (button->indicator_node, name);
   gtk_css_node_set_visible (button->indicator_node, visible);
+}
+
+static void
+gtk_model_button_set_role (GtkModelButton *button,
+                           GtkButtonRole   role)
+{
+  if (role == button->role)
+    return;
+
+  button->role = role;
+
+  update_node_name (button);
 
   gtk_model_button_update_state (button);
   gtk_widget_queue_draw (GTK_WIDGET (button));
@@ -266,7 +338,15 @@ gtk_model_button_set_menu_name (GtkModelButton *button,
 {
   g_free (button->menu_name);
   button->menu_name = g_strdup (menu_name);
+
+  update_node_name (button);
   gtk_model_button_update_state (button);
+
+  if (menu_name)
+    gtk_css_node_add_class (button->indicator_node, g_quark_from_static_string (GTK_STYLE_CLASS_EXPANDER));
+  else
+    gtk_css_node_remove_class (button->indicator_node, g_quark_from_static_string (GTK_STYLE_CLASS_EXPANDER));
+
   gtk_widget_queue_resize (GTK_WIDGET (button));
   g_object_notify_by_pspec (G_OBJECT (button), properties[PROP_MENU_NAME]);
 }
@@ -279,6 +359,8 @@ gtk_model_button_set_inverted (GtkModelButton *button,
     return;
 
   button->inverted = inverted;
+  gtk_model_button_update_state (button);
+  update_node_ordering (button);
   gtk_widget_queue_resize (GTK_WIDGET (button));
   g_object_notify_by_pspec (G_OBJECT (button), properties[PROP_INVERTED]);
 }
@@ -647,16 +729,6 @@ gtk_model_button_get_preferred_height (GtkWidget *widget,
                                                                 NULL, NULL);
 }
 
-static gboolean
-indicator_is_left (GtkWidget *widget)
-{
-  GtkModelButton *button = GTK_MODEL_BUTTON (widget);
-
-  return ((gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL && !button->inverted) ||
-          (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR && button->inverted));
-   
-}
-
 static void
 gtk_model_button_size_allocate (GtkWidget     *widget,
                                 GtkAllocation *allocation)
@@ -764,18 +836,7 @@ gtk_model_button_draw (GtkWidget *widget,
 
   if (model_button->menu_name)
     {
-      GtkStateFlags state;
-
-      gtk_style_context_save_named (context, "arrow");
-      state = gtk_style_context_get_state (context);
-      state = state & ~(GTK_STATE_FLAG_DIR_LTR|GTK_STATE_FLAG_DIR_RTL);
-      if (indicator_is_left (widget))
-        state = state | GTK_STATE_FLAG_DIR_RTL;
-      else
-        state = state | GTK_STATE_FLAG_DIR_LTR;
-
-      gtk_style_context_set_state (context, state);
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_EXPANDER);
+      gtk_style_context_save_to_node (context, model_button->indicator_node);
       gtk_render_expander (context, cr, x, y, indicator_size, indicator_size);
       gtk_style_context_restore (context);
     }
@@ -863,6 +924,7 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
   widget_class->draw = gtk_model_button_draw;
   widget_class->destroy = gtk_model_button_destroy;
   widget_class->state_flags_changed = gtk_model_button_state_flags_changed;
+  widget_class->direction_changed = gtk_model_button_direction_changed;
 
   button_class->clicked = gtk_model_button_clicked;
 
