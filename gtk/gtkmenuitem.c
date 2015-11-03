@@ -90,6 +90,12 @@
  *
  * # CSS nodes
  *
+ * |[<!-- language="plain" -->
+ * menuitem
+ * ├── ...
+ * ╰── [arrow.right]
+ * ]|
+ *
  * GtkMenuItem has a single CSS node with name menuitem. If the menuitem
  * has a submenu, it gets another CSS node with name arrow, which has
  * the .left or .right style class.

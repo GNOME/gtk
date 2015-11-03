@@ -51,6 +51,12 @@
  *
  * # CSS nodes
  *
+ * |[<!-- language="plain" -->
+ * menuitem
+ * ├── ...
+ * ╰── check.right
+ * ]|
+ *
  * GtkCheckMenuItem has a main CSS node with name menuitem, and a subnode
  * with name check, which gets the .left or .right style class.
  */
