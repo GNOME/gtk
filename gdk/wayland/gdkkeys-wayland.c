@@ -264,6 +264,12 @@ get_xkb_modifiers (struct xkb_keymap *xkb_keymap,
     mods |= 1 << xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_LOGO);
   if (state & GDK_MOD5_MASK)
     mods |= 1 << xkb_keymap_mod_get_index (xkb_keymap, "Mod5");
+  if (state & GDK_SUPER_MASK)
+    mods |= 1 << xkb_keymap_mod_get_index (xkb_keymap, "Super");
+  if (state & GDK_HYPER_MASK)
+    mods |= 1 << xkb_keymap_mod_get_index (xkb_keymap, "Hyper");
+  if (state & GDK_META_MASK)
+    mods |= 1 << xkb_keymap_mod_get_index (xkb_keymap, "Meta");
 
   return mods;
 }
@@ -290,6 +296,12 @@ get_gdk_modifiers (struct xkb_keymap *xkb_keymap,
     state |= GDK_MOD4_MASK;
   if (mods & (1 << xkb_keymap_mod_get_index (xkb_keymap, "Mod5")))
     state |= GDK_MOD5_MASK;
+  if (mods & (1 << xkb_keymap_mod_get_index (xkb_keymap, "Super")))
+    state |= GDK_SUPER_MASK;
+  if (mods & (1 << xkb_keymap_mod_get_index (xkb_keymap, "Hyper")))
+    state |= GDK_HYPER_MASK;
+  if (mods & (1 << xkb_keymap_mod_get_index (xkb_keymap, "Meta")))
+    state |= GDK_META_MASK;
 
   return state;
 }
