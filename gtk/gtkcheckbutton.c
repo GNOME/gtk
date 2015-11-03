@@ -169,16 +169,31 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
     {
       gtk_button_set_alignment (button, 0.0, 0.5);
       gtk_css_node_set_visible (priv->indicator_node, TRUE);
-      if (GTK_IS_CHECK_BUTTON (button))
-        gtk_css_node_set_name (widget_node, I_("checkbutton"));
-      else if (GTK_IS_RADIO_BUTTON (button))
-        gtk_css_node_set_name (widget_node, I_("radiobutton"));
+      if (GTK_IS_RADIO_BUTTON (button))
+        {
+          gtk_css_node_remove_class (widget_node, g_quark_from_static_string ("radio"));
+          gtk_css_node_set_name (widget_node, I_("radiobutton"));
+        }
+      else if (GTK_IS_CHECK_BUTTON (button))
+        {
+          gtk_css_node_remove_class (widget_node, g_quark_from_static_string ("check"));
+          gtk_css_node_set_name (widget_node, I_("checkbutton"));
+        }
     }
   else
     {
       gtk_button_set_alignment (button, 0.5, 0.5);
       gtk_css_node_set_visible (priv->indicator_node, FALSE);
-      gtk_css_node_set_name (widget_node, I_("button"));
+      if (GTK_IS_RADIO_BUTTON (button))
+        {
+          gtk_css_node_add_class (widget_node, g_quark_from_static_string ("radio"));
+          gtk_css_node_set_name (widget_node, I_("button"));
+        }
+      else if (GTK_IS_CHECK_BUTTON (button))
+        {
+          gtk_css_node_add_class (widget_node, g_quark_from_static_string ("check"));
+          gtk_css_node_set_name (widget_node, I_("button"));
+        }
     }
 G_GNUC_END_IGNORE_DEPRECATIONS
 }
