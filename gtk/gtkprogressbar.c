@@ -68,6 +68,11 @@
  *
  * # CSS nodes
  *
+ * |[<!-- language="plain" -->
+ * progressbar
+ * ╰── progress[.pulse]
+ * ]|
+ *
  * GtkProgressBar has a main CSS node with name progressbar and a subnode
  * with name progress. The subnode has the style class .pulse when in activity
  * mode. It gets the style classes .left, .right, .top or .bottom added when
