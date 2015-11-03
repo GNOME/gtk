@@ -1892,7 +1892,7 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
                            P_("Custom Title"),
                            P_("Custom title widget to display"),
                            GTK_TYPE_WIDGET,
-                           G_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_STATIC_STRINGS);
+                           G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS);
 
   header_bar_props[PROP_SPACING] =
       g_param_spec_int ("spacing",
