@@ -82,6 +82,12 @@
  *   return FALSE;
  * }
  * ]|
+ *
+ * # CSS nodes
+ *
+ * The main CSS node of GtkMenu has name menu, and there are two subnodes
+ * with name arrow, for scrolling menu arrows. These subnodes get the
+ * .top and .bottom style classes.
  */
 
 #include "config.h"
