@@ -1326,23 +1326,32 @@ treeview.view.progressbar {
       color: gray;
       box-shadow: none; }
 
+menu,
 .menu {
   padding: 0px;
   background-color: #fff; }
+  menu .menuitem,
   .menu .menuitem {
     padding: 4px; }
+    menu .menuitem:hover,
     .menu .menuitem:hover {
       color: #fff;
       background-color: #000; }
+    menu .menuitem:insensitive,
     .menu .menuitem:insensitive {
       color: gray; }
+      menu .menuitem:insensitive:backdrop,
       .menu .menuitem:insensitive:backdrop {
         color: gray; }
-    .menu .menuitem:backdrop, .menu .menuitem:backdrop:hover {
+    menu .menuitem:backdrop, menu .menuitem:backdrop:hover,
+    .menu .menuitem:backdrop,
+    .menu .menuitem:backdrop:hover {
       color: #000;
       background-color: #fff; }
+    menu .menuitem.arrow,
     .menu .menuitem.arrow {
       -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
+    menu .menuitem.arrow:dir(rtl),
     .menu .menuitem.arrow:dir(rtl) {
       -gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl"); }
 
