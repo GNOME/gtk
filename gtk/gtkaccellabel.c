@@ -97,6 +97,11 @@
  *
  * # CSS nodes
  *
+ * |[<!-- language="plain" -->
+ * label
+ * ╰── accelerator
+ * ]|
+ *
  * Like #GtkLabel, GtkAccelLabel has a main CSS node with the name label.
  * It adds a subnode with name accelerator.
  */
