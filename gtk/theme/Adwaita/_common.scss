@@ -1466,6 +1466,7 @@ treeview.view {
   }
 }
 
+menu,
 .menu {
   margin: 4px;
   padding: 0px;
@@ -1491,7 +1492,7 @@ treeview.view {
     &.arrow { -gtk-icon-source: -gtk-icontheme('pan-end-symbolic'); }
     &.arrow:dir(rtl) {-gtk-icon-source:-gtk-icontheme('pan-end-symbolic-rtl'); }
   }
-  & button { // overlow buttons
+  & arrow { // overlow buttons
     @extend %undecorated_button;
     border-style: none;
     border-radius: 0;

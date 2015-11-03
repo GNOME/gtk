@@ -1145,9 +1145,8 @@ modelbutton.flat,
 .menuitem.button.flat:backdrop,
 .menuitem.button.flat:backdrop:hover, button:link, headerbar button.titlebutton:link,
 .titlebar button.titlebutton:link, button:visited, headerbar button.titlebutton:visited,
-.titlebar button.titlebutton:visited, button:link:hover, button:link:active, button:link:checked, button:visited:hover, button:visited:active, button:visited:checked, button:link:backdrop, button:visited:backdrop, .menu button, .menu headerbar button.titlebutton, headerbar .menu button.titlebutton,
-.menu .titlebar button.titlebutton,
-.titlebar .menu button.titlebutton, notebook tab button, notebook tab headerbar button.titlebutton, headerbar notebook tab button.titlebutton,
+.titlebar button.titlebutton:visited, button:link:hover, button:link:active, button:link:checked, button:visited:hover, button:visited:active, button:visited:checked, button:link:backdrop, button:visited:backdrop, menu arrow,
+.menu arrow, notebook tab button, notebook tab headerbar button.titlebutton, headerbar notebook tab button.titlebutton,
 notebook tab .titlebar button.titlebutton,
 .titlebar notebook tab button.titlebutton, .app-notification button.flat, .app-notification .sidebar-button.button, .app-notification headerbar button.titlebutton, headerbar .app-notification button.titlebutton,
 .app-notification .titlebar button.titlebutton,
@@ -1995,42 +1994,55 @@ treeview.view header .titlebar button.titlebutton,
       color: #8e9192;
       box-shadow: none; }
 
+menu,
 .menu {
   margin: 4px;
   padding: 0px;
   background-color: #ffffff;
   border: 1px solid #a1a1a1; }
-  .csd .menu {
+  .csd menu, .csd
+  .menu {
     border: none; }
+  menu .menuitem,
   .menu .menuitem {
     text-shadow: none;
     padding: 4px; }
+    menu .menuitem:hover,
     .menu .menuitem:hover {
       color: #ffffff;
       background-color: #4a90d9; }
+    menu .menuitem:insensitive,
     .menu .menuitem:insensitive {
       color: #8e9192; }
+      menu .menuitem:insensitive:backdrop,
       .menu .menuitem:insensitive:backdrop {
         color: #c7c7c7; }
-    .menu .menuitem:backdrop, .menu .menuitem:backdrop:hover {
+    menu .menuitem:backdrop, menu .menuitem:backdrop:hover,
+    .menu .menuitem:backdrop,
+    .menu .menuitem:backdrop:hover {
       color: #8e9192;
       background-color: white; }
+    menu .menuitem.arrow,
     .menu .menuitem.arrow {
       -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
+    menu .menuitem.arrow:dir(rtl),
     .menu .menuitem.arrow:dir(rtl) {
       -gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl"); }
-  .menu button, .menu headerbar button.titlebutton, headerbar .menu button.titlebutton,
-  .menu .titlebar button.titlebutton,
-  .titlebar .menu button.titlebutton {
+  menu arrow,
+  .menu arrow {
     border-style: none;
     border-radius: 0; }
-    .menu button.top {
+    menu arrow.top,
+    .menu arrow.top {
       border-bottom: 1px solid #eaebeb; }
-    .menu button.bottom {
+    menu arrow.bottom,
+    .menu arrow.bottom {
       border-top: 1px solid #eaebeb; }
-    .menu button:hover {
+    menu arrow:hover,
+    .menu arrow:hover {
       background-color: #eaebeb; }
-    .menu button:insensitive {
+    menu arrow:insensitive,
+    .menu arrow:insensitive {
       color: transparent;
       background-color: transparent;
       border-color: transparent; }
