@@ -78,6 +78,11 @@
  *
  * # CSS nodes
  *
+ * |[<!-- language="plain" -->
+ * paned
+ * ╰── separator
+ * ]|
+ *
  * GtkPaned has a main CSS node with name paned, and a subnode for
  * the separator with name separator.
  *
