@@ -73,6 +73,15 @@
  *
  * # CSS nodes
  *
+ * |[<!-- language="plain" -->
+ * textview.view
+ * ├── border.top
+ * ├── border.left
+ * ├── text
+ * ├── border.right
+ * ╰── border.bottom
+ * ]|
+ *
  * GtkTextView has a main css node with name textview and style class .view,
  * and subnodes for each of the border windows, and the main text area,
  * with names border and text, respectively. The border nodes each get
