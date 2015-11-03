@@ -90,8 +90,13 @@
  *
  * # CSS nodes
  *
+ * |[<!-- language="plain" -->
+ * combobox
+ * ╰── button.combo
+ * ]|
+ *
  * GtkComboBox has a single CSS node with name combobox. It adds the
- * .combo style class to the button (and entry) that it contains.
+ * .combo style class to the button that it contains.
  */
 
 
