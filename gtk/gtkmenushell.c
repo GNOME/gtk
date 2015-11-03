@@ -134,8 +134,6 @@ static void gtk_menu_shell_screen_changed    (GtkWidget         *widget,
                                               GdkScreen         *previous_screen);
 static gboolean gtk_menu_shell_grab_broken       (GtkWidget         *widget,
                                               GdkEventGrabBroken *event);
-static gboolean gtk_menu_shell_draw          (GtkWidget         *widget,
-                                              cairo_t           *cr);
 static void gtk_menu_shell_add               (GtkContainer      *container,
                                               GtkWidget         *widget);
 static void gtk_menu_shell_remove            (GtkContainer      *container,
@@ -201,7 +199,6 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
   widget_class->enter_notify_event = gtk_menu_shell_enter_notify;
   widget_class->leave_notify_event = gtk_menu_shell_leave_notify;
   widget_class->screen_changed = gtk_menu_shell_screen_changed;
-  widget_class->draw = gtk_menu_shell_draw;
 
   container_class->add = gtk_menu_shell_add;
   container_class->remove = gtk_menu_shell_remove;
@@ -615,18 +612,6 @@ gtk_menu_shell_realize (GtkWidget *widget)
                            &attributes, attributes_mask);
   gtk_widget_set_window (widget, window);
   gtk_widget_register_window (widget, window);
-}
-
-static gboolean
-gtk_menu_shell_draw (GtkWidget *widget,
-		     cairo_t   *cr)
-{
-  gtk_render_background (gtk_widget_get_style_context (widget), cr,
-                         0, 0,
-                         gtk_widget_get_allocated_width (widget),
-                         gtk_widget_get_allocated_height (widget));
-
-  return GTK_WIDGET_CLASS (gtk_menu_shell_parent_class)->draw (widget, cr);
 }
 
 static void
