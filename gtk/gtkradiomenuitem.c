@@ -61,6 +61,11 @@
  *     gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (item), TRUE);
  * }
  * ]|
+ *
+ * # CSS nodes
+ *
+ * GtkRadioMenuItem has a main CSS node with name menuitem, and a subnode
+ * with name radio, which gets the .left or .right style class.
  */
 
 struct _GtkRadioMenuItemPrivate

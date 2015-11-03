@@ -36,6 +36,10 @@
  * The #GtkSeparatorMenuItem is a separator used to group
  * items within a menu. It displays a horizontal line with a shadow to
  * make it appear sunken into the interface.
+ *
+ * # CSS nodes
+ *
+ * GtkSeparatorMenuItem has a single CSS node with name separator.
  */
 
 G_DEFINE_TYPE (GtkSeparatorMenuItem, gtk_separator_menu_item, GTK_TYPE_MENU_ITEM)
@@ -46,9 +50,10 @@ gtk_separator_menu_item_class_init (GtkSeparatorMenuItemClass *class)
   GTK_CONTAINER_CLASS (class)->child_type = NULL;
 
   gtk_widget_class_set_accessible_role (GTK_WIDGET_CLASS (class), ATK_ROLE_SEPARATOR);
+  gtk_widget_class_set_css_name (GTK_WIDGET_CLASS (class), "separator");
 }
 
-static void 
+static void
 gtk_separator_menu_item_init (GtkSeparatorMenuItem *item)
 {
 }
