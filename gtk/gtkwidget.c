@@ -9649,7 +9649,7 @@ gtk_widget_set_parent (GtkWidget *widget,
 	  _gtk_widget_get_mapped (priv->parent))
 	gtk_widget_map (widget);
 
-      gtk_widget_queue_resize (widget);
+      gtk_widget_queue_resize (priv->parent);
     }
 
   /* child may cause parent's expand to change, if the child is
