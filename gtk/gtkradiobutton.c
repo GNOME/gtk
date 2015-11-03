@@ -74,8 +74,18 @@
  *
  * # CSS nodes
  *
+ * |[<!-- language="plain" -->
+ * radiobutton
+ * ╰── radio
+ * ]|
+ *
  * A GtkRadioButton with indicator (see gtk_toggle_button_set_mode()) has a
  * main CSS node with name radiobutton and a subnode with name radio.
+ *
+ * |[<!-- language="plain" -->
+ * button.radio
+ * ╰── [radio]
+ * ]|
  *
  * A GtkRadioButton without indicator changes the name of its main node
  * to button and adds a .radio style class to it. The subnode is invisible
