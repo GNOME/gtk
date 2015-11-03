@@ -39,7 +39,6 @@ struct _GtkMenuItemPrivate
   GtkAction *action;
   GtkActionHelper *action_helper;
 
-  guint show_submenu_indicator : 1;
   guint submenu_placement      : 1;
   guint submenu_direction      : 1;
   guint right_justify          : 1;
