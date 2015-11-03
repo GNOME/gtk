@@ -470,7 +470,7 @@ gtk_stack_class_init (GtkStackClass *klass)
   stack_props[PROP_INTERPOLATE_SIZE] =
       g_param_spec_boolean ("interpolate-size", P_("Interpolate size"), P_("Whether or not the size should smoothly change when changing between differently sized children"),
                             FALSE,
-                            GTK_PARAM_READABLE);
+                            GTK_PARAM_READWRITE);
 
 
   g_object_class_install_properties (object_class, LAST_PROP, stack_props);
