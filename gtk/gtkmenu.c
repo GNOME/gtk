@@ -1444,6 +1444,7 @@ gtk_menu_real_insert (GtkMenuShell *menu_shell,
   GtkMenu *menu = GTK_MENU (menu_shell);
   GtkMenuPrivate *priv = menu->priv;
   AttachInfo *ai = get_attach_info (child);
+  GtkCssNode *widget_node, *child_node;
 
   ai->left_attach = -1;
   ai->right_attach = -1;
@@ -1452,6 +1453,10 @@ gtk_menu_real_insert (GtkMenuShell *menu_shell,
 
   if (gtk_widget_get_realized (GTK_WIDGET (menu_shell)))
     gtk_widget_set_parent_window (child, priv->bin_window);
+
+  widget_node = gtk_widget_get_css_node (GTK_WIDGET (menu));
+  child_node = gtk_widget_get_css_node (child);
+  gtk_css_node_insert_before (widget_node, child_node, priv->bottom_arrow);
 
   GTK_MENU_SHELL_CLASS (gtk_menu_parent_class)->insert (menu_shell, child, position);
 
@@ -5186,6 +5191,7 @@ gtk_menu_attach (GtkMenu   *menu,
 {
   GtkMenuShell *menu_shell;
   GtkWidget *parent;
+  GtkCssNode *widget_node, *child_node;
 
   g_return_if_fail (GTK_IS_MENU (menu));
   g_return_if_fail (GTK_IS_MENU_ITEM (child));
@@ -5206,6 +5212,10 @@ gtk_menu_attach (GtkMenu   *menu,
       ai->bottom_attach = bottom_attach;
 
       menu_shell->priv->children = g_list_append (menu_shell->priv->children, child);
+
+      widget_node = gtk_widget_get_css_node (GTK_WIDGET (menu));
+      child_node = gtk_widget_get_css_node (child);
+      gtk_css_node_insert_before (widget_node, child_node, menu->priv->bottom_arrow);
 
       gtk_widget_set_parent (child, GTK_WIDGET (menu));
 
