@@ -46,6 +46,10 @@
  * setting.
  *
  * The GtkStack widget was added in GTK+ 3.10.
+ *
+ * # CSS nodes
+ *
+ * GtkStack has a single CSS node named stack.
  */
 
 /**
@@ -522,6 +526,8 @@ gtk_stack_class_init (GtkStackClass *klass)
                          GTK_PARAM_READWRITE);
 
   gtk_container_class_install_child_properties (container_class, LAST_CHILD_PROP, stack_child_props);
+
+  gtk_widget_class_set_css_name (widget_class, "stack");
 }
 
 /**
