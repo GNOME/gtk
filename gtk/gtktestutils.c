@@ -219,6 +219,8 @@ gtk_test_widget_send_key (GtkWidget      *widget,
  * Returns: whether all actions neccessary for the button click simulation were carried out successfully.
  *
  * Since: 2.14
+ *
+ * Deprecated: 3.20: This testing infrastructure is phased out in favor of reftests.
  **/
 gboolean
 gtk_test_widget_click (GtkWidget      *widget,
@@ -250,6 +252,8 @@ gtk_test_widget_click (GtkWidget      *widget,
  * Returns: whether all actions neccessary for the button click simulation were carried out successfully.
  *
  * Since: 2.14
+ *
+ * Deprecated: 3.20: This testing infrastructure is phased out in favor of reftests.
  **/
 gboolean
 gtk_test_spin_button_click (GtkSpinButton  *spinner,
@@ -464,6 +468,8 @@ gtk_test_find_widget (GtkWidget    *widget,
  * @percentage argument.
  *
  * Since: 2.14
+ *
+ * Deprecated: 3.20: This testing infrastructure is phased out in favor of reftests.
  **/
 void
 gtk_test_slider_set_perc (GtkWidget      *widget,
@@ -496,6 +502,8 @@ gtk_test_slider_set_perc (GtkWidget      *widget,
  * Returns: gtk_adjustment_get_value (adjustment) for an adjustment belonging to @widget.
  *
  * Since: 2.14
+ *
+ * Deprecated: 3.20: This testing infrastructure is phased out in favor of reftests.
  **/
 double
 gtk_test_slider_get_value (GtkWidget *widget)
@@ -517,6 +525,8 @@ gtk_test_slider_get_value (GtkWidget *widget)
  * GtkEditable (entry and text widgets) or GtkTextView.
  *
  * Since: 2.14
+ *
+ * Deprecated: 3.20: This testing infrastructure is phased out in favor of reftests.
  **/
 void
 gtk_test_text_set (GtkWidget   *widget,
@@ -547,6 +557,8 @@ gtk_test_text_set (GtkWidget   *widget,
  * Returns: new 0-terminated C string, needs to be released with g_free().
  *
  * Since: 2.14
+ *
+ * Deprecated: 3.20: This testing infrastructure is phased out in favor of reftests.
  **/
 gchar*
 gtk_test_text_get (GtkWidget *widget)
@@ -583,6 +595,8 @@ gtk_test_text_get (GtkWidget *widget)
  * Returns: (transfer none): a newly created widget.
  *
  * Since: 2.14
+ *
+ * Deprecated: 3.20: This testing infrastructure is phased out in favor of reftests.
  */
 GtkWidget*
 gtk_test_create_widget (GType        widget_type,
@@ -641,6 +655,8 @@ test_increment_intp (int *intp)
  * Returns: (transfer full): a widget pointer to the newly created GtkWindow.
  *
  * Since: 2.14
+ *
+ * Deprecated: 3.20: This testing infrastructure is phased out in favor of reftests.
  **/
 GtkWidget*
 gtk_test_display_button_window (const gchar *window_title,
@@ -683,6 +699,8 @@ gtk_test_display_button_window (const gchar *window_title,
  * Returns: (transfer none): a widget pointer to the newly created GtkWindow.
  *
  * Since: 2.14
+ *
+ * Deprecated: 3.20: This testing infrastructure is phased out in favor of reftests.
  **/
 GtkWidget*
 gtk_test_create_simple_window (const gchar *window_title,
