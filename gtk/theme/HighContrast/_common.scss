@@ -1756,19 +1756,25 @@ progressbar {
   padding: 0;
   font-size: 83%;
   color: $fg_color;
-  border-width: 1px;
-  border-style: solid;
-  border-radius: 3px;
-  border-color: $borders_color;
-  background-color: mix($borders_color,$bg_color, 35%);
-  box-shadow: inset 1px 1px transparentize(black, 0.9);
-  &:backdrop{
+
+  &:backdrop {
     color: $insensitive_fg_color;
-    border-color: $backdrop_borders_color;
-    background-color: mix($backdrop_borders_color,$backdrop_bg_color, 35%);
-    box-shadow: 0 1px transparentize(white,1);
   }
-  &.osd {
+
+  trough {
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 3px;
+    border-color: $borders_color;
+    background-color: mix($borders_color,$bg_color, 35%);
+    box-shadow: inset 1px 1px transparentize(black, 0.9);
+    &:backdrop {
+      border-color: $backdrop_borders_color;
+      background-color: mix($backdrop_borders_color,$backdrop_bg_color, 35%);
+      box-shadow: 0 1px transparentize(white,1);
+    }
+  }
+  &.osd trough {
     background-color: transparent;
     box-shadow: none;
     border-width: 0;

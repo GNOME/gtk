@@ -1940,19 +1940,21 @@ scale,
 progressbar {
   padding: 0;
   font-size: 83%;
-  color: #000;
-  border-width: 1px;
-  border-style: solid;
-  border-radius: 3px;
-  border-color: gray;
-  background-color: lightgray;
-  box-shadow: inset 1px 1px rgba(0, 0, 0, 0.1); }
+  color: #000; }
   progressbar:backdrop {
-    color: gray;
-    border-color: #8d8d8d;
-    background-color: #d7d7d7;
-    box-shadow: 0 1px rgba(255, 255, 255, 0); }
-  progressbar.osd {
+    color: gray; }
+  progressbar trough {
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 3px;
+    border-color: gray;
+    background-color: lightgray;
+    box-shadow: inset 1px 1px rgba(0, 0, 0, 0.1); }
+    progressbar trough:backdrop {
+      border-color: #8d8d8d;
+      background-color: #d7d7d7;
+      box-shadow: 0 1px rgba(255, 255, 255, 0); }
+  progressbar.osd trough {
     background-color: transparent;
     box-shadow: none;
     border-width: 0; }
