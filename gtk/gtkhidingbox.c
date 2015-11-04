@@ -59,6 +59,8 @@ enum {
   LAST_PROP
 };
 
+static GParamSpec *hiding_box_properties[LAST_PROP] = { NULL, };
+
 static void
 gtk_hiding_box_set_property (GObject      *object,
                              guint         prop_id,
@@ -392,15 +394,16 @@ gtk_hiding_box_class_init (GtkHidingBoxClass *class)
   container_class->remove = gtk_hiding_box_remove;
   container_class->forall = gtk_hiding_box_forall;
 
-  g_object_class_install_property (object_class,
-                                   PROP_SPACING,
-                                   g_param_spec_int ("spacing",
-                                                     /* TRANSLATORS: Here are 2 strings the same as in gtk/gtkbox.c
-                                                        in GTK+ project. Please use the same translation. */
-                                                     _("Spacing"),
-                                                     _("The amount of space between children"),
-                                                     0, G_MAXINT, 0,
-                                                     G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  hiding_box_properties[PROP_SPACING] =
+           g_param_spec_int ("spacing",
+                             /* TRANSLATORS: Here are 2 strings the same as in gtk/gtkbox.c
+                                in GTK+ project. Please use the same translation. */
+                             _("Spacing"),
+                             _("The amount of space between children"),
+                             0, G_MAXINT, 0,
+                             G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (object_class, LAST_PROP, hiding_box_properties);
 }
 
 /**
