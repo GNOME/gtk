@@ -486,6 +486,7 @@ gtk_private_h_sources =		\
 	gtkgestureswipeprivate.h	\
 	gtkgesturezoomprivate.h	\
 	gtkheaderbarprivate.h	\
+	gtkhidingboxprivate.h	\
 	gtkhslaprivate.h	\
 	gtkiconcache.h		\
 	gtkiconhelperprivate.h  \
@@ -779,6 +780,7 @@ gtk_base_c_sources = 		\
 	gtkglarea.c		\
 	gtkgrid.c		\
 	gtkheaderbar.c		\
+	gtkhidingbox.c		\
 	gtkhsla.c		\
 	gtkicon.c		\
 	gtkiconcache.c		\
