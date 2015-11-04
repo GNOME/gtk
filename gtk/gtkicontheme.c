@@ -1995,6 +1995,12 @@ choose_icon (GtkIconTheme       *icon_theme,
  * can then be rendered into a pixbuf using
  * gtk_icon_info_load_icon(). (gtk_icon_theme_load_icon()
  * combines these two steps if all you need is the pixbuf.)
+ *
+ * When rendering on displays with high pixel densities you should not
+ * use a @size multiplied by the scaling factor returned by functions
+ * like gdk_window_get_scale_factor(). Instead, you should use
+ * gtk_icon_theme_lookup_icon_for_scale(), as the assets loaded
+ * for a given scaling factor may be different.
  * 
  * Returns: (nullable) (transfer full): a #GtkIconInfo object
  *     containing information about the icon, or %NULL if the
@@ -5378,6 +5384,12 @@ find_builtin_icon (const gchar *icon_name,
  * Looks up an icon and returns a #GtkIconInfo containing information
  * such as the filename of the icon. The icon can then be rendered
  * into a pixbuf using gtk_icon_info_load_icon().
+ *
+ * When rendering on displays with high pixel densities you should not
+ * use a @size multiplied by the scaling factor returned by functions
+ * like gdk_window_get_scale_factor(). Instead, you should use
+ * gtk_icon_theme_lookup_by_gicon_for_scale(), as the assets loaded
+ * for a given scaling factor may be different.
  *
  * Returns: (nullable) (transfer full): a #GtkIconInfo containing
  *     information about the icon, or %NULL if the icon wasn’t
