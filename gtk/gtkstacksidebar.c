@@ -44,6 +44,10 @@
  * can use gtk_stack_sidebar_set_stack() to connect the #GtkStackSidebar
  * to the #GtkStack.
  *
+ * # CSS nodes
+ *
+ * GtkStackSidebar has a single CSS node with name stacksidebar.
+ *
  * Since: 3.16
  */
  
@@ -434,6 +438,7 @@ static void
 gtk_stack_sidebar_class_init (GtkStackSidebarClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->dispose = gtk_stack_sidebar_dispose;
   object_class->finalize = gtk_stack_sidebar_finalize;
@@ -447,6 +452,8 @@ gtk_stack_sidebar_class_init (GtkStackSidebarClass *klass)
                            G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, N_PROPERTIES, obj_properties);
+
+  gtk_widget_class_set_css_name (widget_class, "stacksidebar");
 }
 
 /**
