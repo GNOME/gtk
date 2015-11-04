@@ -350,23 +350,20 @@ gtk_hiding_box_get_preferred_height (GtkWidget *widget,
 {
   GtkHidingBox *box = GTK_HIDING_BOX (widget);
   GtkHidingBoxPrivate *priv = gtk_hiding_box_get_instance_private (box);
-  gint m, n;
   gint cm, cn;
   GList *child;
 
-  m = n = 0;
+  *min = 0;
+  *nat = 0;
   for (child = priv->children; child != NULL; child = child->next)
     {
       if (!gtk_widget_is_visible (child->data))
         continue;
 
       gtk_widget_get_preferred_height (child->data, &cm, &cn);
-      m = MAX (m, cm);
-      n = MAX (n, cn);
+      *min = MAX (*min, cm);
+      *nat = MAX (*nat, cn);
     }
-
-  *min = m;
-  *nat = n;
 }
 
 static void
