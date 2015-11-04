@@ -365,10 +365,8 @@ gtk_hiding_box_get_preferred_height (GtkWidget *widget,
       n = MAX (n, cn);
     }
 
-  if (min)
-    *min = m;
-  if (nat)
-    *nat = n;
+  *min = m;
+  *nat = n;
 }
 
 static void
