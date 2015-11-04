@@ -250,12 +250,8 @@ gtk_hiding_box_size_allocate (GtkWidget     *widget,
       /* Hide the overflowing children even if they have visible=TRUE */
       if (i >= n_visible_children)
         {
-          while (child)
-            {
-              gtk_widget_set_child_visible (child->data, FALSE);
-              child = child->next;
-            }
-          break;
+          gtk_widget_set_child_visible (child->data, FALSE);
+          continue;
         }
 
       child_allocation.x = x;
