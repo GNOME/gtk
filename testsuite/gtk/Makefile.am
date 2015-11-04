@@ -44,7 +44,6 @@ TEST_PROGS += 			\
 	cssprovider		\
 	defaultvalue		\
 	entry			\
-	expander		\
 	firefox-stylecontext	\
 	floating		\
 	focus			\
@@ -78,16 +77,6 @@ TEST_PROGS += 			\
 if OS_UNIX
 #TEST_PROGS			+= defaultvalue
 endif
-
-#TEST_PROGS			+= testing
-#TEST_PROGS			+= treeview-scrolling
-#TEST_PROGS			+= object
-#TEST_PROGS			+= filechooser
-
-# this doesn't work in make distcheck, since running
-# on a naked X server creates slightly different event
-# sequences than running on a normal desktop
-# TEST_PROGS			+= crossingevents
 
 treemodel_SOURCES = 		\
 	treemodel.h 		\
