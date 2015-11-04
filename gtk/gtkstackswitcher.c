@@ -42,6 +42,10 @@
  * with the same stack widget.
  *
  * The GtkStackSwitcher widget was added in 3.10.
+ *
+ * # CSS nodes
+ *
+ * GtkStackSwitcher has a single CSS node names stackswitcher.
  */
 
 typedef struct _GtkStackSwitcherPrivate GtkStackSwitcherPrivate;
@@ -512,6 +516,7 @@ static void
 gtk_stack_switcher_class_init (GtkStackSwitcherClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 
   object_class->get_property = gtk_stack_switcher_get_property;
   object_class->set_property = gtk_stack_switcher_set_property;
@@ -526,6 +531,8 @@ gtk_stack_switcher_class_init (GtkStackSwitcherClass *class)
                                                         GTK_TYPE_STACK,
                                                         GTK_PARAM_READWRITE |
                                                         G_PARAM_CONSTRUCT));
+
+  gtk_widget_class_set_css_name (widget_class, "stackswitcher");
 }
 
 /**
