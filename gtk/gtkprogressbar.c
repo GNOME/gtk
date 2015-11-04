@@ -70,13 +70,15 @@
  *
  * |[<!-- language="plain" -->
  * progressbar
- * ╰── progress[.pulse]
+ * ╰── trough
+ *     ╰── progress[.pulse]
  * ]|
  *
- * GtkProgressBar has a main CSS node with name progressbar and a subnode
- * with name progress. The subnode has the style class .pulse when in activity
- * mode. It gets the style classes .left, .right, .top or .bottom added when
- * the progress 'touches' the corresponding end of the GtkProgressBar.
+ * GtkProgressBar has a main CSS node with name progressbar and subnodes
+ * with names trough and progress. The progress subnode has the style class
+ * .pulse when in activity mode. It gets the style classes .left, .right,
+ * .top or .bottom added when the progress 'touches' the corresponding end
+ * of the GtkProgressBar.
  */
 
 #define MIN_HORIZONTAL_BAR_WIDTH   150
@@ -89,6 +91,7 @@ struct _GtkProgressBarPrivate
 {
   gchar         *text;
 
+  GtkCssNode    *trough_node;
   GtkCssNode    *progress_node;
 
   gdouble        fraction;
@@ -444,9 +447,17 @@ gtk_progress_bar_init (GtkProgressBar *pbar)
   _gtk_orientable_set_style_classes (GTK_ORIENTABLE (pbar));
 
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (pbar));
+
+  priv->trough_node = gtk_css_node_new ();
+  gtk_css_node_set_name (priv->trough_node, I_("trough"));
+  gtk_css_node_set_parent (priv->trough_node, widget_node);
+  gtk_css_node_set_state (priv->trough_node, gtk_css_node_get_state (widget_node));
+  g_signal_connect_object (priv->trough_node, "style-changed", G_CALLBACK (node_style_changed_cb), pbar, 0);
+  g_object_unref (priv->trough_node);
+
   priv->progress_node = gtk_css_node_new ();
   gtk_css_node_set_name (priv->progress_node, I_("progress"));
-  gtk_css_node_set_parent (priv->progress_node, widget_node);
+  gtk_css_node_set_parent (priv->progress_node, priv->trough_node);
   gtk_css_node_set_state (priv->progress_node, gtk_css_node_get_state (widget_node));
   g_signal_connect_object (priv->progress_node, "style-changed", G_CALLBACK (node_style_changed_cb), pbar, 0);
   g_object_unref (priv->progress_node);
@@ -1141,8 +1152,12 @@ gtk_progress_bar_draw (GtkWidget *widget,
       bar_height = height;
     }
 
+  gtk_style_context_save_to_node (context, priv->trough_node);
+
   gtk_render_background (context, cr, width - bar_width, height - bar_height, bar_width, bar_height);
   gtk_render_frame (context, cr, width - bar_width, height - bar_height, bar_width, bar_height);
+
+  gtk_style_context_restore (context);
 
   if (priv->activity_mode)
     {
