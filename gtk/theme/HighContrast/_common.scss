@@ -1477,6 +1477,7 @@ notebook {
  * Scrollbars *
  **************/
 
+scrollbar,
 .scrollbar {
   background-clip: padding-box;
   background-image: none;
@@ -1491,14 +1492,14 @@ notebook {
 
   -GtkRange-stepper-spacing: 0;
   -GtkRange-trough-under-steppers: 1;
+  @extend .scrollbars-junction;
   $_slider_margin: 3px;
   $_slider_fine_tune_margin: 4px;
-  
-  .button {
+
+  button {
     border: none;
   }
-  &.trough { @extend .scrollbars-junction; }
-  &.slider {
+  & slider {
     border-radius: 20px;
     border: 5px solid transparent; //margin
     background-color: mix($bg_color, $fg_color, 50%);
@@ -1521,28 +1522,25 @@ notebook {
   &.overlay-indicator {
     &:not(.dragging):not(.hovering) { // Overlay scrolling indicator
       opacity: 0.4;
+      border-style: none;
+      background-color: transparent;
 
       -GtkRange-slider-width: 5px;
 
-      .slider {
+      slider {
         margin: 0;
         background-color: $fg_color;
         border: 1px solid white;
         background-clip: padding-box;
       }
 
-      .trough {
-        border-style: none;
-        background-color: transparent;
-      }
-
       // w/o the following margin tweaks the slider shrinks when hovering/dragging
-      &.vertical .slider {
+      &.vertical slider {
         margin-top: $_slider_margin - 1px;
         margin-bottom: $_slider_margin - 1px;
       }
 
-      &.horizontal .slider {
+      &.horizontal slider {
         margin-left: $_slider_margin - 1px;
         margin-right: $_slider_margin - 1px;
       }
@@ -1678,6 +1676,7 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
 /************
  * GtkScale *
  ************/
+scale,
 .scale,
 .scale.scale-has-marks-above.scale-has-marks-below,
 .scale.vertical.scale-has-marks-above.scale-has-marks-below {
@@ -1686,6 +1685,13 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
   -GtkRange-trough-border: 2;
   outline-offset: -9px;
   outline-radius: 4px;
+  margin: 10px;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 3px;
+  border-color: $borders_color;
+  background-color: mix($bg_color,$borders_color,60%);
+  box-shadow: inset 1px 1px transparentize(black, 0.9);
 
   &.fine-tune {
     outline-offset: -7px;
@@ -1695,7 +1701,7 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
       margin: 8px;
     }
   }
-  &.slider {
+  & slider {
     //FIXME: better gradient on the slider and hover state
     @include button(normal, $edge: none);
     border-radius: 50%;
@@ -1723,56 +1729,47 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
       border: 1px solid darken($selected_borders_color,3%);
     }
   }
-  &.trough {
-    margin: 10px;
-    border-width: 1px;
-    border-style: solid;
-    border-radius: 3px;
-    border-color: $borders_color;
-    background-color: mix($bg_color,$borders_color,60%);
-    box-shadow: inset 1px 1px transparentize(black, 0.9);
-    &.highlight {
-      border-color: $selected_borders_color;
-      background-color: $selected_bg_color;
-      &:backdrop {
-         border-color: $insensitive_fg_color;
-         background-color: $insensitive_fg_color;
-         box-shadow: none;
-      }
-    }
-    &:insensitive, &.hilight:insensitive {
-      border-color: $insensitive_borders_color;
-      background-color: $insensitive_bg_color;
-    }
+  &.highlight {
+    border-color: $selected_borders_color;
+    background-color: $selected_bg_color;
     &:backdrop {
-      border-color: $backdrop_borders_color;
-      background-color: mix($backdrop_bg_color,$borders_color);
-      box-shadow: none;
+       border-color: $insensitive_fg_color;
+       background-color: $insensitive_fg_color;
+       box-shadow: none;
     }
-    &:backdrop:insensitive, .hilight:backdrop:insensitive {
-      border-color: $insensitive_fg_color;
-      background-color: $backdrop_bg_color;
-    }
+  }
+  &:insensitive, &.hilight:insensitive {
+    border-color: $insensitive_borders_color;
+    background-color: $insensitive_bg_color;
+  }
+  &:backdrop {
+    border-color: $backdrop_borders_color;
+    background-color: mix($backdrop_bg_color,$borders_color);
+    box-shadow: none;
+  }
+  &:backdrop:insensitive, .hilight:backdrop:insensitive {
+    border-color: $insensitive_fg_color;
+    background-color: $backdrop_bg_color;
   }
 }
 
 //FIXME: scale sliders
 
 %scale_marks_above_horz {
-  .trough { margin: 14px 10px 10px; }
-  &.fine-tune .trough { margin: 12px 8px 8px; }
+  margin: 14px 10px 10px;
+  &.fine-tune { margin: 12px 8px 8px; }
 }
 %scale_marks_below_horz {
-  .trough { margin: 10px 10px 14px; }
-  &.fine-tune .trough { margin: 8px 8px 12px; }
+  margin: 10px 10px 14px;
+  &.fine-tune { margin: 8px 8px 12px; }
 }
 %scale_marks_above_vert {
-  .trough { margin: 10px 10px 10px 14px; }
-  &.fine-tune .trough { margin: 8px 8px 8px 12px; }
+  margin: 10px 10px 10px 14px;
+  &.fine-tune { margin: 8px 8px 8px 12px; }
 }
 %scale_marks_below_vert {
-  .trough { margin: 10px 14px 10px 10px; }
-  &.fine-tune .trough { margin: 8px 12px 8px 8px; }
+  margin: 10px 14px 10px 10px;
+  &.fine-tune { margin: 8px 12px 8px 8px; }
 }
 
 /*****************
