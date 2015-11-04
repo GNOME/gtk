@@ -1,54 +1,132 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface domain="gtk30">
-  <!-- interface-requires gtk+ 3.10 -->
-  <object class="GtkButton" id="down_slider_button">
-    <property name="visible">1</property>
-    <property name="can-focus">1</property>
-    <property name="receives-default">1</property>
-    <property name="focus-on-click">0</property>
-    <child internal-child="accessible">
-      <object class="AtkObject" id="down_slider_button-atkobject">
-        <property name="AtkObject::accessible-name" translatable="yes">Down Path</property>
-      </object>
-    </child>
-    <signal name="button-press-event" handler="gtk_path_bar_slider_button_press" swapped="no"/>
-    <signal name="button-release-event" handler="gtk_path_bar_slider_button_release" swapped="no"/>
-    <signal name="focus-out-event" handler="gtk_path_bar_slider_down_defocus" swapped="no"/>
-    <signal name="unmap" handler="on_slider_unmap" swapped="no"/>
+<interface>
+  <requires lib="gtk+" version="3.20"/>
+  <template class="GtkPathBar" parent="GtkStack">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="hexpand">True</property>
     <child>
-      <object class="GtkImage">
-        <property name="visible">1</property>
-        <property name="icon-name">pan-end-symbolic</property>
-        <property name="icon-size">1</property>
+      <object class="GtkPathBarBox" id="path_bar_1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <child>
+          <object class="GtkButton" id="path_bar_root_1">
+            <property name="label" translatable="yes">The Root</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <style>
+              <class name="flat"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="path_bar_overflow_root_1">
+            <property name="label" translatable="yes">//</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <style>
+              <class name="flat"/>
+              <class name="overflow"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkPathBarContainer" id="path_bar_container_1">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="path_bar_overflow_tail_1">
+            <property name="label" translatable="yes">//</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <style>
+              <class name="flat"/>
+              <class name="overflow"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="path_bar_tail_1">
+            <property name="label" translatable="yes">The Tail</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <style>
+              <class name="flat"/>
+            </style>
+          </object>
+        </child>
       </object>
+      <packing>
+        <property name="name">path_bar_stack_page_1</property>
+      </packing>
     </child>
-    <style>
-      <class name="slider-button"/>
-    </style>
-  </object>
-  <object class="GtkButton" id="up_slider_button">
-    <property name="visible">1</property>
-    <property name="can-focus">1</property>
-    <property name="receives-default">1</property>
-    <property name="focus-on-click">0</property>
-    <child internal-child="accessible">
-      <object class="AtkObject" id="up_slider_button-atkobject">
-        <property name="AtkObject::accessible-name" translatable="yes">Up Path</property>
-      </object>
-    </child>
-    <signal name="button-press-event" handler="gtk_path_bar_slider_button_press" swapped="no"/>
-    <signal name="button-release-event" handler="gtk_path_bar_slider_button_release" swapped="no"/>
-    <signal name="focus-out-event" handler="gtk_path_bar_slider_up_defocus" swapped="no"/>
-    <signal name="unmap" handler="on_slider_unmap" swapped="no"/>
     <child>
-      <object class="GtkImage">
-        <property name="visible">1</property>
-        <property name="icon-name">pan-start-symbolic</property>
-        <property name="icon-size">1</property>
+      <object class="GtkPathBarBox" id="path_bar_2">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <child>
+          <object class="GtkButton" id="path_bar_root_2">
+            <property name="label" translatable="yes">The Root</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <style>
+              <class name="flat"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="path_bar_overflow_root_2">
+            <property name="label" translatable="yes">//</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <style>
+              <class name="flat"/>
+              <class name="overflow"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkPathBarContainer" id="path_bar_container_2">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="path_bar_overflow_tail_2">
+            <property name="label" translatable="yes">//</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <style>
+              <class name="flat"/>
+              <class name="overflow"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="path_bar_tail_2">
+            <property name="label" translatable="yes">The Tail</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <style>
+              <class name="flat"/>
+            </style>
+          </object>
+        </child>
       </object>
+      <packing>
+        <property name="name">path_bar_stack_page_2</property>
+        <property name="position">1</property>
+      </packing>
     </child>
-    <style>
-      <class name="slider-button"/>
-    </style>
-  </object>
+  </template>
 </interface>

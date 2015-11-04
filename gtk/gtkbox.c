@@ -479,7 +479,10 @@ count_expand_children (GtkBox *box,
 	{
 	  *visible_children += 1;
 	  if (child->expand || gtk_widget_compute_expand (child->widget, private->orientation))
+            {
+
 	    *expand_children += 1;
+            }
 	}
     }
 }

@@ -86,6 +86,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testgtk				\
 	testheaderbar			\
 	testheightforwidth		\
+	testpathbarcontainer		\
 	testiconview			\
 	testiconview-keynav		\
 	testicontheme			\
@@ -108,6 +109,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testorientable			\
 	testoverlay			\
 	testoverlaystyleclass		\
+	testpathbar			\
 	testprint			\
 	testrecentchooser 		\
 	testrecentchoosermenu		\
@@ -291,6 +293,8 @@ testanimation_DEPENDENCIES = $(TEST_DEPS)
 testpixbuf_save_DEPENDENCIES = $(TEST_DEPS)
 testpixbuf_color_DEPENDENCIES = $(TEST_DEPS)
 testpixbuf_scale_DEPENDENCIES = $(TEST_DEPS)
+testpathbar_DEPENDENCIES = $(TEST_DEPS)
+testpathbarcontainer_DEPENDENCIES = $(TEST_DEPS)
 testgmenu_DEPENDENCIES = $(TEST_DEPS)
 testlogout_DEPENDENCIES = $(TEST_DEPS)
 teststack_DEPENDENCIES = $(TEST_DEPS)
@@ -390,6 +394,12 @@ testtoolbar_SOURCES =	\
 
 testmenubutton_SOURCES =	\
 	testmenubutton.c
+
+testpathbar_SOURCES =    	\
+	testpathbar.c
+
+testpathbarcontainer_SOURCES =    	\
+	testpathbarcontainer.c
 
 testprint_SOURCES =    	\
 	testprint.c		\

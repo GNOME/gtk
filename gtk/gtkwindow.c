@@ -6107,7 +6107,8 @@ gtk_window_show (GtkWidget *widget)
 
   _gtk_widget_set_visible_flag (widget, TRUE);
 
-  gtk_css_node_validate (gtk_widget_get_css_node (widget));
+  if (gtk_widget_get_css_node (widget))
+    gtk_css_node_validate (gtk_widget_get_css_node (widget));
 
   gtk_widget_realize (widget);
 

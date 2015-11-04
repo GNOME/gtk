@@ -2090,22 +2090,40 @@ window.csd > .titlebar:not(headerbar) {
 /************
  * Pathbars *
  ************/
-.path-bar button.text-button, .path-bar button.image-button, .path-bar button {
-  padding-left: 4px;
-  padding-right: 4px; }
-.path-bar button.text-button.image-button label {
-  padding-left: 0;
-  padding-right: 0; }
-.path-bar button.text-button.image-button label:last-child, .path-bar button label:last-child {
-  padding-right: 8px; }
-.path-bar button.text-button.image-button label:first-child, .path-bar button label:first-child {
-  padding-left: 8px; }
-.path-bar button image {
-  padding-left: 4px;
-  padding-right: 4px; }
-.path-bar button.slider-button {
-  padding-left: 0;
-  padding-right: 0; }
+path-bar button.flat {
+  background-image: none;
+  border-radius: 0px;
+  border-color: transparent;
+  border-width: 2px 0px 2px 0px;
+  box-shadow: 0px 0px 0px;
+  margin: 0px;
+  opacity: 0.55;
+  padding: 3px 8px 4px;
+  background-color: transparent; }
+  path-bar button.flat:checked {
+    opacity: 1; }
+  path-bar button.flat:hover {
+    border-bottom-color: #77ace3; }
+  path-bar button.flat:backdrop, path-bar button.flat:backdrop:checked {
+    background-color: transparent;
+    border-color: transparent;
+    background-image: none; }
+  path-bar button.flat .overflow {
+    padding-right: 0px;
+    padding-left: 0px; }
+
+.pathbar-opacity-off {
+  opacity: 0;
+  transition-duration: 250ms; }
+
+@keyframes pathbar-opacity-on-keyframes {
+  from {
+    opacity: 0; }
+  to {
+    opacity: 1; } }
+.pathbar-opacity-on {
+  animation-name: pathbar-opacity-on-keyframes;
+  animation-duration: 250ms; }
 
 /**************
  * Tree Views *
