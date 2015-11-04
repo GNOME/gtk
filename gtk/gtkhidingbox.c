@@ -161,20 +161,19 @@ gtk_hiding_box_size_allocate (GtkWidget     *widget,
 {
   GtkHidingBox *box = GTK_HIDING_BOX (widget);
   GtkHidingBoxPrivate *priv = gtk_hiding_box_get_instance_private (box);
-  gint n_visible_children;
-
   GtkTextDirection direction;
   GtkAllocation child_allocation;
   GtkRequestedSize *sizes;
-
   gint size;
   gint extra = 0;
   gint n_extra_widgets = 0; /* Number of widgets that receive 1 extra px */
-  gint x = 0, i;
+  gint x = 0;
+  gint i;
   GList *child;
   GtkWidget *child_widget;
   gint spacing = priv->spacing;
   gint children_size;
+  gint n_visible_children;
   GtkAllocation clip, child_clip;
 
   gtk_widget_set_allocation (widget, allocation);
