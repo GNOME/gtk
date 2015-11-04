@@ -40,6 +40,8 @@
 #include "gtkorientable.h"
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
+#include "gtkstylecontextprivate.h"
+#include "gtkwidgetprivate.h"
 
 #include "a11y/gtkscaleaccessible.h"
 
@@ -69,6 +71,21 @@
  * element is not empty, its content is taken as the markup to show at
  * the mark. It can be translated with the usual ”translatable” and
  * “context” attributes.
+ *
+ * # CSS nodes
+ *
+ * |[<!-- language="plain" -->
+ * scale
+ * ├── slider
+ * ╰── marks
+ *     ├── mark.bottom
+ *     ├── mark.top
+ *     ╰── ...
+ * ]|
+ *
+ * GtkScale has a main CSS node with name scale and a subnode with name slider.
+ * If marks are present, there is a marks subnode, below which each mark gets
+ * a node with name mark, and either the .top or .bottom style class.
  */
 
 
@@ -86,6 +103,8 @@ struct _GtkScalePrivate
 
   GSList       *marks;
 
+  GtkCssNode   *marks_node;
+
   gint          digits;
 
   guint         draw_value : 1;
@@ -96,6 +115,7 @@ struct _GtkScaleMark
 {
   gdouble          value;
   gchar           *markup;
+  GtkCssNode      *node;
   GtkPositionType  position; /* always GTK_POS_TOP or GTK_POS_BOTTOM */
 };
 
@@ -469,6 +489,7 @@ gtk_scale_class_init (GtkScaleClass *class)
                       GTK_SCROLL_END);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_SCALE_ACCESSIBLE);
+  gtk_widget_class_set_css_name (widget_class, "scale");
 }
 
 static void
@@ -476,7 +497,6 @@ gtk_scale_init (GtkScale *scale)
 {
   GtkScalePrivate *priv;
   GtkRange *range = GTK_RANGE (scale);
-  GtkStyleContext *context;
 
   scale->priv = gtk_scale_get_instance_private (scale);
   priv = scale->priv;
@@ -494,8 +514,6 @@ gtk_scale_init (GtkScale *scale)
 
   gtk_range_set_flippable (range, TRUE);
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (scale));
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_SCALE);
   gtk_scale_update_style (scale);
 }
 
@@ -1153,6 +1171,8 @@ gtk_scale_draw (GtkWidget *widget,
         {
           GtkScaleMark *mark = m->data;
 
+          gtk_style_context_save_to_node (context, mark->node);
+
           if (orientation == GTK_ORIENTATION_HORIZONTAL)
             {
               x1 = marks[i];
@@ -1171,12 +1191,7 @@ gtk_scale_draw (GtkWidget *widget,
                   max_pos = find_next_pos (widget, m, marks + i, GTK_POS_BOTTOM) - min_sep;
                 }
 
-              gtk_style_context_save (context);
-              gtk_style_context_add_class (context, GTK_STYLE_CLASS_MARK);
-
-              gtk_style_context_add_class (context, GTK_STYLE_CLASS_SEPARATOR);
               gtk_render_line (context, cr, x1, y1, x1, y2);
-              gtk_style_context_remove_class (context, GTK_STYLE_CLASS_SEPARATOR);
 
               if (mark->markup)
                 {
@@ -1203,8 +1218,6 @@ gtk_scale_draw (GtkWidget *widget,
 
                   gtk_render_layout (context, cr, x3, y3, layout);
                 }
-
-              gtk_style_context_restore (context);
             }
           else
             {
@@ -1224,12 +1237,7 @@ gtk_scale_draw (GtkWidget *widget,
                 }
               y1 = marks[i];
 
-              gtk_style_context_save (context);
-              gtk_style_context_add_class (context, GTK_STYLE_CLASS_MARK);
-
-              gtk_style_context_add_class (context, GTK_STYLE_CLASS_SEPARATOR);
               gtk_render_line (context, cr, x1, y1, x2, y1);
-              gtk_style_context_remove_class (context, GTK_STYLE_CLASS_SEPARATOR);
 
               if (mark->markup)
                 {
@@ -1256,9 +1264,9 @@ gtk_scale_draw (GtkWidget *widget,
 
                   gtk_render_layout (context, cr, x3, y3, layout);
                 }
-
-              gtk_style_context_restore (context);
             }
+
+          gtk_style_context_restore (context);
         }
 
       g_object_unref (layout);
@@ -1504,6 +1512,7 @@ gtk_scale_mark_free (gpointer data)
 {
   GtkScaleMark *mark = data;
 
+  gtk_css_node_set_parent (mark->node, NULL);
   g_free (mark->markup);
   g_free (mark);
 }
@@ -1532,6 +1541,9 @@ gtk_scale_clear_marks (GtkScale *scale)
   context = gtk_widget_get_style_context (GTK_WIDGET (scale));
   gtk_style_context_remove_class (context, GTK_STYLE_CLASS_SCALE_HAS_MARKS_BELOW);
   gtk_style_context_remove_class (context, GTK_STYLE_CLASS_SCALE_HAS_MARKS_ABOVE);
+
+  gtk_css_node_set_parent (priv->marks_node, NULL);
+  priv->marks_node = NULL;
 
   _gtk_range_set_stop_values (GTK_RANGE (scale), NULL, 0);
 
@@ -1592,6 +1604,37 @@ gtk_scale_add_mark (GtkScale        *scale,
   priv->marks = g_slist_insert_sorted_with_data (priv->marks, mark,
                                                  compare_marks,
                                                  GINT_TO_POINTER (gtk_range_get_inverted (GTK_RANGE (scale))));
+
+  m = g_slist_find (priv->marks, mark);
+
+  if (!priv->marks_node)
+    {
+      GtkCssNode *widget_node;
+
+      widget_node = gtk_widget_get_css_node (GTK_WIDGET (scale));
+      priv->marks_node = gtk_css_node_new ();
+      gtk_css_node_set_name (priv->marks_node, I_("marks"));
+      gtk_css_node_set_parent (priv->marks_node, widget_node);
+      gtk_css_node_set_state (priv->marks_node, gtk_css_node_get_state (widget_node));
+      g_object_unref (priv->marks_node);
+    }
+
+  mark->node = gtk_css_node_new ();
+  gtk_css_node_set_name (mark->node, I_("mark"));
+  gtk_css_node_add_class (mark->node, g_quark_from_static_string (mark->position == GTK_POS_TOP ? "top" : "bottom"));
+  gtk_css_node_set_state (mark->node, gtk_css_node_get_state (priv->marks_node));
+
+  if (m->next)
+    {
+      GtkScaleMark *next = m->next->data;
+      gtk_css_node_insert_before (priv->marks_node, mark->node, next->node);
+    }
+  else
+    {
+      gtk_css_node_set_parent (mark->node, priv->marks_node);
+    }
+
+  g_object_unref (mark->node);
 
 #define MARKS_ABOVE 1
 #define MARKS_BELOW 2

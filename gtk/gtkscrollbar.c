@@ -52,6 +52,22 @@
  * #GtkAdjustment:page-increment fields are properties when the user asks to
  * step down (using the small stepper arrows) or page down (using for
  * example the `Page Down` key).
+ *
+ * # CSS nodes
+ *
+ * |[<!-- language="plain" -->
+ * scrollbar
+ * ├── [button.down]
+ * ├── [button.up]
+ * ├── slider
+ * ├── [button.down]
+ * ╰── [button.up]
+ * ]|
+ *
+ * GtkScrollbar has a main CSS node with name scrollbar, and a subnode
+ * with name slider. If steppers are enabled, they are represented by up
+ * to four additional subnodes with name button. These get the style classes
+ * .up and .down to indicate in which direction they are moving.
  */
 
 
@@ -111,6 +127,7 @@ gtk_scrollbar_class_init (GtkScrollbarClass *class)
                                                                  GTK_PARAM_READABLE));
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_SCROLL_BAR);
+  gtk_widget_class_set_css_name (widget_class, "scrollbar");
 }
 
 static void
@@ -133,17 +150,12 @@ gtk_scrollbar_update_style (GtkScrollbar *scrollbar)
 
   gtk_range_set_min_slider_size (range, slider_length);
   gtk_range_set_slider_size_fixed (range, fixed_size);
-  _gtk_range_set_steppers (range,
-                           has_a, has_b, has_c, has_d);
+  _gtk_range_set_steppers (range, has_a, has_b, has_c, has_d);
 }
 
 static void
 gtk_scrollbar_init (GtkScrollbar *scrollbar)
 {
-  GtkStyleContext *context;
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (scrollbar));
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_SCROLLBAR);
   gtk_scrollbar_update_style (scrollbar);
 }
 
