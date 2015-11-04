@@ -80,11 +80,12 @@
  *
  * |[<!-- language="plain" -->
  * paned
- * ╰── separator
+ * ╰── separator[.wide]
  * ]|
  *
  * GtkPaned has a main CSS node with name paned, and a subnode for
- * the separator with name separator.
+ * the separator with name separator. The subnodes gets a .wide style
+ * class when the paned is supposed to be wide.
  *
  * ## Creating a paned widget with minimum sizes.
  *
@@ -2936,7 +2937,6 @@ void
 gtk_paned_set_wide_handle (GtkPaned *paned,
                            gboolean  wide)
 {
-  GtkStyleContext *context;
   gboolean old_wide;
 
   g_return_if_fail (GTK_IS_PANED (paned));
@@ -2944,11 +2944,10 @@ gtk_paned_set_wide_handle (GtkPaned *paned,
   old_wide = gtk_paned_get_wide_handle (paned);
   if (old_wide != wide)
     {
-      context = gtk_widget_get_style_context (GTK_WIDGET (paned));
       if (wide)
-        gtk_style_context_add_class (context, GTK_STYLE_CLASS_WIDE);
+        gtk_css_node_add_class (paned->priv->handle_node, g_quark_from_static_string (GTK_STYLE_CLASS_WIDE));
       else
-        gtk_style_context_remove_class (context, GTK_STYLE_CLASS_WIDE);
+        gtk_css_node_remove_class (paned->priv->handle_node, g_quark_from_static_string (GTK_STYLE_CLASS_WIDE));
 
       gtk_widget_queue_resize (GTK_WIDGET (paned));
       g_object_notify (G_OBJECT (paned), "wide-handle");
@@ -2968,12 +2967,9 @@ gtk_paned_set_wide_handle (GtkPaned *paned,
 gboolean
 gtk_paned_get_wide_handle (GtkPaned *paned)
 {
-  GtkStyleContext *context;
-
   g_return_val_if_fail (GTK_IS_PANED (paned), FALSE);
-  
-  context = gtk_widget_get_style_context (GTK_WIDGET (paned));
-  if (gtk_style_context_has_class (context, GTK_STYLE_CLASS_WIDE))
+
+  if (gtk_css_node_has_class (paned->priv->handle_node, g_quark_from_static_string (GTK_STYLE_CLASS_WIDE)))
     return TRUE;
   else
     return FALSE;
