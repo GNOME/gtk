@@ -112,7 +112,7 @@
  * It uses transient subnodes with names overshoot and undershoot to
  * draw the overflow and underflow indications. These nodes get
  * the .left, .right, .top or .bottom style class added depending
- * on where the indictaion is drawn. If both scrollbars are visible,
+ * on where the indication is drawn. If both scrollbars are visible,
  * the area where they meet is drawn with a transient subnode named
  * junction.
  */
