@@ -1542,8 +1542,11 @@ gtk_scale_clear_marks (GtkScale *scale)
   gtk_style_context_remove_class (context, GTK_STYLE_CLASS_SCALE_HAS_MARKS_BELOW);
   gtk_style_context_remove_class (context, GTK_STYLE_CLASS_SCALE_HAS_MARKS_ABOVE);
 
-  gtk_css_node_set_parent (priv->marks_node, NULL);
-  priv->marks_node = NULL;
+  if (priv->marks_node)
+    {
+      gtk_css_node_set_parent (priv->marks_node, NULL);
+      priv->marks_node = NULL;
+    }
 
   _gtk_range_set_stop_values (GTK_RANGE (scale), NULL, 0);
 
