@@ -312,8 +312,10 @@ gtk_hiding_box_get_preferred_width (GtkWidget *widget,
 {
   GtkHidingBox *box = GTK_HIDING_BOX (widget);
   GtkHidingBoxPrivate *priv = gtk_hiding_box_get_instance_private (box);
-  gint cm, cn;
-  gint m, n;
+  gint cm;
+  gint cn;
+  gint m;
+  gint n;
   GList *child;
   gint n_visible_children;
   gboolean have_min = FALSE;
