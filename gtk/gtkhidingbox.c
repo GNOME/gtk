@@ -313,13 +313,14 @@ gtk_hiding_box_get_preferred_width (GtkWidget *widget,
   GtkHidingBoxPrivate *priv = gtk_hiding_box_get_instance_private (box);
   gint cm;
   gint cn;
-  gint m;
-  gint n;
   GList *child;
   gint n_visible_children;
   gboolean have_min = FALSE;
 
-  m = n = n_visible_children = 0;
+  *min = 0;
+  *nat = 0;
+
+  n_visible_children = 0;
   for (child = priv->children; child != NULL; child = child->next)
     {
       if (!gtk_widget_is_visible (child->data))
@@ -330,19 +331,16 @@ gtk_hiding_box_get_preferred_width (GtkWidget *widget,
       /* Minimum is a minimum of the first visible child */
       if (!have_min)
         {
-          m = cm;
+          *min = cm;
           have_min = TRUE;
         }
       /* Natural is a sum of all visible children */
-      n += cn;
+      *nat += cn;
     }
 
   /* Natural must also include the spacing */
   if (priv->spacing && n_visible_children > 1)
-    n += priv->spacing * (n_visible_children - 1);
-
-  *min = m;
-  *nat = n;
+    *nat += priv->spacing * (n_visible_children - 1);
 }
 
 static void
