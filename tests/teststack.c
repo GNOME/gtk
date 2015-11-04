@@ -135,6 +135,7 @@ main (gint argc,
   gtk_stack_set_transition_duration (GTK_STACK (stack), 1500);
 
   gtk_widget_set_halign (stack, GTK_ALIGN_START);
+  gtk_widget_set_vexpand (stack, TRUE);
 
   /* Add sidebar before stack */
   sidebar = gtk_stack_sidebar_new ();
