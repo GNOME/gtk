@@ -262,6 +262,8 @@ gtk_revealer_class_init (GtkRevealerClass *klass)
                           G_PARAM_READABLE);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
+
+  gtk_widget_class_set_css_name (widget_class, "revealer");
 }
 
 /**
