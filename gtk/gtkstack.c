@@ -1145,6 +1145,11 @@ set_visible_child (GtkStack               *stack,
       transition_type = get_simple_transition_type (i_first, transition_type);
     }
 
+  if (priv->hhomogeneous && priv->vhomogeneous)
+    gtk_widget_queue_allocate (widget);
+  else
+    gtk_widget_queue_resize (widget);
+
   g_object_notify_by_pspec (G_OBJECT (stack), stack_props[PROP_VISIBLE_CHILD]);
   g_object_notify_by_pspec (G_OBJECT (stack),
                             stack_props[PROP_VISIBLE_CHILD_NAME]);
