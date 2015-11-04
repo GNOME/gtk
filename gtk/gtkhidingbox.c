@@ -176,6 +176,7 @@ gtk_hiding_box_size_allocate (GtkWidget     *widget,
   gint spacing = priv->spacing;
   gint children_size;
   gint n_visible_children;
+  gint n_visible_children_expanding = 0;
   GtkAllocation clip, child_clip;
 
   gtk_widget_set_allocation (widget, allocation);
@@ -226,6 +227,8 @@ gtk_hiding_box_size_allocate (GtkWidget     *widget,
       size -= sizes[i].minimum_size;
       sizes[i].data = child_widget;
 
+      if (gtk_widget_get_hexpand (child_widget))
+        n_visible_children_expanding++;
       i++;
     }
   n_visible_children = i;
@@ -237,7 +240,7 @@ gtk_hiding_box_size_allocate (GtkWidget     *widget,
 
   if (n_visible_children > 1)
     {
-      extra = size / n_visible_children;
+      extra = size / MAX (1, n_visible_children_expanding);
       n_extra_widgets = size % n_visible_children;
     }
 
@@ -258,7 +261,11 @@ gtk_hiding_box_size_allocate (GtkWidget     *widget,
 
       child_allocation.x = x;
       child_allocation.y = allocation->y;
-      child_allocation.width = sizes[i].minimum_size + extra;
+      if (gtk_widget_get_hexpand (child_widget))
+        child_allocation.width = sizes[i].minimum_size + extra;
+      else
+        child_allocation.width = sizes[i].minimum_size;
+
       child_allocation.height = allocation->height;
       if (n_extra_widgets)
         {
