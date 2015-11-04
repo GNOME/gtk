@@ -161,7 +161,7 @@ gtk_hiding_box_size_allocate (GtkWidget     *widget,
 {
   GtkHidingBox *box = GTK_HIDING_BOX (widget);
   GtkHidingBoxPrivate *priv = gtk_hiding_box_get_instance_private (box);
-  gint nvis_children;
+  gint n_visible_children;
 
   GtkTextDirection direction;
   GtkAllocation child_allocation;
@@ -179,17 +179,17 @@ gtk_hiding_box_size_allocate (GtkWidget     *widget,
 
   gtk_widget_set_allocation (widget, allocation);
 
-  nvis_children = 0;
+  n_visible_children = 0;
   for (child = priv->children; child != NULL; child = child->next)
     if (gtk_widget_get_visible (child->data))
-      ++nvis_children;
+      ++n_visible_children;
 
   /* If there is no visible child, simply return. */
-  if (nvis_children <= 0)
+  if (n_visible_children <= 0)
     return;
 
   direction = gtk_widget_get_direction (widget);
-  sizes = g_newa (GtkRequestedSize, nvis_children);
+  sizes = g_newa (GtkRequestedSize, n_visible_children);
 
   size = allocation->width;
   children_size = -spacing;
@@ -208,36 +208,36 @@ gtk_hiding_box_size_allocate (GtkWidget     *widget,
 
       /* Assert the api is working properly */
       if (sizes[i].minimum_size < 0)
-
         g_error ("GtkHidingBox child %s minimum width: %d < 0 for height %d",
                  gtk_widget_get_name (child_widget),
                  sizes[i].minimum_size, allocation->height);
-      if (sizes[i].natural_size < sizes[i].minimum_size)
 
+      if (sizes[i].natural_size < sizes[i].minimum_size)
         g_error ("GtkHidingBox child %s natural width: %d < minimum %d for height %d",
                  gtk_widget_get_name (child_widget),
                  sizes[i].natural_size, sizes[i].minimum_size,
                  allocation->height);
+
       children_size += sizes[i].minimum_size + spacing;
       if (i > 0 && children_size > allocation->width)
-
         break;
+
       size -= sizes[i].minimum_size;
       sizes[i].data = child_widget;
 
       i++;
     }
-  nvis_children = i;
+  n_visible_children = i;
 
   /* Bring children up to size first */
-  size = gtk_distribute_natural_allocation (MAX (0, size), nvis_children, sizes);
+  size = gtk_distribute_natural_allocation (MAX (0, size), n_visible_children, sizes);
   /* Only now we can subtract the spacings */
-  size -= (nvis_children - 1) * spacing;
+  size -= (n_visible_children - 1) * spacing;
 
-  if (nvis_children > 1)
+  if (n_visible_children > 1)
     {
-      extra = size / nvis_children;
-      n_extra_widgets = size % nvis_children;
+      extra = size / n_visible_children;
+      n_extra_widgets = size % n_visible_children;
     }
 
   x = allocation->x;
@@ -249,7 +249,7 @@ gtk_hiding_box_size_allocate (GtkWidget     *widget,
         continue;
 
       /* Hide the overflowing children even if they have visible=TRUE */
-      if (i >= nvis_children)
+      if (i >= n_visible_children)
         {
           while (child)
             {
@@ -315,16 +315,16 @@ gtk_hiding_box_get_preferred_width (GtkWidget *widget,
   gint cm, cn;
   gint m, n;
   GList *child;
-  gint nvis_children;
+  gint n_visible_children;
   gboolean have_min = FALSE;
 
-  m = n = nvis_children = 0;
+  m = n = n_visible_children = 0;
   for (child = priv->children; child != NULL; child = child->next)
     {
       if (!gtk_widget_is_visible (child->data))
         continue;
 
-      ++nvis_children;
+      ++n_visible_children;
       gtk_widget_get_preferred_width (child->data, &cm, &cn);
       /* Minimum is a minimum of the first visible child */
       if (!have_min)
@@ -337,8 +337,8 @@ gtk_hiding_box_get_preferred_width (GtkWidget *widget,
     }
 
   /* Natural must also include the spacing */
-  if (priv->spacing && nvis_children > 1)
-    n += priv->spacing * (nvis_children - 1);
+  if (priv->spacing && n_visible_children > 1)
+    n += priv->spacing * (n_visible_children - 1);
 
   if (min)
     *min = m;
