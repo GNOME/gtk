@@ -341,10 +341,8 @@ gtk_hiding_box_get_preferred_width (GtkWidget *widget,
   if (priv->spacing && n_visible_children > 1)
     n += priv->spacing * (n_visible_children - 1);
 
-  if (min)
-    *min = m;
-  if (nat)
-    *nat = n;
+  *min = m;
+  *nat = n;
 }
 
 static void
