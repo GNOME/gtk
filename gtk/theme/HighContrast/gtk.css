@@ -110,71 +110,6 @@ textview text,
   border: 1px solid #000;
   background-color: rgba(0, 0, 0, 0.2); }
 
-.overshoot.top {
-  background-image: -gtk-gradient(radial, center top, 0, center top, 0.5, to(#010101), to(rgba(1, 1, 1, 0))), -gtk-gradient(radial, center top, 0, center top, 0.6, from(rgba(0, 0, 0, 0.5)), to(transparent));
-  background-size: 100% 5%, 100% 100%;
-  background-repeat: no-repeat;
-  background-position: center top;
-  background-color: transparent;
-  border: none;
-  box-shadow: none; }
-  .overshoot.top:backdrop {
-    background-image: -gtk-gradient(radial, center top, 0, center top, 0.5, to(#8d8d8d), to(rgba(141, 141, 141, 0)));
-    background-size: 100% 5%;
-    background-repeat: no-repeat;
-    background-position: center top;
-    background-color: transparent;
-    border: none;
-    box-shadow: none; }
-.overshoot.bottom {
-  background-image: -gtk-gradient(radial, center bottom, 0, center bottom, 0.5, to(#010101), to(rgba(1, 1, 1, 0))), -gtk-gradient(radial, center bottom, 0, center bottom, 0.6, from(rgba(0, 0, 0, 0.5)), to(transparent));
-  background-size: 100% 5%, 100% 100%;
-  background-repeat: no-repeat;
-  background-position: center bottom;
-  background-color: transparent;
-  border: none;
-  box-shadow: none; }
-  .overshoot.bottom:backdrop {
-    background-image: -gtk-gradient(radial, center bottom, 0, center bottom, 0.5, to(#8d8d8d), to(rgba(141, 141, 141, 0)));
-    background-size: 100% 5%;
-    background-repeat: no-repeat;
-    background-position: center bottom;
-    background-color: transparent;
-    border: none;
-    box-shadow: none; }
-.overshoot.left {
-  background-image: -gtk-gradient(radial, left center, 0, left center, 0.5, to(#010101), to(rgba(1, 1, 1, 0))), -gtk-gradient(radial, left center, 0, left center, 0.6, from(rgba(0, 0, 0, 0.5)), to(transparent));
-  background-size: 5% 100%, 100% 100%;
-  background-repeat: no-repeat;
-  background-position: left center;
-  background-color: transparent;
-  border: none;
-  box-shadow: none; }
-  .overshoot.left:backdrop {
-    background-image: -gtk-gradient(radial, left center, 0, left center, 0.5, to(#8d8d8d), to(rgba(141, 141, 141, 0)));
-    background-size: 5% 100%;
-    background-repeat: no-repeat;
-    background-position: left center;
-    background-color: transparent;
-    border: none;
-    box-shadow: none; }
-.overshoot.right {
-  background-image: -gtk-gradient(radial, right center, 0, right center, 0.5, to(#010101), to(rgba(1, 1, 1, 0))), -gtk-gradient(radial, right center, 0, right center, 0.6, from(rgba(0, 0, 0, 0.5)), to(transparent));
-  background-size: 5% 100%, 100% 100%;
-  background-repeat: no-repeat;
-  background-position: right center;
-  background-color: transparent;
-  border: none;
-  box-shadow: none; }
-  .overshoot.right:backdrop {
-    background-image: -gtk-gradient(radial, right center, 0, right center, 0.5, to(#8d8d8d), to(rgba(141, 141, 141, 0)));
-    background-size: 5% 100%;
-    background-repeat: no-repeat;
-    background-position: right center;
-    background-color: transparent;
-    border: none;
-    box-shadow: none; }
-
 label:insensitive, label:backdrop:insensitive {
   color: gray; }
 
@@ -1726,14 +1661,6 @@ scrollbar,
   .scrollbar.overlay-indicator.hovering {
     opacity: 0.7; }
 
-.scrollbars-junction, scrollbar,
-.scrollbar {
-  border-color: transparent;
-  background-color: #f2f2f2; }
-  .scrollbars-junction:backdrop, scrollbar:backdrop,
-  .scrollbar:backdrop {
-    background-color: transparent; }
-
 /**********
  * Switch *
  **********/
@@ -2147,10 +2074,121 @@ frame,
     padding: 6px;
     border-width: 1px 0 0; }
 
-GtkScrolledWindow .frame {
+scrolledwindow .frame {
   border-radius: 2px; }
-GtkScrolledWindow GtkViewport.frame {
+scrolledwindow viewport.frame {
   border-style: none; }
+scrolledwindow overshoot.top {
+  background-image: -gtk-gradient(radial, center top, 0, center top, 0.5, to(#010101), to(rgba(1, 1, 1, 0))), -gtk-gradient(radial, center top, 0, center top, 0.6, from(rgba(0, 0, 0, 0.5)), to(transparent));
+  background-size: 100% 5%, 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-color: transparent;
+  border: none;
+  box-shadow: none; }
+  scrolledwindow overshoot.top:backdrop {
+    background-image: -gtk-gradient(radial, center top, 0, center top, 0.5, to(#8d8d8d), to(rgba(141, 141, 141, 0)));
+    background-size: 100% 5%;
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-color: transparent;
+    border: none;
+    box-shadow: none; }
+scrolledwindow overshoot.bottom {
+  background-image: -gtk-gradient(radial, center bottom, 0, center bottom, 0.5, to(#010101), to(rgba(1, 1, 1, 0))), -gtk-gradient(radial, center bottom, 0, center bottom, 0.6, from(rgba(0, 0, 0, 0.5)), to(transparent));
+  background-size: 100% 5%, 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-color: transparent;
+  border: none;
+  box-shadow: none; }
+  scrolledwindow overshoot.bottom:backdrop {
+    background-image: -gtk-gradient(radial, center bottom, 0, center bottom, 0.5, to(#8d8d8d), to(rgba(141, 141, 141, 0)));
+    background-size: 100% 5%;
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    background-color: transparent;
+    border: none;
+    box-shadow: none; }
+scrolledwindow overshoot.left {
+  background-image: -gtk-gradient(radial, left center, 0, left center, 0.5, to(#010101), to(rgba(1, 1, 1, 0))), -gtk-gradient(radial, left center, 0, left center, 0.6, from(rgba(0, 0, 0, 0.5)), to(transparent));
+  background-size: 5% 100%, 100% 100%;
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-color: transparent;
+  border: none;
+  box-shadow: none; }
+  scrolledwindow overshoot.left:backdrop {
+    background-image: -gtk-gradient(radial, left center, 0, left center, 0.5, to(#8d8d8d), to(rgba(141, 141, 141, 0)));
+    background-size: 5% 100%;
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-color: transparent;
+    border: none;
+    box-shadow: none; }
+scrolledwindow overshoot.right {
+  background-image: -gtk-gradient(radial, right center, 0, right center, 0.5, to(#010101), to(rgba(1, 1, 1, 0))), -gtk-gradient(radial, right center, 0, right center, 0.6, from(rgba(0, 0, 0, 0.5)), to(transparent));
+  background-size: 5% 100%, 100% 100%;
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-color: transparent;
+  border: none;
+  box-shadow: none; }
+  scrolledwindow overshoot.right:backdrop {
+    background-image: -gtk-gradient(radial, right center, 0, right center, 0.5, to(#8d8d8d), to(rgba(141, 141, 141, 0)));
+    background-size: 5% 100%;
+    background-repeat: no-repeat;
+    background-position: right center;
+    background-color: transparent;
+    border: none;
+    box-shadow: none; }
+scrolledwindow undershoot.top {
+  background-color: transparent;
+  background-image: linear-gradient(to left, rgba(255, 255, 255, 0.2) 50%, rgba(0, 0, 0, 0.2) 50%);
+  padding-top: 1px;
+  background-size: 10px 1px;
+  background-repeat: repeat-x;
+  background-origin: content-box;
+  background-position: center top;
+  border: none;
+  box-shadow: none; }
+scrolledwindow undershoot.bottom {
+  background-color: transparent;
+  background-image: linear-gradient(to left, rgba(255, 255, 255, 0.2) 50%, rgba(0, 0, 0, 0.2) 50%);
+  padding-bottom: 1px;
+  background-size: 10px 1px;
+  background-repeat: repeat-x;
+  background-origin: content-box;
+  background-position: center bottom;
+  border: none;
+  box-shadow: none; }
+scrolledwindow undershoot.left {
+  background-color: transparent;
+  background-image: linear-gradient(to top, rgba(255, 255, 255, 0.2) 50%, rgba(0, 0, 0, 0.2) 50%);
+  padding-left: 1px;
+  background-size: 1px 10px;
+  background-repeat: repeat-y;
+  background-origin: content-box;
+  background-position: left center;
+  border: none;
+  box-shadow: none; }
+scrolledwindow undershoot.right {
+  background-color: transparent;
+  background-image: linear-gradient(to top, rgba(255, 255, 255, 0.2) 50%, rgba(0, 0, 0, 0.2) 50%);
+  padding-right: 1px;
+  background-size: 1px 10px;
+  background-repeat: repeat-y;
+  background-origin: content-box;
+  background-position: right center;
+  border: none;
+  box-shadow: none; }
+scrolledwindow junction, scrolledwindow scrollbar,
+scrolledwindow .scrollbar {
+  border-color: transparent;
+  background-color: #f2f2f2; }
+  scrolledwindow junction:backdrop, scrolledwindow scrollbar:backdrop,
+  scrolledwindow .scrollbar:backdrop {
+    background-color: transparent; }
 
 separator, GtkPlacesSidebar.sidebar .view separator,
 GtkPlacesSidebar.sidebar .view separator:backdrop {
@@ -2951,36 +2989,3 @@ button.titlebutton {
   .touch-selection .radio:backdrop:checked {
     icon-shadow: none;
     color: #fff; }
-
-.undershoot.top {
-  background-color: transparent;
-  background-image: linear-gradient(to left, rgba(255, 255, 255, 0.2) 50%, rgba(0, 0, 0, 0.2) 50%);
-  padding-top: 1px;
-  background-size: 10px 1px;
-  background-repeat: repeat-x;
-  background-origin: content-box;
-  background-position: center top; }
-.undershoot.bottom {
-  background-color: transparent;
-  background-image: linear-gradient(to left, rgba(255, 255, 255, 0.2) 50%, rgba(0, 0, 0, 0.2) 50%);
-  padding-bottom: 1px;
-  background-size: 10px 1px;
-  background-repeat: repeat-x;
-  background-origin: content-box;
-  background-position: center bottom; }
-.undershoot.left {
-  background-color: transparent;
-  background-image: linear-gradient(to top, rgba(255, 255, 255, 0.2) 50%, rgba(0, 0, 0, 0.2) 50%);
-  padding-left: 1px;
-  background-size: 1px 10px;
-  background-repeat: repeat-y;
-  background-origin: content-box;
-  background-position: left center; }
-.undershoot.right {
-  background-color: transparent;
-  background-image: linear-gradient(to top, rgba(255, 255, 255, 0.2) 50%, rgba(0, 0, 0, 0.2) 50%);
-  padding-right: 1px;
-  background-size: 1px 10px;
-  background-repeat: repeat-y;
-  background-origin: content-box;
-  background-position: right center; }

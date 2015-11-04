@@ -373,5 +373,7 @@
   background-repeat: $_gradient_repeat;
   background-origin: content-box;
   background-position: $_bg_pos;
+  border: none;
+  box-shadow: none;
 }
 
