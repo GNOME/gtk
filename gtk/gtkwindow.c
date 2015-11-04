@@ -1383,7 +1383,16 @@ gtk_window_titlebar_action (GtkWindow      *window,
     retval = FALSE;
     /* treat all maximization variants the same */
   else if (g_str_has_prefix (action, "toggle-maximize"))
-    _gtk_window_toggle_maximized (window);
+    {
+      /*
+       * gtk header bar won't show the maximize button if the following
+       * properties are not met, apply the same to title bar actions for
+       * consistency.
+       */
+      if (gtk_window_get_resizable (window) &&
+          gtk_window_get_type_hint (window) == GDK_WINDOW_TYPE_HINT_NORMAL)
+            _gtk_window_toggle_maximized (window);
+    }
   else if (g_str_equal (action, "lower"))
     gdk_window_lower (_gtk_widget_get_window (GTK_WIDGET (window)));
   else if (g_str_equal (action, "minimize"))
