@@ -366,7 +366,7 @@ gtk_inspector_css_node_tree_set_object (GtkInspectorCssNodeTree *cnt,
 
   gtk_tree_view_expand_to_path (GTK_TREE_VIEW (priv->node_tree), path);
   gtk_tree_view_set_cursor (GTK_TREE_VIEW (priv->node_tree), path, NULL, FALSE);
-  gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (priv->node_tree), path, NULL, FALSE, 0.0, 0.0);
+  gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (priv->node_tree), path, NULL, TRUE, 0.5, 0.0);
 
   gtk_tree_path_free (path);
 }
