@@ -73,9 +73,9 @@
  *
  * # CSS nodes
  *
- * GtkPopover has a single css node called popover and gets the
- * .menu style class if it is menu-like (e.g. #GtkPopoverMenu or
- * created using gtk_popover_new_from_model().
+ * GtkPopover has a single css node called popover It always gets the
+ * .background style class and it gets the .menu style class if it is
+ * menu-like (e.g. #GtkPopoverMenu or created using gtk_popover_new_from_model().
  *
  * Particular uses of GtkPopover, such as touch selection popups
  * or magnifiers in #GtkEntry or #GtkTextView get style classes
@@ -191,6 +191,7 @@ static void
 gtk_popover_init (GtkPopover *popover)
 {
   GtkWidget *widget;
+  GtkStyleContext *context;
 
   widget = GTK_WIDGET (popover);
   gtk_widget_set_has_window (widget, TRUE);
@@ -198,6 +199,9 @@ gtk_popover_init (GtkPopover *popover)
   popover->priv->modal = TRUE;
   popover->priv->tick_id = 0;
   popover->priv->transitions_enabled = TRUE;
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (popover));
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_BACKGROUND);
 }
 
 static void
