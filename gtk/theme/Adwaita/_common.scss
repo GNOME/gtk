@@ -2338,23 +2338,29 @@ progressbar {
   box-shadow: inset 1px 1px transparentize(black, 0.9), // needs to be set
               _widget_edge();                           // here ot it gets
                                                         // clipped
-  border: 1px solid $borders_color;
-  border-radius: 3px;
-  background-color: mix($borders_color, $bg_color, 35%);
 
   &:backdrop {
     color: $backdrop_insensitive_color;
-    border-color: $backdrop_borders_color;
-    background-color: $backdrop_dark_fill;
-    box-shadow: 0 1px transparentize(white,1);
   }
   &.osd {
     -GtkProgressBar-xspacing: 0;
     -GtkProgressBar-yspacing: 0;
     -GtkProgressBar-min-horizontal-bar-height: 3;
-    border-style: none;
-    background-color: transparent;
-    box-shadow: none;
+    trough {
+      border-style: none;
+      background-color: transparent;
+      box-shadow: none;
+    }
+  }
+  trough {
+    border: 1px solid $borders_color;
+    border-radius: 3px;
+    background-color: mix($borders_color, $bg_color, 35%);
+    &:backdrop {
+      border-color: $backdrop_borders_color;
+      background-color: $backdrop_dark_fill;
+      box-shadow: 0 1px transparentize(white,1);
+    }
   }
 }
 

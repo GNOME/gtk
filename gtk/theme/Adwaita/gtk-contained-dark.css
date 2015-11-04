@@ -3420,22 +3420,25 @@ progressbar {
   padding: 0;
   font-size: smaller;
   color: rgba(238, 238, 236, 0.4);
-  box-shadow: inset 1px 1px rgba(0, 0, 0, 0.1), 0 1px rgba(238, 238, 236, 0.1);
-  border: 1px solid #1c1f1f;
-  border-radius: 3px;
-  background-color: #2f3434; }
+  box-shadow: inset 1px 1px rgba(0, 0, 0, 0.1), 0 1px rgba(238, 238, 236, 0.1); }
   progressbar:backdrop {
-    color: #5d6767;
-    border-color: #1f2222;
-    background-color: #303535;
-    box-shadow: 0 1px rgba(255, 255, 255, 0); }
+    color: #5d6767; }
   progressbar.osd {
     -GtkProgressBar-xspacing: 0;
     -GtkProgressBar-yspacing: 0;
-    -GtkProgressBar-min-horizontal-bar-height: 3;
-    border-style: none;
-    background-color: transparent;
-    box-shadow: none; }
+    -GtkProgressBar-min-horizontal-bar-height: 3; }
+    progressbar.osd trough {
+      border-style: none;
+      background-color: transparent;
+      box-shadow: none; }
+  progressbar trough {
+    border: 1px solid #1c1f1f;
+    border-radius: 3px;
+    background-color: #2f3434; }
+    progressbar trough:backdrop {
+      border-color: #1f2222;
+      background-color: #303535;
+      box-shadow: 0 1px rgba(255, 255, 255, 0); }
 
 progressbar.horizontal progress {
   background-image: linear-gradient(to bottom, #215d9c 2px, #266cb5);
