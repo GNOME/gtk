@@ -4317,3 +4317,9 @@ _gtk_range_set_steppers (GtkRange *range,
 
   gtk_widget_queue_resize (GTK_WIDGET (range));
 }
+
+GtkCssNode *
+gtk_range_get_trough_node (GtkRange *range)
+{
+  return range->priv->trough_node;
+}

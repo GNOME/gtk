@@ -27,6 +27,7 @@
 
 
 #include <gtk/gtkrange.h>
+#include <gtk/gtkcssnodeprivate.h>
 
 
 G_BEGIN_DECLS
@@ -46,6 +47,8 @@ void               _gtk_range_set_steppers                 (GtkRange      *range
                                                             gboolean       has_b,
                                                             gboolean       has_c,
                                                             gboolean       has_d);
+
+GtkCssNode        *gtk_range_get_trough_node (GtkRange *range);
 
 G_END_DECLS
 
