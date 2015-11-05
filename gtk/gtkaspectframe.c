@@ -39,6 +39,10 @@
  * derives from #GtkFrame, so it can draw a label and
  * a frame around the child. The frame will be
  * “shrink-wrapped” to the size of the child.
+ *
+ * # CSS nodes
+ *
+ * GtkAspectFrame uses a CSS node with name frame.
  */
 
 #include "config.h"
@@ -129,6 +133,8 @@ gtk_aspect_frame_class_init (GtkAspectFrameClass *class)
                                                          P_("Force aspect ratio to match that of the frame's child"),
                                                          TRUE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
+  gtk_widget_class_set_css_name (GTK_WIDGET_CLASS (class), "frame");
 }
 
 static void
