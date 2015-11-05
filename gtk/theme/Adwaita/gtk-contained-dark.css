@@ -1058,10 +1058,11 @@ button, headerbar button.titlebutton,
     .inline-toolbar toolbutton > button:backdrop:insensitive:active > .label, .inline-toolbar toolbutton > button:backdrop:insensitive:checked > .label {
       color: inherit; }
 
-toolbar.inline-toolbar toolbutton > button.flat, .inline-toolbar toolbutton > button.flat, .inline-toolbar.search-bar toolbutton > button.flat, .inline-toolbar.location-bar toolbutton > button.flat, .inline-toolbar toolbutton > .sidebar-button.button, .inline-toolbar headerbar toolbutton > button.titlebutton, headerbar .inline-toolbar toolbutton > button.titlebutton,
+toolbar.inline-toolbar toolbutton > button.flat, .inline-toolbar toolbutton > button.flat, searchbar.inline-toolbar toolbutton > button.flat,
+.inline-toolbar.location-bar toolbutton > button.flat, .inline-toolbar toolbutton > .sidebar-button.button, .inline-toolbar headerbar toolbutton > button.titlebutton, headerbar .inline-toolbar toolbutton > button.titlebutton,
 toolbar.inline-toolbar toolbutton:backdrop > button.flat,
 .inline-toolbar toolbutton:backdrop > button.flat,
-.inline-toolbar.search-bar toolbutton:backdrop > button.flat,
+searchbar.inline-toolbar toolbutton:backdrop > button.flat,
 .inline-toolbar.location-bar toolbutton:backdrop > button.flat,
 .inline-toolbar toolbutton:backdrop > .sidebar-button.button,
 .inline-toolbar headerbar toolbutton:backdrop > button.titlebutton,
@@ -1075,12 +1076,13 @@ headerbar .inline-toolbar toolbutton:backdrop > button.titlebutton,
   border-right-style: none; }
 
 .linked:not(.vertical) > entry:first-child, .linked:not(.vertical) > spinbutton:first-child, .inline-toolbar button:first-child, .linked > button:first-child, headerbar .linked > button.titlebutton:first-child,
-.titlebar .linked > button.titlebutton:first-child, toolbar.inline-toolbar toolbutton:first-child > button.flat, .inline-toolbar toolbutton:first-child > button.flat, .inline-toolbar.search-bar toolbutton:first-child > button.flat, .inline-toolbar.location-bar toolbutton:first-child > button.flat, .inline-toolbar toolbutton:first-child > .sidebar-button.button, .inline-toolbar headerbar toolbutton:first-child > button.titlebutton, headerbar .inline-toolbar toolbutton:first-child > button.titlebutton,
+.titlebar .linked > button.titlebutton:first-child, toolbar.inline-toolbar toolbutton:first-child > button.flat, .inline-toolbar toolbutton:first-child > button.flat, searchbar.inline-toolbar toolbutton:first-child > button.flat,
+.inline-toolbar.location-bar toolbutton:first-child > button.flat, .inline-toolbar toolbutton:first-child > .sidebar-button.button, .inline-toolbar headerbar toolbutton:first-child > button.titlebutton, headerbar .inline-toolbar toolbutton:first-child > button.titlebutton,
 .inline-toolbar .titlebar toolbutton:first-child > button.titlebutton,
 .titlebar .inline-toolbar toolbutton:first-child > button.titlebutton,
 toolbar.inline-toolbar toolbutton:backdrop:first-child > button.flat,
 .inline-toolbar toolbutton:backdrop:first-child > button.flat,
-.inline-toolbar.search-bar toolbutton:backdrop:first-child > button.flat,
+searchbar.inline-toolbar toolbutton:backdrop:first-child > button.flat,
 .inline-toolbar.location-bar toolbutton:backdrop:first-child > button.flat,
 .inline-toolbar toolbutton:backdrop:first-child > .sidebar-button.button,
 .inline-toolbar headerbar toolbutton:backdrop:first-child > button.titlebutton,
@@ -1090,12 +1092,13 @@ headerbar .inline-toolbar toolbutton:backdrop:first-child > button.titlebutton,
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px; }
 .linked:not(.vertical) > entry:last-child, .linked:not(.vertical) > spinbutton:last-child, .inline-toolbar button:last-child, .linked > button:last-child, headerbar .linked > button.titlebutton:last-child,
-.titlebar .linked > button.titlebutton:last-child, toolbar.inline-toolbar toolbutton:last-child > button.flat, .inline-toolbar toolbutton:last-child > button.flat, .inline-toolbar.search-bar toolbutton:last-child > button.flat, .inline-toolbar.location-bar toolbutton:last-child > button.flat, .inline-toolbar toolbutton:last-child > .sidebar-button.button, .inline-toolbar headerbar toolbutton:last-child > button.titlebutton, headerbar .inline-toolbar toolbutton:last-child > button.titlebutton,
+.titlebar .linked > button.titlebutton:last-child, toolbar.inline-toolbar toolbutton:last-child > button.flat, .inline-toolbar toolbutton:last-child > button.flat, searchbar.inline-toolbar toolbutton:last-child > button.flat,
+.inline-toolbar.location-bar toolbutton:last-child > button.flat, .inline-toolbar toolbutton:last-child > .sidebar-button.button, .inline-toolbar headerbar toolbutton:last-child > button.titlebutton, headerbar .inline-toolbar toolbutton:last-child > button.titlebutton,
 .inline-toolbar .titlebar toolbutton:last-child > button.titlebutton,
 .titlebar .inline-toolbar toolbutton:last-child > button.titlebutton,
 toolbar.inline-toolbar toolbutton:backdrop:last-child > button.flat,
 .inline-toolbar toolbutton:backdrop:last-child > button.flat,
-.inline-toolbar.search-bar toolbutton:backdrop:last-child > button.flat,
+searchbar.inline-toolbar toolbutton:backdrop:last-child > button.flat,
 .inline-toolbar.location-bar toolbutton:backdrop:last-child > button.flat,
 .inline-toolbar toolbutton:backdrop:last-child > .sidebar-button.button,
 .inline-toolbar headerbar toolbutton:backdrop:last-child > button.titlebutton,
@@ -1106,12 +1109,13 @@ headerbar .inline-toolbar toolbutton:backdrop:last-child > button.titlebutton,
   border-bottom-right-radius: 3px;
   border-right-style: solid; }
 .linked:not(.vertical) > entry:only-child, .linked:not(.vertical) > spinbutton:only-child, .inline-toolbar button:only-child, .linked > button:only-child, headerbar .linked > button.titlebutton:only-child,
-.titlebar .linked > button.titlebutton:only-child, toolbar.inline-toolbar toolbutton:only-child > button.flat, .inline-toolbar toolbutton:only-child > button.flat, .inline-toolbar.search-bar toolbutton:only-child > button.flat, .inline-toolbar.location-bar toolbutton:only-child > button.flat, .inline-toolbar toolbutton:only-child > .sidebar-button.button, .inline-toolbar headerbar toolbutton:only-child > button.titlebutton, headerbar .inline-toolbar toolbutton:only-child > button.titlebutton,
+.titlebar .linked > button.titlebutton:only-child, toolbar.inline-toolbar toolbutton:only-child > button.flat, .inline-toolbar toolbutton:only-child > button.flat, searchbar.inline-toolbar toolbutton:only-child > button.flat,
+.inline-toolbar.location-bar toolbutton:only-child > button.flat, .inline-toolbar toolbutton:only-child > .sidebar-button.button, .inline-toolbar headerbar toolbutton:only-child > button.titlebutton, headerbar .inline-toolbar toolbutton:only-child > button.titlebutton,
 .inline-toolbar .titlebar toolbutton:only-child > button.titlebutton,
 .titlebar .inline-toolbar toolbutton:only-child > button.titlebutton,
 toolbar.inline-toolbar toolbutton:backdrop:only-child > button.flat,
 .inline-toolbar toolbutton:backdrop:only-child > button.flat,
-.inline-toolbar.search-bar toolbutton:backdrop:only-child > button.flat,
+searchbar.inline-toolbar toolbutton:backdrop:only-child > button.flat,
 .inline-toolbar.location-bar toolbutton:backdrop:only-child > button.flat,
 .inline-toolbar toolbutton:backdrop:only-child > .sidebar-button.button,
 .inline-toolbar headerbar toolbutton:backdrop:only-child > button.titlebutton,
@@ -1482,11 +1486,14 @@ combobox {
 /************
  * Toolbars *
  ************/
-toolbar, .inline-toolbar, .search-bar, .location-bar {
+toolbar, .inline-toolbar, searchbar,
+.location-bar {
   -GtkWidget-window-dragging: true;
   padding: 4px;
   background-color: #393f3f; }
-  .osd toolbar, .osd .inline-toolbar, .osd .search-bar, .osd .location-bar, toolbar.osd, .osd.inline-toolbar, .osd.search-bar, .osd.location-bar {
+  .osd toolbar, .osd .inline-toolbar, .osd searchbar,
+  .osd .location-bar, toolbar.osd, .osd.inline-toolbar, searchbar.osd,
+  .osd.location-bar {
     padding: 13px;
     border: none;
     border-radius: 5px;
@@ -1497,16 +1504,19 @@ toolbar, .inline-toolbar, .search-bar, .location-bar {
   padding: 3px;
   border-radius: 0  0 5px 5px; }
 
-.search-bar, .location-bar {
+searchbar,
+.location-bar {
   border-width: 0 0 1px;
   padding: 3px; }
 
-.inline-toolbar, .search-bar, .location-bar {
+.inline-toolbar, searchbar,
+.location-bar {
   border-style: solid;
   border-color: #1c1f1f;
   background-color: #303535;
   box-shadow: inset 0 2px 3px -1px #242828, 0 1px rgba(238, 238, 236, 0.1); }
-  .inline-toolbar:backdrop, .search-bar:backdrop, .location-bar:backdrop {
+  .inline-toolbar:backdrop, searchbar:backdrop,
+  .location-bar:backdrop {
     border-color: #1f2222;
     background-color: #303535;
     box-shadow: none; }
@@ -2064,8 +2074,9 @@ popover {
   popover > .view,
   popover > toolbar,
   popover > .inline-toolbar,
-  popover > .search-bar,
-  popover > .location-bar, popover.osd > toolbar, popover.osd > .inline-toolbar, popover.osd > .search-bar, popover.osd > .location-bar {
+  popover > searchbar,
+  popover > .location-bar, popover.osd > toolbar, popover.osd > .inline-toolbar, popover.osd > searchbar,
+  popover.osd > .location-bar {
     border-style: none;
     background-color: transparent; }
   popover button.flat, popover .sidebar-button.button, popover headerbar button.titlebutton, headerbar popover button.titlebutton,
@@ -3496,10 +3507,10 @@ frame,
   frame:backdrop,
   .frame:backdrop {
     border-color: #1f2222; }
-  frame.action-bar,
-  .frame.action-bar {
-    padding: 6px;
-    border-width: 1px 0 0; }
+
+actionbar frame {
+  padding: 6px;
+  border-width: 1px 0 0; }
 
 scrolledwindow viewport.frame {
   border-style: none; }
@@ -3619,7 +3630,7 @@ scrolledwindow junction {
 
 separator {
   color: rgba(0, 0, 0, 0.1); }
-  GtkFileChooserButton separator.vertical, button.font separator.vertical {
+  button.file separator.vertical, button.font separator.vertical {
     -GtkWidget-wide-separators: true; }
 
 /*********
@@ -4068,13 +4079,6 @@ messagedialog.csd .dialog-action-area button:first-child {
   border-bottom-left-radius: 7px;
   outline-bottom-left-radius: 5px; }
 
-GtkFileChooserDialog .search-bar {
-  background-color: #292929;
-  border-color: #393f3f;
-  box-shadow: none; }
-  GtkFileChooserDialog .search-bar:backdrop {
-    background-color: #2c2c2c;
-    border-color: #393f3f; }
 GtkFileChooserDialog .dialog-action-box {
   border-top: 1px solid #1c1f1f; }
   GtkFileChooserDialog .dialog-action-box:backdrop {

@@ -1035,7 +1035,8 @@ toolbar {
   padding: 3px;
   border-radius: 0  0 5px 5px;
 }
-.search-bar, .location-bar {
+searchbar,
+.location-bar {
   @extend toolbar;
   @extend %inset-bar;
   border-width: 0 0 1px;
@@ -2495,10 +2496,11 @@ frame,
   &.flat { border-style: none; }
   &:backdrop { border-color: $backdrop_borders_color; }
   padding: 0;
-  &.action-bar {
-    padding: 6px;
-    border-width: 1px 0 0;
-  }
+}
+
+actionbar frame {
+  padding: 6px;
+  border-width: 1px 0 0;
 }
 
 scrolledwindow {
@@ -2568,7 +2570,7 @@ separator {
   color: transparentize(black, 0.9);
 
   // Font and File button separators
-  GtkFileChooserButton &.vertical,
+  button.file &.vertical,
   button.font &.vertical {
     // always disable separators
     -GtkWidget-wide-separators: true;
@@ -2864,15 +2866,6 @@ messagedialog { // Message Dialog styling
 }
 
 GtkFileChooserDialog {
-  .search-bar {
-    background-color: $base_color;
-    border-color: $bg_color;
-    box-shadow: none;
-    &:backdrop {
-      background-color: $backdrop_base_color;
-      border-color: $backdrop_bg_color;
-    }
-  }
   .dialog-action-box {
     border-top: 1px solid $borders_color;
     &:backdrop { border-top-color: $backdrop_borders_color; }
