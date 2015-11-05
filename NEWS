@@ -1,5 +1,8 @@
 Overview of Changes in GTK+ 3.19.2
 ==================================
+* Support for native file chooser on Win32 when using the new
+  GtkFileChooserNative API, and when using GtkFileChooserButton.
+
 * The GtkFileChooser interface prerequisite was changed from GtkWidget
   to GObject to allow non-widget filechooser implementations.
 
