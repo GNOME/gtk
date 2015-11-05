@@ -2356,106 +2356,79 @@ notebook {
 /**************
  * Scrollbars *
  **************/
-scrollbar,
-.scrollbar {
+scrollbar {
   -GtkRange-slider-width: 13;
   -GtkRange-trough-border: 0;
   -GtkScrollbar-has-backward-stepper: false;
   -GtkScrollbar-has-forward-stepper: false;
   -GtkScrollbar-min-slider-length: 42;
   -GtkRange-stepper-spacing: 0;
-  -GtkRange-trough-under-steppers: 1;
-  background-color: #dbdbdb;
-  border: 1px none #a1a1a1; }
+  -GtkRange-trough-under-steppers: 1; }
   scrollbar button, scrollbar headerbar button.titlebutton, headerbar scrollbar button.titlebutton,
   scrollbar .titlebar button.titlebutton,
-  .titlebar scrollbar button.titlebutton,
-  .scrollbar button,
-  .scrollbar headerbar button.titlebutton,
-  headerbar .scrollbar button.titlebutton,
-  .scrollbar .titlebar button.titlebutton,
-  .titlebar .scrollbar button.titlebutton {
+  .titlebar scrollbar button.titlebutton {
     border: none; }
-  scrollbar.overlay-indicator:not(.dragging):not(.hovering),
-  .scrollbar.overlay-indicator:not(.dragging):not(.hovering) {
+  scrollbar.overlay-indicator:not(.dragging):not(.hovering) {
     opacity: 0.4;
-    border-style: none;
-    background-color: transparent;
     -GtkRange-slider-width: 5px; }
-    scrollbar.overlay-indicator:not(.dragging):not(.hovering) slider,
-    .scrollbar.overlay-indicator:not(.dragging):not(.hovering) slider {
+    scrollbar.overlay-indicator:not(.dragging):not(.hovering) slider {
       margin: 0;
       background-color: #2e3436;
       border: 1px solid white;
       background-clip: padding-box; }
-    scrollbar.overlay-indicator:not(.dragging):not(.hovering).vertical slider,
-    .scrollbar.overlay-indicator:not(.dragging):not(.hovering).vertical slider {
+    scrollbar.overlay-indicator:not(.dragging):not(.hovering) trough {
+      border-style: none;
+      background-color: transparent; }
+    scrollbar.overlay-indicator:not(.dragging):not(.hovering).vertical slider {
       margin-top: 2px;
       margin-bottom: 2px; }
-    scrollbar.overlay-indicator:not(.dragging):not(.hovering).horizontal slider,
-    .scrollbar.overlay-indicator:not(.dragging):not(.hovering).horizontal slider {
+    scrollbar.overlay-indicator:not(.dragging):not(.hovering).horizontal slider {
       margin-left: 2px;
       margin-right: 2px; }
-  scrollbar.overlay-indicator.dragging, scrollbar.overlay-indicator.hovering,
-  .scrollbar.overlay-indicator.dragging,
-  .scrollbar.overlay-indicator.hovering {
+  scrollbar.overlay-indicator.dragging, scrollbar.overlay-indicator.hovering {
     opacity: 0.7; }
-  scrollbar:backdrop,
-  .scrollbar:backdrop {
-    background-color: #e5e5e5;
-    border-color: darkgray; }
-  scrollbar slider,
-  .scrollbar slider {
+  scrollbar trough {
+    background-color: #dbdbdb;
+    border: 1px none #a1a1a1; }
+    scrollbar trough:backdrop {
+      background-color: #e5e5e5;
+      border-color: darkgray; }
+  scrollbar slider {
     background-color: #7a7e7f; }
-    scrollbar slider:hover,
-    .scrollbar slider:hover {
+    scrollbar slider:hover {
       background-color: #54595b; }
-    scrollbar slider:prelight:active,
-    .scrollbar slider:prelight:active {
+    scrollbar slider:prelight:active {
       background-color: #2a76c6; }
-    scrollbar slider:backdrop,
-    .scrollbar slider:backdrop {
+    scrollbar slider:backdrop {
       background-color: #c7c8c9; }
-    scrollbar slider:insensitive,
-    .scrollbar slider:insensitive {
+    scrollbar slider:insensitive {
       background-color: transparent; }
-  scrollbar slider,
-  .scrollbar slider {
+  scrollbar slider {
     border-radius: 100px;
     margin: 3px; }
-  scrollbar.fine-tune slider,
-  .scrollbar.fine-tune slider {
+  scrollbar.fine-tune slider {
     margin: 4px; }
-  scrollbar.vertical,
-  .scrollbar.vertical {
+  scrollbar.vertical slider {
+    margin-left: 4px; }
+    scrollbar.vertical slider:dir(rtl) {
+      margin-left: 3px;
+      margin-right: 4px; }
+  scrollbar.vertical.fine-tune slider {
+    margin-left: 5px; }
+    scrollbar.vertical.fine-tune slider:dir(rtl) {
+      margin-left: 4px;
+      margin-right: 5px; }
+  scrollbar.vertical trough {
     border-left-style: solid; }
-    scrollbar.vertical slider,
-    .scrollbar.vertical slider {
-      margin-left: 4px; }
-      scrollbar.vertical slider:dir(rtl),
-      .scrollbar.vertical slider:dir(rtl) {
-        margin-left: 3px;
-        margin-right: 4px; }
-    scrollbar.vertical.fine-tune slider,
-    .scrollbar.vertical.fine-tune slider {
-      margin-left: 5px; }
-      scrollbar.vertical.fine-tune slider:dir(rtl),
-      .scrollbar.vertical.fine-tune slider:dir(rtl) {
-        margin-left: 4px;
-        margin-right: 5px; }
-    scrollbar.vertical:dir(rtl),
-    .scrollbar.vertical:dir(rtl) {
+    scrollbar.vertical trough:dir(rtl) {
       border-left-style: none;
       border-right-style: solid; }
-  scrollbar.horizontal,
-  .scrollbar.horizontal {
+  scrollbar.horizontal slider {
+    margin-top: 4px; }
+  scrollbar.horizontal.fine-tune slider {
+    margin-top: 5px; }
+  scrollbar.horizontal trough {
     border-top-style: solid; }
-    scrollbar.horizontal slider,
-    .scrollbar.horizontal slider {
-      margin-top: 4px; }
-    scrollbar.horizontal.fine-tune slider,
-    .scrollbar.horizontal.fine-tune slider {
-      margin-top: 5px; }
 
 /**********
  * Switch *
@@ -3086,29 +3059,24 @@ checkbutton.text-button, radiobutton.text-button {
  * GtkScale *
  ************/
 scale,
-.scale,
 .scale.scale-has-marks-above.scale-has-marks-below,
 .scale.vertical.scale-has-marks-above.scale-has-marks-below {
   -GtkScale-slider-length: 20;
   -GtkRange-slider-width: 20;
   -GtkRange-trough-border: 2;
   outline-offset: -9px;
-  outline-radius: 4px;
-  margin: 10px;
-  border: 1px solid #a1a1a1;
-  border-radius: 3px;
-  background-color: #cfcfcf;
-  box-shadow: inset 1px 1px rgba(0, 0, 0, 0.1), 0 1px white; }
+  outline-radius: 4px; }
   scale.fine-tune,
-  .scale.fine-tune,
   .scale.scale-has-marks-above.scale-has-marks-below.fine-tune,
   .scale.vertical.scale-has-marks-above.scale-has-marks-below.fine-tune {
     outline-offset: -7px;
-    outline-radius: 6px;
-    margin: 8px;
-    border-radius: 4px; }
+    outline-radius: 6px; }
+    scale.fine-tune trough,
+    .scale.scale-has-marks-above.scale-has-marks-below.fine-tune trough,
+    .scale.vertical.scale-has-marks-above.scale-has-marks-below.fine-tune trough {
+      margin: 8px;
+      border-radius: 4px; }
   scale slider,
-  .scale slider,
   .scale.scale-has-marks-above.scale-has-marks-below slider,
   .scale.vertical.scale-has-marks-above.scale-has-marks-below slider {
     color: #2e3436;
@@ -3123,7 +3091,6 @@ scale,
     border-color: #999999;
     box-shadow: inset 0 1px white, inset 0 -2px #ededed, inset 0 -1px #c7c7c7; }
     scale slider:hover,
-    .scale slider:hover,
     .scale.scale-has-marks-above.scale-has-marks-below slider:hover,
     .scale.vertical.scale-has-marks-above.scale-has-marks-below slider:hover {
       color: #2e3436;
@@ -3137,7 +3104,6 @@ scale,
       border-radius: 50%;
       box-shadow: inset 0 1px white, inset 0 -2px white, inset 0 -1px #d6d6d6; }
     scale slider:insensitive,
-    .scale slider:insensitive,
     .scale.scale-has-marks-above.scale-has-marks-below slider:insensitive,
     .scale.vertical.scale-has-marks-above.scale-has-marks-below slider:insensitive {
       border-style: solid;
@@ -3145,7 +3111,6 @@ scale,
       background-image: linear-gradient(to bottom, #f4f4f4);
       box-shadow: none; }
     scale slider:backdrop,
-    .scale slider:backdrop,
     .scale.scale-has-marks-above.scale-has-marks-below slider:backdrop,
     .scale.vertical.scale-has-marks-above.scale-has-marks-below slider:backdrop {
       border-style: solid;
@@ -3154,7 +3119,6 @@ scale,
       background-image: linear-gradient(to bottom, #ededed);
       box-shadow: none; }
     scale slider:backdrop:insensitive,
-    .scale slider:backdrop:insensitive,
     .scale.scale-has-marks-above.scale-has-marks-below slider:backdrop:insensitive,
     .scale.vertical.scale-has-marks-above.scale-has-marks-below slider:backdrop:insensitive {
       color: #c7c7c7;
@@ -3164,17 +3128,14 @@ scale,
       icon-shadow: none;
       box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
       scale slider:backdrop:insensitive > .label,
-      .scale slider:backdrop:insensitive > .label,
       .scale.scale-has-marks-above.scale-has-marks-below slider:backdrop:insensitive > .label,
       .scale.vertical.scale-has-marks-above.scale-has-marks-below slider:backdrop:insensitive > .label {
         color: inherit; }
     scale slider:active,
-    .scale slider:active,
     .scale.scale-has-marks-above.scale-has-marks-below slider:active,
     .scale.vertical.scale-has-marks-above.scale-has-marks-below slider:active {
       border: 1px solid #153d65; }
     .osd scale slider, .osd
-    .scale slider, .osd
     .scale.scale-has-marks-above.scale-has-marks-below slider, .osd
     .scale.vertical.scale-has-marks-above.scale-has-marks-below slider {
       color: #eeeeec;
@@ -3187,7 +3148,6 @@ scale,
       outline-color: rgba(238, 238, 236, 0.3);
       background-color: #202526; }
       .osd scale slider:hover, .osd
-      .scale slider:hover, .osd
       .scale.scale-has-marks-above.scale-has-marks-below slider:hover, .osd
       .scale.vertical.scale-has-marks-above.scale-has-marks-below slider:hover {
         color: white;
@@ -3199,7 +3159,6 @@ scale,
         icon-shadow: 0 1px black;
         outline-color: rgba(238, 238, 236, 0.3); }
       .osd scale slider:active, .osd
-      .scale slider:active, .osd
       .scale.scale-has-marks-above.scale-has-marks-below slider:active, .osd
       .scale.vertical.scale-has-marks-above.scale-has-marks-below slider:active {
         color: white;
@@ -3211,7 +3170,6 @@ scale,
         icon-shadow: none;
         outline-color: rgba(238, 238, 236, 0.3); }
       .osd scale slider:backdrop, .osd
-      .scale slider:backdrop, .osd
       .scale.scale-has-marks-above.scale-has-marks-below slider:backdrop, .osd
       .scale.vertical.scale-has-marks-above.scale-has-marks-below slider:backdrop {
         color: #eeeeec;
@@ -3221,107 +3179,96 @@ scale,
         box-shadow: none;
         text-shadow: none;
         icon-shadow: none; }
-  scale.highlight,
-  .scale.highlight,
-  .scale.scale-has-marks-above.scale-has-marks-below.highlight,
-  .scale.vertical.scale-has-marks-above.scale-has-marks-below.highlight {
-    background-image: linear-gradient(to bottom, #4a90d9 2px, #63a0de);
-    border-color: #184472;
-    box-shadow: 0 1px white; }
-    scale.highlight.vertical,
-    .scale.highlight.vertical,
-    .scale.scale-has-marks-above.scale-has-marks-below.highlight.vertical,
-    .scale.vertical.scale-has-marks-above.scale-has-marks-below.highlight.vertical {
-      background-image: linear-gradient(to right, #4a90d9 2px, #63a0de); }
-    scale.highlight:backdrop,
-    .scale.highlight:backdrop,
-    .scale.scale-has-marks-above.scale-has-marks-below.highlight:backdrop,
-    .scale.vertical.scale-has-marks-above.scale-has-marks-below.highlight:backdrop {
-      border-color: #4a90d9;
-      background-color: #4a90d9;
-      box-shadow: none; }
-  scale:insensitive, scale.vertical:insensitive,
-  .scale:insensitive,
-  .scale.vertical:insensitive,
-  .scale.scale-has-marks-above.scale-has-marks-below:insensitive,
-  .scale.scale-has-marks-above.scale-has-marks-below.vertical:insensitive,
-  .scale.vertical.scale-has-marks-above.scale-has-marks-below:insensitive,
-  .scale.vertical.scale-has-marks-above.scale-has-marks-below.vertical:insensitive {
-    border-color: #a1a1a1;
-    background-image: none;
-    background-color: #f4f4f4;
-    box-shadow: 0 1px white; }
-  scale:backdrop,
-  .scale:backdrop,
-  .scale.scale-has-marks-above.scale-has-marks-below:backdrop,
-  .scale.vertical.scale-has-marks-above.scale-has-marks-below:backdrop {
-    border-color: darkgray;
-    background-color: #c7c7c7;
-    box-shadow: none; }
-  scale:backdrop:insensitive, scale .highlight:backdrop:insensitive,
-  .scale:backdrop:insensitive,
-  .scale .highlight:backdrop:insensitive,
-  .scale.scale-has-marks-above.scale-has-marks-below:backdrop:insensitive,
-  .scale.scale-has-marks-above.scale-has-marks-below .highlight:backdrop:insensitive,
-  .scale.vertical.scale-has-marks-above.scale-has-marks-below:backdrop:insensitive,
-  .scale.vertical.scale-has-marks-above.scale-has-marks-below .highlight:backdrop:insensitive {
-    border-color: darkgray;
-    background-color: #f4f4f4; }
-  .osd scale, .osd
-  .scale, .osd
-  .scale.scale-has-marks-above.scale-has-marks-below, .osd
-  .scale.vertical.scale-has-marks-above.scale-has-marks-below {
-    border-color: rgba(0, 0, 0, 0.7);
-    box-shadow: none;
-    margin: 9px;
-    background-color: rgba(0, 0, 0, 0.5);
-    outline-color: rgba(238, 238, 236, 0.2);
-    outline-offset: -8px; }
-    .osd scale.fine-tune, .osd
-    .scale.fine-tune, .osd
-    .scale.scale-has-marks-above.scale-has-marks-below.fine-tune, .osd
-    .scale.vertical.scale-has-marks-above.scale-has-marks-below.fine-tune {
-      margin: 7px; }
-    .osd scale.highlight, .osd
-    .scale.highlight, .osd
-    .scale.scale-has-marks-above.scale-has-marks-below.highlight, .osd
-    .scale.vertical.scale-has-marks-above.scale-has-marks-below.highlight {
+  scale trough,
+  .scale.scale-has-marks-above.scale-has-marks-below trough,
+  .scale.vertical.scale-has-marks-above.scale-has-marks-below trough {
+    margin: 10px;
+    border: 1px solid #a1a1a1;
+    border-radius: 3px;
+    background-color: #cfcfcf;
+    box-shadow: inset 1px 1px rgba(0, 0, 0, 0.1), 0 1px white; }
+    scale trough.highlight,
+    .scale.scale-has-marks-above.scale-has-marks-below trough.highlight,
+    .scale.vertical.scale-has-marks-above.scale-has-marks-below trough.highlight {
+      background-image: linear-gradient(to bottom, #4a90d9 2px, #63a0de);
+      border-color: #184472;
+      box-shadow: 0 1px white; }
+      scale trough.highlight.vertical,
+      .scale.scale-has-marks-above.scale-has-marks-below trough.highlight.vertical,
+      .scale.vertical.scale-has-marks-above.scale-has-marks-below trough.highlight.vertical {
+        background-image: linear-gradient(to right, #4a90d9 2px, #63a0de); }
+      scale trough.highlight:backdrop,
+      .scale.scale-has-marks-above.scale-has-marks-below trough.highlight:backdrop,
+      .scale.vertical.scale-has-marks-above.scale-has-marks-below trough.highlight:backdrop {
+        border-color: #4a90d9;
+        background-color: #4a90d9;
+        box-shadow: none; }
+    scale trough:insensitive, scale trough.vertical:insensitive,
+    .scale.scale-has-marks-above.scale-has-marks-below trough:insensitive,
+    .scale.scale-has-marks-above.scale-has-marks-below trough.vertical:insensitive,
+    .scale.vertical.scale-has-marks-above.scale-has-marks-below trough:insensitive,
+    .scale.vertical.scale-has-marks-above.scale-has-marks-below trough.vertical:insensitive {
+      border-color: #a1a1a1;
       background-image: none;
-      background-color: #4a90d9; }
-    .osd scale:insensitive, .osd scale:backdrop:insensitive, .osd
-    .scale:insensitive, .osd
-    .scale:backdrop:insensitive, .osd
-    .scale.scale-has-marks-above.scale-has-marks-below:insensitive, .osd
-    .scale.scale-has-marks-above.scale-has-marks-below:backdrop:insensitive, .osd
-    .scale.vertical.scale-has-marks-above.scale-has-marks-below:insensitive, .osd
-    .scale.vertical.scale-has-marks-above.scale-has-marks-below:backdrop:insensitive {
-      border-color: transparent;
-      background-color: transparent; }
-    .osd scale:backdrop, .osd
-    .scale:backdrop, .osd
-    .scale.scale-has-marks-above.scale-has-marks-below:backdrop, .osd
-    .scale.vertical.scale-has-marks-above.scale-has-marks-below:backdrop {
+      background-color: #f4f4f4;
+      box-shadow: 0 1px white; }
+    scale trough:backdrop,
+    .scale.scale-has-marks-above.scale-has-marks-below trough:backdrop,
+    .scale.vertical.scale-has-marks-above.scale-has-marks-below trough:backdrop {
+      border-color: darkgray;
+      background-color: #c7c7c7;
+      box-shadow: none; }
+    scale trough:backdrop:insensitive, scale trough .highlight:backdrop:insensitive,
+    .scale.scale-has-marks-above.scale-has-marks-below trough:backdrop:insensitive,
+    .scale.scale-has-marks-above.scale-has-marks-below trough .highlight:backdrop:insensitive,
+    .scale.vertical.scale-has-marks-above.scale-has-marks-below trough:backdrop:insensitive,
+    .scale.vertical.scale-has-marks-above.scale-has-marks-below trough .highlight:backdrop:insensitive {
+      border-color: darkgray;
+      background-color: #f4f4f4; }
+    .osd scale trough, .osd
+    .scale.scale-has-marks-above.scale-has-marks-below trough, .osd
+    .scale.vertical.scale-has-marks-above.scale-has-marks-below trough {
       border-color: rgba(0, 0, 0, 0.7);
-      background-image: none; }
+      box-shadow: none;
+      margin: 9px;
+      background-color: rgba(0, 0, 0, 0.5);
+      outline-color: rgba(238, 238, 236, 0.2);
+      outline-offset: -8px; }
+      .osd scale trough.fine-tune, .osd
+      .scale.scale-has-marks-above.scale-has-marks-below trough.fine-tune, .osd
+      .scale.vertical.scale-has-marks-above.scale-has-marks-below trough.fine-tune {
+        margin: 7px; }
+      .osd scale trough.highlight, .osd
+      .scale.scale-has-marks-above.scale-has-marks-below trough.highlight, .osd
+      .scale.vertical.scale-has-marks-above.scale-has-marks-below trough.highlight {
+        background-image: none;
+        background-color: #4a90d9; }
+      .osd scale trough:insensitive, .osd scale trough:backdrop:insensitive, .osd
+      .scale.scale-has-marks-above.scale-has-marks-below trough:insensitive, .osd
+      .scale.scale-has-marks-above.scale-has-marks-below trough:backdrop:insensitive, .osd
+      .scale.vertical.scale-has-marks-above.scale-has-marks-below trough:insensitive, .osd
+      .scale.vertical.scale-has-marks-above.scale-has-marks-below trough:backdrop:insensitive {
+        border-color: transparent;
+        background-color: transparent; }
+      .osd scale trough:backdrop, .osd
+      .scale.scale-has-marks-above.scale-has-marks-below trough:backdrop, .osd
+      .scale.vertical.scale-has-marks-above.scale-has-marks-below trough:backdrop {
+        border-color: rgba(0, 0, 0, 0.7);
+        background-image: none; }
   .list-row:selected scale, .list-row:selected
-  .scale, .list-row:selected
   .scale.scale-has-marks-above.scale-has-marks-below, .list-row:selected
   .scale.vertical.scale-has-marks-above.scale-has-marks-below {
     border-color: #184472;
     box-shadow: inset 1px 1px rgba(0, 0, 0, 0.1); }
     .list-row:selected scale:backdrop, .list-row:selected
-    .scale:backdrop, .list-row:selected
     .scale.scale-has-marks-above.scale-has-marks-below:backdrop, .list-row:selected
     .scale.vertical.scale-has-marks-above.scale-has-marks-below:backdrop {
       box-shadow: none; }
     .list-row:selected scale.highlight:backdrop, .list-row:selected
-    .scale.highlight:backdrop, .list-row:selected
     .scale.scale-has-marks-above.scale-has-marks-below.highlight:backdrop, .list-row:selected
     .scale.vertical.scale-has-marks-above.scale-has-marks-below.highlight:backdrop {
       border-color: #184472; }
     .list-row:selected scale:insensitive, .list-row:selected scale.highlight:insensitive, .list-row:selected
-    .scale:insensitive, .list-row:selected
-    .scale.highlight:insensitive, .list-row:selected
     .scale.scale-has-marks-above.scale-has-marks-below:insensitive, .list-row:selected
     .scale.scale-has-marks-above.scale-has-marks-below.highlight:insensitive, .list-row:selected
     .scale.vertical.scale-has-marks-above.scale-has-marks-below:insensitive, .list-row:selected
@@ -3331,8 +3278,6 @@ scale,
       background-color: #a5c8ec;
       background-image: none; }
       .list-row:selected scale:insensitive:backdrop, .list-row:selected scale.highlight:insensitive:backdrop, .list-row:selected
-      .scale:insensitive:backdrop, .list-row:selected
-      .scale.highlight:insensitive:backdrop, .list-row:selected
       .scale.scale-has-marks-above.scale-has-marks-below:insensitive:backdrop, .list-row:selected
       .scale.scale-has-marks-above.scale-has-marks-below.highlight:insensitive:backdrop, .list-row:selected
       .scale.vertical.scale-has-marks-above.scale-has-marks-below:insensitive:backdrop, .list-row:selected
@@ -3555,25 +3500,25 @@ scale.vertical.scale-has-marks-above {
     background-position: center;
     box-shadow: none; }
 
-scale.scale-has-marks-above {
+scale.scale-has-marks-above trough {
   margin: 14px 10px 10px; }
-  scale.fine-tune.scale-has-marks-above {
-    margin: 12px 8px 8px; }
+scale.fine-tune.scale-has-marks-above trough {
+  margin: 12px 8px 8px; }
 
-scale.scale-has-marks-below {
+scale.scale-has-marks-below trough {
   margin: 10px 10px 14px; }
-  scale.fine-tune.scale-has-marks-below {
-    margin: 8px 8px 12px; }
+scale.fine-tune.scale-has-marks-below trough {
+  margin: 8px 8px 12px; }
 
-scale.vertical.scale-has-marks-above {
+scale.vertical.scale-has-marks-above trough {
   margin: 10px 10px 10px 14px; }
-  scale.fine-tune.vertical.scale-has-marks-above {
-    margin: 8px 8px 8px 12px; }
+scale.fine-tune.vertical.scale-has-marks-above trough {
+  margin: 8px 8px 8px 12px; }
 
-scale.vertical.scale-has-marks-below {
+scale.vertical.scale-has-marks-below trough {
   margin: 10px 14px 10px 10px; }
-  scale.fine-tune.vertical.scale-has-marks-below {
-    margin: 8px 12px 8px 8px; }
+scale.fine-tune.vertical.scale-has-marks-below trough {
+  margin: 8px 12px 8px 8px; }
 
 /*****************
  * Progress bars *

@@ -1804,8 +1804,7 @@ notebook {
  * Scrollbars *
  **************/
 
-scrollbar,
-.scrollbar {
+scrollbar {
   -GtkRange-slider-width: 13;
   -GtkRange-trough-border: 0;
   -GtkScrollbar-has-backward-stepper: false;
@@ -1826,8 +1825,6 @@ scrollbar,
   &.overlay-indicator {
     &:not(.dragging):not(.hovering) { // Overlay scrolling indicator
       opacity: 0.4;
-      border-style: none;
-      background-color: transparent;
 
       -GtkRange-slider-width: 5px;
 
@@ -1836,6 +1833,11 @@ scrollbar,
         background-color: $fg_color;
         border: 1px solid if($variant==light, white, black);
         background-clip: padding-box;
+      }
+
+      & trough {
+        border-style: none;
+        background-color: transparent;
       }
 
       // w/o the following margin tweaks the slider shrinks when hovering/dragging
@@ -1856,12 +1858,14 @@ scrollbar,
   }
 
   // trough coloring
-  background-color: $scrollbar_bg_color;
-  border: 1px none $borders_color;
+  trough {
+    background-color: $scrollbar_bg_color;
+    border: 1px none $borders_color;
 
-  &:backdrop {
-    background-color: $backdrop_scrollbar_bg_color;
-    border-color: $backdrop_borders_color;
+    &:backdrop {
+      background-color: $backdrop_scrollbar_bg_color;
+      border-color: $backdrop_borders_color;
+    }
   }
 
   // slider coloring
@@ -1890,8 +1894,6 @@ scrollbar,
 
   &.vertical {
 
-    border-left-style: solid;
-
     slider {
       margin-left: 1px + $_slider_margin;
 
@@ -1910,9 +1912,13 @@ scrollbar,
       }
     }
 
-    &:dir(rtl) {
-      border-left-style: none;
-      border-right-style: solid;
+    trough {
+      border-left-style: solid;
+
+      &:dir(rtl) {
+        border-left-style: none;
+        border-right-style: solid;
+      }
     }
   }
 
@@ -1922,7 +1928,7 @@ scrollbar,
 
     &.fine-tune slider { margin-top: 1px + $_slider_fine_tune_margin; }
 
-    border-top-style: solid;
+    trough { border-top-style: solid; }
   }
 }
 
@@ -2136,7 +2142,6 @@ checkbutton.text-button, radiobutton.text-button {
  * GtkScale *
  ************/
 scale,
-.scale,
 .scale.scale-has-marks-above.scale-has-marks-below,
 .scale.vertical.scale-has-marks-above.scale-has-marks-below {
   // FIXME: rationalize
@@ -2149,8 +2154,10 @@ scale,
   &.fine-tune {
     outline-offset: -7px;
     outline-radius: 6px;
-    margin: 8px;
-    border-radius: 4px;
+    & trough {
+      margin: 8px;
+      border-radius: 4px;
+    }
   }
 
   & slider {
@@ -2202,60 +2209,62 @@ scale,
       &:backdrop { @include button(osd-backdrop); }
     }
   }
-  margin: 10px;
-  border: 1px solid $borders_color;
-  border-radius: 3px;
-  background-color: mix($bg_color, $borders_color, 60%);
-  box-shadow: inset 1px 1px transparentize(black, 0.9),
+  trough {
+    margin: 10px;
+    border: 1px solid $borders_color;
+    border-radius: 3px;
+    background-color: mix($bg_color, $borders_color, 60%);
+    box-shadow: inset 1px 1px transparentize(black, 0.9),
                 _widget_edge();
-  &.highlight {
-    @include progressbar_fill;
-    border-color: $selected_borders_color;
-    box-shadow: _widget_edge();
-    &.vertical { @include progressbar_fill(vertical); }
-    &:backdrop {
-       border-color: if($variant=='light', $selected_bg_color,
-                                           $selected_borders_color);
-       background-color: $selected_bg_color;
-       box-shadow: none;
-    }
-  }
-  &:insensitive, &.vertical:insensitive {
-    border-color: $insensitive_borders_color;
-    background-image: none;
-    background-color: $insensitive_bg_color;
-    box-shadow: _widget_edge();
-  }
-  &:backdrop {
-    border-color: $backdrop_borders_color;
-    background-color: mix($backdrop_bg_color, $borders_color, 50%);
-    box-shadow: none;
-  }
-  &:backdrop:insensitive, .highlight:backdrop:insensitive {
-    border-color: $backdrop_borders_color;
-    background-color: $insensitive_bg_color;
-  }
-
-  //OSD troughs
-  .osd & {
-    border-color: $osd_borders_color;
-    box-shadow: none;
-    margin: 9px;
-    &.fine-tune { margin: 7px; }
-    background-color: transparentize($osd_borders_color, 0.2);
-    outline-color: transparentize($osd_fg_color, 0.8);
-    outline-offset: -8px;
     &.highlight {
-      background-image: none;
-      background-color: $selected_bg_color;
+      @include progressbar_fill;
+      border-color: $selected_borders_color;
+      box-shadow: _widget_edge();
+      &.vertical { @include progressbar_fill(vertical); }
+      &:backdrop {
+         border-color: if($variant=='light', $selected_bg_color,
+                                             $selected_borders_color);
+         background-color: $selected_bg_color;
+         box-shadow: none;
+      }
     }
-    &:insensitive, &:backdrop:insensitive {
-      border-color: transparent;
-      background-color: transparent;
+    &:insensitive, &.vertical:insensitive {
+      border-color: $insensitive_borders_color;
+      background-image: none;
+      background-color: $insensitive_bg_color;
+      box-shadow: _widget_edge();
     }
     &:backdrop {
+      border-color: $backdrop_borders_color;
+      background-color: mix($backdrop_bg_color, $borders_color, 50%);
+      box-shadow: none;
+    }
+    &:backdrop:insensitive, .highlight:backdrop:insensitive {
+      border-color: $backdrop_borders_color;
+      background-color: $insensitive_bg_color;
+    }
+
+    //OSD troughs
+    .osd & {
       border-color: $osd_borders_color;
-      background-image: none;
+      box-shadow: none;
+      margin: 9px;
+      &.fine-tune { margin: 7px; }
+      background-color: transparentize($osd_borders_color, 0.2);
+      outline-color: transparentize($osd_fg_color, 0.8);
+      outline-offset: -8px;
+      &.highlight {
+        background-image: none;
+        background-color: $selected_bg_color;
+      }
+      &:insensitive, &:backdrop:insensitive {
+        border-color: transparent;
+        background-color: transparent;
+      }
+      &:backdrop {
+        border-color: $osd_borders_color;
+        background-image: none;
+      }
     }
   }
   // scales on selected list rows
@@ -2311,20 +2320,20 @@ scale,
 }
 
 %scale_marks_above_horz {
-  margin: 14px 10px 10px;
-  &.fine-tune { margin: 12px 8px 8px; }
+  trough { margin: 14px 10px 10px; }
+  &.fine-tune trough { margin: 12px 8px 8px; }
 }
 %scale_marks_below_horz {
-  margin: 10px 10px 14px;
-  &.fine-tune { margin: 8px 8px 12px; }
+  trough { margin: 10px 10px 14px; }
+  &.fine-tune trough { margin: 8px 8px 12px; }
 }
 %scale_marks_above_vert {
-  margin: 10px 10px 10px 14px;
-  &.fine-tune { margin: 8px 8px 8px 12px; }
+  trough { margin: 10px 10px 10px 14px; }
+  &.fine-tune trough { margin: 8px 8px 8px 12px; }
 }
 %scale_marks_below_vert {
-  margin: 10px 14px 10px 10px;
-  &.fine-tune { margin: 8px 12px 8px 8px; }
+  trough { margin: 10px 14px 10px 10px; }
+  &.fine-tune trough { margin: 8px 12px 8px 8px; }
 }
 
 /*****************
