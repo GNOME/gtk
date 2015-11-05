@@ -43,7 +43,7 @@
                         <property name="orientation">vertical</property>
                         <property name="spacing">12</property>
                         <style>
-                          <class name="search-bar"/>
+                          <class name="view"/>
                         </style>
                         <child>
                           <object class="GtkStack" id="browse_header_stack">
