@@ -90,6 +90,11 @@
  * user selects in the sidebar a location to open.  The application should also
  * call gtk_places_sidebar_set_location() when it changes the currently-viewed
  * location.
+ *
+ * # CSS nodes
+ *
+ * GtkPlacesSidebar uses a single CSS node with name placesidebar and style
+ * class .sidebar.
  */
 
 /* These are used when a destination-side DND operation is taking place.
@@ -3808,8 +3813,6 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
   gboolean show_desktop;
   GtkStyleContext *context;
 
-  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (sidebar)), GTK_STYLE_CLASS_SIDEBAR);
-
   sidebar->cancellable = g_cancellable_new ();
 
   sidebar->show_trash = TRUE;
@@ -3831,13 +3834,12 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
                                   GTK_POLICY_AUTOMATIC);
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sidebar), GTK_SHADOW_IN);
 
-  gtk_style_context_set_junction_sides (gtk_widget_get_style_context (GTK_WIDGET (sidebar)),
-                                        GTK_JUNCTION_RIGHT | GTK_JUNCTION_LEFT);
+  context = gtk_widget_get_style_context (GTK_WIDGET (sidebar));
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_SIDEBAR);
+  gtk_style_context_set_junction_sides (context, GTK_JUNCTION_RIGHT | GTK_JUNCTION_LEFT);
 
   /* list box */
   sidebar->list_box = gtk_list_box_new ();
-  context = gtk_widget_get_style_context (sidebar->list_box);
-  gtk_style_context_add_class (context, "sidebar");
 
   gtk_list_box_set_header_func (GTK_LIST_BOX (sidebar->list_box),
                                 list_box_header_func, sidebar, NULL);
@@ -4125,9 +4127,9 @@ gtk_places_sidebar_dispose (GObject *object)
 static void
 gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 {
-  GObjectClass *gobject_class;
+  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 
-  gobject_class = (GObjectClass *) class;
 
   gobject_class->dispose = gtk_places_sidebar_dispose;
   gobject_class->set_property = gtk_places_sidebar_set_property;
@@ -4451,6 +4453,8 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
                                 G_PARAM_READWRITE);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, properties);
+
+  gtk_widget_class_set_css_name (widget_class, "placessidebar");
 }
 
 /**
