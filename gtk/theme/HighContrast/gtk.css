@@ -1798,26 +1798,26 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
  * GtkScale *
  ************/
 scale,
-.scale.scale-has-marks-above.scale-has-marks-below,
-.scale.vertical.scale-has-marks-above.scale-has-marks-below {
+scale.scale-has-marks-above.scale-has-marks-below,
+scale.vertical.scale-has-marks-above.scale-has-marks-below {
   -GtkScale-slider-length: 20;
   -GtkRange-slider-width: 20;
   -GtkRange-trough-border: 2;
   outline-offset: -9px;
   outline-radius: 4px; }
   scale.fine-tune,
-  .scale.scale-has-marks-above.scale-has-marks-below.fine-tune,
-  .scale.vertical.scale-has-marks-above.scale-has-marks-below.fine-tune {
+  scale.scale-has-marks-above.scale-has-marks-below.fine-tune,
+  scale.vertical.scale-has-marks-above.scale-has-marks-below.fine-tune {
     outline-offset: -7px;
     outline-radius: 6px; }
     scale.fine-tune trough,
-    .scale.scale-has-marks-above.scale-has-marks-below.fine-tune trough,
-    .scale.vertical.scale-has-marks-above.scale-has-marks-below.fine-tune trough {
+    scale.scale-has-marks-above.scale-has-marks-below.fine-tune trough,
+    scale.vertical.scale-has-marks-above.scale-has-marks-below.fine-tune trough {
       border-radius: 4px;
       margin: 8px; }
-  scale slider,
-  .scale.scale-has-marks-above.scale-has-marks-below slider,
-  .scale.vertical.scale-has-marks-above.scale-has-marks-below slider {
+  scale trough slider,
+  scale.scale-has-marks-above.scale-has-marks-below trough slider,
+  scale.vertical.scale-has-marks-above.scale-has-marks-below trough slider {
     border-width: 2px;
     border-style: solid;
     color: #000;
@@ -1826,9 +1826,9 @@ scale,
     border-color: gray;
     border-radius: 50%;
     border-color: #787878; }
-    scale slider:hover,
-    .scale.scale-has-marks-above.scale-has-marks-below slider:hover,
-    .scale.vertical.scale-has-marks-above.scale-has-marks-below slider:hover {
+    scale trough slider:hover,
+    scale.scale-has-marks-above.scale-has-marks-below trough slider:hover,
+    scale.vertical.scale-has-marks-above.scale-has-marks-below trough slider:hover {
       border-width: 2px;
       border-style: solid;
       color: #000;
@@ -1837,37 +1837,37 @@ scale,
       background-image: none;
       border-color: #787878;
       border-radius: 50%; }
-    scale slider:insensitive,
-    .scale.scale-has-marks-above.scale-has-marks-below slider:insensitive,
-    .scale.vertical.scale-has-marks-above.scale-has-marks-below slider:insensitive {
+    scale trough slider:insensitive,
+    scale.scale-has-marks-above.scale-has-marks-below trough slider:insensitive,
+    scale.vertical.scale-has-marks-above.scale-has-marks-below trough slider:insensitive {
       border-style: solid;
       border-radius: 50%;
       background-image: none;
       box-shadow: none; }
-    scale slider:backdrop,
-    .scale.scale-has-marks-above.scale-has-marks-below slider:backdrop,
-    .scale.vertical.scale-has-marks-above.scale-has-marks-below slider:backdrop {
+    scale trough slider:backdrop,
+    scale.scale-has-marks-above.scale-has-marks-below trough slider:backdrop,
+    scale.vertical.scale-has-marks-above.scale-has-marks-below trough slider:backdrop {
       border-style: solid;
       border-radius: 50%;
       border-color: #858585;
       background-image: none;
       box-shadow: none; }
-    scale slider:backdrop:insensitive,
-    .scale.scale-has-marks-above.scale-has-marks-below slider:backdrop:insensitive,
-    .scale.vertical.scale-has-marks-above.scale-has-marks-below slider:backdrop:insensitive {
+    scale trough slider:backdrop:insensitive,
+    scale.scale-has-marks-above.scale-has-marks-below trough slider:backdrop:insensitive,
+    scale.vertical.scale-has-marks-above.scale-has-marks-below trough slider:backdrop:insensitive {
       border-width: 2px;
       border-style: solid;
       color: gray;
       background-color: white;
       border-color: #8d8d8d;
       background-image: none; }
-    scale slider:active,
-    .scale.scale-has-marks-above.scale-has-marks-below slider:active,
-    .scale.vertical.scale-has-marks-above.scale-has-marks-below slider:active {
+    scale trough slider:active,
+    scale.scale-has-marks-above.scale-has-marks-below trough slider:active,
+    scale.vertical.scale-has-marks-above.scale-has-marks-below trough slider:active {
       border: 1px solid black; }
   scale trough,
-  .scale.scale-has-marks-above.scale-has-marks-below trough,
-  .scale.vertical.scale-has-marks-above.scale-has-marks-below trough {
+  scale.scale-has-marks-above.scale-has-marks-below trough,
+  scale.vertical.scale-has-marks-above.scale-has-marks-below trough {
     margin: 10px;
     border-width: 1px;
     border-style: solid;
@@ -1876,34 +1876,34 @@ scale,
     background-color: #cccccc;
     box-shadow: inset 1px 1px rgba(0, 0, 0, 0.1); }
     scale trough.highlight,
-    .scale.scale-has-marks-above.scale-has-marks-below trough.highlight,
-    .scale.vertical.scale-has-marks-above.scale-has-marks-below trough.highlight {
+    scale.scale-has-marks-above.scale-has-marks-below trough.highlight,
+    scale.vertical.scale-has-marks-above.scale-has-marks-below trough.highlight {
       border-color: #000;
       background-color: #000; }
       scale trough.highlight:backdrop,
-      .scale.scale-has-marks-above.scale-has-marks-below trough.highlight:backdrop,
-      .scale.vertical.scale-has-marks-above.scale-has-marks-below trough.highlight:backdrop {
+      scale.scale-has-marks-above.scale-has-marks-below trough.highlight:backdrop,
+      scale.vertical.scale-has-marks-above.scale-has-marks-below trough.highlight:backdrop {
         border-color: gray;
         background-color: gray;
         box-shadow: none; }
     scale trough:insensitive, scale trough.hilight:insensitive,
-    .scale.scale-has-marks-above.scale-has-marks-below trough:insensitive,
-    .scale.scale-has-marks-above.scale-has-marks-below trough.hilight:insensitive,
-    .scale.vertical.scale-has-marks-above.scale-has-marks-below trough:insensitive,
-    .scale.vertical.scale-has-marks-above.scale-has-marks-below trough.hilight:insensitive {
+    scale.scale-has-marks-above.scale-has-marks-below trough:insensitive,
+    scale.scale-has-marks-above.scale-has-marks-below trough.hilight:insensitive,
+    scale.vertical.scale-has-marks-above.scale-has-marks-below trough:insensitive,
+    scale.vertical.scale-has-marks-above.scale-has-marks-below trough.hilight:insensitive {
       border-color: gray;
       background-color: white; }
     scale trough:backdrop,
-    .scale.scale-has-marks-above.scale-has-marks-below trough:backdrop,
-    .scale.vertical.scale-has-marks-above.scale-has-marks-below trough:backdrop {
+    scale.scale-has-marks-above.scale-has-marks-below trough:backdrop,
+    scale.vertical.scale-has-marks-above.scale-has-marks-below trough:backdrop {
       border-color: #8d8d8d;
       background-color: silver;
       box-shadow: none; }
     scale trough:backdrop:insensitive, scale trough .hilight:backdrop:insensitive,
-    .scale.scale-has-marks-above.scale-has-marks-below trough:backdrop:insensitive,
-    .scale.scale-has-marks-above.scale-has-marks-below trough .hilight:backdrop:insensitive,
-    .scale.vertical.scale-has-marks-above.scale-has-marks-below trough:backdrop:insensitive,
-    .scale.vertical.scale-has-marks-above.scale-has-marks-below trough .hilight:backdrop:insensitive {
+    scale.scale-has-marks-above.scale-has-marks-below trough:backdrop:insensitive,
+    scale.scale-has-marks-above.scale-has-marks-below trough .hilight:backdrop:insensitive,
+    scale.vertical.scale-has-marks-above.scale-has-marks-below trough:backdrop:insensitive,
+    scale.vertical.scale-has-marks-above.scale-has-marks-below trough .hilight:backdrop:insensitive {
       border-color: gray;
       background-color: #fff; }
 

@@ -1655,8 +1655,8 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
  * GtkScale *
  ************/
 scale,
-.scale.scale-has-marks-above.scale-has-marks-below,
-.scale.vertical.scale-has-marks-above.scale-has-marks-below {
+scale.scale-has-marks-above.scale-has-marks-below,
+scale.vertical.scale-has-marks-above.scale-has-marks-below {
   -GtkScale-slider-length: 20;
   -GtkRange-slider-width: 20;
   -GtkRange-trough-border: 2;
@@ -1671,32 +1671,34 @@ scale,
       margin: 8px;
     }
   }
-  & slider {
-    //FIXME: better gradient on the slider and hover state
-    @include button(normal, $edge: none);
-    border-radius: 50%;
-    border-color: darken($borders_color,3%);
-    &:hover {
-      @include button(hover, $edge: none);
+  trough {
+    slider {
+      //FIXME: better gradient on the slider and hover state
+      @include button(normal, $edge: none);
+      border-radius: 50%;
       border-color: darken($borders_color,3%);
-      border-radius: 50%; // needed for double marks scales
-    }
-    &:insensitive {
-      border-style: solid; // needed for double marks scales or they'll get
-      border-radius: 50%;  // overridden
-      background-image: none;
-      box-shadow: none;
-    }
-    &:backdrop {
-      border-style: solid; // needed for double marks scales or they'll get
-      border-radius: 50%;  // overridden
-      border-color: darken($backdrop_borders_color,3%);
-      background-image: none;
-      box-shadow: none;
-    }
-    &:backdrop:insensitive { @include button(backdrop-insensitive);}
-    &:active {
-      border: 1px solid darken($selected_borders_color,3%);
+      &:hover {
+        @include button(hover, $edge: none);
+        border-color: darken($borders_color,3%);
+        border-radius: 50%; // needed for double marks scales
+      }
+      &:insensitive {
+        border-style: solid; // needed for double marks scales or they'll get
+        border-radius: 50%;  // overridden
+        background-image: none;
+        box-shadow: none;
+      }
+      &:backdrop {
+        border-style: solid; // needed for double marks scales or they'll get
+        border-radius: 50%;  // overridden
+        border-color: darken($backdrop_borders_color,3%);
+        background-image: none;
+        box-shadow: none;
+      }
+      &:backdrop:insensitive { @include button(backdrop-insensitive);}
+      &:active {
+        border: 1px solid darken($selected_borders_color,3%);
+      }
     }
   }
   trough {
@@ -1730,25 +1732,6 @@ scale,
       background-color: $backdrop_bg_color;
     }
   }
-}
-
-//FIXME: scale sliders
-
-%scale_marks_above_horz {
-  trough { margin: 14px 10px 10px; }
-  &.fine-tune trough { margin: 12px 8px 8px; }
-}
-%scale_marks_below_horz {
-  trough {  margin: 10px 10px 14px; }
-  &.fine-tune trough { margin: 8px 8px 12px; }
-}
-%scale_marks_above_vert {
-  trough { margin: 10px 10px 10px 14px; }
-  &.fine-tune trough { margin: 8px 8px 8px 12px; }
-}
-%scale_marks_below_vert {
-  trough { margin: 10px 14px 10px 10px; }
-  &.fine-tune trough { margin: 8px 12px 8px 8px; }
 }
 
 /*****************
