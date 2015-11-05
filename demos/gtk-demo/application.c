@@ -13,6 +13,8 @@
 
 #ifdef STANDALONE
 
+static void create_window (GApplication *app, const char *contents);
+
 static void
 show_action_dialog (GSimpleAction *action)
 {
@@ -63,6 +65,79 @@ activate_action (GSimpleAction  *action,
                  gpointer        user_data)
 {
   show_action_dialog (action);
+}
+
+static void
+activate_new (GSimpleAction  *action,
+              GVariant       *parameter,
+              gpointer        user_data)
+{
+  GApplication *app = user_data;
+
+  create_window (app, NULL);
+}
+
+static void
+open_response_cb (GtkNativeDialog *dialog,
+                  gint response_id,
+                  gpointer user_data)
+{
+  GtkFileChooserNative *native = user_data;
+  GApplication *app = g_object_get_data (G_OBJECT (native), "app");
+  GtkWidget *message_dialog;
+  GFile *file;
+  char *contents;
+  GError *error = NULL;
+
+  if (response_id == GTK_RESPONSE_ACCEPT)
+    {
+      file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (native));
+
+      if (g_file_load_contents (file, NULL, &contents, NULL, NULL, &error))
+        {
+          create_window (app, contents);
+          g_free (contents);
+        }
+      else
+        {
+          message_dialog = gtk_message_dialog_new (NULL,
+                                                   GTK_DIALOG_DESTROY_WITH_PARENT,
+                                                   GTK_MESSAGE_ERROR,
+                                                   GTK_BUTTONS_CLOSE,
+                                                   "Error loading file: \"%s\"",
+                                                   error->message);
+          g_signal_connect (message_dialog, "response",
+                            G_CALLBACK (gtk_widget_destroy), NULL);
+          gtk_widget_show (message_dialog);
+          g_error_free (error);
+        }
+    }
+
+  g_object_unref (native);
+}
+
+
+static void
+activate_open (GSimpleAction  *action,
+               GVariant       *parameter,
+               gpointer        user_data)
+{
+  GApplication *app = user_data;
+  GtkFileChooserNative *native;
+
+  native = gtk_file_chooser_native_new ("Open File",
+                                        NULL,
+                                        GTK_FILE_CHOOSER_ACTION_OPEN,
+                                        "_Open",
+                                        "_Cancel");
+
+  g_object_set_data_full (G_OBJECT (native), "app", g_object_ref (app), g_object_unref);
+  g_signal_connect (native,
+                    "response",
+                    G_CALLBACK (open_response_cb),
+                    native);
+
+  gtk_native_dialog_show (GTK_NATIVE_DIALOG (native));
 }
 
 static void
@@ -226,8 +301,8 @@ change_radio_state (GSimpleAction *action,
 }
 
 static GActionEntry app_entries[] = {
-  { "new", activate_action, NULL, NULL, NULL },
-  { "open", activate_action, NULL, NULL, NULL },
+  { "new", activate_new, NULL, NULL, NULL },
+  { "open", activate_open, NULL, NULL, NULL },
   { "save", activate_action, NULL, NULL, NULL },
   { "save-as", activate_action, NULL, NULL, NULL },
   { "quit", activate_quit, NULL, NULL, NULL },
@@ -269,7 +344,8 @@ startup (GApplication *app)
 }
 
 static void
-activate (GApplication *app)
+create_window (GApplication *app,
+               const char *content_text)
 {
   GtkBuilder *builder;
   GtkWidget *window;
@@ -317,6 +393,8 @@ activate (GApplication *app)
 
   /* Show text widget info in the statusbar */
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (contents));
+  if (content_text)
+    gtk_text_buffer_set_text (buffer, content_text, -1);
   g_signal_connect_object (buffer, "changed",
                            G_CALLBACK (update_statusbar), status, 0);
   g_signal_connect_object (buffer, "mark-set",
@@ -327,6 +405,12 @@ activate (GApplication *app)
   gtk_widget_show_all (window);
 
   g_object_unref (builder);
+}
+
+static void
+activate (GApplication *app)
+{
+  create_window (app, NULL);
 }
 
 int
