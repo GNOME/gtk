@@ -2142,8 +2142,8 @@ checkbutton.text-button, radiobutton.text-button {
  * GtkScale *
  ************/
 scale,
-.scale.scale-has-marks-above.scale-has-marks-below,
-.scale.vertical.scale-has-marks-above.scale-has-marks-below {
+scale.scale-has-marks-above.scale-has-marks-below,
+scale.vertical.scale-has-marks-above.scale-has-marks-below {
   // FIXME: rationalize
   -GtkScale-slider-length: 20;
   -GtkRange-slider-width: 20;
@@ -2160,53 +2160,56 @@ scale,
     }
   }
 
-  & slider {
-    //FIXME: better gradient on the slider and hover state
-    @include button(normal);
-    border: 1px solid;
-    border-radius: 50%;
-    border-color: darken($borders_color,3%);
-    box-shadow: inset 0 1px if($variant=='light', white,
-                               transparentize(white,0.85)),
-                inset 0 #{-2px} $bg_color,
-                inset 0 #{-1px} mix($bg_color, $borders_color, 50%);
-    &:hover {
-      @include button(hover);
+  trough {
+    slider {
+      //FIXME: better gradient on the slider and hover state
+      @include button(normal);
+      border: 1px solid;
+      border-radius: 50%;
       border-color: darken($borders_color,3%);
-      border-radius: 50%; // needed for double marks scales
       box-shadow: inset 0 1px if($variant=='light', white,
-                                 transparentize(white, 0.85)),
-                  inset 0 #{-2px} if($variant=='light', white,
-                                     transparentize(white, 0.86)),
-                  inset 0 #{-1px} mix($bg_color, $borders_color, 70%);
-    }
-    &:insensitive {
-      border-style: solid; // needed for double marks scales or they'll get
-      border-radius: 50%;  // overridden
-      background-image: linear-gradient(to bottom, $insensitive_bg_color);
-      box-shadow: none;
-    }
-    &:backdrop {
-      border-style: solid; // needed for double marks scales or they'll get
-      border-radius: 50%;  // overridden
-      border-color: darken($backdrop_borders_color,3%);
-      background-image: linear-gradient(to bottom, $backdrop_bg_color);
-      box-shadow: none;
-    }
-    &:backdrop:insensitive {
-      @include button(backdrop-insensitive);
-    }
-    &:active {
-      border: 1px solid if($variant=='light',darken($selected_borders_color,3%),
-                           darken($selected_bg_color,15%));
-    }
-    //OSD sliders
-    .osd & {
-      @include button(osd);
-      background-color: opacify($osd_bg_color, 1);
-      &:hover { @include button(osd-hover); }
-      &:active { @include button(osd-active); }
-      &:backdrop { @include button(osd-backdrop); }
+                                 transparentize(white,0.85)),
+                  inset 0 #{-2px} $bg_color,
+                  inset 0 #{-1px} mix($bg_color, $borders_color, 50%);
+      &:hover {
+        @include button(hover);
+        border-color: darken($borders_color,3%);
+        border-radius: 50%; // needed for double marks scales
+        box-shadow: inset 0 1px if($variant=='light', white,
+                                   transparentize(white, 0.85)),
+                    inset 0 #{-2px} if($variant=='light', white,
+                                       transparentize(white, 0.86)),
+                    inset 0 #{-1px} mix($bg_color, $borders_color, 70%);
+      }
+      &:insensitive {
+        border-style: solid; // needed for double marks scales or they'll get
+        border-radius: 50%;  // overridden
+        background-image: linear-gradient(to bottom, $insensitive_bg_color);
+        box-shadow: none;
+      }
+      &:backdrop {
+        border-style: solid; // needed for double marks scales or they'll get
+        border-radius: 50%;  // overridden
+        border-color: darken($backdrop_borders_color,3%);
+        background-image: linear-gradient(to bottom, $backdrop_bg_color);
+        box-shadow: none;
+      }
+      &:backdrop:insensitive {
+        @include button(backdrop-insensitive);
+      }
+      &:active {
+        @include button(active);
+        border: 1px solid if($variant=='light',darken($selected_borders_color,3%),
+                             darken($selected_bg_color,15%));
+      }
+      //OSD sliders
+      .osd & {
+        @include button(osd);
+        background-color: opacify($osd_bg_color, 1);
+        &:hover { @include button(osd-hover); }
+        &:active { @include button(osd-active); }
+        &:backdrop { @include button(osd-backdrop); }
+      }
     }
   }
   trough {
@@ -2284,6 +2287,10 @@ scale,
   }
 }
 
+scale marks {
+  color: gtkalpha(currentColor, 0.5); // marks color
+}
+
 @each $d,$dn in ('', 'horz'),
                 ('.vertical', 'vert') {
   @each $w,$we in  ('scale-has-marks-below','scale_marks_below'),
@@ -2293,26 +2300,26 @@ scale,
       -GtkRange-slider-width: 24;
       -GtkRange-trough-border: 2;
 
-      color: gtkalpha(currentColor, 0.5); // marks color
-
       @extend %#{$we}_#{$dn};
+      trough {
 
-      @each $s,$as in ('',''),
-                      (':hover','-hover'),
-                      (':active','-active'),
-                      (':insensitive','-insensitive'),
-                      (':backdrop','-backdrop'),
-                      (':backdrop:insensitive','-backdrop-insensitive') {
-        & slider#{$s} {
-          $_url: 'assets/slider-#{$dn}-#{$w}#{$as}#{$asset_suffix}';
-          border-style: none;
-          border-radius: 0;
-          background-color: transparent;
-          background-image: -gtk-scaled(url('#{$_url}.png'),
-                            url('#{$_url}@2.png'));
-          background-repeat: no-repeat;
-          background-position: center;
-          box-shadow: none;
+        @each $s,$as in ('',''),
+                        (':hover','-hover'),
+                        (':active','-active'),
+                        (':insensitive','-insensitive'),
+                        (':backdrop','-backdrop'),
+                        (':backdrop:insensitive','-backdrop-insensitive') {
+          & slider#{$s} {
+            $_url: 'assets/slider-#{$dn}-#{$w}#{$as}#{$asset_suffix}';
+            border-style: none;
+            border-radius: 0;
+            background-color: transparent;
+            background-image: -gtk-scaled(url('#{$_url}.png'),
+                              url('#{$_url}@2.png'));
+            background-repeat: no-repeat;
+            background-position: center;
+            box-shadow: none;
+          }
         }
       }
     }

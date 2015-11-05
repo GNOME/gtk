@@ -2897,26 +2897,26 @@ checkbutton.text-button, radiobutton.text-button {
  * GtkScale *
  ************/
 scale,
-.scale.scale-has-marks-above.scale-has-marks-below,
-.scale.vertical.scale-has-marks-above.scale-has-marks-below {
+scale.scale-has-marks-above.scale-has-marks-below,
+scale.vertical.scale-has-marks-above.scale-has-marks-below {
   -GtkScale-slider-length: 20;
   -GtkRange-slider-width: 20;
   -GtkRange-trough-border: 2;
   outline-offset: -9px;
   outline-radius: 4px; }
   scale.fine-tune,
-  .scale.scale-has-marks-above.scale-has-marks-below.fine-tune,
-  .scale.vertical.scale-has-marks-above.scale-has-marks-below.fine-tune {
+  scale.scale-has-marks-above.scale-has-marks-below.fine-tune,
+  scale.vertical.scale-has-marks-above.scale-has-marks-below.fine-tune {
     outline-offset: -7px;
     outline-radius: 6px; }
     scale.fine-tune trough,
-    .scale.scale-has-marks-above.scale-has-marks-below.fine-tune trough,
-    .scale.vertical.scale-has-marks-above.scale-has-marks-below.fine-tune trough {
+    scale.scale-has-marks-above.scale-has-marks-below.fine-tune trough,
+    scale.vertical.scale-has-marks-above.scale-has-marks-below.fine-tune trough {
       margin: 8px;
       border-radius: 4px; }
-  scale slider,
-  .scale.scale-has-marks-above.scale-has-marks-below slider,
-  .scale.vertical.scale-has-marks-above.scale-has-marks-below slider {
+  scale trough slider,
+  scale.scale-has-marks-above.scale-has-marks-below trough slider,
+  scale.vertical.scale-has-marks-above.scale-has-marks-below trough slider {
     color: #eeeeec;
     outline-color: rgba(238, 238, 236, 0.3);
     border-color: #1c1f1f;
@@ -2928,9 +2928,9 @@ scale,
     border-radius: 50%;
     border-color: #151717;
     box-shadow: inset 0 1px rgba(255, 255, 255, 0.15), inset 0 -2px #393f3f, inset 0 -1px #2b2f2f; }
-    scale slider:hover,
-    .scale.scale-has-marks-above.scale-has-marks-below slider:hover,
-    .scale.vertical.scale-has-marks-above.scale-has-marks-below slider:hover {
+    scale trough slider:hover,
+    scale.scale-has-marks-above.scale-has-marks-below trough slider:hover,
+    scale.vertical.scale-has-marks-above.scale-has-marks-below trough slider:hover {
       color: #eeeeec;
       outline-color: rgba(238, 238, 236, 0.3);
       border-color: #1c1f1f;
@@ -2941,41 +2941,48 @@ scale,
       border-color: #151717;
       border-radius: 50%;
       box-shadow: inset 0 1px rgba(255, 255, 255, 0.15), inset 0 -2px rgba(255, 255, 255, 0.14), inset 0 -1px #303535; }
-    scale slider:insensitive,
-    .scale.scale-has-marks-above.scale-has-marks-below slider:insensitive,
-    .scale.vertical.scale-has-marks-above.scale-has-marks-below slider:insensitive {
+    scale trough slider:insensitive,
+    scale.scale-has-marks-above.scale-has-marks-below trough slider:insensitive,
+    scale.vertical.scale-has-marks-above.scale-has-marks-below trough slider:insensitive {
       border-style: solid;
       border-radius: 50%;
       background-image: linear-gradient(to bottom, #333636);
       box-shadow: none; }
-    scale slider:backdrop,
-    .scale.scale-has-marks-above.scale-has-marks-below slider:backdrop,
-    .scale.vertical.scale-has-marks-above.scale-has-marks-below slider:backdrop {
+    scale trough slider:backdrop,
+    scale.scale-has-marks-above.scale-has-marks-below trough slider:backdrop,
+    scale.vertical.scale-has-marks-above.scale-has-marks-below trough slider:backdrop {
       border-style: solid;
       border-radius: 50%;
       border-color: #181a1a;
       background-image: linear-gradient(to bottom, #393f3f);
       box-shadow: none; }
-    scale slider:backdrop:insensitive,
-    .scale.scale-has-marks-above.scale-has-marks-below slider:backdrop:insensitive,
-    .scale.vertical.scale-has-marks-above.scale-has-marks-below slider:backdrop:insensitive {
+    scale trough slider:backdrop:insensitive,
+    scale.scale-has-marks-above.scale-has-marks-below trough slider:backdrop:insensitive,
+    scale.vertical.scale-has-marks-above.scale-has-marks-below trough slider:backdrop:insensitive {
       color: #5d6767;
       border-color: #1f2222;
       background-image: linear-gradient(to bottom, #333636);
       text-shadow: none;
       icon-shadow: none;
       box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(238, 238, 236, 0); }
-      scale slider:backdrop:insensitive > .label,
-      .scale.scale-has-marks-above.scale-has-marks-below slider:backdrop:insensitive > .label,
-      .scale.vertical.scale-has-marks-above.scale-has-marks-below slider:backdrop:insensitive > .label {
+      scale trough slider:backdrop:insensitive > .label,
+      scale.scale-has-marks-above.scale-has-marks-below trough slider:backdrop:insensitive > .label,
+      scale.vertical.scale-has-marks-above.scale-has-marks-below trough slider:backdrop:insensitive > .label {
         color: inherit; }
-    scale slider:active,
-    .scale.scale-has-marks-above.scale-has-marks-below slider:active,
-    .scale.vertical.scale-has-marks-above.scale-has-marks-below slider:active {
+    scale trough slider:active,
+    scale.scale-has-marks-above.scale-has-marks-below trough slider:active,
+    scale.vertical.scale-has-marks-above.scale-has-marks-below trough slider:active {
+      color: #eeeeec;
+      outline-color: rgba(238, 238, 236, 0.3);
+      border-color: #1c1f1f;
+      background-image: linear-gradient(to bottom, #232727, #292d2d 40%, #2d3232);
+      text-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
+      icon-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
+      box-shadow: inset 0 1px rgba(0, 0, 0, 0.07), inset 0 2px 1px -2px rgba(0, 0, 0, 0.6), 0 1px rgba(238, 238, 236, 0.1);
       border: 1px solid #14375d; }
-    .osd scale slider, .osd
-    .scale.scale-has-marks-above.scale-has-marks-below slider, .osd
-    .scale.vertical.scale-has-marks-above.scale-has-marks-below slider {
+    .osd scale trough slider, .osd
+    scale.scale-has-marks-above.scale-has-marks-below trough slider, .osd
+    scale.vertical.scale-has-marks-above.scale-has-marks-below trough slider {
       color: #eeeeec;
       border-color: rgba(0, 0, 0, 0.7);
       background-image: linear-gradient(to bottom, rgba(32, 37, 38, 0.7));
@@ -2985,9 +2992,9 @@ scale,
       icon-shadow: 0 1px black;
       outline-color: rgba(238, 238, 236, 0.3);
       background-color: #202526; }
-      .osd scale slider:hover, .osd
-      .scale.scale-has-marks-above.scale-has-marks-below slider:hover, .osd
-      .scale.vertical.scale-has-marks-above.scale-has-marks-below slider:hover {
+      .osd scale trough slider:hover, .osd
+      scale.scale-has-marks-above.scale-has-marks-below trough slider:hover, .osd
+      scale.vertical.scale-has-marks-above.scale-has-marks-below trough slider:hover {
         color: white;
         border-color: rgba(0, 0, 0, 0.7);
         background-image: linear-gradient(to bottom, rgba(60, 69, 71, 0.7));
@@ -2996,9 +3003,9 @@ scale,
         text-shadow: 0 1px black;
         icon-shadow: 0 1px black;
         outline-color: rgba(238, 238, 236, 0.3); }
-      .osd scale slider:active, .osd
-      .scale.scale-has-marks-above.scale-has-marks-below slider:active, .osd
-      .scale.vertical.scale-has-marks-above.scale-has-marks-below slider:active {
+      .osd scale trough slider:active, .osd
+      scale.scale-has-marks-above.scale-has-marks-below trough slider:active, .osd
+      scale.vertical.scale-has-marks-above.scale-has-marks-below trough slider:active {
         color: white;
         border-color: rgba(0, 0, 0, 0.7);
         background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7));
@@ -3007,9 +3014,9 @@ scale,
         text-shadow: none;
         icon-shadow: none;
         outline-color: rgba(238, 238, 236, 0.3); }
-      .osd scale slider:backdrop, .osd
-      .scale.scale-has-marks-above.scale-has-marks-below slider:backdrop, .osd
-      .scale.vertical.scale-has-marks-above.scale-has-marks-below slider:backdrop {
+      .osd scale trough slider:backdrop, .osd
+      scale.scale-has-marks-above.scale-has-marks-below trough slider:backdrop, .osd
+      scale.vertical.scale-has-marks-above.scale-has-marks-below trough slider:backdrop {
         color: #eeeeec;
         border-color: rgba(0, 0, 0, 0.7);
         background-image: linear-gradient(to bottom, rgba(32, 37, 38, 0.7));
@@ -3018,54 +3025,54 @@ scale,
         text-shadow: none;
         icon-shadow: none; }
   scale trough,
-  .scale.scale-has-marks-above.scale-has-marks-below trough,
-  .scale.vertical.scale-has-marks-above.scale-has-marks-below trough {
+  scale.scale-has-marks-above.scale-has-marks-below trough,
+  scale.vertical.scale-has-marks-above.scale-has-marks-below trough {
     margin: 10px;
     border: 1px solid #1c1f1f;
     border-radius: 3px;
     background-color: #2d3232;
     box-shadow: inset 1px 1px rgba(0, 0, 0, 0.1), 0 1px rgba(238, 238, 236, 0.1); }
     scale trough.highlight,
-    .scale.scale-has-marks-above.scale-has-marks-below trough.highlight,
-    .scale.vertical.scale-has-marks-above.scale-has-marks-below trough.highlight {
+    scale.scale-has-marks-above.scale-has-marks-below trough.highlight,
+    scale.vertical.scale-has-marks-above.scale-has-marks-below trough.highlight {
       background-image: linear-gradient(to bottom, #215d9c 2px, #266cb5);
       border-color: #0f2b48;
       box-shadow: 0 1px rgba(238, 238, 236, 0.1); }
       scale trough.highlight.vertical,
-      .scale.scale-has-marks-above.scale-has-marks-below trough.highlight.vertical,
-      .scale.vertical.scale-has-marks-above.scale-has-marks-below trough.highlight.vertical {
+      scale.scale-has-marks-above.scale-has-marks-below trough.highlight.vertical,
+      scale.vertical.scale-has-marks-above.scale-has-marks-below trough.highlight.vertical {
         background-image: linear-gradient(to right, #215d9c 2px, #266cb5); }
       scale trough.highlight:backdrop,
-      .scale.scale-has-marks-above.scale-has-marks-below trough.highlight:backdrop,
-      .scale.vertical.scale-has-marks-above.scale-has-marks-below trough.highlight:backdrop {
+      scale.scale-has-marks-above.scale-has-marks-below trough.highlight:backdrop,
+      scale.vertical.scale-has-marks-above.scale-has-marks-below trough.highlight:backdrop {
         border-color: #0f2b48;
         background-color: #215d9c;
         box-shadow: none; }
     scale trough:insensitive, scale trough.vertical:insensitive,
-    .scale.scale-has-marks-above.scale-has-marks-below trough:insensitive,
-    .scale.scale-has-marks-above.scale-has-marks-below trough.vertical:insensitive,
-    .scale.vertical.scale-has-marks-above.scale-has-marks-below trough:insensitive,
-    .scale.vertical.scale-has-marks-above.scale-has-marks-below trough.vertical:insensitive {
+    scale.scale-has-marks-above.scale-has-marks-below trough:insensitive,
+    scale.scale-has-marks-above.scale-has-marks-below trough.vertical:insensitive,
+    scale.vertical.scale-has-marks-above.scale-has-marks-below trough:insensitive,
+    scale.vertical.scale-has-marks-above.scale-has-marks-below trough.vertical:insensitive {
       border-color: #1c1f1f;
       background-image: none;
       background-color: #333636;
       box-shadow: 0 1px rgba(238, 238, 236, 0.1); }
     scale trough:backdrop,
-    .scale.scale-has-marks-above.scale-has-marks-below trough:backdrop,
-    .scale.vertical.scale-has-marks-above.scale-has-marks-below trough:backdrop {
+    scale.scale-has-marks-above.scale-has-marks-below trough:backdrop,
+    scale.vertical.scale-has-marks-above.scale-has-marks-below trough:backdrop {
       border-color: #1f2222;
       background-color: #2b2f2f;
       box-shadow: none; }
     scale trough:backdrop:insensitive, scale trough .highlight:backdrop:insensitive,
-    .scale.scale-has-marks-above.scale-has-marks-below trough:backdrop:insensitive,
-    .scale.scale-has-marks-above.scale-has-marks-below trough .highlight:backdrop:insensitive,
-    .scale.vertical.scale-has-marks-above.scale-has-marks-below trough:backdrop:insensitive,
-    .scale.vertical.scale-has-marks-above.scale-has-marks-below trough .highlight:backdrop:insensitive {
+    scale.scale-has-marks-above.scale-has-marks-below trough:backdrop:insensitive,
+    scale.scale-has-marks-above.scale-has-marks-below trough .highlight:backdrop:insensitive,
+    scale.vertical.scale-has-marks-above.scale-has-marks-below trough:backdrop:insensitive,
+    scale.vertical.scale-has-marks-above.scale-has-marks-below trough .highlight:backdrop:insensitive {
       border-color: #1f2222;
       background-color: #333636; }
     .osd scale trough, .osd
-    .scale.scale-has-marks-above.scale-has-marks-below trough, .osd
-    .scale.vertical.scale-has-marks-above.scale-has-marks-below trough {
+    scale.scale-has-marks-above.scale-has-marks-below trough, .osd
+    scale.vertical.scale-has-marks-above.scale-has-marks-below trough {
       border-color: rgba(0, 0, 0, 0.7);
       box-shadow: none;
       margin: 9px;
@@ -3073,61 +3080,63 @@ scale,
       outline-color: rgba(238, 238, 236, 0.2);
       outline-offset: -8px; }
       .osd scale trough.fine-tune, .osd
-      .scale.scale-has-marks-above.scale-has-marks-below trough.fine-tune, .osd
-      .scale.vertical.scale-has-marks-above.scale-has-marks-below trough.fine-tune {
+      scale.scale-has-marks-above.scale-has-marks-below trough.fine-tune, .osd
+      scale.vertical.scale-has-marks-above.scale-has-marks-below trough.fine-tune {
         margin: 7px; }
       .osd scale trough.highlight, .osd
-      .scale.scale-has-marks-above.scale-has-marks-below trough.highlight, .osd
-      .scale.vertical.scale-has-marks-above.scale-has-marks-below trough.highlight {
+      scale.scale-has-marks-above.scale-has-marks-below trough.highlight, .osd
+      scale.vertical.scale-has-marks-above.scale-has-marks-below trough.highlight {
         background-image: none;
         background-color: #215d9c; }
       .osd scale trough:insensitive, .osd scale trough:backdrop:insensitive, .osd
-      .scale.scale-has-marks-above.scale-has-marks-below trough:insensitive, .osd
-      .scale.scale-has-marks-above.scale-has-marks-below trough:backdrop:insensitive, .osd
-      .scale.vertical.scale-has-marks-above.scale-has-marks-below trough:insensitive, .osd
-      .scale.vertical.scale-has-marks-above.scale-has-marks-below trough:backdrop:insensitive {
+      scale.scale-has-marks-above.scale-has-marks-below trough:insensitive, .osd
+      scale.scale-has-marks-above.scale-has-marks-below trough:backdrop:insensitive, .osd
+      scale.vertical.scale-has-marks-above.scale-has-marks-below trough:insensitive, .osd
+      scale.vertical.scale-has-marks-above.scale-has-marks-below trough:backdrop:insensitive {
         border-color: transparent;
         background-color: transparent; }
       .osd scale trough:backdrop, .osd
-      .scale.scale-has-marks-above.scale-has-marks-below trough:backdrop, .osd
-      .scale.vertical.scale-has-marks-above.scale-has-marks-below trough:backdrop {
+      scale.scale-has-marks-above.scale-has-marks-below trough:backdrop, .osd
+      scale.vertical.scale-has-marks-above.scale-has-marks-below trough:backdrop {
         border-color: rgba(0, 0, 0, 0.7);
         background-image: none; }
   .list-row:selected scale, .list-row:selected
-  .scale.scale-has-marks-above.scale-has-marks-below, .list-row:selected
-  .scale.vertical.scale-has-marks-above.scale-has-marks-below {
+  scale.scale-has-marks-above.scale-has-marks-below, .list-row:selected
+  scale.vertical.scale-has-marks-above.scale-has-marks-below {
     border-color: #0f2b48;
     box-shadow: inset 1px 1px rgba(0, 0, 0, 0.1); }
     .list-row:selected scale:backdrop, .list-row:selected
-    .scale.scale-has-marks-above.scale-has-marks-below:backdrop, .list-row:selected
-    .scale.vertical.scale-has-marks-above.scale-has-marks-below:backdrop {
+    scale.scale-has-marks-above.scale-has-marks-below:backdrop, .list-row:selected
+    scale.vertical.scale-has-marks-above.scale-has-marks-below:backdrop {
       box-shadow: none; }
     .list-row:selected scale.highlight:backdrop, .list-row:selected
-    .scale.scale-has-marks-above.scale-has-marks-below.highlight:backdrop, .list-row:selected
-    .scale.vertical.scale-has-marks-above.scale-has-marks-below.highlight:backdrop {
+    scale.scale-has-marks-above.scale-has-marks-below.highlight:backdrop, .list-row:selected
+    scale.vertical.scale-has-marks-above.scale-has-marks-below.highlight:backdrop {
       border-color: #0f2b48; }
     .list-row:selected scale:insensitive, .list-row:selected scale.highlight:insensitive, .list-row:selected
-    .scale.scale-has-marks-above.scale-has-marks-below:insensitive, .list-row:selected
-    .scale.scale-has-marks-above.scale-has-marks-below.highlight:insensitive, .list-row:selected
-    .scale.vertical.scale-has-marks-above.scale-has-marks-below:insensitive, .list-row:selected
-    .scale.vertical.scale-has-marks-above.scale-has-marks-below.highlight:insensitive {
+    scale.scale-has-marks-above.scale-has-marks-below:insensitive, .list-row:selected
+    scale.scale-has-marks-above.scale-has-marks-below.highlight:insensitive, .list-row:selected
+    scale.vertical.scale-has-marks-above.scale-has-marks-below:insensitive, .list-row:selected
+    scale.vertical.scale-has-marks-above.scale-has-marks-below.highlight:insensitive {
       border-color: #215d9c;
       box-shadow: none;
       background-color: #90aece;
       background-image: none; }
       .list-row:selected scale:insensitive:backdrop, .list-row:selected scale.highlight:insensitive:backdrop, .list-row:selected
-      .scale.scale-has-marks-above.scale-has-marks-below:insensitive:backdrop, .list-row:selected
-      .scale.scale-has-marks-above.scale-has-marks-below.highlight:insensitive:backdrop, .list-row:selected
-      .scale.vertical.scale-has-marks-above.scale-has-marks-below:insensitive:backdrop, .list-row:selected
-      .scale.vertical.scale-has-marks-above.scale-has-marks-below.highlight:insensitive:backdrop {
+      scale.scale-has-marks-above.scale-has-marks-below:insensitive:backdrop, .list-row:selected
+      scale.scale-has-marks-above.scale-has-marks-below.highlight:insensitive:backdrop, .list-row:selected
+      scale.vertical.scale-has-marks-above.scale-has-marks-below:insensitive:backdrop, .list-row:selected
+      scale.vertical.scale-has-marks-above.scale-has-marks-below.highlight:insensitive:backdrop {
         background-color: #90aece; }
+
+scale marks {
+  color: alpha(currentColor,0.5); }
 
 scale.scale-has-marks-below {
   -GtkScale-slider-length: 20;
   -GtkRange-slider-width: 24;
-  -GtkRange-trough-border: 2;
-  color: alpha(currentColor,0.5); }
-  scale.scale-has-marks-below slider {
+  -GtkRange-trough-border: 2; }
+  scale.scale-has-marks-below trough slider {
     border-style: none;
     border-radius: 0;
     background-color: transparent;
@@ -3135,7 +3144,7 @@ scale.scale-has-marks-below {
     background-repeat: no-repeat;
     background-position: center;
     box-shadow: none; }
-  scale.scale-has-marks-below slider:hover {
+  scale.scale-has-marks-below trough slider:hover {
     border-style: none;
     border-radius: 0;
     background-color: transparent;
@@ -3143,7 +3152,7 @@ scale.scale-has-marks-below {
     background-repeat: no-repeat;
     background-position: center;
     box-shadow: none; }
-  scale.scale-has-marks-below slider:active {
+  scale.scale-has-marks-below trough slider:active {
     border-style: none;
     border-radius: 0;
     background-color: transparent;
@@ -3151,7 +3160,7 @@ scale.scale-has-marks-below {
     background-repeat: no-repeat;
     background-position: center;
     box-shadow: none; }
-  scale.scale-has-marks-below slider:insensitive {
+  scale.scale-has-marks-below trough slider:insensitive {
     border-style: none;
     border-radius: 0;
     background-color: transparent;
@@ -3159,7 +3168,7 @@ scale.scale-has-marks-below {
     background-repeat: no-repeat;
     background-position: center;
     box-shadow: none; }
-  scale.scale-has-marks-below slider:backdrop {
+  scale.scale-has-marks-below trough slider:backdrop {
     border-style: none;
     border-radius: 0;
     background-color: transparent;
@@ -3167,7 +3176,7 @@ scale.scale-has-marks-below {
     background-repeat: no-repeat;
     background-position: center;
     box-shadow: none; }
-  scale.scale-has-marks-below slider:backdrop:insensitive {
+  scale.scale-has-marks-below trough slider:backdrop:insensitive {
     border-style: none;
     border-radius: 0;
     background-color: transparent;
@@ -3179,9 +3188,8 @@ scale.scale-has-marks-below {
 scale.scale-has-marks-above {
   -GtkScale-slider-length: 20;
   -GtkRange-slider-width: 24;
-  -GtkRange-trough-border: 2;
-  color: alpha(currentColor,0.5); }
-  scale.scale-has-marks-above slider {
+  -GtkRange-trough-border: 2; }
+  scale.scale-has-marks-above trough slider {
     border-style: none;
     border-radius: 0;
     background-color: transparent;
@@ -3189,7 +3197,7 @@ scale.scale-has-marks-above {
     background-repeat: no-repeat;
     background-position: center;
     box-shadow: none; }
-  scale.scale-has-marks-above slider:hover {
+  scale.scale-has-marks-above trough slider:hover {
     border-style: none;
     border-radius: 0;
     background-color: transparent;
@@ -3197,7 +3205,7 @@ scale.scale-has-marks-above {
     background-repeat: no-repeat;
     background-position: center;
     box-shadow: none; }
-  scale.scale-has-marks-above slider:active {
+  scale.scale-has-marks-above trough slider:active {
     border-style: none;
     border-radius: 0;
     background-color: transparent;
@@ -3205,7 +3213,7 @@ scale.scale-has-marks-above {
     background-repeat: no-repeat;
     background-position: center;
     box-shadow: none; }
-  scale.scale-has-marks-above slider:insensitive {
+  scale.scale-has-marks-above trough slider:insensitive {
     border-style: none;
     border-radius: 0;
     background-color: transparent;
@@ -3213,7 +3221,7 @@ scale.scale-has-marks-above {
     background-repeat: no-repeat;
     background-position: center;
     box-shadow: none; }
-  scale.scale-has-marks-above slider:backdrop {
+  scale.scale-has-marks-above trough slider:backdrop {
     border-style: none;
     border-radius: 0;
     background-color: transparent;
@@ -3221,7 +3229,7 @@ scale.scale-has-marks-above {
     background-repeat: no-repeat;
     background-position: center;
     box-shadow: none; }
-  scale.scale-has-marks-above slider:backdrop:insensitive {
+  scale.scale-has-marks-above trough slider:backdrop:insensitive {
     border-style: none;
     border-radius: 0;
     background-color: transparent;
@@ -3233,9 +3241,8 @@ scale.scale-has-marks-above {
 scale.vertical.scale-has-marks-below {
   -GtkScale-slider-length: 20;
   -GtkRange-slider-width: 24;
-  -GtkRange-trough-border: 2;
-  color: alpha(currentColor,0.5); }
-  scale.vertical.scale-has-marks-below slider {
+  -GtkRange-trough-border: 2; }
+  scale.vertical.scale-has-marks-below trough slider {
     border-style: none;
     border-radius: 0;
     background-color: transparent;
@@ -3243,7 +3250,7 @@ scale.vertical.scale-has-marks-below {
     background-repeat: no-repeat;
     background-position: center;
     box-shadow: none; }
-  scale.vertical.scale-has-marks-below slider:hover {
+  scale.vertical.scale-has-marks-below trough slider:hover {
     border-style: none;
     border-radius: 0;
     background-color: transparent;
@@ -3251,7 +3258,7 @@ scale.vertical.scale-has-marks-below {
     background-repeat: no-repeat;
     background-position: center;
     box-shadow: none; }
-  scale.vertical.scale-has-marks-below slider:active {
+  scale.vertical.scale-has-marks-below trough slider:active {
     border-style: none;
     border-radius: 0;
     background-color: transparent;
@@ -3259,7 +3266,7 @@ scale.vertical.scale-has-marks-below {
     background-repeat: no-repeat;
     background-position: center;
     box-shadow: none; }
-  scale.vertical.scale-has-marks-below slider:insensitive {
+  scale.vertical.scale-has-marks-below trough slider:insensitive {
     border-style: none;
     border-radius: 0;
     background-color: transparent;
@@ -3267,7 +3274,7 @@ scale.vertical.scale-has-marks-below {
     background-repeat: no-repeat;
     background-position: center;
     box-shadow: none; }
-  scale.vertical.scale-has-marks-below slider:backdrop {
+  scale.vertical.scale-has-marks-below trough slider:backdrop {
     border-style: none;
     border-radius: 0;
     background-color: transparent;
@@ -3275,7 +3282,7 @@ scale.vertical.scale-has-marks-below {
     background-repeat: no-repeat;
     background-position: center;
     box-shadow: none; }
-  scale.vertical.scale-has-marks-below slider:backdrop:insensitive {
+  scale.vertical.scale-has-marks-below trough slider:backdrop:insensitive {
     border-style: none;
     border-radius: 0;
     background-color: transparent;
@@ -3287,9 +3294,8 @@ scale.vertical.scale-has-marks-below {
 scale.vertical.scale-has-marks-above {
   -GtkScale-slider-length: 20;
   -GtkRange-slider-width: 24;
-  -GtkRange-trough-border: 2;
-  color: alpha(currentColor,0.5); }
-  scale.vertical.scale-has-marks-above slider {
+  -GtkRange-trough-border: 2; }
+  scale.vertical.scale-has-marks-above trough slider {
     border-style: none;
     border-radius: 0;
     background-color: transparent;
@@ -3297,7 +3303,7 @@ scale.vertical.scale-has-marks-above {
     background-repeat: no-repeat;
     background-position: center;
     box-shadow: none; }
-  scale.vertical.scale-has-marks-above slider:hover {
+  scale.vertical.scale-has-marks-above trough slider:hover {
     border-style: none;
     border-radius: 0;
     background-color: transparent;
@@ -3305,7 +3311,7 @@ scale.vertical.scale-has-marks-above {
     background-repeat: no-repeat;
     background-position: center;
     box-shadow: none; }
-  scale.vertical.scale-has-marks-above slider:active {
+  scale.vertical.scale-has-marks-above trough slider:active {
     border-style: none;
     border-radius: 0;
     background-color: transparent;
@@ -3313,7 +3319,7 @@ scale.vertical.scale-has-marks-above {
     background-repeat: no-repeat;
     background-position: center;
     box-shadow: none; }
-  scale.vertical.scale-has-marks-above slider:insensitive {
+  scale.vertical.scale-has-marks-above trough slider:insensitive {
     border-style: none;
     border-radius: 0;
     background-color: transparent;
@@ -3321,7 +3327,7 @@ scale.vertical.scale-has-marks-above {
     background-repeat: no-repeat;
     background-position: center;
     box-shadow: none; }
-  scale.vertical.scale-has-marks-above slider:backdrop {
+  scale.vertical.scale-has-marks-above trough slider:backdrop {
     border-style: none;
     border-radius: 0;
     background-color: transparent;
@@ -3329,7 +3335,7 @@ scale.vertical.scale-has-marks-above {
     background-repeat: no-repeat;
     background-position: center;
     box-shadow: none; }
-  scale.vertical.scale-has-marks-above slider:backdrop:insensitive {
+  scale.vertical.scale-has-marks-above trough slider:backdrop:insensitive {
     border-style: none;
     border-radius: 0;
     background-color: transparent;
