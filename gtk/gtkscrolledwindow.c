@@ -204,6 +204,9 @@ struct _GtkScrolledWindowPrivate
   GtkWidget     *hscrollbar;
   GtkWidget     *vscrollbar;
 
+  GtkCssNode    *overshoot_node[4];
+  GtkCssNode    *undershoot_node[4];
+
   Indicator hindicator;
   Indicator vindicator;
 
@@ -1313,6 +1316,14 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
 {
   GtkWidget *widget = GTK_WIDGET (scrolled_window);
   GtkScrolledWindowPrivate *priv;
+  GtkCssNode *widget_node;
+  GQuark classes[4] = {
+    g_quark_from_static_string (GTK_STYLE_CLASS_LEFT),
+    g_quark_from_static_string (GTK_STYLE_CLASS_RIGHT),
+    g_quark_from_static_string (GTK_STYLE_CLASS_TOP),
+    g_quark_from_static_string (GTK_STYLE_CLASS_BOTTOM),
+  };
+  gint i;
 
   scrolled_window->priv = priv =
     gtk_scrolled_window_get_instance_private (scrolled_window);
@@ -1374,6 +1385,24 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
   gtk_scrolled_window_set_capture_button_press (scrolled_window, TRUE);
 
   _gtk_widget_set_captured_event_handler (widget, captured_event_cb);
+
+  widget_node = gtk_widget_get_css_node (widget);
+  for (i = 0; i < 4; i++)
+    {
+      priv->overshoot_node[i] = gtk_css_node_new ();
+      gtk_css_node_set_name (priv->overshoot_node[i], I_("overshoot"));
+      gtk_css_node_add_class (priv->overshoot_node[i], classes[i]);
+      gtk_css_node_set_parent (priv->overshoot_node[i], widget_node);
+      gtk_css_node_set_state (priv->overshoot_node[i], gtk_css_node_get_state (widget_node));
+      g_object_unref (priv->overshoot_node[i]);
+
+      priv->undershoot_node[i] = gtk_css_node_new ();
+      gtk_css_node_set_name (priv->undershoot_node[i], I_("undershoot"));
+      gtk_css_node_add_class (priv->undershoot_node[i], classes[i]);
+      gtk_css_node_set_parent (priv->undershoot_node[i], widget_node);
+      gtk_css_node_set_state (priv->undershoot_node[i], gtk_css_node_get_state (widget_node));
+      g_object_unref (priv->undershoot_node[i]);
+    }
 }
 
 /**
@@ -2190,6 +2219,7 @@ static void
 gtk_scrolled_window_draw_overshoot (GtkScrolledWindow *scrolled_window,
 				    cairo_t           *cr)
 {
+  GtkScrolledWindowPrivate *priv = scrolled_window->priv;
   GtkWidget *widget = GTK_WIDGET (scrolled_window);
   gint overshoot_x, overshoot_y;
   GtkStyleContext *context;
@@ -2204,43 +2234,35 @@ gtk_scrolled_window_draw_overshoot (GtkScrolledWindow *scrolled_window,
   overshoot_x = CLAMP (overshoot_x, - MAX_OVERSHOOT_DISTANCE, MAX_OVERSHOOT_DISTANCE);
   overshoot_y = CLAMP (overshoot_y, - MAX_OVERSHOOT_DISTANCE, MAX_OVERSHOOT_DISTANCE);
 
-  gtk_style_context_save_named (context, "overshoot");
-
   if (overshoot_x > 0)
     {
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_RIGHT);
-
+      gtk_style_context_save_to_node (context, priv->overshoot_node[GTK_POS_RIGHT]);
       gtk_render_background (context, cr, rect.x + rect.width - overshoot_x, rect.y, overshoot_x, rect.height);
       gtk_render_frame (context, cr, rect.x + rect.width - overshoot_x, rect.y, overshoot_x, rect.height);
+      gtk_style_context_restore (context);
     }
   else if (overshoot_x < 0)
     {
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_LEFT);
-
+      gtk_style_context_save_to_node (context, priv->overshoot_node[GTK_POS_LEFT]);
       gtk_render_background (context, cr, rect.x, rect.y, -overshoot_x, rect.height);
       gtk_render_frame (context, cr, rect.x, rect.y, -overshoot_x, rect.height);
+      gtk_style_context_restore (context);
     }
-
-  gtk_style_context_restore (context);
-
-  gtk_style_context_save_named (context, "overshoot");
 
   if (overshoot_y > 0)
     {
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_BOTTOM);
-
+      gtk_style_context_save_to_node (context, priv->overshoot_node[GTK_POS_BOTTOM]);
       gtk_render_background (context, cr, rect.x, rect.y + rect.height - overshoot_y, rect.width, overshoot_y);
       gtk_render_frame (context, cr, rect.x, rect.y + rect.height - overshoot_y, rect.width, overshoot_y);
+      gtk_style_context_restore (context);
     }
   else if (overshoot_y < 0)
     {
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_TOP);
-
+      gtk_style_context_save_to_node (context, priv->overshoot_node[GTK_POS_TOP]);
       gtk_render_background (context, cr, rect.x, rect.y, rect.width, -overshoot_y);
       gtk_render_frame (context, cr, rect.x, rect.y, rect.width, -overshoot_y);
+      gtk_style_context_restore (context);
     }
-
-  gtk_style_context_restore (context);
 }
 
 static void
@@ -2259,9 +2281,7 @@ gtk_scrolled_window_draw_undershoot (GtkScrolledWindow *scrolled_window,
   adj = gtk_range_get_adjustment (GTK_RANGE (priv->hscrollbar));
   if (gtk_adjustment_get_value (adj) < gtk_adjustment_get_upper (adj) - gtk_adjustment_get_page_size (adj))
     {
-      gtk_style_context_save_named (context, "undershoot");
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_RIGHT);
-
+      gtk_style_context_save_to_node (context, priv->undershoot_node[GTK_POS_RIGHT]);
       gtk_render_background (context, cr, rect.x + rect.width - UNDERSHOOT_SIZE, rect.y, UNDERSHOOT_SIZE, rect.height);
       gtk_render_frame (context, cr, rect.x + rect.width - UNDERSHOOT_SIZE, rect.y, UNDERSHOOT_SIZE, rect.height);
 
@@ -2269,34 +2289,25 @@ gtk_scrolled_window_draw_undershoot (GtkScrolledWindow *scrolled_window,
     }
   if (gtk_adjustment_get_value (adj) > gtk_adjustment_get_lower (adj))
     {
-      gtk_style_context_save_named (context, "undershoot");
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_LEFT);
-
+      gtk_style_context_save_to_node (context, priv->undershoot_node[GTK_POS_LEFT]);
       gtk_render_background (context, cr, rect.x, rect.y, UNDERSHOOT_SIZE, rect.height);
       gtk_render_frame (context, cr, rect.x, rect.y, UNDERSHOOT_SIZE, rect.height);
-
       gtk_style_context_restore (context);
     }
 
   adj = gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar));
   if (gtk_adjustment_get_value (adj) < gtk_adjustment_get_upper (adj) - gtk_adjustment_get_page_size (adj))
     {
-      gtk_style_context_save_named (context, "undershoot");
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_BOTTOM);
-
+      gtk_style_context_save_to_node (context, priv->undershoot_node[GTK_POS_BOTTOM]);
       gtk_render_background (context, cr, rect.x, rect.y + rect.height - UNDERSHOOT_SIZE, rect.width, UNDERSHOOT_SIZE);
       gtk_render_frame (context, cr, rect.x, rect.y + rect.height - UNDERSHOOT_SIZE, rect.width, UNDERSHOOT_SIZE);
-
       gtk_style_context_restore (context);
     }
   if (gtk_adjustment_get_value (adj) > gtk_adjustment_get_lower (adj))
     {
-      gtk_style_context_save_named (context, "undershoot");
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_TOP);
-
+      gtk_style_context_save_to_node (context, priv->undershoot_node[GTK_POS_TOP]);
       gtk_render_background (context, cr, rect.x, rect.y, rect.width, UNDERSHOOT_SIZE);
       gtk_render_frame (context, cr, rect.x, rect.y, rect.width, UNDERSHOOT_SIZE);
-
       gtk_style_context_restore (context);
     }
 }
