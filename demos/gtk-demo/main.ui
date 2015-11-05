@@ -72,9 +72,6 @@
                 <property name="can_focus">1</property>
                 <property name="hscrollbar_policy">never</property>
                 <property name="min_content_width">150</property>
-                <style>
-                  <class name="sidebar"/>
-                </style>
                 <child>
                   <object class="GtkTreeView" id="treeview">
                     <property name="visible">1</property>
