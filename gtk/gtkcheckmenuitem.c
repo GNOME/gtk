@@ -779,4 +779,5 @@ _gtk_check_menu_item_set_active (GtkCheckMenuItem *check_menu_item,
   GtkCheckMenuItemPrivate *priv = check_menu_item->priv;
 
   priv->active = is_active;
+  update_node_state (check_menu_item);
 }
