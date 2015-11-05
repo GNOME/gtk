@@ -1093,14 +1093,12 @@ set_visible_child (GtkStack               *stack,
     {
       if (gtk_widget_is_visible (widget))
         {
-          int fake;
+          GtkAllocation allocation;
+
           priv->last_visible_child = priv->visible_child;
-          gtk_widget_get_preferred_width (priv->last_visible_child->widget,
-                                          &fake,
-                                          &priv->last_visible_widget_width);
-          gtk_widget_get_preferred_height (priv->last_visible_child->widget,
-                                          &fake,
-                                          &priv->last_visible_widget_height);
+          gtk_widget_get_allocated_size (priv->last_visible_child->widget, &allocation, NULL);
+          priv->last_visible_widget_width = allocation.width;
+          priv->last_visible_widget_height = allocation.height;
         }
       else
         {
