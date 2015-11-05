@@ -39,8 +39,11 @@
  * A #GtkToggleToolButton is a #GtkToolItem that contains a toggle
  * button.
  *
- * Use gtk_toggle_tool_button_new() to create a new
- * #GtkToggleToolButton.
+ * Use gtk_toggle_tool_button_new() to create a new GtkToggleToolButton.
+ *
+ * # CSS nodes
+ *
+ * GtkToggleToolButton has a single CSS node with name togglebutton.
  */
 
 

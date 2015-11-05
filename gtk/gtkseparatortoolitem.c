@@ -40,6 +40,10 @@
  * a “spring” that forces other items to the ends of the toolbar.
  *
  * Use gtk_separator_tool_item_new() to create a new #GtkSeparatorToolItem.
+ *
+ * # CSS nodes
+ *
+ * GtkSeparatorToolItem has a single CSS node with name separator.
  */
 
 #define MENU_ID "gtk-separator-tool-item-menu-id"
@@ -145,20 +149,17 @@ gtk_separator_tool_item_class_init (GtkSeparatorToolItemClass *class)
                                                          P_("Whether the separator is drawn, or just blank"),
                                                          TRUE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
+  gtk_widget_class_set_css_name (widget_class, "separator");
 }
 
 static void
 gtk_separator_tool_item_init (GtkSeparatorToolItem *separator_item)
 {
-  GtkStyleContext *context;
-
   separator_item->priv = gtk_separator_tool_item_get_instance_private (separator_item);
   separator_item->priv->draw = TRUE;
 
   gtk_widget_set_has_window (GTK_WIDGET (separator_item), FALSE);
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (separator_item));
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_SEPARATOR);
 }
 
 static void
@@ -173,7 +174,7 @@ gtk_separator_tool_item_create_menu_proxy (GtkToolItem *item)
 {
   GtkWidget *menu_item = NULL;
   
-  menu_item = gtk_separator_menu_item_new();
+  menu_item = gtk_separator_menu_item_new ();
   
   gtk_tool_item_set_proxy_menu_item (item, MENU_ID, menu_item);
   
