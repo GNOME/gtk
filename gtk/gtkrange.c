@@ -3623,13 +3623,23 @@ gtk_range_calc_slider (GtkRange *range)
 {
   GtkRangePrivate *priv = range->priv;
   GdkRectangle new_slider;
+  gboolean visible;
 
-  gtk_range_compute_slider_position (range, 
+  if (GTK_IS_SCALE (range) &&
+      gtk_adjustment_get_upper (priv->adjustment) == gtk_adjustment_get_lower (priv->adjustment))
+    visible = FALSE;
+  else
+    visible = TRUE;
+
+  gtk_range_compute_slider_position (range,
                                      gtk_adjustment_get_value (priv->adjustment),
                                      &new_slider);
 
-  if (gdk_rectangle_equal (&priv->slider, &new_slider))
+  if (gdk_rectangle_equal (&priv->slider, &new_slider) &&
+      visible == gtk_css_node_get_visible (priv->slider_node))
     return;
+
+  gtk_css_node_set_visible (priv->slider_node, visible);
 
   gtk_range_queue_draw_location (range, MOUSE_SLIDER);
 
