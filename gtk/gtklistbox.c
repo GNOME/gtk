@@ -60,6 +60,12 @@
  * as selected when the user tries to select it.
  *
  * The GtkListBox widget was added in GTK+ 3.10.
+ *
+ * # CSS nodes
+ *
+ * GtkListBox uses a single CSS node with name list. GtkListBoxRow uses
+ * a single CSS node with name row. The row nodes get the .activatable
+ * style class added when appropriate.
  */
 
 typedef struct
@@ -296,7 +302,6 @@ gtk_list_box_init (GtkListBox *box)
 {
   GtkListBoxPrivate *priv = BOX_PRIV (box);
   GtkWidget *widget = GTK_WIDGET (box);
-  GtkStyleContext *context;
 
   gtk_widget_set_has_window (widget, TRUE);
   gtk_widget_set_redraw_on_allocate (widget, TRUE);
@@ -305,9 +310,6 @@ gtk_list_box_init (GtkListBox *box)
 
   priv->children = g_sequence_new (NULL);
   priv->header_hash = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, NULL);
-
-  context = gtk_widget_get_style_context (widget);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_LIST);
 
   priv->multipress_gesture = gtk_gesture_multi_press_new (widget);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->multipress_gesture),
@@ -616,6 +618,8 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
                                 "select-all", 0);
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_a, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
                                 "unselect-all", 0);
+
+  gtk_widget_class_set_css_name (widget_class, "list");
 }
 
 /**
@@ -3022,7 +3026,6 @@ gtk_list_box_row_init (GtkListBoxRow *row)
   ROW_PRIV (row)->selectable = TRUE;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (row));
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_LIST_ROW);
   gtk_style_context_add_class (context, "activatable");
 }
 
@@ -3678,6 +3681,7 @@ gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
 
   g_object_class_install_properties (object_class, LAST_ROW_PROPERTY, row_properties);
 
+  gtk_widget_class_set_css_name (widget_class, "row");
 }
 
 static void
