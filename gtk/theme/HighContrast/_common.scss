@@ -818,11 +818,6 @@ toolbar { //FIXME: why is all this being ignored?
     padding: 3px;
     border-radius: 0  0 4px 4px;
   }
-  &.search-bar {
-    @extend %inset-bar;
-    border-width: 0 0 1px;
-    padding: 3px;
-  }
   &.vertical {
     border-right: 1px solid $borders_color;
     &:dir(rtl) {
@@ -830,6 +825,12 @@ toolbar { //FIXME: why is all this being ignored?
       border-left: 1px solid $borders_color;
     }
   }
+}
+
+searchbar {
+  @extend %inset-bar;
+  border-width: 0 0 1px;
+  padding: 3px;
 }
 
 %inset-bar {
@@ -2168,15 +2169,6 @@ messagedialog { // Message Dialog styling
 }
 
 GtkFileChooserDialog {
-  .search-bar {
-    background-color: $base_color;
-    border-color: $bg_color;
-    box-shadow: none;
-    &:backdrop {
-      background-color: $backdrop_base_color;
-      border-color: $backdrop_bg_color;
-    }
-  }
   .dialog-action-box {
     border-top: 1px solid $borders_color;
     &:backdrop { border-top-color: $backdrop_borders_color; }

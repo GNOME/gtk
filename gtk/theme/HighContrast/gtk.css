@@ -927,21 +927,22 @@ toolbar {
     border-width: 0 1px 1px;
     padding: 3px;
     border-radius: 0  0 4px 4px; }
-  toolbar.search-bar {
-    border-width: 0 0 1px;
-    padding: 3px; }
   toolbar.vertical {
     border-right: 1px solid gray; }
     toolbar.vertical:dir(rtl) {
       border-right: none;
       border-left: 1px solid gray; }
 
-toolbar.inline-toolbar, toolbar.search-bar {
+searchbar {
+  border-width: 0 0 1px;
+  padding: 3px; }
+
+toolbar.inline-toolbar, searchbar {
   border-style: solid;
   border-color: gray;
   background-color: #d9d9d9;
   box-shadow: inset 0 2px 3px -1px #a4a4a4; }
-  toolbar.inline-toolbar:backdrop, toolbar.search-bar:backdrop {
+  toolbar.inline-toolbar:backdrop, searchbar:backdrop {
     border-color: #8d8d8d;
     background-color: #d7d7d7;
     box-shadow: none; }
@@ -2443,13 +2444,6 @@ messagedialog.csd {
     border-left-style: none;
     border-bottom-left-radius: 7px; }
 
-GtkFileChooserDialog .search-bar {
-  background-color: #fff;
-  border-color: #fff;
-  box-shadow: none; }
-  GtkFileChooserDialog .search-bar:backdrop {
-    background-color: #fff;
-    border-color: #fff; }
 GtkFileChooserDialog .dialog-action-box {
   border-top: 1px solid gray; }
   GtkFileChooserDialog .dialog-action-box:backdrop {
