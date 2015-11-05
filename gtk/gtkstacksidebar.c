@@ -278,7 +278,6 @@ add_child (GtkWidget       *widget,
            GtkStackSidebar *sidebar)
 {
   GtkStackSidebarPrivate *priv = gtk_stack_sidebar_get_instance_private (sidebar);
-  GtkStyleContext *style;
   GtkWidget *item;
   GtkWidget *row;
 
