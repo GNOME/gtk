@@ -1528,7 +1528,7 @@ popover {
     box-shadow: none;
   }
 
-  > .list,
+  > list,
   > .view,
   > toolbar,
   &.osd > toolbar {
@@ -2026,7 +2026,7 @@ switch {
       box-shadow: none;
     }
   }
-  .list-row:selected & {
+  row:selected & {
     @if $variant == 'light' {
       box-shadow: none;
       border-color: $selected_borders_color;
@@ -2079,7 +2079,7 @@ switch {
       // too similar in luminosity to the selected background color, hence
       // we need special casing.
       .view #{$w}#{$s}:selected,
-      .list-row:selected #{$w}#{$s} {
+      row:selected #{$w}#{$s} {
         -gtk-icon-source: -gtk-scaled(url("assets/selected-#{$a}#{$as}#{$asset_suffix}.png"),
                                       url("assets/selected-#{$a}#{$as}#{$asset_suffix}@2.png"));
       }
@@ -2102,9 +2102,9 @@ switch {
   }
 }
 
-//treeview and list-rows
+//treeview and rows
 .view.check, .view.radio,
-.list-row .check, list-row .radio {
+row .check, row .radio {
   icon-shadow: none;
   &:selected, &:hover { icon-shadow: none; }
 }
@@ -2118,7 +2118,7 @@ switch {
                   (':checked:hover', '-checked-hover-selectionmode'),
                   (':checked:active', '-checked-active-selectionmode'),
                   (':backdrop:checked', '-checked-backdrop-selectionmode') {
-  .view.content-view.check#{$s}:not(.list) {
+  .view.content-view.check#{$s}:not(list) {
     icon-shadow: none;
     -gtk-icon-source: -gtk-scaled(url("assets/checkbox#{$as}.png"),
                                     url("assets/checkbox#{$as}@2.png"));
@@ -2272,7 +2272,7 @@ scale.vertical.scale-has-marks-above.scale-has-marks-below {
     }
   }
   // scales on selected list rows
-  .list-row:selected & {
+  row:selected & {
     border-color: $selected_borders_color;
     box-shadow: inset 1px 1px transparentize(black, 0.9);
     &:backdrop { box-shadow: none; }
@@ -2570,21 +2570,23 @@ separator {
  * Lists *
  *********/
 
-.list {
+list {
   background-color: $base_color;
   border-color: $borders_color;
   &:backdrop {
     background-color: $backdrop_base_color;
     border-color: $backdrop_borders_color;
   }
+  row {
+    padding: 2px;
+  }
 }
 
-.list-row,
 .grid-child {
   padding: 2px;
 }
 
-.list-row.activatable {
+row.activatable {
   &.has-open-popup, // this is for indicathing which row generated a popover see https://bugzilla.gnome.org/show_bug.cgi?id=754411
   &:hover { background-color: if(variant == light, transparentize($fg_color, 0.9), transparentize($fg_color, 0.95)); }
 
@@ -2602,7 +2604,7 @@ separator {
   }
 }
 
-.list-row:selected {
+row:selected {
   @extend %selected_items;
   button {
     @include button(normal, $edge:none);
@@ -2650,7 +2652,7 @@ separator {
 }
 
 // transition
-.list-row {
+row {
   transition: all 150ms $ease-out-quad;
   &:hover { transition: none; }
 }
@@ -2879,11 +2881,10 @@ GtkFileChooserDialog {
 }
 
 $_placesidebar_icons_opacity: 0.7;
-GtkSidebarRow {
+
+placessidebar row {
   // Needs overriding of the GtkListBoxRow padding
-  &.list-row {
-    padding: 0px;
-  }
+  padding: 0px;
   // Using margins/padding directly in the SidebarRow
   // will make the animation of the new bookmark row jump
   .sidebar-revealer {
@@ -2902,36 +2903,23 @@ GtkSidebarRow {
 
 placessidebar {
   // in the sidebar case it makes no sense to click the selected row
-  .list-row:selected:active { box-shadow: none; }
+  row:selected:active { box-shadow: none; }
 
    // looks like the label doesn't get all the states so work around
-  .list-row:selected:insensitive label { @extend %selected_items:insensitive; }
-  .list-row:selected:backdrop:insensitive label { @extend %selected_items:backdrop:insensitive; }
+  row:selected:insensitive label { @extend %selected_items:insensitive; }
+  row:selected:backdrop:insensitive label { @extend %selected_items:backdrop:insensitive; }
 
-  .sidebar-placeholder-row {
+  row.sidebar-placeholder-row {
     border: solid 1px $selected_bg_color;
   }
 
-  .sidebar-new-bookmark-row {
+  row.sidebar-new-bookmark-row {
     color: $selected_bg_color;
-  }
-
-  @at-root .sidebar-button.button { // @at-root needded to not change the specificity making button styling inheritance broken
-                                    // so istead of "GtkPlacesSidebar.sidebar .sidebar-button.button" [specificity 0,0,3,1]
-                                    // the extended selector ".sidebar-button.button" [specificity 0,0,2,0]
-
-    &.image-button { padding: 5px; }
-
-    @extend button.flat;
-    border-radius: 100%;
-    outline-radius: 100%;
-    &:not(:hover):not(:active) > image,
-    &:backdrop > image { opacity: $_placesidebar_icons_opacity };
   }
 }
 
 stacksidebar {
-  .list-row {
+  row {
     padding: 10px 4px;
     > label {
       padding-left: 6px;
@@ -2959,7 +2947,7 @@ GtkPlacesView {
     -gtk-icon-transform: rotate(-0.5turn);
   }
 
-  .list-row.activatable:hover {
+  row.activatable:hover {
     background-color: transparent;
   }
 }
