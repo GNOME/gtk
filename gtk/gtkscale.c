@@ -76,16 +76,18 @@
  *
  * |[<!-- language="plain" -->
  * scale
- * ├── slider
+ * ├── trough
+ * │   ╰── slider
  * ╰── marks
  *     ├── mark.bottom
  *     ├── mark.top
  *     ╰── ...
  * ]|
  *
- * GtkScale has a main CSS node with name scale and a subnode with name slider.
- * If marks are present, there is a marks subnode, below which each mark gets
- * a node with name mark, and either the .top or .bottom style class.
+ * GtkScale has a main CSS node with name scale, and subnodes with names
+ * trough and slider. If marks are present, there is a marks subnode, below
+ * which each mark gets a node with name mark, and either the .top or .bottom
+ * style class.
  */
 
 

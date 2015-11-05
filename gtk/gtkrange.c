@@ -108,6 +108,7 @@ struct _GtkRangePrivate
   GtkCssNode *stepper_b_node;
   GtkCssNode *stepper_c_node;
   GtkCssNode *stepper_d_node;
+  GtkCssNode *trough_node;
   GtkCssNode *slider_node;
 
   GtkOrientation     orientation;
@@ -774,9 +775,16 @@ gtk_range_init (GtkRange *range)
   _gtk_orientable_set_style_classes (GTK_ORIENTABLE (range));
 
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (range));
+  priv->trough_node = gtk_css_node_new ();
+  gtk_css_node_set_name (priv->trough_node, I_("trough"));
+  gtk_css_node_set_parent (priv->trough_node, widget_node);
+  gtk_css_node_set_state (priv->trough_node, gtk_css_node_get_state (widget_node));
+  g_signal_connect_object (priv->trough_node, "style-changed", G_CALLBACK (node_style_changed_cb), range, 0);
+  g_object_unref (priv->trough_node);
+
   priv->slider_node = gtk_css_node_new ();
   gtk_css_node_set_name (priv->slider_node, I_("slider"));
-  gtk_css_node_set_parent (priv->slider_node, widget_node);
+  gtk_css_node_set_parent (priv->slider_node, priv->trough_node);
   gtk_css_node_set_state (priv->slider_node, gtk_css_node_get_state (widget_node));
   g_signal_connect_object (priv->slider_node, "style-changed", G_CALLBACK (node_style_changed_cb), range, 0);
   g_object_unref (priv->slider_node);
@@ -1975,6 +1983,7 @@ gtk_range_draw (GtkWidget *widget,
             }
         }
 
+      gtk_style_context_save_to_node (context, priv->trough_node);
       gtk_style_context_get_margin (context, widget_state, &margin);
 
       x += margin.left;
@@ -2052,6 +2061,8 @@ gtk_range_draw (GtkWidget *widget,
               gtk_style_context_restore (context);
             }
         }
+
+      gtk_style_context_restore (context);
 
       if (priv->show_fill_level &&
           gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_page_size (priv->adjustment) -

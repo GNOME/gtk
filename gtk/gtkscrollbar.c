@@ -59,14 +59,15 @@
  * scrollbar
  * ├── [button.down]
  * ├── [button.up]
- * ├── slider
+ * ├── trough
+ * │   ╰── slider
  * ├── [button.down]
  * ╰── [button.up]
  * ]|
  *
- * GtkScrollbar has a main CSS node with name scrollbar, and a subnode
- * with name slider. If steppers are enabled, they are represented by up
- * to four additional subnodes with name button. These get the style classes
+ * GtkScrollbar has a main CSS node with name scrollbar, and subnodes with
+ * names trough and slider. If steppers are enabled, they are represented by
+ * up to four additional subnodes with name button. These get the style classes
  * .up and .down to indicate in which direction they are moving.
  */
 
