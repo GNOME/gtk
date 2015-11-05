@@ -224,7 +224,7 @@ entry, spinbutton {
     box-shadow: none; }
     entry progress:backdrop, spinbutton progress:backdrop {
       background-color: transparent; }
-  .linked:not(.vertical) > entry:focus + entry, .linked:not(.vertical) > spinbutton:focus + entry, .linked:not(.vertical) > entry:focus + spinbutton, .linked:not(.vertical) > spinbutton:focus + spinbutton, .linked:not(.vertical) > entry:focus + button, .linked:not(.vertical) > spinbutton:focus + button, .linked:not(.vertical) > entry:focus + combobox > butotn.combo, .linked:not(.vertical) > spinbutton:focus + combobox > butotn.combo {
+  .linked:not(.vertical) > entry:focus + entry, .linked:not(.vertical) > spinbutton:focus + entry, .linked:not(.vertical) > entry:focus + spinbutton, .linked:not(.vertical) > spinbutton:focus + spinbutton, .linked:not(.vertical) > entry:focus + button, .linked:not(.vertical) > spinbutton:focus + button, .linked:not(.vertical) > entry:focus + combobox > button.combo, .linked:not(.vertical) > spinbutton:focus + combobox > button.combo {
     border-left-color: #4a90d9; }
   entry.error, spinbutton.error {
     color: #cc0000;

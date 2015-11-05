@@ -267,7 +267,7 @@ entry {
 
   .linked:not(.vertical) > &:focus + entry,
   .linked:not(.vertical) > &:focus + button,
-  .linked:not(.vertical) > &:focus + combobox > butotn.combo {
+  .linked:not(.vertical) > &:focus + combobox > button.combo {
     border-left-color: entry_focus_border(); // colors the border of the widget following a focused entry
   }
 
