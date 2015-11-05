@@ -64,6 +64,7 @@
 #include "gtkgestureprivate.h"
 #include "inspector/init.h"
 #include "inspector/window.h"
+#include "gtkcssstylepropertyprivate.h"
 
 #include "gdk/gdk-private.h"
 
@@ -244,6 +245,8 @@ struct _GtkWindowPrivate
   GtkGesture *drag_gesture;
 
   GdkWindow *hardcoded_window;
+
+  GtkCssNode *decoration_node;
 };
 
 enum {
@@ -512,6 +515,8 @@ static void gtk_window_get_preferred_height_for_width (GtkWidget *widget,
                                                        gint       width,
                                                        gint      *minimum_size,
                                                        gint      *natural_size);
+static void gtk_window_state_flags_changed (GtkWidget     *widget,
+                                            GtkStateFlags  previous_state);
 
 static GSList      *toplevel_list = NULL;
 static guint        window_signals[LAST_SIGNAL] = { 0 };
@@ -688,6 +693,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->get_preferred_width_for_height = gtk_window_get_preferred_width_for_height;
   widget_class->get_preferred_height = gtk_window_get_preferred_height;
   widget_class->get_preferred_height_for_width = gtk_window_get_preferred_height_for_width;
+  widget_class->state_flags_changed = gtk_window_state_flags_changed;
 
   container_class->remove = gtk_window_remove;
   container_class->check_resize = gtk_window_check_resize;
@@ -1231,6 +1237,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   add_tab_bindings (binding_set, GDK_CONTROL_MASK | GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_WINDOW_ACCESSIBLE);
+  gtk_widget_class_set_css_name (widget_class, "window");
 }
 
 /**
@@ -1566,11 +1573,34 @@ drag_gesture_update_cb (GtkGestureDrag *gesture,
 }
 
 static void
+node_style_changed_cb (GtkCssNode  *node,
+                       GtkCssStyle *old_style,
+                       GtkCssStyle *new_style,
+                       GtkWidget   *widget)
+{
+  GtkBitmask *changes;
+  static GtkBitmask *affects_size = NULL;
+
+  if (G_UNLIKELY (affects_size == NULL))
+    affects_size = _gtk_css_style_property_get_mask_affecting (GTK_CSS_AFFECTS_SIZE | GTK_CSS_AFFECTS_CLIP);
+
+  changes = _gtk_bitmask_new ();
+  changes = gtk_css_style_add_difference (changes, old_style, new_style);
+
+  if (_gtk_bitmask_intersects (changes, affects_size))
+    gtk_widget_queue_resize (widget);
+  else
+    gtk_widget_queue_draw (widget);
+
+  _gtk_bitmask_free (changes);
+}
+
+static void
 gtk_window_init (GtkWindow *window)
 {
-  GtkStyleContext *context;
   GtkWindowPrivate *priv;
   GtkWidget *widget;
+  GtkCssNode *widget_node;
 
   widget = GTK_WIDGET (window);
 
@@ -1630,8 +1660,15 @@ gtk_window_init (GtkWindow *window)
                            G_CALLBACK (gtk_window_on_theme_variant_changed), window, 0);
 #endif
 
-  context = gtk_widget_get_style_context (widget);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_BACKGROUND);
+  widget_node = gtk_widget_get_css_node (GTK_WIDGET (window));
+  priv->decoration_node = gtk_css_node_new ();
+  gtk_css_node_set_name (priv->decoration_node, I_("decoration"));
+  gtk_css_node_set_parent (priv->decoration_node, widget_node);
+  gtk_css_node_set_state (priv->decoration_node, gtk_css_node_get_state (widget_node));
+  g_signal_connect_object (priv->decoration_node, "style-changed", G_CALLBACK (node_style_changed_cb), window, 0);
+  g_object_unref (priv->decoration_node);
+
+  gtk_css_node_add_class (widget_node, g_quark_from_static_string (GTK_STYLE_CLASS_BACKGROUND));
 
   priv->scale = gtk_widget_get_scale_factor (widget);
 }
@@ -6653,15 +6690,6 @@ subtract_borders (GtkBorder *one,
 }
 
 static void
-style_context_save_to_decoration (GtkStyleContext *context)
-{
-  gtk_style_context_save_named (context, "decoration");
-
-  gtk_style_context_remove_class (context, GTK_STYLE_CLASS_BACKGROUND);
-  gtk_style_context_add_class (context, "window-frame");
-}
-
-static void
 get_shadow_width (GtkWindow *window,
                   GtkBorder *shadow_width)
 {
@@ -6696,7 +6724,7 @@ get_shadow_width (GtkWindow *window,
   state = _gtk_widget_get_state_flags (GTK_WIDGET (window));
   context = _gtk_widget_get_style_context (GTK_WIDGET (window));
 
-  style_context_save_to_decoration (context);
+  gtk_style_context_save_to_node (context, priv->decoration_node);
 
   /* We don't want windows to jump as they go to backdrop,
    * therefore we use the maximum of the decoration sizes
@@ -6787,8 +6815,7 @@ update_border_windows (GtkWindow *window)
   state = _gtk_widget_get_state_flags (widget);
   context = _gtk_widget_get_style_context (widget);
 
-  style_context_save_to_decoration (context);
-  gtk_style_context_set_state (context, state);
+  gtk_style_context_save_to_node (context, priv->decoration_node);
   gtk_style_context_get_margin (context, state, &border);
   gtk_widget_style_get (widget,
                         "decoration-resize-handle", &handle,
@@ -7019,11 +7046,12 @@ corner_rect (cairo_rectangle_int_t *rect,
 static void
 subtract_corners_from_region (cairo_region_t        *region,
                               cairo_rectangle_int_t *extents,
-                              GtkStyleContext       *context)
+                              GtkStyleContext       *context,
+                              GtkWindow             *window)
 {
   cairo_rectangle_int_t rect;
 
-  style_context_save_to_decoration (context);
+  gtk_style_context_save_to_node (context, window->priv->decoration_node);
 
   corner_rect (&rect, _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_LEFT_RADIUS));
   rect.x = extents->x;
@@ -7084,7 +7112,7 @@ update_opaque_region (GtkWindow           *window,
 
       opaque_region = cairo_region_create_rectangle (&rect);
 
-      subtract_corners_from_region (opaque_region, &rect, context);
+      subtract_corners_from_region (opaque_region, &rect, context, window);
     }
   else
     {
@@ -8749,6 +8777,18 @@ gtk_window_get_preferred_height_for_width (GtkWidget *widget,
     }
 }
 
+static void
+gtk_window_state_flags_changed (GtkWidget     *widget,
+                                GtkStateFlags  previous_state)
+{
+  GtkWindow *window = GTK_WINDOW (widget);
+  GtkWindowPrivate *priv = window->priv;
+  GtkStateFlags state;
+
+  state = gtk_widget_get_state_flags (widget);
+  gtk_css_node_set_state (priv->decoration_node, state);
+}
+
 /**
  * _gtk_window_unset_focus_and_default:
  * @window: a #GtkWindow
@@ -9889,7 +9929,7 @@ gtk_window_draw (GtkWidget *widget,
           !priv->fullscreen &&
           !priv->maximized)
         {
-          style_context_save_to_decoration (context);
+          gtk_style_context_save_to_node (context, priv->decoration_node);
 
           if (priv->use_client_shadow)
             {
