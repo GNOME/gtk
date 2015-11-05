@@ -4264,7 +4264,7 @@ _gtk_range_set_steppers (GtkRange *range,
         {
           priv->stepper_a_node = create_stepper_node (range,
                                                       "down",
-                                                      priv->has_stepper_b ? priv->stepper_b_node : priv->slider_node,
+                                                      priv->has_stepper_b ? priv->stepper_b_node : priv->trough_node,
                                                       NULL);
         }
       else
@@ -4281,7 +4281,7 @@ _gtk_range_set_steppers (GtkRange *range,
         {
           priv->stepper_b_node = create_stepper_node (range,
                                                       "up",
-                                                      priv->slider_node,
+                                                      priv->trough_node,
                                                       NULL);
         }
       else
@@ -4299,7 +4299,7 @@ _gtk_range_set_steppers (GtkRange *range,
           priv->stepper_c_node = create_stepper_node (range,
                                                       "down",
                                                       NULL,
-                                                      priv->slider_node);
+                                                      priv->trough_node);
         }
       else
         {
@@ -4316,7 +4316,7 @@ _gtk_range_set_steppers (GtkRange *range,
           priv->stepper_d_node = create_stepper_node (range,
                                                       "up",
                                                       NULL,
-                                                      priv->has_stepper_c ? priv->stepper_c_node : priv->slider_node);
+                                                      priv->has_stepper_c ? priv->stepper_c_node : priv->trough_node);
         }
       else
         {
