@@ -51,6 +51,11 @@
  * Also see #GtkListBox.
  *
  * GtkFlowBox was added in GTK+ 3.12.
+ *
+ * # CSS nodes
+ *
+ * GtkFlowBox uses a single CSS node with name flowbox. GtkFlowBoxChild
+ * uses a single CSS node with name flowboxchild.
  */
 
 #include <config.h>
@@ -616,18 +621,14 @@ gtk_flow_box_child_class_init (GtkFlowBoxChildClass *class)
   widget_class->activate_signal = child_signals[CHILD_ACTIVATE];
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_LIST_ITEM);
+  gtk_widget_class_set_css_name (widget_class, "flowboxchild");
 }
 
 static void
 gtk_flow_box_child_init (GtkFlowBoxChild *child)
 {
-  GtkStyleContext *context;
-
   gtk_widget_set_can_focus (GTK_WIDGET (child), TRUE);
   gtk_widget_set_redraw_on_allocate (GTK_WIDGET (child), TRUE);
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (child));
-  gtk_style_context_add_class (context, "grid-child");
 }
 
 /* Public API {{{2 */
@@ -3991,6 +3992,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                                 "unselect-all", 0);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_FLOW_BOX_ACCESSIBLE);
+  gtk_widget_class_set_css_name (widget_class, "flowbox");
 }
 
 static void
