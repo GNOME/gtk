@@ -46,7 +46,12 @@
  *
  * # CSS nodes
  *
- * GtkStackSidebar has a single CSS node with name stacksidebar.
+ * GtkStackSidebar has a single CSS node with name stacksidebar and
+ * style class .sidebar.
+ *
+ * When circumstances require it, GtkStackSwitcher adds the
+ * .needs-attention style class to the widgets representing the stack
+ * pages.
  *
  * Since: 3.16
  */
@@ -290,10 +295,6 @@ add_child (GtkWidget       *widget,
   gtk_widget_show (item);
 
   update_row (sidebar, widget, row);
-
-  /* Fix up styling */
-  style = gtk_widget_get_style_context (row);
-  gtk_style_context_add_class (style, "sidebar-item");
 
   /* Hook up for events */
   g_signal_connect (widget, "child-notify::title",
