@@ -125,6 +125,21 @@
  * The GtkWindow implementation of the GtkBuildable interface supports
  * setting a child as the titlebar by specifying “titlebar” as the “type”
  * attribute of a <child> element.
+ *
+ * # CSS nodes
+ *
+ * |[<!-- language="plain" -->
+ * window
+ * ╰── decoration
+ * ]|
+ *
+ * GtkWindow has a main CSS node with name window and style class .background,
+ * and a subnode with name decoration. Style classes that are typically used
+ * with the main CSS node are .csd, .solid-csd, .ssd, .tiled, .maximized,
+ * .fullscreen, .popup, .tooltip.
+ *
+ * GtkWindow adds the .titlebar and .default-decoration style classes to the
+ * widget that is added as a titlebar child.
  */
 
 #define MNEMONICS_DELAY 300 /* ms */
