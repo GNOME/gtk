@@ -76,18 +76,22 @@
  *
  * |[<!-- language="plain" -->
  * scale
+ * ├── marks.top
+ * │   ├── mark
+ * │   ├── mark
+ * │   ╰── ...
  * ├── trough
  * │   ╰── slider
- * ╰── marks
- *     ├── mark.bottom
- *     ├── mark.top
+ * ╰── marks.bottom
+ *     ├── mark
+ *     ├── mark
  *     ╰── ...
  * ]|
  *
  * GtkScale has a main CSS node with name scale, and subnodes with names
- * trough and slider. If marks are present, there is a marks subnode, below
- * which each mark gets a node with name mark, and either the .top or .bottom
- * style class.
+ * trough and slider. If marks are present, there is a marks subnode before
+ * or after the trough node, below which each mark gets a node with name mark.
+ * The marks nodes get either the .top or .bottom style class.
  */
 
 
@@ -105,7 +109,8 @@ struct _GtkScalePrivate
 
   GSList       *marks;
 
-  GtkCssNode   *marks_node;
+  GtkCssNode   *top_marks_node;
+  GtkCssNode   *bottom_marks_node;
 
   gint          digits;
 
@@ -1544,10 +1549,15 @@ gtk_scale_clear_marks (GtkScale *scale)
   gtk_style_context_remove_class (context, GTK_STYLE_CLASS_SCALE_HAS_MARKS_BELOW);
   gtk_style_context_remove_class (context, GTK_STYLE_CLASS_SCALE_HAS_MARKS_ABOVE);
 
-  if (priv->marks_node)
+  if (priv->top_marks_node)
     {
-      gtk_css_node_set_parent (priv->marks_node, NULL);
-      priv->marks_node = NULL;
+      gtk_css_node_set_parent (priv->top_marks_node, NULL);
+      priv->top_marks_node = NULL;
+    }
+  if (priv->bottom_marks_node)
+    {
+      gtk_css_node_set_parent (priv->bottom_marks_node, NULL);
+      priv->bottom_marks_node = NULL;
     }
 
   _gtk_range_set_stop_values (GTK_RANGE (scale), NULL, 0);
@@ -1591,7 +1601,7 @@ gtk_scale_add_mark (GtkScale        *scale,
   gdouble *values;
   gint n, i;
   GtkStyleContext *context;
-  int all_pos;
+  GtkCssNode *widget_node, *marks_node;
 
   g_return_if_fail (GTK_IS_SCALE (scale));
 
@@ -1610,51 +1620,68 @@ gtk_scale_add_mark (GtkScale        *scale,
                                                  compare_marks,
                                                  GINT_TO_POINTER (gtk_range_get_inverted (GTK_RANGE (scale))));
 
-  m = g_slist_find (priv->marks, mark);
-
-  if (!priv->marks_node)
+  if (mark->position == GTK_POS_TOP)
     {
-      GtkCssNode *widget_node;
-
-      widget_node = gtk_widget_get_css_node (GTK_WIDGET (scale));
-      priv->marks_node = gtk_css_node_new ();
-      gtk_css_node_set_name (priv->marks_node, I_("marks"));
-      gtk_css_node_set_parent (priv->marks_node, widget_node);
-      gtk_css_node_set_state (priv->marks_node, gtk_css_node_get_state (widget_node));
-      g_object_unref (priv->marks_node);
+      if (!priv->top_marks_node)
+        {
+          widget_node = gtk_widget_get_css_node (GTK_WIDGET (scale));
+          priv->top_marks_node = gtk_css_node_new ();
+          gtk_css_node_set_name (priv->top_marks_node, I_("marks"));
+          gtk_css_node_insert_before (widget_node, priv->top_marks_node, gtk_range_get_trough_node (GTK_RANGE (scale)));
+          gtk_css_node_set_parent (priv->top_marks_node, widget_node);
+          gtk_css_node_add_class (priv->top_marks_node, g_quark_from_static_string ("top"));
+          gtk_css_node_set_state (priv->top_marks_node, gtk_css_node_get_state (widget_node));
+          g_object_unref (priv->top_marks_node);
+        }
+      marks_node = priv->top_marks_node;
+    }
+  else
+    {
+      if (!priv->bottom_marks_node)
+        {
+          widget_node = gtk_widget_get_css_node (GTK_WIDGET (scale));
+          priv->bottom_marks_node = gtk_css_node_new ();
+          gtk_css_node_set_name (priv->bottom_marks_node, I_("marks"));
+          gtk_css_node_insert_after (widget_node, priv->bottom_marks_node, gtk_range_get_trough_node (GTK_RANGE (scale)));
+          gtk_css_node_add_class (priv->bottom_marks_node, g_quark_from_static_string ("bottom"));
+          gtk_css_node_set_state (priv->bottom_marks_node, gtk_css_node_get_state (widget_node));
+          g_object_unref (priv->bottom_marks_node);
+        }
+      marks_node = priv->bottom_marks_node;
     }
 
   mark->node = gtk_css_node_new ();
   gtk_css_node_set_name (mark->node, I_("mark"));
-  gtk_css_node_add_class (mark->node, g_quark_from_static_string (mark->position == GTK_POS_TOP ? "top" : "bottom"));
-  gtk_css_node_set_state (mark->node, gtk_css_node_get_state (priv->marks_node));
+  gtk_css_node_set_state (mark->node, gtk_css_node_get_state (marks_node));
 
-  if (m->next)
+  m = g_slist_find (priv->marks, mark);
+  m = m->next;
+  while (m)
     {
-      GtkScaleMark *next = m->next->data;
-      gtk_css_node_insert_before (priv->marks_node, mark->node, next->node);
+      GtkScaleMark *next = m->data;
+      if (next->position == mark->position)
+        break;
+      m = m->next;
+    }
+
+  if (m)
+    {
+      GtkScaleMark *next = m->data;
+      gtk_css_node_insert_before (marks_node, mark->node, next->node);
     }
   else
     {
-      gtk_css_node_set_parent (mark->node, priv->marks_node);
+      gtk_css_node_set_parent (mark->node, marks_node);
     }
 
   g_object_unref (mark->node);
 
-#define MARKS_ABOVE 1
-#define MARKS_BELOW 2
-
-  all_pos = 0;
   n = g_slist_length (priv->marks);
   values = g_new (gdouble, n);
   for (m = priv->marks, i = 0; m; m = m->next, i++)
     {
       mark = m->data;
       values[i] = mark->value;
-      if (mark->position == GTK_POS_TOP)
-        all_pos |= MARKS_ABOVE;
-      else
-        all_pos |= MARKS_BELOW;
     }
 
   _gtk_range_set_stop_values (GTK_RANGE (scale), values, n);
@@ -1666,11 +1693,11 @@ gtk_scale_add_mark (GtkScale        *scale,
    */
   context = gtk_widget_get_style_context (GTK_WIDGET (scale));
 
-  if (all_pos & MARKS_ABOVE)
+  if (priv->top_marks_node)
     gtk_style_context_add_class (context, GTK_STYLE_CLASS_SCALE_HAS_MARKS_ABOVE);
   else
     gtk_style_context_remove_class (context, GTK_STYLE_CLASS_SCALE_HAS_MARKS_ABOVE);
-  if (all_pos & MARKS_BELOW)
+  if (priv->bottom_marks_node)
     gtk_style_context_add_class (context, GTK_STYLE_CLASS_SCALE_HAS_MARKS_BELOW);
   else
     gtk_style_context_remove_class (context, GTK_STYLE_CLASS_SCALE_HAS_MARKS_BELOW);
