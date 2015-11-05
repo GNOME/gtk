@@ -2941,15 +2941,17 @@ GtkPlacesSidebar.sidebar {
   }
 }
 
-.sidebar-item {
-  padding: 10px 4px;
-  > label {
-    padding-left: 6px;
-    padding-right: 6px;
-  }
-  &.needs-attention > label {
-    @extend %needs_attention;
-    background-size: 6px 6px, 0 0;
+stacksidebar {
+  .list-row {
+    padding: 10px 4px;
+    > label {
+      padding-left: 6px;
+      padding-right: 6px;
+    }
+    &.needs-attention > label {
+      @extend %needs_attention;
+      background-size: 6px 6px, 0 0;
+    }
   }
 }
 
