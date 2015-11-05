@@ -3674,8 +3674,10 @@ actionbar frame {
   padding: 6px;
   border-width: 1px 0 0; }
 
+placessidebar viewport.frame,
 scrolledwindow viewport.frame {
   border-style: none; }
+placessidebar overshoot.top,
 scrolledwindow overshoot.top {
   background-image: -gtk-gradient(radial, center top, 0, center top, 0.5, to(#878787), to(rgba(135, 135, 135, 0))), -gtk-gradient(radial, center top, 0, center top, 0.6, from(rgba(46, 52, 54, 0.07)), to(rgba(46, 52, 54, 0)));
   background-size: 100% 5%, 100% 100%;
@@ -3684,6 +3686,7 @@ scrolledwindow overshoot.top {
   background-color: transparent;
   border: none;
   box-shadow: none; }
+  placessidebar overshoot.top:backdrop,
   scrolledwindow overshoot.top:backdrop {
     background-image: -gtk-gradient(radial, center top, 0, center top, 0.5, to(darkgray), to(rgba(169, 169, 169, 0)));
     background-size: 100% 5%;
@@ -3692,6 +3695,7 @@ scrolledwindow overshoot.top {
     background-color: transparent;
     border: none;
     box-shadow: none; }
+placessidebar overshoot.bottom,
 scrolledwindow overshoot.bottom {
   background-image: -gtk-gradient(radial, center bottom, 0, center bottom, 0.5, to(#878787), to(rgba(135, 135, 135, 0))), -gtk-gradient(radial, center bottom, 0, center bottom, 0.6, from(rgba(46, 52, 54, 0.07)), to(rgba(46, 52, 54, 0)));
   background-size: 100% 5%, 100% 100%;
@@ -3700,6 +3704,7 @@ scrolledwindow overshoot.bottom {
   background-color: transparent;
   border: none;
   box-shadow: none; }
+  placessidebar overshoot.bottom:backdrop,
   scrolledwindow overshoot.bottom:backdrop {
     background-image: -gtk-gradient(radial, center bottom, 0, center bottom, 0.5, to(darkgray), to(rgba(169, 169, 169, 0)));
     background-size: 100% 5%;
@@ -3708,6 +3713,7 @@ scrolledwindow overshoot.bottom {
     background-color: transparent;
     border: none;
     box-shadow: none; }
+placessidebar overshoot.left,
 scrolledwindow overshoot.left {
   background-image: -gtk-gradient(radial, left center, 0, left center, 0.5, to(#878787), to(rgba(135, 135, 135, 0))), -gtk-gradient(radial, left center, 0, left center, 0.6, from(rgba(46, 52, 54, 0.07)), to(rgba(46, 52, 54, 0)));
   background-size: 5% 100%, 100% 100%;
@@ -3716,6 +3722,7 @@ scrolledwindow overshoot.left {
   background-color: transparent;
   border: none;
   box-shadow: none; }
+  placessidebar overshoot.left:backdrop,
   scrolledwindow overshoot.left:backdrop {
     background-image: -gtk-gradient(radial, left center, 0, left center, 0.5, to(darkgray), to(rgba(169, 169, 169, 0)));
     background-size: 5% 100%;
@@ -3724,6 +3731,7 @@ scrolledwindow overshoot.left {
     background-color: transparent;
     border: none;
     box-shadow: none; }
+placessidebar overshoot.right,
 scrolledwindow overshoot.right {
   background-image: -gtk-gradient(radial, right center, 0, right center, 0.5, to(#878787), to(rgba(135, 135, 135, 0))), -gtk-gradient(radial, right center, 0, right center, 0.6, from(rgba(46, 52, 54, 0.07)), to(rgba(46, 52, 54, 0)));
   background-size: 5% 100%, 100% 100%;
@@ -3732,6 +3740,7 @@ scrolledwindow overshoot.right {
   background-color: transparent;
   border: none;
   box-shadow: none; }
+  placessidebar overshoot.right:backdrop,
   scrolledwindow overshoot.right:backdrop {
     background-image: -gtk-gradient(radial, right center, 0, right center, 0.5, to(darkgray), to(rgba(169, 169, 169, 0)));
     background-size: 5% 100%;
@@ -3740,6 +3749,7 @@ scrolledwindow overshoot.right {
     background-color: transparent;
     border: none;
     box-shadow: none; }
+placessidebar undershoot.top,
 scrolledwindow undershoot.top {
   background-color: transparent;
   background-image: linear-gradient(to left, rgba(255, 255, 255, 0.2) 50%, rgba(0, 0, 0, 0.2) 50%);
@@ -3750,6 +3760,7 @@ scrolledwindow undershoot.top {
   background-position: center top;
   border: none;
   box-shadow: none; }
+placessidebar undershoot.bottom,
 scrolledwindow undershoot.bottom {
   background-color: transparent;
   background-image: linear-gradient(to left, rgba(255, 255, 255, 0.2) 50%, rgba(0, 0, 0, 0.2) 50%);
@@ -3760,6 +3771,7 @@ scrolledwindow undershoot.bottom {
   background-position: center bottom;
   border: none;
   box-shadow: none; }
+placessidebar undershoot.left,
 scrolledwindow undershoot.left {
   background-color: transparent;
   background-image: linear-gradient(to top, rgba(255, 255, 255, 0.2) 50%, rgba(0, 0, 0, 0.2) 50%);
@@ -3770,6 +3782,7 @@ scrolledwindow undershoot.left {
   background-position: left center;
   border: none;
   box-shadow: none; }
+placessidebar undershoot.right,
 scrolledwindow undershoot.right {
   background-color: transparent;
   background-image: linear-gradient(to top, rgba(255, 255, 255, 0.2) 50%, rgba(0, 0, 0, 0.2) 50%);
@@ -3780,12 +3793,15 @@ scrolledwindow undershoot.right {
   background-position: right center;
   border: none;
   box-shadow: none; }
+placessidebar junction,
 scrolledwindow junction {
   border-color: transparent;
   border-image: linear-gradient(to bottom, #a1a1a1 1px, transparent 1px) 0 0 0 1/0 1px stretch;
   background-color: #dbdbdb; }
+  placessidebar junction:dir(rtl),
   scrolledwindow junction:dir(rtl) {
     border-image-slice: 0 1 0 0; }
+  placessidebar junction:backdrop,
   scrolledwindow junction:backdrop {
     border-image-source: linear-gradient(to bottom, darkgray 1px, transparent 1px);
     background-color: #e5e5e5; }
@@ -4280,11 +4296,11 @@ GtkSidebarRow .sidebar-label:dir(ltr) {
 GtkSidebarRow .sidebar-label:dir(rtl) {
   padding-left: 2px; }
 
-GtkPlacesSidebar.sidebar .list-row:selected:active {
+placessidebar .list-row:selected:active {
   box-shadow: none; }
-GtkPlacesSidebar.sidebar .sidebar-placeholder-row {
+placessidebar .sidebar-placeholder-row {
   border: solid 1px #4a90d9; }
-GtkPlacesSidebar.sidebar .sidebar-new-bookmark-row {
+placessidebar .sidebar-new-bookmark-row {
   color: #4a90d9; }
 .sidebar-button.button {
   border-radius: 100%;
@@ -4677,7 +4693,7 @@ calendar:selected, label:selected, label:selected:focus, label:selected:hover, .
   textview text:insensitive:selected,
   .view:insensitive:selected,
   calendar:insensitive:selected, label:insensitive:selected, .grid-child:insensitive:selected, entry:insensitive:selected, spinbutton:insensitive:selected, modelbutton.flat:insensitive:selected,
-  .menuitem.button.flat:insensitive:selected, .list-row:insensitive:selected, .sidebar:insensitive:selected, GtkPlacesSidebar.sidebar .list-row:selected:insensitive label {
+  .menuitem.button.flat:insensitive:selected, .list-row:insensitive:selected, .sidebar:insensitive:selected, placessidebar .list-row:selected:insensitive label {
     color: #a5c8ec; }
   textview text:backdrop:selected,
   .view:backdrop:selected,
@@ -4687,7 +4703,7 @@ calendar:selected, label:selected, label:selected:focus, label:selected:hover, .
     textview text:backdrop:insensitive:selected,
     .view:backdrop:insensitive:selected,
     calendar:backdrop:insensitive:selected, label:backdrop:insensitive:selected, .grid-child:backdrop:insensitive:selected, entry:backdrop:insensitive:selected, spinbutton:backdrop:insensitive:selected, modelbutton.flat:backdrop:insensitive:selected,
-    .menuitem.button.flat:backdrop:insensitive:selected, .list-row:backdrop:insensitive:selected, .sidebar:backdrop:insensitive:selected, GtkPlacesSidebar.sidebar .list-row:selected:insensitive label:backdrop, GtkPlacesSidebar.sidebar .list-row:selected:backdrop:insensitive label {
+    .menuitem.button.flat:backdrop:insensitive:selected, .list-row:backdrop:insensitive:selected, .sidebar:backdrop:insensitive:selected, placessidebar .list-row:selected:insensitive label:backdrop, placessidebar .list-row:selected:backdrop:insensitive label {
       color: #80b1e4; }
 
 .monospace {

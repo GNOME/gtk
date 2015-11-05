@@ -2503,6 +2503,7 @@ actionbar frame {
   border-width: 1px 0 0;
 }
 
+placessidebar,
 scrolledwindow {
   viewport.frame { // avoid double borders when viewport inside scrolled window
     border-style: none;
@@ -2530,21 +2531,10 @@ scrolledwindow {
 
   // Overflow indication, works similarly to the overshoot, the size if fixed tho.
   undershoot {
-    &.top {
-      @include undershoot(top);
-    }
-
-    &.bottom {
-      @include undershoot(bottom);
-    }
-
-    &.left {
-      @include undershoot(left);
-    }
-
-    &.right {
-      @include undershoot(right);
-    }
+    &.top { @include undershoot(top); }
+    &.bottom { @include undershoot(bottom); }
+    &.left { @include undershoot(left); }
+    &.right { @include undershoot(right); }
   }
 
   junction { // the small square between two scrollbars
@@ -2560,7 +2550,6 @@ scrolledwindow {
       background-color: $backdrop_scrollbar_bg_color;
     }
   }
-
 }
 
 //vbox and hbox separators
@@ -2911,7 +2900,7 @@ GtkSidebarRow {
   }
 }
 
-GtkPlacesSidebar.sidebar {
+placessidebar {
   // in the sidebar case it makes no sense to click the selected row
   .list-row:selected:active { box-shadow: none; }
 
