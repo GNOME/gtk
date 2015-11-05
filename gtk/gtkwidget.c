@@ -17500,7 +17500,9 @@ _gtk_widget_remove_controller (GtkWidget          *widget,
   if (g_signal_handler_is_connected (widget, data->grab_notify_id))
     g_signal_handler_disconnect (widget, data->grab_notify_id);
 
-  g_signal_handler_disconnect (data->controller, data->sequence_state_changed_id);
+  if (data->sequence_state_changed_id)
+    g_signal_handler_disconnect (data->controller, data->sequence_state_changed_id);
+
   data->controller = NULL;
 }
 
