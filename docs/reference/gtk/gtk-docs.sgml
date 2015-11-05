@@ -203,7 +203,6 @@
       <xi:include href="xml/gtkcolorchooserdialog.xml" />
       <xi:include href="xml/gtkfilechooser.xml" />
       <xi:include href="xml/gtkfilechooserbutton.xml" />
-      <xi:include href="xml/gtknativedialog.xml" />
       <xi:include href="xml/gtkfilechoosernative.xml" />
       <xi:include href="xml/gtkfilechooserdialog.xml" />
       <xi:include href="xml/gtkfilechooserwidget.xml" />
@@ -274,6 +273,7 @@
       <xi:include href="xml/gtkmenushell.xml" />
       <xi:include href="xml/gtkrange.xml" />
       <xi:include href="xml/gtkimcontext.xml" />
+      <xi:include href="xml/gtknativedialog.xml" />
     </chapter>
 
     <chapter id="PlugSocket">
