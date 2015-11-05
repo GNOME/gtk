@@ -95,6 +95,12 @@
  *
  * GtkPlacesSidebar uses a single CSS node with name placesidebar and style
  * class .sidebar.
+ *
+ * Among the children of the places sidebar, the following style classes can
+ * be used:
+ * - .sidebar-new-bookmark-row for the 'Add new bookmark' row
+ * - .sidebar-placeholder-row for a row that is a placeholder
+ * - .has-open-popup when a popup is open for a row
  */
 
 /* These are used when a destination-side DND operation is taking place.
