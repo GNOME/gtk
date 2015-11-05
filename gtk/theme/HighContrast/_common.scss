@@ -1881,6 +1881,7 @@ frame,
   }
 }
 
+placessidebar,
 scrolledwindow {
   .frame { border-radius: 2px; }
   viewport.frame { // avoid double borders when viewport inside scrolled window
@@ -2221,7 +2222,7 @@ GtkSidebarRow {
 }
 
 // Places sidebar is a special case, since the view here have to look like chrome not content, so we override text color
-GtkPlacesSidebar.sidebar {
+placessidebar {
 
   @at-root .sidebar-button.button { // @at-root needded to not change the specificity making button styling inheritance broken
                                     // so istead of "GtkPlacesSidebar.sidebar .sidebar-button.button" [specificity 0,0,3,1]
@@ -2261,16 +2262,17 @@ GtkPlacesSidebar.sidebar {
   }
 }
 
-
-.sidebar-item {
-  padding: 10px 4px;
-  > label {
-    padding-left: 6px;
-    padding-right: 6px;
-  }
-  &.needs-attention > label {
-    @extend %needs_attention;
-    background-size: 6px 6px, 0 0;
+stacksidebar {
+  .list-row {
+    padding: 10px 4px;
+    > label {
+      padding-left: 6px;
+      padding-right: 6px;
+    }
+    &.needs-attention > label {
+      @extend %needs_attention;
+      background-size: 6px 6px, 0 0;
+    }
   }
 }
 

@@ -634,15 +634,15 @@ toolbar.inline-toolbar toolbutton:only-child > button.flat, toolbar.inline-toolb
   border-radius: 3px;
   border-style: solid; }
 
-.sidebar-item.needs-attention > label {
+stacksidebar .list-row.needs-attention > label {
   animation: needs_attention 150ms ease-in;
   background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(#000), to(transparent)), -gtk-gradient(radial, center center, 0, center center, 0.5, to(#000), to(transparent));
   background-size: 6px 6px, 6px 6px;
   background-repeat: no-repeat;
   background-position: right 3px, right 4px; }
-  .sidebar-item.needs-attention > label:backdrop {
+  stacksidebar .list-row.needs-attention > label:backdrop {
     background-size: 6px 6px, 0 0; }
-  .sidebar-item.needs-attention > label:dir(rtl) {
+  stacksidebar .list-row.needs-attention > label:dir(rtl) {
     background-position: left 3px, left 4px; }
 
 .osd button, .osd button:hover, .osd button:active, .osd button:checked, .osd button:insensitive, .osd button:backdrop, .inline-toolbar button, .inline-toolbar button:backdrop, .linked > button, .linked > button:hover, .linked > button:active, .linked > button:checked, .linked > button:backdrop, .linked > combobox > button:dir(ltr) {
@@ -897,7 +897,9 @@ combobox {
     color: gray; }
   combobox .menuitem {
     text-shadow: none; }
-  combobox separator.vertical, combobox GtkPlacesSidebar.sidebar .view separator.vertical, GtkPlacesSidebar.sidebar .view combobox separator.vertical {
+  combobox separator.vertical,
+  combobox placessidebar .view separator.vertical:backdrop,
+  placessidebar .view combobox separator.vertical:backdrop {
     -GtkWidget-wide-separators: true; }
   combobox.combobox-entry entry {
     border-radius: 3px 0 0 3px; }
@@ -975,10 +977,9 @@ headerbar {
     font-size: 80%;
     padding: 0 12px; }
   .titlebar .header-bar-separator, .titlebar > GtkBox > separator.vertical,
-  GtkPlacesSidebar.sidebar .view .titlebar > GtkBox > separator.vertical:backdrop,
   headerbar .header-bar-separator,
   headerbar > GtkBox > separator.vertical,
-  GtkPlacesSidebar.sidebar .view headerbar > GtkBox > separator.vertical {
+  placessidebar .view headerbar > GtkBox > separator.vertical:backdrop {
     -GtkWidget-wide-separators: true;
     -GtkWidget-separator-width: 1px;
     border-width: 0 1px;
@@ -1307,9 +1308,9 @@ popover {
     box-shadow: none; }
   popover > .list, popover > .view, popover > toolbar {
     background-color: transparent; }
-  popover separator, popover GtkPlacesSidebar.sidebar .view separator, GtkPlacesSidebar.sidebar .view popover separator,
-  popover GtkPlacesSidebar.sidebar .view separator:backdrop,
-  GtkPlacesSidebar.sidebar .view popover separator:backdrop {
+  popover separator, popover placessidebar .view separator, placessidebar .view popover separator,
+  popover placessidebar .view separator:backdrop,
+  placessidebar .view popover separator:backdrop {
     color: #000;
     background-color: transparent;
     border: 0; }
@@ -2018,7 +2019,7 @@ calendar:focus:selected,
 .view:selected:hover,
 calendar:hover:selected, label:selected, label:selected:focus, label:selected:hover, label:backdrop:selected, entry:selected, entry:selected:focus, spinbutton:selected, spinbutton:selected:focus, modelbutton.flat:hover, modelbutton.flat:selected,
 .menuitem.button.flat:hover,
-.menuitem.button.flat:selected, .list-row.activatable:selected, .sidebar:selected, GtkPlacesSidebar.sidebar .view:selected, GtkPlacesSidebar.sidebar calendar:selected {
+.menuitem.button.flat:selected, .list-row.activatable:selected, .sidebar:selected, placessidebar .view:selected, placessidebar calendar:selected {
   background-color: #000;
   color: #fff;
   outline-color: rgba(255, 255, 255, 0.3); }
@@ -2028,7 +2029,7 @@ calendar:hover:selected, label:selected, label:selected:focus, label:selected:ho
   calendar:backdrop:focus:selected,
   calendar:backdrop:hover:selected, label:backdrop:selected, entry:backdrop:selected, spinbutton:backdrop:selected, modelbutton.flat:backdrop:hover, modelbutton.flat:backdrop:selected,
   .menuitem.button.flat:backdrop:hover,
-  .menuitem.button.flat:backdrop:selected, .list-row.activatable:backdrop:selected, .sidebar:backdrop:selected, GtkPlacesSidebar.sidebar .view:backdrop:selected, GtkPlacesSidebar.sidebar calendar:backdrop:selected {
+  .menuitem.button.flat:backdrop:selected, .list-row.activatable:backdrop:selected, .sidebar:backdrop:selected {
     background-color: gray;
     color: #fff; }
 
@@ -2050,10 +2051,13 @@ frame,
     padding: 6px;
     border-width: 1px 0 0; }
 
+placessidebar .frame,
 scrolledwindow .frame {
   border-radius: 2px; }
+placessidebar viewport.frame,
 scrolledwindow viewport.frame {
   border-style: none; }
+placessidebar overshoot.top,
 scrolledwindow overshoot.top {
   background-image: -gtk-gradient(radial, center top, 0, center top, 0.5, to(#010101), to(rgba(1, 1, 1, 0))), -gtk-gradient(radial, center top, 0, center top, 0.6, from(rgba(0, 0, 0, 0.5)), to(transparent));
   background-size: 100% 5%, 100% 100%;
@@ -2062,6 +2066,7 @@ scrolledwindow overshoot.top {
   background-color: transparent;
   border: none;
   box-shadow: none; }
+  placessidebar overshoot.top:backdrop,
   scrolledwindow overshoot.top:backdrop {
     background-image: -gtk-gradient(radial, center top, 0, center top, 0.5, to(#8d8d8d), to(rgba(141, 141, 141, 0)));
     background-size: 100% 5%;
@@ -2070,6 +2075,7 @@ scrolledwindow overshoot.top {
     background-color: transparent;
     border: none;
     box-shadow: none; }
+placessidebar overshoot.bottom,
 scrolledwindow overshoot.bottom {
   background-image: -gtk-gradient(radial, center bottom, 0, center bottom, 0.5, to(#010101), to(rgba(1, 1, 1, 0))), -gtk-gradient(radial, center bottom, 0, center bottom, 0.6, from(rgba(0, 0, 0, 0.5)), to(transparent));
   background-size: 100% 5%, 100% 100%;
@@ -2078,6 +2084,7 @@ scrolledwindow overshoot.bottom {
   background-color: transparent;
   border: none;
   box-shadow: none; }
+  placessidebar overshoot.bottom:backdrop,
   scrolledwindow overshoot.bottom:backdrop {
     background-image: -gtk-gradient(radial, center bottom, 0, center bottom, 0.5, to(#8d8d8d), to(rgba(141, 141, 141, 0)));
     background-size: 100% 5%;
@@ -2086,6 +2093,7 @@ scrolledwindow overshoot.bottom {
     background-color: transparent;
     border: none;
     box-shadow: none; }
+placessidebar overshoot.left,
 scrolledwindow overshoot.left {
   background-image: -gtk-gradient(radial, left center, 0, left center, 0.5, to(#010101), to(rgba(1, 1, 1, 0))), -gtk-gradient(radial, left center, 0, left center, 0.6, from(rgba(0, 0, 0, 0.5)), to(transparent));
   background-size: 5% 100%, 100% 100%;
@@ -2094,6 +2102,7 @@ scrolledwindow overshoot.left {
   background-color: transparent;
   border: none;
   box-shadow: none; }
+  placessidebar overshoot.left:backdrop,
   scrolledwindow overshoot.left:backdrop {
     background-image: -gtk-gradient(radial, left center, 0, left center, 0.5, to(#8d8d8d), to(rgba(141, 141, 141, 0)));
     background-size: 5% 100%;
@@ -2102,6 +2111,7 @@ scrolledwindow overshoot.left {
     background-color: transparent;
     border: none;
     box-shadow: none; }
+placessidebar overshoot.right,
 scrolledwindow overshoot.right {
   background-image: -gtk-gradient(radial, right center, 0, right center, 0.5, to(#010101), to(rgba(1, 1, 1, 0))), -gtk-gradient(radial, right center, 0, right center, 0.6, from(rgba(0, 0, 0, 0.5)), to(transparent));
   background-size: 5% 100%, 100% 100%;
@@ -2110,6 +2120,7 @@ scrolledwindow overshoot.right {
   background-color: transparent;
   border: none;
   box-shadow: none; }
+  placessidebar overshoot.right:backdrop,
   scrolledwindow overshoot.right:backdrop {
     background-image: -gtk-gradient(radial, right center, 0, right center, 0.5, to(#8d8d8d), to(rgba(141, 141, 141, 0)));
     background-size: 5% 100%;
@@ -2118,6 +2129,7 @@ scrolledwindow overshoot.right {
     background-color: transparent;
     border: none;
     box-shadow: none; }
+placessidebar undershoot.top,
 scrolledwindow undershoot.top {
   background-color: transparent;
   background-image: linear-gradient(to left, rgba(255, 255, 255, 0.2) 50%, rgba(0, 0, 0, 0.2) 50%);
@@ -2128,6 +2140,7 @@ scrolledwindow undershoot.top {
   background-position: center top;
   border: none;
   box-shadow: none; }
+placessidebar undershoot.bottom,
 scrolledwindow undershoot.bottom {
   background-color: transparent;
   background-image: linear-gradient(to left, rgba(255, 255, 255, 0.2) 50%, rgba(0, 0, 0, 0.2) 50%);
@@ -2138,6 +2151,7 @@ scrolledwindow undershoot.bottom {
   background-position: center bottom;
   border: none;
   box-shadow: none; }
+placessidebar undershoot.left,
 scrolledwindow undershoot.left {
   background-color: transparent;
   background-image: linear-gradient(to top, rgba(255, 255, 255, 0.2) 50%, rgba(0, 0, 0, 0.2) 50%);
@@ -2148,6 +2162,7 @@ scrolledwindow undershoot.left {
   background-position: left center;
   border: none;
   box-shadow: none; }
+placessidebar undershoot.right,
 scrolledwindow undershoot.right {
   background-color: transparent;
   background-image: linear-gradient(to top, rgba(255, 255, 255, 0.2) 50%, rgba(0, 0, 0, 0.2) 50%);
@@ -2158,18 +2173,24 @@ scrolledwindow undershoot.right {
   background-position: right center;
   border: none;
   box-shadow: none; }
-scrolledwindow junction, scrolledwindow scrollbar trough, scrollbar scrolledwindow trough {
+placessidebar junction, placessidebar scrollbar trough, scrollbar placessidebar trough,
+scrolledwindow junction,
+scrolledwindow scrollbar trough,
+scrollbar scrolledwindow trough {
   border-color: transparent;
   background-color: #f2f2f2; }
-  scrolledwindow junction:backdrop, scrolledwindow scrollbar trough:backdrop, scrollbar scrolledwindow trough:backdrop {
+  placessidebar junction:backdrop, placessidebar scrollbar trough:backdrop, scrollbar placessidebar trough:backdrop,
+  scrolledwindow junction:backdrop,
+  scrolledwindow scrollbar trough:backdrop,
+  scrollbar scrolledwindow trough:backdrop {
     background-color: transparent; }
 
-separator, GtkPlacesSidebar.sidebar .view separator,
-GtkPlacesSidebar.sidebar .view separator:backdrop {
+separator, placessidebar .view separator,
+placessidebar .view separator:backdrop {
   color: gray; }
-  GtkFileChooserButton separator.vertical, GtkFileChooserButton GtkPlacesSidebar.sidebar .view separator.vertical, GtkPlacesSidebar.sidebar .view GtkFileChooserButton separator.vertical, button.font separator.vertical,
-  button.font GtkPlacesSidebar.sidebar .view separator.vertical:backdrop,
-  GtkPlacesSidebar.sidebar .view button.font separator.vertical:backdrop {
+  GtkFileChooserButton separator.vertical,
+  GtkFileChooserButton placessidebar .view separator.vertical:backdrop,
+  placessidebar .view GtkFileChooserButton separator.vertical:backdrop, button.font separator.vertical {
     -GtkWidget-wide-separators: true; }
 
 /*********
@@ -2202,7 +2223,7 @@ GtkPlacesSidebar.sidebar .view separator:backdrop {
 
 .list-row.activatable {
   color: #000; }
-  .list-row.activatable:hover, GtkPlacesSidebar.sidebar .has-open-popup {
+  .list-row.activatable:hover, placessidebar .has-open-popup {
     background-color: #f2f2f2; }
   .list-row.activatable:active {
     box-shadow: inset 0 2px 2px -2px rgba(0, 0, 0, 0.2); }
@@ -2211,7 +2232,7 @@ GtkPlacesSidebar.sidebar .view separator:backdrop {
     color: #fff; }
     .list-row.activatable:selected:active {
       box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.5); }
-    .list-row.activatable:selected:hover, GtkPlacesSidebar.sidebar .has-open-popup:selected {
+    .list-row.activatable:selected:hover, placessidebar .has-open-popup:selected {
       background-color: black; }
     .list-row.activatable:selected:backdrop {
       background-color: gray; }
@@ -2228,7 +2249,7 @@ GtkPlacesSidebar.sidebar .view separator:backdrop {
 
 .list-row, .list-row.activatable {
   transition: all 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94); }
-  .list-row:hover, .list-row.activatable:hover, GtkPlacesSidebar.sidebar .has-open-popup {
+  .list-row:hover, .list-row.activatable:hover, placessidebar .has-open-popup {
     transition: none; }
 
 /*********************
@@ -2484,20 +2505,20 @@ GtkSidebarRow .sidebar-label:dir(rtl) {
     padding: 5px; }
   .sidebar-button.button:not(:hover):not(:active) > image, .sidebar-button.button:backdrop > image {
     opacity: 0.9; }
-GtkPlacesSidebar.sidebar .view {
+placessidebar .view {
   color: #000;
   background-color: transparent; }
-  GtkPlacesSidebar.sidebar .view .image {
+  placessidebar .view .image {
     color: #4d4d4d; }
-    GtkPlacesSidebar.sidebar .view .image:selected {
+    placessidebar .view .image:selected {
       color: #e6e6e6; }
 
-.sidebar-item {
+stacksidebar .list-row {
   padding: 10px 4px; }
-  .sidebar-item > label {
+  stacksidebar .list-row > label {
     padding-left: 6px;
     padding-right: 6px; }
-  .sidebar-item.needs-attention > label {
+  stacksidebar .list-row.needs-attention > label {
     background-size: 6px 6px, 0 0; }
 
 /*********
@@ -2508,24 +2529,24 @@ paned {
   paned:dir(rtl) {
     margin-right: 0;
     margin-left: 8px; }
-  paned separator, paned GtkPlacesSidebar.sidebar .view separator, GtkPlacesSidebar.sidebar .view paned separator,
-  paned GtkPlacesSidebar.sidebar .view separator:backdrop,
-  GtkPlacesSidebar.sidebar .view paned separator:backdrop {
+  paned separator, paned placessidebar .view separator, placessidebar .view paned separator,
+  paned placessidebar .view separator:backdrop,
+  placessidebar .view paned separator:backdrop {
     background-image: linear-gradient(to bottom, gray); }
-    paned separator:backdrop, paned GtkPlacesSidebar.sidebar .view separator:backdrop, GtkPlacesSidebar.sidebar .view paned separator:backdrop {
+    paned separator:backdrop {
       background-image: linear-gradient(to bottom, #8d8d8d); }
 
 paned.wide {
   -GtkPaned-handle-size: 5;
   margin: 0; }
-  paned.wide separator, paned.wide GtkPlacesSidebar.sidebar .view separator, GtkPlacesSidebar.sidebar .view paned.wide separator {
+  paned.wide separator,
+  paned.wide placessidebar .view separator:backdrop,
+  placessidebar .view paned.wide separator:backdrop {
     background-color: transparent;
     border-style: none solid;
     border-color: gray;
     border-width: 1px; }
-  paned.wide.vertical separator,
-  paned.wide.vertical GtkPlacesSidebar.sidebar .view separator:backdrop,
-  GtkPlacesSidebar.sidebar .view paned.wide.vertical separator:backdrop {
+  paned.wide.vertical separator {
     border-style: solid none; }
   paned.wide separator:backdrop {
     border-color: #8d8d8d; }
