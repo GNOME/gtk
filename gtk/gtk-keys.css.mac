@@ -180,11 +180,11 @@
   unbind "<shift><ctrl>a";
 }
 
-GtkIconView {
+iconview {
   gtk-key-bindings: gtk-mac-icon-view;
 }
 
-GtkTextView {
+textview {
   gtk-key-bindings: gtk-mac-alt-arrows, gtk-mac-alt-delete, gtk-mac-cmd-c, gtk-mac-text-view;
 }
 
@@ -200,6 +200,6 @@ GtkFileChooserWidget {
   gtk-key-bindings: gtk-mac-file-chooser;
 }
 
-GtkTreeView {
+treeview {
   gtk-key-bindings: gtk-mac-tree-view;
 }
