@@ -490,27 +490,25 @@ gtk_style_context_push_state (GtkStyleContext *context,
 {
   GtkStyleContextPrivate *priv = context->priv;
   GtkStateFlags current_state;
+  GtkCssNode *root;
 
   current_state = gtk_css_node_get_state (priv->cssnode);
 
   if (current_state == state)
     return state;
 
-  if (g_getenv ("GTK_STYLE_CONTEXT_WARNING"))
-    {
-      GtkCssNode *root = gtk_style_context_get_root (context);
+  root = gtk_style_context_get_root (context);
 
-      if (GTK_IS_CSS_WIDGET_NODE (root))
-        {
-          GtkWidget *widget = gtk_css_widget_node_get_widget (GTK_CSS_WIDGET_NODE (root));
-          g_warning ("State %u for %s %p doesn't match state %u set via gtk_style_context_set_state ()",
-                     state, gtk_widget_get_name (widget), widget, gtk_css_node_get_state (priv->cssnode));
-        }
-      else
-        {
-          g_warning ("State %u for context %p doesn't match state %u set via gtk_style_context_set_state ()",
-                     state, context, gtk_css_node_get_state (priv->cssnode));
-        }
+  if (GTK_IS_CSS_WIDGET_NODE (root))
+    {
+      GtkWidget *widget = gtk_css_widget_node_get_widget (GTK_CSS_WIDGET_NODE (root));
+      g_warning ("State %u for %s %p doesn't match state %u set via gtk_style_context_set_state ()",
+                 state, gtk_widget_get_name (widget), widget, gtk_css_node_get_state (priv->cssnode));
+    }
+  else
+    {
+      g_warning ("State %u for context %p doesn't match state %u set via gtk_style_context_set_state ()",
+                 state, context, gtk_css_node_get_state (priv->cssnode));
     }
 
   gtk_css_node_set_state (priv->cssnode, state);
