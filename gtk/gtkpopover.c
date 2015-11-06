@@ -1063,7 +1063,6 @@ gtk_popover_draw (GtkWidget *widget,
   GtkStateFlags state;
 
   context = gtk_widget_get_style_context (widget);
-  gtk_style_context_save (context);
 
   state = gtk_widget_get_state_flags (widget);
   gtk_widget_get_allocation (widget, &allocation);
@@ -1144,8 +1143,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
   if (child)
     gtk_container_propagate_draw (GTK_CONTAINER (widget), child, cr);
-
-  gtk_style_context_restore (context);
 
   return TRUE;
 }
