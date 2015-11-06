@@ -1823,11 +1823,31 @@ update_slider_state (GtkRange *range)
 }
 
 static void
+update_trough_state (GtkRange *range)
+{
+  GtkRangePrivate *priv = range->priv;
+  GtkStateFlags state;
+
+  state = gtk_widget_get_state_flags (GTK_WIDGET (range));
+
+  state &= ~(GTK_STATE_FLAG_PRELIGHT | GTK_STATE_FLAG_ACTIVE);
+
+  if (priv->mouse_location == MOUSE_TROUGH && !(state & GTK_STATE_FLAG_INSENSITIVE))
+    state |= GTK_STATE_FLAG_PRELIGHT;
+
+  if (priv->grab_location == MOUSE_TROUGH)
+    state |= GTK_STATE_FLAG_ACTIVE;
+
+  gtk_css_node_set_state (priv->trough_node, state);
+}
+
+static void
 gtk_range_state_flags_changed (GtkWidget     *widget,
                                GtkStateFlags  previous_state)
 {
   GtkRange *range = GTK_RANGE (widget);
 
+  update_trough_state (range);
   update_slider_state (range);
   update_steppers_state (range);
 }
@@ -2062,8 +2082,6 @@ gtk_range_draw (GtkWidget *widget,
             }
         }
 
-      gtk_style_context_restore (context);
-
       if (priv->show_fill_level &&
           gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_page_size (priv->adjustment) -
           gtk_adjustment_get_lower (priv->adjustment) != 0)
@@ -2119,6 +2137,8 @@ gtk_range_draw (GtkWidget *widget,
 
           gtk_style_context_restore (context);
         }
+
+      gtk_style_context_restore (context);
 
       if (!(widget_state & GTK_STATE_FLAG_INSENSITIVE) && gtk_widget_has_visible_focus (widget))
         {
