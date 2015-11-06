@@ -108,11 +108,11 @@ entry {
   gtk-key-bindings: gtk-emacs-text-entry;
 }
 
-GtkTextView {
+textview {
   gtk-key-bindings: gtk-emacs-text-entry, gtk-emacs-text-view;
 }
 
-GtkTreeView {
+treeview {
   gtk-key-bindings: gtk-emacs-tree-view;
 }
 
