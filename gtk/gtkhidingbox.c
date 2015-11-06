@@ -524,3 +524,21 @@ gtk_hiding_box_get_inverted (GtkHidingBox *box)
 
   return priv->inverted;
 }
+
+GList *
+gtk_hiding_box_get_overflow_children (GtkHidingBox *box)
+{
+  GtkHidingBoxPrivate *priv ;
+  GList *result = NULL;
+  GList *l;
+
+  g_return_val_if_fail (GTK_IS_HIDING_BOX (box), 0);
+
+  priv = gtk_hiding_box_get_instance_private (box);
+
+  for (l = priv->children; l != NULL; l = l->next)
+    if (gtk_widget_is_visible (l->data) && !gtk_widget_get_child_visible (l->data))
+      result = g_list_append (result, l->data);
+
+  return result;
+}
