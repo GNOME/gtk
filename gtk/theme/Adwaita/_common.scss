@@ -2880,28 +2880,54 @@ GtkFileChooserDialog {
   }
 }
 
-$_placesidebar_icons_opacity: 0.7;
-
-placessidebar row {
-  // Needs overriding of the GtkListBoxRow padding
-  padding: 0px;
-  // Using margins/padding directly in the SidebarRow
-  // will make the animation of the new bookmark row jump
-  .sidebar-revealer {
-    padding: 4px 14px 4px 12px;
-  }
-  .sidebar-icon {
-    opacity: $_placesidebar_icons_opacity; // dim the device icons
-    &:dir(ltr) { padding-right: 8px; }
-    &:dir(rtl) { padding-left: 8px; }
-  }
-  .sidebar-label {
-    &:dir(ltr) { padding-right: 2px; }
-    &:dir(rtl) { padding-left: 2px; }
+stacksidebar {
+  & row {
+    padding: 10px 4px;
+    & > label {
+      padding-left: 6px;
+      padding-right: 6px;
+    }
+    &.needs-attention > label {
+      @extend %needs_attention;
+      background-size: 6px 6px, 0 0;
+    }
   }
 }
 
+/****************
+ * File chooser *
+ ****************/
+
+$_placesidebar_icons_opacity: 0.7;
+
 placessidebar {
+  row {
+    // Needs overriding of the GtkListBoxRow padding
+    padding: 0px;
+    // Using margins/padding directly in the SidebarRow
+    // will make the animation of the new bookmark row jump
+    & > revealer {
+      padding: 4px 14px 4px 12px;
+    }
+    & image.sidebar-icon {
+      opacity: $_placesidebar_icons_opacity; // dim the device icons
+      &:dir(ltr) { padding-right: 8px; }
+      &:dir(rtl) { padding-left: 8px; }
+    }
+    & label.sidebar-label {
+      &:dir(ltr) { padding-right: 2px; }
+      &:dir(rtl) { padding-left: 2px; }
+    }
+    @at-root button.sidebar-button {
+      padding: 5px;
+      @extend button.flat;
+      border-radius: 100%;
+      outline-radius: 100%;
+      &:not(:hover):not(:active) > image,
+      &:backdrop > image { opacity: $_placesidebar_icons_opacity };
+    }
+  }
+
   // in the sidebar case it makes no sense to click the selected row
   row:selected:active { box-shadow: none; }
 
@@ -2918,25 +2944,7 @@ placessidebar {
   }
 }
 
-stacksidebar {
-  row {
-    padding: 10px 4px;
-    > label {
-      padding-left: 6px;
-      padding-right: 6px;
-    }
-    &.needs-attention > label {
-      @extend %needs_attention;
-      background-size: 6px 6px, 0 0;
-    }
-  }
-}
-
-/****************
- * File chooser *
- ****************/
-
-GtkPlacesView {
+placesview {
   .server-list-button > image {
     transition: 200ms $ease-out-quad;
     -gtk-icon-transform: rotate(0turn);
