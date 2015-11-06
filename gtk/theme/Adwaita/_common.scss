@@ -959,7 +959,7 @@ combobox {
     // always disable separators
     -GtkWidget-wide-separators: true;
   }
-  & entry.combo {
+  & > entry.combo {
     &:dir(ltr) {
       border-top-right-radius: 0;
       border-bottom-right-radius: 0;
@@ -969,7 +969,7 @@ combobox {
       border-bottom-left-radius: 0;
     }
   }
-  & button.combo {
+  & > button.combo:not(:only-child) {
     &:dir(ltr) {
       border-top-left-radius: 0;
       border-bottom-left-radius: 0;

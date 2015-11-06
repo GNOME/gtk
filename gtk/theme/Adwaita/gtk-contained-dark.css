@@ -1460,17 +1460,19 @@ combobox {
     text-shadow: none; }
   combobox.separator.vertical {
     -GtkWidget-wide-separators: true; }
-  combobox entry.combo:dir(ltr), combobox spinbutton.combo:dir(ltr) {
+  combobox > entry.combo:dir(ltr), combobox > spinbutton.combo:dir(ltr) {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0; }
-  combobox entry.combo:dir(rtl), combobox spinbutton.combo:dir(rtl) {
+  combobox > entry.combo:dir(rtl), combobox > spinbutton.combo:dir(rtl) {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0; }
-  combobox button.combo:dir(ltr) {
+  combobox > button.combo:not(:only-child):dir(ltr), headerbar combobox > button.combo.titlebutton:not(:only-child):dir(ltr),
+  .titlebar combobox > button.combo.titlebutton:not(:only-child):dir(ltr) {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
     border-left-style: none; }
-  combobox button.combo:dir(rtl) {
+  combobox > button.combo:not(:only-child):dir(rtl), headerbar combobox > button.combo.titlebutton:not(:only-child):dir(rtl),
+  .titlebar combobox > button.combo.titlebutton:not(:only-child):dir(rtl) {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
     border-right-style: none; }
