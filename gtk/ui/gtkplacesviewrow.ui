@@ -5,9 +5,6 @@
     <property name="width_request">100</property>
     <property name="visible">True</property>
     <property name="can_focus">True</property>
-    <style>
-      <class name="volume-row"/>
-    </style>
     <child>
       <object class="GtkEventBox" id="event_box">
         <property name="visible">1</property>

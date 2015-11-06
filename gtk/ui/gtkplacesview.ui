@@ -134,9 +134,6 @@
                         <signal name="row-activated" handler="on_listbox_row_activated" object="GtkPlacesView" swapped="yes"/>
                       </object>
                     </child>
-                    <style>
-                      <class name="view"/>
-                    </style>
                   </object>
                 </child>
               </object>
