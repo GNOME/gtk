@@ -142,6 +142,7 @@ gtk/gtkfilechooser.c
 gtk/gtkfilechooserdialog.c
 gtk/gtkfilechooserembed.c
 gtk/gtkfilechooserentry.c
+gtk/gtkfilechoosernative.c
 gtk/gtkfilechooserutils.c
 gtk/gtkfilechooserwidget.c
 gtk/gtkfilefilter.c
@@ -198,6 +199,7 @@ gtk/gtkmodules.c
 gtk/gtkmountoperation.c
 gtk/gtkmountoperation-stub.c
 gtk/gtkmountoperation-x11.c
+gtk/gtknativedialog.c
 gtk/gtknotebook.c
 gtk/gtkorientable.c
 gtk/gtkoverlay.c
