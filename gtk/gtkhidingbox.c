@@ -21,6 +21,7 @@
 #include "config.h"
 
 #include "gtkhidingboxprivate.h"
+#include "gtkwidgetprivate.h"
 #include "gtkintl.h"
 #include "gtksizerequest.h"
 #include "gtkbuildable.h"
@@ -265,7 +266,6 @@ gtk_hiding_box_size_allocate (GtkWidget     *widget,
   gint spacing = priv->spacing;
   gint n_visible_children = 0;
   gint n_visible_children_expanding = 0;
-  GtkAllocation clip, child_clip;
 
   gtk_widget_set_allocation (widget, allocation);
 
@@ -312,30 +312,7 @@ gtk_hiding_box_size_allocate (GtkWidget     *widget,
       ++i;
     }
 
-  /*
-   * Note: Here we ignore the "box-shadow" CSS property of the
-   * hiding box because we don't use it.
-   */
-  clip = *allocation;
-  if (gtk_widget_get_has_window (widget))
-    clip.x = clip.y = 0;
-
-  for (i = 0, child = priv->children; child != NULL; child = child->next)
-    {
-      child_widget = GTK_WIDGET (child->data);
-      if (gtk_widget_get_child_visible (child_widget))
-        {
-          gtk_widget_get_clip (child_widget, &child_clip);
-          gdk_rectangle_union (&child_clip, &clip, &clip);
-        }
-    }
-
-  if (gtk_widget_get_has_window (widget))
-    {
-      clip.x += allocation->x;
-      clip.y += allocation->y;
-    }
-  gtk_widget_set_clip (widget, &clip);
+  _gtk_widget_set_simple_clip (widget, NULL);
 }
 
 static void
