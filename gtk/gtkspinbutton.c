@@ -966,21 +966,19 @@ gtk_spin_button_panel_get_size (GtkSpinButton *spin_button,
   GtkSpinButtonPrivate *priv = spin_button->priv;
   GtkBorder button_padding, button_border;
   GtkStyleContext *context;
-  GtkStateFlags state;
   gint icon_size, w, h;
 
   gtk_icon_size_lookup (GTK_ICON_SIZE_MENU, &w, &h);
   icon_size = MAX (w, h);
 
   context = gtk_widget_get_style_context (GTK_WIDGET (spin_button));
-  state = gtk_style_context_get_state (context);
   if (panel == priv->up_panel)
     gtk_style_context_save_to_node (context, priv->up_node);
   else
     gtk_style_context_save_to_node (context, priv->down_node);
 
-  gtk_style_context_get_padding (context, state, &button_padding);
-  gtk_style_context_get_border (context, state, &button_border);
+  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &button_padding);
+  gtk_style_context_get_border (context, gtk_style_context_get_state (context), &button_border);
 
   gtk_style_context_restore (context);
 
