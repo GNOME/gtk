@@ -89,9 +89,14 @@
  * ]|
  *
  * GtkScale has a main CSS node with name scale, and subnodes with names
- * trough and slider. If marks are present, there is a marks subnode before
- * or after the trough node, below which each mark gets a node with name mark.
- * The marks nodes get either the .top or .bottom style class.
+ * trough and slider.
+ *
+ * The main node gets the style class .fine-tune added when the scale is in
+ * 'fine-tuning' mode.
+ *
+ * If marks are present, there is a marks subnode before or after the trough
+ * node, below which each mark gets a node with name mark. The marks nodes get
+ * either the .top or .bottom style class.
  */
 
 

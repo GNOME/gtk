@@ -66,9 +66,14 @@
  * ]|
  *
  * GtkScrollbar has a main CSS node with name scrollbar, and subnodes with
- * names trough and slider. If steppers are enabled, they are represented by
- * up to four additional subnodes with name button. These get the style classes
- * .up and .down to indicate in which direction they are moving.
+ * names trough and slider.
+ *
+ * The main node gets the style class .fine-tune added when the scrollbar is
+ * in 'fine-tuning' mode.
+ *
+ * If steppers are enabled, they are represented by up to four additional
+ * subnodes with name button. These get the style classes .up and .down to
+ * indicate in which direction they are moving.
  */
 
 
