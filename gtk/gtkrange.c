@@ -2004,7 +2004,7 @@ gtk_range_draw (GtkWidget *widget,
         }
 
       gtk_style_context_save_to_node (context, priv->trough_node);
-      gtk_style_context_get_margin (context, widget_state, &margin);
+      gtk_style_context_get_margin (context, gtk_style_context_get_state (context), &margin);
 
       x += margin.left;
       y += margin.top;
@@ -2159,7 +2159,7 @@ gtk_range_draw (GtkWidget *widget,
       cairo_clip (cr);
 
       gtk_style_context_save_to_node (context, priv->slider_node);
-      gtk_style_context_get_margin (context, widget_state, &margin);
+      gtk_style_context_get_margin (context, gtk_style_context_get_state (context), &margin);
 
       gtk_render_slider (context, cr,
                          priv->slider.x + margin.left,
