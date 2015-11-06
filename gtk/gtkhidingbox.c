@@ -158,56 +158,36 @@ gtk_hiding_box_forall (GtkContainer *container,
 }
 
 static void
-gtk_hiding_box_size_allocate (GtkWidget     *widget,
-                              GtkAllocation *allocation)
+update_children_visibility (GtkHidingBox     *box,
+                            GtkAllocation    *allocation,
+                            GtkRequestedSize *sizes,
+                            gint             *n_visible_children,
+                            gint             *n_visible_children_expanding)
 {
-  GtkHidingBox *box = GTK_HIDING_BOX (widget);
   GtkHidingBoxPrivate *priv = gtk_hiding_box_get_instance_private (box);
-  GtkTextDirection direction;
-  GtkAllocation child_allocation;
-  GtkRequestedSize *sizes;
-  gint size;
-  gint extra = 0;
-  gint n_extra_widgets = 0; /* Number of widgets that receive 1 extra px */
-  gint x = 0;
-  gint i;
-  GList *child;
   GtkWidget *child_widget;
-  gint spacing = priv->spacing;
-  gint children_size;
-  gint n_visible_children;
-  gint n_visible_children_expanding = 0;
-  GtkAllocation clip, child_clip;
+  GList *child;
+  gint i;
+  gint children_size = -priv->spacing;
+  gboolean allocate_more_children = TRUE;
 
-  gtk_widget_set_allocation (widget, allocation);
+  *n_visible_children = 0;
+  *n_visible_children_expanding = 0;
 
-  n_visible_children = 0;
-  for (child = priv->children; child != NULL; child = child->next)
-    if (gtk_widget_get_visible (child->data))
-      ++n_visible_children;
-
-  /* If there is no visible child, simply return. */
-  if (n_visible_children <= 0)
-    return;
-
-  direction = gtk_widget_get_direction (widget);
-  sizes = g_newa (GtkRequestedSize, n_visible_children);
-
-  size = allocation->width;
-  children_size = -spacing;
   /* Retrieve desired size for visible children. */
-  for (i = 0, child = priv->children; child != NULL; child = child->next)
+  for (i = 0, child = priv->children; child != NULL; i++, child = child->next)
     {
-
       child_widget = GTK_WIDGET (child->data);
-      if (!gtk_widget_get_visible (child_widget))
+      if (!gtk_widget_get_visible (child_widget) || !allocate_more_children)
+        {
+          gtk_widget_set_child_visible (child_widget, FALSE);
           continue;
+        }
 
       gtk_widget_get_preferred_width_for_height (child_widget,
                                                  allocation->height,
                                                  &sizes[i].minimum_size,
                                                  &sizes[i].natural_size);
-
       /* Assert the api is working properly */
       if (sizes[i].minimum_size < 0)
         g_error ("GtkHidingBox child %s minimum width: %d < 0 for height %d",
@@ -220,21 +200,58 @@ gtk_hiding_box_size_allocate (GtkWidget     *widget,
                  sizes[i].natural_size, sizes[i].minimum_size,
                  allocation->height);
 
-      children_size += sizes[i].minimum_size + spacing;
-      if (i > 0 && children_size > allocation->width)
-        break;
-
-      size -= sizes[i].minimum_size;
+      children_size += sizes[i].minimum_size + priv->spacing;
       sizes[i].data = child_widget;
 
-      if (gtk_widget_get_hexpand (child_widget))
-        n_visible_children_expanding++;
-      i++;
-    }
-  n_visible_children = i;
+      if (children_size > allocation->width)
+        {
+          gtk_widget_set_child_visible (child_widget, FALSE);
+          allocate_more_children = FALSE;
+          continue;
+        }
 
-  /* Bring children up to size first */
-  size = gtk_distribute_natural_allocation (MAX (0, size), n_visible_children, sizes);
+      if (gtk_widget_get_hexpand (child_widget))
+        (*n_visible_children_expanding)++;
+      (*n_visible_children)++;
+      gtk_widget_set_child_visible (child_widget, TRUE);
+    }
+}
+
+static void
+gtk_hiding_box_size_allocate (GtkWidget     *widget,
+                              GtkAllocation *allocation)
+{
+  GtkHidingBox *box = GTK_HIDING_BOX (widget);
+  GtkHidingBoxPrivate *priv = gtk_hiding_box_get_instance_private (box);
+  GtkTextDirection direction;
+  GtkAllocation child_allocation;
+  GtkRequestedSize *sizes;
+  gint size = 0;
+  gint extra = 0;
+  gint n_extra_widgets = 0; /* Number of widgets that receive 1 extra px */
+  gint x = 0;
+  gint i;
+  GList *child;
+  GtkWidget *child_widget;
+  gint spacing = priv->spacing;
+  gint n_visible_children = 0;
+  gint n_visible_children_expanding = 0;
+  GtkAllocation clip, child_clip;
+
+  gtk_widget_set_allocation (widget, allocation);
+
+  sizes = g_newa (GtkRequestedSize, g_list_length (priv->children));
+  update_children_visibility (box, allocation, sizes, &n_visible_children,
+                              &n_visible_children_expanding);
+
+  /* If there is no visible child, simply return. */
+  if (n_visible_children == 0)
+    return;
+
+  direction = gtk_widget_get_direction (widget);
+
+  /* Bring children up to allocation width first */
+  size = gtk_distribute_natural_allocation (MAX (0, allocation->width), n_visible_children, sizes);
   /* Only now we can subtract the spacings */
   size -= (n_visible_children - 1) * spacing;
 
@@ -249,15 +266,8 @@ gtk_hiding_box_size_allocate (GtkWidget     *widget,
     {
 
       child_widget = GTK_WIDGET (child->data);
-      if (!gtk_widget_get_visible (child_widget))
+      if (!gtk_widget_get_child_visible (child_widget))
         continue;
-
-      /* Hide the overflowing children even if they have visible=TRUE */
-      if (i >= n_visible_children)
-        {
-          gtk_widget_set_child_visible (child->data, FALSE);
-          continue;
-        }
 
       child_allocation.x = x;
       child_allocation.y = allocation->y;
@@ -276,7 +286,6 @@ gtk_hiding_box_size_allocate (GtkWidget     *widget,
         child_allocation.x = allocation->x + allocation->width - (child_allocation.x - allocation->x) - child_allocation.width;
 
       /* Let this child be visible */
-      gtk_widget_set_child_visible (child_widget, TRUE);
       gtk_widget_size_allocate (child_widget, &child_allocation);
       x += child_allocation.width + spacing;
       ++i;
@@ -293,8 +302,7 @@ gtk_hiding_box_size_allocate (GtkWidget     *widget,
   for (i = 0, child = priv->children; child != NULL; child = child->next)
     {
       child_widget = GTK_WIDGET (child->data);
-      if (gtk_widget_get_visible (child_widget) &&
-          gtk_widget_get_child_visible (child_widget))
+      if (gtk_widget_get_child_visible (child_widget))
         {
           gtk_widget_get_clip (child_widget, &child_clip);
           gdk_rectangle_union (&child_clip, &clip, &clip);
