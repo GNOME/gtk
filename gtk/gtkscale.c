@@ -1536,7 +1536,6 @@ void
 gtk_scale_clear_marks (GtkScale *scale)
 {
   GtkScalePrivate *priv;
-  GtkStyleContext *context;
 
   g_return_if_fail (GTK_IS_SCALE (scale));
 
@@ -1544,10 +1543,6 @@ gtk_scale_clear_marks (GtkScale *scale)
 
   g_slist_free_full (priv->marks, gtk_scale_mark_free);
   priv->marks = NULL;
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (scale));
-  gtk_style_context_remove_class (context, GTK_STYLE_CLASS_SCALE_HAS_MARKS_BELOW);
-  gtk_style_context_remove_class (context, GTK_STYLE_CLASS_SCALE_HAS_MARKS_ABOVE);
 
   if (priv->top_marks_node)
     {
@@ -1600,7 +1595,6 @@ gtk_scale_add_mark (GtkScale        *scale,
   GSList *m;
   gdouble *values;
   gint n, i;
-  GtkStyleContext *context;
   GtkCssNode *widget_node, *marks_node;
 
   g_return_if_fail (GTK_IS_SCALE (scale));
@@ -1687,20 +1681,6 @@ gtk_scale_add_mark (GtkScale        *scale,
   _gtk_range_set_stop_values (GTK_RANGE (scale), values, n);
 
   g_free (values);
-
-  /* Set the style classes for the slider, so it could
-   * point to the right direction when marks are present
-   */
-  context = gtk_widget_get_style_context (GTK_WIDGET (scale));
-
-  if (priv->top_marks_node)
-    gtk_style_context_add_class (context, GTK_STYLE_CLASS_SCALE_HAS_MARKS_ABOVE);
-  else
-    gtk_style_context_remove_class (context, GTK_STYLE_CLASS_SCALE_HAS_MARKS_ABOVE);
-  if (priv->bottom_marks_node)
-    gtk_style_context_add_class (context, GTK_STYLE_CLASS_SCALE_HAS_MARKS_BELOW);
-  else
-    gtk_style_context_remove_class (context, GTK_STYLE_CLASS_SCALE_HAS_MARKS_BELOW);
 
   gtk_widget_queue_resize (GTK_WIDGET (scale));
 }
