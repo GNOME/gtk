@@ -70,6 +70,8 @@ void              gtk_hiding_box_set_inverted            (GtkHidingBox      *box
 GDK_AVAILABLE_IN_3_20
 gboolean          gtk_hiding_box_get_inverted            (GtkHidingBox      *box);
 
+GDK_AVAILABLE_IN_3_20
+GList             *gtk_hiding_box_get_overflow_children  (GtkHidingBox      *box);
 G_END_DECLS
 
 #endif /* GTK_HIDING_BOX_PRIVATE_H_ */
