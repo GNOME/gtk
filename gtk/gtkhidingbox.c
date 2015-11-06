@@ -258,7 +258,6 @@ gtk_hiding_box_size_allocate (GtkWidget     *widget,
   GtkRequestedSize *sizes;
   gint size = 0;
   gint extra = 0;
-  gint n_extra_widgets = 0; /* Number of widgets that receive 1 extra px */
   gint x = 0;
   gint i;
   GList *child;
@@ -286,10 +285,7 @@ gtk_hiding_box_size_allocate (GtkWidget     *widget,
   size -= (n_visible_children - 1) * spacing;
 
   if (n_visible_children > 1)
-    {
-      extra = size / MAX (1, n_visible_children_expanding);
-      n_extra_widgets = size % n_visible_children;
-    }
+    extra = size / MAX (1, n_visible_children_expanding);
 
   x = allocation->x;
   for (i = 0, child = priv->children; child != NULL; child = child->next)
@@ -307,11 +303,6 @@ gtk_hiding_box_size_allocate (GtkWidget     *widget,
         child_allocation.width = sizes[i].minimum_size;
 
       child_allocation.height = allocation->height;
-      if (n_extra_widgets)
-        {
-          ++child_allocation.width;
-          --n_extra_widgets;
-        }
       if (direction == GTK_TEXT_DIR_RTL)
         child_allocation.x = allocation->x + allocation->width - (child_allocation.x - allocation->x) - child_allocation.width;
 
