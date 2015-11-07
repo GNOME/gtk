@@ -2571,9 +2571,6 @@ gtk_scrolled_window_relative_allocation (GtkWidget     *widget,
       context = gtk_widget_get_style_context (widget);
       state = gtk_widget_get_state_flags (widget);
 
-      gtk_style_context_save (context);
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_FRAME);
-
       gtk_style_context_get_border (context, state, &border);
       gtk_style_context_get_padding (context, state, &padding);
 
@@ -2581,8 +2578,6 @@ gtk_scrolled_window_relative_allocation (GtkWidget     *widget,
       allocation->y += padding.top + border.top;
       allocation->width = MAX (1, allocation->width - (padding.left + border.left + padding.right + border.right));
       allocation->height = MAX (1, allocation->height - (padding.top + border.top + padding.bottom + border.bottom));
-
-      gtk_style_context_restore (context);
     }
 
   if (priv->vscrollbar_visible && !priv->use_indicators)
@@ -2700,12 +2695,9 @@ gtk_scrolled_window_allocate_scrollbar (GtkScrolledWindow *scrolled_window,
   context = gtk_widget_get_style_context (widget);
   state = gtk_widget_get_state_flags (widget);
 
-  gtk_style_context_save (context);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_FRAME);
   gtk_widget_style_get (widget, "scrollbars-within-bevel", &scrollbars_within_bevel, NULL);
   gtk_style_context_get_padding (context, state, &padding);
   gtk_style_context_get_border (context, state, &border);
-  gtk_style_context_restore (context);
 
   if (scrollbar == priv->hscrollbar)
     {
@@ -3826,9 +3818,6 @@ gtk_scrolled_window_get_preferred_size (GtkWidget      *widget,
       context = gtk_widget_get_style_context (GTK_WIDGET (widget));
       state = gtk_widget_get_state_flags (GTK_WIDGET (widget));
 
-      gtk_style_context_save (context);
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_FRAME);
-
       gtk_style_context_get_padding (context, state, &padding);
       gtk_style_context_get_border (context, state, &border);
 
@@ -3836,8 +3825,6 @@ gtk_scrolled_window_get_preferred_size (GtkWidget      *widget,
       minimum_req.height += padding.top + padding.bottom + border.top + border.bottom;
       natural_req.width += padding.left + padding.right + border.left + border.right;
       natural_req.height += padding.top + padding.bottom + border.top + border.bottom;
-
-      gtk_style_context_restore (context);
     }
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
