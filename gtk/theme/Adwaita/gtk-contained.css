@@ -3997,13 +3997,13 @@ row {
 /*************
  * Expanders *
  *************/
-.expander {
+expander arrow {
   -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
-  .expander:dir(rtl) {
+  expander arrow:dir(rtl) {
     -gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl"); }
-  .expander:hover {
+  expander arrow:hover {
     color: #748489; }
-  .expander:checked {
+  expander arrow:checked {
     -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); }
 
 /************
