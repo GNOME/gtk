@@ -3049,6 +3049,9 @@ scale {
         border-color: #0f2b48;
         background-color: #215d9c;
         box-shadow: none; }
+    scale trough.progressbar {
+      background: none;
+      background-color: red; }
     scale trough:insensitive, scale trough.vertical:insensitive {
       border-color: #1c1f1f;
       background-image: none;

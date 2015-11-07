@@ -2240,6 +2240,10 @@ scale {
          box-shadow: none;
       }
     }
+    &.progressbar {
+      background: none;
+      background-color: red;
+    }
     &:insensitive, &.vertical:insensitive {
       border-color: $insensitive_borders_color;
       background-image: none;
