@@ -3455,6 +3455,13 @@ frame,
   .frame:backdrop {
     border-color: #1f2222; }
 
+paper {
+  border: 1px solid #1c1f1f;
+  background: white;
+  padding: 0; }
+  paper:backdrop {
+    border-color: #1f2222; }
+
 actionbar frame {
   padding: 6px;
   border-width: 1px 0 0; }

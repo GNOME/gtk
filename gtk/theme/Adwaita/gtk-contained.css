@@ -3617,6 +3617,13 @@ frame,
   .frame:backdrop {
     border-color: darkgray; }
 
+paper {
+  border: 1px solid #a1a1a1;
+  background: white;
+  padding: 0; }
+  paper:backdrop {
+    border-color: darkgray; }
+
 actionbar frame {
   padding: 6px;
   border-width: 1px 0 0; }

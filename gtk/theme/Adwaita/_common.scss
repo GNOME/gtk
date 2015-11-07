@@ -2513,6 +2513,13 @@ frame,
   padding: 0;
 }
 
+paper {
+  border: 1px solid $borders_color;
+  background: white;
+  padding: 0;
+  &:backdrop { border-color: $backdrop_borders_color; }
+}
+
 actionbar frame {
   padding: 6px;
   border-width: 1px 0 0;
