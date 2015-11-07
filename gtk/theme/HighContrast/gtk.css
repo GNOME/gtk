@@ -1374,29 +1374,21 @@ notebook {
     background-color: #fff; }
   notebook.frame {
     border: 1px solid gray; }
-    notebook.frame.top {
-      border-top-width: 0; }
-    notebook.frame.bottom {
-      border-bottom-width: 0; }
-    notebook.frame.right {
-      border-right-width: 0; }
-    notebook.frame.left {
-      border-left-width: 0; }
     notebook.frame:backdrop {
       border-color: #8d8d8d; }
   notebook.header {
     background-color: #d9d9d9; }
-    notebook.header.frame {
+    .frame notebook.header {
       border: 1px solid gray; }
-      notebook.header.frame.top {
+      .frame notebook.header.top {
         border-bottom-width: 0; }
-      notebook.header.frame.bottom {
+      .frame notebook.header.bottom {
         border-top-width: 0; }
-      notebook.header.frame.right {
+      .frame notebook.header.right {
         border-left-width: 0; }
-      notebook.header.frame.left {
+      .frame notebook.header.left {
         border-right-width: 0; }
-      notebook.header.frame:backdrop {
+      .frame notebook.header:backdrop {
         border-color: #8d8d8d; }
     notebook.header.top {
       box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.15), inset 0 -1px gray; }
@@ -1417,61 +1409,40 @@ notebook {
     notebook.header:backdrop {
       background-color: #d7d7d7;
       box-shadow: none; }
+  notebook header.top tab {
+    padding: 8px 20px;
+    border-bottom-width: 3px; }
+    notebook header.top tab.reorderable-page {
+      padding-left: 12px;
+      padding-right: 12px;
+      border-left-width: 1px;
+      border-right-width: 1px; }
+  notebook header.bottom tab {
+    padding: 8px 20px;
+    border-top-width: 3px; }
+    notebook header.bottom tab.reorderable-page {
+      padding-left: 12px;
+      padding-right: 12px;
+      border-left-width: 1px;
+      border-right-width: 1px; }
+  notebook header.left tab {
+    padding: 5px 20px;
+    border-right-width: 3px; }
+    notebook header.left tab.reorderable-page {
+      border-bottom-width: 1px;
+      border-top-width: 1px; }
+  notebook header.right tab {
+    padding: 5px 20px;
+    border-left-width: 3px; }
+    notebook header.right tab.reorderable-page {
+      border-bottom-width: 1px;
+      border-top-width: 1px; }
   notebook tab {
     border-width: 0;
     border-style: solid;
     border-color: transparent;
     background-color: transparent;
-    outline-offset: 0;
-    /* works for testnotebookdnd, but there's a superfluous border
-       in gedit or web, commented out for now, needs gtk fixes
-    &.reorderable-page {
-      &.top {
-        padding-top: ($vt_vpadding - 1px);
-        border-top-width: 1px;
-        border-left-width: 1px;
-        border-right-width: 1px;
-      }
-      &.bottom {
-        padding-bottom: ($vt_vpadding - 1px);
-        border-bottom-width: 1px;
-        border-left-width: 1px;
-        border-right-width: 1px;
-      }
-      &.left {
-        padding-left: ($ht_hpadding - 1px);
-        border-left-width: 1px;
-        border-top-width: 1px;
-        border-bottom-width: 1px;
-      }
-      &.right {
-        padding-right: ($ht_hpadding - 1px);
-        border-right-width: 1px;
-        border-top-width: 1px;
-        border-bottom-width: 1px;
-      }
-    }
-    */ }
-    notebook tab.top, notebook tab.bottom {
-      padding: 8px 20px; }
-    notebook tab.left, notebook tab.right {
-      padding: 5px 20px; }
-    notebook tab.reorderable-page.top, notebook tab.reorderable-page.bottom {
-      padding-left: 12px;
-      padding-right: 12px;
-      border-left-width: 1px;
-      border-right-width: 1px; }
-    notebook tab.reorderable-page.left, notebook tab.reorderable-page.right {
-      border-bottom-width: 1px;
-      border-top-width: 1px; }
-    notebook tab.top {
-      border-bottom-width: 3px; }
-    notebook tab.bottom {
-      border-top-width: 3px; }
-    notebook tab.left {
-      border-right-width: 3px; }
-    notebook tab.right {
-      border-left-width: 3px; }
+    outline-offset: 0; }
     notebook tab:hover {
       border-color: gray; }
     notebook tab:active, notebook tab:backdrop:active {
@@ -1479,80 +1450,80 @@ notebook {
     notebook tab:backdrop {
       background-color: transparent;
       border-color: transparent; }
-    notebook tab.reorderable-page.top {
+    .top notebook tab.reorderable-page {
       border-color: transparent; }
-      notebook tab.reorderable-page.top:hover {
+      .top notebook tab.reorderable-page:hover {
         border-color: rgba(128, 128, 128, 0.3);
         border-bottom-color: gray;
         background-color: rgba(255, 255, 255, 0.2); }
-      notebook tab.reorderable-page.top:active {
+      .top notebook tab.reorderable-page:active {
         background-color: rgba(255, 255, 255, 0.5);
         border-color: rgba(128, 128, 128, 0.5);
         border-bottom-color: #000; }
-        notebook tab.reorderable-page.top:active:hover {
+        .top notebook tab.reorderable-page:active:hover {
           background-color: rgba(255, 255, 255, 0.7); }
-        notebook tab.reorderable-page.top:active:backdrop {
+        .top notebook tab.reorderable-page:active:backdrop {
           border-color: #8d8d8d;
           background-color: #fff;
           border-bottom-color: #000; }
-      notebook tab.reorderable-page.top:backdrop {
+      .top notebook tab.reorderable-page:backdrop {
         border-color: transparent;
         background-color: transparent; }
-    notebook tab.reorderable-page.bottom {
+    .bottom notebook tab.reorderable-page {
       border-color: transparent; }
-      notebook tab.reorderable-page.bottom:hover {
+      .bottom notebook tab.reorderable-page:hover {
         border-color: rgba(128, 128, 128, 0.3);
         border-top-color: gray;
         background-color: rgba(255, 255, 255, 0.2); }
-      notebook tab.reorderable-page.bottom:active {
+      .bottom notebook tab.reorderable-page:active {
         background-color: rgba(255, 255, 255, 0.5);
         border-color: rgba(128, 128, 128, 0.5);
         border-top-color: #000; }
-        notebook tab.reorderable-page.bottom:active:hover {
+        .bottom notebook tab.reorderable-page:active:hover {
           background-color: rgba(255, 255, 255, 0.7); }
-        notebook tab.reorderable-page.bottom:active:backdrop {
+        .bottom notebook tab.reorderable-page:active:backdrop {
           border-color: #8d8d8d;
           background-color: #fff;
           border-top-color: #000; }
-      notebook tab.reorderable-page.bottom:backdrop {
+      .bottom notebook tab.reorderable-page:backdrop {
         border-color: transparent;
         background-color: transparent; }
-    notebook tab.reorderable-page.left {
+    .left notebook tab.reorderable-page {
       border-color: transparent; }
-      notebook tab.reorderable-page.left:hover {
+      .left notebook tab.reorderable-page:hover {
         border-color: rgba(128, 128, 128, 0.3);
         border-right-color: gray;
         background-color: rgba(255, 255, 255, 0.2); }
-      notebook tab.reorderable-page.left:active {
+      .left notebook tab.reorderable-page:active {
         background-color: rgba(255, 255, 255, 0.5);
         border-color: rgba(128, 128, 128, 0.5);
         border-right-color: #000; }
-        notebook tab.reorderable-page.left:active:hover {
+        .left notebook tab.reorderable-page:active:hover {
           background-color: rgba(255, 255, 255, 0.7); }
-        notebook tab.reorderable-page.left:active:backdrop {
+        .left notebook tab.reorderable-page:active:backdrop {
           border-color: #8d8d8d;
           background-color: #fff;
           border-right-color: #000; }
-      notebook tab.reorderable-page.left:backdrop {
+      .left notebook tab.reorderable-page:backdrop {
         border-color: transparent;
         background-color: transparent; }
-    notebook tab.reorderable-page.right {
+    .right notebook tab.reorderable-page {
       border-color: transparent; }
-      notebook tab.reorderable-page.right:hover {
+      .right notebook tab.reorderable-page:hover {
         border-color: rgba(128, 128, 128, 0.3);
         border-left-color: gray;
         background-color: rgba(255, 255, 255, 0.2); }
-      notebook tab.reorderable-page.right:active {
+      .right notebook tab.reorderable-page:active {
         background-color: rgba(255, 255, 255, 0.5);
         border-color: rgba(128, 128, 128, 0.5);
         border-left-color: #000; }
-        notebook tab.reorderable-page.right:active:hover {
+        .right notebook tab.reorderable-page:active:hover {
           background-color: rgba(255, 255, 255, 0.7); }
-        notebook tab.reorderable-page.right:active:backdrop {
+        .right notebook tab.reorderable-page:active:backdrop {
           border-color: #8d8d8d;
           background-color: #fff;
           border-left-color: #000; }
-      notebook tab.reorderable-page.right:backdrop {
+      .right notebook tab.reorderable-page:backdrop {
         border-color: transparent;
         background-color: transparent; }
     notebook tab label {
