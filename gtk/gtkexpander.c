@@ -87,6 +87,16 @@
  *   </child>
  * </object>
  * ]|
+ *
+ * # CSS nodes
+ *
+ * |[<!-- language="plain" -->
+ * expander
+ * ╰── arrow
+ * ]|
+ *
+ * GtkExpander has two css nodes, the main node with the name expander and a subnode
+ * named slider. Neither of them is using any style classes.
  */
 
 #include "config.h"
@@ -104,6 +114,9 @@
 #include "gtkprivate.h"
 #include "gtkdnd.h"
 #include "a11y/gtkexpanderaccessible.h"
+#include "gtkstylecontextprivate.h"
+#include "gtkcssstylepropertyprivate.h"
+#include "gtkwidgetprivate.h"
 
 
 #define DEFAULT_EXPANDER_SIZE 10
@@ -127,6 +140,9 @@ struct _GtkExpanderPrivate
 {
   GtkWidget        *label_widget;
   GdkWindow        *event_window;
+
+  GtkCssNode       *arrow_node;
+
   GtkGesture       *multipress_gesture;
   gint              spacing;
 
@@ -134,7 +150,7 @@ struct _GtkExpanderPrivate
 
   guint             expanded : 1;
   guint             use_underline : 1;
-  guint             use_markup : 1; 
+  guint             use_markup : 1;
   guint             prelight : 1;
   guint             label_fill : 1;
   guint             resize_toplevel : 1;
@@ -363,12 +379,37 @@ gtk_expander_class_init (GtkExpanderClass *klass)
                   G_TYPE_NONE, 0);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_EXPANDER_ACCESSIBLE);
+  gtk_widget_class_set_css_name (widget_class, "expander");
+}
+
+static void
+node_style_changed_cb (GtkCssNode  *node,
+                       GtkCssStyle *old_style,
+                       GtkCssStyle *new_style,
+                       GtkWidget   *widget)
+{
+  GtkBitmask *changes;
+  static GtkBitmask *affects_size = NULL;
+
+  if (G_UNLIKELY (affects_size == NULL))
+    affects_size = _gtk_css_style_property_get_mask_affecting (GTK_CSS_AFFECTS_SIZE | GTK_CSS_AFFECTS_CLIP);
+
+  changes = _gtk_bitmask_new ();
+  changes = gtk_css_style_add_difference (changes, old_style, new_style);
+
+  if (_gtk_bitmask_intersects (changes, affects_size))
+    gtk_widget_queue_resize (widget);
+  else
+    gtk_widget_queue_draw (widget);
+
+  _gtk_bitmask_free (changes);
 }
 
 static void
 gtk_expander_init (GtkExpander *expander)
 {
   GtkExpanderPrivate *priv;
+  GtkCssNode *widget_node;
 
   expander->priv = priv = gtk_expander_get_instance_private (expander);
 
@@ -386,6 +427,14 @@ gtk_expander_init (GtkExpander *expander)
   priv->label_fill = FALSE;
   priv->expand_timer = 0;
   priv->resize_toplevel = 0;
+
+  widget_node = gtk_widget_get_css_node (GTK_WIDGET (expander));
+  priv->arrow_node = gtk_css_node_new ();
+  gtk_css_node_set_name (priv->arrow_node, I_("arrow"));
+  gtk_css_node_set_parent (priv->arrow_node, widget_node);
+  gtk_css_node_set_state (priv->arrow_node, gtk_css_node_get_state (widget_node));
+  g_signal_connect_object (priv->arrow_node, "style-changed", G_CALLBACK (node_style_changed_cb), expander, 0);
+  g_object_unref (priv->arrow_node);
 
   gtk_drag_dest_set (GTK_WIDGET (expander), 0, NULL, 0, 0);
   gtk_drag_dest_set_track_motion (GTK_WIDGET (expander), TRUE);
@@ -839,61 +888,34 @@ gtk_expander_unmap (GtkWidget *widget)
 }
 
 static void
-gtk_expander_paint_prelight (GtkExpander *expander,
-                             cairo_t     *cr)
-{
-  GtkWidget *widget;
-  GdkRectangle area;
-  GtkStyleContext *context;
-
-  widget = GTK_WIDGET (expander);
-  get_prelight_area_bounds (expander, &area);
-
-  context = gtk_widget_get_style_context (widget);
-  gtk_render_background (context, cr,
-                         area.x, area.y,
-                         area.width, area.height);
-}
-
-static void
 gtk_expander_paint (GtkExpander *expander,
                     cairo_t     *cr)
 {
   GtkExpanderPrivate *priv = expander->priv;
   GtkWidget *widget;
   GdkRectangle clip;
+  GdkRectangle area;
   GtkAllocation allocation;
   GtkStyleContext *context;
-  GtkStateFlags state = 0;
   gint size;
 
   widget = GTK_WIDGET (expander);
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
 
   get_expander_bounds (expander, &clip);
   gtk_widget_get_allocation (widget, &allocation);
 
-  gtk_style_context_save (context);
-
-  state &= ~(GTK_STATE_FLAG_PRELIGHT);
-  if (expander->priv->prelight)
-    {
-      state |= GTK_STATE_FLAG_PRELIGHT;
-      gtk_style_context_set_state (context, state);
-      gtk_expander_paint_prelight (expander, cr);
-    }
-
   gtk_widget_style_get (widget, "expander-size", &size, NULL);
 
-  /* Set active flag as per the expanded state */
-  if (priv->expanded)
-    state |= GTK_STATE_FLAG_CHECKED;
-  else
-    state &= ~(GTK_STATE_FLAG_CHECKED);
+  gtk_style_context_save_to_node (context, priv->arrow_node);
 
-  gtk_style_context_set_state (context, state);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_EXPANDER);
+  if (expander->priv->prelight)
+    {
+      get_prelight_area_bounds (expander, &area);
+      gtk_render_background (context, cr,
+                             area.x, area.y,
+                             area.width, area.height);
+    }
 
   gtk_render_expander (context, cr,
                        clip.x - allocation.x,
@@ -1014,6 +1036,27 @@ gtk_expander_redraw_expander (GtkExpander *expander)
     }
 }
 
+static void
+update_arrow_state (GtkExpander *expander)
+{
+  GtkExpanderPrivate *priv = expander->priv;
+  GtkStateFlags state;
+
+  state = gtk_widget_get_state_flags (GTK_WIDGET (expander));
+
+  if (priv->prelight)
+    state |= GTK_STATE_FLAG_PRELIGHT;
+  else
+    state &= ~GTK_STATE_FLAG_PRELIGHT;
+
+  if (priv->expanded)
+    state |= GTK_STATE_FLAG_CHECKED;
+  else
+    state &= ~GTK_STATE_FLAG_CHECKED;
+
+  gtk_css_node_set_state (priv->arrow_node, state);
+}
+
 static gboolean
 gtk_expander_enter_notify (GtkWidget        *widget,
                            GdkEventCrossing *event)
@@ -1024,6 +1067,8 @@ gtk_expander_enter_notify (GtkWidget        *widget,
       event->detail != GDK_NOTIFY_INFERIOR)
     {
       expander->priv->prelight = TRUE;
+
+      update_arrow_state (expander);
 
       if (expander->priv->label_widget)
         gtk_widget_set_state_flags (expander->priv->label_widget,
@@ -1046,6 +1091,8 @@ gtk_expander_leave_notify (GtkWidget        *widget,
       event->detail != GDK_NOTIFY_INFERIOR)
     {
       expander->priv->prelight = FALSE;
+
+      update_arrow_state (expander);
 
       if (expander->priv->label_widget)
         gtk_widget_unset_state_flags (expander->priv->label_widget,
@@ -1600,23 +1647,23 @@ gtk_expander_set_expanded (GtkExpander *expander,
 
   expanded = expanded != FALSE;
 
-  if (priv->expanded != expanded)
+  if (priv->expanded == expanded)
+    return;
+
+  priv->expanded = expanded;
+
+  update_arrow_state (expander);
+
+  child = gtk_bin_get_child (GTK_BIN (expander));
+
+  if (child)
     {
-      GtkWidget *widget = GTK_WIDGET (expander);
-
-      priv->expanded = expanded;
-
-      child = gtk_bin_get_child (GTK_BIN (expander));
-
-      if (child)
-        {
-          gtk_widget_set_child_visible (child, priv->expanded);
-          gtk_widget_queue_resize (widget);
-          gtk_expander_resize_toplevel (expander);
-        }
-
-      g_object_notify (G_OBJECT (expander), "expanded");
+      gtk_widget_set_child_visible (child, priv->expanded);
+      gtk_widget_queue_resize (GTK_WIDGET (expander));
+      gtk_expander_resize_toplevel (expander);
     }
+
+  g_object_notify (G_OBJECT (expander), "expanded");
 }
 
 /**
