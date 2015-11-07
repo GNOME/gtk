@@ -3620,6 +3620,7 @@ microphone-sensitivity-medium-symbolic</property>
                   <object class="GtkBox">
                     <property name="visible">1</property>
                     <property name="orientation">vertical</property>
+                    <property name="spacing">10</property>
                     <child>
                       <object class="GtkBox">
                         <property name="visible">1</property>
@@ -3644,6 +3645,108 @@ microphone-sensitivity-medium-symbolic</property>
                         <style>
                           <class name="linked"/>
                         </style>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkSeparator">
+                        <property name="visible">1</property>
+                        <property name="orientation">horizontal</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkNotebook">
+                        <property name="visible">1</property>
+                        <property name="scrollable">1</property>
+                        <child type="action-end">
+                          <object class="GtkMenuButton">
+                            <property name="visible">1</property>
+                            <property name="valign">center</property>
+                            <property name="popover">notebook_info_popover</property>
+                            <child>
+                              <object class="GtkImage">
+                                <property name="visible">1</property>
+                                <property name="icon-name">emblem-important-symbolic</property>
+                                <property name="icon-size">1</property>
+                              </object>
+                            </child>
+                            <style>
+                              <class name="image-button"/>
+                              <class name="sidebar-button"/>
+                            </style>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="visible">1</property>
+                            <property name="height-request">120</property>
+                          </object>
+                          <packing>
+                            <property name="tab-expand">1</property>
+                          </packing>
+                        </child>
+                        <child type="tab">
+                          <object class="GtkLabel">
+                            <property name="visible">1</property>
+                            <property name="label" translatable="yes">Page 1</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="visible">1</property>
+                            <property name="height-request">40</property>
+                          </object>
+                          <packing>
+                            <property name="tab-expand">1</property>
+                          </packing>
+                        </child>
+                        <child type="tab">
+                          <object class="GtkLabel">
+                            <property name="visible">1</property>
+                            <property name="label" translatable="yes">Page 2</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="visible">1</property>
+                          </object>
+                          <packing>
+                            <property name="tab-expand">1</property>
+                          </packing>
+                        </child>
+                        <child type="tab">
+                          <object class="GtkLabel">
+                            <property name="visible">1</property>
+                            <property name="label" translatable="yes">Page 3</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="visible">1</property>
+                          </object>
+                          <packing>
+                            <property name="tab-expand">1</property>
+                          </packing>
+                        </child>
+                        <child type="tab">
+                          <object class="GtkLabel">
+                            <property name="visible">1</property>
+                            <property name="label" translatable="yes">Page 4</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="visible">1</property>
+                          </object>
+                          <packing>
+                            <property name="tab-expand">1</property>
+                          </packing>
+                        </child>
+                        <child type="tab">
+                          <object class="GtkLabel">
+                            <property name="visible">1</property>
+                            <property name="label" translatable="yes">Page 5</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                     <child>
@@ -4000,5 +4103,14 @@ bad things might happen.</property>
       <widget name="panedframe1"/>
       <widget name="panedframe2"/>
     </widgets>
+  </object>
+  <object class="GtkPopover" id="notebook_info_popover">
+    <child>
+      <object class="GtkLabel" id="notebook_info_label">
+        <property name="visible">1</property>
+        <property name="margin">10</property>
+        <property name="label">No updates at this time</property>
+      </object>
+    </child>
   </object>
 </interface>
