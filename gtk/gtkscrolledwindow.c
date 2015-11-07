@@ -116,7 +116,8 @@
  * on where the indication is drawn.
  *
  * GtkScrolledWindow also sets the positional style classes (.left,
- * .right, .top, .bottom) on the scrollbars.
+ * .right, .top, .bottom) and style classes related to overlay
+ * scrolling (.overlay-indicator, .dragging, .hovering) on its scrollbars.
  *
  * If both scrollbars are visible, the area where they meet is drawn
  * with a subnode named junction.

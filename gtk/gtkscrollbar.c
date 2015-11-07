@@ -74,6 +74,10 @@
  * If steppers are enabled, they are represented by up to four additional
  * subnodes with name button. These get the style classes .up and .down to
  * indicate in which direction they are moving.
+ *
+ * Other style classes that may be added to scrollbars inside #GtkScrolledWindow
+ * include the positional classes (.left, .right, .top, .bottom) and style
+ * classes related to overlay scrolling (.overlay-indicator, .dragging, .hovering).
  */
 
 
