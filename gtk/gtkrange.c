@@ -1859,6 +1859,8 @@ update_trough_state (GtkRange *range)
   gtk_css_node_set_state (priv->trough_node, state);
   if (priv->highlight_node)
     gtk_css_node_set_state (priv->highlight_node, state);
+  if (priv->fill_node)
+    gtk_css_node_set_state (priv->fill_node, state);
 }
 
 static void
@@ -2030,7 +2032,7 @@ gtk_range_draw (GtkWidget *widget,
           gtk_style_context_get_margin (context, gtk_style_context_get_state (context), &margin);
 
           x += margin.left;
-          y += y + margin.top;
+          y += margin.top;
           width -= margin.left + margin.right;
           height -= margin.top + margin.bottom;
 
