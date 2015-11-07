@@ -75,13 +75,15 @@
  * # CSS nodes
  *
  * |[<!-- language="plain" -->
- * scale
+ * scale[.fine-tune]
  * ├── marks.top
  * │   ├── mark
  * │   ├── mark
  * │   ╰── ...
  * ├── trough
- * │   ╰── slider
+ * │   ├──slider
+ * │   ├── [highlight]
+ * │   ╰── [fill]
  * ╰── marks.bottom
  *     ├── mark
  *     ├── mark
@@ -93,6 +95,14 @@
  *
  * The main node gets the style class .fine-tune added when the scale is in
  * 'fine-tuning' mode.
+ *
+ * If the scale has an origin (see gtk_scale_set_has_origin()), there is a
+ * subnode with name highlight below the trough node that is used for rendering
+ * the highlighted part of the trough.
+ *
+ * If the scale is showing a fill level (see gtk_range_set_show_fill_level()),
+ * there is a subnode with name fill below the trough node that is used for
+ * rendering the filled in part of the trough.
  *
  * If marks are present, there is a marks subnode before or after the trough
  * node, below which each mark gets a node with name mark. The marks nodes get
