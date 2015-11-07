@@ -109,12 +109,17 @@
  * # CSS nodes
  *
  * GtkScrolledWindow has a main CSS node with name scrolledwindow.
- * It uses transient subnodes with names overshoot and undershoot to
+ *
+ * It uses subnodes with names overshoot and undershoot to
  * draw the overflow and underflow indications. These nodes get
  * the .left, .right, .top or .bottom style class added depending
- * on where the indication is drawn. If both scrollbars are visible,
- * the area where they meet is drawn with a transient subnode named
- * junction.
+ * on where the indication is drawn.
+ *
+ * GtkScrolledWindow also sets the positional style classes (.left,
+ * .right, .top, .bottom) on the scrollbars.
+ *
+ * If both scrollbars are visible, the area where they meet is drawn
+ * with a subnode named junction.
  */
 
 
@@ -429,6 +434,62 @@ gtk_scrolled_window_leave_notify (GtkWidget        *widget,
 }
 
 static void
+update_scrollbar_positions (GtkScrolledWindow *scrolled_window)
+{
+  GtkScrolledWindowPrivate *priv = scrolled_window->priv;
+  GtkStyleContext *context;
+  gboolean is_rtl;
+
+  if (priv->hscrollbar != NULL)
+    {
+      context = gtk_widget_get_style_context (priv->hscrollbar);
+      if (priv->window_placement == GTK_CORNER_TOP_LEFT ||
+          priv->window_placement == GTK_CORNER_TOP_RIGHT)
+        {
+          gtk_style_context_add_class (context, GTK_STYLE_CLASS_BOTTOM);
+          gtk_style_context_remove_class (context, GTK_STYLE_CLASS_TOP);
+        }
+      else
+        {
+          gtk_style_context_remove_class (context, GTK_STYLE_CLASS_BOTTOM);
+          gtk_style_context_add_class (context, GTK_STYLE_CLASS_TOP);
+        }
+    }
+
+  if (priv->vscrollbar != NULL)
+    {
+      context = gtk_widget_get_style_context (priv->vscrollbar);
+      is_rtl = gtk_widget_get_direction (GTK_WIDGET (scrolled_window)) == GTK_TEXT_DIR_RTL;
+      if ((is_rtl &&
+          (priv->window_placement == GTK_CORNER_TOP_RIGHT ||
+           priv->window_placement == GTK_CORNER_BOTTOM_RIGHT)) ||
+         (!is_rtl &&
+          (priv->window_placement == GTK_CORNER_TOP_LEFT ||
+           priv->window_placement == GTK_CORNER_BOTTOM_LEFT)))
+        {
+          gtk_style_context_add_class (context, GTK_STYLE_CLASS_LEFT);
+          gtk_style_context_remove_class (context, GTK_STYLE_CLASS_RIGHT);
+        }
+      else
+        {
+          gtk_style_context_remove_class (context, GTK_STYLE_CLASS_LEFT);
+          gtk_style_context_add_class (context, GTK_STYLE_CLASS_RIGHT);
+        }
+    }
+}
+
+static void
+gtk_scrolled_window_direction_changed (GtkWidget        *widget,
+                                       GtkTextDirection  previous_dir)
+{
+  GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
+
+  update_scrollbar_positions (scrolled_window);
+
+  GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->direction_changed (widget, previous_dir);
+}
+
+static void
 gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
@@ -457,6 +518,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   widget_class->realize = gtk_scrolled_window_realize;
   widget_class->unrealize = gtk_scrolled_window_unrealize;
   widget_class->leave_notify_event = gtk_scrolled_window_leave_notify;
+  widget_class->direction_changed = gtk_scrolled_window_direction_changed;
 
   container_class->add = gtk_scrolled_window_add;
   container_class->remove = gtk_scrolled_window_remove;
@@ -1470,6 +1532,7 @@ gtk_scrolled_window_set_hadjustment (GtkScrolledWindow *scrolled_window,
       gtk_widget_set_parent (priv->hscrollbar, GTK_WIDGET (scrolled_window));
       g_object_ref (priv->hscrollbar);
       gtk_widget_show (priv->hscrollbar);
+      update_scrollbar_positions (scrolled_window);
     }
   else
     {
@@ -1537,6 +1600,7 @@ gtk_scrolled_window_set_vadjustment (GtkScrolledWindow *scrolled_window,
       gtk_widget_set_parent (priv->vscrollbar, GTK_WIDGET (scrolled_window));
       g_object_ref (priv->vscrollbar);
       gtk_widget_show (priv->vscrollbar);
+      update_scrollbar_positions (scrolled_window);
     }
   else
     {
@@ -1730,6 +1794,7 @@ gtk_scrolled_window_set_placement_internal (GtkScrolledWindow *scrolled_window,
   if (priv->window_placement != window_placement)
     {
       priv->window_placement = window_placement;
+      update_scrollbar_positions (scrolled_window);
 
       gtk_widget_queue_resize (GTK_WIDGET (scrolled_window));
 
