@@ -6176,7 +6176,7 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
            * see gtk_notebook_page_allocate().
            */
           gtk_style_context_save_to_node (context, page->cssnode);
-          gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &active_padding);
+          gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &normal_padding);
           gtk_style_context_restore (context);
 
           gtk_style_context_save_to_node (context, priv->cur_page->cssnode);
