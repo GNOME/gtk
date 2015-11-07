@@ -2153,22 +2153,32 @@ scale {
   &.fine-tune {
     outline-offset: -7px;
     outline-radius: 6px;
-    & trough { border-radius: 4px; }
-    & trough:not(:first-child):not(:last-child),
-    & trough:only-child {
-      margin: 10px;
+    & highlight,
+    & fill,
+    & trough {
+      border-radius: 4px;
+      &:not(:first-child):not(:last-child),
+      &:only-child {
+        margin: 10px;
+      }
+    }
+  }
+
+  & trough,
+  & fill,
+  & highlight {
+    &:not(:first-child):not(:last-child),
+    &:only-child {
+      margin: 12px;
     }
   }
 
   & trough:not(:first-child):not(:last-child),
   & trough:only-child {
-    margin: 12px;
     & slider { margin: 2px 0; }
   }
-
   &.vertical trough:not(:first-child):not(:last-child),
   &.vertical trough:only-child {
-    margin: 12px;
     & slider { margin: 0 2px; }
   }
 
@@ -2228,9 +2238,10 @@ scale {
         &:backdrop { @include button(osd-backdrop); }
       }
     }
-    &.highlight {
+    & highlight {
       @include progressbar_fill;
-      border-color: $selected_borders_color;
+      border: 1px solid $borders_color;
+      border-radius: 3px;
       box-shadow: _widget_edge();
       &.vertical { @include progressbar_fill(vertical); }
       &:backdrop {
@@ -2240,9 +2251,12 @@ scale {
          box-shadow: none;
       }
     }
-    &.progressbar {
+    & fill {
       background: none;
       background-color: red;
+      border: 1px solid $borders_color;
+      border-radius: 3px;
+      box-shadow: _widget_edge();
     }
     &:insensitive, &.vertical:insensitive {
       border-color: $insensitive_borders_color;

@@ -3096,18 +3096,16 @@ scale {
   scale.fine-tune {
     outline-offset: -7px;
     outline-radius: 6px; }
-    scale.fine-tune trough {
+    scale.fine-tune highlight, scale.fine-tune fill, scale.fine-tune trough {
       border-radius: 4px; }
-    scale.fine-tune trough:not(:first-child):not(:last-child), scale.fine-tune trough:only-child {
-      margin: 10px; }
-  scale trough:not(:first-child):not(:last-child), scale trough:only-child {
+      scale.fine-tune highlight:not(:first-child):not(:last-child), scale.fine-tune highlight:only-child, scale.fine-tune fill:not(:first-child):not(:last-child), scale.fine-tune fill:only-child, scale.fine-tune trough:not(:first-child):not(:last-child), scale.fine-tune trough:only-child {
+        margin: 10px; }
+  scale trough:not(:first-child):not(:last-child), scale trough:only-child, scale fill:not(:first-child):not(:last-child), scale fill:only-child, scale highlight:not(:first-child):not(:last-child), scale highlight:only-child {
     margin: 12px; }
-    scale trough:not(:first-child):not(:last-child) slider, scale trough:only-child slider {
-      margin: 2px 0; }
-  scale.vertical trough:not(:first-child):not(:last-child), scale.vertical trough:only-child {
-    margin: 12px; }
-    scale.vertical trough:not(:first-child):not(:last-child) slider, scale.vertical trough:only-child slider {
-      margin: 0 2px; }
+  scale trough:not(:first-child):not(:last-child) slider, scale trough:only-child slider {
+    margin: 2px 0; }
+  scale.vertical trough:not(:first-child):not(:last-child) slider, scale.vertical trough:only-child slider {
+    margin: 0 2px; }
   scale trough {
     border: 1px solid #a1a1a1;
     border-radius: 3px;
@@ -3201,19 +3199,23 @@ scale {
           box-shadow: none;
           text-shadow: none;
           icon-shadow: none; }
-    scale trough.highlight {
+    scale trough highlight {
       background-image: linear-gradient(to bottom, #4a90d9 2px, #63a0de);
-      border-color: #184472;
+      border: 1px solid #a1a1a1;
+      border-radius: 3px;
       box-shadow: 0 1px white; }
-      scale trough.highlight.vertical {
+      scale trough highlight.vertical {
         background-image: linear-gradient(to right, #4a90d9 2px, #63a0de); }
-      scale trough.highlight:backdrop {
+      scale trough highlight:backdrop {
         border-color: #4a90d9;
         background-color: #4a90d9;
         box-shadow: none; }
-    scale trough.progressbar {
+    scale trough fill {
       background: none;
-      background-color: red; }
+      background-color: red;
+      border: 1px solid #a1a1a1;
+      border-radius: 3px;
+      box-shadow: 0 1px white; }
     scale trough:insensitive, scale trough.vertical:insensitive {
       border-color: #a1a1a1;
       background-image: none;
