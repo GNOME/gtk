@@ -1480,16 +1480,6 @@ gtk_box_direction_changed (GtkWidget        *widget,
   gtk_box_invalidate_order (GTK_BOX (widget));
 }
 
-static void
-box_child_visibility_notify_cb (GObject *obj,
-                                GParamSpec *pspec,
-                                gpointer user_data)
-{
-  GtkBox *box = user_data;
-
-  gtk_box_invalidate_order (box);
-}
-
 static GtkBoxChild *
 gtk_box_pack (GtkBox      *box,
               GtkWidget   *child,
@@ -1519,9 +1509,6 @@ gtk_box_pack (GtkBox      *box,
 
   gtk_widget_set_parent (child, GTK_WIDGET (box));
   gtk_box_invalidate_order (box);
-
-  g_signal_connect (child, "notify::visible",
-                    G_CALLBACK (box_child_visibility_notify_cb), box);
 
   gtk_container_child_notify_by_pspec (container, child, child_props[CHILD_PROP_EXPAND]);
   gtk_container_child_notify_by_pspec (container, child, child_props[CHILD_PROP_FILL]);
@@ -2534,10 +2521,6 @@ gtk_box_remove (GtkContainer *container,
 
           if (priv->center == child)
             priv->center = NULL;
-
-          g_signal_handlers_disconnect_by_func (widget,
-                                                box_child_visibility_notify_cb,
-                                                box);
 
 	  was_visible = _gtk_widget_get_visible (widget);
 	  gtk_widget_unparent (widget);
