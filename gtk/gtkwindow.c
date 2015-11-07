@@ -6822,16 +6822,14 @@ update_border_windows (GtkWindow *window)
   GtkBorder border;
   GtkBorder window_border;
   GtkStyleContext *context;
-  GtkStateFlags state;
 
   if (!priv->client_decorated)
     return;
 
-  state = _gtk_widget_get_state_flags (widget);
   context = _gtk_widget_get_style_context (widget);
 
   gtk_style_context_save_to_node (context, priv->decoration_node);
-  gtk_style_context_get_margin (context, state, &border);
+  gtk_style_context_get_margin (context, gtk_style_context_get_state (context), &border);
   gtk_widget_style_get (widget,
                         "decoration-resize-handle", &handle,
                         NULL);
