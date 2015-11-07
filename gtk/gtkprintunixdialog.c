@@ -56,6 +56,7 @@
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkdialogprivate.h"
+#include "gtkstylecontextprivate.h"
 
 
 /**
@@ -2223,10 +2224,7 @@ paint_page (GtkWidget *widget,
 
   context = gtk_widget_get_style_context (widget);
 
-  gtk_style_context_save (context);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_FRAME);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_PAPER);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_VIEW);
+  gtk_style_context_save_named (context, "paper");
 
   gtk_render_background (context, cr, x, y, width, height);
   gtk_render_frame (context, cr, x, y, width, height);
