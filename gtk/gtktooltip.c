@@ -34,9 +34,9 @@
 #include "gtksettings.h"
 #include "gtksizerequest.h"
 #include "gtkstylecontext.h"
+#include "gtktooltipwindowprivate.h"
 #include "gtkwindowprivate.h"
 #include "gtkaccessible.h"
-
 
 #ifdef GDK_WINDOWING_WAYLAND
 #include "wayland/gdkwayland.h"
@@ -169,13 +169,6 @@ gtk_tooltip_class_init (GtkTooltipClass *klass)
 static void
 gtk_tooltip_init (GtkTooltip *tooltip)
 {
-  GtkStyleContext *context;
-  GtkWidget *window;
-  GtkWidget *box;
-  GtkWidget *image;
-  GtkWidget *label;
-  AtkObject *atk_obj;
-
   tooltip->timeout_id = 0;
   tooltip->browse_mode_timeout_id = 0;
 
@@ -189,43 +182,10 @@ gtk_tooltip_init (GtkTooltip *tooltip)
 
   tooltip->last_window = NULL;
 
-  window = gtk_window_new (GTK_WINDOW_POPUP);
-  gtk_window_set_type_hint (GTK_WINDOW (window), GDK_WINDOW_TYPE_HINT_TOOLTIP);
-  gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
-  gtk_window_set_use_subsurface (GTK_WINDOW (window), TRUE);
-  g_signal_connect (window, "hide",
-                    G_CALLBACK (gtk_tooltip_window_hide), tooltip);
-
-  _gtk_window_request_csd (GTK_WINDOW (window));
-  context = gtk_widget_get_style_context (window);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_TOOLTIP);
-
-  atk_obj = gtk_widget_get_accessible (window);
-  if (GTK_IS_ACCESSIBLE (atk_obj))
-    atk_object_set_role (atk_obj, ATK_ROLE_TOOL_TIP);
-
-  /* FIXME: don't hardcode the padding */
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
-  gtk_widget_set_margin_start (box, 6);
-  gtk_widget_set_margin_end (box, 6);
-  gtk_widget_set_margin_top (box, 6);
-  gtk_widget_set_margin_bottom (box, 6);
-  gtk_container_add (GTK_CONTAINER (window), box);
-  gtk_widget_show (box);
-
-  image = gtk_image_new ();
-  gtk_box_pack_start (GTK_BOX (box), image, FALSE, FALSE, 0);
-
-  label = gtk_label_new ("");
-  gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
-  gtk_label_set_max_width_chars (GTK_LABEL (label), 70);
-  gtk_box_pack_start (GTK_BOX (box), label, FALSE, FALSE, 0);
-
-  tooltip->window = window;
-  tooltip->box = box;
-  tooltip->image = image;
-  tooltip->label = label;
-  tooltip->custom_widget = NULL;
+  tooltip->window = gtk_tooltip_window_new ();
+  g_signal_connect (tooltip->window, "hide",
+                    G_CALLBACK (gtk_tooltip_window_hide),
+                    tooltip);
 }
 
 static void
@@ -282,15 +242,7 @@ gtk_tooltip_set_markup (GtkTooltip  *tooltip,
 {
   g_return_if_fail (GTK_IS_TOOLTIP (tooltip));
 
-  if (markup)
-    {
-      gtk_label_set_markup (GTK_LABEL (tooltip->label), markup);
-      gtk_widget_show (tooltip->label);
-    }
-  else
-    {
-      gtk_widget_hide (tooltip->label);
-    }
+  gtk_tooltip_window_set_label_markup (GTK_TOOLTIP_WINDOW (tooltip->window), markup);
 }
 
 /**
@@ -309,15 +261,7 @@ gtk_tooltip_set_text (GtkTooltip  *tooltip,
 {
   g_return_if_fail (GTK_IS_TOOLTIP (tooltip));
 
-  if (text)
-    {
-      gtk_label_set_text (GTK_LABEL (tooltip->label), text);
-      gtk_widget_show (tooltip->label);
-    }
-  else
-    {
-      gtk_widget_hide (tooltip->label);
-    }
+  gtk_tooltip_window_set_label_text (GTK_TOOLTIP_WINDOW (tooltip->window), text);
 }
 
 /**
@@ -335,18 +279,9 @@ gtk_tooltip_set_icon (GtkTooltip *tooltip,
 		      GdkPixbuf  *pixbuf)
 {
   g_return_if_fail (GTK_IS_TOOLTIP (tooltip));
-  if (pixbuf)
-    g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
+  g_return_if_fail (pixbuf == NULL || GDK_IS_PIXBUF (pixbuf));
 
-  if (pixbuf)
-    {
-      gtk_image_set_from_pixbuf (GTK_IMAGE (tooltip->image), pixbuf);
-      gtk_widget_show (tooltip->image);
-    }
-  else
-    {
-      gtk_widget_hide (tooltip->image);
-    }
+  gtk_tooltip_window_set_image_icon (GTK_TOOLTIP_WINDOW (tooltip->window), pixbuf);
 }
 
 /**
@@ -370,17 +305,9 @@ gtk_tooltip_set_icon_from_stock (GtkTooltip  *tooltip,
 {
   g_return_if_fail (GTK_IS_TOOLTIP (tooltip));
 
-  if (stock_id)
-    {
- G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      gtk_image_set_from_stock (GTK_IMAGE (tooltip->image), stock_id, size);
- G_GNUC_END_IGNORE_DEPRECATIONS;
-      gtk_widget_show (tooltip->image);
-    }
-  else
-    {
-      gtk_widget_hide (tooltip->image);
-    }
+  gtk_tooltip_window_set_image_icon_from_stock (GTK_TOOLTIP_WINDOW (tooltip->window),
+                                                stock_id,
+                                                size);
 }
 
 /**
@@ -402,15 +329,9 @@ gtk_tooltip_set_icon_from_icon_name (GtkTooltip  *tooltip,
 {
   g_return_if_fail (GTK_IS_TOOLTIP (tooltip));
 
-  if (icon_name)
-    {
-      gtk_image_set_from_icon_name (GTK_IMAGE (tooltip->image), icon_name, size);
-      gtk_widget_show (tooltip->image);
-    }
-  else
-    {
-      gtk_widget_hide (tooltip->image);
-    }
+  gtk_tooltip_window_set_image_icon_from_name (GTK_TOOLTIP_WINDOW (tooltip->window),
+                                               icon_name,
+                                               size);
 }
 
 /**
@@ -432,15 +353,9 @@ gtk_tooltip_set_icon_from_gicon (GtkTooltip  *tooltip,
 {
   g_return_if_fail (GTK_IS_TOOLTIP (tooltip));
 
-  if (gicon)
-    {
-      gtk_image_set_from_gicon (GTK_IMAGE (tooltip->image), gicon, size);
-      gtk_widget_show (tooltip->image);
-    }
-  else
-    {
-      gtk_widget_hide (tooltip->image);
-    }
+  gtk_tooltip_window_set_image_icon_from_gicon (GTK_TOOLTIP_WINDOW (tooltip->window),
+                                                gicon,
+                                                size);
 }
 
 /**
@@ -463,37 +378,14 @@ gtk_tooltip_set_custom (GtkTooltip *tooltip,
 			GtkWidget  *custom_widget)
 {
   g_return_if_fail (GTK_IS_TOOLTIP (tooltip));
-  if (custom_widget)
-    g_return_if_fail (GTK_IS_WIDGET (custom_widget));
+  g_return_if_fail (custom_widget == NULL || GTK_IS_WIDGET (custom_widget));
 
   /* The custom widget has been updated from the query-tooltip
    * callback, so we do not want to reset the custom widget later on.
    */
   tooltip->custom_was_reset = TRUE;
 
-  /* No need to do anything if the custom widget stays the same */
-  if (tooltip->custom_widget == custom_widget)
-    return;
-
-  if (tooltip->custom_widget)
-    {
-      GtkWidget *custom = tooltip->custom_widget;
-      /* Note: We must reset tooltip->custom_widget first, 
-       * since gtk_container_remove() will recurse into 
-       * gtk_tooltip_set_custom()
-       */
-      tooltip->custom_widget = NULL;
-      gtk_container_remove (GTK_CONTAINER (tooltip->box), custom);
-      g_object_unref (custom);
-    }
-
-  if (custom_widget)
-    {
-      tooltip->custom_widget = g_object_ref (custom_widget);
-
-      gtk_container_add (GTK_CONTAINER (tooltip->box), custom_widget);
-      gtk_widget_show (custom_widget);
-    }
+  gtk_tooltip_window_set_custom_widget (GTK_TOOLTIP_WINDOW (tooltip->window), custom_widget);
 }
 
 /**
