@@ -2109,10 +2109,9 @@ popover {
     text-shadow: none;
     transition: none; }
 
-/*****************
- * Notebooks and *
- * Tabs          *
- *****************/
+/*************
+ * Notebooks *
+ *************/
 notebook {
   -GtkNotebook-initial-gap: 10;
   -GtkNotebook-arrow-spacing: 5;
@@ -2148,49 +2147,63 @@ notebook {
       box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.15), inset 0 -1px #1c1f1f; }
       notebook header.top:backdrop {
         box-shadow: inset 0 -1px #1f2222; }
+      notebook header.top tab {
+        padding: 8px 20px;
+        border-bottom-width: 3px; }
+        notebook header.top tab.reorderable-page {
+          padding-left: 12px;
+          padding-right: 12px;
+          border-left-width: 1px;
+          border-right-width: 1px; }
     notebook header.bottom {
       box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.15), inset 0 1px #1c1f1f; }
       notebook header.bottom:backdrop {
         box-shadow: inset 0 1px #1f2222; }
+      notebook header.bottom tab {
+        padding: 8px 20px;
+        border-top-width: 3px; }
+        notebook header.bottom tab.reorderable-page {
+          padding-left: 12px;
+          padding-right: 12px;
+          border-left-width: 1px;
+          border-right-width: 1px; }
     notebook header.right {
       box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.15), inset 1px 0 #1c1f1f; }
       notebook header.right:backdrop {
         box-shadow: inset 1px 0 #1f2222; }
+      notebook header.right tab {
+        padding: 5px 20px;
+        border-left-width: 3px; }
+        notebook header.right tab.reorderable-page {
+          border-bottom-width: 1px;
+          border-top-width: 1px; }
     notebook header.left {
       box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.15), inset -1px 0 #1c1f1f; }
       notebook header.left:backdrop {
         box-shadow: inset -1px 0 #1f2222; }
+      notebook header.left tab {
+        padding: 5px 20px;
+        border-right-width: 3px; }
+        notebook header.left tab.reorderable-page {
+          border-bottom-width: 1px;
+          border-top-width: 1px; }
     notebook header:backdrop {
       background-color: #303535;
       box-shadow: none; }
-  notebook header.top tab {
-    padding: 8px 20px;
-    border-bottom-width: 3px; }
-    notebook header.top tab.reorderable-page {
-      padding-left: 12px;
-      padding-right: 12px;
-      border-left-width: 1px;
-      border-right-width: 1px; }
-  notebook header.bottom tab {
-    padding: 8px 20px;
-    border-top-width: 3px; }
-    notebook header.bottom tab.reorderable-page {
-      padding-left: 12px;
-      padding-right: 12px;
-      border-left-width: 1px;
-      border-right-width: 1px; }
-  notebook header.left tab {
-    padding: 5px 20px;
-    border-right-width: 3px; }
-    notebook header.left tab.reorderable-page {
-      border-bottom-width: 1px;
-      border-top-width: 1px; }
-  notebook header.right tab {
-    padding: 5px 20px;
-    border-left-width: 3px; }
-    notebook header.right tab.reorderable-page {
-      border-bottom-width: 1px;
-      border-top-width: 1px; }
+    notebook header tabs arrow {
+      -gtk-icon-source: -gtk-icontheme("pan-end-symbolic");
+      color: #949796; }
+      notebook header tabs arrow:hover {
+        color: #c1c3c1; }
+      notebook header tabs arrow:active {
+        color: #eeeeec; }
+      notebook header tabs arrow:insensitive {
+        -gtk-icon-source: -gtk-icontheme("pan-end-symbolic");
+        color: rgba(148, 151, 150, 0.3); }
+      notebook header tabs arrow:backdrop {
+        color: rgba(148, 151, 150, 0.4); }
+      notebook header tabs arrow:backdrop:insensitive {
+        color: #5d6767; }
   notebook tab {
     border-width: 0;
     border-style: solid;
@@ -2334,18 +2347,6 @@ notebook {
       notebook tab .titlebar button.titlebutton > image,
       .titlebar notebook tab button.titlebutton > image {
         padding: 2px; }
-  notebook.arrow {
-    color: #949796; }
-    notebook.arrow:hover {
-      color: #c1c3c1; }
-    notebook.arrow:active {
-      color: #eeeeec; }
-    notebook.arrow:insensitive {
-      color: rgba(148, 151, 150, 0.3); }
-    notebook.arrow:backdrop {
-      color: rgba(148, 151, 150, 0.4); }
-      notebook.arrow:backdrop:insensitive {
-        color: #5d6767; }
 
 /**************
  * Scrollbars *
