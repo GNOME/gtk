@@ -27,6 +27,7 @@
 #include "gtktooltipwindowprivate.h"
 
 #include "gtkprivate.h"
+#include "gtkintl.h"
 
 #include "gtkaccessible.h"
 #include "gtkbox.h"
@@ -35,8 +36,10 @@
 #include "gtkmain.h"
 #include "gtksettings.h"
 #include "gtksizerequest.h"
-#include "gtkstylecontext.h"
 #include "gtkwindowprivate.h"
+#include "gtkwidgetprivate.h"
+
+#define MAX_TOOLTIP_LINE_WIDTH  70
 
 struct _GtkTooltipWindow
 {
@@ -60,6 +63,7 @@ gtk_tooltip_window_class_init (GtkTooltipWindowClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  gtk_widget_class_set_css_name (widget_class, I_("tooltip"));
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_TOOL_TIP);
 }
 
@@ -67,16 +71,12 @@ static void
 gtk_tooltip_window_init (GtkTooltipWindow *self)
 {
   GtkWindow *window = GTK_WINDOW (self);
-  GtkStyleContext *context;
 
   gtk_window_set_type_hint (window, GDK_WINDOW_TYPE_HINT_TOOLTIP);
   gtk_window_set_resizable (window, FALSE);
   gtk_window_set_use_subsurface (window, TRUE);
 
   _gtk_window_request_csd (window);
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (self));
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_TOOLTIP);
 
   /* FIXME: don't hardcode the padding */
   self->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
@@ -92,7 +92,7 @@ gtk_tooltip_window_init (GtkTooltipWindow *self)
 
   self->label = gtk_label_new ("");
   gtk_label_set_line_wrap (GTK_LABEL (self->label), TRUE);
-  gtk_label_set_max_width_chars (GTK_LABEL (self->label), 70);
+  gtk_label_set_max_width_chars (GTK_LABEL (self->label), MAX_TOOLTIP_LINE_WIDTH);
   gtk_box_pack_start (GTK_BOX (self->box), self->label, FALSE, FALSE, 0);
 }
 
