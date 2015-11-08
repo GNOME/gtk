@@ -44,6 +44,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkwidgetpath.h"
 #include "gtkcssnodeprivate.h"
+#include "gtkcssstylepropertyprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
 #include "a11y/gtknotebookaccessible.h"
@@ -102,10 +103,12 @@
  * ├── header.top
  * │   ├── [action widget]
  * │   ├── tabs
+ * │   │   ├── [arrow]
  * │   │   ├── tab
  * ┊   ┊   ┊   ╰── [tab label]
- * │   │   ╰── tab[.reorderable-page]
- * │   │       ╰── [tab label]
+ * │   │   ├── tab[.reorderable-page]
+ * │   │   │   ╰── [tab label]
+ * │   │   ╰── [arrow]
  * │   ╰── [action widget]
  * │
  * ├── [child]
@@ -118,7 +121,8 @@
  * contains one subnode per tab with name tab.
  *
  * If action widgets are present, their CSS nodes are placed next
- * to the tabs node.
+ * to the tabs node. If the notebook is scrollable, CSS nodes with
+ * name arrow are placed as first and last child of the tabs node.
  *
  * The main node gets the .frame style class when rendering the
  * background of a notebook with border. It gets the .header
@@ -171,6 +175,7 @@ struct _GtkNotebookPrivate
 
   GtkCssNode                *header_node;
   GtkCssNode                *tabs_node;
+  GtkCssNode                *arrow_node[4];
 
   GList         *children;
   GList         *first_tab;             /* The first tab visible (for scrolling notebooks) */
@@ -237,11 +242,11 @@ enum {
 
 typedef enum
 {
-  ARROW_NONE,
   ARROW_LEFT_BEFORE,
   ARROW_RIGHT_BEFORE,
   ARROW_LEFT_AFTER,
-  ARROW_RIGHT_AFTER
+  ARROW_RIGHT_AFTER,
+  ARROW_NONE
 } GtkNotebookArrow;
 
 typedef enum
@@ -1206,6 +1211,29 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 }
 
 static void
+node_style_changed_cb (GtkCssNode  *node,
+                       GtkCssStyle *old_style,
+                       GtkCssStyle *new_style,
+                       GtkWidget   *widget)
+{
+  GtkBitmask *changes;
+  static GtkBitmask *affects_size = NULL;
+
+  if (G_UNLIKELY (affects_size == NULL))
+    affects_size = _gtk_css_style_property_get_mask_affecting (GTK_CSS_AFFECTS_SIZE | GTK_CSS_AFFECTS_CLIP);
+
+  changes = _gtk_bitmask_new ();
+  changes = gtk_css_style_add_difference (changes, old_style, new_style);
+
+  if (_gtk_bitmask_intersects (changes, affects_size))
+    gtk_widget_queue_resize (widget);
+  else
+    gtk_widget_queue_draw (widget);
+
+  _gtk_bitmask_free (changes);
+}
+
+static void
 gtk_notebook_init (GtkNotebook *notebook)
 {
   GtkNotebookPrivate *priv;
@@ -1228,7 +1256,7 @@ gtk_notebook_init (GtkNotebook *notebook)
   priv->show_border = TRUE;
   priv->tab_pos = GTK_POS_TOP;
   priv->scrollable = FALSE;
-  priv->in_child = 0;
+  priv->in_child = ARROW_NONE;
   priv->click_child = 0;
   priv->button = 0;
   priv->need_timer = 0;
@@ -1265,12 +1293,14 @@ gtk_notebook_init (GtkNotebook *notebook)
   gtk_css_node_add_class (priv->header_node, g_quark_from_static_string (GTK_STYLE_CLASS_TOP));
   gtk_css_node_set_parent (priv->header_node, widget_node);
   gtk_css_node_set_state (priv->header_node, gtk_css_node_get_state (widget_node));
+  g_signal_connect_object (priv->header_node, "style-changed", G_CALLBACK (node_style_changed_cb), notebook, 0);
   g_object_unref (priv->header_node);
 
   priv->tabs_node = gtk_css_node_new ();
   gtk_css_node_set_name (priv->tabs_node, I_("tabs"));
   gtk_css_node_set_parent (priv->tabs_node, priv->header_node);
   gtk_css_node_set_state (priv->tabs_node, gtk_css_node_get_state (widget_node));
+  g_signal_connect_object (priv->tabs_node, "style-changed", G_CALLBACK (node_style_changed_cb), notebook, 0);
   g_object_unref (priv->tabs_node);
 
 }
@@ -2918,7 +2948,7 @@ gtk_notebook_button_press (GtkWidget      *widget,
     return FALSE;
 
   arrow = gtk_notebook_get_arrow (notebook, x, y);
-  if (arrow)
+  if (arrow != ARROW_NONE)
     return gtk_notebook_arrow_button_press (notebook, arrow, event->button);
 
   if (priv->menu && gdk_event_triggers_context_menu ((GdkEvent *) event))
@@ -3332,9 +3362,9 @@ gtk_notebook_leave_notify (GtkWidget        *widget,
           tab_prelight (notebook, (GdkEvent *)event);
         }
 
-      if (priv->in_child)
+      if (priv->in_child != ARROW_NONE)
         {
-          priv->in_child = 0;
+          priv->in_child = ARROW_NONE;
           gtk_notebook_redraw_arrows (notebook);
         }
     }
@@ -3576,11 +3606,86 @@ gtk_notebook_grab_notify (GtkWidget *widget,
 }
 
 static void
+update_tab_state (GtkNotebook *notebook)
+{
+  GtkNotebookPrivate *priv = notebook->priv;
+  GtkStateFlags state, tab_state;
+  GList *l;
+
+  state = gtk_widget_get_state_flags (GTK_WIDGET (notebook));
+
+  state = state & ~GTK_STATE_FLAG_FOCUSED;
+
+  if (priv->header_node)
+    gtk_css_node_set_state (priv->header_node, state);
+  if (priv->tabs_node)
+    gtk_css_node_set_state (priv->header_node, state);
+
+  for (l = priv->children; l; l = l->next)
+    {
+      GtkNotebookPage *page = l->data;
+
+      tab_state = state & ~(GTK_STATE_FLAG_ACTIVE | GTK_STATE_FLAG_PRELIGHT);
+
+      if (page == priv->cur_page)
+        tab_state |= GTK_STATE_FLAG_ACTIVE;
+      if (page == priv->prelight_tab)
+        tab_state |= GTK_STATE_FLAG_PRELIGHT;
+
+      gtk_css_node_set_state (page->cssnode, tab_state);
+    }
+}
+
+static void
+update_arrow_state (GtkNotebook *notebook)
+{
+  GtkNotebookPrivate *priv = notebook->priv;
+  gint i;
+  GtkStateFlags state;
+  gboolean is_rtl, left;
+
+  is_rtl = gtk_widget_get_direction (GTK_WIDGET (notebook)) == GTK_TEXT_DIR_RTL;
+
+  for (i = 0; i < 4; i++)
+    {
+      if (priv->arrow_node[i] == NULL)
+        continue;
+
+      state = gtk_widget_get_state_flags (GTK_WIDGET (notebook));
+      state &= ~GTK_STATE_FLAG_FOCUSED;
+
+
+      left = (ARROW_IS_LEFT (i) && !is_rtl) ||
+             (!ARROW_IS_LEFT (i) && is_rtl);
+
+      if (priv->focus_tab &&
+          !gtk_notebook_search_page (notebook, priv->focus_tab,
+                                     left ? STEP_PREV : STEP_NEXT, TRUE))
+        {
+          state |= GTK_STATE_FLAG_INSENSITIVE;
+        }
+      else if (priv->in_child == i)
+        {
+          state |= GTK_STATE_FLAG_PRELIGHT;
+          if (priv->click_child == i)
+            state |= GTK_STATE_FLAG_ACTIVE;
+        }
+
+      gtk_css_node_set_state (priv->arrow_node[i], state);
+    }
+}
+
+static void
 gtk_notebook_state_flags_changed (GtkWidget     *widget,
                                   GtkStateFlags  previous_state)
 {
+  GtkNotebook *notebook = GTK_NOTEBOOK (widget);
+
+  update_tab_state (notebook);
+  update_arrow_state (notebook);
+
   if (!gtk_widget_is_sensitive (widget))
-    stop_scrolling (GTK_NOTEBOOK (widget));
+    stop_scrolling (notebook);
 }
 
 static gboolean
@@ -3602,11 +3707,85 @@ gtk_notebook_focus_out (GtkWidget     *widget,
 }
 
 static void
+update_arrow_nodes (GtkNotebook *notebook)
+{
+  GtkNotebookPrivate *priv = notebook->priv;
+  gboolean arrow[4];
+  gint i;
+
+  arrow[0] = priv->has_before_previous;
+  arrow[1] = priv->has_before_next;
+  arrow[2] = priv->has_after_previous;
+  arrow[3] = priv->has_after_next;
+
+  for (i = 0; i < 4; i++)
+    {
+      if (priv->scrollable && arrow[i])
+        {
+          if (priv->arrow_node[i] == NULL)
+            {
+              priv->arrow_node[i] = gtk_css_node_new ();
+              gtk_css_node_set_name (priv->arrow_node[i], I_("arrow"));
+              if (i == ARROW_LEFT_BEFORE || i == ARROW_LEFT_AFTER)
+                gtk_css_node_add_class (priv->arrow_node[i], g_quark_from_static_string ("down"));
+              else
+                gtk_css_node_add_class (priv->arrow_node[i], g_quark_from_static_string ("up"));
+              gtk_css_node_set_state (priv->arrow_node[i], gtk_css_node_get_state (priv->tabs_node));
+              g_signal_connect_object (priv->arrow_node[i], "style-changed", G_CALLBACK (node_style_changed_cb), notebook, 0);
+              switch (i)
+                {
+                case 0:
+                  if (priv->arrow_node[1])
+                    gtk_css_node_insert_before (priv->tabs_node, priv->arrow_node[0], priv->arrow_node[1]);
+                  else
+                    gtk_css_node_insert_before (priv->tabs_node, priv->arrow_node[0], gtk_css_node_get_first_child (priv->tabs_node));
+                  break;
+
+                case 1:
+                  if (priv->arrow_node[0])
+                    gtk_css_node_insert_after (priv->tabs_node, priv->arrow_node[1], priv->arrow_node[0]);
+                  else
+                    gtk_css_node_insert_before (priv->tabs_node, priv->arrow_node[1], gtk_css_node_get_first_child (priv->tabs_node));
+                  break;
+
+                case 2:
+                  if (priv->arrow_node[3])
+                    gtk_css_node_insert_before (priv->tabs_node, priv->arrow_node[2], priv->arrow_node[3]);
+                  else
+                    gtk_css_node_insert_after (priv->tabs_node, priv->arrow_node[2], gtk_css_node_get_last_child (priv->tabs_node));
+                  break;
+
+                case 3:
+                  if (priv->arrow_node[2])
+                    gtk_css_node_insert_after (priv->tabs_node, priv->arrow_node[3], priv->arrow_node[2]);
+                  else
+                    gtk_css_node_insert_after (priv->tabs_node, priv->arrow_node[3], gtk_css_node_get_last_child (priv->tabs_node));
+                  break;
+
+                default:
+                  g_assert_not_reached ();
+                  break;
+                }
+
+              g_object_unref (priv->arrow_node[i]);
+           }
+        }
+      else
+        {
+          if (priv->arrow_node[i])
+            {
+              gtk_css_node_set_parent (priv->arrow_node[i], NULL);
+              priv->arrow_node[i] = NULL;
+            }
+        }
+    }
+}
+
+static void
 gtk_notebook_style_updated (GtkWidget *widget)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GtkNotebookPrivate *priv = notebook->priv;
-
   gboolean has_before_previous;
   gboolean has_before_next;
   gboolean has_after_previous;
@@ -3623,6 +3802,9 @@ gtk_notebook_style_updated (GtkWidget *widget)
   priv->has_before_next = has_before_next;
   priv->has_after_previous = has_after_previous;
   priv->has_after_next = has_after_next;
+
+  update_arrow_nodes (notebook);
+  update_arrow_state (notebook);
 
   GTK_WIDGET_CLASS (gtk_notebook_parent_class)->style_updated (widget);
 }
@@ -3818,7 +4000,7 @@ gtk_notebook_drag_motion (GtkWidget      *widget,
   arrow = gtk_notebook_get_arrow (notebook,
                                   x + allocation.x,
                                   y + allocation.y);
-  if (arrow)
+  if (arrow != ARROW_NONE)
     {
       priv->click_child = arrow;
       gtk_notebook_set_scroll_timer (notebook);
@@ -4653,6 +4835,7 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
   GtkNotebookPage *page;
   gint nchildren;
   GList *list;
+  GtkCssNode *sibling;
 
   gtk_widget_freeze_child_notify (child);
 
@@ -4668,9 +4851,16 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
   page->cssnode = gtk_css_node_new ();
   gtk_css_node_set_name (page->cssnode, I_("tab"));
   gtk_css_node_set_state (page->cssnode, gtk_css_node_get_state (priv->tabs_node));
-  gtk_css_node_insert_after (priv->tabs_node,
-                             page->cssnode,
-                             position > 0 ? GTK_NOTEBOOK_PAGE (g_list_nth (priv->children, position - 1))->cssnode : NULL);
+  g_signal_connect_object (page->cssnode, "style-changed", G_CALLBACK (node_style_changed_cb), notebook, 0);
+
+  if (position > 0)
+    sibling = GTK_NOTEBOOK_PAGE (g_list_nth (priv->children, position - 1))->cssnode;
+  else if (priv->arrow_node[ARROW_RIGHT_BEFORE])
+    sibling = priv->arrow_node[ARROW_RIGHT_BEFORE];
+  else
+    sibling = priv->arrow_node[ARROW_LEFT_BEFORE];
+
+  gtk_css_node_insert_after (priv->tabs_node, page->cssnode, sibling);
 
   if (!tab_label)
     page->default_tab = TRUE;
@@ -4899,6 +5089,8 @@ static void
 gtk_notebook_redraw_arrows (GtkNotebook *notebook)
 {
   GtkNotebookPrivate *priv = notebook->priv;
+
+  update_arrow_state (notebook);
 
   if (gtk_widget_get_mapped (GTK_WIDGET (notebook)) &&
       gtk_notebook_show_arrows (notebook))
@@ -5543,10 +5735,8 @@ gtk_notebook_draw_arrow (GtkNotebook      *notebook,
 {
   GtkNotebookPrivate *priv = notebook->priv;
   GtkStyleContext *context;
-  GtkStateFlags state = 0;
   GtkWidget *widget;
   GdkRectangle arrow_rect;
-  gboolean is_rtl, left;
   gint scroll_arrow_hlength;
   gint scroll_arrow_vlength;
   gint arrow_size;
@@ -5554,32 +5744,13 @@ gtk_notebook_draw_arrow (GtkNotebook      *notebook,
 
   widget = GTK_WIDGET (notebook);
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
 
   gtk_notebook_get_arrow_rect (notebook, &arrow_rect, nbarrow);
-
-  is_rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
-  left = (ARROW_IS_LEFT (nbarrow) && !is_rtl) ||
-         (!ARROW_IS_LEFT (nbarrow) && is_rtl);
 
   gtk_widget_style_get (widget,
                         "scroll-arrow-hlength", &scroll_arrow_hlength,
                         "scroll-arrow-vlength", &scroll_arrow_vlength,
                         NULL);
-
-  if (priv->focus_tab &&
-      !gtk_notebook_search_page (notebook, priv->focus_tab,
-                                 left ? STEP_PREV : STEP_NEXT, TRUE))
-    {
-      state |= GTK_STATE_FLAG_INSENSITIVE;
-    }
-  else if (priv->in_child == nbarrow)
-    {
-      state |= GTK_STATE_FLAG_PRELIGHT;
-
-      if (priv->click_child == nbarrow)
-        state |= GTK_STATE_FLAG_ACTIVE;
-    }
 
   if (priv->tab_pos == GTK_POS_LEFT ||
       priv->tab_pos == GTK_POS_RIGHT)
@@ -5593,8 +5764,7 @@ gtk_notebook_draw_arrow (GtkNotebook      *notebook,
       arrow_size = scroll_arrow_hlength;
     }
 
-  gtk_style_context_save (context);
-  gtk_style_context_set_state (context, state);
+  gtk_style_context_save_to_node (context, priv->arrow_node[nbarrow]);
 
   gtk_render_arrow (context, cr, angle,
                     arrow_rect.x, arrow_rect.y,
@@ -7597,15 +7767,18 @@ gtk_notebook_set_scrollable (GtkNotebook *notebook,
 
   scrollable = (scrollable != FALSE);
 
-  if (scrollable != priv->scrollable)
-    {
-      priv->scrollable = scrollable;
+  if (priv->scrollable == scrollable)
+    return;
 
-      if (gtk_widget_get_visible (GTK_WIDGET (notebook)))
-        gtk_widget_queue_resize (GTK_WIDGET (notebook));
+  priv->scrollable = scrollable;
 
-      g_object_notify_by_pspec (G_OBJECT (notebook), properties[PROP_SCROLLABLE]);
-    }
+  update_arrow_nodes (notebook);
+  update_arrow_state (notebook);
+
+  if (gtk_widget_get_visible (GTK_WIDGET (notebook)))
+    gtk_widget_queue_resize (GTK_WIDGET (notebook));
+
+  g_object_notify_by_pspec (G_OBJECT (notebook), properties[PROP_SCROLLABLE]);
 }
 
 /**
@@ -8055,6 +8228,7 @@ gtk_notebook_child_reordered (GtkNotebook     *notebook,
 {
   GtkNotebookPrivate *priv = notebook->priv;
   GList *list;
+  GtkCssNode *sibling;
 
   list = g_list_find (priv->children, page);
 
@@ -8068,9 +8242,14 @@ gtk_notebook_child_reordered (GtkNotebook     *notebook,
       gtk_notebook_menu_item_create (notebook, list);
     }
 
-  gtk_css_node_insert_after (priv->tabs_node,
-                             page->cssnode,
-                             list->prev ? GTK_NOTEBOOK_PAGE (list->prev)->cssnode : NULL);
+  if (list->prev)
+    sibling = GTK_NOTEBOOK_PAGE (list->prev)->cssnode;
+  else if (priv->arrow_node[ARROW_RIGHT_BEFORE])
+    sibling = priv->arrow_node[ARROW_RIGHT_BEFORE];
+  else
+    sibling = priv->arrow_node[ARROW_LEFT_BEFORE];
+
+  gtk_css_node_insert_after (priv->tabs_node, page->cssnode, sibling);
   gtk_notebook_update_labels (notebook);
 }
 
