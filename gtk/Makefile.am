@@ -542,6 +542,7 @@ gtk_private_h_sources =		\
 	gtktoolbarprivate.h	\
 	gtktoolpaletteprivate.h	\
 	gtktooltipprivate.h	\
+	gtktooltipwindowprivate.h \
 	gtktreedatalist.h	\
 	gtktreeprivate.h	\
 	gtkwidgetprivate.h	\
@@ -871,6 +872,7 @@ gtk_base_c_sources = 		\
 	gtktoolpalette.c	\
 	gtktoolshell.c		\
 	gtktooltip.c		\
+	gtktooltipwindow.c	\
 	gtktrashmonitor.c	\
 	gtktreedatalist.c	\
 	gtktreednd.c		\
