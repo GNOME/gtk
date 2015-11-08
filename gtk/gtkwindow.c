@@ -2346,9 +2346,9 @@ gtk_window_set_title (GtkWindow   *window,
  *
  * Retrieves the title of the window. See gtk_window_set_title().
  *
- * Returns: the title of the window, or %NULL if none has
- *    been set explicitly. The returned string is owned by the widget
- *    and must not be modified or freed.
+ * Returns: (nullable): the title of the window, or %NULL if none has
+ * been set explicitly. The returned string is owned by the widget
+ * and must not be modified or freed.
  **/
 const gchar *
 gtk_window_get_title (GtkWindow *window)
@@ -2509,9 +2509,8 @@ gtk_window_set_startup_id (GtkWindow   *window,
  * Returns the role of the window. See gtk_window_set_role() for
  * further explanation.
  *
- * Returns: the role of the window if set, or %NULL. The
- *   returned is owned by the widget and must not be modified
- *   or freed.
+ * Returns: (nullable): the role of the window if set, or %NULL. The
+ * returned is owned by the widget and must not be modified or freed.
  **/
 const gchar *
 gtk_window_get_role (GtkWindow *window)
@@ -2663,10 +2662,11 @@ gtk_window_set_default (GtkWindow *window,
  * gtk_window_get_default_widget:
  * @window: a #GtkWindow
  *
- * Returns the default widget for @window. See gtk_window_set_default()
- * for more details.
+ * Returns the default widget for @window. See
+ * gtk_window_set_default() for more details.
  *
- * Returns: (transfer none): the default widget, or %NULL if there is none.
+ * Returns: (nullable) (transfer none): the default widget, or %NULL
+ * if there is none.
  *
  * Since: 2.14
  **/
@@ -2953,7 +2953,8 @@ gtk_window_activate_focus (GtkWindow *window)
  * is not focused then  `gtk_widget_has_focus (widget)` will
  * not be %TRUE for the widget.
  *
- * Returns: (transfer none): the currently focused widget, or %NULL if there is none.
+ * Returns: (nullable) (transfer none): the currently focused widget,
+ * or %NULL if there is none.
  **/
 GtkWidget *
 gtk_window_get_focus (GtkWindow *window)
@@ -3298,8 +3299,8 @@ gtk_window_set_transient_for  (GtkWindow *window,
  * Fetches the transient parent for this window. See
  * gtk_window_set_transient_for().
  *
- * Returns: (transfer none): the transient parent for this window, or %NULL
- *    if no transient parent has been set.
+ * Returns: (nullable) (transfer none): the transient parent for this
+ * window, or %NULL if no transient parent has been set.
  **/
 GtkWindow *
 gtk_window_get_transient_for (GtkWindow *window)
@@ -3372,8 +3373,8 @@ gtk_window_set_attached_to (GtkWindow *window,
  * Fetches the attach widget for this window. See
  * gtk_window_set_attached_to().
  *
- * Returns: (transfer none): the widget where the window is attached,
- *   or %NULL if the window is not attached to any widget.
+ * Returns: (nullable) (transfer none): the widget where the window
+ * is attached, or %NULL if the window is not attached to any widget.
  *
  * Since: 3.4
  **/
@@ -3436,7 +3437,7 @@ gtk_window_get_opacity (GtkWindow *window)
  *
  * Gets the #GtkApplication associated with the window (if any).
  *
- * Returns: (transfer none): a #GtkApplication, or %NULL
+ * Returns: (nullable) (transfer none): a #GtkApplication, or %NULL
  *
  * Since: 3.0
  **/
@@ -4182,7 +4183,7 @@ out:
  * Returns the custom titlebar that has been set with
  * gtk_window_set_titlebar().
  *
- * Returns: (transfer none): the custom titlebar, or %NULL
+ * Returns: (nullable) (transfer none): the custom titlebar, or %NULL
  *
  * Since: 3.16
  */
@@ -4790,7 +4791,7 @@ gtk_window_set_icon_name (GtkWindow   *window,
  * Returns the name of the themed icon for the window,
  * see gtk_window_set_icon_name().
  *
- * Returns: the icon name or %NULL if the window has 
+ * Returns: (nullable): the icon name or %NULL if the window has
  * no themed icon
  *
  * Since: 2.6
