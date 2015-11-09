@@ -386,6 +386,12 @@ gtk_hiding_box_get_preferred_height (GtkWidget *widget,
     }
 }
 
+static GtkSizeRequestMode
+gtk_hiding_box_get_request_mode (GtkWidget *self)
+{
+  return GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT;
+}
+
 static void
 gtk_hiding_box_init (GtkHidingBox *box)
 {
@@ -409,6 +415,7 @@ gtk_hiding_box_class_init (GtkHidingBoxClass *class)
   widget_class->size_allocate = gtk_hiding_box_size_allocate;
   widget_class->get_preferred_width = gtk_hiding_box_get_preferred_width;
   widget_class->get_preferred_height = gtk_hiding_box_get_preferred_height;
+  widget_class->get_request_mode = gtk_hiding_box_get_request_mode;
 
   container_class->add = gtk_hiding_box_add;
   container_class->remove = gtk_hiding_box_remove;
