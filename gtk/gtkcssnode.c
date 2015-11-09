@@ -1005,8 +1005,11 @@ gtk_css_node_set_visible (GtkCssNode *cssnode,
                                                     | (cssnode->previous_sibling ? 0 : GTK_CSS_CHANGE_FIRST_CHILD));
 
   if (cssnode->previous_sibling)
-    gtk_css_node_invalidate (cssnode->previous_sibling, GTK_CSS_CHANGE_NTH_LAST_CHILD
-                                                        | (cssnode->next_sibling ? 0 : GTK_CSS_CHANGE_LAST_CHILD));
+    {
+      if (cssnode->next_sibling)
+        gtk_css_node_invalidate (cssnode->previous_sibling, GTK_CSS_CHANGE_LAST_CHILD);
+      gtk_css_node_invalidate (cssnode->parent->first_child, GTK_CSS_CHANGE_NTH_LAST_CHILD);
+    }
 }
 
 gboolean
