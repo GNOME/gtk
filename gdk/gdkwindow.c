@@ -5761,11 +5761,16 @@ gdk_window_move_resize_internal (GdkWindow *window,
   if (gdk_window_is_viewable (window) &&
       !window->input_only)
     {
+      GdkRectangle r;
+
       expose = TRUE;
 
-      old_region = cairo_region_copy (window->clip_region);
-      /* Adjust regions to parent window coords */
-      cairo_region_translate (old_region, window->x, window->y);
+      r.x = window->x;
+      r.y = window->y;
+      r.width = window->width;
+      r.height = window->height;
+
+      old_region = cairo_region_create_rectangle (&r);
     }
 
   /* Set the new position and size */
@@ -5801,9 +5806,14 @@ gdk_window_move_resize_internal (GdkWindow *window,
 
   if (expose)
     {
-      new_region = cairo_region_copy (window->clip_region);
-      /* Adjust region to parent window coords */
-      cairo_region_translate (new_region, window->x, window->y);
+      GdkRectangle r;
+
+      r.x = window->x;
+      r.y = window->y;
+      r.width = window->width;
+      r.height = window->height;
+
+      new_region = cairo_region_create_rectangle (&r);
 
       cairo_region_union (new_region, old_region);
 
@@ -5940,7 +5950,7 @@ gdk_window_scroll (GdkWindow *window,
 
   move_native_children (window);
 
-  gdk_window_invalidate_region_full (window, window->clip_region, TRUE);
+  gdk_window_invalidate_rect_full (window, NULL, TRUE);
 
   _gdk_synthesize_crossing_events_for_geometry_change (window);
 }
