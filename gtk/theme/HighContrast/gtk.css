@@ -1376,39 +1376,49 @@ notebook {
     border: 1px solid gray; }
     notebook.frame:backdrop {
       border-color: #8d8d8d; }
-  notebook.header {
+  notebook header {
     background-color: #d9d9d9; }
-    .frame notebook.header {
+    .frame notebook header {
       border: 1px solid gray; }
-      .frame notebook.header.top {
+      .frame notebook header.top {
         border-bottom-width: 0; }
-      .frame notebook.header.bottom {
+      .frame notebook header.bottom {
         border-top-width: 0; }
-      .frame notebook.header.right {
+      .frame notebook header.right {
         border-left-width: 0; }
-      .frame notebook.header.left {
+      .frame notebook header.left {
         border-right-width: 0; }
-      .frame notebook.header:backdrop {
+      .frame notebook header:backdrop {
         border-color: #8d8d8d; }
-    notebook.header.top {
+    notebook header.top {
       box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.15), inset 0 -1px gray; }
-      notebook.header.top:backdrop {
+      notebook header.top:backdrop {
         box-shadow: inset 0 -1px #8d8d8d; }
-    notebook.header.bottom {
+    notebook header.bottom {
       box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.15), inset 0 1px gray; }
-      notebook.header.bottom:backdrop {
+      notebook header.bottom:backdrop {
         box-shadow: inset 0 1px #8d8d8d; }
-    notebook.header.right {
+    notebook header.right {
       box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.15), inset 1px 0 gray; }
-      notebook.header.right:backdrop {
+      notebook header.right:backdrop {
         box-shadow: inset 1px 0 #8d8d8d; }
-    notebook.header.left {
+    notebook header.left {
       box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.15), inset -1px 0 gray; }
-      notebook.header.left:backdrop {
+      notebook header.left:backdrop {
         box-shadow: inset -1px 0 #8d8d8d; }
-    notebook.header:backdrop {
+    notebook header:backdrop {
       background-color: #d7d7d7;
       box-shadow: none; }
+    notebook header tabs arrow {
+      color: gray; }
+      notebook header tabs arrow:hover {
+        color: #404040; }
+      notebook header tabs arrow:active {
+        color: #000; }
+      notebook header tabs arrow:insensitive {
+        color: rgba(128, 128, 128, 0.3); }
+      notebook header tabs arrow:backdrop {
+        color: rgba(0, 0, 0, 0.4); }
   notebook header.top tab {
     padding: 8px 20px;
     border-bottom-width: 3px; }
