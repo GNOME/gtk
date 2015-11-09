@@ -226,6 +226,13 @@ GtkApplication * gtk_builder_get_application     (GtkBuilder     *builder);
 #define GTK_BUILDER_WARN_INVALID_CHILD_TYPE(object, type) \
   g_warning ("'%s' is not a valid child type of '%s'", type, g_type_name (G_OBJECT_TYPE (object)))
 
+GDK_AVAILABLE_IN_3_18
+guint     gtk_builder_extend_with_template  (GtkBuilder    *builder,
+                                             GtkWidget     *widget,
+                                             GType          template_type,                                                          const gchar   *buffer,
+                                             gsize          length,
+                                             GError       **error);
+
 G_END_DECLS
 
 #endif /* __GTK_BUILDER_H__ */
