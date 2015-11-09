@@ -124,9 +124,8 @@
  * to the tabs node. If the notebook is scrollable, CSS nodes with
  * name arrow are placed as first and last child of the tabs node.
  *
- * The main node gets the .frame style class when rendering the
- * background of a notebook with border. It gets the .header
- * style class for rendering the tab area background.
+ * The main node gets the .frame style class when the notebook
+ * has a border (see gtk_notebook_set_has_border()).
  *
  * The header node gets one of the style class .top, .bottom,
  * .left or .right, depending on where the tabs are placed. For
