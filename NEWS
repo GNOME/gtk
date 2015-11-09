@@ -1,3 +1,38 @@
+Overview of Changes in GTK+ 3.18.3
+==================================
+
+* Bug fixes:
+ 735341 Fix/improve gtk_text_buffer_get_iter_at_*() functions
+ 753992 im-quartz discard_preedit segmentation fault
+ 755654 mmc/sd drive does not appear in Nautilus
+ 756160 Crash/segfault when dragging tabs (after 2nd/3rd/4th+ drag)
+ 756385 No more content in Anjuta project wizard
+ 756449 GtkTextHandle artifacts under Wayland
+ 756496 wayland: Make it possible to use a window type hint to map as a subsurface
+ 756505 Entering a dot removes all other characters from input
+ 756568 Some improvements to gtkplacesview
+ 756589 Improve the heuristics for external drives
+ 756625 segfault in captured_event_cb
+ 756751 Keypad decimal point patch prevents entry of comma in german keypad layout
+ 756780 wayland: Fix GtkTreeView's search window
+ 756886 The GtkWindow patch here is necessary to make transparent terminals work...
+ 757147 gdk_pixbuf_get_from_window() doesn't honor device scale
+ 757221 Memory leak in gtk-3.0.m4
+ 757298 nautilus crashes on drag'n'drop over 'side bar'
+ 757303 Vertically align path labels in Other Locations view
+ 757324 win32: handle WM_DISPLAYCHANGE globally
+ 757358 single touch devices are not detected as touch devices
+ 757377 settings.ini is only loaded from first XDG_CONFIG_DIRS entry
+ 757544 GtkHeaderBar subclass template and <child type="title"> does not work
+
+* Translation updates:
+ Basque
+ Czech
+ Icelandic
+ Norwegian bokmål
+ Slovak
+
+
 Overview of Changes in GTK+ 3.18.2
 ==================================
 
