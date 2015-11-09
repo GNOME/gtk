@@ -1034,7 +1034,7 @@ my_tv_draw_layer (GtkTextView      *widget,
 {
   MyTextView *tv = (MyTextView *)widget;
 
-  if (layer == GTK_TEXT_VIEW_LAYER_BELOW && tv->surface)
+  if (layer == GTK_TEXT_VIEW_LAYER_BELOW_TEXT && tv->surface)
     {
       cairo_save (cr);
       cairo_set_source_surface (cr, tv->surface, 0.0, 0.0);

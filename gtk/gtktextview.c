@@ -5813,6 +5813,11 @@ draw_text (cairo_t  *cr,
       cairo_save (cr);
       GTK_TEXT_VIEW_GET_CLASS (text_view)->draw_layer (text_view, GTK_TEXT_VIEW_LAYER_BELOW, cr);
       cairo_restore (cr);
+
+      cairo_save (cr);
+      cairo_translate (cr, -text_view->priv->xoffset, -text_view->priv->yoffset);
+      GTK_TEXT_VIEW_GET_CLASS (text_view)->draw_layer (text_view, GTK_TEXT_VIEW_LAYER_BELOW_TEXT, cr);
+      cairo_restore (cr);
     }
 
   gtk_text_view_paint (widget, cr);
@@ -5821,6 +5826,11 @@ draw_text (cairo_t  *cr,
     {
       cairo_save (cr);
       GTK_TEXT_VIEW_GET_CLASS (text_view)->draw_layer (text_view, GTK_TEXT_VIEW_LAYER_ABOVE, cr);
+      cairo_restore (cr);
+
+      cairo_save (cr);
+      cairo_translate (cr, -text_view->priv->xoffset, -text_view->priv->yoffset);
+      GTK_TEXT_VIEW_GET_CLASS (text_view)->draw_layer (text_view, GTK_TEXT_VIEW_LAYER_ABOVE_TEXT, cr);
       cairo_restore (cr);
     }
 }

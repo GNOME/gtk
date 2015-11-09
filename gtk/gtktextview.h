@@ -69,8 +69,10 @@ typedef enum
 
 /**
  * GtkTextViewLayer:
- * @GTK_TEXT_VIEW_LAYER_BELOW: The layer rendered below the text (but above the background).
- * @GTK_TEXT_VIEW_LAYER_ABOVE: The layer rendered above the text.
+ * @GTK_TEXT_VIEW_LAYER_BELOW: Old deprecated layer, use %GTK_TEXT_VIEW_LAYER_BELOW_TEXT instead
+ * @GTK_TEXT_VIEW_LAYER_ABOVE: Old deprecated layer, use %GTK_TEXT_VIEW_LAYER_ABOVE_TEXT instead
+ * @GTK_TEXT_VIEW_LAYER_BELOW_TEXT: The layer rendered below the text (but above the background).  Since: 3.20
+ * @GTK_TEXT_VIEW_LAYER_ABOVE_TEXT: The layer rendered above the text.  Since: 3.20
  *
  * Used to reference the layers of #GtkTextView for the purpose of customized
  * drawing with the ::draw_layer vfunc.
@@ -78,7 +80,9 @@ typedef enum
 typedef enum
 {
   GTK_TEXT_VIEW_LAYER_BELOW,
-  GTK_TEXT_VIEW_LAYER_ABOVE
+  GTK_TEXT_VIEW_LAYER_ABOVE,
+  GTK_TEXT_VIEW_LAYER_BELOW_TEXT,
+  GTK_TEXT_VIEW_LAYER_ABOVE_TEXT
 } GtkTextViewLayer;
 
 /**
@@ -149,7 +153,10 @@ struct _GtkTextView
  * @draw_layer: The draw_layer vfunc is called before and after the text
  *   view is drawing its own text. Applications can override this vfunc
  *   in a subclass to draw customized content underneath or above the
- *   text. Since: 3.14
+ *   text. In the %GTK_TEXT_VIEW_LAYER_BELOW_TEXT and %GTK_TEXT_VIEW_LAYER_ABOVE_TEXT
+ *   the drawing is done in the buffer coordinate space, but the older (deprecated)
+ *   layers %GTK_TEXT_VIEW_LAYER_BELOW and %GTK_TEXT_VIEW_LAYER_ABOVE work in viewport
+ *   coordinates, which makes them unnecessarily hard to use. Since: 3.14
  * @extend_selection: The class handler for the #GtkTextView::extend-selection
  *   signal. Since 3.16
  */
