@@ -34,11 +34,16 @@ _gtk_css_change_for_sibling (GtkCssChange match)
                     | GTK_CSS_CHANGE_NTH_LAST_CHILD \
                     | GTK_CSS_CHANGE_STATE )
 
+#define KEEP_STATES ( ~(BASE_STATES|GTK_CSS_CHANGE_SOURCE|GTK_CSS_CHANGE_PARENT_STYLE) \
+                    | GTK_CSS_CHANGE_NTH_CHILD \
+                    | GTK_CSS_CHANGE_NTH_LAST_CHILD)
+
 #define SIBLING_SHIFT 8
 
-  return (match & ~(BASE_STATES|GTK_CSS_CHANGE_SOURCE|GTK_CSS_CHANGE_PARENT_STYLE)) | ((match & BASE_STATES) << SIBLING_SHIFT);
+  return (match & KEEP_STATES) | ((match & BASE_STATES) << SIBLING_SHIFT);
 
 #undef BASE_STATES
+#undef KEEP_STATES
 #undef SIBLING_SHIFT
 }
 
