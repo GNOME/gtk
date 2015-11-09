@@ -236,12 +236,8 @@ gtk_render_arrow (GtkStyleContext *context,
   cairo_save (cr);
   cairo_new_path (cr);
 
-  gtk_style_context_save (context);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_ARROW);
-
   gtk_do_render_arrow (context, cr, angle, x, y, size);
 
-  gtk_style_context_restore (context);
   cairo_restore (cr);
 }
 
