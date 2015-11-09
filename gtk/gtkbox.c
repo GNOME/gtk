@@ -1437,47 +1437,47 @@ gtk_box_buildable_init (GtkBuildableIface *iface)
   iface->add_child = gtk_box_buildable_add_child;
 }
 
-typedef struct {
-  GtkCssNode *parent;
-  GtkCssNode *previous;
-  gboolean    reverse;
-} InvalidateOrderData;
-
 static void
-gtk_box_invalidate_order_foreach (GtkWidget *widget,
-                                  gpointer   datap)
+gtk_box_update_child_css_position (GtkBox      *box,
+                                   GtkBoxChild *child_info)
 {
-  InvalidateOrderData *data = datap;
-  GtkCssNode *cur = gtk_widget_get_css_node (widget);
+  GtkBoxPrivate *priv = box->priv;
+  GtkBoxChild *prev;
+  gboolean reverse;
+  GList *l;
 
-  if (data->reverse)
-    gtk_css_node_insert_before (data->parent, cur, data->previous);
+  prev = NULL;
+  for (l = priv->children; l->data != child_info; l = l->next)
+    {
+      GtkBoxChild *cur = l->data;
+
+      if (cur->pack == child_info->pack)
+        prev = cur;
+    }
+
+  reverse = child_info->pack == GTK_PACK_END;
+  if (box->priv->orientation == GTK_ORIENTATION_HORIZONTAL &&
+      gtk_widget_get_direction (GTK_WIDGET (box)) == GTK_TEXT_DIR_RTL)
+    reverse = !reverse;
+
+  if (reverse)
+    gtk_css_node_insert_before (gtk_widget_get_css_node (GTK_WIDGET (box)),
+                                gtk_widget_get_css_node (child_info->widget),
+                                prev ? gtk_widget_get_css_node (prev->widget) : NULL);
   else
-    gtk_css_node_insert_after (data->parent, cur, data->previous);
-
-  data->previous = cur;
-}
-
-static void
-gtk_box_invalidate_order (GtkBox *box)
-{
-  InvalidateOrderData data;
-
-  data.parent = gtk_widget_get_css_node (GTK_WIDGET (box));
-  data.previous = NULL;
-  data.reverse = box->priv->orientation == GTK_ORIENTATION_HORIZONTAL
-                 && gtk_widget_get_direction (GTK_WIDGET (box)) == GTK_TEXT_DIR_RTL;
-
-  gtk_container_foreach (GTK_CONTAINER (box),
-                         gtk_box_invalidate_order_foreach,
-                         &data);
+    gtk_css_node_insert_after (gtk_widget_get_css_node (GTK_WIDGET (box)),
+                               gtk_widget_get_css_node (child_info->widget),
+                               prev ? gtk_widget_get_css_node (prev->widget) : NULL);
 }
 
 static void
 gtk_box_direction_changed (GtkWidget        *widget,
                            GtkTextDirection  previous_direction)
 {
-  gtk_box_invalidate_order (GTK_BOX (widget));
+  GtkBox *box = GTK_BOX (widget);
+
+  if (box->priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+    gtk_css_node_reverse_children (gtk_widget_get_css_node (widget));
 }
 
 static GtkBoxChild *
@@ -1504,11 +1504,11 @@ gtk_box_pack (GtkBox      *box,
   child_info->pack = pack_type;
 
   private->children = g_list_append (private->children, child_info);
+  gtk_box_update_child_css_position (box, child_info);
 
   gtk_widget_freeze_child_notify (child);
 
   gtk_widget_set_parent (child, GTK_WIDGET (box));
-  gtk_box_invalidate_order (box);
 
   gtk_container_child_notify_by_pspec (container, child, child_props[CHILD_PROP_EXPAND]);
   gtk_container_child_notify_by_pspec (container, child, child_props[CHILD_PROP_FILL]);
@@ -2337,12 +2337,12 @@ gtk_box_reorder_child (GtkBox    *box,
     new_link = g_list_nth (priv->children, position);
 
   priv->children = g_list_insert_before (priv->children, new_link, child_info);
+  gtk_box_update_child_css_position (box, child_info);
 
   gtk_container_child_notify_by_pspec (GTK_CONTAINER (box), child, child_props[CHILD_PROP_POSITION]);
   if (_gtk_widget_get_visible (child) &&
       _gtk_widget_get_visible (GTK_WIDGET (box)))
     {
-      gtk_box_invalidate_order (box);
       gtk_widget_queue_resize (child);
     }
 }
@@ -2466,8 +2466,8 @@ gtk_box_set_child_packing (GtkBox      *box,
       if (child_info->pack != pack_type)
         {
 	  child_info->pack = pack_type;
+          gtk_box_update_child_css_position (box, child_info);
           gtk_container_child_notify_by_pspec (GTK_CONTAINER (box), child, child_props[CHILD_PROP_PACK_TYPE]);
-          gtk_box_invalidate_order (box);
         }
 
       if (_gtk_widget_get_visible (child) &&
@@ -2534,7 +2534,6 @@ gtk_box_remove (GtkContainer *container,
 	   */
 	  if (was_visible)
             {
-              gtk_box_invalidate_order (box);
 	      gtk_widget_queue_resize (GTK_WIDGET (container));
             }
 
