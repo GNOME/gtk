@@ -28,6 +28,10 @@
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
+#include "gtkcssnodeprivate.h"
+#include "gtkstylecontextprivate.h"
+#include "gtkwidgetprivate.h"
+
 
 #define ANIMATION_TIMEOUT        50
 #define ANIMATION_DURATION      (ANIMATION_TIMEOUT * 4)
@@ -81,6 +85,8 @@ struct _GtkToolItemGroupPrivate
 {
   GtkWidget         *header;
   GtkWidget         *label_widget;
+
+  GtkCssNode        *arrow_node;
 
   GList             *children;
 
@@ -276,21 +282,14 @@ gtk_tool_item_group_header_draw_cb (GtkWidget *widget,
   gint x, y, width, height;
   GtkTextDirection direction;
   GtkStyleContext *context;
-  GtkStateFlags state = 0;
 
   orientation = gtk_tool_shell_get_orientation (GTK_TOOL_SHELL (group));
   direction = gtk_widget_get_direction (widget);
   width = gtk_widget_get_allocated_width (widget);
   height = gtk_widget_get_allocated_height (widget);
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
 
-  if (!priv->collapsed)
-    state |= GTK_STATE_FLAG_CHECKED;
-
-  gtk_style_context_save (context);
-  gtk_style_context_set_state (context, state);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_EXPANDER);
+  gtk_style_context_save_to_node (context, priv->arrow_node);
 
   if (GTK_ORIENTATION_VERTICAL == orientation)
     {
@@ -386,6 +385,7 @@ gtk_tool_item_group_init (GtkToolItemGroup *group)
 {
   GtkWidget *alignment;
   GtkToolItemGroupPrivate* priv;
+  GtkCssNode *widget_node;
 
   gtk_widget_set_redraw_on_allocate (GTK_WIDGET (group), FALSE);
 
@@ -419,6 +419,13 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   g_signal_connect (priv->header, "clicked",
                     G_CALLBACK (gtk_tool_item_group_header_clicked_cb),
                     group);
+
+  widget_node = gtk_widget_get_css_node (GTK_WIDGET (group));
+  priv->arrow_node = gtk_css_node_new ();
+  gtk_css_node_set_name (priv->arrow_node, I_("arrow"));
+  gtk_css_node_set_parent (priv->arrow_node, widget_node);
+  gtk_css_node_set_state (priv->arrow_node, gtk_css_node_get_state (widget_node));
+  g_object_unref (priv->arrow_node);
 }
 
 static void
@@ -1281,6 +1288,29 @@ gtk_tool_item_group_style_updated (GtkWidget *widget)
 }
 
 static void
+update_arrow_state (GtkToolItemGroup *group)
+{
+  GtkToolItemGroupPrivate *priv = group->priv;
+  GtkStateFlags state;
+
+  state = gtk_widget_get_state_flags (GTK_WIDGET (group));
+
+  if (priv->collapsed)
+    state &= ~GTK_STATE_FLAG_CHECKED;
+  else
+    state |= GTK_STATE_FLAG_CHECKED;
+
+  gtk_css_node_set_state (priv->arrow_node, state);
+}
+
+static void
+gtk_tool_item_group_state_flags_changed (GtkWidget     *widget,
+                                         GtkStateFlags  previous_flags)
+{
+  update_arrow_state (GTK_TOOL_ITEM_GROUP (widget));
+}
+
+static void
 gtk_tool_item_group_add (GtkContainer *container,
                          GtkWidget    *widget)
 {
@@ -1595,6 +1625,7 @@ gtk_tool_item_group_class_init (GtkToolItemGroupClass *cls)
   wclass->style_updated        = gtk_tool_item_group_style_updated;
   wclass->screen_changed       = gtk_tool_item_group_screen_changed;
   wclass->draw                 = gtk_tool_item_group_draw;
+  wclass->state_flags_changed  = gtk_tool_item_group_state_flags_changed;
 
   cclass->add                = gtk_tool_item_group_add;
   cclass->remove             = gtk_tool_item_group_remove;
@@ -1942,6 +1973,7 @@ gtk_tool_item_group_set_collapsed (GtkToolItemGroup *group,
         gtk_tool_item_group_force_expose (group);
 
       priv->collapsed = collapsed;
+      update_arrow_state (group);
       g_object_notify (G_OBJECT (group), "collapsed");
     }
 }
