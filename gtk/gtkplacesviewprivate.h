@@ -63,32 +63,23 @@ struct _GtkPlacesView
   GtkBox parent_instance;
 };
 
-GDK_AVAILABLE_IN_3_18
 GType              gtk_places_view_get_type                      (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_3_18
 GtkPlacesOpenFlags gtk_places_view_get_open_flags                (GtkPlacesView      *view);
-GDK_AVAILABLE_IN_3_18
 void               gtk_places_view_set_open_flags                (GtkPlacesView      *view,
                                                                   GtkPlacesOpenFlags  flags);
 
-GDK_AVAILABLE_IN_3_18
 const gchar*       gtk_places_view_get_search_query              (GtkPlacesView      *view);
-GDK_AVAILABLE_IN_3_18
 void               gtk_places_view_set_search_query              (GtkPlacesView      *view,
                                                                   const gchar        *query_text);
 
-GDK_AVAILABLE_IN_3_18
 gboolean           gtk_places_view_get_local_only                (GtkPlacesView         *view);
 
-GDK_AVAILABLE_IN_3_18
 void               gtk_places_view_set_local_only                (GtkPlacesView         *view,
                                                                   gboolean               local_only);
 
-GDK_AVAILABLE_IN_3_18
 gboolean           gtk_places_view_get_loading                   (GtkPlacesView         *view);
 
-GDK_AVAILABLE_IN_3_18
 GtkWidget *        gtk_places_view_new                           (void);
 
 G_END_DECLS
