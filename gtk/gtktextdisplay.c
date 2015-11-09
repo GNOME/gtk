@@ -183,7 +183,7 @@ gtk_text_renderer_prepare_run (PangoRenderer  *renderer,
   g_assert (appearance != NULL);
 
   context = gtk_widget_get_style_context (text_renderer->widget);
-  state   = gtk_widget_get_state_flags (text_renderer->widget);
+  state   = gtk_style_context_get_state (context);
 
   if (appearance->draw_bg && text_renderer->state == NORMAL)
     bg_rgba = appearance->rgba[0];
@@ -194,9 +194,14 @@ gtk_text_renderer_prepare_run (PangoRenderer  *renderer,
 
   if (text_renderer->state == SELECTED)
     {
+      gtk_style_context_save (context);
+
       state |= GTK_STATE_FLAG_SELECTED;
+      gtk_style_context_set_state (context, state);
 
       gtk_style_context_get (context, state, "color", &fg_rgba, NULL);
+
+      gtk_style_context_restore (context);
     }
   else if (text_renderer->state == CURSOR && gtk_widget_has_focus (text_renderer->widget))
     {
@@ -523,7 +528,7 @@ text_renderer_begin (GtkTextRenderer *text_renderer,
   gtk_style_context_save (context);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_VIEW);
 
-  state = gtk_widget_get_state_flags (widget);
+  state = gtk_style_context_get_state (context);
   gtk_style_context_get_color (context, state, &color);
 
   cairo_save (cr);
@@ -820,7 +825,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                 {
                   GdkRGBA color;
 
-                  state = gtk_widget_get_state_flags (text_renderer->widget);
+                  state = gtk_style_context_get_state (context);
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
                   gtk_style_context_get_background_color (context, state, &color);
 G_GNUC_END_IGNORE_DEPRECATIONS
