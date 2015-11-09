@@ -6722,10 +6722,8 @@ get_shadow_width (GtkWindow *window,
   if (!priv->decorated)
     return;
 
-  if (!priv->client_decorated)
-    return;
-
-  if (!(gtk_window_should_use_csd (window) &&
+  if (!priv->client_decorated &&
+      !(gtk_window_should_use_csd (window) &&
         gtk_window_supports_client_shadow (window)))
     return;
 
