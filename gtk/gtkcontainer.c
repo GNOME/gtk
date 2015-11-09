@@ -1869,7 +1869,7 @@ gtk_container_add (GtkContainer *container,
  * Note that @container will own a reference to @widget, and that this
  * may be the last reference held; so removing a widget from its
  * container can destroy that widget. If you want to use @widget
- * again, you need to add a reference to it while it’s not inside
+ * again, you need to add a reference to it before removing it from
  * a container, using g_object_ref(). If you don’t want to use @widget
  * again it’s usually more efficient to simply destroy it directly
  * using gtk_widget_destroy() since this will remove it from the
