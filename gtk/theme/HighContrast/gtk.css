@@ -108,6 +108,7 @@ textview text,
 
 .rubberband,
 rubberband,
+flowbox rubberband,
 treeview.view.rubberband {
   border: 1px solid #000;
   background-color: rgba(0, 0, 0, 0.2); }

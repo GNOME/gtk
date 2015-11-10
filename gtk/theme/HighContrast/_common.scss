@@ -126,6 +126,10 @@ rubberband {
   background-color: transparentize($selected_bg_color,0.8);
 }
 
+flowbox {
+  & rubberband { @extend rubberband; }
+}
+
 label {
   &:selected,
   &:selected:focus,
