@@ -3043,7 +3043,7 @@ infobar {
  * Tooltips *
  ************/
 
-.tooltip {
+tooltip {
   &.background {
     // background-color needs to be set this way otherwise it gets drawn twice
     // see https://bugzilla.gnome.org/show_bug.cgi?id=736155 for details.
@@ -3063,12 +3063,10 @@ infobar {
   decoration.csd {
     background-color: transparent;
   }
-}
-
-.tooltip * { //Yeah this is ugly
-  padding: 4px;
-  background-color: transparent;
-  color: inherit; // just to be sure
+  * { //Yeah this is ugly
+    padding: 4px;
+    background-color: transparent;
+  }
 }
 
 /*****************
@@ -3276,7 +3274,7 @@ decoration {
     box-shadow: 0 1px 2px transparentize(black, 0.8),
                 0 0 0 1px transparentize($_wm_border,0.1);
   }
-  .csd.tooltip & {
+  tooltip.csd & {
     border-radius: 5px;
     box-shadow: none;
   }
