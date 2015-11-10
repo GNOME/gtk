@@ -2782,8 +2782,7 @@ button.titlebutton {
 /**********************
  * Touch Copy & Paste *
  *********************/
-.entry.cursor-handle,
-.cursor-handle {
+cursor-handle {
   background-color: #fff;
   background-image: none;
   -gtk-icon-source: none;
@@ -2791,47 +2790,29 @@ button.titlebutton {
   outline-style: none;
   outline-color: transparent;
   border: 2px solid #000; }
-  .entry.cursor-handle.top:dir(ltr), .entry.cursor-handle.bottom:dir(rtl),
-  .cursor-handle.top:dir(ltr),
-  .cursor-handle.bottom:dir(rtl) {
+  cursor-handle.top:dir(ltr), cursor-handle.bottom:dir(rtl) {
     border-radius: 10px 0 0 0;
     padding-left: 10px; }
-  .entry.cursor-handle.bottom:dir(ltr), .entry.cursor-handle.top:dir(rtl),
-  .cursor-handle.bottom:dir(ltr),
-  .cursor-handle.top:dir(rtl) {
+  cursor-handle.bottom:dir(ltr), cursor-handle.top:dir(rtl) {
     border-radius: 0 10px 0 0;
     padding-right: 10px; }
-  .entry.cursor-handle.insertion-cursor:dir(ltr), .entry.cursor-handle.insertion-cursor:dir(rtl),
-  .cursor-handle.insertion-cursor:dir(ltr),
-  .cursor-handle.insertion-cursor:dir(rtl) {
+  cursor-handle.insertion-cursor:dir(ltr), cursor-handle.insertion-cursor:dir(rtl) {
     border-radius: 10px 10px 0 0; }
-  .entry.cursor-handle.top:hover:dir(ltr), .entry.cursor-handle.bottom:hover:dir(rtl),
-  .cursor-handle.top:hover:dir(ltr),
-  .cursor-handle.bottom:hover:dir(rtl) {
+  cursor-handle.top:hover:dir(ltr), cursor-handle.bottom:hover:dir(rtl) {
     border-radius: 10px 0 0 0;
     padding-left: 10px; }
-  .entry.cursor-handle.bottom:hover:dir(ltr), .entry.cursor-handle.top:hover:dir(rtl),
-  .cursor-handle.bottom:hover:dir(ltr),
-  .cursor-handle.top:hover:dir(rtl) {
+  cursor-handle.bottom:hover:dir(ltr), cursor-handle.top:hover:dir(rtl) {
     border-radius: 0 10px 0 0;
     padding-right: 10px; }
-  .entry.cursor-handle.insertion-cursor:hover:dir(ltr), .entry.cursor-handle.insertion-cursor:hover:dir(rtl),
-  .cursor-handle.insertion-cursor:hover:dir(ltr),
-  .cursor-handle.insertion-cursor:hover:dir(rtl) {
+  cursor-handle.insertion-cursor:hover:dir(ltr), cursor-handle.insertion-cursor:hover:dir(rtl) {
     border-radius: 10px 10px 0 0; }
-  .entry.cursor-handle.top:active:dir(ltr), .entry.cursor-handle.bottom:active:dir(rtl),
-  .cursor-handle.top:active:dir(ltr),
-  .cursor-handle.bottom:active:dir(rtl) {
+  cursor-handle.top:active:dir(ltr), cursor-handle.bottom:active:dir(rtl) {
     border-radius: 10px 0 0 0;
     padding-left: 10px; }
-  .entry.cursor-handle.bottom:active:dir(ltr), .entry.cursor-handle.top:active:dir(rtl),
-  .cursor-handle.bottom:active:dir(ltr),
-  .cursor-handle.top:active:dir(rtl) {
+  cursor-handle.bottom:active:dir(ltr), cursor-handle.top:active:dir(rtl) {
     border-radius: 0 10px 0 0;
     padding-right: 10px; }
-  .entry.cursor-handle.insertion-cursor:active:dir(ltr), .entry.cursor-handle.insertion-cursor:active:dir(rtl),
-  .cursor-handle.insertion-cursor:active:dir(ltr),
-  .cursor-handle.insertion-cursor:active:dir(rtl) {
+  cursor-handle.insertion-cursor:active:dir(ltr), cursor-handle.insertion-cursor:active:dir(rtl) {
     border-radius: 10px 10px 0 0; }
 
 /* Decouple the font of context menus from their entry/textview */

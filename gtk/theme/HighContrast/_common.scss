@@ -2505,8 +2505,7 @@ button.titlebutton {
  *********************/
 
 //touch selection handlebars for the Popover.osd above
-.entry.cursor-handle,
-.cursor-handle {
+cursor-handle {
   background-color: $bg_color;
   background-image: none;
   -gtk-icon-source: none;
