@@ -205,8 +205,6 @@ G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkTreeViewColumn, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkViewport, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkVolumeButton, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkWidget, g_object_unref)
-G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkWindow, g_object_unref)
-G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkWindowGroup, g_object_unref)
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkBorder, gtk_border_free)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkPaperSize, gtk_paper_size_free)
