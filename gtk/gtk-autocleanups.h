@@ -21,7 +21,6 @@
 
 #ifndef __GI_SCANNER__
 
-G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkAboutDialog, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkAccelLabel, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkAccelMap, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkAccessible, g_object_unref)
