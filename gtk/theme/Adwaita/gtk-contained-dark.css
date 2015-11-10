@@ -4473,53 +4473,34 @@ calendar:selected, label:selected, label:selected:focus, label:selected:hover, .
 /**********************
  * Touch Copy & Paste *
  *********************/
-entry.cursor-handle, spinbutton.cursor-handle,
-.cursor-handle {
+cursor-handle {
   background-color: transparent;
   background-image: none;
   box-shadow: none;
   border-style: none; }
-  entry.cursor-handle.top:dir(ltr), spinbutton.cursor-handle.top:dir(ltr), entry.cursor-handle.bottom:dir(rtl), spinbutton.cursor-handle.bottom:dir(rtl),
-  .cursor-handle.top:dir(ltr),
-  .cursor-handle.bottom:dir(rtl) {
+  cursor-handle.top:dir(ltr), cursor-handle.bottom:dir(rtl) {
     -gtk-icon-source: -gtk-scaled(url("assets/text-select-start-dark.png"), url("assets/text-select-start-dark@2.png"));
     padding-left: 10px; }
-  entry.cursor-handle.bottom:dir(ltr), spinbutton.cursor-handle.bottom:dir(ltr), entry.cursor-handle.top:dir(rtl), spinbutton.cursor-handle.top:dir(rtl),
-  .cursor-handle.bottom:dir(ltr),
-  .cursor-handle.top:dir(rtl) {
+  cursor-handle.bottom:dir(ltr), cursor-handle.top:dir(rtl) {
     -gtk-icon-source: -gtk-scaled(url("assets/text-select-end-dark.png"), url("assets/text-select-end-dark@2.png"));
     padding-right: 10px; }
-  entry.cursor-handle.insertion-cursor:dir(ltr), spinbutton.cursor-handle.insertion-cursor:dir(ltr), entry.cursor-handle.insertion-cursor:dir(rtl), spinbutton.cursor-handle.insertion-cursor:dir(rtl),
-  .cursor-handle.insertion-cursor:dir(ltr),
-  .cursor-handle.insertion-cursor:dir(rtl) {
+  cursor-handle.insertion-cursor:dir(ltr), cursor-handle.insertion-cursor:dir(rtl) {
     -gtk-icon-source: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-dark.png"), url("assets/slider-horz-scale-has-marks-above-dark@2.png")); }
-  entry.cursor-handle.top:hover:dir(ltr), spinbutton.cursor-handle.top:hover:dir(ltr), entry.cursor-handle.bottom:hover:dir(rtl), spinbutton.cursor-handle.bottom:hover:dir(rtl),
-  .cursor-handle.top:hover:dir(ltr),
-  .cursor-handle.bottom:hover:dir(rtl) {
+  cursor-handle.top:hover:dir(ltr), cursor-handle.bottom:hover:dir(rtl) {
     -gtk-icon-source: -gtk-scaled(url("assets/text-select-start-hover-dark.png"), url("assets/text-select-start-hover-dark@2.png"));
     padding-left: 10px; }
-  entry.cursor-handle.bottom:hover:dir(ltr), spinbutton.cursor-handle.bottom:hover:dir(ltr), entry.cursor-handle.top:hover:dir(rtl), spinbutton.cursor-handle.top:hover:dir(rtl),
-  .cursor-handle.bottom:hover:dir(ltr),
-  .cursor-handle.top:hover:dir(rtl) {
+  cursor-handle.bottom:hover:dir(ltr), cursor-handle.top:hover:dir(rtl) {
     -gtk-icon-source: -gtk-scaled(url("assets/text-select-end-hover-dark.png"), url("assets/text-select-end-hover-dark@2.png"));
     padding-right: 10px; }
-  entry.cursor-handle.insertion-cursor:hover:dir(ltr), spinbutton.cursor-handle.insertion-cursor:hover:dir(ltr), entry.cursor-handle.insertion-cursor:hover:dir(rtl), spinbutton.cursor-handle.insertion-cursor:hover:dir(rtl),
-  .cursor-handle.insertion-cursor:hover:dir(ltr),
-  .cursor-handle.insertion-cursor:hover:dir(rtl) {
+  cursor-handle.insertion-cursor:hover:dir(ltr), cursor-handle.insertion-cursor:hover:dir(rtl) {
     -gtk-icon-source: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-hover-dark.png"), url("assets/slider-horz-scale-has-marks-above-hover-dark@2.png")); }
-  entry.cursor-handle.top:active:dir(ltr), spinbutton.cursor-handle.top:active:dir(ltr), entry.cursor-handle.bottom:active:dir(rtl), spinbutton.cursor-handle.bottom:active:dir(rtl),
-  .cursor-handle.top:active:dir(ltr),
-  .cursor-handle.bottom:active:dir(rtl) {
+  cursor-handle.top:active:dir(ltr), cursor-handle.bottom:active:dir(rtl) {
     -gtk-icon-source: -gtk-scaled(url("assets/text-select-start-active-dark.png"), url("assets/text-select-start-active-dark@2.png"));
     padding-left: 10px; }
-  entry.cursor-handle.bottom:active:dir(ltr), spinbutton.cursor-handle.bottom:active:dir(ltr), entry.cursor-handle.top:active:dir(rtl), spinbutton.cursor-handle.top:active:dir(rtl),
-  .cursor-handle.bottom:active:dir(ltr),
-  .cursor-handle.top:active:dir(rtl) {
+  cursor-handle.bottom:active:dir(ltr), cursor-handle.top:active:dir(rtl) {
     -gtk-icon-source: -gtk-scaled(url("assets/text-select-end-active-dark.png"), url("assets/text-select-end-active-dark@2.png"));
     padding-right: 10px; }
-  entry.cursor-handle.insertion-cursor:active:dir(ltr), spinbutton.cursor-handle.insertion-cursor:active:dir(ltr), entry.cursor-handle.insertion-cursor:active:dir(rtl), spinbutton.cursor-handle.insertion-cursor:active:dir(rtl),
-  .cursor-handle.insertion-cursor:active:dir(ltr),
-  .cursor-handle.insertion-cursor:active:dir(rtl) {
+  cursor-handle.insertion-cursor:active:dir(ltr), cursor-handle.insertion-cursor:active:dir(rtl) {
     -gtk-icon-source: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-active-dark.png"), url("assets/slider-horz-scale-has-marks-above-active-dark@2.png")); }
 
 /* Decouple the font of context menus from their entry/textview */
