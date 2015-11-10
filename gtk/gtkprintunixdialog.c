@@ -711,7 +711,6 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
   GtkPrintUnixDialogPrivate *priv;
   GtkTreeSortable *sort;
   GtkWidget *widget;
-  GtkCssNode *widget_node;
 
   dialog->priv = gtk_print_unix_dialog_get_instance_private (dialog);
   priv = dialog->priv;
