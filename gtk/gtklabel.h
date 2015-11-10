@@ -25,7 +25,6 @@
 #ifndef __GTK_LABEL_H__
 #define __GTK_LABEL_H__
 
-
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
@@ -33,7 +32,6 @@
 #include <gtk/deprecated/gtkmisc.h>
 #include <gtk/gtkwindow.h>
 #include <gtk/gtkmenu.h>
-
 
 G_BEGIN_DECLS
 
@@ -226,6 +224,10 @@ void         gtk_label_set_yalign (GtkLabel *label,
 
 GDK_AVAILABLE_IN_3_16
 gfloat       gtk_label_get_yalign (GtkLabel *label);
+
+#ifndef __GI_SCANNER__
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkLabel, g_object_unref)
+#endif
 
 G_END_DECLS
 

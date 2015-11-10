@@ -25,14 +25,12 @@
 #ifndef __GTK_MENU_H__
 #define __GTK_MENU_H__
 
-
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
 #include <gtk/gtkaccelgroup.h>
 #include <gtk/gtkmenushell.h>
-
 
 G_BEGIN_DECLS
 
@@ -251,6 +249,9 @@ void     gtk_menu_set_reserve_toggle_size (GtkMenu  *menu,
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_menu_get_reserve_toggle_size (GtkMenu  *menu);
 
+#ifndef __GI_SCANNER__
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkMenu, g_object_unref)
+#endif
 
 G_END_DECLS
 

@@ -25,13 +25,11 @@
 #ifndef __GTK_MENU_SHELL_H__
 #define __GTK_MENU_SHELL_H__
 
-
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
 #include <gtk/gtkcontainer.h>
-
 
 G_BEGIN_DECLS
 
@@ -131,6 +129,10 @@ void       gtk_menu_shell_bind_model   (GtkMenuShell *menu_shell,
                                         GMenuModel   *model,
                                         const gchar  *action_namespace,
                                         gboolean      with_separators);
+
+#ifndef __GI_SCANNER__
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkMenuShell, g_object_unref)
+#endif
 
 G_END_DECLS
 

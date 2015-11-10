@@ -28,13 +28,11 @@
 #ifndef __GTK_ACCEL_LABEL_H__
 #define __GTK_ACCEL_LABEL_H__
 
-
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
 #include <gtk/gtklabel.h>
-
 
 G_BEGIN_DECLS
 
@@ -110,6 +108,10 @@ void       gtk_accel_label_get_accel         (GtkAccelLabel   *accel_label,
 gchar *    _gtk_accel_label_class_get_accelerator_label (GtkAccelLabelClass *klass,
 							 guint               accelerator_key,
 							 GdkModifierType     accelerator_mods);
+
+#ifndef __GI_SCANNER__
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkAccelLabel, g_object_unref)
+#endif
 
 G_END_DECLS
 
