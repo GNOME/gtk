@@ -283,7 +283,7 @@ object_tree_icon_view_forall (GObject              *object,
 
   child = G_OBJECT (gtk_icon_view_get_model (GTK_ICON_VIEW (object)));
   if (child)
-    forall_func (child, "mnodel", forall_data);
+    forall_func (child, "model", forall_data);
 }
 
 typedef struct {
