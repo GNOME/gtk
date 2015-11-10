@@ -25,13 +25,11 @@
 #ifndef __GTK_DIALOG_H__
 #define __GTK_DIALOG_H__
 
-
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
 #include <gtk/gtkwindow.h>
-
 
 G_BEGIN_DECLS
 
@@ -207,6 +205,10 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget * gtk_dialog_get_content_area (GtkDialog *dialog);
 GDK_AVAILABLE_IN_3_12
 GtkWidget * gtk_dialog_get_header_bar   (GtkDialog *dialog);
+
+#ifndef __GI_SCANNER__
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkDialog, g_object_unref)
+#endif
 
 G_END_DECLS
 
