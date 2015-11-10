@@ -99,7 +99,9 @@ gtk_tooltip_window_init (GtkTooltipWindow *self)
 GtkWidget *
 gtk_tooltip_window_new (void)
 {
-  return g_object_new (GTK_TYPE_TOOLTIP_WINDOW, NULL);
+  return g_object_new (GTK_TYPE_TOOLTIP_WINDOW,
+                       "type", GTK_WINDOW_POPUP,
+                       NULL);
 }
 
 void
