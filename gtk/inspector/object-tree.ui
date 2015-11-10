@@ -126,6 +126,8 @@
                 <child>
                   <object class="GtkCellRendererText">
                     <property name="scale">0.8</property>
+                    <property name="ellipsize">end</property>
+                    <property name="max-width-chars">30</property>
                   </object>
                   <attributes>
                     <attribute name="text">3</attribute>
