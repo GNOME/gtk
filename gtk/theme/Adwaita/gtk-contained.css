@@ -77,7 +77,10 @@ textview text,
   calendar:selected {
     border-radius: 3px; }
 
-.rubberband, treeview.view.rubberband, .content-view.rubberband {
+.rubberband,
+rubberband,
+treeview.view.rubberband,
+.content-view rubberband {
   border: 1px solid #2a76c6;
   background-color: rgba(42, 118, 198, 0.2); }
 
