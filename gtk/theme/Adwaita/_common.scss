@@ -1274,7 +1274,7 @@ treeview.view {
   border-left-color: mix($fg_color, $base_color, 50%); // this is actually the tree lines color,
   border-top-color: $bg_color;                         // while this is the grid lines color, better then nothing
 
-  &.rubberband { @extend rubberband; } // to avoid borders being overridden by the previously set props
+  & rubberband { @extend rubberband; } // to avoid borders being overridden by the previously set props
 
   &:selected { border-radius: 0; } // rest border radius in lists
 
