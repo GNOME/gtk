@@ -79,6 +79,7 @@ textview text,
 
 .rubberband,
 rubberband,
+flowbox rubberband,
 treeview.view.rubberband,
 .content-view rubberband {
   border: 1px solid #184472;
