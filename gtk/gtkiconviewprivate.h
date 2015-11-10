@@ -16,6 +16,7 @@
  */
 
 #include "gtk/gtkiconview.h"
+#include "gtk/gtkcssnodeprivate.h"
 
 #ifndef __GTK_ICON_VIEW_PRIVATE_H__
 #define __GTK_ICON_VIEW_PRIVATE_H__
@@ -63,6 +64,7 @@ struct _GtkIconViewPrivate
   gint rubberband_x1, rubberband_y1;
   gint rubberband_x2, rubberband_y2;
   GdkDevice *rubberband_device;
+  GtkCssNode *rubberband_node;
 
   guint scroll_timeout_id;
   gint scroll_value_diff;
