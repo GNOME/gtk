@@ -120,7 +120,8 @@
  * entry
  * ├── image.left
  * ├── image.right
- * ╰── progress[.pulse]
+ * ├── [selection]
+ * ╰── [progress[.pulse]]
  * ]|
  *
  * GtkEntry has a main node with the name entry. Depending on the properties
@@ -129,6 +130,8 @@
  *
  * When the entry shows icons, it adds subnodes with the name image and the
  * style class .left or .right, depending on where the icon appears.
+ *
+ * When the entry has a selection, it adds a subnode with the name sleciton.
  *
  * When the entry shows progress, it adds a subnode with the name progress.
  * The node has the style class .pulse when the shown progress is pulsing.
@@ -200,6 +203,7 @@ struct _GtkEntryPrivate
   GtkGesture    *drag_gesture;
   GtkGesture    *multipress_gesture;
 
+  GtkCssNode    *selection_node;
   GtkCssNode    *progress_node;
 
   gfloat        xalign;
@@ -3191,6 +3195,20 @@ update_icon_state (GtkWidget            *widget,
   gtk_css_node_set_state (icon_info->css_node, state);
 }
 
+static void
+update_node_state (GtkEntry *entry)
+{
+  GtkEntryPrivate *priv = entry->priv;
+  GtkStateFlags state;
+
+  state = gtk_widget_get_state_flags (GTK_WIDGET (entry));
+
+  if (priv->progress_node)
+    gtk_css_node_set_state (priv->progress_node, state);
+  if (priv->selection_node)
+    gtk_css_node_set_state (priv->selection_node, state);
+}
+
 static GtkCssNode *
 get_entry_node (GtkWidget *widget)
 {
@@ -5104,6 +5122,7 @@ gtk_entry_state_flags_changed (GtkWidget     *widget,
       gtk_editable_select_region (GTK_EDITABLE (entry), priv->current_pos, priv->current_pos);
     }
 
+  update_node_state (entry);
   update_icon_state (widget, GTK_ENTRY_ICON_PRIMARY);
   update_icon_state (widget, GTK_ENTRY_ICON_SECONDARY);
 
@@ -6144,6 +6163,29 @@ gtk_entry_set_positions (GtkEntry *entry,
 
   g_object_thaw_notify (G_OBJECT (entry));
 
+  if (priv->current_pos != priv->selection_bound)
+    {
+      if (!priv->selection_node)
+        {
+          GtkCssNode *widget_node;
+
+          widget_node = get_entry_node (GTK_WIDGET (entry));
+          priv->selection_node = gtk_css_node_new ();
+          gtk_css_node_set_name (priv->selection_node, I_("selection"));
+          gtk_css_node_set_parent (priv->selection_node, widget_node);
+          gtk_css_node_set_state (priv->selection_node, gtk_css_node_get_state (widget_node));
+          g_object_unref (priv->selection_node);
+        }
+    }
+  else
+    {
+      if (priv->selection_node)
+        {
+          gtk_css_node_set_parent (priv->selection_node, NULL);
+          priv->selection_node = NULL;
+        }
+    }
+
   if (changed)
     {
       gtk_entry_move_adjustments (entry);
@@ -6473,42 +6515,32 @@ draw_text_with_color (GtkEntry *entry,
       gint *ranges;
       gint n_ranges, i;
       PangoRectangle logical_rect;
-      GdkRGBA selection_color, text_color;
+      GdkRGBA text_color;
       GtkStyleContext *context;
-      GtkStateFlags state;
 
       context = gtk_widget_get_style_context (widget);
+      gtk_style_context_save_to_node (context, priv->selection_node);
+
       pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
       gtk_entry_get_pixel_ranges (entry, &ranges, &n_ranges);
-
-      gtk_style_context_save (context);
-      state = gtk_style_context_get_state (context);
-      state |= GTK_STATE_FLAG_SELECTED;
-      gtk_style_context_set_state (context, state);
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      gtk_style_context_get_background_color (context, state, &selection_color);
-G_GNUC_END_IGNORE_DEPRECATIONS
-      gtk_style_context_get_color (context, state, &text_color);
-      gtk_style_context_restore (context);
+      for (i = 0; i < n_ranges; ++i)
+        gtk_render_background (context, cr,
+                               - priv->scroll_offset + ranges[2 * i], y,
+			       ranges[2 * i + 1], logical_rect.height);
 
       for (i = 0; i < n_ranges; ++i)
         cairo_rectangle (cr,
-                         - priv->scroll_offset + ranges[2 * i],
-			 y,
-			 ranges[2 * i + 1],
-			 logical_rect.height);
-
+                         - priv->scroll_offset + ranges[2 * i], y,
+			 ranges[2 * i + 1], logical_rect.height);
       cairo_clip (cr);
-	  
-      gdk_cairo_set_source_rgba (cr, &selection_color);
-      cairo_paint (cr);
 
       cairo_move_to (cr, x, y);
+      gtk_style_context_get_color (context, gtk_style_context_get_state (context), &text_color);
       gdk_cairo_set_source_rgba (cr, &text_color);
       pango_cairo_show_layout (cr, layout);
-  
+
       g_free (ranges);
+      gtk_style_context_restore (context);
     }
   cairo_restore (cr);
 }
