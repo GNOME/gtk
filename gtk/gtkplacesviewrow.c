@@ -19,11 +19,24 @@
 #include "config.h"
 
 #include <gio/gio.h>
-#include <gtk/gtk.h>
 
-#include "gtkintl.h"
 #include "gtkplacesviewrowprivate.h"
+
+/* As this widget is shared with Nautilus, we use this guard to
+ * ensure that internally we only include the files that we need
+ * instead of including gtk.h
+ */
+#ifdef GTK_COMPILATION
+#include "gtkbutton.h"
+#include "gtkeventbox.h"
+#include "gtkimage.h"
+#include "gtkintl.h"
+#include "gtklabel.h"
+#include "gtkspinner.h"
 #include "gtktypebuiltins.h"
+#else
+#include <gtk/gtk.h>
+#endif
 
 struct _GtkPlacesViewRow
 {
