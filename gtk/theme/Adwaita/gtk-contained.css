@@ -4433,7 +4433,6 @@ infobar {
  * Tooltips *
  ************/
 tooltip {
-  color: white;
   padding: 4px;
   /* not working */
   border-radius: 5px;
@@ -4443,11 +4442,12 @@ tooltip {
     background-color: rgba(0, 0, 0, 0.8);
     background-clip: padding-box;
     border: 1px solid rgba(255, 255, 255, 0.1); }
-  tooltip decoration.csd {
+  tooltip decoration {
     background-color: transparent; }
   tooltip * {
     padding: 4px;
-    background-color: transparent; }
+    background-color: transparent;
+    color: white; }
 
 /*****************
  * Color Chooser *

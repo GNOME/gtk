@@ -3054,18 +3054,18 @@ tooltip {
                                               // very dark backgrounds
   }
 
-  color: white;
   padding: 4px; /* not working */
   border-radius: 5px;
   box-shadow: none; // otherwise it gets inherited by windowframe.csd
   text-shadow: 0 1px black;
   // FIXME: we need a border or tooltips vanish on black background.
-  decoration.csd {
+  decoration {
     background-color: transparent;
   }
   * { //Yeah this is ugly
     padding: 4px;
     background-color: transparent;
+    color: white;
   }
 }
 
