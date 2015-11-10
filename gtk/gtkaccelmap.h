@@ -102,6 +102,9 @@ GType        gtk_accel_map_get_type (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkAccelMap *gtk_accel_map_get      (void);
 
+#ifndef __GI_SCANNER__
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkAccelMap, g_object_unref)
+#endif
 
 G_END_DECLS
 
