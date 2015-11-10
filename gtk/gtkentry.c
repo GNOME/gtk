@@ -132,6 +132,12 @@
  *
  * When the entry shows progress, it adds a subnode with the name progress.
  * The node has the style class .pulse when the shown progress is pulsing.
+ *
+ * When touch is used and touch selection handles are shown, they are using
+ * CSS nodes with name cursor-handle. They get the .top or .bottom style class
+ * depending on where they are shown in relation to the selection. If there is
+ * just a single handle for the text cursor, it gets the style class
+ * .insertion-cursor.
  */
 
 
