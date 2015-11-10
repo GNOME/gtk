@@ -21,6 +21,8 @@
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtkwindowprivate.h"
+#include "gtkcssnodeprivate.h"
+#include "gtkwidgetprivate.h"
 #include "gtkintl.h"
 
 #include <gtk/gtk.h>
@@ -111,29 +113,10 @@ _gtk_text_handle_draw (GtkTextHandle         *handle,
   _gtk_text_handle_get_size (handle, &width, &height);
 
   cairo_save (cr);
-
   cairo_translate (cr, handle_window->border.left, handle_window->border.top);
-
-  gtk_style_context_save (context);
-  gtk_style_context_add_class (context,
-                               GTK_STYLE_CLASS_CURSOR_HANDLE);
-
-  if (pos == GTK_TEXT_HANDLE_POSITION_SELECTION_END)
-    {
-      gtk_style_context_add_class (context,
-                                   GTK_STYLE_CLASS_BOTTOM);
-
-      if (priv->mode == GTK_TEXT_HANDLE_MODE_CURSOR)
-        gtk_style_context_add_class (context,
-                                     GTK_STYLE_CLASS_INSERTION_CURSOR);
-    }
-  else
-    gtk_style_context_add_class (context,
-                                 GTK_STYLE_CLASS_TOP);
 
   gtk_render_handle (context, cr, 0, 0, width, height);
 
-  gtk_style_context_restore (context);
   cairo_restore (cr);
 }
 
@@ -300,6 +283,7 @@ _gtk_text_handle_ensure_widget (GtkTextHandle         *handle,
   if (!priv->windows[pos].widget)
     {
       GtkWidget *widget, *window;
+      GtkStyleContext *context;
 
       widget = gtk_event_box_new ();
       gtk_event_box_set_visible_window (GTK_EVENT_BOX (widget), TRUE);
@@ -324,8 +308,17 @@ _gtk_text_handle_ensure_widget (GtkTextHandle         *handle,
       window = gtk_widget_get_ancestor (priv->parent, GTK_TYPE_WINDOW);
       _gtk_window_add_popover (GTK_WINDOW (window), widget, priv->parent, FALSE);
 
-      gtk_style_context_set_parent (gtk_widget_get_style_context (widget),
-                                    gtk_widget_get_style_context (priv->parent));
+      context = gtk_widget_get_style_context (widget);
+      gtk_style_context_set_parent (context, gtk_widget_get_style_context (priv->parent));
+      gtk_css_node_set_name (gtk_widget_get_css_node (widget), I_("cursor-handle"));
+      if (pos == GTK_TEXT_HANDLE_POSITION_SELECTION_END)
+        {
+          gtk_style_context_add_class (context, GTK_STYLE_CLASS_BOTTOM);
+          if (priv->mode == GTK_TEXT_HANDLE_MODE_CURSOR)
+            gtk_style_context_add_class (context, GTK_STYLE_CLASS_INSERTION_CURSOR);
+        }
+      else
+        gtk_style_context_add_class (context, GTK_STYLE_CLASS_TOP);
     }
 
   return priv->windows[pos].widget;
@@ -769,6 +762,14 @@ _gtk_text_handle_set_mode (GtkTextHandle     *handle,
       start->mode_visible = FALSE;
       end->mode_visible = FALSE;
       break;
+    }
+
+  if (end->widget)
+    {
+      if (mode == GTK_TEXT_HANDLE_MODE_CURSOR)
+        gtk_style_context_add_class (gtk_widget_get_style_context (end->widget), GTK_STYLE_CLASS_INSERTION_CURSOR);
+      else
+        gtk_style_context_remove_class (gtk_widget_get_style_context (end->widget), GTK_STYLE_CLASS_INSERTION_CURSOR);
     }
 
   _gtk_text_handle_update (handle, GTK_TEXT_HANDLE_POSITION_SELECTION_START);
