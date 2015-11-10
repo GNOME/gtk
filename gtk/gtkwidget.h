@@ -1490,6 +1490,11 @@ void                    gtk_widget_set_font_map         (GtkWidget             *
 GDK_AVAILABLE_IN_3_18
 PangoFontMap *          gtk_widget_get_font_map         (GtkWidget             *widget);
 
+#ifndef __GI_SCANNER__
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkWidget, g_object_unref)
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkRequisition, gtk_requisition_free)
+#endif
+
 G_END_DECLS
 
 #endif /* __GTK_WIDGET_H__ */

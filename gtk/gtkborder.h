@@ -65,6 +65,9 @@ GtkBorder *gtk_border_copy     (const GtkBorder *border_);
 GDK_AVAILABLE_IN_ALL
 void       gtk_border_free     (GtkBorder       *border_);
 
+#ifndef __GI_SCANNER__
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkBorder, gtk_border_free)
+#endif
 
 G_END_DECLS
 

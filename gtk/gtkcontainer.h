@@ -32,7 +32,6 @@
 
 #include <gtk/gtkwidget.h>
 
-
 G_BEGIN_DECLS
 
 #define GTK_TYPE_CONTAINER              (gtk_container_get_type ())
@@ -299,6 +298,10 @@ void    gtk_container_class_handle_border_width (GtkContainerClass *klass);
 GDK_AVAILABLE_IN_ALL
 GtkWidgetPath * gtk_container_get_path_for_child (GtkContainer      *container,
                                                   GtkWidget         *child);
+
+#ifndef __GI_SCANNER__
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkContainer, g_object_unref)
+#endif
 
 G_END_DECLS
 
