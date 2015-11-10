@@ -51,6 +51,7 @@ struct _GtkShortcutsWindowClass
 GDK_AVAILABLE_IN_3_20
 GType gtk_shortcuts_window_get_type (void) G_GNUC_CONST;
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkShortcutsWindow, g_object_unref)
 
 G_END_DECLS
 
