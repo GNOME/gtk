@@ -183,7 +183,7 @@ entry, spinbutton {
     color: gray;
     background-image: linear-gradient(to bottom, #fff);
     box-shadow: 0 1px rgba(255, 255, 255, 0); }
-  entry:selected, entry:backdrop:selected, spinbutton:selected, spinbutton:backdrop:selected {
+  entry selection, entry selection:backdrop, spinbutton selection, spinbutton selection:backdrop {
     background-color: #000;
     color: #fff; }
   entry progress, spinbutton progress {
@@ -2001,7 +2001,11 @@ calendar:selected,
 .view:selected:focus,
 calendar:focus:selected,
 .view:selected:hover,
-calendar:hover:selected, label:selected, label:selected:focus, label:selected:hover, label:backdrop:selected, entry:selected, entry:selected:focus, spinbutton:selected, spinbutton:selected:focus, modelbutton.flat:hover, modelbutton.flat:selected,
+calendar:hover:selected, label:selected, label:selected:focus, label:selected:hover, label:backdrop:selected, entry selection
+entry selection:focus, spinbutton selection
+entry selection:focus, entry selection
+spinbutton selection:focus, spinbutton selection
+spinbutton selection:focus, modelbutton.flat:hover, modelbutton.flat:selected,
 .menuitem.button.flat:hover,
 .menuitem.button.flat:selected, .list-row.activatable:selected, .sidebar:selected, placessidebar .view:selected, placessidebar calendar:selected {
   background-color: #000;
@@ -2011,7 +2015,11 @@ calendar:hover:selected, label:selected, label:selected:focus, label:selected:ho
   .view:backdrop:selected,
   calendar:backdrop:selected,
   calendar:backdrop:focus:selected,
-  calendar:backdrop:hover:selected, label:backdrop:selected, entry:backdrop:selected, spinbutton:backdrop:selected, modelbutton.flat:backdrop:hover, modelbutton.flat:backdrop:selected,
+  calendar:backdrop:hover:selected, label:backdrop:selected, entry selection
+  entry selection:backdrop:focus, spinbutton selection
+  entry selection:backdrop:focus, entry selection
+  spinbutton selection:backdrop:focus, spinbutton selection
+  spinbutton selection:backdrop:focus, modelbutton.flat:backdrop:hover, modelbutton.flat:backdrop:selected,
   .menuitem.button.flat:backdrop:hover,
   .menuitem.button.flat:backdrop:selected, .list-row.activatable:backdrop:selected, .sidebar:backdrop:selected {
     background-color: gray;

@@ -184,12 +184,12 @@ entry, spinbutton {
   &:insensitive { @include entry(insensitive); }
   &:backdrop { @include entry(backdrop); }
   &:backdrop:insensitive { @include entry(backdrop-insensitive); }
-  &:selected, &:backdrop:selected {
+  & selection, & selection:backdrop {
     background-color: $selected_bg_color;
     color: $selected_fg_color;
   }
-  &:selected,
-  &:selected:focus {
+  & selection
+  & selection:focus {
     @extend %selected_items;
   }
   & progress {
