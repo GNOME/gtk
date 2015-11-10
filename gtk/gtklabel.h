@@ -225,9 +225,7 @@ void         gtk_label_set_yalign (GtkLabel *label,
 GDK_AVAILABLE_IN_3_16
 gfloat       gtk_label_get_yalign (GtkLabel *label);
 
-#ifndef __GI_SCANNER__
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkLabel, g_object_unref)
-#endif
 
 G_END_DECLS
 

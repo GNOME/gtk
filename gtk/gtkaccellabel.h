@@ -109,9 +109,7 @@ gchar *    _gtk_accel_label_class_get_accelerator_label (GtkAccelLabelClass *kla
 							 guint               accelerator_key,
 							 GdkModifierType     accelerator_mods);
 
-#ifndef __GI_SCANNER__
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkAccelLabel, g_object_unref)
-#endif
 
 G_END_DECLS
 

@@ -204,9 +204,7 @@ void                  gtk_about_dialog_add_credit_section      (GtkAboutDialog  
                                                                 const gchar     *section_name,
                                                                 const gchar    **people);
 
-#ifndef __GI_SCANNER__
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkAboutDialog, g_object_unref)
-#endif
 
 G_END_DECLS
 

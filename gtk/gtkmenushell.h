@@ -130,9 +130,7 @@ void       gtk_menu_shell_bind_model   (GtkMenuShell *menu_shell,
                                         const gchar  *action_namespace,
                                         gboolean      with_separators);
 
-#ifndef __GI_SCANNER__
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkMenuShell, g_object_unref)
-#endif
 
 G_END_DECLS
 

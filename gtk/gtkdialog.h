@@ -206,9 +206,7 @@ GtkWidget * gtk_dialog_get_content_area (GtkDialog *dialog);
 GDK_AVAILABLE_IN_3_12
 GtkWidget * gtk_dialog_get_header_bar   (GtkDialog *dialog);
 
-#ifndef __GI_SCANNER__
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkDialog, g_object_unref)
-#endif
 
 G_END_DECLS
 

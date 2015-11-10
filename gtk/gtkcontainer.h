@@ -299,9 +299,7 @@ GDK_AVAILABLE_IN_ALL
 GtkWidgetPath * gtk_container_get_path_for_child (GtkContainer      *container,
                                                   GtkWidget         *child);
 
-#ifndef __GI_SCANNER__
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkContainer, g_object_unref)
-#endif
 
 G_END_DECLS
 

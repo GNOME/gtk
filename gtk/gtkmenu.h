@@ -249,9 +249,7 @@ void     gtk_menu_set_reserve_toggle_size (GtkMenu  *menu,
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_menu_get_reserve_toggle_size (GtkMenu  *menu);
 
-#ifndef __GI_SCANNER__
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkMenu, g_object_unref)
-#endif
 
 G_END_DECLS
 

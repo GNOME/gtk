@@ -81,9 +81,7 @@ GtkWidget *gtk_bin_get_child (GtkBin *bin);
 void       _gtk_bin_set_child (GtkBin    *bin,
                                GtkWidget *widget);
 
-#ifndef __GI_SCANNER__
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkBin, g_object_unref)
-#endif
 
 G_END_DECLS
 
