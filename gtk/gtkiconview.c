@@ -68,6 +68,10 @@
  *
  * # CSS nodes
  *
+ * |[<!-- language="plain" -->
+ * iconview.view
+ * ╰── [rubberband]
+ * ]|
  *
  * GtkIconView has a single CSS node with name iconview and style class .view.
  * For rubberband selection, a subnode with name rubberband is used.
