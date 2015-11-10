@@ -172,6 +172,7 @@ IGNORE_HFILES = \
 	gtktoolbarprivate.h		\
 	gtktoolpaletteprivate.h		\
 	gtktooltipprivate.h		\
+	gtktooltipwindowprivate.h	\
 	gtktreeprivate.h		\
 	gtkwidgetprivate.h		\
 	gtkwin32themeprivate.h		\
