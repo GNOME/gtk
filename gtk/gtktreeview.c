@@ -405,6 +405,7 @@ struct _GtkTreeViewPrivate
 
   GtkRBNode *rubber_band_end_node;
   GtkRBTree *rubber_band_end_tree;
+  GtkCssNode *rubber_band_cssnode;
 
   /* Scroll-to functionality when unrealized */
   GtkTreeRowReference *scroll_to_path;
@@ -4332,6 +4333,9 @@ gtk_tree_view_stop_rubber_band (GtkTreeView *tree_view)
       gtk_tree_path_free (tmp_path);
 
       _gtk_tree_selection_emit_changed (tree_view->priv->selection);
+
+      gtk_css_node_set_parent (tree_view->priv->rubber_band_cssnode, NULL);
+      tree_view->priv->rubber_band_cssnode = NULL;
     }
 
   /* Clear status variables */
@@ -4629,8 +4633,7 @@ gtk_tree_view_paint_rubber_band (GtkTreeView  *tree_view,
 
   context = gtk_widget_get_style_context (GTK_WIDGET (tree_view));
 
-  gtk_style_context_save (context);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_RUBBERBAND);
+  gtk_style_context_save_to_node (context, tree_view->priv->rubber_band_cssnode);
 
   rect.x = MIN (tree_view->priv->press_start_x, bin_x);
   rect.y = MIN (tree_view->priv->press_start_y, bin_y) - tree_view->priv->dy;
@@ -4689,6 +4692,15 @@ gtk_tree_view_drag_gesture_update (GtkGestureDrag *gesture,
 
   if (tree_view->priv->rubber_band_status == RUBBER_BAND_MAYBE_START)
     {
+      GtkCssNode *widget_node;
+
+      widget_node = gtk_widget_get_css_node (GTK_WIDGET (tree_view));
+      tree_view->priv->rubber_band_cssnode = gtk_css_node_new ();
+      gtk_css_node_set_name (tree_view->priv->rubber_band_cssnode, I_("rubberband"));
+      gtk_css_node_set_parent (tree_view->priv->rubber_band_cssnode, widget_node);
+      gtk_css_node_set_state (tree_view->priv->rubber_band_cssnode, gtk_css_node_get_state (widget_node));
+      g_object_unref (tree_view->priv->rubber_band_cssnode);
+
       gtk_tree_view_update_rubber_band (tree_view);
 
       tree_view->priv->rubber_band_status = RUBBER_BAND_ACTIVE;
