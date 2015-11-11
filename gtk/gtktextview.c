@@ -1748,6 +1748,12 @@ gtk_text_view_init (GtkTextView *text_view)
 }
 
 GtkCssNode *
+gtk_text_view_get_text_node (GtkTextView *text_view)
+{
+  return text_view->priv->text_window->css_node;
+}
+
+GtkCssNode *
 gtk_text_view_get_selection_node (GtkTextView *text_view)
 {
   return text_view->priv->selection_node;
@@ -4854,6 +4860,7 @@ gtk_text_view_state_flags_changed (GtkWidget     *widget,
   GtkTextView *text_view = GTK_TEXT_VIEW (widget);
   GtkTextViewPrivate *priv = text_view->priv;
   GdkCursor *cursor;
+  GtkStateFlags state;
 
   if (gtk_widget_get_realized (widget))
     {
@@ -4876,17 +4883,17 @@ gtk_text_view_state_flags_changed (GtkWidget     *widget,
       gtk_text_view_unselect (text_view);
     }
 
-  gtk_css_node_set_state (priv->text_window->css_node, gtk_widget_get_state (widget));
-  gtk_css_node_set_state (priv->selection_node, gtk_widget_get_state (widget));
-
+  state = gtk_widget_get_state_flags (widget);
+  gtk_css_node_set_state (priv->text_window->css_node, state);
+  gtk_css_node_set_state (priv->selection_node, state);
   if (priv->left_window)
-    gtk_css_node_set_state (priv->left_window->css_node, gtk_widget_get_state (widget));
+    gtk_css_node_set_state (priv->left_window->css_node, state);
   if (priv->right_window)
-    gtk_css_node_set_state (priv->right_window->css_node, gtk_widget_get_state (widget));
+    gtk_css_node_set_state (priv->right_window->css_node, state);
   if (priv->top_window)
-    gtk_css_node_set_state (priv->top_window->css_node, gtk_widget_get_state (widget));
+    gtk_css_node_set_state (priv->top_window->css_node, state);
   if (priv->bottom_window)
-    gtk_css_node_set_state (priv->bottom_window->css_node, gtk_widget_get_state (widget));
+    gtk_css_node_set_state (priv->bottom_window->css_node, state);
 
   gtk_widget_queue_draw (widget);
 }
