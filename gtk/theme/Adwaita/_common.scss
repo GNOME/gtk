@@ -2422,7 +2422,7 @@ progressbar.vertical progress {
  * Level Bar *
  *************/
 
-.level-bar {
+levelbar {
   box-shadow: _widget_edge(); // needs to be set here to avoid clipping
   -GtkLevelBar-min-block-width: 34;
   -GtkLevelBar-min-block-height: 3;
@@ -2430,7 +2430,7 @@ progressbar.vertical progress {
     -GtkLevelBar-min-block-width: 3;
     -GtkLevelBar-min-block-height: 34;
   }
-  &.trough {
+  & trough {
     border: 1px solid;
     padding: 2px;
     border-radius: 3px;
@@ -2439,11 +2439,11 @@ progressbar.vertical progress {
       @include entry(backdrop);
     }
   }
-  &.fill-block {
-    // FIXME: it would be nice to set make fill blocks bigger, but we'd need
-    // :nth-child working on discrete indicators
+  &.horizontal block.discrete { margin: 0 1px; }
+  &.vertical block.discrete { margin: 1px 0; }
+  & block.filled {
     border: 1px solid if($variant=='light', darken($selected_bg_color,10%),
-                                            darken($selected_bg_color,5%));
+                                              darken($selected_bg_color,5%));
     background-color: $selected_bg_color;
     box-shadow: 0 1px transparentize(black, 0.9);
     border-radius: 1px;
@@ -2451,27 +2451,26 @@ progressbar.vertical progress {
       border-color: $selected_bg_color;
       box-shadow: none;
     }
-    &.indicator-discrete {
-      &.horizontal { margin: 0 1px; }
-      &.vertical { margin: 1px 0; }
-    }
-    &.level-high {
-      border-color: darken($success_color,10%);
-      background-color: $success_color;
-      &:backdrop { border-color: $success_color; }
-    }
-    &.level-low {
-      border-color: darken($warning_color,10%);
-      background-color: $warning_color;
-      &:backdrop { border-color: $warning_color; };
-    }
-    &.empty-fill-block {
-      background-color: transparent;
-      border-color: if($variant=='light', transparentize($fg_color,0.8),
+  }
+  & block.level-high {
+    border-color: darken($success_color,10%);
+    background-color: $success_color;
+    &:backdrop { border-color: $success_color; }
+  }
+  & block.level-low {
+    border-color: darken($warning_color,10%);
+    background-color: $warning_color;
+    &:backdrop { border-color: $warning_color; };
+  }
+  & block.empty {
+    border: 1px solid if($variant=='light', darken($selected_bg_color,10%),
+                                              darken($selected_bg_color,5%));
+    border-radius: 1px;
+    background-color: transparent;
+    border-color: if($variant=='light', transparentize($fg_color,0.8),
                        transparentize($fg_color,0.9));
-      box-shadow: none;
-      &:backdrop { border-color: transparentize($backdrop_fg_color,0.85); }
-    }
+    box-shadow: none;
+    &:backdrop { border-color: transparentize($backdrop_fg_color,0.85); }
   }
 }
 

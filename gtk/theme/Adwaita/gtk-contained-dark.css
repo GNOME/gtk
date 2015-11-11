@@ -3367,14 +3367,14 @@ progressbar.vertical progress {
 /*************
  * Level Bar *
  *************/
-.level-bar {
+levelbar {
   box-shadow: 0 1px rgba(238, 238, 236, 0.1);
   -GtkLevelBar-min-block-width: 34;
   -GtkLevelBar-min-block-height: 3; }
-  .level-bar.vertical {
+  levelbar.vertical {
     -GtkLevelBar-min-block-width: 3;
     -GtkLevelBar-min-block-height: 34; }
-  .level-bar.trough {
+  levelbar trough {
     border: 1px solid;
     padding: 2px;
     border-radius: 3px;
@@ -3383,41 +3383,43 @@ progressbar.vertical progress {
     color: white;
     border-color: #1c1f1f;
     box-shadow: inset 0 0 0 1px rgba(33, 93, 156, 0), 0 1px rgba(238, 238, 236, 0.1); }
-    .level-bar.trough:backdrop {
+    levelbar trough:backdrop {
       background-color: transparent;
       background-image: linear-gradient(to bottom, #1d2020, #242525 3px, #292929 90%);
       color: #d5d5d5;
       border-color: #1f2222;
       background-image: linear-gradient(to bottom, #2c2c2c);
       box-shadow: 0 1px rgba(238, 238, 236, 0); }
-  .level-bar.fill-block {
+  levelbar.horizontal block.discrete {
+    margin: 0 1px; }
+  levelbar.vertical block.discrete {
+    margin: 1px 0; }
+  levelbar block.filled {
     border: 1px solid #1c5187;
     background-color: #215d9c;
     box-shadow: 0 1px rgba(0, 0, 0, 0.1);
     border-radius: 1px; }
-    .level-bar.fill-block:backdrop {
+    levelbar block.filled:backdrop {
       border-color: #215d9c;
       box-shadow: none; }
-    .level-bar.fill-block.indicator-discrete.horizontal {
-      margin: 0 1px; }
-    .level-bar.fill-block.indicator-discrete.vertical {
-      margin: 1px 0; }
-    .level-bar.fill-block.level-high {
-      border-color: #40760c;
-      background-color: #5aa411; }
-      .level-bar.fill-block.level-high:backdrop {
-        border-color: #5aa411; }
-    .level-bar.fill-block.level-low {
-      border-color: #c26000;
-      background-color: #f57900; }
-      .level-bar.fill-block.level-low:backdrop {
-        border-color: #f57900; }
-    .level-bar.fill-block.empty-fill-block {
-      background-color: transparent;
-      border-color: rgba(238, 238, 236, 0.1);
-      box-shadow: none; }
-      .level-bar.fill-block.empty-fill-block:backdrop {
-        border-color: rgba(148, 151, 150, 0.15); }
+  levelbar block.level-high {
+    border-color: #40760c;
+    background-color: #5aa411; }
+    levelbar block.level-high:backdrop {
+      border-color: #5aa411; }
+  levelbar block.level-low {
+    border-color: #c26000;
+    background-color: #f57900; }
+    levelbar block.level-low:backdrop {
+      border-color: #f57900; }
+  levelbar block.empty {
+    border: 1px solid #1c5187;
+    border-radius: 1px;
+    background-color: transparent;
+    border-color: rgba(238, 238, 236, 0.1);
+    box-shadow: none; }
+    levelbar block.empty:backdrop {
+      border-color: rgba(148, 151, 150, 0.15); }
 
 /**********
  * Frames *
