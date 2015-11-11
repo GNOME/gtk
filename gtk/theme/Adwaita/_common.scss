@@ -113,9 +113,8 @@ textview text,
     color: $backdrop_text_color;
     background-color: $backdrop_base_color;
   }
-
-  &:selected {
-    border-radius: 3px;
+  & selection,
+  & selection:focus {
     @extend %selected_items;
   }
 }
