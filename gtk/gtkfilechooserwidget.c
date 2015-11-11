@@ -2403,6 +2403,7 @@ list_button_press_event_cb (GtkWidget            *widget,
   get_selection_modifiers (widget, event, &modify, &extend);
   if (!is_touchscreen &&
       !modify && !extend &&
+      event->type == GDK_BUTTON_PRESS &&
       event->button == GDK_BUTTON_PRIMARY &&
       gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (priv->browse_files_tree_view),
                                      event->x, event->y,
