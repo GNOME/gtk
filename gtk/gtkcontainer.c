@@ -80,6 +80,16 @@
  * children in a horizontal row, and a #GtkGrid arranges the widgets it contains
  * in a two-dimensional grid.
  *
+ * For implementations of #GtkContainer the virtual method #GtkContainerClass.forall()
+ * is always required, since it's used for drawing and other internal operations
+ * on the children.
+ * If the #GtkContainer implementation expect to have non internal children
+ * it's needed to implement both #GtkContainerClass.add() and #GtkContainerClass.remove().
+ * If the GtkContainer implementation has internal children, they should be added
+ * with gtk_widget_set_parent() on init() and removed with gtk_widget_unparent()
+ * in the #GtkWidgetClass.destroy() implementation.
+ * See more about implementing custom widgets at https://wiki.gnome.org/HowDoI/CustomWidgets
+ *
  * # Height for width geometry management
  *
  * GTK+ uses a height-for-width (and width-for-height) geometry management system.
