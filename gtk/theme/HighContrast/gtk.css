@@ -2001,7 +2001,7 @@ calendar:selected,
 .view:selected:focus,
 calendar:focus:selected,
 .view:selected:hover,
-calendar:hover:selected, label:selected, label:selected:focus, label:selected:hover, label:backdrop:selected, entry selection
+calendar:hover:selected, label selection, label selection:focus, label selection:hover, label selection:backdrop, entry selection
 entry selection:focus, spinbutton selection
 entry selection:focus, entry selection
 spinbutton selection:focus, spinbutton selection
@@ -2015,7 +2015,7 @@ spinbutton selection:focus, modelbutton.flat:hover, modelbutton.flat:selected,
   .view:backdrop:selected,
   calendar:backdrop:selected,
   calendar:backdrop:focus:selected,
-  calendar:backdrop:hover:selected, label:backdrop:selected, entry selection
+  calendar:backdrop:hover:selected, label selection:backdrop, entry selection
   entry selection:backdrop:focus, spinbutton selection
   entry selection:backdrop:focus, entry selection
   spinbutton selection:backdrop:focus, spinbutton selection

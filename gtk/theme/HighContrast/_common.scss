@@ -131,10 +131,10 @@ flowbox {
 }
 
 label {
-  &:selected,
-  &:selected:focus,
-  &:selected:hover,
-  &:backdrop:selected {
+  & selection,
+  & selection:focus,
+  & selection:hover,
+  & selection:backdrop {
     @extend %selected_items;
   }
   &:insensitive, &:backdrop:insensitive {
