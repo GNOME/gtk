@@ -97,7 +97,7 @@
  * ]|
  *
  * GtkLevelBar has a main CSS node with name levelbar, a subnode with name trough,
- * and blow that a node with name block and style class .filled and a node with
+ * and below that a node with name block and style class .filled and a node with
  * name block and style class .empty. Both block nodes get one of the style
  * classes .discrete or .continuous, and the block.filled node gets a style class
  * .level-<name> corresponding to the level for the current value.
