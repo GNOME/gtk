@@ -54,6 +54,8 @@ void                  gtk_native_dialog_show (GtkNativeDialog *self);
 GDK_AVAILABLE_IN_3_20
 void                  gtk_native_dialog_hide (GtkNativeDialog *self);
 GDK_AVAILABLE_IN_3_20
+void                  gtk_native_dialog_destroy (GtkNativeDialog *self);
+GDK_AVAILABLE_IN_3_20
 gboolean              gtk_native_dialog_get_visible (GtkNativeDialog *self);
 GDK_AVAILABLE_IN_3_20
 void                  gtk_native_dialog_set_modal (GtkNativeDialog *self,

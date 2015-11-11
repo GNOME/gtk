@@ -361,6 +361,30 @@ gtk_native_dialog_hide (GtkNativeDialog *self)
   g_object_notify_by_pspec (G_OBJECT (self), native_props[PROP_VISIBLE]);
 }
 
+/**
+ * gtk_native_dialog_destroy:
+ * @self: a #GtkNativeDialog
+ *
+ * Destroys a dialog.
+ *
+ * When a dialog is destroyed, it will break any references it holds
+ * to other objects. If it is visible it will be hidden and any underlying
+ * window system resources will be destroyed.
+ *
+ * Note that this does not release any reference to the object (as opposed to
+ * destroying a GtkWindow) because there is no reference from the windowing
+ * system to the #GtkNativeDialog.
+ *
+ * Since: 3.20
+ **/
+void
+gtk_native_dialog_destroy (GtkNativeDialog *self)
+{
+  g_return_if_fail (GTK_IS_NATIVE_DIALOG (self));
+
+  g_object_run_dispose (G_OBJECT (self));
+}
+
 void
 _gtk_native_dialog_emit_response (GtkNativeDialog *self,
                                   int response_id)

@@ -1008,7 +1008,11 @@ gtk_file_chooser_button_destroy (GtkWidget *widget)
       priv->dialog = NULL;
     }
 
-  g_clear_object (&priv->native);
+  if (priv->native)
+    {
+      gtk_native_dialog_destroy (GTK_NATIVE_DIALOG (priv->native));
+      g_clear_object (&priv->native);
+    }
 
   priv->chooser = NULL;
 

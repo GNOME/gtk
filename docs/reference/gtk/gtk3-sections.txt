@@ -2520,6 +2520,7 @@ GTK_TYPE_NATIVE_DIALOG
 GtkNativeDialogClass
 gtk_native_dialog_show
 gtk_native_dialog_hide
+gtk_native_dialog_destroy
 gtk_native_dialog_get_visible
 gtk_native_dialog_set_modal
 gtk_native_dialog_get_modal

@@ -9660,6 +9660,13 @@ native_filter_changed (GtkWidget *combo,
     }
 }
 
+static void
+destroy_native (GtkFileChooserNative *native)
+{
+  gtk_native_dialog_destroy (GTK_NATIVE_DIALOG (native));
+  g_object_unref (native);
+}
+
 void
 create_native_dialogs (GtkWidget *widget)
 {
@@ -9681,7 +9688,7 @@ create_native_dialogs (GtkWidget *widget)
                                             "_accept&native",
                                             "_cancel__native");
 
-      g_signal_connect_swapped (G_OBJECT (window), "destroy", G_CALLBACK (g_object_unref), native);
+      g_signal_connect_swapped (G_OBJECT (window), "destroy", G_CALLBACK (destroy_native), native);
 
       gtk_file_chooser_add_shortcut_folder (GTK_FILE_CHOOSER (native),
                                             g_get_current_dir (),
