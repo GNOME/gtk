@@ -607,7 +607,7 @@ gtk_native_dialog_run (GtkNativeDialog *self)
   priv->run_loop = g_main_loop_new (NULL, FALSE);
 
   was_modal = priv->modal;
-  gtk_native_dialog_set_modal (self, FALSE);
+  gtk_native_dialog_set_modal (self, TRUE);
 
   response_handler =
     g_signal_connect (self,
