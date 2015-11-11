@@ -54,6 +54,8 @@
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindow.h"
+#include "gtkcssnodeprivate.h"
+#include "gtkwidgetprivate.h"
 
 #include "a11y/gtklabelaccessibleprivate.h"
 
@@ -312,6 +314,7 @@ struct _GtkLabelSelectionInfo
   gint selection_anchor;
   gint selection_end;
   GtkWidget *popup_menu;
+  GtkCssNode *selection_node;
 
   GList *links;
   GtkLabelLink *active_link;
@@ -4244,14 +4247,9 @@ gtk_label_draw (GtkWidget *widget,
 
       cairo_translate (cr, -allocation.x, -allocation.y);
 
-      gtk_render_layout (context, cr,
-                         x, y,
-                         priv->layout);
+      gtk_render_layout (context, cr, x, y, priv->layout);
 
-      state = gtk_widget_get_state_flags (widget);
-
-      if (info &&
-          (info->selection_anchor != info->selection_end))
+      if (info && (info->selection_anchor != info->selection_end))
         {
           gint range[2];
           cairo_region_t *clip;
@@ -4272,20 +4270,16 @@ gtk_label_draw (GtkWidget *widget,
                                                    1);
 
           cairo_save (cr);
-          gtk_style_context_save (context);
+          gtk_style_context_save_to_node (context, info->selection_node);
 
           gdk_cairo_region (cr, clip);
           cairo_clip (cr);
-
-          gtk_style_context_set_state (context, state | GTK_STATE_FLAG_SELECTED);
 
           gtk_render_background (context, cr,
                                  allocation.x, allocation.y,
                                  allocation.width, allocation.height);
 
-          gtk_render_layout (context, cr,
-                             x, y,
-                             priv->layout);
+          gtk_render_layout (context, cr, x, y, priv->layout);
 
           gtk_style_context_restore (context);
           cairo_restore (cr);
@@ -4327,9 +4321,12 @@ gtk_label_draw (GtkWidget *widget,
                                                        x, y,
                                                        range,
                                                        1);
+
               gdk_cairo_region (cr, clip);
               cairo_clip (cr);
               cairo_region_destroy (clip);
+
+              state = gtk_style_context_get_state (context);
 
               if (info->link_clicked)
                 state |= GTK_STATE_FLAG_ACTIVE;
@@ -5765,12 +5762,30 @@ gtk_label_select_region_index (GtkLabel *label,
 
           gtk_target_table_free (targets, n_targets);
           gtk_target_list_unref (list);
+
+          if (!priv->select_info->selection_node)
+            {
+              GtkCssNode *widget_node;
+
+              widget_node = gtk_widget_get_css_node (GTK_WIDGET (label));
+              priv->select_info->selection_node = gtk_css_node_new ();
+              gtk_css_node_set_name (priv->select_info->selection_node, I_("selection"));
+              gtk_css_node_set_parent (priv->select_info->selection_node, widget_node);
+              gtk_css_node_set_state (priv->select_info->selection_node, gtk_css_node_get_state (widget_node));
+              g_object_unref (priv->select_info->selection_node);
+            }
         }
       else
         {
           if (clipboard &&
               gtk_clipboard_get_owner (clipboard) == G_OBJECT (label))
             gtk_clipboard_clear (clipboard);
+
+          if (priv->select_info->selection_node)
+            {
+              gtk_css_node_set_parent (priv->select_info->selection_node, NULL);
+              priv->select_info->selection_node = NULL;
+            }
         }
 
       gtk_widget_queue_draw (GTK_WIDGET (label));
