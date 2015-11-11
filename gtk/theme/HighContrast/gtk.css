@@ -1949,7 +1949,7 @@ GtkLevelBar.vertical {
   -GtkLevelBar-min-block-width: 3;
   -GtkLevelBar-min-block-height: 34; }
 
-.level-bar.trough {
+levelbar trough {
   padding: 2px;
   border-radius: 3px;
   background-color: transparent;
@@ -1957,43 +1957,46 @@ GtkLevelBar.vertical {
   background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
   border-color: gray;
   box-shadow: inset 0 2px 2px -2px gray; }
-  .level-bar.trough:backdrop {
+  levelbar trough:backdrop {
     background-color: transparent;
     border-style: solid;
     background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
     color: #000;
     background-image: linear-gradient(to bottom, #fff);
     box-shadow: 0 1px rgba(255, 255, 255, 0); }
-.level-bar.fill-block {
+levelbar.horizontal block.discrete {
+  margin: 0 1px; }
+levelbar.vertical block.discrete {
+  margin: 1px 0; }
+levelbar block.filled {
   border-width: 1px;
   border-style: solid;
   border-color: black;
   background-color: #000;
   box-shadow: 0 1px rgba(0, 0, 0, 0.1);
   border-radius: 1px; }
-  .level-bar.fill-block:backdrop {
+  levelbar block.filled:backdrop {
     border-color: #000;
     box-shadow: none; }
-  .level-bar.fill-block.indicator-discrete.horizontal {
-    margin: 0 1px; }
-  .level-bar.fill-block.indicator-discrete.vertical {
-    margin: 1px 0; }
-  .level-bar.fill-block.level-high {
-    border-color: #5aa411;
-    background-color: #73d216; }
-    .level-bar.fill-block.level-high:backdrop {
-      border-color: #73d216; }
-  .level-bar.fill-block.level-low {
-    border-color: #c26000;
-    background-color: #f57900; }
-    .level-bar.fill-block.level-low:backdrop {
-      border-color: #f57900; }
-  .level-bar.fill-block.empty-fill-block {
-    background-color: transparent;
-    border-color: rgba(0, 0, 0, 0.2);
-    box-shadow: none; }
-    .level-bar.fill-block.empty-fill-block:backdrop {
-      border-color: rgba(0, 0, 0, 0.15); }
+levelbar block.level-high {
+  border-color: #5aa411;
+  background-color: #73d216; }
+  levelbar block.level-high:backdrop {
+    border-color: #73d216; }
+levelbar block.level-low {
+  border-color: #c26000;
+  background-color: #f57900; }
+  levelbar block.level-low:backdrop {
+    border-color: #f57900; }
+levelbar block.empty {
+  border-width: 1px;
+  border-style: solid;
+  background-color: transparent;
+  border-color: rgba(0, 0, 0, 0.2);
+  border-radius: 1px;
+  box-shadow: none; }
+  levelbar block.empty:backdrop {
+    border-color: rgba(0, 0, 0, 0.15); }
 
 textview text selection, textview text selection:focus, textview text selection:hover,
 .view selection,

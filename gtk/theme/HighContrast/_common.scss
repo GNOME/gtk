@@ -1791,8 +1791,8 @@ GtkLevelBar.vertical {
   -GtkLevelBar-min-block-height: 34;
 }
 
-.level-bar {
-  &.trough {
+levelbar {
+  & trough {
     // FIXME: outset not working
     padding: 2px;
     border-radius: 3px;
@@ -1801,9 +1801,9 @@ GtkLevelBar.vertical {
       @include entry(backdrop);
     }
   }
-  &.fill-block {
-    // FIXME: it would be nice to set make fill blocks bigger, but we'd need
-    // :nth-child working on discrete indicators
+  &.horizontal block.discrete { margin: 0 1px; }
+  &.vertical block.discrete { margin: 1px 0; }
+  & block.filled {
     border-width: 1px;
     border-style: solid;
     border-color: darken($selected_bg_color,10%);
@@ -1814,26 +1814,25 @@ GtkLevelBar.vertical {
       border-color: $selected_bg_color;
       box-shadow: none;
     }
-    &.indicator-discrete {
-      &.horizontal { margin: 0 1px; }
-      &.vertical { margin: 1px 0; }
-    }
-    &.level-high {
-      border-color: darken($success_color,10%);
-      background-color: $success_color;
-      &:backdrop { border-color: $success_color; }
-    }
-    &.level-low {
-      border-color: darken($warning_color,10%);
-      background-color: $warning_color;
-      &:backdrop { border-color: $warning_color; };
-    }
-    &.empty-fill-block {
-      background-color: transparent;
-      border-color: transparentize($fg_color,0.8);
-      box-shadow: none;
-      &:backdrop { border-color: transparentize($backdrop_fg_color,0.85); }
-    }
+  }
+  & block.level-high {
+    border-color: darken($success_color,10%);
+    background-color: $success_color;
+    &:backdrop { border-color: $success_color; }
+  }
+  & block.level-low {
+    border-color: darken($warning_color,10%);
+    background-color: $warning_color;
+    &:backdrop { border-color: $warning_color; };
+  }
+  & block.empty {
+    border-width: 1px;
+    border-style: solid;
+    background-color: transparent;
+    border-color: transparentize($fg_color,0.8);
+    border-radius: 1px;
+    box-shadow: none;
+    &:backdrop { border-color: transparentize($backdrop_fg_color,0.85); }
   }
 }
 
