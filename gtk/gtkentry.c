@@ -6493,13 +6493,13 @@ draw_text_with_color (GtkEntry *entry,
 {
   GtkEntryPrivate *priv = entry->priv;
   PangoLayout *layout = gtk_entry_ensure_layout (entry, TRUE);
-  GtkWidget *widget;
   gint x, y;
   gint start_pos, end_pos;
-
-  widget = GTK_WIDGET (entry);
+  GtkAllocation allocation;
 
   cairo_save (cr);
+
+  gtk_widget_get_allocation (GTK_WIDGET (entry), &allocation);
 
   get_layout_position (entry, &x, &y);
 
@@ -6518,21 +6518,19 @@ draw_text_with_color (GtkEntry *entry,
       GdkRGBA text_color;
       GtkStyleContext *context;
 
-      context = gtk_widget_get_style_context (widget);
+      context = gtk_widget_get_style_context (GTK_WIDGET (entry));
       gtk_style_context_save_to_node (context, priv->selection_node);
 
       pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
       gtk_entry_get_pixel_ranges (entry, &ranges, &n_ranges);
       for (i = 0; i < n_ranges; ++i)
-        gtk_render_background (context, cr,
-                               - priv->scroll_offset + ranges[2 * i], y,
-			       ranges[2 * i + 1], logical_rect.height);
-
-      for (i = 0; i < n_ranges; ++i)
         cairo_rectangle (cr,
                          - priv->scroll_offset + ranges[2 * i], y,
 			 ranges[2 * i + 1], logical_rect.height);
       cairo_clip (cr);
+
+      gtk_render_background (context, cr,
+                             0, 0, allocation.width, allocation.height);
 
       cairo_move_to (cr, x, y);
       gtk_style_context_get_color (context, gtk_style_context_get_state (context), &text_color);
