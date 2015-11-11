@@ -4621,24 +4621,24 @@ headerbar.selection-mode button.titlebutton,
 
 textview text:selected,
 .view:selected,
-calendar:selected, label:selected, label:selected:focus, label:selected:hover, .grid-child:selected, entry selection, spinbutton selection, entry selection:focus, spinbutton selection:focus, modelbutton.flat:selected,
+calendar:selected, label selection, label selection:focus, label selection:hover, .grid-child:selected, entry selection, spinbutton selection, entry selection:focus, spinbutton selection:focus, modelbutton.flat:selected,
 .menuitem.button.flat:selected, row:selected, .sidebar :selected {
   background-color: #4a90d9;
   color: #ffffff;
   outline-color: rgba(255, 255, 255, 0.3); }
   textview text:insensitive:selected,
   .view:insensitive:selected,
-  calendar:insensitive:selected, label:insensitive:selected, .grid-child:insensitive:selected, entry selection:insensitive, spinbutton selection:insensitive, modelbutton.flat:insensitive:selected,
+  calendar:insensitive:selected, label selection:insensitive, .grid-child:insensitive:selected, entry selection:insensitive, spinbutton selection:insensitive, modelbutton.flat:insensitive:selected,
   .menuitem.button.flat:insensitive:selected, row:insensitive:selected, .sidebar :insensitive:selected, placessidebar row:selected:insensitive label {
     color: #a5c8ec; }
   textview text:backdrop:selected,
   .view:backdrop:selected,
-  calendar:backdrop:selected, label:backdrop:selected, .grid-child:backdrop:selected, entry selection:backdrop, spinbutton selection:backdrop, modelbutton.flat:backdrop:selected,
+  calendar:backdrop:selected, label selection:backdrop, .grid-child:backdrop:selected, entry selection:backdrop, spinbutton selection:backdrop, modelbutton.flat:backdrop:selected,
   .menuitem.button.flat:backdrop:selected, row:backdrop:selected, .sidebar :backdrop:selected {
     color: #ffffff; }
     textview text:backdrop:insensitive:selected,
     .view:backdrop:insensitive:selected,
-    calendar:backdrop:insensitive:selected, label:backdrop:insensitive:selected, .grid-child:backdrop:insensitive:selected, entry selection:backdrop:insensitive, spinbutton selection:backdrop:insensitive, modelbutton.flat:backdrop:insensitive:selected,
+    calendar:backdrop:insensitive:selected, label selection:backdrop:insensitive, .grid-child:backdrop:insensitive:selected, entry selection:backdrop:insensitive, spinbutton selection:backdrop:insensitive, modelbutton.flat:backdrop:insensitive:selected,
     .menuitem.button.flat:backdrop:insensitive:selected, row:backdrop:insensitive:selected, .sidebar :backdrop:insensitive:selected, placessidebar row:selected:insensitive label:backdrop, placessidebar row:selected:backdrop:insensitive label {
       color: #80b1e4; }
 
