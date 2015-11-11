@@ -753,6 +753,7 @@ gtk_base_c_sources = 		\
 	gtkfilechooserembed.c	\
 	gtkfilechooserentry.c	\
 	gtkfilechoosernative.c	\
+	gtkfilechoosernativeportal.c	\
 	gtkfilechooserutils.c	\
 	gtkfilechooserwidget.c	\
 	gtkfilefilter.c		\

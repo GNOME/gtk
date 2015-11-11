@@ -175,6 +175,7 @@
 enum {
   MODE_FALLBACK,
   MODE_WIN32,
+  MODE_PORTAL,
 };
 
 enum {
@@ -558,6 +559,7 @@ gtk_file_chooser_native_get_files (GtkFileChooser *chooser)
 
   switch (self->mode)
     {
+    case MODE_PORTAL:
     case MODE_WIN32:
       return g_slist_copy_deep (self->custom_files, (GCopyFunc)g_object_ref, NULL);
 
@@ -579,6 +581,10 @@ gtk_file_chooser_native_show (GtkNativeDialog *native)
     self->mode = MODE_WIN32;
 #endif
 
+  if (self->mode == MODE_FALLBACK &&
+      gtk_file_chooser_native_portal_show (self))
+    self->mode = MODE_PORTAL;
+
   if (self->mode == MODE_FALLBACK)
     show_dialog (self);
 }
@@ -597,6 +603,8 @@ gtk_file_chooser_native_hide (GtkNativeDialog *native)
 #ifdef GDK_WINDOWING_WIN32
       gtk_file_chooser_native_win32_hide (self);
 #endif
+    case MODE_PORTAL:
+      gtk_file_chooser_native_portal_hide (self);
       break;
     }
 }
