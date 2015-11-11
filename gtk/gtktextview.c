@@ -233,6 +233,8 @@ struct _GtkTextViewPrivate
   GtkGesture *multipress_gesture;
   GtkGesture *drag_gesture;
 
+  GtkCssNode *selection_node;
+
   /* Default style settings */
   gint pixels_above_lines;
   gint pixels_below_lines;
@@ -1737,6 +1739,18 @@ gtk_text_view_init (GtkTextView *text_view)
   g_signal_connect (priv->drag_gesture, "drag-end",
                     G_CALLBACK (gtk_text_view_drag_gesture_end),
                     widget);
+
+  priv->selection_node = gtk_css_node_new ();
+  gtk_css_node_set_name (priv->selection_node, I_("selection"));
+  gtk_css_node_set_parent (priv->selection_node, priv->text_window->css_node);
+  gtk_css_node_set_state (priv->selection_node, gtk_css_node_get_state (priv->text_window->css_node));
+  g_object_unref (priv->selection_node);
+}
+
+GtkCssNode *
+gtk_text_view_get_selection_node (GtkTextView *text_view)
+{
+  return text_view->priv->selection_node;
 }
 
 static void
@@ -4838,6 +4852,7 @@ gtk_text_view_state_flags_changed (GtkWidget     *widget,
                                    GtkStateFlags  previous_state)
 {
   GtkTextView *text_view = GTK_TEXT_VIEW (widget);
+  GtkTextViewPrivate *priv = text_view->priv;
   GdkCursor *cursor;
 
   if (gtk_widget_get_realized (widget))
@@ -4847,12 +4862,12 @@ gtk_text_view_state_flags_changed (GtkWidget     *widget,
       else
         cursor = NULL;
 
-      gdk_window_set_cursor (text_view->priv->text_window->bin_window, cursor);
+      gdk_window_set_cursor (priv->text_window->bin_window, cursor);
 
       if (cursor)
       g_object_unref (cursor);
 
-      text_view->priv->mouse_cursor_obscured = FALSE;
+      priv->mouse_cursor_obscured = FALSE;
     }
 
   if (!gtk_widget_is_sensitive (widget))
@@ -4860,7 +4875,19 @@ gtk_text_view_state_flags_changed (GtkWidget     *widget,
       /* Clear any selection */
       gtk_text_view_unselect (text_view);
     }
-  
+
+  gtk_css_node_set_state (priv->text_window->css_node, gtk_widget_get_state (widget));
+  gtk_css_node_set_state (priv->selection_node, gtk_widget_get_state (widget));
+
+  if (priv->left_window)
+    gtk_css_node_set_state (priv->left_window->css_node, gtk_widget_get_state (widget));
+  if (priv->right_window)
+    gtk_css_node_set_state (priv->right_window->css_node, gtk_widget_get_state (widget));
+  if (priv->top_window)
+    gtk_css_node_set_state (priv->top_window->css_node, gtk_widget_get_state (widget));
+  if (priv->bottom_window)
+    gtk_css_node_set_state (priv->bottom_window->css_node, gtk_widget_get_state (widget));
+
   gtk_widget_queue_draw (widget);
 }
 

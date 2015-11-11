@@ -596,6 +596,8 @@ get_selected_clip (GtkTextRenderer    *text_renderer,
   return clip_region;
 }
 
+extern GtkCssNode *gtk_text_view_get_selection_node (GtkTextView *text_view);
+
 static void
 render_para (GtkTextRenderer    *text_renderer,
              GtkTextLineDisplay *line_display,
@@ -603,7 +605,6 @@ render_para (GtkTextRenderer    *text_renderer,
              int                 selection_end_index)
 {
   GtkStyleContext *context;
-  GtkStateFlags state;
   PangoLayout *layout = line_display->layout;
   int byte_offset = 0;
   PangoLayoutIter *iter;
@@ -611,6 +612,7 @@ render_para (GtkTextRenderer    *text_renderer,
   int screen_width;
   GdkRGBA selection;
   gboolean first = TRUE;
+  GtkCssNode *selection_node;
 
   iter = pango_layout_get_iter (layout);
 
@@ -624,14 +626,11 @@ render_para (GtkTextRenderer    *text_renderer,
   screen_width = line_display->total_width;
 
   context = gtk_widget_get_style_context (text_renderer->widget);
-  gtk_style_context_save (context);
-
-  state = gtk_style_context_get_state (context);
-  state |= GTK_STATE_FLAG_SELECTED;
-  gtk_style_context_set_state (context, state);
+  selection_node = gtk_text_view_get_selection_node ((GtkTextView*)text_renderer->widget);
+  gtk_style_context_save_to_node (context, selection_node);
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  gtk_style_context_get_background_color (context, state, &selection);
+  gtk_style_context_get_background_color (context, gtk_style_context_get_state (context), &selection);
 G_GNUC_END_IGNORE_DEPRECATIONS
 
  gtk_style_context_restore (context);
@@ -825,9 +824,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                 {
                   GdkRGBA color;
 
-                  state = gtk_style_context_get_state (context);
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-                  gtk_style_context_get_background_color (context, state, &color);
+                  gtk_style_context_get_background_color (context, gtk_style_context_get_state (context), &color);
 G_GNUC_END_IGNORE_DEPRECATIONS
 
                   gdk_cairo_set_source_rgba (cr, &color);
