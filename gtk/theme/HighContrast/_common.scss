@@ -113,9 +113,9 @@ textview text,
     color: $backdrop_fg_color;
     background-color: $backdrop_base_color;
   }
-  &:selected,
-  &:selected:focus,
-  &:selected:hover {
+  & selection,
+  & selection:focus,
+  & selection:hover {
     @extend %selected_items;
   }
 }

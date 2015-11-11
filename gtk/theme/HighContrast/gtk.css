@@ -1995,13 +1995,10 @@ GtkLevelBar.vertical {
     .level-bar.fill-block.empty-fill-block:backdrop {
       border-color: rgba(0, 0, 0, 0.15); }
 
-textview text:selected, textview text:selected:focus, textview text:selected:hover,
-.view:selected,
-calendar:selected,
-.view:selected:focus,
-calendar:focus:selected,
-.view:selected:hover,
-calendar:hover:selected, label selection, label selection:focus, label selection:hover, label selection:backdrop, entry selection
+textview text selection, textview text selection:focus, textview text selection:hover,
+.view selection,
+.view selection:focus,
+.view selection:hover, label selection, label selection:focus, label selection:hover, label selection:backdrop, entry selection
 entry selection:focus, spinbutton selection
 entry selection:focus, entry selection
 spinbutton selection:focus, spinbutton selection
@@ -2011,17 +2008,14 @@ spinbutton selection:focus, modelbutton.flat:hover, modelbutton.flat:selected,
   background-color: #000;
   color: #fff;
   outline-color: rgba(255, 255, 255, 0.3); }
-  textview text:backdrop:selected,
-  .view:backdrop:selected,
-  calendar:backdrop:selected,
-  calendar:backdrop:focus:selected,
-  calendar:backdrop:hover:selected, label selection:backdrop, entry selection
+  textview text selection:backdrop,
+  .view selection:backdrop, label selection:backdrop, entry selection
   entry selection:backdrop:focus, spinbutton selection
   entry selection:backdrop:focus, entry selection
   spinbutton selection:backdrop:focus, spinbutton selection
   spinbutton selection:backdrop:focus, modelbutton.flat:backdrop:hover, modelbutton.flat:backdrop:selected,
   .menuitem.button.flat:backdrop:hover,
-  .menuitem.button.flat:backdrop:selected, .list-row.activatable:backdrop:selected, .sidebar:backdrop:selected {
+  .menuitem.button.flat:backdrop:selected, .list-row.activatable:backdrop:selected, .sidebar:backdrop:selected, placessidebar .view:backdrop:selected, placessidebar calendar:backdrop:selected {
     background-color: gray;
     color: #fff; }
 
