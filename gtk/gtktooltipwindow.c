@@ -65,6 +65,11 @@ gtk_tooltip_window_class_init (GtkTooltipWindowClass *klass)
 
   gtk_widget_class_set_css_name (widget_class, I_("tooltip"));
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_TOOL_TIP);
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/ui/gtktooltipwindow.ui");
+
+  gtk_widget_class_bind_template_child (widget_class, GtkTooltipWindow, box);
+  gtk_widget_class_bind_template_child (widget_class, GtkTooltipWindow, image);
+  gtk_widget_class_bind_template_child (widget_class, GtkTooltipWindow, label);
 }
 
 static void
@@ -72,28 +77,10 @@ gtk_tooltip_window_init (GtkTooltipWindow *self)
 {
   GtkWindow *window = GTK_WINDOW (self);
 
-  gtk_window_set_type_hint (window, GDK_WINDOW_TYPE_HINT_TOOLTIP);
-  gtk_window_set_resizable (window, FALSE);
+  gtk_widget_init_template (GTK_WIDGET (self));
+
   gtk_window_set_use_subsurface (window, TRUE);
-
   _gtk_window_request_csd (window);
-
-  /* FIXME: don't hardcode the padding */
-  self->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
-  gtk_widget_set_margin_start (self->box, 6);
-  gtk_widget_set_margin_end (self->box, 6);
-  gtk_widget_set_margin_top (self->box, 6);
-  gtk_widget_set_margin_bottom (self->box, 6);
-  gtk_container_add (GTK_CONTAINER (self), self->box);
-  gtk_widget_show (self->box);
-
-  self->image = gtk_image_new ();
-  gtk_box_pack_start (GTK_BOX (self->box), self->image, FALSE, FALSE, 0);
-
-  self->label = gtk_label_new ("");
-  gtk_label_set_line_wrap (GTK_LABEL (self->label), TRUE);
-  gtk_label_set_max_width_chars (GTK_LABEL (self->label), MAX_TOOLTIP_LINE_WIDTH);
-  gtk_box_pack_start (GTK_BOX (self->box), self->label, FALSE, FALSE, 0);
 }
 
 GtkWidget *

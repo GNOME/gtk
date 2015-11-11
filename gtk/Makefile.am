@@ -1126,6 +1126,7 @@ templates =				\
 	ui/gtksearchbar.ui		\
 	ui/gtkscalebutton.ui		\
 	ui/gtkstatusbar.ui		\
+	ui/gtktooltipwindow.ui		\
 	ui/gtkvolumebutton.ui		\
 	ui/gtksidebarrow.ui
 
