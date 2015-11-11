@@ -3,17 +3,22 @@
 static GtkWidget *
 create_level_bar (void)
 {
-  GtkWidget *level_bar;
+  GtkWidget *bar;
 
-  level_bar = gtk_level_bar_new ();
+  bar = gtk_level_bar_new ();
+  gtk_level_bar_set_min_value (GTK_LEVEL_BAR (bar), 0.0);
+  gtk_level_bar_set_max_value (GTK_LEVEL_BAR (bar), 10.0);
 
-  gtk_level_bar_add_offset_value (GTK_LEVEL_BAR (level_bar),
-                                  GTK_LEVEL_BAR_OFFSET_LOW, 0.10);
+  gtk_level_bar_add_offset_value (GTK_LEVEL_BAR (bar),
+                                  GTK_LEVEL_BAR_OFFSET_LOW, 1.0);
 
-  gtk_level_bar_add_offset_value (GTK_LEVEL_BAR (level_bar),
-                                  "my-offset", 0.50);
+  gtk_level_bar_add_offset_value (GTK_LEVEL_BAR (bar),
+                                  GTK_LEVEL_BAR_OFFSET_HIGH, 9.0);
 
-  return level_bar;
+  gtk_level_bar_add_offset_value (GTK_LEVEL_BAR (bar),
+                                  "my-offset", 5.0);
+
+  return bar;
 }
 
 static void
@@ -21,16 +26,13 @@ add_custom_css (void)
 {
   GtkCssProvider *provider;
   const gchar data[] =
-  ".level-bar.fill-block.empty-fill-block {"
+  "levelbar.fill-block.empty-fill-block {"
   "   background-color: transparent;"
   "   background-image: none;"
   "   border-color: alpha(@theme_fg_color, 0.1);"
   "}"
-  ".level-bar.fill-block.level-my-offset {"
-  "   background-image: linear-gradient(to bottom,"
-  "                                     shade(magenta,0.9),"
-  "                                     magenta,"
-  "                                     shade(magenta,0.85));"
+  "levelbar.fill-block.level-my-offset {"
+  "   background: magenta;"
   "}";
 
   provider = gtk_css_provider_new ();
@@ -47,9 +49,9 @@ increase_level (gpointer data)
   gdouble value;
 
   value = gtk_level_bar_get_value (bar);
-  value += 0.01;
-  if (value >= 1.0)
-    value = 0.0;
+  value += 0.1;
+  if (value >= gtk_level_bar_get_max_value (bar))
+    value = gtk_level_bar_get_min_value (bar);
   gtk_level_bar_set_value (bar, value);
 
   return G_SOURCE_CONTINUE;
@@ -64,11 +66,23 @@ window_delete_event (GtkWidget *widget,
   return FALSE;
 }
 
+static void
+toggle (GtkSwitch *sw, GParamSpec *pspec, GtkLevelBar *bar)
+{
+  if (gtk_switch_get_active (sw))
+    gtk_level_bar_set_mode (bar, GTK_LEVEL_BAR_MODE_DISCRETE);
+  else
+    gtk_level_bar_set_mode (bar, GTK_LEVEL_BAR_MODE_CONTINUOUS);
+}
+
 int
 main (int argc, char *argv[])
 {
   GtkWidget *window;
+  GtkWidget *box;
   GtkWidget *bar;
+  GtkWidget *box2;
+  GtkWidget *sw;
 
   gtk_init (&argc, &argv);
 
@@ -76,9 +90,18 @@ main (int argc, char *argv[])
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_default_size (GTK_WINDOW (window), 500, 100);
+  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
+  g_object_set (box, "margin", 20, NULL);
   bar = create_level_bar ();
-  g_object_set (bar, "margin", 20, NULL);
-  gtk_container_add (GTK_CONTAINER (window), bar);
+  gtk_container_add (GTK_CONTAINER (window), box);
+  gtk_container_add (GTK_CONTAINER (box), bar);
+  box2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+  gtk_container_add (GTK_CONTAINER (box), box2);
+  gtk_container_add (GTK_CONTAINER (box2), gtk_label_new ("Discrete"));
+  sw = gtk_switch_new ();
+  gtk_container_add (GTK_CONTAINER (box2), sw);
+  g_signal_connect (sw, "notify::active", G_CALLBACK (toggle), bar);
+
   gtk_widget_show_all (window);
 
   g_signal_connect (window, "delete-event",
