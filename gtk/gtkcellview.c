@@ -48,6 +48,10 @@
  * listed top-to-bottom and thus all share the same width but may have separate
  * individual heights (left-to-right menus should be allocated vertically since
  * they all share the same height but may have variable widths).
+ *
+ * # CSS nodes
+ *
+ * GtkCellView has a single CSS node with name cellview.
  */
 
 static void        gtk_cell_view_constructed              (GObject          *object);
@@ -324,6 +328,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   ADD_SET_PROP ("background-set", PROP_BACKGROUND_SET,
                 P_("Background set"),
                 P_("Whether this tag affects the background color"));
+
+  gtk_widget_class_set_css_name (widget_class, "cellview");
 }
 
 static void
