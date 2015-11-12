@@ -73,7 +73,7 @@
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				SubSystem="1"
-				OptimizeReferences="1"
+				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
 				TargetMachine="1"
 			/>
@@ -134,7 +134,7 @@
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				SubSystem="1"
-				OptimizeReferences="1"
+				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
 				TargetMachine="17"
 			/>
