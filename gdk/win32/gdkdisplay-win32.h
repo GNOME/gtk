@@ -32,6 +32,7 @@ struct _GdkWin32Display
   GHashTable *cursor_cache;
 
   HWND hwnd;
+  HWND clipboard_hwnd;
 
   /* WGL/OpenGL Items */
   guint have_wgl : 1;
