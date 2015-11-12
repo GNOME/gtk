@@ -664,10 +664,11 @@ gtk_test_display_button_window (const gchar *window_title,
                                 ...) /* NULL terminated list of (label, &int) pairs */
 {
   va_list var_args;
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  GtkWidget *window = gtk_test_create_widget (GTK_TYPE_WINDOW, "title", window_title, NULL);
-  GtkWidget *vbox = gtk_test_create_widget (GTK_TYPE_BOX, "parent", window, "orientation", GTK_ORIENTATION_VERTICAL, NULL);
+  GtkWidget *window, *vbox;
   const char *arg1;
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+  window = gtk_test_create_widget (GTK_TYPE_WINDOW, "title", window_title, NULL);
+  vbox = gtk_test_create_widget (GTK_TYPE_BOX, "parent", window, "orientation", GTK_ORIENTATION_VERTICAL, NULL);
   gtk_test_create_widget (GTK_TYPE_LABEL, "label", dialog_text, "parent", vbox, NULL);
 G_GNUC_END_IGNORE_DEPRECATIONS;
   g_signal_connect (window, "destroy", G_CALLBACK (try_main_quit), NULL);
@@ -676,8 +677,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS;
   while (arg1)
     {
       int *arg2 = va_arg (var_args, int*);
+      GtkWidget *button;
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      GtkWidget *button = gtk_test_create_widget (GTK_TYPE_BUTTON, "label", arg1, "parent", vbox, NULL);
+      button = gtk_test_create_widget (GTK_TYPE_BUTTON, "label", arg1, "parent", vbox, NULL);
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       g_signal_connect_swapped (button, "clicked", G_CALLBACK (test_increment_intp), arg2);
       arg1 = va_arg (var_args, const char*);
@@ -710,9 +712,10 @@ GtkWidget*
 gtk_test_create_simple_window (const gchar *window_title,
                                const gchar *dialog_text)
 {
+  GtkWidget *window, *vbox;
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  GtkWidget *window = gtk_test_create_widget (GTK_TYPE_WINDOW, "title", window_title, NULL);
-  GtkWidget *vbox = gtk_test_create_widget (GTK_TYPE_BOX, "parent", window, "orientation", GTK_ORIENTATION_VERTICAL, NULL);
+  window = gtk_test_create_widget (GTK_TYPE_WINDOW, "title", window_title, NULL);
+  vbox = gtk_test_create_widget (GTK_TYPE_BOX, "parent", window, "orientation", GTK_ORIENTATION_VERTICAL, NULL);
   gtk_test_create_widget (GTK_TYPE_LABEL, "label", dialog_text, "parent", vbox, NULL);
 G_GNUC_END_IGNORE_DEPRECATIONS;
   g_signal_connect (window, "destroy", G_CALLBACK (try_main_quit), NULL);
