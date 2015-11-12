@@ -373,23 +373,23 @@ GtkTextTag    *gtk_text_buffer_create_tag (GtkTextBuffer *buffer,
  * iterator around using the GtkTextIter operators
  */
 GDK_AVAILABLE_IN_ALL
-gboolean gtk_text_buffer_get_iter_at_line_offset (GtkTextBuffer *buffer,
-                                                  GtkTextIter   *iter,
-                                                  gint           line_number,
-                                                  gint           char_offset);
+void gtk_text_buffer_get_iter_at_line_offset (GtkTextBuffer *buffer,
+                                              GtkTextIter   *iter,
+                                              gint           line_number,
+                                              gint           char_offset);
 GDK_AVAILABLE_IN_ALL
-gboolean gtk_text_buffer_get_iter_at_line_index  (GtkTextBuffer *buffer,
-                                                  GtkTextIter   *iter,
-                                                  gint           line_number,
-                                                  gint           byte_index);
+void gtk_text_buffer_get_iter_at_line_index  (GtkTextBuffer *buffer,
+                                              GtkTextIter   *iter,
+                                              gint           line_number,
+                                              gint           byte_index);
 GDK_AVAILABLE_IN_ALL
-void gtk_text_buffer_get_iter_at_offset          (GtkTextBuffer *buffer,
-                                                  GtkTextIter   *iter,
-                                                  gint           char_offset);
+void gtk_text_buffer_get_iter_at_offset      (GtkTextBuffer *buffer,
+                                              GtkTextIter   *iter,
+                                              gint           char_offset);
 GDK_AVAILABLE_IN_ALL
-gboolean gtk_text_buffer_get_iter_at_line        (GtkTextBuffer *buffer,
-                                                  GtkTextIter   *iter,
-                                                  gint           line_number);
+void gtk_text_buffer_get_iter_at_line        (GtkTextBuffer *buffer,
+                                              GtkTextIter   *iter,
+                                              gint           line_number);
 GDK_AVAILABLE_IN_ALL
 void gtk_text_buffer_get_start_iter          (GtkTextBuffer *buffer,
                                               GtkTextIter   *iter);
