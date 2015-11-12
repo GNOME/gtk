@@ -5076,6 +5076,54 @@ gtk_window_get_default_icon_list (void)
   return g_list_copy (default_icon_list);
 }
 
+#define INCLUDE_CSD_SIZE 1
+#define EXCLUDE_CSD_SIZE -1
+
+static void
+gtk_window_update_csd_size (GtkWindow *window,
+                            gint      *width,
+                            gint      *height,
+                            gint       apply)
+{
+  GtkWindowPrivate *priv = window->priv;
+  GtkBorder window_border = { 0 };
+  gint w, h;
+
+  if (priv->type != GTK_WINDOW_TOPLEVEL)
+    return;
+
+  if (!priv->decorated ||
+      priv->fullscreen)
+    return;
+
+  get_shadow_width (window, &window_border);
+  w = *width + apply * (window_border.left + window_border.right);
+  h = *height + apply * (window_border.top + window_border.bottom);
+
+  if (priv->title_box != NULL &&
+      gtk_widget_get_visible (priv->title_box) &&
+      gtk_widget_get_child_visible (priv->title_box))
+    {
+      gint minimum_height;
+      gint natural_height;
+
+      gtk_widget_get_preferred_height (priv->title_box, &minimum_height, &natural_height);
+      h += apply * natural_height;
+    }
+
+  /* Make sure the size remains acceptable */
+  if (w < 1)
+    w = 1;
+  if (h < 1)
+    h = 1;
+
+  /* Only update given size if not negative */
+  if (*width > -1)
+    *width = w;
+  if (*height > -1)
+    *height = h;
+}
+
 static void
 gtk_window_set_default_size_internal (GtkWindow    *window,
                                       gboolean      change_width,
@@ -5174,6 +5222,7 @@ gtk_window_set_default_size (GtkWindow   *window,
   g_return_if_fail (width >= -1);
   g_return_if_fail (height >= -1);
 
+  gtk_window_update_csd_size (window, &width, &height, INCLUDE_CSD_SIZE);
   gtk_window_set_default_size_internal (window, TRUE, width, TRUE, height, FALSE);
 }
 
@@ -5219,56 +5268,20 @@ gtk_window_get_default_size (GtkWindow *window,
 			     gint      *height)
 {
   GtkWindowGeometryInfo *info;
+  gint w, h;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
 
   info = gtk_window_get_geometry_info (window, FALSE);
+  w = info ? info->default_width : -1;
+  h = info ? info->default_height : -1;
+  gtk_window_update_csd_size (window, &w, &h, EXCLUDE_CSD_SIZE);
 
   if (width)
-    *width = info ? info->default_width : -1;
+    *width = w;
 
   if (height)
-    *height = info ? info->default_height : -1;
-}
-
-#define INCLUDE_CSD_SIZE 1
-#define EXCLUDE_CSD_SIZE -1
-
-static void
-gtk_window_update_csd_size (GtkWindow *window,
-                            gint      *width,
-                            gint      *height,
-                            gint       apply)
-{
-  GtkWindowPrivate *priv = window->priv;
-  GtkBorder window_border = { 0 };
-
-  if (priv->type != GTK_WINDOW_TOPLEVEL)
-    return;
-
-  if (priv->decorated &&
-      !priv->fullscreen)
-    {
-      get_shadow_width (window, &window_border);
-      *width += apply * (window_border.left + window_border.right);
-      *height += apply * (window_border.top + window_border.bottom);
-
-      if (priv->title_box != NULL &&
-          gtk_widget_get_visible (priv->title_box) &&
-          gtk_widget_get_child_visible (priv->title_box))
-        {
-          gint minimum_height;
-          gint natural_height;
-
-          gtk_widget_get_preferred_height (priv->title_box, &minimum_height, &natural_height);
-          *height += apply * natural_height;
-        }
-    }
-  /* Make sure the size remains acceptable */
-  if (*width < 1)
-    *width = 1;
-  if (*height < 1)
-    *height = 1;
+    *height = h;
 }
 
 /**
