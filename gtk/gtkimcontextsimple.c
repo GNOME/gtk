@@ -61,9 +61,6 @@
  * G WITH CEDILLA, i.e. ģ.
  */
 
-
-#define X11_DATADIR X11_DATA_PREFIX "/share/X11/locale"
-
 struct _GtkIMContextSimplePrivate
 {
   guint16        compose_buffer[GTK_MAX_COMPOSE_LEN + 1];
@@ -133,6 +130,23 @@ gtk_im_context_simple_class_init (GtkIMContextSimpleClass *class)
   gobject_class->finalize = gtk_im_context_simple_finalize;
 }
 
+static gchar*
+get_x11_compose_file_dir (void)
+{
+  gchar* compose_file_dir;
+  gchar* datadir = NULL;
+
+#if defined (GDK_WINDOWING_X11) || defined (GDK_WINDOWING_WAYLAND)
+  compose_file_dir = g_strdup (X11_DATA_PREFIX "/share/X11/locale");
+#else
+  datadir = g_strdup (_gtk_get_datadir ());
+  compose_file_dir = g_build_filename (datadir, "X11", "locale", NULL);
+  g_free (datadir);
+#endif
+
+  return compose_file_dir;
+}
+
 static void
 gtk_im_context_simple_init_compose_table (GtkIMContextSimple *im_context_simple)
 {
@@ -143,6 +157,7 @@ gtk_im_context_simple_init_compose_table (GtkIMContextSimple *im_context_simple)
   gchar **lang = NULL;
   gchar * const sys_langs[] = { "el_gr", "fi_fi", "pt_br", NULL };
   gchar * const *sys_lang = NULL;
+  gchar *x11_compose_file_dir = get_x11_compose_file_dir ();
 
   path = g_build_filename (g_get_user_config_dir (), "gtk-3.0", "Compose", NULL);
   if (g_file_test (path, G_FILE_TEST_EXISTS))
@@ -189,7 +204,7 @@ gtk_im_context_simple_init_compose_table (GtkIMContextSimple *im_context_simple)
         {
           if (g_ascii_strncasecmp (*lang, *sys_lang, strlen (*sys_lang)) == 0)
             {
-              path = g_build_filename (X11_DATADIR, *lang, "Compose", NULL);
+              path = g_build_filename (x11_compose_file_dir, *lang, "Compose", NULL);
               break;
             }
         }
@@ -203,6 +218,7 @@ gtk_im_context_simple_init_compose_table (GtkIMContextSimple *im_context_simple)
       path = NULL;
     }
 
+  g_free (x11_compose_file_dir);
   g_strfreev (langs);
 
   if (path != NULL)
