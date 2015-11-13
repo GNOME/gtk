@@ -710,7 +710,11 @@ gdk_win32_display_dispose (GObject *object)
 {
   GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (object);
 
-  g_clear_pointer (&display_win32->hwnd, (GDestroyNotify)DestroyWindow);
+  if (display_win32->hwnd != NULL)
+    {
+      DestroyWindow (display_win32->hwnd);
+      display_win32->hwnd = NULL;
+    }
 
   G_OBJECT_CLASS (gdk_win32_display_parent_class)->dispose (object);
 }
