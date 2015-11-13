@@ -1801,9 +1801,14 @@ levelbar {
       @include entry(backdrop);
     }
   }
-  &.horizontal block.discrete { margin: 0 1px; }
-  &.vertical block.discrete { margin: 1px 0; }
-  & block.filled {
+  &.horizontal.discrete block { margin: 0 1px; }
+  &.vertical.discrete block { margin: 1px 0; }
+  & block.filled.low {
+    border-color: darken($warning_color,10%);
+    background-color: $warning_color;
+    &:backdrop { border-color: $warning_color; };
+  }
+  & block.filled.high {
     border-width: 1px;
     border-style: solid;
     border-color: darken($selected_bg_color,10%);
@@ -1815,15 +1820,10 @@ levelbar {
       box-shadow: none;
     }
   }
-  & block.level-high {
+  & block.filled.full {
     border-color: darken($success_color,10%);
     background-color: $success_color;
     &:backdrop { border-color: $success_color; }
-  }
-  & block.level-low {
-    border-color: darken($warning_color,10%);
-    background-color: $warning_color;
-    &:backdrop { border-color: $warning_color; };
   }
   & block.empty {
     border-width: 1px;
