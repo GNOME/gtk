@@ -1853,9 +1853,11 @@ update_node_ordering (GtkNotebook *notebook)
 
 static void
 gtk_notebook_direction_changed (GtkWidget        *widget,
-                                GtkTextDirection  previous_direction)
+                                GtkTextDirection  previous_dir)
 {
   update_node_ordering (GTK_NOTEBOOK (widget));
+
+  GTK_WIDGET_CLASS (gtk_notebook_parent_class)->direction_changed (widget, previous_dir);
 }
 
 static gboolean
