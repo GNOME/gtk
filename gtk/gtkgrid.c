@@ -2551,8 +2551,6 @@ gtk_grid_get_row_baseline_position (GtkGrid      *grid,
  * one of those is global, meaning it will be the baseline in the
  * parent of the @grid.
  *
- * Returns: the row index defining the global baseline
- *
  * Since: 3.10
  */
 void
