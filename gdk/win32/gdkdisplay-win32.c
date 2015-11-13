@@ -714,7 +714,12 @@ gdk_win32_display_dispose (GObject *object)
 {
   GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (object);
 
-  g_clear_pointer (&display_win32->hwnd, (GDestroyNotify)DestroyWindow);
+  if (display_win32->hwnd != NULL)
+    {
+      DestroyWindow (display_win32->hwnd);
+      display_win32->hwnd = NULL;
+    }
+
   g_clear_pointer (&display_win32->clipboard_hwnd, (GDestroyNotify)DestroyWindow);
   _hwnd_next_viewer = NULL;
 
