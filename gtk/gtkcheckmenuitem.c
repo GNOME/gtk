@@ -498,7 +498,7 @@ gtk_check_menu_item_set_draw_as_radio (GtkCheckMenuItem *check_menu_item,
       if (draw_as_radio)
         gtk_css_node_set_name (priv->indicator_node, I_("radio"));
       else
-        gtk_css_node_set_name (priv->indicator_node, I_("checl"));
+        gtk_css_node_set_name (priv->indicator_node, I_("check"));
 
       gtk_widget_queue_draw (GTK_WIDGET (check_menu_item));
 
