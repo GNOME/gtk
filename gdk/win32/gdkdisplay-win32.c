@@ -720,8 +720,12 @@ gdk_win32_display_dispose (GObject *object)
       display_win32->hwnd = NULL;
     }
 
-  g_clear_pointer (&display_win32->clipboard_hwnd, (GDestroyNotify)DestroyWindow);
-  _hwnd_next_viewer = NULL;
+  if (display_win32->clipboard_hwnd != NULL)
+    {
+      DestroyWindow (display_win32->clipboard_hwnd);
+      display_win32->clipboard_hwnd = NULL;
+      _hwnd_next_viewer = NULL;
+    }
 
   G_OBJECT_CLASS (gdk_win32_display_parent_class)->dispose (object);
 }
