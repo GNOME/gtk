@@ -1275,7 +1275,10 @@ treeview.view {
 
   & rubberband { @extend rubberband; } // to avoid borders being overridden by the previously set props
 
-  &:selected { border-radius: 0; } // rest border radius in lists
+  &:selected {
+    border-radius: 0;
+    @extend %selected_items;
+  }
 
   &:selected, &:backdrop:selected {
     border-left-color: mix($selected_fg_color, $selected_bg_color, 50%);
