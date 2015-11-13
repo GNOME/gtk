@@ -194,7 +194,7 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
    * - Two alternative shortcuts: <shift>a Home
    * - A range: <alt>1...9
    *
-   * Note that < and > need to escaped as &lt; and &gt; when used
+   * Note that < and > need to be escaped as &lt; and &gt; when used
    * in .ui files.
    */
   properties[PROP_ACCELERATOR] =
