@@ -3390,28 +3390,33 @@ levelbar {
       border-color: #1f2222;
       background-image: linear-gradient(to bottom, #2c2c2c);
       box-shadow: 0 1px rgba(238, 238, 236, 0); }
-  levelbar.horizontal block.discrete {
+  levelbar.horizontal.discrete block {
     margin: 0 1px; }
-  levelbar.vertical block.discrete {
+  levelbar.vertical.discrete block {
     margin: 1px 0; }
-  levelbar block.filled {
+  levelbar block:not(.empty) {
     border: 1px solid #1c5187;
     background-color: #215d9c;
     box-shadow: 0 1px rgba(0, 0, 0, 0.1);
     border-radius: 1px; }
-    levelbar block.filled:backdrop {
+    levelbar block:not(.empty):backdrop {
       border-color: #215d9c;
       box-shadow: none; }
-  levelbar block.level-high {
-    border-color: #40760c;
-    background-color: #5aa411; }
-    levelbar block.level-high:backdrop {
-      border-color: #5aa411; }
-  levelbar block.level-low {
+  levelbar block.low {
     border-color: #c26000;
     background-color: #f57900; }
-    levelbar block.level-low:backdrop {
+    levelbar block.low:backdrop {
       border-color: #f57900; }
+  levelbar block.high {
+    border-color: #184472;
+    background-color: #215d9c; }
+    levelbar block.high:backdrop {
+      border-color: #215d9c; }
+  levelbar block.full {
+    border-color: #40760c;
+    background-color: #5aa411; }
+    levelbar block.full:backdrop {
+      border-color: #5aa411; }
   levelbar block.empty {
     border: 1px solid #1c5187;
     border-radius: 1px;
