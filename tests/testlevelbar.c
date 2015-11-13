@@ -16,6 +16,9 @@ create_level_bar (void)
                                   GTK_LEVEL_BAR_OFFSET_HIGH, 9.0);
 
   gtk_level_bar_add_offset_value (GTK_LEVEL_BAR (bar),
+                                  "full", 10.0);
+
+  gtk_level_bar_add_offset_value (GTK_LEVEL_BAR (bar),
                                   "my-offset", 5.0);
 
   return bar;
@@ -26,12 +29,7 @@ add_custom_css (void)
 {
   GtkCssProvider *provider;
   const gchar data[] =
-  "levelbar.fill-block.empty-fill-block {"
-  "   background-color: transparent;"
-  "   background-image: none;"
-  "   border-color: alpha(@theme_fg_color, 0.1);"
-  "}"
-  "levelbar.fill-block.level-my-offset {"
+  "levelbar block.my-offset {"
   "   background: magenta;"
   "}";
 
