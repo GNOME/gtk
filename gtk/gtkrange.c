@@ -1935,7 +1935,6 @@ gtk_range_draw (GtkWidget *widget,
 {
   GtkRange *range = GTK_RANGE (widget);
   GtkRangePrivate *priv = range->priv;
-  GtkStateFlags widget_state;
   gboolean draw_trough = TRUE;
   gboolean draw_slider = TRUE;
   GtkStyleContext *context;
@@ -1957,8 +1956,6 @@ gtk_range_draw (GtkWidget *widget,
 
   gtk_range_calc_marks (range);
   gtk_range_calc_layout (range);
-
-  widget_state = gtk_widget_get_state_flags (widget);
 
   /* Just to be confusing, we draw the trough for the whole
    * range rectangle, not the trough rectangle (the trough
@@ -2140,7 +2137,8 @@ gtk_range_draw (GtkWidget *widget,
             }
         }
 
-      if (!(widget_state & GTK_STATE_FLAG_INSENSITIVE) && gtk_widget_has_visible_focus (widget))
+      if (!(gtk_widget_get_state_flags (widget) & GTK_STATE_FLAG_INSENSITIVE) &&
+          gtk_widget_has_visible_focus (widget))
         {
           gtk_render_focus (context, cr,
                             priv->range_rect.x,
