@@ -106,6 +106,13 @@ textview text,
     color: #000;
     background-color: #fff; }
 
+iconview {
+  color: #000;
+  background-color: #fff; }
+  iconview:backdrop {
+    color: #000;
+    background-color: #fff; }
+
 .rubberband,
 rubberband,
 flowbox rubberband,
@@ -2007,7 +2014,7 @@ levelbar block.empty {
 textview text selection, textview text selection:focus, textview text selection:hover,
 .view selection,
 .view selection:focus,
-.view selection:hover, flowbox flowboxchild:selected, label selection, label selection:focus, label selection:hover, label selection:backdrop, entry selection
+.view selection:hover, iconview:selected, iconview:selected:focus, flowbox flowboxchild:selected, label selection, label selection:focus, label selection:hover, label selection:backdrop, entry selection
 entry selection:focus, spinbutton selection
 entry selection:focus, entry selection
 spinbutton selection:focus, spinbutton selection
@@ -2018,7 +2025,7 @@ spinbutton selection:focus, modelbutton.flat:hover, modelbutton.flat:selected,
   color: #fff;
   outline-color: rgba(255, 255, 255, 0.3); }
   textview text selection:backdrop,
-  .view selection:backdrop, flowbox flowboxchild:backdrop:selected, label selection:backdrop, entry selection
+  .view selection:backdrop, iconview:backdrop:selected, flowbox flowboxchild:backdrop:selected, label selection:backdrop, entry selection
   entry selection:backdrop:focus, spinbutton selection
   entry selection:backdrop:focus, entry selection
   spinbutton selection:backdrop:focus, spinbutton selection

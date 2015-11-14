@@ -120,6 +120,19 @@ textview text,
   }
 }
 
+iconview {
+  color: $fg_color;
+  background-color: $base_color;
+  &:backdrop {
+    color: $backdrop_fg_color;
+    background-color: $backdrop_base_color;
+  }
+  &:selected,
+  &:selected:focus {
+    @extend %selected_items;
+  }
+}
+
 .rubberband,
 rubberband {
   border: 1px solid $selected_bg_color;
