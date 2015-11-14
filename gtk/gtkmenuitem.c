@@ -878,7 +878,6 @@ gtk_menu_item_get_preferred_width (GtkWidget *widget,
   guint border_width;
   gint  min_width, nat_width;
   GtkStyleContext *context;
-  GtkStateFlags state;
   GtkBorder padding;
 
   bin = GTK_BIN (widget);
@@ -887,8 +886,7 @@ gtk_menu_item_get_preferred_width (GtkWidget *widget,
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
-  gtk_style_context_get_padding (context, state, &padding);
+  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
 
   min_width = (border_width * 2) + padding.left + padding.right;
   nat_width = min_width;
@@ -938,7 +936,6 @@ gtk_menu_item_real_get_height (GtkWidget *widget,
   GtkMenuItemPrivate *priv = menu_item->priv;
   GtkBin *bin;
   GtkStyleContext *context;
-  GtkStateFlags state;
   GtkBorder padding;
   GtkWidget *child;
   GtkWidget *parent;
@@ -950,8 +947,7 @@ gtk_menu_item_real_get_height (GtkWidget *widget,
   min_height = nat_height = 0;
 
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
-  gtk_style_context_get_padding (context, state, &padding);
+  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
 
   bin = GTK_BIN (widget);
   parent = gtk_widget_get_parent (widget);
@@ -1569,13 +1565,11 @@ gtk_menu_item_size_allocate (GtkWidget     *widget,
   if (child)
     {
       GtkStyleContext *context;
-      GtkStateFlags state;
       GtkBorder padding;
       guint border_width;
 
       context = gtk_widget_get_style_context (widget);
-      state = gtk_widget_get_state_flags (widget);
-      gtk_style_context_get_padding (context, state, &padding);
+      gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
 
       border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
       child_allocation.x = border_width + padding.left;
@@ -1726,14 +1720,12 @@ gtk_menu_item_draw (GtkWidget *widget,
 {
   GtkMenuItem *menu_item = GTK_MENU_ITEM (widget);
   GtkMenuItemPrivate *priv = menu_item->priv;
-  GtkStateFlags state;
   GtkStyleContext *context;
   GtkBorder padding;
   GtkWidget *child, *parent;
   gint x, y, w, h, width, height;
   guint border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
-  state = gtk_widget_get_state_flags (widget);
   context = gtk_widget_get_style_context (widget);
   width = gtk_widget_get_allocated_width (widget);
   height = gtk_widget_get_allocated_height (widget);
@@ -1746,7 +1738,7 @@ gtk_menu_item_draw (GtkWidget *widget,
   child = gtk_bin_get_child (GTK_BIN (menu_item));
   parent = gtk_widget_get_parent (widget);
 
-  gtk_style_context_get_padding (context, state, &padding);
+  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
 
   gtk_render_background (context, cr, x, y, w, h);
   gtk_render_frame (context, cr, x, y, w, h);
@@ -2139,7 +2131,6 @@ get_offsets (GtkMenu *menu,
              gint    *vertical_offset)
 {
   GtkStyleContext *context;
-  GtkStateFlags state;
   GtkBorder padding;
 
   gtk_widget_style_get (GTK_WIDGET (menu),
@@ -2148,8 +2139,7 @@ get_offsets (GtkMenu *menu,
                         NULL);
 
   context = gtk_widget_get_style_context (GTK_WIDGET (menu));
-  state = gtk_widget_get_state_flags (GTK_WIDGET (menu));
-  gtk_style_context_get_padding (context, state, &padding);
+  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
 
   *vertical_offset -= padding.top;
   *horizontal_offset += padding.left;
@@ -2178,7 +2168,6 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
   gint vertical_offset;
   gint available_left, available_right;
   GtkStyleContext *context;
-  GtkStateFlags state;
   GtkBorder parent_padding;
 
   g_return_if_fail (menu != NULL);
@@ -2247,8 +2236,7 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
         parent_menu_item = NULL;
 
       context = gtk_widget_get_style_context (parent);
-      state = gtk_widget_get_state_flags (parent);
-      gtk_style_context_get_padding (context, state, &parent_padding);
+      gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &parent_padding);
 
       if (parent_menu_item && !GTK_MENU (parent)->priv->torn_off)
         {
