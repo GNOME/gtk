@@ -113,6 +113,12 @@ treeview.view rubberband {
   border: 1px solid #000;
   background-color: rgba(0, 0, 0, 0.2); }
 
+flowbox flowboxchild {
+  padding: 3px;
+  border-radius: 3px; }
+  flowbox flowboxchild:selected {
+    outline-offset: -2px; }
+
 label:insensitive, label:backdrop:insensitive {
   color: gray; }
 
@@ -359,7 +365,7 @@ button {
   background-image: none;
   background-color: #fff;
   border-color: gray; }
-  button:hover, button.flat:hover, .sidebar-button.button:hover {
+  button:hover, button.flat:hover, button.sidebar-button:hover {
     border-width: 2px;
     border-style: solid;
     color: #000;
@@ -367,7 +373,7 @@ button {
     border-color: gray;
     background-image: none;
     -gtk-image-effect: highlight; }
-  button:active, button.flat:active, .sidebar-button.button:active, button:checked, button.flat:checked, .sidebar-button.button:checked {
+  button:active, button.flat:active, button.sidebar-button:active, button:checked, button.flat:checked, button.sidebar-button:checked {
     border-width: 2px;
     border-style: solid;
     background-image: none;
@@ -375,7 +381,7 @@ button {
     background-color: black;
     border-color: gray;
     transition-duration: 50ms; }
-  button:backdrop, button.flat:backdrop, .sidebar-button.button:backdrop {
+  button:backdrop, button.flat:backdrop, button.sidebar-button:backdrop {
     border-width: 2px;
     border-style: solid;
     color: #000;
@@ -384,21 +390,21 @@ button {
     background-image: none;
     text-shadow: none;
     icon-shadow: none; }
-    button:backdrop:active, button:backdrop:checked, button.flat:backdrop:active, .sidebar-button.button:backdrop:active, button.flat:backdrop:checked, .sidebar-button.button:backdrop:checked {
+    button:backdrop:active, button:backdrop:checked, button.flat:backdrop:active, button.sidebar-button:backdrop:active, button.flat:backdrop:checked, button.sidebar-button:backdrop:checked {
       border-width: 2px;
       border-style: solid;
       color: white;
       background-color: #8d8d8d;
       border-color: #8d8d8d;
       background-image: none; }
-    button:backdrop:insensitive, button.flat:backdrop:insensitive, .sidebar-button.button:backdrop:insensitive {
+    button:backdrop:insensitive, button.flat:backdrop:insensitive, button.sidebar-button:backdrop:insensitive {
       border-width: 2px;
       border-style: solid;
       color: gray;
       background-color: white;
       border-color: #8d8d8d;
       background-image: none; }
-    button:backdrop:insensitive:active, button.flat:backdrop:insensitive:active, .sidebar-button.button:backdrop:insensitive:active {
+    button:backdrop:insensitive:active, button.flat:backdrop:insensitive:active, button.sidebar-button:backdrop:insensitive:active {
       border-width: 2px;
       border-style: solid;
       color: gray;
@@ -414,7 +420,7 @@ button {
     background-image: none;
     text-shadow: none;
     icon-shadow: none; }
-    button:insensitive:active, button:insensitive.flat:active, .sidebar-button.button:insensitive:active {
+    button:insensitive:active, button:insensitive.flat:active, button.sidebar-button:insensitive:active {
       border-width: 2px;
       border-style: solid;
       color: gray;
@@ -623,29 +629,29 @@ button {
     background-image: none;
     background-color: #f6f6f6; }
 
-toolbar.inline-toolbar toolbutton > button.flat, toolbar.inline-toolbar toolbutton > .sidebar-button.button {
+toolbar.inline-toolbar toolbutton > button.flat, toolbar.inline-toolbar toolbutton > button.sidebar-button {
   border-radius: 0;
   border-left-style: none; }
-toolbar.inline-toolbar toolbutton:first-child > button.flat, toolbar.inline-toolbar toolbutton:first-child > .sidebar-button.button {
+toolbar.inline-toolbar toolbutton:first-child > button.flat, toolbar.inline-toolbar toolbutton:first-child > button.sidebar-button {
   border-radius: 3px 0 0 3px;
   border-left-style: solid; }
-toolbar.inline-toolbar toolbutton:last-child > button.flat, toolbar.inline-toolbar toolbutton:last-child > .sidebar-button.button {
+toolbar.inline-toolbar toolbutton:last-child > button.flat, toolbar.inline-toolbar toolbutton:last-child > button.sidebar-button {
   border-radius: 0 3px 3px 0; }
-toolbar.inline-toolbar toolbutton:last-child:dir(rtl) > button.flat, toolbar.inline-toolbar toolbutton:last-child:dir(rtl) > .sidebar-button.button {
+toolbar.inline-toolbar toolbutton:last-child:dir(rtl) > button.flat, toolbar.inline-toolbar toolbutton:last-child:dir(rtl) > button.sidebar-button {
   border-right-style: solid; }
-toolbar.inline-toolbar toolbutton:only-child > button.flat, toolbar.inline-toolbar toolbutton:only-child > .sidebar-button.button {
+toolbar.inline-toolbar toolbutton:only-child > button.flat, toolbar.inline-toolbar toolbutton:only-child > button.sidebar-button {
   border-radius: 3px;
   border-style: solid; }
 
-stacksidebar .list-row.needs-attention > label {
+stacksidebar row.needs-attention > label {
   animation: needs_attention 150ms ease-in;
   background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(#000), to(transparent)), -gtk-gradient(radial, center center, 0, center center, 0.5, to(#000), to(transparent));
   background-size: 6px 6px, 6px 6px;
   background-repeat: no-repeat;
   background-position: right 3px, right 4px; }
-  stacksidebar .list-row.needs-attention > label:backdrop {
+  stacksidebar row.needs-attention > label:backdrop {
     background-size: 6px 6px, 0 0; }
-  stacksidebar .list-row.needs-attention > label:dir(rtl) {
+  stacksidebar row.needs-attention > label:dir(rtl) {
     background-position: left 3px, left 4px; }
 
 .osd button, .osd button:hover, .osd button:active, .osd button:checked, .osd button:insensitive, .osd button:backdrop, .inline-toolbar button, .inline-toolbar button:backdrop, .linked > button, .linked > button:hover, .linked > button:active, .linked > button:checked, .linked > button:backdrop, .linked > combobox > button:dir(ltr) {
@@ -681,17 +687,17 @@ stacksidebar .list-row.needs-attention > label {
   border-radius: 3px;
   border-style: solid; }
 
-button.flat, .sidebar-button.button, button.flat:backdrop, .sidebar-button.button:backdrop, button.flat:insensitive:backdrop, .sidebar-button.button:insensitive:backdrop, modelbutton.flat,
+button.flat, button.sidebar-button, button.flat:backdrop, button.sidebar-button:backdrop, button.flat:insensitive:backdrop, button.sidebar-button:insensitive:backdrop, modelbutton.flat,
 .menuitem.button.flat, modelbutton.flat:backdrop,
-.menuitem.button.flat:backdrop, button:link, button:visited, button:link:hover, button:link:active, button:visited:hover, button:visited:active, button:link:backdrop, button:visited:backdrop, notebook tab button, .list-row.activatable,
-.list-row.activatable:backdrop,
-.list-row.activatable:backdrop:active,
-.list-row.activatable:backdrop:checked,
-.list-row.activatable:backdrop:insensitive,
-.list-row.activatable:backdrop:insensitive:active,
-.list-row.activatable:backdrop:insensitive:checked,
-.list-row.activatable:insensitive:active,
-.list-row.activatable:insensitive:checked, calendar.button, calendar.button:hover, calendar.button:backdrop, calendar.button:backdrop:hover {
+.menuitem.button.flat:backdrop, button:link, button:visited, button:link:hover, button:link:active, button:visited:hover, button:visited:active, button:link:backdrop, button:visited:backdrop, notebook tab button, row.activatable,
+row.activatable:backdrop,
+row.activatable:backdrop:active,
+row.activatable:backdrop:checked,
+row.activatable:backdrop:insensitive,
+row.activatable:backdrop:insensitive:active,
+row.activatable:backdrop:insensitive:checked,
+row.activatable:insensitive:active,
+row.activatable:insensitive:checked, calendar.button, calendar.button:hover, calendar.button:backdrop, calendar.button:backdrop:hover {
   border-color: transparent;
   background-color: transparent;
   background-image: none;
@@ -1317,9 +1323,9 @@ popover {
     color: #000;
     background-color: transparent;
     border: 0; }
-  popover button.flat, popover .sidebar-button.button,
+  popover button.flat, popover button.sidebar-button,
   popover button.flat:hover,
-  popover .sidebar-button.button:hover {
+  popover button.sidebar-button:hover {
     color: #000;
     text-shadow: none;
     transition: none; }
@@ -2001,24 +2007,24 @@ levelbar block.empty {
 textview text selection, textview text selection:focus, textview text selection:hover,
 .view selection,
 .view selection:focus,
-.view selection:hover, label selection, label selection:focus, label selection:hover, label selection:backdrop, entry selection
+.view selection:hover, flowbox flowboxchild:selected, label selection, label selection:focus, label selection:hover, label selection:backdrop, entry selection
 entry selection:focus, spinbutton selection
 entry selection:focus, entry selection
 spinbutton selection:focus, spinbutton selection
 spinbutton selection:focus, modelbutton.flat:hover, modelbutton.flat:selected,
 .menuitem.button.flat:hover,
-.menuitem.button.flat:selected, .list-row.activatable:selected, .sidebar:selected, placessidebar .view:selected, placessidebar calendar:selected {
+.menuitem.button.flat:selected, row.activatable:selected, .sidebar:selected, placessidebar .view:selected, placessidebar calendar:selected {
   background-color: #000;
   color: #fff;
   outline-color: rgba(255, 255, 255, 0.3); }
   textview text selection:backdrop,
-  .view selection:backdrop, label selection:backdrop, entry selection
+  .view selection:backdrop, flowbox flowboxchild:backdrop:selected, label selection:backdrop, entry selection
   entry selection:backdrop:focus, spinbutton selection
   entry selection:backdrop:focus, entry selection
   spinbutton selection:backdrop:focus, spinbutton selection
   spinbutton selection:backdrop:focus, modelbutton.flat:backdrop:hover, modelbutton.flat:backdrop:selected,
   .menuitem.button.flat:backdrop:hover,
-  .menuitem.button.flat:backdrop:selected, .list-row.activatable:backdrop:selected, .sidebar:backdrop:selected, placessidebar .view:backdrop:selected, placessidebar calendar:backdrop:selected {
+  .menuitem.button.flat:backdrop:selected, row.activatable:backdrop:selected, .sidebar:backdrop:selected, placessidebar .view:backdrop:selected, placessidebar calendar:backdrop:selected {
     background-color: gray;
     color: #fff; }
 
@@ -2185,60 +2191,61 @@ placessidebar .view separator:backdrop {
 /*********
  * Lists *
  *********/
-.list, .list-row {
+list {
   background-color: #fff;
   border-color: gray; }
-  .list:backdrop, .list-row:backdrop {
+  list:backdrop {
     background-color: #fff;
     border-color: #8d8d8d; }
+  list row {
+    padding: 2px; }
 
-.list-row,
-.grid-child {
-  padding: 2px; }
-
-.list-row.activatable,
-.list-row.activatable:backdrop,
-.list-row.activatable:backdrop:active,
-.list-row.activatable:backdrop:checked,
-.list-row.activatable:backdrop:insensitive,
-.list-row.activatable:backdrop:insensitive:active,
-.list-row.activatable:backdrop:insensitive:checked,
-.list-row.activatable:insensitive:active,
-.list-row.activatable:insensitive:checked {
+row.activatable,
+row.activatable:backdrop,
+row.activatable:backdrop:active,
+row.activatable:backdrop:checked,
+row.activatable:backdrop:insensitive,
+row.activatable:backdrop:insensitive:active,
+row.activatable:backdrop:insensitive:checked,
+row.activatable:insensitive:active,
+row.activatable:insensitive:checked {
   background-color: rgba(255, 255, 255, 0);
   border-style: none;
   border-radius: 0;
   box-shadow: none; }
 
-.list-row.activatable {
+row.activatable {
   color: #000; }
-  .list-row.activatable:hover, placessidebar .has-open-popup {
+  row.activatable:hover, placessidebar .has-open-popup {
     background-color: #f2f2f2; }
-  .list-row.activatable:active {
+  row.activatable:active {
     box-shadow: inset 0 2px 2px -2px rgba(0, 0, 0, 0.2); }
-  .list-row.activatable:selected {
+  row.activatable:selected {
     background-color: #000;
     color: #fff; }
-    .list-row.activatable:selected:active {
+    row.activatable:selected:active {
       box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.5); }
-    .list-row.activatable:selected:hover, placessidebar .has-open-popup:selected {
+    row.activatable:selected:hover, placessidebar .has-open-popup:selected {
       background-color: black; }
-    .list-row.activatable:selected:backdrop {
+    row.activatable:selected:backdrop {
       background-color: gray; }
-    .list-row.activatable:selected .button.flat {
+    row.activatable:selected .button.flat {
       color: #fff; }
-      .list-row.activatable:selected .button.flat:hover {
+      row.activatable:selected .button.flat:hover {
         color: #000; }
-      .list-row.activatable:selected .button.flat:active {
+      row.activatable:selected .button.flat:active {
         color: #fff; }
-.list-row .button.flat {
+row .button.flat {
   color: #000; }
-  .list-row .button.flat:active {
+  row .button.flat:active {
     color: #fff; }
 
-.list-row, .list-row.activatable {
+row,
+row.activatable {
   transition: all 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94); }
-  .list-row:hover, .list-row.activatable:hover, placessidebar .has-open-popup {
+  row:hover,
+  row.activatable:hover,
+  placessidebar .has-open-popup {
     transition: none; }
 
 /*********************
@@ -2259,13 +2266,13 @@ placessidebar .view separator:backdrop {
 /*************
  * Expanders *
  *************/
-GtkExpander {
+expander arrow {
   -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
-  GtkExpander:dir(rtl) {
+  expander arrow:dir(rtl) {
     -gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl"); }
-  GtkExpander:hover {
+  expander arrow:hover {
     color: #4d4d4d; }
-  GtkExpander:checked {
+  expander arrow:checked {
     -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); }
 
 /************
@@ -2472,28 +2479,27 @@ GtkFileChooserDialog .dialog-action-box {
       border-right: none;
       border-left: 1px solid gray; }
 
-GtkSidebarRow.list-row {
+placessidebar row {
   padding: 0px; }
-GtkSidebarRow .sidebar-revealer {
-  padding: 4px 14px 4px 12px; }
-GtkSidebarRow .sidebar-icon {
-  opacity: 0.9; }
-  GtkSidebarRow .sidebar-icon:dir(ltr) {
-    padding-right: 8px; }
-  GtkSidebarRow .sidebar-icon:dir(rtl) {
-    padding-left: 8px; }
-GtkSidebarRow .sidebar-label:dir(ltr) {
-  padding-right: 2px; }
-GtkSidebarRow .sidebar-label:dir(rtl) {
-  padding-left: 2px; }
-
-.sidebar-button.button {
-  border-radius: 100%;
-  outline-radius: 100%; }
-  .sidebar-button.button.image-button {
-    padding: 5px; }
-  .sidebar-button.button:not(:hover):not(:active) > image, .sidebar-button.button:backdrop > image {
+  placessidebar row > revealer {
+    padding: 4px 14px 4px 12px; }
+  placessidebar row image.sidebar-icon {
     opacity: 0.9; }
+    placessidebar row image.sidebar-icon:dir(ltr) {
+      padding-right: 8px; }
+    placessidebar row image.sidebar-icon:dir(rtl) {
+      padding-left: 8px; }
+  placessidebar row label .sidebar-label:dir(ltr) {
+    padding-right: 2px; }
+  placessidebar row label .sidebar-label:dir(rtl) {
+    padding-left: 2px; }
+  button.sidebar-button {
+    border-radius: 100%;
+    outline-radius: 100%; }
+    button.sidebar-button.image-button {
+      padding: 5px; }
+    button.sidebar-button:not(:hover):not(:active) > image, button.sidebar-button:backdrop > image {
+      opacity: 0.9; }
 placessidebar .view {
   color: #000;
   background-color: transparent; }
@@ -2502,12 +2508,12 @@ placessidebar .view {
     placessidebar .view .image:selected {
       color: #e6e6e6; }
 
-stacksidebar .list-row {
+stacksidebar row {
   padding: 10px 4px; }
-  stacksidebar .list-row > label {
+  stacksidebar row > label {
     padding-left: 6px;
     padding-right: 6px; }
-  stacksidebar .list-row.needs-attention > label {
+  stacksidebar row.needs-attention > label {
     background-size: 6px 6px, 0 0; }
 
 /*********

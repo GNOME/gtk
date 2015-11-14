@@ -128,6 +128,14 @@ rubberband {
 
 flowbox {
   & rubberband { @extend rubberband; }
+  flowboxchild {
+    padding: 3px;
+    border-radius: 3px;
+    &:selected {
+      @extend %selected_items;
+      outline-offset: -2px;
+    }
+  }
 }
 
 label {
@@ -482,7 +490,6 @@ toolbar.inline-toolbar toolbutton { // .inline-toolbar.toolbar here for
     border-style: solid;
   }
 }
-
 
 %needs_attention {
   animation: needs_attention 150ms ease-in;
@@ -1928,30 +1935,27 @@ separator {
  * Lists *
  *********/
 
-.list, .list-row {
+list {
   background-color: $base_color;
   border-color: $borders_color;
   &:backdrop {
     background-color: $backdrop_base_color;
     border-color: $backdrop_borders_color;
   }
+  & row {
+    padding: 2px;
+  }
 }
 
-.list-row,
-.grid-child {
-  padding: 2px;
-}
-
-
-.list-row.activatable,
-.list-row.activatable:backdrop,
-.list-row.activatable:backdrop:active,
-.list-row.activatable:backdrop:checked,
-.list-row.activatable:backdrop:insensitive,
-.list-row.activatable:backdrop:insensitive:active,
-.list-row.activatable:backdrop:insensitive:checked,
-.list-row.activatable:insensitive:active,
-.list-row.activatable:insensitive:checked {
+row.activatable,
+row.activatable:backdrop,
+row.activatable:backdrop:active,
+row.activatable:backdrop:checked,
+row.activatable:backdrop:insensitive,
+row.activatable:backdrop:insensitive:active,
+row.activatable:backdrop:insensitive:checked,
+row.activatable:insensitive:active,
+row.activatable:insensitive:checked {
   // reset button inherited stuff
   @extend %undecorated_button;
   background-color: transparentize($base_color,1); // for the transition
@@ -1960,7 +1964,7 @@ separator {
   box-shadow: none;   // and no box-shadow
 }
 
-.list-row {
+row {
   &.activatable {
     color: $fg_color;
     &:hover {
@@ -1993,7 +1997,8 @@ separator {
 
 
 // transition
-.list-row, .list-row.activatable {
+row,
+row.activatable {
   transition: all 300ms $ease-out-quad;
   &:hover { transition: none; }
 }
@@ -2020,11 +2025,13 @@ separator {
  * Expanders *
  *************/
 
-GtkExpander {
-  -gtk-icon-source: -gtk-icontheme('pan-end-symbolic');
-  &:dir(rtl) { -gtk-icon-source: -gtk-icontheme('pan-end-symbolic-rtl'); }
-  &:hover { color: lighten($fg_color,30%); } //only lightens the arrow
-  &:checked { -gtk-icon-source: -gtk-icontheme('pan-down-symbolic'); }
+expander {
+  & arrow {
+    -gtk-icon-source: -gtk-icontheme('pan-end-symbolic');
+    &:dir(rtl) { -gtk-icon-source: -gtk-icontheme('pan-end-symbolic-rtl'); }
+    &:hover { color: lighten($fg_color,30%); } //only lightens the arrow
+    &:checked { -gtk-icon-source: -gtk-icontheme('pan-down-symbolic'); }
+  }
 }
 
 /************
@@ -2179,45 +2186,41 @@ GtkFileChooserDialog {
 }
 
 $_placesidebar_icons_opacity: 0.9;
-GtkSidebarRow {
-  // Needs overriding of the GtkListBoxRow padding
-  &.list-row {
-    padding: 0px;
-  }
-  // Using margins/padding directly in the SidebarRow
-  // will make the animation of the new bookmark row jump
-  .sidebar-revealer {
-    padding: 4px 14px 4px 12px;
-  }
-  .sidebar-icon {
-    opacity: $_placesidebar_icons_opacity; // dim the device icons
-    &:dir(ltr) { padding-right: 8px; }
-    &:dir(rtl) { padding-left: 8px; }
-  }
-  .sidebar-label {
-    &:dir(ltr) { padding-right: 2px; }
-    &:dir(rtl) { padding-left: 2px; }
-  }
-}
-
-// Places sidebar is a special case, since the view here have to look like chrome not content, so we override text color
 placessidebar {
-
-  @at-root .sidebar-button.button { // @at-root needded to not change the specificity making button styling inheritance broken
+  & row {
+    // Needs overriding of the GtkListBoxRow padding
+    padding: 0px;
+    // Using margins/padding directly in the SidebarRow
+    // will make the animation of the new bookmark row jump
+    & > revealer {
+      padding: 4px 14px 4px 12px;
+    }
+    & image.sidebar-icon {
+      opacity: $_placesidebar_icons_opacity; // dim the device icons
+      &:dir(ltr) { padding-right: 8px; }
+      &:dir(rtl) { padding-left: 8px; }
+    }
+    & label .sidebar-label {
+      &:dir(ltr) { padding-right: 2px; }
+      &:dir(rtl) { padding-left: 2px; }
+    }
+    @at-root button.sidebar-button { // @at-root needded to not change the specificity making button styling inheritance broken
                                     // so istead of "GtkPlacesSidebar.sidebar .sidebar-button.button" [specificity 0,0,3,1]
                                     // the extended selector ".sidebar-button.button" [specificity 0,0,2,0]
 
-    &.image-button { padding: 5px; }
+      &.image-button { padding: 5px; }
 
-    @extend button.flat;
-    border-radius: 100%;
-    outline-radius: 100%;
-    &:not(:hover):not(:active) > image,
-    &:backdrop > image { opacity: $_placesidebar_icons_opacity };
+      @extend button.flat;
+      border-radius: 100%;
+      outline-radius: 100%;
+      &:not(:hover):not(:active) > image,
+      &:backdrop > image { opacity: $_placesidebar_icons_opacity };
+    }
   }
+
   // this is for indicating which sidebar row generated a popover
   // see https://bugzilla.gnome.org/show_bug.cgi?id=754411
-  .has-open-popup { @extend .list-row.activatable:hover; }
+  .has-open-popup { @extend row.activatable:hover; }
 
   .view {
 
@@ -2242,7 +2245,7 @@ placessidebar {
 }
 
 stacksidebar {
-  .list-row {
+  & row {
     padding: 10px 4px;
     > label {
       padding-left: 6px;
