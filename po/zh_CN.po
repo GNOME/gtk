@@ -2615,7 +2615,7 @@ msgstr "复制链接地址(_L)"
 
 #: gtk/gtk-launch.c:71
 msgid "APPLICATION [URI…] — launch an APPLICATION with URI."
-msgstr "APPLICATION [URI…] — 带 URI 参数启动一个 APPLICATION"
+msgstr "APPLICATION [URI...] — 带 URI 参数启动一个 APPLICATION"
 
 #. Translators: this message will appear after the usage string
 #. and before the list of options.
@@ -5519,7 +5519,7 @@ msgstr "连接到服务器(_S)"
 # 原文已经是正确省略号了，那么不需要舍近求远用三点。
 #: gtk/ui/gtkplacesview.ui:246
 msgid "Enter server address…"
-msgstr "输入服务器地址…"
+msgstr "输入服务器地址..."
 
 #: gtk/ui/gtkprintunixdialog.ui:117
 msgid "Printer"
