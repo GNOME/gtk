@@ -3141,21 +3141,20 @@ gtk_list_box_row_draw (GtkWidget *widget,
                        cairo_t   *cr)
 {
   GtkListBoxRow *row = GTK_LIST_BOX_ROW (widget);
-  GtkAllocation allocation = {0};
-  GtkStyleContext* context;
-  GtkStateFlags state;
-  GtkBorder border;
+  GtkAllocation allocation;
+  GtkStyleContext *context;
 
   gtk_widget_get_allocation (widget, &allocation);
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
 
   gtk_render_background (context, cr, 0, 0, allocation.width, allocation.height);
   gtk_render_frame (context, cr, 0, 0, allocation.width, allocation.height);
 
   if (gtk_widget_has_visible_focus (GTK_WIDGET (row)))
     {
-      gtk_style_context_get_border (context, state, &border);
+      GtkBorder border;
+
+      gtk_style_context_get_border (context, gtk_style_context_get_state (context), &border);
       gtk_render_focus (context, cr, border.left, border.top,
                         allocation.width - border.left - border.right,
                         allocation.height - border.top - border.bottom);
