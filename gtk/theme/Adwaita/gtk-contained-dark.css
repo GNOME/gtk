@@ -89,7 +89,10 @@ treeview.view rubberband,
   background-color: rgba(24, 68, 114, 0.2); }
 
 flowbox flowboxchild {
-  padding: 2px; }
+  padding: 3px;
+  border-radius: 3px; }
+  flowbox flowboxchild:selected {
+    outline-offset: -2px; }
 
 label.separator {
   color: #eeeeec; }
@@ -126,12 +129,6 @@ textview {
   background-color: #313434; }
   textview:backdrop {
     background-color: #333636; }
-
-.grid-child {
-  padding: 3px;
-  border-radius: 3px; }
-  .grid-child:selected {
-    outline-offset: -2px; }
 
 popover.magnifier,
 popover.osd,
@@ -3610,9 +3607,6 @@ list {
   list row {
     padding: 2px; }
 
-.grid-child {
-  padding: 2px; }
-
 row.activatable.has-open-popup, row.activatable:hover {
   background-color: rgba(238, 238, 236, 0.05); }
 row.activatable:active {
@@ -4465,20 +4459,20 @@ headerbar.selection-mode button.titlebutton,
 
 textview text selection, textview text selection:focus,
 .view selection,
-.view selection:focus, iconview:selected, iconview:selected:focus, flowbox flowboxchild:selected, label selection, label selection:focus, label selection:hover, .grid-child:selected, entry selection, spinbutton selection, entry selection:focus, spinbutton selection:focus, modelbutton.flat:selected,
+.view selection:focus, iconview:selected, iconview:selected:focus, flowbox flowboxchild:selected, label selection, label selection:focus, label selection:hover, entry selection, spinbutton selection, entry selection:focus, spinbutton selection:focus, modelbutton.flat:selected,
 .menuitem.button.flat:selected, treeview.view:selected, row:selected, .sidebar :selected {
   background-color: #215d9c;
   color: #ffffff; }
   textview text selection:insensitive,
-  .view selection:insensitive, iconview:insensitive:selected, flowbox flowboxchild:insensitive:selected, label selection:insensitive, .grid-child:insensitive:selected, entry selection:insensitive, spinbutton selection:insensitive, modelbutton.flat:insensitive:selected,
+  .view selection:insensitive, iconview:insensitive:selected, flowbox flowboxchild:insensitive:selected, label selection:insensitive, entry selection:insensitive, spinbutton selection:insensitive, modelbutton.flat:insensitive:selected,
   .menuitem.button.flat:insensitive:selected, treeview.view:insensitive:selected, row:insensitive:selected, .sidebar :insensitive:selected, placessidebar row:selected:insensitive label {
     color: #90aece; }
   textview text selection:backdrop,
-  .view selection:backdrop, iconview:backdrop:selected, flowbox flowboxchild:backdrop:selected, label selection:backdrop, .grid-child:backdrop:selected, entry selection:backdrop, spinbutton selection:backdrop, modelbutton.flat:backdrop:selected,
+  .view selection:backdrop, iconview:backdrop:selected, flowbox flowboxchild:backdrop:selected, label selection:backdrop, entry selection:backdrop, spinbutton selection:backdrop, modelbutton.flat:backdrop:selected,
   .menuitem.button.flat:backdrop:selected, treeview.view:backdrop:selected, row:backdrop:selected, .sidebar :backdrop:selected {
     color: #ffffff; }
     textview text selection:backdrop:insensitive,
-    .view selection:backdrop:insensitive, iconview:backdrop:insensitive:selected, flowbox flowboxchild:backdrop:insensitive:selected, label selection:backdrop:insensitive, .grid-child:backdrop:insensitive:selected, entry selection:backdrop:insensitive, spinbutton selection:backdrop:insensitive, modelbutton.flat:backdrop:insensitive:selected,
+    .view selection:backdrop:insensitive, iconview:backdrop:insensitive:selected, flowbox flowboxchild:backdrop:insensitive:selected, label selection:backdrop:insensitive, entry selection:backdrop:insensitive, spinbutton selection:backdrop:insensitive, modelbutton.flat:backdrop:insensitive:selected,
     .menuitem.button.flat:backdrop:insensitive:selected, treeview.view:backdrop:insensitive:selected, row:backdrop:insensitive:selected, .sidebar :backdrop:insensitive:selected, placessidebar row:selected:insensitive label:backdrop, placessidebar row:selected:backdrop:insensitive label {
       color: #648eba; }
 
