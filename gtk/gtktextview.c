@@ -4761,16 +4761,14 @@ gtk_text_view_unmap (GtkWidget *widget)
 
 static void
 text_window_set_padding (GtkTextView     *text_view,
-                         GtkStyleContext *style_context)
+                         GtkStyleContext *context)
 {
   GtkTextViewPrivate *priv;
-  GtkStateFlags state;
   GtkBorder padding;
 
   priv = text_view->priv;
 
-  state = gtk_widget_get_state_flags (GTK_WIDGET (text_view));
-  gtk_style_context_get_padding (style_context, state, &padding);
+  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
 
   if (padding.left != priv->left_padding ||
       padding.right != priv->right_padding ||
