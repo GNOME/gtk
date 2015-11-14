@@ -1016,7 +1016,6 @@ gtk_viewport_get_preferred_size (GtkWidget      *widget,
   GtkViewport *viewport = GTK_VIEWPORT (widget);
   GtkViewportPrivate *priv = viewport->priv;
   GtkStyleContext *context;
-  GtkStateFlags state;
   GtkBorder padding, border;
   GtkWidget *child;
   gint       child_min, child_nat;
@@ -1027,12 +1026,11 @@ gtk_viewport_get_preferred_size (GtkWidget      *widget,
   minimum = 2 * gtk_container_get_border_width (GTK_CONTAINER (widget));
 
   context = gtk_widget_get_style_context (GTK_WIDGET (widget));
-  state = gtk_widget_get_state_flags (GTK_WIDGET (widget));
-  gtk_style_context_get_padding (context, state, &padding);
+  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
 
   if (priv->shadow_type != GTK_SHADOW_NONE)
     {
-      gtk_style_context_get_border (context, state, &border);
+      gtk_style_context_get_border (context, gtk_style_context_get_state (context), &border);
 
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
         {
