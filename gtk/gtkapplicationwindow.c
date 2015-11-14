@@ -976,7 +976,7 @@ show_help_overlay (GSimpleAction *action,
 /**
  * gtk_application_window_set_help_overlay:
  * @window: a #GtkApplicationWindow
- * @help_overlay: a #GtkShortcutsWindow
+ * @help_overlay: (nullable): a #GtkShortcutsWindow
  *
  * Associates a shortcuts window with the application window, and
  * sets up an action with the name win.show-help-overlay to present
