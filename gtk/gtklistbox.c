@@ -3150,8 +3150,8 @@ gtk_list_box_row_draw (GtkWidget *widget,
   context = gtk_widget_get_style_context (widget);
   state = gtk_widget_get_state_flags (widget);
 
-  gtk_render_background (context, cr, (gdouble) 0, (gdouble) 0, (gdouble) allocation.width, (gdouble) allocation.height);
-  gtk_render_frame (context, cr, (gdouble) 0, (gdouble) 0, (gdouble) allocation.width, (gdouble) allocation.height);
+  gtk_render_background (context, cr, 0, 0, allocation.width, allocation.height);
+  gtk_render_frame (context, cr, 0, 0, allocation.width, allocation.height);
 
   if (gtk_widget_has_visible_focus (GTK_WIDGET (row)))
     {
