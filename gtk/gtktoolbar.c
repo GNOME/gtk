@@ -3575,7 +3575,6 @@ _gtk_toolbar_paint_space_line (GtkWidget           *widget,
 {
   GtkOrientation orientation;
   GtkStyleContext *context;
-  GtkStateFlags state;
   GtkBorder padding;
   gint width, height;
   const gdouble start_fraction = (SPACE_LINE_START / SPACE_LINE_DIVISION);
@@ -3585,11 +3584,11 @@ _gtk_toolbar_paint_space_line (GtkWidget           *widget,
 
   orientation = toolbar ? toolbar->priv->orientation : GTK_ORIENTATION_HORIZONTAL;
 
-  context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
   width = gtk_widget_get_allocated_width (widget);
   height = gtk_widget_get_allocated_height (widget);
-  gtk_style_context_get_padding (context, state, &padding);
+
+  context = gtk_widget_get_style_context (widget);
+  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
