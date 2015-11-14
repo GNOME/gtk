@@ -325,7 +325,6 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
   gint child_minimum, child_natural;
   GtkStyleContext *context;
   GtkBorder border;
-  GtkStateFlags flags;
 
   *minimum = 0;
   *natural = 0;
@@ -382,8 +381,7 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
     }
 
   context = gtk_widget_get_style_context (widget);
-  flags = gtk_widget_get_state_flags (widget);
-  gtk_style_context_get_padding (context, flags, &border);
+  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &border);
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
@@ -402,7 +400,7 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
 
   if (get_shadow_type (menu_bar) != GTK_SHADOW_NONE)
     {
-      gtk_style_context_get_border (context, flags, &border);
+      gtk_style_context_get_border (context, gtk_style_context_get_state (context), &border);
 
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
         {
@@ -483,12 +481,10 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
   if (menu_shell->priv->children)
     {
       GtkStyleContext *context;
-      GtkStateFlags flags;
       GtkBorder border;
 
       context = gtk_widget_get_style_context (widget);
-      flags = gtk_widget_get_state_flags (widget);
-      gtk_style_context_get_padding (context, flags, &border);
+      gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &border);
 
       border_width = gtk_container_get_border_width (GTK_CONTAINER (menu_bar));
 
@@ -501,7 +497,7 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
 
       if (get_shadow_type (menu_bar) != GTK_SHADOW_NONE)
 	{
-          gtk_style_context_get_border (context, flags, &border);
+          gtk_style_context_get_border (context, gtk_style_context_get_state (context), &border);
 
           remaining_space.x += border.left;
           remaining_space.y += border.top;
