@@ -600,8 +600,7 @@ gtk_progress_bar_get_preferred_width (GtkWidget *widget,
 {
   GtkProgressBar *pbar;
   GtkProgressBarPrivate *priv;
-  GtkStyleContext *style_context;
-  GtkStateFlags state;
+  GtkStyleContext *context;
   GtkBorder padding;
   gchar *buf;
   PangoRectangle logical_rect;
@@ -612,9 +611,8 @@ gtk_progress_bar_get_preferred_width (GtkWidget *widget,
 
   g_return_if_fail (GTK_IS_PROGRESS_BAR (widget));
 
-  style_context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
-  gtk_style_context_get_padding (style_context, state, &padding);
+  context = gtk_widget_get_style_context (widget);
+  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
 
   pbar = GTK_PROGRESS_BAR (widget);
   priv = pbar->priv;
@@ -677,7 +675,6 @@ gtk_progress_bar_get_preferred_height (GtkWidget *widget,
   GtkProgressBar *pbar;
   GtkProgressBarPrivate *priv;
   GtkStyleContext *context;
-  GtkStateFlags state;
   GtkBorder padding;
   gchar *buf;
   PangoRectangle logical_rect;
@@ -689,8 +686,7 @@ gtk_progress_bar_get_preferred_height (GtkWidget *widget,
   g_return_if_fail (GTK_IS_PROGRESS_BAR (widget));
 
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
-  gtk_style_context_get_padding (context, state, &padding);
+  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
 
   pbar = GTK_PROGRESS_BAR (widget);
   priv = pbar->priv;
@@ -894,14 +890,12 @@ gtk_progress_bar_paint_activity (GtkProgressBar *pbar,
 {
   GtkProgressBarPrivate *priv = pbar->priv;
   GtkStyleContext *context;
-  GtkStateFlags state;
   GtkBorder padding;
   GtkWidget *widget = GTK_WIDGET (pbar);
   GdkRectangle area;
 
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
-  gtk_style_context_get_padding (context, state, &padding);
+  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
 
   gtk_style_context_save_to_node (context, priv->progress_node);
 
@@ -937,7 +931,6 @@ gtk_progress_bar_paint_continuous (GtkProgressBar *pbar,
 {
   GtkProgressBarPrivate *priv = pbar->priv;
   GtkStyleContext *context;
-  GtkStateFlags state;
   GtkBorder padding;
   GtkWidget *widget = GTK_WIDGET (pbar);
   GdkRectangle area;
@@ -946,8 +939,7 @@ gtk_progress_bar_paint_continuous (GtkProgressBar *pbar,
     return;
 
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
-  gtk_style_context_get_padding (context, state, &padding);
+  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
 
   gtk_style_context_save_to_node (context, priv->progress_node);
 
@@ -992,7 +984,6 @@ gtk_progress_bar_paint_text (GtkProgressBar *pbar,
 {
   GtkProgressBarPrivate *priv = pbar->priv;
   GtkStyleContext *context;
-  GtkStateFlags state;
   GtkBorder padding;
   GtkWidget *widget = GTK_WIDGET (pbar);
   gint x;
@@ -1004,8 +995,7 @@ gtk_progress_bar_paint_text (GtkProgressBar *pbar,
   GdkRectangle prelight_clip, start_clip, end_clip;
 
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
-  gtk_style_context_get_padding (context, state, &padding);
+  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
 
   buf = get_current_text (pbar);
 
@@ -1122,14 +1112,12 @@ gtk_progress_bar_draw (GtkWidget *widget,
   GtkOrientation orientation;
   gboolean inverted;
   GtkStyleContext *context;
-  GtkStateFlags state;
   GtkBorder padding;
   int width, height;
   int bar_width, bar_height;
 
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
-  gtk_style_context_get_padding (context, state, &padding);
+  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
 
   orientation = priv->orientation;
   inverted = priv->inverted;
