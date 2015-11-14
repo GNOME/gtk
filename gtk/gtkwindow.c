@@ -6717,9 +6717,8 @@ get_shadow_width (GtkWindow *window,
   GtkBorder d = { 0 };
   GtkBorder margin;
   GtkStyleContext *context;
-  GtkStateFlags state, s;
+  GtkStateFlags s;
   GtkCssValue *shadows;
-  gint i;
 
   *shadow_width = border;
 
@@ -6738,43 +6737,29 @@ get_shadow_width (GtkWindow *window,
   if (!_gtk_widget_is_toplevel (GTK_WIDGET (window)))
     return;
 
-  state = _gtk_widget_get_state_flags (GTK_WIDGET (window));
   context = _gtk_widget_get_style_context (GTK_WIDGET (window));
 
   gtk_style_context_save_to_node (context, priv->decoration_node);
+  s = gtk_style_context_get_state (context);
 
-  /* We don't want windows to jump as they go to backdrop,
-   * therefore we use the maximum of the decoration sizes
-   * for focused and unfocused.
-   */
-  for (i = 0; i < 2; i++)
+  /* Always sum border + padding */
+  gtk_style_context_get_border (context, s, &border);
+  gtk_style_context_get_padding (context, s, &d);
+  sum_borders (&d, &border);
+
+  /* Calculate the size of the drop shadows ... */
+  shadows = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BOX_SHADOW);
+  _gtk_css_shadows_value_get_extents (shadows, &border);
+
+  if (priv->type != GTK_WINDOW_POPUP)
     {
-      if (i == 0)
-        s = state & ~GTK_STATE_FLAG_BACKDROP;
-      else
-        s = state | GTK_STATE_FLAG_BACKDROP;
-
-      gtk_style_context_set_state (context, s);
-
-      /* Always sum border + padding */
-      gtk_style_context_get_border (context, s, &border);
-      gtk_style_context_get_padding (context, s, &d);
-      sum_borders (&d, &border);
-
-      /* Calculate the size of the drop shadows ... */
-      shadows = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BOX_SHADOW);
-      _gtk_css_shadows_value_get_extents (shadows, &border);
-
-      if (priv->type != GTK_WINDOW_POPUP)
-        {
-          /* ... and compare it to the margin size, which we use for resize grips */
-          gtk_style_context_get_margin (context, s, &margin);
-          max_borders (&border, &margin);
-        }
-
-      sum_borders (&d, &border);
-      max_borders (shadow_width, &d);
+      /* ... and compare it to the margin size, which we use for resize grips */
+      gtk_style_context_get_margin (context, s, &margin);
+      max_borders (&border, &margin);
     }
+
+  sum_borders (&d, &border);
+  *shadow_width = d;
 
   gtk_style_context_restore (context);
 }
