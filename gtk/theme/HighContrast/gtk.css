@@ -2013,7 +2013,7 @@ entry selection:focus, entry selection
 spinbutton selection:focus, spinbutton selection
 spinbutton selection:focus, modelbutton.flat:hover, modelbutton.flat:selected,
 .menuitem.button.flat:hover,
-.menuitem.button.flat:selected, row.activatable:selected, .sidebar:selected, placessidebar .view:selected, placessidebar calendar:selected {
+.menuitem.button.flat:selected, treeview.view:selected, row.activatable:selected, .sidebar:selected, placessidebar .view:selected, placessidebar calendar:selected {
   background-color: #000;
   color: #fff;
   outline-color: rgba(255, 255, 255, 0.3); }
@@ -2024,7 +2024,7 @@ spinbutton selection:focus, modelbutton.flat:hover, modelbutton.flat:selected,
   spinbutton selection:backdrop:focus, spinbutton selection
   spinbutton selection:backdrop:focus, modelbutton.flat:backdrop:hover, modelbutton.flat:backdrop:selected,
   .menuitem.button.flat:backdrop:hover,
-  .menuitem.button.flat:backdrop:selected, row.activatable:backdrop:selected, .sidebar:backdrop:selected, placessidebar .view:backdrop:selected, placessidebar calendar:backdrop:selected {
+  .menuitem.button.flat:backdrop:selected, treeview.view:backdrop:selected, row.activatable:backdrop:selected, .sidebar:backdrop:selected, placessidebar .view:backdrop:selected, placessidebar calendar:backdrop:selected {
     background-color: gray;
     color: #fff; }
 
