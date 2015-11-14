@@ -73,6 +73,13 @@ textview text,
     color: #d5d5d5;
     background-color: #2c2c2c; }
 
+iconview {
+  color: white;
+  background-color: #292929; }
+  iconview:backdrop {
+    color: #d5d5d5;
+    background-color: #2c2c2c; }
+
 .rubberband,
 rubberband,
 flowbox rubberband,
@@ -4458,20 +4465,20 @@ headerbar.selection-mode button.titlebutton,
 
 textview text selection, textview text selection:focus,
 .view selection,
-.view selection:focus, flowbox flowboxchild:selected, label selection, label selection:focus, label selection:hover, .grid-child:selected, entry selection, spinbutton selection, entry selection:focus, spinbutton selection:focus, modelbutton.flat:selected,
+.view selection:focus, iconview:selected, iconview:selected:focus, flowbox flowboxchild:selected, label selection, label selection:focus, label selection:hover, .grid-child:selected, entry selection, spinbutton selection, entry selection:focus, spinbutton selection:focus, modelbutton.flat:selected,
 .menuitem.button.flat:selected, treeview.view:selected, row:selected, .sidebar :selected {
   background-color: #215d9c;
   color: #ffffff; }
   textview text selection:insensitive,
-  .view selection:insensitive, flowbox flowboxchild:insensitive:selected, label selection:insensitive, .grid-child:insensitive:selected, entry selection:insensitive, spinbutton selection:insensitive, modelbutton.flat:insensitive:selected,
+  .view selection:insensitive, iconview:insensitive:selected, flowbox flowboxchild:insensitive:selected, label selection:insensitive, .grid-child:insensitive:selected, entry selection:insensitive, spinbutton selection:insensitive, modelbutton.flat:insensitive:selected,
   .menuitem.button.flat:insensitive:selected, treeview.view:insensitive:selected, row:insensitive:selected, .sidebar :insensitive:selected, placessidebar row:selected:insensitive label {
     color: #90aece; }
   textview text selection:backdrop,
-  .view selection:backdrop, flowbox flowboxchild:backdrop:selected, label selection:backdrop, .grid-child:backdrop:selected, entry selection:backdrop, spinbutton selection:backdrop, modelbutton.flat:backdrop:selected,
+  .view selection:backdrop, iconview:backdrop:selected, flowbox flowboxchild:backdrop:selected, label selection:backdrop, .grid-child:backdrop:selected, entry selection:backdrop, spinbutton selection:backdrop, modelbutton.flat:backdrop:selected,
   .menuitem.button.flat:backdrop:selected, treeview.view:backdrop:selected, row:backdrop:selected, .sidebar :backdrop:selected {
     color: #ffffff; }
     textview text selection:backdrop:insensitive,
-    .view selection:backdrop:insensitive, flowbox flowboxchild:backdrop:insensitive:selected, label selection:backdrop:insensitive, .grid-child:backdrop:insensitive:selected, entry selection:backdrop:insensitive, spinbutton selection:backdrop:insensitive, modelbutton.flat:backdrop:insensitive:selected,
+    .view selection:backdrop:insensitive, iconview:backdrop:insensitive:selected, flowbox flowboxchild:backdrop:insensitive:selected, label selection:backdrop:insensitive, .grid-child:backdrop:insensitive:selected, entry selection:backdrop:insensitive, spinbutton selection:backdrop:insensitive, modelbutton.flat:backdrop:insensitive:selected,
     .menuitem.button.flat:backdrop:insensitive:selected, treeview.view:backdrop:insensitive:selected, row:backdrop:insensitive:selected, .sidebar :backdrop:insensitive:selected, placessidebar row:selected:insensitive label:backdrop, placessidebar row:selected:backdrop:insensitive label {
       color: #648eba; }
 

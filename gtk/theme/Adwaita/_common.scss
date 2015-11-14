@@ -119,6 +119,19 @@ textview text,
   }
 }
 
+iconview {
+  color: $text_color;
+  background-color: $base_color;
+  &:backdrop {
+    color: $backdrop_text_color;
+    background-color: $backdrop_base_color;
+  }
+  &:selected,
+  &:selected:focus {
+    @extend %selected_items;
+  }
+}
+
 .rubberband,
 rubberband {
   border: 1px solid darken($selected_bg_color, 10%);
