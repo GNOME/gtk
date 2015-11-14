@@ -127,6 +127,10 @@ rubberband {
 
 flowbox {
   & rubberband { @extend rubberband; }
+  & flowboxchild {
+    padding: 2px;
+    &:selected { @extend %selected_items; }
+  }
 }
 
 label {
