@@ -4854,12 +4854,10 @@ gtk_tree_view_draw_line (GtkTreeView         *tree_view,
 
     case GTK_TREE_VIEW_FOREGROUND_LINE:
       {
-        GtkStateFlags state;
         GdkRGBA color;
 
-        state = gtk_widget_get_state_flags (GTK_WIDGET (tree_view));
         cairo_set_line_width (cr, 1.0);
-        gtk_style_context_get_color (context, state, &color);
+        gtk_style_context_get_color (context, gtk_style_context_get_state (context), &color);
         gdk_cairo_set_source_rgba (cr, &color);
       }
       break;
