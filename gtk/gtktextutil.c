@@ -201,12 +201,11 @@ limit_layout_lines (PangoLayout *layout)
  * Returns: a #cairo_surface_t to use as DND icon
  */
 cairo_surface_t *
-_gtk_text_util_create_drag_icon (GtkWidget *widget, 
+_gtk_text_util_create_drag_icon (GtkWidget *widget,
                                  gchar     *text,
                                  gsize      len)
 {
   GtkStyleContext *style_context;
-  GtkStateFlags state;
   cairo_surface_t *surface;
   PangoContext *context;
   PangoLayout  *layout;
@@ -236,15 +235,15 @@ _gtk_text_util_create_drag_icon (GtkWidget *widget,
   pixmap_width  = layout_width  / PANGO_SCALE;
   pixmap_height = layout_height / PANGO_SCALE;
 
-  style_context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
-
   surface = gdk_window_create_similar_surface (gtk_widget_get_window (widget),
                                                CAIRO_CONTENT_COLOR_ALPHA,
                                                pixmap_width, pixmap_height);
   cr = cairo_create (surface);
 
-  gtk_style_context_get_color (style_context, state, &color);
+  style_context = gtk_widget_get_style_context (widget);
+  gtk_style_context_get_color (style_context,
+                               gtk_style_context_get_state (style_context),
+                               &color);
   gdk_cairo_set_source_rgba (cr, &color);
   pango_cairo_show_layout (cr, layout);
 
