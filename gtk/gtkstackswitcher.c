@@ -45,8 +45,8 @@
  *
  * # CSS nodes
  *
- * GtkStackSwitcher has a single CSS node names stackswitcher and
- * style class .sidebar.
+ * GtkStackSwitcher has a single CSS node named stackswitcher and
+ * style class .stack-switcher.
  *
  * When circumstances require it, GtkStackSwitcher adds the
  * .needs-attention style class to the widgets representing the
