@@ -190,15 +190,58 @@ display_shortcut (GtkContainer    *self,
   g_strfreev (keys);
 }
 
+static gboolean
+parse_sequence (GtkShortcutLabel *self,
+                const gchar      *str)
+{
+  gchar **accels;
+  gint k;
+  GdkModifierType modifier = 0;
+  guint key = 0;
+  gboolean retval = TRUE;
+
+  accels = g_strsplit (str, "+", 0);
+  for (k = 0; accels[k]; k++)
+    {
+      gtk_accelerator_parse (accels[k], &key, &modifier);
+      if (key == 0 && modifier == 0)
+        {
+          retval = FALSE;
+          break;
+        }
+      display_shortcut (GTK_CONTAINER (self), key, modifier);
+    }
+  g_strfreev (accels);
+
+  return retval;
+}
+
+static gboolean
+parse_range (GtkShortcutLabel *self,
+             const gchar      *str)
+{
+  gchar *dots;
+
+  dots = strstr (str, "...");
+  if (!dots)
+    return parse_sequence (self, str);
+
+  dots[0] = '\0';
+  if (!parse_sequence (self, str))
+    return FALSE;
+
+  gtk_container_add (GTK_CONTAINER (self), dim_label ("⋯"));
+  if (!parse_sequence (self, dots + 3))
+    return FALSE;
+
+  return TRUE;
+}
+
 static void
 gtk_shortcut_label_rebuild (GtkShortcutLabel *self)
 {
-  gchar **accels = NULL;
-  GdkModifierType modifier = 0;
-  GdkModifierType modifier2 = 0;
-  guint key = 0;
-  guint key2 = 0;
-  guint k;
+  gchar **accels;
+  gint k;
 
   gtk_container_foreach (GTK_CONTAINER (self), (GtkCallback)gtk_widget_destroy, NULL);
 
@@ -208,46 +251,15 @@ gtk_shortcut_label_rebuild (GtkShortcutLabel *self)
   accels = g_strsplit (self->accelerator, " ", 0);
   for (k = 0; accels[k]; k++)
     {
-      gchar *dots;
-
-      dots = strstr (accels[k], "...");
-      if (dots)
-        {
-          dots[0] = '\0';
-          gtk_accelerator_parse (dots + 3, &key2, &modifier2);
-          if ((key2 == 0) && (modifier2 == 0))
-            {
-              g_warning ("Failed to parse %s, part of accelerator '%s'", dots + 3, self->accelerator);
-              goto out;
-            }
-        }
-      else
-        key2 = 0;
-
-      gtk_accelerator_parse (accels[k], &key, &modifier);
-      if ((key == 0) && (modifier == 0))
-        {
-          g_warning ("Failed to parse %s, part of accelerator '%s'", accels[k], self->accelerator);
-          goto out;
-        }
-
       if (k > 0)
         gtk_container_add (GTK_CONTAINER (self), dim_label ("/"));
 
-      display_shortcut (GTK_CONTAINER (self), key, modifier);
-
-       if (key2 == 0)
-         continue;
-
-       if (modifier2 == modifier)
-         modifier2 = 0;
-
-      gtk_container_add (GTK_CONTAINER (self), dim_label ("⋯"));
-
-      display_shortcut (GTK_CONTAINER (self), key2, modifier2);
+      if (!parse_range (self, accels[k]))
+        {
+          g_warning ("Failed to parse %s, part of accelerator '%s'", accels[k], self->accelerator);
+          break;
+        }
     }
-
-out:
   g_strfreev (accels);
 }
 
