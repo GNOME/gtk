@@ -12,6 +12,7 @@ test_parse_selectors (void)
     "E {}",
     "E F {}",
     "E > F {}",
+    "E + F {}",
     "E#id {}",
     "#id {}",
     "tab:first-child {}",
