@@ -173,14 +173,14 @@ test_match (void)
   data = "* { color: #fff }";
   gtk_css_provider_load_from_data (provider, data, -1, &error);
   g_assert_no_error (error);
-  gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &color);
+  gtk_style_context_get_color (context, gtk_style_context_get_state (context), &color);
   g_assert (gdk_rgba_equal (&color, &expected));
 
   data = "* { color: #f00 }\n"
          "GtkButton { color: #fff }";
   gtk_css_provider_load_from_data (provider, data, -1, &error);
   g_assert_no_error (error);
-  gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &color);
+  gtk_style_context_get_color (context, gtk_style_context_get_state (context), &color);
   g_assert (gdk_rgba_equal (&color, &expected));
 
   data = "* { color: #f00 }\n"
@@ -188,14 +188,14 @@ test_match (void)
          "GtkWindow > GtkButton { color: #000 }";
   gtk_css_provider_load_from_data (provider, data, -1, &error);
   g_assert_no_error (error);
-  gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &color);
+  gtk_style_context_get_color (context, gtk_style_context_get_state (context), &color);
   g_assert (gdk_rgba_equal (&color, &expected));
 
   data = "* { color: #f00 }\n"
          ".button { color: #fff }";
   gtk_css_provider_load_from_data (provider, data, -1, &error);
   g_assert_no_error (error);
-  gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &color);
+  gtk_style_context_get_color (context, gtk_style_context_get_state (context), &color);
   g_assert (gdk_rgba_equal (&color, &expected));
 
   data = "* { color: #f00 }\n"
@@ -203,7 +203,7 @@ test_match (void)
          ".button { color: #fff }";
   gtk_css_provider_load_from_data (provider, data, -1, &error);
   g_assert_no_error (error);
-  gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &color);
+  gtk_style_context_get_color (context, gtk_style_context_get_state (context), &color);
   g_assert (gdk_rgba_equal (&color, &expected));
 
   data = "* { color: #f00 }\n"
@@ -211,7 +211,7 @@ test_match (void)
          "GtkWindow GtkButton { color: #fff }";
   gtk_css_provider_load_from_data (provider, data, -1, &error);
   g_assert_no_error (error);
-  gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &color);
+  gtk_style_context_get_color (context, gtk_style_context_get_state (context), &color);
   g_assert (gdk_rgba_equal (&color, &expected));
 
   data = "* { color: #f00 }\n"
@@ -219,7 +219,7 @@ test_match (void)
          "GtkWindow .button { color: #fff }";
   gtk_css_provider_load_from_data (provider, data, -1, &error);
   g_assert_no_error (error);
-  gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &color);
+  gtk_style_context_get_color (context, gtk_style_context_get_state (context), &color);
   g_assert (gdk_rgba_equal (&color, &expected));
 
   data = "* { color: #f00 }\n"
@@ -227,7 +227,7 @@ test_match (void)
          "#mywindow .button { color: #fff }";
   gtk_css_provider_load_from_data (provider, data, -1, &error);
   g_assert_no_error (error);
-  gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &color);
+  gtk_style_context_get_color (context, gtk_style_context_get_state (context), &color);
   g_assert (gdk_rgba_equal (&color, &expected));
 
   data = "* { color: #f00 }\n"
@@ -235,7 +235,7 @@ test_match (void)
          "GtkWindow#mywindow .button { color: #fff }";
   gtk_css_provider_load_from_data (provider, data, -1, &error);
   g_assert_no_error (error);
-  gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &color);
+  gtk_style_context_get_color (context, gtk_style_context_get_state (context), &color);
   g_assert (gdk_rgba_equal (&color, &expected));
 
   data = "* { color: #f00 }\n"
@@ -243,7 +243,7 @@ test_match (void)
          "GObject .button { color: #fff }";
   gtk_css_provider_load_from_data (provider, data, -1, &error);
   g_assert_no_error (error);
-  gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &color);
+  gtk_style_context_get_color (context, gtk_style_context_get_state (context), &color);
   g_assert (gdk_rgba_equal (&color, &expected));
 
   data = "* { color: #f00 }\n"
@@ -252,7 +252,7 @@ test_match (void)
          "GtkWindow:active .button { color: #fff }";
   gtk_css_provider_load_from_data (provider, data, -1, &error);
   g_assert_no_error (error);
-  gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &color);
+  gtk_style_context_get_color (context, gtk_style_context_get_state (context), &color);
   g_assert (gdk_rgba_equal (&color, &expected));
 
   g_object_unref (provider);
@@ -273,7 +273,7 @@ test_basic_properties (void)
   gtk_style_context_set_path (context, path);
   gtk_widget_path_free (path);
 
-  gtk_style_context_get (context, 0,
+  gtk_style_context_get (context, gtk_style_context_get_state (context),
                          "color", &color,
                          "background-color", &bg_color,
                          "font", &font,
