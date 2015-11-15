@@ -75,9 +75,23 @@
  *
  * # CSS nodes
  *
+ * |[<!-- language="plain" -->
+ * label
+ * ├── [selection]
+ * ├── [link]
+ * ┊
+ * ╰── [link]
+ * ]|
+ *
  * GtkLabel has a single CSS node with the name label. A wide variety
  * of style classes may be applied to labels, such as .title, .subtitle,
  * .dim-label, etc.
+ *
+ * If the label has a selection, it gets a subnode with name selection.
+ *
+ * If the label has links, there is one subnode per link. These subnodes
+ * carry the link or visited state depending on whether they have been
+ * visited.
  *
  * # GtkLabel as GtkBuildable
  *
@@ -301,6 +315,9 @@ typedef struct
 {
   gchar *uri;
   gchar *title;     /* the title attribute, used as tooltip */
+
+  GtkCssNode *cssnode;
+
   gboolean visited; /* get set when the link is activated; this flag
                      * gets preserved over later set_markup() calls
                      */
@@ -2376,6 +2393,8 @@ start_element_handler (GMarkupParseContext  *context,
       gint line_number;
       gint char_number;
       gint i;
+      GtkCssNode *widget_node;
+      GtkStateFlags state;
 
       g_markup_parse_context_get_position (context, &line_number, &char_number);
 
@@ -2429,6 +2448,19 @@ start_element_handler (GMarkupParseContext  *context,
       link = g_new0 (GtkLabelLink, 1);
       link->uri = g_strdup (uri);
       link->title = g_strdup (title);
+
+      widget_node = gtk_widget_get_css_node (GTK_WIDGET (pdata->label));
+      link->cssnode = gtk_css_node_new ();
+      gtk_css_node_set_name (link->cssnode, I_("link"));
+      gtk_css_node_set_parent (link->cssnode, widget_node);
+      state = gtk_css_node_get_state (widget_node);
+      if (visited)
+        state |= GTK_STATE_FLAG_VISITED;
+      else
+        state |= GTK_STATE_FLAG_LINK;
+      gtk_css_node_set_state (link->cssnode, state);
+      g_object_unref (link->cssnode);
+
       link->visited = visited;
       link->start = pdata->text_len;
       pdata->links = g_list_prepend (pdata->links, link);
@@ -2515,6 +2547,7 @@ xml_isspace (gchar c)
 static void
 link_free (GtkLabelLink *link)
 {
+  gtk_css_node_set_parent (link->cssnode, NULL);
   g_free (link->uri);
   g_free (link->title);
   g_free (link);
@@ -3456,26 +3489,18 @@ gtk_label_update_layout_attributes (GtkLabel *label)
 
       attrs = pango_attr_list_new ();
 
-      gtk_style_context_save (context);
-
       for (list = priv->select_info->links; list; list = list->next)
         {
           GtkLabelLink *link = list->data;
-          GtkStateFlags state;
 
           attribute = pango_attr_underline_new (TRUE);
           attribute->start_index = link->start;
           attribute->end_index = link->end;
           pango_attr_list_insert (attrs, attribute);
 
-          state = gtk_widget_get_state_flags (widget);
-          if (link->visited)
-            state |= GTK_STATE_FLAG_VISITED;
-          else
-            state |= GTK_STATE_FLAG_LINK;
-
-          gtk_style_context_set_state (context, state);
-          gtk_style_context_get_color (context, state, &link_color);
+          gtk_style_context_save_to_node (context, link->cssnode);
+          gtk_style_context_get_color (context, gtk_style_context_get_state (context), &link_color);
+          gtk_style_context_restore (context);
 
           attribute = pango_attr_foreground_new (link_color.red * 65535,
                                                  link_color.green * 65535,
@@ -3484,8 +3509,6 @@ gtk_label_update_layout_attributes (GtkLabel *label)
           attribute->end_index = link->end;
           pango_attr_list_insert (attrs, attribute);
         }
-
-      gtk_style_context_restore (context);
     }
   else if (priv->markup_attrs && priv->attrs)
     attrs = pango_attr_list_new ();
@@ -4125,6 +4148,36 @@ gtk_label_update_cursor (GtkLabel *label)
 }
 
 static void
+update_link_state (GtkLabel *label)
+{
+  GtkLabelPrivate *priv = label->priv;
+  GList *l;
+  GtkStateFlags state;
+
+  if (!priv->select_info)
+    return;
+
+  for (l = priv->select_info->links; l; l = l->next)
+    {
+      GtkLabelLink *link = l->data;
+
+      state = gtk_widget_get_state_flags (GTK_WIDGET (label));
+      if (link->visited)
+        state |= GTK_STATE_FLAG_VISITED;
+      else
+        state |= GTK_STATE_FLAG_LINK;
+      if (link == priv->select_info->active_link)
+        {
+          if (priv->select_info->link_clicked)
+            state |= GTK_STATE_FLAG_ACTIVE;
+          else
+            state |= GTK_STATE_FLAG_PRELIGHT;
+        }
+      gtk_css_node_set_state (link->cssnode, state);
+    }
+}
+
+static void
 gtk_label_state_flags_changed (GtkWidget     *widget,
                                GtkStateFlags  prev_state)
 {
@@ -4137,6 +4190,7 @@ gtk_label_state_flags_changed (GtkWidget     *widget,
         gtk_label_select_region (label, 0, 0);
 
       gtk_label_update_cursor (label);
+      update_link_state (label);
     }
 
   if (GTK_WIDGET_CLASS (gtk_label_parent_class)->state_flags_changed)
@@ -4226,7 +4280,6 @@ gtk_label_draw (GtkWidget *widget,
   GtkLabelSelectionInfo *info = priv->select_info;
   GtkAllocation allocation;
   GtkStyleContext *context;
-  GtkStateFlags state;
   gint x, y;
 
   gtk_label_ensure_layout (label);
@@ -4315,7 +4368,7 @@ gtk_label_draw (GtkWidget *widget,
               range[1] = active_link->end;
 
               cairo_save (cr);
-              gtk_style_context_save (context);
+              gtk_style_context_save_to_node (context, active_link->cssnode);
 
               clip = gdk_pango_layout_get_clip_region (priv->layout,
                                                        x, y,
@@ -4325,20 +4378,6 @@ gtk_label_draw (GtkWidget *widget,
               gdk_cairo_region (cr, clip);
               cairo_clip (cr);
               cairo_region_destroy (clip);
-
-              state = gtk_style_context_get_state (context);
-
-              if (info->link_clicked)
-                state |= GTK_STATE_FLAG_ACTIVE;
-              else
-                state |= GTK_STATE_FLAG_PRELIGHT;
-
-              if (active_link->visited)
-                state |= GTK_STATE_FLAG_VISITED;
-              else
-                state |= GTK_STATE_FLAG_LINK;
-
-              gtk_style_context_set_state (context, state);
 
               gtk_render_background (context, cr,
                                      allocation.x, allocation.y,
@@ -4942,12 +4981,14 @@ gtk_label_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
       if (gdk_event_triggers_context_menu (event))
         {
           info->link_clicked = 1;
+          update_link_state (label);
           gtk_label_do_popup (label, (GdkEventButton*) event);
           return;
         }
       else if (button == GDK_BUTTON_PRIMARY)
         {
           info->link_clicked = 1;
+          update_link_state (label);
           gtk_widget_queue_draw (widget);
           if (!info->selectable)
             return;
@@ -5313,6 +5354,7 @@ gtk_label_motion (GtkWidget      *widget,
             {
               info->link_clicked = 0;
               info->active_link = link;
+              update_link_state (label);
               gtk_label_update_cursor (label);
               gtk_widget_queue_draw (widget);
             }
@@ -5323,6 +5365,7 @@ gtk_label_motion (GtkWidget      *widget,
             {
               info->link_clicked = 0;
               info->active_link = NULL;
+              update_link_state (label);
               gtk_label_update_cursor (label);
               gtk_widget_queue_draw (widget);
             }
@@ -6709,11 +6752,14 @@ emit_activate_link (GtkLabel     *label,
 {
   GtkLabelPrivate *priv = label->priv;
   gboolean handled;
+  GtkStateFlags state;
 
   g_signal_emit (label, signals[ACTIVATE_LINK], 0, link->uri, &handled);
   if (handled && priv->track_links && !link->visited)
     {
       link->visited = TRUE;
+      state = gtk_css_node_get_state (link->cssnode);
+      gtk_css_node_set_state (link->cssnode, (state & ~GTK_STATE_FLAG_LINK) | GTK_STATE_FLAG_VISITED);
       /* FIXME: shouldn't have to redo everything here */
       gtk_label_clear_layout (label);
     }
