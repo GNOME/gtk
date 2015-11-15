@@ -557,12 +557,18 @@ gtk_shortcuts_section_reflow_groups (GtkShortcutsSection *self)
       if (n_rows == 0 || n_rows + height > self->max_height)
         {
           GtkWidget *column;
+          GtkSizeGroup *group;
 
           column = gtk_box_new (GTK_ORIENTATION_VERTICAL, 22);
           gtk_widget_show (column);
 
-          g_object_set_data_full (G_OBJECT (column), "accel-size-group", gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL), g_object_unref);
-          g_object_set_data_full (G_OBJECT (column), "title-size-group", gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL), g_object_unref);
+          group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+          gtk_size_group_set_ignore_hidden (group, TRUE);
+          g_object_set_data_full (G_OBJECT (column), "accel-size-group", group, g_object_unref);
+
+          group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+          gtk_size_group_set_ignore_hidden (group, TRUE);
+          g_object_set_data_full (G_OBJECT (column), "title-size-group", group, g_object_unref);
 
           if (n_columns % 2 == 0)
             {
@@ -598,14 +604,19 @@ gtk_shortcuts_section_reflow_groups (GtkShortcutsSection *self)
   if (n_columns % 2 == 1)
     {
       GtkWidget *column;
+      GtkSizeGroup *group;
       GList *content;
       guint n;
 
       column = gtk_box_new (GTK_ORIENTATION_VERTICAL, 22);
       gtk_widget_show (column);
 
-      g_object_set_data_full (G_OBJECT (column), "accel-size-group", gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL), g_object_unref);
-      g_object_set_data_full (G_OBJECT (column), "title-size-group", gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL), g_object_unref);
+      group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+      gtk_size_group_set_ignore_hidden (group, TRUE);
+      g_object_set_data_full (G_OBJECT (column), "accel-size-group", group, g_object_unref);
+      group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+      gtk_size_group_set_ignore_hidden (group, TRUE);
+      g_object_set_data_full (G_OBJECT (column), "title-size-group", group, g_object_unref);
 
       gtk_container_add (GTK_CONTAINER (current_page), column);
 

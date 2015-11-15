@@ -114,9 +114,13 @@ gtk_shortcuts_group_get_height (GtkShortcutsGroup *group)
   children = gtk_container_get_children (GTK_CONTAINER (group));
   for (l = children; l; l = l->next)
     {
-      if (GTK_IS_SHORTCUTS_SHORTCUT (l->data))
+      GtkWidget *child = l->data;
+
+      if (!gtk_widget_get_visible (child))
+        continue;
+      else if (GTK_IS_SHORTCUTS_SHORTCUT (child))
         height += 1;
-      else if (GTK_IS_SHORTCUTS_GESTURE (l->data))
+      else if (GTK_IS_SHORTCUTS_GESTURE (child))
         height += 2;
     }
   g_list_free (children);
@@ -165,6 +169,14 @@ gtk_shortcuts_group_get_property (GObject    *object,
 }
 
 static void
+gtk_shortcuts_group_direction_changed (GtkWidget        *widget,
+                                       GtkTextDirection  previous_dir)
+{
+  GTK_WIDGET_CLASS (gtk_shortcuts_group_parent_class)->direction_changed (widget, previous_dir);
+  g_object_notify (G_OBJECT (widget), "height");
+}
+
+static void
 gtk_shortcuts_group_set_property (GObject      *object,
                                   guint         prop_id,
                                   const GValue *value,
@@ -209,13 +221,15 @@ gtk_shortcuts_group_finalize (GObject *object)
 static void
 gtk_shortcuts_group_class_init (GtkShortcutsGroupClass *klass)
 {
-  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
 
   object_class->finalize = gtk_shortcuts_group_finalize;
   object_class->get_property = gtk_shortcuts_group_get_property;
   object_class->set_property = gtk_shortcuts_group_set_property;
 
+  widget_class->direction_changed = gtk_shortcuts_group_direction_changed;
   container_class->add = gtk_shortcuts_group_add;
 
   /**

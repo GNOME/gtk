@@ -43,6 +43,8 @@ struct _GtkShortcutsShortcut
 
   GtkSizeGroup *accel_size_group;
   GtkSizeGroup *title_size_group;
+
+  GtkTextDirection direction;
 };
 
 struct _GtkShortcutsShortcutClass
@@ -58,6 +60,7 @@ enum {
   PROP_TITLE,
   PROP_ACCEL_SIZE_GROUP,
   PROP_TITLE_SIZE_GROUP,
+  PROP_DIRECTION,
   LAST_PROP
 };
 
@@ -105,9 +108,44 @@ gtk_shortcuts_shortcut_get_property (GObject    *object,
       g_value_set_string (value, gtk_shortcut_label_get_accelerator (self->accelerator));
       break;
 
+    case PROP_DIRECTION:
+      g_value_set_enum (value, self->direction);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
+}
+
+static void
+update_visible (GtkShortcutsShortcut *self)
+{
+  if (self->direction == GTK_TEXT_DIR_NONE ||
+      self->direction == gtk_widget_get_direction (GTK_WIDGET (self)))
+    gtk_widget_set_visible (GTK_WIDGET (self), TRUE);
+  else
+    gtk_widget_set_visible (GTK_WIDGET (self), FALSE);
+}
+
+static void
+gtk_shortcuts_shortcut_set_direction (GtkShortcutsShortcut *self,
+                                      GtkTextDirection      direction)
+{
+  if (self->direction == direction)
+    return;
+
+  self->direction = direction;
+
+  update_visible (self);
+}
+
+static void
+gtk_shortcuts_shortcut_direction_changed (GtkWidget        *widget,
+                                          GtkTextDirection  previous_dir)
+{
+  update_visible (GTK_SHORTCUTS_SHORTCUT (widget));
+
+  GTK_WIDGET_CLASS (gtk_shortcuts_shortcut_parent_class)->direction_changed (widget, previous_dir);
 }
 
 static void
@@ -134,6 +172,10 @@ gtk_shortcuts_shortcut_set_property (GObject      *object,
 
     case PROP_TITLE_SIZE_GROUP:
       gtk_shortcuts_shortcut_set_title_size_group (self, GTK_SIZE_GROUP (g_value_get_object (value)));
+      break;
+
+    case PROP_DIRECTION:
+      gtk_shortcuts_shortcut_set_direction (self, g_value_get_enum (value));
       break;
 
     default:
@@ -169,12 +211,15 @@ gtk_shortcuts_shortcut_child_type (GtkContainer *container)
 static void
 gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
 {
-  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
 
   object_class->finalize = gtk_shortcuts_shortcut_finalize;
   object_class->get_property = gtk_shortcuts_shortcut_get_property;
   object_class->set_property = gtk_shortcuts_shortcut_set_property;
+
+  widget_class->direction_changed = gtk_shortcuts_shortcut_direction_changed;
 
   container_class->add = gtk_shortcuts_shortcut_add;
   container_class->child_type = gtk_shortcuts_shortcut_child_type;
@@ -248,6 +293,14 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
                          GTK_TYPE_SIZE_GROUP,
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
+  properties[PROP_DIRECTION] =
+    g_param_spec_enum ("direction",
+                       P_("Direction"),
+                       P_("Direction"),
+                       GTK_TYPE_TEXT_DIRECTION,
+                       GTK_TEXT_DIR_NONE,
+                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
@@ -256,6 +309,8 @@ gtk_shortcuts_shortcut_init (GtkShortcutsShortcut *self)
 {
   gtk_orientable_set_orientation (GTK_ORIENTABLE (self), GTK_ORIENTATION_HORIZONTAL);
   gtk_box_set_spacing (GTK_BOX (self), 12);
+
+  self->direction = GTK_TEXT_DIR_NONE;
 
   self->accelerator = g_object_new (GTK_TYPE_SHORTCUT_LABEL,
                                     "visible", TRUE,

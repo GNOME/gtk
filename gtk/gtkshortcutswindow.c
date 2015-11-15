@@ -184,6 +184,7 @@ gtk_shortcuts_window_add_search_item (GtkWidget *child, gpointer data)
   gchar *title = NULL;
   gchar *hash_key = NULL;
   GIcon *icon = NULL;
+  GtkTextDirection direction;
   gchar *str;
   gchar *keywords;
 
@@ -192,6 +193,7 @@ gtk_shortcuts_window_add_search_item (GtkWidget *child, gpointer data)
       g_object_get (child,
                     "accelerator", &accelerator,
                     "title", &title,
+                    "direction", &direction,
                     NULL);
 
       hash_key = g_strdup_printf ("%s-%s", title, accelerator);
@@ -206,9 +208,9 @@ gtk_shortcuts_window_add_search_item (GtkWidget *child, gpointer data)
       g_hash_table_insert (priv->search_items_hash, hash_key, GINT_TO_POINTER (1));
 
       item = g_object_new (GTK_TYPE_SHORTCUTS_SHORTCUT,
-                           "visible", TRUE,
                            "accelerator", accelerator,
                            "title", title,
+                           "direction", direction,
                            "accel-size-group", priv->search_image_group,
                            "title-size-group", priv->search_text_group,
                            NULL);
@@ -244,7 +246,6 @@ gtk_shortcuts_window_add_search_item (GtkWidget *child, gpointer data)
       g_hash_table_insert (priv->search_items_hash, hash_key, GINT_TO_POINTER (1));
 
       item = g_object_new (GTK_TYPE_SHORTCUTS_GESTURE,
-                           "visible", TRUE,
                            "title", title,
                            "subtitle", subtitle,
                            "icon", icon,
@@ -379,6 +380,22 @@ gtk_shortcuts_window__list_box__row_activated (GtkShortcutsWindow *self,
   gtk_widget_hide (GTK_WIDGET (priv->popover));
 }
 
+static gboolean
+hidden_by_direction (GtkWidget *widget)
+{
+  if (GTK_IS_SHORTCUTS_SHORTCUT (widget))
+    {
+      GtkTextDirection dir;
+
+      g_object_get (widget, "direction", &dir, NULL);
+      if (dir != GTK_TEXT_DIR_NONE &&
+          dir != gtk_widget_get_direction (widget))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 gtk_shortcuts_window__entry__changed (GtkShortcutsWindow *self,
                                      GtkSearchEntry      *search_entry)
@@ -400,6 +417,7 @@ gtk_shortcuts_window__entry__changed (GtkShortcutsWindow *self,
         {
           gtk_stack_set_visible_child_name (priv->stack, priv->last_section_name);
           return;
+
         }
     }
 
@@ -423,7 +441,11 @@ gtk_shortcuts_window__entry__changed (GtkShortcutsWindow *self,
       const gchar *keywords = value;
       gboolean match;
 
-      match = strstr (keywords, downcase) != NULL;
+      if (hidden_by_direction (widget))
+        match = FALSE;
+      else
+        match = strstr (keywords, downcase) != NULL;
+
       gtk_widget_set_visible (widget, match);
       has_result |= match;
     }
