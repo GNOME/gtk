@@ -308,6 +308,7 @@ static void gtk_spin_button_real_change_value (GtkSpinButton   *spin,
 static gint gtk_spin_button_default_input  (GtkSpinButton      *spin_button,
                                             gdouble            *new_val);
 static void gtk_spin_button_default_output (GtkSpinButton      *spin_button);
+static void update_node_state              (GtkSpinButton *spin_button);
 
 static guint spinbutton_signals[LAST_SIGNAL] = {0};
 
@@ -824,9 +825,10 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   g_signal_connect_object (priv->up_node, "style-changed", G_CALLBACK (node_style_changed_cb), spin_button, 0);
   g_object_unref (priv->up_node);
 
-  update_node_ordering (spin_button);
-
   gtk_spin_button_set_adjustment (spin_button, NULL);
+
+  update_node_ordering (spin_button);
+  update_node_state (spin_button);
 
   gtk_widget_add_events (GTK_WIDGET (spin_button), GDK_SCROLL_MASK);
 
@@ -1488,6 +1490,7 @@ gtk_spin_button_state_flags_changed (GtkWidget     *widget,
                                      GtkStateFlags  previous_state)
 {
   GtkSpinButton *spin = GTK_SPIN_BUTTON (widget);
+  GtkSpinButtonPrivate *priv = spin->priv;
 
   if (!gtk_widget_is_sensitive (widget))
     {
@@ -1495,6 +1498,7 @@ gtk_spin_button_state_flags_changed (GtkWidget     *widget,
         gtk_widget_queue_draw (GTK_WIDGET (spin));
     }
 
+  gtk_css_node_set_state (priv->entry_node, gtk_widget_get_state_flags (widget));
   update_node_state (spin);
 }
 
