@@ -1342,6 +1342,7 @@ gdk_x11_display_init_input (GdkDisplay *display)
   GdkDeviceManager *device_manager;
   GdkDevice *device;
   GList *list, *l;
+  gint pass;
 
   display_x11 = GDK_X11_DISPLAY (display);
   device_manager = gdk_display_get_device_manager (display);
@@ -1365,25 +1366,31 @@ gdk_x11_display_init_input (GdkDisplay *display)
   g_list_free (list);
 
   /* Now set "core" pointer to the first
-   * master device that is a pointer.
+   * master device that is a pointer,
+   * preferring mice over touchscreens.
    */
   list = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_MASTER);
 
-  for (l = list; l; l = l->next)
+  for (pass = 0; pass < 2; pass++)
     {
-      device = l->data;
+      for (l = list; l; l = l->next)
+        {
+          device = l->data;
 
-      if (gdk_device_get_source (device) != GDK_SOURCE_MOUSE)
-        continue;
+          if ((pass == 0 && gdk_device_get_source (device) == GDK_SOURCE_MOUSE) ||
+              (pass == 1 && gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN))
+            {
+              display->core_pointer = device;
 
-      display->core_pointer = device;
-      break;
+              /* Add the core pointer to the devices list */
+              display_x11->input_devices = g_list_prepend (display_x11->input_devices,
+                                                           g_object_ref (display->core_pointer));
+              goto out;
+            }
+        }
     }
 
-  /* Add the core pointer to the devices list */
-  display_x11->input_devices = g_list_prepend (display_x11->input_devices,
-                                               g_object_ref (display->core_pointer));
-
+out:
   g_list_free (list);
 }
 
