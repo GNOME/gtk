@@ -164,8 +164,10 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
   container_class->get_child_property = gtk_button_box_get_child_property;
   gtk_container_class_handle_border_width (container_class);
 
-  /* FIXME we need to override the "spacing" property on GtkBox once
-   * libgobject allows that.
+  /**
+   * GtkButtonBox:child-min-width:
+   *
+   * The minimum width of buttons inside the box.
    */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("child-min-width",
@@ -176,6 +178,11 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
                                                              DEFAULT_CHILD_MIN_WIDTH,
                                                              GTK_PARAM_READABLE));
 
+  /**
+   * GtkButtonBox:child-min-height:
+   *
+   * The minimum height of buttons inside the box.
+   */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("child-min-height",
                                                              P_("Minimum child height"),
@@ -185,6 +192,11 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
                                                              DEFAULT_CHILD_MIN_HEIGHT,
                                                              GTK_PARAM_READABLE));
 
+  /**
+   * GtkButtonBox:child-internal-pad-x:
+   *
+   * The amount to increase a child's size on either side.
+   */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("child-internal-pad-x",
                                                              P_("Child internal width padding"),
@@ -194,6 +206,11 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
                                                              DEFAULT_CHILD_IPAD_X,
                                                              GTK_PARAM_READABLE));
 
+  /**
+   * GtkButtonBox:child-internal-pad-y:
+   *
+   * The amount to increase a child's size on the top and bottom.
+   */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("child-internal-pad-y",
                                                              P_("Child internal height padding"),
@@ -202,6 +219,7 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
                                                              G_MAXINT,
                                                              DEFAULT_CHILD_IPAD_Y,
                                                              GTK_PARAM_READABLE));
+
   g_object_class_install_property (gobject_class,
                                    PROP_LAYOUT_STYLE,
                                    g_param_spec_enum ("layout-style",
