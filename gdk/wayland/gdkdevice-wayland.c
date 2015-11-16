@@ -33,8 +33,12 @@
 
 #include <xkbcommon/xkbcommon.h>
 
+#include <linux/input.h>
+
 #include <sys/time.h>
 #include <sys/mman.h>
+
+#define BUTTON_BASE (BTN_LEFT - 1) /* Used to translate to 1-indexed buttons */
 
 typedef struct _GdkWaylandTouchData GdkWaylandTouchData;
 
@@ -1018,14 +1022,18 @@ pointer_handle_button (void              *data,
 
   switch (button)
     {
-    case 273:
-      gdk_button = 3;
+    case BTN_LEFT:
+      gdk_button = GDK_BUTTON_PRIMARY;
       break;
-    case 274:
-      gdk_button = 2;
+    case BTN_MIDDLE:
+      gdk_button = GDK_BUTTON_MIDDLE;
+      break;
+    case BTN_RIGHT:
+      gdk_button = GDK_BUTTON_SECONDARY;
       break;
     default:
-      gdk_button = button - 271;
+       /* For compatibility reasons, all additional buttons go after the old 4-7 scroll ones */
+      gdk_button = button - BUTTON_BASE + 4;
       break;
     }
 
