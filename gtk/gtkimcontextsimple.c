@@ -134,14 +134,11 @@ static gchar*
 get_x11_compose_file_dir (void)
 {
   gchar* compose_file_dir;
-  gchar* datadir = NULL;
 
 #if defined (GDK_WINDOWING_X11) || defined (GDK_WINDOWING_WAYLAND)
   compose_file_dir = g_strdup (X11_DATA_PREFIX "/share/X11/locale");
 #else
-  datadir = g_strdup (_gtk_get_datadir ());
-  compose_file_dir = g_build_filename (datadir, "X11", "locale", NULL);
-  g_free (datadir);
+  compose_file_dir = g_build_filename (_gtk_get_datadir (), "X11", "locale", NULL);
 #endif
 
   return compose_file_dir;
