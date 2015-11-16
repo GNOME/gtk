@@ -674,6 +674,14 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
   g_object_class_override_property (gobject_class, PROP_VSCROLL_POLICY, "vscroll-policy");
 
   /* Style properties */
+  /**
+   * GtkIconView:selection-box-color:
+   *
+   * The color of the selection box.
+   *
+   * Deprecated: 3.20: The color of the selection box is determined by CSS;
+   *     the value of this style property is ignored.
+   */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_boxed ("selection-box-color",
                                                                P_("Selection Box Color"),
@@ -681,6 +689,15 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
                                                                g_type_from_name ("GdkColor"),
                                                                GTK_PARAM_READABLE));
 
+
+  /**
+   * GtkIconView:selection-box-alpha:
+   *
+   * The opacity of the selection box.
+   *
+   * Deprecated: 3.20: The opacity of the selection box is determined by CSS;
+   *     the value of this style property is ignored.
+   */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_uchar ("selection-box-alpha",
                                                                P_("Selection Box Alpha"),
