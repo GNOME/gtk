@@ -213,7 +213,7 @@ gtk_do_render_arrow (GtkStyleContext *context,
  *
  * Renders an arrow pointing to @angle.
  *
- * Typical arrow rendering at 0, 1&solidus;2 &pi;, &pi; and 3&solidus;2 &pi;:
+ * Typical arrow rendering at 0, 1⁄2 π;, π; and 3⁄2 π:
  *
  * ![](arrows.png)
  *
