@@ -50,6 +50,18 @@ G_GNUC_END_IGNORE_DEPRECATIONS;
   g_object_unref (provider);
 }
 
+static void
+test_section_load_nonexisting_file (void)
+{
+  GtkCssProvider *provider;
+
+  provider = gtk_css_provider_new ();
+  g_signal_connect (provider, "parsing-error",
+                    G_CALLBACK (assert_section_is_not_null), NULL);
+  gtk_css_provider_load_from_path (provider, "this/path/does/absolutely/not/exist.css", NULL);
+  g_object_unref (provider);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -58,6 +70,7 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/cssprovider/section-in-load-from-data", test_section_in_load_from_data);
   g_test_add_func ("/cssprovider/section-in-style-property", test_section_in_style_property);
+  g_test_add_func ("/cssprovider/load-nonexisting-file", test_section_load_nonexisting_file);
 
   return g_test_run ();
 }

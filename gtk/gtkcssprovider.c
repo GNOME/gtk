@@ -1943,6 +1943,9 @@ gtk_css_provider_error (GtkCssProvider *provider,
   GError *error;
   va_list args;
 
+  gtk_internal_return_if_fail (GTK_IS_CSS_PROVIDER (provider));
+  gtk_internal_return_if_fail (scanner != NULL);
+
   va_start (args, format);
   error = g_error_new_valist (domain, code, format, args);
   va_end (args);
@@ -2725,21 +2728,24 @@ gtk_css_provider_load_internal (GtkCssProvider *css_provider,
         }
       else
         {
-          GtkCssSection *section;
-          
-          if (parent)
-            section = gtk_css_section_ref (parent->section);
-          else
-            section = _gtk_css_section_new_for_file (GTK_CSS_SECTION_DOCUMENT, file);
+          scanner = gtk_css_scanner_new (css_provider,
+                                         parent,
+                                         parent ? parent->section : NULL,
+                                         file,
+                                         "");
+
+          gtk_css_scanner_push_section (scanner, GTK_CSS_SECTION_DOCUMENT);
 
           gtk_css_provider_error (css_provider,
-                                  parent,
+                                  scanner,
                                   GTK_CSS_PROVIDER_ERROR,
                                   GTK_CSS_PROVIDER_ERROR_IMPORT,
                                   "Failed to import: %s",
                                   load_error->message);
 
-          gtk_css_section_unref (section);
+          gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_DOCUMENT);
+
+          gtk_css_scanner_destroy (scanner);
         }
     }
 
