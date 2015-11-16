@@ -486,6 +486,14 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
   g_object_class_override_property (gobject_class, PROP_ACTION_NAME, "action-name");
   g_object_class_override_property (gobject_class, PROP_ACTION_TARGET, "action-target");
 
+  /**
+   * GtkMenuItem:selected-shadow-type:
+   *
+   * The shadow type when the item is selected.
+   *
+   * Deprecated: 3.20: Use CSS to determine the shadow; the value of this
+   *     style property is ignored.
+   */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_enum ("selected-shadow-type",
                                                               "Selected Shadow Type",
