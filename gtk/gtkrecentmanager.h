@@ -55,7 +55,7 @@ typedef struct _GtkRecentManagerPrivate GtkRecentManagerPrivate;
  * @app_name: the name of the application that is registering this recently
  *   used resource;
  * @app_exec: command line used to launch this resource; may contain the
- *   “&percnt;f” and “&percnt;u” escape characters which will be expanded
+ *   “\%f” and “\%u” escape characters which will be expanded
  *   to the resource file path and URI respectively when the command line
  *   is retrieved;
  * @groups: (array zero-terminated=1): a vector of strings containing
