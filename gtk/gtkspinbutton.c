@@ -447,7 +447,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
                                                               P_("Style of bevel around the spin button"),
                                                               GTK_TYPE_SHADOW_TYPE,
                                                               GTK_SHADOW_IN,
-                                                              GTK_PARAM_READABLE));
+                                                              GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   /**
    * GtkSpinButton::input:

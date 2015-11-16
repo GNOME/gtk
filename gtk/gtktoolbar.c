@@ -593,7 +593,7 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
 							     0,
 							     G_MAXINT,
                                                              0,
-                                                             GTK_PARAM_READABLE));
+                                                             GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("max-child-expand",
@@ -634,7 +634,7 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
                                                               P_("Style of bevel around the toolbar"),
                                                               GTK_TYPE_SHADOW_TYPE,
                                                               GTK_SHADOW_OUT,
-                                                              GTK_PARAM_READABLE));
+                                                              GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   binding_set = gtk_binding_set_by_class (klass);
   

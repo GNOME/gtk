@@ -226,7 +226,7 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
                                                               P_("Style of bevel around the menubar"),
                                                               GTK_TYPE_SHADOW_TYPE,
                                                               GTK_SHADOW_OUT,
-                                                              GTK_PARAM_READABLE));
+                                                              GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   /**
    * GtkMenuBar:internal-padding:
@@ -245,7 +245,7 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
 							     G_MAXINT,
                                                              0,
                                                              GTK_PARAM_READABLE |
-                                                             G_PARAM_DEPRECATED));
+                                                             G_PARAM_DEPRECATED|G_PARAM_DEPRECATED));
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_MENU_BAR);
   gtk_widget_class_set_css_name (widget_class, "menubar");

@@ -605,7 +605,7 @@ gtk_button_class_init (GtkButtonClass *klass)
 							     0,
 							     G_MAXINT,
 							     2,
-							     GTK_PARAM_READABLE));
+							     GTK_PARAM_READABLE | G_PARAM_DEPRECATED));
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_BUTTON_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, "button");

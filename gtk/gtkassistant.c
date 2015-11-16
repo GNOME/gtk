@@ -543,7 +543,7 @@ gtk_assistant_class_init (GtkAssistantClass *class)
                                                              0,
                                                              G_MAXINT,
                                                              6,
-                                                             GTK_PARAM_READABLE));
+                                                             GTK_PARAM_READABLE | G_PARAM_DEPRECATED));
 
   /**
    * GtkAssistant:content-padding:
@@ -559,7 +559,7 @@ gtk_assistant_class_init (GtkAssistantClass *class)
                                                              0,
                                                              G_MAXINT,
                                                              1,
-                                                             GTK_PARAM_READABLE));
+                                                             GTK_PARAM_READABLE | G_PARAM_DEPRECATED));
 
   /**
    * GtkAssistant:page-type:

@@ -270,7 +270,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
                                                              P_("X spacing"),
                                                              P_("Extra spacing applied to the width of a progress bar."),
                                                              0, G_MAXINT, 2,
-                                                             G_PARAM_READWRITE));
+                                                             G_PARAM_READWRITE|G_PARAM_DEPRECATED));
 
   /**
    * GtkProgressBar:yspacing:
@@ -285,7 +285,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
                                                              P_("Y spacing"),
                                                              P_("Extra spacing applied to the height of a progress bar."),
                                                              0, G_MAXINT, 2,
-                                                             G_PARAM_READWRITE));
+                                                             G_PARAM_READWRITE|G_PARAM_DEPRECATED));
 
   /**
    * GtkProgressBar:min-horizontal-bar-width:

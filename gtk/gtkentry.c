@@ -1505,7 +1505,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                                  P_("Icon Prelight"),
                                                                  P_("Whether activatable icons should prelight when hovered"),
                                                                  TRUE,
-                                                                 GTK_PARAM_READABLE|G_PARAM_EXPLICIT_NOTIFY));
+                                                                 GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   /**
    * GtkEntry:progress-border:

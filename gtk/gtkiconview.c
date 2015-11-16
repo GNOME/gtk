@@ -687,7 +687,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
                                                                P_("Selection Box Color"),
                                                                P_("Color of the selection box"),
                                                                g_type_from_name ("GdkColor"),
-                                                               GTK_PARAM_READABLE));
+                                                               GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
 
   /**
@@ -704,7 +704,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
                                                                P_("Opacity of the selection box"),
                                                                0, 0xff,
                                                                0x40,
-                                                               GTK_PARAM_READABLE));
+                                                               GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   /* Signals */
   /**

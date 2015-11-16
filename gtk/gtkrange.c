@@ -585,7 +585,7 @@ gtk_range_class_init (GtkRangeClass *class)
 							     G_MININT,
 							     G_MAXINT,
 							     0,
-							     GTK_PARAM_READABLE));
+							     GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   /**
    * GtkRange:arrow-displacement-y:
@@ -601,7 +601,7 @@ gtk_range_class_init (GtkRangeClass *class)
 							     G_MININT,
 							     G_MAXINT,
 							     0,
-							     GTK_PARAM_READABLE));
+							     GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   /**
    * GtkRange:trough-under-steppers:

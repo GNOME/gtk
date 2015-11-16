@@ -500,7 +500,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
                                                               "Shadow type when item is selected",
                                                               GTK_TYPE_SHADOW_TYPE,
                                                               GTK_SHADOW_NONE,
-                                                              GTK_PARAM_READABLE));
+                                                              GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   /**
    * GtkMenuItem:horizontal-padding:

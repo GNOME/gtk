@@ -526,7 +526,7 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
                                                              0,
                                                              G_MAXINT,
                                                              CONTENT_AREA_DEFAULT_BORDER,
-                                                             GTK_PARAM_READABLE));
+                                                             GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   /**
    * GtkInfoBar:content-area-spacing:
@@ -544,7 +544,7 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
                                                              0,
                                                              G_MAXINT,
                                                              CONTENT_AREA_DEFAULT_SPACING,
-                                                             GTK_PARAM_READABLE));
+                                                             GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   /**
    * GtkInfoBar:button-spacing:
@@ -561,7 +561,7 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
                                                              0,
                                                              G_MAXINT,
                                                              ACTION_AREA_DEFAULT_SPACING,
-                                                             GTK_PARAM_READABLE));
+                                                             GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   /**
    * GtkInfoBar:action-area-border:
@@ -578,7 +578,7 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
                                                              0,
                                                              G_MAXINT,
                                                              ACTION_AREA_DEFAULT_BORDER,
-                                                             GTK_PARAM_READABLE));
+                                                             GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   binding_set = gtk_binding_set_by_class (klass);
 

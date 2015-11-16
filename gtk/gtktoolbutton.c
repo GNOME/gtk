@@ -313,7 +313,7 @@ gtk_tool_button_class_init (GtkToolButtonClass *klass)
 							     0,
 							     G_MAXINT,
 							     3,
-							     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+							     GTK_PARAM_READWRITE));
 
 /**
  * GtkToolButton::clicked:
