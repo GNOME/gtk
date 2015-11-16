@@ -257,6 +257,14 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, progress_props);
 
+  /**
+   * GtkProgressBar:xspacing:
+   *
+   * Extra spacing applied to the width of a progress bar.
+   *
+   * Deprecated: 3.20: Use the standard CSS padding and margins; the
+   *     value of this style property is ignored.
+   */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("xspacing",
                                                              P_("X spacing"),
@@ -264,6 +272,14 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
                                                              0, G_MAXINT, 2,
                                                              G_PARAM_READWRITE));
 
+  /**
+   * GtkProgressBar:yspacing:
+   *
+   * Extra spacing applied to the height of a progress bar.
+   *
+   * Deprecated: 3.20: Use the standard CSS padding and margins; the
+   *     value of this style property is ignored.
+   */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("yspacing",
                                                              P_("Y spacing"),
@@ -606,7 +622,6 @@ gtk_progress_bar_get_preferred_width (GtkWidget *widget,
   PangoRectangle logical_rect;
   PangoLayout *layout;
   gint width;
-  gint xspacing;
   gint bar_width;
 
   g_return_if_fail (GTK_IS_PROGRESS_BAR (widget));
@@ -621,11 +636,6 @@ gtk_progress_bar_get_preferred_width (GtkWidget *widget,
 
   if (priv->show_text)
     {
-      gtk_widget_style_get (widget,
-                            "xspacing", &xspacing,
-                            NULL);
-      width += xspacing;
-
       buf = get_current_text (pbar);
       layout = gtk_widget_create_pango_layout (widget, buf);
 
@@ -680,7 +690,6 @@ gtk_progress_bar_get_preferred_height (GtkWidget *widget,
   PangoRectangle logical_rect;
   PangoLayout *layout;
   gint height;
-  gint yspacing;
   gint bar_height;
 
   g_return_if_fail (GTK_IS_PROGRESS_BAR (widget));
@@ -695,11 +704,6 @@ gtk_progress_bar_get_preferred_height (GtkWidget *widget,
 
   if (priv->show_text)
     {
-      gtk_widget_style_get (widget,
-                            "yspacing", &yspacing,
-                            NULL);
-      height += yspacing;
-
       buf = get_current_text (pbar);
       layout = gtk_widget_create_pango_layout (widget, buf);
 
