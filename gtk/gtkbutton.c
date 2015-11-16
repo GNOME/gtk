@@ -519,6 +519,15 @@ gtk_button_class_init (GtkButtonClass *klass)
 							       P_("Extra space to add for GTK_CAN_DEFAULT buttons that is always drawn outside the border"),
 							       GTK_TYPE_BORDER,
 							       GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
+
+  /**
+   * GtkButton:child-displacement-x:
+   *
+   * How far in the x direction to move the child when the button is depressed.
+   *
+   * Deprecated: 3.20: Use CSS margins and padding instead;
+   *     the value of this style property is ignored.
+   */
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("child-displacement-x",
 							     P_("Child X Displacement"),
@@ -527,6 +536,15 @@ gtk_button_class_init (GtkButtonClass *klass)
 							     G_MAXINT,
 							     0,
 							     GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
+
+  /**
+   * GtkButton:child-displacement-y:
+   *
+   * How far in the y direction to move the child when the button is depressed.
+   *
+   * Deprecated: 3.20: Use CSS margins and padding instead;
+   *     the value of this style property is ignored.
+   */
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("child-displacement-y",
 							     P_("Child Y Displacement"),
@@ -539,10 +557,13 @@ gtk_button_class_init (GtkButtonClass *klass)
   /**
    * GtkButton:displace-focus:
    *
-   * Whether the child_displacement_x/child_displacement_y properties 
+   * Whether the child_displacement_x/child_displacement_y properties
    * should also affect the focus rectangle.
    *
    * Since: 2.6
+   *
+   * Deprecated: 3.20: Use CSS margins and padding instead;
+   *     the value of this style property is ignored.
    */
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_boolean ("displace-focus",
@@ -574,6 +595,8 @@ gtk_button_class_init (GtkButtonClass *klass)
    * Spacing in pixels between the image and label.
    *
    * Since: 2.10
+   *
+   * Deprecated: 3.20: Use CSS margins and padding instead.
    */
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("image-spacing",
