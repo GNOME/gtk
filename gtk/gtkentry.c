@@ -1496,6 +1496,9 @@ gtk_entry_class_init (GtkEntryClass *class)
    * icons prelight on mouseover.
    *
    * Since: 2.16
+   *
+   * Deprecated: 3.20: Use CSS to control the appearance of prelighted icons;
+   *     the value of this style property is ignored.
    */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_boolean ("icon-prelight",
@@ -1521,7 +1524,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                                P_("Border around the progress bar"),
                                                                GTK_TYPE_BORDER,
                                                                GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
-  
+
   /**
    * GtkEntry:invisible-char:
    *
@@ -3772,7 +3775,6 @@ should_prelight (GtkEntry             *entry,
 {
   GtkEntryPrivate *priv = entry->priv;
   EntryIconInfo *icon_info = priv->icons[icon_pos];
-  gboolean prelight;
 
   if (!icon_info)
     return FALSE;
@@ -3783,11 +3785,7 @@ should_prelight (GtkEntry             *entry,
   if (icon_info->pressed)
     return FALSE;
 
-  gtk_widget_style_get (GTK_WIDGET (entry),
-                        "icon-prelight", &prelight,
-                        NULL);
-
-  return prelight;
+  return TRUE;
 }
 
 static void
