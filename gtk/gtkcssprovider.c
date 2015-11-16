@@ -2409,6 +2409,55 @@ name_is_style_property (const char *name)
 }
 
 static void
+warn_if_deprecated (GtkCssScanner *scanner,
+                    const gchar   *name)
+{
+  gchar *n = NULL;
+  gchar *p;
+  const gchar *type_name;
+  const gchar *property_name;
+  GType type;
+  GTypeClass *class = NULL;
+  GParamSpec *pspec;
+
+  n = g_strdup (name);
+
+  /* skip initial - */
+  type_name = n + 1;
+
+  p = strchr (type_name, '-');
+  if (!p)
+    goto out;
+
+  p[0] = '\0';
+  property_name = p + 1;
+
+  type = g_type_from_name (type_name);
+  if (type == G_TYPE_INVALID ||
+      !g_type_is_a (type, GTK_TYPE_WIDGET))
+    goto out;
+
+  class = g_type_class_ref (type);
+  pspec = gtk_widget_class_find_style_property (GTK_WIDGET_CLASS (class), property_name);
+  if (!pspec)
+    goto out;
+
+  if (!(pspec->flags & G_PARAM_DEPRECATED))
+    goto out;
+
+  _gtk_css_parser_error_full (scanner->parser,
+                              GTK_CSS_PROVIDER_ERROR_DEPRECATED,
+                              "The style property %s:%s is deprecated and shouldn't be "
+                              "used anymore. It will be removed in a future version",
+                              g_type_name (pspec->owner_type), pspec->name);
+
+out:
+  g_free (n);
+  if (class)
+    g_type_class_unref (class);
+}
+
+static void
 parse_declaration (GtkCssScanner *scanner,
                    GtkCssRuleset *ruleset)
 {
@@ -2510,6 +2559,8 @@ parse_declaration (GtkCssScanner *scanner,
   else if (name_is_style_property (name))
     {
       char *value_str;
+
+      warn_if_deprecated (scanner, name);
 
       gtk_css_scanner_push_section (scanner, GTK_CSS_SECTION_VALUE);
 
