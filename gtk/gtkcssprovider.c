@@ -2801,10 +2801,10 @@ gtk_css_provider_load_internal (GtkCssProvider *css_provider,
           if (parent == NULL)
             {
               scanner = gtk_css_scanner_new (css_provider,
-                                           parent,
-                                           parent ? parent->section : NULL,
-                                           file,
-                                           "");
+                                             NULL,
+                                             NULL,
+                                             file,
+                                             "");
 
               gtk_css_scanner_push_section (scanner, GTK_CSS_SECTION_DOCUMENT);
             }
