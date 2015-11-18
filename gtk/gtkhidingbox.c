@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2015 Rafał Lużyński <digitalfreak@lingonborough.com>
+ * Copyright (C) 2015 Red Hat
  *
  * Licensed under the GNU General Public License Version 2
  *
@@ -16,6 +17,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * Authors: Rafał Lużyński <digitalfreak@lingonborough.com>
+ *          Carlos Soriano <csoriano@gnome.org>
  */
 
 #include "config.h"
