@@ -15629,21 +15629,6 @@ gtk_widget_set_clip (GtkWidget           *widget,
   priv->clip = *clip;
 }
 
-static void
-union_with_clip (GtkWidget *widget,
-                 gpointer   clip)
-{
-  GtkAllocation widget_clip;
-
-  if (!gtk_widget_is_visible (widget) ||
-      !_gtk_widget_get_child_visible (widget))
-    return;
-
-  gtk_widget_get_clip (widget, &widget_clip);
-
-  gdk_rectangle_union (&widget_clip, clip, clip);
-}
-
 /*
  * _gtk_widget_set_simple_clip:
  * @widget: a #GtkWidget
@@ -15690,19 +15675,17 @@ _gtk_widget_set_simple_clip (GtkWidget     *widget,
 
   if (GTK_IS_CONTAINER (widget))
     {
-      if (_gtk_widget_get_has_window (widget))
-        {
-          clip.x -= allocation.x;
-          clip.y -= allocation.y;
-        }
+      GdkRectangle children_clip;
 
-      gtk_container_forall (GTK_CONTAINER (widget), union_with_clip, &clip);
+      gtk_container_get_children_clip (GTK_CONTAINER (widget), &children_clip);
 
       if (_gtk_widget_get_has_window (widget))
         {
-          clip.x += allocation.x;
-          clip.y += allocation.y;
+          children_clip.x += allocation.x;
+          children_clip.y += allocation.y;
         }
+
+      gdk_rectangle_union (&children_clip, &clip, &clip);
     }
 
   gtk_widget_set_clip (widget, &clip);
