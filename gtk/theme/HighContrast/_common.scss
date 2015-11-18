@@ -27,15 +27,6 @@ $ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
   -GtkTreeView-horizontal-separator: 4;
 
-  -GtkMenu-horizontal-padding: 0;
-  -GtkMenu-vertical-padding: 0;
-
-  -GtkWidget-link-color: $link_color;
-  -GtkWidget-visited-link-color: $link_color;
-
-  -GtkWidget-focus-padding: 2;    // FIXME: do we still need these?
-  -GtkWidget-focus-line-width: 1; //
-
   -GtkDialog-button-spacing: 4;
   -GtkDialog-action-area-border: 0;
 
@@ -1249,8 +1240,6 @@ notebook {
   -GtkNotebook-tab-curvature: 0;
   -GtkNotebook-tab-overlap: -8;
   -GtkNotebook-has-tab-gap: false;
-  -GtkWidget-focus-padding: 0;
-  -GtkWidget-focus-line-width: 0;
 
   // Through me you go to the grief wracked city;
   // Through me you go to everlasting pain;

@@ -44,12 +44,6 @@
   -GtkToolItemGroup-expander-size: 11;
   -GtkExpander-expander-size: 16;
   -GtkTreeView-horizontal-separator: 4;
-  -GtkMenu-horizontal-padding: 0;
-  -GtkMenu-vertical-padding: 0;
-  -GtkWidget-link-color: #000;
-  -GtkWidget-visited-link-color: #000;
-  -GtkWidget-focus-padding: 2;
-  -GtkWidget-focus-line-width: 1;
   -GtkDialog-button-spacing: 4;
   -GtkDialog-action-area-border: 0;
   -GtkStatusbar-shadow-type: none;
@@ -1381,8 +1375,6 @@ notebook {
   -GtkNotebook-tab-curvature: 0;
   -GtkNotebook-tab-overlap: -8;
   -GtkNotebook-has-tab-gap: false;
-  -GtkWidget-focus-padding: 0;
-  -GtkWidget-focus-line-width: 0;
   padding: 0;
   background-color: #fff;
   transition: all 200ms ease-out; }
