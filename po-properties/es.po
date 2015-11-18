@@ -19,8 +19,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-16 00:08+0000\n"
-"PO-Revision-Date: 2015-11-17 16:22+0100\n"
+"POT-Creation-Date: 2015-11-18 00:14+0000\n"
+"PO-Revision-Date: 2015-11-18 13:21+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -513,7 +513,7 @@ msgid "Appearance of the shadow surrounding the arrow"
 msgstr "Apariencia de la sombra que rodea la flecha"
 
 #: gtk/deprecated/gtkarrow.c:138 gtk/gtkcombobox.c:1041 gtk/gtkmenu.c:809
-#: gtk/gtkmenuitem.c:536
+#: gtk/gtkmenuitem.c:544
 msgid "Arrow Scaling"
 msgstr "Escalado de flechas"
 
@@ -612,7 +612,7 @@ msgid "The text to display in order to demonstrate the selected font"
 msgstr "El texto que mostrar como demostración de la tipografía seleccionada"
 
 #: gtk/deprecated/gtkhandlebox.c:223 gtk/gtkcombobox.c:1057 gtk/gtkentry.c:967
-#: gtk/gtkmenubar.c:219 gtk/gtkstatusbar.c:170 gtk/gtktoolbar.c:633
+#: gtk/gtkmenubar.c:225 gtk/gtkstatusbar.c:170 gtk/gtktoolbar.c:633
 #: gtk/gtkviewport.c:181
 msgid "Shadow type"
 msgstr "Tipo de sombra"
@@ -1117,7 +1117,7 @@ msgstr "Separación"
 msgid "Padding that should be put around icons in the tray"
 msgstr "Separación que poner alrededor de los iconos en la bandeja"
 
-#: gtk/deprecated/gtktrayicon-x11.c:178
+#: gtk/deprecated/gtktrayicon-x11.c:178 gtk/gtkstackswitcher.c:577
 msgid "Icon Size"
 msgstr "Tamaño del icono"
 
@@ -1561,108 +1561,108 @@ msgstr "Usar barra de cabecera"
 msgid "Use Header Bar for actions."
 msgstr "Usar barra de cabecera para las acciones."
 
-#: gtk/gtkassistant.c:534
+#: gtk/gtkassistant.c:541
 msgid "Header Padding"
 msgstr "Separación de la cabecera"
 
-#: gtk/gtkassistant.c:535
+#: gtk/gtkassistant.c:542
 msgid "Number of pixels around the header."
 msgstr "Número de píxeles alrededor de la cabecera."
 
-#: gtk/gtkassistant.c:542
+#: gtk/gtkassistant.c:557
 msgid "Content Padding"
 msgstr "Separación del contenido"
 
-#: gtk/gtkassistant.c:543
+#: gtk/gtkassistant.c:558
 msgid "Number of pixels around the content pages."
 msgstr "Número de píxeles alrededor de las páginas de contenidos."
 
-#: gtk/gtkassistant.c:559
+#: gtk/gtkassistant.c:574
 msgid "Page type"
 msgstr "Tipo de página"
 
-#: gtk/gtkassistant.c:560
+#: gtk/gtkassistant.c:575
 msgid "The type of the assistant page"
 msgstr "El tipo de página del asistente"
 
-#: gtk/gtkassistant.c:575
+#: gtk/gtkassistant.c:590
 msgid "Page title"
 msgstr "Título de página"
 
-#: gtk/gtkassistant.c:576
+#: gtk/gtkassistant.c:591
 msgid "The title of the assistant page"
 msgstr "El título de la página del asistente"
 
-#: gtk/gtkassistant.c:593
+#: gtk/gtkassistant.c:608
 msgid "Header image"
 msgstr "Imagen de la cabecera"
 
-#: gtk/gtkassistant.c:594
+#: gtk/gtkassistant.c:609
 msgid "Header image for the assistant page"
 msgstr "Imagen de la cabecera para la página del asistente"
 
-#: gtk/gtkassistant.c:610
+#: gtk/gtkassistant.c:625
 msgid "Sidebar image"
 msgstr "Imagen de barra lateral"
 
-#: gtk/gtkassistant.c:611
+#: gtk/gtkassistant.c:626
 msgid "Sidebar image for the assistant page"
 msgstr "Imagen de barra lateral para la página del asistente"
 
-#: gtk/gtkassistant.c:627
+#: gtk/gtkassistant.c:642
 msgid "Page complete"
 msgstr "Página completa"
 
-#: gtk/gtkassistant.c:628
+#: gtk/gtkassistant.c:643
 msgid "Whether all required fields on the page have been filled out"
 msgstr "Indica si todos los campos requeridos en la página se han rellenado"
 
-#: gtk/gtkassistant.c:633
+#: gtk/gtkassistant.c:648
 msgid "Has padding"
 msgstr "Tiene relleno"
 
-#: gtk/gtkassistant.c:633
+#: gtk/gtkassistant.c:648
 msgid "Whether the assistant adds padding around the page"
 msgstr "Indica si el asistente añade relleno alrededor de la página"
 
-#: gtk/gtkbbox.c:172
+#: gtk/gtkbbox.c:174
 msgid "Minimum child width"
 msgstr "Anchura mínima del hijo"
 
-#: gtk/gtkbbox.c:173
+#: gtk/gtkbbox.c:175
 msgid "Minimum width of buttons inside the box"
 msgstr "Anchura mínima de los botones dentro de la caja"
 
-#: gtk/gtkbbox.c:181
+#: gtk/gtkbbox.c:188
 msgid "Minimum child height"
 msgstr "Altura mínima del hijo"
 
-#: gtk/gtkbbox.c:182
+#: gtk/gtkbbox.c:189
 msgid "Minimum height of buttons inside the box"
 msgstr "Altura mínima de los botones dentro de la caja"
 
-#: gtk/gtkbbox.c:190
+#: gtk/gtkbbox.c:202
 msgid "Child internal width padding"
 msgstr "Anchura interna de relleno del hijo"
 
-#: gtk/gtkbbox.c:191
+#: gtk/gtkbbox.c:203
 msgid "Amount to increase child's size on either side"
 msgstr "Cantidad en la que se incrementa el tamaño del hijo por cada lado"
 
-#: gtk/gtkbbox.c:199
+#: gtk/gtkbbox.c:216
 msgid "Child internal height padding"
 msgstr "Altura interna de relleno del hijo"
 
-#: gtk/gtkbbox.c:200
+#: gtk/gtkbbox.c:217
 msgid "Amount to increase child's size on the top and bottom"
 msgstr ""
 "Cantidad en la que se incrementa el tamaño del hijo por arriba y por abajo"
 
-#: gtk/gtkbbox.c:208
+#: gtk/gtkbbox.c:226
 msgid "Layout style"
 msgstr "Estilo de la distribución"
 
-#: gtk/gtkbbox.c:209
+#: gtk/gtkbbox.c:227
 msgid ""
 "How to lay out the buttons in the box. Possible values are: spread, edge, "
 "start and end"
@@ -1670,11 +1670,11 @@ msgstr ""
 "Como disponer los botones en la caja. Los valores posibles son: esparcidos, "
 "esquinas, inicio y final"
 
-#: gtk/gtkbbox.c:217
+#: gtk/gtkbbox.c:235
 msgid "Secondary"
 msgstr "Secundario"
 
-#: gtk/gtkbbox.c:218
+#: gtk/gtkbbox.c:236
 msgid ""
 "If TRUE, the child appears in a secondary group of children, suitable for, e."
 "g., help buttons"
@@ -1682,11 +1682,11 @@ msgstr ""
 "Si es TRUE, el hijo aparece en un grupo secundario de hijos, apropiado para, "
 "por ejemplo, botones de ayuda"
 
-#: gtk/gtkbbox.c:225
+#: gtk/gtkbbox.c:243
 msgid "Non-Homogeneous"
 msgstr "No homogéneo"
 
-#: gtk/gtkbbox.c:226
+#: gtk/gtkbbox.c:244
 msgid "If TRUE, the child will not be subject to homogeneous sizing"
 msgstr "Si es TRUE, el hijo no será objeto de tamaño homogéneo"
 
@@ -1825,31 +1825,31 @@ msgstr ""
 "Espacio adicional que añadir para los botones CAN_DEFAULT que se dibuja "
 "siempre fuera del borde"
 
-#: gtk/gtkbutton.c:524
+#: gtk/gtkbutton.c:533
 msgid "Child X Displacement"
 msgstr "Desplazamiento X del hijo"
 
-#: gtk/gtkbutton.c:525
+#: gtk/gtkbutton.c:534
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
 msgstr ""
 "Cuánta distancia en la dirección x se mueve el hijo cuando se suelta el botón"
 
-#: gtk/gtkbutton.c:532
+#: gtk/gtkbutton.c:550
 msgid "Child Y Displacement"
 msgstr "Desplazamiento Y del hijo"
 
-#: gtk/gtkbutton.c:533
+#: gtk/gtkbutton.c:551
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
 msgstr ""
 "Cuánta distancia en la dirección y se mueve el hijo cuando se suelta el botón"
 
-#: gtk/gtkbutton.c:549
+#: gtk/gtkbutton.c:570
 msgid "Displace focus"
 msgstr "Desplazar el foco"
 
-#: gtk/gtkbutton.c:550
+#: gtk/gtkbutton.c:571
 msgid ""
 "Whether the child_displacement_x/_y properties should also affect the focus "
 "rectangle"
@@ -1857,19 +1857,19 @@ msgstr ""
 "Indica si las propiedades child_displacement_x/_y deben afectar también al "
 "rectángulo del foco"
 
-#: gtk/gtkbutton.c:566 gtk/gtkentry.c:868 gtk/gtkentry.c:2034
+#: gtk/gtkbutton.c:587 gtk/gtkentry.c:868 gtk/gtkentry.c:2037
 msgid "Inner Border"
 msgstr "Borde interior"
 
-#: gtk/gtkbutton.c:567
+#: gtk/gtkbutton.c:588
 msgid "Border between button edges and child."
 msgstr "Borde entre los bordes del botón y el hijo."
 
-#: gtk/gtkbutton.c:580
+#: gtk/gtkbutton.c:603
 msgid "Image spacing"
 msgstr "Espaciado de imagen"
 
-#: gtk/gtkbutton.c:581
+#: gtk/gtkbutton.c:604
 msgid "Spacing in pixels between the image and label"
 msgstr "Espaciado en píxeles entre la imagen y la etiqueta"
 
@@ -2365,7 +2365,7 @@ msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
 msgstr "La alineación vertical del texto, desde 0 (superior) a 1 (inferior)."
 
 #: gtk/gtkcellrendererprogress.c:226 gtk/gtklevelbar.c:1108
-#: gtk/gtkmodelbutton.c:1045 gtk/gtkprogressbar.c:185 gtk/gtkrange.c:450
+#: gtk/gtkmodelbutton.c:1045 gtk/gtkprogressbar.c:185 gtk/gtkrange.c:448
 msgid "Inverted"
 msgstr "Invertido"
 
@@ -2373,7 +2373,7 @@ msgstr "Invertido"
 msgid "Invert the direction in which the progress bar grows"
 msgstr "Invertir la dirección en la que aumentan las barras de progreso"
 
-#: gtk/gtkcellrendererspin.c:113 gtk/gtkrange.c:443 gtk/gtkscalebutton.c:215
+#: gtk/gtkcellrendererspin.c:113 gtk/gtkrange.c:441 gtk/gtkscalebutton.c:215
 #: gtk/gtkspinbutton.c:370
 msgid "Adjustment"
 msgstr "Ajuste"
@@ -3137,27 +3137,27 @@ msgstr "La cantidad de espacio usado por la flecha"
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "Qué clase de sombra dibujar alrededor de la caja combo"
 
-#: gtk/gtkcontainer.c:512
+#: gtk/gtkcontainer.c:522
 msgid "Resize mode"
 msgstr "Modo de redimensión"
 
-#: gtk/gtkcontainer.c:513
+#: gtk/gtkcontainer.c:523
 msgid "Specify how resize events are handled"
 msgstr "Especifica cómo se manipulan los eventos de redimensionado"
 
-#: gtk/gtkcontainer.c:520
+#: gtk/gtkcontainer.c:530
 msgid "Border width"
 msgstr "Anchura del borde"
 
-#: gtk/gtkcontainer.c:521
+#: gtk/gtkcontainer.c:531
 msgid "The width of the empty border outside the containers children"
 msgstr "La anchura del borde vacío fuera de los contenedores hijos"
 
-#: gtk/gtkcontainer.c:528
+#: gtk/gtkcontainer.c:538
 msgid "Child"
 msgstr "Hijo"
 
-#: gtk/gtkcontainer.c:529
+#: gtk/gtkcontainer.c:539
 msgid "Can be used to add a new child to the container"
 msgstr "Puede usarse para añadir un hijo nuevo al contenedor"
 
@@ -3316,11 +3316,11 @@ msgstr ""
 "Borde entre el texto y el marco. Toma precedencia sobre la propiedad de "
 "estilo del borde interno"
 
-#: gtk/gtkentry.c:875 gtk/gtkentry.c:1541
+#: gtk/gtkentry.c:875 gtk/gtkentry.c:1544
 msgid "Invisible character"
 msgstr "Carácter invisible"
 
-#: gtk/gtkentry.c:876 gtk/gtkentry.c:1542
+#: gtk/gtkentry.c:876 gtk/gtkentry.c:1545
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 "El carácter que se usará cuando se enmascaren los contenidos de la entrada "
@@ -3625,25 +3625,25 @@ msgstr "Pestañas"
 msgid "A list of tabstop locations to apply to the text of the entry"
 msgstr "Un lista de ubicaciones tabuladas que aplicar al texto de la entrada"
 
-#: gtk/gtkentry.c:1502
+#: gtk/gtkentry.c:1505
 msgid "Icon Prelight"
 msgstr "Iluminación de icono"
 
-#: gtk/gtkentry.c:1503
+#: gtk/gtkentry.c:1506
 msgid "Whether activatable icons should prelight when hovered"
 msgstr ""
 "Indica si los iconos activables deben iluminarse al pasar el ratón sobre "
 "ellos"
 
-#: gtk/gtkentry.c:1520
+#: gtk/gtkentry.c:1523
 msgid "Progress Border"
 msgstr "Borde del progreso"
 
-#: gtk/gtkentry.c:1521
+#: gtk/gtkentry.c:1524
 msgid "Border around the progress bar"
 msgstr "Borde alrededor de la barra de progreso"
 
-#: gtk/gtkentry.c:2035
+#: gtk/gtkentry.c:2038
 msgid "Border between text and frame."
 msgstr "Borde entre el texto y el marco."
 
@@ -3936,22 +3936,18 @@ msgstr ""
 "la posibilidad de crear carpetas nuevas."
 
 #: gtk/gtkfilechoosernative.c:627
-#| msgid "Accepts tab"
 msgid "Accept label"
 msgstr "Etiqueta de aceptar"
 
 #: gtk/gtkfilechoosernative.c:628
-#| msgid "The role of this button"
 msgid "The label on the accept button"
 msgstr "La etiqueta del botón de aceptar"
 
 #: gtk/gtkfilechoosernative.c:640
-#| msgid "Tab label"
 msgid "Cancel label"
 msgstr "Etiqueta de cancelar"
 
 #: gtk/gtkfilechoosernative.c:641
-#| msgid "The role of this button"
 msgid "The label on the cancel button"
 msgstr "La etiqueta del botón de cancelar"
 
@@ -4417,19 +4413,19 @@ msgstr "Separación del elemento"
 msgid "Padding around icon view items"
 msgstr "Separación alrededor de la vista de iconos"
 
-#: gtk/gtkiconview.c:679
+#: gtk/gtkiconview.c:687
 msgid "Selection Box Color"
 msgstr "Color de la caja de selección"
 
-#: gtk/gtkiconview.c:680
+#: gtk/gtkiconview.c:688
 msgid "Color of the selection box"
 msgstr "Color de la caja de selección"
 
-#: gtk/gtkiconview.c:686
+#: gtk/gtkiconview.c:703
 msgid "Selection Box Alpha"
 msgstr "Alfa de la caja de selección"
 
-#: gtk/gtkiconview.c:687
+#: gtk/gtkiconview.c:704
 msgid "Opacity of the selection box"
 msgstr "Opacidad de la caja de selección"
 
@@ -4788,31 +4784,31 @@ msgstr "ampliación"
 msgid "resize"
 msgstr "redimensionar"
 
-#: gtk/gtkmenubar.c:193
+#: gtk/gtkmenubar.c:191
 msgid "Pack direction"
 msgstr "Dirección del empaquetado"
 
-#: gtk/gtkmenubar.c:194
+#: gtk/gtkmenubar.c:192
 msgid "The pack direction of the menubar"
 msgstr "La dirección del empaquetado de la barra de menú"
 
-#: gtk/gtkmenubar.c:210
+#: gtk/gtkmenubar.c:208
 msgid "Child Pack direction"
 msgstr "Dirección de empaquetado del hijo"
 
-#: gtk/gtkmenubar.c:211
+#: gtk/gtkmenubar.c:209
 msgid "The child pack direction of the menubar"
 msgstr "La dirección de empaquetado hijo de la barra de menú"
 
-#: gtk/gtkmenubar.c:220
+#: gtk/gtkmenubar.c:226
 msgid "Style of bevel around the menubar"
 msgstr "Estilo del bisel alrededor de la barra de menús"
 
-#: gtk/gtkmenubar.c:236 gtk/gtktoolbar.c:591
+#: gtk/gtkmenubar.c:242 gtk/gtktoolbar.c:591
 msgid "Internal padding"
 msgstr "Relleno interno"
 
-#: gtk/gtkmenubar.c:237
+#: gtk/gtkmenubar.c:243
 msgid "Amount of border space between the menubar shadow and the menu items"
 msgstr ""
 "Número de espacios del borde entre la sombra de la barra de menús y los "
@@ -5041,17 +5037,17 @@ msgstr "Establece la ruta del acelerador del elemento del menú"
 msgid "The text for the child label"
 msgstr "El texto para la etiqueta hijo"
 
-#: gtk/gtkmenuitem.c:537
+#: gtk/gtkmenuitem.c:545
 msgid "Amount of space used up by arrow, relative to the menu item's font size"
 msgstr ""
 "Cantidad de espacio ocupado por una flecha, relativa al tamaño de tipografía "
 "del elemento del menú"
 
-#: gtk/gtkmenuitem.c:550
+#: gtk/gtkmenuitem.c:558
 msgid "Width in Characters"
 msgstr "Anchura en caracteres"
 
-#: gtk/gtkmenuitem.c:551
+#: gtk/gtkmenuitem.c:559
 msgid "The minimum desired width of the menu item in characters"
 msgstr "La anchura mínima del elemento del menú en caracteres"
 
@@ -5196,12 +5192,10 @@ msgid "The screen where this window will be displayed."
 msgstr "La pantalla donde se mostrará esta ventana."
 
 #: gtk/gtknativedialog.c:214
-#| msgid "Dialog"
 msgid "Dialog Title"
 msgstr "Título del diálogo"
 
 #: gtk/gtknativedialog.c:215
-#| msgid "The title of the file chooser dialog."
 msgid "The title of the file chooser dialog"
 msgstr "El título del diálogo de selección de archivos"
 
@@ -5210,9 +5204,6 @@ msgid "Modal"
 msgstr "Modal"
 
 #: gtk/gtknativedialog.c:229
-#| msgid ""
-#| "If TRUE, the window is modal (other windows are not usable while this one "
-#| "is up)"
 msgid ""
 "If TRUE, the dialog is modal (other windows are not usable while this one is "
 "up)"
@@ -5221,7 +5212,6 @@ msgstr ""
 "mientras ésta este encima)"
 
 #: gtk/gtknativedialog.c:243
-#| msgid "Whether the widget is visible"
 msgid "Whether the dialog is currently visible"
 msgstr "Indica si el diálogo es visible actualmente"
 
@@ -6063,51 +6053,51 @@ msgstr ""
 "El lugar preferido para la elipsis de la cadena, si la barra de progreso no "
 "tiene suficiente espacio para mostrar la cadena completa."
 
-#: gtk/gtkprogressbar.c:262
+#: gtk/gtkprogressbar.c:270
 msgid "X spacing"
 msgstr "Espaciado X"
 
-#: gtk/gtkprogressbar.c:263
+#: gtk/gtkprogressbar.c:271
 msgid "Extra spacing applied to the width of a progress bar."
 msgstr "Espacio extra aplicado a la anchura de una barra de progreso."
 
-#: gtk/gtkprogressbar.c:269
+#: gtk/gtkprogressbar.c:285
 msgid "Y spacing"
 msgstr "Espaciado Y"
 
-#: gtk/gtkprogressbar.c:270
+#: gtk/gtkprogressbar.c:286
 msgid "Extra spacing applied to the height of a progress bar."
 msgstr "Espacio adicional aplicado a la altura >de una barra de progreso."
 
-#: gtk/gtkprogressbar.c:283
+#: gtk/gtkprogressbar.c:299
 msgid "Minimum horizontal bar width"
 msgstr "Anchura mínima de la barra horizontal"
 
-#: gtk/gtkprogressbar.c:284
+#: gtk/gtkprogressbar.c:300
 msgid "The minimum horizontal width of the progress bar"
 msgstr "La anchura mínima horizontal de la barra de progreso"
 
-#: gtk/gtkprogressbar.c:296
+#: gtk/gtkprogressbar.c:312
 msgid "Minimum horizontal bar height"
 msgstr "Altura mínima de la barra horizontal"
 
-#: gtk/gtkprogressbar.c:297
+#: gtk/gtkprogressbar.c:313
 msgid "Minimum horizontal height of the progress bar"
 msgstr "La altura mínima horizontal de la barra de progreso"
 
-#: gtk/gtkprogressbar.c:309
+#: gtk/gtkprogressbar.c:325
 msgid "Minimum vertical bar width"
 msgstr "Anchura mínima horizontal de la barra"
 
-#: gtk/gtkprogressbar.c:310
+#: gtk/gtkprogressbar.c:326
 msgid "The minimum vertical width of the progress bar"
 msgstr "La anchura mínima vertical de la barra de progreso"
 
-#: gtk/gtkprogressbar.c:322
+#: gtk/gtkprogressbar.c:338
 msgid "Minimum vertical bar height"
 msgstr "Altura mínima vertical de la barra"
 
-#: gtk/gtkprogressbar.c:323
+#: gtk/gtkprogressbar.c:339
 msgid "The minimum vertical height of the progress bar"
 msgstr "La altura mínima vertical de la barra de progreso"
 
@@ -6123,21 +6113,21 @@ msgstr "El elemento del menú de radio a cuyo grupo pertenece este widget."
 msgid "The radio tool button whose group this button belongs to."
 msgstr "La herramienta de botón de radio a cuyo grupo pertenece este widget."
 
-#: gtk/gtkrange.c:444
+#: gtk/gtkrange.c:442
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr "El GtkAdjustment que contiene el valor actual de este objeto de rango"
 
-#: gtk/gtkrange.c:451
+#: gtk/gtkrange.c:449
 msgid "Invert direction slider moves to increase range value"
 msgstr ""
 "Invierte la dirección en que se mueve el deslizador para incrementar el "
 "valor del rango"
 
-#: gtk/gtkrange.c:457
+#: gtk/gtkrange.c:455
 msgid "Lower stepper sensitivity"
 msgstr "Sensibilidad de la flecha inferior"
 
-#: gtk/gtkrange.c:458
+#: gtk/gtkrange.c:456
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
@@ -6145,11 +6135,11 @@ msgstr ""
 "La directiva de sensibilidad del botón de desplazamiento que apunta al lado "
 "más bajo del ajuste"
 
-#: gtk/gtkrange.c:465
+#: gtk/gtkrange.c:463
 msgid "Upper stepper sensitivity"
 msgstr "Sensibilidad de la flecha superior"
 
-#: gtk/gtkrange.c:466
+#: gtk/gtkrange.c:464
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
@@ -6157,99 +6147,99 @@ msgstr ""
 "La directiva de sensibilidad del botón de flecha que apunta al lado más alto "
 "del ajuste"
 
-#: gtk/gtkrange.c:482
+#: gtk/gtkrange.c:480
 msgid "Show Fill Level"
 msgstr "Mostrar nivel de relleno"
 
-#: gtk/gtkrange.c:483
+#: gtk/gtkrange.c:481
 msgid "Whether to display a fill level indicator graphics on trough."
 msgstr ""
 "Indica si se debe mostrar el indicador de nivel de llenado en los gráficos "
 "mientras se llena."
 
-#: gtk/gtkrange.c:498
+#: gtk/gtkrange.c:496
 msgid "Restrict to Fill Level"
 msgstr "Restringir al nivel de llenado"
 
-#: gtk/gtkrange.c:499
+#: gtk/gtkrange.c:497
 msgid "Whether to restrict the upper boundary to the fill level."
 msgstr "Indica si se debe restringir el borde superior al nivel de llenado."
 
-#: gtk/gtkrange.c:513
+#: gtk/gtkrange.c:511
 msgid "Fill Level"
 msgstr "Nivel de llenado"
 
-#: gtk/gtkrange.c:514
+#: gtk/gtkrange.c:512
 msgid "The fill level."
 msgstr "El nivel de llenado."
 
-#: gtk/gtkrange.c:529
+#: gtk/gtkrange.c:527
 msgid "Round Digits"
 msgstr "Redondear dígitos"
 
-#: gtk/gtkrange.c:530
+#: gtk/gtkrange.c:528
 msgid "The number of digits to round the value to."
 msgstr "El número de dígitos al que redondear el valor."
 
-#: gtk/gtkrange.c:539 gtk/gtkswitch.c:971
+#: gtk/gtkrange.c:537 gtk/gtkswitch.c:971
 msgid "Slider Width"
 msgstr "Anchura del deslizador"
 
-#: gtk/gtkrange.c:540
+#: gtk/gtkrange.c:538
 msgid "Width of scrollbar or scale thumb"
 msgstr "Anchura de la barra de desplazamiento o escala de miniatura"
 
-#: gtk/gtkrange.c:547
+#: gtk/gtkrange.c:545
 msgid "Trough Border"
 msgstr "Borde del carril"
 
-#: gtk/gtkrange.c:548
+#: gtk/gtkrange.c:546
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr ""
 "Espaciado entre la marcador/flechas de desplazamiento y el bisel exterior "
 "del carril"
 
-#: gtk/gtkrange.c:555
+#: gtk/gtkrange.c:553
 msgid "Stepper Size"
 msgstr "Tamaño del botón de flecha de desplazamiento"
 
-#: gtk/gtkrange.c:556
+#: gtk/gtkrange.c:554
 msgid "Length of step buttons at ends"
 msgstr "Longitud de los botones de flecha en los extremos"
 
-#: gtk/gtkrange.c:569
+#: gtk/gtkrange.c:567
 msgid "Stepper Spacing"
 msgstr "Espaciado de los botones de flecha de desplazamiento"
 
-#: gtk/gtkrange.c:570
+#: gtk/gtkrange.c:568
 msgid "Spacing between step buttons and thumb"
 msgstr "Espaciado entre los botones de flecha de desplazamiento y el marcador"
 
-#: gtk/gtkrange.c:577
+#: gtk/gtkrange.c:583
 msgid "Arrow X Displacement"
 msgstr "Desplazamiento de la flecha X"
 
-#: gtk/gtkrange.c:578
+#: gtk/gtkrange.c:584
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
 msgstr ""
 "Distancia en la dirección «X» para mover la flecha cuando se suelta el botón "
 
-#: gtk/gtkrange.c:585
+#: gtk/gtkrange.c:599
 msgid "Arrow Y Displacement"
 msgstr "Desplazamiento de la flecha Y"
 
-#: gtk/gtkrange.c:586
+#: gtk/gtkrange.c:600
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr ""
 "Distancia en la dirección «Y» para mover la flecha cuando se suelta el botón "
 
-#: gtk/gtkrange.c:602
+#: gtk/gtkrange.c:616
 msgid "Trough Under Steppers"
 msgstr "Carril bajo las flechas de deslizamiento"
 
-#: gtk/gtkrange.c:603
+#: gtk/gtkrange.c:617
 msgid ""
 "Whether to draw trough for full length of range or exclude the steppers and "
 "spacing"
@@ -6257,11 +6247,11 @@ msgstr ""
 "Indica si se debe dibujar para la longitud completa del rango o excluir las "
 "flechas de desplazamiento y el espaciado"
 
-#: gtk/gtkrange.c:616
+#: gtk/gtkrange.c:630
 msgid "Arrow scaling"
 msgstr "Escalado de flechas"
 
-#: gtk/gtkrange.c:617
+#: gtk/gtkrange.c:631
 msgid "Arrow scaling with regard to scroll button size"
 msgstr ""
 "Escalado de flechas en consideración con el tamaño del botón de "
@@ -6568,7 +6558,7 @@ msgstr ""
 "Indica si debe usarse \"window-placement\" para determinar el lugar del "
 "contenido respecto a las barras de desplazamiento."
 
-#: gtk/gtkscrolledwindow.c:592 gtk/gtkspinbutton.c:438
+#: gtk/gtkscrolledwindow.c:592 gtk/gtkspinbutton.c:446
 msgid "Shadow Type"
 msgstr "Tipo de sombra"
 
@@ -7415,7 +7405,6 @@ msgstr ""
 
 #: gtk/gtkshortcutlabel.c:324 gtk/gtkshortcutsshortcut.c:249
 #: gtk/gtkshortcutsshortcut.c:250
-#| msgid "Accelerator key"
 msgid "Accelerator"
 msgstr "Acelerador"
 
@@ -7426,7 +7415,6 @@ msgid "Title Size Group"
 msgstr "Grupo de tamaño del título"
 
 #: gtk/gtkshortcutsgesture.c:272 gtk/gtkshortcutsgesture.c:273
-#| msgid "Icon Size"
 msgid "Icon Size Group"
 msgstr "Grupo de tamaño del icono"
 
@@ -7436,22 +7424,18 @@ msgstr "Ver"
 
 #: gtk/gtkshortcutsgroup.c:268 gtk/gtkshortcutsgroup.c:269
 #: gtk/gtkshortcutsshortcut.c:277 gtk/gtkshortcutsshortcut.c:278
-#| msgid "Accelerator Group"
 msgid "Accelerator Size Group"
 msgstr "Grupo de tamaño del acelerador"
 
 #: gtk/gtkshortcutssection.c:257 gtk/gtkshortcutswindow.c:622
-#| msgid "action name"
 msgid "Section Name"
 msgstr "Nombre de la sección"
 
 #: gtk/gtkshortcutssection.c:271 gtk/gtkshortcutswindow.c:637
-#| msgid "Theme Name"
 msgid "View Name"
 msgstr "Nombre de la vista"
 
 #: gtk/gtkshortcutssection.c:296
-#| msgid "Minimum Height"
 msgid "Maximum Height"
 msgstr "Altura máxima"
 
@@ -7526,7 +7510,7 @@ msgstr ""
 msgid "Reads the current value, or sets a new value"
 msgstr "Lee el valor actual, o establece un valor nuevo"
 
-#: gtk/gtkspinbutton.c:439
+#: gtk/gtkspinbutton.c:447
 msgid "Style of bevel around the spin button"
 msgstr "Estilo de bisel alrededor del botón giratorio"
 
@@ -7614,14 +7598,19 @@ msgstr "Requiere atención"
 msgid "Whether this page needs attention"
 msgstr "Indica si la página necesita atención"
 
-#: gtk/gtkstacksidebar.c:449 gtk/gtkstackswitcher.c:534
-#: gtk/gtkstackswitcher.c:535
+#: gtk/gtkstacksidebar.c:449 gtk/gtkstackswitcher.c:586
+#: gtk/gtkstackswitcher.c:587
 msgid "Stack"
 msgstr "Pila"
 
 #: gtk/gtkstacksidebar.c:450
 msgid "Associated stack for this GtkStackSidebar"
 msgstr "Pila asociada para esta GtkStackSidebar"
+
+#: gtk/gtkstackswitcher.c:578
+#| msgid "Pixel size to use for named icon"
+msgid "Symbolic size to use for named icon"
+msgstr "Tamaño simbólico que usar para el icono nombrado"
 
 #: gtk/gtkstatusbar.c:171
 msgid "Style of bevel around the statusbar text"
@@ -8907,7 +8896,6 @@ msgid "Focus on click"
 msgstr "Enfocar al pulsar"
 
 #: gtk/gtkwidget.c:1215
-#| msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgid "Whether the widget should grab focus when it is clicked with the mouse"
 msgstr "Indica si el widget obtiene el foco cuando se pulsa con el ratón"
 
