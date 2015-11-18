@@ -1939,8 +1939,6 @@ progressbar progress {
   progressbar progress.osd {
     border-width: 0;
     border-radius: 0;
-    -GtkProgressBar-xspacing: 0;
-    -GtkProgressBar-yspacing: 2px;
     -GtkProgressBar-min-horizontal-bar-height: 2px; }
 
 /*************
