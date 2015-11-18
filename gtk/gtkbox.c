@@ -81,6 +81,8 @@
 
 #include "gtkbox.h"
 #include "gtkboxprivate.h"
+#include "gtkcontainerprivate.h"
+#include "gtkcsscustomgadgetprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkintl.h"
 #include "gtkorientable.h"
@@ -120,6 +122,7 @@ struct _GtkBoxPrivate
 {
   GList          *children;
   GtkBoxChild    *center;
+  GtkCssGadget   *gadget;
 
   GtkOrientation  orientation;
   gint16          spacing;
@@ -227,6 +230,17 @@ G_DEFINE_TYPE_WITH_CODE (GtkBox, gtk_box, GTK_TYPE_CONTAINER,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, gtk_box_buildable_init))
 
 static void
+gtk_box_dispose (GObject *object)
+{
+  GtkBox *box = GTK_BOX (object);
+  GtkBoxPrivate *priv = box->priv;
+
+  g_clear_object (&priv->gadget);
+
+  G_OBJECT_CLASS (gtk_box_parent_class)->dispose (object);
+}
+
+static void
 gtk_box_class_init (GtkBoxClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
@@ -235,6 +249,7 @@ gtk_box_class_init (GtkBoxClass *class)
 
   object_class->set_property = gtk_box_set_property;
   object_class->get_property = gtk_box_get_property;
+  object_class->dispose = gtk_box_dispose;
 
   widget_class->draw                           = gtk_box_draw;
   widget_class->size_allocate                  = gtk_box_size_allocate;
@@ -351,29 +366,6 @@ gtk_box_class_init (GtkBoxClass *class)
 }
 
 static void
-gtk_box_init (GtkBox *box)
-{
-  GtkBoxPrivate *private;
-
-  box->priv = gtk_box_get_instance_private (box);
-  private = box->priv;
-
-  gtk_widget_set_has_window (GTK_WIDGET (box), FALSE);
-  gtk_widget_set_redraw_on_allocate (GTK_WIDGET (box), FALSE);
-
-  private->orientation = GTK_ORIENTATION_HORIZONTAL;
-  private->children = NULL;
-
-  private->default_expand = FALSE;
-  private->homogeneous = FALSE;
-  private->spacing = 0;
-  private->spacing_set = FALSE;
-  private->baseline_pos = GTK_BASELINE_POSITION_CENTER;
-
-  _gtk_orientable_set_style_classes (GTK_ORIENTABLE (box));
-}
-
-static void
 gtk_box_set_property (GObject      *object,
                       guint         prop_id,
                       const GValue *value,
@@ -441,20 +433,28 @@ gtk_box_get_property (GObject    *object,
 }
 
 static gboolean
+gtk_box_draw_contents (GtkCssGadget *gadget,
+                       cairo_t      *cr,
+                       int           x,
+                       int           y,
+                       int           width,
+                       int           height,
+                       gpointer      unused)
+{
+  GTK_WIDGET_CLASS (gtk_box_parent_class)->draw (gtk_css_gadget_get_owner (gadget), cr);
+
+  return FALSE;
+}
+
+static gboolean
 gtk_box_draw (GtkWidget *widget,
               cairo_t   *cr)
 {
-  GtkStyleContext *context;
-  GtkAllocation alloc;
+  gtk_css_gadget_draw (GTK_BOX (widget)->priv->gadget, cr);
 
-  context = gtk_widget_get_style_context (widget);
-  gtk_widget_get_allocation (widget, &alloc);
-
-  gtk_render_background (context, cr, 0, 0, alloc.width, alloc.height);
-  gtk_render_frame (context, cr, 0, 0, alloc.width, alloc.height);
-
-  return GTK_WIDGET_CLASS (gtk_box_parent_class)->draw (widget, cr);
+  return FALSE;
 }
+
 
 static void
 count_expand_children (GtkBox *box,
@@ -481,8 +481,8 @@ count_expand_children (GtkBox *box,
 }
 
 static void
-gtk_box_size_allocate_no_center (GtkWidget     *widget,
-                                 GtkAllocation *allocation)
+gtk_box_size_allocate_no_center (GtkWidget           *widget,
+                                 const GtkAllocation *allocation)
 {
   GtkBox *box = GTK_BOX (widget);
   GtkBoxPrivate *private = box->priv;
@@ -508,8 +508,6 @@ gtk_box_size_allocate_no_center (GtkWidget     *widget,
   gint x = 0, y = 0, i;
   gint child_size;
 
-
-  gtk_widget_set_allocation (widget, allocation);
 
   count_expand_children (box, &nvis_children, &nexpand_children);
 
@@ -816,8 +814,8 @@ gtk_box_size_allocate_no_center (GtkWidget     *widget,
 }
 
 static void
-gtk_box_size_allocate_with_center (GtkWidget     *widget,
-                                   GtkAllocation *allocation)
+gtk_box_size_allocate_with_center (GtkWidget           *widget,
+                                   const GtkAllocation *allocation)
 {
   GtkBox *box = GTK_BOX (widget);
   GtkBoxPrivate *priv = box->priv;
@@ -846,8 +844,6 @@ gtk_box_size_allocate_with_center (GtkWidget     *widget,
   gint n_extra_widgets[2];
   gint x = 0, y = 0, i;
   gint child_size;
-
-  gtk_widget_set_allocation (widget, allocation);
 
   nvis[0] = nvis[1] = 0;
   nexp[0] = nexp[1] = 0;
@@ -1185,9 +1181,13 @@ gtk_box_size_allocate_with_center (GtkWidget     *widget,
 }
 
 static void
-gtk_box_size_allocate (GtkWidget     *widget,
-                       GtkAllocation *allocation)
+gtk_box_allocate_contents (GtkCssGadget        *gadget,
+                           const GtkAllocation *allocation,
+                           int                  baseline,
+                           GtkAllocation       *out_clip,
+                           gpointer             unused)
 {
+  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
   GtkBox *box = GTK_BOX (widget);
 
   if (box->priv->center &&
@@ -1195,6 +1195,25 @@ gtk_box_size_allocate (GtkWidget     *widget,
     gtk_box_size_allocate_with_center (widget, allocation);
   else
     gtk_box_size_allocate_no_center (widget, allocation);
+
+  gtk_container_get_children_clip (GTK_CONTAINER (box), out_clip);
+}
+
+static void
+gtk_box_size_allocate (GtkWidget     *widget,
+                       GtkAllocation *allocation)
+{
+  GtkBoxPrivate *priv = GTK_BOX (widget)->priv;
+  GtkAllocation clip;
+
+  gtk_widget_set_allocation (widget, allocation);
+
+  gtk_css_gadget_allocate (priv->gadget,
+                           allocation,
+                           gtk_widget_get_allocated_baseline (widget),
+                           &clip);
+  
+  gtk_widget_set_clip (widget, &clip);
 }
 
 static GType
@@ -1679,18 +1698,26 @@ gtk_box_get_size (GtkWidget      *widget,
 
 static void
 gtk_box_get_preferred_width (GtkWidget *widget,
-                             gint      *minimum_size,
-                             gint      *natural_size)
+                             gint      *minimum,
+                             gint      *natural)
 {
-  gtk_box_get_size (widget, GTK_ORIENTATION_HORIZONTAL, minimum_size, natural_size, NULL, NULL);
+  gtk_css_gadget_get_preferred_size (GTK_BOX (widget)->priv->gadget,
+                                     GTK_ORIENTATION_HORIZONTAL,
+                                     -1,
+                                     minimum, natural,
+                                     NULL, NULL);
 }
 
 static void
 gtk_box_get_preferred_height (GtkWidget *widget,
-                              gint      *minimum_size,
-                              gint      *natural_size)
+                              gint      *minimum,
+                              gint      *natural)
 {
-  gtk_box_get_size (widget, GTK_ORIENTATION_VERTICAL, minimum_size, natural_size, NULL, NULL);
+  gtk_css_gadget_get_preferred_size (GTK_BOX (widget)->priv->gadget,
+                                     GTK_ORIENTATION_VERTICAL,
+                                     -1,
+                                     minimum, natural,
+                                     NULL, NULL);
 }
 
 static void
@@ -1979,42 +2006,58 @@ gtk_box_compute_size_for_orientation (GtkBox *box,
 static void
 gtk_box_get_preferred_width_for_height (GtkWidget *widget,
                                         gint       height,
-                                        gint      *minimum_width,
-                                        gint      *natural_width)
+                                        gint      *minimum,
+                                        gint      *natural)
 {
-  GtkBox        *box     = GTK_BOX (widget);
-  GtkBoxPrivate *private = box->priv;
-
-  if (private->orientation == GTK_ORIENTATION_VERTICAL)
-    gtk_box_compute_size_for_opposing_orientation (box, height, minimum_width, natural_width, NULL, NULL);
-  else
-    gtk_box_compute_size_for_orientation (box, height, minimum_width, natural_width);
+  gtk_css_gadget_get_preferred_size (GTK_BOX (widget)->priv->gadget,
+                                     GTK_ORIENTATION_HORIZONTAL,
+                                     height,
+                                     minimum, natural,
+                                     NULL, NULL);
 }
 
 static void
 gtk_box_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
 						     gint       width,
-						     gint      *minimum_height,
-						     gint      *natural_height,
+						     gint      *minimum,
+						     gint      *natural,
 						     gint      *minimum_baseline,
 						     gint      *natural_baseline)
 {
+  gtk_css_gadget_get_preferred_size (GTK_BOX (widget)->priv->gadget,
+                                     GTK_ORIENTATION_VERTICAL,
+                                     width,
+                                     minimum, natural,
+                                     minimum_baseline, natural_baseline);
+}
+
+static void
+gtk_box_get_content_size (GtkCssGadget   *gadget,
+                          GtkOrientation  orientation,
+                          gint            for_size,
+                          gint           *minimum,
+                          gint           *natural,
+                          gint           *minimum_baseline,
+                          gint           *natural_baseline,
+                          gpointer        unused)
+{
+  GtkWidget     *widget  = gtk_css_gadget_get_owner (gadget);
   GtkBox        *box     = GTK_BOX (widget);
   GtkBoxPrivate *private = box->priv;
 
-  if (width < 0)
-    gtk_box_get_size (widget, GTK_ORIENTATION_VERTICAL, minimum_height, natural_height, minimum_baseline, natural_baseline);
+  if (for_size < 0)
+    gtk_box_get_size (widget, orientation, minimum, natural, minimum_baseline, natural_baseline);
   else
     {
-      if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
-	gtk_box_compute_size_for_opposing_orientation (box, width, minimum_height, natural_height, minimum_baseline, natural_baseline);
+      if (private->orientation != orientation)
+	gtk_box_compute_size_for_opposing_orientation (box, for_size, minimum, natural, minimum_baseline, natural_baseline);
       else
 	{
 	  if (minimum_baseline)
 	    *minimum_baseline = -1;
 	  if (natural_baseline)
 	    *natural_baseline = -1;
-	  gtk_box_compute_size_for_orientation (box, width, minimum_height, natural_height);
+	  gtk_box_compute_size_for_orientation (box, for_size, minimum, natural);
 	}
     }
 }
@@ -2026,6 +2069,37 @@ gtk_box_get_preferred_height_for_width (GtkWidget *widget,
                                         gint      *natural_height)
 {
   gtk_box_get_preferred_height_and_baseline_for_width (widget, width, minimum_height, natural_height, NULL, NULL);
+}
+
+static void
+gtk_box_init (GtkBox *box)
+{
+  GtkBoxPrivate *private;
+
+  box->priv = gtk_box_get_instance_private (box);
+  private = box->priv;
+
+  gtk_widget_set_has_window (GTK_WIDGET (box), FALSE);
+  gtk_widget_set_redraw_on_allocate (GTK_WIDGET (box), FALSE);
+
+  private->orientation = GTK_ORIENTATION_HORIZONTAL;
+  private->children = NULL;
+
+  private->default_expand = FALSE;
+  private->homogeneous = FALSE;
+  private->spacing = 0;
+  private->spacing_set = FALSE;
+  private->baseline_pos = GTK_BASELINE_POSITION_CENTER;
+
+  private->gadget = gtk_css_custom_gadget_new_for_node (gtk_widget_get_css_node (GTK_WIDGET (box)),
+                                                        GTK_WIDGET (box),
+                                                        gtk_box_get_content_size,
+                                                        gtk_box_allocate_contents,
+                                                        gtk_box_draw_contents,
+                                                        NULL,
+                                                        NULL);
+
+  _gtk_orientable_set_style_classes (GTK_ORIENTABLE (box));
 }
 
 /**
