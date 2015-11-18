@@ -1363,6 +1363,9 @@ gtk_popover_check_invalidate_borders (GtkPopover *popover)
   GtkPositionType gap_side;
   gint tip_x, tip_y;
 
+  if (!priv->widget)
+    return;
+
   gtk_popover_get_gap_coords (popover, NULL, NULL,
                               &tip_x, &tip_y, NULL, NULL,
                               &gap_side);
