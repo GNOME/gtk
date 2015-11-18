@@ -280,7 +280,7 @@ void
 _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
 {
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
-  GtkWidget *widget = GTK_WIDGET (bar);
+  GtkWidget *widget = GTK_WIDGET (bar), *toplevel;
   GtkWindow *window;
   GtkTextDirection direction;
   gchar *layout_desc;
@@ -290,7 +290,8 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
   gboolean shown_by_shell;
   GdkWindowTypeHint type_hint;
 
-  if (!gtk_widget_get_realized (widget))
+  toplevel = gtk_widget_get_toplevel (widget);
+  if (!gtk_widget_is_toplevel (toplevel))
     return;
 
   if (priv->titlebar_start_box)
@@ -324,7 +325,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
       layout_desc = g_strdup (priv->decoration_layout);
     }
 
-  window = GTK_WINDOW (gtk_widget_get_toplevel (widget));
+  window = GTK_WINDOW (toplevel);
 
   if (!shown_by_shell && gtk_window_get_application (window))
     menu = gtk_application_get_app_menu (gtk_window_get_application (window));
@@ -1774,7 +1775,6 @@ gtk_header_bar_realize (GtkWidget *widget)
                             G_CALLBACK (_gtk_header_bar_update_window_buttons), widget);
   g_signal_connect_swapped (settings, "notify::gtk-decoration-layout",
                             G_CALLBACK (_gtk_header_bar_update_window_buttons), widget);
-  _gtk_header_bar_update_window_buttons (GTK_HEADER_BAR (widget));
 }
 
 static void
@@ -1807,6 +1807,7 @@ gtk_header_bar_hierarchy_changed (GtkWidget *widget,
                                   GtkWidget *previous_toplevel)
 {
   GtkWidget *toplevel;
+  GtkHeaderBar *bar = GTK_HEADER_BAR (widget);
 
   toplevel = gtk_widget_get_toplevel (widget);
 
@@ -1817,6 +1818,8 @@ gtk_header_bar_hierarchy_changed (GtkWidget *widget,
   if (toplevel)
     g_signal_connect_after (toplevel, "window-state-event",
                             G_CALLBACK (window_state_changed), widget);
+
+  _gtk_header_bar_update_window_buttons (bar);
 }
 
 static void
