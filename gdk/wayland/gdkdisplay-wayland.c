@@ -35,7 +35,7 @@
 #include "gdkkeysprivate.h"
 #include "gdkprivate-wayland.h"
 #include "gdkglcontext-wayland.h"
-#include "pointer-gestures-client-protocol.h"
+#include "pointer-gestures-unstable-v1-client-protocol.h"
 
 /**
  * SECTION:wayland_interaction
@@ -358,12 +358,12 @@ gdk_registry_handle_global (void               *data,
       display_wayland->subcompositor =
         wl_registry_bind (display_wayland->wl_registry, id, &wl_subcompositor_interface, 1);
     }
-  else if (strcmp (interface, "_wl_pointer_gestures") == 0 &&
-           version == GDK__WL_POINTER_GESTURES_VERSION)
+  else if (strcmp (interface, "zwp_pointer_gestures_v1") == 0 &&
+           version == GDK_ZWP_POINTER_GESTURES_V1_VERSION)
     {
       display_wayland->pointer_gestures =
         wl_registry_bind (display_wayland->wl_registry,
-                          id, &_wl_pointer_gestures_interface, version);
+                          id, &zwp_pointer_gestures_v1_interface, version);
     }
   else
     handled = FALSE;

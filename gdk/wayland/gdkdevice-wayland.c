@@ -29,7 +29,7 @@
 #include "gdkkeysyms.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdevicemanagerprivate.h"
-#include "pointer-gestures-client-protocol.h"
+#include "pointer-gestures-unstable-v1-client-protocol.h"
 
 #include <xkbcommon/xkbcommon.h>
 
@@ -59,8 +59,8 @@ struct _GdkWaylandDeviceData
   struct wl_pointer *wl_pointer;
   struct wl_keyboard *wl_keyboard;
   struct wl_touch *wl_touch;
-  struct _wl_pointer_gesture_swipe *wl_pointer_gesture_swipe;
-  struct _wl_pointer_gesture_pinch *wl_pointer_gesture_pinch;
+  struct zwp_pointer_gesture_swipe_v1 *wp_pointer_gesture_swipe;
+  struct zwp_pointer_gesture_pinch_v1 *wp_pointer_gesture_pinch;
 
   GdkDisplay *display;
   GdkDeviceManager *device_manager;
@@ -1808,12 +1808,12 @@ emit_gesture_swipe_event (GdkWaylandDeviceData    *device,
 }
 
 static void
-gesture_swipe_begin (void                             *data,
-                     struct _wl_pointer_gesture_swipe *swipe,
-                     uint32_t                          serial,
-                     uint32_t                          time,
-                     struct wl_surface                *surface,
-                     uint32_t                          fingers)
+gesture_swipe_begin (void                                *data,
+                     struct zwp_pointer_gesture_swipe_v1 *swipe,
+                     uint32_t                             serial,
+                     uint32_t                             time,
+                     struct wl_surface                   *surface,
+                     uint32_t                             fingers)
 {
   GdkWaylandDeviceData *device = data;
   GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (device->display);
@@ -1827,11 +1827,11 @@ gesture_swipe_begin (void                             *data,
 }
 
 static void
-gesture_swipe_update (void                             *data,
-                      struct _wl_pointer_gesture_swipe *swipe,
-                      uint32_t                          time,
-                      wl_fixed_t                        dx,
-                      wl_fixed_t                        dy)
+gesture_swipe_update (void                                *data,
+                      struct zwp_pointer_gesture_swipe_v1 *swipe,
+                      uint32_t                             time,
+                      wl_fixed_t                           dx,
+                      wl_fixed_t                           dy)
 {
   GdkWaylandDeviceData *device = data;
 
@@ -1844,11 +1844,11 @@ gesture_swipe_update (void                             *data,
 }
 
 static void
-gesture_swipe_end (void                             *data,
-                   struct _wl_pointer_gesture_swipe *swipe,
-                   uint32_t                          serial,
-                   uint32_t                          time,
-                   int32_t                           cancelled)
+gesture_swipe_end (void                                *data,
+                   struct zwp_pointer_gesture_swipe_v1 *swipe,
+                   uint32_t                             serial,
+                   uint32_t                             time,
+                   int32_t                              cancelled)
 {
   GdkWaylandDeviceData *device = data;
   GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (device->display);
@@ -1912,12 +1912,12 @@ emit_gesture_pinch_event (GdkWaylandDeviceData    *device,
 }
 
 static void
-gesture_pinch_begin (void                             *data,
-                     struct _wl_pointer_gesture_pinch *pinch,
-                     uint32_t                          serial,
-                     uint32_t                          time,
-                     struct wl_surface                *surface,
-                     uint32_t                          fingers)
+gesture_pinch_begin (void                                *data,
+                     struct zwp_pointer_gesture_pinch_v1 *pinch,
+                     uint32_t                             serial,
+                     uint32_t                             time,
+                     struct wl_surface                   *surface,
+                     uint32_t                             fingers)
 {
   GdkWaylandDeviceData *device = data;
   GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (device->display);
@@ -1930,13 +1930,13 @@ gesture_pinch_begin (void                             *data,
 }
 
 static void
-gesture_pinch_update (void                             *data,
-                      struct _wl_pointer_gesture_pinch *pinch,
-                      uint32_t                          time,
-                      wl_fixed_t                        dx,
-                      wl_fixed_t                        dy,
-                      wl_fixed_t                        scale,
-                      wl_fixed_t                        rotation)
+gesture_pinch_update (void                                *data,
+                      struct zwp_pointer_gesture_pinch_v1 *pinch,
+                      uint32_t                             time,
+                      wl_fixed_t                           dx,
+                      wl_fixed_t                           dy,
+                      wl_fixed_t                           scale,
+                      wl_fixed_t                           rotation)
 {
   GdkWaylandDeviceData *device = data;
 
@@ -1950,11 +1950,11 @@ gesture_pinch_update (void                             *data,
 }
 
 static void
-gesture_pinch_end (void                             *data,
-                   struct _wl_pointer_gesture_pinch *pinch,
-                   uint32_t                          serial,
-                   uint32_t                          time,
-                   int32_t                           cancelled)
+gesture_pinch_end (void                                *data,
+                   struct zwp_pointer_gesture_pinch_v1 *pinch,
+                   uint32_t                             serial,
+                   uint32_t                             time,
+                   int32_t                              cancelled)
 {
   GdkWaylandDeviceData *device = data;
   GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (device->display);
@@ -1996,13 +1996,13 @@ static const struct wl_touch_listener touch_listener = {
   touch_handle_cancel
 };
 
-static const struct _wl_pointer_gesture_swipe_listener gesture_swipe_listener = {
+static const struct zwp_pointer_gesture_swipe_v1_listener gesture_swipe_listener = {
   gesture_swipe_begin,
   gesture_swipe_update,
   gesture_swipe_end
 };
 
-static const struct _wl_pointer_gesture_pinch_listener gesture_pinch_listener = {
+static const struct zwp_pointer_gesture_pinch_v1_listener gesture_pinch_listener = {
   gesture_pinch_begin,
   gesture_pinch_update,
   gesture_pinch_end
@@ -2046,21 +2046,21 @@ seat_handle_capabilities (void                    *data,
 
       if (wayland_display->pointer_gestures)
         {
-          device->wl_pointer_gesture_swipe =
-            _wl_pointer_gestures_get_swipe_gesture (wayland_display->pointer_gestures,
-                                                    device->wl_pointer);
-          _wl_pointer_gesture_swipe_set_user_data (device->wl_pointer_gesture_swipe,
-                                                   device);
-          _wl_pointer_gesture_swipe_add_listener (device->wl_pointer_gesture_swipe,
-                                                  &gesture_swipe_listener, device);
+          device->wp_pointer_gesture_swipe =
+            zwp_pointer_gestures_v1_get_swipe_gesture (wayland_display->pointer_gestures,
+                                                       device->wl_pointer);
+          zwp_pointer_gesture_swipe_v1_set_user_data (device->wp_pointer_gesture_swipe,
+                                                      device);
+          zwp_pointer_gesture_swipe_v1_add_listener (device->wp_pointer_gesture_swipe,
+                                                     &gesture_swipe_listener, device);
 
-          device->wl_pointer_gesture_pinch =
-            _wl_pointer_gestures_get_pinch_gesture (wayland_display->pointer_gestures,
-                                                    device->wl_pointer);
-          _wl_pointer_gesture_pinch_set_user_data (device->wl_pointer_gesture_pinch,
-                                                   device);
-          _wl_pointer_gesture_pinch_add_listener (device->wl_pointer_gesture_pinch,
-                                                  &gesture_pinch_listener, device);
+          device->wp_pointer_gesture_pinch =
+            zwp_pointer_gestures_v1_get_pinch_gesture (wayland_display->pointer_gestures,
+                                                       device->wl_pointer);
+          zwp_pointer_gesture_pinch_v1_set_user_data (device->wp_pointer_gesture_pinch,
+                                                      device);
+          zwp_pointer_gesture_pinch_v1_add_listener (device->wp_pointer_gesture_pinch,
+                                                     &gesture_pinch_listener, device);
         }
 
       g_signal_emit_by_name (device_manager, "device-added", device->pointer);

@@ -60,6 +60,7 @@ m4_define([cairo_required_version], [1.14.0])
 m4_define([gdk_pixbuf_required_version], [2.30.0])
 m4_define([introspection_required_version], [1.39.0])
 m4_define([wayland_required_version], [1.5.91])
+m4_define([wayland_protocols_required_version], [1.0])
 m4_define([mirclient_required_version], [0.11.0])
 m4_define([mircookie_required_version], [0.17.0])
 m4_define([epoxy_required_version], [1.0])
@@ -428,7 +429,7 @@ fi
 
 PKG_PROG_PKG_CONFIG
 
-WAYLAND_DEPENDENCIES="wayland-client >= wayland_required_version xkbcommon >= 0.2.0 wayland-cursor >= wayland_required_version wayland-egl"
+WAYLAND_DEPENDENCIES="wayland-client >= wayland_required_version wayland-protocols >= wayland_protocols_required_version xkbcommon >= 0.2.0 wayland-cursor >= wayland_required_version wayland-egl"
 if test "$enable_wayland_backend" = "maybe" ; then
   AC_PATH_PROG([WAYLAND_SCANNER],[wayland-scanner],[no])
   PKG_CHECK_EXISTS($WAYLAND_DEPENDENCIES, [have_wayland_deps=yes], [have_wayland_deps=no])
@@ -444,6 +445,7 @@ fi
 if test "$enable_wayland_backend" = "yes"; then
   # For the cairo image backend
   cairo_backends="$cairo_backends cairo"
+  AC_SUBST(WAYLAND_PROTOCOLS_DATADIR, `$PKG_CONFIG --variable=pkgdatadir wayland-protocols`)
   GDK_BACKENDS="$GDK_BACKENDS wayland"
   GDK_WINDOWING="$GDK_WINDOWING
 #define GDK_WINDOWING_WAYLAND"

@@ -20,8 +20,8 @@ noinst_LTLIBRARIES =				\
 	libgdk-wayland.la
 
 BUILT_SOURCES = 				\
-	pointer-gestures-client-protocol.h	\
-	pointer-gestures-protocol.c		\
+	pointer-gestures-unstable-v1-client-protocol.h		\
+	pointer-gestures-unstable-v1-protocol.c			\
 	xdg-shell-client-protocol.h		\
 	xdg-shell-protocol.c			\
 	gtk-shell-client-protocol.h		\
@@ -62,6 +62,22 @@ libgdkwaylandinclude_HEADERS = 			\
 	gdkwaylandselection.h			\
 	gdkwaylandwindow.h
 
+.SECONDEXPANSION:
+
+define protostability
+$(shell echo $1 | sed 's/.*\(\<unstable\>\|\<stable\>\).*/\1/')
+endef
+
+define protoname
+$(shell echo $1 | sed 's/\([a-z\-]\+\)-[a-z]\+-v[0-9]\+/\1/')
+endef
+
+%-protocol.c : $(WAYLAND_PROTOCOLS_DATADIR)/$$(call protostability,$$*)/$$(call protoname,$$*)/$$*.xml
+	$(AM_V_GEN)$(WAYLAND_SCANNER) code < $< > $@
+	$(AM_V_GEN)$(SED) -i -e 's/WL_EXPORT //' $@
+%-client-protocol.h : $(WAYLAND_PROTOCOLS_DATADIR)/$$(call protostability,$$*)/$$(call protoname,$$*)/$$*.xml
+	$(AM_V_GEN)$(WAYLAND_SCANNER) client-header < $< > $@
+
 %-protocol.c : $(srcdir)/protocol/%.xml
 	$(AM_V_GEN)$(WAYLAND_SCANNER) code < $< > $@
 	$(AM_V_GEN)$(SED) -i -e 's/WL_EXPORT //' $@
@@ -72,7 +88,6 @@ libgdkwaylandinclude_HEADERS = 			\
 	$(AM_V_GEN)$(WAYLAND_SCANNER) client-header < $< > $@
 
 EXTRA_DIST += 					\
-	protocol/pointer-gestures.xml		\
 	protocol/xdg-shell.xml			\
 	protocol/gtk-shell.xml
 
