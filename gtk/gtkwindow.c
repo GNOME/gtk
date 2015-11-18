@@ -5232,7 +5232,6 @@ gtk_window_set_default_size (GtkWindow   *window,
   g_return_if_fail (width >= -1);
   g_return_if_fail (height >= -1);
 
-  gtk_window_update_csd_size (window, &width, &height, INCLUDE_CSD_SIZE);
   gtk_window_set_default_size_internal (window, TRUE, width, TRUE, height, FALSE);
 }
 
@@ -5278,20 +5277,16 @@ gtk_window_get_default_size (GtkWindow *window,
 			     gint      *height)
 {
   GtkWindowGeometryInfo *info;
-  gint w, h;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
 
   info = gtk_window_get_geometry_info (window, FALSE);
-  w = info ? info->default_width : -1;
-  h = info ? info->default_height : -1;
-  gtk_window_update_csd_size (window, &w, &h, EXCLUDE_CSD_SIZE);
 
   if (width)
-    *width = w;
+    *width = info ? info->default_width : -1;
 
   if (height)
-    *height = h;
+    *height = info ? info->default_height : -1;
 }
 
 /**
@@ -5826,9 +5821,6 @@ gtk_window_get_position (GtkWindow *window,
         *root_y = y;
     }
 }
-
-#undef INCLUDE_CSD_SIZE
-#undef EXCLUDE_CSD_SIZE
 
 /**
  * gtk_window_reshow_with_initial_size:
@@ -8996,10 +8988,19 @@ gtk_window_compute_configure_request_size (GtkWindow   *window,
       /* Override with default size */
       if (info)
         {
+          /* Take width of shadows/headerbar into account. We want to set the
+           * default size of the content area and not the window area.
+           */
+          gint default_width_csd = info->default_width;
+          gint default_height_csd = info->default_height;
+          gtk_window_update_csd_size (window,
+                                      &default_width_csd, &default_height_csd,
+                                      INCLUDE_CSD_SIZE);
+
           if (info->default_width > 0)
-            *width = info->default_width;
+            *width = default_width_csd;
           if (info->default_height > 0)
-            *height = info->default_height;
+            *height = default_height_csd;
 
           if (info->default_is_geometry)
             geometry_size_to_pixels (geometry, flags,
@@ -9039,6 +9040,9 @@ gtk_window_compute_configure_request_size (GtkWindow   *window,
   *width = MAX (*width, 1);
   *height = MAX (*height, 1);
 }
+
+#undef INCLUDE_CSD_SIZE
+#undef EXCLUDE_CSD_SIZE
 
 static GtkWindowPosition
 get_effective_position (GtkWindow *window)
