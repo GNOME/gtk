@@ -19,7 +19,7 @@
   background-size: 29px, 59px, 73px, 109px;
 }
 
-.button {
+button {
   color: black;
   padding: 10px;
   border-radius: 5px;
@@ -27,14 +27,14 @@
   border: 1px transparent solid;
 }
 
-.button:hover {
+button:hover {
   text-shadow: 3px 3px 5px alpha(black, 0.75);
   icon-shadow: 3px 3px 5px alpha(black, 0.75);
   box-shadow: 3px 3px 5px alpha(black, 0.5) inset;
   border: solid 1px alpha(black, 0.75);
 }
 
-.button:active {
+button:active {
   padding: 11px 9px 9px 11px;
   text-shadow: 1px 1px 2.5px alpha(black, 0.6);
   icon-shadow: 1px 1px 2.5px alpha(black, 0.6);

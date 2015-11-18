@@ -7,7 +7,7 @@
     font: Cantarell 20px;
 }
 
-GtkWindow {
+window {
     background: linear-gradient(153deg, #151515, #151515 5px, transparent 5px) 0 0,
                 linear-gradient(333deg, #151515, #151515 5px, transparent 5px) 10px 5px,
                 linear-gradient(153deg, #222, #222 5px, transparent 5px) 0 5px,
@@ -18,7 +18,7 @@ GtkWindow {
     background-size: 20px 20px;
 }
 
-.button {
+button {
     color: black;
     background-color: #bbb;
     border-style: solid;
@@ -28,25 +28,25 @@ GtkWindow {
     padding: 12px 4px;
 }
 
-.button:first-child {
+button:first-child {
     border-radius: 5px 0 0 5px;
 }
 
-.button:last-child {
+button:last-child {
     border-radius: 0 5px 5px 0;
     border-width: 2px;
 }
 
-.button:hover {
+button:hover {
     padding: 12px 48px;
     background-color: #4870bc;
 }
 
-.button *:hover {
+button *:hover {
     color: white;
 }
 
-.button:hover:active,
-.button:active {
+button:hover:active,
+button:active {
     background-color: #993401;
 }
