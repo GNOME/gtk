@@ -3751,6 +3751,30 @@ gtk_container_propagate_draw_internal (GtkContainer *container,
   cairo_restore (cr);
 }
 
+static void
+union_with_clip (GtkWidget *widget,
+                 gpointer   clip)
+{
+  GtkAllocation widget_clip;
+
+  if (!gtk_widget_is_visible (widget) ||
+      !_gtk_widget_get_child_visible (widget))
+    return;
+
+  gtk_widget_get_clip (widget, &widget_clip);
+
+  gdk_rectangle_union (&widget_clip, clip, clip);
+}
+
+void
+gtk_container_get_children_clip (GtkContainer  *container,
+                                 GtkAllocation *out_clip)
+{
+  memset (out_clip, 0, sizeof (GtkAllocation));
+
+  gtk_container_forall (container, union_with_clip, out_clip);
+}
+
 /**
  * gtk_container_propagate_draw:
  * @container: a #GtkContainer
