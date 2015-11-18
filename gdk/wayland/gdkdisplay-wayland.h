@@ -28,7 +28,7 @@
 #include <wayland-cursor.h>
 #include <wayland-egl.h>
 #include <gdk/wayland/gtk-shell-client-protocol.h>
-#include <gdk/wayland/xdg-shell-client-protocol.h>
+#include <gdk/wayland/xdg-shell-unstable-v5-client-protocol.h>
 
 #include <glib.h>
 #include <gdk/gdkkeys.h>
