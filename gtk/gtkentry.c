@@ -4778,9 +4778,11 @@ gtk_entry_obscure_mouse_cursor (GtkEntry *entry)
   if (priv->mouse_cursor_obscured)
     return;
 
-  set_invisible_cursor (priv->text_area);
-
-  priv->mouse_cursor_obscured = TRUE;
+  if (priv->text_area)
+    {
+      set_invisible_cursor (priv->text_area);
+      priv->mouse_cursor_obscured = TRUE;
+    }
 }
 
 static gint
