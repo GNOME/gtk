@@ -3472,8 +3472,6 @@ progressbar {
   progressbar:backdrop {
     color: #c7c7c7; }
   progressbar.osd {
-    -GtkProgressBar-xspacing: 0;
-    -GtkProgressBar-yspacing: 0;
     -GtkProgressBar-min-horizontal-bar-height: 3; }
     progressbar.osd trough {
       border-style: none;
