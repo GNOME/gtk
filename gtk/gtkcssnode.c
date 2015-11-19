@@ -26,6 +26,42 @@
 #include "gtksettingsprivate.h"
 #include "gtktypebuiltins.h"
 
+/*
+ * CSS nodes are the backbone of the GtkStyleContext implementation and
+ * replace the role that GtkWidgetPath played in the past. A CSS node has
+ * an element name and a state, and can have style classes, which is what
+ * is needed to determine the matching CSS selectors. CSS nodes have a
+ * 'visible' property, which makes it possible to temporarily 'hide' them
+ * from CSS matching - e.g. an invisible node will not affect :nth-child
+ * matching and so forth.
+ *
+ * CSS nodes are organized in a dom-like tree, and there is API to navigate
+ * and manipulate this tree:
+ * - gtk_css_node_set_parent
+ * - gtk_css_node_insert_before/after
+ * - gtk_css_node_get_parent
+ * - gtk_css_node_get_first/last_child
+ * - gtk_css_node_get_previous/next_sibling
+ *
+ * Every widget has one or more CSS nodes - the first one gets created
+ * automatically by GtkStyleContext. To set the  name of the main node,
+ * call gtk_widget_class_set_css_name() in class_init. Widget implementations
+ * can and should add subnodes as suitable.
+ *
+ * Best practice is:
+ * - for permanent subnodes, create them in init(), and keep a pointer
+ *   to the node (you don't have to keep a reference, cleanup will be
+ *   automatic by means of the parent node getting cleaned up by the
+ *   style context
+ * - for transient nodes, create/destroy them when the conditions that warrant
+ *   their existence change.
+ * - keep the state of all your nodes up-to-date. This probably requires
+ *   a state-flags-changed (and possibly direction-changed) handler, as well
+ *   as code to update the state in other places
+ * - the draw function should just use gtk_style_context_save_to_node to
+ *   'switch' to the right node, not make any other changes to the style context
+ */
+
 /* When these change we do a full restyling. Otherwise we try to figure out
  * if we need to change things. */
 #define GTK_CSS_RADICAL_CHANGE (GTK_CSS_CHANGE_ID | GTK_CSS_CHANGE_NAME | GTK_CSS_CHANGE_CLASS | GTK_CSS_CHANGE_SOURCE | GTK_CSS_CHANGE_PARENT_STYLE)
