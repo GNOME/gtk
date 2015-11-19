@@ -786,7 +786,10 @@ gtk_drag_can_use_rgba_cursor (GdkDisplay *display,
                               gint        height)
 {
   guint max_width, max_height;
-  
+
+  if (GDK_IS_WAYLAND_DISPLAY (display))
+    return FALSE;
+
   if (!gdk_display_supports_cursor_color (display))
     return FALSE;
 
