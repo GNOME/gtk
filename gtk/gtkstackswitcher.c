@@ -474,8 +474,9 @@ gtk_stack_switcher_set_icon_size (GtkStackSwitcher *switcher,
         {
           clear_switcher (switcher);
           populate_switcher (switcher);
-          g_object_notify (G_OBJECT (switcher), "icon-size");
         }
+
+      g_object_notify (G_OBJECT (switcher), "icon-size");
     }
 }
 
