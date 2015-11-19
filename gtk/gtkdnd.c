@@ -2456,7 +2456,7 @@ gtk_drag_begin_internal (GtkWidget         *widget,
 
   source_widgets = g_slist_prepend (source_widgets, ipc_widget);
 
-  context = gdk_drag_begin (ipc_window, targets);
+  context = gdk_drag_begin_for_device (ipc_window, pointer, targets);
   gdk_drag_context_set_device (context, pointer);
   g_list_free (targets);
   
