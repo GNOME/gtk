@@ -381,6 +381,21 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void
+update_arrow_state (GtkToolItemGroup *group)
+{
+  GtkToolItemGroupPrivate *priv = group->priv;
+  GtkStateFlags state;
+
+  state = gtk_widget_get_state_flags (GTK_WIDGET (group));
+
+  if (priv->collapsed)
+    state &= ~GTK_STATE_FLAG_CHECKED;
+  else
+    state |= GTK_STATE_FLAG_CHECKED;
+  gtk_css_node_set_state (priv->arrow_node, state);
+}
+
+static void
 gtk_tool_item_group_init (GtkToolItemGroup *group)
 {
   GtkWidget *alignment;
@@ -394,6 +409,7 @@ gtk_tool_item_group_init (GtkToolItemGroup *group)
   priv->children = NULL;
   priv->header_spacing = DEFAULT_HEADER_SPACING;
   priv->expander_size = DEFAULT_EXPANDER_SIZE;
+  priv->collapsed = DEFAULT_COLLAPSED;
 
   priv->label_widget = gtk_label_new (NULL);
   gtk_widget_set_halign (priv->label_widget, GTK_ALIGN_START);
@@ -426,6 +442,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   gtk_css_node_set_parent (priv->arrow_node, widget_node);
   gtk_css_node_set_state (priv->arrow_node, gtk_css_node_get_state (widget_node));
   g_object_unref (priv->arrow_node);
+
+  update_arrow_state (group);
 }
 
 static void
@@ -1285,22 +1303,6 @@ gtk_tool_item_group_style_updated (GtkWidget *widget)
 {
   gtk_tool_item_group_header_adjust_style (GTK_TOOL_ITEM_GROUP (widget));
   GTK_WIDGET_CLASS (gtk_tool_item_group_parent_class)->style_updated (widget);
-}
-
-static void
-update_arrow_state (GtkToolItemGroup *group)
-{
-  GtkToolItemGroupPrivate *priv = group->priv;
-  GtkStateFlags state;
-
-  state = gtk_widget_get_state_flags (GTK_WIDGET (group));
-
-  if (priv->collapsed)
-    state &= ~GTK_STATE_FLAG_CHECKED;
-  else
-    state |= GTK_STATE_FLAG_CHECKED;
-
-  gtk_css_node_set_state (priv->arrow_node, state);
 }
 
 static void
