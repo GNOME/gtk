@@ -61,6 +61,11 @@
  * - The draw function should just use gtk_style_context_save_to_node() to
  *   'switch' to the right node, not make any other changes to the style
  *   context.
+ *
+ * A noteworthy difference between gtk_style_context_save() and
+ * gtk_style_context_save_to_node() is that the former inherits all the
+ * style classes from the main CSS node, which often leads to unintended
+ * inheritance. 
  */
 
 /* When these change we do a full restyling. Otherwise we try to figure out
