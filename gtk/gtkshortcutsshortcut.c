@@ -137,6 +137,8 @@ gtk_shortcuts_shortcut_set_direction (GtkShortcutsShortcut *self,
   self->direction = direction;
 
   update_visible (self);
+
+  g_object_notify (G_OBJECT (self), "direction");
 }
 
 static void
@@ -299,7 +301,7 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
                        P_("Direction"),
                        GTK_TYPE_TEXT_DIRECTION,
                        GTK_TEXT_DIR_NONE,
-                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
