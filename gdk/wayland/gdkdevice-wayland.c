@@ -595,16 +595,45 @@ gdk_wayland_device_window_at_position (GdkDevice       *device,
                                        gboolean         get_toplevel)
 {
   GdkWaylandDeviceData *wd;
+  GdkWindow *window = NULL;
 
   wd = GDK_WAYLAND_DEVICE(device)->device;
-  if (win_x)
-    *win_x = wd->surface_x;
-  if (win_y)
-    *win_y = wd->surface_y;
-  if (mask)
-    *mask = wd->button_modifiers | wd->key_modifiers;
 
-  return wd->pointer_focus;
+  if (device == wd->master_pointer)
+    {
+      if (win_x)
+        *win_x = wd->surface_x;
+      if (win_y)
+        *win_y = wd->surface_y;
+
+      if (mask)
+        *mask |= wd->button_modifiers;
+
+      window = wd->pointer_focus;
+    }
+  else if (device == wd->touch_master)
+    {
+      GdkWaylandTouchData *touch;
+
+      touch = GDK_WAYLAND_DEVICE(device)->emulating_touch;
+
+      if (touch)
+        {
+          if (win_x)
+            *win_x = touch->x;
+          if (win_y)
+            *win_y = touch->y;
+          if (mask)
+            *mask |= GDK_BUTTON1_MASK;
+
+          window = touch->window;
+        }
+    }
+
+  if (mask)
+    *mask = wd->key_modifiers;
+
+  return window;
 }
 
 static void
