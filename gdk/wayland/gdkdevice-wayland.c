@@ -283,6 +283,9 @@ gdk_wayland_device_set_window_cursor (GdkDevice *device,
 {
   GdkWaylandDeviceData *wd = GDK_WAYLAND_DEVICE (device)->device;
 
+  if (device == wd->touch_master)
+    return;
+
   /* Setting the cursor to NULL means that we should use
    * the default cursor
    */
