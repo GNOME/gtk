@@ -1,10 +1,59 @@
 Overview of Changes in GTK+ 3.19.2
 ==================================
+
+* Most widgets have been ported to CSS nodes. The element names and
+  the tree relationships are documented now. The Adwaita and HighContrast
+  themes have been mostly kept up-to-date with these changes. Third-party
+  themes and custom CSS will need adjustments.
+
+* The inspector now shows CSS nodes and allows to manipulate them.
+
+* Size allocation has been simplified to avoid excessive resizes of
+  the entire window.
+
+* GtkShortcutsWindow can now display direction-dependent shortcuts
+  and sequences of keys.
+
 * Support for native file chooser on Win32 when using the new
   GtkFileChooserNative API, and when using GtkFileChooserButton.
 
 * The GtkFileChooser interface prerequisite was changed from GtkWidget
   to GObject to allow non-widget filechooser implementations.
+
+* :focus-on-click has been moved from various subclasses to GtkWidget,
+  so it is now available for every widget, in particular GtkListBoxRow.
+
+* Bugs fixed:
+ 735341 Fix/improve gtk_text_buffer_get_iter_at_*() functions
+ 748904 wayland: map real modifiers to virtual modifiers
+ 756618 GtkWindow CSD: gtk_window_resize() also includes client side decorations...
+ 756625 segfault in captured_event_cb
+ 756670 Popover is shown below clutter widget after tab switch from Gtk.Notebook
+ 756978 Deadlock in the places widget
+ 757221 Memory leak in gtk-3.0.m4
+ 757269 Allow to make ListBoxRows not grab focus when activated
+ 757324 win32: handle WM_DISPLAYCHANGE globally
+ 757358 single touch devices are not detected as touch devices
+ 757377 settings.ini is only loaded from first XDG_CONFIG_DIRS entry
+ 757397 gtk_widget_set_name() doesn't properly refresh the style
+ 757805 gtkwindow: CSD windows not resizable in metacity
+ 757888 ShortcutsWindow: Support different keyboard shortcuts for LTR vs RTL loc...
+ 757950 Hanle double click better in the new file chooser
+ 757968 Typo in GtkCheckMenuItem
+ 757984 gtkimcontextsimple.c: Fix build on Windows
+ 758072 [Wayland] additional mouse buttons don't work
+ 758087 gtkcontainer: clarify requirements for implementations
+ 758208 GtkStackSwitcher should allow changing the icon size
+
+* Translation updates:
+ Hebrew
+ Hungarian
+ Norwegian bokmål
+ Portuguese
+ Scottish Gaelic
+ Spanish
+ Traditional Chinese
+
 
 Overview of Changes in GTK+ 3.19.1
 ==================================
