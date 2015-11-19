@@ -44,6 +44,9 @@ Overview of Changes in GTK+ 3.19.2
  758072 [Wayland] additional mouse buttons don't work
  758087 gtkcontainer: clarify requirements for implementations
  758208 GtkStackSwitcher should allow changing the icon size
+ 758327 gnome-disks segfault in gdkwayland get_popup_parent...
+ 758086 gtkstack: allow subclasses overriding properties on init
+ 758175 Fix character entity
 
 * Translation updates:
  Hebrew
