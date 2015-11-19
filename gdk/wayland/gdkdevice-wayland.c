@@ -2412,21 +2412,16 @@ static GdkDevice *
 gdk_wayland_device_manager_get_client_pointer (GdkDeviceManager *device_manager)
 {
   GdkWaylandDeviceManager *wayland_device_manager;
-  GList *l;
+  GdkWaylandDeviceData *wd;
+  GdkDevice *device;
 
   wayland_device_manager = GDK_WAYLAND_DEVICE_MANAGER (device_manager);
 
-  /* Find the first master pointer device */
-  for (l = wayland_device_manager->devices; l != NULL; l = l->next)
-    {
-      GdkDevice *device = l->data;
+  /* Find the master pointer of the first GdkWaylandDeviceData we find */
+  device = wayland_device_manager->devices->data;
+  wd = GDK_WAYLAND_DEVICE (device)->device;
 
-      if (gdk_device_get_source (device) == GDK_SOURCE_MOUSE &&
-          gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_MASTER)
-        return device;
-    }
-
-  return NULL;
+  return wd->master_pointer;
 }
 
 static void
