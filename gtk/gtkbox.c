@@ -71,6 +71,10 @@
  *
  * Note that a single-row or single-column #GtkGrid provides exactly
  * the same functionality as #GtkBox.
+ *
+ * # CSS names
+ *
+ * GtkBox uses a single CSS node with name box.
  */
 
 #include "config.h"
@@ -343,6 +347,7 @@ gtk_box_class_init (GtkBoxClass *class)
   gtk_container_class_install_child_properties (container_class, LAST_CHILD_PROP, child_props);
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_FILLER);
+  gtk_widget_class_set_css_name (widget_class, "box");
 }
 
 static void
