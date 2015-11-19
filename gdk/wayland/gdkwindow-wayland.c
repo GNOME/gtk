@@ -1274,7 +1274,7 @@ should_map_as_popup (GdkWindow *window)
 static GdkWindow *
 get_popup_parent (GdkWindow *window)
 {
-  do
+  while (window)
     {
       GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
@@ -1283,7 +1283,6 @@ get_popup_parent (GdkWindow *window)
 
       window = impl->transient_for;
     }
-  while (window);
 
   return NULL;
 }
@@ -1351,9 +1350,7 @@ gdk_wayland_window_map (GdkWindow *window)
             }
 
           if (transient_for)
-            transient_for = gdk_window_get_toplevel (transient_for);
-          if (transient_for)
-            transient_for = get_popup_parent (transient_for);
+            transient_for = get_popup_parent (gdk_window_get_toplevel (transient_for));
 
           /* If the position was not explicitly set, start the popup at the
            * position of the device that holds the grab.
