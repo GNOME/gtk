@@ -25,6 +25,8 @@
 #include "gdkprivate-wayland.h"
 #include "gdkdisplay-wayland.h"
 
+#include "gdkdeviceprivate.h"
+
 #include <string.h>
 
 #define GDK_TYPE_WAYLAND_DRAG_CONTEXT              (gdk_wayland_drag_context_get_type ())
@@ -350,7 +352,7 @@ _gdk_wayland_window_drag_begin (GdkWindow *window,
   GdkWindow *toplevel;
   GList *l;
 
-  toplevel = gdk_device_get_window_at_position (device, NULL, NULL);
+  toplevel = _gdk_device_window_at_position (device, NULL, NULL, NULL, TRUE);
 
   context_wayland = g_object_new (GDK_TYPE_WAYLAND_DRAG_CONTEXT, NULL);
   context = GDK_DRAG_CONTEXT (context_wayland);
