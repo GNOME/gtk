@@ -44,22 +44,23 @@
  * - gtk_css_node_get_previous/next_sibling
  *
  * Every widget has one or more CSS nodes - the first one gets created
- * automatically by GtkStyleContext. To set the  name of the main node,
- * call gtk_widget_class_set_css_name() in class_init. Widget implementations
+ * automatically by GtkStyleContext. To set the name of the main node,
+ * call gtk_widget_class_set_css_name() in class_init(). Widget implementations
  * can and should add subnodes as suitable.
  *
  * Best practice is:
- * - for permanent subnodes, create them in init(), and keep a pointer
+ * - For permanent subnodes, create them in init(), and keep a pointer
  *   to the node (you don't have to keep a reference, cleanup will be
  *   automatic by means of the parent node getting cleaned up by the
- *   style context
- * - for transient nodes, create/destroy them when the conditions that warrant
- *   their existence change.
- * - keep the state of all your nodes up-to-date. This probably requires
- *   a state-flags-changed (and possibly direction-changed) handler, as well
- *   as code to update the state in other places
- * - the draw function should just use gtk_style_context_save_to_node to
- *   'switch' to the right node, not make any other changes to the style context
+ *   style context).
+ * - For transient nodes, create/destroy them when the conditions that
+ *   warrant their existence change.
+ * - Keep the state of all your nodes up-to-date. This probably requires
+ *   a ::state-flags-changed (and possibly ::direction-changed) handler,
+ *   as well as code to update the state in other places.
+ * - The draw function should just use gtk_style_context_save_to_node() to
+ *   'switch' to the right node, not make any other changes to the style
+ *   context.
  */
 
 /* When these change we do a full restyling. Otherwise we try to figure out
