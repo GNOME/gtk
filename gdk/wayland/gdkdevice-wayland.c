@@ -2047,8 +2047,6 @@ seat_handle_capabilities (void                    *data,
       device_manager->devices =
         g_list_prepend (device_manager->devices, device->pointer);
 
-      device->drop_context = _gdk_wayland_drop_context_new (device->master_pointer,
-                                                            device->data_device);
       if (wayland_display->pointer_gestures)
         {
           device->wl_pointer_gesture_swipe =
@@ -2078,8 +2076,6 @@ seat_handle_capabilities (void                    *data,
 
       device_manager->devices =
         g_list_remove (device_manager->devices, device->pointer);
-
-      g_clear_object (&device->drop_context);
 
       g_signal_emit_by_name (device_manager, "device-removed", device->pointer);
       g_object_unref (device->pointer);
@@ -2181,6 +2177,11 @@ seat_handle_capabilities (void                    *data,
       device->touch_master = NULL;
       device->touch = NULL;
     }
+
+  if (device->master_pointer)
+    gdk_drag_context_set_device (device->drop_context, device->master_pointer);
+  else if (device->touch_master)
+    gdk_drag_context_set_device (device->drop_context, device->touch_master);
 }
 
 static void
@@ -2362,6 +2363,7 @@ _gdk_wayland_device_manager_add_seat (GdkDeviceManager *device_manager,
   device->data_device =
     wl_data_device_manager_get_data_device (display_wayland->data_device_manager,
                                             device->wl_seat);
+  device->drop_context = _gdk_wayland_drop_context_new (device->data_device);
   wl_data_device_add_listener (device->data_device,
                                &data_device_listener, device);
 
@@ -2394,6 +2396,7 @@ _gdk_wayland_device_manager_remove_seat (GdkDeviceManager *manager,
           wl_surface_destroy (device->pointer_surface);
           /* FIXME: destroy data_device */
           g_clear_object (&device->keyboard_settings);
+          g_clear_object (&device->drop_context);
           g_hash_table_destroy (device->touches);
           gdk_window_destroy (device->foreign_dnd_window);
           stop_key_repeat (device);

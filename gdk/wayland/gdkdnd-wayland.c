@@ -387,8 +387,7 @@ _gdk_wayland_window_drag_begin (GdkWindow *window,
 }
 
 GdkDragContext *
-_gdk_wayland_drop_context_new (GdkDevice             *device,
-                               struct wl_data_device *data_device)
+_gdk_wayland_drop_context_new (struct wl_data_device *data_device)
 {
   GdkWaylandDragContext *context_wayland;
   GdkDragContext *context;
@@ -396,8 +395,6 @@ _gdk_wayland_drop_context_new (GdkDevice             *device,
   context_wayland = g_object_new (GDK_TYPE_WAYLAND_DRAG_CONTEXT, NULL);
   context = GDK_DRAG_CONTEXT (context_wayland);
   context->is_source = FALSE;
-
-  gdk_drag_context_set_device (context, device);
 
   return context;
 }
