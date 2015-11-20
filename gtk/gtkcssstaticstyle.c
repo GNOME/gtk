@@ -46,9 +46,12 @@ gtk_css_static_style_get_value (GtkCssStyle *style,
 {
   GtkCssStaticStyle *sstyle = GTK_CSS_STATIC_STYLE (style);
 
-  if (sstyle->values == NULL ||
-      id >= sstyle->values->len)
-    return NULL;
+  if (G_UNLIKELY (id >= GTK_CSS_PROPERTY_N_PROPERTIES))
+    {
+      GtkCssStyleProperty *prop = _gtk_css_style_property_lookup_by_id (id);
+
+      return _gtk_css_style_property_get_initial_value (prop);
+    }
 
   return g_ptr_array_index (sstyle->values, id);
 }
