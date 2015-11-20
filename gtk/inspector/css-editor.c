@@ -33,6 +33,8 @@
 #include "gtkfilechooserdialog.h"
 #include "gtktogglebutton.h"
 #include "gtklabel.h"
+#include "gtktooltip.h"
+#include "gtktextiter.h"
 
 #define GTK_INSPECTOR_CSS_EDITOR_TEXT "inspector-css-editor-text"
 #define GTK_INSPECTOR_CSS_EDITOR_PROVIDER "inspector-css-editor-provider"
@@ -66,7 +68,63 @@ struct _GtkInspectorCssEditorPrivate
   GtkStyleContext *context;
   GtkToggleButton *disable_button;
   guint timeout;
+  GList *errors;
 };
+
+typedef struct {
+  GError *error;
+  GtkTextIter start;
+  GtkTextIter end;
+} CssError;
+
+static void
+css_error_free (gpointer data)
+{
+  CssError *error = data;
+  g_error_free (error->error);
+  g_free (error);
+}
+
+static gboolean
+query_tooltip_cb (GtkWidget             *widget,
+                  gint                   x,
+                  gint                   y,
+                  gboolean               keyboard_tip,
+                  GtkTooltip            *tooltip,
+                  GtkInspectorCssEditor *ce)
+{
+  GtkTextIter iter;
+  GList *l;
+
+  if (keyboard_tip)
+    {
+      gint offset;
+
+      g_object_get (ce->priv->text, "cursor-position", &offset, NULL);
+      gtk_text_buffer_get_iter_at_offset (ce->priv->text, &iter, offset);
+    }
+  else
+    {
+      gint bx, by, trailing;
+
+      gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (ce->priv->view), GTK_TEXT_WINDOW_TEXT,
+                                             x, y, &bx, &by);
+      gtk_text_view_get_iter_at_position (GTK_TEXT_VIEW (ce->priv->view), &iter, &trailing, bx, by);
+    }
+
+  for (l = ce->priv->errors; l; l = l->next)
+    {
+      CssError *css_error = l->data;
+
+      if (gtk_text_iter_in_range (&iter, &css_error->start, &css_error->end))
+        {
+          gtk_tooltip_set_text (tooltip, css_error->error->message);
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
 
 static void gtk_inspector_css_editor_remove_dead_object (gpointer  data,
                                                          GObject  *dead_object);
@@ -220,6 +278,9 @@ update_style (GtkInspectorCssEditor *ce)
   else
     return;
 
+  g_list_free_full (ce->priv->errors, css_error_free);
+  ce->priv->errors = NULL;
+
   text = get_current_text (ce->priv->text);
   gtk_css_provider_load_from_data (provider, text, -1, NULL);
   g_free (text);
@@ -255,16 +316,19 @@ show_parsing_error (GtkCssProvider        *provider,
                     const GError          *error,
                     GtkInspectorCssEditor *ce)
 {
-  GtkTextIter start, end;
   const char *tag_name;
   GtkTextBuffer *buffer = GTK_TEXT_BUFFER (ce->priv->text);
+  CssError *css_error;
+
+  css_error = g_new (CssError, 1);
+  css_error->error = g_error_copy (error);
 
   gtk_text_buffer_get_iter_at_line_index (buffer,
-                                          &start,
+                                          &css_error->start,
                                           gtk_css_section_get_start_line (section),
                                           gtk_css_section_get_start_position (section));
   gtk_text_buffer_get_iter_at_line_index (buffer,
-                                          &end,
+                                          &css_error->end,
                                           gtk_css_section_get_end_line (section),
                                           gtk_css_section_get_end_position (section));
 
@@ -273,7 +337,9 @@ show_parsing_error (GtkCssProvider        *provider,
   else
     tag_name = "error";
 
-  gtk_text_buffer_apply_tag_by_name (buffer, tag_name, &start, &end);
+  gtk_text_buffer_apply_tag_by_name (buffer, tag_name, &css_error->start, &css_error->end);
+
+  ce->priv->errors = g_list_prepend (ce->priv->errors, css_error);
 }
 
 static void
@@ -400,6 +466,8 @@ finalize (GObject *object)
       ce->priv->context = NULL;
     }
 
+  g_list_free_full (ce->priv->errors, css_error_free);
+
   G_OBJECT_CLASS (gtk_inspector_css_editor_parent_class)->finalize (object);
 }
 
@@ -426,6 +494,7 @@ gtk_inspector_css_editor_class_init (GtkInspectorCssEditorClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, disable_toggled);
   gtk_widget_class_bind_template_callback (widget_class, save_clicked);
   gtk_widget_class_bind_template_callback (widget_class, text_changed);
+  gtk_widget_class_bind_template_callback (widget_class, query_tooltip_cb);
 }
 
 static void

@@ -88,6 +88,8 @@
             <property name="has-focus">True</property>
             <property name="left-margin">6</property>
             <property name="right-margin">6</property>
+            <property name="has-tooltip">True</property>
+            <signal name="query-tooltip" handler="query_tooltip_cb"/>
           </object>
         </child>
       </object>
