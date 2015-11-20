@@ -28,9 +28,8 @@ GtkCssLookup *
 _gtk_css_lookup_new (const GtkBitmask *relevant)
 {
   GtkCssLookup *lookup;
-  guint n = _gtk_css_style_property_get_n_properties ();
 
-  lookup = g_malloc0 (sizeof (GtkCssLookup) + sizeof (GtkCssLookupValue) * n);
+  lookup = g_malloc0 (sizeof (GtkCssLookup));
 
   if (relevant)
     {
@@ -39,7 +38,7 @@ _gtk_css_lookup_new (const GtkBitmask *relevant)
   else
     {
       lookup->missing = _gtk_bitmask_new ();
-      lookup->missing = _gtk_bitmask_invert_range (lookup->missing, 0, n);
+      lookup->missing = _gtk_bitmask_invert_range (lookup->missing, 0, GTK_CSS_PROPERTY_N_PROPERTIES);
     }
 
   return lookup;
@@ -109,16 +108,14 @@ _gtk_css_lookup_resolve (GtkCssLookup            *lookup,
                          GtkCssStaticStyle       *style,
                          GtkCssStyle             *parent_style)
 {
-  guint i, n;
+  guint i;
 
   gtk_internal_return_if_fail (lookup != NULL);
   gtk_internal_return_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider));
   gtk_internal_return_if_fail (GTK_IS_CSS_STATIC_STYLE (style));
   gtk_internal_return_if_fail (parent_style == NULL || GTK_IS_CSS_STYLE (parent_style));
 
-  n = _gtk_css_style_property_get_n_properties ();
-
-  for (i = 0; i < n; i++)
+  for (i = 0; i < GTK_CSS_PROPERTY_N_PROPERTIES; i++)
     {
       if (lookup->values[i].value ||
           _gtk_bitmask_get (lookup->missing, i))

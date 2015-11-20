@@ -46,11 +46,14 @@ gtk_css_static_style_get_value (GtkCssStyle *style,
 {
   GtkCssStaticStyle *sstyle = GTK_CSS_STATIC_STYLE (style);
 
-  if (sstyle->values == NULL ||
-      id >= sstyle->values->len)
-    return NULL;
+  if (G_UNLIKELY (id >= GTK_CSS_PROPERTY_N_PROPERTIES))
+    {
+      GtkCssStyleProperty *prop = _gtk_css_style_property_lookup_by_id (id);
 
-  return g_ptr_array_index (sstyle->values, id);
+      return _gtk_css_style_property_get_initial_value (prop);
+    }
+
+  return sstyle->values[id];
 }
 
 static GtkCssSection *
@@ -70,11 +73,12 @@ static void
 gtk_css_static_style_dispose (GObject *object)
 {
   GtkCssStaticStyle *style = GTK_CSS_STATIC_STYLE (object);
+  guint i;
 
-  if (style->values)
+  for (i = 0; i < GTK_CSS_PROPERTY_N_PROPERTIES; i++)
     {
-      g_ptr_array_unref (style->values);
-      style->values = NULL;
+      if (style->values[i])
+        _gtk_css_value_unref (style->values[i]);
     }
   if (style->sections)
     {
@@ -115,14 +119,9 @@ gtk_css_static_style_set_value (GtkCssStaticStyle *style,
                                 GtkCssValue       *value,
                                 GtkCssSection     *section)
 {
-  if (style->values == NULL)
-    style->values = g_ptr_array_new_with_free_func ((GDestroyNotify)_gtk_css_value_unref);
-  if (id >= style->values->len)
-   g_ptr_array_set_size (style->values, id + 1);
-
-  if (g_ptr_array_index (style->values, id))
-    _gtk_css_value_unref (g_ptr_array_index (style->values, id));
-  g_ptr_array_index (style->values, id) = _gtk_css_value_ref (value);
+  if (style->values[id])
+    _gtk_css_value_unref (style->values[id]);
+  style->values[id] = _gtk_css_value_ref (value);
 
   if (style->sections && style->sections->len > id && g_ptr_array_index (style->sections, id))
     {
@@ -208,6 +207,7 @@ gtk_css_static_style_compute_value (GtkCssStaticStyle       *style,
   gtk_internal_return_if_fail (GTK_IS_CSS_STATIC_STYLE (style));
   gtk_internal_return_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider));
   gtk_internal_return_if_fail (parent_style == NULL || GTK_IS_CSS_STYLE (parent_style));
+  gtk_internal_return_if_fail (id < GTK_CSS_PROPERTY_N_PROPERTIES);
 
   /* http://www.w3.org/TR/css3-cascade/#cascade
    * Then, for every element, the value for each property can be found

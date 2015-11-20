@@ -39,7 +39,7 @@ struct _GtkCssStaticStyle
 {
   GtkCssStyle parent;
 
-  GPtrArray             *values;               /* the values */
+  GtkCssValue           *values[GTK_CSS_PROPERTY_N_PROPERTIES]; /* the values */
   GPtrArray             *sections;             /* sections the values are defined in */
 
   GtkCssChange           change;               /* change as returned by value lookup */

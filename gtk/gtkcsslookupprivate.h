@@ -35,7 +35,7 @@ typedef struct {
 
 struct _GtkCssLookup {
   GtkBitmask        *missing;
-  GtkCssLookupValue  values[1];
+  GtkCssLookupValue  values[GTK_CSS_PROPERTY_N_PROPERTIES];
 };
 
 GtkCssLookup *          _gtk_css_lookup_new                     (const GtkBitmask           *relevant);
