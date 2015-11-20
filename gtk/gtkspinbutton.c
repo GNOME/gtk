@@ -170,6 +170,11 @@
  * ]|
  */
 
+enum {
+  UP_PANEL,
+  DOWN_PANEL
+};
+
 struct _GtkSpinButtonPrivate
 {
   GtkAdjustment *adjustment;
@@ -903,24 +908,18 @@ gtk_spin_button_unmap (GtkWidget *widget)
 
 static gboolean
 gtk_spin_button_panel_at_limit (GtkSpinButton *spin_button,
-                                GdkWindow     *panel)
+                                gint           panel)
 {
   GtkSpinButtonPrivate *priv = spin_button->priv;
-  GdkWindow *effective_panel;
 
   if (priv->wrap)
     return FALSE;
 
-  if (gtk_adjustment_get_step_increment (priv->adjustment) > 0)
-    effective_panel = panel;
-  else
-    effective_panel = panel == priv->up_panel ? priv->down_panel : priv->up_panel;
-
-  if (effective_panel == priv->up_panel &&
+  if (panel == UP_PANEL &&
       (gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_value (priv->adjustment) <= EPSILON))
     return TRUE;
 
-  if (effective_panel == priv->down_panel &&
+  if (panel == DOWN_PANEL &&
       (gtk_adjustment_get_value (priv->adjustment) - gtk_adjustment_get_lower (priv->adjustment) <= EPSILON))
     return TRUE;
 
@@ -929,7 +928,7 @@ gtk_spin_button_panel_at_limit (GtkSpinButton *spin_button,
 
 static GtkStateFlags
 gtk_spin_button_panel_get_state (GtkSpinButton *spin_button,
-                                 GdkWindow     *panel)
+                                 gint           panel)
 {
   GtkStateFlags state;
   GtkSpinButtonPrivate *priv = spin_button->priv;
@@ -946,9 +945,15 @@ gtk_spin_button_panel_get_state (GtkSpinButton *spin_button,
     }
   else
     {
-      if (priv->click_child == panel)
+      GdkWindow *panel_win;
+
+      panel_win = panel == UP_PANEL ? priv->up_panel : priv->down_panel;
+
+      if (priv->click_child &&
+          priv->click_child == panel_win)
         state |= GTK_STATE_FLAG_ACTIVE;
-      else if (priv->in_child == panel &&
+      else if (priv->in_child &&
+               priv->in_child == panel_win &&
                priv->click_child == NULL)
         state |= GTK_STATE_FLAG_PRELIGHT;
     }
@@ -962,9 +967,9 @@ update_node_state (GtkSpinButton *spin_button)
   GtkSpinButtonPrivate *priv = spin_button->priv;
 
   gtk_css_node_set_state (priv->up_node,
-                          gtk_spin_button_panel_get_state (spin_button, priv->up_panel));
+                          gtk_spin_button_panel_get_state (spin_button, UP_PANEL));
   gtk_css_node_set_state (priv->down_node,
-                          gtk_spin_button_panel_get_state (spin_button, priv->down_panel));
+                          gtk_spin_button_panel_get_state (spin_button, DOWN_PANEL));
 }
 
 static void
