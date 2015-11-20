@@ -227,7 +227,8 @@ sparql_escape_string (const gchar *literal)
 static void
 sparql_append_string_literal (GString     *sparql,
                               const gchar *str,
-                              gboolean     glob)
+                              gboolean     glob,
+                              gboolean     is_dir_uri)
 {
   gchar *s;
 
@@ -236,6 +237,8 @@ sparql_append_string_literal (GString     *sparql,
   g_string_append_c (sparql, '"');
   g_string_append (sparql, s);
 
+  if (is_dir_uri)
+    g_string_append_c (sparql, '/');
   if (glob)
     g_string_append_c (sparql, '*');
   g_string_append_c (sparql, '"');
@@ -250,7 +253,7 @@ sparql_append_string_literal_lower_case (GString     *sparql,
   gchar *s;
 
   s = g_utf8_strdown (str, -1);
-  sparql_append_string_literal (sparql, s, FALSE);
+  sparql_append_string_literal (sparql, s, FALSE, FALSE);
   g_free (s);
 }
 
@@ -347,11 +350,12 @@ gtk_search_engine_tracker_start (GtkSearchEngine *engine)
                          "WHERE {"
                          "  ?urn a nfo:FileDataObject ;"
                          "  tracker:available true ; ");
+                         "  nfo:belongsToContainer ?parent; ");
 
 #ifdef FTS_MATCHING
   /* Using FTS: */
   g_string_append (sparql, "fts:match ");
-  sparql_append_string_literal (sparql, search_text, TRUE);
+  sparql_append_string_literal (sparql, search_text, TRUE, FALSE);
 #endif
 
   g_string_append (sparql, ". FILTER (BOUND(nie:url(?urn)) && ");
@@ -365,11 +369,16 @@ gtk_search_engine_tracker_start (GtkSearchEngine *engine)
       gchar *location_uri = g_file_get_uri (location);
       g_string_append (sparql, " && ");
       if (recursive)
-        g_string_append (sparql, "tracker:uri-is-descendant(");
+        {
+          g_string_append (sparql, "fn:starts-with(nie:url(?urn),");
+          sparql_append_string_literal (sparql, location_uri, FALSE, TRUE);
+          g_string_append (sparql, ")");
+        }
       else
-        g_string_append (sparql, "tracker:uri-is-parent(");
-      sparql_append_string_literal (sparql, location_uri, FALSE);
-      g_string_append (sparql, ",nie:url(?urn))");
+        {
+          g_string_append (sparql, "nie:url(?parent) = ");
+          sparql_append_string_literal (sparql, location_uri, FALSE, FALSE);
+        }
       g_free (location_uri);
     }
 
