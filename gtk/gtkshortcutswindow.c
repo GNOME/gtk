@@ -94,6 +94,7 @@ typedef struct
   GtkSearchBar   *search_bar;
   GtkSearchEntry *search_entry;
   GtkHeaderBar   *header_bar;
+  GtkWidget      *main_box;
   GtkPopover     *popover;
   GtkListBox     *list_box;
   GtkBox         *search_gestures;
@@ -329,6 +330,52 @@ gtk_shortcuts_window_add (GtkContainer *container,
     g_warning ("Can't add children of type %s to %s",
                G_OBJECT_TYPE_NAME (widget),
                G_OBJECT_TYPE_NAME (container));
+}
+
+static void
+gtk_shortcuts_window_remove (GtkContainer *container,
+                             GtkWidget    *widget)
+{
+  GtkShortcutsWindow *self = (GtkShortcutsWindow *)container;
+  GtkShortcutsWindowPrivate *priv = gtk_shortcuts_window_get_instance_private (self);
+
+  gtk_container_remove (GTK_CONTAINER (priv->stack), widget);
+}
+
+static void
+gtk_shortcuts_window_forall (GtkContainer *container,
+                             gboolean      include_internal,
+                             GtkCallback   callback,
+                             gpointer      callback_data)
+{
+  GtkShortcutsWindow *self = (GtkShortcutsWindow *)container;
+  GtkShortcutsWindowPrivate *priv = gtk_shortcuts_window_get_instance_private (self);
+
+  if (include_internal)
+    {
+      callback (GTK_WIDGET (priv->header_bar), callback_data);
+      callback (GTK_WIDGET (priv->main_box), callback_data);
+    }
+
+  if (priv->stack)
+    {
+      GList *children, *l;
+      GtkWidget *search;
+      GtkWidget *empty;
+
+      search = gtk_stack_get_child_by_name (GTK_STACK (priv->stack), "internal-search");
+      empty = gtk_stack_get_child_by_name (GTK_STACK (priv->stack), "no-search-results");
+      children = gtk_container_get_children (GTK_CONTAINER (priv->stack));
+      for (l = children; l; l = l->next)
+        {
+          GtkWidget *child = l->data;
+
+          if (include_internal ||
+              (child != search && child != empty))
+            callback (child, callback_data);
+        }
+      g_list_free (children);
+    }
 }
 
 static void
@@ -605,7 +652,9 @@ gtk_shortcuts_window_class_init (GtkShortcutsWindowClass *klass)
 
   widget_class->unmap = gtk_shortcuts_window_unmap;
   container_class->add = gtk_shortcuts_window_add;
+  container_class->remove = gtk_shortcuts_window_remove;
   container_class->child_type = gtk_shortcuts_window_child_type;
+  container_class->forall = gtk_shortcuts_window_forall;
 
   klass->close = gtk_shortcuts_window_close;
   klass->search = gtk_shortcuts_window_search;
@@ -700,7 +749,6 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
 {
   GtkShortcutsWindowPrivate *priv = gtk_shortcuts_window_get_instance_private (self);
   GtkToggleButton *search_button;
-  GtkBox *main_box;
   GtkBox *menu_box;
   GtkBox *box;
   GtkArrow *arrow;
@@ -736,11 +784,11 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
                                 NULL);
   gtk_container_add (GTK_CONTAINER (priv->header_bar), GTK_WIDGET (search_button));
 
-  main_box = g_object_new (GTK_TYPE_BOX,
+  priv->main_box = g_object_new (GTK_TYPE_BOX,
                            "orientation", GTK_ORIENTATION_VERTICAL,
                            "visible", TRUE,
                            NULL);
-  GTK_CONTAINER_CLASS (gtk_shortcuts_window_parent_class)->add (GTK_CONTAINER (self), GTK_WIDGET (main_box));
+  GTK_CONTAINER_CLASS (gtk_shortcuts_window_parent_class)->add (GTK_CONTAINER (self), GTK_WIDGET (priv->main_box));
 
   priv->search_bar = g_object_new (GTK_TYPE_SEARCH_BAR,
                                    "visible", TRUE,
@@ -748,7 +796,7 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
   g_object_bind_property (priv->search_bar, "search-mode-enabled",
                           search_button, "active",
                           G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
-  gtk_container_add (GTK_CONTAINER (main_box), GTK_WIDGET (priv->search_bar));
+  gtk_container_add (GTK_CONTAINER (priv->main_box), GTK_WIDGET (priv->search_bar));
 
   priv->stack = g_object_new (GTK_TYPE_STACK,
                               "expand", TRUE,
@@ -756,7 +804,7 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
                               "transition-type", GTK_STACK_TRANSITION_TYPE_CROSSFADE,
                               "visible", TRUE,
                               NULL);
-  gtk_container_add (GTK_CONTAINER (main_box), GTK_WIDGET (priv->stack));
+  gtk_container_add (GTK_CONTAINER (priv->main_box), GTK_WIDGET (priv->stack));
 
   priv->title_stack = g_object_new (GTK_TYPE_STACK,
                                     "visible", TRUE,
