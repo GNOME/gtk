@@ -1659,6 +1659,8 @@ gtk_spin_button_button_release (GtkWidget      *widget,
                 gtk_spin_button_real_spin (spin, diff);
             }
         }
+
+      update_node_state (spin);
       gtk_widget_queue_draw (GTK_WIDGET (spin));
 
       return TRUE;
