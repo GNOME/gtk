@@ -255,9 +255,6 @@ struct _GtkLabelPrivate
   PangoAttrList *markup_attrs;
   PangoLayout   *layout;
 
-  GtkGesture    *drag_gesture;
-  GtkGesture    *multipress_gesture;
-
   gchar   *label;
   gchar   *text;
 
@@ -335,6 +332,9 @@ struct _GtkLabelSelectionInfo
 
   GList *links;
   GtkLabelLink *active_link;
+
+  GtkGesture *drag_gesture;
+  GtkGesture *multipress_gesture;
 
   gint drag_start_x;
   gint drag_start_y;
@@ -1373,21 +1373,6 @@ gtk_label_init (GtkLabel *label)
   priv->mnemonics_visible = TRUE;
 
   gtk_label_set_text (label, "");
-
-  priv->drag_gesture = gtk_gesture_drag_new (GTK_WIDGET (label));
-  g_signal_connect (priv->drag_gesture, "drag-begin",
-                    G_CALLBACK (gtk_label_drag_gesture_begin), label);
-  g_signal_connect (priv->drag_gesture, "drag-update",
-                    G_CALLBACK (gtk_label_drag_gesture_update), label);
-  gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (priv->drag_gesture), TRUE);
-
-  priv->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (label));
-  g_signal_connect (priv->multipress_gesture, "pressed",
-                    G_CALLBACK (gtk_label_multipress_gesture_pressed), label);
-  g_signal_connect (priv->multipress_gesture, "released",
-                    G_CALLBACK (gtk_label_multipress_gesture_released), label);
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->multipress_gesture), 0);
-  gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (priv->multipress_gesture), TRUE);
 }
 
 
@@ -3285,11 +3270,14 @@ gtk_label_finalize (GObject *object)
   if (priv->markup_attrs)
     pango_attr_list_unref (priv->markup_attrs);
 
+  if (priv->select_info)
+    {
+      g_object_unref (priv->select_info->drag_gesture);
+      g_object_unref (priv->select_info->multipress_gesture);
+    }
+
   gtk_label_clear_links (label);
   g_free (priv->select_info);
-
-  g_object_unref (priv->drag_gesture);
-  g_object_unref (priv->multipress_gesture);
 
   G_OBJECT_CLASS (gtk_label_parent_class)->finalize (object);
 }
@@ -5474,6 +5462,21 @@ gtk_label_ensure_select_info (GtkLabel *label)
 
       if (gtk_widget_get_mapped (GTK_WIDGET (label)))
         gdk_window_show (priv->select_info->window);
+
+      priv->select_info->drag_gesture = gtk_gesture_drag_new (GTK_WIDGET (label));
+      g_signal_connect (priv->select_info->drag_gesture, "drag-begin",
+                        G_CALLBACK (gtk_label_drag_gesture_begin), label);
+      g_signal_connect (priv->select_info->drag_gesture, "drag-update",
+                        G_CALLBACK (gtk_label_drag_gesture_update), label);
+      gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (priv->select_info->drag_gesture), TRUE);
+
+      priv->select_info->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (label));
+      g_signal_connect (priv->select_info->multipress_gesture, "pressed",
+                        G_CALLBACK (gtk_label_multipress_gesture_pressed), label);
+      g_signal_connect (priv->select_info->multipress_gesture, "released",
+                        G_CALLBACK (gtk_label_multipress_gesture_released), label);
+      gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->select_info->multipress_gesture), 0);
+      gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (priv->select_info->multipress_gesture), TRUE);
     }
 }
 
@@ -5488,6 +5491,9 @@ gtk_label_clear_select_info (GtkLabel *label)
   if (!priv->select_info->selectable && !priv->select_info->links)
     {
       gtk_label_destroy_window (label);
+
+      g_object_unref (priv->select_info->drag_gesture);
+      g_object_unref (priv->select_info->multipress_gesture);
 
       g_free (priv->select_info);
       priv->select_info = NULL;
