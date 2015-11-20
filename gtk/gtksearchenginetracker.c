@@ -354,7 +354,7 @@ gtk_search_engine_tracker_start (GtkSearchEngine *engine)
   sparql_append_string_literal (sparql, search_text, TRUE);
 #endif
 
-  g_string_append (sparql, ". FILTER (");
+  g_string_append (sparql, ". FILTER (BOUND(nie:url(?urn)) && ");
 
   g_string_append (sparql, "fn:contains(fn:lower-case(nfo:fileName(?urn)),");
   sparql_append_string_literal_lower_case (sparql, search_text);
