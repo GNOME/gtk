@@ -437,6 +437,9 @@ main (int argc, char **argv)
     {
       gchar *testname;
 
+      if (otypes[i] == GTK_TYPE_FILE_CHOOSER_NATIVE)
+        continue;
+
       testname = g_strdup_printf ("/Default Values/%s",
 				  g_type_name (otypes[i]));
       g_test_add_data_func (testname,
