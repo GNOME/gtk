@@ -16,7 +16,7 @@
 }
 
 /* Make sure selections are visible */
-:selected {
+selection {
   background-color: darkGreen;
   color: black;
 }
