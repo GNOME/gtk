@@ -337,6 +337,9 @@ show_parsing_error (GtkCssProvider        *provider,
   else
     tag_name = "error";
 
+  if (gtk_text_iter_equal (&css_error->start, &css_error->end))
+    gtk_text_iter_forward_char (&css_error->end);
+
   gtk_text_buffer_apply_tag_by_name (buffer, tag_name, &css_error->start, &css_error->end);
 
   ce->priv->errors = g_list_prepend (ce->priv->errors, css_error);
