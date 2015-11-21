@@ -621,6 +621,10 @@ gtk_css_node_declaration_add_to_widget_path (const GtkCssNodeDeclaration *decl,
   GtkRegion *regions;
   guint i;
 
+  /* Set name and id */
+  gtk_widget_path_iter_set_object_name (path, pos, decl->name);
+  gtk_widget_path_iter_set_name (path, pos, decl->id);
+
   /* Set widget regions */
   regions = get_regions (decl);
   for (i = 0; i < decl->n_regions; i++)
