@@ -91,7 +91,7 @@
     background-clip: padding-box;
     box-shadow: none;
     text-shadow: 0 1px black;
-    icon-shadow: 0 1px black;
+    -gtk-icon-shadow: 0 1px black;
   }
   @if $t==osd-focus {
     color: $osd_text_color;
@@ -100,7 +100,7 @@
     background-clip: padding-box;
     box-shadow: entry_focus_shadow($fc);
     text-shadow: 0 1px black;
-    icon-shadow: 0 1px black;
+    -gtk-icon-shadow: 0 1px black;
   }
   @if $t==osd-insensitive {
     color: $osd_insensitive_fg_color;
@@ -109,7 +109,7 @@
     background-clip: padding-box;
     box-shadow: none;
     text-shadow: none;
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
   }
   @if $t==osd-backdrop {
     color: $osd_text_color;
@@ -118,7 +118,7 @@
     background-clip: padding-box;
     box-shadow: none;
     text-shadow: none;
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
   }
 }
 
@@ -166,11 +166,11 @@
 
   @if lightness($tc)<50% {
     text-shadow: 0 1px $_shadow;
-    icon-shadow: 0 1px $_shadow;
+    -gtk-icon-shadow: 0 1px $_shadow;
   }
   @else {
     text-shadow: 0 -1px $_shadow;
-    icon-shadow: 0 -1px $_shadow;
+    -gtk-icon-shadow: 0 -1px $_shadow;
   }
 }
 
@@ -253,7 +253,7 @@
                                     $insensitive_borders_color);
     background-image: linear-gradient(to bottom, $_bg);
     text-shadow: none;
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
     // white with 0 alpha to avoid an ugly transition, since no color means
     // black with 0 alpha
     @include _shadows(inset 0 1px transparentize(white,1), $_button_edge);
@@ -287,7 +287,7 @@
     border-color: if($c!=$bg_color, $_bc, $backdrop_borders_color);
     background-image: linear-gradient(to bottom, $_bg);
     text-shadow: none;
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
     @include _shadows(inset 0 1px transparentize(white,1),
                       $_blank_edge);
   }
@@ -318,7 +318,7 @@
     border-color: if($c!=$bg_color, $_bc, $backdrop_borders_color);
     background-image: linear-gradient(to bottom, $_bg);
     text-shadow: none;
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
     // white with 0 alpha to avoid an ugly transition, since no color means
     // black with 0 alpha
     @include _shadows(inset 0 1px transparentize(white,1),
@@ -356,7 +356,7 @@
     background-clip: padding-box;
     box-shadow: inset 0 1px transparentize(white, 0.9);
     text-shadow: 0 1px black;
-    icon-shadow: 0 1px black;
+    -gtk-icon-shadow: 0 1px black;
     outline-color: transparentize($osd_fg_color, 0.7);
   }
   @else if $t==osd-hover {
@@ -372,7 +372,7 @@
     background-clip: padding-box;
     box-shadow: inset 0 1px transparentize(white, 0.9);
     text-shadow: 0 1px black;
-    icon-shadow: 0 1px black;
+    -gtk-icon-shadow: 0 1px black;
     outline-color: transparentize($osd_fg_color, 0.7);
   }
   @else if $t==osd-active {
@@ -387,7 +387,7 @@
     background-clip: padding-box;
     box-shadow: none;
     text-shadow: none;
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
     outline-color: transparentize($osd_fg_color, 0.7);
   }
   @else if $t==osd-insensitive {
@@ -400,7 +400,7 @@
     background-clip: padding-box;
     box-shadow: none;
     text-shadow: none;
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
   }
   @else if $t==osd-backdrop {
   //
@@ -415,7 +415,7 @@
     background-clip: padding-box;
     box-shadow: none;
     text-shadow: none;
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
   }
   @else if $t==undecorated {
   //
@@ -429,7 +429,7 @@
                       $_blank_edge);
 
     text-shadow: none;
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
   }
 }
 
