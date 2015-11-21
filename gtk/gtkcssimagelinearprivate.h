@@ -48,6 +48,8 @@ struct _GtkCssImageLinear
   GtkCssValue *angle; /* warning: We use GTK_CSS_NUMBER as an enum for the corners */
   GArray *stops;
   guint repeating :1;
+
+  cairo_surface_t *cached_surface;
 };
 
 struct _GtkCssImageLinearClass

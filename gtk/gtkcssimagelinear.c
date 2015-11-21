@@ -126,7 +126,135 @@ gtk_css_image_linear_compute_start_point (double angle_in_degrees,
   *x = c / (slope - perpendicular);
   *y = perpendicular * *x + c;
 }
-                                         
+
+static void
+gtk_css_image_linear_ensure_surface (GtkCssImageLinear *linear,
+                                     double             width,
+                                     double             height)
+{
+  if (linear->cached_surface != NULL &&
+      width != cairo_image_surface_get_width (linear->cached_surface) &&
+      height != cairo_image_surface_get_height (linear->cached_surface))
+    {
+      cairo_surface_destroy (linear->cached_surface);
+      linear->cached_surface = NULL;
+    }
+
+  if (linear->cached_surface == NULL)
+    {
+      cairo_t *cr;
+      cairo_surface_t *surface;
+      cairo_pattern_t *pattern;
+      double angle; /* actual angle of the gradiant line in degrees */
+      double x, y; /* coordinates of start point */
+      double length; /* distance in pixels for 100% */
+      double start, end; /* position of first/last point on gradient line - with gradient line being [0, 1] */
+      double offset;
+      int i, last;
+
+      if (_gtk_css_number_value_get_unit (linear->angle) == GTK_CSS_NUMBER)
+        {
+          guint side = _gtk_css_number_value_get (linear->angle, 100);
+
+          /* special casing the regular cases here so we don't get rounding errors */
+          switch (side)
+            {
+            case 1 << GTK_CSS_RIGHT:
+              angle = 90;
+              break;
+            case 1 << GTK_CSS_LEFT:
+              angle = 270;
+              break;
+            case 1 << GTK_CSS_TOP:
+              angle = 0;
+              break;
+            case 1 << GTK_CSS_BOTTOM:
+              angle = 180;
+              break;
+            default:
+              angle = atan2 (side & 1 << GTK_CSS_TOP ? -width : width,
+                             side & 1 << GTK_CSS_LEFT ? -height : height);
+              angle = 180 * angle / G_PI + 90;
+              break;
+            }
+        }
+      else
+        {
+          angle = _gtk_css_number_value_get (linear->angle, 100);
+        }
+
+      gtk_css_image_linear_compute_start_point (angle,
+                                                width, height,
+                                                &x, &y);
+
+      length = sqrt (x * x + y * y);
+      gtk_css_image_linear_get_start_end (linear, length, &start, &end);
+      pattern = cairo_pattern_create_linear (x * (start - 0.5), y * (start - 0.5),
+                                             x * (end - 0.5),   y * (end - 0.5));
+      if (linear->repeating)
+        cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
+      else
+        cairo_pattern_set_extend (pattern, CAIRO_EXTEND_PAD);
+
+      offset = start;
+      last = -1;
+      for (i = 0; i < linear->stops->len; i++)
+        {
+          GtkCssImageLinearColorStop *stop;
+          double pos, step;
+
+          stop = &g_array_index (linear->stops, GtkCssImageLinearColorStop, i);
+
+          if (stop->offset == NULL)
+            {
+              if (i == 0)
+                pos = 0.0;
+              else if (i + 1 == linear->stops->len)
+                pos = 1.0;
+              else
+                continue;
+            }
+          else
+            pos = _gtk_css_number_value_get (stop->offset, length) / length;
+
+          pos = MAX (pos, offset);
+          step = (pos - offset) / (i - last);
+          for (last = last + 1; last <= i; last++)
+            {
+              const GdkRGBA *rgba;
+
+              stop = &g_array_index (linear->stops, GtkCssImageLinearColorStop, last);
+
+              rgba = _gtk_css_rgba_value_get_rgba (stop->color);
+              offset += step;
+
+              cairo_pattern_add_color_stop_rgba (pattern,
+                                                 (offset - start) / (end - start),
+                                                 rgba->red,
+                                                 rgba->green,
+                                                 rgba->blue,
+                                                 rgba->alpha);
+            }
+
+          offset = pos;
+          last = i;
+        }
+
+      surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                            width, height);
+      cr = cairo_create (surface);
+      cairo_rectangle (cr, 0, 0, width, height);
+      cairo_translate (cr, width / 2, height / 2);
+      cairo_set_source (cr, pattern);
+      cairo_fill (cr);
+
+      cairo_destroy (cr);
+      cairo_pattern_destroy (pattern);
+
+      linear->cached_surface = surface;
+    }
+}
+
 static void
 gtk_css_image_linear_draw (GtkCssImage        *image,
                            cairo_t            *cr,
@@ -134,110 +262,28 @@ gtk_css_image_linear_draw (GtkCssImage        *image,
                            double              height)
 {
   GtkCssImageLinear *linear = GTK_CSS_IMAGE_LINEAR (image);
-  cairo_pattern_t *pattern;
-  double angle; /* actual angle of the gradiant line in degrees */
-  double x, y; /* coordinates of start point */
-  double length; /* distance in pixels for 100% */
-  double start, end; /* position of first/last point on gradient line - with gradient line being [0, 1] */
-  double offset;
-  int i, last;
 
-  if (_gtk_css_number_value_get_unit (linear->angle) == GTK_CSS_NUMBER)
-    {
-      guint side = _gtk_css_number_value_get (linear->angle, 100);
-
-      /* special casing the regular cases here so we don't get rounding errors */
-      switch (side)
-      {
-        case 1 << GTK_CSS_RIGHT:
-          angle = 90;
-          break;
-        case 1 << GTK_CSS_LEFT:
-          angle = 270;
-          break;
-        case 1 << GTK_CSS_TOP:
-          angle = 0;
-          break;
-        case 1 << GTK_CSS_BOTTOM:
-          angle = 180;
-          break;
-        default:
-          angle = atan2 (side & 1 << GTK_CSS_TOP ? -width : width,
-                         side & 1 << GTK_CSS_LEFT ? -height : height);
-          angle = 180 * angle / G_PI + 90;
-          break;
-      }
-    }
-  else
-    {
-      angle = _gtk_css_number_value_get (linear->angle, 100);
-    }
-
-  gtk_css_image_linear_compute_start_point (angle,
-                                            width, height,
-                                            &x, &y);
-
-  length = sqrt (x * x + y * y);
-  gtk_css_image_linear_get_start_end (linear, length, &start, &end);
-  pattern = cairo_pattern_create_linear (x * (start - 0.5), y * (start - 0.5),
-                                         x * (end - 0.5),   y * (end - 0.5));
-  if (linear->repeating)
-    cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
-  else
-    cairo_pattern_set_extend (pattern, CAIRO_EXTEND_PAD);
-
-  offset = start;
-  last = -1;
-  for (i = 0; i < linear->stops->len; i++)
-    {
-      GtkCssImageLinearColorStop *stop;
-      double pos, step;
-      
-      stop = &g_array_index (linear->stops, GtkCssImageLinearColorStop, i);
-
-      if (stop->offset == NULL)
-        {
-          if (i == 0)
-            pos = 0.0;
-          else if (i + 1 == linear->stops->len)
-            pos = 1.0;
-          else
-            continue;
-        }
-      else
-        pos = _gtk_css_number_value_get (stop->offset, length) / length;
-
-      pos = MAX (pos, offset);
-      step = (pos - offset) / (i - last);
-      for (last = last + 1; last <= i; last++)
-        {
-          const GdkRGBA *rgba;
-
-          stop = &g_array_index (linear->stops, GtkCssImageLinearColorStop, last);
-
-          rgba = _gtk_css_rgba_value_get_rgba (stop->color);
-          offset += step;
-
-          cairo_pattern_add_color_stop_rgba (pattern,
-                                             (offset - start) / (end - start),
-                                             rgba->red,
-                                             rgba->green,
-                                             rgba->blue,
-                                             rgba->alpha);
-        }
-
-      offset = pos;
-      last = i;
-    }
-
-  cairo_rectangle (cr, 0, 0, width, height);
-  cairo_translate (cr, width / 2, height / 2);
-  cairo_set_source (cr, pattern);
-  cairo_fill (cr);
-
-  cairo_pattern_destroy (pattern);
+  gtk_css_image_linear_ensure_surface (linear, width, height);
+  cairo_set_source_surface (cr, linear->cached_surface, 0, 0);
+  cairo_paint (cr);
 }
 
+static cairo_surface_t *
+gtk_css_image_linear_get_surface (GtkCssImage     *image,
+                                  cairo_surface_t *target,
+                                  int              surface_width,
+                                  int              surface_height)
+{
+  GtkCssImageLinear *linear = GTK_CSS_IMAGE_LINEAR (image);
+
+  if (linear->cached_surface != NULL &&
+      surface_width == cairo_image_surface_get_width (linear->cached_surface) &&
+      surface_height == cairo_image_surface_get_height (linear->cached_surface))
+    return cairo_surface_reference (linear->cached_surface);
+
+  return GTK_CSS_IMAGE_CLASS (_gtk_css_image_linear_parent_class)->get_surface
+    (image, target, surface_width, surface_height);
+}
 
 static gboolean
 gtk_css_image_linear_parse (GtkCssImage  *image,
@@ -586,6 +632,12 @@ gtk_css_image_linear_dispose (GObject *object)
       linear->angle = NULL;
     }
 
+  if (linear->cached_surface)
+    {
+      cairo_surface_destroy (linear->cached_surface);
+      linear->cached_surface = NULL;
+    }
+
   G_OBJECT_CLASS (_gtk_css_image_linear_parent_class)->dispose (object);
 }
 
@@ -595,6 +647,7 @@ _gtk_css_image_linear_class_init (GtkCssImageLinearClass *klass)
   GtkCssImageClass *image_class = GTK_CSS_IMAGE_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  image_class->get_surface = gtk_css_image_linear_get_surface;
   image_class->draw = gtk_css_image_linear_draw;
   image_class->parse = gtk_css_image_linear_parse;
   image_class->print = gtk_css_image_linear_print;
