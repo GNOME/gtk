@@ -98,10 +98,6 @@ struct _GtkDragSourceSite
 
   GtkIconHelper     *icon_helper;
   GtkGesture        *drag_gesture;
-
-  /* Stored button press information to detect drag beginning */
-  gint               state;
-  gint               x, y;
 };
   
 struct _GtkDragSourceInfo 
