@@ -105,17 +105,17 @@
 }
 
 entry {
-  gtk-key-bindings: gtk-emacs-text-entry;
+  -gtk-key-bindings: gtk-emacs-text-entry;
 }
 
 textview {
-  gtk-key-bindings: gtk-emacs-text-entry, gtk-emacs-text-view;
+  -gtk-key-bindings: gtk-emacs-text-entry, gtk-emacs-text-view;
 }
 
 treeview {
-  gtk-key-bindings: gtk-emacs-tree-view;
+  -gtk-key-bindings: gtk-emacs-tree-view;
 }
 
 GtkMenuShell {
-  gtk-key-bindings: gtk-emacs-menu;
+  -gtk-key-bindings: gtk-emacs-menu;
 }
