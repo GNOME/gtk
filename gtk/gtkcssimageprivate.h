@@ -54,6 +54,12 @@ struct _GtkCssImageClass
   /* aspect ratio (width / height) of image or 0 if it has no aspect ratio (optional) */
   double       (* get_aspect_ratio)                (GtkCssImage                *image);
 
+  /* returns a surface for specified width and height */
+  cairo_surface_t * (* get_surface)                (GtkCssImage                *image,
+                                                    cairo_surface_t            *target,
+                                                    int                         surface_width,
+                                                    int                         surface_height);
+
   /* create "computed value" in CSS terms, returns a new reference */
   GtkCssImage *(* compute)                         (GtkCssImage                *image,
                                                     guint                       property_id,

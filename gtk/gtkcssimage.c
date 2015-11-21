@@ -60,6 +60,36 @@ gtk_css_image_real_get_aspect_ratio (GtkCssImage *image)
     return 0;
 }
 
+static cairo_surface_t *
+gtk_css_image_real_get_surface (GtkCssImage     *image,
+                                cairo_surface_t *target,
+                                int              surface_width,
+                                int              surface_height)
+{
+  cairo_surface_t *result;
+  cairo_t *cr;
+
+  g_return_val_if_fail (GTK_IS_CSS_IMAGE (image), NULL);
+  g_return_val_if_fail (surface_width > 0, NULL);
+  g_return_val_if_fail (surface_height > 0, NULL);
+
+  if (target)
+    result = cairo_surface_create_similar (target,
+                                           CAIRO_CONTENT_COLOR_ALPHA,
+                                           surface_width,
+                                           surface_height);
+  else
+    result = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                         surface_width,
+                                         surface_height);
+
+  cr = cairo_create (result);
+  _gtk_css_image_draw (image, cr, surface_width, surface_height);
+  cairo_destroy (cr);
+
+  return result;
+}
+
 static GtkCssImage *
 gtk_css_image_real_compute (GtkCssImage             *image,
                             guint                    property_id,
@@ -99,6 +129,7 @@ _gtk_css_image_class_init (GtkCssImageClass *klass)
   klass->get_width = gtk_css_image_real_get_width;
   klass->get_height = gtk_css_image_real_get_height;
   klass->get_aspect_ratio = gtk_css_image_real_get_aspect_ratio;
+  klass->get_surface = gtk_css_image_real_get_surface;
   klass->compute = gtk_css_image_real_compute;
   klass->equal = gtk_css_image_real_equal;
   klass->transition = gtk_css_image_real_transition;
@@ -143,6 +174,21 @@ _gtk_css_image_get_aspect_ratio (GtkCssImage *image)
   klass = GTK_CSS_IMAGE_GET_CLASS (image);
 
   return klass->get_aspect_ratio (image);
+}
+
+cairo_surface_t *
+_gtk_css_image_get_surface (GtkCssImage     *image,
+                            cairo_surface_t *target,
+                            int              surface_width,
+                            int              surface_height)
+{
+  GtkCssImageClass *klass;
+
+  g_return_val_if_fail (GTK_IS_CSS_IMAGE (image), NULL);
+
+  klass = GTK_CSS_IMAGE_GET_CLASS (image);
+
+  return klass->get_surface (image, target, surface_width, surface_height);
 }
 
 GtkCssImage *
@@ -375,36 +421,6 @@ _gtk_css_image_get_concrete_size (GtkCssImage *image,
       else
         *concrete_width = default_width;
     }
-}
-
-cairo_surface_t *
-_gtk_css_image_get_surface (GtkCssImage     *image,
-                            cairo_surface_t *target,
-                            int              surface_width,
-                            int              surface_height)
-{
-  cairo_surface_t *result;
-  cairo_t *cr;
-
-  g_return_val_if_fail (GTK_IS_CSS_IMAGE (image), NULL);
-  g_return_val_if_fail (surface_width > 0, NULL);
-  g_return_val_if_fail (surface_height > 0, NULL);
-
-  if (target)
-    result = cairo_surface_create_similar (target,
-                                           CAIRO_CONTENT_COLOR_ALPHA,
-                                           surface_width,
-                                           surface_height);
-  else
-    result = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                         surface_width,
-                                         surface_height);
-
-  cr = cairo_create (result);
-  _gtk_css_image_draw (image, cr, surface_width, surface_height);
-  cairo_destroy (cr);
-
-  return result;
 }
 
 static GType
