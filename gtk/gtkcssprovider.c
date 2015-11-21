@@ -1048,11 +1048,11 @@
  * - The optional blur radius is parsed, but it is currently not
  * rendered by the GTK+ theming engine.
  *
- * To set a shadow on an icon, use the `icon-shadow` property instead,
+ * To set a shadow on an icon, use the `-gtk-icon-shadow` property instead,
  * with the same syntax.
  *
  * To set multiple shadows on an element, you can specify a comma-separated list
- * of shadow elements in the `text-shadow` or `icon-shadow` property. Shadows are
+ * of shadow elements in the `text-shadow` or `-gtk-icon-shadow` property. Shadows are
  * always rendered front to back (i.e. the first shadow specified is on top of the
  * others). Shadows can thus overlay each other, but they can never overlay the
  * text or icon itself, which is always rendered on top of the shadow layer.
