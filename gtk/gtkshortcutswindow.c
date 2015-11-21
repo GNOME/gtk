@@ -272,6 +272,34 @@ gtk_shortcuts_window_add_search_item (GtkWidget *child, gpointer data)
 }
 
 static void
+section_notify_cb (GObject    *section,
+                   GParamSpec *pspec,
+                   gpointer    data)
+{
+  GtkShortcutsWindow *self = data;
+  GtkShortcutsWindowPrivate *priv = gtk_shortcuts_window_get_instance_private (self);
+
+  if (strcmp (pspec->name, "section-name") == 0)
+    {
+      gchar *name;
+
+      g_object_get (section, "section-name", &name, NULL);
+      gtk_container_child_set (GTK_CONTAINER (priv->stack), GTK_WIDGET (section), "name", name, NULL);
+      g_free (name);
+    }
+  else if (strcmp (pspec->name, "title") == 0)
+    {
+      gchar *title;
+      GtkWidget *label;
+
+      label = g_object_get_data (section, "gtk-shortcuts-title");
+      g_object_get (section, "title", &title, NULL);
+      gtk_label_set_label (GTK_LABEL (label), title);
+      g_free (title);
+    }
+}
+
+static void
 gtk_shortcuts_window_add_section (GtkShortcutsWindow  *self,
                                   GtkShortcutsSection *section)
 {
@@ -289,6 +317,8 @@ gtk_shortcuts_window_add_section (GtkShortcutsWindow  *self,
                 "title", &title,
                 NULL);
 
+  g_signal_connect (section, "notify", G_CALLBACK (section_notify_cb), self);
+
   if (name == NULL)
     name = g_strdup ("shortcuts");
 
@@ -302,13 +332,14 @@ gtk_shortcuts_window_add_section (GtkShortcutsWindow  *self,
   row = g_object_new (GTK_TYPE_LIST_BOX_ROW,
                       "visible", TRUE,
                       NULL);
-  g_object_set_data_full (G_OBJECT (row), "GTK_SHORTCUTS_SECTION_NAME", g_strdup (name), g_free);
+  g_object_set_data (G_OBJECT (row), "gtk-shortcuts-section", section);
   label = g_object_new (GTK_TYPE_LABEL,
                         "margin", 6,
                         "label", title,
                         "xalign", 0.5f,
                         "visible", TRUE,
                         NULL);
+  g_object_set_data (G_OBJECT (section), "gtk-shortcuts-title", label);
   gtk_container_add (GTK_CONTAINER (row), GTK_WIDGET (label));
   gtk_container_add (GTK_CONTAINER (priv->list_box), GTK_WIDGET (row));
 
@@ -338,6 +369,8 @@ gtk_shortcuts_window_remove (GtkContainer *container,
 {
   GtkShortcutsWindow *self = (GtkShortcutsWindow *)container;
   GtkShortcutsWindowPrivate *priv = gtk_shortcuts_window_get_instance_private (self);
+
+  g_signal_handlers_disconnect_by_func (widget, section_notify_cb, self);
 
   gtk_container_remove (GTK_CONTAINER (priv->stack), widget);
 }
@@ -420,10 +453,10 @@ gtk_shortcuts_window__list_box__row_activated (GtkShortcutsWindow *self,
                                                GtkListBox         *list_box)
 {
   GtkShortcutsWindowPrivate *priv = gtk_shortcuts_window_get_instance_private (self);
-  const gchar *name;
+  GtkWidget *section;
 
-  name = g_object_get_data (G_OBJECT (row), "GTK_SHORTCUTS_SECTION_NAME");
-  gtk_stack_set_visible_child_name (priv->stack, name);
+  section = g_object_get_data (G_OBJECT (row), "gtk-shortcuts-section");
+  gtk_stack_set_visible_child (priv->stack, section);
   gtk_widget_hide (GTK_WIDGET (priv->popover));
 }
 
