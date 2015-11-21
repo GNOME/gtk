@@ -2485,7 +2485,16 @@ parse_declaration (GtkCssScanner *scanner,
       return;
     }
 
-  if (strcmp (name, "engine") == 0)
+  if (property != NULL && strcmp (name, property->name) != 0)
+    {
+      gtk_css_provider_error (scanner->provider,
+                              scanner,
+                              GTK_CSS_PROVIDER_ERROR,
+                              GTK_CSS_PROVIDER_ERROR_DEPRECATED,
+                              "The '%s' property has been renamed to '%s'",
+                              name, property->name);
+    }
+  else if (strcmp (name, "engine") == 0)
     {
       gtk_css_provider_error (scanner->provider,
                               scanner,
