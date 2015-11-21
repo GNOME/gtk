@@ -62,7 +62,7 @@
 
 .background:backdrop {
   text-shadow: none;
-  icon-shadow: none;
+  -gtk-icon-shadow: none;
   color: #1a1a1a;
   background-color: #fff; }
 
@@ -390,7 +390,7 @@ button {
     border-color: #8d8d8d;
     background-image: none;
     text-shadow: none;
-    icon-shadow: none; }
+    -gtk-icon-shadow: none; }
     button:backdrop:active, button:backdrop:checked, button.flat:backdrop:active, button.sidebar-button:backdrop:active, button.flat:backdrop:checked, button.sidebar-button:backdrop:checked {
       border-width: 2px;
       border-style: solid;
@@ -420,7 +420,7 @@ button {
     border-color: gray;
     background-image: none;
     text-shadow: none;
-    icon-shadow: none; }
+    -gtk-icon-shadow: none; }
     button:insensitive:active, button:insensitive.flat:active, button.sidebar-button:insensitive:active {
       border-width: 2px;
       border-style: solid;
@@ -489,7 +489,7 @@ button {
       border-color: #4a90d9;
       background-image: none;
       text-shadow: none;
-      icon-shadow: none; }
+      -gtk-icon-shadow: none; }
       button.suggested-action:backdrop:insensitive {
         border-width: 2px;
         border-style: solid;
@@ -505,7 +505,7 @@ button {
       border-color: gray;
       background-image: none;
       text-shadow: none;
-      icon-shadow: none; }
+      -gtk-icon-shadow: none; }
   button.destructive-action {
     border-width: 2px;
     border-style: solid;
@@ -535,7 +535,7 @@ button {
       border-color: #ef2929;
       background-image: none;
       text-shadow: none;
-      icon-shadow: none; }
+      -gtk-icon-shadow: none; }
       button.destructive-action:backdrop:insensitive {
         border-width: 2px;
         border-style: solid;
@@ -551,7 +551,7 @@ button {
       border-color: gray;
       background-image: none;
       text-shadow: none;
-      icon-shadow: none; }
+      -gtk-icon-shadow: none; }
   button.image-button {
     padding: 8px; }
   button.text-button {
@@ -560,7 +560,7 @@ button {
     border-radius: 2px;
     border-width: 1px; }
   .primary-toolbar button {
-    icon-shadow: none; }
+    -gtk-icon-shadow: none; }
 
 .inline-toolbar toolbutton > button {
   border-width: 2px;
@@ -591,7 +591,7 @@ button {
     border-color: gray;
     background-image: none;
     text-shadow: none;
-    icon-shadow: none; }
+    -gtk-icon-shadow: none; }
   .inline-toolbar toolbutton > button:insensitive:active {
     border-width: 2px;
     border-style: solid;
@@ -607,7 +607,7 @@ button {
     border-color: #8d8d8d;
     background-image: none;
     text-shadow: none;
-    icon-shadow: none; }
+    -gtk-icon-shadow: none; }
   .inline-toolbar toolbutton > button:backdrop:active {
     border-width: 2px;
     border-style: solid;
@@ -703,7 +703,7 @@ row.activatable:insensitive:checked, calendar.button, calendar.button:hover, cal
   background-color: transparent;
   background-image: none;
   text-shadow: none;
-  icon-shadow: none; }
+  -gtk-icon-shadow: none; }
 
 /* menu buttons */
 modelbutton.flat,
@@ -820,7 +820,7 @@ spinbutton {
       border-color: gray;
       background-image: none;
       text-shadow: none;
-      icon-shadow: none; }
+      -gtk-icon-shadow: none; }
     spinbutton.vertical button:first-child:backdrop {
       border-width: 2px;
       border-style: solid;
@@ -829,7 +829,7 @@ spinbutton {
       border-color: #8d8d8d;
       background-image: none;
       text-shadow: none;
-      icon-shadow: none; }
+      -gtk-icon-shadow: none; }
   spinbutton.vertical button:last-child {
     border-width: 2px;
     border-style: solid;
@@ -859,7 +859,7 @@ spinbutton {
       border-color: gray;
       background-image: none;
       text-shadow: none;
-      icon-shadow: none; }
+      -gtk-icon-shadow: none; }
     spinbutton.vertical button:last-child:backdrop {
       border-width: 2px;
       border-style: solid;
@@ -868,7 +868,7 @@ spinbutton {
       border-color: #8d8d8d;
       background-image: none;
       text-shadow: none;
-      icon-shadow: none; }
+      -gtk-icon-shadow: none; }
   spinbutton.vertical button:backdrop:insensitive {
     border-width: 2px;
     border-style: solid;
@@ -894,15 +894,15 @@ combobox {
   -GtkComboBox-shadow-type: none;
   box-shadow: 0 1px #fff;
   text-shadow: 0 1px white;
-  icon-shadow: 0 1px white; }
+  -gtk-icon-shadow: 0 1px white; }
   combobox:insensitive {
     color: gray;
     text-shadow: none;
-    icon-shadow: none; }
+    -gtk-icon-shadow: none; }
   combobox:backdrop {
     color: #000;
     text-shadow: none;
-    icon-shadow: none; }
+    -gtk-icon-shadow: none; }
   combobox:backdrop:insensitive {
     color: gray; }
   combobox .menuitem {
@@ -1034,7 +1034,7 @@ headerbar {
         border-color: gray;
         background-image: none;
         text-shadow: none;
-        icon-shadow: none; }
+        -gtk-icon-shadow: none; }
       .titlebar.selection-mode button:backdrop,
       headerbar.selection-mode button:backdrop {
         border-width: 2px;
@@ -1044,7 +1044,7 @@ headerbar {
         border-color: #000;
         background-image: none;
         text-shadow: none;
-        icon-shadow: none;
+        -gtk-icon-shadow: none;
         border-color: black; }
       .titlebar.selection-mode button:backdrop:insensitive,
       headerbar.selection-mode button:backdrop:insensitive {
@@ -1087,7 +1087,7 @@ headerbar {
           border-color: gray;
           background-image: none;
           text-shadow: none;
-          icon-shadow: none; }
+          -gtk-icon-shadow: none; }
         .titlebar.selection-mode button.suggested-action:backdrop,
         headerbar.selection-mode button.suggested-action:backdrop {
           border-width: 2px;
@@ -1097,7 +1097,7 @@ headerbar {
           border-color: #8d8d8d;
           background-image: none;
           text-shadow: none;
-          icon-shadow: none; }
+          -gtk-icon-shadow: none; }
         .titlebar.selection-mode button.suggested-action:backdrop:insensitive,
         headerbar.selection-mode button.suggested-action:backdrop:insensitive {
           border-width: 2px;
@@ -1559,7 +1559,7 @@ notebook {
         color: #000; }
     notebook tab button {
       border: 2px solid transparent;
-      icon-shadow: none;
+      -gtk-icon-shadow: none;
       transition: none;
       color: rgba(0, 0, 0, 0.3); }
       notebook tab button:hover {
@@ -1708,7 +1708,7 @@ switch {
       border-color: gray;
       background-image: none;
       text-shadow: none;
-      icon-shadow: none; }
+      -gtk-icon-shadow: none; }
     switch slider:backdrop {
       border-width: 2px;
       border-style: solid;
@@ -1717,7 +1717,7 @@ switch {
       border-color: #8d8d8d;
       background-image: none;
       text-shadow: none;
-      icon-shadow: none; }
+      -gtk-icon-shadow: none; }
       switch slider:backdrop:active {
         border-color: #8d8d8d; }
       switch slider:backdrop:insensitive {
@@ -2340,7 +2340,7 @@ messagedialog.csd {
       border-color: gray;
       background-image: none;
       text-shadow: none;
-      icon-shadow: none; }
+      -gtk-icon-shadow: none; }
     messagedialog.csd .dialog-action-area button:backdrop {
       border-width: 2px;
       border-style: solid;
@@ -2349,7 +2349,7 @@ messagedialog.csd {
       border-color: #8d8d8d;
       background-image: none;
       text-shadow: none;
-      icon-shadow: none; }
+      -gtk-icon-shadow: none; }
     messagedialog.csd .dialog-action-area button:backdrop:insensitive {
       border-width: 2px;
       border-style: solid;
@@ -2386,7 +2386,7 @@ messagedialog.csd {
         border-color: #4a90d9;
         background-image: none;
         text-shadow: none;
-        icon-shadow: none; }
+        -gtk-icon-shadow: none; }
         messagedialog.csd .dialog-action-area button.suggested-action:backdrop:insensitive {
           border-width: 2px;
           border-style: solid;
@@ -2402,7 +2402,7 @@ messagedialog.csd {
         border-color: gray;
         background-image: none;
         text-shadow: none;
-        icon-shadow: none; }
+        -gtk-icon-shadow: none; }
     messagedialog.csd .dialog-action-area button.destructive-action {
       border-width: 2px;
       border-style: solid;
@@ -2432,7 +2432,7 @@ messagedialog.csd {
         border-color: #ef2929;
         background-image: none;
         text-shadow: none;
-        icon-shadow: none; }
+        -gtk-icon-shadow: none; }
         messagedialog.csd .dialog-action-area button.destructive-action:backdrop:insensitive {
           border-width: 2px;
           border-style: solid;
@@ -2448,7 +2448,7 @@ messagedialog.csd {
         border-color: gray;
         background-image: none;
         text-shadow: none;
-        icon-shadow: none; }
+        -gtk-icon-shadow: none; }
   messagedialog.csd .dialog-action-area button, messagedialog.csd .dialog-action-area button:hover, messagedialog.csd .dialog-action-area button:active, messagedialog.csd .dialog-action-area button:insensitive, messagedialog.csd .dialog-action-area button:backdrop, messagedialog.csd .dialog-action-area button:backdrop:insensitive, messagedialog.csd .dialog-action-area button.suggested-action, messagedialog.csd .dialog-action-area button.suggested-action:hover, messagedialog.csd .dialog-action-area button.suggested-action:active, messagedialog.csd .dialog-action-area button.suggested-action:backdrop, messagedialog.csd .dialog-action-area button.suggested-action:backdrop:insensitive, messagedialog.csd .dialog-action-area button.suggested-action:insensitive, messagedialog.csd .dialog-action-area button.destructive-action, messagedialog.csd .dialog-action-area button.destructive-action:hover, messagedialog.csd .dialog-action-area button.destructive-action:active, messagedialog.csd .dialog-action-area button.destructive-action:backdrop, messagedialog.csd .dialog-action-area button.destructive-action:backdrop:insensitive, messagedialog.csd .dialog-action-area button.destructive-action:insensitive {
     border-right-style: none;
     border-bottom-style: none; }
@@ -2599,7 +2599,7 @@ infobar {
       border-color: gray;
       background-image: none;
       text-shadow: none;
-      icon-shadow: none; }
+      -gtk-icon-shadow: none; }
     .info button:backdrop,
     .question button:backdrop,
     .warning button:backdrop,
@@ -2611,7 +2611,7 @@ infobar {
       border-color: #000;
       background-image: none;
       text-shadow: none;
-      icon-shadow: none; }
+      -gtk-icon-shadow: none; }
     .info button:backdrop:insensitive,
     .question button:backdrop:insensitive,
     .warning button:backdrop:insensitive,
@@ -2724,7 +2724,7 @@ colorswatch {
       border-color: #8d8d8d;
       background-image: none;
       text-shadow: none;
-      icon-shadow: none;
+      -gtk-icon-shadow: none;
       border-width: 1px;
       color: gray; }
     colorswatch#add-color-button overlay {
@@ -2786,7 +2786,7 @@ button.titlebutton {
     border-color: #8d8d8d;
     background-image: none;
     text-shadow: none;
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
     border-color: transparent;
     transition-property: border, box-shadow, color; }
 
@@ -2839,7 +2839,7 @@ cursor-handle {
   outline-color: rgba(255, 255, 255, 0.3);
   box-shadow: none;
   text-shadow: 0 1px black;
-  icon-shadow: 0 1px black; }
+  -gtk-icon-shadow: 0 1px black; }
   .touch-selection:backdrop {
     text-shadow: none; }
   .touch-selection button {
@@ -2873,80 +2873,80 @@ cursor-handle {
       border-width: 2px;
       border-style: solid; }
   .touch-selection .check {
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
     color: #fff; }
   .touch-selection .check:hover {
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
     color: #fff; }
   .touch-selection .check:active {
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
     color: #fff; }
   .touch-selection .check:insensitive {
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
     color: #fff; }
   .touch-selection .check:inconsistent {
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
     color: #fff; }
   .touch-selection .check:inconsistent:hover {
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
     color: #fff; }
   .touch-selection .check:inconsistent:selected {
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
     color: #fff; }
   .touch-selection .check:inconsistent:insensitive {
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
     color: #fff; }
   .touch-selection .check:checked {
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
     color: #fff; }
   .touch-selection .check:checked:insensitive {
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
     color: #fff; }
   .touch-selection .check:checked:hover {
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
     color: #fff; }
   .touch-selection .check:checked:active {
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
     color: #fff; }
   .touch-selection .check:backdrop:checked {
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
     color: #fff; }
   .touch-selection .radio {
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
     color: #fff; }
   .touch-selection .radio:hover {
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
     color: #fff; }
   .touch-selection .radio:active {
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
     color: #fff; }
   .touch-selection .radio:insensitive {
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
     color: #fff; }
   .touch-selection .radio:inconsistent {
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
     color: #fff; }
   .touch-selection .radio:inconsistent:hover {
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
     color: #fff; }
   .touch-selection .radio:inconsistent:selected {
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
     color: #fff; }
   .touch-selection .radio:inconsistent:insensitive {
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
     color: #fff; }
   .touch-selection .radio:checked {
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
     color: #fff; }
   .touch-selection .radio:checked:insensitive {
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
     color: #fff; }
   .touch-selection .radio:checked:hover {
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
     color: #fff; }
   .touch-selection .radio:checked:active {
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
     color: #fff; }
   .touch-selection .radio:backdrop:checked {
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
     color: #fff; }

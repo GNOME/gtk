@@ -56,7 +56,7 @@ $ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
 .background:backdrop {
     text-shadow: none;
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
 
     color: lighten($fg_color,10%);
     background-color: $backdrop_bg_color;
@@ -439,7 +439,7 @@ button {
     @extend %linked;
   }
 
-  .primary-toolbar & { icon-shadow: none; } // tango icons don't need added shadows
+  .primary-toolbar & { -gtk-icon-shadow: none; } // tango icons don't need added shadows
 //  .separator {
 //    -GtkWidget-wide-separators: true;
 //   }
@@ -570,7 +570,7 @@ toolbar.inline-toolbar toolbutton { // .inline-toolbar.toolbar here for
   background-color: transparent;
   background-image: none;
   text-shadow: none;
-  icon-shadow: none;
+  -gtk-icon-shadow: none;
 }
 
 /* menu buttons */
@@ -753,12 +753,12 @@ combobox {
   &:insensitive {
     color: $insensitive_fg_color;
     text-shadow: none;
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
   }
   &:backdrop {
     color: $backdrop_fg_color;
     text-shadow: none;
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
   }
   &:backdrop:insensitive {
     color: $insensitive_fg_color;
@@ -1417,7 +1417,7 @@ notebook {
     button { //tab close button
       border: 2px solid transparent;
       @extend %undecorated_button;
-      icon-shadow: none;
+      -gtk-icon-shadow: none;
       transition: none;
       color: transparentize($fg_color,0.7);
       &:hover {
@@ -2555,7 +2555,7 @@ cursor-handle {
   outline-color: transparentize($osd_fg_color, 0.7);
   box-shadow: none;
   text-shadow: 0 1px black;
-  icon-shadow: 0 1px black;
+  -gtk-icon-shadow: 0 1px black;
   &:backdrop { text-shadow: none; }
   button {
     @include button(osd);
@@ -2581,7 +2581,7 @@ cursor-handle {
                   (':checked:active', '-checked-active'),
                   (':backdrop:checked', '-checked-backdrop') {
     .#{$w}#{$s} {
-      icon-shadow: none;
+      -gtk-icon-shadow: none;
       color: $osd_fg_color; 
       }
     }

@@ -96,11 +96,11 @@
 
   @if lightness($tc) < 50% {
     text-shadow: 0 1px $_bright;
-    icon-shadow: 0 1px $_bright;
+    -gtk-icon-shadow: 0 1px $_bright;
   }
   @else {
     text-shadow: 0 -1px $_dark;
-    icon-shadow: 0 -1px $_dark;
+    -gtk-icon-shadow: 0 -1px $_dark;
   }
 }
 
@@ -166,7 +166,7 @@
     border-color: $insensitive_borders_color;
     background-image: none;
     text-shadow: none;
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
   }
   @else if $t==insensitive-active {
   //
@@ -187,7 +187,7 @@
     border-color: if($c!=$bg_color, $c, $backdrop_borders_color);
     background-image: none;
     text-shadow: none;
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
   }
 
   @else if $t==backdrop-active {
