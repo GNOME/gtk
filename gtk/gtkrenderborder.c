@@ -247,7 +247,7 @@ gtk_border_image_compute_slice_size (GtkBorderImageSliceSize sizes[3],
   sizes[1].offset = sizes[0].size;
 }
 
-void
+static void
 gtk_border_image_render (GtkBorderImage   *image,
                          const double      border_width[4],
                          cairo_t          *cr,
