@@ -60,6 +60,13 @@ struct _FullscreenInfo
   LONG  style;
 };
 
+/* Use this for hWndInsertAfter (2nd argument to SetWindowPos()) if
+ * SWP_NOZORDER flag is used. Otherwise it's unobvious why a particular
+ * argument is used. Using NULL is misleading, because
+ * NULL is equivalent to HWND_TOP.
+ */
+#define SWP_NOZORDER_SPECIFIED HWND_TOP
+
 static void     update_style_bits         (GdkWindow         *window);
 static gboolean _gdk_window_get_functions (GdkWindow         *window,
                                            GdkWMFunction     *functions);
@@ -694,7 +701,8 @@ _gdk_win32_display_create_window_impl (GdkDisplay    *display,
       /* Now we know the initial position, move to actually specified position */
       if (real_x != x || real_y != y)
 	{
-	  API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), NULL,
+	  API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window),
+				   SWP_NOZORDER_SPECIFIED,
 				   real_x, real_y, 0, 0,
 				   SWP_NOACTIVATE | SWP_NOSIZE | SWP_NOZORDER));
 	}
@@ -1027,7 +1035,8 @@ show_window_internal (GdkWindow *window,
       if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP || !focus_on_map)
 	flags |= SWP_NOACTIVATE;
 
-      SetWindowPos (GDK_WINDOW_HWND (window), HWND_TOP, 0, 0, 0, 0, flags);
+      SetWindowPos (GDK_WINDOW_HWND (window),
+		    SWP_NOZORDER_SPECIFIED, 0, 0, 0, 0, flags);
 
       return;
     }
@@ -1097,7 +1106,8 @@ show_window_internal (GdkWindow *window,
 	  y = center_on_rect.top + ((center_on_rect.bottom - center_on_rect.top) - (window_rect.bottom - window_rect.top)) / 2;
 	}
 
-      API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), NULL,
+      API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window),
+			       SWP_NOZORDER_SPECIFIED,
 			       x, y, 0, 0,
 			       SWP_NOACTIVATE | SWP_NOSIZE | SWP_NOZORDER));
     }
@@ -1146,7 +1156,8 @@ show_window_internal (GdkWindow *window,
 	    }
 
 	  if (x != window_rect.left || y != window_rect.top)
-	    API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), NULL,
+	    API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window),
+				     SWP_NOZORDER_SPECIFIED,
 				     window_rect.left, window_rect.top, 0, 0,
 				     SWP_NOACTIVATE | SWP_NOSIZE | SWP_NOZORDER));
 	}
@@ -1220,7 +1231,7 @@ gdk_win32_window_hide (GdkWindow *window)
 
   if (GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE) & WS_EX_TRANSPARENT)
     {
-      SetWindowPos (GDK_WINDOW_HWND (window), HWND_BOTTOM,
+      SetWindowPos (GDK_WINDOW_HWND (window), SWP_NOZORDER_SPECIFIED,
 		    0, 0, 0, 0,
 		    SWP_HIDEWINDOW | SWP_NOREDRAW | SWP_NOZORDER | SWP_NOMOVE | SWP_NOSIZE);
     }
@@ -1279,7 +1290,8 @@ gdk_win32_window_move (GdkWindow *window,
                                GDK_WINDOW_HWND (window),
                                x - _gdk_offset_x, y - _gdk_offset_y));
 
-      API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), NULL,
+      API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window),
+			       SWP_NOZORDER_SPECIFIED,
                                x - _gdk_offset_x, y - _gdk_offset_y, 0, 0,
                                SWP_NOACTIVATE | SWP_NOSIZE | SWP_NOZORDER));
     }
@@ -1321,7 +1333,8 @@ gdk_win32_window_resize (GdkWindow *window,
                                outer_rect.right - outer_rect.left,
                                outer_rect.bottom - outer_rect.top));
 
-      API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), NULL,
+      API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window),
+			       SWP_NOZORDER_SPECIFIED,
                                0, 0,
                                outer_rect.right - outer_rect.left,
                                outer_rect.bottom - outer_rect.top,
@@ -1373,7 +1386,8 @@ gdk_win32_window_move_resize_internal (GdkWindow *window,
                                outer_rect.right - outer_rect.left,
                                outer_rect.bottom - outer_rect.top));
 
-      API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), NULL,
+      API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window),
+			       SWP_NOZORDER_SPECIFIED,
                                x - _gdk_offset_x, y - _gdk_offset_y,
                                outer_rect.right - outer_rect.left,
                                outer_rect.bottom - outer_rect.top,
@@ -2498,7 +2512,7 @@ update_style_bits (GdkWindow *window)
   else
     {
       flags |= SWP_NOZORDER;
-      insert_after = NULL;
+      insert_after = SWP_NOZORDER_SPECIFIED;
     }
 
   SetWindowPos (GDK_WINDOW_HWND (window), insert_after,
@@ -3087,7 +3101,7 @@ gdk_win32_window_set_skip_taskbar_hint (GdkWindow *window,
       SetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE,
 		     GetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE) & ~(WS_MINIMIZEBOX|WS_MAXIMIZEBOX|WS_SYSMENU));
 
-      SetWindowPos (GDK_WINDOW_HWND (window), NULL,
+      SetWindowPos (GDK_WINDOW_HWND (window), SWP_NOZORDER_SPECIFIED,
 		    0, 0, 0, 0,
 		    SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_NOMOVE |
 		    SWP_NOREPOSITION | SWP_NOSIZE | SWP_NOZORDER);
