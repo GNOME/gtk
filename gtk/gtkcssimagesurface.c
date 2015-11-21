@@ -39,6 +39,22 @@ gtk_css_image_surface_get_height (GtkCssImage *image)
   return cairo_image_surface_get_height (surface->surface);
 }
 
+static cairo_surface_t *
+gtk_css_image_surface_get_surface (GtkCssImage     *image,
+                                   cairo_surface_t *target,
+                                   int              surface_width,
+                                   int              surface_height)
+{
+  GtkCssImageSurface *surface = GTK_CSS_IMAGE_SURFACE (image);
+
+  if (surface_width == cairo_image_surface_get_width (surface->surface) &&
+      surface_height == cairo_image_surface_get_height (surface->surface))
+    return cairo_surface_reference (surface->surface);
+
+  return GTK_CSS_IMAGE_CLASS (_gtk_css_image_surface_parent_class)->get_surface
+    (image, target, surface_width, surface_height);
+}
+
 static void
 gtk_css_image_surface_draw (GtkCssImage *image,
                             cairo_t     *cr,
@@ -112,6 +128,7 @@ _gtk_css_image_surface_class_init (GtkCssImageSurfaceClass *klass)
 
   image_class->get_width = gtk_css_image_surface_get_width;
   image_class->get_height = gtk_css_image_surface_get_height;
+  image_class->get_surface = gtk_css_image_surface_get_surface;
   image_class->draw = gtk_css_image_surface_draw;
   image_class->print = gtk_css_image_surface_print;
 

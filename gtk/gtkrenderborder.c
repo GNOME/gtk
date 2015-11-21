@@ -267,8 +267,6 @@ gtk_border_image_render (GtkBorderImage   *image,
                                     width, height,
                                     &source_width, &source_height);
 
-  /* XXX: Optimize for (source_width == width && source_height == height) */
-
   surface = _gtk_css_image_get_surface (image->source,
                                         cairo_get_target (cr),
                                         source_width, source_height);

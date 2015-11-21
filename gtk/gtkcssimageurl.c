@@ -108,6 +108,18 @@ gtk_css_image_url_get_aspect_ratio (GtkCssImage *image)
   return _gtk_css_image_get_aspect_ratio (gtk_css_image_url_load_image (url));
 }
 
+static cairo_surface_t *
+gtk_css_image_url_get_surface (GtkCssImage *image,
+                               cairo_surface_t *target,
+                               int              surface_width,
+                               int              surface_height)
+{
+  GtkCssImageUrl *url = GTK_CSS_IMAGE_URL (image);
+
+  return _gtk_css_image_get_surface (gtk_css_image_url_load_image (url),
+                                     target, surface_width, surface_height);
+}
+
 static void
 gtk_css_image_url_draw (GtkCssImage        *image,
                         cairo_t            *cr,
@@ -173,6 +185,7 @@ _gtk_css_image_url_class_init (GtkCssImageUrlClass *klass)
   image_class->get_width = gtk_css_image_url_get_width;
   image_class->get_height = gtk_css_image_url_get_height;
   image_class->get_aspect_ratio = gtk_css_image_url_get_aspect_ratio;
+  image_class->get_surface = gtk_css_image_url_get_surface;
   image_class->compute = gtk_css_image_url_compute;
   image_class->draw = gtk_css_image_url_draw;
   image_class->parse = gtk_css_image_url_parse;
