@@ -33,6 +33,7 @@
 #include "gtkprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkgesturepan.h"
+#include "gtkwidgetprivate.h"
 #include "gtkintl.h"
 
 /**
@@ -64,6 +65,8 @@ struct _GtkShortcutsSection
   GtkStack         *stack;
   GtkStackSwitcher *switcher;
   GtkWidget        *show_all;
+  GtkWidget        *footer;
+  GList            *groups;
 
   gboolean          has_filtered_group;
   gboolean          need_reflow;
@@ -120,17 +123,6 @@ static void gtk_shortcuts_section_pan_gesture_pan (GtkGesturePan       *gesture,
                                                    GtkShortcutsSection *self);
 
 static void
-gtk_shortcuts_section_map (GtkWidget *widget)
-{
-  GtkShortcutsSection *self = GTK_SHORTCUTS_SECTION (widget);
-
-  if (self->need_reflow)
-    gtk_shortcuts_section_reflow_groups (self);
-
-  GTK_WIDGET_CLASS (gtk_shortcuts_section_parent_class)->map (widget);
-}
-
-static void
 gtk_shortcuts_section_add (GtkContainer *container,
                            GtkWidget    *child)
 {
@@ -142,6 +134,78 @@ gtk_shortcuts_section_add (GtkContainer *container,
     g_warning ("Can't add children of type %s to %s",
                G_OBJECT_TYPE_NAME (child),
                G_OBJECT_TYPE_NAME (container));
+}
+
+static void
+gtk_shortcuts_section_remove (GtkContainer *container,
+                              GtkWidget    *child)
+{
+  GtkShortcutsSection *self = (GtkShortcutsSection *)container;
+
+  if (GTK_IS_SHORTCUTS_GROUP (child) &&
+      gtk_widget_is_ancestor (child, GTK_WIDGET (container)))
+    {
+      self->groups = g_list_remove (self->groups, child);
+      gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (child)), child);
+    }
+  else
+    GTK_CONTAINER_CLASS (gtk_shortcuts_section_parent_class)->remove (container, child);
+}
+
+static void
+gtk_shortcuts_section_forall (GtkContainer *container,
+                              gboolean      include_internal,
+                              GtkCallback   callback,
+                              gpointer      callback_data)
+{
+  GtkShortcutsSection *self = (GtkShortcutsSection *)container;
+  GList *l;
+
+  if (include_internal)
+    {
+      callback (GTK_WIDGET (self->stack), callback_data);
+      callback (GTK_WIDGET (self->footer), callback_data);
+    }
+
+  for (l = self->groups; l; l = l->next)
+    {
+      GtkWidget *group = l->data;
+      callback (group, callback_data);
+    }
+}
+
+static void
+map_child (GtkWidget *child)
+{
+  if (_gtk_widget_get_visible (child) &&
+      _gtk_widget_get_child_visible (child) &&
+      !_gtk_widget_get_mapped (child))
+    gtk_widget_map (child);
+}
+
+static void
+gtk_shortcuts_section_map (GtkWidget *widget)
+{
+  GtkShortcutsSection *self = GTK_SHORTCUTS_SECTION (widget);
+
+  if (self->need_reflow)
+    gtk_shortcuts_section_reflow_groups (self);
+
+  gtk_widget_set_mapped (widget, TRUE);
+
+  map_child (GTK_WIDGET (self->stack));
+  map_child (GTK_WIDGET (self->footer));
+}
+
+static void
+gtk_shortcuts_section_unmap (GtkWidget *widget)
+{
+  GtkShortcutsSection *self = GTK_SHORTCUTS_SECTION (widget);
+
+  gtk_widget_set_mapped (widget, FALSE);
+
+  gtk_widget_unmap (GTK_WIDGET (self->footer));
+  gtk_widget_unmap (GTK_WIDGET (self->stack));
 }
 
 static void
@@ -239,8 +303,11 @@ gtk_shortcuts_section_class_init (GtkShortcutsSectionClass *klass)
   object_class->set_property = gtk_shortcuts_section_set_property;
 
   widget_class->map = gtk_shortcuts_section_map;
+  widget_class->unmap = gtk_shortcuts_section_unmap;
 
   container_class->add = gtk_shortcuts_section_add;
+  container_class->remove = gtk_shortcuts_section_remove;
+  container_class->forall = gtk_shortcuts_section_forall;
   container_class->child_type = gtk_shortcuts_section_child_type;
 
   klass->change_current_page = gtk_shortcuts_section_change_current_page;
@@ -331,8 +398,6 @@ gtk_shortcuts_section_class_init (GtkShortcutsSectionClass *klass)
 static void
 gtk_shortcuts_section_init (GtkShortcutsSection *self)
 {
-  GtkWidget *box;
-
   self->max_height = 15;
 
   gtk_orientable_set_orientation (GTK_ORIENTABLE (self), GTK_ORIENTATION_VERTICAL);
@@ -362,11 +427,11 @@ gtk_shortcuts_section_init (GtkShortcutsSection *self)
   g_signal_connect_swapped (self->show_all, "clicked",
                             G_CALLBACK (gtk_shortcuts_section_show_all), self);
 
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 20);
-  GTK_CONTAINER_CLASS (gtk_shortcuts_section_parent_class)->add (GTK_CONTAINER (self), box);
+  self->footer = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 20);
+  GTK_CONTAINER_CLASS (gtk_shortcuts_section_parent_class)->add (GTK_CONTAINER (self), self->footer);
 
-  gtk_box_set_center_widget (GTK_BOX (box), GTK_WIDGET (self->switcher));
-  gtk_box_pack_end (GTK_BOX (box), self->show_all, TRUE, TRUE, 0);
+  gtk_box_set_center_widget (GTK_BOX (self->footer), GTK_WIDGET (self->switcher));
+  gtk_box_pack_end (GTK_BOX (self->footer), self->show_all, TRUE, TRUE, 0);
   gtk_widget_set_halign (self->show_all, GTK_ALIGN_END);
 
   self->pan_gesture = gtk_gesture_pan_new (GTK_WIDGET (self->stack), GTK_ORIENTATION_HORIZONTAL);
@@ -413,16 +478,17 @@ gtk_shortcuts_section_add_group (GtkShortcutsSection *self,
 
   children = gtk_container_get_children (GTK_CONTAINER (self->stack));
   if (children)
-    page = children->data;
+    page = g_list_last (children)->data;
   else
     {
       page = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 22);
       gtk_stack_add_named (self->stack, page, "1");
     }
   g_list_free (children);
+
   children = gtk_container_get_children (GTK_CONTAINER (page));
   if (children)
-    column = children->data;
+    column = g_list_last (children)->data;
   else
     {
       column = gtk_box_new (GTK_ORIENTATION_VERTICAL, 22);
@@ -431,6 +497,7 @@ gtk_shortcuts_section_add_group (GtkShortcutsSection *self,
   g_list_free (children);
 
   gtk_container_add (GTK_CONTAINER (column), GTK_WIDGET (group));
+  self->groups = g_list_append (self->groups, group);
 
   gtk_shortcuts_section_maybe_reflow (self);
 }

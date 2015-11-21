@@ -1896,6 +1896,8 @@ gtk_container_remove (GtkContainer *container,
                     GTK_IS_ASSISTANT (container) ||
                     GTK_IS_ACTION_BAR (container) ||
                     GTK_IS_POPOVER_MENU (container) ||
+                    GTK_IS_SHORTCUTS_GROUP (container) ||
+                    GTK_IS_SHORTCUTS_SECTION (container) ||
                     GTK_IS_SHORTCUTS_WINDOW (container));
 
   g_object_ref (container);

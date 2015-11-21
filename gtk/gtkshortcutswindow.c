@@ -386,8 +386,12 @@ gtk_shortcuts_window_forall (GtkContainer *container,
 
   if (include_internal)
     {
-      callback (GTK_WIDGET (priv->header_bar), callback_data);
-      callback (GTK_WIDGET (priv->main_box), callback_data);
+      if (priv->header_bar)
+        callback (GTK_WIDGET (priv->header_bar), callback_data);
+      if (priv->main_box)
+        callback (GTK_WIDGET (priv->main_box), callback_data);
+      if (priv->popover)
+        callback (GTK_WIDGET (priv->popover), callback_data);
     }
 
   if (priv->stack)
@@ -437,12 +441,13 @@ gtk_shortcuts_window_set_section_name (GtkShortcutsWindow *self,
                                        const gchar        *section_name)
 {
   GtkShortcutsWindowPrivate *priv = gtk_shortcuts_window_get_instance_private (self);
-  GtkWidget *section;
+  GtkWidget *section = NULL;
 
   g_free (priv->initial_section);
   priv->initial_section = g_strdup (section_name);
 
-  section = gtk_stack_get_child_by_name (priv->stack, section_name);
+  if (!section_name)
+    section = gtk_stack_get_child_by_name (priv->stack, section_name);
   if (section)
     gtk_stack_set_visible_child (priv->stack, section);
 }
@@ -595,6 +600,21 @@ gtk_shortcuts_window_finalize (GObject *object)
 }
 
 static void
+gtk_shortcuts_window_dispose (GObject *object)
+{
+  GtkShortcutsWindow *self = (GtkShortcutsWindow *)object;
+  GtkShortcutsWindowPrivate *priv = gtk_shortcuts_window_get_instance_private (self);
+
+  g_signal_handlers_disconnect_by_func (priv->stack, G_CALLBACK (update_title_stack), self);
+
+  priv->header_bar = NULL;
+  priv->popover = NULL;
+  priv->main_box = NULL;
+
+  G_OBJECT_CLASS (gtk_shortcuts_window_parent_class)->dispose (object);
+}
+
+static void
 gtk_shortcuts_window_get_property (GObject    *object,
                                   guint       prop_id,
                                   GValue     *value,
@@ -682,6 +702,7 @@ gtk_shortcuts_window_class_init (GtkShortcutsWindowClass *klass)
   object_class->finalize = gtk_shortcuts_window_finalize;
   object_class->get_property = gtk_shortcuts_window_get_property;
   object_class->set_property = gtk_shortcuts_window_set_property;
+  object_class->dispose = gtk_shortcuts_window_dispose;
 
   widget_class->unmap = gtk_shortcuts_window_unmap;
   container_class->add = gtk_shortcuts_window_add;
@@ -917,9 +938,6 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
                            self,
                            G_CONNECT_SWAPPED);
 
-  g_signal_connect_object (priv->stack, "notify::visible-child",
-                           G_CALLBACK (update_title_stack), self, G_CONNECT_SWAPPED);
-
   scroller = g_object_new (GTK_TYPE_SCROLLED_WINDOW,
                            "visible", TRUE,
                            NULL);
@@ -983,4 +1001,8 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
   gtk_grid_attach (GTK_GRID (empty), label, 0, 2, 1, 1);
 
   gtk_stack_add_named (priv->stack, empty, "no-search-results");
+
+  g_signal_connect_object (priv->stack, "notify::visible-child",
+                           G_CALLBACK (update_title_stack), self, G_CONNECT_SWAPPED);
+
 }
