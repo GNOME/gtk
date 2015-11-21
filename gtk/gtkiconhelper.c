@@ -25,7 +25,9 @@
 
 #include "gtkcssenumvalueprivate.h"
 #include "gtkiconhelperprivate.h"
+#include "gtkrender.h"
 #include "gtkstylecontextprivate.h"
+#include "deprecated/gtkstock.h"
 
 struct _GtkIconHelperPrivate {
   GtkImageType storage_type;

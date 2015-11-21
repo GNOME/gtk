@@ -20,9 +20,8 @@
 #ifndef __GTK_ICON_HELPER_H__
 #define __GTK_ICON_HELPER_H__
 
-#include <glib-object.h>
-
-#include <gtk/gtk.h>
+#include "gtk/gtkimage.h"
+#include "gtk/gtktypes.h"
 
 G_BEGIN_DECLS
 

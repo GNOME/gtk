@@ -45,6 +45,8 @@
 
 #include "gtkdnd.h"
 #include "gtkdndprivate.h"
+#include "gtkgesturedrag.h"
+#include "gtkgesturesingle.h"
 #include "gtkiconhelperprivate.h"
 #include "gtkicontheme.h"
 #include "gtkmain.h"
@@ -52,7 +54,9 @@
 #include "gtktooltipprivate.h"
 #include "gtkwindow.h"
 #include "gtkintl.h"
+#include "gtkrender.h"
 #include "gtkselectionprivate.h"
+#include "gtkwindowgroup.h"
 #include "gtkwindowprivate.h"
 
 
