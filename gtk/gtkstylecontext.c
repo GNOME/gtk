@@ -1076,16 +1076,13 @@ gtk_style_context_set_path (GtkStyleContext *context,
   root = gtk_style_context_get_root (context);
   g_return_if_fail (GTK_IS_CSS_PATH_NODE (root));
 
-  if (path)
+  if (path && gtk_widget_path_length (path) > 0)
     {
       GtkWidgetPath *copy = gtk_widget_path_copy (path);
       gtk_css_path_node_set_widget_path (GTK_CSS_PATH_NODE (root), copy);
-      if (gtk_widget_path_length (copy))
-        {
-          gtk_css_node_set_widget_type (root,
-                                        gtk_widget_path_iter_get_object_type (copy, -1));
-          gtk_css_node_set_name (root, gtk_widget_path_iter_get_object_name (copy, -1));
-        }
+      gtk_css_node_set_widget_type (root,
+                                    gtk_widget_path_iter_get_object_type (copy, -1));
+      gtk_css_node_set_name (root, gtk_widget_path_iter_get_object_name (copy, -1));
       gtk_widget_path_unref (copy);
     }
   else
