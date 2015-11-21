@@ -1685,29 +1685,33 @@ ensure_stacking_on_unminimize (MSG *msg)
   HWND rover;
   HWND lowest_transient = NULL;
 
-  rover = msg->hwnd;
-  while ((rover = GetNextWindow (rover, GW_HWNDNEXT)))
+  for (rover = GetNextWindow (msg->hwnd, GW_HWNDNEXT);
+       rover;
+       rover = GetNextWindow (rover, GW_HWNDNEXT))
     {
       GdkWindow *rover_gdkw = gdk_win32_handle_table_lookup (rover);
+      GdkWindowImplWin32 *rover_impl;
 
       /* Checking window group not implemented yet */
-      if (rover_gdkw)
-	{
-	  GdkWindowImplWin32 *rover_impl =
-	    GDK_WINDOW_IMPL_WIN32 (rover_gdkw->impl);
+      if (rover_gdkw == NULL)
+        continue;
 
-	  if (GDK_WINDOW_IS_MAPPED (rover_gdkw) &&
-	      (rover_impl->type_hint == GDK_WINDOW_TYPE_HINT_UTILITY ||
-	       rover_impl->type_hint == GDK_WINDOW_TYPE_HINT_DIALOG ||
-	       rover_impl->transient_owner != NULL))
-	    {
-	      lowest_transient = rover;
-	    }
-	}
+      rover_impl = GDK_WINDOW_IMPL_WIN32 (rover_gdkw->impl);
+
+      if (GDK_WINDOW_IS_MAPPED (rover_gdkw) &&
+          (rover_impl->type_hint == GDK_WINDOW_TYPE_HINT_UTILITY ||
+           rover_impl->type_hint == GDK_WINDOW_TYPE_HINT_DIALOG ||
+           rover_impl->transient_owner != NULL))
+        {
+          lowest_transient = rover;
+        }
     }
+
   if (lowest_transient != NULL)
     {
-      GDK_NOTE (EVENTS, g_print (" restacking: %p", lowest_transient));
+      GDK_NOTE (EVENTS,
+		g_print (" restacking %p above %p",
+			 msg->hwnd, lowest_transient));
       SetWindowPos (msg->hwnd, lowest_transient, 0, 0, 0, 0,
 		    SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
     }
@@ -1719,52 +1723,55 @@ ensure_stacking_on_window_pos_changing (MSG       *msg,
 {
   GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
   WINDOWPOS *windowpos = (WINDOWPOS *) msg->lParam;
+  HWND rover;
+  gboolean restacking;
 
-  if (GetActiveWindow () == msg->hwnd &&
-      impl->type_hint != GDK_WINDOW_TYPE_HINT_UTILITY &&
-      impl->type_hint != GDK_WINDOW_TYPE_HINT_DIALOG &&
-      impl->transient_owner == NULL)
+  if (GetActiveWindow () != msg->hwnd ||
+      impl->type_hint == GDK_WINDOW_TYPE_HINT_UTILITY ||
+      impl->type_hint == GDK_WINDOW_TYPE_HINT_DIALOG ||
+      impl->transient_owner != NULL)
+    return FALSE;
+
+  /* Make sure the window stays behind any transient-type windows
+   * of the same window group.
+   *
+   * If the window is not active and being activated, we let
+   * Windows bring it to the top and rely on the WM_ACTIVATEAPP
+   * handling to bring any utility windows on top of it.
+   */
+
+  for (rover = windowpos->hwndInsertAfter, restacking = FALSE;
+       rover;
+       rover = GetNextWindow (rover, GW_HWNDNEXT))
     {
-      /* Make sure the window stays behind any transient-type windows
-       * of the same window group.
-       *
-       * If the window is not active and being activated, we let
-       * Windows bring it to the top and rely on the WM_ACTIVATEAPP
-       * handling to bring any utility windows on top of it.
-       */
-      HWND rover;
-      gboolean restacking;
+      GdkWindow *rover_gdkw = gdk_win32_handle_table_lookup (rover);
+      GdkWindowImplWin32 *rover_impl;
 
-      rover = windowpos->hwndInsertAfter;
-      restacking = FALSE;
-      while (rover)
-	{
-	  GdkWindow *rover_gdkw = gdk_win32_handle_table_lookup (rover);
+      /* Checking window group not implemented yet */
 
-	  /* Checking window group not implemented yet */
-	  if (rover_gdkw)
-	    {
-	      GdkWindowImplWin32 *rover_impl =
-		GDK_WINDOW_IMPL_WIN32 (rover_gdkw->impl);
+      if (rover_gdkw == NULL)
+	continue;
 
-	      if (GDK_WINDOW_IS_MAPPED (rover_gdkw) &&
-		  (rover_impl->type_hint == GDK_WINDOW_TYPE_HINT_UTILITY ||
-		   rover_impl->type_hint == GDK_WINDOW_TYPE_HINT_DIALOG ||
-		   rover_impl->transient_owner != NULL))
-		{
-		  restacking = TRUE;
-		  windowpos->hwndInsertAfter = rover;
-		}
-	    }
-	  rover = GetNextWindow (rover, GW_HWNDNEXT);
-	}
+      rover_impl = GDK_WINDOW_IMPL_WIN32 (rover_gdkw->impl);
 
-      if (restacking)
-	{
-	  GDK_NOTE (EVENTS, g_print (" restacking: %p", windowpos->hwndInsertAfter));
-	  return TRUE;
-	}
+      if (GDK_WINDOW_IS_MAPPED (rover_gdkw) &&
+          (rover_impl->type_hint == GDK_WINDOW_TYPE_HINT_UTILITY ||
+           rover_impl->type_hint == GDK_WINDOW_TYPE_HINT_DIALOG ||
+           rover_impl->transient_owner != NULL))
+        {
+          restacking = TRUE;
+          windowpos->hwndInsertAfter = rover;
+        }
     }
+
+  if (restacking)
+    {
+      GDK_NOTE (EVENTS,
+		g_print (" letting Windows restack %p above %p",
+			 msg->hwnd, windowpos->hwndInsertAfter));
+      return TRUE;
+    }
+
   return FALSE;
 }
 
@@ -1773,6 +1780,7 @@ ensure_stacking_on_activate_app (MSG       *msg,
 				 GdkWindow *window)
 {
   GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+  HWND rover;
 
   if (impl->type_hint == GDK_WINDOW_TYPE_HINT_UTILITY ||
       impl->type_hint == GDK_WINDOW_TYPE_HINT_DIALOG ||
@@ -1783,38 +1791,43 @@ ensure_stacking_on_activate_app (MSG       *msg,
       return;
     }
 
-  if (IsWindowVisible (msg->hwnd) &&
-      msg->hwnd == GetActiveWindow ())
+  if (!IsWindowVisible (msg->hwnd) ||
+      msg->hwnd != GetActiveWindow ())
+    return;
+
+
+  /* This window is not a transient-type window and it is the
+   * activated window. Make sure this window is as visible as
+   * possible, just below the lowest transient-type window of this
+   * app.
+   */
+
+  for (rover = GetNextWindow (msg->hwnd, GW_HWNDPREV);
+       rover;
+       rover = GetNextWindow (rover, GW_HWNDPREV))
     {
-      /* This window is not a transient-type window and it is the
-       * activated window. Make sure this window is as visible as
-       * possible, just below the lowest transient-type window of this
-       * app.
-       */
-      HWND rover;
+      GdkWindow *rover_gdkw = gdk_win32_handle_table_lookup (rover);
+      GdkWindowImplWin32 *rover_impl;
+      gboolean rover_ontop;
 
-      rover = msg->hwnd;
-      while ((rover = GetNextWindow (rover, GW_HWNDPREV)))
-	{
-	  GdkWindow *rover_gdkw = gdk_win32_handle_table_lookup (rover);
+      /* Checking window group not implemented yet */
+      if (rover_gdkw == NULL)
+        continue;
 
-	  /* Checking window group not implemented yet */
-	  if (rover_gdkw)
-	    {
-	      GdkWindowImplWin32 *rover_impl =
-		GDK_WINDOW_IMPL_WIN32 (rover_gdkw->impl);
+      rover_ontop = should_window_be_always_on_top (rover_gdkw);
+      rover_impl = GDK_WINDOW_IMPL_WIN32 (rover_gdkw->impl);
 
-	      if (GDK_WINDOW_IS_MAPPED (rover_gdkw) &&
-		  (rover_impl->type_hint == GDK_WINDOW_TYPE_HINT_UTILITY ||
-		   rover_impl->type_hint == GDK_WINDOW_TYPE_HINT_DIALOG ||
-		   rover_impl->transient_owner != NULL))
-		{
-		  GDK_NOTE (EVENTS, g_print (" restacking: %p", rover));
-		  SetWindowPos (msg->hwnd, rover, 0, 0, 0, 0,
-				SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
-		  break;
-		}
-	    }
+      if (GDK_WINDOW_IS_MAPPED (rover_gdkw) &&
+          (rover_impl->type_hint == GDK_WINDOW_TYPE_HINT_UTILITY ||
+           rover_impl->type_hint == GDK_WINDOW_TYPE_HINT_DIALOG ||
+           rover_impl->transient_owner != NULL))
+        {
+	  GDK_NOTE (EVENTS,
+		    g_print (" restacking %p above %p",
+			     msg->hwnd, rover));
+	  SetWindowPos (msg->hwnd, rover, 0, 0, 0, 0,
+			SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
+          break;
 	}
     }
 }
