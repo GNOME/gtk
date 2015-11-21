@@ -1445,7 +1445,7 @@ gtk_bindings_activate_list (GObject  *object,
   state = gtk_widget_get_state_flags (GTK_WIDGET (object));
 
   gtk_style_context_get (context, state,
-                         "gtk-key-bindings", &array,
+                         "-gtk-key-bindings", &array,
                          NULL);
   if (array)
     {

@@ -1743,7 +1743,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 G_GNUC_END_IGNORE_DEPRECATIONS
 
   /* Private property holding the binding sets */
-  gtk_css_style_property_register        ("gtk-key-bindings",
+  gtk_css_style_property_register        ("-gtk-key-bindings",
                                           GTK_CSS_PROPERTY_GTK_KEY_BINDINGS,
                                           G_TYPE_PTR_ARRAY,
                                           0,
@@ -1752,5 +1752,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                                           bindings_value_query,
                                           bindings_value_assign,
                                           _gtk_css_array_value_new (_gtk_css_string_value_new (NULL)));
+  _gtk_style_property_add_alias ("-gtk-key-bindings", "gtk-key-bindings");
 }
 
