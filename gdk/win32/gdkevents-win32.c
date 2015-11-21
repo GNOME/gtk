@@ -1679,11 +1679,41 @@ generate_button_event (GdkEventType      type,
   _gdk_win32_append_event (event);
 }
 
+/**
+ * Used by the stacking functions to see if a window
+ * should be always on top.
+ * Restacking is only done if both windows are either ontop
+ * or not ontop.
+ */
+static gboolean
+should_window_be_always_on_top (GdkWindow *window)
+{
+  DWORD exstyle;
+
+  if ((GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP) ||
+      (window->state & GDK_WINDOW_STATE_ABOVE))
+    return TRUE;
+
+  exstyle = GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE);
+
+  if (exstyle & WS_EX_TOPMOST)
+    return TRUE;
+
+  return FALSE;
+}
+
 static void
 ensure_stacking_on_unminimize (MSG *msg)
 {
   HWND rover;
   HWND lowest_transient = NULL;
+  GdkWindow *msg_window;
+  gboolean window_ontop = FALSE;
+
+  msg_window = gdk_win32_handle_table_lookup (msg->hwnd);
+
+  if (msg_window)
+    window_ontop = should_window_be_always_on_top (msg_window);
 
   for (rover = GetNextWindow (msg->hwnd, GW_HWNDNEXT);
        rover;
@@ -1691,17 +1721,20 @@ ensure_stacking_on_unminimize (MSG *msg)
     {
       GdkWindow *rover_gdkw = gdk_win32_handle_table_lookup (rover);
       GdkWindowImplWin32 *rover_impl;
+      gboolean rover_ontop;
 
       /* Checking window group not implemented yet */
       if (rover_gdkw == NULL)
         continue;
 
+      rover_ontop = should_window_be_always_on_top (rover_gdkw);
       rover_impl = GDK_WINDOW_IMPL_WIN32 (rover_gdkw->impl);
 
       if (GDK_WINDOW_IS_MAPPED (rover_gdkw) &&
           (rover_impl->type_hint == GDK_WINDOW_TYPE_HINT_UTILITY ||
            rover_impl->type_hint == GDK_WINDOW_TYPE_HINT_DIALOG ||
-           rover_impl->transient_owner != NULL))
+           rover_impl->transient_owner != NULL) &&
+           ((window_ontop && rover_ontop) || (!window_ontop && !rover_ontop)))
         {
           lowest_transient = rover;
         }
@@ -1725,6 +1758,7 @@ ensure_stacking_on_window_pos_changing (MSG       *msg,
   WINDOWPOS *windowpos = (WINDOWPOS *) msg->lParam;
   HWND rover;
   gboolean restacking;
+  gboolean window_ontop;
 
   if (GetActiveWindow () != msg->hwnd ||
       impl->type_hint == GDK_WINDOW_TYPE_HINT_UTILITY ||
@@ -1740,24 +1774,29 @@ ensure_stacking_on_window_pos_changing (MSG       *msg,
    * handling to bring any utility windows on top of it.
    */
 
+  window_ontop = should_window_be_always_on_top (window);
+
   for (rover = windowpos->hwndInsertAfter, restacking = FALSE;
        rover;
        rover = GetNextWindow (rover, GW_HWNDNEXT))
     {
       GdkWindow *rover_gdkw = gdk_win32_handle_table_lookup (rover);
       GdkWindowImplWin32 *rover_impl;
+      gboolean rover_ontop;
 
       /* Checking window group not implemented yet */
 
       if (rover_gdkw == NULL)
 	continue;
 
+      rover_ontop = should_window_be_always_on_top (rover_gdkw);
       rover_impl = GDK_WINDOW_IMPL_WIN32 (rover_gdkw->impl);
 
       if (GDK_WINDOW_IS_MAPPED (rover_gdkw) &&
           (rover_impl->type_hint == GDK_WINDOW_TYPE_HINT_UTILITY ||
            rover_impl->type_hint == GDK_WINDOW_TYPE_HINT_DIALOG ||
-           rover_impl->transient_owner != NULL))
+           rover_impl->transient_owner != NULL) &&
+          ((window_ontop && rover_ontop) || (!window_ontop && !rover_ontop)))
         {
           restacking = TRUE;
           windowpos->hwndInsertAfter = rover;
@@ -1781,6 +1820,7 @@ ensure_stacking_on_activate_app (MSG       *msg,
 {
   GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
   HWND rover;
+  gboolean window_ontop;
 
   if (impl->type_hint == GDK_WINDOW_TYPE_HINT_UTILITY ||
       impl->type_hint == GDK_WINDOW_TYPE_HINT_DIALOG ||
@@ -1802,6 +1842,8 @@ ensure_stacking_on_activate_app (MSG       *msg,
    * app.
    */
 
+  window_ontop = should_window_be_always_on_top (window);
+
   for (rover = GetNextWindow (msg->hwnd, GW_HWNDPREV);
        rover;
        rover = GetNextWindow (rover, GW_HWNDPREV))
@@ -1820,7 +1862,8 @@ ensure_stacking_on_activate_app (MSG       *msg,
       if (GDK_WINDOW_IS_MAPPED (rover_gdkw) &&
           (rover_impl->type_hint == GDK_WINDOW_TYPE_HINT_UTILITY ||
            rover_impl->type_hint == GDK_WINDOW_TYPE_HINT_DIALOG ||
-           rover_impl->transient_owner != NULL))
+           rover_impl->transient_owner != NULL) &&
+          ((window_ontop && rover_ontop) || (!window_ontop && !rover_ontop)))
         {
 	  GDK_NOTE (EVENTS,
 		    g_print (" restacking %p above %p",
