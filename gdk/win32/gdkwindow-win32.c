@@ -2402,6 +2402,10 @@ update_style_bits (GdkWindow *window)
   LONG old_style, new_style, old_exstyle, new_exstyle;
   gboolean all;
   RECT rect, before, after;
+  gboolean was_topmost;
+  gboolean will_be_topmost;
+  HWND insert_after;
+  UINT flags;
 
   if (window->state & GDK_WINDOW_STATE_FULLSCREEN)
     return;
@@ -2413,15 +2417,27 @@ update_style_bits (GdkWindow *window)
   after = before;
   AdjustWindowRectEx (&before, old_style, FALSE, old_exstyle);
 
+  was_topmost = (old_exstyle & WS_EX_TOPMOST) ? TRUE : FALSE;
+  will_be_topmost = was_topmost;
+
+  old_exstyle &= ~WS_EX_TOPMOST;
+
   new_style = old_style;
   new_exstyle = old_exstyle;
 
   if (window->window_type == GDK_WINDOW_TEMP)
-    new_exstyle |= WS_EX_TOOLWINDOW | WS_EX_TOPMOST;
+    {
+      new_exstyle |= WS_EX_TOOLWINDOW;
+      will_be_topmost = TRUE;
+    }
   else if (impl->type_hint == GDK_WINDOW_TYPE_HINT_UTILITY)
-    new_exstyle |= WS_EX_TOOLWINDOW ;
+    {
+      new_exstyle |= WS_EX_TOOLWINDOW;
+    }
   else
-    new_exstyle &= ~WS_EX_TOOLWINDOW;
+    {
+      new_exstyle &= ~WS_EX_TOOLWINDOW;
+    }
 
   if (get_effective_window_decorations (window, &decorations))
     {
@@ -2469,12 +2485,26 @@ update_style_bits (GdkWindow *window)
   rect.right += after.right - before.right;
   rect.bottom += after.bottom - before.bottom;
 
-  SetWindowPos (GDK_WINDOW_HWND (window), NULL,
-		rect.left, rect.top,
-		rect.right - rect.left, rect.bottom - rect.top,
-		SWP_FRAMECHANGED | SWP_NOACTIVATE |
-		SWP_NOREPOSITION | SWP_NOZORDER);
+  flags = SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_NOREPOSITION;
 
+  if (will_be_topmost && !was_topmost)
+    {
+      insert_after = HWND_TOPMOST;
+    }
+  else if (was_topmost && !will_be_topmost)
+    {
+      insert_after = HWND_NOTOPMOST;
+    }
+  else
+    {
+      flags |= SWP_NOZORDER;
+      insert_after = NULL;
+    }
+
+  SetWindowPos (GDK_WINDOW_HWND (window), insert_after,
+		0, 0,
+		rect.right - rect.left, rect.bottom - rect.top,
+		flags);
 }
 
 static void
