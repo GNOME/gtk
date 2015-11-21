@@ -1229,6 +1229,9 @@ gdk_win32_window_hide (GdkWindow *window)
   if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TOPLEVEL)
     ShowOwnedPopups (GDK_WINDOW_HWND (window), FALSE);
 
+  /* Use SetWindowPos to hide transparent windows so automatic redraws
+   * in other windows can be suppressed.
+   */
   if (GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE) & WS_EX_TRANSPARENT)
     {
       SetWindowPos (GDK_WINDOW_HWND (window), SWP_NOZORDER_SPECIFIED,
