@@ -460,6 +460,57 @@
             </child>
           </object>
         </child>
+
+        <child>
+          <object class="GtkShortcutsGroup">
+            <property name="visible">1</property>
+            <property name="title" translatable="yes">All gestures</property>
+
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">1</property>
+                <property name="shortcut-type">gesture-pinch</property>
+                <property name="title" translatable="yes">A stock pinch gesture</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">1</property>
+                <property name="shortcut-type">gesture-stretch</property>
+                <property name="title" translatable="yes">A stock stretch gesture</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">1</property>
+                <property name="shortcut-type">gesture-rotate-clockwise</property>
+                <property name="title" translatable="yes">A stock rotation gesture</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">1</property>
+                <property name="shortcut-type">gesture-rotate-counterclockwise</property>
+                <property name="title" translatable="yes">A stock rotation gesture</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">1</property>
+                <property name="shortcut-type">gesture-two-finger-swipe-left</property>
+                <property name="title" translatable="yes">A stock swipe gesture</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">1</property>
+                <property name="shortcut-type">gesture-two-finger-swipe-right</property>
+                <property name="title" translatable="yes">A stock swipe gesture</property>
+              </object>
+            </child>
+
+          </object>
+        </child>
       </object>
     </child>
   </object>
