@@ -48,6 +48,9 @@ struct _GtkShortcutsGroup
   GtkLabel *title;
   gchar    *view;
   guint     height;
+
+  GtkSizeGroup *accel_size_group;
+  GtkSizeGroup *title_size_group;
 };
 
 struct _GtkShortcutsGroupClass
@@ -70,19 +73,36 @@ enum {
 static GParamSpec *properties[LAST_PROP];
 
 static void
+gtk_shortcuts_group_apply_accel_size_group (GtkShortcutsGroup *group,
+                                            GtkWidget         *child)
+{
+  if (GTK_IS_SHORTCUTS_SHORTCUT (child))
+    g_object_set (child, "accel-size-group", group->accel_size_group, NULL);
+  else if (GTK_IS_SHORTCUTS_GESTURE (child))
+    g_object_set (child, "icon-size-group", group->accel_size_group, NULL);
+}
+
+static void
+gtk_shortcuts_group_apply_title_size_group (GtkShortcutsGroup *group,
+                                            GtkWidget         *child)
+{
+  if (GTK_IS_SHORTCUTS_SHORTCUT (child))
+    g_object_set (child, "title-size-group", group->title_size_group, NULL);
+  else if (GTK_IS_SHORTCUTS_GESTURE (child))
+    g_object_set (child, "title-size-group", group->title_size_group, NULL);
+}
+
+static void
 gtk_shortcuts_group_set_accel_size_group (GtkShortcutsGroup *group,
                                           GtkSizeGroup      *size_group)
 {
   GList *children, *l;
 
+  g_set_object (&group->accel_size_group, size_group);
+
   children = gtk_container_get_children (GTK_CONTAINER (group));
   for (l = children; l; l = l->next)
-    {
-      if (GTK_IS_SHORTCUTS_SHORTCUT (l->data))
-        g_object_set (l->data, "accel-size-group", size_group, NULL);
-      else if (GTK_IS_SHORTCUTS_GESTURE (l->data))
-        g_object_set (l->data, "icon-size-group", size_group, NULL);
-    }
+    gtk_shortcuts_group_apply_accel_size_group (group, GTK_WIDGET (l->data));
   g_list_free (children);
 }
 
@@ -92,14 +112,11 @@ gtk_shortcuts_group_set_title_size_group (GtkShortcutsGroup *group,
 {
   GList *children, *l;
 
+  g_set_object (&group->title_size_group, size_group);
+
   children = gtk_container_get_children (GTK_CONTAINER (group));
   for (l = children; l; l = l->next)
-    {
-      if (GTK_IS_SHORTCUTS_SHORTCUT (l->data))
-        g_object_set (l->data, "title-size-group", size_group, NULL);
-      else if (GTK_IS_SHORTCUTS_GESTURE (l->data))
-        g_object_set (l->data, "title-size-group", size_group, NULL);
-    }
+    gtk_shortcuts_group_apply_title_size_group (group, GTK_WIDGET (l->data));
   g_list_free (children);
 }
 
@@ -134,7 +151,11 @@ gtk_shortcuts_group_add (GtkContainer *container,
 {
   if (GTK_IS_SHORTCUTS_SHORTCUT (widget) ||
       GTK_IS_SHORTCUTS_GESTURE (widget))
-    GTK_CONTAINER_CLASS (gtk_shortcuts_group_parent_class)->add (container, widget);
+    {
+      GTK_CONTAINER_CLASS (gtk_shortcuts_group_parent_class)->add (container, widget);
+      gtk_shortcuts_group_apply_accel_size_group (GTK_SHORTCUTS_GROUP (container), widget);
+      gtk_shortcuts_group_apply_title_size_group (GTK_SHORTCUTS_GROUP (container), widget);
+    }
   else
     g_warning ("Can't add children of type %s to %s",
                G_OBJECT_TYPE_NAME (widget),
@@ -246,6 +267,8 @@ gtk_shortcuts_group_finalize (GObject *object)
   GtkShortcutsGroup *self = GTK_SHORTCUTS_GROUP (object);
 
   g_free (self->view);
+  g_set_object (&self->accel_size_group, NULL);
+  g_set_object (&self->title_size_group, NULL);
 
   G_OBJECT_CLASS (gtk_shortcuts_group_parent_class)->finalize (object);
 }
