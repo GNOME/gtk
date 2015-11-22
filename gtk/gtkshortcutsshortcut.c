@@ -29,9 +29,8 @@
  * @Title: GtkShortcutsShortcut
  * @Short_description: Represents a keyboard shortcut in a GtkShortcutsWindow
  *
- * A GtkShortcutsShortcut represents a single keyboard shortcut with
- * a short text. This widget is only meant to be used with
- * #GtkShortcutsWindow.
+ * A GtkShortcutsShortcut represents a single keyboard shortcut or gesture
+ * with a short text. This widget is only meant to be used with #GtkShortcutsWindow.
  */
 
 struct _GtkShortcutsShortcut
@@ -48,6 +47,7 @@ struct _GtkShortcutsShortcut
   GtkSizeGroup *title_size_group;
 
   GtkTextDirection direction;
+  GtkShortcutType  shortcut_type;
 };
 
 struct _GtkShortcutsShortcutClass
@@ -66,6 +66,7 @@ enum {
   PROP_ACCEL_SIZE_GROUP,
   PROP_TITLE_SIZE_GROUP,
   PROP_DIRECTION,
+  PROP_SHORTCUT_TYPE,
   LAST_PROP
 };
 
@@ -108,19 +109,7 @@ gtk_shortcuts_shortcut_set_subtitle (GtkShortcutsShortcut *self,
 {
   gtk_label_set_label (self->subtitle, subtitle);
   gtk_widget_set_visible (GTK_WIDGET (self->subtitle), subtitle != NULL);
-}
-
-static void
-update_icon_visible (GtkShortcutsShortcut *self)
-{
-  const gchar *accelerator;
-  gboolean show_accel;
-
-  accelerator = gtk_shortcut_label_get_accelerator (self->accelerator);
-  show_accel = accelerator && accelerator[0] != '\0';
-
-  gtk_widget_set_visible (GTK_WIDGET (self->accelerator), show_accel);
-  gtk_widget_set_visible (GTK_WIDGET (self->image), !show_accel);
+  g_object_notify (G_OBJECT (self), "subtitle");
 }
 
 static void
@@ -128,7 +117,6 @@ gtk_shortcuts_shortcut_set_accelerator (GtkShortcutsShortcut *self,
                                         const gchar          *accelerator)
 {
   gtk_shortcut_label_set_accelerator (self->accelerator, accelerator);
-  update_icon_visible (self);
 }
 
 static void
@@ -136,7 +124,6 @@ gtk_shortcuts_shortcut_set_icon (GtkShortcutsShortcut *self,
                                  GIcon                *gicon)
 {
   gtk_image_set_from_gicon (self->image, gicon, GTK_ICON_SIZE_DIALOG);
-  update_icon_visible (self);
 }
 
 static void
@@ -173,6 +160,57 @@ gtk_shortcuts_shortcut_direction_changed (GtkWidget        *widget,
 }
 
 static void
+gtk_shortcuts_shortcut_set_type (GtkShortcutsShortcut *self,
+                                 GtkShortcutType       type)
+{
+  if (self->shortcut_type == type)
+    return;
+
+  self->shortcut_type = type;
+
+  switch (type)
+    {
+    case GTK_SHORTCUT_GESTURE_PINCH:
+      gtk_image_set_from_resource (self->image, "/org/gtk/libgtk/gesture/pinch.png");
+      gtk_shortcuts_shortcut_set_subtitle (self, _("Two finger pinch"));
+      break;
+
+    case GTK_SHORTCUT_GESTURE_STRETCH:
+      gtk_image_set_from_resource (self->image, "/org/gtk/libgtk/gesture/stretch.png");
+      gtk_shortcuts_shortcut_set_subtitle (self, _("Two finger stretch"));
+      break;
+
+    case GTK_SHORTCUT_GESTURE_ROTATE_CLOCKWISE:
+      gtk_image_set_from_resource (self->image, "/org/gtk/libgtk/gesture/rotate-clockwise.png");
+      gtk_shortcuts_shortcut_set_subtitle (self, _("Rotate clockwise"));
+      break;
+
+    case GTK_SHORTCUT_GESTURE_ROTATE_COUNTERCLOCKWISE:
+      gtk_image_set_from_resource (self->image, "/org/gtk/libgtk/gesture/rotate-anticlockwise.png");
+      gtk_shortcuts_shortcut_set_subtitle (self, _("Rotate counterclockwise"));
+      break;
+
+    case GTK_SHORTCUT_GESTURE_TWO_FINGER_SWIPE_LEFT:
+      gtk_image_set_from_resource (self->image, "/org/gtk/libgtk/gesture/two-finger-swipe-left.png");
+      gtk_shortcuts_shortcut_set_subtitle (self, _("Two finger swipe left"));
+      break;
+
+    case GTK_SHORTCUT_GESTURE_TWO_FINGER_SWIPE_RIGHT:
+      gtk_image_set_from_resource (self->image, "/org/gtk/libgtk/gesture/two-finger-swipe-right.png");
+      gtk_shortcuts_shortcut_set_subtitle (self, _("Two finger swipe right"));
+      break;
+
+    default: ;
+    }
+
+  gtk_widget_set_visible (GTK_WIDGET (self->accelerator), type == GTK_SHORTCUT_ACCELERATOR);
+  gtk_widget_set_visible (GTK_WIDGET (self->image), type != GTK_SHORTCUT_ACCELERATOR);
+
+
+  g_object_notify (G_OBJECT (self), "shortcut-type");
+}
+
+static void
 gtk_shortcuts_shortcut_get_property (GObject    *object,
                                      guint       prop_id,
                                      GValue     *value,
@@ -205,6 +243,10 @@ gtk_shortcuts_shortcut_get_property (GObject    *object,
 
     case PROP_DIRECTION:
       g_value_set_enum (value, self->direction);
+      break;
+
+    case PROP_SHORTCUT_TYPE:
+      g_value_set_enum (value, self->shortcut_type);
       break;
 
     default:
@@ -248,6 +290,10 @@ gtk_shortcuts_shortcut_set_property (GObject      *object,
 
     case PROP_DIRECTION:
       gtk_shortcuts_shortcut_set_direction (self, g_value_get_enum (value));
+      break;
+
+    case PROP_SHORTCUT_TYPE:
+      gtk_shortcuts_shortcut_set_type (self, g_value_get_enum (value));
       break;
 
     default:
@@ -398,9 +444,17 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
   properties[PROP_DIRECTION] =
     g_param_spec_enum ("direction",
                        P_("Direction"),
-                       P_("Direction"),
+                       P_("Text direction for which this shortcut is active"),
                        GTK_TYPE_TEXT_DIRECTION,
                        GTK_TEXT_DIR_NONE,
+                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY));
+
+  properties[PROP_SHORTCUT_TYPE] =
+    g_param_spec_enum ("shortcut-type",
+                       P_("Shortcut Type"),
+                       P_("The type of shortcut that is represented"),
+                       GTK_TYPE_SHORTCUT_TYPE,
+                       GTK_SHORTCUT_ACCELERATOR,
                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
@@ -413,6 +467,7 @@ gtk_shortcuts_shortcut_init (GtkShortcutsShortcut *self)
   gtk_box_set_spacing (GTK_BOX (self), 12);
 
   self->direction = GTK_TEXT_DIR_NONE;
+  self->shortcut_type = GTK_SHORTCUT_ACCELERATOR;
 
   self->image = g_object_new (GTK_TYPE_IMAGE,
                               "visible", FALSE,

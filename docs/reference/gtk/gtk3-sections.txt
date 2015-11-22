@@ -8517,6 +8517,7 @@ gtk_shortcuts_group_get_type
 <SECTION>
 <FILE>gtkshortcutsshortcut</FILE>
 GtkShortcutsShortcut
+GtkShortcutType
 <SUBSECTION Standard>
 GTK_TYPE_SHORTCUTS_SHORTCUT
 GTK_SHORTCUTS_SHORTCUT

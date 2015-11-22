@@ -34,6 +34,42 @@ G_BEGIN_DECLS
 typedef struct _GtkShortcutsShortcut      GtkShortcutsShortcut;
 typedef struct _GtkShortcutsShortcutClass GtkShortcutsShortcutClass;
 
+/**
+ * GtkShortcutType:
+ * @GTK_SHORTCUT_ACCELERATOR:
+ *   The shortcut is a keyboard accelerator. The #GtkShortcutsShortcut:accelerator
+ *   property will be used.
+ * @GTK_SHORTCUT_GESTURE_PINCH:
+ *   The shortcut is a pinch gesture. GTK+ provides and icon and subtitle.
+ * @GTK_SHORTCUT_GESTURE_STRETCH:
+ *   The shortcut is a stretch gesture. GTK+ provides and icon and subtitle.
+ * @GTK_SHORTCUT_GESTURE_ROTATE_CLOCKWISE:
+ *   The shortcut is a clockwise rotation gesture. GTK+ provides and icon and subtitle.
+ * @GTK_SHORTCUT_GESTURE_ROTATE_COUNTERCLOCKWISE:
+ *   The shortcut is a counterclockwise rotation gesture. GTK+ provides and icon and subtitle.
+ * @GTK_SHORTCUT_GESTURE_TWO_FINGER_SWIPE_LEFT:
+ *   The shortcut is a two-finger swipe gesture. GTK+ provides and icon and subtitle.
+ * @GTK_SHORTCUT_GESTURE_TWO_FINGER_SWIPE_RIGHT:
+ *   The shortcut is a two-finger swipe gesture. GTK+ provides and icon and subtitle.
+ * @GTK_SHORTCUT_GESTURE:
+ *   The shortcut is a gesture. The #GtkShortcutsShortcut:icon property will be
+ *   used.
+ *
+ * GtkShortcutType specifies the kind of shortcut that is being described.
+ * More values may be added to this enumeration over time.
+ *
+ * Since: 3.20
+ */
+typedef enum {
+  GTK_SHORTCUT_ACCELERATOR,
+  GTK_SHORTCUT_GESTURE_PINCH,
+  GTK_SHORTCUT_GESTURE_STRETCH,
+  GTK_SHORTCUT_GESTURE_ROTATE_CLOCKWISE,
+  GTK_SHORTCUT_GESTURE_ROTATE_COUNTERCLOCKWISE,
+  GTK_SHORTCUT_GESTURE_TWO_FINGER_SWIPE_LEFT,
+  GTK_SHORTCUT_GESTURE_TWO_FINGER_SWIPE_RIGHT,
+  GTK_SHORTCUT_GESTURE
+} GtkShortcutType;
 
 GDK_AVAILABLE_IN_3_20
 GType        gtk_shortcuts_shortcut_get_type (void) G_GNUC_CONST;
