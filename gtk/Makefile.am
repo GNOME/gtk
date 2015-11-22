@@ -1201,6 +1201,10 @@ gtk.gresource.xml: Makefile.am inspector/Makefile.inc
 	  n=`basename $$f`; \
 	  echo "    <file>cursor/$$n</file>" >> $@; \
 	done; \
+	for f in $(srcdir)/gesture/*.png; do \
+	  n=`basename $$f`; \
+	  echo "    <file>gesture/$$n</file>" >> $@; \
+	done; \
 	for f in $(srcdir)/ui/*.ui; do \
 	  n=`basename $$f`; \
 	  echo "    <file compressed='true'>ui/$$n</file>" >> $@; \
@@ -1221,6 +1225,14 @@ gtk.gresource.xml: Makefile.am inspector/Makefile.inc
 	echo "    <file>inspector/logo.png</file>" >> $@; \
 	echo "  </gresource>" >> $@; \
 	echo "</gresources>" >> $@;
+
+gesture_sources = 				\
+	gesture/pinch.svg			\
+	gesture/stretch.svg			\
+	gesture/rotate-clockwise.svg		\
+	gesture/rotate-anticlockwise.svg	\
+	gesture/two-finger-swipe-left.svg	\
+	gesture/two-finger-swipe-right.svg
 
 theme_sources = 				\
 	theme/win32/gtk-win32.css 		\
@@ -1522,6 +1534,7 @@ gsettings_SCHEMAS = \
 
 EXTRA_DIST +=                   \
 	$(resource_files)	\
+	$(gesture_sources)	\
 	$(theme_sources)	\
 	$(gsettings_SCHEMAS)	\
 	a11y/Makefile.inc	\
