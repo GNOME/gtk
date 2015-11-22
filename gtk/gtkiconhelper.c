@@ -142,7 +142,6 @@ _gtk_icon_helper_init (GtkIconHelper *self)
 
 static void
 ensure_icon_size (GtkIconHelper *self,
-                  GtkStyleContext *context,
 		  gint *width_out,
 		  gint *height_out)
 {
@@ -312,7 +311,7 @@ ensure_pixbuf_for_gicon (GtkIconHelper *self,
   icon_theme = gtk_icon_theme_get_for_screen (gtk_style_context_get_screen (context));
   flags = get_icon_lookup_flags (self, context);
 
-  ensure_icon_size (self, context, &width, &height);
+  ensure_icon_size (self, &width, &height);
 
   if (self->priv->gicon != NULL)
     {
@@ -348,7 +347,6 @@ ensure_pixbuf_for_icon_set (GtkIconHelper *self,
 
 static void
 get_surface_size (GtkIconHelper   *self,
-		  GtkStyleContext *context,
 		  cairo_surface_t *surface,
 		  int *width,
 		  int *height)
@@ -368,7 +366,7 @@ get_surface_size (GtkIconHelper   *self,
 	ceil (cairo_image_surface_get_height (surface) / y_scale);
     }
   else
-    ensure_icon_size (self, context, width, height);
+    ensure_icon_size (self, width, height);
 }
 
 static void
@@ -386,7 +384,7 @@ ensure_pixbuf_from_surface (GtkIconHelper   *self,
   if (self->priv->rendered_pixbuf)
     return;
 
-  get_surface_size (self, context, self->priv->orig_surface, &width, &height);
+  get_surface_size (self, self->priv->orig_surface, &width, &height);
 
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
 					width, height);
@@ -419,7 +417,7 @@ ensure_pixbuf_at_size (GtkIconHelper   *self,
       (self->priv->pixel_size != -1 ||
        self->priv->icon_size != GTK_ICON_SIZE_INVALID))
     {
-      ensure_icon_size (self, context, &width, &height);
+      ensure_icon_size (self, &width, &height);
 
       if (self->priv->orig_pixbuf_scale > 1 ||
 	  /* These should divide the orig_pixbuf size by scale, but need not 
@@ -559,7 +557,7 @@ ensure_surface_from_surface (GtkIconHelper   *self,
   self->priv->rendered_surface =
     cairo_surface_reference (self->priv->orig_surface);
 
-  get_surface_size (self, context, self->priv->orig_surface,
+  get_surface_size (self, self->priv->orig_surface,
 		    &self->priv->rendered_surface_width,
 		    &self->priv->rendered_surface_height);
 }
@@ -582,7 +580,7 @@ get_pixbuf_size (GtkIconHelper   *self,
       (self->priv->pixel_size != -1 ||
        self->priv->icon_size != GTK_ICON_SIZE_INVALID))
     {
-      ensure_icon_size (self, context, &width, &height);
+      ensure_icon_size (self, &width, &height);
 
       if (scale != self->priv->orig_pixbuf_scale ||
 	  width < gdk_pixbuf_get_width (self->priv->orig_pixbuf) / self->priv->orig_pixbuf_scale ||
@@ -666,7 +664,7 @@ ensure_surface_for_icon_set (GtkIconHelper *self,
   G_GNUC_END_IGNORE_DEPRECATIONS;
 
   if (self->priv->rendered_surface)
-    get_surface_size (self, context, self->priv->rendered_surface, 
+    get_surface_size (self, self->priv->rendered_surface, 
 		      &self->priv->rendered_surface_width, 
 		      &self->priv->rendered_surface_height);
 }
@@ -742,7 +740,7 @@ ensure_surface_for_gicon (GtkIconHelper   *self,
   icon_theme = gtk_icon_theme_get_for_screen (gtk_style_context_get_screen (context));
   flags = get_icon_lookup_flags (self, context);
 
-  ensure_icon_size (self, context, &width, &height);
+  ensure_icon_size (self, &width, &height);
   scale = get_scale_factor (self, context);
 
   if (self->priv->gicon != NULL)
@@ -832,7 +830,7 @@ _gtk_icon_helper_get_size (GtkIconHelper *self,
   switch (self->priv->storage_type)
     {
     case GTK_IMAGE_SURFACE:
-      get_surface_size (self, context, self->priv->orig_surface,
+      get_surface_size (self, self->priv->orig_surface,
                         &width,
                         &height);
       break;
@@ -846,7 +844,7 @@ _gtk_icon_helper_get_size (GtkIconHelper *self,
     case GTK_IMAGE_ICON_NAME:
     case GTK_IMAGE_GICON:
       if (self->priv->pixel_size != -1 || self->priv->force_scale_pixbuf)
-        ensure_icon_size (self, context, &width, &height);
+        ensure_icon_size (self, &width, &height);
 
       break;
 
@@ -876,7 +874,7 @@ _gtk_icon_helper_get_size (GtkIconHelper *self,
         }
       else if (self->priv->icon_size != GTK_ICON_SIZE_INVALID)
         {
-          ensure_icon_size (self, context, &width, &height);
+          ensure_icon_size (self, &width, &height);
         }
     }
 
