@@ -289,6 +289,7 @@ gtk/gtktoolitem.c
 gtk/gtktoolitemgroup.c
 gtk/gtktoolpalette.c
 gtk/gtktoolshell.c
+gtk/gtktooltipwindow.c
 gtk/gtktrashmonitor.c
 gtk/gtktreednd.c
 gtk/gtktreemenu.c
