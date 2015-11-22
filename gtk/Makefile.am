@@ -168,6 +168,7 @@ gtk_public_h_sources = 		\
 	gtkdebug.h		\
 	gtkdialog.h		\
 	gtkdnd.h		\
+	gtkdragsource.h		\
 	gtkdrawingarea.h	\
 	gtkeditable.h		\
 	gtkentry.h		\
@@ -686,6 +687,7 @@ gtk_base_c_sources = 		\
 	gtkcssvalue.c		\
 	gtkcsswidgetnode.c	\
 	gtkdialog.c		\
+	gtkdragsource.c		\
 	gtkdrawingarea.c	\
 	gtkeditable.c		\
 	gtkentry.c		\

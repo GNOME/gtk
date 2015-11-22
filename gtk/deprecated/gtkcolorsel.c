@@ -40,6 +40,7 @@
 #include "gtkselection.h"
 #include "gtkcolorutils.h"
 #include "gtkdnd.h"
+#include "gtkdragsource.h"
 #include "gtkdrawingarea.h"
 #include "gtkframe.h"
 #include "gtkgrid.h"

@@ -23,13 +23,22 @@
 #include <gtk/gtkwidget.h>
 #include <gtk/gtkselection.h>
 
+#include "gtkiconhelperprivate.h"
 
 G_BEGIN_DECLS
 
-void _gtk_drag_source_handle_event (GtkWidget *widget,
-				    GdkEvent  *event);
-void _gtk_drag_dest_handle_event   (GtkWidget *toplevel,
-				    GdkEvent  *event);
+GdkDragContext *        gtk_drag_begin_internal         (GtkWidget              *widget,
+                                                         GtkIconHelper          *icon_helper,
+                                                         GtkTargetList          *target_list,
+                                                         GdkDragAction           actions,
+                                                         gint                    button,
+                                                         const GdkEvent         *event,
+                                                         int                     x,
+                                                         int                     y);
+void                    _gtk_drag_source_handle_event   (GtkWidget              *widget,
+                                                         GdkEvent               *event);
+void                    _gtk_drag_dest_handle_event     (GtkWidget              *toplevel,
+				                         GdkEvent               *event);
 
 G_END_DECLS
 

@@ -38,6 +38,7 @@
 #include "gtkcheckmenuitem.h"
 #include "gtkclipboard.h"
 #include "gtkcomboboxtext.h"
+#include "gtkdragsource.h"
 #include "gtkentry.h"
 #include "gtkeventbox.h"
 #include "gtkexpander.h"
