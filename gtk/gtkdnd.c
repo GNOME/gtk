@@ -2351,28 +2351,12 @@ gtk_drag_dest_drop (GtkWidget      *widget,
  * Source side *
  ***************/
 
-static GtkIconHelper *
-gtk_drag_source_site_get_icon_helper (GtkDragSourceSite *site)
-{
-  GtkIconHelper *helper;
-
-  if (site)
-    helper = g_object_ref (site->icon_helper);
-  else
-    helper = _gtk_icon_helper_new ();
-
-  if (_gtk_icon_helper_get_is_empty (helper))
-    _gtk_icon_helper_set_icon_name (helper, "text-x-generic", GTK_ICON_SIZE_DND);
-
-  return helper;
-}
-
-/* Like gtk_drag_begin(), but also takes a GtkDragSourceSite,
+/* Like gtk_drag_begin(), but also takes a GtkIconHelper
  * so that we can set the icon from the source site information
  */
 static GdkDragContext *
 gtk_drag_begin_internal (GtkWidget         *widget,
-                         GtkDragSourceSite *site,
+                         GtkIconHelper     *icon_helper,
                          GtkTargetList     *target_list,
                          GdkDragAction      actions,
                          gint               button,
@@ -2518,7 +2502,14 @@ gtk_drag_begin_internal (GtkWidget         *widget,
    */
   if (!info->icon_window && !info->icon_helper)
     {
-      info->icon_helper = gtk_drag_source_site_get_icon_helper (site);
+      if (icon_helper)
+        info->icon_helper = g_object_ref (icon_helper);
+      else
+        info->icon_helper = _gtk_icon_helper_new ();
+
+      if (_gtk_icon_helper_get_is_empty (info->icon_helper))
+        _gtk_icon_helper_set_icon_name (info->icon_helper, "text-x-generic", GTK_ICON_SIZE_DND);
+
       set_icon_helper (info->context, info->icon_helper, 0, 0, FALSE);
     }
 
@@ -3786,7 +3777,7 @@ gtk_drag_source_event_cb (GtkWidget *widget,
           button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (site->drag_gesture));
 
           gtk_event_controller_reset (GTK_EVENT_CONTROLLER (site->drag_gesture));
-          gtk_drag_begin_internal (widget, site, site->target_list,
+          gtk_drag_begin_internal (widget, site->icon_helper, site->target_list,
                                    site->actions, button, last_event,
                                    start_x, start_y);
           return TRUE;

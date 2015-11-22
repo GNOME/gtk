@@ -1196,9 +1196,9 @@ gtk_drag_begin_idle (gpointer arg)
 - (GdkWindow *)gdkWindow;
 @end
 
-static GdkDragContext *
+GdkDragContext *
 gtk_drag_begin_internal (GtkWidget         *widget,
-			 GtkDragSourceSite *site,
+			 GtkIconHelper     *icon_helper,
 			 GtkTargetList     *target_list,
 			 GdkDragAction      actions,
 			 gint               button,
@@ -1293,25 +1293,25 @@ gtk_drag_begin_internal (GtkWidget         *widget,
    */
   if (!info->icon_surface)
     {
-      if (!site || site->icon_type == GTK_IMAGE_EMPTY)
+      if (!icon_helper || _gtk_icon_helper_get_is_empty (icon_helper))
         gtk_drag_set_icon_default (context);
       else
         {
-          switch (site->icon_type)
+          switch (_gtk_icon_helper_get_storage_type (icon_helper))
             {
               case GTK_IMAGE_PIXBUF:
                   gtk_drag_set_icon_pixbuf (context,
-                                            site->icon_data.pixbuf.pixbuf,
+                                            _gtk_icon_helper_peek_pixbuf (icon_helper),
                                             -2, -2);
                   break;
               case GTK_IMAGE_STOCK:
                   gtk_drag_set_icon_stock (context,
-                                           site->icon_data.stock.stock_id,
+                                           _gtk_icon_helper_get_stock_id (icon_helper),
                                            -2, -2);
                   break;
               case GTK_IMAGE_ICON_NAME:
                   gtk_drag_set_icon_name (context,
-                                          site->icon_data.name.icon_name,
+                                          _gtk_icon_helper_get_icon_name (icon_helper),
                                           -2, -2);
                   break;
               case GTK_IMAGE_EMPTY:
