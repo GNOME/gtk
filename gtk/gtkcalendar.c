@@ -1086,7 +1086,7 @@ get_component_paddings (GtkCalendar *calendar,
 
   widget = GTK_WIDGET (calendar);
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
+  state = gtk_style_context_get_state (context);
 
   if (padding)
     gtk_style_context_get_padding (context, state, padding);

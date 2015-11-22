@@ -390,7 +390,7 @@ gtk_flow_box_child_draw (GtkWidget *widget,
 
   gtk_widget_get_allocation (widget, &allocation);
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
+  state = gtk_style_context_get_state (context);
 
   gtk_render_background (context, cr, 0, 0, allocation.width, allocation.height);
   gtk_render_frame (context, cr, 0, 0, allocation.width, allocation.height);

@@ -3884,7 +3884,6 @@ get_progress_area (GtkWidget *widget,
   GtkStyleContext *context;
   GtkBorder border, entry_borders;
   gint frame_width, text_area_width, text_area_height;
-  GtkStateFlags state;
 
   context = gtk_widget_get_style_context (widget);
   _gtk_entry_get_borders (entry, &entry_borders);
@@ -3900,15 +3899,15 @@ get_progress_area (GtkWidget *widget,
   *width = text_area_width + entry_borders.left + entry_borders.right;
   *height = text_area_height + entry_borders.top + entry_borders.bottom;
 
-  state = gtk_style_context_get_state (context);
-
   /* if the text area got resized by a subclass, subtract the left/right
    * border width, so that the progress bar won't extend over the resized
    * text area.
    */
   if (frame_width > *width)
     {
-      gtk_style_context_get_border (context, state, &border);
+      gtk_style_context_get_border (context,
+                                    gtk_style_context_get_state (context),
+                                    &border);
       if (gtk_widget_get_direction (GTK_WIDGET (entry)) == GTK_TEXT_DIR_RTL)
         {
           *x = (frame_width - *width) + border.left;
@@ -3925,7 +3924,9 @@ get_progress_area (GtkWidget *widget,
       GtkBorder margin;
 
       gtk_style_context_save_to_node (context, private->progress_node);
-      gtk_style_context_get_margin (context, state, &margin);
+      gtk_style_context_get_margin (context,
+                                    gtk_style_context_get_state (context),
+                                    &margin);
       gtk_style_context_restore (context);
 
       *x += margin.left;
@@ -6549,7 +6550,6 @@ gtk_entry_draw_text (GtkEntry *entry,
 {
   GtkEntryPrivate *priv = entry->priv;
   GtkWidget *widget = GTK_WIDGET (entry);
-  GtkStateFlags state = 0;
   GdkRGBA text_color;
   GdkRGBA bar_text_color = { 0 };
   GtkStyleContext *context;
@@ -6561,16 +6561,19 @@ gtk_entry_draw_text (GtkEntry *entry,
   if (gtk_entry_get_display_mode (entry) == DISPLAY_BLANK)
     return;
 
-  state = gtk_widget_get_state_flags (widget);
   context = gtk_widget_get_style_context (widget);
 
-  gtk_style_context_get_color (context, state, &text_color);
+  gtk_style_context_get_color (context,
+                               gtk_style_context_get_state (context),
+                               &text_color);
 
   /* Get foreground color for progressbars */
   if (priv->progress_node)
     {
       gtk_style_context_save_to_node (context, priv->progress_node);
-      gtk_style_context_get_color (context, state, &bar_text_color);
+      gtk_style_context_get_color (context,
+                                   gtk_style_context_get_state (context),
+                                   &bar_text_color);
       gtk_style_context_restore (context);
     }
 
@@ -6692,12 +6695,12 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
 
       if (!block_at_line_end)
         {
-          GtkStateFlags state;
           GdkRGBA color;
 
-          state = gtk_widget_get_state_flags (widget);
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-          gtk_style_context_get_background_color (context, state, &color);
+          gtk_style_context_get_background_color (context,
+                                                  gtk_style_context_get_state (context),
+                                                  &color);
 G_GNUC_END_IGNORE_DEPRECATIONS
 
           gdk_cairo_rectangle (cr, &rect);

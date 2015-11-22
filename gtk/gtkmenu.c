@@ -2594,12 +2594,12 @@ get_menu_padding (GtkWidget *widget,
                   GtkBorder *padding)
 {
   GtkStyleContext *context;
-  GtkStateFlags state;
 
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
 
-  gtk_style_context_get_padding (context, state, padding);
+  gtk_style_context_get_padding (context,
+                                 gtk_style_context_get_state (context),
+                                 padding);
 }
 
 static void
@@ -2607,12 +2607,12 @@ get_menu_margin (GtkWidget *widget,
                  GtkBorder *margin)
 {
   GtkStyleContext *context;
-  GtkStateFlags state;
 
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
 
-  gtk_style_context_get_margin (context, state, margin);
+  gtk_style_context_get_margin (context,
+                                gtk_style_context_get_state (context),
+                                margin);
 }
 
 static void

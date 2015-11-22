@@ -2220,7 +2220,7 @@ gtk_scrolled_window_draw_scrollbars_junction (GtkScrolledWindow *scrolled_window
       GtkStateFlags state;
       GtkBorder padding, border;
 
-      state = gtk_widget_get_state_flags (widget);
+      state = gtk_style_context_get_state (context);
 
       gtk_style_context_get_padding (context, state, &padding);
       gtk_style_context_get_border (context, state, &border);
@@ -2409,7 +2409,7 @@ gtk_scrolled_window_draw (GtkWidget *widget,
           GtkStateFlags state;
           GtkBorder padding, border;
 
-          state = gtk_widget_get_state_flags (widget);
+          state = gtk_style_context_get_state (context);
           gtk_style_context_get_padding (context, state, &padding);
           gtk_style_context_get_border (context, state, &border);
 
@@ -2635,7 +2635,7 @@ gtk_scrolled_window_relative_allocation (GtkWidget     *widget,
       GtkBorder padding, border;
 
       context = gtk_widget_get_style_context (widget);
-      state = gtk_widget_get_state_flags (widget);
+      state = gtk_style_context_get_state (context);
 
       gtk_style_context_get_border (context, state, &border);
       gtk_style_context_get_padding (context, state, &padding);
@@ -2759,7 +2759,7 @@ gtk_scrolled_window_allocate_scrollbar (GtkScrolledWindow *scrolled_window,
   gtk_widget_get_preferred_width (priv->vscrollbar, &sb_width, NULL);
 
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
+  state = gtk_style_context_get_state (context);
 
   gtk_widget_style_get (widget, "scrollbars-within-bevel", &scrollbars_within_bevel, NULL);
   gtk_style_context_get_padding (context, state, &padding);
@@ -3882,7 +3882,7 @@ gtk_scrolled_window_get_preferred_size (GtkWidget      *widget,
       GtkBorder padding, border;
 
       context = gtk_widget_get_style_context (GTK_WIDGET (widget));
-      state = gtk_widget_get_state_flags (GTK_WIDGET (widget));
+      state = gtk_style_context_get_state (context);
 
       gtk_style_context_get_padding (context, state, &padding);
       gtk_style_context_get_border (context, state, &border);

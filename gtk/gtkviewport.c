@@ -370,7 +370,7 @@ viewport_get_view_allocation (GtkViewport   *viewport,
   view_allocation->y = 0;
 
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
+  state = gtk_style_context_get_state (context);
 
   gtk_style_context_get_padding (context, state, &padding);
   gtk_style_context_get_border (context, state, &border);

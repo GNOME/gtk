@@ -648,11 +648,11 @@ get_margin (GtkWidget *widget,
             GtkBorder *border)
 {
   GtkStyleContext *context;
-  GtkStateFlags state;
 
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
-  gtk_style_context_get_margin (context, state, border);
+  gtk_style_context_get_margin (context,
+                                gtk_style_context_get_state (context),
+                                border);
 }
 
 static void
@@ -675,7 +675,6 @@ gtk_popover_get_gap_coords (GtkPopover      *popover,
   GtkPositionType gap_side, pos;
   GtkAllocation allocation;
   gint border_radius;
-  GtkStateFlags state;
   GtkStyleContext *context;
   GtkBorder margin, border;
 
@@ -709,10 +708,9 @@ gtk_popover_get_gap_coords (GtkPopover      *popover,
   rect.y += gtk_widget_get_margin_top (widget);
 
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
 
-  gtk_style_context_get_border (context, state, &border);
-  gtk_style_context_get (context, state,
+  gtk_style_context_get (context,
+                         gtk_style_context_get_state (context),
                          GTK_STYLE_PROPERTY_BORDER_RADIUS, &border_radius,
                          NULL);
   pos = get_effective_position (popover, priv->final_position);
@@ -1064,7 +1062,7 @@ gtk_popover_draw (GtkWidget *widget,
 
   context = gtk_widget_get_style_context (widget);
 
-  state = gtk_widget_get_state_flags (widget);
+  state = gtk_style_context_get_state (context);
   gtk_widget_get_allocation (widget, &allocation);
 
   gtk_style_context_get_border (context, state, &border);
@@ -1157,7 +1155,7 @@ get_padding_and_border (GtkWidget *widget,
   GtkBorder tmp;
 
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
+  state = gtk_style_context_get_state (context);
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
@@ -1177,7 +1175,7 @@ get_border_radius (GtkWidget *widget)
   gint border_radius;
 
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
+  state = gtk_style_context_get_state (context);
   gtk_style_context_get (context, state,
                          GTK_STYLE_PROPERTY_BORDER_RADIUS, &border_radius,
                          NULL);

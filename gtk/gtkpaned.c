@@ -1457,9 +1457,10 @@ gtk_paned_size_allocate (GtkWidget     *widget,
       if (gtk_widget_get_realized (widget))
 	{
           GtkBorder margin;
+          GtkStyleContext *context = gtk_widget_get_style_context (widget);
 
-          gtk_style_context_get_margin (gtk_widget_get_style_context (widget),
-                                        gtk_widget_get_state_flags (widget),
+          gtk_style_context_get_margin (context,
+                                        gtk_style_context_get_state (context),
                                         &margin);
 
 	  if (gtk_widget_get_mapped (widget))

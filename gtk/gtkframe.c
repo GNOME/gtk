@@ -630,7 +630,7 @@ get_padding_and_border (GtkFrame *frame,
   GtkStateFlags state;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (frame));
-  state = gtk_widget_get_state_flags (GTK_WIDGET (frame));
+  state = gtk_style_context_get_state (context);
 
   gtk_style_context_get_padding (context, state, border);
 

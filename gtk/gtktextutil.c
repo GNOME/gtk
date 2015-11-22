@@ -262,7 +262,7 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
   GtkStateFlags state;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (text_view));
-  state = gtk_widget_get_state_flags (GTK_WIDGET (text_view));
+  state = gtk_style_context_get_state (context);
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_style_context_get_background_color (context, state, &bg_color);
