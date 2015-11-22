@@ -46,6 +46,8 @@ struct _GtkShortcutsShortcut
   GtkSizeGroup *accel_size_group;
   GtkSizeGroup *title_size_group;
 
+  gboolean subtitle_set;
+  gboolean icon_set;
   GtkTextDirection direction;
   GtkShortcutType  shortcut_type;
 };
@@ -61,8 +63,10 @@ enum {
   PROP_0,
   PROP_ACCELERATOR,
   PROP_ICON,
+  PROP_ICON_SET,
   PROP_TITLE,
   PROP_SUBTITLE,
+  PROP_SUBTITLE_SET,
   PROP_ACCEL_SIZE_GROUP,
   PROP_TITLE_SIZE_GROUP,
   PROP_DIRECTION,
@@ -71,6 +75,13 @@ enum {
 };
 
 static GParamSpec *properties[LAST_PROP];
+
+static void
+gtk_shortcuts_shortcut_set_accelerator (GtkShortcutsShortcut *self,
+                                        const gchar          *accelerator)
+{
+  gtk_shortcut_label_set_accelerator (self->accelerator, accelerator);
+}
 
 static void
 gtk_shortcuts_shortcut_set_accel_size_group (GtkShortcutsShortcut *self,
@@ -104,19 +115,123 @@ gtk_shortcuts_shortcut_set_title_size_group (GtkShortcutsShortcut *self,
 }
 
 static void
-gtk_shortcuts_shortcut_set_subtitle (GtkShortcutsShortcut *self,
-                                     const gchar          *subtitle)
+update_subtitle_from_type (GtkShortcutsShortcut *self)
 {
+  const gchar *subtitle;
+
+  if (self->subtitle_set)
+    return;
+
+  switch (self->shortcut_type)
+    {
+    case GTK_SHORTCUT_ACCELERATOR:
+    case GTK_SHORTCUT_GESTURE:
+      subtitle = NULL;
+      break;
+
+    case GTK_SHORTCUT_GESTURE_PINCH:
+      subtitle = _("Two finger pinch");
+      break;
+
+    case GTK_SHORTCUT_GESTURE_STRETCH:
+      subtitle = _("Two finger stretch");
+      break;
+
+    case GTK_SHORTCUT_GESTURE_ROTATE_CLOCKWISE:
+      subtitle = _("Rotate clockwise");
+      break;
+
+    case GTK_SHORTCUT_GESTURE_ROTATE_COUNTERCLOCKWISE:
+      subtitle = _("Rotate counterclockwise");
+      break;
+
+    case GTK_SHORTCUT_GESTURE_TWO_FINGER_SWIPE_LEFT:
+      subtitle = _("Two finger swipe left");
+      break;
+
+    case GTK_SHORTCUT_GESTURE_TWO_FINGER_SWIPE_RIGHT:
+      subtitle = _("Two finger swipe right");
+      break;
+
+    default:
+      subtitle = NULL;
+      break;
+    }
+
   gtk_label_set_label (self->subtitle, subtitle);
   gtk_widget_set_visible (GTK_WIDGET (self->subtitle), subtitle != NULL);
   g_object_notify (G_OBJECT (self), "subtitle");
 }
 
 static void
-gtk_shortcuts_shortcut_set_accelerator (GtkShortcutsShortcut *self,
-                                        const gchar          *accelerator)
+gtk_shortcuts_shortcut_set_subtitle_set (GtkShortcutsShortcut *self,
+                                         gboolean              subtitle_set)
 {
-  gtk_shortcut_label_set_accelerator (self->accelerator, accelerator);
+  if (self->subtitle_set != subtitle_set)
+    {
+      self->subtitle_set = subtitle_set;
+      g_object_notify (G_OBJECT (self), "subtitle-set");
+    }
+  update_subtitle_from_type (self);
+}
+
+static void
+gtk_shortcuts_shortcut_set_subtitle (GtkShortcutsShortcut *self,
+                                     const gchar          *subtitle)
+{
+  gtk_label_set_label (self->subtitle, subtitle);
+  gtk_widget_set_visible (GTK_WIDGET (self->subtitle), subtitle && subtitle[0]);
+  gtk_shortcuts_shortcut_set_subtitle_set (self, subtitle && subtitle[0]);
+
+  g_object_notify (G_OBJECT (self), "subtitle");
+}
+
+static void
+update_icon_from_type (GtkShortcutsShortcut *self)
+{
+  if (self->icon_set)
+    return;
+
+  switch (self->shortcut_type)
+    {
+    case GTK_SHORTCUT_GESTURE_PINCH:
+      gtk_image_set_from_resource (self->image, "/org/gtk/libgtk/gesture/pinch.png");
+      break;
+
+    case GTK_SHORTCUT_GESTURE_STRETCH:
+      gtk_image_set_from_resource (self->image, "/org/gtk/libgtk/gesture/stretch.png");
+      break;
+
+    case GTK_SHORTCUT_GESTURE_ROTATE_CLOCKWISE:
+      gtk_image_set_from_resource (self->image, "/org/gtk/libgtk/gesture/rotate-clockwise.png");
+      break;
+
+    case GTK_SHORTCUT_GESTURE_ROTATE_COUNTERCLOCKWISE:
+      gtk_image_set_from_resource (self->image, "/org/gtk/libgtk/gesture/rotate-anticlockwise.png");
+      break;
+
+    case GTK_SHORTCUT_GESTURE_TWO_FINGER_SWIPE_LEFT:
+      gtk_image_set_from_resource (self->image, "/org/gtk/libgtk/gesture/two-finger-swipe-left.png");
+      break;
+
+    case GTK_SHORTCUT_GESTURE_TWO_FINGER_SWIPE_RIGHT:
+      gtk_image_set_from_resource (self->image, "/org/gtk/libgtk/gesture/two-finger-swipe-right.png");
+      break;
+
+    default: ;
+    }
+}
+
+static void
+gtk_shortcuts_shortcut_set_icon_set (GtkShortcutsShortcut *self,
+                                     gboolean              icon_set)
+{
+  if (self->icon_set != icon_set)
+    {
+      self->icon_set = icon_set;
+      g_object_notify (G_OBJECT (self), "icon-set");
+    }
+  update_icon_from_type (self);
 }
 
 static void
@@ -124,10 +239,12 @@ gtk_shortcuts_shortcut_set_icon (GtkShortcutsShortcut *self,
                                  GIcon                *gicon)
 {
   gtk_image_set_from_gicon (self->image, gicon, GTK_ICON_SIZE_DIALOG);
+  gtk_shortcuts_shortcut_set_icon_set (self, gicon != NULL);
+  g_object_notify (G_OBJECT (self), "icon");
 }
 
 static void
-update_visible (GtkShortcutsShortcut *self)
+update_visible_from_direction (GtkShortcutsShortcut *self)
 {
   if (self->direction == GTK_TEXT_DIR_NONE ||
       self->direction == gtk_widget_get_direction (GTK_WIDGET (self)))
@@ -145,7 +262,7 @@ gtk_shortcuts_shortcut_set_direction (GtkShortcutsShortcut *self,
 
   self->direction = direction;
 
-  update_visible (self);
+  update_visible_from_direction (self);
 
   g_object_notify (G_OBJECT (self), "direction");
 }
@@ -154,7 +271,7 @@ static void
 gtk_shortcuts_shortcut_direction_changed (GtkWidget        *widget,
                                           GtkTextDirection  previous_dir)
 {
-  update_visible (GTK_SHORTCUTS_SHORTCUT (widget));
+  update_visible_from_direction (GTK_SHORTCUTS_SHORTCUT (widget));
 
   GTK_WIDGET_CLASS (gtk_shortcuts_shortcut_parent_class)->direction_changed (widget, previous_dir);
 }
@@ -168,40 +285,8 @@ gtk_shortcuts_shortcut_set_type (GtkShortcutsShortcut *self,
 
   self->shortcut_type = type;
 
-  switch (type)
-    {
-    case GTK_SHORTCUT_GESTURE_PINCH:
-      gtk_image_set_from_resource (self->image, "/org/gtk/libgtk/gesture/pinch.png");
-      gtk_shortcuts_shortcut_set_subtitle (self, _("Two finger pinch"));
-      break;
-
-    case GTK_SHORTCUT_GESTURE_STRETCH:
-      gtk_image_set_from_resource (self->image, "/org/gtk/libgtk/gesture/stretch.png");
-      gtk_shortcuts_shortcut_set_subtitle (self, _("Two finger stretch"));
-      break;
-
-    case GTK_SHORTCUT_GESTURE_ROTATE_CLOCKWISE:
-      gtk_image_set_from_resource (self->image, "/org/gtk/libgtk/gesture/rotate-clockwise.png");
-      gtk_shortcuts_shortcut_set_subtitle (self, _("Rotate clockwise"));
-      break;
-
-    case GTK_SHORTCUT_GESTURE_ROTATE_COUNTERCLOCKWISE:
-      gtk_image_set_from_resource (self->image, "/org/gtk/libgtk/gesture/rotate-anticlockwise.png");
-      gtk_shortcuts_shortcut_set_subtitle (self, _("Rotate counterclockwise"));
-      break;
-
-    case GTK_SHORTCUT_GESTURE_TWO_FINGER_SWIPE_LEFT:
-      gtk_image_set_from_resource (self->image, "/org/gtk/libgtk/gesture/two-finger-swipe-left.png");
-      gtk_shortcuts_shortcut_set_subtitle (self, _("Two finger swipe left"));
-      break;
-
-    case GTK_SHORTCUT_GESTURE_TWO_FINGER_SWIPE_RIGHT:
-      gtk_image_set_from_resource (self->image, "/org/gtk/libgtk/gesture/two-finger-swipe-right.png");
-      gtk_shortcuts_shortcut_set_subtitle (self, _("Two finger swipe right"));
-      break;
-
-    default: ;
-    }
+  update_subtitle_from_type (self);
+  update_icon_from_type (self);
 
   gtk_widget_set_visible (GTK_WIDGET (self->accelerator), type == GTK_SHORTCUT_ACCELERATOR);
   gtk_widget_set_visible (GTK_WIDGET (self->image), type != GTK_SHORTCUT_ACCELERATOR);
@@ -228,6 +313,10 @@ gtk_shortcuts_shortcut_get_property (GObject    *object,
       g_value_set_string (value, gtk_label_get_label (self->subtitle));
       break;
 
+    case PROP_SUBTITLE_SET:
+      g_value_set_boolean (value, self->subtitle_set);
+      break;
+
     case PROP_ACCELERATOR:
       g_value_set_string (value, gtk_shortcut_label_get_accelerator (self->accelerator));
       break;
@@ -239,6 +328,10 @@ gtk_shortcuts_shortcut_get_property (GObject    *object,
         gtk_image_get_gicon (self->image, &icon, NULL);
         g_value_set_object (value, icon);
       }
+      break;
+
+    case PROP_ICON_SET:
+      g_value_set_boolean (value, self->icon_set);
       break;
 
     case PROP_DIRECTION:
@@ -272,6 +365,10 @@ gtk_shortcuts_shortcut_set_property (GObject      *object,
       gtk_shortcuts_shortcut_set_icon (self, g_value_get_object (value));
       break;
 
+    case PROP_ICON_SET:
+      gtk_shortcuts_shortcut_set_icon_set (self, g_value_get_boolean (value));
+      break;
+
     case PROP_ACCEL_SIZE_GROUP:
       gtk_shortcuts_shortcut_set_accel_size_group (self, GTK_SIZE_GROUP (g_value_get_object (value)));
       break;
@@ -282,6 +379,10 @@ gtk_shortcuts_shortcut_set_property (GObject      *object,
 
     case PROP_SUBTITLE:
       gtk_shortcuts_shortcut_set_subtitle (self, g_value_get_string (value));
+      break;
+
+    case PROP_SUBTITLE_SET:
+      gtk_shortcuts_shortcut_set_subtitle_set (self, g_value_get_boolean (value));
       break;
 
     case PROP_TITLE_SIZE_GROUP:
@@ -345,15 +446,16 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
   /**
    * GtkShortcutsShortcut:accelerator:
    *
-   * The accelerator(s) represented by this object in (an extension of)
-   * the syntax understood by gtk_accelerator_parse(). Multiple accelerators
-   * can be specified by separating them with a space, but keep in
-   * mind that the available width is limited. It is also possible
-   * to specify ranges of shortcuts, using ... between the keys. Sequences
-   * of keys can be specified using a + between the keys.
+   * The accelerator(s) represented by this object. This property is used
+   * if #GtkShorcutsShortcut:shortcut-type is set to #GTK_SHORTCUT_ACCELERATOR.
+   *
+   * The syntax of this property is (an extension of) the syntax understood by
+   * gtk_accelerator_parse(). Multiple accelerators can be specified by separating
+   * them with a space, but keep in mind that the available width is limited.
+   * It is also possible to specify ranges of shortcuts, using ... between the keys.
+   * Sequences of keys can be specified using a + between the keys.
    *
    * Examples:
-   *
    * - A single shortcut: <ctl><alt>delete
    * - Two alternative shortcuts: <shift>a Home
    * - A range of shortcuts: <alt>1...<alt>9
@@ -365,36 +467,46 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
   properties[PROP_ACCELERATOR] =
     g_param_spec_string ("accelerator",
                          P_("Accelerator"),
-                         P_("Accelerator"),
+                         P_("The accelerator keys for shortcuts of type 'Accelerator'"),
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   /**
    * GtkShortcutsShortcut:icon:
    *
-   * An icon to represent the shortcut or gesture. This is used if
-   * #GtkShortcutsShortcut:accelerator is not set.
-   *
-   * Typically used for gestures.
+   * An icon to represent the shortcut or gesture. This property is used if
+   * #GtkShortcutsShortcut:shortcut-type is set to #GTK_SHORTCUT_GESTURE.
+   * For the other predefined gesture types, GTK+ provides an icon on its own.
    */
   properties[PROP_ICON] =
     g_param_spec_object ("icon",
                          P_("Icon"),
-                         P_("Icon"),
+                         P_("The icon to show for shortcuts of type 'Other Gesture'"),
                          G_TYPE_ICON,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  /**
+   * GtkShortcutsShortcut:icon-set:
+   *
+   * %TRUE if an icon has been set.
+   */
+  properties[PROP_ICON_SET] =
+    g_param_spec_boolean ("icon-set",
+                          P_("Icon Set"),
+                          P_("Whether an icon has been set"),
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   /**
    * GtkShortcutsShortcut:title:
    *
    * The textual description for the shortcut or gesture represented by
-   * this object. This should be a short string that can fit in
-   * a single line.
+   * this object. This should be a short string that can fit in a single line.
    */
   properties[PROP_TITLE] =
     g_param_spec_string ("title",
                          P_("Title"),
-                         P_("Title"),
+                         P_("A short description for the shortcut"),
                          "",
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
@@ -404,14 +516,27 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
    * The subtitle for the shortcut or gesture.
    *
    * This is typically used for gestures and should be a short, one-line
-   * text that describes the gesture itself, e.g. "Two-finger swipe".
+   * text that describes the gesture itself. For the predefined gesture
+   * types, GTK+ provides a subtitle on its own.
    */
   properties[PROP_SUBTITLE] =
     g_param_spec_string ("subtitle",
                          P_("Subtitle"),
-                         P_("Subtitle"),
+                         P_("A short description for the gesture"),
                          "",
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  /**
+   * GtkShortcutsShortcut:subtitle-set:
+   *
+   * %TRUE if a subtitle has been set.
+   */
+  properties[PROP_SUBTITLE_SET] =
+    g_param_spec_boolean ("subtitle-set",
+                          P_("Subtitle Set"),
+                          P_("Whether a subtitle has been set"),
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   /**
    * GtkShortcutsShortcut:accel-size-group:
@@ -441,6 +566,13 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
                          GTK_TYPE_SIZE_GROUP,
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
+  /**
+   * GtkShortcutsShortcut:direction:
+   *
+   * The text direction for which this shortcut is active. If the shortcut
+   * is used regardless of the text direction, set this property to
+   * #GTK_TEXT_DIR_NONE.
+   */
   properties[PROP_DIRECTION] =
     g_param_spec_enum ("direction",
                        P_("Direction"),
@@ -449,6 +581,11 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
                        GTK_TEXT_DIR_NONE,
                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY));
 
+  /**
+   * GtkShortcutsShortcut:shortcut-type:
+   *
+   * The type of shortcut that is represented.
+   */
   properties[PROP_SHORTCUT_TYPE] =
     g_param_spec_enum ("shortcut-type",
                        P_("Shortcut Type"),
