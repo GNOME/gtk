@@ -802,7 +802,7 @@ GtkCalendar.button:hover {
 }
 
 .titlebar .titlebutton {
-  icon-shadow: 0px 1px #ffff;
+  -gtk-icon-shadow: 0px 1px #ffff;
   color: shade(@fg_color, 1.8);
   background: none;
   padding: 5px 5px 6px 5px;
@@ -826,14 +826,14 @@ GtkCalendar.button:hover {
 .titlebar .titlebutton:active {
   background-image: linear-gradient(to bottom, #a7aba7, shade(@bg_color, 0.95));
   color: @selected_fg_color;
-  icon-shadow: none;
+  -gtk-icon-shadow: none;
 }
 
 .titlebar .titlebutton:backdrop {
   background-image: none;
   color: #a7aba7;
   border-image: none;
-  icon-shadow: none;
+  -gtk-icon-shadow: none;
 }
 
 .window-frame {
