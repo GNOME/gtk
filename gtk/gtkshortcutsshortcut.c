@@ -189,36 +189,47 @@ gtk_shortcuts_shortcut_set_subtitle (GtkShortcutsShortcut *self,
 static void
 update_icon_from_type (GtkShortcutsShortcut *self)
 {
+  GIcon *icon;
+
   if (self->icon_set)
     return;
 
   switch (self->shortcut_type)
     {
     case GTK_SHORTCUT_GESTURE_PINCH:
-      gtk_image_set_from_resource (self->image, "/org/gtk/libgtk/gesture/pinch.png");
+      icon = g_themed_icon_new ("gesture-pinch-symbolic");
       break;
 
     case GTK_SHORTCUT_GESTURE_STRETCH:
-      gtk_image_set_from_resource (self->image, "/org/gtk/libgtk/gesture/stretch.png");
+      icon = g_themed_icon_new ("gesture-stretch-symbolic");
       break;
 
     case GTK_SHORTCUT_GESTURE_ROTATE_CLOCKWISE:
-      gtk_image_set_from_resource (self->image, "/org/gtk/libgtk/gesture/rotate-clockwise.png");
+      icon = g_themed_icon_new ("gesture-rotate-clockwise-symbolic");
       break;
 
     case GTK_SHORTCUT_GESTURE_ROTATE_COUNTERCLOCKWISE:
-      gtk_image_set_from_resource (self->image, "/org/gtk/libgtk/gesture/rotate-anticlockwise.png");
+      icon = g_themed_icon_new ("gesture-rotate-anticlockwise-symbolic");
       break;
 
     case GTK_SHORTCUT_GESTURE_TWO_FINGER_SWIPE_LEFT:
-      gtk_image_set_from_resource (self->image, "/org/gtk/libgtk/gesture/two-finger-swipe-left.png");
+      icon = g_themed_icon_new ("gesture-two-finger-swipe-left-symbolic");
       break;
 
     case GTK_SHORTCUT_GESTURE_TWO_FINGER_SWIPE_RIGHT:
-      gtk_image_set_from_resource (self->image, "/org/gtk/libgtk/gesture/two-finger-swipe-right.png");
+      icon = g_themed_icon_new ("gesture-two-finger-swipe-right-symbolic");
       break;
 
     default: ;
+      icon = NULL;
+      break;
+    }
+
+  if (icon)
+    {
+      gtk_image_set_from_gicon (self->image, icon, GTK_ICON_SIZE_DIALOG);
+      gtk_image_set_pixel_size (self->image, 64);
+      g_object_unref (icon);
     }
 }
 

@@ -1201,9 +1201,9 @@ gtk.gresource.xml: Makefile.am inspector/Makefile.inc
 	  n=`basename $$f`; \
 	  echo "    <file>cursor/$$n</file>" >> $@; \
 	done; \
-	for f in $(srcdir)/gesture/*.png; do \
+	for f in $(srcdir)/gesture/*.symbolic.png; do \
 	  n=`basename $$f`; \
-	  echo "    <file>gesture/$$n</file>" >> $@; \
+	  echo "    <file alias='icons/64x64/actions/$$n'>gesture/$$n</file>" >> $@; \
 	done; \
 	for f in $(srcdir)/ui/*.ui; do \
 	  n=`basename $$f`; \
