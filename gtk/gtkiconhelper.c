@@ -1164,9 +1164,3 @@ _gtk_icon_helper_set_pixbuf_scale (GtkIconHelper *self,
       _gtk_icon_helper_invalidate (self);
     }
 }
-
-int
-_gtk_icon_helper_get_pixbuf_scale (GtkIconHelper *self)
-{
-  return self->priv->orig_pixbuf_scale;
-}
