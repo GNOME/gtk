@@ -1227,12 +1227,12 @@ gtk.gresource.xml: Makefile.am inspector/Makefile.inc
 	echo "</gresources>" >> $@;
 
 gesture_sources = 				\
-	gesture/pinch.svg			\
-	gesture/stretch.svg			\
-	gesture/rotate-clockwise.svg		\
-	gesture/rotate-anticlockwise.svg	\
-	gesture/two-finger-swipe-left.svg	\
-	gesture/two-finger-swipe-right.svg
+	gesture/gesture-pinch-symbolic.svg			\
+	gesture/gesture-stretch-symbolic.svg			\
+	gesture/gesture-rotate-clockwise-symbolic.svg		\
+	gesture/gesture-rotate-anticlockwise-symbolic.svg	\
+	gesture/gesture-two-finger-swipe-left-symbolic.svg	\
+	gesture/gesture-two-finger-swipe-right-symbolic.svg
 
 theme_sources = 				\
 	theme/win32/gtk-win32.css 		\
