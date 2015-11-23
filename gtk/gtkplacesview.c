@@ -2372,8 +2372,6 @@ gtk_places_view_get_search_query (GtkPlacesView *view)
  *
  * Sets the search query of @view. The search is immediately performed
  * once the query is set.
- *
- * Returns:
  */
 void
 gtk_places_view_set_search_query (GtkPlacesView *view,
@@ -2508,8 +2506,6 @@ gtk_places_view_get_local_only (GtkPlacesView *view)
  * @local_only: %TRUE to hide remote locations, %FALSE to show.
  *
  * Sets the #GtkPlacesView::local-only property to @local_only.
- *
- * Returns:
  *
  * Since: 3.18
  */
