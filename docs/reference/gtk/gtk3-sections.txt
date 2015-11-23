@@ -5449,6 +5449,7 @@ gtk_widget_draw
 gtk_widget_queue_draw
 gtk_widget_queue_resize
 gtk_widget_queue_resize_no_redraw
+gtk_widget_queue_allocate
 gtk_widget_get_frame_clock
 gtk_widget_get_scale_factor
 GtkTickCallback
@@ -5603,6 +5604,8 @@ gtk_widget_get_can_default
 gtk_widget_set_can_default
 gtk_widget_get_can_focus
 gtk_widget_set_can_focus
+gtk_widget_get_focus_on_click
+gtk_widget_set_focus_on_click
 gtk_widget_get_double_buffered
 gtk_widget_get_has_window
 gtk_widget_set_has_window
@@ -8483,6 +8486,7 @@ GTK_SHORTCUTS_WINDOW_CLASS
 GTK_IS_SHORTCUTS_WINDOW_CLASS
 GTK_GET_SHORTCUTS_WINDOW_CLASS
 <SUBSECTION Private>
+GtkShortcutsWindowClass
 gtk_shortcuts_window_get_type
 </SECTION>
 
@@ -8497,6 +8501,7 @@ GTK_SHORTCUTS_SECTION_CLASS
 GTK_IS_SHORTCUTS_SECTION_CLASS
 GTK_GET_SHORTCUTS_SECTION_CLASS
 <SUBSECTION Private>
+GtkShortcutsSectionClass
 gtk_shortcuts_section_get_type
 </SECTION>
 
@@ -8511,6 +8516,7 @@ GTK_SHORTCUTS_GROUP_CLASS
 GTK_IS_SHORTCUTS_GROUP_CLASS
 GTK_GET_SHORTCUTS_GROUP_CLASS
 <SUBSECTION Private>
+GtkShortcutsGroupClass
 gtk_shortcuts_group_get_type
 </SECTION>
 
@@ -8526,7 +8532,7 @@ GTK_SHORTCUTS_SHORTCUT_CLASS
 GTK_IS_SHORTCUTS_SHORTCUT_CLASS
 GTK_GET_SHORTCUTS_SHORTCUT_CLASS
 <SUBSECTION Private>
-<SUBSECTION Private>
+GtkShortcutsShortcutClass
 gtk_shortcuts_shortcut_get_type
 </SECTION>
 
