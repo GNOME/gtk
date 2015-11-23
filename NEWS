@@ -1,3 +1,34 @@
+Overview of Changes in GTK+ 3.19.3
+==================================
+
+* Theming changes
+ - Non-standard CSS properties have been renamed to have a -gtk-
+   prefix (the old names still work, with a warning):
+     gtk-key-bindings is now -gtk-key-bindings
+     icon-shadow is now -gtk-icon-shadow
+ - CSS parsing errors and warnings are shown in the inspector
+
+* GtkShortcutsWindow:
+ - Widgets are more complete, to allow supporting them in glade
+ - GtkShortcutsShortcut can now show gestures as well, GtkShortcutsGesture
+   is no longer needed and will be removed soon
+ - GtkShortcutsShortcut supports standard gestures, with predefined
+   icons and subtitles
+
+* Bugs fixed:
+ 746745 Window suddenly always on top
+ 758025 cursor flickering
+ 758094 GtkSpinButton missing redraw
+ 758187 Stock images for gestures
+ 758367 GTK+ 3 does not respect bold in org.gnome.desktop.interface font-name
+ 758407 Could not send the search request \ GDBus.Error:org.freedesktop.Tr...
+ 758442 gtk_style_context_save() destroys style information
+
+* Translation updates:
+ Lithuanian
+ Portuguese
+
+
 Overview of Changes in GTK+ 3.19.2
 ==================================
 
