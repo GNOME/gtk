@@ -349,7 +349,7 @@ gtk_search_engine_tracker_start (GtkSearchEngine *engine)
   sparql = g_string_new ("SELECT nie:url(?urn) "
                          "WHERE {"
                          "  ?urn a nfo:FileDataObject ;"
-                         "  tracker:available true ; ");
+                         "  tracker:available true ; "
                          "  nfo:belongsToContainer ?parent; ");
 
 #ifdef FTS_MATCHING
