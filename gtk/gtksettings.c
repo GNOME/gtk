@@ -507,10 +507,15 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                              NULL);
   g_assert (result == PROP_DND_DRAG_THRESHOLD);
 
+  /**
+   * GtkSettings:gtk-font-name:
+   *
+   * The default font to use. GTK+ uses the family name and size from this string.
+   */
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-font-name",
                                                                    P_("Font Name"),
-                                                                   P_("Name of default font to use"),
+                                                                   P_("The default font family and size to use"),
                                                                   "Sans 10",
                                                                   GTK_PARAM_READWRITE),
                                              NULL);
