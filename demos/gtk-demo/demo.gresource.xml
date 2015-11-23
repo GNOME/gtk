@@ -220,8 +220,4 @@
   <gresource prefix="/modelbutton">
     <file>modelbutton.ui</file>
   </gresource>
-  <gresource prefix="/icons">
-    <file>gesture-two-finger-swipe-right.svg</file>
-    <file>gesture-two-finger-swipe-left.svg</file>
-  </gresource>
 </gresources>

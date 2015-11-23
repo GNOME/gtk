@@ -2,13 +2,6 @@
 <interface>
   <!-- interface-requires gtk+ 3.17 -->
 
-  <object class="GFileIcon" id="left-swipe-icon">
-    <property name="file">resource:///icons/gesture-two-finger-swipe-left.svg</property>
-  </object>
-  <object class="GFileIcon" id="right-swipe-icon">
-    <property name="file">resource:///icons/gesture-two-finger-swipe-right.svg</property>
-  </object>
-
   <object class="GtkShortcutsWindow" id="shortcuts-builder">
     <property name="modal">1</property>
     <child>
@@ -89,19 +82,17 @@
             <property name="visible">1</property>
             <property name="title" translatable="yes">Touchpad gestures</property>
             <child>
-              <object class="GtkShortcutsGesture">
+              <object class="GtkShortcutsShortcut">
                 <property name="visible">1</property>
+                <property name="shortcut-type">gesture-two-finger-swipe-right</property>
                 <property name="title" translatable="yes">Switch to the next document</property>
-                <property name="subtitle" translatable="yes">Two finger swipe right</property>
-                <property name="icon">right-swipe-icon</property>
               </object>
             </child>
             <child>
-              <object class="GtkShortcutsGesture">
+              <object class="GtkShortcutsShortcut">
                 <property name="visible">1</property>
+                <property name="shortcut-type">gesture-two-finger-swipe-left</property>
                 <property name="title" translatable="yes">Switch to the previous document</property>
-                <property name="subtitle" translatable="yes">Two finger swipe left</property>
-                <property name="icon">left-swipe-icon</property>
               </object>
             </child>
           </object>
