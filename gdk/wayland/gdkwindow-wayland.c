@@ -1769,7 +1769,11 @@ gdk_wayland_window_destroy (GdkWindow *window,
   gdk_wayland_window_hide_surface (window);
 
   if (impl->cairo_surface)
-    cairo_surface_finish (impl->cairo_surface);
+    {
+      cairo_surface_finish (impl->cairo_surface);
+      cairo_surface_destroy (impl->cairo_surface);
+      impl->cairo_surface = NULL;
+    }
 }
 
 static void

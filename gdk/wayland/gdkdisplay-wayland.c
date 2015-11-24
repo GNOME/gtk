@@ -1029,6 +1029,8 @@ gdk_wayland_cairo_surface_destroy (void *p)
 {
   GdkWaylandCairoSurfaceData *data = p;
 
+  g_print ("EHMMMM...\n");
+
   if (data->buffer)
     wl_buffer_destroy (data->buffer);
 
@@ -1055,6 +1057,8 @@ _gdk_wayland_display_create_shm_surface (GdkWaylandDisplay *display,
   data->buffer = NULL;
   data->scale = scale;
   data->busy = FALSE;
+
+  g_print ("create shm surface...\n");
 
   stride = width * 4;
 
