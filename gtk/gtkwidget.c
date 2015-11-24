@@ -15657,7 +15657,8 @@ union_with_clip (GtkWidget *widget,
 /*
  * _gtk_widget_set_simple_clip:
  * @widget: a #GtkWidget
- * @content_clip: Clipping area of the contents or %NULL, if the contents
+ * @content_clip: (nullable): Clipping area of the contents
+ *     or %NULL, if the contents
  *     do not extent the allocation.
  *
  * This is a convenience function for gtk_widget_set_clip(), if you
@@ -16019,7 +16020,7 @@ gtk_widget_unregister_window (GtkWidget    *widget,
  *
  * Returns the widget’s window if it is realized, %NULL otherwise
  *
- * Returns: (transfer none): @widget’s window.
+ * Returns: (transfer none) (nullable): @widget’s window.
  *
  * Since: 2.14
  */
