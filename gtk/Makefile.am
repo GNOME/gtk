@@ -464,6 +464,7 @@ gtk_private_h_sources =		\
 	gtkiconcache.h		\
 	gtkiconhelperprivate.h  \
 	gtkiconviewprivate.h	\
+	gtkimagedefinitionprivate.h	\
 	gtkimageprivate.h	\
 	gtkimcontextsimpleprivate.h	\
 	gtkimmoduleprivate.h	\
@@ -735,6 +736,7 @@ gtk_base_c_sources = 		\
 	gtkicontheme.c		\
 	gtkiconview.c		\
 	gtkimage.c		\
+	gtkimagedefinition.c	\
 	gtkimcontext.c		\
 	gtkimcontextsimple.c	\
 	gtkimmodule.c		\
