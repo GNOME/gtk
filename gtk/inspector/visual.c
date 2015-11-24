@@ -55,7 +55,6 @@ struct _GtkInspectorVisualPrivate
   GtkWidget *rendering_mode_combo;
   GtkWidget *updates_switch;
   GtkWidget *baselines_switch;
-  GtkWidget *pixelcache_switch;
   GtkWidget *touchscreen_switch;
 
   GtkWidget *gl_box;
@@ -676,7 +675,6 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, updates_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, direction_combo);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, baselines_switch);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, pixelcache_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, theme_combo);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, dark_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, cursor_combo);
