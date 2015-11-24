@@ -1339,7 +1339,7 @@ gtk_stack_remove (GtkContainer *container,
  * the argument. Returns %NULL if there is no child with this
  * name.
  *
- * Returns: (transfer none): the requested child of the #GtkStack
+ * Returns: (transfer none) (nullable): the requested child of the #GtkStack
  *
  * Since: 3.12
  */
@@ -1720,7 +1720,7 @@ gtk_stack_get_interpolate_size (GtkStack *stack)
  * Gets the currently visible child of @stack, or %NULL if
  * there are no visible children.
  *
- * Returns: (transfer none): the visible child of the #GtkStack
+ * Returns: (transfer none) (nullable): the visible child of the #GtkStack
  *
  * Since: 3.10
  */
@@ -1741,7 +1741,7 @@ gtk_stack_get_visible_child (GtkStack *stack)
  * Returns the name of the currently visible child of @stack, or
  * %NULL if there is no visible child.
  *
- * Returns: (transfer none): the name of the visible child of the #GtkStack
+ * Returns: (transfer none) (nullable): the name of the visible child of the #GtkStack
  *
  * Since: 3.10
  */
