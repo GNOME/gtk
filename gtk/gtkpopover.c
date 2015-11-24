@@ -677,6 +677,7 @@ gtk_popover_get_gap_coords (GtkPopover      *popover,
   gint border_radius;
   GtkStyleContext *context;
   GtkBorder margin, border;
+  GtkStateFlags state;
 
   gtk_popover_get_pointing_to (popover, &rect);
   gtk_widget_get_allocation (widget, &allocation);
@@ -708,9 +709,11 @@ gtk_popover_get_gap_coords (GtkPopover      *popover,
   rect.y += gtk_widget_get_margin_top (widget);
 
   context = gtk_widget_get_style_context (widget);
+  state = gtk_style_context_get_state (context);
 
+  gtk_style_context_get_border (context, state, &border);
   gtk_style_context_get (context,
-                         gtk_style_context_get_state (context),
+                         state,
                          GTK_STYLE_PROPERTY_BORDER_RADIUS, &border_radius,
                          NULL);
   pos = get_effective_position (popover, priv->final_position);
