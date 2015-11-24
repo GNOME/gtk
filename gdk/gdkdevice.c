@@ -323,17 +323,20 @@ static void
 gdk_device_dispose (GObject *object)
 {
   GdkDevice *device = GDK_DEVICE (object);
+  GdkDevice *associated = device->associated;
 
-  if (device->type == GDK_DEVICE_TYPE_SLAVE)
-    _gdk_device_remove_slave (device->associated, device);
+  if (associated && device->type == GDK_DEVICE_TYPE_SLAVE)
+    _gdk_device_remove_slave (associated, device);
 
-  if (device->associated)
+  if (associated)
     {
-      if (device->type == GDK_DEVICE_TYPE_MASTER)
-        _gdk_device_set_associated_device (device->associated, NULL);
-
-      g_object_unref (device->associated);
       device->associated = NULL;
+
+      if (device->type == GDK_DEVICE_TYPE_MASTER &&
+          associated->associated == device)
+        _gdk_device_set_associated_device (associated, NULL);
+
+      g_object_unref (associated);
     }
 
   G_OBJECT_CLASS (gdk_device_parent_class)->dispose (object);
