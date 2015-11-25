@@ -1906,7 +1906,7 @@ gtk_list_box_multipress_gesture_released (GtkGestureMultiPress *gesture,
 
   if (priv->active_row != NULL && priv->active_row_active)
     {
-      gboolean focus_on_click = gtk_widget_get_focus_on_click (GTK_WIDGET (box));
+      gboolean focus_on_click = gtk_widget_get_focus_on_click (GTK_WIDGET (priv->active_row));
 
       gtk_widget_unset_state_flags (GTK_WIDGET (priv->active_row),
                                     GTK_STATE_FLAG_ACTIVE);
