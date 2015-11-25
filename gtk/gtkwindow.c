@@ -1451,6 +1451,9 @@ multipress_gesture_pressed_cb (GtkGestureMultiPress *gesture,
       if (gtk_window_titlebar_action (window, event, button, n_press))
         gtk_gesture_set_sequence_state (GTK_GESTURE (gesture),
                                         sequence, GTK_EVENT_SEQUENCE_CLAIMED);
+
+      gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
+      gtk_event_controller_reset (GTK_EVENT_CONTROLLER (priv->drag_gesture));
       return;
     }
   else if (button == GDK_BUTTON_MIDDLE && region == GTK_WINDOW_REGION_TITLE)
