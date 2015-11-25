@@ -5319,7 +5319,6 @@ gtk_window_resize (GtkWindow *window,
   g_return_if_fail (height > 0);
 
   info = gtk_window_get_geometry_info (window, TRUE);
-  gtk_window_update_csd_size (window, &width, &height, INCLUDE_CSD_SIZE);
 
   info->resize_width = width;
   info->resize_height = height;
@@ -8973,15 +8972,21 @@ gtk_window_compute_configure_request_size (GtkWindow   *window,
     }
   else if (info)
     {
+      gint resize_width_csd = info->resize_width;
+      gint resize_height_csd = info->resize_height;
+      gtk_window_update_csd_size (window,
+                                  &resize_width_csd, &resize_height_csd,
+                                  INCLUDE_CSD_SIZE);
+
       if (info->resize_width > 0)
-       *width = info->resize_width;
+        *width = resize_width_csd;
       if (info->resize_height > 0)
-       *height = info->resize_height;
+        *height = resize_height_csd;
 
       if (info->resize_is_geometry)
-       geometry_size_to_pixels (geometry, flags,
-                                info->resize_width > 0 ? width : NULL,
-                                info->resize_height > 0 ? height : NULL);
+        geometry_size_to_pixels (geometry, flags,
+                                 info->resize_width > 0 ? width : NULL,
+                                 info->resize_height > 0 ? height : NULL);
     }
 
   /* Don't ever request zero width or height, it's not supported by
