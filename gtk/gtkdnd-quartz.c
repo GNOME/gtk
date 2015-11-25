@@ -42,6 +42,7 @@
 #include "gdk/quartz/gdkquartz.h"
 #include "gtkselectionprivate.h"
 #include "gtksettings.h"
+#include "gtkiconhelperprivate.h"
 
 typedef struct _GtkDragSourceSite GtkDragSourceSite;
 typedef struct _GtkDragSourceInfo GtkDragSourceInfo;
