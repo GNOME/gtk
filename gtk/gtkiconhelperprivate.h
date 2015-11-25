@@ -23,6 +23,8 @@
 #include "gtk/gtkimage.h"
 #include "gtk/gtktypes.h"
 
+#include "gtkimagedefinitionprivate.h"
+
 G_BEGIN_DECLS
 
 #define GTK_TYPE_ICON_HELPER _gtk_icon_helper_get_type()
@@ -74,6 +76,8 @@ void _gtk_icon_helper_set_window (GtkIconHelper *self,
 
 gboolean _gtk_icon_helper_get_is_empty (GtkIconHelper *self);
 
+void _gtk_icon_helper_set_definition (GtkIconHelper *self,
+                                      GtkImageDefinition *def);
 void _gtk_icon_helper_set_gicon (GtkIconHelper *self,
                                  GIcon *gicon,
                                  GtkIconSize icon_size);

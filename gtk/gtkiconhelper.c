@@ -24,7 +24,6 @@
 #include <math.h>
 
 #include "gtkcssenumvalueprivate.h"
-#include "gtkimagedefinitionprivate.h"
 #include "gtkrender.h"
 #include "gtkstylecontextprivate.h"
 #include "deprecated/gtkstock.h"
@@ -910,6 +909,16 @@ _gtk_icon_helper_get_size (GtkIconHelper *self,
     *width_out = width;
   if (height_out)
     *height_out = height;
+}
+
+void
+_gtk_icon_helper_set_definition (GtkIconHelper *self,
+                                 GtkImageDefinition *def)
+{
+  if (def)
+    gtk_icon_helper_take_definition (self, gtk_image_definition_ref (def));
+  else
+    _gtk_icon_helper_clear (self);
 }
 
 void 

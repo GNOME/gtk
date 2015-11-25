@@ -23,12 +23,12 @@
 #include <gtk/gtkwidget.h>
 #include <gtk/gtkselection.h>
 
-#include "gtkiconhelperprivate.h"
+#include "gtkimagedefinitionprivate.h"
 
 G_BEGIN_DECLS
 
 GdkDragContext *        gtk_drag_begin_internal         (GtkWidget              *widget,
-                                                         GtkIconHelper          *icon_helper,
+                                                         GtkImageDefinition     *icon,
                                                          GtkTargetList          *target_list,
                                                          GdkDragAction           actions,
                                                          gint                    button,

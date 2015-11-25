@@ -29,7 +29,7 @@
 #include "gtkdnd.h"
 #include "gtkdndprivate.h"
 #include "gtkgesturedrag.h"
-#include "gtkiconhelperprivate.h"
+#include "gtkimagedefinitionprivate.h"
 #include "gtkintl.h"
 
 
@@ -41,7 +41,7 @@ struct _GtkDragSourceSite
   GtkTargetList     *target_list;        /* Targets for drag data */
   GdkDragAction      actions;            /* Possible actions */
 
-  GtkIconHelper     *icon_helper;
+  GtkImageDefinition *image_def;
   GtkGesture        *drag_gesture;
 };
   
@@ -92,7 +92,7 @@ gtk_drag_source_event_cb (GtkWidget *widget,
           button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (site->drag_gesture));
 
           gtk_event_controller_reset (GTK_EVENT_CONTROLLER (site->drag_gesture));
-          gtk_drag_begin_internal (widget, site->icon_helper, site->target_list,
+          gtk_drag_begin_internal (widget, site->image_def, site->target_list,
                                    site->actions, button, last_event,
                                    start_x, start_y);
           return TRUE;
@@ -110,7 +110,7 @@ gtk_drag_source_site_destroy (gpointer data)
   if (site->target_list)
     gtk_target_list_unref (site->target_list);
 
-  g_clear_object (&site->icon_helper);
+  gtk_image_definition_unref (site->image_def);
   g_clear_object (&site->drag_gesture);
   g_slice_free (GtkDragSourceSite, site);
 }
@@ -153,7 +153,7 @@ gtk_drag_source_set (GtkWidget            *widget,
   else
     {
       site = g_slice_new0 (GtkDragSourceSite);
-      site->icon_helper = _gtk_icon_helper_new ();
+      site->image_def = gtk_image_definition_new_empty ();
       site->drag_gesture = gtk_gesture_drag_new (widget);
       gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (site->drag_gesture),
                                                   GTK_PHASE_NONE);
@@ -369,7 +369,8 @@ gtk_drag_source_set_icon_pixbuf (GtkWidget *widget,
   g_return_if_fail (site != NULL); 
   g_object_ref (pixbuf);
 
-  _gtk_icon_helper_set_pixbuf (site->icon_helper, pixbuf);
+  g_clear_pointer (&site->image_def, gtk_image_definition_unref);
+  site->image_def = gtk_image_definition_new_pixbuf (pixbuf, 1);
 }
 
 /**
@@ -394,7 +395,8 @@ gtk_drag_source_set_icon_stock (GtkWidget   *widget,
   site = g_object_get_data (G_OBJECT (widget), "gtk-site-data");
   g_return_if_fail (site != NULL);
 
-  _gtk_icon_helper_set_stock_id (site->icon_helper, stock_id, GTK_ICON_SIZE_DND);
+  gtk_image_definition_unref (site->image_def);
+  site->image_def = gtk_image_definition_new_stock (stock_id, GTK_ICON_SIZE_DND);
 }
 
 /**
@@ -419,7 +421,8 @@ gtk_drag_source_set_icon_name (GtkWidget   *widget,
   site = g_object_get_data (G_OBJECT (widget), "gtk-site-data");
   g_return_if_fail (site != NULL);
 
-  _gtk_icon_helper_set_icon_name (site->icon_helper, icon_name, GTK_ICON_SIZE_DND);
+  gtk_image_definition_unref (site->image_def);
+  site->image_def = gtk_image_definition_new_icon_name (icon_name, GTK_ICON_SIZE_DND);
 }
 
 /**
@@ -444,6 +447,7 @@ gtk_drag_source_set_icon_gicon (GtkWidget *widget,
   site = g_object_get_data (G_OBJECT (widget), "gtk-site-data");
   g_return_if_fail (site != NULL);
 
-  _gtk_icon_helper_set_gicon (site->icon_helper, icon, GTK_ICON_SIZE_DND);
+  gtk_image_definition_unref (site->image_def);
+  site->image_def = gtk_image_definition_new_gicon (icon, GTK_ICON_SIZE_DND);
 }
 

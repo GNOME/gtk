@@ -2337,14 +2337,14 @@ gtk_drag_dest_drop (GtkWidget      *widget,
  * so that we can set the icon from the source site information
  */
 GdkDragContext *
-gtk_drag_begin_internal (GtkWidget         *widget,
-                         GtkIconHelper     *icon_helper,
-                         GtkTargetList     *target_list,
-                         GdkDragAction      actions,
-                         gint               button,
-                         const GdkEvent    *event,
-                         int                x,
-                         int                y)
+gtk_drag_begin_internal (GtkWidget          *widget,
+                         GtkImageDefinition *icon,
+                         GtkTargetList      *target_list,
+                         GdkDragAction       actions,
+                         gint                button,
+                         const GdkEvent     *event,
+                         int                 x,
+                         int                 y)
 {
   GtkDragSourceInfo *info;
   GList *targets = NULL;
@@ -2484,12 +2484,11 @@ gtk_drag_begin_internal (GtkWidget         *widget,
    */
   if (!info->icon_window && !info->icon_helper)
     {
-      if (icon_helper)
-        info->icon_helper = g_object_ref (icon_helper);
-      else
-        info->icon_helper = _gtk_icon_helper_new ();
+      info->icon_helper = _gtk_icon_helper_new ();
 
-      if (_gtk_icon_helper_get_is_empty (info->icon_helper))
+      if (icon)
+        _gtk_icon_helper_set_definition (info->icon_helper, icon);
+      else
         _gtk_icon_helper_set_icon_name (info->icon_helper, "text-x-generic", GTK_ICON_SIZE_DND);
 
       set_icon_helper (info->context, info->icon_helper, 0, 0, FALSE);
