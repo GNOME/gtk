@@ -6121,8 +6121,7 @@ gtk_window_show (GtkWidget *widget)
        * and gdk_window_resize() below, rather than
        * queuing it.
        */
-      info->last.configure_request.width = configure_request.width;
-      info->last.configure_request.height = configure_request.height;
+      info->last.configure_request = configure_request;
       
       /* and allocate the window - this is normally done
        * in move_resize in response to configure notify
