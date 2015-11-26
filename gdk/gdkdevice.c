@@ -90,6 +90,7 @@ enum {
   PROP_N_AXES,
   PROP_VENDOR_ID,
   PROP_PRODUCT_ID,
+  PROP_SEAT,
   LAST_PROP
 };
 
@@ -271,6 +272,21 @@ gdk_device_class_init (GdkDeviceClass *klass)
                            G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
                            G_PARAM_STATIC_STRINGS);
 
+  /**
+   * GdkDevice:seat:
+   *
+   * #GdkSeat of this device.
+   *
+   * Since: 3.20
+   */
+  device_props[PROP_SEAT] =
+      g_param_spec_object ("seat",
+                           P_("Seat"),
+                           P_("Seat"),
+                           GDK_TYPE_SEAT,
+                           G_PARAM_READWRITE |
+                           G_PARAM_STATIC_STRINGS);
+
   g_object_class_install_properties (object_class, LAST_PROP, device_props);
 
   /**
@@ -381,6 +397,9 @@ gdk_device_set_property (GObject      *object,
     case PROP_PRODUCT_ID:
       device->product_id = g_value_dup_string (value);
       break;
+    case PROP_SEAT:
+      device->seat = g_value_get_object (value);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -429,6 +448,9 @@ gdk_device_get_property (GObject    *object,
       break;
     case PROP_PRODUCT_ID:
       g_value_set_string (value, device->product_id);
+      break;
+    case PROP_SEAT:
+      g_value_set_object (value, device->seat);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1879,4 +1901,37 @@ gdk_device_get_product_id (GdkDevice *device)
   g_return_val_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_MASTER, NULL);
 
   return device->product_id;
+}
+
+void
+gdk_device_set_seat (GdkDevice *device,
+                     GdkSeat   *seat)
+{
+  g_return_if_fail (GDK_IS_DEVICE (device));
+  g_return_if_fail (!seat || GDK_IS_SEAT (seat));
+
+  if (device->seat == seat)
+    return;
+
+  device->seat = seat;
+  g_object_notify (G_OBJECT (device), "seat");
+}
+
+/**
+ * gdk_device_get_seat:
+ * @device: A #GdkDevice
+ *
+ * Returns the #GdkSeat the device belongs to.
+ *
+ * Returns: (transfer none): A #GdkSeat. This memory is owned by GTK+ and
+ *          must not be freed.
+ *
+ * Since: 3.20
+ **/
+GdkSeat *
+gdk_device_get_seat (GdkDevice *device)
+{
+  g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
+
+  return device->seat;
 }

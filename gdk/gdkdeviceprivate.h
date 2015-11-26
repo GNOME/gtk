@@ -21,6 +21,7 @@
 #include "gdkdevice.h"
 #include "gdkdevicemanager.h"
 #include "gdkevents.h"
+#include "gdkseat.h"
 
 G_BEGIN_DECLS
 
@@ -59,6 +60,8 @@ struct _GdkDevice
 
   gchar *vendor_id;
   gchar *product_id;
+
+  GdkSeat *seat;
 };
 
 struct _GdkDeviceClass
@@ -175,6 +178,9 @@ GdkWindow * _gdk_device_window_at_position    (GdkDevice        *device,
                                                gdouble          *win_y,
                                                GdkModifierType  *mask,
                                                gboolean          get_toplevel);
+
+void  gdk_device_set_seat  (GdkDevice *device,
+                            GdkSeat   *seat);
 
 G_END_DECLS
 
