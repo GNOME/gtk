@@ -96,7 +96,6 @@ struct _GtkCellRendererAccelPrivate
   guint accel_key;
   guint keycode;
 
-  GdkDevice *grab_keyboard;
   GdkDevice *grab_pointer;
 };
 
@@ -441,8 +440,7 @@ gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
   GtkWidget *label;
   GtkWidget *eventbox;
   gboolean editable;
-  GdkDevice *device, *keyboard, *pointer;
-  guint32 timestamp;
+  GdkDevice *device, *pointer;
   GdkWindow *window;
 
   celltext = GTK_CELL_RENDERER_TEXT (cell);
@@ -465,34 +463,15 @@ gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
     return NULL;
 
   if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
-    {
-      keyboard = device;
-      pointer = gdk_device_get_associated_device (device);
-    }
+    pointer = gdk_device_get_associated_device (device);
   else
-    {
-      pointer = device;
-      keyboard = gdk_device_get_associated_device (device);
-    }
+    pointer = device;
 
-  timestamp = gdk_event_get_time (event);
-
-  if (gdk_device_grab (keyboard, window,
-                       GDK_OWNERSHIP_WINDOW, FALSE,
-                       GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK,
-                       NULL, timestamp) != GDK_GRAB_SUCCESS)
+  if (gdk_seat_grab (gdk_device_get_seat (pointer), window,
+                     GDK_SEAT_CAPABILITY_ALL, FALSE,
+                     NULL, event, NULL, NULL) != GDK_GRAB_SUCCESS)
     return NULL;
 
-  if (gdk_device_grab (pointer, window,
-                       GDK_OWNERSHIP_WINDOW, FALSE,
-                       GDK_BUTTON_PRESS_MASK,
-                       NULL, timestamp) != GDK_GRAB_SUCCESS)
-    {
-      gdk_device_ungrab (keyboard, timestamp);
-      return NULL;
-    }
-
-  priv->grab_keyboard = keyboard;
   priv->grab_pointer = pointer;
 
   eventbox = gtk_cell_editable_event_box_new (cell, priv->accel_mode, path);
@@ -521,11 +500,9 @@ gtk_cell_renderer_accel_ungrab (GtkCellRendererAccel *accel)
 {
   GtkCellRendererAccelPrivate *priv = accel->priv;
 
-  if (priv->grab_keyboard)
+  if (priv->grab_pointer)
     {
-      gdk_device_ungrab (priv->grab_keyboard, GDK_CURRENT_TIME);
-      gdk_device_ungrab (priv->grab_pointer, GDK_CURRENT_TIME);
-      priv->grab_keyboard = NULL;
+      gdk_seat_ungrab (gdk_device_get_seat (priv->grab_pointer));
       priv->grab_pointer = NULL;
     }
 }
