@@ -2912,6 +2912,31 @@ gdk_x11_display_get_keymap (GdkDisplay *display)
   return display_x11->keymap;
 }
 
+static GdkSeat *
+gdk_x11_display_get_default_seat (GdkDisplay *display)
+{
+  GList *seats, *l;
+  int device_id;
+
+  seats = gdk_display_list_seats (display);
+  XIGetClientPointer (GDK_DISPLAY_XDISPLAY (display),
+                      None, &device_id);
+
+  for (l = seats; l; l = l->next)
+    {
+      GdkDevice *pointer;
+
+      pointer = gdk_seat_get_pointer (l->data);
+
+      if (gdk_x11_device_get_id (pointer) == device_id)
+        return l->data;
+    }
+
+  g_list_free (seats);
+
+  return NULL;
+}
+
 static void
 gdk_x11_display_class_init (GdkX11DisplayClass * class)
 {
@@ -2966,6 +2991,8 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
   display_class->utf8_to_string_target = _gdk_x11_display_utf8_to_string_target;
 
   display_class->make_gl_context_current = gdk_x11_display_make_gl_context_current;
+
+  display_class->get_default_seat = gdk_x11_display_get_default_seat;
 
   _gdk_x11_windowing_init ();
 }
