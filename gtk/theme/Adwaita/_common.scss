@@ -211,8 +211,7 @@ popover.magnifier,
 }
 
 spinner {
-  background-image: none;
-  background-color: blue;
+  background: none;
   opacity: 0; // non spinning spinner makes no sense
   -gtk-icon-source: -gtk-icontheme('process-working-symbolic');
   &:active {
