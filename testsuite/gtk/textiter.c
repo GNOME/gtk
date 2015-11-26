@@ -186,6 +186,12 @@ test_search (void)
   check_found_backward ("This is some \303\240 text", "some \303\240", 0, 8, 14, "some \303\240");
   check_found_backward ("This is some \303\240 text", "\303\240 text", 0, 13, 19, "\303\240 text");
   check_found_backward ("This is some \303\240 text", "some \303\240 text", 0, 8, 19, "some \303\240 text");
+
+  /* multi-byte characters outside the needle */
+  check_found_forward ("\303\200 aa", "aa", 0, 2, 4, "aa");
+  check_found_forward ("aa \303\200", "aa", 0, 0, 2, "aa");
+  check_found_backward ("\303\200 aa", "aa", 0, 2, 4, "aa");
+  check_found_backward ("aa \303\200", "aa", 0, 0, 2, "aa");
 }
 
 static void
@@ -265,6 +271,12 @@ test_search_caseless (void)
   check_found_backward ("This is some Foo\nFoo text", "foo\nfoo", flags, 13, 20, "Foo\nFoo");
   check_found_backward ("This is some \303\200\n\303\200 text", "\303\240\n\303\240", flags, 13, 16, "\303\200\n\303\200");
   check_found_backward ("This is some \303\200\n\303\200 text", "a\314\200\na\314\200", flags, 13, 16, "\303\200\n\303\200");
+
+  /* multi-byte characters outside the needle */
+  check_found_forward ("\303\200 aa", "aa", flags, 2, 4, "aa");
+  check_found_forward ("aa \303\200", "aa", flags, 0, 2, "aa");
+  check_found_backward ("\303\200 aa", "aa", flags, 2, 4, "aa");
+  check_found_backward ("aa \303\200", "aa", flags, 0, 2, "aa");
 }
 
 static void
