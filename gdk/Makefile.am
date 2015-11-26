@@ -85,6 +85,7 @@ gdk_public_h_sources = 				\
 	gdkrectangle.h				\
 	gdkrgba.h				\
 	gdkscreen.h				\
+	gdkseat.h				\
 	gdkselection.h				\
 	gdktestutils.h				\
 	gdkthreads.h				\
@@ -112,6 +113,7 @@ gdk_private_headers = 				\
 	gdkframeclockprivate.h			\
 	gdkglcontextprivate.h			\
 	gdkscreenprivate.h			\
+	gdkseatprivate.h			\
 	gdkinternals.h				\
 	gdkintl.h				\
 	gdkkeysprivate.h			\
@@ -150,6 +152,7 @@ gdk_c_sources = 				\
 	gdkrectangle.c				\
 	gdkrgba.c				\
 	gdkscreen.c				\
+	gdkseat.c				\
 	gdkselection.c				\
 	gdkvisual.c				\
 	gdkwindow.c				\

@@ -143,6 +143,7 @@ typedef struct _GdkScreen             GdkScreen;
 typedef struct _GdkWindow             GdkWindow;
 typedef struct _GdkKeymap             GdkKeymap;
 typedef struct _GdkAppLaunchContext   GdkAppLaunchContext;
+typedef struct _GdkSeat               GdkSeat;
 
 typedef struct _GdkGLContext          GdkGLContext;
 
