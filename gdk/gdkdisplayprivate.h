@@ -125,6 +125,8 @@ struct _GdkDisplay
   guint debug_updates_set : 1;
 
   GdkRenderingMode rendering_mode;
+
+  GList *seats;
 };
 
 struct _GdkDisplayClass
@@ -237,6 +239,8 @@ struct _GdkDisplayClass
   gboolean               (*make_gl_context_current)    (GdkDisplay        *display,
                                                         GdkGLContext      *context);
 
+  GdkSeat *              (*get_default_seat)           (GdkDisplay     *display);
+
   /* Signals */
   void                   (*opened)                     (GdkDisplay     *display);
   void (*closed) (GdkDisplay *display,
@@ -317,6 +321,11 @@ GdkWindow *         _gdk_display_create_window        (GdkDisplay       *display
 
 gboolean            gdk_display_make_gl_context_current  (GdkDisplay        *display,
                                                           GdkGLContext      *context);
+
+void                gdk_display_add_seat              (GdkDisplay       *display,
+                                                       GdkSeat          *seat);
+void                gdk_display_remove_seat           (GdkDisplay       *display,
+                                                       GdkSeat          *seat);
 
 G_END_DECLS
 

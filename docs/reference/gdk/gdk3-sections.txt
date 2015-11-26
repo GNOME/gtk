@@ -156,6 +156,8 @@ gdk_display_supports_input_shapes
 gdk_display_supports_composite
 gdk_display_get_app_launch_context
 gdk_display_notify_startup_complete
+gdk_display_get_default_seat
+gdk_display_list_seats
 
 <SUBSECTION Standard>
 GDK_DISPLAY
