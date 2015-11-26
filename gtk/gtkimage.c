@@ -455,7 +455,10 @@ gtk_image_set_property (GObject      *object,
       break;
     case PROP_ICON_SIZE:
       if (_gtk_icon_helper_set_icon_size (priv->icon_helper, g_value_get_int (value)))
-        g_object_notify_by_pspec (object, pspec);
+        {
+          g_object_notify_by_pspec (object, pspec);
+          gtk_widget_queue_resize (GTK_WIDGET (image));
+        }
       break;
     case PROP_PIXEL_SIZE:
       gtk_image_set_pixel_size (image, g_value_get_int (value));
