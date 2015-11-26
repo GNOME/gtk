@@ -5645,6 +5645,7 @@ gtk_window_move (GtkWindow *window,
   else
     {
       /* Save this position to apply on mapping */
+      gtk_widget_queue_resize (widget);
       info->initial_x = x;
       info->initial_y = y;
       info->initial_pos_set = TRUE;
