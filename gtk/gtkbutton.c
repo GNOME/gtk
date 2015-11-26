@@ -2081,14 +2081,13 @@ gtk_real_button_activate (GtkButton *button)
        */
       if (device && gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
 	{
-	  if (gdk_device_grab (device, priv->event_window,
-			       GDK_OWNERSHIP_WINDOW, TRUE,
-			       GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK,
-			       NULL, time) == GDK_GRAB_SUCCESS)
-	    {
-	      gtk_device_grab_add (widget, device, TRUE);
-	      priv->grab_keyboard = device;
-	      priv->grab_time = time;
+          if (gdk_seat_grab (gdk_device_get_seat (device), priv->event_window,
+                             GDK_SEAT_CAPABILITY_KEYBOARD, TRUE,
+                             NULL, NULL, NULL, NULL) == GDK_GRAB_SUCCESS)
+            {
+              gtk_device_grab_add (widget, device, TRUE);
+              priv->grab_keyboard = device;
+              priv->grab_time = time;
 	    }
 	}
 
@@ -2113,7 +2112,7 @@ gtk_button_finish_activate (GtkButton *button,
 
   if (priv->grab_keyboard)
     {
-      gdk_device_ungrab (priv->grab_keyboard, priv->grab_time);
+      gdk_seat_ungrab (gdk_device_get_seat (priv->grab_keyboard));
       gtk_device_grab_remove (widget, priv->grab_keyboard);
       priv->grab_keyboard = NULL;
     }
