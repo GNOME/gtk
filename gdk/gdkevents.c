@@ -2314,3 +2314,38 @@ gdk_event_get_event_type (const GdkEvent *event)
 
   return event->type;
 }
+
+/**
+ * gdk_event_get_seat:
+ * @event: a #GdkEvent
+ *
+ * Returns the #GdkSeat this event was generated for.
+ *
+ * Returns: (transfer none): The #GdkSeat of this event
+ *
+ * Since: 3.20
+ **/
+GdkSeat *
+gdk_event_get_seat (const GdkEvent *event)
+{
+  const GdkEventPrivate *priv;
+
+  if (!gdk_event_is_allocated (event))
+    return NULL;
+
+  priv = (const GdkEventPrivate *) event;
+  return priv->seat;
+}
+
+void
+gdk_event_set_seat (GdkEvent *event,
+                    GdkSeat  *seat)
+{
+  GdkEventPrivate *priv;
+
+  if (gdk_event_is_allocated (event))
+    {
+      priv = (GdkEventPrivate *) event;
+      priv->seat = seat;
+    }
+}

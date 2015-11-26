@@ -1427,6 +1427,9 @@ GdkEventSequence *gdk_event_get_event_sequence (const GdkEvent *event);
 GDK_AVAILABLE_IN_3_10
 GdkEventType gdk_event_get_event_type   (const GdkEvent *event);
 
+GDK_AVAILABLE_IN_3_20
+GdkSeat  *gdk_event_get_seat            (const GdkEvent *event);
+
 GDK_AVAILABLE_IN_ALL
 void	  gdk_set_show_events		(gboolean	 show_events);
 GDK_AVAILABLE_IN_ALL
