@@ -114,6 +114,7 @@ gdk_private_headers = 				\
 	gdkglcontextprivate.h			\
 	gdkscreenprivate.h			\
 	gdkseatprivate.h			\
+	gdkseatdefaultprivate.h			\
 	gdkinternals.h				\
 	gdkintl.h				\
 	gdkkeysprivate.h			\
@@ -153,6 +154,7 @@ gdk_c_sources = 				\
 	gdkrgba.c				\
 	gdkscreen.c				\
 	gdkseat.c				\
+	gdkseatdefault.c			\
 	gdkselection.c				\
 	gdkvisual.c				\
 	gdkwindow.c				\
