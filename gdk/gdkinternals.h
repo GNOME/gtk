@@ -185,6 +185,7 @@ struct _GdkEventPrivate
   gpointer   windowing_data;
   GdkDevice *device;
   GdkDevice *source_device;
+  GdkSeat   *seat;
 };
 
 typedef struct _GdkWindowPaint GdkWindowPaint;
@@ -389,6 +390,9 @@ void _gdk_event_filter_unref        (GdkWindow      *window,
 void     _gdk_event_set_pointer_emulated (GdkEvent *event,
                                           gboolean  emulated);
 gboolean _gdk_event_get_pointer_emulated (GdkEvent *event);
+
+void     gdk_event_set_seat              (GdkEvent *event,
+                                          GdkSeat  *seat);
 
 void   _gdk_event_emit               (GdkEvent   *event);
 GList* _gdk_event_queue_find_first   (GdkDisplay *display);
