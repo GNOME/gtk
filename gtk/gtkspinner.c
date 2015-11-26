@@ -38,6 +38,7 @@
 #include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
 #include "a11y/gtkspinneraccessible.h"
+#include "gtkcsscustomgadgetprivate.h"
 
 
 /**
@@ -59,8 +60,6 @@
  */
 
 
-#define SPINNER_SIZE 16
-
 enum {
   PROP_0,
   PROP_ACTIVE
@@ -68,65 +67,157 @@ enum {
 
 struct _GtkSpinnerPrivate
 {
+  GtkCssGadget *gadget;
   gboolean active;
 };
-
-static gboolean gtk_spinner_draw       (GtkWidget       *widget,
-                                        cairo_t         *cr);
-static void gtk_spinner_size_allocate  (GtkWidget       *widget,
-                                        GtkAllocation   *allocation);
-static void gtk_spinner_get_property   (GObject         *object,
-                                        guint            param_id,
-                                        GValue          *value,
-                                        GParamSpec      *pspec);
-static void gtk_spinner_set_property   (GObject         *object,
-                                        guint            param_id,
-                                        const GValue    *value,
-                                        GParamSpec      *pspec);
-static void gtk_spinner_set_active     (GtkSpinner      *spinner,
-                                        gboolean         active);
-static void gtk_spinner_get_preferred_width (GtkWidget  *widget,
-                                        gint            *minimum_size,
-                                        gint            *natural_size);
-static void gtk_spinner_get_preferred_height (GtkWidget *widget,
-                                        gint            *minimum_size,
-                                        gint            *natural_size);
-
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkSpinner, gtk_spinner, GTK_TYPE_WIDGET)
 
 static void
-gtk_spinner_class_init (GtkSpinnerClass *klass)
+gtk_spinner_finalize (GObject *object)
 {
-  GObjectClass *gobject_class;
-  GtkWidgetClass *widget_class;
+  GtkSpinner *spinner = GTK_SPINNER (object);
 
-  gobject_class = G_OBJECT_CLASS(klass);
-  gobject_class->get_property = gtk_spinner_get_property;
-  gobject_class->set_property = gtk_spinner_set_property;
+  g_clear_object (&spinner->priv->gadget);
 
-  widget_class = GTK_WIDGET_CLASS(klass);
-  widget_class->size_allocate = gtk_spinner_size_allocate;
-  widget_class->draw = gtk_spinner_draw;
-  widget_class->get_preferred_width = gtk_spinner_get_preferred_width;
-  widget_class->get_preferred_height = gtk_spinner_get_preferred_height;
+  G_OBJECT_CLASS (gtk_spinner_parent_class)->finalize (object);
+}
 
-  /* GtkSpinner:active:
-   *
-   * Whether the spinner is active
-   *
-   * Since: 2.20
-   */
-  g_object_class_install_property (gobject_class,
-                                   PROP_ACTIVE,
-                                   g_param_spec_boolean ("active",
-                                                         P_("Active"),
-                                                         P_("Whether the spinner is active"),
-                                                         FALSE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+static void
+gtk_spinner_measure (GtkCssGadget   *gadget,
+                     GtkOrientation  orientation,
+                     gint            for_size,
+                     gint           *minimum,
+                     gint           *natural,
+                     gint           *minimum_baseline,
+                     gint           *natural_baseline,
+                     gpointer        data)
+{
+  *minimum = *natural = 16;
+}
 
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_SPINNER_ACCESSIBLE);
-  gtk_widget_class_set_css_name (widget_class, "spinner");
+static void
+gtk_spinner_get_preferred_width (GtkWidget *widget,
+                                 gint      *minimum,
+                                 gint      *natural)
+{
+  gtk_css_gadget_get_preferred_size (GTK_SPINNER (widget)->priv->gadget,
+                                     GTK_ORIENTATION_HORIZONTAL,
+                                     -1,
+                                     minimum, natural,
+                                     NULL, NULL);
+}
+
+static void
+gtk_spinner_get_preferred_height (GtkWidget *widget,
+                                  gint      *minimum,
+                                  gint      *natural)
+{
+  gtk_css_gadget_get_preferred_size (GTK_SPINNER (widget)->priv->gadget,
+                                     GTK_ORIENTATION_VERTICAL,
+                                     -1,
+                                     minimum, natural,
+                                     NULL, NULL);
+}
+
+static void
+gtk_spinner_allocate (GtkCssGadget        *gadget,
+                      const GtkAllocation *allocation,
+                      gint                 baseline,
+                      GtkAllocation       *out_clip,
+                      gpointer             data)
+{
+  GtkWidget *widget;
+  GtkStyleContext *context;
+  gint size;
+
+  widget = gtk_css_gadget_get_owner (gadget);
+  context = gtk_widget_get_style_context (widget);
+  size = MIN (allocation->width, allocation->height);
+
+  gtk_widget_set_allocation (widget, allocation);
+
+  _gtk_style_context_get_icon_extents (context,
+                                       out_clip,
+                                       allocation->x + (allocation->width - size) / 2,
+                                       allocation->y + (allocation->height - size) / 2,
+                                       size, size);
+
+  gdk_rectangle_union (out_clip, allocation, out_clip);
+}
+
+static void
+gtk_spinner_size_allocate (GtkWidget     *widget,
+                           GtkAllocation *allocation)
+{
+  GtkAllocation clip;
+
+  gtk_widget_set_allocation (widget, allocation);
+
+  gtk_css_gadget_allocate (GTK_SPINNER (widget)->priv->gadget,
+                           allocation,
+                           gtk_widget_get_allocated_baseline (widget),
+                           &clip);
+
+  gtk_widget_set_clip (widget, &clip);
+}
+
+static gboolean
+gtk_spinner_draw (GtkWidget *widget,
+                  cairo_t   *cr)
+{
+  gtk_css_gadget_draw (GTK_SPINNER (widget)->priv->gadget, cr);
+
+  return FALSE;
+}
+
+static gboolean
+gtk_spinner_render (GtkCssGadget *gadget,
+                    cairo_t      *cr,
+                    gint          x,
+                    gint          y,
+                    gint          width,
+                    gint          height,
+                    gpointer      data)
+{
+  GtkWidget *widget;
+  GtkStyleContext *context;
+  gint size;
+
+  widget = gtk_css_gadget_get_owner (gadget);
+  context = gtk_widget_get_style_context (widget);
+
+  size = MIN (width, height);
+
+  gtk_render_activity (context, cr,
+                       (width - size) / 2,
+                       (height - size) / 2,
+                       size, size);
+
+  return FALSE;
+}
+
+static void
+gtk_spinner_set_active (GtkSpinner *spinner,
+                        gboolean    active)
+{
+  GtkSpinnerPrivate *priv = spinner->priv;
+
+  active = !!active;
+
+  if (priv->active != active)
+    {
+      priv->active = active;
+
+      g_object_notify (G_OBJECT (spinner), "active");
+
+      if (active)
+        gtk_widget_set_state_flags (GTK_WIDGET (spinner),
+                                    GTK_STATE_FLAG_CHECKED, FALSE);
+      else
+        gtk_widget_unset_state_flags (GTK_WIDGET (spinner),
+                                      GTK_STATE_FLAG_CHECKED);
+    }
 }
 
 static void
@@ -166,97 +257,57 @@ gtk_spinner_set_property (GObject      *object,
 }
 
 static void
+gtk_spinner_class_init (GtkSpinnerClass *klass)
+{
+  GObjectClass *gobject_class;
+  GtkWidgetClass *widget_class;
+
+  gobject_class = G_OBJECT_CLASS(klass);
+  gobject_class->finalize = gtk_spinner_finalize;
+  gobject_class->get_property = gtk_spinner_get_property;
+  gobject_class->set_property = gtk_spinner_set_property;
+
+  widget_class = GTK_WIDGET_CLASS(klass);
+  widget_class->size_allocate = gtk_spinner_size_allocate;
+  widget_class->draw = gtk_spinner_draw;
+  widget_class->get_preferred_width = gtk_spinner_get_preferred_width;
+  widget_class->get_preferred_height = gtk_spinner_get_preferred_height;
+
+  /* GtkSpinner:active:
+   *
+   * Whether the spinner is active
+   *
+   * Since: 2.20
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_ACTIVE,
+                                   g_param_spec_boolean ("active",
+                                                         P_("Active"),
+                                                         P_("Whether the spinner is active"),
+                                                         FALSE,
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_SPINNER_ACCESSIBLE);
+  gtk_widget_class_set_css_name (widget_class, "spinner");
+}
+
+static void
 gtk_spinner_init (GtkSpinner *spinner)
 {
+  GtkCssNode *widget_node;
+
   spinner->priv = gtk_spinner_get_instance_private (spinner);
 
   gtk_widget_set_has_window (GTK_WIDGET (spinner), FALSE);
-}
 
-static void
-gtk_spinner_get_preferred_width (GtkWidget *widget,
-                                 gint      *minimum_size,
-                                 gint      *natural_size)
-{
-  *minimum_size = SPINNER_SIZE;
-  *natural_size = SPINNER_SIZE;
-}
-
-static void
-gtk_spinner_get_preferred_height (GtkWidget *widget,
-                                  gint      *minimum_size,
-                                  gint      *natural_size)
-{
-  *minimum_size = SPINNER_SIZE;
-  *natural_size = SPINNER_SIZE;
-}
-
-static void
-gtk_spinner_size_allocate (GtkWidget     *widget,
-                           GtkAllocation *allocation)
-{
-  GtkStyleContext *context;
-  GtkAllocation clip;
-  gint size;
-
-  context = gtk_widget_get_style_context (widget);
-  size = MIN (allocation->width, allocation->height);
-
-  _gtk_style_context_get_icon_extents (context,
-                                       &clip,
-                                       allocation->x + (allocation->width - size) / 2,
-                                       allocation->y + (allocation->height - size) / 2,
-                                       size, size);
-
-  gdk_rectangle_union (&clip, allocation, &clip);
-
-  gtk_widget_set_allocation (widget, allocation);
-  gtk_widget_set_clip (widget, &clip);
-}
-
-static gboolean
-gtk_spinner_draw (GtkWidget *widget,
-                  cairo_t   *cr)
-{
-  GtkStyleContext *context;
-  gint width, height;
-  gint size;
-
-  context = gtk_widget_get_style_context (widget);
-
-  width = gtk_widget_get_allocated_width (widget);
-  height = gtk_widget_get_allocated_height (widget);
-  size = MIN (width, height);
-
-  gtk_render_activity (context, cr,
-                       (width - size) / 2,
-                       (height - size) / 2,
-                       size, size);
-
-  return FALSE;
-}
-
-static void
-gtk_spinner_set_active (GtkSpinner *spinner,
-                        gboolean    active)
-{
-  GtkSpinnerPrivate *priv = spinner->priv;
-
-  active = !!active;
-
-  if (priv->active != active)
-    {
-      priv->active = active;
-
-      g_object_notify (G_OBJECT (spinner), "active");
-
-      if (active)
-        gtk_widget_set_state_flags (GTK_WIDGET (spinner),
-                                    GTK_STATE_FLAG_CHECKED, FALSE);
-      else
-        gtk_widget_unset_state_flags (GTK_WIDGET (spinner),
-                                      GTK_STATE_FLAG_CHECKED);
-    }
+  widget_node = gtk_widget_get_css_node (GTK_WIDGET (spinner));
+  spinner->priv->gadget = gtk_css_custom_gadget_new_for_node (widget_node,
+                                                              GTK_WIDGET (spinner),
+                                                              gtk_spinner_measure,
+                                                              gtk_spinner_allocate,
+                                                              gtk_spinner_render,
+                                                              NULL,
+                                                              NULL);
 }
 
 /**
