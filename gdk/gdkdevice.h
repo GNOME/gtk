@@ -279,6 +279,9 @@ const gchar *gdk_device_get_vendor_id       (GdkDevice *device);
 GDK_AVAILABLE_IN_3_16
 const gchar *gdk_device_get_product_id      (GdkDevice *device);
 
+GDK_AVAILABLE_IN_3_20
+GdkSeat     *gdk_device_get_seat            (GdkDevice *device);
+
 G_END_DECLS
 
 #endif /* __GDK_DEVICE_H__ */
