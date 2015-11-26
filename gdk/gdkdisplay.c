@@ -125,6 +125,15 @@ gdk_display_real_event_data_free (GdkDisplay     *display,
 {
 }
 
+static GdkSeat *
+gdk_display_real_get_default_seat (GdkDisplay *display)
+{
+  if (!display->seats)
+    return NULL;
+
+  return display->seats->data;
+}
+
 static void
 gdk_display_class_init (GdkDisplayClass *class)
 {
@@ -140,6 +149,7 @@ gdk_display_class_init (GdkDisplayClass *class)
   class->make_default = gdk_display_real_make_default;
   class->event_data_copy = gdk_display_real_event_data_copy;
   class->event_data_free = gdk_display_real_event_data_free;
+  class->get_default_seat = gdk_display_real_get_default_seat;
 
   /**
    * GdkDisplay::opened:
@@ -2317,4 +2327,74 @@ gdk_display_get_debug_updates (GdkDisplay *display)
     return display->debug_updates;
   else
     return _gdk_debug_updates;
+}
+
+void
+gdk_display_add_seat (GdkDisplay *display,
+                      GdkSeat    *seat)
+{
+  g_return_if_fail (GDK_IS_DISPLAY (display));
+  g_return_if_fail (GDK_IS_SEAT (seat));
+
+  display->seats = g_list_prepend (display->seats, g_object_ref (seat));
+}
+
+void
+gdk_display_remove_seat (GdkDisplay *display,
+                         GdkSeat    *seat)
+{
+  GList *link;
+
+  g_return_if_fail (GDK_IS_DISPLAY (display));
+  g_return_if_fail (GDK_IS_SEAT (seat));
+
+  link = g_list_find (display->seats, seat);
+
+  if (link)
+    {
+      display->seats = g_list_remove_link (display->seats, link);
+      g_object_unref (link->data);
+      g_list_free (link);
+    }
+}
+
+/**
+ * gdk_display_get_default_seat:
+ * @display: a #GdkDisplay
+ *
+ * Returns the default #GdkSeat for this display.
+ *
+ * Returns: (transfer none): the default seat.
+ *
+ * Since: 3.20
+ **/
+GdkSeat *
+gdk_display_get_default_seat (GdkDisplay *display)
+{
+  GdkDisplayClass *display_class;
+
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+
+  display_class = GDK_DISPLAY_GET_CLASS (display);
+
+  return display_class->get_default_seat (display);
+}
+
+/**
+ * gdk_display_list_seats:
+ * @display: a #GdkDisplay
+ *
+ * Returns the list of seats known to @display.
+ *
+ * Returns: (transfer container) (element-type GdkSeat): the
+ *          list of seats known to the #GdkDisplay
+ *
+ * Since: 3.20
+ **/
+GList *
+gdk_display_list_seats (GdkDisplay *display)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+
+  return g_list_copy (display->seats);
 }
