@@ -5308,37 +5308,34 @@ gtk_text_iter_backward_search (const GtkTextIter *iter,
         {
           /* Match! */
           gint offset;
-          GtkTextIter next;
           GtkTextIter start_tmp;
-          
+          GtkTextIter end_tmp;
+
           /* Offset to start of search string */
           offset = g_utf8_strlen (*win.lines, first_line_match - *win.lines);
 
-          next = win.first_line_start;
-          start_tmp = next;
+          start_tmp = win.first_line_start;
           forward_chars_with_skipping (&start_tmp, offset,
                                        visible_only, !slice, FALSE);
 
           if (limit &&
               gtk_text_iter_compare (limit, &start_tmp) > 0)
             goto out; /* match was bogus */
-          
+
           if (match_start)
             *match_start = start_tmp;
 
           /* Go to end of search string */
-          l = lines;
-          while (*l)
-            {
-              offset += g_utf8_strlen (*l, -1);
-              ++l;
-            }
+          offset = 0;
+          for (l = lines; *l != NULL; l++)
+            offset += g_utf8_strlen (*l, -1);
 
-          forward_chars_with_skipping (&next, offset,
+          end_tmp = start_tmp;
+          forward_chars_with_skipping (&end_tmp, offset,
                                        visible_only, !slice, case_insensitive);
 
           if (match_end)
-            *match_end = next;
+            *match_end = end_tmp;
 
           retval = TRUE;
           goto out;
