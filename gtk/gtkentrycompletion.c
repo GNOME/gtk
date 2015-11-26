@@ -1609,6 +1609,22 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
 }
 
 static void
+prepare_popup_func (GdkSeat   *seat,
+                    GdkWindow *window,
+                    gpointer   user_data)
+{
+  GtkEntryCompletion *completion = user_data;
+
+  /* prevent the first row being focused */
+  gtk_widget_grab_focus (completion->priv->tree_view);
+
+  gtk_tree_selection_unselect_all (gtk_tree_view_get_selection (GTK_TREE_VIEW (completion->priv->tree_view)));
+  gtk_tree_selection_unselect_all (gtk_tree_view_get_selection (GTK_TREE_VIEW (completion->priv->action_view)));
+
+  gtk_widget_show (completion->priv->popup_window);
+}
+
+static void
 gtk_entry_completion_popup (GtkEntryCompletion *completion)
 {
   GtkWidget *toplevel;
@@ -1643,26 +1659,17 @@ gtk_entry_completion_popup (GtkEntryCompletion *completion)
                                    GTK_WINDOW (completion->priv->popup_window));
     }
 
-  /* prevent the first row being focused */
-  gtk_widget_grab_focus (completion->priv->tree_view);
-
-  gtk_tree_selection_unselect_all (gtk_tree_view_get_selection (GTK_TREE_VIEW (completion->priv->tree_view)));
-  gtk_tree_selection_unselect_all (gtk_tree_view_get_selection (GTK_TREE_VIEW (completion->priv->action_view)));
-
   gtk_window_set_screen (GTK_WINDOW (completion->priv->popup_window),
                          gtk_widget_get_screen (completion->priv->entry));
 
-  gtk_widget_show (completion->priv->popup_window);
-
   if (completion->priv->device)
     {
-      gtk_device_grab_add (completion->priv->popup_window, completion->priv->device, TRUE);
-      gdk_device_grab (completion->priv->device, gtk_widget_get_window (completion->priv->popup_window),
-                       GDK_OWNERSHIP_WINDOW, TRUE,
-                       GDK_BUTTON_PRESS_MASK |
-                       GDK_BUTTON_RELEASE_MASK |
-                       GDK_POINTER_MOTION_MASK,
-                       NULL, GDK_CURRENT_TIME);
+      gtk_grab_add (completion->priv->popup_window);
+      gdk_seat_grab (gdk_device_get_seat (completion->priv->device),
+                     gtk_widget_get_window (completion->priv->popup_window),
+                     GDK_SEAT_CAPABILITY_POINTER | GDK_SEAT_CAPABILITY_TOUCH,
+                     TRUE, NULL, NULL,
+                     prepare_popup_func, completion);
 
       completion->priv->has_grab = TRUE;
     }
@@ -1678,9 +1685,8 @@ _gtk_entry_completion_popdown (GtkEntryCompletion *completion)
 
   if (completion->priv->has_grab)
     {
-      gdk_device_ungrab (completion->priv->device, GDK_CURRENT_TIME);
-      gtk_device_grab_remove (completion->priv->popup_window,
-                              completion->priv->device);
+      gdk_seat_ungrab (gdk_device_get_seat (completion->priv->device));
+      gtk_grab_remove (completion->priv->popup_window);
       completion->priv->has_grab = FALSE;
     }
 
