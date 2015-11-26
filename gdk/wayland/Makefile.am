@@ -45,6 +45,7 @@ libgdk_wayland_la_SOURCES =			\
 	gdkglcontext-wayland.c			\
 	gdkglcontext-wayland.h			\
 	gdkscreen-wayland.c			\
+	gdkseat-wayland.h			\
 	gdkselection-wayland.c			\
 	gdkwindow-wayland.c			\
 	gdkwayland.h				\
