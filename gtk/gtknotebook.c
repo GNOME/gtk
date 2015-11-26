@@ -3122,6 +3122,14 @@ get_drop_position (GtkNotebook *notebook)
 }
 
 static void
+prepare_drag_window (GdkSeat   *seat,
+                     GdkWindow *window,
+                     gpointer   user_data)
+{
+  gdk_window_show (window);
+}
+
+static void
 show_drag_window (GtkNotebook        *notebook,
                   GtkNotebookPrivate    *priv,
                   GtkNotebookPage    *page,
@@ -3158,13 +3166,10 @@ show_drag_window (GtkNotebook        *notebook,
   gtk_widget_set_parent (page->tab_label, widget);
   g_object_unref (page->tab_label);
 
-  gdk_window_show (priv->drag_window);
-
   /* the grab will dissapear when the window is hidden */
-  gdk_device_grab (device, priv->drag_window,
-                   GDK_OWNERSHIP_WINDOW, FALSE,
-                   GDK_POINTER_MOTION_MASK | GDK_BUTTON_RELEASE_MASK,
-                   NULL, GDK_CURRENT_TIME);
+  gdk_seat_grab (gdk_device_get_seat (device), priv->drag_window,
+                 GDK_SEAT_CAPABILITY_ALL, FALSE,
+                 NULL, NULL, prepare_drag_window, notebook);
 }
 
 /* This function undoes the reparenting that happens both when drag_window
