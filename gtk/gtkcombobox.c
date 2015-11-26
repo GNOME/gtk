@@ -162,7 +162,6 @@ struct _GtkComboBoxPrivate
   GDestroyNotify              row_separator_destroy;
 
   GdkDevice *grab_pointer;
-  GdkDevice *grab_keyboard;
 
   gchar *tearoff_title;
 };
@@ -2157,31 +2156,17 @@ gtk_combo_box_menu_popup (GtkComboBox *combo_box,
 
 static gboolean
 popup_grab_on_window (GdkWindow *window,
-                      GdkDevice *keyboard,
-                      GdkDevice *pointer,
-                      guint32    activate_time)
+                      GdkDevice *pointer)
 {
-  if (keyboard &&
-      gdk_device_grab (keyboard, window,
-                       GDK_OWNERSHIP_WINDOW, TRUE,
-                       GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK,
-                       NULL, activate_time) != GDK_GRAB_SUCCESS)
-    return FALSE;
+  GdkGrabStatus status;
+  GdkSeat *seat;
 
-  if (pointer &&
-      gdk_device_grab (pointer, window,
-                       GDK_OWNERSHIP_WINDOW, TRUE,
-                       GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
-                       GDK_POINTER_MOTION_MASK,
-                       NULL, activate_time) != GDK_GRAB_SUCCESS)
-    {
-      if (keyboard)
-        gdk_device_ungrab (keyboard, activate_time);
+  seat = gdk_device_get_seat (pointer);
+  status = gdk_seat_grab (seat, window,
+                          GDK_SEAT_CAPABILITY_ALL, TRUE,
+                          NULL, NULL, NULL, NULL);
 
-      return FALSE;
-    }
-
-  return TRUE;
+  return status == GDK_GRAB_SUCCESS;
 }
 
 static gboolean
@@ -2235,8 +2220,7 @@ gtk_combo_box_popup_for_device (GtkComboBox *combo_box,
   gint x, y, width, height;
   GtkTreePath *path = NULL, *ppath;
   GtkWidget *toplevel;
-  GdkDevice *keyboard, *pointer;
-  guint32 time;
+  GdkDevice *pointer;
 
   g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
   g_return_if_fail (GDK_IS_DEVICE (device));
@@ -2247,21 +2231,13 @@ gtk_combo_box_popup_for_device (GtkComboBox *combo_box,
   if (gtk_widget_get_mapped (priv->popup_widget))
     return;
 
-  if (priv->grab_pointer && priv->grab_keyboard)
+  if (priv->grab_pointer)
     return;
 
-  time = gtk_get_current_event_time ();
-
   if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
-    {
-      keyboard = device;
-      pointer = gdk_device_get_associated_device (device);
-    }
+    pointer = gdk_device_get_associated_device (device);
   else
-    {
-      pointer = device;
-      keyboard = gdk_device_get_associated_device (device);
-    }
+    pointer = device;
 
   if (GTK_IS_MENU (priv->popup_widget))
     {
@@ -2311,15 +2287,13 @@ gtk_combo_box_popup_for_device (GtkComboBox *combo_box,
   if (!gtk_widget_has_focus (priv->tree_view))
     gtk_widget_grab_focus (priv->tree_view);
 
-  if (!popup_grab_on_window (gtk_widget_get_window (priv->popup_window),
-                             keyboard, pointer, time))
+  if (!popup_grab_on_window (gtk_widget_get_window (priv->popup_window), pointer))
     {
       gtk_widget_hide (priv->popup_window);
       return;
     }
 
   priv->grab_pointer = pointer;
-  priv->grab_keyboard = keyboard;
 
   g_signal_connect (priv->popup_window,
                     "grab-broken-event",
@@ -2394,10 +2368,8 @@ gtk_combo_box_popdown (GtkComboBox *combo_box)
   if (!gtk_widget_is_drawable (priv->popup_window))
     return;
 
-  if (priv->grab_keyboard)
-    gdk_device_ungrab (priv->grab_keyboard, GDK_CURRENT_TIME);
   if (priv->grab_pointer)
-    gdk_device_ungrab (priv->grab_pointer, GDK_CURRENT_TIME);
+    gdk_seat_ungrab (gdk_device_get_seat (priv->grab_pointer));
 
   gtk_widget_hide (priv->popup_window);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->button),
@@ -2410,7 +2382,6 @@ gtk_combo_box_popdown (GtkComboBox *combo_box)
     }
 
   priv->grab_pointer = NULL;
-  priv->grab_keyboard = NULL;
 }
 
 static void
