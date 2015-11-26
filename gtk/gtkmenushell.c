@@ -626,7 +626,7 @@ gtk_menu_shell_activate (GtkMenuShell *menu_shell)
       device = gtk_get_current_event_device ();
 
       _gtk_menu_shell_set_grab_device (menu_shell, device);
-      gtk_device_grab_add (GTK_WIDGET (menu_shell), device, TRUE);
+      gtk_grab_add (GTK_WIDGET (menu_shell));
 
       priv->have_grab = TRUE;
       priv->active = TRUE;
@@ -1173,18 +1173,11 @@ gtk_real_menu_shell_deactivate (GtkMenuShell *menu_shell)
       if (priv->have_grab)
         {
           priv->have_grab = FALSE;
-          gtk_device_grab_remove (GTK_WIDGET (menu_shell), priv->grab_pointer);
+          gtk_grab_remove (GTK_WIDGET (menu_shell));
         }
       if (priv->have_xgrab)
         {
-          GdkDevice *keyboard;
-
-          gdk_device_ungrab (priv->grab_pointer, GDK_CURRENT_TIME);
-          keyboard = gdk_device_get_associated_device (priv->grab_pointer);
-
-          if (keyboard)
-            gdk_device_ungrab (keyboard, GDK_CURRENT_TIME);
-
+          gdk_seat_ungrab (gdk_device_get_seat (priv->grab_pointer));
           priv->have_xgrab = FALSE;
         }
 
