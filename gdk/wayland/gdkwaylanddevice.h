@@ -52,6 +52,9 @@ struct wl_pointer   *gdk_wayland_device_get_wl_pointer      (GdkDevice *device);
 GDK_AVAILABLE_IN_ALL
 struct wl_keyboard  *gdk_wayland_device_get_wl_keyboard     (GdkDevice *device);
 
+GDK_AVAILABLE_IN_3_20
+struct wl_seat      *gdk_wayland_seat_get_wl_seat           (GdkSeat   *seat);
+
 
 G_END_DECLS
 
