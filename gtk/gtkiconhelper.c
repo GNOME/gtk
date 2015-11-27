@@ -867,6 +867,14 @@ _gtk_icon_helper_get_size (GtkIconHelper *self,
       height = (height + scale - 1) / scale;
       break;
 
+    case GTK_IMAGE_ANIMATION:
+      {
+        GdkPixbufAnimation *animation = gtk_image_definition_get_animation (self->priv->def);
+        width = gdk_pixbuf_animation_get_width (animation);
+        height = gdk_pixbuf_animation_get_height (animation);
+        break;
+      }
+
     case GTK_IMAGE_ICON_NAME:
     case GTK_IMAGE_GICON:
       if (self->priv->pixel_size != -1 || self->priv->force_scale_pixbuf)
@@ -876,7 +884,6 @@ _gtk_icon_helper_get_size (GtkIconHelper *self,
 
     case GTK_IMAGE_STOCK:
     case GTK_IMAGE_ICON_SET:
-    case GTK_IMAGE_ANIMATION:
     case GTK_IMAGE_EMPTY:
     default:
       break;
@@ -892,12 +899,6 @@ _gtk_icon_helper_get_size (GtkIconHelper *self,
           width = self->priv->rendered_surface_width;
           height = self->priv->rendered_surface_height;
           cairo_surface_destroy (surface);
-        }
-      else if (gtk_image_definition_get_storage_type (self->priv->def) == GTK_IMAGE_ANIMATION)
-        {
-          GdkPixbufAnimation *animation = gtk_image_definition_get_animation (self->priv->def);
-          width = gdk_pixbuf_animation_get_width (animation);
-          height = gdk_pixbuf_animation_get_height (animation);
         }
       else if (self->priv->icon_size != GTK_ICON_SIZE_INVALID)
         {
