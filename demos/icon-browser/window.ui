@@ -248,7 +248,7 @@
                 <property name="ypad">4</property>
                 <property name="halign">center</property>
                 <property name="valign">baseline</property>
-                <property name="label">16x16</property>
+                <property name="label">16×16</property>
                 <style>
                   <class name="dim-label"/>
                 </style>
@@ -265,7 +265,7 @@
                 <property name="ypad">4</property>
                 <property name="halign">center</property>
                 <property name="valign">baseline</property>
-                <property name="label">24x24</property>
+                <property name="label">24×24</property>
                 <style>
                   <class name="dim-label"/>
                 </style>
@@ -282,7 +282,7 @@
                 <property name="ypad">4</property>
                 <property name="halign">center</property>
                 <property name="valign">baseline</property>
-                <property name="label">32x32</property>
+                <property name="label">32×32</property>
                 <style>
                   <class name="dim-label"/>
                 </style>
@@ -299,7 +299,7 @@
                 <property name="ypad">4</property>
                 <property name="halign">center</property>
                 <property name="valign">baseline</property>
-                <property name="label">48x48</property>
+                <property name="label">48×48</property>
                 <style>
                   <class name="dim-label"/>
                 </style>
@@ -316,7 +316,7 @@
                 <property name="ypad">4</property>
                 <property name="halign">center</property>
                 <property name="valign">baseline</property>
-                <property name="label">64x64</property>
+                <property name="label">64×64</property>
                 <style>
                   <class name="dim-label"/>
                 </style>
