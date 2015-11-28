@@ -279,6 +279,8 @@ testdata = \
 	image-load-from-file.css \
 	image-load-from-file.ref.ui \
 	image-load-from-file.ui \
+	image-recording-surface.ref.ui \
+	image-recording-surface.ui \
 	info-bar-message-types.css \
 	info-bar-message-types.ref.ui \
 	info-bar-message-types.ui \
@@ -496,6 +498,7 @@ libreftest_la_CFLAGS = $(gtk_reftest_CFLAGS)
 libreftest_la_LIBADD = $(gtk_reftest_LDADD)
 libreftest_la_SOURCES =			\
 	expand-expander.c		\
+	image-recording-surface.c	\
 	label-text-shadow-changes-modify-clip.c	\
 	letter-spacing.c		\
 	set-default-direction.c		\

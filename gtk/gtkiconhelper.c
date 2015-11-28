@@ -346,22 +346,26 @@ get_surface_size (GtkIconHelper   *self,
 		  int *width,
 		  int *height)
 {
-  double x_scale, y_scale;
+  GdkRectangle clip;
+  cairo_t *cr;
 
-  if (cairo_surface_get_type (surface) == CAIRO_SURFACE_TYPE_IMAGE)
+  cr = cairo_create (surface);
+  if (gdk_cairo_get_clip_rectangle (cr, &clip))
     {
-      x_scale = y_scale = 1;
-
-      cairo_surface_get_device_scale (surface, &x_scale, &y_scale);
-
-      /* Assume any set scaling is icon scale */
-      *width =
-	ceil (cairo_image_surface_get_width (surface) / x_scale);
-      *height =
-	ceil (cairo_image_surface_get_height (surface) / y_scale);
+      if (clip.x != 0 || clip.y != 0)
+        {
+          g_warning ("origin of surface is %d %d, not supported", clip.x, clip.y);
+        }
+      *width = clip.width;
+      *height = clip.height;
     }
   else
-    ensure_icon_size (self, width, height);
+    {
+      g_warning ("infinite surface size not supported");
+      ensure_icon_size (self, width, height);
+    }
+
+  cairo_destroy (cr);
 }
 
 static void
