@@ -247,7 +247,7 @@
                 <property name="xpad">4</property>
                 <property name="ypad">4</property>
                 <property name="halign">center</property>
-                <property name="valign">center</property>
+                <property name="valign">baseline</property>
                 <property name="label">16x16</property>
                 <style>
                   <class name="dim-label"/>
@@ -264,7 +264,7 @@
                 <property name="xpad">4</property>
                 <property name="ypad">4</property>
                 <property name="halign">center</property>
-                <property name="valign">center</property>
+                <property name="valign">baseline</property>
                 <property name="label">24x24</property>
                 <style>
                   <class name="dim-label"/>
@@ -281,7 +281,7 @@
                 <property name="xpad">4</property>
                 <property name="ypad">4</property>
                 <property name="halign">center</property>
-                <property name="valign">center</property>
+                <property name="valign">baseline</property>
                 <property name="label">32x32</property>
                 <style>
                   <class name="dim-label"/>
@@ -298,7 +298,7 @@
                 <property name="xpad">4</property>
                 <property name="ypad">4</property>
                 <property name="halign">center</property>
-                <property name="valign">center</property>
+                <property name="valign">baseline</property>
                 <property name="label">48x48</property>
                 <style>
                   <class name="dim-label"/>
@@ -315,7 +315,7 @@
                 <property name="xpad">4</property>
                 <property name="ypad">4</property>
                 <property name="halign">center</property>
-                <property name="valign">center</property>
+                <property name="valign">baseline</property>
                 <property name="label">64x64</property>
                 <style>
                   <class name="dim-label"/>
