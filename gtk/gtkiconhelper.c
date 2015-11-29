@@ -43,8 +43,6 @@ struct _GtkIconHelperPrivate {
   GtkStateFlags last_rendered_state;
 
   cairo_surface_t *rendered_surface;
-  gint rendered_surface_width;
-  gint rendered_surface_height;
   GtkStateFlags last_surface_state;
   gint last_surface_scale;
 };
@@ -548,10 +546,6 @@ ensure_surface_from_surface (GtkIconHelper   *self,
 {
   self->priv->rendered_surface =
     cairo_surface_reference (orig_surface);
-
-  get_surface_size (self, orig_surface,
-		    &self->priv->rendered_surface_width,
-		    &self->priv->rendered_surface_height);
 }
 
 static gboolean
@@ -631,9 +625,6 @@ ensure_surface_from_pixbuf (GtkIconHelper   *self,
   g_object_unref (pixbuf);
   pixbuf = stated;
 
-  self->priv->rendered_surface_width = (width + scale - 1) / scale;
-  self->priv->rendered_surface_height = (height + scale - 1) / scale;
-
   self->priv->rendered_surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, scale, self->priv->window);
   g_object_unref (pixbuf);
 }
@@ -653,11 +644,6 @@ ensure_surface_for_icon_set (GtkIconHelper *self,
 				      self->priv->icon_size,
 				      scale, self->priv->window);
   G_GNUC_END_IGNORE_DEPRECATIONS;
-
-  if (self->priv->rendered_surface)
-    get_surface_size (self, self->priv->rendered_surface, 
-		      &self->priv->rendered_surface_width, 
-		      &self->priv->rendered_surface_height);
 }
 
 static void
@@ -706,10 +692,6 @@ ensure_stated_surface_from_info (GtkIconHelper *self,
     {
       surface = gdk_cairo_surface_create_from_pixbuf (destination, scale, self->priv->window);
 
-      self->priv->rendered_surface_width = 
-	(gdk_pixbuf_get_width (destination) + scale - 1) / scale;
-      self->priv->rendered_surface_height = 
-	(gdk_pixbuf_get_height (destination) + scale - 1) / scale;
       g_object_unref (destination);
     }
 
@@ -869,8 +851,7 @@ _gtk_icon_helper_get_size (GtkIconHelper *self,
 
       if (surface != NULL)
         {
-          width = self->priv->rendered_surface_width;
-          height = self->priv->rendered_surface_height;
+          get_surface_size (self, surface, &width, &height);
           cairo_surface_destroy (surface);
         }
       else if (self->priv->icon_size != GTK_ICON_SIZE_INVALID)
