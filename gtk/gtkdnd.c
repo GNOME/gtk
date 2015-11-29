@@ -2785,22 +2785,20 @@ set_icon_helper (GdkDragContext *context,
     }
   else
     {
-      cairo_surface_t *surface;
+      cairo_surface_t *source, *surface;
       cairo_pattern_t *pattern;
       cairo_t *cr;
-      GdkPixbuf *pixbuf;
 
       gtk_widget_set_size_request (window, width, height);
 
-      pixbuf = _gtk_icon_helper_ensure_pixbuf (helper, gtk_widget_get_style_context (window));
+      source = _gtk_icon_helper_ensure_surface (helper, gtk_widget_get_style_context (window));
       surface = gdk_window_create_similar_surface (gdk_screen_get_root_window (screen),
                                                    CAIRO_CONTENT_COLOR,
-                                                   gdk_pixbuf_get_width (pixbuf),
-                                                   gdk_pixbuf_get_height (pixbuf));
+                                                   width, height);
 
       cr = cairo_create (surface);
       cairo_push_group_with_content (cr, CAIRO_CONTENT_COLOR_ALPHA);
-      gdk_cairo_set_source_pixbuf (cr, pixbuf, 0, 0);
+      cairo_set_source_surface (cr, source, 0, 0);
       cairo_paint (cr);
       cairo_set_operator (cr, CAIRO_OPERATOR_SATURATE);
       cairo_paint (cr);
@@ -2812,16 +2810,14 @@ set_icon_helper (GdkDragContext *context,
 
       cairo_surface_destroy (surface);
 
-      if (gdk_pixbuf_get_has_alpha (pixbuf))
+      if (cairo_surface_get_content (source) & CAIRO_CONTENT_ALPHA)
         {
           cairo_region_t *region;
 
-          surface = cairo_image_surface_create (CAIRO_FORMAT_A1,
-                                                gdk_pixbuf_get_width (pixbuf),
-                                                gdk_pixbuf_get_height (pixbuf));
+          surface = cairo_image_surface_create (CAIRO_FORMAT_A1, width, height);
           
           cr = cairo_create (surface);
-          gdk_cairo_set_source_pixbuf (cr, pixbuf, 0, 0);
+          cairo_set_source_surface (cr, source, 0, 0);
           cairo_paint (cr);
           cairo_destroy (cr);
 
@@ -2832,7 +2828,7 @@ set_icon_helper (GdkDragContext *context,
           cairo_surface_destroy (surface);
         }
 
-      g_object_unref (pixbuf);
+      cairo_surface_destroy (source);
 
       g_signal_connect_data (window,
                              "draw",
