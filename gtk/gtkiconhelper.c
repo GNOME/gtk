@@ -546,12 +546,6 @@ ensure_surface_from_surface (GtkIconHelper   *self,
 			     GtkStyleContext *context,
                              cairo_surface_t *orig_surface)
 {
-  if (!check_invalidate_surface (self, context))
-    return;
-
-  if (self->priv->rendered_surface)
-    return;
-
   self->priv->rendered_surface =
     cairo_surface_reference (orig_surface);
 
@@ -622,12 +616,6 @@ ensure_surface_from_pixbuf (GtkIconHelper   *self,
   GdkPixbuf *pixbuf, *stated;
   int scale;
 
-  if (!check_invalidate_surface (self, context))
-    return;
-
-  if (self->priv->rendered_surface)
-    return;
-
   if (get_pixbuf_size (self,
                        context,
                        orig_pixbuf,
@@ -656,9 +644,6 @@ ensure_surface_for_icon_set (GtkIconHelper *self,
 			     GtkIconSet *icon_set)
 {
   gint scale;
-
-  if (!check_invalidate_surface (self, context))
-    return;
 
   scale = get_scale_factor (self, context);
 
@@ -741,9 +726,6 @@ ensure_surface_for_gicon (GtkIconHelper   *self,
   GtkIconInfo *info;
   GtkIconLookupFlags flags;
 
-  if (!check_invalidate_surface (self, context))
-    return;
-
   icon_theme = gtk_icon_theme_get_for_screen (gtk_style_context_get_screen (context));
   flags = get_icon_lookup_flags (self, context);
 
@@ -768,6 +750,9 @@ _gtk_icon_helper_ensure_surface (GtkIconHelper *self,
   cairo_surface_t *surface = NULL;
   GtkIconSet *icon_set;
   GIcon *gicon;
+
+  if (!check_invalidate_surface (self, context))
+    return self->priv->rendered_surface;
 
   switch (gtk_image_definition_get_storage_type (self->priv->def))
     {
