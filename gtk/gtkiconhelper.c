@@ -539,13 +539,12 @@ check_invalidate_surface (GtkIconHelper *self,
   return TRUE;
 }
 
-static void
+static cairo_surface_t *
 ensure_surface_from_surface (GtkIconHelper   *self,
 			     GtkStyleContext *context,
                              cairo_surface_t *orig_surface)
 {
-  self->priv->rendered_surface =
-    cairo_surface_reference (orig_surface);
+  return cairo_surface_reference (orig_surface);
 }
 
 static gboolean
@@ -600,13 +599,14 @@ get_pixbuf_size (GtkIconHelper   *self,
   return scale_pixmap;
 }
 
-static void
+static cairo_surface_t *
 ensure_surface_from_pixbuf (GtkIconHelper   *self,
 			    GtkStyleContext *context,
                             GdkPixbuf       *orig_pixbuf,
                             gint             orig_scale)
 {
   gint width, height;
+  cairo_surface_t *surface;
   GdkPixbuf *pixbuf, *stated;
   int scale;
 
@@ -625,28 +625,26 @@ ensure_surface_from_pixbuf (GtkIconHelper   *self,
   g_object_unref (pixbuf);
   pixbuf = stated;
 
-  self->priv->rendered_surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, scale, self->priv->window);
+  surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, scale, self->priv->window);
   g_object_unref (pixbuf);
+
+  return surface;
 }
 
-static void
+static cairo_surface_t *
 ensure_surface_for_icon_set (GtkIconHelper *self,
 			     GtkStyleContext *context,
 			     GtkIconSet *icon_set)
 {
-  gint scale;
-
-  scale = get_scale_factor (self, context);
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  self->priv->rendered_surface =
-    gtk_icon_set_render_icon_surface (icon_set, context, 
-				      self->priv->icon_size,
-				      scale, self->priv->window);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+  return gtk_icon_set_render_icon_surface (icon_set, context, 
+                			   self->priv->icon_size,
+				           get_scale_factor (self, context),
+                                           self->priv->window);
+G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
-static void
+static cairo_surface_t *
 ensure_stated_surface_from_info (GtkIconHelper *self,
 				 GtkStyleContext *context,
 				 GtkIconInfo *info,
@@ -695,10 +693,10 @@ ensure_stated_surface_from_info (GtkIconHelper *self,
       g_object_unref (destination);
     }
 
-  self->priv->rendered_surface = surface;
+  return surface;
 }
 
-static void
+static cairo_surface_t *
 ensure_surface_for_gicon (GtkIconHelper   *self,
                           GtkStyleContext *context,
                           GIcon           *gicon)
@@ -707,6 +705,7 @@ ensure_surface_for_gicon (GtkIconHelper   *self,
   gint width, height, scale;
   GtkIconInfo *info;
   GtkIconLookupFlags flags;
+  cairo_surface_t *surface;
 
   icon_theme = gtk_icon_theme_get_for_screen (gtk_style_context_get_screen (context));
   flags = get_icon_lookup_flags (self, context);
@@ -719,17 +718,19 @@ ensure_surface_for_gicon (GtkIconHelper   *self,
                                                    MIN (width, height),
                                                    scale, flags);
 
-  ensure_stated_surface_from_info (self, context, info, scale);
+  surface = ensure_stated_surface_from_info (self, context, info, scale);
 
   if (info)
     g_object_unref (info);
+
+  return surface;
 }
 
 cairo_surface_t *
 _gtk_icon_helper_ensure_surface (GtkIconHelper *self,
 				 GtkStyleContext *context)
 {
-  cairo_surface_t *surface = NULL;
+  cairo_surface_t *surface;
   GtkIconSet *icon_set;
   GIcon *gicon;
 
@@ -739,20 +740,20 @@ _gtk_icon_helper_ensure_surface (GtkIconHelper *self,
   switch (gtk_image_definition_get_storage_type (self->priv->def))
     {
     case GTK_IMAGE_SURFACE:
-      ensure_surface_from_surface (self, context, gtk_image_definition_get_surface (self->priv->def));
+      surface = ensure_surface_from_surface (self, context, gtk_image_definition_get_surface (self->priv->def));
       break;
 
     case GTK_IMAGE_PIXBUF:
-      ensure_surface_from_pixbuf (self, context,
-                                  gtk_image_definition_get_pixbuf (self->priv->def),
-                                  gtk_image_definition_get_scale (self->priv->def));
+      surface = ensure_surface_from_pixbuf (self, context,
+                                            gtk_image_definition_get_pixbuf (self->priv->def),
+                                            gtk_image_definition_get_scale (self->priv->def));
       break;
 
     case GTK_IMAGE_STOCK:
       G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       icon_set = gtk_icon_factory_lookup_default (gtk_image_definition_get_stock (self->priv->def));
       if (icon_set != NULL)
-	ensure_surface_for_icon_set (self, context, icon_set);
+	surface = ensure_surface_for_icon_set (self, context, icon_set);
       else
 	surface = NULL;
       G_GNUC_END_IGNORE_DEPRECATIONS;
@@ -760,7 +761,7 @@ _gtk_icon_helper_ensure_surface (GtkIconHelper *self,
 
     case GTK_IMAGE_ICON_SET:
       icon_set = gtk_image_definition_get_icon_set (self->priv->def);
-      ensure_surface_for_icon_set (self, context, icon_set);
+      surface = ensure_surface_for_icon_set (self, context, icon_set);
       break;
 
     case GTK_IMAGE_ICON_NAME:
@@ -768,12 +769,12 @@ _gtk_icon_helper_ensure_surface (GtkIconHelper *self,
         gicon = g_themed_icon_new_with_default_fallbacks (gtk_image_definition_get_icon_name (self->priv->def));
       else
         gicon = g_themed_icon_new (gtk_image_definition_get_icon_name (self->priv->def));
-      ensure_surface_for_gicon (self, context, gicon);
+      surface = ensure_surface_for_gicon (self, context, gicon);
       g_object_unref (gicon);
       break;
 
     case GTK_IMAGE_GICON:
-      ensure_surface_for_gicon (self, context, gtk_image_definition_get_gicon (self->priv->def));
+      surface = ensure_surface_for_gicon (self, context, gtk_image_definition_get_gicon (self->priv->def));
       break;
 
     case GTK_IMAGE_ANIMATION:
@@ -783,11 +784,9 @@ _gtk_icon_helper_ensure_surface (GtkIconHelper *self,
       break;
     }
 
-  if (surface == NULL &&
-      self->priv->rendered_surface != NULL)
-    surface = cairo_surface_reference (self->priv->rendered_surface);
+  self->priv->rendered_surface = surface;
 
-  return surface;
+  return cairo_surface_reference (surface);
 }
 
 void
