@@ -47,8 +47,8 @@
  * @window: Source window
  * @src_x: Source X coordinate within @window
  * @src_y: Source Y coordinate within @window
- * @width: Width in logical pixels of region to get
- * @height: Height in logical pixels of region to get
+ * @width: Width in pixels of region to get
+ * @height: Height in pixels of region to get
  *
  * Transfers image data from a #GdkWindow and converts it to an RGB(A)
  * representation inside a #GdkPixbuf. In other words, copies
@@ -88,12 +88,9 @@ gdk_pixbuf_get_from_window (GdkWindow *src,
 {
   cairo_surface_t *surface;
   GdkPixbuf *dest;
-  gint scale;
 
   g_return_val_if_fail (GDK_IS_WINDOW (src), NULL);
   g_return_val_if_fail (gdk_window_is_viewable (src), NULL);
-
-  scale = gdk_window_get_scale_factor (src);
 
   surface = _gdk_window_ref_cairo_surface (src);
 
@@ -105,8 +102,8 @@ gdk_pixbuf_get_from_window (GdkWindow *src,
   cairo_surface_mark_dirty (surface);
 
   dest = gdk_pixbuf_get_from_surface (surface,
-                                      scale * src_x, scale * src_y,
-                                      scale * width, scale * height);
+                                      src_x, src_y,
+                                      width, height);
   cairo_surface_destroy (surface);
 
   return dest;
@@ -137,15 +134,10 @@ gdk_cairo_surface_coerce_to_image (cairo_surface_t *surface,
 {
   cairo_surface_t *copy;
   cairo_t *cr;
-  double sx, sy;
-
-  cairo_surface_get_device_scale (surface, &sx, &sy);
 
   copy = cairo_image_surface_create (gdk_cairo_format_for_content (content),
                                      width,
                                      height);
-
-  cairo_surface_set_device_scale (copy, sx, sy);
 
   cr = cairo_create (copy);
   cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
