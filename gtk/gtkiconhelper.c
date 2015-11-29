@@ -727,15 +727,12 @@ ensure_surface_for_gicon (GtkIconHelper   *self,
 }
 
 cairo_surface_t *
-_gtk_icon_helper_ensure_surface (GtkIconHelper *self,
-				 GtkStyleContext *context)
+gtk_icon_helper_load_surface (GtkIconHelper   *self,
+                              GtkStyleContext *context)
 {
   cairo_surface_t *surface;
   GtkIconSet *icon_set;
   GIcon *gicon;
-
-  if (!check_invalidate_surface (self, context))
-    return self->priv->rendered_surface;
 
   switch (gtk_image_definition_get_storage_type (self->priv->def))
     {
@@ -784,9 +781,18 @@ _gtk_icon_helper_ensure_surface (GtkIconHelper *self,
       break;
     }
 
-  self->priv->rendered_surface = surface;
+  return surface;
 
-  return cairo_surface_reference (surface);
+}
+
+static void
+gtk_icon_helper_ensure_surface (GtkIconHelper   *self,
+				GtkStyleContext *context)
+{
+  if (!check_invalidate_surface (self, context))
+    return;
+
+  self->priv->rendered_surface = gtk_icon_helper_load_surface (self, context);
 }
 
 void
@@ -795,7 +801,6 @@ _gtk_icon_helper_get_size (GtkIconHelper *self,
                            gint *width_out,
                            gint *height_out)
 {
-  cairo_surface_t *surface;
   gint width, height, scale;
 
   width = height = 0;
@@ -846,12 +851,11 @@ _gtk_icon_helper_get_size (GtkIconHelper *self,
   /* Otherwise we load the surface to guarantee we get a size */
   if (width == 0)
     {
-      surface = _gtk_icon_helper_ensure_surface (self, context);
+      gtk_icon_helper_ensure_surface (self, context);
 
-      if (surface != NULL)
+      if (self->priv->rendered_surface != NULL)
         {
-          get_surface_size (self, surface, &width, &height);
-          cairo_surface_destroy (surface);
+          get_surface_size (self, self->priv->rendered_surface, &width, &height);
         }
       else if (self->priv->icon_size != GTK_ICON_SIZE_INVALID)
         {
@@ -1046,13 +1050,13 @@ _gtk_icon_helper_draw (GtkIconHelper *self,
                        gdouble x,
                        gdouble y)
 {
-  cairo_surface_t *surface;
+  gtk_icon_helper_ensure_surface (self, context);
 
-  surface = _gtk_icon_helper_ensure_surface (self, context);
-  if (surface != NULL)
+  if (self->priv->rendered_surface != NULL)
     {
-      gtk_render_icon_surface (context, cr, surface, x, y);
-      cairo_surface_destroy (surface);
+      gtk_render_icon_surface (context, cr, 
+                               self->priv->rendered_surface,
+                               x, y);
     }
 }
 
