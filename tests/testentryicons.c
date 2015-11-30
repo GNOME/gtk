@@ -18,8 +18,6 @@ drag_begin_cb (GtkWidget      *widget,
   pos = gtk_entry_get_current_icon_drag_source (GTK_ENTRY (widget));
   if (pos != -1)
     gtk_drag_set_icon_name (context, "dialog-information", 2, 2);
-
-  g_print ("drag begin %d\n", pos);
 }
 
 static void
@@ -36,20 +34,18 @@ drag_data_get_cb (GtkWidget        *widget,
 
   if (pos == GTK_ENTRY_ICON_PRIMARY)
     {
-#if 0
       gint start, end;
-      
+
       if (gtk_editable_get_selection_bounds (GTK_EDITABLE (widget), &start, &end))
         {
           gchar *str;
-          
+
           str = gtk_editable_get_chars (GTK_EDITABLE (widget), start, end);
           gtk_selection_data_set_text (data, str, -1);
           g_free (str);
         }
-#else
-      gtk_selection_data_set_text (data, "XXX", -1);
-#endif
+      else
+        gtk_selection_data_set_text (data, "XXX", -1);
     }
 }
 
