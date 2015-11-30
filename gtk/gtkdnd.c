@@ -885,7 +885,8 @@ gtk_drag_get_cursor (GtkWidget         *widget,
                                  gtk_widget_get_style_context (widget),
                                  &icon_width, &icon_height);
       icon_surface = gtk_icon_helper_load_surface (info->icon_helper,
-                                                   gtk_widget_get_style_context (widget));
+                                                   gtk_widget_get_style_context (widget),
+                                                   scale);
 
       icon_x = info->hot_x;
       icon_y = info->hot_y;
@@ -2787,11 +2788,15 @@ set_icon_helper (GdkDragContext *context,
     {
       cairo_surface_t *source, *surface;
       cairo_pattern_t *pattern;
+      GdkWindow *root;
       cairo_t *cr;
 
       gtk_widget_set_size_request (window, width, height);
 
-      source = gtk_icon_helper_load_surface (helper, gtk_widget_get_style_context (window));
+      root = gdk_screen_get_root_window (screen);
+      source = gtk_icon_helper_load_surface (helper,
+                                             gtk_widget_get_style_context (window),
+                                             gdk_window_get_scale_factor (root));
       surface = gdk_window_create_similar_surface (gdk_screen_get_root_window (screen),
                                                    CAIRO_CONTENT_COLOR,
                                                    width, height);
