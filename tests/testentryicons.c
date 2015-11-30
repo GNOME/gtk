@@ -17,7 +17,7 @@ drag_begin_cb (GtkWidget      *widget,
 
   pos = gtk_entry_get_current_icon_drag_source (GTK_ENTRY (widget));
   if (pos != -1)
-    gtk_drag_set_icon_name (context, "dialog-info", 2, 2);
+    gtk_drag_set_icon_name (context, "dialog-information", 2, 2);
 
   g_print ("drag begin %d\n", pos);
 }
