@@ -795,6 +795,7 @@ data_source_cancelled (void                  *data,
   GdkWaylandSelection *wayland_selection = data;
   GdkDragContext *context;
   GdkDisplay *display;
+  GdkAtom atom;
 
   g_debug (G_STRLOC ": %s source = %p",
            G_STRFUNC, source);
@@ -802,16 +803,22 @@ data_source_cancelled (void                  *data,
   display = gdk_display_get_default ();
 
   if (source == wayland_selection->dnd_source)
-    {
-      gdk_wayland_selection_unset_data_source (display, atoms[ATOM_DND]);
+    atom = atoms[ATOM_DND];
+  else if (source == wayland_selection->clipboard_source)
+    atom = atoms[ATOM_CLIPBOARD];
+  else
+    return;
 
+  gdk_wayland_selection_unset_data_source (display, atom);
+  gdk_selection_owner_set (NULL, atom, GDK_CURRENT_TIME, TRUE);
+
+  if (source == wayland_selection->dnd_source)
+    {
       context = gdk_wayland_drag_context_lookup_by_data_source (source);
 
       if (context)
         gdk_wayland_device_unset_grab (gdk_drag_context_get_device (context));
     }
-  else if (source == wayland_selection->clipboard_source)
-    gdk_wayland_selection_unset_data_source (display, atoms[ATOM_CLIPBOARD]);
 }
 
 static const struct wl_data_source_listener data_source_listener = {
@@ -864,15 +871,9 @@ gdk_wayland_selection_get_data_source (GdkWindow *owner,
                                wayland_selection);
 
   if (is_clipboard)
-    {
-      wayland_selection->clipboard_source = source;
-      wayland_selection->clipboard_owner = owner;
-    }
+    wayland_selection->clipboard_source = source;
   else
-    {
-      wayland_selection->dnd_source = source;
-      wayland_selection->dnd_owner = owner;
-    }
+    wayland_selection->dnd_source = source;
 
   return source;
 }
@@ -892,7 +893,6 @@ gdk_wayland_selection_unset_data_source (GdkDisplay *display,
       device = gdk_device_manager_get_client_pointer (device_manager);
 
       gdk_wayland_device_set_selection (device, NULL);
-      wayland_selection->clipboard_owner = NULL;
 
       if (wayland_selection->clipboard_source)
         {
@@ -902,7 +902,6 @@ gdk_wayland_selection_unset_data_source (GdkDisplay *display,
     }
   else if (selection == atoms[ATOM_DND])
     {
-      wayland_selection->dnd_owner = NULL;
       wayland_selection->dnd_source = NULL;
     }
 }
