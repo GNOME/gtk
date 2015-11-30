@@ -2183,6 +2183,16 @@ gtk_stack_size_allocate (GtkWidget     *widget,
 
   gtk_widget_set_allocation (widget, allocation);
 
+  if (gtk_widget_get_realized (widget))
+    {
+      gdk_window_move_resize (priv->view_window,
+                              allocation->x, allocation->y,
+                              allocation->width, allocation->height);
+      gdk_window_move_resize (priv->bin_window,
+                              get_bin_window_x (stack, allocation), get_bin_window_y (stack, allocation),
+                              allocation->width, allocation->height);
+    }
+
   child_allocation.x = 0;
   child_allocation.y = 0;
   child_allocation.width = allocation->width;
@@ -2217,16 +2227,6 @@ gtk_stack_size_allocate (GtkWidget     *widget,
         {
           gtk_widget_size_allocate (priv->visible_child->widget, &child_allocation);
         }
-    }
-
-   if (gtk_widget_get_realized (widget))
-    {
-      gdk_window_move_resize (priv->view_window,
-                              allocation->x, allocation->y,
-                              allocation->width, allocation->height);
-      gdk_window_move_resize (priv->bin_window,
-                              get_bin_window_x (stack, allocation), get_bin_window_y (stack, allocation),
-                              allocation->width, allocation->height);
     }
 }
 
