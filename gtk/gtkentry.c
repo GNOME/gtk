@@ -651,8 +651,6 @@ static void         get_frame_size                     (GtkEntry       *entry,
 							gint           *width,
 							gint           *height);
 static void         gtk_entry_move_adjustments         (GtkEntry             *entry);
-static GdkPixbuf *  gtk_entry_ensure_pixbuf            (GtkEntry             *entry,
-                                                        GtkEntryIconPosition  icon_pos);
 static void         gtk_entry_update_cached_style_values(GtkEntry      *entry);
 static gboolean     get_middle_click_paste             (GtkEntry *entry);
 
@@ -7588,26 +7586,6 @@ gtk_entry_clear (GtkEntry             *entry,
   g_object_thaw_notify (G_OBJECT (entry));
 }
 
-static GdkPixbuf *
-gtk_entry_ensure_pixbuf (GtkEntry             *entry,
-                         GtkEntryIconPosition  icon_pos)
-{
-  GtkEntryPrivate *priv = entry->priv;
-  EntryIconInfo *icon_info = priv->icons[icon_pos];
-  GtkStyleContext *context;
-  GdkPixbuf *pix;
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (entry));
-  gtk_style_context_save_to_node (context, icon_info->css_node);
-
-  pix = _gtk_icon_helper_ensure_pixbuf (icon_info->icon_helper,
-                                        context);
-
-  gtk_style_context_restore (context);
-
-  return pix;
-}
-
 /* Public API
  */
 
@@ -8919,7 +8897,10 @@ gtk_entry_get_icon_pixbuf (GtkEntry             *entry,
 {
   GtkEntryPrivate *priv;
   EntryIconInfo *icon_info;
+  GtkStyleContext *context;
+  cairo_surface_t *surface;
   GdkPixbuf *pixbuf;
+  int width, height;
 
   g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);
   g_return_val_if_fail (IS_VALID_ICON_POSITION (icon_pos), NULL);
@@ -8931,12 +8912,29 @@ gtk_entry_get_icon_pixbuf (GtkEntry             *entry,
   if (!icon_info)
     return NULL;
 
-  /* HACK: unfortunately this is transfer none, so we need to return
-   * the icon helper's cache ref directly.
+  context = gtk_widget_get_style_context (GTK_WIDGET (entry));
+  gtk_style_context_save_to_node (context, icon_info->css_node);
+
+  _gtk_icon_helper_get_size (icon_info->icon_helper, context, &width, &height);
+  surface = gtk_icon_helper_load_surface (icon_info->icon_helper,
+                                          context,
+                                          1);
+
+  pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0, width, height);
+
+  cairo_surface_destroy (surface);
+  gtk_style_context_restore (context);
+
+  /* HACK: unfortunately this is transfer none, so we attach it somehwere
+   * convenient.
    */
-  pixbuf = gtk_entry_ensure_pixbuf (entry, icon_pos);
   if (pixbuf)
-    g_object_unref (pixbuf);
+    {
+      g_object_set_data_full (G_OBJECT (icon_info->icon_helper),
+                              "gtk-entry-pixbuf",
+                              pixbuf,
+                              g_object_unref);
+    }
 
   return pixbuf;
 }
