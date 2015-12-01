@@ -12430,11 +12430,5 @@ gtk_window_set_hardcoded_window (GtkWindow *window,
   g_return_if_fail (GTK_IS_WINDOW (window));
   g_return_if_fail (!_gtk_widget_get_realized (GTK_WIDGET (window)));
 
-  if (priv->hardcoded_window)
-    g_object_unref (priv->hardcoded_window);
-
-  priv->hardcoded_window = gdk_window;
-
-  if (gdk_window)
-    g_object_ref (gdk_window);
+  g_set_object (&priv->hardcoded_window, gdk_window);
 }
