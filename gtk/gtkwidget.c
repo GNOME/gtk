@@ -6034,7 +6034,7 @@ gtk_widget_size_allocate (GtkWidget	*widget,
  * Find the common ancestor of @widget_a and @widget_b that
  * is closest to the two widgets.
  *
- * Returns: the closest common ancestor of @widget_a and
+ * Returns: (nullable): the closest common ancestor of @widget_a and
  *   @widget_b or %NULL if @widget_a and @widget_b do not
  *   share a common ancestor.
  **/
@@ -9492,7 +9492,7 @@ gtk_widget_set_parent (GtkWidget *widget,
  *
  * Returns the parent container of @widget.
  *
- * Returns: (transfer none): the parent container of @widget, or %NULL
+ * Returns: (transfer none) (nullable): the parent container of @widget, or %NULL
  **/
 GtkWidget *
 gtk_widget_get_parent (GtkWidget *widget)
@@ -10298,7 +10298,7 @@ gtk_widget_set_font_options (GtkWidget                  *widget,
  * Returns the #cairo_font_options_t used for Pango rendering. When not set,
  * the defaults font options for the #GdkScreen will be used.
  *
- * Returns: (transfer none): the #cairo_font_options_t or %NULL if not set
+ * Returns: (transfer none) (nullable): the #cairo_font_options_t or %NULL if not set
  *
  * Since: 3.18
  **/
@@ -10365,7 +10365,7 @@ gtk_widget_set_font_map (GtkWidget    *widget,
  *
  * Gets the font map that has been set with gtk_widget_set_font_map().
  *
- * Returns: (transfer none): A #PangoFontMap, or %NULL
+ * Returns: (transfer none) (nullable): A #PangoFontMap, or %NULL
  *
  * Since: 3.18
  */
@@ -10464,7 +10464,7 @@ gtk_widget_create_pango_layout (GtkWidget   *widget,
  * the application and should not be modified. The pixbuf should be freed
  * after use with g_object_unref().
  *
- * Returns: (transfer full): a new pixbuf, or %NULL if the
+ * Returns: (transfer full) (nullable): a new pixbuf, or %NULL if the
  *     stock ID wasn’t known
  *
  * Since: 3.0
@@ -11489,7 +11489,7 @@ gtk_widget_get_toplevel (GtkWidget *widget)
  * Note that unlike gtk_widget_is_ancestor(), gtk_widget_get_ancestor()
  * considers @widget to be an ancestor of itself.
  *
- * Returns: (transfer none): the ancestor widget, or %NULL if not found
+ * Returns: (transfer none) (nullable): the ancestor widget, or %NULL if not found
  **/
 GtkWidget*
 gtk_widget_get_ancestor (GtkWidget *widget,
@@ -12433,7 +12433,7 @@ is_my_window (GtkWidget *widget,
  * @widget: a #GtkWidget
  * @device: a #GdkDevice
  *
- * Returns: the window of @widget that @device is in, or %NULL
+ * Returns: (nullable): the window of @widget that @device is in, or %NULL
  */
 GdkWindow *
 _gtk_widget_get_device_window (GtkWidget *widget,
@@ -13346,7 +13346,7 @@ gtk_widget_class_set_accessible_role (GtkWidgetClass *widget_class,
  * does not use the default way to create accessibles, %NULL will always be
  * returned.
  *
- * Returns: the accessible for @widget or %NULL if none has been
+ * Returns: (nullable): the accessible for @widget or %NULL if none has been
  *     created yet.
  **/
 AtkObject *
@@ -15312,7 +15312,7 @@ gtk_widget_set_tooltip_text (GtkWidget   *widget,
  *
  * Gets the contents of the tooltip for @widget.
  *
- * Returns: the tooltip text, or %NULL. You should free the
+ * Returns: (nullable): the tooltip text, or %NULL. You should free the
  *   returned string with g_free() when done.
  *
  * Since: 2.12
@@ -15360,7 +15360,7 @@ gtk_widget_set_tooltip_markup (GtkWidget   *widget,
  *
  * Gets the contents of the tooltip for @widget.
  *
- * Returns: the tooltip text, or %NULL. You should free the
+ * Returns: (nullable): the tooltip text, or %NULL. You should free the
  *   returned string with g_free() when done.
  *
  * Since: 2.12
