@@ -1595,7 +1595,6 @@ gtk_drag_set_icon_name (GdkDragContext *context,
 			gint            hot_y)
 {
   GdkScreen *screen;
-  GtkSettings *settings;
   GtkIconTheme *icon_theme;
   GdkPixbuf *pixbuf;
   gint width, height, icon_size;
@@ -1606,13 +1605,8 @@ gtk_drag_set_icon_name (GdkDragContext *context,
   screen = gdk_window_get_screen (gdk_drag_context_get_source_window (context));
   g_return_if_fail (screen != NULL);
 
-  settings = gtk_settings_get_for_screen (screen);
-  if (gtk_icon_size_lookup_for_settings (settings,
-					 GTK_ICON_SIZE_DND,
-					 &width, &height))
-    icon_size = MAX (width, height);
-  else 
-    icon_size = 32; /* default value for GTK_ICON_SIZE_DND */ 
+  gtk_icon_size_lookup (GTK_ICON_SIZE_DND, &width, &height);
+  icon_size = MAX (width, height);
 
   icon_theme = gtk_icon_theme_get_for_screen (screen);
 

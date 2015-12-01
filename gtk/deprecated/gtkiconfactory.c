@@ -1277,16 +1277,14 @@ render_icon_name_pixbuf (GtkIconSource    *icon_source,
   GtkIconSource tmp_source;
   GdkScreen *screen;
   GtkIconTheme *icon_theme;
-  GtkSettings *settings;
   gint width, height, pixel_size;
   gint *sizes, *s, dist;
   GError *error = NULL;
 
   screen = gtk_style_context_get_screen (context);
   icon_theme = gtk_icon_theme_get_for_screen (screen);
-  settings = gtk_settings_get_for_screen (screen);
 
-  if (!gtk_icon_size_lookup_for_settings (settings, size, &width, &height))
+  if (!gtk_icon_size_lookup (size, &width, &height))
     {
       if (size == (GtkIconSize)-1)
 	{
