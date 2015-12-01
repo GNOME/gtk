@@ -96,6 +96,7 @@ struct _GtkDragSourceInfo
   GdkDragAction      possible_actions; /* Actions allowed by source */
   GdkDragContext    *context;     /* drag context */
   GtkWidget         *icon_window; /* Window for drag */
+  GtkWidget         *icon_widget; /* Widget for drag */
   GtkWidget         *fallback_icon; /* Window for drag used on other screens */
   GtkWidget         *ipc_widget;  /* GtkInvisible for grab, message passing */
   GdkCursor         *cursor;      /* Cursor for drag */
@@ -116,7 +117,7 @@ struct _GtkDragSourceInfo
 
   guint              update_idle;      /* Idle function to update the drag */
   guint              drop_timeout;     /* Timeout for aborting drop */
-  guint              destroy_icon : 1; /* If true, destroy icon_window */
+  guint              destroy_icon : 1; /* If true, destroy icon_widget */
   guint              have_grab : 1;    /* Do we still have the pointer grab */
   GtkIconHelper     *icon_helper;
   GdkCursor         *drag_cursors[6];
@@ -2450,6 +2451,7 @@ gtk_drag_begin_internal (GtkWidget          *widget,
   info->last_event = NULL;
   info->selections = NULL;
   info->icon_window = NULL;
+  info->icon_widget = NULL;
   info->destroy_icon = FALSE;
 
   /* Set cur_x, cur_y here so if the "drag-begin" signal shows
@@ -2483,7 +2485,7 @@ gtk_drag_begin_internal (GtkWidget          *widget,
    * application may have set one in ::drag_begin, or it may
    * not have set one.
    */
-  if (!info->icon_window && !info->icon_helper)
+  if (!info->icon_widget && !info->icon_helper)
     {
       if (icon)
         {
@@ -2643,22 +2645,6 @@ gtk_drag_begin (GtkWidget     *widget,
 }
 
 static void
-gtk_drag_update_icon (GtkDragSourceInfo *info)
-{
-  if (info->icon_window)
-    {
-      gtk_window_move (GTK_WINDOW (info->icon_window),
-                       info->cur_x - info->hot_x,
-                       info->cur_y - info->hot_y);
-
-      if (gtk_widget_get_visible (info->icon_window))
-        gdk_window_raise (gtk_widget_get_window (info->icon_window));
-      else
-        gtk_widget_show (info->icon_window);
-    }
-}
-
-static void
 gtk_drag_set_icon_window (GdkDragContext *context,
                           GtkWidget      *widget,
                           gint            hot_x,
@@ -2666,7 +2652,6 @@ gtk_drag_set_icon_window (GdkDragContext *context,
                           gboolean        destroy_on_release)
 {
   GtkDragSourceInfo *info;
-  GdkDisplay *display;
 
   info = gtk_drag_get_source_info (context, FALSE);
   if (info == NULL)
@@ -2679,31 +2664,51 @@ gtk_drag_set_icon_window (GdkDragContext *context,
   gtk_drag_remove_icon (info);
 
   if (widget)
-    g_object_ref (widget);  
-  
-  info->icon_window = widget;
+    g_object_ref (widget);
+
+  info->icon_widget = widget;
   info->hot_x = hot_x;
   info->hot_y = hot_y;
   info->destroy_icon = destroy_on_release;
 
-  display = gdk_window_get_display (gdk_drag_context_get_source_window (context));
+  if (!widget)
+    goto out;
 
-#ifdef GDK_WINDOWING_WAYLAND
-  if (GTK_IS_WINDOW (widget) && GDK_IS_WAYLAND_DISPLAY (display))
+  if (!info->icon_window)
     {
-      if (gtk_widget_get_realized (widget))
-        gtk_widget_unrealize (widget);
+      GdkScreen *screen;
+      GdkVisual *visual;
 
-      gtk_window_set_hardcoded_window (GTK_WINDOW (widget),
-                                       gdk_wayland_drag_context_get_dnd_window (context));
+      screen = gdk_window_get_screen (gdk_drag_context_get_source_window (context));
+      visual = gdk_screen_get_rgba_visual (screen);
+
+      info->icon_window = gtk_window_new (GTK_WINDOW_POPUP);
+      gtk_window_set_type_hint (GTK_WINDOW (info->icon_window), GDK_WINDOW_TYPE_HINT_DND);
+      gtk_window_set_screen (GTK_WINDOW (info->icon_window), screen);
+      gtk_widget_set_size_request (info->icon_window, 24, 24);
+      if (visual)
+        gtk_widget_set_visual (info->icon_window, visual);
+      gtk_widget_set_events (info->icon_window, GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
+      gtk_widget_set_app_paintable (info->icon_window, TRUE);
+      gtk_window_set_hardcoded_window (GTK_WINDOW (info->icon_window),
+                                       gdk_drag_context_get_drag_window (context));
+      gtk_widget_show (info->icon_window);
     }
-#endif
 
-  if (widget && info->icon_helper)
-    g_clear_object (&info->icon_helper);
+  if (GTK_IS_WINDOW (widget))
+    {
+      gtk_widget_hide (widget);
+      gtk_widget_unrealize (widget);
+      gtk_widget_set_parent_window (widget, gtk_widget_get_window (info->icon_window));
+      gtk_widget_show (widget);
+    }
 
+  gtk_container_add (GTK_CONTAINER (info->icon_window), widget);
+
+  g_clear_object (&info->icon_helper);
+
+out:
   gtk_drag_update_cursor (info);
-  gtk_drag_update_icon (info);
 }
 
 /**
@@ -2757,17 +2762,20 @@ set_icon_helper (GdkDragContext     *context,
   gint width, height;
   GdkScreen *screen;
   GdkDisplay *display;
+  GdkVisual *visual;
 
   g_return_if_fail (context != NULL);
   g_return_if_fail (def != NULL);
 
   info = gtk_drag_get_source_info (context, FALSE);
   screen = gdk_window_get_screen (gdk_drag_context_get_source_window (context));
+  visual = gdk_screen_get_rgba_visual (screen);
 
   window = gtk_window_new (GTK_WINDOW_POPUP);
   gtk_window_set_type_hint (GTK_WINDOW (window), GDK_WINDOW_TYPE_HINT_DND);
   gtk_window_set_screen (GTK_WINDOW (window), screen);
-
+  if (visual)
+    gtk_widget_set_visual (window, visual);
   gtk_widget_set_events (window, GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
   gtk_widget_set_app_paintable (window, TRUE);
 
@@ -2827,7 +2835,6 @@ set_icon_helper (GdkDragContext     *context,
           cairo_region_t *region;
 
           surface = cairo_image_surface_create (CAIRO_FORMAT_A1, width, height);
-          
           cr = cairo_create (surface);
           cairo_set_source_surface (cr, source, 0, 0);
           cairo_paint (cr);
@@ -3299,22 +3306,26 @@ gtk_drag_drop_finished (GtkDragSourceInfo *info,
         }
       else
         {
-          GtkDragAnim *anim = g_slice_new0 (GtkDragAnim);
+          GtkDragAnim *anim;
+
+          /* Mark the context as dead, so if the destination decides
+           * to respond really late, we still are OK.
+           */
+          gtk_drag_clear_source_info (info->context);
+
+#ifdef GDK_WINDOWING_WAYLAND
+          if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (info->widget)))
+            return; /* cancel animation is done by the compositor */ ;
+#endif
+          anim = g_slice_new0 (GtkDragAnim);
           anim->info = info;
           anim->start_time = gdk_frame_clock_get_frame_time (gtk_widget_get_frame_clock (info->widget));
 
           info->cur_screen = gtk_widget_get_screen (info->widget);
 
           if (!info->icon_window)
-            set_icon_helper (info->context, gtk_icon_helper_get_definition (info->icon_helper),
-                             0, 0, TRUE);
+            set_icon_helper (info->context, gtk_icon_helper_get_definition (info->icon_helper), 0, 0, TRUE);
 
-          gtk_drag_update_icon (info);
-
-          /* Mark the context as dead, so if the destination decides
-           * to respond really late, we still are OK.
-           */
-          gtk_drag_clear_source_info (info->context);
           gdk_threads_add_timeout_full (G_PRIORITY_DEFAULT, 17, gtk_drag_anim_timeout, anim, (GDestroyNotify) gtk_drag_anim_destroy);
         }
     }
@@ -3365,12 +3376,12 @@ gtk_drag_drop (GtkDragSourceInfo *info,
               selection_data.target = pair->target;
               selection_data.data = NULL;
               selection_data.length = -1;
-              
+
               g_signal_emit_by_name (info->widget, "drag-data-get",
                                      info->context, &selection_data,
                                      pair->info,
                                      time);
-              
+
               /* FIXME: Should we check for length >= 0 here? */
               gtk_drag_drop_finished (info, GTK_DRAG_RESULT_SUCCESS, time);
               return;
@@ -3383,7 +3394,7 @@ gtk_drag_drop (GtkDragSourceInfo *info,
     {
       if (info->icon_window)
         gtk_widget_hide (info->icon_window);
-        
+
       gdk_drag_drop (info->context, time);
       info->drop_timeout = gdk_threads_add_timeout (DROP_ABORT_TIME,
                                           gtk_drag_abort_timeout,
@@ -3500,12 +3511,12 @@ gtk_drag_anim_timeout (gpointer data)
 static void
 gtk_drag_remove_icon (GtkDragSourceInfo *info)
 {
-  if (info->icon_window)
+  if (info->icon_widget)
     {
-      gtk_widget_hide (info->icon_window);
-      gtk_widget_set_opacity (info->icon_window, 1.0);
+      gtk_widget_hide (info->icon_widget);
+      gtk_widget_set_opacity (info->icon_widget, 1.0);
       if (info->destroy_icon)
-        gtk_widget_destroy (info->icon_window);
+        gtk_widget_destroy (info->icon_widget);
 
       if (info->fallback_icon)
         {
@@ -3513,8 +3524,8 @@ gtk_drag_remove_icon (GtkDragSourceInfo *info)
           info->fallback_icon = NULL;
         }
 
-      g_object_unref (info->icon_window);
-      info->icon_window = NULL;
+      g_object_unref (info->icon_widget);
+      info->icon_widget = NULL;
     }
 }
 
@@ -3557,8 +3568,10 @@ gtk_drag_source_info_destroy (GtkDragSourceInfo *info)
   if (!info->proxy_dest)
     g_signal_emit_by_name (info->widget, "drag-end", info->context);
 
-  if (info->widget)
-    g_object_unref (info->widget);
+  g_clear_object (&info->widget);
+
+  if (info->icon_window)
+    gtk_widget_destroy (info->icon_window);
 
   gtk_selection_remove_all (info->ipc_widget);
   g_object_set_data (G_OBJECT (info->ipc_widget), I_("gtk-info"), NULL);
@@ -3600,7 +3613,7 @@ gtk_drag_update_idle (gpointer data)
                                   info->button, 
                                   info->possible_actions,
                                   &action, &possible_actions);
-      gtk_drag_update_icon (info);
+
       gdk_drag_find_window_for_screen (info->context,
                                        info->icon_window ? gtk_widget_get_window (info->icon_window) : NULL,
                                        info->cur_screen, info->cur_x, info->cur_y,
