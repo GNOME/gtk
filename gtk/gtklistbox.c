@@ -653,7 +653,7 @@ gtk_list_box_get_selected_row (GtkListBox *box)
  * If @_index is negative or larger than the number of items in the
  * list, %NULL is returned.
  *
- * Returns: (transfer none): the child #GtkWidget or %NULL
+ * Returns: (transfer none) (nullable): the child #GtkWidget or %NULL
  *
  * Since: 3.10
  */
@@ -3332,7 +3332,7 @@ gtk_list_box_row_changed (GtkListBoxRow *row)
  * in a #GtkListBoxUpdateHeaderFunc to see if there is a header
  * set already, and if so to update the state of it.
  *
- * Returns: (transfer none): the current header, or %NULL if none
+ * Returns: (transfer none) (nullable): the current header, or %NULL if none
  *
  * Since: 3.10
  */
