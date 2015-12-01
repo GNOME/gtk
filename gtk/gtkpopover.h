@@ -109,6 +109,13 @@ void            gtk_popover_set_default_widget (GtkPopover *popover,
 GDK_AVAILABLE_IN_3_18
 GtkWidget *     gtk_popover_get_default_widget (GtkPopover *popover);
 
+GDK_AVAILABLE_IN_3_20
+void                 gtk_popover_set_constrain_to (GtkPopover           *popover,
+                                                   GtkPopoverConstraint  constraint);
+
+GDK_AVAILABLE_IN_3_20
+GtkPopoverConstraint gtk_popover_get_constrain_to (GtkPopover           *popover);
+
 G_END_DECLS
 
 #endif /* __GTK_POPOVER_H__ */

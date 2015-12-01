@@ -125,7 +125,8 @@ enum {
   PROP_POINTING_TO,
   PROP_POSITION,
   PROP_MODAL,
-  PROP_TRANSITIONS_ENABLED
+  PROP_TRANSITIONS_ENABLED,
+  PROP_CONSTRAIN_TO
 };
 
 enum {
@@ -151,6 +152,7 @@ struct _GtkPopoverPrivate
   GtkAdjustment *vadj;
   GtkAdjustment *hadj;
   GdkRectangle pointing_to;
+  GtkPopoverConstraint constraint;
   guint prev_focus_unmap_id;
   guint hierarchy_changed_id;
   guint size_allocate_id;
@@ -199,6 +201,7 @@ gtk_popover_init (GtkPopover *popover)
   popover->priv->modal = TRUE;
   popover->priv->tick_id = 0;
   popover->priv->transitions_enabled = TRUE;
+  popover->priv->constraint = GTK_POPOVER_CONSTRAINT_WINDOW;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (popover));
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_BACKGROUND);
@@ -232,6 +235,10 @@ gtk_popover_set_property (GObject      *object,
       gtk_popover_set_transitions_enabled (GTK_POPOVER (object),
                                            g_value_get_boolean (value));
       break;
+    case PROP_CONSTRAIN_TO:
+      gtk_popover_set_constrain_to (GTK_POPOVER (object),
+                                    g_value_get_enum (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -261,6 +268,9 @@ gtk_popover_get_property (GObject    *object,
       break;
     case PROP_TRANSITIONS_ENABLED:
       g_value_set_boolean (value, priv->transitions_enabled);
+      break;
+    case PROP_CONSTRAIN_TO:
+      g_value_set_enum (value, priv->constraint);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -986,7 +996,8 @@ gtk_popover_update_position (GtkPopover *popover)
   overshoot[GTK_POS_RIGHT] = rect.x + rect.width + req.width - window_alloc.width;
 
 #ifdef GDK_WINDOWING_WAYLAND
-  if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)))
+  if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)) &&
+      priv->constraint == GTK_POPOVER_CONSTRAINT_NONE)
     {
       priv->final_position = priv->preferred_position;
     }
@@ -1698,6 +1709,20 @@ gtk_popover_class_init (GtkPopoverClass *klass)
                                                          TRUE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
+  /**
+   * GtkPopover:constrain-to:
+   *
+   * Sets a constraint for the popover position.
+   *
+   * Since: 3.20
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_CONSTRAIN_TO,
+                                   g_param_spec_enum ("constrain-to",
+                                                      P_("Constraint"),
+                                                      P_("Constraint for the popover position"),
+                                                      GTK_TYPE_POPOVER_CONSTRAINT, GTK_POPOVER_CONSTRAINT_WINDOW,
+                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   signals[CLOSED] =
     g_signal_new (I_("closed"),
                   G_TYPE_FROM_CLASS (object_class),
@@ -2481,4 +2506,54 @@ gtk_popover_get_default_widget (GtkPopover *popover)
   g_return_val_if_fail (GTK_IS_POPOVER (popover), NULL);
 
   return priv->default_widget;
+}
+
+/**
+ * gtk_popover_set_constrain_to:
+ * @popover: a #GtkPopover
+ * @constraint: the new constraint
+ *
+ * Sets a constraint for positioning this popover.
+ *
+ * Note that not all platforms support placing popovers freely,
+ * and may already impose constraints.
+ *
+ * Since: 3.20
+ */
+void
+gtk_popover_set_constrain_to (GtkPopover           *popover,
+                              GtkPopoverConstraint  constraint)
+{
+  GtkPopoverPrivate *priv = popover->priv;
+
+  g_return_if_fail (GTK_IS_POPOVER (popover));
+
+  if (priv->constraint == constraint)
+    return;
+
+  priv->constraint = constraint;
+  gtk_popover_update_position (popover);
+
+  g_object_notify (G_OBJECT (popover), "constrain-to");
+}
+
+/**
+ * gtk_popover_get_constrain_to:
+ * @popover: a #GtkPopover
+ *
+ * Returns the constraint for placing this popover.
+ * See gtk_popover_set_constrain_to().
+ *
+ * Returns: the constraint for placing this popover.
+ *
+ * Since: 3.20
+ */
+GtkPopoverConstraint
+gtk_popover_get_constrain_to (GtkPopover *popover)
+{
+  GtkPopoverPrivate *priv = popover->priv;
+
+  g_return_val_if_fail (GTK_IS_POPOVER (popover), GTK_POPOVER_CONSTRAINT_WINDOW);
+
+  return priv->constraint;
 }

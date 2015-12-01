@@ -1126,4 +1126,23 @@ typedef enum
   GTK_PAN_DIRECTION_DOWN
 } GtkPanDirection;
 
+/**
+ * GtkPopoverConstraint:
+ * @GTK_POPOVER_CONSTRAINT_NONE: Don't constrain the popover position
+ *   beyond what is imposed by the implementation
+ * @GTK_POPOVER_CONSTRAINT_WINDOW: Constrain the popover to the boundaries
+ *   of the window that it is attached to
+ *
+ * Describes constraints to positioning of popovers. More values
+ * may be added to this enumeration in the future.
+ *
+ * Since: 3.20
+ */
+typedef enum
+{
+  GTK_POPOVER_CONSTRAINT_NONE,
+  GTK_POPOVER_CONSTRAINT_WINDOW
+} GtkPopoverConstraint;
+
+
 #endif /* __GTK_ENUMS_H__ */

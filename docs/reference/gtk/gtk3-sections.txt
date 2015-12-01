@@ -8141,6 +8141,9 @@ gtk_popover_set_pointing_to
 gtk_popover_get_pointing_to
 gtk_popover_set_position
 gtk_popover_get_position
+GtkPopoverConstraint
+gtk_popover_set_constrain_to
+gtk_popover_get_constrain_to
 gtk_popover_set_modal
 gtk_popover_get_modal
 gtk_popover_set_transitions_enabled
