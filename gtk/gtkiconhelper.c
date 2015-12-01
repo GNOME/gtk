@@ -1002,6 +1002,12 @@ _gtk_icon_helper_get_pixel_size (GtkIconHelper *self)
   return self->priv->pixel_size;
 }
 
+GtkImageDefinition *
+gtk_icon_helper_get_definition (GtkIconHelper *self)
+{
+  return self->priv->def;
+}
+
 GdkPixbuf *
 _gtk_icon_helper_peek_pixbuf (GtkIconHelper *self)
 {

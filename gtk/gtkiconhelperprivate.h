@@ -118,6 +118,7 @@ GtkIconSet *_gtk_icon_helper_peek_icon_set (GtkIconHelper *self);
 GdkPixbufAnimation *_gtk_icon_helper_peek_animation (GtkIconHelper *self);
 cairo_surface_t *_gtk_icon_helper_peek_surface (GtkIconHelper *self);
 
+GtkImageDefinition *gtk_icon_helper_get_definition (GtkIconHelper *self);
 const gchar *_gtk_icon_helper_get_stock_id (GtkIconHelper *self);
 const gchar *_gtk_icon_helper_get_icon_name (GtkIconHelper *self);
 
