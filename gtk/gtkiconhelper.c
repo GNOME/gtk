@@ -40,7 +40,6 @@ struct _GtkIconHelperPrivate {
   guint force_scale_pixbuf : 1;
 
   cairo_surface_t *rendered_surface;
-  GtkStateFlags last_surface_state;
   gint last_surface_scale;
 };
 
@@ -71,7 +70,6 @@ _gtk_icon_helper_clear (GtkIconHelper *self)
   self->priv->def = gtk_image_definition_new_empty ();
 
   self->priv->icon_size = GTK_ICON_SIZE_INVALID;
-  self->priv->last_surface_state = GTK_STATE_FLAG_NORMAL;
   self->priv->last_surface_scale = 0;
 }
 
@@ -272,18 +270,14 @@ static gboolean
 check_invalidate_surface (GtkIconHelper *self,
 			  GtkStyleContext *context)
 {
-  GtkStateFlags state;
   int scale;
 
-  state = gtk_style_context_get_state (context);
   scale = get_scale_factor (self, context);
 
   if ((self->priv->rendered_surface != NULL) &&
-      (self->priv->last_surface_state == state) &&
       (self->priv->last_surface_scale == scale))
     return FALSE;
 
-  self->priv->last_surface_state = state;
   self->priv->last_surface_scale = scale;
 
   if (self->priv->rendered_surface)
