@@ -779,9 +779,9 @@ data_source_send (void                  *data,
 
   if (context)
     {
-      gdk_wayland_device_unset_grab (gdk_drag_context_get_device (context));
       _gdk_wayland_drag_context_emit_event (context, GDK_DROP_FINISHED,
                                             GDK_CURRENT_TIME);
+      gdk_wayland_device_unset_grab (gdk_drag_context_get_device (context));
     }
 }
 
