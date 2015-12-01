@@ -698,11 +698,6 @@ gdk_wayland_window_configure (GdkWindow *window,
   GdkDisplay *display;
   GdkEvent *event;
 
-  if (window->width == width &&
-      window->height == height &&
-      impl->scale == scale)
-    return;
-
   event = gdk_event_new (GDK_CONFIGURE);
   event->configure.window = g_object_ref (window);
   event->configure.send_event = FALSE;
