@@ -694,7 +694,6 @@ gdk_wayland_window_configure (GdkWindow *window,
                               int        height,
                               int        scale)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   GdkDisplay *display;
   GdkEvent *event;
 
