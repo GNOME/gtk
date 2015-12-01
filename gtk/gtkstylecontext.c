@@ -499,7 +499,11 @@ gtk_style_context_push_state (GtkStyleContext *context,
 
   root = gtk_style_context_get_root (context);
 
-  if (GTK_IS_CSS_WIDGET_NODE (root))
+  if (GTK_IS_CSS_TRANSIENT_NODE (priv->cssnode))
+    {
+      /* don't emit a warning, changing state here is fine */
+    }
+  else if (GTK_IS_CSS_WIDGET_NODE (root))
     {
       GtkWidget *widget = gtk_css_widget_node_get_widget (GTK_CSS_WIDGET_NODE (root));
       g_warning ("State %u for %s %p doesn't match state %u set via gtk_style_context_set_state ()",
