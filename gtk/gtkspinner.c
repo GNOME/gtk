@@ -252,10 +252,10 @@ gtk_spinner_set_active (GtkSpinner *spinner,
 
       if (active)
         gtk_widget_set_state_flags (GTK_WIDGET (spinner),
-                                    GTK_STATE_FLAG_ACTIVE, FALSE);
+                                    GTK_STATE_FLAG_CHECKED, FALSE);
       else
         gtk_widget_unset_state_flags (GTK_WIDGET (spinner),
-                                      GTK_STATE_FLAG_ACTIVE);
+                                      GTK_STATE_FLAG_CHECKED);
     }
 }
 

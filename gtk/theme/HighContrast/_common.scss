@@ -167,7 +167,7 @@ spinner {
   background-color: blue;
   opacity: 0; // non spinning spinner makes no sense
   -gtk-icon-source: -gtk-icontheme('process-working-symbolic');
-  &:active {
+  &:checked {
     opacity: 1;
     animation: spin 1s linear infinite;
     &:insensitive {
