@@ -125,8 +125,6 @@ const gchar *_gtk_icon_helper_get_icon_name (GtkIconHelper *self);
 cairo_surface_t *gtk_icon_helper_load_surface (GtkIconHelper *self,
 					       GtkStyleContext *context,
                                                int              scale);
-GdkPixbuf *_gtk_icon_helper_ensure_pixbuf (GtkIconHelper *self,
-                                           GtkStyleContext *context);
 void _gtk_icon_helper_get_size (GtkIconHelper *self,
                                 GtkStyleContext *context,
                                 gint *width_out,
