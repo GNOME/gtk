@@ -497,7 +497,7 @@ static GtkCssValue *
 image_effect_parse (GtkCssStyleProperty *property,
 		    GtkCssParser        *parser)
 {
-  GtkCssValue *value = _gtk_css_image_effect_value_try_parse (parser);
+  GtkCssValue *value = _gtk_css_icon_effect_value_try_parse (parser);
 
   if (value == NULL)
     _gtk_css_parser_error (parser, "unknown value for property");
@@ -1720,7 +1720,7 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           NULL,
                                           _gtk_css_number_value_new (1, GTK_CSS_NUMBER));
-  gtk_css_style_property_register        ("-gtk-image-effect",
+  gtk_css_style_property_register        ("-gtk-icon-effect",
 					  GTK_CSS_PROPERTY_GTK_IMAGE_EFFECT,
 					  G_TYPE_NONE,
 					  GTK_STYLE_PROPERTY_INHERIT,
@@ -1728,7 +1728,7 @@ _gtk_css_style_property_init_properties (void)
 					  image_effect_parse,
 					  NULL,
 					  NULL,
-					  _gtk_css_image_effect_value_new (GTK_CSS_IMAGE_EFFECT_NONE));
+					  _gtk_css_icon_effect_value_new (GTK_CSS_ICON_EFFECT_NONE));
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_css_style_property_register        ("engine",

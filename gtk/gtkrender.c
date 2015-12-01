@@ -1078,7 +1078,7 @@ gtk_do_render_icon_pixbuf (GtkStyleContext     *context,
   cairo_t *cr;
   cairo_surface_t *surface;
   gboolean wildcarded;
-  GtkCssImageEffect image_effect;
+  GtkCssIconEffect image_effect;
 
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   base_pixbuf = gtk_icon_source_get_pixbuf (source);
@@ -1112,12 +1112,12 @@ gtk_do_render_icon_pixbuf (GtkStyleContext     *context,
   if (!wildcarded)
     return scaled;
 
-  image_effect = _gtk_css_image_effect_value_get
+  image_effect = _gtk_css_icon_effect_value_get
     (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_GTK_IMAGE_EFFECT));
 
   switch (image_effect)
     {
-    case GTK_CSS_IMAGE_EFFECT_DIM:
+    case GTK_CSS_ICON_EFFECT_DIM:
       surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
 					    gdk_pixbuf_get_width (scaled),
 					    gdk_pixbuf_get_height (scaled));
@@ -1134,7 +1134,7 @@ gtk_do_render_icon_pixbuf (GtkStyleContext     *context,
       cairo_surface_destroy (surface);
       break;
 
-    case GTK_CSS_IMAGE_EFFECT_HIGHLIGHT:
+    case GTK_CSS_ICON_EFFECT_HIGHLIGHT:
       surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
 					    gdk_pixbuf_get_width (scaled),
 					    gdk_pixbuf_get_height (scaled));
@@ -1155,7 +1155,7 @@ gtk_do_render_icon_pixbuf (GtkStyleContext     *context,
     default:
       g_warn_if_reached ();
       /* fall through */
-    case GTK_CSS_IMAGE_EFFECT_NONE:
+    case GTK_CSS_ICON_EFFECT_NONE:
       stated = scaled;
       break;
     }

@@ -249,10 +249,10 @@ typedef enum /*< skip >*/ {
 } GtkCssFillMode;
 
 typedef enum /*< skip >*/ {
-  GTK_CSS_IMAGE_EFFECT_NONE,
-  GTK_CSS_IMAGE_EFFECT_HIGHLIGHT,
-  GTK_CSS_IMAGE_EFFECT_DIM
-} GtkCssImageEffect;
+  GTK_CSS_ICON_EFFECT_NONE,
+  GTK_CSS_ICON_EFFECT_HIGHLIGHT,
+  GTK_CSS_ICON_EFFECT_DIM
+} GtkCssIconEffect;
 
 typedef enum /*< skip >*/ {
   GTK_CSS_ICON_STYLE_REQUESTED,

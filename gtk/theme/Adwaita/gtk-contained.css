@@ -40,7 +40,7 @@
    Everytime a wildcard is used a kitten dies, painfully.
 */
 *:insensitive {
-  -gtk-image-effect: dim; }
+  -gtk-icon-effect: dim; }
 
 .gtkstyle-fallback {
   background-color: #ededed;
@@ -363,7 +363,7 @@ button, headerbar button.titlebutton,
     text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
     -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
     box-shadow: inset 0 1px white, 0 1px white;
-    -gtk-image-effect: highlight; }
+    -gtk-icon-effect: highlight; }
   button:active, headerbar button.titlebutton:active,
   .titlebar button.titlebutton:active, button:checked, headerbar button.titlebutton:checked,
   .titlebar button.titlebutton:checked {
@@ -384,7 +384,7 @@ button, headerbar button.titlebutton,
     text-shadow: none;
     -gtk-icon-shadow: none;
     box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0);
-    -gtk-image-effect: none; }
+    -gtk-icon-effect: none; }
     button:backdrop:active, button:backdrop:checked, button.flat:backdrop:active, button.sidebar-button:backdrop:active, headerbar button.titlebutton:backdrop:active,
     .titlebar button.titlebutton:backdrop:active, button.flat:backdrop:checked, button.sidebar-button:backdrop:checked, headerbar button.titlebutton:backdrop:checked,
     .titlebar button.titlebutton:backdrop:checked {
@@ -1643,7 +1643,7 @@ headerbar {
         text-shadow: none;
         -gtk-icon-shadow: none;
         box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(165, 200, 236, 0);
-        -gtk-image-effect: none;
+        -gtk-icon-effect: none;
         border-color: #184472; }
         .titlebar.selection-mode button:backdrop:active, .titlebar.selection-mode button:backdrop:checked, .titlebar.selection-mode button.flat:backdrop:active, .titlebar.selection-mode button.sidebar-button:backdrop:active,
         .titlebar.selection-mode button.titlebutton:backdrop:active, .titlebar.selection-mode button.flat:backdrop:checked, .titlebar.selection-mode button.sidebar-button:backdrop:checked,
@@ -4546,7 +4546,7 @@ colorswatch {
 .content-view {
   background-color: #dbdbdb; }
   .content-view:hover {
-    -gtk-image-effect: highlight; }
+    -gtk-icon-effect: highlight; }
   .content-view:backdrop {
     background-color: #dbdbdb; }
 

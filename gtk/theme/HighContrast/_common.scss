@@ -72,7 +72,7 @@ $ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
 
 *:insensitive {
-    -gtk-image-effect: dim;
+    -gtk-icon-effect: dim;
 }
 
 .gtkstyle-fallback {
@@ -349,7 +349,7 @@ button {
   @include button(normal);
   &:hover, &.flat:hover {
     @include button(hover);
-    -gtk-image-effect: highlight;
+    -gtk-icon-effect: highlight;
   }
   &:active, &.flat:active,
   &:checked, &.flat:checked {

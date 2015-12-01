@@ -73,7 +73,7 @@
    Everytime a wildcard is used a kitten dies, painfully.
 */
 *:insensitive {
-  -gtk-image-effect: dim; }
+  -gtk-icon-effect: dim; }
 
 .gtkstyle-fallback {
   background-color: #fff;
@@ -373,7 +373,7 @@ button {
     background-color: #fff;
     border-color: gray;
     background-image: none;
-    -gtk-image-effect: highlight; }
+    -gtk-icon-effect: highlight; }
   button:active, button.flat:active, button.sidebar-button:active, button:checked, button.flat:checked, button.sidebar-button:checked {
     border-width: 2px;
     border-style: solid;

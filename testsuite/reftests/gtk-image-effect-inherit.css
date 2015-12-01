@@ -1,11 +1,11 @@
 GtkBox > :nth-child(1) {
-  -gtk-image-effect: none;
+  -gtk-icon-effect: none;
 }
 
 GtkBox > :nth-child(2) {
-  -gtk-image-effect: highlight;
+  -gtk-icon-effect: highlight;
 }
 
 GtkBox > :nth-child(3) {
-  -gtk-image-effect: dim;
+  -gtk-icon-effect: dim;
 }

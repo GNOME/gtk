@@ -869,7 +869,7 @@ _gtk_css_fill_mode_value_get (const GtkCssValue *value)
   return value->value;
 }
 
-/* GtkCssImageEffect */
+/* GtkCssIconEffect */
 
 static const GtkCssValueClass GTK_CSS_VALUE_IMAGE_EFFECT = {
   gtk_css_value_enum_free,
@@ -880,13 +880,13 @@ static const GtkCssValueClass GTK_CSS_VALUE_IMAGE_EFFECT = {
 };
 
 static GtkCssValue image_effect_values[] = {
-  { &GTK_CSS_VALUE_IMAGE_EFFECT, 1, GTK_CSS_IMAGE_EFFECT_NONE, "none" },
-  { &GTK_CSS_VALUE_IMAGE_EFFECT, 1, GTK_CSS_IMAGE_EFFECT_HIGHLIGHT, "highlight" },
-  { &GTK_CSS_VALUE_IMAGE_EFFECT, 1, GTK_CSS_IMAGE_EFFECT_DIM, "dim" }
+  { &GTK_CSS_VALUE_IMAGE_EFFECT, 1, GTK_CSS_ICON_EFFECT_NONE, "none" },
+  { &GTK_CSS_VALUE_IMAGE_EFFECT, 1, GTK_CSS_ICON_EFFECT_HIGHLIGHT, "highlight" },
+  { &GTK_CSS_VALUE_IMAGE_EFFECT, 1, GTK_CSS_ICON_EFFECT_DIM, "dim" }
 };
 
 GtkCssValue *
-_gtk_css_image_effect_value_new (GtkCssImageEffect image_effect)
+_gtk_css_icon_effect_value_new (GtkCssIconEffect image_effect)
 {
   guint i;
 
@@ -900,7 +900,7 @@ _gtk_css_image_effect_value_new (GtkCssImageEffect image_effect)
 }
 
 GtkCssValue *
-_gtk_css_image_effect_value_try_parse (GtkCssParser *parser)
+_gtk_css_icon_effect_value_try_parse (GtkCssParser *parser)
 {
   guint i;
 
@@ -915,10 +915,10 @@ _gtk_css_image_effect_value_try_parse (GtkCssParser *parser)
   return NULL;
 }
 
-GtkCssImageEffect
-_gtk_css_image_effect_value_get (const GtkCssValue *value)
+GtkCssIconEffect
+_gtk_css_icon_effect_value_get (const GtkCssValue *value)
 {
-  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_IMAGE_EFFECT, GTK_CSS_IMAGE_EFFECT_NONE);
+  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_IMAGE_EFFECT, GTK_CSS_ICON_EFFECT_NONE);
 
   return value->value;
 }

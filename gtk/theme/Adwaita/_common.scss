@@ -71,7 +71,7 @@ $asset_suffix: if($variant=='dark', '-dark', '');
 */
 
 *:insensitive {
-  -gtk-image-effect: dim;
+  -gtk-icon-effect: dim;
 }
 
 .gtkstyle-fallback {
@@ -392,7 +392,7 @@ button {
   }
   &:hover {
     @include button(hover);
-    -gtk-image-effect: highlight;
+    -gtk-icon-effect: highlight;
   }
   &:active, &:checked {
     @include button(active);
@@ -400,7 +400,7 @@ button {
   }
   &:backdrop, &.flat:backdrop {
     @include button(backdrop);
-    -gtk-image-effect: none;
+    -gtk-icon-effect: none;
     &:active, &:checked {
       @include button(backdrop-active);
     }
@@ -1148,7 +1148,7 @@ headerbar {
       &:backdrop,
       &.flat:backdrop {
         @include button(backdrop, $selected_bg_color, $selected_fg_color, $_hc);
-        -gtk-image-effect: none;
+        -gtk-icon-effect: none;
         border-color: $selected_borders_color;
 
         &:active,
@@ -3196,7 +3196,7 @@ colorswatch {
 //content view (grid/list)
 .content-view {
   background-color: darken($bg_color,7%);
-  &:hover { -gtk-image-effect: highlight; }
+  &:hover { -gtk-icon-effect: highlight; }
   &:backdrop { background-color: darken($bg_color,7%); }
   & rubberband { @extend rubberband; }
 }
