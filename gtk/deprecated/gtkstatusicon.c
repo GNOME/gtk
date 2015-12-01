@@ -1377,6 +1377,7 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
   HICON prev_hicon;
 #endif
   GtkStyleContext *context;
+  cairo_surface_t *surface;
   GtkWidget *widget;
   GdkPixbuf *pixbuf;
   gint round_size;
@@ -1394,7 +1395,9 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
   round_size = round_pixel_size (widget, priv->size);
 
   _gtk_icon_helper_set_pixel_size (priv->icon_helper, round_size);
-  pixbuf = _gtk_icon_helper_ensure_pixbuf (priv->icon_helper, context);
+  surface = gtk_icon_helper_load_surface (priv->icon_helper, context, 1);
+  pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0, round_size, round_size);
+  cairo_surface_destroy (surface);
 
   if (pixbuf != NULL)
     {
