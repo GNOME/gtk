@@ -77,7 +77,9 @@
           </attributes>
         </child>
         <child>
-          <object class="GtkCellRendererText" id="name_cell"/>
+          <object class="GtkCellRendererText" id="name_cell">
+            <property name="xpad">6</property>
+          </object>
           <attributes>
             <attribute name="text">1</attribute>
           </attributes>
