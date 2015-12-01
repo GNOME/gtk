@@ -69,7 +69,6 @@ struct _DataOfferData
 {
   struct wl_data_offer *offer;
   GList *targets; /* List of GdkAtom */
-  GdkAtom requested_target;
 };
 
 struct _AsyncWriteData
@@ -97,6 +96,7 @@ struct _GdkWaylandSelection
   /* Source-side data */
   StoredSelection stored_selection;
   GArray *source_targets;
+  GdkAtom requested_target;
 
   struct wl_data_source *clipboard_source;
   GdkWindow *clipboard_owner;
@@ -657,7 +657,6 @@ gdk_wayland_selection_request_target (GdkWaylandSelection *wayland_selection,
                                       GdkAtom              target,
                                       gint                 fd)
 {
-  DataOfferData *offer;
   GdkAtom selection;
 
   if (wayland_selection->clipboard_owner == window)
@@ -667,10 +666,8 @@ gdk_wayland_selection_request_target (GdkWaylandSelection *wayland_selection,
   else
     return FALSE;
 
-  offer = selection_lookup_offer_by_atom (wayland_selection, selection);
-
   if (wayland_selection->stored_selection.fd == fd &&
-      offer->requested_target == target)
+      wayland_selection->requested_target == target)
     return FALSE;
 
   /* If we didn't issue gdk_wayland_selection_check_write() yet
@@ -681,7 +678,7 @@ gdk_wayland_selection_request_target (GdkWaylandSelection *wayland_selection,
     close (wayland_selection->stored_selection.fd);
 
   wayland_selection->stored_selection.fd = fd;
-  offer->requested_target = target;
+  wayland_selection->requested_target = target;
 
   if (window &&
       gdk_wayland_selection_source_handles_target (wayland_selection, target))
@@ -1188,6 +1185,7 @@ gdk_wayland_selection_clear_targets (GdkDisplay *display,
 {
   GdkWaylandSelection *wayland_selection = gdk_wayland_display_get_selection (display);
 
+  wayland_selection->requested_target = GDK_NONE;
   g_array_set_size (wayland_selection->source_targets, 0);
   gdk_wayland_selection_unset_data_source (display, selection);
 }
