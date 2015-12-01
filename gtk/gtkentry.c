@@ -36,6 +36,7 @@
 #include "gtkclipboard.h"
 #include "gtkdebug.h"
 #include "gtkdnd.h"
+#include "gtkdndprivate.h"
 #include "gtkentry.h"
 #include "gtkentrybuffer.h"
 #include "gtkiconhelperprivate.h"
@@ -10054,14 +10055,9 @@ gtk_entry_drag_begin (GtkWidget      *widget,
         {
           if (icon_info->in_drag) 
             {
-              GdkPixbuf *pix;
-
-              pix = _gtk_icon_helper_ensure_pixbuf
-                (icon_info->icon_helper,
-                 gtk_widget_get_style_context (GTK_WIDGET (entry)));
-              gtk_drag_set_icon_pixbuf (context, pix, -2, -2);
-
-              g_object_unref (pix);
+              gtk_drag_set_icon_definition (context,
+                                            gtk_icon_helper_get_definition (icon_info->icon_helper),
+                                            -2, -2);
               return;
             }
         }

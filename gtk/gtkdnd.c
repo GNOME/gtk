@@ -2853,6 +2853,18 @@ set_icon_helper (GdkDragContext     *context,
    }
 }
 
+void 
+gtk_drag_set_icon_definition (GdkDragContext     *context,
+                              GtkImageDefinition *def,
+                              gint                hot_x,
+                              gint                hot_y)
+{
+  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
+  g_return_if_fail (def != NULL);
+
+  set_icon_helper (context, def, hot_x, hot_y, FALSE);
+}
+
 /**
  * gtk_drag_set_icon_pixbuf: (method)
  * @context: the context for a drag (This must be called 

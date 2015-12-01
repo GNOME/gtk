@@ -1453,6 +1453,43 @@ set_icon_stock_pixbuf (GdkDragContext    *context,
   cairo_surface_destroy (surface);
 }
 
+void
+gtk_drag_set_icon_definition (GdkDragContext     *context,
+                              GtkImageDefinition *def,
+                              gint                hot_x,
+                              gint                hot_y)
+{
+  switch (gtk_image_definition_get_storage_type (def))
+    {
+    case GTK_IMAGE_EMPTY:
+      gtk_drag_set_icon_default (context);
+      break;
+
+    case GTK_IMAGE_PIXBUF:
+      gtk_drag_set_icon_pixbuf (context,
+                                gtk_image_definition_get_pixbuf (def),
+                                hot_x, hot_y);
+      break;
+
+    case GTK_IMAGE_STOCK:
+      gtk_drag_set_icon_stock (context,
+                               gtk_image_definition_get_stock (def),
+                               hot_x, hot_y);
+      break;
+
+    case GTK_IMAGE_ICON_NAME:
+      gtk_drag_set_icon_name (context,
+                              gtk_image_definition_get_icon_name (def),
+                              hot_x, hot_y);
+      break;
+
+    default:
+      g_warning ("FIXME: setting drag icon of type %u not implemented, using default.", gtk_image_definition_get_storage_type (def));
+      gtk_drag_set_icon_default (context);
+      break;
+  }
+}
+
 /**
  * gtk_drag_set_icon_pixbuf:
  * @context: the context for a drag. (This must be called 
