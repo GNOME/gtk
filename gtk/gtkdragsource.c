@@ -396,7 +396,7 @@ gtk_drag_source_set_icon_stock (GtkWidget   *widget,
   g_return_if_fail (site != NULL);
 
   gtk_image_definition_unref (site->image_def);
-  site->image_def = gtk_image_definition_new_stock (stock_id, GTK_ICON_SIZE_DND);
+  site->image_def = gtk_image_definition_new_stock (stock_id);
 }
 
 /**
@@ -422,7 +422,7 @@ gtk_drag_source_set_icon_name (GtkWidget   *widget,
   g_return_if_fail (site != NULL);
 
   gtk_image_definition_unref (site->image_def);
-  site->image_def = gtk_image_definition_new_icon_name (icon_name, GTK_ICON_SIZE_DND);
+  site->image_def = gtk_image_definition_new_icon_name (icon_name);
 }
 
 /**
@@ -448,6 +448,6 @@ gtk_drag_source_set_icon_gicon (GtkWidget *widget,
   g_return_if_fail (site != NULL);
 
   gtk_image_definition_unref (site->image_def);
-  site->image_def = gtk_image_definition_new_gicon (icon, GTK_ICON_SIZE_DND);
+  site->image_def = gtk_image_definition_new_gicon (icon);
 }
 

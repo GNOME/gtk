@@ -53,8 +53,6 @@ static void
 gtk_icon_helper_take_definition (GtkIconHelper      *self,
                                  GtkImageDefinition *def)
 {
-  GtkIconSize icon_size;
-
   _gtk_icon_helper_clear (self);
 
   if (def == NULL)
@@ -63,10 +61,6 @@ gtk_icon_helper_take_definition (GtkIconHelper      *self,
   gtk_image_definition_unref (self->priv->def);
   self->priv->def = def;
 
-  icon_size = gtk_image_definition_get_icon_size (def);
-  if (icon_size != GTK_ICON_SIZE_INVALID)
-    self->priv->icon_size = icon_size;
-  
   _gtk_icon_helper_invalidate (self);
 }
 
@@ -891,7 +885,8 @@ _gtk_icon_helper_set_gicon (GtkIconHelper *self,
                             GIcon *gicon,
                             GtkIconSize icon_size)
 {
-  gtk_icon_helper_take_definition (self, gtk_image_definition_new_gicon (gicon, icon_size));
+  gtk_icon_helper_take_definition (self, gtk_image_definition_new_gicon (gicon));
+  _gtk_icon_helper_set_icon_size (self, icon_size);
 }
 
 void 
@@ -899,7 +894,8 @@ _gtk_icon_helper_set_icon_name (GtkIconHelper *self,
                                 const gchar *icon_name,
                                 GtkIconSize icon_size)
 {
-  gtk_icon_helper_take_definition (self, gtk_image_definition_new_icon_name (icon_name, icon_size));
+  gtk_icon_helper_take_definition (self, gtk_image_definition_new_icon_name (icon_name));
+  _gtk_icon_helper_set_icon_size (self, icon_size);
 }
 
 void 
@@ -907,7 +903,8 @@ _gtk_icon_helper_set_icon_set (GtkIconHelper *self,
                                GtkIconSet *icon_set,
                                GtkIconSize icon_size)
 {
-  gtk_icon_helper_take_definition (self, gtk_image_definition_new_icon_set (icon_set, icon_size));
+  gtk_icon_helper_take_definition (self, gtk_image_definition_new_icon_set (icon_set));
+  _gtk_icon_helper_set_icon_size (self, icon_size);
 }
 
 void 
@@ -936,7 +933,8 @@ _gtk_icon_helper_set_stock_id (GtkIconHelper *self,
                                const gchar *stock_id,
                                GtkIconSize icon_size)
 {
-  gtk_icon_helper_take_definition (self, gtk_image_definition_new_stock (stock_id, icon_size));
+  gtk_icon_helper_take_definition (self, gtk_image_definition_new_stock (stock_id));
+  _gtk_icon_helper_set_icon_size (self, icon_size);
 }
 
 gboolean

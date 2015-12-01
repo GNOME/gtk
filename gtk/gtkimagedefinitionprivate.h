@@ -28,23 +28,18 @@ typedef union _GtkImageDefinition GtkImageDefinition;
 GtkImageDefinition *    gtk_image_definition_new_empty          (void);
 GtkImageDefinition *    gtk_image_definition_new_pixbuf         (GdkPixbuf                      *pixbuf,
                                                                  int                             scale);
-GtkImageDefinition *    gtk_image_definition_new_stock          (const char                     *stock_id,
-                                                                 GtkIconSize                     icon_size);
-GtkImageDefinition *    gtk_image_definition_new_icon_set       (GtkIconSet                     *icon_set,
-                                                                 GtkIconSize                     icon_size);
+GtkImageDefinition *    gtk_image_definition_new_stock          (const char                     *stock_id);
+GtkImageDefinition *    gtk_image_definition_new_icon_set       (GtkIconSet                     *icon_set);
 GtkImageDefinition *    gtk_image_definition_new_animation      (GdkPixbufAnimation             *animation,
                                                                  int                             scale);
-GtkImageDefinition *    gtk_image_definition_new_icon_name      (const char                     *icon_name,
-                                                                 GtkIconSize                     icon_size);
-GtkImageDefinition *    gtk_image_definition_new_gicon          (GIcon                          *gicon,
-                                                                 GtkIconSize                     icon_size);
+GtkImageDefinition *    gtk_image_definition_new_icon_name      (const char                     *icon_name);
+GtkImageDefinition *    gtk_image_definition_new_gicon          (GIcon                          *gicon);
 GtkImageDefinition *    gtk_image_definition_new_surface        (cairo_surface_t                *surface);
 
 GtkImageDefinition *    gtk_image_definition_ref                (GtkImageDefinition             *def);
 void                    gtk_image_definition_unref              (GtkImageDefinition             *def);
 
 gboolean                gtk_image_definition_get_storage_type   (const GtkImageDefinition       *def);
-GtkIconSize             gtk_image_definition_get_icon_size      (const GtkImageDefinition       *def);
 gint                    gtk_image_definition_get_scale          (const GtkImageDefinition       *def);
 GdkPixbuf *             gtk_image_definition_get_pixbuf         (const GtkImageDefinition       *def);
 const gchar *           gtk_image_definition_get_stock          (const GtkImageDefinition       *def);

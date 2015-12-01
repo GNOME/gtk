@@ -2491,7 +2491,7 @@ gtk_drag_begin_internal (GtkWidget          *widget,
         }
       else
         {
-          icon = gtk_image_definition_new_icon_name ("text-x-generic", GTK_ICON_SIZE_DND);
+          icon = gtk_image_definition_new_icon_name ("text-x-generic");
           set_icon_helper (info->context, icon, 0, 0, FALSE);
           gtk_image_definition_unref (icon);
         }
@@ -2777,6 +2777,7 @@ set_icon_helper (GdkDragContext     *context,
       _gtk_icon_helper_set_window (info->icon_helper, gdk_drag_context_get_source_window (context));
     }
   _gtk_icon_helper_set_definition (info->icon_helper, def);
+  _gtk_icon_helper_set_icon_size (info->icon_helper, GTK_ICON_SIZE_DND);
 
   display = gdk_window_get_display (gdk_drag_context_get_source_window (context));
   _gtk_icon_helper_get_size (info->icon_helper, 
@@ -2902,7 +2903,7 @@ gtk_drag_set_icon_stock (GdkDragContext *context,
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
   g_return_if_fail (stock_id != NULL);
 
-  def = gtk_image_definition_new_stock (stock_id, GTK_ICON_SIZE_DND);
+  def = gtk_image_definition_new_stock (stock_id);
   set_icon_helper (context, def, hot_x, hot_y, FALSE);
 
   gtk_image_definition_unref (def);
@@ -3080,7 +3081,7 @@ gtk_drag_set_icon_name (GdkDragContext *context,
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
   g_return_if_fail (icon_name != NULL);
 
-  def = gtk_image_definition_new_icon_name (icon_name, GTK_ICON_SIZE_DND);
+  def = gtk_image_definition_new_icon_name (icon_name);
   set_icon_helper (context, def, hot_x, hot_y, FALSE);
 
   gtk_image_definition_unref (def);
@@ -3111,7 +3112,7 @@ gtk_drag_set_icon_gicon (GdkDragContext *context,
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
   g_return_if_fail (icon != NULL);
 
-  def = gtk_image_definition_new_gicon (icon, GTK_ICON_SIZE_DND);
+  def = gtk_image_definition_new_gicon (icon);
   set_icon_helper (context, def, hot_x, hot_y, FALSE);
 
   gtk_image_definition_unref (def);
