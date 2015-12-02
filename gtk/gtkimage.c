@@ -1742,6 +1742,36 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void
+gtk_image_notify_for_storage_type (GtkImage     *image,
+                                   GtkImageType  storage_type)
+{
+  switch (storage_type)
+    {
+    case GTK_IMAGE_PIXBUF:
+      g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_PIXBUF]);
+      break;
+    case GTK_IMAGE_STOCK:
+      g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_STOCK]);
+      break;
+    case GTK_IMAGE_ICON_SET:
+      g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_ICON_SET]);
+      break;
+    case GTK_IMAGE_ANIMATION:
+      g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_PIXBUF_ANIMATION]);
+      break;
+    case GTK_IMAGE_ICON_NAME:
+      g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_ICON_NAME]);
+      break;
+    case GTK_IMAGE_GICON:
+      g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_GICON]);
+      break;
+    case GTK_IMAGE_EMPTY:
+    default:
+      break;
+    }
+}
+
+static void
 gtk_image_reset (GtkImage *image)
 {
   GtkImagePrivate *priv = image->priv;
@@ -1755,31 +1785,9 @@ gtk_image_reset (GtkImage *image)
 
   g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_ICON_SIZE]);
 
-  switch (storage_type)
-    {
-    case GTK_IMAGE_PIXBUF:
-      g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_PIXBUF]);
-      break;
-    case GTK_IMAGE_STOCK:
-      g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_STOCK]);
-      break;
-    case GTK_IMAGE_ICON_SET:
-      g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_ICON_SET]);
-      break;
-    case GTK_IMAGE_ANIMATION:
-      gtk_image_reset_anim_iter (image);
-      g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_PIXBUF_ANIMATION]);
-      break;
-    case GTK_IMAGE_ICON_NAME:
-      g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_ICON_NAME]);
-      break;
-    case GTK_IMAGE_GICON:
-      g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_GICON]);
-      break;
-    case GTK_IMAGE_EMPTY:
-    default:
-      break;
-    }
+  gtk_image_reset_anim_iter (image);
+
+  gtk_image_notify_for_storage_type (image, storage_type);
 
   if (priv->filename)
     {
