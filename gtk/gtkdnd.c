@@ -2626,30 +2626,13 @@ set_icon_helper (GdkDragContext     *context,
                  gboolean            force_window)
 {
   GtkDragSourceInfo *info;
-  GtkWidget *window;
-  gint width, height;
+  GtkWidget *widget;
   GdkScreen *screen;
-  GdkVisual *visual;
   cairo_surface_t *source;
-  cairo_surface_t *surface;
-  cairo_pattern_t *pattern;
-  cairo_t *cr;
   GdkWindow *root;
-
-  g_return_if_fail (context != NULL);
-  g_return_if_fail (def != NULL);
 
   info = gtk_drag_get_source_info (context, FALSE);
   screen = gdk_window_get_screen (gdk_drag_context_get_source_window (context));
-  visual = gdk_screen_get_rgba_visual (screen);
-
-  window = gtk_window_new (GTK_WINDOW_POPUP);
-  gtk_window_set_type_hint (GTK_WINDOW (window), GDK_WINDOW_TYPE_HINT_DND);
-  gtk_window_set_screen (GTK_WINDOW (window), screen);
-  if (visual)
-    gtk_widget_set_visual (window, visual);
-  gtk_widget_set_events (window, GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
-  gtk_widget_set_app_paintable (window, TRUE);
 
   if (info->icon_helper == NULL)
     {
@@ -2659,43 +2642,17 @@ set_icon_helper (GdkDragContext     *context,
   _gtk_icon_helper_set_definition (info->icon_helper, def);
   _gtk_icon_helper_set_icon_size (info->icon_helper, GTK_ICON_SIZE_DND);
 
-  _gtk_icon_helper_get_size (info->icon_helper,
-                             gtk_widget_get_style_context (window),
-                             &width, &height);
-
-  gtk_widget_set_size_request (window, width, height);
+  widget  = gtk_image_new ();
+  gtk_widget_show (widget);
 
   root = gdk_screen_get_root_window (screen);
   source = gtk_icon_helper_load_surface (info->icon_helper,
-                                         gtk_widget_get_style_context (window),
+                                         gtk_widget_get_style_context (widget),
                                          gdk_window_get_scale_factor (root));
-  surface = gdk_window_create_similar_surface (root,
-                                               CAIRO_CONTENT_COLOR_ALPHA,
-                                               width, height);
-
-  cr = cairo_create (surface);
-  cairo_push_group_with_content (cr, CAIRO_CONTENT_COLOR_ALPHA);
-  cairo_set_source_surface (cr, source, 0, 0);
-  cairo_paint (cr);
-  cairo_set_operator (cr, CAIRO_OPERATOR_SATURATE);
-  cairo_paint (cr);
-  cairo_pop_group_to_source (cr);
-  cairo_paint (cr);
-  cairo_destroy (cr);
-
-  pattern = cairo_pattern_create_for_surface (surface);
-
-  cairo_surface_destroy (surface);
+  gtk_image_set_from_surface (GTK_IMAGE (widget), source);
   cairo_surface_destroy (source);
 
-  g_signal_connect_data (window,
-                         "draw",
-                         G_CALLBACK (gtk_drag_draw_icon_pattern),
-                         pattern,
-                         (GClosureNotify) cairo_pattern_destroy,
-                         G_CONNECT_AFTER);
-
-  gtk_drag_set_icon_window (context, window, hot_x, hot_y, TRUE);
+  gtk_drag_set_icon_window (context, widget, hot_x, hot_y, TRUE);
 }
 
 void 
