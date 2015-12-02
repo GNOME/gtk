@@ -323,6 +323,11 @@ entry {
     }
   }
 
+  // brighter border between linked insensitive entries
+  > entry:insensitive + entry:insensitive {
+    border-top-color: mix($borders_color, $base_color, 30%);
+  }
+
   // color back the top border of a linked focused entry following another entry and add back the focus shadow.
   > entry + entry:focus:not(:last-child) {
     border-top-color: entry_focus_border();
