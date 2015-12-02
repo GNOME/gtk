@@ -103,7 +103,7 @@
             <child>
               <object class="GtkImage">
                 <property name="visible">1</property>
-                <property name="icon-name">gnome-software-symbolic</property>
+                <property name="icon-name">application-x-executable-symbolic</property>
                 <property name="pixel-size">48</property>
                 <property name="margin">12</property>
                 <style>
@@ -117,6 +117,7 @@
                 <property name="label" translatable="yes">No applications found.</property>
                 <property name="halign">center</property>
                 <property name="valign">center</property>
+                <property name="wrap">1</property>
                 <attributes>
                   <attribute name="scale" value="1.2"/>
                 </attributes>
