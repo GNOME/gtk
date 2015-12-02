@@ -168,6 +168,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testpopover			\
 	gdkgears			\
 	listmodel			\
+	foreigndrawing			\
 	$(NULL)
 
 if USE_X11
@@ -308,6 +309,7 @@ testrevealer_DEPENDENCIES = $(TEST_DEPS)
 testtitlebar_DEPENDENCIES = $(TEST_DEPS)
 testwindowsize_DEPENDENCIES = $(TEST_DEPS)
 listmodel_DEPENDENCIES = $(TEST_DEPS)
+foreigndrawing_DEPENDENCIES = $(TEST_DEPS)
 
 animated_resizing_SOURCES = 	\
 	animated-resizing.c	\
@@ -541,6 +543,8 @@ testglblending_SOURCES =	\
 	gtkgears.h
 
 listmodel_SOURCES = listmodel.c
+
+foreigndrawing_SOURCES = foreigndrawing.c
 
 EXTRA_DIST += 			\
 	gradient1.png		\
