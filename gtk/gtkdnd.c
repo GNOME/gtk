@@ -2670,7 +2670,7 @@ set_icon_helper (GdkDragContext     *context,
                                          gtk_widget_get_style_context (window),
                                          gdk_window_get_scale_factor (root));
   surface = gdk_window_create_similar_surface (root,
-                                               CAIRO_CONTENT_COLOR,
+                                               CAIRO_CONTENT_COLOR_ALPHA,
                                                width, height);
 
   cr = cairo_create (surface);
