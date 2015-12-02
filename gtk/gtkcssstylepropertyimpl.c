@@ -987,9 +987,7 @@ static GtkCssValue *
 icon_theme_value_parse (GtkCssStyleProperty *property,
 		        GtkCssParser        *parser)
 {
-  _gtk_css_parser_error (parser, "Only 'inherit', 'initial' or 'unset' are allowed");
-
-  return NULL;
+  return gtk_css_icon_theme_value_parse (parser);
 }
 
 /*** REGISTRATION ***/
@@ -1028,9 +1026,6 @@ _gtk_css_style_property_init_properties (void)
                                           query_length_as_double,
                                           assign_length_from_double,
                                           _gtk_css_font_size_value_new (GTK_CSS_FONT_SIZE_MEDIUM));
-
-  /* properties that aren't referenced when computing values
-   * start here */
   gtk_css_style_property_register        ("-gtk-icon-theme",
                                           GTK_CSS_PROPERTY_ICON_THEME,
                                           G_TYPE_NONE,
@@ -1039,7 +1034,10 @@ _gtk_css_style_property_init_properties (void)
                                           icon_theme_value_parse,
                                           NULL,
                                           NULL,
-                                          _gtk_css_icon_theme_value_new());
+                                          gtk_css_icon_theme_value_new (NULL));
+
+  /* properties that aren't referenced when computing values
+   * start here */
   gtk_css_style_property_register        ("background-color",
                                           GTK_CSS_PROPERTY_BACKGROUND_COLOR,
                                           GDK_TYPE_RGBA,
