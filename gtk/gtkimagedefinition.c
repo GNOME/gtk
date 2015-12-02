@@ -254,8 +254,8 @@ gtk_image_definition_unref (GtkImageDefinition *def)
   switch (def->type)
     {
     default:
-      g_assert_not_reached ();
     case GTK_IMAGE_EMPTY:
+      g_assert_not_reached ();
       break;
     case GTK_IMAGE_PIXBUF:
       g_object_unref (def->pixbuf.pixbuf);
