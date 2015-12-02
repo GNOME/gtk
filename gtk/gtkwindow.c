@@ -492,8 +492,7 @@ static void     gtk_window_set_default_size_internal (GtkWindow    *window,
                                                       gint          height,
 						      gboolean      is_geometry);
 
-static void     update_themed_icon                    (GtkIconTheme *theme,
-				                       GtkWindow    *window);
+static void     update_themed_icon                    (GtkWindow    *window);
 static GList   *icon_list_from_theme                  (GtkWindow    *window,
 						       const gchar  *name);
 static void     gtk_window_realize_icon               (GtkWindow    *window);
@@ -531,6 +530,7 @@ static void gtk_window_get_preferred_height_for_width (GtkWidget *widget,
                                                        gint       width,
                                                        gint      *minimum_size,
                                                        gint      *natural_size);
+static void gtk_window_style_updated (GtkWidget     *widget);
 static void gtk_window_state_flags_changed (GtkWidget     *widget,
                                             GtkStateFlags  previous_state);
 
@@ -710,6 +710,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->get_preferred_height = gtk_window_get_preferred_height;
   widget_class->get_preferred_height_for_width = gtk_window_get_preferred_height_for_width;
   widget_class->state_flags_changed = gtk_window_state_flags_changed;
+  widget_class->style_updated = gtk_window_style_updated;
 
   container_class->remove = gtk_window_remove;
   container_class->check_resize = gtk_window_check_resize;
@@ -4513,15 +4514,7 @@ gtk_window_realize_icon (GtkWindow *window)
 
   if (info->using_themed_icon) 
     {
-      GtkIconTheme *icon_theme;
-
       g_list_free_full (icon_list, g_object_unref);
- 
-      icon_theme = gtk_css_icon_theme_value_get_icon_theme
-        (_gtk_style_context_peek_property (gtk_widget_get_style_context (GTK_WIDGET (window)),
-                                           GTK_CSS_PROPERTY_ICON_THEME));
-      g_signal_connect (icon_theme, "changed",
-			G_CALLBACK (update_themed_icon), window);
     }
 }
 
@@ -4602,17 +4595,6 @@ gtk_window_unrealize_icon (GtkWindow *window)
   if (info == NULL)
     return;
   
-  if (info->using_themed_icon)
-    {
-      GtkIconTheme *icon_theme;
-
-      icon_theme = gtk_css_icon_theme_value_get_icon_theme
-        (_gtk_style_context_peek_property (gtk_widget_get_style_context (GTK_WIDGET (window)),
-                                           GTK_CSS_PROPERTY_ICON_THEME));
-
-      g_signal_handlers_disconnect_by_func (icon_theme, update_themed_icon, window);
-    }
-    
   /* We don't clear the properties on the window, just figure the
    * window is going away.
    */
@@ -4753,8 +4735,7 @@ gtk_window_set_icon (GtkWindow  *window,
 
 
 static void 
-update_themed_icon (GtkIconTheme *icon_theme,
-		    GtkWindow    *window)
+update_themed_icon (GtkWindow *window)
 {
   g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_ICON_NAME]);
   
@@ -4798,7 +4779,7 @@ gtk_window_set_icon_name (GtkWindow   *window,
   g_list_free_full (info->icon_list, g_object_unref);
   info->icon_list = NULL;
   
-  update_themed_icon (NULL, window);
+  update_themed_icon (window);
 
   g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_ICON_NAME]);
 }
@@ -8759,6 +8740,17 @@ gtk_window_state_flags_changed (GtkWidget     *widget,
 
   state = gtk_widget_get_state_flags (widget);
   gtk_css_node_set_state (priv->decoration_node, state);
+}
+
+static void
+gtk_window_style_updated (GtkWidget *widget)
+{
+  const GtkBitmask *changes = _gtk_style_context_get_changes (gtk_widget_get_style_context (widget));
+
+  GTK_WIDGET_CLASS (gtk_window_parent_class)->style_updated (widget);
+
+  if (changes == NULL || _gtk_bitmask_get (changes, GTK_CSS_PROPERTY_ICON_THEME))
+    update_themed_icon (GTK_WINDOW (widget));
 }
 
 /**
