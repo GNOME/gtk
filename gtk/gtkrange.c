@@ -2204,7 +2204,7 @@ gtk_range_draw (GtkWidget *widget,
                   priv->stepper_d_node,
                   priv->orientation == GTK_ORIENTATION_VERTICAL ? GTK_ARROW_DOWN : GTK_ARROW_RIGHT);
 
-  return FALSE;
+  return GDK_EVENT_PROPAGATE;
 }
 
 static void
@@ -2400,7 +2400,7 @@ gtk_range_key_press (GtkWidget   *widget,
     {
       stop_scrolling (range);
 
-      return TRUE;
+      return GDK_EVENT_STOP;
     }
   else if (priv->in_drag &&
            (event->keyval == GDK_KEY_Shift_L ||
@@ -2412,7 +2412,7 @@ gtk_range_key_press (GtkWidget   *widget,
         priv->slide_initial_slider_position = priv->slider.x;
       update_zoom_state (range, !priv->zoom);
 
-      return TRUE;
+      return GDK_EVENT_STOP;
     }
 
   return GTK_WIDGET_CLASS (gtk_range_parent_class)->key_press_event (widget, event);
@@ -2895,7 +2895,7 @@ gtk_range_scroll_event (GtkWidget      *widget,
                      &handled);
     }
 
-  return TRUE;
+  return GDK_EVENT_STOP;
 }
 
 static void
@@ -4090,7 +4090,7 @@ second_timeout (gpointer data)
 
   gtk_range_scroll (range, priv->timer->step);
 
-  return TRUE;
+  return G_SOURCE_CONTINUE;
 }
 
 static gboolean
@@ -4103,8 +4103,7 @@ initial_timeout (gpointer data)
                                                      second_timeout,
                                                      range);
   g_source_set_name_by_id (priv->timer->timeout_id, "[gtk+] second_timeout");
-  /* remove self */
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static void
