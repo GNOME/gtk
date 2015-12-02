@@ -5306,6 +5306,14 @@ gtk_window_get_default_size (GtkWindow *window,
  * client side decorations depend on the theme and may not be realized
  * or visible at the time gtk_window_resize() is issued.
  *
+ * Typically, gtk_window_resize() will compensate for the GtkHeaderBar
+ * height only if it's known at the time the resulting GtkWindow
+ * configuration is issued.
+ * For example, if new widgets are added after the GtkWindow configuration
+ * and cause the GtkHeaderBar to grow in height, this will result in a
+ * window content smaller that specified by gtk_window_resize() and not
+ * a larger window.
+ *
  **/
 void
 gtk_window_resize (GtkWindow *window,
