@@ -1911,21 +1911,6 @@ gtk_image_screen_changed (GtkWidget *widget,
   icon_theme_changed (image);
 }
 
-void
-_gtk_image_gicon_data_clear (GtkImageGIconData *data)
-{
-  if (data->pixbuf)
-    {
-      g_object_unref (data->pixbuf);
-      data->pixbuf = NULL;
-    }
-  if (data->icon)
-    {
-      g_object_unref (data->icon);
-      data->icon = NULL;
-    }
-}
-
 /**
  * gtk_image_set_pixel_size:
  * @image: a #GtkImage
