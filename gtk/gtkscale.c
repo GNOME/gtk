@@ -601,7 +601,7 @@ gtk_scale_get_property (GObject      *object,
 /**
  * gtk_scale_new:
  * @orientation: the scale’s orientation.
- * @adjustment: (allow-none): the #GtkAdjustment which sets the range
+ * @adjustment: (allow-none) (nullable): the #GtkAdjustment which sets the range
  *              of the scale, or %NULL to create a new adjustment.
  *
  * Creates a new #GtkScale.
@@ -1455,7 +1455,7 @@ gtk_scale_finalize (GObject *object)
  * object is owned by the scale so does not need to be freed by
  * the caller.
  *
- * Returns: (transfer none): the #PangoLayout for this scale,
+ * Returns: (transfer none) (nullable): the #PangoLayout for this scale,
  *     or %NULL if the #GtkScale:draw-value property is %FALSE.
  *
  * Since: 2.4
