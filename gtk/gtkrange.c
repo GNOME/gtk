@@ -135,7 +135,6 @@ struct _GtkRangePrivate
 
   guint flippable              : 1;
   guint inverted               : 1;
-  guint recalc_marks           : 1;
   guint slider_size_fixed      : 1;
   guint trough_click_forward   : 1;  /* trough click was on the forward side of slider */
 
@@ -1740,8 +1739,7 @@ gtk_range_size_allocate (GtkWidget     *widget,
 
   gtk_widget_set_allocation (widget, allocation);
 
-  priv->recalc_marks = TRUE;
-
+  gtk_range_calc_marks (range);
   gtk_range_calc_layout (range);
 
   if (gtk_widget_get_realized (widget))
@@ -1967,9 +1965,6 @@ gtk_range_draw (GtkWidget *widget,
       draw_trough = FALSE;
       draw_slider = TRUE;
     }
-
-  gtk_range_calc_marks (range);
-  gtk_range_calc_layout (range);
 
   /* Just to be confusing, we draw the trough for the whole
    * range rectangle, not the trough rectangle (the trough
@@ -4032,11 +4027,6 @@ gtk_range_calc_marks (GtkRange *range)
   GdkRectangle slider;
   gint i;
 
-  if (!priv->recalc_marks)
-    return;
-
-  priv->recalc_marks = FALSE;
-
   for (i = 0; i < priv->n_marks; i++)
     {
       gtk_range_compute_slider_position (range, priv->marks[i], &slider);
@@ -4202,7 +4192,7 @@ _gtk_range_set_stop_values (GtkRange *range,
   for (i = 0; i < n_values; i++) 
     priv->marks[i] = values[i];
 
-  priv->recalc_marks = TRUE;
+  gtk_range_calc_marks (range);
 }
 
 gint
