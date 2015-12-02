@@ -454,3 +454,29 @@ gdk_drag_get_selection (GdkDragContext *context)
 
   return GDK_DRAG_CONTEXT_GET_CLASS (context)->get_selection (context);
 }
+
+/**
+ * gdk_drag_context_get_drag_window:
+ * @context: a #GdkDragContext
+ *
+ * Returns the window on which the drag icon should be rendered
+ * during the drag operation. Note that the window may not be
+ * available until the drag operation has begun. GDK will move
+ * the window in accordance with the ongoing drag operation.
+ * The window is owned by @context and will be destroyed when
+ * the drag operation is over.
+ *
+ * Returns: (transfer none): the drag window, or %NULL
+ *
+ * Since: 3.20
+ */
+GdkWindow *
+gdk_drag_context_get_drag_window (GdkDragContext *context)
+{
+  g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), NULL);
+
+  if (GDK_DRAG_CONTEXT_GET_CLASS (context)->get_drag_window)
+    return GDK_DRAG_CONTEXT_GET_CLASS (context)->get_drag_window (context);
+
+  return NULL;
+}

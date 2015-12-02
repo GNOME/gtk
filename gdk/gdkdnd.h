@@ -171,6 +171,9 @@ void            gdk_drag_abort       (GdkDragContext *context,
 GDK_AVAILABLE_IN_ALL
 gboolean        gdk_drag_drop_succeeded (GdkDragContext *context);
 
+GDK_AVAILABLE_IN_3_20
+GdkWindow      *gdk_drag_context_get_drag_window (GdkDragContext *context);
+
 G_END_DECLS
 
 #endif /* __GDK_DND_H__ */

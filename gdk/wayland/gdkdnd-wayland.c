@@ -293,6 +293,12 @@ gdk_wayland_drag_context_init (GdkWaylandDragContext *context_wayland)
   context->actions = GDK_ACTION_COPY | GDK_ACTION_MOVE;
 }
 
+static GdkWindow *
+gdk_wayland_drag_context_get_drag_window (GdkDragContext *context)
+{
+  return GDK_WAYLAND_DRAG_CONTEXT (context)->dnd_window;
+}
+
 static void
 gdk_wayland_drag_context_class_init (GdkWaylandDragContextClass *klass)
 {
@@ -310,6 +316,7 @@ gdk_wayland_drag_context_class_init (GdkWaylandDragContextClass *klass)
   context_class->drop_finish = gdk_wayland_drag_context_drop_finish;
   context_class->drop_status = gdk_wayland_drag_context_drop_status;
   context_class->get_selection = gdk_wayland_drag_context_get_selection;
+  context_class->get_drag_window = gdk_wayland_drag_context_get_drag_window;
 }
 
 GdkDragProtocol

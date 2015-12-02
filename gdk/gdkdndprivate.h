@@ -62,6 +62,7 @@ struct _GdkDragContextClass {
                                 gboolean         success,
                                 guint32          time_);
   gboolean    (*drop_status)   (GdkDragContext  *context);
+  GdkWindow*  (*get_drag_window) (GdkDragContext *context);
 };
 
 struct _GdkDragContext {
@@ -73,6 +74,7 @@ struct _GdkDragContext {
   gboolean is_source;
   GdkWindow *source_window;
   GdkWindow *dest_window;
+  GdkWindow *drag_window;
 
   GList *targets;
   GdkDragAction actions;

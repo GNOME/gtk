@@ -85,6 +85,8 @@ struct _GdkX11DragContext
 
   GSList *window_caches;
 
+  GdkWindow *drag_window;
+
   Window dest_xid;             /* The last window we looked up */
   Window drop_xid;             /* The (non-proxied) window that is receiving drops */
   guint xdnd_targets_set  : 1; /* Whether we've already set XdndTypeList */
@@ -183,6 +185,12 @@ static void        gdk_x11_drag_context_drop_finish (GdkDragContext  *context,
 static gboolean    gdk_x11_drag_context_drop_status (GdkDragContext  *context);
 static GdkAtom     gdk_x11_drag_context_get_selection (GdkDragContext  *context);
 
+static GdkWindow *
+gdk_x11_drag_context_get_drag_window (GdkDragContext *context)
+{
+  return GDK_X11_DRAG_CONTEXT (context)->drag_window;
+}
+
 static void
 gdk_x11_drag_context_class_init (GdkX11DragContextClass *klass)
 {
@@ -200,6 +208,7 @@ gdk_x11_drag_context_class_init (GdkX11DragContextClass *klass)
   context_class->drop_finish = gdk_x11_drag_context_drop_finish;
   context_class->drop_status = gdk_x11_drag_context_drop_status;
   context_class->get_selection = gdk_x11_drag_context_get_selection;
+  context_class->get_drag_window = gdk_x11_drag_context_get_drag_window;
 }
 
 static void
@@ -1914,6 +1923,26 @@ gdk_drag_do_leave (GdkX11DragContext *context_x11,
     }
 }
 
+static GdkWindow *
+create_drag_window (GdkScreen *screen)
+{
+  GdkWindowAttr attrs;
+  guint mask;
+
+  attrs.x = attrs.y = 0;
+  attrs.width = attrs.height = 100;
+  attrs.wclass = GDK_INPUT_OUTPUT;
+  attrs.window_type = GDK_WINDOW_TEMP;
+  attrs.type_hint = GDK_WINDOW_TYPE_HINT_DND;
+  attrs.visual = gdk_screen_get_rgba_visual (screen);
+  if (!attrs.visual)
+    attrs.visual = gdk_screen_get_system_visual (screen);
+
+  mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_TYPE_HINT;
+
+  return gdk_window_new (gdk_screen_get_root_window (screen), &attrs, mask);
+}
+
 GdkDragContext *
 _gdk_x11_window_drag_begin (GdkWindow *window,
                             GdkDevice *device,
@@ -1933,6 +1962,8 @@ _gdk_x11_window_drag_begin (GdkWindow *window,
   context->actions = 0;
 
   gdk_drag_context_set_device (context, device);
+
+  GDK_X11_DRAG_CONTEXT (context)->drag_window = create_drag_window (gdk_window_get_screen (window));
 
   return context;
 }
@@ -2087,6 +2118,12 @@ gdk_x11_drag_context_drag_motion (GdkDragContext *context,
 {
   GdkX11DragContext *context_x11 = GDK_X11_DRAG_CONTEXT (context);
   GdkWindowImplX11 *impl;
+
+  if (context_x11->drag_window)
+    {
+      gdk_window_move (context_x11->drag_window, x_root, y_root);
+      gdk_window_raise (context_x11->drag_window);
+    }
 
   context_x11->old_actions = context->actions;
   context->actions = possible_actions;
