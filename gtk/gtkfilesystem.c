@@ -788,22 +788,6 @@ _gtk_file_system_volume_get_symbolic_icon (GtkFileSystemVolume *volume)
     return NULL;
 }
 
-cairo_surface_t *
-_gtk_file_system_volume_render_symbolic_icon (GtkFileSystemVolume  *volume,
-				              GtkWidget            *widget,
-				              gint                  icon_size,
-				              GError              **error)
-{
-  GIcon *icon;
-  cairo_surface_t *surface;
-
-  icon = _gtk_file_system_volume_get_symbolic_icon (volume);
-  surface = get_surface_from_gicon (icon, widget, icon_size, error);
-  g_object_unref (icon);
-
-  return surface;
-}
-
 GtkFileSystemVolume *
 _gtk_file_system_volume_ref (GtkFileSystemVolume *volume)
 {
@@ -892,14 +876,6 @@ _gtk_file_info_render_icon (GFileInfo *info,
 			    gint       icon_size)
 {
   return _gtk_file_info_render_icon_internal (info, widget, icon_size, FALSE);
-}
-
-cairo_surface_t *
-_gtk_file_info_render_symbolic_icon (GFileInfo *info,
-			             GtkWidget *widget,
-			             gint       icon_size)
-{
-  return _gtk_file_info_render_icon_internal (info, widget, icon_size, TRUE);
 }
 
 gboolean

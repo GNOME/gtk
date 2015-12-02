@@ -1513,6 +1513,8 @@ gtk_spin_button_state_flags_changed (GtkWidget     *widget,
 
   gtk_css_node_set_state (priv->entry_node, gtk_widget_get_state_flags (widget));
   update_node_state (spin);
+
+  GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->state_flags_changed (widget, previous_state);
 }
 
 static gint

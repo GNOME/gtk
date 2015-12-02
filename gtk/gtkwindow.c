@@ -8740,6 +8740,8 @@ gtk_window_state_flags_changed (GtkWidget     *widget,
 
   state = gtk_widget_get_state_flags (widget);
   gtk_css_node_set_state (priv->decoration_node, state);
+
+  GTK_WIDGET_CLASS (gtk_window_parent_class)->state_flags_changed (widget, previous_state);
 }
 
 static void

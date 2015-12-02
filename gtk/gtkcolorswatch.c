@@ -616,6 +616,8 @@ swatch_state_flags_changed (GtkWidget     *widget,
   GtkColorSwatch *swatch = GTK_COLOR_SWATCH (widget);
 
   gtk_css_node_set_state (swatch->priv->overlay_node, gtk_widget_get_state_flags (widget));
+
+  GTK_WIDGET_CLASS (gtk_color_swatch_parent_class)->state_flags_changed (widget, previous_state);
 }
 
 /* GObject implementation {{{1 */

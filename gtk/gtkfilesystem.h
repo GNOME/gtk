@@ -98,10 +98,6 @@ cairo_surface_t *     _gtk_file_system_volume_render_icon      (GtkFileSystemVol
 							        GtkWidget            *widget,
 							        gint                  icon_size,
 							        GError              **error);
-cairo_surface_t *     _gtk_file_system_volume_render_symbolic_icon (GtkFileSystemVolume  *volume,
-							            GtkWidget            *widget,
-							            gint                  icon_size,
-							            GError              **error);
 
 GtkFileSystemVolume  *_gtk_file_system_volume_ref              (GtkFileSystemVolume *volume);
 void                  _gtk_file_system_volume_unref            (GtkFileSystemVolume *volume);
@@ -110,9 +106,6 @@ void                  _gtk_file_system_volume_unref            (GtkFileSystemVol
 cairo_surface_t *     _gtk_file_info_render_icon (GFileInfo *info,
 						  GtkWidget *widget,
 						  gint       icon_size);
-cairo_surface_t *     _gtk_file_info_render_symbolic_icon (GFileInfo *info,
-						           GtkWidget *widget,
-						           gint       icon_size);
 
 gboolean	_gtk_file_info_consider_as_directory (GFileInfo *info);
 

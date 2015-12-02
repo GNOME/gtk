@@ -1884,6 +1884,8 @@ gtk_range_state_flags_changed (GtkWidget     *widget,
   update_trough_state (range);
   update_slider_state (range);
   update_steppers_state (range);
+
+  GTK_WIDGET_CLASS (gtk_range_parent_class)->state_flags_changed (widget, previous_state);
 }
 
 static void

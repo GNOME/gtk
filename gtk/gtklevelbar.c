@@ -666,6 +666,8 @@ gtk_level_bar_state_flags_changed (GtkWidget     *widget,
   gtk_css_node_set_state (priv->trough_node, state);
   for (i = 0; i < priv->n_blocks; i++)
     gtk_css_node_set_state (priv->block_node[i], state);
+
+  GTK_WIDGET_CLASS (gtk_level_bar_parent_class)->state_flags_changed (widget, previous_state);
 }
 
 static void
