@@ -38,6 +38,8 @@
 #endif /* G_OS_WIN32 */
 
 #include "gtkicontheme.h"
+#include "gtkcsspalettevalueprivate.h"
+#include "gtkcssrgbavalueprivate.h"
 #include "gtkdebug.h"
 #include "deprecated/gtkiconfactory.h"
 #include "gtkiconcache.h"
@@ -45,6 +47,7 @@
 #include "gtkmain.h"
 #include "deprecated/gtknumerableiconprivate.h"
 #include "gtksettingsprivate.h"
+#include "gtkstylecontextprivate.h"
 #include "gtkprivate.h"
 
 #undef GDK_DEPRECATED
@@ -4663,6 +4666,39 @@ gtk_icon_info_load_symbolic (GtkIconInfo    *icon_info,
                                                error);
 }
 
+static void
+lookup_colors_from_style_context (GtkStyleContext *context,
+                                  GdkRGBA         *color_out,
+                                  GdkRGBA         *success_out,
+                                  GdkRGBA         *warning_out,
+                                  GdkRGBA         *error_out)
+{
+  GtkCssValue *palette, *color;
+  const GdkRGBA *lookup;
+
+  color = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR);
+  palette = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_PALETTE);
+  *color_out = *_gtk_css_rgba_value_get_rgba (color);
+
+  lookup = gtk_css_palette_value_get_color (palette, "success");
+  if (lookup)
+    *success_out = *lookup;
+  else
+    *success_out = *color_out;
+
+  lookup = gtk_css_palette_value_get_color (palette, "warning");
+  if (lookup)
+    *warning_out = *lookup;
+  else
+    *warning_out = *color_out;
+
+  lookup = gtk_css_palette_value_get_color (palette, "error");
+  if (lookup)
+    *error_out = *lookup;
+  else
+    *error_out = *color_out;
+}
+
 /**
  * gtk_icon_info_load_symbolic_for_context:
  * @icon_info: a #GtkIconInfo
@@ -4694,16 +4730,10 @@ gtk_icon_info_load_symbolic_for_context (GtkIconInfo      *icon_info,
                                          gboolean         *was_symbolic,
                                          GError          **error)
 {
-  GdkRGBA *color = NULL;
   GdkRGBA fg;
-  GdkRGBA *fgp;
   GdkRGBA success_color;
-  GdkRGBA *success_colorp;
   GdkRGBA warning_color;
-  GdkRGBA *warning_colorp;
   GdkRGBA error_color;
-  GdkRGBA *error_colorp;
-  GtkStateFlags state;
   gboolean is_symbolic;
 
   g_return_val_if_fail (icon_info != NULL, NULL);
@@ -4717,29 +4747,11 @@ gtk_icon_info_load_symbolic_for_context (GtkIconInfo      *icon_info,
   if (!is_symbolic)
     return gtk_icon_info_load_icon (icon_info, error);
 
-  fgp = success_colorp = warning_colorp = error_colorp = NULL;
-
-  state = gtk_style_context_get_state (context);
-  gtk_style_context_get (context, state, "color", &color, NULL);
-  if (color)
-    {
-      fg = *color;
-      fgp = &fg;
-      gdk_rgba_free (color);
-    }
-
-  if (gtk_style_context_lookup_color (context, "success_color", &success_color))
-    success_colorp = &success_color;
-
-  if (gtk_style_context_lookup_color (context, "warning_color", &warning_color))
-    warning_colorp = &warning_color;
-
-  if (gtk_style_context_lookup_color (context, "error_color", &error_color))
-    error_colorp = &error_color;
+  lookup_colors_from_style_context (context, &fg, &success_color, &warning_color, &error_color);
 
   return gtk_icon_info_load_symbolic_internal (icon_info,
-                                               fgp, success_colorp,
-                                               warning_colorp, error_colorp,
+                                               &fg, &success_color,
+                                               &warning_color, &error_color,
                                                TRUE,
                                                error);
 }
@@ -4991,43 +5003,19 @@ gtk_icon_info_load_symbolic_for_context_async (GtkIconInfo         *icon_info,
                                                GAsyncReadyCallback  callback,
                                                gpointer             user_data)
 {
-  GdkRGBA *color = NULL;
   GdkRGBA fg;
-  GdkRGBA *fgp;
   GdkRGBA success_color;
-  GdkRGBA *success_colorp;
   GdkRGBA warning_color;
-  GdkRGBA *warning_colorp;
   GdkRGBA error_color;
-  GdkRGBA *error_colorp;
-  GtkStateFlags state;
 
   g_return_if_fail (icon_info != NULL);
   g_return_if_fail (context != NULL);
 
-  fgp = success_colorp = warning_colorp = error_colorp = NULL;
-
-  state = gtk_style_context_get_state (context);
-  gtk_style_context_get (context, state, "color", &color, NULL);
-  if (color)
-    {
-      fg = *color;
-      fgp = &fg;
-      gdk_rgba_free (color);
-    }
-
-  if (gtk_style_context_lookup_color (context, "success_color", &success_color))
-    success_colorp = &success_color;
-
-  if (gtk_style_context_lookup_color (context, "warning_color", &warning_color))
-    warning_colorp = &warning_color;
-
-  if (gtk_style_context_lookup_color (context, "error_color", &error_color))
-    error_colorp = &error_color;
+  lookup_colors_from_style_context (context, &fg, &success_color, &warning_color, &error_color);
 
   gtk_icon_info_load_symbolic_async (icon_info,
-                                     fgp, success_colorp,
-                                     warning_colorp, error_colorp,
+                                     &fg, &success_color,
+                                     &warning_color, &error_color,
                                      cancellable, callback, user_data);
 }
 

@@ -411,6 +411,7 @@ gtk_private_h_sources =		\
 	gtkcssnodeprivate.h		\
 	gtkcssnodedeclarationprivate.h	\
 	gtkcssnumbervalueprivate.h	\
+	gtkcsspalettevalueprivate.h	\
 	gtkcssparserprivate.h	\
 	gtkcsspathnodeprivate.h	\
 	gtkcsspositionvalueprivate.h	\
@@ -661,6 +662,7 @@ gtk_base_c_sources = 		\
 	gtkcssnode.c		\
 	gtkcssnodedeclaration.c	\
 	gtkcssnumbervalue.c	\
+	gtkcsspalettevalue.c	\
 	gtkcssparser.c		\
 	gtkcsspathnode.c	\
 	gtkcsspositionvalue.c	\

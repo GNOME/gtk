@@ -127,6 +127,8 @@ gtk_css_value_color_get_fallback (guint                    property_id,
                                        provider,
                                        style,
                                        parent_style);
+      case GTK_CSS_PROPERTY_ICON_PALETTE:
+        return _gtk_css_value_ref (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_COLOR));
       default:
         if (property_id < GTK_CSS_PROPERTY_N_PROPERTIES)
           g_warning ("No fallback color defined for property '%s'", 
