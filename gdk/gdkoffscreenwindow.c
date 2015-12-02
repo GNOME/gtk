@@ -143,10 +143,16 @@ _gdk_offscreen_window_create_surface (GdkWindow *offscreen,
                                       gint       width,
                                       gint       height)
 {
+  GdkOffscreenWindow *impl;
+  GdkWindow *derived;
+
   g_return_val_if_fail (GDK_IS_OFFSCREEN_WINDOW (offscreen->impl), NULL);
 
-  return gdk_window_create_similar_surface (offscreen->parent,
-					    CAIRO_CONTENT_COLOR_ALPHA, 
+  impl = GDK_OFFSCREEN_WINDOW (offscreen->impl);
+  derived = impl->embedder ? impl->embedder : offscreen->parent;
+
+  return gdk_window_create_similar_surface (derived,
+					    CAIRO_CONTENT_COLOR_ALPHA,
 					    width, height);
 }
 
@@ -657,9 +663,14 @@ gdk_offscreen_window_get_frame_extents (GdkWindow    *window,
 static gint
 gdk_offscreen_window_get_scale_factor (GdkWindow *window)
 {
+  GdkOffscreenWindow *offscreen;
 
   if (GDK_WINDOW_DESTROYED (window))
     return 1;
+
+  offscreen = GDK_OFFSCREEN_WINDOW (window->impl);
+  if (offscreen->embedder)
+    return gdk_window_get_scale_factor (offscreen->embedder);
 
   return gdk_window_get_scale_factor (window->parent);
 }
