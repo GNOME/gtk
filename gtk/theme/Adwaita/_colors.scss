@@ -15,6 +15,7 @@ $borders_edge: if($variant == 'light', white, transparentize($fg_color, 0.9));
 $link_color: if($variant == 'light', darken($selected_bg_color,10%), lighten($selected_bg_color,20%));
 $link_visited_color: if($variant == 'light', darken($selected_bg_color,20%), lighten($selected_bg_color,10%));
 $top_hilight: $borders_edge;
+$dark_fill: mix($borders_color, $bg_color, 35%);
 
 $scrollbar_bg_color: darken($bg_color, 7%);
 

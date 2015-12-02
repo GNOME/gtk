@@ -3075,397 +3075,152 @@ scale {
   -GtkRange-slider-width: 24;
   -GtkRange-trough-border: 2;
   outline-offset: -9px;
-  outline-radius: 4px; }
+  outline-radius: 6px; }
   scale.fine-tune {
     outline-offset: -7px;
-    outline-radius: 6px; }
-    scale.fine-tune highlight, scale.fine-tune fill, scale.fine-tune trough {
+    outline-radius: 8px; }
+    scale.fine-tune trough,
+    scale.fine-tune fill,
+    scale.fine-tune highlight {
+      margin: 10px;
       border-radius: 4px; }
-      scale.fine-tune highlight:not(:first-child):not(:last-child), scale.fine-tune highlight:only-child, scale.fine-tune fill:not(:first-child):not(:last-child), scale.fine-tune fill:only-child, scale.fine-tune trough:not(:first-child):not(:last-child), scale.fine-tune trough:only-child {
-        margin: 10px; }
-  scale trough:not(:first-child):not(:last-child), scale trough:only-child, scale fill:not(:first-child):not(:last-child), scale fill:only-child, scale highlight:not(:first-child):not(:last-child), scale highlight:only-child {
+  scale trough,
+  scale fill,
+  scale highlight {
     margin: 12px; }
-  scale trough:not(:first-child):not(:last-child) slider, scale trough:only-child slider {
+  scale:not(.vertical) slider {
     margin: 2px 0; }
-  scale.vertical trough:not(:first-child):not(:last-child) slider, scale.vertical trough:only-child slider {
+  scale.vertical slider {
     margin: 0 2px; }
-  scale trough {
-    border: 1px solid #a1a1a1;
-    border-radius: 3px;
-    background-color: #cfcfcf;
-    box-shadow: inset 1px 1px rgba(0, 0, 0, 0.1), 0 1px white; }
-    scale trough slider {
+  scale slider {
+    color: #2e3436;
+    outline-color: rgba(46, 52, 54, 0.3);
+    border-color: #a1a1a1;
+    background-image: linear-gradient(to bottom, #fafafa, #ededed 40%, #e0e0e0);
+    text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
+    -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
+    box-shadow: inset 0 1px white, 0 1px rgba(0, 0, 0, 0.1);
+    border: 1px solid #999999;
+    border-radius: 100%; }
+    scale slider:hover {
       color: #2e3436;
       outline-color: rgba(46, 52, 54, 0.3);
       border-color: #a1a1a1;
-      background-image: linear-gradient(to bottom, #fafafa, #ededed 40%, #e0e0e0);
+      background-image: linear-gradient(to bottom, white, #f7f7f7 40%, #ededed);
       text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
       -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-      box-shadow: inset 0 1px white, 0 1px white;
-      border: 1px solid;
-      border-radius: 50%;
-      border-color: #999999;
-      box-shadow: inset 0 1px white, inset 0 -2px #ededed, inset 0 -1px #c7c7c7; }
-      scale trough slider:hover {
-        color: #2e3436;
-        outline-color: rgba(46, 52, 54, 0.3);
-        border-color: #a1a1a1;
-        background-image: linear-gradient(to bottom, white, #f7f7f7 40%, #ededed);
-        text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-        -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-        box-shadow: inset 0 1px white, 0 1px white;
-        border-color: #999999;
-        border-radius: 50%;
-        box-shadow: inset 0 1px white, inset 0 -2px white, inset 0 -1px #d6d6d6; }
-      scale trough slider:insensitive {
-        border-style: solid;
-        border-radius: 50%;
-        background-image: linear-gradient(to bottom, #f4f4f4);
-        box-shadow: none; }
-      scale trough slider:backdrop {
-        border-style: solid;
-        border-radius: 50%;
-        border-color: #a1a1a1;
-        background-image: linear-gradient(to bottom, #ededed);
-        box-shadow: none; }
-      scale trough slider:backdrop:insensitive {
+      box-shadow: inset 0 1px white, 0 1px rgba(0, 0, 0, 0.1); }
+    scale slider:active {
+      border-color: #184472; }
+    scale slider:insensitive {
+      color: #8e9192;
+      border-color: #a1a1a1;
+      background-image: linear-gradient(to bottom, #f4f4f4);
+      text-shadow: none;
+      -gtk-icon-shadow: none;
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px white; }
+      scale slider:insensitive > .label {
+        color: inherit; }
+    scale slider:backdrop {
+      color: #8e9192;
+      border-color: darkgray;
+      background-image: linear-gradient(to bottom, #ededed);
+      text-shadow: none;
+      -gtk-icon-shadow: none;
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
+      scale slider:backdrop:insensitive {
         color: #c7c7c7;
         border-color: darkgray;
         background-image: linear-gradient(to bottom, #f4f4f4);
         text-shadow: none;
         -gtk-icon-shadow: none;
         box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
-        scale trough slider:backdrop:insensitive > .label {
+        scale slider:backdrop:insensitive > .label {
           color: inherit; }
-      scale trough slider:active {
-        color: #2e3436;
-        outline-color: rgba(46, 52, 54, 0.3);
-        border-color: #a1a1a1;
-        background-image: linear-gradient(to bottom, #d6d6d6, gainsboro 40%, #e0e0e0);
-        text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-        -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-        box-shadow: inset 0 1px rgba(0, 0, 0, 0.07), inset 0 2px 1px -2px rgba(0, 0, 0, 0.6), 0 1px white;
-        border: 1px solid #153d65; }
-      .osd scale trough slider {
-        color: #eeeeec;
+    .osd scale slider {
+      color: #eeeeec;
+      border-color: rgba(0, 0, 0, 0.7);
+      background-image: linear-gradient(to bottom, rgba(32, 37, 38, 0.7));
+      background-clip: padding-box;
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0.1);
+      text-shadow: 0 1px black;
+      -gtk-icon-shadow: 0 1px black;
+      outline-color: rgba(238, 238, 236, 0.3);
+      border-color: rgba(0, 0, 0, 0.7);
+      background-color: #202526; }
+      .osd scale slider:hover {
+        color: white;
         border-color: rgba(0, 0, 0, 0.7);
-        background-image: linear-gradient(to bottom, rgba(32, 37, 38, 0.7));
+        background-image: linear-gradient(to bottom, rgba(60, 69, 71, 0.7));
         background-clip: padding-box;
         box-shadow: inset 0 1px rgba(255, 255, 255, 0.1);
         text-shadow: 0 1px black;
         -gtk-icon-shadow: 0 1px black;
-        outline-color: rgba(238, 238, 236, 0.3);
-        background-color: #202526; }
-        .osd scale trough slider:hover {
-          color: white;
-          border-color: rgba(0, 0, 0, 0.7);
-          background-image: linear-gradient(to bottom, rgba(60, 69, 71, 0.7));
-          background-clip: padding-box;
-          box-shadow: inset 0 1px rgba(255, 255, 255, 0.1);
-          text-shadow: 0 1px black;
-          -gtk-icon-shadow: 0 1px black;
-          outline-color: rgba(238, 238, 236, 0.3); }
-        .osd scale trough slider:active {
-          color: white;
-          border-color: rgba(0, 0, 0, 0.7);
-          background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7));
-          background-clip: padding-box;
-          box-shadow: none;
-          text-shadow: none;
-          -gtk-icon-shadow: none;
-          outline-color: rgba(238, 238, 236, 0.3); }
-        .osd scale trough slider:backdrop {
-          color: #eeeeec;
-          border-color: rgba(0, 0, 0, 0.7);
-          background-image: linear-gradient(to bottom, rgba(32, 37, 38, 0.7));
-          background-clip: padding-box;
-          box-shadow: none;
-          text-shadow: none;
-          -gtk-icon-shadow: none; }
-    scale trough highlight {
-      background-image: linear-gradient(to bottom, #4a90d9 2px, #63a0de);
-      border: 1px solid #a1a1a1;
-      border-radius: 3px;
-      box-shadow: 0 1px white; }
-      scale trough highlight.vertical {
-        background-image: linear-gradient(to right, #4a90d9 2px, #63a0de); }
-      scale trough highlight:backdrop {
-        border-color: #4a90d9;
-        background-color: #4a90d9;
-        box-shadow: none; }
-    scale trough fill {
-      background: none;
-      background-color: red;
-      border: 1px solid #a1a1a1;
-      border-radius: 3px;
-      box-shadow: 0 1px white; }
-    scale trough:insensitive, scale trough.vertical:insensitive {
-      border-color: #a1a1a1;
-      background-image: none;
-      background-color: #f4f4f4;
-      box-shadow: 0 1px white; }
-    scale trough:backdrop {
-      border-color: darkgray;
-      background-color: #c7c7c7;
-      box-shadow: none; }
-    scale trough:backdrop:insensitive, scale trough .highlight:backdrop:insensitive {
-      border-color: darkgray;
-      background-color: #f4f4f4; }
-    .osd scale trough {
-      border-color: rgba(0, 0, 0, 0.7);
-      box-shadow: none;
-      margin: 9px;
-      background-color: rgba(0, 0, 0, 0.5);
-      outline-color: rgba(238, 238, 236, 0.2);
-      outline-offset: -8px; }
-      .osd scale trough.fine-tune {
-        margin: 7px; }
-      .osd scale trough.highlight {
-        background-image: none;
-        background-color: #4a90d9; }
-      .osd scale trough:insensitive, .osd scale trough:backdrop:insensitive {
-        border-color: transparent;
-        background-color: transparent; }
-      .osd scale trough:backdrop {
+        outline-color: rgba(238, 238, 236, 0.3); }
+      .osd scale slider:active {
+        color: white;
         border-color: rgba(0, 0, 0, 0.7);
-        background-image: none; }
-  row:selected scale {
-    border-color: #184472;
-    box-shadow: inset 1px 1px rgba(0, 0, 0, 0.1); }
-    row:selected scale:backdrop {
-      box-shadow: none; }
-    row:selected scale.highlight:backdrop {
-      border-color: #184472; }
-    row:selected scale:insensitive, row:selected scale.highlight:insensitive {
-      border-color: #4a90d9;
-      box-shadow: none;
-      background-color: #a5c8ec;
-      background-image: none; }
-      row:selected scale:insensitive:backdrop, row:selected scale.highlight:insensitive:backdrop {
-        background-color: #a5c8ec; }
+        background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7));
+        background-clip: padding-box;
+        box-shadow: none;
+        text-shadow: none;
+        -gtk-icon-shadow: none;
+        outline-color: rgba(238, 238, 236, 0.3); }
+      .osd scale slider:insensitive {
+        color: #878a89;
+        border-color: rgba(0, 0, 0, 0.7);
+        background-image: linear-gradient(to bottom, rgba(53, 57, 58, 0.5));
+        background-clip: padding-box;
+        box-shadow: none;
+        text-shadow: none;
+        -gtk-icon-shadow: none; }
+      .osd scale slider:backdrop {
+        color: #eeeeec;
+        border-color: rgba(0, 0, 0, 0.7);
+        background-image: linear-gradient(to bottom, rgba(32, 37, 38, 0.7));
+        background-clip: padding-box;
+        box-shadow: none;
+        text-shadow: none;
+        -gtk-icon-shadow: none; }
 
-scale marks {
-  color: alpha(currentColor,0.5); }
+scale trough, progressbar trough {
+  border: 1px solid #a1a1a1;
+  border-radius: 3px;
+  background-color: #d2d2d2;
+  box-shadow: inset 1px 1px rgba(0, 0, 0, 0.1), 0 1px white; }
+  scale trough:insensitive, progressbar trough:insensitive {
+    background-color: #f4f4f4;
+    box-shadow: 0 1px white; }
+  scale trough:backdrop, progressbar trough:backdrop, progressbar:backdrop trough {
+    background-color: #d5d5d5;
+    border-color: darkgray;
+    box-shadow: none; }
+    scale trough:backdrop:insensitive, progressbar trough:backdrop:insensitive, progressbar:backdrop trough:insensitive {
+      background-color: #f4f4f4; }
+  .osd scale trough, scale .osd trough, .osd progressbar trough, progressbar .osd trough {
+    border-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(0, 0, 0, 0.5);
+    box-shadow: none;
+    outline-color: rgba(238, 238, 236, 0.2); }
+    .osd scale trough:insensitive, scale .osd trough:insensitive, .osd progressbar trough:insensitive, progressbar .osd trough:insensitive {
+      background-color: rgba(53, 57, 58, 0.5); }
 
-scale trough:first-child:not(:last-child) slider {
-  border-style: none;
-  border-radius: 0;
-  background-color: transparent;
-  background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-below.png"), url("assets/slider-horz-scale-has-marks-below@2.png"));
-  background-repeat: no-repeat;
-  background-position: center;
-  box-shadow: none; }
-scale trough:first-child:not(:last-child) slider:hover {
-  border-style: none;
-  border-radius: 0;
-  background-color: transparent;
-  background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-below-hover.png"), url("assets/slider-horz-scale-has-marks-below-hover@2.png"));
-  background-repeat: no-repeat;
-  background-position: center;
-  box-shadow: none; }
-scale trough:first-child:not(:last-child) slider:active {
-  border-style: none;
-  border-radius: 0;
-  background-color: transparent;
-  background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-below-active.png"), url("assets/slider-horz-scale-has-marks-below-active@2.png"));
-  background-repeat: no-repeat;
-  background-position: center;
-  box-shadow: none; }
-scale trough:first-child:not(:last-child) slider:insensitive {
-  border-style: none;
-  border-radius: 0;
-  background-color: transparent;
-  background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-below-insensitive.png"), url("assets/slider-horz-scale-has-marks-below-insensitive@2.png"));
-  background-repeat: no-repeat;
-  background-position: center;
-  box-shadow: none; }
-scale trough:first-child:not(:last-child) slider:backdrop {
-  border-style: none;
-  border-radius: 0;
-  background-color: transparent;
-  background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-below-backdrop.png"), url("assets/slider-horz-scale-has-marks-below-backdrop@2.png"));
-  background-repeat: no-repeat;
-  background-position: center;
-  box-shadow: none; }
-scale trough:first-child:not(:last-child) slider:backdrop:insensitive {
-  border-style: none;
-  border-radius: 0;
-  background-color: transparent;
-  background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-below-backdrop-insensitive.png"), url("assets/slider-horz-scale-has-marks-below-backdrop-insensitive@2.png"));
-  background-repeat: no-repeat;
-  background-position: center;
-  box-shadow: none; }
-
-scale trough:not(:first-child):last-child slider {
-  border-style: none;
-  border-radius: 0;
-  background-color: transparent;
-  background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above.png"), url("assets/slider-horz-scale-has-marks-above@2.png"));
-  background-repeat: no-repeat;
-  background-position: center;
-  box-shadow: none; }
-scale trough:not(:first-child):last-child slider:hover {
-  border-style: none;
-  border-radius: 0;
-  background-color: transparent;
-  background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-hover.png"), url("assets/slider-horz-scale-has-marks-above-hover@2.png"));
-  background-repeat: no-repeat;
-  background-position: center;
-  box-shadow: none; }
-scale trough:not(:first-child):last-child slider:active {
-  border-style: none;
-  border-radius: 0;
-  background-color: transparent;
-  background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-active.png"), url("assets/slider-horz-scale-has-marks-above-active@2.png"));
-  background-repeat: no-repeat;
-  background-position: center;
-  box-shadow: none; }
-scale trough:not(:first-child):last-child slider:insensitive {
-  border-style: none;
-  border-radius: 0;
-  background-color: transparent;
-  background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-insensitive.png"), url("assets/slider-horz-scale-has-marks-above-insensitive@2.png"));
-  background-repeat: no-repeat;
-  background-position: center;
-  box-shadow: none; }
-scale trough:not(:first-child):last-child slider:backdrop {
-  border-style: none;
-  border-radius: 0;
-  background-color: transparent;
-  background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-backdrop.png"), url("assets/slider-horz-scale-has-marks-above-backdrop@2.png"));
-  background-repeat: no-repeat;
-  background-position: center;
-  box-shadow: none; }
-scale trough:not(:first-child):last-child slider:backdrop:insensitive {
-  border-style: none;
-  border-radius: 0;
-  background-color: transparent;
-  background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-backdrop-insensitive.png"), url("assets/slider-horz-scale-has-marks-above-backdrop-insensitive@2.png"));
-  background-repeat: no-repeat;
-  background-position: center;
-  box-shadow: none; }
-
-scale.vertical trough:first-child:not(:last-child) slider {
-  border-style: none;
-  border-radius: 0;
-  background-color: transparent;
-  background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below.png"), url("assets/slider-vert-scale-has-marks-below@2.png"));
-  background-repeat: no-repeat;
-  background-position: center;
-  box-shadow: none; }
-scale.vertical trough:first-child:not(:last-child) slider:hover {
-  border-style: none;
-  border-radius: 0;
-  background-color: transparent;
-  background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below-hover.png"), url("assets/slider-vert-scale-has-marks-below-hover@2.png"));
-  background-repeat: no-repeat;
-  background-position: center;
-  box-shadow: none; }
-scale.vertical trough:first-child:not(:last-child) slider:active {
-  border-style: none;
-  border-radius: 0;
-  background-color: transparent;
-  background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below-active.png"), url("assets/slider-vert-scale-has-marks-below-active@2.png"));
-  background-repeat: no-repeat;
-  background-position: center;
-  box-shadow: none; }
-scale.vertical trough:first-child:not(:last-child) slider:insensitive {
-  border-style: none;
-  border-radius: 0;
-  background-color: transparent;
-  background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below-insensitive.png"), url("assets/slider-vert-scale-has-marks-below-insensitive@2.png"));
-  background-repeat: no-repeat;
-  background-position: center;
-  box-shadow: none; }
-scale.vertical trough:first-child:not(:last-child) slider:backdrop {
-  border-style: none;
-  border-radius: 0;
-  background-color: transparent;
-  background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below-backdrop.png"), url("assets/slider-vert-scale-has-marks-below-backdrop@2.png"));
-  background-repeat: no-repeat;
-  background-position: center;
-  box-shadow: none; }
-scale.vertical trough:first-child:not(:last-child) slider:backdrop:insensitive {
-  border-style: none;
-  border-radius: 0;
-  background-color: transparent;
-  background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below-backdrop-insensitive.png"), url("assets/slider-vert-scale-has-marks-below-backdrop-insensitive@2.png"));
-  background-repeat: no-repeat;
-  background-position: center;
-  box-shadow: none; }
-
-scale.vertical trough:not(:first-child):last-child slider {
-  border-style: none;
-  border-radius: 0;
-  background-color: transparent;
-  background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above.png"), url("assets/slider-vert-scale-has-marks-above@2.png"));
-  background-repeat: no-repeat;
-  background-position: center;
-  box-shadow: none; }
-scale.vertical trough:not(:first-child):last-child slider:hover {
-  border-style: none;
-  border-radius: 0;
-  background-color: transparent;
-  background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above-hover.png"), url("assets/slider-vert-scale-has-marks-above-hover@2.png"));
-  background-repeat: no-repeat;
-  background-position: center;
-  box-shadow: none; }
-scale.vertical trough:not(:first-child):last-child slider:active {
-  border-style: none;
-  border-radius: 0;
-  background-color: transparent;
-  background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above-active.png"), url("assets/slider-vert-scale-has-marks-above-active@2.png"));
-  background-repeat: no-repeat;
-  background-position: center;
-  box-shadow: none; }
-scale.vertical trough:not(:first-child):last-child slider:insensitive {
-  border-style: none;
-  border-radius: 0;
-  background-color: transparent;
-  background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above-insensitive.png"), url("assets/slider-vert-scale-has-marks-above-insensitive@2.png"));
-  background-repeat: no-repeat;
-  background-position: center;
-  box-shadow: none; }
-scale.vertical trough:not(:first-child):last-child slider:backdrop {
-  border-style: none;
-  border-radius: 0;
-  background-color: transparent;
-  background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above-backdrop.png"), url("assets/slider-vert-scale-has-marks-above-backdrop@2.png"));
-  background-repeat: no-repeat;
-  background-position: center;
-  box-shadow: none; }
-scale.vertical trough:not(:first-child):last-child slider:backdrop:insensitive {
-  border-style: none;
-  border-radius: 0;
-  background-color: transparent;
-  background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above-backdrop-insensitive.png"), url("assets/slider-vert-scale-has-marks-above-backdrop-insensitive@2.png"));
-  background-repeat: no-repeat;
-  background-position: center;
-  box-shadow: none; }
-
-scale trough:not(:first-child):last-child {
-  margin: 14px 10px 10px 10px; }
-
-scale trough:first-child:not(:last-child) {
-  margin: 10px 10px 14px 10px; }
-
-scale.vertical trough:not(:first-child):last-child {
-  margin: 10px 10px 10px 14px; }
-
-scale.vertical trough:first-child:not(:last-child) {
-  margin: 10px 14px 10px 10px; }
-
-scale.fine-tune trough:not(:first-child):last-child {
-  margin: 12px  8px  8px  8px; }
-
-scale.fine-tune trough:first-child:not(:last-child) {
-  margin: 8px  8px 12px  8px; }
-
-scale.vertical.fine-tune trough:not(:first-child):last-child {
-  margin: 8px  8px  8px 12px; }
-
-scale.vertical.fine-tune trough:first-child:not(:last-child) {
-  margin: 8px 12px  8px  8px; }
+scale highlight, progressbar progress {
+  border: 1px solid #184472;
+  border-radius: 3px;
+  background-color: #4a90d9; }
+  scale highlight:insensitive, progressbar progress:insensitive {
+    background-color: transparent;
+    border-color: transparent; }
+  scale highlight:backdrop, progressbar progress:backdrop, progressbar:backdrop progress {
+    border-color: #4a90d9; }
+    scale highlight:backdrop:insensitive, progressbar progress:backdrop:insensitive, progressbar:backdrop progress:insensitive {
+      background-color: transparent;
+      border-color: transparent; }
+  .osd scale highlight, scale .osd highlight, .osd progressbar progress, progressbar .osd progress {
+    border-color: rgba(0, 0, 0, 0.7); }
+    .osd scale highlight:insensitive, scale .osd highlight:insensitive, .osd progressbar progress:insensitive, progressbar .osd progress:insensitive {
+      border-color: transparent; }
 
 /*****************
  * Progress bars *
@@ -3474,60 +3229,23 @@ progressbar {
   padding: 0;
   font-size: smaller;
   color: rgba(46, 52, 54, 0.4);
-  box-shadow: inset 1px 1px rgba(0, 0, 0, 0.1), 0 1px white; }
+  box-shadow: 0 1px white; }
   progressbar:backdrop {
-    color: #c7c7c7; }
-  progressbar.osd {
-    -GtkProgressBar-min-horizontal-bar-height: 3; }
-    progressbar.osd trough {
-      border-style: none;
-      background-color: transparent;
-      box-shadow: none; }
-  progressbar trough {
-    border: 1px solid #a1a1a1;
-    border-radius: 3px;
-    background-color: #d2d2d2; }
-    progressbar trough:backdrop {
-      border-color: darkgray;
-      background-color: #d5d5d5;
-      box-shadow: 0 1px rgba(255, 255, 255, 0); }
-
-progressbar.horizontal progress {
-  background-image: linear-gradient(to bottom, #4a90d9 2px, #63a0de);
-  border: 1px solid #184472;
-  border-radius: 1.5px;
-  box-shadow: none; }
-  progressbar.horizontal progress.left {
-    border-top-left-radius: 3px;
-    border-bottom-left-radius: 3px; }
-  progressbar.horizontal progress.right {
-    border-top-right-radius: 3px;
-    border-bottom-right-radius: 3px; }
-  progressbar.horizontal progress.left.right {
     box-shadow: none; }
-
-progressbar.vertical progress {
-  background-image: linear-gradient(to right, #4a90d9 2px, #63a0de);
-  border: 1px solid #184472;
-  border-radius: 1.5px;
-  box-shadow: none; }
-  progressbar.vertical progress.bottom {
-    border-bottom-left-radius: 3px;
-    border-bottom-right-radius: 3px;
-    box-shadow: none; }
-  progressbar.vertical progress.top {
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px; }
-  progressbar.vertical progress:backdrop {
-    border-color: #4a90d9;
-    background-image: none;
-    background-color: #4a90d9;
-    box-shadow: none; }
-  progressbar.vertical progress.osd {
-    background-image: none;
-    background-color: #4a90d9;
-    border-style: none;
-    border-radius: 0; }
+  progressbar progress {
+    border-radius: 1.5px; }
+    progressbar progress.left {
+      border-top-left-radius: 3px;
+      border-bottom-left-radius: 3px; }
+    progressbar progress.right {
+      border-top-right-radius: 3px;
+      border-bottom-right-radius: 3px; }
+    progressbar progress.top {
+      border-top-right-radius: 3px;
+      border-top-left-radius: 3px; }
+    progressbar progress.bottom {
+      border-bottom-right-radius: 3px;
+      border-bottom-left-radius: 3px; }
 
 /*************
  * Level Bar *

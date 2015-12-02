@@ -2123,305 +2123,177 @@ checkbutton.text-button, radiobutton.text-button {
 /************
  * GtkScale *
  ************/
+
 scale {
   // FIXME: rationalize
   -GtkScale-slider-length: 20;
   -GtkRange-slider-width: 24;
   -GtkRange-trough-border: 2;
+
   outline-offset: -9px;
-  outline-radius: 4px;
+  outline-radius: 6px;
 
   &.fine-tune {
     outline-offset: -7px;
-    outline-radius: 6px;
-    & highlight,
-    & fill,
-    & trough {
+    outline-radius: 8px;
+
+    trough,
+    fill,
+    highlight {
+      margin: 10px;
       border-radius: 4px;
-      &:not(:first-child):not(:last-child),
-      &:only-child {
-        margin: 10px;
-      }
     }
   }
 
-  & trough,
-  & fill,
-  & highlight {
-    &:not(:first-child):not(:last-child),
-    &:only-child {
-      margin: 12px;
-    }
-  }
+  trough,
+  fill,
+  highlight { margin: 12px; }
 
-  & trough:not(:first-child):not(:last-child),
-  & trough:only-child {
-    & slider { margin: 2px 0; }
-  }
-  &.vertical trough:not(:first-child):not(:last-child),
-  &.vertical trough:only-child {
-    & slider { margin: 0 2px; }
-  }
+  &:not(.vertical) slider { margin: 2px 0; }
 
-  & trough {
-    border: 1px solid $borders_color;
-    border-radius: 3px;
-    background-color: mix($bg_color, $borders_color, 60%);
-    box-shadow: inset 1px 1px transparentize(black, 0.9),
-                _widget_edge();
-    & slider {
-      //FIXME: better gradient on the slider and hover state
-      @include button(normal);
-      border: 1px solid;
-      border-radius: 50%;
-      border-color: darken($borders_color,3%);
-      box-shadow: inset 0 1px if($variant=='light', white,
-                                 transparentize(white,0.85)),
-                  inset 0 #{-2px} $bg_color,
-                  inset 0 #{-1px} mix($bg_color, $borders_color, 50%);
-      &:hover {
-        @include button(hover);
-        border-color: darken($borders_color,3%);
-        border-radius: 50%; // needed for double marks scales
-        box-shadow: inset 0 1px if($variant=='light', white,
-                                   transparentize(white, 0.85)),
-                    inset 0 #{-2px} if($variant=='light', white,
-                                       transparentize(white, 0.86)),
-                    inset 0 #{-1px} mix($bg_color, $borders_color, 70%);
-      }
-      &:insensitive {
-        border-style: solid; // needed for double marks scales or they'll get
-        border-radius: 50%;  // overridden
-        background-image: linear-gradient(to bottom, $insensitive_bg_color);
-        box-shadow: none;
-      }
-      &:backdrop {
-        border-style: solid; // needed for double marks scales or they'll get
-        border-radius: 50%;  // overridden
-        border-color: darken($backdrop_borders_color,3%);
-        background-image: linear-gradient(to bottom, $backdrop_bg_color);
-        box-shadow: none;
-      }
-      &:backdrop:insensitive {
-        @include button(backdrop-insensitive);
-      }
-      &:active {
-        @include button(active);
-        border: 1px solid if($variant=='light',darken($selected_borders_color,3%),
-                             darken($selected_bg_color,15%));
-      }
-      //OSD sliders
-      .osd & {
-        @include button(osd);
-        background-color: opacify($osd_bg_color, 1);
-        &:hover { @include button(osd-hover); }
-        &:active { @include button(osd-active); }
-        &:backdrop { @include button(osd-backdrop); }
-      }
-    }
-    & highlight {
-      @include progressbar_fill;
-      border: 1px solid $borders_color;
-      border-radius: 3px;
-      box-shadow: _widget_edge();
-      &.vertical { @include progressbar_fill(vertical); }
-      &:backdrop {
-         border-color: if($variant=='light', $selected_bg_color,
-                                             $selected_borders_color);
-         background-color: $selected_bg_color;
-         box-shadow: none;
-      }
-    }
-    & fill {
-      background: none;
-      background-color: red;
-      border: 1px solid $borders_color;
-      border-radius: 3px;
-      box-shadow: _widget_edge();
-    }
-    &:insensitive, &.vertical:insensitive {
-      border-color: $insensitive_borders_color;
-      background-image: none;
-      background-color: $insensitive_bg_color;
-      box-shadow: _widget_edge();
-    }
+  &.vertical slider { margin: 0 2px; }
+
+  trough { @extend %trough; }
+
+  highlight { @extend %highlight; }
+
+  slider {
+    // FIXME: scale-has-marks-* missing
+    $_slider_edge_color: transparentize(black, 0.9);
+    @include button(normal, $edge: $_slider_edge_color);
+    border: 1px solid darken($borders_color, 3%);
+    border-radius: 100%;
+
+    &:hover { @include button(hover, $edge: $_slider_edge_color); }
+
+    &:active { border-color: $selected_borders_color; }
+
+    &:insensitive { @include button (insensitive); }
+
     &:backdrop {
-      border-color: $backdrop_borders_color;
-      background-color: mix($backdrop_bg_color, $borders_color, 50%);
-      box-shadow: none;
-    }
-    &:backdrop:insensitive, .highlight:backdrop:insensitive {
-      border-color: $backdrop_borders_color;
-      background-color: $insensitive_bg_color;
+      @include button(backdrop);
+      &:insensitive { @include button(backdrop-insensitive); }
     }
 
-    //OSD troughs
+    // OSD
     .osd & {
-      border-color: $osd_borders_color;
-      box-shadow: none;
-      margin: 9px;
-      &.fine-tune { margin: 7px; }
-      background-color: transparentize($osd_borders_color, 0.2);
-      outline-color: transparentize($osd_fg_color, 0.8);
-      outline-offset: -8px;
-      &.highlight {
-        background-image: none;
-        background-color: $selected_bg_color;
-      }
-      &:insensitive, &:backdrop:insensitive {
-        border-color: transparent;
-        background-color: transparent;
-      }
+      @include button(osd);
+      border-color: darken($osd_borders_color, 3%);
+      background-color: opacify($osd_bg_color, 1); // solid background needed here
+
+      &:hover { @include button(osd-hover); }
+
+      &:active { @include button(osd-active); }
+
+      &:insensitive { @include button(osd-insensitive); }
+
       &:backdrop {
-        border-color: $osd_borders_color;
-        background-image: none;
-      }
-    }
-  }
-  // scales on selected list rows
-  row:selected & {
-    border-color: $selected_borders_color;
-    box-shadow: inset 1px 1px transparentize(black, 0.9);
-    &:backdrop { box-shadow: none; }
-    &.highlight:backdrop { border-color: $selected_borders_color; }
-    &:insensitive,
-    &.highlight:insensitive {
-      border-color: $selected_bg_color;
-      box-shadow: none;
-      background-color: mix($selected_fg_color, $selected_bg_color, 50%);
-      background-image: none;
-      &:backdrop { background-color: mix($backdrop_selected_fg_color, $selected_bg_color, 50%); }
-    }
-  }
-}
+        @include button(osd-backdrop);
 
-scale marks {
-  color: gtkalpha(currentColor, 0.5); // marks color
-}
-
-@each $d,$dn in ('', 'horz'),
-                ('.vertical', 'vert') {
-  @each $ws,$w,$we in  (':first-child:not(:last-child)','scale-has-marks-below','scale_marks_below'),
-                       (':not(:first-child):last-child','scale-has-marks-above','scale_marks_above') {
-    scale#{$d} {
-      &.fine-tune trough#{$ws} { @extend %#{$we}_#{$dn}_ft; }
-      & trough#{$ws} {
-        @extend %#{$we}_#{$dn};
-
-        @each $s,$as in ('',''),
-                        (':hover','-hover'),
-                        (':active','-active'),
-                        (':insensitive','-insensitive'),
-                        (':backdrop','-backdrop'),
-                        (':backdrop:insensitive','-backdrop-insensitive') {
-          & slider#{$s} {
-            $_url: 'assets/slider-#{$dn}-#{$w}#{$as}#{$asset_suffix}';
-            border-style: none;
-            border-radius: 0;
-            background-color: transparent;
-            background-image: -gtk-scaled(url('#{$_url}.png'),
-                              url('#{$_url}@2.png'));
-            background-repeat: no-repeat;
-            background-position: center;
-            box-shadow: none;
-          }
-        }
+        &:insensitive { @include button(osd-backdrop-insensitive); }
       }
     }
   }
 }
 
-%scale_marks_above_horz { margin: 14px 10px 10px 10px; }
-%scale_marks_below_horz { margin: 10px 10px 14px 10px; }
-%scale_marks_above_vert { margin: 10px 10px 10px 14px; }
-%scale_marks_below_vert { margin: 10px 14px 10px 10px; }
-%scale_marks_above_horz_ft { margin: 12px  8px  8px  8px; }
-%scale_marks_below_horz_ft { margin:  8px  8px 12px  8px; }
-%scale_marks_above_vert_ft { margin:  8px  8px  8px 12px; }
-%scale_marks_below_vert_ft { margin:  8px 12px  8px  8px; }
+%trough {
+  border: 1px solid $borders_color;
+  border-radius: 3px;
+  background-color: $dark_fill;
+  box-shadow: inset 1px 1px transparentize(black, 0.9),
+              _widget_edge();
+
+  &:insensitive {
+    background-color: $insensitive_bg_color;
+    box-shadow: _widget_edge();
+  }
+
+  &:backdrop {
+    background-color: $backdrop_dark_fill;
+    border-color: $backdrop_borders_color;
+    box-shadow: none;
+    &:insensitive { background-color: $insensitive_bg_color; }
+  }
+
+  // OSD
+  .osd & {
+    border-color: $osd_borders_color;
+    background-color: transparentize($osd_borders_color, 0.2);
+    box-shadow: none;
+    outline-color: transparentize($osd_fg_color, 0.8);
+
+    &:insensitive { background-color: $osd_insensitive_bg_color; }
+  }
+}
+
+%highlight {
+  border: 1px solid $selected_borders_color;
+  border-radius: 3px;
+  background-color: $selected_bg_color;
+
+  &:insensitive {
+    background-color: transparent;
+    border-color: transparent;
+  }
+
+  &:backdrop {
+    border-color: if($variant=='light', $selected_bg_color,
+                                        $selected_borders_color);
+    &:insensitive {
+      background-color: transparent;
+      border-color: transparent;
+    }
+  }
+
+  // OSD
+  .osd & {
+    border-color: $osd_borders_color;
+    &:insensitive { border-color: transparent; }
+  }
+}
 
 /*****************
  * Progress bars *
  *****************/
 
 progressbar {
+  // FIXME: insensitive state missing
   padding: 0;
   font-size: smaller;
   color: transparentize($fg_color, 0.6);
-  box-shadow: inset 1px 1px transparentize(black, 0.9), // needs to be set
-              _widget_edge();                           // here ot it gets
-                                                        // clipped
 
-  &:backdrop {
-    color: $backdrop_insensitive_color;
-  }
-  &.osd {
-    -GtkProgressBar-min-horizontal-bar-height: 3;
-    trough {
-      border-style: none;
-      background-color: transparent;
-      box-shadow: none;
-    }
-  }
+  box-shadow: _widget_edge();      // needs to be set here;
+  &:backdrop { box-shadow: none; }
+
   trough {
-    border: 1px solid $borders_color;
-    border-radius: 3px;
-    background-color: mix($borders_color, $bg_color, 35%);
-    &:backdrop {
-      border-color: $backdrop_borders_color;
-      background-color: $backdrop_dark_fill;
-      box-shadow: 0 1px transparentize(white,1);
+    @extend %trough;
+  }
+
+  &:backdrop trough { @extend %trough:backdrop; } // looks like states are not passed to the trough component here
+
+  progress {
+    @extend %highlight;
+    border-radius: 1.5px;
+    &.left {
+      border-top-left-radius: 3px;
+      border-bottom-left-radius: 3px;
+    }
+    &.right {
+      border-top-right-radius: 3px;
+      border-bottom-right-radius: 3px;
+    }
+    &.top {
+      border-top-right-radius: 3px;
+      border-top-left-radius: 3px;
+    }
+    &.bottom {
+      border-bottom-right-radius: 3px;
+      border-bottom-left-radius: 3px;
     }
   }
-}
 
-progressbar.horizontal progress {
-  @include progressbar_fill;
-  border: 1px solid $selected_borders_color;
-  border-radius: 1.5px;
-  box-shadow: none; //needed for clipping
-  &.left {
-    border-top-left-radius: 3px;
-    border-bottom-left-radius: 3px;
-  }
-  &.right {
-    border-top-right-radius: 3px;
-    border-bottom-right-radius: 3px;
-  }
-  &.left.right {
-    box-shadow: none;
-  }
+  &:backdrop progress { @extend %highlight:backdrop; } // states not passed here as well
 }
-
-progressbar.vertical progress {
-  @include progressbar_fill(vertical);
-  border: 1px solid $selected_borders_color;
-  border-radius: 1.5px;
-  box-shadow: none; //needed for clipping
-  &.bottom {
-    border-bottom-left-radius: 3px;
-    border-bottom-right-radius: 3px;
-    box-shadow: none;
-  }
-  &.top {
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
-  }
-  &:backdrop {
-    border-color: if($variant=='light', $selected_bg_color,
-                                        $selected_borders_color);
-    background-image: none;
-    background-color: $selected_bg_color;
-    box-shadow: none;
-  }
-  &.osd {
-    background-image: none;
-    background-color: $selected_bg_color;
-    border-style: none;
-    border-radius: 0;
-  }
-}
-
 
 /*************
  * Level Bar *
