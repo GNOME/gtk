@@ -203,6 +203,7 @@ gtk_popover_init (GtkPopover *popover)
   popover->priv->modal = TRUE;
   popover->priv->tick_id = 0;
   popover->priv->transitions_enabled = TRUE;
+  popover->priv->preferred_position = GTK_POS_TOP;
   popover->priv->constraint = GTK_POPOVER_CONSTRAINT_WINDOW;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (popover));
@@ -1677,7 +1678,7 @@ gtk_popover_class_init (GtkPopoverClass *klass)
                          P_("Position"),
                          P_("Position to place the bubble window"),
                          GTK_TYPE_POSITION_TYPE, GTK_POS_TOP,
-                         GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkPopover:modal
