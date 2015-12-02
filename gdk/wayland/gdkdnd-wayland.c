@@ -489,12 +489,3 @@ gdk_wayland_drag_context_get_data_source (GdkDragContext *context)
 {
   return GDK_WAYLAND_DRAG_CONTEXT (context)->data_source;
 }
-
-GdkWindow *
-gdk_wayland_drag_context_get_dnd_window (GdkDragContext *context)
-{
-  GdkWaylandDragContext *wayland_context;
-
-  wayland_context = GDK_WAYLAND_DRAG_CONTEXT (context);
-  return wayland_context->dnd_window;
-}
