@@ -3116,9 +3116,6 @@ gtk_drag_drop_finished (GtkDragSourceInfo *info,
 
           info->cur_screen = gtk_widget_get_screen (info->widget);
 
-          if (!info->icon_window)
-            set_icon_helper (info->context, gtk_icon_helper_get_definition (info->icon_helper), 0, 0);
-
           gdk_threads_add_timeout_full (G_PRIORITY_DEFAULT, 17, gtk_drag_anim_timeout, anim, (GDestroyNotify) gtk_drag_anim_destroy);
         }
     }
