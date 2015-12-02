@@ -126,7 +126,8 @@ enum {
   PROP_POSITION,
   PROP_MODAL,
   PROP_TRANSITIONS_ENABLED,
-  PROP_CONSTRAIN_TO
+  PROP_CONSTRAIN_TO,
+  NUM_PROPERTIES
 };
 
 enum {
@@ -178,6 +179,7 @@ struct _GtkPopoverPrivate
   gint tip_y;
 };
 
+static GParamSpec *properties[NUM_PROPERTIES];
 static GQuark quark_widget_popovers = 0;
 static guint signals[N_SIGNALS] = { 0 };
 
@@ -1642,13 +1644,13 @@ gtk_popover_class_init (GtkPopoverClass *klass)
    *
    * Since: 3.12
    */
-  g_object_class_install_property (object_class,
-                                   PROP_RELATIVE_TO,
-                                   g_param_spec_object ("relative-to",
-                                                        P_("Relative to"),
-                                                        P_("Widget the bubble window points to"),
-                                                        GTK_TYPE_WIDGET,
-                                                        GTK_PARAM_READWRITE));
+  properties[PROP_RELATIVE_TO] =
+      g_param_spec_object ("relative-to",
+                           P_("Relative to"),
+                           P_("Widget the bubble window points to"),
+                           GTK_TYPE_WIDGET,
+                           GTK_PARAM_READWRITE);
+
   /**
    * GtkPopover:pointing-to:
    *
@@ -1656,13 +1658,13 @@ gtk_popover_class_init (GtkPopoverClass *klass)
    *
    * Since: 3.12
    */
-  g_object_class_install_property (object_class,
-                                   PROP_POINTING_TO,
-                                   g_param_spec_boxed ("pointing-to",
-                                                       P_("Pointing to"),
-                                                       P_("Rectangle the bubble window points to"),
-                                                       GDK_TYPE_RECTANGLE,
-                                                       GTK_PARAM_READWRITE));
+  properties[PROP_POINTING_TO] =
+      g_param_spec_boxed ("pointing-to",
+                          P_("Pointing to"),
+                          P_("Rectangle the bubble window points to"),
+                          GDK_TYPE_RECTANGLE,
+                          GTK_PARAM_READWRITE);
+
   /**
    * GtkPopover:position
    *
@@ -1670,13 +1672,12 @@ gtk_popover_class_init (GtkPopoverClass *klass)
    *
    * Since: 3.12
    */
-  g_object_class_install_property (object_class,
-                                   PROP_POSITION,
-                                   g_param_spec_enum ("position",
-                                                      P_("Position"),
-                                                      P_("Position to place the bubble window"),
-                                                      GTK_TYPE_POSITION_TYPE, GTK_POS_TOP,
-                                                      GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY));
+  properties[PROP_POSITION] =
+      g_param_spec_enum ("position",
+                         P_("Position"),
+                         P_("Position to place the bubble window"),
+                         GTK_TYPE_POSITION_TYPE, GTK_POS_TOP,
+                         GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkPopover:modal
@@ -1686,13 +1687,12 @@ gtk_popover_class_init (GtkPopoverClass *klass)
    *
    * Since: 3.12
    */
-  g_object_class_install_property (object_class,
-                                   PROP_MODAL,
-                                   g_param_spec_boolean ("modal",
-                                                         P_("Modal"),
-                                                         P_("Whether the popover is modal"),
-                                                         TRUE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  properties[PROP_MODAL] =
+      g_param_spec_boolean ("modal",
+                            P_("Modal"),
+                            P_("Whether the popover is modal"),
+                            TRUE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkPopover:transitions-enabled
@@ -1701,13 +1701,12 @@ gtk_popover_class_init (GtkPopoverClass *klass)
    *
    * Since: 3.16
    */
-  g_object_class_install_property (object_class,
-                                   PROP_TRANSITIONS_ENABLED,
-                                   g_param_spec_boolean ("transitions-enabled",
-                                                         P_("Transitions enabled"),
-                                                         P_("Whether show/hide transitions are enabled or not"),
-                                                         TRUE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  properties[PROP_TRANSITIONS_ENABLED] =
+      g_param_spec_boolean ("transitions-enabled",
+                            P_("Transitions enabled"),
+                            P_("Whether show/hide transitions are enabled or not"),
+                            TRUE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkPopover:constrain-to:
@@ -1716,13 +1715,15 @@ gtk_popover_class_init (GtkPopoverClass *klass)
    *
    * Since: 3.20
    */
-  g_object_class_install_property (object_class,
-                                   PROP_CONSTRAIN_TO,
-                                   g_param_spec_enum ("constrain-to",
-                                                      P_("Constraint"),
-                                                      P_("Constraint for the popover position"),
-                                                      GTK_TYPE_POPOVER_CONSTRAINT, GTK_POPOVER_CONSTRAINT_WINDOW,
-                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  properties[PROP_CONSTRAIN_TO] =
+      g_param_spec_enum ("constrain-to",
+                         P_("Constraint"),
+                         P_("Constraint for the popover position"),
+                         GTK_TYPE_POPOVER_CONSTRAINT, GTK_POPOVER_CONSTRAINT_WINDOW,
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
+
   signals[CLOSED] =
     g_signal_new (I_("closed"),
                   G_TYPE_FROM_CLASS (object_class),
@@ -1994,7 +1995,7 @@ gtk_popover_update_relative_to (GtkPopover *popover,
     }
 
   priv->widget = relative_to;
-  g_object_notify (G_OBJECT (popover), "relative-to");
+  g_object_notify_by_pspec (G_OBJECT (popover), properties[PROP_RELATIVE_TO]);
 
   if (priv->widget)
     {
@@ -2059,18 +2060,18 @@ gtk_popover_update_pointing_to (GtkPopover         *popover,
   else
     priv->has_pointing_to = FALSE;
 
-  g_object_notify (G_OBJECT (popover), "pointing-to");
+  g_object_notify_by_pspec (G_OBJECT (popover), properties[PROP_POINTING_TO]);
 }
 
 static void
 gtk_popover_update_preferred_position (GtkPopover      *popover,
                                        GtkPositionType  position)
 {
-  if (popover->priv->preferred_position != position)
-    {
-      popover->priv->preferred_position = position;
-      g_object_notify (G_OBJECT (popover), "position");
-    }
+  if (popover->priv->preferred_position == position)
+    return;
+
+  popover->priv->preferred_position = position;
+  g_object_notify_by_pspec (G_OBJECT (popover), properties[PROP_POSITION]);
 }
 
 /**
@@ -2266,7 +2267,7 @@ gtk_popover_set_modal (GtkPopover *popover,
   if (gtk_widget_is_visible (GTK_WIDGET (popover)))
     gtk_popover_apply_modality (popover, priv->modal);
 
-  g_object_notify (G_OBJECT (popover), "modal");
+  g_object_notify_by_pspec (G_OBJECT (popover), properties[PROP_MODAL]);
 }
 
 /**
@@ -2311,7 +2312,7 @@ gtk_popover_set_transitions_enabled (GtkPopover *popover,
     return;
 
   priv->transitions_enabled = transitions_enabled;
-  g_object_notify (G_OBJECT (popover), "transitions-enabled");
+  g_object_notify_by_pspec (G_OBJECT (popover), properties[PROP_TRANSITIONS_ENABLED]);
 }
 
 /**
@@ -2534,7 +2535,7 @@ gtk_popover_set_constrain_to (GtkPopover           *popover,
   priv->constraint = constraint;
   gtk_popover_update_position (popover);
 
-  g_object_notify (G_OBJECT (popover), "constrain-to");
+  g_object_notify_by_pspec (G_OBJECT (popover), properties[PROP_CONSTRAIN_TO]);
 }
 
 /**
