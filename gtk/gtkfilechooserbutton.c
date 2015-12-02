@@ -34,6 +34,7 @@
 #include "gtkcellrenderertext.h"
 #include "gtkcellrendererpixbuf.h"
 #include "gtkcombobox.h"
+#include "gtkcssiconthemevalueprivate.h"
 #include "gtkdnd.h"
 #include "gtkicontheme.h"
 #include "deprecated/gtkiconfactory.h"
@@ -1489,10 +1490,8 @@ gtk_file_chooser_button_screen_changed (GtkWidget *widget,
 static GtkIconTheme *
 get_icon_theme (GtkWidget *widget)
 {
-  if (gtk_widget_has_screen (widget))
-    return gtk_icon_theme_get_for_screen (gtk_widget_get_screen (widget));
-
-  return gtk_icon_theme_get_default ();
+  return gtk_css_icon_theme_value_get_icon_theme
+    (_gtk_style_context_peek_property (gtk_widget_get_style_context (widget), GTK_CSS_PROPERTY_ICON_THEME));
 }
 
 
@@ -1963,7 +1962,7 @@ model_add_bookmarks (GtkFileChooserButton *button,
 	  if (!label)
 	    label = _gtk_file_chooser_label_for_file (file);
 
-	  icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (button)));
+          icon_theme = get_icon_theme (GTK_WIDGET (button));
 	  surface = gtk_icon_theme_load_surface (icon_theme, "folder-remote",
 						 button->priv->icon_size, 
 						 gtk_widget_get_scale_factor (GTK_WIDGET (button)),
@@ -2070,7 +2069,7 @@ model_update_current_folder (GtkFileChooserButton *button,
       if (!label)
 	label = _gtk_file_chooser_label_for_file (file);
 
-      icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (button)));
+      icon_theme = get_icon_theme (GTK_WIDGET (button));
 
       if (g_file_is_native (file))
 	  surface = gtk_icon_theme_load_surface (icon_theme, "folder",

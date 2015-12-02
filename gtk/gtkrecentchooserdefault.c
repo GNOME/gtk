@@ -38,6 +38,7 @@
 #include "gtkcheckmenuitem.h"
 #include "gtkclipboard.h"
 #include "gtkcomboboxtext.h"
+#include "gtkcssiconthemevalueprivate.h"
 #include "gtkdragsource.h"
 #include "gtkentry.h"
 #include "gtkeventbox.h"
@@ -54,6 +55,7 @@
 #include "gtkseparatormenuitem.h"
 #include "gtksizegroup.h"
 #include "gtksizerequest.h"
+#include "gtkstylecontextprivate.h"
 #include "gtktreemodelsort.h"
 #include "gtktreemodelfilter.h"
 #include "gtktreeselection.h"
@@ -1340,10 +1342,9 @@ chooser_set_sort_type (GtkRecentChooserDefault *impl,
 static GtkIconTheme *
 get_icon_theme_for_widget (GtkWidget *widget)
 {
-  if (gtk_widget_has_screen (widget))
-    return gtk_icon_theme_get_for_screen (gtk_widget_get_screen (widget));
-
-  return gtk_icon_theme_get_default ();
+  return gtk_css_icon_theme_value_get_icon_theme
+    (_gtk_style_context_peek_property (gtk_widget_get_style_context (widget),
+                                       GTK_CSS_PROPERTY_ICON_THEME));
 }
 
 static gint

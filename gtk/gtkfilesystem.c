@@ -21,15 +21,16 @@
 
 #include "config.h"
 
-#include <string.h>
+#include "gtkfilesystem.h"
 
+#include <string.h>
 #include <glib/gi18n-lib.h>
 
 #include "gtkfilechooser.h"
-#include "gtkfilesystem.h"
-#include "gtkicontheme.h"
-#include "gtkprivate.h"
+#include "gtkcssiconthemevalueprivate.h"
 #include "gtkintl.h"
+#include "gtkprivate.h"
+#include "gtkstylecontextprivate.h"
 
 /* #define DEBUG_MODE */
 #ifdef DEBUG_MODE
@@ -707,14 +708,15 @@ get_surface_from_gicon (GIcon      *icon,
 			gint        icon_size,
 			GError    **error)
 {
-  GdkScreen *screen;
+  GtkStyleContext *context;
   GtkIconTheme *icon_theme;
   GtkIconInfo *icon_info;
   GdkPixbuf *pixbuf;
   cairo_surface_t *surface;
 
-  screen = gtk_widget_get_screen (GTK_WIDGET (widget));
-  icon_theme = gtk_icon_theme_get_for_screen (screen);
+  context = gtk_widget_get_style_context (widget);
+  icon_theme = gtk_css_icon_theme_value_get_icon_theme
+    (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_THEME));
 
   icon_info = gtk_icon_theme_lookup_by_gicon_for_scale (icon_theme,
                                                         icon,
@@ -726,7 +728,7 @@ get_surface_from_gicon (GIcon      *icon,
     return NULL;
 
   pixbuf = gtk_icon_info_load_symbolic_for_context (icon_info,
-                                                    gtk_widget_get_style_context (widget),
+                                                    context,
                                                     NULL,
                                                     error);
 

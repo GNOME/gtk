@@ -29,6 +29,7 @@
 
 #include "gtkmountoperationprivate.h"
 #include "gtkbox.h"
+#include "gtkcssiconthemevalueprivate.h"
 #include "gtkdbusgenerated.h"
 #include "gtkentry.h"
 #include "gtkbox.h"
@@ -49,6 +50,7 @@
 #include "gtkmenuitem.h"
 #include "gtkmain.h"
 #include "gtksettings.h"
+#include "gtkstylecontextprivate.h"
 
 #include <glib/gprintf.h>
 
@@ -1096,7 +1098,9 @@ add_pid_to_process_list_store (GtkMountOperation              *mount_operation,
   if (pixbuf == NULL)
     {
       GtkIconTheme *theme;
-      theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (mount_operation->priv->dialog)));
+      theme = gtk_css_icon_theme_value_get_icon_theme
+        (_gtk_style_context_peek_property (gtk_widget_get_style_context (GTK_WIDGET (mount_operation->priv->dialog)),
+                                           GTK_CSS_PROPERTY_ICON_THEME));
       pixbuf = gtk_icon_theme_load_icon (theme,
                                          "application-x-executable",
                                          24,

@@ -23,6 +23,7 @@
 
 #include <math.h>
 
+#include "gtkcssiconthemevalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
 #include "gtksettingsprivate.h"
 #include "gtkstyleproviderprivate.h"
@@ -133,18 +134,10 @@ gtk_css_image_icon_theme_compute (GtkCssImage             *image,
 {
   GtkCssImageIconTheme *icon_theme = GTK_CSS_IMAGE_ICON_THEME (image);
   GtkCssImageIconTheme *copy;
-  GtkSettings *settings;
-  GdkScreen *screen;
-
-  settings = _gtk_style_provider_private_get_settings (provider);
-  if (settings == NULL)
-    screen = gdk_screen_get_default ();
-  else
-    screen = _gtk_settings_get_screen (settings);
 
   copy = g_object_new (GTK_TYPE_CSS_IMAGE_ICON_THEME, NULL);
   copy->name = g_strdup (icon_theme->name);
-  copy->icon_theme = gtk_icon_theme_get_for_screen (screen);
+  copy->icon_theme = gtk_css_icon_theme_value_get_icon_theme (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_THEME));
   copy->scale = _gtk_style_provider_private_get_scale (provider);
   copy->color = *_gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_COLOR));
 

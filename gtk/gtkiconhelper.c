@@ -24,6 +24,7 @@
 #include <math.h>
 
 #include "gtkcssenumvalueprivate.h"
+#include "gtkcssiconthemevalueprivate.h"
 #include "gtkrender.h"
 #include "gtkstylecontextprivate.h"
 #include "deprecated/gtkstock.h"
@@ -457,7 +458,8 @@ ensure_surface_for_gicon (GtkIconHelper   *self,
   GtkIconLookupFlags flags;
   cairo_surface_t *surface;
 
-  icon_theme = gtk_icon_theme_get_for_screen (gtk_style_context_get_screen (context));
+  icon_theme = gtk_css_icon_theme_value_get_icon_theme
+    (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_THEME));
   flags = get_icon_lookup_flags (self, context);
 
   ensure_icon_size (self, &width, &height);

@@ -20,12 +20,16 @@
 #ifndef __GTK_CSS_ICON_THEME_VALUE_PRIVATE_H__
 #define __GTK_CSS_ICON_THEME_VALUE_PRIVATE_H__
 
+#include "gtkicontheme.h"
+
 #include "gtkcssparserprivate.h"
 #include "gtkcssvalueprivate.h"
 
 G_BEGIN_DECLS
 
 GtkCssValue *   _gtk_css_icon_theme_value_new           (void);
+
+GtkIconTheme *  gtk_css_icon_theme_value_get_icon_theme (GtkCssValue    *value);
 
 G_END_DECLS
 

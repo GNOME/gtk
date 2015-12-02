@@ -36,6 +36,7 @@
 #include "gtkaccelgroupprivate.h"
 #include "gtkbindings.h"
 #include "gtkcsscornervalueprivate.h"
+#include "gtkcssiconthemevalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
 #include "gtkcssshadowsvalueprivate.h"
 #include "gtkkeyhash.h"
@@ -4412,7 +4413,9 @@ icon_list_from_theme (GtkWindow   *window,
   gint *sizes;
   gint i;
 
-  icon_theme = gtk_icon_theme_get_for_screen (_gtk_window_get_screen (window));
+  icon_theme = gtk_css_icon_theme_value_get_icon_theme
+    (_gtk_style_context_peek_property (gtk_widget_get_style_context (GTK_WIDGET (window)),
+                                       GTK_CSS_PROPERTY_ICON_THEME));
 
   sizes = gtk_icon_theme_get_icon_sizes (icon_theme, name);
 
@@ -4514,7 +4517,9 @@ gtk_window_realize_icon (GtkWindow *window)
 
       g_list_free_full (icon_list, g_object_unref);
  
-      icon_theme = gtk_icon_theme_get_for_screen (_gtk_window_get_screen (window));
+      icon_theme = gtk_css_icon_theme_value_get_icon_theme
+        (_gtk_style_context_peek_property (gtk_widget_get_style_context (GTK_WIDGET (window)),
+                                           GTK_CSS_PROPERTY_ICON_THEME));
       g_signal_connect (icon_theme, "changed",
 			G_CALLBACK (update_themed_icon), window);
     }
@@ -4601,7 +4606,9 @@ gtk_window_unrealize_icon (GtkWindow *window)
     {
       GtkIconTheme *icon_theme;
 
-      icon_theme = gtk_icon_theme_get_for_screen (_gtk_window_get_screen (window));
+      icon_theme = gtk_css_icon_theme_value_get_icon_theme
+        (_gtk_style_context_peek_property (gtk_widget_get_style_context (GTK_WIDGET (window)),
+                                           GTK_CSS_PROPERTY_ICON_THEME));
 
       g_signal_handlers_disconnect_by_func (icon_theme, update_themed_icon, window);
     }

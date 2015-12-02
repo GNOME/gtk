@@ -41,8 +41,10 @@
 #include "gtknumerableicon.h"
 #include "gtknumerableiconprivate.h"
 
+#include "gtkcssiconthemevalueprivate.h"
 #include "gtkicontheme.h"
 #include "gtkintl.h"
+#include "gtkstylepropertyprivate.h"
 #include "gtkwidget.h"
 #include "gtkwidgetpath.h"
 #include "gtkwindow.h"
@@ -192,15 +194,14 @@ static cairo_surface_t *
 draw_from_gicon (GtkNumerableIcon *self)
 {
   GtkIconTheme *theme;
-  GdkScreen *screen;
   GtkIconInfo *info;
   GdkPixbuf *pixbuf;
   cairo_surface_t *surface;
 
   if (self->priv->style != NULL)
     {
-      screen = gtk_style_context_get_screen (self->priv->style);
-      theme = gtk_icon_theme_get_for_screen (screen);
+      theme = gtk_css_icon_theme_value_get_icon_theme
+          (_gtk_style_context_peek_property (self->priv->style, GTK_CSS_PROPERTY_ICON_THEME));
     }
   else
     {

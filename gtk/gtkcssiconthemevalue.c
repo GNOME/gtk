@@ -131,3 +131,10 @@ _gtk_css_icon_theme_value_new (void)
   return _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_ICON_THEME);
 }
 
+GtkIconTheme *
+gtk_css_icon_theme_value_get_icon_theme (GtkCssValue *value)
+{
+  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_ICON_THEME, NULL);
+
+  return value->icontheme;
+}
