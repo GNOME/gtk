@@ -83,7 +83,7 @@ typedef enum {
 struct _GtkRangePrivate
 {
   MouseLocation      mouse_location;
-  /* last mouse coords we got, or -1 if mouse is outside the range */
+  /* last mouse coords we got, or G_MININT if mouse is outside the range */
   gint  mouse_x;
   gint  mouse_y;
   MouseLocation      grab_location;   /* "grabbed" mouse location, OUTSIDE for no grab */
@@ -775,8 +775,8 @@ gtk_range_init (GtkRange *range)
   priv->has_stepper_d = FALSE;
   priv->round_digits = -1;
   priv->mouse_location = MOUSE_OUTSIDE;
-  priv->mouse_x = -1;
-  priv->mouse_y = -1;
+  priv->mouse_x = G_MININT;
+  priv->mouse_y = G_MININT;
   priv->grab_location = MOUSE_OUTSIDE;
   priv->lower_sensitivity = GTK_SENSITIVITY_AUTO;
   priv->upper_sensitivity = GTK_SENSITIVITY_AUTO;
@@ -2995,8 +2995,8 @@ gtk_range_event (GtkWidget *widget,
 
   if (event->type == GDK_LEAVE_NOTIFY)
     {
-      priv->mouse_x = -1;
-      priv->mouse_y = -1;
+      priv->mouse_x = G_MININT;
+      priv->mouse_y = G_MININT;
     }
   else if (gdk_event_get_coords (event, &x, &y))
     {
