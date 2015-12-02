@@ -52,25 +52,26 @@ get_style (PathElt pelt[], gint n_elts)
 }
 
 static void
-draw_horizontal_scrollbar (GtkWidget *widget,
-                           cairo_t   *cr,
-                           gint       x,
-                           gint       y,
-                           gint       width,
-                           gint       height,
-                           gint       position)
+draw_horizontal_scrollbar (GtkWidget    *widget,
+                           cairo_t      *cr,
+                           gint          x,
+                           gint          y,
+                           gint          width,
+                           gint          height,
+                           gint          position,
+                           GtkStateFlags state)
 {
   GtkStyleContext *context;
 
   PathElt trough[2] = {
-    { GTK_TYPE_SCROLLBAR, "scrollbar", "horizontal", GTK_STATE_FLAG_NORMAL },
-    { G_TYPE_NONE, "trough", NULL, GTK_STATE_FLAG_NORMAL }
+    { GTK_TYPE_SCROLLBAR, "scrollbar", "horizontal", state },
+    { G_TYPE_NONE, "trough", NULL, state }
   };
 
   PathElt slider[3] = {
-    { GTK_TYPE_SCROLLBAR, "scrollbar", "horizontal", GTK_STATE_FLAG_NORMAL },
-    { G_TYPE_NONE, "trough", NULL, GTK_STATE_FLAG_NORMAL },
-    { G_TYPE_NONE, "slider", NULL, GTK_STATE_FLAG_NORMAL }
+    { GTK_TYPE_SCROLLBAR, "scrollbar", "horizontal", state },
+    { G_TYPE_NONE, "trough", NULL, state },
+    { G_TYPE_NONE, "slider", NULL, state }
   };
 
   context = get_style (trough, G_N_ELEMENTS (trough));
@@ -95,7 +96,8 @@ draw_cb (GtkWidget *widget,
 
   width = gtk_widget_get_allocated_width (widget);
 
-  draw_horizontal_scrollbar (widget, cr, 10, 10, width - 20, 10, 30);
+  draw_horizontal_scrollbar (widget, cr, 10, 10, width - 20, 10, 30, GTK_STATE_FLAG_NORMAL);
+  draw_horizontal_scrollbar (widget, cr, 10, 30, width - 20, 10, 50, GTK_STATE_FLAG_PRELIGHT|GTK_STATE_FLAG_ACTIVE);
 
   return FALSE;
 }
