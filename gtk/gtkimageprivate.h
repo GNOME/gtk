@@ -27,10 +27,14 @@
 
 
 #include "gtkimage.h"
+#include "gtkimagedefinitionprivate.h"
 
 
 G_BEGIN_DECLS
 
+void            gtk_image_set_from_definition           (GtkImage               *image,
+                                                         GtkImageDefinition     *def,
+                                                         GtkIconSize             size);
 
 G_END_DECLS
 

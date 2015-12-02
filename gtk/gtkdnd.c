@@ -24,6 +24,9 @@
 
 #include "config.h"
 
+#include "gtkdnd.h"
+#include "gtkdndprivate.h"
+
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
@@ -43,17 +46,15 @@
 #include <gdk/wayland/gdkwayland.h>
 #endif
 
-#include "gtkdnd.h"
-#include "gtkdndprivate.h"
 #include "gtkgesturedrag.h"
 #include "gtkgesturesingle.h"
-#include "gtkiconhelperprivate.h"
 #include "gtkicontheme.h"
+#include "gtkimageprivate.h"
+#include "gtkintl.h"
 #include "gtkmain.h"
 #include "gtkplug.h"
 #include "gtktooltipprivate.h"
 #include "gtkwindow.h"
-#include "gtkintl.h"
 #include "gtkrender.h"
 #include "gtkselectionprivate.h"
 #include "gtkwindowgroup.h"
@@ -114,7 +115,6 @@ struct _GtkDragSourceInfo
   GList             *selections;  /* selections we've claimed */
 
   GtkDragDestInfo   *proxy_dest;  /* Set if this is a proxy drag */
-  GtkIconHelper     *icon_helper;
 
   guint              update_idle;      /* Idle function to update the drag */
   guint              drop_timeout;     /* Timeout for aborting drop */
@@ -2352,7 +2352,7 @@ gtk_drag_begin_internal (GtkWidget          *widget,
    * application may have set one in ::drag_begin, or it may
    * not have set one.
    */
-  if (!info->icon_widget && !info->icon_helper)
+  if (!info->icon_widget)
     {
       if (icon)
         {
@@ -2363,27 +2363,6 @@ gtk_drag_begin_internal (GtkWidget          *widget,
           icon = gtk_image_definition_new_icon_name ("text-x-generic");
           set_icon_helper (info->context, icon, 0, 0);
           gtk_image_definition_unref (icon);
-        }
-    }
-
-  /* We need to composite the icon into the cursor, if we are
-   * not using an icon window.
-   */
-  if (info->icon_helper)
-    {
-      cursor = gtk_drag_get_cursor (widget,
-                                    gtk_widget_get_display (widget), 
-                                    suggested_action,
-                                    info);
-  
-      if (cursor != info->cursor)
-        {
-          gdk_device_grab (pointer, gtk_widget_get_window (widget),
-                           GDK_OWNERSHIP_APPLICATION, FALSE,
-                           GDK_POINTER_MOTION_MASK |
-                           GDK_BUTTON_RELEASE_MASK,
-                           cursor, time);
-          info->cursor = cursor;
         }
     }
 
@@ -2572,8 +2551,6 @@ gtk_drag_set_icon_window (GdkDragContext *context,
 
   gtk_container_add (GTK_CONTAINER (info->icon_window), widget);
 
-  g_clear_object (&info->icon_helper);
-
 out:
   gtk_drag_update_cursor (info);
 }
@@ -2623,32 +2600,12 @@ set_icon_helper (GdkDragContext     *context,
                  gint                hot_x,
                  gint                hot_y)
 {
-  GtkDragSourceInfo *info;
   GtkWidget *widget;
-  GdkScreen *screen;
-  cairo_surface_t *source;
-  GdkWindow *root;
-
-  info = gtk_drag_get_source_info (context, FALSE);
-  screen = gdk_window_get_screen (gdk_drag_context_get_source_window (context));
-
-  if (info->icon_helper == NULL)
-    {
-      info->icon_helper = _gtk_icon_helper_new ();
-      _gtk_icon_helper_set_window (info->icon_helper, gdk_drag_context_get_source_window (context));
-    }
-  _gtk_icon_helper_set_definition (info->icon_helper, def);
-  _gtk_icon_helper_set_icon_size (info->icon_helper, GTK_ICON_SIZE_DND);
 
   widget  = gtk_image_new ();
   gtk_widget_show (widget);
 
-  root = gdk_screen_get_root_window (screen);
-  source = gtk_icon_helper_load_surface (info->icon_helper,
-                                         gtk_widget_get_style_context (widget),
-                                         gdk_window_get_scale_factor (root));
-  gtk_image_set_from_surface (GTK_IMAGE (widget), source);
-  cairo_surface_destroy (source);
+  gtk_image_set_from_definition (GTK_IMAGE (widget), def, GTK_ICON_SIZE_DND);
 
   gtk_drag_set_icon_window (context, widget, hot_x, hot_y, TRUE);
 }
@@ -3323,7 +3280,6 @@ static void
 gtk_drag_source_info_destroy (GtkDragSourceInfo *info)
 {
   gtk_drag_remove_icon (info);
-  g_clear_object (&info->icon_helper);
 
   g_signal_handlers_disconnect_by_func (info->ipc_widget,
                                         gtk_drag_grab_broken_event_cb,
