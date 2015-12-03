@@ -4013,7 +4013,7 @@ gtk_entry_draw (GtkWidget *widget,
         }
     }
 
-  return FALSE;
+  return GDK_EVENT_PROPAGATE;
 }
 
 static gint
@@ -4041,7 +4041,7 @@ gtk_entry_enter_notify (GtkWidget        *widget,
         }
     }
 
-    return FALSE;
+    return GDK_EVENT_PROPAGATE;
 }
 
 static gint
@@ -4073,7 +4073,7 @@ gtk_entry_leave_notify (GtkWidget        *widget,
         }
     }
 
-  return FALSE;
+  return GDK_EVENT_PROPAGATE;
 }
 
 static void
@@ -4954,7 +4954,7 @@ gtk_entry_focus_in (GtkWidget     *widget,
       gtk_entry_check_cursor_blink (entry);
     }
 
-  return FALSE;
+  return GDK_EVENT_PROPAGATE;
 }
 
 static gint
@@ -5000,7 +5000,7 @@ gtk_entry_focus_out (GtkWidget     *widget,
   if (completion)
     _gtk_entry_completion_popdown (completion);
 
-  return FALSE;
+  return GDK_EVENT_PROPAGATE;
 }
 
 void
@@ -5308,7 +5308,7 @@ gtk_cell_editable_key_press_event (GtkEntry    *entry,
       gtk_cell_editable_editing_done (GTK_CELL_EDITABLE (entry));
       gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE (entry));
 
-      return TRUE;
+      return GDK_EVENT_STOP;
     }
 
   /* override focus */
@@ -5317,10 +5317,10 @@ gtk_cell_editable_key_press_event (GtkEntry    *entry,
       gtk_cell_editable_editing_done (GTK_CELL_EDITABLE (entry));
       gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE (entry));
 
-      return TRUE;
+      return GDK_EVENT_STOP;
     }
 
-  return FALSE;
+  return GDK_EVENT_PROPAGATE;
 }
 
 static void
@@ -5351,7 +5351,7 @@ gtk_entry_remove_password_hint (gpointer data)
 
   /* Force the string to be redrawn, but now without a visible character */
   gtk_entry_recompute (GTK_ENTRY (data));
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 /* Default signal handlers
@@ -9560,7 +9560,7 @@ gtk_entry_mnemonic_activate (GtkWidget *widget,
 			     gboolean   group_cycling)
 {
   gtk_widget_grab_focus (widget);
-  return TRUE;
+  return GDK_EVENT_STOP;
 }
 
 static void
@@ -9788,7 +9788,7 @@ static gboolean
 gtk_entry_popup_menu (GtkWidget *widget)
 {
   gtk_entry_do_popup (GTK_ENTRY (widget), NULL);
-  return TRUE;
+  return GDK_EVENT_STOP;
 }
 
 static void
@@ -10433,11 +10433,11 @@ blink_cb (gpointer data)
     {
       g_warning ("GtkEntry - did not receive focus-out-event. If you\n"
 		 "connect a handler to this signal, it must return\n"
-		 "FALSE so the entry gets the event as well");
+		 "GDK_EVENT_PROPAGATE so the entry gets the event as well");
 
       gtk_entry_check_cursor_blink (entry);
 
-      return FALSE;
+      return G_SOURCE_REMOVE;
     }
   
   g_assert (priv->selection_bound == priv->current_pos);
@@ -10468,8 +10468,7 @@ blink_cb (gpointer data)
       g_source_set_name_by_id (priv->blink_timeout, "[gtk+] blink_cb");
     }
 
-  /* Remove ourselves */
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static void
