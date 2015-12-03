@@ -53,3 +53,7 @@
 :checked {
   color: red;
 }
+
+:dnd {
+  color: red;
+}

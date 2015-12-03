@@ -34,7 +34,7 @@
 
 G_BEGIN_DECLS
 
-#define GTK_STATE_FLAGS_BITS 12
+#define GTK_STATE_FLAGS_BITS 13
 
 struct _GtkWidgetPrivate
 {

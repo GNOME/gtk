@@ -53,3 +53,7 @@
 :checked {
   color: rgb(255,0,0);
 }
+
+:dnd {
+  color: rgb(255,0,0);
+}
