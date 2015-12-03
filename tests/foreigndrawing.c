@@ -66,24 +66,16 @@ draw_horizontal_scrollbar (GtkWidget     *widget,
   GtkStyleContext *trough_context;
   GtkStyleContext *slider_context;
 
-  PathElt scrollbar_path[1] = {
-    { GTK_TYPE_SCROLLBAR, "scrollbar", "horizontal", NULL },
-  };
-
-  PathElt trough_path[2] = {
-    { GTK_TYPE_SCROLLBAR, "scrollbar", "horizontal", NULL },
-    { G_TYPE_NONE, "trough", NULL, NULL }
-  };
-
-  PathElt slider_path[3] = {
+  /* This information is taken from the GtkScrollbar docs, see "CSS nodes" */
+  PathElt path[3] = {
     { GTK_TYPE_SCROLLBAR, "scrollbar", "horizontal", NULL },
     { G_TYPE_NONE, "trough", NULL, NULL },
     { G_TYPE_NONE, "slider", NULL, NULL }
   };
 
-  scrollbar_context = get_style (scrollbar_path, G_N_ELEMENTS (scrollbar_path));
-  trough_context = get_style (trough_path, G_N_ELEMENTS (trough_path));
-  slider_context = get_style (slider_path, G_N_ELEMENTS (slider_path));
+  scrollbar_context = get_style (path, 1);
+  trough_context = get_style (path, 2);
+  slider_context = get_style (path, 3);
   gtk_style_context_set_parent (slider_context, trough_context);
   gtk_style_context_set_parent (trough_context, scrollbar_context);
 
@@ -115,21 +107,17 @@ draw_text (GtkWidget     *widget,
   GtkStyleContext *context;
   PangoLayout *layout;
 
-  PathElt label_path[1] = {
-    { GTK_TYPE_LABEL, "label", "view", NULL },
-  };
-
-  PathElt selection_path[2] = {
+  /* This information is taken from the GtkLabel docs, see "CSS nodes" */
+  PathElt path[2] = {
     { GTK_TYPE_LABEL, "label", "view", NULL },
     { G_TYPE_NONE, "selection", NULL, NULL }
   };
 
-  label_context = get_style (label_path, G_N_ELEMENTS (label_path));
-  selection_context = get_style (selection_path, G_N_ELEMENTS (selection_path));
+  label_context = get_style (path, 1);
+  selection_context = get_style (path, 2);
   gtk_style_context_set_parent (selection_context, label_context);
 
   gtk_style_context_set_state (label_context, state);
-
 
   if (state & GTK_STATE_FLAG_SELECTED)
     context = selection_context;
