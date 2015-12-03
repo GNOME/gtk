@@ -227,7 +227,6 @@ struct _GtkEntryPrivate
 
   guint         blink_time;                  /* time in msec the cursor has blinked since last user event */
   guint         blink_timeout;
-  guint         recompute_idle;
 
   guint16       preedit_length;              /* length of preedit string, in bytes */
   guint16	preedit_cursor;	             /* offset of cursor within preedit string, in chars */
@@ -2887,12 +2886,6 @@ gtk_entry_destroy (GtkWidget *widget)
       priv->blink_timeout = 0;
     }
 
-  if (priv->recompute_idle)
-    {
-      g_source_remove (priv->recompute_idle);
-      priv->recompute_idle = 0;
-    }
-
   if (priv->magnifier)
     _gtk_magnifier_set_inspected (GTK_MAGNIFIER (priv->magnifier), NULL);
 
@@ -2960,9 +2953,6 @@ gtk_entry_finalize (GObject *object)
 
   if (priv->blink_timeout)
     g_source_remove (priv->blink_timeout);
-
-  if (priv->recompute_idle)
-    g_source_remove (priv->recompute_idle);
 
   if (priv->selection_bubble)
     gtk_widget_destroy (priv->selection_bubble);
@@ -4225,10 +4215,6 @@ gtk_entry_update_handles (GtkEntry          *entry,
   gint cursor, bound;
 
   _gtk_text_handle_set_mode (priv->text_handle, mode);
-
-  /* Wait for recomputation before repositioning */
-  if (priv->recompute_idle != 0)
-    return;
 
   height = gdk_window_get_height (priv->text_area);
 
@@ -5512,8 +5498,19 @@ buffer_notify_text (GtkEntryBuffer *buffer,
                     GParamSpec     *spec,
                     GtkEntry       *entry)
 {
+  int new_current_pos, new_selection_bound;
+  guint buffer_length;
+
   if (entry->priv->handling_key_event)
     gtk_entry_obscure_mouse_cursor (entry);
+
+  /* Make sure the cursor/selection stays in the new text length */
+  buffer_length = gtk_entry_buffer_get_length (buffer);
+  new_current_pos = MIN (entry->priv->current_pos, buffer_length);
+  new_selection_bound = MIN (entry->priv->selection_bound, buffer_length);
+
+  gtk_entry_set_positions (entry, new_current_pos, new_selection_bound);
+
   gtk_entry_recompute (entry);
   emit_changed (entry);
   g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_TEXT]);
@@ -6229,49 +6226,28 @@ update_im_cursor_location (GtkEntry *entry)
   gtk_im_context_set_cursor_location (priv->im_context, &area);
 }
 
-static gboolean
-recompute_idle_func (gpointer data)
-{
-  GtkEntry *entry = GTK_ENTRY (data);
-  GtkEntryPrivate *priv = entry->priv;
-
-  priv->recompute_idle = 0;
-
-  if (gtk_widget_has_screen (GTK_WIDGET (entry)))
-    {
-      GtkTextHandleMode handle_mode;
-
-      gtk_entry_adjust_scroll (entry);
-      gtk_widget_queue_draw (GTK_WIDGET (entry));
-
-      update_im_cursor_location (entry);
-
-      if (priv->text_handle)
-        {
-          handle_mode = _gtk_text_handle_get_mode (priv->text_handle);
-
-          if (handle_mode != GTK_TEXT_HANDLE_MODE_NONE)
-            gtk_entry_update_handles (entry, handle_mode);
-        }
-    }
-
-  return FALSE;
-}
-
 static void
 gtk_entry_recompute (GtkEntry *entry)
 {
   GtkEntryPrivate *priv = entry->priv;
+  GtkTextHandleMode handle_mode;
 
   gtk_entry_reset_layout (entry);
   gtk_entry_check_cursor_blink (entry);
 
-  if (!priv->recompute_idle)
+  gtk_entry_adjust_scroll (entry);
+
+  update_im_cursor_location (entry);
+
+  if (priv->text_handle)
     {
-      priv->recompute_idle = gdk_threads_add_idle_full (G_PRIORITY_HIGH_IDLE + 15, /* between resize and redraw */
-					       recompute_idle_func, entry, NULL); 
-      g_source_set_name_by_id (priv->recompute_idle, "[gtk+] recompute_idle_func");
+      handle_mode = _gtk_text_handle_get_mode (priv->text_handle);
+
+      if (handle_mode != GTK_TEXT_HANDLE_MODE_NONE)
+        gtk_entry_update_handles (entry, handle_mode);
     }
+
+  gtk_widget_queue_draw (GTK_WIDGET (entry));
 }
 
 static void
