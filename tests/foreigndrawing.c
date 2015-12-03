@@ -100,6 +100,54 @@ draw_horizontal_scrollbar (GtkWidget     *widget,
   g_object_unref (scrollbar_context);
 }
 
+static void
+draw_text (GtkWidget     *widget,
+           cairo_t       *cr,
+           gint           x,
+           gint           y,
+           gint           width,
+           gint           height,
+           const gchar   *text,
+           GtkStateFlags  state)
+{
+  GtkStyleContext *label_context;
+  GtkStyleContext *selection_context;
+  GtkStyleContext *context;
+  PangoLayout *layout;
+
+  PathElt label_path[1] = {
+    { GTK_TYPE_LABEL, "label", "view", NULL },
+  };
+
+  PathElt selection_path[2] = {
+    { GTK_TYPE_LABEL, "label", "view", NULL },
+    { G_TYPE_NONE, "selection", NULL, NULL }
+  };
+
+  label_context = get_style (label_path, G_N_ELEMENTS (label_path));
+  selection_context = get_style (selection_path, G_N_ELEMENTS (selection_path));
+  gtk_style_context_set_parent (selection_context, label_context);
+
+  gtk_style_context_set_state (label_context, state);
+
+
+  if (state & GTK_STATE_FLAG_SELECTED)
+    context = selection_context;
+  else
+    context = label_context;
+
+  layout = gtk_widget_create_pango_layout (widget, text);
+
+  gtk_render_background (context, cr, x, y, width, height);
+  gtk_render_frame (context, cr, x, y, width, height);
+  gtk_render_layout (context, cr, x, y, layout);
+
+  g_object_unref (layout);
+
+  g_object_unref (selection_context);
+  g_object_unref (label_context);
+}
+
 static gboolean
 draw_cb (GtkWidget *widget,
          cairo_t   *cr)
@@ -111,6 +159,9 @@ draw_cb (GtkWidget *widget,
   draw_horizontal_scrollbar (widget, cr, 10, 10, width - 20, 10, 30, GTK_STATE_FLAG_NORMAL);
   draw_horizontal_scrollbar (widget, cr, 10, 30, width - 20, 10, 40, GTK_STATE_FLAG_PRELIGHT);
   draw_horizontal_scrollbar (widget, cr, 10, 50, width - 20, 10, 50, GTK_STATE_FLAG_ACTIVE|GTK_STATE_FLAG_PRELIGHT);
+
+  draw_text (widget, cr, 10,  70, width - 20, 20, "Not selected", GTK_STATE_FLAG_NORMAL);
+  draw_text (widget, cr, 10, 100, width - 20, 20, "Selected", GTK_STATE_FLAG_SELECTED);
 
   return FALSE;
 }
