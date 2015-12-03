@@ -1741,6 +1741,7 @@ build/win32/vs9/Makefile
 build/win32/vs10/Makefile
 build/win32/vs11/Makefile
 build/win32/vs12/Makefile
+build/win32/vs14/Makefile
 gdk/Makefile
 gdk/x11/Makefile
 gdk/win32/Makefile
