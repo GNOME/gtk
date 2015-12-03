@@ -391,11 +391,6 @@ struct _GtkWindowGeometryInfo
    */
   guint          default_is_geometry : 1;
 
-  /* if true, resize_width, height should be multiplied by the
-   * increments and affect the geometry widget only
-   */
-  guint          resize_is_geometry : 1;
-  
   GtkWindowLastGeometryInfo last;
 };
 
@@ -5330,7 +5325,6 @@ gtk_window_resize (GtkWindow *window,
 
   info->resize_width = width;
   info->resize_height = height;
-  info->resize_is_geometry = FALSE;
 
   gtk_widget_queue_resize_no_redraw (GTK_WIDGET (window));
 }
@@ -5346,25 +5340,18 @@ gtk_window_resize (GtkWindow *window,
  * gtk_window_set_geometry_hints.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.20: This function does nothing. Use 
+ *    gtk_window_resize() and compute the geometry yourself.
  */
 void
 gtk_window_resize_to_geometry (GtkWindow *window,
 			       gint       width,
 			       gint       height)
 {
-  GtkWindowGeometryInfo *info;
-
   g_return_if_fail (GTK_IS_WINDOW (window));
   g_return_if_fail (width > 0);
   g_return_if_fail (height > 0);
-
-  info = gtk_window_get_geometry_info (window, TRUE);
-
-  info->resize_width = width;
-  info->resize_height = height;
-  info->resize_is_geometry = TRUE;
-
-  gtk_widget_queue_resize_no_redraw (GTK_WIDGET (window));
 }
 
 /**
@@ -8990,11 +8977,6 @@ gtk_window_compute_configure_request_size (GtkWindow   *window,
         *width = resize_width_csd;
       if (info->resize_height > 0)
         *height = resize_height_csd;
-
-      if (info->resize_is_geometry)
-        geometry_size_to_pixels (geometry, flags,
-                                 info->resize_width > 0 ? width : NULL,
-                                 info->resize_height > 0 ? height : NULL);
     }
 
   /* Don't ever request zero width or height, it's not supported by

@@ -447,7 +447,7 @@ GDK_AVAILABLE_IN_ALL
 void gtk_window_set_default_geometry (GtkWindow *window,
                                       gint       width,
                                       gint       height);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_20_FOR(gtk_window_resize)
 void gtk_window_resize_to_geometry   (GtkWindow *window,
                                       gint       width,
                                       gint       height);
