@@ -229,9 +229,6 @@ struct _GtkEntryPrivate
   guint         blink_timeout;
   guint         recompute_idle;
 
-  guint16       x_text_size;                 /* allocated size, in bytes */
-  guint16       x_n_bytes;                   /* length in use, in bytes */
-
   guint16       preedit_length;              /* length of preedit string, in bytes */
   guint16	preedit_cursor;	             /* offset of cursor within preedit string, in chars */
 
