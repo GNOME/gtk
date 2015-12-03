@@ -987,10 +987,9 @@ gtk_drag_finish (GdkDragContext *context,
  * gtk_drag_highlight: (method)
  * @widget: a widget to highlight
  *
- * Draws a highlight around a widget. This will attach
- * handlers to #GtkWidget::draw, so the highlight
- * will continue to be displayed until gtk_drag_unhighlight()
- * is called.
+ * Highlights a widget as a currently hovered drop target.
+ * To end the highlight, call gtk_drag_unhighlight().
+ * GTK+ calls this automatically if %GTK_DEST_DEFAULT_HIGHLIGHT is set.
  */
 void
 gtk_drag_highlight (GtkWidget  *widget)
