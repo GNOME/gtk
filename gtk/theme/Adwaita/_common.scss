@@ -2153,9 +2153,9 @@ scale {
 
   &.vertical slider { margin: 0 2px; }
 
-  trough { @extend %trough; }
+  trough { @extend %scale_trough; }
 
-  highlight { @extend %highlight; }
+  highlight { @extend %scale_highlight; }
 
   slider {
     // FIXME: scale-has-marks-* missing
@@ -2199,7 +2199,7 @@ scale {
   }
 }
 
-%trough {
+%scale_trough {
   border: 1px solid $borders_color;
   border-radius: 3px;
   background-color: $dark_fill;
@@ -2236,7 +2236,7 @@ scale {
   }
 }
 
-%highlight {
+%scale_highlight {
   border: 1px solid $selected_borders_color;
   border-radius: 3px;
   background-color: $selected_bg_color;
@@ -2279,13 +2279,13 @@ progressbar {
   &:backdrop { box-shadow: none; }
 
   trough {
-    @extend %trough;
+    @extend %scale_trough;
   }
 
-  &:backdrop trough { @extend %trough:backdrop; } // looks like states are not passed to the trough component here
+  &:backdrop trough { @extend %scale_trough:backdrop; } // looks like states are not passed to the trough component here
 
   progress {
-    @extend %highlight;
+    @extend %scale_highlight;
     border-radius: 1.5px;
     &.left {
       border-top-left-radius: 3px;
@@ -2305,7 +2305,7 @@ progressbar {
     }
   }
 
-  &:backdrop progress { @extend %highlight:backdrop; } // states not passed here as well
+  &:backdrop progress { @extend %scale_highlight:backdrop; } // states not passed here as well
 }
 
 /*************
