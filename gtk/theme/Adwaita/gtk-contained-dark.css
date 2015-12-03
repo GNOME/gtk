@@ -141,7 +141,8 @@ popover.osd,
   popover.osd:backdrop,
   .app-notification:backdrop,
   .osd .scale-popup:backdrop, .osd:backdrop {
-    text-shadow: none; }
+    text-shadow: none;
+    -gtk-icon-shadow: none; }
 
 /*********************
  * Spinner Animation *
@@ -507,7 +508,10 @@ button, headerbar button.titlebutton,
       text-shadow: none;
       -gtk-icon-shadow: none;
       border: none; }
-  .osd button, .osd headerbar button.titlebutton, headerbar .osd button.titlebutton,
+  .app-notification button, .app-notification headerbar button.titlebutton, headerbar .app-notification button.titlebutton,
+  .app-notification .titlebar button.titlebutton,
+  .titlebar .app-notification button.titlebutton,
+  .app-notification.frame button, .osd button, .osd headerbar button.titlebutton, headerbar .osd button.titlebutton,
   .osd .titlebar button.titlebutton,
   .titlebar .osd button.titlebutton {
     color: #eeeeec;
@@ -518,7 +522,7 @@ button, headerbar button.titlebutton,
     text-shadow: 0 1px black;
     -gtk-icon-shadow: 0 1px black;
     outline-color: rgba(238, 238, 236, 0.3); }
-    .osd button:hover {
+    .app-notification button:hover, .osd button:hover {
       color: white;
       border-color: rgba(0, 0, 0, 0.7);
       background-image: linear-gradient(to bottom, rgba(60, 69, 71, 0.7));
@@ -527,7 +531,7 @@ button, headerbar button.titlebutton,
       text-shadow: 0 1px black;
       -gtk-icon-shadow: 0 1px black;
       outline-color: rgba(238, 238, 236, 0.3); }
-    .osd button:active, .osd button:checked, .osd button:backdrop:active, .osd button:backdrop:checked {
+    .app-notification button:active, .app-notification button:checked, .app-notification button:backdrop:active, .app-notification button:backdrop:checked, .osd button:active, .osd button:checked, .osd button:backdrop:active, .osd button:backdrop:checked {
       color: white;
       border-color: rgba(0, 0, 0, 0.7);
       background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7));
@@ -536,7 +540,7 @@ button, headerbar button.titlebutton,
       text-shadow: none;
       -gtk-icon-shadow: none;
       outline-color: rgba(238, 238, 236, 0.3); }
-    .osd button:insensitive, .osd button:backdrop:insensitive {
+    .app-notification button:insensitive, .app-notification button:backdrop:insensitive, .osd button:insensitive, .osd button:backdrop:insensitive {
       color: #878a89;
       border-color: rgba(0, 0, 0, 0.7);
       background-image: linear-gradient(to bottom, rgba(53, 57, 58, 0.5));
@@ -544,7 +548,7 @@ button, headerbar button.titlebutton,
       box-shadow: none;
       text-shadow: none;
       -gtk-icon-shadow: none; }
-    .osd button:backdrop {
+    .app-notification button:backdrop, .osd button:backdrop {
       color: #eeeeec;
       border-color: rgba(0, 0, 0, 0.7);
       background-image: linear-gradient(to bottom, rgba(32, 37, 38, 0.7));
@@ -552,7 +556,9 @@ button, headerbar button.titlebutton,
       box-shadow: none;
       text-shadow: none;
       -gtk-icon-shadow: none; }
-    .osd button.flat, .osd button.sidebar-button, .osd headerbar button.titlebutton, headerbar .osd button.titlebutton,
+    .app-notification button.flat, .app-notification button.sidebar-button, .app-notification headerbar button.titlebutton, headerbar .app-notification button.titlebutton,
+    .app-notification .titlebar button.titlebutton,
+    .titlebar .app-notification button.titlebutton, .osd button.flat, .osd button.sidebar-button, .osd headerbar button.titlebutton, headerbar .osd button.titlebutton,
     .osd .titlebar button.titlebutton,
     .titlebar .osd button.titlebutton {
       border-color: transparent;
@@ -564,7 +570,9 @@ button, headerbar button.titlebutton,
       box-shadow: none;
       text-shadow: 0 1px black;
       -gtk-icon-shadow: 0 1px black; }
-      .osd button.flat:hover, .osd button.sidebar-button:hover, .osd headerbar button.titlebutton:hover, headerbar .osd button.titlebutton:hover,
+      .app-notification button.flat:hover, .app-notification button.sidebar-button:hover, .app-notification headerbar button.titlebutton:hover, headerbar .app-notification button.titlebutton:hover,
+      .app-notification .titlebar button.titlebutton:hover,
+      .titlebar .app-notification button.titlebutton:hover, .osd button.flat:hover, .osd button.sidebar-button:hover, .osd headerbar button.titlebutton:hover, headerbar .osd button.titlebutton:hover,
       .osd .titlebar button.titlebutton:hover,
       .titlebar .osd button.titlebutton:hover {
         color: white;
@@ -574,11 +582,10 @@ button, headerbar button.titlebutton,
         box-shadow: inset 0 1px rgba(255, 255, 255, 0.1);
         text-shadow: 0 1px black;
         -gtk-icon-shadow: 0 1px black;
-        outline-color: rgba(238, 238, 236, 0.3);
-        background-clip: padding-box;
-        border-color: transparent;
-        box-shadow: none; }
-      .osd button.flat:insensitive, .osd button.sidebar-button:insensitive, .osd headerbar button.titlebutton:insensitive, headerbar .osd button.titlebutton:insensitive,
+        outline-color: rgba(238, 238, 236, 0.3); }
+      .app-notification button.flat:insensitive, .app-notification button.sidebar-button:insensitive, .app-notification headerbar button.titlebutton:insensitive, headerbar .app-notification button.titlebutton:insensitive,
+      .app-notification .titlebar button.titlebutton:insensitive,
+      .titlebar .app-notification button.titlebutton:insensitive, .osd button.flat:insensitive, .osd button.sidebar-button:insensitive, .osd headerbar button.titlebutton:insensitive, headerbar .osd button.titlebutton:insensitive,
       .osd .titlebar button.titlebutton:insensitive,
       .titlebar .osd button.titlebutton:insensitive {
         color: #878a89;
@@ -591,7 +598,9 @@ button, headerbar button.titlebutton,
         background-image: none;
         border-color: transparent;
         box-shadow: none; }
-      .osd button.flat:backdrop, .osd button.sidebar-button:backdrop, .osd headerbar button.titlebutton:backdrop, headerbar .osd button.titlebutton:backdrop,
+      .app-notification button.flat:backdrop, .app-notification button.sidebar-button:backdrop, .app-notification headerbar button.titlebutton:backdrop, headerbar .app-notification button.titlebutton:backdrop,
+      .app-notification .titlebar button.titlebutton:backdrop,
+      .titlebar .app-notification button.titlebutton:backdrop, .osd button.flat:backdrop, .osd button.sidebar-button:backdrop, .osd headerbar button.titlebutton:backdrop, headerbar .osd button.titlebutton:backdrop,
       .osd .titlebar button.titlebutton:backdrop,
       .titlebar .osd button.titlebutton:backdrop {
         border-color: transparent;
@@ -600,7 +609,11 @@ button, headerbar button.titlebutton,
         box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(238, 238, 236, 0);
         text-shadow: none;
         -gtk-icon-shadow: none; }
-      .osd button.flat:active, .osd button.sidebar-button:active, .osd headerbar button.titlebutton:active, headerbar .osd button.titlebutton:active,
+      .app-notification button.flat:active, .app-notification button.sidebar-button:active, .app-notification headerbar button.titlebutton:active, headerbar .app-notification button.titlebutton:active,
+      .app-notification .titlebar button.titlebutton:active,
+      .titlebar .app-notification button.titlebutton:active, .app-notification button.flat:checked, .app-notification button.sidebar-button:checked, .app-notification headerbar button.titlebutton:checked, headerbar .app-notification button.titlebutton:checked,
+      .app-notification .titlebar button.titlebutton:checked,
+      .titlebar .app-notification button.titlebutton:checked, .osd button.flat:active, .osd button.sidebar-button:active, .osd headerbar button.titlebutton:active, headerbar .osd button.titlebutton:active,
       .osd .titlebar button.titlebutton:active,
       .titlebar .osd button.titlebutton:active, .osd button.flat:checked, .osd button.sidebar-button:checked, .osd headerbar button.titlebutton:checked, headerbar .osd button.titlebutton:checked,
       .osd .titlebar button.titlebutton:checked,
@@ -612,10 +625,7 @@ button, headerbar button.titlebutton,
         box-shadow: none;
         text-shadow: none;
         -gtk-icon-shadow: none;
-        outline-color: rgba(238, 238, 236, 0.3);
-        background-clip: padding-box;
-        border-color: transparent;
-        box-shadow: none; }
+        outline-color: rgba(238, 238, 236, 0.3); }
   button.suggested-action, headerbar button.suggested-action.titlebutton,
   .titlebar button.suggested-action.titlebutton {
     color: white;
@@ -1170,31 +1180,7 @@ modelbutton.flat,
 .titlebar button.titlebutton:visited, button:link:hover, button:link:active, button:link:checked, button:visited:hover, button:visited:active, button:visited:checked, button:link:backdrop, button:visited:backdrop, menu arrow,
 .menu arrow, notebook tab button, notebook tab headerbar button.titlebutton, headerbar notebook tab button.titlebutton,
 notebook tab .titlebar button.titlebutton,
-.titlebar notebook tab button.titlebutton, .app-notification button.flat, .app-notification button.sidebar-button, .app-notification headerbar button.titlebutton, headerbar .app-notification button.titlebutton,
-.app-notification .titlebar button.titlebutton,
-.titlebar .app-notification button.titlebutton,
-.app-notification.frame button.flat,
-.app-notification.frame button.sidebar-button,
-.app-notification.frame headerbar button.titlebutton,
-headerbar .app-notification.frame button.titlebutton, .app-notification button.flat:backdrop, .app-notification button.sidebar-button:backdrop, .app-notification headerbar button.titlebutton:backdrop, headerbar .app-notification button.titlebutton:backdrop, .app-notification button.flat:insensitive, .app-notification button.sidebar-button:insensitive, .app-notification headerbar button.titlebutton:insensitive, headerbar .app-notification button.titlebutton:insensitive, .app-notification button.flat:backdrop:insensitive, .app-notification button.sidebar-button:backdrop:insensitive, .app-notification headerbar button.titlebutton:backdrop:insensitive, headerbar .app-notification button.titlebutton:backdrop:insensitive,
-.app-notification .titlebar button.titlebutton:backdrop:insensitive,
-.titlebar .app-notification button.titlebutton:backdrop:insensitive,
-.app-notification.frame button.flat:backdrop,
-.app-notification.frame button.sidebar-button:backdrop,
-.app-notification.frame headerbar button.titlebutton:backdrop,
-headerbar .app-notification.frame button.titlebutton:backdrop,
-.app-notification.frame .titlebar button.titlebutton:backdrop,
-.titlebar .app-notification.frame button.titlebutton:backdrop,
-.app-notification.frame button.flat:insensitive,
-.app-notification.frame button.sidebar-button:insensitive,
-.app-notification.frame headerbar button.titlebutton:insensitive,
-headerbar .app-notification.frame button.titlebutton:insensitive,
-.app-notification.frame .titlebar button.titlebutton:insensitive,
-.titlebar .app-notification.frame button.titlebutton:insensitive,
-.app-notification.frame button.flat:backdrop:insensitive,
-.app-notification.frame button.sidebar-button:backdrop:insensitive,
-.app-notification.frame headerbar button.titlebutton:backdrop:insensitive,
-headerbar .app-notification.frame button.titlebutton:backdrop:insensitive, calendar.button, calendar.button:hover, calendar.button:backdrop, calendar.button:insensitive, .scale-popup button:hover, .scale-popup button:backdrop, .scale-popup button:backdrop:hover, .scale-popup button:backdrop:insensitive {
+.titlebar notebook tab button.titlebutton, calendar.button, calendar.button:hover, calendar.button:backdrop, calendar.button:insensitive, .scale-popup button:hover, .scale-popup button:backdrop, .scale-popup button:backdrop:hover, .scale-popup button:backdrop:insensitive {
   border-color: transparent;
   background-color: transparent;
   background-image: none;
@@ -1517,12 +1503,20 @@ toolbar, .inline-toolbar, searchbar,
   padding: 4px;
   background-color: #393f3f; }
   .osd toolbar, .osd .inline-toolbar, .osd searchbar,
-  .osd .location-bar, toolbar.osd, .osd.inline-toolbar, searchbar.osd,
+  .osd .location-bar {
+    background-color: transparent; }
+  toolbar.osd, .osd.inline-toolbar, searchbar.osd,
   .osd.location-bar {
     padding: 13px;
     border: none;
     border-radius: 5px;
     background-color: rgba(32, 37, 38, 0.7); }
+  toolbar.osd.left, .osd.left.inline-toolbar, searchbar.osd.left,
+  .osd.left.location-bar, toolbar.osd.right, .osd.right.inline-toolbar, searchbar.osd.right,
+  .osd.right.location-bar, toolbar.osd.top, .osd.top.inline-toolbar, searchbar.osd.top,
+  .osd.top.location-bar, toolbar.osd.bottom, .osd.bottom.inline-toolbar, searchbar.osd.bottom,
+  .osd.bottom.location-bar {
+    border-radius: 0; }
 
 .inline-toolbar {
   border-width: 0 1px 1px;
@@ -2100,8 +2094,7 @@ popover {
   popover > toolbar,
   popover > .inline-toolbar,
   popover > searchbar,
-  popover > .location-bar, popover.osd > toolbar, popover.osd > .inline-toolbar, popover.osd > searchbar,
-  popover.osd > .location-bar {
+  popover > .location-bar {
     border-style: none;
     background-color: transparent; }
   popover button.flat, popover button.sidebar-button, popover headerbar button.titlebutton, headerbar popover button.titlebutton,
@@ -3695,78 +3688,13 @@ row {
 .app-notification.frame {
   padding: 10px;
   border: none;
-  border-radius: 0 0 6px 6px;
+  border-radius: 0 0 5px 5px;
   background-color: rgba(32, 37, 38, 0.7);
   background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.2), transparent 2px);
   background-clip: padding-box; }
   .app-notification:backdrop,
   .app-notification.frame:backdrop {
     background-image: none; }
-  .app-notification button, .app-notification headerbar button.titlebutton, headerbar .app-notification button.titlebutton,
-  .app-notification .titlebar button.titlebutton,
-  .titlebar .app-notification button.titlebutton,
-  .app-notification.frame button {
-    color: #eeeeec;
-    border-color: rgba(0, 0, 0, 0.7);
-    background-image: linear-gradient(to bottom, rgba(32, 37, 38, 0.7));
-    background-clip: padding-box;
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0.1);
-    text-shadow: 0 1px black;
-    -gtk-icon-shadow: 0 1px black;
-    outline-color: rgba(238, 238, 236, 0.3); }
-    .app-notification button.flat, .app-notification button.sidebar-button, .app-notification headerbar button.titlebutton, headerbar .app-notification button.titlebutton,
-    .app-notification .titlebar button.titlebutton,
-    .titlebar .app-notification button.titlebutton,
-    .app-notification.frame button.flat,
-    .app-notification.frame button.sidebar-button,
-    .app-notification.frame headerbar button.titlebutton,
-    headerbar .app-notification.frame button.titlebutton,
-    .app-notification.frame .titlebar button.titlebutton,
-    .titlebar .app-notification.frame button.titlebutton {
-      -gtk-icon-shadow: 0 1px black;
-      text-shadow: 0 1px black; }
-    .app-notification button:hover,
-    .app-notification.frame button:hover {
-      color: white;
-      border-color: rgba(0, 0, 0, 0.7);
-      background-image: linear-gradient(to bottom, rgba(60, 69, 71, 0.7));
-      background-clip: padding-box;
-      box-shadow: inset 0 1px rgba(255, 255, 255, 0.1);
-      text-shadow: 0 1px black;
-      -gtk-icon-shadow: 0 1px black;
-      outline-color: rgba(238, 238, 236, 0.3); }
-    .app-notification button:active, .app-notification button:checked, .app-notification button:backdrop:active, .app-notification button:backdrop:checked,
-    .app-notification.frame button:active,
-    .app-notification.frame button:checked,
-    .app-notification.frame button:backdrop:active,
-    .app-notification.frame button:backdrop:checked {
-      color: white;
-      border-color: rgba(0, 0, 0, 0.7);
-      background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7));
-      background-clip: padding-box;
-      box-shadow: none;
-      text-shadow: none;
-      -gtk-icon-shadow: none;
-      outline-color: rgba(238, 238, 236, 0.3); }
-    .app-notification button:insensitive, .app-notification button:backdrop:insensitive,
-    .app-notification.frame button:insensitive,
-    .app-notification.frame button:backdrop:insensitive {
-      color: #878a89;
-      border-color: rgba(0, 0, 0, 0.7);
-      background-image: linear-gradient(to bottom, rgba(53, 57, 58, 0.5));
-      background-clip: padding-box;
-      box-shadow: none;
-      text-shadow: none;
-      -gtk-icon-shadow: none; }
-    .app-notification button:backdrop,
-    .app-notification.frame button:backdrop {
-      color: #eeeeec;
-      border-color: rgba(0, 0, 0, 0.7);
-      background-image: linear-gradient(to bottom, rgba(32, 37, 38, 0.7));
-      background-clip: padding-box;
-      box-shadow: none;
-      text-shadow: none;
-      -gtk-icon-shadow: none; }
 
 /*************
  * Expanders *

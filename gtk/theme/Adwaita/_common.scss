@@ -199,7 +199,10 @@ popover.magnifier,
   box-shadow: none;
   text-shadow: 0 1px black;
   -gtk-icon-shadow: 0 1px black;
-  &:backdrop { text-shadow: none; }
+  &:backdrop {
+    text-shadow: none;
+    -gtk-icon-shadow: none;
+  }
 }
 
 /*********************
@@ -454,6 +457,7 @@ button {
     }
   }
   //overlay / OSD style
+  @at-root %osd_button,
   .osd & {
     @include button(osd);
     &:hover {
@@ -475,9 +479,6 @@ button {
       -gtk-icon-shadow: 0 1px black;
       &:hover {
         @include button(osd-hover);
-        background-clip: padding-box;
-        border-color: transparent;
-        box-shadow: none;
       }
       &:insensitive {
         @include button(osd-insensitive);
@@ -486,12 +487,7 @@ button {
         box-shadow: none;
       }
       &:backdrop { @include button(undecorated); }
-      &:active, &:checked {
-        @include button(osd-active);
-        background-clip: padding-box;
-        border-color: transparent;
-        box-shadow: none;
-      }
+      &:active, &:checked { @include button(osd-active); }
     }
   }
 
@@ -1029,12 +1025,21 @@ toolbar {
   -GtkWidget-window-dragging: true;
   padding: 4px;
   background-color: $bg_color;
-  .osd &, &.osd {
+  // on OSD
+  .osd & { background-color: transparent; }
+
+  // stand-alone OSD toolbars
+  &.osd {
     padding: 13px;
     border: none;
     border-radius: 5px;
     background-color: $osd_bg_color;
   }
+
+  &.osd.left,
+  &.osd.right,
+  &.osd.top,
+  &.osd.bottom { border-radius: 0; } // positional classes for `attached` osd toolbars
 }
 
 //searchbar, location-bar & inline-toolbar
@@ -1543,8 +1548,7 @@ popover {
 
   > list,
   > .view,
-  > toolbar,
-  &.osd > toolbar {
+  > toolbar {
     border-style: none;
     background-color: transparent;
   }
@@ -2632,35 +2636,14 @@ row {
   @extend %osd;
   padding: 10px;
   border: none;
-  border-radius: 0 0 6px 6px;
+  border-radius: 0 0 5px 5px;
   background-color: $osd_bg_color;
   background-image: linear-gradient(to bottom, transparentize(black, 0.8),
                                                transparent 2px);
   background-clip: padding-box;
   &:backdrop { background-image: none; }
-  button {
-    @include button(osd);
-    &.flat {
-      @extend %undecorated_button;
-      -gtk-icon-shadow: 0 1px black;
-      text-shadow: 0 1px black;
-      &:backdrop,
-      &:insensitive,
-      &:backdrop:insensitive { @extend %undecorated_button; }
-    }
-    &:hover { @include button(osd-hover); }
-    &:active,
-    &:checked,
-    &:backdrop:active,
-    &:backdrop:checked {
-      @include button(osd-active);
-    }
-    &:insensitive,
-    &:backdrop:insensitive {
-      @include button(osd-insensitive);
-    }
-    &:backdrop { @include button(osd-backdrop); }
-  }
+
+  button { @extend %osd_button; }
 }
 
 /*************
