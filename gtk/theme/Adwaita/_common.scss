@@ -2193,31 +2193,27 @@ checkbutton.text-button, radiobutton.text-button {
 scale {
   // FIXME: rationalize
   -GtkScale-slider-length: 20;
-  -GtkRange-slider-width: 24;
+  -GtkRange-slider-width: 26;
   -GtkRange-trough-border: 2;
 
-  outline-offset: -9px;
+  outline-offset: -10px;
   outline-radius: 6px;
 
   &.fine-tune {
-    outline-offset: -7px;
+    outline-offset: -8px;
     outline-radius: 8px;
 
-    trough,
-    fill,
-    highlight {
-      margin: 10px;
-      border-radius: 4px;
+    trough {
+      margin: 11px;
+      &, fill, highlight { border-radius: 4px; }
     }
   }
 
-  trough,
-  fill,
-  highlight { margin: 12px; }
+  trough { margin: 13px; }
 
-  &:not(.vertical) slider { margin: 2px 0; }
+  &:not(.vertical) slider { margin: 3px 0; }
 
-  &.vertical slider { margin: 0 2px; }
+  &.vertical slider { margin: 0 3px; }
 
   // the backing bit
   trough { @extend %scale_trough; }
@@ -2295,6 +2291,56 @@ scale {
   }
 
   marks { color: gtkalpha(currentColor, 0.4); }
+
+  // *WARNING* scale with marks madness following
+
+  // FIXME: OSD and selected list rows missing, I don't feel like adding the other 144 assets needed for those...
+
+  @each $dir_class, $dir_infix in ('', 'horz'),
+                                  ('.vertical', 'vert') {
+    @each $marks_infix, $nth_child in ('scale-has-marks-above', ':last-child:not(:only-child)'),
+                                      ('scale-has-marks-below', ':first-child:not(:only-child)') {
+
+      &#{$dir_class} {
+        @each $state, $suffix in ('', ''),
+                                 (':hover', '-hover'),
+                                 (':active', '-active'),
+                                 (':insensitive', '-insensitive'),
+                                 (':backdrop', '-backdrop'),
+                                 (':backdrop:insensitive', '-backdrop-insensitive') {
+
+          &.fine-tune trough#{$nth_child} {}
+
+          trough#{$nth_child} {
+            slider{
+              margin: 0;
+              &#{$state} {
+                $_scale_asset: 'assets/slider-#{$dir_infix}-#{$marks_infix}#{$suffix}';
+                // @warn $_file_name; // uncomment for debuggin purpose...
+                border-style: none;
+                border-radius: 0;
+
+                background-image: -gtk-scaled(url('#{$_scale_asset}.png'), url('#{$_scale_asset}@2.png'));
+
+                $_scale_slider_bg_pos: bottom;
+                @if $dir_infix == 'horz' {
+                  @if $marks_infix == 'scale-has-marks-above' { $_scale_slider_bg_pos: top; }
+                }
+                @else {
+                  @if $marks_infix == 'scale-has-marks-above' { $_scale_slider_bg_pos: left; }
+                  @else { $_scale_slider_bg_pos: right; }
+                }
+
+                background-position: $_scale_slider_bg_pos;
+                background-repeat: no-repeat;
+                box-shadow: none;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 
