@@ -21,8 +21,8 @@
 typedef struct {
   GType type;
   const gchar *name;
-  const gchar *class;
-  GtkStateFlags state;
+  const gchar *class1;
+  const gchar *class2;
 } PathElt;
 
 static GtkStyleContext *
@@ -39,9 +39,10 @@ get_style (PathElt pelt[], gint n_elts)
       gtk_widget_path_append_type (path, pelt[i].type);
       if (pelt[i].name)
         gtk_widget_path_iter_set_object_name (path, i, pelt[i].name);
-      if (pelt[i].class)
-        gtk_widget_path_iter_add_class (path, i, pelt[i].class);
-      gtk_widget_path_iter_set_state (path, i, pelt[i].state);
+      if (pelt[i].class1)
+        gtk_widget_path_iter_add_class (path, i, pelt[i].class1);
+      if (pelt[i].class2)
+        gtk_widget_path_iter_add_class (path, i, pelt[i].class2);
     }
 
   context = gtk_style_context_new ();
@@ -52,40 +53,51 @@ get_style (PathElt pelt[], gint n_elts)
 }
 
 static void
-draw_horizontal_scrollbar (GtkWidget    *widget,
-                           cairo_t      *cr,
-                           gint          x,
-                           gint          y,
-                           gint          width,
-                           gint          height,
-                           gint          position,
-                           GtkStateFlags state)
+draw_horizontal_scrollbar (GtkWidget     *widget,
+                           cairo_t       *cr,
+                           gint           x,
+                           gint           y,
+                           gint           width,
+                           gint           height,
+                           gint           position,
+                           GtkStateFlags  state)
 {
-  GtkStyleContext *context;
+  GtkStyleContext *scrollbar_context;
+  GtkStyleContext *trough_context;
+  GtkStyleContext *slider_context;
 
-  PathElt trough[2] = {
-    { GTK_TYPE_SCROLLBAR, "scrollbar", "horizontal", state },
-    { G_TYPE_NONE, "trough", NULL, state }
+  PathElt scrollbar_path[1] = {
+    { GTK_TYPE_SCROLLBAR, "scrollbar", "horizontal", NULL },
   };
 
-  PathElt slider[3] = {
-    { GTK_TYPE_SCROLLBAR, "scrollbar", "horizontal", state },
-    { G_TYPE_NONE, "trough", NULL, state },
-    { G_TYPE_NONE, "slider", NULL, state }
+  PathElt trough_path[2] = {
+    { GTK_TYPE_SCROLLBAR, "scrollbar", "horizontal", NULL },
+    { G_TYPE_NONE, "trough", NULL, NULL }
   };
 
-  context = get_style (trough, G_N_ELEMENTS (trough));
+  PathElt slider_path[3] = {
+    { GTK_TYPE_SCROLLBAR, "scrollbar", "horizontal", NULL },
+    { G_TYPE_NONE, "trough", NULL, NULL },
+    { G_TYPE_NONE, "slider", NULL, NULL }
+  };
 
-  gtk_render_background (context, cr, x, y, width, height);
-  gtk_render_frame (context, cr, x, y, width, height);
+  scrollbar_context = get_style (scrollbar_path, G_N_ELEMENTS (scrollbar_path));
+  trough_context = get_style (trough_path, G_N_ELEMENTS (trough_path));
+  slider_context = get_style (slider_path, G_N_ELEMENTS (slider_path));
+  gtk_style_context_set_parent (slider_context, trough_context);
+  gtk_style_context_set_parent (trough_context, scrollbar_context);
 
-  g_object_unref (context);
+  gtk_style_context_set_state (scrollbar_context, state);
+  gtk_style_context_set_state (trough_context, state);
+  gtk_style_context_set_state (slider_context, state);
 
-  context = get_style (slider, G_N_ELEMENTS (slider));
+  gtk_render_background (trough_context, cr, x, y, width, height);
+  gtk_render_frame (trough_context, cr, x, y, width, height);
+  gtk_render_slider (slider_context, cr, x + position, y + 1, 30, height - 2, GTK_ORIENTATION_HORIZONTAL);
 
-  gtk_render_slider (context, cr, x + position, y + 1, position + 30, height - 2, GTK_ORIENTATION_HORIZONTAL);
-
-  g_object_unref (context);
+  g_object_unref (slider_context);
+  g_object_unref (trough_context);
+  g_object_unref (scrollbar_context);
 }
 
 static gboolean
@@ -97,7 +109,8 @@ draw_cb (GtkWidget *widget,
   width = gtk_widget_get_allocated_width (widget);
 
   draw_horizontal_scrollbar (widget, cr, 10, 10, width - 20, 10, 30, GTK_STATE_FLAG_NORMAL);
-  draw_horizontal_scrollbar (widget, cr, 10, 30, width - 20, 10, 50, GTK_STATE_FLAG_PRELIGHT|GTK_STATE_FLAG_ACTIVE);
+  draw_horizontal_scrollbar (widget, cr, 10, 30, width - 20, 10, 40, GTK_STATE_FLAG_PRELIGHT);
+  draw_horizontal_scrollbar (widget, cr, 10, 50, width - 20, 10, 50, GTK_STATE_FLAG_ACTIVE|GTK_STATE_FLAG_PRELIGHT);
 
   return FALSE;
 }
@@ -106,16 +119,23 @@ int
 main (int argc, char *argv[])
 {
   GtkWidget *window;
+  GtkWidget *box;
+  GtkWidget *da;
 
   gtk_init (NULL, NULL);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_widget_set_size_request (window, 200, 200);
   gtk_widget_set_app_paintable (window, TRUE);
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+  gtk_container_add (GTK_CONTAINER (window), box);
+  da = gtk_drawing_area_new ();
+  gtk_widget_set_size_request (da, 200, 200);
+  gtk_widget_set_app_paintable (da, TRUE);
+  gtk_container_add (GTK_CONTAINER (box), da);
 
-  g_signal_connect (window, "draw", G_CALLBACK (draw_cb), NULL);
+  g_signal_connect (da, "draw", G_CALLBACK (draw_cb), NULL);
 
-  gtk_widget_show (window);
+  gtk_widget_show_all (window);
 
   gtk_main ();
 
