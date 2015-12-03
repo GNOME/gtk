@@ -3240,6 +3240,8 @@ scale {
         box-shadow: none;
         text-shadow: none;
         -gtk-icon-shadow: none; }
+  scale marks {
+    color: alpha(currentColor,0.4); }
 
 /*****************
  * Progress bars *
