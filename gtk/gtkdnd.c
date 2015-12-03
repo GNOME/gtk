@@ -983,48 +983,6 @@ gtk_drag_finish (GdkDragContext *context,
     gdk_drop_finish (context, success, time);
 }
 
-static gboolean
-gtk_drag_highlight_draw (GtkWidget *widget,
-                         cairo_t   *cr,
-                         gpointer   data)
-{
-  GtkAllocation alloc;
-  GtkStyleContext *context;
-
-  if (GTK_IS_WINDOW (widget))
-    {
-      /* We don't want to draw the drag highlight around the
-       * CSD window decorations
-       */
-      gtk_widget_get_allocation (gtk_bin_get_child (GTK_BIN (widget)), &alloc);
-    }
-  else
-    {
-      alloc.x = 0;
-      alloc.y = 0;
-      alloc.width = gtk_widget_get_allocated_width (widget);
-      alloc.height = gtk_widget_get_allocated_height (widget);
-    }
-
-  context = gtk_widget_get_style_context (widget);
-
-  gtk_style_context_save (context);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_DND);
-
-  gtk_render_frame (context, cr, alloc.x, alloc.y, alloc.width, alloc.height);
-
-  gtk_style_context_restore (context);
-
-  cairo_set_source_rgb (cr, 0.0, 0.0, 0.0); /* black */
-  cairo_set_line_width (cr, 1.0);
-  cairo_rectangle (cr,
-                   alloc.x + 0.5, alloc.y + 0.5,
-                   alloc.width - 1, alloc.height - 1);
-  cairo_stroke (cr);
-
-  return FALSE;
-}
-
 /**
  * gtk_drag_highlight: (method)
  * @widget: a widget to highlight
@@ -1034,16 +992,12 @@ gtk_drag_highlight_draw (GtkWidget *widget,
  * will continue to be displayed until gtk_drag_unhighlight()
  * is called.
  */
-void 
+void
 gtk_drag_highlight (GtkWidget  *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  g_signal_connect_after (widget, "draw",
-                          G_CALLBACK (gtk_drag_highlight_draw),
-                          NULL);
-
-  gtk_widget_queue_draw (widget);
+  gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_DND, FALSE);
 }
 
 /**
@@ -1053,16 +1007,12 @@ gtk_drag_highlight (GtkWidget  *widget)
  * Removes a highlight set by gtk_drag_highlight() from
  * a widget.
  */
-void 
+void
 gtk_drag_unhighlight (GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  g_signal_handlers_disconnect_by_func (widget,
-                                        gtk_drag_highlight_draw,
-                                        NULL);
-  
-  gtk_widget_queue_draw (widget);
+  gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_DND);
 }
 
 static void

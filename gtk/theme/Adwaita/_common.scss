@@ -3438,3 +3438,7 @@ frame.keycap {
   padding: 3px 8px 3px 8px;
 }
 
+*:dnd:focus,
+*:dnd {
+  border: 1px solid black;
+}

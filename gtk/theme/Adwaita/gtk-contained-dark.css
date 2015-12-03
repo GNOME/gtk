@@ -4665,6 +4665,10 @@ frame.keycap {
   color: #555753;
   padding: 3px 8px 3px 8px; }
 
+*:dnd:focus,
+*:dnd {
+  border: 1px solid black; }
+
 /* GTK NAMED COLORS
    ----------------
    use responsibly! */
