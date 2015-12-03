@@ -26,27 +26,27 @@ typedef struct {
 } PathElt;
 
 static GtkStyleContext *
-get_style (PathElt pelt[], gint n_elts)
+get_style (PathElt *pelt, GtkStyleContext *parent)
 {
   GtkWidgetPath *path;
-  gint i;
   GtkStyleContext *context;
 
-  path = gtk_widget_path_new ();
+  if (parent)
+    path = gtk_widget_path_copy (gtk_style_context_get_path (parent));
+  else
+    path = gtk_widget_path_new ();
 
-  for (i = 0; i < n_elts; i++)
-    {
-      gtk_widget_path_append_type (path, pelt[i].type);
-      if (pelt[i].name)
-        gtk_widget_path_iter_set_object_name (path, i, pelt[i].name);
-      if (pelt[i].class1)
-        gtk_widget_path_iter_add_class (path, i, pelt[i].class1);
-      if (pelt[i].class2)
-        gtk_widget_path_iter_add_class (path, i, pelt[i].class2);
-    }
+  gtk_widget_path_append_type (path, pelt->type);
+  if (pelt->name)
+    gtk_widget_path_iter_set_object_name (path, -1, pelt->name);
+  if (pelt->class1)
+    gtk_widget_path_iter_add_class (path, -1, pelt->class1);
+  if (pelt->class2)
+    gtk_widget_path_iter_add_class (path, -1, pelt->class2);
 
   context = gtk_style_context_new ();
   gtk_style_context_set_path (context, path);
+  gtk_style_context_set_parent (context, parent);
   gtk_widget_path_unref (path);
 
   return context;
@@ -73,11 +73,9 @@ draw_horizontal_scrollbar (GtkWidget     *widget,
     { G_TYPE_NONE, "slider", NULL, NULL }
   };
 
-  scrollbar_context = get_style (path, 1);
-  trough_context = get_style (path, 2);
-  slider_context = get_style (path, 3);
-  gtk_style_context_set_parent (slider_context, trough_context);
-  gtk_style_context_set_parent (trough_context, scrollbar_context);
+  scrollbar_context = get_style (&path[0], NULL);
+  trough_context = get_style (&path[1], scrollbar_context);
+  slider_context = get_style (&path[2], trough_context);
 
   gtk_style_context_set_state (scrollbar_context, state);
   gtk_style_context_set_state (trough_context, state);
@@ -113,9 +111,8 @@ draw_text (GtkWidget     *widget,
     { G_TYPE_NONE, "selection", NULL, NULL }
   };
 
-  label_context = get_style (path, 1);
-  selection_context = get_style (path, 2);
-  gtk_style_context_set_parent (selection_context, label_context);
+  label_context = get_style (&path[0], NULL);
+  selection_context = get_style (&path[1], label_context);
 
   gtk_style_context_set_state (label_context, state);
 
