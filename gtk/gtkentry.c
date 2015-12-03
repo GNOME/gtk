@@ -2697,9 +2697,7 @@ gtk_entry_init (GtkEntry *entry)
   priv->progress_fraction = 0.0;
   priv->progress_pulse_fraction = 0.1;
 
-  gtk_drag_dest_set (GTK_WIDGET (entry),
-                     GTK_DEST_DEFAULT_HIGHLIGHT,
-                     NULL, 0,
+  gtk_drag_dest_set (GTK_WIDGET (entry), 0, NULL, 0,
                      GDK_ACTION_COPY | GDK_ACTION_MOVE);
   gtk_drag_dest_add_text_targets (GTK_WIDGET (entry));
 
@@ -10109,6 +10107,7 @@ gtk_entry_drag_leave (GtkWidget        *widget,
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = entry->priv;
 
+  gtk_drag_unhighlight (widget);
   priv->dnd_position = -1;
   gtk_widget_queue_draw (widget);
 }
@@ -10202,8 +10201,12 @@ gtk_entry_drag_motion (GtkWidget        *widget,
       suggested_action = 0;
       priv->dnd_position = -1;
     }
-  
+
   gdk_drag_status (context, suggested_action, time);
+  if (priv->dnd_position == -1)
+    gtk_drag_unhighlight (widget);
+  else
+    gtk_drag_highlight (widget);
 
   if (priv->dnd_position != old_position)
     gtk_widget_queue_draw (widget);
