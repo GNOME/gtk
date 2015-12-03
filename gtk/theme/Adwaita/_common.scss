@@ -2124,81 +2124,6 @@ checkbutton.text-button, radiobutton.text-button {
  * GtkScale *
  ************/
 
-scale {
-  // FIXME: rationalize
-  -GtkScale-slider-length: 20;
-  -GtkRange-slider-width: 24;
-  -GtkRange-trough-border: 2;
-
-  outline-offset: -9px;
-  outline-radius: 6px;
-
-  &.fine-tune {
-    outline-offset: -7px;
-    outline-radius: 8px;
-
-    trough,
-    fill,
-    highlight {
-      margin: 10px;
-      border-radius: 4px;
-    }
-  }
-
-  trough,
-  fill,
-  highlight { margin: 12px; }
-
-  &:not(.vertical) slider { margin: 2px 0; }
-
-  &.vertical slider { margin: 0 2px; }
-
-  trough { @extend %scale_trough; }
-
-  highlight { @extend %scale_highlight; }
-
-  slider {
-    // FIXME: scale-has-marks-* missing
-    $_slider_edge_color: transparentize(black, 0.9);
-    @include button(normal, $edge: $_slider_edge_color);
-    border: 1px solid darken($borders_color, 3%);
-    border-radius: 100%;
-
-    &:hover { @include button(hover, $edge: $_slider_edge_color); }
-
-    &:active { border-color: $selected_borders_color; }
-
-    &:insensitive { @include button (insensitive); }
-
-    &:backdrop {
-      @include button(backdrop);
-      &:insensitive { @include button(backdrop-insensitive); }
-    }
-
-    // ...on selected list rows
-    row:selected & { &, &:insensitive { border-color: $selected_borders_color; } }
-
-    // OSD
-    .osd & {
-      @include button(osd);
-      border-color: darken($osd_borders_color, 3%);
-      background-color: opacify($osd_bg_color, 1); // solid background needed here
-
-      &:hover { @include button(osd-hover); }
-
-      &:active { @include button(osd-active); }
-
-      &:insensitive { @include button(osd-insensitive); }
-
-      &:backdrop {
-        @include button(osd-backdrop);
-
-        &:insensitive { @include button(osd-backdrop-insensitive); }
-      }
-    }
-  }
-}
-
 %scale_trough {
   border: 1px solid $borders_color;
   border-radius: 3px;
@@ -2264,6 +2189,112 @@ scale {
     &:insensitive { border-color: transparent; }
   }
 }
+
+scale {
+  // FIXME: rationalize
+  -GtkScale-slider-length: 20;
+  -GtkRange-slider-width: 24;
+  -GtkRange-trough-border: 2;
+
+  outline-offset: -9px;
+  outline-radius: 6px;
+
+  &.fine-tune {
+    outline-offset: -7px;
+    outline-radius: 8px;
+
+    trough,
+    fill,
+    highlight {
+      margin: 10px;
+      border-radius: 4px;
+    }
+  }
+
+  trough,
+  fill,
+  highlight { margin: 12px; }
+
+  &:not(.vertical) slider { margin: 2px 0; }
+
+  &.vertical slider { margin: 0 2px; }
+
+  // the backing bit
+  trough { @extend %scale_trough; }
+
+  // the colored part of the backing bit
+  highlight { @extend %scale_highlight; }
+
+  // this is another differently styled part of the backing bit, the most relevant use case is for example
+  // in media player to indicate how much video stream as been cached
+  fill {
+    @extend %scale_trough;
+    &, &:backdrop {
+      background-color: $borders_color;
+      box-shadow: none;
+    }
+
+    &:insensitive {
+      &, &:backdrop {
+        border-color: transparent;
+        background-color: transparent;
+      }
+    }
+
+    // OSD
+    .osd & {
+      background-color: mix($osd_fg_color, $osd_borders_color, 25%);
+      &:insensitive {
+        &, &:backdrop {
+          border-color: transparent;
+          background-color: transparent;
+        }
+      }
+    }
+  }
+
+  slider {
+    // FIXME: scale-has-marks-* missing
+    $_slider_edge_color: transparentize(black, 0.9);
+    @include button(normal, $edge: $_slider_edge_color);
+    border: 1px solid darken($borders_color, 3%);
+    border-radius: 100%;
+
+    &:hover { @include button(hover, $edge: $_slider_edge_color); }
+
+    &:active { border-color: $selected_borders_color; }
+
+    &:insensitive { @include button (insensitive); }
+
+    &:backdrop {
+      @include button(backdrop);
+      &:insensitive { @include button(backdrop-insensitive); }
+    }
+
+    // ...on selected list rows
+    row:selected & { &, &:insensitive { border-color: $selected_borders_color; } }
+
+    // OSD
+    .osd & {
+      @include button(osd);
+      border-color: darken($osd_borders_color, 3%);
+      background-color: opacify($osd_bg_color, 1); // solid background needed here
+
+      &:hover { @include button(osd-hover); }
+
+      &:active { @include button(osd-active); }
+
+      &:insensitive { @include button(osd-insensitive); }
+
+      &:backdrop {
+        @include button(osd-backdrop);
+
+        &:insensitive { @include button(osd-backdrop-insensitive); }
+      }
+    }
+  }
+}
+
 
 /*****************
  * Progress bars *

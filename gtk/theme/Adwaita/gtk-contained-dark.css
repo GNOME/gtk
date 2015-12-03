@@ -2908,6 +2908,51 @@ checkbutton.text-button, radiobutton.text-button {
 /************
  * GtkScale *
  ************/
+scale trough, scale fill, progressbar trough {
+  border: 1px solid #1c1f1f;
+  border-radius: 3px;
+  background-color: #2f3434;
+  box-shadow: inset 1px 1px rgba(0, 0, 0, 0.1), 0 1px rgba(238, 238, 236, 0.1); }
+  scale trough:insensitive, scale fill:insensitive, progressbar trough:insensitive {
+    background-color: #333636;
+    box-shadow: 0 1px rgba(238, 238, 236, 0.1); }
+  scale trough:backdrop, scale fill:backdrop, progressbar trough:backdrop, progressbar:backdrop trough {
+    background-color: #303535;
+    border-color: #1f2222;
+    box-shadow: none; }
+    scale trough:backdrop:insensitive, scale fill:backdrop:insensitive, progressbar trough:backdrop:insensitive, progressbar:backdrop trough:insensitive {
+      background-color: #333636; }
+  row:selected scale trough, scale row:selected trough, row:selected scale fill, scale row:selected fill, row:selected progressbar trough, progressbar row:selected trough {
+    box-shadow: none; }
+    row:selected scale trough, scale row:selected trough, row:selected scale fill, scale row:selected fill, row:selected progressbar trough, progressbar row:selected trough, row:selected scale trough:insensitive, scale row:selected trough:insensitive, row:selected scale fill:insensitive, scale row:selected fill:insensitive, row:selected progressbar trough:insensitive, progressbar row:selected trough:insensitive {
+      border-color: #0f2b48; }
+  .osd scale trough, scale .osd trough, .osd scale fill, scale .osd fill, .osd progressbar trough, progressbar .osd trough {
+    border-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(0, 0, 0, 0.5);
+    box-shadow: none;
+    outline-color: rgba(238, 238, 236, 0.2); }
+    .osd scale trough:insensitive, scale .osd trough:insensitive, .osd scale fill:insensitive, scale .osd fill:insensitive, .osd progressbar trough:insensitive, progressbar .osd trough:insensitive {
+      background-color: rgba(53, 57, 58, 0.5); }
+
+scale highlight, progressbar progress {
+  border: 1px solid #0f2b48;
+  border-radius: 3px;
+  background-color: #215d9c; }
+  scale highlight:insensitive, progressbar progress:insensitive {
+    background-color: transparent;
+    border-color: transparent; }
+  scale highlight:backdrop, progressbar progress:backdrop, progressbar:backdrop progress {
+    border-color: #0f2b48; }
+    scale highlight:backdrop:insensitive, progressbar progress:backdrop:insensitive, progressbar:backdrop progress:insensitive {
+      background-color: transparent;
+      border-color: transparent; }
+  row:selected scale highlight, scale row:selected highlight, row:selected progressbar progress, progressbar row:selected progress, row:selected scale highlight:insensitive, scale row:selected highlight:insensitive, row:selected progressbar progress:insensitive, progressbar row:selected progress:insensitive {
+    border-color: #0f2b48; }
+  .osd scale highlight, scale .osd highlight, .osd progressbar progress, progressbar .osd progress {
+    border-color: rgba(0, 0, 0, 0.7); }
+    .osd scale highlight:insensitive, scale .osd highlight:insensitive, .osd progressbar progress:insensitive, progressbar .osd progress:insensitive {
+      border-color: transparent; }
+
 scale {
   -GtkScale-slider-length: 20;
   -GtkRange-slider-width: 24;
@@ -2930,6 +2975,17 @@ scale {
     margin: 2px 0; }
   scale.vertical slider {
     margin: 0 2px; }
+  scale fill, scale fill:backdrop {
+    background-color: #1c1f1f;
+    box-shadow: none; }
+  scale fill:insensitive, scale fill:insensitive:backdrop {
+    border-color: transparent;
+    background-color: transparent; }
+  .osd scale fill {
+    background-color: rgba(91, 91, 90, 0.775); }
+    .osd scale fill:insensitive, .osd scale fill:insensitive:backdrop {
+      border-color: transparent;
+      background-color: transparent; }
   scale slider {
     color: #eeeeec;
     outline-color: rgba(238, 238, 236, 0.3);
@@ -3022,51 +3078,6 @@ scale {
         box-shadow: none;
         text-shadow: none;
         -gtk-icon-shadow: none; }
-
-scale trough, progressbar trough {
-  border: 1px solid #1c1f1f;
-  border-radius: 3px;
-  background-color: #2f3434;
-  box-shadow: inset 1px 1px rgba(0, 0, 0, 0.1), 0 1px rgba(238, 238, 236, 0.1); }
-  scale trough:insensitive, progressbar trough:insensitive {
-    background-color: #333636;
-    box-shadow: 0 1px rgba(238, 238, 236, 0.1); }
-  scale trough:backdrop, progressbar trough:backdrop, progressbar:backdrop trough {
-    background-color: #303535;
-    border-color: #1f2222;
-    box-shadow: none; }
-    scale trough:backdrop:insensitive, progressbar trough:backdrop:insensitive, progressbar:backdrop trough:insensitive {
-      background-color: #333636; }
-  row:selected scale trough, scale row:selected trough, row:selected progressbar trough, progressbar row:selected trough {
-    box-shadow: none; }
-    row:selected scale trough, scale row:selected trough, row:selected progressbar trough, progressbar row:selected trough, row:selected scale trough:insensitive, scale row:selected trough:insensitive, row:selected progressbar trough:insensitive, progressbar row:selected trough:insensitive {
-      border-color: #0f2b48; }
-  .osd scale trough, scale .osd trough, .osd progressbar trough, progressbar .osd trough {
-    border-color: rgba(0, 0, 0, 0.7);
-    background-color: rgba(0, 0, 0, 0.5);
-    box-shadow: none;
-    outline-color: rgba(238, 238, 236, 0.2); }
-    .osd scale trough:insensitive, scale .osd trough:insensitive, .osd progressbar trough:insensitive, progressbar .osd trough:insensitive {
-      background-color: rgba(53, 57, 58, 0.5); }
-
-scale highlight, progressbar progress {
-  border: 1px solid #0f2b48;
-  border-radius: 3px;
-  background-color: #215d9c; }
-  scale highlight:insensitive, progressbar progress:insensitive {
-    background-color: transparent;
-    border-color: transparent; }
-  scale highlight:backdrop, progressbar progress:backdrop, progressbar:backdrop progress {
-    border-color: #0f2b48; }
-    scale highlight:backdrop:insensitive, progressbar progress:backdrop:insensitive, progressbar:backdrop progress:insensitive {
-      background-color: transparent;
-      border-color: transparent; }
-  row:selected scale highlight, scale row:selected highlight, row:selected progressbar progress, progressbar row:selected progress, row:selected scale highlight:insensitive, scale row:selected highlight:insensitive, row:selected progressbar progress:insensitive, progressbar row:selected progress:insensitive {
-    border-color: #0f2b48; }
-  .osd scale highlight, scale .osd highlight, .osd progressbar progress, progressbar .osd progress {
-    border-color: rgba(0, 0, 0, 0.7); }
-    .osd scale highlight:insensitive, scale .osd highlight:insensitive, .osd progressbar progress:insensitive, progressbar .osd progress:insensitive {
-      border-color: transparent; }
 
 /*****************
  * Progress bars *
