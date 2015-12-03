@@ -8810,7 +8810,7 @@ gtk_entry_get_icon_activatable (GtkEntry             *entry,
  * method will work regardless of whether the icon was set using a
  * #GdkPixbuf, a #GIcon, a stock item, or an icon name.
  *
- * Returns: (transfer none): A #GdkPixbuf, or %NULL if no icon is
+ * Returns: (transfer none) (nullable): A #GdkPixbuf, or %NULL if no icon is
  *     set for this position.
  *
  * Since: 2.16
@@ -8852,7 +8852,7 @@ gtk_entry_get_icon_pixbuf (GtkEntry             *entry,
  * no icon or if the icon was set by some other method (e.g., by
  * stock, pixbuf, or icon name).
  *
- * Returns: (transfer none): A #GIcon, or %NULL if no icon is set
+ * Returns: (transfer none) (nullable): A #GIcon, or %NULL if no icon is set
  *     or if the icon is not a #GIcon
  *
  * Since: 2.16
@@ -8920,7 +8920,7 @@ gtk_entry_get_icon_stock (GtkEntry             *entry,
  * no icon or if the icon was set by some other method (e.g., by
  * pixbuf, stock or gicon).
  *
- * Returns: An icon name, or %NULL if no icon is set or if the icon
+ * Returns: (nullable): An icon name, or %NULL if no icon is set or if the icon
  *          wasn’t set from an icon name
  *
  * Since: 2.16
@@ -10531,7 +10531,7 @@ gtk_entry_get_completion (GtkEntry *entry)
 /**
  * gtk_entry_set_cursor_hadjustment:
  * @entry: a #GtkEntry
- * @adjustment: an adjustment which should be adjusted when the cursor 
+ * @adjustment: (nullable): an adjustment which should be adjusted when the cursor
  *              is moved, or %NULL
  *
  * Hooks up an adjustment to the cursor position in an entry, so that when 
@@ -10568,7 +10568,7 @@ gtk_entry_set_cursor_hadjustment (GtkEntry      *entry,
  * Retrieves the horizontal cursor adjustment for the entry. 
  * See gtk_entry_set_cursor_hadjustment().
  *
- * Returns: (transfer none): the horizontal cursor adjustment, or %NULL
+ * Returns: (transfer none) (nullable): the horizontal cursor adjustment, or %NULL
  *   if none has been set.
  *
  * Since: 2.12
@@ -10830,7 +10830,7 @@ gtk_entry_progress_pulse (GtkEntry *entry)
 /**
  * gtk_entry_set_placeholder_text:
  * @entry: a #GtkEntry
- * @text: a string to be displayed when @entry is empty an unfocused, or %NULL
+ * @text: (nullable): a string to be displayed when @entry is empty an unfocused, or %NULL
  *
  * Sets text to be displayed in @entry when it is empty and unfocused.
  * This can be used to give a visual hint of the expected contents of
@@ -11094,7 +11094,7 @@ gtk_entry_set_attributes (GtkEntry      *entry,
  * Gets the attribute list that was set on the entry using
  * gtk_entry_set_attributes(), if any.
  *
- * Returns: (transfer none): the attribute list, or %NULL
+ * Returns: (transfer none) (nullable): the attribute list, or %NULL
  *     if none was set.
  *
  * Since: 3.6
