@@ -3137,6 +3137,8 @@ scale {
         box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
         scale slider:backdrop:insensitive > .label {
           color: inherit; }
+    row:selected scale slider, row:selected scale slider:insensitive {
+      border-color: #184472; }
     .osd scale slider {
       color: #eeeeec;
       border-color: rgba(0, 0, 0, 0.7);
@@ -3197,6 +3199,10 @@ scale trough, progressbar trough {
     box-shadow: none; }
     scale trough:backdrop:insensitive, progressbar trough:backdrop:insensitive, progressbar:backdrop trough:insensitive {
       background-color: #f4f4f4; }
+  row:selected scale trough, scale row:selected trough, row:selected progressbar trough, progressbar row:selected trough {
+    box-shadow: none; }
+    row:selected scale trough, scale row:selected trough, row:selected progressbar trough, progressbar row:selected trough, row:selected scale trough:insensitive, scale row:selected trough:insensitive, row:selected progressbar trough:insensitive, progressbar row:selected trough:insensitive {
+      border-color: #184472; }
   .osd scale trough, scale .osd trough, .osd progressbar trough, progressbar .osd trough {
     border-color: rgba(0, 0, 0, 0.7);
     background-color: rgba(0, 0, 0, 0.5);
@@ -3217,6 +3223,8 @@ scale highlight, progressbar progress {
     scale highlight:backdrop:insensitive, progressbar progress:backdrop:insensitive, progressbar:backdrop progress:insensitive {
       background-color: transparent;
       border-color: transparent; }
+  row:selected scale highlight, scale row:selected highlight, row:selected progressbar progress, progressbar row:selected progress, row:selected scale highlight:insensitive, scale row:selected highlight:insensitive, row:selected progressbar progress:insensitive, progressbar row:selected progress:insensitive {
+    border-color: #184472; }
   .osd scale highlight, scale .osd highlight, .osd progressbar progress, progressbar .osd progress {
     border-color: rgba(0, 0, 0, 0.7); }
     .osd scale highlight:insensitive, scale .osd highlight:insensitive, .osd progressbar progress:insensitive, progressbar .osd progress:insensitive {

@@ -2175,6 +2175,9 @@ scale {
       &:insensitive { @include button(backdrop-insensitive); }
     }
 
+    // ...on selected list rows
+    row:selected & { &, &:insensitive { border-color: $selected_borders_color; } }
+
     // OSD
     .osd & {
       @include button(osd);
@@ -2215,6 +2218,13 @@ scale {
     &:insensitive { background-color: $insensitive_bg_color; }
   }
 
+  // ...on selected list rows
+  row:selected & {
+    box-shadow: none;
+
+    &, &:insensitive { border-color: $selected_borders_color; }
+  }
+
   // OSD
   .osd & {
     border-color: $osd_borders_color;
@@ -2245,6 +2255,9 @@ scale {
     }
   }
 
+  // ...on selected list rows
+  row:selected & { &, &:insensitive { border-color: $selected_borders_color; } }
+
   // OSD
   .osd & {
     border-color: $osd_borders_color;
@@ -2257,7 +2270,7 @@ scale {
  *****************/
 
 progressbar {
-  // FIXME: insensitive state missing
+  // FIXME: insensitive state missing and some other state should be set probably
   padding: 0;
   font-size: smaller;
   color: transparentize($fg_color, 0.6);
