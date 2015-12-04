@@ -3315,7 +3315,7 @@ progressbar {
     -GtkProgressBar-min-horizontal-bar-height: 3; }
     progressbar.osd trough {
       border-style: none;
-      border-raduys: 0;
+      border-radius: 0;
       background-color: transparent;
       box-shadow: none; }
     progressbar.osd progress {
