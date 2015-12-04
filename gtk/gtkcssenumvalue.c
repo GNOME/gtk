@@ -923,6 +923,39 @@ _gtk_css_icon_effect_value_get (const GtkCssValue *value)
   return value->value;
 }
 
+void
+gtk_css_icon_effect_apply (GtkCssIconEffect  icon_effect,
+                           cairo_surface_t  *surface)
+{
+  cairo_t *cr;
+
+  switch (icon_effect)
+    {
+    case GTK_CSS_ICON_EFFECT_DIM:
+      cr = cairo_create (surface);
+      cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+      cairo_set_source_rgba (cr, 0, 0, 0, 0); /* transparent */
+      cairo_paint_with_alpha (cr, 0.5);
+      cairo_destroy (cr);
+      break;
+
+    case GTK_CSS_ICON_EFFECT_HIGHLIGHT:
+      cr = cairo_create (surface);
+      cairo_set_source_rgb (cr, 0.1, 0.1, 0.1);
+      cairo_set_operator (cr, CAIRO_OPERATOR_COLOR_DODGE);
+      /* DANGER: We mask with ourself - that works for images, but... */
+      cairo_mask_surface (cr, surface, 0, 0);
+      cairo_destroy (cr);
+      break;
+
+    default:
+      g_warn_if_reached ();
+      /* fall through */
+    case GTK_CSS_ICON_EFFECT_NONE:
+      break;
+    }
+}
+
 /* GtkCssIconStyle */
 
 static const GtkCssValueClass GTK_CSS_VALUE_ICON_STYLE = {

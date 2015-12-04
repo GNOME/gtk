@@ -22,11 +22,11 @@
 #include <pango/pango.h>
 #include <gdk/gdk.h>
 
-void        gtk_render_content_path  (GtkStyleContext   *context,
-                                      cairo_t           *cr,
-                                      double             x,
-                                      double             y,
-                                      double             width,
-                                      double             height);
+void        gtk_render_content_path             (GtkStyleContext        *context,
+                                                 cairo_t                *cr,
+                                                 double                  x,
+                                                 double                  y,
+                                                 double                  width,
+                                                 double                  height);
 
 #endif /* __GTK_RENDER_PRIVATE_H__ */
