@@ -464,15 +464,19 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
    * gtk_accelerator_parse(). Multiple accelerators can be specified by separating
    * them with a space, but keep in mind that the available width is limited.
    * It is also possible to specify ranges of shortcuts, using ... between the keys.
-   * Sequences of keys can be specified using a + between the keys.
+   * Sequences of keys can be specified using a + or & between the keys.
    *
    * Examples:
    * - A single shortcut: <ctl><alt>delete
    * - Two alternative shortcuts: <shift>a Home
    * - A range of shortcuts: <alt>1...<alt>9
-   * - A sequence of key combinations: <ctl>c+<ctl>x
+   * - Several keys pressed together: Control_L&Control_R
+   * - A sequence of shortcuts or keys: <ctl>c+<ctl>x
    *
-   * Note that < and > need to be escaped as &lt; and &gt; when used
+   * Use + instead of & when the keys may (or have to be) pressed sequentially (e.g
+   * use t+t for 'press the t key twice').
+   *
+   * Note that <, > and & need to be escaped as &lt;, &gt; and &amp; when used
    * in .ui files.
    */
   properties[PROP_ACCELERATOR] =

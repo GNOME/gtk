@@ -46,14 +46,71 @@ enum {
 
 static GParamSpec *properties[LAST_PROP];
 
+static gchar *
+get_modifier_label (guint key)
+{
+  const gchar *subscript;
+  const gchar *label;
+
+  switch (key)
+    {
+    case GDK_KEY_Shift_L:
+    case GDK_KEY_Control_L:
+    case GDK_KEY_Alt_L:
+    case GDK_KEY_Meta_L:
+    case GDK_KEY_Super_L:
+    case GDK_KEY_Hyper_L:
+      subscript = "L";
+      break;
+    case GDK_KEY_Shift_R:
+    case GDK_KEY_Control_R:
+    case GDK_KEY_Alt_R:
+    case GDK_KEY_Meta_R:
+    case GDK_KEY_Super_R:
+    case GDK_KEY_Hyper_R:
+      subscript = "R";
+      break;
+    default:
+      g_assert_not_reached ();
+   }
+
+ switch (key)
+   {
+   case GDK_KEY_Shift_L:   case GDK_KEY_Shift_R:
+     label = C_("keyboard label", "Shift");
+     break;
+   case GDK_KEY_Control_L: case GDK_KEY_Control_R:
+     label = C_("keyboard label", "Ctrl");
+     break;
+   case GDK_KEY_Alt_L:     case GDK_KEY_Alt_R:
+     label = C_("keyboard label", "Alt");
+     break;
+   case GDK_KEY_Meta_L:    case GDK_KEY_Meta_R:
+     label = C_("keyboard label", "Meta");
+     break;
+   case GDK_KEY_Super_L:   case GDK_KEY_Super_R:
+     label = C_("keyboard label", "Super");
+     break;
+   case GDK_KEY_Hyper_L:   case GDK_KEY_Hyper_R:
+     label = C_("keyboard label", "Hyper");
+     break;
+    default:
+      g_assert_not_reached ();
+   }
+
+  return g_strdup_printf ("%s<sub>%s</sub>", label, subscript);
+}
+
 static gchar **
 get_labels (guint key, GdkModifierType modifier, guint *n_mods)
 {
   const gchar *labels[16];
+  GList *freeme = NULL;
   gchar key_label[6];
   gchar *tmp;
   gunichar ch;
   gint i = 0;
+  gchar **retval;
 
   if (modifier & GDK_SHIFT_MASK)
     labels[i++] = C_("keyboard label", "Shift");
@@ -97,6 +154,15 @@ get_labels (guint key, GdkModifierType modifier, guint *n_mods)
     {
       switch (key)
         {
+        case GDK_KEY_Shift_L:   case GDK_KEY_Shift_R:
+        case GDK_KEY_Control_L: case GDK_KEY_Control_R:
+        case GDK_KEY_Alt_L:     case GDK_KEY_Alt_R:
+        case GDK_KEY_Meta_L:    case GDK_KEY_Meta_R:
+        case GDK_KEY_Super_L:   case GDK_KEY_Super_R:
+        case GDK_KEY_Hyper_L:   case GDK_KEY_Hyper_R:
+          freeme = g_list_prepend (freeme, get_modifier_label (key));
+          labels[i++] = (const gchar*)freeme->data;
+           break;
         case GDK_KEY_Left:
           labels[i++] = "\xe2\x86\x90";
           break;
@@ -141,7 +207,11 @@ get_labels (guint key, GdkModifierType modifier, guint *n_mods)
 
   labels[i] = NULL;
 
-  return g_strdupv ((gchar **)labels);
+  retval = g_strdupv ((gchar **)labels);
+
+  g_list_free_full (freeme, g_free);
+
+  return retval;
 }
 
 static GtkWidget *
@@ -184,6 +254,8 @@ display_shortcut (GtkContainer    *self,
         gtk_widget_set_size_request (frame, 50, -1);
 
       disp = gtk_label_new (keys[i]);
+      gtk_label_set_use_markup (GTK_LABEL (disp), TRUE);
+
       gtk_widget_show (disp);
       gtk_container_add (GTK_CONTAINER (frame), disp);
     }
@@ -191,8 +263,8 @@ display_shortcut (GtkContainer    *self,
 }
 
 static gboolean
-parse_sequence (GtkShortcutLabel *self,
-                const gchar      *str)
+parse_combination (GtkShortcutLabel *self,
+                   const gchar      *str)
 {
   gchar **accels;
   gint k;
@@ -200,7 +272,7 @@ parse_sequence (GtkShortcutLabel *self,
   guint key = 0;
   gboolean retval = TRUE;
 
-  accels = g_strsplit (str, "+", 0);
+  accels = g_strsplit (str, "&", 0);
   for (k = 0; accels[k]; k++)
     {
       gtk_accelerator_parse (accels[k], &key, &modifier);
@@ -209,8 +281,34 @@ parse_sequence (GtkShortcutLabel *self,
           retval = FALSE;
           break;
         }
+      if (k > 0)
+        gtk_container_add (GTK_CONTAINER (self), dim_label ("+"));
+
       display_shortcut (GTK_CONTAINER (self), key, modifier);
     }
+  g_strfreev (accels);
+
+  return retval;
+}
+
+static gboolean
+parse_sequence (GtkShortcutLabel *self,
+                const gchar      *str)
+{
+  gchar **accels;
+  gint k;
+  gboolean retval = TRUE;
+
+  accels = g_strsplit (str, "+", 0);
+  for (k = 0; accels[k]; k++)
+    {
+      if (!parse_combination (self, accels[k]))
+        {
+          retval = FALSE;
+          break;
+        }
+    }
+
   g_strfreev (accels);
 
   return retval;
@@ -231,6 +329,7 @@ parse_range (GtkShortcutLabel *self,
     return FALSE;
 
   gtk_container_add (GTK_CONTAINER (self), dim_label ("⋯"));
+
   if (!parse_sequence (self, dots + 3))
     return FALSE;
 
