@@ -573,6 +573,7 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   g_type_ensure (GTK_TYPE_DELAYED_FONT_DESCRIPTION);
+  g_type_ensure (G_TYPE_THEMED_ICON);
 
   widget_class->screen_changed = gtk_font_chooser_widget_screen_changed;
   widget_class->style_updated = gtk_font_chooser_widget_style_updated;
