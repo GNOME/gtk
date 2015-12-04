@@ -1,0 +1,11 @@
+* {
+  -gtk-icon-effect: none;
+}
+
+:nth-child(2) {
+  -gtk-icon-effect: dim;
+}
+
+:nth-child(3) {
+  -gtk-icon-effect: highlight;
+}

@@ -259,6 +259,9 @@ testdata = \
 	gtk-icontheme-sizing.css \
 	gtk-icontheme-sizing.ref.ui \
 	gtk-icontheme-sizing.ui \
+	icon-effect-missing.css \
+	icon-effect-missing.ref.ui \
+	icon-effect-missing.ui \
 	icon-shadow-no-transform.css \
 	icon-shadow-no-transform.ref.ui \
 	icon-shadow-no-transform.ui \
