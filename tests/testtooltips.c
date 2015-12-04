@@ -341,6 +341,11 @@ main (int argc, char *argv[])
   gtk_widget_show (tooltip_button);
 
   gtk_widget_set_tooltip_window (button, GTK_WINDOW (tooltip_window));
+  gtk_window_set_type_hint (GTK_WINDOW (tooltip_window),
+                            GDK_WINDOW_TYPE_HINT_TOOLTIP);
+  gtk_window_set_transient_for (GTK_WINDOW (tooltip_window),
+                                GTK_WINDOW (window));
+
   g_signal_connect (button, "query-tooltip",
 		    G_CALLBACK (query_tooltip_custom_cb), NULL);
   g_object_set (button, "has-tooltip", TRUE, NULL);
