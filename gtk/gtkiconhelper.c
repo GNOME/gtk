@@ -154,23 +154,6 @@ ensure_icon_size (GtkIconHelper *self,
   *height_out = height;
 }
 
-static cairo_surface_t *
-ensure_stated_surface_from_pixbuf (GtkIconHelper   *self,
-                                   GtkStyleContext *context,
-                                   GdkPixbuf       *pixbuf,
-                                   gint             scale,
-                                   GdkWindow       *window)
-{
-  cairo_surface_t *surface;
-  GtkCssIconEffect icon_effect;
-
-  surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, scale, window);
-  icon_effect = _gtk_css_icon_effect_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_EFFECT));
-  gtk_css_icon_effect_apply (icon_effect, surface);
-
-  return surface;
-}
-
 static GtkIconLookupFlags
 get_icon_lookup_flags (GtkIconHelper *self, GtkStyleContext *context)
 {
@@ -344,6 +327,7 @@ ensure_surface_from_pixbuf (GtkIconHelper   *self,
   gint width, height;
   cairo_surface_t *surface;
   GdkPixbuf *pixbuf;
+  GtkCssIconEffect icon_effect;
 
   if (get_pixbuf_size (self,
                        context,
@@ -357,7 +341,9 @@ ensure_surface_from_pixbuf (GtkIconHelper   *self,
   else
     pixbuf = g_object_ref (orig_pixbuf);
 
-  surface = ensure_stated_surface_from_pixbuf (self, context, pixbuf, scale, self->priv->window);
+  surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, scale, self->priv->window);
+  icon_effect = _gtk_css_icon_effect_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_EFFECT));
+  gtk_css_icon_effect_apply (icon_effect, surface);
   g_object_unref (pixbuf);
 
   return surface;
@@ -429,9 +415,17 @@ ensure_surface_for_gicon (GtkIconHelper   *self,
     }
 
   if (!symbolic)
-    surface = ensure_stated_surface_from_pixbuf (self, context, destination, scale, self->priv->window);
+    {
+      GtkCssIconEffect icon_effect;
+
+      surface = gdk_cairo_surface_create_from_pixbuf (destination, scale, self->priv->window);
+      icon_effect = _gtk_css_icon_effect_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_EFFECT));
+      gtk_css_icon_effect_apply (icon_effect, surface);
+    }
   else
-    surface = gdk_cairo_surface_create_from_pixbuf (destination, scale, self->priv->window);
+    {
+      surface = gdk_cairo_surface_create_from_pixbuf (destination, scale, self->priv->window);
+    }
   g_object_unref (destination);
 
   return surface;
