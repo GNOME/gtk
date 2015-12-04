@@ -2390,6 +2390,21 @@ progressbar {
   }
 
   &:backdrop progress { @extend %scale_highlight:backdrop; } // states not passed here as well
+
+  &.osd {
+    -GtkProgressBar-min-horizontal-bar-height: 3;
+    trough {
+      border-style: none;
+      border-raduys: 0;
+      background-color: transparent;
+      box-shadow: none;
+    }
+
+    progress {
+      border-style: none;
+      border-radius: 0;
+    }
+  }
 }
 
 /*************
