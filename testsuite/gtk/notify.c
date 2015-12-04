@@ -423,13 +423,8 @@ test_type (gconstpointer data)
     return;
 #endif
 
-#ifdef GDK_WINDOWING_WAYLAND
-  if (GDK_IS_WAYLAND_DISPLAY (gdk_display_get_default ()))
-    {
-      if (g_type_is_a (type, GTK_TYPE_STATUS_ICON))
-        return;
-    }
-#endif
+  if (g_type_is_a (type, GTK_TYPE_STATUS_ICON))
+    return;
 
   klass = g_type_class_ref (type);
 
@@ -489,6 +484,10 @@ test_type (gconstpointer data)
            g_str_equal (pspec->name, "expand")
             ))
 	continue;
+
+      if (pspec->owner_type == GTK_TYPE_ENTRY &&
+          g_str_equal (pspec->name, "im-module"))
+        continue;
 
       if (type == GTK_TYPE_SETTINGS)
         continue;
