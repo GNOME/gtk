@@ -60,7 +60,12 @@ get_modifier_label (guint key)
     case GDK_KEY_Meta_L:
     case GDK_KEY_Super_L:
     case GDK_KEY_Hyper_L:
-      subscript = "L";
+      /* Translators: This string is used to mark left/right variants of modifier
+       * keys in the shortcut window (e.g. Control_L vs Control_R). Please keep
+       * this string very short, ideally just a single character, since it will
+       * be rendered as part of the key.
+       */
+      subscript = C_("keyboard side marker", "L");
       break;
     case GDK_KEY_Shift_R:
     case GDK_KEY_Control_R:
@@ -68,7 +73,12 @@ get_modifier_label (guint key)
     case GDK_KEY_Meta_R:
     case GDK_KEY_Super_R:
     case GDK_KEY_Hyper_R:
-      subscript = "R";
+      /* Translators: This string is used to mark left/right variants of modifier
+       * keys in the shortcut window (e.g. Control_L vs Control_R). Please keep
+       * this string very short, ideally just a single character, since it will
+       * be rendered as part of the key.
+       */
+      subscript = C_("keyboard side marker", "R");
       break;
     default:
       g_assert_not_reached ();
@@ -98,7 +108,7 @@ get_modifier_label (guint key)
       g_assert_not_reached ();
    }
 
-  return g_strdup_printf ("%s<sub>%s</sub>", label, subscript);
+  return g_strdup_printf ("%s <small><b>%s</b></small>", label, subscript);
 }
 
 static gchar **
