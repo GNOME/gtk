@@ -154,13 +154,16 @@ ensure_icon_size (GtkIconHelper *self,
   *height_out = height;
 }
 
-static GdkPixbuf *
-ensure_stated_pixbuf_from_pixbuf (GtkIconHelper   *self,
-				  GtkStyleContext *context,
-				  GdkPixbuf       *pixbuf)
+static cairo_surface_t *
+ensure_stated_surface_from_pixbuf (GtkIconHelper   *self,
+                                   GtkStyleContext *context,
+                                   GdkPixbuf       *pixbuf,
+                                   gint             scale,
+                                   GdkWindow       *window)
 {
   GdkPixbuf *rendered;
   GtkIconSource *source;
+  cairo_surface_t *surface;
 
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 
@@ -181,7 +184,11 @@ ensure_stated_pixbuf_from_pixbuf (GtkIconHelper   *self,
 
   G_GNUC_END_IGNORE_DEPRECATIONS;
 
-  return rendered;
+  surface = gdk_cairo_surface_create_from_pixbuf (rendered, scale, window);
+
+  g_object_unref (rendered);
+
+  return surface;
 }
 
 static GtkIconLookupFlags
@@ -356,7 +363,7 @@ ensure_surface_from_pixbuf (GtkIconHelper   *self,
 {
   gint width, height;
   cairo_surface_t *surface;
-  GdkPixbuf *pixbuf, *stated;
+  GdkPixbuf *pixbuf;
 
   if (get_pixbuf_size (self,
                        context,
@@ -370,11 +377,7 @@ ensure_surface_from_pixbuf (GtkIconHelper   *self,
   else
     pixbuf = g_object_ref (orig_pixbuf);
 
-  stated = ensure_stated_pixbuf_from_pixbuf (self, context, pixbuf);
-  g_object_unref (pixbuf);
-  pixbuf = stated;
-
-  surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, scale, self->priv->window);
+  surface = ensure_stated_surface_from_pixbuf (self, context, pixbuf, scale, self->priv->window);
   g_object_unref (pixbuf);
 
   return surface;
@@ -446,15 +449,9 @@ ensure_surface_for_gicon (GtkIconHelper   *self,
     }
 
   if (!symbolic)
-    {
-      GdkPixbuf *rendered;
-
-      rendered = ensure_stated_pixbuf_from_pixbuf (self, context, destination);
-      g_object_unref (destination);
-      destination = rendered;
-    }
-
-  surface = gdk_cairo_surface_create_from_pixbuf (destination, scale, self->priv->window);
+    surface = ensure_stated_surface_from_pixbuf (self, context, destination, scale, self->priv->window);
+  else
+    surface = gdk_cairo_surface_create_from_pixbuf (destination, scale, self->priv->window);
   g_object_unref (destination);
 
   return surface;
