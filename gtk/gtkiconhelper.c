@@ -419,28 +419,33 @@ ensure_surface_for_gicon (GtkIconHelper   *self,
                                                    MIN (width, height),
                                                    scale, flags);
   if (info)
-    destination =
-      gtk_icon_info_load_symbolic_for_context (info,
-					       context,
-					       &symbolic,
-					       NULL);
+    {
+      destination =
+        gtk_icon_info_load_symbolic_for_context (info,
+                                                 context,
+                                                 &symbolic,
+                                                 NULL);
+      g_object_unref (info);
+    }
   else
-    destination = NULL;
+    {
+      destination = NULL;
+    }
 
   if (destination == NULL)
     {
-      GtkIconSet *icon_set;
-
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-
-      icon_set = gtk_icon_factory_lookup_default (GTK_STOCK_MISSING_IMAGE);
-
-      destination =
-        gtk_icon_set_render_icon_pixbuf (icon_set, context, self->priv->icon_size);
-
-      G_GNUC_END_IGNORE_DEPRECATIONS;
+      destination = gtk_icon_theme_load_icon (icon_theme,
+                                              "image-missing",
+                                              width,
+                                              flags | GTK_ICON_LOOKUP_USE_BUILTIN | GTK_ICON_LOOKUP_GENERIC_FALLBACK,
+                                              NULL);
+      /* We include this image as resource, so we always have it available or
+       * the icontheme code is broken */
+      g_assert (destination);
+      symbolic = FALSE;
     }
-  else if (!symbolic)
+
+  if (!symbolic)
     {
       GdkPixbuf *rendered;
 
@@ -449,16 +454,8 @@ ensure_surface_for_gicon (GtkIconHelper   *self,
       destination = rendered;
     }
 
-  surface = NULL;
-  if (destination)
-    {
-      surface = gdk_cairo_surface_create_from_pixbuf (destination, scale, self->priv->window);
-
-      g_object_unref (destination);
-    }
-
-  if (info)
-    g_object_unref (info);
+  surface = gdk_cairo_surface_create_from_pixbuf (destination, scale, self->priv->window);
+  g_object_unref (destination);
 
   return surface;
 }
