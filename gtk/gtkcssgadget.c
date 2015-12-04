@@ -451,8 +451,17 @@ gtk_css_gadget_allocate (GtkCssGadget        *gadget,
   if (baseline >= 0)
     baseline += extents.top;
 
-  g_assert (content_allocation.width >= 0);
-  g_assert (content_allocation.height >= 0);
+  if (content_allocation.width < 0)
+    {
+      g_warning ("Negative content width while allocating gadget\n");
+      content_allocation.width = 0;
+    }
+
+  if (content_allocation.height < 0)
+    {
+      g_warning ("Negative content height while allocating gadget\n");
+      content_allocation.width = 0;
+    }
 
   GTK_CSS_GADGET_GET_CLASS (gadget)->allocate (gadget, &content_allocation, baseline, &content_clip);
 
