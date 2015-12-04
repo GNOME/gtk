@@ -969,49 +969,12 @@ gtk_icon_size_get_name (GtkIconSize  size)
 
 /* Icon Set */
 
-
-static GdkPixbuf *find_in_cache     (GtkIconSet       *icon_set,
-                                     GtkStyleContext  *style_context,
-                                     GtkTextDirection  direction,
-                                     GtkIconSize       size,
-                                     gint              scale,
-				     GtkCssIconEffect effect);
-static void       add_to_cache      (GtkIconSet       *icon_set,
-                                     GtkStyleContext  *style_context,
-                                     GtkTextDirection  direction,
-                                     GtkIconSize       size,
-                                     gint              scale,
-				     GtkCssIconEffect effect,
-                                     GdkPixbuf        *pixbuf);
-/* Clear icon set contents, drop references to all contained
- * GdkPixbuf objects and forget all GtkIconSources. Used to
- * recycle an icon set.
- */
-static void       clear_cache       (GtkIconSet       *icon_set,
-                                     gboolean          style_detach);
-static GSList*    copy_cache        (GtkIconSet       *icon_set,
-                                     GtkIconSet       *copy_recipient);
-static void       attach_to_style   (GtkIconSet       *icon_set,
-                                     GtkStyleContext  *style_context);
-static void       detach_from_style (GtkIconSet       *icon_set,
-                                     GtkStyleContext  *style_context);
-static void       style_dnotify     (gpointer          data);
-
 struct _GtkIconSet
 {
   guint ref_count;
 
   GSList *sources;
-
-  /* Cache of the last few rendered versions of the icon. */
-  GSList *cache;
-
-  guint cache_size;
-
-  guint cache_serial;
 };
-
-static guint cache_serial = 0;
 
 /**
  * gtk_icon_set_new:
@@ -1039,9 +1002,6 @@ gtk_icon_set_new (void)
 
   icon_set->ref_count = 1;
   icon_set->sources = NULL;
-  icon_set->cache = NULL;
-  icon_set->cache_size = 0;
-  icon_set->cache_serial = cache_serial;
 
   return icon_set;
 }
@@ -1128,8 +1088,6 @@ gtk_icon_set_unref (GtkIconSet *icon_set)
         }
       g_slist_free (icon_set->sources);
 
-      clear_cache (icon_set, TRUE);
-
       g_free (icon_set);
     }
 }
@@ -1166,10 +1124,6 @@ gtk_icon_set_copy (GtkIconSet *icon_set)
     }
 
   copy->sources = g_slist_reverse (copy->sources);
-
-  copy->cache = copy_cache (icon_set, copy);
-  copy->cache_size = icon_set->cache_size;
-  copy->cache_serial = icon_set->cache_serial;
 
   return copy;
 }
@@ -1507,20 +1461,11 @@ G_GNUC_END_IGNORE_DEPRECATIONS;
     }
 
   if (icon_set->sources)
-    {
-      icon = find_in_cache (icon_set, context, direction, size, scale, effect);
-      if (icon)
-	return g_object_ref (icon);
-    }
-
-  if (icon_set->sources)
     icon = find_and_render_icon_source (icon_set, context, direction, state,
                                         size, scale);
 
   if (icon == NULL)
     icon = render_fallback_image (context, direction, state, size);
-
-  add_to_cache (icon_set, context, direction, size, scale, effect, icon);
 
   return icon;
 }
@@ -2428,275 +2373,6 @@ gtk_icon_source_get_size (const GtkIconSource *source)
   g_return_val_if_fail (source != NULL, 0);
 
   return source->size;
-}
-
-#define NUM_CACHED_ICONS 8
-
-typedef struct _CachedIcon CachedIcon;
-
-struct _CachedIcon
-{
-  /* These must all match to use the cached pixbuf.
-   * If any don't match, we must re-render the pixbuf.
-   */
-  GtkStyleContext *style;
-  GtkTextDirection direction;
-  GtkIconSize size;
-  gint scale;
-  GtkCssIconEffect effect;
-
-  GdkPixbuf *pixbuf;
-};
-
-static void
-ensure_cache_up_to_date (GtkIconSet *icon_set)
-{
-  if (icon_set->cache_serial != cache_serial)
-    {
-      clear_cache (icon_set, TRUE);
-      icon_set->cache_serial = cache_serial;
-    }
-}
-
-static void
-cached_icon_free (CachedIcon *icon)
-{
-  g_object_unref (icon->pixbuf);
-  g_object_unref (icon->style);
-
-  g_free (icon);
-}
-
-static GdkPixbuf *
-find_in_cache (GtkIconSet       *icon_set,
-               GtkStyleContext  *style_context,
-               GtkTextDirection  direction,
-               GtkIconSize       size,
-               gint              scale,
-	       GtkCssIconEffect effect)
-{
-  GSList *tmp_list;
-  GSList *prev;
-
-  ensure_cache_up_to_date (icon_set);
-
-  prev = NULL;
-  tmp_list = icon_set->cache;
-  while (tmp_list != NULL)
-    {
-      CachedIcon *icon = tmp_list->data;
-
-      if (icon->style == style_context &&
-          icon->direction == direction &&
-	  icon->effect == effect &&
-          (size == (GtkIconSize)-1 || icon->size == size))
-        {
-          if (prev)
-            {
-              /* Move this icon to the front of the list. */
-              prev->next = tmp_list->next;
-              tmp_list->next = icon_set->cache;
-              icon_set->cache = tmp_list;
-            }
-
-          return icon->pixbuf;
-        }
-
-      prev = tmp_list;
-      tmp_list = tmp_list->next;
-    }
-
-  return NULL;
-}
-
-static void
-add_to_cache (GtkIconSet       *icon_set,
-              GtkStyleContext  *style_context,
-              GtkTextDirection  direction,
-              GtkIconSize       size,
-              gint              scale,
-	      GtkCssIconEffect effect,
-              GdkPixbuf        *pixbuf)
-{
-  CachedIcon *icon;
-
-  ensure_cache_up_to_date (icon_set);
-
-  g_object_ref (pixbuf);
-
-  icon = g_new (CachedIcon, 1);
-  icon_set->cache = g_slist_prepend (icon_set->cache, icon);
-  icon_set->cache_size++;
-
-  icon->style = g_object_ref (style_context);
-  icon->direction = direction;
-  icon->size = size;
-  icon->scale = scale;
-  icon->effect = effect;
-  icon->pixbuf = pixbuf;
-  attach_to_style (icon_set, icon->style);
-
-  if (icon_set->cache_size >= NUM_CACHED_ICONS)
-    {
-      /* Remove oldest item in the cache */
-      GSList *tmp_list;
-
-      tmp_list = icon_set->cache;
-
-      /* Find next-to-last link */
-      g_assert (NUM_CACHED_ICONS > 2);
-      while (tmp_list->next->next)
-        tmp_list = tmp_list->next;
-
-      g_assert (tmp_list != NULL);
-      g_assert (tmp_list->next != NULL);
-      g_assert (tmp_list->next->next == NULL);
-
-      /* Free the last icon */
-      icon = tmp_list->next->data;
-
-      g_slist_free (tmp_list->next);
-      tmp_list->next = NULL;
-
-      cached_icon_free (icon);
-    }
-}
-
-static void
-clear_cache (GtkIconSet *icon_set,
-             gboolean    style_detach)
-{
-  GSList *cache, *tmp_list;
-  GtkStyleContext *last_style = NULL;
-
-  cache = icon_set->cache;
-  icon_set->cache = NULL;
-  icon_set->cache_size = 0;
-  tmp_list = cache;
-  while (tmp_list != NULL)
-    {
-      CachedIcon *icon = tmp_list->data;
-
-      if (style_detach)
-        {
-          /* simple optimization for the case where the cache
-           * contains contiguous icons from the same style.
-           * it's safe to call detach_from_style more than
-           * once on the same style though.
-           */
-          if (last_style != icon->style)
-            {
-              detach_from_style (icon_set, icon->style);
-              last_style = icon->style;
-            }
-        }
-
-      cached_icon_free (icon);
-
-      tmp_list = tmp_list->next;
-    }
-
-  g_slist_free (cache);
-}
-
-static GSList*
-copy_cache (GtkIconSet *icon_set,
-            GtkIconSet *copy_recipient)
-{
-  GSList *tmp_list;
-  GSList *copy = NULL;
-
-  ensure_cache_up_to_date (icon_set);
-
-  tmp_list = icon_set->cache;
-  while (tmp_list != NULL)
-    {
-      CachedIcon *icon = tmp_list->data;
-      CachedIcon *icon_copy = g_new (CachedIcon, 1);
-
-      *icon_copy = *icon;
-
-      attach_to_style (copy_recipient, icon_copy->style);
-      g_object_ref (icon_copy->style);
-
-      g_object_ref (icon_copy->pixbuf);
-
-      icon_copy->size = icon->size;
-
-      copy = g_slist_prepend (copy, icon_copy);
-
-      tmp_list = tmp_list->next;
-    }
-
-  return g_slist_reverse (copy);
-}
-
-static void
-attach_to_style (GtkIconSet      *icon_set,
-                 GtkStyleContext *style_context)
-{
-  GHashTable *table;
-
-  table = g_object_get_qdata (G_OBJECT (style_context),
-                              g_quark_try_string ("gtk-style-icon-sets"));
-
-  if (table == NULL)
-    {
-      table = g_hash_table_new (NULL, NULL);
-      g_object_set_qdata_full (G_OBJECT (style_context),
-                               g_quark_from_static_string ("gtk-style-icon-sets"),
-                               table,
-                               style_dnotify);
-    }
-
-  g_hash_table_insert (table, icon_set, icon_set);
-}
-
-static void
-detach_from_style (GtkIconSet       *icon_set,
-                   GtkStyleContext  *style_context)
-{
-  GHashTable *table;
-
-  table = g_object_get_qdata (G_OBJECT (style_context),
-                              g_quark_try_string ("gtk-style-icon-sets"));
-
-  if (table != NULL)
-    g_hash_table_remove (table, icon_set);
-}
-
-static void
-iconsets_foreach (gpointer key,
-                  gpointer value,
-                  gpointer user_data)
-{
-  GtkIconSet *icon_set = key;
-
-  /* We only need to remove cache entries for the given style;
-   * but that complicates things because in destroy notify
-   * we don't know which style got destroyed, and 95% of the
-   * time all cache entries will have the same style,
-   * so this is faster anyway.
-   */
-
-  clear_cache (icon_set, FALSE);
-}
-
-static void
-style_dnotify (gpointer data)
-{
-  GHashTable *table = data;
-
-  g_hash_table_foreach (table, iconsets_foreach, NULL);
-
-  g_hash_table_destroy (table);
-}
-
-/* This allows the icon set to detect that its cache is out of date. */
-void
-_gtk_icon_set_invalidate_caches (void)
-{
-  ++cache_serial;
 }
 
 /**
