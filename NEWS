@@ -1,3 +1,61 @@
+Overview of Changes in GTK+ 3.19.4
+==================================
+
+* GtkPopover can now be instructed to stay within the toplevel window
+  on platforms that don't already enforce this (such as Wayland)
+ 
+* Wayland:
+ - Memory leak fixes
+ - Window positioning and sizing fixes
+ - Clipboard and DND fixes
+ - New build dependency: wayland-protocols
+
+* CSS changes:
+ - The -gtk-image-effect property was renamed to -gtk-icon-effect
+ - Active spinners are now :checked, not :active
+ - A -gtk-icontheme property has been added
+ - A -gtk-icon-palette has been added to allow recoloring symbolic icons
+ - Drag highlighting uses the new :dnd pseudoclass
+
+* DND:
+ - Make drag highlighting themable
+ - Stop using RGBA cursors for drag icons (this only ever worked on X11)
+ - Change the handling of drag windows to work on Wayland. The drag window
+   implementation has been moved to GDK, with the new function
+   gdk_drag_context_get_drag_window
+ - Non-toplevel widgets can be used as drag widgets
+
+* Bugs fixed:
+ 539944 Add GtkScaleButton API so struct fields can be marked as private
+ 732742 Infinite recursion on GdkDevice disposal
+ 735847 move animatable cursors' current frame info into GdkCursor
+ 747295 shared memory leak when creating/destroying widgets
+ 756618 GtkWindow CSD: gtk_window_resize() also includes client side deco...
+ 757147 gdk_pixbuf_get_from_window() doesn't honor device scale
+ 757282 "window: Ignore geometry widget" commit breaks gnome-terminal win...
+ 757474 Add option for automatic GtkPopover placement
+ 758483 GDK W32: Incorrectly uses SetWindowLong() to set/unset WS_EX_TOPM...
+ 758484 GDK W32: Some calls to W32 routines are rather unclear
+ 758563 play bar gets weird position in fullscreen under Wayland
+ 758609 Regression with firefox dropdown menu position
+ 758634 wayland: Use wayland-protocols for shared protocols
+ 758660 Copy and paste doesn't work in wayland session
+ 758661 every second right-click to window header is ignored (CSD-related?)
+ 758698 Bug backward search + case insensitive + preceding multi-byte cha...
+ 758713 Evolution cannot start on wayland if the clipboard contains data ...
+ 758790 A few stylistic icon-browser patches
+ 758901 wayland: old window size applied sometimes
+ 758908 The app chooser dialog uses a non standard icon and doesn't wrap ...
+ 758930 GTK+ spamming system logs with "doesn't match state" warnings
+ 758936 Widgets within an offscreen windows are blurry on wayland with hidpi
+ 759018 wayland: tests/testtooltips custom tooltip misplaced at (0,0) on ... 
+
+* Translation updates:
+ Polish
+ Portuguese
+ Spanish
+
+ 
 Overview of Changes in GTK+ 3.19.3
 ==================================
 
