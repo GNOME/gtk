@@ -53,7 +53,7 @@ $asset_suffix: if($variant=='dark', '-dark', '');
 
 .background {
   color: $fg_color;
-  background-color: if($variant == 'light', darken($bg_color, 1.5%), $bg_color);
+  background-color: $bg_color;
 
   &:backdrop {
     text-shadow: none;
