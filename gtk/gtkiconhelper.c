@@ -395,23 +395,37 @@ G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
 static cairo_surface_t *
-ensure_stated_surface_from_info (GtkIconHelper *self,
-				 GtkStyleContext *context,
-				 GtkIconInfo *info,
-				 int scale)
+ensure_surface_for_gicon (GtkIconHelper   *self,
+                          GtkStyleContext *context,
+                          gint             scale,
+                          GIcon           *gicon)
 {
-  GdkPixbuf *destination = NULL;
+  GtkIconTheme *icon_theme;
+  gint width, height;
+  GtkIconInfo *info;
+  GtkIconLookupFlags flags;
   cairo_surface_t *surface;
+  GdkPixbuf *destination;
   gboolean symbolic;
 
-  symbolic = FALSE;
+  icon_theme = gtk_css_icon_theme_value_get_icon_theme
+    (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_THEME));
+  flags = get_icon_lookup_flags (self, context);
 
+  ensure_icon_size (self, &width, &height);
+
+  info = gtk_icon_theme_lookup_by_gicon_for_scale (icon_theme,
+                                                   gicon,
+                                                   MIN (width, height),
+                                                   scale, flags);
   if (info)
     destination =
       gtk_icon_info_load_symbolic_for_context (info,
 					       context,
 					       &symbolic,
 					       NULL);
+  else
+    destination = NULL;
 
   if (destination == NULL)
     {
@@ -442,34 +456,6 @@ ensure_stated_surface_from_info (GtkIconHelper *self,
 
       g_object_unref (destination);
     }
-
-  return surface;
-}
-
-static cairo_surface_t *
-ensure_surface_for_gicon (GtkIconHelper   *self,
-                          GtkStyleContext *context,
-                          gint             scale,
-                          GIcon           *gicon)
-{
-  GtkIconTheme *icon_theme;
-  gint width, height;
-  GtkIconInfo *info;
-  GtkIconLookupFlags flags;
-  cairo_surface_t *surface;
-
-  icon_theme = gtk_css_icon_theme_value_get_icon_theme
-    (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_THEME));
-  flags = get_icon_lookup_flags (self, context);
-
-  ensure_icon_size (self, &width, &height);
-
-  info = gtk_icon_theme_lookup_by_gicon_for_scale (icon_theme,
-                                                   gicon,
-                                                   MIN (width, height),
-                                                   scale, flags);
-
-  surface = ensure_stated_surface_from_info (self, context, info, scale);
 
   if (info)
     g_object_unref (info);
