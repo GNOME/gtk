@@ -2299,6 +2299,7 @@ scale {
   // *WARNING* scale with marks madness following
 
   // FIXME: OSD and selected list rows missing, I don't feel like adding the other 144 assets needed for those...
+  $suffix: if($variant == 'light', '', '-dark');
 
   @each $dir_class, $dir_infix in ('', 'horz'),
                                   ('.vertical', 'vert') {
@@ -2306,7 +2307,7 @@ scale {
                                       ('scale-has-marks-below', ':first-child:not(:only-child)') {
 
       &#{$dir_class} {
-        @each $state, $suffix in ('', ''),
+        @each $state, $state_infix in ('', ''),
                                  (':hover', '-hover'),
                                  (':active', '-active'),
                                  (':insensitive', '-insensitive'),
@@ -2319,7 +2320,7 @@ scale {
             slider{
               margin: 0;
               &#{$state} {
-                $_scale_asset: 'assets/slider-#{$dir_infix}-#{$marks_infix}#{$suffix}';
+                $_scale_asset: 'assets/slider-#{$dir_infix}-#{$marks_infix}#{$state_infix}#{$suffix}';
                 // @warn $_file_name; // uncomment for debuggin purpose...
                 border-style: none;
                 border-radius: 0;
