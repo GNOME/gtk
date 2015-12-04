@@ -161,32 +161,12 @@ ensure_stated_surface_from_pixbuf (GtkIconHelper   *self,
                                    gint             scale,
                                    GdkWindow       *window)
 {
-  GdkPixbuf *rendered;
-  GtkIconSource *source;
   cairo_surface_t *surface;
+  GtkCssIconEffect icon_effect;
 
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-
-  /* FIXME: use gtk_icon_info_load_icon? */
-
-  source = gtk_icon_source_new ();
-  gtk_icon_source_set_pixbuf (source, pixbuf);
-  /* The size here is arbitrary; since size isn't
-   * wildcarded in the source, it isn't supposed to be
-   * scaled by the engine function
-   */
-  gtk_icon_source_set_size (source,
-			    GTK_ICON_SIZE_SMALL_TOOLBAR);
-  gtk_icon_source_set_size_wildcarded (source, FALSE);
-
-  rendered = gtk_render_icon_pixbuf (context, source, (GtkIconSize) -1);
-  gtk_icon_source_free (source);
-
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-
-  surface = gdk_cairo_surface_create_from_pixbuf (rendered, scale, window);
-
-  g_object_unref (rendered);
+  surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, scale, window);
+  icon_effect = _gtk_css_icon_effect_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_EFFECT));
+  gtk_css_icon_effect_apply (icon_effect, surface);
 
   return surface;
 }
