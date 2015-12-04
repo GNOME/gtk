@@ -5425,6 +5425,7 @@ buffer_inserted_text (GtkEntryBuffer *buffer,
     selection_bound += n_chars;
 
   gtk_entry_set_positions (entry, current_pos, selection_bound);
+  gtk_entry_recompute (entry);
 
   /* Calculate the password hint if it needs to be displayed. */
   if (n_chars == 1 && !priv->visible)
@@ -5474,6 +5475,7 @@ buffer_deleted_text (GtkEntryBuffer *buffer,
     selection_bound -= MIN (selection_bound, end_pos) - position;
 
   gtk_entry_set_positions (entry, current_pos, selection_bound);
+  gtk_entry_recompute (entry);
 
   /* We might have deleted the selection */
   gtk_entry_update_primary_selection (entry);
@@ -5498,20 +5500,9 @@ buffer_notify_text (GtkEntryBuffer *buffer,
                     GParamSpec     *spec,
                     GtkEntry       *entry)
 {
-  int new_current_pos, new_selection_bound;
-  guint buffer_length;
-
   if (entry->priv->handling_key_event)
     gtk_entry_obscure_mouse_cursor (entry);
 
-  /* Make sure the cursor/selection stays in the new text length */
-  buffer_length = gtk_entry_buffer_get_length (buffer);
-  new_current_pos = MIN (entry->priv->current_pos, buffer_length);
-  new_selection_bound = MIN (entry->priv->selection_bound, buffer_length);
-
-  gtk_entry_set_positions (entry, new_current_pos, new_selection_bound);
-
-  gtk_entry_recompute (entry);
   emit_changed (entry);
   g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_TEXT]);
 }
