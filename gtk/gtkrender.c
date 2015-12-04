@@ -1091,7 +1091,7 @@ gtk_render_icon_pixbuf_for_style (GtkCssStyle         *style,
   if (!wildcarded)
     return scaled;
 
-  icon_effect = _gtk_css_icon_effect_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_GTK_IMAGE_EFFECT));
+  icon_effect = _gtk_css_icon_effect_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_EFFECT));
 
   if (icon_effect != GTK_CSS_ICON_EFFECT_NONE)
     {

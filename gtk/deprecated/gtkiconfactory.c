@@ -1443,7 +1443,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 G_GNUC_END_IGNORE_DEPRECATIONS;
 
   effect = _gtk_css_icon_effect_value_get
-    (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_GTK_IMAGE_EFFECT));
+    (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_EFFECT));
 
   switch (effect)
     {

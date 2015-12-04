@@ -1727,7 +1727,7 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           _gtk_css_number_value_new (1, GTK_CSS_NUMBER));
   gtk_css_style_property_register        ("-gtk-icon-effect",
-					  GTK_CSS_PROPERTY_GTK_IMAGE_EFFECT,
+					  GTK_CSS_PROPERTY_ICON_EFFECT,
 					  G_TYPE_NONE,
 					  GTK_STYLE_PROPERTY_INHERIT,
                                           GTK_CSS_AFFECTS_ICON,
