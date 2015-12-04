@@ -22,6 +22,7 @@
 #include "gtkactionhelper.h"
 #include "gtkgesturesingle.h"
 #include "deprecated/gtkaction.h"
+#include "gtkcssgadgetprivate.h"
 
 G_BEGIN_DECLS
 
@@ -31,6 +32,7 @@ struct _GtkButtonPrivate
   GtkAction             *action;
   GtkWidget             *image;
   GtkActionHelper       *action_helper;
+  GtkCssGadget          *gadget;
 
   GdkDevice             *grab_keyboard;
   GdkWindow             *event_window;
