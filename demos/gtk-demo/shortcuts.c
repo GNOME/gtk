@@ -22,6 +22,7 @@ show_shortcuts (GtkWidget   *window,
   gtk_window_set_transient_for (GTK_WINDOW (overlay), GTK_WINDOW (window));
   g_object_set (overlay, "view-name", view, NULL);
   gtk_widget_show (overlay);
+  g_object_unref (builder);
 }
 
 static void
