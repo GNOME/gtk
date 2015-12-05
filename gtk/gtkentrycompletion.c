@@ -90,7 +90,7 @@
 #include <string.h>
 
 #define PAGE_STEP 14
-#define COMPLETION_TIMEOUT 300
+#define COMPLETION_TIMEOUT 100
 
 /* signals */
 enum
