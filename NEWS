@@ -1,3 +1,30 @@
+Overview of Changes in GTK+ 3.18.6
+==================================
+
+* Bugs fixed:
+ 539944 Add GtkScaleButton API so struct fields can be marked as private
+ 732742 Infinite recursion on GdkDevice disposal
+ 735847 move animatable cursors' current frame info into GdkCursor
+ 746745 Window suddenly always on top
+ 747295 shared memory leak when creating/destroying widgets
+ 748904 wayland: map real modifiers to virtual modifiers
+ 757358 single touch devices are not detected as touch devices
+ 758025 cursor flickering
+ 758072 [Wayland] additional mouse buttons don't work
+ 758175 Fix character entity
+ 758327 gnome-disks segfault in gdkwayland get_popup_parent - dereference...
+ 758367 GTK+ 3 does not respect bold in org.gnome.desktop.interface font-name
+ 758407 Could not send the search request \ GDBus.Error:org.freedesktop...
+ 758483 GDK W32: Incorrectly uses SetWindowLong() to set/unset WS_EX_TOPMOST
+ 758484 GDK W32: Some calls to W32 routines are rather unclear
+ 758660 Copy and paste doesn't work in wayland session
+ 758661 every second right-click to window header is ignored (CSD-related?)
+ 758698 Bug backward search + case insensitive + preceding multi-byte character
+ 758790 A few stylistic icon-browser patches 
+
+* Translation updates:
+ Polish
+
 Overview of Changes in GTK+ 3.18.5
 ==================================
 
