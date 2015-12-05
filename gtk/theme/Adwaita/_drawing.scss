@@ -4,7 +4,7 @@
 
 @function _widget_edge($c:$borders_edge) {
 // outer highlight "used" on most widgets
-  @return 0 1px $c;
+  @return 0 1px transparentize($c, 1); // HACK, killme properly
 }
 
 @mixin _shadows($shadow1, $shadow2:none, $shadow3:none, $shadow4:none) {
@@ -29,8 +29,8 @@
 }
 
 @function entry_gradient($c) {
-  @if $variant=='light' { @return linear-gradient(to bottom, mix($borders_color, $c, 35%),
-                                                             mix($borders_color, $c, 7%) 3px,
+  @if $variant=='light' { @return linear-gradient(to bottom, mix($borders_color, $c, 45%),
+                                                             mix($borders_color, $c, 3%) 2px,
                                                              $c 90%); }
   @else { @return linear-gradient(to bottom, mix($borders_color, $c, 95%),
                                              mix($borders_color, $c, 40%) 3px,
@@ -146,11 +146,12 @@
 //
 // $c: base color;
 //
-  @if lightness($c)>90% { @return white; }
-  @else if lightness($c)>80% { @return transparentize(white, 0.3); }
-  @else if lightness($c)>50% { @return transparentize(white, 0.5); }
-  @else if lightness($c)>40% { @return transparentize(white, 0.7); }
-  @else { @return transparentize(white, 0.9); }
+  @if lightness($c)>95% { @return white; }
+  @else if lightness($c)>90% { @return transparentize(white, 0.2); }
+  @else if lightness($c)>80% { @return transparentize(white, 0.4); }
+  @else if lightness($c)>50% { @return transparentize(white, 0.6); }
+  @else if lightness($c)>40% { @return transparentize(white, 0.8); }
+  @else { @return transparentize(white, 0.95); }
 }
 
 @mixin _button_text_shadow ($tc:$fg_color, $bg:$bg_color) {
@@ -201,12 +202,9 @@
     color: $tc;
     outline-color: transparentize($tc, 0.7);
     border-color: if($c!=$bg_color, _border_color($c), $borders_color);
-    background-image: linear-gradient(to bottom,
-                                  lighten($c, 7%),
-                                  lighten($c, 2%) 40%,
-                                  darken($c, 3%)
-                                  );
-    @include _button_text_shadow($tc,$c);
+    @if $variant == 'light' { background-image: linear-gradient(to bottom, $c, darken($c, 4%) 60%, darken($c, 10%)); }
+    @else { background-image: linear-gradient(to bottom, darken($c, 2%), darken($c, 4%) 60%, darken($c, 6%)); }
+    @include _button_text_shadow($tc, $c);
     @include _shadows(inset 0 1px $_hilight_color, $_button_edge);
   }
 
@@ -217,13 +215,22 @@
     color: $tc;
     outline-color: transparentize($tc, 0.7);
     border-color: if($c!=$bg_color, _border_color($c), $borders_color);
+    /*
     background-image: linear-gradient(to bottom,
                                       lighten($c, 16%),
                                       lighten($c, 6%) 40%,
                                       lighten($c, 2%));
-
-    @include _button_text_shadow($tc,lighten($c, 6%));
-    @include _shadows(inset 0 1px $_hilight_color, $_button_edge);
+    */
+    @if $variant == 'light' {
+      background-image: linear-gradient(to bottom, lighten($c, 6%), $c 60%, darken($c, 4%));
+      @include _button_text_shadow($tc,lighten($c, 6%));
+      @include _shadows(inset 0 1px _button_hilight_color(lighten($c, 6%)), $_button_edge);
+    }
+    @else {
+      background-image: linear-gradient(to bottom, lighten($c, 1%), darken($c, 2%) 60%, darken($c, 4%));
+      @include _button_text_shadow($tc,lighten($c, 6%));
+      @include _shadows(inset 0 1px _button_hilight_color(darken($c, 2%)), $_button_edge);
+    }
   }
 
   @else if $t==active {
@@ -233,13 +240,10 @@
     color: $tc;
     outline-color: transparentize($tc, 0.7);
     border-color: if($c!=$bg_color, _border_color($c), $borders_color);
-    background-image: linear-gradient(to bottom,
-                                      darken($c, 9%),
-                                      darken($c, 6.6%) 40%,
-                                      darken($c, 5%));
-    @include _button_text_shadow($tc,darken($c,10%));
-    @include _shadows(inset 0 1px transparentize(black, 0.93),
-                      inset 0 2px 1px -2px transparentize(black,0.4),
+    @if $variant == 'light' { background-image: linear-gradient(to bottom, darken($c, 13%), darken($c, 5%)); }
+    @else { background-image: linear-gradient(to bottom, darken($c, 9%), darken($c, 5%)); }
+    @include _button_text_shadow($tc, darken($c,10%));
+    @include _shadows(inset 0 2px 1px -2px transparentize(black,0.4),
                       $_button_edge);
   }
   @else if $t==insensitive {
@@ -465,17 +469,17 @@
                                              lighten($selected_bg_color, 6%));
 }
 
-@function headerbar_gradient($c, $tc:lighten($c, 4%)) {
+@function headerbar_gradient($c, $tc:lighten($c, 2%)) {
 //
 // headerbar gradient helper function
 //
 // $c:  base color
 // $tc: top color
 //
-  @return linear-gradient(to bottom, $tc, lighten($c, 2%));
+  @return linear-gradient(to top, $c, $tc 10%);
 }
 
-@mixin headerbar_fill($c:$bg_color, $tc:lighten($c, 6%), $hc:$top_hilight) {
+@mixin headerbar_fill($c:$headerbar_color, $tc:lighten($c, 2%), $hc:$top_hilight) {
 //
 // headerbar fill
 //
@@ -483,8 +487,8 @@
 // $tc: top color
 // $hc: top highlight color
 //
-  $_bottom_shade_color: if($variant == 'light', mix(_border_color($c), $c, 30%),
-                                                mix(_border_color($c), $c, 20%));
+  $_bottom_shade_color: if($variant == 'light', mix(_border_color($c), $c, 20%),
+                                                mix(_border_color($c), $c, 10%));
 
   background-image: headerbar_gradient($c, $tc);
   box-shadow: inset 0 -1px $_bottom_shade_color, // bottom shade

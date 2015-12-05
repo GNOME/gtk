@@ -169,10 +169,10 @@ entry, spinbutton {
   border-radius: 3px;
   transition: all 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
   background-color: transparent;
-  background-image: linear-gradient(to bottom, #dddddb, #f8f8f8 3px, #ffffff 90%);
+  background-image: linear-gradient(to bottom, #d3d3d1, #fcfcfc 2px, #ffffff 90%);
   color: black;
   border-color: #9d9d99;
-  box-shadow: inset 0 0 0 1px rgba(74, 144, 217, 0), 0 1px rgba(255, 255, 255, 0.8); }
+  box-shadow: inset 0 0 0 1px rgba(74, 144, 217, 0), 0 1px rgba(255, 255, 255, 0); }
   entry image.left, spinbutton image.left {
     padding-left: 0;
     padding-right: 6px; }
@@ -182,7 +182,7 @@ entry, spinbutton {
   entry.flat, spinbutton.flat, entry.flat:focus, spinbutton.flat:focus {
     padding: 2px;
     background-color: transparent;
-    background-image: linear-gradient(to bottom, #dddddb, #f8f8f8 3px, #ffffff 90%);
+    background-image: linear-gradient(to bottom, #d3d3d1, #fcfcfc 2px, #ffffff 90%);
     color: black;
     border-color: #9d9d99;
     box-shadow: inset 0 0 0 1px rgba(74, 144, 217, 0);
@@ -190,26 +190,26 @@ entry, spinbutton {
     border-radius: 0; }
   entry:focus, spinbutton:focus {
     background-color: transparent;
-    background-image: linear-gradient(to bottom, #dddddb, #f8f8f8 3px, #ffffff 90%);
-    box-shadow: inset 0 0 0 1px #4a90d9, 0 1px rgba(255, 255, 255, 0.8);
+    background-image: linear-gradient(to bottom, #d3d3d1, #fcfcfc 2px, #ffffff 90%);
+    box-shadow: inset 0 0 0 1px #4a90d9, 0 1px rgba(255, 255, 255, 0);
     border-color: #4a90d9; }
   entry:insensitive, spinbutton:insensitive {
     background-color: transparent;
-    background-image: linear-gradient(to bottom, #dddddb, #f8f8f8 3px, #ffffff 90%);
+    background-image: linear-gradient(to bottom, #d3d3d1, #fcfcfc 2px, #ffffff 90%);
     color: #8b8e8f;
     border-color: #9d9d99;
     background-image: linear-gradient(to bottom, #f1f1f1);
-    box-shadow: 0 1px rgba(255, 255, 255, 0.8); }
+    box-shadow: 0 1px rgba(255, 255, 255, 0); }
   entry:backdrop, spinbutton:backdrop {
     background-color: transparent;
-    background-image: linear-gradient(to bottom, #dddddb, #f8f8f8 3px, #ffffff 90%);
+    background-image: linear-gradient(to bottom, #d3d3d1, #fcfcfc 2px, #ffffff 90%);
     color: #333333;
     border-color: #a5a5a1;
     background-image: linear-gradient(to bottom, white);
     box-shadow: 0 1px rgba(255, 255, 255, 0); }
   entry:backdrop:insensitive, spinbutton:backdrop:insensitive {
     background-color: transparent;
-    background-image: linear-gradient(to bottom, #dddddb, #f8f8f8 3px, #ffffff 90%);
+    background-image: linear-gradient(to bottom, #d3d3d1, #fcfcfc 2px, #ffffff 90%);
     color: #c3c3c0;
     border-color: #a5a5a1;
     background-image: linear-gradient(to bottom, #f1f1f1);
@@ -232,8 +232,8 @@ entry, spinbutton {
     border-color: #cc0000; }
     entry.error:focus, spinbutton.error:focus {
       background-color: transparent;
-      background-image: linear-gradient(to bottom, #dddddb, #f8f8f8 3px, #ffffff 90%);
-      box-shadow: inset 0 0 0 1px #cc0000, 0 1px rgba(255, 255, 255, 0.8);
+      background-image: linear-gradient(to bottom, #d3d3d1, #fcfcfc 2px, #ffffff 90%);
+      box-shadow: inset 0 0 0 1px #cc0000, 0 1px rgba(255, 255, 255, 0);
       border-color: #cc0000; }
     entry.error:selected, spinbutton.error:selected, entry.error:selected:focus, spinbutton.error:selected:focus {
       background-color: #cc0000; }
@@ -242,8 +242,8 @@ entry, spinbutton {
     border-color: #f57900; }
     entry.warning:focus, spinbutton.warning:focus {
       background-color: transparent;
-      background-image: linear-gradient(to bottom, #dddddb, #f8f8f8 3px, #ffffff 90%);
-      box-shadow: inset 0 0 0 1px #f57900, 0 1px rgba(255, 255, 255, 0.8);
+      background-image: linear-gradient(to bottom, #d3d3d1, #fcfcfc 2px, #ffffff 90%);
+      box-shadow: inset 0 0 0 1px #f57900, 0 1px rgba(255, 255, 255, 0);
       border-color: #f57900; }
     entry.warning:selected, spinbutton.warning:selected, entry.warning:selected:focus, spinbutton.warning:selected:focus {
       background-color: #f57900; }
@@ -257,7 +257,7 @@ entry, spinbutton {
       color: #a2a5a5; }
   .osd entry, .osd spinbutton {
     background-color: transparent;
-    background-image: linear-gradient(to bottom, #dddddb, #f8f8f8 3px, #ffffff 90%);
+    background-image: linear-gradient(to bottom, #d3d3d1, #fcfcfc 2px, #ffffff 90%);
     color: white;
     border-color: rgba(0, 0, 0, 0.7);
     background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.5));
@@ -267,7 +267,7 @@ entry, spinbutton {
     -gtk-icon-shadow: 0 1px black; }
     .osd entry:focus, .osd spinbutton:focus {
       background-color: transparent;
-      background-image: linear-gradient(to bottom, #dddddb, #f8f8f8 3px, #ffffff 90%);
+      background-image: linear-gradient(to bottom, #d3d3d1, #fcfcfc 2px, #ffffff 90%);
       color: white;
       border-color: #4a90d9;
       background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.5));
@@ -277,7 +277,7 @@ entry, spinbutton {
       -gtk-icon-shadow: 0 1px black; }
     .osd entry:backdrop, .osd spinbutton:backdrop {
       background-color: transparent;
-      background-image: linear-gradient(to bottom, #dddddb, #f8f8f8 3px, #ffffff 90%);
+      background-image: linear-gradient(to bottom, #d3d3d1, #fcfcfc 2px, #ffffff 90%);
       color: white;
       border-color: rgba(0, 0, 0, 0.7);
       background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.5));
@@ -287,7 +287,7 @@ entry, spinbutton {
       -gtk-icon-shadow: none; }
     .osd entry:insensitive, .osd spinbutton:insensitive {
       background-color: transparent;
-      background-image: linear-gradient(to bottom, #dddddb, #f8f8f8 3px, #ffffff 90%);
+      background-image: linear-gradient(to bottom, #d3d3d1, #fcfcfc 2px, #ffffff 90%);
       color: #878a89;
       border-color: rgba(0, 0, 0, 0.7);
       background-image: linear-gradient(to bottom, rgba(53, 57, 58, 0.5));
@@ -337,10 +337,10 @@ button, headerbar button.titlebutton,
   color: #2e3436;
   outline-color: rgba(46, 52, 54, 0.3);
   border-color: #9d9d99;
-  background-image: linear-gradient(to bottom, #f9f9f9, #ededec 40%, #e1e1df);
+  background-image: linear-gradient(to bottom, #e8e8e7, #dededd 60%, #cfcfcd);
   text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
   -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-  box-shadow: inset 0 1px white, 0 1px rgba(255, 255, 255, 0.8); }
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.8), 0 1px rgba(255, 255, 255, 0); }
   button.flat, button.sidebar-button, headerbar button.titlebutton,
   .titlebar button.titlebutton {
     border-color: transparent;
@@ -362,10 +362,16 @@ button, headerbar button.titlebutton,
     color: #2e3436;
     outline-color: rgba(46, 52, 54, 0.3);
     border-color: #9d9d99;
-    background-image: linear-gradient(to bottom, white, #f7f7f7 40%, #ededec);
+    /*
+    background-image: linear-gradient(to bottom,
+                                      lighten($c, 16%),
+                                      lighten($c, 6%) 40%,
+                                      lighten($c, 2%));
+    */
+    background-image: linear-gradient(to bottom, #f7f7f7, #e8e8e7 60%, #dededd);
     text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
     -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-    box-shadow: inset 0 1px white, 0 1px rgba(255, 255, 255, 0.8);
+    box-shadow: inset 0 1px white, 0 1px rgba(255, 255, 255, 0);
     -gtk-icon-effect: highlight; }
   button:active, headerbar button.titlebutton:active,
   .titlebar button.titlebutton:active, button:checked, headerbar button.titlebutton:checked,
@@ -373,10 +379,10 @@ button, headerbar button.titlebutton,
     color: #2e3436;
     outline-color: rgba(46, 52, 54, 0.3);
     border-color: #9d9d99;
-    background-image: linear-gradient(to bottom, #d2d2d0, #d8d8d6 40%, #dcdcda);
+    background-image: linear-gradient(to bottom, #c8c8c5, #dcdcda);
     text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
     -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-    box-shadow: inset 0 1px rgba(0, 0, 0, 0.07), inset 0 2px 1px -2px rgba(0, 0, 0, 0.6), 0 1px rgba(255, 255, 255, 0.8);
+    box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6), 0 1px rgba(255, 255, 255, 0);
     transition-duration: 50ms; }
   button:backdrop, headerbar button.titlebutton:backdrop,
   .titlebar button.titlebutton:backdrop, button.flat:backdrop, button.sidebar-button:backdrop, headerbar button.titlebutton:backdrop,
@@ -437,7 +443,7 @@ button, headerbar button.titlebutton,
     background-image: linear-gradient(to bottom, #f1f1f1);
     text-shadow: none;
     -gtk-icon-shadow: none;
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0.8); }
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
     button:insensitive > .label, headerbar button.titlebutton:insensitive > .label,
     .titlebar button.titlebutton:insensitive > .label {
       color: inherit; }
@@ -445,7 +451,7 @@ button, headerbar button.titlebutton,
       color: #8b8e8f;
       border-color: #9d9d99;
       background-image: linear-gradient(to bottom, #e9e9e8, #f1f1f1);
-      box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0.8); }
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
       button:insensitive:active > .label, headerbar button.titlebutton:insensitive:active > .label,
       .titlebar button.titlebutton:insensitive:active > .label, button:insensitive:checked > .label, headerbar button.titlebutton:insensitive:checked > .label,
       .titlebar button.titlebutton:insensitive:checked > .label {
@@ -631,10 +637,10 @@ button, headerbar button.titlebutton,
     color: white;
     outline-color: rgba(255, 255, 255, 0.3);
     border-color: #1c5187;
-    background-image: linear-gradient(to bottom, #68a2df, #5295db 40%, #3d88d6);
+    background-image: linear-gradient(to bottom, #4a90d9, #3986d5 60%, #2a76c6);
     text-shadow: 0 -1px rgba(0, 0, 0, 0.54353);
     -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.54353);
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 1px rgba(255, 255, 255, 0.8); }
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.4), 0 1px rgba(255, 255, 255, 0); }
     button.suggested-action.flat, button.suggested-action.sidebar-button, headerbar button.suggested-action.titlebutton,
     .titlebar button.suggested-action.titlebutton {
       border-color: transparent;
@@ -648,18 +654,24 @@ button, headerbar button.titlebutton,
       color: white;
       outline-color: rgba(255, 255, 255, 0.3);
       border-color: #1c5187;
-      background-image: linear-gradient(to bottom, #8db9e7, #63a0de 40%, #5295db);
+      /*
+      background-image: linear-gradient(to bottom,
+                                        lighten($c, 16%),
+                                        lighten($c, 6%) 40%,
+                                        lighten($c, 2%));
+      */
+      background-image: linear-gradient(to bottom, #63a0de, #4a90d9 60%, #3986d5);
       text-shadow: 0 -1px rgba(0, 0, 0, 0.49553);
       -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.49553);
-      box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 1px rgba(255, 255, 255, 0.8); }
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0.4), 0 1px rgba(255, 255, 255, 0); }
     button.suggested-action:active, button.suggested-action:checked {
       color: white;
       outline-color: rgba(255, 255, 255, 0.3);
       border-color: #1c5187;
-      background-image: linear-gradient(to bottom, #2b79cb, #2e7fd3 40%, #3583d5);
+      background-image: linear-gradient(to bottom, #276fba, #3583d5);
       text-shadow: 0 -1px rgba(0, 0, 0, 0.62353);
       -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.62353);
-      box-shadow: inset 0 1px rgba(0, 0, 0, 0.07), inset 0 2px 1px -2px rgba(0, 0, 0, 0.6), 0 1px rgba(255, 255, 255, 0.8); }
+      box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6), 0 1px rgba(255, 255, 255, 0); }
     button.suggested-action:backdrop, button.suggested-action.flat:backdrop, button.suggested-action.sidebar-button:backdrop, headerbar button.suggested-action.titlebutton:backdrop,
     .titlebar button.suggested-action.titlebutton:backdrop {
       color: #dbe9f7;
@@ -717,7 +729,7 @@ button, headerbar button.titlebutton,
       background-image: linear-gradient(to bottom, #f1f1f1);
       text-shadow: none;
       -gtk-icon-shadow: none;
-      box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0.8); }
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
       button.suggested-action:insensitive > .label, headerbar button.suggested-action.titlebutton:insensitive > .label,
       .titlebar button.suggested-action.titlebutton:insensitive > .label {
         color: inherit; }
@@ -725,7 +737,7 @@ button, headerbar button.titlebutton,
         color: #b9d4f1;
         border-color: #1c5187;
         background-image: linear-gradient(to bottom, #4b8dd3, #5094db);
-        box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0.8); }
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
         button.suggested-action:insensitive:active > .label, headerbar button.suggested-action.titlebutton:insensitive:active > .label,
         .titlebar button.suggested-action.titlebutton:insensitive:active > .label, button.suggested-action:insensitive:checked > .label, headerbar button.suggested-action.titlebutton:insensitive:checked > .label,
         .titlebar button.suggested-action.titlebutton:insensitive:checked > .label {
@@ -778,10 +790,10 @@ button, headerbar button.titlebutton,
     color: white;
     outline-color: rgba(255, 255, 255, 0.3);
     border-color: #8e0b0b;
-    background-image: linear-gradient(to bottom, #f14a4a, #f03232 40%, #ee1b1b);
+    background-image: linear-gradient(to bottom, #ef2929, #ee1616 60%, #d51010);
     text-shadow: 0 -1px rgba(0, 0, 0, 0.56078);
     -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.56078);
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 1px rgba(255, 255, 255, 0.8); }
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.4), 0 1px rgba(255, 255, 255, 0); }
     button.destructive-action.flat, button.destructive-action.sidebar-button, headerbar button.destructive-action.titlebutton,
     .titlebar button.destructive-action.titlebutton {
       border-color: transparent;
@@ -795,18 +807,24 @@ button, headerbar button.titlebutton,
       color: white;
       outline-color: rgba(255, 255, 255, 0.3);
       border-color: #8e0b0b;
-      background-image: linear-gradient(to bottom, #f57575, #f14545 40%, #f03232);
+      /*
+      background-image: linear-gradient(to bottom,
+                                        lighten($c, 16%),
+                                        lighten($c, 6%) 40%,
+                                        lighten($c, 2%));
+      */
+      background-image: linear-gradient(to bottom, #f14545, #ef2929 60%, #ee1616);
       text-shadow: 0 -1px rgba(0, 0, 0, 0.51278);
       -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.51278);
-      box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 1px rgba(255, 255, 255, 0.8); }
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0.4), 0 1px rgba(255, 255, 255, 0); }
     button.destructive-action:active, button.destructive-action:checked {
       color: white;
       outline-color: rgba(255, 255, 255, 0.3);
       border-color: #8e0b0b;
-      background-image: linear-gradient(to bottom, #da1010, #e51111 40%, #ed1212);
+      background-image: linear-gradient(to bottom, #c70f0f, #ed1212);
       text-shadow: 0 -1px rgba(0, 0, 0, 0.64078);
       -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.64078);
-      box-shadow: inset 0 1px rgba(0, 0, 0, 0.07), inset 0 2px 1px -2px rgba(0, 0, 0, 0.6), 0 1px rgba(255, 255, 255, 0.8); }
+      box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6), 0 1px rgba(255, 255, 255, 0); }
     button.destructive-action:backdrop, button.destructive-action.flat:backdrop, button.destructive-action.sidebar-button:backdrop, headerbar button.destructive-action.titlebutton:backdrop,
     .titlebar button.destructive-action.titlebutton:backdrop {
       color: #fcd4d4;
@@ -864,7 +882,7 @@ button, headerbar button.titlebutton,
       background-image: linear-gradient(to bottom, #f1f1f1);
       text-shadow: none;
       -gtk-icon-shadow: none;
-      box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0.8); }
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
       button.destructive-action:insensitive > .label, headerbar button.destructive-action.titlebutton:insensitive > .label,
       .titlebar button.destructive-action.titlebutton:insensitive > .label {
         color: inherit; }
@@ -872,7 +890,7 @@ button, headerbar button.titlebutton,
         color: #f9adad;
         border-color: #8e0b0b;
         background-image: linear-gradient(to bottom, #e52d2d, #ef3131);
-        box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0.8); }
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
         button.destructive-action:insensitive:active > .label, headerbar button.destructive-action.titlebutton:insensitive:active > .label,
         .titlebar button.destructive-action.titlebutton:insensitive:active > .label, button.destructive-action:insensitive:checked > .label, headerbar button.destructive-action.titlebutton:insensitive:checked > .label,
         .titlebar button.destructive-action.titlebutton:insensitive:checked > .label {
@@ -993,29 +1011,35 @@ button, headerbar button.titlebutton,
   color: #2e3436;
   outline-color: rgba(46, 52, 54, 0.3);
   border-color: #9d9d99;
-  background-image: linear-gradient(to bottom, #f9f9f9, #ededec 40%, #e1e1df);
+  background-image: linear-gradient(to bottom, #e8e8e7, #dededd 60%, #cfcfcd);
   text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
   -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-  box-shadow: inset 0 1px white, 0 1px rgba(255, 255, 255, 0.8); }
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.8), 0 1px rgba(255, 255, 255, 0); }
   .inline-toolbar toolbutton > button:hover, .inline-toolbar headerbar toolbutton > button.titlebutton:hover,
   .inline-toolbar .titlebar toolbutton > button.titlebutton:hover {
     color: #2e3436;
     outline-color: rgba(46, 52, 54, 0.3);
     border-color: #9d9d99;
-    background-image: linear-gradient(to bottom, white, #f7f7f7 40%, #ededec);
+    /*
+    background-image: linear-gradient(to bottom,
+                                      lighten($c, 16%),
+                                      lighten($c, 6%) 40%,
+                                      lighten($c, 2%));
+    */
+    background-image: linear-gradient(to bottom, #f7f7f7, #e8e8e7 60%, #dededd);
     text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
     -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-    box-shadow: inset 0 1px white, 0 1px rgba(255, 255, 255, 0.8); }
+    box-shadow: inset 0 1px white, 0 1px rgba(255, 255, 255, 0); }
   .inline-toolbar toolbutton > button:active, .inline-toolbar headerbar toolbutton > button.titlebutton:active,
   .inline-toolbar .titlebar toolbutton > button.titlebutton:active, .inline-toolbar toolbutton > button:checked, .inline-toolbar headerbar toolbutton > button.titlebutton:checked,
   .inline-toolbar .titlebar toolbutton > button.titlebutton:checked {
     color: #2e3436;
     outline-color: rgba(46, 52, 54, 0.3);
     border-color: #9d9d99;
-    background-image: linear-gradient(to bottom, #d2d2d0, #d8d8d6 40%, #dcdcda);
+    background-image: linear-gradient(to bottom, #c8c8c5, #dcdcda);
     text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
     -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-    box-shadow: inset 0 1px rgba(0, 0, 0, 0.07), inset 0 2px 1px -2px rgba(0, 0, 0, 0.6), 0 1px rgba(255, 255, 255, 0.8); }
+    box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6), 0 1px rgba(255, 255, 255, 0); }
   .inline-toolbar toolbutton > button:insensitive, .inline-toolbar headerbar toolbutton > button.titlebutton:insensitive,
   .inline-toolbar .titlebar toolbutton > button.titlebutton:insensitive {
     color: #8b8e8f;
@@ -1023,7 +1047,7 @@ button, headerbar button.titlebutton,
     background-image: linear-gradient(to bottom, #f1f1f1);
     text-shadow: none;
     -gtk-icon-shadow: none;
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0.8); }
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
     .inline-toolbar toolbutton > button:insensitive > .label {
       color: inherit; }
   .inline-toolbar toolbutton > button:insensitive:active, .inline-toolbar headerbar toolbutton > button.titlebutton:insensitive:active,
@@ -1032,7 +1056,7 @@ button, headerbar button.titlebutton,
     color: #8b8e8f;
     border-color: #9d9d99;
     background-image: linear-gradient(to bottom, #e9e9e8, #f1f1f1);
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0.8); }
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
     .inline-toolbar toolbutton > button:insensitive:active > .label, .inline-toolbar toolbutton > button:insensitive:checked > .label {
       color: inherit; }
   .inline-toolbar toolbutton > button:backdrop, .inline-toolbar headerbar toolbutton > button.titlebutton:backdrop,
@@ -1201,7 +1225,7 @@ button.color, headerbar button.color.titlebutton,
   padding: 5px; }
   button.color > colorswatch:first-child:last-child, headerbar button.color.titlebutton > colorswatch:first-child:last-child,
   .titlebar button.color.titlebutton > colorswatch:first-child:last-child {
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.1), 0 1px rgba(255, 255, 255, 0.8); }
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.1), 0 1px rgba(255, 255, 255, 0); }
     button.color > colorswatch:first-child:last-child > overlay, button.color > colorswatch:first-child:last-child, headerbar button.color.titlebutton > colorswatch:first-child:last-child,
     .titlebar button.color.titlebutton > colorswatch:first-child:last-child {
       border-radius: 0; }
@@ -1348,23 +1372,29 @@ spinbutton.vertical {
       color: #2e3436;
       outline-color: rgba(46, 52, 54, 0.3);
       border-color: #9d9d99;
-      background-image: linear-gradient(to bottom, #f9f9f9, #ededec 40%, #e1e1df);
+      background-image: linear-gradient(to bottom, #e8e8e7, #dededd 60%, #cfcfcd);
       text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
       -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-      box-shadow: inset 0 1px white; }
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0.8); }
       spinbutton.vertical button:first-child:active {
         color: #2e3436;
         outline-color: rgba(46, 52, 54, 0.3);
         border-color: #9d9d99;
-        background-image: linear-gradient(to bottom, #d2d2d0, #d8d8d6 40%, #dcdcda);
+        background-image: linear-gradient(to bottom, #c8c8c5, #dcdcda);
         text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
         -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-        box-shadow: inset 0 1px rgba(0, 0, 0, 0.07), inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
+        box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
       spinbutton.vertical button:first-child:hover {
         color: #2e3436;
         outline-color: rgba(46, 52, 54, 0.3);
         border-color: #9d9d99;
-        background-image: linear-gradient(to bottom, white, #f7f7f7 40%, #ededec);
+        /*
+        background-image: linear-gradient(to bottom,
+                                          lighten($c, 16%),
+                                          lighten($c, 6%) 40%,
+                                          lighten($c, 2%));
+        */
+        background-image: linear-gradient(to bottom, #f7f7f7, #e8e8e7 60%, #dededd);
         text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
         -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
         box-shadow: inset 0 1px white; }
@@ -1533,7 +1563,7 @@ searchbar,
   border-style: solid;
   border-color: #9d9d99;
   background-color: #d2d2d0;
-  box-shadow: inset 0 2px 3px -1px #b2b2af, 0 1px rgba(255, 255, 255, 0.8); }
+  box-shadow: inset 0 2px 3px -1px #b2b2af, 0 1px rgba(255, 255, 255, 0); }
   .inline-toolbar:backdrop, searchbar:backdrop,
   .location-bar:backdrop {
     border-color: #a5a5a1;
@@ -1551,8 +1581,8 @@ headerbar {
   border-color: #9d9d99;
   border-radius: 7px 7px 0 0;
   background-color: transparent;
-  background-image: linear-gradient(to bottom, #f7f7f7, #ededec);
-  box-shadow: inset 0 -1px #d5d5d4, inset 0 1px rgba(255, 255, 255, 0.8); }
+  background-image: linear-gradient(to top, #ededec, #f2f2f1 10%);
+  box-shadow: inset 0 -1px #e1e1df, inset 0 1px rgba(255, 255, 255, 0.8); }
   .titlebar:backdrop,
   headerbar:backdrop {
     border-color: #a5a5a1;
@@ -1598,10 +1628,10 @@ headerbar {
       color: #ffffff;
       outline-color: rgba(255, 255, 255, 0.3);
       border-color: #1c5187;
-      background-image: linear-gradient(to bottom, #68a2df, #5295db 40%, #3d88d6);
+      background-image: linear-gradient(to bottom, #4a90d9, #3986d5 60%, #2a76c6);
       text-shadow: 0 -1px rgba(0, 0, 0, 0.54353);
       -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.54353);
-      box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 1px rgba(146, 188, 232, 0.9); }
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0.4), 0 1px rgba(146, 188, 232, 0); }
       .titlebar.selection-mode button.flat, .titlebar.selection-mode button.sidebar-button,
       .titlebar.selection-mode button.titlebutton,
       headerbar.selection-mode button.flat,
@@ -1618,20 +1648,26 @@ headerbar {
         color: #ffffff;
         outline-color: rgba(255, 255, 255, 0.3);
         border-color: #1c5187;
-        background-image: linear-gradient(to bottom, #8db9e7, #63a0de 40%, #5295db);
+        /*
+        background-image: linear-gradient(to bottom,
+                                          lighten($c, 16%),
+                                          lighten($c, 6%) 40%,
+                                          lighten($c, 2%));
+        */
+        background-image: linear-gradient(to bottom, #63a0de, #4a90d9 60%, #3986d5);
         text-shadow: 0 -1px rgba(0, 0, 0, 0.49553);
         -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.49553);
-        box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 1px rgba(146, 188, 232, 0.9); }
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0.4), 0 1px rgba(146, 188, 232, 0); }
       .titlebar.selection-mode button:active, .titlebar.selection-mode button:checked,
       headerbar.selection-mode button:active,
       headerbar.selection-mode button:checked {
         color: #ffffff;
         outline-color: rgba(255, 255, 255, 0.3);
         border-color: #1c5187;
-        background-image: linear-gradient(to bottom, #2b79cb, #2e7fd3 40%, #3583d5);
+        background-image: linear-gradient(to bottom, #276fba, #3583d5);
         text-shadow: 0 -1px rgba(0, 0, 0, 0.62353);
         -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.62353);
-        box-shadow: inset 0 1px rgba(0, 0, 0, 0.07), inset 0 2px 1px -2px rgba(0, 0, 0, 0.6), 0 1px rgba(146, 188, 232, 0.9); }
+        box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6), 0 1px rgba(146, 188, 232, 0); }
       .titlebar.selection-mode button:backdrop, .titlebar.selection-mode button.flat:backdrop, .titlebar.selection-mode button.sidebar-button:backdrop,
       .titlebar.selection-mode button.titlebutton:backdrop,
       headerbar.selection-mode button:backdrop,
@@ -1742,7 +1778,7 @@ headerbar {
         background-image: linear-gradient(to bottom, #65a1df);
         text-shadow: none;
         -gtk-icon-shadow: none;
-        box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(146, 188, 232, 0.9); }
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(146, 188, 232, 0); }
         .titlebar.selection-mode button:insensitive > .label, .titlebar.selection-mode headerbar button.titlebutton:insensitive > .label,
         headerbar.selection-mode button:insensitive > .label,
         headerbar.selection-mode .titlebar button.titlebutton:insensitive > .label {
@@ -1753,7 +1789,7 @@ headerbar {
           color: #b9d4f1;
           border-color: #1c5187;
           background-image: linear-gradient(to bottom, #4b8dd3, #5094db);
-          box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(146, 188, 232, 0.9); }
+          box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(146, 188, 232, 0); }
           .titlebar.selection-mode button:insensitive:active > .label, .titlebar.selection-mode headerbar button.titlebutton:insensitive:active > .label, .titlebar.selection-mode button:insensitive:checked > .label, .titlebar.selection-mode headerbar button.titlebutton:insensitive:checked > .label,
           headerbar.selection-mode button:insensitive:active > .label,
           headerbar.selection-mode .titlebar button.titlebutton:insensitive:active > .label,
@@ -1765,30 +1801,36 @@ headerbar {
         color: #2e3436;
         outline-color: rgba(46, 52, 54, 0.3);
         border-color: #9d9d99;
-        background-image: linear-gradient(to bottom, #f9f9f9, #ededec 40%, #e1e1df);
+        background-image: linear-gradient(to bottom, #e8e8e7, #dededd 60%, #cfcfcd);
         text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
         -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-        box-shadow: inset 0 1px white, 0 1px rgba(146, 188, 232, 0.9);
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0.8), 0 1px rgba(146, 188, 232, 0);
         border-color: #184472; }
         .titlebar.selection-mode button.suggested-action:hover,
         headerbar.selection-mode button.suggested-action:hover {
           color: #2e3436;
           outline-color: rgba(46, 52, 54, 0.3);
           border-color: #9d9d99;
-          background-image: linear-gradient(to bottom, white, #f7f7f7 40%, #ededec);
+          /*
+          background-image: linear-gradient(to bottom,
+                                            lighten($c, 16%),
+                                            lighten($c, 6%) 40%,
+                                            lighten($c, 2%));
+          */
+          background-image: linear-gradient(to bottom, #f7f7f7, #e8e8e7 60%, #dededd);
           text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
           -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-          box-shadow: inset 0 1px white, 0 1px rgba(146, 188, 232, 0.9);
+          box-shadow: inset 0 1px white, 0 1px rgba(146, 188, 232, 0);
           border-color: #184472; }
         .titlebar.selection-mode button.suggested-action:active,
         headerbar.selection-mode button.suggested-action:active {
           color: #2e3436;
           outline-color: rgba(46, 52, 54, 0.3);
           border-color: #9d9d99;
-          background-image: linear-gradient(to bottom, #d2d2d0, #d8d8d6 40%, #dcdcda);
+          background-image: linear-gradient(to bottom, #c8c8c5, #dcdcda);
           text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
           -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-          box-shadow: inset 0 1px rgba(0, 0, 0, 0.07), inset 0 2px 1px -2px rgba(0, 0, 0, 0.6), 0 1px rgba(146, 188, 232, 0.9);
+          box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6), 0 1px rgba(146, 188, 232, 0);
           border-color: #184472; }
         .titlebar.selection-mode button.suggested-action:insensitive,
         headerbar.selection-mode button.suggested-action:insensitive {
@@ -1797,7 +1839,7 @@ headerbar {
           background-image: linear-gradient(to bottom, #f1f1f1);
           text-shadow: none;
           -gtk-icon-shadow: none;
-          box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(146, 188, 232, 0.9);
+          box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(146, 188, 232, 0);
           border-color: #184472; }
           .titlebar.selection-mode button.suggested-action:insensitive > .label, .titlebar.selection-mode headerbar button.suggested-action.titlebutton:insensitive > .label,
           headerbar.selection-mode button.suggested-action:insensitive > .label,
@@ -2332,7 +2374,13 @@ notebook {
         color: #2e3436;
         outline-color: rgba(46, 52, 54, 0.3);
         border-color: #9d9d99;
-        background-image: linear-gradient(to bottom, white, #f7f7f7 40%, #ededec);
+        /*
+        background-image: linear-gradient(to bottom,
+                                          lighten($c, 16%),
+                                          lighten($c, 6%) 40%,
+                                          lighten($c, 2%));
+        */
+        background-image: linear-gradient(to bottom, #f7f7f7, #e8e8e7 60%, #dededd);
         text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
         -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
         box-shadow: inset 0 1px white;
@@ -2344,10 +2392,10 @@ notebook {
         color: #2e3436;
         outline-color: rgba(46, 52, 54, 0.3);
         border-color: #9d9d99;
-        background-image: linear-gradient(to bottom, #d2d2d0, #d8d8d6 40%, #dcdcda);
+        background-image: linear-gradient(to bottom, #c8c8c5, #dcdcda);
         text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
         -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-        box-shadow: inset 0 1px rgba(0, 0, 0, 0.07), inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
+        box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
       notebook tab button:backdrop,
       notebook tab .titlebar button.titlebutton:backdrop,
       .titlebar notebook tab button.titlebutton:backdrop {
@@ -2442,7 +2490,7 @@ switch {
   font-weight: bold;
   font-size: smaller;
   outline-offset: -4px;
-  box-shadow: inset 0 1px rgba(0, 0, 0, 0.1), 0 1px rgba(255, 255, 255, 0.8);
+  box-shadow: inset 0 1px rgba(0, 0, 0, 0.1), 0 1px rgba(255, 255, 255, 0);
   border: 1px solid #9d9d99;
   border-radius: 3px;
   color: #2e3436;
@@ -2455,14 +2503,14 @@ switch {
     background-image: linear-gradient(to bottom, #4a90d9 2px, #63a0de);
     color: white;
     border-color: #184472;
-    box-shadow: 0 1px rgba(255, 255, 255, 0.8);
+    box-shadow: 0 1px rgba(255, 255, 255, 0);
     text-shadow: 0 1px rgba(24, 68, 114, 0.5), 0 0 2px rgba(255, 255, 255, 0.6); }
   switch:insensitive {
     color: #8b8e8f;
     border-color: #9d9d99;
     background-image: none;
     background-color: #f1f1f1;
-    box-shadow: 0 1px rgba(255, 255, 255, 0.8);
+    box-shadow: 0 1px rgba(255, 255, 255, 0);
     text-shadow: none; }
   switch:backdrop {
     color: #8b8e8f;
@@ -2486,19 +2534,25 @@ switch {
     color: #2e3436;
     outline-color: rgba(46, 52, 54, 0.3);
     border-color: #9d9d99;
-    background-image: linear-gradient(to bottom, #f9f9f9, #ededec 40%, #e1e1df);
+    background-image: linear-gradient(to bottom, #e8e8e7, #dededd 60%, #cfcfcd);
     text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
     -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-    box-shadow: inset 0 1px white, 0 1px rgba(255, 255, 255, 0.8);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.8), 0 1px rgba(255, 255, 255, 0);
     box-shadow: inset 0 1px white, inset 0 -2px rgba(232, 232, 231, 0.6), inset 0 -1px #c3c3c0; }
   switch:hover slider {
     color: #2e3436;
     outline-color: rgba(46, 52, 54, 0.3);
     border-color: #9d9d99;
-    background-image: linear-gradient(to bottom, white, #f7f7f7 40%, #ededec);
+    /*
+    background-image: linear-gradient(to bottom,
+                                      lighten($c, 16%),
+                                      lighten($c, 6%) 40%,
+                                      lighten($c, 2%));
+    */
+    background-image: linear-gradient(to bottom, #f7f7f7, #e8e8e7 60%, #dededd);
     text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
     -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-    box-shadow: inset 0 1px white, 0 1px rgba(255, 255, 255, 0.8);
+    box-shadow: inset 0 1px white, 0 1px rgba(255, 255, 255, 0);
     box-shadow: inset 0 1px white, inset 0 -2px rgba(232, 232, 231, 0.6), inset 0 -1px #c3c3c0; }
   switch:active slider {
     border: 1px solid #184472; }
@@ -3067,10 +3121,10 @@ scale trough, scale fill, progressbar trough {
   border: 1px solid #9d9d99;
   border-radius: 3px;
   background-color: #cececc;
-  box-shadow: inset 1px 1px rgba(0, 0, 0, 0.1), 0 1px rgba(255, 255, 255, 0.8); }
+  box-shadow: inset 1px 1px rgba(0, 0, 0, 0.1), 0 1px rgba(255, 255, 255, 0); }
   scale trough:insensitive, scale fill:insensitive, progressbar trough:insensitive {
     background-color: #f1f1f1;
-    box-shadow: 0 1px rgba(255, 255, 255, 0.8); }
+    box-shadow: 0 1px rgba(255, 255, 255, 0); }
   scale trough:backdrop, scale fill:backdrop, progressbar trough:backdrop, progressbar:backdrop trough {
     background-color: #d1d1cf;
     border-color: #a5a5a1;
@@ -3142,20 +3196,26 @@ scale {
     color: #2e3436;
     outline-color: rgba(46, 52, 54, 0.3);
     border-color: #9d9d99;
-    background-image: linear-gradient(to bottom, #f9f9f9, #ededec 40%, #e1e1df);
+    background-image: linear-gradient(to bottom, #e8e8e7, #dededd 60%, #cfcfcd);
     text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
     -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-    box-shadow: inset 0 1px white, 0 1px rgba(0, 0, 0, 0.1);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.8), 0 1px transparent;
     border: 1px solid #969691;
     border-radius: 100%; }
     scale slider:hover {
       color: #2e3436;
       outline-color: rgba(46, 52, 54, 0.3);
       border-color: #9d9d99;
-      background-image: linear-gradient(to bottom, white, #f7f7f7 40%, #ededec);
+      /*
+      background-image: linear-gradient(to bottom,
+                                        lighten($c, 16%),
+                                        lighten($c, 6%) 40%,
+                                        lighten($c, 2%));
+      */
+      background-image: linear-gradient(to bottom, #f7f7f7, #e8e8e7 60%, #dededd);
       text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
       -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-      box-shadow: inset 0 1px white, 0 1px rgba(0, 0, 0, 0.1); }
+      box-shadow: inset 0 1px white, 0 1px transparent; }
     scale slider:active {
       border-color: #184472; }
     scale slider:insensitive {
@@ -3164,7 +3224,7 @@ scale {
       background-image: linear-gradient(to bottom, #f1f1f1);
       text-shadow: none;
       -gtk-icon-shadow: none;
-      box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0.8); }
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
       scale slider:insensitive > .label {
         color: inherit; }
     scale slider:backdrop {
@@ -3456,7 +3516,7 @@ progressbar {
   padding: 0;
   font-size: smaller;
   color: rgba(46, 52, 54, 0.4);
-  box-shadow: 0 1px rgba(255, 255, 255, 0.8); }
+  box-shadow: 0 1px rgba(255, 255, 255, 0); }
   progressbar:backdrop {
     box-shadow: none; }
   progressbar progress {
@@ -3488,7 +3548,7 @@ progressbar {
  * Level Bar *
  *************/
 levelbar {
-  box-shadow: 0 1px rgba(255, 255, 255, 0.8);
+  box-shadow: 0 1px rgba(255, 255, 255, 0);
   -GtkLevelBar-min-block-width: 34;
   -GtkLevelBar-min-block-height: 3; }
   levelbar.vertical {
@@ -3499,13 +3559,13 @@ levelbar {
     padding: 2px;
     border-radius: 3px;
     background-color: transparent;
-    background-image: linear-gradient(to bottom, #dddddb, #f8f8f8 3px, #ffffff 90%);
+    background-image: linear-gradient(to bottom, #d3d3d1, #fcfcfc 2px, #ffffff 90%);
     color: black;
     border-color: #9d9d99;
-    box-shadow: inset 0 0 0 1px rgba(74, 144, 217, 0), 0 1px rgba(255, 255, 255, 0.8); }
+    box-shadow: inset 0 0 0 1px rgba(74, 144, 217, 0), 0 1px rgba(255, 255, 255, 0); }
     levelbar trough:backdrop {
       background-color: transparent;
-      background-image: linear-gradient(to bottom, #dddddb, #f8f8f8 3px, #ffffff 90%);
+      background-image: linear-gradient(to bottom, #d3d3d1, #fcfcfc 2px, #ffffff 90%);
       color: #333333;
       border-color: #a5a5a1;
       background-image: linear-gradient(to bottom, white);
@@ -3739,10 +3799,10 @@ row:selected .titlebar button.titlebutton,
   color: #2e3436;
   outline-color: rgba(46, 52, 54, 0.3);
   border-color: #9d9d99;
-  background-image: linear-gradient(to bottom, #f9f9f9, #ededec 40%, #e1e1df);
+  background-image: linear-gradient(to bottom, #e8e8e7, #dededd 60%, #cfcfcd);
   text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
   -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-  box-shadow: inset 0 1px white;
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.8);
   border-color: #184472; }
   row:selected button.flat, row:selected button.sidebar-button, row:selected headerbar button.titlebutton, headerbar row:selected button.titlebutton,
   row:selected .titlebar button.titlebutton,
@@ -3758,7 +3818,13 @@ row:selected .titlebar button.titlebutton,
     color: #2e3436;
     outline-color: rgba(46, 52, 54, 0.3);
     border-color: #9d9d99;
-    background-image: linear-gradient(to bottom, white, #f7f7f7 40%, #ededec);
+    /*
+    background-image: linear-gradient(to bottom,
+                                      lighten($c, 16%),
+                                      lighten($c, 6%) 40%,
+                                      lighten($c, 2%));
+    */
+    background-image: linear-gradient(to bottom, #f7f7f7, #e8e8e7 60%, #dededd);
     text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
     -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
     box-shadow: inset 0 1px white;
@@ -3767,10 +3833,10 @@ row:selected .titlebar button.titlebutton,
     color: #2e3436;
     outline-color: rgba(46, 52, 54, 0.3);
     border-color: #9d9d99;
-    background-image: linear-gradient(to bottom, #d2d2d0, #d8d8d6 40%, #dcdcda);
+    background-image: linear-gradient(to bottom, #c8c8c5, #dcdcda);
     text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
     -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-    box-shadow: inset 0 1px rgba(0, 0, 0, 0.07), inset 0 2px 1px -2px rgba(0, 0, 0, 0.6);
+    box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6);
     border-color: #184472; }
   row:selected button:backdrop, row:selected button.flat:backdrop, row:selected button.sidebar-button:backdrop, row:selected headerbar button.titlebutton:backdrop, headerbar row:selected button.titlebutton:backdrop,
   row:selected .titlebar button.titlebutton:backdrop,
@@ -3938,15 +4004,21 @@ messagedialog.csd .dialog-action-area button {
   color: #2e3436;
   outline-color: rgba(46, 52, 54, 0.3);
   border-color: #9d9d99;
-  background-image: linear-gradient(to bottom, #f9f9f9, #ededec 40%, #e1e1df);
+  background-image: linear-gradient(to bottom, #e8e8e7, #dededd 60%, #cfcfcd);
   text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
   -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-  box-shadow: inset 0 1px white; }
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.8); }
   messagedialog.csd .dialog-action-area button:hover {
     color: #2e3436;
     outline-color: rgba(46, 52, 54, 0.3);
     border-color: #9d9d99;
-    background-image: linear-gradient(to bottom, white, #f7f7f7 40%, #ededec);
+    /*
+    background-image: linear-gradient(to bottom,
+                                      lighten($c, 16%),
+                                      lighten($c, 6%) 40%,
+                                      lighten($c, 2%));
+    */
+    background-image: linear-gradient(to bottom, #f7f7f7, #e8e8e7 60%, #dededd);
     text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
     -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
     box-shadow: inset 0 1px white; }
@@ -3954,10 +4026,10 @@ messagedialog.csd .dialog-action-area button {
     color: #2e3436;
     outline-color: rgba(46, 52, 54, 0.3);
     border-color: #9d9d99;
-    background-image: linear-gradient(to bottom, #d2d2d0, #d8d8d6 40%, #dcdcda);
+    background-image: linear-gradient(to bottom, #c8c8c5, #dcdcda);
     text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
     -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-    box-shadow: inset 0 1px rgba(0, 0, 0, 0.07), inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
+    box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
   messagedialog.csd .dialog-action-area button:insensitive {
     color: #8b8e8f;
     border-color: #9d9d99;
@@ -3989,26 +4061,32 @@ messagedialog.csd .dialog-action-area button {
     color: white;
     outline-color: rgba(255, 255, 255, 0.3);
     border-color: #1c5187;
-    background-image: linear-gradient(to bottom, #68a2df, #5295db 40%, #3d88d6);
+    background-image: linear-gradient(to bottom, #4a90d9, #3986d5 60%, #2a76c6);
     text-shadow: 0 -1px rgba(0, 0, 0, 0.54353);
     -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.54353);
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0.5); }
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.4); }
     messagedialog.csd .dialog-action-area button.suggested-action:hover {
       color: white;
       outline-color: rgba(255, 255, 255, 0.3);
       border-color: #1c5187;
-      background-image: linear-gradient(to bottom, #8db9e7, #63a0de 40%, #5295db);
+      /*
+      background-image: linear-gradient(to bottom,
+                                        lighten($c, 16%),
+                                        lighten($c, 6%) 40%,
+                                        lighten($c, 2%));
+      */
+      background-image: linear-gradient(to bottom, #63a0de, #4a90d9 60%, #3986d5);
       text-shadow: 0 -1px rgba(0, 0, 0, 0.49553);
       -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.49553);
-      box-shadow: inset 0 1px rgba(255, 255, 255, 0.5); }
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0.4); }
     messagedialog.csd .dialog-action-area button.suggested-action:active {
       color: white;
       outline-color: rgba(255, 255, 255, 0.3);
       border-color: #1c5187;
-      background-image: linear-gradient(to bottom, #2b79cb, #2e7fd3 40%, #3583d5);
+      background-image: linear-gradient(to bottom, #276fba, #3583d5);
       text-shadow: 0 -1px rgba(0, 0, 0, 0.62353);
       -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.62353);
-      box-shadow: inset 0 1px rgba(0, 0, 0, 0.07), inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
+      box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
     messagedialog.csd .dialog-action-area button.suggested-action:backdrop {
       color: #dbe9f7;
       border-color: #4a90d9;
@@ -4040,26 +4118,32 @@ messagedialog.csd .dialog-action-area button {
     color: white;
     outline-color: rgba(255, 255, 255, 0.3);
     border-color: #8e0b0b;
-    background-image: linear-gradient(to bottom, #f14a4a, #f03232 40%, #ee1b1b);
+    background-image: linear-gradient(to bottom, #ef2929, #ee1616 60%, #d51010);
     text-shadow: 0 -1px rgba(0, 0, 0, 0.56078);
     -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.56078);
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0.5); }
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.4); }
     messagedialog.csd .dialog-action-area button.destructive-action:hover {
       color: white;
       outline-color: rgba(255, 255, 255, 0.3);
       border-color: #8e0b0b;
-      background-image: linear-gradient(to bottom, #f57575, #f14545 40%, #f03232);
+      /*
+      background-image: linear-gradient(to bottom,
+                                        lighten($c, 16%),
+                                        lighten($c, 6%) 40%,
+                                        lighten($c, 2%));
+      */
+      background-image: linear-gradient(to bottom, #f14545, #ef2929 60%, #ee1616);
       text-shadow: 0 -1px rgba(0, 0, 0, 0.51278);
       -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.51278);
-      box-shadow: inset 0 1px rgba(255, 255, 255, 0.5); }
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0.4); }
     messagedialog.csd .dialog-action-area button.destructive-action:active {
       color: white;
       outline-color: rgba(255, 255, 255, 0.3);
       border-color: #8e0b0b;
-      background-image: linear-gradient(to bottom, #da1010, #e51111 40%, #ed1212);
+      background-image: linear-gradient(to bottom, #c70f0f, #ed1212);
       text-shadow: 0 -1px rgba(0, 0, 0, 0.64078);
       -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.64078);
-      box-shadow: inset 0 1px rgba(0, 0, 0, 0.07), inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
+      box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
     messagedialog.csd .dialog-action-area button.destructive-action:backdrop {
       color: #fcd4d4;
       border-color: #ef2929;
@@ -4228,10 +4312,10 @@ infobar {
     color: #ffffff;
     outline-color: rgba(255, 255, 255, 0.3);
     border-color: #1c5187;
-    background-image: linear-gradient(to bottom, #68a2df, #5295db 40%, #3d88d6);
+    background-image: linear-gradient(to bottom, #4a90d9, #3986d5 60%, #2a76c6);
     text-shadow: 0 -1px rgba(0, 0, 0, 0.54353);
     -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.54353);
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0.5); }
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.4); }
     .info button:hover,
     .question button:hover,
     .warning button:hover,
@@ -4239,10 +4323,16 @@ infobar {
       color: #ffffff;
       outline-color: rgba(255, 255, 255, 0.3);
       border-color: #1c5187;
-      background-image: linear-gradient(to bottom, #8db9e7, #63a0de 40%, #5295db);
+      /*
+      background-image: linear-gradient(to bottom,
+                                        lighten($c, 16%),
+                                        lighten($c, 6%) 40%,
+                                        lighten($c, 2%));
+      */
+      background-image: linear-gradient(to bottom, #63a0de, #4a90d9 60%, #3986d5);
       text-shadow: 0 -1px rgba(0, 0, 0, 0.49553);
       -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.49553);
-      box-shadow: inset 0 1px rgba(255, 255, 255, 0.5); }
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0.4); }
     .info button:active,
     .question button:active,
     .warning button:active,
@@ -4250,10 +4340,10 @@ infobar {
       color: #ffffff;
       outline-color: rgba(255, 255, 255, 0.3);
       border-color: #1c5187;
-      background-image: linear-gradient(to bottom, #2b79cb, #2e7fd3 40%, #3583d5);
+      background-image: linear-gradient(to bottom, #276fba, #3583d5);
       text-shadow: 0 -1px rgba(0, 0, 0, 0.62353);
       -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.62353);
-      box-shadow: inset 0 1px rgba(0, 0, 0, 0.07), inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
+      box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
     .info button:insensitive,
     .question button:insensitive,
     .warning button:insensitive,
@@ -4346,13 +4436,13 @@ tooltip {
  * Color Chooser *
  *****************/
 colorswatch {
-  box-shadow: inset 0 1px rgba(0, 0, 0, 0.1), 0 1px rgba(255, 255, 255, 0.8); }
+  box-shadow: inset 0 1px rgba(0, 0, 0, 0.1), 0 1px rgba(255, 255, 255, 0); }
   :selected colorswatch {
     box-shadow: none; }
     :selected colorswatch overlay, :selected colorswatch overlay:hover {
       border-color: #ffffff; }
   colorswatch:selected {
-    box-shadow: inset 0 1px rgba(0, 0, 0, 0.1), 0 1px rgba(255, 255, 255, 0.8); }
+    box-shadow: inset 0 1px rgba(0, 0, 0, 0.1), 0 1px rgba(255, 255, 255, 0); }
   colorswatch.top {
     border-top-left-radius: 6px;
     border-top-right-radius: 6px; }
@@ -4410,18 +4500,24 @@ colorswatch {
     color: #2e3436;
     outline-color: rgba(46, 52, 54, 0.3);
     border-color: #9d9d99;
-    background-image: linear-gradient(to bottom, #f9f9f9, #ededec 40%, #e1e1df);
+    background-image: linear-gradient(to bottom, #e8e8e7, #dededd 60%, #cfcfcd);
     text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
     -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-    box-shadow: inset 0 1px white, 0 1px rgba(255, 255, 255, 0.8); }
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.8), 0 1px rgba(255, 255, 255, 0); }
     colorswatch#add-color-button:hover {
       color: #2e3436;
       outline-color: rgba(46, 52, 54, 0.3);
       border-color: #9d9d99;
-      background-image: linear-gradient(to bottom, white, #f7f7f7 40%, #ededec);
+      /*
+      background-image: linear-gradient(to bottom,
+                                        lighten($c, 16%),
+                                        lighten($c, 6%) 40%,
+                                        lighten($c, 2%));
+      */
+      background-image: linear-gradient(to bottom, #f7f7f7, #e8e8e7 60%, #dededd);
       text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
       -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-      box-shadow: inset 0 1px white, 0 1px rgba(255, 255, 255, 0.8); }
+      box-shadow: inset 0 1px white, 0 1px rgba(255, 255, 255, 0); }
     colorswatch#add-color-button:backdrop {
       color: #8b8e8f;
       border-color: #a5a5a1;
