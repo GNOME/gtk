@@ -330,7 +330,11 @@ gtk_shortcuts_window_remove (GtkContainer *container,
 
   g_signal_handlers_disconnect_by_func (widget, section_notify_cb, self);
 
-  gtk_container_remove (GTK_CONTAINER (priv->stack), widget);
+  if (widget == (GtkWidget *)priv->header_bar ||
+      widget == (GtkWidget *)priv->main_box)
+    GTK_CONTAINER_CLASS (gtk_shortcuts_window_parent_class)->remove (container, widget);
+  else
+    gtk_container_remove (GTK_CONTAINER (priv->stack), widget);
 }
 
 static void
@@ -565,11 +569,22 @@ gtk_shortcuts_window_dispose (GObject *object)
 
   g_signal_handlers_disconnect_by_func (priv->stack, G_CALLBACK (update_title_stack), self);
 
-  priv->header_bar = NULL;
-  priv->popover = NULL;
-  priv->main_box = NULL;
+  if (priv->header_bar)
+    {
+      gtk_widget_destroy (GTK_WIDGET (priv->header_bar));
+      priv->header_bar = NULL;
+      priv->popover = NULL;
+    }
 
   G_OBJECT_CLASS (gtk_shortcuts_window_parent_class)->dispose (object);
+
+#if 0
+  if (priv->main_box)
+    {
+      gtk_widget_destroy (GTK_WIDGET (priv->main_box));
+      priv->main_box = NULL;
+    }
+#endif
 }
 
 static void
