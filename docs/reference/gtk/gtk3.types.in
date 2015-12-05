@@ -177,7 +177,6 @@ gtk_shortcuts_window_get_type
 gtk_shortcuts_section_get_type
 gtk_shortcuts_group_get_type
 gtk_shortcuts_shortcut_get_type
-gtk_shortcuts_gesture_get_type
 gtk_size_group_get_type
 @ENABLE_ON_X11@gtk_socket_get_type
 gtk_spin_button_get_type

@@ -21,7 +21,6 @@
 #include "gtkshortcutsgroup.h"
 
 #include "gtkshortcutsshortcut.h"
-#include "gtkshortcutsgesture.h"
 #include "gtklabel.h"
 #include "gtkorientable.h"
 #include "gtksizegroup.h"
@@ -78,8 +77,6 @@ gtk_shortcuts_group_apply_accel_size_group (GtkShortcutsGroup *group,
 {
   if (GTK_IS_SHORTCUTS_SHORTCUT (child))
     g_object_set (child, "accel-size-group", group->accel_size_group, NULL);
-  else if (GTK_IS_SHORTCUTS_GESTURE (child))
-    g_object_set (child, "icon-size-group", group->accel_size_group, NULL);
 }
 
 static void
@@ -87,8 +84,6 @@ gtk_shortcuts_group_apply_title_size_group (GtkShortcutsGroup *group,
                                             GtkWidget         *child)
 {
   if (GTK_IS_SHORTCUTS_SHORTCUT (child))
-    g_object_set (child, "title-size-group", group->title_size_group, NULL);
-  else if (GTK_IS_SHORTCUTS_GESTURE (child))
     g_object_set (child, "title-size-group", group->title_size_group, NULL);
 }
 
@@ -137,8 +132,6 @@ gtk_shortcuts_group_get_height (GtkShortcutsGroup *group)
         continue;
       else if (GTK_IS_SHORTCUTS_SHORTCUT (child))
         height += 1;
-      else if (GTK_IS_SHORTCUTS_GESTURE (child))
-        height += 2;
     }
   g_list_free (children);
 
@@ -149,8 +142,7 @@ static void
 gtk_shortcuts_group_add (GtkContainer *container,
                          GtkWidget    *widget)
 {
-  if (GTK_IS_SHORTCUTS_SHORTCUT (widget) ||
-      GTK_IS_SHORTCUTS_GESTURE (widget))
+  if (GTK_IS_SHORTCUTS_SHORTCUT (widget))
     {
       GTK_CONTAINER_CLASS (gtk_shortcuts_group_parent_class)->add (container, widget);
       gtk_shortcuts_group_apply_accel_size_group (GTK_SHORTCUTS_GROUP (container), widget);

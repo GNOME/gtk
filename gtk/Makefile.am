@@ -272,7 +272,6 @@ gtk_public_h_sources = 		\
 	gtkseparatormenuitem.h	\
 	gtkseparatortoolitem.h	\
 	gtksettings.h		\
-	gtkshortcutsgesture.h	\
 	gtkshortcutsgroup.h	\
 	gtkshortcutssection.h	\
 	gtkshortcutsshortcut.h	\
@@ -827,7 +826,6 @@ gtk_base_c_sources = 		\
 	gtkseparatormenuitem.c	\
 	gtkseparatortoolitem.c	\
 	gtksettings.c		\
-	gtkshortcutsgesture.c	\
 	gtkshortcutsgroup.c	\
 	gtkshortcutlabel.c	\
 	gtkshortcutsshortcut.c	\

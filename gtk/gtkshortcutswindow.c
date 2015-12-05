@@ -22,7 +22,6 @@
 #include "gtkscrolledwindow.h"
 #include "gtkshortcutssection.h"
 #include "gtkshortcutsgroup.h"
-#include "gtkshortcutsgesture.h"
 #include "gtkshortcutsshortcut.h"
 #include "gtksearchbar.h"
 #include "gtksearchentry.h"
@@ -180,11 +179,9 @@ gtk_shortcuts_window_add_search_item (GtkWidget *child, gpointer data)
   GtkShortcutsWindow *self = data;
   GtkShortcutsWindowPrivate *priv = gtk_shortcuts_window_get_instance_private (self);
   GtkWidget *item;
-  gchar *subtitle = NULL;
   gchar *accelerator = NULL;
   gchar *title = NULL;
   gchar *hash_key = NULL;
-  GIcon *icon = NULL;
   GtkTextDirection direction;
   gchar *str;
   gchar *keywords;
@@ -224,45 +221,6 @@ gtk_shortcuts_window_add_search_item (GtkWidget *child, gpointer data)
 
       g_free (title);
       g_free (accelerator);
-      g_free (str);
-    }
-  else if (GTK_IS_SHORTCUTS_GESTURE (child))
-    {
-      g_object_get (child,
-                    "title", &title,
-                    "subtitle", &subtitle,
-                    "icon", &icon,
-                    NULL);
-
-      hash_key = g_strdup_printf ("%s-%s", title, subtitle);
-      if (g_hash_table_contains (priv->search_items_hash, hash_key))
-        {
-          g_free (subtitle);
-          g_free (title);
-          g_free (hash_key);
-          g_clear_object (&icon);
-          return;
-        }
-
-      g_hash_table_insert (priv->search_items_hash, hash_key, GINT_TO_POINTER (1));
-
-      item = g_object_new (GTK_TYPE_SHORTCUTS_GESTURE,
-                           "title", title,
-                           "subtitle", subtitle,
-                           "icon", icon,
-                           "icon-size-group", priv->search_image_group,
-                           "title-size-group", priv->search_text_group,
-                           NULL);
-
-      str = g_strdup_printf ("%s %s", title, subtitle);
-      keywords = g_utf8_strdown (str, -1);
-
-      g_hash_table_insert (priv->keywords, item, keywords);
-      gtk_container_add (GTK_CONTAINER (priv->search_gestures), item);
-
-      g_free (subtitle);
-      g_free (title);
-      g_clear_object (&icon);
       g_free (str);
     }
   else if (GTK_IS_CONTAINER (child))
@@ -782,8 +740,6 @@ gtk_shortcuts_window_class_init (GtkShortcutsWindowClass *klass)
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_f, GDK_CONTROL_MASK, "search", 0);
 
   g_type_ensure (GTK_TYPE_SHORTCUTS_GROUP);
-  g_type_ensure (GTK_TYPE_SHORTCUTS_GROUP);
-  g_type_ensure (GTK_TYPE_SHORTCUTS_GESTURE);
   g_type_ensure (GTK_TYPE_SHORTCUTS_SHORTCUT);
 }
 

@@ -186,7 +186,6 @@
 #include <gtk/gtkseparatormenuitem.h>
 #include <gtk/gtkseparatortoolitem.h>
 #include <gtk/gtksettings.h>
-#include <gtk/gtkshortcutsgesture.h>
 #include <gtk/gtkshortcutsgroup.h>
 #include <gtk/gtkshortcutssection.h>
 #include <gtk/gtkshortcutsshortcut.h>
