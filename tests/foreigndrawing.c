@@ -133,13 +133,78 @@ draw_text (GtkWidget     *widget,
   g_object_unref (label_context);
 }
 
+static void
+draw_check (GtkWidget     *widget,
+            cairo_t       *cr,
+            gint           x,
+            gint           y,
+            GtkStateFlags  state)
+{
+  GtkStyleContext *button_context;
+  GtkStyleContext *check_context;
+
+  /* This information is taken from the GtkCheckButton docs, see "CSS nodes" */
+  PathElt path[2] = {
+    { GTK_TYPE_LABEL, "checkbutton", NULL, NULL },
+    { G_TYPE_NONE, "check", NULL, NULL }
+  };
+
+  button_context = get_style (&path[0], NULL);
+  check_context = get_style (&path[1], button_context);
+
+  gtk_style_context_set_state (check_context, state);
+
+  gtk_render_background (check_context, cr, x, y, 20, 20);
+  gtk_render_frame (check_context, cr, x, y, 20, 20);
+  gtk_render_check (check_context, cr, x, y, 20, 20);
+
+  g_object_unref (check_context);
+  g_object_unref (button_context);
+
+}
+
+static void
+draw_radio (GtkWidget     *widget,
+            cairo_t       *cr,
+            gint           x,
+            gint           y,
+            GtkStateFlags  state)
+{
+  GtkStyleContext *button_context;
+  GtkStyleContext *check_context;
+
+  /* This information is taken from the GtkRadioButton docs, see "CSS nodes" */
+  PathElt path[2] = {
+    { GTK_TYPE_LABEL, "radiobutton", NULL, NULL },
+    { G_TYPE_NONE, "radio", NULL, NULL }
+  };
+
+  button_context = get_style (&path[0], NULL);
+  check_context = get_style (&path[1], button_context);
+
+  gtk_style_context_set_state (check_context, state);
+
+  gtk_render_background (check_context, cr, x, y, 20, 20);
+  gtk_render_frame (check_context, cr, x, y, 20, 20);
+  gtk_render_option (check_context, cr, x, y, 20, 20);
+
+  g_object_unref (check_context);
+  g_object_unref (button_context);
+
+}
+
 static gboolean
 draw_cb (GtkWidget *widget,
          cairo_t   *cr)
 {
-  gint width;
+  gint width, height;
 
   width = gtk_widget_get_allocated_width (widget);
+  height = gtk_widget_get_allocated_height (widget);
+
+  cairo_rectangle (cr, 0, 0, width, height);
+  cairo_set_source_rgb (cr, 0, 0, 0);
+  cairo_fill (cr);
 
   draw_horizontal_scrollbar (widget, cr, 10, 10, width - 20, 10, 30, GTK_STATE_FLAG_NORMAL);
   draw_horizontal_scrollbar (widget, cr, 10, 30, width - 20, 10, 40, GTK_STATE_FLAG_PRELIGHT);
@@ -147,6 +212,11 @@ draw_cb (GtkWidget *widget,
 
   draw_text (widget, cr, 10,  70, width - 20, 20, "Not selected", GTK_STATE_FLAG_NORMAL);
   draw_text (widget, cr, 10, 100, width - 20, 20, "Selected", GTK_STATE_FLAG_SELECTED);
+
+  draw_check (widget, cr,  10, 130, GTK_STATE_FLAG_NORMAL);
+  draw_check (widget, cr,  40, 130, GTK_STATE_FLAG_CHECKED);
+  draw_radio (widget, cr,  70, 130, GTK_STATE_FLAG_NORMAL);
+  draw_radio (widget, cr, 100, 130, GTK_STATE_FLAG_CHECKED);
 
   return FALSE;
 }
@@ -161,11 +231,12 @@ main (int argc, char *argv[])
   gtk_init (NULL, NULL);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_widget_set_app_paintable (window, TRUE);
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   gtk_container_add (GTK_CONTAINER (window), box);
   da = gtk_drawing_area_new ();
   gtk_widget_set_size_request (da, 200, 200);
+  gtk_widget_set_hexpand (da, TRUE);
+  gtk_widget_set_vexpand (da, TRUE);
   gtk_widget_set_app_paintable (da, TRUE);
   gtk_container_add (GTK_CONTAINER (box), da);
 
