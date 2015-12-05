@@ -7262,7 +7262,7 @@ gtk_window_realize (GtkWidget *widget)
         {
           attributes.cursor = gdk_cursor_new_from_name (gtk_widget_get_display (widget), cursor[i]);
           priv->border_window[i] = gdk_window_new (gdk_window, &attributes, attributes_mask);
-          g_object_unref (attributes.cursor);
+          g_clear_object (&attributes.cursor);
 
           gdk_window_show (priv->border_window[i]);
           gtk_widget_register_window (widget, priv->border_window[i]);
