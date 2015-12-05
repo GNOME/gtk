@@ -1941,9 +1941,10 @@ switch {
   background-image: linear-gradient(to bottom, mix($bg_color, $borders_color, 60%));
   text-shadow: 0 1px transparentize(black, 0.9);
   &:active {
-      @include progressbar_fill;
       color: white;
       border-color: $selected_borders_color;
+      background-color: $selected_bg_color;
+      background-image: none;
       box-shadow: _widget_edge();
       text-shadow: 0 1px transparentize($selected_borders_color, 0.5),
                    0 0 2px transparentize(white, 0.4);

@@ -2494,9 +2494,10 @@ switch {
     -GtkSwitch-slider-width: 45px;
     -GtkSwitch-slider-height: 27px; }
   switch:active {
-    background-image: linear-gradient(to bottom, #215d9c 2px, #266cb5);
     color: white;
     border-color: #0f2b48;
+    background-color: #215d9c;
+    background-image: none;
     box-shadow: 0 1px rgba(238, 238, 236, 0);
     text-shadow: 0 1px rgba(15, 43, 72, 0.5), 0 0 2px rgba(255, 255, 255, 0.6); }
   switch:insensitive {

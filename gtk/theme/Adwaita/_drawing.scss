@@ -463,12 +463,6 @@
   @else { box-shadow: none; }
 }
 
-@mixin progressbar_fill($d:horizontal) {
-  $dir: if($d==vertical,right,bottom);
-  background-image: linear-gradient(to $dir, $selected_bg_color 2px,
-                                             lighten($selected_bg_color, 6%));
-}
-
 @function headerbar_gradient($c, $tc:lighten($c, 2%)) {
 //
 // headerbar gradient helper function
