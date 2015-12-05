@@ -250,7 +250,6 @@ gtk/gtkseparator.c
 gtk/gtkseparatortoolitem.c
 gtk/gtksettings.c
 gtk/gtkshortcutlabel.c
-gtk/gtkshortcutsgesture.c
 gtk/gtkshortcutsgroup.c
 gtk/gtkshortcutssection.c
 gtk/gtkshortcutsshortcut.c
