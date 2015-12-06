@@ -72,7 +72,7 @@
  * Note that a single-row or single-column #GtkGrid provides exactly
  * the same functionality as #GtkBox.
  *
- * # CSS names
+ * # CSS nodes
  *
  * GtkBox uses a single CSS node with name box.
  */
