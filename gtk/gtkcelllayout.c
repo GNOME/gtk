@@ -600,7 +600,8 @@ gtk_cell_layout_get_cells (GtkCellLayout *cell_layout)
  * if called on a #GtkCellArea or might be %NULL if no #GtkCellArea
  * is used by @cell_layout.
  *
- * Returns: (transfer none): the cell area used by @cell_layout.
+ * Returns: (transfer none) (nullable): the cell area used by @cell_layout,
+ * or %NULL in case no cell area is used.
  *
  * Since: 3.0
  */
