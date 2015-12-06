@@ -330,11 +330,7 @@ set_busy_cursor (GtkPlacesView *view,
   display = gtk_widget_get_display (widget);
 
   if (busy)
-    {
-      cursor = gdk_cursor_new_from_name (display, "left_ptr_watch");
-      if (cursor == NULL)
-        cursor = gdk_cursor_new_for_display (display, GDK_WATCH);
-    }
+    cursor = gdk_cursor_new_from_name (display, "progress");
   else
     cursor = NULL;
 
