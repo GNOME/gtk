@@ -34,6 +34,9 @@
 #include "gtkrender.h"
 #include "gtksearchbar.h"
 #include "gtksearchentryprivate.h"
+#include "gtkcsscustomgadgetprivate.h"
+#include "gtkwidgetprivate.h"
+#include "gtkcontainerprivate.h"
 
 /**
  * SECTION:gtksearchbar
@@ -73,6 +76,8 @@ typedef struct {
   GtkWidget   *tool_box;
   GtkWidget   *box_center;
   GtkWidget   *close_button;
+
+  GtkCssGadget *gadget;
 
   GtkWidget   *entry;
   gboolean     reveal_child;
@@ -355,8 +360,11 @@ static void
 gtk_search_bar_dispose (GObject *object)
 {
   GtkSearchBar *bar = GTK_SEARCH_BAR (object);
+  GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
 
   gtk_search_bar_set_entry (bar, NULL);
+
+  g_clear_object (&priv->gadget);
 
   G_OBJECT_CLASS (gtk_search_bar_parent_class)->dispose (object);
 }
@@ -365,19 +373,104 @@ static gboolean
 gtk_search_bar_draw (GtkWidget *widget,
                      cairo_t *cr)
 {
-  gint width, height;
-  GtkStyleContext *context;
+  GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (GTK_SEARCH_BAR (widget));
 
-  width = gtk_widget_get_allocated_width (widget);
-  height = gtk_widget_get_allocated_height (widget);
-  context = gtk_widget_get_style_context (widget);
-
-  gtk_render_background (context, cr, 0, 0, width, height);
-  gtk_render_frame (context, cr, 0, 0, width, height);
-
-  GTK_WIDGET_CLASS (gtk_search_bar_parent_class)->draw (widget, cr);
+  gtk_css_gadget_draw (priv->gadget, cr);
 
   return FALSE;
+}
+
+static gboolean
+gtk_search_bar_render_contents (GtkCssGadget *gadget,
+                                cairo_t      *cr,
+                                int           x,
+                                int           y,
+                                int           width,
+                                int           height,
+                                gpointer      unused)
+{
+  GTK_WIDGET_CLASS (gtk_search_bar_parent_class)->draw (gtk_css_gadget_get_owner (gadget), cr);
+
+  return FALSE;
+}
+
+static void
+gtk_search_bar_allocate_contents (GtkCssGadget        *gadget,
+                                  const GtkAllocation *allocation,
+                                  int                  baseline,
+                                  GtkAllocation       *out_clip,
+                                  gpointer             unused)
+{
+  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
+
+  GTK_WIDGET_CLASS (gtk_search_bar_parent_class)->size_allocate (widget, (GtkAllocation *)allocation);
+
+  gtk_container_get_children_clip (GTK_CONTAINER (widget), out_clip);
+}
+
+static void
+gtk_search_bar_size_allocate (GtkWidget     *widget,
+                              GtkAllocation *allocation)
+{
+  GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (GTK_SEARCH_BAR (widget));
+  GtkAllocation clip;
+
+  gtk_widget_set_allocation (widget, allocation);
+
+  gtk_css_gadget_allocate (priv->gadget, allocation, gtk_widget_get_allocated_baseline (widget), &clip);
+
+  gtk_widget_set_clip (widget, &clip);
+}
+
+static void
+gtk_search_bar_get_content_size (GtkCssGadget   *gadget,
+                                 GtkOrientation  orientation,
+                                 gint            for_size,
+                                 gint           *minimum,
+                                 gint           *natural,
+                                 gint           *minimum_baseline,
+                                 gint           *natural_baseline,
+                                 gpointer        unused)
+{
+  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
+  GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (GTK_SEARCH_BAR (widget));
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    gtk_widget_get_preferred_width_for_height (priv->revealer, for_size, minimum, natural);
+  else
+    gtk_widget_get_preferred_height_and_baseline_for_width (priv->revealer, for_size, minimum, natural, minimum_baseline, natural_baseline);
+}
+
+static void
+gtk_search_bar_get_preferred_width_for_height (GtkWidget *widget,
+                                               gint       height,
+                                               gint      *minimum,
+                                               gint      *natural)
+{
+  GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (GTK_SEARCH_BAR (widget));
+
+  gtk_css_gadget_get_preferred_size (priv->gadget,
+                                     GTK_ORIENTATION_HORIZONTAL,
+                                     height,
+                                     minimum, natural,
+                                     NULL, NULL);
+}
+
+static void
+gtk_search_bar_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
+                                                            gint       width,
+                                                            gint      *minimum,
+                                                            gint      *natural,
+                                                            gint      *minimum_baseline,
+                                                            gint      *natural_baseline)
+{
+  GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (GTK_SEARCH_BAR (widget));
+
+  gtk_css_gadget_get_preferred_size (priv->gadget,
+                                     GTK_ORIENTATION_VERTICAL,
+                                     width,
+                                     minimum, natural,
+                                     minimum_baseline, natural_baseline);
 }
 
 static void
@@ -390,7 +483,11 @@ gtk_search_bar_class_init (GtkSearchBarClass *klass)
   object_class->dispose = gtk_search_bar_dispose;
   object_class->set_property = gtk_search_bar_set_property;
   object_class->get_property = gtk_search_bar_get_property;
+
   widget_class->draw = gtk_search_bar_draw;
+  widget_class->size_allocate = gtk_search_bar_size_allocate;
+  widget_class->get_preferred_width_for_height = gtk_search_bar_get_preferred_width_for_height;
+  widget_class->get_preferred_height_and_baseline_for_width = gtk_search_bar_get_preferred_height_and_baseline_for_width;
 
   container_class->add = gtk_search_bar_add;
 
@@ -433,6 +530,7 @@ static void
 gtk_search_bar_init (GtkSearchBar *bar)
 {
   GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
+  GtkCssNode *widget_node;
 
   gtk_widget_init_template (GTK_WIDGET (bar));
 
@@ -449,6 +547,16 @@ gtk_search_bar_init (GtkSearchBar *bar)
   gtk_widget_set_no_show_all (priv->close_button, TRUE);
   g_signal_connect (priv->close_button, "clicked",
                     G_CALLBACK (close_button_clicked_cb), bar);
+
+  widget_node = gtk_widget_get_css_node (GTK_WIDGET (bar));
+  priv->gadget = gtk_css_custom_gadget_new_for_node (widget_node,
+                                                     GTK_WIDGET (bar),
+                                                     gtk_search_bar_get_content_size,
+                                                     gtk_search_bar_allocate_contents,
+                                                     gtk_search_bar_render_contents,
+                                                     NULL,
+                                                     NULL);
+
 };
 
 /**
