@@ -29,11 +29,18 @@
 /*
  * CSS nodes are the backbone of the GtkStyleContext implementation and
  * replace the role that GtkWidgetPath played in the past. A CSS node has
- * an element name and a state, and can have style classes, which is what
- * is needed to determine the matching CSS selectors. CSS nodes have a
- * 'visible' property, which makes it possible to temporarily 'hide' them
+ * an element name and a state, and can have an id and style classes, which
+ * is what is needed to determine the matching CSS selectors. CSS nodes have
+ * a 'visible' property, which makes it possible to temporarily 'hide' them
  * from CSS matching - e.g. an invisible node will not affect :nth-child
  * matching and so forth.
+ *
+ * The API to manage states, names, ids and classes of CSS nodes is:
+ * - gtk_css_node_get/set_state. States are represented as GtkStateFlags
+ * - gtk_css_node_get/set_name. Names are represented as interned strings
+ * - gtk_css_node_get/set_id. Ids are represented as interned strings
+ * - gtk_css_node_add/remove/has_class and gtk_css_node_list_classes. Style
+ *   classes are represented as quarks.
  *
  * CSS nodes are organized in a dom-like tree, and there is API to navigate
  * and manipulate this tree:
@@ -42,6 +49,7 @@
  * - gtk_css_node_get_parent
  * - gtk_css_node_get_first/last_child
  * - gtk_css_node_get_previous/next_sibling
+ * Note that parents keep a reference on their children in this tree.
  *
  * Every widget has one or more CSS nodes - the first one gets created
  * automatically by GtkStyleContext. To set the name of the main node,
@@ -57,7 +65,13 @@
  *   warrant their existence change.
  * - Keep the state of all your nodes up-to-date. This probably requires
  *   a ::state-flags-changed (and possibly ::direction-changed) handler,
- *   as well as code to update the state in other places.
+ *   as well as code to update the state in other places. Note that GTK+
+ *   does this automatically for the widget's main CSS node.
+ * - The sibling ordering in the CSS node tree is supposed to correspond
+ *   to the visible order of content: top-to-bottom and left-to-right.
+ *   Reorder your nodes to maintain this correlation. In particular for
+ *   horizontally layed out widgets, this will require listening to
+ *   ::direction-changed.
  * - The draw function should just use gtk_style_context_save_to_node() to
  *   'switch' to the right node, not make any other changes to the style
  *   context.
@@ -65,7 +79,7 @@
  * A noteworthy difference between gtk_style_context_save() and
  * gtk_style_context_save_to_node() is that the former inherits all the
  * style classes from the main CSS node, which often leads to unintended
- * inheritance. 
+ * inheritance.
  */
 
 /* When these change we do a full restyling. Otherwise we try to figure out
@@ -679,6 +693,13 @@ gtk_css_node_init (GtkCssNode *cssnode)
   cssnode->visible = TRUE;
 }
 
+/**
+ * gtk_css_node_new:
+ *
+ * Creates a new CSS node.
+ *
+ * Returns: (transfer full): the new CSS node
+ */
 GtkCssNode *
 gtk_css_node_new (void)
 {
@@ -843,6 +864,7 @@ gtk_css_node_set_parent (GtkCssNode *node,
   gtk_css_node_reposition (node, parent, parent ? parent->last_child : NULL);
 }
 
+/* If previous_sibling is NULL, insert at the beginning */
 void
 gtk_css_node_insert_after (GtkCssNode *parent,
                            GtkCssNode *cssnode,
@@ -859,6 +881,7 @@ gtk_css_node_insert_after (GtkCssNode *parent,
                            previous_sibling);
 }
 
+/* If next_sibling is NULL, insert at the end */
 void
 gtk_css_node_insert_before (GtkCssNode *parent,
                             GtkCssNode *cssnode,
