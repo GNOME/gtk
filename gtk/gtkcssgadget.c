@@ -31,6 +31,34 @@
 #include "gtkrenderbackgroundprivate.h"
 #include "gtkrenderborderprivate.h"
 
+/*
+ * Gadgets are 'next-generation widgets' - they combine a CSS node
+ * for style matching with geometry management and drawing. Each gadget
+ * corresponds to 'CSS box'. Compared to traditional widgets, they are more
+ * like building blocks - a typical GTK+ widget will have multiple gadgets,
+ * for example a check button has its main gadget, and sub-gadgets for
+ * the checkmark and the text.
+ *
+ * Gadgets are not themselves hierarchically organized, but it is common
+ * to have a 'main' gadget, which gets used by the widgets size_allocate,
+ * get_preferred_width, etc. and draw callbacks, and which in turn calls out
+ * to the sub-gadgets. This call tree might extend further if there are
+ * sub-sub-gadgets that a allocated relative to sub-gadgets. In typical
+ * situations, the callback chain will reflect the tree structure of the
+ * gadgets CSS nodes.
+ *
+ * Geometry management - Gadgets implement much of the CSS box model for you:
+ * margins, border, padding, shadows, min-width/height are all applied automatically.
+ *
+ * Drawing - Gadgets implement standardized CSS drawing for you: background,
+ * shadows and border are drawn before any custom drawing, and the focus outline
+ * is (optionally) drawn afterwards.
+ *
+ * Invalidation - Gadgets sit 'between' widgets and CSS nodes, and connect
+ * to the nodes ::style-changed signal and trigger appropriate invalidations
+ * on the widget side.
+ */
+
 typedef struct _GtkCssGadgetPrivate GtkCssGadgetPrivate;
 struct _GtkCssGadgetPrivate {
   GtkCssNode    *node;
@@ -261,6 +289,14 @@ gtk_css_gadget_init (GtkCssGadget *gadget)
 
 }
 
+/**
+ * gtk_css_gadget_get_node:
+ * @gadget: a #GtkCssGadget
+ *
+ * Get the CSS node for this gadget.
+ *
+  * Returns: (transfer none):  the CSS node
+ */
 GtkCssNode *
 gtk_css_gadget_get_node (GtkCssGadget *gadget)
 {
@@ -269,6 +305,14 @@ gtk_css_gadget_get_node (GtkCssGadget *gadget)
   return priv->node;
 }
 
+/**
+ * gtk_css_gadget_get_style:
+ * @gadget: a #GtkCssGadget
+ *
+ * Get the CSS style for this gadget.
+ *
+ * Returns: (transfer none):  the CSS style
+ */
 GtkCssStyle *
 gtk_css_gadget_get_style (GtkCssGadget *gadget)
 {
@@ -277,6 +321,14 @@ gtk_css_gadget_get_style (GtkCssGadget *gadget)
   return gtk_css_node_get_style (priv->node);
 }
 
+/**
+ * gtk_css_gadget_get_style:
+ * @gadget: a #GtkCssGadget
+ *
+ * Get the widget to which this gadget belongs.
+ *
+ * Returns: (transfer none):  the widget to which @gadget belongs
+ */
 GtkWidget *
 gtk_css_gadget_get_owner (GtkCssGadget *gadget)
 {
@@ -285,6 +337,13 @@ gtk_css_gadget_get_owner (GtkCssGadget *gadget)
   return priv->owner;
 }
 
+/**
+ * gtk_css_gadget_add_class:
+ * @gadget: a #GtkCssGadget
+ * @name: class name to use in CSS matching
+ *
+ * Adds a style class to the gadgets CSS node.
+ */
 void
 gtk_css_gadget_add_class (GtkCssGadget *gadget,
                           const char   *name)
@@ -297,6 +356,13 @@ gtk_css_gadget_add_class (GtkCssGadget *gadget,
   gtk_css_node_add_class (priv->node, quark);
 }
 
+/**
+ * gtk_css_gadget_remove_class:
+ * @gadget: a #GtkCssGadget
+ * @name: class name
+ *
+ * Removes a style class from the gadgets CSS node.
+ */
 void
 gtk_css_gadget_remove_class (GtkCssGadget *gadget,
                              const char   *name)
@@ -353,6 +419,24 @@ get_box_padding (GtkCssStyle *style,
   border->right = get_number (style, GTK_CSS_PROPERTY_PADDING_RIGHT);
 }
 
+/**
+ * gtk_css_gadget_get_preferred_size:
+ * @gadget: the #GtkCssGadget whose size is requested
+ * @orientation: whether a width (ie horizontal) or height (ie vertical) size is requested
+ * @for_size: the available size in the opposite direction, or -1
+ * @minimum: (nullable): return location for the minimum size
+ * @natural: (nullable): return location for the natural size
+ * @minimum_baseline: (nullable): return location for the baseline at minimum size
+ * @natural_baseline: (nullable): return location for the baseline at natural size
+ *
+ * Gets the gadgets minimum and natural size (and, optionally, baseline)
+ * in the given orientation for the specified size in the opposite direction.
+ *
+ * The returned values include CSS padding, border and margin in addition to the
+ * gadgets content size, and respect the CSS min-with or min-height properties.
+ *
+ * The @for_size is assumed to include CSS padding, border and margins as well.
+ */
 void
 gtk_css_gadget_get_preferred_size (GtkCssGadget   *gadget,
                                    GtkOrientation  orientation,
@@ -419,6 +503,20 @@ gtk_css_gadget_get_preferred_size (GtkCssGadget   *gadget,
     *natural_baseline += extra_baseline;
 }
 
+/**
+ * gtk_css_gadget_allocate:
+ * @gadget: the #GtkCssGadget to allocate
+ * @allocation: the allocation
+ * @baseline: the baseline for the allocation
+ * @out_clip: (out): return location for the gadgets clip region
+ *
+ * Allocates the gadget.
+ *
+ * The @allocation is assumed to include CSS padding, border and margin.
+ * The gadget content will be allocated a smaller area that excludes these.
+ * The @out_clip includes the shadow extents of the gadget in addition to
+ * any content clip.
+ */
 void
 gtk_css_gadget_allocate (GtkCssGadget        *gadget,
                          const GtkAllocation *allocation,
