@@ -2082,7 +2082,7 @@ update_menu_sensitivity (GtkComboBox *combo_box,
 {
   GtkComboBoxPrivate *priv = combo_box->priv;
   GList *children, *child;
-  GtkWidget *item, *submenu, *separator;
+  GtkWidget *item, *submenu;
   GtkWidget *cell_view;
   gboolean sensitive;
 
@@ -2108,15 +2108,7 @@ update_menu_sensitivity (GtkComboBox *combo_box,
       else
         {
           sensitive = cell_layout_is_sensitive (GTK_CELL_LAYOUT (cell_view));
-
-          if (menu != priv->popup_widget && child == children)
-            {
-              separator = GTK_WIDGET (child->next->data);
-              g_object_set (item, "visible", sensitive, NULL);
-              g_object_set (separator, "visible", sensitive, NULL);
-            }
-          else
-            gtk_widget_set_sensitive (item, sensitive);
+          gtk_widget_set_sensitive (item, sensitive);
         }
     }
 
