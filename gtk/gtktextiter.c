@@ -1238,7 +1238,7 @@ gtk_text_iter_begins_tag (const GtkTextIter *iter,
  * Note that if gtk_text_iter_ends_tag() returns %TRUE, it means that @iter is
  * at the end of the tagged range, but that the character
  * at @iter is outside the tagged range. In other words,
- * unlike gtk_text_iter_begins_tag(), if gtk_text_iter_ends_tag() returns %TRUE,
+ * unlike gtk_text_iter_starts_tag(), if gtk_text_iter_ends_tag() returns %TRUE,
  * gtk_text_iter_has_tag() will return %FALSE for the same parameters.
  *
  * Returns: whether @iter is the end of a range tagged with @tag
@@ -1280,7 +1280,7 @@ gtk_text_iter_ends_tag   (const GtkTextIter  *iter,
  * @iter: an iterator
  * @tag: (allow-none): a #GtkTextTag, or %NULL
  *
- * This is equivalent to (gtk_text_iter_begins_tag() ||
+ * This is equivalent to (gtk_text_iter_starts_tag() ||
  * gtk_text_iter_ends_tag()), i.e. it tells you whether a range with
  * @tag applied to it begins or ends at @iter.
  *
@@ -1323,7 +1323,7 @@ gtk_text_iter_toggles_tag (const GtkTextIter  *iter,
  * @tag: a #GtkTextTag
  *
  * Returns %TRUE if @iter points to a character that is part of a range tagged
- * with @tag. See also gtk_text_iter_begins_tag() and gtk_text_iter_ends_tag().
+ * with @tag. See also gtk_text_iter_starts_tag() and gtk_text_iter_ends_tag().
  *
  * Returns: whether @iter is tagged with @tag
  **/

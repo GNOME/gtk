@@ -585,10 +585,10 @@ gtk_text_buffer_deserialize (GtkTextBuffer  *register_buffer,
 
               list = list->next;
 
-              /*  If a tag begins at the insertion point, ignore it
+              /*  If a tag starts at the insertion point, ignore it
                *  because it doesn't affect the pasted text
                */
-              if (gtk_text_iter_begins_tag (iter, tag))
+              if (gtk_text_iter_starts_tag (iter, tag))
                 split_tags = g_slist_remove (split_tags, tag);
             }
 

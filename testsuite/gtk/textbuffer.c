@@ -200,7 +200,7 @@ check_specific_tag_in_range (GtkTextBuffer     *buffer,
 
           last_offset = this_offset;
           
-          if (gtk_text_iter_begins_tag (&iter, tag))
+          if (gtk_text_iter_starts_tag (&iter, tag))
             {
               if (state)
                 g_error ("Tag %p is already on, and was toggled on?", tag);
@@ -244,7 +244,7 @@ check_specific_tag_in_range (GtkTextBuffer     *buffer,
           
           last_offset = this_offset;
 
-          if (gtk_text_iter_begins_tag (&iter, tag))
+          if (gtk_text_iter_starts_tag (&iter, tag))
             {
               if (!state)
                 g_error ("Tag %p wasn't on when we got to the on toggle going backward?", tag);
