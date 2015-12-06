@@ -170,7 +170,11 @@ GDK_AVAILABLE_IN_ALL
 GSList  *gtk_text_iter_get_toggled_tags  (const GtkTextIter  *iter,
                                           gboolean            toggled_on);
 
-GDK_AVAILABLE_IN_ALL
+GDK_AVAILABLE_IN_3_20
+gboolean gtk_text_iter_starts_tag        (const GtkTextIter  *iter,
+                                          GtkTextTag         *tag);
+
+GDK_DEPRECATED_IN_3_20_FOR(gtk_text_iter_starts_tag)
 gboolean gtk_text_iter_begins_tag        (const GtkTextIter  *iter,
                                           GtkTextTag         *tag);
 
