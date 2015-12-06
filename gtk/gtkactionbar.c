@@ -26,6 +26,9 @@
 #include "gtktypebuiltins.h"
 #include "gtkbox.h"
 #include "gtkrevealer.h"
+#include "gtkcsscustomgadgetprivate.h"
+#include "gtkwidgetprivate.h"
+#include "gtkcontainerprivate.h"
 
 #include <string.h>
 
@@ -53,6 +56,7 @@ struct _GtkActionBarPrivate
 {
   GtkWidget *box;
   GtkWidget *revealer;
+  GtkCssGadget *gadget;
 };
 
 enum {
@@ -61,7 +65,8 @@ enum {
   CHILD_PROP_POSITION
 };
 
-static void     gtk_action_bar_buildable_interface_init     (GtkBuildableIface *iface);
+static void gtk_action_bar_finalize (GObject *object);
+static void gtk_action_bar_buildable_interface_init (GtkBuildableIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkActionBar, gtk_action_bar, GTK_TYPE_BIN,
                          G_ADD_PRIVATE (GtkActionBar)
@@ -213,20 +218,132 @@ gtk_action_bar_set_child_property (GtkContainer *container,
                                       value);
 }
 
+static gboolean
+gtk_action_bar_render (GtkCssGadget *gadget,
+                       cairo_t      *cr,
+                       int           x,
+                       int           y,
+                       int           width,
+                       int           height,
+                       gpointer      data)
+{
+  GTK_WIDGET_CLASS (gtk_action_bar_parent_class)->draw (gtk_css_gadget_get_owner (gadget), cr);
+
+  return FALSE;
+}
+
+static gboolean
+gtk_action_bar_draw (GtkWidget *widget,
+                     cairo_t   *cr)
+{
+  GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (GTK_ACTION_BAR (widget));
+
+  gtk_css_gadget_draw (priv->gadget, cr);
+
+  return FALSE;
+}
+
+static void
+gtk_action_bar_allocate (GtkCssGadget        *gadget,
+                         const GtkAllocation *allocation,
+                         int                  baseline,
+                         GtkAllocation       *out_clip,
+                         gpointer             data)
+{
+  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
+
+  GTK_WIDGET_CLASS (gtk_action_bar_parent_class)->size_allocate (widget, (GtkAllocation *)allocation);
+
+  gtk_container_get_children_clip (GTK_CONTAINER (widget), out_clip);
+}
+
+static void
+gtk_action_bar_size_allocate (GtkWidget     *widget,
+                              GtkAllocation *allocation)
+{
+  GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (GTK_ACTION_BAR (widget));
+  GtkAllocation clip;
+
+  gtk_widget_set_allocation (widget, allocation);
+
+  gtk_css_gadget_allocate (priv->gadget, allocation, gtk_widget_get_allocated_baseline (widget), &clip);
+
+  gtk_widget_set_clip (widget, &clip);
+}
+
+static void
+gtk_action_bar_measure (GtkCssGadget   *gadget,
+                        GtkOrientation  orientation,
+                        int             for_size,
+                        int            *minimum,
+                        int            *natural,
+                        int            *minimum_baseline,
+                        int            *natural_baseline,
+                        gpointer        data)
+{
+  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
+  GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (GTK_ACTION_BAR (widget));
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    gtk_widget_get_preferred_width_for_height (priv->revealer, for_size, minimum, natural);
+  else
+    gtk_widget_get_preferred_height_and_baseline_for_width (priv->revealer, for_size, minimum, natural, minimum_baseline, natural_baseline);
+}
+
+static void
+gtk_action_bar_get_preferred_width_for_height (GtkWidget *widget,
+                                               gint       height,
+                                               gint      *minimum,
+                                               gint      *natural)
+{
+  GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (GTK_ACTION_BAR (widget));
+
+  gtk_css_gadget_get_preferred_size (priv->gadget,
+                                     GTK_ORIENTATION_HORIZONTAL,
+                                     height,
+                                     minimum, natural,
+                                     NULL, NULL);
+}
+
+static void
+gtk_action_bar_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
+                                                            gint       width,
+                                                            gint      *minimum,
+                                                            gint      *natural,
+                                                            gint      *minimum_baseline,
+                                                            gint      *natural_baseline)
+{
+  GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (GTK_ACTION_BAR (widget));
+
+  gtk_css_gadget_get_preferred_size (priv->gadget,
+                                     GTK_ORIENTATION_VERTICAL,
+                                     width,
+                                     minimum, natural,
+                                     minimum_baseline, natural_baseline);
+}
+
 static void
 gtk_action_bar_class_init (GtkActionBarClass *klass)
 {
+  GObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
 
+  object_class = G_OBJECT_CLASS (klass);
   widget_class = GTK_WIDGET_CLASS (klass);
   container_class = GTK_CONTAINER_CLASS (klass);
+
+  object_class->finalize = gtk_action_bar_finalize;
 
   widget_class->show = gtk_action_bar_show;
   widget_class->hide = gtk_action_bar_hide;
   widget_class->map = gtk_action_bar_map;
   widget_class->unmap = gtk_action_bar_unmap;
   widget_class->destroy = gtk_action_bar_destroy;
+  widget_class->draw = gtk_action_bar_draw;
+  widget_class->size_allocate = gtk_action_bar_size_allocate;
+  widget_class->get_preferred_width_for_height = gtk_action_bar_get_preferred_width_for_height;
+  widget_class->get_preferred_height_and_baseline_for_width = gtk_action_bar_get_preferred_height_and_baseline_for_width;
 
   container_class->add = gtk_action_bar_add;
   container_class->remove = gtk_action_bar_remove;
@@ -263,12 +380,33 @@ gtk_action_bar_init (GtkActionBar *action_bar)
 {
   GtkWidget *widget = GTK_WIDGET (action_bar);
   GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (action_bar);
+  GtkCssNode *widget_node;
 
   gtk_widget_set_redraw_on_allocate (widget, TRUE);
 
   gtk_widget_init_template (GTK_WIDGET (action_bar));
 
   gtk_revealer_set_transition_type (GTK_REVEALER (priv->revealer), GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP);
+
+  widget_node = gtk_widget_get_css_node (GTK_WIDGET (action_bar));
+  priv->gadget = gtk_css_custom_gadget_new_for_node (widget_node,
+                                                     GTK_WIDGET (action_bar),
+                                                     gtk_action_bar_measure,
+                                                     gtk_action_bar_allocate,
+                                                     gtk_action_bar_render,
+                                                     NULL,
+                                                     NULL);
+}
+
+static void
+gtk_action_bar_finalize (GObject *object)
+{
+  GtkActionBar *action_bar = GTK_ACTION_BAR (object);
+  GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (action_bar);
+
+  g_clear_object (&priv->gadget);
+
+  G_OBJECT_CLASS (gtk_action_bar_parent_class)->finalize (object);
 }
 
 static void
