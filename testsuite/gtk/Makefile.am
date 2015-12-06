@@ -40,6 +40,7 @@ TEST_PROGS += 			\
 	builderparser		\
 	cellarea		\
 	check-icon-names	\
+	check-cursor-names	\
 	clipboard		\
 	cssprovider		\
 	defaultvalue		\
