@@ -332,6 +332,9 @@ object_tree_cell_layout_forall (GObject              *object,
     return;
 
   area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (object));
+  if (!area)
+    return;
+
   g_object_set_data (G_OBJECT (area), "gtk-inspector-cell-layout", object);
   forall_func (G_OBJECT (area), "cell-area", forall_data);
 }
