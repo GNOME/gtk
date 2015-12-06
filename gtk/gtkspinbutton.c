@@ -1213,7 +1213,6 @@ gtk_spin_button_get_preferred_width (GtkWidget *widget,
   if (gtk_entry_get_width_chars (entry) < 0)
     {
       gint width, w;
-      GtkBorder borders;
       PangoLayout *layout;
       gchar *str;
 
@@ -1233,9 +1232,6 @@ gtk_spin_button_get_preferred_width (GtkWidget *widget,
       w = measure_string_width (layout, str);
       width = MAX (width, w);
       g_free (str);
-
-      _gtk_entry_get_borders (entry, &borders);
-      width += borders.left + borders.right;
 
       *minimum = width;
       *natural = width;
