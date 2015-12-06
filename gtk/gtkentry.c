@@ -3371,7 +3371,7 @@ gtk_entry_realize (GtkWidget *widget)
 
   if (gtk_widget_is_sensitive (widget))
     {
-      attributes.cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget), GDK_XTERM);
+      attributes.cursor = gdk_cursor_new_from_name (gtk_widget_get_display (widget), "text");
       attributes_mask |= GDK_WA_CURSOR;
     }
 
@@ -4266,7 +4266,7 @@ gtk_entry_event (GtkWidget *widget,
     {
       GdkCursor *cursor;
 
-      cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget), GDK_XTERM);
+      cursor = gdk_cursor_new_from_name (gtk_widget_get_display (widget), "text");
       gdk_window_set_cursor (priv->text_area, cursor);
       g_object_unref (cursor);
       priv->mouse_cursor_obscured = FALSE;
@@ -4658,7 +4658,7 @@ gtk_entry_drag_gesture_update (GtkGestureDrag *gesture,
     {
       GdkCursor *cursor;
 
-      cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget), GDK_XTERM);
+      cursor = gdk_cursor_new_from_name (gtk_widget_get_display (widget), "text");
       gdk_window_set_cursor (priv->text_area, cursor);
       g_object_unref (cursor);
       priv->mouse_cursor_obscured = FALSE;
@@ -4815,14 +4815,10 @@ gtk_entry_drag_gesture_end (GtkGestureDrag *gesture,
 static void
 set_invisible_cursor (GdkWindow *window)
 {
-  GdkDisplay *display;
   GdkCursor *cursor;
 
-  display = gdk_window_get_display (window);
-  cursor = gdk_cursor_new_for_display (display, GDK_BLANK_CURSOR);
-
+  cursor = gdk_cursor_new_from_name (gdk_window_get_display (window), "none");
   gdk_window_set_cursor (window, cursor);
-
   g_object_unref (cursor);
 }
 
@@ -5083,7 +5079,7 @@ gtk_entry_state_flags_changed (GtkWidget     *widget,
   if (gtk_widget_get_realized (widget))
     {
       if (gtk_widget_is_sensitive (widget))
-        cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget), GDK_XTERM);
+        cursor = gdk_cursor_new_from_name (gtk_widget_get_display (widget), "text");
       else
         cursor = NULL;
 
