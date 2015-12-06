@@ -23,6 +23,77 @@
 
 #include "gtkcssnodeprivate.h"
 
+/*
+ * GtkCssCustomGadget is a subclass that lets widgets customize size
+ * requests, size allocation and drawing of gadgets. The gadget is passed
+ * to the callbacks as the first argument, and you can use gtk_css_gadget_get_owner()
+ * to obtain the widget. Note that the widgets style context is not saved,
+ * so if you want to query style properties or call gtk_render functions which
+ * take the style context as an argument, you should use
+ * gtk_style_context_save_to_node to make the gadget's CSS node take effect.
+ *
+ * The callbacks are
+ *
+ * GtkCssPreferredSizeFunc:
+ * @gadget: the #GtkCssCustomGadget
+ * @orientation: whether a width (ie horizontal) or height (ie vertical) is requested
+ * @for_size: the available size in the opposite direction, or -1
+ * @minimum: return location for the minimum size
+ * @natural: return location for the natural size
+ * @minimum_baseline: (nullable): return location for the baseline at minimum size
+ * @natural_baseline: (nullable): return location for the baseline at natural size
+ * @data: data provided when registering the callback
+ *
+ * The GtkCssPreferredSizeFunc is called to determine the content size in
+ * gtk_css_gadget_get_preferred_size(). @for_size is a content size (ie excluding
+ * CSS padding, border and margin) and the returned @minimum, @natural,
+ * @minimum_baseline, @natural_baseline should be content sizes excluding CSS
+ * padding, border and margin as well.
+ *
+ * Typically, GtkCssPreferredSizeFunc will query the size of sub-gadgets and
+ * child widgets that are placed relative to the gadget and determine its own
+ * needed size from the results. If the gadget has no sub-gadgets or child
+ * widgets that it needs to place, then a GtkCssPreferredSizeFunc is only
+ * needed if you want to enforce a minimum size independent of CSS min-width
+ * and min-height (e.g. if size-related style properties need to be supported
+ * for compatibility).
+ *
+ * GtkCssAllocateFunc:
+ * @gadget: the #GtkCssCustomGadget
+ * @allocation: the allocation
+ * @baseline: the baseline
+ * @out_clip: (out): return location for the content clip
+ * @data: data provided when registering the callback
+ *
+ * The GtkCssAllocateFunc is called to allocate the gadgets content in
+ * gtk_css_gadget_allocate(). @allocation and @baseline are content sizes
+ * (ie excluding CSS padding, border and margin).
+ *
+ * Typically, GtkCssAllocateFunc will allocate sub-gadgets and child widgets
+ * that are placed relative to the gadget, and merge their clips into the
+ * value returned as @out_clip. For clip handling in the main gadget of
+ * containers, gtk_container_get_children_clip() can be useful. Gadgets that
+ * don't have sub-gadgets of child widgets don't need a GtkCssAllocateFunc
+ * (although it is still required to call gtk_css_gadget_allocate() on them).
+ *
+ * GtkCssDrawFunc:
+ * @gadget: the #GtkCssCustomGadget
+ * @cr: the cairo context to draw on
+ * @x: the x origin of the content area
+ * @y: the y origin of the content area
+ * @width: the width of the content area
+ * @height: the height of the content area
+ * @data: data provided when registering the callback
+ *
+ * The GtkCssDrawFunc is called to draw the gadgets content in
+ * gtk_css_gadget_draw(). It gets passed an untransformed cairo context
+ * and the coordinates of the area to draw the content in.
+ *
+ * Typically, GtkCssDrawFunc will draw sub-gadgets and child widgets
+ * that are placed relative to the gadget, as well as custom content
+ * such as icons, checkmarks, arrows or text.
+ */
+
 typedef struct _GtkCssCustomGadgetPrivate GtkCssCustomGadgetPrivate;
 struct _GtkCssCustomGadgetPrivate {
   GtkCssPreferredSizeFunc          preferred_size_func;
@@ -117,6 +188,27 @@ gtk_css_custom_gadget_init (GtkCssCustomGadget *custom_gadget)
 
 }
 
+/**
+ * gtk_css_custom_gadget_new_for_node:
+ * @node: the #GtkCssNode to use for the gadget
+ * @owner: the widget that the gadget belongs to
+ * @preferred_size_func: (nullable): the GtkCssPreferredSizeFunc to use
+ * @allocate_func: (nullable): the GtkCssAllocateFunc to use
+ * @draw_func: (nullable): the GtkCssDrawFunc to use
+ * @data: (nullable): user data to pass to the callbacks
+ * @destroy_func: (nullable): destroy notify for @data
+ *
+ * Creates a #GtkCssCustomGadget for an existing CSS node.
+ * This function is typically used in the widgets init function
+ * to create the main gadget for the widgets main CSS node (which
+ * is obtained with gtk_widget_get_css_node()), as well as other
+ * permanent sub-gadgets. Sub-gadgets that only exist sometimes
+ * (e.g. depending on widget properties) should be created and
+ * destroyed as needed. All gadgets should be destroyed in the
+ * finalize (or dispose) vfunc.
+ *
+ * Returns: (transfer full): the new gadget
+ */
 GtkCssGadget *
 gtk_css_custom_gadget_new_for_node (GtkCssNode                 *node,
                                     GtkWidget                  *owner,
@@ -145,6 +237,23 @@ gtk_css_custom_gadget_new_for_node (GtkCssNode                 *node,
   return result;
 }
 
+/**
+ * gtk_css_custom_gadget_new:
+ * @name: the name for the CSS node
+ * @owner: the widget that the gadget belongs to
+ * @parent: the gadget that has the parent CSS node
+ * @next_sibling: the gadget that has the sibling CSS node
+ * @preferred_size_func: (nullable): the GtkCssPreferredSizeFunc to use
+ * @allocate_func: (nullable): the GtkCssAllocateFunc to use
+ * @draw_func: (nullable): the GtkCssDrawFunc to use
+ * @data: (nullable): user data to pass to the callbacks
+ * @destroy_func: (nullable): destroy notify for @data
+ *
+ * Creates a #GtkCssCustomGadget with a new CSS node which gets
+ * placed below the @parent's and before the @next_sibling's CSS node.
+ *
+ * Returns: (transfer full): the new gadget
+ */
 GtkCssGadget *
 gtk_css_custom_gadget_new (const char                 *name,
                            GtkWidget                  *owner,
