@@ -98,7 +98,6 @@ struct _GtkDragSourceInfo
   GdkDragContext    *context;     /* drag context */
   GtkWidget         *icon_window; /* Window for drag */
   GtkWidget         *icon_widget; /* Widget for drag */
-  GtkWidget         *fallback_icon; /* Window for drag used on other screens */
   GtkWidget         *ipc_widget;  /* GtkInvisible for grab, message passing */
   GdkCursor         *cursor;      /* Cursor for drag */
   gint hot_x, hot_y;              /* Hot spot for drag */
@@ -3213,13 +3212,6 @@ gtk_drag_remove_icon (GtkDragSourceInfo *info)
       gtk_widget_set_opacity (info->icon_widget, 1.0);
       if (info->destroy_icon)
         gtk_widget_destroy (info->icon_widget);
-
-      if (info->fallback_icon)
-        {
-          gtk_widget_destroy (info->fallback_icon);
-          info->fallback_icon = NULL;
-        }
-
       g_object_unref (info->icon_widget);
       info->icon_widget = NULL;
     }
