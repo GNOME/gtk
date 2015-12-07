@@ -221,11 +221,6 @@ GtkStateType     gtk_icon_source_get_state                (const GtkIconSource *
 GDK_DEPRECATED_IN_3_10
 GtkIconSize      gtk_icon_source_get_size                 (const GtkIconSource *source);
 
-
-/* ignore this */
-GList* _gtk_icon_factory_list_ids (void);
-void _gtk_icon_factory_ensure_default_icons (void);
-
 G_END_DECLS
 
 #endif /* __GTK_ICON_FACTORY_H__ */

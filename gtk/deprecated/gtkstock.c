@@ -31,6 +31,7 @@
 #include "gtkprivate.h"
 #include "gtkstock.h"
 #include "gtkiconfactory.h"
+#include "gtkiconfactoryprivate.h"
 #include "gtkintl.h"
 
 /**
