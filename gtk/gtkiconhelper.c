@@ -25,6 +25,7 @@
 
 #include "gtkcssenumvalueprivate.h"
 #include "gtkcssiconthemevalueprivate.h"
+#include "gtkiconthemeprivate.h"
 #include "gtkrender.h"
 #include "gtkstylecontextprivate.h"
 #include "deprecated/gtkstock.h"
@@ -155,19 +156,19 @@ ensure_icon_size (GtkIconHelper *self,
 }
 
 static GtkIconLookupFlags
-get_icon_lookup_flags (GtkIconHelper *self, GtkStyleContext *context)
+get_icon_lookup_flags (GtkIconHelper    *self,
+                       GtkCssStyle      *style,
+                       GtkTextDirection  dir)
 {
   GtkIconLookupFlags flags;
   GtkCssIconStyle icon_style;
-  GtkStateFlags state;
 
-  state = gtk_style_context_get_state (context);
   flags = GTK_ICON_LOOKUP_USE_BUILTIN;
 
   if (self->priv->pixel_size != -1 || self->priv->force_scale_pixbuf)
     flags |= GTK_ICON_LOOKUP_FORCE_SIZE;
 
-  icon_style = _gtk_css_icon_style_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_STYLE));
+  icon_style = _gtk_css_icon_style_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_STYLE));
 
   switch (icon_style)
     {
@@ -184,9 +185,9 @@ get_icon_lookup_flags (GtkIconHelper *self, GtkStyleContext *context)
       return 0;
     }
 
-  if (state & GTK_STATE_FLAG_DIR_LTR)
+  if (dir == GTK_TEXT_DIR_LTR)
     flags |= GTK_ICON_LOOKUP_DIR_LTR;
-  else if (state & GTK_STATE_FLAG_DIR_RTL)
+  else if (dir == GTK_TEXT_DIR_RTL)
     flags |= GTK_ICON_LOOKUP_DIR_RTL;
 
   return flags;
@@ -364,10 +365,11 @@ G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
 static cairo_surface_t *
-ensure_surface_for_gicon (GtkIconHelper   *self,
-                          GtkStyleContext *context,
-                          gint             scale,
-                          GIcon           *gicon)
+ensure_surface_for_gicon (GtkIconHelper    *self,
+                          GtkCssStyle      *style,
+                          GtkTextDirection  dir,
+                          gint              scale,
+                          GIcon            *gicon)
 {
   GtkIconTheme *icon_theme;
   gint width, height;
@@ -378,8 +380,8 @@ ensure_surface_for_gicon (GtkIconHelper   *self,
   gboolean symbolic;
 
   icon_theme = gtk_css_icon_theme_value_get_icon_theme
-    (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_THEME));
-  flags = get_icon_lookup_flags (self, context);
+    (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_THEME));
+  flags = get_icon_lookup_flags (self, style, dir);
 
   ensure_icon_size (self, &width, &height);
 
@@ -389,11 +391,25 @@ ensure_surface_for_gicon (GtkIconHelper   *self,
                                                    scale, flags);
   if (info)
     {
-      destination =
-        gtk_icon_info_load_symbolic_for_context (info,
-                                                 context,
-                                                 &symbolic,
-                                                 NULL);
+      symbolic = gtk_icon_info_is_symbolic (info);
+
+      if (symbolic)
+        {
+          GdkRGBA fg, success_color, warning_color, error_color;
+
+          gtk_icon_theme_lookup_symbolic_colors (style, &fg, &success_color, &warning_color, &error_color);
+
+          destination = gtk_icon_info_load_symbolic (info,
+                                                     &fg, &success_color,
+                                                     &warning_color, &error_color,
+                                                     NULL,
+                                                     NULL);
+        }
+      else
+        {
+          destination = gtk_icon_info_load_icon (info, NULL);
+        }
+
       g_object_unref (info);
     }
   else
@@ -419,7 +435,7 @@ ensure_surface_for_gicon (GtkIconHelper   *self,
       GtkCssIconEffect icon_effect;
 
       surface = gdk_cairo_surface_create_from_pixbuf (destination, scale, self->priv->window);
-      icon_effect = _gtk_css_icon_effect_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_EFFECT));
+      icon_effect = _gtk_css_icon_effect_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_EFFECT));
       gtk_css_icon_effect_apply (icon_effect, surface);
     }
   else
@@ -472,12 +488,24 @@ gtk_icon_helper_load_surface (GtkIconHelper   *self,
         gicon = g_themed_icon_new_with_default_fallbacks (gtk_image_definition_get_icon_name (self->priv->def));
       else
         gicon = g_themed_icon_new (gtk_image_definition_get_icon_name (self->priv->def));
-      surface = ensure_surface_for_gicon (self, context, scale, gicon);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+      surface = ensure_surface_for_gicon (self,
+                                          gtk_style_context_lookup_style (context), 
+                                          gtk_style_context_get_direction (context), 
+                                          scale, 
+                                          gicon);
+G_GNUC_END_IGNORE_DEPRECATIONS;
       g_object_unref (gicon);
       break;
 
     case GTK_IMAGE_GICON:
-      surface = ensure_surface_for_gicon (self, context, scale, gtk_image_definition_get_gicon (self->priv->def));
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+      surface = ensure_surface_for_gicon (self, 
+                                          gtk_style_context_lookup_style (context), 
+                                          gtk_style_context_get_direction (context), 
+                                          scale,
+                                          gtk_image_definition_get_gicon (self->priv->def));
+G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
 
     case GTK_IMAGE_ANIMATION:

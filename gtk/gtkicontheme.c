@@ -4666,18 +4666,18 @@ gtk_icon_info_load_symbolic (GtkIconInfo    *icon_info,
                                                error);
 }
 
-static void
-lookup_colors_from_style_context (GtkStyleContext *context,
-                                  GdkRGBA         *color_out,
-                                  GdkRGBA         *success_out,
-                                  GdkRGBA         *warning_out,
-                                  GdkRGBA         *error_out)
+void
+gtk_icon_theme_lookup_symbolic_colors (GtkCssStyle *style,
+                                       GdkRGBA     *color_out,
+                                       GdkRGBA     *success_out,
+                                       GdkRGBA     *warning_out,
+                                       GdkRGBA     *error_out)
 {
   GtkCssValue *palette, *color;
   const GdkRGBA *lookup;
 
-  color = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR);
-  palette = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_PALETTE);
+  color = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_COLOR);
+  palette = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_PALETTE);
   *color_out = *_gtk_css_rgba_value_get_rgba (color);
 
   lookup = gtk_css_palette_value_get_color (palette, "success");
@@ -4747,7 +4747,9 @@ gtk_icon_info_load_symbolic_for_context (GtkIconInfo      *icon_info,
   if (!is_symbolic)
     return gtk_icon_info_load_icon (icon_info, error);
 
-  lookup_colors_from_style_context (context, &fg, &success_color, &warning_color, &error_color);
+  gtk_icon_theme_lookup_symbolic_colors (gtk_style_context_lookup_style (context),
+                                         &fg, &success_color,
+                                         &warning_color, &error_color);
 
   return gtk_icon_info_load_symbolic_internal (icon_info,
                                                &fg, &success_color,
@@ -5011,7 +5013,9 @@ gtk_icon_info_load_symbolic_for_context_async (GtkIconInfo         *icon_info,
   g_return_if_fail (icon_info != NULL);
   g_return_if_fail (context != NULL);
 
-  lookup_colors_from_style_context (context, &fg, &success_color, &warning_color, &error_color);
+  gtk_icon_theme_lookup_symbolic_colors (gtk_style_context_lookup_style (context),
+                                         &fg, &success_color,
+                                         &warning_color, &error_color);
 
   gtk_icon_info_load_symbolic_async (icon_info,
                                      &fg, &success_color,

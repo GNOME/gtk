@@ -463,6 +463,7 @@ gtk_private_h_sources =		\
 	gtkhslaprivate.h	\
 	gtkiconcache.h		\
 	gtkiconhelperprivate.h  \
+	gtkiconthemeprivate.h  \
 	gtkiconviewprivate.h	\
 	gtkimagedefinitionprivate.h	\
 	gtkimageprivate.h	\
