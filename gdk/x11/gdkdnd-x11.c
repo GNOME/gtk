@@ -1948,7 +1948,9 @@ create_drag_window (GdkScreen *screen)
 GdkDragContext *
 _gdk_x11_window_drag_begin (GdkWindow *window,
                             GdkDevice *device,
-                            GList     *targets)
+                            GList     *targets,
+                            gint       x_root,
+                            gint       y_root)
 {
   GdkDragContext *context;
 

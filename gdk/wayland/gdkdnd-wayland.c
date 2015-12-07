@@ -375,7 +375,9 @@ create_dnd_window (GdkScreen *screen)
 GdkDragContext *
 _gdk_wayland_window_drag_begin (GdkWindow *window,
 				GdkDevice *device,
-				GList     *targets)
+				GList     *targets,
+                                gint       x_root,
+                                gint       y_root)
 {
   GdkWaylandDragContext *context_wayland;
   GdkWaylandDisplay *display_wayland;

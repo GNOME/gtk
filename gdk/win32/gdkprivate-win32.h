@@ -484,7 +484,7 @@ void       _gdk_win32_display_create_window_impl   (GdkDisplay    *display,
 
 /* stray GdkWindowImplWin32 members */
 void _gdk_win32_window_register_dnd (GdkWindow *window);
-GdkDragContext *_gdk_win32_window_drag_begin (GdkWindow *window, GdkDevice *device, GList *targets);
+GdkDragContext *_gdk_win32_window_drag_begin (GdkWindow *window, GdkDevice *device, GList *targets, gint x_root, gint y_root);
 gboolean _gdk_win32_window_simulate_key (GdkWindow      *window,
 				  gint            x,
 				  gint            y,

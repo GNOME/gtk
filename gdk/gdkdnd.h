@@ -31,6 +31,7 @@
 
 #include <gdk/gdktypes.h>
 #include <gdk/gdkdevice.h>
+#include <gdk/gdkevents.h>
 
 G_BEGIN_DECLS
 
@@ -143,6 +144,12 @@ GDK_AVAILABLE_IN_ALL
 GdkDragContext * gdk_drag_begin_for_device (GdkWindow      *window,
                                             GdkDevice      *device,
                                             GList          *targets);
+GDK_AVAILABLE_IN_3_20
+GdkDragContext * gdk_drag_begin_from_point  (GdkWindow      *window,
+                                             GdkDevice      *device,
+                                             GList          *targets,
+                                             gint            x_root,
+                                             gint            y_root);
 
 GDK_AVAILABLE_IN_ALL
 void    gdk_drag_find_window_for_screen   (GdkDragContext   *context,

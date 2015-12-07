@@ -80,7 +80,9 @@ void         _gdk_quartz_synthesize_null_key_event (GdkWindow *window);
 void        _gdk_quartz_window_register_dnd      (GdkWindow   *window);
 GdkDragContext * _gdk_quartz_window_drag_begin   (GdkWindow   *window,
                                                   GdkDevice   *device,
-                                                  GList       *targets);
+                                                  GList       *targets,
+                                                  gint         x_root,
+                                                  gint         y_root);
 
 /* Display */
 

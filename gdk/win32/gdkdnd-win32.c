@@ -1807,7 +1807,9 @@ gdk_drag_do_leave (GdkDragContext *context,
 GdkDragContext *
 _gdk_win32_window_drag_begin (GdkWindow *window,
 			      GdkDevice *device,
-			      GList     *targets)
+			      GList     *targets,
+                              gint       x_root,
+                              gint       y_root)
 {
   if (!use_ole2_dnd)
     {

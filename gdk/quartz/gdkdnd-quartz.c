@@ -35,7 +35,9 @@ gdk_quartz_drag_source_context ()
 GdkDragContext *
 _gdk_quartz_window_drag_begin (GdkWindow *window,
                                GdkDevice *device,
-                               GList     *targets)
+                               GList     *targets,
+                               gint       x_root,
+                               gint       y_root)
 {
   g_assert (_gdk_quartz_drag_source_context == NULL);
 

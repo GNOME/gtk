@@ -11014,11 +11014,42 @@ gdk_drag_begin (GdkWindow     *window,
  * Returns: (transfer full): a newly created #GdkDragContext
  */
 GdkDragContext *
-gdk_drag_begin_for_device (GdkWindow     *window,
-                           GdkDevice     *device,
-                           GList         *targets)
+gdk_drag_begin_for_device (GdkWindow *window,
+                           GdkDevice *device,
+                           GList     *targets)
 {
-  return GDK_WINDOW_IMPL_GET_CLASS (window->impl)->drag_begin (window, device, targets);
+  gint x, y;
+
+  gdk_device_get_position (device, NULL, &x, &y);
+
+  return gdk_drag_begin_from_point (window, device, targets, x, y);
+}
+
+/**
+ * gdk_drag_begin_from_point:
+ * @window: the source window for this drag
+ * @device: the device that controls this drag
+ * @targets: (transfer none) (element-type GdkAtom): the offered targets,
+ *     as list of #GdkAtoms
+ * @x_root: the x coordinate where the drag nominally started
+ * @y_root: the y coordinate where the drag nominally started
+ *
+ * Starts a drag and creates a new drag context for it.
+ *
+ * This function is called by the drag source.
+ *
+ * Returns: (transfer full): a newly created #GdkDragContext
+ *
+ * Since: 3.20
+ */
+GdkDragContext *
+gdk_drag_begin_from_point (GdkWindow *window,
+                           GdkDevice *device,
+                           GList     *targets,
+                           gint       x_root,
+                           gint       y_root)
+{
+  return GDK_WINDOW_IMPL_GET_CLASS (window->impl)->drag_begin (window, device, targets, x_root, y_root);
 }
 
 /**

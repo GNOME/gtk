@@ -312,7 +312,9 @@ void _gdk_x11_window_register_dnd (GdkWindow *window);
 
 GdkDragContext * _gdk_x11_window_drag_begin (GdkWindow *window,
                                              GdkDevice *device,
-                                             GList     *targets);
+                                             GList     *targets,
+                                             gint       x_root,
+                                             gint       y_root);
 
 gboolean _gdk_x11_get_xft_setting (GdkScreen   *screen,
                                    const gchar *name,
