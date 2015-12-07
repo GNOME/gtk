@@ -147,6 +147,7 @@ label {
     @extend .dim-label;
     &:backdrop { color: $backdrop_fg_color; }
   }
+  &:selected,
   & selection,
   & selection:focus,
   & selection:hover {

@@ -501,7 +501,7 @@ gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
   gtk_widget_set_halign (label, GTK_ALIGN_START);
   gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
 
-  gtk_widget_set_state_flags (label, GTK_STATE_FLAG_SELECTED, FALSE);
+  gtk_widget_set_state_flags (label, GTK_STATE_FLAG_SELECTED, TRUE);
 
   /* This label is displayed in a treeview cell displaying an accelerator
    * when the cell is clicked to change the acelerator.
