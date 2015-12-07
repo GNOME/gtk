@@ -318,11 +318,11 @@ get_pixbuf_size (GtkIconHelper   *self,
 }
 
 static cairo_surface_t *
-ensure_surface_from_pixbuf (GtkIconHelper   *self,
-			    GtkStyleContext *context,
-                            gint             scale,
-                            GdkPixbuf       *orig_pixbuf,
-                            gint             orig_scale)
+ensure_surface_from_pixbuf (GtkIconHelper *self,
+                            GtkCssStyle   *style,
+                            gint           scale,
+                            GdkPixbuf     *orig_pixbuf,
+                            gint           orig_scale)
 {
   gint width, height;
   cairo_surface_t *surface;
@@ -341,7 +341,7 @@ ensure_surface_from_pixbuf (GtkIconHelper   *self,
     pixbuf = g_object_ref (orig_pixbuf);
 
   surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, scale, self->priv->window);
-  icon_effect = _gtk_css_icon_effect_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_EFFECT));
+  icon_effect = _gtk_css_icon_effect_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_EFFECT));
   gtk_css_icon_effect_apply (icon_effect, surface);
   g_object_unref (pixbuf);
 
@@ -470,7 +470,9 @@ gtk_icon_helper_load_surface (GtkIconHelper   *self,
       break;
 
     case GTK_IMAGE_PIXBUF:
-      surface = ensure_surface_from_pixbuf (self, context, scale,
+      surface = ensure_surface_from_pixbuf (self,
+                                            gtk_style_context_lookup_style (context), 
+                                            scale,
                                             gtk_image_definition_get_pixbuf (self->priv->def),
                                             gtk_image_definition_get_scale (self->priv->def));
       break;
