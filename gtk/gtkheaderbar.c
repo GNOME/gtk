@@ -1388,6 +1388,40 @@ gtk_header_bar_get_custom_title (GtkHeaderBar *bar)
 }
 
 static void
+gtk_header_bar_destroy (GtkWidget *widget)
+{
+  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (GTK_HEADER_BAR (widget));
+
+  if (priv->custom_title)
+    {
+      gtk_widget_unparent (priv->custom_title);
+      priv->custom_title = NULL;
+    }
+
+  if (priv->label_box)
+    {
+      gtk_widget_unparent (priv->label_box);
+      priv->label_box = NULL;
+    }
+
+  if (priv->titlebar_start_box)
+    {
+      gtk_widget_unparent (priv->titlebar_start_box);
+      priv->titlebar_start_box = NULL;
+      priv->titlebar_start_separator = NULL;
+    }
+
+  if (priv->titlebar_end_box)
+    {
+      gtk_widget_unparent (priv->titlebar_end_box);
+      priv->titlebar_end_box = NULL;
+      priv->titlebar_end_separator = NULL;
+    }
+
+  GTK_WIDGET_CLASS (gtk_header_bar_parent_class)->destroy (widget);
+}
+
+static void
 gtk_header_bar_finalize (GObject *object)
 {
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (GTK_HEADER_BAR (object));
@@ -1842,6 +1876,7 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
   object_class->get_property = gtk_header_bar_get_property;
   object_class->set_property = gtk_header_bar_set_property;
 
+  widget_class->destroy = gtk_header_bar_destroy;
   widget_class->size_allocate = gtk_header_bar_size_allocate;
   widget_class->get_preferred_width = gtk_header_bar_get_preferred_width;
   widget_class->get_preferred_height = gtk_header_bar_get_preferred_height;
