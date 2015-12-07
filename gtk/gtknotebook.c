@@ -2837,8 +2837,8 @@ gtk_notebook_arrow_button_press (GtkNotebook      *notebook,
 static gboolean
 get_widget_coordinates (GtkWidget *widget,
                         GdkEvent  *event,
-                        gint      *x,
-                        gint      *y)
+                        gdouble   *x,
+                        gdouble   *y)
 {
   GdkWindow *window = ((GdkEventAny *)event)->window;
   gdouble tx, ty;
@@ -2869,7 +2869,9 @@ get_widget_coordinates (GtkWidget *widget,
 }
 
 static GList*
-get_tab_at_pos (GtkNotebook *notebook, gint x, gint y)
+get_tab_at_pos (GtkNotebook *notebook,
+                gdouble      x,
+                gdouble      y)
 {
    GtkNotebookPrivate *priv = notebook->priv;
   GtkNotebookPage *page;
@@ -2903,7 +2905,7 @@ gtk_notebook_button_press (GtkWidget      *widget,
   GtkNotebookPage *page;
   GList *tab;
   GtkNotebookArrow arrow;
-  gint x, y;
+  gdouble x, y;
 
   if (event->type != GDK_BUTTON_PRESS || !priv->children ||
       priv->button)
@@ -3282,7 +3284,7 @@ tab_prelight (GtkNotebook *notebook,
 {
   GtkNotebookPrivate *priv = notebook->priv;
   GList *tab;
-  gint x, y;
+  gdouble x, y;
 
   if (get_widget_coordinates (GTK_WIDGET (notebook), (GdkEvent *)event, &x, &y))
     {
@@ -3313,7 +3315,7 @@ gtk_notebook_leave_notify (GtkWidget        *widget,
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GtkNotebookPrivate *priv = notebook->priv;
-  gint x, y;
+  gdouble x, y;
 
   if (get_widget_coordinates (widget, (GdkEvent *)event, &x, &y))
     {
