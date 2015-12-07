@@ -245,8 +245,6 @@ static void gtk_drag_selection_get             (GtkWidget         *widget,
                                                 guint              sel_info,
                                                 guint32            time,
                                                 gpointer           data);
-static void gtk_drag_anim_destroy              (GtkDragAnim       *anim);
-static gboolean gtk_drag_anim_timeout          (gpointer           data);
 static void gtk_drag_remove_icon               (GtkDragSourceInfo *info);
 static void gtk_drag_source_info_destroy       (GtkDragSourceInfo *info);
 static void gtk_drag_add_update_idle           (GtkDragSourceInfo *info);
@@ -3001,31 +2999,8 @@ gtk_drag_drop_finished (GtkDragSourceInfo *info,
         g_signal_emit_by_name (info->widget, "drag-failed",
                                info->context, result, &success);
 
-      if (success)
-        {
-          gtk_drag_source_info_destroy (info);
-        }
-      else
-        {
-          GtkDragAnim *anim;
-
-          /* Mark the context as dead, so if the destination decides
-           * to respond really late, we still are OK.
-           */
-          gtk_drag_clear_source_info (info->context);
-
-#ifdef GDK_WINDOWING_WAYLAND
-          if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (info->widget)))
-            return; /* cancel animation is done by the compositor */ ;
-#endif
-          anim = g_slice_new0 (GtkDragAnim);
-          anim->info = info;
-          anim->start_time = gdk_frame_clock_get_frame_time (gtk_widget_get_frame_clock (info->widget));
-
-          info->cur_screen = gtk_widget_get_screen (info->widget);
-
-          gdk_threads_add_timeout_full (G_PRIORITY_DEFAULT, 17, gtk_drag_anim_timeout, anim, (GDestroyNotify) gtk_drag_anim_destroy);
-        }
+      gdk_drag_drop_done (info->context, success);
+      gtk_drag_source_info_destroy (info);
     }
 }
 
@@ -3157,74 +3132,37 @@ gtk_drag_selection_get (GtkWidget        *widget,
     }
 }
 
-/* From clutter-easing.c, based on Robert Penner's
- * infamous easing equations, MIT license.
- */
-static double
-ease_out_cubic (double t)
-{
-  double p = t - 1;
-  return p * p * p + 1;
-}
-
-static void
-gtk_drag_anim_destroy (GtkDragAnim *anim)
-{
-  gtk_drag_source_info_destroy (anim->info);
-  g_slice_free (GtkDragAnim, anim);
-}
-
-static gboolean
-gtk_drag_anim_timeout (gpointer data)
-{
-  GtkDragAnim *anim = data;
-  GtkDragSourceInfo *info = anim->info;
-  GdkFrameClock *frame_clock;
-  gint64 current_time;
-  double f;
-  double t;
-
-  frame_clock = gtk_widget_get_frame_clock (info->widget);
-
-  if (!frame_clock)
-    return G_SOURCE_REMOVE;
-
-  current_time = gdk_frame_clock_get_frame_time (frame_clock);
-
-  f = (current_time - anim->start_time) / (double) ANIM_TIME;
-
-  if (f >= 1.0)
-    return G_SOURCE_REMOVE;
-
-  t = ease_out_cubic (f);
-
-  gtk_window_move (GTK_WINDOW (info->icon_window),
-                   (info->cur_x + (info->start_x - info->cur_x) * t) - info->hot_x,
-                   (info->cur_y + (info->start_y - info->cur_y) * t) - info->hot_y);
-  gtk_widget_set_opacity (info->icon_window, (1.0 - f));
-
-  return G_SOURCE_CONTINUE;
-}
-
 static void
 gtk_drag_remove_icon (GtkDragSourceInfo *info)
 {
   if (info->icon_widget)
     {
-      gtk_widget_hide (info->icon_widget);
-      gtk_widget_set_opacity (info->icon_widget, 1.0);
-      if (info->destroy_icon)
-        gtk_widget_destroy (info->icon_widget);
-      g_object_unref (info->icon_widget);
+      GtkWidget *widget;
+
+      widget = info->icon_widget;
       info->icon_widget = NULL;
+
+      gtk_widget_hide (widget);
+      gtk_widget_set_opacity (widget, 1.0);
+
+      if (info->destroy_icon)
+        gtk_widget_destroy (widget);
+
+      g_object_unref (widget);
     }
+}
+
+static void
+gtk_drag_source_info_free (GtkDragSourceInfo *info)
+{
+  gtk_drag_remove_icon (info);
+  gtk_widget_destroy (info->icon_window);
+  g_free (info);
 }
 
 static void
 gtk_drag_source_info_destroy (GtkDragSourceInfo *info)
 {
-  gtk_drag_remove_icon (info);
-
   g_signal_handlers_disconnect_by_func (info->ipc_widget,
                                         gtk_drag_grab_broken_event_cb,
                                         info);
@@ -3249,9 +3187,6 @@ gtk_drag_source_info_destroy (GtkDragSourceInfo *info)
 
   g_clear_object (&info->widget);
 
-  if (info->icon_window)
-    gtk_widget_destroy (info->icon_window);
-
   gtk_selection_remove_all (info->ipc_widget);
   g_object_set_data (G_OBJECT (info->ipc_widget), I_("gtk-info"), NULL);
   source_widgets = g_slist_remove (source_widgets, info->ipc_widget);
@@ -3259,16 +3194,17 @@ gtk_drag_source_info_destroy (GtkDragSourceInfo *info)
 
   gtk_target_list_unref (info->target_list);
 
-  gtk_drag_clear_source_info (info->context);
-  g_object_unref (info->context);
-
   if (info->drop_timeout)
     g_source_remove (info->drop_timeout);
 
   if (info->update_idle)
     g_source_remove (info->update_idle);
 
-  g_free (info);
+  /* keep the icon_window alive until the (possible) drag cancel animation is done */
+  g_object_set_data_full (G_OBJECT (info->context), "former-gtk-source-info", info, (GDestroyNotify)gtk_drag_source_info_free);
+
+  gtk_drag_clear_source_info (info->context);
+  g_object_unref (info->context);
 }
 
 static gboolean
