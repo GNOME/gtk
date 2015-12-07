@@ -179,6 +179,10 @@ GDK_AVAILABLE_IN_ALL
 gboolean        gdk_drag_drop_succeeded (GdkDragContext *context);
 
 GDK_AVAILABLE_IN_3_20
+void            gdk_drag_drop_done   (GdkDragContext *context,
+                                      gboolean        success);
+
+GDK_AVAILABLE_IN_3_20
 GdkWindow      *gdk_drag_context_get_drag_window (GdkDragContext *context);
 
 GDK_AVAILABLE_IN_3_20

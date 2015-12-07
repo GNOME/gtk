@@ -503,3 +503,27 @@ gdk_drag_context_set_hotspot (GdkDragContext *context,
   if (GDK_DRAG_CONTEXT_GET_CLASS (context)->set_hotspot)
     GDK_DRAG_CONTEXT_GET_CLASS (context)->set_hotspot (context, hot_x, hot_y);
 }
+
+/**
+ * gdk_drag_drop_done:
+ * @context: a #GdkDragContext
+ * @success: whether the drag was ultimatively successful
+ *
+ * Inform GDK if the drop ended successfully. Passing %FALSE
+ * for @success may trigger a drag cancellation animation.
+ *
+ * This function is called by the drag source, and should
+ * be the last call before dropping the reference to the
+ * @context.
+ *
+ * Since: 3.20
+ */
+void
+gdk_drag_drop_done (GdkDragContext *context,
+                    gboolean        success)
+{
+  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
+
+  if (GDK_DRAG_CONTEXT_GET_CLASS (context)->drop_done)
+    GDK_DRAG_CONTEXT_GET_CLASS (context)->drop_done (context, success);
+}

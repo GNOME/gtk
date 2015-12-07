@@ -66,6 +66,8 @@ struct _GdkDragContextClass {
   void        (*set_hotspot)   (GdkDragContext  *context,
                                 gint             hot_x,
                                 gint             hot_y);
+  void        (*drop_done)     (GdkDragContext   *context,
+                                gboolean          success);
 };
 
 struct _GdkDragContext {
