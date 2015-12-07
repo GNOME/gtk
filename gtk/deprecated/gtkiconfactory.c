@@ -46,6 +46,7 @@
 #include "gtkstyle.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkrender.h"
+#include "gtkrenderprivate.h"
 
 /**
  * SECTION:gtkiconfactory
@@ -1222,21 +1223,20 @@ ensure_filename_pixbuf (GtkIconSet    *icon_set,
 }
 
 static GdkPixbuf *
-render_icon_name_pixbuf (GtkIconSource    *icon_source,
-			 GtkStyleContext  *context,
-			 GtkIconSize       size,
-                         gint              scale)
+render_icon_name_pixbuf (GtkIconSource *icon_source,
+			 GtkCssStyle   *style,
+			 GtkIconSize    size,
+                         gint           scale)
 {
   GdkPixbuf *pixbuf;
   GdkPixbuf *tmp_pixbuf;
-  GtkIconSource tmp_source;
   GtkIconTheme *icon_theme;
   gint width, height, pixel_size;
   gint *sizes, *s, dist;
   GError *error = NULL;
 
   icon_theme = gtk_css_icon_theme_value_get_icon_theme
-    (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_THEME));
+    (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_THEME));
 
   if (!gtk_icon_size_lookup (size, &width, &height))
     {
@@ -1322,11 +1322,11 @@ render_icon_name_pixbuf (GtkIconSource    *icon_source,
       return NULL;
     }
 
-  tmp_source = *icon_source;
-  tmp_source.type = GTK_ICON_SOURCE_PIXBUF;
-  tmp_source.source.pixbuf = tmp_pixbuf;
-
-  pixbuf = gtk_render_icon_pixbuf (context, &tmp_source, -1);
+  pixbuf = gtk_render_icon_pixbuf_unpacked (tmp_pixbuf,
+                                            -1,
+                                            gtk_icon_source_get_state_wildcarded (icon_source)
+                                            ? _gtk_css_icon_effect_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_EFFECT))
+                                            : GTK_CSS_ICON_EFFECT_NONE);
 
   if (!pixbuf)
     g_warning ("Failed to render icon");
@@ -1338,7 +1338,7 @@ render_icon_name_pixbuf (GtkIconSource    *icon_source,
 
 static GdkPixbuf *
 find_and_render_icon_source (GtkIconSet       *icon_set,
-			     GtkStyleContext  *context,
+			     GtkCssStyle      *style,
 			     GtkTextDirection  direction,
 			     GtkStateType      state,
 			     GtkIconSize       size,
@@ -1371,7 +1371,14 @@ find_and_render_icon_source (GtkIconSet       *icon_set,
 	    break;
 	  /* Fall through */
 	case GTK_ICON_SOURCE_PIXBUF:
-          pixbuf = gtk_render_icon_pixbuf (context, source, size);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+          pixbuf = gtk_render_icon_pixbuf_unpacked (gtk_icon_source_get_pixbuf (source),
+                                                    gtk_icon_source_get_size_wildcarded (source) ? size : -1,
+                                                    gtk_icon_source_get_state_wildcarded (source)
+                                                    ? _gtk_css_icon_effect_value_get (
+                                                       gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_EFFECT))
+                                                    : GTK_CSS_ICON_EFFECT_NONE);
+G_GNUC_END_IGNORE_DEPRECATIONS;
 	  if (!pixbuf)
 	    {
 	      g_warning ("Failed to render icon");
@@ -1390,7 +1397,7 @@ find_and_render_icon_source (GtkIconSet       *icon_set,
 	  break;
 	case GTK_ICON_SOURCE_ICON_NAME:
 	case GTK_ICON_SOURCE_STATIC_ICON_NAME:
-          pixbuf = render_icon_name_pixbuf (source, context,
+          pixbuf = render_icon_name_pixbuf (source, style,
                                             size, scale);
 	  if (!pixbuf)
 	    failed = g_slist_prepend (failed, source);
@@ -1406,7 +1413,7 @@ find_and_render_icon_source (GtkIconSet       *icon_set,
 }
 
 static GdkPixbuf*
-render_fallback_image (GtkStyleContext   *context,
+render_fallback_image (GtkCssStyle       *style,
                        GtkTextDirection   direction,
                        GtkStateType       state,
                        GtkIconSize        size)
@@ -1421,29 +1428,25 @@ render_fallback_image (GtkStyleContext   *context,
       fallback_source.direction = GTK_TEXT_DIR_NONE;
     }
 
-  return render_icon_name_pixbuf (&fallback_source, context, size, 1);
+  return render_icon_name_pixbuf (&fallback_source, style, size, 1);
 }
 
-static GdkPixbuf*
-gtk_icon_set_render_icon_pixbuf_for_scale (GtkIconSet      *icon_set,
-					   GtkStyleContext *context,
-					   GtkIconSize      size,
-					   gint             scale)
+GdkPixbuf*
+gtk_icon_set_render_icon_pixbuf_for_scale (GtkIconSet       *icon_set,
+					   GtkCssStyle      *style,
+                                           GtkTextDirection  direction,
+					   GtkIconSize       size,
+					   gint              scale)
 {
   GdkPixbuf *icon = NULL;
   GtkStateType state;
-  GtkTextDirection direction;
   GtkCssIconEffect effect;
 
   g_return_val_if_fail (icon_set != NULL, NULL);
-  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  direction = gtk_style_context_get_direction (context);
-G_GNUC_END_IGNORE_DEPRECATIONS;
+  g_return_val_if_fail (GTK_IS_CSS_STYLE (style), NULL);
 
   effect = _gtk_css_icon_effect_value_get
-    (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_EFFECT));
+    (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_EFFECT));
 
   switch (effect)
     {
@@ -1461,11 +1464,11 @@ G_GNUC_END_IGNORE_DEPRECATIONS;
     }
 
   if (icon_set->sources)
-    icon = find_and_render_icon_source (icon_set, context, direction, state,
+    icon = find_and_render_icon_source (icon_set, style, direction, state,
                                         size, scale);
 
   if (icon == NULL)
-    icon = render_fallback_image (context, direction, state, size);
+    icon = render_fallback_image (style, direction, state, size);
 
   return icon;
 }
@@ -1498,7 +1501,13 @@ gtk_icon_set_render_icon_pixbuf (GtkIconSet        *icon_set,
   g_return_val_if_fail (icon_set != NULL, NULL);
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
 
-  return gtk_icon_set_render_icon_pixbuf_for_scale (icon_set, context, size, 1);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+  return gtk_icon_set_render_icon_pixbuf_for_scale (icon_set,
+                                                    gtk_style_context_lookup_style (context),
+                                                    gtk_style_context_get_direction (context),
+                                                    size,
+                                                    1);
+G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
 /**
@@ -1533,7 +1542,13 @@ gtk_icon_set_render_icon_surface  (GtkIconSet      *icon_set,
   GdkPixbuf *pixbuf;
   cairo_surface_t *surface;
 
-  pixbuf = gtk_icon_set_render_icon_pixbuf_for_scale (icon_set, context, size, scale);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+  pixbuf = gtk_icon_set_render_icon_pixbuf_for_scale (icon_set,
+                                                      gtk_style_context_lookup_style (context),
+                                                      gtk_style_context_get_direction (context),
+                                                      size,
+                                                      scale);
+G_GNUC_END_IGNORE_DEPRECATIONS;
 
   surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, scale, for_window);
   g_object_unref (pixbuf);
@@ -1599,7 +1614,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
     }
 
   if (!context)
-    return render_fallback_image (context, direction, state, size);
+    return render_fallback_image (gtk_style_context_lookup_style (context), direction, state, size);
 
   gtk_style_context_save (context);
 

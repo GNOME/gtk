@@ -23,4 +23,10 @@
 GList *     _gtk_icon_factory_list_ids                  (void);
 void        _gtk_icon_factory_ensure_default_icons      (void);
 
+GdkPixbuf * gtk_icon_set_render_icon_pixbuf_for_scale   (GtkIconSet             *icon_set,
+                                                         GtkCssStyle            *style,
+                                                         GtkTextDirection        direction,
+                                                         GtkIconSize             size,
+                                                         gint                    scale);
+
 #endif /* __GTK_ICON_FACTORY_PRIVATE_H__ */

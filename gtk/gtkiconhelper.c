@@ -28,6 +28,7 @@
 #include "gtkiconthemeprivate.h"
 #include "gtkrender.h"
 #include "gtkstylecontextprivate.h"
+#include "deprecated/gtkiconfactoryprivate.h"
 #include "deprecated/gtkstock.h"
 
 struct _GtkIconHelperPrivate {
@@ -351,17 +352,26 @@ ensure_surface_from_pixbuf (GtkIconHelper   *self,
 }
 
 static cairo_surface_t *
-ensure_surface_for_icon_set (GtkIconHelper *self,
-			     GtkStyleContext *context,
-                             gint scale,
-			     GtkIconSet *icon_set)
+ensure_surface_for_icon_set (GtkIconHelper    *self,
+                             GtkCssStyle      *style,
+                             GtkTextDirection  direction,
+                             gint              scale,
+			     GtkIconSet       *icon_set)
 {
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  return gtk_icon_set_render_icon_surface (icon_set, context, 
-                			   self->priv->icon_size,
-				           scale,
-                                           self->priv->window);
-G_GNUC_END_IGNORE_DEPRECATIONS;
+  cairo_surface_t *surface;
+  GdkPixbuf *pixbuf;
+
+  pixbuf = gtk_icon_set_render_icon_pixbuf_for_scale (icon_set,
+                                                      style,
+                                                      direction,
+                                                      self->priv->icon_size,
+                                                      scale);
+  surface = gdk_cairo_surface_create_from_pixbuf (pixbuf,
+                                                  scale,
+                                                  self->priv->window);
+  g_object_unref (pixbuf);
+
+  return surface;
 }
 
 static cairo_surface_t *
@@ -469,18 +479,26 @@ gtk_icon_helper_load_surface (GtkIconHelper   *self,
       break;
 
     case GTK_IMAGE_STOCK:
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       icon_set = gtk_icon_factory_lookup_default (gtk_image_definition_get_stock (self->priv->def));
       if (icon_set != NULL)
-	surface = ensure_surface_for_icon_set (self, context, scale, icon_set);
+	surface = ensure_surface_for_icon_set (self,
+                                               gtk_style_context_lookup_style (context), 
+                                               gtk_style_context_get_direction (context), 
+                                               scale, icon_set);
       else
 	surface = NULL;
-      G_GNUC_END_IGNORE_DEPRECATIONS;
+G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
 
     case GTK_IMAGE_ICON_SET:
       icon_set = gtk_image_definition_get_icon_set (self->priv->def);
-      surface = ensure_surface_for_icon_set (self, context, scale, icon_set);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+      surface = ensure_surface_for_icon_set (self,
+                                             gtk_style_context_lookup_style (context), 
+                                             gtk_style_context_get_direction (context), 
+                                             scale, icon_set);
+G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
 
     case GTK_IMAGE_ICON_NAME:

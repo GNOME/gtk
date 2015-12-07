@@ -23,7 +23,6 @@
 #include <math.h>
 
 #include "gtkcsscornervalueprivate.h"
-#include "gtkcssenumvalueprivate.h"
 #include "gtkcssimagebuiltinprivate.h"
 #include "gtkcssimagevalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
@@ -1045,53 +1044,37 @@ scale_or_ref (GdkPixbuf *src,
                                     GDK_INTERP_BILINEAR);
 }
 
-static GdkPixbuf *
-gtk_render_icon_pixbuf_for_style (GtkCssStyle         *style,
-                                  const GtkIconSource *source,
-                                  GtkIconSize          size)
+GdkPixbuf *
+gtk_render_icon_pixbuf_unpacked (GdkPixbuf           *base_pixbuf,
+                                 GtkIconSize          size,
+                                 GtkCssIconEffect     icon_effect)
 {
   GdkPixbuf *scaled;
   GdkPixbuf *stated;
-  GdkPixbuf *base_pixbuf;
-  gint width = 1;
-  gint height = 1;
   cairo_surface_t *surface;
-  gboolean wildcarded;
-  GtkCssIconEffect icon_effect;
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  base_pixbuf = gtk_icon_source_get_pixbuf (source);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   g_return_val_if_fail (base_pixbuf != NULL, NULL);
-
-  if (size != (GtkIconSize) -1 &&
-      !gtk_icon_size_lookup (size, &width, &height))
-    {
-      g_warning (G_STRLOC ": invalid icon size '%d'", size);
-      return NULL;
-    }
 
   /* If the size was wildcarded, and we're allowed to scale, then scale; otherwise,
    * leave it alone.
    */
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  wildcarded = gtk_icon_source_get_size_wildcarded (source);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-  if (size != (GtkIconSize) -1 && wildcarded)
-    scaled = scale_or_ref (base_pixbuf, width, height);
+  if (size != (GtkIconSize) -1)
+    {
+      int width = 1;
+      int height = 1;
+
+      if (!gtk_icon_size_lookup (size, &width, &height))
+        {
+          g_warning (G_STRLOC ": invalid icon size '%d'", size);
+          return NULL;
+        }
+
+      scaled = scale_or_ref (base_pixbuf, width, height);
+    }
   else
-    scaled = g_object_ref (base_pixbuf);
-
-  /* If the state was wildcarded, then generate a state. */
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  wildcarded = gtk_icon_source_get_state_wildcarded (source);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-
-  if (!wildcarded)
-    return scaled;
-
-  icon_effect = _gtk_css_icon_effect_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_EFFECT));
+    {
+      scaled = g_object_ref (base_pixbuf);
+    }
 
   if (icon_effect != GTK_CSS_ICON_EFFECT_NONE)
     {
@@ -1135,7 +1118,14 @@ gtk_render_icon_pixbuf (GtkStyleContext     *context,
   g_return_val_if_fail (size > GTK_ICON_SIZE_INVALID || size == (GtkIconSize)-1, NULL);
   g_return_val_if_fail (source != NULL, NULL);
 
-  return gtk_render_icon_pixbuf_for_style (gtk_style_context_lookup_style (context), source, size);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+  return gtk_render_icon_pixbuf_unpacked (gtk_icon_source_get_pixbuf (source),
+                                          gtk_icon_source_get_size_wildcarded (source) ? size : -1,
+                                          gtk_icon_source_get_state_wildcarded (source)
+                                          ? _gtk_css_icon_effect_value_get (
+                                             _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_EFFECT))
+                                          : GTK_CSS_ICON_EFFECT_NONE);
+G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
 /**
