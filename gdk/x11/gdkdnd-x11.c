@@ -193,6 +193,8 @@ static GdkWindow * gdk_x11_drag_context_get_drag_window (GdkDragContext *context
 static void        gdk_x11_drag_context_set_hotspot (GdkDragContext  *context,
                                                      gint             hot_x,
                                                      gint             hot_y);
+static void        gdk_x11_drag_context_drop_done     (GdkDragContext  *context,
+                                                       gboolean         success);
 
 static void
 gdk_x11_drag_context_class_init (GdkX11DragContextClass *klass)
@@ -213,6 +215,7 @@ gdk_x11_drag_context_class_init (GdkX11DragContextClass *klass)
   context_class->get_selection = gdk_x11_drag_context_get_selection;
   context_class->get_drag_window = gdk_x11_drag_context_get_drag_window;
   context_class->set_hotspot = gdk_x11_drag_context_set_hotspot;
+  context_class->drop_done = gdk_x11_drag_context_drop_done;
 }
 
 static void
@@ -2485,4 +2488,95 @@ gdk_x11_drag_context_set_hotspot (GdkDragContext *context,
 
   x11_context->hot_x = hot_x;
   x11_context->hot_y = hot_y;
+}
+
+static double
+ease_out_cubic (double t)
+{
+  double p = t - 1;
+  return p * p * p + 1;
+}
+
+
+#define ANIM_TIME 500000 /* half a second */
+
+typedef struct _GdkDragAnim GdkDragAnim;
+struct _GdkDragAnim {
+  GdkX11DragContext *context;
+  GdkFrameClock *frame_clock;
+  gint64 start_time;
+};
+
+static void
+gdk_drag_anim_destroy (GdkDragAnim *anim)
+{
+  g_object_unref (anim->context);
+  g_slice_free (GdkDragAnim, anim);
+}
+
+static gboolean
+gdk_drag_anim_timeout (gpointer data)
+{
+  GdkDragAnim *anim = data;
+  GdkX11DragContext *context = anim->context;
+  GdkFrameClock *frame_clock = anim->frame_clock;
+  gint64 current_time;
+  double f;
+  double t;
+
+  if (!frame_clock)
+    return G_SOURCE_REMOVE;
+
+  current_time = gdk_frame_clock_get_frame_time (frame_clock);
+
+  f = (current_time - anim->start_time) / (double) ANIM_TIME;
+
+  if (f >= 1.0)
+    return G_SOURCE_REMOVE;
+
+  t = ease_out_cubic (f);
+
+  gdk_window_show (context->drag_window);
+  gdk_window_move (context->drag_window,
+                   context->last_x + (context->start_x - context->last_x) * t,
+                   context->last_y + (context->start_y - context->last_y) * t);
+  gdk_window_set_opacity (context->drag_window, 1.0 - f);
+
+  return G_SOURCE_CONTINUE;
+}
+
+static void
+gdk_x11_drag_context_drop_done (GdkDragContext *context,
+                                gboolean        success)
+{
+  GdkX11DragContext *x11_context = GDK_X11_DRAG_CONTEXT (context);
+  GdkDragAnim *anim;
+  GdkPixbuf *pixbuf;
+  cairo_surface_t *surface;
+  cairo_pattern_t *pattern;
+
+  if (success)
+    return;
+
+  pixbuf = gdk_pixbuf_get_from_window (x11_context->drag_window,
+                                       0, 0,
+                                       gdk_window_get_width (x11_context->drag_window),
+                                       gdk_window_get_height (x11_context->drag_window));
+  surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, 0, x11_context->drag_window);
+  pattern = cairo_pattern_create_for_surface (surface);
+
+  gdk_window_set_background_pattern (x11_context->drag_window, pattern);
+
+  cairo_pattern_destroy (pattern);
+  cairo_surface_destroy (surface);
+  g_object_unref (pixbuf);
+
+  anim = g_slice_new0 (GdkDragAnim);
+  anim->context = g_object_ref (x11_context);
+  anim->frame_clock = gdk_window_get_frame_clock (x11_context->drag_window);
+  anim->start_time = gdk_frame_clock_get_frame_time (anim->frame_clock);
+
+  gdk_threads_add_timeout_full (G_PRIORITY_DEFAULT, 17,
+                                gdk_drag_anim_timeout, anim,
+                                (GDestroyNotify) gdk_drag_anim_destroy);
 }
