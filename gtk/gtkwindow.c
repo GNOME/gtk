@@ -3994,9 +3994,8 @@ gtk_window_get_geometry_info (GtkWindow *window,
  * the user.  You can set a minimum and maximum size; allowed resize
  * increments (e.g. for xterm, you can only resize by the size of a
  * character); aspect ratios; and more. See the #GdkGeometry struct.
- * 
- **/
-void       
+ */
+void
 gtk_window_set_geometry_hints (GtkWindow       *window,
 			       GtkWidget       *geometry_widget,
 			       GdkGeometry     *geometry,
@@ -4008,17 +4007,18 @@ gtk_window_set_geometry_hints (GtkWindow       *window,
   g_return_if_fail (geometry_widget == NULL || GTK_IS_WIDGET (geometry_widget));
 
   info = gtk_window_get_geometry_info (window, TRUE);
-  
+
   if (geometry)
     info->geometry = *geometry;
 
   /* We store gravity in priv->gravity not in the hints. */
   info->mask = geom_mask & ~(GDK_HINT_WIN_GRAVITY);
 
+  if (geometry_widget)
+    info->mask &= ~(GDK_HINT_BASE_SIZE | GDK_HINT_RESIZE_INC);
+
   if (geom_mask & GDK_HINT_WIN_GRAVITY)
-    {
-      gtk_window_set_gravity (window, geometry->win_gravity);
-    }
+    gtk_window_set_gravity (window, geometry->win_gravity);
 
   gtk_widget_queue_resize_no_redraw (GTK_WIDGET (window));
 }
