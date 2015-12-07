@@ -2173,6 +2173,7 @@ gtk_drag_begin_internal (GtkWidget          *widget,
   GdkCursor *cursor;
   GdkDevice *pointer, *keyboard;
   GdkWindow *ipc_window;
+  gint start_x, start_y;
 
   pointer = keyboard = NULL;
   ipc_widget = gtk_drag_get_ipc_widget (widget);
@@ -2244,7 +2245,24 @@ gtk_drag_begin_internal (GtkWidget          *widget,
 
   source_widgets = g_slist_prepend (source_widgets, ipc_widget);
 
-  context = gdk_drag_begin_for_device (ipc_window, pointer, targets);
+  if (x != -1 && y != -1)
+    {
+      GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
+      gtk_widget_translate_coordinates (widget, toplevel,
+                                        x, y, &x, &y);
+      gdk_window_get_root_coords (gtk_widget_get_window (toplevel),
+                                  x, y, &start_x, &start_y);
+    }
+  else if (event && event->type == GDK_MOTION_NOTIFY)
+    {
+      start_x = event->motion.x_root;
+      start_y = event->motion.y_root;
+    }
+  else
+    gdk_device_get_position (pointer, NULL, &start_x, &start_y);
+
+  context = gdk_drag_begin_from_point (ipc_window, pointer, targets, start_x, start_y);
+
   gdk_drag_context_set_device (context, pointer);
   g_list_free (targets);
   
@@ -2269,30 +2287,13 @@ gtk_drag_begin_internal (GtkWidget          *widget,
   info->icon_widget = NULL;
   info->destroy_icon = FALSE;
 
-  /* Set cur_x, cur_y here so if the "drag-begin" signal shows
-   * the drag icon, it will be in the right place
-   */
   if (event)
     info->cur_screen = gdk_event_get_screen (event);
   else
     gdk_device_get_position (pointer, &info->cur_screen, NULL, NULL);
 
-  if (x != -1 && y != -1)
-    {
-      GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
-      gtk_widget_translate_coordinates (widget, toplevel,
-                                        x, y, &x, &y);
-      gdk_window_get_root_coords (gtk_widget_get_window (toplevel),
-                                  x, y, &info->start_x, &info->start_y);
-    }
-  else if (event && event->type == GDK_MOTION_NOTIFY)
-    {
-      info->start_x = event->motion.x_root;
-      info->start_y = event->motion.y_root;
-    }
-  else
-    gdk_device_get_position (pointer, NULL, &info->start_x, &info->start_y);
-
+  info->start_x = start_x;
+  info->start_y = start_y;
 
   g_signal_emit_by_name (widget, "drag-begin", info->context);
 
