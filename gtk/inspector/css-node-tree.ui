@@ -12,17 +12,65 @@
   <template class="GtkInspectorCssNodeTree" parent="GtkBox">
     <property name="orientation">vertical</property>
     <child>
-      <object class="GtkLabel" id="object_title">
+      <object class="GtkBox">
         <property name="visible">1</property>
-        <property name="valign">center</property>
-        <property name="margin-top">12</property>
-        <property name="margin-bottom">12</property>
+        <property name="margin-start">6</property>
+        <property name="margin-end">6</property>
+        <child type="center">
+          <object class="GtkLabel" id="object_title">
+            <property name="visible">1</property>
+            <property name="valign">center</property>
+            <property name="margin">12</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="node_list_button">
+            <property name="valign">center</property>
+            <property name="no-show-all">1</property>
+            <property name="relief">none</property>
+            <property name="tooltip-text" translatable="yes">Show all CSS nodes</property>
+            <signal name="clicked" handler="switch_to_node_list" swapped="1"/>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">1</property>
+                <property name="icon-name">pan-start-symbolic</property>
+                <property name="icon-size">1</property>
+              </object>
+            </child>
+            <style>
+              <class name="image-button"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="prop_list_button">
+            <property name="visible">1</property>
+            <property name="valign">center</property>
+            <property name="no-show-all">1</property>
+            <property name="relief">none</property>
+            <property name="tooltip-text" translatable="yes">Show CSS properties</property>
+            <signal name="clicked" handler="switch_to_prop_list" swapped="1"/>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">1</property>
+                <property name="icon-name">pan-end-symbolic</property>
+                <property name="icon-size">1</property>
+              </object>
+            </child>
+            <style>
+              <class name="image-button"/>
+            </style>
+          </object>
+          <packing>
+            <property name="pack-type">end</property>
+          </packing>
+        </child>
       </object>
     </child>
     <child>
-      <object class="GtkPaned">
+      <object class="GtkStack" id="stack">
         <property name="visible">1</property>
-        <property name="orientation">vertical</property>
+        <property name="transition-type">slide-left-right</property>
         <child>
           <object class="GtkScrolledWindow">
             <property name="visible">1</property>
@@ -34,9 +82,9 @@
                 <property name="search-column">0</property>
                 <property name="enable-search">0</property>
                 <signal name="row-activated" handler="row_activated"/>
+                <signal name="button-press-event" handler="button_pressed"/>
                 <child internal-child="selection">
                   <object class="GtkTreeSelection">
-                    <property name="mode">single</property>
                     <signal name="changed" handler="selection_changed"/>
                   </object>
                 </child>
@@ -108,68 +156,98 @@
               </object>
             </child>
           </object>
+          <packing>
+            <property name="name">node-list</property>
+          </packing>
         </child>
         <child>
-          <object class="GtkScrolledWindow">
+          <object class="GtkBox">
             <property name="visible">1</property>
-            <property name="expand">1</property>
-            <property name="min-content-height">100</property>
+            <property name="orientation">vertical</property>
             <child>
-              <object class="GtkTreeView" id="prop_tree">
+              <object class="GtkBox">
                 <property name="visible">1</property>
-                <property name="model">prop_model</property>
-                <property name="search-column">0</property>
-                <property name="enable-search">0</property>
+                <property name="orientation">horizontal</property>
+                <property name="margin">12</property>
                 <child>
-                  <object class="GtkTreeViewColumn" id="prop_name_column">
-                    <property name="title" translatable="yes">Property</property>
-                    <property name="resizable">1</property>
-                    <property name="sort-column-id">0</property>
-                    <child>
-                      <object class="GtkCellRendererText">
-                        <property name="scale">0.8</property>
-                      </object>
-                      <attributes>
-                        <attribute name="text">0</attribute>
-                      </attributes>
-                    </child>
+                  <object class="GtkLabel">
+                    <property name="visible">1</property>
+                    <property name="label" translatable="yes">Node:</property>
                   </object>
                 </child>
-                <child>
-                  <object class="GtkTreeViewColumn">
-                    <property name="title" translatable="yes">Value</property>
-                    <property name="resizable">1</property>
-                    <child>
-                      <object class="GtkCellRendererText">
-                        <property name="scale">0.8</property>
-                        <property name="width-chars">20</property>
-                        <property name="ellipsize">end</property>
-                      </object>
-                      <attributes>
-                        <attribute name="text">1</attribute>
-                      </attributes>
-                    </child>
+                <child type="center">
+                  <object class="GtkLabel" id="css_node_info">
+                    <property name="visible">1</property>
                   </object>
                 </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="visible">1</property>
+                <property name="expand">1</property>
+                <property name="min-content-height">100</property>
                 <child>
-                  <object class="GtkTreeViewColumn">
-                    <property name="title" translatable="yes">Location</property>
-                    <property name="resizable">1</property>
+                  <object class="GtkTreeView" id="prop_tree">
+                    <property name="visible">1</property>
+                    <property name="model">prop_model</property>
+                    <property name="search-column">0</property>
+                    <property name="enable-search">0</property>
                     <child>
-                      <object class="GtkCellRendererText">
-                        <property name="scale">0.8</property>
-                        <property name="width-chars">20</property>
-                        <property name="ellipsize">end</property>
+                      <object class="GtkTreeViewColumn" id="prop_name_column">
+                        <property name="title" translatable="yes">CSS Property</property>
+                        <property name="resizable">1</property>
+                        <property name="sort-column-id">0</property>
+                        <child>
+                          <object class="GtkCellRendererText">
+                            <property name="scale">0.8</property>
+                          </object>
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                          </attributes>
+                        </child>
                       </object>
-                      <attributes>
-                        <attribute name="text">2</attribute>
-                      </attributes>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn">
+                        <property name="title" translatable="yes">Value</property>
+                        <property name="resizable">1</property>
+                        <child>
+                          <object class="GtkCellRendererText">
+                            <property name="scale">0.8</property>
+                            <property name="width-chars">20</property>
+                            <property name="ellipsize">end</property>
+                          </object>
+                          <attributes>
+                            <attribute name="text">1</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn">
+                        <property name="title" translatable="yes">Location</property>
+                        <property name="resizable">1</property>
+                        <child>
+                          <object class="GtkCellRendererText">
+                            <property name="scale">0.8</property>
+                            <property name="width-chars">20</property>
+                            <property name="ellipsize">end</property>
+                          </object>
+                          <attributes>
+                            <attribute name="text">2</attribute>
+                          </attributes>
+                        </child>
+                      </object>
                     </child>
                   </object>
                 </child>
               </object>
             </child>
           </object>
+          <packing>
+            <property name="name">prop-list</property>
+          </packing>
         </child>
       </object>
     </child>
