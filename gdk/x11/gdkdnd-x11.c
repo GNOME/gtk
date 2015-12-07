@@ -76,6 +76,8 @@ struct _GdkX11DragContext
 
   guint   ref_count;
 
+  gint start_x;                /* Where the drag started */
+  gint start_y;
   guint16 last_x;              /* Coordinates from last event */
   guint16 last_y;
   GdkDragAction old_action;    /* The last action we sent to the source */
@@ -1966,6 +1968,9 @@ _gdk_x11_window_drag_begin (GdkWindow *window,
   context->actions = 0;
 
   gdk_drag_context_set_device (context, device);
+
+  GDK_X11_DRAG_CONTEXT (context)->start_x = x_root;
+  GDK_X11_DRAG_CONTEXT (context)->start_y = y_root;
 
   GDK_X11_DRAG_CONTEXT (context)->drag_window = create_drag_window (gdk_window_get_screen (window));
 
