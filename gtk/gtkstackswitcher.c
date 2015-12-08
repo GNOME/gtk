@@ -187,11 +187,6 @@ update_button (GtkStackSwitcher *self,
 
   gtk_widget_set_visible (button, gtk_widget_get_visible (widget) && (title != NULL || icon_name != NULL));
 
-  if (icon_name != NULL)
-    gtk_widget_set_size_request (button, -1, -1);
-  else
-    gtk_widget_set_size_request (button, 100, -1);
-
   g_free (title);
   g_free (icon_name);
 
