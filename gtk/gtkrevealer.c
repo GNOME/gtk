@@ -44,6 +44,10 @@
  * These animations respect the #GtkSettings:gtk-enable-animations
  * setting.
  *
+ * # CSS nodes
+ *
+ * GtkRevealer has a single CSS node with name revealer.
+ *
  * The GtkRevealer widget was added in GTK+ 3.10.
  */
 
