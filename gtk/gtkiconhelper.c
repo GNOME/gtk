@@ -34,6 +34,7 @@
 struct _GtkIconHelperPrivate {
   GtkImageDefinition *def;
 
+  GtkWidget *owner;
   GdkWindow *window;
 
   GtkIconSize icon_size;
@@ -804,9 +805,17 @@ _gtk_icon_helper_get_icon_name (GtkIconHelper *self)
 }
 
 GtkIconHelper *
-_gtk_icon_helper_new (void)
+_gtk_icon_helper_new (GtkWidget *owner)
 {
-  return g_object_new (GTK_TYPE_ICON_HELPER, NULL);
+  GtkIconHelper *helper;
+  
+  g_return_val_if_fail (GTK_IS_WIDGET (owner), NULL);
+
+  helper = g_object_new (GTK_TYPE_ICON_HELPER, NULL);
+
+  helper->priv->owner = owner;
+
+  return helper;
 }
 
 void

@@ -1394,7 +1394,7 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
   context = gtk_widget_get_style_context (widget);
   round_size = round_pixel_size (widget, priv->size);
 
-  icon_helper = _gtk_icon_helper_new ();
+  icon_helper = _gtk_icon_helper_new (widget);
   _gtk_icon_helper_set_force_scale_pixbuf (icon_helper, TRUE);
   _gtk_icon_helper_set_definition (icon_helper, priv->image_def);
   _gtk_icon_helper_set_icon_size (icon_helper, GTK_ICON_SIZE_SMALL_TOOLBAR);

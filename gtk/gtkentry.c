@@ -3260,7 +3260,7 @@ construct_icon_info (GtkWidget            *widget,
   icon_info = g_slice_new0 (EntryIconInfo);
   priv->icons[icon_pos] = icon_info;
 
-  icon_info->icon_helper = _gtk_icon_helper_new ();
+  icon_info->icon_helper = _gtk_icon_helper_new (widget);
   _gtk_icon_helper_set_force_scale_pixbuf (icon_info->icon_helper, TRUE);
 
   widget_node = get_entry_node (widget);

@@ -402,7 +402,7 @@ gtk_image_init (GtkImage *image)
   priv = image->priv;
 
   gtk_widget_set_has_window (GTK_WIDGET (image), FALSE);
-  priv->icon_helper = _gtk_icon_helper_new ();
+  priv->icon_helper = _gtk_icon_helper_new (GTK_WIDGET (image));
   _gtk_icon_helper_set_icon_size (priv->icon_helper, DEFAULT_ICON_SIZE);
 }
 

@@ -440,12 +440,13 @@ gtk_cell_renderer_pixbuf_new (void)
 }
 
 static GtkIconHelper *
-create_icon_helper (GtkCellRendererPixbuf *cellpixbuf)
+create_icon_helper (GtkCellRendererPixbuf *cellpixbuf,
+                    GtkWidget             *widget)
 {
   GtkCellRendererPixbufPrivate *priv = cellpixbuf->priv;
   GtkIconHelper *helper;
 
-  helper = _gtk_icon_helper_new ();
+  helper = _gtk_icon_helper_new (widget);
   _gtk_icon_helper_set_force_scale_pixbuf (helper, TRUE);
   _gtk_icon_helper_set_definition (helper, priv->image_def);
   _gtk_icon_helper_set_icon_size (helper, priv->icon_size);
@@ -475,7 +476,7 @@ gtk_cell_renderer_pixbuf_get_size (GtkCellRenderer    *cell,
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_save (context);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_IMAGE);
-  icon_helper = create_icon_helper (cellpixbuf);
+  icon_helper = create_icon_helper (cellpixbuf, widget);
 
   if (!_gtk_icon_helper_get_is_empty (icon_helper))
     _gtk_icon_helper_get_size (icon_helper, 
@@ -579,18 +580,18 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
 
       if (is_expanded && priv->pixbuf_expander_open != NULL)
         {
-          icon_helper = _gtk_icon_helper_new ();
+          icon_helper = _gtk_icon_helper_new (widget);
           _gtk_icon_helper_set_pixbuf (icon_helper, priv->pixbuf_expander_open);
         }
       else if (!is_expanded && priv->pixbuf_expander_closed != NULL)
         {
-          icon_helper = _gtk_icon_helper_new ();
+          icon_helper = _gtk_icon_helper_new (widget);
           _gtk_icon_helper_set_pixbuf (icon_helper, priv->pixbuf_expander_closed);
         }
     }
 
   if (icon_helper == NULL)
-    icon_helper = create_icon_helper (cellpixbuf);
+    icon_helper = create_icon_helper (cellpixbuf, widget);
 
   _gtk_icon_helper_set_window (icon_helper,
 			       gtk_widget_get_window (widget));

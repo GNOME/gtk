@@ -1099,7 +1099,7 @@ gtk_spin_button_panel_draw (GtkSpinButton   *spin_button,
   height = gdk_window_get_height (panel);
   width = gdk_window_get_width (panel);
 
-  icon_helper = _gtk_icon_helper_new ();
+  icon_helper = _gtk_icon_helper_new (widget);
   _gtk_icon_helper_set_window (icon_helper, panel);
   _gtk_icon_helper_set_use_fallback (icon_helper, TRUE);
 

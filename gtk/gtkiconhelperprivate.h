@@ -67,7 +67,7 @@ struct _GtkIconHelperClass
 
 GType _gtk_icon_helper_get_type (void) G_GNUC_CONST;
 
-GtkIconHelper *_gtk_icon_helper_new (void);
+GtkIconHelper *_gtk_icon_helper_new (GtkWidget *owner);
 
 void _gtk_icon_helper_clear (GtkIconHelper *self);
 void _gtk_icon_helper_invalidate (GtkIconHelper *self);
