@@ -3804,6 +3804,8 @@ row {
 /*************
  * Expanders *
  *************/
+expander title:hover {
+  background: red; }
 expander arrow {
   -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
   expander arrow:dir(rtl) {
@@ -4550,6 +4552,12 @@ frame.keycap {
 *:dnd:focus,
 *:dnd {
   border: 1px solid black; }
+
+stackswitcher button.text-button, stackswitcher GtkScaleButton.button.text-button,
+stackswitcher GtkVolumeButton.button.text-button,
+stackswitcher .titlebar button.text-button.titlebutton,
+.titlebar stackswitcher button.text-button.titlebutton {
+  min-width: 100px; }
 
 /* GTK NAMED COLORS
    ----------------

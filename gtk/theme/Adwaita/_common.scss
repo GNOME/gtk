@@ -2681,6 +2681,7 @@ row {
  *************/
 
 expander {
+  & title:hover { background: red; }
   & arrow {
     -gtk-icon-source: -gtk-icontheme('pan-end-symbolic');
     &:dir(rtl) { -gtk-icon-source: -gtk-icontheme('pan-end-symbolic-rtl'); }
@@ -3375,4 +3376,8 @@ frame.keycap {
 *:dnd:focus,
 *:dnd {
   border: 1px solid black;
+}
+
+stackswitcher button.text-button {
+  min-width: 100px;
 }
