@@ -306,8 +306,20 @@ gdk_wayland_drag_context_set_hotspot (GdkDragContext *context,
                                       gint            hot_x,
                                       gint            hot_y)
 {
-  GDK_WAYLAND_DRAG_CONTEXT (context)->hot_x = hot_x;
-  GDK_WAYLAND_DRAG_CONTEXT (context)->hot_y = hot_y;
+  GdkWaylandDragContext *context_wayland = GDK_WAYLAND_DRAG_CONTEXT (context);
+  gint prev_hot_x = context_wayland->hot_x;
+  gint prev_hot_y = context_wayland->hot_y;
+  const GdkRectangle damage_rect = { .width = 1, .height = 1 };
+
+  context_wayland->hot_x = hot_x;
+  context_wayland->hot_y = hot_y;
+
+  if (prev_hot_x == hot_x && prev_hot_y == hot_y)
+    return;
+
+  _gdk_wayland_window_offset_next_wl_buffer (context_wayland->dnd_window,
+                                             -hot_x, -hot_y);
+  gdk_window_invalidate_rect (context_wayland->dnd_window, &damage_rect, FALSE);
 }
 
 static void

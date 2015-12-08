@@ -121,6 +121,8 @@ struct _GdkWindowImplWayland
   GdkWindow *transient_for;
 
   cairo_surface_t *cairo_surface;
+  int pending_buffer_offset_x;
+  int pending_buffer_offset_y;
 
   gchar *title;
 
@@ -564,7 +566,10 @@ gdk_wayland_window_attach_image (GdkWindow *window)
   /* Attach this new buffer to the surface */
   wl_surface_attach (impl->surface,
                      _gdk_wayland_shm_surface_get_wl_buffer (impl->cairo_surface),
-                     0, 0);
+                     impl->pending_buffer_offset_x,
+                     impl->pending_buffer_offset_y);
+  impl->pending_buffer_offset_x = 0;
+  impl->pending_buffer_offset_y = 0;
 
   /* Only set the buffer scale if supported by the compositor */
   display = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
@@ -2741,4 +2746,19 @@ gdk_wayland_window_set_dbus_properties_libgtk_only (GdkWindow  *window,
   impl->application.unique_bus_name = g_strdup (unique_bus_name);
 
   maybe_set_gtk_surface_dbus_properties (window);
+}
+
+void
+_gdk_wayland_window_offset_next_wl_buffer (GdkWindow *window,
+                                           int        x,
+                                           int        y)
+{
+  GdkWindowImplWayland *impl;
+
+  g_return_if_fail (GDK_IS_WAYLAND_WINDOW (window));
+
+  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  impl->pending_buffer_offset_x = x;
+  impl->pending_buffer_offset_y = y;
 }
