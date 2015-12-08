@@ -187,15 +187,10 @@ static void        gdk_x11_drag_context_drop_finish (GdkDragContext  *context,
                                                      guint32          time_);
 static gboolean    gdk_x11_drag_context_drop_status (GdkDragContext  *context);
 static GdkAtom     gdk_x11_drag_context_get_selection (GdkDragContext  *context);
+static GdkWindow * gdk_x11_drag_context_get_drag_window (GdkDragContext *context);
 static void        gdk_x11_drag_context_set_hotspot (GdkDragContext  *context,
                                                      gint             hot_x,
                                                      gint             hot_y);
-
-static GdkWindow *
-gdk_x11_drag_context_get_drag_window (GdkDragContext *context)
-{
-  return GDK_X11_DRAG_CONTEXT (context)->drag_window;
-}
 
 static void
 gdk_x11_drag_context_class_init (GdkX11DragContextClass *klass)
@@ -2466,6 +2461,12 @@ static gboolean
 gdk_x11_drag_context_drop_status (GdkDragContext *context)
 {
   return ! GDK_X11_DRAG_CONTEXT (context)->drop_failed;
+}
+
+static GdkWindow *
+gdk_x11_drag_context_get_drag_window (GdkDragContext *context)
+{
+  return GDK_X11_DRAG_CONTEXT (context)->drag_window;
 }
 
 static void
