@@ -174,6 +174,11 @@ gboolean        gdk_drag_drop_succeeded (GdkDragContext *context);
 GDK_AVAILABLE_IN_3_20
 GdkWindow      *gdk_drag_context_get_drag_window (GdkDragContext *context);
 
+GDK_AVAILABLE_IN_3_20
+void            gdk_drag_context_set_hotspot (GdkDragContext *context,
+                                              gint            hot_x,
+                                              gint            hot_y);
+
 G_END_DECLS
 
 #endif /* __GDK_DND_H__ */

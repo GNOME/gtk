@@ -480,3 +480,26 @@ gdk_drag_context_get_drag_window (GdkDragContext *context)
 
   return NULL;
 }
+
+/**
+ * gdk_drag_context_set_hotspot:
+ * @context: a #GdkDragContext
+ * @hot_x: x coordinate of the drag window hotspot
+ * @hot_y: y coordinate of the drag window hotspot
+ *
+ * Sets the position of the drag window that will be kept
+ * under the cursor hotspot. Initially, the hotspot is at the
+ * top left corner of the drag window.
+ *
+ * Since: 3.20
+ */
+void
+gdk_drag_context_set_hotspot (GdkDragContext *context,
+                              gint            hot_x,
+                              gint            hot_y)
+{
+  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
+
+  if (GDK_DRAG_CONTEXT_GET_CLASS (context)->set_hotspot)
+    GDK_DRAG_CONTEXT_GET_CLASS (context)->set_hotspot (context, hot_x, hot_y);
+}

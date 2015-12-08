@@ -63,6 +63,9 @@ struct _GdkDragContextClass {
                                 guint32          time_);
   gboolean    (*drop_status)   (GdkDragContext  *context);
   GdkWindow*  (*get_drag_window) (GdkDragContext *context);
+  void        (*set_hotspot)   (GdkDragContext  *context,
+                                gint             hot_x,
+                                gint             hot_y);
 };
 
 struct _GdkDragContext {
