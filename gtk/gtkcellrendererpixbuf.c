@@ -480,7 +480,6 @@ gtk_cell_renderer_pixbuf_get_size (GtkCellRenderer    *cell,
 
   if (!_gtk_icon_helper_get_is_empty (icon_helper))
     _gtk_icon_helper_get_size (icon_helper, 
-                               gtk_widget_get_style_context (widget),
                                &pixbuf_width, &pixbuf_height);
 
   g_object_unref (icon_helper);
@@ -594,7 +593,7 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
     icon_helper = create_icon_helper (cellpixbuf, widget);
 
   _gtk_icon_helper_draw (icon_helper,
-                         context, cr,
+                         cr,
                          pix_rect.x, pix_rect.y);
   g_object_unref (icon_helper);
 

@@ -2785,7 +2785,7 @@ get_icon_width (GtkEntry             *entry,
   state = gtk_style_context_get_state (context);
   gtk_style_context_get_padding (context, state, &padding);
 
-  _gtk_icon_helper_get_size (icon_info->icon_helper, context,
+  _gtk_icon_helper_get_size (icon_info->icon_helper,
                              &width, NULL);
   gtk_style_context_restore (context);
 
@@ -3795,7 +3795,7 @@ draw_icon (GtkWidget            *widget,
 
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_save_to_node (context, icon_info->css_node);
-  _gtk_icon_helper_get_size (icon_info->icon_helper, context,
+  _gtk_icon_helper_get_size (icon_info->icon_helper,
                              &pix_width, &pix_height);
   state = gtk_style_context_get_state (context);
   gtk_style_context_get_padding (context, state, &padding);
@@ -3804,7 +3804,7 @@ draw_icon (GtkWidget            *widget,
   y = MAX (0, (height - pix_height) / 2);
 
   _gtk_icon_helper_draw (icon_info->icon_helper,
-                         context, cr,
+                         cr,
                          x, y);
 
   gtk_style_context_restore (context);
@@ -8868,10 +8868,8 @@ gtk_entry_get_icon_pixbuf (GtkEntry             *entry,
   context = gtk_widget_get_style_context (GTK_WIDGET (entry));
   gtk_style_context_save_to_node (context, icon_info->css_node);
 
-  _gtk_icon_helper_get_size (icon_info->icon_helper, context, &width, &height);
-  surface = gtk_icon_helper_load_surface (icon_info->icon_helper,
-                                          context,
-                                          1);
+  _gtk_icon_helper_get_size (icon_info->icon_helper, &width, &height);
+  surface = gtk_icon_helper_load_surface (icon_info->icon_helper, 1);
 
   pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0, width, height);
 

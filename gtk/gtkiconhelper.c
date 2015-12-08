@@ -428,12 +428,14 @@ ensure_surface_for_gicon (GtkIconHelper    *self,
 
 cairo_surface_t *
 gtk_icon_helper_load_surface (GtkIconHelper   *self,
-                              GtkStyleContext *context,
                               int              scale)
 {
   cairo_surface_t *surface;
+  GtkStyleContext *context;
   GtkIconSet *icon_set;
   GIcon *gicon;
+
+  context = gtk_widget_get_style_context (self->priv->owner);
 
   switch (gtk_image_definition_get_storage_type (self->priv->def))
     {
@@ -519,17 +521,18 @@ gtk_icon_helper_ensure_surface (GtkIconHelper   *self,
 
   scale = gtk_widget_get_scale_factor (self->priv->owner);
 
-  self->priv->rendered_surface = gtk_icon_helper_load_surface (self, context, scale);
+  self->priv->rendered_surface = gtk_icon_helper_load_surface (self, scale);
 }
 
 void
 _gtk_icon_helper_get_size (GtkIconHelper *self,
-                           GtkStyleContext *context,
                            gint *width_out,
                            gint *height_out)
 {
+  GtkStyleContext *context;
   gint width, height, scale;
 
+  context = gtk_widget_get_style_context (self->priv->owner);
   width = height = 0;
 
   /* Certain kinds of images are easy to calculate the size for, these
@@ -791,11 +794,12 @@ _gtk_icon_helper_new (GtkWidget *owner)
 
 void
 _gtk_icon_helper_draw (GtkIconHelper *self,
-                       GtkStyleContext *context,
                        cairo_t *cr,
                        gdouble x,
                        gdouble y)
 {
+  GtkStyleContext *context = gtk_widget_get_style_context (self->priv->owner);
+
   gtk_icon_helper_ensure_surface (self, context);
 
   if (self->priv->rendered_surface != NULL)

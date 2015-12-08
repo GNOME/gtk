@@ -1113,7 +1113,7 @@ gtk_spin_button_panel_draw (GtkSpinButton   *spin_button,
       _gtk_icon_helper_set_icon_name (icon_helper, "list-add-symbolic", GTK_ICON_SIZE_MENU);
     }
 
-  _gtk_icon_helper_get_size (icon_helper, context, &icon_width, &icon_height);
+  _gtk_icon_helper_get_size (icon_helper, &icon_width, &icon_height);
 
   gtk_render_background (context, cr, 0, 0, width, height);
   gtk_render_frame (context, cr, 0, 0, width, height);
@@ -1121,7 +1121,7 @@ gtk_spin_button_panel_draw (GtkSpinButton   *spin_button,
   x = floor ((width - icon_width) / 2.0);
   y = floor ((height - icon_height) / 2.0);
 
-  _gtk_icon_helper_draw (icon_helper, context, cr, x, y);
+  _gtk_icon_helper_draw (icon_helper, cr, x, y);
   cairo_restore (cr);
 
   gtk_style_context_restore (context);

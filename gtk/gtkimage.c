@@ -1623,10 +1623,8 @@ gtk_image_get_preferred_size (GtkImage *image,
   GtkImagePrivate *priv = image->priv;
   gint width, height;
   GtkBorder border;
-  GtkStyleContext *context;
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (image));
-  _gtk_icon_helper_get_size (priv->icon_helper, context, &width, &height);
+  _gtk_icon_helper_get_size (priv->icon_helper, &width, &height);
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   _gtk_misc_get_padding_and_border (GTK_MISC (image), &border);
 G_GNUC_END_IGNORE_DEPRECATIONS
@@ -1716,7 +1714,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   else
     {
       _gtk_icon_helper_draw (priv->icon_helper, 
-                             context, cr,
+                             cr,
                              x, y);
     }
 

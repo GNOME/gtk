@@ -121,15 +121,12 @@ const gchar *_gtk_icon_helper_get_stock_id (GtkIconHelper *self);
 const gchar *_gtk_icon_helper_get_icon_name (GtkIconHelper *self);
 
 cairo_surface_t *gtk_icon_helper_load_surface (GtkIconHelper *self,
-					       GtkStyleContext *context,
                                                int              scale);
 void _gtk_icon_helper_get_size (GtkIconHelper *self,
-                                GtkStyleContext *context,
                                 gint *width_out,
                                 gint *height_out);
 
 void _gtk_icon_helper_draw (GtkIconHelper *self,
-                            GtkStyleContext *context,
                             cairo_t *cr,
                             gdouble x,
                             gdouble y);
