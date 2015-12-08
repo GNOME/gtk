@@ -37,7 +37,24 @@
             <child>
               <object class="GtkShortcutsShortcut">
                 <property name="visible">1</property>
+                <property name="accelerator">&lt;alt&gt;Right</property>
+                <property name="direction">ltr</property>
+                <property name="title" translatable="yes">Forward</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">1</property>
+                <property name="accelerator">&lt;ctrl&gt;Left</property>
+                <property name="direction">ltr</property>
+                <property name="title" translatable="yes">Back</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">1</property>
                 <property name="accelerator">&lt;alt&gt;Left</property>
+                <property name="direction">rtl</property>
                 <property name="title" translatable="yes">Forward</property>
               </object>
             </child>
@@ -45,6 +62,7 @@
               <object class="GtkShortcutsShortcut">
                 <property name="visible">1</property>
                 <property name="accelerator">&lt;ctrl&gt;Right</property>
+                <property name="direction">rtl</property>
                 <property name="title" translatable="yes">Back</property>
               </object>
             </child>
