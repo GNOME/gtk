@@ -24,6 +24,7 @@
 #include "gdkproperty.h"
 #include "gdkprivate-wayland.h"
 #include "gdkdisplay-wayland.h"
+#include "gdkwaylandwindow.h"
 
 #include "gdkdeviceprivate.h"
 
@@ -48,6 +49,8 @@ struct _GdkWaylandDragContext
   uint32_t serial;
   gdouble x;
   gdouble y;
+  gint prev_hot_x;
+  gint prev_hot_y;
   gint hot_x;
   gint hot_y;
 };
@@ -306,8 +309,27 @@ gdk_wayland_drag_context_set_hotspot (GdkDragContext *context,
                                       gint            hot_x,
                                       gint            hot_y)
 {
-  GDK_WAYLAND_DRAG_CONTEXT (context)->hot_x = hot_x;
-  GDK_WAYLAND_DRAG_CONTEXT (context)->hot_y = hot_y;
+  GdkWaylandDragContext *context_wayland = GDK_WAYLAND_DRAG_CONTEXT (context);
+
+  context_wayland->prev_hot_x = context_wayland->hot_x;
+  context_wayland->prev_hot_y = context_wayland->hot_x;
+  context_wayland->hot_x = hot_x;
+  context_wayland->hot_y = hot_y;
+
+  if (context_wayland->prev_hot_x == hot_x &&
+      context_wayland->prev_hot_x == hot_x)
+    return;
+
+  _gdk_wayland_window_offset_next_wl_buffer (context_wayland->dnd_window,
+                                             -hot_x, -hot_y);
+  gdk_window_invalidate_rect (context_wayland->dnd_window,
+                              &(GdkRectangle) {
+                                .x = 0,
+                                .y = 0,
+                                .width = 1,
+                                .height = 1,
+                              },
+                              FALSE);
 }
 
 static void
