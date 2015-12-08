@@ -156,7 +156,7 @@ struct _GtkStatusIconPrivate
 #endif
 
   gint           size;
-  GtkIconHelper *icon_helper;
+  GtkImageDefinition *image_def;
   guint          visible : 1;
 };
 
@@ -859,9 +859,8 @@ gtk_status_icon_init (GtkStatusIcon *status_icon)
   priv = gtk_status_icon_get_instance_private (status_icon);
   status_icon->priv = priv;
 
-  priv->icon_helper = _gtk_icon_helper_new ();
-  _gtk_icon_helper_set_force_scale_pixbuf (priv->icon_helper, TRUE);
-  priv->visible      = TRUE;
+  priv->image_def = gtk_image_definition_new_empty ();
+  priv->visible = TRUE;
 
 #ifdef GDK_WINDOWING_X11
   if (GDK_IS_X11_DISPLAY (gdk_display_get_default ()))
@@ -1004,7 +1003,7 @@ gtk_status_icon_finalize (GObject *object)
   GtkStatusIconPrivate *priv = status_icon->priv;
 
   gtk_status_icon_reset_image_data (status_icon);
-  g_clear_object (&priv->icon_helper);
+  gtk_image_definition_unref (priv->image_def);
 
 #ifdef GDK_WINDOWING_X11
   if (priv->tray_icon)
@@ -1376,6 +1375,7 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
 #ifdef GDK_WINDOWING_WIN32
   HICON prev_hicon;
 #endif
+  GtkIconHelper *icon_helper;
   GtkStyleContext *context;
   cairo_surface_t *surface;
   GtkWidget *widget;
@@ -1394,8 +1394,12 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
   context = gtk_widget_get_style_context (widget);
   round_size = round_pixel_size (widget, priv->size);
 
-  _gtk_icon_helper_set_pixel_size (priv->icon_helper, round_size);
-  surface = gtk_icon_helper_load_surface (priv->icon_helper, context, 1);
+  icon_helper = _gtk_icon_helper_new ();
+  _gtk_icon_helper_set_force_scale_pixbuf (icon_helper, TRUE);
+  _gtk_icon_helper_set_definition (icon_helper, priv->image_def);
+  _gtk_icon_helper_set_icon_size (icon_helper, GTK_ICON_SIZE_SMALL_TOOLBAR);
+  _gtk_icon_helper_set_pixel_size (icon_helper, round_size);
+  surface = gtk_icon_helper_load_surface (icon_helper, context, 1);
   pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0, round_size, round_size);
   cairo_surface_destroy (surface);
 
@@ -1679,7 +1683,7 @@ static void
 gtk_status_icon_reset_image_data (GtkStatusIcon *status_icon)
 {
   GtkStatusIconPrivate *priv = status_icon->priv;
-  GtkImageType storage_type = _gtk_icon_helper_get_storage_type (priv->icon_helper);
+  GtkImageType storage_type = gtk_image_definition_get_storage_type (priv->image_def);
 
   switch (storage_type)
   {
@@ -1702,14 +1706,14 @@ gtk_status_icon_reset_image_data (GtkStatusIcon *status_icon)
       break;
   }
 
-  _gtk_icon_helper_clear (priv->icon_helper);
+  gtk_image_definition_unref (priv->image_def);
+  priv->image_def = gtk_image_definition_new_empty ();
   g_object_notify (G_OBJECT (status_icon), "storage-type");
 }
 
 static void
-gtk_status_icon_set_image (GtkStatusIcon *status_icon,
-    			   GtkImageType   storage_type,
-			   gpointer       data)
+gtk_status_icon_take_image (GtkStatusIcon      *status_icon,
+                            GtkImageDefinition *def)
 {
   GtkStatusIconPrivate *priv = status_icon->priv;
 
@@ -1719,29 +1723,31 @@ gtk_status_icon_set_image (GtkStatusIcon *status_icon,
 
   g_object_notify (G_OBJECT (status_icon), "storage-type");
 
-  /* the icon size we pass here doesn't really matter, since
-   * we force a pixel size before doing the actual rendering anyway.
-   */
-  switch (storage_type) 
+  if (def != NULL)
     {
-    case GTK_IMAGE_PIXBUF:
-      _gtk_icon_helper_set_pixbuf (priv->icon_helper, data);
-      g_object_notify (G_OBJECT (status_icon), "pixbuf");
-      break;
-    case GTK_IMAGE_STOCK:
-      _gtk_icon_helper_set_stock_id (priv->icon_helper, data, GTK_ICON_SIZE_SMALL_TOOLBAR);
-      g_object_notify (G_OBJECT (status_icon), "stock");
-      break;
-    case GTK_IMAGE_ICON_NAME:
-      _gtk_icon_helper_set_icon_name (priv->icon_helper, data, GTK_ICON_SIZE_SMALL_TOOLBAR);
-      g_object_notify (G_OBJECT (status_icon), "icon-name");
-      break;
-    case GTK_IMAGE_GICON:
-      _gtk_icon_helper_set_gicon (priv->icon_helper, data, GTK_ICON_SIZE_SMALL_TOOLBAR);
-      g_object_notify (G_OBJECT (status_icon), "gicon");
-      break;
-    default:
-      g_warning ("Image type %u not handled by GtkStatusIcon", storage_type);
+      gtk_image_definition_unref (priv->image_def);
+      priv->image_def = def;
+      /* the icon size we pass here doesn't really matter, since
+       * we force a pixel size before doing the actual rendering anyway.
+       */
+      switch (gtk_image_definition_get_storage_type (def))
+        {
+        case GTK_IMAGE_PIXBUF:
+          g_object_notify (G_OBJECT (status_icon), "pixbuf");
+          break;
+        case GTK_IMAGE_STOCK:
+          g_object_notify (G_OBJECT (status_icon), "stock");
+          break;
+        case GTK_IMAGE_ICON_NAME:
+          g_object_notify (G_OBJECT (status_icon), "icon-name");
+          break;
+        case GTK_IMAGE_GICON:
+          g_object_notify (G_OBJECT (status_icon), "gicon");
+          break;
+        default:
+          g_warning ("Image type %u not handled by GtkStatusIcon", 
+                     gtk_image_definition_get_storage_type (def));
+        }
     }
 
   g_object_thaw_notify (G_OBJECT (status_icon));
@@ -1768,8 +1774,8 @@ gtk_status_icon_set_from_pixbuf (GtkStatusIcon *status_icon,
   g_return_if_fail (GTK_IS_STATUS_ICON (status_icon));
   g_return_if_fail (pixbuf == NULL || GDK_IS_PIXBUF (pixbuf));
 
-  gtk_status_icon_set_image (status_icon, GTK_IMAGE_PIXBUF,
-      			     (gpointer) pixbuf);
+  gtk_status_icon_take_image (status_icon,
+      			      gtk_image_definition_new_pixbuf (pixbuf, 1));
 }
 
 /**
@@ -1820,8 +1826,8 @@ gtk_status_icon_set_from_stock (GtkStatusIcon *status_icon,
   g_return_if_fail (GTK_IS_STATUS_ICON (status_icon));
   g_return_if_fail (stock_id != NULL);
 
-  gtk_status_icon_set_image (status_icon, GTK_IMAGE_STOCK,
-      			     (gpointer) stock_id);
+  gtk_status_icon_take_image (status_icon,
+      			      gtk_image_definition_new_stock (stock_id));
 }
 
 /**
@@ -1844,8 +1850,8 @@ gtk_status_icon_set_from_icon_name (GtkStatusIcon *status_icon,
   g_return_if_fail (GTK_IS_STATUS_ICON (status_icon));
   g_return_if_fail (icon_name != NULL);
 
-  gtk_status_icon_set_image (status_icon, GTK_IMAGE_ICON_NAME,
-      			     (gpointer) icon_name);
+  gtk_status_icon_take_image (status_icon,
+      			      gtk_image_definition_new_icon_name (icon_name));
 }
 
 /**
@@ -1867,8 +1873,8 @@ gtk_status_icon_set_from_gicon (GtkStatusIcon *status_icon,
   g_return_if_fail (GTK_IS_STATUS_ICON (status_icon));
   g_return_if_fail (icon != NULL);
 
-  gtk_status_icon_set_image (status_icon, GTK_IMAGE_GICON,
-                             (gpointer) icon);
+  gtk_status_icon_take_image (status_icon,
+      			      gtk_image_definition_new_gicon (icon));
 }
 
 /**
@@ -1890,7 +1896,7 @@ gtk_status_icon_get_storage_type (GtkStatusIcon *status_icon)
 {
   g_return_val_if_fail (GTK_IS_STATUS_ICON (status_icon), GTK_IMAGE_EMPTY);
 
-  return _gtk_icon_helper_get_storage_type (status_icon->priv->icon_helper);
+  return gtk_image_definition_get_storage_type (status_icon->priv->image_def);
 }
 /**
  * gtk_status_icon_get_pixbuf:
@@ -1918,7 +1924,7 @@ gtk_status_icon_get_pixbuf (GtkStatusIcon *status_icon)
 
   priv = status_icon->priv;
 
-  return _gtk_icon_helper_peek_pixbuf (priv->icon_helper);
+  return gtk_image_definition_get_pixbuf (priv->image_def);
 }
 
 /**
@@ -1947,7 +1953,7 @@ gtk_status_icon_get_stock (GtkStatusIcon *status_icon)
 
   priv = status_icon->priv;
 
-  return _gtk_icon_helper_get_stock_id (priv->icon_helper);
+  return gtk_image_definition_get_stock (priv->image_def);
 }
 
 /**
@@ -1975,7 +1981,7 @@ gtk_status_icon_get_icon_name (GtkStatusIcon *status_icon)
 
   priv = status_icon->priv;
 
-  return _gtk_icon_helper_get_icon_name (priv->icon_helper);
+  return gtk_image_definition_get_icon_name (priv->image_def);
 }
 
 /**
@@ -2005,7 +2011,7 @@ gtk_status_icon_get_gicon (GtkStatusIcon *status_icon)
 
   priv = status_icon->priv;
 
-  return _gtk_icon_helper_peek_gicon (priv->icon_helper);
+  return gtk_image_definition_get_gicon (priv->image_def);
 }
 
 /**
