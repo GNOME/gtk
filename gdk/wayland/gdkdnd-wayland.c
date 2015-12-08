@@ -48,6 +48,8 @@ struct _GdkWaylandDragContext
   uint32_t serial;
   gdouble x;
   gdouble y;
+  gint hot_x;
+  gint hot_y;
 };
 
 struct _GdkWaylandDragContextClass
@@ -300,6 +302,15 @@ gdk_wayland_drag_context_get_drag_window (GdkDragContext *context)
 }
 
 static void
+gdk_wayland_drag_context_set_hotspot (GdkDragContext *context,
+                                      gint            hot_x,
+                                      gint            hot_y)
+{
+  GDK_WAYLAND_DRAG_CONTEXT (context)->hot_x = hot_x;
+  GDK_WAYLAND_DRAG_CONTEXT (context)->hot_y = hot_y;
+}
+
+static void
 gdk_wayland_drag_context_class_init (GdkWaylandDragContextClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -317,6 +328,7 @@ gdk_wayland_drag_context_class_init (GdkWaylandDragContextClass *klass)
   context_class->drop_status = gdk_wayland_drag_context_drop_status;
   context_class->get_selection = gdk_wayland_drag_context_get_selection;
   context_class->get_drag_window = gdk_wayland_drag_context_get_drag_window;
+  context_class->set_hotspot = gdk_wayland_drag_context_set_hotspot;
 }
 
 GdkDragProtocol
