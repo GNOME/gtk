@@ -873,6 +873,7 @@ gtk_css_node_insert_after (GtkCssNode *parent,
                            GtkCssNode *previous_sibling)
 {
   g_return_if_fail (previous_sibling == NULL || previous_sibling->parent == parent);
+  g_return_if_fail (cssnode != previous_sibling);
 
   if (cssnode->previous_sibling == previous_sibling &&
       cssnode->parent == parent)
@@ -890,6 +891,7 @@ gtk_css_node_insert_before (GtkCssNode *parent,
                             GtkCssNode *next_sibling)
 {
   g_return_if_fail (next_sibling == NULL || next_sibling->parent == parent);
+  g_return_if_fail (cssnode != next_sibling);
 
   if (cssnode->next_sibling == next_sibling && 
       cssnode->parent == parent)
