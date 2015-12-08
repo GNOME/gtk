@@ -87,6 +87,9 @@ struct _GdkX11DragContext
 
   GdkWindow *drag_window;
 
+  gint hot_x;
+  gint hot_y;
+
   Window dest_xid;             /* The last window we looked up */
   Window drop_xid;             /* The (non-proxied) window that is receiving drops */
   guint xdnd_targets_set  : 1; /* Whether we've already set XdndTypeList */
@@ -184,6 +187,9 @@ static void        gdk_x11_drag_context_drop_finish (GdkDragContext  *context,
                                                      guint32          time_);
 static gboolean    gdk_x11_drag_context_drop_status (GdkDragContext  *context);
 static GdkAtom     gdk_x11_drag_context_get_selection (GdkDragContext  *context);
+static void        gdk_x11_drag_context_set_hotspot (GdkDragContext  *context,
+                                                     gint             hot_x,
+                                                     gint             hot_y);
 
 static GdkWindow *
 gdk_x11_drag_context_get_drag_window (GdkDragContext *context)
@@ -209,6 +215,7 @@ gdk_x11_drag_context_class_init (GdkX11DragContextClass *klass)
   context_class->drop_status = gdk_x11_drag_context_drop_status;
   context_class->get_selection = gdk_x11_drag_context_get_selection;
   context_class->get_drag_window = gdk_x11_drag_context_get_drag_window;
+  context_class->set_hotspot = gdk_x11_drag_context_set_hotspot;
 }
 
 static void
@@ -2121,7 +2128,9 @@ gdk_x11_drag_context_drag_motion (GdkDragContext *context,
 
   if (context_x11->drag_window)
     {
-      gdk_window_move (context_x11->drag_window, x_root, y_root);
+      gdk_window_move (context_x11->drag_window,
+                       x_root - context_x11->hot_x,
+                       y_root - context_x11->hot_y);
       gdk_window_raise (context_x11->drag_window);
     }
 
@@ -2457,4 +2466,15 @@ static gboolean
 gdk_x11_drag_context_drop_status (GdkDragContext *context)
 {
   return ! GDK_X11_DRAG_CONTEXT (context)->drop_failed;
+}
+
+static void
+gdk_x11_drag_context_set_hotspot (GdkDragContext *context,
+                                  gint            hot_x,
+                                  gint            hot_y)
+{
+  GdkX11DragContext *x11_context = GDK_X11_DRAG_CONTEXT (context);
+
+  x11_context->hot_x = hot_x;
+  x11_context->hot_y = hot_y;
 }
