@@ -3134,10 +3134,6 @@ realize_icon_info (GtkWidget            *widget,
   gtk_widget_register_window (widget, icon_info->window);
 
   gtk_widget_queue_resize (widget);
-
-  _gtk_icon_helper_set_window (icon_info->icon_helper,
-			       gtk_widget_get_window (widget));
-
 }
 
 static void
@@ -3439,8 +3435,6 @@ gtk_entry_unrealize (GtkWidget *widget)
     {
       if ((icon_info = priv->icons[i]) != NULL)
         {
-          _gtk_icon_helper_set_window (icon_info->icon_helper, NULL);
-
           if (icon_info->window != NULL)
             {
               gtk_widget_unregister_window (widget, icon_info->window);

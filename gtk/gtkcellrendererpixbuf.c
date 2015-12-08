@@ -593,8 +593,6 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
   if (icon_helper == NULL)
     icon_helper = create_icon_helper (cellpixbuf, widget);
 
-  _gtk_icon_helper_set_window (icon_helper,
-			       gtk_widget_get_window (widget));
   _gtk_icon_helper_draw (icon_helper,
                          context, cr,
                          pix_rect.x, pix_rect.y);

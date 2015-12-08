@@ -157,7 +157,6 @@ static gint gtk_image_draw                 (GtkWidget    *widget,
 static void gtk_image_size_allocate        (GtkWidget    *widget,
                                             GtkAllocation*allocation);
 static void gtk_image_unmap                (GtkWidget    *widget);
-static void gtk_image_realize              (GtkWidget    *widget);
 static void gtk_image_unrealize            (GtkWidget    *widget);
 static void gtk_image_get_preferred_width  (GtkWidget    *widget,
                                             gint         *minimum,
@@ -233,7 +232,6 @@ gtk_image_class_init (GtkImageClass *class)
   widget_class->get_preferred_height_and_baseline_for_width = gtk_image_get_preferred_height_and_baseline_for_width;
   widget_class->size_allocate = gtk_image_size_allocate;
   widget_class->unmap = gtk_image_unmap;
-  widget_class->realize = gtk_image_realize;
   widget_class->unrealize = gtk_image_unrealize;
   widget_class->style_updated = gtk_image_style_updated;
   widget_class->screen_changed = gtk_image_screen_changed;
@@ -1558,24 +1556,8 @@ gtk_image_unmap (GtkWidget *widget)
 }
 
 static void
-gtk_image_realize (GtkWidget *widget)
-{
-  GtkImage *image = GTK_IMAGE (widget);
-  GtkImagePrivate *priv = image->priv;
-
-  GTK_WIDGET_CLASS (gtk_image_parent_class)->realize (widget);
-
-  _gtk_icon_helper_set_window (priv->icon_helper,
-			       gtk_widget_get_window (widget));
-}
-
-static void
 gtk_image_unrealize (GtkWidget *widget)
 {
-  GtkImage *image = GTK_IMAGE (widget);
-  GtkImagePrivate *priv = image->priv;
-
-  _gtk_icon_helper_set_window (priv->icon_helper, NULL);
   gtk_image_reset_anim_iter (GTK_IMAGE (widget));
 
   GTK_WIDGET_CLASS (gtk_image_parent_class)->unrealize (widget);

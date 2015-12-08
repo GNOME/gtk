@@ -67,7 +67,6 @@ gtk_icon_helper_take_definition (GtkIconHelper      *self,
 void
 _gtk_icon_helper_clear (GtkIconHelper *self)
 {
-  g_clear_object (&self->priv->window);
   g_clear_pointer (&self->priv->rendered_surface, cairo_surface_destroy);
 
   gtk_image_definition_unref (self->priv->def);
@@ -85,17 +84,6 @@ _gtk_icon_helper_invalidate (GtkIconHelper *self)
       cairo_surface_destroy (self->priv->rendered_surface);
       self->priv->rendered_surface = NULL;
     }
-}
-
-void
- _gtk_icon_helper_set_window (GtkIconHelper *self,
-			      GdkWindow *window)
-{
-  if (window)
-    g_object_ref (window);
-  g_clear_object (&self->priv->window);
-  self->priv->window = window;
-
 }
 
 static void
@@ -223,30 +211,13 @@ get_surface_size (GtkIconHelper   *self,
   cairo_destroy (cr);
 }
 
-static gint
-get_scale_factor (GtkIconHelper *self,
-		  GtkStyleContext *context)
-{
-  GdkScreen *screen;
-
-  if (self->priv->window)
-    return gdk_window_get_scale_factor (self->priv->window);
-
-  screen = gtk_style_context_get_screen (context);
-
-  /* else fall back to something that is more likely to be right than
-   * just returning 1:
-   */
-  return gdk_screen_get_monitor_scale_factor (screen, 0);
-}
-
 static gboolean
 check_invalidate_surface (GtkIconHelper *self,
 			  GtkStyleContext *context)
 {
   int scale;
 
-  scale = get_scale_factor (self, context);
+  scale = gtk_widget_get_scale_factor (self->priv->owner);
 
   if ((self->priv->rendered_surface != NULL) &&
       (self->priv->last_surface_scale == scale))
@@ -341,7 +312,7 @@ ensure_surface_from_pixbuf (GtkIconHelper *self,
   else
     pixbuf = g_object_ref (orig_pixbuf);
 
-  surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, scale, self->priv->window);
+  surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, scale, gtk_widget_get_window (self->priv->owner));
   icon_effect = _gtk_css_icon_effect_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_EFFECT));
   gtk_css_icon_effect_apply (icon_effect, surface);
   g_object_unref (pixbuf);
@@ -366,7 +337,7 @@ ensure_surface_for_icon_set (GtkIconHelper    *self,
                                                       scale);
   surface = gdk_cairo_surface_create_from_pixbuf (pixbuf,
                                                   scale,
-                                                  self->priv->window);
+                                                  gtk_widget_get_window (self->priv->owner));
   g_object_unref (pixbuf);
 
   return surface;
@@ -442,13 +413,13 @@ ensure_surface_for_gicon (GtkIconHelper    *self,
     {
       GtkCssIconEffect icon_effect;
 
-      surface = gdk_cairo_surface_create_from_pixbuf (destination, scale, self->priv->window);
+      surface = gdk_cairo_surface_create_from_pixbuf (destination, scale, gtk_widget_get_window (self->priv->owner));
       icon_effect = _gtk_css_icon_effect_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_EFFECT));
       gtk_css_icon_effect_apply (icon_effect, surface);
     }
   else
     {
-      surface = gdk_cairo_surface_create_from_pixbuf (destination, scale, self->priv->window);
+      surface = gdk_cairo_surface_create_from_pixbuf (destination, scale, gtk_widget_get_window (self->priv->owner));
     }
   g_object_unref (destination);
 
@@ -546,7 +517,7 @@ gtk_icon_helper_ensure_surface (GtkIconHelper   *self,
   if (!check_invalidate_surface (self, context))
     return;
 
-  scale = get_scale_factor (self, context);
+  scale = gtk_widget_get_scale_factor (self->priv->owner);
 
   self->priv->rendered_surface = gtk_icon_helper_load_surface (self, context, scale);
 }
@@ -575,7 +546,7 @@ _gtk_icon_helper_get_size (GtkIconHelper *self,
 
     case GTK_IMAGE_PIXBUF:
       get_pixbuf_size (self,
-                       get_scale_factor (self, context),
+                       gtk_widget_get_scale_factor (self->priv->owner),
                        gtk_image_definition_get_pixbuf (self->priv->def),
                        gtk_image_definition_get_scale (self->priv->def),
                        &width, &height, &scale);
