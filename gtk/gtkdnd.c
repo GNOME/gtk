@@ -2468,6 +2468,8 @@ gtk_drag_set_icon_window (GdkDragContext *context,
   if (!widget)
     goto out;
 
+  gdk_drag_context_set_hotspot (context, hot_x, hot_y);
+
   if (!info->icon_window)
     {
       GdkScreen *screen;
