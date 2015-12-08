@@ -246,7 +246,6 @@
       <xi:include href="xml/gtkshortcutssection.xml" />
       <xi:include href="xml/gtkshortcutsgroup.xml" />
       <xi:include href="xml/gtkshortcutsshortcut.xml" />
-      <xi:include href="xml/gtkshortcutsgesture.xml" />
     </chapter>
 
     <chapter id="MiscObjects">
