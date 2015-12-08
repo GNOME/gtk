@@ -104,10 +104,6 @@ void            _gdk_wayland_window_register_dnd (GdkWindow *window);
 GdkDragContext *_gdk_wayland_window_drag_begin (GdkWindow *window,
 						GdkDevice *device,
 						GList     *targets);
-void            _gdk_wayland_window_offset_next_wl_buffer (GdkWindow *window,
-                                                           int        x,
-                                                           int        y);
-
 GdkDragContext * _gdk_wayland_drop_context_new (struct wl_data_device *data_device);
 void _gdk_wayland_drag_context_set_source_window (GdkDragContext *context,
                                                   GdkWindow      *window);

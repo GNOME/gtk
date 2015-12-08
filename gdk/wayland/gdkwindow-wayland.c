@@ -121,8 +121,6 @@ struct _GdkWindowImplWayland
   GdkWindow *transient_for;
 
   cairo_surface_t *cairo_surface;
-  int pending_buffer_offset_x;
-  int pending_buffer_offset_y;
 
   gchar *title;
 
@@ -566,10 +564,7 @@ gdk_wayland_window_attach_image (GdkWindow *window)
   /* Attach this new buffer to the surface */
   wl_surface_attach (impl->surface,
                      _gdk_wayland_shm_surface_get_wl_buffer (impl->cairo_surface),
-                     impl->pending_buffer_offset_x,
-                     impl->pending_buffer_offset_y);
-  impl->pending_buffer_offset_x = 0;
-  impl->pending_buffer_offset_y = 0;
+                     0, 0);
 
   /* Only set the buffer scale if supported by the compositor */
   display = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
@@ -2567,32 +2562,6 @@ gdk_wayland_window_get_wl_surface (GdkWindow *window)
   g_return_val_if_fail (GDK_IS_WAYLAND_WINDOW (window), NULL);
 
   return GDK_WINDOW_IMPL_WAYLAND (window->impl)->surface;
-}
-
-/**
- * gdk_wayland_window_offset_next_wl_buffer:
- * @window (type GdkWaylandWindow): a #GdkWindow
- * @x: x offset which the next buffer should be attached at
- * @y: y offset which the next buffer should be attached at
- *
- * Make GDK attach the next buffer at the given offset. This is useful for
- * DND icons which may have a hotspot other than (0, 0).
- *
- * Since: 3.20
- */
-void
-gdk_wayland_window_offset_next_wl_buffer (GdkWindow *window,
-                                          int        x,
-                                          int        y)
-{
-  GdkWindowImplWayland *impl;
-
-  g_return_if_fail (GDK_IS_WAYLAND_WINDOW (window));
-
-  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-
-  impl->pending_buffer_offset_x = x;
-  impl->pending_buffer_offset_y = y;
 }
 
 static struct wl_egl_window *
