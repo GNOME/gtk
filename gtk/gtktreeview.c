@@ -3482,6 +3482,22 @@ gtk_tree_view_column_drag_gesture_begin (GtkGestureDrag *gesture,
     }
 }
 
+static void
+gtk_tree_view_update_button_position (GtkTreeView       *tree_view,
+                                      GtkTreeViewColumn *column)
+{
+  GtkTreeViewPrivate *priv = tree_view->priv;
+  GList *column_el;
+
+  column_el = g_list_find (priv->columns, column);
+  g_return_if_fail (column_el != NULL);
+
+  gtk_css_node_insert_after (priv->header_node,
+                             gtk_widget_get_css_node (gtk_tree_view_column_get_button (column)),
+                             column_el->prev ? gtk_widget_get_css_node (
+                                gtk_tree_view_column_get_button (column_el->prev->data)) : NULL);
+}
+
 /* column drag gesture helper */
 static gboolean
 gtk_tree_view_button_release_drag_column (GtkTreeView *tree_view)
@@ -3502,6 +3518,7 @@ gtk_tree_view_button_release_drag_column (GtkTreeView *tree_view)
   g_object_ref (button);
   gtk_container_remove (GTK_CONTAINER (tree_view), button);
   gtk_widget_set_parent_window (button, tree_view->priv->header_window);
+  gtk_tree_view_update_button_position (tree_view, tree_view->priv->drag_column);
   gtk_widget_set_parent (button, GTK_WIDGET (tree_view));
   g_object_unref (button);
   gtk_widget_queue_resize (widget);
@@ -12023,22 +12040,6 @@ gtk_tree_view_remove_column (GtkTreeView       *tree_view,
   g_signal_emit (tree_view, tree_view_signals[COLUMNS_CHANGED], 0);
 
   return tree_view->priv->n_columns;
-}
-
-static void
-gtk_tree_view_update_button_position (GtkTreeView       *tree_view,
-                                      GtkTreeViewColumn *column)
-{
-  GtkTreeViewPrivate *priv = tree_view->priv;
-  GList *column_el;
-
-  column_el = g_list_find (priv->columns, column);
-  g_return_if_fail (column_el != NULL);
-
-  gtk_css_node_insert_after (priv->header_node,
-                             gtk_widget_get_css_node (gtk_tree_view_column_get_button (column)),
-                             column_el->prev ? gtk_widget_get_css_node (
-                                gtk_tree_view_column_get_button (column_el->prev->data)) : NULL);
 }
 
 /**
