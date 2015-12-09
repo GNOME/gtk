@@ -30,6 +30,7 @@ G_BEGIN_DECLS
 
 GtkStyleContext *gtk_style_context_new_for_node              (GtkCssNode      *node);
 
+GtkCssNode     *gtk_style_context_get_node                   (GtkStyleContext *context);
 void            gtk_style_context_set_id                     (GtkStyleContext *context,
                                                               const char      *id);
 const char *    gtk_style_context_get_id                     (GtkStyleContext *context);

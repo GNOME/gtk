@@ -484,6 +484,12 @@ gtk_style_context_lookup_style (GtkStyleContext *context)
   return gtk_css_node_get_style (context->priv->cssnode);
 }
 
+GtkCssNode*
+gtk_style_context_get_node (GtkStyleContext *context)
+{
+  return context->priv->cssnode;
+}
+
 static GtkStateFlags
 gtk_style_context_push_state (GtkStyleContext *context,
                               GtkStateFlags    state)

@@ -419,11 +419,12 @@ gtk_image_init (GtkImage *image)
   image->priv = gtk_image_get_instance_private (image);
   priv = image->priv;
 
+  widget_node = gtk_widget_get_css_node (GTK_WIDGET (image));
   gtk_widget_set_has_window (GTK_WIDGET (image), FALSE);
-  priv->icon_helper = _gtk_icon_helper_new (GTK_WIDGET (image));
+
+  priv->icon_helper = gtk_icon_helper_new (widget_node, GTK_WIDGET (image));
   _gtk_icon_helper_set_icon_size (priv->icon_helper, DEFAULT_ICON_SIZE);
 
-  widget_node = gtk_widget_get_css_node (GTK_WIDGET (image));
   priv->gadget = gtk_css_custom_gadget_new_for_node (widget_node,
                                                      GTK_WIDGET (image),
                                                      gtk_image_get_content_size,
