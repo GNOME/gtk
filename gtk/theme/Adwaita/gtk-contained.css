@@ -2091,11 +2091,14 @@ menu,
 .menu {
   margin: 4px;
   padding: 0px;
-  background-color: #ffffff;
+  background-color: #f4f4f3;
   border: 1px solid #9d9d99; }
   .csd menu, .csd
   .menu {
     border: none; }
+  menu:backdrop,
+  .menu:backdrop {
+    background-color: #f4f4f3; }
   menu menuitem,
   .menu menuitem {
     text-shadow: none;
@@ -2114,7 +2117,7 @@ menu,
     .menu menuitem:backdrop,
     .menu menuitem:backdrop:hover {
       color: #8b8e8f;
-      background-color: white; }
+      background-color: transparent; }
     menu menuitem arrow,
     .menu menuitem arrow {
       -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
@@ -2149,7 +2152,6 @@ menuitem accelerator {
 popover.background {
   padding: 2px;
   border-radius: 5px;
-  background-color: #f4f4f3;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); }
   .csd popover.background, popover.background {
     border: 1px solid #9d9d99; }
