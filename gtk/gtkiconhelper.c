@@ -25,9 +25,10 @@
 
 #include "gtkcssenumvalueprivate.h"
 #include "gtkcssiconthemevalueprivate.h"
+#include "gtkcssnodeprivate.h"
+#include "gtkcssstyleprivate.h"
 #include "gtkiconthemeprivate.h"
-#include "gtkrender.h"
-#include "gtkstylecontextprivate.h"
+#include "gtkrendericonprivate.h"
 #include "deprecated/gtkiconfactoryprivate.h"
 #include "deprecated/gtkstock.h"
 
@@ -209,8 +210,7 @@ get_surface_size (GtkIconHelper   *self,
 }
 
 static gboolean
-check_invalidate_surface (GtkIconHelper *self,
-			  GtkStyleContext *context)
+check_invalidate_surface (GtkIconHelper *self)
 {
   int scale;
 
@@ -428,11 +428,8 @@ gtk_icon_helper_load_surface (GtkIconHelper   *self,
                               int              scale)
 {
   cairo_surface_t *surface;
-  GtkStyleContext *context;
   GtkIconSet *icon_set;
   GIcon *gicon;
-
-  context = gtk_widget_get_style_context (gtk_css_gadget_get_owner (GTK_CSS_GADGET (self)));
 
   switch (gtk_image_definition_get_storage_type (self->priv->def))
     {
@@ -442,7 +439,7 @@ gtk_icon_helper_load_surface (GtkIconHelper   *self,
 
     case GTK_IMAGE_PIXBUF:
       surface = ensure_surface_from_pixbuf (self,
-                                            gtk_style_context_lookup_style (context), 
+                                            gtk_css_node_get_style (gtk_css_gadget_get_node (GTK_CSS_GADGET (self))),
                                             scale,
                                             gtk_image_definition_get_pixbuf (self->priv->def),
                                             gtk_image_definition_get_scale (self->priv->def));
@@ -454,7 +451,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 G_GNUC_END_IGNORE_DEPRECATIONS;
       if (icon_set != NULL)
 	surface = ensure_surface_for_icon_set (self,
-                                               gtk_style_context_lookup_style (context), 
+                                               gtk_css_node_get_style (gtk_css_gadget_get_node (GTK_CSS_GADGET (self))),
                                                gtk_widget_get_direction (gtk_css_gadget_get_owner (GTK_CSS_GADGET (self))), 
                                                scale, icon_set);
       else
@@ -464,7 +461,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS;
     case GTK_IMAGE_ICON_SET:
       icon_set = gtk_image_definition_get_icon_set (self->priv->def);
       surface = ensure_surface_for_icon_set (self,
-                                             gtk_style_context_lookup_style (context), 
+                                             gtk_css_node_get_style (gtk_css_gadget_get_node (GTK_CSS_GADGET (self))),
                                              gtk_widget_get_direction (gtk_css_gadget_get_owner (GTK_CSS_GADGET (self))), 
                                              scale, icon_set);
       break;
@@ -475,7 +472,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS;
       else
         gicon = g_themed_icon_new (gtk_image_definition_get_icon_name (self->priv->def));
       surface = ensure_surface_for_gicon (self,
-                                          gtk_style_context_lookup_style (context), 
+                                          gtk_css_node_get_style (gtk_css_gadget_get_node (GTK_CSS_GADGET (self))),
                                           gtk_widget_get_direction (gtk_css_gadget_get_owner (GTK_CSS_GADGET (self))), 
                                           scale, 
                                           gicon);
@@ -484,7 +481,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS;
 
     case GTK_IMAGE_GICON:
       surface = ensure_surface_for_gicon (self, 
-                                          gtk_style_context_lookup_style (context), 
+                                          gtk_css_node_get_style (gtk_css_gadget_get_node (GTK_CSS_GADGET (self))),
                                           gtk_widget_get_direction (gtk_css_gadget_get_owner (GTK_CSS_GADGET (self))), 
                                           scale,
                                           gtk_image_definition_get_gicon (self->priv->def));
@@ -502,12 +499,11 @@ G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
 static void
-gtk_icon_helper_ensure_surface (GtkIconHelper   *self,
-				GtkStyleContext *context)
+gtk_icon_helper_ensure_surface (GtkIconHelper *self)
 {
   int scale;
 
-  if (!check_invalidate_surface (self, context))
+  if (!check_invalidate_surface (self))
     return;
 
   scale = gtk_widget_get_scale_factor (gtk_css_gadget_get_owner (GTK_CSS_GADGET (self)));
@@ -520,10 +516,8 @@ _gtk_icon_helper_get_size (GtkIconHelper *self,
                            gint *width_out,
                            gint *height_out)
 {
-  GtkStyleContext *context;
   gint width, height, scale;
 
-  context = gtk_widget_get_style_context (gtk_css_gadget_get_owner (GTK_CSS_GADGET (self)));
   width = height = 0;
 
   /* Certain kinds of images are easy to calculate the size for, these
@@ -573,7 +567,7 @@ _gtk_icon_helper_get_size (GtkIconHelper *self,
   /* Otherwise we load the surface to guarantee we get a size */
   if (width == 0)
     {
-      gtk_icon_helper_ensure_surface (self, context);
+      gtk_icon_helper_ensure_surface (self);
 
       if (self->priv->rendered_surface != NULL)
         {
@@ -788,15 +782,14 @@ _gtk_icon_helper_draw (GtkIconHelper *self,
                        gdouble x,
                        gdouble y)
 {
-  GtkStyleContext *context = gtk_widget_get_style_context (gtk_css_gadget_get_owner (GTK_CSS_GADGET (self)));
-
-  gtk_icon_helper_ensure_surface (self, context);
+  gtk_icon_helper_ensure_surface (self);
 
   if (self->priv->rendered_surface != NULL)
     {
-      gtk_render_icon_surface (context, cr, 
-                               self->priv->rendered_surface,
-                               x, y);
+      gtk_css_style_render_icon_surface (gtk_css_node_get_style (gtk_css_gadget_get_node (GTK_CSS_GADGET (self))),
+                                         cr,
+                                         self->priv->rendered_surface,
+                                         x, y);
     }
 }
 
