@@ -9579,7 +9579,8 @@ _gdk_windowing_got_event (GdkDisplay *display,
       goto out;
     }
 
-  if (!(is_button_type (event->type) ||
+  if (!(event->type == GDK_TOUCH_CANCEL ||
+        is_button_type (event->type) ||
         is_motion_type (event->type) ||
         is_gesture_type (event->type)) ||
       event_window->window_type == GDK_WINDOW_ROOT)
@@ -9684,13 +9685,14 @@ _gdk_windowing_got_event (GdkDisplay *display,
     unlink_event = proxy_gesture_event (event, serial);
 
   if ((event->type == GDK_BUTTON_RELEASE ||
+       event->type == GDK_TOUCH_CANCEL ||
        event->type == GDK_TOUCH_END) &&
       !event->any.send_event)
     {
       GdkEventSequence *sequence;
 
       sequence = gdk_event_get_event_sequence (event);
-      if (event->type == GDK_TOUCH_END && sequence)
+      if (sequence)
         {
           _gdk_display_end_touch_grab (display, device, sequence);
         }
