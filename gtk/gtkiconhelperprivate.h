@@ -23,11 +23,12 @@
 #include "gtk/gtkimage.h"
 #include "gtk/gtktypes.h"
 
+#include "gtkcssgadgetprivate.h"
 #include "gtkimagedefinitionprivate.h"
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_ICON_HELPER _gtk_icon_helper_get_type()
+#define GTK_TYPE_ICON_HELPER gtk_icon_helper_get_type()
 
 #define GTK_ICON_HELPER(obj) \
   (G_TYPE_CHECK_INSTANCE_CAST ((obj), \
@@ -55,17 +56,17 @@ typedef struct _GtkIconHelperPrivate GtkIconHelperPrivate;
 
 struct _GtkIconHelper
 {
-  GObject parent;
+  GtkCssGadget parent;
 
   GtkIconHelperPrivate *priv;
 };
 
 struct _GtkIconHelperClass
 {
-  GObjectClass parent_class;
+  GtkCssGadgetClass parent_class;
 };
 
-GType _gtk_icon_helper_get_type (void) G_GNUC_CONST;
+GType gtk_icon_helper_get_type (void) G_GNUC_CONST;
 
 GtkIconHelper *_gtk_icon_helper_new (GtkWidget *owner);
 
