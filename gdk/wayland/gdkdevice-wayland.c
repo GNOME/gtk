@@ -488,12 +488,17 @@ device_emit_grab_crossing (GdkDevice       *device,
 static GdkWindow *
 gdk_wayland_device_get_focus (GdkDevice *device)
 {
-  GdkWaylandDeviceData *wayland_device = GDK_WAYLAND_DEVICE (device)->device;
+  GdkWaylandSeat *wayland_seat = GDK_WAYLAND_DEVICE (device)->device;
 
-  if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
-    return wayland_device->keyboard_focus;
+  if (device == wayland_seat->master_keyboard)
+    return wayland_seat->keyboard_focus;
+  else if (device == wayland_seat->master_pointer)
+    return wayland_seat->pointer_focus;
+  else if (device == wayland_seat->touch_master &&
+           GDK_WAYLAND_DEVICE(device)->emulating_touch)
+    return GDK_WAYLAND_DEVICE(device)->emulating_touch->window;
   else
-    return wayland_device->pointer_focus;
+    return NULL;
 }
 
 static GdkGrabStatus
