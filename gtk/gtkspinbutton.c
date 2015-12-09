@@ -1087,16 +1087,17 @@ gtk_spin_button_panel_draw (GtkSpinButton   *spin_button,
   height = gdk_window_get_height (panel);
   width = gdk_window_get_width (panel);
 
-  icon_helper = _gtk_icon_helper_new (widget);
-  _gtk_icon_helper_set_use_fallback (icon_helper, TRUE);
-
   if (panel == priv->down_panel)
     {
+      icon_helper = gtk_icon_helper_new (priv->down_node, widget);
+      _gtk_icon_helper_set_use_fallback (icon_helper, TRUE);
       gtk_style_context_save_to_node (context, priv->down_node);
       _gtk_icon_helper_set_icon_name (icon_helper, "list-remove-symbolic", GTK_ICON_SIZE_MENU);
     }
   else
     {
+      icon_helper = gtk_icon_helper_new (priv->up_node, widget);
+      _gtk_icon_helper_set_use_fallback (icon_helper, TRUE);
       gtk_style_context_save_to_node (context, priv->up_node);
       _gtk_icon_helper_set_icon_name (icon_helper, "list-add-symbolic", GTK_ICON_SIZE_MENU);
     }

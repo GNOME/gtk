@@ -770,11 +770,14 @@ _gtk_icon_helper_get_icon_name (GtkIconHelper *self)
 }
 
 GtkIconHelper *
-_gtk_icon_helper_new (GtkWidget *owner)
+gtk_icon_helper_new (GtkCssNode *node,
+                     GtkWidget  *owner)
 {
+  g_return_val_if_fail (GTK_IS_CSS_NODE (node), NULL);
   g_return_val_if_fail (GTK_IS_WIDGET (owner), NULL);
 
   return g_object_new (GTK_TYPE_ICON_HELPER,
+                       "node", node,
                        "owner", owner,
                        NULL);
 }

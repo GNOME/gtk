@@ -3256,9 +3256,6 @@ construct_icon_info (GtkWidget            *widget,
   icon_info = g_slice_new0 (EntryIconInfo);
   priv->icons[icon_pos] = icon_info;
 
-  icon_info->icon_helper = _gtk_icon_helper_new (widget);
-  _gtk_icon_helper_set_force_scale_pixbuf (icon_info->icon_helper, TRUE);
-
   widget_node = get_entry_node (widget);
   icon_info->css_node = gtk_css_node_new ();
   gtk_css_node_set_name (icon_info->css_node, I_("image"));
@@ -3266,6 +3263,9 @@ construct_icon_info (GtkWidget            *widget,
   update_icon_state (widget, icon_pos);
   update_icon_style (widget, icon_pos);
   g_object_unref (icon_info->css_node);
+
+  icon_info->icon_helper = gtk_icon_helper_new (icon_info->css_node, widget);
+  _gtk_icon_helper_set_force_scale_pixbuf (icon_info->icon_helper, TRUE);
 
   update_node_ordering (entry);
 

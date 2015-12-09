@@ -24,6 +24,7 @@
 #include "gtkicontheme.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
+#include "gtkstylecontextprivate.h"
 #include "a11y/gtkimagecellaccessible.h"
 
 
@@ -446,7 +447,7 @@ create_icon_helper (GtkCellRendererPixbuf *cellpixbuf,
   GtkCellRendererPixbufPrivate *priv = cellpixbuf->priv;
   GtkIconHelper *helper;
 
-  helper = _gtk_icon_helper_new (widget);
+  helper = gtk_icon_helper_new (gtk_style_context_get_node (gtk_widget_get_style_context (widget)), widget);
   _gtk_icon_helper_set_force_scale_pixbuf (helper, TRUE);
   _gtk_icon_helper_set_definition (helper, priv->image_def);
   if (gtk_image_definition_get_storage_type (priv->image_def) != GTK_IMAGE_PIXBUF)
@@ -580,12 +581,12 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
 
       if (is_expanded && priv->pixbuf_expander_open != NULL)
         {
-          icon_helper = _gtk_icon_helper_new (widget);
+          icon_helper = gtk_icon_helper_new (gtk_style_context_get_node (context), widget);
           _gtk_icon_helper_set_pixbuf (icon_helper, priv->pixbuf_expander_open);
         }
       else if (!is_expanded && priv->pixbuf_expander_closed != NULL)
         {
-          icon_helper = _gtk_icon_helper_new (widget);
+          icon_helper = gtk_icon_helper_new (gtk_style_context_get_node (context), widget);
           _gtk_icon_helper_set_pixbuf (icon_helper, priv->pixbuf_expander_closed);
         }
     }
