@@ -671,6 +671,10 @@ toolbar.inline-toolbar toolbutton:backdrop {
   &:only-child > button.flat { @extend %linked:only-child; }
 }
 
+toolbar separator {
+  background: none;
+}
+
 %linked_middle {
   border-radius: 0;
   border-right-style: none;

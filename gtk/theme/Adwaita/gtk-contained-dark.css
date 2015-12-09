@@ -1111,6 +1111,10 @@ button, headerbar button.titlebutton,
     .inline-toolbar toolbutton > button:backdrop:insensitive:active > .label, .inline-toolbar toolbutton > button:backdrop:insensitive:checked > .label {
       color: inherit; }
 
+toolbar separator, .inline-toolbar separator, searchbar separator,
+.location-bar separator {
+  background: none; }
+
 toolbar.inline-toolbar toolbutton > button.flat, .inline-toolbar toolbutton > button.flat, searchbar.inline-toolbar toolbutton > button.flat,
 .inline-toolbar.location-bar toolbutton > button.flat, toolbar.inline-toolbar toolbutton > button.sidebar-button, .inline-toolbar toolbutton > button.sidebar-button, searchbar.inline-toolbar toolbutton > button.sidebar-button,
 .inline-toolbar.location-bar toolbutton > button.sidebar-button, .inline-toolbar headerbar toolbutton > button.titlebutton, headerbar .inline-toolbar toolbutton > button.titlebutton,
