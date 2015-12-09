@@ -4969,8 +4969,8 @@ gtk_flow_box_invalidate_filter (GtkFlowBox *box)
  * gtk_flow_box_child_changed()) and when gtk_flow_box_invalidate_sort()
  * is called.
  *
- * + * Note that using a sort function is incompatible with using a model
- * + * (see gtk_list_box_bind_model()).
+ * Note that using a sort function is incompatible with using a model
+ * (see gtk_flow_box_bind_model()).
  *
  * Since: 3.12
  */
