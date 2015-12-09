@@ -56,8 +56,9 @@
  * This allows you to efficiently read individual pixels on the client side.
  *
  * This function will create an RGB pixbuf with 8 bits per channel with
- * the same size specified by the @width and @height arguments. The pixbuf
- * will contain an alpha channel if the @window contains one.
+ * the size specified by the @width and @height arguments scaled by the
+ * scale factor of @window. The pixbuf will contain an alpha channel if
+ * the @window contains one.
  *
  * If the window is off the screen, then there is no image data in the
  * obscured/offscreen regions to be placed in the pixbuf. The contents of
@@ -87,6 +88,8 @@ gdk_pixbuf_get_from_window (GdkWindow *src,
                             gint       height)
 {
   cairo_surface_t *surface;
+  cairo_surface_t *copy;
+  cairo_t *cr;
   GdkPixbuf *dest;
   gint scale;
 
@@ -104,9 +107,22 @@ gdk_pixbuf_get_from_window (GdkWindow *src,
    */
   cairo_surface_mark_dirty (surface);
 
-  dest = gdk_pixbuf_get_from_surface (surface,
-                                      scale * src_x, scale * src_y,
-                                      scale * width, scale * height);
+  if (cairo_surface_get_content (surface) & CAIRO_CONTENT_ALPHA)
+    copy = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width * scale, height * scale);
+  else
+    copy = cairo_image_surface_create (CAIRO_FORMAT_RGB24, width * scale, height * scale);
+
+  cairo_surface_set_device_scale (copy, scale, scale);
+
+  cr = cairo_create (copy);
+  cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+  cairo_set_source_surface (cr, surface, -src_x, -src_y);
+  cairo_paint (cr);
+  cairo_destroy (cr);
+
+  dest = gdk_pixbuf_get_from_surface (copy, 0, 0, width * scale, height * scale);
+
+  cairo_surface_destroy (copy);
   cairo_surface_destroy (surface);
 
   return dest;
@@ -137,15 +153,10 @@ gdk_cairo_surface_coerce_to_image (cairo_surface_t *surface,
 {
   cairo_surface_t *copy;
   cairo_t *cr;
-  double sx, sy;
-
-  cairo_surface_get_device_scale (surface, &sx, &sy);
 
   copy = cairo_image_surface_create (gdk_cairo_format_for_content (content),
                                      width,
                                      height);
-
-  cairo_surface_set_device_scale (copy, sx, sy);
 
   cr = cairo_create (copy);
   cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
