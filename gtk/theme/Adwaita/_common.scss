@@ -1511,9 +1511,10 @@ column-header.button.dnd { // for treeview-like derive widgets
 .menu {
   margin: 4px;
   padding: 0px;
-  background-color: $base_color;
+  background-color: $menu_color;
   border: 1px solid $borders_color; // adds borders in a non composited env
   .csd & { border: none; }  // axes borders in a composited env
+  &:backdrop { background-color: $backdrop_menu_color; }
   .menuitem {
     text-shadow: none;
     padding: 4px;
@@ -1527,7 +1528,7 @@ column-header.button.dnd { // for treeview-like derive widgets
     }
     &:backdrop, &:backdrop:hover {
       color: $backdrop_fg_color;
-      background-color: $backdrop_base_color;
+      background-color: transparent;
     }
     //submenu indicators
     &.arrow { -gtk-icon-source: -gtk-icontheme('pan-end-symbolic'); }
