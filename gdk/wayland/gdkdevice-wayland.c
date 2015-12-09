@@ -1768,19 +1768,28 @@ static void
 touch_handle_cancel (void            *data,
                      struct wl_touch *wl_touch)
 {
-  GdkWaylandDeviceData *device = data;
+  GdkWaylandSeat *wayland_seat = data;
   GdkWaylandTouchData *touch;
   GHashTableIter iter;
   GdkEvent *event;
 
-  g_hash_table_iter_init (&iter, device->touches);
+  if (GDK_WAYLAND_DEVICE (wayland_seat->touch_master)->emulating_touch)
+    {
+      touch = GDK_WAYLAND_DEVICE (wayland_seat->touch_master)->emulating_touch;
+      GDK_WAYLAND_DEVICE (wayland_seat->touch_master)->emulating_touch = NULL;
+      emulate_touch_crossing (touch->window, NULL,
+                              wayland_seat->touch_master, wayland_seat->touch,
+                              touch, GDK_LEAVE_NOTIFY, GDK_CROSSING_NORMAL,
+                              GDK_CURRENT_TIME);
+    }
+
+  g_hash_table_iter_init (&iter, wayland_seat->touches);
 
   while (g_hash_table_iter_next (&iter, NULL, (gpointer *) &touch))
     {
-      event = _create_touch_event (device, touch, GDK_TOUCH_CANCEL,
+      event = _create_touch_event (wayland_seat, touch, GDK_TOUCH_CANCEL,
                                    GDK_CURRENT_TIME);
-      _gdk_wayland_display_deliver_event (device->display, event);
-
+      _gdk_wayland_display_deliver_event (wayland_seat->display, event);
       g_hash_table_iter_remove (&iter);
     }
 
