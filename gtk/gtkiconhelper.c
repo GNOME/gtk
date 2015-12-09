@@ -454,24 +454,22 @@ gtk_icon_helper_load_surface (GtkIconHelper   *self,
     case GTK_IMAGE_STOCK:
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       icon_set = gtk_icon_factory_lookup_default (gtk_image_definition_get_stock (self->priv->def));
+G_GNUC_END_IGNORE_DEPRECATIONS;
       if (icon_set != NULL)
 	surface = ensure_surface_for_icon_set (self,
                                                gtk_style_context_lookup_style (context), 
-                                               gtk_style_context_get_direction (context), 
+                                               gtk_widget_get_direction (self->priv->owner), 
                                                scale, icon_set);
       else
 	surface = NULL;
-G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
 
     case GTK_IMAGE_ICON_SET:
       icon_set = gtk_image_definition_get_icon_set (self->priv->def);
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       surface = ensure_surface_for_icon_set (self,
                                              gtk_style_context_lookup_style (context), 
-                                             gtk_style_context_get_direction (context), 
+                                             gtk_widget_get_direction (self->priv->owner), 
                                              scale, icon_set);
-G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
 
     case GTK_IMAGE_ICON_NAME:
@@ -479,24 +477,20 @@ G_GNUC_END_IGNORE_DEPRECATIONS;
         gicon = g_themed_icon_new_with_default_fallbacks (gtk_image_definition_get_icon_name (self->priv->def));
       else
         gicon = g_themed_icon_new (gtk_image_definition_get_icon_name (self->priv->def));
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       surface = ensure_surface_for_gicon (self,
                                           gtk_style_context_lookup_style (context), 
-                                          gtk_style_context_get_direction (context), 
+                                          gtk_widget_get_direction (self->priv->owner), 
                                           scale, 
                                           gicon);
-G_GNUC_END_IGNORE_DEPRECATIONS;
       g_object_unref (gicon);
       break;
 
     case GTK_IMAGE_GICON:
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       surface = ensure_surface_for_gicon (self, 
                                           gtk_style_context_lookup_style (context), 
-                                          gtk_style_context_get_direction (context), 
+                                          gtk_widget_get_direction (self->priv->owner), 
                                           scale,
                                           gtk_image_definition_get_gicon (self->priv->def));
-G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
 
     case GTK_IMAGE_ANIMATION:
