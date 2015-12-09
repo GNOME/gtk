@@ -36,10 +36,15 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkwidgetprivate.h"
+#include "gtkcontainerprivate.h"
 #include "a11y/gtkpanedaccessible.h"
+#include "gtkcsscustomgadgetprivate.h"
 #include "gtkcssnodeprivate.h"
-#include "gtkcssstylepropertyprivate.h"
 #include "gtkstylecontextprivate.h"
+#include "gtkcssstylepropertyprivate.h"
+#include "gtkcssnumbervalueprivate.h"
+
+#include <math.h>
 
 /**
  * SECTION:gtkpaned
@@ -125,7 +130,9 @@ struct _GtkPanedPrivate
 
   GdkRectangle   handle_pos;
   GdkWindow     *handle;
-  GtkCssNode    *handle_node;
+
+  GtkCssGadget  *gadget;
+  GtkCssGadget  *handle_gadget;
 
   GtkGesture    *pan_gesture;
 
@@ -419,7 +426,7 @@ gtk_paned_class_init (GtkPanedClass *class)
 							     0,
 							     G_MAXINT,
 							     5,
-							     GTK_PARAM_READABLE));
+							     GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   /**
    * GtkPaned:resize:
@@ -695,7 +702,11 @@ initiates_touch_drag (GtkPaned *paned,
 
 #define TOUCH_EXTRA_AREA_WIDTH 50
   gtk_widget_get_allocation (GTK_WIDGET (paned), &allocation);
-  gtk_widget_style_get (GTK_WIDGET (paned), "handle-size", &handle_size, NULL);
+  gtk_css_gadget_get_preferred_size (priv->handle_gadget,
+                                     priv->orientation,
+                                     -1,
+                                     NULL, &handle_size,
+                                     NULL, NULL);
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
@@ -782,79 +793,6 @@ pan_gesture_drag_end_cb (GtkGestureDrag *gesture,
 {
   if (!paned->priv->panning)
     gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
-}
-
-static void
-node_style_changed_cb (GtkCssNode        *node,
-                       GtkCssStyleChange *change,
-                       GtkWidget         *widget)
-{
-  if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_SIZE | GTK_CSS_AFFECTS_CLIP))
-    gtk_widget_queue_resize (widget);
-  else
-    gtk_widget_queue_draw (widget);
-}
-
-static void
-gtk_paned_init (GtkPaned *paned)
-{
-  GtkPanedPrivate *priv;
-  GtkGesture *gesture;
-  GtkCssNode *widget_node;
-
-  gtk_widget_set_has_window (GTK_WIDGET (paned), FALSE);
-  gtk_widget_set_can_focus (GTK_WIDGET (paned), TRUE);
-
-  /* We only need to redraw when the handle position moves, which is
-   * independent of the overall allocation of the GtkPaned
-   */
-  gtk_widget_set_redraw_on_allocate (GTK_WIDGET (paned), FALSE);
-
-  paned->priv = gtk_paned_get_instance_private (paned);
-  priv = paned->priv;
-
-  priv->orientation = GTK_ORIENTATION_HORIZONTAL;
-
-  priv->child1 = NULL;
-  priv->child2 = NULL;
-  priv->handle = NULL;
-
-  priv->handle_pos.width = 5;
-  priv->handle_pos.height = 5;
-  priv->position_set = FALSE;
-  priv->last_allocation = -1;
-
-  priv->last_child1_focus = NULL;
-  priv->last_child2_focus = NULL;
-  priv->in_recursion = FALSE;
-  priv->handle_prelit = FALSE;
-  priv->original_position = -1;
-
-  priv->handle_pos.x = -1;
-  priv->handle_pos.y = -1;
-
-  _gtk_orientable_set_style_classes (GTK_ORIENTABLE (paned));
-
-  gesture = gtk_gesture_pan_new (GTK_WIDGET (paned),
-                                 GTK_ORIENTATION_HORIZONTAL);
-  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture), FALSE);
-  g_signal_connect (gesture, "drag-begin",
-                    G_CALLBACK (pan_gesture_drag_begin_cb), paned);
-  g_signal_connect (gesture, "pan",
-                    G_CALLBACK (pan_gesture_pan_cb), paned);
-  g_signal_connect (gesture, "drag-end",
-                    G_CALLBACK (pan_gesture_drag_end_cb), paned);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
-                                              GTK_PHASE_CAPTURE);
-  priv->pan_gesture = gesture;
-
-  widget_node = gtk_widget_get_css_node (GTK_WIDGET (paned));
-  priv->handle_node = gtk_css_node_new ();
-  gtk_css_node_set_name (priv->handle_node, I_("separator"));
-  gtk_css_node_set_parent (priv->handle_node, widget_node);
-  gtk_css_node_set_state (priv->handle_node, gtk_css_node_get_state (widget_node));
-  g_signal_connect_object (priv->handle_node, "style-changed", G_CALLBACK (node_style_changed_cb), paned, 0);
-  g_object_unref (priv->handle_node);
 }
 
 static void
@@ -1033,6 +971,9 @@ gtk_paned_finalize (GObject *object)
 
   g_clear_object (&paned->priv->pan_gesture);
 
+  g_clear_object (&paned->priv->handle_gadget);
+  g_clear_object (&paned->priv->gadget);
+
   G_OBJECT_CLASS (gtk_paned_parent_class)->finalize (object);
 }
 
@@ -1130,7 +1071,11 @@ gtk_paned_get_preferred_size_for_orientation (GtkWidget      *widget,
     {
       gint handle_size;
 
-      gtk_widget_style_get (widget, "handle-size", &handle_size, NULL);
+      gtk_css_gadget_get_preferred_size (priv->handle_gadget,
+                                         priv->orientation,
+                                         -1,
+                                         NULL, &handle_size,
+                                         NULL, NULL);
 
       *minimum += handle_size;
       *natural += handle_size;
@@ -1155,7 +1100,11 @@ gtk_paned_get_preferred_size_for_opposite_orientation (GtkWidget      *widget,
       gint child1_req, child2_req;
       gint handle_size;
 
-      gtk_widget_style_get (widget, "handle-size", &handle_size, NULL);
+      gtk_css_gadget_get_preferred_size (priv->handle_gadget,
+                                         OPPOSITE_ORIENTATION (priv->orientation),
+                                         -1,
+                                         NULL, &handle_size,
+                                         NULL, NULL);
 
       _gtk_widget_get_preferred_size_for_size (priv->child1, priv->orientation, -1, &child1_req, NULL, NULL, NULL);
       _gtk_widget_get_preferred_size_for_size (priv->child2, priv->orientation, -1, &child2_req, NULL, NULL, NULL);
@@ -1199,13 +1148,72 @@ gtk_paned_get_preferred_size_for_opposite_orientation (GtkWidget      *widget,
     }
 }
 
-static void
-gtk_paned_get_preferred_size (GtkWidget      *widget,
-                              GtkOrientation  orientation,
-                              gint            size,
-                              gint           *minimum,
-                              gint           *natural)
+static gint
+get_number (GtkCssStyle *style,
+            guint        property)
 {
+  double d = _gtk_css_number_value_get (gtk_css_style_get_value (style, property), 100.0);
+
+  if (d < 1)
+    return ceil (d);
+  else
+    return floor (d);
+}
+
+static void
+gtk_paned_measure_handle (GtkCssGadget   *gadget,
+                          GtkOrientation  orientation,
+                          int             size,
+                          int            *minimum,
+                          int            *natural,
+                          int            *minimum_baseline,
+                          int            *natural_baseline,
+                          gpointer        data)
+{
+  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
+  GtkPaned *paned = GTK_PANED (widget);
+  GtkPanedPrivate *priv = paned->priv;
+  GtkStyleContext *context;
+  gint handle_size;
+  GtkCssStyle *style;
+  gint min_size;
+
+  style = gtk_css_gadget_get_style (gadget);
+  if (orientation == priv->orientation)
+    {
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+        min_size = get_number (style, GTK_CSS_PROPERTY_MIN_WIDTH);
+      else
+        min_size = get_number (style, GTK_CSS_PROPERTY_MIN_HEIGHT);
+
+      if (min_size != 0)
+        *minimum = *natural = min_size;
+      else
+        {
+          context = gtk_widget_get_style_context (widget);
+          gtk_style_context_save_to_node (context, gtk_css_gadget_get_node (gadget));
+          gtk_widget_style_get (widget, "handle-size", &handle_size, NULL);
+          gtk_style_context_restore (context);
+          *minimum = *natural = handle_size;
+        }
+    }
+  else if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    *minimum = *natural = gtk_widget_get_allocated_width (widget);
+  else
+    *minimum = *natural = gtk_widget_get_allocated_height(widget);
+}
+
+static void
+gtk_paned_measure (GtkCssGadget   *gadget,
+                   GtkOrientation  orientation,
+                   int             size,
+                   int            *minimum,
+                   int            *natural,
+                   int            *minimum_baseline,
+                   int            *natural_baseline,
+                   gpointer        data)
+{
+  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
   GtkPaned *paned = GTK_PANED (widget);
   GtkPanedPrivate *priv = paned->priv;
 
@@ -1220,7 +1228,11 @@ gtk_paned_get_preferred_width (GtkWidget *widget,
                                gint      *minimum,
                                gint      *natural)
 {
-  gtk_paned_get_preferred_size (widget, GTK_ORIENTATION_HORIZONTAL, -1, minimum, natural);
+  gtk_css_gadget_get_preferred_size (GTK_PANED (widget)->priv->gadget,
+                                     GTK_ORIENTATION_HORIZONTAL,
+                                     -1,
+                                     minimum, natural,
+                                     NULL, NULL);
 }
 
 static void
@@ -1228,7 +1240,11 @@ gtk_paned_get_preferred_height (GtkWidget *widget,
                                 gint      *minimum,
                                 gint      *natural)
 {
-  gtk_paned_get_preferred_size (widget, GTK_ORIENTATION_VERTICAL, -1, minimum, natural);
+  gtk_css_gadget_get_preferred_size (GTK_PANED (widget)->priv->gadget,
+                                     GTK_ORIENTATION_VERTICAL,
+                                     -1,
+                                     minimum, natural,
+                                     NULL, NULL);
 }
 
 static void
@@ -1237,7 +1253,11 @@ gtk_paned_get_preferred_width_for_height (GtkWidget *widget,
                                           gint      *minimum,
                                           gint      *natural)
 {
-  gtk_paned_get_preferred_size (widget, GTK_ORIENTATION_HORIZONTAL, height, minimum, natural);
+  gtk_css_gadget_get_preferred_size (GTK_PANED (widget)->priv->gadget,
+                                     GTK_ORIENTATION_HORIZONTAL,
+                                     height,
+                                     minimum, natural,
+                                     NULL, NULL);
 }
 
 static void
@@ -1246,7 +1266,11 @@ gtk_paned_get_preferred_height_for_width (GtkWidget *widget,
                                           gint      *minimum,
                                           gint      *natural)
 {
-  gtk_paned_get_preferred_size (widget, GTK_ORIENTATION_VERTICAL, width, minimum, natural);
+  gtk_css_gadget_get_preferred_size (GTK_PANED (widget)->priv->gadget,
+                                     GTK_ORIENTATION_VERTICAL,
+                                     width,
+                                     minimum, natural,
+                                     NULL, NULL);
 }
 
 static void
@@ -1312,8 +1336,29 @@ gtk_paned_size_allocate (GtkWidget     *widget,
 {
   GtkPaned *paned = GTK_PANED (widget);
   GtkPanedPrivate *priv = paned->priv;
+  GtkAllocation clip;
 
   gtk_widget_set_allocation (widget, allocation);
+
+  gtk_css_gadget_allocate (priv->gadget,
+                           allocation,
+                           gtk_widget_get_allocated_baseline (widget),
+                           &clip);
+
+  gtk_widget_set_clip (widget, &clip);
+}
+
+static void
+gtk_paned_allocate (GtkCssGadget        *gadget,
+                    const GtkAllocation *allocation,
+                    int                  baseline,
+                    GtkAllocation       *out_clip,
+                    gpointer             data)
+{
+  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
+  GtkPaned *paned = GTK_PANED (widget);
+  GtkPanedPrivate *priv = paned->priv;
+  GtkAllocation clip;
 
   if (priv->child1 && gtk_widget_get_visible (priv->child1) &&
       priv->child2 && gtk_widget_get_visible (priv->child2))
@@ -1324,7 +1369,11 @@ gtk_paned_size_allocate (GtkWidget     *widget,
       GdkRectangle old_handle_pos;
       gint handle_size;
 
-      gtk_widget_style_get (widget, "handle-size", &handle_size, NULL);
+      gtk_css_gadget_get_preferred_size (priv->handle_gadget,
+                                         priv->orientation,
+                                         -1,
+                                         NULL, &handle_size,
+                                         NULL, NULL);
 
       old_handle_pos = priv->handle_pos;
 
@@ -1428,6 +1477,12 @@ gtk_paned_size_allocate (GtkWidget     *widget,
           if (child2_height > child2_allocation.height)
             child2_allocation.height = child2_height;
         }
+
+
+      gtk_css_gadget_allocate (priv->handle_gadget,
+                               &priv->handle_pos,
+                               -1,
+                               &clip);
 
       if (gtk_widget_get_mapped (widget) &&
           (old_handle_pos.x != priv->handle_pos.x ||
@@ -1545,6 +1600,9 @@ gtk_paned_size_allocate (GtkWidget     *widget,
           gtk_paned_set_child_visible (paned, CHILD2, FALSE);
         }
     }
+
+  gtk_container_get_children_clip (GTK_CONTAINER (paned), out_clip);
+  gdk_rectangle_union (out_clip, &clip, out_clip);
 }
 
 static GdkWindow *
@@ -1566,7 +1624,11 @@ gtk_paned_create_child_window (GtkPaned  *paned,
       GtkAllocation allocation;
       int handle_size;
 
-      gtk_widget_style_get (widget, "handle-size", &handle_size, NULL);
+      gtk_css_gadget_get_preferred_size (priv->handle_gadget,
+                                         priv->orientation,
+                                         -1,
+                                         NULL, &handle_size,
+                                         NULL, NULL);
 
       gtk_widget_get_allocation (widget, &allocation);
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL &&
@@ -1721,15 +1783,24 @@ static gboolean
 gtk_paned_draw (GtkWidget *widget,
                 cairo_t   *cr)
 {
+  gtk_css_gadget_draw (GTK_PANED (widget)->priv->gadget, cr);
+
+  return FALSE;
+}
+
+static gboolean
+gtk_paned_render (GtkCssGadget *gadget,
+                  cairo_t      *cr,
+                  int           x,
+                  int           y,
+                  int           width,
+                  int           height,
+                  gpointer      data)
+{
+  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
   GtkPaned *paned = GTK_PANED (widget);
   GtkPanedPrivate *priv = paned->priv;
   GtkStyleContext *context = gtk_widget_get_style_context (widget);
-  GtkAllocation allocation;
-
-  gtk_widget_get_allocation (widget, &allocation);
-  gtk_render_background (context, cr,
-                         0, 0,
-                         allocation.width, allocation.height);
 
   if (gtk_cairo_should_draw_window (cr, priv->child1_window))
     {
@@ -1759,19 +1830,124 @@ gtk_paned_draw (GtkWidget *widget,
       priv->child1 && gtk_widget_get_visible (priv->child1) &&
       priv->child2 && gtk_widget_get_visible (priv->child2))
     {
-      gtk_style_context_save_to_node (context, priv->handle_node);
-      gtk_render_handle (context, cr,
-                         priv->handle_pos.x - allocation.x,
-                         priv->handle_pos.y - allocation.y,
-                         priv->handle_pos.width,
-                         priv->handle_pos.height);
-      gtk_style_context_restore (context);
+      gtk_css_gadget_draw (priv->handle_gadget, cr);
     }
 
   /* Chain up to draw children */
   GTK_WIDGET_CLASS (gtk_paned_parent_class)->draw (widget, cr);
-  
+
   return FALSE;
+}
+
+static gboolean
+gtk_paned_render_handle (GtkCssGadget *gadget,
+                         cairo_t      *cr,
+                         int           x,
+                         int           y,
+                         int           width,
+                         int           height,
+                         gpointer      data)
+{
+  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
+  GtkPaned *paned = GTK_PANED (widget);
+  GtkPanedPrivate *priv = paned->priv;
+  GtkStyleContext *context = gtk_widget_get_style_context (widget);
+
+  gtk_style_context_save_to_node (context, gtk_css_gadget_get_node (priv->handle_gadget));
+  gtk_render_handle (context, cr, x, y, width, height);
+  gtk_style_context_restore (context);
+
+  return FALSE;
+}
+
+static void
+update_node_state (GtkWidget *widget)
+{
+  GtkPaned *paned = GTK_PANED (widget);
+  GtkPanedPrivate *priv = paned->priv;
+  GtkStateFlags state;
+
+  state = gtk_widget_get_state_flags (widget);
+
+  if (gtk_widget_is_focus (widget))
+    state |= GTK_STATE_FLAG_SELECTED;
+  if (priv->handle_prelit)
+    state |= GTK_STATE_FLAG_PRELIGHT;
+
+  gtk_css_node_set_state (gtk_css_gadget_get_node (priv->handle_gadget), state);
+}
+
+static void
+gtk_paned_init (GtkPaned *paned)
+{
+  GtkPanedPrivate *priv;
+  GtkGesture *gesture;
+  GtkCssNode *widget_node;
+
+  gtk_widget_set_has_window (GTK_WIDGET (paned), FALSE);
+  gtk_widget_set_can_focus (GTK_WIDGET (paned), TRUE);
+
+  /* We only need to redraw when the handle position moves, which is
+   * independent of the overall allocation of the GtkPaned
+   */
+  gtk_widget_set_redraw_on_allocate (GTK_WIDGET (paned), FALSE);
+
+  paned->priv = gtk_paned_get_instance_private (paned);
+  priv = paned->priv;
+
+  priv->orientation = GTK_ORIENTATION_HORIZONTAL;
+
+  priv->child1 = NULL;
+  priv->child2 = NULL;
+  priv->handle = NULL;
+
+  priv->handle_pos.width = 5;
+  priv->handle_pos.height = 5;
+  priv->position_set = FALSE;
+  priv->last_allocation = -1;
+
+  priv->last_child1_focus = NULL;
+  priv->last_child2_focus = NULL;
+  priv->in_recursion = FALSE;
+  priv->handle_prelit = FALSE;
+  priv->original_position = -1;
+
+  priv->handle_pos.x = -1;
+  priv->handle_pos.y = -1;
+
+  _gtk_orientable_set_style_classes (GTK_ORIENTABLE (paned));
+
+  gesture = gtk_gesture_pan_new (GTK_WIDGET (paned),
+                                 GTK_ORIENTATION_HORIZONTAL);
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture), FALSE);
+  g_signal_connect (gesture, "drag-begin",
+                    G_CALLBACK (pan_gesture_drag_begin_cb), paned);
+  g_signal_connect (gesture, "pan",
+                    G_CALLBACK (pan_gesture_pan_cb), paned);
+  g_signal_connect (gesture, "drag-end",
+                    G_CALLBACK (pan_gesture_drag_end_cb), paned);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
+                                              GTK_PHASE_CAPTURE);
+  priv->pan_gesture = gesture;
+
+  widget_node = gtk_widget_get_css_node (GTK_WIDGET (paned));
+  priv->gadget = gtk_css_custom_gadget_new_for_node (widget_node,
+                                                     GTK_WIDGET (paned),
+                                                     gtk_paned_measure,
+                                                     gtk_paned_allocate,
+                                                     gtk_paned_render,
+                                                     NULL,
+                                                     NULL);
+  priv->handle_gadget = gtk_css_custom_gadget_new ("separator",
+                                                   GTK_WIDGET (paned),
+                                                   priv->gadget,
+                                                   NULL,
+                                                   gtk_paned_measure_handle,
+                                                   NULL,
+                                                   gtk_paned_render_handle,
+                                                   NULL,
+                                                   NULL);
+  update_node_state (GTK_WIDGET (paned));
 }
 
 static gboolean
@@ -1812,9 +1988,11 @@ update_drag (GtkPaned *paned,
 
   if (is_rtl (paned))
     {
-      gtk_widget_style_get (widget,
-			    "handle-size", &handle_size,
-			    NULL);
+      gtk_css_gadget_get_preferred_size (priv->handle_gadget,
+                                         GTK_ORIENTATION_HORIZONTAL,
+                                         -1,
+                                         NULL, &handle_size,
+                                         NULL, NULL);
 
       size = allocation.width - pos - handle_size;
     }
@@ -1827,23 +2005,6 @@ update_drag (GtkPaned *paned,
 
   if (size != priv->child1_size)
     gtk_paned_set_position (paned, size);
-}
-
-static void
-update_node_state (GtkWidget *widget)
-{
-  GtkPaned *paned = GTK_PANED (widget);
-  GtkPanedPrivate *priv = paned->priv;
-  GtkStateFlags state;
-
-  state = gtk_widget_get_state_flags (widget);
-
-  if (gtk_widget_is_focus (widget))
-    state |= GTK_STATE_FLAG_SELECTED;
-  if (priv->handle_prelit)
-    state |= GTK_STATE_FLAG_PRELIGHT;
-
-  gtk_css_node_set_state (priv->handle_node, state);
 }
 
 static gboolean
@@ -1930,6 +2091,8 @@ gtk_paned_state_flags_changed (GtkWidget     *widget,
     }
 
   update_node_state (widget);
+
+  GTK_WIDGET_CLASS (gtk_paned_parent_class)->state_flags_changed (widget, previous_state);
 }
 
 /**
@@ -2014,7 +2177,7 @@ gtk_paned_pack1 (GtkPaned  *paned,
 
       widget_node = gtk_widget_get_css_node (GTK_WIDGET (paned));
       child_node = gtk_widget_get_css_node (child);
-      gtk_css_node_insert_before (widget_node, child_node, priv->handle_node);
+      gtk_css_node_insert_before (widget_node, child_node, gtk_css_gadget_get_node (priv->handle_gadget));
 
       gtk_widget_set_parent_window (child, priv->child1_window);
       gtk_widget_set_parent (child, GTK_WIDGET (paned));
@@ -2053,7 +2216,7 @@ gtk_paned_pack2 (GtkPaned  *paned,
 
       widget_node = gtk_widget_get_css_node (GTK_WIDGET (paned));
       child_node = gtk_widget_get_css_node (child);
-      gtk_css_node_insert_after (widget_node, child_node, priv->handle_node);
+      gtk_css_node_insert_after (widget_node, child_node, gtk_css_gadget_get_node (priv->handle_gadget));
 
       gtk_widget_set_parent_window (child, priv->child2_window);
       gtk_widget_set_parent (child, GTK_WIDGET (paned));
@@ -2934,9 +3097,9 @@ gtk_paned_set_wide_handle (GtkPaned *paned,
   if (old_wide != wide)
     {
       if (wide)
-        gtk_css_node_add_class (paned->priv->handle_node, g_quark_from_static_string (GTK_STYLE_CLASS_WIDE));
+        gtk_css_gadget_add_class (paned->priv->handle_gadget, GTK_STYLE_CLASS_WIDE);
       else
-        gtk_css_node_remove_class (paned->priv->handle_node, g_quark_from_static_string (GTK_STYLE_CLASS_WIDE));
+        gtk_css_gadget_remove_class (paned->priv->handle_gadget, GTK_STYLE_CLASS_WIDE);
 
       gtk_widget_queue_resize (GTK_WIDGET (paned));
       g_object_notify (G_OBJECT (paned), "wide-handle");
@@ -2958,7 +3121,7 @@ gtk_paned_get_wide_handle (GtkPaned *paned)
 {
   g_return_val_if_fail (GTK_IS_PANED (paned), FALSE);
 
-  if (gtk_css_node_has_class (paned->priv->handle_node, g_quark_from_static_string (GTK_STYLE_CLASS_WIDE)))
+  if (gtk_css_node_has_class (gtk_css_gadget_get_node (paned->priv->handle_gadget), g_quark_from_static_string (GTK_STYLE_CLASS_WIDE)))
     return TRUE;
   else
     return FALSE;
