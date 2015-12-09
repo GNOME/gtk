@@ -220,10 +220,8 @@ struct wl_output *_gdk_wayland_screen_get_wl_output (GdkScreen *screen,
 
 void _gdk_wayland_screen_set_has_gtk_shell (GdkScreen       *screen);
 
-void _gdk_wayland_window_set_device_grabbed (GdkWindow      *window,
-                                             GdkDevice      *device,
-                                             struct wl_seat *seat,
-                                             guint32         time_);
+void _gdk_wayland_window_set_grab_seat (GdkWindow      *window,
+                                        GdkSeat        *seat);
 
 guint32 _gdk_wayland_display_get_serial (GdkWaylandDisplay *wayland_display);
 void _gdk_wayland_display_update_serial (GdkWaylandDisplay *wayland_display, guint32 serial);

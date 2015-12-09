@@ -140,9 +140,7 @@ struct _GdkWindowImplWayland
   GdkGeometry geometry_hints;
   GdkWindowHints geometry_mask;
 
-  guint32 grab_time;
-  GdkDevice *grab_device;
-  struct wl_seat *grab_input_seat;
+  GdkSeat *grab_input_seat;
 
   gint64 pending_frame_counter;
   guint32 scale;
@@ -1173,7 +1171,7 @@ find_grab_input_seat (GdkWindow *window, GdkWindow *transient_for)
    * grab before showing the popup window.
    */
   if (impl->grab_input_seat)
-    return impl->grab_input_seat;
+    return gdk_wayland_seat_get_wl_seat (impl->grab_input_seat);
 
   /* HACK: GtkMenu grabs a special window known as the "grab transfer window"
    * and then transfers the grab over to the correct window later. Look for
@@ -1186,7 +1184,7 @@ find_grab_input_seat (GdkWindow *window, GdkWindow *transient_for)
     {
       tmp_impl = GDK_WINDOW_IMPL_WAYLAND (attached_grab_window->impl);
       if (tmp_impl->grab_input_seat)
-        return tmp_impl->grab_input_seat;
+        return gdk_wayland_seat_get_wl_seat (tmp_impl->grab_input_seat);
     }
 
   while (transient_for)
@@ -1194,12 +1192,24 @@ find_grab_input_seat (GdkWindow *window, GdkWindow *transient_for)
       tmp_impl = GDK_WINDOW_IMPL_WAYLAND (transient_for->impl);
 
       if (tmp_impl->grab_input_seat)
-        return tmp_impl->grab_input_seat;
+        return gdk_wayland_seat_get_wl_seat (tmp_impl->grab_input_seat);
 
       transient_for = tmp_impl->transient_for;
     }
 
   return NULL;
+}
+
+static struct wl_seat *
+find_default_input_seat (GdkWindow *window)
+{
+  GdkDisplay *display;
+  GdkSeat *seat;
+
+  display = gdk_window_get_display (window);
+  seat = gdk_display_get_default_seat (display);
+
+  return gdk_wayland_seat_get_wl_seat (seat);
 }
 
 static gboolean
@@ -1318,7 +1328,7 @@ gdk_wayland_window_map (GdkWindow *window)
        */
       if (!impl->transient_for && impl->hint == GDK_WINDOW_TYPE_HINT_POPUP_MENU)
         {
-          GdkDevice *grab_device;
+          GdkDevice *grab_device = NULL;
 
           /* The popup menu window is not the grabbed window. This may mean
            * that a "transfer window" (see gtkmenu.c) is used, and we need
@@ -1326,7 +1336,7 @@ gdk_wayland_window_map (GdkWindow *window)
            * the "transfer window" can be retrieved via the
            * "gdk-attached-grab-window" associated data field.
            */
-          if (!impl->grab_device)
+          if (!impl->grab_input_seat)
             {
               GdkWindow *attached_grab_window =
                 g_object_get_data (G_OBJECT (window),
@@ -1335,7 +1345,7 @@ gdk_wayland_window_map (GdkWindow *window)
                 {
                   GdkWindowImplWayland *attached_impl =
                     GDK_WINDOW_IMPL_WAYLAND (attached_grab_window->impl);
-                  grab_device = attached_impl->grab_device;
+                  grab_device = gdk_seat_get_pointer (attached_impl->grab_input_seat);
                   transient_for =
                     gdk_device_get_window_at_position (grab_device,
                                                        NULL, NULL);
@@ -1343,7 +1353,7 @@ gdk_wayland_window_map (GdkWindow *window)
             }
           else
             {
-              grab_device = impl->grab_device;
+              grab_device = gdk_seat_get_pointer (impl->grab_input_seat);
               transient_for =
                 gdk_device_get_window_at_position (grab_device, NULL, NULL);
             }
@@ -1354,9 +1364,8 @@ gdk_wayland_window_map (GdkWindow *window)
           /* If the position was not explicitly set, start the popup at the
            * position of the device that holds the grab.
            */
-          if (!impl->position_set)
-            gdk_window_get_device_position (transient_for,
-                                            impl->grab_device,
+          if (!impl->position_set && grab_device)
+            gdk_window_get_device_position (transient_for, grab_device,
                                             &window->x, &window->y, NULL);
         }
       else
@@ -1375,10 +1384,12 @@ gdk_wayland_window_map (GdkWindow *window)
 
           if (!grab_input_seat)
             {
-              g_warning ("Couldn't map window %p as popup because no grabbed seat found",
+              g_warning ("No grabbed seat found, using the default one in "
+                         "order to map popup window %p. You may find oddities "
+                         "ahead, gdk_seat_grab() should be used to "
+                         "simultaneously grab input and show this popup",
                          window);
-
-              create_fallback = TRUE;
+              grab_input_seat = find_default_input_seat (window);
             }
         }
 
@@ -2535,20 +2546,15 @@ _gdk_window_impl_wayland_class_init (GdkWindowImplWaylandClass *klass)
 }
 
 void
-_gdk_wayland_window_set_device_grabbed (GdkWindow      *window,
-                                        GdkDevice      *device,
-                                        struct wl_seat *seat,
-                                        guint32         time_)
+_gdk_wayland_window_set_grab_seat (GdkWindow *window,
+                                   GdkSeat   *seat)
 {
   GdkWindowImplWayland *impl;
 
   g_return_if_fail (window != NULL);
 
   impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-
-  impl->grab_device = device;
   impl->grab_input_seat = seat;
-  impl->grab_time = time_;
 }
 
 /**
