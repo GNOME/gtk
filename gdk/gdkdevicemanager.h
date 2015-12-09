@@ -37,10 +37,10 @@ GType        gdk_device_manager_get_type           (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
 GdkDisplay * gdk_device_manager_get_display        (GdkDeviceManager *device_manager);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_20
 GList *      gdk_device_manager_list_devices       (GdkDeviceManager *device_manager,
                                                     GdkDeviceType     type);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_20
 GdkDevice *  gdk_device_manager_get_client_pointer (GdkDeviceManager *device_manager);
 
 G_END_DECLS

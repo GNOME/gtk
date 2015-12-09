@@ -246,7 +246,7 @@ GList *      gdk_device_list_slave_devices    (GdkDevice     *device);
 GDK_AVAILABLE_IN_ALL
 GdkDeviceType gdk_device_get_device_type (GdkDevice *device);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_20_FOR(gdk_seat_grab)
 GdkGrabStatus gdk_device_grab        (GdkDevice        *device,
                                       GdkWindow        *window,
                                       GdkGrabOwnership  grab_ownership,
@@ -255,7 +255,7 @@ GdkGrabStatus gdk_device_grab        (GdkDevice        *device,
                                       GdkCursor        *cursor,
                                       guint32           time_);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_20_FOR(gdk_seat_ungrab)
 void          gdk_device_ungrab      (GdkDevice        *device,
                                       guint32           time_);
 
