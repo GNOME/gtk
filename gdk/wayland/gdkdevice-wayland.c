@@ -535,16 +535,7 @@ gdk_wayland_device_grab (GdkDevice    *device,
 
       wayland_device->pointer_grab_window = window;
       wayland_device->pointer_grab_time = time_;
-
-      /* FIXME: This probably breaks if you end up with multiple grabs
-       * on the same window - but we need to know the input device for
-       * when we are asked to map a popup window so that the grab can
-       * be managed by the compositor.
-       */
-      _gdk_wayland_window_set_device_grabbed (window,
-                                              device,
-                                              wayland_device->wl_seat,
-                                              time_);
+      _gdk_wayland_window_set_grab_seat (window, GDK_SEAT (wayland_device));
 
       g_clear_object (&wayland_device->cursor);
 
@@ -591,10 +582,8 @@ gdk_wayland_device_ungrab (GdkDevice *device,
       gdk_wayland_device_update_window_cursor (wayland_device);
 
       if (wayland_device->pointer_grab_window)
-        _gdk_wayland_window_set_device_grabbed (wayland_device->pointer_grab_window,
-                                                NULL,
-                                                NULL,
-                                                0);
+        _gdk_wayland_window_set_grab_seat (wayland_device->pointer_grab_window,
+                                           NULL);
     }
 }
 
