@@ -2224,7 +2224,7 @@ gdk_wayland_window_begin_resize_drag (GdkWindow     *window,
   /* This is needed since Wayland will absorb all the pointer events after the
    * above function - FIXME: Is this always safe..?
    */
-  gdk_device_ungrab (device, timestamp);
+  gdk_seat_ungrab (gdk_device_get_seat (device));
 }
 
 static void
@@ -2259,7 +2259,7 @@ gdk_wayland_window_begin_move_drag (GdkWindow *window,
   /* This is needed since Wayland will absorb all the pointer events after the
    * above function - FIXME: Is this always safe..?
    */
-  gdk_device_ungrab (device, timestamp);
+  gdk_seat_ungrab (gdk_device_get_seat (device));
 }
 
 static void
