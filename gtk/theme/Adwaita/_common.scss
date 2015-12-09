@@ -2950,8 +2950,6 @@ placesview {
 
 paned { // this is for the standard paned separator
 
-  -GtkPaned-handle-size: 1; // sets separator width
-
   -gtk-icon-source: none; // removes handle decoration
   margin: 0 8px 8px 0; // drag area of the separator, not a real margin
   &:dir(rtl) {
@@ -2959,6 +2957,8 @@ paned { // this is for the standard paned separator
     margin-left: 8px;
   }
   separator {
+    min-width: 1px;
+    min-height: 1px;
     background-color: $borders_color;
     &:backdrop {
       background-color: $backdrop_borders_color;
@@ -2967,19 +2967,14 @@ paned { // this is for the standard paned separator
   separator:selected {
     background-color: $selected_bg_color;
   }
-}
-
-paned.wide { // this is for the paned with wide separator
-  -GtkPaned-handle-size: 5; // wider separator here
-  margin: 0; // no need of the invisible drag area so, reset margin
-  separator {
+  separator.wide {
+    min-width: 5px;
+    min-height: 5px;
     background-color: transparent;
     border-style: none solid;
     border-color: $borders_color;
     border-width: 1px;
   }
-  &.vertical separator { border-style: solid none;}
-  separator:backdrop { border-color: $backdrop_borders_color; }
 }
 
 

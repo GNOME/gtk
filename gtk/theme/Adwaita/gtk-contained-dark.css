@@ -4112,31 +4112,26 @@ placesview row.activatable:hover {
  * Paned *
  *********/
 paned {
-  -GtkPaned-handle-size: 1;
   -gtk-icon-source: none;
   margin: 0 8px 8px 0; }
   paned:dir(rtl) {
     margin-right: 0;
     margin-left: 8px; }
   paned separator {
+    min-width: 1px;
+    min-height: 1px;
     background-color: #1c1f1f; }
     paned separator:backdrop {
       background-color: #1f2222; }
   paned separator:selected {
     background-color: #215d9c; }
-
-paned.wide {
-  -GtkPaned-handle-size: 5;
-  margin: 0; }
-  paned.wide separator {
+  paned separator.wide {
+    min-width: 5px;
+    min-height: 5px;
     background-color: transparent;
     border-style: none solid;
     border-color: #1c1f1f;
     border-width: 1px; }
-  paned.wide.vertical separator {
-    border-style: solid none; }
-  paned.wide separator:backdrop {
-    border-color: #1f2222; }
 
 /**************
  * GtkInfoBar *
