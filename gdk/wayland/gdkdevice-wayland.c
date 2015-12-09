@@ -2819,14 +2819,27 @@ gdk_wayland_device_unset_touch_grab (GdkDevice        *gdk_device,
                                      GdkEventSequence *sequence)
 {
   GdkWaylandDeviceData *device;
+  GdkWaylandTouchData *touch;
+  GdkEvent *event;
 
   g_return_if_fail (GDK_IS_WAYLAND_DEVICE (gdk_device));
 
   device = GDK_WAYLAND_DEVICE (gdk_device)->device;
+  touch = gdk_wayland_device_get_touch (device,
+                                        GDK_EVENT_SEQUENCE_TO_SLOT (sequence));
 
-  gdk_wayland_device_remove_touch (device, GDK_EVENT_SEQUENCE_TO_SLOT (sequence));
-  _gdk_display_end_touch_grab (gdk_device_get_display (gdk_device),
-                               gdk_device, sequence);
+  if (GDK_WAYLAND_DEVICE (device->touch_master)->emulating_touch == touch)
+    {
+      GDK_WAYLAND_DEVICE (device->touch_master)->emulating_touch = NULL;
+      emulate_touch_crossing (touch->window, NULL,
+                              device->touch_master, device->touch,
+                              touch, GDK_LEAVE_NOTIFY, GDK_CROSSING_NORMAL,
+                              GDK_CURRENT_TIME);
+    }
+
+  event = _create_touch_event (device, touch, GDK_TOUCH_CANCEL,
+                               GDK_CURRENT_TIME);
+  _gdk_wayland_display_deliver_event (device->display, event);
 }
 
 struct wl_data_device *
