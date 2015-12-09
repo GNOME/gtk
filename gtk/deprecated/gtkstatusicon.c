@@ -1400,6 +1400,7 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
   surface = gtk_icon_helper_load_surface (icon_helper, 1);
   pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0, round_size, round_size);
   cairo_surface_destroy (surface);
+  g_object_unref (icon_helper);
 
   if (pixbuf != NULL)
     {
