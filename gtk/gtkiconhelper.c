@@ -47,7 +47,7 @@ struct _GtkIconHelperPrivate {
   gint last_surface_scale;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkIconHelper, _gtk_icon_helper, G_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkIconHelper, gtk_icon_helper, GTK_TYPE_CSS_GADGET)
 
 static void
 gtk_icon_helper_take_definition (GtkIconHelper      *self,
@@ -94,11 +94,11 @@ gtk_icon_helper_finalize (GObject *object)
   _gtk_icon_helper_clear (self);
   gtk_image_definition_unref (self->priv->def);
   
-  G_OBJECT_CLASS (_gtk_icon_helper_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_icon_helper_parent_class)->finalize (object);
 }
 
 static void
-_gtk_icon_helper_class_init (GtkIconHelperClass *klass)
+gtk_icon_helper_class_init (GtkIconHelperClass *klass)
 {
   GObjectClass *oclass;
 
@@ -107,9 +107,9 @@ _gtk_icon_helper_class_init (GtkIconHelperClass *klass)
 }
 
 static void
-_gtk_icon_helper_init (GtkIconHelper *self)
+gtk_icon_helper_init (GtkIconHelper *self)
 {
-  self->priv = _gtk_icon_helper_get_instance_private (self);
+  self->priv = gtk_icon_helper_get_instance_private (self);
 
   self->priv->def = gtk_image_definition_new_empty ();
 
