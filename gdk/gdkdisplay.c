@@ -69,6 +69,8 @@
 enum {
   OPENED,
   CLOSED,
+  SEAT_ADDED,
+  SEAT_REMOVED,
   LAST_SIGNAL
 };
 
@@ -187,6 +189,42 @@ gdk_display_class_init (GdkDisplayClass *class)
 		  G_TYPE_NONE,
 		  1,
 		  G_TYPE_BOOLEAN);
+
+  /**
+   * GdkDisplay::seat-added:
+   * @display: the object on which the signal is emitted
+   * @seat: the seat that was just added
+   *
+   * The ::seat-added signal is emitted whenever a new seat is made
+   * known to the windowing system.
+   *
+   * Since: 3.20
+   */
+  signals[SEAT_ADDED] =
+    g_signal_new (g_intern_static_string ("seat-added"),
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_LAST,
+		  0, NULL, NULL,
+                  g_cclosure_marshal_VOID__OBJECT,
+		  G_TYPE_NONE, 1, GDK_TYPE_SEAT);
+
+  /**
+   * GdkDisplay::seat-removed:
+   * @display: the object on which the signal is emitted
+   * @seat: the seat that was just added
+   *
+   * The ::seat-removed signal is emitted whenever a seat is removed
+   * by the windowing system.
+   *
+   * Since: 3.20
+   */
+  signals[SEAT_REMOVED] =
+    g_signal_new (g_intern_static_string ("seat-removed"),
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_LAST,
+		  0, NULL, NULL,
+                  g_cclosure_marshal_VOID__OBJECT,
+		  G_TYPE_NONE, 1, GDK_TYPE_SEAT);
 }
 
 static void
@@ -2337,6 +2375,7 @@ gdk_display_add_seat (GdkDisplay *display,
   g_return_if_fail (GDK_IS_SEAT (seat));
 
   display->seats = g_list_prepend (display->seats, g_object_ref (seat));
+  g_signal_emit (display, signals[SEAT_ADDED], 0, seat);
 }
 
 void
@@ -2353,6 +2392,7 @@ gdk_display_remove_seat (GdkDisplay *display,
   if (link)
     {
       display->seats = g_list_remove_link (display->seats, link);
+      g_signal_emit (display, signals[SEAT_REMOVED], 0, seat);
       g_object_unref (link->data);
       g_list_free (link);
     }
