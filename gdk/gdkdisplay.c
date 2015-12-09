@@ -1491,6 +1491,8 @@ gdk_display_device_is_grabbed (GdkDisplay *display,
  *          or unreferenced.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.20. Use gdk_display_get_default_seat() and #GdkSeat operations.
  **/
 GdkDeviceManager *
 gdk_display_get_device_manager (GdkDisplay *display)

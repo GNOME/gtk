@@ -1360,6 +1360,8 @@ get_native_grab_event_mask (GdkEventMask grab_mask)
  * Returns: %GDK_GRAB_SUCCESS if the grab was successful.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.20. Use gdk_seat_grab() instead.
  **/
 GdkGrabStatus
 gdk_device_grab (GdkDevice        *device,
@@ -1433,6 +1435,8 @@ gdk_device_grab (GdkDevice        *device,
  * Release any grab on @device.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.20. Use gdk_seat_ungrab() instead.
  */
 void
 gdk_device_ungrab (GdkDevice  *device,
