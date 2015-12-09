@@ -124,23 +124,16 @@ textview {
   textview:backdrop {
     background-color: #f4f4f3; }
 
-popover.magnifier,
-popover.osd,
-.app-notification,
-.app-notification.frame,
-.osd .scale-popup, .osd {
+.csd popover.background.touch-selection, .csd popover.background.magnifier, popover.background.touch-selection, popover.background.magnifier, .csd popover.background.osd, popover.background.osd, .app-notification,
+.app-notification.frame, .osd .scale-popup, .osd {
   color: #eeeeec;
   border: none;
-  background-color: rgba(32, 37, 38, 0.7);
+  background-color: rgba(32, 37, 38, 0.8);
   background-clip: padding-box;
   outline-color: rgba(238, 238, 236, 0.3);
-  box-shadow: none;
   text-shadow: 0 1px black;
   -gtk-icon-shadow: 0 1px black; }
-  popover.magnifier:backdrop,
-  popover.osd:backdrop,
-  .app-notification:backdrop,
-  .osd .scale-popup:backdrop, .osd:backdrop {
+  popover.background.touch-selection:backdrop, popover.background.magnifier:backdrop, popover.background.osd:backdrop, .app-notification:backdrop, .osd .scale-popup:backdrop, .osd:backdrop {
     text-shadow: none;
     -gtk-icon-shadow: none; }
 
@@ -463,7 +456,7 @@ button, headerbar button.titlebutton,
     outline-color: rgba(238, 238, 236, 0.3);
     color: #eeeeec;
     border-color: rgba(0, 0, 0, 0.7);
-    background-image: linear-gradient(to bottom, rgba(32, 37, 38, 0.7));
+    background-image: linear-gradient(to bottom, rgba(32, 37, 38, 0.8));
     background-clip: padding-box;
     box-shadow: inset 0 1px rgba(255, 255, 255, 0.1);
     text-shadow: 0 1px black;
@@ -477,7 +470,7 @@ button, headerbar button.titlebutton,
     button.osd:hover {
       color: white;
       border-color: rgba(0, 0, 0, 0.7);
-      background-image: linear-gradient(to bottom, rgba(60, 69, 71, 0.7));
+      background-image: linear-gradient(to bottom, rgba(60, 69, 71, 0.8));
       background-clip: padding-box;
       box-shadow: inset 0 1px rgba(255, 255, 255, 0.1);
       text-shadow: 0 1px black;
@@ -508,13 +501,13 @@ button, headerbar button.titlebutton,
     button.osd:backdrop {
       color: #eeeeec;
       border-color: rgba(0, 0, 0, 0.7);
-      background-image: linear-gradient(to bottom, rgba(32, 37, 38, 0.7));
+      background-image: linear-gradient(to bottom, rgba(32, 37, 38, 0.8));
       background-clip: padding-box;
       box-shadow: none;
       text-shadow: none;
       -gtk-icon-shadow: none;
       border: none; }
-  .app-notification button, .app-notification headerbar button.titlebutton, headerbar .app-notification button.titlebutton,
+  .csd popover.background.touch-selection button, .csd popover.background.magnifier button, popover.background.touch-selection button, popover.background.magnifier button, .app-notification button, .app-notification headerbar button.titlebutton, headerbar .app-notification button.titlebutton,
   .app-notification .titlebar button.titlebutton,
   .titlebar .app-notification button.titlebutton,
   .app-notification.frame button, .osd button, .osd headerbar button.titlebutton, headerbar .osd button.titlebutton,
@@ -522,22 +515,22 @@ button, headerbar button.titlebutton,
   .titlebar .osd button.titlebutton {
     color: #eeeeec;
     border-color: rgba(0, 0, 0, 0.7);
-    background-image: linear-gradient(to bottom, rgba(32, 37, 38, 0.7));
+    background-image: linear-gradient(to bottom, rgba(32, 37, 38, 0.8));
     background-clip: padding-box;
     box-shadow: inset 0 1px rgba(255, 255, 255, 0.1);
     text-shadow: 0 1px black;
     -gtk-icon-shadow: 0 1px black;
     outline-color: rgba(238, 238, 236, 0.3); }
-    .app-notification button:hover, .osd button:hover {
+    popover.background.touch-selection button:hover, popover.background.magnifier button:hover, .app-notification button:hover, .osd button:hover {
       color: white;
       border-color: rgba(0, 0, 0, 0.7);
-      background-image: linear-gradient(to bottom, rgba(60, 69, 71, 0.7));
+      background-image: linear-gradient(to bottom, rgba(60, 69, 71, 0.8));
       background-clip: padding-box;
       box-shadow: inset 0 1px rgba(255, 255, 255, 0.1);
       text-shadow: 0 1px black;
       -gtk-icon-shadow: 0 1px black;
       outline-color: rgba(238, 238, 236, 0.3); }
-    .app-notification button:active, .app-notification button:checked, .app-notification button:backdrop:active, .app-notification button:backdrop:checked, .osd button:active, .osd button:checked, .osd button:backdrop:active, .osd button:backdrop:checked {
+    popover.background.touch-selection button:active, popover.background.magnifier button:active, .app-notification button:active, popover.background.touch-selection button:checked, popover.background.magnifier button:checked, .app-notification button:checked, popover.background.touch-selection button:backdrop:active, popover.background.magnifier button:backdrop:active, .app-notification button:backdrop:active, popover.background.touch-selection button:backdrop:checked, popover.background.magnifier button:backdrop:checked, .app-notification button:backdrop:checked, .osd button:active, .osd button:checked, .osd button:backdrop:active, .osd button:backdrop:checked {
       color: white;
       border-color: rgba(0, 0, 0, 0.7);
       background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7));
@@ -546,7 +539,7 @@ button, headerbar button.titlebutton,
       text-shadow: none;
       -gtk-icon-shadow: none;
       outline-color: rgba(238, 238, 236, 0.3); }
-    .app-notification button:insensitive, .app-notification button:backdrop:insensitive, .osd button:insensitive, .osd button:backdrop:insensitive {
+    popover.background.touch-selection button:insensitive, popover.background.magnifier button:insensitive, .app-notification button:insensitive, popover.background.touch-selection button:backdrop:insensitive, popover.background.magnifier button:backdrop:insensitive, .app-notification button:backdrop:insensitive, .osd button:insensitive, .osd button:backdrop:insensitive {
       color: #878a89;
       border-color: rgba(0, 0, 0, 0.7);
       background-image: linear-gradient(to bottom, rgba(53, 57, 58, 0.5));
@@ -554,15 +547,19 @@ button, headerbar button.titlebutton,
       box-shadow: none;
       text-shadow: none;
       -gtk-icon-shadow: none; }
-    .app-notification button:backdrop, .osd button:backdrop {
+    popover.background.touch-selection button:backdrop, popover.background.magnifier button:backdrop, .app-notification button:backdrop, .osd button:backdrop {
       color: #eeeeec;
       border-color: rgba(0, 0, 0, 0.7);
-      background-image: linear-gradient(to bottom, rgba(32, 37, 38, 0.7));
+      background-image: linear-gradient(to bottom, rgba(32, 37, 38, 0.8));
       background-clip: padding-box;
       box-shadow: none;
       text-shadow: none;
       -gtk-icon-shadow: none; }
-    .app-notification button.flat, .app-notification button.sidebar-button, .app-notification headerbar button.titlebutton, headerbar .app-notification button.titlebutton,
+    popover.background.touch-selection button.flat, popover.background.touch-selection button.sidebar-button, popover.background.touch-selection headerbar button.titlebutton, headerbar popover.background.touch-selection button.titlebutton,
+    popover.background.touch-selection .titlebar button.titlebutton,
+    .titlebar popover.background.touch-selection button.titlebutton, popover.background.magnifier button.flat, popover.background.magnifier button.sidebar-button, popover.background.magnifier headerbar button.titlebutton, headerbar popover.background.magnifier button.titlebutton,
+    popover.background.magnifier .titlebar button.titlebutton,
+    .titlebar popover.background.magnifier button.titlebutton, .app-notification button.flat, .app-notification button.sidebar-button, .app-notification headerbar button.titlebutton, headerbar .app-notification button.titlebutton,
     .app-notification .titlebar button.titlebutton,
     .titlebar .app-notification button.titlebutton, .osd button.flat, .osd button.sidebar-button, .osd headerbar button.titlebutton, headerbar .osd button.titlebutton,
     .osd .titlebar button.titlebutton,
@@ -576,20 +573,28 @@ button, headerbar button.titlebutton,
       box-shadow: none;
       text-shadow: 0 1px black;
       -gtk-icon-shadow: 0 1px black; }
-      .app-notification button.flat:hover, .app-notification button.sidebar-button:hover, .app-notification headerbar button.titlebutton:hover, headerbar .app-notification button.titlebutton:hover,
+      popover.background.touch-selection button.flat:hover, popover.background.touch-selection button.sidebar-button:hover, popover.background.touch-selection headerbar button.titlebutton:hover, headerbar popover.background.touch-selection button.titlebutton:hover,
+      popover.background.touch-selection .titlebar button.titlebutton:hover,
+      .titlebar popover.background.touch-selection button.titlebutton:hover, popover.background.magnifier button.flat:hover, popover.background.magnifier button.sidebar-button:hover, popover.background.magnifier headerbar button.titlebutton:hover, headerbar popover.background.magnifier button.titlebutton:hover,
+      popover.background.magnifier .titlebar button.titlebutton:hover,
+      .titlebar popover.background.magnifier button.titlebutton:hover, .app-notification button.flat:hover, .app-notification button.sidebar-button:hover, .app-notification headerbar button.titlebutton:hover, headerbar .app-notification button.titlebutton:hover,
       .app-notification .titlebar button.titlebutton:hover,
       .titlebar .app-notification button.titlebutton:hover, .osd button.flat:hover, .osd button.sidebar-button:hover, .osd headerbar button.titlebutton:hover, headerbar .osd button.titlebutton:hover,
       .osd .titlebar button.titlebutton:hover,
       .titlebar .osd button.titlebutton:hover {
         color: white;
         border-color: rgba(0, 0, 0, 0.7);
-        background-image: linear-gradient(to bottom, rgba(60, 69, 71, 0.7));
+        background-image: linear-gradient(to bottom, rgba(60, 69, 71, 0.8));
         background-clip: padding-box;
         box-shadow: inset 0 1px rgba(255, 255, 255, 0.1);
         text-shadow: 0 1px black;
         -gtk-icon-shadow: 0 1px black;
         outline-color: rgba(238, 238, 236, 0.3); }
-      .app-notification button.flat:insensitive, .app-notification button.sidebar-button:insensitive, .app-notification headerbar button.titlebutton:insensitive, headerbar .app-notification button.titlebutton:insensitive,
+      popover.background.touch-selection button.flat:insensitive, popover.background.touch-selection button.sidebar-button:insensitive, popover.background.touch-selection headerbar button.titlebutton:insensitive, headerbar popover.background.touch-selection button.titlebutton:insensitive,
+      popover.background.touch-selection .titlebar button.titlebutton:insensitive,
+      .titlebar popover.background.touch-selection button.titlebutton:insensitive, popover.background.magnifier button.flat:insensitive, popover.background.magnifier button.sidebar-button:insensitive, popover.background.magnifier headerbar button.titlebutton:insensitive, headerbar popover.background.magnifier button.titlebutton:insensitive,
+      popover.background.magnifier .titlebar button.titlebutton:insensitive,
+      .titlebar popover.background.magnifier button.titlebutton:insensitive, .app-notification button.flat:insensitive, .app-notification button.sidebar-button:insensitive, .app-notification headerbar button.titlebutton:insensitive, headerbar .app-notification button.titlebutton:insensitive,
       .app-notification .titlebar button.titlebutton:insensitive,
       .titlebar .app-notification button.titlebutton:insensitive, .osd button.flat:insensitive, .osd button.sidebar-button:insensitive, .osd headerbar button.titlebutton:insensitive, headerbar .osd button.titlebutton:insensitive,
       .osd .titlebar button.titlebutton:insensitive,
@@ -604,7 +609,11 @@ button, headerbar button.titlebutton,
         background-image: none;
         border-color: transparent;
         box-shadow: none; }
-      .app-notification button.flat:backdrop, .app-notification button.sidebar-button:backdrop, .app-notification headerbar button.titlebutton:backdrop, headerbar .app-notification button.titlebutton:backdrop,
+      popover.background.touch-selection button.flat:backdrop, popover.background.touch-selection button.sidebar-button:backdrop, popover.background.touch-selection headerbar button.titlebutton:backdrop, headerbar popover.background.touch-selection button.titlebutton:backdrop,
+      popover.background.touch-selection .titlebar button.titlebutton:backdrop,
+      .titlebar popover.background.touch-selection button.titlebutton:backdrop, popover.background.magnifier button.flat:backdrop, popover.background.magnifier button.sidebar-button:backdrop, popover.background.magnifier headerbar button.titlebutton:backdrop, headerbar popover.background.magnifier button.titlebutton:backdrop,
+      popover.background.magnifier .titlebar button.titlebutton:backdrop,
+      .titlebar popover.background.magnifier button.titlebutton:backdrop, .app-notification button.flat:backdrop, .app-notification button.sidebar-button:backdrop, .app-notification headerbar button.titlebutton:backdrop, headerbar .app-notification button.titlebutton:backdrop,
       .app-notification .titlebar button.titlebutton:backdrop,
       .titlebar .app-notification button.titlebutton:backdrop, .osd button.flat:backdrop, .osd button.sidebar-button:backdrop, .osd headerbar button.titlebutton:backdrop, headerbar .osd button.titlebutton:backdrop,
       .osd .titlebar button.titlebutton:backdrop,
@@ -615,9 +624,17 @@ button, headerbar button.titlebutton,
         box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0);
         text-shadow: none;
         -gtk-icon-shadow: none; }
-      .app-notification button.flat:active, .app-notification button.sidebar-button:active, .app-notification headerbar button.titlebutton:active, headerbar .app-notification button.titlebutton:active,
+      popover.background.touch-selection button.flat:active, popover.background.touch-selection button.sidebar-button:active, popover.background.touch-selection headerbar button.titlebutton:active, headerbar popover.background.touch-selection button.titlebutton:active,
+      popover.background.touch-selection .titlebar button.titlebutton:active,
+      .titlebar popover.background.touch-selection button.titlebutton:active, popover.background.magnifier button.flat:active, popover.background.magnifier button.sidebar-button:active, popover.background.magnifier headerbar button.titlebutton:active, headerbar popover.background.magnifier button.titlebutton:active,
+      popover.background.magnifier .titlebar button.titlebutton:active,
+      .titlebar popover.background.magnifier button.titlebutton:active, .app-notification button.flat:active, .app-notification button.sidebar-button:active, .app-notification headerbar button.titlebutton:active, headerbar .app-notification button.titlebutton:active,
       .app-notification .titlebar button.titlebutton:active,
-      .titlebar .app-notification button.titlebutton:active, .app-notification button.flat:checked, .app-notification button.sidebar-button:checked, .app-notification headerbar button.titlebutton:checked, headerbar .app-notification button.titlebutton:checked,
+      .titlebar .app-notification button.titlebutton:active, popover.background.touch-selection button.flat:checked, popover.background.touch-selection button.sidebar-button:checked, popover.background.touch-selection headerbar button.titlebutton:checked, headerbar popover.background.touch-selection button.titlebutton:checked,
+      popover.background.touch-selection .titlebar button.titlebutton:checked,
+      .titlebar popover.background.touch-selection button.titlebutton:checked, popover.background.magnifier button.flat:checked, popover.background.magnifier button.sidebar-button:checked, popover.background.magnifier headerbar button.titlebutton:checked, headerbar popover.background.magnifier button.titlebutton:checked,
+      popover.background.magnifier .titlebar button.titlebutton:checked,
+      .titlebar popover.background.magnifier button.titlebutton:checked, .app-notification button.flat:checked, .app-notification button.sidebar-button:checked, .app-notification headerbar button.titlebutton:checked, headerbar .app-notification button.titlebutton:checked,
       .app-notification .titlebar button.titlebutton:checked,
       .titlebar .app-notification button.titlebutton:checked, .osd button.flat:active, .osd button.sidebar-button:active, .osd headerbar button.titlebutton:active, headerbar .osd button.titlebutton:active,
       .osd .titlebar button.titlebutton:active,
@@ -1434,7 +1451,7 @@ spinbutton.vertical {
 .osd spinbutton.vertical button:first-child {
   color: #eeeeec;
   border-color: rgba(0, 0, 0, 0.7);
-  background-image: linear-gradient(to bottom, rgba(32, 37, 38, 0.7));
+  background-image: linear-gradient(to bottom, rgba(32, 37, 38, 0.8));
   background-clip: padding-box;
   box-shadow: inset 0 1px rgba(255, 255, 255, 0.1);
   text-shadow: 0 1px black;
@@ -1443,7 +1460,7 @@ spinbutton.vertical {
   .osd spinbutton.vertical button:first-child:hover {
     color: white;
     border-color: rgba(0, 0, 0, 0.7);
-    background-image: linear-gradient(to bottom, rgba(60, 69, 71, 0.7));
+    background-image: linear-gradient(to bottom, rgba(60, 69, 71, 0.8));
     background-clip: padding-box;
     box-shadow: inset 0 1px rgba(255, 255, 255, 0.1);
     text-shadow: 0 1px black;
@@ -1469,7 +1486,7 @@ spinbutton.vertical {
   .osd spinbutton.vertical button:first-child:backdrop {
     color: #eeeeec;
     border-color: rgba(0, 0, 0, 0.7);
-    background-image: linear-gradient(to bottom, rgba(32, 37, 38, 0.7));
+    background-image: linear-gradient(to bottom, rgba(32, 37, 38, 0.8));
     background-clip: padding-box;
     box-shadow: none;
     text-shadow: none;
@@ -1540,7 +1557,7 @@ toolbar, .inline-toolbar, searchbar,
     padding: 13px;
     border: none;
     border-radius: 5px;
-    background-color: rgba(32, 37, 38, 0.7); }
+    background-color: rgba(32, 37, 38, 0.8); }
   toolbar.osd.left, .osd.left.inline-toolbar, searchbar.osd.left,
   .osd.left.location-bar, toolbar.osd.right, .osd.right.inline-toolbar, searchbar.osd.right,
   .osd.right.location-bar, toolbar.osd.top, .osd.top.inline-toolbar, searchbar.osd.top,
@@ -2129,33 +2146,36 @@ menuitem accelerator {
 /***************
  * Popovers   *
  ***************/
-popover {
+popover.background {
   padding: 2px;
-  border: 1px solid #9d9d99;
   border-radius: 5px;
   background-color: #f4f4f3;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); }
-  popover:backdrop {
+  .csd popover.background, popover.background {
+    border: 1px solid #9d9d99; }
+  popover.background:backdrop {
     box-shadow: none; }
-  popover > list,
-  popover > .view,
-  popover > toolbar,
-  popover > .inline-toolbar,
-  popover > searchbar,
-  popover > .location-bar {
+  popover.background > list,
+  popover.background > .view,
+  popover.background > toolbar,
+  popover.background > .inline-toolbar,
+  popover.background > searchbar,
+  popover.background > .location-bar {
     border-style: none;
     background-color: transparent; }
-  popover button.flat, popover button.sidebar-button, popover headerbar button.titlebutton, headerbar popover button.titlebutton,
-  popover .titlebar button.titlebutton,
-  .titlebar popover button.titlebutton,
-  popover button.flat:hover,
-  popover button.sidebar-button:hover,
-  popover headerbar button.titlebutton:hover,
-  headerbar popover button.titlebutton:hover,
-  popover .titlebar button.titlebutton:hover,
-  .titlebar popover button.titlebutton:hover {
+  popover.background button.flat, popover.background button.sidebar-button, popover.background headerbar button.titlebutton, headerbar popover.background button.titlebutton,
+  popover.background .titlebar button.titlebutton,
+  .titlebar popover.background button.titlebutton,
+  popover.background button.flat:hover,
+  popover.background button.sidebar-button:hover,
+  popover.background headerbar button.titlebutton:hover,
+  headerbar popover.background button.titlebutton:hover,
+  popover.background .titlebar button.titlebutton:hover,
+  .titlebar popover.background button.titlebutton:hover {
     text-shadow: none;
     transition: none; }
+  .csd popover.background.touch-selection, .csd popover.background.magnifier, popover.background.touch-selection, popover.background.magnifier {
+    border: 1px solid rgba(255, 255, 255, 0.1); }
 
 /*************
  * Notebooks *
@@ -3249,7 +3269,7 @@ scale {
     .osd scale slider {
       color: #eeeeec;
       border-color: rgba(0, 0, 0, 0.7);
-      background-image: linear-gradient(to bottom, rgba(32, 37, 38, 0.7));
+      background-image: linear-gradient(to bottom, rgba(32, 37, 38, 0.8));
       background-clip: padding-box;
       box-shadow: inset 0 1px rgba(255, 255, 255, 0.1);
       text-shadow: 0 1px black;
@@ -3260,7 +3280,7 @@ scale {
       .osd scale slider:hover {
         color: white;
         border-color: rgba(0, 0, 0, 0.7);
-        background-image: linear-gradient(to bottom, rgba(60, 69, 71, 0.7));
+        background-image: linear-gradient(to bottom, rgba(60, 69, 71, 0.8));
         background-clip: padding-box;
         box-shadow: inset 0 1px rgba(255, 255, 255, 0.1);
         text-shadow: 0 1px black;
@@ -3286,7 +3306,7 @@ scale {
       .osd scale slider:backdrop {
         color: #eeeeec;
         border-color: rgba(0, 0, 0, 0.7);
-        background-image: linear-gradient(to bottom, rgba(32, 37, 38, 0.7));
+        background-image: linear-gradient(to bottom, rgba(32, 37, 38, 0.8));
         background-clip: padding-box;
         box-shadow: none;
         text-shadow: none;
@@ -3936,7 +3956,7 @@ row {
   padding: 10px;
   border: none;
   border-radius: 0 0 5px 5px;
-  background-color: rgba(32, 37, 38, 0.7);
+  background-color: rgba(32, 37, 38, 0.8);
   background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.2), transparent 2px);
   background-clip: padding-box; }
   .app-notification:backdrop,
@@ -4671,142 +4691,6 @@ cursor-handle {
 /* Decouple the font of context menus from their entry/textview */
 .context-menu {
   font: initial; }
-
-popover.touch-selection {
-  font: initial;
-  color: #eeeeec;
-  border: none;
-  background-color: rgba(32, 37, 38, 0.9);
-  background-clip: padding-box;
-  outline-color: rgba(238, 238, 236, 0.3);
-  box-shadow: none;
-  text-shadow: 0 1px black;
-  -gtk-icon-shadow: 0 1px black; }
-  popover.touch-selection:backdrop {
-    text-shadow: none; }
-  popover.touch-selection button,
-  popover.touch-selection .titlebar button.titlebutton,
-  .titlebar popover.touch-selection button.titlebutton {
-    color: #eeeeec;
-    border-color: rgba(0, 0, 0, 0.7);
-    background-image: linear-gradient(to bottom, rgba(32, 37, 38, 0.7));
-    background-clip: padding-box;
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0.1);
-    text-shadow: 0 1px black;
-    -gtk-icon-shadow: 0 1px black;
-    outline-color: rgba(238, 238, 236, 0.3); }
-    popover.touch-selection button:hover {
-      color: white;
-      border-color: rgba(0, 0, 0, 0.7);
-      background-image: linear-gradient(to bottom, rgba(60, 69, 71, 0.7));
-      background-clip: padding-box;
-      box-shadow: inset 0 1px rgba(255, 255, 255, 0.1);
-      text-shadow: 0 1px black;
-      -gtk-icon-shadow: 0 1px black;
-      outline-color: rgba(238, 238, 236, 0.3); }
-    popover.touch-selection button:active, popover.touch-selection button:checked {
-      color: white;
-      border-color: rgba(0, 0, 0, 0.7);
-      background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7));
-      background-clip: padding-box;
-      box-shadow: none;
-      text-shadow: none;
-      -gtk-icon-shadow: none;
-      outline-color: rgba(238, 238, 236, 0.3); }
-    popover.touch-selection button:insensitive, popover.touch-selection button:backdrop:insensitive {
-      color: #878a89;
-      border-color: rgba(0, 0, 0, 0.7);
-      background-image: linear-gradient(to bottom, rgba(53, 57, 58, 0.5));
-      background-clip: padding-box;
-      box-shadow: none;
-      text-shadow: none;
-      -gtk-icon-shadow: none; }
-    popover.touch-selection button:backdrop {
-      color: #eeeeec;
-      border-color: rgba(0, 0, 0, 0.7);
-      background-image: linear-gradient(to bottom, rgba(32, 37, 38, 0.7));
-      background-clip: padding-box;
-      box-shadow: none;
-      text-shadow: none;
-      -gtk-icon-shadow: none; }
-  popover.touch-selection .check {
-    -gtk-icon-shadow: none;
-    -gtk-icon-source: -gtk-scaled(url("assets/checkbox-unchecked-dark.png"), url("assets/checkbox-unchecked-dark@2.png")); }
-  popover.touch-selection .check:hover {
-    -gtk-icon-shadow: none;
-    -gtk-icon-source: -gtk-scaled(url("assets/checkbox-unchecked-hover-dark.png"), url("assets/checkbox-unchecked-hover-dark@2.png")); }
-  popover.touch-selection .check:active {
-    -gtk-icon-shadow: none;
-    -gtk-icon-source: -gtk-scaled(url("assets/checkbox-unchecked-active-dark.png"), url("assets/checkbox-unchecked-active-dark@2.png")); }
-  popover.touch-selection .check:insensitive {
-    -gtk-icon-shadow: none;
-    -gtk-icon-source: -gtk-scaled(url("assets/checkbox-unchecked-insensitive-dark.png"), url("assets/checkbox-unchecked-insensitive-dark@2.png")); }
-  popover.touch-selection .check:inconsistent {
-    -gtk-icon-shadow: none;
-    -gtk-icon-source: -gtk-scaled(url("assets/checkbox-mixed-dark.png"), url("assets/checkbox-mixed-dark@2.png")); }
-  popover.touch-selection .check:inconsistent:hover {
-    -gtk-icon-shadow: none;
-    -gtk-icon-source: -gtk-scaled(url("assets/checkbox-mixed-hover-dark.png"), url("assets/checkbox-mixed-hover-dark@2.png")); }
-  popover.touch-selection .check:inconsistent:selected {
-    -gtk-icon-shadow: none;
-    -gtk-icon-source: -gtk-scaled(url("assets/checkbox-mixed-active-dark.png"), url("assets/checkbox-mixed-active-dark@2.png")); }
-  popover.touch-selection .check:inconsistent:insensitive {
-    -gtk-icon-shadow: none;
-    -gtk-icon-source: -gtk-scaled(url("assets/checkbox-mixed-insensitive-dark.png"), url("assets/checkbox-mixed-insensitive-dark@2.png")); }
-  popover.touch-selection .check:checked {
-    -gtk-icon-shadow: none;
-    -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-dark.png"), url("assets/checkbox-checked-dark@2.png")); }
-  popover.touch-selection .check:checked:insensitive {
-    -gtk-icon-shadow: none;
-    -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-insensitive-dark.png"), url("assets/checkbox-checked-insensitive-dark@2.png")); }
-  popover.touch-selection .check:checked:hover {
-    -gtk-icon-shadow: none;
-    -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-hover-dark.png"), url("assets/checkbox-checked-hover-dark@2.png")); }
-  popover.touch-selection .check:checked:active {
-    -gtk-icon-shadow: none;
-    -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-active-dark.png"), url("assets/checkbox-checked-active-dark@2.png")); }
-  popover.touch-selection .check:backdrop:checked {
-    -gtk-icon-shadow: none;
-    -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-backdrop-dark.png"), url("assets/checkbox-checked-backdrop-dark@2.png")); }
-  popover.touch-selection .radio {
-    -gtk-icon-shadow: none;
-    -gtk-icon-source: -gtk-scaled(url("assets/radio-unchecked-dark.png"), url("assets/radio-unchecked-dark@2.png")); }
-  popover.touch-selection .radio:hover {
-    -gtk-icon-shadow: none;
-    -gtk-icon-source: -gtk-scaled(url("assets/radio-unchecked-hover-dark.png"), url("assets/radio-unchecked-hover-dark@2.png")); }
-  popover.touch-selection .radio:active {
-    -gtk-icon-shadow: none;
-    -gtk-icon-source: -gtk-scaled(url("assets/radio-unchecked-active-dark.png"), url("assets/radio-unchecked-active-dark@2.png")); }
-  popover.touch-selection .radio:insensitive {
-    -gtk-icon-shadow: none;
-    -gtk-icon-source: -gtk-scaled(url("assets/radio-unchecked-insensitive-dark.png"), url("assets/radio-unchecked-insensitive-dark@2.png")); }
-  popover.touch-selection .radio:inconsistent {
-    -gtk-icon-shadow: none;
-    -gtk-icon-source: -gtk-scaled(url("assets/radio-mixed-dark.png"), url("assets/radio-mixed-dark@2.png")); }
-  popover.touch-selection .radio:inconsistent:hover {
-    -gtk-icon-shadow: none;
-    -gtk-icon-source: -gtk-scaled(url("assets/radio-mixed-hover-dark.png"), url("assets/radio-mixed-hover-dark@2.png")); }
-  popover.touch-selection .radio:inconsistent:selected {
-    -gtk-icon-shadow: none;
-    -gtk-icon-source: -gtk-scaled(url("assets/radio-mixed-active-dark.png"), url("assets/radio-mixed-active-dark@2.png")); }
-  popover.touch-selection .radio:inconsistent:insensitive {
-    -gtk-icon-shadow: none;
-    -gtk-icon-source: -gtk-scaled(url("assets/radio-mixed-insensitive-dark.png"), url("assets/radio-mixed-insensitive-dark@2.png")); }
-  popover.touch-selection .radio:checked {
-    -gtk-icon-shadow: none;
-    -gtk-icon-source: -gtk-scaled(url("assets/radio-checked-dark.png"), url("assets/radio-checked-dark@2.png")); }
-  popover.touch-selection .radio:checked:insensitive {
-    -gtk-icon-shadow: none;
-    -gtk-icon-source: -gtk-scaled(url("assets/radio-checked-insensitive-dark.png"), url("assets/radio-checked-insensitive-dark@2.png")); }
-  popover.touch-selection .radio:checked:hover {
-    -gtk-icon-shadow: none;
-    -gtk-icon-source: -gtk-scaled(url("assets/radio-checked-hover-dark.png"), url("assets/radio-checked-hover-dark@2.png")); }
-  popover.touch-selection .radio:checked:active {
-    -gtk-icon-shadow: none;
-    -gtk-icon-source: -gtk-scaled(url("assets/radio-checked-active-dark.png"), url("assets/radio-checked-active-dark@2.png")); }
-  popover.touch-selection .radio:backdrop:checked {
-    -gtk-icon-shadow: none;
-    -gtk-icon-source: -gtk-scaled(url("assets/radio-checked-backdrop-dark.png"), url("assets/radio-checked-backdrop-dark@2.png")); }
 
 button.circular, headerbar button.circular.titlebutton,
 .titlebar button.circular.titlebutton {
