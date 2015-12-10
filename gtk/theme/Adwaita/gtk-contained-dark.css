@@ -3483,14 +3483,17 @@ levelbar {
 /**********
  * Frames *
  **********/
-frame,
+frame border,
 .frame {
-  border: 1px solid #1c1f1f;
-  padding: 0; }
-  frame.flat,
+  box-shadow: none;
+  margin: 0;
+  padding: 0;
+  border-radius: 0;
+  border: 1px solid #1c1f1f; }
+  frame border.flat,
   .frame.flat {
     border-style: none; }
-  frame:backdrop,
+  frame border:backdrop,
   .frame:backdrop {
     border-color: #1f2222; }
 
