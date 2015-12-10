@@ -1,3 +1,23 @@
+Overview of Changes from GTK+ 2.24.28 to 2.24.29
+================================================
+
+* OS X:
+ - Partial aspect ratio support
+
+* Bug fixes:
+ 345345 PrintOperation::paginate is not emitted for class handler
+ 745127 Changing order of file in "Places" crashes the application
+ 749507 gtk-2.0.m4 fails to detect a prefixed pkg-config
+ 752638 notebook tab dragging doesn't work on Quartz (patches...
+ 753644 Switching from Multipress input method to None immedi...
+ 753691 make install -j2 fails when building for MinGW
+ 753992 im-quartz discard_preedit segmentation fault
+ 754046 annotate gtk_color_button_get_color
+
+* Translation updates:
+ Occitan
+
+
 Overview of Changes from GTK+ 2.24.27 to 2.24.28
 ================================================
 
