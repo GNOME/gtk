@@ -906,8 +906,6 @@ gtk_stack_set_transition_position (GtkStack *stack,
           gtk_widget_set_child_visible (priv->last_visible_child->widget, FALSE);
           priv->last_visible_child = NULL;
         }
-
-      gtk_widget_queue_resize (GTK_WIDGET (stack));
     }
 
   return done;
