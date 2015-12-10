@@ -4214,8 +4214,9 @@ gtk_flow_box_insert (GtkFlowBox *box,
  *
  * Gets the nth child in the @box.
  *
- * Returns: (transfer none): the child widget, which will
- *     always be a #GtkFlowBoxChild
+ * Returns: (transfer none) (nullable): the child widget, which will
+ *     always be a #GtkFlowBoxChild or %NULL in case no child widget
+ *     with the given index exists.
  *
  * Since: 3.12
  */
