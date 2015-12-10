@@ -79,6 +79,8 @@
 #include "gtkcssnodeprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkstylecontextprivate.h"
+#include "gtkcsscustomgadgetprivate.h"
+#include "gtkcontainerprivate.h"
 
 #include "a11y/gtkflowboxaccessibleprivate.h"
 #include "a11y/gtkflowboxchildaccessible.h"
@@ -262,6 +264,7 @@ typedef struct _GtkFlowBoxChildPrivate GtkFlowBoxChildPrivate;
 struct _GtkFlowBoxChildPrivate
 {
   GSequenceIter *iter;
+  GtkCssGadget  *gadget;
   gboolean       selected;
 };
 
@@ -383,53 +386,30 @@ static gboolean
 gtk_flow_box_child_draw (GtkWidget *widget,
                          cairo_t   *cr)
 {
-  GtkAllocation allocation = {0};
-  GtkStyleContext* context;
-  GtkStateFlags state;
-  GtkBorder border;
+  gtk_css_gadget_draw (CHILD_PRIV (GTK_FLOW_BOX_CHILD (widget))->gadget, cr);
 
-  gtk_widget_get_allocation (widget, &allocation);
-  context = gtk_widget_get_style_context (widget);
-  state = gtk_style_context_get_state (context);
+  return FALSE;
+}
 
-  gtk_render_background (context, cr, 0, 0, allocation.width, allocation.height);
-  gtk_render_frame (context, cr, 0, 0, allocation.width, allocation.height);
+static gboolean
+gtk_flow_box_child_render (GtkCssGadget *gadget,
+                           cairo_t      *cr,
+                           int           x,
+                           int           y,
+                           int           width,
+                           int           height,
+                           gpointer      data)
+{
+  GtkWidget *widget;
 
-  if (gtk_widget_has_visible_focus (widget))
-    {
-      gtk_style_context_get_border (context, state, &border);
-      gtk_render_focus (context, cr, border.left, border.top,
-                        allocation.width - border.left - border.right,
-                        allocation.height - border.top - border.bottom);
-    }
+  widget = gtk_css_gadget_get_owner (gadget);
 
   GTK_WIDGET_CLASS (gtk_flow_box_child_parent_class)->draw (widget, cr);
 
-  return TRUE;
+  return gtk_widget_has_visible_focus (widget);
 }
 
 /* Size allocation {{{3 */
-
-static void
-gtk_flow_box_child_get_full_border (GtkFlowBoxChild *child,
-                                    GtkBorder       *full_border)
-{
-  GtkWidget *widget = GTK_WIDGET (child);
-  GtkStyleContext *context;
-  GtkStateFlags state;
-  GtkBorder padding, border;
-
-  context = gtk_widget_get_style_context (widget);
-  state = gtk_style_context_get_state (context);
-
-  gtk_style_context_get_padding (context, state, &padding);
-  gtk_style_context_get_border (context, state, &border);
-
-  full_border->left = padding.left + border.left;
-  full_border->right = padding.right + border.right;
-  full_border->top = padding.top + border.top;
-  full_border->bottom = padding.bottom + border.bottom;
-}
 
 static GtkSizeRequestMode
 gtk_flow_box_child_get_request_mode (GtkWidget *widget)
@@ -443,123 +423,122 @@ gtk_flow_box_child_get_request_mode (GtkWidget *widget)
     return GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
 }
 
-static void gtk_flow_box_child_get_preferred_width_for_height (GtkWidget *widget,
-                                                               gint       height,
-                                                               gint      *minimum_width,
-                                                               gint      *natural_width);
-static void gtk_flow_box_child_get_preferred_height           (GtkWidget *widget,
-                                                               gint      *minimum_height,
-                                                               gint      *natural_height);
+static void
+gtk_flow_box_child_get_preferred_height (GtkWidget *widget,
+                                         gint      *minimum,
+                                         gint      *natural)
+{
+  gtk_css_gadget_get_preferred_size (CHILD_PRIV (GTK_FLOW_BOX_CHILD (widget))->gadget,
+                                     GTK_ORIENTATION_VERTICAL,
+                                     -1,
+                                     minimum, natural,
+                                     NULL, NULL);
+}
 
 static void
 gtk_flow_box_child_get_preferred_height_for_width (GtkWidget *widget,
                                                    gint       width,
-                                                   gint      *minimum_height,
-                                                   gint      *natural_height)
+                                                   gint      *minimum,
+                                                   gint      *natural)
 {
-  if (gtk_flow_box_child_get_request_mode (widget) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
-    {
-      GtkWidget *child;
-      gint child_min = 0, child_natural = 0;
-      GtkBorder full_border = { 0, };
-
-      gtk_flow_box_child_get_full_border (GTK_FLOW_BOX_CHILD (widget), &full_border);
-      child = gtk_bin_get_child (GTK_BIN (widget));
-      if (child && gtk_widget_get_visible (child))
-        gtk_widget_get_preferred_height_for_width (child, width - full_border.left - full_border.right,
-                                                   &child_min, &child_natural);
-
-      *minimum_height = full_border.top + child_min + full_border.bottom;
-      *natural_height = full_border.top + child_natural + full_border.bottom;
-    }
-  else
-    {
-      gtk_flow_box_child_get_preferred_height (widget, minimum_height, natural_height);
-    }
+  gtk_css_gadget_get_preferred_size (CHILD_PRIV (GTK_FLOW_BOX_CHILD (widget))->gadget,
+                                     GTK_ORIENTATION_VERTICAL,
+                                     width,
+                                     minimum, natural,
+                                     NULL, NULL);
 }
 
 static void
 gtk_flow_box_child_get_preferred_width (GtkWidget *widget,
-                                        gint      *minimum_width,
-                                        gint      *natural_width)
+                                        gint      *minimum,
+                                        gint      *natural)
 {
-  if (gtk_flow_box_child_get_request_mode (widget) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
-    {
-      GtkWidget *child;
-      gint child_min = 0, child_natural = 0;
-      GtkBorder full_border = { 0, };
-
-      gtk_flow_box_child_get_full_border (GTK_FLOW_BOX_CHILD (widget), &full_border);
-      child = gtk_bin_get_child (GTK_BIN (widget));
-      if (child && gtk_widget_get_visible (child))
-        gtk_widget_get_preferred_width (child, &child_min, &child_natural);
-
-      *minimum_width = full_border.left + child_min + full_border.right;
-      *natural_width = full_border.left + child_natural + full_border.right;
-    }
-  else
-    {
-      gint natural_height;
-
-      gtk_flow_box_child_get_preferred_height (widget, NULL, &natural_height);
-      gtk_flow_box_child_get_preferred_width_for_height (widget, natural_height,
-                                                         minimum_width, natural_width);
-    }
+  gtk_css_gadget_get_preferred_size (CHILD_PRIV (GTK_FLOW_BOX_CHILD (widget))->gadget,
+                                     GTK_ORIENTATION_HORIZONTAL,
+                                     -1,
+                                     minimum, natural,
+                                     NULL, NULL);
 }
 
 static void
 gtk_flow_box_child_get_preferred_width_for_height (GtkWidget *widget,
                                                    gint       height,
-                                                   gint      *minimum_width,
-                                                   gint      *natural_width)
+                                                   gint      *minimum,
+                                                   gint      *natural)
 {
-  if (gtk_flow_box_child_get_request_mode (widget) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
-    {
-      gtk_flow_box_child_get_preferred_width (widget, minimum_width, natural_width);
-    }
-  else
-    {
-      GtkWidget *child;
-      gint child_min = 0, child_natural = 0;
-      GtkBorder full_border = { 0, };
-
-      gtk_flow_box_child_get_full_border (GTK_FLOW_BOX_CHILD (widget), &full_border);
-      child = gtk_bin_get_child (GTK_BIN (widget));
-      if (child && gtk_widget_get_visible (child))
-        gtk_widget_get_preferred_width_for_height (child, height - full_border.top - full_border.bottom,
-                                                   &child_min, &child_natural);
-
-      *minimum_width = full_border.left + child_min + full_border.right;
-      *natural_width = full_border.left + child_natural + full_border.right;
-    }
+  gtk_css_gadget_get_preferred_size (CHILD_PRIV (GTK_FLOW_BOX_CHILD (widget))->gadget,
+                                     GTK_ORIENTATION_HORIZONTAL,
+                                     height,
+                                     minimum, natural,
+                                     NULL, NULL);
 }
 
 static void
-gtk_flow_box_child_get_preferred_height (GtkWidget *widget,
-                                         gint      *minimum_height,
-                                         gint      *natural_height)
+gtk_flow_box_child_measure (GtkCssGadget   *gadget,
+                            GtkOrientation  orientation,
+                            int             for_size,
+                            int            *minimum,
+                            int            *natural,
+                            int            *minimum_baseline,
+                            int            *natural_baseline,
+                            gpointer        data)
 {
-  if (gtk_flow_box_child_get_request_mode (widget) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
-    {
-      gint natural_width;
+  GtkWidget *widget;
+  GtkWidget *child;
 
-      gtk_flow_box_child_get_preferred_width (widget, NULL, &natural_width);
-      gtk_flow_box_child_get_preferred_height_for_width (widget, natural_width,
-                                                         minimum_height, natural_height);
+  widget = gtk_css_gadget_get_owner (gadget);
+  child = gtk_bin_get_child (GTK_BIN (widget));
+  if (!child || ! gtk_widget_get_visible (child))
+    {
+      *minimum = *natural = 0;
+      return;
+    }
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    {
+      if (for_size < 0)
+        {
+          if (gtk_flow_box_child_get_request_mode (widget) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
+            {
+              gtk_widget_get_preferred_width (child, minimum, natural);
+            }
+          else
+            {
+              gint height;
+              gtk_widget_get_preferred_height (child, NULL, &height);
+              gtk_widget_get_preferred_width_for_height (child, height, minimum, natural);
+            }
+        }
+      else
+        {
+          if (gtk_flow_box_child_get_request_mode (widget) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
+            gtk_widget_get_preferred_width (child, minimum, natural);
+          else
+            gtk_widget_get_preferred_width_for_height (child, for_size, minimum, natural);
+        }
     }
   else
     {
-      GtkWidget *child;
-      gint child_min = 0, child_natural = 0;
-      GtkBorder full_border = { 0, };
-
-      gtk_flow_box_child_get_full_border (GTK_FLOW_BOX_CHILD (widget), &full_border);
-      child = gtk_bin_get_child (GTK_BIN (widget));
-      if (child && gtk_widget_get_visible (child))
-        gtk_widget_get_preferred_height (child, &child_min, &child_natural);
-
-      *minimum_height = full_border.top + child_min + full_border.bottom;
-      *natural_height = full_border.top + child_natural + full_border.bottom;
+      if (for_size < 0)
+        {
+          if (gtk_flow_box_child_get_request_mode (widget) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
+            {
+              gint width;
+              gtk_widget_get_preferred_width (child, NULL, &width);
+              gtk_widget_get_preferred_height_for_width (child, width, minimum, natural);
+            }
+          else
+            {
+              gtk_widget_get_preferred_height (child, minimum, natural);
+            }
+        }
+      else
+        {
+          if (gtk_flow_box_child_get_request_mode (widget) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
+            gtk_widget_get_preferred_height_for_width (child, for_size, minimum, natural);
+          else
+            gtk_widget_get_preferred_height (child, minimum, natural);
+        }
     }
 }
 
@@ -567,37 +546,54 @@ static void
 gtk_flow_box_child_size_allocate (GtkWidget     *widget,
                                   GtkAllocation *allocation)
 {
-  GtkWidget *child;
+  GtkAllocation clip;
 
   gtk_widget_set_allocation (widget, allocation);
 
+  gtk_css_gadget_allocate (CHILD_PRIV (GTK_FLOW_BOX_CHILD (widget))->gadget,
+                           allocation,
+                           gtk_widget_get_allocated_baseline (widget),
+                           &clip);
+
+  gtk_widget_set_clip (widget, &clip);
+}
+
+static void
+gtk_flow_box_child_allocate (GtkCssGadget        *gadget,
+                             const GtkAllocation *allocation,
+                             int                  baseline,
+                             GtkAllocation       *out_clip,
+                             gpointer             data)
+{
+  GtkWidget *widget;
+  GtkWidget *child;
+
+  widget = gtk_css_gadget_get_owner (gadget);
+
   child = gtk_bin_get_child (GTK_BIN (widget));
   if (child && gtk_widget_get_visible (child))
-    {
-      GtkAllocation child_allocation;
-      GtkBorder border = { 0, };
+    gtk_widget_size_allocate (child, (GtkAllocation *)allocation);
 
-      gtk_flow_box_child_get_full_border (GTK_FLOW_BOX_CHILD (widget), &border);
-
-      child_allocation.x = allocation->x + border.left;
-      child_allocation.y = allocation->y + border.top;
-      child_allocation.width = allocation->width - border.left - border.right;
-      child_allocation.height = allocation->height - border.top - border.bottom;
-
-      child_allocation.width  = MAX (1, child_allocation.width);
-      child_allocation.height = MAX (1, child_allocation.height);
-
-      gtk_widget_size_allocate (child, &child_allocation);
-    }
+  gtk_container_get_children_clip (GTK_CONTAINER (widget), out_clip);
 }
 
 /* GObject implementation {{{2 */
+
+static void
+gtk_flow_box_child_finalize (GObject *object)
+{
+  g_clear_object (&CHILD_PRIV (GTK_FLOW_BOX_CHILD (object))->gadget);
+
+  G_OBJECT_CLASS (gtk_flow_box_child_parent_class)->finalize (object);
+}
 
 static void
 gtk_flow_box_child_class_init (GtkFlowBoxChildClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
+
+  object_class->finalize = gtk_flow_box_child_finalize;
 
   widget_class->draw = gtk_flow_box_child_draw;
   widget_class->get_request_mode = gtk_flow_box_child_get_request_mode;
@@ -641,6 +637,14 @@ gtk_flow_box_child_init (GtkFlowBoxChild *child)
 {
   gtk_widget_set_can_focus (GTK_WIDGET (child), TRUE);
   gtk_widget_set_redraw_on_allocate (GTK_WIDGET (child), TRUE);
+
+  CHILD_PRIV (child)->gadget = gtk_css_custom_gadget_new_for_node (gtk_widget_get_css_node (GTK_WIDGET (child)),
+                                                     GTK_WIDGET (child),
+                                                     gtk_flow_box_child_measure,
+                                                     gtk_flow_box_child_allocate,
+                                                     gtk_flow_box_child_render,
+                                                     NULL,
+                                                     NULL);
 }
 
 /* Public API {{{2 */
