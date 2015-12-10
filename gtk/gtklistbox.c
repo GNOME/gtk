@@ -25,6 +25,7 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkwidgetprivate.h"
+#include "gtkcsscustomgadgetprivate.h"
 
 #include <float.h>
 #include <math.h>
@@ -117,6 +118,7 @@ typedef struct
 {
   GSequenceIter *iter;
   GtkWidget *header;
+  GtkCssGadget *gadget;
   gint y;
   gint height;
   guint visible     :1;
@@ -3015,21 +3017,6 @@ gtk_list_box_row_new (void)
 }
 
 static void
-gtk_list_box_row_init (GtkListBoxRow *row)
-{
-  GtkStyleContext *context;
-
-  gtk_widget_set_can_focus (GTK_WIDGET (row), TRUE);
-  gtk_widget_set_redraw_on_allocate (GTK_WIDGET (row), TRUE);
-
-  ROW_PRIV (row)->activatable = TRUE;
-  ROW_PRIV (row)->selectable = TRUE;
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (row));
-  gtk_style_context_add_class (context, "activatable");
-}
-
-static void
 gtk_list_box_row_set_focus (GtkListBoxRow *row)
 {
   GtkListBox *box = gtk_list_box_row_get_box (row);
@@ -3140,151 +3127,147 @@ static gboolean
 gtk_list_box_row_draw (GtkWidget *widget,
                        cairo_t   *cr)
 {
-  GtkListBoxRow *row = GTK_LIST_BOX_ROW (widget);
-  GtkAllocation allocation;
-  GtkStyleContext *context;
-
-  gtk_widget_get_allocation (widget, &allocation);
-  context = gtk_widget_get_style_context (widget);
-
-  gtk_render_background (context, cr, 0, 0, allocation.width, allocation.height);
-  gtk_render_frame (context, cr, 0, 0, allocation.width, allocation.height);
-
-  if (gtk_widget_has_visible_focus (GTK_WIDGET (row)))
-    {
-      GtkBorder border;
-
-      gtk_style_context_get_border (context, gtk_style_context_get_state (context), &border);
-      gtk_render_focus (context, cr, border.left, border.top,
-                        allocation.width - border.left - border.right,
-                        allocation.height - border.top - border.bottom);
-    }
-
-  GTK_WIDGET_CLASS (gtk_list_box_row_parent_class)->draw (widget, cr);
+  gtk_css_gadget_draw (ROW_PRIV (GTK_LIST_BOX_ROW (widget))->gadget, cr);
 
   return GDK_EVENT_PROPAGATE;
 }
 
-static void
-gtk_list_box_row_get_full_border (GtkListBoxRow *row,
-                                  GtkBorder     *full_border)
+static gboolean
+gtk_list_box_row_render (GtkCssGadget *gadget,
+                         cairo_t      *cr,
+                         int           x,
+                         int           y,
+                         int           width,
+                         int           height,
+                         gpointer      data)
 {
-  GtkWidget *widget = GTK_WIDGET (row);
-  GtkStyleContext *context;
-  GtkStateFlags state;
-  GtkBorder padding, border;
+  GtkWidget *widget;
 
-  context = gtk_widget_get_style_context (widget);
-  state = gtk_style_context_get_state (context);
+  widget = gtk_css_gadget_get_owner (gadget);
 
-  gtk_style_context_get_padding (context, state, &padding);
-  gtk_style_context_get_border (context, state, &border);
+  GTK_WIDGET_CLASS (gtk_list_box_row_parent_class)->draw (widget, cr);
 
-  full_border->left = padding.left + border.left;
-  full_border->right = padding.right + border.right;
-  full_border->top = padding.top + border.top;
-  full_border->bottom = padding.bottom + border.bottom;
+  return gtk_widget_has_visible_focus (widget);
 }
 
-static void gtk_list_box_row_get_preferred_height_for_width (GtkWidget *widget,
-                                                             gint       width,
-                                                             gint      *minimum_height_out,
-                                                             gint      *natural_height_out);
-static void gtk_list_box_row_get_preferred_width            (GtkWidget *widget,
-                                                             gint      *minimum_width_out,
-                                                             gint      *natural_width_out);
+static void
+gtk_list_box_row_measure (GtkCssGadget   *gadget,
+                          GtkOrientation  orientation,
+                          int             for_size,
+                          int            *minimum,
+                          int            *natural,
+                          int            *minimum_baseline,
+                          int            *natural_baseline,
+                          gpointer        data)
+{
+  GtkWidget *widget;
+  GtkWidget *child;
+
+  widget = gtk_css_gadget_get_owner (gadget);
+  child = gtk_bin_get_child (GTK_BIN (widget));
+
+  if (orientation == GTK_ORIENTATION_VERTICAL)
+    {
+      if (child && gtk_widget_get_visible (child))
+        {
+          if (for_size < 0)
+            gtk_widget_get_preferred_height (child, minimum, natural);
+          else
+            gtk_widget_get_preferred_height_for_width (child, for_size, minimum, natural);
+        }
+      else
+        *minimum = *natural = 0;
+    }
+  else
+    {
+      if (child && gtk_widget_get_visible (child))
+        gtk_widget_get_preferred_width (child, minimum, natural);
+      else
+        *minimum = *natural = 0;
+    }
+}
 
 static void
 gtk_list_box_row_get_preferred_height (GtkWidget *widget,
-                                       gint      *minimum_height,
-                                       gint      *natural_height)
+                                       gint      *minimum,
+                                       gint      *natural)
 {
-  gint min_width, natural_width;
-
-  gtk_list_box_row_get_preferred_width (widget, &min_width, &natural_width);
-  gtk_list_box_row_get_preferred_height_for_width (widget, natural_width,
-                                                   minimum_height, natural_height);
+  gtk_css_gadget_get_preferred_size (ROW_PRIV (GTK_LIST_BOX_ROW (widget))->gadget,
+                                     GTK_ORIENTATION_VERTICAL,
+                                     -1,
+                                     minimum, natural,
+                                     NULL, NULL);
 }
 
 static void
 gtk_list_box_row_get_preferred_height_for_width (GtkWidget *widget,
                                                  gint       width,
-                                                 gint      *minimum_height_out,
-                                                 gint      *natural_height_out)
+                                                 gint      *minimum,
+                                                 gint      *natural)
 {
-  GtkListBoxRow *row = GTK_LIST_BOX_ROW (widget);
-  GtkWidget *child;
-  gint child_min = 0, child_natural = 0;
-  GtkBorder full_border;
-
-  gtk_list_box_row_get_full_border (row, &full_border);
-
-  child = gtk_bin_get_child (GTK_BIN (row));
-  if (child && gtk_widget_get_visible (child))
-      gtk_widget_get_preferred_height_for_width (child, width - full_border.left - full_border.right,
-                                                 &child_min, &child_natural);
-
-  *minimum_height_out = full_border.top + child_min + full_border.bottom;
-  *natural_height_out = full_border.top + child_natural + full_border.bottom;
+  gtk_css_gadget_get_preferred_size (ROW_PRIV (GTK_LIST_BOX_ROW (widget))->gadget,
+                                     GTK_ORIENTATION_VERTICAL,
+                                     width,
+                                     minimum, natural,
+                                     NULL, NULL);
 }
 
 static void
 gtk_list_box_row_get_preferred_width (GtkWidget *widget,
-                                      gint      *minimum_width_out,
-                                      gint      *natural_width_out)
+                                      gint      *minimum,
+                                      gint      *natural)
 {
-  GtkListBoxRow *row = GTK_LIST_BOX_ROW (widget);
-  GtkWidget *child;
-  gint child_min = 0, child_natural = 0;
-  GtkBorder full_border;
-
-  gtk_list_box_row_get_full_border (row, &full_border);
-
-  child = gtk_bin_get_child (GTK_BIN (row));
-  if (child && gtk_widget_get_visible (child))
-      gtk_widget_get_preferred_width (child,
-                                      &child_min, &child_natural);
-
-  *minimum_width_out = full_border.left + child_min + full_border.right;
-  *natural_width_out = full_border.left + child_natural + full_border.right;
+  gtk_css_gadget_get_preferred_size (ROW_PRIV (GTK_LIST_BOX_ROW (widget))->gadget,
+                                     GTK_ORIENTATION_HORIZONTAL,
+                                     -1,
+                                     minimum, natural,
+                                     NULL, NULL);
 }
 
 static void
 gtk_list_box_row_get_preferred_width_for_height (GtkWidget *widget,
                                                  gint       height,
-                                                 gint      *minimum_width,
-                                                 gint      *natural_width)
+                                                 gint      *minimum,
+                                                 gint      *natural)
 {
-  gtk_list_box_row_get_preferred_width (widget, minimum_width, natural_width);
+  gtk_css_gadget_get_preferred_size (ROW_PRIV (GTK_LIST_BOX_ROW (widget))->gadget,
+                                     GTK_ORIENTATION_HORIZONTAL,
+                                     height,
+                                     minimum, natural,
+                                     NULL, NULL);
 }
 
 static void
 gtk_list_box_row_size_allocate (GtkWidget     *widget,
                                 GtkAllocation *allocation)
 {
-  GtkListBoxRow *row = GTK_LIST_BOX_ROW (widget);
-  GtkWidget *child;
+  GtkAllocation clip;
 
   gtk_widget_set_allocation (widget, allocation);
 
-  child = gtk_bin_get_child (GTK_BIN (row));
+  gtk_css_gadget_allocate (ROW_PRIV (GTK_LIST_BOX_ROW (widget))->gadget,
+                           allocation,
+                           gtk_widget_get_allocated_baseline (widget),
+                           &clip);
+
+  gtk_widget_set_clip (widget, &clip);
+}
+
+static void
+gtk_list_box_row_allocate (GtkCssGadget        *gadget,
+                           const GtkAllocation *allocation,
+                           int                  baseline,
+                           GtkAllocation       *out_clip,
+                           gpointer             data)
+{
+  GtkWidget *widget;
+  GtkWidget *child;
+
+  widget = gtk_css_gadget_get_owner (gadget);
+
+  child = gtk_bin_get_child (GTK_BIN (widget));
   if (child && gtk_widget_get_visible (child))
-    {
-      GtkAllocation child_allocation;
-      GtkBorder border;
-
-      gtk_list_box_row_get_full_border (row, &border);
-
-      child_allocation.x = allocation->x + border.left;
-      child_allocation.y = allocation->y + border.top;
-      child_allocation.width = allocation->width - border.left - border.right;
-      child_allocation.height = allocation->height - border.top - border.bottom;
-
-      child_allocation.width  = MAX (1, child_allocation.width);
-      child_allocation.height = MAX (1, child_allocation.height);
-
-      gtk_widget_size_allocate (child, &child_allocation);
-    }
+    gtk_widget_size_allocate (child, (GtkAllocation *)allocation);
 
   _gtk_widget_set_simple_clip (widget, NULL);
 }
@@ -3595,6 +3578,7 @@ static void
 gtk_list_box_row_finalize (GObject *obj)
 {
   g_clear_object (&ROW_PRIV (GTK_LIST_BOX_ROW (obj))->header);
+  g_clear_object (&ROW_PRIV (GTK_LIST_BOX_ROW (obj))->gadget);
 
   G_OBJECT_CLASS (gtk_list_box_row_parent_class)->finalize (obj);
 }
@@ -3681,6 +3665,25 @@ gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
   g_object_class_install_properties (object_class, LAST_ROW_PROPERTY, row_properties);
 
   gtk_widget_class_set_css_name (widget_class, "row");
+}
+
+static void
+gtk_list_box_row_init (GtkListBoxRow *row)
+{
+  gtk_widget_set_can_focus (GTK_WIDGET (row), TRUE);
+  gtk_widget_set_redraw_on_allocate (GTK_WIDGET (row), TRUE);
+
+  ROW_PRIV (row)->activatable = TRUE;
+  ROW_PRIV (row)->selectable = TRUE;
+
+  ROW_PRIV (row)->gadget = gtk_css_custom_gadget_new_for_node (gtk_widget_get_css_node (GTK_WIDGET (row)),
+                                                     GTK_WIDGET (row),
+                                                     gtk_list_box_row_measure,
+                                                     gtk_list_box_row_allocate,
+                                                     gtk_list_box_row_render,
+                                                     NULL,
+                                                     NULL);
+  gtk_css_gadget_add_class (ROW_PRIV (row)->gadget, "activatable");
 }
 
 static void
