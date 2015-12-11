@@ -2091,14 +2091,14 @@ menu,
 .menu {
   margin: 4px;
   padding: 0px;
-  background-color: #f4f4f3;
+  background-color: #ffffff;
   border: 1px solid #9d9d99; }
   .csd menu, .csd
   .menu {
     border: none; }
   menu:backdrop,
   .menu:backdrop {
-    background-color: #f4f4f3; }
+    background-color: white; }
   menu menuitem,
   .menu menuitem {
     text-shadow: none;

@@ -17,7 +17,7 @@ $link_visited_color: if($variant == 'light', darken($selected_bg_color,20%), lig
 $top_hilight: $borders_edge;
 $dark_fill: mix($borders_color, $bg_color, 35%);
 $headerbar_color: if($variant == 'light', lighten($bg_color, 5%), darken($bg_color, 3%));
-$menu_color: mix($bg_color, $base_color, 50%);
+$menu_color: if($variant == 'light', $base_color, mix($bg_color, $base_color, 20%));
 
 $scrollbar_bg_color: darken($bg_color, 7%);
 
@@ -55,4 +55,4 @@ $backdrop_sidebar_bg_color: mix($backdrop_bg_color, $backdrop_base_color, 50%);
 
 $backdrop_scrollbar_bg_color: darken($backdrop_bg_color, 3%);
 
-$backdrop_menu_color: mix($backdrop_bg_color, $backdrop_base_color, 50%);
+$backdrop_menu_color: if($variant == 'light', $backdrop_base_color, mix($backdrop_bg_color, $backdrop_base_color, 20%));
