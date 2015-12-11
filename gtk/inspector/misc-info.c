@@ -439,6 +439,7 @@ gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
   else
     {
       gtk_widget_hide (sl->priv->state_row);
+      gtk_widget_hide (sl->priv->request_mode_row);
       gtk_widget_hide (sl->priv->mnemonic_label_row);
       gtk_widget_hide (sl->priv->allocated_size_row);
       gtk_widget_hide (sl->priv->clip_area_row);
