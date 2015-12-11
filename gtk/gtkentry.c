@@ -5232,22 +5232,6 @@ gtk_entry_get_selection_bounds (GtkEditable *editable,
 }
 
 static void
-icon_theme_changed (GtkEntry *entry)
-{
-  GtkEntryPrivate *priv = entry->priv;
-  gint i;
-
-  for (i = 0; i < MAX_ICONS; i++)
-    {
-      EntryIconInfo *icon_info = priv->icons[i];
-      if (icon_info != NULL) 
-        _gtk_icon_helper_invalidate (icon_info->icon_helper);
-    }
-
-  gtk_widget_queue_draw (GTK_WIDGET (entry));
-}
-
-static void
 gtk_entry_update_cached_style_values (GtkEntry *entry)
 {
   GtkEntryPrivate *priv = entry->priv;
@@ -5272,8 +5256,6 @@ gtk_entry_style_updated (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_entry_parent_class)->style_updated (widget);
 
   gtk_entry_update_cached_style_values (entry);
-
-  icon_theme_changed (entry);
 }
 
 /* GtkCellEditable method implementations

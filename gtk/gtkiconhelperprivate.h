@@ -72,7 +72,6 @@ GtkIconHelper *gtk_icon_helper_new (GtkCssNode *node,
                                     GtkWidget  *owner);
 
 void _gtk_icon_helper_clear (GtkIconHelper *self);
-void _gtk_icon_helper_invalidate (GtkIconHelper *self);
 
 gboolean _gtk_icon_helper_get_is_empty (GtkIconHelper *self);
 
