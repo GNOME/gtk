@@ -225,6 +225,8 @@ static void     gtk_file_chooser_dialog_notify       (GObject               *obj
 
 static void     gtk_file_chooser_dialog_map          (GtkWidget             *widget);
 static void     gtk_file_chooser_dialog_unmap        (GtkWidget             *widget);
+static void     gtk_file_chooser_dialog_size_allocate (GtkWidget             *widget,
+                                                       GtkAllocation         *allocation);
 static void     file_chooser_widget_file_activated   (GtkFileChooser        *chooser,
                                                       GtkFileChooserDialog  *dialog);
 static void     file_chooser_widget_default_size_changed (GtkWidget            *widget,
@@ -256,6 +258,7 @@ gtk_file_chooser_dialog_class_init (GtkFileChooserDialogClass *class)
 
   widget_class->map = gtk_file_chooser_dialog_map;
   widget_class->unmap = gtk_file_chooser_dialog_unmap;
+  widget_class->size_allocate = gtk_file_chooser_dialog_size_allocate;
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_FILE_CHOOSER);
 
@@ -618,6 +621,7 @@ save_dialog_geometry (GtkFileChooserDialog *dialog)
 {
   GtkWindow *window;
   GSettings *settings;
+  int old_x, old_y, old_width, old_height;
   int x, y, width, height;
 
   settings = _gtk_file_chooser_get_settings_for_widget (GTK_WIDGET (dialog));
@@ -627,8 +631,13 @@ save_dialog_geometry (GtkFileChooserDialog *dialog)
   gtk_window_get_position (window, &x, &y);
   gtk_window_get_size (window, &width, &height);
 
-  g_settings_set (settings, SETTINGS_KEY_WINDOW_POSITION, "(ii)", x, y);
-  g_settings_set (settings, SETTINGS_KEY_WINDOW_SIZE, "(ii)", width, height);
+  g_settings_get (settings, SETTINGS_KEY_WINDOW_POSITION, "(ii)", &old_x, &old_y);
+  if (old_x != x || old_y != y)
+    g_settings_set (settings, SETTINGS_KEY_WINDOW_POSITION, "(ii)", x, y);
+
+  g_settings_get (settings, SETTINGS_KEY_WINDOW_SIZE, "(ii)", &old_width, &old_height);
+  if (old_width != width || old_height != height)
+    g_settings_set (settings, SETTINGS_KEY_WINDOW_SIZE, "(ii)", width, height);
 }
 
 static void
@@ -639,6 +648,16 @@ gtk_file_chooser_dialog_unmap (GtkWidget *widget)
   save_dialog_geometry (dialog);
 
   GTK_WIDGET_CLASS (gtk_file_chooser_dialog_parent_class)->unmap (widget);
+}
+
+static void
+gtk_file_chooser_dialog_size_allocate (GtkWidget     *widget,
+                                       GtkAllocation *allocation)
+{
+  GTK_WIDGET_CLASS (gtk_file_chooser_dialog_parent_class)->size_allocate (widget, allocation);
+
+  if (gtk_widget_is_drawable (widget))
+    save_dialog_geometry (GTK_FILE_CHOOSER_DIALOG (widget));
 }
 
 /* We do a signal connection here rather than overriding the method in
