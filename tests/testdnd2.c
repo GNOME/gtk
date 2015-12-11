@@ -199,6 +199,18 @@ spinner_drag_begin (GtkWidget      *widget,
                           "active",  TRUE,
                           NULL);
   gtk_drag_set_icon_widget (context, spinner, 0, 0);
+  g_object_set_data (G_OBJECT (context), "spinner", spinner);
+}
+
+static void
+spinner_drag_end (GtkWidget      *widget,
+                  GdkDragContext *context,
+                  gpointer        data)
+{
+  GtkWidget *spinner;
+
+  spinner = g_object_get_data (G_OBJECT (context), "spinner");
+  gtk_widget_destroy (spinner);
 }
 
 void
@@ -225,6 +237,7 @@ make_spinner (void)
   gtk_drag_source_add_text_targets (ebox);
 
   g_signal_connect (ebox, "drag-begin", G_CALLBACK (spinner_drag_begin), spinner);
+  g_signal_connect (ebox, "drag-end", G_CALLBACK (spinner_drag_end), spinner);
   g_signal_connect (ebox, "drag-data-get", G_CALLBACK (spinner_drag_data_get), spinner);
 
   gtk_container_add (GTK_CONTAINER (ebox), spinner);
