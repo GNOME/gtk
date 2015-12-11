@@ -643,6 +643,8 @@ save_dialog_geometry (GtkFileChooserDialog *dialog)
   g_settings_get (settings, SETTINGS_KEY_WINDOW_SIZE, "(ii)", &old_width, &old_height);
   if (old_width != width || old_height != height)
     g_settings_set (settings, SETTINGS_KEY_WINDOW_SIZE, "(ii)", width, height);
+
+  g_settings_apply (settings);
 }
 
 static void
