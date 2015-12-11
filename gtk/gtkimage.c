@@ -191,8 +191,6 @@ static gboolean gtk_image_render_contents (GtkCssGadget *gadget,
                                            gpointer      data);
 
 static void gtk_image_style_updated        (GtkWidget    *widget);
-static void gtk_image_screen_changed       (GtkWidget    *widget,
-                                            GdkScreen    *prev_screen);
 static void gtk_image_finalize             (GObject      *object);
 static void gtk_image_reset                (GtkImage     *image);
 
@@ -204,8 +202,6 @@ static void gtk_image_get_property         (GObject      *object,
                                             guint         prop_id,
                                             GValue       *value,
                                             GParamSpec   *pspec);
-
-static void icon_theme_changed             (GtkImage     *image);
 
 enum
 {
@@ -253,7 +249,6 @@ gtk_image_class_init (GtkImageClass *class)
   widget_class->unmap = gtk_image_unmap;
   widget_class->unrealize = gtk_image_unrealize;
   widget_class->style_updated = gtk_image_style_updated;
-  widget_class->screen_changed = gtk_image_screen_changed;
 
   image_props[PROP_PIXBUF] =
       g_param_spec_object ("pixbuf",
@@ -1918,41 +1913,14 @@ gtk_image_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
 }
 
 static void
-icon_theme_changed (GtkImage *image)
-{
-  GtkImagePrivate *priv = image->priv;
-
-  _gtk_icon_helper_invalidate (priv->icon_helper);
-  gtk_widget_queue_draw (GTK_WIDGET (image));
-}
-
-static void
 gtk_image_style_updated (GtkWidget *widget)
 {
   GtkImage *image = GTK_IMAGE (widget);
   GtkImagePrivate *priv = image->priv;
-  GtkCssStyleChange *change;
 
   GTK_WIDGET_CLASS (gtk_image_parent_class)->style_updated (widget);
 
-  change = gtk_style_context_get_change (gtk_widget_get_style_context (widget));
-  if (change == NULL || gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_ICON))
-    icon_theme_changed (image);
   priv->baseline_align = 0.0;
-}
-
-static void
-gtk_image_screen_changed (GtkWidget *widget,
-			  GdkScreen *prev_screen)
-{
-  GtkImage *image;
-
-  image = GTK_IMAGE (widget);
-
-  if (GTK_WIDGET_CLASS (gtk_image_parent_class)->screen_changed)
-    GTK_WIDGET_CLASS (gtk_image_parent_class)->screen_changed (widget, prev_screen);
-
-  icon_theme_changed (image);
 }
 
 /**
