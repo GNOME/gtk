@@ -62,6 +62,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testcellrenderertext		\
 	testdialog			\
 	testdnd				\
+	testdnd2			\
 	testellipsise			\
 	testemblems			\
 	testentrycompletion 		\
@@ -217,6 +218,7 @@ testcombo_DEPENDENCIES = $(TEST_DEPS)
 testcombochange_DEPENDENCIES = $(TEST_DEPS)
 testcellrenderertext_DEPENDENCIES = $(TEST_DEPS)
 testdnd_DEPENDENCIES = $(TEST_DEPS)
+testdnd2_DEPENDENCIES = $(TEST_DEPS)
 testellipsise_DEPENDENCIES = $(TEST_DEPS)
 testentrycompletion_DEPENDENCIES = $(TEST_DEPS)
 testentryicons_DEPENDENCIES = $(TEST_DEPS)
