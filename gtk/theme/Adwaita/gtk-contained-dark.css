@@ -2015,12 +2015,12 @@ column-header .titlebar .button.titlebutton,
 .menu {
   margin: 4px;
   padding: 0px;
-  background-color: #313434;
+  background-color: #2c2d2d;
   border: 1px solid #1c1f1f; }
   .csd .menu {
     border: none; }
   .menu:backdrop {
-    background-color: #333636; }
+    background-color: #2f3030; }
   .menu .menuitem {
     text-shadow: none;
     padding: 4px; }

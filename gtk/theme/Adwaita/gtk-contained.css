@@ -2021,12 +2021,12 @@ column-header .titlebar .button.titlebutton,
 .menu {
   margin: 4px;
   padding: 0px;
-  background-color: #f6f6f6;
+  background-color: #ffffff;
   border: 1px solid #a1a1a1; }
   .csd .menu {
     border: none; }
   .menu:backdrop {
-    background-color: #f6f6f6; }
+    background-color: white; }
   .menu .menuitem {
     text-shadow: none;
     padding: 4px; }
