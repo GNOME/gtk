@@ -510,7 +510,7 @@ gtk_gesture_single_get_current_button (GtkGestureSingle *gesture)
  * Returns the event sequence currently interacting with @gesture.
  * This is only meaningful if gtk_gesture_is_active() returns %TRUE.
  *
- * Returns: the current sequence
+ * Returns: (nullable): the current sequence
  *
  * Since: 3.14
  **/
