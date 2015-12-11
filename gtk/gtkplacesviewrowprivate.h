@@ -54,11 +54,6 @@ gboolean           gtk_places_view_row_get_is_network            (GtkPlacesViewR
 void               gtk_places_view_row_set_is_network            (GtkPlacesViewRow   *row,
                                                                   gboolean            is_network);
 
-gboolean           gtk_places_view_row_get_show_disk_usage       (GtkPlacesViewRow   *row);
-
-void               gtk_places_view_row_set_show_disk_usage       (GtkPlacesViewRow   *row,
-                                                                  gboolean            show_disk_usage);
-
 void               gtk_places_view_row_set_path_size_group       (GtkPlacesViewRow   *row,
                                                                   GtkSizeGroup       *group);
 
