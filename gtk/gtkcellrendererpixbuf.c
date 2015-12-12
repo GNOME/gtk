@@ -449,7 +449,8 @@ create_icon_helper (GtkCellRendererPixbuf *cellpixbuf,
   helper = _gtk_icon_helper_new (widget);
   _gtk_icon_helper_set_force_scale_pixbuf (helper, TRUE);
   _gtk_icon_helper_set_definition (helper, priv->image_def);
-  _gtk_icon_helper_set_icon_size (helper, priv->icon_size);
+  if (gtk_image_definition_get_storage_type (priv->image_def) != GTK_IMAGE_PIXBUF)
+    _gtk_icon_helper_set_icon_size (helper, priv->icon_size);
 
   return helper;
 }
