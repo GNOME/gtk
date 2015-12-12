@@ -950,17 +950,20 @@ gtk_css_node_set_style (GtkCssNode  *cssnode,
                         GtkCssStyle *style)
 {
   GtkCssStyleChange change;
+  gboolean style_changed;
 
   if (cssnode->style == style)
     return FALSE;
 
   gtk_css_style_change_init (&change, cssnode->style, style);
 
-  g_signal_emit (cssnode, cssnode_signals[STYLE_CHANGED], 0, &change);
+  style_changed = gtk_css_style_change_has_change (&change);
+  if (style_changed)
+    g_signal_emit (cssnode, cssnode_signals[STYLE_CHANGED], 0, &change);
 
   gtk_css_style_change_finish (&change);
 
-  return TRUE;
+  return style_changed;
 }
 
 static void
