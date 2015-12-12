@@ -450,8 +450,7 @@ notify_cb (GtkCssNode          *node,
 
 static void
 style_changed_cb (GtkCssNode          *node,
-                  GtkCssStyle         *old_style,
-                  GtkCssStyle         *new_style,
+                  GtkCssStyleChange   *change,
                   GtkTreeModelCssNode *model)
 {
   GtkTreeIter iter;

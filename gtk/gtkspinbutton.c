@@ -726,26 +726,14 @@ swipe_gesture_update (GtkGesture       *gesture,
 }
 
 static void
-node_style_changed_cb (GtkCssNode  *node,
-                       GtkCssStyle *old_style,
-                       GtkCssStyle *new_style,
-                       GtkWidget    *widget)
+node_style_changed_cb (GtkCssNode        *node,
+                       GtkCssStyleChange *change,
+                       GtkWidget         *widget)
 {
-  GtkBitmask *changes;
-  static GtkBitmask *affects_size = NULL;
-
-  if (G_UNLIKELY (affects_size == NULL))
-    affects_size = _gtk_css_style_property_get_mask_affecting (GTK_CSS_AFFECTS_SIZE | GTK_CSS_AFFECTS_CLIP);
-
-  changes = _gtk_bitmask_new ();
-  changes = gtk_css_style_add_difference (changes, old_style, new_style);
-
-  if (_gtk_bitmask_intersects (changes, affects_size))
+  if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_SIZE | GTK_CSS_AFFECTS_CLIP))
     gtk_widget_queue_resize (widget);
   else
     gtk_widget_queue_draw (widget);
-
-  _gtk_bitmask_free (changes);
 }
 
 static void

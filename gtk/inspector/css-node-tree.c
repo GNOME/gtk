@@ -533,12 +533,14 @@ gtk_inspector_css_node_tree_set_object (GtkInspectorCssNodeTree *cnt,
 
 static void
 gtk_inspector_css_node_tree_update_style (GtkCssNode              *node,
-                                          GtkCssStyle             *old_style,
-                                          GtkCssStyle             *new_style,
+                                          GtkCssStyleChange       *change,
                                           GtkInspectorCssNodeTree *cnt)
 {
   GtkInspectorCssNodeTreePrivate *priv = cnt->priv;
+  GtkCssStyle *new_style;
   gint i;
+
+  new_style = gtk_css_style_change_get_new_style (change);
 
   for (i = 0; i < _gtk_css_style_property_get_n_properties (); i++)
     {
@@ -586,6 +588,7 @@ gtk_inspector_css_node_tree_set_node (GtkInspectorCssNodeTree *cnt,
                                       GtkCssNode              *node)
 {
   GtkInspectorCssNodeTreePrivate *priv = cnt->priv;
+  GtkCssStyleChange change;
   GString *s;
   GType type;
   const gchar *name;
@@ -598,10 +601,15 @@ gtk_inspector_css_node_tree_set_node (GtkInspectorCssNodeTree *cnt,
   if (node)
     g_object_ref (node);
 
+  gtk_css_style_change_init (&change,
+                             node ? gtk_css_node_get_style (node) : NULL,
+                             priv->node ? gtk_css_node_get_style (priv->node) : NULL);
+
   gtk_inspector_css_node_tree_update_style (node,
-                                            node ? gtk_css_node_get_style (node) : NULL,
-                                            priv->node ? gtk_css_node_get_style (priv->node) : NULL,
+                                            &change,
                                             cnt);
+
+  gtk_css_style_change_finish (&change);
 
   gtk_inspector_css_node_tree_unset_node (cnt);
 

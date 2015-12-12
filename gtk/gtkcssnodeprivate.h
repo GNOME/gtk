@@ -19,6 +19,7 @@
 #define __GTK_CSS_NODE_PRIVATE_H__
 
 #include "gtkcssnodedeclarationprivate.h"
+#include "gtkcssstylechangeprivate.h"
 #include "gtkbitmaskprivate.h"
 #include "gtkcsstypesprivate.h"
 
@@ -31,7 +32,7 @@ G_BEGIN_DECLS
 #define GTK_IS_CSS_NODE_CLASS(obj)  (G_TYPE_CHECK_CLASS_TYPE (obj, GTK_TYPE_CSS_NODE))
 #define GTK_CSS_NODE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_CSS_NODE, GtkCssNodeClass))
 
-typedef struct _GtkCssNodeClass      GtkCssNodeClass;
+typedef struct _GtkCssNodeClass         GtkCssNodeClass;
 
 struct _GtkCssNode
 {
@@ -70,8 +71,7 @@ struct _GtkCssNodeClass
                                                          GtkCssNode            *child,
                                                          GtkCssNode            *previous);
   void                  (* style_changed)               (GtkCssNode            *cssnode,
-                                                         GtkCssStyle           *old_style,
-                                                         GtkCssStyle           *new_style);
+                                                         GtkCssStyleChange     *style_change);
 
   gboolean              (* init_matcher)                (GtkCssNode            *cssnode,
                                                          GtkCssMatcher         *matcher);

@@ -1,0 +1,97 @@
+/* GTK - The GIMP Toolkit
+ * Copyright (C) 2015 Benjamin Otte <otte@gnome.org>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include "config.h"
+
+#include "gtkcssstylechangeprivate.h"
+
+#include "gtkcssstylepropertyprivate.h"
+
+void
+gtk_css_style_change_init (GtkCssStyleChange *change,
+                           GtkCssStyle       *old_style,
+                           GtkCssStyle       *new_style)
+{
+  change->old_style = g_object_ref (old_style);
+  change->new_style = g_object_ref (new_style);
+
+  change->n_compared = 0;
+
+  change->affects = 0;
+  change->has_change = FALSE;
+}
+
+void
+gtk_css_style_change_finish (GtkCssStyleChange *change)
+{
+  g_object_unref (change->old_style);
+  g_object_unref (change->new_style);
+}
+
+GtkCssStyle *
+gtk_css_style_change_get_old_style (GtkCssStyleChange *change)
+{
+  return change->old_style;
+}
+
+GtkCssStyle *
+gtk_css_style_change_get_new_style (GtkCssStyleChange *change)
+{
+  return change->new_style;
+}
+
+static gboolean
+gtk_css_style_compare_next_value (GtkCssStyleChange *change)
+{
+  if (change->n_compared == GTK_CSS_PROPERTY_N_PROPERTIES)
+    return FALSE;
+
+  if (!_gtk_css_value_equal (gtk_css_style_get_value (change->old_style, change->n_compared),
+                             gtk_css_style_get_value (change->new_style, change->n_compared)))
+    {
+      change->has_change = TRUE;
+      change->affects |= _gtk_css_style_property_get_affects (_gtk_css_style_property_lookup_by_id (change->n_compared));
+    }
+
+  change->n_compared++;
+
+  return TRUE;
+}
+
+gboolean
+gtk_css_style_change_has_change (GtkCssStyleChange *change)
+{
+  do {
+    if (change->has_change)
+      return TRUE;
+  } while (gtk_css_style_compare_next_value (change));
+
+  return FALSE;
+}
+
+gboolean
+gtk_css_style_change_affects (GtkCssStyleChange *change,
+                              GtkCssAffects      affects)
+{
+  do {
+    if (change->affects & affects)
+      return TRUE;
+  } while (gtk_css_style_compare_next_value (change));
+
+  return FALSE;
+}
+

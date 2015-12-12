@@ -45,9 +45,8 @@ gtk_css_widget_node_finalize (GObject *object)
 }
 
 static void
-gtk_css_widget_node_style_changed (GtkCssNode   *cssnode,
-                                   GtkCssStyle  *old_style,
-                                   GtkCssStyle  *new_style)
+gtk_css_widget_node_style_changed (GtkCssNode        *cssnode,
+                                   GtkCssStyleChange *change)
 {
   GtkCssWidgetNode *node;
 
@@ -56,9 +55,11 @@ gtk_css_widget_node_style_changed (GtkCssNode   *cssnode,
   if (node->widget)
     gtk_widget_clear_path (node->widget);
 
-  GTK_CSS_NODE_CLASS (gtk_css_widget_node_parent_class)->style_changed (cssnode, old_style, new_style);
+  GTK_CSS_NODE_CLASS (gtk_css_widget_node_parent_class)->style_changed (cssnode, change);
 
-  node->accumulated_changes = gtk_css_style_add_difference (node->accumulated_changes, new_style, old_style);
+  node->accumulated_changes = gtk_css_style_add_difference (node->accumulated_changes,
+                                                            gtk_css_style_change_get_new_style (change),
+                                                            gtk_css_style_change_get_old_style (change));
 }
 
 static gboolean
