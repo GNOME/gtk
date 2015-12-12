@@ -25,6 +25,7 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkwidgetprivate.h"
+#include "gtkcontainerprivate.h"
 #include "gtkcsscustomgadgetprivate.h"
 
 #include <float.h>
@@ -75,6 +76,8 @@ typedef struct
   GHashTable *header_hash;
 
   GtkWidget *placeholder;
+
+  GtkCssGadget *gadget;
 
   GtkListBoxSortFunc sort_func;
   gpointer sort_func_target;
@@ -279,6 +282,30 @@ static void                 gtk_list_box_bound_model_changed            (GListMo
                                                                          gpointer             user_data);
 
 static void                 gtk_list_box_check_model_compat             (GtkListBox          *box);
+
+static void     gtk_list_box_measure    (GtkCssGadget        *gadget,
+                                          GtkOrientation       orientation,
+                                          gint                 for_size,
+                                          gint                *minimum_size,
+                                          gint                *natural_size,
+                                          gint                *minimum_baseline,
+                                          gint                *natural_baseline,
+                                          gpointer             data);
+static void     gtk_list_box_allocate    (GtkCssGadget        *gadget,
+                                          const GtkAllocation *allocation,
+                                          int                  baseline,
+                                          GtkAllocation       *out_clip,
+                                          gpointer             data);
+static gboolean gtk_list_box_render      (GtkCssGadget        *gadget,
+                                          cairo_t             *cr,
+                                          int                  x,
+                                          int                  y,
+                                          int                  width,
+                                          int                  height,
+                                          gpointer             data);
+
+
+
 static GParamSpec *properties[LAST_PROPERTY] = { NULL, };
 static guint signals[LAST_SIGNAL] = { 0 };
 static GParamSpec *row_properties[LAST_ROW_PROPERTY] = { NULL, };
@@ -297,33 +324,6 @@ GtkWidget *
 gtk_list_box_new (void)
 {
   return g_object_new (GTK_TYPE_LIST_BOX, NULL);
-}
-
-static void
-gtk_list_box_init (GtkListBox *box)
-{
-  GtkListBoxPrivate *priv = BOX_PRIV (box);
-  GtkWidget *widget = GTK_WIDGET (box);
-
-  gtk_widget_set_has_window (widget, TRUE);
-  gtk_widget_set_redraw_on_allocate (widget, TRUE);
-  priv->selection_mode = GTK_SELECTION_SINGLE;
-  priv->activate_single_click = TRUE;
-
-  priv->children = g_sequence_new (NULL);
-  priv->header_hash = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, NULL);
-
-  priv->multipress_gesture = gtk_gesture_multi_press_new (widget);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->multipress_gesture),
-                                              GTK_PHASE_BUBBLE);
-  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->multipress_gesture),
-                                     FALSE);
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->multipress_gesture),
-                                 GDK_BUTTON_PRIMARY);
-  g_signal_connect (priv->multipress_gesture, "pressed",
-                    G_CALLBACK (gtk_list_box_multipress_gesture_pressed), box);
-  g_signal_connect (priv->multipress_gesture, "released",
-                    G_CALLBACK (gtk_list_box_multipress_gesture_released), box);
 }
 
 static void
@@ -397,6 +397,8 @@ gtk_list_box_finalize (GObject *obj)
       g_signal_handlers_disconnect_by_func (priv->bound_model, gtk_list_box_bound_model_changed, obj);
       g_clear_object (&priv->bound_model);
     }
+
+  g_clear_object (&priv->gadget);
 
   G_OBJECT_CLASS (gtk_list_box_parent_class)->finalize (obj);
 }
@@ -622,6 +624,44 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
                                 "unselect-all", 0);
 
   gtk_widget_class_set_css_name (widget_class, "list");
+}
+
+static void
+gtk_list_box_init (GtkListBox *box)
+{
+  GtkListBoxPrivate *priv = BOX_PRIV (box);
+  GtkWidget *widget = GTK_WIDGET (box);
+  GtkCssNode *widget_node;
+
+  gtk_widget_set_has_window (widget, TRUE);
+  gtk_widget_set_redraw_on_allocate (widget, TRUE);
+  priv->selection_mode = GTK_SELECTION_SINGLE;
+  priv->activate_single_click = TRUE;
+
+  priv->children = g_sequence_new (NULL);
+  priv->header_hash = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, NULL);
+
+  priv->multipress_gesture = gtk_gesture_multi_press_new (widget);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->multipress_gesture),
+                                              GTK_PHASE_BUBBLE);
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->multipress_gesture),
+                                     FALSE);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->multipress_gesture),
+                                 GDK_BUTTON_PRIMARY);
+  g_signal_connect (priv->multipress_gesture, "pressed",
+                    G_CALLBACK (gtk_list_box_multipress_gesture_pressed), box);
+  g_signal_connect (priv->multipress_gesture, "released",
+                    G_CALLBACK (gtk_list_box_multipress_gesture_released), box);
+
+  widget_node = gtk_widget_get_css_node (GTK_WIDGET (box));
+  priv->gadget = gtk_css_custom_gadget_new_for_node (widget_node,
+                                                     GTK_WIDGET (box),
+                                                     gtk_list_box_measure,
+                                                     gtk_list_box_allocate,
+                                                     gtk_list_box_render,
+                                                     NULL,
+                                                     NULL);
+
 }
 
 /**
@@ -2077,16 +2117,25 @@ static gboolean
 gtk_list_box_draw (GtkWidget *widget,
                    cairo_t   *cr)
 {
-  GtkAllocation allocation;
-  GtkStyleContext *context;
+  gtk_css_gadget_draw (BOX_PRIV (widget)->gadget, cr);
 
-  gtk_widget_get_allocation (widget, &allocation);
-  context = gtk_widget_get_style_context (widget);
-  gtk_render_background (context, cr, 0, 0, allocation.width, allocation.height);
+  return FALSE;
+}
+
+static gboolean
+gtk_list_box_render (GtkCssGadget *gadget,
+                     cairo_t      *cr,
+                     int           x,
+                     int           y,
+                     int           width,
+                     int           height,
+                     gpointer      data)
+{
+  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
 
   GTK_WIDGET_CLASS (gtk_list_box_parent_class)->draw (widget, cr);
 
-  return TRUE;
+  return FALSE;
 }
 
 static void
@@ -2493,138 +2542,157 @@ gtk_list_box_get_request_mode (GtkWidget *widget)
 
 static void
 gtk_list_box_get_preferred_height (GtkWidget *widget,
-                                   gint      *minimum_height,
-                                   gint      *natural_height)
+                                   gint      *minimum,
+                                   gint      *natural)
 {
-  gint min_width, natural_width;
-  gtk_list_box_get_preferred_width (widget, &min_width, &natural_width);
-  gtk_list_box_get_preferred_height_for_width (widget, natural_width,
-                                               minimum_height, natural_height);
+  gtk_css_gadget_get_preferred_size (BOX_PRIV (widget)->gadget,
+                                     GTK_ORIENTATION_VERTICAL,
+                                     -1,
+                                     minimum, natural,
+                                     NULL, NULL);
 }
 
 static void
 gtk_list_box_get_preferred_height_for_width (GtkWidget *widget,
                                              gint       width,
-                                             gint      *minimum_height_out,
-                                             gint      *natural_height_out)
+                                             gint      *minimum,
+                                             gint      *natural)
 {
-  GtkListBoxPrivate *priv = BOX_PRIV (widget);
-  GSequenceIter *iter;
-  gint minimum_height;
-
-  minimum_height = 0;
-
-  if (priv->placeholder != NULL && gtk_widget_get_child_visible (priv->placeholder))
-    gtk_widget_get_preferred_height_for_width (priv->placeholder, width,
-                                               &minimum_height, NULL);
-
-  for (iter = g_sequence_get_begin_iter (priv->children);
-       !g_sequence_iter_is_end (iter);
-       iter = g_sequence_iter_next (iter))
-    {
-      GtkListBoxRow *row;
-      gint row_min = 0;
-
-      row = g_sequence_get (iter);
-      if (!row_is_visible (row))
-        continue;
-
-      if (ROW_PRIV (row)->header != NULL)
-        {
-          gtk_widget_get_preferred_height_for_width (ROW_PRIV (row)->header, width, &row_min, NULL);
-          minimum_height += row_min;
-        }
-      gtk_widget_get_preferred_height_for_width (GTK_WIDGET (row), width, &row_min, NULL);
-      minimum_height += row_min;
-    }
-
-  /* We always allocate the minimum height, since handling expanding rows is way too costly,
-   * and unlikely to be used, as lists are generally put inside a scrolling window anyway.
-   */
-  *minimum_height_out = minimum_height;
-  *natural_height_out = minimum_height;
+  gtk_css_gadget_get_preferred_size (BOX_PRIV (widget)->gadget,
+                                     GTK_ORIENTATION_VERTICAL,
+                                     width,
+                                     minimum, natural,
+                                     NULL, NULL);
 }
 
 static void
 gtk_list_box_get_preferred_width (GtkWidget *widget,
-                                  gint      *minimum_width_out,
-                                  gint      *natural_width_out)
+                                  gint      *minimum,
+                                  gint      *natural)
 {
-  GtkListBoxPrivate *priv = BOX_PRIV (widget);
-  gint minimum_width;
-  gint natural_width;
-  GSequenceIter *iter;
-  GtkListBoxRow *row;
-  gint row_min;
-  gint row_nat;
-
-  minimum_width = 0;
-  natural_width = 0;
-
-  if (priv->placeholder != NULL && gtk_widget_get_child_visible (priv->placeholder))
-    gtk_widget_get_preferred_width (priv->placeholder,
-                                    &minimum_width, &natural_width);
-
-  for (iter = g_sequence_get_begin_iter (priv->children);
-       !g_sequence_iter_is_end (iter);
-       iter = g_sequence_iter_next (iter))
-    {
-      row = g_sequence_get (iter);
-
-      /* We *do* take visible but filtered rows into account here so that
-       * the list width doesn't change during filtering
-       */
-      if (!gtk_widget_get_visible (GTK_WIDGET (row)))
-        continue;
-
-      gtk_widget_get_preferred_width (GTK_WIDGET (row), &row_min, &row_nat);
-      minimum_width = MAX (minimum_width, row_min);
-      natural_width = MAX (natural_width, row_nat);
-
-      if (ROW_PRIV (row)->header != NULL)
-        {
-          gtk_widget_get_preferred_width (ROW_PRIV (row)->header, &row_min, &row_nat);
-          minimum_width = MAX (minimum_width, row_min);
-          natural_width = MAX (natural_width, row_nat);
-        }
-    }
-
-  *minimum_width_out = minimum_width;
-  *natural_width_out = natural_width;
+  gtk_css_gadget_get_preferred_size (BOX_PRIV (widget)->gadget,
+                                     GTK_ORIENTATION_HORIZONTAL,
+                                     -1,
+                                     minimum, natural,
+                                     NULL, NULL);
 }
 
 static void
 gtk_list_box_get_preferred_width_for_height (GtkWidget *widget,
                                              gint       height,
-                                             gint      *minimum_width,
-                                             gint      *natural_width)
+                                             gint      *minimum,
+                                             gint      *natural)
 {
-  gtk_list_box_get_preferred_width (widget, minimum_width, natural_width);
+  gtk_css_gadget_get_preferred_size (BOX_PRIV (widget)->gadget,
+                                     GTK_ORIENTATION_HORIZONTAL,
+                                     height,
+                                     minimum, natural,
+                                     NULL, NULL);
+}
+
+static void
+gtk_list_box_measure (GtkCssGadget   *gadget,
+                      GtkOrientation  orientation,
+                      gint            for_size,
+                      gint           *minimum,
+                      gint           *natural,
+                      gint           *minimum_baseline,
+                      gint           *natural_baseline,
+                      gpointer        unused)
+{
+  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
+  GtkListBoxPrivate *priv = BOX_PRIV (widget);
+  GSequenceIter *iter;
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    {
+      *minimum = 0;
+      *natural = 0;
+
+      if (priv->placeholder && gtk_widget_get_child_visible (priv->placeholder))
+        gtk_widget_get_preferred_width (priv->placeholder, minimum, natural);
+
+      for (iter = g_sequence_get_begin_iter (priv->children);
+           !g_sequence_iter_is_end (iter);
+           iter = g_sequence_iter_next (iter))
+        {
+          GtkListBoxRow *row;
+          gint row_min;
+          gint row_nat;
+
+          row = g_sequence_get (iter);
+
+          /* We *do* take visible but filtered rows into account here so that
+           * the list width doesn't change during filtering
+           */
+          if (!gtk_widget_get_visible (GTK_WIDGET (row)))
+            continue;
+
+          gtk_widget_get_preferred_width (GTK_WIDGET (row), &row_min, &row_nat);
+          *minimum = MAX (*minimum, row_min);
+          *natural = MAX (*natural, row_nat);
+
+          if (ROW_PRIV (row)->header != NULL)
+            {
+              gtk_widget_get_preferred_width (ROW_PRIV (row)->header, &row_min, &row_nat);
+              *minimum = MAX (*minimum, row_min);
+              *natural = MAX (*natural, row_nat);
+            }
+        }
+    }
+  else
+    {
+      if (for_size < 0)
+        gtk_css_gadget_get_preferred_size (priv->gadget,
+                                           GTK_ORIENTATION_HORIZONTAL,
+                                           -1,
+                                           NULL, &for_size,
+                                           NULL, NULL);
+
+      *minimum = 0;
+
+      if (priv->placeholder && gtk_widget_get_child_visible (priv->placeholder))
+        gtk_widget_get_preferred_height_for_width (priv->placeholder, for_size,
+                                                   minimum, NULL);
+
+      for (iter = g_sequence_get_begin_iter (priv->children);
+           !g_sequence_iter_is_end (iter);
+           iter = g_sequence_iter_next (iter))
+        {
+          GtkListBoxRow *row;
+          gint row_min = 0;
+
+          row = g_sequence_get (iter);
+          if (!row_is_visible (row))
+            continue;
+
+          if (ROW_PRIV (row)->header != NULL)
+            {
+              gtk_widget_get_preferred_height_for_width (ROW_PRIV (row)->header, for_size, &row_min, NULL);
+              *minimum += row_min;
+            }
+          gtk_widget_get_preferred_height_for_width (GTK_WIDGET (row), for_size, &row_min, NULL);
+          *minimum += row_min;
+        }
+
+      /* We always allocate the minimum height, since handling expanding rows
+       * is way too costly, and unlikely to be used, as lists are generally put
+       * inside a scrolling window anyway.
+       */
+      *natural = *minimum;
+    }
 }
 
 static void
 gtk_list_box_size_allocate (GtkWidget     *widget,
                             GtkAllocation *allocation)
 {
-  GtkListBoxPrivate *priv = BOX_PRIV (widget);
-  GtkAllocation child_allocation;
-  GtkAllocation header_allocation;
-  GtkListBoxRow *row;
+  GtkAllocation clip;
   GdkWindow *window;
-  GSequenceIter *iter;
-  int child_min;
-
-  child_allocation.x = 0;
-  child_allocation.y = 0;
-  child_allocation.width = 0;
-  child_allocation.height = 0;
-
-  header_allocation.x = 0;
-  header_allocation.y = 0;
-  header_allocation.width = 0;
-  header_allocation.height = 0;
+  GtkAllocation child_allocation;
 
   gtk_widget_set_allocation (widget, allocation);
+
   window = gtk_widget_get_window (widget);
   if (window != NULL)
     gdk_window_move_resize (window,
@@ -2634,17 +2702,49 @@ gtk_list_box_size_allocate (GtkWidget     *widget,
   child_allocation.x = 0;
   child_allocation.y = 0;
   child_allocation.width = allocation->width;
-  header_allocation.x = 0;
-  header_allocation.width = allocation->width;
+  child_allocation.height = allocation->height;
 
-  if (priv->placeholder != NULL && gtk_widget_get_child_visible (priv->placeholder))
+  gtk_css_gadget_allocate (BOX_PRIV (widget)->gadget,
+                           &child_allocation,
+                           gtk_widget_get_allocated_baseline (widget),
+                           &clip);
+
+  _gtk_widget_set_simple_clip (widget, &clip);
+}
+
+
+static void
+gtk_list_box_allocate (GtkCssGadget        *gadget,
+                       const GtkAllocation *allocation,
+                       int                  baseline,
+                       GtkAllocation       *out_clip,
+                       gpointer             unused)
+{
+  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
+  GtkListBoxPrivate *priv = BOX_PRIV (widget);
+  GtkAllocation child_allocation;
+  GtkAllocation header_allocation;
+  GtkListBoxRow *row;
+  GSequenceIter *iter;
+  int child_min;
+
+  child_allocation.x = allocation->x;
+  child_allocation.y = allocation->y;
+  child_allocation.width = allocation->width;
+  child_allocation.height = 0;
+
+  header_allocation.x = allocation->x;
+  header_allocation.y = allocation->y;
+  header_allocation.width = allocation->width;
+  header_allocation.height = 0;
+
+  if (priv->placeholder && gtk_widget_get_child_visible (priv->placeholder))
     {
       gtk_widget_get_preferred_height_for_width (priv->placeholder,
                                                  allocation->width, &child_min, NULL);
       header_allocation.height = allocation->height;
       header_allocation.y = child_allocation.y;
-      gtk_widget_size_allocate (priv->placeholder,
-                                &header_allocation);
+      gtk_widget_size_allocate (priv->placeholder, &header_allocation);
       child_allocation.y += child_min;
     }
 
@@ -2680,6 +2780,8 @@ gtk_list_box_size_allocate (GtkWidget     *widget,
       gtk_widget_size_allocate (GTK_WIDGET (row), &child_allocation);
       child_allocation.y += child_min;
     }
+
+  gtk_container_get_children_clip (GTK_CONTAINER (widget), out_clip);
 }
 
 /**
