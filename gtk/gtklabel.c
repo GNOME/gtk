@@ -4188,21 +4188,17 @@ gtk_label_state_flags_changed (GtkWidget     *widget,
 static void 
 gtk_label_style_updated (GtkWidget *widget)
 {
-  static GtkBitmask *affects_text_attrs = NULL;
   GtkLabel *label = GTK_LABEL (widget);
   GtkLabelPrivate *priv = label->priv;
   GtkStyleContext *context;
-  const GtkBitmask *changes;;
-
-  if (G_UNLIKELY (affects_text_attrs == NULL))
-    affects_text_attrs = _gtk_css_style_property_get_mask_affecting (GTK_CSS_AFFECTS_TEXT_ATTRS);
+  GtkCssStyleChange *change;
 
   GTK_WIDGET_CLASS (gtk_label_parent_class)->style_updated (widget);
 
   context = gtk_widget_get_style_context (widget);
-  changes = _gtk_style_context_get_changes (context);
+  change = gtk_style_context_get_change (context);
 
-  if (changes == NULL || _gtk_bitmask_intersects (changes, affects_text_attrs) ||
+  if (change == NULL || gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT_ATTRS) ||
       (priv->select_info && priv->select_info->links))
     gtk_label_update_layout_attributes (label);
 }

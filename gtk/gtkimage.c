@@ -1888,18 +1888,14 @@ icon_theme_changed (GtkImage *image)
 static void
 gtk_image_style_updated (GtkWidget *widget)
 {
-  static GtkBitmask *affects_icon = NULL;
   GtkImage *image = GTK_IMAGE (widget);
   GtkImagePrivate *priv = image->priv;
-  const GtkBitmask *changes;
+  GtkCssStyleChange *change;
 
   GTK_WIDGET_CLASS (gtk_image_parent_class)->style_updated (widget);
 
-  if (G_UNLIKELY (affects_icon == NULL))
-    affects_icon = _gtk_css_style_property_get_mask_affecting (GTK_CSS_AFFECTS_ICON);
-
-  changes = _gtk_style_context_get_changes (gtk_widget_get_style_context (widget));
-  if (changes == NULL || _gtk_bitmask_intersects (changes, affects_icon))
+  change = gtk_style_context_get_change (gtk_widget_get_style_context (widget));
+  if (change == NULL || gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_ICON))
     icon_theme_changed (image);
   priv->baseline_align = 0.0;
 }

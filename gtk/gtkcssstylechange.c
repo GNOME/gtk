@@ -32,7 +32,7 @@ gtk_css_style_change_init (GtkCssStyleChange *change,
   change->n_compared = 0;
 
   change->affects = 0;
-  change->has_change = FALSE;
+  change->changes = _gtk_bitmask_new ();
 }
 
 void
@@ -40,6 +40,7 @@ gtk_css_style_change_finish (GtkCssStyleChange *change)
 {
   g_object_unref (change->old_style);
   g_object_unref (change->new_style);
+  _gtk_bitmask_free (change->changes);
 }
 
 GtkCssStyle *
@@ -63,8 +64,8 @@ gtk_css_style_compare_next_value (GtkCssStyleChange *change)
   if (!_gtk_css_value_equal (gtk_css_style_get_value (change->old_style, change->n_compared),
                              gtk_css_style_get_value (change->new_style, change->n_compared)))
     {
-      change->has_change = TRUE;
       change->affects |= _gtk_css_style_property_get_affects (_gtk_css_style_property_lookup_by_id (change->n_compared));
+      change->changes = _gtk_bitmask_set (change->changes, change->n_compared, TRUE);
     }
 
   change->n_compared++;
@@ -76,7 +77,7 @@ gboolean
 gtk_css_style_change_has_change (GtkCssStyleChange *change)
 {
   do {
-    if (change->has_change)
+    if (!_gtk_bitmask_is_empty (change->changes))
       return TRUE;
   } while (gtk_css_style_compare_next_value (change));
 
@@ -93,5 +94,15 @@ gtk_css_style_change_affects (GtkCssStyleChange *change,
   } while (gtk_css_style_compare_next_value (change));
 
   return FALSE;
+}
+
+gboolean
+gtk_css_style_change_changes_property (GtkCssStyleChange *change,
+                                       guint              id)
+{
+  while (change->n_compared <= id)
+    gtk_css_style_compare_next_value (change);
+
+  return _gtk_bitmask_get (change->changes, id);
 }
 

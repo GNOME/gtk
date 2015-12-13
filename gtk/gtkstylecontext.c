@@ -152,7 +152,7 @@ struct _GtkStyleContextPrivate
 
   GdkFrameClock *frame_clock;
 
-  const GtkBitmask *invalidating_context;
+  GtkCssStyleChange *invalidating_context;
 };
 
 enum {
@@ -2365,9 +2365,11 @@ gtk_style_context_pop_animatable_region (GtkStyleContext *context)
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 }
 
-static void
-gtk_style_context_do_invalidate (GtkStyleContext  *context,
-                                 const GtkBitmask *changes)
+static GtkCssStyleChange magic_number;
+
+void
+gtk_style_context_validate (GtkStyleContext  *context,
+                            GtkCssStyleChange *change)
 {
   GtkStyleContextPrivate *priv;
 
@@ -2379,21 +2381,16 @@ gtk_style_context_do_invalidate (GtkStyleContext  *context,
   if (priv->invalidating_context)
     return;
 
-  priv->invalidating_context = changes;
+  if (change)
+    priv->invalidating_context = change;
+  else
+    priv->invalidating_context = &magic_number;
 
   g_signal_emit (context, signals[CHANGED], 0);
 
   g_object_set_data (G_OBJECT (context), "font-cache-for-get_font", NULL);
 
   priv->invalidating_context = NULL;
-}
-
-void
-gtk_style_context_validate (GtkStyleContext  *context,
-                            const GtkBitmask *changes)
-{
-  if (!_gtk_bitmask_is_empty (changes))
-    gtk_style_context_do_invalidate (context, changes);
 }
 
 /**
@@ -2411,18 +2408,11 @@ gtk_style_context_validate (GtkStyleContext  *context,
 void
 gtk_style_context_invalidate (GtkStyleContext *context)
 {
-  GtkBitmask *changes;
-
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
   gtk_style_context_clear_property_cache (context);
 
-  changes = _gtk_bitmask_new ();
-  changes = _gtk_bitmask_invert_range (changes,
-                                       0,
-                                       _gtk_css_style_property_get_n_properties ());
-  gtk_style_context_do_invalidate (context, changes);
-  _gtk_bitmask_free (changes);
+  gtk_style_context_validate (context, NULL);
 }
 
 static gboolean
@@ -3015,21 +3005,25 @@ gtk_draw_insertion_cursor (GtkWidget          *widget,
 }
 
 /**
- * _gtk_style_context_get_changes:
+ * gtk_style_context_get_change:
  * @context: the context to query
  *
  * Queries the context for the changes for the currently executing
  * GtkStyleContext::invalidate signal. If no signal is currently
- * emitted, this function returns %NULL.
+ * emitted or the signal has not been triggered by a CssNode
+ * invalidation, this function returns %NULL.
  *
  * FIXME 4.0: Make this part of the signal.
  *
  * Returns: %NULL or the currently invalidating changes
  **/
-const GtkBitmask *
-_gtk_style_context_get_changes (GtkStyleContext *context)
+GtkCssStyleChange *
+gtk_style_context_get_change (GtkStyleContext *context)
 {
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
+
+  if (context->priv->invalidating_context == &magic_number)
+    return NULL;
 
   return context->priv->invalidating_context;
 }

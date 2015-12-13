@@ -31,7 +31,7 @@ struct _GtkCssStyleChange {
   guint          n_compared;
 
   GtkCssAffects  affects;
-  guint          has_change :1;
+  GtkBitmask    *changes;
 };
 
 void            gtk_css_style_change_init               (GtkCssStyleChange      *change,
@@ -45,6 +45,8 @@ GtkCssStyle *   gtk_css_style_change_get_new_style      (GtkCssStyleChange      
 gboolean        gtk_css_style_change_has_change         (GtkCssStyleChange      *change);
 gboolean        gtk_css_style_change_affects            (GtkCssStyleChange      *change,
                                                          GtkCssAffects           affects);
+gboolean        gtk_css_style_change_changes_property   (GtkCssStyleChange      *change,
+                                                         guint                   id);
 
 G_END_DECLS
 

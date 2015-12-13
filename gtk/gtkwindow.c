@@ -8729,11 +8729,11 @@ gtk_window_state_flags_changed (GtkWidget     *widget,
 static void
 gtk_window_style_updated (GtkWidget *widget)
 {
-  const GtkBitmask *changes = _gtk_style_context_get_changes (gtk_widget_get_style_context (widget));
+  GtkCssStyleChange *change = gtk_style_context_get_change (gtk_widget_get_style_context (widget));
 
   GTK_WIDGET_CLASS (gtk_window_parent_class)->style_updated (widget);
 
-  if (changes == NULL || _gtk_bitmask_get (changes, GTK_CSS_PROPERTY_ICON_THEME))
+  if (change == NULL || gtk_css_style_change_changes_property (change, GTK_CSS_PROPERTY_ICON_THEME))
     update_themed_icon (GTK_WINDOW (widget));
 }
 

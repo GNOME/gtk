@@ -41,18 +41,7 @@ gtk_css_path_node_invalidate (GtkCssNode *node)
   GtkCssPathNode *path_node = GTK_CSS_PATH_NODE (node);
 
   if (path_node->context)
-    {
-      GtkBitmask *changes;
-
-      changes = _gtk_bitmask_new ();
-      changes = _gtk_bitmask_invert_range (changes,
-                                           0,
-                                           _gtk_css_style_property_get_n_properties ());
-
-      gtk_style_context_validate (path_node->context, changes);
-
-      _gtk_bitmask_free (changes);
-    }
+    gtk_style_context_validate (path_node->context, NULL);
 }
 
 gboolean

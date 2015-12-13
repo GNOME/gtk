@@ -39,7 +39,7 @@ struct _GtkCssWidgetNode
 
   GtkWidget *widget;
   guint validate_cb_id;
-  GtkBitmask *accumulated_changes;
+  GtkCssStyle *last_updated_style;
 };
 
 struct _GtkCssWidgetNodeClass

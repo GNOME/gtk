@@ -8250,24 +8250,15 @@ gtk_widget_real_style_updated (GtkWidget *widget)
 
   if (widget->priv->context)
     {
-      const GtkBitmask *changes = _gtk_style_context_get_changes (widget->priv->context);
+      GtkCssStyleChange *change = gtk_style_context_get_change (widget->priv->context);
 
       if (widget->priv->anchored)
         {
-          static GtkBitmask *affects_size, *affects_redraw, *affects_allocate;
-
-          if (G_UNLIKELY (affects_size == NULL))
-            {
-              affects_size = _gtk_css_style_property_get_mask_affecting (GTK_CSS_AFFECTS_SIZE);
-              affects_allocate = _gtk_css_style_property_get_mask_affecting (GTK_CSS_AFFECTS_CLIP);
-              affects_redraw = _gtk_css_style_property_get_mask_affecting (GTK_CSS_AFFECTS_REDRAW);
-            }
-
-          if (changes == NULL || _gtk_bitmask_intersects (changes, affects_size))
+          if (change == NULL || gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_SIZE))
             gtk_widget_queue_resize (widget);
-          else if (_gtk_bitmask_intersects (changes, affects_allocate))
+          else if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_CLIP))
             gtk_widget_queue_allocate (widget);
-          else if (_gtk_bitmask_intersects (changes, affects_redraw))
+          else if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_REDRAW))
             gtk_widget_queue_draw (widget);
         }
     }

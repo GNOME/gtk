@@ -1464,8 +1464,8 @@ gtk_file_chooser_button_style_updated (GtkWidget *widget)
       /* We need to update the icon surface, but only in case
        * the icon theme really changed. */
       GtkStyleContext *context = gtk_widget_get_style_context (widget);
-      const GtkBitmask *changes = _gtk_style_context_get_changes (context);
-      if (!changes || _gtk_bitmask_get (changes, GTK_CSS_PROPERTY_ICON_THEME))
+      GtkCssStyleChange *change = gtk_style_context_get_change (context);
+      if (!change || gtk_css_style_change_changes_property (change, GTK_CSS_PROPERTY_ICON_THEME))
         change_icon_theme (GTK_FILE_CHOOSER_BUTTON (widget));
     }
 }
