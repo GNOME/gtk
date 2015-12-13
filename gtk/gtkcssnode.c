@@ -959,7 +959,16 @@ gtk_css_node_set_style (GtkCssNode  *cssnode,
 
   style_changed = gtk_css_style_change_has_change (&change);
   if (style_changed)
-    g_signal_emit (cssnode, cssnode_signals[STYLE_CHANGED], 0, &change);
+    {
+      g_signal_emit (cssnode, cssnode_signals[STYLE_CHANGED], 0, &change);
+    }
+  else if (cssnode->style != style &&
+           (GTK_IS_CSS_ANIMATED_STYLE (cssnode->style) || GTK_IS_CSS_ANIMATED_STYLE (style)))
+    {
+      /* This is when animations are starting/stopping but they didn't change any CSS this frame */
+      g_object_unref (cssnode->style);
+      cssnode->style = g_object_ref (style);
+    }
 
   gtk_css_style_change_finish (&change);
 
