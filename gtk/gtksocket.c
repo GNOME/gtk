@@ -36,6 +36,7 @@
 #include "gtkprivate.h"
 #include "gtkrender.h"
 #include "gtkdnd.h"
+#include "gtkdragdest.h"
 #include "gtkdebug.h"
 #include "gtkintl.h"
 #include "gtkmain.h"

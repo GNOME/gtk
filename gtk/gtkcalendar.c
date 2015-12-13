@@ -73,6 +73,7 @@
 
 #include "gtkcalendar.h"
 #include "gtkdnd.h"
+#include "gtkdragdest.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"

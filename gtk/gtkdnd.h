@@ -37,56 +37,6 @@
 
 G_BEGIN_DECLS
 
-/**
- * GtkDestDefaults:
- * @GTK_DEST_DEFAULT_MOTION: If set for a widget, GTK+, during a drag over this
- *   widget will check if the drag matches this widget’s list of possible targets
- *   and actions.
- *   GTK+ will then call gdk_drag_status() as appropriate.
- * @GTK_DEST_DEFAULT_HIGHLIGHT: If set for a widget, GTK+ will draw a highlight on
- *   this widget as long as a drag is over this widget and the widget drag format
- *   and action are acceptable.
- * @GTK_DEST_DEFAULT_DROP: If set for a widget, when a drop occurs, GTK+ will
- *   will check if the drag matches this widget’s list of possible targets and
- *   actions. If so, GTK+ will call gtk_drag_get_data() on behalf of the widget.
- *   Whether or not the drop is successful, GTK+ will call gtk_drag_finish(). If
- *   the action was a move, then if the drag was successful, then %TRUE will be
- *   passed for the @delete parameter to gtk_drag_finish().
- * @GTK_DEST_DEFAULT_ALL: If set, specifies that all default actions should
- *   be taken.
- *
- * The #GtkDestDefaults enumeration specifies the various
- * types of action that will be taken on behalf
- * of the user for a drag destination site.
- */
-typedef enum {
-  GTK_DEST_DEFAULT_MOTION     = 1 << 0,
-  GTK_DEST_DEFAULT_HIGHLIGHT  = 1 << 1,
-  GTK_DEST_DEFAULT_DROP       = 1 << 2,
-  GTK_DEST_DEFAULT_ALL        = 0x07
-} GtkDestDefaults;
-
-/**
- * GtkTargetFlags:
- * @GTK_TARGET_SAME_APP: If this is set, the target will only be selected
- *   for drags within a single application.
- * @GTK_TARGET_SAME_WIDGET: If this is set, the target will only be selected
- *   for drags within a single widget.
- * @GTK_TARGET_OTHER_APP: If this is set, the target will not be selected
- *   for drags within a single application.
- * @GTK_TARGET_OTHER_WIDGET: If this is set, the target will not be selected
- *   for drags withing a single widget.
- *
- * The #GtkTargetFlags enumeration is used to specify
- * constraints on a #GtkTargetEntry.
- */
-typedef enum {
-  GTK_TARGET_SAME_APP = 1 << 0,    /*< nick=same-app >*/
-  GTK_TARGET_SAME_WIDGET = 1 << 1, /*< nick=same-widget >*/
-  GTK_TARGET_OTHER_APP = 1 << 2,   /*< nick=other-app >*/
-  GTK_TARGET_OTHER_WIDGET = 1 << 3 /*< nick=other-widget >*/
-} GtkTargetFlags;
-
 /* Destination side */
 
 GDK_AVAILABLE_IN_ALL
@@ -107,44 +57,6 @@ GDK_AVAILABLE_IN_ALL
 void gtk_drag_highlight   (GtkWidget  *widget);
 GDK_AVAILABLE_IN_ALL
 void gtk_drag_unhighlight (GtkWidget  *widget);
-
-GDK_AVAILABLE_IN_ALL
-void gtk_drag_dest_set   (GtkWidget            *widget,
-			  GtkDestDefaults       flags,
-  		          const GtkTargetEntry *targets,
-			  gint                  n_targets,
-			  GdkDragAction         actions);
-
-GDK_AVAILABLE_IN_ALL
-void gtk_drag_dest_set_proxy (GtkWidget      *widget,
-			      GdkWindow      *proxy_window,
-			      GdkDragProtocol protocol,
-			      gboolean        use_coordinates);
-
-GDK_AVAILABLE_IN_ALL
-void gtk_drag_dest_unset (GtkWidget          *widget);
-
-GDK_AVAILABLE_IN_ALL
-GdkAtom        gtk_drag_dest_find_target     (GtkWidget      *widget,
-                                              GdkDragContext *context,
-                                              GtkTargetList  *target_list);
-GDK_AVAILABLE_IN_ALL
-GtkTargetList* gtk_drag_dest_get_target_list (GtkWidget      *widget);
-GDK_AVAILABLE_IN_ALL
-void           gtk_drag_dest_set_target_list (GtkWidget      *widget,
-                                              GtkTargetList  *target_list);
-GDK_AVAILABLE_IN_ALL
-void           gtk_drag_dest_add_text_targets  (GtkWidget    *widget);
-GDK_AVAILABLE_IN_ALL
-void           gtk_drag_dest_add_image_targets (GtkWidget    *widget);
-GDK_AVAILABLE_IN_ALL
-void           gtk_drag_dest_add_uri_targets   (GtkWidget    *widget);
-
-GDK_AVAILABLE_IN_ALL
-void           gtk_drag_dest_set_track_motion  (GtkWidget *widget,
-						gboolean   track_motion);
-GDK_AVAILABLE_IN_ALL
-gboolean       gtk_drag_dest_get_track_motion  (GtkWidget *widget);
 
 /* Source side */
 

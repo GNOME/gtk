@@ -173,6 +173,7 @@ gtk_public_h_sources = 		\
 	gtkdebug.h		\
 	gtkdialog.h		\
 	gtkdnd.h		\
+	gtkdragdest.h		\
 	gtkdragsource.h		\
 	gtkdrawingarea.h	\
 	gtkeditable.h		\
@@ -724,6 +725,7 @@ gtk_base_c_sources = 		\
 	gtkcsswidgetnode.c	\
         gtkcsswin32sizevalue.c  \
 	gtkdialog.c		\
+	gtkdragdest.c		\
 	gtkdragsource.c		\
 	gtkdrawingarea.c	\
 	gtkeditable.c		\

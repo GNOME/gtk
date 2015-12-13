@@ -70,6 +70,27 @@ typedef struct _GtkTargetEntry GtkTargetEntry;
 #define GTK_TYPE_TARGET_LIST    (gtk_target_list_get_type ())
 
 /**
+ * GtkTargetFlags:
+ * @GTK_TARGET_SAME_APP: If this is set, the target will only be selected
+ *   for drags within a single application.
+ * @GTK_TARGET_SAME_WIDGET: If this is set, the target will only be selected
+ *   for drags within a single widget.
+ * @GTK_TARGET_OTHER_APP: If this is set, the target will not be selected
+ *   for drags within a single application.
+ * @GTK_TARGET_OTHER_WIDGET: If this is set, the target will not be selected
+ *   for drags withing a single widget.
+ *
+ * The #GtkTargetFlags enumeration is used to specify
+ * constraints on a #GtkTargetEntry.
+ */
+typedef enum {
+  GTK_TARGET_SAME_APP = 1 << 0,    /*< nick=same-app >*/
+  GTK_TARGET_SAME_WIDGET = 1 << 1, /*< nick=same-widget >*/
+  GTK_TARGET_OTHER_APP = 1 << 2,   /*< nick=other-app >*/
+  GTK_TARGET_OTHER_WIDGET = 1 << 3 /*< nick=other-widget >*/
+} GtkTargetFlags;
+
+/**
  * GtkTargetEntry:
  * @target: a string representation of the target type
  * @flags: #GtkTargetFlags for DND

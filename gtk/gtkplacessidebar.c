@@ -52,6 +52,7 @@
 #include "gtkbutton.h"
 #include "gtklistbox.h"
 #include "gtkselection.h"
+#include "gtkdragdest.h"
 #include "gtkdnd.h"
 #include "gtkseparator.h"
 #include "gtkentry.h"

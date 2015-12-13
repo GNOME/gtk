@@ -31,6 +31,7 @@
 #include "gtkclipboard.h"
 #include "gtkcomboboxtext.h"
 #include "gtkdragsource.h"
+#include "gtkdragdest.h"
 #include "gtkentry.h"
 #include "gtkexpander.h"
 #include "gtkfilechooserprivate.h"

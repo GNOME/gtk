@@ -36,6 +36,7 @@
 #include "gtkcombobox.h"
 #include "gtkcssiconthemevalueprivate.h"
 #include "gtkdnd.h"
+#include "gtkdragdest.h"
 #include "gtkicontheme.h"
 #include "deprecated/gtkiconfactory.h"
 #include "gtkimage.h"
