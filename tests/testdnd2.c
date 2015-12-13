@@ -194,6 +194,7 @@ spinner_drag_begin (GtkWidget      *widget,
 {
   GtkWidget *spinner;
 
+  g_print ("GtkWidget::drag-begin\n");
   spinner = g_object_new (GTK_TYPE_SPINNER,
                           "visible", TRUE,
                           "active",  TRUE,
@@ -209,8 +210,26 @@ spinner_drag_end (GtkWidget      *widget,
 {
   GtkWidget *spinner;
 
+  g_print ("GtkWidget::drag-end\n");
   spinner = g_object_get_data (G_OBJECT (context), "spinner");
   gtk_widget_destroy (spinner);
+}
+
+static gboolean
+spinner_drag_failed (GtkWidget      *widget,
+                     GdkDragContext *context,
+                     GtkDragResult   result,
+                     gpointer        data)
+{
+  GTypeClass *class;
+  GEnumValue *value;
+
+  class = g_type_class_ref (GTK_TYPE_DRAG_RESULT);
+  value = g_enum_get_value (G_ENUM_CLASS (class), result);
+  g_print ("GtkWidget::drag-failed %s\n", value->value_nick);
+  g_type_class_unref (class);
+
+  return FALSE;
 }
 
 void
@@ -221,6 +240,7 @@ spinner_drag_data_get (GtkWidget        *widget,
                        guint             time,
                        gpointer          data)
 {
+  g_print ("GtkWidget::drag-data-get\n");
   gtk_selection_data_set_text (selection_data, "ACTIVE", -1);
 }
 
@@ -238,6 +258,7 @@ make_spinner (void)
 
   g_signal_connect (ebox, "drag-begin", G_CALLBACK (spinner_drag_begin), spinner);
   g_signal_connect (ebox, "drag-end", G_CALLBACK (spinner_drag_end), spinner);
+  g_signal_connect (ebox, "drag-failed", G_CALLBACK (spinner_drag_failed), spinner);
   g_signal_connect (ebox, "drag-data-get", G_CALLBACK (spinner_drag_data_get), spinner);
 
   gtk_container_add (GTK_CONTAINER (ebox), spinner);
