@@ -631,7 +631,7 @@ init_settings (GdkScreen *screen)
       if (g_hash_table_lookup (screen_wayland->settings, (gpointer)translations[i].schema) != NULL)
         continue;
 
-      schema = g_settings_schema_source_lookup (source, translations[i].schema, FALSE);
+      schema = g_settings_schema_source_lookup (source, translations[i].schema, TRUE);
       if (schema != NULL)
         {
           settings = g_settings_new_full (schema, NULL, NULL);
