@@ -42,10 +42,6 @@
 #endif
 #endif
 
-#ifdef GDK_WINDOWING_WAYLAND
-#include <gdk/wayland/gdkwayland.h>
-#endif
-
 #include "gtkgesturedrag.h"
 #include "gtkgesturesingle.h"
 #include "gtkicontheme.h"
@@ -80,7 +76,6 @@ static GSList *source_widgets = NULL;
 typedef struct _GtkDragSourceInfo GtkDragSourceInfo;
 typedef struct _GtkDragDestSite GtkDragDestSite;
 typedef struct _GtkDragDestInfo GtkDragDestInfo;
-typedef struct _GtkDragAnim GtkDragAnim;
 
 
 typedef enum 
@@ -150,14 +145,6 @@ struct _GtkDragDestInfo
 };
 
 #define DROP_ABORT_TIME 300000
-
-#define ANIM_TIME (0.5 * 1000 * 1000) /* half a second */
-
-struct _GtkDragAnim 
-{
-  GtkDragSourceInfo *info;
-  gint64 start_time;
-};
 
 typedef gboolean (* GtkDragDestCallback) (GtkWidget      *widget,
                                           GdkDragContext *context,
@@ -2438,11 +2425,11 @@ gtk_drag_begin (GtkWidget     *widget,
 }
 
 static void
-gtk_drag_set_icon_window (GdkDragContext *context,
-                          GtkWidget      *widget,
-                          gint            hot_x,
-                          gint            hot_y,
-                          gboolean        destroy_on_release)
+gtk_drag_set_icon_widget_internal (GdkDragContext *context,
+                                   GtkWidget      *widget,
+                                   gint            hot_x,
+                                   gint            hot_y,
+                                   gboolean        destroy_on_release)
 {
   GtkDragSourceInfo *info;
 
@@ -2507,20 +2494,15 @@ out:
 /**
  * gtk_drag_set_icon_widget: (method)
  * @context: the context for a drag. (This must be called 
-          with a  context for the source side of a drag)
- * @widget: a toplevel window to use as an icon
+          with a context for the source side of a drag)
+ * @widget: a widget to use as an icon
  * @hot_x: the X offset within @widget of the hotspot
  * @hot_y: the Y offset within @widget of the hotspot
  * 
- * Changes the icon for a widget to a given widget.
- * GTK+ will not destroy the icon, so if you don’t want
+ * Changes the icon for drag operation to a given widget.
+ * GTK+ will not destroy the widget, so if you don’t want
  * it to persist, you should connect to the “drag-end” 
  * signal and destroy it yourself.
- *
- * GTK+ will, however, change the opacity and position of
- * the window as part of the drag animation. If you want
- * to reuse the window, you have to restore these to
- * the values you need after each drag operation.
  */
 void 
 gtk_drag_set_icon_widget (GdkDragContext *context,
@@ -2531,7 +2513,7 @@ gtk_drag_set_icon_widget (GdkDragContext *context,
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  gtk_drag_set_icon_window (context, widget, hot_x, hot_y, FALSE);
+  gtk_drag_set_icon_widget_internal (context, widget, hot_x, hot_y, FALSE);
 }
 
 static void
@@ -2551,12 +2533,12 @@ set_icon_helper (GdkDragContext     *context,
 {
   GtkWidget *widget;
 
-  widget  = gtk_image_new ();
+  widget = gtk_image_new ();
   gtk_widget_show (widget);
 
   gtk_image_set_from_definition (GTK_IMAGE (widget), def, GTK_ICON_SIZE_DND);
 
-  gtk_drag_set_icon_window (context, widget, hot_x, hot_y, TRUE);
+  gtk_drag_set_icon_widget_internal (context, widget, hot_x, hot_y, TRUE);
 }
 
 void 
@@ -2769,7 +2751,7 @@ gtk_drag_set_icon_surface (GdkDragContext  *context,
                          (GClosureNotify) cairo_pattern_destroy,
                          G_CONNECT_AFTER);
 
-  gtk_drag_set_icon_window (context, window, extents.x, extents.y, TRUE);
+  gtk_drag_set_icon_widget_internal (context, window, extents.x, extents.y, TRUE);
 }
 
 /**
