@@ -10,6 +10,7 @@ gdk/gdkdisplaymanager.c
 gdk/gdkglcontext.c
 gdk/gdkpango.c
 gdk/gdkscreen.c
+gdk/gdkseat.c
 gdk/gdkwindow.c
 gdk/keyname-table.h
 gdk/mir/gdkmirglcontext.c
