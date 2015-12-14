@@ -2553,7 +2553,9 @@ scrolledwindow {
 separator {
   // always disable separators
   // -GtkWidget-wide-separators: true;
-  color: transparentize(black, 0.9);
+  background: transparentize(black, 0.9);
+  min-width: 1px;
+  min-height: 1px;
 
   // Font and File button separators
   button.file &.vertical,
