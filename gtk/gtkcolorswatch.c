@@ -30,6 +30,7 @@
 #include "gtkintl.h"
 #include "gtkrenderprivate.h"
 #include "gtkcssnodeprivate.h"
+#include "gtkcsscustomgadgetprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "a11y/gtkcolorswatchaccessibleprivate.h"
@@ -59,7 +60,8 @@ struct _GtkColorSwatchPrivate
 
   GtkGesture *long_press_gesture;
   GtkGesture *multipress_gesture;
-  GtkCssNode *overlay_node;
+  GtkCssGadget *gadget;
+  GtkCssGadget *overlay_gadget;
 
   GtkWidget *popover;
 };
@@ -81,85 +83,44 @@ enum
 
 static guint signals[LAST_SIGNAL];
 
-static void hold_action (GtkGestureLongPress  *gesture,
-                         gdouble               x,
-                         gdouble               y,
-                         GtkColorSwatch       *swatch);
-static void tap_action  (GtkGestureMultiPress *gesture,
-                         gint                  n_press,
-                         gdouble               x,
-                         gdouble               y,
-                         GtkColorSwatch       *swatch);
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkColorSwatch, gtk_color_swatch, GTK_TYPE_WIDGET)
 
-static void
-gtk_color_swatch_init (GtkColorSwatch *swatch)
+static gboolean
+swatch_draw (GtkWidget *widget,
+             cairo_t   *cr)
 {
-  GtkCssNode *widget_node;
-  GtkStyleContext *context;
+  gtk_css_gadget_draw (GTK_COLOR_SWATCH (widget)->priv->gadget, cr);
 
-  swatch->priv = gtk_color_swatch_get_instance_private (swatch);
-  swatch->priv->use_alpha = TRUE;
-  swatch->priv->selectable = TRUE;
-  swatch->priv->has_menu = TRUE;
-
-  gtk_widget_set_can_focus (GTK_WIDGET (swatch), TRUE);
-  gtk_widget_set_has_window (GTK_WIDGET (swatch), FALSE);
-
-  swatch->priv->long_press_gesture = gtk_gesture_long_press_new (GTK_WIDGET (swatch));
-  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (swatch->priv->long_press_gesture),
-                                     TRUE);
-  g_signal_connect (swatch->priv->long_press_gesture, "pressed",
-                    G_CALLBACK (hold_action), swatch);
-
-  swatch->priv->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (swatch));
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (swatch->priv->multipress_gesture), 0);
-  g_signal_connect (swatch->priv->multipress_gesture, "pressed",
-                    G_CALLBACK (tap_action), swatch);
-
-  widget_node = gtk_widget_get_css_node (GTK_WIDGET (swatch));
-  swatch->priv->overlay_node = gtk_css_node_new ();
-  gtk_css_node_set_name (swatch->priv->overlay_node, I_("overlay"));
-  gtk_css_node_set_parent (swatch->priv->overlay_node, widget_node);
-  gtk_css_node_set_state (swatch->priv->overlay_node, gtk_css_node_get_state (widget_node));
-  g_object_unref (swatch->priv->overlay_node);
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (swatch));
-  gtk_style_context_add_class (context, "activatable");
+  return FALSE;
 }
 
 #define INTENSITY(r, g, b) ((r) * 0.30 + (g) * 0.59 + (b) * 0.11)
 #define PIXBUF_SIZE 16
 
 static gboolean
-swatch_draw (GtkWidget *widget,
-             cairo_t   *cr)
+gtk_color_swatch_render (GtkCssGadget *gadget,
+                         cairo_t      *cr,
+                         int           x,
+                         int           y,
+                         int           width,
+                         int           height,
+                         gpointer      data)
 {
-  GtkColorSwatch *swatch = (GtkColorSwatch*)widget;
-  gdouble width, height;
+  GtkWidget *widget;
+  GtkColorSwatch *swatch;
   GtkStyleContext *context;
-  GtkStateFlags state;
-  GtkIconTheme *theme;
-  GtkBorder border, padding;
-  GdkRectangle rect;
-  GtkIconInfo *icon_info = NULL;
-  gint scale;
 
-  theme = gtk_icon_theme_get_default ();
+  widget = gtk_css_gadget_get_owner (gadget);
+  swatch = GTK_COLOR_SWATCH (widget);
   context = gtk_widget_get_style_context (widget);
-  state = gtk_style_context_get_state (context);
-  width = gtk_widget_get_allocated_width (widget);
-  height = gtk_widget_get_allocated_height (widget);
-
-  gtk_render_background (context, cr, 0, 0, width, height);
 
   if (swatch->priv->has_color)
     {
       cairo_pattern_t *pattern;
       cairo_matrix_t matrix;
 
-      gtk_render_content_path (context, cr, 0, 0, width, height);
+      gtk_render_content_path (context, cr, x, y, width, height);
 
       if (swatch->priv->use_alpha)
         {
@@ -193,7 +154,36 @@ swatch_draw (GtkWidget *widget,
       cairo_fill (cr);
     }
 
-  gtk_render_frame (context, cr, 0, 0, width, height);
+  gtk_render_frame (context, cr, x, y, width, height);
+
+  gtk_css_gadget_draw (swatch->priv->overlay_gadget, cr);
+
+  return gtk_widget_has_visible_focus (widget);
+}
+
+static gboolean
+gtk_color_swatch_render_overlay (GtkCssGadget *gadget,
+                                 cairo_t      *cr,
+                                 int           x,
+                                 int           y,
+                                 int           width,
+                                 int           height,
+                                 gpointer      data)
+{
+  GtkWidget *widget;
+  GtkColorSwatch *swatch;
+  GtkStyleContext *context;
+  GtkStateFlags state;
+  GtkIconTheme *theme;
+  GtkIconInfo *icon_info = NULL;
+  gint scale;
+
+  widget = gtk_css_gadget_get_owner (gadget);
+  swatch = GTK_COLOR_SWATCH (widget);
+
+  theme = gtk_icon_theme_get_default ();
+  context = gtk_widget_get_style_context (widget);
+  state = gtk_style_context_get_state (context);
 
   scale = gtk_widget_get_scale_factor (widget);
   if (swatch->priv->icon)
@@ -218,18 +208,6 @@ swatch_draw (GtkWidget *widget,
     }
 
   /* now draw the overlay image */
-  gtk_style_context_get_border (context, state, &border);
-  gtk_style_context_get_padding (context, state, &padding);
-  rect.width = width - (border.left + border.right + padding.left + padding.right);
-  rect.height = height - (border.top + border.bottom + padding.top + padding.bottom);
-  rect.x = border.left + padding.left;
-  rect.y = border.top + padding.top;
-
-  gtk_style_context_save_to_node (context, swatch->priv->overlay_node);
-
-  gtk_render_background (context, cr, rect.x, rect.y, rect.width, rect.height);
-  gtk_render_frame (context, cr, rect.x, rect.y, rect.width, rect.height);
-
   if (icon_info != NULL)
     {
       GdkPixbuf *pixbuf;
@@ -240,20 +218,13 @@ swatch_draw (GtkWidget *widget,
           cairo_surface_t *surface;
 
           surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, scale, gtk_widget_get_window (widget));
-          gtk_render_icon_surface (context, cr, surface,
-                                   rect.x + (rect.width - (gdk_pixbuf_get_width (pixbuf) / scale)) / 2,
-                                   rect.y + (rect.height - (gdk_pixbuf_get_height (pixbuf) / scale)) / 2);
+          gtk_render_icon_surface (context, cr, surface, x, y);
           cairo_surface_destroy (surface);
           g_object_unref (pixbuf);
         }
 
       g_object_unref (icon_info);
     }
-
-  if (gtk_widget_has_visible_focus (widget))
-    gtk_render_focus (context, cr, 0, 0, width, height);
-
-  gtk_style_context_restore (context);
 
   return FALSE;
 }
@@ -349,33 +320,49 @@ swatch_drag_data_received (GtkWidget        *widget,
 }
 
 static void
-swatch_get_preferred_width (GtkWidget *widget,
-                            gint      *min,
-                            gint      *nat)
+gtk_color_swatch_measure (GtkCssGadget   *gadget,
+                          GtkOrientation  orientation,
+                          int             for_size,
+                          int            *minimum,
+                          int            *natural,
+                          int            *minimum_baseline,
+                          int            *natural_baseline,
+                          gpointer        unused)
 {
-  gint w, h;
+  GtkWidget *widget;
+  GtkColorSwatch *swatch;
+  gint w, h, min;
+
+  widget = gtk_css_gadget_get_owner (gadget);
+  swatch = GTK_COLOR_SWATCH (widget);
+
+  gtk_css_gadget_get_preferred_size (swatch->priv->overlay_gadget,
+                                     orientation,
+                                     -1,
+                                     minimum, natural,
+                                     NULL, NULL);
 
   gtk_widget_get_size_request (widget, &w, &h);
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    min = w < 0 ? 48 : w;
+  else
+    min = h < 0 ? 32 : h;
 
-  if (w < 0)
-    w = 48;
-
-  *min = *nat = w;
+  *minimum = MAX (*minimum, min);
+  *natural = MAX (*natural, min);
 }
 
 static void
-swatch_get_preferred_height (GtkWidget *widget,
-                             gint      *min,
-                             gint      *nat)
+gtk_color_swatch_measure_overlay (GtkCssGadget   *gadget,
+                                  GtkOrientation  orientation,
+                                  int             for_size,
+                                  int            *minimum,
+                                  int            *natural,
+                                  int            *minimum_baseline,
+                                  int            *natural_baseline,
+                                  gpointer        unused)
 {
-  gint w, h;
-
-  gtk_widget_get_size_request (widget, &w, &h);
-
-  if (h < 0)
-    h = 32;
-
-  *min = *nat = h;
+  *minimum = *natural = 16;
 }
 
 static gboolean
@@ -563,9 +550,7 @@ swatch_realize (GtkWidget *widget)
   gtk_widget_set_window (widget, window);
   g_object_ref (window);
 
-  swatch->priv->event_window =
-    gdk_window_new (window,
-                    &attributes, attributes_mask);
+  swatch->priv->event_window = gdk_window_new (window, &attributes, attributes_mask);
   gtk_widget_register_window (widget, swatch->priv->event_window);
 }
 
@@ -589,6 +574,7 @@ swatch_size_allocate (GtkWidget     *widget,
                       GtkAllocation *allocation)
 {
   GtkColorSwatch *swatch = GTK_COLOR_SWATCH (widget);
+  GtkAllocation clip;
 
   gtk_widget_set_allocation (widget, allocation);
 
@@ -599,7 +585,68 @@ swatch_size_allocate (GtkWidget     *widget,
                             allocation->width,
                             allocation->height);
 
-  _gtk_widget_set_simple_clip (widget, NULL);
+  gtk_css_gadget_allocate (swatch->priv->gadget,
+                           allocation,
+                           gtk_widget_get_allocated_baseline (widget),
+                           &clip);
+
+  gtk_widget_set_clip (widget, &clip);
+}
+
+static void
+gtk_color_swatch_allocate (GtkCssGadget        *gadget,
+                           const GtkAllocation *allocation,
+                           int                  baseline,
+                           GtkAllocation       *out_clip,
+                           gpointer             unused)
+{
+  GtkColorSwatch *swatch;
+  GtkAllocation overlay_alloc;
+  gint overlay_width, overlay_height;
+
+  swatch = GTK_COLOR_SWATCH (gtk_css_gadget_get_owner (gadget));
+
+  gtk_css_gadget_get_preferred_size (swatch->priv->overlay_gadget,
+                                     GTK_ORIENTATION_HORIZONTAL,
+                                     -1,
+                                     &overlay_width, NULL,
+                                     NULL, NULL);
+  gtk_css_gadget_get_preferred_size (swatch->priv->overlay_gadget,
+                                     GTK_ORIENTATION_VERTICAL,
+                                     -1,
+                                     &overlay_height, NULL,
+                                     NULL, NULL);
+
+  overlay_alloc.x = allocation->x + (allocation->width - overlay_width) / 2;
+  overlay_alloc.y = allocation->y + (allocation->height - overlay_height) / 2;
+  overlay_alloc.width = overlay_width;
+  overlay_alloc.height = overlay_height;
+
+  gtk_css_gadget_allocate (swatch->priv->overlay_gadget, &overlay_alloc, baseline, out_clip);
+}
+
+static void
+swatch_get_preferred_width (GtkWidget *widget,
+                            gint      *minimum,
+                            gint      *natural)
+{
+  gtk_css_gadget_get_preferred_size (GTK_COLOR_SWATCH (widget)->priv->gadget,
+                                     GTK_ORIENTATION_HORIZONTAL,
+                                     -1,
+                                     minimum, natural,
+                                     NULL, NULL);
+}
+
+static void
+swatch_get_preferred_height (GtkWidget *widget,
+                             gint      *minimum,
+                             gint      *natural)
+{
+  gtk_css_gadget_get_preferred_size (GTK_COLOR_SWATCH (widget)->priv->gadget,
+                                     GTK_ORIENTATION_VERTICAL,
+                                     -1,
+                                     minimum, natural,
+                                     NULL, NULL);
 }
 
 static gboolean
@@ -615,7 +662,8 @@ swatch_state_flags_changed (GtkWidget     *widget,
 {
   GtkColorSwatch *swatch = GTK_COLOR_SWATCH (widget);
 
-  gtk_css_node_set_state (swatch->priv->overlay_node, gtk_widget_get_state_flags (widget));
+  gtk_css_node_set_state (gtk_css_gadget_get_node (swatch->priv->gadget), gtk_widget_get_state_flags (widget));
+  gtk_css_node_set_state (gtk_css_gadget_get_node (swatch->priv->overlay_gadget), gtk_widget_get_state_flags (widget));
 
   GTK_WIDGET_CLASS (gtk_color_swatch_parent_class)->state_flags_changed (widget, previous_state);
 }
@@ -680,6 +728,8 @@ swatch_finalize (GObject *object)
   GtkColorSwatch *swatch = GTK_COLOR_SWATCH (object);
 
   g_free (swatch->priv->icon);
+  g_clear_object (&swatch->priv->gadget);
+  g_clear_object (&swatch->priv->overlay_gadget);
 
   G_OBJECT_CLASS (gtk_color_swatch_parent_class)->finalize (object);
 }
@@ -757,6 +807,50 @@ gtk_color_swatch_class_init (GtkColorSwatchClass *class)
   gtk_widget_class_set_css_name (widget_class, "colorswatch");
 }
 
+static void
+gtk_color_swatch_init (GtkColorSwatch *swatch)
+{
+  GtkCssNode *widget_node;
+
+  swatch->priv = gtk_color_swatch_get_instance_private (swatch);
+  swatch->priv->use_alpha = TRUE;
+  swatch->priv->selectable = TRUE;
+  swatch->priv->has_menu = TRUE;
+
+  gtk_widget_set_can_focus (GTK_WIDGET (swatch), TRUE);
+  gtk_widget_set_has_window (GTK_WIDGET (swatch), FALSE);
+
+  swatch->priv->long_press_gesture = gtk_gesture_long_press_new (GTK_WIDGET (swatch));
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (swatch->priv->long_press_gesture),
+                                     TRUE);
+  g_signal_connect (swatch->priv->long_press_gesture, "pressed",
+                    G_CALLBACK (hold_action), swatch);
+
+  swatch->priv->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (swatch));
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (swatch->priv->multipress_gesture), 0);
+  g_signal_connect (swatch->priv->multipress_gesture, "pressed",
+                    G_CALLBACK (tap_action), swatch);
+
+  widget_node = gtk_widget_get_css_node (GTK_WIDGET (swatch));
+  swatch->priv->gadget = gtk_css_custom_gadget_new_for_node (widget_node,
+                                                             GTK_WIDGET (swatch),
+                                                             gtk_color_swatch_measure,
+                                                             gtk_color_swatch_allocate,
+                                                             gtk_color_swatch_render,
+                                                             NULL,
+                                                             NULL);
+
+  swatch->priv->overlay_gadget = gtk_css_custom_gadget_new ("overlay",
+                                                            GTK_WIDGET (swatch),
+                                                            swatch->priv->gadget,
+                                                            NULL,
+                                                            gtk_color_swatch_measure_overlay,
+                                                            NULL,
+                                                            gtk_color_swatch_render_overlay,
+                                                            NULL,
+                                                            NULL);
+  gtk_css_gadget_add_class (swatch->priv->gadget, "activatable");
+}
 
 /* Public API {{{1 */
 
