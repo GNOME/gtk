@@ -201,6 +201,7 @@ generate_focus_event (GdkDeviceManager *device_manager,
   event->focus_change.in = in;
   gdk_event_set_device (event, device);
   gdk_event_set_source_device (event, source_device);
+  gdk_event_set_seat (event, gdk_device_get_seat (device));
 
   _gdk_win32_append_event (event);
 }
@@ -233,6 +234,7 @@ generate_grab_broken_event (GdkDeviceManager *device_manager,
   event->grab_broken.grab_window = grab_window;
   gdk_event_set_device (event, device);
   gdk_event_set_source_device (event, source_device);
+  gdk_event_set_seat (event, gdk_device_get_seat (device));
 
   _gdk_win32_append_event (event);
 }
@@ -1141,6 +1143,7 @@ send_crossing_event (GdkDisplay                 *display,
   event->crossing.state = mask;
   gdk_event_set_device (event, device_manager->core_pointer);
   gdk_event_set_source_device (event, device_manager->system_pointer);
+  gdk_event_set_seat (event, gdk_device_get_seat (device_manager->core_pointer));
 
   _gdk_win32_append_event (event);
 }
@@ -1675,6 +1678,7 @@ generate_button_event (GdkEventType      type,
   event->button.button = button;
   gdk_event_set_device (event, device_manager->core_pointer);
   gdk_event_set_source_device (event, device_manager->system_pointer);
+  gdk_event_set_seat (event, gdk_device_get_seat (device_manager->core_pointer));
 
   _gdk_win32_append_event (event);
 }
@@ -2120,6 +2124,7 @@ gdk_event_translate (MSG  *msg,
       event->key.hardware_keycode = msg->wParam;
       gdk_event_set_device (event, device_manager_win32->core_keyboard);
       gdk_event_set_source_device (event, device_manager_win32->system_keyboard);
+      gdk_event_set_seat (event, gdk_device_get_seat (device_manager_win32->core_keyboard));
       if (HIWORD (msg->lParam) & KF_EXTENDED)
 	{
 	  switch (msg->wParam)
@@ -2270,6 +2275,7 @@ gdk_event_translate (MSG  *msg,
 	      event->key.window = window;
 	      gdk_event_set_device (event, device_manager_win32->core_keyboard);
 	      gdk_event_set_source_device (event, device_manager_win32->system_keyboard);
+              gdk_event_set_seat (event, gdk_device_get_seat (device_manager_win32->core_keyboard));
 	      build_wm_ime_composition_event (event, msg, wbuf[i], key_state);
 
 	      _gdk_win32_append_event (event);
@@ -2282,6 +2288,7 @@ gdk_event_translate (MSG  *msg,
 	      event->key.window = window;
 	      gdk_event_set_device (event, device_manager_win32->core_keyboard);
 	      gdk_event_set_source_device (event, device_manager_win32->system_keyboard);
+              gdk_event_set_seat (event, gdk_device_get_seat (device_manager_win32->core_keyboard));
 	      build_wm_ime_composition_event (event, msg, wbuf[i], key_state);
 
 	      _gdk_win32_append_event (event);
@@ -2477,6 +2484,7 @@ gdk_event_translate (MSG  *msg,
 	  event->motion.is_hint = FALSE;
 	  gdk_event_set_device (event, device_manager_win32->core_pointer);
 	  gdk_event_set_source_device (event, device_manager_win32->system_pointer);
+          gdk_event_set_seat (event, gdk_device_get_seat (device_manager_win32->core_pointer));
 
 	  _gdk_win32_append_event (event);
 	}
@@ -2599,6 +2607,7 @@ gdk_event_translate (MSG  *msg,
       event->scroll.state = build_pointer_event_state (msg);
       gdk_event_set_device (event, device_manager_win32->core_pointer);
       gdk_event_set_source_device (event, device_manager_win32->system_pointer);
+      gdk_event_set_seat (event, gdk_device_get_seat (device_manager_win32->core_pointer));
 
       _gdk_win32_append_event (event);
 
