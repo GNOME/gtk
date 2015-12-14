@@ -507,6 +507,7 @@ create_focus_event (GdkWindow *window,
 
   device_manager = GDK_QUARTZ_DEVICE_MANAGER_CORE (_gdk_display->device_manager);
   gdk_event_set_device (event, device_manager->core_keyboard);
+  gdk_event_set_seat (event, gdk_device_get_seat (device_manager->core_keyboard));
 
   return event;
 }
@@ -540,6 +541,7 @@ generate_motion_event (GdkWindow *window)
                         _gdk_quartz_events_get_current_mouse_modifiers ();
   event->motion.is_hint = FALSE;
   event->motion.device = _gdk_display->core_pointer;
+  gdk_event_set_seat (event, gdk_device_get_seat (_gdk_display->core_pointer));
 
   append_event (event, TRUE);
 }
@@ -876,6 +878,7 @@ fill_crossing_event (GdkWindow       *toplevel,
                          _gdk_quartz_events_get_current_mouse_modifiers ();
 
   gdk_event_set_device (event, _gdk_display->core_pointer);
+  gdk_event_set_seat (event, gdk_device_get_seat (_gdk_display->core_pointer));
 
   /* FIXME: Focus and button state? */
 }
@@ -926,6 +929,7 @@ fill_button_event (GdkWindow *window,
   event->button.state = state;
   event->button.button = get_mouse_button_from_ns_event (nsevent);
   event->button.device = _gdk_display->core_pointer;
+  gdk_event_set_seat (event, gdk_device_get_seat (_gdk_display->core_pointer));
 }
 
 static void
@@ -949,6 +953,7 @@ fill_motion_event (GdkWindow *window,
                         _gdk_quartz_events_get_current_mouse_modifiers ();
   event->motion.is_hint = FALSE;
   event->motion.device = _gdk_display->core_pointer;
+  gdk_event_set_seat (event, gdk_device_get_seat (_gdk_display->core_pointer));
 }
 
 static void
@@ -979,6 +984,7 @@ fill_scroll_event (GdkWindow          *window,
   event->scroll.device = _gdk_display->core_pointer;
   event->scroll.delta_x = delta_x;
   event->scroll.delta_y = delta_y;
+  gdk_event_set_seat (event, gdk_device_get_seat (_gdk_display->core_pointer));
 }
 
 static void
@@ -1005,6 +1011,7 @@ fill_key_event (GdkWindow    *window,
 
   device_manager = GDK_QUARTZ_DEVICE_MANAGER_CORE (_gdk_display->device_manager);
   gdk_event_set_device (event, device_manager->core_keyboard);
+  gdk_event_set_seat (event, gdk_device_get_seat (device_manager->core_keyboard));
   
   gdk_keymap_translate_keyboard_state (gdk_keymap_get_for_display (_gdk_display),
 				       event->key.hardware_keycode,
@@ -1171,6 +1178,7 @@ _gdk_quartz_synthesize_null_key_event (GdkWindow *window)
   event->key.keyval = GDK_KEY_VoidSymbol;
   device_manager = GDK_QUARTZ_DEVICE_MANAGER_CORE (_gdk_display->device_manager);
   gdk_event_set_device (event, device_manager->core_keyboard);
+  gdk_event_set_seat (event, gdk_device_get_seat (device_manager->core_keyboard));
   append_event(event, FALSE);
 }
 
