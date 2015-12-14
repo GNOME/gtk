@@ -1569,6 +1569,8 @@ add_format (GArray *fmts,
 void
 _gdk_dnd_init (void)
 {
+  CoInitializeEx (NULL, COINIT_APARTMENTTHREADED);
+
   if (getenv ("GDK_WIN32_USE_EXPERIMENTAL_OLE2_DND"))
     use_ole2_dnd = TRUE;
 
@@ -1615,6 +1617,8 @@ _gdk_win32_dnd_exit (void)
     {
       OleUninitialize ();
     }
+
+  CoUninitialize ();
 }
 
 /* Source side */
