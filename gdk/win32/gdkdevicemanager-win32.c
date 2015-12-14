@@ -30,6 +30,7 @@
 #include "gdkdevice-virtual.h"
 #include "gdkdevice-wintab.h"
 #include "gdkdisplayprivate.h"
+#include "gdkseatdefaultprivate.h"
 
 #define WINTAB32_DLL "Wintab32.dll"
 
@@ -705,6 +706,7 @@ static void
 gdk_device_manager_win32_constructed (GObject *object)
 {
   GdkDeviceManagerWin32 *device_manager;
+  GdkSeat *seat;
 
   device_manager = GDK_DEVICE_MANAGER_WIN32 (object);
   device_manager->core_pointer =
@@ -739,6 +741,13 @@ gdk_device_manager_win32_constructed (GObject *object)
 
   _gdk_device_set_associated_device (device_manager->core_pointer, device_manager->core_keyboard);
   _gdk_device_set_associated_device (device_manager->core_keyboard, device_manager->core_pointer);
+
+  seat = gdk_seat_default_new_for_master_pair (device_manager->core_pointer,
+                                               device_manager->core_keyboard);
+  gdk_display_add_seat (gdk_device_manager_get_display (GDK_DEVICE_MANAGER (object)), seat);
+  gdk_seat_default_add_slave (GDK_SEAT_DEFAULT (seat), device_manager->system_pointer);
+  gdk_seat_default_add_slave (GDK_SEAT_DEFAULT (seat), device_manager->system_keyboard);
+  g_object_unref (seat);
 }
 
 static GList *
@@ -1055,6 +1064,7 @@ _gdk_input_other_event (GdkEvent  *event,
 	  if (source_device->sends_core)
 	    gdk_event_set_device (event, device_manager->core_pointer);
           gdk_event_set_source_device (event, GDK_DEVICE (source_device));
+          gdk_event_set_seat (event, gdk_device_get_seat (device_manager->core_pointer));
 
           event->button.axes = g_new (gdouble, num_axes);
 	  gdk_window_get_origin (window, &root_x, &root_y);
@@ -1087,6 +1097,7 @@ _gdk_input_other_event (GdkEvent  *event,
           event->motion.is_hint = FALSE;
           gdk_event_set_device (event, device_manager->core_pointer);
           gdk_event_set_source_device (event, GDK_DEVICE (source_device));
+          gdk_event_set_seat (event, gdk_device_get_seat (device_manager->core_pointer));
 
           event->motion.axes = g_new (gdouble, num_axes);
 	  gdk_window_get_origin (window, &root_x, &root_y);
