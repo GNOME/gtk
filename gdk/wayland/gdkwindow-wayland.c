@@ -1943,11 +1943,32 @@ gdk_wayland_window_set_startup_id (GdkWindow   *window,
 {
 }
 
+static gboolean
+check_transient_for_loop (GdkWindow *window,
+                          GdkWindow *parent)
+{
+  while (parent)
+    {
+      GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (parent->impl);
+
+      if (impl->transient_for == window)
+        return TRUE;
+      parent = impl->transient_for;
+    }
+  return FALSE;
+}
+
 static void
 gdk_wayland_window_set_transient_for (GdkWindow *window,
                                       GdkWindow *parent)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  if (check_transient_for_loop (window, parent))
+    {
+      g_warning ("Setting %p transient for %p would create a loop", window, parent);
+      return;
+    }
 
   if (impl->subsurface)
     unmap_subsurface (window);
