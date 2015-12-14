@@ -3566,13 +3566,14 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    * configurable width and should be drawn using a box instead of a line.
    *
    * Since: 2.10
+   * Deprecated: 3.20: Use the standard min-width and min-height CSS properties instead.
    */
   gtk_widget_class_install_style_property (klass,
                                            g_param_spec_boolean ("wide-separators",
                                                                  P_("Wide Separators"),
                                                                  P_("Whether separators have configurable width and should be drawn using a box instead of a line"),
                                                                  FALSE,
-                                                                 GTK_PARAM_READABLE));
+                                                                 GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   /**
    * GtkWidget:separator-width:
@@ -3581,13 +3582,15 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    * This property only takes effect if the "wide-separators" style property is %TRUE.
    *
    * Since: 2.10
+   *
+   * Deprecated: 3.20: Use the standard min-width and min-height CSS properties instead.
    */
   gtk_widget_class_install_style_property (klass,
                                            g_param_spec_int ("separator-width",
                                                              P_("Separator Width"),
                                                              P_("The width of separators if wide-separators is TRUE"),
                                                              0, G_MAXINT, 0,
-                                                             GTK_PARAM_READABLE));
+                                                             GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   /**
    * GtkWidget:separator-height:
@@ -3596,13 +3599,15 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    * This property only takes effect if the "wide-separators" style property is %TRUE.
    *
    * Since: 2.10
+   *
+   * Deprecated: 3.20: Use the standard min-width and min-height CSS properties instead.
    */
   gtk_widget_class_install_style_property (klass,
                                            g_param_spec_int ("separator-height",
                                                              P_("Separator Height"),
                                                              P_("The height of separators if \"wide-separators\" is TRUE"),
                                                              0, G_MAXINT, 0,
-                                                             GTK_PARAM_READABLE));
+                                                             GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   /**
    * GtkWidget:scroll-arrow-hlength:
