@@ -1217,7 +1217,7 @@ gtk_tool_button_set_label (GtkToolButton *button,
  * doesn’t have a label. or uses a the label from a stock item. The returned
  * string is owned by GTK+, and must not be modified or freed.
  * 
- * Returns: The label, or %NULL
+ * Returns: (nullable): The label, or %NULL
  * 
  * Since: 2.4
  **/
@@ -1372,7 +1372,7 @@ gtk_tool_button_set_icon_name (GtkToolButton *button,
  * Returns the name of the themed icon for the tool button,
  * see gtk_tool_button_set_icon_name().
  *
- * Returns: the icon name or %NULL if the tool button has
+ * Returns: (nullable): the icon name or %NULL if the tool button has
  * no themed icon
  *
  * Since: 2.8
@@ -1478,7 +1478,7 @@ gtk_tool_button_set_label_widget (GtkToolButton *button,
  * Returns the widget used as label on @button.
  * See gtk_tool_button_set_label_widget().
  *
- * Returns: (transfer none): The widget used as label
+ * Returns: (nullable) (transfer none): The widget used as label
  *     on @button, or %NULL.
  *
  * Since: 2.4
@@ -1498,7 +1498,7 @@ gtk_tool_button_get_label_widget (GtkToolButton *button)
  * Return the widget used as icon widget on @button.
  * See gtk_tool_button_set_icon_widget().
  *
- * Returns: (transfer none): The widget used as icon
+ * Returns: (nullable) (transfer none): The widget used as icon
  *     on @button, or %NULL.
  *
  * Since: 2.4

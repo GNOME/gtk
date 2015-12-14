@@ -2216,7 +2216,7 @@ gtk_paned_set_position (GtkPaned *paned,
  * 
  * Obtains the first child of the paned widget.
  * 
- * Returns: (transfer none): first child, or %NULL if it is not set.
+ * Returns: (transfer none) (nullable): first child, or %NULL if it is not set.
  *
  * Since: 2.4
  **/
@@ -2234,7 +2234,7 @@ gtk_paned_get_child1 (GtkPaned *paned)
  * 
  * Obtains the second child of the paned widget.
  * 
- * Returns: (transfer none): second child, or %NULL if it is not set.
+ * Returns: (transfer none) (nullable): second child, or %NULL if it is not set.
  *
  * Since: 2.4
  **/

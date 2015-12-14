@@ -463,7 +463,7 @@ gtk_recent_filter_set_name (GtkRecentFilter *filter,
  * Gets the human-readable name for the filter.
  * See gtk_recent_filter_set_name().
  *
- * Returns: the name of the filter, or %NULL.  The returned string
+ * Returns: (nullable): the name of the filter, or %NULL.  The returned string
  *   is owned by the filter object and should not be freed.
  *
  * Since: 2.10

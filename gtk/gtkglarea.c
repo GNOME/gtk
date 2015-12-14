@@ -998,7 +998,7 @@ gtk_gl_area_set_error (GtkGLArea    *area,
  *
  * Gets the current error set on the @area.
  *
- * Returns: (transfer none): the #GError or %NULL
+ * Returns: (transfer none) (nullable): the #GError or %NULL
  *
  * Since: 3.16
  */

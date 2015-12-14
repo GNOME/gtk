@@ -2496,7 +2496,8 @@ gtk_popover_set_default_widget (GtkPopover *popover,
  * Gets the widget that should be set as the default while
  * the popover is shown.
  *
- * Returns: (transfer none): the default widget, or %NULL if there is none
+ * Returns: (nullable) (transfer none): the default widget,
+ * or %NULL if there is none
  *
  * Since: 3.18
  */

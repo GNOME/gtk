@@ -4608,8 +4608,8 @@ gtk_places_sidebar_set_location (GtkPlacesSidebar *sidebar,
  * function to get the location that is being referred to during the callbacks
  * for your menu items.
  *
- * Returns: (transfer full): a GFile with the selected location, or #NULL if nothing is visually
- * selected.
+ * Returns: (transfer full) (nullable): a GFile with the selected location, or
+ * %NULL if nothing is visually selected.
  *
  * Since: 3.10
  */
@@ -5096,9 +5096,9 @@ gtk_places_sidebar_list_shortcuts (GtkPlacesSidebar *sidebar)
  * and returns one of them.  This function is used by #GtkFileChooser to implement
  * the “Alt-1”, “Alt-2”, etc. shortcuts, which activate the cooresponding bookmark.
  *
- * Returns: (transfer full): The bookmark specified by the index @n, or
- * #NULL if no such index exist.  Note that the indices start at 0, even though
- * the file chooser starts them with the keyboard shortcut “Alt-1”.
+ * Returns: (nullable) (transfer full): The bookmark specified by the index @n, or
+ * %NULL if no such index exist.  Note that the indices start at 0, even though
+ * the file chooser starts them with the keyboard shortcut "Alt-1".
  *
  * Since: 3.10
  */

@@ -2251,7 +2251,7 @@ gtk_text_buffer_delete_mark (GtkTextBuffer *buffer,
  * Returns the mark named @name in buffer @buffer, or %NULL if no such
  * mark exists in the buffer.
  *
- * Returns: (transfer none): a #GtkTextMark, or %NULL
+ * Returns: (nullable) (transfer none): a #GtkTextMark, or %NULL
  **/
 GtkTextMark*
 gtk_text_buffer_get_mark (GtkTextBuffer *buffer,

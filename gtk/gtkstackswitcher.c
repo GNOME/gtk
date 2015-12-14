@@ -441,7 +441,7 @@ gtk_stack_switcher_set_stack (GtkStackSwitcher *switcher,
  * Retrieves the stack.
  * See gtk_stack_switcher_set_stack().
  *
- * Returns: (transfer none): the stack, or %NULL if
+ * Returns: (nullable) (transfer none): the stack, or %NULL if
  *    none has been set explicitly.
  *
  * Since: 3.10

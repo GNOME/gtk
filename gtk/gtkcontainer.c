@@ -2465,7 +2465,7 @@ gtk_container_set_focus_child (GtkContainer *container,
  * currently focused widget. That can be obtained by calling
  * gtk_window_get_focus().
  *
- * Returns: (transfer none): The child widget which will receive the
+ * Returns: (nullable) (transfer none): The child widget which will receive the
  *          focus inside @container when the @conatiner is focussed,
  *          or %NULL if none is set.
  *
@@ -3463,8 +3463,8 @@ gtk_container_set_focus_vadjustment (GtkContainer  *container,
  * Retrieves the vertical focus adjustment for the container. See
  * gtk_container_set_focus_vadjustment().
  *
- * Returns: (transfer none): the vertical focus adjustment, or %NULL if
- *   none has been set.
+ * Returns: (nullable) (transfer none): the vertical focus adjustment, or
+ *   %NULL if none has been set.
  **/
 GtkAdjustment *
 gtk_container_get_focus_vadjustment (GtkContainer *container)
@@ -3518,7 +3518,7 @@ gtk_container_set_focus_hadjustment (GtkContainer  *container,
  * Retrieves the horizontal focus adjustment for the container. See
  * gtk_container_set_focus_hadjustment ().
  *
- * Returns: (transfer none): the horizontal focus adjustment, or %NULL if
+ * Returns: (nullable) (transfer none): the horizontal focus adjustment, or %NULL if
  *   none has been set.
  **/
 GtkAdjustment *

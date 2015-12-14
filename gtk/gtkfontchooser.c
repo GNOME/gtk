@@ -135,7 +135,7 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
  *
  * If the selected font is not installed, returns %NULL.
  *
- * Returns: (transfer none): A #PangoFontFamily representing the
+ * Returns: (transfer none) (nullable): A #PangoFontFamily representing the
  *     selected font family, or %NULL. The returned object is owned by @fontchooser
  *     and must not be modified or freed.
  *
@@ -158,7 +158,7 @@ gtk_font_chooser_get_font_family (GtkFontChooser *fontchooser)
  *
  * If the selected font is not installed, returns %NULL.
  *
- * Returns: (transfer none): A #PangoFontFace representing the
+ * Returns: (transfer none) (nullable): A #PangoFontFace representing the
  *     selected font group details, or %NULL. The returned object is owned by
  *     @fontchooser and must not be modified or freed.
  *
@@ -206,7 +206,7 @@ gtk_font_chooser_get_font_size (GtkFontChooser *fontchooser)
  * Use pango_font_description_equal() if you want to compare two
  * font descriptions.
  *
- * Returns: (transfer full) (allow-none): A string with the name
+ * Returns: (transfer full) (nullable): A string with the name
  *     of the current font, or %NULL if  no font is selected. You must
  *     free this string with g_free().
  *
@@ -259,7 +259,7 @@ gtk_font_chooser_set_font (GtkFontChooser *fontchooser,
  * Use pango_font_description_equal() if you want to compare two
  * font descriptions.
  *
- * Returns: (transfer full) (allow-none): A #PangoFontDescription for the
+ * Returns: (transfer full) (nullable): A #PangoFontDescription for the
  *     current font, or %NULL if  no font is selected.
  *
  * Since: 3.2
@@ -465,7 +465,7 @@ gtk_font_chooser_set_font_map (GtkFontChooser *fontchooser,
  * Gets the custom font map of this font chooser widget,
  * or %NULL if it does not have one.
  *
- * Returns: (transfer full) (allow-none): a #PangoFontMap, or %NULL
+ * Returns: (transfer full) (nullable): a #PangoFontMap, or %NULL
  *
  * Since: 3.18
  */

@@ -86,8 +86,8 @@ typedef enum
  *
  * Since: 2.14
  *
- * Returns: Newly allocated string with Pango markup with details
- * for the specified day, or %NULL.
+ * Returns: (nullable) (transfer full): Newly allocated string with Pango markup
+ *     with details for the specified day or %NULL.
  */
 typedef gchar* (*GtkCalendarDetailFunc) (GtkCalendar *calendar,
                                          guint        year,

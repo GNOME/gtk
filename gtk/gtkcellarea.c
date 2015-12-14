@@ -3187,7 +3187,7 @@ gtk_cell_area_get_focus_siblings (GtkCellArea     *area,
  * then chose to activate the focus cell for which the event
  * cell may have been a sibling.
  *
- * Returns: (transfer none): the #GtkCellRenderer for which @renderer
+ * Returns: (nullable) (transfer none): the #GtkCellRenderer for which @renderer
  *    is a sibling, or %NULL.
  *
  * Since: 3.0

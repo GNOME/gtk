@@ -893,7 +893,7 @@ gtk_cell_renderer_activate (GtkCellRenderer      *cell,
  *
  * Passes an activate event to the cell renderer for possible processing.
  *
- * Returns: (transfer none): A new #GtkCellEditable, or %NULL
+ * Returns: (nullable) (transfer none): A new #GtkCellEditable, or %NULL
  **/
 GtkCellEditable *
 gtk_cell_renderer_start_editing (GtkCellRenderer      *cell,

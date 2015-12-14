@@ -439,7 +439,7 @@ gtk_test_find_sibling (GtkWidget *base_widget,
  * gtk_test_widget_click() for possible caveats involving the search of
  * such widgets and synthesizing widget events.
  *
- * Returns: (transfer none): a valid widget if any is found or %NULL.
+ * Returns: (nullable) (transfer none): a valid widget if any is found or %NULL.
  *
  * Since: 2.14
  **/

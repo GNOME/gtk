@@ -7338,8 +7338,8 @@ gtk_notebook_get_current_page (GtkNotebook *notebook)
  *
  * Returns the child widget contained in page number @page_num.
  *
- * Returns: (transfer none): the child widget, or %NULL
- *     if @page_num is out of bounds
+ * Returns: (nullable) (transfer none): the child widget, or %NULL if @page_num
+ * is out of bounds
  */
 GtkWidget*
 gtk_notebook_get_nth_page (GtkNotebook *notebook,
@@ -8054,9 +8054,9 @@ gtk_notebook_set_tab_label_text (GtkNotebook *notebook,
  * Retrieves the text of the tab label for the page containing
  * @child.
  *
- * Returns: the text of the tab label, or %NULL if the
- *     tab label widget is not a #GtkLabel. The string is owned
- *     by the widget and must not be freed.
+ * Returns: (nullable): the text of the tab label, or %NULL if the tab label
+ * widget is not a #GtkLabel. The string is owned by the widget and must not be
+ * freed.
  */
 const gchar *
 gtk_notebook_get_tab_label_text (GtkNotebook *notebook,
@@ -8082,9 +8082,9 @@ gtk_notebook_get_tab_label_text (GtkNotebook *notebook,
  *
  * Retrieves the menu label widget of the page containing @child.
  *
- * Returns: (transfer none): the menu label, or %NULL if the
- *     notebook page does not have a menu label other than the
- *     default (the tab label).
+ * Returns: (nullable) (transfer none): the menu label, or %NULL if the
+ * notebook page does not have a menu label other than the default (the tab
+ * label).
  */
 GtkWidget*
 gtk_notebook_get_menu_label (GtkNotebook *notebook,
@@ -8189,10 +8189,10 @@ gtk_notebook_set_menu_label_text (GtkNotebook *notebook,
  * Retrieves the text of the menu label for the page containing
  * @child.
  *
- * Returns: the text of the tab label, or %NULL if the
- *     widget does not have a menu label other than the default
- *     menu label, or the menu label widget is not a #GtkLabel.
- *     The string is owned by the widget and must not be freed.
+ * Returns: (nullable): the text of the tab label, or %NULL if the widget does
+ * not have a menu label other than the default menu label, or the menu label
+ * widget is not a #GtkLabel. The string is owned by the widget and must not be
+ * freed.
  */
 const gchar *
 gtk_notebook_get_menu_label_text (GtkNotebook *notebook,
@@ -8415,8 +8415,7 @@ gtk_notebook_set_group_name (GtkNotebook *notebook,
  *
  * Gets the current group name for @notebook.
  *
- * Returns: (transfer none): the group name,
- *     or %NULL if none is set.
+ * Returns: (nullable) (transfer none): the group name, or %NULL if none is set
  *
  * Since: 2.24
  */
@@ -8601,8 +8600,8 @@ gtk_notebook_set_tab_detachable (GtkNotebook *notebook,
  *
  * Gets one of the action widgets. See gtk_notebook_set_action_widget().
  *
- * Returns: (transfer none): The action widget with the given @pack_type
- *     or %NULL when this action widget has not been set
+ * Returns: (nullable) (transfer none): The action widget with the given
+ * @pack_type or %NULL when this action widget has not been set
  *
  * Since: 2.20
  */

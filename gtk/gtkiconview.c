@@ -4441,8 +4441,8 @@ gtk_icon_view_convert_widget_to_bin_window_coords (GtkIconView *icon_view,
  * See gtk_icon_view_convert_widget_to_bin_window_coords() for converting
  * widget coordinates to bin_window coordinates.
  * 
- * Returns: The #GtkTreePath corresponding to the icon or %NULL
- * if no icon exists at that position.
+ * Returns: (nullable) (transfer full): The #GtkTreePath corresponding
+ * to the icon or %NULL if no icon exists at that position.
  *
  * Since: 2.6 
  **/
@@ -5082,7 +5082,7 @@ gtk_icon_view_set_model (GtkIconView *icon_view,
  * Returns the model the #GtkIconView is based on.  Returns %NULL if the
  * model is unset.
  *
- * Returns: (transfer none): A #GtkTreeModel, or %NULL if none is
+ * Returns: (nullable) (transfer none): A #GtkTreeModel, or %NULL if none is
  *     currently being used.
  *
  * Since: 2.6 

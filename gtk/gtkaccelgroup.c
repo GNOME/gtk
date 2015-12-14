@@ -818,13 +818,13 @@ _gtk_accel_group_get_accelerables (GtkAccelGroup *accel_group)
  * @accel_group: the accelerator group to query
  * @accel_key: key value of the accelerator
  * @accel_mods: modifier combination of the accelerator
- * @n_entries: (out) (allow-none): location to return the number
+ * @n_entries: (out) (optional): location to return the number
  *     of entries found, or %NULL
  *
  * Queries an accelerator group for all entries matching @accel_key
  * and @accel_mods.
  *
- * Returns: (transfer none) (array length=n_entries): an array of
+ * Returns: (transfer none) (array length=n_entries) (nullable): an array of
  *     @n_entries #GtkAccelGroupEntry elements, or %NULL. The array
  *     is owned by GTK+ and must not be freed.
  */
@@ -854,7 +854,7 @@ gtk_accel_group_query (GtkAccelGroup   *accel_group,
  * Finds the #GtkAccelGroup to which @closure is connected;
  * see gtk_accel_group_connect().
  *
- * Returns: (transfer none): the #GtkAccelGroup to which @closure
+ * Returns: (nullable) (transfer none): the #GtkAccelGroup to which @closure
  *     is connected, or %NULL
  */
 GtkAccelGroup*

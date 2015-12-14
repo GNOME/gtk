@@ -352,7 +352,7 @@ gtk_accel_label_finalize (GObject *object)
  * Fetches the widget monitored by this accelerator label. See
  * gtk_accel_label_set_accel_widget().
  *
- * Returns: (transfer none): the object monitored by the accelerator label, or %NULL.
+ * Returns: (nullable) (transfer none): the object monitored by the accelerator label, or %NULL.
  **/
 GtkWidget*
 gtk_accel_label_get_accel_widget (GtkAccelLabel *accel_label)

@@ -297,7 +297,7 @@ gtk_offscreen_window_new (void)
  * a #cairo_surface_t.  If you need to keep this around over window
  * resizes then you should add a reference to it.
  *
- * Returns: (transfer none): A #cairo_surface_t pointer to the offscreen
+ * Returns: (transfer none) (nullable): A #cairo_surface_t pointer to the offscreen
  *     surface, or %NULL.
  *
  * Since: 2.20
@@ -319,7 +319,7 @@ gtk_offscreen_window_get_surface (GtkOffscreenWindow *offscreen)
  * and the application should unreference it once it is no longer
  * needed.
  *
- * Returns: (transfer full): A #GdkPixbuf pointer, or %NULL.
+ * Returns: (transfer full) (nullable): A #GdkPixbuf pointer, or %NULL.
  *
  * Since: 2.20
  */

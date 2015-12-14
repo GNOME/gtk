@@ -1489,7 +1489,7 @@ gtk_tool_palette_get_expand (GtkToolPalette   *palette,
  * Gets the item at position (x, y).
  * See gtk_tool_palette_get_drop_group().
  *
- * Returns: (transfer none): the #GtkToolItem at position or %NULL if there is no such item
+ * Returns: (nullable) (transfer none): the #GtkToolItem at position or %NULL if there is no such item
  *
  * Since: 2.20
  */
@@ -1521,8 +1521,8 @@ gtk_tool_palette_get_drop_item (GtkToolPalette *palette,
  *
  * Gets the group at position (x, y).
  *
- * Returns: (transfer none): the #GtkToolItemGroup at position or %NULL
- *     if there is no such group
+ * Returns: (nullable) (transfer none): the #GtkToolItemGroup at position
+ * or %NULL if there is no such group
  *
  * Since: 2.20
  */

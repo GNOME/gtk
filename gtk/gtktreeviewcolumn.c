@@ -2520,7 +2520,7 @@ gtk_tree_view_column_set_widget (GtkTreeViewColumn *tree_column,
  * Returns the #GtkWidget in the button on the column header.
  * If a custom widget has not been set then %NULL is returned.
  *
- * Returns: (transfer none): The #GtkWidget in the column
+ * Returns: (nullable) (transfer none): The #GtkWidget in the column
  *     header, or %NULL
  **/
 GtkWidget *
@@ -3101,7 +3101,7 @@ gtk_tree_view_column_queue_resize (GtkTreeViewColumn *tree_column)
  * If @column is currently not inserted in any tree view, %NULL is
  * returned.
  *
- * Returns: (transfer none): The tree view wherein @column has
+ * Returns: (nullable) (transfer none): The tree view wherein @column has
  *     been inserted if any, %NULL otherwise.
  *
  * Since: 2.12

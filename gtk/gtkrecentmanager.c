@@ -1162,7 +1162,7 @@ build_recent_info (GBookmarkFile *bookmarks,
  * returns a #GtkRecentInfo-struct containing informations about the resource
  * like its MIME type, or its display name.
  *
- * Returns: a #GtkRecentInfo-struct containing information
+ * Returns: (nullable): a #GtkRecentInfo-struct containing information
  *   about the resource pointed by @uri, or %NULL if the URI was
  *   not registered in the recently used resources list. Free with
  *   gtk_recent_info_unref().

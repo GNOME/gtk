@@ -337,7 +337,7 @@ _gtk_window_group_remove_device_grab (GtkWindowGroup *window_group,
  *
  * Returns the current grab widget for @device, or %NULL if none.
  *
- * Returns: (transfer none): The grab widget, or %NULL
+ * Returns: (nullable) (transfer none): The grab widget, or %NULL
  *
  * Since: 3.0
  */

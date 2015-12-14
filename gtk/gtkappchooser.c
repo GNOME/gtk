@@ -109,7 +109,7 @@ gtk_app_chooser_get_content_type (GtkAppChooser *self)
  *
  * Returns the currently selected application.
  *
- * Returns: (transfer full): a #GAppInfo for the currently selected
+ * Returns: (nullable) (transfer full): a #GAppInfo for the currently selected
  *     application, or %NULL if none is selected. Free with g_object_unref()
  *
  * Since: 3.0
