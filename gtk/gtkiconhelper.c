@@ -28,6 +28,7 @@
 #include "gtkcssnodeprivate.h"
 #include "gtkcssstyleprivate.h"
 #include "gtkcssstylepropertyprivate.h"
+#include "gtkcsstransientnodeprivate.h"
 #include "gtkiconthemeprivate.h"
 #include "gtkrendericonprivate.h"
 #include "deprecated/gtkiconfactoryprivate.h"
@@ -55,6 +56,9 @@ gtk_icon_helper_invalidate (GtkIconHelper *self)
       cairo_surface_destroy (self->priv->rendered_surface);
       self->priv->rendered_surface = NULL;
     }
+
+  if (!GTK_IS_CSS_TRANSIENT_NODE (gtk_css_gadget_get_node (GTK_CSS_GADGET (self))))
+    gtk_widget_queue_resize (gtk_css_gadget_get_owner (GTK_CSS_GADGET (self)));
 }
 
 static void
