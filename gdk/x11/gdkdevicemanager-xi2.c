@@ -1232,6 +1232,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
 {
   GdkX11DeviceManagerXI2 *device_manager;
   XGenericEventCookie *cookie;
+  GdkDevice *device, *source_device;
   gboolean return_val = TRUE;
   GdkWindow *window;
   GdkWindowImplX11 *impl;
@@ -1289,7 +1290,6 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         XIDeviceEvent *xev = (XIDeviceEvent *) ev;
         GdkKeymap *keymap = gdk_keymap_get_for_display (display);
         GdkModifierType consumed, state;
-        GdkDevice *device, *source_device;
 
         GDK_NOTE (EVENTS,
                   g_message ("key %s:\twindow %ld\n"
@@ -1349,7 +1349,6 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
     case XI_ButtonRelease:
       {
         XIDeviceEvent *xev = (XIDeviceEvent *) ev;
-        GdkDevice *source_device;
 
         GDK_NOTE (EVENTS,
                   g_message ("button %s:\twindow %ld\n"
@@ -1391,8 +1390,9 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
             event->scroll.delta_x = 0;
             event->scroll.delta_y = 0;
 
-            event->scroll.device = g_hash_table_lookup (device_manager->id_table,
-                                                        GUINT_TO_POINTER (xev->deviceid));
+            device = g_hash_table_lookup (device_manager->id_table,
+                                          GUINT_TO_POINTER (xev->deviceid));
+            gdk_event_set_device (event, device);
 
             source_device = g_hash_table_lookup (device_manager->id_table,
                                                  GUINT_TO_POINTER (xev->sourceid));
@@ -1416,8 +1416,9 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
             event->button.x_root = (gdouble) xev->root_x / scale;
             event->button.y_root = (gdouble) xev->root_y / scale;
 
-            event->button.device = g_hash_table_lookup (device_manager->id_table,
-                                                        GUINT_TO_POINTER (xev->deviceid));
+            device = g_hash_table_lookup (device_manager->id_table,
+                                          GUINT_TO_POINTER (xev->deviceid));
+            gdk_event_set_device (event, device);
 
             source_device = g_hash_table_lookup (device_manager->id_table,
                                                  GUINT_TO_POINTER (xev->sourceid));
@@ -1466,7 +1467,6 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
     case XI_Motion:
       {
         XIDeviceEvent *xev = (XIDeviceEvent *) ev;
-        GdkDevice *source_device, *device;
         gdouble delta_x, delta_y;
 
         source_device = g_hash_table_lookup (device_manager->id_table,
@@ -1557,7 +1557,6 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
     case XI_TouchEnd:
       {
         XIDeviceEvent *xev = (XIDeviceEvent *) ev;
-        GdkDevice *source_device;
 
         GDK_NOTE(EVENTS,
                  g_message ("touch %s:\twindow %ld\n\ttouch id: %u\n\tpointer emulating: %s",
@@ -1578,8 +1577,9 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         event->touch.x_root = (gdouble) xev->root_x / scale;
         event->touch.y_root = (gdouble) xev->root_y / scale;
 
-        event->touch.device = g_hash_table_lookup (device_manager->id_table,
-                                                   GUINT_TO_POINTER (xev->deviceid));
+        device = g_hash_table_lookup (device_manager->id_table,
+                                      GUINT_TO_POINTER (xev->deviceid));
+        gdk_event_set_device (event, device);
 
         source_device = g_hash_table_lookup (device_manager->id_table,
                                              GUINT_TO_POINTER (xev->sourceid));
@@ -1630,7 +1630,6 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
     case XI_TouchUpdate:
       {
         XIDeviceEvent *xev = (XIDeviceEvent *) ev;
-        GdkDevice *source_device;
 
         GDK_NOTE(EVENTS,
                  g_message ("touch update:\twindow %ld\n\ttouch id: %u\n\tpointer emulating: %s",
@@ -1647,8 +1646,9 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         event->touch.x_root = (gdouble) xev->root_x / scale;
         event->touch.y_root = (gdouble) xev->root_y / scale;
 
-        event->touch.device = g_hash_table_lookup (device_manager->id_table,
-                                                   GINT_TO_POINTER (xev->deviceid));
+        device = g_hash_table_lookup (device_manager->id_table,
+                                      GINT_TO_POINTER (xev->deviceid));
+        gdk_event_set_device (event, device);
 
         source_device = g_hash_table_lookup (device_manager->id_table,
                                              GUINT_TO_POINTER (xev->sourceid));
@@ -1686,7 +1686,6 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
     case XI_Leave:
       {
         XIEnterEvent *xev = (XIEnterEvent *) ev;
-        GdkDevice *device, *source_device;
 
         GDK_NOTE (EVENTS,
                   g_message ("%s notify:\twindow %ld\n\tsubwindow:%ld\n"
