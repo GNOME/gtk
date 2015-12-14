@@ -96,7 +96,7 @@ gtk_css_style_render_icon_surface (GtkCssStyle            *style,
                                    double                  y)
 {
   const GtkCssValue *shadows;
-  cairo_matrix_t matrix, transform_matrix;
+  cairo_matrix_t matrix, transform_matrix, saved_matrix;
   GdkRectangle extents;
 
   g_return_if_fail (GTK_IS_CSS_STYLE (style));
@@ -114,6 +114,7 @@ gtk_css_style_render_icon_surface (GtkCssStyle            *style,
       return;
     }
 
+  cairo_get_matrix (cr, &saved_matrix);
   cairo_translate (cr, x + extents.x, y + extents.y);
 
   if (_gtk_css_transform_value_get_matrix (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_TRANSFORM), &transform_matrix))
@@ -138,5 +139,7 @@ gtk_css_style_render_icon_surface (GtkCssStyle            *style,
       _gtk_css_shadows_value_paint_icon (shadows, cr);
       cairo_paint (cr);
     }
+
+  cairo_set_matrix (cr, &saved_matrix);
 }
 
