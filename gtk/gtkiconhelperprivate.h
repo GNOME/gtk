@@ -70,6 +70,8 @@ GType gtk_icon_helper_get_type (void) G_GNUC_CONST;
 
 GtkIconHelper *gtk_icon_helper_new (GtkCssNode *node,
                                     GtkWidget  *owner);
+GtkCssGadget *gtk_icon_helper_new_named (const char *name,
+                                          GtkWidget  *owner);
 
 void _gtk_icon_helper_clear (GtkIconHelper *self);
 
