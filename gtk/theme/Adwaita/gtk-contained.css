@@ -4499,26 +4499,29 @@ colorswatch {
   colorswatch.activatable:hover, colorswatch.activatable:hover:selected {
     background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0) 50%);
     box-shadow: inset 0 1px rgba(255, 255, 255, 0.4), inset 0 -1px rgba(0, 0, 0, 0.1); }
-    colorswatch.activatable:hover.dark overlay, colorswatch.activatable:hover:selected.dark overlay {
-      background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0) 50%); }
   colorswatch:backdrop, colorswatch:backdrop:selected
   colorswatch.dark:backdrop, colorswatch.dark:backdrop:selected {
     background-image: none;
     box-shadow: none; }
-  colorswatch.dark overlay {
+  colorswatch.dark {
     color: white;
-    outline-color: rgba(255, 255, 255, 0.5); }
-    colorswatch.dark overlay:backdrop {
+    outline-color: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(0, 0, 0, 0.3); }
+    colorswatch.dark:hover {
+      border-color: rgba(0, 0, 0, 0.5); }
+    colorswatch.dark:backdrop {
       color: rgba(255, 255, 255, 0.3); }
-  colorswatch.light overlay {
+  colorswatch.light {
     color: black;
-    outline-color: rgba(0, 0, 0, 0.5); }
-    colorswatch.light overlay:backdrop {
+    outline-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 0, 0, 0.3); }
+    colorswatch.light:hover {
+      border-color: rgba(0, 0, 0, 0.5); }
+    colorswatch.light:backdrop {
       color: rgba(0, 0, 0, 0.3); }
   colorswatch overlay, colorswatch overlay:selected {
-    border: 1px solid rgba(0, 0, 0, 0.3); }
-    colorswatch overlay:hover, colorswatch overlay:selected:hover {
-      border-color: rgba(0, 0, 0, 0.5); }
+    background: none;
+    border: none; }
   colorswatch#add-color-button {
     border-style: solid;
     border-width: 1px;
