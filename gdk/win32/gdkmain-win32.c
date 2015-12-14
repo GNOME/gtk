@@ -97,8 +97,6 @@ _gdk_win32_windowing_init (void)
   GDK_NOTE (EVENTS, g_print ("input_locale:%p, codepage:%d\n",
 			     _gdk_input_locale, _gdk_input_codepage));
 
-  CoInitialize (NULL);
-
   _gdk_selection = gdk_atom_intern_static_string ("GDK_SELECTION");
   _wm_transient_for = gdk_atom_intern_static_string ("WM_TRANSIENT_FOR");
   _targets = gdk_atom_intern_static_string ("TARGETS");
