@@ -590,6 +590,7 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
   event->dnd.time = GDK_CURRENT_TIME;
 
   gdk_event_set_device (event, gdk_drag_context_get_device (current_context));
+  gdk_event_set_seat (event, gdk_device_get_seat (gdk_drag_context_get_device (current_context)));
 
   _gdk_event_emit (event);
 
@@ -620,6 +621,7 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
   event->dnd.time = GDK_CURRENT_TIME;
 
   gdk_event_set_device (event, gdk_drag_context_get_device (current_context));
+  gdk_event_set_seat (event, gdk_device_get_seat (gdk_drag_context_get_device (current_context)));
 
   _gdk_event_emit (event);
 
@@ -648,6 +650,7 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
   event->dnd.y_root = gy;
 
   gdk_event_set_device (event, gdk_drag_context_get_device (current_context));
+  gdk_event_set_seat (event, gdk_device_get_seat (gdk_drag_context_get_device (current_context)));
 
   _gdk_event_emit (event);
 
@@ -675,6 +678,7 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
   event->dnd.y_root = gy;
 
   gdk_event_set_device (event, gdk_drag_context_get_device (current_context));
+  gdk_event_set_seat (event, gdk_device_get_seat (gdk_drag_context_get_device (current_context)));
 
   _gdk_event_emit (event);
 
@@ -695,6 +699,7 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
 {
   GdkEvent *event;
   GdkScreen *screen;
+  GdkDevice *device;
 
   g_assert (_gdk_quartz_drag_source_context != NULL);
 
@@ -730,8 +735,9 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
         }
     }
 
-  gdk_event_set_device (event,
-                        gdk_drag_context_get_device (_gdk_quartz_drag_source_context));
+  device = gdk_drag_context_get_device (_gdk_quartz_drag_source_context);
+  gdk_event_set_device (event, device);
+  gdk_event_set_seat (event, gdk_device_get_seat (device));
 
   _gdk_event_emit (event);
 

@@ -20,10 +20,12 @@
 #include <gdk/gdktypes.h>
 #include <gdk/gdkdevicemanager.h>
 #include <gdk/gdkdeviceprivate.h>
+#include <gdk/gdkseatdefaultprivate.h>
 #include <gdk/gdkdevicemanagerprivate.h>
 #include "gdkdevicemanager-core-quartz.h"
 #include "gdkquartzdevice-core.h"
 #include "gdkkeysyms.h"
+#include "gdkprivate-quartz.h"
 
 
 #define HAS_FOCUS(toplevel)                           \
@@ -104,6 +106,7 @@ gdk_quartz_device_manager_core_constructed (GObject *object)
 {
   GdkQuartzDeviceManagerCore *device_manager;
   GdkDisplay *display;
+  GdkSeat *seat;
 
   device_manager = GDK_QUARTZ_DEVICE_MANAGER_CORE (object);
   display = gdk_device_manager_get_display (GDK_DEVICE_MANAGER (object));
@@ -112,6 +115,11 @@ gdk_quartz_device_manager_core_constructed (GObject *object)
 
   _gdk_device_set_associated_device (device_manager->core_pointer, device_manager->core_keyboard);
   _gdk_device_set_associated_device (device_manager->core_keyboard, device_manager->core_pointer);
+
+  seat = gdk_seat_default_new_for_master_pair (device_manager->core_pointer,
+                                               device_manager->core_keyboard);
+  gdk_display_add_seat (display, seat);
+  g_object_unref (seat);
 }
 
 static GList *
