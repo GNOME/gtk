@@ -84,6 +84,60 @@ _gtk_icon_helper_clear (GtkIconHelper *self)
 }
 
 static void
+gtk_icon_helper_get_preferred_size (GtkCssGadget   *gadget,
+                                    GtkOrientation  orientation,
+                                    gint            for_size,
+                                    gint           *minimum,
+                                    gint           *natural,
+                                    gint           *minimum_baseline,
+                                    gint           *natural_baseline)
+{
+  GtkIconHelper *self = GTK_ICON_HELPER (gadget);
+  int icon_width, icon_height;
+
+  _gtk_icon_helper_get_size (self, &icon_width, &icon_height);
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    *minimum = *natural = icon_width;
+  else
+    *minimum = *natural = icon_height;
+
+  if (minimum_baseline)
+    *minimum_baseline = 0;
+  if (natural_baseline)
+    *natural_baseline = 0;
+}
+
+static void
+gtk_icon_helper_allocate (GtkCssGadget        *gadget,
+                          const GtkAllocation *allocation,
+                          int                  baseline,
+                          GtkAllocation       *out_clip)
+{
+  GTK_CSS_GADGET_CLASS (gtk_icon_helper_parent_class)->allocate (gadget, allocation, baseline, out_clip);
+}
+
+static gboolean
+gtk_icon_helper_draw (GtkCssGadget *gadget,
+                      cairo_t      *cr,
+                      int           x,
+                      int           y,
+                      int           width,
+                      int           height)
+{
+  GtkIconHelper *self = GTK_ICON_HELPER (gadget);
+  int icon_width, icon_height;
+
+  _gtk_icon_helper_get_size (self, &icon_width, &icon_height);
+  _gtk_icon_helper_draw (self,
+                         cr,
+                         x + (width - icon_width) / 2,
+                         y + (height - icon_height) / 2);
+
+  return FALSE;
+}
+
+static void
 gtk_icon_helper_style_changed (GtkCssGadget      *gadget,
                                GtkCssStyleChange *change)
 {
@@ -128,6 +182,9 @@ gtk_icon_helper_class_init (GtkIconHelperClass *klass)
   GtkCssGadgetClass *gadget_class = GTK_CSS_GADGET_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   
+  gadget_class->get_preferred_size = gtk_icon_helper_get_preferred_size;
+  gadget_class->allocate = gtk_icon_helper_allocate;
+  gadget_class->draw = gtk_icon_helper_draw;
   gadget_class->style_changed = gtk_icon_helper_style_changed;
 
   object_class->constructed = gtk_icon_helper_constructed;
@@ -781,6 +838,26 @@ gtk_icon_helper_new (GtkCssNode *node,
                        "node", node,
                        "owner", owner,
                        NULL);
+}
+
+GtkCssGadget *
+gtk_icon_helper_new_named (const char *name,
+                           GtkWidget  *owner)
+{
+  GtkIconHelper *result;
+  GtkCssNode *node;
+
+  g_return_val_if_fail (name != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_WIDGET (owner), NULL);
+
+  node = gtk_css_node_new ();
+  gtk_css_node_set_name (node, g_intern_string (name));
+
+  result = gtk_icon_helper_new (node, owner);
+
+  g_object_unref (node);
+
+  return GTK_CSS_GADGET (result);
 }
 
 void
