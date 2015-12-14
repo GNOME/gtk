@@ -24,6 +24,7 @@
 #include "gdkdevice-broadway.h"
 #include "gdkkeysyms.h"
 #include "gdkprivate-broadway.h"
+#include "gdkseatdefaultprivate.h"
 
 #define HAS_FOCUS(toplevel)                           \
   ((toplevel)->has_focus || (toplevel)->has_pointer_focus)
@@ -118,6 +119,7 @@ gdk_broadway_device_manager_constructed (GObject *object)
 {
   GdkBroadwayDeviceManager *device_manager;
   GdkDisplay *display;
+  GdkSeat *seat;
 
   device_manager = GDK_BROADWAY_DEVICE_MANAGER (object);
   display = gdk_device_manager_get_display (GDK_DEVICE_MANAGER (object));
@@ -129,6 +131,12 @@ gdk_broadway_device_manager_constructed (GObject *object)
   _gdk_device_set_associated_device (device_manager->core_keyboard, device_manager->core_pointer);
   _gdk_device_set_associated_device (device_manager->touchscreen, device_manager->core_pointer);
   _gdk_device_add_slave (device_manager->core_pointer, device_manager->touchscreen);
+
+  seat = gdk_seat_default_new_for_master_pair (device_manager->core_pointer,
+                                               device_manager->core_keyboard);
+  gdk_display_add_seat (display, seat);
+  gdk_seat_default_add_slave (GDK_SEAT_DEFAULT (seat), device_manager->touchscreen);
+  g_object_unref (seat);
 }
 
 
