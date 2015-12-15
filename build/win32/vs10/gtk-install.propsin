@@ -58,6 +58,8 @@ copy ..\..\..\modules\engines\ms-windows\Theme\gtk-2.0\gtkrc $(CopyDir)\share\th
 
 mkdir $(CopyDir)\share\themes\Raleigh\gtk-2.0
 copy ..\..\..\gtk\gtkrc.default $(CopyDir)\share\themes\Raleigh\gtk-2.0\gtkrc
+
+if exist $(CopyDir)\share\icons\hicolor $(CopyDir)\bin\gtk-update-icon-cache.exe --ignore-theme-index --force "$(CopyDir)\share\icons\hicolor"
 </GtkDoInstall>
   </PropertyGroup>
   <PropertyGroup>

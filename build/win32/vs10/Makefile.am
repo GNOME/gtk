@@ -34,6 +34,8 @@ EXTRA_DIST +=	\
 	gailutil.vcxproj.filtersin	\
 	libwimp.vcxprojin	\
 	libwimp.vcxproj.filtersin	\
+	gtk-update-icon-cache.vcxproj	\
+	gtk-update-icon-cache.vcxproj.filters	\
 	gtk-install.vcxproj	\
 	$(GENERATED_ITEMS)
 

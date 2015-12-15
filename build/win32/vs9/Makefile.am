@@ -22,6 +22,7 @@ EXTRA_DIST +=	\
 	gtk-demo.vcprojin	\
 	gailutil.vcprojin	\
 	libwimp.vcprojin	\
+	gtk-update-icon-cache.vcproj	\
 	gtk-install.vcproj	\
 	$(GENERATED_ITEMS)
 

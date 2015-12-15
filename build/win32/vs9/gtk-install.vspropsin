@@ -17,6 +17,8 @@ copy $(ConfigurationName)\$(PlatformName)\bin\$(GtkDllPrefix)gailutil$(GtkDllSuf
 copy $(ConfigurationName)\$(PlatformName)\bin\$(GtkDllPrefix)gailutil$(GtkDllSuffix).pdb $(CopyDir)\bin&#x0D;&#x0A;
 copy $(ConfigurationName)\$(PlatformName)\bin\gtk-demo.exe $(CopyDir)\bin&#x0D;&#x0A;
 copy $(ConfigurationName)\$(PlatformName)\bin\gtk-demo.pdb $(CopyDir)\bin&#x0D;&#x0A;
+copy $(ConfigurationName)\$(PlatformName)\bin\gtk-update-icon-cache.exe $(CopyDir)\bin&#x0D;&#x0A;
+copy $(ConfigurationName)\$(PlatformName)\bin\gtk-update-icon-cache.pdb $(CopyDir)\bin&#x0D;&#x0A;
 
 mkdir $(CopyDir)\lib\gtk-$(ApiVersion)\$(GtkHost)\engines&#x0D;&#x0A;
 copy $(ConfigurationName)\$(PlatformName)\bin\gdk-win32-$(ApiVersion).lib $(CopyDir)\lib&#x0D;&#x0A;
@@ -57,6 +59,8 @@ copy ..\..\..\modules\engines\ms-windows\Theme\gtk-$(ApiVersion)\gtkrc $(CopyDir
 
 mkdir $(CopyDir)\share\themes\Raleigh\gtk-$(ApiVersion)&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkrc.default $(CopyDir)\share\themes\Raleigh\gtk-$(ApiVersion)\gtkrc&#x0D;&#x0A;
+
+if exist $(CopyDir)\share\icons\hicolor $(CopyDir)\bin\gtk-update-icon-cache.exe --ignore-theme-index --force &quot;$(CopyDir)\share\icons\hicolor&quot;&#x0D;&#x0A;
 		      "
 	/>
 </VisualStudioPropertySheet>
