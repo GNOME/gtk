@@ -3371,7 +3371,7 @@ gtk_list_box_row_allocate (GtkCssGadget        *gadget,
   if (child && gtk_widget_get_visible (child))
     gtk_widget_size_allocate (child, (GtkAllocation *)allocation);
 
-  _gtk_widget_set_simple_clip (widget, NULL);
+  gtk_container_get_children_clip (GTK_CONTAINER (widget), out_clip);
 }
 
 /**
