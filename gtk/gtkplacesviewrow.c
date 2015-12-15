@@ -89,6 +89,7 @@ measure_available_space_finished (GObject      *object,
   gchar *formatted_free_size;
   gchar *formatted_total_size;
   gchar *label;
+  guint plural_form;
 
   error = NULL;
 
@@ -120,8 +121,16 @@ measure_available_space_finished (GObject      *object,
 
   formatted_free_size = g_format_size (free_space);
   formatted_total_size = g_format_size (total_space);
-  /* Translators: respectively, free and total space of the drive */
-  label = g_strdup_printf (_("%s / %s available"), formatted_free_size, formatted_total_size);
+
+  /* read g_format_size code in glib for further understanding */
+  plural_form = free_space < 1000 ? free_space : free_space % 1000 + 1000;
+
+  /* Translators: respectively, free and total space of the drive. The plural form
+   * should be based on the free space available.
+   * i.e. 1 GB / 24 GB available.
+   */
+  label = g_strdup_printf (ngettext ("%s / %s available", "%s / %s available", plural_form),
+                           formatted_free_size, formatted_total_size);
 
   gtk_label_set_label (row->available_space_label, label);
 
