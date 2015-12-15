@@ -3804,8 +3804,6 @@ row {
 /*************
  * Expanders *
  *************/
-expander title:hover {
-  background: red; }
 expander arrow {
   -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
   expander arrow:dir(rtl) {
