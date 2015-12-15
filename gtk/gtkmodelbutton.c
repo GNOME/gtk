@@ -1052,7 +1052,6 @@ gtk_model_button_clicked (GtkButton *button)
 {
   GtkModelButton *model_button = GTK_MODEL_BUTTON (button);
 
-  g_print ("model button clicked\n");
   if (model_button->menu_name != NULL)
     {
       GtkWidget *stack;
