@@ -7421,15 +7421,15 @@ drag_scan_timeout (gpointer data)
   GtkTreePath *path = NULL;
   GtkTreeViewColumn *column = NULL;
   GdkRectangle visible_rect;
+  GdkSeat *seat;
 
   gdk_threads_enter ();
 
   tree_view = GTK_TREE_VIEW (data);
 
+  seat = gdk_display_get_default_seat (gtk_widget_get_display (GTK_WIDGET (tree_view)));
   gdk_window_get_device_position (tree_view->priv->bin_window,
-                                  gdk_device_manager_get_client_pointer (
-                                    gdk_display_get_device_manager (
-                                      gtk_widget_get_display (GTK_WIDGET (tree_view)))),
+                                  gdk_seat_get_pointer (seat),
                                   &x, &y, &state);
 
   gtk_tree_view_get_visible_rect (tree_view, &visible_rect);
@@ -12981,11 +12981,12 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
   
   if (gtk_widget_get_mapped (GTK_WIDGET (tree_view)))
     {
+      GdkSeat *seat;
+
+      seat = gdk_display_get_default_seat (gtk_widget_get_display (GTK_WIDGET (tree_view)));
       /* now that we've collapsed all rows, we want to try to set the prelight again */
       child = gdk_window_get_device_position (gdk_window_get_parent (tree_view->priv->bin_window),
-                                              gdk_device_manager_get_client_pointer (
-                                                gdk_display_get_device_manager (
-                                                  gtk_widget_get_display (GTK_WIDGET (tree_view)))),
+                                              gdk_seat_get_pointer (seat),
                                               &x, &y, NULL);
       if (child == tree_view->priv->bin_window)
 	{
