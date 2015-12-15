@@ -11808,10 +11808,11 @@ gtk_widget_get_pointer (GtkWidget *widget,
 
   if (_gtk_widget_get_realized (widget))
     {
+      GdkSeat *seat;
+
+      seat = gdk_display_get_default_seat (gtk_widget_get_display (widget));
       gdk_window_get_device_position (priv->window,
-                                      gdk_device_manager_get_client_pointer (
-                                        gdk_display_get_device_manager (
-                                          gtk_widget_get_display (widget))),
+                                      gdk_seat_get_pointer (seat),
                                       x, y, NULL);
 
       if (!_gtk_widget_get_has_window (widget))
