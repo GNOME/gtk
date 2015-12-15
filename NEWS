@@ -1,3 +1,54 @@
+Overview of Changes in GTK+ 3.19.5
+==================================
+
+* GtkShortcutsWindow:
+ - GtkShortcutsGesture has been removed, since GtkShortcutsShortcut
+   can now document gestures
+
+* GtkFileChooser:
+ - The places view now shows the available space when that information
+   is available
+ - Problems with remembering the dialog size have been fixed
+
+* CSS changes:
+ - CSS margins, border and padding are more consistently supported
+ - Many widgets now support min-width and min-height
+ - Many style properties have been superseded by CSS properties
+
+* Adwaita:
+ - Some visual updates and fixes
+
+* Wayland:
+ - DND with icon widgets is working properly
+
+* GDK:
+ - More of the DND implementation is now handled in GDK: creating the
+   drag window, moving the window along with the cursor, the drag
+   cancel animation.
+ - GdkSeat is a new API that supersedes grabs on individual devices and
+   is a better fit for backends like Wayland or Mir
+
+* Bugs fixed:
+ 758929 GtkEntryCompletion should allow for changing the popdown delay
+ 759079 GtkComboBox triggers segmentation fault in update_menu_sensitivity...
+ 759081 Add 'nullable' to return type of gtk_cell_layout_get_area.
+ 759091 notebook tab stays hovered if mouse leaves slowly
+ 759092 GtkTextIter: add starts_tag() and deprecate begins_tag(), for cons...
+ 759168 wayland: Implement DND icon hotspot API
+ 759225 placesview: implement available space
+ 759260 [Adwaita:dark] menus on GtkTreeView barely visible because menu sh...
+ 759309 Add GdkSeat
+ 759323 gdk_display_get_pointer(): segfault if application client (core) p...
+
+* Translation updates:
+ Arabic
+ German
+ Polish
+ Portuguese
+ Slovak
+ Spanish
+
+
 Overview of Changes in GTK+ 3.19.4
 ==================================
 
@@ -83,11 +134,6 @@ Overview of Changes in GTK+ 3.19.3
  758442 gtk_style_context_save() destroys style information
 
 * Translation updates:
- Lithuanian
- Portuguese
-
-
-Overview of Changes in GTK+ 3.19.2
 ==================================
 
 * Most widgets have been ported to CSS nodes. The element names and
@@ -181,6 +227,11 @@ Overview of Changes in GTK+ 3.19.1
   this transition, the element names and style classes in use are documented
   and will be stable going forward.
 
+* Debugging: GtkInspector can now edit string-array-valued properties
+
+* Wayland:
+ - Fix transparent terminals
+ - Fix treeview search popups
 * Debugging: GtkInspector can now edit string-array-valued properties
 
 * Wayland:
