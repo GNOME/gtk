@@ -2189,11 +2189,11 @@ gtk_drag_begin_internal (GtkWidget          *widget,
     }
   else
     {
-      GdkDeviceManager *device_manager;
+      GdkSeat *seat;
 
-      device_manager = gdk_display_get_device_manager (gtk_widget_get_display (widget));
-      pointer = gdk_device_manager_get_client_pointer (device_manager);
-      keyboard = gdk_device_get_associated_device (pointer);
+      seat = gdk_display_get_default_seat (gtk_widget_get_display (widget));
+      pointer = gdk_seat_get_pointer (seat);
+      keyboard = gdk_seat_get_keyboard (seat);
     }
 
   if (!pointer)
