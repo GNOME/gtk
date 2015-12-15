@@ -28,7 +28,6 @@
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkcsscornervalueprivate.h"
 #include "gtkcssenumvalueprivate.h"
-#include "gtkcssimagebuiltinprivate.h"
 #include "gtkcssimagevalueprivate.h"
 #include "gtkcssnodedeclarationprivate.h"
 #include "gtkcssnodeprivate.h"
@@ -3090,10 +3089,6 @@ _gtk_style_context_get_icon_extents (GtkStyleContext *context,
   extents->y = y;
   extents->width = width;
   extents->height = height;
-
-  /* builtin images can't be transformed */
-  if (GTK_IS_CSS_IMAGE_BUILTIN (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_SOURCE)))
-    return;
 
   if (!_gtk_css_transform_value_get_matrix (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_TRANSFORM), &transform_matrix))
     return;
