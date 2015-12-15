@@ -1663,10 +1663,10 @@ gtk_stack_get_transition_running (GtkStack *stack)
  * @interpolate_size: the new value
  *
  * Sets whether or not @stack will interpolate its size when
- * changing the visible child. If the interpolate-size property
- * is set to %TRUE, @stack will interpolate its size between
- * the current one and the one it'll take after changing the visible-child,
- * according to the set transition-duration.
+ * changing the visible child. If the #GtkStack::interpolate-size
+ * property is set to %TRUE, @stack will interpolate its size between
+ * the current one and the one it'll take after changing the
+ * visible child, according to the set transition duration.
  *
  * Since: 3.18
  */
@@ -1691,8 +1691,10 @@ gtk_stack_set_interpolate_size (GtkStack *stack,
  * gtk_stack_get_interpolate_size:
  * @stack: A #GtkStack
  *
- * Returns: %TRUE If the #GtkStack is set up to interpolate between
- * visible-child sizes, %FALSE otherwise.
+ * Returns wether the #GtkStack is set up to interpolate between
+ * the sizes of childen on page switch.
+ *
+ * Returns: %TRUE if child sizes are interpolated
  *
  * Since: 3.18
  */
