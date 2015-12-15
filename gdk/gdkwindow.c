@@ -10787,11 +10787,11 @@ gdk_window_begin_resize_drag (GdkWindow     *window,
                               gint           root_y,
                               guint32        timestamp)
 {
-  GdkDeviceManager *device_manager;
+  GdkDisplay *display;
   GdkDevice *device;
 
-  device_manager = gdk_display_get_device_manager (gdk_window_get_display (window));
-  device = gdk_device_manager_get_client_pointer (device_manager);
+  display = gdk_window_get_display (window);
+  device = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
   gdk_window_begin_resize_drag_for_device (window, edge,
                                            device, button, root_x, root_y, timestamp);
 }
@@ -10846,11 +10846,11 @@ gdk_window_begin_move_drag (GdkWindow *window,
                             gint       root_y,
                             guint32    timestamp)
 {
-  GdkDeviceManager *device_manager;
+  GdkDisplay *display;
   GdkDevice *device;
 
-  device_manager = gdk_display_get_device_manager (gdk_window_get_display (window));
-  device = gdk_device_manager_get_client_pointer (device_manager);
+  display = gdk_window_get_display (window);
+  device = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
   gdk_window_begin_move_drag_for_device (window, device, button, root_x, root_y, timestamp);
 }
 
@@ -10993,11 +10993,11 @@ GdkDragContext *
 gdk_drag_begin (GdkWindow     *window,
                 GList         *targets)
 {
-  GdkDeviceManager *device_manager;
+  GdkDisplay *display;
   GdkDevice *device;
 
-  device_manager = gdk_display_get_device_manager (gdk_window_get_display (window));
-  device = gdk_device_manager_get_client_pointer (device_manager);
+  display = gdk_window_get_display (window);
+  device = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
 
   return gdk_drag_begin_for_device (window, device, targets);
 }
