@@ -6212,28 +6212,21 @@ gdk_window_set_cursor (GdkWindow *window,
 
   if (!GDK_WINDOW_DESTROYED (window))
     {
-      GdkDeviceManager *device_manager;
-      GList *devices, *d;
+      GdkDevice *device;
+      GList *seats, *s;
 
       if (cursor)
 	window->cursor = g_object_ref (cursor);
 
-      device_manager = gdk_display_get_device_manager (display);
-      devices = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_MASTER);
+      seats = gdk_display_list_seats (display);
 
-      for (d = devices; d; d = d->next)
+      for (s = seats; s; s = s->next)
         {
-          GdkDevice *device;
-
-          device = d->data;
-
-          if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
-            continue;
-
+          device = gdk_seat_get_pointer (s->data);
           gdk_window_set_cursor_internal (window, device, window->cursor);
         }
 
-      g_list_free (devices);
+      g_list_free (seats);
       g_object_notify_by_pspec (G_OBJECT (window), properties[PROP_CURSOR]);
     }
 }
