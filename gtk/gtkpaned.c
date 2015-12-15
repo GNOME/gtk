@@ -419,6 +419,13 @@ gtk_paned_class_init (GtkPanedClass *class)
                                                          FALSE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
+  /**
+   * GtkPaned::handle-size:
+   *
+   * The width of the handle.
+   *
+   * Deprecated: 3.20: Use CSS min-width and min-height instead.
+   */
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("handle-size",
 							     P_("Handle Size"),
