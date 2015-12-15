@@ -2767,7 +2767,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       cairo_restore (cr);
     }
 
-  return TRUE;
+  return gtk_widget_has_visible_focus (widget);
 }
 
 /* Autoscrolling {{{3 */
