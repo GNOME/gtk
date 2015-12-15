@@ -31,6 +31,12 @@ copy $(ConfigurationName)\$(PlatformName)\bin\gtk3-icon-browser.exe $(CopyDir)\b
 copy $(ConfigurationName)\$(PlatformName)\bin\gtk3-icon-browser.pdb $(CopyDir)\bin&#x0D;&#x0A;
 copy $(ConfigurationName)\$(PlatformName)\bin\gtk-encode-symbolic-svg.exe $(CopyDir)\bin&#x0D;&#x0A;
 copy $(ConfigurationName)\$(PlatformName)\bin\gtk-encode-symbolic-svg.pdb $(CopyDir)\bin&#x0D;&#x0A;
+copy $(ConfigurationName)\$(PlatformName)\bin\gtk-update-icon-cache.exe $(CopyDir)\bin&#x0D;&#x0A;
+copy $(ConfigurationName)\$(PlatformName)\bin\gtk-update-icon-cache.pdb $(CopyDir)\bin&#x0D;&#x0A;
+copy $(ConfigurationName)\$(PlatformName)\bin\gtk-query-settings.exe $(CopyDir)\bin&#x0D;&#x0A;
+copy $(ConfigurationName)\$(PlatformName)\bin\gtk-query-settings.pdb $(CopyDir)\bin&#x0D;&#x0A;
+copy $(ConfigurationName)\$(PlatformName)\bin\gtk-builder-tool.exe $(CopyDir)\bin&#x0D;&#x0A;
+copy $(ConfigurationName)\$(PlatformName)\bin\gtk-builder-tool.pdb $(CopyDir)\bin&#x0D;&#x0A;
 goto DONE_BIN&#x0D;&#x0A;
 
 :DO_BROADWAY_BIN&#x0D;&#x0A;
@@ -54,6 +60,12 @@ copy .\Release\$(PlatformName)\bin\gtk3-icon-browser.exe $(CopyDir)\bin&#x0D;&#x
 copy .\Release\$(PlatformName)\bin\gtk3-icon-browser.pdb $(CopyDir)\bin&#x0D;&#x0A;
 copy .\Release\$(PlatformName)\bin\gtk-encode-symbolic-svg.exe $(CopyDir)\bin&#x0D;&#x0A;
 copy .\Release\$(PlatformName)\bin\gtk-encode-symbolic-svg.pdb $(CopyDir)\bin&#x0D;&#x0A;
+copy .\Release\$(PlatformName)\bin\gtk-update-icon-cache.exe $(CopyDir)\bin&#x0D;&#x0A;
+copy .\Release\$(PlatformName)\bin\gtk-update-icon-cache.pdb $(CopyDir)\bin&#x0D;&#x0A;
+copy .\Release\$(PlatformName)\bin\gtk-query-settings.exe $(CopyDir)\bin&#x0D;&#x0A;
+copy .\Release\$(PlatformName)\bin\gtk-query-settings.pdb $(CopyDir)\bin&#x0D;&#x0A;
+copy .\Release\$(PlatformName)\bin\gtk-builder-tool.exe $(CopyDir)\bin&#x0D;&#x0A;
+copy .\Release\$(PlatformName)\bin\gtk-builder-tool.pdb $(CopyDir)\bin&#x0D;&#x0A;
 goto DONE_BIN&#x0D;&#x0A;
 
 :DO_BROADWAY_DEBUG&#x0D;&#x0A;
@@ -71,6 +83,12 @@ copy .\Debug\$(PlatformName)\bin\gtk3-icon-browser.exe $(CopyDir)\bin&#x0D;&#x0A
 copy .\Debug\$(PlatformName)\bin\gtk3-icon-browser.pdb $(CopyDir)\bin&#x0D;&#x0A;
 copy .\Debug\$(PlatformName)\bin\gtk-encode-symbolic-svg.exe $(CopyDir)\bin&#x0D;&#x0A;
 copy .\Debug\$(PlatformName)\bin\gtk-encode-symbolic-svg.pdb $(CopyDir)\bin&#x0D;&#x0A;
+copy .\Debug\$(PlatformName)\bin\gtk-update-icon-cache.exe $(CopyDir)\bin&#x0D;&#x0A;
+copy .\Debug\$(PlatformName)\bin\gtk-update-icon-cache.pdb $(CopyDir)\bin&#x0D;&#x0A;
+copy .\Debug\$(PlatformName)\bin\gtk-query-settings.exe $(CopyDir)\bin&#x0D;&#x0A;
+copy .\Debug\$(PlatformName)\bin\gtk-query-settings.pdb $(CopyDir)\bin&#x0D;&#x0A;
+copy .\Debug\$(PlatformName)\bin\gtk-builder-tool.exe $(CopyDir)\bin&#x0D;&#x0A;
+copy .\Debug\$(PlatformName)\bin\gtk-builder-tool.pdb $(CopyDir)\bin&#x0D;&#x0A;
 :DONE_BIN&#x0D;&#x0A;
                        "
  />
@@ -113,6 +131,9 @@ copy ..\..\..\demos\gtk-demo\org.gtk.Demo.gschema.xml $(CopyDir)\share\glib-2.0\
 
 echo &quot;Compiling gsettings XML Files...&quot;&#x0D;&#x0A;
 $(GlibEtcInstallRoot)\bin\glib-compile-schemas.exe $(CopyDir)\share\glib-2.0\schemas&#x0D;&#x0A;
+
+echo &quot;Generating icon cache...&quot;&#x0D;&#x0A;
+$(CopyDir)\bin\gtk-update-icon-cache.exe --ignore-theme-index --force &quot;$(CopyDir)\share\icons\hicolor&quot;
 "
  />
  <UserMacro

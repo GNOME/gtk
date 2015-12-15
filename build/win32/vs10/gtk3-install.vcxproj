@@ -215,6 +215,18 @@
       <Project>{f280bf1a-777a-4fb5-8005-dfbe04621edb}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+    <ProjectReference Include="gtk-udpate-icon-cache.vcxproj">
+      <Project>{fc98af16-4c68-42df-906b-93a6804c198a}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="gtk-builder-tool.vcxproj">
+      <Project>{7d2397cf-4c25-45bc-a1bb-cb4b6e154bbd}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="gtk-query-settings.vcxproj">
+      <Project>{9f22107a-3ef7-4b52-b269-747b65307f36}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
