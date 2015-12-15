@@ -364,6 +364,7 @@ gdk_window_unstick
 gdk_window_maximize
 gdk_window_unmaximize
 gdk_window_fullscreen
+gdk_window_fullscreen_on_monitor
 gdk_window_unfullscreen
 GdkFullscreenMode
 gdk_window_get_fullscreen_mode
@@ -373,6 +374,8 @@ gdk_window_set_keep_below
 gdk_window_set_opacity
 gdk_window_set_composited
 gdk_window_get_composited
+gdk_window_set_pass_through
+gdk_window_get_pass_through
 gdk_window_move
 gdk_window_resize
 gdk_window_move_resize
@@ -976,6 +979,7 @@ gdk_drag_get_selection
 gdk_drag_abort
 gdk_drop_reply
 gdk_drag_drop
+gdk_drag_drop_done
 gdk_drag_find_window_for_screen
 gdk_drag_begin
 gdk_drag_begin_for_device
