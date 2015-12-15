@@ -115,32 +115,7 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\gdk\win32\gdkapplaunchcontext-win32.c" />
-    <ClCompile Include="..\..\..\gdk\win32\gdkcolor-win32.c" />
-    <ClCompile Include="..\..\..\gdk\win32\gdkcursor-win32.c" />
-    <ClCompile Include="..\..\..\gdk\win32\gdkdisplay-win32.c" />
-    <ClCompile Include="..\..\..\gdk\win32\gdkdnd-win32.c" />
-    <ClCompile Include="..\..\..\gdk\win32\gdkdrawable-win32.c" />
-    <ClCompile Include="..\..\..\gdk\win32\gdkevents-win32.c" />
-    <ClCompile Include="..\..\..\gdk\win32\gdkfont-win32.c" />
-    <ClCompile Include="..\..\..\gdk\win32\gdkgc-win32.c" />
-    <ClCompile Include="..\..\..\gdk\win32\gdkgeometry-win32.c" />
-    <ClCompile Include="..\..\..\gdk\win32\gdkglobals-win32.c" />
-    <ClCompile Include="..\..\..\gdk\win32\gdkim-win32.c" />
-    <ClCompile Include="..\..\..\gdk\win32\gdkimage-win32.c" />
-    <ClCompile Include="..\..\..\gdk\win32\gdkinput-win32.c" />
-    <ClCompile Include="..\..\..\gdk\win32\gdkinput.c" />
-    <ClCompile Include="..\..\..\gdk\win32\gdkkeys-win32.c" />
-    <ClCompile Include="..\..\..\gdk\win32\gdkmain-win32.c" />
-    <ClCompile Include="..\..\..\gdk\win32\gdkpixmap-win32.c" />
-    <ClCompile Include="..\..\..\gdk\win32\gdkproperty-win32.c" />
-    <ClCompile Include="..\..\..\gdk\win32\gdkscreen-win32.c" />
-    <ClCompile Include="..\..\..\gdk\win32\gdkselection-win32.c" />
-    <ClCompile Include="..\..\..\gdk\win32\gdkspawn-win32.c" />
-    <ClCompile Include="..\..\..\gdk\win32\gdktestutils-win32.c" />
-    <ClCompile Include="..\..\..\gdk\win32\gdkvisual-win32.c" />
-    <ClCompile Include="..\..\..\gdk\win32\gdkwin32id.c" />
-    <ClCompile Include="..\..\..\gdk\win32\gdkwindow-win32.c" />
+#include "gdk-win32.vs10.sourcefiles"
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\..\config.h.win32">

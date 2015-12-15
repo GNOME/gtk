@@ -102,6 +102,16 @@ IMAGEFILES=	alphatest.png		\
 
 democode_DATA = $(demos) $(IMAGEFILES) demo.ui
 
+# ------------------- MSVC Projects --------------------
+MSVCPROJS = gtk-demo
+
+gtk_demo_FILES = $(gtk_demo_SOURCES)
+gtk_demo_EXCLUDES = gtkdemodummy
+
+include $(top_srcdir)/build/Makefile.msvcproj
+
+dist-hook: $(top_builddir)/build/win32/vs9/gtk-demo.vcproj
+
 DISTCLEANFILES = demos.h
 
 -include $(top_srcdir)/git.mk

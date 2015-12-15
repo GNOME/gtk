@@ -150,10 +150,7 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
-			<File RelativePath="..\..\..\modules\engines\ms-windows\msw_rc_style.c" />
-			<File RelativePath="..\..\..\modules\engines\ms-windows\msw_style.c" />
-			<File RelativePath="..\..\..\modules\engines\ms-windows\msw_theme_main.c" />
-			<File RelativePath="..\..\..\modules\engines\ms-windows\xp_theme.c" />
+#include "libwimp.sourcefiles"
 		</Filter>
 		<Filter
 			Name="Headers"

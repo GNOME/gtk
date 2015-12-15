@@ -76,6 +76,20 @@ libgailutil_la_LDFLAGS = \
 	$(export_symbols)			\
         $(LDFLAGS)
 
+# ----------------- MSVC Projects ------------------
+MSVCPROJS = gailutil
+
+gailutil_FILES = $(libgailutil_la_SOURCES)
+gailutil_EXCLUDES = gaildummy
+
+gailutil_HEADERS_DIR = $(libgailutilincludedir)
+gailutil_HEADERS_INST = $(libgailutilinclude_HEADERS)
+gailutil_HEADERS_EXCLUDES = gaildummy
+
+include $(top_srcdir)/build/Makefile.msvcproj
+
+dist-hook: $(top_builddir)/build/win32/vs9/gailutil.vcproj $(top_builddir)/build/win32/vs9/gailutil.headers
+
 gailutil.lib: libgailutil.la gailutil.def
 	lib -machine:@LIB_EXE_MACHINE_FLAG@ -name:libgailutil-$(GAIL_LT_CURRENT_MINUS_AGE).dll -def:gailutil.def -out:$@
 

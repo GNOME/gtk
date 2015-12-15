@@ -15,6 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+#include "libwimp.vs10.sourcefiles.filters"
     <ClCompile Include="..\..\..\modules\engines\ms-windows\msw_rc_style.c"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\modules\engines\ms-windows\msw_style.c"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\modules\engines\ms-windows\msw_theme_main.c"><Filter>Sources</Filter></ClCompile>

@@ -215,7 +215,7 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
-#include "libgtk.sourcefiles"
+#include "gtk.sourcefiles"
 			<File RelativePath="..\..\..\modules\input\gtkimcontextime.c" />
 			<File RelativePath="..\..\..\modules\input\gtkimcontextmultipress.c" />
 			<File RelativePath="..\..\..\modules\input\gtkimcontextthai.c" />

@@ -184,7 +184,7 @@
     <ResourceCompile Include="..\..\..\gdk\win32\rc\gdk.rc" />
   </ItemGroup>
   <ItemGroup>
-#include "libgdk.vs10.sourcefiles"
+#include "gdk.vs10.sourcefiles"
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="gdk-win32.vcxproj">

@@ -184,7 +184,7 @@
     <ResourceCompile Include="..\..\..\gtk\gtk-win32.rc" />
   </ItemGroup>
   <ItemGroup>
-#include "libgtk.vs10.sourcefiles"
+#include "gtk.vs10.sourcefiles"
     <ClCompile Include="..\..\..\modules\input\gtkimcontextime.c" />
     <ClCompile Include="..\..\..\modules\input\gtkimcontextmultipress.c" />
     <ClCompile Include="..\..\..\modules\input\gtkimcontextthai.c" />

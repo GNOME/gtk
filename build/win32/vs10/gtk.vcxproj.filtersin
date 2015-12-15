@@ -18,7 +18,7 @@
     <ResourceCompile Include="..\..\..\gtk\gtk-win32.rc"><Filter>Resource Files</Filter></ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-#include "libgtk.vs10.sourcefiles.filters"
+#include "gtk.vs10.sourcefiles.filters"
     <ClCompile Include="..\..\..\modules\input\gtkimcontextime.c"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="..\..\..\modules\input\gtkimcontextmultipress.c"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="..\..\..\modules\input\gtkimcontextthai.c"><Filter>Source Files</Filter></ClCompile>

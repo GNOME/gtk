@@ -38,4 +38,14 @@ libwimp_la_LDFLAGS = \
 
 libwimp_la_LIBADD = $(LDADDS) -lgdi32
 
+# ---------------- MSVC Projects ---------------
+MSVCPROJS = libwimp
+
+libwimp_FILES = $(libwimp_la_SOURCES)
+libwimp_EXCLUDES = libwimpdummy
+
+include $(top_srcdir)/build/Makefile.msvcproj
+
+dist-hook: $(top_builddir)/build/win32/vs9/libwimp.vcproj
+
 -include $(top_srcdir)/git.mk

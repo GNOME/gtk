@@ -160,45 +160,7 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
-			<File RelativePath="..\..\..\demos\gtk-demo\appwindow.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\assistant.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\builder.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\button_box.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\changedisplay.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\clipboard.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\colorsel.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\combobox.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\dialog.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\drawingarea.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\editable_cells.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\entry_buffer.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\entry_completion.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\expander.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\hypertext.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\iconview.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\iconview_edit.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\images.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\infobar.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\links.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\list_store.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\main.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\menus.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\offscreen_window.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\offscreen_window2.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\panes.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\pickers.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\pixbufs.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\printing.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\rotated_text.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\search_entry.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\sizegroup.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\spinner.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\stock_browser.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\textscroll.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\textview.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\toolpalette.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\tree_store.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\ui_manager.c" />
+#include "gtk-demo.sourcefiles"
 		</Filter>
 		<Filter
 			Name="Header Files"
