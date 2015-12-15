@@ -1557,6 +1557,10 @@ popover.background {
     transition: none;
   }
 
+  button.image-button {
+    padding: 0px;
+  }
+
   .csd &, & {
     &.touch-selection,
     &.magnifier {
