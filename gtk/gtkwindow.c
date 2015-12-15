@@ -9010,13 +9010,11 @@ get_monitor_containing_pointer (GtkWindow *window)
   GdkScreen *window_screen;
   GdkScreen *pointer_screen;
   GdkDisplay *display;
-  GdkDeviceManager *device_manager;
   GdkDevice *pointer;
 
   window_screen = gtk_window_check_screen (window);
   display = gdk_screen_get_display (window_screen);
-  device_manager = gdk_display_get_device_manager (display);
-  pointer = gdk_device_manager_get_client_pointer (device_manager);
+  pointer = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
 
   gdk_device_get_position (pointer,
                            &pointer_screen,
@@ -9207,14 +9205,12 @@ gtk_window_compute_configure_request (GtkWindow    *window,
             gint monitor_num;
             GdkRectangle monitor;
             GdkDisplay *display;
-            GdkDeviceManager *device_manager;
             GdkDevice *pointer;
             GdkScreen *pointer_screen;
             gint px, py;
 
             display = gdk_screen_get_display (screen);
-            device_manager = gdk_display_get_device_manager (display);
-            pointer = gdk_device_manager_get_client_pointer (device_manager);
+            pointer = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
 
             gdk_device_get_position (pointer,
                                      &pointer_screen,
