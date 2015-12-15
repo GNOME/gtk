@@ -478,10 +478,12 @@ gdk_window_class_init (GdkWindowClass *klass)
 }
 
 static void
-device_removed_cb (GdkDeviceManager *device_manager,
-                   GdkDevice        *device,
-                   GdkWindow        *window)
+seat_removed_cb (GdkDisplay *display,
+                 GdkSeat    *seat,
+                 GdkWindow  *window)
 {
+  GdkDevice *device = gdk_seat_get_pointer (seat);
+
   window->devices_inside = g_list_remove (window->devices_inside, device);
   g_hash_table_remove (window->device_cursor, device);
 
@@ -493,10 +495,9 @@ static void
 gdk_window_finalize (GObject *object)
 {
   GdkWindow *window = GDK_WINDOW (object);
-  GdkDeviceManager *device_manager;
 
-  device_manager = gdk_display_get_device_manager (gdk_window_get_display (window));
-  g_signal_handlers_disconnect_by_func (device_manager, device_removed_cb, window);
+  g_signal_handlers_disconnect_by_func (gdk_window_get_display (window),
+                                        seat_removed_cb, window);
 
   if (!GDK_WINDOW_DESTROYED (window))
     {
@@ -1287,7 +1288,6 @@ gdk_window_new (GdkWindow     *parent,
   gboolean native;
   GdkEventMask event_mask;
   GdkWindow *real_parent;
-  GdkDeviceManager *device_manager;
 
   g_return_val_if_fail (attributes != NULL, NULL);
 
@@ -1451,10 +1451,8 @@ gdk_window_new (GdkWindow     *parent,
 				  (attributes->cursor) :
 				  NULL));
 
-  device_manager = gdk_display_get_device_manager (gdk_window_get_display (parent));
-  g_signal_connect (device_manager, "device-removed",
-                    G_CALLBACK (device_removed_cb), window);
-
+  g_signal_connect (gdk_window_get_display (parent), "seat-removed",
+                    G_CALLBACK (seat_removed_cb), window);
 
   if ((_gdk_gl_flags & (GDK_GL_ALWAYS | GDK_GL_DISABLE)) == GDK_GL_ALWAYS)
     {
