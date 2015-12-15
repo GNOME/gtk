@@ -408,20 +408,6 @@ gtk_check_button_render (GtkCssGadget *gadget,
   return FALSE;
 }
 
-void
-_gtk_check_button_get_props (GtkCheckButton *check_button,
-			     gint           *indicator_size,
-			     gint           *indicator_spacing)
-{
-  GtkWidget *widget =  GTK_WIDGET (check_button);
-
-  if (indicator_size)
-    gtk_widget_style_get (widget, "indicator-size", indicator_size, NULL);
-
-  if (indicator_spacing)
-    gtk_widget_style_get (widget, "indicator-spacing", indicator_spacing, NULL);
-}
-
 static void
 gtk_check_button_measure (GtkCssGadget   *gadget,
                           GtkOrientation  orientation,
