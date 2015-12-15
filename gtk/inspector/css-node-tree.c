@@ -532,15 +532,11 @@ gtk_inspector_css_node_tree_set_object (GtkInspectorCssNodeTree *cnt,
 }
 
 static void
-gtk_inspector_css_node_tree_update_style (GtkCssNode              *node,
-                                          GtkCssStyleChange       *change,
-                                          GtkInspectorCssNodeTree *cnt)
+gtk_inspector_css_node_tree_update_style (GtkInspectorCssNodeTree *cnt,
+                                          GtkCssStyle             *new_style)
 {
   GtkInspectorCssNodeTreePrivate *priv = cnt->priv;
-  GtkCssStyle *new_style;
   gint i;
-
-  new_style = gtk_css_style_change_get_new_style (change);
 
   for (i = 0; i < _gtk_css_style_property_get_n_properties (); i++)
     {
@@ -584,11 +580,18 @@ gtk_inspector_css_node_tree_update_style (GtkCssNode              *node,
 }
 
 static void
+gtk_inspector_css_node_tree_update_style_cb (GtkCssNode              *node,
+                                             GtkCssStyleChange       *change,
+                                             GtkInspectorCssNodeTree *cnt)
+{
+  gtk_inspector_css_node_tree_update_style (cnt, gtk_css_style_change_get_new_style (change));
+}
+
+static void
 gtk_inspector_css_node_tree_set_node (GtkInspectorCssNodeTree *cnt,
                                       GtkCssNode              *node)
 {
   GtkInspectorCssNodeTreePrivate *priv = cnt->priv;
-  GtkCssStyleChange change;
   GString *s;
   GType type;
   const gchar *name;
@@ -601,21 +604,13 @@ gtk_inspector_css_node_tree_set_node (GtkInspectorCssNodeTree *cnt,
   if (node)
     g_object_ref (node);
 
-  gtk_css_style_change_init (&change,
-                             node ? gtk_css_node_get_style (node) : NULL,
-                             priv->node ? gtk_css_node_get_style (priv->node) : NULL);
-
-  gtk_inspector_css_node_tree_update_style (node,
-                                            &change,
-                                            cnt);
-
-  gtk_css_style_change_finish (&change);
+  gtk_inspector_css_node_tree_update_style (cnt, node ? gtk_css_node_get_style (node) : NULL);
 
   gtk_inspector_css_node_tree_unset_node (cnt);
 
   priv->node = node;
 
-  g_signal_connect (node, "style-changed", G_CALLBACK (gtk_inspector_css_node_tree_update_style), cnt);
+  g_signal_connect (node, "style-changed", G_CALLBACK (gtk_inspector_css_node_tree_update_style_cb), cnt);
 
   s = g_string_new ("");
   type = gtk_css_node_get_widget_type (node);
