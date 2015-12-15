@@ -439,7 +439,7 @@ gtk_tooltip_trigger_tooltip_query (GdkDisplay *display)
   GdkDevice *device;
 
   /* Trigger logic as if the mouse moved */
-  device = gdk_device_manager_get_client_pointer (gdk_display_get_device_manager (display));
+  device = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
   window = gdk_device_get_window_at_position (device, &x, &y);
   if (!window)
     return;
@@ -1122,7 +1122,7 @@ gtk_tooltip_show_tooltip (GdkDisplay *display)
       if (!GDK_IS_WINDOW (window))
         return;
 
-      device = gdk_device_manager_get_client_pointer (gdk_display_get_device_manager (display));
+      device = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
 
       gdk_window_get_device_position (window, device, &x, &y, NULL);
 
