@@ -3582,15 +3582,13 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    * This property only takes effect if the "wide-separators" style property is %TRUE.
    *
    * Since: 2.10
-   *
-   * Deprecated: 3.20: Use the standard min-width and min-height CSS properties instead.
    */
   gtk_widget_class_install_style_property (klass,
                                            g_param_spec_int ("separator-width",
                                                              P_("Separator Width"),
                                                              P_("The width of separators if wide-separators is TRUE"),
                                                              0, G_MAXINT, 0,
-                                                             GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
+                                                             GTK_PARAM_READABLE));
 
   /**
    * GtkWidget:separator-height:
