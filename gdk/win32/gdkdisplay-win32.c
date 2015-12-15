@@ -725,6 +725,7 @@ gdk_win32_display_finalize (GObject *object)
   GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (object);
 
   _gdk_win32_display_finalize_cursors (display_win32);
+  _gdk_win32_dnd_exit ();
 
   G_OBJECT_CLASS (gdk_win32_display_parent_class)->finalize (object);
 }
