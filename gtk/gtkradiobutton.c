@@ -145,8 +145,6 @@ static void     gtk_radio_button_destroy        (GtkWidget           *widget);
 static gboolean gtk_radio_button_focus          (GtkWidget           *widget,
 						 GtkDirectionType     direction);
 static void     gtk_radio_button_clicked        (GtkButton           *button);
-static void     gtk_radio_button_draw_indicator (GtkCheckButton      *check_button,
-						 cairo_t             *cr);
 static void     gtk_radio_button_set_property   (GObject             *object,
 						 guint                prop_id,
 						 const GValue        *value,
@@ -165,13 +163,11 @@ gtk_radio_button_class_init (GtkRadioButtonClass *class)
 {
   GObjectClass *gobject_class;
   GtkButtonClass *button_class;
-  GtkCheckButtonClass *check_button_class;
   GtkWidgetClass *widget_class;
 
   gobject_class = G_OBJECT_CLASS (class);
   widget_class = (GtkWidgetClass*) class;
   button_class = (GtkButtonClass*) class;
-  check_button_class = (GtkCheckButtonClass*) class;
 
   gobject_class->set_property = gtk_radio_button_set_property;
   gobject_class->get_property = gtk_radio_button_get_property;
@@ -194,8 +190,6 @@ gtk_radio_button_class_init (GtkRadioButtonClass *class)
   widget_class->focus = gtk_radio_button_focus;
 
   button_class->clicked = gtk_radio_button_clicked;
-
-  check_button_class->draw_indicator = gtk_radio_button_draw_indicator;
 
   class->group_changed = NULL;
 
@@ -798,52 +792,4 @@ gtk_radio_button_clicked (GtkButton *button)
   gtk_widget_queue_draw (GTK_WIDGET (button));
 
   g_object_unref (button);
-}
-
-static void
-gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
-				 cairo_t        *cr)
-{
-  GtkAllocation allocation;
-  GtkWidget *widget;
-  GtkButton *button;
-  GtkStyleContext *context;
-  gint x, y;
-  gint indicator_size, indicator_spacing;
-  gint baseline;
-  guint border_width;
-  GtkCssNode *css_node;
-
-  widget = GTK_WIDGET (check_button);
-  button = GTK_BUTTON (check_button);
-  context = gtk_widget_get_style_context (widget);
-
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
-  _gtk_check_button_get_props (check_button, &indicator_size, &indicator_spacing);
-
-  gtk_widget_get_allocation (widget, &allocation);
-  baseline = gtk_widget_get_allocated_baseline (widget);
-
-  x = indicator_spacing + border_width;
-  if (baseline == -1)
-    y = (allocation.height - indicator_size) / 2;
-  else
-    y = CLAMP (baseline - indicator_size * button->priv->baseline_align,
-	       0, allocation.height - indicator_size);
-
-  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-    x = allocation.width - (indicator_size + x);
-
-  css_node = gtk_check_button_get_indicator_node (check_button);
-  gtk_style_context_save_to_node (context, css_node);
-
-  gtk_render_background (context, cr,
-                         border_width, border_width,
-                         allocation.width - (2 * border_width),
-                         allocation.height - (2 * border_width));
-
-  gtk_render_option (context, cr,
-                     x, y, indicator_size, indicator_size);
-
-  gtk_style_context_restore (context);
 }
