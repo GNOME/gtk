@@ -547,7 +547,7 @@ gtk_css_gadget_allocate (GtkCssGadget        *gadget,
   content_allocation.width = allocation->width - extents.left - extents.right;
   content_allocation.height = allocation->height - extents.top - extents.bottom;
   if (baseline >= 0)
-    baseline += extents.top;
+    baseline -= extents.top;
 
   if (content_allocation.width < 0)
     {
