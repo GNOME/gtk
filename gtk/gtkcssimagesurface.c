@@ -46,11 +46,18 @@ gtk_css_image_surface_draw (GtkCssImage *image,
                             double       height)
 {
   GtkCssImageSurface *surface = GTK_CSS_IMAGE_SURFACE (image);
+  int image_width, image_height;
+
+  image_width = cairo_image_surface_get_width (surface->surface);
+  image_height = cairo_image_surface_get_height (surface->surface);
+
+  if (image_width == 0 || image_height == 0)
+    return;
 
   cairo_rectangle (cr, 0, 0, width, height);
   cairo_scale (cr,
-               width / cairo_image_surface_get_width (surface->surface),
-               height / cairo_image_surface_get_height (surface->surface));
+               width / image_width,
+               height / image_height);
   cairo_set_source_surface (cr, surface->surface, 0, 0);
   cairo_pattern_set_extend (cairo_get_source (cr), CAIRO_EXTEND_PAD);
   cairo_fill (cr);
