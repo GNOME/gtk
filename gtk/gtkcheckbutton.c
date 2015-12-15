@@ -104,8 +104,6 @@ static gboolean gtk_check_button_draw            (GtkWidget           *widget,
 						  cairo_t             *cr);
 static void gtk_check_button_draw_indicator      (GtkCheckButton      *check_button,
 						  cairo_t             *cr);
-static void gtk_real_check_button_draw_indicator (GtkCheckButton      *check_button,
-						  cairo_t             *cr);
 
 static void     gtk_check_button_measure       (GtkCssGadget        *gadget,
                                                 GtkOrientation       orientation,
@@ -214,8 +212,6 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
   widget_class->draw = gtk_check_button_draw;
   widget_class->state_flags_changed = gtk_check_button_state_flags_changed;
   widget_class->direction_changed = gtk_check_button_direction_changed;
-
-  class->draw_indicator = gtk_real_check_button_draw_indicator;
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("indicator-size",
@@ -787,26 +783,18 @@ gtk_check_button_draw (GtkWidget *widget,
   return FALSE;
 }
 
-
 static void
 gtk_check_button_draw_indicator (GtkCheckButton *check_button,
 				 cairo_t        *cr)
 {
   GtkCheckButtonClass *class = GTK_CHECK_BUTTON_GET_CLASS (check_button);
+  GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (check_button);
 
   if (class->draw_indicator)
     class->draw_indicator (check_button, cr);
+  else
+    gtk_css_gadget_draw (priv->indicator_gadget, cr);
 }
-
-static void
-gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
-				      cairo_t        *cr)
-{
-  GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (check_button);
-
-  gtk_css_gadget_draw (priv->indicator_gadget, cr);
-}
-
 
 static gboolean
 gtk_check_button_render_check (GtkCssGadget *gadget,
@@ -820,13 +808,20 @@ gtk_check_button_render_check (GtkCssGadget *gadget,
   GtkWidget *widget;
   GtkStyleContext *context;
   GtkCheckButtonPrivate *priv;
+  GtkCssNode *css_node;
 
   widget = gtk_css_gadget_get_owner (gadget);
   priv = gtk_check_button_get_instance_private (GTK_CHECK_BUTTON (widget));
   context = gtk_widget_get_style_context (widget);
 
-  gtk_style_context_save_to_node (context, gtk_css_gadget_get_node (priv->indicator_gadget));
-  gtk_render_check (context, cr, x, y, width, height);
+  css_node = gtk_css_gadget_get_node (priv->indicator_gadget);
+  gtk_style_context_save_to_node (context, css_node);
+
+  if (strcmp (gtk_css_node_get_name (css_node), "check") == 0)
+    gtk_render_check (context, cr, x, y, width, height);
+  else
+    gtk_render_option (context, cr, x, y, width, height);
+
   gtk_style_context_restore (context);
 
   return FALSE;
