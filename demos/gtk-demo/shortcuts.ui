@@ -38,6 +38,27 @@
             <signal name="clicked" handler="clocks_shortcuts_stopwatch" swapped="1" object="window1"/>
           </object>
         </child>
+        <child>
+          <object class="GtkButton">
+            <property name="visible">1</property>
+            <property name="label">Boxes</property>
+            <signal name="clicked" handler="boxes_shortcuts" swapped="1" object="window1"/>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton">
+            <property name="visible">1</property>
+            <property name="label">Boxes - Wizard</property>
+            <signal name="clicked" handler="boxes_shortcuts_wizard" swapped="1" object="window1"/>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton">
+            <property name="visible">1</property>
+            <property name="label">Boxes - Display</property>
+            <signal name="clicked" handler="boxes_shortcuts_display" swapped="1" object="window1"/>
+          </object>
+        </child>
       </object>
     </child>
   </object>

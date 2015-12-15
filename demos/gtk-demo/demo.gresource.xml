@@ -96,6 +96,7 @@
     <file>shortcuts-builder.ui</file>
     <file>shortcuts-gedit.ui</file>
     <file>shortcuts-clocks.ui</file>
+    <file>shortcuts-boxes.ui</file>
   </gresource>
   <gresource prefix="/revealer">
     <file>revealer.ui</file>

@@ -49,6 +49,24 @@ clocks_shortcuts_stopwatch (GtkWidget *window)
   show_shortcuts (window, "shortcuts-clocks", "stopwatch");
 }
 
+static void
+boxes_shortcuts (GtkWidget *window)
+{
+  show_shortcuts (window, "shortcuts-boxes", NULL);
+}
+
+static void
+boxes_shortcuts_wizard (GtkWidget *window)
+{
+  show_shortcuts (window, "shortcuts-boxes", "wizard");
+}
+
+static void
+boxes_shortcuts_display (GtkWidget *window)
+{
+  show_shortcuts (window, "shortcuts-boxes", "display");
+}
+
 GtkWidget *
 do_shortcuts (GtkWidget *do_widget)
 {
@@ -73,6 +91,9 @@ do_shortcuts (GtkWidget *do_widget)
                                         "gedit_shortcuts", G_CALLBACK (gedit_shortcuts),
                                         "clocks_shortcuts", G_CALLBACK (clocks_shortcuts),
                                         "clocks_shortcuts_stopwatch", G_CALLBACK (clocks_shortcuts_stopwatch),
+                                        "boxes_shortcuts", G_CALLBACK (boxes_shortcuts),
+                                        "boxes_shortcuts_wizard", G_CALLBACK (boxes_shortcuts_wizard),
+                                        "boxes_shortcuts_display", G_CALLBACK (boxes_shortcuts_display),
                                         NULL);
       gtk_builder_connect_signals (builder, NULL);
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window1"));
