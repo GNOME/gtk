@@ -39,6 +39,10 @@ Overview of Changes in GTK+ 3.19.5
  759260 [Adwaita:dark] menus on GtkTreeView barely visible because menu sh...
  759309 Add GdkSeat
  759323 gdk_display_get_pointer(): segfault if application client (core) p...
+ 729593 Add margin style property to GtkSwitch slider
+ 756191 GtkModelButton css padding not working
+ 708394 CSS - support min-width
+ 755947 wayland: gnome-terminal does not fill entire area when tiled
 
 * Translation updates:
  Arabic
