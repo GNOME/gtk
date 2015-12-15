@@ -645,7 +645,7 @@ gtk_shortcuts_section_reflow_groups (GtkShortcutsSection *self)
       if (!visible)
         height = 0;
 
-      if (n_rows == 0 || n_rows + height > self->max_height)
+      if (current_column == NULL || n_rows + height > self->max_height)
         {
           GtkWidget *column;
           GtkSizeGroup *group;
