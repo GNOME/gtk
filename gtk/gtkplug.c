@@ -954,9 +954,9 @@ gtk_plug_filter_func (GdkXEvent *gdk_xevent,
     case KeyRelease:
       {
         GdkModifierType state, consumed;
-        GdkDeviceManager *device_manager;
-        GdkDevice *pointer, *keyboard;
+        GdkDevice *keyboard;
         GdkKeymap *keymap;
+        GdkSeat *seat;
 
         if (xevent->type == KeyPress)
           event->key.type = GDK_KEY_PRESS;
@@ -970,9 +970,8 @@ gtk_plug_filter_func (GdkXEvent *gdk_xevent,
         event->key.hardware_keycode = xevent->xkey.keycode;
         event->key.keyval = GDK_KEY_VoidSymbol;
 
-        device_manager = gdk_display_get_device_manager (display);
-        pointer = gdk_device_manager_get_client_pointer (device_manager);
-        keyboard = gdk_device_get_associated_device (pointer);
+        seat = gdk_display_get_default_seat (display);
+        keyboard = gdk_seat_get_keyboard (seat);
         gdk_event_set_device (event, keyboard);
 
         keymap = gdk_keymap_get_for_display (display);
