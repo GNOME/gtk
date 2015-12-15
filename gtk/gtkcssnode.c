@@ -1034,6 +1034,12 @@ gtk_css_node_ensure_style (GtkCssNode *cssnode,
 
       style_changed = gtk_css_node_set_style (cssnode, new_style);
       g_object_unref (new_style);
+
+      if (!style_changed && (cssnode->pending_changes & GTK_CSS_CHANGE_SOURCE))
+        {
+          /* clear the global cache if we reuse the same style after the CSS changed */
+          g_object_set_qdata (G_OBJECT (cssnode->style), quark_global_cache, NULL);
+        }
     }
   else
     {
