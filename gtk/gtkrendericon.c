@@ -21,6 +21,7 @@
 
 #include "gtkrendericonprivate.h"
 
+#include "gtkcssimagebuiltinprivate.h"
 #include "gtkcssimagevalueprivate.h"
 #include "gtkcssshadowsvalueprivate.h"
 #include "gtkcssstyleprivate.h"

@@ -24,7 +24,6 @@
 #include <cairo.h>
 
 #include "gtkcsstypesprivate.h"
-#include "gtkcssimagebuiltinprivate.h"
 #include "gtktypes.h"
 
 G_BEGIN_DECLS
