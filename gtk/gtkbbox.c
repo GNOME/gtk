@@ -168,6 +168,8 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
    * GtkButtonBox:child-min-width:
    *
    * The minimum width of buttons inside the box.
+   *
+   * Deprecated: 3.20: Use CSS min-width instead.
    */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("child-min-width",
@@ -176,12 +178,14 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
                                                              0,
                                                              G_MAXINT,
                                                              DEFAULT_CHILD_MIN_WIDTH,
-                                                             GTK_PARAM_READABLE));
+                                                             GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   /**
    * GtkButtonBox:child-min-height:
    *
    * The minimum height of buttons inside the box.
+   *
+   * Deprecated: 3.20: Use CSS min-height instead.
    */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("child-min-height",
@@ -190,12 +194,14 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
                                                              0,
                                                              G_MAXINT,
                                                              DEFAULT_CHILD_MIN_HEIGHT,
-                                                             GTK_PARAM_READABLE));
+                                                             GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   /**
    * GtkButtonBox:child-internal-pad-x:
    *
    * The amount to increase a child's size on either side.
+   *
+   * Deprecated: 3.20: Use CSS padding instead.
    */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("child-internal-pad-x",
@@ -204,12 +210,14 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
                                                              0,
                                                              G_MAXINT,
                                                              DEFAULT_CHILD_IPAD_X,
-                                                             GTK_PARAM_READABLE));
+                                                             GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   /**
    * GtkButtonBox:child-internal-pad-y:
    *
    * The amount to increase a child's size on the top and bottom.
+   *
+   * Deprecated: 3.20: Use CSS padding instead.
    */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("child-internal-pad-y",
@@ -218,7 +226,7 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
                                                              0,
                                                              G_MAXINT,
                                                              DEFAULT_CHILD_IPAD_Y,
-                                                             GTK_PARAM_READABLE));
+                                                             GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   g_object_class_install_property (gobject_class,
                                    PROP_LAYOUT_STYLE,
