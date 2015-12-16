@@ -4686,7 +4686,7 @@ wmspec_moveresize (GdkWindow *window,
   GdkDisplay *display = GDK_WINDOW_DISPLAY (window);
 
   if (button != 0)
-    gdk_device_ungrab (device, timestamp); /* Release passive grab */
+    gdk_seat_ungrab (gdk_device_get_seat (device)); /* Release passive grab */
   GDK_X11_DISPLAY (display)->wm_moveresize_button = button;
 
   wmspec_send_message (display, window, root_x, root_y, direction, button);
@@ -5145,13 +5145,10 @@ create_moveresize_window (MoveResizeData *mv_resize,
 
   gdk_window_show (mv_resize->moveresize_emulation_window);
 
-  status = gdk_device_grab (mv_resize->device,
-                            mv_resize->moveresize_emulation_window,
-                            GDK_OWNERSHIP_NONE,
-                            FALSE,
-                            GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK,
-                            NULL,
-                            timestamp);
+  status = gdk_seat_grab (gdk_device_get_seat (mv_resize->device),
+                          mv_resize->moveresize_emulation_window,
+                          GDK_SEAT_CAPABILITY_POINTER, FALSE,
+                          NULL, NULL, NULL, NULL);
 
   if (status != GDK_GRAB_SUCCESS)
     {
@@ -5663,7 +5660,7 @@ gdk_x11_window_show_window_menu (GdkWindow *window,
                 NULL);
 
   /* Ungrab the implicit grab */
-  gdk_device_ungrab (device, gdk_event_get_time (event));
+  gdk_seat_ungrab (gdk_device_get_seat (device));
 
   xclient.type = ClientMessage;
   xclient.window = GDK_WINDOW_XID (window);
