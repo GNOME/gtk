@@ -188,6 +188,8 @@ static void gtk_popover_update_relative_to (GtkPopover *popover,
 static void gtk_popover_set_state          (GtkPopover *popover,
                                             guint       state);
 static void gtk_popover_invalidate_borders (GtkPopover *popover);
+static void gtk_popover_apply_modality     (GtkPopover *popover,
+                                            gboolean    modal);
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkPopover, gtk_popover, GTK_TYPE_BIN)
 
@@ -328,6 +330,9 @@ gtk_popover_dispose (GObject *object)
 {
   GtkPopover *popover = GTK_POPOVER (object);
   GtkPopoverPrivate *priv = popover->priv;
+
+  if (priv->modal)
+    gtk_popover_apply_modality (popover, FALSE);
 
   if (priv->window)
     {
