@@ -835,23 +835,21 @@ gtk_progress_bar_measure_trough (GtkCssGadget   *gadget,
                                  gpointer        data)
 {
   GtkWidget *widget;
-  GtkProgressBar *pbar;
   GtkProgressBarPrivate *priv;
   GtkCssStyle *style;
 
   widget = gtk_css_gadget_get_owner (gadget);
-  pbar = GTK_PROGRESS_BAR (widget);
-  priv = pbar->priv;
+  priv = GTK_PROGRESS_BAR (widget)->priv;
 
   style = gtk_css_gadget_get_style (gadget);
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      gint min_width;
+      gdouble min_width;
 
-      min_width = get_number (style, GTK_CSS_PROPERTY_MIN_WIDTH);
+      min_width = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_MIN_WIDTH), 100.0);
 
-      if (min_width != 0)
-        *minimum = min_width;
+      if (min_width > 0.0)
+        *minimum = 0;
       else if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
         gtk_widget_style_get (widget, "min-horizontal-bar-width", minimum, NULL);
       else
@@ -859,12 +857,12 @@ gtk_progress_bar_measure_trough (GtkCssGadget   *gadget,
     }
   else
     {
-      gint min_height;
+      gdouble min_height;
 
-      min_height = get_number (style, GTK_CSS_PROPERTY_MIN_HEIGHT);
+      min_height = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_MIN_HEIGHT), 100.0);
 
-      if (min_height != 0)
-        *minimum = min_height;
+      if (min_height > 0.0)
+        *minimum = 0;
       else if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
         gtk_widget_style_get (widget, "min-horizontal-bar-height", minimum, NULL);
       else
