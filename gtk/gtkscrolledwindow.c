@@ -4390,10 +4390,6 @@ gtk_scrolled_window_grab_notify (GtkWidget *widget,
       gtk_widget_device_is_shadowed (widget,
                                      priv->drag_device))
     {
-      gdk_device_ungrab (priv->drag_device,
-                         gtk_get_current_event_time ());
-      priv->drag_device = NULL;
-
       if (_gtk_scrolled_window_get_overshoot (scrolled_window, NULL, NULL))
         gtk_scrolled_window_start_deceleration (scrolled_window);
       else
