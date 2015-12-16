@@ -1178,36 +1178,28 @@ gtk_paned_measure_handle (GtkCssGadget   *gadget,
                           gpointer        data)
 {
   GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
-  GtkPaned *paned = GTK_PANED (widget);
-  GtkPanedPrivate *priv = paned->priv;
-  GtkStyleContext *context;
-  gint handle_size;
   GtkCssStyle *style;
   gint min_size;
 
   style = gtk_css_gadget_get_style (gadget);
-  if (orientation == priv->orientation)
-    {
-      if (orientation == GTK_ORIENTATION_HORIZONTAL)
-        min_size = get_number (style, GTK_CSS_PROPERTY_MIN_WIDTH);
-      else
-        min_size = get_number (style, GTK_CSS_PROPERTY_MIN_HEIGHT);
-
-      if (min_size != 0)
-        *minimum = *natural = min_size;
-      else
-        {
-          context = gtk_widget_get_style_context (widget);
-          gtk_style_context_save_to_node (context, gtk_css_gadget_get_node (gadget));
-          gtk_widget_style_get (widget, "handle-size", &handle_size, NULL);
-          gtk_style_context_restore (context);
-          *minimum = *natural = handle_size;
-        }
-    }
-  else if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    *minimum = *natural = gtk_widget_get_allocated_width (widget);
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    min_size = get_number (style, GTK_CSS_PROPERTY_MIN_WIDTH);
   else
-    *minimum = *natural = gtk_widget_get_allocated_height(widget);
+    min_size = get_number (style, GTK_CSS_PROPERTY_MIN_HEIGHT);
+
+  if (min_size != 0)
+    *minimum = *natural = min_size;
+  else
+    {
+      GtkStyleContext *context;
+
+      context = gtk_widget_get_style_context (widget);
+      gtk_style_context_save_to_node (context, gtk_css_gadget_get_node (gadget));
+      gtk_widget_style_get (widget, "handle-size", &min_size, NULL);
+      gtk_style_context_restore (context);
+
+      *minimum = *natural = min_size;
+    }
 }
 
 static void
@@ -1411,7 +1403,7 @@ gtk_paned_allocate (GtkCssGadget        *gadget,
           window1_allocation.y = window2_allocation.y = allocation->y;
 
           window2_allocation.x = window1_allocation.x + priv->child1_size + priv->handle_pos.width;
-          window2_allocation.width = MAX (1, allocation->x + allocation->width - window2_allocation.x);
+          window2_allocation.width = MAX (1, allocation->width - priv->child1_size - priv->handle_pos.width);
 
           if (gtk_widget_get_direction (GTK_WIDGET (widget)) == GTK_TEXT_DIR_RTL)
             {
