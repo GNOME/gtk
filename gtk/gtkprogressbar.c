@@ -1068,7 +1068,7 @@ gtk_progress_bar_allocate_trough (GtkCssGadget        *gadget,
     {
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
         {
-          alloc.width = MAX (width, allocation->width / priv->activity_blocks);
+          alloc.width = width + (allocation->width - width) / priv->activity_blocks;
           alloc.x = allocation->x + priv->activity_pos * (allocation->width - alloc.width);
           alloc.y = allocation->y + (allocation->height - height) / 2;
           alloc.height = height;
@@ -1076,7 +1076,7 @@ gtk_progress_bar_allocate_trough (GtkCssGadget        *gadget,
       else
         {
 
-          alloc.height = MAX (height, allocation->height / priv->activity_blocks);
+          alloc.height = height + (allocation->height - height) / priv->activity_blocks;
           alloc.y = allocation->y + priv->activity_pos * (allocation->height - alloc.height);
           alloc.x = allocation->x + (allocation->width - width) / 2;
           alloc.width = width;
@@ -1086,7 +1086,7 @@ gtk_progress_bar_allocate_trough (GtkCssGadget        *gadget,
     {
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
         {
-          alloc.width = MAX (width, allocation->width * priv->fraction);
+          alloc.width = width + (allocation->width - width) * priv->fraction;
           alloc.height = height;
           alloc.y = allocation->y + (allocation->height - height) / 2;
 
@@ -1098,7 +1098,7 @@ gtk_progress_bar_allocate_trough (GtkCssGadget        *gadget,
       else
         {
           alloc.width = width;
-          alloc.height = MAX (height, allocation->height * priv->fraction);
+          alloc.height = height + (allocation->height - height) * priv->fraction;
           alloc.x = allocation->x + (allocation->width - width) / 2;
 
           if (!inverted)
