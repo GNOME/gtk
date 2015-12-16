@@ -1602,17 +1602,7 @@ gtk_menu_popup_for_device (GtkMenu             *menu,
     device = NULL;
 
   if (device == NULL)
-    {
-      GdkDeviceManager *device_manager;
-      GList *devices;
-
-      device_manager = gdk_display_get_device_manager (display);
-      devices = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_MASTER);
-
-      device = devices->data;
-
-      g_list_free (devices);
-    }
+    device = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
 
   widget = GTK_WIDGET (menu);
   menu_shell = GTK_MENU_SHELL (menu);
