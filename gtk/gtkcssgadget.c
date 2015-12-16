@@ -552,20 +552,26 @@ gtk_css_gadget_allocate (GtkCssGadget        *gadget,
 
   if (content_allocation.width < 0)
     {
-      g_warning ("Negative content width while allocating gadget\n");
+      g_warning ("Negative content width while allocating gadget (node %s, owner %s)\n",
+                 gtk_css_node_get_name (gtk_css_gadget_get_node (gadget)),
+                 G_OBJECT_TYPE_NAME (gtk_css_gadget_get_owner (gadget)));
       content_allocation.width = 0;
     }
 
   if (content_allocation.height < 0)
     {
-      g_warning ("Negative content height while allocating gadget\n");
+      g_warning ("Negative content height while allocating gadget (node %s, owner %s)\n",
+                 gtk_css_node_get_name (gtk_css_gadget_get_node (gadget)),
+                 G_OBJECT_TYPE_NAME (gtk_css_gadget_get_owner (gadget)));
       content_allocation.width = 0;
     }
 
   GTK_CSS_GADGET_GET_CLASS (gadget)->allocate (gadget, &content_allocation, baseline, &content_clip);
 
   if (content_clip.width == 0 || content_clip.height == 0)
-    g_warning ("GtkCssAllocateFunc did not set clip\n");
+    g_warning ("GtkCssAllocateFunc did not set clip for gadget (node %s, owner %s)\n",
+               gtk_css_node_get_name (gtk_css_gadget_get_node (gadget)),
+               G_OBJECT_TYPE_NAME (gtk_css_gadget_get_owner (gadget)));
 
   _gtk_css_shadows_value_get_extents (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BOX_SHADOW), &shadow);
 
