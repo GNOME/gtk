@@ -1330,9 +1330,11 @@ gdk_event_init (GdkDisplay *display)
   gdk_x11_event_source_add_translator ((GdkEventSource *) display_x11->event_source,
                                        GDK_EVENT_TRANSLATOR (display));
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   device_manager = gdk_display_get_device_manager (display);
   gdk_x11_event_source_add_translator ((GdkEventSource *) display_x11->event_source,
                                         GDK_EVENT_TRANSLATOR (device_manager));
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
 static void
@@ -1344,12 +1346,15 @@ gdk_x11_display_init_input (GdkDisplay *display)
   GList *list, *l;
 
   display_x11 = GDK_X11_DISPLAY (display);
+
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   device_manager = gdk_display_get_device_manager (display);
 
   /* For backwards compatibility, just add
    * floating devices that are not keyboards.
    */
   list = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_FLOATING);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   for (l = list; l; l = l->next)
     {

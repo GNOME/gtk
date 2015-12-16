@@ -425,7 +425,9 @@ gdk_x11_device_xi2_grab (GdkDevice    *device,
   gint status;
 
   display = gdk_device_get_display (device);
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   device_manager_xi2 = GDK_X11_DEVICE_MANAGER_XI2 (gdk_display_get_device_manager (display));
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   /* FIXME: confine_to is actually unused */
 
@@ -676,7 +678,9 @@ gdk_x11_device_xi2_select_window_events (GdkDevice    *device,
   XIEventMask evmask;
 
   display = gdk_device_get_display (device);
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   device_manager_xi2 = GDK_X11_DEVICE_MANAGER_XI2 (gdk_display_get_device_manager (display));
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   evmask.deviceid = device_xi2->device_id;
   evmask.mask = _gdk_x11_device_xi2_translate_event_mask (device_manager_xi2,
