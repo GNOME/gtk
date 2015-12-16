@@ -31,7 +31,8 @@
  *
  * Allocates a new #GtkBorder-struct and initializes its elements to zero.
  *
- * Returns: a newly allocated #GtkBorder-struct. Free with gtk_border_free()
+ * Returns: (transfer full): a newly allocated #GtkBorder-struct.
+ *  Free with gtk_border_free()
  *
  * Since: 2.14
  */
@@ -47,7 +48,7 @@ gtk_border_new (void)
  *
  * Copies a #GtkBorder-struct.
  *
- * Returns: a copy of @border_.
+ * Returns: (transfer full): a copy of @border_.
  */
 GtkBorder *
 gtk_border_copy (const GtkBorder *border_)
