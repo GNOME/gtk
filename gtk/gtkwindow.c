@@ -8124,35 +8124,29 @@ do_focus_change (GtkWidget *widget,
 static gboolean
 gtk_window_has_mnemonic_modifier_pressed (GtkWindow *window)
 {
-  GList *devices, *d;
-  GdkDeviceManager *device_manager;
+  GList *seats, *s;
   gboolean retval = FALSE;
 
   if (!window->priv->mnemonic_modifier)
     return FALSE;
 
-  device_manager = gdk_display_get_device_manager (gtk_widget_get_display (GTK_WIDGET (window)));
-  devices = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_MASTER);
+  seats = gdk_display_list_seats (gtk_widget_get_display (GTK_WIDGET (window)));
 
-  for (d = devices; d; d = d->next)
+  for (s = seats; s; s = s->next)
     {
-      GdkDevice *dev = d->data;
+      GdkDevice *dev = gdk_seat_get_pointer (s->data);
+      GdkModifierType mask;
 
-      if (gdk_device_get_source (dev) == GDK_SOURCE_MOUSE)
+      gdk_device_get_state (dev, _gtk_widget_get_window (GTK_WIDGET (window)),
+                            NULL, &mask);
+      if (window->priv->mnemonic_modifier == (mask & gtk_accelerator_get_default_mod_mask ()))
         {
-          GdkModifierType mask;
-
-          gdk_device_get_state (dev, _gtk_widget_get_window (GTK_WIDGET (window)),
-                                NULL, &mask);
-          if (window->priv->mnemonic_modifier == (mask & gtk_accelerator_get_default_mod_mask ()))
-            {
-              retval = TRUE;
-              break;
-            }
+          retval = TRUE;
+          break;
         }
     }
 
-  g_list_free (devices);
+  g_list_free (seats);
 
   return retval;
 }
