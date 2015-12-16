@@ -698,3 +698,38 @@ gtk_css_gadget_get_border_allocation (GtkCssGadget  *gadget,
     }
 }
 
+void
+gtk_css_gadget_get_content_allocation (GtkCssGadget  *gadget,
+                                       GtkAllocation *allocation,
+                                       int           *baseline)
+{
+  GtkCssGadgetPrivate *priv = gtk_css_gadget_get_instance_private (gadget);
+  GtkBorder margin, border, padding, extents;
+  GtkCssStyle *style;
+
+  g_return_if_fail (GTK_IS_CSS_GADGET (gadget));
+
+  style = gtk_css_gadget_get_style (gadget);
+  get_box_margin (style, &margin);
+  get_box_border (style, &border);
+  get_box_padding (style, &padding);
+  extents.top = margin.top + border.top + padding.top;
+  extents.right = margin.right + border.right + padding.right;
+  extents.bottom = margin.bottom + border.bottom + padding.bottom;
+  extents.left = margin.left + border.left + padding.left;
+
+  if (allocation)
+    {
+      allocation->x = priv->allocated_size.x + extents.left;
+      allocation->y = priv->allocated_size.y + extents.top;
+      allocation->width = priv->allocated_size.width - extents.left - extents.right;
+      allocation->height = priv->allocated_size.height - extents.top - extents.bottom;
+    }
+  if (baseline)
+    {
+      if (priv->allocated_baseline >= 0)
+        *baseline = priv->allocated_baseline - extents.top;
+      else
+        *baseline = -1;
+    }
+}

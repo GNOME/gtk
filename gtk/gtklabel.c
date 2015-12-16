@@ -3403,16 +3403,18 @@ gtk_label_update_layout_width (GtkLabel *label)
 
   if (priv->ellipsize || priv->wrap)
     {
+      GtkAllocation allocation;
       GtkBorder border;
       PangoRectangle logical;
       gint width, height;
 
+      gtk_css_gadget_get_content_allocation (priv->gadget, &allocation, NULL);
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       _gtk_misc_get_padding_and_border (GTK_MISC (label), &border);
 G_GNUC_END_IGNORE_DEPRECATIONS
 
-      width = gtk_widget_get_allocated_width (GTK_WIDGET (label)) - border.left - border.right;
-      height = gtk_widget_get_allocated_height (GTK_WIDGET (label)) - border.top - border.bottom;
+      width = allocation.width - border.left - border.right;
+      height = allocation.height - border.top - border.bottom;
 
       if (priv->have_transform)
         {
@@ -4011,12 +4013,13 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   req_width  += border.left + border.right;
   req_height += border.top + border.bottom;
 
-  gtk_widget_get_allocation (widget, &allocation);
+  gtk_css_gadget_get_content_allocation (priv->gadget,
+                                         &allocation,
+                                         &baseline);
 
   x = floor (allocation.x + border.left + xalign * (allocation.width - req_width) - logical.x);
 
   baseline_offset = 0;
-  baseline = gtk_widget_get_allocated_baseline (widget);
   if (baseline != -1 && !priv->have_transform)
     {
       layout_baseline = pango_layout_get_baseline (priv->layout) / PANGO_SCALE;

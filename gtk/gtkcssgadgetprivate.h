@@ -100,6 +100,9 @@ void            gtk_css_gadget_draw                     (GtkCssGadget           
 void            gtk_css_gadget_get_border_allocation    (GtkCssGadget           *gadget,
                                                          GtkAllocation          *allocation,
                                                          int                    *baseline);
+void            gtk_css_gadget_get_content_allocation   (GtkCssGadget           *gadget,
+                                                         GtkAllocation          *allocation,
+                                                         int                    *baseline);
 
 G_END_DECLS
 
