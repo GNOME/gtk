@@ -27,6 +27,8 @@
 #include "gtkcssstyleprivate.h"
 #include "gtkcsstransformvalueprivate.h"
 
+#include <math.h>
+
 void
 gtk_css_style_render_icon (GtkCssStyle            *style,
                            cairo_t                *cr,
@@ -142,5 +144,77 @@ gtk_css_style_render_icon_surface (GtkCssStyle            *style,
     }
 
   cairo_set_matrix (cr, &saved_matrix);
+}
+
+static void
+gtk_cairo_rectangle_transform (cairo_rectangle_int_t       *dest,
+                               const cairo_rectangle_int_t *src,
+                               const cairo_matrix_t        *matrix)
+{
+  double x1, x2, x3, x4;
+  double y1, y2, y3, y4;
+
+  g_return_if_fail (dest != NULL);
+  g_return_if_fail (src != NULL);
+  g_return_if_fail (matrix != NULL);
+
+  x1 = src->x;
+  y1 = src->y;
+  x2 = src->x + src->width;
+  y2 = src->y;
+  x3 = src->x + src->width;
+  y3 = src->y + src->height;
+  x4 = src->x;
+  y4 = src->y + src->height;
+
+  cairo_matrix_transform_point (matrix, &x1, &y1);
+  cairo_matrix_transform_point (matrix, &x2, &y2);
+  cairo_matrix_transform_point (matrix, &x3, &y3);
+  cairo_matrix_transform_point (matrix, &x4, &y4);
+
+  dest->x = floor (MIN (MIN (x1, x2), MIN (x3, x4)));
+  dest->y = floor (MIN (MIN (y1, y2), MIN (y3, y4)));
+  dest->width = ceil (MAX (MAX (x1, x2), MAX (x3, x4))) - dest->x;
+  dest->height = ceil (MAX (MAX (y1, y2), MAX (y3, y4))) - dest->y;
+}
+
+void
+gtk_css_style_render_icon_get_extents (GtkCssStyle  *style,
+                                       GdkRectangle *extents,
+                                       gint          x,
+                                       gint          y,
+                                       gint          width,
+                                       gint          height)
+{
+  cairo_matrix_t transform_matrix, matrix;
+  GtkBorder border;
+  GdkRectangle rect;
+
+  g_return_if_fail (GTK_IS_CSS_STYLE (style));
+  g_return_if_fail (extents != NULL);
+
+  extents->x = x;
+  extents->y = y;
+  extents->width = width;
+  extents->height = height;
+
+  if (!_gtk_css_transform_value_get_matrix (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_TRANSFORM), &transform_matrix))
+    return;
+  
+  cairo_matrix_init_translate (&matrix, x + width / 2.0, y + height / 2.0);
+  cairo_matrix_multiply (&matrix, &transform_matrix, &matrix);
+  /* need to round to full pixels */
+  rect.x = - (width + 1) / 2;
+  rect.y = - (height + 1) / 2;
+  rect.width = (width + 1) & ~1;
+  rect.height = (height + 1) & ~1;
+  gtk_cairo_rectangle_transform (extents, &rect, &matrix);
+
+  _gtk_css_shadows_value_get_extents (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_SHADOW), &border);
+
+  extents->x -= border.left;
+  extents->y -= border.top;
+  extents->width += border.left + border.right;
+  extents->height += border.top + border.bottom;
 }
 
