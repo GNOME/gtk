@@ -1597,12 +1597,12 @@ xdnd_enter_filter (GdkXEvent *xev,
                    GdkEvent  *event,
                    gpointer   cb_data)
 {
-  GdkDeviceManager *device_manager;
   GdkDisplay *display;
   GdkX11Display *display_x11;
   XEvent *xevent = (XEvent *)xev;
   GdkDragContext *context;
   GdkX11DragContext *context_x11;
+  GdkSeat *seat;
   gint i;
   Atom type;
   int format;
@@ -1650,8 +1650,8 @@ xdnd_enter_filter (GdkXEvent *xev,
   context_x11->version = version;
 
   /* FIXME: Should extend DnD protocol to have device info */
-  device_manager = gdk_display_get_device_manager (display);
-  gdk_drag_context_set_device (context, gdk_device_manager_get_client_pointer (device_manager));
+  seat = gdk_display_get_default_seat (display);
+  gdk_drag_context_set_device (context, gdk_seat_get_pointer (seat));
 
   context->source_window = gdk_x11_window_foreign_new_for_display (display, source_window);
   if (!context->source_window)

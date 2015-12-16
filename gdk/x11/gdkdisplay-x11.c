@@ -1364,7 +1364,7 @@ gdk_x11_display_init_input (GdkDisplay *display)
 
   g_list_free (list);
 
-  display->core_pointer = gdk_device_manager_get_client_pointer (device_manager);
+  display->core_pointer = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
   display_x11->input_devices = g_list_prepend (display_x11->input_devices,
                                                g_object_ref (display->core_pointer));
 }
