@@ -106,7 +106,9 @@ gdk_display_real_opened (GdkDisplay *display)
 {
   GdkDeviceManager *device_manager;
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   device_manager = gdk_display_get_device_manager (display);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   g_signal_connect (device_manager, "device-removed",
                     G_CALLBACK (device_removed_cb), display);
@@ -281,7 +283,9 @@ gdk_display_dispose (GObject *object)
   GdkDisplay *display = GDK_DISPLAY (object);
   GdkDeviceManager *device_manager;
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   device_manager = gdk_display_get_device_manager (GDK_DISPLAY (object));
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   _gdk_display_manager_remove_display (gdk_display_manager_get (), display);
 
