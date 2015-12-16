@@ -12586,7 +12586,9 @@ list_devices (GtkWidget        *widget,
               GdkDeviceType     device_type,
               GList           **result)
 {
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   GList *devices = gdk_device_manager_list_devices (device_manager, device_type);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
   GList *l;
 
   for (l = devices; l; l = l->next)
@@ -12620,10 +12622,13 @@ _gtk_widget_list_devices (GtkWidget *widget)
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  display = gtk_widget_get_display (widget);
-  device_manager = gdk_display_get_device_manager (display);
   if (!_gtk_widget_get_mapped (widget))
     return NULL;
+
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+  display = gtk_widget_get_display (widget);
+  device_manager = gdk_display_get_device_manager (display);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   list_devices (widget, device_manager, GDK_DEVICE_TYPE_MASTER, &result);
   /* Rare, but we can get events for grabbed slave devices */
