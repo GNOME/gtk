@@ -253,6 +253,36 @@ gtk_css_node_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_css_node_parent_class)->finalize (object);
 }
 
+static gboolean
+gtk_css_node_is_first_child (GtkCssNode *node)
+{
+  GtkCssNode *iter;
+
+  for (iter = node->previous_sibling;
+       iter != NULL;
+       iter = iter->previous_sibling)
+    {
+      if (iter->visible)
+        return FALSE;
+    }
+  return TRUE;
+}
+
+static gboolean
+gtk_css_node_is_last_child (GtkCssNode *node)
+{
+  GtkCssNode *iter;
+
+  for (iter = node->next_sibling;
+       iter != NULL;
+       iter = iter->next_sibling)
+    {
+      if (iter->visible)
+        return FALSE;
+    }
+  return TRUE;
+}
+
 #define UNPACK_DECLARATION(packed) ((GtkCssNodeDeclaration *) (GPOINTER_TO_SIZE (packed) & ~0x3))
 #define UNPACK_FLAGS(packed) (GPOINTER_TO_SIZE (packed) & 0x3)
 #define PACK(decl, first_child, last_child) GSIZE_TO_POINTER (GPOINTER_TO_SIZE (decl) | ((first_child) ? 0x2 : 0) | ((last_child) ? 0x1 : 0))
@@ -292,8 +322,8 @@ lookup_in_global_parent_cache (GtkCssNode                  *node,
 
   style = g_hash_table_lookup (cache,
                                PACK (decl,
-                                     gtk_css_node_get_previous_sibling (node) == NULL,
-                                     gtk_css_node_get_next_sibling (node) == NULL));
+                                     gtk_css_node_is_first_child (node),
+                                     gtk_css_node_is_last_child (node)));
 
   return style;
 }
@@ -376,8 +406,8 @@ store_in_global_parent_cache (GtkCssNode                  *node,
 
   g_hash_table_insert (cache,
                        PACK (gtk_css_node_declaration_ref ((GtkCssNodeDeclaration *) decl),
-                             gtk_css_node_get_previous_sibling (node) == NULL,
-                             gtk_css_node_get_next_sibling (node) == NULL),
+                             gtk_css_node_is_first_child (node),
+                             gtk_css_node_is_last_child (node)),
                        g_object_ref (style));
 }
 
@@ -1071,6 +1101,8 @@ void
 gtk_css_node_set_visible (GtkCssNode *cssnode,
                           gboolean    visible)
 {
+  GtkCssNode *iter;
+
   if (cssnode->visible == visible)
     return;
 
@@ -1094,14 +1126,34 @@ gtk_css_node_set_visible (GtkCssNode *cssnode,
     }
 
   if (cssnode->next_sibling)
-    gtk_css_node_invalidate (cssnode->next_sibling, GTK_CSS_CHANGE_ANY_SIBLING
-                                                    | GTK_CSS_CHANGE_NTH_CHILD
-                                                    | (cssnode->previous_sibling ? 0 : GTK_CSS_CHANGE_FIRST_CHILD));
-
+    {
+      gtk_css_node_invalidate (cssnode->next_sibling, GTK_CSS_CHANGE_ANY_SIBLING | GTK_CSS_CHANGE_NTH_CHILD);
+      if (gtk_css_node_is_first_child (cssnode))
+        {
+          for (iter = cssnode->next_sibling;
+               iter != NULL;
+               iter = iter->next_sibling)
+            {
+              gtk_css_node_invalidate (iter, GTK_CSS_CHANGE_FIRST_CHILD);
+              if (iter->visible)
+                break;
+            }
+        }
+    }
+               
   if (cssnode->previous_sibling)
     {
-      if (cssnode->next_sibling)
-        gtk_css_node_invalidate (cssnode->previous_sibling, GTK_CSS_CHANGE_LAST_CHILD);
+      if (gtk_css_node_is_last_child (cssnode))
+        {
+          for (iter = cssnode->previous_sibling;
+               iter != NULL;
+               iter = iter->previous_sibling)
+            {
+              gtk_css_node_invalidate (iter, GTK_CSS_CHANGE_LAST_CHILD);
+              if (iter->visible)
+                break;
+            }
+        }
       gtk_css_node_invalidate (cssnode->parent->first_child, GTK_CSS_CHANGE_NTH_LAST_CHILD);
     }
 }
