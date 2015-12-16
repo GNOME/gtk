@@ -660,6 +660,7 @@ gdk_event_copy (const GdkEvent *event)
       new_private->screen = private->screen;
       new_private->device = private->device ? g_object_ref (private->device) : NULL;
       new_private->source_device = private->source_device ? g_object_ref (private->source_device) : NULL;
+      new_private->seat = private->seat;
     }
 
   switch (event->any.type)
