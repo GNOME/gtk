@@ -29,6 +29,7 @@ typedef struct _GtkBuiltinIconPrivate GtkBuiltinIconPrivate;
 struct _GtkBuiltinIconPrivate {
   GtkCssImageBuiltinType        image_type;
   int                           default_size;
+  char *                        default_size_property;
 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkBuiltinIcon, gtk_builtin_icon, GTK_TYPE_CSS_GADGET,
@@ -58,6 +59,21 @@ gtk_builtin_icon_get_preferred_size (GtkCssGadget   *gadget,
       return;
     }
 
+  if (priv->default_size_property)
+    {
+      GValue value = G_VALUE_INIT;
+
+      /* Do it a bit more complicated here so we get warnings when
+       * somebody sets a non-int proerty. */
+      g_value_init (&value, G_TYPE_INT);
+      gtk_widget_style_get_property (gtk_css_gadget_get_owner (gadget),
+                                     priv->default_size_property,
+                                     &value);
+      *minimum = *natural = g_value_get_int (&value);
+      g_value_unset (&value);
+      return;
+    }
+
   *minimum = priv->default_size;
   *natural = priv->default_size;
 }
@@ -81,11 +97,11 @@ gtk_builtin_icon_allocate (GtkCssGadget        *gadget,
 
 static gboolean
 gtk_builtin_icon_draw (GtkCssGadget *gadget,
-                            cairo_t      *cr,
-                            int           x,
-                            int           y,
-                            int           width,
-                            int           height)
+                       cairo_t      *cr,
+                       int           x,
+                       int           y,
+                       int           width,
+                       int           height)
 {
   GtkBuiltinIconPrivate *priv = gtk_builtin_icon_get_instance_private (GTK_BUILTIN_ICON (gadget));
 
@@ -101,7 +117,9 @@ gtk_builtin_icon_draw (GtkCssGadget *gadget,
 static void
 gtk_builtin_icon_finalize (GObject *object)
 {
-  //GtkBuiltinIconPrivate *priv = gtk_builtin_icon_get_instance_private (GTK_BUILTIN_ICON (object));
+  GtkBuiltinIconPrivate *priv = gtk_builtin_icon_get_instance_private (GTK_BUILTIN_ICON (object));
+
+  g_free (priv->default_size_property);
 
   G_OBJECT_CLASS (gtk_builtin_icon_parent_class)->finalize (object);
 }
@@ -215,3 +233,45 @@ gtk_builtin_icon_get_default_size (GtkBuiltinIcon *icon)
   return priv->default_size;
 }
 
+/**
+ * gtk_builtin_icon_set_default_size_property:
+ * @icon: icon to set the property for
+ * @property_name: Name of the style property
+ *
+ * Sets the name of a widget style property to use to compute the default size
+ * of the icon. If it is set to no %NULL, it will be used instead of the value
+ * set via gtk_builtin_icon_set_default_size() to set the default size of the
+ * icon.
+ *
+ * @property_name must refer to a style property that is of integer type.
+ *
+ * This function is intended strictly for backwards compatibility reasons.
+ */
+void
+gtk_builtin_icon_set_default_size_property (GtkBuiltinIcon *icon,
+                                            const char     *property_name)
+{
+  GtkBuiltinIconPrivate *priv;
+  
+  g_return_if_fail (GTK_IS_BUILTIN_ICON (icon));
+
+  priv = gtk_builtin_icon_get_instance_private (icon);
+
+  if (g_strcmp0 (priv->default_size_property, property_name))
+    {
+      priv->default_size_property = g_strdup (property_name);
+      gtk_widget_queue_resize (gtk_css_gadget_get_owner (GTK_CSS_GADGET (icon)));
+    }
+}
+
+const char *
+gtk_builtin_icon_get_default_size_property (GtkBuiltinIcon *icon)
+{
+  GtkBuiltinIconPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_BUILTIN_ICON (icon), GTK_CSS_IMAGE_BUILTIN_NONE);
+
+  priv = gtk_builtin_icon_get_instance_private (icon);
+
+  return priv->default_size_property;
+}
