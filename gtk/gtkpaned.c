@@ -1357,7 +1357,7 @@ gtk_paned_allocate (GtkCssGadget        *gadget,
   GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
   GtkPaned *paned = GTK_PANED (widget);
   GtkPanedPrivate *priv = paned->priv;
-  GtkAllocation clip;
+  GtkAllocation clip = { 0 };
 
   if (priv->child1 && gtk_widget_get_visible (priv->child1) &&
       priv->child2 && gtk_widget_get_visible (priv->child2))
@@ -1476,7 +1476,6 @@ gtk_paned_allocate (GtkCssGadget        *gadget,
           if (child2_height > child2_allocation.height)
             child2_allocation.height = child2_height;
         }
-
 
       gtk_css_gadget_allocate (priv->handle_gadget,
                                &priv->handle_pos,
