@@ -3145,6 +3145,11 @@ checkbutton.text-button, radiobutton.text-button {
     checkbutton.text-button:insensitive:backdrop, checkbutton.text-button:insensitive:active:backdrop, checkbutton.text-button:insensitive:inconsistent:backdrop, radiobutton.text-button:insensitive:backdrop, radiobutton.text-button:insensitive:active:backdrop, radiobutton.text-button:insensitive:inconsistent:backdrop {
       color: #c3c3c0; }
 
+checkbutton check {
+  margin: 0 2px 0 2px; }
+  checkbutton check:only-child {
+    margin: 0; }
+
 /************
  * GtkScale *
  ************/

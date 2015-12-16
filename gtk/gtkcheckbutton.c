@@ -223,6 +223,15 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
 							     G_MAXINT,
 							     INDICATOR_SIZE,
 							     GTK_PARAM_READABLE));
+
+  /**
+   * GtkCheckButton:indicator-spacing:
+   *
+   * The spacing around the indicator.
+   *
+   * Deprecated: 3.20: Use CSS margins of the indicator node,
+   *    the value of this style property is ignored.
+   */
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("indicator-spacing",
 							     P_("Indicator Spacing"),
@@ -230,7 +239,7 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
 							     0,
 							     G_MAXINT,
 							     INDICATOR_SPACING,
-							     GTK_PARAM_READABLE));
+							     GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_CHECK_BOX);
   gtk_widget_class_set_css_name (widget_class, "checkbutton");
@@ -441,19 +450,14 @@ gtk_check_button_measure (GtkCssGadget   *gadget,
       if (child && gtk_widget_get_visible (child))
         {
           gint child_min, child_nat;
-          gint spacing;
-
-          gtk_widget_style_get (widget,
-                                "indicator-spacing", &spacing,
-                                NULL);
 
           _gtk_widget_get_preferred_size_for_size (child,
                                                    GTK_ORIENTATION_HORIZONTAL,
                                                    for_size,
                                                    &child_min, &child_nat,
                                                    NULL, NULL);
-          *minimum = check_min + 2 * spacing + child_min;
-          *natural = check_nat + 2 * spacing + child_nat;
+          *minimum = check_min + child_min;
+          *natural = check_nat + child_nat;
         }
       else
         {
@@ -680,7 +684,6 @@ gtk_check_button_allocate (GtkCssGadget        *gadget,
   GtkWidget *child;
   gint check_min_width, check_nat_width;
   gint check_min_height, check_nat_height;
-  gint spacing;
   GdkRectangle check_clip;
 
   widget = gtk_css_gadget_get_owner (gadget);
@@ -707,18 +710,13 @@ gtk_check_button_allocate (GtkCssGadget        *gadget,
                                      -1,
                                      &check_min_height, &check_nat_height,
                                      NULL, NULL);
-  gtk_widget_style_get (widget,
-                        "indicator-spacing", &spacing,
-                        NULL);
 
   child = gtk_bin_get_child (GTK_BIN (button));
-  if (!child || !gtk_widget_get_visible (child))
-    spacing = 0;
 
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
-    child_allocation.x = allocation->x + spacing;
+    child_allocation.x = allocation->x;
   else
-    child_allocation.x = allocation->x + allocation->width - check_nat_width - spacing;
+    child_allocation.x = allocation->x + allocation->width - check_nat_width;
   child_allocation.y = allocation->y + (allocation->height - check_nat_height) / 2;
   child_allocation.width = check_nat_width;
   child_allocation.height = check_nat_height;
@@ -731,11 +729,11 @@ gtk_check_button_allocate (GtkCssGadget        *gadget,
   if (child && gtk_widget_get_visible (child))
     {
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
-        child_allocation.x = allocation->x + 2 * spacing + check_nat_width;
+        child_allocation.x = allocation->x + check_nat_width;
       else
         child_allocation.x = allocation->x;
       child_allocation.y = allocation->y;
-      child_allocation.width = allocation->width - check_nat_width - 2 * spacing;
+      child_allocation.width = allocation->width - check_nat_width;
       child_allocation.height = allocation->height;
 
       gtk_widget_size_allocate_with_baseline (child, &child_allocation, baseline);

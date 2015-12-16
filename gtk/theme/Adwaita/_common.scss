@@ -2140,6 +2140,14 @@ checkbutton.text-button, radiobutton.text-button {
   }
 }
 
+radiobutton radio,
+checkbutton check {
+  margin: 0 2px 0 2px;
+  &:only-child {
+    margin: 0;
+  }
+}
+
 /************
  * GtkScale *
  ************/
