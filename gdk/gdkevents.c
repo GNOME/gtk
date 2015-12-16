@@ -2333,6 +2333,20 @@ gdk_event_get_seat (const GdkEvent *event)
     return NULL;
 
   priv = (const GdkEventPrivate *) event;
+
+  if (!priv->seat)
+    {
+      GdkDevice *device;
+
+      g_warning ("Event with type %d not holding a GdkSeat. "
+                 "It is most likely synthesized outside Gdk/GTK+\n",
+                 event->type);
+
+      device = gdk_event_get_device (event);
+
+      return device ? gdk_device_get_seat (device) : NULL;
+    }
+
   return priv->seat;
 }
 
