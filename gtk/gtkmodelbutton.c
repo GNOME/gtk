@@ -133,6 +133,16 @@
  *
  * The subnode is positioned before or after the content nodes and gets the
  * .left or .right style class, depending on where it is located.
+ *
+ * |[<!-- language="plain" -->
+ * button.model
+ * ├── <child>
+ * ╰── check
+ * ]|
+ *
+ * Iconic model buttons (see #GtkModelButton::iconic) change the name of
+ * their main node to button and add a .model style class to it. The indicator
+ * subnode is invisible in this case.
  */
 
 struct _GtkModelButton
@@ -435,6 +445,7 @@ gtk_model_button_set_iconic (GtkModelButton *button,
   if (iconic)
     {
       gtk_css_node_set_name (widget_node, I_("button"));
+      gtk_css_gadget_add_class (button->gadget, "model");
       gtk_css_gadget_add_class (button->gadget, "image-button");
       gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NORMAL);
       gtk_css_node_set_visible (indicator_node, FALSE);
@@ -442,6 +453,7 @@ gtk_model_button_set_iconic (GtkModelButton *button,
   else
     {
       gtk_css_node_set_name (widget_node, I_("modelbutton"));
+      gtk_css_gadget_remove_class (button->gadget, "model");
       gtk_css_gadget_remove_class (button->gadget, "image-button");
       gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
       gtk_css_node_set_visible (indicator_node,

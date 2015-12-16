@@ -2180,9 +2180,9 @@ popover.background {
   .titlebar popover.background button.titlebutton:hover {
     text-shadow: none;
     transition: none; }
-  popover.background button.image-button, popover.background headerbar button.titlebutton, headerbar popover.background button.titlebutton,
-  popover.background .titlebar button.titlebutton,
-  .titlebar popover.background button.titlebutton {
+  popover.background button.model.image-button, popover.background headerbar button.model.titlebutton, headerbar popover.background button.model.titlebutton,
+  popover.background .titlebar button.model.titlebutton,
+  .titlebar popover.background button.model.titlebutton {
     padding: 0px; }
   .csd popover.background.touch-selection, .csd popover.background.magnifier, popover.background.touch-selection, popover.background.magnifier {
     border: 1px solid rgba(255, 255, 255, 0.1); }
