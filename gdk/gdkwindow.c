@@ -7938,6 +7938,7 @@ send_crossing_event (GdkDisplay                 *display,
     {
       event = _gdk_make_event ((GdkWindow *)window, type, event_in_queue, TRUE);
       gdk_event_set_device (event, device);
+      gdk_event_set_seat (event, gdk_device_get_seat (device));
 
       if (source_device)
         gdk_event_set_source_device (event, source_device);
@@ -9009,6 +9010,7 @@ proxy_pointer_event (GdkDisplay                 *display,
 
       gdk_event_set_device (event, gdk_event_get_device (source_event));
       gdk_event_set_source_device (event, source_device);
+      gdk_event_set_seat (event, gdk_device_get_seat (device));
 
       if (event_type == GDK_TOUCH_UPDATE)
 	{
@@ -9249,6 +9251,7 @@ proxy_button_event (GdkEvent *source_event,
 				 &event->button.y_root);
       gdk_event_set_device (event, gdk_event_get_device (source_event));
       gdk_event_set_source_device (event, source_device);
+      gdk_event_set_seat (event, gdk_device_get_seat (device));
 
       if (is_touch_type (source_event->type))
         {
@@ -9383,6 +9386,7 @@ proxy_gesture_event (GdkEvent *source_event,
   event = _gdk_make_event (event_win, evtype, source_event, FALSE);
   gdk_event_set_device (event, device);
   gdk_event_set_source_device (event, source_device);
+  gdk_event_set_seat (event, gdk_device_get_seat (device));
 
   switch (evtype)
     {
