@@ -8242,11 +8242,10 @@ gdk_pointer_grab (GdkWindow *	  window,
 {
   GdkWindow *native;
   GdkDisplay *display;
-  GdkDeviceManager *device_manager;
   GdkDevice *device;
   GdkGrabStatus res = 0;
   gulong serial;
-  GList *devices, *dev;
+  GList *seats, *s;
 
   g_return_val_if_fail (window != NULL, GDK_GRAB_FAILED);
   g_return_val_if_fail (GDK_IS_WINDOW (window), GDK_GRAB_FAILED);
@@ -8283,17 +8282,11 @@ gdk_pointer_grab (GdkWindow *	  window,
   display = gdk_window_get_display (window);
 
   serial = _gdk_display_get_next_serial (display);
-  device_manager = gdk_display_get_device_manager (display);
-  devices = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_MASTER);
+  seats = gdk_display_list_seats (display);
 
-  /* FIXME: Should this be generic to all backends? */
-  /* FIXME: What happens with extended devices? */
-  for (dev = devices; dev; dev = dev->next)
+  for (s = seats; s; s = s->next)
     {
-      device = dev->data;
-
-      if (gdk_device_get_source (device) != GDK_SOURCE_MOUSE)
-        continue;
+      device = gdk_seat_get_pointer (s->data);
 
       res = GDK_DEVICE_GET_CLASS (device)->grab (device,
                                                  native,
@@ -8318,7 +8311,7 @@ gdk_pointer_grab (GdkWindow *	  window,
 
   /* FIXME: handle errors when grabbing */
 
-  g_list_free (devices);
+  g_list_free (seats);
 
   return res;
 }
@@ -8354,11 +8347,10 @@ gdk_keyboard_grab (GdkWindow *window,
 {
   GdkWindow *native;
   GdkDisplay *display;
-  GdkDeviceManager *device_manager;
   GdkDevice *device;
   GdkGrabStatus res = 0;
   gulong serial;
-  GList *devices, *dev;
+  GList *seats, *s;
 
   g_return_val_if_fail (GDK_IS_WINDOW (window), GDK_GRAB_FAILED);
 
@@ -8383,17 +8375,11 @@ gdk_keyboard_grab (GdkWindow *window,
 
   display = gdk_window_get_display (window);
   serial = _gdk_display_get_next_serial (display);
-  device_manager = gdk_display_get_device_manager (display);
-  devices = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_MASTER);
+  seats = gdk_display_list_seats (display);
 
-  /* FIXME: Should this be generic to all backends? */
-  /* FIXME: What happens with extended devices? */
-  for (dev = devices; dev; dev = dev->next)
+  for (s = seats; s; s = s->next)
     {
-      device = dev->data;
-
-      if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD)
-        continue;
+      device = gdk_seat_get_keyboard (s->data);
 
       res = GDK_DEVICE_GET_CLASS (device)->grab (device,
                                                  native,
@@ -8417,7 +8403,7 @@ gdk_keyboard_grab (GdkWindow *window,
 
   /* FIXME: handle errors when grabbing */
 
-  g_list_free (devices);
+  g_list_free (seats);
 
   return res;
 }
