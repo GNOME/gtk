@@ -38,7 +38,7 @@
 #include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
 #include "a11y/gtkspinneraccessible.h"
-#include "gtkcsscustomgadgetprivate.h"
+#include "gtkbuiltiniconprivate.h"
 
 
 /**
@@ -84,19 +84,6 @@ gtk_spinner_finalize (GObject *object)
 }
 
 static void
-gtk_spinner_measure (GtkCssGadget   *gadget,
-                     GtkOrientation  orientation,
-                     gint            for_size,
-                     gint           *minimum,
-                     gint           *natural,
-                     gint           *minimum_baseline,
-                     gint           *natural_baseline,
-                     gpointer        data)
-{
-  *minimum = *natural = 16;
-}
-
-static void
 gtk_spinner_get_preferred_width (GtkWidget *widget,
                                  gint      *minimum,
                                  gint      *natural)
@@ -121,32 +108,6 @@ gtk_spinner_get_preferred_height (GtkWidget *widget,
 }
 
 static void
-gtk_spinner_allocate (GtkCssGadget        *gadget,
-                      const GtkAllocation *allocation,
-                      gint                 baseline,
-                      GtkAllocation       *out_clip,
-                      gpointer             data)
-{
-  GtkWidget *widget;
-  GtkStyleContext *context;
-  gint size;
-
-  widget = gtk_css_gadget_get_owner (gadget);
-  context = gtk_widget_get_style_context (widget);
-  size = MIN (allocation->width, allocation->height);
-
-  gtk_widget_set_allocation (widget, allocation);
-
-  _gtk_style_context_get_icon_extents (context,
-                                       out_clip,
-                                       allocation->x + (allocation->width - size) / 2,
-                                       allocation->y + (allocation->height - size) / 2,
-                                       size, size);
-
-  gdk_rectangle_union (out_clip, allocation, out_clip);
-}
-
-static void
 gtk_spinner_size_allocate (GtkWidget     *widget,
                            GtkAllocation *allocation)
 {
@@ -167,32 +128,6 @@ gtk_spinner_draw (GtkWidget *widget,
                   cairo_t   *cr)
 {
   gtk_css_gadget_draw (GTK_SPINNER (widget)->priv->gadget, cr);
-
-  return FALSE;
-}
-
-static gboolean
-gtk_spinner_render (GtkCssGadget *gadget,
-                    cairo_t      *cr,
-                    gint          x,
-                    gint          y,
-                    gint          width,
-                    gint          height,
-                    gpointer      data)
-{
-  GtkWidget *widget;
-  GtkStyleContext *context;
-  gint size;
-
-  widget = gtk_css_gadget_get_owner (gadget);
-  context = gtk_widget_get_style_context (widget);
-
-  size = MIN (width, height);
-
-  gtk_render_activity (context, cr,
-                       (width - size) / 2,
-                       (height - size) / 2,
-                       size, size);
 
   return FALSE;
 }
@@ -301,13 +236,9 @@ gtk_spinner_init (GtkSpinner *spinner)
   gtk_widget_set_has_window (GTK_WIDGET (spinner), FALSE);
 
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (spinner));
-  spinner->priv->gadget = gtk_css_custom_gadget_new_for_node (widget_node,
-                                                              GTK_WIDGET (spinner),
-                                                              gtk_spinner_measure,
-                                                              gtk_spinner_allocate,
-                                                              gtk_spinner_render,
-                                                              NULL,
-                                                              NULL);
+  spinner->priv->gadget = gtk_builtin_icon_new_for_node (widget_node, GTK_WIDGET (spinner));
+  gtk_builtin_icon_set_image (GTK_BUILTIN_ICON (spinner->priv->gadget), GTK_CSS_IMAGE_BUILTIN_SPINNER);
+  gtk_builtin_icon_set_default_size (GTK_BUILTIN_ICON (spinner->priv->gadget), 16);
 }
 
 /**

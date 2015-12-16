@@ -366,6 +366,7 @@ gtk_private_h_sources =		\
 	gtkbookmarksmanager.h	\
 	gtkboxprivate.h         \
 	gtkbuilderprivate.h	\
+	gtkbuiltiniconprivate.h	\
 	gtkbuttonprivate.h	\
 	gtkcairoblurprivate.h	\
 	gtkcellareaboxcontextprivate.h	\
@@ -600,6 +601,7 @@ gtk_base_c_sources = 		\
 	gtkbuilder.c		\
 	gtkbuilderparser.c	\
 	gtkbuilder-menus.c	\
+	gtkbuiltinicon.c	\
 	gtkbutton.c		\
 	gtkcairoblur.c		\
 	gtkcalendar.c		\
