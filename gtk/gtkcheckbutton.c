@@ -37,6 +37,7 @@
 #include "gtkcsscustomgadgetprivate.h"
 #include "gtkcontainerprivate.h"
 #include "gtkstylecontextprivate.h"
+#include "gtkcssnumbervalueprivate.h"
 #include "gtkradiobutton.h"
 
 
@@ -215,6 +216,13 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
   widget_class->state_flags_changed = gtk_check_button_state_flags_changed;
   widget_class->direction_changed = gtk_check_button_direction_changed;
 
+  /**
+   * GtkCheckButton:indicator-size:
+   *
+   * The size of the indicator.
+   *
+   * Deprecated: 3.20: Use CSS min-width and min-height on the indicator node.
+   */
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("indicator-size",
 							     P_("Indicator Size"),
@@ -222,7 +230,7 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
 							     0,
 							     G_MAXINT,
 							     INDICATOR_SIZE,
-							     GTK_PARAM_READABLE));
+							     GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   /**
    * GtkCheckButton:indicator-spacing:
@@ -521,15 +529,24 @@ gtk_check_button_measure_check (GtkCssGadget   *gadget,
                                 int            *natural_baseline,
                                 gpointer        unused)
 {
-  GtkWidget *widget;
-  gint indicator_size;
+  gdouble min_size;
+  guint property;
 
-  widget = gtk_css_gadget_get_owner (gadget);
-  gtk_widget_style_get (widget,
-                        "indicator-size", &indicator_size,
-                        NULL);
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    property = GTK_CSS_PROPERTY_MIN_WIDTH;
+  else
+    property = GTK_CSS_PROPERTY_MIN_HEIGHT;
 
-  *minimum = *natural = indicator_size;
+  min_size = _gtk_css_number_value_get (gtk_css_style_get_value (gtk_css_gadget_get_style (gadget), property), 100);
+  if (min_size > 0.0)
+    *minimum = *natural = 0;
+  else
+    {
+      gtk_widget_style_get (gtk_css_gadget_get_owner (gadget),
+                            "indicator-size", minimum,
+                            NULL);
+      *natural = *minimum;
+    }
 }
 
 static void
