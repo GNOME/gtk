@@ -322,7 +322,7 @@ gtk_css_gadget_get_style (GtkCssGadget *gadget)
 }
 
 /**
- * gtk_css_gadget_get_style:
+ * gtk_css_gadget_get_owner:
  * @gadget: a #GtkCssGadget
  *
  * Get the widget to which this gadget belongs.
