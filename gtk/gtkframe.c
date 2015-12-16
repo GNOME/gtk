@@ -852,6 +852,8 @@ gtk_frame_allocate_border (GtkCssGadget        *gadget,
   child = gtk_bin_get_child (GTK_BIN (widget));
   if (child && gtk_widget_get_visible (child))
     gtk_widget_size_allocate (child, (GtkAllocation *)allocation);
+
+  *out_clip = *allocation;
 }
 
 static void
