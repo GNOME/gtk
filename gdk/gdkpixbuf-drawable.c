@@ -91,11 +91,13 @@ gdk_pixbuf_get_from_window (GdkWindow *src,
   cairo_surface_t *copy;
   cairo_t *cr;
   GdkPixbuf *dest;
+  int scale;
 
   g_return_val_if_fail (GDK_IS_WINDOW (src), NULL);
   g_return_val_if_fail (gdk_window_is_viewable (src), NULL);
 
   surface = _gdk_window_ref_cairo_surface (src);
+  scale = gdk_window_get_scale_factor (window);
 
   /* We do not know what happened to this surface outside of GDK.
    * Especially for foreign windows, they will have been modified
