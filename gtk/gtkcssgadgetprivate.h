@@ -97,6 +97,10 @@ void            gtk_css_gadget_allocate                 (GtkCssGadget           
 void            gtk_css_gadget_draw                     (GtkCssGadget           *gadget,
                                                          cairo_t                *cr);
 
+void            gtk_css_gadget_get_border_allocation    (GtkCssGadget           *gadget,
+                                                         GtkAllocation          *allocation,
+                                                         int                    *baseline);
+
 G_END_DECLS
 
 #endif /* __GTK_CSS_GADGET_PRIVATE_H__ */

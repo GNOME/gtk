@@ -670,3 +670,31 @@ gtk_css_node_style_changed_for_widget (GtkCssNode  *node,
   _gtk_bitmask_free (changes);
 }
 
+void
+gtk_css_gadget_get_border_allocation (GtkCssGadget  *gadget,
+                                      GtkAllocation *allocation,
+                                      int           *baseline)
+{
+  GtkCssGadgetPrivate *priv = gtk_css_gadget_get_instance_private (gadget);
+  GtkBorder margin;
+
+  g_return_if_fail (GTK_IS_CSS_GADGET (gadget));
+
+  get_box_margin (gtk_css_gadget_get_style (gadget), &margin);
+
+  if (allocation)
+    {
+      allocation->x = priv->allocated_size.x + margin.left;
+      allocation->y = priv->allocated_size.y + margin.top;
+      allocation->width = priv->allocated_size.width - margin.left - margin.right;
+      allocation->height = priv->allocated_size.height - margin.top - margin.bottom;
+    }
+  if (baseline)
+    {
+      if (priv->allocated_baseline >= 0)
+        *baseline = priv->allocated_baseline - margin.top;
+      else
+        *baseline = -1;
+    }
+}
+
