@@ -2310,17 +2310,11 @@ gtk_combo_box_real_popup (GtkComboBox *combo_box)
 
   if (!device)
     {
-      GdkDeviceManager *device_manager;
       GdkDisplay *display;
-      GList *devices;
-
-      display = gtk_widget_get_display (GTK_WIDGET (combo_box));
-      device_manager = gdk_display_get_device_manager (display);
 
       /* No device was set, pick the first master device */
-      devices = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_MASTER);
-      device = devices->data;
-      g_list_free (devices);
+      display = gtk_widget_get_display (GTK_WIDGET (combo_box));
+      device = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
     }
 
   gtk_combo_box_popup_for_device (combo_box, device);
