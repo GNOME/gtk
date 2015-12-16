@@ -76,6 +76,9 @@
  * don't have sub-gadgets of child widgets don't need a GtkCssAllocateFunc
  * (although it is still required to call gtk_css_gadget_allocate() on them).
  *
+ * Note that @out_clip *must* be set to meaningful values. If in doubt,
+ * just set it to the allocation.
+ *
  * GtkCssDrawFunc:
  * @gadget: the #GtkCssCustomGadget
  * @cr: the cairo context to draw on
