@@ -1130,8 +1130,8 @@ gdk_wayland_window_create_xdg_popup (GdkWindow      *window,
   GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   GdkWindowImplWayland *parent_impl = GDK_WINDOW_IMPL_WAYLAND (parent->impl);
-  GdkDeviceManager *device_manager;
   GdkWaylandDevice *device;
+  GdkSeat *gdk_seat;
   int x, y;
   int parent_x, parent_y;
 
@@ -1141,8 +1141,8 @@ gdk_wayland_window_create_xdg_popup (GdkWindow      *window,
   if (!parent_impl->surface)
     return;
 
-  device_manager = gdk_display_get_device_manager (GDK_DISPLAY (display));
-  device = GDK_WAYLAND_DEVICE (gdk_device_manager_get_client_pointer (device_manager));
+  gdk_seat = gdk_display_get_default_seat (GDK_DISPLAY (display));
+  device = GDK_WAYLAND_DEVICE (gdk_seat_get_pointer (gdk_seat));
 
   gdk_wayland_window_get_fake_root_coords (parent, &parent_x, &parent_y);
 

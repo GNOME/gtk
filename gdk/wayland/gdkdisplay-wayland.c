@@ -107,50 +107,12 @@ static void
 gdk_input_init (GdkDisplay *display)
 {
   GdkWaylandDisplay *display_wayland;
-  GdkDeviceManager *device_manager;
-  GdkDevice *device;
-  GList *list, *l;
 
   display_wayland = GDK_WAYLAND_DISPLAY (display);
-  device_manager = gdk_display_get_device_manager (display);
-
-  /* For backwards compatibility, just add
-   * floating devices that are not keyboards.
-   */
-  list = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_FLOATING);
-
-  for (l = list; l; l = l->next)
-    {
-      device = l->data;
-
-      if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
-	continue;
-
-      display_wayland->input_devices = g_list_prepend (display_wayland->input_devices, l->data);
-    }
-
-  g_list_free (list);
-
-  /* Now set "core" pointer to the first
-   * master device that is a pointer.
-   */
-  list = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_MASTER);
-
-  for (l = list; l; l = l->next)
-    {
-      device = l->data;
-
-      if (gdk_device_get_source (device) != GDK_SOURCE_MOUSE)
-	continue;
-
-      display->core_pointer = device;
-      break;
-    }
+  display->core_pointer = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
 
   /* Add the core pointer to the devices list */
   display_wayland->input_devices = g_list_prepend (display_wayland->input_devices, display->core_pointer);
-
-  g_list_free (list);
 }
 
 static void
@@ -676,27 +638,10 @@ gdk_wayland_display_notify_startup_complete (GdkDisplay  *display,
 static GdkKeymap *
 _gdk_wayland_display_get_keymap (GdkDisplay *display)
 {
-  GdkDeviceManager *device_manager;
-  GList *list, *l;
   GdkDevice *core_keyboard = NULL;
   static GdkKeymap *tmp_keymap = NULL;
 
-  device_manager = gdk_display_get_device_manager (display);
-  list = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_MASTER);
-
-  for (l = list; l; l = l->next)
-    {
-      GdkDevice *device;
-      device = l->data;
-
-      if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD)
-	continue;
-
-      core_keyboard = device;
-      break;
-    }
-
-  g_list_free (list);
+  core_keyboard = gdk_seat_get_keyboard (gdk_display_get_default_seat (display));
 
   if (core_keyboard && tmp_keymap)
     {

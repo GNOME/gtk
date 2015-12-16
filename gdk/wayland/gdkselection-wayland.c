@@ -883,11 +883,9 @@ gdk_wayland_selection_unset_data_source (GdkDisplay *display,
 
   if (selection == atoms[ATOM_CLIPBOARD])
     {
-      GdkDeviceManager *device_manager;
       GdkDevice *device;
 
-      device_manager = gdk_display_get_device_manager (display);
-      device = gdk_device_manager_get_client_pointer (device_manager);
+      device = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
 
       gdk_wayland_device_set_selection (device, NULL);
 
@@ -1168,13 +1166,11 @@ gdk_wayland_selection_add_targets (GdkWindow *window,
 
   if (selection == atoms[ATOM_CLIPBOARD])
     {
-      GdkDeviceManager *device_manager;
       GdkDisplay *display;
       GdkDevice *device;
 
       display = gdk_window_get_display (window);
-      device_manager = gdk_display_get_device_manager (display);
-      device = gdk_device_manager_get_client_pointer (device_manager);
+      device = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
       gdk_wayland_device_set_selection (device, data_source);
     }
 }
