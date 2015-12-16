@@ -4729,6 +4729,11 @@ stackswitcher .titlebar button.text-button.titlebutton,
 .titlebar stackswitcher button.text-button.titlebutton {
   min-width: 100px; }
 
+stackswitcher button.circular,
+stackswitcher .titlebar button.circular.titlebutton,
+.titlebar stackswitcher button.circular.titlebutton {
+  min-width: 0px; }
+
 /* GTK NAMED COLORS
    ----------------
    use responsibly! */

@@ -586,12 +586,6 @@ adjust_page_buttons (GtkWidget *widget,
 {
   GtkWidget *label;
 
-  /*
-   * TODO: This is a hack to get the GtkStackSwitcher radio
-   *       buttons to look how we want. However, it's very
-   *       much font size specific.
-   */
-  gtk_widget_set_size_request (widget, 34, 34);
   gtk_style_context_add_class (gtk_widget_get_style_context (widget), "circular");
 
   label = gtk_bin_get_child (GTK_BIN (widget));
