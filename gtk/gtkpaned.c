@@ -1498,32 +1498,15 @@ gtk_paned_allocate (GtkCssGadget        *gadget,
 
       if (gtk_widget_get_realized (widget))
 	{
-          GtkBorder margin;
-          GtkStyleContext *context = gtk_widget_get_style_context (widget);
-
-          gtk_style_context_get_margin (context,
-                                        gtk_style_context_get_state (context),
-                                        &margin);
+          GtkAllocation border_alloc;
 
 	  if (gtk_widget_get_mapped (widget))
 	    gdk_window_show (priv->handle);
 
-          if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-            {
-              gdk_window_move_resize (priv->handle,
-                                      priv->handle_pos.x - margin.left,
-                                      priv->handle_pos.y,
-                                      handle_size + margin.left + margin.right,
-                                      priv->handle_pos.height);
-            }
-          else
-            {
-              gdk_window_move_resize (priv->handle,
-                                      priv->handle_pos.x,
-                                      priv->handle_pos.y - margin.top,
-                                      priv->handle_pos.width,
-                                      handle_size + margin.top + margin.bottom);
-            }
+          gtk_css_gadget_get_border_allocation (priv->handle_gadget, &border_alloc, NULL);
+          gdk_window_move_resize (priv->handle,
+                                  border_alloc.x, border_alloc.y,
+                                  border_alloc.width, border_alloc.height);
 	}
 
       /* Now allocate the childen, making sure, when resizing not to
