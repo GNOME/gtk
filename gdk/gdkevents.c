@@ -1634,7 +1634,6 @@ gdk_event_get_device (const GdkEvent *event)
     case GDK_KEY_RELEASE:
       {
         GdkDisplay *display;
-        GdkDevice *client_pointer;
         GdkSeat *seat;
 
         g_warning ("Event with type %d not holding a GdkDevice. "
