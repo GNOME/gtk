@@ -94,8 +94,8 @@
  * expander
  * ├── title
  * │   ├── arrow
- * │   ╰── label widget
- * ╰── child
+ * │   ╰── <label widget>
+ * ╰── <child>
  * ]|
  *
  * GtkExpander has three CSS nodes, the main node with the name expander,

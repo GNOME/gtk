@@ -57,9 +57,9 @@
  * |[<!-- language="plain" -->
  * flowbox
  * ├── flowboxchild
- * │   ╰── child
+ * │   ╰── <child>
  * ├── flowboxchild
- * │   ╰── child
+ * │   ╰── <child>
  * ┊
  * ╰── [rubberband]
  * ]|

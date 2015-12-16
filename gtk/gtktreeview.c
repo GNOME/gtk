@@ -129,9 +129,9 @@
  * |[<!-- language="plain" -->
  * treeview.view
  * ├── header
- * │   ├── [column header]
- * │   ├── [column header]
-   ┊   ┊
+ * │   ├── <column header>
+ * ┊   ┊
+ * │   ╰── <column header>
  * │
  * ╰── [rubberband]
  * ]|

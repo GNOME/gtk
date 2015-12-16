@@ -89,7 +89,7 @@
  * |[<!-- language="plain" -->
  * levelbar[.discrete]
  * ╰── trough
- *     ├── block.filled.<level-name>
+ *     ├── block.filled.level-name
  *     ┊
  *     ├── block.empty
  *     ┊
@@ -100,7 +100,7 @@
  * trough node are a number of nodes with name block and style class .filled
  * or .empty. In continuous mode, there is exactly one node of each, in discrete
  * mode, the number of filled and unfilled nodes corresponds to blocks that are
- * drawn. The block.filled nodes also get a style class .<level-name> corresponding
+ * drawn. The block.filled nodes also get a style class .level-name corresponding
  * to the level for the current value.
  */
 #include "config.h"

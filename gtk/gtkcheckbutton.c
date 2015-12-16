@@ -57,7 +57,8 @@
  *
  * |[<!-- language="plain" -->
  * checkbutton
- * ╰── check
+ * ├── check
+ * ╰── <child>
  * ]|
  *
  * A GtkCheckButton with indicator (see gtk_toggle_button_set_mode()) has a
@@ -65,7 +66,8 @@
  *
  * |[<!-- language="plain" -->
  * button.check
- * ╰── [check]
+ * ├── check
+ * ╰── <child>
  * ]|
  *
  * A GtkCheckButton without indicator changes the name of its main node

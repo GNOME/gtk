@@ -76,7 +76,8 @@
  *
  * |[<!-- language="plain" -->
  * radiobutton
- * ╰── radio
+ * ├── radio
+ * ╰── <child>
  * ]|
  *
  * A GtkRadioButton with indicator (see gtk_toggle_button_set_mode()) has a
@@ -84,7 +85,8 @@
  *
  * |[<!-- language="plain" -->
  * button.radio
- * ╰── [radio]
+ * ├── radio
+ * ╰── <child>
  * ]|
  *
  * A GtkRadioButton without indicator changes the name of its main node

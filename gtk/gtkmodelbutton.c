@@ -111,19 +111,19 @@
  *
  * |[<!-- language="plain" -->
  * modelbutton
- * ├── ...
+ * ├── <child>
  * ╰── check
  * ]|
  *
  * |[<!-- language="plain" -->
  * modelbutton
- * ├── ...
+ * ├── <child>
  * ╰── radio
  * ]|
  *
  * |[<!-- language="plain" -->
  * modelbutton
- * ├── ...
+ * ├── <child>
  * ╰── arrow
  * ]|
  *

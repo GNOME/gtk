@@ -53,8 +53,8 @@
  *
  * |[<!-- language="plain" -->
  * menuitem
- * ├── ...
- * ╰── check.right
+ * ├── check.left
+ * ╰── <child>
  * ]|
  *
  * GtkCheckMenuItem has a main CSS node with name menuitem, and a subnode

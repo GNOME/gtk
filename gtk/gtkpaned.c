@@ -85,7 +85,9 @@
  *
  * |[<!-- language="plain" -->
  * paned
- * ╰── separator[.wide]
+ * ├── <child>
+ * ├── separator[.wide]
+ * ╰── <child>
  * ]|
  *
  * GtkPaned has a main CSS node with name paned, and a subnode for

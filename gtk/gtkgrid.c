@@ -55,7 +55,7 @@
  *
  * # CSS nodes
  *
- * GtkGrid uses a single CSS node wiht name grid.
+ * GtkGrid uses a single CSS node with name grid.
  */
 
 typedef struct _GtkGridChild GtkGridChild;

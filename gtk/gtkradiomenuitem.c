@@ -66,8 +66,8 @@
  *
  * |[<!-- language="plain" -->
  * menuitem
- * ├── ...
- * ╰── radio
+ * ├── radio.left
+ * ╰── <child>
  * ]|
  *
  * GtkRadioMenuItem has a main CSS node with name menuitem, and a subnode

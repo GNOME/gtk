@@ -88,7 +88,9 @@
  * |[<!-- language="plain" -->
  * menu
  * ├── arrow.top
- * ├── ...
+ * ├── <child>
+ * ┊
+ * ├── <child>
  * ╰── arrow.bottom
  * ]|
  *

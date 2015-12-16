@@ -92,7 +92,7 @@
  *
  * |[<!-- language="plain" -->
  * menuitem
- * ├── ...
+ * ├── <child>
  * ╰── [arrow.right]
  * ]|
  *

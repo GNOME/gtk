@@ -101,19 +101,20 @@
  * |[<!-- language="plain" -->
  * notebook
  * ├── header.top
- * │   ├── [action widget]
+ * │   ├── [<action widget>]
  * │   ├── tabs
  * │   │   ├── [arrow]
  * │   │   ├── tab
- * ┊   ┊   ┊   ╰── [tab label]
+ * │   │   │   ╰── <tab label>
+ * ┊   ┊   ┊
  * │   │   ├── tab[.reorderable-page]
- * │   │   │   ╰── [tab label]
+ * │   │   │   ╰── <tab label>
  * │   │   ╰── [arrow]
- * │   ╰── [action widget]
+ * │   ╰── [<action widget>]
  * │
- * ├── [child]
+ * ├── <child>
  * ┊
- * ╰── [child]
+ * ╰── <child>
  * ]|
  *
  * GtkNotebook has a main CSS node with name notebook, a subnode

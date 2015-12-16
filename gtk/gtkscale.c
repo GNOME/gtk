@@ -78,16 +78,16 @@
  * scale[.fine-tune]
  * ├── marks.top
  * │   ├── mark
- * │   ├── mark
- * │   ╰── ...
+ * ┊   ┊
+ * │   ╰── mark
  * ├── trough
- * │   ├──slider
+ * │   ├── slider
  * │   ├── [highlight]
  * │   ╰── [fill]
  * ╰── marks.bottom
  *     ├── mark
- *     ├── mark
- *     ╰── ...
+ *     ┊
+ *     ╰── mark
  * ]|
  *
  * GtkScale has a main CSS node with name scale, and subnodes with names

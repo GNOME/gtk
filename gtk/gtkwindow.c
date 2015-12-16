@@ -131,7 +131,8 @@
  *
  * |[<!-- language="plain" -->
  * window
- * ╰── decoration
+ * ├── decoration
+ * ╰── <child>
  * ]|
  *
  * GtkWindow has a main CSS node with name window and style class .background,
