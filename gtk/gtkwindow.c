@@ -8082,10 +8082,12 @@ do_focus_change (GtkWidget *widget,
 
   g_object_ref (widget);
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   device_manager = gdk_display_get_device_manager (gtk_widget_get_display (widget));
   devices = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_MASTER);
   devices = g_list_concat (devices, gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_SLAVE));
   devices = g_list_concat (devices, gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_FLOATING));
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   for (d = devices; d; d = d->next)
     {
