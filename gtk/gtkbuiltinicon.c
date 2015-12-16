@@ -22,6 +22,7 @@
 #include "gtkbuiltiniconprivate.h"
 
 #include "gtkcssnodeprivate.h"
+#include "gtkcssnumbervalueprivate.h"
 #include "gtkrendericonprivate.h"
 
 typedef struct _GtkBuiltinIconPrivate GtkBuiltinIconPrivate;
@@ -43,6 +44,19 @@ gtk_builtin_icon_get_preferred_size (GtkCssGadget   *gadget,
                                      gint           *natural_baseline)
 {
   GtkBuiltinIconPrivate *priv = gtk_builtin_icon_get_instance_private (GTK_BUILTIN_ICON (gadget));
+  double min_size;
+  guint property;
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    property = GTK_CSS_PROPERTY_MIN_WIDTH;
+  else
+    property = GTK_CSS_PROPERTY_MIN_HEIGHT;
+  min_size = _gtk_css_number_value_get (gtk_css_style_get_value (gtk_css_gadget_get_style (gadget), property), 100);
+  if (min_size > 0.0)
+    {
+      *minimum = *natural = 0;
+      return;
+    }
 
   *minimum = priv->default_size;
   *natural = priv->default_size;
