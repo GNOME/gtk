@@ -75,6 +75,7 @@ gdk_broadway_display_init_input (GdkDisplay *display)
   GList *list, *l;
 
   broadway_display = GDK_BROADWAY_DISPLAY (display);
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   device_manager = gdk_display_get_device_manager (display);
 
   /* For backwards compatibility, just add
@@ -110,6 +111,7 @@ gdk_broadway_display_init_input (GdkDisplay *display)
       display->core_pointer = device;
       break;
     }
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   /* Add the core pointer to the devices list */
   broadway_display->input_devices = g_list_prepend (broadway_display->input_devices,

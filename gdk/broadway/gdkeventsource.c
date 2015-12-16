@@ -117,7 +117,9 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
   g_assert (display != NULL);
 
   display_broadway = GDK_BROADWAY_DISPLAY (display);
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   device_manager = GDK_BROADWAY_DEVICE_MANAGER (gdk_display_get_device_manager (display));
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   switch (message->base.type) {
   case BROADWAY_EVENT_ENTER:
