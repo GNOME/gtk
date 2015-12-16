@@ -499,9 +499,9 @@ render_frame_stroke (cairo_t       *cr,
       for (i = 0; i < 4; i++) 
         {
           length += _gtk_rounded_box_guess_length (&stroke_box, i);
-          _gtk_rounded_box_path_side (&stroke_box, cr, i);
         }
 
+      _gtk_rounded_box_path (&stroke_box, cr);
       gdk_cairo_set_source_rgba (cr, &colors[0]);
       set_stroke_style (cr, border_width[0], stroke_style, length);
       cairo_stroke (cr);
