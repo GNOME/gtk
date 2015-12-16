@@ -458,28 +458,22 @@ void
 gdk_display_pointer_ungrab (GdkDisplay *display,
 			    guint32     time_)
 {
-  GdkDeviceManager *device_manager;
-  GList *devices, *dev;
+  GList *seats, *s;
   GdkDevice *device;
 
   g_return_if_fail (GDK_IS_DISPLAY (display));
 
-  device_manager = gdk_display_get_device_manager (display);
-  devices = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_MASTER);
+  seats = gdk_display_list_seats (display);
 
-  /* FIXME: Should this be generic to all backends? */
-  /* FIXME: What happens with extended devices? */
-  for (dev = devices; dev; dev = dev->next)
+  for (s = seats; s; s = s->next)
     {
-      device = dev->data;
-
-      if (gdk_device_get_source (device) != GDK_SOURCE_MOUSE)
-        continue;
-
+      device = gdk_seat_get_pointer (s->data);
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gdk_device_ungrab (device, time_);
+      G_GNUC_END_IGNORE_DEPRECATIONS;
     }
 
-  g_list_free (devices);
+  g_list_free (seats);
 }
 
 /**
@@ -498,28 +492,22 @@ void
 gdk_display_keyboard_ungrab (GdkDisplay *display,
 			     guint32     time)
 {
-  GdkDeviceManager *device_manager;
-  GList *devices, *dev;
+  GList *seats, *s;
   GdkDevice *device;
 
   g_return_if_fail (GDK_IS_DISPLAY (display));
 
-  device_manager = gdk_display_get_device_manager (display);
-  devices = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_MASTER);
+  seats = gdk_display_list_seats (display);
 
-  /* FIXME: Should this be generic to all backends? */
-  /* FIXME: What happens with extended devices? */
-  for (dev = devices; dev; dev = dev->next)
+  for (s = seats; s; s = s->next)
     {
-      device = dev->data;
-
-      if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD)
-        continue;
-
+      device = gdk_seat_get_keyboard (s->data);
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gdk_device_ungrab (device, time);
+      G_GNUC_END_IGNORE_DEPRECATIONS;
     }
 
-  g_list_free (devices);
+  g_list_free (seats);
 }
 
 /**
@@ -1428,28 +1416,25 @@ gdk_device_grab_info_libgtk_only (GdkDisplay  *display,
 gboolean
 gdk_display_pointer_is_grabbed (GdkDisplay *display)
 {
-  GdkDeviceManager *device_manager;
-  GList *devices, *dev;
+  GList *seats, *s;
   GdkDevice *device;
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), TRUE);
 
-  device_manager = gdk_display_get_device_manager (display);
-  devices = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_MASTER);
+  seats = gdk_display_list_seats (display);
 
-  for (dev = devices; dev; dev = dev->next)
+  for (s = seats; s; s = s->next)
     {
-      device = dev->data;
+      device = gdk_seat_get_pointer (s->data);
 
-      if (gdk_device_get_source (device) == GDK_SOURCE_MOUSE &&
-          gdk_display_device_is_grabbed (display, device))
+      if (gdk_display_device_is_grabbed (display, device))
         {
-          g_list_free (devices);
+          g_list_free (seats);
           return TRUE;
         }
     }
 
-  g_list_free (devices);
+  g_list_free (seats);
 
   return FALSE;
 }
