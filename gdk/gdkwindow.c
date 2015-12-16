@@ -5371,6 +5371,8 @@ gdk_window_hide (GdkWindow *window)
       GdkDeviceManager *device_manager;
       GList *devices, *d;
 
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
       /* May need to break grabs on children */
       display = gdk_window_get_display (window);
       device_manager = gdk_display_get_device_manager (display);
@@ -5394,6 +5396,7 @@ gdk_window_hide (GdkWindow *window)
 
       window->state = GDK_WINDOW_STATE_WITHDRAWN;
       g_list_free (devices);
+      G_GNUC_END_IGNORE_DEPRECATIONS;
     }
 
   did_hide = _gdk_window_update_viewable (window);
@@ -8499,6 +8502,7 @@ gdk_window_set_source_events (GdkWindow      *window,
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   display = gdk_window_get_display (window);
   device_manager = gdk_display_get_device_manager (display);
 
@@ -8514,6 +8518,7 @@ gdk_window_set_source_events (GdkWindow      *window,
     }
 
   g_list_free (devices);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   /* Update accounting */
   if (G_UNLIKELY (!window->source_event_masks))
