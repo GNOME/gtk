@@ -1670,8 +1670,8 @@ activate (GApplication *app)
                     G_CALLBACK (textbuffer_notify_selection), widget);
   widget = (GtkWidget *)gtk_builder_get_object (builder, "pastebutton");
   g_signal_connect (widget, "clicked", G_CALLBACK (handle_cutcopypaste), widget2);
-  g_signal_connect (gtk_widget_get_clipboard (widget2, GDK_SELECTION_CLIPBOARD), "owner-change",
-                    G_CALLBACK (clipboard_owner_change), widget);
+  g_signal_connect_object (gtk_widget_get_clipboard (widget2, GDK_SELECTION_CLIPBOARD), "owner-change",
+                           G_CALLBACK (clipboard_owner_change), widget);
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "osd_frame");
   widget2 = (GtkWidget *)gtk_builder_get_object (builder, "totem_like_osd");
