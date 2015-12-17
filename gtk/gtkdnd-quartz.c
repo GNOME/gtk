@@ -1179,13 +1179,13 @@ gtk_drag_begin_idle (gpointer arg)
 
 GdkDragContext *
 gtk_drag_begin_internal (GtkWidget         *widget,
-			 GtkIconHelper     *icon_helper,
+			 GtkImageDefinition *icon,
 			 GtkTargetList     *target_list,
 			 GdkDragAction      actions,
 			 gint               button,
-			 GdkEvent          *event,
-			 gint               x,
-			 gint               y)
+			 const GdkEvent    *event,
+			 int               x,
+			 int               y)
 {
   GtkDragSourceInfo *info;
   GdkDevice *pointer;
@@ -1272,36 +1272,33 @@ gtk_drag_begin_internal (GtkWidget         *widget,
    * application may have set one in ::drag_begin, or it may
    * not have set one.
    */
-  if (!info->icon_surface)
+  if (!info->icon_surface && icon)
     {
-      if (!icon_helper || _gtk_icon_helper_get_is_empty (icon_helper))
-        gtk_drag_set_icon_default (context);
-      else
+      switch (gtk_image_definition_get_storage_type (icon))
         {
-          switch (_gtk_icon_helper_get_storage_type (icon_helper))
-            {
-              case GTK_IMAGE_PIXBUF:
-                  gtk_drag_set_icon_pixbuf (context,
-                                            _gtk_icon_helper_peek_pixbuf (icon_helper),
-                                            -2, -2);
-                  break;
-              case GTK_IMAGE_STOCK:
-                  gtk_drag_set_icon_stock (context,
-                                           _gtk_icon_helper_get_stock_id (icon_helper),
-                                           -2, -2);
-                  break;
-              case GTK_IMAGE_ICON_NAME:
-                  gtk_drag_set_icon_name (context,
-                                          _gtk_icon_helper_get_icon_name (icon_helper),
-                                          -2, -2);
-                  break;
-              case GTK_IMAGE_EMPTY:
-              default:
-                  g_assert_not_reached();
-                  break;
-            }
+          case GTK_IMAGE_PIXBUF:
+              gtk_drag_set_icon_pixbuf (context,
+                                        gtk_image_definition_get_pixbuf (icon),
+                                        -2, -2);
+              break;
+          case GTK_IMAGE_STOCK:
+              gtk_drag_set_icon_stock (context,
+                                       gtk_image_definition_get_stock (icon),
+                                       -2, -2);
+              break;
+          case GTK_IMAGE_ICON_NAME:
+              gtk_drag_set_icon_name (context,
+                                      gtk_image_definition_get_icon_name (icon),
+                                      -2, -2);
+              break;
+          default:
+              break;
         }
     }
+
+  /* no image def or no supported type -> set the default */
+  if (!info->icon_surface)
+    gtk_drag_set_icon_default (context);
 
   /* drag will begin in an idle handler to avoid nested run loops */
 
