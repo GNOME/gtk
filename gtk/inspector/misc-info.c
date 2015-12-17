@@ -410,6 +410,7 @@ gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
       gtk_widget_show (sl->priv->state_row);
       gtk_widget_show (sl->priv->request_mode_row);
       gtk_widget_show (sl->priv->allocated_size_row);
+      gtk_widget_show (sl->priv->clip_area_row);
       gtk_widget_show (sl->priv->mnemonic_label_row);
       gtk_widget_show (sl->priv->tick_callback_row);
       gtk_widget_show (sl->priv->accessible_role_row);
