@@ -3777,6 +3777,13 @@ gtk_entry_size_allocate (GtkWidget     *widget,
 
   gtk_widget_set_allocation (widget, allocation);
 
+  gtk_css_gadget_allocate (entry->priv->gadget,
+                           allocation,
+                           gtk_widget_get_allocated_baseline (widget),
+                           &clip);
+
+  gtk_widget_set_clip (widget, &clip);
+
   if (gtk_widget_get_realized (widget))
     {
       GtkEntryCompletion *completion;
@@ -3788,13 +3795,6 @@ gtk_entry_size_allocate (GtkWidget     *widget,
       if (completion)
         _gtk_entry_completion_resize_popup (completion);
     }
-
-  gtk_css_gadget_allocate (entry->priv->gadget,
-                           allocation,
-                           gtk_widget_get_allocated_baseline (widget),
-                           &clip);
-
-  gtk_widget_set_clip (widget, &clip);
 }
 
 static void
