@@ -39,7 +39,7 @@ GtkImageDefinition *    gtk_image_definition_new_surface        (cairo_surface_t
 GtkImageDefinition *    gtk_image_definition_ref                (GtkImageDefinition             *def);
 void                    gtk_image_definition_unref              (GtkImageDefinition             *def);
 
-gboolean                gtk_image_definition_get_storage_type   (const GtkImageDefinition       *def);
+GtkImageType            gtk_image_definition_get_storage_type   (const GtkImageDefinition       *def);
 gint                    gtk_image_definition_get_scale          (const GtkImageDefinition       *def);
 GdkPixbuf *             gtk_image_definition_get_pixbuf         (const GtkImageDefinition       *def);
 const gchar *           gtk_image_definition_get_stock          (const GtkImageDefinition       *def);

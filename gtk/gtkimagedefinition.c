@@ -285,7 +285,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS;
   g_free (def);
 }
 
-gboolean
+GtkImageType
 gtk_image_definition_get_storage_type (const GtkImageDefinition *def)
 {
   return def->type;
