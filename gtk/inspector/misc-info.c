@@ -147,19 +147,9 @@ allocation_changed (GtkWidget *w, GdkRectangle *allocation, GtkInspectorMiscInfo
 
   gtk_widget_get_clip (w, &clip);
 
-  if (clip.width == gtk_widget_get_allocated_width (w) &&
-      clip.height == gtk_widget_get_allocated_height (w))
-    {
-      gtk_widget_hide (sl->priv->clip_area_row);
-    }
-  else
-    {
-      gtk_widget_show (sl->priv->clip_area_row);
-
-      size_label = g_strdup_printf ("%d × %d", clip.width, clip.height);
-      gtk_label_set_label (GTK_LABEL (sl->priv->clip_area), size_label);
-      g_free (size_label);
-    }
+  size_label = g_strdup_printf ("%d × %d", clip.width, clip.height);
+  gtk_label_set_label (GTK_LABEL (sl->priv->clip_area), size_label);
+  g_free (size_label);
 
   class = G_ENUM_CLASS (g_type_class_ref (GTK_TYPE_SIZE_REQUEST_MODE));
   value = g_enum_get_value (class, gtk_widget_get_request_mode (w));
