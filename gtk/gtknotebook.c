@@ -2572,12 +2572,7 @@ gtk_notebook_draw (GtkWidget *widget,
   window = gtk_widget_get_window (widget);
   if (gtk_cairo_should_draw_window (cr, window))
     {
-      cairo_save (cr);
-
-      cairo_translate (cr, -allocation.x, -allocation.y);
       gtk_notebook_paint (widget, cr);
-
-      cairo_restore (cr);
 
       if (priv->show_tabs)
         {
@@ -5386,8 +5381,8 @@ gtk_notebook_paint (GtkWidget    *widget,
 
   gtk_widget_get_allocation (widget, &allocation);
 
-  x = allocation.x + border_width;
-  y = allocation.y + border_width;
+  x = border_width;
+  y = border_width;
   width = allocation.width - border_width * 2;
   height = allocation.height - border_width * 2;
 
@@ -5588,6 +5583,7 @@ gtk_notebook_draw_tab (GtkNotebook     *notebook,
   GtkNotebookPrivate *priv;
   GtkWidget *widget;
   GtkStyleContext *context;
+  GtkAllocation allocation;
 
   if (!NOTEBOOK_IS_TAB_LABEL_PARENT (notebook, page) ||
       !gtk_widget_get_mapped (page->tab_label) ||
@@ -5597,32 +5593,33 @@ gtk_notebook_draw_tab (GtkNotebook     *notebook,
   widget = GTK_WIDGET (notebook);
   priv = notebook->priv;
 
+  gtk_widget_get_allocation (gtk_widget_get_parent (page->tab_label), &allocation);
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_save_to_node (context, page->cssnode);
 
   gtk_render_background (context, cr,
-                         page->allocation.x,
-                         page->allocation.y,
+                         page->allocation.x - allocation.x,
+                         page->allocation.y - allocation.y,
                          page->allocation.width,
                          page->allocation.height);
 
   gtk_render_frame (context, cr,
-                    page->allocation.x,
-                    page->allocation.y,
+                    page->allocation.x - allocation.x,
+                    page->allocation.y - allocation.y,
                     page->allocation.width,
                     page->allocation.height);
 
   if (gtk_widget_has_visible_focus (widget) &&
       priv->cur_page == page)
     {
-      GtkAllocation allocation;
+      GtkAllocation label_allocation;
 
-      gtk_widget_get_allocation (page->tab_label, &allocation);
+      gtk_widget_get_allocation (page->tab_label, &label_allocation);
       gtk_render_focus (context, cr,
-                        allocation.x,
-                        allocation.y,
-                        allocation.width,
-                        allocation.height);
+                        label_allocation.x - allocation.x,
+                        label_allocation.y - allocation.y,
+                        label_allocation.width,
+                        label_allocation.height);
     }
 
   gtk_style_context_restore (context);
@@ -5636,6 +5633,7 @@ gtk_notebook_draw_arrow (GtkNotebook      *notebook,
   GtkNotebookPrivate *priv = notebook->priv;
   GtkStyleContext *context;
   GtkWidget *widget;
+  GtkAllocation allocation;
   GdkRectangle arrow_rect;
   gint scroll_arrow_hlength;
   gint scroll_arrow_vlength;
@@ -5646,6 +5644,9 @@ gtk_notebook_draw_arrow (GtkNotebook      *notebook,
   context = gtk_widget_get_style_context (widget);
 
   gtk_notebook_get_arrow_rect (notebook, &arrow_rect, nbarrow);
+  gtk_widget_get_allocation (widget, &allocation);
+  arrow_rect.x -= allocation.x;
+  arrow_rect.y -= allocation.y;
 
   gtk_widget_style_get (widget,
                         "scroll-arrow-hlength", &scroll_arrow_hlength,
