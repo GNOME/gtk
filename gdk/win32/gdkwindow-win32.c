@@ -195,60 +195,10 @@ _gdk_win32_adjust_client_rect (GdkWindow *window,
   API_CALL (AdjustWindowRectEx, (rect, style, FALSE, exstyle));
 }
 
-void
-_gdk_root_window_size_init (void)
-{
-  GdkWindow *window;
-  GdkRectangle rect;
-  int i;
-
-  window = GDK_WINDOW (_gdk_root);
-  rect = _gdk_monitors[0].rect;
-  for (i = 1; i < _gdk_num_monitors; i++)
-    gdk_rectangle_union (&rect, &_gdk_monitors[i].rect, &rect);
-
-  window->width = rect.width;
-  window->height = rect.height;
-}
-
-void
-_gdk_windowing_window_init (GdkScreen *screen)
-{
-  GdkWindow *window;
-  GdkWindowImplWin32 *impl_win32;
-
-  g_assert (_gdk_root == NULL);
-
-  _gdk_root = _gdk_display_create_window (_gdk_display);
-
-  window = (GdkWindow *)_gdk_root;
-  window->impl = g_object_new (GDK_TYPE_WINDOW_IMPL_WIN32, NULL);
-  impl_win32 = GDK_WINDOW_IMPL_WIN32 (window->impl);
-  impl_win32->wrapper = window;
-
-  window->impl_window = window;
-  window->visual = gdk_screen_get_system_visual (screen);
-
-  window->window_type = GDK_WINDOW_ROOT;
-  window->depth = window->visual->depth;
-
-  _gdk_root_window_size_init ();
-
-  window->x = 0;
-  window->y = 0;
-  window->abs_x = 0;
-  window->abs_y = 0;
-  /* width and height already initialised in _gdk_root_window_size_init() */
-  window->viewable = TRUE;
-
-  gdk_win32_handle_table_insert ((HANDLE *) &impl_win32->handle, _gdk_root);
-
-  GDK_NOTE (MISC, g_print ("_gdk_root=%p\n", GDK_WINDOW_HWND (_gdk_root)));
-}
-
 gboolean
 _gdk_win32_window_enable_transparency (GdkWindow *window)
 {
+  GdkScreen *screen;
   DWM_BLURBEHIND blur_behind;
   HRGN empty_region;
   HRESULT call_result;
@@ -257,10 +207,12 @@ _gdk_win32_window_enable_transparency (GdkWindow *window)
   if (window == NULL || GDK_WINDOW_HWND (window) == NULL)
     return FALSE;
 
-  if (!gdk_screen_is_composited (gdk_window_get_screen (window)))
+  screen = gdk_window_get_screen (window);
+
+  if (!gdk_screen_is_composited (screen))
     return FALSE;
 
-  if (window == _gdk_root)
+  if (window == gdk_screen_get_root_window (screen))
     return FALSE;
 
   thiswindow = GDK_WINDOW_HWND (window);
@@ -591,7 +543,7 @@ _gdk_win32_display_create_window_impl (GdkDisplay    *display,
 
     case GDK_WINDOW_TEMP:
       /* A temp window is not necessarily a top level window */
-      dwStyle = (_gdk_root == real_parent ? WS_POPUP : WS_CHILDWINDOW);
+      dwStyle = (gdk_screen_get_root_window (screen) == real_parent ? WS_POPUP : WS_CHILDWINDOW);
       dwStyle |= WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
       dwExStyle |= WS_EX_TOOLWINDOW | WS_EX_TOPMOST;
       offset_x = _gdk_offset_x;
@@ -766,7 +718,7 @@ gdk_win32_window_foreign_new_for_display (GdkDisplay      *display,
 
   window->parent = gdk_win32_handle_table_lookup (parent);
   if (!window->parent || GDK_WINDOW_TYPE (window->parent) == GDK_WINDOW_FOREIGN)
-    window->parent = _gdk_root;
+    window->parent = gdk_get_default_root_window ();
 
   window->parent->children = g_list_concat (&window->children_list_node, window->parent->children);
   window->parent->impl_window->native_children =
@@ -1445,14 +1397,23 @@ gdk_win32_window_reparent (GdkWindow *window,
 			   gint       x,
 			   gint       y)
 {
+  GdkScreen *screen;
   GdkWindow *parent;
   GdkWindow *old_parent;
   GdkWindowImplWin32 *impl;
+  gboolean new_parent_is_root;
   gboolean was_toplevel;
   LONG style;
 
+  screen = gdk_window_get_screen (window);
+
   if (!new_parent)
-    new_parent = _gdk_root;
+    {
+      new_parent = gdk_screen_get_root_window (screen);
+      new_parent_is_root = TRUE;
+    }
+  else
+     new_parent_is_root = (gdk_screen_get_root_window (screen) == new_parent);
 
   old_parent = window->parent;
   parent = new_parent;
@@ -1465,7 +1426,7 @@ gdk_win32_window_reparent (GdkWindow *window,
   style = GetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE);
 
   was_toplevel = GetAncestor (GDK_WINDOW_HWND (window), GA_PARENT) == GetDesktopWindow ();
-  if (was_toplevel && new_parent != _gdk_root)
+  if (was_toplevel && !new_parent_is_root)
     {
       /* Reparenting from top-level (child of desktop). Clear out
        * decorations.
@@ -1474,7 +1435,7 @@ gdk_win32_window_reparent (GdkWindow *window,
       style |= WS_CHILD;
       SetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE, style);
     }
-  else if (new_parent == _gdk_root)
+  else if (new_parent_is_root)
     {
       /* Reparenting to top-level. Add decorations. */
       style &= ~(WS_CHILD);
@@ -1492,7 +1453,7 @@ gdk_win32_window_reparent (GdkWindow *window,
    * the root window
    */
   if (GDK_WINDOW_TYPE (new_parent) == GDK_WINDOW_FOREIGN)
-    new_parent = _gdk_root;
+    new_parent = gdk_screen_get_root_window (screen);
 
   window->parent = new_parent;
 
@@ -2005,8 +1966,18 @@ gdk_win32_window_get_geometry (GdkWindow *window,
 			       gint      *width,
 			       gint      *height)
 {
+  GdkScreen *screen;
+  gboolean window_is_root;
+
+  screen = gdk_window_get_screen (window);
+
   if (!window)
-    window = _gdk_root;
+    {
+      window = gdk_screen_get_root_window (screen);
+      window_is_root = TRUE;
+    }
+  else
+    window_is_root = (gdk_screen_get_root_window (screen) == window);
 
   if (!GDK_WINDOW_DESTROYED (window))
     {
@@ -2014,7 +1985,7 @@ gdk_win32_window_get_geometry (GdkWindow *window,
 
       API_CALL (GetClientRect, (GDK_WINDOW_HWND (window), &rect));
 
-      if (window != _gdk_root)
+      if (!window_is_root)
 	{
 	  POINT pt;
 	  GdkWindow *parent = gdk_window_get_parent (window);
@@ -2033,7 +2004,7 @@ gdk_win32_window_get_geometry (GdkWindow *window,
 	  rect.right = pt.x;
 	  rect.bottom = pt.y;
 
-	  if (parent == _gdk_root)
+	  if (gdk_screen_get_root_window (screen) == parent)
 	    {
 	      rect.left += _gdk_offset_x;
 	      rect.top += _gdk_offset_y;

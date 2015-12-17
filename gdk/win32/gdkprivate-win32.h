@@ -38,6 +38,7 @@
 #include <gdk/gdkcursorprivate.h>
 #include <gdk/win32/gdkwindow-win32.h>
 #include <gdk/win32/gdkwin32display.h>
+#include <gdk/win32/gdkwin32screen.h>
 
 #include "gdkinternals.h"
 
@@ -253,8 +254,6 @@ void    _gdk_other_api_failed        (const gchar *where,
 #define API_CALL(api, arglist) (api arglist ? 1 : (WIN32_API_FAILED (#api), 0))
 
 extern LRESULT CALLBACK _gdk_win32_window_procedure (HWND, UINT, WPARAM, LPARAM);
-
-extern GdkWindow        *_gdk_root;
 
 extern GdkDisplay       *_gdk_display;
 extern GdkScreen        *_gdk_screen;
@@ -545,8 +544,8 @@ void _gdk_win32_emit_configure_event (GdkWindow *window);
 
 /* Initialization */
 void _gdk_win32_windowing_init (void);
-void _gdk_windowing_window_init (GdkScreen *screen);
-void _gdk_root_window_size_init (void);
+void _gdk_screen_init_root_window (GdkWin32Screen *screen_win32);
+void _gdk_screen_init_root_window_size (GdkWin32Screen *screen);
 void _gdk_monitor_init(void);
 void _gdk_visual_init (GdkScreen *screen);
 void _gdk_dnd_init    (void);

@@ -1357,7 +1357,7 @@ propagate (GdkWindow  **window,
 	{
 	  /* Owner doesn't want it, propagate to parent. */
 	  GdkWindow *parent = gdk_window_get_parent (*window);
-	  if (parent == _gdk_root || parent == NULL)
+	  if (parent == gdk_get_default_root_window () || parent == NULL)
 	    {
 	      /* No parent; check if grabbed */
 	      if (grab_window != NULL)
@@ -1431,7 +1431,7 @@ _gdk_win32_emit_configure_event (GdkWindow *window)
   point.y = client_rect.top;
 
   /* top level windows need screen coords */
-  if (gdk_window_get_parent (window) == _gdk_root)
+  if (gdk_window_get_parent (window) == gdk_get_default_root_window ())
     {
       ClientToScreen (hwnd, &point);
       point.x += _gdk_offset_x;

@@ -728,7 +728,7 @@ idropsource_givefeedback (LPDROPSOURCE This,
   else
     {
       if (ctx->context->dest_window == NULL)
-	ctx->context->dest_window = g_object_ref (_gdk_root);
+        ctx->context->dest_window = g_object_ref (gdk_get_default_root_window ());
     }
 
   return DRAGDROP_S_USEDEFAULTCURSORS;
@@ -1445,7 +1445,7 @@ gdk_dropfiles_filter (GdkXEvent *xev,
       device = gdk_device_manager_get_client_pointer (device_manager);
       gdk_drag_context_set_device (context, device);
 
-      context->source_window = _gdk_root;
+      context->source_window = gdk_get_default_root_window ();
       g_object_ref (context->source_window);
 
       context->dest_window = event->any.window;

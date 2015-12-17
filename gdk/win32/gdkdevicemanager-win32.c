@@ -919,7 +919,7 @@ _gdk_input_other_event (GdkEvent  *event,
   device_manager = GDK_DEVICE_MANAGER_WIN32 (gdk_display_get_device_manager (_gdk_display));
   window = gdk_device_get_window_at_position (device_manager->core_pointer, &x, &y);
   if (window == NULL)
-    window = _gdk_root;
+    window = gdk_get_default_root_window ();
 
   g_object_ref (window);
 
@@ -961,7 +961,7 @@ _gdk_input_other_event (GdkEvent  *event,
           window = g_object_ref (last_grab->window);
         }
 
-      if (window == _gdk_root)
+      if (window == gdk_get_default_root_window ())
         {
           GDK_NOTE (EVENTS_OR_INPUT, g_print ("... is root\n"));
           return FALSE;
@@ -1038,8 +1038,7 @@ _gdk_input_other_event (GdkEvent  *event,
         {
           GDK_NOTE (EVENTS_OR_INPUT, g_print ("... not selected\n"));
 
-          if (window->parent == GDK_WINDOW (_gdk_root) ||
-	      window->parent == NULL)
+          if (window->parent == gdk_get_default_root_window () || window->parent == NULL)
             return FALSE;
 
           pt.x = x;

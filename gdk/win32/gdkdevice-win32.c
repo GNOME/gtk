@@ -175,8 +175,11 @@ gdk_device_win32_query_state (GdkDevice        *device,
                               gdouble          *win_y,
                               GdkModifierType  *mask)
 {
+  GdkScreen *screen;
   POINT point;
   HWND hwnd, hwndc;
+
+  screen = gdk_window_get_screen (window);
 
   hwnd = GDK_WINDOW_HWND (window);
   GetCursorPos (&point);
@@ -195,7 +198,7 @@ gdk_device_win32_query_state (GdkDevice        *device,
   if (win_y)
     *win_y = point.y;
 
-  if (window == _gdk_root)
+  if (window == gdk_screen_get_root_window (screen))
     {
       if (win_x)
         *win_x += _gdk_offset_x;
@@ -221,12 +224,7 @@ gdk_device_win32_query_state (GdkDevice        *device,
     }
 
   if (root_window)
-    {
-      GdkScreen *screen;
-
-      screen = gdk_window_get_screen (window);
-      *root_window = gdk_screen_get_root_window (screen);
-    }
+    *root_window = gdk_screen_get_root_window (screen);
 
   if (mask)
     *mask = get_current_mask ();
@@ -322,7 +320,8 @@ _gdk_device_win32_window_at_position (GdkDevice       *device,
             *win_x = screen_pt.x + _gdk_offset_x;
           if (win_y)
             *win_y = screen_pt.y + _gdk_offset_y;
-          return _gdk_root;
+
+          return gdk_get_default_root_window ();
         }
 
       window = gdk_win32_handle_table_lookup (hwnd);

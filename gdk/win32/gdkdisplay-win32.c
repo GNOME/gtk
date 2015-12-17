@@ -260,7 +260,7 @@ inner_display_change_window_procedure (HWND   hwnd,
     case WM_DISPLAYCHANGE:
       {
         _gdk_monitor_init ();
-        _gdk_root_window_size_init ();
+        _gdk_screen_init_root_window_size (GDK_WIN32_SCREEN (_gdk_screen));
         g_signal_emit_by_name (_gdk_screen, "size_changed");
 
         return 0;
@@ -345,7 +345,7 @@ _gdk_win32_display_open (const gchar *display_name)
 
   _gdk_monitor_init ();
   _gdk_visual_init (_gdk_screen);
-  _gdk_windowing_window_init (_gdk_screen);
+  _gdk_screen_init_root_window (GDK_WIN32_SCREEN (_gdk_screen));
   _gdk_events_init ();
   _gdk_input_init (_gdk_display);
   _gdk_dnd_init ();
@@ -520,9 +520,8 @@ inner_clipboard_window_procedure (HWND   hwnd,
 
         GDK_NOTE (DND, g_print (" \n"));
 
-
         event = gdk_event_new (GDK_OWNER_CHANGE);
-        event->owner_change.window = _gdk_root;
+        event->owner_change.window = gdk_get_default_root_window ();
         event->owner_change.owner = owner;
         event->owner_change.reason = GDK_OWNER_CHANGE_NEW_OWNER;
         event->owner_change.selection = GDK_SELECTION_CLIPBOARD;
@@ -575,7 +574,6 @@ register_clipboard_notification (GdkDisplay *display)
 {
   GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
   WNDCLASS wclass = { 0, };
-  HWND hwnd;
   ATOM klass;
 
   wclass.lpszClassName = "GdkClipboardNotification";

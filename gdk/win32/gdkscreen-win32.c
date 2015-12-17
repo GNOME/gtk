@@ -20,12 +20,16 @@
 #include "gdkprivate-win32.h"
 #include "gdkscreenprivate.h"
 #include "gdkwin32screen.h"
+#include "gdkdisplayprivate.h"
+#include "gdkvisualprivate.h"
 
 #include <dwmapi.h>
 
 struct _GdkWin32Screen
 {
   GdkScreen parent_instance;
+
+  GdkWindow *root_window;
 };
 
 struct _GdkWin32ScreenClass
@@ -36,9 +40,9 @@ struct _GdkWin32ScreenClass
 G_DEFINE_TYPE (GdkWin32Screen, gdk_win32_screen, GDK_TYPE_SCREEN)
 
 static void
-gdk_win32_screen_init (GdkWin32Screen *display)
+gdk_win32_screen_init (GdkWin32Screen *win32_screen)
 {
-  GdkScreen *screen = GDK_SCREEN (display);
+  GdkScreen *screen = GDK_SCREEN (win32_screen);
   HDC screen_dc;
   int logpixelsx = -1;
   const gchar *font_resolution;
@@ -63,6 +67,58 @@ gdk_win32_screen_init (GdkWin32Screen *display)
     _gdk_screen_set_resolution (screen, logpixelsx);
 }
 
+void
+_gdk_screen_init_root_window_size (GdkWin32Screen *screen)
+{
+  GdkRectangle rect;
+  int i;
+
+  rect = _gdk_monitors[0].rect;
+  for (i = 1; i < _gdk_num_monitors; i++)
+    gdk_rectangle_union (&rect, &_gdk_monitors[i].rect, &rect);
+
+  screen->root_window->width = rect.width;
+  screen->root_window->height = rect.height;
+}
+
+void
+_gdk_screen_init_root_window (GdkWin32Screen *screen_win32)
+{
+  GdkScreen *screen;
+  GdkWindow *window;
+  GdkWindowImplWin32 *impl_win32;
+
+  screen = GDK_SCREEN (screen_win32);
+
+  g_assert (screen_win32->root_window == NULL);
+
+  window = _gdk_display_create_window (_gdk_display);
+  window->impl = g_object_new (GDK_TYPE_WINDOW_IMPL_WIN32, NULL);
+  impl_win32 = GDK_WINDOW_IMPL_WIN32 (window->impl);
+  impl_win32->wrapper = window;
+
+  window->impl_window = window;
+  window->visual = gdk_screen_get_system_visual (screen);
+
+  window->window_type = GDK_WINDOW_ROOT;
+  window->depth = window->visual->depth;
+
+  screen_win32->root_window = window;
+
+  _gdk_screen_init_root_window_size (screen_win32);
+
+  window->x = 0;
+  window->y = 0;
+  window->abs_x = 0;
+  window->abs_y = 0;
+  /* width and height already initialised in _gdk_screen_init_root_window_size() */
+  window->viewable = TRUE;
+
+  gdk_win32_handle_table_insert ((HANDLE *) &impl_win32->handle, window);
+
+  GDK_NOTE (MISC, g_print ("screen->root_window=%p\n", window));
+}
+
 static GdkDisplay *
 gdk_win32_screen_get_display (GdkScreen *screen)
 {
@@ -72,13 +128,13 @@ gdk_win32_screen_get_display (GdkScreen *screen)
 static gint
 gdk_win32_screen_get_width (GdkScreen *screen)
 {
-  return GDK_WINDOW (_gdk_root)->width;
+  return GDK_WIN32_SCREEN (screen)->root_window->width;
 }
 
 static gint
 gdk_win32_screen_get_height (GdkScreen *screen)
 {
-  return GDK_WINDOW (_gdk_root)->height;
+  return GDK_WIN32_SCREEN (screen)->root_window->height;
 }
 
 static gint
@@ -96,7 +152,7 @@ gdk_win32_screen_get_height_mm (GdkScreen *screen)
 static GdkWindow *
 gdk_win32_screen_get_root_window (GdkScreen *screen)
 {
-  return _gdk_root;
+  return GDK_WIN32_SCREEN (screen)->root_window;
 }
 
 static gint
