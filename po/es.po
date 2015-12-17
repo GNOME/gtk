@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-07 04:08+0000\n"
-"PO-Revision-Date: 2015-12-07 11:43+0100\n"
+"POT-Creation-Date: 2015-12-14 12:13+0000\n"
+"PO-Revision-Date: 2015-12-14 16:37+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -631,32 +631,32 @@ msgstr "Activa el expansor"
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: gtk/a11y/gtkimageaccessible.c:53 gtk/deprecated/gtkstock.c:340
+#: gtk/a11y/gtkimageaccessible.c:53 gtk/deprecated/gtkstock.c:341
 msgctxt "Stock label"
 msgid "_About"
 msgstr "Acerca _de"
 
-#: gtk/a11y/gtkimageaccessible.c:54 gtk/deprecated/gtkstock.c:341
+#: gtk/a11y/gtkimageaccessible.c:54 gtk/deprecated/gtkstock.c:342
 msgctxt "Stock label"
 msgid "_Add"
 msgstr "_Añadir"
 
-#: gtk/a11y/gtkimageaccessible.c:55 gtk/deprecated/gtkstock.c:343
+#: gtk/a11y/gtkimageaccessible.c:55 gtk/deprecated/gtkstock.c:344
 msgctxt "Stock label"
 msgid "_Bold"
 msgstr "_Negrita"
 
-#: gtk/a11y/gtkimageaccessible.c:56 gtk/deprecated/gtkstock.c:345
+#: gtk/a11y/gtkimageaccessible.c:56 gtk/deprecated/gtkstock.c:346
 msgctxt "Stock label"
 msgid "_CD-ROM"
 msgstr "_CD-ROM"
 
-#: gtk/a11y/gtkimageaccessible.c:57 gtk/deprecated/gtkstock.c:346
+#: gtk/a11y/gtkimageaccessible.c:57 gtk/deprecated/gtkstock.c:347
 msgctxt "Stock label"
 msgid "_Clear"
 msgstr "_Limpiar"
 
-#: gtk/a11y/gtkimageaccessible.c:58 gtk/deprecated/gtkstock.c:347
+#: gtk/a11y/gtkimageaccessible.c:58 gtk/deprecated/gtkstock.c:348
 msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Cerrar"
@@ -673,366 +673,366 @@ msgstr "Maximizar"
 msgid "Restore"
 msgstr "Restaurar"
 
-#: gtk/a11y/gtkimageaccessible.c:62 gtk/deprecated/gtkstock.c:350
+#: gtk/a11y/gtkimageaccessible.c:62 gtk/deprecated/gtkstock.c:351
 msgctxt "Stock label"
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: gtk/a11y/gtkimageaccessible.c:63 gtk/deprecated/gtkstock.c:351
+#: gtk/a11y/gtkimageaccessible.c:63 gtk/deprecated/gtkstock.c:352
 msgctxt "Stock label"
 msgid "Cu_t"
 msgstr "Cor_tar"
 
-#: gtk/a11y/gtkimageaccessible.c:64 gtk/deprecated/gtkstock.c:352
+#: gtk/a11y/gtkimageaccessible.c:64 gtk/deprecated/gtkstock.c:353
 msgctxt "Stock label"
 msgid "_Delete"
 msgstr "_Eliminar"
 
-#: gtk/a11y/gtkimageaccessible.c:65 gtk/deprecated/gtkstock.c:334
+#: gtk/a11y/gtkimageaccessible.c:65 gtk/deprecated/gtkstock.c:335
 msgctxt "Stock label"
 msgid "Error"
 msgstr "Error"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
-#: gtk/a11y/gtkimageaccessible.c:66 gtk/deprecated/gtkstock.c:332
+#: gtk/a11y/gtkimageaccessible.c:66 gtk/deprecated/gtkstock.c:333
 msgctxt "Stock label"
 msgid "Information"
 msgstr "Información"
 
-#: gtk/a11y/gtkimageaccessible.c:67 gtk/deprecated/gtkstock.c:335
+#: gtk/a11y/gtkimageaccessible.c:67 gtk/deprecated/gtkstock.c:336
 msgctxt "Stock label"
 msgid "Question"
 msgstr "Pregunta"
 
-#: gtk/a11y/gtkimageaccessible.c:68 gtk/deprecated/gtkstock.c:333
+#: gtk/a11y/gtkimageaccessible.c:68 gtk/deprecated/gtkstock.c:334
 msgctxt "Stock label"
 msgid "Warning"
 msgstr "Advertencia"
 
-#: gtk/a11y/gtkimageaccessible.c:69 gtk/deprecated/gtkstock.c:355
+#: gtk/a11y/gtkimageaccessible.c:69 gtk/deprecated/gtkstock.c:356
 msgctxt "Stock label"
 msgid "_Execute"
 msgstr "_Ejecutar"
 
-#: gtk/a11y/gtkimageaccessible.c:70 gtk/deprecated/gtkstock.c:357
+#: gtk/a11y/gtkimageaccessible.c:70 gtk/deprecated/gtkstock.c:358
 msgctxt "Stock label"
 msgid "_File"
 msgstr "_Archivo"
 
 # src/nautilus-first-time-druid.c:290
-#: gtk/a11y/gtkimageaccessible.c:71 gtk/deprecated/gtkstock.c:358
+#: gtk/a11y/gtkimageaccessible.c:71 gtk/deprecated/gtkstock.c:359
 msgctxt "Stock label"
 msgid "_Find"
 msgstr "_Buscar"
 
-#: gtk/a11y/gtkimageaccessible.c:72 gtk/deprecated/gtkstock.c:359
+#: gtk/a11y/gtkimageaccessible.c:72 gtk/deprecated/gtkstock.c:360
 msgctxt "Stock label"
 msgid "Find and _Replace"
 msgstr "Buscar y _reemplazar"
 
-#: gtk/a11y/gtkimageaccessible.c:73 gtk/deprecated/gtkstock.c:360
+#: gtk/a11y/gtkimageaccessible.c:73 gtk/deprecated/gtkstock.c:361
 msgctxt "Stock label"
 msgid "_Floppy"
 msgstr "_Disquete"
 
-#: gtk/a11y/gtkimageaccessible.c:74 gtk/deprecated/gtkstock.c:361
+#: gtk/a11y/gtkimageaccessible.c:74 gtk/deprecated/gtkstock.c:362
 msgctxt "Stock label"
 msgid "_Fullscreen"
 msgstr "Pantalla _completa"
 
 #. This is a navigation label as in "go to the bottom of the page"
-#: gtk/a11y/gtkimageaccessible.c:75 gtk/deprecated/gtkstock.c:364
+#: gtk/a11y/gtkimageaccessible.c:75 gtk/deprecated/gtkstock.c:365
 msgctxt "Stock label, navigation"
 msgid "_Bottom"
 msgstr "_Inferior"
 
 #. This is a navigation label as in "go to the first page"
-#: gtk/a11y/gtkimageaccessible.c:76 gtk/deprecated/gtkstock.c:366
+#: gtk/a11y/gtkimageaccessible.c:76 gtk/deprecated/gtkstock.c:367
 msgctxt "Stock label, navigation"
 msgid "_First"
 msgstr "_Primero"
 
 #. This is a navigation label as in "go to the last page"
-#: gtk/a11y/gtkimageaccessible.c:77 gtk/deprecated/gtkstock.c:368
+#: gtk/a11y/gtkimageaccessible.c:77 gtk/deprecated/gtkstock.c:369
 msgctxt "Stock label, navigation"
 msgid "_Last"
 msgstr "_Último"
 
 #. This is a navigation label as in "go to the top of the page"
-#: gtk/a11y/gtkimageaccessible.c:78 gtk/deprecated/gtkstock.c:370
+#: gtk/a11y/gtkimageaccessible.c:78 gtk/deprecated/gtkstock.c:371
 msgctxt "Stock label, navigation"
 msgid "_Top"
 msgstr "_Superior"
 
 #. This is a navigation label as in "go back"
-#: gtk/a11y/gtkimageaccessible.c:79 gtk/deprecated/gtkstock.c:372
+#: gtk/a11y/gtkimageaccessible.c:79 gtk/deprecated/gtkstock.c:373
 msgctxt "Stock label, navigation"
 msgid "_Back"
 msgstr "A_trás"
 
 #. This is a navigation label as in "go down"
-#: gtk/a11y/gtkimageaccessible.c:80 gtk/deprecated/gtkstock.c:374
+#: gtk/a11y/gtkimageaccessible.c:80 gtk/deprecated/gtkstock.c:375
 msgctxt "Stock label, navigation"
 msgid "_Down"
 msgstr "_Bajar"
 
 #. This is a navigation label as in "go forward"
-#: gtk/a11y/gtkimageaccessible.c:81 gtk/deprecated/gtkstock.c:376
+#: gtk/a11y/gtkimageaccessible.c:81 gtk/deprecated/gtkstock.c:377
 msgctxt "Stock label, navigation"
 msgid "_Forward"
 msgstr "A_delante"
 
 #. This is a navigation label as in "go up"
-#: gtk/a11y/gtkimageaccessible.c:82 gtk/deprecated/gtkstock.c:378
+#: gtk/a11y/gtkimageaccessible.c:82 gtk/deprecated/gtkstock.c:379
 msgctxt "Stock label, navigation"
 msgid "_Up"
 msgstr "_Subir"
 
-#: gtk/a11y/gtkimageaccessible.c:83 gtk/deprecated/gtkstock.c:379
+#: gtk/a11y/gtkimageaccessible.c:83 gtk/deprecated/gtkstock.c:380
 msgctxt "Stock label"
 msgid "_Hard Disk"
 msgstr "_Disco duro"
 
-#: gtk/a11y/gtkimageaccessible.c:84 gtk/deprecated/gtkstock.c:380
+#: gtk/a11y/gtkimageaccessible.c:84 gtk/deprecated/gtkstock.c:381
 msgctxt "Stock label"
 msgid "_Help"
 msgstr "Ay_uda"
 
-#: gtk/a11y/gtkimageaccessible.c:85 gtk/deprecated/gtkstock.c:381
+#: gtk/a11y/gtkimageaccessible.c:85 gtk/deprecated/gtkstock.c:382
 msgctxt "Stock label"
 msgid "_Home"
 msgstr "_Inicio"
 
-#: gtk/a11y/gtkimageaccessible.c:86 gtk/deprecated/gtkstock.c:382
+#: gtk/a11y/gtkimageaccessible.c:86 gtk/deprecated/gtkstock.c:383
 msgctxt "Stock label"
 msgid "Increase Indent"
 msgstr "Aumentar sangría"
 
-#: gtk/a11y/gtkimageaccessible.c:87 gtk/deprecated/gtkstock.c:386
+#: gtk/a11y/gtkimageaccessible.c:87 gtk/deprecated/gtkstock.c:387
 msgctxt "Stock label"
 msgid "_Italic"
 msgstr "_Cursiva"
 
-#: gtk/a11y/gtkimageaccessible.c:88 gtk/deprecated/gtkstock.c:387
+#: gtk/a11y/gtkimageaccessible.c:88 gtk/deprecated/gtkstock.c:388
 msgctxt "Stock label"
 msgid "_Jump to"
 msgstr "_Ir a"
 
 #. This is about text justification, "centered text"
-#: gtk/a11y/gtkimageaccessible.c:89 gtk/deprecated/gtkstock.c:389
+#: gtk/a11y/gtkimageaccessible.c:89 gtk/deprecated/gtkstock.c:390
 msgctxt "Stock label"
 msgid "_Center"
 msgstr "_Centro"
 
 #. This is about text justification
-#: gtk/a11y/gtkimageaccessible.c:90 gtk/deprecated/gtkstock.c:391
+#: gtk/a11y/gtkimageaccessible.c:90 gtk/deprecated/gtkstock.c:392
 msgctxt "Stock label"
 msgid "_Fill"
 msgstr "_Rellenar"
 
 #. This is about text justification, "left-justified text"
-#: gtk/a11y/gtkimageaccessible.c:91 gtk/deprecated/gtkstock.c:393
+#: gtk/a11y/gtkimageaccessible.c:91 gtk/deprecated/gtkstock.c:394
 msgctxt "Stock label"
 msgid "_Left"
 msgstr "_Izquierda"
 
 #. This is about text justification, "right-justified text"
-#: gtk/a11y/gtkimageaccessible.c:92 gtk/deprecated/gtkstock.c:395
+#: gtk/a11y/gtkimageaccessible.c:92 gtk/deprecated/gtkstock.c:396
 msgctxt "Stock label"
 msgid "_Right"
 msgstr "_Derecha"
 
-#: gtk/a11y/gtkimageaccessible.c:93 gtk/deprecated/gtkstock.c:362
+#: gtk/a11y/gtkimageaccessible.c:93 gtk/deprecated/gtkstock.c:363
 msgctxt "Stock label"
 msgid "_Leave Fullscreen"
 msgstr "_Salir de pantalla completa"
 
 #. Media label, as in "fast forward"
-#: gtk/a11y/gtkimageaccessible.c:94 gtk/deprecated/gtkstock.c:398
+#: gtk/a11y/gtkimageaccessible.c:94 gtk/deprecated/gtkstock.c:399
 msgctxt "Stock label, media"
 msgid "_Forward"
 msgstr "A_delante"
 
 #. Media label, as in "next song"
-#: gtk/a11y/gtkimageaccessible.c:95 gtk/deprecated/gtkstock.c:400
+#: gtk/a11y/gtkimageaccessible.c:95 gtk/deprecated/gtkstock.c:401
 msgctxt "Stock label, media"
 msgid "_Next"
 msgstr "_Siguiente"
 
 #. Media label, as in "pause music"
-#: gtk/a11y/gtkimageaccessible.c:96 gtk/deprecated/gtkstock.c:402
+#: gtk/a11y/gtkimageaccessible.c:96 gtk/deprecated/gtkstock.c:403
 msgctxt "Stock label, media"
 msgid "P_ause"
 msgstr "_Pausa"
 
 #. Media label, as in "play music"
-#: gtk/a11y/gtkimageaccessible.c:97 gtk/deprecated/gtkstock.c:404
+#: gtk/a11y/gtkimageaccessible.c:97 gtk/deprecated/gtkstock.c:405
 msgctxt "Stock label, media"
 msgid "_Play"
 msgstr "_Reproducir"
 
 #. Media label, as in  "previous song"
-#: gtk/a11y/gtkimageaccessible.c:98 gtk/deprecated/gtkstock.c:406
+#: gtk/a11y/gtkimageaccessible.c:98 gtk/deprecated/gtkstock.c:407
 msgctxt "Stock label, media"
 msgid "Pre_vious"
 msgstr "_Anterior"
 
 #. Media label
-#: gtk/a11y/gtkimageaccessible.c:99 gtk/deprecated/gtkstock.c:408
+#: gtk/a11y/gtkimageaccessible.c:99 gtk/deprecated/gtkstock.c:409
 msgctxt "Stock label, media"
 msgid "_Record"
 msgstr "_Grabar"
 
 # src/nautilus-first-time-druid.c:290
 #. Media label
-#: gtk/a11y/gtkimageaccessible.c:100 gtk/deprecated/gtkstock.c:410
+#: gtk/a11y/gtkimageaccessible.c:100 gtk/deprecated/gtkstock.c:411
 msgctxt "Stock label, media"
 msgid "R_ewind"
 msgstr "_Rebobinar"
 
 #. Media label
-#: gtk/a11y/gtkimageaccessible.c:101 gtk/deprecated/gtkstock.c:412
+#: gtk/a11y/gtkimageaccessible.c:101 gtk/deprecated/gtkstock.c:413
 msgctxt "Stock label, media"
 msgid "_Stop"
 msgstr "_Detener"
 
-#: gtk/a11y/gtkimageaccessible.c:102 gtk/deprecated/gtkstock.c:413
+#: gtk/a11y/gtkimageaccessible.c:102 gtk/deprecated/gtkstock.c:414
 msgctxt "Stock label"
 msgid "_Network"
 msgstr "_Red"
 
-#: gtk/a11y/gtkimageaccessible.c:103 gtk/deprecated/gtkstock.c:414
+#: gtk/a11y/gtkimageaccessible.c:103 gtk/deprecated/gtkstock.c:415
 msgctxt "Stock label"
 msgid "_New"
 msgstr "_Nuevo"
 
-#: gtk/a11y/gtkimageaccessible.c:104 gtk/deprecated/gtkstock.c:417
+#: gtk/a11y/gtkimageaccessible.c:104 gtk/deprecated/gtkstock.c:418
 msgctxt "Stock label"
 msgid "_Open"
 msgstr "_Abrir"
 
-#: gtk/a11y/gtkimageaccessible.c:105 gtk/deprecated/gtkstock.c:427
+#: gtk/a11y/gtkimageaccessible.c:105 gtk/deprecated/gtkstock.c:428
 msgctxt "Stock label"
 msgid "_Paste"
 msgstr "_Pegar"
 
-#: gtk/a11y/gtkimageaccessible.c:106 gtk/deprecated/gtkstock.c:429
+#: gtk/a11y/gtkimageaccessible.c:106 gtk/deprecated/gtkstock.c:430
 msgctxt "Stock label"
 msgid "_Print"
 msgstr "_Imprimir"
 
-#: gtk/a11y/gtkimageaccessible.c:107 gtk/deprecated/gtkstock.c:430
+#: gtk/a11y/gtkimageaccessible.c:107 gtk/deprecated/gtkstock.c:431
 msgctxt "Stock label"
 msgid "Print Pre_view"
 msgstr "_Vista previa de impresión"
 
-#: gtk/a11y/gtkimageaccessible.c:108 gtk/deprecated/gtkstock.c:431
+#: gtk/a11y/gtkimageaccessible.c:108 gtk/deprecated/gtkstock.c:432
 msgctxt "Stock label"
 msgid "_Properties"
 msgstr "_Propiedades"
 
-#: gtk/a11y/gtkimageaccessible.c:109 gtk/deprecated/gtkstock.c:432
+#: gtk/a11y/gtkimageaccessible.c:109 gtk/deprecated/gtkstock.c:433
 msgctxt "Stock label"
 msgid "_Quit"
 msgstr "_Salir"
 
-#: gtk/a11y/gtkimageaccessible.c:110 gtk/deprecated/gtkstock.c:433
+#: gtk/a11y/gtkimageaccessible.c:110 gtk/deprecated/gtkstock.c:434
 msgctxt "Stock label"
 msgid "_Redo"
 msgstr "_Rehacer"
 
-#: gtk/a11y/gtkimageaccessible.c:111 gtk/deprecated/gtkstock.c:434
+#: gtk/a11y/gtkimageaccessible.c:111 gtk/deprecated/gtkstock.c:435
 msgctxt "Stock label"
 msgid "_Refresh"
 msgstr "_Actualizar"
 
-#: gtk/a11y/gtkimageaccessible.c:112 gtk/deprecated/gtkstock.c:435
+#: gtk/a11y/gtkimageaccessible.c:112 gtk/deprecated/gtkstock.c:436
 msgctxt "Stock label"
 msgid "_Remove"
 msgstr "_Quitar"
 
-#: gtk/a11y/gtkimageaccessible.c:113 gtk/deprecated/gtkstock.c:436
+#: gtk/a11y/gtkimageaccessible.c:113 gtk/deprecated/gtkstock.c:437
 msgctxt "Stock label"
 msgid "_Revert"
 msgstr "_Revertir"
 
-#: gtk/a11y/gtkimageaccessible.c:114 gtk/deprecated/gtkstock.c:437
+#: gtk/a11y/gtkimageaccessible.c:114 gtk/deprecated/gtkstock.c:438
 msgctxt "Stock label"
 msgid "_Save"
 msgstr "_Guardar"
 
-#: gtk/a11y/gtkimageaccessible.c:115 gtk/deprecated/gtkstock.c:438
+#: gtk/a11y/gtkimageaccessible.c:115 gtk/deprecated/gtkstock.c:439
 msgctxt "Stock label"
 msgid "Save _As"
 msgstr "Guardar co_mo"
 
-#: gtk/a11y/gtkimageaccessible.c:116 gtk/deprecated/gtkstock.c:439
+#: gtk/a11y/gtkimageaccessible.c:116 gtk/deprecated/gtkstock.c:440
 msgctxt "Stock label"
 msgid "Select _All"
 msgstr "Seleccionar _todo"
 
 #. Sorting direction
-#: gtk/a11y/gtkimageaccessible.c:117 gtk/deprecated/gtkstock.c:443
+#: gtk/a11y/gtkimageaccessible.c:117 gtk/deprecated/gtkstock.c:444
 msgctxt "Stock label"
 msgid "_Ascending"
 msgstr "_Ascendente"
 
 #. Sorting direction
-#: gtk/a11y/gtkimageaccessible.c:118 gtk/deprecated/gtkstock.c:445
+#: gtk/a11y/gtkimageaccessible.c:118 gtk/deprecated/gtkstock.c:446
 msgctxt "Stock label"
 msgid "_Descending"
 msgstr "_Descendente"
 
-#: gtk/a11y/gtkimageaccessible.c:119 gtk/deprecated/gtkstock.c:446
+#: gtk/a11y/gtkimageaccessible.c:119 gtk/deprecated/gtkstock.c:447
 msgctxt "Stock label"
 msgid "_Spell Check"
 msgstr "Comprobar _ortografía"
 
-#: gtk/a11y/gtkimageaccessible.c:120 gtk/deprecated/gtkstock.c:447
+#: gtk/a11y/gtkimageaccessible.c:120 gtk/deprecated/gtkstock.c:448
 msgctxt "Stock label"
 msgid "_Stop"
 msgstr "_Detener"
 
 #. Font variant
-#: gtk/a11y/gtkimageaccessible.c:121 gtk/deprecated/gtkstock.c:449
+#: gtk/a11y/gtkimageaccessible.c:121 gtk/deprecated/gtkstock.c:450
 msgctxt "Stock label"
 msgid "_Strikethrough"
 msgstr "_Tachar"
 
 #. Font variant
-#: gtk/a11y/gtkimageaccessible.c:122 gtk/deprecated/gtkstock.c:452
+#: gtk/a11y/gtkimageaccessible.c:122 gtk/deprecated/gtkstock.c:453
 msgctxt "Stock label"
 msgid "_Underline"
 msgstr "_Subrayar"
 
-#: gtk/a11y/gtkimageaccessible.c:123 gtk/deprecated/gtkstock.c:453
+#: gtk/a11y/gtkimageaccessible.c:123 gtk/deprecated/gtkstock.c:454
 msgctxt "Stock label"
 msgid "_Undo"
 msgstr "_Deshacer"
 
-#: gtk/a11y/gtkimageaccessible.c:124 gtk/deprecated/gtkstock.c:383
+#: gtk/a11y/gtkimageaccessible.c:124 gtk/deprecated/gtkstock.c:384
 msgctxt "Stock label"
 msgid "Decrease Indent"
 msgstr "Disminuir sangría"
 
 #. Zoom
-#: gtk/a11y/gtkimageaccessible.c:125 gtk/deprecated/gtkstock.c:456
+#: gtk/a11y/gtkimageaccessible.c:125 gtk/deprecated/gtkstock.c:457
 msgctxt "Stock label"
 msgid "_Normal Size"
 msgstr "Tamaño _normal"
 
 #. Zoom
-#: gtk/a11y/gtkimageaccessible.c:126 gtk/deprecated/gtkstock.c:458
+#: gtk/a11y/gtkimageaccessible.c:126 gtk/deprecated/gtkstock.c:459
 msgctxt "Stock label"
 msgid "Best _Fit"
 msgstr "Ajuste _óptimo"
 
-#: gtk/a11y/gtkimageaccessible.c:127 gtk/deprecated/gtkstock.c:459
+#: gtk/a11y/gtkimageaccessible.c:127 gtk/deprecated/gtkstock.c:460
 msgctxt "Stock label"
 msgid "Zoom _In"
 msgstr "_Ampliar"
 
-#: gtk/a11y/gtkimageaccessible.c:128 gtk/deprecated/gtkstock.c:460
+#: gtk/a11y/gtkimageaccessible.c:128 gtk/deprecated/gtkstock.c:461
 msgctxt "Stock label"
 msgid "Zoom _Out"
 msgstr "_Reducir"
@@ -1223,7 +1223,7 @@ msgstr ""
 #: gtk/gtkmountoperation.c:545 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:667 gtk/gtkprintunixdialog.c:740
-#: gtk/gtkwindow.c:12245 gtk/inspector/css-editor.c:257
+#: gtk/gtkwindow.c:12233 gtk/inspector/css-editor.c:257
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:131
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -1274,7 +1274,7 @@ msgid "_Apply"
 msgstr "_Aplicar"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:936
-#: gtk/gtkmessagedialog.c:958 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12246
+#: gtk/gtkmessagedialog.c:958 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12234
 msgid "_OK"
 msgstr "_Aceptar"
 
@@ -1291,111 +1291,111 @@ msgctxt "Number format"
 msgid "%d"
 msgstr "%d"
 
-#: gtk/deprecated/gtkstock.c:342
+#: gtk/deprecated/gtkstock.c:343
 msgctxt "Stock label"
 msgid "_Apply"
 msgstr "_Aplicar"
 
-#: gtk/deprecated/gtkstock.c:344
+#: gtk/deprecated/gtkstock.c:345
 msgctxt "Stock label"
 msgid "_Cancel"
 msgstr "_Cancelar"
 
-#: gtk/deprecated/gtkstock.c:348
+#: gtk/deprecated/gtkstock.c:349
 msgctxt "Stock label"
 msgid "C_onnect"
 msgstr "_Conectar"
 
-#: gtk/deprecated/gtkstock.c:349
+#: gtk/deprecated/gtkstock.c:350
 msgctxt "Stock label"
 msgid "_Convert"
 msgstr "_Convertir"
 
-#: gtk/deprecated/gtkstock.c:353
+#: gtk/deprecated/gtkstock.c:354
 msgctxt "Stock label"
 msgid "_Discard"
 msgstr "_Descartar"
 
-#: gtk/deprecated/gtkstock.c:354
+#: gtk/deprecated/gtkstock.c:355
 msgctxt "Stock label"
 msgid "_Disconnect"
 msgstr "_Desconectar"
 
-#: gtk/deprecated/gtkstock.c:356
+#: gtk/deprecated/gtkstock.c:357
 msgctxt "Stock label"
 msgid "_Edit"
 msgstr "_Editar"
 
-#: gtk/deprecated/gtkstock.c:384
+#: gtk/deprecated/gtkstock.c:385
 msgctxt "Stock label"
 msgid "_Index"
 msgstr "_Ind_ice"
 
-#: gtk/deprecated/gtkstock.c:385
+#: gtk/deprecated/gtkstock.c:386
 msgctxt "Stock label"
 msgid "_Information"
 msgstr "_Información"
 
-#: gtk/deprecated/gtkstock.c:415
+#: gtk/deprecated/gtkstock.c:416
 msgctxt "Stock label"
 msgid "_No"
 msgstr "_No"
 
-#: gtk/deprecated/gtkstock.c:416
+#: gtk/deprecated/gtkstock.c:417
 msgctxt "Stock label"
 msgid "_OK"
 msgstr "_Aceptar"
 
 #. Page orientation
-#: gtk/deprecated/gtkstock.c:419
+#: gtk/deprecated/gtkstock.c:420
 msgctxt "Stock label"
 msgid "Landscape"
 msgstr "Apaisado"
 
 #. Page orientation
-#: gtk/deprecated/gtkstock.c:421
+#: gtk/deprecated/gtkstock.c:422
 msgctxt "Stock label"
 msgid "Portrait"
 msgstr "Vertical"
 
 #. Page orientation
-#: gtk/deprecated/gtkstock.c:423
+#: gtk/deprecated/gtkstock.c:424
 msgctxt "Stock label"
 msgid "Reverse landscape"
 msgstr "Apaisado invertido"
 
 #. Page orientation
-#: gtk/deprecated/gtkstock.c:425
+#: gtk/deprecated/gtkstock.c:426
 msgctxt "Stock label"
 msgid "Reverse portrait"
 msgstr "Vertical invertido"
 
-#: gtk/deprecated/gtkstock.c:426
+#: gtk/deprecated/gtkstock.c:427
 msgctxt "Stock label"
 msgid "Page Set_up"
 msgstr "Config_uración de página"
 
-#: gtk/deprecated/gtkstock.c:428
+#: gtk/deprecated/gtkstock.c:429
 msgctxt "Stock label"
 msgid "_Preferences"
 msgstr "Prefere_ncias"
 
-#: gtk/deprecated/gtkstock.c:440
+#: gtk/deprecated/gtkstock.c:441
 msgctxt "Stock label"
 msgid "_Color"
 msgstr "_Color"
 
-#: gtk/deprecated/gtkstock.c:441
+#: gtk/deprecated/gtkstock.c:442
 msgctxt "Stock label"
 msgid "_Font"
 msgstr "_Tipografía"
 
-#: gtk/deprecated/gtkstock.c:450
+#: gtk/deprecated/gtkstock.c:451
 msgctxt "Stock label"
 msgid "_Undelete"
 msgstr "_Recuperar"
 
-#: gtk/deprecated/gtkstock.c:454
+#: gtk/deprecated/gtkstock.c:455
 msgctxt "Stock label"
 msgid "_Yes"
 msgstr "_Sí"
@@ -1583,7 +1583,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:872 gtk/gtkshortcutlabel.c:102
+#: gtk/gtkaccellabel.c:860 gtk/gtkshortcutlabel.c:102
 #: gtk/gtkshortcutlabel.c:140
 msgctxt "keyboard label"
 msgid "Super"
@@ -1594,7 +1594,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:885 gtk/gtkshortcutlabel.c:105
+#: gtk/gtkaccellabel.c:873 gtk/gtkshortcutlabel.c:105
 #: gtk/gtkshortcutlabel.c:142
 msgctxt "keyboard label"
 msgid "Hyper"
@@ -1605,18 +1605,18 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:899 gtk/gtkshortcutlabel.c:99
+#: gtk/gtkaccellabel.c:887 gtk/gtkshortcutlabel.c:99
 #: gtk/gtkshortcutlabel.c:144
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: gtk/gtkaccellabel.c:916
+#: gtk/gtkaccellabel.c:904
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Espacio"
 
-#: gtk/gtkaccellabel.c:919 gtk/gtkshortcutlabel.c:154
+#: gtk/gtkaccellabel.c:907 gtk/gtkshortcutlabel.c:154
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Contrabarra"
@@ -2168,44 +2168,44 @@ msgstr "_Derecho:"
 msgid "Paper Margins"
 msgstr "Márgenes del papel"
 
-#: gtk/gtkentry.c:9695 gtk/gtklabel.c:6688 gtk/gtktextview.c:9432
+#: gtk/gtkentry.c:9687 gtk/gtklabel.c:6684 gtk/gtktextview.c:9428
 msgid "Cu_t"
 msgstr "Cor_tar"
 
-#: gtk/gtkentry.c:9699 gtk/gtklabel.c:6689 gtk/gtktextview.c:9436
+#: gtk/gtkentry.c:9691 gtk/gtklabel.c:6685 gtk/gtktextview.c:9432
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: gtk/gtkentry.c:9703 gtk/gtklabel.c:6690 gtk/gtktextview.c:9438
+#: gtk/gtkentry.c:9695 gtk/gtklabel.c:6686 gtk/gtktextview.c:9434
 msgid "_Paste"
 msgstr "_Pegar"
 
-#: gtk/gtkentry.c:9706 gtk/gtkfilechooserwidget.c:1460
-#: gtk/gtkfilechooserwidget.c:2258 gtk/gtklabel.c:6692 gtk/gtktextview.c:9441
+#: gtk/gtkentry.c:9698 gtk/gtkfilechooserwidget.c:1460
+#: gtk/gtkfilechooserwidget.c:2258 gtk/gtklabel.c:6688 gtk/gtktextview.c:9437
 msgid "_Delete"
 msgstr "_Eliminar"
 
-#: gtk/gtkentry.c:9717 gtk/gtklabel.c:6701 gtk/gtktextview.c:9455
+#: gtk/gtkentry.c:9709 gtk/gtklabel.c:6697 gtk/gtktextview.c:9451
 msgid "Select _All"
 msgstr "Seleccionar _todo"
 
-#: gtk/gtkentry.c:9895 gtk/gtktextview.c:9665
+#: gtk/gtkentry.c:9887 gtk/gtktextview.c:9661
 msgid "Select all"
 msgstr "Seleccionar todo"
 
-#: gtk/gtkentry.c:9898 gtk/gtktextview.c:9668
+#: gtk/gtkentry.c:9890 gtk/gtktextview.c:9664
 msgid "Cut"
 msgstr "Cortar"
 
-#: gtk/gtkentry.c:9901 gtk/gtktextview.c:9671
+#: gtk/gtkentry.c:9893 gtk/gtktextview.c:9667
 msgid "Copy"
 msgstr "Copiar"
 
-#: gtk/gtkentry.c:9904 gtk/gtktextview.c:9674
+#: gtk/gtkentry.c:9896 gtk/gtktextview.c:9670
 msgid "Paste"
 msgstr "Pegar"
 
-#: gtk/gtkentry.c:11019
+#: gtk/gtkentry.c:11011
 msgid "Caps Lock is on"
 msgstr "Bloq Mayús está activado"
 
@@ -2226,13 +2226,13 @@ msgstr "(Ninguno)"
 msgid "Other…"
 msgstr "Otro…"
 
-#: gtk/gtkfilechooserdialog.c:575
+#: gtk/gtkfilechooserdialog.c:578
 msgid "_Name"
 msgstr "_Nombre"
 
 #. Open item is always present
 #: gtk/gtkfilechoosernative.c:371 gtk/gtkfilechoosernative.c:456
-#: gtk/gtkplacessidebar.c:3434 gtk/gtkplacesview.c:1597
+#: gtk/gtkplacessidebar.c:3434 gtk/gtkplacesview.c:1600
 msgid "_Open"
 msgstr "_Abrir"
 
@@ -2576,7 +2576,7 @@ msgstr "Falló al crear el contexto de OpenGL"
 msgid "Application menu"
 msgstr "Menú de la aplicación"
 
-#: gtk/gtkheaderbar.c:460 gtk/gtkwindow.c:8840
+#: gtk/gtkheaderbar.c:460 gtk/gtkwindow.c:8828
 msgid "Close"
 msgstr "Cerrar"
 
@@ -2628,12 +2628,12 @@ msgid "Error"
 msgstr "Error"
 
 #. Open Link
-#: gtk/gtklabel.c:6669
+#: gtk/gtklabel.c:6665
 msgid "_Open Link"
 msgstr "_Abrir enlace"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6678
+#: gtk/gtklabel.c:6674
 msgid "Copy _Link Address"
 msgstr "Copiar la dirección del _enlace"
 
@@ -2868,7 +2868,7 @@ msgstr "Shell Z"
 msgid "Cannot end process with PID %d: %s"
 msgstr "No se puede finalizar el proceso con PID %d: %s"
 
-#: gtk/gtknotebook.c:5325 gtk/gtknotebook.c:8011
+#: gtk/gtknotebook.c:5315 gtk/gtknotebook.c:8001
 #, c-format
 msgid "Page %u"
 msgstr "Página %u"
@@ -3068,11 +3068,11 @@ msgstr "No se pudo expulsar %s"
 msgid "Unable to poll “%s” for media changes"
 msgstr "No se puede consultar a «%s» si hay cambios en el medio"
 
-#: gtk/gtkplacessidebar.c:3437 gtk/gtkplacesview.c:1607
+#: gtk/gtkplacessidebar.c:3437 gtk/gtkplacesview.c:1610
 msgid "Open in New _Tab"
 msgstr "Abrir en una _pestaña nueva"
 
-#: gtk/gtkplacessidebar.c:3440 gtk/gtkplacesview.c:1618
+#: gtk/gtkplacessidebar.c:3440 gtk/gtkplacesview.c:1621
 msgid "Open in New _Window"
 msgstr "Abrir en una _ventana nueva"
 
@@ -3088,11 +3088,11 @@ msgstr "_Quitar"
 msgid "Rename…"
 msgstr "Renombrar…"
 
-#: gtk/gtkplacessidebar.c:3450 gtk/gtkplacesview.c:1652
+#: gtk/gtkplacessidebar.c:3450 gtk/gtkplacesview.c:1655
 msgid "_Mount"
 msgstr "_Montar"
 
-#: gtk/gtkplacessidebar.c:3451 gtk/gtkplacesview.c:1642
+#: gtk/gtkplacessidebar.c:3451 gtk/gtkplacesview.c:1645
 msgid "_Unmount"
 msgstr "_Desmontar"
 
@@ -3104,63 +3104,70 @@ msgstr "_Expulsar"
 msgid "_Detect Media"
 msgstr "_Detectar medio"
 
-#: gtk/gtkplacessidebar.c:3899 gtk/gtkplacesview.c:1050
+#: gtk/gtkplacessidebar.c:3899 gtk/gtkplacesview.c:1053
 msgid "Computer"
 msgstr "Equipo"
 
-#: gtk/gtkplacesview.c:878
+#: gtk/gtkplacesview.c:881
 msgid "Searching for network locations"
 msgstr "Buscando ubicaciones de red"
 
-#: gtk/gtkplacesview.c:885
+#: gtk/gtkplacesview.c:888
 msgid "No network locations found"
 msgstr "No se han encontrado ubicaciones de red"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1160 gtk/gtkplacesview.c:1204 gtk/gtkplacesview.c:1255
+#: gtk/gtkplacesview.c:1163 gtk/gtkplacesview.c:1207 gtk/gtkplacesview.c:1258
 msgid "Unable to access location"
 msgstr "No se puede acceder a la ubicación"
 
 #. Restore from Cancel to Connect
-#: gtk/gtkplacesview.c:1177 gtk/ui/gtkplacesview.ui:221
+#: gtk/gtkplacesview.c:1180 gtk/ui/gtkplacesview.ui:221
 msgid "Con_nect"
 msgstr "Co_nectar"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1318
+#: gtk/gtkplacesview.c:1321
 msgid "Unable to unmount volume"
 msgstr "No se puede desmontar del volumen"
 
 #. Allow to cancel the operation
-#: gtk/gtkplacesview.c:1400
+#: gtk/gtkplacesview.c:1403
 msgid "Cance_l"
 msgstr "Cance_lar"
 
-#: gtk/gtkplacesview.c:1642
+#: gtk/gtkplacesview.c:1645
 msgid "_Disconnect"
 msgstr "_Desconectar"
 
-#: gtk/gtkplacesview.c:1652
+#: gtk/gtkplacesview.c:1655
 msgid "_Connect"
 msgstr "_Conectar"
 
-#: gtk/gtkplacesview.c:1817
+#: gtk/gtkplacesview.c:1820
 msgid "Unable to get remote server location"
 msgstr "No se pudo obtener la ubicación del servidor remoto"
 
-#: gtk/gtkplacesview.c:1954 gtk/gtkplacesview.c:1963
+#: gtk/gtkplacesview.c:1957 gtk/gtkplacesview.c:1966
 msgid "Networks"
 msgstr "Redes"
 
-#: gtk/gtkplacesview.c:1954 gtk/gtkplacesview.c:1963
+#: gtk/gtkplacesview.c:1957 gtk/gtkplacesview.c:1966
 msgid "On This Computer"
 msgstr "En este equipo"
 
-#: gtk/gtkplacesviewrow.c:344
+#. Translators: respectively, free and total space of the drive
+#: gtk/gtkplacesviewrow.c:124
+#, c-format
+#| msgid "Not available"
+msgid "%s / %s available"
+msgstr "%s / %s disponible"
+
+#: gtk/gtkplacesviewrow.c:461
 msgid "Disconnect"
 msgstr "Desconectar"
 
-#: gtk/gtkplacesviewrow.c:344 gtk/ui/gtkplacesviewrow.ui:55
+#: gtk/gtkplacesviewrow.c:461 gtk/ui/gtkplacesviewrow.ui:68
 msgid "Unmount"
 msgstr "Desmontar"
 
@@ -3408,7 +3415,7 @@ msgstr "De abajo a arriba"
 msgid "Print"
 msgstr "Imprimir"
 
-#: gtk/gtkprogressbar.c:600
+#: gtk/gtkprogressbar.c:588
 #, c-format
 msgctxt "progress bar label"
 msgid "%.0f %%"
@@ -3781,12 +3788,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:12233
+#: gtk/gtkwindow.c:12221
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "¿Quiere usar el inspector de GTK+?"
 
-#: gtk/gtkwindow.c:12235
+#: gtk/gtkwindow.c:12223
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3797,7 +3804,7 @@ msgstr ""
 "modificar los aspectos internos de cualquier aplicación de GTK+. Al usarlo "
 "puede hacer que la aplicación falle o se cierre."
 
-#: gtk/gtkwindow.c:12240
+#: gtk/gtkwindow.c:12228
 msgid "Don't show this message again"
 msgstr "No mostrar este mensaje de nuevo"
 
@@ -3857,13 +3864,26 @@ msgstr "Desactivar este CSS personalizado"
 msgid "Save the current CSS"
 msgstr "Guardar el CSS actual"
 
+#: gtk/inspector/css-node-tree.c:205
+#| msgid "Class name"
+msgid "Change name"
+msgstr "Cambiar nombre"
+
+#: gtk/inspector/css-node-tree.c:220
+#| msgid "Classes"
+msgid "Change classes"
+msgstr "Cambiar clases"
+
+#: gtk/inspector/css-node-tree.c:229
+#| msgid "Show CSS properties"
+msgid "CSS properties"
+msgstr "Propiedades CSS"
+
 #: gtk/inspector/css-node-tree.ui:31
-#| msgid "Show all Resources"
 msgid "Show all CSS nodes"
 msgstr "Mostrar todos los nodos CSS"
 
 #: gtk/inspector/css-node-tree.ui:51
-#| msgid "Child Properties"
 msgid "Show CSS properties"
 msgstr "Mostrar las propiedades CSS"
 
@@ -3884,7 +3904,6 @@ msgid "Node:"
 msgstr "Nodo:"
 
 #: gtk/inspector/css-node-tree.ui:198
-#| msgid "Property"
 msgid "CSS Property"
 msgstr "Propiedad CSS"
 
@@ -6574,9 +6593,6 @@ msgstr "Imprimir en la impresora de prueba"
 
 #~ msgid "Cancel"
 #~ msgstr "Cancelar"
-
-#~ msgid "Class name"
-#~ msgstr "Nombre de la clase"
 
 #~ msgid "Add a class"
 #~ msgstr "Añadir una clase"
