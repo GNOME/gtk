@@ -107,10 +107,10 @@ typedef struct _GdkBorder GdkBorder;
  */
 struct _GdkBorder
 {
-  gint16 left;
-  gint16 right;
-  gint16 top;
-  gint16 bottom;
+  gint left;
+  gint right;
+  gint top;
+  gint bottom;
 };
 
 /**
