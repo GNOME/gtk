@@ -181,6 +181,7 @@ static const GDebugKey gtk_debug_keys[] = {
   {"interactive", GTK_DEBUG_INTERACTIVE},
   {"touchscreen", GTK_DEBUG_TOUCHSCREEN},
   {"actions", GTK_DEBUG_ACTIONS},
+  {"resize", GTK_DEBUG_RESIZE}
 };
 #endif /* G_ENABLE_DEBUG */
 

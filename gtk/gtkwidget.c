@@ -4356,6 +4356,9 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   priv->alloc_needed = TRUE;
   priv->alloc_needed_on_child = TRUE;
   priv->focus_on_click = TRUE;
+#ifdef G_ENABLE_DEBUG
+  priv->highlight_resize = FALSE;
+#endif
 
   switch (_gtk_widget_get_direction (widget))
     {
@@ -5927,6 +5930,9 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
   gtk_widget_push_verify_invariants (widget);
 
 #ifdef G_ENABLE_DEBUG
+  priv->highlight_resize = TRUE;
+  gtk_widget_queue_draw (widget);
+
   if (gtk_widget_get_resize_needed (widget))
     {
       g_warning ("Allocating size to %s %p without calling gtk_widget_get_preferred_width/height(). "
@@ -6978,6 +6984,22 @@ _gtk_widget_draw_internal (GtkWidget *widget,
 	      cairo_restore (cr);
 	    }
 	}
+
+      if (GTK_DEBUG_CHECK (RESIZE) &&
+          widget->priv->highlight_resize)
+        {
+          GtkAllocation alloc;
+          gtk_widget_get_allocation (widget, &alloc);
+
+          cairo_rectangle (cr, 0, 0, alloc.width, alloc.height);
+          cairo_set_source_rgba (cr, 1, 0, 0, 0.2);
+          cairo_fill (cr);
+
+          gtk_widget_queue_draw (widget);
+
+          widget->priv->highlight_resize = FALSE;
+
+        }
 #endif
 
       if (cairo_status (cr) &&

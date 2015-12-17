@@ -54,7 +54,8 @@ typedef enum {
   GTK_DEBUG_NO_PIXEL_CACHE  = 1 << 16,
   GTK_DEBUG_INTERACTIVE     = 1 << 17,
   GTK_DEBUG_TOUCHSCREEN     = 1 << 18,
-  GTK_DEBUG_ACTIONS         = 1 << 19
+  GTK_DEBUG_ACTIONS         = 1 << 19,
+  GTK_DEBUG_RESIZE          = 1 << 20
 } GtkDebugFlag;
 
 #ifdef G_ENABLE_DEBUG

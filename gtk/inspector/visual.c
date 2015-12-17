@@ -186,6 +186,19 @@ pixelcache_activate (GtkSwitch *sw)
 }
 
 static void
+widget_resize_activate (GtkSwitch *sw)
+{
+  guint flags = gtk_get_debug_flags ();
+
+  if (gtk_switch_get_active (sw))
+    flags |= GTK_DEBUG_RESIZE;
+  else
+    flags &= ~GTK_DEBUG_RESIZE;
+
+  gtk_set_debug_flags (flags);
+}
+
+static void
 fill_gtk (const gchar *path,
           GHashTable  *t)
 {
@@ -699,6 +712,7 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, rendering_mode_changed);
   gtk_widget_class_bind_template_callback (widget_class, baselines_activate);
   gtk_widget_class_bind_template_callback (widget_class, pixelcache_activate);
+  gtk_widget_class_bind_template_callback (widget_class, widget_resize_activate);
   gtk_widget_class_bind_template_callback (widget_class, software_gl_activate);
   gtk_widget_class_bind_template_callback (widget_class, software_surface_activate);
   gtk_widget_class_bind_template_callback (widget_class, texture_rectangle_activate);
