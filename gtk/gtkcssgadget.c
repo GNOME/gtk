@@ -525,7 +525,7 @@ gtk_css_gadget_allocate (GtkCssGadget        *gadget,
 {
   GtkCssGadgetPrivate *priv = gtk_css_gadget_get_instance_private (gadget);
   GtkAllocation content_allocation;
-  GtkAllocation content_clip = { 0, 0, -1, -1 };
+  GtkAllocation content_clip = { 0, 0, 0, 0 };
   GtkBorder margin, border, padding, shadow, extents;
   GtkCssStyle *style;
 
@@ -568,15 +568,6 @@ gtk_css_gadget_allocate (GtkCssGadget        *gadget,
 
   GTK_CSS_GADGET_GET_CLASS (gadget)->allocate (gadget, &content_allocation, baseline, &content_clip);
 
-  if (content_clip.width == -1 || content_clip.height == -1)
-    {
-      g_warning ("GtkCssAllocateFunc did not set clip for gadget (node %s, owner %s)\n",
-                 gtk_css_node_get_name (gtk_css_gadget_get_node (gadget)),
-                 G_OBJECT_TYPE_NAME (gtk_css_gadget_get_owner (gadget)));
-      content_clip.width = 0;
-      content_clip.height = 0;
-    }
-
   _gtk_css_shadows_value_get_extents (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BOX_SHADOW), &shadow);
 
   out_clip->x = allocation->x + margin.left - shadow.left;
@@ -584,7 +575,8 @@ gtk_css_gadget_allocate (GtkCssGadget        *gadget,
   out_clip->width = allocation->width - margin.left - margin.right + shadow.left + shadow.right;
   out_clip->height = allocation->height - margin.top - margin.bottom + shadow.top + shadow.bottom;
 
-  gdk_rectangle_union (&content_clip, out_clip, out_clip);
+  if (content_clip.width > 0 && content_clip.height > 0)
+    gdk_rectangle_union (&content_clip, out_clip, out_clip);
 }
 
 /**
