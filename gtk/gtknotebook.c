@@ -2574,25 +2574,11 @@ gtk_notebook_draw (GtkWidget *widget,
     {
       gtk_notebook_paint (widget, cr);
 
-      if (priv->show_tabs)
-        {
-          GtkNotebookPage *page;
-          GList *pages;
-
-          for (pages = priv->children; pages; pages = pages->next)
-            {
-              page = GTK_NOTEBOOK_PAGE (pages);
-
-              if (gtk_widget_get_parent (page->tab_label) == widget)
-                gtk_container_propagate_draw (GTK_CONTAINER (notebook),
-                                              page->tab_label, cr);
-            }
-        }
-
       if (priv->cur_page)
         gtk_container_propagate_draw (GTK_CONTAINER (notebook),
                                       priv->cur_page->child,
                                       cr);
+
       if (priv->show_tabs)
       {
         for (i = 0; i < N_ACTION_WIDGETS; i++)
@@ -2607,17 +2593,9 @@ gtk_notebook_draw (GtkWidget *widget,
   if (priv->cur_page && priv->operation == DRAG_OPERATION_REORDER &&
       gtk_cairo_should_draw_window (cr, priv->drag_window))
     {
-      cairo_save (cr);
-      gtk_cairo_transform_to_window (cr, widget, priv->drag_window);
-
       gtk_notebook_draw_tab (notebook,
                              priv->cur_page,
                              cr);
-
-      cairo_restore (cr);
-
-      gtk_container_propagate_draw (GTK_CONTAINER (notebook),
-                                    priv->cur_page->tab_label, cr);
     }
 
   return FALSE;
@@ -5623,6 +5601,9 @@ gtk_notebook_draw_tab (GtkNotebook     *notebook,
     }
 
   gtk_style_context_restore (context);
+
+  gtk_container_propagate_draw (GTK_CONTAINER (notebook),
+                                page->tab_label, cr);
 }
 
 static void
