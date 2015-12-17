@@ -217,6 +217,17 @@ gtk_separator_init (GtkSeparator *separator)
 }
 
 static void
+gtk_separator_finalize (GObject *object)
+{
+  GtkSeparatorPrivate *priv = GTK_SEPARATOR (object)->priv;
+
+  g_clear_object (&priv->gadget);
+
+
+  G_OBJECT_CLASS (gtk_separator_parent_class)->finalize (object);
+}
+
+static void
 gtk_separator_class_init (GtkSeparatorClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
@@ -224,6 +235,7 @@ gtk_separator_class_init (GtkSeparatorClass *class)
 
   object_class->set_property = gtk_separator_set_property;
   object_class->get_property = gtk_separator_get_property;
+  object_class->finalize = gtk_separator_finalize;
 
   widget_class->get_preferred_width = gtk_separator_get_preferred_width;
   widget_class->get_preferred_height = gtk_separator_get_preferred_height;
