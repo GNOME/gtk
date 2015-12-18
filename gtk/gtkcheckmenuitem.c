@@ -649,7 +649,6 @@ gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
       guint offset;
       guint toggle_size;
       guint toggle_spacing;
-      guint horizontal_padding;
       guint indicator_size;
       GtkStateFlags state;
       GtkBorder padding;
@@ -662,7 +661,6 @@ gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
 
       gtk_widget_style_get (widget,
                             "toggle-spacing", &toggle_spacing,
-                            "horizontal-padding", &horizontal_padding,
                             "indicator-size", &indicator_size,
                             NULL);
 
@@ -672,13 +670,13 @@ gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
 
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
         {
-          x = offset + horizontal_padding +
+          x = offset +
             (toggle_size - toggle_spacing - indicator_size) / 2;
         }
       else
         {
           x = allocation.width -
-            offset - horizontal_padding - toggle_size + toggle_spacing +
+            offset - toggle_size + toggle_spacing +
             (toggle_size - toggle_spacing - indicator_size) / 2;
         }
 

@@ -645,12 +645,11 @@ gtk_image_menu_item_size_allocate (GtkWidget     *widget,
       GtkBorder padding;
       GtkRequisition child_requisition;
       GtkAllocation child_allocation;
-      guint horizontal_padding, toggle_spacing;
+      guint toggle_spacing;
       gint toggle_size;
 
       toggle_size = GTK_MENU_ITEM (image_menu_item)->priv->toggle_size;
       gtk_widget_style_get (widget,
-                            "horizontal-padding", &horizontal_padding,
                             "toggle-spacing", &toggle_spacing,
                             NULL);
 
@@ -672,10 +671,10 @@ gtk_image_menu_item_size_allocate (GtkWidget     *widget,
         {
           if ((gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR) ==
               (pack_dir == GTK_PACK_DIRECTION_LTR))
-            x = offset + horizontal_padding + padding.left +
+            x = offset + padding.left +
                (toggle_size - toggle_spacing - child_requisition.width) / 2;
           else
-            x = widget_allocation.width - offset - horizontal_padding - padding.right -
+            x = widget_allocation.width - offset - padding.right -
               toggle_size + toggle_spacing +
               (toggle_size - toggle_spacing - child_requisition.width) / 2;
 
@@ -685,10 +684,10 @@ gtk_image_menu_item_size_allocate (GtkWidget     *widget,
         {
           if ((gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR) ==
               (pack_dir == GTK_PACK_DIRECTION_TTB))
-            y = offset + horizontal_padding + padding.top +
+            y = offset + padding.top +
               (toggle_size - toggle_spacing - child_requisition.height) / 2;
           else
-            y = widget_allocation.height - offset - horizontal_padding - padding.bottom -
+            y = widget_allocation.height - offset - padding.bottom -
               toggle_size + toggle_spacing +
               (toggle_size - toggle_spacing - child_requisition.height) / 2;
 
