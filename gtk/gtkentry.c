@@ -8560,8 +8560,6 @@ gtk_entry_set_icon_from_pixbuf (GtkEntry             *entry,
   if (pixbuf)
     g_object_ref (pixbuf);
 
-  gtk_entry_clear (entry, icon_pos);
-
   if (pixbuf)
     {
       _gtk_icon_helper_set_pixbuf (GTK_ICON_HELPER (icon_info->gadget), pixbuf);
@@ -8584,7 +8582,9 @@ gtk_entry_set_icon_from_pixbuf (GtkEntry             *entry,
 
       g_object_unref (pixbuf);
     }
-  
+  else
+    gtk_entry_clear (entry, icon_pos);
+
   if (gtk_widget_get_visible (GTK_WIDGET (entry)))
     gtk_widget_queue_resize (GTK_WIDGET (entry));
 
@@ -8613,7 +8613,6 @@ gtk_entry_set_icon_from_stock (GtkEntry             *entry,
 {
   GtkEntryPrivate *priv;
   EntryIconInfo *icon_info;
-  gchar *new_id;
 
   g_return_if_fail (GTK_IS_ENTRY (entry));
   g_return_if_fail (IS_VALID_ICON_POSITION (icon_pos));
@@ -8625,14 +8624,9 @@ gtk_entry_set_icon_from_stock (GtkEntry             *entry,
 
   g_object_freeze_notify (G_OBJECT (entry));
 
-  /* need to dup before clearing */
-  new_id = g_strdup (stock_id);
-
-  gtk_entry_clear (entry, icon_pos);
-
-  if (new_id != NULL)
+  if (stock_id != NULL)
     {
-      _gtk_icon_helper_set_stock_id (GTK_ICON_HELPER (icon_info->gadget), new_id, GTK_ICON_SIZE_MENU);
+      _gtk_icon_helper_set_stock_id (GTK_ICON_HELPER (icon_info->gadget), stock_id, GTK_ICON_SIZE_MENU);
 
       if (icon_pos == GTK_ENTRY_ICON_PRIMARY)
         {
@@ -8647,9 +8641,9 @@ gtk_entry_set_icon_from_stock (GtkEntry             *entry,
 
       if (gtk_widget_get_mapped (GTK_WIDGET (entry)))
           gdk_window_show_unraised (icon_info->window);
-
-      g_free (new_id);
     }
+  else
+    gtk_entry_clear (entry, icon_pos);
 
   if (gtk_widget_get_visible (GTK_WIDGET (entry)))
     gtk_widget_queue_resize (GTK_WIDGET (entry));
@@ -8680,7 +8674,6 @@ gtk_entry_set_icon_from_icon_name (GtkEntry             *entry,
 {
   GtkEntryPrivate *priv;
   EntryIconInfo *icon_info;
-  gchar *new_name;
 
   g_return_if_fail (GTK_IS_ENTRY (entry));
   g_return_if_fail (IS_VALID_ICON_POSITION (icon_pos));
@@ -8692,14 +8685,10 @@ gtk_entry_set_icon_from_icon_name (GtkEntry             *entry,
 
   g_object_freeze_notify (G_OBJECT (entry));
 
-  /* need to dup before clearing */
-  new_name = g_strdup (icon_name);
 
-  gtk_entry_clear (entry, icon_pos);
-
-  if (new_name != NULL)
+  if (icon_name != NULL)
     {
-      _gtk_icon_helper_set_icon_name (GTK_ICON_HELPER (icon_info->gadget), new_name, GTK_ICON_SIZE_MENU);
+      _gtk_icon_helper_set_icon_name (GTK_ICON_HELPER (icon_info->gadget), icon_name, GTK_ICON_SIZE_MENU);
 
       if (icon_pos == GTK_ENTRY_ICON_PRIMARY)
         {
@@ -8714,9 +8703,9 @@ gtk_entry_set_icon_from_icon_name (GtkEntry             *entry,
 
       if (gtk_widget_get_mapped (GTK_WIDGET (entry)))
           gdk_window_show_unraised (icon_info->window);
-
-      g_free (new_name);
     }
+  else
+    gtk_entry_clear (entry, icon_pos);
 
   if (gtk_widget_get_visible (GTK_WIDGET (entry)))
     gtk_widget_queue_resize (GTK_WIDGET (entry));
@@ -8757,12 +8746,6 @@ gtk_entry_set_icon_from_gicon (GtkEntry             *entry,
 
   g_object_freeze_notify (G_OBJECT (entry));
 
-  /* need to ref before clearing */
-  if (icon)
-    g_object_ref (icon);
-
-  gtk_entry_clear (entry, icon_pos);
-
   if (icon)
     {
       _gtk_icon_helper_set_gicon (GTK_ICON_HELPER (icon_info->gadget), icon, GTK_ICON_SIZE_MENU);
@@ -8780,9 +8763,9 @@ gtk_entry_set_icon_from_gicon (GtkEntry             *entry,
 
       if (gtk_widget_get_mapped (GTK_WIDGET (entry)))
           gdk_window_show_unraised (icon_info->window);
-
-      g_object_unref (icon);
     }
+  else
+    gtk_entry_clear (entry, icon_pos);
 
   if (gtk_widget_get_visible (GTK_WIDGET (entry)))
     gtk_widget_queue_resize (GTK_WIDGET (entry));
