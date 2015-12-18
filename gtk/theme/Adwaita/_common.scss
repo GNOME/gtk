@@ -1514,8 +1514,14 @@ menu,
       background-color: transparent;
     }
     //submenu indicators
-    & arrow { -gtk-icon-source: -gtk-icontheme('pan-end-symbolic'); }
-    & arrow:dir(rtl) {-gtk-icon-source:-gtk-icontheme('pan-end-symbolic-rtl'); }
+    & arrow {
+      -gtk-icon-source: -gtk-icontheme('pan-end-symbolic');
+      margin-left: 10px;
+    }
+    & arrow:dir(rtl) {
+      -gtk-icon-source:-gtk-icontheme('pan-end-symbolic-rtl');
+      margin-right: 10px;
+    }
   }
   & arrow { // overlow buttons
     @extend %undecorated_button;

@@ -1176,6 +1176,12 @@ menu,
 
   menuitem {
     min-width: 40px;
+    & arrow {
+      margin-left: 10px;
+    }
+    & arrow:dir(rtl) {
+      margin-right: 10px;
+    }
   }
 }
 

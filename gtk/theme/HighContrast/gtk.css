@@ -1304,6 +1304,12 @@ menu,
   menu menuitem,
   .menu menuitem {
     min-width: 40px; }
+    menu menuitem arrow,
+    .menu menuitem arrow {
+      margin-left: 10px; }
+    menu menuitem arrow:dir(rtl),
+    .menu menuitem arrow:dir(rtl) {
+      margin-right: 10px; }
 
 /***************
  * Popovers   *

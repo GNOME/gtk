@@ -2131,10 +2131,12 @@ menu,
       background-color: transparent; }
     menu menuitem arrow,
     .menu menuitem arrow {
-      -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
+      -gtk-icon-source: -gtk-icontheme("pan-end-symbolic");
+      margin-left: 10px; }
     menu menuitem arrow:dir(rtl),
     .menu menuitem arrow:dir(rtl) {
-      -gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl"); }
+      -gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl");
+      margin-right: 10px; }
   menu arrow,
   .menu arrow {
     border-style: none;
