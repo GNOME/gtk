@@ -1013,9 +1013,9 @@ gtk_menu_item_init (GtkMenuItem *menu_item)
   priv->action = NULL;
   priv->use_action_appearance = TRUE;
   
-  menu_item->priv->submenu = NULL;
-  menu_item->priv->toggle_size = 0;
-  menu_item->priv->accelerator_width = 0;
+  priv->submenu = NULL;
+  priv->toggle_size = 0;
+  priv->accelerator_width = 0;
   if (gtk_widget_get_direction (GTK_WIDGET (menu_item)) == GTK_TEXT_DIR_RTL)
     priv->submenu_direction = GTK_DIRECTION_LEFT;
   else
@@ -1180,7 +1180,7 @@ gtk_menu_item_get_property (GObject    *object,
   switch (prop_id)
     {
     case PROP_RIGHT_JUSTIFIED:
-      g_value_set_boolean (value, menu_item->priv->right_justify);
+      g_value_set_boolean (value, priv->right_justify);
       break;
     case PROP_SUBMENU:
       g_value_set_object (value, gtk_menu_item_get_submenu (menu_item));
