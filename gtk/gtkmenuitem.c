@@ -309,41 +309,6 @@ gtk_menu_item_render_arrow (GtkCssGadget *gadget,
   return FALSE;
 }
 
-static void
-gtk_menu_item_measure_arrow (GtkCssGadget   *gadget,
-                             GtkOrientation  orientation,
-                             int             for_size,
-                             int            *minimum,
-                             int            *natural,
-                             int            *minimum_baseline,
-                             int            *natural_baseline,
-                             gpointer        data)
-{
-  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
-  PangoContext *context;
-  PangoFontMetrics *metrics;
-  gfloat arrow_scaling;
-  gint size;
-
-  gtk_widget_style_get (widget,
-                        "arrow-scaling", &arrow_scaling,
-                        NULL);
-
-  context = gtk_widget_get_pango_context (widget);
-
-  metrics = pango_context_get_metrics (context,
-                                       pango_context_get_font_description (context),
-                                       pango_context_get_language (context));
-
-  size = arrow_scaling *
-    (PANGO_PIXELS (pango_font_metrics_get_ascent (metrics) +
-                   pango_font_metrics_get_descent (metrics)));
-
-  pango_font_metrics_unref (metrics);
-
-  *minimum = *natural = size;
-}
-
 static gboolean
 gtk_menu_item_render (GtkCssGadget *gadget,
                       cairo_t      *cr,
@@ -995,12 +960,21 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
                                                              10,
                                                              GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
+  /**
+   * GtkMenuItem:arrow-scaling:
+   *
+   * Amount of space used up by the arrow, relative to the menu item's font
+   * size.
+   *
+   * Deprecated: 3.20: use the standard min-width/min-height CSS properties;
+   *   the value of this style property is ignored.
+   */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_float ("arrow-scaling",
                                                                P_("Arrow Scaling"),
                                                                P_("Amount of space used up by arrow, relative to the menu item's font size"),
                                                                0.0, 2.0, 0.8,
-                                                               GTK_PARAM_READABLE));
+                                                               GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   /**
    * GtkMenuItem:width-chars:
@@ -1628,7 +1602,7 @@ gtk_menu_item_set_submenu (GtkMenuItem *menu_item,
               priv->arrow_gadget =
                 gtk_css_custom_gadget_new_for_node (priv->arrow_node,
                                                     GTK_WIDGET (menu_item),
-                                                    gtk_menu_item_measure_arrow,
+                                                    NULL,
                                                     NULL,
                                                     gtk_menu_item_render_arrow,
                                                     NULL, NULL);

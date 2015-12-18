@@ -1306,7 +1306,9 @@ menu,
     min-width: 40px; }
     menu menuitem arrow,
     .menu menuitem arrow {
-      margin-left: 10px; }
+      margin-left: 10px;
+      min-height: 16px;
+      min-width: 16px; }
     menu menuitem arrow:dir(rtl),
     .menu menuitem arrow:dir(rtl) {
       margin-right: 10px; }

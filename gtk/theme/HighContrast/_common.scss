@@ -1178,6 +1178,8 @@ menu,
     min-width: 40px;
     & arrow {
       margin-left: 10px;
+      min-height: 16px;
+      min-width: 16px;
     }
     & arrow:dir(rtl) {
       margin-right: 10px;
