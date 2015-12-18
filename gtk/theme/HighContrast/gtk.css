@@ -1301,6 +1301,9 @@ menu,
     menu .menuitem.arrow:dir(rtl),
     .menu .menuitem.arrow:dir(rtl) {
       -gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl"); }
+  menu menuitem,
+  .menu menuitem {
+    min-width: 40px; }
 
 /***************
  * Popovers   *

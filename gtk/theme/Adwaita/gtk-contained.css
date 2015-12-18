@@ -2112,7 +2112,8 @@ menu,
   menu menuitem,
   .menu menuitem {
     text-shadow: none;
-    padding: 4px; }
+    padding: 4px;
+    min-width: 40px; }
     menu menuitem:hover,
     .menu menuitem:hover {
       color: #ffffff;

@@ -506,29 +506,6 @@ gtk_menu_item_accel_width_foreach (GtkWidget *widget,
                            data);
 }
 
-static gint
-get_minimum_width (GtkWidget *widget)
-{
-  PangoContext *context;
-  PangoFontMetrics *metrics;
-  gint width;
-  gint width_chars;
-
-  context = gtk_widget_get_pango_context (widget);
-
-  metrics = pango_context_get_metrics (context,
-                                       pango_context_get_font_description (context),
-                                       pango_context_get_language (context));
-
-  width = pango_font_metrics_get_approximate_char_width (metrics);
-
-  pango_font_metrics_unref (metrics);
-
-  gtk_widget_style_get (widget, "width-chars", &width_chars, NULL);
-
-  return PANGO_PIXELS (width_chars * width);
-}
-
 static void
 gtk_menu_item_real_get_width (GtkWidget *widget,
                               gint      *minimum_size,
@@ -560,8 +537,6 @@ gtk_menu_item_real_get_width (GtkWidget *widget,
 
           min_width += arrow_size;
           min_width += arrow_spacing;
-
-          min_width = MAX (min_width, get_minimum_width (widget));
           nat_width = min_width;
         }
 
@@ -982,13 +957,16 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
    * The minimum desired width of the menu item in characters.
    *
    * Since: 2.14
+   *
+   * Deprecated: 3.20: Use the standard CSS property min-width; the value of
+   *     this style property is ignored.
    */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("width-chars",
                                                              P_("Width in Characters"),
                                                              P_("The minimum desired width of the menu item in characters"),
                                                              0, G_MAXINT, 12,
-                                                             GTK_PARAM_READABLE));
+                                                             GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_MENU_ITEM_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, "menuitem");

@@ -1500,6 +1500,7 @@ menu,
   & menuitem {
     text-shadow: none;
     padding: 4px;
+    min-width: 40px;
     &:hover {
       color: $selected_fg_color;
       background-color: $selected_bg_color;

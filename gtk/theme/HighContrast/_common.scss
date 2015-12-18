@@ -1173,9 +1173,11 @@ menu,
     &.arrow { -gtk-icon-source: -gtk-icontheme('pan-end-symbolic'); }
     &.arrow:dir(rtl) { -gtk-icon-source: -gtk-icontheme('pan-end-symbolic-rtl'); }
   }
+
+  menuitem {
+    min-width: 40px;
+  }
 }
-
-
 
 /***************
  * Popovers   *
