@@ -147,8 +147,6 @@
 
 
 #define MIN_ENTRY_WIDTH  150
-#define DRAW_TIMEOUT     20
-#define PASSWORD_HINT_MAX 8
 
 #define MAX_ICONS 2
 
