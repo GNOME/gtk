@@ -637,62 +637,61 @@ gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
 {
   GtkCheckMenuItemPrivate *priv = check_menu_item->priv;
   GtkWidget *widget;
+  GtkAllocation allocation;
+  GtkStyleContext *context;
+  guint border_width;
+  guint offset;
+  guint toggle_size;
+  guint toggle_spacing;
+  guint indicator_size;
   gint x, y;
+  GtkStateFlags state;
+  GtkBorder padding;
 
   widget = GTK_WIDGET (check_menu_item);
 
-  if (gtk_widget_is_drawable (widget))
+  if (!gtk_widget_is_drawable (widget))
+    return;
+
+  context = gtk_widget_get_style_context (widget);
+  state = gtk_widget_get_state_flags (widget);
+  gtk_style_context_get_padding (context, state, &padding);
+
+  gtk_widget_get_allocation (widget, &allocation);
+
+  gtk_widget_style_get (widget,
+                        "toggle-spacing", &toggle_spacing,
+                        "indicator-size", &indicator_size,
+                        NULL);
+
+  toggle_size = GTK_MENU_ITEM (check_menu_item)->priv->toggle_size;
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
+  offset = border_width + padding.left + 2;
+
+  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
     {
-      GtkAllocation allocation;
-      GtkStyleContext *context;
-      guint border_width;
-      guint offset;
-      guint toggle_size;
-      guint toggle_spacing;
-      guint indicator_size;
-      GtkStateFlags state;
-      GtkBorder padding;
-
-      context = gtk_widget_get_style_context (widget);
-      state = gtk_widget_get_state_flags (widget);
-      gtk_style_context_get_padding (context, state, &padding);
-
-      gtk_widget_get_allocation (widget, &allocation);
-
-      gtk_widget_style_get (widget,
-                            "toggle-spacing", &toggle_spacing,
-                            "indicator-size", &indicator_size,
-                            NULL);
-
-      toggle_size = GTK_MENU_ITEM (check_menu_item)->priv->toggle_size;
-      border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
-      offset = border_width + padding.left + 2;
-
-      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
-        {
-          x = offset +
-            (toggle_size - toggle_spacing - indicator_size) / 2;
-        }
-      else
-        {
-          x = allocation.width -
-            offset - toggle_size + toggle_spacing +
-            (toggle_size - toggle_spacing - indicator_size) / 2;
-        }
-
-      y = (allocation.height - indicator_size) / 2;
-
-      gtk_style_context_save_to_node (context, priv->indicator_node);
-
-      if (priv->draw_as_radio)
-        gtk_render_option (context, cr, x, y,
-                           indicator_size, indicator_size);
-      else
-        gtk_render_check (context, cr, x, y,
-                          indicator_size, indicator_size);
-
-      gtk_style_context_restore (context);
+      x = offset +
+        (toggle_size - toggle_spacing - indicator_size) / 2;
     }
+  else
+    {
+      x = allocation.width -
+        offset - toggle_size + toggle_spacing +
+        (toggle_size - toggle_spacing - indicator_size) / 2;
+    }
+
+  y = (allocation.height - indicator_size) / 2;
+
+  gtk_style_context_save_to_node (context, priv->indicator_node);
+
+  if (priv->draw_as_radio)
+    gtk_render_option (context, cr, x, y,
+                       indicator_size, indicator_size);
+  else
+    gtk_render_check (context, cr, x, y,
+                      indicator_size, indicator_size);
+
+  gtk_style_context_restore (context);
 }
 
 
