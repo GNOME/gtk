@@ -243,6 +243,8 @@ struct _GtkEntryPrivate
   guint         cache_includes_preedit  : 1;
   guint         caps_lock_warning       : 1;
   guint         caps_lock_warning_shown : 1;
+  guint         password_indicator      : 1;
+  guint         password_indicator_connected : 1;
   guint         change_count            : 8;
   guint         cursor_visible          : 1;
   guint         editing_canceled        : 1; /* Only used by GtkCellRendererText */
@@ -333,6 +335,7 @@ enum {
   PROP_TEXT_LENGTH,
   PROP_INVISIBLE_CHAR_SET,
   PROP_CAPS_LOCK_WARNING,
+  PROP_PASSWORD_INDICATOR,
   PROP_PROGRESS_FRACTION,
   PROP_PROGRESS_PULSE_STEP,
   PROP_PIXBUF_PRIMARY,
@@ -649,6 +652,7 @@ static void         get_frame_size                     (GtkEntry       *entry,
 static void         gtk_entry_move_adjustments         (GtkEntry             *entry);
 static void         gtk_entry_update_cached_style_values(GtkEntry      *entry);
 static gboolean     get_middle_click_paste             (GtkEntry *entry);
+static void         update_password_indicator          (GtkEntry       *entry);
 
 /* GtkTextHandle handlers */
 static void         gtk_entry_handle_drag_started      (GtkTextHandle         *handle,
@@ -1031,7 +1035,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   /**
    * GtkEntry:caps-lock-warning:
    *
-   * Whether password entries will show a warning when Caps Lock is on.
+   * Whether the entry will show a warning when Caps Lock is on in password mode.
    *
    * Note that the warning is shown using a secondary icon, and thus
    * does not work if you are using the secondary icon position for some
@@ -1042,8 +1046,26 @@ gtk_entry_class_init (GtkEntryClass *class)
   entry_props[PROP_CAPS_LOCK_WARNING] =
       g_param_spec_boolean ("caps-lock-warning",
                             P_("Caps Lock warning"),
-                            P_("Whether password entries will show a warning when Caps Lock is on"),
+                            P_("Whether the entry shows a warning when Caps Lock is on in password mode"),
                             TRUE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkEntry:password-indicator:
+   *
+   * Whether the entry shows an icon to toggle password mode on and off.
+   *
+   * Note that the icon is shown using a secondary icon, and thus
+   * does not work if you are using the secondary icon position for some
+   * other purpose.
+   *
+   * Since: 3.20
+   */
+  entry_props[PROP_PASSWORD_INDICATOR] =
+      g_param_spec_boolean ("password-indicator",
+                            P_("Password indicator"),
+                            P_("Whether the entry shows an icon to toggle password mode"),
+                            FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
@@ -2226,6 +2248,15 @@ gtk_entry_set_property (GObject         *object,
         }
       break;
 
+    case PROP_PASSWORD_INDICATOR:
+      if (priv->password_indicator != g_value_get_boolean (value))
+        {
+          priv->password_indicator = g_value_get_boolean (value);
+          update_password_indicator (entry);
+          g_object_notify_by_pspec (object, pspec);
+        }
+      break;
+
     case PROP_PROGRESS_FRACTION:
       gtk_entry_set_progress_fraction (entry, g_value_get_double (value));
       break;
@@ -2489,6 +2520,10 @@ gtk_entry_get_property (GObject         *object,
       g_value_set_boolean (value, priv->caps_lock_warning);
       break;
 
+    case PROP_PASSWORD_INDICATOR:
+      g_value_set_boolean (value, priv->password_indicator);
+      break;
+
     case PROP_PROGRESS_FRACTION:
       g_value_set_double (value, priv->progress_fraction);
       break;
@@ -2711,6 +2746,8 @@ gtk_entry_init (GtkEntry *entry)
   priv->xalign = 0.0;
   priv->caps_lock_warning = TRUE;
   priv->caps_lock_warning_shown = FALSE;
+  priv->password_indicator = FALSE;
+  priv->password_indicator_connected = FALSE;
   priv->progress_fraction = 0.0;
   priv->progress_pulse_fraction = 0.1;
 
@@ -3144,7 +3181,7 @@ realize_icon_info (GtkWidget            *widget,
                                 GDK_BUTTON3_MOTION_MASK |
                                 GDK_POINTER_MOTION_MASK |
                                 GDK_ENTER_NOTIFY_MASK |
-                            GDK_LEAVE_NOTIFY_MASK);
+                                GDK_LEAVE_NOTIFY_MASK);
   attributes_mask = GDK_WA_X | GDK_WA_Y;
 
   icon_info->window = gdk_window_new (gtk_widget_get_window (widget),
@@ -3402,6 +3439,7 @@ gtk_entry_realize (GtkWidget *widget)
 
   gtk_entry_adjust_scroll (entry);
   gtk_entry_update_primary_selection (entry);
+  update_password_indicator (entry);
 
   /* If the icon positions are already setup, create their windows.
    * Otherwise if they don't exist yet, then construct_icon_info()
@@ -7814,6 +7852,7 @@ gtk_entry_set_visibility (GtkEntry *entry,
     {
       priv->visible = visible;
 
+      update_password_indicator (entry);
       g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_VISIBILITY]);
       gtk_entry_recompute (entry);
     }
@@ -10971,7 +11010,77 @@ gtk_entry_get_placeholder_text (GtkEntry *entry)
   return priv->placeholder_text;
 }
 
-/* Caps Lock warning for password entries */
+/* Caps Lock warning and password indicator */
+
+static void
+password_indicator_show (GtkEntry             *entry,
+                         GtkEntryIconPosition  pos,
+                         GdkEvent             *event,
+                         gpointer              data)
+{
+  GtkEntryPrivate *priv = entry->priv;
+
+  if (pos == GTK_ENTRY_ICON_SECONDARY && priv->password_indicator)
+    gtk_entry_set_visibility (entry, TRUE);
+}
+
+static void
+password_indicator_hide (GtkEntry             *entry,
+                         GtkEntryIconPosition  pos,
+                         GdkEvent             *event,
+                         gpointer              data)
+{
+  GtkEntryPrivate *priv = entry->priv;
+
+  if (pos == GTK_ENTRY_ICON_SECONDARY && priv->password_indicator)
+    gtk_entry_set_visibility (entry, FALSE);
+}
+
+static void
+update_password_indicator (GtkEntry *entry)
+{
+  GtkEntryPrivate *priv = entry->priv;
+
+  if (priv->caps_lock_warning_shown)
+    return;
+
+  if (priv->password_indicator)
+    {
+      if (!priv->password_indicator_connected)
+        {
+          g_signal_connect (entry, "icon-press", G_CALLBACK (password_indicator_show), NULL);
+          g_signal_connect (entry, "icon-release", G_CALLBACK (password_indicator_hide), NULL);
+          priv->password_indicator_connected = TRUE;
+        }
+
+      gtk_entry_set_icon_activatable (entry, GTK_ENTRY_ICON_SECONDARY, TRUE);
+
+      if (gtk_entry_get_display_mode (entry) != DISPLAY_NORMAL)
+        {
+          gtk_entry_set_icon_from_icon_name (entry, GTK_ENTRY_ICON_SECONDARY, "password-invisible");
+          gtk_entry_set_icon_tooltip_text (entry, GTK_ENTRY_ICON_SECONDARY, _("Show text"));
+        }
+      else
+        {
+          gtk_entry_set_icon_from_icon_name (entry, GTK_ENTRY_ICON_SECONDARY, "password-visible");
+          gtk_entry_set_icon_tooltip_text (entry, GTK_ENTRY_ICON_SECONDARY, _("Hide text"));
+        }
+
+    }
+  else
+    {
+      if (priv->password_indicator_connected)
+        {
+          g_signal_handlers_disconnect_by_func (entry, password_indicator_show, NULL);
+          g_signal_handlers_disconnect_by_func (entry, password_indicator_hide, NULL);
+          priv->password_indicator_connected = FALSE;
+        }
+
+      gtk_entry_set_icon_activatable (entry, GTK_ENTRY_ICON_SECONDARY, FALSE);
+      gtk_entry_set_icon_from_icon_name (entry, GTK_ENTRY_ICON_SECONDARY, NULL);
+      gtk_entry_set_icon_tooltip_text (entry, GTK_ENTRY_ICON_SECONDARY, NULL);
+    }
+}
 
 static void
 show_capslock_feedback (GtkEntry    *entry,
@@ -10979,7 +11088,8 @@ show_capslock_feedback (GtkEntry    *entry,
 {
   GtkEntryPrivate *priv = entry->priv;
 
-  if (gtk_entry_get_icon_storage_type (entry, GTK_ENTRY_ICON_SECONDARY) == GTK_IMAGE_EMPTY)
+  if (gtk_entry_get_icon_storage_type (entry, GTK_ENTRY_ICON_SECONDARY) == GTK_IMAGE_EMPTY ||
+      priv->password_indicator)
     {
       gtk_entry_set_icon_from_icon_name (entry, GTK_ENTRY_ICON_SECONDARY, "dialog-warning-symbolic");
       gtk_entry_set_icon_activatable (entry, GTK_ENTRY_ICON_SECONDARY, FALSE);
@@ -10999,8 +11109,8 @@ remove_capslock_feedback (GtkEntry *entry)
 
   if (priv->caps_lock_warning_shown)
     {
-      gtk_entry_set_icon_from_icon_name (entry, GTK_ENTRY_ICON_SECONDARY, NULL);
       priv->caps_lock_warning_shown = FALSE;
+      update_password_indicator (entry);
     } 
 }
 

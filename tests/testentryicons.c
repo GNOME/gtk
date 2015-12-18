@@ -214,13 +214,7 @@ main (int argc, char **argv)
   gtk_grid_attach (GTK_GRID (grid), entry, 1, 3, 1, 1);
   gtk_entry_set_visibility (GTK_ENTRY (entry), FALSE);
 
-  gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
-                                     GTK_ENTRY_ICON_PRIMARY,
-                                     "dialog-password-symbolic");
-
-  gtk_entry_set_icon_activatable (GTK_ENTRY (entry),
-				  GTK_ENTRY_ICON_PRIMARY,
-				  FALSE);
+  g_object_set (entry, "password-indicator", TRUE, NULL);
 
   /* Name - Does not set any icons. */
   label = gtk_label_new ("Name:");
