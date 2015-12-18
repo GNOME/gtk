@@ -12586,10 +12586,12 @@ list_devices (GtkWidget        *widget,
               GdkDeviceType     device_type,
               GList           **result)
 {
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  GList *devices = gdk_device_manager_list_devices (device_manager, device_type);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
+  GList *devices;
   GList *l;
+
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+  devices = gdk_device_manager_list_devices (device_manager, device_type);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   for (l = devices; l; l = l->next)
     {
