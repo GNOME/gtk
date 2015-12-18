@@ -208,8 +208,6 @@ static void gtk_expander_forall (GtkContainer *container,
 
 static void gtk_expander_activate (GtkExpander *expander);
 
-static void get_expander_bounds (GtkExpander  *expander,
-                                 GdkRectangle *rect);
 
 /* GtkBuildable */
 static void gtk_expander_buildable_init           (GtkBuildableIface *iface);
@@ -696,60 +694,6 @@ gtk_expander_unrealize (GtkWidget *widget)
 }
 
 static void
-get_expander_bounds (GtkExpander  *expander,
-                     GdkRectangle *rect)
-{
-  GtkAllocation allocation;
-  GtkWidget *widget;
-  GtkExpanderPrivate *priv;
-  gint border_width;
-  gint expander_size;
-  gint expander_spacing;
-  gboolean ltr;
-
-  widget = GTK_WIDGET (expander);
-  priv = expander->priv;
-
-  gtk_widget_get_allocation (widget, &allocation);
-
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
-
-  gtk_widget_style_get (widget,
-                        "expander-size", &expander_size,
-                        "expander-spacing", &expander_spacing,
-                        NULL);
-
-  ltr = gtk_widget_get_direction (widget) != GTK_TEXT_DIR_RTL;
-
-  rect->x = border_width;
-  rect->y = border_width;
-
-  if (ltr)
-    rect->x += expander_spacing;
-  else
-    rect->x += allocation.width - border_width - 
-               expander_spacing - expander_size;
-
-  if (priv->label_widget && gtk_widget_get_visible (priv->label_widget))
-    {
-      GtkAllocation label_allocation;
-
-      gtk_widget_get_allocation (priv->label_widget, &label_allocation);
-
-      if (expander_size < label_allocation.height)
-        rect->y += (label_allocation.height - expander_size) / 2;
-      else
-        rect->y += expander_spacing;
-    }
-  else
-    {
-      rect->y += expander_spacing;
-    }
-
-  rect->width = rect->height = expander_size;
-}
-
-static void
 gtk_expander_size_allocate (GtkWidget     *widget,
                             GtkAllocation *allocation)
 {
@@ -975,75 +919,7 @@ gtk_expander_render_title (GtkCssGadget *gadget,
 
   gtk_css_gadget_draw (priv->arrow_gadget, cr);
 
-  return FALSE;
-}
-
-static void
-gtk_expander_paint_focus (GtkExpander *expander,
-                          cairo_t     *cr)
-{
-  GtkWidget *widget;
-  GtkExpanderPrivate *priv;
-  GdkRectangle rect;
-  GtkStyleContext *context;
-  gint x, y, width, height;
-  gint border_width;
-  gint expander_size;
-  gint expander_spacing;
-  gboolean ltr;
-  GtkAllocation allocation;
-
-  widget = GTK_WIDGET (expander);
-  priv = expander->priv;
-
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
-  gtk_widget_get_allocation (widget, &allocation);
-
-  gtk_widget_style_get (widget,
-                        "expander-size", &expander_size,
-                        "expander-spacing", &expander_spacing,
-                        NULL);
-
-  ltr = gtk_widget_get_direction (widget) != GTK_TEXT_DIR_RTL;
-
-  width = height = 0;
-
-  if (priv->label_widget)
-    {
-      if (gtk_widget_get_visible (priv->label_widget))
-        {
-          GtkAllocation label_allocation;
-
-          gtk_widget_get_allocation (priv->label_widget, &label_allocation);
-          width  = label_allocation.width;
-          height = label_allocation.height;
-        }
-
-      x = border_width;
-      y = border_width;
-
-      if (ltr)
-        {
-          x += expander_spacing * 2 + expander_size;
-        }
-      else
-        {
-          x += allocation.width - 2 * border_width
-            - expander_spacing * 2 - expander_size - width;
-        }
-    }
-  else
-    {
-      get_expander_bounds (expander, &rect);
-
-      x = rect.x;
-      y = rect.y;
-      width = rect.width;
-      height = rect.height;
-    }
-
-  context = gtk_widget_get_style_context (widget);
-  gtk_render_focus (context, cr, x, y, width, height);
+  return gtk_widget_has_visible_focus (widget);
 }
 
 static gboolean
@@ -1070,9 +946,6 @@ gtk_expander_render (GtkCssGadget *gadget,
   gtk_css_gadget_draw (expander->priv->title_gadget, cr);
 
   GTK_WIDGET_CLASS (gtk_expander_parent_class)->draw (widget, cr);
-
-  if (gtk_widget_has_visible_focus (widget))
-    gtk_expander_paint_focus (expander, cr);
 
   return FALSE;
 }
