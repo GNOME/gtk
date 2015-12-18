@@ -120,6 +120,8 @@
 #include "a11y/gtkexpanderaccessible.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkcsscustomgadgetprivate.h"
+#include "gtkcssnumbervalueprivate.h"
+#include "gtkcssstyleprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkcontainerprivate.h"
 
@@ -420,6 +422,13 @@ gtk_expander_class_init (GtkExpanderClass *klass)
                                                          FALSE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
+  /**
+   * GtkExpander:expander-size:
+   *
+   * The size of the expander arrow.
+   *
+   * Deprecated: 3.20: Use CSS min-width and min-height instead.
+   */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("expander-size",
                                                              P_("Expander Size"),
@@ -427,8 +436,16 @@ gtk_expander_class_init (GtkExpanderClass *klass)
                                                              0,
                                                              G_MAXINT,
                                                              DEFAULT_EXPANDER_SIZE,
-                                                             GTK_PARAM_READABLE));
+                                                             GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
+  /**
+   * GtkExpander:expander-spacing:
+   *
+   * Spaing around the expander arrow.
+   *
+   * Deprecated: 3.20: Use CSS margins instead, the value of this
+   *    style property is ignored.
+   */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("expander-spacing",
                                                              P_("Indicator Spacing"),
@@ -436,7 +453,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
                                                              0,
                                                              G_MAXINT,
                                                              DEFAULT_EXPANDER_SPACING,
-                                                             GTK_PARAM_READABLE));
+                                                             GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   widget_class->activate_signal =
     g_signal_new (I_("activate"),
@@ -774,7 +791,6 @@ gtk_expander_allocate_title (GtkCssGadget        *gadget,
   GtkExpander *expander;
   GtkExpanderPrivate *priv;
   gint arrow_width, arrow_height;
-  gint expander_spacing;
   gint label_height;
   gint label_xoffset;
   GtkAllocation arrow_allocation;
@@ -795,11 +811,7 @@ gtk_expander_allocate_title (GtkCssGadget        *gadget,
                                      NULL, &arrow_height,
                                      NULL, NULL);
 
-  gtk_widget_style_get (widget,
-                        "expander-spacing", &expander_spacing,
-                        NULL);
-
-  label_xoffset = arrow_width + 2 * expander_spacing;
+  label_xoffset = arrow_width;
   if (priv->label_widget && gtk_widget_get_visible (priv->label_widget))
     {
       GtkAllocation label_allocation;
@@ -838,9 +850,9 @@ gtk_expander_allocate_title (GtkCssGadget        *gadget,
     }
 
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-    arrow_allocation.x = allocation->x + allocation->width - expander_spacing - arrow_width;
+    arrow_allocation.x = allocation->x + allocation->width - arrow_width;
   else
-    arrow_allocation.x = allocation->x + expander_spacing;
+    arrow_allocation.x = allocation->x;
   arrow_allocation.y = allocation->y;
   arrow_allocation.width = arrow_width;
   arrow_allocation.height = arrow_height;
@@ -1510,7 +1522,7 @@ gtk_expander_measure_title (GtkCssGadget   *gadget,
   GtkExpander *expander;
   GtkExpanderPrivate *priv;
   gint arrow_width, arrow_height;
-  gint expander_spacing;
+  gint label_min, label_nat;
 
   widget = gtk_css_gadget_get_owner (gadget);
   expander = GTK_EXPANDER (widget);
@@ -1527,50 +1539,33 @@ gtk_expander_measure_title (GtkCssGadget   *gadget,
                                      NULL, &arrow_height,
                                      NULL, NULL);
 
-  gtk_widget_style_get (GTK_WIDGET (widget),
-                        "expander-spacing", &expander_spacing,
-                        NULL);
-
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      *minimum = *natural = arrow_width + 2 * expander_spacing;
-
       if (priv->label_widget && gtk_widget_get_visible (priv->label_widget))
-        {
-          gint label_min, label_nat;
+        gtk_widget_get_preferred_width (priv->label_widget, &label_min, &label_nat);
+      else
+        label_min = label_nat = 0;
 
-          gtk_widget_get_preferred_width (priv->label_widget, &label_min, &label_nat);
-
-          *minimum += label_min;
-          *natural += label_nat;
-        }
+      *minimum = arrow_width + label_min;
+      *natural = arrow_height + label_nat;
     }
   else
     {
-      gint label_xpad;
-
-      label_xpad = arrow_width + 2 * expander_spacing;
-
-      *minimum = *natural = 0;
-
       if (priv->label_widget && gtk_widget_get_visible (priv->label_widget))
         {
-          gint label_min, label_nat;
-
           if (for_size > 0)
             gtk_widget_get_preferred_height_for_width (priv->label_widget,
-                                                       MAX (for_size - label_xpad, 1),
+                                                       MAX (for_size - arrow_width, 1),
                                                        &label_min, &label_nat);
           else
             gtk_widget_get_preferred_height (priv->label_widget,
                                              &label_min, &label_nat);
-
-          *minimum += label_min;
-          *natural += label_nat;
         }
+      else
+        label_min = label_nat = 0;
 
-      *minimum = MAX (*minimum, arrow_height + 2 * expander_spacing);
-      *natural = MAX (*natural, *minimum);
+      *minimum = MAX (arrow_height, label_min);
+      *natural = MAX (arrow_height, label_nat);
     }
 }
 
@@ -1585,13 +1580,30 @@ gtk_expander_measure_arrow (GtkCssGadget   *gadget,
                             gpointer        data)
 {
   GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
-  gint expander_size;
+  GtkCssStyle *style;
+  guint property;
+  gdouble min_size;
 
-  gtk_widget_style_get (GTK_WIDGET (widget),
-                        "expander-size", &expander_size,
-                        NULL);
+  style = gtk_css_gadget_get_style (gadget);
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    property = GTK_CSS_PROPERTY_MIN_WIDTH;
+  else
+    property = GTK_CSS_PROPERTY_MIN_HEIGHT;
 
-  *minimum = *natural = expander_size;
+  min_size = _gtk_css_number_value_get (gtk_css_style_get_value (style, property), 100.0);
+
+  if (min_size > 0.0)
+    *minimum = *natural = 0;
+  else
+    {
+      gint expander_size;
+
+      gtk_widget_style_get (GTK_WIDGET (widget),
+                            "expander-size", &expander_size,
+                            NULL);
+
+      *minimum = *natural = expander_size;
+    }
 }
 
 /**
