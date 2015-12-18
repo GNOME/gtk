@@ -20,6 +20,7 @@
 #define __GTK_BOX_PRIVATE_H__
 
 #include "gtkbox.h"
+#include "gtkcssgadgetprivate.h"
 
 G_BEGIN_DECLS
 
@@ -29,6 +30,8 @@ gboolean    _gtk_box_get_spacing_set    (GtkBox         *box);
 void        _gtk_box_set_spacing_set    (GtkBox         *box,
                                          gboolean        spacing_set);
 GList      *_gtk_box_get_children       (GtkBox         *box);
+
+GtkCssGadget *gtk_box_get_gadget (GtkBox *box);
 
 
 G_END_DECLS
