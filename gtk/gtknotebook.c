@@ -6871,8 +6871,6 @@ gtk_notebook_real_switch_page (GtkNotebook     *notebook,
           gtk_widget_grab_focus (GTK_WIDGET (notebook));
     }
 
-  gtk_notebook_pages_allocate (notebook);
-
   gtk_widget_queue_resize (GTK_WIDGET (notebook));
   g_object_notify_by_pspec (G_OBJECT (notebook), properties[PROP_PAGE]);
 }
