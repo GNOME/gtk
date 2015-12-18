@@ -2857,17 +2857,22 @@ check:backdrop:checked:insensitive {
 row:selected check:backdrop:checked:insensitive {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-checked-backdrop-insensitive.png"), url("assets/selected-checkbox-checked-backdrop-insensitive@2.png")); }
 
-menu menuitem.check {
+menu menuitem check {
+  color: #666a6b;
   -gtk-icon-source: -gtk-icontheme("checkbox-symbolic");
-  color: #787c7d;
   -gtk-icon-shadow: none; }
-  menu menuitem.check:active, menu menuitem.check:checked {
-    -gtk-icon-source: -gtk-icontheme("checkbox-checked-symbolic"); }
-  menu menuitem.check:inconsistent {
-    -gtk-icon-source: -gtk-icontheme("checkbox-mixed-symbolic"); }
-  menu menuitem.check:hover {
+  menu menuitem check:hover, menu menuitem check:insensitive {
+    -gtk-icon-source: -gtk-icontheme("checkbox-symbolic");
+    -gtk-icon-shadow: none; }
+  menu menuitem check:checked, menu menuitem check:checked:hover, menu menuitem check:checked:insensitive {
+    -gtk-icon-source: -gtk-icontheme("checkbox-checked-symbolic");
+    -gtk-icon-shadow: none; }
+  menu menuitem check:inconsistent, menu menuitem check:inconsistent:hover, menu menuitem check:inconsistent:insensitive {
+    -gtk-icon-source: -gtk-icontheme("checkbox-mixed-symbolic");
+    -gtk-icon-shadow: none; }
+  menu menuitem check:hover {
     color: #ffffff; }
-  menu menuitem.check:insensitive {
+  menu menuitem check:insensitive {
     color: #babbbb; }
 
 radio {
@@ -3086,17 +3091,22 @@ radio:backdrop:checked:insensitive {
 row:selected radio:backdrop:checked:insensitive {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-checked-backdrop-insensitive.png"), url("assets/selected-radio-checked-backdrop-insensitive@2.png")); }
 
-menu menuitem.radio {
+menu menuitem radio {
+  color: #666a6b;
   -gtk-icon-source: -gtk-icontheme("radio-symbolic");
-  color: #787c7d;
   -gtk-icon-shadow: none; }
-  menu menuitem.radio:active, menu menuitem.radio:checked {
-    -gtk-icon-source: -gtk-icontheme("radio-checked-symbolic"); }
-  menu menuitem.radio:inconsistent {
-    -gtk-icon-source: -gtk-icontheme("radio-mixed-symbolic"); }
-  menu menuitem.radio:hover {
+  menu menuitem radio:hover, menu menuitem radio:insensitive {
+    -gtk-icon-source: -gtk-icontheme("radio-symbolic");
+    -gtk-icon-shadow: none; }
+  menu menuitem radio:checked, menu menuitem radio:checked:hover, menu menuitem radio:checked:insensitive {
+    -gtk-icon-source: -gtk-icontheme("radio-checked-symbolic");
+    -gtk-icon-shadow: none; }
+  menu menuitem radio:inconsistent, menu menuitem radio:inconsistent:hover, menu menuitem radio:inconsistent:insensitive {
+    -gtk-icon-source: -gtk-icontheme("radio-mixed-symbolic");
+    -gtk-icon-shadow: none; }
+  menu menuitem radio:hover {
     color: #ffffff; }
-  menu menuitem.radio:insensitive {
+  menu menuitem radio:insensitive {
     color: #babbbb; }
 
 .view.check, .view.radio,

@@ -2092,15 +2092,21 @@ switch {
   }
 
   //menu
-  menu menuitem.#{$w} {
+  menu menuitem #{$w} {
+    color: mix($fg_color, $bg_color, 70%);
     -gtk-icon-source: -gtk-icontheme('#{$a}-symbolic');
-    color: mix($fg_color, $bg_color, 60%);
     -gtk-icon-shadow: none;
-    &:active, &:checked {
-      -gtk-icon-source: -gtk-icontheme('#{$a}-checked-symbolic');
+    &:hover, &:insensitive {
+      -gtk-icon-source: -gtk-icontheme('#{$a}-symbolic');
+      -gtk-icon-shadow: none;
     }
-    &:inconsistent {
+    &:checked, &:checked:hover, &:checked:insensitive {
+      -gtk-icon-source: -gtk-icontheme('#{$a}-checked-symbolic');
+      -gtk-icon-shadow: none;
+    }
+    &:inconsistent, &:inconsistent:hover, &:inconsistent:insensitive {
       -gtk-icon-source: -gtk-icontheme('#{$a}-mixed-symbolic');
+      -gtk-icon-shadow: none;
     }
     &:hover { color: $selected_fg_color; }
     &:insensitive { color: mix($insensitive_fg_color, $bg_color, 50%); }
