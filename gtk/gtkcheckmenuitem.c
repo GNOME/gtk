@@ -24,6 +24,7 @@
 
 #include "config.h"
 #include "gtkcheckmenuitem.h"
+#include "gtkcsscustomgadgetprivate.h"
 #include "gtkmenuitemprivate.h"
 #include "gtkaccellabel.h"
 #include "deprecated/gtkactivatable.h"
@@ -67,6 +68,7 @@
 struct _GtkCheckMenuItemPrivate
 {
   GtkCssNode *indicator_node;
+  GtkCssGadget *indicator_gadget;
 
   guint active             : 1;
   guint draw_as_radio      : 1;
@@ -123,6 +125,118 @@ G_DEFINE_TYPE_WITH_CODE (GtkCheckMenuItem, gtk_check_menu_item, GTK_TYPE_MENU_IT
                                                 gtk_check_menu_item_activatable_interface_init))
 G_GNUC_END_IGNORE_DEPRECATIONS;
 
+static gboolean
+gtk_check_menu_item_render_indicator (GtkCssGadget *gadget,
+                                      cairo_t      *cr,
+                                      int           x,
+                                      int           y,
+                                      int           width,
+                                      int           height,
+                                      gpointer      data)
+{
+  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
+  GtkCheckMenuItem *check_menu_item = GTK_CHECK_MENU_ITEM (widget);
+  GtkCheckMenuItemPrivate *priv = check_menu_item->priv;
+  GtkStyleContext *context;
+
+  if (!gtk_widget_is_drawable (widget))
+    return FALSE;
+
+  context = gtk_widget_get_style_context (widget);
+  gtk_style_context_save_to_node (context, priv->indicator_node);
+
+  if (priv->draw_as_radio)
+    gtk_render_option (context, cr, x, y,
+                       width, height);
+  else
+    gtk_render_check (context, cr, x, y,
+                      width, height);
+
+  gtk_style_context_restore (context);
+
+  return FALSE;
+}
+
+static void
+gtk_check_menu_item_measure_indicator (GtkCssGadget   *gadget,
+                                       GtkOrientation  orientation,
+                                       int             size,
+                                       int            *minimum,
+                                       int            *natural,
+                                       int            *minimum_baseline,
+                                       int            *natural_baseline,
+                                       gpointer        data)
+{
+  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
+  guint indicator_size;
+
+  gtk_widget_style_get (widget,
+                        "indicator-size", &indicator_size,
+                        NULL);
+
+  *minimum = *natural = indicator_size;
+}
+
+static void
+gtk_check_menu_item_size_allocate (GtkWidget     *widget,
+                                   GtkAllocation *allocation)
+{
+  GtkAllocation clip, widget_clip;
+  GtkAllocation content_alloc, indicator_alloc;
+  GtkCssGadget *menu_item_gadget;
+  GtkCheckMenuItem *check_menu_item = GTK_CHECK_MENU_ITEM (widget);
+  GtkCheckMenuItemPrivate *priv = check_menu_item->priv;
+  gint content_baseline, toggle_size;
+
+  GTK_WIDGET_CLASS (gtk_check_menu_item_parent_class)->size_allocate
+    (widget, allocation);
+
+  menu_item_gadget = _gtk_menu_item_get_gadget (GTK_MENU_ITEM (widget));
+  gtk_css_gadget_get_content_allocation (menu_item_gadget,
+                                         &content_alloc, &content_baseline);
+
+  gtk_css_gadget_get_preferred_size (priv->indicator_gadget,
+                                     GTK_ORIENTATION_HORIZONTAL,
+                                     -1,
+                                     &indicator_alloc.width, NULL,
+                                     NULL, NULL);
+  gtk_css_gadget_get_preferred_size (priv->indicator_gadget,
+                                     GTK_ORIENTATION_VERTICAL,
+                                     -1,
+                                     &indicator_alloc.height, NULL,
+                                     NULL, NULL);
+  toggle_size = GTK_MENU_ITEM (check_menu_item)->priv->toggle_size;
+
+  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
+    indicator_alloc.x = content_alloc.x +
+      (toggle_size - indicator_alloc.width) / 2;
+  else
+    indicator_alloc.x = content_alloc.x + content_alloc.width - toggle_size +
+      (toggle_size - indicator_alloc.width) / 2;
+
+  indicator_alloc.y = content_alloc.y +
+    (content_alloc.height - indicator_alloc.height) / 2;
+
+  gtk_css_gadget_allocate (check_menu_item->priv->indicator_gadget,
+                           &indicator_alloc,
+                           content_baseline,
+                           &clip);
+
+  gtk_widget_get_clip (widget, &widget_clip);
+  gdk_rectangle_union (&widget_clip, &clip, &widget_clip);
+  gtk_widget_set_clip (widget, &widget_clip);
+}
+
+static void
+gtk_check_menu_item_finalize (GObject *object)
+{
+  GtkCheckMenuItemPrivate *priv = GTK_CHECK_MENU_ITEM (object)->priv;
+
+  g_clear_object (&priv->indicator_gadget);
+
+  G_OBJECT_CLASS (gtk_check_menu_item_parent_class)->finalize (object);
+}
+
 static void
 gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
 {
@@ -136,7 +250,9 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
   
   gobject_class->set_property = gtk_check_menu_item_set_property;
   gobject_class->get_property = gtk_check_menu_item_get_property;
+  gobject_class->finalize = gtk_check_menu_item_finalize;
 
+  widget_class->size_allocate = gtk_check_menu_item_size_allocate;
   widget_class->state_flags_changed = gtk_check_menu_item_state_flags_changed;
   widget_class->direction_changed = gtk_check_menu_item_direction_changed;
 
@@ -378,17 +494,16 @@ static void
 gtk_check_menu_item_toggle_size_request (GtkMenuItem *menu_item,
                                          gint        *requisition)
 {
-  guint toggle_spacing;
-  guint indicator_size;
-  
-  g_return_if_fail (GTK_IS_CHECK_MENU_ITEM (menu_item));
-  
-  gtk_widget_style_get (GTK_WIDGET (menu_item),
-                        "toggle-spacing", &toggle_spacing,
-                        "indicator-size", &indicator_size,
-                        NULL);
+  GtkCheckMenuItem *check_menu_item;
 
-  *requisition = indicator_size + toggle_spacing;
+  g_return_if_fail (GTK_IS_CHECK_MENU_ITEM (menu_item));
+
+  check_menu_item = GTK_CHECK_MENU_ITEM (menu_item);
+  gtk_css_gadget_get_preferred_size (check_menu_item->priv->indicator_gadget,
+                                     GTK_ORIENTATION_HORIZONTAL,
+                                     -1,
+                                     requisition, NULL,
+                                     NULL, NULL);
 }
 
 /**
@@ -551,6 +666,14 @@ gtk_check_menu_item_init (GtkCheckMenuItem *check_menu_item)
   gtk_css_node_set_state (priv->indicator_node, gtk_css_node_get_state (widget_node));
   g_signal_connect_object (priv->indicator_node, "style-changed", G_CALLBACK (node_style_changed_cb), check_menu_item, 0);
   g_object_unref (priv->indicator_node);
+
+  priv->indicator_gadget =
+    gtk_css_custom_gadget_new_for_node (priv->indicator_node,
+                                        GTK_WIDGET (check_menu_item),
+                                        gtk_check_menu_item_measure_indicator,
+                                        NULL,
+                                        gtk_check_menu_item_render_indicator,
+                                        NULL, NULL);
 }
 
 static gint
@@ -635,65 +758,8 @@ static void
 gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
                                          cairo_t          *cr)
 {
-  GtkCheckMenuItemPrivate *priv = check_menu_item->priv;
-  GtkWidget *widget;
-  GtkAllocation allocation;
-  GtkStyleContext *context;
-  guint border_width;
-  guint offset;
-  guint toggle_size;
-  guint toggle_spacing;
-  guint indicator_size;
-  gint x, y;
-  GtkStateFlags state;
-  GtkBorder padding;
-
-  widget = GTK_WIDGET (check_menu_item);
-
-  if (!gtk_widget_is_drawable (widget))
-    return;
-
-  context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
-  gtk_style_context_get_padding (context, state, &padding);
-
-  gtk_widget_get_allocation (widget, &allocation);
-
-  gtk_widget_style_get (widget,
-                        "toggle-spacing", &toggle_spacing,
-                        "indicator-size", &indicator_size,
-                        NULL);
-
-  toggle_size = GTK_MENU_ITEM (check_menu_item)->priv->toggle_size;
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
-  offset = border_width + padding.left + 2;
-
-  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
-    {
-      x = offset +
-        (toggle_size - toggle_spacing - indicator_size) / 2;
-    }
-  else
-    {
-      x = allocation.width -
-        offset - toggle_size + toggle_spacing +
-        (toggle_size - toggle_spacing - indicator_size) / 2;
-    }
-
-  y = (allocation.height - indicator_size) / 2;
-
-  gtk_style_context_save_to_node (context, priv->indicator_node);
-
-  if (priv->draw_as_radio)
-    gtk_render_option (context, cr, x, y,
-                       indicator_size, indicator_size);
-  else
-    gtk_render_check (context, cr, x, y,
-                      indicator_size, indicator_size);
-
-  gtk_style_context_restore (context);
+  gtk_css_gadget_draw (check_menu_item->priv->indicator_gadget, cr);
 }
-
 
 static void
 gtk_check_menu_item_get_property (GObject     *object,

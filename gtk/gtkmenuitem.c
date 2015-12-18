@@ -1035,6 +1035,12 @@ gtk_menu_item_init (GtkMenuItem *menu_item)
                                                      NULL, NULL);
 }
 
+GtkCssGadget *
+_gtk_menu_item_get_gadget (GtkMenuItem *menu_item)
+{
+  return menu_item->priv->gadget;
+}
+
 /**
  * gtk_menu_item_new:
  *

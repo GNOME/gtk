@@ -2096,6 +2096,8 @@ switch {
     color: mix($fg_color, $bg_color, 70%);
     -gtk-icon-source: -gtk-icontheme('#{$a}-symbolic');
     -gtk-icon-shadow: none;
+    &:dir(ltr) { margin-right: 7px; }
+    &:dir(rtl) { margin-left: 7px; }
     &:hover, &:insensitive {
       -gtk-icon-source: -gtk-icontheme('#{$a}-symbolic');
       -gtk-icon-shadow: none;
