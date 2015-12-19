@@ -782,7 +782,6 @@ struct _GtkFlowBoxPrivate {
   guint             row_spacing;
   guint             column_spacing;
 
-  GtkFlowBoxChild  *prelight_child;
   GtkFlowBoxChild  *cursor_child;
   GtkFlowBoxChild  *selected_child;
 
@@ -898,19 +897,6 @@ gtk_flow_box_find_child_at_pos (GtkFlowBox *box,
     }
 
   return NULL;
-}
-
-static void
-gtk_flow_box_update_prelight (GtkFlowBox      *box,
-                              GtkFlowBoxChild *child)
-{
-  GtkFlowBoxPrivate *priv = BOX_PRIV (box);
-
-  if (child != priv->prelight_child)
-    {
-      priv->prelight_child = child;
-      gtk_widget_queue_draw (GTK_WIDGET (box));
-    }
 }
 
 static void
@@ -2723,7 +2709,6 @@ autoscroll_cb (GtkWidget     *widget,
 
       child = gtk_flow_box_find_child_at_pos (box, x, y);
 
-      gtk_flow_box_update_prelight (box, child);
       gtk_flow_box_update_active (box, child);
 
       if (child != NULL)
@@ -2826,7 +2811,6 @@ gtk_flow_box_enter_notify_event (GtkWidget        *widget,
     return FALSE;
 
   child = gtk_flow_box_find_child_at_pos (box, event->x, event->y);
-  gtk_flow_box_update_prelight (box, child);
   gtk_flow_box_update_active (box, child);
 
   return FALSE;
@@ -2847,7 +2831,6 @@ gtk_flow_box_leave_notify_event (GtkWidget        *widget,
   else
     child = gtk_flow_box_find_child_at_pos (box, event->x, event->y);
 
-  gtk_flow_box_update_prelight (box, child);
   gtk_flow_box_update_active (box, child);
 
   return FALSE;
@@ -2920,7 +2903,6 @@ gtk_flow_box_motion_notify_event (GtkWidget      *widget,
     }
 
   child = gtk_flow_box_find_child_at_pos (box, relative_x, relative_y);
-  gtk_flow_box_update_prelight (box, child);
   gtk_flow_box_update_active (box, child);
 
   return GTK_WIDGET_CLASS (gtk_flow_box_parent_class)->motion_notify_event (widget, event);
@@ -3158,8 +3140,6 @@ gtk_flow_box_remove (GtkContainer *container,
   was_visible = child_is_visible (GTK_WIDGET (child));
   was_selected = CHILD_PRIV (child)->selected;
 
-  if (child == priv->prelight_child)
-    priv->prelight_child = NULL;
   if (child == priv->active_child)
     priv->active_child = NULL;
   if (child == priv->selected_child)
