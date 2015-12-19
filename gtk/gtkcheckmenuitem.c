@@ -158,26 +158,6 @@ gtk_check_menu_item_render_indicator (GtkCssGadget *gadget,
 }
 
 static void
-gtk_check_menu_item_measure_indicator (GtkCssGadget   *gadget,
-                                       GtkOrientation  orientation,
-                                       int             size,
-                                       int            *minimum,
-                                       int            *natural,
-                                       int            *minimum_baseline,
-                                       int            *natural_baseline,
-                                       gpointer        data)
-{
-  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
-  guint indicator_size;
-
-  gtk_widget_style_get (widget,
-                        "indicator-size", &indicator_size,
-                        NULL);
-
-  *minimum = *natural = indicator_size;
-}
-
-static void
 gtk_check_menu_item_size_allocate (GtkWidget     *widget,
                                    GtkAllocation *allocation)
 {
@@ -279,7 +259,15 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
                                                          P_("Whether the menu item looks like a radio menu item"),
                                                          FALSE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  
+
+  /**
+   * GtkCheckMenuItem:indicator-size:
+   *
+   * The size of the check or radio indicator.
+   *
+   * Deprecated: 3.20: Use the standard CSS property min-width on the check or
+   *   radio nodes; the value of this style property is ignored.
+   */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("indicator-size",
                                                              P_("Indicator Size"),
@@ -287,7 +275,7 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
                                                              0,
                                                              G_MAXINT,
                                                              INDICATOR_SIZE,
-                                                             GTK_PARAM_READABLE));
+                                                             GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   widget_class->draw = gtk_check_menu_item_draw;
 
@@ -670,7 +658,7 @@ gtk_check_menu_item_init (GtkCheckMenuItem *check_menu_item)
   priv->indicator_gadget =
     gtk_css_custom_gadget_new_for_node (priv->indicator_node,
                                         GTK_WIDGET (check_menu_item),
-                                        gtk_check_menu_item_measure_indicator,
+                                        NULL,
                                         NULL,
                                         gtk_check_menu_item_render_indicator,
                                         NULL, NULL);

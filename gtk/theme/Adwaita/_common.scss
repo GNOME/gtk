@@ -10,8 +10,6 @@ $asset_suffix: if($variant=='dark', '-dark', '');
   -GtkToolButton-icon-spacing: 4;
   -GtkTextView-error-underline-color: $error_color;
 
-  -GtkCheckMenuItem-indicator-size: 16;
-
   // The size for scrollbars. The slider is 2px smaller, but we keep it
   // up so that the whole area is sensitive to button presses for the
   // slider. The stepper button is larger in both directions, the slider
@@ -1544,6 +1542,8 @@ menuitem {
   & accelerator { color: gtkalpha(currentColor,0.55); }
   & check,
   & radio {
+    min-height: 16px;
+    min-width: 16px;
     &:dir(ltr) { margin-right: 7px; }
     &:dir(rtl) { margin-left: 7px; }
   }

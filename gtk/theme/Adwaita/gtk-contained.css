@@ -2,7 +2,6 @@
   padding: 0;
   -GtkToolButton-icon-spacing: 4;
   -GtkTextView-error-underline-color: #cc0000;
-  -GtkCheckMenuItem-indicator-size: 16;
   -GtkScrolledWindow-scrollbar-spacing: 0;
   -GtkScrolledWindow-scrollbars-within-bevel: 1;
   -GtkToolItemGroup-expander-size: 11;
@@ -2160,10 +2159,13 @@ menu,
 
 menuitem accelerator {
   color: alpha(currentColor,0.55); }
-menuitem check:dir(ltr), menuitem radio:dir(ltr) {
-  margin-right: 7px; }
-menuitem check:dir(rtl), menuitem radio:dir(rtl) {
-  margin-left: 7px; }
+menuitem check, menuitem radio {
+  min-height: 16px;
+  min-width: 16px; }
+  menuitem check:dir(ltr), menuitem radio:dir(ltr) {
+    margin-right: 7px; }
+  menuitem check:dir(rtl), menuitem radio:dir(rtl) {
+    margin-left: 7px; }
 
 /***************
  * Popovers   *
