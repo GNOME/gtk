@@ -4800,8 +4800,7 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
                                    g_list_find (priv->children, page));
 
   /* child visible will be turned on by switch_page below */
-  if (priv->cur_page != page)
-    gtk_widget_set_child_visible (child, FALSE);
+  gtk_widget_set_child_visible (child, FALSE);
 
   gtk_widget_set_parent (child, GTK_WIDGET (notebook));
   if (tab_label)
