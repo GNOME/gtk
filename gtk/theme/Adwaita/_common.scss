@@ -2514,9 +2514,12 @@ paper {
   &:backdrop { border-color: $backdrop_borders_color; }
 }
 
-actionbar frame {
-  padding: 6px;
+actionbar frame border {
   border-width: 1px 0 0;
+}
+
+actionbar box {
+  padding: 6px;
 }
 
 placessidebar,

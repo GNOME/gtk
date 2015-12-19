@@ -3145,8 +3145,10 @@ checkbutton.text-button, radiobutton.text-button {
     checkbutton.text-button:insensitive:backdrop, checkbutton.text-button:insensitive:active:backdrop, checkbutton.text-button:insensitive:inconsistent:backdrop, radiobutton.text-button:insensitive:backdrop, radiobutton.text-button:insensitive:active:backdrop, radiobutton.text-button:insensitive:inconsistent:backdrop {
       color: #c3c3c0; }
 
+radiobutton radio,
 checkbutton check {
   margin: 0 2px 0 2px; }
+  radiobutton radio:only-child,
   checkbutton check:only-child {
     margin: 0; }
 
@@ -3666,9 +3668,11 @@ paper {
   paper:backdrop {
     border-color: #a5a5a1; }
 
-actionbar frame {
-  padding: 6px;
+actionbar frame border {
   border-width: 1px 0 0; }
+
+actionbar box {
+  padding: 6px; }
 
 placessidebar viewport.frame,
 scrolledwindow viewport.frame {
