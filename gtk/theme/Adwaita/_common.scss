@@ -1513,10 +1513,12 @@ menu,
     }
     //submenu indicators
     & arrow {
-      -gtk-icon-source: -gtk-icontheme('pan-end-symbolic');
-      margin-left: 10px;
       min-height: 16px;
       min-width: 16px;
+    }
+    & arrow:dir(ltr) {
+      -gtk-icon-source: -gtk-icontheme('pan-end-symbolic');
+      margin-left: 10px;
     }
     & arrow:dir(rtl) {
       -gtk-icon-source:-gtk-icontheme('pan-end-symbolic-rtl');

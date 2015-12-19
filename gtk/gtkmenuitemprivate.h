@@ -43,7 +43,6 @@ struct _GtkMenuItemPrivate
 
   GtkCssGadget *gadget;
   GtkCssGadget *arrow_gadget;
-  GtkCssNode *arrow_node;
 
   guint submenu_placement      : 1;
   guint submenu_direction      : 1;

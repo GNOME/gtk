@@ -27,6 +27,7 @@
 #include <string.h>
 
 #include "gtkaccellabel.h"
+#include "gtkbuiltiniconprivate.h"
 #include "gtkcontainerprivate.h"
 #include "gtkcsscustomgadgetprivate.h"
 #include "gtkmain.h"
@@ -275,38 +276,6 @@ gtk_menu_item_actionable_interface_init (GtkActionableInterface *iface)
   iface->get_action_name = gtk_menu_item_get_action_name;
   iface->set_action_target_value = gtk_menu_item_set_action_target_value;
   iface->get_action_target_value = gtk_menu_item_get_action_target_value;
-}
-
-static gboolean
-gtk_menu_item_render_arrow (GtkCssGadget *gadget,
-                            cairo_t      *cr,
-                            int           x,
-                            int           y,
-                            int           width,
-                            int           height,
-                            gpointer      data)
-{
-  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
-  GtkMenuItem *menu_item = GTK_MENU_ITEM (widget);
-  GtkMenuItemPrivate *priv = menu_item->priv;
-  GtkStyleContext *context;
-  GtkTextDirection direction;
-  gdouble angle;
-
-  context = gtk_widget_get_style_context (widget);
-  gtk_style_context_save_to_node (context, priv->arrow_node);
-  direction = gtk_widget_get_direction (widget);
-
-  if (direction == GTK_TEXT_DIR_LTR)
-    angle = G_PI / 2;
-  else
-    angle = (3 * G_PI) / 2;
-
-  gtk_render_arrow (context, cr, angle, x, y, width);
-
-  gtk_style_context_restore (context);
-
-  return FALSE;
 }
 
 static gboolean
@@ -1248,13 +1217,6 @@ gtk_menu_item_detacher (GtkWidget *widget,
   g_return_if_fail (priv->submenu == (GtkWidget*) menu);
 
   priv->submenu = NULL;
-
-  if (priv->arrow_node)
-    {
-      gtk_css_node_set_parent (priv->arrow_node, NULL);
-      priv->arrow_node = NULL;
-    }
-
   g_clear_object (&priv->arrow_gadget);
 }
 
@@ -1532,44 +1494,36 @@ gtk_menu_item_set_use_action_appearance (GtkMenuItem *menu_item,
 }
 
 static void
-node_style_changed_cb (GtkCssNode        *node,
-                       GtkCssStyleChange *change,
-                       GtkWidget         *widget)
-{
-  if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_SIZE | GTK_CSS_AFFECTS_CLIP))
-    gtk_widget_queue_resize (widget);
-  else
-    gtk_widget_queue_draw (widget);
-}
-
-static void
 update_node_classes (GtkMenuItem *menu_item)
 {
   GtkMenuItemPrivate *priv = menu_item->priv;
-  GtkCssNode *widget_node, *node;
+  GtkCssNode *arrow_node, *widget_node, *node;
 
-  if (!priv->arrow_node)
+  if (!priv->arrow_gadget)
     return;
 
+  arrow_node = gtk_css_gadget_get_node (priv->arrow_gadget);
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (menu_item));
+
+  gtk_css_node_set_state (arrow_node, gtk_css_node_get_state (widget_node));
 
   if (gtk_widget_get_direction (GTK_WIDGET (menu_item)) == GTK_TEXT_DIR_RTL)
     {
-      gtk_css_node_add_class (priv->arrow_node, g_quark_from_static_string (GTK_STYLE_CLASS_LEFT));
-      gtk_css_node_remove_class (priv->arrow_node, g_quark_from_static_string (GTK_STYLE_CLASS_RIGHT));
+      gtk_css_node_add_class (arrow_node, g_quark_from_static_string (GTK_STYLE_CLASS_LEFT));
+      gtk_css_node_remove_class (arrow_node, g_quark_from_static_string (GTK_STYLE_CLASS_RIGHT));
 
       node = gtk_css_node_get_first_child (widget_node);
-      if (node != priv->arrow_node)
-        gtk_css_node_insert_before (widget_node, priv->arrow_node, node);
+      if (node != arrow_node)
+        gtk_css_node_insert_before (widget_node, arrow_node, node);
     }
   else
     {
-      gtk_css_node_remove_class (priv->arrow_node, g_quark_from_static_string (GTK_STYLE_CLASS_LEFT));
-      gtk_css_node_add_class (priv->arrow_node, g_quark_from_static_string (GTK_STYLE_CLASS_RIGHT));
+      gtk_css_node_remove_class (arrow_node, g_quark_from_static_string (GTK_STYLE_CLASS_LEFT));
+      gtk_css_node_add_class (arrow_node, g_quark_from_static_string (GTK_STYLE_CLASS_RIGHT));
 
       node = gtk_css_node_get_last_child (widget_node);
-      if (node != priv->arrow_node)
-        gtk_css_node_insert_after (widget_node, priv->arrow_node, node);
+      if (node != arrow_node)
+        gtk_css_node_insert_after (widget_node, arrow_node, node);
     }
 }
 
@@ -1608,26 +1562,11 @@ gtk_menu_item_set_submenu (GtkMenuItem *menu_item,
 
           if (!GTK_IS_MENU_BAR (gtk_widget_get_parent (widget)))
             {
-              GtkCssNode *widget_node;
-
-              widget_node = gtk_widget_get_css_node (widget);
-              priv->arrow_node = gtk_css_node_new ();
-              gtk_css_node_set_name (priv->arrow_node, I_("arrow"));
-              gtk_css_node_set_parent (priv->arrow_node, widget_node);
-              gtk_css_node_set_state (priv->arrow_node, gtk_css_node_get_state (widget_node));
-              g_signal_connect_object (priv->arrow_node, "style-changed", G_CALLBACK (node_style_changed_cb), menu_item, 0);
-
-              priv->arrow_gadget =
-                gtk_css_custom_gadget_new_for_node (priv->arrow_node,
-                                                    widget,
-                                                    NULL,
-                                                    NULL,
-                                                    gtk_menu_item_render_arrow,
-                                                    NULL, NULL);
-
+              priv->arrow_gadget = gtk_builtin_icon_new ("arrow",
+                                                         widget,
+                                                         priv->gadget,
+                                                         NULL);
               update_node_classes (menu_item);
-
-              g_object_unref (priv->arrow_node);
             }
         }
 

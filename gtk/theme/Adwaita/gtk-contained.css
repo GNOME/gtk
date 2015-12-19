@@ -2130,10 +2130,12 @@ menu,
       background-color: transparent; }
     menu menuitem arrow,
     .menu menuitem arrow {
-      -gtk-icon-source: -gtk-icontheme("pan-end-symbolic");
-      margin-left: 10px;
       min-height: 16px;
       min-width: 16px; }
+    menu menuitem arrow:dir(ltr),
+    .menu menuitem arrow:dir(ltr) {
+      -gtk-icon-source: -gtk-icontheme("pan-end-symbolic");
+      margin-left: 10px; }
     menu menuitem arrow:dir(rtl),
     .menu menuitem arrow:dir(rtl) {
       -gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl");
