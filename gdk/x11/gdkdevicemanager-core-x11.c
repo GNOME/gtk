@@ -22,6 +22,7 @@
 #include "gdkx11device-core.h"
 
 #include "gdkdeviceprivate.h"
+#include "gdkseatdefaultprivate.h"
 #include "gdkdisplayprivate.h"
 #include "gdkeventtranslator.h"
 #include "gdkprivate-x11.h"
@@ -129,6 +130,18 @@ gdk_x11_device_manager_core_constructed (GObject *object)
 
   _gdk_device_set_associated_device (device_manager->core_pointer, device_manager->core_keyboard);
   _gdk_device_set_associated_device (device_manager->core_keyboard, device_manager->core_pointer);
+
+  /* We expect subclasses to handle their own seats */
+  if (G_OBJECT_TYPE (object) == GDK_TYPE_X11_DEVICE_MANAGER_CORE)
+    {
+      GdkSeat *seat;
+
+      seat = gdk_seat_default_new_for_master_pair (device_manager->core_pointer,
+                                                   device_manager->core_keyboard);
+
+      gdk_display_add_seat (display, seat);
+      g_object_unref (seat);
+  }
 }
 
 static void
