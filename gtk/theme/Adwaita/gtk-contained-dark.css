@@ -1241,6 +1241,13 @@ modelbutton.flat,
   .menuitem.button.flat:hover {
     background-color: #4b5150; }
 
+modelbutton arrow {
+  background: none; }
+  modelbutton arrow.left {
+    -gtk-icon-source: -gtk-icontheme("pan-start-symbolic"); }
+  modelbutton arrow.right {
+    -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
+
 button.color, headerbar button.color.titlebutton,
 .titlebar button.color.titlebutton {
   padding: 5px; }

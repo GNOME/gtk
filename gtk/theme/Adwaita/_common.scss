@@ -741,6 +741,11 @@ modelbutton.flat,
   }
 }
 
+modelbutton arrow {
+  background: none;
+  &.left { -gtk-icon-source: -gtk-icontheme("pan-start-symbolic"); }
+  &.right { -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
+}
 
 button.color {
   padding: 5px; // Uniform padding on the GtkColorButton

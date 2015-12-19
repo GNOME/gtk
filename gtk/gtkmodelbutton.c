@@ -36,6 +36,8 @@
 #include "gtkintl.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkcsscustomgadgetprivate.h"
+#include "gtkbuiltiniconprivate.h"
+#include "gtkcsstypesprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkcontainerprivate.h"
 
@@ -195,29 +197,48 @@ static void
 gtk_model_button_update_state (GtkModelButton *button)
 {
   GtkStateFlags state;
+  GtkCssImageBuiltinType image_type = GTK_CSS_IMAGE_BUILTIN_NONE;
 
   state = gtk_widget_get_state_flags (GTK_WIDGET (button));
 
   gtk_css_node_set_state (gtk_css_gadget_get_node (button->gadget), state);
 
-  if (button->role == GTK_BUTTON_ROLE_CHECK ||
-      button->role == GTK_BUTTON_ROLE_RADIO)
+  if (button->role == GTK_BUTTON_ROLE_CHECK)
     {
-      state &= ~GTK_STATE_FLAG_CHECKED;
-
       if (button->active && !button->menu_name)
-        state |= GTK_STATE_FLAG_CHECKED;
+        {
+          state &= ~GTK_STATE_FLAG_CHECKED;
+          image_type = GTK_CSS_IMAGE_BUILTIN_CHECK_CHECKED;
+        }
+      else
+        {
+          state |= GTK_STATE_FLAG_CHECKED;
+          image_type = GTK_CSS_IMAGE_BUILTIN_CHECK;
+        }
+    }
+  if (button->role == GTK_BUTTON_ROLE_RADIO)
+    {
+      if (button->active && !button->menu_name)
+        {
+          state &= ~GTK_STATE_FLAG_CHECKED;
+          image_type = GTK_CSS_IMAGE_BUILTIN_OPTION_CHECKED;
+        }
+      else
+        {
+          state |= GTK_STATE_FLAG_CHECKED;
+          image_type = GTK_CSS_IMAGE_BUILTIN_OPTION;
+        }
     }
 
   if (button->menu_name)
     {
-      state = state & ~(GTK_STATE_FLAG_DIR_LTR|GTK_STATE_FLAG_DIR_RTL);
       if (indicator_is_left (GTK_WIDGET (button)))
-        state = state | GTK_STATE_FLAG_DIR_RTL;
+        image_type = GTK_CSS_IMAGE_BUILTIN_ARROW_LEFT;
       else
-        state = state | GTK_STATE_FLAG_DIR_LTR;
+        image_type = GTK_CSS_IMAGE_BUILTIN_ARROW_RIGHT;
     }
 
+  gtk_builtin_icon_set_image (GTK_BUILTIN_ICON (button->indicator_gadget), image_type);
   gtk_css_node_set_state (gtk_css_gadget_get_node (button->indicator_gadget), state);
 }
 
@@ -391,11 +412,6 @@ gtk_model_button_set_menu_name (GtkModelButton *button,
 
   update_node_name (button);
   gtk_model_button_update_state (button);
-
-  if (menu_name)
-    gtk_css_gadget_add_class (button->indicator_gadget, GTK_STYLE_CLASS_EXPANDER);
-  else
-    gtk_css_gadget_remove_class (button->indicator_gadget, GTK_STYLE_CLASS_EXPANDER);
 
   gtk_widget_queue_resize (GTK_WIDGET (button));
   g_object_notify_by_pspec (G_OBJECT (button), properties[PROP_MENU_NAME]);
@@ -710,23 +726,6 @@ gtk_model_button_get_preferred_height (GtkWidget *widget,
 }
 
 static void
-gtk_model_button_measure_indicator (GtkCssGadget   *gadget,
-                                    GtkOrientation  orientation,
-                                    int             for_size,
-                                    int            *minimum,
-                                    int            *natural,
-                                    int            *minimum_baseline,
-                                    int            *natural_baseline,
-                                    gpointer        data)
-{
-  gint indicator_size;
-
-  gtk_icon_size_lookup (GTK_ICON_SIZE_MENU, &indicator_size, NULL);
-
-  *minimum = *natural = indicator_size;
-}
-
-static void
 gtk_model_button_measure (GtkCssGadget   *gadget,
                           GtkOrientation  orientation,
                           int             for_size,
@@ -983,48 +982,6 @@ gtk_model_button_draw (GtkWidget *widget,
 }
 
 static gboolean
-gtk_model_button_render_indicator (GtkCssGadget *gadget,
-                                   cairo_t      *cr,
-                                   int           x,
-                                   int           y,
-                                   int           width,
-                                   int           height,
-                                   gpointer      data)
-{
-  GtkWidget *widget;
-  GtkModelButton *button;
-  GtkCssNode *indicator_node;
-  GtkStyleContext *context;
-
-  widget = gtk_css_gadget_get_owner (gadget);
-  button = GTK_MODEL_BUTTON (widget);
-  context = gtk_widget_get_style_context (widget);
-
-  indicator_node = gtk_css_gadget_get_node (button->indicator_gadget);
-
-  if (button->menu_name)
-    {
-      gtk_style_context_save_to_node (context, indicator_node);
-      gtk_render_expander (context, cr, x, y, width, height);
-      gtk_style_context_restore (context);
-    }
-  else if (button->role == GTK_BUTTON_ROLE_CHECK)
-    {
-      gtk_style_context_save_to_node (context, indicator_node);
-      gtk_render_check (context, cr, x, y, width, height);
-      gtk_style_context_restore (context);
-    }
-  else if (button->role == GTK_BUTTON_ROLE_RADIO)
-    {
-      gtk_style_context_save_to_node (context, indicator_node);
-      gtk_render_option (context, cr, x, y, width, height);
-      gtk_style_context_restore (context);
-    }
-
-  return FALSE;
-}
-
-static gboolean
 gtk_model_button_render (GtkCssGadget *gadget,
                          cairo_t      *cr,
                          int           x,
@@ -1040,7 +997,12 @@ gtk_model_button_render (GtkCssGadget *gadget,
   widget = gtk_css_gadget_get_owner (gadget);
   button = GTK_MODEL_BUTTON (widget);
 
-  gtk_css_gadget_draw (button->indicator_gadget, cr);
+  if (gtk_css_node_get_visible (gtk_css_gadget_get_node (button->indicator_gadget)))
+    {
+      cairo_save (cr);
+      gtk_css_gadget_draw (button->indicator_gadget, cr);
+      cairo_restore (cr);
+    }
 
   child = gtk_bin_get_child (GTK_BIN (widget));
   if (child)
@@ -1275,16 +1237,12 @@ gtk_model_button_init (GtkModelButton *button)
                                                        gtk_model_button_render,
                                                        NULL,
                                                        NULL);
-
-  button->indicator_gadget = gtk_css_custom_gadget_new ("check",
-                                                        GTK_WIDGET (button),
-                                                        button->gadget,
-                                                        NULL,
-                                                        gtk_model_button_measure_indicator,
-                                                        NULL,
-                                                        gtk_model_button_render_indicator,
-                                                        NULL,
-                                                        NULL);
+  button->indicator_gadget = gtk_builtin_icon_new ("check",
+                                                   GTK_WIDGET (button),
+                                                   button->gadget,
+                                                   NULL);
+  gtk_builtin_icon_set_default_size (GTK_BUILTIN_ICON (button->indicator_gadget), 16);
+  update_node_ordering (button);
 }
 
 /**
