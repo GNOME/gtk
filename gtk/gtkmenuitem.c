@@ -934,6 +934,14 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
                                                              GTK_PARAM_READABLE |
                                                              G_PARAM_DEPRECATED));
 
+  /**
+   * GtkMenuItem:toggle-spacing:
+   *
+   * Spacing between menu icon and label.
+   *
+   * Deprecated: 3.20: use the standard margin CSS property on the check or
+   *   radio nodes; the value of this style property is ignored.
+   */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("toggle-spacing",
                                                              "Icon Spacing",
@@ -941,7 +949,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
                                                              0,
                                                              G_MAXINT,
                                                              5,
-                                                             GTK_PARAM_READABLE));
+                                                             GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   /**
    * GtkMenuItem:arrow-spacing:

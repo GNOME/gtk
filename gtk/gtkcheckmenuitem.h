@@ -108,12 +108,6 @@ void       gtk_check_menu_item_set_draw_as_radio (GtkCheckMenuItem *check_menu_i
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_check_menu_item_get_draw_as_radio (GtkCheckMenuItem *check_menu_item);
 
-
-/* private */
-void       _gtk_check_menu_item_set_active       (GtkCheckMenuItem *check_menu_item,
-                                                  gboolean          is_active);
-
-
 G_END_DECLS
 
 #endif /* __GTK_CHECK_MENU_ITEM_H__ */

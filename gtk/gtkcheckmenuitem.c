@@ -832,3 +832,9 @@ _gtk_check_menu_item_set_active (GtkCheckMenuItem *check_menu_item,
   priv->active = is_active;
   update_node_state (check_menu_item);
 }
+
+GtkCssGadget *
+_gtk_check_menu_item_get_indicator_gadget (GtkCheckMenuItem *check_menu_item)
+{
+  return check_menu_item->priv->indicator_gadget;
+}

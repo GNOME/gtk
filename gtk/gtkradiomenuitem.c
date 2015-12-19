@@ -24,6 +24,7 @@
 
 #include "config.h"
 #include "gtkaccellabel.h"
+#include "gtkcheckmenuitemprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkradiomenuitem.h"
 #include "deprecated/gtkactivatable.h"

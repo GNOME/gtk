@@ -2154,6 +2154,10 @@ menu,
 
 menuitem accelerator {
   color: alpha(currentColor,0.55); }
+menuitem check:dir(ltr), menuitem radio:dir(ltr) {
+  margin-right: 7px; }
+menuitem check:dir(rtl), menuitem radio:dir(rtl) {
+  margin-left: 7px; }
 
 /***************
  * Popovers   *
@@ -2771,10 +2775,6 @@ menu menuitem check {
   color: #b8bab8;
   -gtk-icon-source: -gtk-icontheme("checkbox-symbolic");
   -gtk-icon-shadow: none; }
-  menu menuitem check:dir(ltr) {
-    margin-right: 7px; }
-  menu menuitem check:dir(rtl) {
-    margin-left: 7px; }
   menu menuitem check:hover, menu menuitem check:insensitive {
     -gtk-icon-source: -gtk-icontheme("checkbox-symbolic");
     -gtk-icon-shadow: none; }
@@ -2937,10 +2937,6 @@ menu menuitem radio {
   color: #b8bab8;
   -gtk-icon-source: -gtk-icontheme("radio-symbolic");
   -gtk-icon-shadow: none; }
-  menu menuitem radio:dir(ltr) {
-    margin-right: 7px; }
-  menu menuitem radio:dir(rtl) {
-    margin-left: 7px; }
   menu menuitem radio:hover, menu menuitem radio:insensitive {
     -gtk-icon-source: -gtk-icontheme("radio-symbolic");
     -gtk-icon-shadow: none; }

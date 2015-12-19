@@ -110,6 +110,7 @@
 #include "gtkadjustment.h"
 #include "gtkbindings.h"
 #include "gtkcheckmenuitem.h"
+#include "gtkcheckmenuitemprivate.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkmenuprivate.h"
@@ -3227,29 +3228,23 @@ gtk_menu_get_preferred_width (GtkWidget *widget,
       gtk_menu_get_n_columns (menu) == 1 &&
       !priv->no_toggle_size)
     {
-      GtkStyleContext *context;
-      GtkWidgetPath *check_path;
-      guint toggle_spacing;
-      guint indicator_size;
+      GtkWidget *menu_item;
+      GtkCssGadget *indicator_gadget;
+      gint indicator_width;
 
-      context = gtk_style_context_new ();
+      /* Create a GtkCheckMenuItem, to query indicator size */
+      menu_item = gtk_check_menu_item_new ();
+      indicator_gadget = _gtk_check_menu_item_get_indicator_gadget
+        (GTK_CHECK_MENU_ITEM (menu_item));
 
-      /* Create a GtkCheckMenuItem path, only to query indicator spacing */
-      check_path = _gtk_widget_create_path (widget);
-      gtk_widget_path_append_type (check_path, GTK_TYPE_CHECK_MENU_ITEM);
+      gtk_css_gadget_get_preferred_size (indicator_gadget,
+                                         GTK_ORIENTATION_HORIZONTAL,
+                                         -1,
+                                         &indicator_width, NULL,
+                                         NULL, NULL);
+      max_toggle_size = indicator_width;
 
-      gtk_style_context_set_path (context, check_path);
-      gtk_widget_path_free (check_path);
-      gtk_style_context_set_screen (context, gtk_widget_get_screen (widget));
-
-      gtk_style_context_get_style (context,
-                                   "toggle-spacing", &toggle_spacing,
-                                   "indicator-size", &indicator_size,
-                                   NULL);
-
-      max_toggle_size = indicator_size + toggle_spacing;
-
-      g_object_unref (context);
+      gtk_widget_destroy (menu_item);
     }
 
   min_width += 2 * max_toggle_size + max_accel_width;
