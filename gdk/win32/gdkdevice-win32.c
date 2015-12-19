@@ -61,11 +61,6 @@ static GdkGrabStatus gdk_device_win32_grab   (GdkDevice     *device,
                                               guint32        time_);
 static void          gdk_device_win32_ungrab (GdkDevice     *device,
                                               guint32        time_);
-static GdkWindow * gdk_device_win32_window_at_position (GdkDevice       *device,
-                                                        gdouble         *win_x,
-                                                        gdouble         *win_y,
-                                                        GdkModifierType *mask,
-                                                        gboolean         get_toplevel);
 static void      gdk_device_win32_select_window_events (GdkDevice       *device,
                                                         GdkWindow       *window,
                                                         GdkEventMask     event_mask);
@@ -85,7 +80,7 @@ gdk_device_win32_class_init (GdkDeviceWin32Class *klass)
   device_class->query_state = gdk_device_win32_query_state;
   device_class->grab = gdk_device_win32_grab;
   device_class->ungrab = gdk_device_win32_ungrab;
-  device_class->window_at_position = gdk_device_win32_window_at_position;
+  device_class->window_at_position = _gdk_device_win32_window_at_position;
   device_class->select_window_events = gdk_device_win32_select_window_events;
 }
 
@@ -263,12 +258,12 @@ screen_to_client (HWND hwnd, POINT screen_pt, POINT *client_pt)
   ScreenToClient (hwnd, client_pt);
 }
 
-static GdkWindow *
-gdk_device_win32_window_at_position (GdkDevice       *device,
-                                     gdouble         *win_x,
-                                     gdouble         *win_y,
-                                     GdkModifierType *mask,
-                                     gboolean         get_toplevel)
+GdkWindow *
+_gdk_device_win32_window_at_position (GdkDevice       *device,
+                                      gdouble         *win_x,
+                                      gdouble         *win_y,
+                                      GdkModifierType *mask,
+                                      gboolean         get_toplevel)
 {
   GdkWindow *window = NULL;
   POINT screen_pt, client_pt;
