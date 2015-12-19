@@ -120,8 +120,7 @@
 #include "a11y/gtkexpanderaccessible.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkcsscustomgadgetprivate.h"
-#include "gtkcssnumbervalueprivate.h"
-#include "gtkcssstyleprivate.h"
+#include "gtkbuiltiniconprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkcontainerprivate.h"
 
@@ -287,22 +286,6 @@ static gboolean gtk_expander_render_title   (GtkCssGadget        *gadget,
                                              int                  width,
                                              int                  height,
                                              gpointer             data);
-static void     gtk_expander_measure_arrow  (GtkCssGadget        *gadget,
-                                             GtkOrientation       orientation,
-                                             int                  for_size,
-                                             int                 *minimum_size,
-                                             int                 *natural_size,
-                                             int                 *minimum_baseline,
-                                             int                 *natural_baseline,
-                                             gpointer             data);
-static gboolean gtk_expander_render_arrow   (GtkCssGadget        *gadget,
-                                             cairo_t             *cr,
-                                             int                  x,
-                                             int                  y,
-                                             int                  width,
-                                             int                  height,
-                                             gpointer             data);
-
 
 G_DEFINE_TYPE_WITH_CODE (GtkExpander, gtk_expander, GTK_TYPE_BIN,
                          G_ADD_PRIVATE (GtkExpander)
@@ -508,15 +491,12 @@ gtk_expander_init (GtkExpander *expander)
                                                   gtk_expander_render_title,
                                                   NULL,
                                                   NULL);
-  priv->arrow_gadget = gtk_css_custom_gadget_new ("arrow",
-                                                  GTK_WIDGET (expander),
-                                                  priv->title_gadget,
-                                                  NULL,
-                                                  gtk_expander_measure_arrow,
-                                                  NULL,
-                                                  gtk_expander_render_arrow,
-                                                  NULL,
-                                                  NULL);
+  priv->arrow_gadget = gtk_builtin_icon_new ("arrow",
+                                             GTK_WIDGET (expander),
+                                             priv->title_gadget,
+                                             NULL);
+  gtk_css_gadget_add_class (priv->arrow_gadget, GTK_STYLE_CLASS_HORIZONTAL);
+  gtk_builtin_icon_set_default_size_property (GTK_BUILTIN_ICON (priv->arrow_gadget), "expander-size");
 
   gtk_drag_dest_set (GTK_WIDGET (expander), 0, NULL, 0, 0);
   gtk_drag_dest_set_track_motion (GTK_WIDGET (expander), TRUE);
@@ -892,28 +872,6 @@ gtk_expander_unmap (GtkWidget *widget)
 
   if (priv->label_widget)
     gtk_widget_unmap (priv->label_widget);
-}
-
-static gboolean
-gtk_expander_render_arrow (GtkCssGadget *gadget,
-                           cairo_t      *cr,
-                           int           x,
-                           int           y,
-                           int           width,
-                           int           height,
-                           gpointer      data)
-{
-  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
-  GtkExpander *expander = GTK_EXPANDER (widget);
-  GtkExpanderPrivate *priv = expander->priv;
-  GtkStyleContext *context;
-
-  context = gtk_widget_get_style_context (widget);
-  gtk_style_context_save_to_node (context, gtk_css_gadget_get_node (priv->arrow_gadget));
-  gtk_render_expander (context, cr, x, y, width, height);
-  gtk_style_context_restore (context);
-
-  return FALSE;
 }
 
 static gboolean
@@ -1566,43 +1524,6 @@ gtk_expander_measure_title (GtkCssGadget   *gadget,
 
       *minimum = MAX (arrow_height, label_min);
       *natural = MAX (arrow_height, label_nat);
-    }
-}
-
-static void
-gtk_expander_measure_arrow (GtkCssGadget   *gadget,
-                            GtkOrientation  orientation,
-                            int             for_size,
-                            int            *minimum,
-                            int            *natural,
-                            int            *minimum_baseline,
-                            int            *natural_baseline,
-                            gpointer        data)
-{
-  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
-  GtkCssStyle *style;
-  guint property;
-  gdouble min_size;
-
-  style = gtk_css_gadget_get_style (gadget);
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    property = GTK_CSS_PROPERTY_MIN_WIDTH;
-  else
-    property = GTK_CSS_PROPERTY_MIN_HEIGHT;
-
-  min_size = _gtk_css_number_value_get (gtk_css_style_get_value (style, property), 100.0);
-
-  if (min_size > 0.0)
-    *minimum = *natural = 0;
-  else
-    {
-      gint expander_size;
-
-      gtk_widget_style_get (GTK_WIDGET (widget),
-                            "expander-size", &expander_size,
-                            NULL);
-
-      *minimum = *natural = expander_size;
     }
 }
 
