@@ -887,7 +887,9 @@ gtk_expander_render_title (GtkCssGadget *gadget,
   GtkExpander *expander = GTK_EXPANDER (widget);
   GtkExpanderPrivate *priv = expander->priv;
 
+  cairo_save (cr);
   gtk_css_gadget_draw (priv->arrow_gadget, cr);
+  cairo_restore (cr);
 
   return gtk_widget_has_visible_focus (widget);
 }
