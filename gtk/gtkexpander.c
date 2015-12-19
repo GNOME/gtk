@@ -1505,7 +1505,7 @@ gtk_expander_measure_title (GtkCssGadget   *gadget,
         label_min = label_nat = 0;
 
       *minimum = arrow_width + label_min;
-      *natural = arrow_height + label_nat;
+      *natural = arrow_width + label_nat;
     }
   else
     {
