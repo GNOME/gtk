@@ -23,8 +23,8 @@
  */
 
 #include "config.h"
+#include "gtkbuiltiniconprivate.h"
 #include "gtkcheckmenuitem.h"
-#include "gtkcsscustomgadgetprivate.h"
 #include "gtkmenuitemprivate.h"
 #include "gtkaccellabel.h"
 #include "deprecated/gtkactivatable.h"
@@ -67,7 +67,6 @@
 
 struct _GtkCheckMenuItemPrivate
 {
-  GtkCssNode *indicator_node;
   GtkCssGadget *indicator_gadget;
 
   guint active             : 1;
@@ -124,38 +123,6 @@ G_DEFINE_TYPE_WITH_CODE (GtkCheckMenuItem, gtk_check_menu_item, GTK_TYPE_MENU_IT
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIVATABLE,
                                                 gtk_check_menu_item_activatable_interface_init))
 G_GNUC_END_IGNORE_DEPRECATIONS;
-
-static gboolean
-gtk_check_menu_item_render_indicator (GtkCssGadget *gadget,
-                                      cairo_t      *cr,
-                                      int           x,
-                                      int           y,
-                                      int           width,
-                                      int           height,
-                                      gpointer      data)
-{
-  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
-  GtkCheckMenuItem *check_menu_item = GTK_CHECK_MENU_ITEM (widget);
-  GtkCheckMenuItemPrivate *priv = check_menu_item->priv;
-  GtkStyleContext *context;
-
-  if (!gtk_widget_is_drawable (widget))
-    return FALSE;
-
-  context = gtk_widget_get_style_context (widget);
-  gtk_style_context_save_to_node (context, priv->indicator_node);
-
-  if (priv->draw_as_radio)
-    gtk_render_option (context, cr, x, y,
-                       width, height);
-  else
-    gtk_render_check (context, cr, x, y,
-                      width, height);
-
-  gtk_style_context_restore (context);
-
-  return FALSE;
-}
 
 static void
 gtk_check_menu_item_size_allocate (GtkWidget     *widget,
@@ -519,7 +486,8 @@ update_node_state (GtkCheckMenuItem *check_menu_item)
   if (priv->active)
     state |= GTK_STATE_FLAG_CHECKED;
 
-  gtk_css_node_set_state (priv->indicator_node, state);
+  gtk_css_node_set_state (gtk_css_gadget_get_node (priv->indicator_gadget),
+                          state);
 }
 
 /**
@@ -588,6 +556,7 @@ gtk_check_menu_item_set_draw_as_radio (GtkCheckMenuItem *check_menu_item,
                                        gboolean          draw_as_radio)
 {
   GtkCheckMenuItemPrivate *priv;
+  GtkCssNode *indicator_node;
 
   g_return_if_fail (GTK_IS_CHECK_MENU_ITEM (check_menu_item));
 
@@ -598,10 +567,11 @@ gtk_check_menu_item_set_draw_as_radio (GtkCheckMenuItem *check_menu_item,
   if (draw_as_radio != priv->draw_as_radio)
     {
       priv->draw_as_radio = draw_as_radio;
+      indicator_node = gtk_css_gadget_get_node (priv->indicator_gadget);
       if (draw_as_radio)
-        gtk_css_node_set_name (priv->indicator_node, I_("radio"));
+        gtk_css_node_set_name (indicator_node, I_("radio"));
       else
-        gtk_css_node_set_name (priv->indicator_node, I_("check"));
+        gtk_css_node_set_name (indicator_node, I_("check"));
 
       gtk_widget_queue_draw (GTK_WIDGET (check_menu_item));
 
@@ -628,40 +598,19 @@ gtk_check_menu_item_get_draw_as_radio (GtkCheckMenuItem *check_menu_item)
 }
 
 static void
-node_style_changed_cb (GtkCssNode        *node,
-                       GtkCssStyleChange *change,
-                       GtkWidget         *widget)
-{
-  if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_SIZE | GTK_CSS_AFFECTS_CLIP))
-    gtk_widget_queue_resize (widget);
-  else
-    gtk_widget_queue_draw (widget);
-}
-
-static void
 gtk_check_menu_item_init (GtkCheckMenuItem *check_menu_item)
 {
   GtkCheckMenuItemPrivate *priv;
-  GtkCssNode *widget_node;
 
   priv = check_menu_item->priv = gtk_check_menu_item_get_instance_private (check_menu_item);
   priv->active = FALSE;
 
-  widget_node = gtk_widget_get_css_node (GTK_WIDGET (check_menu_item));
-  priv->indicator_node = gtk_css_node_new ();
-  gtk_css_node_set_name (priv->indicator_node, I_("check"));
-  gtk_css_node_set_parent (priv->indicator_node, widget_node);
-  gtk_css_node_set_state (priv->indicator_node, gtk_css_node_get_state (widget_node));
-  g_signal_connect_object (priv->indicator_node, "style-changed", G_CALLBACK (node_style_changed_cb), check_menu_item, 0);
-  g_object_unref (priv->indicator_node);
-
   priv->indicator_gadget =
-    gtk_css_custom_gadget_new_for_node (priv->indicator_node,
-                                        GTK_WIDGET (check_menu_item),
-                                        NULL,
-                                        NULL,
-                                        gtk_check_menu_item_render_indicator,
-                                        NULL, NULL);
+    gtk_builtin_icon_new ("check",
+                          GTK_WIDGET (check_menu_item),
+                          _gtk_menu_item_get_gadget (GTK_MENU_ITEM (check_menu_item)),
+                          NULL);
+  update_node_state (check_menu_item);
 }
 
 static gint
@@ -716,27 +665,28 @@ gtk_check_menu_item_direction_changed (GtkWidget        *widget,
 {
   GtkCheckMenuItem *check_menu_item = GTK_CHECK_MENU_ITEM (widget);
   GtkCheckMenuItemPrivate *priv = check_menu_item->priv;
-  GtkCssNode *widget_node, *node;
+  GtkCssNode *indicator_node, *widget_node, *node;
 
+  indicator_node = gtk_css_gadget_get_node (priv->indicator_gadget);
   widget_node = gtk_widget_get_css_node (widget);
 
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
     {
-      gtk_css_node_remove_class (priv->indicator_node, g_quark_from_static_string (GTK_STYLE_CLASS_LEFT));
-      gtk_css_node_add_class (priv->indicator_node, g_quark_from_static_string (GTK_STYLE_CLASS_RIGHT));
+      gtk_css_node_remove_class (indicator_node, g_quark_from_static_string (GTK_STYLE_CLASS_LEFT));
+      gtk_css_node_add_class (indicator_node, g_quark_from_static_string (GTK_STYLE_CLASS_RIGHT));
 
       node = gtk_css_node_get_last_child (widget_node);
-      if (node != priv->indicator_node)
-        gtk_css_node_insert_after (widget_node, priv->indicator_node, node);
+      if (node != indicator_node)
+        gtk_css_node_insert_after (widget_node, indicator_node, node);
     }
   else
     {
-      gtk_css_node_add_class (priv->indicator_node, g_quark_from_static_string (GTK_STYLE_CLASS_LEFT));
-      gtk_css_node_remove_class (priv->indicator_node, g_quark_from_static_string (GTK_STYLE_CLASS_RIGHT));
+      gtk_css_node_add_class (indicator_node, g_quark_from_static_string (GTK_STYLE_CLASS_LEFT));
+      gtk_css_node_remove_class (indicator_node, g_quark_from_static_string (GTK_STYLE_CLASS_RIGHT));
 
       node = gtk_css_node_get_first_child (widget_node);
-      if (node != priv->indicator_node)
-        gtk_css_node_insert_before (widget_node, priv->indicator_node, node);
+      if (node != indicator_node)
+        gtk_css_node_insert_before (widget_node, indicator_node, node);
     }
 
   GTK_WIDGET_CLASS (gtk_check_menu_item_parent_class)->direction_changed (widget, previous_dir);
