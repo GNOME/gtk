@@ -2274,7 +2274,6 @@ gtk_notebook_measure_contents (GtkCssGadget   *gadget,
   GtkNotebookPage *page;
   GList *children;
   gint child_minimum, child_natural;
-  gboolean switch_page = FALSE;
   gint vis_pages;
   guint border_width;
 
@@ -2299,11 +2298,6 @@ gtk_notebook_measure_contents (GtkCssGadget   *gadget,
 
           *minimum = MAX (*minimum, child_minimum);
           *natural = MAX (*natural, child_natural);
-        }
-      else
-        {
-          if (page == priv->cur_page)
-            switch_page = TRUE;
         }
     }
 
@@ -2355,36 +2349,6 @@ gtk_notebook_measure_contents (GtkCssGadget   *gadget,
 
   *minimum += border_width * 2;
   *natural += border_width * 2;
-
-  if (switch_page)
-    {
-      if (vis_pages)
-        {
-          for (children = priv->children; children;
-               children = children->next)
-            {
-              page = children->data;
-              if (gtk_widget_get_visible (page->child))
-                {
-                  gtk_notebook_switch_page (notebook, page);
-                  break;
-                }
-            }
-        }
-      else if (gtk_widget_get_visible (widget))
-        {
-          *minimum = border_width * 2;
-        }
-    }
-  if (vis_pages && !priv->cur_page)
-    {
-      children = gtk_notebook_search_page (notebook, NULL, STEP_NEXT, TRUE);
-      if (children)
-        {
-          priv->first_tab = children;
-          gtk_notebook_switch_page (notebook, GTK_NOTEBOOK_PAGE (children));
-        }
-    }
 }
 
 static void
