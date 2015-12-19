@@ -86,6 +86,12 @@ void            gtk_css_gadget_add_class                (GtkCssGadget           
                                                          const char             *name);
 void            gtk_css_gadget_remove_class             (GtkCssGadget           *gadget,
                                                          const char             *name);
+void            gtk_css_gadget_set_state                (GtkCssGadget           *gadget,
+                                                         GtkStateFlags           state);
+void            gtk_css_gadget_add_state                (GtkCssGadget           *gadget,
+                                                         GtkStateFlags           state);
+void            gtk_css_gadget_remove_state             (GtkCssGadget           *gadget,
+                                                         GtkStateFlags           state);
 
 void            gtk_css_gadget_get_preferred_size       (GtkCssGadget           *gadget,
                                                          GtkOrientation          orientation,

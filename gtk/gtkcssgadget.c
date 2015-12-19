@@ -394,6 +394,56 @@ gtk_css_gadget_remove_class (GtkCssGadget *gadget,
   gtk_css_node_remove_class (priv->node, quark);
 }
 
+/**
+ * gtk_css_gadget_set_state:
+ * @gadget: a #GtkCssGadget
+ * @state: The new state
+ *
+ * Sets the state of the gadget's CSS node.
+ */
+void
+gtk_css_gadget_set_state (GtkCssGadget  *gadget,
+                          GtkStateFlags  state)
+{
+  GtkCssGadgetPrivate *priv = gtk_css_gadget_get_instance_private (gadget);
+
+  gtk_css_node_set_state (priv->node, state);
+}
+
+/**
+ * gtk_css_gadget_add_state:
+ * @gadget: a #GtkCssGadget
+ * @state: The state to add
+ *
+ * Adds the given states to the states of gadget's CSS node. Other states
+ * will be kept as they are.
+ */
+void
+gtk_css_gadget_add_state (GtkCssGadget  *gadget,
+                          GtkStateFlags  state)
+{
+  GtkCssGadgetPrivate *priv = gtk_css_gadget_get_instance_private (gadget);
+
+  gtk_css_node_set_state (priv->node, gtk_css_node_get_state (priv->node) | state);
+}
+
+/**
+ * gtk_css_gadget_remove_state:
+ * @gadget: a #GtkCssGadget
+ * @state: The state to remove
+ *
+ * Adds the given states to the states of gadget's CSS node. Other states
+ * will be kept as they are.
+ */
+void
+gtk_css_gadget_remove_state (GtkCssGadget  *gadget,
+                             GtkStateFlags  state)
+{
+  GtkCssGadgetPrivate *priv = gtk_css_gadget_get_instance_private (gadget);
+
+  gtk_css_node_set_state (priv->node, gtk_css_node_get_state (priv->node) & ~state);
+}
+
 static gint
 get_number (GtkCssStyle *style,
             guint        property)
