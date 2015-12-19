@@ -3668,11 +3668,9 @@ paper {
   paper:backdrop {
     border-color: #a5a5a1; }
 
-actionbar frame border {
-  border-width: 1px 0 0; }
-
 actionbar box {
-  padding: 6px; }
+  padding: 6px;
+  border-width: 1px 0 0; }
 
 placessidebar viewport.frame,
 scrolledwindow viewport.frame {

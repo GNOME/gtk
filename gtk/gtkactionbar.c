@@ -251,8 +251,9 @@ gtk_action_bar_allocate (GtkCssGadget        *gadget,
                          gpointer             data)
 {
   GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
+  GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (GTK_ACTION_BAR (widget));
 
-  GTK_WIDGET_CLASS (gtk_action_bar_parent_class)->size_allocate (widget, (GtkAllocation *)allocation);
+  gtk_widget_size_allocate (priv->revealer, (GtkAllocation *)allocation);
 
   gtk_container_get_children_clip (GTK_CONTAINER (widget), out_clip);
 }
