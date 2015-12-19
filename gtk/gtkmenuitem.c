@@ -1585,10 +1585,14 @@ void
 gtk_menu_item_set_submenu (GtkMenuItem *menu_item,
                            GtkWidget   *submenu)
 {
-  GtkMenuItemPrivate *priv = menu_item->priv;
+  GtkWidget *widget;
+  GtkMenuItemPrivate *priv;
 
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
   g_return_if_fail (submenu == NULL || GTK_IS_MENU (submenu));
+
+  widget = GTK_WIDGET (menu_item);
+  priv = menu_item->priv;
 
   if (priv->submenu != submenu)
     {
@@ -1599,14 +1603,14 @@ gtk_menu_item_set_submenu (GtkMenuItem *menu_item,
         {
           priv->submenu = submenu;
           gtk_menu_attach_to_widget (GTK_MENU (submenu),
-                                     GTK_WIDGET (menu_item),
+                                     widget,
                                      gtk_menu_item_detacher);
 
-          if (!GTK_IS_MENU_BAR (gtk_widget_get_parent (GTK_WIDGET (menu_item))))
+          if (!GTK_IS_MENU_BAR (gtk_widget_get_parent (widget)))
             {
               GtkCssNode *widget_node;
 
-              widget_node = gtk_widget_get_css_node (GTK_WIDGET (menu_item));
+              widget_node = gtk_widget_get_css_node (widget);
               priv->arrow_node = gtk_css_node_new ();
               gtk_css_node_set_name (priv->arrow_node, I_("arrow"));
               gtk_css_node_set_parent (priv->arrow_node, widget_node);
@@ -1615,7 +1619,7 @@ gtk_menu_item_set_submenu (GtkMenuItem *menu_item,
 
               priv->arrow_gadget =
                 gtk_css_custom_gadget_new_for_node (priv->arrow_node,
-                                                    GTK_WIDGET (menu_item),
+                                                    widget,
                                                     NULL,
                                                     NULL,
                                                     gtk_menu_item_render_arrow,
@@ -1627,8 +1631,8 @@ gtk_menu_item_set_submenu (GtkMenuItem *menu_item,
             }
         }
 
-      if (gtk_widget_get_parent (GTK_WIDGET (menu_item)))
-        gtk_widget_queue_resize (GTK_WIDGET (menu_item));
+      if (gtk_widget_get_parent (widget))
+        gtk_widget_queue_resize (widget);
 
       g_object_notify_by_pspec (G_OBJECT (menu_item), menu_item_props[PROP_SUBMENU]);
     }
