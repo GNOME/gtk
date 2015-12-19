@@ -2298,7 +2298,6 @@ gtk_notebook_size_request (GtkWidget      *widget,
   for (children = priv->children, vis_pages = 0; children;
        children = children->next)
     {
-      GtkWidget *parent;
       page = children->data;
 
       if (gtk_widget_get_visible (page->child))
@@ -2314,25 +2313,11 @@ gtk_notebook_size_request (GtkWidget      *widget,
 
           *minimum = MAX (*minimum, child_minimum);
           *natural = MAX (*natural, child_natural);
-
-          if (priv->menu && page->menu_label)
-            {
-              parent = gtk_widget_get_parent (page->menu_label);
-              if (parent && !gtk_widget_get_visible (parent))
-                gtk_widget_show (parent);
-            }
         }
       else
         {
           if (page == priv->cur_page)
             switch_page = TRUE;
-
-          if (priv->menu && page->menu_label)
-            {
-              parent = gtk_widget_get_parent (page->menu_label);
-              if (parent && gtk_widget_get_visible (parent))
-                gtk_widget_hide (parent);
-            }
         }
     }
 
@@ -4795,18 +4780,25 @@ gtk_notebook_child_type (GtkContainer     *container)
  * gtk_notebook_real_insert_page
  */
 static void
-page_visible_cb (GtkWidget  *page,
+page_visible_cb (GtkWidget  *child,
                  GParamSpec *arg,
                  gpointer    data)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (data);
   GtkNotebookPrivate *priv = notebook->priv;
-  GList *list;
+  GList *list = gtk_notebook_find_child (notebook, GTK_WIDGET (child));
+  GtkNotebookPage *page = list->data;
   GList *next = NULL;
 
-  if (priv->cur_page &&
-      priv->cur_page->child == page &&
-      !gtk_widget_get_visible (page))
+  if (priv->menu && page->menu_label)
+    {
+      GtkWidget *parent = gtk_widget_get_parent (page->menu_label);
+      if (parent)
+        gtk_widget_set_visible (parent, gtk_widget_get_visible (child));
+    }
+
+  if (priv->cur_page == page &&
+      !gtk_widget_get_visible (child))
     {
       list = g_list_find (priv->children, priv->cur_page);
       if (list)
