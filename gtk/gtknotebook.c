@@ -1987,8 +1987,6 @@ gtk_notebook_unmap (GtkWidget *widget)
 
   stop_scrolling (notebook);
 
-  gtk_widget_set_mapped (widget, FALSE);
-
   gdk_window_hide (priv->event_window);
 
   GTK_WIDGET_CLASS (gtk_notebook_parent_class)->unmap (widget);
