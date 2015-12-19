@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-14 00:45+0000\n"
-"PO-Revision-Date: 2015-12-14 11:52+0100\n"
+"POT-Creation-Date: 2015-12-19 12:15+0000\n"
+"PO-Revision-Date: 2015-12-19 14:45+0100\n"
 "Last-Translator: Dušan Kazik <prescott66@gmail.com>\n"
 "Language-Team: slovenčina <>\n"
 "Language: sk\n"
@@ -78,7 +78,7 @@ msgstr "Ladiace príznaky GDK, ktoré sa majú nastaviť"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:239 gdk/gdk.c:242 gtk/gtkmain.c:461 gtk/gtkmain.c:464
+#: gdk/gdk.c:239 gdk/gdk.c:242 gtk/gtkmain.c:462 gtk/gtkmain.c:465
 msgid "FLAGS"
 msgstr "PRÍZNAKY"
 
@@ -87,7 +87,7 @@ msgstr "PRÍZNAKY"
 msgid "GDK debugging flags to unset"
 msgstr "Ladiace príznaky GDK, ktoré sa majú vypnúť"
 
-#: gdk/gdkwindow.c:2768
+#: gdk/gdkwindow.c:2766
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "Podpora GL je zakázaná prostredníctvom GDK_DEBUG"
 
@@ -656,15 +656,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "Za_vrieť"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:419
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:405
 msgid "Minimize"
 msgstr "Minimalizovať"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:442
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:428
 msgid "Maximize"
 msgstr "Maximalizovať"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:442
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:428
 msgid "Restore"
 msgstr "Obnoviť"
 
@@ -1215,7 +1215,7 @@ msgstr ""
 #: gtk/gtkmountoperation.c:545 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:667 gtk/gtkprintunixdialog.c:740
-#: gtk/gtkwindow.c:12233 gtk/inspector/css-editor.c:257
+#: gtk/gtkwindow.c:12226 gtk/inspector/css-editor.c:257
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:131
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -1265,7 +1265,7 @@ msgid "_Apply"
 msgstr "Po_užiť"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:936
-#: gtk/gtkmessagedialog.c:958 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12234
+#: gtk/gtkmessagedialog.c:958 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12227
 msgid "_OK"
 msgstr "_Ok"
 
@@ -1844,7 +1844,7 @@ msgstr "%Y"
 #. This label is displayed in a treeview cell displaying
 #. * a disabled accelerator key combination.
 #.
-#: gtk/gtkcellrendereraccel.c:274
+#: gtk/gtkcellrendereraccel.c:273
 msgctxt "Accelerator"
 msgid "Disabled"
 msgstr "Zakázané"
@@ -1853,7 +1853,7 @@ msgstr "Zakázané"
 #. * an accelerator key combination that is not valid according
 #. * to gtk_accelerator_valid().
 #.
-#: gtk/gtkcellrendereraccel.c:284
+#: gtk/gtkcellrendereraccel.c:283
 msgctxt "Accelerator"
 msgid "Invalid"
 msgstr "Neplatné"
@@ -1861,7 +1861,7 @@ msgstr "Neplatné"
 #. This label is displayed in a treeview cell displaying an accelerator
 #. * when the cell is clicked to change the acelerator.
 #.
-#: gtk/gtkcellrendereraccel.c:415 gtk/gtkcellrendereraccel.c:509
+#: gtk/gtkcellrendereraccel.c:414 gtk/gtkcellrendereraccel.c:488
 msgid "New accelerator…"
 msgstr "Nový akcelerátor…"
 
@@ -2108,7 +2108,7 @@ msgctxt "Color channel"
 msgid "Alpha"
 msgstr "Alfa"
 
-#: gtk/gtkcolorswatch.c:445
+#: gtk/gtkcolorswatch.c:432
 msgid "C_ustomize"
 msgstr "_Prispôsobiť"
 
@@ -2176,44 +2176,44 @@ msgstr "_Pravý:"
 msgid "Paper Margins"
 msgstr "Okraje papiera"
 
-#: gtk/gtkentry.c:9687 gtk/gtklabel.c:6684 gtk/gtktextview.c:9428
+#: gtk/gtkentry.c:9693 gtk/gtklabel.c:6685 gtk/gtktextview.c:9428
 msgid "Cu_t"
 msgstr "Vystri_hnúť"
 
-#: gtk/gtkentry.c:9691 gtk/gtklabel.c:6685 gtk/gtktextview.c:9432
+#: gtk/gtkentry.c:9697 gtk/gtklabel.c:6686 gtk/gtktextview.c:9432
 msgid "_Copy"
 msgstr "_Kopírovať"
 
-#: gtk/gtkentry.c:9695 gtk/gtklabel.c:6686 gtk/gtktextview.c:9434
+#: gtk/gtkentry.c:9701 gtk/gtklabel.c:6687 gtk/gtktextview.c:9434
 msgid "_Paste"
 msgstr "_Vložiť"
 
-#: gtk/gtkentry.c:9698 gtk/gtkfilechooserwidget.c:1460
-#: gtk/gtkfilechooserwidget.c:2258 gtk/gtklabel.c:6688 gtk/gtktextview.c:9437
+#: gtk/gtkentry.c:9704 gtk/gtkfilechooserwidget.c:1460
+#: gtk/gtkfilechooserwidget.c:2258 gtk/gtklabel.c:6689 gtk/gtktextview.c:9437
 msgid "_Delete"
 msgstr "O_dstrániť"
 
-#: gtk/gtkentry.c:9709 gtk/gtklabel.c:6697 gtk/gtktextview.c:9451
+#: gtk/gtkentry.c:9715 gtk/gtklabel.c:6698 gtk/gtktextview.c:9451
 msgid "Select _All"
 msgstr "Vybr_ať všetko"
 
-#: gtk/gtkentry.c:9887 gtk/gtktextview.c:9661
+#: gtk/gtkentry.c:9893 gtk/gtktextview.c:9661
 msgid "Select all"
 msgstr "Vybrať všetko"
 
-#: gtk/gtkentry.c:9890 gtk/gtktextview.c:9664
+#: gtk/gtkentry.c:9896 gtk/gtktextview.c:9664
 msgid "Cut"
 msgstr "Vystrihnúť"
 
-#: gtk/gtkentry.c:9893 gtk/gtktextview.c:9667
+#: gtk/gtkentry.c:9899 gtk/gtktextview.c:9667
 msgid "Copy"
 msgstr "Kopírovať"
 
-#: gtk/gtkentry.c:9896 gtk/gtktextview.c:9670
+#: gtk/gtkentry.c:9902 gtk/gtktextview.c:9670
 msgid "Paste"
 msgstr "Vložiť"
 
-#: gtk/gtkentry.c:11011
+#: gtk/gtkentry.c:11017
 msgid "Caps Lock is on"
 msgstr "Caps Lock je zapnutý"
 
@@ -2586,11 +2586,11 @@ msgstr "(žiadna)"
 msgid "OpenGL context creation failed"
 msgstr "Vytvárania kontextu OpenGL zlyhalo"
 
-#: gtk/gtkheaderbar.c:398
+#: gtk/gtkheaderbar.c:384
 msgid "Application menu"
 msgstr "Ponuka aplikácie"
 
-#: gtk/gtkheaderbar.c:460 gtk/gtkwindow.c:8828
+#: gtk/gtkheaderbar.c:446 gtk/gtkwindow.c:8825
 msgid "Close"
 msgstr "Zavrieť"
 
@@ -2645,12 +2645,12 @@ msgid "Error"
 msgstr "Chyba"
 
 #. Open Link
-#: gtk/gtklabel.c:6665
+#: gtk/gtklabel.c:6666
 msgid "_Open Link"
 msgstr "_Otvoriť odkaz"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6674
+#: gtk/gtklabel.c:6675
 msgid "Copy _Link Address"
 msgstr "Kopírovať _adresu odkazu"
 
@@ -2753,41 +2753,41 @@ msgstr ""
 "Kontaktujte správcu vášho systému"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:454
+#: gtk/gtkmain.c:455
 msgid "Load additional GTK+ modules"
 msgstr "Načíta prídavné moduly GTK+"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:455
+#: gtk/gtkmain.c:456
 msgid "MODULES"
 msgstr "MODULY"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:457
+#: gtk/gtkmain.c:458
 msgid "Make all warnings fatal"
 msgstr "Zmení všetky upozornenia na závažné"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:460
+#: gtk/gtkmain.c:461
 msgid "GTK+ debugging flags to set"
 msgstr "Ladiace príznaky GTK+, ktoré sa majú nastaviť"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:463
+#: gtk/gtkmain.c:464
 msgid "GTK+ debugging flags to unset"
 msgstr "Ladiace príznaky GTK+, ktoré sa majú vypnúť"
 
-#: gtk/gtkmain.c:787
+#: gtk/gtkmain.c:788
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Nedá sa otvoriť displej: %s"
 
-#: gtk/gtkmain.c:864
+#: gtk/gtkmain.c:865
 msgid "GTK+ Options"
 msgstr "Voľby GTK+"
 
 #  cmd desc
-#: gtk/gtkmain.c:864
+#: gtk/gtkmain.c:865
 msgid "Show GTK+ Options"
 msgstr "Zobrazí voľby GTK+"
 
@@ -2796,7 +2796,7 @@ msgstr "Zobrazí voľby GTK+"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:1188
+#: gtk/gtkmain.c:1189
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -2893,7 +2893,7 @@ msgstr "Z shell"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Nedá sa ukončiť proces s PID %d: %s"
 
-#: gtk/gtknotebook.c:5315 gtk/gtknotebook.c:8001
+#: gtk/gtknotebook.c:5313 gtk/gtknotebook.c:7997
 #, c-format
 msgid "Page %u"
 msgstr "Stránka č. %u"
@@ -3191,19 +3191,25 @@ msgstr "Siete"
 msgid "On This Computer"
 msgstr "Na tomto počítači"
 
-#. Translators: respectively, free and total space of the drive
-#: gtk/gtkplacesviewrow.c:124
+#. Translators: respectively, free and total space of the drive. The plural form
+#. * should be based on the free space available.
+#. * i.e. 1 GB / 24 GB available.
+#.
+#: gtk/gtkplacesviewrow.c:132
 #, c-format
-#| msgid "Not available"
+#| msgid "%s / %s available"
 msgid "%s / %s available"
-msgstr "Dostupný priestor: %s / %s"
+msgid_plural "%s / %s available"
+msgstr[0] "%s / %s dostupných"
+msgstr[1] "%s / %s dostupný"
+msgstr[2] "%s / %s dostupné"
 
-#: gtk/gtkplacesviewrow.c:461
+#: gtk/gtkplacesviewrow.c:470
 msgid "Disconnect"
 msgstr "Odpojí"
 
 # tooltip
-#: gtk/gtkplacesviewrow.c:461 gtk/ui/gtkplacesviewrow.ui:68
+#: gtk/gtkplacesviewrow.c:470 gtk/ui/gtkplacesviewrow.ui:68
 msgid "Unmount"
 msgstr "Odpojí"
 
@@ -3456,7 +3462,7 @@ msgstr "Zdola nahor"
 msgid "Print"
 msgstr "Tlačiť"
 
-#: gtk/gtkprogressbar.c:588
+#: gtk/gtkprogressbar.c:692
 #, c-format
 msgctxt "progress bar label"
 msgid "%.0f %%"
@@ -3635,7 +3641,7 @@ msgstr "Skúste vyhľadať niečo iné"
 #. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
 #. * the state
 #.
-#: gtk/gtkswitch.c:391 gtk/gtkswitch.c:441 gtk/gtkswitch.c:627
+#: gtk/gtkswitch.c:419 gtk/gtkswitch.c:620
 msgctxt "switch"
 msgid "ON"
 msgstr "❙"
@@ -3643,7 +3649,7 @@ msgstr "❙"
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
 #.
-#: gtk/gtkswitch.c:399 gtk/gtkswitch.c:442 gtk/gtkswitch.c:642
+#: gtk/gtkswitch.c:425 gtk/gtkswitch.c:634
 msgctxt "switch"
 msgid "OFF"
 msgstr "○"
@@ -3835,12 +3841,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:12221
+#: gtk/gtkwindow.c:12214
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Chcete použiť nástroj Inšpektor GTK+?"
 
-#: gtk/gtkwindow.c:12223
+#: gtk/gtkwindow.c:12216
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3851,7 +3857,7 @@ msgstr ""
 "preskúmať a meniť interné vlastnosti ľubovolnej aplikácie GTK+. Jeho "
 "používaním môžete spôsobiť neočakávanie chovanie alebo pád."
 
-#: gtk/gtkwindow.c:12228
+#: gtk/gtkwindow.c:12221
 msgid "Don't show this message again"
 msgstr "Nezobrazovať túto správu znovu"
 
@@ -4302,19 +4308,19 @@ msgstr "Kumulatívne"
 msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
 msgstr "Povoliť štatistiky s GOBJECT_DEBUG=instance-count"
 
-#: gtk/inspector/visual.c:262 gtk/inspector/visual.c:277
+#: gtk/inspector/visual.c:275 gtk/inspector/visual.c:290
 msgid "Theme is hardcoded by GTK_THEME"
 msgstr "Téma je vynútená podľa premennej prostredia GTK_THEME"
 
-#: gtk/inspector/visual.c:452
+#: gtk/inspector/visual.c:465
 msgid "Backend does not support window scaling"
 msgstr "Obslužný program nepodporuje škálovanie okna"
 
-#: gtk/inspector/visual.c:491
+#: gtk/inspector/visual.c:504
 msgid "Setting is hardcoded by GTK_TEST_TOUCHSCREEN"
 msgstr "Nastavenie je vynútené z premennej prostredia GTK_TEST_TOUCHSCREEN"
 
-#: gtk/inspector/visual.c:556
+#: gtk/inspector/visual.c:569
 msgid ""
 "Not settable at runtime.\n"
 "Use GDK_GL=always or GDK_GL=disable instead"
@@ -4322,8 +4328,8 @@ msgstr ""
 "Nie je možné nastaviť v relácii.\n"
 "Použite namiesto toho GDK_GL=always alebo GDK_GL=disable"
 
-#: gtk/inspector/visual.c:570 gtk/inspector/visual.c:571
-#: gtk/inspector/visual.c:572
+#: gtk/inspector/visual.c:583 gtk/inspector/visual.c:584
+#: gtk/inspector/visual.c:585
 msgid "GL rendering is disabled"
 msgstr "Vykresľovanie GL je zakázané"
 
@@ -4400,34 +4406,40 @@ msgid "Show Pixel Cache"
 msgstr "Zobraziť medzipamäť pixelov"
 
 #: gtk/inspector/visual.ui:508
+#, fuzzy
+#| msgid "Show _Hidden Files"
+msgid "Show Widget Resizes"
+msgstr "Zobraziť _skryté súbory"
+
+#: gtk/inspector/visual.ui:542
 msgid "Simulate touchscreen"
 msgstr "Simulovať dotikovú obrazovku"
 
-#: gtk/inspector/visual.ui:553
+#: gtk/inspector/visual.ui:587
 msgid "GL Rendering"
 msgstr "Vykresľovanie GL"
 
-#: gtk/inspector/visual.ui:565
+#: gtk/inspector/visual.ui:599
 msgid "When needed"
 msgstr "Podľa potreby"
 
-#: gtk/inspector/visual.ui:566
+#: gtk/inspector/visual.ui:600
 msgid "Always"
 msgstr "Vždy"
 
-#: gtk/inspector/visual.ui:567
+#: gtk/inspector/visual.ui:601
 msgid "Disabled"
 msgstr "Zakázané"
 
-#: gtk/inspector/visual.ui:591
+#: gtk/inspector/visual.ui:625
 msgid "Software GL"
 msgstr "Softvérové GL"
 
-#: gtk/inspector/visual.ui:625
+#: gtk/inspector/visual.ui:659
 msgid "Software Surfaces"
 msgstr "Softvérové povrchy"
 
-#: gtk/inspector/visual.ui:659
+#: gtk/inspector/visual.ui:693
 msgid "Texture Rectangle Extension"
 msgstr "Rozšírenie pre obdĺžnikové textúry"
 
