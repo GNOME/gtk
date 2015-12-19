@@ -4771,6 +4771,13 @@ page_visible_cb (GtkWidget  *child,
       if (next)
         gtk_notebook_switch_page (notebook, GTK_NOTEBOOK_PAGE (next));
     }
+  
+  if (!priv->cur_page && gtk_widget_get_visible (child))
+    {
+      gtk_notebook_switch_page (notebook, page);
+      /* focus_tab is set in the switch_page method */
+      gtk_notebook_switch_focus_tab (notebook, priv->focus_tab);
+    }
 }
 
 static gint
