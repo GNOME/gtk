@@ -1972,43 +1972,8 @@ gtk_notebook_map (GtkWidget *widget)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GtkNotebookPrivate *priv = notebook->priv;
-  GtkNotebookPage *page;
-  GList *children;
-  gint i;
 
-  gtk_widget_set_mapped (widget, TRUE);
-
-  if (priv->cur_page &&
-      gtk_widget_get_visible (priv->cur_page->child) &&
-      !gtk_widget_get_mapped (priv->cur_page->child))
-    gtk_widget_map (priv->cur_page->child);
-
-  for (i = 0; i < N_ACTION_WIDGETS; i++)
-    {
-      if (priv->action_widget[i] &&
-          gtk_widget_get_visible (priv->action_widget[i]) &&
-          gtk_widget_get_child_visible (priv->action_widget[i]) &&
-          !gtk_widget_get_mapped (priv->action_widget[i]))
-        gtk_widget_map (priv->action_widget[i]);
-    }
-
-  if (priv->scrollable)
-    gtk_notebook_pages_allocate (notebook);
-  else
-    {
-      children = priv->children;
-
-      while (children)
-        {
-          page = children->data;
-          children = children->next;
-
-          if (page->tab_label &&
-              gtk_widget_get_visible (page->tab_label) &&
-              !gtk_widget_get_mapped (page->tab_label))
-            gtk_widget_map (page->tab_label);
-        }
-    }
+  GTK_WIDGET_CLASS (gtk_notebook_parent_class)->map (widget);
 
   if (gtk_notebook_get_event_window_position (notebook, NULL))
     gdk_window_show_unraised (priv->event_window);
