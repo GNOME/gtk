@@ -148,7 +148,8 @@ gtk_icon_helper_style_changed (GtkCssGadget      *gadget,
   if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_ICON))
     gtk_icon_helper_invalidate (GTK_ICON_HELPER (gadget));
 
-  GTK_CSS_GADGET_CLASS (gtk_icon_helper_parent_class)->style_changed (gadget, change);
+  if (!GTK_IS_CSS_TRANSIENT_NODE (gtk_css_gadget_get_node (gadget)))
+    GTK_CSS_GADGET_CLASS (gtk_icon_helper_parent_class)->style_changed (gadget, change);
 }
 
 static void
