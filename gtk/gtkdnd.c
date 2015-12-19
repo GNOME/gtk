@@ -2485,6 +2485,8 @@ gtk_drag_set_icon_widget_internal (GdkDragContext *context,
       gtk_widget_show (widget);
     }
 
+  if (gtk_bin_get_child (GTK_BIN (info->icon_window)))
+    gtk_container_remove (GTK_CONTAINER (info->icon_window), gtk_bin_get_child (GTK_BIN (info->icon_window)));
   gtk_container_add (GTK_CONTAINER (info->icon_window), widget);
 
 out:
