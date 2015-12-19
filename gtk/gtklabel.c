@@ -3404,17 +3404,17 @@ gtk_label_update_layout_width (GtkLabel *label)
   if (priv->ellipsize || priv->wrap)
     {
       GtkAllocation allocation;
-      GtkBorder border;
+      int xpad, ypad;
       PangoRectangle logical;
       gint width, height;
 
       gtk_css_gadget_get_content_allocation (priv->gadget, &allocation, NULL);
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      _gtk_misc_get_padding_and_border (GTK_MISC (label), &border);
+      gtk_misc_get_padding (GTK_MISC (label), &xpad, &ypad);
 G_GNUC_END_IGNORE_DEPRECATIONS
 
-      width = allocation.width - border.left - border.right;
-      height = allocation.height - border.top - border.bottom;
+      width = allocation.width - 2 * xpad;
+      height = allocation.height - 2 * ypad;
 
       if (priv->have_transform)
         {
@@ -3976,7 +3976,7 @@ get_layout_location (GtkLabel  *label,
   GtkAllocation allocation;
   GtkWidget *widget;
   GtkLabelPrivate *priv;
-  GtkBorder border;
+  gint xpad, ypad;
   gint req_width, x, y;
   gint req_height;
   gfloat xalign, yalign;
@@ -3990,7 +3990,7 @@ get_layout_location (GtkLabel  *label,
   yalign = priv->yalign;
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  _gtk_misc_get_padding_and_border (GTK_MISC (label), &border);
+  gtk_misc_get_padding (GTK_MISC (label), &xpad, &ypad);
 G_GNUC_END_IGNORE_DEPRECATIONS
 
   if (gtk_widget_get_direction (widget) != GTK_TEXT_DIR_LTR)
@@ -4010,14 +4010,14 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   req_width  = logical.width;
   req_height = logical.height;
 
-  req_width  += border.left + border.right;
-  req_height += border.top + border.bottom;
+  req_width  += 2 * xpad;
+  req_height += 2 * ypad;
 
   gtk_css_gadget_get_content_allocation (priv->gadget,
                                          &allocation,
                                          &baseline);
 
-  x = floor (allocation.x + border.left + xalign * (allocation.width - req_width) - logical.x);
+  x = floor (allocation.x + xpad + xalign * (allocation.width - req_width) - logical.x);
 
   baseline_offset = 0;
   if (baseline != -1 && !priv->have_transform)
@@ -4041,9 +4041,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    *   middle".  You want to read the first line, at least, to get some context.
    */
   if (pango_layout_get_line_count (priv->layout) == 1)
-    y = floor (allocation.y + border.top + (allocation.height - req_height) * yalign) - logical.y + baseline_offset;
+    y = floor (allocation.y + ypad + (allocation.height - req_height) * yalign) - logical.y + baseline_offset;
   else
-    y = floor (allocation.y + border.top + MAX ((allocation.height - req_height) * yalign, 0)) - logical.y + baseline_offset;
+    y = floor (allocation.y + ypad + MAX ((allocation.height - req_height) * yalign, 0)) - logical.y + baseline_offset;
 
   if (xp)
     *xp = x;
