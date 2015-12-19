@@ -105,11 +105,13 @@ gtk_builtin_icon_draw (GtkCssGadget *gadget,
 {
   GtkBuiltinIconPrivate *priv = gtk_builtin_icon_get_instance_private (GTK_BUILTIN_ICON (gadget));
 
+  cairo_save (cr);
   gtk_css_style_render_icon (gtk_css_gadget_get_style (gadget),
                              cr,
                              x, y,
                              width, height,
                              priv->image_type);
+  cairo_restore (cr);
 
   return FALSE;
 }
