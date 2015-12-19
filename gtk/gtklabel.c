@@ -4084,6 +4084,11 @@ gtk_label_size_allocate (GtkWidget     *widget,
 
   GTK_WIDGET_CLASS (gtk_label_parent_class)->size_allocate (widget, allocation);
 
+  gtk_css_gadget_allocate (priv->gadget,
+                           allocation,
+                           gtk_widget_get_allocated_baseline (widget),
+                           &clip);
+
   if (priv->layout)
     gtk_label_update_layout_width (label);
 
@@ -4093,11 +4098,6 @@ gtk_label_size_allocate (GtkWidget     *widget,
                             allocation->y,
                             allocation->width,
                             allocation->height);
-
-  gtk_css_gadget_allocate (priv->gadget,
-                           allocation,
-                           gtk_widget_get_allocated_baseline (widget),
-                           &clip);
 
   gtk_label_get_ink_rect (label, &clip_rect);
   gdk_rectangle_union (&clip_rect, &clip, &clip_rect);
