@@ -2040,7 +2040,7 @@ treeview.view {
     treeview.view header button:active {
       color: #eeeeec;
       transition: none; }
-  treeview.view header button:last-child, treeview.view header button:last-child:backdrop, treeview.view header:last-child button, treeview.view header:last-child button:backdrop {
+  treeview.view header button:last-child, treeview.view header button:last-child:backdrop {
     border-right-style: none; }
   treeview.view header.button.dnd, treeview.view header button.dnd, treeview.view header.button.dnd:active, treeview.view header.button.dnd:selected, treeview.view header.button.dnd:hover {
     transition: none;

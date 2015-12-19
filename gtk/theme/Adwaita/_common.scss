@@ -1428,9 +1428,7 @@ treeview.view {
       }
     }
     & button:last-child,
-    & button:last-child:backdrop, // set :backdrop too or the border will be visibile there
-    &:last-child button,
-    &:last-child button:backdrop { //treeview-like derived widgets in Banshee and Evolution
+    & button:last-child:backdrop {
       border-right-style: none;
     }
   }
