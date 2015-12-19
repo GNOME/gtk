@@ -1632,8 +1632,6 @@ gtk_notebook_reorder_tab (GtkNotebook      *notebook,
   else
     page_num = reorder_tab (notebook, child, priv->focus_tab);
 
-  gtk_notebook_pages_allocate (notebook);
-
   g_signal_emit (notebook,
                  notebook_signals[PAGE_REORDERED],
                  0,
@@ -3140,7 +3138,6 @@ gtk_notebook_stop_reorder (GtkNotebook *notebook)
       hide_drag_window (notebook, priv, page);
 
       priv->operation = DRAG_OPERATION_NONE;
-      gtk_notebook_pages_allocate (notebook);
 
       if (priv->dnd_timer)
         {
@@ -3320,7 +3317,6 @@ scroll_notebook_timer (gpointer data)
   if (first_tab && priv->cur_page)
     {
       priv->first_tab = first_tab;
-      gtk_notebook_pages_allocate (notebook);
 
       gdk_window_move_resize (priv->drag_window,
                               priv->drag_window_x,
@@ -3464,7 +3460,6 @@ gtk_notebook_motion_notify (GtkWidget      *widget,
               show_drag_window (notebook, priv, page, event->device);
             }
 
-          gtk_notebook_pages_allocate (notebook);
           gdk_window_move_resize (priv->drag_window,
                                   priv->drag_window_x,
                                   priv->drag_window_y,
@@ -3745,7 +3740,6 @@ gtk_notebook_drag_begin (GtkWidget        *widget,
   g_assert (priv->cur_page != NULL);
 
   priv->operation = DRAG_OPERATION_DETACH;
-  gtk_notebook_pages_allocate (notebook);
 
   tab_label = priv->detached_tab->tab_label;
 
@@ -8122,9 +8116,6 @@ gtk_notebook_reorder_child (GtkNotebook *notebook,
       if (MIN (old_pos, position) <= i && i <= MAX (old_pos, position))
 	gtk_widget_child_notify (((GtkNotebookPage *) list->data)->child, "position");
     }
-
-  if (priv->show_tabs)
-    gtk_notebook_pages_allocate (notebook);
 
   gtk_widget_thaw_child_notify (child);
 
