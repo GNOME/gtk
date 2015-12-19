@@ -2307,50 +2307,47 @@ gtk_notebook_measure_contents (GtkCssGadget   *gadget,
         }
     }
 
-  if (priv->show_border || priv->show_tabs)
+  if (priv->show_tabs)
     {
-      if (priv->show_tabs)
-        {
-          GtkRequisition tabs_requisition = { 0, 0 };
+      GtkRequisition tabs_requisition = { 0, 0 };
 
-          gtk_notebook_get_preferred_tabs_size (notebook, &tabs_requisition);
-          if (orientation == GTK_ORIENTATION_HORIZONTAL)
+      gtk_notebook_get_preferred_tabs_size (notebook, &tabs_requisition);
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+        {
+          if (priv->tab_pos == GTK_POS_TOP || priv->tab_pos == GTK_POS_BOTTOM)
             {
-              if (priv->tab_pos == GTK_POS_TOP || priv->tab_pos == GTK_POS_BOTTOM)
-                {
-                  *minimum = MAX (*minimum, tabs_requisition.width);
-                  *natural = MAX (*minimum, *natural);
-                }
-              else
-                {
-                  *minimum += tabs_requisition.width;
-                  *natural += tabs_requisition.width;
-                }
+              *minimum = MAX (*minimum, tabs_requisition.width);
+              *natural = MAX (*minimum, *natural);
             }
           else
             {
-              if (priv->tab_pos == GTK_POS_LEFT || priv->tab_pos == GTK_POS_RIGHT)
-                {
-                  *minimum = MAX (*minimum, tabs_requisition.height);
-                  *natural = MAX (*minimum, *natural);
-                }
-              else
-                {
-                  *minimum += tabs_requisition.height;
-                  *natural += tabs_requisition.height;
-                }
+              *minimum += tabs_requisition.width;
+              *natural += tabs_requisition.width;
             }
         }
       else
         {
-          for (children = priv->children; children;
-               children = children->next)
+          if (priv->tab_pos == GTK_POS_LEFT || priv->tab_pos == GTK_POS_RIGHT)
             {
-              page = children->data;
-
-              if (page->tab_label && gtk_widget_get_visible (page->tab_label))
-                gtk_widget_hide (page->tab_label);
+              *minimum = MAX (*minimum, tabs_requisition.height);
+              *natural = MAX (*minimum, *natural);
             }
+          else
+            {
+              *minimum += tabs_requisition.height;
+              *natural += tabs_requisition.height;
+            }
+        }
+    }
+  else
+    {
+      for (children = priv->children; children;
+           children = children->next)
+        {
+          page = children->data;
+
+          if (page->tab_label && gtk_widget_get_visible (page->tab_label))
+            gtk_widget_hide (page->tab_label);
         }
     }
 
@@ -2478,7 +2475,7 @@ gtk_notebook_allocate_contents (GtkCssGadget        *gadget,
       child_allocation.width = MAX (1, allocation->width - border_width * 2);
       child_allocation.height = MAX (1, allocation->height - border_width * 2);
 
-      if (priv->show_tabs || priv->show_border)
+      if (priv->show_tabs)
         {
           if (priv->show_tabs && priv->children && priv->cur_page)
             {
@@ -5386,8 +5383,7 @@ gtk_notebook_paint (GtkWidget    *widget,
   context = gtk_widget_get_style_context (widget);
   showarrow = FALSE;
 
-  if ((!priv->show_tabs && !priv->show_border) ||
-      !priv->cur_page || !gtk_widget_get_visible (priv->cur_page->child))
+  if (!priv->cur_page || !gtk_widget_get_visible (priv->cur_page->child))
     return;
 
   x += border_width;
