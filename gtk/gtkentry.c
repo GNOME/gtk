@@ -133,7 +133,7 @@
  * When the entry shows icons, it adds subnodes with the name image and the
  * style class .left or .right, depending on where the icon appears.
  *
- * When the entry has a selection, it adds a subnode with the name sleciton.
+ * When the entry has a selection, it adds a subnode with the name selection.
  *
  * When the entry shows progress, it adds a subnode with the name progress.
  * The node has the style class .pulse when the shown progress is pulsing.
