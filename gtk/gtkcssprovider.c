@@ -66,11 +66,13 @@
  * is loaded if it exists. Then, GTK+ tries to load
  * `$HOME/.themes/theme-name/gtk-3.0/gtk.css`,
  * falling back to
- * `datadir/share/themes/theme-name/gtk-3.0/gtk.css`,
- * where theme-name is the name of the current theme
- * (see the #GtkSettings:gtk-theme-name setting) and datadir
+ * `DATADIR/share/themes/THEME/gtk-VERSION/gtk.css`,
+ * where THEME is the name of the current theme
+ * (see the #GtkSettings:gtk-theme-name setting), DATADIR
  * is the prefix configured when GTK+ was compiled, unless overridden by the
- * `GTK_DATA_PREFIX` environment variable.
+ * `GTK_DATA_PREFIX` environment variable, and VERSION is the GTK+ version number.
+ * If no file is found for the current version, GTK+ tries older versions all the
+ * way back to 3.0.
  *
  * # Style sheets
  *
@@ -86,7 +88,7 @@
  *
  * An example of a rule set with two selectors:
  * |[
- * GtkButton, GtkEntry {
+ * button, entry {
  *     color: #ff00ea;
  *     font: Comic Sans 12
  * }
@@ -94,48 +96,48 @@
  *
  * # Selectors # {#gtkcssprovider-selectors}
  *
- * Selectors work very similar to the way they do in CSS, with widget class
- * names taking the role of element names, and widget names taking the role
- * of IDs. When used in a selector, widget names must be prefixed with a
- * '#' character. The “*” character represents the so-called universal
- * selector, which matches any widget.
+ * Selectors work very similar to the way they do in CSS. Typically widgets
+ * have one or more CSS nodes with element names (GTK+ falls back to using the
+ * widget class name if a widget has no element name). Widget names can be
+ * used in selectors like IDs. When used in a selector, widget names must be
+ * prefixed with a '#' character. The “*” character represents the so-called
+ * universal selector, which matches any widget.
  *
  * To express more complicated situations, selectors can be combined in
  * various ways:
  * - To require that a widget satisfies several conditions,
  *   combine several selectors into one by concatenating them. E.g.
- *   `GtkButton#button1` matches a GtkButton widget
- *   with the name button1.
+ *   `button#button1` matches a widget with element name button and
+ *   name button1.
  * - To only match a widget when it occurs inside some other
  *   widget, write the two selectors after each other, separated by whitespace.
- *   E.g. `GtkToolBar GtkButton` matches GtkButton widgets
- *   that occur inside a GtkToolBar.
- * - In the previous example, the GtkButton is matched even
- *   if it occurs deeply nested inside the toolbar. To restrict the match
- *   to direct children of the parent widget, insert a “>” character between
- *   the two selectors. E.g. `GtkNotebook > GtkLabel` matches
- *   GtkLabel widgets that are direct children of a GtkNotebook.
+ *   E.g. `toolbar button` matches button widgets that occur inside a toolbar.
+ * - In the previous example, the button is matched even if it occurs deeply
+ *   nested inside the toolbar. To restrict the match to direct children of the
+ *   parent widget, insert a “>” character between the two selectors. E.g.
+ *   `notebook > label` only matches label widgets that are direct children
+ *   of a notebook.
  *
- * ## Examples of widget classes and names in selectors
+ * ## Examples of element and widget names in selectors
  *
  * Theme labels that are descendants of a window:
  * |[
- * GtkWindow GtkLabel {
+ * window label {
  *     background-color: #898989
  * }
  * ]|
  *
  * Theme notebooks, and anything that’s within these:
  * |[
- * GtkNotebook {
+ * notebook {
  *     background-color: #a939f0
  * }
  * ]|
  *
  * Theme combo boxes, and entries that are direct children of a notebook:
  * |[
- * GtkComboBox,
- * GtkNotebook > GtkEntry {
+ * combobox,
+ * notebook > entry {
  *     color: @fg_color;
  *     background-color: #1209a2
  * }
@@ -150,7 +152,7 @@
  *
  * Theme a label named title-label:
  * |[
- * GtkLabel#title-label {
+ * label#title-label {
  *     font: Sans 15
  * }
  * ]|
@@ -167,14 +169,7 @@
  * character.
  *
  * Refer to the documentation of individual widgets to learn which
- * style classes they define and see
- * [Style Classes and Regions][gtkstylecontext-classes]
- * for a list of all style classes used by GTK+ widgets.
- *
- * Note that there is some ambiguity in the selector syntax when it comes
- * to differentiation widget class names from regions. GTK+ currently treats
- * a string as a widget class name if it contains any uppercase characters
- * (which should work for more widgets with names like GtkLabel).
+ * element names and style classes they define.
  *
  * ## Examples for style classes in selectors
  *
@@ -187,41 +182,35 @@
  *
  * Theme spinbuttons’ entry:
  * |[
- * GtkSpinButton.entry {
+ * spinbutton.entry {
  *     color: #900185
  * }
  * ]|
  *
  * In complicated widgets like e.g. a GtkNotebook, it may be desirable
  * to style different parts of the widget differently. To make this
- * possible, container widgets may define regions, whose names
- * may be used for matching in selectors.
+ * possible widgets can define multiple element names (also known as
+ * CSS nodes) which may be used for matching in selectors. Refer to
+ * the documentation of individual widgets to learn which CSS nodes
+ * they define.
  *
- * Some containers allow to further differentiate between regions by
- * applying so-called pseudo-classes to the region. For example, the
- * tab region in GtkNotebook allows to single out the first or last
- * tab by using the :first-child or :last-child pseudo-class.
- * When used in selectors, pseudo-classes must be prefixed with a
- * ':' character.
- *
- * Refer to the documentation of individual widgets to learn which
- * regions and pseudo-classes they define and see
- * [Style Classes and Regions][gtkstylecontext-classes]
- * for a list of all regions
- * used by GTK+ widgets.
- *
- * ## Examples for regions in selectors
+ * The CSS nodes of a widget (more generally, of all widgets) form a
+ * tree, in which the child nodes of any node are linearly ordered.
+ * It is possible to select CSS nodes depending on their position
+ * amongst their siblings by applying pseudo-classes to the selector,
+ * like :first-child, :last-child or :nth-child(even). When used in
+ * selectors, pseudo-classes must be prefixed with a ':' character.
  *
  * Theme any label within a notebook:
  * |[
- * GtkNotebook GtkLabel {
+ * notebook label {
  *     color: #f90192;
  * }
  * ]|
  *
  * Theme labels within notebook tabs:
  * |[
- * GtkNotebook tab GtkLabel {
+ * notebook tab label {
  *     color: #703910;
  * }
  * ]|
@@ -229,8 +218,8 @@
  * Theme labels in the any first notebook tab, both selectors are
  * equivalent:
  * |[
- * GtkNotebook tab:nth-child(first) GtkLabel,
- * GtkNotebook tab:first-child GtkLabel {
+ * notebook tab:nth-child(first) label,
+ * notebook tab:first-child label {
  *     color: #89d012;
  * }
  * ]|
@@ -238,22 +227,25 @@
  * Another use of pseudo-classes is to match widgets depending on their
  * state. This is conceptually similar to the :hover, :active or :focus
  * pseudo-classes in CSS. The available pseudo-classes for widget states
- * are :active, :prelight (or :hover), :insensitive, :selected, :focused
- * and :inconsistent.
+ * are :active, :hover (or :prelight), :insensitive, :selected, :focus
+ * (or :focused), :inconsistent, :checked and :backdrop. In addition,
+ * the following pseudo-classes don't have a direct equivalent as a widget
+ * state: :dir(ltr) and :dir(rtl) (for text direction), :link and :visited
+ * (for links) and :dnd (for highlighting drop targets).
  *
  * ## Examples for styling specific widget states
  *
- * Theme active (pressed) buttons: 
+ * Theme active (pressed) buttons:
  * |[
- * GtkButton:active {
+ * button:active {
  *     background-color: #0274d9;
  * }
  * ]|
  *
  * Theme buttons with the mouse pointer on it, both are equivalent:
  * |[
- * GtkButton:hover,
- * GtkButton:prelight {
+ * button:prelight,
+ * button:hover {
  *     background-color: #3085a9;
  * }
  * ]|
@@ -266,23 +258,23 @@
  * }
  * ]|
  *
- * Theme selection colors in entries:
+ * Theme checkbuttons that are checked:
  * |[
- * GtkEntry:selected {
+ * checkbutton:checked {
  *     background-color: #56f9a0;
  * }
  * ]|
  *
  * Theme focused labels:
  * |[
- * GtkLabel:focused {
+ * label:focused {
  *     background-color: #b4940f;
  * }
  * ]|
  *
  * Theme inconsistent checkbuttons:
  * |[
- * GtkCheckButton:inconsistent {
+ * checkbutton:inconsistent {
  *     background-color: #20395a;
  * }
  * ]|
@@ -329,15 +321,14 @@
  *                          "insert-at-cursor" (" ") };
  * };
  *
- * GtkEntry {
+ * entry {
  *   gtk-key-bindings: binding-set1, binding-set2;
  * }
  * ]|
  *
  * GTK+ also supports an additional \@define-color rule, in order
  * to define a color name which may be used instead of color numeric
- * representations. Also see the #GtkSettings:gtk-color-scheme setting
- * for a way to override the values of these named colors.
+ * representations.
  *
  * An example for defining colors:
  * |[
@@ -359,11 +350,11 @@
  * |[
  * @define-color entry-color shade (@bg_color, 0.7);
  *
- * GtkEntry {
+ * entry {
  *     background-color: @entry-color;
  * }
  *
- * GtkEntry:focused {
+ * entry:focused {
  *     background-color: mix (@entry-color,
  *                            shade (#fff, 0.5),
  *                            0.8);
@@ -372,6 +363,15 @@
  *
  * # Specifying Colors # {#specifying-colors}
  * There are various ways to express colors in GTK+ CSS.
+ *
+ * ## name
+ *
+ * A named color. See the list of [CSS colors](https://drafts.csswg.org/css-color/#named-colors).
+ *
+ * |[
+ *   color: red;
+ *   background-color: aquamarine;
+ * ]|
  *
  * ## rgb(r, g, b)
  *
@@ -392,7 +392,7 @@
  * - `a` is a floating point number between 0 and 1.
  *
  * |[
- *   color: rgb(128, 10, 54, 0.5);
+ *   color: rgba(128, 10, 54, 0.5);
  * ]|
  *
  * ## \#xxyyzz
@@ -650,13 +650,6 @@
  * a widget based environment).
  *
  * The currently supported properties are:
- *
- * ## engine: [name|none];
- *
- * - `none` means to use the default (ie. builtin engine)
- * |[
- *  engine: clearlooks;
- * ]|
  *
  * ## background-color: [color|transparent];
  *
