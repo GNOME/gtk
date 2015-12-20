@@ -1241,11 +1241,13 @@ modelbutton.flat,
   .menuitem.button.flat:hover {
     background-color: #d5d6d5; }
 
-modelbutton arrow {
+modelbutton.flat arrow {
   background: none; }
-  modelbutton arrow.left {
+  modelbutton.flat arrow:hover {
+    background: none; }
+  modelbutton.flat arrow.left {
     -gtk-icon-source: -gtk-icontheme("pan-start-symbolic"); }
-  modelbutton arrow.right {
+  modelbutton.flat arrow.right {
     -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
 
 button.color, headerbar button.color.titlebutton,
