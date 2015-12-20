@@ -308,6 +308,9 @@ text_changed (GtkTextBuffer         *buffer,
     g_source_remove (ce->priv->timeout);
 
   ce->priv->timeout = g_timeout_add (100, update_timeout, ce); 
+
+  g_list_free_full (ce->priv->errors, css_error_free);
+  ce->priv->errors = NULL;
 }
 
 static void
