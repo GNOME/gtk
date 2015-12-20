@@ -207,12 +207,12 @@ gtk_model_button_update_state (GtkModelButton *button)
     {
       if (button->active && !button->menu_name)
         {
-          state &= ~GTK_STATE_FLAG_CHECKED;
+          state |= GTK_STATE_FLAG_CHECKED;
           image_type = GTK_CSS_IMAGE_BUILTIN_CHECK_CHECKED;
         }
       else
         {
-          state |= GTK_STATE_FLAG_CHECKED;
+          state &= ~GTK_STATE_FLAG_CHECKED;
           image_type = GTK_CSS_IMAGE_BUILTIN_CHECK;
         }
     }
@@ -220,12 +220,12 @@ gtk_model_button_update_state (GtkModelButton *button)
     {
       if (button->active && !button->menu_name)
         {
-          state &= ~GTK_STATE_FLAG_CHECKED;
+          state |= GTK_STATE_FLAG_CHECKED;
           image_type = GTK_CSS_IMAGE_BUILTIN_OPTION_CHECKED;
         }
       else
         {
-          state |= GTK_STATE_FLAG_CHECKED;
+          state &= ~GTK_STATE_FLAG_CHECKED;
           image_type = GTK_CSS_IMAGE_BUILTIN_OPTION;
         }
     }
