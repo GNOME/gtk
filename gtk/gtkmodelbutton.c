@@ -998,11 +998,7 @@ gtk_model_button_render (GtkCssGadget *gadget,
   button = GTK_MODEL_BUTTON (widget);
 
   if (gtk_css_node_get_visible (gtk_css_gadget_get_node (button->indicator_gadget)))
-    {
-      cairo_save (cr);
-      gtk_css_gadget_draw (button->indicator_gadget, cr);
-      cairo_restore (cr);
-    }
+    gtk_css_gadget_draw (button->indicator_gadget, cr);
 
   child = gtk_bin_get_child (GTK_BIN (widget));
   if (child)
