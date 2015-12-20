@@ -665,8 +665,7 @@ gtk_check_button_allocate (GtkCssGadget        *gadget,
   GtkButton *button;
   GtkAllocation child_allocation;
   GtkWidget *child;
-  gint check_min_width, check_nat_width;
-  gint check_min_height, check_nat_height;
+  gint check_width, check_height;
   GdkRectangle check_clip;
 
   widget = gtk_css_gadget_get_owner (gadget);
@@ -676,22 +675,15 @@ gtk_check_button_allocate (GtkCssGadget        *gadget,
 
   g_assert (gtk_toggle_button_get_mode (GTK_TOGGLE_BUTTON (widget)));
 
-  gtk_widget_set_allocation (widget, allocation);
-
-  if (gtk_widget_get_realized (widget))
-    gdk_window_move_resize (gtk_button_get_event_window (button),
-                            allocation->x, allocation->y,
-                            allocation->width, allocation->height);
-
   gtk_css_gadget_get_preferred_size (priv->indicator_gadget,
                                      GTK_ORIENTATION_HORIZONTAL,
                                      -1,
-                                     &check_min_width, &check_nat_width,
+                                     NULL, &check_width,
                                      NULL, NULL);
   gtk_css_gadget_get_preferred_size (priv->indicator_gadget,
                                      GTK_ORIENTATION_VERTICAL,
                                      -1,
-                                     &check_min_height, &check_nat_height,
+                                     NULL, &check_height,
                                      NULL, NULL);
 
   child = gtk_bin_get_child (GTK_BIN (button));
@@ -699,10 +691,10 @@ gtk_check_button_allocate (GtkCssGadget        *gadget,
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
     child_allocation.x = allocation->x;
   else
-    child_allocation.x = allocation->x + allocation->width - check_nat_width;
-  child_allocation.y = allocation->y + (allocation->height - check_nat_height) / 2;
-  child_allocation.width = check_nat_width;
-  child_allocation.height = check_nat_height;
+    child_allocation.x = allocation->x + allocation->width - check_width;
+  child_allocation.y = allocation->y + (allocation->height - check_height) / 2;
+  child_allocation.width = check_width;
+  child_allocation.height = check_height;
 
   gtk_css_gadget_allocate (priv->indicator_gadget,
                            &child_allocation,
@@ -712,11 +704,11 @@ gtk_check_button_allocate (GtkCssGadget        *gadget,
   if (child && gtk_widget_get_visible (child))
     {
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
-        child_allocation.x = allocation->x + check_nat_width;
+        child_allocation.x = allocation->x + check_width;
       else
         child_allocation.x = allocation->x;
       child_allocation.y = allocation->y;
-      child_allocation.width = allocation->width - check_nat_width;
+      child_allocation.width = allocation->width - check_width;
       child_allocation.height = allocation->height;
 
       gtk_widget_size_allocate_with_baseline (child, &child_allocation, baseline);
@@ -762,7 +754,11 @@ gtk_check_button_draw_indicator (GtkCheckButton *check_button,
   if (class->draw_indicator)
     class->draw_indicator (check_button, cr);
   else
-    gtk_css_gadget_draw (priv->indicator_gadget, cr);
+    {
+      cairo_save (cr);
+      gtk_css_gadget_draw (priv->indicator_gadget, cr);
+      cairo_restore (cr);
+    }
 }
 
 GtkCssNode *
