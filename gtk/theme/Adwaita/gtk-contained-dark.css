@@ -2,12 +2,10 @@
   padding: 0;
   -GtkToolButton-icon-spacing: 4;
   -GtkTextView-error-underline-color: #cc0000;
-  -GtkCheckButton-indicator-size: 16;
   -GtkCheckMenuItem-indicator-size: 16;
   -GtkScrolledWindow-scrollbar-spacing: 0;
   -GtkScrolledWindow-scrollbars-within-bevel: 1;
   -GtkToolItemGroup-expander-size: 11;
-  -GtkExpander-expander-size: 16;
   -GtkTreeView-expander-size: 11;
   -GtkTreeView-horizontal-separator: 4;
   -GtkWidget-text-handle-width: 20;
@@ -2529,9 +2527,6 @@ switch {
   color: #eeeeec;
   background-image: linear-gradient(to bottom, #2d3232);
   text-shadow: 0 1px rgba(0, 0, 0, 0.1); }
-  * {
-    -GtkSwitch-slider-width: 45px;
-    -GtkSwitch-slider-height: 27px; }
   switch:active {
     color: white;
     border-color: #0f2b48;
@@ -2562,6 +2557,8 @@ switch {
     background-image: none;
     background-color: #333636; }
   switch slider {
+    min-width: 45px;
+    min-height: 27px;
     border: 1px solid;
     border-radius: 3px;
     color: #eeeeec;
@@ -2994,6 +2991,8 @@ checkbutton.text-button, radiobutton.text-button {
 
 radiobutton radio,
 checkbutton check {
+  min-width: 16px;
+  min-height: 16px;
   margin: 0 2px 0 2px; }
   radiobutton radio:only-child,
   checkbutton check:only-child {
@@ -3419,7 +3418,8 @@ progressbar {
       border-bottom-right-radius: 3px;
       border-bottom-left-radius: 3px; }
   progressbar.osd {
-    -GtkProgressBar-min-horizontal-bar-height: 3; }
+    min-width: 3px;
+    min-height: 3px; }
     progressbar.osd trough {
       border-style: none;
       border-radius: 0;
@@ -3828,6 +3828,8 @@ row {
  * Expanders *
  *************/
 expander arrow {
+  min-width: 16px;
+  min-height: 16px;
   -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
   expander arrow:dir(rtl) {
     -gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl"); }

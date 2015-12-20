@@ -10,7 +10,6 @@ $asset_suffix: if($variant=='dark', '-dark', '');
   -GtkToolButton-icon-spacing: 4;
   -GtkTextView-error-underline-color: $error_color;
 
-  -GtkCheckButton-indicator-size: 16;
   -GtkCheckMenuItem-indicator-size: 16;
 
   // The size for scrollbars. The slider is 2px smaller, but we keep it
@@ -22,7 +21,6 @@ $asset_suffix: if($variant=='dark', '-dark', '');
   -GtkScrolledWindow-scrollbars-within-bevel: 1;
 
   -GtkToolItemGroup-expander-size: 11;
-  -GtkExpander-expander-size: 16;
   -GtkTreeView-expander-size: 11;
 
   -GtkTreeView-horizontal-separator: 4;
@@ -1942,11 +1940,6 @@ scrollbar {
  **********/
 
 switch {
-  @at-root * {
-    -GtkSwitch-slider-width: 45px;
-    -GtkSwitch-slider-height: 27px;
-  }
-
   font-weight: bold;
   font-size: smaller;
   outline-offset: -4px;
@@ -1996,9 +1989,9 @@ switch {
         background-image: none;
         background-color: $insensitive_bg_color;
   }
-  // slider styling
-  // switch slider doesn't respond to its own states but relies on the switch ones
   slider {
+    min-width: 45px;
+    min-height: 27px;
     border: 1px solid;
     border-radius: 3px;
     @include button(normal);
@@ -2146,6 +2139,8 @@ checkbutton.text-button, radiobutton.text-button {
 
 radiobutton radio,
 checkbutton check {
+  min-width: 16px;
+  min-height: 16px;
   margin: 0 2px 0 2px;
   &:only-child {
     margin: 0;
@@ -2420,7 +2415,8 @@ progressbar {
   &:backdrop progress { @extend %scale_highlight:backdrop; } // states not passed here as well
 
   &.osd {
-    -GtkProgressBar-min-horizontal-bar-height: 3;
+    min-width: 3px;
+    min-height: 3px;
     trough {
       border-style: none;
       border-radius: 0;
@@ -2701,6 +2697,8 @@ row {
 
 expander {
   & arrow {
+    min-width: 16px;
+    min-height: 16px;
     -gtk-icon-source: -gtk-icontheme('pan-end-symbolic');
     &:dir(rtl) { -gtk-icon-source: -gtk-icontheme('pan-end-symbolic-rtl'); }
     &:hover { color: lighten($fg_color,30%); } //only lightens the arrow
