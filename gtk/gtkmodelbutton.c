@@ -1212,6 +1212,7 @@ gtk_model_button_init (GtkModelButton *button)
 {
   GtkCssNode *widget_node;
 
+  button->role = GTK_BUTTON_ROLE_NORMAL;
   gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
   button->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   gtk_widget_set_margin_start (button->box, 12);
@@ -1243,6 +1244,7 @@ gtk_model_button_init (GtkModelButton *button)
                                                    NULL);
   gtk_builtin_icon_set_default_size (GTK_BUILTIN_ICON (button->indicator_gadget), 16);
   update_node_ordering (button);
+  gtk_css_node_set_visible (gtk_css_gadget_get_node (button->indicator_gadget), FALSE);
 }
 
 /**
