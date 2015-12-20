@@ -165,13 +165,21 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
 		  G_TYPE_UINT,
 		  G_TYPE_STRING);
 
+  /**
+   * GtkStatusbar:shadow-type:
+   *
+   * The style of the bevel around the statusbar text.
+   *
+   * Deprecated: 3.20: Use CSS properties to determine the appearance,
+   *    the value of this style property is ignored.
+   */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_enum ("shadow-type",
                                                               P_("Shadow type"),
                                                               P_("Style of bevel around the statusbar text"),
                                                               GTK_TYPE_SHADOW_TYPE,
                                                               GTK_SHADOW_IN,
-                                                              GTK_PARAM_READABLE));
+                                                              GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   /* Bind class to template
    */
@@ -188,7 +196,6 @@ static void
 gtk_statusbar_init (GtkStatusbar *statusbar)
 {
   GtkStatusbarPrivate *priv;
-  GtkShadowType shadow_type;
 
   statusbar->priv = gtk_statusbar_get_instance_private (statusbar);
   priv = statusbar->priv;
@@ -199,10 +206,7 @@ gtk_statusbar_init (GtkStatusbar *statusbar)
   priv->keys = NULL;
 
   gtk_widget_init_template (GTK_WIDGET (statusbar));
-
   gtk_widget_set_redraw_on_allocate (GTK_WIDGET (statusbar), TRUE);
-  gtk_widget_style_get (GTK_WIDGET (statusbar), "shadow-type", &shadow_type, NULL);
-  gtk_frame_set_shadow_type (GTK_FRAME (priv->frame), shadow_type);
 }
 
 /**
