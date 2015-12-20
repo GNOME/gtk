@@ -911,7 +911,6 @@ gtk_button_box_measure (GtkCssGadget   *gadget,
   else
     *minimum = *natural = requisition.height;
 
-  *minimum = *natural = requisition.height;
   if (minimum_baseline)
     *minimum_baseline = baseline;
   if (natural_baseline)
