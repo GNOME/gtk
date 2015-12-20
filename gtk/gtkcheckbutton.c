@@ -754,11 +754,7 @@ gtk_check_button_draw_indicator (GtkCheckButton *check_button,
   if (class->draw_indicator)
     class->draw_indicator (check_button, cr);
   else
-    {
-      cairo_save (cr);
-      gtk_css_gadget_draw (priv->indicator_gadget, cr);
-      cairo_restore (cr);
-    }
+    gtk_css_gadget_draw (priv->indicator_gadget, cr);
 }
 
 GtkCssNode *
