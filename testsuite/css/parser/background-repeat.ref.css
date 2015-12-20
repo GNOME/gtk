@@ -85,3 +85,19 @@ s {
 t {
   background-repeat: no-repeat;
 }
+
+aa {
+  background-repeat: initial;
+}
+
+bb {
+  background-repeat: inherit;
+}
+
+cc {
+  background-repeat: unset;
+}
+
+dd {
+  background-repeat: repeat-x, space round, no-repeat;
+}

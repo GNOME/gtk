@@ -1,0 +1,62 @@
+a {
+  outline-bottom-left-radius: initial;
+  outline-bottom-right-radius: initial;
+  outline-top-left-radius: initial;
+  outline-top-right-radius: initial;
+}
+
+b {
+  outline-bottom-left-radius: inherit;
+  outline-bottom-right-radius: inherit;
+  outline-top-left-radius: inherit;
+  outline-top-right-radius: inherit;
+}
+
+c {
+  outline-bottom-left-radius: unset;
+  outline-bottom-right-radius: unset;
+  outline-top-left-radius: unset;
+  outline-top-right-radius: unset;
+}
+
+d {
+  outline-bottom-left-radius: 0;
+  outline-bottom-right-radius: 0;
+  outline-top-left-radius: 0;
+  outline-top-right-radius: 0;
+}
+
+e {
+  outline-bottom-left-radius: 5px;
+  outline-bottom-right-radius: 5px;
+  outline-top-left-radius: 5px;
+  outline-top-right-radius: 5px;
+}
+
+f {
+  outline-bottom-left-radius: 50%;
+  outline-bottom-right-radius: 50%;
+  outline-top-left-radius: 50%;
+  outline-top-right-radius: 50%;
+}
+
+g {
+  outline-bottom-left-radius: 5px 6px;
+  outline-bottom-right-radius: 5px 6px;
+  outline-top-left-radius: 5px 6px;
+  outline-top-right-radius: 5px 6px;
+}
+
+h {
+  outline-bottom-left-radius: 5px 20%;
+  outline-bottom-right-radius: 5px 20%;
+  outline-top-left-radius: 5px 20%;
+  outline-top-right-radius: 5px 20%;
+}
+
+i {
+  outline-bottom-left-radius: 10% 20%;
+  outline-bottom-right-radius: 10% 20%;
+  outline-top-left-radius: 10% 20%;
+  outline-top-right-radius: 10% 20%;
+}

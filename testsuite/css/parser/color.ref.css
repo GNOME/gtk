@@ -1,0 +1,65 @@
+@define-color mygreen rgb(0,1,0);
+
+a {
+  color: initial;
+}
+
+b {
+  color: inherit;
+}
+
+c {
+  color: unset;
+}
+
+d {
+  color: currentColor;
+}
+
+e {
+  color: rgba(0,0,0,0);
+}
+
+f {
+  color: rgb(255,0,0);
+}
+
+g {
+  color: rgb(0,1,0);
+}
+
+h {
+  color: rgb(1,0,1);
+}
+
+i {
+  color: rgb(170,187,204);
+}
+
+j {
+  color: rgb(1,35,69);
+}
+
+k {
+  color: shade(rgb(255,0,0), 1.3);
+}
+
+l {
+  color: shade(rgb(255,0,0), 0.69999999999999996);
+}
+
+m {
+  color: shade(rgb(0,128,0), 0.5);
+}
+
+n {
+  color: alpha(rgb(0,128,0), 0.5);
+}
+
+o {
+  color: mix(rgb(255,0,0), rgb(0,0,255), 0.25);
+}
+
+p {
+  color: @mygreen;
+}

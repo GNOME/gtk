@@ -1,0 +1,88 @@
+a {
+  background-image: initial;
+}
+
+b {
+  background-image: inherit;
+}
+
+c {
+  background-image: unset;
+}
+
+d {
+  background-image: none;
+}
+
+e {
+  background-image: none, none;
+}
+
+f {
+  background-image: url("test.png");
+}
+
+g {
+  background-image: linear-gradient(45deg, red 10%, green 20px);
+}
+
+h {
+  background-image: linear-gradient(to top, blue, black);
+}
+
+i {
+  background-image: linear-gradient(to bottom left, blue, black);
+}
+
+j {
+  background-image: linear-gradient(yellow, blue);
+}
+
+k {
+  background-image: repeating-linear-gradient(45deg, red 10%, green 20px);
+}
+
+l {
+  background-image: repeating-linear-gradient(to top, blue, black);
+}
+
+m {
+  background-image: repeating-linear-gradient(to bottom left, blue, black);
+
+}
+
+n {
+  background-image: repeating-linear-gradient(yellow, blue);
+}
+
+o {
+  background-image: cross-fade(40% linear-gradient(blue, black), linear-gradient(black, red));
+}
+
+p {
+  background-image: cross-fade(linear-gradient(blue, black), linear-gradient(black, red));
+}
+
+q {
+  background-image: cross-fade(40% linear-gradient(blue, black));
+}
+
+r {
+  background-image: -gtk-icontheme("object-select-symbolic");
+}
+
+s {
+  background-image: -gtk-scaled(-gtk-icontheme("object-select-symbolic"),linear-gradient(yellow, blue));
+}
+
+t {
+  background-image: -gtk-gradient(linear, left top, 0 1, from(red), to(green));
+}
+
+u {
+  background-image: -gtk-gradient(linear, center center, 0.2 bottom, color-stop(0, rgb(0,0,0)), color-stop(0.5, rgb(128,128,128)), color-stop(1, rgb(255,255,255)));
+}
+
+v {
+  background-image: -gtk-gradient(radial, left top, 0.1, 0 1, 0.3, color-stop(0, black), color-stop(1, blue));
+}

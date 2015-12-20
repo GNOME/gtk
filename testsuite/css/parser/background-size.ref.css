@@ -1,3 +1,15 @@
+aa {
+  background-size: initial;
+}
+
+bb {
+  background-size: inherit;
+}
+
+cc {
+  background-size: unset;
+}
+
 a {
   background-size: cover;
 }
@@ -48,4 +60,8 @@ l {
 
 m {
   background-size: 10px 10px;
+}
+
+n {
+  background-size: auto, cover, 10px 100%;
 }

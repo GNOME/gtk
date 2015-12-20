@@ -1,0 +1,87 @@
+a {
+  background-image: initial;
+}
+
+b {
+  background-image: inherit;
+}
+
+c {
+  background-image: unset;
+}
+
+d {
+  background-image: none;
+}
+
+e {
+  background-image: none, none;
+}
+
+f {
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAIAAAD91JpzAAAABmJLR0QA/wD/AP+gvaeTAAAAFUlEQVQImQXBAQEAAACAEP9PF1CpMCnkBftPnd1xAAAAAElFTkSuQmCC");
+}
+
+g {
+  background-image: linear-gradient(45deg, rgb(255,0,0) 10%, rgb(0,128,0) 20px);
+}
+
+h {
+  background-image: linear-gradient(to top, rgb(0,0,255), rgb(0,0,0));
+}
+
+i {
+  background-image: linear-gradient(to bottom left, rgb(0,0,255), rgb(0,0,0));
+}
+
+j {
+  background-image: linear-gradient(rgb(255,255,0), rgb(0,0,255));
+}
+
+k {
+  background-image: repeating-linear-gradient(45deg, rgb(255,0,0) 10%, rgb(0,128,0) 20px);
+}
+
+l {
+  background-image: repeating-linear-gradient(to top, rgb(0,0,255), rgb(0,0,0));
+}
+
+m {
+  background-image: repeating-linear-gradient(to bottom left, rgb(0,0,255), rgb(0,0,0));
+}
+
+n {
+  background-image: repeating-linear-gradient(rgb(255,255,0), rgb(0,0,255));
+}
+
+o {
+  background-image: cross-fade(40% linear-gradient(rgb(0,0,255), rgb(0,0,0)), linear-gradient(rgb(0,0,0), rgb(255,0,0)));
+}
+
+p {
+  background-image: cross-fade(linear-gradient(rgb(0,0,255), rgb(0,0,0)), linear-gradient(rgb(0,0,0), rgb(255,0,0)));
+}
+
+q {
+  background-image: cross-fade(40% linear-gradient(rgb(0,0,255), rgb(0,0,0)));
+}
+
+r {
+  background-image: -gtk-icontheme("object-select-symbolic");
+}
+
+s {
+  background-image: -gtk-scaled(-gtk-icontheme("object-select-symbolic"),linear-gradient(rgb(255,255,0), rgb(0,0,255)));
+}
+
+t {
+  background-image: -gtk-gradient (linear, left top, left bottom, from (rgb(255,0,0)), to (rgb(0,128,0)));
+}
+
+u {
+  background-image: -gtk-gradient (linear, center center, 0.20000000000000001 bottom, from (rgb(0,0,0)), color-stop (0.5, rgb(128,128,128)), to (rgb(255,255,255)));
+}
+
+v {
+  background-image: -gtk-gradient (radial, left top, 0.10000000000000001, left bottom, 0.29999999999999999, from (rgb(0,0,0)), to (rgb(0,0,255)));
+}

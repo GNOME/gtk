@@ -1,0 +1,19 @@
+a {
+  font-variant: initial;
+}
+
+b {
+  font-variant: inherit;
+}
+
+c {
+  font-variant: unset;
+}
+
+d {
+  font-variant: normal;
+}
+
+e {
+  font-variant: small-caps;
+}
