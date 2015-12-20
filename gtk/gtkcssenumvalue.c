@@ -481,9 +481,9 @@ _gtk_css_font_weight_value_try_parse (GtkCssParser *parser)
     }
   /* special cases go here */
   if (_gtk_css_parser_try (parser, "400", TRUE))
-    return _gtk_css_value_ref (&font_weight_values[3]);
+    return _gtk_css_value_ref (&font_weight_values[5]);
   if (_gtk_css_parser_try (parser, "700", TRUE))
-    return _gtk_css_value_ref (&font_weight_values[6]);
+    return _gtk_css_value_ref (&font_weight_values[8]);
 
   return NULL;
 }
