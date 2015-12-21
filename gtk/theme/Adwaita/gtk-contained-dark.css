@@ -93,8 +93,8 @@ label:insensitive {
   label:insensitive:backdrop {
     color: #5d6767; }
 
-.dim-label, label.separator, .titlebar .subtitle,
-window > headerbar .subtitle {
+.dim-label, label.separator, .titlebar:not(headerbar) .subtitle,
+headerbar .subtitle {
   opacity: 0.55;
   text-shadow: none; }
 
@@ -1282,11 +1282,11 @@ button.color, headerbar button.color.titlebutton,
     color: #4a90d9; }
     *:selected *:link:active, *:selected button:active:link, *:selected button:active:visited {
       color: #d3dfeb; }
-  *:link:backdrop, button:backdrop:link, button:backdrop:visited, *:link:backdrop:hover, button:backdrop:hover:link, button:backdrop:hover:visited, *:link:backdrop:hover:selected, button:backdrop:hover:selected:link, button:backdrop:hover:selected:visited, .titlebar.selection-mode .subtitle:backdrop:hover:link,
-  window > headerbar.selection-mode .subtitle:backdrop:hover:link {
+  *:link:backdrop, button:backdrop:link, button:backdrop:visited, *:link:backdrop:hover, button:backdrop:hover:link, button:backdrop:hover:visited, *:link:backdrop:hover:selected, button:backdrop:hover:selected:link, button:backdrop:hover:selected:visited, .selection-mode.titlebar:not(headerbar) .subtitle:backdrop:hover:link,
+  headerbar.selection-mode .subtitle:backdrop:hover:link {
     color: #215d9c; }
-  *:link:selected, button:selected:link, button:selected:visited, .titlebar.selection-mode .subtitle:link,
-  window > headerbar.selection-mode .subtitle:link, *:selected *:link, *:selected button:link, *:selected button:visited {
+  *:link:selected, button:selected:link, button:selected:visited, .selection-mode.titlebar:not(headerbar) .subtitle:link,
+  headerbar.selection-mode .subtitle:link, *:selected *:link, *:selected button:link, *:selected button:visited {
     color: #d3dfeb; }
 
 button:link, headerbar button.titlebutton:link,
@@ -1599,8 +1599,8 @@ searchbar,
 /***************
  * Header bars *
  ***************/
-.titlebar,
-window > headerbar {
+.titlebar:not(headerbar),
+headerbar {
   padding: 6px;
   border-width: 0 0 1px;
   border-style: solid;
@@ -1609,48 +1609,48 @@ window > headerbar {
   background-color: transparent;
   background-image: linear-gradient(to top, #2a2f2f, #2f3434 2px, #323737 3px);
   box-shadow: inset 0 1px rgba(238, 238, 236, 0.07); }
-  .titlebar:backdrop,
-  window > headerbar:backdrop {
+  .titlebar:backdrop:not(headerbar),
+  headerbar:backdrop {
     border-color: #1f2222;
     background-color: #393f3f;
     background-image: none;
     box-shadow: inset 0 1px rgba(238, 238, 236, 0.07); }
-  .titlebar .title,
-  window > headerbar .title {
+  .titlebar:not(headerbar) .title,
+  headerbar .title {
     font-weight: bold;
     padding-left: 12px;
     padding-right: 12px; }
-  .titlebar .subtitle,
-  window > headerbar .subtitle {
+  .titlebar:not(headerbar) .subtitle,
+  headerbar .subtitle {
     font-size: smaller;
     padding-left: 12px;
     padding-right: 12px; }
-  .titlebar .header-bar-separator, .titlebar > GtkBox > separator.vertical,
-  window > headerbar .header-bar-separator,
-  window > headerbar > GtkBox > separator.vertical {
+  .titlebar:not(headerbar) .header-bar-separator, .titlebar:not(headerbar) > GtkBox > separator.vertical,
+  headerbar .header-bar-separator,
+  headerbar > GtkBox > separator.vertical {
     -GtkWidget-wide-separators: true;
     -GtkWidget-separator-width: 1px;
     border-width: 0 1px;
     border-image: linear-gradient(to bottom, rgba(28, 31, 31, 0), #1c1f1f 30%, #1c1f1f 70%, rgba(28, 31, 31, 0) 100%) 0 1/0 1px stretch; }
-    .titlebar .header-bar-separator:backdrop, .titlebar > GtkBox > separator.vertical:backdrop,
-    window > headerbar .header-bar-separator:backdrop,
-    window > headerbar > GtkBox > separator.vertical:backdrop {
+    .titlebar:not(headerbar) .header-bar-separator:backdrop, .titlebar:not(headerbar) > GtkBox > separator.vertical:backdrop,
+    headerbar .header-bar-separator:backdrop,
+    headerbar > GtkBox > separator.vertical:backdrop {
       border-image: linear-gradient(to bottom, rgba(31, 34, 34, 0.5)) 0 1/1px 1px; }
-  .titlebar.selection-mode,
-  window > headerbar.selection-mode {
+  .selection-mode.titlebar:not(headerbar),
+  headerbar.selection-mode {
     color: #ffffff;
     text-shadow: 0 -1px rgba(0, 0, 0, 0.5);
     border-color: #0f2b48;
     background-image: linear-gradient(to bottom, #256ab1, #215d9c);
     box-shadow: inset 0 -1px #1b4c7f, inset 0 1px rgba(40, 98, 159, 0.535); }
-    .titlebar.selection-mode:backdrop,
-    window > headerbar.selection-mode:backdrop {
+    .selection-mode.titlebar:backdrop:not(headerbar),
+    headerbar.selection-mode:backdrop {
       background-image: linear-gradient(to bottom, #215d9c);
       box-shadow: inset 0 1px rgba(44, 100, 160, 0.442); }
-    .titlebar.selection-mode button,
-    window > headerbar.selection-mode button,
-    window > headerbar.selection-mode .titlebar button.titlebutton,
-    .titlebar window > headerbar.selection-mode button.titlebutton {
+    .selection-mode.titlebar:not(headerbar) button,
+    headerbar.selection-mode button,
+    headerbar.selection-mode .titlebar button.titlebutton,
+    .titlebar headerbar.selection-mode button.titlebutton {
       color: #ffffff;
       outline-color: rgba(255, 255, 255, 0.3);
       border-color: #0b1e33;
@@ -1658,19 +1658,19 @@ window > headerbar {
       text-shadow: 0 -1px rgba(0, 0, 0, 0.70353);
       -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.70353);
       box-shadow: inset 0 1px rgba(255, 255, 255, 0.05), 0 1px rgba(40, 98, 159, 0); }
-      .titlebar.selection-mode button.flat, .titlebar.selection-mode button.sidebar-button,
-      .titlebar.selection-mode button.titlebutton,
-      window > headerbar.selection-mode button.flat,
-      window > headerbar.selection-mode button.sidebar-button,
-      window > headerbar.selection-mode button.titlebutton {
+      .selection-mode.titlebar:not(headerbar) button.flat, .selection-mode.titlebar:not(headerbar) button.sidebar-button,
+      .selection-mode.titlebar:not(headerbar) button.titlebutton,
+      headerbar.selection-mode button.flat,
+      headerbar.selection-mode button.sidebar-button,
+      headerbar.selection-mode button.titlebutton {
         border-color: transparent;
         background-color: transparent;
         background-image: none;
         box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(238, 238, 236, 0);
         text-shadow: none;
         -gtk-icon-shadow: none; }
-      .titlebar.selection-mode button:hover,
-      window > headerbar.selection-mode button:hover {
+      .selection-mode.titlebar:not(headerbar) button:hover,
+      headerbar.selection-mode button:hover {
         color: #ffffff;
         outline-color: rgba(255, 255, 255, 0.3);
         border-color: #0b1e33;
@@ -1684,9 +1684,9 @@ window > headerbar {
         text-shadow: 0 -1px rgba(0, 0, 0, 0.65553);
         -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.65553);
         box-shadow: inset 0 1px rgba(255, 255, 255, 0.05), 0 1px rgba(40, 98, 159, 0); }
-      .titlebar.selection-mode button:active, .titlebar.selection-mode button:checked,
-      window > headerbar.selection-mode button:active,
-      window > headerbar.selection-mode button:checked {
+      .selection-mode.titlebar:not(headerbar) button:active, .selection-mode.titlebar:not(headerbar) button:checked,
+      headerbar.selection-mode button:active,
+      headerbar.selection-mode button:checked {
         color: #ffffff;
         outline-color: rgba(255, 255, 255, 0.3);
         border-color: #0b1e33;
@@ -1694,12 +1694,12 @@ window > headerbar {
         text-shadow: 0 -1px rgba(0, 0, 0, 0.78353);
         -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.78353);
         box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6), 0 1px rgba(40, 98, 159, 0); }
-      .titlebar.selection-mode button:backdrop, .titlebar.selection-mode button.flat:backdrop, .titlebar.selection-mode button.sidebar-button:backdrop,
-      .titlebar.selection-mode button.titlebutton:backdrop,
-      window > headerbar.selection-mode button:backdrop,
-      window > headerbar.selection-mode button.flat:backdrop,
-      window > headerbar.selection-mode button.sidebar-button:backdrop,
-      window > headerbar.selection-mode button.titlebutton:backdrop {
+      .selection-mode.titlebar:not(headerbar) button:backdrop, .selection-mode.titlebar:not(headerbar) button.flat:backdrop, .selection-mode.titlebar:not(headerbar) button.sidebar-button:backdrop,
+      .selection-mode.titlebar:not(headerbar) button.titlebutton:backdrop,
+      headerbar.selection-mode button:backdrop,
+      headerbar.selection-mode button.flat:backdrop,
+      headerbar.selection-mode button.sidebar-button:backdrop,
+      headerbar.selection-mode button.titlebutton:backdrop {
         color: #d3dfeb;
         border-color: #0b1e33;
         background-image: linear-gradient(to bottom, #215d9c);
@@ -1708,28 +1708,28 @@ window > headerbar {
         box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(40, 98, 159, 0);
         -gtk-icon-effect: none;
         border-color: #0f2b48; }
-        .titlebar.selection-mode button:backdrop:active, .titlebar.selection-mode button:backdrop:checked, .titlebar.selection-mode button.flat:backdrop:active, .titlebar.selection-mode button.sidebar-button:backdrop:active,
-        .titlebar.selection-mode button.titlebutton:backdrop:active, .titlebar.selection-mode button.flat:backdrop:checked, .titlebar.selection-mode button.sidebar-button:backdrop:checked,
-        .titlebar.selection-mode button.titlebutton:backdrop:checked,
-        window > headerbar.selection-mode button:backdrop:active,
-        window > headerbar.selection-mode button:backdrop:checked,
-        window > headerbar.selection-mode button.flat:backdrop:active,
-        window > headerbar.selection-mode button.sidebar-button:backdrop:active,
-        window > headerbar.selection-mode button.titlebutton:backdrop:active,
-        window > headerbar.selection-mode button.flat:backdrop:checked,
-        window > headerbar.selection-mode button.sidebar-button:backdrop:checked,
-        window > headerbar.selection-mode button.titlebutton:backdrop:checked {
+        .selection-mode.titlebar:not(headerbar) button:backdrop:active, .selection-mode.titlebar:not(headerbar) button:backdrop:checked, .selection-mode.titlebar:not(headerbar) button.flat:backdrop:active, .selection-mode.titlebar:not(headerbar) button.sidebar-button:backdrop:active,
+        .selection-mode.titlebar:not(headerbar) button.titlebutton:backdrop:active, .selection-mode.titlebar:not(headerbar) button.flat:backdrop:checked, .selection-mode.titlebar:not(headerbar) button.sidebar-button:backdrop:checked,
+        .selection-mode.titlebar:not(headerbar) button.titlebutton:backdrop:checked,
+        headerbar.selection-mode button:backdrop:active,
+        headerbar.selection-mode button:backdrop:checked,
+        headerbar.selection-mode button.flat:backdrop:active,
+        headerbar.selection-mode button.sidebar-button:backdrop:active,
+        headerbar.selection-mode button.titlebutton:backdrop:active,
+        headerbar.selection-mode button.flat:backdrop:checked,
+        headerbar.selection-mode button.sidebar-button:backdrop:checked,
+        headerbar.selection-mode button.titlebutton:backdrop:checked {
           color: #d1dae3;
           border-color: #0b1e33;
           background-image: linear-gradient(to bottom, #184472);
           box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(40, 98, 159, 0);
           border-color: #0f2b48; }
-        .titlebar.selection-mode button:backdrop:insensitive, .titlebar.selection-mode button.flat:backdrop:insensitive, .titlebar.selection-mode button.sidebar-button:backdrop:insensitive,
-        .titlebar.selection-mode button.titlebutton:backdrop:insensitive,
-        window > headerbar.selection-mode button:backdrop:insensitive,
-        window > headerbar.selection-mode button.flat:backdrop:insensitive,
-        window > headerbar.selection-mode button.sidebar-button:backdrop:insensitive,
-        window > headerbar.selection-mode button.titlebutton:backdrop:insensitive {
+        .selection-mode.titlebar:not(headerbar) button:backdrop:insensitive, .selection-mode.titlebar:not(headerbar) button.flat:backdrop:insensitive, .selection-mode.titlebar:not(headerbar) button.sidebar-button:backdrop:insensitive,
+        .selection-mode.titlebar:not(headerbar) button.titlebutton:backdrop:insensitive,
+        headerbar.selection-mode button:backdrop:insensitive,
+        headerbar.selection-mode button.flat:backdrop:insensitive,
+        headerbar.selection-mode button.sidebar-button:backdrop:insensitive,
+        headerbar.selection-mode button.titlebutton:backdrop:insensitive {
           color: #6f91b4;
           border-color: #0b1e33;
           background-image: linear-gradient(to bottom, #22558b);
@@ -1737,93 +1737,93 @@ window > headerbar {
           -gtk-icon-shadow: none;
           box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(40, 98, 159, 0);
           border-color: #0f2b48; }
-          .titlebar.selection-mode button:backdrop:insensitive > .label, .titlebar.selection-mode headerbar button.titlebutton:backdrop:insensitive > .label, .titlebar.selection-mode button.flat:backdrop:insensitive > .label, .titlebar.selection-mode button.sidebar-button:backdrop:insensitive > .label, .titlebar.selection-mode headerbar button.titlebutton:backdrop:insensitive > .label,
-          .titlebar.selection-mode button.titlebutton:backdrop:insensitive > .label,
-          window > headerbar.selection-mode button:backdrop:insensitive > .label,
-          window > headerbar.selection-mode .titlebar button.titlebutton:backdrop:insensitive > .label,
-          window > headerbar.selection-mode button.flat:backdrop:insensitive > .label,
-          window > headerbar.selection-mode button.sidebar-button:backdrop:insensitive > .label,
-          window > headerbar.selection-mode button.titlebutton:backdrop:insensitive > .label,
-          window > headerbar.selection-mode .titlebar button.titlebutton:backdrop:insensitive > .label {
+          .selection-mode.titlebar:not(headerbar) button:backdrop:insensitive > .label, .selection-mode.titlebar:not(headerbar) headerbar button.titlebutton:backdrop:insensitive > .label, .selection-mode.titlebar:not(headerbar) button.flat:backdrop:insensitive > .label, .selection-mode.titlebar:not(headerbar) button.sidebar-button:backdrop:insensitive > .label, .selection-mode.titlebar:not(headerbar) headerbar button.titlebutton:backdrop:insensitive > .label,
+          .selection-mode.titlebar:not(headerbar) button.titlebutton:backdrop:insensitive > .label,
+          headerbar.selection-mode button:backdrop:insensitive > .label,
+          headerbar.selection-mode .titlebar button.titlebutton:backdrop:insensitive > .label,
+          headerbar.selection-mode button.flat:backdrop:insensitive > .label,
+          headerbar.selection-mode button.sidebar-button:backdrop:insensitive > .label,
+          headerbar.selection-mode button.titlebutton:backdrop:insensitive > .label,
+          headerbar.selection-mode .titlebar button.titlebutton:backdrop:insensitive > .label {
             color: inherit; }
-        .titlebar.selection-mode button:backdrop:insensitive:active, .titlebar.selection-mode button:backdrop:insensitive:checked, .titlebar.selection-mode button.flat:backdrop:insensitive:active, .titlebar.selection-mode button.sidebar-button:backdrop:insensitive:active,
-        .titlebar.selection-mode button.titlebutton:backdrop:insensitive:active, .titlebar.selection-mode button.flat:backdrop:insensitive:checked, .titlebar.selection-mode button.sidebar-button:backdrop:insensitive:checked,
-        .titlebar.selection-mode button.titlebutton:backdrop:insensitive:checked,
-        window > headerbar.selection-mode button:backdrop:insensitive:active,
-        window > headerbar.selection-mode button:backdrop:insensitive:checked,
-        window > headerbar.selection-mode button.flat:backdrop:insensitive:active,
-        window > headerbar.selection-mode button.sidebar-button:backdrop:insensitive:active,
-        window > headerbar.selection-mode button.titlebutton:backdrop:insensitive:active,
-        window > headerbar.selection-mode button.flat:backdrop:insensitive:checked,
-        window > headerbar.selection-mode button.sidebar-button:backdrop:insensitive:checked,
-        window > headerbar.selection-mode button.titlebutton:backdrop:insensitive:checked {
+        .selection-mode.titlebar:not(headerbar) button:backdrop:insensitive:active, .selection-mode.titlebar:not(headerbar) button:backdrop:insensitive:checked, .selection-mode.titlebar:not(headerbar) button.flat:backdrop:insensitive:active, .selection-mode.titlebar:not(headerbar) button.sidebar-button:backdrop:insensitive:active,
+        .selection-mode.titlebar:not(headerbar) button.titlebutton:backdrop:insensitive:active, .selection-mode.titlebar:not(headerbar) button.flat:backdrop:insensitive:checked, .selection-mode.titlebar:not(headerbar) button.sidebar-button:backdrop:insensitive:checked,
+        .selection-mode.titlebar:not(headerbar) button.titlebutton:backdrop:insensitive:checked,
+        headerbar.selection-mode button:backdrop:insensitive:active,
+        headerbar.selection-mode button:backdrop:insensitive:checked,
+        headerbar.selection-mode button.flat:backdrop:insensitive:active,
+        headerbar.selection-mode button.sidebar-button:backdrop:insensitive:active,
+        headerbar.selection-mode button.titlebutton:backdrop:insensitive:active,
+        headerbar.selection-mode button.flat:backdrop:insensitive:checked,
+        headerbar.selection-mode button.sidebar-button:backdrop:insensitive:checked,
+        headerbar.selection-mode button.titlebutton:backdrop:insensitive:checked {
           color: #6c88a7;
           border-color: #0b1e33;
           background-image: linear-gradient(to bottom, #1d4877);
           box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(40, 98, 159, 0);
           border-color: #0f2b48; }
-          .titlebar.selection-mode button:backdrop:insensitive:active > .label, .titlebar.selection-mode headerbar button.titlebutton:backdrop:insensitive:active > .label, .titlebar.selection-mode button:backdrop:insensitive:checked > .label, .titlebar.selection-mode headerbar button.titlebutton:backdrop:insensitive:checked > .label, .titlebar.selection-mode button.flat:backdrop:insensitive:active > .label, .titlebar.selection-mode button.sidebar-button:backdrop:insensitive:active > .label, .titlebar.selection-mode headerbar button.titlebutton:backdrop:insensitive:active > .label,
-          .titlebar.selection-mode button.titlebutton:backdrop:insensitive:active > .label, .titlebar.selection-mode button.flat:backdrop:insensitive:checked > .label, .titlebar.selection-mode button.sidebar-button:backdrop:insensitive:checked > .label, .titlebar.selection-mode headerbar button.titlebutton:backdrop:insensitive:checked > .label,
-          .titlebar.selection-mode button.titlebutton:backdrop:insensitive:checked > .label,
-          window > headerbar.selection-mode button:backdrop:insensitive:active > .label,
-          window > headerbar.selection-mode .titlebar button.titlebutton:backdrop:insensitive:active > .label,
-          window > headerbar.selection-mode button:backdrop:insensitive:checked > .label,
-          window > headerbar.selection-mode .titlebar button.titlebutton:backdrop:insensitive:checked > .label,
-          window > headerbar.selection-mode button.flat:backdrop:insensitive:active > .label,
-          window > headerbar.selection-mode button.sidebar-button:backdrop:insensitive:active > .label,
-          window > headerbar.selection-mode button.titlebutton:backdrop:insensitive:active > .label,
-          window > headerbar.selection-mode .titlebar button.titlebutton:backdrop:insensitive:active > .label,
-          window > headerbar.selection-mode button.flat:backdrop:insensitive:checked > .label,
-          window > headerbar.selection-mode button.sidebar-button:backdrop:insensitive:checked > .label,
-          window > headerbar.selection-mode button.titlebutton:backdrop:insensitive:checked > .label,
-          window > headerbar.selection-mode .titlebar button.titlebutton:backdrop:insensitive:checked > .label {
+          .selection-mode.titlebar:not(headerbar) button:backdrop:insensitive:active > .label, .selection-mode.titlebar:not(headerbar) headerbar button.titlebutton:backdrop:insensitive:active > .label, .selection-mode.titlebar:not(headerbar) button:backdrop:insensitive:checked > .label, .selection-mode.titlebar:not(headerbar) headerbar button.titlebutton:backdrop:insensitive:checked > .label, .selection-mode.titlebar:not(headerbar) button.flat:backdrop:insensitive:active > .label, .selection-mode.titlebar:not(headerbar) button.sidebar-button:backdrop:insensitive:active > .label, .selection-mode.titlebar:not(headerbar) headerbar button.titlebutton:backdrop:insensitive:active > .label,
+          .selection-mode.titlebar:not(headerbar) button.titlebutton:backdrop:insensitive:active > .label, .selection-mode.titlebar:not(headerbar) button.flat:backdrop:insensitive:checked > .label, .selection-mode.titlebar:not(headerbar) button.sidebar-button:backdrop:insensitive:checked > .label, .selection-mode.titlebar:not(headerbar) headerbar button.titlebutton:backdrop:insensitive:checked > .label,
+          .selection-mode.titlebar:not(headerbar) button.titlebutton:backdrop:insensitive:checked > .label,
+          headerbar.selection-mode button:backdrop:insensitive:active > .label,
+          headerbar.selection-mode .titlebar button.titlebutton:backdrop:insensitive:active > .label,
+          headerbar.selection-mode button:backdrop:insensitive:checked > .label,
+          headerbar.selection-mode .titlebar button.titlebutton:backdrop:insensitive:checked > .label,
+          headerbar.selection-mode button.flat:backdrop:insensitive:active > .label,
+          headerbar.selection-mode button.sidebar-button:backdrop:insensitive:active > .label,
+          headerbar.selection-mode button.titlebutton:backdrop:insensitive:active > .label,
+          headerbar.selection-mode .titlebar button.titlebutton:backdrop:insensitive:active > .label,
+          headerbar.selection-mode button.flat:backdrop:insensitive:checked > .label,
+          headerbar.selection-mode button.sidebar-button:backdrop:insensitive:checked > .label,
+          headerbar.selection-mode button.titlebutton:backdrop:insensitive:checked > .label,
+          headerbar.selection-mode .titlebar button.titlebutton:backdrop:insensitive:checked > .label {
             color: inherit; }
-      .titlebar.selection-mode button.flat:backdrop, .titlebar.selection-mode button.sidebar-button:backdrop,
-      .titlebar.selection-mode button.titlebutton:backdrop, .titlebar.selection-mode button.flat:insensitive, .titlebar.selection-mode button.sidebar-button:insensitive,
-      .titlebar.selection-mode button.titlebutton:insensitive, .titlebar.selection-mode button.flat:insensitive:backdrop, .titlebar.selection-mode button.sidebar-button:insensitive:backdrop,
-      .titlebar.selection-mode button.titlebutton:insensitive:backdrop,
-      window > headerbar.selection-mode button.flat:backdrop,
-      window > headerbar.selection-mode button.sidebar-button:backdrop,
-      window > headerbar.selection-mode button.titlebutton:backdrop,
-      window > headerbar.selection-mode button.flat:insensitive,
-      window > headerbar.selection-mode button.sidebar-button:insensitive,
-      window > headerbar.selection-mode button.titlebutton:insensitive,
-      window > headerbar.selection-mode button.flat:insensitive:backdrop,
-      window > headerbar.selection-mode button.sidebar-button:insensitive:backdrop,
-      window > headerbar.selection-mode button.titlebutton:insensitive:backdrop {
+      .selection-mode.titlebar:not(headerbar) button.flat:backdrop, .selection-mode.titlebar:not(headerbar) button.sidebar-button:backdrop,
+      .selection-mode.titlebar:not(headerbar) button.titlebutton:backdrop, .selection-mode.titlebar:not(headerbar) button.flat:insensitive, .selection-mode.titlebar:not(headerbar) button.sidebar-button:insensitive,
+      .selection-mode.titlebar:not(headerbar) button.titlebutton:insensitive, .selection-mode.titlebar:not(headerbar) button.flat:insensitive:backdrop, .selection-mode.titlebar:not(headerbar) button.sidebar-button:insensitive:backdrop,
+      .selection-mode.titlebar:not(headerbar) button.titlebutton:insensitive:backdrop,
+      headerbar.selection-mode button.flat:backdrop,
+      headerbar.selection-mode button.sidebar-button:backdrop,
+      headerbar.selection-mode button.titlebutton:backdrop,
+      headerbar.selection-mode button.flat:insensitive,
+      headerbar.selection-mode button.sidebar-button:insensitive,
+      headerbar.selection-mode button.titlebutton:insensitive,
+      headerbar.selection-mode button.flat:insensitive:backdrop,
+      headerbar.selection-mode button.sidebar-button:insensitive:backdrop,
+      headerbar.selection-mode button.titlebutton:insensitive:backdrop {
         border-color: transparent;
         background-color: transparent;
         background-image: none;
         box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(238, 238, 236, 0);
         text-shadow: none;
         -gtk-icon-shadow: none; }
-      .titlebar.selection-mode button:insensitive,
-      window > headerbar.selection-mode button:insensitive {
+      .selection-mode.titlebar:not(headerbar) button:insensitive,
+      headerbar.selection-mode button:insensitive {
         color: #91aac5;
         border-color: #0b1e33;
         background-image: linear-gradient(to bottom, #22558b);
         text-shadow: none;
         -gtk-icon-shadow: none;
         box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(40, 98, 159, 0); }
-        .titlebar.selection-mode button:insensitive > .label, .titlebar.selection-mode headerbar button.titlebutton:insensitive > .label,
-        window > headerbar.selection-mode button:insensitive > .label,
-        window > headerbar.selection-mode .titlebar button.titlebutton:insensitive > .label {
+        .selection-mode.titlebar:not(headerbar) button:insensitive > .label, .selection-mode.titlebar:not(headerbar) headerbar button.titlebutton:insensitive > .label,
+        headerbar.selection-mode button:insensitive > .label,
+        headerbar.selection-mode .titlebar button.titlebutton:insensitive > .label {
           color: inherit; }
-        .titlebar.selection-mode button:insensitive:active, .titlebar.selection-mode button:insensitive:checked,
-        window > headerbar.selection-mode button:insensitive:active,
-        window > headerbar.selection-mode button:insensitive:checked {
+        .selection-mode.titlebar:not(headerbar) button:insensitive:active, .selection-mode.titlebar:not(headerbar) button:insensitive:checked,
+        headerbar.selection-mode button:insensitive:active,
+        headerbar.selection-mode button:insensitive:checked {
           color: #a5b6c9;
           border-color: #0b1e33;
           background-image: linear-gradient(to bottom, #1b4470, #1d4877);
           box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(40, 98, 159, 0); }
-          .titlebar.selection-mode button:insensitive:active > .label, .titlebar.selection-mode headerbar button.titlebutton:insensitive:active > .label, .titlebar.selection-mode button:insensitive:checked > .label, .titlebar.selection-mode headerbar button.titlebutton:insensitive:checked > .label,
-          window > headerbar.selection-mode button:insensitive:active > .label,
-          window > headerbar.selection-mode .titlebar button.titlebutton:insensitive:active > .label,
-          window > headerbar.selection-mode button:insensitive:checked > .label,
-          window > headerbar.selection-mode .titlebar button.titlebutton:insensitive:checked > .label {
+          .selection-mode.titlebar:not(headerbar) button:insensitive:active > .label, .selection-mode.titlebar:not(headerbar) headerbar button.titlebutton:insensitive:active > .label, .selection-mode.titlebar:not(headerbar) button:insensitive:checked > .label, .selection-mode.titlebar:not(headerbar) headerbar button.titlebutton:insensitive:checked > .label,
+          headerbar.selection-mode button:insensitive:active > .label,
+          headerbar.selection-mode .titlebar button.titlebutton:insensitive:active > .label,
+          headerbar.selection-mode button:insensitive:checked > .label,
+          headerbar.selection-mode .titlebar button.titlebutton:insensitive:checked > .label {
             color: inherit; }
-      .titlebar.selection-mode button.suggested-action,
-      window > headerbar.selection-mode button.suggested-action {
+      .selection-mode.titlebar:not(headerbar) button.suggested-action,
+      headerbar.selection-mode button.suggested-action {
         color: #eeeeec;
         outline-color: rgba(238, 238, 236, 0.3);
         border-color: #1c1f1f;
@@ -1832,8 +1832,8 @@ window > headerbar {
         -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
         box-shadow: inset 0 1px rgba(255, 255, 255, 0.05), 0 1px rgba(40, 98, 159, 0);
         border-color: #0f2b48; }
-        .titlebar.selection-mode button.suggested-action:hover,
-        window > headerbar.selection-mode button.suggested-action:hover {
+        .selection-mode.titlebar:not(headerbar) button.suggested-action:hover,
+        headerbar.selection-mode button.suggested-action:hover {
           color: #eeeeec;
           outline-color: rgba(238, 238, 236, 0.3);
           border-color: #1c1f1f;
@@ -1848,8 +1848,8 @@ window > headerbar {
           -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.76376);
           box-shadow: inset 0 1px rgba(255, 255, 255, 0.05), 0 1px rgba(40, 98, 159, 0);
           border-color: #0f2b48; }
-        .titlebar.selection-mode button.suggested-action:active,
-        window > headerbar.selection-mode button.suggested-action:active {
+        .selection-mode.titlebar:not(headerbar) button.suggested-action:active,
+        headerbar.selection-mode button.suggested-action:active {
           color: #eeeeec;
           outline-color: rgba(238, 238, 236, 0.3);
           border-color: #1c1f1f;
@@ -1858,8 +1858,8 @@ window > headerbar {
           -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
           box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6), 0 1px rgba(40, 98, 159, 0);
           border-color: #0f2b48; }
-        .titlebar.selection-mode button.suggested-action:insensitive,
-        window > headerbar.selection-mode button.suggested-action:insensitive {
+        .selection-mode.titlebar:not(headerbar) button.suggested-action:insensitive,
+        headerbar.selection-mode button.suggested-action:insensitive {
           color: #949796;
           border-color: #1c1f1f;
           background-image: linear-gradient(to bottom, #333636);
@@ -1867,12 +1867,12 @@ window > headerbar {
           -gtk-icon-shadow: none;
           box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(40, 98, 159, 0);
           border-color: #0f2b48; }
-          .titlebar.selection-mode button.suggested-action:insensitive > .label, .titlebar.selection-mode headerbar button.suggested-action.titlebutton:insensitive > .label,
-          window > headerbar.selection-mode button.suggested-action:insensitive > .label,
-          window > headerbar.selection-mode .titlebar button.suggested-action.titlebutton:insensitive > .label {
+          .selection-mode.titlebar:not(headerbar) button.suggested-action:insensitive > .label, .selection-mode.titlebar:not(headerbar) headerbar button.suggested-action.titlebutton:insensitive > .label,
+          headerbar.selection-mode button.suggested-action:insensitive > .label,
+          headerbar.selection-mode .titlebar button.suggested-action.titlebutton:insensitive > .label {
             color: inherit; }
-        .titlebar.selection-mode button.suggested-action:backdrop,
-        window > headerbar.selection-mode button.suggested-action:backdrop {
+        .selection-mode.titlebar:not(headerbar) button.suggested-action:backdrop,
+        headerbar.selection-mode button.suggested-action:backdrop {
           color: #949796;
           border-color: #1f2222;
           background-image: linear-gradient(to bottom, #393f3f);
@@ -1880,8 +1880,8 @@ window > headerbar {
           -gtk-icon-shadow: none;
           box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(40, 98, 159, 0);
           border-color: #0f2b48; }
-        .titlebar.selection-mode button.suggested-action:backdrop:insensitive,
-        window > headerbar.selection-mode button.suggested-action:backdrop:insensitive {
+        .selection-mode.titlebar:not(headerbar) button.suggested-action:backdrop:insensitive,
+        headerbar.selection-mode button.suggested-action:backdrop:insensitive {
           color: #5d6767;
           border-color: #1f2222;
           background-image: linear-gradient(to bottom, #333636);
@@ -1889,43 +1889,49 @@ window > headerbar {
           -gtk-icon-shadow: none;
           box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(40, 98, 159, 0);
           border-color: #0f2b48; }
-          .titlebar.selection-mode button.suggested-action:backdrop:insensitive > .label, .titlebar.selection-mode headerbar button.suggested-action.titlebutton:backdrop:insensitive > .label,
-          window > headerbar.selection-mode button.suggested-action:backdrop:insensitive > .label,
-          window > headerbar.selection-mode .titlebar button.suggested-action.titlebutton:backdrop:insensitive > .label {
+          .selection-mode.titlebar:not(headerbar) button.suggested-action:backdrop:insensitive > .label, .selection-mode.titlebar:not(headerbar) headerbar button.suggested-action.titlebutton:backdrop:insensitive > .label,
+          headerbar.selection-mode button.suggested-action:backdrop:insensitive > .label,
+          headerbar.selection-mode .titlebar button.suggested-action.titlebutton:backdrop:insensitive > .label {
             color: inherit; }
-    .titlebar.selection-mode .selection-menu, .titlebar.selection-mode .selection-menu:backdrop,
-    window > headerbar.selection-mode .selection-menu,
-    window > headerbar.selection-mode .titlebar.selection-mode .selection-menu:backdrop,
-    .titlebar.selection-mode window > headerbar.selection-mode .selection-menu:backdrop,
-    window > headerbar.selection-mode .selection-menu:backdrop {
+    .selection-mode.titlebar:not(headerbar) .selection-menu, .selection-mode.titlebar:not(headerbar) .selection-menu:backdrop,
+    headerbar.selection-mode .selection-menu,
+    headerbar.selection-mode .selection-mode.titlebar:not(headerbar) .selection-menu:backdrop,
+    .selection-mode.titlebar:not(headerbar) headerbar.selection-mode .selection-menu:backdrop,
+    headerbar.selection-mode .selection-menu:backdrop {
       border-color: rgba(33, 93, 156, 0);
       background-image: linear-gradient(to bottom, rgba(33, 93, 156, 0));
       box-shadow: none;
       padding-left: 10px;
       padding-right: 10px; }
-      .titlebar.selection-mode .selection-menu GtkArrow, .titlebar.selection-mode .selection-menu:backdrop GtkArrow,
-      window > headerbar.selection-mode .selection-menu GtkArrow,
-      window > headerbar.selection-mode .titlebar.selection-mode .selection-menu:backdrop GtkArrow,
-      .titlebar.selection-mode window > headerbar.selection-mode .selection-menu:backdrop GtkArrow,
-      window > headerbar.selection-mode .selection-menu:backdrop GtkArrow {
+      .selection-mode.titlebar:not(headerbar) .selection-menu GtkArrow, .selection-mode.titlebar:not(headerbar) .selection-menu:backdrop GtkArrow,
+      headerbar.selection-mode .selection-menu GtkArrow,
+      headerbar.selection-mode .selection-mode.titlebar:not(headerbar) .selection-menu:backdrop GtkArrow,
+      .selection-mode.titlebar:not(headerbar) headerbar.selection-mode .selection-menu:backdrop GtkArrow,
+      headerbar.selection-mode .selection-menu:backdrop GtkArrow {
         -GtkArrow-arrow-scaling: 1; }
-      .titlebar.selection-mode .selection-menu .arrow,
-      window > headerbar.selection-mode .selection-menu .arrow {
+      .selection-mode.titlebar:not(headerbar) .selection-menu .arrow,
+      headerbar.selection-mode .selection-menu .arrow {
         -gtk-icon-source: -gtk-icontheme("pan-down-symbolic");
         color: rgba(255, 255, 255, 0.5);
         -gtk-icon-shadow: none; }
-  .tiled .titlebar, .maximized .titlebar, .tiled
-  window > headerbar, .maximized
-  window > headerbar {
+  .tiled .titlebar:not(headerbar), .maximized .titlebar:not(headerbar), .tiled
+  headerbar, .maximized
+  headerbar {
     border-radius: 0; }
-  .titlebar.default-decoration,
-  window > headerbar.default-decoration {
+  .default-decoration.titlebar:not(headerbar),
+  headerbar.default-decoration {
     padding: 4px; }
-    .titlebar.default-decoration button,
-    window > headerbar.default-decoration button,
-    window > headerbar.default-decoration .titlebar button.titlebutton,
-    .titlebar window > headerbar.default-decoration button.titlebutton {
+    .default-decoration.titlebar:not(headerbar) button,
+    headerbar.default-decoration button,
+    headerbar.default-decoration .titlebar button.titlebutton,
+    .titlebar headerbar.default-decoration button.titlebutton {
       padding: 5px; }
+
+window.csd > .titlebar:not(headerbar) {
+  padding: 0;
+  border-style: none;
+  background-image: none;
+  border-color: transparent; }
 
 /************
  * Pathbars *

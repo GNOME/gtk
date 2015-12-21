@@ -1080,8 +1080,8 @@ searchbar,
  * Header bars *
  ***************/
 
-.titlebar,
-window > headerbar {
+%titlebar,
+headerbar {
   padding: 6px;
   border-width: 0 0 1px;
   border-style: solid;
@@ -1252,6 +1252,17 @@ window > headerbar {
     padding: 4px;
     button { padding: 5px; }
   }
+}
+
+.titlebar:not(headerbar) {
+  window.csd > & {
+    // in csd we assume every titlebar is a headerbar so reset anything, this is needed for split toolbars cases
+    padding: 0;
+    border-style: none;
+    background-image: none;
+    border-color: transparent;
+  }
+  @extend %titlebar;
 }
 
 /************
