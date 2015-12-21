@@ -399,7 +399,7 @@ _gtk_gradient_parse (GtkCssParser *parser)
           if (! _gtk_css_parser_try_double (parser, &coords[(i * 3) + 2]))
             {
               _gtk_css_parser_error (parser,
-                                     "Expected a numer for the radius");
+                                     "Expected a number for the radius");
               return NULL;
             }
         }
