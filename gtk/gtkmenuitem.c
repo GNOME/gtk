@@ -943,8 +943,8 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
    * Amount of space used up by the arrow, relative to the menu item's font
    * size.
    *
-   * Deprecated: 3.20: use the standard min-width/min-height CSS properties;
-   *   the value of this style property is ignored.
+   * Deprecated: 3.20: use the standard min-width/min-height CSS properties on
+   *   the arrow node; the value of this style property is ignored.
    */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_float ("arrow-scaling",
