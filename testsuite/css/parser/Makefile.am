@@ -284,7 +284,6 @@ test_data = \
 	declarations-valid-17.css \
 	declarations-valid-17.ref.css \
 	declarations-valid-18.css \
-	declarations-valid-18.errors \
 	declarations-valid-18.ref.css \
 	declarations-valid-19.css \
 	declarations-valid-19.ref.css \
