@@ -2143,12 +2143,16 @@ menu,
   menu arrow,
   .menu arrow {
     border-style: none;
-    border-radius: 0; }
+    border-radius: 0;
+    min-height: 16px;
+    min-width: 16px; }
     menu arrow.top,
     .menu arrow.top {
+      -gtk-icon-source: -gtk-icontheme("pan-up-symbolic");
       border-bottom: 1px solid #3d3d3d; }
     menu arrow.bottom,
     .menu arrow.bottom {
+      -gtk-icon-source: -gtk-icontheme("pan-down-symbolic");
       border-top: 1px solid #3d3d3d; }
     menu arrow:hover,
     .menu arrow:hover {

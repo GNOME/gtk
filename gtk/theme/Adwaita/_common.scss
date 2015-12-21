@@ -1540,8 +1540,16 @@ menu,
     @extend %undecorated_button;
     border-style: none;
     border-radius: 0;
-    &.top { border-bottom: 1px solid mix($fg_color, $base_color, 10%); }
-    &.bottom { border-top: 1px solid mix($fg_color, $base_color, 10%); }
+    min-height: 16px;
+    min-width: 16px;
+    &.top {
+      -gtk-icon-source: -gtk-icontheme('pan-up-symbolic');
+      border-bottom: 1px solid mix($fg_color, $base_color, 10%);
+    }
+    &.bottom {
+      -gtk-icon-source: -gtk-icontheme('pan-down-symbolic');
+      border-top: 1px solid mix($fg_color, $base_color, 10%);
+    }
     &:hover { background-color: mix($fg_color, $base_color, 10%); }
     &:insensitive {
       color: transparent;

@@ -26,6 +26,7 @@
 #define __GTK_MENU_PRIVATE_H__
 
 #include <gtk/gtkmenu.h>
+#include <gtk/gtkcssgadgetprivate.h>
 #include <gtk/gtkcssnodeprivate.h>
 
 G_BEGIN_DECLS
@@ -69,8 +70,8 @@ struct _GtkMenuPrivate
   GdkWindow *view_window;
   GdkWindow *bin_window;
 
-  GtkCssNode *top_arrow;
-  GtkCssNode *bottom_arrow;
+  GtkCssGadget *top_arrow_gadget;
+  GtkCssGadget *bottom_arrow_gadget;
 
   gint scroll_offset;
   gint saved_scroll_offset;
