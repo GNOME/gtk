@@ -1694,7 +1694,10 @@ gtk_image_get_content_size (GtkCssGadget   *gadget,
     {
       baseline_align = gtk_image_get_baseline_align (GTK_IMAGE (widget));
       *minimum = *natural = height;
-      *minimum_baseline = *natural_baseline = height * baseline_align;
+      if (minimum_baseline)
+        *minimum_baseline = height * baseline_align;
+      if (natural_baseline)
+        *natural_baseline = height * baseline_align;
     }
 
 }
