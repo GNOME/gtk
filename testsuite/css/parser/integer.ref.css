@@ -1,23 +1,39 @@
 a {
-  int-property: 0;
+  margin-top: 0;
 }
 
 b {
-  int-property: 1;
+  margin-top: 1px;
 }
 
 c {
-  int-property: -1;
+  margin-top: -1px;
 }
 
 d {
-  int-property: 2147483647;
+  margin-top: 2147483647px;
 }
 
 e {
-  int-property: -2147483648;
+  margin-top: -2147483648px;
+}
+
+f {
+  margin-top: 1px;
+}
+
+g {
+  margin-top: 3px;
+}
+
+h {
+  margin-top: 255px;
 }
 
 i {
-  int-property: 377;
+  margin-top: 377px;
+}
+
+l {
+  margin-top: 3px;
 }
