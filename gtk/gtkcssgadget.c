@@ -563,7 +563,7 @@ gtk_css_gadget_allocate (GtkCssGadget        *gadget,
       g_warning ("Negative content height while allocating gadget (node %s, owner %s)\n",
                  gtk_css_node_get_name (gtk_css_gadget_get_node (gadget)),
                  G_OBJECT_TYPE_NAME (gtk_css_gadget_get_owner (gadget)));
-      content_allocation.width = 0;
+      content_allocation.height = 0;
     }
 
   GTK_CSS_GADGET_GET_CLASS (gadget)->allocate (gadget, &content_allocation, baseline, &content_clip);
