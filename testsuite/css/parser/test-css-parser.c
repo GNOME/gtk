@@ -321,12 +321,6 @@ main (int argc, char **argv)
                                                                NULL,
                                                                G_PARAM_READABLE));
   gtk_style_properties_register_property (NULL,
-                                          g_param_spec_boxed ("rgba-property",
-                                                              "rgba property",
-                                                              "test rgba properties",
-                                                              GDK_TYPE_RGBA,
-                                                              G_PARAM_READABLE));
-  gtk_style_properties_register_property (NULL,
                                           g_param_spec_enum ("enum-property",
                                                              "enum property",
                                                              "test enum properties",
