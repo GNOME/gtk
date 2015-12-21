@@ -407,6 +407,7 @@ test_data = \
 	value-inherit-shorthand.css \
 	value-inherit-shorthand.ref.css \
 	value-initial.css \
+	value-initial.errors \
 	value-initial-shorthand.css \
 	value-initial-shorthand.ref.css \
 	value-none.css \

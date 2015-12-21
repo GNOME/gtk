@@ -1,4 +1,5 @@
 * {
+  -gtk-icon-shadow: initial;
   background-clip: initial;
   background-color: initial;
   background-image: initial;
@@ -32,7 +33,6 @@
   font-style: initial;
   font-variant: initial;
   font-weight: initial;
-  icon-shadow: initial;
   margin-bottom: initial;
   margin-left: initial;
   margin-right: initial;
