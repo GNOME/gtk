@@ -1,11 +1,11 @@
 a {
-  int-property: 1;
+  padding-top: 1px;
 }
 
 a {
-  int-property: 3;
+  padding-top: 3px;
 }
 
 a {
-  int-property: 2;
+  padding-top: 2px;
 }

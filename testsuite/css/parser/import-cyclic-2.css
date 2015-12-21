@@ -1,5 +1,5 @@
 @import url("import-cyclic-3.css");
 
 a {
-  int-property: 2
+  padding-top: 2px
 }
