@@ -170,6 +170,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	gdkgears			\
 	listmodel			\
 	foreigndrawing			\
+	testpopup			\
 	$(NULL)
 
 if USE_X11

@@ -3229,6 +3229,12 @@ gtk_window_unset_transient_for  (GtkWindow *window)
  *
  * Passing %NULL for @parent unsets the current transient window.
  *
+ * On Wayland, this function can also be used to attach a new
+ * #GTK_WINDOW_POPUP to a #GTK_WINDOW_TOPLEVEL parent already mapped
+ * on screen so that the #GTK_WINDOW_POPUP will be created as a
+ * subsurface-based window #GDK_WINDOW_SUBSURFACE which can be
+ * positioned at will relatively to the #GTK_WINDOW_TOPLEVEL surface.
+ *
  * On Windows, this function puts the child window on top of the parent,
  * much as the window manager would have done on X.
  */

@@ -1228,35 +1228,26 @@ should_be_mapped (GdkWindow *window)
 }
 
 static gboolean
-should_map_as_subsurface (GdkWindow *window)
-{
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-
-  if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_SUBSURFACE)
-    return TRUE;
-
-  switch (impl->hint)
-    {
-    case GDK_WINDOW_TYPE_HINT_TOOLTIP:
-      return TRUE;
-
-    case GDK_WINDOW_TYPE_HINT_UTILITY:
-      if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP)
-        return TRUE;
-      break;
-
-    default:
-      break;
-    }
-
-  return FALSE;
-}
-
-static gboolean
 should_map_as_popup (GdkWindow *window)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
+  /* Ideally, popup would be temp windows with a parent and grab */
+  if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP)
+    {
+      /* If a temp window has a parent and a grab, we can use a popup */
+      if (impl->transient_for)
+        {
+          if (impl->grab_input_seat)
+            return TRUE;
+        }
+      else
+        g_warning ("Window %p is a temporary window without parent, "
+                   "application will not be able to position it on screen.",
+                   window);
+    }
+
+  /* Yet we need to keep the window type hint tests for compatibility */
   switch (impl->hint)
     {
     case GDK_WINDOW_TYPE_HINT_POPUP_MENU:
@@ -1271,6 +1262,38 @@ should_map_as_popup (GdkWindow *window)
 
     default:
       break;
+    }
+
+  return FALSE;
+}
+
+static gboolean
+should_map_as_subsurface (GdkWindow *window)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_SUBSURFACE)
+    return TRUE;
+
+  if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_TEMP)
+    return FALSE;
+
+  /* if we want a popup, we do not want a subsurface */
+  if (should_map_as_popup (window))
+    return FALSE;
+
+  if (impl->transient_for)
+    {
+      GdkWindowImplWayland *impl_parent;
+
+      impl_parent = GDK_WINDOW_IMPL_WAYLAND (impl->transient_for->impl);
+      /* subsurface require that the parent is mapped */
+      if (impl_parent->mapped)
+        return TRUE;
+      else
+        g_warning ("Couldn't map window %p as susburface because its parent is not mapped.",
+                   window);
+
     }
 
   return FALSE;
@@ -1313,7 +1336,7 @@ gdk_wayland_window_map (GdkWindow *window)
       if (impl->transient_for)
         gdk_wayland_window_create_subsurface (window);
       else
-        g_warning ("Couldn't map as window %p as susburface yet because it doesn't have a parent",
+        g_warning ("Couldn't map window %p as susburface yet because it doesn't have a parent",
                    window);
     }
   else if (should_map_as_popup (window))
