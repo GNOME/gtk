@@ -746,12 +746,19 @@ gtk_menu_class_init (GtkMenuClass *class)
                                                              -2,
                                                              GTK_PARAM_READABLE));
 
+  /**
+   * GtkMenu:double-arrows:
+   *
+   * When %TRUE, both arrows are shown when scrolling.
+   *
+   * Deprecated: 3.20: the value of this style property is ignored.
+   **/
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_boolean ("double-arrows",
                                                                  P_("Double Arrows"),
                                                                  P_("When scrolling, always show both arrows."),
                                                                  TRUE,
-                                                                 GTK_PARAM_READABLE));
+                                                                 GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   /**
    * GtkMenu:arrow-placement:
@@ -3560,20 +3567,6 @@ gtk_menu_motion_notify (GtkWidget      *widget,
   return FALSE;
 }
 
-static gboolean
-get_double_arrows (GtkMenu *menu)
-{
-  GtkMenuPrivate   *priv = menu->priv;
-  gboolean          double_arrows;
-
-  gtk_widget_style_get (GTK_WIDGET (menu),
-                        "double-arrows", &double_arrows,
-                        NULL);
-
-  return double_arrows || (priv->initially_pushed_in &&
-                           priv->scroll_offset != 0);
-}
-
 static void
 gtk_menu_scroll_by (GtkMenu *menu,
                     gint     step)
@@ -3583,23 +3576,11 @@ gtk_menu_scroll_by (GtkMenu *menu,
   GtkWidget *widget;
   gint offset;
   gint view_height;
-  gboolean double_arrows;
 
   widget = GTK_WIDGET (menu);
   offset = priv->scroll_offset + step;
 
   get_arrows_border (menu, &arrow_border);
-
-  double_arrows = get_double_arrows (menu);
-
-  /* If we scroll upward and the non-visible top part
-   * is smaller than the scroll arrow it would be
-   * pretty stupid to show the arrow and taking more
-   * screen space than just scrolling to the top.
-   */
-  if (!double_arrows)
-    if ((step < 0) && (offset < arrow_border.top))
-      offset = 0;
 
   /* Don't scroll over the top if we weren't before: */
   if ((priv->scroll_offset >= 0) && (offset < 0))
@@ -3615,11 +3596,8 @@ gtk_menu_scroll_by (GtkMenu *menu,
   if (priv->scroll_offset > 0)
     view_height -= arrow_border.top;
 
-  /* When both arrows are always shown,
-   * reduce view height even more.
-   */
-  if (double_arrows)
-    view_height -= arrow_border.bottom;
+  /* Since arrows are shown, reduce view height even more */
+  view_height -= arrow_border.bottom;
 
   if ((priv->scroll_offset + view_height <= priv->requested_height) &&
       (offset + view_height > priv->requested_height))
@@ -4620,7 +4598,6 @@ gtk_menu_scroll_to (GtkMenu *menu,
   gint view_width, view_height;
   gint border_width;
   gint menu_height;
-  gboolean double_arrows;
 
   widget = GTK_WIDGET (menu);
 
@@ -4632,7 +4609,6 @@ gtk_menu_scroll_to (GtkMenu *menu,
   view_height = gtk_widget_get_allocated_height (widget);
 
   get_menu_padding (widget, &padding);
-  double_arrows = get_double_arrows (menu);
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (menu));
 
@@ -4643,7 +4619,7 @@ gtk_menu_scroll_to (GtkMenu *menu,
   x = border_width + padding.left;
   y = border_width + padding.top;
 
-  if (double_arrows && !priv->tearoff_active)
+  if (!priv->tearoff_active)
     {
       if (view_height < menu_height               ||
           (offset > 0 && priv->scroll_offset > 0) ||
@@ -4723,52 +4699,6 @@ gtk_menu_scroll_to (GtkMenu *menu,
           gtk_widget_queue_draw (GTK_WIDGET (menu));
         }
     }
-  else if (!priv->tearoff_active)
-    {
-      gboolean last_visible;
-
-      last_visible = priv->upper_arrow_visible;
-      priv->upper_arrow_visible = offset > 0;
-
-      /* upper_arrow_visible may have changed, so requery the border */
-      get_arrows_border (menu, &arrow_border);
-      view_height -= arrow_border.top;
-
-      if ((last_visible != priv->upper_arrow_visible) &&
-          !priv->upper_arrow_visible)
-        {
-          priv->upper_arrow_prelight = FALSE;
-
-          /* If we hide the upper arrow, possibly remove timeout */
-          if (priv->scroll_step < 0)
-            {
-              gtk_menu_stop_scrolling (menu);
-              gtk_widget_queue_draw (GTK_WIDGET (menu));
-            }
-        }
-
-      last_visible = priv->lower_arrow_visible;
-      priv->lower_arrow_visible = offset < menu_height - view_height;
-
-      /* lower_arrow_visible may have changed, so requery the border */
-      get_arrows_border (menu, &arrow_border);
-      view_height -= arrow_border.bottom;
-
-      if ((last_visible != priv->lower_arrow_visible) &&
-           !priv->lower_arrow_visible)
-        {
-          priv->lower_arrow_prelight = FALSE;
-
-          /* If we hide the lower arrow, possibly remove timeout */
-          if (priv->scroll_step > 0)
-            {
-              gtk_menu_stop_scrolling (menu);
-              gtk_widget_queue_draw (GTK_WIDGET (menu));
-            }
-        }
-
-      y += arrow_border.top;
-    }
 
   gtk_css_node_set_visible (priv->top_arrow, priv->upper_arrow_visible);
   gtk_css_node_set_visible (priv->bottom_arrow, priv->lower_arrow_visible);
@@ -4843,13 +4773,11 @@ gtk_menu_scroll_item_visible (GtkMenuShell *menu_shell,
   if (compute_child_offset (menu, menu_item,
                             &child_offset, &child_height, &last_child))
     {
-      gboolean double_arrows;
       GtkBorder padding;
 
       y = priv->scroll_offset;
       height = gdk_window_get_height (gtk_widget_get_window (widget));
 
-      double_arrows = get_double_arrows (menu);
       get_menu_padding (widget, &padding);
 
       height -= 2 * gtk_container_get_border_width (GTK_CONTAINER (menu)) +
@@ -4875,17 +4803,9 @@ gtk_menu_scroll_item_visible (GtkMenuShell *menu_shell,
 
           if (child_offset + child_height > y + height - arrow_height)
             {
-              arrow_height = 0;
-              if ((!last_child && !priv->tearoff_active) || double_arrows)
-                arrow_height += arrow_border.bottom;
-
+              arrow_height = arrow_border.bottom + arrow_border.top;
               y = child_offset + child_height - height + arrow_height;
-              if (((y > 0) && !priv->tearoff_active) || double_arrows)
-                {
-                  /* Need upper arrow */
-                  arrow_height += arrow_border.top;
-                  y = child_offset + child_height - height + arrow_height;
-                }
+
               /* Ignore the enter event we might get if the pointer
                * is on the menu
                */
