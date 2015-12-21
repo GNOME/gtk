@@ -2239,7 +2239,6 @@ checkbutton check {
 }
 
 scale {
-  // FIXME: rationalize
   -GtkScale-slider-length: 20;
   -GtkRange-slider-width: 26;
   -GtkRange-trough-border: 2;
@@ -2259,8 +2258,7 @@ scale {
 
   trough { margin: 13px; }
 
-  &:not(.vertical) slider { margin: 3px 0; }
-
+  &.horizontal slider { margin: 3px 0; }
   &.vertical slider { margin: 0 3px; }
 
   // the backing bit
@@ -2401,12 +2399,12 @@ progressbar {
   // sizing
   &.horizontal {
     trough,
-    progress { min-height: 4px; } // FIXME: should be 6px, but looks like currently gtk+ consider borders
+    progress { min-height: 2px; } // FIXME: should be 4px, but looks like currently gtk+ consider borders
   }
 
   &.vertical {
     trough,
-    progress { min-width: 4px; } // FIXME: should be 6px, but looks like currently gtk+ consider borders
+    progress { min-width: 2px; } // FIXME: should be 4px, but looks like currently gtk+ consider borders
   }
 
   &.horizontal progress { margin: 0 -1px; } // the progress node is positioned after the trough border
@@ -2430,20 +2428,20 @@ progressbar {
     @extend %scale_highlight;
     border-radius: 1.5px;
     &.left {
-      border-top-left-radius: 3px;
-      border-bottom-left-radius: 3px;
+      border-top-left-radius: 2px;
+      border-bottom-left-radius: 2px;
     }
     &.right {
-      border-top-right-radius: 3px;
-      border-bottom-right-radius: 3px;
+      border-top-right-radius: 2px;
+      border-bottom-right-radius: 2px;
     }
     &.top {
-      border-top-right-radius: 3px;
-      border-top-left-radius: 3px;
+      border-top-right-radius: 2px;
+      border-top-left-radius: 2px;
     }
     &.bottom {
-      border-bottom-right-radius: 3px;
-      border-bottom-left-radius: 3px;
+      border-bottom-right-radius: 2px;
+      border-bottom-left-radius: 2px;
     }
   }
 

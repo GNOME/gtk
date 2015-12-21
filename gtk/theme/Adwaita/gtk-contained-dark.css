@@ -3083,7 +3083,7 @@ scale {
         border-radius: 4px; }
   scale trough {
     margin: 13px; }
-  scale:not(.vertical) slider {
+  scale.horizontal slider {
     margin: 3px 0; }
   scale.vertical slider {
     margin: 0 3px; }
@@ -3424,10 +3424,10 @@ progressbar {
   box-shadow: 0 1px rgba(238, 238, 236, 0); }
   progressbar.horizontal trough,
   progressbar.horizontal progress {
-    min-height: 4px; }
+    min-height: 2px; }
   progressbar.vertical trough,
   progressbar.vertical progress {
-    min-width: 4px; }
+    min-width: 2px; }
   progressbar.horizontal progress {
     margin: 0 -1px; }
   progressbar.vertical progress {
@@ -3437,17 +3437,17 @@ progressbar {
   progressbar progress {
     border-radius: 1.5px; }
     progressbar progress.left {
-      border-top-left-radius: 3px;
-      border-bottom-left-radius: 3px; }
+      border-top-left-radius: 2px;
+      border-bottom-left-radius: 2px; }
     progressbar progress.right {
-      border-top-right-radius: 3px;
-      border-bottom-right-radius: 3px; }
+      border-top-right-radius: 2px;
+      border-bottom-right-radius: 2px; }
     progressbar progress.top {
-      border-top-right-radius: 3px;
-      border-top-left-radius: 3px; }
+      border-top-right-radius: 2px;
+      border-top-left-radius: 2px; }
     progressbar progress.bottom {
-      border-bottom-right-radius: 3px;
-      border-bottom-left-radius: 3px; }
+      border-bottom-right-radius: 2px;
+      border-bottom-left-radius: 2px; }
   progressbar.osd {
     min-width: 3px;
     min-height: 3px; }
