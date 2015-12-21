@@ -159,6 +159,12 @@ test_data = \
 	at-valid-21.css \
 	at-valid-21.errors \
 	at-valid-21.ref.css \
+        background-clip.css \
+        background-clip.ref.css \
+        background-image.css \
+        background-image.ref.css \
+        background-origin.css \
+        background-origin.ref.css \
 	background-position.css \
 	background-position.errors \
 	background-position.ref.css \
@@ -179,19 +185,31 @@ test_data = \
 	border.css \
 	border.errors \
 	border.ref.css \
+        border-color.css \
+        border-color.ref.css \
 	border-color-currentcolor.css \
 	border-color-currentcolor.ref.css \
 	border-infloop-3.12.css \
 	border-infloop-3.12.errors \
 	border-infloop-3.12.ref.css \
+        border-radius.css \
+        border-radius.ref.css \
 	border-radius-shorthand.css \
 	border-radius-shorthand.errors \
 	border-radius-shorthand.ref.css \
 	border-shorthand.css \
 	border-shorthand.ref.css \
+        border-style.css \
+        border-style.ref.css \
+        border-width.css \
+        border-width.ref.css \
+        box-shadow.css \
+        box-shadow.ref.css \
 	close-at-end-of-file.css \
 	close-at-end-of-file.errors \
 	close-at-end-of-file.ref.css \
+        color.css \
+        color.ref.css \
 	colors-errors.css \
 	colors-errors.errors \
 	colors-errors.ref.css \
@@ -297,6 +315,16 @@ test_data = \
 	font-family.css \
 	font-family.errors \
 	font-family.ref.css \
+        font-size.css \
+        font-size.ref.css \
+        font-stretch.css \
+        font-stretch.ref.css \
+        font-style.css \
+        font-style.ref.css \
+        font-variant.css \
+        font-variant.ref.css \
+        font-weight.css \
+        font-weight.ref.css \
 	freed-string-in-error-messages.css \
 	freed-string-in-error-messages.errors \
 	freed-string-in-error-messages.ref.css \
@@ -322,14 +350,32 @@ test_data = \
 	keyframes-empty.ref.css \
 	keyframes-ordering.css \
 	keyframes-ordering.ref.css \
+        letter-spacing.css \
+        letter-spacing.ref.css \
 	linear-gradient.css \
 	linear-gradient.ref.css \
+        margin.css \
+        margin.ref.css \
 	no-semicolon.css \
 	no-semicolon.ref.css \
 	not.css \
 	not.ref.css \
 	nth-child.css \
 	nth-child.ref.css \
+        opacity.css \
+        opacity.ref.css \
+        outline-color.css \
+        outline-color.ref.css \
+        outline-offset.css \
+        outline-offset.ref.css \
+        outline-radius.css \
+        outline-radius.ref.css \
+        outline-style.css \
+        outline-style.ref.css \
+        outline-width.css \
+        outline-width.ref.css \
+        padding.css \
+        padding.ref.css \
 	property-name-errors.css \
 	property-name-errors.errors \
 	property-name-errors.ref.css \
@@ -350,7 +396,15 @@ test_data = \
 	single-slash.ref.css \
 	string-values.css \
 	string-values.ref.css \
+        text-decoration-color.css \
+        text-decoration-color.ref.css \
+        text-decoration-line.css \
+        text-decoration-line.ref.css \
+        text-decoration-style.css \
+        text-decoration-style.ref.css \
 	test.png \
+        text-shadow.css \
+        text-shadow.ref.css \
 	text-shadow-invalid-but-worked-in-3.12.css \
 	text-shadow-invalid-but-worked-in-3.12.errors \
 	text-shadow-invalid-but-worked-in-3.12.ref.css \
