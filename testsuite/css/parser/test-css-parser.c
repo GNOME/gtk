@@ -327,12 +327,6 @@ main (int argc, char **argv)
                                                               GDK_TYPE_RGBA,
                                                               G_PARAM_READABLE));
   gtk_style_properties_register_property (NULL,
-                                          g_param_spec_boxed ("border-property",
-                                                              "border property",
-                                                              "test border properties",
-                                                              GTK_TYPE_BORDER,
-                                                              G_PARAM_READABLE));
-  gtk_style_properties_register_property (NULL,
                                           g_param_spec_enum ("enum-property",
                                                              "enum property",
                                                              "test enum properties",
