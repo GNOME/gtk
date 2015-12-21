@@ -1,23 +1,23 @@
 :nobody-knows-me {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 :nobody-knows-me(really) {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 :a:lot:of:unkwnown:pseudo:classes(some):of(them):with:functions( spaces ) {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 :nth-child {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 :nth-child() {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 x, :unknown-pseudo-classes-invalidate-selectors, y {
-  int-property: 42;
+  padding-top: 42px;
 }
