@@ -184,9 +184,9 @@ test_data = \
 	border-infloop-3.12.css \
 	border-infloop-3.12.errors \
 	border-infloop-3.12.ref.css \
-	border-radius.css \
-	border-radius.errors \
-	border-radius.ref.css \
+	border-radius-shorthand.css \
+	border-radius-shorthand.errors \
+	border-radius-shorthand.ref.css \
 	border-shorthand.css \
 	border-shorthand.ref.css \
 	close-at-end-of-file.css \
