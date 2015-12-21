@@ -2464,7 +2464,7 @@ notebook {
 /**************
  * Scrollbars *
  **************/
-scrollbar {
+* {
   -GtkRange-slider-width: 13;
   -GtkRange-trough-border: 0;
   -GtkScrollbar-has-backward-stepper: false;
@@ -2472,71 +2472,71 @@ scrollbar {
   -GtkScrollbar-min-slider-length: 42;
   -GtkRange-stepper-spacing: 0;
   -GtkRange-trough-under-steppers: 1; }
-  scrollbar button, scrollbar headerbar button.titlebutton, headerbar scrollbar button.titlebutton,
-  scrollbar .titlebar button.titlebutton,
-  .titlebar scrollbar button.titlebutton {
-    border: none; }
-  scrollbar.overlay-indicator:not(.dragging):not(.hovering) {
-    opacity: 0.4;
-    -GtkRange-slider-width: 5px; }
-    scrollbar.overlay-indicator:not(.dragging):not(.hovering) slider {
-      margin: 0;
-      background-color: #2e3436;
-      border: 1px solid white;
-      background-clip: padding-box; }
-    scrollbar.overlay-indicator:not(.dragging):not(.hovering) trough {
-      border-style: none;
-      background-color: transparent; }
-    scrollbar.overlay-indicator:not(.dragging):not(.hovering).vertical slider {
-      margin-top: 2px;
-      margin-bottom: 2px; }
-    scrollbar.overlay-indicator:not(.dragging):not(.hovering).horizontal slider {
-      margin-left: 2px;
-      margin-right: 2px; }
-  scrollbar.overlay-indicator.dragging, scrollbar.overlay-indicator.hovering {
-    opacity: 0.7; }
-  scrollbar trough {
-    background-color: #d7d7d5;
-    border: 1px none #9d9d99; }
-    scrollbar trough:backdrop {
-      background-color: #e1e1df;
-      border-color: #a5a5a1; }
-  scrollbar slider {
-    background-color: #787c7d; }
-    scrollbar slider:hover {
-      background-color: #535859; }
-    scrollbar slider:prelight:active {
-      background-color: #2a76c6; }
-    scrollbar slider:backdrop {
-      background-color: #c3c4c4; }
-    scrollbar slider:insensitive {
-      background-color: transparent; }
-  scrollbar slider {
-    border-radius: 100px;
-    margin: 3px; }
-  scrollbar.fine-tune slider {
-    margin: 4px; }
-  scrollbar.vertical slider {
-    margin-left: 4px; }
-    scrollbar.vertical slider:dir(rtl) {
-      margin-left: 3px;
-      margin-right: 4px; }
-  scrollbar.vertical.fine-tune slider {
-    margin-left: 5px; }
-    scrollbar.vertical.fine-tune slider:dir(rtl) {
-      margin-left: 4px;
-      margin-right: 5px; }
-  scrollbar.vertical trough {
-    border-left-style: solid; }
-    scrollbar.vertical trough:dir(rtl) {
-      border-left-style: none;
-      border-right-style: solid; }
-  scrollbar.horizontal slider {
-    margin-top: 4px; }
-  scrollbar.horizontal.fine-tune slider {
-    margin-top: 5px; }
-  scrollbar.horizontal trough {
-    border-top-style: solid; }
+scrollbar button, scrollbar headerbar button.titlebutton, headerbar scrollbar button.titlebutton,
+scrollbar .titlebar button.titlebutton,
+.titlebar scrollbar button.titlebutton {
+  border: none; }
+scrollbar.overlay-indicator:not(.dragging):not(.hovering) {
+  opacity: 0.4;
+  -GtkRange-slider-width: 5px; }
+  scrollbar.overlay-indicator:not(.dragging):not(.hovering) slider {
+    margin: 0;
+    background-color: #2e3436;
+    border: 1px solid white;
+    background-clip: padding-box; }
+  scrollbar.overlay-indicator:not(.dragging):not(.hovering) trough {
+    border-style: none;
+    background-color: transparent; }
+  scrollbar.overlay-indicator:not(.dragging):not(.hovering).vertical slider {
+    margin-top: 2px;
+    margin-bottom: 2px; }
+  scrollbar.overlay-indicator:not(.dragging):not(.hovering).horizontal slider {
+    margin-left: 2px;
+    margin-right: 2px; }
+scrollbar.overlay-indicator.dragging, scrollbar.overlay-indicator.hovering {
+  opacity: 0.7; }
+scrollbar trough {
+  background-color: #d7d7d5;
+  border: 1px none #9d9d99; }
+  scrollbar trough:backdrop {
+    background-color: #e1e1df;
+    border-color: #a5a5a1; }
+scrollbar slider {
+  background-color: #787c7d; }
+  scrollbar slider:hover {
+    background-color: #535859; }
+  scrollbar slider:prelight:active {
+    background-color: #2a76c6; }
+  scrollbar slider:backdrop {
+    background-color: #c3c4c4; }
+  scrollbar slider:insensitive {
+    background-color: transparent; }
+scrollbar slider {
+  border-radius: 100px;
+  margin: 3px; }
+scrollbar.fine-tune slider {
+  margin: 4px; }
+scrollbar.vertical slider {
+  margin-left: 4px; }
+  scrollbar.vertical slider:dir(rtl) {
+    margin-left: 3px;
+    margin-right: 4px; }
+scrollbar.vertical.fine-tune slider {
+  margin-left: 5px; }
+  scrollbar.vertical.fine-tune slider:dir(rtl) {
+    margin-left: 4px;
+    margin-right: 5px; }
+scrollbar.vertical trough {
+  border-left-style: solid; }
+  scrollbar.vertical trough:dir(rtl) {
+    border-left-style: none;
+    border-right-style: solid; }
+scrollbar.horizontal slider {
+  margin-top: 4px; }
+scrollbar.horizontal.fine-tune slider {
+  margin-top: 5px; }
+scrollbar.horizontal trough {
+  border-top-style: solid; }
 
 /**********
  * Switch *
