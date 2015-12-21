@@ -2438,7 +2438,8 @@ gdk_wayland_seat_grab (GdkSeat                *seat,
       return GDK_GRAB_NOT_VIEWABLE;
     }
 
-  if (capabilities & GDK_SEAT_CAPABILITY_POINTER)
+  if (wayland_seat->master_pointer &&
+      capabilities & GDK_SEAT_CAPABILITY_POINTER)
     {
       GdkWindow *prev_focus = gdk_wayland_device_get_focus (wayland_seat->master_pointer);
 
@@ -2461,7 +2462,8 @@ gdk_wayland_seat_grab (GdkSeat                *seat,
       gdk_wayland_device_update_window_cursor (wayland_seat);
     }
 
-  if (capabilities & GDK_SEAT_CAPABILITY_TOUCH)
+  if (wayland_seat->touch_master &&
+      capabilities & GDK_SEAT_CAPABILITY_TOUCH)
     {
       GdkWindow *prev_focus = gdk_wayland_device_get_focus (wayland_seat->touch_master);
 
@@ -2481,7 +2483,8 @@ gdk_wayland_seat_grab (GdkSeat                *seat,
                                     FALSE);
     }
 
-  if (capabilities & GDK_SEAT_CAPABILITY_KEYBOARD)
+  if (wayland_seat->master_keyboard &&
+      capabilities & GDK_SEAT_CAPABILITY_KEYBOARD)
     {
       GdkWindow *prev_focus = gdk_wayland_device_get_focus (wayland_seat->master_keyboard);
 
