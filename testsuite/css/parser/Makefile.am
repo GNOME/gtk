@@ -179,9 +179,6 @@ test_data = \
 	background-shorthand-single.ref.css \
         background-size.css \
         background-size.ref.css \
-	boolean.css \
-	boolean.errors \
-	boolean.ref.css \
 	border.css \
 	border.errors \
 	border.ref.css \
