@@ -300,35 +300,6 @@ main (int argc, char **argv)
 {
   gtk_test_init (&argc, &argv);
 
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  /* Add a bunch of properties so we can test that we parse them properly */
-  gtk_style_properties_register_property (NULL,
-                                          g_param_spec_int ("int-property",
-                                                            "int property",
-                                                            "test int properties",
-                                                            G_MININT, G_MAXINT, 0,
-                                                            G_PARAM_READABLE));
-  gtk_style_properties_register_property (NULL,
-                                          g_param_spec_uint ("uint-property",
-                                                             "uint property",
-                                                             "test uint properties",
-                                                             0, G_MAXUINT, 0,
-                                                             G_PARAM_READABLE));
-  gtk_style_properties_register_property (NULL,
-                                          g_param_spec_string ("string-property",
-                                                               "string property",
-                                                               "test string properties",
-                                                               NULL,
-                                                               G_PARAM_READABLE));
-  gtk_style_properties_register_property (NULL,
-                                          g_param_spec_enum ("enum-property",
-                                                             "enum property",
-                                                             "test enum properties",
-                                                             GTK_TYPE_SHADOW_TYPE,
-                                                             0,
-                                                             G_PARAM_READABLE));
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-
   if (argc < 2)
     {
       const char *basedir;
