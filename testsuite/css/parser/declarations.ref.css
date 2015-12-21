@@ -1,28 +1,28 @@
 d {
-  int-property: 42;
+  margin-top: 42px;
 }
 
 e {
-  int-property: 42;
-  uint-property: 42;
+  margin-top: 42px;
+  padding-top: 42px;
 }
 
 f {
-  int-property: 42;
+  margin-top: 42px;
 }
 
 g {
-  int-property: 42;
+  margin-top: 42px;
 }
 
 i {
-  uint-property: 42;
+  padding-top: 42px;
 }
 
 m {
-  uint-property: 42;
+  padding-top: 42px;
 }
 
 n {
-  uint-property: 42;
+  padding-top: 42px;
 }

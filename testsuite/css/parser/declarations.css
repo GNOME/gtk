@@ -5,46 +5,46 @@ b { }
 c {
 }
 
-d { ; int-property: 42; }
+d { ; margin-top: 42px; }
 
 e {
-  int-property: 42;
+  margin-top: 42px;
   ;
   ;
   ;
-  uint-property: 42;
+  padding-top: 42px;
 }
 
 f {
-  int-property: 42
+  margin-top: 42px
 }
 
-g { int-property: 42 }
+g { margin-top: 42px }
 
-h { int-property }
+h { margin-top }
 
-i { int-property; }
+i { margin-top; }
 
-j { int-property: }
+j { margin-top: }
 
-k { int-property : }
+k { margin-top : }
 
-l { int-property: ; }
+l { margin-top: ; }
 
-m { int-property:; }
+m { margin-top:; }
 
-n { int-property: ; }
+n { margin-top: ; }
 
-h { int-property uint-property: 42; }
+h { margin-top padding-top: 42px; }
 
-i { int-property; uint-property: 42; }
+i { margin-top; padding-top: 42px; }
 
-j { int-property: uint-property: 42; }
+j { margin-top: padding-top: 42px; }
 
-k { int-property : uint-property: 42; }
+k { margin-top : padding-top: 42px; }
 
-l { int-property: uint-property: 42; }
+l { margin-top: padding-top: 42px; }
 
-m { int-property:; uint-property: 42; }
+m { margin-top:; padding-top: 42px; }
 
-n { int-property: ; uint-property: 42; }
+n { margin-top: ; padding-top: 42px; }
