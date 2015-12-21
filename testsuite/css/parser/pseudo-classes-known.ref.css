@@ -14,11 +14,19 @@
   color: rgb(255,0,0);
 }
 
-:insensitive {
+:disabled {
   color: rgb(255,0,0);
 }
 
-:inconsistent {
+:disabled {
+  color: rgb(255,0,0);
+}
+
+:indeterminate {
+  color: rgb(255,0,0);
+}
+
+:indeterminate {
   color: rgb(255,0,0);
 }
 
