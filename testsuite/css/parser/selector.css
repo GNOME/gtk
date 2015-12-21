@@ -1,480 +1,480 @@
 * {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 * * {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 * > * {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 * + * {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 * ~ * {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 * b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 * > b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 * + b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 * ~ b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 *.b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 * .b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 * > .b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 * + .b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 * ~ .b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 *:hover {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 * :hover {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 * > :hover {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 * + :hover {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 * ~ :hover {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 *#b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 * #b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 * > #b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 * + #b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 * ~ #b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 a {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 a * {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 a > * {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 a + * {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 a ~ * {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 a b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 a > b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 a + b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 a ~ b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 a.b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 a .b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 a > .b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 a + .b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 a ~ .b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 a:hover {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 a :hover {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 a > :hover {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 a + :hover {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 a ~ :hover {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 a#b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 a #b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 a > #b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 a + #b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 a ~ #b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 .a {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 .a * {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 .a > * {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 .a + * {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 .a ~ * {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 .a b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 .a > b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 .a + b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 .a ~ b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 .a.b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 .a .b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 .a > .b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 .a + .b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 .a ~ .b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 .a:hover {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 .a :hover {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 .a > :hover {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 .a + :hover {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 .a ~ :hover {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 .a#b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 .a #b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 .a > #b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 .a + #b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 .a ~ #b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 :hover {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 :hover * {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 :hover > * {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 :hover + * {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 :hover ~ * {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 :hover b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 :hover > b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 :hover + b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 :hover ~ b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 :hover.b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 :hover .b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 :hover > .b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 :hover + .b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 :hover ~ .b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 :hover:hover {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 :hover :hover {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 :hover > :hover {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 :hover + :hover {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 :hover ~ :hover {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 :hover#b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 :hover #b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 :hover > #b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 :hover + #b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 :hover ~ #b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 #a {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 #a * {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 #a > * {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 #a + * {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 #a ~ * {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 #a b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 #a > b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 #a + b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 #a ~ b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 #a.b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 #a .b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 #a > .b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 #a + .b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 #a ~ .b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 #a:hover {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 #a :hover {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 #a > :hover {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 #a + :hover {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 #a ~ :hover {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 #a#b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 #a #b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 #a > #b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 #a + #b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
 #a ~ #b {
-  int-property: 42;
+  padding-top: 42px;
 }
 
