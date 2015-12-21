@@ -403,6 +403,7 @@ test_data = \
 	transition.css \
 	transition.ref.css \
 	value-inherit.css \
+	value-inherit.errors \
 	value-inherit-shorthand.css \
 	value-inherit-shorthand.ref.css \
 	value-initial.css \

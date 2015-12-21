@@ -1,4 +1,5 @@
 * {
+  -gtk-icon-shadow: inherit;
   background-clip: inherit;
   background-color: inherit;
   background-image: inherit;
@@ -33,7 +34,6 @@
   font-style: inherit;
   font-variant: inherit;
   font-weight: inherit;
-  icon-shadow: inherit;
   margin-bottom: inherit;
   margin-left: inherit;
   margin-right: inherit;
