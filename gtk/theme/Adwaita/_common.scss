@@ -2398,8 +2398,22 @@ scale {
  *****************/
 
 progressbar {
+  // sizing
+  &.horizontal {
+    trough,
+    progress { min-height: 4px; } // FIXME: should be 6px, but looks like currently gtk+ consider borders
+  }
+
+  &.vertical {
+    trough,
+    progress { min-width: 4px; } // FIXME: should be 6px, but looks like currently gtk+ consider borders
+  }
+
+  &.horizontal progress { margin: 0 -1px; } // the progress node is positioned after the trough border
+  &.vertical progress { margin: -1px 0; }   // this moves it over it.
+
+
   // FIXME: insensitive state missing and some other state should be set probably
-  padding: 0;
   font-size: smaller;
   color: transparentize($fg_color, 0.6);
 

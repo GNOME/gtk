@@ -3581,10 +3581,19 @@ scale {
  * Progress bars *
  *****************/
 progressbar {
-  padding: 0;
   font-size: smaller;
   color: rgba(46, 52, 54, 0.4);
   box-shadow: 0 1px rgba(255, 255, 255, 0); }
+  progressbar.horizontal trough,
+  progressbar.horizontal progress {
+    min-height: 4px; }
+  progressbar.vertical trough,
+  progressbar.vertical progress {
+    min-width: 4px; }
+  progressbar.horizontal progress {
+    margin: 0 -1px; }
+  progressbar.vertical progress {
+    margin: -1px 0; }
   progressbar:backdrop {
     box-shadow: none; }
   progressbar progress {
