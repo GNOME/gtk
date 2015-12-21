@@ -1,27 +1,27 @@
 a {
-  border-property: 1 2 3 4;
+  border-image-width: 1 2 3 4;
 }
 
 b {
-  border-property: 1 2 3;
+  border-image-width: 1 2 3;
 }
 
 c {
-  border-property: 1 2;
+  border-image-width: 1 2;
 }
 
 d {
-  border-property: 1;
+  border-image-width: 1;
 }
 
 e {
-  border-property: 0;
+  border-image-width: 0;
 }
 
 f {
-  border-property: 1 2 3 4;
+  border-image-width: 1px 2px 3 4px;
 }
 
 n {
-  border-property: 1 2;
+  border-image-width: 1 2;
 }
