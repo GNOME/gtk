@@ -468,6 +468,7 @@ gtk_private_h_sources =		\
 	gtkhslaprivate.h	\
 	gtkiconcache.h		\
 	gtkiconhelperprivate.h  \
+	gtkiconprivate.h	\
 	gtkiconthemeprivate.h  \
 	gtkiconviewprivate.h	\
 	gtkimagedefinitionprivate.h	\
@@ -741,6 +742,7 @@ gtk_base_c_sources = 		\
 	gtkgrid.c		\
 	gtkheaderbar.c		\
 	gtkhsla.c		\
+	gtkicon.c		\
 	gtkiconcache.c		\
 	gtkiconcachevalidator.c	\
 	gtkiconhelper.c		\
