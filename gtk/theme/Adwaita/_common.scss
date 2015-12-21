@@ -945,7 +945,6 @@ combobox {
   > button.combo { padding-top: 3px; padding-bottom: 4px; } // Otherwise combos
                                                                            // are bigger then
                                                                            // buttons
-  -GtkComboBox-arrow-scaling: 0.5;
   -GtkComboBox-shadow-type: none;
 
   @include _button_text_shadow;
@@ -962,6 +961,11 @@ combobox {
   }
   &:backdrop:insensitive {
     color: $backdrop_insensitive_color;
+  }
+  & arrow {
+    -gtk-icon-source: -gtk-icontheme('pan-down-symbolic');
+    min-height: 16px;
+    min-width: 16px;
   }
   & menuitem { text-shadow: none; }
   &.separator.vertical {

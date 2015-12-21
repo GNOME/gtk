@@ -1511,7 +1511,6 @@ treeview spinbutton entry, treeview spinbutton spinbutton, treeview spinbutton e
  * ComboBoxes *
  **************/
 combobox {
-  -GtkComboBox-arrow-scaling: 0.5;
   -GtkComboBox-shadow-type: none;
   text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
   -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923); }
@@ -1529,6 +1528,10 @@ combobox {
     -gtk-icon-shadow: none; }
   combobox:backdrop:insensitive {
     color: #c3c3c0; }
+  combobox arrow {
+    -gtk-icon-source: -gtk-icontheme("pan-down-symbolic");
+    min-height: 16px;
+    min-width: 16px; }
   combobox menuitem {
     text-shadow: none; }
   combobox.separator.vertical {

@@ -29,6 +29,7 @@
 #include "gtkcssnodeprivate.h"
 #include "gtkeventbox.h"
 #include "gtkframe.h"
+#include "gtkiconprivate.h"
 #include "gtkbox.h"
 #include "gtkliststore.h"
 #include "gtkmain.h"
@@ -93,10 +94,12 @@
  * |[<!-- language="plain" -->
  * combobox
  * ╰── button.combo
+ *     ╰── arrow
  * ]|
  *
  * GtkComboBox has a single CSS node with name combobox. It adds the
  * .combo style class to the button that it contains.
+ * The button also contains another node with name arrow.
  */
 
 
@@ -1017,6 +1020,9 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
    * by arrow size.
    *
    * Since: 2.12
+   *
+   * Deprecated: 3.20: use the standard min-width/min-height CSS properties on
+   *   the arrow node; the value of this style property is ignored.
    */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("arrow-size",
@@ -1025,7 +1031,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                              0,
                                                              G_MAXINT,
                                                              15,
-                                                             GTK_PARAM_READABLE));
+                                                             GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   /**
    * GtkComboBox:arrow-scaling:
@@ -1033,7 +1039,8 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
    * Sets the amount of space used up by the combobox arrow,
    * proportional to the font size.
    *
-   * Since: 3.2
+   * Deprecated: 3.20: use the standard min-width/min-height CSS properties on
+   *   the arrow node; the value of this style property is ignored.
    */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_float ("arrow-scaling",
@@ -1042,7 +1049,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                              0,
                                                              2.0,
                                                              1.0,
-                                                             GTK_PARAM_READABLE));
+                                                             GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   /**
    * GtkComboBox:shadow-type:
@@ -1120,6 +1127,7 @@ gtk_combo_box_init (GtkComboBox *combo_box)
   priv->text_renderer = NULL;
   priv->id_column = -1;
 
+  g_type_ensure (GTK_TYPE_ICON);
   gtk_widget_init_template (GTK_WIDGET (combo_box));
 
   gtk_widget_add_events (priv->button, GDK_SCROLL_MASK);
@@ -5030,14 +5038,10 @@ gtk_combo_box_get_preferred_width (GtkWidget *widget,
 {
   GtkComboBox           *combo_box = GTK_COMBO_BOX (widget);
   GtkComboBoxPrivate    *priv = combo_box->priv;
-  gint                   font_size, arrow_size;
-  PangoContext          *context;
-  PangoFontMetrics      *metrics;
   GtkWidget             *child;
   gint                   child_min, child_nat;
   gint                   but_min, but_nat;
   GtkBorder              padding;
-  gfloat                 arrow_scaling;
   gint                   dummy;
 
   /* https://bugzilla.gnome.org/show_bug.cgi?id=729496 */
@@ -5051,24 +5055,7 @@ gtk_combo_box_get_preferred_width (GtkWidget *widget,
   else
     gtk_widget_get_preferred_width (child, &child_min, &child_nat);
 
-  gtk_widget_style_get (GTK_WIDGET (widget),
-                        "arrow-size", &arrow_size,
-                        "arrow-scaling", &arrow_scaling,
-                        NULL);
-
   get_widget_padding_and_border (widget, &padding);
-
-  context = gtk_widget_get_pango_context (GTK_WIDGET (widget));
-  metrics = pango_context_get_metrics (context,
-                                       pango_context_get_font_description (context),
-                                       pango_context_get_language (context));
-  font_size = PANGO_PIXELS (pango_font_metrics_get_ascent (metrics) +
-                            pango_font_metrics_get_descent (metrics));
-  pango_font_metrics_unref (metrics);
-
-  arrow_size = MAX (arrow_size, font_size) * arrow_scaling;
-
-  gtk_widget_set_size_request (priv->arrow, arrow_size, arrow_size);
 
   gtk_widget_get_preferred_width (priv->button,
                                   &but_min, &but_nat);

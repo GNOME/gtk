@@ -10,9 +10,9 @@
           <object class="GtkBox">
             <property name="visible">1</property>
             <child>
-              <object class="GtkImage" id="arrow">
+              <object class="GtkIcon" id="arrow">
                 <property name="visible">1</property>
-                <property name="icon-name">pan-down-symbolic</property>
+                <property name="css_name">arrow</property>
               </object>
               <packing>
                 <property name="pack_type">end</property>
