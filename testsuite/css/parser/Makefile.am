@@ -305,11 +305,7 @@ test_data = \
 	doubled.css \
 	doubled.ref.css \
 	empty.css \
-	enum.css \
-	enum.errors \
-	enum.ref.css \
 	font-family.css \
-	font-family.errors \
 	font-family.ref.css \
         font-size.css \
         font-size.ref.css \
