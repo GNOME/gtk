@@ -1930,13 +1930,6 @@ gtk_combo_box_list_position (GtkComboBox *combo_box,
   *x = *y = 0;
 
   gtk_widget_get_allocation (widget, &allocation);
-
-  if (!gtk_widget_get_has_window (widget))
-    {
-      *x += allocation.x;
-      *y += allocation.y;
-    }
-
   window = gtk_widget_get_window (widget);
 
   gdk_window_get_root_coords (gtk_widget_get_window (widget),
