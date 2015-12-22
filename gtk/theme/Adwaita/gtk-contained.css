@@ -1534,8 +1534,6 @@ combobox {
     min-width: 16px; }
   combobox menuitem {
     text-shadow: none; }
-  combobox.separator.vertical {
-    -GtkWidget-wide-separators: true; }
   combobox > entry.combo:dir(ltr), combobox > spinbutton.combo:dir(ltr) {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0; }

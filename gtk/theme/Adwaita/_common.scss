@@ -968,10 +968,6 @@ combobox {
     min-width: 16px;
   }
   & menuitem { text-shadow: none; }
-  &.separator.vertical {
-    // always disable separators
-    -GtkWidget-wide-separators: true;
-  }
   & > entry.combo {
     &:dir(ltr) {
       border-top-right-radius: 0;
