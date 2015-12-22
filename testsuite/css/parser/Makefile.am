@@ -356,6 +356,10 @@ test_data = \
 	linear-gradient.ref.css \
         margin.css \
         margin.ref.css \
+        min-height.css \
+        min-height.ref.css \
+        min-width.css \
+        min-width.ref.css \
 	no-semicolon.css \
 	no-semicolon.ref.css \
 	not.css \
@@ -410,6 +414,14 @@ test_data = \
 	text-shadow-invalid-but-worked-in-3.12.ref.css \
 	transition.css \
 	transition.ref.css \
+        transition-delay.css \
+        transition-delay.ref.css \
+        transition-duration.css \
+        transition-duration.ref.css \
+        transition-property.css \
+        transition-property.ref.css \
+        transition-timing-function.css \
+        transition-timing-function.ref.css \
 	value-inherit.css \
 	value-inherit.errors \
 	value-inherit-shorthand.css \
