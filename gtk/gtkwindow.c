@@ -12143,6 +12143,8 @@ _gtk_window_raise_popover (GtkWindow *window,
 
 static GtkWidget *inspector_window = NULL;
 
+static guint gtk_window_update_debugging_id;
+
 static void set_warn_again (gboolean warn);
 
 static void
@@ -12159,16 +12161,25 @@ warn_response (GtkDialog *dialog,
   g_object_set_data (G_OBJECT (inspector_window), "warning_dialog", NULL);
   if (response == GTK_RESPONSE_NO)
     {
-      gtk_widget_destroy (inspector_window);
+      GtkWidget *window;
+
+      if (gtk_window_update_debugging_id)
+        {
+          g_source_remove (gtk_window_update_debugging_id);
+          gtk_window_update_debugging_id = 0;
+        }
+
+      /* Steal reference into temp variable, so not to mess up with
+         inspector_window during gtk_widget_destroy().  */
+      window = inspector_window;
       inspector_window = NULL;
+      gtk_widget_destroy (window);
     }
   else
     {
       set_warn_again (!remember);
     }
 }
-
-static guint gtk_window_update_debugging_id;
 
 static gboolean
 update_debugging (gpointer data)
