@@ -1511,7 +1511,6 @@ treeview spinbutton entry, treeview spinbutton spinbutton, treeview spinbutton e
  * ComboBoxes *
  **************/
 combobox {
-  -GtkComboBox-shadow-type: none;
   text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
   -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923); }
   combobox > button.combo, headerbar combobox > button.combo.titlebutton,

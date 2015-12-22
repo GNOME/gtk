@@ -945,8 +945,6 @@ combobox {
   > button.combo { padding-top: 3px; padding-bottom: 4px; } // Otherwise combos
                                                                            // are bigger then
                                                                            // buttons
-  -GtkComboBox-shadow-type: none;
-
   @include _button_text_shadow;
 
   &:insensitive {
