@@ -1086,7 +1086,8 @@ headerbar {
   border-width: 0 0 1px;
   border-style: solid;
   border-color: $borders_color;
-  border-radius: 7px 7px 0 0;
+  border-radius: 0;
+
   background-color: transparent;
 
   @include headerbar_fill;
@@ -1254,13 +1255,28 @@ headerbar {
   }
 }
 
+.titlebar {
+  &, &:backdrop {
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+  }
+}
+
+headerbar {
+  separator:first-child + &, // tackles the paned container case
+  &:first-child { &, &:backdrop { border-top-left-radius: 7px; }}
+  &:last-child { &, &:backdrop { border-top-right-radius: 7px; }}
+}
+
 .titlebar:not(headerbar) {
   window.csd > & {
     // in csd we assume every titlebar is a headerbar so reset anything, this is needed for split toolbars cases
     padding: 0;
-    border-style: none;
+    background-color: transparent;
     background-image: none;
+    border-style: none;
     border-color: transparent;
+    box-shadow: none;
   }
   @extend %titlebar;
 }

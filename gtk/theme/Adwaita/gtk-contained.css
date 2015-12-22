@@ -1605,7 +1605,7 @@ headerbar {
   border-width: 0 0 1px;
   border-style: solid;
   border-color: #9d9d99;
-  border-radius: 7px 7px 0 0;
+  border-radius: 0;
   background-color: transparent;
   background-image: linear-gradient(to top, #d4d4d2, #efefef 2px, #f4f4f4 3px);
   box-shadow: inset 0 1px rgba(255, 255, 255, 0.8); }
@@ -1927,11 +1927,22 @@ headerbar {
     .titlebar headerbar.default-decoration button.titlebutton {
       padding: 5px; }
 
+.titlebar, .titlebar:backdrop {
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px; }
+
+separator:first-child + headerbar, separator:first-child + headerbar:backdrop, headerbar:first-child, headerbar:first-child:backdrop {
+  border-top-left-radius: 7px; }
+headerbar:last-child, headerbar:last-child:backdrop {
+  border-top-right-radius: 7px; }
+
 window.csd > .titlebar:not(headerbar) {
   padding: 0;
-  border-style: none;
+  background-color: transparent;
   background-image: none;
-  border-color: transparent; }
+  border-style: none;
+  border-color: transparent;
+  box-shadow: none; }
 
 /************
  * Pathbars *
