@@ -25,6 +25,10 @@
 #include "gtkiconprivate.h"
 #include "gtkwidgetprivate.h"
 
+/* GtkIcon is a minimal widget wrapped around a GtkBuiltinIcon gadget,
+ * It should be used whenever builtin-icon functionality is desired
+ * but a widget is needed for other reasons.
+ */
 enum {
   PROP_0,
   PROP_CSS_NAME,
