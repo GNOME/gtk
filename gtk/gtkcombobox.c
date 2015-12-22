@@ -1927,15 +1927,13 @@ gtk_combo_box_list_position (GtkComboBox *combo_box,
      see bug #340204 */
   GtkWidget *widget = GTK_WIDGET (combo_box);
 
-  *x = *y = 0;
-
   gtk_widget_get_allocation (widget, &allocation);
-  window = gtk_widget_get_window (widget);
 
-  gdk_window_get_root_coords (gtk_widget_get_window (widget),
-                              *x, *y, x, y);
-
+  *x = *y = 0;
   *width = allocation.width;
+
+  window = gtk_widget_get_window (widget);
+  gdk_window_get_root_coords (window, *x, *y, x, y);
 
   hpolicy = vpolicy = GTK_POLICY_NEVER;
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (priv->scrolled_window),
@@ -1970,11 +1968,11 @@ gtk_combo_box_list_position (GtkComboBox *combo_box,
 
   *height = popup_req.height;
 
-  screen = gtk_widget_get_screen (GTK_WIDGET (combo_box));
+  screen = gtk_widget_get_screen (widget);
   monitor_num = gdk_screen_get_monitor_at_window (screen, window);
   gdk_screen_get_monitor_workarea (screen, monitor_num, &monitor);
 
-  if (gtk_widget_get_direction (GTK_WIDGET (combo_box)) == GTK_TEXT_DIR_RTL)
+  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
     *x = *x + allocation.width - *width;
 
   if (*x < monitor.x)
