@@ -37,7 +37,7 @@ $asset_suffix: if($variant=='dark', '-dark', '');
   outline-style: dashed;
   outline-offset: -3px;
   outline-width: 1px;
-  outline-radius: 2px;
+  -gtk-outline-radius: 2px;
 }
 
 
@@ -2279,11 +2279,11 @@ scale {
   -GtkRange-trough-border: 2;
 
   outline-offset: -10px;
-  outline-radius: 6px;
+  -gtk-outline-radius: 6px;
 
   &.fine-tune {
     outline-offset: -8px;
-    outline-radius: 8px;
+    -gtk-outline-radius: 8px;
 
     trough {
       margin: 11px;
@@ -2911,12 +2911,12 @@ messagedialog { // Message Dialog styling
     }
     %last_button {
       border-bottom-right-radius: 7px;
-      outline-bottom-right-radius: 5px;
+      -gtk-outline-bottom-right-radius: 5px;
     }
     %first_button {
       border-left-style: none;
       border-bottom-left-radius: 7px;
-      outline-bottom-left-radius: 5px;
+      -gtk-outline-bottom-left-radius: 5px;
     }
   }
 }
@@ -2987,7 +2987,7 @@ placessidebar {
       padding: 5px;
       @extend button.flat;
       border-radius: 100%;
-      outline-radius: 100%;
+      -gtk-outline-radius: 100%;
       &:not(:hover):not(:active) > image,
       &:backdrop > image { opacity: $_placesidebar_icons_opacity };
     }
@@ -3440,7 +3440,7 @@ cursor-handle {
 
 button.circular {
   border-radius: 20px;
-  outline-radius: 20px;
+  -gtk-outline-radius: 20px;
 }
 
 button.circular label {

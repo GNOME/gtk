@@ -15,7 +15,7 @@
   outline-style: dashed;
   outline-offset: -3px;
   outline-width: 1px;
-  outline-radius: 2px; }
+  -gtk-outline-radius: 2px; }
 
 /***************
  * Base States *
@@ -3094,10 +3094,10 @@ scale {
   -GtkRange-slider-width: 26;
   -GtkRange-trough-border: 2;
   outline-offset: -10px;
-  outline-radius: 6px; }
+  -gtk-outline-radius: 6px; }
   scale.fine-tune {
     outline-offset: -8px;
-    outline-radius: 8px; }
+    -gtk-outline-radius: 8px; }
     scale.fine-tune trough {
       margin: 11px; }
       scale.fine-tune trough, scale.fine-tune trough fill, scale.fine-tune trough highlight {
@@ -4113,11 +4113,11 @@ messagedialog.csd .dialog-action-area button, messagedialog.csd .dialog-action-a
   border-bottom-style: none; }
 messagedialog.csd .dialog-action-area button:last-child {
   border-bottom-right-radius: 7px;
-  outline-bottom-right-radius: 5px; }
+  -gtk-outline-bottom-right-radius: 5px; }
 messagedialog.csd .dialog-action-area button:first-child {
   border-left-style: none;
   border-bottom-left-radius: 7px;
-  outline-bottom-left-radius: 5px; }
+  -gtk-outline-bottom-left-radius: 5px; }
 
 GtkFileChooserDialog .dialog-action-box {
   border-top: 1px solid #1c1f1f; }
@@ -4162,7 +4162,7 @@ placessidebar row {
   .titlebar button.sidebar-button.titlebutton {
     padding: 5px;
     border-radius: 100%;
-    outline-radius: 100%; }
+    -gtk-outline-radius: 100%; }
     button.sidebar-button:not(:hover):not(:active) > image, headerbar button.sidebar-button.titlebutton:not(:hover):not(:active) > image,
     .titlebar button.sidebar-button.titlebutton:not(:hover):not(:active) > image, button.sidebar-button:backdrop > image, headerbar button.sidebar-button.titlebutton:backdrop > image,
     .titlebar button.sidebar-button.titlebutton:backdrop > image {
@@ -4610,7 +4610,7 @@ cursor-handle {
 button.circular, headerbar button.circular.titlebutton,
 .titlebar button.circular.titlebutton {
   border-radius: 20px;
-  outline-radius: 20px; }
+  -gtk-outline-radius: 20px; }
 
 button.circular label,
 .titlebar button.circular.titlebutton label {
