@@ -25,6 +25,24 @@
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkrendericonprivate.h"
 
+/* GtkBuiltinIcon is a gadget implementation that is meant to replace
+ * all calls to gtk_render_ functions to render arrows, expanders, checks
+ * radios, handles, separators, etc. See the GtkCssImageBuiltinType
+ * enumeration for the full set of builtin icons that this gadget can
+ * render.
+ *
+ * Use gtk_builtin_icon_set_image to set which of the builtin icons
+ * is rendered.
+ *
+ * Use gtk_builtin_icon_set_default_size to set a non-zero default
+ * size for the icon. If you need to support a legacy size style property,
+ * use gtk_builtin_icon_set_default_size_property.
+ *
+ * Themes can override the acutal image that is used with the
+ * -gtk-icon-source property. If it is not specified, a builtin
+ * fallback is used.
+ */
+
 typedef struct _GtkBuiltinIconPrivate GtkBuiltinIconPrivate;
 struct _GtkBuiltinIconPrivate {
   GtkCssImageBuiltinType        image_type;
