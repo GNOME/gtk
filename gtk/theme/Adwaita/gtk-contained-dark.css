@@ -157,7 +157,7 @@ entry, spinbutton {
   padding: 5px 8px 6px;
   border-radius: 3px;
   transition: all 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  background-color: transparent;
+  background-color: #292929;
   background-image: linear-gradient(to bottom, #1d2020, #242525 3px, #292929 90%);
   color: white;
   border-color: #1c1f1f;
@@ -170,7 +170,7 @@ entry, spinbutton {
     padding-right: 0; }
   entry.flat, spinbutton.flat, entry.flat:focus, spinbutton.flat:focus {
     padding: 2px;
-    background-color: transparent;
+    background-color: #292929;
     background-image: linear-gradient(to bottom, #1d2020, #242525 3px, #292929 90%);
     color: white;
     border-color: #1c1f1f;
@@ -178,26 +178,26 @@ entry, spinbutton {
     border: none;
     border-radius: 0; }
   entry:focus, spinbutton:focus {
-    background-color: transparent;
+    background-color: #292929;
     background-image: linear-gradient(to bottom, #1d2020, #242525 3px, #292929 90%);
     box-shadow: inset 0 0 0 1px #215d9c, 0 1px rgba(238, 238, 236, 0);
     border-color: #0f2b48; }
   entry:insensitive, spinbutton:insensitive {
-    background-color: transparent;
+    background-color: #292929;
     background-image: linear-gradient(to bottom, #1d2020, #242525 3px, #292929 90%);
     color: #949796;
     border-color: #1c1f1f;
     background-image: linear-gradient(to bottom, #333636);
     box-shadow: 0 1px rgba(238, 238, 236, 0); }
   entry:backdrop, spinbutton:backdrop {
-    background-color: transparent;
+    background-color: #292929;
     background-image: linear-gradient(to bottom, #1d2020, #242525 3px, #292929 90%);
     color: #d5d5d5;
     border-color: #1f2222;
     background-image: linear-gradient(to bottom, #2c2c2c);
     box-shadow: 0 1px rgba(238, 238, 236, 0); }
   entry:backdrop:insensitive, spinbutton:backdrop:insensitive {
-    background-color: transparent;
+    background-color: #292929;
     background-image: linear-gradient(to bottom, #1d2020, #242525 3px, #292929 90%);
     color: #5d6767;
     border-color: #1f2222;
@@ -220,7 +220,7 @@ entry, spinbutton {
     color: #cc0000;
     border-color: #1a0000; }
     entry.error:focus, spinbutton.error:focus {
-      background-color: transparent;
+      background-color: #292929;
       background-image: linear-gradient(to bottom, #1d2020, #242525 3px, #292929 90%);
       box-shadow: inset 0 0 0 1px #cc0000, 0 1px rgba(238, 238, 236, 0);
       border-color: #1a0000; }
@@ -230,7 +230,7 @@ entry, spinbutton {
     color: #f57900;
     border-color: #432100; }
     entry.warning:focus, spinbutton.warning:focus {
-      background-color: transparent;
+      background-color: #292929;
       background-image: linear-gradient(to bottom, #1d2020, #242525 3px, #292929 90%);
       box-shadow: inset 0 0 0 1px #f57900, 0 1px rgba(238, 238, 236, 0);
       border-color: #432100; }
@@ -245,7 +245,7 @@ entry, spinbutton {
     entry image:backdrop, spinbutton image:backdrop {
       color: #7f8281; }
   .osd entry, .osd spinbutton {
-    background-color: transparent;
+    background-color: #292929;
     background-image: linear-gradient(to bottom, #1d2020, #242525 3px, #292929 90%);
     color: white;
     border-color: rgba(0, 0, 0, 0.7);
@@ -255,7 +255,7 @@ entry, spinbutton {
     text-shadow: 0 1px black;
     -gtk-icon-shadow: 0 1px black; }
     .osd entry:focus, .osd spinbutton:focus {
-      background-color: transparent;
+      background-color: #292929;
       background-image: linear-gradient(to bottom, #1d2020, #242525 3px, #292929 90%);
       color: white;
       border-color: #215d9c;
@@ -265,7 +265,7 @@ entry, spinbutton {
       text-shadow: 0 1px black;
       -gtk-icon-shadow: 0 1px black; }
     .osd entry:backdrop, .osd spinbutton:backdrop {
-      background-color: transparent;
+      background-color: #292929;
       background-image: linear-gradient(to bottom, #1d2020, #242525 3px, #292929 90%);
       color: white;
       border-color: rgba(0, 0, 0, 0.7);
@@ -275,7 +275,7 @@ entry, spinbutton {
       text-shadow: none;
       -gtk-icon-shadow: none; }
     .osd entry:insensitive, .osd spinbutton:insensitive {
-      background-color: transparent;
+      background-color: #292929;
       background-image: linear-gradient(to bottom, #1d2020, #242525 3px, #292929 90%);
       color: #878a89;
       border-color: rgba(0, 0, 0, 0.7);
@@ -3484,13 +3484,13 @@ levelbar {
     border: 1px solid;
     padding: 2px;
     border-radius: 3px;
-    background-color: transparent;
+    background-color: #292929;
     background-image: linear-gradient(to bottom, #1d2020, #242525 3px, #292929 90%);
     color: white;
     border-color: #1c1f1f;
     box-shadow: inset 0 0 0 1px rgba(33, 93, 156, 0), 0 1px rgba(238, 238, 236, 0); }
     levelbar trough:backdrop {
-      background-color: transparent;
+      background-color: #292929;
       background-image: linear-gradient(to bottom, #1d2020, #242525 3px, #292929 90%);
       color: #d5d5d5;
       border-color: #1f2222;
