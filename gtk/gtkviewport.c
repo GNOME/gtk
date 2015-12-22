@@ -168,6 +168,7 @@ gtk_viewport_class_init (GtkViewportClass *class)
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_VIEWPORT);
 
   container_class->add = gtk_viewport_add;
+  gtk_container_class_handle_border_width (container_class);
 
   /* GtkScrollable implementation */
   g_object_class_override_property (gobject_class, PROP_HADJUSTMENT,    "hadjustment");
@@ -361,10 +362,8 @@ viewport_get_view_allocation (GtkViewport   *viewport,
   GtkStyleContext *context;
   GtkStateFlags state;
   GtkBorder padding, border;
-  gint border_width;
 
   gtk_widget_get_allocation (widget, &allocation);
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (viewport));
 
   view_allocation->x = 0;
   view_allocation->y = 0;
@@ -383,8 +382,8 @@ viewport_get_view_allocation (GtkViewport   *viewport,
 
   view_allocation->x += padding.left;
   view_allocation->y += padding.top;
-  view_allocation->width = MAX (1, allocation.width - padding.left - padding.right - border_width * 2);
-  view_allocation->height = MAX (1, allocation.height - padding.top - padding.bottom - border_width * 2);
+  view_allocation->width = MAX (1, allocation.width - padding.left - padding.right);
+  view_allocation->height = MAX (1, allocation.height - padding.top - padding.bottom);
 
   if (priv->shadow_type != GTK_SHADOW_NONE)
     {
@@ -737,18 +736,15 @@ gtk_viewport_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
   gint event_mask;
-  guint border_width;
-
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
   gtk_widget_set_realized (widget, TRUE);
 
   gtk_widget_get_allocation (widget, &allocation);
 
-  attributes.x = allocation.x + border_width;
-  attributes.y = allocation.y + border_width;
-  attributes.width = allocation.width - border_width * 2;
-  attributes.height = allocation.height - border_width * 2;
+  attributes.x = allocation.x;
+  attributes.y = allocation.y;
+  attributes.width = allocation.width;
+  attributes.height = allocation.height;
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.wclass = GDK_INPUT_OUTPUT;
   attributes.visual = gtk_widget_get_visual (widget);
@@ -918,13 +914,10 @@ gtk_viewport_size_allocate (GtkWidget     *widget,
   GtkViewport *viewport = GTK_VIEWPORT (widget);
   GtkViewportPrivate *priv = viewport->priv;
   GtkBin *bin = GTK_BIN (widget);
-  guint border_width;
   GtkAdjustment *hadjustment = priv->hadjustment;
   GtkAdjustment *vadjustment = priv->vadjustment;
   GtkAllocation child_allocation;
   GtkWidget *child;
-
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
   /* If our size changed, and we have a shadow, queue a redraw on widget->window to
    * redraw the shadow correctly.
@@ -953,10 +946,10 @@ gtk_viewport_size_allocate (GtkWidget     *widget,
       GtkAllocation view_allocation;
 
       gdk_window_move_resize (gtk_widget_get_window (widget),
-			      allocation->x + border_width,
-			      allocation->y + border_width,
-			      allocation->width - border_width * 2,
-			      allocation->height - border_width * 2);
+			      allocation->x,
+			      allocation->y,
+			      allocation->width,
+			      allocation->height);
       
       viewport_get_view_allocation (viewport, &view_allocation);
       gdk_window_move_resize (priv->view_window,
@@ -1023,7 +1016,7 @@ gtk_viewport_get_preferred_size (GtkWidget      *widget,
 
   child = gtk_bin_get_child (GTK_BIN (widget));
 
-  minimum = 2 * gtk_container_get_border_width (GTK_CONTAINER (widget));
+  minimum = 0;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (widget));
   gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
