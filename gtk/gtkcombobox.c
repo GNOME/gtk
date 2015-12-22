@@ -115,7 +115,6 @@ struct _GtkComboBoxPrivate
   gint row_column;
 
   gint wrap_width;
-  GtkShadowType shadow_type;
 
   gint active; /* Only temporary */
   GtkTreeRowReference *active_row;
@@ -1335,6 +1334,9 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
    * Which kind of shadow to draw around the combo box.
    *
    * Since: 2.12
+   *
+   * Deprecated: 3.20: use CSS styling to change the appearance of the combobox
+   *   frame; the value of this style property is ignored.
    */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_enum ("shadow-type",
@@ -1342,7 +1344,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                               P_("Which kind of shadow to draw around the combo box"),
                                                               GTK_TYPE_SHADOW_TYPE,
                                                               GTK_SHADOW_NONE,
-                                                              GTK_PARAM_READABLE));
+                                                              GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/ui/gtkcombobox.ui");
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkComboBox, button);
@@ -1693,28 +1695,16 @@ gtk_combo_box_check_appearance (GtkComboBox *combo_box)
       if (!GTK_IS_MENU (priv->popup_widget))
         gtk_combo_box_menu_setup (combo_box);
     }
-
-  gtk_widget_style_get (GTK_WIDGET (combo_box),
-                        "shadow-type", &priv->shadow_type,
-                        NULL);
 }
 
 static void
 gtk_combo_box_style_updated (GtkWidget *widget)
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
-  GtkComboBoxPrivate *priv = combo_box->priv;
-  GtkWidget *child;
 
   GTK_WIDGET_CLASS (gtk_combo_box_parent_class)->style_updated (widget);
 
   gtk_combo_box_check_appearance (combo_box);
-
-  child = gtk_bin_get_child (GTK_BIN (combo_box));
-  if (GTK_IS_ENTRY (child))
-    g_object_set (child, "shadow-type",
-                  GTK_SHADOW_NONE == priv->shadow_type ?
-                  GTK_SHADOW_IN : GTK_SHADOW_NONE, NULL);
 }
 
 static void
