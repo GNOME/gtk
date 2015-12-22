@@ -406,11 +406,6 @@ gtk_menu_item_allocate (GtkCssGadget        *gadget,
       gdk_rectangle_union (out_clip, &arrow_clip, out_clip);
     }
 
-  if (gtk_widget_get_realized (widget))
-    gdk_window_move_resize (priv->event_window,
-                            allocation->x, allocation->y,
-                            allocation->width, allocation->height);
-
   if (priv->submenu)
     gtk_menu_reposition (GTK_MENU (priv->submenu));
 }
@@ -424,6 +419,11 @@ gtk_menu_item_size_allocate (GtkWidget     *widget,
   GtkAllocation clip;
   
   gtk_widget_set_allocation (widget, allocation);
+
+  if (gtk_widget_get_realized (widget))
+    gdk_window_move_resize (priv->event_window,
+                            allocation->x, allocation->y,
+                            allocation->width, allocation->height);
 
   gtk_css_gadget_allocate (priv->gadget,
                            allocation,
