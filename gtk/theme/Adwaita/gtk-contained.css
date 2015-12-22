@@ -4038,7 +4038,6 @@ row {
 .app-notification,
 .app-notification.frame {
   padding: 10px;
-  border: none;
   border-radius: 0 0 5px 5px;
   background-color: rgba(32, 37, 38, 0.8);
   background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.2), transparent 2px);
@@ -4046,6 +4045,9 @@ row {
   .app-notification:backdrop,
   .app-notification.frame:backdrop {
     background-image: none; }
+  .app-notification border,
+  .app-notification.frame border {
+    border: none; }
 
 /*************
  * Expanders *
