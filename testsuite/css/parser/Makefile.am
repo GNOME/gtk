@@ -186,6 +186,14 @@ test_data = \
         border-color.ref.css \
 	border-color-currentcolor.css \
 	border-color-currentcolor.ref.css \
+        border-image-source.css \
+        border-image-source.ref.css \
+        border-image-repeat.css \
+        border-image-repeat.ref.css \
+        border-image-slice.css \
+        border-image-slice.ref.css \
+        border-image-width.css \
+        border-image-width.ref.css \
 	border-infloop-3.12.css \
 	border-infloop-3.12.errors \
 	border-infloop-3.12.ref.css \
