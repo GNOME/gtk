@@ -271,7 +271,7 @@ gtk_builtin_icon_get_default_size_property (GtkBuiltinIcon *icon)
 {
   GtkBuiltinIconPrivate *priv;
 
-  g_return_val_if_fail (GTK_IS_BUILTIN_ICON (icon), GTK_CSS_IMAGE_BUILTIN_NONE);
+  g_return_val_if_fail (GTK_IS_BUILTIN_ICON (icon), NULL);
 
   priv = gtk_builtin_icon_get_instance_private (icon);
 
