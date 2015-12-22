@@ -290,36 +290,12 @@ gtk_menu_item_render (GtkCssGadget *gadget,
   GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
   GtkMenuItem *menu_item = GTK_MENU_ITEM (widget);
   GtkMenuItemPrivate *priv = menu_item->priv;
-  GtkStyleContext *context;
-  GtkWidget *child, *parent;
+  GtkWidget *parent;
 
-  context = gtk_widget_get_style_context (widget);
-
-  child = gtk_bin_get_child (GTK_BIN (menu_item));
   parent = gtk_widget_get_parent (widget);
 
   if (priv->submenu && !GTK_IS_MENU_BAR (parent))
-    {
-      gtk_css_gadget_draw (priv->arrow_gadget, cr);
-    }
-  else if (!child)
-    {
-      gboolean wide_separators;
-      gint     separator_height;
-
-      gtk_widget_style_get (widget,
-                            "wide-separators", &wide_separators,
-                            "separator-height", &separator_height,
-                            NULL);
-      if (wide_separators)
-        gtk_render_frame (context, cr,
-                          x, y,
-                          width, separator_height);
-      else
-        gtk_render_line (context, cr,
-                         x, y,
-                         width, y);
-    }
+    gtk_css_gadget_draw (priv->arrow_gadget, cr);
 
   return FALSE;
 }
