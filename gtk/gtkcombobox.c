@@ -124,7 +124,6 @@ struct _GtkComboBoxPrivate
   GtkWidget *cell_view;
 
   GtkWidget *button;
-  GtkWidget *box;
   GtkWidget *arrow;
 
   GtkWidget *popup_widget;
@@ -3271,13 +3270,6 @@ gtk_combo_box_list_destroy (GtkComboBox *combo_box)
                                         gtk_combo_box_child_hide,
                                         NULL);
 
-  if (priv->box)
-    g_signal_handlers_disconnect_matched (priv->box,
-                                          G_SIGNAL_MATCH_DATA,
-                                          0, 0, NULL,
-                                          gtk_combo_box_list_button_pressed,
-                                          NULL);
-
   if (priv->cell_view)
     {
       g_object_set (priv->cell_view,
@@ -3322,7 +3314,7 @@ gtk_combo_box_list_button_pressed (GtkWidget      *widget,
   if (ewidget == priv->popup_window)
     return TRUE;
 
-  if ((ewidget != priv->button && ewidget != priv->box) ||
+  if (ewidget != priv->button ||
       gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->button)))
     return FALSE;
 
@@ -3379,8 +3371,7 @@ gtk_combo_box_list_button_released (GtkWidget      *widget,
 
   if (ewidget != priv->tree_view)
     {
-      if ((ewidget == priv->button ||
-           ewidget == priv->box) &&
+      if (ewidget == priv->button &&
           !popup_in_progress &&
           gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->button)))
         {
@@ -3389,7 +3380,7 @@ gtk_combo_box_list_button_released (GtkWidget      *widget,
         }
 
       /* released outside treeview */
-      if (ewidget != priv->button && ewidget != priv->box)
+      if (ewidget != priv->button)
         {
           gtk_combo_box_popdown (combo_box);
 
