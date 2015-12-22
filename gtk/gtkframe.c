@@ -875,7 +875,7 @@ gtk_frame_real_compute_child_allocation (GtkFrame      *frame,
   GtkAllocation allocation;
   gint border_width, height;
 
-  gtk_widget_get_allocation (widget, &allocation);
+  gtk_css_gadget_get_content_allocation (priv->gadget, &allocation, NULL);
   border_width = gtk_container_get_border_width (GTK_CONTAINER (frame));
 
   if (priv->label_widget)
