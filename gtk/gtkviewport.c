@@ -27,6 +27,7 @@
 #include "gtkviewport.h"
 
 #include "gtkadjustment.h"
+#include "gtkcsscustomgadgetprivate.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkpixelcacheprivate.h"
@@ -72,6 +73,8 @@ struct _GtkViewportPrivate
 
   GdkWindow      *bin_window;
   GdkWindow      *view_window;
+
+  GtkCssGadget *gadget;
 
   GtkPixelCache *pixel_cache;
 
@@ -137,6 +140,234 @@ static void gtk_viewport_queue_draw_region        (GtkWidget        *widget,
 G_DEFINE_TYPE_WITH_CODE (GtkViewport, gtk_viewport, GTK_TYPE_BIN,
                          G_ADD_PRIVATE (GtkViewport)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_SCROLLABLE, NULL))
+
+static void
+gtk_viewport_measure (GtkCssGadget   *gadget,
+                      GtkOrientation  orientation,
+                      int             for_size,
+                      int            *minimum,
+                      int            *natural,
+                      int            *minimum_baseline,
+                      int            *natural_baseline,
+                      gpointer        data)
+{
+  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
+  GtkWidget *child;
+
+  *minimum = *natural = 0;
+
+  child = gtk_bin_get_child (GTK_BIN (widget));
+  if (child && gtk_widget_get_visible (child))
+    _gtk_widget_get_preferred_size_for_size (child,
+                                             orientation,
+                                             for_size,
+                                             minimum, natural,
+                                             NULL, NULL);
+}
+
+static void
+viewport_set_hadjustment_values (GtkViewport *viewport)
+{
+  GtkBin *bin = GTK_BIN (viewport);
+  GtkAllocation view_allocation;
+  GtkAdjustment *hadjustment = viewport->priv->hadjustment;
+  GtkWidget *child;
+  gdouble upper, value;
+
+  gtk_css_gadget_get_content_allocation (viewport->priv->gadget,
+                                         &view_allocation, NULL);
+
+  child = gtk_bin_get_child (bin);
+  if (child && gtk_widget_get_visible (child))
+    {
+      gint minimum_width, natural_width;
+      gint scroll_height;
+
+      if (viewport->priv->vscroll_policy == GTK_SCROLL_MINIMUM)
+	gtk_widget_get_preferred_height (child, &scroll_height, NULL);
+      else
+	gtk_widget_get_preferred_height (child, NULL, &scroll_height);
+
+      gtk_widget_get_preferred_width_for_height (child,
+                                                 MAX (view_allocation.height, scroll_height),
+                                                 &minimum_width,
+                                                 &natural_width);
+
+      if (viewport->priv->hscroll_policy == GTK_SCROLL_MINIMUM)
+	upper = MAX (minimum_width, view_allocation.width);
+      else
+	upper = MAX (natural_width, view_allocation.width);
+    }
+  else
+    upper = view_allocation.width;
+
+  value = gtk_adjustment_get_value (hadjustment);
+  /* We clamp to the left in RTL mode */
+  if (gtk_widget_get_direction (GTK_WIDGET (viewport)) == GTK_TEXT_DIR_RTL)
+    {
+      gdouble dist = gtk_adjustment_get_upper (hadjustment)
+                     - value
+                     - gtk_adjustment_get_page_size (hadjustment);
+      value = upper - dist - view_allocation.width;
+    }
+
+  gtk_adjustment_configure (hadjustment,
+                            value,
+                            0,
+                            upper,
+                            view_allocation.width * 0.1,
+                            view_allocation.width * 0.9,
+                            view_allocation.width);
+}
+
+static void
+viewport_set_vadjustment_values (GtkViewport *viewport)
+{
+  GtkBin *bin = GTK_BIN (viewport);
+  GtkAllocation view_allocation;
+  GtkAdjustment *vadjustment = viewport->priv->vadjustment;
+  GtkWidget *child;
+  gdouble upper;
+
+  gtk_css_gadget_get_content_allocation (viewport->priv->gadget,
+                                         &view_allocation, NULL);
+
+  child = gtk_bin_get_child (bin);
+  if (child && gtk_widget_get_visible (child))
+    {
+      gint minimum_height, natural_height;
+      gint scroll_width;
+
+      if (viewport->priv->hscroll_policy == GTK_SCROLL_MINIMUM)
+	gtk_widget_get_preferred_width (child, &scroll_width, NULL);
+      else
+	gtk_widget_get_preferred_width (child, NULL, &scroll_width);
+
+      gtk_widget_get_preferred_height_for_width (child,
+                                                 MAX (view_allocation.width, scroll_width),
+                                                 &minimum_height,
+                                                 &natural_height);
+
+      if (viewport->priv->vscroll_policy == GTK_SCROLL_MINIMUM)
+	upper = MAX (minimum_height, view_allocation.height);
+      else
+	upper = MAX (natural_height, view_allocation.height);
+    }
+  else
+    upper = view_allocation.height;
+
+  gtk_adjustment_configure (vadjustment,
+                            gtk_adjustment_get_value (vadjustment),
+                            0,
+                            upper,
+                            view_allocation.height * 0.1,
+                            view_allocation.height * 0.9,
+                            view_allocation.height);
+}
+
+static void
+gtk_viewport_allocate (GtkCssGadget        *gadget,
+                       const GtkAllocation *allocation,
+                       int                  baseline,
+                       GtkAllocation       *out_clip,
+                       gpointer             data)
+{
+  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
+  GtkViewport *viewport = GTK_VIEWPORT (widget);
+  GtkViewportPrivate *priv = viewport->priv;
+  GtkAdjustment *hadjustment = priv->hadjustment;
+  GtkAdjustment *vadjustment = priv->vadjustment;
+  GtkWidget *child;
+
+  g_object_freeze_notify (G_OBJECT (hadjustment));
+  g_object_freeze_notify (G_OBJECT (vadjustment));
+
+  viewport_set_hadjustment_values (viewport);
+  viewport_set_vadjustment_values (viewport);
+
+  if (gtk_widget_get_realized (widget))
+    {
+      gdk_window_move_resize (priv->view_window,
+			      allocation->x,
+			      allocation->y,
+			      allocation->width,
+			      allocation->height);
+      gdk_window_move_resize (priv->bin_window,
+                              - gtk_adjustment_get_value (hadjustment),
+                              - gtk_adjustment_get_value (vadjustment),
+                              gtk_adjustment_get_upper (hadjustment),
+                              gtk_adjustment_get_upper (vadjustment));
+    }
+
+  child = gtk_bin_get_child (GTK_BIN (widget));
+  if (child && gtk_widget_get_visible (child))
+    {
+      GtkAllocation child_allocation;
+
+      child_allocation.x = 0;
+      child_allocation.y = 0;
+      child_allocation.width = gtk_adjustment_get_upper (hadjustment);
+      child_allocation.height = gtk_adjustment_get_upper (vadjustment);
+
+      gtk_widget_size_allocate (child, &child_allocation);
+    }
+
+  g_object_thaw_notify (G_OBJECT (hadjustment));
+  g_object_thaw_notify (G_OBJECT (vadjustment));
+}
+
+static void
+draw_bin (cairo_t *cr,
+	  gpointer user_data)
+{
+  GtkWidget *widget = GTK_WIDGET (user_data);
+  GtkViewport *viewport = GTK_VIEWPORT (widget);
+  GtkViewportPrivate *priv = viewport->priv;
+  GtkStyleContext *context;
+  int x, y;
+
+  context = gtk_widget_get_style_context (widget);
+
+  gdk_window_get_position (priv->bin_window, &x, &y);
+  gtk_render_background (context, cr, x, y,
+			 gdk_window_get_width (priv->bin_window),
+			 gdk_window_get_height (priv->bin_window));
+  GTK_WIDGET_CLASS (gtk_viewport_parent_class)->draw (widget, cr);
+}
+
+static gboolean
+gtk_viewport_render (GtkCssGadget *gadget,
+                     cairo_t      *cr,
+                     int           x,
+                     int           y,
+                     int           width,
+                     int           height,
+                     gpointer      data)
+{
+  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
+  GtkViewport *viewport = GTK_VIEWPORT (widget);
+  GtkViewportPrivate *priv = viewport->priv;
+
+  if (gtk_cairo_should_draw_window (cr, priv->bin_window))
+    {
+      cairo_rectangle_int_t view_rect;
+      cairo_rectangle_int_t canvas_rect;
+
+      gdk_window_get_position (priv->view_window, &view_rect.x, &view_rect.y);
+      view_rect.width = gdk_window_get_width (priv->view_window);
+      view_rect.height = gdk_window_get_height (priv->view_window);
+
+      gdk_window_get_position (priv->bin_window, &canvas_rect.x, &canvas_rect.y);
+      canvas_rect.width = gdk_window_get_width (priv->bin_window);
+      canvas_rect.height = gdk_window_get_height (priv->bin_window);
+
+      _gtk_pixel_cache_draw (priv->pixel_cache, cr, priv->bin_window,
+			     &view_rect, &canvas_rect,
+			     draw_bin, widget);
+    }
+
+  return FALSE;
+}
 
 static void
 gtk_viewport_class_init (GtkViewportClass *class)
@@ -269,6 +500,7 @@ gtk_viewport_init (GtkViewport *viewport)
   GtkWidget *widget;
   GtkViewportPrivate *priv;
   GtkStyleContext *style_context;
+  GtkCssNode *widget_node;
 
   viewport->priv = gtk_viewport_get_instance_private (viewport);
   priv = viewport->priv;
@@ -287,6 +519,14 @@ gtk_viewport_init (GtkViewport *viewport)
 
   style_context = gtk_widget_get_style_context (widget);
   _gtk_pixel_cache_set_style_context (priv->pixel_cache, style_context);
+
+  widget_node = gtk_widget_get_css_node (widget);
+  priv->gadget = gtk_css_custom_gadget_new_for_node (widget_node,
+                                                     widget,
+                                                     gtk_viewport_measure,
+                                                     gtk_viewport_allocate,
+                                                     gtk_viewport_render,
+                                                     NULL, NULL);
 
   gtk_style_context_add_class (style_context, GTK_STYLE_CLASS_FRAME);
   viewport_set_adjustment (viewport, GTK_ORIENTATION_HORIZONTAL, NULL);
@@ -350,47 +590,9 @@ gtk_viewport_destroy (GtkWidget *widget)
     _gtk_pixel_cache_free (priv->pixel_cache);
   priv->pixel_cache = NULL;
 
+  g_clear_object (&priv->gadget);
+
   GTK_WIDGET_CLASS (gtk_viewport_parent_class)->destroy (widget);
-}
-
-static void
-viewport_get_view_allocation (GtkViewport   *viewport,
-			      GtkAllocation *view_allocation)
-{
-  GtkViewportPrivate *priv = viewport->priv;
-  GtkWidget *widget = GTK_WIDGET (viewport);
-  GtkAllocation allocation;
-  GtkStyleContext *context;
-  GtkStateFlags state;
-  GtkBorder padding, border;
-
-  gtk_widget_get_allocation (widget, &allocation);
-
-  view_allocation->x = 0;
-  view_allocation->y = 0;
-
-  context = gtk_widget_get_style_context (widget);
-  state = gtk_style_context_get_state (context);
-
-  gtk_style_context_get_padding (context, state, &padding);
-  gtk_style_context_get_border (context, state, &border);
-
-  if (priv->shadow_type != GTK_SHADOW_NONE)
-    {
-      view_allocation->x = border.left;
-      view_allocation->y = border.top;
-    }
-
-  view_allocation->x += padding.left;
-  view_allocation->y += padding.top;
-  view_allocation->width = MAX (1, allocation.width - padding.left - padding.right);
-  view_allocation->height = MAX (1, allocation.height - padding.top - padding.bottom);
-
-  if (priv->shadow_type != GTK_SHADOW_NONE)
-    {
-      view_allocation->width = MAX (1, view_allocation->width - border.left - border.right);
-      view_allocation->height = MAX (1, view_allocation->height - border.top - border.bottom);
-    }
 }
 
 /**
@@ -427,104 +629,6 @@ gtk_viewport_get_vadjustment (GtkViewport *viewport)
   g_return_val_if_fail (GTK_IS_VIEWPORT (viewport), NULL);
 
   return viewport->priv->vadjustment;
-}
-
-static void
-viewport_set_hadjustment_values (GtkViewport *viewport)
-{
-  GtkBin *bin = GTK_BIN (viewport);
-  GtkAllocation view_allocation;
-  GtkAdjustment *hadjustment = viewport->priv->hadjustment;
-  GtkWidget *child;
-  gdouble upper, value;
-  
-  viewport_get_view_allocation (viewport, &view_allocation);  
-
-  child = gtk_bin_get_child (bin);
-  if (child && gtk_widget_get_visible (child))
-    {
-      gint minimum_width, natural_width;
-      gint scroll_height;
-      
-      if (viewport->priv->vscroll_policy == GTK_SCROLL_MINIMUM)
-	gtk_widget_get_preferred_height (child, &scroll_height, NULL);
-      else
-	gtk_widget_get_preferred_height (child, NULL, &scroll_height);
-
-      gtk_widget_get_preferred_width_for_height (child,
-                                                 MAX (view_allocation.height, scroll_height),
-                                                 &minimum_width,
-                                                 &natural_width);
-
-      if (viewport->priv->hscroll_policy == GTK_SCROLL_MINIMUM)
-	upper = MAX (minimum_width, view_allocation.width);
-      else
-	upper = MAX (natural_width, view_allocation.width);
-    }
-  else
-    upper = view_allocation.width;
-
-  value = gtk_adjustment_get_value (hadjustment);
-  /* We clamp to the left in RTL mode */
-  if (gtk_widget_get_direction (GTK_WIDGET (viewport)) == GTK_TEXT_DIR_RTL)
-    {
-      gdouble dist = gtk_adjustment_get_upper (hadjustment)
-                     - value
-                     - gtk_adjustment_get_page_size (hadjustment);
-      value = upper - dist - view_allocation.width;
-    }
-
-  gtk_adjustment_configure (hadjustment,
-                            value,
-                            0,
-                            upper,
-                            view_allocation.width * 0.1,
-                            view_allocation.width * 0.9,
-                            view_allocation.width);
-}
-
-static void
-viewport_set_vadjustment_values (GtkViewport *viewport)
-{
-  GtkBin *bin = GTK_BIN (viewport);
-  GtkAllocation view_allocation;
-  GtkAdjustment *vadjustment = viewport->priv->vadjustment;
-  GtkWidget *child;
-  gdouble upper;
-
-  viewport_get_view_allocation (viewport, &view_allocation);  
-
-  child = gtk_bin_get_child (bin);
-  if (child && gtk_widget_get_visible (child))
-    {
-      gint minimum_height, natural_height;
-      gint scroll_width;
-
-      if (viewport->priv->hscroll_policy == GTK_SCROLL_MINIMUM)
-	gtk_widget_get_preferred_width (child, &scroll_width, NULL);
-      else
-	gtk_widget_get_preferred_width (child, NULL, &scroll_width);
-
-      gtk_widget_get_preferred_height_for_width (child,
-                                                 MAX (view_allocation.width, scroll_width),
-                                                 &minimum_height,
-                                                 &natural_height);
-
-      if (viewport->priv->vscroll_policy == GTK_SCROLL_MINIMUM)
-	upper = MAX (minimum_height, view_allocation.height);
-      else
-	upper = MAX (natural_height, view_allocation.height);
-    }
-  else
-    upper = view_allocation.height;
-
-  gtk_adjustment_configure (vadjustment,
-                            gtk_adjustment_get_value (vadjustment),
-                            0,
-                            upper,
-                            view_allocation.height * 0.1,
-                            view_allocation.height * 0.9,
-                            view_allocation.height);
 }
 
 static void
@@ -761,8 +865,9 @@ gtk_viewport_realize (GtkWidget *widget)
   gtk_widget_set_window (widget, window);
   gtk_widget_register_window (widget, window);
 
-  viewport_get_view_allocation (viewport, &view_allocation);
-  
+  gtk_css_gadget_get_content_allocation (priv->gadget,
+                                         &view_allocation, NULL);
+
   attributes.x = view_allocation.x;
   attributes.y = view_allocation.y;
   attributes.width = view_allocation.width;
@@ -832,62 +937,16 @@ gtk_viewport_unmap (GtkWidget *widget)
   _gtk_pixel_cache_unmap (priv->pixel_cache);
 }
 
-static void
-draw_bin (cairo_t *cr,
-	  gpointer user_data)
-{
-  GtkWidget *widget = GTK_WIDGET (user_data);
-  GtkViewport *viewport = GTK_VIEWPORT (widget);
-  GtkViewportPrivate *priv = viewport->priv;
-  GtkStyleContext *context;
-  int x, y;
-
-  context = gtk_widget_get_style_context (widget);
-
-  gdk_window_get_position (priv->bin_window, &x, &y);
-  gtk_render_background (context, cr, x, y,
-			 gdk_window_get_width (priv->bin_window),
-			 gdk_window_get_height (priv->bin_window));
-  GTK_WIDGET_CLASS (gtk_viewport_parent_class)->draw (widget, cr);
-}
-
 static gint
 gtk_viewport_draw (GtkWidget *widget,
                    cairo_t   *cr)
 {
   GtkViewport *viewport = GTK_VIEWPORT (widget);
   GtkViewportPrivate *priv = viewport->priv;
-  GtkStyleContext *context;
 
-  context = gtk_widget_get_style_context (widget);
-
-  if (gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)))
-    {
-      gtk_render_background (context, cr, 0, 0,
-                             gdk_window_get_width (gtk_widget_get_window (widget)),
-                             gdk_window_get_height (gtk_widget_get_window (widget)));
-      gtk_render_frame (context, cr, 0, 0,
-                        gdk_window_get_width (gtk_widget_get_window (widget)),
-                        gdk_window_get_height (gtk_widget_get_window (widget)));
-    }
-
-  if (gtk_cairo_should_draw_window (cr, priv->bin_window))
-    {
-      cairo_rectangle_int_t view_rect;
-      cairo_rectangle_int_t canvas_rect;
-
-      gdk_window_get_position (priv->view_window, &view_rect.x, &view_rect.y);
-      view_rect.width = gdk_window_get_width (priv->view_window);
-      view_rect.height = gdk_window_get_height (priv->view_window);
-
-      gdk_window_get_position (priv->bin_window, &canvas_rect.x, &canvas_rect.y);
-      canvas_rect.width = gdk_window_get_width (priv->bin_window);
-      canvas_rect.height = gdk_window_get_height (priv->bin_window);
-
-      _gtk_pixel_cache_draw (priv->pixel_cache, cr, priv->bin_window,
-			     &view_rect, &canvas_rect,
-			     draw_bin, widget);
-    }
+  if (gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)) ||
+      gtk_cairo_should_draw_window (cr, priv->bin_window))
+    gtk_css_gadget_draw (priv->gadget, cr);
 
   return FALSE;
 }
@@ -911,14 +970,9 @@ static void
 gtk_viewport_size_allocate (GtkWidget     *widget,
 			    GtkAllocation *allocation)
 {
-  GtkAllocation widget_allocation;
   GtkViewport *viewport = GTK_VIEWPORT (widget);
   GtkViewportPrivate *priv = viewport->priv;
-  GtkBin *bin = GTK_BIN (widget);
-  GtkAdjustment *hadjustment = priv->hadjustment;
-  GtkAdjustment *vadjustment = priv->vadjustment;
-  GtkAllocation child_allocation;
-  GtkWidget *child;
+  GtkAllocation clip, content_allocation, widget_allocation;
 
   /* If our size changed, and we have a shadow, queue a redraw on widget->window to
    * redraw the shadow correctly.
@@ -932,45 +986,23 @@ gtk_viewport_size_allocate (GtkWidget     *widget,
 
   gtk_widget_set_allocation (widget, allocation);
 
-  g_object_freeze_notify (G_OBJECT (hadjustment));
-  g_object_freeze_notify (G_OBJECT (vadjustment));
-
-  viewport_set_hadjustment_values (viewport);
-  viewport_set_vadjustment_values (viewport);
-
-  child_allocation.x = 0;
-  child_allocation.y = 0;
-  child_allocation.width = gtk_adjustment_get_upper (hadjustment);
-  child_allocation.height = gtk_adjustment_get_upper (vadjustment);
   if (gtk_widget_get_realized (widget))
-    {
-      GtkAllocation view_allocation;
+    gdk_window_move_resize (gtk_widget_get_window (widget),
+                            allocation->x,
+                            allocation->y,
+                            allocation->width,
+                            allocation->height);
 
-      gdk_window_move_resize (gtk_widget_get_window (widget),
-			      allocation->x,
-			      allocation->y,
-			      allocation->width,
-			      allocation->height);
-      
-      viewport_get_view_allocation (viewport, &view_allocation);
-      gdk_window_move_resize (priv->view_window,
-			      view_allocation.x,
-			      view_allocation.y,
-			      view_allocation.width,
-			      view_allocation.height);
-      gdk_window_move_resize (priv->bin_window,
-                              - gtk_adjustment_get_value (hadjustment),
-                              - gtk_adjustment_get_value (vadjustment),
-                              child_allocation.width,
-                              child_allocation.height);
-    }
+  content_allocation = *allocation;
+  content_allocation.x = content_allocation.y = 0;
+  gtk_css_gadget_allocate (priv->gadget,
+                           &content_allocation,
+                           gtk_widget_get_allocated_baseline (widget),
+                           &clip);
 
-  child = gtk_bin_get_child (bin);
-  if (child && gtk_widget_get_visible (child))
-    gtk_widget_size_allocate (child, &child_allocation);
-
-  g_object_thaw_notify (G_OBJECT (hadjustment));
-  g_object_thaw_notify (G_OBJECT (vadjustment));
+  clip.x += allocation->x;
+  clip.y += allocation->y;
+  gtk_widget_set_clip (widget, &clip);
 }
 
 static void
@@ -1001,82 +1033,15 @@ gtk_viewport_adjustment_value_changed (GtkAdjustment *adjustment,
 }
 
 static void
-gtk_viewport_get_preferred_size (GtkWidget      *widget,
-                                 GtkOrientation  orientation,
-                                 gint            for_size,
-                                 gint           *minimum_size,
-                                 gint           *natural_size)
-{
-  GtkViewport *viewport = GTK_VIEWPORT (widget);
-  GtkViewportPrivate *priv = viewport->priv;
-  GtkStyleContext *context;
-  GtkBorder padding, border;
-  GtkWidget *child;
-  gint       child_min, child_nat;
-  gint       minimum, natural;
-
-  child = gtk_bin_get_child (GTK_BIN (widget));
-
-  minimum = 0;
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (widget));
-  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
-
-  if (priv->shadow_type != GTK_SHADOW_NONE)
-    {
-      gtk_style_context_get_border (context, gtk_style_context_get_state (context), &border);
-
-      if (orientation == GTK_ORIENTATION_HORIZONTAL)
-        {
-          if (for_size >= 0)
-            for_size -= border.top + border.bottom;
-          minimum += border.left + border.right;
-        }
-      else
-        {
-          if (for_size >= 0)
-            for_size -= border.left + border.right;
-          minimum += border.top + border.bottom;
-        }
-    }
-
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    {
-      if (for_size >= 0)
-        for_size -= padding.top + padding.bottom;
-      minimum += padding.left + padding.right;
-    }
-  else
-    {
-      if (for_size >= 0)
-        for_size -= padding.left + padding.right;
-      minimum += padding.top + padding.bottom;
-    }
-
-  natural = minimum;
-
-  if (child && gtk_widget_get_visible (child))
-    {
-      _gtk_widget_get_preferred_size_for_size (child,
-                                               orientation,
-                                               for_size,
-                                               &child_min, &child_nat,
-                                               NULL, NULL);
-
-      minimum += child_min;
-      natural += child_nat;
-    }
-
-  *minimum_size = minimum;
-  *natural_size = natural;
-}
-
-static void
 gtk_viewport_get_preferred_width (GtkWidget *widget,
                                   gint      *minimum_size,
                                   gint      *natural_size)
 {
-  gtk_viewport_get_preferred_size (widget, GTK_ORIENTATION_HORIZONTAL, -1, minimum_size, natural_size);
+  gtk_css_gadget_get_preferred_size (GTK_VIEWPORT (widget)->priv->gadget,
+                                     GTK_ORIENTATION_HORIZONTAL,
+                                     -1,
+                                     minimum_size, natural_size,
+                                     NULL, NULL);
 }
 
 static void
@@ -1084,7 +1049,11 @@ gtk_viewport_get_preferred_height (GtkWidget *widget,
                                    gint      *minimum_size,
                                    gint      *natural_size)
 {
-  gtk_viewport_get_preferred_size (widget, GTK_ORIENTATION_VERTICAL, -1, minimum_size, natural_size);
+  gtk_css_gadget_get_preferred_size (GTK_VIEWPORT (widget)->priv->gadget,
+                                     GTK_ORIENTATION_VERTICAL,
+                                     -1,
+                                     minimum_size, natural_size,
+                                     NULL, NULL);
 }
 
 static void
@@ -1093,7 +1062,11 @@ gtk_viewport_get_preferred_width_for_height (GtkWidget *widget,
                                              gint      *minimum_size,
                                              gint      *natural_size)
 {
-  gtk_viewport_get_preferred_size (widget, GTK_ORIENTATION_HORIZONTAL, height, minimum_size, natural_size);
+  gtk_css_gadget_get_preferred_size (GTK_VIEWPORT (widget)->priv->gadget,
+                                     GTK_ORIENTATION_HORIZONTAL,
+                                     height,
+                                     minimum_size, natural_size,
+                                     NULL, NULL);
 }
 
 static void
@@ -1102,5 +1075,9 @@ gtk_viewport_get_preferred_height_for_width (GtkWidget *widget,
                                              gint      *minimum_size,
                                              gint      *natural_size)
 {
-  gtk_viewport_get_preferred_size (widget, GTK_ORIENTATION_VERTICAL, width, minimum_size, natural_size);
+  gtk_css_gadget_get_preferred_size (GTK_VIEWPORT (widget)->priv->gadget,
+                                     GTK_ORIENTATION_VERTICAL,
+                                     width,
+                                     minimum_size, natural_size,
+                                     NULL, NULL);
 }
