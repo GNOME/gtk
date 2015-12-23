@@ -3426,4 +3426,5 @@ gtk_settings_reset_property (GtkSettings *settings,
   g_param_value_set_default (pspec, &priv->property_values[pspec->param_id - 1].value);
 
   priv->property_values[pspec->param_id - 1].source = GTK_SETTINGS_SOURCE_DEFAULT;
+  g_object_notify_by_pspec (G_OBJECT (settings), pspec);
 }
