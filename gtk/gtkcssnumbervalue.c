@@ -17,13 +17,13 @@
 
 #include "config.h"
 
-#include <math.h>
-
 #include "gtkcssnumbervalueprivate.h"
 
 #include "gtkcssenumvalueprivate.h"
 #include "gtkcssinitialvalueprivate.h"
 #include "gtkstylepropertyprivate.h"
+
+#include "fallback-c89.c"
 
 struct _GtkCssValue {
   GTK_CSS_VALUE_BASE

@@ -65,3 +65,15 @@ nearbyint (double x)
   return floor (x + 0.5);
 }
 #endif
+
+#ifndef HAVE_DECL_ISINF
+/* Unfortunately MSVC does not have finite()
+ * but it does have _finite() which is the same
+ * as finite() except when x is a NaN
+ */
+static inline gboolean
+isinf (double x)
+{
+  return (!_finite (x) && !_isnan (x));
+}
+#endif
