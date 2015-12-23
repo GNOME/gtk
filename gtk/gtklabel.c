@@ -5147,7 +5147,7 @@ gtk_label_drag_gesture_begin (GtkGestureDrag *gesture,
   const GdkEvent *event;
   gint min, max, index;
 
-  if (!info)
+  if (!info || !info->selectable)
     {
       gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
       return;
