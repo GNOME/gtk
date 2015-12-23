@@ -1833,7 +1833,9 @@ notebook {
       color: $fg_color;
       &:backdrop { color: $backdrop_fg_color; }
     }
-    button { //tab close button
+    button.flat { //tab close button
+      min-height: 18px;
+      min-width: 18px;
       padding: 0;
       border: 1px solid transparent;
       @extend %undecorated_button;
@@ -1852,9 +1854,6 @@ notebook {
       &:backdrop {
         color: transparentize($backdrop_fg_color,0.7);
         border-color: transparent;
-      }
-      & > image { // this is a hack which makes tabs grow
-        padding: 2px;
       }
     }
   }

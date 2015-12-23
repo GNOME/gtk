@@ -1219,7 +1219,7 @@ modelbutton.flat,
 .menuitem.button.flat:backdrop:hover, button:link, headerbar button.titlebutton:link,
 .titlebar button.titlebutton:link, button:visited, headerbar button.titlebutton:visited,
 .titlebar button.titlebutton:visited, button:link:hover, button:link:active, button:link:checked, button:visited:hover, button:visited:active, button:visited:checked, button:link:backdrop, button:visited:backdrop, menu arrow,
-.menu arrow, notebook tab button, notebook tab headerbar button.titlebutton, headerbar notebook tab button.titlebutton,
+.menu arrow, notebook tab button.flat, notebook tab button.sidebar-button, notebook tab headerbar button.titlebutton, headerbar notebook tab button.titlebutton,
 notebook tab .titlebar button.titlebutton,
 .titlebar notebook tab button.titlebutton, calendar.button, calendar.button:hover, calendar.button:backdrop, calendar.button:insensitive, .scale-popup button:hover, .scale-popup button:backdrop, .scale-popup button:backdrop:hover, .scale-popup button:backdrop:insensitive {
   border-color: transparent;
@@ -2423,15 +2423,17 @@ notebook {
       color: #eeeeec; }
       notebook tab:active label:backdrop {
         color: #949796; }
-    notebook tab button, notebook tab headerbar button.titlebutton, headerbar notebook tab button.titlebutton,
+    notebook tab button.flat, notebook tab button.sidebar-button, notebook tab headerbar button.titlebutton, headerbar notebook tab button.titlebutton,
     notebook tab .titlebar button.titlebutton,
     .titlebar notebook tab button.titlebutton {
+      min-height: 18px;
+      min-width: 18px;
       padding: 0;
       border: 1px solid transparent;
       -gtk-icon-shadow: none;
       transition: none;
       color: rgba(238, 238, 236, 0.3); }
-      notebook tab button:hover,
+      notebook tab button.flat:hover, notebook tab button.sidebar-button:hover, notebook tab headerbar button.titlebutton:hover, headerbar notebook tab button.titlebutton:hover,
       notebook tab .titlebar button.titlebutton:hover,
       .titlebar notebook tab button.titlebutton:hover {
         color: #eeeeec;
@@ -2450,7 +2452,7 @@ notebook {
         box-shadow: inset 0 1px rgba(255, 255, 255, 0.05);
         background-image: none;
         box-shadow: none; }
-      notebook tab button:active,
+      notebook tab button.flat:active, notebook tab button.sidebar-button:active, notebook tab headerbar button.titlebutton:active, headerbar notebook tab button.titlebutton:active,
       notebook tab .titlebar button.titlebutton:active,
       .titlebar notebook tab button.titlebutton:active {
         color: #eeeeec;
@@ -2460,15 +2462,11 @@ notebook {
         text-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
         -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
         box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
-      notebook tab button:backdrop,
+      notebook tab button.flat:backdrop, notebook tab button.sidebar-button:backdrop, notebook tab headerbar button.titlebutton:backdrop, headerbar notebook tab button.titlebutton:backdrop,
       notebook tab .titlebar button.titlebutton:backdrop,
       .titlebar notebook tab button.titlebutton:backdrop {
         color: rgba(148, 151, 150, 0.3);
         border-color: transparent; }
-      notebook tab button > image, notebook tab headerbar button.titlebutton > image, headerbar notebook tab button.titlebutton > image,
-      notebook tab .titlebar button.titlebutton > image,
-      .titlebar notebook tab button.titlebutton > image {
-        padding: 2px; }
 
 /**************
  * Scrollbars *
