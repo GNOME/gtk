@@ -266,15 +266,16 @@ gtk_viewport_get_property (GObject         *object,
 static void
 gtk_viewport_init (GtkViewport *viewport)
 {
+  GtkWidget *widget;
   GtkViewportPrivate *priv;
   GtkStyleContext *style_context;
 
   viewport->priv = gtk_viewport_get_instance_private (viewport);
   priv = viewport->priv;
+  widget = GTK_WIDGET (viewport);
 
-  gtk_widget_set_has_window (GTK_WIDGET (viewport), TRUE);
-
-  gtk_widget_set_redraw_on_allocate (GTK_WIDGET (viewport), FALSE);
+  gtk_widget_set_has_window (widget, TRUE);
+  gtk_widget_set_redraw_on_allocate (widget, FALSE);
 
   priv->shadow_type = GTK_SHADOW_IN;
   priv->view_window = NULL;
@@ -284,10 +285,10 @@ gtk_viewport_init (GtkViewport *viewport)
 
   priv->pixel_cache = _gtk_pixel_cache_new ();
 
-  style_context = gtk_widget_get_style_context (GTK_WIDGET (viewport));
+  style_context = gtk_widget_get_style_context (widget);
   _gtk_pixel_cache_set_style_context (priv->pixel_cache, style_context);
 
-  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (viewport)), GTK_STYLE_CLASS_FRAME);
+  gtk_style_context_add_class (style_context, GTK_STYLE_CLASS_FRAME);
   viewport_set_adjustment (viewport, GTK_ORIENTATION_HORIZONTAL, NULL);
   viewport_set_adjustment (viewport, GTK_ORIENTATION_VERTICAL, NULL);
 }
@@ -309,9 +310,9 @@ gtk_viewport_new (GtkAdjustment *hadjustment,
   GtkWidget *viewport;
 
   viewport = g_object_new (GTK_TYPE_VIEWPORT,
-			     "hadjustment", hadjustment,
-			     "vadjustment", vadjustment,
-			     NULL);
+                           "hadjustment", hadjustment,
+                           "vadjustment", vadjustment,
+                           NULL);
 
   return viewport;
 }
