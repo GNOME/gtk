@@ -31,7 +31,6 @@ GtkViewport {
     -GtkWidget-visited-link-color: -gtk-win32-color(button, 26);
     border-color: shade (@bg_color, 0.6);
 
-    -GtkScrolledWindow-scrollbars-within-bevel: 1;
     -GtkScrolledWindow-scrollbars-spacing: 0;
 }
 

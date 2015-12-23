@@ -16,7 +16,6 @@ $asset_suffix: if($variant=='dark', '-dark', '');
   // only in the width
 
   -GtkScrolledWindow-scrollbar-spacing: 0;
-  -GtkScrolledWindow-scrollbars-within-bevel: 1;
 
   -GtkToolItemGroup-expander-size: 11;
   -GtkTreeView-expander-size: 11;
