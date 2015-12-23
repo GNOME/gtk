@@ -5252,6 +5252,7 @@ gtk_widget_add_tick_callback (GtkWidget       *widget,
 {
   GtkWidgetPrivate *priv;
   GtkTickCallbackInfo *info;
+  GdkFrameClock *frame_clock;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
 
@@ -5259,11 +5260,15 @@ gtk_widget_add_tick_callback (GtkWidget       *widget,
 
   if (priv->realized && !priv->clock_tick_id)
     {
-      GdkFrameClock *frame_clock = gtk_widget_get_frame_clock (widget);
-      priv->clock_tick_id = g_signal_connect (frame_clock, "update",
-                                              G_CALLBACK (gtk_widget_on_frame_clock_update),
-                                              widget);
-      gdk_frame_clock_begin_updating (frame_clock);
+      frame_clock = gtk_widget_get_frame_clock (widget);
+
+      if (frame_clock)
+        {
+          priv->clock_tick_id = g_signal_connect (frame_clock, "update",
+                                                  G_CALLBACK (gtk_widget_on_frame_clock_update),
+                                                  widget);
+          gdk_frame_clock_begin_updating (frame_clock);
+        }
     }
 
   info = g_slice_new0 (GtkTickCallbackInfo);
