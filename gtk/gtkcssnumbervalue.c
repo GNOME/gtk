@@ -17,6 +17,8 @@
 
 #include "config.h"
 
+#include <math.h>
+
 #include "gtkcssnumbervalueprivate.h"
 
 #include "gtkcssenumvalueprivate.h"
@@ -201,10 +203,15 @@ gtk_css_value_number_print (const GtkCssValue *number,
     /* [GTK_CSS_MS] = */ "ms",
   };
 
-  g_ascii_dtostr (buf, sizeof (buf), number->value);
-  g_string_append (string, buf);
-  if (number->value != 0.0)
-    g_string_append (string, names[number->unit]);
+  if (isinf (number->value))
+    g_string_append (string, "infinite");
+  else
+    {
+      g_ascii_dtostr (buf, sizeof (buf), number->value);
+      g_string_append (string, buf);
+      if (number->value != 0.0)
+        g_string_append (string, names[number->unit]);
+    }
 }
 
 static const GtkCssValueClass GTK_CSS_VALUE_NUMBER = {
