@@ -78,6 +78,10 @@ GtkCssNode *    gtk_css_gadget_get_node                 (GtkCssGadget           
 GtkCssStyle *   gtk_css_gadget_get_style                (GtkCssGadget           *gadget);
 GtkWidget *     gtk_css_gadget_get_owner                (GtkCssGadget           *gadget);
 
+void            gtk_css_gadget_set_visible              (GtkCssGadget           *gadget,
+                                                         gboolean                visible);
+gboolean        gtk_css_gadget_get_visible              (GtkCssGadget           *gadget);
+
 void            gtk_css_gadget_add_class                (GtkCssGadget           *gadget,
                                                          const char             *name);
 void            gtk_css_gadget_remove_class             (GtkCssGadget           *gadget,

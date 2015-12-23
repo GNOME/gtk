@@ -337,6 +337,23 @@ gtk_css_gadget_get_owner (GtkCssGadget *gadget)
   return priv->owner;
 }
 
+void
+gtk_css_gadget_set_visible (GtkCssGadget *gadget,
+                            gboolean      visible)
+{
+  GtkCssGadgetPrivate *priv = gtk_css_gadget_get_instance_private (gadget);
+
+  gtk_css_node_set_visible (priv->node, visible);
+}
+
+gboolean
+gtk_css_gadget_get_visible (GtkCssGadget *gadget)
+{
+  GtkCssGadgetPrivate *priv = gtk_css_gadget_get_instance_private (gadget);
+
+  return gtk_css_node_get_visible (priv->node);
+}
+
 /**
  * gtk_css_gadget_add_class:
  * @gadget: a #GtkCssGadget
@@ -456,6 +473,17 @@ gtk_css_gadget_get_preferred_size (GtkCssGadget   *gadget,
   if (natural == NULL)
     natural = &unused_natural;
 
+  if (!gtk_css_gadget_get_visible (gadget))
+    {
+      *minimum = 0;
+      *natural = 0;
+      if (minimum_baseline)
+        *minimum_baseline = -1;
+      if (natural_baseline)
+        *natural_baseline = -1;
+      return;
+    }
+
   style = gtk_css_gadget_get_style (gadget);
   get_box_margin (style, &margin);
   get_box_border (style, &border);
@@ -530,6 +558,9 @@ gtk_css_gadget_allocate (GtkCssGadget        *gadget,
   GtkCssStyle *style;
 
   g_return_if_fail (out_clip != NULL);
+
+  if (!gtk_css_gadget_get_visible (gadget))
+    return;
 
   priv->allocated_size = *allocation;
   priv->allocated_baseline = baseline;
@@ -608,6 +639,9 @@ gtk_css_gadget_draw (GtkCssGadget *gadget,
   GtkCssStyle *style;
   int x, y, width, height;
   int contents_x, contents_y, contents_width, contents_height;
+
+  if (!gtk_css_gadget_get_visible (gadget))
+    return;
 
   x =  priv->allocated_size.x;
   y =  priv->allocated_size.y;
@@ -694,6 +728,15 @@ gtk_css_gadget_get_border_allocation (GtkCssGadget  *gadget,
 
   g_return_if_fail (GTK_IS_CSS_GADGET (gadget));
 
+  if (!gtk_css_gadget_get_visible (gadget))
+    {
+      if (allocation)
+        allocation->x = allocation->y = allocation->width = allocation->height = 0;
+      if (baseline)
+        *baseline = -1;
+      return;
+    }
+
   get_box_margin (gtk_css_gadget_get_style (gadget), &margin);
 
   if (allocation)
@@ -722,6 +765,15 @@ gtk_css_gadget_get_content_allocation (GtkCssGadget  *gadget,
   GtkCssStyle *style;
 
   g_return_if_fail (GTK_IS_CSS_GADGET (gadget));
+
+  if (!gtk_css_gadget_get_visible (gadget))
+    {
+      if (allocation)
+        allocation->x = allocation->y = allocation->width = allocation->height = 0;
+      if (baseline)
+        *baseline = -1;
+      return;
+    }
 
   style = gtk_css_gadget_get_style (gadget);
   get_box_margin (style, &margin);
