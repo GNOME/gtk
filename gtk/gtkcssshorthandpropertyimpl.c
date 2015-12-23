@@ -156,7 +156,8 @@ parse_border_radius (GtkCssShorthandProperty  *shorthand,
     }
 
   /* The magic (i - 1) >> 1 below makes it take the correct value
-   * according to spec. Feel free to check the 4 cases */
+   * according to spec. Feel free to check the 4 cases
+   */
   for (; i < 4; i++)
     x[i] = _gtk_css_value_ref (x[(i - 1) >> 1]);
 
@@ -316,7 +317,8 @@ parse_border_image (GtkCssShorthandProperty  *shorthand,
         {
           /* We parsed everything and there's still stuff left?
            * Pretend we didn't notice and let the normal code produce
-           * a 'junk at end of value' error */
+           * a 'junk at end of value' error
+           */
           break;
         }
     }
@@ -357,7 +359,8 @@ parse_border_side (GtkCssShorthandProperty  *shorthand,
       {
         /* We parsed and there's still stuff left?
          * Pretend we didn't notice and let the normal code produce
-         * a 'junk at end of value' error */
+         * a 'junk at end of value' error
+         */
         break;
       }
   }
@@ -407,14 +410,16 @@ parse_border (GtkCssShorthandProperty  *shorthand,
       {
         /* We parsed everything and there's still stuff left?
          * Pretend we didn't notice and let the normal code produce
-         * a 'junk at end of value' error */
+         * a 'junk at end of value' error
+         */
         break;
       }
   }
   while (!value_is_done_parsing (parser));
 
   /* Note that border-image values are not set: according to the spec
-     they just need to be reset when using the border shorthand */
+   * they just need to be reset when using the border shorthand
+   */
 
   return TRUE;
 }
@@ -540,7 +545,8 @@ parse_one_background (GtkCssShorthandProperty  *shorthand,
         {
           /* We parsed everything and there's still stuff left?
            * Pretend we didn't notice and let the normal code produce
-           * a 'junk at end of value' error */
+           * a 'junk at end of value' error
+           */
           break;
         }
     }
@@ -648,7 +654,8 @@ parse_one_transition (GtkCssShorthandProperty  *shorthand,
         {
           /* We parsed everything and there's still stuff left?
            * Pretend we didn't notice and let the normal code produce
-           * a 'junk at end of value' error */
+           * a 'junk at end of value' error
+           */
           break;
         }
     }
