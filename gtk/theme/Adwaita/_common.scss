@@ -224,8 +224,10 @@ spinner {
  ****************/
 
 entry {
+  min-height: 32px;
   border: 1px solid;
-  padding: 5px 8px 6px;
+  padding-left: 8px;
+  padding-right: 8px;
 
   & image { // icons inside the entry
     &.left { padding-left: 0; padding-right: 6px; }
@@ -373,9 +375,11 @@ button {
 
   $_button_transition: all 200ms $ease-out-quad;
 
+  min-height: 24px;
+  min-width: 16px;
+  padding: 4px 8px;
   border: 1px solid;
   border-radius: 3px;
-  padding: 5px 8px 6px;
   transition: $_button_transition;
   @include button(normal);
   &.flat {
@@ -423,7 +427,10 @@ button {
   }
   // big standalone buttons like in Documents pager
   &.osd {
-    &.image-button { padding: 13px; }
+    &.image-button {
+      min-height: 48px;
+      min-width: 48px;
+    }
     color: $osd_fg_color;
     border-radius: 5px;
     outline-color: transparentize($osd_fg_color, 0.7);  //FIXME: define a color var?
@@ -535,8 +542,6 @@ button {
     }
   }
 
-  &.image-button { padding: 8px; }
-
   &.text-button {
     padding-left: 16px;
     padding-right: 16px;
@@ -547,7 +552,6 @@ button {
     // to have the image-button padding, while the text side the text-button
     // one, so we're adding the missing padding to the label depending on
     // its position inside the button
-    padding: 5px 8px 6px; // same as .button
     & label:first-child { padding-left: 8px; }
     & label:last-child { padding-right: 8px; }
   }
@@ -570,12 +574,15 @@ button {
       padding-bottom: 3px; //
     }
     &.text-button {
-      padding: 5px 10px 6px; // needed or it will get overridden
+      // compensate text-button paddings
+      padding-left: 10px;
+      padding-right: 10px;
     }
     &.image-button {
       // we want image buttons to have a 1:1 aspect ratio, so compensation
       // of the padding added to the GtkImage is needed
-      padding: 5px 2px;
+      padding-left: 2px;
+      padding-right: 2px;
     }
     &.needs-attention > label,
     &.needs-attention > image { @extend %needs_attention; }
@@ -942,9 +949,11 @@ spinbutton {
  * ComboBoxes *
  **************/
 combobox {
-  > button.combo { padding-top: 3px; padding-bottom: 4px; } // Otherwise combos
-                                                                           // are bigger then
-                                                                           // buttons
+  > button.combo {
+      padding-left: 8px;
+      padding-right: 8px;
+    }
+
   @include _button_text_shadow;
 
   &:insensitive {
@@ -2435,12 +2444,12 @@ progressbar {
   // sizing
   &.horizontal {
     trough,
-    progress { min-height: 2px; } // FIXME: should be 4px, but looks like currently gtk+ consider borders
+    progress { min-height: 2px; }
   }
 
   &.vertical {
     trough,
-    progress { min-width: 2px; } // FIXME: should be 4px, but looks like currently gtk+ consider borders
+    progress { min-width: 2px; } 
   }
 
   &.horizontal progress { margin: 0 -1px; } // the progress node is positioned after the trough border

@@ -153,8 +153,10 @@ spinner {
  * Text Entries *
  ****************/
 entry, spinbutton {
+  min-height: 32px;
   border: 1px solid;
-  padding: 5px 8px 6px;
+  padding-left: 8px;
+  padding-right: 8px;
   border-radius: 3px;
   transition: all 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
   background-color: #ffffff;
@@ -319,9 +321,11 @@ entry, spinbutton {
     background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(#4a90d9), to(transparent)); } }
 button, headerbar button.titlebutton,
 .titlebar button.titlebutton {
+  min-height: 24px;
+  min-width: 16px;
+  padding: 4px 8px;
   border: 1px solid;
   border-radius: 3px;
-  padding: 5px 8px 6px;
   transition: all 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
   color: #2e3436;
   outline-color: rgba(46, 52, 54, 0.3);
@@ -462,7 +466,8 @@ button, headerbar button.titlebutton,
     box-shadow: none; }
     button.osd.image-button, headerbar button.osd.titlebutton,
     .titlebar button.osd.titlebutton {
-      padding: 13px; }
+      min-height: 48px;
+      min-width: 48px; }
     button.osd:hover {
       color: white;
       border-color: rgba(0, 0, 0, 0.7);
@@ -951,26 +956,19 @@ button, headerbar button.titlebutton,
         box-shadow: none;
         text-shadow: none;
         -gtk-icon-shadow: none; }
-  button.image-button, headerbar button.titlebutton,
-  .titlebar button.titlebutton {
-    padding: 8px; }
   button.text-button, GtkScaleButton.button.text-button,
   GtkVolumeButton.button.text-button, headerbar button.text-button.titlebutton,
   .titlebar button.text-button.titlebutton {
     padding-left: 16px;
     padding-right: 16px; }
-  button.text-button.image-button, GtkScaleButton.button.text-button,
-  GtkVolumeButton.button.text-button, headerbar button.text-button.titlebutton,
-  .titlebar button.text-button.titlebutton {
-    padding: 5px 8px 6px; }
-    button.text-button.image-button label:first-child, GtkScaleButton.button.text-button label:first-child,
-    GtkVolumeButton.button.text-button label:first-child, headerbar button.text-button.titlebutton label:first-child,
-    .titlebar button.text-button.titlebutton label:first-child {
-      padding-left: 8px; }
-    button.text-button.image-button label:last-child, GtkScaleButton.button.text-button label:last-child,
-    GtkVolumeButton.button.text-button label:last-child, headerbar button.text-button.titlebutton label:last-child,
-    .titlebar button.text-button.titlebutton label:last-child {
-      padding-right: 8px; }
+  button.text-button.image-button label:first-child, GtkScaleButton.button.text-button label:first-child,
+  GtkVolumeButton.button.text-button label:first-child, headerbar button.text-button.titlebutton label:first-child,
+  .titlebar button.text-button.titlebutton label:first-child {
+    padding-left: 8px; }
+  button.text-button.image-button label:last-child, GtkScaleButton.button.text-button label:last-child,
+  GtkVolumeButton.button.text-button label:last-child, headerbar button.text-button.titlebutton label:last-child,
+  .titlebar button.text-button.titlebutton label:last-child {
+    padding-right: 8px; }
   .stack-switcher > button, headerbar .stack-switcher > button.titlebutton,
   .titlebar .stack-switcher > button.titlebutton {
     outline-offset: -3px; }
@@ -990,10 +988,12 @@ button, headerbar button.titlebutton,
     .titlebar .stack-switcher > button.text-button.titlebutton,
     .titlebar .stack-switcher > GtkScaleButton.titlebutton.button.text-button,
     .titlebar .stack-switcher > GtkVolumeButton.titlebutton.button.text-button {
-      padding: 5px 10px 6px; }
+      padding-left: 10px;
+      padding-right: 10px; }
     .stack-switcher > button.image-button, headerbar .stack-switcher > button.titlebutton,
     .titlebar .stack-switcher > button.titlebutton {
-      padding: 5px 2px; }
+      padding-left: 2px;
+      padding-right: 2px; }
     .stack-switcher > button.needs-attention:active > label, .stack-switcher > button.needs-attention:active > image, .stack-switcher > button.needs-attention:checked > label, .stack-switcher > button.needs-attention:checked > image {
       animation: none;
       background-image: none; }
@@ -1515,8 +1515,8 @@ combobox {
   -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923); }
   combobox > button.combo, headerbar combobox > button.combo.titlebutton,
   .titlebar combobox > button.combo.titlebutton {
-    padding-top: 3px;
-    padding-bottom: 4px; }
+    padding-left: 8px;
+    padding-right: 8px; }
   combobox:insensitive {
     color: #8b8e8f;
     text-shadow: none;
