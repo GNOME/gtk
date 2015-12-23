@@ -1938,70 +1938,11 @@ gtk_notebook_get_event_window_position (GtkNotebook  *notebook,
                                         GdkRectangle *rectangle)
 {
   GtkNotebookPrivate *priv = notebook->priv;
-  GtkAllocation allocation, action_allocation;
-  GtkWidget *widget = GTK_WIDGET (notebook);
-  GtkPositionType tab_pos = get_effective_tab_pos (notebook);
-  gboolean is_rtl;
-  gint i;
 
   if (priv->show_tabs && gtk_notebook_has_current_page (notebook))
     {
       if (rectangle)
-        {
-          gtk_widget_get_allocation (widget, &allocation);
-
-          is_rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
-          rectangle->x = allocation.x;
-          rectangle->y = allocation.y;
-
-          switch (tab_pos)
-            {
-            case GTK_POS_TOP:
-            case GTK_POS_BOTTOM:
-              rectangle->width = allocation.width;
-              rectangle->height = priv->cur_page->requisition.height;
-              if (tab_pos == GTK_POS_BOTTOM)
-                rectangle->y += allocation.height - rectangle->height;
-
-              for (i = 0; i < N_ACTION_WIDGETS; i++)
-                {
-                  if (priv->action_widget[i] &&
-                      gtk_widget_get_visible (priv->action_widget[i]))
-                    {
-                      gtk_widget_get_allocation (priv->action_widget[i], &action_allocation);
-
-                      rectangle->width -= action_allocation.width;
-                      if ((!is_rtl && i == ACTION_WIDGET_START) ||
-                          (is_rtl && i == ACTION_WIDGET_END))
-                        rectangle->x += action_allocation.width;
-                    }
-                }
-              break;
-            case GTK_POS_LEFT:
-            case GTK_POS_RIGHT:
-              rectangle->width = priv->cur_page->requisition.width;
-              rectangle->height = allocation.height;
-              if (tab_pos == GTK_POS_RIGHT)
-                rectangle->x += allocation.width - rectangle->width;
-
-              for (i = 0; i < N_ACTION_WIDGETS; i++)
-                {
-                  if (priv->action_widget[i] &&
-                      gtk_widget_get_visible (priv->action_widget[i]))
-                    {
-                      gtk_widget_get_allocation (priv->action_widget[i], &action_allocation);
-
-                      rectangle->height -= action_allocation.height;
-
-                      if (i == ACTION_WIDGET_START)
-                        rectangle->y += action_allocation.height;
-                    }
-                }
-              break;
-            default:
-              g_assert_not_reached ();
-            }
-        }
+        gtk_css_gadget_get_border_allocation (priv->header_gadget, rectangle, NULL);
 
       return TRUE;
     }
@@ -2588,27 +2529,13 @@ gtk_notebook_allocate_contents (GtkCssGadget        *gadget,
   GtkNotebookPrivate *priv = notebook->priv;
   GtkAllocation stack_allocation, header_allocation;
   
-  if (gtk_widget_get_realized (widget))
-    {
-      GdkRectangle position;
-
-      if (gtk_notebook_get_event_window_position (notebook, &position))
-        {
-          gdk_window_move_resize (priv->event_window,
-                                  position.x, position.y,
-                                  position.width, position.height);
-          if (gtk_widget_get_mapped (GTK_WIDGET (notebook)))
-            gdk_window_show_unraised (priv->event_window);
-        }
-      else
-        gdk_window_hide (priv->event_window);
-    }
-
   stack_allocation = *allocation;
 
   if (!priv->show_tabs || !gtk_notebook_has_current_page (notebook))
     {
       gtk_css_gadget_allocate (priv->stack_gadget, &stack_allocation, -1, out_clip);
+      if (gtk_widget_get_realized (widget))
+        gdk_window_hide (priv->event_window);
     }
   else
     {
@@ -2659,6 +2586,17 @@ gtk_notebook_allocate_contents (GtkCssGadget        *gadget,
       gtk_css_gadget_allocate (priv->stack_gadget, &stack_allocation, -1, &stack_clip);
 
       gdk_rectangle_union (&stack_clip, &header_clip, out_clip);
+
+      if (gtk_widget_get_realized (widget))
+        {
+          GtkAllocation position;
+          gtk_css_gadget_get_border_allocation (priv->header_gadget, &position, NULL);
+          gdk_window_move_resize (priv->event_window,
+                                  position.x, position.y,
+                                  position.width, position.height);
+          if (gtk_widget_get_mapped (GTK_WIDGET (notebook)))
+            gdk_window_show_unraised (priv->event_window);
+        }
     }
 }
 
