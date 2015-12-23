@@ -2590,6 +2590,7 @@ switch {
     background-image: none;
     background-color: #333636; }
   switch slider {
+    margin: -1px;
     min-width: 45px;
     min-height: 27px;
     border: 1px solid;

@@ -2040,6 +2040,7 @@ switch {
         background-color: $insensitive_bg_color;
   }
   slider {
+    margin: -1px;
     min-width: 45px;
     min-height: 27px;
     border: 1px solid;
