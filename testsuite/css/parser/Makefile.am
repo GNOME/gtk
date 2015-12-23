@@ -35,6 +35,22 @@ test_data = \
 	animation-crash-3.12.ref.css \
 	animation-shorthand-crash.css \
 	animation-shorthand-crash.ref.css \
+        animation-delay.css \
+        animation-delay.ref.css \
+        animation-direction.css \
+        animation-direction.ref.css \
+        animation-duration.css \
+        animation-duration.ref.css \
+        animation-fill-mode.css \
+        animation-fill-mode.ref.css \
+        animation-iteration-count.css \
+        animation-iteration-count.ref.css \
+        animation-name.css \
+        animation-name.ref.css \
+        animation-play-state.css \
+        animation-play-state.ref.css \
+        animation-timing-function.css \
+        animation-timing-function.ref.css \
 	at-invalid-01.css \
 	at-invalid-01.errors \
 	at-invalid-01.ref.css \
