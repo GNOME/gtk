@@ -2780,7 +2780,6 @@ gtk_notebook_get_arrow (GtkNotebook *notebook,
 {
   GtkNotebookPrivate *priv = notebook->priv;
   GdkRectangle arrow_rect;
-  GdkRectangle event_window_pos;
   gint i;
   gint x0, y0;
   GtkNotebookArrow arrow[4];
@@ -2792,7 +2791,6 @@ gtk_notebook_get_arrow (GtkNotebook *notebook,
 
   if (gtk_notebook_show_arrows (notebook))
     {
-      gtk_notebook_get_event_window_position (notebook, &event_window_pos);
       for (i = 0; i < 4; i++)
         {
           if (arrow[i] == ARROW_NONE)
