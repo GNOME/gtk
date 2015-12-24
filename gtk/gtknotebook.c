@@ -524,7 +524,6 @@ static gboolean gtk_notebook_draw_stack      (GtkCssGadget     *gadget,
                                               gpointer          data);
 
 /*** GtkNotebook Private Functions ***/
-static void gtk_notebook_redraw_tabs         (GtkNotebook      *notebook);
 static void gtk_notebook_redraw_arrows       (GtkNotebook      *notebook);
 static void gtk_notebook_real_remove         (GtkNotebook      *notebook,
                                               GList            *list);
@@ -3038,7 +3037,7 @@ tab_prelight (GtkNotebook *notebook,
           (tab != NULL && tab->data != priv->prelight_tab))
         {
           update_prelight_tab (notebook, tab == NULL ? NULL : tab->data);
-          gtk_notebook_redraw_tabs (notebook);
+          gtk_css_gadget_queue_draw (priv->tabs_gadget);
        }
     }
 }
@@ -3394,7 +3393,10 @@ static gboolean
 gtk_notebook_focus_in (GtkWidget     *widget,
                        GdkEventFocus *event)
 {
-  gtk_notebook_redraw_tabs (GTK_NOTEBOOK (widget));
+  GtkNotebook *notebook = GTK_NOTEBOOK (widget);
+  GtkNotebookPrivate *priv = notebook->priv;
+
+  gtk_css_gadget_queue_draw (priv->tabs_gadget);
 
   return FALSE;
 }
@@ -3403,7 +3405,10 @@ static gboolean
 gtk_notebook_focus_out (GtkWidget     *widget,
                         GdkEventFocus *event)
 {
-  gtk_notebook_redraw_tabs (GTK_NOTEBOOK (widget));
+  GtkNotebook *notebook = GTK_NOTEBOOK (widget);
+  GtkNotebookPrivate *priv = notebook->priv;
+
+  gtk_css_gadget_queue_draw (priv->tabs_gadget);
 
   return FALSE;
 }
@@ -4652,7 +4657,6 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
 
 /* Private GtkNotebook Functions:
  *
- * gtk_notebook_redraw_tabs
  * gtk_notebook_real_remove
  * gtk_notebook_update_labels
  * gtk_notebook_timer
@@ -4660,58 +4664,6 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
  * gtk_notebook_page_compare
  * gtk_notebook_search_page
  */
-static void
-gtk_notebook_redraw_tabs (GtkNotebook *notebook)
-{
-  GtkNotebookPrivate *priv = notebook->priv;
-  GtkAllocation allocation;
-  GtkWidget *widget;
-  GtkNotebookPage *page;
-  GdkRectangle redraw_rect;
-  GtkPositionType tab_pos = get_effective_tab_pos (notebook);
-
-  widget = GTK_WIDGET (notebook);
-
-  if (!gtk_widget_get_mapped (widget) || !gtk_notebook_has_current_page (notebook))
-    return;
-
-  page = priv->cur_page;
-
-  redraw_rect.x = 0;
-  redraw_rect.y = 0;
-
-  gtk_css_gadget_get_content_allocation (priv->gadget, &allocation, NULL);
-  if (allocation.width <= 1)
-    return;
-
-  switch (tab_pos)
-    {
-    case GTK_POS_BOTTOM:
-      redraw_rect.y = allocation.height - page->allocation.height;
-      /* fall through */
-    case GTK_POS_TOP:
-      redraw_rect.width = allocation.width;
-      redraw_rect.height = page->allocation.height;
-
-      break;
-    case GTK_POS_RIGHT:
-      redraw_rect.x = allocation.width - page->allocation.width;
-
-      /* fall through */
-    case GTK_POS_LEFT:
-      redraw_rect.width = page->allocation.width;
-      redraw_rect.height = allocation.height;
-
-      break;
-    }
-
-  redraw_rect.x += allocation.x;
-  redraw_rect.y += allocation.y;
-
-  gdk_window_invalidate_rect (gtk_widget_get_window (widget),
-                              &redraw_rect, TRUE);
-}
-
 static void
 gtk_notebook_redraw_arrows (GtkNotebook *notebook)
 {
@@ -6017,7 +5969,7 @@ gtk_notebook_pages_allocate (GtkNotebook *notebook)
     priv->first_tab = priv->children;
 
   if (tab_allocations_changed)
-    gtk_notebook_redraw_tabs (notebook);
+    gtk_css_gadget_queue_draw (priv->tabs_gadget);
 }
 
 static gboolean
