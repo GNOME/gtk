@@ -136,7 +136,8 @@ struct _GtkPanedPrivate
   GtkCssGadget  *gadget;
   GtkCssGadget  *handle_gadget;
 
-  GtkGesture    *pan_gesture;
+  GtkGesture    *pan_gesture;  /* Used for touch */
+  GtkGesture    *drag_gesture; /* Used for mice */
 
   gint          child1_size;
   gint          drag_pos;
@@ -738,10 +739,10 @@ initiates_touch_drag (GtkPaned *paned,
 }
 
 static void
-pan_gesture_drag_begin_cb (GtkGestureDrag *gesture,
-                           gdouble         start_x,
-                           gdouble         start_y,
-                           GtkPaned       *paned)
+gesture_drag_begin_cb (GtkGestureDrag *gesture,
+                       gdouble         start_x,
+                       gdouble         start_y,
+                       GtkPaned       *paned)
 {
   GtkPanedPrivate *priv = paned->priv;
   GdkEventSequence *sequence;
@@ -758,6 +759,14 @@ pan_gesture_drag_begin_cb (GtkGestureDrag *gesture,
 
   is_touch = (event->type == GDK_TOUCH_BEGIN ||
               gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN);
+
+  if ((is_touch && GTK_GESTURE (gesture) == priv->drag_gesture) ||
+      (!is_touch && GTK_GESTURE (gesture) == priv->pan_gesture))
+    {
+      gtk_gesture_set_state (GTK_GESTURE (gesture),
+                             GTK_EVENT_SEQUENCE_DENIED);
+      return;
+    }
 
   if (event->any.window == priv->handle ||
       (is_touch && initiates_touch_drag (paned, start_x, start_y)))
@@ -778,27 +787,25 @@ pan_gesture_drag_begin_cb (GtkGestureDrag *gesture,
 }
 
 static void
-pan_gesture_pan_cb (GtkGesturePan   *gesture,
-                    GtkPanDirection  direction,
-                    gdouble          offset,
-                    GtkPaned        *paned)
+gesture_drag_update_cb (GtkGestureDrag   *gesture,
+                        gdouble           offset_x,
+                        gdouble           offset_y,
+                        GtkPaned         *paned)
 {
-  gdouble start_x, start_y, offset_x, offset_y;
+  gdouble start_x, start_y;
 
   paned->priv->panning = TRUE;
 
   gtk_gesture_drag_get_start_point (GTK_GESTURE_DRAG (gesture),
                                &start_x, &start_y);
-  gtk_gesture_drag_get_offset (GTK_GESTURE_DRAG (gesture),
-                               &offset_x, &offset_y);
   update_drag (paned, start_x + offset_x, start_y + offset_y);
 }
 
 static void
-pan_gesture_drag_end_cb (GtkGestureDrag *gesture,
-                         gdouble         offset_x,
-                         gdouble         offset_y,
-                         GtkPaned       *paned)
+gesture_drag_end_cb (GtkGestureDrag *gesture,
+                     gdouble         offset_x,
+                     gdouble         offset_y,
+                     GtkPaned       *paned)
 {
   if (!paned->priv->panning)
     gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
@@ -979,6 +986,7 @@ gtk_paned_finalize (GObject *object)
   gtk_paned_set_first_paned (paned, NULL);
 
   g_clear_object (&paned->priv->pan_gesture);
+  g_clear_object (&paned->priv->drag_gesture);
 
   g_clear_object (&paned->priv->handle_gadget);
   g_clear_object (&paned->priv->gadget);
@@ -1861,6 +1869,18 @@ update_node_state (GtkWidget *widget)
 }
 
 static void
+connect_drag_gesture_signals (GtkPaned   *paned,
+                              GtkGesture *gesture)
+{
+  g_signal_connect (gesture, "drag-begin",
+                    G_CALLBACK (gesture_drag_begin_cb), paned);
+  g_signal_connect (gesture, "drag-update",
+                    G_CALLBACK (gesture_drag_update_cb), paned);
+  g_signal_connect (gesture, "drag-end",
+                    G_CALLBACK (gesture_drag_end_cb), paned);
+}
+
+static void
 gtk_paned_init (GtkPaned *paned)
 {
   GtkPanedPrivate *priv;
@@ -1900,18 +1920,19 @@ gtk_paned_init (GtkPaned *paned)
 
   _gtk_orientable_set_style_classes (GTK_ORIENTABLE (paned));
 
+  /* Touch gesture */
   gesture = gtk_gesture_pan_new (GTK_WIDGET (paned),
                                  GTK_ORIENTATION_HORIZONTAL);
-  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture), FALSE);
-  g_signal_connect (gesture, "drag-begin",
-                    G_CALLBACK (pan_gesture_drag_begin_cb), paned);
-  g_signal_connect (gesture, "pan",
-                    G_CALLBACK (pan_gesture_pan_cb), paned);
-  g_signal_connect (gesture, "drag-end",
-                    G_CALLBACK (pan_gesture_drag_end_cb), paned);
+  connect_drag_gesture_signals (paned, gesture);
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture), TRUE);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
                                               GTK_PHASE_CAPTURE);
   priv->pan_gesture = gesture;
+
+  /* Pointer gesture */
+  gesture = gtk_gesture_drag_new (GTK_WIDGET (paned));
+  connect_drag_gesture_signals (paned, gesture);
+  priv->drag_gesture = gesture;
 
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (paned));
   priv->gadget = gtk_css_custom_gadget_new_for_node (widget_node,
