@@ -857,7 +857,7 @@ typedef enum
  * @GTK_STATE_FLAG_LINK: Widget is a link. Since 3.12
  * @GTK_STATE_FLAG_VISITED: The location the widget points to has already been visited. Since 3.12
  * @GTK_STATE_FLAG_CHECKED: Widget is checked. Since 3.14
- * @GTK_STATE_FLAG_DND: Widget is highlighted as a drop target for DND. Since 3.20
+ * @GTK_STATE_FLAG_DROP_ACTIVE: Widget is highlighted as a drop target for DND. Since 3.20
  *
  * Describes a widget state. Widget states are used to match the widget
  * against CSS pseudo-classes. Note that GTK extends the regular CSS
@@ -878,7 +878,7 @@ typedef enum
   GTK_STATE_FLAG_LINK         = 1 << 9,
   GTK_STATE_FLAG_VISITED      = 1 << 10,
   GTK_STATE_FLAG_CHECKED      = 1 << 11,
-  GTK_STATE_FLAG_DND          = 1 << 12
+  GTK_STATE_FLAG_DROP_ACTIVE  = 1 << 12
 } GtkStateFlags;
 
 /**

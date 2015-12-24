@@ -1192,7 +1192,9 @@ parse_selector_pseudo_class (GtkCssParser   *parser,
     { "link",         GTK_STATE_FLAG_LINK, },
     { "visited",      GTK_STATE_FLAG_VISITED, },
     { "checked",      GTK_STATE_FLAG_CHECKED, },
-    { "dnd"    ,      GTK_STATE_FLAG_DND, }
+    { "dnd",          GTK_STATE_FLAG_DROP_ACTIVE, },
+    { "drop(active)", GTK_STATE_FLAG_DROP_ACTIVE, }
+
   };
   guint i;
 

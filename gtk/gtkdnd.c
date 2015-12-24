@@ -980,7 +980,7 @@ gtk_drag_highlight (GtkWidget  *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_DND, FALSE);
+  gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_DROP_ACTIVE, FALSE);
 }
 
 /**
@@ -995,7 +995,7 @@ gtk_drag_unhighlight (GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_DND);
+  gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_DROP_ACTIVE);
 }
 
 static void
