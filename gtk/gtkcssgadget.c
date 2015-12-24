@@ -122,17 +122,12 @@ static void
 gtk_css_gadget_real_style_changed (GtkCssGadget      *gadget,
                                    GtkCssStyleChange *change)
 {
-  GtkCssGadgetPrivate *priv = gtk_css_gadget_get_instance_private (gadget);
-
-  if (priv->owner)
-    {
-      if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_SIZE))
-        gtk_widget_queue_resize (priv->owner);
-      else if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_CLIP))
-        gtk_widget_queue_allocate (priv->owner);
-      else if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_REDRAW))
-        gtk_widget_queue_draw (priv->owner);
-    }
+  if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_SIZE))
+    gtk_css_gadget_queue_resize (gadget);
+  else if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_CLIP))
+    gtk_css_gadget_queue_allocate (gadget);
+  else if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_REDRAW))
+    gtk_css_gadget_queue_draw (gadget);
 }
 
 static void
@@ -772,6 +767,31 @@ gtk_css_node_style_changed_for_widget (GtkCssNode  *node,
     gtk_widget_queue_draw (widget);
 
   _gtk_bitmask_free (changes);
+}
+
+void
+gtk_css_gadget_queue_resize (GtkCssGadget *gadget)
+{
+  g_return_if_fail (GTK_IS_CSS_GADGET (gadget));
+
+  gtk_widget_queue_resize (gtk_css_gadget_get_owner (gadget));
+}
+
+void
+gtk_css_gadget_queue_allocate (GtkCssGadget *gadget)
+{
+  g_return_if_fail (GTK_IS_CSS_GADGET (gadget));
+
+  gtk_widget_queue_allocate (gtk_css_gadget_get_owner (gadget));
+}
+
+void
+gtk_css_gadget_queue_draw (GtkCssGadget *gadget)
+{
+  g_return_if_fail (GTK_IS_CSS_GADGET (gadget));
+  
+  /* XXX: Only invalidate clip here */
+  gtk_widget_queue_draw (gtk_css_gadget_get_owner (gadget));
 }
 
 void

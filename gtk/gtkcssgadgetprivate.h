@@ -107,6 +107,10 @@ void            gtk_css_gadget_allocate                 (GtkCssGadget           
 void            gtk_css_gadget_draw                     (GtkCssGadget           *gadget,
                                                          cairo_t                *cr);
 
+void            gtk_css_gadget_queue_resize             (GtkCssGadget           *gadget);
+void            gtk_css_gadget_queue_allocate           (GtkCssGadget           *gadget);
+void            gtk_css_gadget_queue_draw               (GtkCssGadget           *gadget);
+
 void            gtk_css_gadget_get_border_allocation    (GtkCssGadget           *gadget,
                                                          GtkAllocation          *allocation,
                                                          int                    *baseline);
