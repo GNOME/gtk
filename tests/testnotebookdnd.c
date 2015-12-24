@@ -150,17 +150,39 @@ on_button_drag_data_received (GtkWidget        *widget,
   g_idle_add (remove_in_idle, *child);
 }
 
+static void
+action_clicked_cb (GtkWidget *button,
+                   GtkWidget *notebook)
+{
+  GtkWidget *page, *title;
+
+  page = gtk_entry_new ();
+  gtk_entry_set_text (GTK_ENTRY (page), "Addition");
+  gtk_widget_show (page);
+
+  title = gtk_label_new ("Addition");
+
+  gtk_notebook_append_page (GTK_NOTEBOOK (notebook), page, title);
+  gtk_notebook_set_tab_reorderable (GTK_NOTEBOOK (notebook), page, TRUE);
+  gtk_notebook_set_tab_detachable (GTK_NOTEBOOK (notebook), page, TRUE);
+}
+
 static GtkWidget*
 create_notebook (gchar           **labels,
                  const gchar      *group,
                  GtkPositionType   pos)
 {
-  GtkWidget *notebook, *title, *page;
-  gint count = 0;
+  GtkWidget *notebook, *title, *page, *action_widget;
 
   notebook = gtk_notebook_new ();
   gtk_widget_set_vexpand (notebook, TRUE);
   gtk_widget_set_hexpand (notebook, TRUE);
+
+  action_widget = gtk_button_new_from_icon_name ("list-add-symbolic", GTK_ICON_SIZE_BUTTON);
+  g_signal_connect (action_widget, "clicked", G_CALLBACK (action_clicked_cb), notebook);
+  gtk_widget_show (action_widget);
+  gtk_notebook_set_action_widget (GTK_NOTEBOOK (notebook), action_widget, GTK_PACK_END);
+
   g_signal_connect (notebook, "create-window",
                     G_CALLBACK (window_creation_function), NULL);
 
@@ -180,7 +202,6 @@ create_notebook (gchar           **labels,
       gtk_notebook_set_tab_reorderable (GTK_NOTEBOOK (notebook), page, TRUE);
       gtk_notebook_set_tab_detachable (GTK_NOTEBOOK (notebook), page, TRUE);
 
-      count++;
       labels++;
     }
 
