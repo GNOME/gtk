@@ -525,7 +525,6 @@ static gboolean gtk_notebook_draw_stack      (GtkCssGadget     *gadget,
 
 /*** GtkNotebook Private Functions ***/
 static void gtk_notebook_redraw_tabs         (GtkNotebook      *notebook);
-static void gtk_notebook_redraw_tabs_junction (GtkNotebook     *notebook);
 static void gtk_notebook_redraw_arrows       (GtkNotebook      *notebook);
 static void gtk_notebook_real_remove         (GtkNotebook      *notebook,
                                               GList            *list);
@@ -3290,8 +3289,6 @@ gtk_notebook_motion_notify (GtkWidget      *widget,
                                   priv->drag_window_y,
                                   page->allocation.width,
                                   page->allocation.height);
-
-          gtk_notebook_redraw_tabs_junction (notebook);
         }
     }
 
@@ -4705,68 +4702,6 @@ gtk_notebook_redraw_tabs (GtkNotebook *notebook)
       redraw_rect.width = page->allocation.width;
       redraw_rect.height = allocation.height;
 
-      break;
-    }
-
-  redraw_rect.x += allocation.x;
-  redraw_rect.y += allocation.y;
-
-  gdk_window_invalidate_rect (gtk_widget_get_window (widget),
-                              &redraw_rect, TRUE);
-}
-
-static void
-gtk_notebook_redraw_tabs_junction (GtkNotebook *notebook)
-{
-  GtkNotebookPrivate *priv = notebook->priv;
-  GtkAllocation allocation;
-  GtkWidget *widget;
-  GtkNotebookPage *page;
-  GdkRectangle redraw_rect;
-  GtkPositionType tab_pos = get_effective_tab_pos (notebook);
-
-  widget = GTK_WIDGET (notebook);
-
-  if (!gtk_widget_get_mapped (widget) || !gtk_notebook_has_current_page (notebook))
-    return;
-
-  page = priv->cur_page;
-
-  redraw_rect.x = 0;
-  redraw_rect.y = 0;
-
-  gtk_css_gadget_get_content_allocation (priv->gadget, &allocation, NULL);
-
-  switch (tab_pos)
-    {
-    case GTK_POS_TOP:
-    case GTK_POS_BOTTOM:
-      redraw_rect.width = allocation.width;
-      if (tab_pos == GTK_POS_TOP)
-        {
-          redraw_rect.y = page->allocation.y + page->allocation.height;
-          redraw_rect.height = 0;
-        }
-      else
-        {
-          redraw_rect.y = allocation.height - page->allocation.height;
-          redraw_rect.height = 0;
-        }
-      break;
-    case GTK_POS_LEFT:
-    case GTK_POS_RIGHT:
-      redraw_rect.height = allocation.height;
-
-      if (tab_pos == GTK_POS_LEFT)
-        {
-          redraw_rect.x = page->allocation.x + page->allocation.width;
-          redraw_rect.width = 0;
-        }
-      else
-        {
-          redraw_rect.x = allocation.width - page->allocation.width;
-          redraw_rect.width = 0;
-        }
       break;
     }
 
