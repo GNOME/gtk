@@ -1177,23 +1177,23 @@ parse_selector_pseudo_class (GtkCssParser   *parser,
     { "only-child",   0,                           POSITION_ONLY,     0, 0 },
     { "sorted",       0,                           POSITION_SORTED,   0, 0 },
     { "active",       GTK_STATE_FLAG_ACTIVE, },
-    { "prelight",     GTK_STATE_FLAG_PRELIGHT, },
     { "hover",        GTK_STATE_FLAG_PRELIGHT, },
+    { "prelight",     GTK_STATE_FLAG_PRELIGHT, },
     { "selected",     GTK_STATE_FLAG_SELECTED, },
-    { "insensitive",  GTK_STATE_FLAG_INSENSITIVE, },
     { "disabled",     GTK_STATE_FLAG_INSENSITIVE, },
-    { "inconsistent", GTK_STATE_FLAG_INCONSISTENT, },
+    { "insensitive",  GTK_STATE_FLAG_INSENSITIVE, },
     { "indeterminate",GTK_STATE_FLAG_INCONSISTENT, },
-    { "focused",      GTK_STATE_FLAG_FOCUSED, },
+    { "inconsistent", GTK_STATE_FLAG_INCONSISTENT, },
     { "focus",        GTK_STATE_FLAG_FOCUSED, },
+    { "focused",      GTK_STATE_FLAG_FOCUSED, },
     { "backdrop",     GTK_STATE_FLAG_BACKDROP, },
     { "dir(ltr)",     GTK_STATE_FLAG_DIR_LTR, },
     { "dir(rtl)",     GTK_STATE_FLAG_DIR_RTL, },
     { "link",         GTK_STATE_FLAG_LINK, },
     { "visited",      GTK_STATE_FLAG_VISITED, },
     { "checked",      GTK_STATE_FLAG_CHECKED, },
-    { "dnd",          GTK_STATE_FLAG_DROP_ACTIVE, },
-    { "drop(active)", GTK_STATE_FLAG_DROP_ACTIVE, }
+    { "drop(active)", GTK_STATE_FLAG_DROP_ACTIVE, },
+    { "dnd",          GTK_STATE_FLAG_DROP_ACTIVE, }
 
   };
   guint i;
@@ -1213,6 +1213,14 @@ parse_selector_pseudo_class (GtkCssParser   *parser,
                                                       : &GTK_CSS_SELECTOR_PSEUDOCLASS_STATE,
                                                selector);
               selector->state.state = pseudo_classes[i].state_flag;
+              if (pseudo_classes[i].state_flag == pseudo_classes[i - 1].state_flag)
+                {
+                  _gtk_css_parser_error_full (parser,
+                                              GTK_CSS_PROVIDER_ERROR_DEPRECATED,
+                                              "The :%s pseudo-class is deprecated. Use :%s instead.",
+                                              pseudo_classes[i].name,
+                                              pseudo_classes[i - 1].name);
+                }
             }
           else
             {
