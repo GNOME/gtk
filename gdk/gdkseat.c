@@ -117,7 +117,7 @@ gdk_seat_class_init (GdkSeatClass *klass)
    * Since: 3.20
    */
   signals [DEVICE_ADDED] =
-    g_signal_new (P_("device-added"),
+    g_signal_new (g_intern_static_string ("device-added"),
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GdkSeatClass, device_added),
@@ -137,7 +137,7 @@ gdk_seat_class_init (GdkSeatClass *klass)
    * Since: 3.20
    */
   signals [DEVICE_REMOVED] =
-    g_signal_new (P_("device-removed"),
+    g_signal_new (g_intern_static_string ("device-removed"),
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GdkSeatClass, device_removed),
