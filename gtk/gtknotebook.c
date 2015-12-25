@@ -218,11 +218,6 @@ struct _GtkNotebookPrivate
   guint          show_tabs          : 1;
   guint          scrollable         : 1;
   guint          tab_pos            : 2;
-
-  guint          has_before_previous : 1;
-  guint          has_before_next     : 1;
-  guint          has_after_previous  : 1;
-  guint          has_after_next      : 1;
 };
 
 enum {
@@ -1297,11 +1292,6 @@ gtk_notebook_init (GtkNotebook *notebook)
   priv->need_timer = 0;
   priv->child_has_focus = FALSE;
   priv->focus_out = FALSE;
-
-  priv->has_before_previous = 1;
-  priv->has_before_next     = 0;
-  priv->has_after_previous  = 0;
-  priv->has_after_next      = 1;
 
   priv->group = 0;
   priv->pressed_button = -1;
@@ -2426,8 +2416,8 @@ gtk_notebook_get_arrow_rect (GtkNotebook     *notebook,
       rectangle->width = scroll_arrow_vlength;
       rectangle->height = scroll_arrow_vlength;
 
-      if ((before && (priv->has_before_previous != priv->has_before_next)) ||
-          (!before && (priv->has_after_previous != priv->has_after_next)))
+      if ((before && (priv->arrow_node[ARROW_LEFT_BEFORE] != NULL) != (priv->arrow_node[ARROW_LEFT_AFTER] != NULL)) ||
+          (!before && (priv->arrow_node[ARROW_RIGHT_BEFORE] != NULL) != (priv->arrow_node[ARROW_RIGHT_AFTER] != NULL)))
       rectangle->x = event_window_pos.x + (event_window_pos.width - rectangle->width) / 2;
       else if (left)
         rectangle->x = event_window_pos.x + event_window_pos.width / 2 - rectangle->width;
@@ -2445,14 +2435,14 @@ gtk_notebook_get_arrow_rect (GtkNotebook     *notebook,
 
       if (before)
         {
-          if (left || !priv->has_before_previous)
+          if (left || !priv->arrow_node[ARROW_LEFT_BEFORE])
             rectangle->x = event_window_pos.x;
           else
             rectangle->x = event_window_pos.x + rectangle->width;
         }
       else
         {
-          if (!left || !priv->has_after_next)
+          if (!left || !priv->arrow_node[ARROW_RIGHT_AFTER])
             rectangle->x = event_window_pos.x + event_window_pos.width - rectangle->width;
           else
             rectangle->x = event_window_pos.x + event_window_pos.width - 2 * rectangle->width;
@@ -2471,28 +2461,22 @@ gtk_notebook_get_arrow (GtkNotebook *notebook,
   GdkRectangle arrow_rect;
   gint i;
   gint x0, y0;
-  GtkNotebookArrow arrow[4];
-
-  arrow[0] = priv->has_before_previous ? ARROW_LEFT_BEFORE : ARROW_NONE;
-  arrow[1] = priv->has_before_next ? ARROW_RIGHT_BEFORE : ARROW_NONE;
-  arrow[2] = priv->has_after_previous ? ARROW_LEFT_AFTER : ARROW_NONE;
-  arrow[3] = priv->has_after_next ? ARROW_RIGHT_AFTER : ARROW_NONE;
 
   if (gtk_notebook_show_arrows (notebook))
     {
       for (i = 0; i < 4; i++)
         {
-          if (arrow[i] == ARROW_NONE)
+          if (priv->arrow_node[i] == NULL)
             continue;
 
-          gtk_notebook_get_arrow_rect (notebook, &arrow_rect, arrow[i]);
+          gtk_notebook_get_arrow_rect (notebook, &arrow_rect, i);
 
           x0 = x - arrow_rect.x;
           y0 = y - arrow_rect.y;
 
           if (y0 >= 0 && y0 < arrow_rect.height &&
               x0 >= 0 && x0 < arrow_rect.width)
-            return arrow[i];
+            return i;
         }
     }
 
@@ -3408,10 +3392,12 @@ update_arrow_nodes (GtkNotebook *notebook)
 
   tabs_node = gtk_css_gadget_get_node (priv->tabs_gadget);
 
-  arrow[0] = priv->has_before_previous;
-  arrow[1] = priv->has_before_next;
-  arrow[2] = priv->has_after_previous;
-  arrow[3] = priv->has_after_next;
+  gtk_widget_style_get (GTK_WIDGET (notebook),
+                        "has-backward-stepper", &arrow[0],
+                        "has-secondary-forward-stepper", &arrow[1],
+                        "has-secondary-backward-stepper", &arrow[2],
+                        "has-forward-stepper", &arrow[3],
+                        NULL);
 
   for (i = 0; i < 4; i++)
     {
@@ -3480,23 +3466,6 @@ static void
 gtk_notebook_style_updated (GtkWidget *widget)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-  GtkNotebookPrivate *priv = notebook->priv;
-  gboolean has_before_previous;
-  gboolean has_before_next;
-  gboolean has_after_previous;
-  gboolean has_after_next;
-
-  gtk_widget_style_get (widget,
-                        "has-backward-stepper", &has_before_previous,
-                        "has-secondary-forward-stepper", &has_before_next,
-                        "has-secondary-backward-stepper", &has_after_previous,
-                        "has-forward-stepper", &has_after_next,
-                        NULL);
-
-  priv->has_before_previous = has_before_previous;
-  priv->has_before_next = has_before_next;
-  priv->has_after_previous = has_after_previous;
-  priv->has_after_next = has_after_next;
 
   update_arrow_nodes (notebook);
   update_arrow_state (notebook);
@@ -4766,19 +4735,13 @@ gtk_notebook_redraw_arrows (GtkNotebook *notebook)
     {
       GdkRectangle rect;
       gint i;
-      GtkNotebookArrow arrow[4];
-
-      arrow[0] = priv->has_before_previous ? ARROW_LEFT_BEFORE : ARROW_NONE;
-      arrow[1] = priv->has_before_next ? ARROW_RIGHT_BEFORE : ARROW_NONE;
-      arrow[2] = priv->has_after_previous ? ARROW_LEFT_AFTER : ARROW_NONE;
-      arrow[3] = priv->has_after_next ? ARROW_RIGHT_AFTER : ARROW_NONE;
 
       for (i = 0; i < 4; i++)
         {
-          if (arrow[i] == ARROW_NONE)
+          if (priv->arrow_node[i] == NULL)
             continue;
 
-          gtk_notebook_get_arrow_rect (notebook, &rect, arrow[i]);
+          gtk_notebook_get_arrow_rect (notebook, &rect, i);
           gdk_window_invalidate_rect (gtk_widget_get_window (GTK_WIDGET (notebook)),
                                       &rect, FALSE);
         }
@@ -5094,6 +5057,7 @@ gtk_notebook_draw_tabs (GtkCssGadget *gadget,
   gint step = STEP_PREV;
   gboolean is_rtl;
   GtkPositionType tab_pos;
+  guint i;
 
   is_rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
   tab_pos = get_effective_tab_pos (notebook);
@@ -5183,14 +5147,13 @@ gtk_notebook_draw_tabs (GtkCssGadget *gadget,
 
   if (showarrow && priv->scrollable)
     {
-      if (priv->has_before_previous)
-        gtk_notebook_draw_arrow (notebook, cr, ARROW_LEFT_BEFORE);
-      if (priv->has_before_next)
-        gtk_notebook_draw_arrow (notebook, cr, ARROW_RIGHT_BEFORE);
-      if (priv->has_after_previous)
-        gtk_notebook_draw_arrow (notebook, cr, ARROW_LEFT_AFTER);
-      if (priv->has_after_next)
-        gtk_notebook_draw_arrow (notebook, cr, ARROW_RIGHT_AFTER);
+      for (i = 0; i < 4; i++)
+        {
+          if (priv->arrow_node[i] == NULL)
+            continue;
+          
+          gtk_notebook_draw_arrow (notebook, cr, i);
+        }
     }
 
   if (priv->operation != DRAG_OPERATION_DETACH)
@@ -5329,33 +5292,23 @@ gtk_notebook_tab_space (GtkNotebook *notebook,
         case GTK_POS_BOTTOM:
           if (*tab_space > *max - *min)
             {
+              guint i;
+
               *show_arrows = TRUE;
 
               /* take arrows into account */
               *tab_space = *max - *min;
 
-              if (priv->has_after_previous)
+              for (i = 0; i < 4; i++)
                 {
-                  *tab_space -= arrow_spacing + scroll_arrow_hlength;
-                  *max -= arrow_spacing + scroll_arrow_hlength;
-                }
+                  if (priv->arrow_node[i] == NULL)
+                    continue;
 
-              if (priv->has_after_next)
-                {
                   *tab_space -= arrow_spacing + scroll_arrow_hlength;
-                  *max -= arrow_spacing + scroll_arrow_hlength;
-                }
-
-              if (priv->has_before_previous)
-                {
-                  *tab_space -= arrow_spacing + scroll_arrow_hlength;
-                  *min += arrow_spacing + scroll_arrow_hlength;
-                }
-
-              if (priv->has_before_next)
-                {
-                  *tab_space -= arrow_spacing + scroll_arrow_hlength;
-                  *min += arrow_spacing + scroll_arrow_hlength;
+                  if (i < 2)
+                    *min += arrow_spacing + scroll_arrow_hlength;
+                  else
+                    *max -= arrow_spacing + scroll_arrow_hlength;
                 }
             }
           break;
@@ -5368,13 +5321,13 @@ gtk_notebook_tab_space (GtkNotebook *notebook,
               /* take arrows into account */
               *tab_space = *max - *min;
 
-              if (priv->has_after_previous || priv->has_after_next)
+              if (priv->arrow_node[ARROW_LEFT_BEFORE] || priv->arrow_node[ARROW_RIGHT_BEFORE])
                 {
                   *tab_space -= arrow_spacing + scroll_arrow_vlength;
                   *max -= arrow_spacing + scroll_arrow_vlength;
                 }
 
-              if (priv->has_before_previous || priv->has_before_next)
+              if (priv->arrow_node[ARROW_LEFT_AFTER] || priv->arrow_node[ARROW_RIGHT_AFTER])
                 {
                   *tab_space -= arrow_spacing + scroll_arrow_vlength;
                   *min += arrow_spacing + scroll_arrow_vlength;
