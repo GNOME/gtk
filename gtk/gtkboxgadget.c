@@ -419,6 +419,15 @@ gtk_box_gadget_set_orientation (GtkBoxGadget   *gadget,
   priv->orientation = orientation;
 }
 
+static GtkCssNode *
+get_css_node (GObject *child)
+{
+  if (GTK_IS_WIDGET (child))
+    return gtk_widget_get_css_node (GTK_WIDGET (child));
+  else
+    return gtk_css_gadget_get_node (GTK_CSS_GADGET (child));
+}
+
 static void
 gtk_box_gadget_insert_object (GtkBoxGadget      *gadget,
                               int                pos,
@@ -432,9 +441,20 @@ gtk_box_gadget_insert_object (GtkBoxGadget      *gadget,
   child.compute_expand = compute_expand_func;
 
   if (pos < 0 || pos >= priv->children->len)
-    g_array_append_val (priv->children, child);
+    {
+      g_array_append_val (priv->children, child);
+      gtk_css_node_insert_before (gtk_css_gadget_get_node (GTK_CSS_GADGET (gadget)),
+                                  get_css_node (object),
+                                  NULL);
+    }
   else
-    g_array_insert_val (priv->children, pos, child);
+    {
+      
+      g_array_insert_val (priv->children, pos, child);
+      gtk_css_node_insert_before (gtk_css_gadget_get_node (GTK_CSS_GADGET (gadget)),
+                                  get_css_node (object),
+                                  get_css_node (g_array_index (priv->children, GtkBoxGadgetChild, pos + 1).object));
+    }
 }
 
 void
@@ -461,6 +481,7 @@ gtk_box_gadget_remove_object (GtkBoxGadget *gadget,
 
       if (child->object == object)
         {
+          gtk_css_node_set_parent (get_css_node (object), NULL);
           g_array_remove_index (priv->children, i);
           break;
         }
