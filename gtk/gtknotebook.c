@@ -5600,7 +5600,6 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
   GtkAllocation allocation;
   GtkWidget *widget;
   GtkNotebookPage *page;
-  GtkStyleContext *context;
   gboolean allocate_at_bottom;
   gint tab_extra_space;
   GtkPositionType tab_pos;
@@ -5620,8 +5619,6 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
 
   child_allocation.x = allocation.x;
   child_allocation.y = allocation.y;
-
-  context = gtk_widget_get_style_context (widget);
 
   switch (tab_pos)
     {
@@ -5792,49 +5789,6 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
            * to be shown in the drag window */
           page->allocation.x = 0;
           page->allocation.y = 0;
-        }
-
-      if (page != priv->cur_page)
-        {
-          GtkBorder active_padding, normal_padding, padding;
-
-          /* The active tab is by definition at least the same height as the inactive one.
-           * The padding we're building is the offset between the two tab states, 
-           * so in case the style specifies normal_padding > active_padding we
-           * remove the offset and draw them with the same height.
-           * Note that the padding will still be applied to the tab content though,
-           * see gtk_notebook_page_allocate().
-           */
-          gtk_style_context_save_to_node (context, page->cssnode);
-          gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &normal_padding);
-          gtk_style_context_restore (context);
-
-          gtk_style_context_save_to_node (context, priv->cur_page->cssnode);
-          gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &active_padding);
-          gtk_style_context_restore (context);
-
-          padding.top = MAX (0, active_padding.top - normal_padding.top);
-          padding.right = MAX (0, active_padding.right - normal_padding.right);
-          padding.bottom = MAX (0, active_padding.bottom - normal_padding.bottom);
-          padding.left = MAX (0, active_padding.left - normal_padding.left);
-
-          switch (tab_pos)
-            {
-            case GTK_POS_TOP:
-              page->allocation.y += padding.top + padding.bottom;
-              page->allocation.height = MAX (1, page->allocation.height - padding.top - padding.bottom);
-              break;
-            case GTK_POS_BOTTOM:
-              page->allocation.height = MAX (1, page->allocation.height - padding.top - padding.bottom);
-              break;
-            case GTK_POS_LEFT:
-              page->allocation.x += padding.left + padding.right;
-              page->allocation.width = MAX (1, page->allocation.width - padding.left - padding.right);
-              break;
-            case GTK_POS_RIGHT:
-              page->allocation.width = MAX (1, page->allocation.width - padding.left - padding.right);
-              break;
-            }
         }
 
       /* calculate whether to leave a gap based on reorder operation or not */
