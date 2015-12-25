@@ -311,11 +311,6 @@ struct _GtkNotebookPage
   guint reorderable  : 1;
   guint detachable   : 1;
 
-  /* if true, the tab label was visible on last allocation; we track this so
-   * that we know to redraw the tab area if a tab label was hidden then shown
-   * without changing position */
-  guint tab_allocated_visible : 1;
-
   GtkRequisition requisition;
   GtkAllocation allocation;
 
@@ -551,7 +546,7 @@ static void gtk_notebook_draw_arrow          (GtkNotebook      *notebook,
 
 /*** GtkNotebook Size Allocate Functions ***/
 static void gtk_notebook_pages_allocate      (GtkNotebook      *notebook);
-static gboolean gtk_notebook_page_allocate   (GtkNotebook      *notebook,
+static void gtk_notebook_page_allocate       (GtkNotebook      *notebook,
                                               GtkNotebookPage  *page);
 static void gtk_notebook_calc_tabs           (GtkNotebook      *notebook,
                                               GList            *start,
@@ -5883,7 +5878,6 @@ gtk_notebook_pages_allocate (GtkNotebook *notebook)
   gboolean showarrow = FALSE;
   gint tab_space, min, max, remaining_space;
   gint expanded_tabs;
-  gboolean tab_allocations_changed = FALSE;
 
   if (!priv->show_tabs || !gtk_notebook_has_current_page (notebook))
     return;
@@ -5914,38 +5908,31 @@ gtk_notebook_pages_allocate (GtkNotebook *notebook)
 
   while (children)
     {
-      if (gtk_notebook_page_allocate (notebook, GTK_NOTEBOOK_PAGE (children)))
-        tab_allocations_changed = TRUE;
+      gtk_notebook_page_allocate (notebook, GTK_NOTEBOOK_PAGE (children));
       children = children->next;
     }
 
   if (!priv->first_tab)
     priv->first_tab = priv->children;
 
-  if (tab_allocations_changed)
-    gtk_css_gadget_queue_draw (priv->tabs_gadget);
+  gtk_css_gadget_queue_draw (priv->tabs_gadget);
 }
 
-static gboolean
+static void
 gtk_notebook_page_allocate (GtkNotebook     *notebook,
                             GtkNotebookPage *page)
 {
   GtkWidget *widget = GTK_WIDGET (notebook);
-  GtkAllocation child_allocation, label_allocation;
+  GtkAllocation child_allocation;
   GtkRequisition tab_requisition;
   GtkStyleContext *context;
   GtkPositionType tab_pos = get_effective_tab_pos (notebook);
-  gboolean tab_allocation_changed;
-  gboolean was_visible = page->tab_allocated_visible;
   GtkBorder tab_padding;
 
   if (!page->tab_label ||
       !gtk_widget_get_visible (page->tab_label) ||
       !gtk_widget_get_child_visible (page->tab_label))
-    {
-      page->tab_allocated_visible = FALSE;
-      return was_visible;
-    }
+    return;
 
   context = gtk_widget_get_style_context (widget);
 
@@ -6007,23 +5994,9 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
       g_assert_not_reached ();
     }
 
-  gtk_widget_get_allocation (page->tab_label, &label_allocation);
-  tab_allocation_changed = (child_allocation.x != label_allocation.x ||
-                            child_allocation.y != label_allocation.y ||
-                            child_allocation.width != label_allocation.width ||
-                            child_allocation.height != label_allocation.height);
-
   gtk_widget_size_allocate (page->tab_label, &child_allocation);
 
-  if (!was_visible)
-    {
-      page->tab_allocated_visible = TRUE;
-      tab_allocation_changed = TRUE;
-    }
-
   gtk_style_context_restore (context);
-
-  return tab_allocation_changed;
 }
 
 static void
