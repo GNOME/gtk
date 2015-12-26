@@ -892,8 +892,6 @@ gtk_frame_real_compute_child_allocation (GtkFrame      *frame,
   child_allocation->y = allocation.y + border_width + height;
   child_allocation->width = MAX (1, allocation.width - 2 * border_width);
   child_allocation->height = MAX (1, allocation.height - 2 * border_width - height);
-
-
 }
 
 static void
