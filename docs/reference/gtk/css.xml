@@ -1747,7 +1747,7 @@ entry {
             </row>
             <row>
               <entry>border‑image</entry>
-              <entry></entry>
+              <entry>〈border-image-source〉 || 〈border-image-slice〉 [ / 〈border-image-width〉 | / 〈border-image-width〉? / 〈border-image-outset〉 ]? || 〈border-image-repeat〉</entry>
               <entry>see individual properties</entry>
               <entry><ulink url="http://www.w3.org/TR/css3-background/#border-image">CSS3</ulink></entry>
               <entry></entry>
