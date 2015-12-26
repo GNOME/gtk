@@ -871,7 +871,6 @@ gtk_frame_real_compute_child_allocation (GtkFrame      *frame,
 					 GtkAllocation *child_allocation)
 {
   GtkFramePrivate *priv = frame->priv;
-  GtkWidget *widget = GTK_WIDGET (frame);
   GtkAllocation allocation;
   gint border_width, height;
 
