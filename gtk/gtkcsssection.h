@@ -66,6 +66,12 @@ typedef enum
   GTK_CSS_SECTION_KEYFRAMES
 } GtkCssSectionType;
 
+/**
+ * GtkCssSection:
+ *
+ * GtkCssSection is an auxiliary object containing information about
+ * the results of parsing a CSS style sheet.
+ */
 typedef struct _GtkCssSection GtkCssSection;
 
 GDK_AVAILABLE_IN_3_2
