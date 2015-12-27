@@ -575,6 +575,9 @@ gtk_icon_helper_ensure_surface (GtkIconHelper *self)
 {
   int scale;
 
+  if (self->priv->rendered_surface)
+    return;
+
   scale = gtk_widget_get_scale_factor (gtk_css_gadget_get_owner (GTK_CSS_GADGET (self)));
 
   self->priv->rendered_surface = gtk_icon_helper_load_surface (self, scale);
