@@ -400,6 +400,7 @@ gtk_private_h_sources =		\
 	gtkcssimagegradientprivate.h	\
 	gtkcssimageiconthemeprivate.h	\
 	gtkcssimagelinearprivate.h	\
+	gtkcssimageradialprivate.h	\
 	gtkcssimageprivate.h	\
 	gtkcssimagesurfaceprivate.h	\
 	gtkcssimageurlprivate.h	\
@@ -658,6 +659,7 @@ gtk_base_c_sources = 		\
 	gtkcssimagegradient.c	\
 	gtkcssimageicontheme.c	\
 	gtkcssimagelinear.c	\
+	gtkcssimageradial.c	\
 	gtkcssimagesurface.c	\
 	gtkcssimageurl.c	\
 	gtkcssimagescaled.c	\
