@@ -1,0 +1,4 @@
+pseudo-classes-known.css:5: error: GTK_CSS_PROVIDER_ERROR_DEPRECATED
+pseudo-classes-known.css:17: error: GTK_CSS_PROVIDER_ERROR_DEPRECATED
+pseudo-classes-known.css:25: error: GTK_CSS_PROVIDER_ERROR_DEPRECATED
+pseudo-classes-known.css:33: error: GTK_CSS_PROVIDER_ERROR_DEPRECATED
