@@ -366,8 +366,7 @@ RegisterGdkClass (GdkWindowType wtype, GdkWindowTypeHint wtype_hint)
     case GDK_WINDOW_TEMP:
       if ((wtype_hint == GDK_WINDOW_TYPE_HINT_MENU) ||
           (wtype_hint == GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU) ||
-          (wtype_hint == GDK_WINDOW_TYPE_HINT_POPUP_MENU) ||
-          (wtype_hint == GDK_WINDOW_TYPE_HINT_TOOLTIP))
+          (wtype_hint == GDK_WINDOW_TYPE_HINT_POPUP_MENU))
         {
           if (klassTEMPSHADOW == 0)
             {
