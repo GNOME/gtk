@@ -405,6 +405,8 @@ test_data = \
 	pseudo-classes-unknown.css \
 	pseudo-classes-unknown.errors \
 	pseudo-classes-unknown.ref.css \
+        radial.css \
+        radial.ref.css \
 	selector.css \
 	selector.ref.css \
 	shadow.css \
