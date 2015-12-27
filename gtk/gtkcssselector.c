@@ -1176,7 +1176,7 @@ parse_selector_pseudo_class (GtkCssParser   *parser,
     { "first-child",   0, 0,                           POSITION_FORWARD,  0, 1 },
     { "last-child",    0, 0,                           POSITION_BACKWARD, 0, 1 },
     { "only-child",    0, 0,                           POSITION_ONLY,     0, 0 },
-    { "sorted",        0, 0,                           POSITION_SORTED,   0, 0 },
+    { "sorted",        1, 0,                           POSITION_SORTED,   0, 0 },
     { "active",        0, GTK_STATE_FLAG_ACTIVE, },
     { "prelight",      1, GTK_STATE_FLAG_PRELIGHT, },
     { "hover",         0, GTK_STATE_FLAG_PRELIGHT, },
@@ -1215,11 +1215,17 @@ parse_selector_pseudo_class (GtkCssParser   *parser,
               selector->state.state = pseudo_classes[i].state_flag;
               if (pseudo_classes[i].deprecated)
                 {
-                  _gtk_css_parser_error_full (parser,
-                                              GTK_CSS_PROVIDER_ERROR_DEPRECATED,
-                                              "The :%s pseudo-class is deprecated. Use :%s instead.",
-                                              pseudo_classes[i].name,
-                                              pseudo_classes[i + 1].name);
+                  if (pseudo_classes[i + 1].state_flag == pseudo_classes[i].state_flag)
+                    _gtk_css_parser_error_full (parser,
+                                                GTK_CSS_PROVIDER_ERROR_DEPRECATED,
+                                                "The :%s pseudo-class is deprecated. Use :%s instead.",
+                                                pseudo_classes[i].name,
+                                                pseudo_classes[i + 1].name);
+                  else
+                    _gtk_css_parser_error_full (parser,
+                                                GTK_CSS_PROVIDER_ERROR_DEPRECATED,
+                                                "The :%s pseudo-class is deprecated.",
+                                                pseudo_classes[i].name);
                 }
             }
           else
