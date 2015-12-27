@@ -145,7 +145,7 @@ parsing_error_cb (GtkCssProvider *provider,
                           "%s:%u: error: ",
                           basename, gtk_css_section_get_end_line (section) + 1);
   g_free (basename);
-                          
+
   if (error->domain == GTK_CSS_PROVIDER_ERROR)
       append_error_value (errors, GTK_TYPE_CSS_PROVIDER_ERROR, error->code);
   else
@@ -158,7 +158,7 @@ parsing_error_cb (GtkCssProvider *provider,
 }
 
 static void
-test_css_file (GFile *file)
+parse_css_file (GFile *file, gboolean generate)
 {
   GtkCssProvider *provider;
   char *css, *diff;
@@ -174,11 +174,15 @@ test_css_file (GFile *file)
                     "parsing-error",
                     G_CALLBACK (parsing_error_cb),
                     errors);
-  gtk_css_provider_load_from_path (provider,
-                                   css_file,
-                                   NULL);
+  gtk_css_provider_load_from_path (provider, css_file, NULL);
 
   css = gtk_css_provider_to_string (provider);
+
+  if (generate)
+    {
+      g_print ("%s", css);
+      goto out;
+    }
 
   reference_file = test_get_reference_file (css_file);
 
@@ -190,8 +194,6 @@ test_css_file (GFile *file)
       g_test_message ("Resulting CSS doesn't match reference:\n%s", diff);
       g_test_fail ();
     }
-
-  g_free (css);
   g_free (reference_file);
 
   errors_file = test_get_errors_file (css_file);
@@ -217,7 +219,16 @@ test_css_file (GFile *file)
   g_string_free (errors, TRUE);
 
   g_free (diff);
+
+out:
   g_free (css_file);
+  g_free (css);
+}
+
+static void
+test_css_file (GFile *file)
+{
+  parse_css_file (file, FALSE);
 }
 
 static void
@@ -310,6 +321,17 @@ main (int argc, char **argv)
       add_tests_for_files_in_directory (dir);
 
       g_object_unref (dir);
+    }
+  else if (strcmp (argv[1], "--generate") == 0)
+    {
+      if (argc >= 3)
+        {
+          GFile *file = g_file_new_for_commandline_arg (argv[2]);
+
+          parse_css_file (file, TRUE);
+
+          g_object_unref (file);
+        }
     }
   else
     {
