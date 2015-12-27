@@ -979,7 +979,6 @@ gtk_inspector_object_tree_append_object (GtkInspectorObjectTree *wt,
                                          const gchar            *name)
 {
   GtkTreeIter iter;
-  GtkTreePath *path;
   const gchar *class_name;
   gchar *classes;
   const gchar *label;
@@ -1068,9 +1067,6 @@ gtk_inspector_object_tree_append_object (GtkInspectorObjectTree *wt,
     }
 
   g_free (classes);
-
-  path = gtk_tree_model_get_path (GTK_TREE_MODEL (wt->priv->model), &iter);
-  gtk_tree_path_free (path);
 
   g_object_weak_ref (object, gtk_object_tree_remove_dead_object, wt);
   
