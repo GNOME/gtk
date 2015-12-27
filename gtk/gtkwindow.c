@@ -12223,7 +12223,8 @@ warn_response (GtkDialog *dialog,
         }
 
       /* Steal reference into temp variable, so not to mess up with
-         inspector_window during gtk_widget_destroy().  */
+       * inspector_window during gtk_widget_destroy().
+       */
       window = inspector_window;
       inspector_window = NULL;
       gtk_widget_destroy (window);
