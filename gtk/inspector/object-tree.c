@@ -639,6 +639,32 @@ gtk_object_tree_remove_dead_object (gpointer data, GObject *dead_object)
 }
 
 static gboolean
+weak_unref_cb (GtkTreeModel *model,
+               GtkTreePath  *path,
+               GtkTreeIter  *iter,
+               gpointer      data)
+{
+  GtkInspectorObjectTree *wt = data;
+  GObject *object;
+
+  gtk_tree_model_get (model, iter, OBJECT, &object, -1);
+
+  g_object_weak_unref (object, gtk_object_tree_remove_dead_object, wt);
+
+  return FALSE;
+}
+
+static void
+clear_store (GtkInspectorObjectTree *wt)
+{
+  if (wt->priv->model)
+    {
+      gtk_tree_model_foreach (GTK_TREE_MODEL (wt->priv->model), weak_unref_cb, wt);
+      gtk_tree_store_clear (wt->priv->model);
+    }
+}
+
+static gboolean
 map_or_unmap (GSignalInvocationHint *ihint,
               guint                  n_params,
               const GValue          *params,
@@ -899,6 +925,16 @@ gtk_inspector_object_tree_init (GtkInspectorObjectTree *wt)
 }
 
 static void
+gtk_inspector_object_tree_dispose (GObject *object)
+{
+  GtkInspectorObjectTree *wt = GTK_INSPECTOR_OBJECT_TREE (object);
+
+  clear_store (wt);
+
+  G_OBJECT_CLASS (gtk_inspector_object_tree_parent_class)->dispose (object);
+}
+
+static void
 gtk_inspector_object_tree_finalize (GObject *object)
 {
   GtkInspectorObjectTree *wt = GTK_INSPECTOR_OBJECT_TREE (object);
@@ -921,6 +957,7 @@ gtk_inspector_object_tree_class_init (GtkInspectorObjectTreeClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->finalize = gtk_inspector_object_tree_finalize;
+  object_class->dispose = gtk_inspector_object_tree_dispose;
 
   signals[OBJECT_ACTIVATED] =
       g_signal_new ("object-activated",
@@ -1127,7 +1164,7 @@ gtk_inspector_object_tree_scan (GtkInspectorObjectTree *wt,
 
   selected = gtk_inspector_object_tree_get_selected (wt);
 
-  gtk_tree_store_clear (wt->priv->model);
+  clear_store (wt);
   gtk_inspector_object_tree_append_object (wt, G_OBJECT (gtk_settings_get_default ()), NULL, NULL);
   if (g_application_get_default ())
     gtk_inspector_object_tree_append_object (wt, G_OBJECT (g_application_get_default ()), NULL, NULL);
