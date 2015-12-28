@@ -1,0 +1,13 @@
+window visible=0 state=dir-ltr classes=background
+  decoration visible=1 state=dir-ltr
+  box visible=1 state=dir-ltr classes=horizontal
+    box visible=1 state=dir-ltr classes=horizontal
+      label visible=1 state=dir-ltr
+        font-size: 20px (nth-child.css:4:17)
+      label visible=1 state=dir-ltr
+        font-size: 30px (nth-child.css:7:17)
+      label visible=1 state=dir-ltr
+        font-size: 40px (nth-child.css:10:17)
+    box visible=1 state=dir-ltr classes=horizontal
+      label visible=1 state=dir-ltr
+        font-size: 50px (nth-child.css:13:17)
