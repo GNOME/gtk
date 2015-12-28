@@ -27,6 +27,7 @@ test_css_nodes_SOURCES = \
 test_data = \
 	buttons.ui 	buttons.nodes \
 	entries.ui 	entries.nodes \
+	levelbar.ui 	levelbar.nodes \
 	notebook.ui 	notebook.nodes \
 	progressbar.ui 	progressbar.nodes \
 	$(NULL)

@@ -1,0 +1,55 @@
+window visible=0 state=dir-ltr classes=background
+  decoration visible=1 state=dir-ltr
+  box visible=1 state=dir-ltr classes=vertical
+    levelbar visible=1 state=dir-ltr classes=horizontal,continuous
+      trough visible=1 state=dir-ltr
+        block visible=1 state=dir-ltr classes=high,filled
+        block visible=1 state=dir-ltr classes=empty
+    levelbar visible=1 state=dir-ltr classes=horizontal,continuous
+      trough visible=1 state=dir-ltr
+        block visible=1 state=dir-ltr classes=empty
+        block visible=1 state=dir-ltr classes=high,filled
+    levelbar visible=1 state=dir-ltr classes=horizontal,continuous
+      trough visible=1 state=dir-ltr
+        block visible=1 state=dir-ltr classes=low,filled
+        block visible=1 state=dir-ltr classes=empty
+    levelbar visible=1 state=dir-ltr classes=horizontal,continuous
+      trough visible=1 state=dir-ltr
+        block visible=1 state=dir-ltr classes=full,filled
+        block visible=1 state=dir-ltr classes=empty
+    levelbar visible=1 state=dir-ltr classes=horizontal,discrete
+      trough visible=1 state=dir-ltr
+        block visible=1 state=dir-ltr classes=full,filled
+        block visible=1 state=dir-ltr classes=full,filled
+        block visible=1 state=dir-ltr classes=full,filled
+        block visible=1 state=dir-ltr classes=full,filled
+        block visible=1 state=dir-ltr classes=full,filled
+        block visible=1 state=dir-ltr classes=empty
+        block visible=1 state=dir-ltr classes=empty
+        block visible=1 state=dir-ltr classes=empty
+        block visible=1 state=dir-ltr classes=empty
+        block visible=1 state=dir-ltr classes=empty
+    levelbar visible=1 state=dir-ltr classes=horizontal,discrete
+      trough visible=1 state=dir-ltr
+        block visible=1 state=dir-ltr classes=full,filled
+        block visible=1 state=dir-ltr classes=full,filled
+        block visible=1 state=dir-ltr classes=empty
+        block visible=1 state=dir-ltr classes=empty
+        block visible=1 state=dir-ltr classes=empty
+        block visible=1 state=dir-ltr classes=empty
+        block visible=1 state=dir-ltr classes=empty
+        block visible=1 state=dir-ltr classes=empty
+        block visible=1 state=dir-ltr classes=empty
+        block visible=1 state=dir-ltr classes=empty
+    levelbar visible=1 state=dir-ltr classes=horizontal,discrete
+      trough visible=1 state=dir-ltr
+        block visible=1 state=dir-ltr classes=full,filled
+        block visible=1 state=dir-ltr classes=full,filled
+        block visible=1 state=dir-ltr classes=full,filled
+        block visible=1 state=dir-ltr classes=full,filled
+        block visible=1 state=dir-ltr classes=full,filled
+        block visible=1 state=dir-ltr classes=full,filled
+        block visible=1 state=dir-ltr classes=full,filled
+        block visible=1 state=dir-ltr classes=full,filled
+        block visible=1 state=dir-ltr classes=empty
+        block visible=1 state=dir-ltr classes=empty
