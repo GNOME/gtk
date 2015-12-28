@@ -26,6 +26,7 @@ test_css_style_SOURCES = \
 
 test_data = \
 	label.ui	label.css	label.nodes \
+	nth-child.ui	nth-child.css	nth-child.nodes \
 	$(NULL)
 
 EXTRA_DIST += $(test_in_files) $(test_data)
