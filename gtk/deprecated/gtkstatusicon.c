@@ -1399,8 +1399,13 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
   _gtk_icon_helper_set_icon_size (icon_helper, GTK_ICON_SIZE_SMALL_TOOLBAR);
   _gtk_icon_helper_set_pixel_size (icon_helper, round_size);
   surface = gtk_icon_helper_load_surface (icon_helper, 1);
-  pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0, round_size, round_size);
-  cairo_surface_destroy (surface);
+  if (surface)
+    {
+      pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0, round_size, round_size);
+      cairo_surface_destroy (surface);
+    }
+  else
+    pixbuf = NULL;
   g_object_unref (icon_helper);
 
   if (pixbuf != NULL)
