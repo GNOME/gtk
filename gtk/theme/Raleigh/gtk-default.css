@@ -51,7 +51,7 @@ GtkTreeView.dnd {
     border-style: solid;
 }
 
-*:insensitive {
+*:disabled {
   border-color: shade (@bg_color, 0.7);
   background-color: shade (@bg_color, 0.9);
   color: shade (@bg_color, 0.7);
@@ -67,7 +67,7 @@ GtkTreeView.dnd {
   color: @fg_color;
 }
 
-.entry:selected:focused {
+.entry:selected:focus {
   background-color: @selected_bg_color;
   color: @selected_fg_color;
 }
@@ -83,7 +83,7 @@ GtkTreeView.dnd {
   color: @fg_color;
 }
 
-.view:selected:focused {
+.view:selected:focus {
   background-color: @selected_bg_color;
   color: @selected_fg_color;
 }
@@ -109,7 +109,7 @@ GtkTreeView.dnd {
   background-color: shade (@base_color, 0.93);
 }
 
-.view row:selected:focused {
+.view row:selected:focus {
   background-color: @selected_bg_color;
 }
 
@@ -121,7 +121,7 @@ GtkTreeView.dnd {
 .view.cell.trough,
 .view.cell.trough:hover,
 .view.cell.trough:selected,
-.view.cell.trough:selected:focused {
+.view.cell.trough:selected:focus {
   background-color: @bg_color;
   color: @fg_color;
 }
@@ -129,7 +129,7 @@ GtkTreeView.dnd {
 .view.cell.progressbar,
 .view.cell.progressbar:hover,
 .view.cell.progressbar:selected,
-.view.cell.progressbar:selected:focused {
+.view.cell.progressbar:selected:focus {
   background-color: @selected_bg_color;
   color: @selected_fg_color;
 }
@@ -183,7 +183,7 @@ GtkTreeView.dnd {
   color: @text_color;
 }
 
-.entry:insensitive {
+.entry:disabled {
   background-color: shade (@base_color, 0.9);
   color: shade (@base_color, 0.7);
 }
@@ -251,7 +251,7 @@ GtkRadioButton:selected {
   border-color: @selected_fg_color;
 }
 
-.check:active:focused, .radio:active:focused {
+.check:active:focus, .radio:active:focus {
   background-color: @selected_bg_color;
 }
 
@@ -338,7 +338,7 @@ GtkSwitch.trough:active {
   color: @selected_fg_color;
 }
 
-GtkToggleButton.button:inconsistent {
+GtkToggleButton.button:indeterminate {
   border-style: outset;
   border-width: 1px;
   background-color: shade (@bg_color, 0.9);
@@ -349,7 +349,7 @@ GtkLabel:selected {
   background-color: shade (@bg_color, 0.9);
 }
 
-GtkLabel:selected:focused {
+GtkLabel:selected:focus {
   background-color: @selected_bg_color;
 }
 
@@ -391,7 +391,7 @@ GtkCalendar.view {
   padding: 1px;
 }
 
-GtkCalendar.view:inconsistent {
+GtkCalendar.view:indeterminate {
   color: darker (@bg_color);
 }
 
