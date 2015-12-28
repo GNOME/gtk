@@ -2,7 +2,7 @@ include $(top_srcdir)/Makefile.decl
 
 NULL =
 
-SUBDIRS = parser
+SUBDIRS = parser nodes
 
 check_PROGRAMS = $(TEST_PROGS)
 test_in_files =
