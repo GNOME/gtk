@@ -1,0 +1,15 @@
+window visible=0 state=dir-ltr classes=background
+  decoration visible=1 state=dir-ltr
+  notebook visible=1 state=dir-ltr classes=frame
+    header visible=1 state=dir-ltr classes=top
+      button visible=1 state=dir-ltr classes=text-button
+        label visible=1 state=dir-ltr
+      tabs visible=1 state=dir-ltr
+        tab visible=1 state=active|dir-ltr
+          label visible=1 state=dir-ltr
+        tab visible=1 state=dir-ltr
+          label visible=1 state=dir-ltr
+    button visible=1 state=dir-ltr classes=text-button
+      label visible=1 state=dir-ltr
+    button visible=1 state=dir-ltr classes=text-button
+      label visible=1 state=dir-ltr
