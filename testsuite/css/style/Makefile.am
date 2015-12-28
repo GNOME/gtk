@@ -25,6 +25,7 @@ test_css_style_SOURCES = \
         test-css-style.c
 
 test_data = \
+	label.ui	label.css	label.nodes \
 	$(NULL)
 
 EXTRA_DIST += $(test_in_files) $(test_data)

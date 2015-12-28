@@ -1,0 +1,6 @@
+window visible=0 state=dir-ltr classes=background
+  decoration visible=1 state=dir-ltr
+  box visible=1 state=dir-ltr classes=horizontal
+    font-family: "\"Comic Sans\"" (label.css:4:20)
+    label visible=1 state=dir-ltr
+      font-family: "\"Comic Sans\"" (reset-to-defaults.css:2:12)
