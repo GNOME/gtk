@@ -28,6 +28,7 @@ test_data = \
 	buttons.ui 	buttons.nodes \
 	entries.ui 	entries.nodes \
 	notebook.ui 	notebook.nodes \
+	progressbar.ui 	progressbar.nodes \
 	$(NULL)
 
 EXTRA_DIST += $(test_in_files) $(test_data)
