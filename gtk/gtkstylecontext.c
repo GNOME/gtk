@@ -3219,3 +3219,48 @@ _gtk_style_context_is_background_opaque (GtkStyleContext *context)
           corner_value_is_right_angle (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_RIGHT_RADIUS)) &&
           corner_value_is_right_angle (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_LEFT_RADIUS)));
 }
+
+/**
+ * GtkStyleContextPrintFlags:
+ * @GTK_STYLE_CONTEXT_PRINT_RECURSE: Print the entire tree of
+ *     CSS nodes starting at the style context's node
+ * @GTK_STYLE_CONTEXT_PRINT_SHOW_STYLE: Show the values of the
+ *     CSS properties for each node
+ * @GTK_STYLE_CONTEXT_PRINT_SHOW_INITIAL: Show the values of the
+ *     CSS properties even if they match the initial value. By default,
+ *     values are only shown if they are different from the initial
+ *     value.
+ *
+ * Flags that modify the behavior of gtk_style_context_to_string().
+ */
+
+/**
+ * gtk_style_context_to_string:
+ * @context: a #GtkStyleContext
+ * @flags: Flags that determine what to print
+ *
+ * Converts the style context into a string representation.
+ *
+ * The string representation always includes information about
+ * the name, state, id, visibility and style classes of the CSS
+ * node that is backing @context. Depending on the flags, more
+ * information may be included.
+ *
+ * Returns: a newly allocated string representing @context
+ *
+ * Since: 3.20
+ */
+char *
+gtk_style_context_to_string (GtkStyleContext           *context,
+                             GtkStyleContextPrintFlags  flags)
+{
+  GString *string;
+
+  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
+
+  string = g_string_new ("");
+
+  gtk_css_node_print (context->priv->cssnode, flags, string, 0);
+
+  return g_string_free (string, FALSE);
+}

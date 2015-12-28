@@ -25,6 +25,8 @@
 #include "gtkmarshalers.h"
 #include "gtksettingsprivate.h"
 #include "gtktypebuiltins.h"
+#include "gtkcssstylepropertyprivate.h"
+#include "gtkcsssectionprivate.h"
 
 /*
  * CSS nodes are the backbone of the GtkStyleContext implementation and
@@ -1510,7 +1512,7 @@ GtkStyleProviderPrivate *
 gtk_css_node_get_style_provider (GtkCssNode *cssnode)
 {
   GtkStyleProviderPrivate *result;
-  
+
   result = gtk_css_node_get_style_provider_or_null (cssnode);
   if (result)
     return result;
@@ -1519,4 +1521,163 @@ gtk_css_node_get_style_provider (GtkCssNode *cssnode)
     return gtk_css_node_get_style_provider (cssnode->parent);
 
   return GTK_STYLE_PROVIDER_PRIVATE (_gtk_settings_get_style_cascade (gtk_settings_get_default (), 1));
+}
+
+static void
+append_id (GtkCssNode *cssnode,
+           GString    *string)
+{
+  const char *id;
+
+  id = gtk_css_node_get_id (cssnode);
+  if (id)
+    {
+      g_string_append (string, " id=");
+      g_string_append (string, id);
+    }
+}
+
+static void
+append_visible (GtkCssNode *cssnode,
+                GString    *string)
+{
+  g_string_append_printf (string, " visible=%d", gtk_css_node_get_visible (cssnode));
+}
+
+static void
+append_state (GtkCssNode *cssnode,
+              GString    *string)
+
+{
+  GtkStateFlags state;
+
+  state = gtk_css_node_get_state (cssnode);
+  if (state)
+    {
+      GFlagsClass *fclass;
+      gint i;
+      gboolean first = TRUE;
+
+      g_string_append (string, " state=");
+      fclass = g_type_class_ref (GTK_TYPE_STATE_FLAGS);
+      for (i = 0; i < fclass->n_values; i++)
+        {
+          if (state & fclass->values[i].value)
+            {
+              if (first)
+                first = FALSE;
+              else
+                g_string_append_c (string, '|');
+              g_string_append (string, fclass->values[i].value_nick);
+            }
+        }
+      g_type_class_unref (fclass);
+    }
+}
+
+static void
+append_classes (GtkCssNode *cssnode,
+                GString    *string)
+{
+  const GQuark *classes;
+  guint n_classes;
+
+  classes = gtk_css_node_list_classes (cssnode, &n_classes);
+  if (n_classes > 0)
+    {
+      int i;
+
+      g_string_append (string, " classes=");
+      for (i = 0; i < n_classes; i++)
+        {
+          if (i > 0)
+            g_string_append_c (string, ',');
+          g_string_append (string, g_quark_to_string (classes[i]));
+        }
+    }
+}
+
+static void
+append_style (GtkCssNode                *cssnode,
+              GtkStyleContextPrintFlags  flags,
+              GString                   *string,
+              guint                      indent)
+{
+  int i;
+  GtkCssStyle *style;
+
+  if (!(flags & GTK_STYLE_CONTEXT_PRINT_SHOW_STYLE))
+    return;
+
+  style = gtk_css_node_get_style (cssnode);
+
+  for (i = 0; i < _gtk_css_style_property_get_n_properties (); i++)
+    {
+      GtkCssStyleProperty *prop;
+      GtkCssValue *value;
+      GtkCssSection *section;
+      const char *name;
+
+      prop = _gtk_css_style_property_lookup_by_id (i);
+      name = _gtk_style_property_get_name (GTK_STYLE_PROPERTY (prop));
+      value = gtk_css_style_get_value (style, i);
+
+      if (!(flags & GTK_STYLE_CONTEXT_PRINT_SHOW_INITIAL))
+        {
+          GtkCssValue *initial, *computed;
+          GtkCssNode *parent_node;
+          GtkCssStyle *parent_style;
+
+          parent_node = gtk_css_node_get_parent (cssnode);
+          parent_style = parent_node ? gtk_css_node_get_style (parent_node) : NULL;
+          initial = _gtk_css_style_property_get_initial_value (prop);
+          computed = _gtk_css_value_compute (initial,
+                                             i,
+                                             gtk_css_node_get_style_provider (cssnode),
+                                             style,
+                                             parent_style);
+          if (_gtk_css_value_equal (value, computed))
+            continue;
+        }
+
+      g_string_append_printf (string, "%*s%s: ", indent, "", name);
+      _gtk_css_value_print (value, string);
+
+      section = gtk_css_style_get_section (style, i);
+      if (section)
+        {
+          g_string_append (string, " (");
+          _gtk_css_section_print (section, string);
+          g_string_append (string, ")");
+        }
+      g_string_append_c (string, '\n');
+    }
+}
+
+void
+gtk_css_node_print (GtkCssNode                *cssnode,
+                    GtkStyleContextPrintFlags  flags,
+                    GString                   *string,
+                    guint                      indent)
+{
+  GtkCssNode *node;
+
+  g_string_append_printf (string, "%*s", indent, "");
+  if (gtk_css_node_get_name (cssnode))
+    g_string_append (string, gtk_css_node_get_name (cssnode));
+  else
+    g_string_append (string, g_type_name (gtk_css_node_get_widget_type (cssnode)));
+  append_id (cssnode, string);
+  append_visible (cssnode, string);
+  append_state (cssnode, string);
+  append_classes (cssnode, string);
+  g_string_append_c (string, '\n');
+
+  append_style (cssnode, flags, string, indent + 2);
+
+  if (flags & GTK_STYLE_CONTEXT_PRINT_RECURSE)
+    {
+      for (node = gtk_css_node_get_first_child (cssnode); node; node = gtk_css_node_get_next_sibling (node))
+        gtk_css_node_print (node, flags, string, indent + 2);
+    }
 }
