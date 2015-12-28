@@ -321,17 +321,6 @@ draw_bin (cairo_t *cr,
 	  gpointer user_data)
 {
   GtkWidget *widget = GTK_WIDGET (user_data);
-  GtkViewport *viewport = GTK_VIEWPORT (widget);
-  GtkViewportPrivate *priv = viewport->priv;
-  GtkStyleContext *context;
-  int x, y;
-
-  context = gtk_widget_get_style_context (widget);
-
-  gdk_window_get_position (priv->bin_window, &x, &y);
-  gtk_render_background (context, cr, x, y,
-			 gdk_window_get_width (priv->bin_window),
-			 gdk_window_get_height (priv->bin_window));
   GTK_WIDGET_CLASS (gtk_viewport_parent_class)->draw (widget, cr);
 }
 
