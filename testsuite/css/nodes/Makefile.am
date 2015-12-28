@@ -25,6 +25,7 @@ test_css_nodes_SOURCES = \
         test-css-nodes.c
 
 test_data = \
+	entries.ui entries.nodes \
 	notebook.ui notebook.nodes \
 	$(NULL)
 

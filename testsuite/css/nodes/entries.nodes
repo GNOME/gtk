@@ -1,0 +1,16 @@
+window visible=0 state=dir-ltr classes=background
+  decoration visible=1 state=dir-ltr
+  box visible=0 state=dir-ltr classes=horizontal
+    label visible=1 state=dir-ltr
+    label visible=1 state=dir-ltr
+    label visible=1 state=dir-ltr
+    entry visible=1 state=dir-ltr
+      progress visible=1 state=dir-ltr
+    entry visible=1 state=dir-ltr
+    entry visible=1 state=dir-ltr
+      image visible=1 state=dir-ltr classes=left
+      image visible=1 state=dir-ltr classes=right
+    spinbutton visible=1 state=dir-ltr classes=horizontal
+      entry visible=1 state=dir-ltr
+      button visible=1 state=dir-ltr classes=down
+      button visible=1 state=dir-ltr classes=up
