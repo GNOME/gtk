@@ -1819,6 +1819,7 @@ gtk_header_bar_realize (GtkWidget *widget)
                             G_CALLBACK (_gtk_header_bar_update_window_buttons), widget);
   g_signal_connect_swapped (settings, "notify::gtk-decoration-layout",
                             G_CALLBACK (_gtk_header_bar_update_window_buttons), widget);
+  _gtk_header_bar_update_window_buttons (GTK_HEADER_BAR (widget));
 }
 
 static void
