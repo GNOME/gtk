@@ -676,12 +676,14 @@ static void
 gtk_toolbar_init (GtkToolbar *toolbar)
 {
   GtkToolbarPrivate *priv;
+  GtkWidget *widget;
 
+  widget = GTK_WIDGET (toolbar);
   toolbar->priv = gtk_toolbar_get_instance_private (toolbar);
   priv = toolbar->priv;
 
-  gtk_widget_set_can_focus (GTK_WIDGET (toolbar), FALSE);
-  gtk_widget_set_has_window (GTK_WIDGET (toolbar), FALSE);
+  gtk_widget_set_can_focus (widget, FALSE);
+  gtk_widget_set_has_window (widget, FALSE);
 
   priv->orientation = GTK_ORIENTATION_HORIZONTAL;
   priv->style = DEFAULT_TOOLBAR_STYLE;
@@ -705,7 +707,7 @@ gtk_toolbar_init (GtkToolbar *toolbar)
   gtk_widget_show (priv->arrow);
   gtk_container_add (GTK_CONTAINER (priv->arrow_button), priv->arrow);
   
-  gtk_widget_set_parent (priv->arrow_button, GTK_WIDGET (toolbar));
+  gtk_widget_set_parent (priv->arrow_button, widget);
   
   /* which child position a drop will occur at */
   priv->menu = NULL;
