@@ -138,8 +138,7 @@ typedef struct {
 G_DEFINE_TYPE_WITH_PRIVATE (GtkCheckButton, gtk_check_button, GTK_TYPE_TOGGLE_BUTTON)
 
 static void
-gtk_check_button_state_flags_changed (GtkWidget     *widget,
-				      GtkStateFlags  previous_state_flags)
+gtk_check_button_update_node_state (GtkWidget *widget)
 {
   GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (GTK_CHECK_BUTTON (widget));
   GtkCssImageBuiltinType image_type;
@@ -147,8 +146,9 @@ gtk_check_button_state_flags_changed (GtkWidget     *widget,
 
   state = gtk_widget_get_state_flags (widget);
 
-  /* XXX: This is soimewhat awkward here, but there's no better
-   * way to update the icon */
+  /* XXX: This is somewhat awkward here, but there's no better
+   * way to update the icon
+   */
   if (state & GTK_STATE_FLAG_CHECKED)
     image_type = GTK_IS_RADIO_BUTTON (widget) ? GTK_CSS_IMAGE_BUILTIN_OPTION_CHECKED : GTK_CSS_IMAGE_BUILTIN_CHECK_CHECKED;
   else if (state & GTK_STATE_FLAG_INCONSISTENT)
@@ -158,6 +158,13 @@ gtk_check_button_state_flags_changed (GtkWidget     *widget,
   gtk_builtin_icon_set_image (GTK_BUILTIN_ICON (priv->indicator_gadget), image_type);
   
   gtk_css_node_set_state (gtk_css_gadget_get_node (priv->indicator_gadget), state);
+}
+
+static void
+gtk_check_button_state_flags_changed (GtkWidget     *widget,
+				      GtkStateFlags  previous_state_flags)
+{
+  gtk_check_button_update_node_state (widget);
 
   GTK_WIDGET_CLASS (gtk_check_button_parent_class)->state_flags_changed (widget, previous_state_flags);
 }
@@ -326,6 +333,8 @@ gtk_check_button_init (GtkCheckButton *check_button)
                                                  priv->gadget,
                                                  NULL);
   gtk_builtin_icon_set_default_size_property (GTK_BUILTIN_ICON (priv->indicator_gadget), "indicator-size");
+
+  gtk_check_button_update_node_state (GTK_WIDGET (check_button));
 }
 
 /**
