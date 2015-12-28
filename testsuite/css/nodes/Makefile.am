@@ -25,8 +25,9 @@ test_css_nodes_SOURCES = \
         test-css-nodes.c
 
 test_data = \
-	entries.ui entries.nodes \
-	notebook.ui notebook.nodes \
+	buttons.ui 	buttons.nodes \
+	entries.ui 	entries.nodes \
+	notebook.ui 	notebook.nodes \
 	$(NULL)
 
 EXTRA_DIST += $(test_in_files) $(test_data)
