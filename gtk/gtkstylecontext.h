@@ -1208,6 +1208,17 @@ void   gtk_draw_insertion_cursor    (GtkWidget          *widget,
                                      GtkTextDirection    direction,
                                      gboolean            draw_arrow);
 
+typedef enum {
+  GTK_STYLE_CONTEXT_PRINT_NONE         = 0,
+  GTK_STYLE_CONTEXT_PRINT_RECURSE      = 1 << 0,
+  GTK_STYLE_CONTEXT_PRINT_SHOW_STYLE   = 1 << 1,
+  GTK_STYLE_CONTEXT_PRINT_SHOW_INITIAL = 1 << 2
+} GtkStyleContextPrintFlags;
+
+GDK_AVAILABLE_IN_3_20
+char * gtk_style_context_to_string (GtkStyleContext           *context,
+                                    GtkStyleContextPrintFlags  flags);
+
 G_END_DECLS
 
 #endif /* __GTK_STYLE_CONTEXT_H__ */

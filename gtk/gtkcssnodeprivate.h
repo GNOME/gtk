@@ -171,6 +171,11 @@ GtkWidgetPath *         gtk_css_node_create_widget_path (GtkCssNode            *
 const GtkWidgetPath *   gtk_css_node_get_widget_path    (GtkCssNode            *cssnode);
 GtkStyleProviderPrivate *gtk_css_node_get_style_provider(GtkCssNode            *cssnode);
 
+void                    gtk_css_node_print              (GtkCssNode                *cssnode,
+                                                         GtkStyleContextPrintFlags  flags,
+                                                         GString                   *string,
+                                                         guint                      indent);
+
 G_END_DECLS
 
 #endif /* __GTK_CSS_NODE_PRIVATE_H__ */
