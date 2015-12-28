@@ -385,7 +385,7 @@ _gtk_css_style_property_get_id (GtkCssStyleProperty *property)
  * [CSS Documentation](http://www.w3.org/TR/css3-cascade/#intial)
  * for an explanation of this concept.
  *
- * Returns: a reference to the initial value. The value will never change.
+ * Returns: (transfer none): the initial value. The value will never change.
  **/
 GtkCssValue *
 _gtk_css_style_property_get_initial_value (GtkCssStyleProperty *property)
