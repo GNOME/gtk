@@ -1643,7 +1643,7 @@ gtk_progress_bar_set_inverted (GtkProgressBar *pbar,
  * to the text, not a copy of it, so will become invalid
  * if you change the text in the progress bar.
  *
- * Returns: text, or %NULL; this string is owned by the widget
+ * Returns: (nullable): text, or %NULL; this string is owned by the widget
  * and should not be modified or freed.
  */
 const gchar*

@@ -1554,7 +1554,7 @@ gtk_menu_item_set_submenu (GtkMenuItem *menu_item,
  * Gets the submenu underneath this menu item, if any.
  * See gtk_menu_item_set_submenu().
  *
- * Returns: (transfer none): submenu for this menu item, or %NULL if none
+ * Returns: (nullable) (transfer none): submenu for this menu item, or %NULL if none
  */
 GtkWidget *
 gtk_menu_item_get_submenu (GtkMenuItem *menu_item)
@@ -2479,8 +2479,8 @@ gtk_menu_item_set_accel_path (GtkMenuItem *menu_item,
  *
  * See gtk_menu_item_set_accel_path() for details.
  *
- * Returns: the accelerator path corresponding to this menu
- *     item’s functionality, or %NULL if not set
+ * Returns: (nullable) (transfer none): the accelerator path corresponding to
+ *     this menu item’s functionality, or %NULL if not set
  *
  * Since: 2.14
  */

@@ -737,7 +737,7 @@ gtk_clipboard_set_with_owner (GtkClipboard          *clipboard,
  * gtk_clipboard_clear() has not subsequently called, returns the owner set
  * by gtk_clipboard_set_with_owner().
  *
- * Returns: (transfer none): the owner of the clipboard, if any;
+ * Returns: (nullable) (transfer none): the owner of the clipboard, if any;
  *     otherwise %NULL.
  **/
 GObject *

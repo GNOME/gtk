@@ -1903,8 +1903,8 @@ gtk_settings_get_for_screen (GdkScreen *screen)
  * Gets the #GtkSettings object for the default GDK screen, creating
  * it if necessary. See gtk_settings_get_for_screen().
  *
- * Returns: (transfer none): a #GtkSettings object. If there is no default
- *  screen, then returns %NULL.
+ * Returns: (nullable) (transfer none): a #GtkSettings object. If there is
+ * no default screen, then returns %NULL.
  **/
 GtkSettings*
 gtk_settings_get_default (void)

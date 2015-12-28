@@ -379,7 +379,7 @@ gtk_plug_get_embedded (GtkPlug *plug)
  *
  * Retrieves the socket the plug is embedded in.
  *
- * Returns: (transfer none): the window of the socket, or %NULL
+ * Returns: (nullable) (transfer none): the window of the socket, or %NULL
  *
  * Since: 2.14
  **/

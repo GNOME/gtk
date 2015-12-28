@@ -5766,7 +5766,8 @@ gtk_widget_queue_resize_no_redraw (GtkWidget *widget)
  *
  * Unrealized widgets do not have a frame clock.
  *
- * Returns: (transfer none): a #GdkFrameClock (or #NULL if widget is unrealized)
+ * Returns: (nullable) (transfer none): a #GdkFrameClock,
+ * or #NULL if widget is unrealized
  *
  * Since: 3.8
  */

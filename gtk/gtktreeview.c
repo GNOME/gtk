@@ -12256,8 +12256,8 @@ gtk_tree_view_get_n_columns (GtkTreeView *tree_view)
  *
  * Gets the #GtkTreeViewColumn at the given position in the #tree_view.
  *
- * Returns: (transfer none): The #GtkTreeViewColumn, or %NULL if the
- *     position is outside the range of columns.
+ * Returns: (nullable) (transfer none): The #GtkTreeViewColumn, or %NULL if the
+ * position is outside the range of columns.
  **/
 GtkTreeViewColumn *
 gtk_tree_view_get_column (GtkTreeView *tree_view,
@@ -13444,8 +13444,8 @@ gtk_tree_view_set_cursor_on_cell (GtkTreeView       *tree_view,
  * This is used primarily to compare to `event->window`
  * to confirm that the event on @tree_view is on the right window.
  *
- * Returns: (transfer none): A #GdkWindow, or %NULL when @tree_view
- *     hasn’t been realized yet
+ * Returns: (nullable) (transfer none): A #GdkWindow, or %NULL when @tree_view
+ * hasn’t been realized yet.
  **/
 GdkWindow *
 gtk_tree_view_get_bin_window (GtkTreeView *tree_view)

@@ -496,7 +496,7 @@ gtk_native_dialog_set_title (GtkNativeDialog *self,
  *
  * Gets the title of the #GtkNativeDialog.
  *
- * Returns: the title of the dialog, or %NULL if none has
+ * Returns: (nullable): the title of the dialog, or %NULL if none has
  *    been set explicitly. The returned string is owned by the widget
  *    and must not be modified or freed.
  *
@@ -546,8 +546,8 @@ gtk_native_dialog_set_transient_for (GtkNativeDialog *self,
  * Fetches the transient parent for this window. See
  * gtk_native_dialog_set_transient_for().
  *
- * Returns: (transfer none): the transient parent for this window, or %NULL
- *    if no transient parent has been set.
+ * Returns: (nullable) (transfer none): the transient parent for this window,
+ * or %NULL if no transient parent has been set.
  *
  * Since: 3.20
  **/

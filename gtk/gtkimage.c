@@ -1346,7 +1346,7 @@ gtk_image_get_storage_type (GtkImage *image)
  * The caller of this function does not own a reference to the
  * returned pixbuf.
  * 
- * Returns: (transfer none): the displayed pixbuf, or %NULL if
+ * Returns: (nullable) (transfer none): the displayed pixbuf, or %NULL if
  * the image is empty
  **/
 GdkPixbuf*
@@ -1433,7 +1433,7 @@ gtk_image_get_icon_set  (GtkImage        *image,
  * The caller of this function does not own a reference to the
  * returned animation.
  * 
- * Returns: (transfer none): the displayed animation, or %NULL if
+ * Returns: (nullable) (transfer none): the displayed animation, or %NULL if
  * the image is empty
  **/
 GdkPixbufAnimation*

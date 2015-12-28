@@ -1444,7 +1444,7 @@ gtk_builder_add_objects_from_string (GtkBuilder   *builder,
  * Gets the object named @name. Note that this function does not
  * increment the reference count of the returned object.
  *
- * Returns: (transfer none): the object named @name or %NULL if
+ * Returns: (nullable) (transfer none): the object named @name or %NULL if
  *    it could not be found in the object tree.
  *
  * Since: 2.12
@@ -2517,7 +2517,7 @@ gtk_builder_add_callback_symbols (GtkBuilder  *builder,
  * or for any case that one might be cusomizing signal connections
  * using gtk_builder_connect_signals_full()
  *
- * Returns: The callback symbol in @builder for @callback_name, or %NULL
+ * Returns: (nullable): The callback symbol in @builder for @callback_name, or %NULL
  *
  * Since: 3.10
  */
@@ -2660,7 +2660,7 @@ gtk_builder_set_application (GtkBuilder     *builder,
  * g_application_get_default(). If you want to use another application
  * for constructing proxies, use gtk_builder_set_application().
  *
- * Returns: (transfer none): the application being used by the builder,
+ * Returns: (nullable) (transfer none): the application being used by the builder,
  *     or %NULL
  *
  * Since: 3.10

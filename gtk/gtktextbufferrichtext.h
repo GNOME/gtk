@@ -40,8 +40,8 @@ G_BEGIN_DECLS
  * A function that is called to serialize the content of a text buffer.
  * It must return the serialized form of the content.
  *
- * Returns: a newly-allocated array of guint8 which contains the serialized
- *   data, or %NULL if an error occurred
+ * Returns: (nullable): a newly-allocated array of guint8 which contains
+ * the serialized data, or %NULL if an error occurred
  */
 typedef guint8 * (* GtkTextBufferSerializeFunc)   (GtkTextBuffer     *register_buffer,
                                                    GtkTextBuffer     *content_buffer,

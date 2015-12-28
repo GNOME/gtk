@@ -823,7 +823,7 @@ gtk_menu_button_set_popup (GtkMenuButton *menu_button,
  * If the button does not use a #GtkMenu, this function
  * returns %NULL.
  *
- * Returns: (transfer none): a #GtkMenu or %NULL
+ * Returns: (nullable) (transfer none): a #GtkMenu or %NULL
  *
  * Since: 3.6
  */
@@ -905,7 +905,7 @@ gtk_menu_button_set_menu_model (GtkMenuButton *menu_button,
  *
  * Returns the #GMenuModel used to generate the popup.
  *
- * Returns: (transfer none): a #GMenuModel or %NULL
+ * Returns: (nullable) (transfer none): a #GMenuModel or %NULL
  *
  * Since: 3.6
  */
@@ -974,7 +974,7 @@ gtk_menu_button_set_align_widget (GtkMenuButton *menu_button,
  *
  * Returns the parent #GtkWidget to use to line up with menu.
  *
- * Returns: (transfer none): a #GtkWidget value or %NULL
+ * Returns: (nullable) (transfer none): a #GtkWidget value or %NULL
  *
  * Since: 3.6
  */
@@ -1220,7 +1220,7 @@ gtk_menu_button_set_popover (GtkMenuButton *menu_button,
  * If the button is not using a #GtkPopover, this function
  * returns %NULL.
  *
- * Returns: (transfer none): a #GtkPopover or %NULL
+ * Returns: (nullable) (transfer none): a #GtkPopover or %NULL
  *
  * Since: 3.12
  */

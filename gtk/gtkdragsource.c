@@ -214,7 +214,7 @@ gtk_drag_source_unset (GtkWidget *widget)
  * Gets the list of targets this widget can provide for
  * drag-and-drop.
  *
- * Returns: (transfer none): the #GtkTargetList, or %NULL if none
+ * Returns: (nullable) (transfer none): the #GtkTargetList, or %NULL if none
  *
  * Since: 2.4
  */

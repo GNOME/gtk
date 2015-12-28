@@ -1172,7 +1172,7 @@ gtk_entry_completion_set_model (GtkEntryCompletion *completion,
  * Returns the model the #GtkEntryCompletion is using as data source.
  * Returns %NULL if the model is unset.
  *
- * Returns: (transfer none): A #GtkTreeModel, or %NULL if none
+ * Returns: (nullable) (transfer none): A #GtkTreeModel, or %NULL if none
  *     is currently being used
  *
  * Since: 2.4
@@ -1731,8 +1731,8 @@ gtk_entry_completion_cursor_on_match (GtkEntryCompletion *completion,
  * Note that a text column must have been set for this function to work,
  * see gtk_entry_completion_set_text_column() for details. 
  *
- * Returns: (transfer full): The common prefix all rows starting with @key
- *   or %NULL if no row matches @key.
+ * Returns: (nullable) (transfer full): The common prefix all rows starting with
+ *   @key or %NULL if no row matches @key.
  *
  * Since: 3.4
  **/

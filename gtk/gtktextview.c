@@ -3460,8 +3460,8 @@ gtk_text_view_set_tabs (GtkTextView   *text_view,
  * “standard” (8-space) tabs are used. Free the return value
  * with pango_tab_array_free().
  * 
- * Returns: copy of default tab array, or %NULL if “standard” 
- *    tabs are used; must be freed with pango_tab_array_free().
+ * Returns: (nullable) (transfer full): copy of default tab array, or %NULL if
+ *    “standard" tabs are used; must be freed with pango_tab_array_free().
  **/
 PangoTabArray*
 gtk_text_view_get_tabs (GtkTextView *text_view)
@@ -10206,7 +10206,7 @@ text_window_get_height (GtkTextWindow *win)
  * height is 0, and are nonexistent before the widget has been
  * realized.
  *
- * Returns: (transfer none): a #GdkWindow, or %NULL
+ * Returns: (nullable) (transfer none): a #GdkWindow, or %NULL
  **/
 GdkWindow*
 gtk_text_view_get_window (GtkTextView *text_view,

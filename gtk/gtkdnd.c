@@ -890,7 +890,7 @@ gtk_drag_get_data (GtkWidget      *widget,
  *
  * Determines the source widget for a drag.
  *
- * Returns: (transfer none): if the drag is occurring
+ * Returns: (nullable) (transfer none): if the drag is occurring
  *     within a single application, a pointer to the source widget.
  *     Otherwise, %NULL.
  */
@@ -1187,7 +1187,7 @@ gtk_drag_dest_unset (GtkWidget *widget)
  * Returns the list of targets this widget can accept from
  * drag-and-drop.
  * 
- * Returns: (transfer none): the #GtkTargetList, or %NULL if none
+ * Returns: (nullable) (transfer none): the #GtkTargetList, or %NULL if none
  */
 GtkTargetList*
 gtk_drag_dest_get_target_list (GtkWidget *widget)

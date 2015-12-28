@@ -199,8 +199,8 @@ G_DEFINE_TYPE_WITH_CODE (GtkFileChooserNative, gtk_file_chooser_native, GTK_TYPE
  *
  * Retrieves the custom label text for the accept button.
  *
- * Returns: The custom label, or %NULL for the default. This string is
- * owned by GTK+ and should not be modified or freed
+ * Returns: (nullable): The custom label, or %NULL for the default. This string
+ * is owned by GTK+ and should not be modified or freed
  *
  * Since: 3.20
  **/
@@ -245,8 +245,8 @@ gtk_file_chooser_native_set_accept_label (GtkFileChooserNative *self,
  *
  * Retrieves the custom label text for the cancel button.
  *
- * Returns: The custom label, or %NULL for the default. This string is
- * owned by GTK+ and should not be modified or freed
+ * Returns: (nullable): The custom label, or %NULL for the default. This string
+ * is owned by GTK+ and should not be modified or freed
  *
  * Since: 3.20
  **/

@@ -1154,7 +1154,7 @@ gtk_application_get_windows (GtkApplication *application)
  *
  * Returns the #GtkApplicationWindow with the given ID.
  *
- * Returns: (transfer none): the window with ID @id, or
+ * Returns: (nullable) (transfer none): the window with ID @id, or
  *   %NULL if there is no window with this ID
  *
  * Since: 3.6

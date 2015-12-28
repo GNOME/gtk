@@ -2101,7 +2101,7 @@ gtk_label_set_mnemonic_widget (GtkLabel  *label,
  * Retrieves the target of the mnemonic (keyboard shortcut) of this
  * label. See gtk_label_set_mnemonic_widget().
  *
- * Returns: (transfer none): the target of the label’s mnemonic,
+ * Returns: (nullable) (transfer none): the target of the label’s mnemonic,
  *     or %NULL if none has been set and the default algorithm will be used.
  **/
 GtkWidget *
@@ -2322,7 +2322,7 @@ gtk_label_set_attributes (GtkLabel         *label,
  * effective attributes for the label, use
  * pango_layout_get_attribute (gtk_label_get_layout (label)).
  *
- * Returns: (transfer none): the attribute list, or %NULL
+ * Returns: (nullable) (transfer none): the attribute list, or %NULL
  *     if none was set.
  **/
 PangoAttrList *

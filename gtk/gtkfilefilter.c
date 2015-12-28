@@ -432,7 +432,7 @@ gtk_file_filter_set_name (GtkFileFilter *filter,
  * 
  * Gets the human-readable name for the filter. See gtk_file_filter_set_name().
  * 
- * Returns: The human-readable name of the filter,
+ * Returns: (nullable): The human-readable name of the filter,
  *   or %NULL. This value is owned by GTK+ and must not
  *   be modified or freed.
  * 

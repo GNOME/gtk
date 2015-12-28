@@ -751,7 +751,8 @@ gtk_style_context_remove_provider_for_screen (GdkScreen        *screen,
  * Shorthand CSS properties cannot be queried for a location and will
  * always return %NULL.
  *
- * Returns: %NULL or the section where value was defined
+ * Returns: (nullable) (transfer none): %NULL or the section where a value
+ * for @property was defined
  **/
 GtkCssSection *
 gtk_style_context_get_section (GtkStyleContext *context,
@@ -1180,7 +1181,7 @@ gtk_style_context_set_parent (GtkStyleContext *context,
  * Gets the parent context set via gtk_style_context_set_parent().
  * See that function for details.
  *
- * Returns: (transfer none): the parent context or %NULL
+ * Returns: (nullable) (transfer none): the parent context or %NULL
  *
  * Since: 3.4
  **/
@@ -2026,7 +2027,7 @@ gtk_style_context_set_frame_clock (GtkStyleContext *context,
  *
  * Returns the #GdkFrameClock to which @context is attached.
  *
- * Returns: (transfer none): a #GdkFrameClock, or %NULL
+ * Returns: (nullable) (transfer none): a #GdkFrameClock, or %NULL
  *  if @context does not have an attached frame clock.
  *
  * Since: 3.8

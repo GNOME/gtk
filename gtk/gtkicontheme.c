@@ -3624,7 +3624,7 @@ gtk_icon_info_get_base_scale (GtkIconInfo *icon_info)
  * filename if a builtin icon is returned; in this case, you should
  * use gtk_icon_info_get_builtin_pixbuf().
  * 
- * Returns: (type filename): the filename for the icon, or %NULL
+ * Returns: (nullable) (type filename): the filename for the icon, or %NULL
  *     if gtk_icon_info_get_builtin_pixbuf() should be used instead.
  *     The return value is owned by GTK+ and should not be modified
  *     or freed.

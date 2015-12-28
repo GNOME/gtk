@@ -673,8 +673,8 @@ gtk_file_chooser_get_create_folders (GtkFileChooser *chooser)
  * If the file chooser is in folder mode, this function returns the selected
  * folder.
  * 
- * Returns: (type filename): The currently selected filename, or %NULL
- *  if no file is selected, or the selected file can't
+ * Returns: (nullable) (type filename): The currently selected filename,
+ *  or %NULL if no file is selected, or the selected file can't
  *  be represented with a local filename. Free with g_free().
  *
  * Since: 2.4
@@ -927,8 +927,8 @@ gtk_file_chooser_set_current_folder (GtkFileChooser *chooser,
  * currently-selected folder in that mode, use gtk_file_chooser_get_uri() as the
  * usual way to get the selection.
  * 
- * Returns: (type filename): the full path of the current folder,
- * or %NULL if the current path cannot be represented as a local
+ * Returns: (nullable) (type filename): the full path of the current
+ * folder, or %NULL if the current path cannot be represented as a local
  * filename.  Free with g_free().  This function will also return
  * %NULL if the file chooser was unable to load the last folder that
  * was requested from it; for example, as would be for calling
@@ -1021,10 +1021,10 @@ gtk_file_chooser_get_current_name (GtkFileChooser *chooser)
  * If the file chooser is in folder mode, this function returns the selected
  * folder.
  * 
- * Returns: The currently selected URI, or %NULL
- *  if no file is selected. If gtk_file_chooser_set_local_only() is set to %TRUE
- * (the default) a local URI will be returned for any FUSE locations.
- * Free with g_free()
+ * Returns: (nullable) (transfer full): The currently selected URI, or %NULL
+ *    if no file is selected. If gtk_file_chooser_set_local_only() is set to
+ *    %TRUE (the default) a local URI will be returned for any FUSE locations.
+ *    Free with g_free()
  *
  * Since: 2.4
  **/
@@ -1272,10 +1272,11 @@ gtk_file_chooser_set_current_folder_uri (GtkFileChooser *chooser,
  * currently-selected folder in that mode, use gtk_file_chooser_get_uri() as the
  * usual way to get the selection.
  * 
- * Returns: the URI for the current folder.  Free with g_free().  This
- * function will also return %NULL if the file chooser was unable to load the
- * last folder that was requested from it; for example, as would be for calling
- * gtk_file_chooser_set_current_folder_uri() on a nonexistent folder.
+ * Returns: (nullable) (transfer full): the URI for the current folder.
+ * Free with g_free().  This function will also return %NULL if the file chooser
+ * was unable to load the last folder that was requested from it; for example,
+ * as would be for calling gtk_file_chooser_set_current_folder_uri() on a
+ * nonexistent folder.
  *
  * Since: 2.4
  */
@@ -1560,7 +1561,7 @@ gtk_file_chooser_set_preview_widget (GtkFileChooser *chooser,
  * Gets the current preview widget; see
  * gtk_file_chooser_set_preview_widget().
  *
- * Returns: (transfer none): the current preview widget, or %NULL
+ * Returns: (nullable) (transfer none): the current preview widget, or %NULL
  *
  * Since: 2.4
  **/
@@ -1682,7 +1683,7 @@ gtk_file_chooser_get_use_preview_label (GtkFileChooser *chooser)
  * Gets the #GFile that should be previewed in a custom preview
  * Internal function, see gtk_file_chooser_get_preview_uri().
  *
- * Returns: (transfer full): the #GFile for the file to preview,
+ * Returns: (nullable) (transfer full): the #GFile for the file to preview,
  *     or %NULL if no file is selected. Free with g_object_unref().
  *
  * Since: 2.14
@@ -1752,7 +1753,7 @@ _gtk_file_chooser_remove_shortcut_folder (GtkFileChooser  *chooser,
  * Gets the filename that should be previewed in a custom preview
  * widget. See gtk_file_chooser_set_preview_widget().
  * 
- * Returns: (type filename): the filename to preview, or %NULL if
+ * Returns: (nullable) (type filename): the filename to preview, or %NULL if
  *  no file is selected, or if the selected file cannot be represented
  *  as a local filename. Free with g_free()
  *
@@ -1783,8 +1784,8 @@ gtk_file_chooser_get_preview_filename (GtkFileChooser *chooser)
  * Gets the URI that should be previewed in a custom preview
  * widget. See gtk_file_chooser_set_preview_widget().
  * 
- * Returns: the URI for the file to preview, or %NULL if no file is
- * selected. Free with g_free().
+ * Returns: (nullable) (transfer full): the URI for the file to preview,
+ *     or %NULL if no file is selected. Free with g_free().
  *
  * Since: 2.4
  **/
@@ -1831,7 +1832,7 @@ gtk_file_chooser_set_extra_widget (GtkFileChooser *chooser,
  * Gets the current preview widget; see
  * gtk_file_chooser_set_extra_widget().
  *
- * Returns: (transfer none): the current extra widget, or %NULL
+ * Returns: (nullable) (transfer none): the current extra widget, or %NULL
  *
  * Since: 2.4
  **/
@@ -1947,7 +1948,7 @@ gtk_file_chooser_set_filter (GtkFileChooser *chooser,
  *
  * Gets the current filter; see gtk_file_chooser_set_filter().
  *
- * Returns: (transfer none): the current filter, or %NULL
+ * Returns: (nullable) (transfer none): the current filter, or %NULL
  *
  * Since: 2.4
  **/

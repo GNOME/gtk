@@ -313,7 +313,7 @@ gtk_get_interface_age (void)
  * old version of gtk_check_version(), but still get loaded
  * into an application using a newer version of GTK+.
  *
- * Returns: %NULL if the GTK+ library is compatible with the
+ * Returns: (nullable): %NULL if the GTK+ library is compatible with the
  *   given version, or a string describing the version mismatch.
  *   The returned string is owned by GTK+ and should not be modified
  *   or freed.

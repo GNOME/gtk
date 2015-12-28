@@ -207,7 +207,7 @@ gtk_accessible_set_widget (GtkAccessible *accessible,
  * The returned widget does not have a reference added, so
  * you do not need to unref it.
  *
- * Returns: (transfer none): pointer to the #GtkWidget
+ * Returns: (nullable) (transfer none): pointer to the #GtkWidget
  *     corresponding to the #GtkAccessible, or %NULL.
  *
  * Since: 2.22

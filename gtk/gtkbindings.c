@@ -751,7 +751,7 @@ gtk_binding_set_find_interned (const gchar *set_name)
  * The @set_name can either be a name used for gtk_binding_set_new()
  * or the type name of a class used in gtk_binding_set_by_class().
  *
- * Returns: (transfer none): %NULL or the specified binding set
+ * Returns: (nullable) (transfer none): %NULL or the specified binding set
  */
 GtkBindingSet*
 gtk_binding_set_find (const gchar *set_name)

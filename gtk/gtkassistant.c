@@ -1684,7 +1684,7 @@ gtk_assistant_get_n_pages (GtkAssistant *assistant)
  *
  * Returns the child widget contained in page number @page_num.
  *
- * Returns: (transfer none): the child widget, or %NULL
+ * Returns: (nullable) (transfer none): the child widget, or %NULL
  *     if @page_num is out of bounds
  *
  * Since: 2.10

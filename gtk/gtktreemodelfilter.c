@@ -4128,7 +4128,7 @@ gtk_real_tree_model_filter_convert_child_path_to_path (GtkTreeModelFilter *filte
  * child model or points to a row which is not visible in @filter, then %NULL
  * is returned.
  *
- * Returns: A newly allocated #GtkTreePath, or %NULL.
+ * Returns: (nullable) (transfer full): A newly allocated #GtkTreePath, or %NULL.
  *
  * Since: 2.4
  */
@@ -4171,7 +4171,7 @@ gtk_tree_model_filter_convert_child_path_to_path (GtkTreeModelFilter *filter,
  * point to the same location in the model not being filtered. If @filter_path
  * does not point to a location in the child model, %NULL is returned.
  *
- * Returns: A newly allocated #GtkTreePath, or %NULL.
+ * Returns: (nullable) (transfer full): A newly allocated #GtkTreePath, or %NULL.
  *
  * Since: 2.4
  */
