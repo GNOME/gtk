@@ -5224,8 +5224,7 @@ static void
 gtk_notebook_tab_space (GtkNotebook         *notebook,
                         const GtkAllocation *allocation,
                         gboolean            *show_arrows,
-                        gint                *min,
-                        gint                *max,
+                        GtkAllocation       *tabs_allocation,
                         gint                *tab_space)
 {
   GtkNotebookPrivate *priv = notebook->priv;
@@ -5243,13 +5242,12 @@ gtk_notebook_tab_space (GtkNotebook         *notebook,
                         "scroll-arrow-vlength", &scroll_arrow_vlength,
                         NULL);
 
+  *tabs_allocation = *allocation;
+
   switch (tab_pos)
     {
     case GTK_POS_TOP:
     case GTK_POS_BOTTOM:
-      *min = allocation->x;
-      *max = allocation->x + allocation->width;
-
       while (children)
         {
           GtkNotebookPage *page;
@@ -5264,9 +5262,6 @@ gtk_notebook_tab_space (GtkNotebook         *notebook,
       break;
     case GTK_POS_RIGHT:
     case GTK_POS_LEFT:
-      *min = allocation->y;
-      *max = allocation->y + allocation->height;
-
       while (children)
         {
           GtkNotebookPage *page;
@@ -5289,14 +5284,14 @@ gtk_notebook_tab_space (GtkNotebook         *notebook,
         {
         case GTK_POS_TOP:
         case GTK_POS_BOTTOM:
-          if (*tab_space > *max - *min)
+          if (*tab_space > tabs_allocation->width)
             {
               guint i;
 
               *show_arrows = TRUE;
 
               /* take arrows into account */
-              *tab_space = *max - *min;
+              *tab_space = tabs_allocation->width;
 
               for (i = 0; i < 4; i++)
                 {
@@ -5304,32 +5299,32 @@ gtk_notebook_tab_space (GtkNotebook         *notebook,
                     continue;
 
                   *tab_space -= arrow_spacing + scroll_arrow_hlength;
+                  tabs_allocation->width -= arrow_spacing + scroll_arrow_hlength;
                   if (i < 2)
-                    *min += arrow_spacing + scroll_arrow_hlength;
-                  else
-                    *max -= arrow_spacing + scroll_arrow_hlength;
+                    tabs_allocation->x += arrow_spacing + scroll_arrow_hlength;
                 }
             }
           break;
         case GTK_POS_LEFT:
         case GTK_POS_RIGHT:
-          if (*tab_space > *max - *min)
+          if (*tab_space > tabs_allocation->height)
             {
               *show_arrows = TRUE;
 
               /* take arrows into account */
-              *tab_space = *max - *min;
+              *tab_space = tabs_allocation->height;
 
               if (priv->arrow_node[ARROW_LEFT_BEFORE] || priv->arrow_node[ARROW_RIGHT_BEFORE])
                 {
                   *tab_space -= arrow_spacing + scroll_arrow_vlength;
-                  *max -= arrow_spacing + scroll_arrow_vlength;
+                  tabs_allocation->x += arrow_spacing + scroll_arrow_vlength;
+                  tabs_allocation->height -= arrow_spacing + scroll_arrow_vlength;
                 }
 
               if (priv->arrow_node[ARROW_LEFT_AFTER] || priv->arrow_node[ARROW_RIGHT_AFTER])
                 {
                   *tab_space -= arrow_spacing + scroll_arrow_vlength;
-                  *min += arrow_spacing + scroll_arrow_vlength;
+                  tabs_allocation->height -= arrow_spacing + scroll_arrow_vlength;
                 }
             }
           break;
@@ -5338,14 +5333,13 @@ gtk_notebook_tab_space (GtkNotebook         *notebook,
 }
 
 static void
-gtk_notebook_calculate_shown_tabs (GtkNotebook  *notebook,
-                                   gboolean      show_arrows,
-                                   gint          min,
-                                   gint          max,
-                                   gint          tab_space,
-                                   GList       **last_child,
-                                   gint         *n,
-                                   gint         *remaining_space)
+gtk_notebook_calculate_shown_tabs (GtkNotebook          *notebook,
+                                   gboolean              show_arrows,
+                                   const GtkAllocation  *tabs_allocation,
+                                   gint                  tab_space,
+                                   GList               **last_child,
+                                   gint                 *n,
+                                   gint                 *remaining_space)
 {
   GtkNotebookPrivate *priv = notebook->priv;
   GList *children;
@@ -5513,10 +5507,15 @@ gtk_notebook_calculate_shown_tabs (GtkNotebook  *notebook,
       *n = 0;
 
       if (priv->tab_pos == GTK_POS_TOP || priv->tab_pos == GTK_POS_BOTTOM)
-        tab_expand_orientation = GTK_ORIENTATION_HORIZONTAL;
+        {
+          tab_expand_orientation = GTK_ORIENTATION_HORIZONTAL;
+          *remaining_space = tabs_allocation->width - tab_space;
+        }
       else
-        tab_expand_orientation = GTK_ORIENTATION_VERTICAL;
-      *remaining_space = max - min - tab_space;
+        {
+          tab_expand_orientation = GTK_ORIENTATION_VERTICAL;
+          *remaining_space = tabs_allocation->height - tab_space;
+        }
       children = priv->children;
       priv->first_tab = gtk_notebook_search_page (notebook, NULL,
                                                   STEP_NEXT, TRUE);
@@ -5565,15 +5564,14 @@ get_allocate_at_bottom (GtkWidget *widget,
 }
 
 static void
-gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
-                                        GList       **children,
-                                        GList        *last_child,
-                                        gboolean      showarrow,
-                                        gint          direction,
-                                        gint         *remaining_space,
-                                        gint         *expanded_tabs,
-                                        gint          min,
-                                        gint          max)
+gtk_notebook_calculate_tabs_allocation (GtkNotebook          *notebook,
+                                        GList               **children,
+                                        GList                *last_child,
+                                        gboolean              showarrow,
+                                        gint                  direction,
+                                        gint                 *remaining_space,
+                                        gint                 *expanded_tabs,
+                                        const GtkAllocation  *allocation)
 {
   GtkNotebookPrivate *priv = notebook->priv;
   GtkWidget *widget;
@@ -5593,27 +5591,29 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
   allocate_at_bottom = get_allocate_at_bottom (widget, direction);
   anchor = 0;
 
-  gtk_css_gadget_get_content_allocation (priv->tabs_gadget, &child_allocation, NULL);
+  child_allocation = *allocation;
 
   switch (tab_pos)
     {
     case GTK_POS_BOTTOM:
     case GTK_POS_TOP:
-      child_allocation.x = (allocate_at_bottom) ? max : min;
+      if (allocate_at_bottom)
+        child_allocation.x += allocation->width;
       anchor = child_allocation.x;
       break;
 
     case GTK_POS_RIGHT:
     case GTK_POS_LEFT:
-      child_allocation.y = (allocate_at_bottom) ? max : min;
+      if (allocate_at_bottom)
+        child_allocation.y += allocation->height;
       anchor = child_allocation.y;
       break;
     }
 
   left_x   = CLAMP (priv->mouse_x - priv->drag_offset_x,
-                    min, max - priv->cur_page->allocation.width);
+                    allocation->x, allocation->x + allocation->width - priv->cur_page->allocation.width);
   top_y    = CLAMP (priv->mouse_y - priv->drag_offset_y,
-                    min, max - priv->cur_page->allocation.height);
+                    allocation->y, allocation->y + allocation->height - priv->cur_page->allocation.height);
   right_x  = left_x + priv->cur_page->allocation.width;
   bottom_y = top_y + priv->cur_page->allocation.height;
   gap_left = packing_changed = FALSE;
@@ -5856,32 +5856,33 @@ gtk_notebook_pages_allocate (GtkNotebook         *notebook,
   GList *children = NULL;
   GList *last_child = NULL;
   gboolean showarrow = FALSE;
-  gint tab_space, min, max, remaining_space;
+  GtkAllocation tabs_allocation;
+  gint tab_space, remaining_space;
   gint expanded_tabs;
 
   if (!priv->show_tabs || !gtk_notebook_has_current_page (notebook))
     return;
 
-  min = max = tab_space = remaining_space = 0;
+  tab_space = remaining_space = 0;
   expanded_tabs = 1;
 
   gtk_notebook_tab_space (notebook, allocation,
-                          &showarrow, &min, &max, &tab_space);
+                          &showarrow, &tabs_allocation, &tab_space);
 
   gtk_notebook_calculate_shown_tabs (notebook, showarrow,
-                                     min, max, tab_space, &last_child,
+                                     &tabs_allocation, tab_space, &last_child,
                                      &expanded_tabs, &remaining_space);
 
   children = priv->first_tab;
   gtk_notebook_calculate_tabs_allocation (notebook, &children, last_child,
                                           showarrow, STEP_NEXT,
-                                          &remaining_space, &expanded_tabs, min, max);
+                                          &remaining_space, &expanded_tabs, &tabs_allocation);
   if (children && children != last_child)
     {
       children = priv->children;
       gtk_notebook_calculate_tabs_allocation (notebook, &children, last_child,
                                               showarrow, STEP_PREV,
-                                              &remaining_space, &expanded_tabs, min, max);
+                                              &remaining_space, &expanded_tabs, &tabs_allocation);
     }
 
   for (children = priv->children; children; children = children->next)
