@@ -1,0 +1,7 @@
+window visible=0 state=dir-ltr classes=background
+  decoration visible=1 state=dir-ltr
+  box visible=1 state=dir-ltr classes=horizontal
+    color: rgb(255,0,0) (currentcolor.css:4:12)
+    label visible=1 state=dir-ltr
+      color: rgb(255,0,0) (reset-to-defaults.css:2:12)
+      background-color: rgb(255,0,0) (currentcolor.css:8:32)

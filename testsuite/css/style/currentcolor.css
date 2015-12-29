@@ -1,0 +1,9 @@
+@import "reset-to-defaults.css";
+
+box {
+  color: red;
+}
+
+label {
+  background-color: currentColor;
+}

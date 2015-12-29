@@ -25,9 +25,10 @@ test_css_style_SOURCES = \
         test-css-style.c
 
 test_data = \
-        inherit.ui      inherit.css     inherit.nodes \
-	label.ui	label.css	label.nodes \
-	nth-child.ui	nth-child.css	nth-child.nodes \
+        currentcolor.ui currentcolor.css        currentcolor.nodes \
+        inherit.ui      inherit.css             inherit.nodes \
+	label.ui	label.css	        label.nodes \
+	nth-child.ui	nth-child.css	        nth-child.nodes \
 	$(NULL)
 
 EXTRA_DIST += $(test_in_files) $(test_data)
