@@ -8822,6 +8822,8 @@ gtk_widget_set_name (GtkWidget	 *widget,
   if (priv->context)
     gtk_style_context_set_id (priv->context, priv->name);
 
+  gtk_css_node_set_id (priv->cssnode, priv->name);
+
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_NAME]);
 }
 
