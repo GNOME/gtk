@@ -1106,10 +1106,6 @@ button, headerbar button.titlebutton,
     .inline-toolbar toolbutton > button:backdrop:disabled:active > .label, .inline-toolbar toolbutton > button:backdrop:disabled:checked > .label {
       color: inherit; }
 
-toolbar separator, .inline-toolbar separator, searchbar separator,
-.location-bar separator {
-  background: none; }
-
 toolbar.inline-toolbar toolbutton > button.flat, .inline-toolbar toolbutton > button.flat, searchbar.inline-toolbar toolbutton > button.flat,
 .inline-toolbar.location-bar toolbutton > button.flat, toolbar.inline-toolbar toolbutton > button.sidebar-button, .inline-toolbar toolbutton > button.sidebar-button, searchbar.inline-toolbar toolbutton > button.sidebar-button,
 .inline-toolbar.location-bar toolbutton > button.sidebar-button, .inline-toolbar headerbar toolbutton > button.titlebutton, headerbar .inline-toolbar toolbutton > button.titlebutton,
@@ -1572,6 +1568,15 @@ toolbar, .inline-toolbar, searchbar,
   .osd.top.location-bar, toolbar.osd.bottom, .osd.bottom.inline-toolbar, searchbar.osd.bottom,
   .osd.bottom.location-bar {
     border-radius: 0; }
+  toolbar separator, .inline-toolbar separator, searchbar separator,
+  .location-bar separator {
+    background: none; }
+  toolbar.horizontal separator, .horizontal.inline-toolbar separator, searchbar.horizontal separator,
+  .horizontal.location-bar separator {
+    margin: 0 6px; }
+  toolbar.vertical separator, .vertical.inline-toolbar separator, searchbar.vertical separator,
+  .vertical.location-bar separator {
+    margin: 6px 0; }
 
 .inline-toolbar {
   border-width: 0 1px 1px;

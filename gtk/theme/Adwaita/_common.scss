@@ -671,10 +671,6 @@ toolbar.inline-toolbar toolbutton:backdrop {
   &:only-child > button.flat { @extend %linked:only-child; }
 }
 
-toolbar separator {
-  background: none;
-}
-
 %linked_middle {
   border-radius: 0;
   border-right-style: none;
@@ -1049,6 +1045,21 @@ toolbar {
   &.osd.right,
   &.osd.top,
   &.osd.bottom { border-radius: 0; } // positional classes for `attached` osd toolbars
+
+  // toolbar separators
+  & separator {
+    background: none;
+  }
+  &.horizontal {
+    & separator {
+      margin: 0 6px;
+    }
+  }
+  &.vertical {
+    & separator {
+      margin: 6px 0;
+    }
+  }
 }
 
 //searchbar, location-bar & inline-toolbar

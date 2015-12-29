@@ -83,7 +83,6 @@ static gboolean gtk_separator_tool_item_draw              (GtkWidget            
                                                            cairo_t                   *cr);
 static void     gtk_separator_tool_item_add               (GtkContainer              *container,
                                                            GtkWidget                 *child);
-static gint     get_space_size                            (GtkToolItem               *tool_item);
 static void     gtk_separator_tool_item_realize           (GtkWidget                 *widget);
 static void     gtk_separator_tool_item_unrealize         (GtkWidget                 *widget);
 static void     gtk_separator_tool_item_map               (GtkWidget                 *widget);
@@ -93,42 +92,7 @@ static gboolean gtk_separator_tool_item_button_event      (GtkWidget            
 static gboolean gtk_separator_tool_item_motion_event      (GtkWidget                 *widget,
                                                            GdkEventMotion            *event);
 
-static void     gtk_separator_tool_item_get_size      (GtkCssGadget        *gadget,
-                                          GtkOrientation       orientation,
-                                          gint                 for_size,
-                                          gint                *minimum_size,
-                                          gint                *natural_size,
-                                          gint                *minimum_baseline,
-                                          gint                *natural_baseline,
-                                          gpointer             data);
-static gboolean gtk_separator_tool_item_render (GtkCssGadget        *gadget,
-                                          cairo_t             *cr,
-                                          int                  x,
-                                          int                  y,
-                                          int                  width,
-                                          int                  height,
-                                          gpointer             data);
-
-
 G_DEFINE_TYPE_WITH_PRIVATE (GtkSeparatorToolItem, gtk_separator_tool_item, GTK_TYPE_TOOL_ITEM)
-
-static gint
-get_space_size (GtkToolItem *tool_item)
-{
-  gint space_size = _gtk_toolbar_get_default_space_size();
-  GtkWidget *parent;
-
-  parent = gtk_widget_get_parent (GTK_WIDGET (tool_item));
-
-  if (GTK_IS_TOOLBAR (parent))
-    {
-      gtk_widget_style_get (parent,
-                            "space-size", &space_size,
-                            NULL);
-    }
-  
-  return space_size;
-}
 
 static void
 gtk_separator_tool_item_finalize (GObject *object)
@@ -201,11 +165,8 @@ gtk_separator_tool_item_init (GtkSeparatorToolItem *separator_item)
   separator_item->priv->gadget =
     gtk_css_custom_gadget_new_for_node (widget_node,
                                         widget,
-                                        gtk_separator_tool_item_get_size,
-                                        NULL,
-                                        gtk_separator_tool_item_render,
-                                        NULL,
-                                        NULL);
+                                        NULL, NULL, NULL,
+                                        NULL, NULL);
 }
 
 static void
@@ -487,54 +448,13 @@ gtk_separator_tool_item_set_draw (GtkSeparatorToolItem *item,
   if (draw != item->priv->draw)
     {
       item->priv->draw = draw;
+      if (draw)
+        gtk_css_gadget_remove_class (item->priv->gadget, "invisible");
+      else
+        gtk_css_gadget_add_class (item->priv->gadget, "invisible");
 
       gtk_widget_queue_draw (GTK_WIDGET (item));
 
       g_object_notify (G_OBJECT (item), "draw");
     }
-}
-
-static void
-gtk_separator_tool_item_get_size (GtkCssGadget   *gadget,
-                                  GtkOrientation  orientation,
-                                  gint            for_size,
-                                  gint           *minimum,
-                                  gint           *natural,
-                                  gint           *minimum_baseline,
-                                  gint           *natural_baseline,
-                                  gpointer        data)
-{
-  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
-
-  if (gtk_tool_item_get_orientation (GTK_TOOL_ITEM (widget)) == orientation)
-    *minimum = *natural = get_space_size (GTK_TOOL_ITEM (widget));
-  else
-    *minimum = *natural = 1;
-}
-
-static gboolean
-gtk_separator_tool_item_render (GtkCssGadget *gadget,
-                                cairo_t      *cr,
-                                int           x,
-                                int           y,
-                                int           width,
-                                int           height,
-                                gpointer      data)
-{
-  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
-  GtkToolbar *toolbar;
-  GtkWidget *parent;
-
-  if (GTK_SEPARATOR_TOOL_ITEM (widget)->priv->draw)
-    {
-      parent = gtk_widget_get_parent (widget);
-      if (GTK_IS_TOOLBAR (parent))
-        toolbar = GTK_TOOLBAR (parent);
-      else
-        toolbar = NULL;
-
-      _gtk_toolbar_paint_space_line (widget, toolbar, cr);
-    }
-
-  return FALSE;
 }

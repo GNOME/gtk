@@ -594,7 +594,14 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
 								    FALSE,
 								    GTK_PARAM_READWRITE));
   
-  /* style properties */
+  /**
+   * GtkToolbar:space-size:
+   *
+   * Size of toolbar spacers.
+   *
+   * Deprecated: 3.20: Use the standard margin/padding CSS properties on the
+   *   separator elements; the value of this style property is ignored.
+   */
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("space-size",
 							     P_("Spacer size"),
@@ -602,7 +609,7 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
 							     0,
 							     G_MAXINT,
                                                              DEFAULT_SPACE_SIZE,
-							     GTK_PARAM_READABLE));
+							     GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
   
   /**
    * GtkToolbar:internal-padding:
@@ -3600,97 +3607,6 @@ get_max_child_expand (GtkToolbar *toolbar)
 }
 
 /* GTK+ internal methods */
-
-gint
-_gtk_toolbar_get_default_space_size (void)
-{
-  return DEFAULT_SPACE_SIZE;
-}
-
-void
-_gtk_toolbar_paint_space_line (GtkWidget           *widget,
-			       GtkToolbar          *toolbar,
-                               cairo_t             *cr)
-{
-  GtkOrientation orientation;
-  GtkStyleContext *context;
-  GtkBorder padding;
-  gint width, height;
-  const gdouble start_fraction = (SPACE_LINE_START / SPACE_LINE_DIVISION);
-  const gdouble end_fraction = (SPACE_LINE_END / SPACE_LINE_DIVISION);
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  orientation = toolbar ? toolbar->priv->orientation : GTK_ORIENTATION_HORIZONTAL;
-
-  width = gtk_widget_get_allocated_width (widget);
-  height = gtk_widget_get_allocated_height (widget);
-
-  context = gtk_widget_get_style_context (widget);
-  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
-
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    {
-      gboolean wide_separators;
-      gint     separator_width;
-
-      gtk_widget_style_get (widget,
-                            "wide-separators", &wide_separators,
-                            "separator-width", &separator_width,
-                            NULL);
-
-      if (wide_separators)
-        {
-          gtk_render_background (context, cr,
-                                 (width - separator_width) / 2,
-                                 padding.top,
-                                 separator_width,
-                                 height - padding.bottom);
-          gtk_render_frame (context, cr,
-                            (width - separator_width) / 2,
-                            padding.top,
-                            separator_width,
-                            height - padding.bottom);
-        }
-      else
-        gtk_render_line (context, cr,
-                         (width - padding.left) / 2,
-                         height * start_fraction,
-                         (width - padding.left) / 2,
-                         height * end_fraction);
-    }
-  else
-    {
-      gboolean wide_separators;
-      gint     separator_height;
-
-      gtk_widget_style_get (widget,
-                            "wide-separators",  &wide_separators,
-                            "separator-height", &separator_height,
-                            NULL);
-
-      if (wide_separators)
-        {
-          gtk_render_background (context, cr,
-                                 padding.left,
-                                 (height - separator_height) / 2,
-                                 width - padding.right,
-                                 separator_height);
-          gtk_render_frame (context, cr,
-                            padding.left,
-                            (height - separator_height) / 2,
-                            width - padding.right,
-                            separator_height);
-        }
-      else
-        gtk_render_line (context, cr,
-                         width * start_fraction,
-                         (height - padding.top) / 2,
-                         width * end_fraction,
-                         (height - padding.top) / 2);
-    }
-}
-
 gchar *
 _gtk_toolbar_elide_underscores (const gchar *original)
 {
