@@ -5577,7 +5577,6 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
                                         gint          max)
 {
   GtkNotebookPrivate *priv = notebook->priv;
-  GtkAllocation allocation;
   GtkWidget *widget;
   GtkNotebookPage *page;
   gboolean allocate_at_bottom;
@@ -5585,7 +5584,7 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
   GtkPositionType tab_pos;
   gint left_x, right_x, top_y, bottom_y, anchor;
   gboolean gap_left, packing_changed;
-  GtkAllocation child_allocation = { 0, };
+  GtkAllocation child_allocation;
   GtkOrientation tab_expand_orientation;
 
   g_assert (priv->cur_page != NULL);
@@ -5595,30 +5594,19 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
   allocate_at_bottom = get_allocate_at_bottom (widget, direction);
   anchor = 0;
 
-  gtk_css_gadget_get_content_allocation (priv->gadget, &allocation, NULL);
-
-  child_allocation.x = allocation.x;
-  child_allocation.y = allocation.y;
+  gtk_css_gadget_get_content_allocation (priv->tabs_gadget, &child_allocation, NULL);
 
   switch (tab_pos)
     {
     case GTK_POS_BOTTOM:
-      child_allocation.y = allocation.y + allocation.height -
-        priv->cur_page->requisition.height;
-      /* fall through */
     case GTK_POS_TOP:
       child_allocation.x = (allocate_at_bottom) ? max : min;
-      child_allocation.height = priv->cur_page->requisition.height;
       anchor = child_allocation.x;
       break;
 
     case GTK_POS_RIGHT:
-      child_allocation.x = allocation.x + allocation.width -
-        priv->cur_page->requisition.width;
-      /* fall through */
     case GTK_POS_LEFT:
       child_allocation.y = (allocate_at_bottom) ? max : min;
-      child_allocation.width = priv->cur_page->requisition.width;
       anchor = child_allocation.y;
       break;
     }
