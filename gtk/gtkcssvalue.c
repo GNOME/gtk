@@ -71,8 +71,8 @@ _gtk_css_value_unref (GtkCssValue *value)
  * @value: the value to compute from
  * @property_id: the ID of the property to compute
  * @provider: Style provider for looking up extra information
- * @values: values to compute for
- * @parent_values: parent values to use for inherited values
+ * @style: Style to compute for
+ * @parent_style: parent style to use for inherited values
  *
  * Converts the specified @value into the computed value for the CSS
  * property given by @property_id using the information in @context.
