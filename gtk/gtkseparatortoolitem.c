@@ -187,18 +187,25 @@ gtk_separator_tool_item_class_init (GtkSeparatorToolItemClass *class)
 static void
 gtk_separator_tool_item_init (GtkSeparatorToolItem *separator_item)
 {
-  separator_item->priv = gtk_separator_tool_item_get_instance_private (separator_item);
-  separator_item->priv->draw = TRUE;
+  GtkSeparatorToolItemPrivate *priv;
+  GtkWidget *widget;
+  GtkCssNode *widget_node;
 
-  gtk_widget_set_has_window (GTK_WIDGET (separator_item), FALSE);
+  widget = GTK_WIDGET (separator_item);
+  priv = separator_item->priv = gtk_separator_tool_item_get_instance_private (separator_item);
+  priv->draw = TRUE;
 
- separator_item->priv->gadget = gtk_css_custom_gadget_new_for_node (gtk_widget_get_css_node (GTK_WIDGET (separator_item)),
-                                                     GTK_WIDGET (separator_item),
-                                                     gtk_separator_tool_item_get_size,
-                                                     NULL,
-                                                     gtk_separator_tool_item_render,
-                                                     NULL,
-                                                     NULL);
+  gtk_widget_set_has_window (widget, FALSE);
+
+  widget_node = gtk_widget_get_css_node (widget);
+  separator_item->priv->gadget =
+    gtk_css_custom_gadget_new_for_node (widget_node,
+                                        widget,
+                                        gtk_separator_tool_item_get_size,
+                                        NULL,
+                                        gtk_separator_tool_item_render,
+                                        NULL,
+                                        NULL);
 }
 
 static void
