@@ -556,32 +556,6 @@ gtk_menu_item_real_get_height (GtkWidget *widget,
       min_height = MAX (min_height, arrow_size);
       nat_height = MAX (nat_height, arrow_size);
     }
-  else /* separator item */
-    {
-      gboolean wide_separators;
-      gint     separator_height;
-
-      gtk_widget_style_get (widget,
-                            "wide-separators",  &wide_separators,
-                            "separator-height", &separator_height,
-                            NULL);
-
-      if (wide_separators)
-        {
-          min_height += separator_height;
-          nat_height += separator_height;
-        }
-      else
-        {
-          /* force odd, so that we can have the same space above and
-           * below the line.
-           */
-          if (min_height % 2 == 0)
-            min_height += 1;
-          if (nat_height % 2 == 0)
-            nat_height += 1;
-        }
-    }
 
   accel_width = 0;
   gtk_container_foreach (GTK_CONTAINER (menu_item),
