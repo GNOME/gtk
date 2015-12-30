@@ -890,7 +890,6 @@ headerbar {
     font-size: 80%;
     padding: 0 12px;
   }
-  .header-bar-separator,
   & > GtkBox > separator.vertical {
     border-width: 0 1px;
     border-color: $fg_color;
