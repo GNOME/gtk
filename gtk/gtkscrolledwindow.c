@@ -618,7 +618,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
 							         P_("Scrollbars within bevel"),
 							         P_("Place scrollbars within the scrolled window's bevel"),
 							         FALSE,
-							         GTK_PARAM_READABLE));
+							         GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("scrollbar-spacing",
