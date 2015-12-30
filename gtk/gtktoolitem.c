@@ -707,7 +707,7 @@ gtk_tool_item_get_ellipsize_mode (GtkToolItem *tool_item)
 {
   GtkWidget *parent;
   
-  g_return_val_if_fail (GTK_IS_TOOL_ITEM (tool_item), GTK_ORIENTATION_HORIZONTAL);
+  g_return_val_if_fail (GTK_IS_TOOL_ITEM (tool_item), PANGO_ELLIPSIZE_NONE);
 
   parent = gtk_widget_get_parent (GTK_WIDGET (tool_item));
   if (!parent || !GTK_IS_TOOL_SHELL (parent))
