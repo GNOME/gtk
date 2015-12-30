@@ -6327,18 +6327,18 @@ validate_row (GtkTreeView *tree_view,
 					  NULL, NULL, NULL,
 					  NULL, &row_height);
 
-      if (!is_separator)
+      if (is_separator)
 	{
-          row_height += vertical_separator;
-	  height = MAX (height, row_height);
-	  height = MAX (height, expander_size);
-	}
-      else
-        {
           if (wide_separators)
             height = separator_height;
           else
             height = 2;
+	}
+      else
+        {
+          row_height += vertical_separator;
+          height = MAX (height, row_height);
+          height = MAX (height, expander_size);
         }
 
       if (gtk_tree_view_is_expander_column (tree_view, column))
