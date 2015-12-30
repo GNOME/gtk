@@ -1131,8 +1131,6 @@ headerbar {
 
   .header-bar-separator,
   & > GtkBox > separator.vertical {
-    -GtkWidget-wide-separators: true;
-    -GtkWidget-separator-width: 1px;
     border-width: 0 1px;
     border-image: linear-gradient(to bottom,
                                   transparentize($borders_color,1),
@@ -2661,17 +2659,9 @@ scrolledwindow {
 //vbox and hbox separators
 separator {
   // always disable separators
-  // -GtkWidget-wide-separators: true;
   background: transparentize(black, 0.9);
   min-width: 1px;
   min-height: 1px;
-
-  // Font and File button separators
-  button.file &.vertical,
-  button.font &.vertical {
-    // always disable separators
-    -GtkWidget-wide-separators: true;
-  }
 }
 
 /*********

@@ -1632,8 +1632,6 @@ headerbar {
   .titlebar:not(headerbar) .header-bar-separator, .titlebar:not(headerbar) > GtkBox > separator.vertical,
   headerbar .header-bar-separator,
   headerbar > GtkBox > separator.vertical {
-    -GtkWidget-wide-separators: true;
-    -GtkWidget-separator-width: 1px;
     border-width: 0 1px;
     border-image: linear-gradient(to bottom, rgba(157, 157, 153, 0), #9d9d99 30%, #9d9d99 70%, rgba(157, 157, 153, 0) 100%) 0 1/0 1px stretch; }
     .titlebar:not(headerbar) .header-bar-separator:backdrop, .titlebar:not(headerbar) > GtkBox > separator.vertical:backdrop,
@@ -3874,8 +3872,6 @@ separator {
   background: rgba(0, 0, 0, 0.1);
   min-width: 1px;
   min-height: 1px; }
-  button.file separator.vertical, button.font separator.vertical {
-    -GtkWidget-wide-separators: true; }
 
 /*********
  * Lists *
