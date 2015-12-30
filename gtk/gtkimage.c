@@ -1223,7 +1223,6 @@ gtk_image_set_from_icon_name  (GtkImage       *image,
 			       GtkIconSize     size)
 {
   GtkImagePrivate *priv;
-  gchar *new_name;
 
   g_return_if_fail (GTK_IS_IMAGE (image));
 
@@ -1231,18 +1230,14 @@ gtk_image_set_from_icon_name  (GtkImage       *image,
 
   g_object_freeze_notify (G_OBJECT (image));
 
-  new_name = g_strdup (icon_name);
   gtk_image_clear (image);
 
-  if (new_name)
-    {
-      _gtk_icon_helper_set_icon_name (priv->icon_helper, new_name, size);
-      g_free (new_name);
-    }
+  if (icon_name)
+    _gtk_icon_helper_set_icon_name (priv->icon_helper, icon_name, size);
 
   g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_ICON_NAME]);
   g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_ICON_SIZE]);
-  
+
   g_object_thaw_notify (G_OBJECT (image));
 }
 
