@@ -115,37 +115,6 @@ gtk_separator_get_property (GObject    *object,
 }
 
 static void
-gtk_separator_measure (GtkCssGadget   *gadget,
-                       GtkOrientation  orientation,
-                       gint            for_size,
-                       gint           *minimum,
-                       gint           *natural,
-                       gint           *minimum_baseline,
-                       gint           *natural_baseline,
-                       gpointer        data)
-{
-  GtkWidget *widget;
-  gboolean wide_sep;
-  gint     sep_width;
-  gint     sep_height;
-
-  widget = gtk_css_gadget_get_owner (gadget);
-
-  gtk_widget_style_get (widget,
-                        "wide-separators",  &wide_sep,
-                        "separator-width",  &sep_width,
-                        "separator-height", &sep_height,
-                        NULL);
-
-  if (orientation == GTK_SEPARATOR (widget)->priv->orientation)
-    *minimum = *natural = 1;
-  else if (orientation == GTK_ORIENTATION_VERTICAL)
-    *minimum = *natural = wide_sep ? sep_height : 1;
-  else
-    *minimum = *natural = wide_sep ? sep_width : 1;
-}
-
-static void
 gtk_separator_get_preferred_width (GtkWidget *widget,
                                    gint      *minimum,
                                    gint      *natural)
@@ -209,11 +178,8 @@ gtk_separator_init (GtkSeparator *separator)
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (separator));
   separator->priv->gadget = gtk_css_custom_gadget_new_for_node (widget_node,
                                                                 GTK_WIDGET (separator),
-                                                                gtk_separator_measure,
-                                                                NULL,
-                                                                NULL,
-                                                                NULL,
-                                                                NULL);
+                                                                NULL, NULL, NULL,
+                                                                NULL, NULL);
 }
 
 static void
