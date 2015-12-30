@@ -64,6 +64,23 @@
 
 #include "deprecated/gtkrc.h"
 
+/* We need to call getc() a lot in a loop. This is suboptimal,
+ * as getc() does thread locking on the FILE it is given.
+ * To optimize that, lock the file first, then call getc(),
+ * then unlock.
+ * If locking functions are not present in libc, fall back
+ * to the suboptimal getc().
+ */
+#if !defined(HAVE_FLOCKFILE) && !defined(HAVE__LOCK_FILE)
+#  define flockfile(f) (void)1
+#  define funlockfile(f) (void)1
+#  define getc_unlocked(f) getc(f)
+#elif !defined(HAVE_FLOCKFILE) && defined(HAVE__LOCK_FILE)
+#  define flockfile(f) _lock_file(f)
+#  define funlockfile(f) _unlock_file(f)
+#  define getc_unlocked(f) _getc_nolock(f)
+#endif
+
 #define SIMPLE_ID "gtk-im-context-simple"
 #define NONE_ID   "gtk-im-context-none"
 
