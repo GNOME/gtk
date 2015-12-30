@@ -1129,7 +1129,6 @@ headerbar {
     @extend .dim-label;
   }
 
-  .header-bar-separator,
   & > GtkBox > separator.vertical {
     border-width: 0 1px;
     border-image: linear-gradient(to bottom,

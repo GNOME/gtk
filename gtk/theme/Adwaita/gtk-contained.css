@@ -1629,13 +1629,11 @@ headerbar {
     font-size: smaller;
     padding-left: 12px;
     padding-right: 12px; }
-  .titlebar:not(headerbar) .header-bar-separator, .titlebar:not(headerbar) > GtkBox > separator.vertical,
-  headerbar .header-bar-separator,
+  .titlebar:not(headerbar) > GtkBox > separator.vertical,
   headerbar > GtkBox > separator.vertical {
     border-width: 0 1px;
     border-image: linear-gradient(to bottom, rgba(157, 157, 153, 0), #9d9d99 30%, #9d9d99 70%, rgba(157, 157, 153, 0) 100%) 0 1/0 1px stretch; }
-    .titlebar:not(headerbar) .header-bar-separator:backdrop, .titlebar:not(headerbar) > GtkBox > separator.vertical:backdrop,
-    headerbar .header-bar-separator:backdrop,
+    .titlebar:not(headerbar) > GtkBox > separator.vertical:backdrop,
     headerbar > GtkBox > separator.vertical:backdrop {
       border-image: linear-gradient(to bottom, rgba(165, 165, 161, 0.5)) 0 1/1px 1px; }
   .selection-mode.titlebar:not(headerbar),
