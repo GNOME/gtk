@@ -1503,6 +1503,33 @@ update_node_classes (GtkMenuItem *menu_item)
     }
 }
 
+static void
+update_arrow_gadget (GtkMenuItem *menu_item)
+{
+  GtkMenuItemPrivate *priv = menu_item->priv;
+  GtkWidget *widget = GTK_WIDGET (menu_item);
+  gboolean should_have_gadget;
+
+  should_have_gadget = priv->reserve_indicator ||
+    (priv->submenu && !GTK_IS_MENU_BAR (gtk_widget_get_parent (widget)));
+
+  if (should_have_gadget)
+    {
+      if (!priv->arrow_gadget)
+        {
+          priv->arrow_gadget = gtk_builtin_icon_new ("arrow",
+                                                     widget,
+                                                     priv->gadget,
+                                                     NULL);
+          update_node_classes (menu_item);
+        }
+    }
+  else
+    {
+      g_clear_object (&priv->arrow_gadget);
+    }
+}
+
 /**
  * gtk_menu_item_set_submenu:
  * @menu_item: a #GtkMenuItem
@@ -1536,14 +1563,7 @@ gtk_menu_item_set_submenu (GtkMenuItem *menu_item,
                                      widget,
                                      gtk_menu_item_detacher);
 
-          if (!GTK_IS_MENU_BAR (gtk_widget_get_parent (widget)))
-            {
-              priv->arrow_gadget = gtk_builtin_icon_new ("arrow",
-                                                         widget,
-                                                         priv->gadget,
-                                                         NULL);
-              update_node_classes (menu_item);
-            }
+          update_arrow_gadget (menu_item);
         }
 
       if (gtk_widget_get_parent (widget))
@@ -2666,6 +2686,7 @@ gtk_menu_item_set_reserve_indicator (GtkMenuItem *menu_item,
   if (priv->reserve_indicator != reserve)
     {
       priv->reserve_indicator = reserve;
+      update_arrow_gadget (menu_item);
       gtk_widget_queue_resize (GTK_WIDGET (menu_item));
     }
 }
