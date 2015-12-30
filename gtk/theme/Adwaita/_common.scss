@@ -1352,8 +1352,11 @@ treeview.view {
     &:backdrop { color: $backdrop_insensitive_color; }
   }
 
-  &.separator:backdrop {
-    color: transparentize(black, 0.9);
+  &.separator {
+    min-height: 2px;
+    &:backdrop {
+      color: transparentize(black, 0.9);
+    }
   }
 
   &:backdrop {

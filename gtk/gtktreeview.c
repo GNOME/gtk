@@ -24,6 +24,7 @@
 #include "gtktreeview.h"
 
 #include "gtkadjustmentprivate.h"
+#include "gtkcssnumbervalueprivate.h"
 #include "gtkrbtree.h"
 #include "gtktreednd.h"
 #include "gtktreeprivate.h"
@@ -6239,6 +6240,32 @@ node_is_visible (GtkTreeView *tree_view,
   return FALSE;
 }
 
+static gint
+get_separator_height (GtkTreeView *tree_view)
+{
+  GtkStyleContext *context;
+  GtkCssStyle *style;
+  gdouble d;
+  gint min_size;
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (tree_view));
+  gtk_style_context_save (context);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_SEPARATOR);
+
+  style = gtk_style_context_lookup_style (context);
+  d = _gtk_css_number_value_get
+    (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_MIN_HEIGHT), 100);
+
+  if (d < 1)
+    min_size = ceil (d);
+  else
+    min_size = floor (d);
+
+  gtk_style_context_restore (context);
+
+  return min_size;
+}
+
 /* Returns TRUE if it updated the size
  */
 static gboolean
@@ -6259,8 +6286,6 @@ validate_row (GtkTreeView *tree_view,
   gboolean is_separator = FALSE;
   gboolean draw_vgrid_lines, draw_hgrid_lines;
   gint grid_line_width;
-  gboolean wide_separators;
-  gint separator_height;
   gint expander_size;
 
   /* double check the row needs validating */
@@ -6274,8 +6299,6 @@ validate_row (GtkTreeView *tree_view,
 			"horizontal-separator", &horizontal_separator,
 			"vertical-separator", &vertical_separator,
 			"grid-line-width", &grid_line_width,
-                        "wide-separators",  &wide_separators,
-                        "separator-height", &separator_height,
 			NULL);
   
   draw_vgrid_lines =
@@ -6328,12 +6351,9 @@ validate_row (GtkTreeView *tree_view,
 					  NULL, &row_height);
 
       if (is_separator)
-	{
-          if (wide_separators)
-            height = separator_height;
-          else
-            height = 2;
-	}
+        {
+          height = get_separator_height (tree_view);
+        }
       else
         {
           row_height += vertical_separator;

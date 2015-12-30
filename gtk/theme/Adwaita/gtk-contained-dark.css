@@ -1998,8 +1998,10 @@ treeview.view {
         color: #648eba; }
     treeview.view:disabled:backdrop {
       color: #5d6767; }
-  treeview.view.separator:backdrop {
-    color: rgba(0, 0, 0, 0.1); }
+  treeview.view.separator {
+    min-height: 2px; }
+    treeview.view.separator:backdrop {
+      color: rgba(0, 0, 0, 0.1); }
   treeview.view:backdrop {
     border-left-color: #676b6b;
     border-top: #393f3f; }
