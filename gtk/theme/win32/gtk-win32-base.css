@@ -810,13 +810,6 @@ GtkComboBox GtkCellLayout * {
     background-color: -gtk-win32-color(listview, 5);
 }
 
-GtkComboBox .separator {
-    /* always disable separators */
-    -GtkWidget-wide-separators: true;
-    -GtkWidget-horizontal-separator: 0;
-    -GtkWidget-vertical-separator: 0;
-}
-
 /* Draw "arrow" for non-entry comboboxes. Select the box, since selecting
    the arrow itself does not seem to work as intended. */
 GtkComboBox GtkBox {
