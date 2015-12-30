@@ -631,13 +631,21 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
                                                              G_MAXINT,
                                                              GTK_PARAM_READABLE));
 
+  /**
+   * GtkToolbar:space-style:
+   *
+   * Style of toolbar spacers.
+   *
+   * Deprecated: 3.20: Use CSS properties on the separator elements to style
+   *   toolbar spacers; the value of this style property is ignored.
+   */
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_enum ("space-style",
 							      P_("Space style"),
 							      P_("Whether spacers are vertical lines or just blank"),
                                                               GTK_TYPE_TOOLBAR_SPACE_STYLE,
                                                               DEFAULT_SPACE_STYLE,
-                                                              GTK_PARAM_READABLE));
+                                                              GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
   
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_enum ("button-relief",

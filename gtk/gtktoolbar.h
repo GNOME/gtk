@@ -54,6 +54,8 @@ G_BEGIN_DECLS
  * @GTK_TOOLBAR_SPACE_LINE: Use vertical lines for spacers.
  *
  * Whether spacers are vertical lines or just blank.
+ *
+ * Deprecated: 3.20
  */
 typedef enum
 {
