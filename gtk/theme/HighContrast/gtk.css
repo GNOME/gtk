@@ -906,10 +906,6 @@ combobox {
     color: gray; }
   combobox .menuitem {
     text-shadow: none; }
-  combobox separator.vertical,
-  combobox placessidebar .view separator.vertical:backdrop,
-  placessidebar .view combobox separator.vertical:backdrop {
-    -GtkWidget-wide-separators: true; }
   combobox.combobox-entry entry {
     border-radius: 3px 0 0 3px; }
     combobox.combobox-entry entry:dir(rtl) {
@@ -989,8 +985,6 @@ headerbar {
   headerbar .header-bar-separator,
   headerbar > GtkBox > separator.vertical,
   placessidebar .view headerbar > GtkBox > separator.vertical:backdrop {
-    -GtkWidget-wide-separators: true;
-    -GtkWidget-separator-width: 1px;
     border-width: 0 1px;
     border-color: #000;
     border-style: solid; }
@@ -1162,6 +1156,7 @@ treeview.view {
     treeview.view:insensitive:backdrop {
       color: gray; }
   treeview.view.separator:backdrop {
+    min-height: 2px;
     color: rgba(0, 0, 0, 0.1); }
   treeview.view:backdrop {
     color: #000;
@@ -2189,11 +2184,9 @@ scrollbar scrolledwindow trough {
 
 separator, placessidebar .view separator,
 placessidebar .view separator:backdrop {
-  color: gray; }
-  GtkFileChooserButton separator.vertical,
-  GtkFileChooserButton placessidebar .view separator.vertical:backdrop,
-  placessidebar .view GtkFileChooserButton separator.vertical:backdrop, button.font separator.vertical {
-    -GtkWidget-wide-separators: true; }
+  background: gray;
+  min-width: 1px;
+  min-height: 1px; }
 
 /*********
  * Lists *

@@ -439,9 +439,7 @@ button {
   }
 
   .primary-toolbar & { -gtk-icon-shadow: none; } // tango icons don't need added shadows
-//  .separator {
-//    -GtkWidget-wide-separators: true;
-//   }
+
   .linked > &,
   .linked > &:hover,
   .linked > &:active,
@@ -763,10 +761,6 @@ combobox {
     color: $insensitive_fg_color;
   }
   .menuitem { text-shadow: none; }
-  & separator.vertical {
-    // always disable separators
-    -GtkWidget-wide-separators: true;
-  }
   &.combobox-entry entry {
     border-radius: 3px 0 0 3px;
     &:dir(rtl) {
@@ -898,8 +892,6 @@ headerbar {
   }
   .header-bar-separator,
   & > GtkBox > separator.vertical {
-    -GtkWidget-wide-separators: true;
-    -GtkWidget-separator-width: 1px;
     border-width: 0 1px;
     border-color: $fg_color;
     border-style: solid;
@@ -998,6 +990,7 @@ treeview.view {
   }
 
   &.separator:backdrop {
+    min-height: 2px;
     color: transparentize(black, 0.9);
   }
 
@@ -1931,16 +1924,9 @@ scrolledwindow {
 
 //vbox and hbox separators
 separator {
-  // always disable separators
-  // -GtkWidget-wide-separators: true;
-  color: $borders_color;
-
-  // Font and File button separators
-  GtkFileChooserButton &.vertical,
-  button.font &.vertical {
-    // always disable separators
-    -GtkWidget-wide-separators: true;
-  }
+  background: $borders_color;
+  min-width: 1px;
+  min-height: 1px;
 }
 
 /*********
