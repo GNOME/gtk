@@ -7137,15 +7137,15 @@ gtk_window_realize (GtkWidget *widget)
       allocation.width == 1 &&
       allocation.height == 1)
     {
-      gint w, h;
+      GdkRectangle request;
+      gint default_width, default_height;
+
+      gtk_window_compute_configure_request (window, &request, NULL, NULL);
 
       allocation.x = 0;
       allocation.y = 0;
-
-      gtk_window_guess_default_size (window, &allocation.width, &allocation.height);
-      gtk_window_get_remembered_size (window, &w, &h);
-      allocation.width = MAX (allocation.width, w);
-      allocation.height = MAX (allocation.height, h);
+      allocation.width = request.width;
+      allocation.height = request.height;
       gtk_widget_size_allocate (widget, &allocation);
 
       gtk_widget_queue_resize (widget);
