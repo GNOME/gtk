@@ -446,7 +446,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
    * Style of bevel around the sping button.
    *
    * Deprecated: 3.20: Use CSS to determine the style of the border;
-   *     the value of this syyle property is ignored.
+   *     the value of this style property is ignored.
    */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_enum ("shadow-type",
