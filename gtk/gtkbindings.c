@@ -77,7 +77,7 @@
  * }
  * GtkEntry
  * {
- *   gtk-key-bindings: MoveCursor3;
+ *   -gtk-key-bindings: MoveCursor3;
  * }
  * ]|
  *
@@ -99,7 +99,7 @@
  * }
  * GtkEntry
  * {
- *   gtk-key-bindings: MoveCursor3;
+ *   -gtk-key-bindings: MoveCursor3;
  * }
  * ]|
  *
@@ -122,7 +122,7 @@
  * }
  * GtkEntry
  * {
- *   gtk-key-bindings: MoveCursor3;
+ *   -gtk-key-bindings: MoveCursor3;
  * }
  * ]|
  *
