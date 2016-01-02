@@ -512,124 +512,125 @@ gtk_menu_bar_allocate (GtkCssGadget        *gadget,
   menu_shell = GTK_MENU_SHELL (widget);
   priv = menu_bar->priv;
 
-  if (menu_shell->priv->children)
+  if (!menu_shell->priv->children)
+    return;
+
+  remaining_space = *allocation;
+  requested_sizes = g_array_new (FALSE, FALSE, sizeof (GtkRequestedSize));
+
+  if (priv->pack_direction == GTK_PACK_DIRECTION_LTR ||
+      priv->pack_direction == GTK_PACK_DIRECTION_RTL)
     {
-      remaining_space = *allocation;
-      requested_sizes = g_array_new (FALSE, FALSE, sizeof (GtkRequestedSize));
+      int size = remaining_space.width;
+      gboolean ltr = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR) == (priv->pack_direction == GTK_PACK_DIRECTION_LTR);
 
-      if (priv->pack_direction == GTK_PACK_DIRECTION_LTR ||
-	  priv->pack_direction == GTK_PACK_DIRECTION_RTL)
-	{
-          int size = remaining_space.width;
-          gboolean ltr = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR) == (priv->pack_direction == GTK_PACK_DIRECTION_LTR);
+      for (children = menu_shell->priv->children; children; children = children->next)
+        {
+          GtkRequestedSize request;
+          child = children->data;
 
-          for (children = menu_shell->priv->children; children; children = children->next)
-            {
-              GtkRequestedSize request;
-	      child = children->data;
+          if (!gtk_widget_get_visible (child))
+            continue;
 
-	      if (!gtk_widget_get_visible (child))
-                continue;
+          request.data = child;
+          gtk_widget_get_preferred_width_for_height (child, 
+                                                     remaining_space.height,
+                                                     &request.minimum_size, 
+                                                     &request.natural_size);
+          gtk_menu_item_toggle_size_request (GTK_MENU_ITEM (child),
+                                             &toggle_size);
+          request.minimum_size += toggle_size;
+          request.natural_size += toggle_size;
 
-              request.data = child;
-              gtk_widget_get_preferred_width_for_height (child, 
-                                                         remaining_space.height,
-                                                         &request.minimum_size, 
-                                                         &request.natural_size);
-	      gtk_menu_item_toggle_size_request (GTK_MENU_ITEM (child),
-						 &toggle_size);
-              request.minimum_size += toggle_size;
-              request.natural_size += toggle_size;
+          gtk_menu_item_toggle_size_allocate (GTK_MENU_ITEM (child), toggle_size);
 
-	      gtk_menu_item_toggle_size_allocate (GTK_MENU_ITEM (child), toggle_size);
+          g_array_append_val (requested_sizes, request);
 
-              g_array_append_val (requested_sizes, request);
+          size -= request.minimum_size;
+        }
 
-              size -= request.minimum_size;
-            }
+      size = gtk_distribute_natural_allocation (size,
+                                                requested_sizes->len,
+                                                (GtkRequestedSize *) requested_sizes->data);
 
-          size = gtk_distribute_natural_allocation (size,
-                                                    requested_sizes->len,
-                                                    (GtkRequestedSize *) requested_sizes->data);
+      for (i = 0; i < requested_sizes->len; i++)
+        {
+          GtkAllocation child_allocation = remaining_space;
+          GtkRequestedSize *request = &g_array_index (requested_sizes, GtkRequestedSize, i);
 
-          for (i = 0; i < requested_sizes->len; i++)
-            {
-              GtkAllocation child_allocation = remaining_space;
-              GtkRequestedSize *request = &g_array_index (requested_sizes, GtkRequestedSize, i);
+          child_allocation.width = request->minimum_size;
+          remaining_space.width -= request->minimum_size;
 
-              child_allocation.width = request->minimum_size;
-              remaining_space.width -= request->minimum_size;
+          if (i + 1 == requested_sizes->len && GTK_IS_MENU_ITEM (request->data) &&
+              GTK_MENU_ITEM (request->data)->priv->right_justify)
+            ltr = !ltr;
 
-	      if (i + 1 == requested_sizes->len && GTK_IS_MENU_ITEM (request->data) &&
-                  GTK_MENU_ITEM (request->data)->priv->right_justify)
-                ltr = !ltr;
+          if (ltr)
+            remaining_space.x += request->minimum_size;
+          else
+            child_allocation.x += remaining_space.width;
 
-              if (ltr)
-                remaining_space.x += request->minimum_size;
-              else
-                child_allocation.x += remaining_space.width;
-
-              gtk_widget_size_allocate (request->data, &child_allocation);
-            }
-	}
-      else
-	{
-          int size = remaining_space.height;
-          gboolean ttb = (priv->pack_direction == GTK_PACK_DIRECTION_TTB);
-
-          for (children = menu_shell->priv->children; children; children = children->next)
-            {
-              GtkRequestedSize request;
-	      child = children->data;
-
-	      if (!gtk_widget_get_visible (child))
-                continue;
-
-              request.data = child;
-              gtk_widget_get_preferred_height_for_width (child, 
-                                                         remaining_space.width,
-                                                         &request.minimum_size, 
-                                                         &request.natural_size);
-	      gtk_menu_item_toggle_size_request (GTK_MENU_ITEM (child),
-						 &toggle_size);
-              request.minimum_size += toggle_size;
-              request.natural_size += toggle_size;
-
-	      gtk_menu_item_toggle_size_allocate (GTK_MENU_ITEM (child), toggle_size);
-
-              g_array_append_val (requested_sizes, request);
-
-              size -= request.minimum_size;
-            }
-
-          size = gtk_distribute_natural_allocation (size,
-                                                    requested_sizes->len,
-                                                    (GtkRequestedSize *) requested_sizes->data);
-
-          for (i = 0; i < requested_sizes->len; i++)
-            {
-              GtkAllocation child_allocation = remaining_space;
-              GtkRequestedSize *request = &g_array_index (requested_sizes, GtkRequestedSize, i);
-
-              child_allocation.height = request->minimum_size;
-              remaining_space.height -= request->minimum_size;
-
-	      if (i + 1 == requested_sizes->len && GTK_IS_MENU_ITEM (request->data) &&
-                  GTK_MENU_ITEM (request->data)->priv->right_justify)
-                ttb = !ttb;
-
-              if (ttb)
-                remaining_space.y += request->minimum_size;
-              else
-                child_allocation.y += remaining_space.height;
-
-              gtk_widget_size_allocate (request->data, &child_allocation);
-            }
-	}
-
-      g_array_free (requested_sizes, TRUE);
+          gtk_widget_size_allocate (request->data, &child_allocation);
+        }
     }
+  else
+    {
+      int size = remaining_space.height;
+      gboolean ttb = (priv->pack_direction == GTK_PACK_DIRECTION_TTB);
+
+      for (children = menu_shell->priv->children; children; children = children->next)
+        {
+          GtkRequestedSize request;
+          child = children->data;
+
+          if (!gtk_widget_get_visible (child))
+            continue;
+
+          request.data = child;
+          gtk_widget_get_preferred_height_for_width (child, 
+                                                     remaining_space.width,
+                                                     &request.minimum_size, 
+                                                     &request.natural_size);
+          gtk_menu_item_toggle_size_request (GTK_MENU_ITEM (child),
+                                             &toggle_size);
+          request.minimum_size += toggle_size;
+          request.natural_size += toggle_size;
+
+          gtk_menu_item_toggle_size_allocate (GTK_MENU_ITEM (child), toggle_size);
+
+          g_array_append_val (requested_sizes, request);
+
+          size -= request.minimum_size;
+        }
+
+      size = gtk_distribute_natural_allocation (size,
+                                                requested_sizes->len,
+                                                (GtkRequestedSize *) requested_sizes->data);
+
+      for (i = 0; i < requested_sizes->len; i++)
+        {
+          GtkAllocation child_allocation = remaining_space;
+          GtkRequestedSize *request = &g_array_index (requested_sizes, GtkRequestedSize, i);
+
+          child_allocation.height = request->minimum_size;
+          remaining_space.height -= request->minimum_size;
+
+          if (i + 1 == requested_sizes->len && GTK_IS_MENU_ITEM (request->data) &&
+              GTK_MENU_ITEM (request->data)->priv->right_justify)
+            ttb = !ttb;
+
+          if (ttb)
+            remaining_space.y += request->minimum_size;
+          else
+            child_allocation.y += remaining_space.height;
+
+          gtk_widget_size_allocate (request->data, &child_allocation);
+        }
+    }
+
+  g_array_free (requested_sizes, TRUE);
 }
+
 static void
 gtk_menu_bar_size_allocate (GtkWidget     *widget,
 			    GtkAllocation *allocation)
