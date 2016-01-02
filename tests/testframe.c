@@ -38,9 +38,13 @@ spin_ythickness_cb (GtkSpinButton *spin, gpointer user_data)
                                       GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
 
-  gtk_style_context_get_padding (context, GTK_STATE_FLAG_NORMAL, &pad);
+  gtk_style_context_save (context);
+  gtk_style_context_set_state (context, GTK_STATE_FLAG_NORMAL);
+  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &pad);
+  gtk_style_context_restore (context);
 
-  data = g_strdup_printf ("GtkFrame { padding: %d %d }",
+
+  data = g_strdup_printf ("GtkFrame { padding: %dpx %dpx }",
                           pad.top,
                           (gint)gtk_spin_button_get_value (spin));
 
@@ -70,9 +74,13 @@ spin_xthickness_cb (GtkSpinButton *spin, gpointer user_data)
                                       GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
 
-  gtk_style_context_get_padding (context, GTK_STATE_FLAG_NORMAL, &pad);
+  gtk_style_context_save (context);
+  gtk_style_context_set_state (context, GTK_STATE_FLAG_NORMAL);
+  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &pad);
+  gtk_style_context_restore (context);
 
-  data = g_strdup_printf ("GtkFrame { padding: %d %d }",
+
+  data = g_strdup_printf ("GtkFrame { padding: %dpx %dpx }",
                           (gint)gtk_spin_button_get_value (spin),
                           pad.left);
 
@@ -149,7 +157,10 @@ int main (int argc, char **argv)
   gtk_box_pack_start (GTK_BOX (vbox), grid, FALSE, FALSE, 0);
 
   context = gtk_widget_get_style_context (frame);
-  gtk_style_context_get_padding (context, GTK_STATE_FLAG_NORMAL, &pad);
+  gtk_style_context_save (context);
+  gtk_style_context_set_state (context, GTK_STATE_FLAG_NORMAL);
+  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &pad);
+  gtk_style_context_restore (context);
 
   /* Spin to control xthickness */
   label = gtk_label_new ("xthickness: ");
