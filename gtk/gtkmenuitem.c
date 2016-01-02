@@ -297,6 +297,8 @@ gtk_menu_item_render (GtkCssGadget *gadget,
   if (priv->submenu && !GTK_IS_MENU_BAR (parent))
     gtk_css_gadget_draw (priv->arrow_gadget, cr);
 
+  GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->draw (widget, cr);
+
   return FALSE;
 }
 
@@ -305,8 +307,6 @@ gtk_menu_item_draw (GtkWidget *widget,
                     cairo_t   *cr)
 {
   gtk_css_gadget_draw (GTK_MENU_ITEM (widget)->priv->gadget, cr);
-
-  GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->draw (widget, cr);
 
   return FALSE;
 }
