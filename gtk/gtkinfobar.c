@@ -606,21 +606,22 @@ close_button_clicked_cb (GtkWidget  *button,
 static void
 gtk_info_bar_init (GtkInfoBar *info_bar)
 {
+  GtkInfoBarPrivate *priv;
   GtkWidget *widget = GTK_WIDGET (info_bar);
 
-  info_bar->priv = gtk_info_bar_get_instance_private (info_bar);
+  priv = info_bar->priv = gtk_info_bar_get_instance_private (info_bar);
 
   gtk_widget_set_redraw_on_allocate (widget, TRUE);
 
   /* message-type is a CONSTRUCT property, so we init to a value
    * different from its default to trigger its property setter
    * during construction */
-  info_bar->priv->message_type = GTK_MESSAGE_OTHER;
+  priv->message_type = GTK_MESSAGE_OTHER;
 
-  gtk_widget_init_template (GTK_WIDGET (info_bar));
+  gtk_widget_init_template (widget);
 
-  gtk_widget_set_no_show_all (info_bar->priv->close_button, TRUE);
-  g_signal_connect (info_bar->priv->close_button, "clicked",
+  gtk_widget_set_no_show_all (priv->close_button, TRUE);
+  g_signal_connect (priv->close_button, "clicked",
                     G_CALLBACK (close_button_clicked_cb), info_bar);
 }
 
