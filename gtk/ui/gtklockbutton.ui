@@ -21,27 +21,31 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="label_lock">
+          <object class="GtkStack" id="stack">
             <property name="visible">1</property>
-            <property name="no_show_all">1</property>
-            <property name="xalign">0</property>
-            <property name="label" translatable="yes">Lock</property>
+            <child>
+              <object class="GtkLabel" id="label_lock">
+                <property name="visible">1</property>
+                <property name="xalign">0</property>
+                <property name="label" translatable="yes">Lock</property>
+              </object>
+              <packing>
+                <property name="fill">0</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label_unlock">
+                <property name="visible">1</property>
+                <property name="xalign">0</property>
+                <property name="label" translatable="yes">Unlock</property>
+              </object>
+              <packing>
+                <property name="fill">0</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
           </object>
-          <packing>
-            <property name="fill">0</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="label_unlock">
-            <property name="no_show_all">1</property>
-            <property name="xalign">0</property>
-            <property name="label" translatable="yes">Unlock</property>
-          </object>
-          <packing>
-            <property name="fill">0</property>
-            <property name="position">2</property>
-          </packing>
         </child>
       </object>
     </child>

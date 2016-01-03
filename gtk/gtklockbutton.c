@@ -76,10 +76,9 @@ struct _GtkLockButtonPrivate
 
   GtkWidget *box;
   GtkWidget *image;
+  GtkWidget *stack;
   GtkWidget *label_lock;
   GtkWidget *label_unlock;
-
-  GtkSizeGroup *label_group;
 };
 
 enum
@@ -321,7 +320,7 @@ gtk_lock_button_class_init (GtkLockButtonClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkLockButton, image);
   gtk_widget_class_bind_template_child_private (widget_class, GtkLockButton, label_lock);
   gtk_widget_class_bind_template_child_private (widget_class, GtkLockButton, label_unlock);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkLockButton, label_group);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkLockButton, stack);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_LOCK_BUTTON_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, "button");
@@ -386,12 +385,9 @@ update_state (GtkLockButton *button)
     }
 
   gtk_image_set_from_gicon (GTK_IMAGE (priv->image), icon, GTK_ICON_SIZE_MENU);
-  if (gtk_widget_get_visible (priv->label_lock) != allowed)
-    {
-      gtk_widget_set_visible (priv->label_lock, allowed);
-      gtk_widget_set_visible (priv->label_unlock, !allowed);
-      _gtk_lock_button_accessible_name_changed (button);
-    }
+  gtk_stack_set_visible_child (GTK_STACK (priv->stack),
+                               allowed ? priv->label_lock : priv->label_unlock);
+  _gtk_lock_button_accessible_name_changed (button);
   gtk_widget_set_tooltip_markup (GTK_WIDGET (button), tooltip);
   gtk_widget_set_sensitive (GTK_WIDGET (button), sensitive);
   gtk_widget_set_visible (GTK_WIDGET (button), visible);
@@ -572,15 +568,12 @@ gtk_lock_button_set_permission (GtkLockButton *button,
 const char *
 _gtk_lock_button_get_current_text (GtkLockButton *button)
 {
-  GtkLockButtonPrivate *priv;
+  GtkWidget *label;
 
   g_return_val_if_fail (GTK_IS_LOCK_BUTTON (button), NULL);
 
-  priv = button->priv;
+  label = gtk_stack_get_visible_child (GTK_STACK (button->priv->stack));
 
-  if (gtk_widget_get_visible (priv->label_lock))
-    return gtk_label_get_text (GTK_LABEL (priv->label_lock));
-  else
-    return gtk_label_get_text (GTK_LABEL (priv->label_unlock));
+  return gtk_label_get_text (GTK_LABEL (label));
 }
 
