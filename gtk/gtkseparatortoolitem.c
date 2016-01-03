@@ -413,7 +413,8 @@ static gboolean
 gtk_separator_tool_item_draw (GtkWidget *widget,
                               cairo_t   *cr)
 {
-  gtk_css_gadget_draw (GTK_SEPARATOR_TOOL_ITEM (widget)->priv->gadget, cr);
+  if (GTK_SEPARATOR_TOOL_ITEM (widget)->priv->draw)
+    gtk_css_gadget_draw (GTK_SEPARATOR_TOOL_ITEM (widget)->priv->gadget, cr);
 
   return FALSE;
 }
