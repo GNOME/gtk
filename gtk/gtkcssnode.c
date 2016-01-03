@@ -1604,7 +1604,7 @@ gtk_css_node_has_initial_value (GtkCssNode          *cssnode,
   GtkCssNode *parent_node;
   GtkCssStyle *style, *parent_style;
   GtkCssValue *value, *initial, *computed;
-  GtkCssProvider *provider;
+  GtkStyleProviderPrivate *provider;
   gboolean is_initial;
   guint id;
 
