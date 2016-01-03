@@ -7138,7 +7138,6 @@ gtk_window_realize (GtkWidget *widget)
       allocation.height == 1)
     {
       GdkRectangle request;
-      gint default_width, default_height;
 
       gtk_window_compute_configure_request (window, &request, NULL, NULL);
 
