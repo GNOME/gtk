@@ -110,7 +110,6 @@ struct _GtkAssistantPrivate
   GtkWidget *last;
 
   GtkWidget *sidebar;
-  GtkWidget *sidebar_frame;
   GtkWidget *content;
   GtkWidget *action_area;
   GtkWidget *headerbar;
@@ -663,7 +662,6 @@ gtk_assistant_class_init (GtkAssistantClass *class)
   gtk_widget_class_bind_template_child_private (widget_class, GtkAssistant, close);
   gtk_widget_class_bind_template_child_private (widget_class, GtkAssistant, last);
   gtk_widget_class_bind_template_child_private (widget_class, GtkAssistant, sidebar);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkAssistant, sidebar_frame);
   gtk_widget_class_bind_template_child_private (widget_class, GtkAssistant, button_size_group);
   gtk_widget_class_bind_template_child_private (widget_class, GtkAssistant, title_size_group);
 
@@ -972,7 +970,7 @@ update_title_state (GtkAssistant *assistant)
         show_titles = TRUE;
     }
 
-  gtk_widget_set_visible (priv->sidebar_frame, show_titles);
+  gtk_widget_set_visible (priv->sidebar, show_titles);
 }
 
 static void

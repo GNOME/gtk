@@ -11,19 +11,12 @@
       <object class="GtkBox" id="main_box">
         <property name="visible">1</property>
         <child>
-          <object class="GtkFrame" id="sidebar_frame">
+          <object class="GtkBox" id="sidebar">
             <property name="visible">1</property>
+            <property name="orientation">vertical</property>
             <style>
               <class name="sidebar"/>
             </style>
-            <child>
-              <object class="GtkBox" id="sidebar">
-                <property name="visible">1</property>
-                <property name="orientation">vertical</property>
-                <property name="spacing">6</property>
-              </object>
-            </child>
-            <child type="label_item"/>
           </object>
           <packing>
             <property name="fill">0</property>
