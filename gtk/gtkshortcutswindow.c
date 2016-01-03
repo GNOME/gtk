@@ -237,7 +237,10 @@ gtk_shortcuts_window_add_search_item (GtkWidget *child, gpointer data)
       keywords = g_utf8_strdown (str, -1);
 
       g_hash_table_insert (priv->keywords, item, keywords);
-      gtk_container_add (GTK_CONTAINER (priv->search_shortcuts), item);
+      if (shortcut_type == GTK_SHORTCUT_ACCELERATOR)
+        gtk_container_add (GTK_CONTAINER (priv->search_shortcuts), item);
+      else
+        gtk_container_add (GTK_CONTAINER (priv->search_gestures), item);
 
       g_free (title);
       g_free (accelerator);
