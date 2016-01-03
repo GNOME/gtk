@@ -3,11 +3,11 @@
   box.horizontal:dir(ltr)
     box.horizontal:dir(ltr)
       label:dir(ltr)
-        font-size: 20px (nth-child.css:4:17)
+        font-size: 20px; /* nth-child.css:2:17 */
       label:dir(ltr)
-        font-size: 30px (nth-child.css:7:17)
+        font-size: 30px; /* nth-child.css:5:17 */
       label:dir(ltr)
-        font-size: 40px (nth-child.css:10:17)
+        font-size: 40px; /* nth-child.css:8:17 */
     box.horizontal:dir(ltr)
       label:dir(ltr)
-        font-size: 50px (nth-child.css:13:17)
+        font-size: 50px; /* nth-child.css:11:17 */

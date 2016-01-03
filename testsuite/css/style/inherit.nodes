@@ -1,9 +1,9 @@
 [window.background:dir(ltr)]
   decoration:dir(ltr)
   box.horizontal:dir(ltr)
-    color: rgb(255,0,0) (inherit.css:4:12)
-    opacity: 0.5 (inherit.css:5:14)
+    color: rgb(255,0,0); /* inherit.css:2:12 */
+    opacity: 0.5; /* inherit.css:3:14 */
     label#label1:dir(ltr)
-      opacity: 0.5 (inherit.css:10:18)
+      color: rgb(255,255,255); /* inherit.css:7:16 */
+      opacity: 0.5; /* inherit.css:8:18 */
     label#label2:dir(ltr)
-      color: rgb(255,0,0) (reset-to-defaults.css:2:12)
