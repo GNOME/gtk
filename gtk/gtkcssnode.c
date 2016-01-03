@@ -1523,80 +1523,6 @@ gtk_css_node_get_style_provider (GtkCssNode *cssnode)
   return GTK_STYLE_PROVIDER_PRIVATE (_gtk_settings_get_style_cascade (gtk_settings_get_default (), 1));
 }
 
-static void
-append_id (GtkCssNode *cssnode,
-           GString    *string)
-{
-  const char *id;
-
-  id = gtk_css_node_get_id (cssnode);
-  if (id)
-    {
-      g_string_append (string, " id=");
-      g_string_append (string, id);
-    }
-}
-
-static void
-append_visible (GtkCssNode *cssnode,
-                GString    *string)
-{
-  g_string_append_printf (string, " visible=%d", gtk_css_node_get_visible (cssnode));
-}
-
-static void
-append_state (GtkCssNode *cssnode,
-              GString    *string)
-
-{
-  GtkStateFlags state;
-
-  state = gtk_css_node_get_state (cssnode);
-  if (state)
-    {
-      GFlagsClass *fclass;
-      gint i;
-      gboolean first = TRUE;
-
-      g_string_append (string, " state=");
-      fclass = g_type_class_ref (GTK_TYPE_STATE_FLAGS);
-      for (i = 0; i < fclass->n_values; i++)
-        {
-          if (state & fclass->values[i].value)
-            {
-              if (first)
-                first = FALSE;
-              else
-                g_string_append_c (string, '|');
-              g_string_append (string, fclass->values[i].value_nick);
-            }
-        }
-      g_type_class_unref (fclass);
-    }
-}
-
-static void
-append_classes (GtkCssNode *cssnode,
-                GString    *string)
-{
-  const GQuark *classes;
-  guint n_classes;
-
-  classes = gtk_css_node_list_classes (cssnode, &n_classes);
-  if (n_classes > 0)
-    {
-      int i;
-
-      g_string_append (string, " classes=");
-      for (i = 0; i < n_classes; i++)
-        {
-          if (i > 0)
-            g_string_append_c (string, ',');
-          g_string_append (string, g_quark_to_string (classes[i]));
-        }
-    }
-}
-
 static gboolean
 gtk_css_node_has_initial_value (GtkCssNode          *cssnode,
                                 GtkCssStyleProperty *prop)
@@ -1690,14 +1616,15 @@ gtk_css_node_print (GtkCssNode                *cssnode,
   GtkCssNode *node;
 
   g_string_append_printf (string, "%*s", indent, "");
-  if (gtk_css_node_get_name (cssnode))
-    g_string_append (string, gtk_css_node_get_name (cssnode));
-  else
-    g_string_append (string, g_type_name (gtk_css_node_get_widget_type (cssnode)));
-  append_id (cssnode, string);
-  append_visible (cssnode, string);
-  append_state (cssnode, string);
-  append_classes (cssnode, string);
+
+  if (!cssnode->visible)
+    g_string_append_c (string, '[');
+
+  gtk_css_node_declaration_print (cssnode->decl, string);
+
+  if (!cssnode->visible)
+    g_string_append_c (string, ']');
+
   g_string_append_c (string, '\n');
 
   append_style (cssnode, flags, string, indent + 2);

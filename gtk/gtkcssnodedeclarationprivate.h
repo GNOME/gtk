@@ -72,6 +72,10 @@ gboolean                gtk_css_node_declaration_equal                  (gconstp
 void                    gtk_css_node_declaration_add_to_widget_path     (const GtkCssNodeDeclaration   *decl,
                                                                          GtkWidgetPath                 *path,
                                                                          guint                          pos);
+
+void                    gtk_css_node_declaration_print                  (const GtkCssNodeDeclaration   *decl,
+                                                                         GString                       *string);
+
 G_END_DECLS
 
 #endif /* __GTK_CSS_NODE_DECLARATION_PRIVATE_H__ */

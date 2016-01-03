@@ -648,3 +648,53 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   gtk_widget_path_iter_set_state (path, pos, decl->state);
 }
 
+/* Append the declaration to the string, in selector format */
+void
+gtk_css_node_declaration_print (const GtkCssNodeDeclaration *decl,
+                                GString                     *string)
+{
+  static const char *state_names[] = {
+    "active",
+    "hover",
+    "selected",
+    "disabled",
+    "indeterminate",
+    "focus",
+    "backdrop",
+    "dir(ltr)",
+    "dir(rtl)",
+    "link",
+    "visited",
+    "checked",
+    "drop(active)"
+  };
+  const GQuark *classes;
+  guint i;
+
+  if (decl->name)
+    g_string_append (string, decl->name);
+  else
+    g_string_append (string, g_type_name (decl->type));
+
+  if (decl->id)
+    {
+      g_string_append_c (string, '#');
+      g_string_append (string, decl->id);
+    }
+
+  classes = get_classes (decl);
+  for (i = 0; i < decl->n_classes; i++)
+    {
+      g_string_append_c (string, '.');
+      g_string_append (string, g_quark_to_string (classes[i]));
+    }
+
+  for (i = 0; i < G_N_ELEMENTS (state_names); i++)
+    {
+      if (decl->state & (1 << i))
+        {
+          g_string_append_c (string, ':');
+          g_string_append (string, state_names[i]);
+        }
+    }
+}
