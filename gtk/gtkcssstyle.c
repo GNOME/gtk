@@ -114,10 +114,11 @@ gtk_css_style_is_static (GtkCssStyle *style)
   return GTK_CSS_STYLE_GET_CLASS (style)->is_static (style);
 }
 
-
 void
 gtk_css_style_print (GtkCssStyle *style,
-                     GString     *string)
+                     GString     *string,
+                     guint        indent,
+                     gboolean     skip_initial)
 {
   guint i;
 
@@ -126,18 +127,31 @@ gtk_css_style_print (GtkCssStyle *style,
 
   for (i = 0; i < _gtk_css_style_property_get_n_properties (); i++)
     {
-      GtkCssSection *section = gtk_css_style_get_section (style, i);
-      g_string_append (string, _gtk_style_property_get_name (GTK_STYLE_PROPERTY (_gtk_css_style_property_lookup_by_id (i))));
-      g_string_append (string, ": ");
-      _gtk_css_value_print (gtk_css_style_get_value (style, i), string);
-      g_string_append (string, ";");
+      GtkCssSection *section;
+      GtkCssStyleProperty *prop;
+      GtkCssValue *value;
+      const char *name;
+
+      section = gtk_css_style_get_section (style, i);
+      if (!section && skip_initial)
+        continue;
+
+      prop = _gtk_css_style_property_lookup_by_id (i);
+      name = _gtk_style_property_get_name (GTK_STYLE_PROPERTY (prop));
+      value = gtk_css_style_get_value (style, i);
+
+      g_string_append_printf (string, "%*s%s: ", indent, "", name);
+      _gtk_css_value_print (value, string);
+      g_string_append_c (string, ';');
+
       if (section)
         {
           g_string_append (string, " /* ");
           _gtk_css_section_print (section, string);
           g_string_append (string, " */");
         }
-      g_string_append (string, "\n");
+
+      g_string_append_c (string, '\n');
     }
 }
 
@@ -150,7 +164,7 @@ gtk_css_style_to_string (GtkCssStyle *style)
 
   string = g_string_new ("");
 
-  gtk_css_style_print (style, string);
+  gtk_css_style_print (style, string, 0, FALSE);
 
   return g_string_free (string, FALSE);
 }

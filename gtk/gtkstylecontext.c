@@ -3226,10 +3226,6 @@ _gtk_style_context_is_background_opaque (GtkStyleContext *context)
  *     CSS nodes starting at the style context's node
  * @GTK_STYLE_CONTEXT_PRINT_SHOW_STYLE: Show the values of the
  *     CSS properties for each node
- * @GTK_STYLE_CONTEXT_PRINT_SHOW_INITIAL: Show the values of the
- *     CSS properties even if they match the initial value. By default,
- *     values are only shown if they are different from the initial
- *     value.
  *
  * Flags that modify the behavior of gtk_style_context_to_string().
  * New values may be added to this enumeration.

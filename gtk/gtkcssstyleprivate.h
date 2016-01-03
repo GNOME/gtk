@@ -71,7 +71,9 @@ gboolean                gtk_css_style_is_static                 (GtkCssStyle    
 
 char *                  gtk_css_style_to_string                 (GtkCssStyle            *style);
 void                    gtk_css_style_print                     (GtkCssStyle            *style,
-                                                                 GString                *string);
+                                                                 GString                *string,
+                                                                 guint                   indent,
+                                                                 gboolean                skip_initial);
 
 G_END_DECLS
 

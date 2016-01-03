@@ -1523,90 +1523,6 @@ gtk_css_node_get_style_provider (GtkCssNode *cssnode)
   return GTK_STYLE_PROVIDER_PRIVATE (_gtk_settings_get_style_cascade (gtk_settings_get_default (), 1));
 }
 
-static gboolean
-gtk_css_node_has_initial_value (GtkCssNode          *cssnode,
-                                GtkCssStyleProperty *prop)
-{
-  GtkCssNode *parent_node;
-  GtkCssStyle *style, *parent_style;
-  GtkCssValue *value, *initial, *computed;
-  GtkStyleProviderPrivate *provider;
-  gboolean is_initial;
-  guint id;
-
-  id = _gtk_css_style_property_get_id (prop);
-  style = gtk_css_node_get_style (cssnode);
-  value = gtk_css_style_get_value (style, id);
-
-  parent_node = gtk_css_node_get_parent (cssnode);
-  parent_style = parent_node ? gtk_css_node_get_style (parent_node) : NULL;
-  provider = gtk_css_node_get_style_provider (cssnode);
-
-  initial = _gtk_css_style_property_get_initial_value (prop);
-  computed = _gtk_css_value_compute (initial, id, provider, style, parent_style);
-
-  is_initial = _gtk_css_value_equal (value, computed);
-
-  _gtk_css_value_unref (computed);
-
-  return is_initial;
-}
-
-static void
-append_value (GtkCssNode          *cssnode,
-              GtkCssStyleProperty *prop,
-              GString             *string,
-              guint                indent)
-{
-  GtkCssValue *value;
-  GtkCssStyle *style;
-  GtkCssSection *section;
-  const char *name;
-  guint id;
-
-  id = _gtk_css_style_property_get_id (prop);
-  name = _gtk_style_property_get_name (GTK_STYLE_PROPERTY (prop));
-  style = gtk_css_node_get_style (cssnode);
-  value = gtk_css_style_get_value (style, id);
-
-  g_string_append_printf (string, "%*s%s: ", indent, "", name);
-
-  _gtk_css_value_print (value, string);
-
-  section = gtk_css_style_get_section (style, id);
-  if (section)
-    {
-      g_string_append (string, " (");
-      _gtk_css_section_print (section, string);
-      g_string_append (string, ")");
-    }
-
-  g_string_append_c (string, '\n');
-}
-
-static void
-append_style (GtkCssNode                *cssnode,
-              GtkStyleContextPrintFlags  flags,
-              GString                   *string,
-              guint                      indent)
-{
-  int i;
-
-  if (!(flags & GTK_STYLE_CONTEXT_PRINT_SHOW_STYLE))
-    return;
-
-  for (i = 0; i < _gtk_css_style_property_get_n_properties (); i++)
-    {
-      GtkCssStyleProperty *prop;
-
-      prop = _gtk_css_style_property_lookup_by_id (i);
-
-      if ((flags & GTK_STYLE_CONTEXT_PRINT_SHOW_INITIAL) ||
-          !gtk_css_node_has_initial_value (cssnode, prop))
-        append_value (cssnode, prop, string, indent);
-    }
-}
-
 void
 gtk_css_node_print (GtkCssNode                *cssnode,
                     GtkStyleContextPrintFlags  flags,
@@ -1627,7 +1543,8 @@ gtk_css_node_print (GtkCssNode                *cssnode,
 
   g_string_append_c (string, '\n');
 
-  append_style (cssnode, flags, string, indent + 2);
+  if (flags & GTK_STYLE_CONTEXT_PRINT_SHOW_STYLE)
+    gtk_css_style_print (gtk_css_node_get_style (cssnode), string, indent + 2, TRUE);
 
   if (flags & GTK_STYLE_CONTEXT_PRINT_RECURSE)
     {
