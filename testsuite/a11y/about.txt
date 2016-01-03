@@ -454,7 +454,7 @@ See the GNU General Public License, version 3 or later for details.
               alpha: 1
               <AtkValue>
               minimum value: 0.000000
-              maximum value: 9.000000
+              maximum value: 10.000000
               current value: 0.000000
             unnamed-GtkRangeAccessible-6
               "scroll bar"
@@ -466,7 +466,7 @@ See the GNU General Public License, version 3 or later for details.
               alpha: 1
               <AtkValue>
               minimum value: 0.000000
-              maximum value: 9.000000
+              maximum value: 10.000000
               current value: 0.000000
         license_page
           "filler"
