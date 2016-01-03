@@ -1792,16 +1792,6 @@ progressbar progress {
  * Level Bar *
  *************/
 
-GtkLevelBar {
-  -GtkLevelBar-min-block-width: 34;
-  -GtkLevelBar-min-block-height: 3;
-}
-
-GtkLevelBar.vertical {
-  -GtkLevelBar-min-block-width: 3;
-  -GtkLevelBar-min-block-height: 34;
-}
-
 levelbar {
   & trough {
     // FIXME: outset not working
@@ -1812,6 +1802,15 @@ levelbar {
       @include entry(backdrop);
     }
   }
+  & block {
+    min-width: 32px;
+    min-height: 1px;
+  }
+  &.vertical block {
+    min-width: 1px;
+    min-height: 32px;
+  }
+
   &.horizontal.discrete block { margin: 0 1px; }
   &.vertical.discrete block { margin: 1px 0; }
   & block.filled.low {

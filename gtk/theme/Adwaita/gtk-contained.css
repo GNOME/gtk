@@ -3648,12 +3648,13 @@ progressbar {
  * Level Bar *
  *************/
 levelbar {
-  box-shadow: 0 1px rgba(255, 255, 255, 0);
-  -GtkLevelBar-min-block-width: 34;
-  -GtkLevelBar-min-block-height: 3; }
-  levelbar.vertical {
-    -GtkLevelBar-min-block-width: 3;
-    -GtkLevelBar-min-block-height: 34; }
+  box-shadow: 0 1px rgba(255, 255, 255, 0); }
+  levelbar block {
+    min-width: 32px;
+    min-height: 1px; }
+  levelbar.vertical block {
+    min-width: 1px;
+    min-height: 32px; }
   levelbar trough {
     border: 1px solid;
     padding: 2px;

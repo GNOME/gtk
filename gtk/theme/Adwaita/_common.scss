@@ -2524,11 +2524,13 @@ progressbar {
 
 levelbar {
   box-shadow: _widget_edge(); // needs to be set here to avoid clipping
-  -GtkLevelBar-min-block-width: 34;
-  -GtkLevelBar-min-block-height: 3;
-  &.vertical {
-    -GtkLevelBar-min-block-width: 3;
-    -GtkLevelBar-min-block-height: 34;
+  & block {
+    min-width: 32px;
+    min-height: 1px;
+  }
+  &.vertical block {
+    min-width: 1px;
+    min-height: 32px;
   }
   & trough {
     border: 1px solid;
