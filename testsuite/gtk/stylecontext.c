@@ -30,14 +30,13 @@ test_parse_selectors (void)
     "E > .foo {}",
     "E > #id {}",
     "E:active {}",
-    "E:prelight {}",
     "E:hover {}",
     "E:selected {}",
-    "E:insensitive {}",
-    "E:inconsistent {}",
-    "E:focused {}",
-    "E:active:prelight {}",
-    "* > .notebook tab:first-child .label:focused {}",
+    "E:disabled {}",
+    "E:indeterminate {}",
+    "E:focus {}",
+    "E:active:hover {}",
+    "* > .notebook tab:first-child .label:focus {}",
     "E, F {}",
     "E, F /* comment here */ {}",
     "E,/* comment here */ F {}",
@@ -48,8 +47,7 @@ test_parse_selectors (void)
     "E:nth-child(last) {}",
     "E:nth-child(even) {}",
     "E:nth-child(odd) {}",
-    "E:sorted {}",
-    "E:focused tab {}",
+    "E:focus tab {}",
      NULL
   };
 
@@ -309,51 +307,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 void
-test_set_widget_path_saved (void)
-{
-  GtkWidgetPath *path;
-  GtkCssProvider *provider;
-  GtkStyleContext *context;
-  GtkBorder padding;
-
-  context = gtk_style_context_new ();
-
-  provider = gtk_css_provider_new ();
-  gtk_style_context_add_provider (context,
-                                  GTK_STYLE_PROVIDER (provider),
-                                  GTK_STYLE_PROVIDER_PRIORITY_USER);
-  gtk_css_provider_load_from_data (provider,
-                                   "GtkWindow * { padding: 1px; }\n"
-                                   ".foo * { padding: 2px; }\n",
-                                   -1,
-                                   NULL);
-
-  path = gtk_widget_path_new ();
-  gtk_widget_path_append_type (path, GTK_TYPE_WINDOW);
-  gtk_style_context_set_path (context, path);
-
-  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
-  g_assert_cmpint (padding.top, ==, 0);
-
-  gtk_style_context_save (context);
-  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
-  g_assert_cmpint (padding.top, ==, 1);
-
-  gtk_widget_path_iter_add_class (path, -1, "foo");
-  gtk_style_context_set_path (context, path);
-  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
-  g_assert_cmpint (padding.top, ==, 2);
-
-  gtk_style_context_restore (context);
-  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
-  g_assert_cmpint (padding.top, ==, 0);
-
-  gtk_widget_path_free (path);
-  g_object_unref (provider);
-  g_object_unref (context);
-}
-
-void
 test_widget_path_parent (void)
 {
   GtkStyleContext *parent, *context;
@@ -407,29 +360,6 @@ test_style_classes (void)
   g_object_unref (context);
 }
 
-void
-test_new_css_property (void)
-{
-  GtkWidget *widget;
-  GtkStyleContext *context;
-  GtkBorder padding;
-
-  widget = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_widget_realize (widget);
-  context = gtk_widget_get_style_context (widget);
-
-  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  gtk_style_properties_register_property (NULL,
-                                          g_param_spec_int ("test", "test", "test",
-                                                            0, G_MAXINT, 42, G_PARAM_READWRITE));
-G_GNUC_END_IGNORE_DEPRECATIONS;
-
-  gtk_style_context_add_class (context, "nonexisting");
-  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
-}
-
 int
 main (int argc, char *argv[])
 {
@@ -441,10 +371,8 @@ main (int argc, char *argv[])
   g_test_add_func ("/style/match", test_match);
   g_test_add_func ("/style/basic", test_basic_properties);
   g_test_add_func ("/style/invalidate-saved", test_invalidate_saved);
-  g_test_add_func ("/style/set-widget-path-saved", test_set_widget_path_saved);
   g_test_add_func ("/style/widget-path-parent", test_widget_path_parent);
   g_test_add_func ("/style/classes", test_style_classes);
-  g_test_add_func ("/style/new-css-property", test_new_css_property);
 
   return g_test_run ();
 }
