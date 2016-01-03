@@ -712,6 +712,8 @@ update_level_style_classes (GtkLevelBar *self)
           num_blocks = (gint) round (priv->max_value) - (gint) round (priv->min_value);
         }
 
+      num_filled = MIN (num_blocks, num_filled);
+
       classes[0] = "filled";
       classes[1] = value_class;
       for (i = 0; i < num_filled; i++)
