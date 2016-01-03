@@ -70,7 +70,7 @@ GtkBitmask *            gtk_css_style_add_difference            (GtkBitmask     
 gboolean                gtk_css_style_is_static                 (GtkCssStyle            *style);
 
 char *                  gtk_css_style_to_string                 (GtkCssStyle            *style);
-void                    gtk_css_style_print                     (GtkCssStyle            *style,
+gboolean                gtk_css_style_print                     (GtkCssStyle            *style,
                                                                  GString                *string,
                                                                  guint                   indent,
                                                                  gboolean                skip_initial);

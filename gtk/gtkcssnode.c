@@ -1529,7 +1529,7 @@ gtk_css_node_print (GtkCssNode                *cssnode,
                     GString                   *string,
                     guint                      indent)
 {
-  GtkCssNode *node;
+  gboolean need_newline = FALSE;
 
   g_string_append_printf (string, "%*s", indent, "");
 
@@ -1544,10 +1544,15 @@ gtk_css_node_print (GtkCssNode                *cssnode,
   g_string_append_c (string, '\n');
 
   if (flags & GTK_STYLE_CONTEXT_PRINT_SHOW_STYLE)
-    gtk_css_style_print (gtk_css_node_get_style (cssnode), string, indent + 2, TRUE);
+    need_newline = gtk_css_style_print (gtk_css_node_get_style (cssnode), string, indent + 2, TRUE);
 
   if (flags & GTK_STYLE_CONTEXT_PRINT_RECURSE)
     {
+      GtkCssNode *node;
+
+      if (need_newline && gtk_css_node_get_first_child (cssnode))
+        g_string_append_c (string, '\n');
+
       for (node = gtk_css_node_get_first_child (cssnode); node; node = gtk_css_node_get_next_sibling (node))
         gtk_css_node_print (node, flags, string, indent + 2);
     }

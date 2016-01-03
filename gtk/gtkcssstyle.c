@@ -114,13 +114,28 @@ gtk_css_style_is_static (GtkCssStyle *style)
   return GTK_CSS_STYLE_GET_CLASS (style)->is_static (style);
 }
 
-void
+/*
+ * gtk_css_style_print:
+ * @style: a #GtkCssStyle
+ * @string: the #GString to print to
+ * @indent: level of indentation to use
+ * @skip_initial: %TRUE to skip properties that have their initial value
+ *
+ * Print the @style to @string, in CSS format. Every property is printed
+ * on a line by itself, indented by @indent spaces. If @skip_initial is
+ * %TRUE, properties are only printed if their value in @style is different
+ * from the initial value of the property.
+ *
+ * Returns: %TRUE is any properties have been printed
+ */
+gboolean
 gtk_css_style_print (GtkCssStyle *style,
                      GString     *string,
                      guint        indent,
                      gboolean     skip_initial)
 {
   guint i;
+  gboolean retval = FALSE;
 
   g_return_if_fail (GTK_IS_CSS_STYLE (style));
   g_return_if_fail (string != NULL);
@@ -152,7 +167,11 @@ gtk_css_style_print (GtkCssStyle *style,
         }
 
       g_string_append_c (string, '\n');
+
+      retval = TRUE;
     }
+
+  return retval;
 }
 
 char *
