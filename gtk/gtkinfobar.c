@@ -37,7 +37,6 @@
 #include "gtkbuilderprivate.h"
 #include "gtkbbox.h"
 #include "gtkbox.h"
-#include "gtkcsscustomgadgetprivate.h"
 #include "gtklabel.h"
 #include "gtkbutton.h"
 #include "gtkenums.h"
@@ -143,8 +142,6 @@ struct _GtkInfoBarPrivate
   GtkWidget *close_button;
   GtkWidget *revealer;
 
-  GtkCssGadget *gadget;
-
   gboolean show_close_button;
   GtkMessageType message_type;
 };
@@ -178,14 +175,6 @@ static void     gtk_info_bar_get_property (GObject        *object,
                                            guint           prop_id,
                                            GValue         *value,
                                            GParamSpec     *pspec);
-static void     gtk_info_bar_get_preferred_width          (GtkWidget *widget,
-                                                           gint      *minimum_width,
-                                                           gint      *natural_width);
-static void     gtk_info_bar_get_preferred_height         (GtkWidget *widget,
-                                                           gint      *minimum_height,
-                                                           gint      *natural_height);
-static gboolean gtk_info_bar_draw                         (GtkWidget      *widget,
-                                                           cairo_t        *cr);
 static void     gtk_info_bar_buildable_interface_init     (GtkBuildableIface *iface);
 static gboolean  gtk_info_bar_buildable_custom_tag_start   (GtkBuildable  *buildable,
                                                             GtkBuilder    *builder,
@@ -247,16 +236,6 @@ gtk_info_bar_get_property (GObject    *object,
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
-}
-
-static void
-gtk_info_bar_finalize (GObject *object)
-{
-  GtkInfoBar *info_bar = GTK_INFO_BAR (object);
-
-  g_clear_object (&info_bar->priv->gadget);
-
-  G_OBJECT_CLASS (gtk_info_bar_parent_class)->finalize (object);
 }
 
 static void
@@ -322,77 +301,6 @@ gtk_info_bar_close (GtkInfoBar *info_bar)
 }
 
 static void
-gtk_info_bar_measure (GtkCssGadget   *gadget,
-                      GtkOrientation  orientation,
-                      int             size,
-                      int            *minimum,
-                      int            *natural,
-                      int            *minimum_baseline,
-                      int            *natural_baseline,
-                      gpointer        data)
-{
-  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
-
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    GTK_WIDGET_CLASS (gtk_info_bar_parent_class)->get_preferred_width (widget,
-                                                                       minimum,
-                                                                       natural);
-  else
-    GTK_WIDGET_CLASS (gtk_info_bar_parent_class)->get_preferred_height (widget,
-                                                                        minimum,
-                                                                        natural);
-}
-
-static void
-gtk_info_bar_get_preferred_width (GtkWidget *widget,
-                                  gint      *minimum_width,
-                                  gint      *natural_width)
-{
-  gtk_css_gadget_get_preferred_size (GTK_INFO_BAR (widget)->priv->gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     -1,
-                                     minimum_width, natural_width,
-                                     NULL, NULL);
-}
-
-static void
-gtk_info_bar_get_preferred_height (GtkWidget *widget,
-                                   gint      *minimum_height,
-                                   gint      *natural_height)
-{
-  gtk_css_gadget_get_preferred_size (GTK_INFO_BAR (widget)->priv->gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     -1,
-                                     minimum_height, natural_height,
-                                     NULL, NULL);
-}
-
-static gboolean
-gtk_info_bar_render (GtkCssGadget *gadget,
-                     cairo_t      *cr,
-                     int           x,
-                     int           y,
-                     int           width,
-                     int           height,
-                     gpointer      data)
-{
-  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
-
-  GTK_WIDGET_CLASS (gtk_info_bar_parent_class)->draw (widget, cr);
-
-  return FALSE;
-}
-
-static gboolean
-gtk_info_bar_draw (GtkWidget *widget,
-                   cairo_t   *cr)
-{
-  gtk_css_gadget_draw (GTK_INFO_BAR (widget)->priv->gadget, cr);
-
-  return FALSE;
-}
-
-static void
 gtk_info_bar_show (GtkWidget *widget)
 {
   GtkInfoBarPrivate *priv = GTK_INFO_BAR (widget)->priv;
@@ -434,11 +342,7 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
 
   object_class->get_property = gtk_info_bar_get_property;
   object_class->set_property = gtk_info_bar_set_property;
-  object_class->finalize = gtk_info_bar_finalize;
 
-  widget_class->get_preferred_width = gtk_info_bar_get_preferred_width;
-  widget_class->get_preferred_height = gtk_info_bar_get_preferred_height;
-  widget_class->draw = gtk_info_bar_draw;
   widget_class->show = gtk_info_bar_show;
   widget_class->hide = gtk_info_bar_hide;
 
@@ -614,7 +518,6 @@ gtk_info_bar_init (GtkInfoBar *info_bar)
 {
   GtkInfoBarPrivate *priv;
   GtkWidget *widget = GTK_WIDGET (info_bar);
-  GtkCssNode *widget_node;
 
   priv = info_bar->priv = gtk_info_bar_get_instance_private (info_bar);
 
@@ -630,14 +533,6 @@ gtk_info_bar_init (GtkInfoBar *info_bar)
   gtk_widget_set_no_show_all (priv->close_button, TRUE);
   g_signal_connect (priv->close_button, "clicked",
                     G_CALLBACK (close_button_clicked_cb), info_bar);
-
-  widget_node = gtk_widget_get_css_node (widget);
-  priv->gadget = gtk_css_custom_gadget_new_for_node (widget_node,
-                                                     widget,
-                                                     gtk_info_bar_measure,
-                                                     NULL,
-                                                     gtk_info_bar_render,
-                                                     NULL, NULL);
 }
 
 static GtkBuildableIface *parent_buildable_iface;
