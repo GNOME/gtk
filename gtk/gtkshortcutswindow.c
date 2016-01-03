@@ -182,7 +182,12 @@ gtk_shortcuts_window_add_search_item (GtkWidget *child, gpointer data)
   gchar *accelerator = NULL;
   gchar *title = NULL;
   gchar *hash_key = NULL;
+  GIcon *icon = NULL;
+  gboolean icon_set = FALSE;
+  gboolean subtitle_set = FALSE;
   GtkTextDirection direction;
+  GtkShortcutType shortcut_type;
+  gchar *subtitle;
   gchar *str;
   gchar *keywords;
 
@@ -192,6 +197,9 @@ gtk_shortcuts_window_add_search_item (GtkWidget *child, gpointer data)
                     "accelerator", &accelerator,
                     "title", &title,
                     "direction", &direction,
+                    "icon-set", &icon_set,
+                    "subtitle-set", &subtitle_set,
+                    "shortcut-type", &shortcut_type,
                     NULL);
 
       hash_key = g_strdup_printf ("%s-%s", title, accelerator);
@@ -209,10 +217,22 @@ gtk_shortcuts_window_add_search_item (GtkWidget *child, gpointer data)
                            "accelerator", accelerator,
                            "title", title,
                            "direction", direction,
+                           "shortcut-type", shortcut_type,
                            "accel-size-group", priv->search_image_group,
                            "title-size-group", priv->search_text_group,
                            NULL);
-
+      if (icon_set)
+        {
+          g_object_get (child, "icon", &icon, NULL);
+          g_object_set (item, "icon", icon, NULL);
+          g_clear_object (&icon);
+        }
+      if (subtitle_set)
+        {
+          g_object_get (child, "subtitle", &subtitle, NULL);
+          g_object_set (item, "subtitle", subtitle, NULL);
+          g_free (subtitle);
+        }
       str = g_strdup_printf ("%s %s", accelerator, title);
       keywords = g_utf8_strdown (str, -1);
 
