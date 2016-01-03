@@ -305,6 +305,16 @@ gtk_level_bar_get_num_blocks (GtkLevelBar *self)
   return 0;
 }
 
+static gboolean
+gtk_level_bar_get_real_inverted (GtkLevelBar *self)
+{
+  if (gtk_widget_get_direction (GTK_WIDGET (self)) == GTK_TEXT_DIR_RTL &&
+      self->priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+    return !self->priv->inverted;
+
+  return self->priv->inverted;
+}
+
 static void
 gtk_level_bar_get_borders (GtkLevelBar *self,
                            GtkBorder   *borders_out)
@@ -342,14 +352,8 @@ gtk_level_bar_draw_fill_continuous (GtkLevelBar           *self,
   gdouble fill_percentage;
   gboolean inverted;
 
-  inverted = self->priv->inverted;
-  if (gtk_widget_get_direction (GTK_WIDGET (self)) == GTK_TEXT_DIR_RTL)
-    {
-      if (self->priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-        inverted = !inverted;
-    }
-
   context = gtk_widget_get_style_context (widget);
+  inverted = gtk_level_bar_get_real_inverted (self);
 
   /* render the empty (unfilled) part */
   gtk_style_context_save_to_node (context, self->priv->block_node[inverted ? 0 : 1]);
@@ -696,10 +700,7 @@ update_level_style_classes (GtkLevelBar *self)
       gint num_filled, num_blocks, i;
       gboolean inverted;
 
-      inverted = priv->inverted;
-      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL &&
-          gtk_widget_get_direction (GTK_WIDGET (self)) == GTK_TEXT_DIR_RTL)
-        inverted = !inverted;
+      inverted = gtk_level_bar_get_real_inverted (self);
 
       if (priv->bar_mode == GTK_LEVEL_BAR_MODE_CONTINUOUS)
         {
