@@ -245,6 +245,7 @@ main (int argc, char **argv)
 
   g_object_set (gtk_settings_get_default (),
                 "gtk-font-name", "Sans",
+                "gtk-theme-name", "Empty",
                 NULL);
   if (argc < 2)
     {

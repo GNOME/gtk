@@ -14,15 +14,19 @@ test_css_style_CFLAGS = \
         -I$(top_builddir)/gdk           \
         -I$(top_srcdir)/gdk             \
         $(GTK_DEBUG_FLAGS)              \
-        $(GTK_DEP_CFLAGS)
+        $(GTK_DEP_CFLAGS)		\
+	$(NULL)
 
 test_css_style_LDADD = \
         $(top_builddir)/gdk/libgdk-3.la \
         $(top_builddir)/gtk/libgtk-3.la \
-        $(GTK_DEP_LIBS)
+        $(GTK_DEP_LIBS)			\
+	$(NULL)
 
 test_css_style_SOURCES = \
-        test-css-style.c
+        test-css-style.c		\
+	resources.c			\
+	$(NULL)
 
 test_data = \
         currentcolor.ui currentcolor.css        currentcolor.nodes \
@@ -31,7 +35,19 @@ test_data = \
 	nth-child.ui	nth-child.css	        nth-child.nodes \
 	$(NULL)
 
-EXTRA_DIST += $(test_in_files) $(test_data)
+BUILT_SOURCES = resources.c
+
+resource_files = $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir) --generate-dependencies $(builddir)/test-css-style.gresource.xml)
+
+resources.c: test-css-style.gresource.xml $(resource_files)
+	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) --target=$@ --sourcedir=$(srcdir) --generate-source $(srcdir)/test-css-style.gresource.xml
+
+EXTRA_DIST += \
+	test-css-style.gresource.xml	\
+	$(resource_files)		\
+	$(test_in_files) 		\
+	$(test_data)			\
+	$(NULL)
 
 if BUILDOPT_INSTALL_TESTS
 insttestdir=$(libexecdir)/installed-tests/$(PACKAGE)/css/style
@@ -48,7 +64,6 @@ $(test_files): %.test: %.test.in
 	$(AM_V_GEN) sed $(substitutions) $< > $@.tmp && mv $@.tmp $@
 
 EXTRA_DIST += \
-	reset-to-defaults.css 	\
 	$(test_files) 		\
 	$(NULL)
 
