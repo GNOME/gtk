@@ -47,7 +47,10 @@ test_files = $(test_in_files:.test.in=.test)
 $(test_files): %.test: %.test.in
         $(AM_V_GEN) sed $(substitutions) $< > $@.tmp && mv $@.tmp $@
 
-EXTRA_DIST += $(test_files)
+EXTRA_DIST += \
+	reset-to-defaults.css 	\
+	$(test_files) 		\
+	$(NULL)
 
 CLEANFILES += $(test_files)
 
