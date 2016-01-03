@@ -3,6 +3,7 @@
   box.horizontal:dir(ltr)
     color: rgb(255,0,0); /* inherit.css:2:12 */
     opacity: 0.5; /* inherit.css:3:14 */
+
     label#label1:dir(ltr)
       color: rgb(255,255,255); /* inherit.css:7:16 */
       opacity: 0.5; /* inherit.css:8:18 */
