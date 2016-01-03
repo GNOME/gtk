@@ -45,7 +45,7 @@ substitutions = \
 test_files = $(test_in_files:.test.in=.test)
 
 $(test_files): %.test: %.test.in
-        $(AM_V_GEN) sed $(substitutions) $< > $@.tmp && mv $@.tmp $@
+	$(AM_V_GEN) sed $(substitutions) $< > $@.tmp && mv $@.tmp $@
 
 EXTRA_DIST += \
 	reset-to-defaults.css 	\
