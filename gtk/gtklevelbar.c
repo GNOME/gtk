@@ -283,6 +283,15 @@ gtk_level_bar_get_num_blocks (GtkLevelBar *self)
   return 0;
 }
 
+static gint
+gtk_level_bar_get_num_block_nodes (GtkLevelBar *self)
+{
+  if (self->priv->bar_mode == GTK_LEVEL_BAR_MODE_CONTINUOUS)
+    return 2;
+  else
+    return gtk_level_bar_get_num_blocks (self);
+}
+
 static gboolean
 gtk_level_bar_get_real_inverted (GtkLevelBar *self)
 {
@@ -536,10 +545,7 @@ update_block_nodes (GtkLevelBar *self)
   guint n_blocks;
   guint i;
 
-  if (priv->bar_mode == GTK_LEVEL_BAR_MODE_CONTINUOUS)
-    n_blocks = 2;
-  else
-    n_blocks = MAX (1, (gint) (round (priv->max_value) - round (priv->min_value)));
+  n_blocks = gtk_level_bar_get_num_block_nodes (self);
 
   if (priv->n_blocks == n_blocks)
     return;
@@ -644,19 +650,12 @@ update_level_style_classes (GtkLevelBar *self)
       gboolean inverted;
 
       inverted = gtk_level_bar_get_real_inverted (self);
+      num_blocks = gtk_level_bar_get_num_block_nodes (self);
 
       if (priv->bar_mode == GTK_LEVEL_BAR_MODE_CONTINUOUS)
-        {
-          num_filled = 1;
-          num_blocks = 2;
-        }
+        num_filled = 1;
       else
-        {
-          num_filled = (gint) round (priv->cur_value) - (gint) round (priv->min_value);
-          num_blocks = (gint) round (priv->max_value) - (gint) round (priv->min_value);
-        }
-
-      num_filled = MIN (num_blocks, num_filled);
+        num_filled = MIN (num_blocks, (gint) round (priv->cur_value) - (gint) round (priv->min_value));
 
       classes[0] = "filled";
       classes[1] = value_class;
