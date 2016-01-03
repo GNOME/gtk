@@ -10,26 +10,29 @@ test_in_files = test-css-nodes.test.in
 check_PROGRAMS = $(TEST_PROGS)
 
 test_css_nodes_CFLAGS = \
-        -I$(top_srcdir)                 \
-        -I$(top_builddir)/gdk           \
-        -I$(top_srcdir)/gdk             \
-        $(GTK_DEBUG_FLAGS)              \
-        $(GTK_DEP_CFLAGS)
+	-I$(top_srcdir)                 \
+	-I$(top_builddir)/gdk           \
+	-I$(top_srcdir)/gdk             \
+	$(GTK_DEBUG_FLAGS)              \
+	$(GTK_DEP_CFLAGS)		\
+	$(NULL)
 
 test_css_nodes_LDADD = \
-        $(top_builddir)/gdk/libgdk-3.la \
-        $(top_builddir)/gtk/libgtk-3.la \
-        $(GTK_DEP_LIBS)
+	$(top_builddir)/gdk/libgdk-3.la \
+	$(top_builddir)/gtk/libgtk-3.la \
+	$(GTK_DEP_LIBS)			\
+	$(NULL)
 
 test_css_nodes_SOURCES = \
-        test-css-nodes.c
+	test-css-nodes.c		\
+	$(NULL)
 
 test_data = \
-	buttons.ui 	buttons.nodes \
-	entries.ui 	entries.nodes \
-	levelbar.ui 	levelbar.nodes \
-	notebook.ui 	notebook.nodes \
-	progressbar.ui 	progressbar.nodes \
+	buttons.ui 	buttons.nodes 		\
+	entries.ui 	entries.nodes 		\
+	levelbar.ui 	levelbar.nodes 		\
+	notebook.ui 	notebook.nodes 		\
+	progressbar.ui 	progressbar.nodes 	\
 	$(NULL)
 
 EXTRA_DIST += $(test_in_files) $(test_data)
@@ -40,13 +43,13 @@ insttest_PROGRAMS = $(TEST_PROGS)
 insttest_DATA = $(test_data)
 
 substitutions = \
-        -e s,@libexecdir\@,$(libexecdir),g \
-        $(NULL)
+	-e s,@libexecdir\@,$(libexecdir),g \
+	$(NULL)
 
 test_files = $(test_in_files:.test.in=.test)
 
 $(test_files): %.test: %.test.in
-        $(AM_V_GEN) sed $(substitutions) $< > $@.tmp && mv $@.tmp $@
+	$(AM_V_GEN) sed $(substitutions) $< > $@.tmp && mv $@.tmp $@
 
 EXTRA_DIST += $(test_files)
 
