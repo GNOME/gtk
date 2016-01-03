@@ -82,6 +82,7 @@ test_type (gconstpointer data)
 #endif
       g_type_is_a (type, gdk_pixbuf_simple_anim_iter_get_type ()) ||
       g_str_equal (g_type_name (type), "GdkX11DeviceManagerXI2") ||
+      g_str_equal (g_type_name (type), "GdkX11DeviceManagerCore") ||
       g_str_equal (g_type_name (type), "GdkX11Display") ||
       g_str_equal (g_type_name (type), "GdkX11DisplayManager") ||
       g_str_equal (g_type_name (type), "GdkX11Screen") ||
