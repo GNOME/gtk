@@ -1,20 +1,20 @@
-window visible=0 state=dir-ltr classes=background
-  decoration visible=1 state=dir-ltr
-  box id=progressbars visible=1 state=dir-ltr classes=vertical
-    progressbar visible=1 state=dir-ltr classes=horizontal
-      text visible=1 state=dir-ltr
-      trough visible=1 state=dir-ltr
-        progress visible=1 state=dir-ltr classes=left
-    progressbar visible=1 state=dir-ltr classes=horizontal
-      trough visible=1 state=dir-ltr
-        progress visible=1 state=dir-ltr classes=left
-    progressbar visible=1 state=dir-ltr classes=horizontal
-      text visible=1 state=dir-ltr
-      trough visible=1 state=dir-ltr
-        progress visible=1 state=dir-ltr classes=left
-    progressbar visible=1 state=dir-ltr classes=horizontal
-      trough visible=1 state=dir-ltr
-        progress visible=1 state=dir-ltr classes=right
-    progressbar visible=1 state=dir-ltr classes=vertical
-      trough visible=1 state=dir-ltr
-        progress visible=1 state=dir-ltr classes=top
+[window.background:dir(ltr)]
+  decoration:dir(ltr)
+  box#progressbars.vertical:dir(ltr)
+    progressbar.horizontal:dir(ltr)
+      text:dir(ltr)
+      trough:dir(ltr)
+        progress.left:dir(ltr)
+    progressbar.horizontal:dir(ltr)
+      trough:dir(ltr)
+        progress.left:dir(ltr)
+    progressbar.horizontal:dir(ltr)
+      text:dir(ltr)
+      trough:dir(ltr)
+        progress.left:dir(ltr)
+    progressbar.horizontal:dir(ltr)
+      trough:dir(ltr)
+        progress.right:dir(ltr)
+    progressbar.vertical:dir(ltr)
+      trough:dir(ltr)
+        progress.top:dir(ltr)

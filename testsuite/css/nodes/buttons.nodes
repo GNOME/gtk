@@ -1,28 +1,28 @@
-window visible=0 state=dir-ltr classes=background
-  decoration visible=1 state=dir-ltr
-  grid visible=1 state=dir-ltr classes=horizontal
-    button visible=1 state=dir-ltr|checked classes=text-button,toggle
-      label visible=1 state=dir-ltr
-    checkbutton visible=1 state=dir-ltr classes=text-button
-      check visible=1 state=dir-ltr
-      label visible=1 state=dir-ltr
-    radiobutton visible=1 state=dir-ltr|checked classes=text-button
-      radio visible=1 state=dir-ltr|checked
-      label visible=1 state=dir-ltr
-    radiobutton visible=1 state=dir-ltr classes=text-button
-      radio visible=1 state=dir-ltr
-      label visible=1 state=dir-ltr
-    switch visible=1 state=active|dir-ltr
-      slider visible=1 classes=slider
-    switch visible=1 state=dir-ltr
-      slider visible=1 classes=slider
-    button visible=1 state=dir-ltr classes=text-button
-      label visible=1 state=dir-ltr
-    button visible=1 state=dir-ltr classes=image-button
-      GtkAlignment visible=1 state=dir-ltr
-        box visible=1 state=dir-ltr classes=horizontal
-          image visible=1 state=dir-ltr
-    button visible=1 state=dir-ltr classes=image-button
-      GtkAlignment visible=1 state=dir-ltr
-        box visible=1 state=dir-ltr classes=horizontal
-          image visible=1 state=dir-ltr
+[window.background:dir(ltr)]
+  decoration:dir(ltr)
+  grid.horizontal:dir(ltr)
+    button.text-button.toggle:dir(ltr):checked
+      label:dir(ltr)
+    checkbutton.text-button:dir(ltr)
+      check:dir(ltr)
+      label:dir(ltr)
+    radiobutton.text-button:dir(ltr):checked
+      radio:dir(ltr):checked
+      label:dir(ltr)
+    radiobutton.text-button:dir(ltr)
+      radio:dir(ltr)
+      label:dir(ltr)
+    switch:active:dir(ltr)
+      slider.slider
+    switch:dir(ltr)
+      slider.slider
+    button.text-button:dir(ltr)
+      label:dir(ltr)
+    button.image-button:dir(ltr)
+      GtkAlignment:dir(ltr)
+        box.horizontal:dir(ltr)
+          image:dir(ltr)
+    button.image-button:dir(ltr)
+      GtkAlignment:dir(ltr)
+        box.horizontal:dir(ltr)
+          image:dir(ltr)

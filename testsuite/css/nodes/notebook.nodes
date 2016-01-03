@@ -1,15 +1,15 @@
-window visible=0 state=dir-ltr classes=background
-  decoration visible=1 state=dir-ltr
-  notebook visible=1 state=dir-ltr classes=frame
-    header visible=1 state=dir-ltr classes=top
-      button visible=1 state=dir-ltr classes=text-button
-        label visible=1 state=dir-ltr
-      tabs visible=1 state=dir-ltr
-        tab visible=1 state=active|dir-ltr
-          label visible=1 state=dir-ltr
-        tab visible=1 state=dir-ltr
-          label visible=1 state=dir-ltr
-    button visible=1 state=dir-ltr classes=text-button
-      label visible=1 state=dir-ltr
-    button visible=1 state=dir-ltr classes=text-button
-      label visible=1 state=dir-ltr
+[window.background:dir(ltr)]
+  decoration:dir(ltr)
+  notebook.frame:dir(ltr)
+    header.top:dir(ltr)
+      button.text-button:dir(ltr)
+        label:dir(ltr)
+      tabs:dir(ltr)
+        tab:active:dir(ltr)
+          label:dir(ltr)
+        tab:dir(ltr)
+          label:dir(ltr)
+    button.text-button:dir(ltr)
+      label:dir(ltr)
+    button.text-button:dir(ltr)
+      label:dir(ltr)
