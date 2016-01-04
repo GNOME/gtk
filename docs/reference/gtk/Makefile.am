@@ -281,43 +281,43 @@ MKHTML_OPTIONS="--path=\"$(abs_srcdir):$(top_srcdir)/examples\""
 
 # Extra SGML files that are included by $(DOC_MAIN_SGML_FILE)
 content_files =					\
-	version.xml				\
-	running.sgml				\
+	broadway.xml				\
+	broadwayd.xml				\
 	building.sgml				\
 	compiling.sgml				\
 	drawing-model.xml			\
+	getting_started.xml			\
 	glossary.xml				\
-	migrating-2to3.xml			\
-	migrating-checklist.sgml		\
-	migrating-unique-GtkApplication.xml	\
-	migrating-smclient-GtkApplication.xml	\
-	migrating-GtkGrid.xml			\
-	migrating-GtkStyleContext.xml		\
-	osx.sgml				\
-	broadway.xml				\
-	wayland.xml				\
-	mir.xml					\
-	question_index.sgml			\
-	resources.sgml				\
-	text_widget.sgml			\
-	tree_widget.sgml			\
-	windows.sgml				\
-	x11.sgml				\
-	gtk3-demo.xml				\
 	gtk3-demo-application.xml		\
-	gtk3-widget-factory.xml			\
+	gtk3-demo.xml				\
 	gtk3-icon-browser.xml			\
-	gtk-query-immodules-3.0.xml		\
-	gtk-update-icon-cache.xml		\
+	gtk3-widget-factory.xml			\
+	gtk-builder-tool.xml			\
 	gtk-encode-symbolic-svg.xml		\
 	gtk-launch.xml				\
-	broadwayd.xml				\
-	gtk-builder-tool.xml			\
+	gtk-query-immodules-3.0.xml		\
+	gtk-query-settings.xml			\
+	gtk-update-icon-cache.xml		\
 	input-handling.xml			\
-	visual_index.xml			\
-	getting_started.xml			\
+	migrating-2to3.xml			\
+	migrating-checklist.sgml		\
+	migrating-GtkGrid.xml			\
+	migrating-GtkStyleContext.xml		\
+	migrating-smclient-GtkApplication.xml	\
+	migrating-unique-GtkApplication.xml	\
+	mir.xml					\
+	osx.sgml				\
 	overview.xml 				\
-	gtk-query-settings.xml
+	question_index.sgml			\
+	resources.sgml				\
+	running.sgml				\
+	text_widget.sgml			\
+	tree_widget.sgml			\
+	version.xml				\
+	visual_index.xml			\
+	wayland.xml				\
+	windows.sgml				\
+	x11.sgml
 
 expand_content_files = 				\
 	compiling.sgml				\
@@ -327,10 +327,10 @@ expand_content_files = 				\
 	input-handling.xml			\
 	migrating-2to3.xml			\
 	migrating-checklist.sgml		\
-	migrating-unique-GtkApplication.xml	\
-	migrating-smclient-GtkApplication.xml	\
 	migrating-GtkGrid.xml			\
 	migrating-GtkStyleContext.xml		\
+	migrating-smclient-GtkApplication.xml	\
+	migrating-unique-GtkApplication.xml	\
 	question_index.sgml			\
 	text_widget.sgml			\
 	tree_widget.sgml
