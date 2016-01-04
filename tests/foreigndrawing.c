@@ -18,15 +18,107 @@
 
 #include <gtk/gtk.h>
 
-typedef struct {
-  GType type;
-  const gchar *name;
-  const gchar *class1;
-  const gchar *class2;
-} PathElt;
+#include <string.h>
+
+static void
+append_element (GtkWidgetPath *path,
+                const char    *selector)
+{
+  static const struct {
+    const char    *name;
+    GtkStateFlags  state_flag;
+  } pseudo_classes[] = {
+    { "active",        GTK_STATE_FLAG_ACTIVE },
+    { "hover",         GTK_STATE_FLAG_PRELIGHT },
+    { "selected",      GTK_STATE_FLAG_SELECTED },
+    { "disabled",      GTK_STATE_FLAG_INSENSITIVE },
+    { "indeterminate", GTK_STATE_FLAG_INCONSISTENT },
+    { "focus",         GTK_STATE_FLAG_FOCUSED },
+    { "backdrop",      GTK_STATE_FLAG_BACKDROP },
+    { "dir(ltr)",      GTK_STATE_FLAG_DIR_LTR },
+    { "dir(rtl)",      GTK_STATE_FLAG_DIR_RTL },
+    { "link",          GTK_STATE_FLAG_LINK },
+    { "visited",       GTK_STATE_FLAG_VISITED },
+    { "checked",       GTK_STATE_FLAG_CHECKED },
+    { "drop(active)",  GTK_STATE_FLAG_DROP_ACTIVE }
+  };
+  const char *next;
+  char *name;
+  char type;
+  guint i;
+
+  next = strpbrk (selector, "#.:");
+  if (next == NULL)
+    next = selector + strlen (selector);
+
+  name = g_strndup (selector, next - selector);
+  if (g_ascii_isupper (selector[0]))
+    {
+      GType gtype;
+      gtype = g_type_from_name (name);
+      if (gtype == G_TYPE_INVALID)
+        {
+          g_critical ("Unknown type name `%s'", name);
+          g_free (name);
+          return;
+        }
+      gtk_widget_path_append_type (path, gtype);
+    }
+  else
+    {
+      /* Omit type, we're using name */
+      gtk_widget_path_append_type (path, G_TYPE_NONE);
+      gtk_widget_path_iter_set_object_name (path, -1, name);
+    }
+  g_free (name);
+
+  while (*next != '\0')
+    {
+      type = *next;
+      selector = next + 1;
+      next = strpbrk (selector, "#.:");
+      if (next == NULL)
+        next = selector + strlen (selector);
+      name = g_strndup (selector, next - selector);
+
+      switch (type)
+        {
+        case '#':
+          gtk_widget_path_iter_set_name (path, -1, name);
+          break;
+
+        case '.':
+          gtk_widget_path_iter_add_class (path, -1, name);
+          break;
+
+        case ':':
+          for (i = 0; i < G_N_ELEMENTS (pseudo_classes); i++)
+            {
+              if (g_str_equal (pseudo_classes[i].name, name))
+                {
+                  gtk_widget_path_iter_set_state (path,
+                                                  -1,
+                                                  gtk_widget_path_iter_get_state (path, -1)
+                                                  | pseudo_classes[i].state_flag);
+                  break;
+                }
+            }
+          if (i == G_N_ELEMENTS (pseudo_classes))
+            g_critical ("Unknown pseudo-class :%s", name);
+          break;
+
+        default:
+          g_assert_not_reached ();
+          break;
+        }
+
+      g_free (name);
+    }
+}
 
 static GtkStyleContext *
-get_style (PathElt *pelt, GtkStyleContext *parent)
+get_style (GtkStyleContext *parent,
+           const char      *selector)
 {
   GtkWidgetPath *path;
   GtkStyleContext *context;
@@ -36,17 +128,13 @@ get_style (PathElt *pelt, GtkStyleContext *parent)
   else
     path = gtk_widget_path_new ();
 
-  gtk_widget_path_append_type (path, pelt->type);
-  if (pelt->name)
-    gtk_widget_path_iter_set_object_name (path, -1, pelt->name);
-  if (pelt->class1)
-    gtk_widget_path_iter_add_class (path, -1, pelt->class1);
-  if (pelt->class2)
-    gtk_widget_path_iter_add_class (path, -1, pelt->class2);
+  append_element (path, selector);
 
   context = gtk_style_context_new ();
   gtk_style_context_set_path (context, path);
   gtk_style_context_set_parent (context, parent);
+  /* XXX: Why is this necessary? */
+  gtk_style_context_set_state (context, gtk_widget_path_iter_get_state (path, -1));
   gtk_widget_path_unref (path);
 
   return context;
@@ -67,15 +155,15 @@ draw_horizontal_scrollbar (GtkWidget     *widget,
   GtkStyleContext *slider_context;
 
   /* This information is taken from the GtkScrollbar docs, see "CSS nodes" */
-  PathElt path[3] = {
-    { GTK_TYPE_SCROLLBAR, "scrollbar", "horizontal", NULL },
-    { G_TYPE_NONE, "trough", NULL, NULL },
-    { G_TYPE_NONE, "slider", NULL, NULL }
+  const char *path[3] = {
+    "scrollbar.horizontal",
+    "trough",
+    "slider"
   };
 
-  scrollbar_context = get_style (&path[0], NULL);
-  trough_context = get_style (&path[1], scrollbar_context);
-  slider_context = get_style (&path[2], trough_context);
+  scrollbar_context = get_style (NULL, path[0]);
+  trough_context = get_style (scrollbar_context, path[1]);
+  slider_context = get_style (trough_context, path[2]);
 
   gtk_style_context_set_state (scrollbar_context, state);
   gtk_style_context_set_state (trough_context, state);
@@ -106,13 +194,13 @@ draw_text (GtkWidget     *widget,
   PangoLayout *layout;
 
   /* This information is taken from the GtkLabel docs, see "CSS nodes" */
-  PathElt path[2] = {
-    { GTK_TYPE_LABEL, "label", "view", NULL },
-    { G_TYPE_NONE, "selection", NULL, NULL }
+  const char *path[2] = {
+    "label.view",
+    "selection"
   };
 
-  label_context = get_style (&path[0], NULL);
-  selection_context = get_style (&path[1], label_context);
+  label_context = get_style (NULL, path[0]);
+  selection_context = get_style (label_context, path[1]);
 
   gtk_style_context_set_state (label_context, state);
 
@@ -144,13 +232,13 @@ draw_check (GtkWidget     *widget,
   GtkStyleContext *check_context;
 
   /* This information is taken from the GtkCheckButton docs, see "CSS nodes" */
-  PathElt path[2] = {
-    { GTK_TYPE_LABEL, "checkbutton", NULL, NULL },
-    { G_TYPE_NONE, "check", NULL, NULL }
+  const char *path[2] = {
+    "checkbutton",
+    "check"
   };
 
-  button_context = get_style (&path[0], NULL);
-  check_context = get_style (&path[1], button_context);
+  button_context = get_style (NULL, path[0]);
+  check_context = get_style (button_context, path[1]);
 
   gtk_style_context_set_state (check_context, state);
 
@@ -174,13 +262,13 @@ draw_radio (GtkWidget     *widget,
   GtkStyleContext *check_context;
 
   /* This information is taken from the GtkRadioButton docs, see "CSS nodes" */
-  PathElt path[2] = {
-    { GTK_TYPE_LABEL, "radiobutton", NULL, NULL },
-    { G_TYPE_NONE, "radio", NULL, NULL }
+  const char *path[2] = {
+    "radiobutton",
+    "radio"
   };
 
-  button_context = get_style (&path[0], NULL);
-  check_context = get_style (&path[1], button_context);
+  button_context = get_style (NULL, path[0]);
+  check_context = get_style (button_context, path[1]);
 
   gtk_style_context_set_state (check_context, state);
 
