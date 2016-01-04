@@ -285,6 +285,7 @@ content_files =					\
 	broadwayd.xml				\
 	building.sgml				\
 	compiling.sgml				\
+	css.xml					\
 	drawing-model.xml			\
 	getting_started.xml			\
 	glossary.xml				\
