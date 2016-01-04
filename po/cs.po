@@ -4440,7 +4440,7 @@ msgstr "Statistiky"
 
 #: gtk/inspector/window.ui:403
 msgid "Resources"
-msgstr "Zdroje"
+msgstr "Prostředky"
 
 #: gtk/inspector/window.ui:422
 msgid "Visual"
