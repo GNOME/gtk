@@ -29,10 +29,11 @@ test_css_style_SOURCES = \
 	$(NULL)
 
 test_data = \
-        currentcolor.ui currentcolor.css        currentcolor.nodes \
-        inherit.ui      inherit.css             inherit.nodes \
-	label.ui	label.css	        label.nodes \
-	nth-child.ui	nth-child.css	        nth-child.nodes \
+        currentcolor.ui currentcolor.css        currentcolor.nodes      \
+        gradient.ui     gradient.css            gradient.nodes          \
+        inherit.ui      inherit.css             inherit.nodes           \
+	label.ui	label.css	        label.nodes             \
+	nth-child.ui	nth-child.css	        nth-child.nodes         \
 	$(NULL)
 
 BUILT_SOURCES = resources.c
