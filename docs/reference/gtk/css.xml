@@ -616,9 +616,19 @@ background-color: @bg_color;
     <literallayout>
 〈image〉 = 〈url〉 | 〈crossfade〉 | 〈gradient〉 | 〈gtk image〉
 〈crossfade〉 = cross-fade( 〈percentage〉, 〈image〉, 〈image〉)
-〈gradient〉 = [ linear-gradient | repeating-linear-gradient ] ( [ [ 〈angle〉 | to 〈side or corner〉 ] , ]? 〈color stop〉 [ , 〈color stop〉]+ )
+〈gradient〉 = 〈linear gradient〉 | 〈radial gradient〉
+〈linear gradient〉 = [ linear-gradient | repeating-linear-gradient ] (
+                      [ [ 〈angle〉 | to 〈side or corner〉 ] , ]?
+                      〈color stops〉 )
+〈radial gradient〉 = [ radial‑gradient | repeating‑radial‑gradient ] (
+                      [ [ 〈shape〉 || 〈size〉 ] [ at 〈position〉 ]? , | at 〈position〉, ]?
+                      〈color stops〉 )
 〈side or corner〉 = [ left | right ] || [ top | bottom ]
+〈color stops〉 =  〈color stop〉 [ , 〈color stop〉]+
 〈color stop〉 = 〈color〉 [ 〈percentage〉 | 〈length〉 ]?
+〈shape〉 = circle | ellipse
+〈size〉 = 〈extent keyword〉 | 〈length〉 | [ 〈length〉 | 〈percentage〉 ]{1,2}
+〈extent keyword〉 = closest-size | farthest-side | closest-corner | farthest-corner
     </literallayout>
 
     <para>
@@ -660,9 +670,8 @@ button {
     <para>
       Gradients are images that smoothly fades from one color to another. CSS
       provides ways to specify repeating and non-repeating linear and radial
-      gradients. GTK+ currently only supports linear gradients in the CSS syntax,
-      but see the -gtk-gradient extension below, which does allow to specify
-      radial gradients as well.
+      gradients. Radial gradients can be circular, or axis-aligned ellipses.
+      In addition to CSS gradients, GTK+ has its own -gtk-gradient extensions.
     </para>
 
     <para>
@@ -684,8 +693,28 @@ label {
     </example>
 
     <para>
+      A radial gradient is created by specifying a center point and one or two
+      radii. The radii may be given explicitly as lengths or percentages or
+      indirectly, by keywords that specify how the end circle or ellipsis
+      should be positioned relative to the area it is derawn in.
+    </para>
+
+    <example>
+      <title>Radial gradients</title>
+      <programlisting><![CDATA[
+button {
+  background-image: radial-gradient(ellipse at center, yellow 0%, green 100%);
+}
+label {
+  background-image: radial-gradient(circle farthest-side at left bottom, red, yellow 50px, green);
+}
+]]></programlisting>
+    </example>
+
+    <para>
       To learn more about gradients in CSS, including details of how color stops
-      are placed on the gradient line, you can read the
+      are placed on the gradient line and keywords for specifying radial sizes,
+      you can read the
       <ulink url="http://www.w3.org/TR/css3-images/#gradients">Image</ulink>
       module of the CSS specification.
     </para>
@@ -705,13 +734,16 @@ label {
 
     <literallayout>
 〈gtk gradient〉 = 〈gtk linear gradient〉 | 〈gtk radial gradient〉
-〈gtk linear gradient〉 = -gtk-gradient(linear, [ 〈x position〉 〈y position〉 , ]{2}
-                          〈gtk color stop〉 [ , 〈gtk color stop〉 ]+ )
-〈gtk radial gradient〉 = -gtk-gradient(radial, [ 〈x position〉 〈y position〉 , 〈radius〉 , ]{2}
-                          〈gtk color stop〉 [ , 〈gtk color stop〉 ]+ )
+〈gtk linear gradient〉 = -gtk-gradient(linear,
+                          [ 〈x position〉 〈y position〉 , ]{2}
+                          〈gtk color stops〉 )
+〈gtk radial gradient〉 = -gtk-gradient(radial,
+                          [ 〈x position〉 〈y position〉 , 〈radius〉 , ]{2}
+                          〈gtk color stops〉 )
 〈x position〉 = left | right | center | 〈number〉
 〈y position〉 = top | bottom | center | 〈number〉
 〈radius 〉 = 〈number〉
+〈gtk color stops〉 = 〈gtk color stop〉 [ , 〈gtk color stop〉 ]+
 〈gtk color stop〉 = color-stop( 〈number〉 , 〈color〉 ) | from( 〈color〉 ) | to( 〈color〉 )
     </literallayout>
 
