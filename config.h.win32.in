@@ -50,6 +50,9 @@
 /* Define to 1 if you have the <dlfcn.h> header file. */
 /* #undef HAVE_DLFCN_H */
 
+/* Define to 1 if you have the `flockfile' function. */
+#undef HAVE_FLOCKFILE
+
 /* Define to 1 if you have the <ftw.h> header file. */
 /* #undef HAVE_FTW_H */
 
@@ -229,6 +232,9 @@
 
 /* Have the SYNC extension library */
 /* #undef HAVE_XSYNC */
+
+/* Define to 1 if you have the `_lock_file' function. */
+#define HAVE__LOCK_FILE
 
 /* Define if _NL_MEASUREMENT_MEASUREMENT is available */
 /* #undef HAVE__NL_MEASUREMENT_MEASUREMENT */
