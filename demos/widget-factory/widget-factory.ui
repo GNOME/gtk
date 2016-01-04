@@ -3685,7 +3685,8 @@ microphone-sensitivity-medium-symbolic</property>
                             </child>
                             <style>
                               <class name="image-button"/>
-                              <class name="sidebar-button"/>
+                              <class name="circular"/>
+                              <class name="flat"/>
                             </style>
                           </object>
                         </child>
