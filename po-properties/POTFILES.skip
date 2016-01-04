@@ -159,6 +159,13 @@ testsuite/a11y/notebook.ui
 testsuite/a11y/paned.ui
 testsuite/a11y/placeholder-text.ui
 testsuite/a11y/stack.ui
+testsuite/css/nodes/buttons.ui
+testsuite/css/nodes/entries.ui
+testsuite/css/nodes/notebook.ui
+testsuite/css/style/currentcolor.ui
+testsuite/css/style/inherit.ui
+testsuite/css/style/label.ui
+testsuite/css/style/nth-child.ui
 testsuite/gtk/filechooser.c
 testsuite/gtk/ui/celllayout1.ui
 testsuite/gtk/ui/container1.ui
