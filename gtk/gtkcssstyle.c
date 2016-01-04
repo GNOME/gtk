@@ -137,8 +137,8 @@ gtk_css_style_print (GtkCssStyle *style,
   guint i;
   gboolean retval = FALSE;
 
-  g_return_if_fail (GTK_IS_CSS_STYLE (style));
-  g_return_if_fail (string != NULL);
+  g_return_val_if_fail (GTK_IS_CSS_STYLE (style), FALSE);
+  g_return_val_if_fail (string != NULL, FALSE);
 
   for (i = 0; i < _gtk_css_style_property_get_n_properties (); i++)
     {
