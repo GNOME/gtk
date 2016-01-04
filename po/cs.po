@@ -3437,7 +3437,7 @@ msgstr "Vy_mazat seznam"
 
 #: gtk/gtkrecentchooserdefault.c:1721
 msgid "Show _Private Resources"
-msgstr "Zo_brazovat soukromé zdroje"
+msgstr "Zo_brazovat soukromé prostředky"
 
 #. we create a placeholder menuitem, to be used in case
 #. * the menu is empty. this placeholder will stay around
@@ -3456,7 +3456,7 @@ msgstr "Nebyly nalezeny žádné položky"
 #: gtk/gtkrecentchoosermenu.c:534 gtk/gtkrecentchoosermenu.c:590
 #, c-format
 msgid "No recently used resource found with URI '%s'"
-msgstr "Nenalezeny žádné naposledy použité zdroje s URI „%s“"
+msgstr "Nenalezeny žádné naposledy použité prostředky s URI „%s“"
 
 #: gtk/gtkrecentchoosermenu.c:789
 #, c-format
