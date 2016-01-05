@@ -1073,31 +1073,33 @@ treeview.view {
         color: $selected_fg_color;
       }
     }
-    & :last-child.button,
-    &:last-child.button { //treeview-like derived widgets in Banshee and Evolution
+    & button:last-child,
+    & button:last-child:hover,
+    & button:last-child:backdrop { //treeview-like derived widgets in Banshee and Evolution
       border-right-style: none;
     }
   }
 }
 
 %column_header_button {
-  border-width: 0 1px 1px 0;
+  padding: 3px 6px;
+  border-style: none solid solid none;
   border-radius: 0;
+  border-width: 1;
   background-image: none;
-  border-color: $bg_color;
+  border-color: mix($backdrop_fg_color, $backdrop_bg_color,50%);
   text-shadow: none;
   &:disabled {
-    border-width: 0 1px 1px 0;
     border-color: $bg_color;
     background-image: none;
   }
   &:backdrop {
-    border-color: $backdrop_bg_color;
-    border-width: 0 1px 1px 0;
+    border-color: mix($backdrop_fg_color, $backdrop_bg_color,50%);
+    border-style: none solid solid none;
     color: mix($backdrop_fg_color, $backdrop_bg_color,50%);
     background-image: none;
+    background-color: $backdrop_base_color;
     &:disabled {
-      border-width: 0 1px 1px 0;
       border-color: $backdrop_bg_color;
       background-image: none;
     }

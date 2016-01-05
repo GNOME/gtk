@@ -1225,26 +1225,27 @@ treeview.view {
       box-shadow: none; }
     treeview.view header button:active {
       color: #fff; }
-  treeview.view header :last-child.button, treeview.view header:last-child.button {
+  treeview.view header button:last-child, treeview.view header button:last-child:hover, treeview.view header button:last-child:backdrop {
     border-right-style: none; }
 
 treeview.view header button, treeview.view header button:hover, treeview.view header button:active {
-  border-width: 0 1px 1px 0;
+  padding: 3px 6px;
+  border-style: none solid solid none;
   border-radius: 0;
+  border-width: 1;
   background-image: none;
-  border-color: #fff;
+  border-color: gray;
   text-shadow: none; }
   treeview.view header button:disabled {
-    border-width: 0 1px 1px 0;
     border-color: #fff;
     background-image: none; }
   treeview.view header button:backdrop {
-    border-color: #fff;
-    border-width: 0 1px 1px 0;
+    border-color: gray;
+    border-style: none solid solid none;
     color: gray;
-    background-image: none; }
+    background-image: none;
+    background-color: #fff; }
     treeview.view header button:backdrop:disabled {
-      border-width: 0 1px 1px 0;
       border-color: #fff;
       background-image: none; }
 
