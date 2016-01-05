@@ -1232,7 +1232,7 @@ treeview.view header button, treeview.view header button:hover, treeview.view he
   padding: 3px 6px;
   border-style: none solid solid none;
   border-radius: 0;
-  border-width: 1;
+  border-width: 1px;
   background-image: none;
   border-color: gray;
   text-shadow: none; }
