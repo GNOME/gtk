@@ -1630,7 +1630,7 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
 
 @each $w,$a in ('check', 'checkbox'),
                ('radio','radio') {
-  .#{$w} {
+  #{$w} {
     color: $fg_color;
     background-image: none;
     -gtk-icon-source: -gtk-icontheme('#{$a}-symbolic');
@@ -1654,6 +1654,16 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
       color: $backdrop_fg_color;
       &:selected { color: $backdrop_fg_color; }
     }
+  }
+}
+
+radiobutton radio,
+checkbutton check {
+  min-width: 16px;
+  min-height: 16px;
+  margin: 0 2px 0 2px;
+  &:only-child {
+    margin: 0;
   }
 }
 

@@ -1750,55 +1750,64 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
   padding: 1px;
   outline-offset: 0; }
 
-.check {
+check {
   color: #000;
   background-image: none;
   -gtk-icon-source: -gtk-icontheme("checkbox-symbolic"); }
-  .check:hover {
+  check:hover {
     color: #333333; }
-  .check:checked, .check:active {
+  check:checked, check:active {
     -gtk-icon-source: -gtk-icontheme("checkbox-checked-symbolic"); }
-    .check:checked:disabled, .check:active:disabled {
+    check:checked:disabled, check:active:disabled {
       color: gray; }
-      .check:checked:disabled:backdrop, .check:active:disabled:backdrop {
+      check:checked:disabled:backdrop, check:active:disabled:backdrop {
         color: gray; }
-    .check:checked:backdrop, .check:active:backdrop {
+    check:checked:backdrop, check:active:backdrop {
       color: #000; }
-  .check:disabled {
+  check:disabled {
     color: gray; }
-    .check:disabled:backdrop {
+    check:disabled:backdrop {
       color: gray; }
-  .check:indeterminate {
+  check:indeterminate {
     -gtk-icon-source: -gtk-icontheme("checkbox-mixed-symbolic"); }
-  .check:backdrop {
+  check:backdrop {
     color: #000; }
-    .check:backdrop:selected {
+    check:backdrop:selected {
       color: #000; }
 
-.radio {
+radio {
   color: #000;
   background-image: none;
   -gtk-icon-source: -gtk-icontheme("radio-symbolic"); }
-  .radio:hover {
+  radio:hover {
     color: #333333; }
-  .radio:checked, .radio:active {
+  radio:checked, radio:active {
     -gtk-icon-source: -gtk-icontheme("radio-checked-symbolic"); }
-    .radio:checked:disabled, .radio:active:disabled {
+    radio:checked:disabled, radio:active:disabled {
       color: gray; }
-      .radio:checked:disabled:backdrop, .radio:active:disabled:backdrop {
+      radio:checked:disabled:backdrop, radio:active:disabled:backdrop {
         color: gray; }
-    .radio:checked:backdrop, .radio:active:backdrop {
+    radio:checked:backdrop, radio:active:backdrop {
       color: #000; }
-  .radio:disabled {
+  radio:disabled {
     color: gray; }
-    .radio:disabled:backdrop {
+    radio:disabled:backdrop {
       color: gray; }
-  .radio:indeterminate {
+  radio:indeterminate {
     -gtk-icon-source: -gtk-icontheme("radio-mixed-symbolic"); }
-  .radio:backdrop {
+  radio:backdrop {
     color: #000; }
-    .radio:backdrop:selected {
+    radio:backdrop:selected {
       color: #000; }
+
+radiobutton radio,
+checkbutton check {
+  min-width: 16px;
+  min-height: 16px;
+  margin: 0 2px 0 2px; }
+  radiobutton radio:only-child,
+  checkbutton check:only-child {
+    margin: 0; }
 
 /************
  * GtkScale *
