@@ -211,7 +211,7 @@
 
     <para>When creating an application, you'll want to put more than one widget
     inside a window.
-    When you want to put more than one widget into a window, it
+    When you want to put more than one widget into a window,
     it becomes important to control how each widget is positioned and sized.
     This is where packing comes in.</para>
 
