@@ -255,23 +255,6 @@ gtk_level_bar_value_in_interval (GtkLevelBar *self,
           (value <= self->priv->max_value));
 }
 
-static void
-gtk_level_bar_get_min_block_size (GtkLevelBar *self,
-                                  gint        *block_width,
-                                  gint        *block_height)
-{
-  gtk_css_gadget_get_preferred_size (self->priv->block_gadget[0],
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     -1,
-                                     block_width, NULL,
-                                     NULL, NULL);
-  gtk_css_gadget_get_preferred_size (self->priv->block_gadget[0],
-                                     GTK_ORIENTATION_VERTICAL,
-                                     -1,
-                                     block_height, NULL,
-                                     NULL, NULL);
-}
-
 static gint
 gtk_level_bar_get_num_blocks (GtkLevelBar *self)
 {
@@ -290,6 +273,35 @@ gtk_level_bar_get_num_block_nodes (GtkLevelBar *self)
     return 2;
   else
     return gtk_level_bar_get_num_blocks (self);
+}
+
+static void
+gtk_level_bar_get_min_block_size (GtkLevelBar *self,
+                                  gint        *block_width,
+                                  gint        *block_height)
+{
+  guint i, n_blocks;
+  gint width, height;
+
+  *block_width = *block_height = 0;
+  n_blocks = gtk_level_bar_get_num_block_nodes (self);
+
+  for (i = 0; i < n_blocks; i++)
+    {
+      gtk_css_gadget_get_preferred_size (self->priv->block_gadget[i],
+                                         GTK_ORIENTATION_HORIZONTAL,
+                                         -1,
+                                         &width, NULL,
+                                         NULL, NULL);
+      gtk_css_gadget_get_preferred_size (self->priv->block_gadget[i],
+                                         GTK_ORIENTATION_VERTICAL,
+                                         -1,
+                                         &height, NULL,
+                                         NULL, NULL);
+
+      *block_width = MAX (width, *block_width);
+      *block_height = MAX (height, *block_height);
+    }
 }
 
 static gboolean
