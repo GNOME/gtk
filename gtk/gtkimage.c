@@ -1915,6 +1915,16 @@ gtk_image_style_updated (GtkWidget *widget)
 {
   GtkImage *image = GTK_IMAGE (widget);
   GtkImagePrivate *priv = image->priv;
+  GtkStyleContext *context;
+
+  context = gtk_widget_get_style_context (widget);
+  if (context)
+    {
+      GtkCssStyleChange *change = gtk_style_context_get_change (context);
+
+      if (change && gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_ICON))
+        gtk_icon_helper_invalidate (priv->icon_helper);
+    }
 
   GTK_WIDGET_CLASS (gtk_image_parent_class)->style_updated (widget);
 
