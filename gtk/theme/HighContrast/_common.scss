@@ -1126,11 +1126,10 @@ treeview.view.progressbar { //Progressbar in treeview cells
 /*********
  * Menus *
  *********/
+menubar,
 .menubar {
   padding: 0px;
-  background-color: mix($fg_color,$bg_color,5%); //Uhm?
-  &:backdrop { background-color: $backdrop_bg_color; }
-  & > .menuitem {
+  & > menuitem {
     padding: 4px 8px;
     &:hover { //Seems like it :hover even with keyboard focus
       box-shadow: inset 0 -3px $selected_bg_color;
@@ -1145,11 +1144,14 @@ treeview.view.progressbar { //Progressbar in treeview cells
 
 menu,
 .menu {
+  margin: 4px;
   padding: 0px;
   background-color: $base_color;
-  //border: 1px solid $borders_color;
-  .menuitem {
+  border: 1px solid $borders_color;
+  & menuitem {
+    text-shadow: none;
     padding: 4px;
+    min-width: 40px;
     &:hover {
       color: $selected_fg_color;
       background-color: $selected_bg_color;
@@ -1163,20 +1165,28 @@ menu,
       background-color: $backdrop_base_color;
     }
     //submenu indicators
-    &.arrow { -gtk-icon-source: -gtk-icontheme('pan-end-symbolic'); }
-    &.arrow:dir(rtl) { -gtk-icon-source: -gtk-icontheme('pan-end-symbolic-rtl'); }
-  }
-
-  menuitem {
-    min-width: 40px;
     & arrow {
-      margin-left: 10px;
       min-height: 16px;
       min-width: 16px;
     }
+    & arrow:dir(ltr) {
+      -gtk-icon-source: -gtk-icontheme('pan-end-symbolic');
+      margin-left: 10px;
+    }
     & arrow:dir(rtl) {
+      -gtk-icon-source: -gtk-icontheme('pan-end-symbolic-rtl');
       margin-right: 10px;
     }
+  }
+}
+
+menuitem {
+  & check,
+  & radio {
+    min-height: 16px;
+    min-width: 16px;
+    &:dir(ltr) { margin-right: 7px; }
+    &:dir(rtl) { margin-left: 7px; }
   }
 }
 

@@ -1255,59 +1255,67 @@ treeview.view.progressbar {
 /*********
  * Menus *
  *********/
+menubar,
 .menubar {
-  padding: 0px;
-  background-color: #f2f2f2; }
-  .menubar:backdrop {
-    background-color: #fff; }
-  .menubar > .menuitem {
+  padding: 0px; }
+  menubar > menuitem,
+  .menubar > menuitem {
     padding: 4px 8px; }
-    .menubar > .menuitem:hover {
+    menubar > menuitem:hover,
+    .menubar > menuitem:hover {
       box-shadow: inset 0 -3px #000;
       color: #000; }
-    .menubar > .menuitem:disabled {
+    menubar > menuitem:disabled,
+    .menubar > menuitem:disabled {
       color: gray;
       box-shadow: none; }
 
 menu,
 .menu {
+  margin: 4px;
   padding: 0px;
-  background-color: #fff; }
-  menu .menuitem,
-  .menu .menuitem {
-    padding: 4px; }
-    menu .menuitem:hover,
-    .menu .menuitem:hover {
-      color: #fff;
-      background-color: #000; }
-    menu .menuitem:disabled,
-    .menu .menuitem:disabled {
-      color: gray; }
-      menu .menuitem:disabled:backdrop,
-      .menu .menuitem:disabled:backdrop {
-        color: gray; }
-    menu .menuitem:backdrop, menu .menuitem:backdrop:hover,
-    .menu .menuitem:backdrop,
-    .menu .menuitem:backdrop:hover {
-      color: #000;
-      background-color: #fff; }
-    menu .menuitem.arrow,
-    .menu .menuitem.arrow {
-      -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
-    menu .menuitem.arrow:dir(rtl),
-    .menu .menuitem.arrow:dir(rtl) {
-      -gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl"); }
+  background-color: #fff;
+  border: 1px solid gray; }
   menu menuitem,
   .menu menuitem {
+    text-shadow: none;
+    padding: 4px;
     min-width: 40px; }
+    menu menuitem:hover,
+    .menu menuitem:hover {
+      color: #fff;
+      background-color: #000; }
+    menu menuitem:disabled,
+    .menu menuitem:disabled {
+      color: gray; }
+      menu menuitem:disabled:backdrop,
+      .menu menuitem:disabled:backdrop {
+        color: gray; }
+    menu menuitem:backdrop, menu menuitem:backdrop:hover,
+    .menu menuitem:backdrop,
+    .menu menuitem:backdrop:hover {
+      color: #000;
+      background-color: #fff; }
     menu menuitem arrow,
     .menu menuitem arrow {
-      margin-left: 10px;
       min-height: 16px;
       min-width: 16px; }
+    menu menuitem arrow:dir(ltr),
+    .menu menuitem arrow:dir(ltr) {
+      -gtk-icon-source: -gtk-icontheme("pan-end-symbolic");
+      margin-left: 10px; }
     menu menuitem arrow:dir(rtl),
     .menu menuitem arrow:dir(rtl) {
+      -gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl");
       margin-right: 10px; }
+
+menuitem check, menuitem radio {
+  min-height: 16px;
+  min-width: 16px; }
+  menuitem check:dir(ltr), menuitem radio:dir(ltr) {
+    margin-right: 7px; }
+  menuitem check:dir(rtl), menuitem radio:dir(rtl) {
+    margin-left: 7px; }
 
 /***************
  * Popovers   *
