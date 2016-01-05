@@ -735,14 +735,10 @@ spinbutton {
  * ComboBoxes *
  **************/
 combobox {
-
-  //FIXME padding issue
-  padding: 0;
-
-  -GtkComboBox-arrow-scaling: 0.5;
-  -GtkComboBox-shadow-type: none;
-
-  box-shadow: 0 1px $borders_edge;
+  > button.combo {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
 
   @include _button_text_shadow;
 
@@ -759,14 +755,19 @@ combobox {
   &:backdrop:disabled {
     color: $insensitive_fg_color;
   }
+  & arrow {
+    -gtk-icon-source: -gtk-icontheme('pan-down-symbolic');
+    min-height: 16px;
+    min-width: 16px;
+  }
   .menuitem { text-shadow: none; }
-  &.combobox-entry entry {
+  & > entry.combo {
     border-radius: 3px 0 0 3px;
     &:dir(rtl) {
       border-radius: 0 3px 3px 0;
     }
   }
-  &.combobox-entry button, &.combobox-entry button:backdrop {
+  & > button.combo, & > button.combo:backdrop {
     // It is needed to specify the backdrop button or it gets overridden
     border-radius: 0 3px 3px 0;
     border-left-style: none;
@@ -778,32 +779,32 @@ combobox {
   }
 }
 
-.linked > combobox > button {
+.linked > combobox > button.combo {
   // The combo is a composite widget so the way we do
   // button linking doesn't work, special case needed.
   // See https://bugzilla.gnome.org/show_bug.cgi?id=733979
   &:dir(ltr) { @extend %linked_middle; } // specificity bump
   &:dir(rtl) { @extend %linked_middle:dir(rtl); }
 }
-.linked > combobox:first-child > button {
+.linked > combobox:first-child > button.combo {
   @extend %linked:first-child;
 }
-.linked > combobox:last-child > button {
+.linked > combobox:last-child > button.combo {
   @extend %linked:last-child;
 }
-.linked > combobox:only-child > button {
+.linked > combobox:only-child > button.combo {
   @extend %linked:only-child;
 }
-.linked.vertical > combobox  > button {
+.linked.vertical > combobox  > button.combo {
   @extend %linked_vertical_middle;
 }
-.linked.vertical > combobox:first-child > button {
+.linked.vertical > combobox:first-child > button.combo {
   @extend %linked_vertical:first-child;
 }
-.linked.vertical > combobox:last-child > button {
+.linked.vertical > combobox:last-child > button.combo {
   @extend %linked_vertical:last-child;
 }
-.linked.vertical > combobox:only-child > button {
+.linked.vertical > combobox:only-child > button.combo {
   @extend %linked_vertical:only-child;
 }
 

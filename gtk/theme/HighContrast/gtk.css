@@ -653,36 +653,36 @@ stacksidebar row.needs-attention > label {
   stacksidebar row.needs-attention > label:dir(rtl) {
     background-position: left 3px, left 4px; }
 
-.osd button, .osd button:hover, .osd button:active, .osd button:checked, .osd button:disabled, .osd button:backdrop, .inline-toolbar button, .inline-toolbar button:backdrop, .linked > button, .linked > button:hover, .linked > button:active, .linked > button:checked, .linked > button:backdrop, .linked > combobox > button:dir(ltr) {
+.osd button, .osd button:hover, .osd button:active, .osd button:checked, .osd button:disabled, .osd button:backdrop, .inline-toolbar button, .inline-toolbar button:backdrop, .linked > button, .linked > button:hover, .linked > button:active, .linked > button:checked, .linked > button:backdrop, .linked > combobox > button.combo:dir(ltr) {
   border-radius: 0;
   border-left-style: none; }
-  .osd button:dir(rtl), .inline-toolbar button:dir(rtl), .linked > button:dir(rtl), .linked > combobox > button:dir(rtl) {
+  .osd button:dir(rtl), .inline-toolbar button:dir(rtl), .linked > button:dir(rtl), .linked > combobox > button.combo:dir(rtl) {
     border-radius: 0;
     border-right-style: none;
     border-left-style: solid; }
 
-.osd button:first-child, .inline-toolbar button:first-child, .linked > button:first-child, .linked > combobox:first-child > button {
+.osd button:first-child, .inline-toolbar button:first-child, .linked > button:first-child, .linked > combobox:first-child > button.combo {
   border-radius: 3px 0 0 3px;
   border-left-style: solid; }
-.osd button:last-child, .inline-toolbar button:last-child, .linked > button:last-child, .linked > combobox:last-child > button {
+.osd button:last-child, .inline-toolbar button:last-child, .linked > button:last-child, .linked > combobox:last-child > button.combo {
   border-radius: 0 3px 3px 0; }
-  .osd button:last-child:dir(rtl), .inline-toolbar button:last-child:dir(rtl), .linked > button:last-child:dir(rtl), .linked > combobox:last-child > button:dir(rtl) {
+  .osd button:last-child:dir(rtl), .inline-toolbar button:last-child:dir(rtl), .linked > button:last-child:dir(rtl), .linked > combobox:last-child > button.combo:dir(rtl) {
     border-right-style: solid; }
-.osd button:only-child, .inline-toolbar button:only-child, .linked > button:only-child, .linked > combobox:only-child > button {
+.osd button:only-child, .inline-toolbar button:only-child, .linked > button:only-child, .linked > combobox:only-child > button.combo {
   border-radius: 3px;
   border-style: solid; }
 
-.linked.vertical entry, .linked.vertical spinbutton, .linked.vertical entry:focus, .linked.vertical spinbutton:focus, .linked.vertical entry:disabled, .linked.vertical spinbutton:disabled, .linked.vertical entry:disabled:backdrop, .linked.vertical spinbutton:disabled:backdrop, .linked.vertical entry:backdrop, .linked.vertical spinbutton:backdrop, .linked.vertical > button, .linked.vertical > button:hover, .linked.vertical > button:active, .linked.vertical > button:checked, .linked.vertical > button:backdrop, .linked.vertical > combobox > button {
+.linked.vertical entry, .linked.vertical spinbutton, .linked.vertical entry:focus, .linked.vertical spinbutton:focus, .linked.vertical entry:disabled, .linked.vertical spinbutton:disabled, .linked.vertical entry:disabled:backdrop, .linked.vertical spinbutton:disabled:backdrop, .linked.vertical entry:backdrop, .linked.vertical spinbutton:backdrop, .linked.vertical > button, .linked.vertical > button:hover, .linked.vertical > button:active, .linked.vertical > button:checked, .linked.vertical > button:backdrop, .linked.vertical > combobox > button.combo {
   border-left-style: solid;
   border-top-style: none;
   border-radius: 0; }
 
-.linked.vertical entry:first-child, .linked.vertical spinbutton:first-child, .linked.vertical > button:first-child, .linked.vertical > combobox:first-child > button {
+.linked.vertical entry:first-child, .linked.vertical spinbutton:first-child, .linked.vertical > button:first-child, .linked.vertical > combobox:first-child > button.combo {
   border-style: solid;
   border-radius: 3px 3px 0 0; }
-.linked.vertical entry:last-child, .linked.vertical spinbutton:last-child, .linked.vertical > button:last-child, .linked.vertical > combobox:last-child > button {
+.linked.vertical entry:last-child, .linked.vertical spinbutton:last-child, .linked.vertical > button:last-child, .linked.vertical > combobox:last-child > button.combo {
   border-radius: 0 0 3px 3px; }
-.linked.vertical entry:only-child, .linked.vertical spinbutton:only-child, .linked.vertical > button:only-child, .linked.vertical > combobox:only-child > button {
+.linked.vertical entry:only-child, .linked.vertical spinbutton:only-child, .linked.vertical > button:only-child, .linked.vertical > combobox:only-child > button.combo {
   border-radius: 3px;
   border-style: solid; }
 
@@ -887,12 +887,11 @@ spinbutton {
  * ComboBoxes *
  **************/
 combobox {
-  padding: 0;
-  -GtkComboBox-arrow-scaling: 0.5;
-  -GtkComboBox-shadow-type: none;
-  box-shadow: 0 1px #fff;
   text-shadow: 0 1px white;
   -gtk-icon-shadow: 0 1px white; }
+  combobox > button.combo {
+    padding-left: 8px;
+    padding-right: 8px; }
   combobox:disabled {
     color: gray;
     text-shadow: none;
@@ -903,16 +902,20 @@ combobox {
     -gtk-icon-shadow: none; }
   combobox:backdrop:disabled {
     color: gray; }
+  combobox arrow {
+    -gtk-icon-source: -gtk-icontheme("pan-down-symbolic");
+    min-height: 16px;
+    min-width: 16px; }
   combobox .menuitem {
     text-shadow: none; }
-  combobox.combobox-entry entry {
+  combobox > entry.combo {
     border-radius: 3px 0 0 3px; }
-    combobox.combobox-entry entry:dir(rtl) {
+    combobox > entry.combo:dir(rtl) {
       border-radius: 0 3px 3px 0; }
-  combobox.combobox-entry button, combobox.combobox-entry button:backdrop {
+  combobox > button.combo, combobox > button.combo:backdrop {
     border-radius: 0 3px 3px 0;
     border-left-style: none; }
-    combobox.combobox-entry button:dir(rtl), combobox.combobox-entry button:backdrop:dir(rtl) {
+    combobox > button.combo:dir(rtl), combobox > button.combo:backdrop:dir(rtl) {
       border-radius: 3px 0 0 3px;
       border-left-style: solid;
       border-right-style: none; }
