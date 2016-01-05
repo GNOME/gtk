@@ -959,7 +959,12 @@ gtk_style_context_set_state (GtkStyleContext *context,
  * gtk_style_context_get_state:
  * @context: a #GtkStyleContext
  *
- * Returns the state used when rendering.
+ * Returns the state used when rendering. This method should
+ * only be used to retrieve the #GtkStateFlags to pass to
+ * #GtkStyleContext methods, like gtk_style_context_get_padding().
+ *
+ * If you need to retrieve the current state of a #GtkWidget you
+ * should look at gtk_widget_get_state_flags().
  *
  * Returns: the state flags
  *

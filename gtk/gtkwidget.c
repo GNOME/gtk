@@ -8968,6 +8968,10 @@ gtk_widget_unset_state_flags (GtkWidget     *widget,
  * returned, that is, also based on parent insensitivity, even if
  * @widget itself is sensitive.
  *
+ * Also note that if you are looking for a way to obtain the
+ * #GtkStateFlags to pass to a #GtkStyleContext method, you
+ * should look at gtk_style_context_get_state().
+ *
  * Returns: The state flags for widget
  *
  * Since: 3.0
