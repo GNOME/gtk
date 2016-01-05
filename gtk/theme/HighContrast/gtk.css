@@ -1767,7 +1767,7 @@ check {
   background-image: none;
   -gtk-icon-source: -gtk-icontheme("checkbox-symbolic"); }
   check:hover {
-    color: #333333; }
+    color: #fff; }
   check:checked, check:active {
     -gtk-icon-source: -gtk-icontheme("checkbox-checked-symbolic"); }
     check:checked:disabled, check:active:disabled {
@@ -1792,7 +1792,7 @@ radio {
   background-image: none;
   -gtk-icon-source: -gtk-icontheme("radio-symbolic"); }
   radio:hover {
-    color: #333333; }
+    color: #fff; }
   radio:checked, radio:active {
     -gtk-icon-source: -gtk-icontheme("radio-checked-symbolic"); }
     radio:checked:disabled, radio:active:disabled {
