@@ -130,7 +130,6 @@ label:disabled, label:backdrop:disabled {
     -gtk-icon-transform: rotate(1turn); } }
 spinner {
   background-image: none;
-  background-color: blue;
   opacity: 0;
   -gtk-icon-source: -gtk-icontheme("process-working-symbolic"); }
   spinner:checked {

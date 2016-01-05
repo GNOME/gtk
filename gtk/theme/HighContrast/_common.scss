@@ -163,7 +163,6 @@ label {
 
 spinner {
   background-image: none;
-  background-color: blue;
   opacity: 0; // non spinning spinner makes no sense
   -gtk-icon-source: -gtk-icontheme('process-working-symbolic');
   &:checked {
