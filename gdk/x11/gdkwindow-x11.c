@@ -1297,7 +1297,10 @@ gdk_toplevel_x11_free_contents (GdkDisplay *display,
     {
       XSyncDestroyCounter (GDK_DISPLAY_XDISPLAY (display), 
 			   toplevel->update_counter);
+      XSyncDestroyCounter (GDK_DISPLAY_XDISPLAY (display),
+                           toplevel->extended_update_counter);
       toplevel->update_counter = None;
+      toplevel->extended_update_counter = None;
 
       toplevel->current_counter_value = 0;
     }
