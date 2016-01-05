@@ -1635,7 +1635,7 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
       color: $insensitive_fg_color;
       &:backdrop { color: $insensitive_fg_color; }
     }
-    &:inconsistent {
+    &:indeterminate {
       -gtk-icon-source: -gtk-icontheme('#{$a}-mixed-symbolic');
     }
     &:backdrop {
@@ -2063,7 +2063,7 @@ calendar {
     }
   }
 
-  &:inconsistent, &:inconsistent:backdrop { color: gtkalpha(currentColor, 0.55); }
+  &:indeterminate, &:indeterminate:backdrop { color: gtkalpha(currentColor, 0.55); }
   &.highlight, &.highlight:backdrop { color: $fg_color; }
 }
 
@@ -2564,10 +2564,10 @@ cursor-handle {
                   (':hover', '-unchecked-hover'),
                   (':active', '-unchecked-active'),
                   (':disabled','-unchecked-insensitive'),
-                  (':inconsistent', '-mixed'),
-                  (':inconsistent:hover', '-mixed-hover'),
-                  (':inconsistent:selected', '-mixed-active'),
-                  (':inconsistent:disabled', '-mixed-insensitive'),
+                  (':indeterminate', '-mixed'),
+                  (':indeterminate:hover', '-mixed-hover'),
+                  (':indeterminate:selected', '-mixed-active'),
+                  (':indeterminate:disabled', '-mixed-insensitive'),
                   (':checked', '-checked'),
                   (':checked:disabled','-checked-insensitive'),
                   (':checked:hover', '-checked-hover'),
