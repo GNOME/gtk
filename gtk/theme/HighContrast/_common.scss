@@ -767,13 +767,15 @@ combobox {
       border-radius: 0 3px 3px 0;
     }
   }
-  & > button.combo, & > button.combo:backdrop {
-    // It is needed to specify the backdrop button or it gets overridden
-    border-radius: 0 3px 3px 0;
-    border-left-style: none;
+  & > button.combo:not(:only-child) {
+    &:dir(ltr) {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      border-left-style: none;
+    }
     &:dir(rtl) {
-      border-radius: 3px 0 0 3px;
-      border-left-style: solid;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
       border-right-style: none;
     }
   }
