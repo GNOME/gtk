@@ -2361,26 +2361,45 @@ colorswatch {
 
   // we need to re-set the shadow here since it get axed by the previous bit
   &:selected { box-shadow: $_colorswatch_shadow; }
-  button.color > & { box-shadow: none; }
 
   // border rounding
   &.top {
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
   }
   &.bottom {
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+  }
+  &.left, &:first-child:not(overlay):not(.top) {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+  }
+  &.right, &:last-child:not(overlay):not(.bottom) {
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+  }
+  &:only-child:not(overlay) { border-radius: 6px; }
+
+  // overlay corner rounding
+  &.top > overlay {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+  }
+  &.bottom > overlay {
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
   }
-  &.left, &:first-child:not(overlay), &:first-child:not(.top) > .overlay {
+  &:first-child:not(.top) > overlay {
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
   }
-  &.right, &:last-child:not(overlay), &:last-child:not(.bottom) > .overlay {
+  &:last-child:not(.bottom) > overlay {
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
   }
-  &:only-child:not(overlay), &:only-child > overlay { border-radius: 5px; }
+  &:only-child > overlay { border-radius: 5px; }
+
   // nth-child is used for the custom colors row.
   // the :not() madness is needed since actually the overlay is selectable by GtkColorSwatch > .overlay
   // and GtkColorSwatch.overlay, I know it's weird, but this is gtk+.
@@ -2394,7 +2413,9 @@ colorswatch {
                 inset 0 -1px transparentize(black, 0.6);
   }
   &:backdrop,
-  &:backdrop:selected {
+  &:backdrop:selectedi,
+  &.dark:backdrop,
+  &.dark:backdrop:selected {
     background-image: none;
     box-shadow: none;
   }
@@ -2403,37 +2424,31 @@ colorswatch {
   &.dark {
     color: white;
     outline-color: transparentize(black, 0.7);
+    border: 1px solid transparentize(black, 0.7);
+    &:hover { border-color: transparentize(black, 0.5); }
     &:backdrop { color: transparentize(white, 0.7); }
   }
   &.light {
     color: black;
     outline-color: transparentize(white, 0.5);
+    border: 1px solid transparentize(black, 0.7);
+    &:hover { border-color: transparentize(black, 0.5); }
     &:backdrop { color: transparentize(black, 0.7); }
   }
 
   // border color
   & overlay,
   & overlay:selected {
-    border: 1px solid $borders_color;
-    &:hover { border-color: black; }
+    background: none;
+    border: none;
   }
 
   // make the add color button looks like, well, a button
   &#add-color-button {
     @include button(normal);
-    border-style: solid; // the borders are drawn by the overlay for standard colorswatches to have them semi
-    border-width: 1px;   // translucent on the colored background, here it's not necessary so they need to be set
-    box-shadow: none;
     &:hover { @include button(hover); }
-    &:backdrop { 
-      @include button(backdrop); 
-      border-width: 1px;
-      color: $insensitive_fg_color; 
-    }
-    overlay { 
-      @include button(undecorated);
-      border-width: 0; } // reset the overlay to not 
-                         // cover the button style underneat
+    &:backdrop { @include button(backdrop); }
+    & overlay { border-width: 0; background: none; }
   }
 }
 
