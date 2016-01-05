@@ -77,7 +77,7 @@ $ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 .gtkstyle-fallback {
   background-color: $bg_color;
   color: $fg_color;
-  &:prelight {
+  &:hover {
     background-color: lighten($bg_color, 10%);
     color: $fg_color;
   }
@@ -1484,12 +1484,12 @@ scrollbar {
     &:hover {
       background-color: mix($bg_color, $fg_color, 30%);
     }
-    &:prelight:active {
+    &:hover:active {
       background-color: $selected_bg_color;
     }
     &.fine-tune {
       border-width: 8px;
-      &:prelight:active {
+      &:hover:active {
         background-color: $selected_bg_color;
       }
     }

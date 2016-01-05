@@ -77,7 +77,7 @@
 .gtkstyle-fallback {
   background-color: #fff;
   color: #000; }
-  .gtkstyle-fallback:prelight {
+  .gtkstyle-fallback:hover {
     background-color: white;
     color: #000; }
   .gtkstyle-fallback:active {
@@ -1616,11 +1616,11 @@ scrollbar {
       background-color: #e6e6e6; }
     scrollbar slider:hover {
       background-color: #4d4d4d; }
-    scrollbar slider:prelight:active {
+    scrollbar slider:hover:active {
       background-color: #000; }
     scrollbar slider.fine-tune {
       border-width: 8px; }
-      scrollbar slider.fine-tune:prelight:active {
+      scrollbar slider.fine-tune:hover:active {
         background-color: #000; }
   scrollbar.overlay-indicator:not(.dragging):not(.hovering) {
     opacity: 0.4;
