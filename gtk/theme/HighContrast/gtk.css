@@ -71,7 +71,7 @@
    or better, just don't.
    Everytime a wildcard is used a kitten dies, painfully.
 */
-*:insensitive {
+*:disabled {
   -gtk-icon-effect: dim; }
 
 .gtkstyle-fallback {
@@ -83,7 +83,7 @@
   .gtkstyle-fallback:active {
     background-color: #e6e6e6;
     color: #000; }
-  .gtkstyle-fallback:insensitive {
+  .gtkstyle-fallback:disabled {
     background-color: white;
     color: gray; }
   .gtkstyle-fallback:selected {
@@ -119,7 +119,7 @@ flowbox flowboxchild {
   flowbox flowboxchild:selected {
     outline-offset: -2px; }
 
-label:insensitive, label:backdrop:insensitive {
+label:disabled, label:backdrop:disabled {
   color: gray; }
 
 /*********************
@@ -136,7 +136,7 @@ spinner {
   spinner:checked {
     opacity: 1;
     animation: spin 1s linear infinite; }
-    spinner:checked:insensitive {
+    spinner:checked:disabled {
       opacity: 0.5; }
 
 /****************
@@ -167,7 +167,7 @@ entry, spinbutton {
     background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
     border-color: #000;
     box-shadow: inset 0 2px 2px -2px gray, inset 0 0 2px 1px #cccccc; }
-  entry:insensitive, spinbutton:insensitive {
+  entry:disabled, spinbutton:disabled {
     background-color: transparent;
     border-style: solid;
     background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
@@ -182,7 +182,7 @@ entry, spinbutton {
     color: #000;
     background-image: linear-gradient(to bottom, #fff);
     box-shadow: 0 1px rgba(255, 255, 255, 0); }
-  entry:backdrop:insensitive, spinbutton:backdrop:insensitive {
+  entry:backdrop:disabled, spinbutton:backdrop:disabled {
     background-color: transparent;
     border-style: solid;
     background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
@@ -226,7 +226,7 @@ entry, spinbutton {
     .linked.vertical entry:focus, .linked.vertical spinbutton:focus {
       border-color: #000;
       box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15), 0 -1px 0 0 #000; }
-    .linked.vertical entry:insensitive, .linked.vertical spinbutton:insensitive {
+    .linked.vertical entry:disabled, .linked.vertical spinbutton:disabled {
       background-color: transparent;
       border-style: solid;
       background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
@@ -235,7 +235,7 @@ entry, spinbutton {
       background-image: linear-gradient(to bottom, white);
       box-shadow: none;
       border-bottom-color: #d9d9d9; }
-      .linked.vertical entry:insensitive:backdrop, .linked.vertical spinbutton:insensitive:backdrop {
+      .linked.vertical entry:disabled:backdrop, .linked.vertical spinbutton:disabled:backdrop {
         background-color: transparent;
         border-style: solid;
         background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
@@ -264,7 +264,7 @@ entry, spinbutton {
         background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
         border-color: #000;
         box-shadow: inset 0 2px 2px -2px gray, inset 0 0 2px 1px #cccccc; }
-      .linked.vertical entry:first-child:insensitive, .linked.vertical spinbutton:first-child:insensitive {
+      .linked.vertical entry:first-child:disabled, .linked.vertical spinbutton:first-child:disabled {
         background-color: transparent;
         border-style: solid;
         background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
@@ -273,7 +273,7 @@ entry, spinbutton {
         background-image: linear-gradient(to bottom, white);
         box-shadow: none;
         border-bottom-color: #dddddd; }
-        .linked.vertical entry:first-child:insensitive:backdrop, .linked.vertical spinbutton:first-child:insensitive:backdrop {
+        .linked.vertical entry:first-child:disabled:backdrop, .linked.vertical spinbutton:first-child:disabled:backdrop {
           background-color: transparent;
           border-style: solid;
           background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
@@ -302,7 +302,7 @@ entry, spinbutton {
       .linked.vertical entry:last-child:focus, .linked.vertical spinbutton:last-child:focus {
         border-color: #000;
         box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15), 0 -1px 0 0 #000; }
-      .linked.vertical entry:last-child:insensitive, .linked.vertical spinbutton:last-child:insensitive {
+      .linked.vertical entry:last-child:disabled, .linked.vertical spinbutton:last-child:disabled {
         background-color: transparent;
         border-style: solid;
         background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
@@ -310,7 +310,7 @@ entry, spinbutton {
         border-color: gray;
         background-image: linear-gradient(to bottom, white);
         box-shadow: none; }
-        .linked.vertical entry:last-child:insensitive:backdrop, .linked.vertical spinbutton:last-child:insensitive:backdrop {
+        .linked.vertical entry:last-child:disabled:backdrop, .linked.vertical spinbutton:last-child:disabled:backdrop {
           background-color: transparent;
           border-style: solid;
           background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
@@ -397,21 +397,21 @@ button {
       background-color: #8d8d8d;
       border-color: #8d8d8d;
       background-image: none; }
-    button:backdrop:insensitive, button.flat:backdrop:insensitive, button.sidebar-button:backdrop:insensitive {
+    button:backdrop:disabled, button.flat:backdrop:disabled, button.sidebar-button:backdrop:disabled {
       border-width: 2px;
       border-style: solid;
       color: gray;
       background-color: white;
       border-color: #8d8d8d;
       background-image: none; }
-    button:backdrop:insensitive:active, button.flat:backdrop:insensitive:active, button.sidebar-button:backdrop:insensitive:active {
+    button:backdrop:disabled:active, button.flat:backdrop:disabled:active, button.sidebar-button:backdrop:disabled:active {
       border-width: 2px;
       border-style: solid;
       color: gray;
       border-color: #8d8d8d;
       background-image: none;
       background-color: #f6f6f6; }
-  button:insensitive {
+  button:disabled {
     border-width: 2px;
     border-style: solid;
     color: gray;
@@ -420,7 +420,7 @@ button {
     background-image: none;
     text-shadow: none;
     -gtk-icon-shadow: none; }
-    button:insensitive:active, button:insensitive.flat:active, button.sidebar-button:insensitive:active {
+    button:disabled:active, button:disabled.flat:active, button.sidebar-button:disabled:active {
       border-width: 2px;
       border-style: solid;
       color: gray;
@@ -451,7 +451,7 @@ button {
       background-color: #fff;
       border-color: rgba(255, 255, 255, 0.2);
       box-shadow: none; }
-    .osd button:insensitive {
+    .osd button:disabled {
       border-width: 2px;
       border-style: solid;
       border-color: rgba(255, 255, 255, 0.2);
@@ -489,14 +489,14 @@ button {
       background-image: none;
       text-shadow: none;
       -gtk-icon-shadow: none; }
-      button.suggested-action:backdrop:insensitive {
+      button.suggested-action:backdrop:disabled {
         border-width: 2px;
         border-style: solid;
         color: gray;
         background-color: white;
         border-color: #8d8d8d;
         background-image: none; }
-    button.suggested-action:insensitive {
+    button.suggested-action:disabled {
       border-width: 2px;
       border-style: solid;
       color: gray;
@@ -535,14 +535,14 @@ button {
       background-image: none;
       text-shadow: none;
       -gtk-icon-shadow: none; }
-      button.destructive-action:backdrop:insensitive {
+      button.destructive-action:backdrop:disabled {
         border-width: 2px;
         border-style: solid;
         color: gray;
         background-color: white;
         border-color: #8d8d8d;
         background-image: none; }
-    button.destructive-action:insensitive {
+    button.destructive-action:disabled {
       border-width: 2px;
       border-style: solid;
       color: gray;
@@ -582,7 +582,7 @@ button {
     color: white;
     background-color: black;
     border-color: gray; }
-  .inline-toolbar toolbutton > button:insensitive {
+  .inline-toolbar toolbutton > button:disabled {
     border-width: 2px;
     border-style: solid;
     color: gray;
@@ -591,7 +591,7 @@ button {
     background-image: none;
     text-shadow: none;
     -gtk-icon-shadow: none; }
-  .inline-toolbar toolbutton > button:insensitive:active {
+  .inline-toolbar toolbutton > button:disabled:active {
     border-width: 2px;
     border-style: solid;
     color: gray;
@@ -614,14 +614,14 @@ button {
     background-color: #8d8d8d;
     border-color: #8d8d8d;
     background-image: none; }
-  .inline-toolbar toolbutton > button:backdrop:insensitive {
+  .inline-toolbar toolbutton > button:backdrop:disabled {
     border-width: 2px;
     border-style: solid;
     color: gray;
     background-color: white;
     border-color: #8d8d8d;
     background-image: none; }
-  .inline-toolbar toolbutton > button:backdrop:insensitive:active {
+  .inline-toolbar toolbutton > button:backdrop:disabled:active {
     border-width: 2px;
     border-style: solid;
     color: gray;
@@ -654,7 +654,7 @@ stacksidebar row.needs-attention > label {
   stacksidebar row.needs-attention > label:dir(rtl) {
     background-position: left 3px, left 4px; }
 
-.osd button, .osd button:hover, .osd button:active, .osd button:checked, .osd button:insensitive, .osd button:backdrop, .inline-toolbar button, .inline-toolbar button:backdrop, .linked > button, .linked > button:hover, .linked > button:active, .linked > button:checked, .linked > button:backdrop, .linked > combobox > button:dir(ltr) {
+.osd button, .osd button:hover, .osd button:active, .osd button:checked, .osd button:disabled, .osd button:backdrop, .inline-toolbar button, .inline-toolbar button:backdrop, .linked > button, .linked > button:hover, .linked > button:active, .linked > button:checked, .linked > button:backdrop, .linked > combobox > button:dir(ltr) {
   border-radius: 0;
   border-left-style: none; }
   .osd button:dir(rtl), .inline-toolbar button:dir(rtl), .linked > button:dir(rtl), .linked > combobox > button:dir(rtl) {
@@ -673,7 +673,7 @@ stacksidebar row.needs-attention > label {
   border-radius: 3px;
   border-style: solid; }
 
-.linked.vertical entry, .linked.vertical spinbutton, .linked.vertical entry:focus, .linked.vertical spinbutton:focus, .linked.vertical entry:insensitive, .linked.vertical spinbutton:insensitive, .linked.vertical entry:insensitive:backdrop, .linked.vertical spinbutton:insensitive:backdrop, .linked.vertical entry:backdrop, .linked.vertical spinbutton:backdrop, .linked.vertical > button, .linked.vertical > button:hover, .linked.vertical > button:active, .linked.vertical > button:checked, .linked.vertical > button:backdrop, .linked.vertical > combobox > button {
+.linked.vertical entry, .linked.vertical spinbutton, .linked.vertical entry:focus, .linked.vertical spinbutton:focus, .linked.vertical entry:disabled, .linked.vertical spinbutton:disabled, .linked.vertical entry:disabled:backdrop, .linked.vertical spinbutton:disabled:backdrop, .linked.vertical entry:backdrop, .linked.vertical spinbutton:backdrop, .linked.vertical > button, .linked.vertical > button:hover, .linked.vertical > button:active, .linked.vertical > button:checked, .linked.vertical > button:backdrop, .linked.vertical > combobox > button {
   border-left-style: solid;
   border-top-style: none;
   border-radius: 0; }
@@ -687,17 +687,17 @@ stacksidebar row.needs-attention > label {
   border-radius: 3px;
   border-style: solid; }
 
-button.flat, button.sidebar-button, button.flat:backdrop, button.sidebar-button:backdrop, button.flat:insensitive:backdrop, button.sidebar-button:insensitive:backdrop, modelbutton.flat,
+button.flat, button.sidebar-button, button.flat:backdrop, button.sidebar-button:backdrop, button.flat:disabled:backdrop, button.sidebar-button:disabled:backdrop, modelbutton.flat,
 .menuitem.button.flat, modelbutton.flat:backdrop,
 .menuitem.button.flat:backdrop, button:link, button:visited, button:link:hover, button:link:active, button:visited:hover, button:visited:active, button:link:backdrop, button:visited:backdrop, notebook tab button, row.activatable,
 row.activatable:backdrop,
 row.activatable:backdrop:active,
 row.activatable:backdrop:checked,
-row.activatable:backdrop:insensitive,
-row.activatable:backdrop:insensitive:active,
-row.activatable:backdrop:insensitive:checked,
-row.activatable:insensitive:active,
-row.activatable:insensitive:checked, calendar.button, calendar.button:hover, calendar.button:backdrop, calendar.button:backdrop:hover {
+row.activatable:backdrop:disabled,
+row.activatable:backdrop:disabled:active,
+row.activatable:backdrop:disabled:checked,
+row.activatable:disabled:active,
+row.activatable:disabled:checked, calendar.button, calendar.button:hover, calendar.button:backdrop, calendar.button:backdrop:hover {
   border-color: transparent;
   background-color: transparent;
   background-image: none;
@@ -715,8 +715,8 @@ modelbutton.flat,
     .menuitem.button.flat:backdrop:hover {
       color: #fff;
       background-color: #000; }
-  modelbutton.flat:insensitive,
-  .menuitem.button.flat:insensitive {
+  modelbutton.flat:disabled,
+  .menuitem.button.flat:disabled {
     color: gray; }
 
 button.color {
@@ -774,7 +774,7 @@ spinbutton {
     spinbutton button:hover {
       color: #000;
       background-color: rgba(0, 0, 0, 0.05); }
-    spinbutton button:insensitive {
+    spinbutton button:disabled {
       box-shadow: none;
       color: rgba(128, 128, 128, 0.3); }
     spinbutton button:active {
@@ -784,11 +784,11 @@ spinbutton {
       border-color: rgba(141, 141, 141, 0.3);
       background-color: #fff;
       box-shadow: none; }
-    spinbutton button:backdrop:insensitive {
+    spinbutton button:backdrop:disabled {
       box-shadow: none;
       color: rgba(128, 128, 128, 0.3);
       border-width: 0 0 0 1px; }
-      spinbutton button:backdrop:insensitive:dir(rtl) {
+      spinbutton button:backdrop:disabled:dir(rtl) {
         border-width: 0 1px 0 0; }
   spinbutton.vertical button:first-child {
     border-width: 2px;
@@ -811,7 +811,7 @@ spinbutton {
       background-color: #fff;
       border-color: gray;
       background-image: none; }
-    spinbutton.vertical button:first-child:insensitive {
+    spinbutton.vertical button:first-child:disabled {
       border-width: 2px;
       border-style: solid;
       color: gray;
@@ -850,7 +850,7 @@ spinbutton {
       background-color: #fff;
       border-color: gray;
       background-image: none; }
-    spinbutton.vertical button:last-child:insensitive {
+    spinbutton.vertical button:last-child:disabled {
       border-width: 2px;
       border-style: solid;
       color: gray;
@@ -868,7 +868,7 @@ spinbutton {
       background-image: none;
       text-shadow: none;
       -gtk-icon-shadow: none; }
-  spinbutton.vertical button:backdrop:insensitive {
+  spinbutton.vertical button:backdrop:disabled {
     border-width: 2px;
     border-style: solid;
     color: gray;
@@ -877,10 +877,10 @@ spinbutton {
     background-image: none; }
   spinbutton.vertical.entry {
     border-radius: 0; }
-  spinbutton.vertical button:first-child, spinbutton.vertical button:first-child:active, spinbutton.vertical button:first-child:hover, spinbutton.vertical button:first-child:insensitive, spinbutton.vertical button:first-child:backdrop {
+  spinbutton.vertical button:first-child, spinbutton.vertical button:first-child:active, spinbutton.vertical button:first-child:hover, spinbutton.vertical button:first-child:disabled, spinbutton.vertical button:first-child:backdrop {
     border-radius: 3px 3px 0 0;
     border-bottom-width: 0; }
-  spinbutton.vertical button:last-child, spinbutton.vertical button:last-child:active, spinbutton.vertical button:last-child:hover, spinbutton.vertical button:last-child:insensitive, spinbutton.vertical button:last-child:backdrop {
+  spinbutton.vertical button:last-child, spinbutton.vertical button:last-child:active, spinbutton.vertical button:last-child:hover, spinbutton.vertical button:last-child:disabled, spinbutton.vertical button:last-child:backdrop {
     border-radius: 0 0 3px 3px;
     border-top-width: 0; }
 
@@ -894,7 +894,7 @@ combobox {
   box-shadow: 0 1px #fff;
   text-shadow: 0 1px white;
   -gtk-icon-shadow: 0 1px white; }
-  combobox:insensitive {
+  combobox:disabled {
     color: gray;
     text-shadow: none;
     -gtk-icon-shadow: none; }
@@ -902,7 +902,7 @@ combobox {
     color: #000;
     text-shadow: none;
     -gtk-icon-shadow: none; }
-  combobox:backdrop:insensitive {
+  combobox:backdrop:disabled {
     color: gray; }
   combobox .menuitem {
     text-shadow: none; }
@@ -1017,8 +1017,8 @@ headerbar {
         color: black;
         background-color: white;
         border-color: black; }
-      .titlebar.selection-mode button:insensitive,
-      headerbar.selection-mode button:insensitive {
+      .titlebar.selection-mode button:disabled,
+      headerbar.selection-mode button:disabled {
         border-width: 2px;
         border-style: solid;
         color: gray;
@@ -1038,8 +1038,8 @@ headerbar {
         text-shadow: none;
         -gtk-icon-shadow: none;
         border-color: black; }
-      .titlebar.selection-mode button:backdrop:insensitive,
-      headerbar.selection-mode button:backdrop:insensitive {
+      .titlebar.selection-mode button:backdrop:disabled,
+      headerbar.selection-mode button:backdrop:disabled {
         border-width: 2px;
         border-style: solid;
         color: gray;
@@ -1070,8 +1070,8 @@ headerbar {
           color: white;
           background-color: black;
           border-color: gray; }
-        .titlebar.selection-mode button.suggested-action:insensitive,
-        headerbar.selection-mode button.suggested-action:insensitive {
+        .titlebar.selection-mode button.suggested-action:disabled,
+        headerbar.selection-mode button.suggested-action:disabled {
           border-width: 2px;
           border-style: solid;
           color: gray;
@@ -1090,8 +1090,8 @@ headerbar {
           background-image: none;
           text-shadow: none;
           -gtk-icon-shadow: none; }
-        .titlebar.selection-mode button.suggested-action:backdrop:insensitive,
-        headerbar.selection-mode button.suggested-action:backdrop:insensitive {
+        .titlebar.selection-mode button.suggested-action:backdrop:disabled,
+        headerbar.selection-mode button.suggested-action:backdrop:disabled {
           border-width: 2px;
           border-style: solid;
           color: gray;
@@ -1146,13 +1146,13 @@ treeview.view {
   treeview.view:selected, treeview.view:backdrop:selected {
     border-left-color: gray;
     border-top-color: rgba(0, 0, 0, 0.1); }
-  treeview.view:insensitive {
+  treeview.view:disabled {
     color: gray; }
-    treeview.view:insensitive:selected {
+    treeview.view:disabled:selected {
       color: #666666; }
-      treeview.view:insensitive:selected:backdrop {
+      treeview.view:disabled:selected:backdrop {
         color: gray; }
-    treeview.view:insensitive:backdrop {
+    treeview.view:disabled:backdrop {
       color: gray; }
   treeview.view.separator:backdrop {
     min-height: 2px;
@@ -1220,7 +1220,7 @@ treeview.view header button, treeview.view header button:hover, treeview.view he
   background-image: none;
   border-color: #fff;
   text-shadow: none; }
-  treeview.view header button:insensitive {
+  treeview.view header button:disabled {
     border-width: 0 1px 1px 0;
     border-color: #fff;
     background-image: none; }
@@ -1229,7 +1229,7 @@ treeview.view header button, treeview.view header button:hover, treeview.view he
     border-width: 0 1px 1px 0;
     color: gray;
     background-image: none; }
-    treeview.view header button:backdrop:insensitive {
+    treeview.view header button:backdrop:disabled {
       border-width: 0 1px 1px 0;
       border-color: #fff;
       background-image: none; }
@@ -1262,7 +1262,7 @@ treeview.view.progressbar {
     .menubar > .menuitem:hover {
       box-shadow: inset 0 -3px #000;
       color: #000; }
-    .menubar > .menuitem:insensitive {
+    .menubar > .menuitem:disabled {
       color: gray;
       box-shadow: none; }
 
@@ -1277,11 +1277,11 @@ menu,
     .menu .menuitem:hover {
       color: #fff;
       background-color: #000; }
-    menu .menuitem:insensitive,
-    .menu .menuitem:insensitive {
+    menu .menuitem:disabled,
+    .menu .menuitem:disabled {
       color: gray; }
-      menu .menuitem:insensitive:backdrop,
-      .menu .menuitem:insensitive:backdrop {
+      menu .menuitem:disabled:backdrop,
+      .menu .menuitem:disabled:backdrop {
         color: gray; }
     menu .menuitem:backdrop, menu .menuitem:backdrop:hover,
     .menu .menuitem:backdrop,
@@ -1363,7 +1363,7 @@ popover {
         background-color: #fff;
         border-color: rgba(255, 255, 255, 0.2);
         box-shadow: none; }
-      popover.magnifier button:insensitive, popover.osd button:insensitive {
+      popover.magnifier button:disabled, popover.osd button:disabled {
         border-width: 2px;
         border-style: solid;
         border-color: rgba(255, 255, 255, 0.2);
@@ -1427,7 +1427,7 @@ notebook {
         color: #404040; }
       notebook header tabs arrow:active {
         color: #000; }
-      notebook header tabs arrow:insensitive {
+      notebook header tabs arrow:disabled {
         color: rgba(128, 128, 128, 0.3); }
       notebook header tabs arrow:backdrop {
         color: rgba(0, 0, 0, 0.4); }
@@ -1612,7 +1612,7 @@ scrollbar {
     border-radius: 20px;
     border: 5px solid transparent;
     background-color: gray; }
-    scrollbar slider:backdrop, scrollbar slider:insensitive {
+    scrollbar slider:backdrop, scrollbar slider:disabled {
       background-color: #e6e6e6; }
     scrollbar slider:hover {
       background-color: #4d4d4d; }
@@ -1665,7 +1665,7 @@ switch {
     border-color: #000;
     background-color: #000;
     text-shadow: 0 0 2px white; }
-  switch:insensitive {
+  switch:disabled {
     color: gray;
     border-color: gray;
     background-color: white;
@@ -1681,7 +1681,7 @@ switch {
       border-color: #8d8d8d;
       background-color: #8d8d8d;
       box-shadow: none; }
-    switch:backdrop:insensitive, switch:backdrop:insensitive:active {
+    switch:backdrop:disabled, switch:backdrop:disabled:active {
       background-color: white;
       color: gray;
       border-color: gray; }
@@ -1704,7 +1704,7 @@ switch {
       box-shadow: inset 0 1px white, inset 0 -2px rgba(255, 255, 255, 0.6), inset 0 -1px silver; }
     switch slider:active {
       border-color: #000; }
-    switch slider:insensitive {
+    switch slider:disabled {
       border-width: 2px;
       border-style: solid;
       color: gray;
@@ -1724,7 +1724,7 @@ switch {
       -gtk-icon-shadow: none; }
       switch slider:backdrop:active {
         border-color: #8d8d8d; }
-      switch slider:backdrop:insensitive {
+      switch slider:backdrop:disabled {
         border-width: 2px;
         border-style: solid;
         color: gray;
@@ -1747,15 +1747,15 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
     color: #333333; }
   .check:checked, .check:active {
     -gtk-icon-source: -gtk-icontheme("checkbox-checked-symbolic"); }
-    .check:checked:insensitive, .check:active:insensitive {
+    .check:checked:disabled, .check:active:disabled {
       color: gray; }
-      .check:checked:insensitive:backdrop, .check:active:insensitive:backdrop {
+      .check:checked:disabled:backdrop, .check:active:disabled:backdrop {
         color: gray; }
     .check:checked:backdrop, .check:active:backdrop {
       color: #000; }
-  .check:insensitive {
+  .check:disabled {
     color: gray; }
-    .check:insensitive:backdrop {
+    .check:disabled:backdrop {
       color: gray; }
   .check:inconsistent {
     -gtk-icon-source: -gtk-icontheme("checkbox-mixed-symbolic"); }
@@ -1772,15 +1772,15 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
     color: #333333; }
   .radio:checked, .radio:active {
     -gtk-icon-source: -gtk-icontheme("radio-checked-symbolic"); }
-    .radio:checked:insensitive, .radio:active:insensitive {
+    .radio:checked:disabled, .radio:active:disabled {
       color: gray; }
-      .radio:checked:insensitive:backdrop, .radio:active:insensitive:backdrop {
+      .radio:checked:disabled:backdrop, .radio:active:disabled:backdrop {
         color: gray; }
     .radio:checked:backdrop, .radio:active:backdrop {
       color: #000; }
-  .radio:insensitive {
+  .radio:disabled {
     color: gray; }
-    .radio:insensitive:backdrop {
+    .radio:disabled:backdrop {
       color: gray; }
   .radio:inconsistent {
     -gtk-icon-source: -gtk-icontheme("radio-mixed-symbolic"); }
@@ -1832,9 +1832,9 @@ scale.vertical.scale-has-marks-above.scale-has-marks-below {
       background-image: none;
       border-color: #787878;
       border-radius: 50%; }
-    scale trough slider:insensitive,
-    scale.scale-has-marks-above.scale-has-marks-below trough slider:insensitive,
-    scale.vertical.scale-has-marks-above.scale-has-marks-below trough slider:insensitive {
+    scale trough slider:disabled,
+    scale.scale-has-marks-above.scale-has-marks-below trough slider:disabled,
+    scale.vertical.scale-has-marks-above.scale-has-marks-below trough slider:disabled {
       border-style: solid;
       border-radius: 50%;
       background-image: none;
@@ -1847,9 +1847,9 @@ scale.vertical.scale-has-marks-above.scale-has-marks-below {
       border-color: #858585;
       background-image: none;
       box-shadow: none; }
-    scale trough slider:backdrop:insensitive,
-    scale.scale-has-marks-above.scale-has-marks-below trough slider:backdrop:insensitive,
-    scale.vertical.scale-has-marks-above.scale-has-marks-below trough slider:backdrop:insensitive {
+    scale trough slider:backdrop:disabled,
+    scale.scale-has-marks-above.scale-has-marks-below trough slider:backdrop:disabled,
+    scale.vertical.scale-has-marks-above.scale-has-marks-below trough slider:backdrop:disabled {
       border-width: 2px;
       border-style: solid;
       color: gray;
@@ -1881,11 +1881,11 @@ scale.vertical.scale-has-marks-above.scale-has-marks-below {
         border-color: gray;
         background-color: gray;
         box-shadow: none; }
-    scale trough:insensitive, scale trough.hilight:insensitive,
-    scale.scale-has-marks-above.scale-has-marks-below trough:insensitive,
-    scale.scale-has-marks-above.scale-has-marks-below trough.hilight:insensitive,
-    scale.vertical.scale-has-marks-above.scale-has-marks-below trough:insensitive,
-    scale.vertical.scale-has-marks-above.scale-has-marks-below trough.hilight:insensitive {
+    scale trough:disabled, scale trough.hilight:disabled,
+    scale.scale-has-marks-above.scale-has-marks-below trough:disabled,
+    scale.scale-has-marks-above.scale-has-marks-below trough.hilight:disabled,
+    scale.vertical.scale-has-marks-above.scale-has-marks-below trough:disabled,
+    scale.vertical.scale-has-marks-above.scale-has-marks-below trough.hilight:disabled {
       border-color: gray;
       background-color: white; }
     scale trough:backdrop,
@@ -1894,11 +1894,11 @@ scale.vertical.scale-has-marks-above.scale-has-marks-below {
       border-color: #8d8d8d;
       background-color: silver;
       box-shadow: none; }
-    scale trough:backdrop:insensitive, scale trough .hilight:backdrop:insensitive,
-    scale.scale-has-marks-above.scale-has-marks-below trough:backdrop:insensitive,
-    scale.scale-has-marks-above.scale-has-marks-below trough .hilight:backdrop:insensitive,
-    scale.vertical.scale-has-marks-above.scale-has-marks-below trough:backdrop:insensitive,
-    scale.vertical.scale-has-marks-above.scale-has-marks-below trough .hilight:backdrop:insensitive {
+    scale trough:backdrop:disabled, scale trough .hilight:backdrop:disabled,
+    scale.scale-has-marks-above.scale-has-marks-below trough:backdrop:disabled,
+    scale.scale-has-marks-above.scale-has-marks-below trough .hilight:backdrop:disabled,
+    scale.vertical.scale-has-marks-above.scale-has-marks-below trough:backdrop:disabled,
+    scale.vertical.scale-has-marks-above.scale-has-marks-below trough .hilight:backdrop:disabled {
       border-color: gray;
       background-color: #fff; }
 
@@ -2201,11 +2201,11 @@ row.activatable,
 row.activatable:backdrop,
 row.activatable:backdrop:active,
 row.activatable:backdrop:checked,
-row.activatable:backdrop:insensitive,
-row.activatable:backdrop:insensitive:active,
-row.activatable:backdrop:insensitive:checked,
-row.activatable:insensitive:active,
-row.activatable:insensitive:checked {
+row.activatable:backdrop:disabled,
+row.activatable:backdrop:disabled:active,
+row.activatable:backdrop:disabled:checked,
+row.activatable:disabled:active,
+row.activatable:disabled:checked {
   background-color: rgba(255, 255, 255, 0);
   border-style: none;
   border-radius: 0;
@@ -2332,7 +2332,7 @@ messagedialog.csd {
       color: white;
       background-color: black;
       border-color: gray; }
-    messagedialog.csd .dialog-action-area button:insensitive {
+    messagedialog.csd .dialog-action-area button:disabled {
       border-width: 2px;
       border-style: solid;
       color: gray;
@@ -2350,7 +2350,7 @@ messagedialog.csd {
       background-image: none;
       text-shadow: none;
       -gtk-icon-shadow: none; }
-    messagedialog.csd .dialog-action-area button:backdrop:insensitive {
+    messagedialog.csd .dialog-action-area button:backdrop:disabled {
       border-width: 2px;
       border-style: solid;
       color: gray;
@@ -2387,14 +2387,14 @@ messagedialog.csd {
         background-image: none;
         text-shadow: none;
         -gtk-icon-shadow: none; }
-        messagedialog.csd .dialog-action-area button.suggested-action:backdrop:insensitive {
+        messagedialog.csd .dialog-action-area button.suggested-action:backdrop:disabled {
           border-width: 2px;
           border-style: solid;
           color: gray;
           background-color: white;
           border-color: #8d8d8d;
           background-image: none; }
-      messagedialog.csd .dialog-action-area button.suggested-action:insensitive {
+      messagedialog.csd .dialog-action-area button.suggested-action:disabled {
         border-width: 2px;
         border-style: solid;
         color: gray;
@@ -2433,14 +2433,14 @@ messagedialog.csd {
         background-image: none;
         text-shadow: none;
         -gtk-icon-shadow: none; }
-        messagedialog.csd .dialog-action-area button.destructive-action:backdrop:insensitive {
+        messagedialog.csd .dialog-action-area button.destructive-action:backdrop:disabled {
           border-width: 2px;
           border-style: solid;
           color: gray;
           background-color: white;
           border-color: #8d8d8d;
           background-image: none; }
-      messagedialog.csd .dialog-action-area button.destructive-action:insensitive {
+      messagedialog.csd .dialog-action-area button.destructive-action:disabled {
         border-width: 2px;
         border-style: solid;
         color: gray;
@@ -2449,7 +2449,7 @@ messagedialog.csd {
         background-image: none;
         text-shadow: none;
         -gtk-icon-shadow: none; }
-  messagedialog.csd .dialog-action-area button, messagedialog.csd .dialog-action-area button:hover, messagedialog.csd .dialog-action-area button:active, messagedialog.csd .dialog-action-area button:insensitive, messagedialog.csd .dialog-action-area button:backdrop, messagedialog.csd .dialog-action-area button:backdrop:insensitive, messagedialog.csd .dialog-action-area button.suggested-action, messagedialog.csd .dialog-action-area button.suggested-action:hover, messagedialog.csd .dialog-action-area button.suggested-action:active, messagedialog.csd .dialog-action-area button.suggested-action:backdrop, messagedialog.csd .dialog-action-area button.suggested-action:backdrop:insensitive, messagedialog.csd .dialog-action-area button.suggested-action:insensitive, messagedialog.csd .dialog-action-area button.destructive-action, messagedialog.csd .dialog-action-area button.destructive-action:hover, messagedialog.csd .dialog-action-area button.destructive-action:active, messagedialog.csd .dialog-action-area button.destructive-action:backdrop, messagedialog.csd .dialog-action-area button.destructive-action:backdrop:insensitive, messagedialog.csd .dialog-action-area button.destructive-action:insensitive {
+  messagedialog.csd .dialog-action-area button, messagedialog.csd .dialog-action-area button:hover, messagedialog.csd .dialog-action-area button:active, messagedialog.csd .dialog-action-area button:disabled, messagedialog.csd .dialog-action-area button:backdrop, messagedialog.csd .dialog-action-area button:backdrop:disabled, messagedialog.csd .dialog-action-area button.suggested-action, messagedialog.csd .dialog-action-area button.suggested-action:hover, messagedialog.csd .dialog-action-area button.suggested-action:active, messagedialog.csd .dialog-action-area button.suggested-action:backdrop, messagedialog.csd .dialog-action-area button.suggested-action:backdrop:disabled, messagedialog.csd .dialog-action-area button.suggested-action:disabled, messagedialog.csd .dialog-action-area button.destructive-action, messagedialog.csd .dialog-action-area button.destructive-action:hover, messagedialog.csd .dialog-action-area button.destructive-action:active, messagedialog.csd .dialog-action-area button.destructive-action:backdrop, messagedialog.csd .dialog-action-area button.destructive-action:backdrop:disabled, messagedialog.csd .dialog-action-area button.destructive-action:disabled {
     border-right-style: none;
     border-bottom-style: none; }
   messagedialog.csd .dialog-action-area button:last-child {
@@ -2588,10 +2588,10 @@ infobar {
       color: black;
       background-color: white;
       border-color: black; }
-    .info button:insensitive,
-    .question button:insensitive,
-    .warning button:insensitive,
-    .error button:insensitive {
+    .info button:disabled,
+    .question button:disabled,
+    .warning button:disabled,
+    .error button:disabled {
       border-width: 2px;
       border-style: solid;
       color: gray;
@@ -2612,10 +2612,10 @@ infobar {
       background-image: none;
       text-shadow: none;
       -gtk-icon-shadow: none; }
-    .info button:backdrop:insensitive,
-    .question button:backdrop:insensitive,
-    .warning button:backdrop:insensitive,
-    .error button:backdrop:insensitive {
+    .info button:backdrop:disabled,
+    .question button:backdrop:disabled,
+    .warning button:backdrop:disabled,
+    .error button:backdrop:disabled {
       border-width: 2px;
       border-style: solid;
       color: gray;
@@ -2864,7 +2864,7 @@ cursor-handle {
       background-color: #fff;
       border-color: rgba(255, 255, 255, 0.2);
       box-shadow: none; }
-    .touch-selection button:insensitive, .touch-selection button:backdrop:insensitive {
+    .touch-selection button:disabled, .touch-selection button:backdrop:disabled {
       border-width: 2px;
       border-style: solid;
       border-color: rgba(255, 255, 255, 0.2);
@@ -2881,7 +2881,7 @@ cursor-handle {
   .touch-selection .check:active {
     -gtk-icon-shadow: none;
     color: #fff; }
-  .touch-selection .check:insensitive {
+  .touch-selection .check:disabled {
     -gtk-icon-shadow: none;
     color: #fff; }
   .touch-selection .check:inconsistent {
@@ -2893,13 +2893,13 @@ cursor-handle {
   .touch-selection .check:inconsistent:selected {
     -gtk-icon-shadow: none;
     color: #fff; }
-  .touch-selection .check:inconsistent:insensitive {
+  .touch-selection .check:inconsistent:disabled {
     -gtk-icon-shadow: none;
     color: #fff; }
   .touch-selection .check:checked {
     -gtk-icon-shadow: none;
     color: #fff; }
-  .touch-selection .check:checked:insensitive {
+  .touch-selection .check:checked:disabled {
     -gtk-icon-shadow: none;
     color: #fff; }
   .touch-selection .check:checked:hover {
@@ -2920,7 +2920,7 @@ cursor-handle {
   .touch-selection .radio:active {
     -gtk-icon-shadow: none;
     color: #fff; }
-  .touch-selection .radio:insensitive {
+  .touch-selection .radio:disabled {
     -gtk-icon-shadow: none;
     color: #fff; }
   .touch-selection .radio:inconsistent {
@@ -2932,13 +2932,13 @@ cursor-handle {
   .touch-selection .radio:inconsistent:selected {
     -gtk-icon-shadow: none;
     color: #fff; }
-  .touch-selection .radio:inconsistent:insensitive {
+  .touch-selection .radio:inconsistent:disabled {
     -gtk-icon-shadow: none;
     color: #fff; }
   .touch-selection .radio:checked {
     -gtk-icon-shadow: none;
     color: #fff; }
-  .touch-selection .radio:checked:insensitive {
+  .touch-selection .radio:checked:disabled {
     -gtk-icon-shadow: none;
     color: #fff; }
   .touch-selection .radio:checked:hover {
