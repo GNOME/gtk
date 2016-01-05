@@ -2262,19 +2262,36 @@ stacksidebar {
 
 
 paned {
-  // This is actually the invisible area of the paned separator, not a margin...
-  margin: 0 8px 8px 0; //drag area of the separator
-  &:dir(rtl) {
-    margin-right: 0;
-    margin-left: 8px;
-  }
   separator {
-    //FIXME abusing a background-image to get rid of the handle decoration
-    //I'd like something better...
+    min-width: 1px;
+    min-height: 1px;
     background-image: linear-gradient(to bottom, $borders_color);
     &:backdrop {
       background-image: linear-gradient(to bottom, $backdrop_borders_color);
     }
+  }
+   &:dir(ltr).horizontal separator {
+    margin: 0 -8px 0 0;
+    padding: 0 8px 0 0;
+  }
+  &:dir(rtl).horizontal separator {
+    margin: 0 0 0 -8px;
+    padding: 0 0 0 8px;
+  }
+  &.vertical separator {
+    margin: 0 0 -8px 0;
+    padding: 0 0 8px 0;
+  }
+  separator:selected {
+    background-color: $selected_bg_color;
+  }
+  separator.wide {
+    min-width: 5px;
+    min-height: 5px;
+    background-color: transparent;
+    border-style: none solid;
+    border-color: $borders_color;
+    border-width: 1px;
   }
 }
 

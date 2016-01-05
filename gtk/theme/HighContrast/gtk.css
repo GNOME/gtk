@@ -2519,17 +2519,38 @@ stacksidebar row {
 /*********
  * Paned *
  *********/
-paned {
-  margin: 0 8px 8px 0; }
-  paned:dir(rtl) {
-    margin-right: 0;
-    margin-left: 8px; }
-  paned separator, paned placessidebar .view separator, placessidebar .view paned separator,
-  paned placessidebar .view separator:backdrop,
-  placessidebar .view paned separator:backdrop {
-    background-image: linear-gradient(to bottom, gray); }
-    paned separator:backdrop {
-      background-image: linear-gradient(to bottom, #8d8d8d); }
+paned separator, paned placessidebar .view separator, placessidebar .view paned separator,
+paned placessidebar .view separator:backdrop,
+placessidebar .view paned separator:backdrop {
+  min-width: 1px;
+  min-height: 1px;
+  background-image: linear-gradient(to bottom, gray); }
+  paned separator:backdrop {
+    background-image: linear-gradient(to bottom, #8d8d8d); }
+paned:dir(ltr).horizontal separator {
+  margin: 0 -8px 0 0;
+  padding: 0 8px 0 0; }
+paned:dir(rtl).horizontal separator {
+  margin: 0 0 0 -8px;
+  padding: 0 0 0 8px; }
+paned.vertical separator,
+paned.vertical placessidebar .view separator:backdrop,
+placessidebar .view paned.vertical separator:backdrop {
+  margin: 0 0 -8px 0;
+  padding: 0 0 8px 0; }
+paned separator:selected,
+paned placessidebar .view separator:selected:backdrop,
+placessidebar .view paned separator:selected:backdrop {
+  background-color: #000; }
+paned separator.wide,
+paned placessidebar .view separator.wide:backdrop,
+placessidebar .view paned separator.wide:backdrop {
+  min-width: 5px;
+  min-height: 5px;
+  background-color: transparent;
+  border-style: none solid;
+  border-color: gray;
+  border-width: 1px; }
 
 paned.wide {
   -GtkPaned-handle-size: 5;
