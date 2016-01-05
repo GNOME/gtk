@@ -2949,3 +2949,28 @@ cursor-handle {
   .touch-selection .radio:backdrop:checked {
     -gtk-icon-shadow: none;
     color: #fff; }
+
+button.circular {
+  border-radius: 20px;
+  -gtk-outline-radius: 20px; }
+
+button.circular label {
+  padding: 0; }
+
+frame.keycap {
+  background-color: #fefefe;
+  border: 1px solid #cecece;
+  border-radius: 5px;
+  box-shadow: 0px 1px 0px #fff inset, 0px -2px 0px #dedede inset;
+  color: #555753;
+  padding: 3px 8px 3px 8px; }
+
+*:drop(active):focus,
+*:drop(active) {
+  border: 1px solid black; }
+
+stackswitcher button.text-button {
+  min-width: 100px; }
+
+stackswitcher button.circular {
+  min-width: 0px; }
