@@ -2502,9 +2502,9 @@ GtkFileChooserDialog .dialog-action-box {
   border: none; }
   .sidebar:backdrop {
     background-color: #fff; }
-  .sidebar > GtkScrolledWindow > .frame {
+  .sidebar > scrolledwindow > .frame {
     border-right: 1px solid gray; }
-    .sidebar > GtkScrolledWindow > .frame:dir(rtl) {
+    .sidebar > scrolledwindow > .frame:dir(rtl) {
       border-right: none;
       border-left: 1px solid gray; }
 
