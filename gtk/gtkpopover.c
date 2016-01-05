@@ -108,6 +108,8 @@
 #include "gtksizegroup.h"
 #include "a11y/gtkpopoveraccessible.h"
 #include "gtkmenusectionbox.h"
+#include "gtkroundedboxprivate.h"
+#include "gtkstylecontextprivate.h"
 
 #ifdef GDK_WINDOWING_WAYLAND
 #include "wayland/gdkwayland.h"
@@ -882,17 +884,25 @@ gtk_popover_fill_border_path (GtkPopover *popover,
   GtkAllocation allocation;
   GtkStyleContext *context;
   gint x1, y1, x2, y2;
+  GtkRoundedBox box;
 
   context = gtk_widget_get_style_context (widget);
   gtk_widget_get_allocation (widget, &allocation);
+
+  cairo_set_source_rgba (cr, 0, 0, 0, 1);
 
   gtk_popover_apply_tail_path (popover, cr);
   cairo_close_path (cr);
   cairo_fill (cr);
 
   gtk_popover_get_rect_coords (popover, &x1, &y1, &x2, &y2);
-  gtk_render_frame (context, cr, x1, y1, x2 - x1, y2 - y1);
-  gtk_render_background (context, cr, x1, y1, x2 - x1, y2 - y1);
+
+  _gtk_rounded_box_init_rect (&box, x1, y1, x2 - x1, y2 - y1);
+  _gtk_rounded_box_apply_border_radius_for_style (&box,
+                                                  gtk_style_context_lookup_style (context),
+                                                  0);
+  _gtk_rounded_box_path (&box, cr);
+  cairo_fill (cr);
 }
 
 static void
