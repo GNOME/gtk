@@ -268,7 +268,7 @@ gtk_level_bar_get_min_block_size (GtkLevelBar *self,
   gtk_css_gadget_get_preferred_size (self->priv->block_gadget[0],
                                      GTK_ORIENTATION_VERTICAL,
                                      -1,
-                                     NULL, block_height,
+                                     block_height, NULL,
                                      NULL, NULL);
 }
 
