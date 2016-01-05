@@ -39,7 +39,7 @@ $ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   outline-style: dashed;
   outline-offset: -3px;
   outline-width: 1px;
-  outline-radius: 2px;
+  -gtk-outline-radius: 2px;
 
 }
 
@@ -1655,11 +1655,11 @@ scale.vertical.scale-has-marks-above.scale-has-marks-below {
   -GtkRange-slider-width: 20;
   -GtkRange-trough-border: 2;
   outline-offset: -9px;
-  outline-radius: 4px;
+  -gtk-outline-radius: 4px;
 
   &.fine-tune {
     outline-offset: -7px;
-    outline-radius: 6px;
+    -gtk-outline-radius: 6px;
     & trough {
       border-radius: 4px;
       margin: 8px;
@@ -2208,7 +2208,7 @@ placessidebar {
 
       @extend button.flat;
       border-radius: 100%;
-      outline-radius: 100%;
+      -gtk-outline-radius: 100%;
       &:not(:hover):not(:active) > image,
       &:backdrop > image { opacity: $_placesidebar_icons_opacity };
     }

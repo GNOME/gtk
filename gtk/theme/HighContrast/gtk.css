@@ -50,7 +50,7 @@
   outline-style: dashed;
   outline-offset: -3px;
   outline-width: 1px;
-  outline-radius: 2px; }
+  -gtk-outline-radius: 2px; }
 
 /***************
  * Base States *
@@ -1799,12 +1799,12 @@ scale.vertical.scale-has-marks-above.scale-has-marks-below {
   -GtkRange-slider-width: 20;
   -GtkRange-trough-border: 2;
   outline-offset: -9px;
-  outline-radius: 4px; }
+  -gtk-outline-radius: 4px; }
   scale.fine-tune,
   scale.scale-has-marks-above.scale-has-marks-below.fine-tune,
   scale.vertical.scale-has-marks-above.scale-has-marks-below.fine-tune {
     outline-offset: -7px;
-    outline-radius: 6px; }
+    -gtk-outline-radius: 6px; }
     scale.fine-tune trough,
     scale.scale-has-marks-above.scale-has-marks-below.fine-tune trough,
     scale.vertical.scale-has-marks-above.scale-has-marks-below.fine-tune trough {
@@ -2492,7 +2492,7 @@ placessidebar row {
     padding-left: 2px; }
   button.sidebar-button {
     border-radius: 100%;
-    outline-radius: 100%; }
+    -gtk-outline-radius: 100%; }
     button.sidebar-button.image-button {
       padding: 5px; }
     button.sidebar-button:not(:hover):not(:active) > image, button.sidebar-button:backdrop > image {
