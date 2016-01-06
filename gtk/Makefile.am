@@ -1279,9 +1279,13 @@ theme_sources = 				\
 	theme/HighContrast/_colors.scss 	\
 	theme/HighContrast/_common.scss 	\
 	theme/HighContrast/_drawing.scss 	\
+	theme/HighContrast/gtk-contained-dark.scss \
+	theme/HighContrast/gtk-contained.scss 	\
 	theme/HighContrast/Gemfile 		\
+	theme/HighContrast/gtk-contained.css 	\
+	theme/HighContrast/gtk-contained-dark.css \
 	theme/HighContrast/gtk.css 		\
-	theme/HighContrast/gtk.scss 		\
+	theme/HighContrast/gtk-dark.css 	\
 	theme/HighContrast/parse-sass.sh 	\
 	theme/Raleigh/gtk-default.css
 
