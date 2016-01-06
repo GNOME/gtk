@@ -1114,6 +1114,11 @@ pkgdata_DATA = gtkbuilder.rng
 
 EXTRA_DIST += gtkbuilder.rnc gtkbuilder.rng
 
+itsdir = $(datadir)/gettext/its
+its_DATA = gtkbuilder.loc gtkbuilder.its
+
+EXTRA_DIST += $(its_DATA)
+
 templates =				\
 	$(inspector_templates)		\
 	ui/gtkapplication-quartz.ui	\
