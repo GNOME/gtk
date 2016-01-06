@@ -623,17 +623,17 @@ button {
     background-image: none;
     background-color: #f6f6f6; }
 
-toolbar.inline-toolbar toolbutton > button.flat, toolbar.inline-toolbar toolbutton > button.sidebar-button {
+toolbar.inline-toolbar toolbutton > button.flat, searchbar.inline-toolbar toolbutton > button.flat, toolbar.inline-toolbar toolbutton > button.sidebar-button, searchbar.inline-toolbar toolbutton > button.sidebar-button {
   border-radius: 0;
   border-left-style: none; }
-toolbar.inline-toolbar toolbutton:first-child > button.flat, toolbar.inline-toolbar toolbutton:first-child > button.sidebar-button {
+toolbar.inline-toolbar toolbutton:first-child > button.flat, searchbar.inline-toolbar toolbutton:first-child > button.flat, toolbar.inline-toolbar toolbutton:first-child > button.sidebar-button, searchbar.inline-toolbar toolbutton:first-child > button.sidebar-button {
   border-radius: 3px 0 0 3px;
   border-left-style: solid; }
-toolbar.inline-toolbar toolbutton:last-child > button.flat, toolbar.inline-toolbar toolbutton:last-child > button.sidebar-button {
+toolbar.inline-toolbar toolbutton:last-child > button.flat, searchbar.inline-toolbar toolbutton:last-child > button.flat, toolbar.inline-toolbar toolbutton:last-child > button.sidebar-button, searchbar.inline-toolbar toolbutton:last-child > button.sidebar-button {
   border-radius: 0 3px 3px 0; }
-toolbar.inline-toolbar toolbutton:last-child:dir(rtl) > button.flat, toolbar.inline-toolbar toolbutton:last-child:dir(rtl) > button.sidebar-button {
+toolbar.inline-toolbar toolbutton:last-child:dir(rtl) > button.flat, searchbar.inline-toolbar toolbutton:last-child:dir(rtl) > button.flat, toolbar.inline-toolbar toolbutton:last-child:dir(rtl) > button.sidebar-button, searchbar.inline-toolbar toolbutton:last-child:dir(rtl) > button.sidebar-button {
   border-right-style: solid; }
-toolbar.inline-toolbar toolbutton:only-child > button.flat, toolbar.inline-toolbar toolbutton:only-child > button.sidebar-button {
+toolbar.inline-toolbar toolbutton:only-child > button.flat, searchbar.inline-toolbar toolbutton:only-child > button.flat, toolbar.inline-toolbar toolbutton:only-child > button.sidebar-button, searchbar.inline-toolbar toolbutton:only-child > button.sidebar-button {
   border-radius: 3px;
   border-style: solid; }
 
@@ -930,35 +930,37 @@ combobox {
 /************
  * Toolbars *
  ************/
-toolbar {
+toolbar, searchbar {
   padding: 6px;
   background-color: #fff; }
-  toolbar.osd {
+  toolbar.osd, searchbar.osd {
     background-color: rgba(0, 0, 0, 0.8);
     border-radius: 6px;
     padding: 12px; }
-    toolbar.osd label {
+    toolbar.osd label, searchbar.osd label {
       color: #fff; }
-  toolbar.inline-toolbar {
+  toolbar.inline-toolbar, searchbar.inline-toolbar {
     border-width: 0 1px 1px;
     padding: 3px;
     border-radius: 0  0 4px 4px; }
-  toolbar.vertical {
+  toolbar.vertical, searchbar.vertical {
     border-right: 1px solid gray; }
-    toolbar.vertical:dir(rtl) {
+    toolbar.vertical:dir(rtl), searchbar.vertical:dir(rtl) {
       border-right: none;
       border-left: 1px solid gray; }
 
 searchbar {
   border-width: 0 0 1px;
+  border-color: gray;
+  border-style: none none solid none;
   padding: 3px; }
 
-toolbar.inline-toolbar, searchbar {
+toolbar.inline-toolbar, searchbar.inline-toolbar {
   border-style: solid;
   border-color: gray;
   background-color: #d9d9d9;
   box-shadow: inset 0 2px 3px -1px #a4a4a4; }
-  toolbar.inline-toolbar:backdrop, searchbar:backdrop {
+  toolbar.inline-toolbar:backdrop, searchbar.inline-toolbar:backdrop {
     border-color: #8d8d8d;
     background-color: #d7d7d7;
     box-shadow: none; }
@@ -1338,7 +1340,7 @@ popover {
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.5); }
   popover:backdrop {
     box-shadow: none; }
-  popover > .list, popover > .view, popover > toolbar {
+  popover > .list, popover > .view, popover > toolbar, popover > searchbar {
     background-color: transparent; }
   popover separator, popover placessidebar .view separator, placessidebar .view popover separator,
   popover placessidebar .view separator:backdrop,
