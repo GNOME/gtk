@@ -39,7 +39,7 @@ gtk_css_style_render_icon (GtkCssStyle            *style,
                            GtkCssImageBuiltinType  builtin_type)
 {
   const GtkCssValue *shadows;
-  cairo_matrix_t matrix, transform_matrix;
+  cairo_matrix_t matrix, transform_matrix, saved_matrix;
   GtkCssImage *image;
 
   g_return_if_fail (GTK_IS_CSS_STYLE (style));
@@ -48,6 +48,8 @@ gtk_css_style_render_icon (GtkCssStyle            *style,
   image = _gtk_css_image_value_get_image (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_SOURCE));
   if (image == NULL)
     return;
+
+  cairo_get_matrix (cr, &saved_matrix);
 
   shadows = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_SHADOW);
 
@@ -75,6 +77,8 @@ gtk_css_style_render_icon (GtkCssStyle            *style,
           cairo_paint (cr);
         }
     }
+
+  cairo_set_matrix (cr, &saved_matrix);
 }
 
 gboolean
