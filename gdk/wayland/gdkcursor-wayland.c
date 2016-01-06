@@ -87,17 +87,23 @@ static const struct {
   const gchar *css_name, *traditional_name;
 } name_map[] = {
   { "default",      "left_ptr" },
+  { "help",         "left_ptr" },
+  { "context-menu", "left_ptr" },
   { "pointer",      "hand" },
   { "progress",     "left_ptr_watch" },
   { "wait",         "watch" },
   { "cell",         "crosshair" },
   { "crosshair",    "cross" },
   { "text",         "xterm" },
+  { "vertical-text","xterm" },
   { "alias",        "dnd-link" },
   { "copy",         "dnd-copy" },
+  { "move",         "dnd-move" },
   { "no-drop",      "dnd-none" },
   { "not-allowed",  "crossed_circle" },
   { "grab",         "hand2" },
+  { "grabbing",     "hand2" },
+  { "all-scroll",   "left_ptr" },
   { "col-resize",   "h_double_arrow" },
   { "row-resize",   "v_double_arrow" },
   { "n-resize",     "top_side" },
@@ -112,6 +118,8 @@ static const struct {
   { "ns-resize",    "v_double_arrow" },
   { "nesw-resize",  "fd_double_arrow" },
   { "nwse-resize",  "bd_double_arrow" },
+  { "zoom-in",      "left_ptr" },
+  { "zoom-out",     "left_ptr" },
   { NULL, NULL }
 };
 
@@ -126,7 +134,7 @@ name_fallback (const gchar *name)
         return name_map[i].traditional_name;
     }
 
-  return "left_ptr";
+  return NULL;
 }
 
 static gboolean
@@ -144,17 +152,22 @@ _gdk_wayland_cursor_update (GdkWaylandDisplay *wayland_display,
                                                         cursor->scale);
   c = wl_cursor_theme_get_cursor (theme, cursor->name);
   if (!c)
-    c = wl_cursor_theme_get_cursor (theme, name_fallback (cursor->name));
+    {
+      const char *fallback;
+
+      fallback = name_fallback (cursor->name);
+      if (fallback)
+        {
+          c = wl_cursor_theme_get_cursor (theme, name_fallback (cursor->name));
+          if (!c)
+            c = wl_cursor_theme_get_cursor (theme, "left_ptr");
+        }
+    }
 
   if (!c)
     {
       g_warning (G_STRLOC ": Unable to load %s from the cursor theme", cursor->name);
-
-      /* return the left_ptr cursor as a fallback */
-      c = wl_cursor_theme_get_cursor (theme, "left_ptr");
-
-      if (!c)
-        return FALSE;
+      return FALSE;
     }
 
   cursor->wl_cursor = c;
