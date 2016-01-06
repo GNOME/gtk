@@ -677,7 +677,8 @@ gtk_list_box_get_row_at_index (GtkListBox *box,
  *
  * Gets the row at the @y position.
  *
- * Returns: (transfer none): the row
+ * Returns: (transfer none) (nullable): the row or %NULL
+ *   in case no row exists for the given y coordinate.
  *
  * Since: 3.10
  */
