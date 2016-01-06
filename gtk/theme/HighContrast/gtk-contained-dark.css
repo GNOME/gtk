@@ -35,17 +35,12 @@
   padding: 0;
   -GtkToolButton-icon-spacing: 4;
   -GtkTextView-error-underline-color: #cc0000;
-  -GtkPaned-handle-size: 1;
   -gtk-icon-style: symbolic;
-  -GtkCheckButton-indicator-size: 16;
-  -GtkCheckMenuItem-indicator-size: 16;
   -GtkScrolledWindow-scrollbar-spacing: 0;
   -GtkToolItemGroup-expander-size: 11;
-  -GtkExpander-expander-size: 16;
   -GtkTreeView-horizontal-separator: 4;
   -GtkDialog-button-spacing: 4;
   -GtkDialog-action-area-border: 0;
-  -GtkStatusbar-shadow-type: none;
   outline-color: rgba(255, 255, 255, 0.3);
   outline-style: dashed;
   outline-offset: -3px;
@@ -1668,10 +1663,6 @@ scrollbar {
 /**********
  * Switch *
  **********/
-GtkSwitch {
-  -GtkSwitch-slider-width: 47px;
-  -GtkSwitch-slider-height: 28px; }
-
 switch {
   font: bold condensed 9;
   outline-offset: -4px;
@@ -1709,6 +1700,10 @@ switch {
       color: gray;
       border-color: gray; }
   switch slider {
+    margin: -1px;
+    min-width: 45px;
+    min-height: 27px;
+    border: 1px solid;
     border-radius: 3px;
     border-width: 2px;
     border-style: solid;
@@ -1959,6 +1954,10 @@ progressbar {
     box-shadow: none;
     border-width: 0; }
 
+progressbar.horizontal trough, progressbar.horizontal progress {
+  min-height: 2px; }
+progressbar.vertical trough, progressbar.vertical progress {
+  min-width: 2px; }
 progressbar progress {
   border-width: 1px;
   border-style: solid;
@@ -1974,8 +1973,7 @@ progressbar progress {
     box-shadow: none; }
   progressbar progress.osd {
     border-width: 0;
-    border-radius: 0;
-    -GtkProgressBar-min-horizontal-bar-height: 2px; }
+    border-radius: 0; }
 
 /*************
  * Level Bar *
@@ -2296,6 +2294,8 @@ row.activatable {
  * Expanders *
  *************/
 expander arrow {
+  min-width: 16px;
+  min-height: 16px;
   -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
   expander arrow:dir(rtl) {
     -gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl"); }
@@ -2580,21 +2580,6 @@ placessidebar .view paned separator.wide:backdrop {
   border-style: none solid;
   border-color: gray;
   border-width: 1px; }
-
-paned.wide {
-  -GtkPaned-handle-size: 5;
-  margin: 0; }
-  paned.wide separator,
-  paned.wide placessidebar .view separator:backdrop,
-  placessidebar .view paned.wide separator:backdrop {
-    background-color: transparent;
-    border-style: none solid;
-    border-color: gray;
-    border-width: 1px; }
-  paned.wide.vertical separator {
-    border-style: solid none; }
-  paned.wide separator:backdrop {
-    border-color: #737373; }
 
 /**************
  * GtkInfoBar *
