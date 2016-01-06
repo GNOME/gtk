@@ -2,16 +2,16 @@
 // it gets @if ed depending on $variant
 
 
-$base_color: #fff;
-$bg_color: #fff;
-$fg_color: #000;
+$base_color: if($variant == 'light', #fff, #111);
+$bg_color: if($variant == 'light', #fff, #000);
+$fg_color: if($variant == 'light', #000, #fff);
 
 $selected_fg_color: #fff;
-$selected_bg_color: #000; //#4a90d9;
-$selected_borders_color: #000;
+$selected_bg_color: if($variant == 'light', #000, #aaa); //#4a90d9;
+$selected_borders_color: if($variant == 'light', #000, #aaa);
 
 $borders_color: mix($bg_color,$fg_color,50%);
-$borders_edge: #fff;
+$borders_edge: if($variant == 'light', #fff, #000);
 $link_color: $selected_bg_color;
 
 $suggested_color: #4a90d9;
@@ -56,7 +56,6 @@ $backdrop_borders_color: mix($borders_color, $bg_color, 90%);
 @define-color warning_color #{"" + $warning_color};
 @define-color error_color #{"" + $error_color};
 @define-color success_color #{"" + $success_color};
-//@define-color desctructive_color $destructive_color
 
 //WM
 

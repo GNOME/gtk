@@ -1209,6 +1209,9 @@ gtk.gresource.xml: Makefile.am inspector/Makefile.inc
           echo "    <file preprocess='to-pixdata'>theme/Adwaita/assets/$$n</file>" >> $@; \
         done; \
 	echo "    <file alias='theme/HighContrast.css'>theme/HighContrast/gtk.css</file>" >> $@; \
+	echo "    <file alias='theme/HighContrast-dark.css'>theme/HighContrast/gtk-dark.css</file>" >> $@; \
+	echo "    <file>theme/HighContrast/gtk-contained.css</file>" >> $@; \
+	echo "    <file>theme/HighContrast/gtk-contained-dark.css</file>" >> $@; \
 	if test "$(win32_theme)" = "yes"; then \
 	  for f in $(srcdir)/theme/win32/*.css; do \
 	    n=`basename $$f`; \
