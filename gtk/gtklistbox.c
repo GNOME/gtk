@@ -972,12 +972,93 @@ gtk_list_box_set_placeholder (GtkListBox *box,
 
   if (placeholder)
     {
-      gtk_widget_set_parent (GTK_WIDGET (placeholder), GTK_WIDGET (box));
-      gtk_widget_set_child_visible (GTK_WIDGET (placeholder),
+      gtk_widget_set_parent (placeholder, GTK_WIDGET (box));
+      gtk_widget_set_child_visible (placeholder,
                                     priv->n_visible_rows == 0);
     }
 }
 
+
+static int
+row_allocation_y_cmp (gconstpointer a,
+                      gconstpointer b,
+                      gpointer      user_data)
+{
+  int y = GPOINTER_TO_INT (b);
+  GtkListBoxRowPrivate *row_priv = ROW_PRIV (a);
+
+  if (y >= row_priv->y && y < (row_priv->y + row_priv->height))
+    {
+      return 0;
+    }
+  else if (row_priv->header)
+    {
+      /* Headers are separate widgets, belong to one row and aren't part of that row's
+       * priv->height, priv->y, or allocation... */
+      GtkAllocation header_alloc;
+      gtk_widget_get_allocated_size (row_priv->header, &header_alloc, NULL);
+      g_assert (header_alloc.y <= row_priv->y);
+      if (y >= header_alloc.y && y < (header_alloc.y + header_alloc.height))
+        return 0;
+      else if (y < header_alloc.y)
+        return 1;
+      else if (y > header_alloc.y + header_alloc.height)
+        return -1;
+    }
+  else if (y < row_priv->y)
+    {
+      return 1;
+    }
+
+  return -1;
+}
+
+
+static void
+apply_child_visibility (GtkListBox *box, int from, int to, gboolean setting)
+{
+  GtkListBoxPrivate *priv = BOX_PRIV (box);
+  GSequenceIter *top_iter, *bottom_iter, *iter;
+
+  top_iter = g_sequence_lookup (priv->children,
+                                GINT_TO_POINTER (from),
+                                row_allocation_y_cmp,
+                                NULL);
+
+  if (!top_iter)
+    return;
+
+  bottom_iter = g_sequence_lookup (priv->children,
+                                   GINT_TO_POINTER (to),
+                                   row_allocation_y_cmp,
+                                   NULL);
+
+  if (!bottom_iter)
+    bottom_iter = g_sequence_get_end_iter (priv->children);
+  else if (bottom_iter != g_sequence_get_end_iter (priv->children))
+    bottom_iter = g_sequence_iter_next (bottom_iter);
+
+  for (iter = top_iter;
+       iter != bottom_iter;
+       iter = g_sequence_iter_next (iter))
+    gtk_widget_set_child_visible (GTK_WIDGET (g_sequence_get (iter)), setting);
+}
+
+static void
+adjustment_changed_cb (GtkAdjustment *source, gpointer user_data)
+{
+  static int old_value;
+  static int old_page_size;
+
+  int value = (int)gtk_adjustment_get_value (source);
+  int page_size = (int)gtk_adjustment_get_page_size (source);
+
+  apply_child_visibility (user_data, old_value, old_value + old_page_size, FALSE);
+  apply_child_visibility (user_data, value, value + page_size, TRUE);
+
+  old_value = value;
+  old_page_size = page_size;
+}
 
 /**
  * gtk_list_box_set_adjustment:
@@ -1005,9 +1086,21 @@ gtk_list_box_set_adjustment (GtkListBox    *box,
   g_return_if_fail (adjustment == NULL || GTK_IS_ADJUSTMENT (adjustment));
 
   if (adjustment)
-    g_object_ref_sink (adjustment);
+    {
+      g_signal_connect (G_OBJECT (adjustment),
+                        "value-changed",
+                        G_CALLBACK (adjustment_changed_cb),
+                        box);
+      g_object_ref_sink (adjustment);
+    }
   if (priv->adjustment)
-    g_object_unref (priv->adjustment);
+    {
+      if (priv->adjustment != adjustment)
+        g_signal_handlers_disconnect_by_func (G_OBJECT (priv->adjustment),
+                                              adjustment_changed_cb,
+                                              box);
+      g_object_unref (priv->adjustment);
+    }
   priv->adjustment = adjustment;
 }
 
@@ -1225,6 +1318,12 @@ void
 gtk_list_box_invalidate_filter (GtkListBox *box)
 {
   g_return_if_fail (GTK_IS_LIST_BOX (box));
+
+  if (BOX_PRIV (box)->filter_func == NULL)
+    {
+      g_warning ("%s called on GtkListBox instance %p, which has no filter function set.", __FUNCTION__, box);
+      return;
+    }
 
   gtk_list_box_apply_filter_all (box);
   gtk_list_box_invalidate_headers (box);
@@ -2184,7 +2283,7 @@ list_box_add_visible_rows (GtkListBox *box,
 
   if (priv->placeholder &&
       (was_zero || priv->n_visible_rows == 0))
-    gtk_widget_set_child_visible (GTK_WIDGET (priv->placeholder),
+    gtk_widget_set_child_visible (priv->placeholder,
                                   priv->n_visible_rows == 0);
 }
 
@@ -2695,6 +2794,7 @@ static void
 gtk_list_box_size_allocate (GtkWidget     *widget,
                             GtkAllocation *allocation)
 {
+  GtkListBoxPrivate *priv = BOX_PRIV (widget);
   GtkAllocation clip;
   GdkWindow *window;
   GtkAllocation child_allocation;
@@ -2718,6 +2818,10 @@ gtk_list_box_size_allocate (GtkWidget     *widget,
                            &clip);
 
   _gtk_widget_set_simple_clip (widget, &clip);
+
+  // XXX Maybe rename the function...
+  if (priv->adjustment)
+    adjustment_changed_cb (priv->adjustment, widget);
 }
 
 
@@ -2884,12 +2988,16 @@ gtk_list_box_insert (GtkListBox *box,
 
   ROW_PRIV (row)->iter = iter;
   gtk_widget_set_parent (GTK_WIDGET (row), GTK_WIDGET (box));
-  gtk_widget_set_child_visible (GTK_WIDGET (row), TRUE);
+  gtk_widget_set_child_visible (GTK_WIDGET (row), (priv->adjustment == NULL));
   ROW_PRIV (row)->visible = gtk_widget_get_visible (GTK_WIDGET (row));
   if (ROW_PRIV (row)->visible)
     list_box_add_visible_rows (box, 1);
-  gtk_list_box_apply_filter (box, row);
+
+  if (priv->filter_func)
+    gtk_list_box_apply_filter (box, row);
+
   gtk_list_box_update_row_style (box, row);
+
   if (gtk_widget_get_visible (GTK_WIDGET (box)))
     {
       gtk_list_box_update_header (box, ROW_PRIV (row)->iter);
