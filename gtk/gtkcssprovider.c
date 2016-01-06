@@ -1797,7 +1797,7 @@ gtk_css_provider_load_internal (GtkCssProvider *css_provider,
  *   potentially do a copy.
  * @error: (out) (allow-none): return location for a #GError, or %NULL
  *
- * Loads @data into @css_provider, making it clear any previously loaded
+ * Loads @data into @css_provider, and by doing do clears any previously loaded
  * information.
  *
  * Returns: %TRUE. The return value is deprecated and %FALSE will only be
