@@ -1883,7 +1883,7 @@ levelbar {
 }
 
 /**********
- * Frames *
+ * rames *
  **********/
 frame border,
 .frame {
@@ -1891,10 +1891,13 @@ frame border,
   &.flat { border-style: none; }
   &:backdrop { border-color: $backdrop_borders_color; }
   padding: 0;
-  &.action-bar {
-    padding: 6px;
-    border-width: 1px 0 0;
-  }
+}
+
+actionbar box {
+  padding: 6px;
+  border-width: 1px 0 0;
+  border-color: $borders_color;
+  border-style: solid none none;
 }
 
 placessidebar,

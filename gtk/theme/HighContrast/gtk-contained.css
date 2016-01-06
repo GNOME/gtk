@@ -2058,7 +2058,7 @@ spinbutton selection:focus, modelbutton.flat:hover, modelbutton.flat:selected,
     color: #fff; }
 
 /**********
- * Frames *
+ * rames *
  **********/
 frame border,
 .frame {
@@ -2070,10 +2070,12 @@ frame border,
   frame border:backdrop,
   .frame:backdrop {
     border-color: #8d8d8d; }
-  frame border.action-bar,
-  .frame.action-bar {
-    padding: 6px;
-    border-width: 1px 0 0; }
+
+actionbar box {
+  padding: 6px;
+  border-width: 1px 0 0;
+  border-color: gray;
+  border-style: solid none none; }
 
 placessidebar .frame,
 scrolledwindow .frame {
