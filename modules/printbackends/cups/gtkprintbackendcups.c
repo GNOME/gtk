@@ -6241,6 +6241,8 @@ cups_printer_prepare_for_print (GtkPrinter       *printer,
     {
       if (gtk_print_settings_get_collate (settings))
         gtk_print_settings_set (settings, "cups-Collate", "True");
+      else
+        gtk_print_settings_set (settings, "cups-Collate", "False");
       gtk_print_job_set_collate (print_job, FALSE);
     }
   else
