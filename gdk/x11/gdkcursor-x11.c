@@ -611,17 +611,23 @@ static const struct {
   const gchar *css_name, *traditional_name;
 } name_map[] = {
   { "default",      "left_ptr" },
+  { "help",         "left_ptr" },
+  { "context-menu", "left_ptr" },
   { "pointer",      "hand" },
   { "progress",     "left_ptr_watch" },
   { "wait",         "watch" },
   { "cell",         "crosshair" },
   { "crosshair",    "cross" },
   { "text",         "xterm" },
+  { "vertical-text","xterm" },
   { "alias",        "dnd-link" },
   { "copy",         "dnd-copy" },
+  { "move",         "dnd-move" },
   { "no-drop",      "dnd-none" },
   { "not-allowed",  "crossed_circle" },
   { "grab",         "hand2" },
+  { "grabbing",     "hand2" },
+  { "all-scroll",   "left_ptr" },
   { "col-resize",   "h_double_arrow" },
   { "row-resize",   "v_double_arrow" },
   { "n-resize",     "top_side" },
@@ -636,6 +642,8 @@ static const struct {
   { "ns-resize",    "v_double_arrow" },
   { "nesw-resize",  "fd_double_arrow" },
   { "nwse-resize",  "bd_double_arrow" },
+  { "zoom-in",      "left_ptr" },
+  { "zoom-out",     "left_ptr" },
   { NULL, NULL }
 };
 
@@ -650,7 +658,7 @@ name_fallback (const gchar *name)
         return name_map[i].traditional_name;
     }
 
-  return "left_ptr";
+  return NULL;
 }
 
 GdkCursor*
@@ -683,9 +691,17 @@ _gdk_x11_display_get_cursor_for_name (GdkDisplay  *display,
       xdisplay = GDK_DISPLAY_XDISPLAY (display);
       xcursor = XcursorLibraryLoadCursor (xdisplay, name);
       if (xcursor == None)
-        xcursor = XcursorLibraryLoadCursor (xdisplay, name_fallback (name));
-      if (xcursor == None)
-        xcursor = XcursorLibraryLoadCursor (xdisplay, "left_ptr");
+        {
+          const char *fallback;
+
+          fallback = name_fallback (name);
+          if (fallback)
+            {
+              xcursor = XcursorLibraryLoadCursor (xdisplay, fallback);
+              if (xcursor == None)
+                xcursor = XcursorLibraryLoadCursor (xdisplay, "left_ptr");
+            }
+        }
       if (xcursor == None)
         return NULL;
     }
