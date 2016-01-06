@@ -28,6 +28,8 @@ test_css_nodes_SOURCES = \
 	$(NULL)
 
 test_data = \
+	box.ltr.ui	box.ltr.nodes		\
+	box.rtl.ui	box.rtl.nodes		\
 	buttons.ui 	buttons.nodes 		\
 	entries.ui 	entries.nodes 		\
 	levelbar.ui 	levelbar.nodes 		\
