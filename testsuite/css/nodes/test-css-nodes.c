@@ -104,6 +104,11 @@ load_ui_file (GFile *file, gboolean generate)
 
   ui_file = g_file_get_path (file);
 
+  if (g_str_has_suffix (ui_file, ".rtl.ui"))
+    gtk_widget_set_default_direction (GTK_TEXT_DIR_RTL);
+  else
+    gtk_widget_set_default_direction (GTK_TEXT_DIR_LTR);
+
   builder = gtk_builder_new_from_file (ui_file);
   window = GTK_WIDGET (gtk_builder_get_object (builder, "window1"));
 
