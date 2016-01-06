@@ -714,6 +714,23 @@ gtk_list_box_get_row_at_index (GtkListBox *box,
   return NULL;
 }
 
+static int
+row_y_cmp_func (gconstpointer a,
+                gconstpointer b,
+                gpointer      user_data)
+{
+  int y = GPOINTER_TO_INT (b);
+  GtkListBoxRowPrivate *row_priv = ROW_PRIV (a);
+
+
+  if (y < row_priv->y)
+    return 1;
+  else if (y >= row_priv->y + row_priv->height)
+    return -1;
+
+  return 0;
+}
+
 /**
  * gtk_list_box_get_row_at_y:
  * @box: a #GtkListBox
@@ -730,29 +747,19 @@ GtkListBoxRow *
 gtk_list_box_get_row_at_y (GtkListBox *box,
                            gint        y)
 {
-  GtkListBoxRow *row, *found_row;
-  GtkListBoxRowPrivate *row_priv;
   GSequenceIter *iter;
 
   g_return_val_if_fail (GTK_IS_LIST_BOX (box), NULL);
 
-  /* TODO: This should use g_sequence_search */
+  iter = g_sequence_lookup (BOX_PRIV (box)->children,
+                            GINT_TO_POINTER (y),
+                            row_y_cmp_func,
+                            NULL);
 
-  found_row = NULL;
-  for (iter = g_sequence_get_begin_iter (BOX_PRIV (box)->children);
-       !g_sequence_iter_is_end (iter);
-       iter = g_sequence_iter_next (iter))
-    {
-      row = (GtkListBoxRow*) g_sequence_get (iter);
-      row_priv = ROW_PRIV (row);
-      if (y >= row_priv->y && y < (row_priv->y + row_priv->height))
-        {
-          found_row = row;
-          break;
-        }
-    }
+  if (iter)
+    return GTK_LIST_BOX_ROW (g_sequence_get (iter));
 
-  return found_row;
+  return NULL;
 }
 
 /**
