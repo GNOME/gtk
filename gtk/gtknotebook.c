@@ -5525,7 +5525,6 @@ gtk_notebook_calculate_shown_tabs (GtkNotebook          *notebook,
           *last_child = gtk_notebook_search_page (notebook, priv->focus_tab,
                                                   STEP_NEXT, TRUE);
           page = priv->first_tab->data;
-          *remaining_space = tab_space - page->requisition.width;
           *n = 1;
         }
       else
