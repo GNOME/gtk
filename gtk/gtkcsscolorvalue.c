@@ -122,6 +122,8 @@ gtk_css_value_color_get_fallback (guint                    property_id,
       case GTK_CSS_PROPERTY_BORDER_BOTTOM_COLOR:
       case GTK_CSS_PROPERTY_BORDER_LEFT_COLOR:
       case GTK_CSS_PROPERTY_OUTLINE_COLOR:
+      case GTK_CSS_PROPERTY_CARET_COLOR:
+      case GTK_CSS_PROPERTY_SECONDARY_CARET_COLOR:
         return _gtk_css_value_compute (_gtk_css_style_property_get_initial_value (_gtk_css_style_property_lookup_by_id (property_id)),
                                        property_id,
                                        provider,
