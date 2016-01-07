@@ -560,7 +560,13 @@ gtk_css_gadget_allocate (GtkCssGadget        *gadget,
   g_return_if_fail (out_clip != NULL);
 
   if (!gtk_css_gadget_get_visible (gadget))
-    return;
+    {
+      out_clip->x = 0;
+      out_clip->y = 0;
+      out_clip->width = 0;
+      out_clip->height = 0;
+      return;
+    }
 
   priv->allocated_size = *allocation;
   priv->allocated_baseline = baseline;
