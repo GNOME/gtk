@@ -887,7 +887,6 @@ gtk_model_button_allocate (GtkCssGadget        *gadget,
   PangoFontMetrics *metrics;
   GtkAllocation child_allocation;
   GtkWidget *child;
-  gint spacing;
   gint check_min_width, check_nat_width;
   gint check_min_height, check_nat_height;
   GdkRectangle check_clip;
@@ -897,7 +896,6 @@ gtk_model_button_allocate (GtkCssGadget        *gadget,
   child = gtk_bin_get_child (GTK_BIN (widget));
 
 
-  spacing = 0;
 
   gtk_css_gadget_get_preferred_size (button->indicator_gadget,
                                      GTK_ORIENTATION_HORIZONTAL,
@@ -911,9 +909,9 @@ gtk_model_button_allocate (GtkCssGadget        *gadget,
                                      NULL, NULL);
 
   if (indicator_is_left (widget))
-    child_allocation.x = allocation->x + spacing;
+    child_allocation.x = allocation->x;
   else
-    child_allocation.x = allocation->x + allocation->width - check_nat_width - spacing;
+    child_allocation.x = allocation->x + allocation->width - check_nat_width;
   child_allocation.y = allocation->y + (allocation->height - check_nat_height) / 2;
   child_allocation.width = check_nat_width;
   child_allocation.height = check_nat_height;
