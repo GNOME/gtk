@@ -1939,7 +1939,7 @@ gdk_drag_do_leave (GdkX11DragContext *context_x11,
 static GdkWindow *
 create_drag_window (GdkScreen *screen)
 {
-  GdkWindowAttr attrs;
+  GdkWindowAttr attrs = { 0 };
   guint mask;
 
   attrs.x = attrs.y = 0;
