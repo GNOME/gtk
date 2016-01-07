@@ -353,6 +353,9 @@ get_event_mask_from_ns_event (NSEvent *nsevent)
 
 	return mask;
       }
+    case NSEventTypeMagnify:
+    case NSEventTypeRotate:
+      return GDK_TOUCHPAD_GESTURE_MASK;
     case NSKeyDown:
     case NSKeyUp:
     case NSFlagsChanged:
@@ -829,6 +832,8 @@ find_window_for_ns_event (NSEvent *nsevent,
     case NSLeftMouseDragged:
     case NSRightMouseDragged:
     case NSOtherMouseDragged:
+    case NSEventTypeMagnify:
+    case NSEventTypeRotate:
       return find_toplevel_for_mouse_event (nsevent, x, y);
       
     case NSMouseEntered:
@@ -887,6 +892,114 @@ fill_crossing_event (GdkWindow       *toplevel,
 
   /* FIXME: Focus and button state? */
 }
+
+/* fill_pinch_event handles the conversion from the two OSX gesture events
+   NSEventTypeMagnfiy and NSEventTypeRotate to the GDK_TOUCHPAD_PINCH event.
+   The normal behavior of the OSX events is that they produce as sequence of
+     1 x NSEventPhaseBegan,
+     n x NSEventPhaseChanged,
+     1 x NSEventPhaseEnded
+   This can happen for both the Magnify and the Rotate events independently.
+   As both events are summarized in one GDK_TOUCHPAD_PINCH event sequence, a
+   little state machine handles the case of two NSEventPhaseBegan events in
+   a sequence, e.g. Magnify(Began), Magnify(Changed)..., Rotate(Began)...
+   such that PINCH(STARTED), PINCH(UPDATE).... will not show a second
+   PINCH(STARTED) event.
+*/
+#ifdef AVAILABLE_MAC_OS_X_VERSION_10_7_AND_LATER
+static void
+fill_pinch_event (GdkWindow *window,
+                  GdkEvent  *event,
+                  NSEvent   *nsevent,
+                  gint       x,
+                  gint       y,
+                  gint       x_root,
+                  gint       y_root)
+{
+  static double last_scale = 1.0;
+  static enum {
+    FP_STATE_IDLE,
+    FP_STATE_UPDATE
+  } last_state = FP_STATE_IDLE;
+
+  event->any.type = GDK_TOUCHPAD_PINCH;
+  event->touchpad_pinch.window = window;
+  event->touchpad_pinch.time = get_time_from_ns_event (nsevent);
+  event->touchpad_pinch.x = x;
+  event->touchpad_pinch.y = y;
+  event->touchpad_pinch.x_root = x_root;
+  event->touchpad_pinch.y_root = y_root;
+  event->touchpad_pinch.state = get_keyboard_modifiers_from_ns_event (nsevent);
+  event->touchpad_pinch.n_fingers = 2;
+  event->touchpad_pinch.dx = 0.0;
+  event->touchpad_pinch.dy = 0.0;
+  gdk_event_set_device (event, _gdk_display->core_pointer);
+
+  switch ([nsevent phase])
+    {
+    case NSEventPhaseBegan:
+      switch (last_state)
+        {
+        case FP_STATE_IDLE:
+          event->touchpad_pinch.phase = GDK_TOUCHPAD_GESTURE_PHASE_BEGIN;
+          last_state = FP_STATE_UPDATE;
+          last_scale = 1.0;
+          break;
+        case FP_STATE_UPDATE:
+          /* We have already received a PhaseBegan event but no PhaseEnded
+             event. This can happen, e.g. Magnify(Began), Magnify(Change)...
+             Rotate(Began), Rotate (Change),...., Magnify(End) Rotate(End)
+          */
+          event->touchpad_pinch.phase = GDK_TOUCHPAD_GESTURE_PHASE_UPDATE;
+          break;
+        }
+      break;
+    case NSEventPhaseChanged:
+      event->touchpad_pinch.phase = GDK_TOUCHPAD_GESTURE_PHASE_UPDATE;
+      break;
+    case NSEventPhaseEnded:
+      event->touchpad_pinch.phase = GDK_TOUCHPAD_GESTURE_PHASE_END;
+      switch (last_state)
+        {
+        case FP_STATE_IDLE:
+          /* We are idle but have received a second PhaseEnded event.
+             This can happen because we have Magnify and Rotate OSX
+             event sequences. We just send a second end GDK_PHASE_END.
+          */
+          break;
+        case FP_STATE_UPDATE:
+          last_state = FP_STATE_IDLE;
+          break;
+        }
+      break;
+    case NSEventPhaseCancelled:
+      event->touchpad_pinch.phase = GDK_TOUCHPAD_GESTURE_PHASE_CANCEL;
+      last_state = FP_STATE_IDLE;
+      break;
+    case NSEventPhaseMayBegin:
+    case NSEventPhaseStationary:
+      event->touchpad_pinch.phase = GDK_TOUCHPAD_GESTURE_PHASE_CANCEL;
+      break;
+    default:
+      g_assert_not_reached ();
+      break;
+    }
+
+  switch ([nsevent type])
+    {
+    case NSEventTypeMagnify:
+      last_scale *= [nsevent magnification] + 1.0;
+      event->touchpad_pinch.angle_delta = 0.0;
+      break;
+    case NSEventTypeRotate:
+      event->touchpad_pinch.angle_delta = - [nsevent rotation] * G_PI / 180.0;
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+  event->touchpad_pinch.scale = last_scale;
+}
+#endif /* OSX Version >= 10.7 */
 
 static void
 fill_button_event (GdkWindow *window,
@@ -1531,7 +1644,16 @@ gdk_event_translate (GdkEvent *event,
           }
       }
       break;
-
+#ifdef AVAILABLE_MAC_OS_X_VERSION_10_7_AND_LATER
+    case NSEventTypeMagnify:
+    case NSEventTypeRotate:
+      /* Event handling requires [NSEvent phase] which was introduced in 10.7 */
+      if (gdk_quartz_osx_version () >= GDK_OSX_LION)
+        fill_pinch_event (window, event, nsevent, x, y, x_root, y_root);
+      else
+        return_val = FALSE;
+      break;
+#endif
     case NSMouseExited:
       if (WINDOW_IS_TOPLEVEL (window))
           [[NSCursor arrowCursor] set];
