@@ -492,6 +492,10 @@ gtk_css_image_linear_transition (GtkCssImage *start_image,
   result = g_object_new (GTK_TYPE_CSS_IMAGE_LINEAR, NULL);
   result->repeating = start->repeating;
 
+  if (_gtk_css_number_value_get_unit (start->angle) == GTK_CSS_NUMBER ||
+      _gtk_css_number_value_get_unit (end->angle) == GTK_CSS_NUMBER)
+    goto fail;
+
   result->angle = _gtk_css_value_transition (start->angle, end->angle, property_id, progress);
   if (result->angle == NULL)
     goto fail;
