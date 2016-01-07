@@ -140,8 +140,6 @@
 #define SCROLL_DELAY_FACTOR   5
 #define SCROLL_THRESHOLD      12
 #define DND_THRESHOLD_MULTIPLIER 4
-#define FRAMES_PER_SECOND     45
-#define MSECS_BETWEEN_UPDATES (1000 / FRAMES_PER_SECOND)
 
 #define TIMEOUT_INITIAL  500
 #define TIMEOUT_REPEAT    50
@@ -203,7 +201,6 @@ struct _GtkNotebookPrivate
   GList         *switch_tab;
 
   guint32        timer;
-  guint32        timestamp;
 
   guint          button             : 2;
   guint          child_has_focus    : 1;
@@ -3297,11 +3294,6 @@ gtk_notebook_motion_notify (GtkWidget      *widget,
       gtk_notebook_stop_reorder (notebook);
       stop_scrolling (notebook);
     }
-
-  if (event->time < priv->timestamp + MSECS_BETWEEN_UPDATES)
-    return FALSE;
-
-  priv->timestamp = event->time;
 
   tab_prelight (notebook, (GdkEvent *)event);
 
