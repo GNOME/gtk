@@ -1394,10 +1394,6 @@ popover {
  * Tabs          *
  *****************/
 notebook {
-  -GtkNotebook-initial-gap: 10;
-  -GtkNotebook-arrow-spacing: 5;
-  -GtkNotebook-tab-curvature: 0;
-  -GtkNotebook-tab-overlap: -8;
   padding: 0;
   background-color: #fff;
   transition: all 200ms ease-out; }
