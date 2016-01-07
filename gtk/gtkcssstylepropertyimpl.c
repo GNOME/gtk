@@ -1801,5 +1801,23 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                                           bindings_value_assign,
                                           _gtk_css_array_value_new (_gtk_css_string_value_new (NULL)));
   _gtk_style_property_add_alias ("-gtk-key-bindings", "gtk-key-bindings");
-}
 
+  gtk_css_style_property_register        ("caret-color",
+                                          GTK_CSS_PROPERTY_CARET_COLOR,
+                                          GDK_TYPE_RGBA,
+                                          GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
+                                          GTK_CSS_AFFECTS_TEXT,
+                                          color_parse,
+                                          color_query,
+                                          color_assign,
+                                          _gtk_css_color_value_new_current_color ());
+  gtk_css_style_property_register        ("-gtk-secondary-caret-color",
+                                          GTK_CSS_PROPERTY_SECONDARY_CARET_COLOR,
+                                          GDK_TYPE_RGBA,
+                                          GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
+                                          GTK_CSS_AFFECTS_TEXT,
+                                          color_parse,
+                                          color_query,
+                                          color_assign,
+                                          _gtk_css_color_value_new_current_color ());
+}
