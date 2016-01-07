@@ -35,6 +35,7 @@
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcsspathnodeprivate.h"
 #include "gtkcssrgbavalueprivate.h"
+#include "gtkcsscolorvalueprivate.h"
 #include "gtkcssshadowsvalueprivate.h"
 #include "gtkcssstaticstyleprivate.h"
 #include "gtkcssstylepropertyprivate.h"
@@ -2754,62 +2755,26 @@ gtk_style_context_get_font (GtkStyleContext *context,
   return description;
 }
 
-static void
-get_cursor_color (GtkStyleContext *context,
-                  gboolean         primary,
-                  GdkRGBA         *color)
-{
-  GdkColor *style_color;
-
-  gtk_style_context_get_style (context,
-                               primary ? "cursor-color" : "secondary-cursor-color",
-                               &style_color,
-                               NULL);
-
-  if (style_color)
-    {
-      color->red = style_color->red / 65535.0;
-      color->green = style_color->green / 65535.0;
-      color->blue = style_color->blue / 65535.0;
-      color->alpha = 1;
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      gdk_color_free (style_color);
-G_GNUC_END_IGNORE_DEPRECATIONS
-    }
-  else
-    {
-      GtkStateFlags state;
-
-      state = gtk_style_context_get_state (context);
-
-      gtk_style_context_get_color (context, state, color);
-
-      if (!primary)
-      {
-        GdkRGBA bg;
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-        gtk_style_context_get_background_color (context, state, &bg);
-G_GNUC_END_IGNORE_DEPRECATIONS
-
-        color->red = (color->red + bg.red) * 0.5;
-        color->green = (color->green + bg.green) * 0.5;
-        color->blue = (color->blue + bg.blue) * 0.5;
-      }
-    }
-}
-
 void
 _gtk_style_context_get_cursor_color (GtkStyleContext *context,
                                      GdkRGBA         *primary_color,
                                      GdkRGBA         *secondary_color)
 {
+  GdkRGBA *pc, *sc;
+
+  gtk_style_context_get (context,
+                         gtk_style_context_get_state (context),
+                         "caret-color", &pc,
+                         "-gtk-secondary-caret-color", &sc,
+                         NULL);
   if (primary_color)
-    get_cursor_color (context, TRUE, primary_color);
+    *primary_color = *pc;
 
   if (secondary_color)
-    get_cursor_color (context, FALSE, secondary_color);
+    *secondary_color = *sc;
+
+  gdk_rgba_free (pc);
+  gdk_rgba_free (sc);
 }
 
 static void
