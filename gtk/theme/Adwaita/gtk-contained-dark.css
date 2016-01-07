@@ -1227,10 +1227,24 @@ notebook tab .titlebar button.titlebutton,
 /* menu buttons */
 modelbutton.flat,
 .menuitem.button.flat {
-  outline-offset: -1px; }
+  min-height: 26px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-radius: 3px;
+  outline-offset: -2px; }
   modelbutton.flat:hover,
   .menuitem.button.flat:hover {
     background-color: #4b5150; }
+  modelbutton.flat check:last-child,
+  modelbutton.flat radio:last-child,
+  .menuitem.button.flat check:last-child,
+  .menuitem.button.flat radio:last-child {
+    margin-left: 8px; }
+  modelbutton.flat check:first-child,
+  modelbutton.flat radio:first-child,
+  .menuitem.button.flat check:first-child,
+  .menuitem.button.flat radio:first-child {
+    margin-right: 8px; }
 
 modelbutton.flat arrow {
   background: none; }
@@ -2216,12 +2230,10 @@ popover.background {
   .titlebar popover.background button.titlebutton:hover {
     text-shadow: none;
     transition: none; }
-  popover.background button.model.image-button, popover.background headerbar button.model.titlebutton, headerbar popover.background button.model.titlebutton,
-  popover.background .titlebar button.model.titlebutton,
-  .titlebar popover.background button.model.titlebutton {
-    padding: 0px; }
   .csd popover.background.touch-selection, .csd popover.background.magnifier, popover.background.touch-selection, popover.background.magnifier {
     border: 1px solid rgba(255, 255, 255, 0.1); }
+  popover.background separator {
+    margin: 3px; }
 
 /*************
  * Notebooks *

@@ -728,13 +728,25 @@ toolbar.inline-toolbar toolbutton:backdrop {
 /* menu buttons */
 modelbutton.flat,
 .menuitem.button.flat {
+  min-height: 26px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-radius: 3px;
+  outline-offset: -2px;
+
   @extend %undecorated_button;
-  outline-offset: -1px;
   &:hover { background-color: mix($fg_color, $bg_color, 10%); }
   &:selected { @extend %selected_items; }
   &:backdrop, &:backdrop:hover {
     @extend %undecorated_button;
   }
+
+  // FIXME: remove the following when the checks/radios rewrite lands
+  check:last-child,
+  radio:last-child { margin-left: 8px; }
+
+  check:first-child,
+  radio:first-child { margin-right: 8px; }
 }
 
 modelbutton.flat arrow {
@@ -1630,10 +1642,6 @@ popover.background {
     transition: none;
   }
 
-  button.model.image-button {
-    padding: 0px;
-  }
-
   .csd &, & {
     &.touch-selection,
     &.magnifier {
@@ -1644,6 +1652,8 @@ popover.background {
 
     &.osd { @extend %osd; }
   }
+
+  separator { margin: 3px; }
 }
 
 /*************

@@ -1209,15 +1209,10 @@ gtk_model_button_init (GtkModelButton *button)
   button->role = GTK_BUTTON_ROLE_NORMAL;
   gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
   button->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
-  gtk_widget_set_margin_start (button->box, 12);
-  gtk_widget_set_margin_end (button->box, 12);
-  gtk_widget_set_margin_top (button->box, 3);
-  gtk_widget_set_margin_bottom (button->box, 3);
   gtk_widget_set_halign (button->box, GTK_ALIGN_FILL);
   gtk_widget_show (button->box);
   button->image = gtk_image_new ();
   gtk_widget_set_no_show_all (button->image, TRUE);
-  g_object_set (button->image, "margin", 4, NULL);
   button->label = gtk_label_new ("");
   gtk_widget_set_no_show_all (button->label, TRUE);
   gtk_container_add (GTK_CONTAINER (button->box), button->image);

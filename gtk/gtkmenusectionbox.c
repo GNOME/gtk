@@ -496,12 +496,6 @@ gtk_menu_section_box_new_section (GtkMenuTrackerItem *item,
       box->separator = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
       g_object_ref_sink (box->separator);
 
-      g_object_set (box->separator,
-                    "margin-start", 12,
-                    "margin-end", 12,
-                    "margin-top", 6,
-                    "margin-bottom", 3,
-                    NULL);
       gtk_container_add (GTK_CONTAINER (box->separator), title);
       gtk_container_add (GTK_CONTAINER (box->separator), separator);
       gtk_widget_show_all (box->separator);
@@ -511,12 +505,6 @@ gtk_menu_section_box_new_section (GtkMenuTrackerItem *item,
       box->separator = separator;
       g_object_ref_sink (box->separator);
 
-      g_object_set (box->separator,
-                    "margin-start", 12,
-                    "margin-end", 12,
-                    "margin-top", 3,
-                    "margin-bottom", 3,
-                    NULL);
       gtk_widget_show (box->separator);
     }
 
