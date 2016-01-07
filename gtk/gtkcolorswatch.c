@@ -154,8 +154,6 @@ gtk_color_swatch_render (GtkCssGadget *gadget,
       cairo_fill (cr);
     }
 
-  gtk_render_frame (context, cr, x, y, width, height);
-
   gtk_css_gadget_draw (swatch->priv->overlay_gadget, cr);
 
   return gtk_widget_has_visible_focus (widget);
