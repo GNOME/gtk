@@ -3108,6 +3108,10 @@ GtkColorSwatch {
 
   // we need to re-set the shadow here since it get axed by the previous bit
   &:selected { box-shadow: $_colorswatch_shadow; }
+  &:insensitive {
+    box-shadow: none;
+    opacity: 0.5;
+  }
 
   // base color corners rounding
   // to avoid the artifacts caused by rounded corner anti-aliasing the base color
