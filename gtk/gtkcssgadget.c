@@ -795,6 +795,30 @@ gtk_css_gadget_queue_draw (GtkCssGadget *gadget)
 }
 
 void
+gtk_css_gadget_get_margin_allocation (GtkCssGadget  *gadget,
+                                      GtkAllocation *allocation,
+                                      int           *baseline)
+{
+  GtkCssGadgetPrivate *priv = gtk_css_gadget_get_instance_private (gadget);
+
+  g_return_if_fail (GTK_IS_CSS_GADGET (gadget));
+
+  if (!gtk_css_gadget_get_visible (gadget))
+    {
+      if (allocation)
+        allocation->x = allocation->y = allocation->width = allocation->height = 0;
+      if (baseline)
+        *baseline = -1;
+      return;
+    }
+
+  if (allocation)
+    *allocation = priv->allocated_size;
+  if (baseline)
+    *baseline = priv->allocated_baseline;
+}
+
+void
 gtk_css_gadget_get_border_allocation (GtkCssGadget  *gadget,
                                       GtkAllocation *allocation,
                                       int           *baseline)

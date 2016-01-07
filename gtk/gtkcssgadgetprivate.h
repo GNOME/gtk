@@ -111,6 +111,9 @@ void            gtk_css_gadget_queue_resize             (GtkCssGadget           
 void            gtk_css_gadget_queue_allocate           (GtkCssGadget           *gadget);
 void            gtk_css_gadget_queue_draw               (GtkCssGadget           *gadget);
 
+void            gtk_css_gadget_get_margin_allocation    (GtkCssGadget           *gadget,
+                                                         GtkAllocation          *allocation,
+                                                         int                    *baseline);
 void            gtk_css_gadget_get_border_allocation    (GtkCssGadget           *gadget,
                                                          GtkAllocation          *allocation,
                                                          int                    *baseline);
