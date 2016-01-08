@@ -89,6 +89,12 @@ struct _GdkX11DragContext
 
   GdkWindow *drag_window;
 
+  GdkWindow *ipc_window;
+  GdkCursor *cursor;
+  GdkSeat *grab_seat;
+  GdkDragAction actions;
+  GdkDragAction current_action;
+
   gint hot_x;
   gint hot_y;
 
@@ -104,6 +110,35 @@ struct _GdkX11DragContext
 struct _GdkX11DragContextClass
 {
   GdkDragContextClass parent_class;
+};
+
+typedef struct {
+  gint keysym;
+  gint modifiers;
+} GrabKey;
+
+static GrabKey grab_keys[] = {
+  { XK_Escape, 0 },
+  { XK_space, 0 },
+  { XK_KP_Space, 0 },
+  { XK_Return, 0 },
+  { XK_KP_Enter, 0 },
+  { XK_Up, 0 },
+  { XK_Up, Mod1Mask },
+  { XK_Down, 0 },
+  { XK_Down, Mod1Mask },
+  { XK_Left, 0 },
+  { XK_Left, Mod1Mask },
+  { XK_Right, 0 },
+  { XK_Right, Mod1Mask },
+  { XK_KP_Up, 0 },
+  { XK_KP_Up, Mod1Mask },
+  { XK_KP_Down, 0 },
+  { XK_KP_Down, Mod1Mask },
+  { XK_KP_Left, 0 },
+  { XK_KP_Left, Mod1Mask },
+  { XK_KP_Right, 0 },
+  { XK_KP_Right, Mod1Mask }
 };
 
 /* Forward declarations */
@@ -134,6 +169,11 @@ static GdkFilterReturn xdnd_drop_filter     (GdkXEvent *xev,
 static void   xdnd_manage_source_filter (GdkDragContext *context,
                                          GdkWindow      *window,
                                          gboolean        add_filter);
+
+gboolean gdk_x11_drag_context_handle_event (GdkDragContext *context,
+                                            const GdkEvent *event);
+void     gdk_x11_drag_context_action_changed (GdkDragContext *context,
+                                              GdkDragAction   action);
 
 static GList *contexts;
 static GSList *window_caches;
@@ -195,6 +235,14 @@ static void        gdk_x11_drag_context_set_hotspot (GdkDragContext  *context,
                                                      gint             hot_y);
 static void        gdk_x11_drag_context_drop_done     (GdkDragContext  *context,
                                                        gboolean         success);
+static gboolean    gdk_x11_drag_context_manage_dnd     (GdkDragContext *context,
+                                                        GdkWindow      *window,
+                                                        GdkDragAction   actions);
+static void        gdk_x11_drag_context_set_cursor     (GdkDragContext *context,
+                                                        GdkCursor      *cursor);
+static void        gdk_x11_drag_context_cancel         (GdkDragContext *context);
+static void        gdk_x11_drag_context_drop_performed (GdkDragContext *context,
+                                                        guint32         time);
 
 static void
 gdk_x11_drag_context_class_init (GdkX11DragContextClass *klass)
@@ -216,6 +264,12 @@ gdk_x11_drag_context_class_init (GdkX11DragContextClass *klass)
   context_class->get_drag_window = gdk_x11_drag_context_get_drag_window;
   context_class->set_hotspot = gdk_x11_drag_context_set_hotspot;
   context_class->drop_done = gdk_x11_drag_context_drop_done;
+  context_class->manage_dnd = gdk_x11_drag_context_manage_dnd;
+  context_class->set_cursor = gdk_x11_drag_context_set_cursor;
+  context_class->cancel = gdk_x11_drag_context_cancel;
+  context_class->drop_performed = gdk_x11_drag_context_drop_performed;
+  context_class->handle_event = gdk_x11_drag_context_handle_event;
+  context_class->action_changed = gdk_x11_drag_context_action_changed;
 }
 
 static void
@@ -2591,4 +2645,488 @@ gdk_x11_drag_context_drop_done (GdkDragContext *context,
   gdk_threads_add_timeout_full (G_PRIORITY_DEFAULT, 17,
                                 gdk_drag_anim_timeout, anim,
                                 (GDestroyNotify) gdk_drag_anim_destroy);
+}
+
+static gboolean
+drag_context_grab (GdkDragContext *context)
+{
+  GdkX11DragContext *x11_context = GDK_X11_DRAG_CONTEXT (context);
+  GdkDevice *device = gdk_drag_context_get_device (context);
+  GdkWindow *root;
+  GdkSeat *seat;
+  gint keycode, i;
+
+  if (!x11_context->ipc_window)
+    return FALSE;
+
+  root = gdk_screen_get_root_window (gdk_window_get_screen (x11_context->ipc_window));
+  seat = gdk_device_get_seat (gdk_drag_context_get_device (context));
+
+  if (gdk_seat_grab (seat, x11_context->ipc_window,
+                     GDK_SEAT_CAPABILITY_ALL, FALSE,
+                     x11_context->cursor, NULL, NULL, NULL) != GDK_GRAB_SUCCESS)
+    return FALSE;
+
+  g_set_object (&x11_context->grab_seat, seat);
+
+  gdk_error_trap_push ();
+
+  for (i = 0; i < G_N_ELEMENTS (grab_keys); ++i)
+    {
+      keycode = XKeysymToKeycode (GDK_WINDOW_XDISPLAY (x11_context->ipc_window),
+                                  grab_keys[i].keysym);
+      if (keycode == NoSymbol)
+        continue;
+
+#ifdef XINPUT_2
+      if (GDK_IS_X11_DEVICE_XI2 (device))
+        {
+          gint deviceid = gdk_x11_device_get_id (gdk_seat_get_keyboard (seat));
+          unsigned char mask[XIMaskLen(XI_LASTEVENT)];
+          XIGrabModifiers mods;
+          XIEventMask evmask;
+          gint num_mods;
+
+          memset (mask, 0, sizeof (mask));
+          XISetMask (mask, XI_KeyPress);
+          XISetMask (mask, XI_KeyRelease);
+
+          evmask.deviceid = deviceid;
+          evmask.mask_len = sizeof (mask);
+          evmask.mask = mask;
+
+          num_mods = 1;
+          mods.modifiers = grab_keys[i].modifiers;
+
+          XIGrabKeycode (GDK_WINDOW_XDISPLAY (x11_context->ipc_window),
+                         deviceid,
+                         keycode,
+                         GDK_WINDOW_XID (root),
+                         GrabModeAsync,
+                         GrabModeAsync,
+                         False,
+                         &evmask,
+                         num_mods,
+                         &mods);
+        }
+      else
+#endif
+        {
+          XGrabKey (GDK_WINDOW_XDISPLAY (x11_context->ipc_window),
+                    keycode, grab_keys[i].modifiers,
+                    GDK_WINDOW_XID (root),
+                    FALSE,
+                    GrabModeAsync,
+                    GrabModeAsync);
+        }
+    }
+
+  return TRUE;
+}
+
+static void
+drag_context_ungrab (GdkDragContext *context)
+{
+  GdkX11DragContext *x11_context = GDK_X11_DRAG_CONTEXT (context);
+  GdkDevice *keyboard;
+  GdkWindow *root;
+  gint keycode, i;
+
+  if (!x11_context->grab_seat)
+    return;
+
+  gdk_seat_ungrab (x11_context->grab_seat);
+
+  keyboard = gdk_seat_get_keyboard (x11_context->grab_seat);
+  root = gdk_screen_get_root_window (gdk_window_get_screen (x11_context->ipc_window));
+  g_clear_object (&x11_context->grab_seat);
+
+  for (i = 0; i < G_N_ELEMENTS (grab_keys); ++i)
+    {
+      keycode = XKeysymToKeycode (GDK_WINDOW_XDISPLAY (x11_context->ipc_window),
+                                  grab_keys[i].keysym);
+      if (keycode == NoSymbol)
+        continue;
+
+#ifdef XINPUT_2
+      if (GDK_IS_X11_DEVICE_XI2 (keyboard))
+        {
+          XIGrabModifiers mods;
+          gint num_mods;
+
+          num_mods = 1;
+          mods.modifiers = grab_keys[i].modifiers;
+
+          XIUngrabKeycode (GDK_WINDOW_XDISPLAY (x11_context->ipc_window),
+                           gdk_x11_device_get_id (keyboard),
+                           keycode,
+                           GDK_WINDOW_XID (root),
+                           num_mods,
+                           &mods);
+        }
+      else
+#endif /* XINPUT_2 */
+        {
+          XUngrabKey (GDK_WINDOW_XDISPLAY (x11_context->ipc_window),
+                      keycode, grab_keys[i].modifiers,
+                      GDK_WINDOW_XID (root));
+        }
+    }
+}
+
+static gboolean
+gdk_x11_drag_context_manage_dnd (GdkDragContext *context,
+                                 GdkWindow      *ipc_window,
+                                 GdkDragAction   actions)
+{
+  GdkX11DragContext *x11_context = GDK_X11_DRAG_CONTEXT (context);
+
+  if (x11_context->ipc_window)
+    return FALSE;
+
+  context->protocol = GDK_DRAG_PROTO_XDND;
+  x11_context->ipc_window = g_object_ref (ipc_window);
+
+  if (drag_context_grab (context))
+    {
+      x11_context->actions = actions;
+      return TRUE;
+    }
+  else
+    {
+      g_clear_object (&x11_context->ipc_window);
+      return FALSE;
+    }
+}
+
+static void
+gdk_x11_drag_context_set_cursor (GdkDragContext *context,
+                                 GdkCursor      *cursor)
+{
+  GdkX11DragContext *x11_context = GDK_X11_DRAG_CONTEXT (context);
+
+  if (!g_set_object (&x11_context->cursor, cursor))
+    return;
+
+  if (x11_context->grab_seat)
+    {
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+      gdk_device_grab (gdk_seat_get_pointer (x11_context->grab_seat),
+                       x11_context->ipc_window,
+                       GDK_OWNERSHIP_APPLICATION, FALSE,
+                       GDK_POINTER_MOTION_MASK | GDK_BUTTON_RELEASE_MASK,
+                       cursor, GDK_CURRENT_TIME);
+      G_GNUC_END_IGNORE_DEPRECATIONS;
+    }
+}
+
+static void
+gdk_x11_drag_context_cancel (GdkDragContext *context)
+{
+  drag_context_ungrab (context);
+  gdk_drag_drop_done (context, FALSE);
+}
+
+static void
+gdk_x11_drag_context_drop_performed (GdkDragContext *context,
+                                     guint32         time_)
+{
+  drag_context_ungrab (context);
+}
+
+#define BIG_STEP 20
+#define SMALL_STEP 1
+
+static void
+gdk_drag_get_current_actions (GdkModifierType  state,
+                              gint             button,
+                              GdkDragAction    actions,
+                              GdkDragAction   *suggested_action,
+                              GdkDragAction   *possible_actions)
+{
+  *suggested_action = 0;
+  *possible_actions = 0;
+
+  if ((button == GDK_BUTTON_MIDDLE || button == GDK_BUTTON_SECONDARY) && (actions & GDK_ACTION_ASK))
+    {
+      *suggested_action = GDK_ACTION_ASK;
+      *possible_actions = actions;
+    }
+  else if (state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK))
+    {
+      if ((state & GDK_SHIFT_MASK) && (state & GDK_CONTROL_MASK))
+        {
+          if (actions & GDK_ACTION_LINK)
+            {
+              *suggested_action = GDK_ACTION_LINK;
+              *possible_actions = GDK_ACTION_LINK;
+            }
+        }
+      else if (state & GDK_CONTROL_MASK)
+        {
+          if (actions & GDK_ACTION_COPY)
+            {
+              *suggested_action = GDK_ACTION_COPY;
+              *possible_actions = GDK_ACTION_COPY;
+            }
+        }
+      else
+        {
+          if (actions & GDK_ACTION_MOVE)
+            {
+              *suggested_action = GDK_ACTION_MOVE;
+              *possible_actions = GDK_ACTION_MOVE;
+            }
+        }
+    }
+  else
+    {
+      *possible_actions = actions;
+
+      if ((state & (GDK_MOD1_MASK)) && (actions & GDK_ACTION_ASK))
+        *suggested_action = GDK_ACTION_ASK;
+      else if (actions & GDK_ACTION_COPY)
+        *suggested_action =  GDK_ACTION_COPY;
+      else if (actions & GDK_ACTION_MOVE)
+        *suggested_action = GDK_ACTION_MOVE;
+      else if (actions & GDK_ACTION_LINK)
+        *suggested_action = GDK_ACTION_LINK;
+    }
+}
+
+static void
+gdk_drag_update (GdkDragContext  *context,
+                 gdouble          x_root,
+                 gdouble          y_root,
+                 GdkModifierType  mods,
+                 guint32          evtime)
+{
+  GdkX11DragContext *x11_context = GDK_X11_DRAG_CONTEXT (context);
+  GdkDragAction action, possible_actions;
+  GdkWindow *dest_window;
+  GdkDragProtocol protocol;
+
+  gdk_drag_get_current_actions (mods, GDK_BUTTON_PRIMARY, x11_context->actions,
+                                &action, &possible_actions);
+
+  gdk_drag_find_window_for_screen (context,
+                                   x11_context->drag_window,
+                                   gdk_display_get_default_screen (gdk_display_get_default ()),
+                                   x_root, y_root, &dest_window, &protocol);
+
+  gdk_drag_motion (context, dest_window, protocol, x_root, y_root,
+                   action, possible_actions, evtime);
+}
+
+static gboolean
+gdk_dnd_handle_motion_event (GdkDragContext       *context,
+                             const GdkEventMotion *event)
+{
+  GdkModifierType state;
+
+  if (!gdk_event_get_state ((GdkEvent *) event, &state))
+    return FALSE;
+
+  gdk_drag_update (context, event->x_root, event->y_root, state,
+                   gdk_event_get_time ((GdkEvent *) event));
+  return TRUE;
+}
+
+static gboolean
+gdk_dnd_handle_key_event (GdkDragContext    *context,
+                          const GdkEventKey *event)
+{
+  GdkX11DragContext *x11_context = GDK_X11_DRAG_CONTEXT (context);
+  GdkModifierType state;
+  GdkWindow *root_window;
+  GdkDevice *pointer;
+  gint dx, dy;
+
+  dx = dy = 0;
+  state = event->state;
+  pointer = gdk_device_get_associated_device (gdk_event_get_device ((GdkEvent *) event));
+
+  if (event->type == GDK_KEY_PRESS)
+    {
+      switch (event->keyval)
+        {
+        case GDK_KEY_Escape:
+          gdk_drag_context_cancel (context);
+          return TRUE;
+
+        case GDK_KEY_space:
+        case GDK_KEY_Return:
+        case GDK_KEY_ISO_Enter:
+        case GDK_KEY_KP_Enter:
+        case GDK_KEY_KP_Space:
+          if ((gdk_drag_context_get_selected_action (context) != 0) &&
+              (gdk_drag_context_get_dest_window (context) != NULL))
+            {
+              g_signal_emit_by_name (context, "drop-performed",
+                                     gdk_event_get_time ((GdkEvent *) event));
+            }
+          else
+            gdk_drag_context_cancel (context);
+
+          return TRUE;
+
+        case GDK_KEY_Up:
+        case GDK_KEY_KP_Up:
+          dy = (state & GDK_MOD1_MASK) ? -BIG_STEP : -SMALL_STEP;
+          break;
+
+        case GDK_KEY_Down:
+        case GDK_KEY_KP_Down:
+          dy = (state & GDK_MOD1_MASK) ? BIG_STEP : SMALL_STEP;
+          break;
+
+        case GDK_KEY_Left:
+        case GDK_KEY_KP_Left:
+          dx = (state & GDK_MOD1_MASK) ? -BIG_STEP : -SMALL_STEP;
+          break;
+
+        case GDK_KEY_Right:
+        case GDK_KEY_KP_Right:
+          dx = (state & GDK_MOD1_MASK) ? BIG_STEP : SMALL_STEP;
+          break;
+        }
+    }
+
+  /* The state is not yet updated in the event, so we need
+   * to query it here. We could use XGetModifierMapping, but
+   * that would be overkill.
+   */
+  root_window = gdk_screen_get_root_window (gdk_window_get_screen (x11_context->ipc_window));
+  gdk_window_get_device_position (root_window, pointer, NULL, NULL, &state);
+
+  if (dx != 0 || dy != 0)
+    {
+      x11_context->last_x += dx;
+      x11_context->last_y += dy;
+      gdk_device_warp (pointer,
+                       gdk_window_get_screen (x11_context->ipc_window),
+                       x11_context->last_x, x11_context->last_y);
+    }
+
+  gdk_drag_update (context, x11_context->last_x, x11_context->last_y, state,
+                   gdk_event_get_time ((GdkEvent *) event));
+
+  return TRUE;
+}
+
+static gboolean
+gdk_dnd_handle_grab_broken_event (GdkDragContext           *context,
+                                  const GdkEventGrabBroken *event)
+{
+  GdkX11DragContext *x11_context = GDK_X11_DRAG_CONTEXT (context);
+
+  /* Don't cancel if we break the implicit grab from the initial button_press.
+   * Also, don't cancel if we re-grab on the widget or on our IPC window, for
+   * example, when changing the drag cursor.
+   */
+  if (event->implicit ||
+      event->grab_window == x11_context->drag_window ||
+      event->grab_window == x11_context->ipc_window)
+    return FALSE;
+
+  gdk_drag_context_cancel (context);
+  return TRUE;
+}
+
+static gboolean
+gdk_dnd_handle_button_event (GdkDragContext       *context,
+                             const GdkEventButton *event)
+{
+#if 0
+  /* FIXME: Check the button matches */
+  if (event->button != x11_context->button)
+    return FALSE;
+#endif
+
+  if ((gdk_drag_context_get_selected_action (context) != 0) &&
+      (gdk_drag_context_get_dest_window (context) != NULL))
+    {
+      g_signal_emit_by_name (context, "drop-performed",
+                             gdk_event_get_time ((GdkEvent *) event));
+    }
+  else
+    gdk_drag_context_cancel (context);
+
+  return TRUE;
+}
+
+gboolean
+gdk_dnd_handle_drag_status (GdkDragContext    *context,
+                            const GdkEventDND *event)
+{
+  GdkX11DragContext *context_x11 = GDK_X11_DRAG_CONTEXT (context);
+  GdkDragAction action;
+
+  if (context != event->context)
+    return FALSE;
+
+  action = gdk_drag_context_get_selected_action (context);
+
+  if (action != context_x11->current_action)
+    {
+      context_x11->current_action = action;
+      g_signal_emit_by_name (context, "action-changed", action);
+    }
+
+  return TRUE;
+}
+
+static gboolean
+gdk_dnd_handle_drop_finished (GdkDragContext *context,
+                              const GdkEventDND *event)
+{
+  if (context != event->context)
+    return FALSE;
+
+  g_signal_emit_by_name (context, "dnd-finished");
+  gdk_drag_drop_done (context, TRUE);
+  return TRUE;
+}
+
+gboolean
+gdk_x11_drag_context_handle_event (GdkDragContext *context,
+                                   const GdkEvent *event)
+{
+  GdkX11DragContext *x11_context = GDK_X11_DRAG_CONTEXT (context);
+
+  if (!context->is_source)
+    return FALSE;
+  if (!x11_context->grab_seat && event->type != GDK_DROP_FINISHED)
+    return FALSE;
+
+  switch (event->type)
+    {
+    case GDK_MOTION_NOTIFY:
+      return gdk_dnd_handle_motion_event (context, &event->motion);
+    case GDK_BUTTON_RELEASE:
+      return gdk_dnd_handle_button_event (context, &event->button);
+    case GDK_KEY_PRESS:
+    case GDK_KEY_RELEASE:
+      return gdk_dnd_handle_key_event (context, &event->key);
+    case GDK_GRAB_BROKEN:
+      return gdk_dnd_handle_grab_broken_event (context, &event->grab_broken);
+    case GDK_DRAG_STATUS:
+      return gdk_dnd_handle_drag_status (context, &event->dnd);
+    case GDK_DROP_FINISHED:
+      return gdk_dnd_handle_drop_finished (context, &event->dnd);
+    default:
+      break;
+    }
+
+  return FALSE;
+}
+
+void
+gdk_x11_drag_context_action_changed (GdkDragContext *context,
+                                     GdkDragAction   action)
+{
+  GdkCursor *cursor;
+
+  cursor = gdk_drag_get_cursor (action);
+  gdk_drag_context_set_cursor (context, cursor);
 }
