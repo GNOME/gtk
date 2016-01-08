@@ -56,16 +56,23 @@ static void
 gtk_rounded_box_clamp_border_radius (GtkRoundedBox *box)
 {
   gdouble factor = 1.0;
+  gdouble corners;
 
-  /* note: division by zero leads to +INF, which is > factor, so will be ignored */
-  factor = MIN (factor, box->box.width / (box->corner[GTK_CSS_TOP_LEFT].horizontal +
-                                          box->corner[GTK_CSS_TOP_RIGHT].horizontal));
-  factor = MIN (factor, box->box.height / (box->corner[GTK_CSS_TOP_RIGHT].vertical +
-                                           box->corner[GTK_CSS_BOTTOM_RIGHT].vertical));
-  factor = MIN (factor, box->box.width / (box->corner[GTK_CSS_BOTTOM_RIGHT].horizontal +
-                                          box->corner[GTK_CSS_BOTTOM_LEFT].horizontal));
-  factor = MIN (factor, box->box.height / (box->corner[GTK_CSS_TOP_LEFT].vertical +
-                                           box->corner[GTK_CSS_BOTTOM_LEFT].vertical));
+  corners = box->corner[GTK_CSS_TOP_LEFT].horizontal + box->corner[GTK_CSS_TOP_RIGHT].horizontal;
+  if (corners != 0)
+    factor = MIN (factor, box->box.width / corners);
+
+  corners = box->corner[GTK_CSS_TOP_RIGHT].vertical + box->corner[GTK_CSS_BOTTOM_RIGHT].vertical;
+  if (corners != 0)
+    factor = MIN (factor, box->box.height / corners);
+
+  corners = box->corner[GTK_CSS_BOTTOM_RIGHT].horizontal + box->corner[GTK_CSS_BOTTOM_LEFT].horizontal;
+  if (corners != 0)
+    factor = MIN (factor, box->box.width / corners);
+
+  corners = box->corner[GTK_CSS_TOP_LEFT].vertical + box->corner[GTK_CSS_BOTTOM_LEFT].vertical;
+  if (corners != 0)
+    factor = MIN (factor, box->box.height / corners);
 
   box->corner[GTK_CSS_TOP_LEFT].horizontal *= factor;
   box->corner[GTK_CSS_TOP_LEFT].vertical *= factor;
