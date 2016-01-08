@@ -1259,16 +1259,12 @@ modelbutton.flat arrow {
 
 button.color, headerbar button.color.titlebutton,
 .titlebar button.color.titlebutton {
-  padding: 5px; }
-  button.color > colorswatch:first-child:last-child, headerbar button.color.titlebutton > colorswatch:first-child:last-child,
-  .titlebar button.color.titlebutton > colorswatch:first-child:last-child {
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.1), 0 1px rgba(255, 255, 255, 0); }
-    button.color > colorswatch:first-child:last-child > overlay, button.color > colorswatch:first-child:last-child, headerbar button.color.titlebutton > colorswatch:first-child:last-child,
-    .titlebar button.color.titlebutton > colorswatch:first-child:last-child {
+  padding: 4px; }
+  button.color colorswatch:only-child {
+    box-shadow: 0 1px rgba(255, 255, 255, 0.76923); }
+    button.color colorswatch:only-child, button.color colorswatch:only-child overlay {
       border-radius: 0; }
-    button.color > colorswatch:first-child:last-child:disabled, headerbar button.color.titlebutton > colorswatch:first-child:last-child:disabled,
-    .titlebar button.color.titlebutton > colorswatch:first-child:last-child:disabled, button.color > colorswatch:first-child:last-child:backdrop, headerbar button.color.titlebutton > colorswatch:first-child:last-child:backdrop,
-    .titlebar button.color.titlebutton > colorswatch:first-child:last-child:backdrop {
+    button.color colorswatch:only-child:disabled, button.color colorswatch:only-child:backdrop {
       box-shadow: none; }
 
 /*********
@@ -4557,71 +4553,55 @@ tooltip {
 /*****************
  * Color Chooser *
  *****************/
-colorswatch {
-  box-shadow: inset 0 1px rgba(0, 0, 0, 0.1), 0 1px rgba(255, 255, 255, 0); }
-  :selected colorswatch {
-    box-shadow: none; }
-    :selected colorswatch overlay, :selected colorswatch overlay:hover {
-      border-color: #ffffff; }
-  colorswatch:selected {
-    box-shadow: inset 0 1px rgba(0, 0, 0, 0.1), 0 1px rgba(255, 255, 255, 0); }
-  colorswatch.top {
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px; }
-  colorswatch.bottom {
-    border-bottom-left-radius: 6px;
-    border-bottom-right-radius: 6px; }
-  colorswatch.left, colorswatch:first-child:not(overlay):not(.top) {
-    border-top-left-radius: 6px;
-    border-bottom-left-radius: 6px; }
-  colorswatch.right, colorswatch:last-child:not(overlay):not(.bottom) {
-    border-top-right-radius: 6px;
-    border-bottom-right-radius: 6px; }
-  colorswatch:only-child:not(overlay) {
-    border-radius: 6px; }
-  colorswatch.top > overlay {
+colorswatch.top {
+  border-top-left-radius: 5.5px;
+  border-top-right-radius: 5.5px; }
+  colorswatch.top overlay {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px; }
-  colorswatch.bottom > overlay {
+colorswatch.bottom {
+  border-bottom-left-radius: 5.5px;
+  border-bottom-right-radius: 5.5px; }
+  colorswatch.bottom overlay {
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px; }
-  colorswatch:first-child:not(.top) > overlay {
+colorswatch.left, colorswatch:first-child:not(.top) {
+  border-top-left-radius: 5.5px;
+  border-bottom-left-radius: 5.5px; }
+  colorswatch.left overlay, colorswatch:first-child:not(.top) overlay {
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px; }
-  colorswatch:last-child:not(.bottom) > overlay {
+colorswatch.right, colorswatch:last-child:not(.bottom) {
+  border-top-right-radius: 5.5px;
+  border-bottom-right-radius: 5.5px; }
+  colorswatch.right overlay, colorswatch:last-child:not(.bottom) overlay {
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px; }
-  colorswatch:only-child > overlay {
-    border-radius: 5px; }
-  colorswatch.activatable:hover, colorswatch.activatable:hover:selected {
-    background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0) 50%);
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0.4), inset 0 -1px rgba(0, 0, 0, 0.1); }
-  colorswatch:backdrop, colorswatch:backdrop:selected
-  colorswatch.dark:backdrop, colorswatch.dark:backdrop:selected {
-    background-image: none;
+colorswatch.dark overlay {
+  color: #ffffff; }
+  colorswatch.dark overlay:hover {
+    border-color: rgba(0, 0, 0, 0.8); }
+  colorswatch.dark overlay:backdrop {
+    color: #ffffff; }
+colorswatch.light overlay {
+  color: black; }
+  colorswatch.light overlay:hover {
+    border-color: rgba(0, 0, 0, 0.5); }
+  colorswatch.light overlay:backdrop {
+    color: #333333; }
+colorswatch overlay {
+  box-shadow: inset 0 2px 2px -3px rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(0, 0, 0, 0.3); }
+  colorswatch overlay:hover {
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.3); }
+  colorswatch overlay:backdrop, colorswatch overlay:backdrop:hover {
+    border-color: rgba(0, 0, 0, 0.3);
     box-shadow: none; }
-  colorswatch.dark {
-    color: white;
-    outline-color: rgba(255, 255, 255, 0.5);
-    border: 1px solid rgba(0, 0, 0, 0.3); }
-    colorswatch.dark:hover {
-      border-color: rgba(0, 0, 0, 0.5); }
-    colorswatch.dark:backdrop {
-      color: rgba(255, 255, 255, 0.3); }
-  colorswatch.light {
-    color: black;
-    outline-color: rgba(0, 0, 0, 0.5);
-    border: 1px solid rgba(0, 0, 0, 0.3); }
-    colorswatch.light:hover {
-      border-color: rgba(0, 0, 0, 0.5); }
-    colorswatch.light:backdrop {
-      color: rgba(0, 0, 0, 0.3); }
-  colorswatch overlay, colorswatch overlay:selected {
-    background: none;
-    border: none; }
-  colorswatch#add-color-button {
-    border-style: solid;
-    border-width: 1px;
+colorswatch#add-color-button {
+  border-radius: 5px 5px 0 0; }
+  colorswatch#add-color-button:only-child {
+    border-radius: 5px; }
+  colorswatch#add-color-button overlay {
     color: #2e3436;
     outline-color: rgba(46, 52, 54, 0.3);
     border-color: #9d9d99;
@@ -4629,7 +4609,7 @@ colorswatch {
     text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
     -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
     box-shadow: inset 0 1px rgba(255, 255, 255, 0.8), 0 1px rgba(255, 255, 255, 0); }
-    colorswatch#add-color-button:hover {
+    colorswatch#add-color-button overlay:hover {
       color: #2e3436;
       outline-color: rgba(46, 52, 54, 0.3);
       border-color: #9d9d99;
@@ -4643,20 +4623,20 @@ colorswatch {
       text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
       -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
       box-shadow: inset 0 1px white, 0 1px rgba(255, 255, 255, 0); }
-    colorswatch#add-color-button:backdrop {
+    colorswatch#add-color-button overlay:backdrop {
       color: #8b8e8f;
       border-color: #a5a5a1;
       background-image: linear-gradient(to bottom, #e8e8e7);
       text-shadow: none;
       -gtk-icon-shadow: none;
       box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
-    colorswatch#add-color-button overlay {
-      border-color: transparent;
-      background-color: transparent;
-      background-image: none;
-      box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0);
-      text-shadow: none;
-      -gtk-icon-shadow: none; }
+colorswatch:disabled {
+  opacity: 0.5; }
+  colorswatch:disabled overlay {
+    border-color: rgba(0, 0, 0, 0.6);
+    box-shadow: none; }
+row:selected colorswatch {
+  box-shadow: 0 0 0 2px #ffffff; }
 
 /********
  * Misc *

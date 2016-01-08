@@ -758,14 +758,14 @@ modelbutton.flat arrow {
 }
 
 button.color {
-  padding: 5px; // Uniform padding on the GtkColorButton
-
-  > colorswatch:first-child:last-child { // :first-child:last-child for a specificity bump, it gets overridden by the colorchooser style
-    > overlay, & { border-radius: 0; }
-    box-shadow: inset 0 1px 1px transparentize(black, 0.9),
-                _widget_edge();
-    &:disabled,
-    &:backdrop { box-shadow: none; }
+  padding: 4px;
+  colorswatch:only-child {
+    &, overlay { border-radius: 0; }
+    @if $variant == 'light' {
+      box-shadow: 0 1px _text_shadow_color();
+      &:disabled,
+      &:backdrop { box-shadow: none; }
+    }
   }
 }
 
@@ -3166,117 +3166,91 @@ tooltip {
 
 colorswatch {
   // This widget is made of two boxes one on top of the other, the lower box is colorswatch {} the other one
-  // is colorswatch overlay {}, GtkColorSwatch has the programmatically set background, so most of the style
-  // is applied to the overlay box.
-
-  $_colorswatch_shadow: inset 0 1px transparentize(black, 0.9), _widget_edge();
+  // is colorswatch overlay {}, colorswatch has the programmatically set background, so most of the style is
+  // applied to the overlay box.
 
   $_colorswatch_radius: 5px;
-
-  box-shadow: $_colorswatch_shadow;
-
-  // take care of colorswatches on selected elements
-  :selected & {
-    box-shadow: none;
-    & overlay, & overlay:hover {
-      border-color: $selected_fg_color;
-    }
-  }
-
-  // we need to re-set the shadow here since it get axed by the previous bit
-  &:selected { box-shadow: $_colorswatch_shadow; }
+  $_colorswatch_overlay_shadow: if($variant == 'light', inset 0 2px 2px -3px transparentize(black, 0.3),
+                                                        inset 0 3px 2px -2px transparentize(black, 0.5));
 
   // base color corners rounding
   // to avoid the artifacts caused by rounded corner anti-aliasing the base color
   // sports a bigger radius.
   // nth-child is needed by the custom color strip.
-  // The :not() madness is needed since actually the overlay is selectable by GtkColorSwatch > .overlay
-  // and GtkColorSwatch.overlay, I know it's weird, but this is gtk+, not a browser.
   &.top {
-    border-top-left-radius: $_colorswatch-radius + 1px;
-    border-top-right-radius: $_colorswatch-radius + 1px;
+    border-top-left-radius: $_colorswatch_radius + 0.5px;
+    border-top-right-radius: $_colorswatch_radius + 0.5px;
+    overlay {
+      border-top-left-radius: $_colorswatch_radius;
+      border-top-right-radius: $_colorswatch_radius;
+    }
   }
   &.bottom {
-    border-bottom-left-radius: $_colorswatch-radius + 1px;
-    border-bottom-right-radius: $_colorswatch-radius + 1px;
+    border-bottom-left-radius: $_colorswatch_radius + 0.5px;
+    border-bottom-right-radius: $_colorswatch_radius + 0.5px;
+    overlay {
+      border-bottom-left-radius: $_colorswatch_radius;
+      border-bottom-right-radius: $_colorswatch_radius;
+    }
   }
-  &.left, &:first-child:not(overlay):not(.top) {
-    border-top-left-radius: $_colorswatch-radius + 1px;
-    border-bottom-left-radius: $_colorswatch-radius + 1px;
+  &.left, &:first-child:not(.top) {
+    border-top-left-radius: $_colorswatch_radius + 0.5px;
+    border-bottom-left-radius: $_colorswatch_radius + 0.5px;
+    overlay {
+      border-top-left-radius: $_colorswatch_radius;
+      border-bottom-left-radius: $_colorswatch_radius;
+    }
   }
-  &.right, &:last-child:not(overlay):not(.bottom) {
-    border-top-right-radius: $_colorswatch-radius + 1px;
-    border-bottom-right-radius: $_colorswatch-radius + 1px;
-  }
-  &:only-child:not(overlay) { border-radius: $_colorswatch-radius + 1px; }
-
-  // overlay corner rounding
-  &.top > overlay {
-    border-top-left-radius: $_colorswatch-radius;
-    border-top-right-radius: $_colorswatch-radius;
-  }
-  &.bottom > overlay {
-    border-bottom-left-radius: $_colorswatch-radius;
-    border-bottom-right-radius: $_colorswatch-radius;
-  }
-  &:first-child:not(.top) > overlay {
-    border-top-left-radius: $_colorswatch-radius;
-    border-bottom-left-radius: $_colorswatch-radius;
-  }
-  &:last-child:not(.bottom) > overlay {
-    border-top-right-radius: $_colorswatch-radius;
-    border-bottom-right-radius: $_colorswatch-radius;
-  }
-  &:only-child > overlay { border-radius: $_colorswatch-radius; }
-
-  // hover effect
-  &.activatable:hover,
-  &.activatable:hover:selected {
-    background-image: linear-gradient(135deg, transparentize(white, 0.3),
-                                              transparentize(white, 1) 50%);
-    box-shadow: inset 0 1px transparentize(white, 0.6),
-                inset 0 -1px if($variant == 'light', transparentize(black, 0.9), transparentize(black, 0.6));
-  }
-  &:backdrop,
-  &:backdrop:selected
-  &.dark:backdrop,
-  &.dark:backdrop:selected {
-    background-image: none;
-    box-shadow: none;
+  &.right, &:last-child:not(.bottom) {
+    border-top-right-radius: $_colorswatch_radius + 0.5px;
+    border-bottom-right-radius: $_colorswatch_radius + 0.5px;
+    overlay {
+      border-top-right-radius: $_colorswatch_radius;
+      border-bottom-right-radius: $_colorswatch_radius;
+    }
   }
 
-  // indicator and keynav outline colors
-  &.dark {
-    color: white;
-    outline-color: transparentize(white, 0.5);
+  &.dark overlay {
+    color: $selected_fg_color;
+    &:hover { border-color: if($variant == 'light', transparentize(black, 0.2), $borders_color); }
+    &:backdrop { color: $backdrop_selected_fg_color; }
+  }
+
+  &.light overlay {
+    color: $text_color;
+    &:hover { border-color: if($variant == 'light', transparentize(black, 0.5), $borders_color); }
+    &:backdrop { color: $backdrop_text_color; }
+  }
+
+  overlay {
+    box-shadow: $_colorswatch_overlay_shadow;
     border: 1px solid if($variant == 'light', transparentize(black, 0.7), $borders_color);
-    &:hover { border-color: if($variant == 'light', transparentize(black, 0.5), black); }
-    &:backdrop { color: transparentize(white, 0.7); }
-  }
-  &.light {
-    color: black;
-    outline-color: transparentize(black, 0.5);
-    border: 1px solid if($variant == 'light', transparentize(black, 0.7), $borders_color);
-    &:hover { border-color: if($variant == 'light', transparentize(black, 0.5), black); }
-    &:backdrop { color: transparentize(black, 0.7); }
+    &:hover { box-shadow: inset 0 1px transparentize(white, 0.7); }
+    &:backdrop, &:backdrop:hover {
+      border-color: if($variant == 'light', transparentize(black, 0.7), $borders_color);
+      box-shadow: none;
+    }
   }
 
-  // border color
-  & overlay,
-  & overlay:selected {
-    background: none;
-    border: none;
-  }
-
-  // make the add color button looks like, well, a button
   &#add-color-button {
-    border-style: solid; // the borders are drawn by the overlay for standard colorswatches to have them semi
-    border-width: 1px;   // translucent on the colored background, here it's not necessary so they need to be set
-    @include button(normal);
-    &:hover { @include button(hover); }
-    &:backdrop { @include button(backdrop); }
-    overlay { @include button(undecorated); } // reset the overlay to not cover the button style underneat
+    border-radius: $_colorswatch_radius $_colorswatch_radius 0 0;
+    &:only-child { border-radius: $_colorswatch_radius; }
+    overlay {
+      @include button(normal);
+      &:hover { @include button(hover); }
+      &:backdrop { @include button(backdrop); }
+    }
   }
+
+  &:disabled {
+    opacity: 0.5;
+    overlay {
+      border-color: transparentize(black, 0.4);
+      box-shadow: none;
+    }
+  }
+
+  row:selected & { box-shadow: 0 0 0 2px $selected_fg_color; }
 }
 
 
