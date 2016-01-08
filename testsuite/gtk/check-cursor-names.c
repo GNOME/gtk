@@ -17,10 +17,10 @@ static char *cursor_names[] = {
 
   /*** dnd cursors, from gtkdnd.c ***/
   "dnd-ask",
-  "dnd-copy",
-  "dnd-move",
-  "dnd-link",
-  "dnd-none",
+  "copy",
+  "move",
+  "alias",
+  "no-drop",
 
   "none",      /* used e.g. in gtkentry.c */
   "pointer",   /* used e.g. in gtklinkbutton.c */
