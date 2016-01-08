@@ -223,6 +223,7 @@ gdk_x11_drag_context_finalize (GObject *object)
 {
   GdkDragContext *context = GDK_DRAG_CONTEXT (object);
   GdkX11DragContext *x11_context = GDK_X11_DRAG_CONTEXT (object);
+  GdkWindow *drag_window;
 
   if (context->source_window)
     {
@@ -235,7 +236,12 @@ gdk_x11_drag_context_finalize (GObject *object)
 
   contexts = g_list_remove (contexts, context);
 
+  drag_window = context->drag_window;
+
   G_OBJECT_CLASS (gdk_x11_drag_context_parent_class)->finalize (object);
+
+  if (drag_window)
+    gdk_window_destroy (drag_window);
 }
 
 /* Drag Contexts */
