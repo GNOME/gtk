@@ -1,3 +1,80 @@
+Overview of Changes in GTK+ 3.19.6
+==================================
+
+* CSS changes:
+ - CSS margins, border and padding are more consistently supported
+ - More widgets support min-width and min-height
+ - More style properties have been superseded by CSS properties
+ - Pseudo state names have been aligned with what CSS uses:
+   :disabled instead of :insensitive, :indeterminate instead of
+   :inconsistent and :drop(active) instead of :dnd. The old names
+   still work
+ - GTK+ specific CSS properties have been prefixed with -gtk-.
+   The old names still work
+ - The CSS syntax for Radial gradients is now supported
+ - CSS documentation has been rewritten and expanded
+
+* Themes:
+ - GTK+ now includes a HighContrastInverse theme which is a dark
+   variant of the HighContrast theme
+
+* Inspector:
+ - The inspector can now highlight widgets that are causing resizes,
+   which can be helpful in tracking down allocation loops
+
+* Wayland:
+ - Prefer subsurfaces for temporary windows when possible, to fix
+   placement issues
+ - Improve handling of dialogs without transient parent
+ - Force a grab cursor while a popup is shown
+
+* Bugs fixed:
+ 728344 Collate setting in Print Dialog does not override PPD setting...
+ 753520 Gtk potentially misses nullable in 166 functions
+ 756618 GtkWindow CSD: gtk_window_resize() also includes client side ...
+ 757147 gdk_pixbuf_get_from_window() doesn't honor device scale
+ 757411 Reference GtkIconSize in argument/return documentation
+ 759161 wayland: dialog stacking without parents (RFC)
+ 759299 wayland: possible infinite loop in gdkwindow-wayland
+ 759541 shortcuts: Make sure that hidden shortcuts stay hidden
+ 759567 Treeview column header buttons are jumpy
+ 759586 Add a way to highlight resizing widgets
+ 759607 gtkdnd-quartz: fix gtk_drag_begin_internal
+ 759664 Buttonbox broken in chess promotion dialog
+ 759668 Drawing failures with GTK+ master
+ 759670 GtkPaned doesn't react to mouse dragging in some cases
+ 759705 Sidebar broken in GNOME Disks
+ 759738 wayland: use a subsurface for GDK_WINDOW_TEMP if attached to ...
+ 759764 gtkinspector crashes app when selecting 'cancel' on initial p...
+ 759768 gtkinspector crashes app on termination, when selecting 'canc...
+ 759771 GdkSeat: Missing G_BEGIN_DECLS and G_END_DECLS
+ 759857 Signal name should not be translated
+ 759905 Popover: Invisible to events when we set transparent backgrounds
+ 759917 GtkStatusIcon: avoid criticals
+ 760018 Separator Tool Items with draw=false still get drawn
+ 760082 GtkBinding: Use correct CSS key in examples
+ 760097 GtkShortcutsWindow: Gestures not shown correctly in search re...
+ 760141 New gdk_cursor_new_from_name() fallback breaks behavior expec...
+ 760148 Duplication of word in document
+ 760169 GtkColorButton sensitive and insensitive appearances are bare...
+ 760188 GDK's X11 backend leaks SyncCounters
+ 760202 gtkbuilder: Install gettext ITS files
+ 760213 wayland: gdk_seat_grab() set cursor not resilient
+ 760238 Improve function documentation for gtk_css_provider_load_from...
+ 760314 gtkimcontextime.c: Silence gtk_style_context_set_state() warn...
+
+* Translation updates:
+ Brazilian Portuguese
+ Czech
+ German
+ Hebrew
+ Indonesian
+ Norwegian bokmål
+ Portuguese
+ Slovak
+ Spanish
+
+
 Overview of Changes in GTK+ 3.19.5
 ==================================
 
