@@ -240,6 +240,7 @@ init_theme (GtkInspectorVisual *vis)
   GHashTable *t;
   GHashTableIter iter;
   gchar *theme, *path;
+  GList *list, *l;
 
   t = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
   /* Builtin themes */
@@ -260,9 +261,18 @@ init_theme (GtkInspectorVisual *vis)
   fill_gtk (path, t);
   g_free (path);
 
+  list = NULL;
   g_hash_table_iter_init (&iter, t);
   while (g_hash_table_iter_next (&iter, (gpointer *)&theme, NULL))
-    gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (vis->priv->theme_combo), theme, theme);
+    list = g_list_insert_sorted (list, theme, (GCompareFunc)strcmp);
+
+  for (l = list; l; l = l->next)
+    {
+      theme = l->data;
+      gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (vis->priv->theme_combo), theme, theme);
+    }
+
+  g_list_free (list);
   g_hash_table_destroy (t);
 
   g_object_bind_property (gtk_settings_get_default (), "gtk-theme-name",
@@ -322,6 +332,7 @@ init_icons (GtkInspectorVisual *vis)
   GHashTable *t;
   GHashTableIter iter;
   gchar *theme, *path;
+  GList *list, *l;
 
   t = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
@@ -333,12 +344,19 @@ init_icons (GtkInspectorVisual *vis)
   fill_icons (path, t);
   g_free (path);
 
+  list = NULL;
   g_hash_table_iter_init (&iter, t);
   while (g_hash_table_iter_next (&iter, (gpointer *)&theme, NULL))
+    list = g_list_insert_sorted (list, theme, (GCompareFunc)strcmp);
+
+  for (l = list; l; l = l->next)
     {
+      theme = l->data;
       gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (vis->priv->icon_combo), theme, theme);
     }
+
   g_hash_table_destroy (t);
+  g_list_free (list);
 
   g_object_bind_property (gtk_settings_get_default (), "gtk-icon-theme-name",
                           vis->priv->icon_combo, "active-id",
@@ -374,6 +392,7 @@ init_cursors (GtkInspectorVisual *vis)
   GHashTable *t;
   GHashTableIter iter;
   gchar *theme, *path;
+  GList *list, *l;
 
   t = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
@@ -385,12 +404,19 @@ init_cursors (GtkInspectorVisual *vis)
   fill_cursors (path, t);
   g_free (path);
 
+  list = NULL;
   g_hash_table_iter_init (&iter, t);
   while (g_hash_table_iter_next (&iter, (gpointer *)&theme, NULL))
+    list = g_list_insert_sorted (list, theme, (GCompareFunc)strcmp);
+
+  for (l = list; l; l = l->next)
     {
+      theme = l->data;
       gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (vis->priv->cursor_combo), theme, theme);
     }
+
   g_hash_table_destroy (t);
+  g_list_free (list);
 
   g_object_bind_property (gtk_settings_get_default (), "gtk-cursor-theme-name",
                           vis->priv->cursor_combo, "active-id",
