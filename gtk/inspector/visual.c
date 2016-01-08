@@ -245,6 +245,7 @@ init_theme (GtkInspectorVisual *vis)
   /* Builtin themes */
   g_hash_table_add (t, g_strdup ("Adwaita"));
   g_hash_table_add (t, g_strdup ("HighContrast"));
+  g_hash_table_add (t, g_strdup ("HighContrastInverse"));
   g_hash_table_add (t, g_strdup ("Raleigh"));
 
   path = _gtk_css_provider_get_theme_dir ();
