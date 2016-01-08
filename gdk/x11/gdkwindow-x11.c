@@ -1331,6 +1331,8 @@ gdk_x11_window_destroy (GdkWindow *window,
   if (toplevel)
     gdk_toplevel_x11_free_contents (GDK_WINDOW_DISPLAY (window), toplevel);
 
+  unhook_surface_changed (window);
+
   if (impl->cairo_surface)
     {
       cairo_surface_finish (impl->cairo_surface);
