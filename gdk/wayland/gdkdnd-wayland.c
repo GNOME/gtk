@@ -68,6 +68,7 @@ gdk_wayland_drag_context_finalize (GObject *object)
 {
   GdkWaylandDragContext *wayland_context = GDK_WAYLAND_DRAG_CONTEXT (object);
   GdkDragContext *context = GDK_DRAG_CONTEXT (object);
+  GdkWindow *dnd_window;
 
   contexts = g_list_remove (contexts, context);
 
@@ -86,10 +87,12 @@ gdk_wayland_drag_context_finalize (GObject *object)
   if (wayland_context->data_source)
     wl_data_source_destroy (wayland_context->data_source);
 
-  if (wayland_context->dnd_window)
-    gdk_window_destroy (wayland_context->dnd_window);
+  dnd_window = wayland_context->dnd_window;
 
   G_OBJECT_CLASS (gdk_wayland_drag_context_parent_class)->finalize (object);
+
+  if (dnd_window)
+    gdk_window_destroy (dnd_window);
 }
 
 void
