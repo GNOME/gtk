@@ -68,6 +68,21 @@ struct _GdkDragContextClass {
                                 gint             hot_y);
   void        (*drop_done)     (GdkDragContext   *context,
                                 gboolean          success);
+
+  gboolean    (*manage_dnd)     (GdkDragContext  *context,
+                                 GdkWindow       *ipc_window,
+                                 GdkDragAction    actions);
+  void        (*set_cursor)     (GdkDragContext  *context,
+                                 GdkCursor       *cursor);
+  void        (*cancel)         (GdkDragContext  *context);
+  void        (*drop_performed) (GdkDragContext  *context,
+                                 guint32          time);
+  void        (*dnd_finished)   (GdkDragContext  *context);
+
+  gboolean    (*handle_event)   (GdkDragContext  *context,
+                                 const GdkEvent  *event);
+  void        (*action_changed) (GdkDragContext  *context,
+                                 GdkDragAction    action);
 };
 
 struct _GdkDragContext {
@@ -90,6 +105,13 @@ struct _GdkDragContext {
 
   GdkDevice *device;
 };
+
+GList *  gdk_drag_context_list (void);
+
+void     gdk_drag_context_set_cursor          (GdkDragContext *context,
+                                               GdkCursor      *cursor);
+void     gdk_drag_context_cancel              (GdkDragContext *context);
+gboolean gdk_drag_context_handle_source_event (GdkEvent *event);
 
 G_END_DECLS
 

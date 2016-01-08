@@ -190,6 +190,10 @@ void            gdk_drag_context_set_hotspot (GdkDragContext *context,
                                               gint            hot_x,
                                               gint            hot_y);
 
+GDK_AVAILABLE_IN_3_20
+gboolean        gdk_drag_context_manage_dnd (GdkDragContext *context,
+                                             GdkWindow      *ipc_window,
+                                             GdkDragAction   actions);
 G_END_DECLS
 
 #endif /* __GDK_DND_H__ */
