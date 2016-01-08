@@ -465,8 +465,7 @@ button, headerbar button.titlebutton,
     outline-color: rgba(238, 238, 236, 0.3);
     border: none;
     box-shadow: none; }
-    button.osd.image-button, headerbar button.osd.titlebutton,
-    .titlebar button.osd.titlebutton {
+    button.osd.image-button {
       min-height: 48px;
       min-width: 48px; }
     button.osd:hover {
@@ -957,18 +956,13 @@ button, headerbar button.titlebutton,
         box-shadow: none;
         text-shadow: none;
         -gtk-icon-shadow: none; }
-  button.text-button, GtkScaleButton.button.text-button,
-  GtkVolumeButton.button.text-button, headerbar button.text-button.titlebutton,
+  button.text-button, headerbar button.text-button.titlebutton,
   .titlebar button.text-button.titlebutton {
     padding-left: 16px;
     padding-right: 16px; }
-  button.text-button.image-button label:first-child, GtkScaleButton.button.text-button label:first-child,
-  GtkVolumeButton.button.text-button label:first-child, headerbar button.text-button.titlebutton label:first-child,
-  .titlebar button.text-button.titlebutton label:first-child {
+  button.text-button.image-button label:first-child {
     padding-left: 8px; }
-  button.text-button.image-button label:last-child, GtkScaleButton.button.text-button label:last-child,
-  GtkVolumeButton.button.text-button label:last-child, headerbar button.text-button.titlebutton label:last-child,
-  .titlebar button.text-button.titlebutton label:last-child {
+  button.text-button.image-button label:last-child {
     padding-right: 8px; }
   .stack-switcher > button, headerbar .stack-switcher > button.titlebutton,
   .titlebar .stack-switcher > button.titlebutton {
@@ -983,16 +977,12 @@ button, headerbar button.titlebutton,
       padding-right: 6px;
       padding-top: 3px;
       padding-bottom: 3px; }
-    .stack-switcher > button.text-button, .stack-switcher > GtkScaleButton.button.text-button,
-    .stack-switcher > GtkVolumeButton.button.text-button, headerbar .stack-switcher > button.text-button.titlebutton, headerbar .stack-switcher > GtkScaleButton.titlebutton.button.text-button,
-    headerbar .stack-switcher > GtkVolumeButton.titlebutton.button.text-button,
-    .titlebar .stack-switcher > button.text-button.titlebutton,
-    .titlebar .stack-switcher > GtkScaleButton.titlebutton.button.text-button,
-    .titlebar .stack-switcher > GtkVolumeButton.titlebutton.button.text-button {
+    .stack-switcher > button.text-button, headerbar .stack-switcher > button.text-button.titlebutton,
+    .titlebar .stack-switcher > button.text-button.titlebutton {
       padding-left: 10px;
       padding-right: 10px; }
-    .stack-switcher > button.image-button, headerbar .stack-switcher > button.titlebutton,
-    .titlebar .stack-switcher > button.titlebutton {
+    .stack-switcher > button.image-button, headerbar .stack-switcher > button.image-button.titlebutton,
+    .titlebar .stack-switcher > button.image-button.titlebutton {
       padding-left: 2px;
       padding-right: 2px; }
     .stack-switcher > button.needs-attention:active > label, .stack-switcher > button.needs-attention:active > image, .stack-switcher > button.needs-attention:checked > label, .stack-switcher > button.needs-attention:checked > image {
@@ -4620,8 +4610,7 @@ frame.keycap {
 *:drop(active) {
   border: 1px solid black; }
 
-stackswitcher button.text-button, stackswitcher GtkScaleButton.button.text-button,
-stackswitcher GtkVolumeButton.button.text-button,
+stackswitcher button.text-button,
 stackswitcher .titlebar button.text-button.titlebutton,
 .titlebar stackswitcher button.text-button.titlebutton {
   min-width: 100px; }

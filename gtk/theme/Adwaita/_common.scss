@@ -3289,15 +3289,6 @@ colorswatch {
   }
 }
 
-GtkScaleButton.button,
-GtkVolumeButton.button {
-  // I assume both are image-button *by default*
-  // with the image-button/text-button classes automagically applied depending on the button child these selectors can be deleted.
-  @extend .image-button;
-
-  &.text-button { @extend button.text-button }
-}
-
 /**********************
  * Window Decorations *
  *********************/
@@ -3366,7 +3357,6 @@ headerbar button.titlebutton,
 .titlebar button.titlebutton {
   @extend button;
   @extend button.flat;
-  @extend .image-button;
   @include _button_text_shadow;
   &:backdrop { -gtk-icon-shadow: none; }
 }
