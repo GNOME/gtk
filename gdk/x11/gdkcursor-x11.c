@@ -624,6 +624,7 @@ static const struct {
   { "copy",         "dnd-copy" },
   { "move",         "dnd-move" },
   { "no-drop",      "dnd-none" },
+  { "dnd-ask",      "dnd-copy" }, /* not CSS, but we want to guarantee it anyway */
   { "not-allowed",  "crossed_circle" },
   { "grab",         "hand2" },
   { "grabbing",     "hand2" },
