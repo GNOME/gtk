@@ -1186,6 +1186,42 @@ entry {
       </para>
 
       <table pgwide="1">
+        <title>Text caret properties</title>
+        <tgroup cols="7">
+          <colspec colnum="4" align="center"/>
+          <colspec colnum="5" align="center"/>
+          <thead>
+            <row><entry>Name</entry><entry>Value</entry><entry>Initial</entry><entry>Inh.</entry><entry>Ani.</entry><entry>Reference</entry><entry>Notes</entry></row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>caret-color</entry>
+              <entry>〈color〉</entry>
+              <entry>currentColor</entry>
+              <entry>✓</entry>
+              <entry>✓</entry>
+              <entry><ulink url="http://www.w3.org/TR/css3-ui/#caret-color">CSS3</ulink></entry>
+              <entry>CSS allows an auto value</entry>
+            </row>
+            <row>
+              <entry>-gtk-secondary-caret-color</entry>
+              <entry>〈color〉</entry>
+              <entry>currentColor</entry>
+              <entry>✓</entry>
+              <entry>✓</entry>
+              <entry></entry>
+              <entry>Used for the secondary caret in bidirectional text</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <para>
+        The caret properties provide a way to change the appearance of the insertion
+        caret in editable text.
+      </para>
+
+      <table pgwide="1">
         <title>Text decoration properties</title>
         <tgroup cols="7">
           <colspec colnum="4" align="center"/>
