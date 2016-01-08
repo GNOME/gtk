@@ -43,6 +43,7 @@
             <child>
               <object class="GtkColorSwatch" id="swatch">
                 <property name="visible">True</property>
+                <property name="name">editor-color-sample</property>
                 <property name="can_focus">False</property>
                 <property name="rgba">rgb(255,255,255)</property>
                 <property name="selectable">False</property>
