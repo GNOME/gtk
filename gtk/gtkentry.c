@@ -10913,7 +10913,7 @@ gtk_entry_progress_pulse (GtkEntry *entry)
 /**
  * gtk_entry_set_placeholder_text:
  * @entry: a #GtkEntry
- * @text: (nullable): a string to be displayed when @entry is empty an unfocused, or %NULL
+ * @text: (nullable): a string to be displayed when @entry is empty and unfocused, or %NULL
  *
  * Sets text to be displayed in @entry when it is empty and unfocused.
  * This can be used to give a visual hint of the expected contents of
