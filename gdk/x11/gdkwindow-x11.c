@@ -250,8 +250,10 @@ static void
 on_surface_changed (void *data)
 {
   GdkWindow *window = data;
+  GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (window->impl);
 
-  window_pre_damage (window);
+  if (impl->tracking_damage)
+    window_pre_damage (window);
 }
 
 /* We want to know when cairo drawing causes damage to the window,
@@ -269,12 +271,15 @@ hook_surface_changed (GdkWindow *window)
   GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (window->impl);
 
   if (impl->cairo_surface)
-    cairo_surface_set_mime_data (impl->cairo_surface,
-                                 "x-gdk/change-notify",
-                                 (unsigned char *)"X",
-                                 1,
-                                 on_surface_changed,
-                                 window);
+    {
+      cairo_surface_set_mime_data (impl->cairo_surface,
+                                   "x-gdk/change-notify",
+                                   (unsigned char *)"X",
+                                   1,
+                                   on_surface_changed,
+                                   window);
+      impl->tracking_damage = 1;
+    }
 }
 
 static void
@@ -283,10 +288,13 @@ unhook_surface_changed (GdkWindow *window)
   GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (window->impl);
 
   if (impl->cairo_surface)
-    cairo_surface_set_mime_data (impl->cairo_surface,
-                                 "x-gdk/change-notify",
-                                 NULL, 0,
-                                 NULL, NULL);
+    {
+      impl->tracking_damage = 0;
+      cairo_surface_set_mime_data (impl->cairo_surface,
+                                   "x-gdk/change-notify",
+                                   NULL, 0,
+                                   NULL, NULL);
+    }
 }
 
 static void

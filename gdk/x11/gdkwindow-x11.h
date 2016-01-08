@@ -73,6 +73,7 @@ struct _GdkWindowImplX11
   guint override_redirect : 1;
   guint frame_clock_connected : 1;
   guint frame_sync_enabled : 1;
+  guint tracking_damage: 1;
 
   gint window_scale;
 
