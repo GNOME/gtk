@@ -706,7 +706,7 @@ gtk_revealer_real_draw (GtkWidget *widget,
   if (gtk_cairo_should_draw_window (cr, priv->bin_window))
     GTK_WIDGET_CLASS (gtk_revealer_parent_class)->draw (widget, cr);
 
-  return TRUE;
+  return GDK_EVENT_PROPAGATE;
 }
 
 /**
