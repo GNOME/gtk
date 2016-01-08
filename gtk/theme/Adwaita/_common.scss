@@ -1112,7 +1112,8 @@ searchbar,
 
 %titlebar,
 headerbar {
-  padding: 6px;
+  padding: 0 6px;
+  min-height: 46px;
   border-width: 0 0 1px;
   border-style: solid;
   border-color: $borders_color;
@@ -1277,8 +1278,12 @@ headerbar {
   }
 
   &.default-decoration {
-    padding: 4px;
-    button { padding: 5px; }
+    padding: 0 4px;
+    min-height: 36px;
+    button {
+      min-height: 26px;
+      padding: 0 5px;
+    }
   }
 }
 
