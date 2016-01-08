@@ -275,10 +275,10 @@ static struct {
 } drag_cursors[] = {
   { GDK_ACTION_DEFAULT, NULL },
   { GDK_ACTION_ASK,   "dnd-ask",  NULL, NULL },
-  { GDK_ACTION_COPY,  "dnd-copy", NULL, NULL },
-  { GDK_ACTION_MOVE,  "dnd-move", NULL, NULL },
-  { GDK_ACTION_LINK,  "dnd-link", NULL, NULL },
-  { 0              ,  "dnd-none", NULL, NULL },
+  { GDK_ACTION_COPY,  "copy", NULL, NULL },
+  { GDK_ACTION_MOVE,  "move", NULL, NULL },
+  { GDK_ACTION_LINK,  "alias", NULL, NULL },
+  { 0              ,  "no-drop", NULL, NULL },
 };
 
 /*********************
