@@ -120,14 +120,19 @@ gtk_color_swatch_render (GtkCssGadget *gadget,
     {
       cairo_pattern_t *pattern;
       cairo_matrix_t matrix;
-      GtkBorder border;
+      GtkAllocation allocation, border_allocation;
 
-      gtk_style_context_get_border (context, gtk_style_context_get_state (context), &border);
+      gtk_widget_get_allocation (widget, &allocation);
+      gtk_css_gadget_get_border_allocation (gadget, &border_allocation, NULL);
+
+      border_allocation.x -= allocation.x;
+      border_allocation.y -= allocation.y;
+
       gtk_render_content_path (context, cr,
-                               x - border.left,
-                               y - border.top,
-                               width + border.left + border.right,
-                               height + border.top + border.bottom);
+                               border_allocation.x,
+                               border_allocation.y,
+                               border_allocation.width,
+                               border_allocation.height);
 
       if (swatch->priv->use_alpha)
         {
