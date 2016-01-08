@@ -26,6 +26,7 @@
 
 #include "gdkinternals.h"
 #include "gdkdisplayprivate.h"
+#include "gdkdndprivate.h"
 
 #include <string.h>
 #include <math.h>
@@ -65,6 +66,9 @@ static GDestroyNotify _gdk_event_notify = NULL;
 void
 _gdk_event_emit (GdkEvent *event)
 {
+  if (gdk_drag_context_handle_source_event (event))
+    return;
+
   if (_gdk_event_func)
     (*_gdk_event_func) (event, _gdk_event_data);
 }
