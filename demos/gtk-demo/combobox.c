@@ -36,12 +36,9 @@ create_icon_store (void)
     N_("Open")
   };
 
-  GtkWidget *cellview;
   GtkTreeIter iter;
   GtkListStore *store;
   gint i;
-
-  cellview = gtk_cell_view_new ();
 
   store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
 
@@ -64,8 +61,6 @@ create_icon_store (void)
                               -1);
         }
     }
-
-  gtk_widget_destroy (cellview);
 
   return GTK_TREE_MODEL (store);
 }
