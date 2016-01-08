@@ -116,6 +116,8 @@ struct _GdkWaylandSeat
   /* Some tracking on gesture events */
   guint gesture_n_fingers;
   gdouble gesture_scale;
+
+  GdkCursor *grab_cursor;
 };
 
 G_DEFINE_TYPE (GdkWaylandSeat, gdk_wayland_seat, GDK_TYPE_SEAT)
@@ -289,6 +291,9 @@ gdk_wayland_device_set_window_cursor (GdkDevice *device,
 
   if (device == wd->touch_master)
     return;
+
+  if (wd->pointer_grab_window)
+    cursor = wd->grab_cursor;
 
   /* Setting the cursor to NULL means that we should use
    * the default cursor
@@ -2458,6 +2463,7 @@ gdk_wayland_seat_grab (GdkSeat                *seat,
                                     evtime,
                                     FALSE);
 
+      g_set_object (&wayland_seat->grab_cursor, cursor);
       g_set_object (&wayland_seat->cursor, cursor);
       gdk_wayland_device_update_window_cursor (wayland_seat);
     }
@@ -2514,6 +2520,15 @@ gdk_wayland_seat_ungrab (GdkSeat *seat)
   GdkDisplay *display = gdk_seat_get_display (seat);;
   GdkDeviceGrabInfo *grab;
 
+  g_clear_object (&wayland_seat->grab_cursor);
+
+  if (wayland_seat->pointer_grab_window)
+    {
+      _gdk_wayland_window_set_grab_seat (wayland_seat->pointer_grab_window,
+                                         NULL);
+      wayland_seat->pointer_grab_window = NULL;
+    }
+
   if (wayland_seat->master_pointer)
     {
       GdkWindow *focus, *prev_focus = NULL;
@@ -2550,13 +2565,6 @@ gdk_wayland_seat_ungrab (GdkSeat *seat)
 
       if (grab)
         grab->serial_end = grab->serial_start;
-    }
-
-  if (wayland_seat->pointer_grab_window)
-    {
-      _gdk_wayland_window_set_grab_seat (wayland_seat->pointer_grab_window,
-                                         NULL);
-      wayland_seat->pointer_grab_window = NULL;
     }
 }
 
