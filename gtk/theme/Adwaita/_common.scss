@@ -2805,11 +2805,12 @@ calendar {
   border: 1px solid $borders_color;
 
   &:selected {
-    @extend .view:selected;
+    @extend %selected_items;
+    border-radius: 3px;
   }
 
   &.header {
-    border: 1px solid transparentize(black, 0.9);
+    border-bottom: 1px solid transparentize(black, 0.9);
     border-radius: 0;
 
     &:backdrop { border-color: transparentize(black, 0.9); }
