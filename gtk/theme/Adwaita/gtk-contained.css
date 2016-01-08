@@ -68,6 +68,8 @@ iconview {
   iconview:backdrop {
     color: #333333;
     background-color: white; }
+  iconview:selected, iconview:selected:focus {
+    border-radius: 3px; }
 
 .rubberband,
 rubberband,
