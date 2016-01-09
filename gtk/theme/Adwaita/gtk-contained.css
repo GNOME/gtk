@@ -4849,13 +4849,24 @@ button.circular, headerbar button.circular.titlebutton,
   .titlebar button.circular.titlebutton label {
     padding: 0; }
 
-frame.keycap {
-  background-color: #fefefe;
-  border: 1px solid #cecece;
+.keycap {
+  min-width: 20px;
+  min-height: 25px;
+  padding-bottom: 3px;
+  padding-left: 6px;
+  padding-right: 6px;
+  color: #8b8e8f;
+  background-color: #ffffff;
+  border: 1px solid;
+  border-color: #c3c3c0;
   border-radius: 5px;
-  box-shadow: 0px 1px 0px #fff inset, 0px -2px 0px #dedede inset;
-  color: #555753;
-  padding: 3px 8px 3px 8px; }
+  box-shadow: inset 0 -3px #ededec;
+  font-size: smaller; }
+  .keycap:backdrop {
+    background-color: white;
+    color: #c3c3c0; }
+  .keycap border {
+    border-style: none; }
 
 *:drop(active):focus,
 *:drop(active) {
@@ -4868,8 +4879,11 @@ stackswitcher .titlebar button.text-button.titlebutton,
 
 stackswitcher button.circular,
 stackswitcher .titlebar button.circular.titlebutton,
-.titlebar stackswitcher button.circular.titlebutton {
-  min-width: 0px; }
+.titlebar stackswitcher button.circular.titlebutton,
+stackswitcher button.text-button.circular {
+  min-width: 32px;
+  min-height: 32px;
+  padding: 0; }
 
 /* GTK NAMED COLORS
    ----------------

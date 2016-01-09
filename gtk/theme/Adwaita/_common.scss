@@ -2608,7 +2608,7 @@ progressbar {
 
   &.vertical {
     trough,
-    progress { min-width: 2px; } 
+    progress { min-width: 2px; }
   }
 
   &.horizontal progress { margin: 0 -1px; } // the progress node is positioned after the trough border
@@ -3706,14 +3706,28 @@ button.circular { // FIXME: aggregate to buttons
   label { padding: 0; }
 }
 
-frame.keycap {
-  background-color: #fefefe;
-  border: 1px solid #cecece;
+// shortcut window keys
+.keycap {
+  min-width: 20px;
+  min-height: 25px;
+  padding-bottom: 3px;
+  padding-left: 6px;
+  padding-right: 6px;
+
+  color: if($variant == 'light', $insensitive_fg_color, $fg_color);
+  background-color: $base_color;
+  border: 1px solid;
+  border-color: if($variant == 'light', mix($borders_color, $bg_color, 50%), $borders_color);
   border-radius: 5px;
-  box-shadow: 0px 1px 0px #fff inset,
-              0px -2px 0px #dedede inset;
-  color: #555753;
-  padding: 3px 8px 3px 8px;
+  box-shadow: if($variant == 'light', inset 0 -3px mix($base_color, $bg_color, 20%), inset 0 -3px mix($borders_color, $base_color, 60%));
+  font-size: smaller;
+
+  &:backdrop {
+    background-color: $backdrop_base_color;
+    color: if($variant == 'light', $backdrop_insensitive_color, $backdrop_fg_color);
+  }
+
+  border { border-style: none; }
 }
 
 *:drop(active):focus,
@@ -3721,4 +3735,9 @@ frame.keycap {
 
 stackswitcher button.text-button { min-width: 100px; } // FIXME aggregate with buttons
 
-stackswitcher button.circular { min-width: 0px; } // FIXME aggregate with buttons
+stackswitcher button.circular,
+stackswitcher button.text-button.circular { // FIXME aggregate with buttons
+  min-width: 32px;
+  min-height: 32px;
+  padding: 0;
+}
