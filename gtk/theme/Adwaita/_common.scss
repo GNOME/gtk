@@ -3056,23 +3056,34 @@ paned {
   > separator {
     min-width: 1px;
     min-height: 1px;
-    background-color: $borders_color;
-    &:backdrop { background-color: $backdrop_borders_color; }
-    &:selected { background-color: $selected_bg_color; }
+    -gtk-icon-source: none; // defeats the ugly default handle decoration
+    background-color: transparent;
+    background-image: linear-gradient(to top, $borders_color);
+    background-size: 1px 1px;
+    &:selected { background-image: linear-gradient(to top, $selected_bg_color); }
+    &:backdrop { background-image: linear-gradient(to top, $backdrop_borders_color); }
   }
-  &:dir(ltr).horizontal > separator {
-    margin: 0 -8px 0 0;
-    padding: 0 8px 0 0;
-  }
-  &:dir(rtl).horizontal > separator {
-    margin: 0 0 0 -8px;
-    padding: 0 0 0 8px;
+  &.horizontal > separator {
+    background-repeat: repeat-y;
+    &:dir(ltr) {
+      margin: 0 -8px 0 0;
+      padding: 0 8px 0 0;
+      background-position: left;
+    }
+    &:dir(rtl) {
+      margin: 0 0 0 -8px;
+      padding: 0 0 0 8px;
+      background-position: right;
+    }
   }
   &.vertical > separator {
     margin: 0 0 -8px 0;
     padding: 0 0 8px 0;
+    background-repeat: repeat-x;
+    background-position: top;
   }
   > separator.wide {
+    // FIXME: I don't understand this clearly
     min-width: 5px;
     min-height: 5px;
     background-color: transparent;
