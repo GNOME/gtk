@@ -1,0 +1,984 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+               "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+]>
+<refentry id="chap-css-overview">
+<refmeta>
+<refentrytitle>GTK+ CSS</refentrytitle>
+<manvolnum>3</manvolnum>
+<refmiscinfo>GTK Library</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+<refname>GTK+ CSS</refname>
+<refpurpose>
+Overview of CSS in GTK+
+</refpurpose>
+</refnamediv>
+
+
+<!--
+Formatting conventions:
+We use
+
+‑ U+2011 Non-breaking Hyphen
+  U+00A0 No-break Space
+
+to control line breaks in the Name and Value columns.
+We use
+
+〈 U+2329 Left-pointing Angle Bracket
+〉 U+232A Right-pointing Angle Bracket
+
+for indicating non-terminals in syntax productions.
+
+We use <literallayout> for syntax productions, and each line is put in a <code>
+(the latter is a workaround for deficiences in the developer.gnome.org post-processing).
+-->
+
+<refsect1 id="css-overview">
+  <title>Overview of CSS in GTK+</title>
+
+  <para>
+    This chapter describes in detail how GTK+ uses CSS for styling
+    and layout.
+  </para>
+
+  <para>
+    We loosely follow the CSS
+    <ulink url="http://www.w3.org/TR/css-values/#value-defs">value definition</ulink>
+    specification in the formatting of syntax productions.
+    <simplelist>
+      <member>Nonterminals are enclosed in angle backets (〈〉), all other strings that are not listed here are literals</member>
+      <member>Juxtaposition means all components must occur, in the given order</member>
+      <member>A double ampersand (&amp;&amp;) means all components must occur, in any order</member>
+      <member>A double bar (||) means one or more of the components must occur, in any order</member>
+      <member>A single bar (|) indicates an alternative; exactly one of the components must occur</member>
+      <member>Brackets ([]) are used for grouping</member>
+      <member>A question mark (?) means that the preceding component is optional</member>
+      <member>An asterisk (*) means zero or more copies of the preceding component</member>
+      <member>A plus (+) means one or more copies of the preceding component</member>
+      <member>A number in curly braces ({n}) means that the preceding component occurs exactly n times</member>
+      <member>Two numbers in curly braces ({m,n}) mean that the preceding component occurs at least m times and at most n times</member>
+    </simplelist>
+  </para>
+
+  <refsect2>
+    <title>CSS nodes</title>
+
+    <para>
+      GTK+ applies the style information found in style sheets by matching
+      the selectors against a tree of nodes. Each node in the tree has a
+      name, a state and possibly style classes. The children of each node
+      are linearly ordered.
+    </para>
+
+    <para>
+      Every widget has one or more of these CSS nodes, and determines their
+      name, state, style classes and how they are layed out as children and
+      siblings in the overall node tree. The documentation for each widget
+      explains what CSS nodes it has.
+    </para>
+
+    <example>
+      <title>The CSS nodes of a GtkScale</title>
+      <programlisting><![CDATA[
+scale[.fine-tune]
+├── marks.top
+│   ├── mark
+┊   ┊
+│   ╰── mark
+├── trough
+│   ├── slider
+│   ├── [highlight]
+│   ╰── [fill]
+╰── marks.bottom
+    ├── mark
+    ┊
+    ╰── mark
+]]></programlisting>
+    </example>
+
+  </refsect2>
+
+  <refsect2>
+    <title>Style sheets</title>
+
+    <para>
+      The basic structure of the style sheets understood by GTK+ is
+      a series of statements, which are either rule sets or “@-rules”,
+      separated by whitespace.
+    </para>
+
+    <para>
+      A rule set consists of a selector and a declaration block, which is
+      a series of declarations enclosed in curly braces. The declarations
+      are separated by semicolons. Multiple selectors can share the same
+      declaration block, by putting all the separators in front of the block,
+      separated by commas.
+    </para>
+
+    <example>
+      <title>A rule set with two selectors</title>
+      <programlisting><![CDATA[
+button, entry {
+  color: #ff00ea;
+  font: Comic Sans 12
+}
+]]></programlisting>
+    </example>
+
+  </refsect2>
+
+  <refsect2>
+    <title>Importing style sheets</title>
+
+    <para>
+      GTK+ supports the CSS @import rule, in order to load another
+      style sheet in addition to the currently parsed one.
+    </para>
+
+    <para>
+      The syntax for @import rules is as follows:
+    </para>
+
+<literallayout><code>〈import rule〉 = @import [ 〈url〉 | 〈string〉] ;</code>
+<code>〈url〉 = url( 〈string〉)</code>
+</literallayout>
+
+    <example><title>An example for using the @import rule</title>
+      <programlisting><![CDATA[
+@import url("path/to/common.css");
+]]></programlisting>
+    </example>
+
+    <para>
+      To learn more about the @import rule, you can read the
+      <ulink url="http://www.w3.org/TR/css3-cascade/#at-import">Cascading</ulink>
+      module of the CSS specification.
+    </para>
+
+  </refsect2>
+
+  <refsect2>
+    <title>Selectors</title>
+
+    <para>
+      Selectors work very similar to the way they do in CSS.
+    </para>
+
+    <para>
+      Typically widgets have one or more CSS nodes with element names (GTK+ falls
+      back to using the widget type if a widget has no element name) and style
+      classes. When style classes are used in selectors, they have to be prefixed
+      with a period. Widget names can be used in selectors like IDs. When used
+      in a selector, widget names must be prefixed with a &num; character.
+    </para>
+
+    <para>
+      In more complicated situations, selectors can be combined in various ways.
+      To require that a node satisfies several conditions, combine several selectors
+      into one by concatenating them. To only match a node when it occurs inside some
+      other node, write the two selectors after each other, separated by whitespace.
+      To restrict the match to direct children of the parent node, insert a &gt;
+      character between the two selectors.
+    </para>
+
+    <example>
+      <title>Theme labels that are descendants of a window</title>
+      <programlisting><![CDATA[
+window label {
+  background-color: #898989
+}
+]]></programlisting>
+    </example>
+
+    <example>
+      <title>Theme notebooks, and anything within</title>
+      <programlisting><![CDATA[
+notebook {
+  background-color: #a939f0
+}
+]]></programlisting>
+    </example>
+ 
+    <example>
+      <title>Theme combo boxes, and entries that are direct children of a notebook</title>
+      <programlisting><![CDATA[
+combobox,
+notebook > entry {
+  color: @fg_color;
+  background-color: #1209a2
+}
+]]></programlisting>
+    </example>
+
+    <example>
+      <title>Theme any widget within a GtkBin</title>
+      <programlisting><![CDATA[
+GtkBin * {
+  font: Sans 20
+}
+]]></programlisting>
+    </example>
+
+    <example>
+      <title>Theme a label named title-label</title>
+      <programlisting><![CDATA[
+label#title-label {
+  font: Sans 15
+}
+]]></programlisting>
+    </example>
+
+    <example>
+      <title>Theme any widget named main-entry</title>
+      <programlisting><![CDATA[
+#main-entry {
+  background-color: #f0a810
+}
+]]></programlisting>
+    </example>
+
+    <example>
+      <title>Theme all widgets with the style class entry</title>
+      <programlisting><![CDATA[
+.entry {
+  color: #39f1f9;
+}
+]]></programlisting>
+    </example>
+
+    <example>
+      <title>Theme the entry of a GtkSpinButton</title>
+      <programlisting><![CDATA[
+spinbutton.entry {
+  color: 900185;
+}
+]]></programlisting>
+    </example>
+
+    <para>
+      It is possible to select CSS nodes depending on their position amongst
+      their siblings by applying pseudo-classes to the selector, like :first-child,
+      :last-child or :nth-child(even). When used in selectors, pseudo-classes
+      must be prefixed with a : character.
+    </para>
+
+    <example>
+      <title>Theme labels in the first notebook tab</title>
+      <programlisting><![CDATA[
+notebook tab:first-child label {
+  color: #89d012;
+}
+]]></programlisting>
+    </example>
+
+    <para>
+      Another use of pseudo-classes is to match widgets depending on their
+      state. The available pseudo-classes for widget states are :active, :hover
+      :disabled, :selected, :focus, :indeterminate, :checked and :backdrop.
+      In addition, the following pseudo-classes don't have a direct equivalent
+      as a widget state: :dir(ltr) and :dir(rtl) (for text direction), :link and
+      :visited (for links) and :drop(active) (for highlighting drop targets).
+      Widget state pseudo-classes may only apply to the last element in a selector.
+    </para>
+
+    <example>
+      <title>Theme pressed buttons</title>
+      <programlisting><![CDATA[
+button:active {
+  background-color: #0274d9;
+}
+]]></programlisting>
+    </example>
+
+    <example>
+      <title>Theme buttons with the mouse pointer over it</title>
+      <programlisting><![CDATA[
+button:hover {
+  background-color: #3085a9;
+}
+]]></programlisting>
+    </example>
+
+    <example>
+      <title>Theme insensitive widgets</title>
+      <programlisting><![CDATA[
+*:disabled {
+  background-color: #320a91;
+}
+]]></programlisting>
+    </example>
+
+    <example>
+      <title>Theme checkbuttons that are checked</title>
+      <programlisting><![CDATA[
+checkbutton:checked {
+  background-color: #56f9a0;
+}
+]]></programlisting>
+    </example>
+
+    <example>
+      <title>Theme focused labels</title>
+        <programlisting><![CDATA[
+label:focus {
+  background-color: #b4940f;
+}
+]]></programlisting>
+    </example>
+
+    <example>
+      <title>Theme inconsistent checkbuttons</title>
+      <programlisting><![CDATA[
+checkbutton:indeterminate {
+  background-color: #20395a;
+}
+]]></programlisting>
+    </example>
+
+    <para>
+      To determine the effective style for a widget, all the matching rule
+      sets are merged. As in CSS, rules apply by specificity, so the rules
+      whose selectors more closely match a node will take precedence
+      over the others.
+    </para>
+
+    <para>
+      The full syntax for selectors understood by GTK+ can be found in the
+      table below. The main difference to CSS is that GTK+ does not currently
+      support attribute selectors.
+    </para>
+
+    <table>
+      <title>Selector syntax</title>
+      <tgroup cols="4">
+        <thead>
+          <row><entry>Pattern</entry><entry>Matches</entry><entry>Reference</entry><entry>Notes</entry></row>
+        </thead>
+        <tbody>
+          <row>
+            <entry>*</entry>
+            <entry>any node</entry>
+            <entry><ulink url="http://www.w3.org/TR/css3-selectors/#universal-selector">CSS</ulink></entry>
+            <entry></entry>
+          </row>
+          <row>
+            <entry>E</entry>
+            <entry>any node with name E</entry>
+            <entry><ulink url="http://www.w3.org/TR/css3-selectors/#type-selectors">CSS</ulink></entry>
+            <entry>GTK+ uses the type name of the widget if no CSS name has been set</entry>
+          </row>
+          <row>
+            <entry>E.class</entry>
+            <entry>any E node with the given style class</entry>
+            <entry><ulink url="http://www.w3.org/TR/css3-selectors/#class-html">CSS</ulink></entry>
+            <entry></entry>
+          </row>
+          <row>
+            <entry>E#id</entry>
+            <entry>any E node with the given ID</entry>
+            <entry><ulink url="http://www.w3.org/TR/css3-selectors/#id-selectors">CSS</ulink></entry>
+            <entry>GTK+ uses the widget name as ID</entry>
+          </row>
+          <row>
+            <entry>E:nth‑child(〈nth‑child〉)</entry>
+            <entry>any E node which is the n-th child of its parent node</entry>
+            <entry><ulink url="http://www.w3.org/TR/css3-selectors/#structural-pseudos">CSS</ulink></entry>
+            <entry></entry>
+          </row>
+          <row>
+            <entry>E:nth‑last‑child(〈nth‑child〉)</entry>
+            <entry>any E node which is the n-th child of its parent node, counting from the end</entry>
+            <entry><ulink url="http://www.w3.org/TR/css3-selectors/#structural-pseudos">CSS</ulink></entry>
+            <entry></entry>
+          </row>
+          <row>
+            <entry>E:first‑child</entry>
+            <entry>any E node which is the first child of its parent node</entry>
+            <entry><ulink url="http://www.w3.org/TR/css3-selectors/#structural-pseudos">CSS</ulink></entry>
+            <entry></entry>
+          </row>
+          <row>
+            <entry>E:last‑child</entry>
+            <entry>any E node which is the last child of its parent node</entry>
+            <entry><ulink url="http://www.w3.org/TR/css3-selectors/#structural-pseudos">CSS</ulink></entry>
+            <entry></entry>
+          </row>
+          <row>
+            <entry>E:only‑child</entry>
+            <entry>any E node which is the only child of its parent node</entry>
+            <entry><ulink url="http://www.w3.org/TR/css3-selectors/#structural-pseudos">CSS</ulink></entry>
+            <entry>Equivalent to E:first-child:last-child</entry>
+          </row>
+          <row>
+            <entry>E:link, E:visited</entry>
+            <entry>any E node which represents a hyperlink, not yet visited (:link) or already visited (:visited)</entry>
+            <entry><ulink url="http://www.w3.org/TR/css3-selectors/#link">CSS</ulink></entry>
+            <entry>Corresponds to GTK_STATE_FLAG_LINK and GTK_STATE_FLAGS_VISITED</entry>
+          </row>
+          <row>
+            <entry>E:active, E:hover, E:focus</entry>
+            <entry>any E node which is part of a widget with the corresponding state</entry>
+            <entry><ulink url="http://www.w3.org/TR/css3-selectors/#useraction-pseudos">CSS</ulink></entry>
+            <entry>Corresponds to GTK_STATE_FLAG_ACTIVE, GTK_STATE_FLAG_PRELIGHT and GTK_STATE_FLAGS_FOCUSED; GTK+ also allows E:prelight and E:focused</entry>
+          </row>
+          <row>
+            <entry>E:disabled</entry>
+            <entry>any E node which is part of a widget with is disabled</entry>
+            <entry><ulink url="http://www.w3.org/TR/css3-selectors/#UIstates">CSS</ulink></entry>
+            <entry>Corresponds to GTK_STATE_FLAG_INSENSITIVE; GTK+ also allows E:insensitive</entry>
+          </row>
+          <row>
+            <entry>E:checked</entry>
+            <entry>any E node which is part of a widget (e.g. radio- or checkbuttons) which is checked</entry>
+            <entry><ulink url="http://www.w3.org/TR/css3-selectors/#UIstates">CSS</ulink></entry>
+            <entry>Corresponds to GTK_STATE_FLAG_CHECKED</entry>
+          </row>
+          <row>
+            <entry>E:indeterminate</entry>
+            <entry>any E node which is part of a widget (e.g. radio- or checkbuttons) which is in an inconsistent state</entry>
+            <entry><ulink url="http://www.w3.org/TR/css3-selectors/#indeterminate">CSS3</ulink>,
+                   <ulink url="https://drafts.csswg.org/selectors/#indeterminate">CSS4</ulink></entry>
+            <entry>Corresponds to GTK_STATE_FLAG_INCONSISTENT; GTK+ also allows E:inconsistent</entry>
+          </row>
+          <row>
+            <entry>E:backdrop, E:selected</entry>
+            <entry>any E node which is part of a widget with the corresponding state</entry>
+            <entry></entry>
+            <entry>Corresponds to GTK_STATE_FLAG_BACKDROP, GTK_STATE_FLAG_SELECTED</entry>
+          </row>
+          <row>
+            <entry>E:not(〈selector〉)</entry>
+            <entry>any E node which does not match the simple selector 〈selector〉</entry>
+            <entry><ulink url="http://www.w3.org/TR/css3-selectors/#negation">CSS</ulink></entry>
+            <entry></entry>
+          </row>
+          <row>
+            <entry>E:dir(ltr), E:dir(rtl)</entry>
+            <entry>any E node that has the corresponding text direction</entry>
+            <entry><ulink url="https://drafts.csswg.org/selectors/#the-dir-pseudo">CSS4</ulink></entry>
+            <entry></entry>
+          </row>
+          <row>
+            <entry>E:drop(active)</entry>
+            <entry>any E node that is an active drop target for a current DND operation</entry>
+            <entry><ulink url="https://drafts.csswg.org/selectors/#drag-pseudos">CSS4</ulink></entry>
+            <entry></entry>
+          </row>
+          <row>
+            <entry>E F</entry>
+            <entry>any F node which is a descendent of an E node</entry>
+            <entry><ulink url="http://www.w3.org/TR/css3-selectors/#descendent-combinators">CSS</ulink></entry>
+            <entry></entry>
+          </row>
+          <row>
+            <entry>E > F</entry>
+            <entry>any F node which is a child of an E node</entry>
+            <entry><ulink url="http://www.w3.org/TR/css3-selectors/#child-combinators">CSS</ulink></entry>
+            <entry></entry>
+          </row>
+          <row>
+            <entry>E ~ F</entry>
+            <entry>any F node which is preceded by an E node</entry>
+            <entry><ulink url="http://www.w3.org/TR/css3-selectors/#general-sibling-combinators">CSS</ulink></entry>
+            <entry></entry>
+          </row>
+          <row>
+            <entry>E + F</entry>
+            <entry>any F node which is immediately preceded by an E node</entry>
+            <entry><ulink url="http://www.w3.org/TR/css3-selectors/#adjacent-sibling-combinators">CSS</ulink></entry>
+            <entry></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+
+<literallayout><code>〈nth-child〉 = even | odd | 〈integer〉 | 〈integer〉n | 〈integer〉n [ + | - ] 〈integer〉</code>
+</literallayout>
+
+    <para>
+      To learn more about selectors in CSS, read the
+      <ulink url="http://www.w3.org/TR/css3-selectors/">Selectors</ulink>
+      module of the CSS specification.
+    </para>
+
+  </refsect2>
+
+  <refsect2>
+    <title>Colors</title>
+
+    <para>
+      CSS allows to specify colors in various ways, using numeric
+      values or names from a predefined list of colors.
+    </para>
+
+<literallayout><code>〈color〉 = currentColor | transparent | 〈color name〉 | 〈rgb color〉 | 〈rgba color〉 | 〈hex color〉 | 〈gtk color〉</code>
+<code>〈rgb color 〉 = rgb( 〈number〉, 〈number〉, 〈number〉 ) | rgb( 〈percentage〉, 〈percentage〉, 〈percentage〉 )</code>
+<code>〈rgba color 〉 = rgba(〈number〉, 〈number〉, 〈number〉, 〈alpha value〉) | rgba( 〈percentage〉, 〈percentage〉, 〈percentage〉, 〈alpha value〉 )</code>
+<code>〈hex color〉 = #〈hex digits〉</code>
+<code>〈alpha value〉 = 〈number〉</code>, clamped to values between 0 and 1
+</literallayout>
+
+    <para>
+      The keyword currentColor resolves to the current value of the
+      color property when used in another property, and to the inherited value
+      of the color property when used in the color property itself.
+    </para>
+
+    <para>
+      The keyword transparent can be considered a shorthand for rgba(0,0,0,0).
+    </para>
+
+    <para>
+      For a list of valid color names and for more background on colors in
+      CSS, see the <ulink url="http://www.w3.org/TR/css3-color/#svg-color">Color</ulink>
+      module of the CSS specification.
+    </para>
+
+    <example>
+      <title>Specifying colors in various ways</title>
+      <programlisting><![CDATA[
+  color: transparent;
+  background-color: red;
+  border-top-color: rgb(128,57,0);
+  border-left-color: rgba(10%,20%,30%,0.5);
+  border-right-color: #ff00cc;
+  border-bottom-color: #ffff0000cccc;
+]]></programlisting>
+    </example>
+
+    <para>
+      GTK+ adds several additional ways to specify colors.
+    </para>
+
+<literallayout><code>〈gtk color〉 = 〈symbolic color〉 | 〈color expression〉| 〈win32 color〉</code>
+</literallayout>
+
+    <para>
+      The first is a reference to a color defined via a @define-color rule.
+      The syntax for @define-color rules is as follows:
+    </para>
+
+<literallayout><code>〈define color rule〉 = @define-color 〈name〉 〈color〉</code>
+</literallayout>
+
+    <para>
+      To refer to the color defined by a @define-color rule,
+      use the name from the rule, prefixed with @.
+    </para>
+
+<literallayout><code>〈symbolic color〉 = @〈name〉</code>
+</literallayout>
+
+    <example><title>An example for defining colors</title>
+      <programlisting><![CDATA[
+@define-color bg_color #f9a039;
+
+* {
+background-color: @bg_color;
+}
+]]></programlisting>
+    </example>
+
+    <para>
+      GTK+ also allows to form color expressions, which can be nested and
+      provide a rich language to define colors which are derived from a
+      set of base colors.
+    </para>
+
+<literallayout><code>〈color expression〉 = ligher(〈color〉) | darker(〈color〉) | shade(〈number〉,〈color〉) | alpha(〈number〉,〈color〉) | mix(〈number〉,〈color〉,〈color〉)</code>
+</literallayout>
+
+    <para>
+      On Windows, GTK+ allows to refer to system colors, as follows:
+    </para>
+
+<literallayout><code>〈win32 color〉 = -gtk-win32-color( 〈name〉, 〈integer〉)</code>
+</literallayout>
+
+  </refsect2>
+
+  <refsect2>
+    <title>Images</title>
+
+    <para>
+      CSS allows to specify images in various ways, for backgrounds
+      and borders.
+    </para>
+
+<literallayout><code>〈image〉 = 〈url〉 | 〈crossfade〉 | 〈gradient〉 | 〈gtk image〉</code>
+<code>〈crossfade〉 = cross-fade( 〈percentage〉, 〈image〉, 〈image〉)</code>
+<code>〈gradient〉 = 〈linear gradient〉 | 〈radial gradient〉</code>
+<code>〈linear gradient〉 = [ linear-gradient | repeating-linear-gradient ] (</code>
+<code>                      [ [ 〈angle〉 | to 〈side or corner〉 ] , ]?</code>
+<code>                      〈color stops〉 )</code>
+<code>〈radial gradient〉 = [ radial‑gradient | repeating‑radial‑gradient ] (</code>
+<code>                      [ [ 〈shape〉 || 〈size〉 ] [ at 〈position〉 ]? , | at 〈position〉, ]?</code>
+<code>                      〈color stops〉 )</code>
+<code>〈side or corner〉 = [ left | right ] || [ top | bottom ]</code>
+<code>〈color stops〉 =  〈color stop〉 [ , 〈color stop〉]+</code>
+<code>〈color stop〉 = 〈color〉 [ 〈percentage〉 | 〈length〉 ]?</code>
+<code>〈shape〉 = circle | ellipse</code>
+<code>〈size〉 = 〈extent keyword〉 | 〈length〉 | [ 〈length〉 | 〈percentage〉 ]{1,2}</code>
+<code>〈extent keyword〉 = closest-size | farthest-side | closest-corner | farthest-corner</code>
+</literallayout>
+
+    <para>
+      The simplest way to specify an image in CSS is to load an image
+      file from a URL. CSS does not specify anything about supported file
+      formats; within GTK+, you can expect at least PNG, JPEG and SVG to
+      work. The full list of supported image formats is determined by the
+      available gdk-pixbuf image loaders and may vary between systems.
+    </para>
+
+    <example>
+      <title>Loading an image file</title>
+      <programlisting><![CDATA[
+button {
+  background-image: url("water-lily.png");
+}
+]]></programlisting>
+    </example>
+
+    <para>
+      A crossfade lets you specify an image as an intermediate between two
+      images. Crossfades are specified in the draft of the level 4
+      <ulink url="http://www.w3.org/TR/css4-images">Image</ulink>
+      module of the CSS specification.
+    </para>
+
+    <para>
+    </para>
+
+    <example>
+      <title>Crossfading two images</title>
+      <programlisting><![CDATA[
+button {
+  background-image: cross-fade(50%, url("water-lily.png"), url("buffalo.jpg"));
+}
+]]></programlisting>
+    </example>
+
+    <para>
+      Gradients are images that smoothly fades from one color to another. CSS
+      provides ways to specify repeating and non-repeating linear and radial
+      gradients. Radial gradients can be circular, or axis-aligned ellipses.
+      In addition to CSS gradients, GTK+ has its own -gtk-gradient extensions.
+    </para>
+
+    <para>
+      A linear gradient is created by specifying a gradient line and then several
+      colors placed along that line. The gradient line may be specified using
+      an angle, or by using direction keywords.
+    </para>
+
+    <example>
+      <title>Linear gradients</title>
+      <programlisting><![CDATA[
+button {
+  background-image: linear-gradient(45deg, yellow, blue);
+}
+label {
+  background-image: linear-gradient(to top right, blue 20%, #f0f 80%);
+}
+]]></programlisting>
+    </example>
+
+    <para>
+      A radial gradient is created by specifying a center point and one or two
+      radii. The radii may be given explicitly as lengths or percentages or
+      indirectly, by keywords that specify how the end circle or ellipsis
+      should be positioned relative to the area it is derawn in.
+    </para>
+
+    <example>
+      <title>Radial gradients</title>
+      <programlisting><![CDATA[
+button {
+  background-image: radial-gradient(ellipse at center, yellow 0%, green 100%);
+}
+label {
+  background-image: radial-gradient(circle farthest-side at left bottom, red, yellow 50px, green);
+}
+]]></programlisting>
+    </example>
+
+    <para>
+      To learn more about gradients in CSS, including details of how color stops
+      are placed on the gradient line and keywords for specifying radial sizes,
+      you can read the
+      <ulink url="http://www.w3.org/TR/css3-images/#gradients">Image</ulink>
+      module of the CSS specification.
+    </para>
+
+    <para>
+      GTK+ extends the CSS syntax for images and also uses it for specifying icons.
+    </para>
+
+<literallayout><code>〈gtk image〉 = 〈gtk gradient〉 | 〈themed icon〉 | 〈scaled image〉 | 〈win32 theme part〉</code>
+</literallayout>
+
+    <para>
+      GTK+ supports an alternative syntax for linear and radial gradients (which
+      was implemented before CSS gradients were supported).
+    </para>
+
+<literallayout><code>〈gtk gradient〉 = 〈gtk linear gradient〉 | 〈gtk radial gradient〉</code>
+<code>〈gtk linear gradient〉 = -gtk-gradient(linear,</code>
+<code>                          [ 〈x position〉 〈y position〉 , ]{2}</code>
+<code>                          〈gtk color stops〉 )</code>
+<code>〈gtk radial gradient〉 = -gtk-gradient(radial,</code>
+<code>                          [ 〈x position〉 〈y position〉 , 〈radius〉 , ]{2}</code>
+<code>                          〈gtk color stops〉 )</code>
+<code>〈x position〉 = left | right | center | 〈number〉</code>
+<code>〈y position〉 = top | bottom | center | 〈number〉</code>
+<code>〈radius 〉 = 〈number〉</code>
+<code>〈gtk color stops〉 = 〈gtk color stop〉 [ , 〈gtk color stop〉 ]+</code>
+<code>〈gtk color stop〉 = color-stop( 〈number〉 , 〈color〉 ) | from( 〈color〉 ) | to( 〈color〉 )</code>
+</literallayout>
+
+    <para>
+      The numbers used to specify x and y positions, radii, as well as the
+      positions of color stops, must be between 0 and 1. The keywords for for
+      x and y positions (left, right, top, bottom, center), map to numeric
+      values of 0, 1 and 0.5 in the obvious way. Color stops using the from() and
+      to() syntax are abbreviations for color-stop with numeric positions of
+      0 and 1, respectively.
+    </para>
+
+    <example>
+      <title>Linear gradients</title>
+      <programlisting><![CDATA[
+button {
+  background-image: -gtk-gradient (linear,
+                                   left top, right bottom,
+                                   from(@yellow), to(@blue));
+}
+label {
+  background-image: -gtk-gradient (linear,
+                                   0 0, 0 1,
+                                   color-stop(0, @yellow),
+                                   color-stop(0.2, @blue),
+                                   color-stop(1, #0f0));
+}
+]]></programlisting>
+    </example>
+
+    <example>
+      <title>Radial gradients</title>
+      <programlisting><![CDATA[
+button {
+  background-image: -gtk-gradient (radial,
+                                   center center, 0,
+                                   center center, 1,
+                                   from(@yellow), to(@green));
+}
+label {
+  background-image: -gtk-gradient (radial,
+                                   0.4 0.4, 0.1,
+                                   0.6 0.6, 0.7,
+                                   color-stop(0, #f00),
+                                   color-stop(0.1, $a0f),
+                                   color-stop(0.2, @yellow),
+                                   color-stop(1, @green));
+}
+]]></programlisting>
+    </example>
+
+    <para>
+      GTK+ has extensive support for loading icons from icon themes. It is
+      accessible from CSS with the -gtk-icontheme syntax.
+    </para>
+
+<literallayout><code>〈themed icon〉 = -gtk-icontheme( 〈icon name〉 )</code>
+</literallayout>
+
+    <para>
+      The specified icon name is used to look up a themed icon, while taking
+      the values of the -gtk-icon-style and -gtk-icon-theme properties. This
+      kind of image is mainly used as value of the -gtk-icon-source property.
+    </para>
+
+    <example>
+      <title>Using themed icons in CSS</title>
+      <programlisting><![CDATA[
+spinner {
+  -gtk-icon-source: -gtk-icontheme('process-working');
+  -gtk-icon-style: symbolic;
+}
+arrow.fancy {
+  -gtk-icon-source: -gtk-icontheme('pan-down');
+  -gtk-icon-theme: 'Oxygen';
+}
+]]></programlisting>
+    </example>
+
+    <para>
+      GTK+ supports scaled rendering on hi-resolution displays. This works
+      best if images can be specify normal and hi-resolution variants. From
+      CSS, this can be done with the -gtk-scaled syntax.
+    </para>
+
+<literallayout><code>〈scaled image〉 = -gtk-scaled( 〈image〉[, 〈image〉]* )</code>
+</literallayout>
+
+    <para>
+      While -gtk-scaled accepts multiple higher-resolution variants, in
+      practice, it will mostly be used to specify a regular image and one
+      variant for scale 2.
+    </para>
+
+    <example>
+      <title>Scaled images in CSS</title>
+      <programlisting><![CDATA[
+arrow {
+  -gtk-icon-source: -gtk-scaled(url('my-arrow.png'),
+                                url('my-arrow@2.png'));
+}
+]]></programlisting>
+    </example>
+
+    <para>
+      On Windows, GTK+ allows to refer to system theme parts as images, as follows:
+    </para>
+
+<literallayout><code>〈win32 theme part〉 = -gtk-win32-theme-part( 〈name〉, 〈integer〉 〈integer〉</code>
+<code>                                              [, [ over( 〈integer〉 〈integer〉 [ , 〈alpha value〉]? ) | margins( 〈integer〉{1,4} ) ] ]* )</code>
+</literallayout>
+
+  </refsect2>
+
+  <refsect2>
+    <title>Transitions</title>
+
+    <para>
+      CSS defines a mechanism by which changes in CSS property values can
+      be made to take effect gradually, instead of all at once. GTK+ supports
+      these transitions as well.
+    </para>
+
+    <para>
+      To enable a transition for a property when a rule set takes effect, it
+      needs to be listed in the transition-property property in that rule set.
+      Only animatable properties can be listed in the transition-property.
+    </para>
+
+    <para>
+      The details of a transition can modified with the transition-duration,
+      transition-timing-function and transition-delay properties.
+    </para>
+
+    <para>
+      To learn more about transitions, you can read the
+      <ulink url="www.w3.org/TR/css3-transitions/">Transitions</ulink>
+      module of the CSS specification.
+    </para>
+
+  </refsect2>
+
+  <refsect2>
+    <title>Animations</title>
+
+    <para>
+      In addition to transitions, which are triggered by changes of the underlying
+      node tree, CSS also supports defined animations. While transitions specify how
+      property values change from one value to a new value, animations explicitly
+      define intermediate property values in keyframes.
+    </para>
+
+    <para>
+      Keyframes are defined with an @-rule which contains one or more of rule sets
+      with special selectors. Property declarations for nonanimatable properties
+      are ignored in these rule sets (with the exception of animation properties).
+    </para>
+
+<literallayout><code>〈keyframe rule〉 = @keyframes 〈name〉 { 〈animation rule〉 }</code>
+<code>〈animation rule〉 = 〈animation selector〉 { 〈declaration〉* }</code>
+<code>〈animation selector〉 = 〈single animation selector〉 [ , 〈single animation selector  ]*</code>
+<code>〈single animation selector〉 = from | to | 〈percentage〉</code>
+</literallayout>
+
+    <para>
+      To enable an animation, the name of the keyframes must be set as the value
+      of the animation-name property. The details of the animation can modified
+      with the animation-time, animation-timing-function, animation-iteration-count
+      and other animation properties.
+    </para>
+
+    <example>
+      <title>A CSS animation</title>
+      <programlisting><![CDATA[
+@keyrframes spin {
+  to { -gtk-icon-transform: rotate(1turn); }
+}
+
+spinner {
+  animation-name: spin;
+  animation-time: 1s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+]]></programlisting>
+    </example>
+
+    <para>
+      To learn more about animations, you can read the
+      <ulink url="www.w3.org/TR/css3-animations/">Animations</ulink>
+      module of the CSS specification.
+    </para>
+
+  </refsect2>
+
+  <refsect2>
+    <title>Key bindings</title>
+
+    <para>
+      In order to extend key bindings affecting different widgets,
+      GTK+ supports the @binding-set rule to parse a set of bind/unbind
+      directives. Note that in order to take effect, the binding sets
+      defined in this way must be associated with rule sets by setting
+      the -gtk-key-bindings property.
+    </para>
+
+    <para>
+      The syntax for @binding-set rules is as follows:
+    </para>
+
+<literallayout><code>〈binding set rule〉 = @binding-set 〈binding name〉{ [ [ 〈binding〉 | 〈unbinding〉] ; ]* }</code>
+<code>〈binding〉 = bind "〈accelerator〉" { 〈signal emission〉* }</code>
+<code>〈signal emission〉 = "〈signal name〉" ( [ 〈argument〉[ , 〈argument〉]* ]? }</code>
+<code>〈unbinding〉 = unbind "〈accelerator〉" ;</code>
+</literallayout>
+
+    <para>
+      where 〈accelerator〉 is a string that can be parsed by gtk_accelerator_parse(),
+      〈signal name〉 is the name of a keybinding signal of the widget in question,
+      and the 〈argument〉 list must be according to the signals declaration.
+    </para>
+
+    <example>
+      <title>An example for using the @binding-set rule</title>
+      <programlisting><![CDATA[
+@binding-set binding-set1 {
+  bind "<alt>Left" { "move-cursor" (visual-positions, -3, 0) };
+  unbind "End";
+};
+
+@binding-set binding-set2 {
+  bind "<alt>Right" { "move-cursor" (visual-positions, 3, 0) };
+  bind "<alt>KP_space" { "delete-from-cursor" (whitespace, 1)
+                         "insert-at-cursor" (" ") };
+};
+
+entry {
+  -gtk-key-bindings: binding-set1, binding-set2;
+}
+]]></programlisting>
+    </example>
+
+  </refsect2>
+
+</refsect1>
+</refentry>
