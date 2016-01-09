@@ -4369,24 +4369,24 @@ placesview row.activatable:hover {
 /*********
  * Paned *
  *********/
-paned separator {
+paned > separator {
   min-width: 1px;
   min-height: 1px;
   background-color: #9d9d99; }
-  paned separator:backdrop {
+  paned > separator:backdrop {
     background-color: #a5a5a1; }
-paned:dir(ltr).horizontal separator {
+  paned > separator:selected {
+    background-color: #4a90d9; }
+paned:dir(ltr).horizontal > separator {
   margin: 0 -8px 0 0;
   padding: 0 8px 0 0; }
-paned:dir(rtl).horizontal separator {
+paned:dir(rtl).horizontal > separator {
   margin: 0 0 0 -8px;
   padding: 0 0 0 8px; }
-paned.vertical separator {
+paned.vertical > separator {
   margin: 0 0 -8px 0;
   padding: 0 0 8px 0; }
-paned separator:selected {
-  background-color: #4a90d9; }
-paned separator.wide {
+paned > separator.wide {
   min-width: 5px;
   min-height: 5px;
   background-color: transparent;
