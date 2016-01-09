@@ -3411,6 +3411,8 @@ colorswatch {
   // is colorswatch overlay {}, colorswatch has the programmatically set background, so most of the style is
   // applied to the overlay box.
 
+  &, &:drop(active) { border-style: none; } // FIXME: implement a proper drop(active) state
+
   $_colorswatch_radius: 5px;
   $_colorswatch_overlay_shadow: if($variant == 'light', inset 0 2px 2px -3px transparentize(black, 0.3),
                                                         inset 0 3px 2px -2px transparentize(black, 0.5));
@@ -3715,7 +3717,7 @@ frame.keycap {
 }
 
 *:drop(active):focus,
-*:drop(active) { border: 1px solid black; }
+*:drop(active) { border: 1px solid black; } // FIXME this makes boxes grow and looks pretty bad, needs to be handled differently
 
 stackswitcher button.text-button { min-width: 100px; } // FIXME aggregate with buttons
 

@@ -4432,6 +4432,8 @@ tooltip {
 /*****************
  * Color Chooser *
  *****************/
+colorswatch, colorswatch:drop(active) {
+  border-style: none; }
 colorswatch.top {
   border-top-left-radius: 5.5px;
   border-top-right-radius: 5.5px; }
