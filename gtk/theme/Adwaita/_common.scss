@@ -1143,22 +1143,6 @@ headerbar {
     @extend .dim-label;
   }
 
-  // FIXME: we need a safer way to select this separator
-  & > GtkBox > separator.vertical {
-    border-width: 0 1px;
-    border-image: linear-gradient(to bottom,
-                                  transparentize($borders_color,1),
-                                  $borders_color 30%,
-                                  $borders_color 70%,
-                                  transparentize($borders_color,1) 100%)
-                  0 1 / 0 1px stretch; //FIXME use a proper color
-
-    &:backdrop {
-      border-image: linear-gradient(to bottom, transparentize($backdrop_borders_color, 0.5))
-                    0 1 / 1px 1px;  //FIXME use a proper color
-    }
-  }
-
   &.selection-mode {
     $_hc: mix($top_hilight,$selected_bg_color, 50%); // hilight color
 
