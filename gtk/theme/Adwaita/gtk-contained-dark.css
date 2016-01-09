@@ -2228,6 +2228,14 @@ notebook > stack:not(:only-child) {
   -GtkRange-trough-under-steppers: 1; }
 scrollbar button {
   border: none; }
+scrollbar.vertical button.down {
+  -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); }
+scrollbar.vertical button.up {
+  -gtk-icon-source: -gtk-icontheme("pan-up-symbolic"); }
+scrollbar.horizontal button.down {
+  -gtk-icon-source: -gtk-icontheme("pan-right-symbolic"); }
+scrollbar.horizontal button.up {
+  -gtk-icon-source: -gtk-icontheme("pan-left-symbolic"); }
 scrollbar.overlay-indicator:not(.dragging):not(.hovering) {
   opacity: 0.4;
   -GtkRange-slider-width: 5px; }

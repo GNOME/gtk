@@ -32,6 +32,8 @@
 #include "gtkrangeprivate.h"
 
 #include "gtkadjustmentprivate.h"
+#include "gtkbuiltiniconprivate.h"
+#include "gtkcsscustomgadgetprivate.h"
 #include "gtkcolorscaleprivate.h"
 #include "gtkintl.h"
 #include "gtkgesturelongpressprivate.h"
@@ -104,14 +106,17 @@ struct _GtkRangePrivate
   GdkRectangle       slider;
   GdkWindow         *event_window;
 
-  GtkCssNode *stepper_a_node;
-  GtkCssNode *stepper_b_node;
-  GtkCssNode *stepper_c_node;
-  GtkCssNode *stepper_d_node;
-  GtkCssNode *trough_node;
-  GtkCssNode *highlight_node;
-  GtkCssNode *fill_node;
-  GtkCssNode *slider_node;
+  /* Steppers are: < > ---- < >
+   *               a b      c d
+   */
+  GtkCssGadget *stepper_a_gadget;
+  GtkCssGadget *stepper_b_gadget;
+  GtkCssGadget *stepper_c_gadget;
+  GtkCssGadget *stepper_d_gadget;
+  GtkCssGadget *trough_gadget;
+  GtkCssGadget *fill_gadget;
+  GtkCssGadget *highlight_gadget;
+  GtkCssGadget *slider_gadget;
 
   GtkOrientation     orientation;
 
@@ -124,14 +129,6 @@ struct _GtkRangePrivate
   gint  round_digits;                /* Round off value to this many digits, -1 for no rounding */
   gint  slide_initial_slider_position;
   gint  slide_initial_coordinate_delta;
-
-  /* Steppers are: < > ---- < >
-   *               a b      c d
-   */
-  guint has_stepper_a          : 1;
-  guint has_stepper_b          : 1;
-  guint has_stepper_c          : 1;
-  guint has_stepper_d          : 1;
 
   guint flippable              : 1;
   guint inverted               : 1;
@@ -302,7 +299,14 @@ static gboolean      gtk_range_key_press                (GtkWidget     *range,
 							 GdkEventKey   *event);
 static void          gtk_range_state_flags_changed      (GtkWidget     *widget,
                                                          GtkStateFlags  previous_state);
-
+static void          gtk_range_measure_trough           (GtkCssGadget   *gadget,
+                                                         GtkOrientation  orientation,
+                                                         int             for_size,
+                                                         int            *minimum,
+                                                         int            *natural,
+                                                         int            *minimum_baseline,
+                                                         int            *natural_baseline,
+                                                         gpointer        data);
 
 G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GtkRange, gtk_range, GTK_TYPE_WIDGET,
                                   G_ADD_PRIVATE (GtkRange)
@@ -726,17 +730,6 @@ gtk_range_get_property (GObject      *object,
 }
 
 static void
-node_style_changed_cb (GtkCssNode        *node,
-                       GtkCssStyleChange *change,
-                       GtkWidget         *widget)
-{
-  if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_SIZE | GTK_CSS_AFFECTS_CLIP))
-    gtk_widget_queue_resize (widget);
-  else
-    gtk_widget_queue_draw (widget);
-}
-
-static void
 gtk_range_init (GtkRange *range)
 {
   GtkRangePrivate *priv;
@@ -752,10 +745,6 @@ gtk_range_init (GtkRange *range)
   priv->inverted = FALSE;
   priv->flippable = FALSE;
   priv->min_slider_size = 1;
-  priv->has_stepper_a = FALSE;
-  priv->has_stepper_b = FALSE;
-  priv->has_stepper_c = FALSE;
-  priv->has_stepper_d = FALSE;
   priv->round_digits = -1;
   priv->mouse_location = MOUSE_OUTSIDE;
   priv->mouse_x = G_MININT;
@@ -774,19 +763,22 @@ gtk_range_init (GtkRange *range)
   _gtk_orientable_set_style_classes (GTK_ORIENTABLE (range));
 
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (range));
-  priv->trough_node = gtk_css_node_new ();
-  gtk_css_node_set_name (priv->trough_node, I_("trough"));
-  gtk_css_node_set_parent (priv->trough_node, widget_node);
-  gtk_css_node_set_state (priv->trough_node, gtk_css_node_get_state (widget_node));
-  g_signal_connect_object (priv->trough_node, "style-changed", G_CALLBACK (node_style_changed_cb), range, 0);
-  g_object_unref (priv->trough_node);
+  priv->trough_gadget = gtk_css_custom_gadget_new ("trough",
+                                                   GTK_WIDGET (range),
+                                                   NULL, NULL,
+                                                   gtk_range_measure_trough,
+                                                   NULL,
+                                                   NULL,
+                                                   NULL, NULL);
+  gtk_css_node_set_parent (gtk_css_gadget_get_node (priv->trough_gadget), widget_node);
+  gtk_css_node_set_state (gtk_css_gadget_get_node (priv->trough_gadget),
+                          gtk_css_node_get_state (widget_node));
 
-  priv->slider_node = gtk_css_node_new ();
-  gtk_css_node_set_name (priv->slider_node, I_("slider"));
-  gtk_css_node_set_parent (priv->slider_node, priv->trough_node);
-  gtk_css_node_set_state (priv->slider_node, gtk_css_node_get_state (widget_node));
-  g_signal_connect_object (priv->slider_node, "style-changed", G_CALLBACK (node_style_changed_cb), range, 0);
-  g_object_unref (priv->slider_node);
+  priv->slider_gadget = gtk_builtin_icon_new ("slider",
+                                              GTK_WIDGET (range),
+                                              priv->trough_gadget, NULL);
+  gtk_css_node_set_state (gtk_css_gadget_get_node (priv->slider_gadget),
+                          gtk_css_node_get_state (widget_node));
 
   /* Note: Order is important here.
    * The ::drag-begin handler relies on the state set up by the
@@ -899,9 +891,9 @@ gtk_range_set_adjustment (GtkRange      *range,
 }
 
 static void
-update_stepper_state (GtkRange   *range,
-                      Stepper     stepper,
-                      GtkCssNode *node)
+update_stepper_state (GtkRange     *range,
+                      Stepper       stepper,
+                      GtkCssGadget *gadget)
 {
   GtkRangePrivate *priv = range->priv;
   GtkStateFlags state;
@@ -931,7 +923,7 @@ update_stepper_state (GtkRange   *range,
         state |= GTK_STATE_FLAG_PRELIGHT;
     }
 
-  gtk_css_node_set_state (node, state);
+  gtk_css_node_set_state (gtk_css_gadget_get_node (gadget), state);
 }
 
 static void
@@ -939,14 +931,14 @@ update_steppers_state (GtkRange *range)
 {
   GtkRangePrivate *priv = range->priv;
 
-  if (priv->has_stepper_a)
-    update_stepper_state (range, STEPPER_A, priv->stepper_a_node);
-  if (priv->has_stepper_b)
-    update_stepper_state (range, STEPPER_B, priv->stepper_b_node);
-  if (priv->has_stepper_c)
-    update_stepper_state (range, STEPPER_C, priv->stepper_c_node);
-  if (priv->has_stepper_d)
-    update_stepper_state (range, STEPPER_D, priv->stepper_d_node);
+  if (priv->stepper_a_gadget)
+    update_stepper_state (range, STEPPER_A, priv->stepper_a_gadget);
+  if (priv->stepper_b_gadget)
+    update_stepper_state (range, STEPPER_B, priv->stepper_b_gadget);
+  if (priv->stepper_c_gadget)
+    update_stepper_state (range, STEPPER_C, priv->stepper_c_gadget);
+  if (priv->stepper_d_gadget)
+    update_stepper_state (range, STEPPER_D, priv->stepper_d_gadget);
 }
 
 /**
@@ -1026,7 +1018,7 @@ gtk_range_set_flippable (GtkRange *range,
     {
       priv->flippable = flippable;
 
-      gtk_widget_queue_draw (GTK_WIDGET (range));
+      gtk_widget_queue_allocate (GTK_WIDGET (range));
     }
 }
 
@@ -1462,21 +1454,21 @@ gtk_range_set_show_fill_level (GtkRange *range,
 
   if (show_fill_level)
     {
-      priv->fill_node = gtk_css_node_new ();
-      gtk_css_node_set_name (priv->fill_node, I_("fill"));
-      gtk_css_node_set_parent (priv->fill_node, priv->trough_node);
-      gtk_css_node_set_state (priv->fill_node, gtk_css_node_get_state (priv->trough_node));
-      g_signal_connect_object (priv->fill_node, "style-changed", G_CALLBACK (node_style_changed_cb), range, 0);
-      g_object_unref (priv->fill_node);
+      priv->fill_gadget = gtk_css_custom_gadget_new ("fill",
+                                                     GTK_WIDGET (range),
+                                                     priv->trough_gadget, NULL,
+                                                     NULL, NULL, NULL,
+                                                     NULL, NULL);
+      gtk_css_node_set_state (gtk_css_gadget_get_node (priv->fill_gadget),
+                              gtk_css_node_get_state (gtk_css_gadget_get_node (priv->trough_gadget)));
     }
   else
     {
-      gtk_css_node_set_parent (priv->fill_node, NULL);
-      priv->fill_node = NULL;
+      g_clear_object (&priv->fill_gadget);
     }
 
   g_object_notify_by_pspec (G_OBJECT (range), properties[PROP_SHOW_FILL_LEVEL]);
-  gtk_widget_queue_draw (GTK_WIDGET (range));
+  gtk_widget_queue_allocate (GTK_WIDGET (range));
 }
 
 /**
@@ -1588,7 +1580,7 @@ gtk_range_set_fill_level (GtkRange *range,
       g_object_notify_by_pspec (G_OBJECT (range), properties[PROP_FILL_LEVEL]);
 
       if (priv->show_fill_level)
-        gtk_widget_queue_draw (GTK_WIDGET (range));
+        gtk_widget_queue_allocate (GTK_WIDGET (range));
 
       if (priv->restrict_to_fill_level)
         gtk_range_set_value (range, gtk_range_get_value (range));
@@ -1639,6 +1631,15 @@ gtk_range_destroy (GtkWidget *widget)
   g_clear_object (&priv->multipress_gesture);
   g_clear_object (&priv->long_press_gesture);
 
+  g_clear_object (&priv->trough_gadget);
+  g_clear_object (&priv->fill_gadget);
+  g_clear_object (&priv->highlight_gadget);
+  g_clear_object (&priv->slider_gadget);
+  g_clear_object (&priv->stepper_a_gadget);
+  g_clear_object (&priv->stepper_b_gadget);
+  g_clear_object (&priv->stepper_c_gadget);
+  g_clear_object (&priv->stepper_d_gadget);
+
   if (priv->adjustment)
     {
       g_signal_handlers_disconnect_by_func (priv->adjustment,
@@ -1664,28 +1665,98 @@ gtk_range_destroy (GtkWidget *widget)
 }
 
 static void
+gtk_range_measure_trough (GtkCssGadget   *gadget,
+                          GtkOrientation  orientation,
+                          int             for_size,
+                          int            *minimum,
+                          int            *natural,
+                          int            *minimum_baseline,
+                          int            *natural_baseline,
+                          gpointer        data)
+{
+  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
+  GtkRange *range = GTK_RANGE (widget);
+  GtkRangePrivate *priv = range->priv;
+  gint slider_width, stepper_size, trough_border;
+  gint stepper_spacing;
+  gint n_steppers, n_steppers_ab, n_steppers_cd;
+  GtkBorder border;
+  GdkRectangle range_rect;
+
+  gtk_widget_style_get (widget,
+                        "slider-width", &slider_width,
+                        "trough-border", &trough_border,
+                        "stepper-size", &stepper_size,
+                        "stepper-spacing", &stepper_spacing,
+                        NULL);
+
+  border.left = 0;
+  border.right = 0;
+  border.top = 0;
+  border.bottom = 0;
+
+  if (GTK_RANGE_GET_CLASS (range)->get_range_border)
+    GTK_RANGE_GET_CLASS (range)->get_range_border (range, &border);
+
+  n_steppers_ab = 0;
+  n_steppers_cd = 0;
+
+  if (priv->stepper_a_gadget)
+    n_steppers_ab += 1;
+  if (priv->stepper_b_gadget)
+    n_steppers_ab += 1;
+  if (priv->stepper_c_gadget)
+    n_steppers_cd += 1;
+  if (priv->stepper_d_gadget)
+    n_steppers_cd += 1;
+
+  n_steppers = n_steppers_ab + n_steppers_cd;
+
+  range_rect.x = 0;
+  range_rect.y = 0;
+
+  /* We never expand to fill available space in the small dimension
+   * (i.e. vertical scrollbars are always a fixed width)
+   */
+  if (priv->orientation == GTK_ORIENTATION_VERTICAL)
+    {
+      range_rect.width = trough_border * 2 + slider_width;
+      range_rect.height = stepper_size * n_steppers + trough_border * 2 + priv->min_slider_size;
+
+      if (n_steppers_ab > 0)
+        range_rect.height += stepper_spacing;
+
+      if (n_steppers_cd > 0)
+        range_rect.height += stepper_spacing;
+    }
+  else
+    {
+      range_rect.width = stepper_size * n_steppers + trough_border * 2 + priv->min_slider_size;
+      range_rect.height = trough_border * 2 + slider_width;
+
+      if (n_steppers_ab > 0)
+        range_rect.width += stepper_spacing;
+
+      if (n_steppers_cd > 0)
+        range_rect.width += stepper_spacing;
+    }
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    *minimum = *natural = range_rect.width + border.left + border.right;
+  else
+    *minimum = *natural = range_rect.height + border.top + border.bottom;
+}
+
+static void
 gtk_range_get_preferred_width (GtkWidget *widget,
                                gint      *minimum,
                                gint      *natural)
 {
-  GtkRange *range;
-  gint slider_width, stepper_size, trough_border, stepper_spacing;
-  GdkRectangle range_rect;
-  GtkBorder border;
-
-  range = GTK_RANGE (widget);
-
-  gtk_range_get_props (range,
-                       &slider_width, &stepper_size,
-                       &trough_border,
-                       &stepper_spacing, NULL);
-
-  gtk_range_calc_request (range,
-                          slider_width, stepper_size,
-                          trough_border, stepper_spacing,
-                          &range_rect, &border, NULL, NULL, NULL);
-
-  *minimum = *natural = range_rect.width + border.left + border.right;
+  gtk_css_gadget_get_preferred_size (GTK_RANGE (widget)->priv->trough_gadget,
+                                     GTK_ORIENTATION_HORIZONTAL,
+                                     -1,
+                                     minimum, natural,
+                                     NULL, NULL);
 }
 
 static void
@@ -1693,24 +1764,169 @@ gtk_range_get_preferred_height (GtkWidget *widget,
                                 gint      *minimum,
                                 gint      *natural)
 {
-  GtkRange *range;
-  gint slider_width, stepper_size, trough_border, stepper_spacing;
-  GdkRectangle range_rect;
-  GtkBorder border;
+  gtk_css_gadget_get_preferred_size (GTK_RANGE (widget)->priv->trough_gadget,
+                                     GTK_ORIENTATION_VERTICAL,
+                                     -1,
+                                     minimum, natural,
+                                     NULL, NULL);
+}
 
-  range = GTK_RANGE (widget);
+static void
+gtk_range_allocate_trough (GtkRange *range,
+                           GtkAllocation *out_clip)
+{
+  GtkRangePrivate *priv = range->priv;
+  GtkWidget *widget = GTK_WIDGET (range);
+  GtkAllocation widget_alloc;
+  GtkAllocation trough_alloc = priv->range_rect;
+  gboolean trough_under_steppers;
+  gint stepper_size;
+  gint stepper_spacing;
 
-  gtk_range_get_props (range,
-                       &slider_width, &stepper_size,
-                       &trough_border,
-                       &stepper_spacing, NULL);
+  gtk_widget_style_get (widget,
+                        "trough-under-steppers", &trough_under_steppers,
+                        "stepper-size",          &stepper_size,
+                        "stepper-spacing",       &stepper_spacing,
+                        NULL);
 
-  gtk_range_calc_request (range,
-                          slider_width, stepper_size,
-                          trough_border, stepper_spacing,
-                          &range_rect, &border, NULL, NULL, NULL);
+  gtk_widget_get_allocation (widget, &widget_alloc);
+  trough_alloc.x += widget_alloc.x;
+  trough_alloc.y += widget_alloc.y;
 
-  *minimum = *natural = range_rect.height + border.top + border.bottom;
+  if (!trough_under_steppers)
+    {
+      gint offset  = 0;
+      gint shorter = 0;
+
+      if (priv->stepper_a_gadget)
+        offset += stepper_size;
+
+      if (priv->stepper_b_gadget)
+        offset += stepper_size;
+
+      shorter += offset;
+
+      if (priv->stepper_c_gadget)
+        shorter += stepper_size;
+
+      if (priv->stepper_d_gadget)
+        shorter += stepper_size;
+
+      if (priv->stepper_a_gadget || priv->stepper_b_gadget)
+        {
+          offset  += stepper_spacing;
+          shorter += stepper_spacing;
+        }
+
+      if (priv->stepper_c_gadget || priv->stepper_d_gadget)
+        {
+          shorter += stepper_spacing;
+        }
+
+      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+        {
+          trough_alloc.x     += offset;
+          trough_alloc.width -= shorter;
+        }
+      else
+        {
+          trough_alloc.y      += offset;
+          trough_alloc.height -= shorter;
+        }
+    }
+
+  gtk_css_gadget_allocate (priv->trough_gadget,
+                           &trough_alloc,
+                           gtk_widget_get_allocated_baseline (widget),
+                           out_clip);
+
+  if (priv->show_fill_level &&
+      gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_page_size (priv->adjustment) -
+      gtk_adjustment_get_lower (priv->adjustment) != 0)
+    {
+      gdouble level;
+      gdouble fill = 0.0;
+      GtkAllocation content_alloc, fill_alloc, fill_clip;
+
+      gtk_css_gadget_get_content_allocation (priv->trough_gadget,
+                                             &content_alloc, NULL);
+      fill_alloc = content_alloc;
+
+      level = CLAMP (priv->fill_level,
+                     gtk_adjustment_get_lower (priv->adjustment),
+                     gtk_adjustment_get_upper (priv->adjustment) -
+                     gtk_adjustment_get_page_size (priv->adjustment));
+
+      fill = (level - gtk_adjustment_get_lower (priv->adjustment)) /
+        (gtk_adjustment_get_upper (priv->adjustment) -
+         gtk_adjustment_get_lower (priv->adjustment) -
+         gtk_adjustment_get_page_size (priv->adjustment));
+
+      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+        {
+          fill_alloc.width *= fill;
+
+          if (should_invert (range))
+            fill_alloc.x += content_alloc.width - fill_alloc.width;
+        }
+      else
+        {
+          fill_alloc.height *= fill;
+
+          if (should_invert (range))
+            fill_alloc.y += content_alloc.height - (fill_alloc.height * fill);
+        }
+
+      gtk_css_gadget_allocate (priv->fill_gadget,
+                               &fill_alloc,
+                               gtk_widget_get_allocated_baseline (widget),
+                               &fill_clip);
+      gdk_rectangle_union (out_clip, &fill_clip, out_clip);
+    }
+
+  if (priv->has_origin)
+    {
+      GtkAllocation content_alloc, highlight_alloc, highlight_clip, slider_alloc;
+
+      gtk_css_gadget_get_content_allocation (priv->trough_gadget,
+                                             &content_alloc, NULL);
+      gtk_css_gadget_get_content_allocation (priv->slider_gadget,
+                                             &slider_alloc, NULL);
+      highlight_alloc = content_alloc;
+
+      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+        {
+          if (!should_invert (range))
+            {
+              highlight_alloc.x = content_alloc.x;
+              highlight_alloc.width = slider_alloc.x + slider_alloc.width / 2 - content_alloc.x;
+            }
+          else
+            {
+              highlight_alloc.x = slider_alloc.x + slider_alloc.width / 2;
+              highlight_alloc.width = content_alloc.x + content_alloc.width - highlight_alloc.x;
+            }
+        }
+      else
+        {
+          if (!should_invert (range))
+            {
+              highlight_alloc.y = content_alloc.y;
+              highlight_alloc.height = slider_alloc.y + slider_alloc.height / 2 - content_alloc.y;
+            }
+          else
+            {
+              highlight_alloc.y = slider_alloc.y + slider_alloc.height / 2;
+              highlight_alloc.height = content_alloc.y + content_alloc.height - highlight_alloc.y;
+            }
+        }
+
+      gtk_css_gadget_allocate (priv->highlight_gadget,
+                               &highlight_alloc,
+                               gtk_widget_get_allocated_baseline (widget),
+                               &highlight_clip);
+      gdk_rectangle_union (out_clip, &highlight_clip, out_clip);
+    }
 }
 
 static void
@@ -1719,18 +1935,84 @@ gtk_range_size_allocate (GtkWidget     *widget,
 {
   GtkRange *range = GTK_RANGE (widget);
   GtkRangePrivate *priv = range->priv;
+  GtkAllocation clip, trough_clip, slider_clip, stepper_clip;
+  GtkAllocation slider_alloc, stepper_alloc;
 
   gtk_widget_set_allocation (widget, allocation);
-
-  gtk_range_calc_marks (range);
-  gtk_range_calc_layout (range);
 
   if (gtk_widget_get_realized (widget))
     gdk_window_move_resize (priv->event_window,
                             allocation->x, allocation->y,
                             allocation->width, allocation->height);
 
-  _gtk_widget_set_simple_clip (widget, NULL);
+  gtk_range_calc_marks (range);
+  gtk_range_calc_layout (range);
+
+  slider_alloc = priv->slider;
+  slider_alloc.x += allocation->x;
+  slider_alloc.y += allocation->y;
+
+  gtk_css_gadget_allocate (priv->slider_gadget,
+                           &slider_alloc,
+                           gtk_widget_get_allocated_baseline (widget),
+                           &slider_clip);
+
+  gtk_range_allocate_trough (range, &trough_clip);
+  gdk_rectangle_union (&trough_clip, &slider_clip, &clip);
+
+  if (priv->stepper_a_gadget)
+    {
+      stepper_alloc = priv->stepper_a;
+      stepper_alloc.x += allocation->x;
+      stepper_alloc.y += allocation->y;
+
+      gtk_css_gadget_allocate (priv->stepper_a_gadget,
+                               &stepper_alloc,
+                               gtk_widget_get_allocated_baseline (widget),
+                               &stepper_clip);
+      gdk_rectangle_union (&clip, &stepper_clip, &clip);
+    }
+
+  if (priv->stepper_b_gadget)
+    {
+      stepper_alloc = priv->stepper_b;
+      stepper_alloc.x += allocation->x;
+      stepper_alloc.y += allocation->y;
+
+      gtk_css_gadget_allocate (priv->stepper_b_gadget,
+                               &stepper_alloc,
+                               gtk_widget_get_allocated_baseline (widget),
+                               &stepper_clip);
+      gdk_rectangle_union (&clip, &stepper_clip, &clip);
+    }
+
+  if (priv->stepper_c_gadget)
+    {
+      stepper_alloc = priv->stepper_c;
+      stepper_alloc.x += allocation->x;
+      stepper_alloc.y += allocation->y;
+
+      gtk_css_gadget_allocate (priv->stepper_c_gadget,
+                               &stepper_alloc,
+                               gtk_widget_get_allocated_baseline (widget),
+                               &stepper_clip);
+      gdk_rectangle_union (&clip, &stepper_clip, &clip);
+    }
+
+  if (priv->stepper_d_gadget)
+    {
+      stepper_alloc = priv->stepper_d;
+      stepper_alloc.x += allocation->x;
+      stepper_alloc.y += allocation->y;
+
+      gtk_css_gadget_allocate (priv->stepper_d_gadget,
+                               &stepper_alloc,
+                               gtk_widget_get_allocated_baseline (widget),
+                               &stepper_clip);
+      gdk_rectangle_union (&clip, &stepper_clip, &clip);
+    }
+
+  gtk_widget_set_clip (widget, &clip);
 }
 
 static void
@@ -1830,7 +2112,7 @@ update_slider_state (GtkRange *range)
   if (priv->grab_location == MOUSE_SLIDER)
     state |= GTK_STATE_FLAG_ACTIVE;
 
-  gtk_css_node_set_state (priv->slider_node, state);
+  gtk_css_node_set_state (gtk_css_gadget_get_node (priv->slider_gadget), state);
 }
 
 static void
@@ -1849,11 +2131,11 @@ update_trough_state (GtkRange *range)
   if (priv->grab_location == MOUSE_TROUGH)
     state |= GTK_STATE_FLAG_ACTIVE;
 
-  gtk_css_node_set_state (priv->trough_node, state);
-  if (priv->highlight_node)
-    gtk_css_node_set_state (priv->highlight_node, state);
-  if (priv->fill_node)
-    gtk_css_node_set_state (priv->fill_node, state);
+  gtk_css_node_set_state (gtk_css_gadget_get_node (priv->trough_gadget), state);
+  if (priv->highlight_gadget)
+    gtk_css_node_set_state (gtk_css_gadget_get_node (priv->highlight_gadget), state);
+  if (priv->fill_gadget)
+    gtk_css_node_set_state (gtk_css_gadget_get_node (priv->fill_gadget), state);
 }
 
 static void
@@ -1869,61 +2151,6 @@ gtk_range_state_flags_changed (GtkWidget     *widget,
   GTK_WIDGET_CLASS (gtk_range_parent_class)->state_flags_changed (widget, previous_state);
 }
 
-static void
-draw_stepper (GtkRange     *range,
-              cairo_t      *cr,
-              GdkRectangle *rect,
-              GtkCssNode   *node,
-              GtkArrowType  arrow_type)
-{
-  GtkStyleContext *context;
-  GtkWidget *widget = GTK_WIDGET (range);
-  gfloat arrow_scaling;
-  gdouble arrow_x;
-  gdouble arrow_y;
-  gdouble arrow_size, angle;
-
-  context = gtk_widget_get_style_context (widget);
-  gtk_style_context_save_to_node (context, node);
-
-  gtk_render_background (context, cr,
-                         rect->x, rect->y,
-                         rect->width, rect->height);
-  gtk_render_frame (context, cr,
-                    rect->x, rect->y,
-                    rect->width, rect->height);
-
-  gtk_widget_style_get (widget, "arrow-scaling", &arrow_scaling, NULL);
-
-  arrow_size = MIN (rect->width, rect->height) * arrow_scaling;
-  arrow_x = rect->x + (rect->width - arrow_size) / 2;
-  arrow_y = rect->y + (rect->height - arrow_size) / 2;
-
-  switch (arrow_type)
-    {
-    case GTK_ARROW_RIGHT:
-      angle = G_PI / 2;
-      break;
-    case GTK_ARROW_DOWN:
-      angle = G_PI;
-      break;
-    case GTK_ARROW_LEFT:
-      angle = 3 * (G_PI / 2);
-      break;
-    case GTK_ARROW_UP:
-    default:
-      angle = 0;
-      break;
-    }
-
-  gtk_render_arrow (context, cr,
-                    angle,
-                    arrow_x, arrow_y,
-                    arrow_size);
-
-  gtk_style_context_restore (context);
-}
-
 static gboolean
 gtk_range_draw (GtkWidget *widget,
                 cairo_t   *cr)
@@ -1933,7 +2160,6 @@ gtk_range_draw (GtkWidget *widget,
   gboolean draw_trough = TRUE;
   gboolean draw_slider = TRUE;
   GtkStyleContext *context;
-  GtkBorder margin;
 
   context = gtk_widget_get_style_context (widget);
 
@@ -1949,243 +2175,41 @@ gtk_range_draw (GtkWidget *widget,
       draw_slider = TRUE;
     }
 
-  /* Just to be confusing, we draw the trough for the whole
-   * range rectangle, not the trough rectangle (the trough
-   * rectangle is just for hit detection)
-   */
-  cairo_save (cr);
-  gdk_cairo_rectangle (cr, &priv->range_rect);
-  cairo_clip (cr);
-
+  if (draw_trough)
     {
-      gint x = priv->range_rect.x;
-      gint y = priv->range_rect.y;
-      gint width = priv->range_rect.width;
-      gint height = priv->range_rect.height;
-      gboolean trough_under_steppers;
-      gint stepper_size;
-      gint stepper_spacing;
+      gtk_css_gadget_draw (priv->trough_gadget, cr);
 
-      gtk_widget_style_get (GTK_WIDGET (range),
-                            "trough-under-steppers", &trough_under_steppers,
-                            "stepper-size",          &stepper_size,
-                            "stepper-spacing",       &stepper_spacing,
-                            NULL);
+      if (priv->show_fill_level &&
+          gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_page_size (priv->adjustment) -
+          gtk_adjustment_get_lower (priv->adjustment) != 0)
+        gtk_css_gadget_draw (priv->fill_gadget, cr);
 
-      if (!trough_under_steppers)
-        {
-          gint offset  = 0;
-          gint shorter = 0;
-
-          if (priv->has_stepper_a)
-            offset += stepper_size;
-
-          if (priv->has_stepper_b)
-            offset += stepper_size;
-
-          shorter += offset;
-
-          if (priv->has_stepper_c)
-            shorter += stepper_size;
-
-          if (priv->has_stepper_d)
-            shorter += stepper_size;
-
-          if (priv->has_stepper_a || priv->has_stepper_b)
-            {
-              offset  += stepper_spacing;
-              shorter += stepper_spacing;
-            }
-
-          if (priv->has_stepper_c || priv->has_stepper_d)
-            {
-              shorter += stepper_spacing;
-            }
-
-          if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-            {
-              x     += offset;
-              width -= shorter;
-            }
-          else
-            {
-              y      += offset;
-              height -= shorter;
-            }
-        }
-
-      if (draw_trough)
-        {
-          gtk_style_context_save_to_node (context, priv->trough_node);
-
-          gtk_style_context_get_margin (context, gtk_style_context_get_state (context), &margin);
-
-          x += margin.left;
-          y += margin.top;
-          width -= margin.left + margin.right;
-          height -= margin.top + margin.bottom;
-
-          gtk_render_background (context, cr, x, y, width, height);
-          gtk_render_frame (context, cr, x, y, width, height);
-
-          gtk_style_context_restore (context);
-
-          if (priv->show_fill_level &&
-              gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_page_size (priv->adjustment) -
-              gtk_adjustment_get_lower (priv->adjustment) != 0)
-            {
-              gdouble level;
-              gdouble fill = 0.0;
-              gint fx = x;
-              gint fy = y;
-              gint fwidth = width;
-              gint fheight = height;
-
-              level = CLAMP (priv->fill_level,
-                             gtk_adjustment_get_lower (priv->adjustment),
-                             gtk_adjustment_get_upper (priv->adjustment) -
-                             gtk_adjustment_get_page_size (priv->adjustment));
-
-              fill = (level - gtk_adjustment_get_lower (priv->adjustment)) /
-                      (gtk_adjustment_get_upper (priv->adjustment) -
-                      gtk_adjustment_get_lower (priv->adjustment) -
-                      gtk_adjustment_get_page_size (priv->adjustment));
-
-              if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-                {
-                  if (!should_invert (range))
-                    {
-                      fx = x;
-                      fwidth = width * fill;
-                    }
-                  else
-                    {
-                      fwidth = width * fill;
-                      fx = x + width - fwidth;
-                    }
-                }
-              else
-                {
-                  if (!should_invert (range))
-                    {
-                      fy = y;
-                      fheight = height * fill;
-                    }
-                  else
-                    {
-                      fheight = height * fill;
-                      fy = y + height - fheight;
-                    }
-                }
-
-              gtk_style_context_save_to_node (context, priv->fill_node);
-
-              gtk_render_background (context, cr, fx, fy, fwidth, fheight);
-              gtk_render_frame (context, cr, fx, fy, fwidth, fheight);
-
-              gtk_style_context_restore (context);
-            }
-
-          if (priv->has_origin)
-            {
-              gint fx = x;
-              gint fy = y;
-              gint fwidth = width;
-              gint fheight = height;
-
-              if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-                {
-                  if (!should_invert (range))
-                    {
-                      fx = x;
-                      fwidth = priv->slider.x + priv->slider.width / 2 - x;
-                    }
-                  else
-                    {
-                      fx = priv->slider.x + priv->slider.width / 2;
-                      fwidth = x + width - fx;
-                    }
-                }
-              else
-                {
-                  if (!should_invert (range))
-                    {
-                      fy = y;
-                      fheight = priv->slider.y + priv->slider.height / 2 - y;
-                    }
-                  else
-                    {
-                      fy = priv->slider.y + priv->slider.height / 2;
-                      fheight = y + height - fy;
-                    }
-                }
-
-              gtk_style_context_save_to_node (context, priv->highlight_node);
-
-              gtk_render_background (context, cr, fx, fy, fwidth, fheight);
-              gtk_render_frame (context, cr, fx, fy, fwidth, fheight);
-
-              gtk_style_context_restore (context);
-            }
-        }
-
-      if (!(gtk_widget_get_state_flags (widget) & GTK_STATE_FLAG_INSENSITIVE) &&
-          gtk_widget_has_visible_focus (widget))
-        {
-          gtk_render_focus (context, cr,
-                            priv->range_rect.x,
-                            priv->range_rect.y,
-                            priv->range_rect.width,
-                            priv->range_rect.height);
-        }
+      if (priv->has_origin)
+        gtk_css_gadget_draw (priv->highlight_gadget, cr);
     }
 
-  cairo_restore (cr);
+  if (!(gtk_widget_get_state_flags (widget) & GTK_STATE_FLAG_INSENSITIVE) &&
+      gtk_widget_has_visible_focus (widget))
+    gtk_render_focus (context, cr,
+                      priv->range_rect.x,
+                      priv->range_rect.y,
+                      priv->range_rect.width,
+                      priv->range_rect.height);
 
   if (draw_slider)
-    {
-      cairo_save (cr);
-      gdk_cairo_rectangle (cr, &priv->slider);
-      cairo_clip (cr);
+    gtk_css_gadget_draw (priv->slider_gadget, cr);
 
-      gtk_style_context_save_to_node (context, priv->slider_node);
-      gtk_style_context_get_margin (context, gtk_style_context_get_state (context), &margin);
+  if (priv->stepper_a_gadget)
+    gtk_css_gadget_draw (priv->stepper_a_gadget, cr);
 
-      gtk_render_slider (context, cr,
-                         priv->slider.x + margin.left,
-                         priv->slider.y + margin.top,
-                         priv->slider.width - margin.left - margin.right,
-                         priv->slider.height - margin.top - margin.bottom,
-                         priv->orientation);
+  if (priv->stepper_b_gadget)
+    gtk_css_gadget_draw (priv->stepper_b_gadget, cr);
 
-      gtk_style_context_restore (context);
+  if (priv->stepper_c_gadget)
+    gtk_css_gadget_draw (priv->stepper_c_gadget, cr);
 
-      cairo_restore (cr);
-    }
-
-  if (priv->has_stepper_a)
-    draw_stepper (range, cr,
-                  &priv->stepper_a,
-                  priv->stepper_a_node,
-                  priv->orientation == GTK_ORIENTATION_VERTICAL ? GTK_ARROW_UP : GTK_ARROW_LEFT);
-
-  if (priv->has_stepper_b)
-    draw_stepper (range, cr,
-                  &priv->stepper_b,
-                  priv->stepper_b_node,
-                  priv->orientation == GTK_ORIENTATION_VERTICAL ? GTK_ARROW_DOWN : GTK_ARROW_RIGHT);
-
-  if (priv->has_stepper_c)
-    draw_stepper (range, cr,
-                  &priv->stepper_c,
-                  priv->stepper_c_node,
-                  priv->orientation == GTK_ORIENTATION_VERTICAL ? GTK_ARROW_UP : GTK_ARROW_LEFT);
-
-  if (priv->has_stepper_d)
-    draw_stepper (range, cr,
-                  &priv->stepper_d,
-                  priv->stepper_d_node,
-                  priv->orientation == GTK_ORIENTATION_VERTICAL ? GTK_ARROW_DOWN : GTK_ARROW_RIGHT);
+  if (priv->stepper_d_gadget)
+    gtk_css_gadget_draw (priv->stepper_d_gadget, cr);
 
   return GDK_EVENT_PROPAGATE;
 }
@@ -3441,13 +3465,13 @@ gtk_range_calc_request (GtkRange      *range,
   n_steppers_ab = 0;
   n_steppers_cd = 0;
 
-  if (priv->has_stepper_a)
+  if (priv->stepper_a_gadget)
     n_steppers_ab += 1;
-  if (priv->has_stepper_b)
+  if (priv->stepper_b_gadget)
     n_steppers_ab += 1;
-  if (priv->has_stepper_c)
+  if (priv->stepper_c_gadget)
     n_steppers_cd += 1;
-  if (priv->has_stepper_d)
+  if (priv->stepper_d_gadget)
     n_steppers_cd += 1;
 
   n_steppers = n_steppers_ab + n_steppers_cd;
@@ -3623,10 +3647,10 @@ gtk_range_calc_slider (GtkRange *range)
                                      &new_slider);
 
   if (gdk_rectangle_equal (&priv->slider, &new_slider) &&
-      visible == gtk_css_node_get_visible (priv->slider_node))
+      visible == gtk_css_gadget_get_visible (priv->slider_gadget))
     return;
 
-  gtk_css_node_set_visible (priv->slider_node, visible);
+  gtk_css_gadget_set_visible (priv->slider_gadget, visible);
 
   gtk_range_queue_draw_location (range, MOUSE_SLIDER);
 
@@ -3775,7 +3799,7 @@ gtk_range_calc_layout (GtkRange *range)
       priv->stepper_a.x = range_rect.x + trough_border * trough_under_steppers;
       priv->stepper_a.y = range_rect.y + trough_border * trough_under_steppers;
 
-      if (priv->has_stepper_a)
+      if (priv->stepper_a_gadget)
         {
           priv->stepper_a.width = stepper_width;
           priv->stepper_a.height = stepper_height;
@@ -3791,7 +3815,7 @@ gtk_range_calc_layout (GtkRange *range)
       priv->stepper_b.x = priv->stepper_a.x;
       priv->stepper_b.y = priv->stepper_a.y + priv->stepper_a.height;
 
-      if (priv->has_stepper_b)
+      if (priv->stepper_b_gadget)
         {
           priv->stepper_b.width = stepper_width;
           priv->stepper_b.height = stepper_height;
@@ -3804,7 +3828,7 @@ gtk_range_calc_layout (GtkRange *range)
 
       /* Stepper D */
 
-      if (priv->has_stepper_d)
+      if (priv->stepper_d_gadget)
         {
           priv->stepper_d.width = stepper_width;
           priv->stepper_d.height = stepper_height;
@@ -3820,7 +3844,7 @@ gtk_range_calc_layout (GtkRange *range)
 
       /* Stepper C */
 
-      if (priv->has_stepper_c)
+      if (priv->stepper_c_gadget)
         {
           priv->stepper_c.width = stepper_width;
           priv->stepper_c.height = stepper_height;
@@ -3868,7 +3892,7 @@ gtk_range_calc_layout (GtkRange *range)
       priv->stepper_a.x = range_rect.x + trough_border * trough_under_steppers;
       priv->stepper_a.y = range_rect.y + trough_border * trough_under_steppers;
 
-      if (priv->has_stepper_a)
+      if (priv->stepper_a_gadget)
         {
           priv->stepper_a.width = stepper_width;
           priv->stepper_a.height = stepper_height;
@@ -3884,7 +3908,7 @@ gtk_range_calc_layout (GtkRange *range)
       priv->stepper_b.x = priv->stepper_a.x + priv->stepper_a.width;
       priv->stepper_b.y = priv->stepper_a.y;
 
-      if (priv->has_stepper_b)
+      if (priv->stepper_b_gadget)
         {
           priv->stepper_b.width = stepper_width;
           priv->stepper_b.height = stepper_height;
@@ -3897,7 +3921,7 @@ gtk_range_calc_layout (GtkRange *range)
 
       /* Stepper D */
 
-      if (priv->has_stepper_d)
+      if (priv->stepper_d_gadget)
         {
           priv->stepper_d.width = stepper_width;
           priv->stepper_d.height = stepper_height;
@@ -3914,7 +3938,7 @@ gtk_range_calc_layout (GtkRange *range)
 
       /* Stepper C */
 
-      if (priv->has_stepper_c)
+      if (priv->stepper_c_gadget)
         {
           priv->stepper_c.width = stepper_width;
           priv->stepper_c.height = stepper_height;
@@ -3948,29 +3972,27 @@ gtk_range_queue_draw_location (GtkRange      *range,
                                MouseLocation  location)
 {
   GtkRangePrivate *priv = range->priv;
-  GtkWidget *widget = GTK_WIDGET (range);
-  const GdkRectangle *rect;
-  GdkRectangle allocation;
+  GtkCssGadget *gadget;
 
   switch (location)
     {
     case MOUSE_STEPPER_A:
-      rect = &priv->stepper_a;
+      gadget = priv->stepper_a_gadget;
       break;
     case MOUSE_STEPPER_B:
-      rect = &priv->stepper_b;
+      gadget = priv->stepper_b_gadget;
       break;
     case MOUSE_STEPPER_C:
-      rect = &priv->stepper_c;
+      gadget = priv->stepper_c_gadget;
       break;
     case MOUSE_STEPPER_D:
-      rect = &priv->stepper_d;
+      gadget = priv->stepper_d_gadget;
       break;
     case MOUSE_TROUGH:
-      rect = &priv->trough;
+      gadget = priv->trough_gadget;
       break;
     case MOUSE_SLIDER:
-      rect = &priv->slider;
+      gadget = priv->slider_gadget;
       break;
     case MOUSE_WIDGET:
     case MOUSE_OUTSIDE:
@@ -3980,15 +4002,9 @@ gtk_range_queue_draw_location (GtkRange      *range,
       return;
     }
 
-  if (rect->width <= 0 || rect->height <= 0)
-    return;
-
-  gtk_widget_get_allocation (widget, &allocation);
-  gtk_widget_queue_draw_area (widget,
-                              allocation.x + rect->x,
-                              allocation.y + rect->y,
-                              rect->width,
-                              rect->height);
+  /* FIXME: should we queue draw instead in some cases? */
+  if (gadget)
+    gtk_css_gadget_queue_allocate (gadget);
 }
 
 static void
@@ -4123,17 +4139,17 @@ _gtk_range_set_has_origin (GtkRange *range,
 
   if (has_origin)
     {
-      priv->highlight_node = gtk_css_node_new ();
-      gtk_css_node_set_name (priv->highlight_node, I_("highlight"));
-      gtk_css_node_set_parent (priv->highlight_node, priv->trough_node);
-      gtk_css_node_set_state (priv->highlight_node, gtk_css_node_get_state (priv->trough_node));
-      g_signal_connect_object (priv->highlight_node, "style-changed", G_CALLBACK (node_style_changed_cb), range, 0);
-      g_object_unref (priv->highlight_node);
+      priv->highlight_gadget = gtk_css_custom_gadget_new ("highlight",
+                                                          GTK_WIDGET (range),
+                                                          priv->trough_gadget, NULL,
+                                                          NULL, NULL, NULL,
+                                                          NULL, NULL);
+      gtk_css_node_set_state (gtk_css_gadget_get_node (priv->highlight_gadget),
+                              gtk_css_node_get_state (gtk_css_gadget_get_node (priv->trough_gadget)));
     }
   else
     {
-      gtk_css_node_set_parent (priv->highlight_node, NULL);
-      priv->highlight_node = NULL;
+      g_clear_object (&priv->highlight_gadget);
     }
 }
 
@@ -4222,27 +4238,46 @@ gtk_range_get_round_digits (GtkRange *range)
   return range->priv->round_digits;
 }
 
-static GtkCssNode *
-create_stepper_node (GtkRange    *range,
-                     const gchar *class,
-                     GtkCssNode  *before,
-                     GtkCssNode  *after)
+static void
+sync_stepper_gadget (GtkRange                *range,
+                     gboolean                 should_have_stepper,
+                     GtkCssGadget           **gadget_ptr,
+                     const gchar             *class,
+                     GtkCssImageBuiltinType   image_type,
+                     GtkCssGadget            *before,
+                     GtkCssGadget            *after)
 {
+  GtkWidget *widget;
+  GtkCssGadget *gadget;
   GtkCssNode *widget_node, *node;
+  gboolean has_stepper;
 
-  widget_node = gtk_widget_get_css_node (GTK_WIDGET (range));
-  node = gtk_css_node_new ();
-  gtk_css_node_set_name (node, I_("button"));
-  gtk_css_node_add_class (node, g_quark_from_static_string (class));
+  has_stepper = (*gadget_ptr != NULL);
+  if (has_stepper == should_have_stepper)
+    return;
+
+  if (!should_have_stepper)
+    {
+      g_clear_object (gadget_ptr);
+      return;
+    }
+
+  widget = GTK_WIDGET (range);
+  gadget = gtk_builtin_icon_new ("button",
+                                 widget,
+                                 NULL, NULL);
+  gtk_builtin_icon_set_image (GTK_BUILTIN_ICON (gadget), image_type);
+  gtk_css_gadget_add_class (gadget, class);
+
+  node = gtk_css_gadget_get_node (gadget);
+  widget_node = gtk_widget_get_css_node (widget);
   if (before)
-    gtk_css_node_insert_before (widget_node, node, before);
+    gtk_css_node_insert_before (widget_node, node, gtk_css_gadget_get_node (before));
   else
-    gtk_css_node_insert_after (widget_node, node, after);
+    gtk_css_node_insert_after (widget_node, node, gtk_css_gadget_get_node (after));
   gtk_css_node_set_state (node, gtk_css_node_get_state (widget_node));
-  g_signal_connect_object (node, "style-changed", G_CALLBACK (node_style_changed_cb), range, 0);
-  g_object_unref (node);
 
-  return node;
+  *gadget_ptr = gadget;
 }
 
 void
@@ -4254,73 +4289,37 @@ _gtk_range_set_steppers (GtkRange *range,
 {
   GtkRangePrivate *priv = range->priv;
 
-  if (priv->has_stepper_a != has_a)
-    {
-      priv->has_stepper_a = has_a;
-      if (has_a)
-        {
-          priv->stepper_a_node = create_stepper_node (range,
-                                                      "down",
-                                                      priv->has_stepper_b ? priv->stepper_b_node : priv->trough_node,
-                                                      NULL);
-        }
-      else
-        {
-          gtk_css_node_set_parent (priv->stepper_a_node, NULL);
-          priv->stepper_a_node = NULL;
-        }
-    }
+  sync_stepper_gadget (range,
+                       has_a, &priv->stepper_a_gadget,
+                       "up",
+                       priv->orientation == GTK_ORIENTATION_VERTICAL ?
+                       GTK_CSS_IMAGE_BUILTIN_ARROW_UP : GTK_CSS_IMAGE_BUILTIN_ARROW_LEFT,
+                       priv->stepper_b_gadget ? priv->stepper_b_gadget : priv->trough_gadget,
+                       NULL);
 
-  if (priv->has_stepper_b != has_b)
-    {
-      priv->has_stepper_b = has_b;
-      if (has_b)
-        {
-          priv->stepper_b_node = create_stepper_node (range,
-                                                      "up",
-                                                      priv->trough_node,
-                                                      NULL);
-        }
-      else
-        {
-          gtk_css_node_set_parent (priv->stepper_b_node, NULL);
-          priv->stepper_b_node = NULL;
-        }
-    }
+  sync_stepper_gadget (range,
+                       has_b, &priv->stepper_b_gadget,
+                       "down",
+                       priv->orientation == GTK_ORIENTATION_VERTICAL ?
+                       GTK_CSS_IMAGE_BUILTIN_ARROW_DOWN : GTK_CSS_IMAGE_BUILTIN_ARROW_RIGHT,
+                       priv->trough_gadget,
+                       NULL);
 
-  if (priv->has_stepper_c != has_c)
-    {
-      priv->has_stepper_c = has_c;
-      if (has_c)
-        {
-          priv->stepper_c_node = create_stepper_node (range,
-                                                      "down",
-                                                      NULL,
-                                                      priv->trough_node);
-        }
-      else
-        {
-          gtk_css_node_set_parent (priv->stepper_c_node, NULL);
-          priv->stepper_c_node = NULL;
-        }
-    }
+  sync_stepper_gadget (range,
+                       has_c, &priv->stepper_c_gadget,
+                       "up",
+                       priv->orientation == GTK_ORIENTATION_VERTICAL ?
+                       GTK_CSS_IMAGE_BUILTIN_ARROW_UP : GTK_CSS_IMAGE_BUILTIN_ARROW_LEFT,
+                       NULL,
+                       priv->trough_gadget);
 
-  if (priv->has_stepper_d != has_d)
-    {
-      priv->has_stepper_d = has_d;
-      if (has_d)
-        {
-          priv->stepper_d_node = create_stepper_node (range,
-                                                      "up",
-                                                      NULL,
-                                                      priv->has_stepper_c ? priv->stepper_c_node : priv->trough_node);
-        }
-      else
-        {
-          gtk_css_node_set_parent (priv->stepper_d_node, NULL);
-          priv->stepper_d_node = NULL;
-        }
-    }
+  sync_stepper_gadget (range,
+                       has_d, &priv->stepper_d_gadget,
+                       "down",
+                       priv->orientation == GTK_ORIENTATION_VERTICAL ?
+                       GTK_CSS_IMAGE_BUILTIN_ARROW_DOWN : GTK_CSS_IMAGE_BUILTIN_ARROW_RIGHT,
+                       NULL,
+                       priv->stepper_c_gadget ? priv->stepper_c_gadget : priv->trough_gadget);
 
   gtk_widget_queue_resize (GTK_WIDGET (range));
 }
@@ -4328,5 +4327,5 @@ _gtk_range_set_steppers (GtkRange *range,
 GtkCssNode *
 gtk_range_get_trough_node (GtkRange *range)
 {
-  return range->priv->trough_node;
+  return gtk_css_gadget_get_node (range->priv->trough_gadget);
 }
