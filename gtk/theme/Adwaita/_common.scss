@@ -3047,12 +3047,26 @@ paned {
     min-width: 1px;
     min-height: 1px;
     -gtk-icon-source: none; // defeats the ugly default handle decoration
+    border-style: none; // just to be sure
     background-color: transparent;
+    // using background istead of a border since the border will get rendered twice (?)
     background-image: linear-gradient(to top, $borders_color);
     background-size: 1px 1px;
-    &:selected { background-image: linear-gradient(to top, $selected_bg_color); }
+
+    &:selected { background-image: linear-gradient(to top, $selected_bg_color); } // FIXME is this needed?
     &:backdrop { background-image: linear-gradient(to top, $backdrop_borders_color); }
+
+    &.wide {
+      margin: 0;
+      padding: 0;
+      min-width: 5px;
+      min-height: 5px;
+      background-image: none;
+      border: 1px solid $borders_color;
+      &:backdrop { border-color: $backdrop_borders_color; }
+    }
   }
+
   &.horizontal > separator {
     background-repeat: repeat-y;
     &:dir(ltr) {
@@ -3065,21 +3079,23 @@ paned {
       padding: 0 0 0 8px;
       background-position: right;
     }
+
+    &.wide {
+      border-top-style: none;
+      border-bottom-style: none;
+    }
   }
+
   &.vertical > separator {
     margin: 0 0 -8px 0;
     padding: 0 0 8px 0;
     background-repeat: repeat-x;
     background-position: top;
-  }
-  > separator.wide {
-    // FIXME: I don't understand this clearly
-    min-width: 5px;
-    min-height: 5px;
-    background-color: transparent;
-    border-style: none solid;
-    border-color: $borders_color;
-    border-width: 1px;
+
+    &.wide {
+      border-left-style: none;
+      border-right-style: none;
+    }
   }
 }
 
