@@ -72,7 +72,7 @@
  * # CSS nodes
  *
  * |[<!-- language="plain" -->
- * progressbar
+ * progressbar[.osd]
  * ╰── trough
  *     ├── [text]
  *     ╰── progress[.pulse]
@@ -83,6 +83,8 @@
  * is shown. The progress subnode has the style class .pulse when in activity
  * mode. It gets the style classes .left, .right, .top or .bottom added when
  * the progress 'touches' the corresponding end of the GtkProgressBar.
+ * The .osd class on the progressbar node is for use in overlays like the one
+ * epiphany has for page loading progress.
  */
 
 #define MIN_HORIZONTAL_BAR_WIDTH   150

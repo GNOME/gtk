@@ -2653,9 +2653,11 @@ progressbar {
 
   &:backdrop progress { @extend %scale_highlight:backdrop; } // states not passed here as well
 
-  &.osd {
+  &.osd { // progressbar.osd used for epiphany page loading progress
     min-width: 3px;
     min-height: 3px;
+    background-color: transparent;
+
     trough {
       border-style: none;
       border-radius: 0;

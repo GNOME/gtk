@@ -3512,7 +3512,8 @@ progressbar {
       border-bottom-left-radius: 2px; }
   progressbar.osd {
     min-width: 3px;
-    min-height: 3px; }
+    min-height: 3px;
+    background-color: transparent; }
     progressbar.osd trough {
       border-style: none;
       border-radius: 0;
