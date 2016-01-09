@@ -336,6 +336,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
 
           separator = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
           gtk_widget_set_no_show_all (separator, TRUE);
+          gtk_style_context_add_class (gtk_widget_get_style_context (separator), "titlebutton");
 
           if (i == 0)
             priv->titlebar_start_separator = separator;
