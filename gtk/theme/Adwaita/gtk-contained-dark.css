@@ -1927,6 +1927,14 @@ headerbar {
     .titlebar headerbar.default-decoration button.titlebutton {
       min-height: 26px;
       padding: 0 5px; }
+  .titlebar:not(headerbar) button,
+  .titlebar:not(headerbar) button.titlebutton,
+  headerbar button,
+  headerbar button.titlebutton,
+  headerbar .titlebar button.titlebutton,
+  .titlebar headerbar button.titlebutton {
+    margin-top: 6px;
+    margin-bottom: 6px; }
 
 .titlebar, .titlebar:backdrop {
   border-top-left-radius: 7px;

@@ -1143,6 +1143,7 @@ headerbar {
     @extend .dim-label;
   }
 
+  // FIXME: we need a safer way to select this separator
   & > GtkBox > separator.vertical {
     border-width: 0 1px;
     border-image: linear-gradient(to bottom,
@@ -1284,6 +1285,12 @@ headerbar {
       min-height: 26px;
       padding: 0 5px;
     }
+  }
+
+  // add vertical margins to headerbar buttons to avoid them spanning the whole height
+  button {
+    margin-top: 6px;
+    margin-bottom: 6px;
   }
 }
 
