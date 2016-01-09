@@ -161,6 +161,10 @@ AC_PROG_MKDIR_P
 AC_PROG_INSTALL
 AC_PROG_MAKE_SET
 
+# i18n stuff
+AM_GNU_GETTEXT([external])
+AM_GNU_GETTEXT_VERSION([0.19.7])
+
 GETTEXT_PACKAGE=gtk30
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE",
@@ -685,46 +689,7 @@ if test "$gtk_ok" = "yes"; then
 	    [Define if _NL_PAPER_WIDTH is available])
 fi
 
-# i18n stuff
-ALL_LINGUAS="`grep -v '^#' "$srcdir/po/LINGUAS" | tr '\n' ' '`"
-AM_GLIB_GNU_GETTEXT
-
-AC_MSG_CHECKING([whether xgettext supports ui files])
-if $ac_cv_path_XGETTEXT --output=- --color=no --language=Glade $srcdir/gtk/ui/gtkfilechooserwidget.ui > /dev/null 2>&1; then
-  AC_MSG_RESULT([yes])
-else
-  AC_MSG_RESULT([no])
-  AC_MSG_ERROR([GNU gettext 0.18.3 or newer is required])
-fi
-
 LIBS="$LIBS $INTLLIBS"
-AC_CONFIG_COMMANDS([po-properties],
-                   [[case "$CONFIG_FILES" in *po-properties/Makefile.in*)
-                       sed -e "/POTFILES =/r po-properties/POTFILES" po-properties/Makefile.in > po-properties/Makefile
-                     esac]],
-                   [[]])
-
-dnl Snippet below is copied from AM_GLIB_GNU_GETTEXT to generate a first
-dnl po-properties/POTFILES during configure; see GNOME #573515.
-dnl
-dnl Generate list of files to be processed by xgettext which will
-dnl be included in po-properties/Makefile.
-test -d po-properties || mkdir po-properties
-if test "x$srcdir" != "x."; then
-  if test "x`echo $srcdir | sed 's@/.*@@'`" = "x"; then
-    popropsrcprefix="$srcdir/"
-  else
-    popropsrcprefix="../$srcdir/"
-  fi
-else
-  popropsrcprefix="../"
-fi
-rm -f po-properties/POTFILES
-sed -e "/^#/d" -e "/^\$/d" -e "s,.*,	$popropsrcprefix& \\\\," -e "\$s/\(.*\) \\\\/\1/" \
-< $srcdir/po-properties/POTFILES.in > po-properties/POTFILES
-dnl (End of adapted AM_GLIB_GNU_GETTEXT snippet.)
-
-AM_GLIB_DEFINE_LOCALEDIR(GTK_LOCALEDIR)
 
 dnl The DU4 header files don't provide library prototypes unless
 dnl -std1 is given to the native cc.

@@ -2,6 +2,7 @@
 include $(top_srcdir)/Makefile.decl
 
 AM_CPPFLAGS = \
+	-DGTK_LOCALEDIR=\"$(localedir)\" \
 	-I$(top_srcdir) 		\
 	-I$(top_srcdir)/gdk		\
 	-I$(top_builddir)/gdk		\

@@ -11,6 +11,7 @@ GTK_BASE_CFLAGS_DEFINES =				\
 
 GTK_PLAT_CFLAGS_DEFINES =				\
 	-DGTK_LIBDIR=\"$(libdir)\"			\
+	-DGTK_LOCALEDIR=\"$(localedir)\"		\
 	-DGTK_DATADIR=\"$(datadir)\"			\
 	-DGTK_DATA_PREFIX=\"$(prefix)\"			\
 	-DGTK_SYSCONFDIR=\"$(sysconfdir)\"		\

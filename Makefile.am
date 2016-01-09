@@ -22,6 +22,7 @@ EXTRA_DIST +=			\
 	sanitize-la.sh		\
 	po/README.translators	\
 	po/po2tbl.sed.in	\
+	build-aux/config.rpath	\
 	make-pot
 
 MAINTAINERCLEANFILES = \
@@ -110,7 +111,6 @@ GITIGNOREFILES = \
 	po-properties/*.gmo \
 	po-properties/*.mo \
 	po-properties/POTFILES \
-	po-properties/stamp-it \
-	po-properties/.intltool-merge-cache
+	po-properties/stamp-it
 
 -include $(top_srcdir)/git.mk
