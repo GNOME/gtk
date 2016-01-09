@@ -1287,7 +1287,9 @@ headerbar {
     }
   }
 
-  // add vertical margins to headerbar buttons to avoid them spanning the whole height
+  // add vertical margins to headerbar entries, buttons and separators to avoid them spanning the whole height
+  entry,
+  separator,
   button {
     margin-top: 6px;
     margin-bottom: 6px;

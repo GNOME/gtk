@@ -1931,8 +1931,13 @@ headerbar {
     .titlebar headerbar.default-decoration button.titlebutton {
       min-height: 26px;
       padding: 0 5px; }
+  .titlebar:not(headerbar) entry, .titlebar:not(headerbar) spinbutton,
+  .titlebar:not(headerbar) separator,
   .titlebar:not(headerbar) button,
   .titlebar:not(headerbar) button.titlebutton,
+  headerbar entry,
+  headerbar spinbutton,
+  headerbar separator,
   headerbar button,
   headerbar button.titlebutton,
   headerbar .titlebar button.titlebutton,
