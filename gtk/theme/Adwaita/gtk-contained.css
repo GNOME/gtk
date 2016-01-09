@@ -121,7 +121,7 @@ textview {
   textview:backdrop {
     background-color: #f4f4f3; }
 
-.csd popover.background.touch-selection, .csd popover.background.magnifier, popover.background.touch-selection, popover.background.magnifier, .csd popover.background.osd, popover.background.osd, .app-notification,
+popover.background.touch-selection, popover.background.magnifier, .csd popover.background.touch-selection, .csd popover.background.magnifier, popover.background.osd, .csd popover.background.osd, .app-notification,
 .app-notification.frame, .osd .scale-popup, .osd {
   color: #eeeeec;
   border: none;
@@ -508,7 +508,7 @@ button, headerbar button.titlebutton,
       text-shadow: none;
       -gtk-icon-shadow: none;
       border: none; }
-  .csd popover.background.touch-selection button, .csd popover.background.magnifier button, popover.background.touch-selection button, popover.background.magnifier button, .app-notification button, .app-notification headerbar button.titlebutton, headerbar .app-notification button.titlebutton,
+  popover.background.touch-selection button, popover.background.magnifier button, .csd popover.background.touch-selection button, .csd popover.background.magnifier button, .app-notification button, .app-notification headerbar button.titlebutton, headerbar .app-notification button.titlebutton,
   .app-notification .titlebar button.titlebutton,
   .titlebar .app-notification button.titlebutton,
   .app-notification.frame button, .osd button, .osd headerbar button.titlebutton, headerbar .osd button.titlebutton,
@@ -1204,8 +1204,14 @@ modelbutton.flat,
 .menuitem.button.flat, modelbutton.flat:backdrop, modelbutton.flat:backdrop:hover,
 .menuitem.button.flat:backdrop,
 .menuitem.button.flat:backdrop:hover, button:link, headerbar button.titlebutton:link,
-.titlebar button.titlebutton:link, button:visited, headerbar button.titlebutton:visited,
-.titlebar button.titlebutton:visited, button:link:hover, button:link:active, button:link:checked, button:visited:hover, button:visited:active, button:visited:checked, button:link:backdrop, button:visited:backdrop, menu arrow,
+.titlebar button.titlebutton:link,
+button:visited,
+headerbar button.titlebutton:visited,
+.titlebar button.titlebutton:visited, button:link:hover, button:link:active, button:link:checked,
+button:visited:hover,
+button:visited:active,
+button:visited:checked, button:link:backdrop,
+button:visited:backdrop, menu arrow,
 .menu arrow, notebook tab button.flat, notebook tab button.sidebar-button, notebook tab headerbar button.titlebutton, headerbar notebook tab button.titlebutton,
 notebook tab .titlebar button.titlebutton,
 .titlebar notebook tab button.titlebutton, calendar.button, calendar.button:hover, calendar.button:backdrop, calendar.button:disabled, .scale-popup button:hover, .scale-popup button:backdrop, .scale-popup button:backdrop:hover, .scale-popup button:backdrop:disabled {
@@ -1261,39 +1267,62 @@ button.color, headerbar button.color.titlebutton,
  * Links *
  *********/
 *:link, button:link, headerbar button.titlebutton:link,
-.titlebar button.titlebutton:link, button:visited, headerbar button.titlebutton:visited,
+.titlebar button.titlebutton:link,
+button:visited,
+headerbar button.titlebutton:visited,
 .titlebar button.titlebutton:visited {
   color: #2a76c6; }
-  *:link:visited, button:visited, headerbar button.titlebutton:visited,
+  *:link:visited,
+  button:visited,
+  headerbar button.titlebutton:visited,
   .titlebar button.titlebutton:visited {
     color: #215d9c; }
-    *:selected *:link:visited, *:selected button:visited:link, *:selected button:visited, *:selected headerbar button.titlebutton:visited, headerbar *:selected button.titlebutton:visited,
+    *:selected *:link:visited, *:selected button:visited:link,
+    *:selected button:visited,
+    *:selected headerbar button.titlebutton:visited,
+    headerbar *:selected button.titlebutton:visited,
     *:selected .titlebar button.titlebutton:visited,
     .titlebar *:selected button.titlebutton:visited {
       color: #b7d3f0; }
-  *:link:hover, button:hover:link, button:hover:visited {
+  *:link:hover, button:hover:link,
+  button:hover:visited {
     color: #4a90d9; }
-    *:selected *:link:hover, *:selected button:hover:link, *:selected button:hover:visited {
+    *:selected *:link:hover, *:selected button:hover:link,
+    *:selected button:hover:visited {
       color: #edf4fb; }
-  *:link:active, button:active:link, button:active:visited {
+  *:link:active, button:active:link,
+  button:active:visited {
     color: #2a76c6; }
-    *:selected *:link:active, *:selected button:active:link, *:selected button:active:visited {
+    *:selected *:link:active, *:selected button:active:link,
+    *:selected button:active:visited {
       color: #dbe9f7; }
-  *:link:backdrop, button:backdrop:link, button:backdrop:visited, *:link:backdrop:hover, button:backdrop:hover:link, button:backdrop:hover:visited, *:link:backdrop:hover:selected, button:backdrop:hover:selected:link, button:backdrop:hover:selected:visited, .selection-mode.titlebar:not(headerbar) .subtitle:backdrop:hover:link,
+  *:link:backdrop, button:backdrop:link,
+  button:backdrop:visited, *:link:backdrop:hover, button:backdrop:hover:link,
+  button:backdrop:hover:visited, *:link:backdrop:hover:selected, button:backdrop:hover:selected:link,
+  button:backdrop:hover:selected:visited, .selection-mode.titlebar:not(headerbar) .subtitle:backdrop:hover:link,
   headerbar.selection-mode .subtitle:backdrop:hover:link {
     color: #4a90d9; }
-  *:link:selected, button:selected:link, button:selected:visited, .selection-mode.titlebar:not(headerbar) .subtitle:link,
-  headerbar.selection-mode .subtitle:link, *:selected *:link, *:selected button:link, *:selected button:visited {
+  *:link:selected, button:selected:link,
+  button:selected:visited, .selection-mode.titlebar:not(headerbar) .subtitle:link,
+  headerbar.selection-mode .subtitle:link, *:selected *:link, *:selected button:link,
+  *:selected button:visited {
     color: #dbe9f7; }
 
 button:link, headerbar button.titlebutton:link,
-.titlebar button.titlebutton:link, button:visited, headerbar button.titlebutton:visited,
+.titlebar button.titlebutton:link,
+button:visited,
+headerbar button.titlebutton:visited,
 .titlebar button.titlebutton:visited {
   text-shadow: none; }
-  button:link:hover, button:link:active, button:link:checked, button:visited:hover, button:visited:active, button:visited:checked {
+  button:link:hover, button:link:active, button:link:checked,
+  button:visited:hover,
+  button:visited:active,
+  button:visited:checked {
     text-shadow: none; }
   button:link > label, headerbar button.titlebutton:link > label,
-  .titlebar button.titlebutton:link > label, button:visited > label, headerbar button.titlebutton:visited > label,
+  .titlebar button.titlebutton:link > label,
+  button:visited > label,
+  headerbar button.titlebutton:visited > label,
   .titlebar button.titlebutton:visited > label {
     text-decoration-line: underline; }
 
@@ -1497,7 +1526,9 @@ spinbutton.vertical {
     box-shadow: none;
     text-shadow: none;
     -gtk-icon-shadow: none; }
-treeview spinbutton entry, treeview spinbutton spinbutton, treeview spinbutton entry:focus, treeview spinbutton spinbutton:focus {
+treeview spinbutton entry, treeview spinbutton spinbutton,
+treeview spinbutton entry:focus,
+treeview spinbutton spinbutton:focus {
   padding: 1px;
   border-width: 1px 0;
   border-color: #4a90d9;
@@ -2074,7 +2105,8 @@ treeview.view {
     treeview.view header button:active {
       color: #2e3436;
       transition: none; }
-  treeview.view header button:last-child, treeview.view header button:last-child:backdrop {
+  treeview.view header button:last-child,
+  treeview.view header button:last-child:backdrop {
     border-right-style: none; }
   treeview.view header.button.dnd, treeview.view header button.dnd, treeview.view header.button.dnd:active, treeview.view header.button.dnd:selected, treeview.view header.button.dnd:hover {
     transition: none;
@@ -2162,14 +2194,14 @@ menu,
     .menu menuitem arrow {
       min-height: 16px;
       min-width: 16px; }
-    menu menuitem arrow:dir(ltr),
-    .menu menuitem arrow:dir(ltr) {
-      -gtk-icon-source: -gtk-icontheme("pan-end-symbolic");
-      margin-left: 10px; }
-    menu menuitem arrow:dir(rtl),
-    .menu menuitem arrow:dir(rtl) {
-      -gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl");
-      margin-right: 10px; }
+      menu menuitem arrow:dir(ltr),
+      .menu menuitem arrow:dir(ltr) {
+        -gtk-icon-source: -gtk-icontheme("pan-end-symbolic");
+        margin-left: 10px; }
+      menu menuitem arrow:dir(rtl),
+      .menu menuitem arrow:dir(rtl) {
+        -gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl");
+        margin-right: 10px; }
   menu arrow,
   .menu arrow {
     border-style: none;
@@ -2195,12 +2227,15 @@ menu,
 
 menuitem accelerator {
   color: alpha(currentColor,0.55); }
-menuitem check, menuitem radio {
+menuitem check,
+menuitem radio {
   min-height: 16px;
   min-width: 16px; }
-  menuitem check:dir(ltr), menuitem radio:dir(ltr) {
+  menuitem check:dir(ltr),
+  menuitem radio:dir(ltr) {
     margin-right: 7px; }
-  menuitem check:dir(rtl), menuitem radio:dir(rtl) {
+  menuitem check:dir(rtl),
+  menuitem radio:dir(rtl) {
     margin-left: 7px; }
 
 /***************
@@ -2210,7 +2245,7 @@ popover.background {
   padding: 2px;
   border-radius: 5px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); }
-  .csd popover.background, popover.background {
+  popover.background, .csd popover.background {
     border: 1px solid #9d9d99; }
   popover.background:backdrop {
     box-shadow: none; }
@@ -2233,7 +2268,7 @@ popover.background {
   .titlebar popover.background button.titlebutton:hover {
     text-shadow: none;
     transition: none; }
-  .csd popover.background.touch-selection, .csd popover.background.magnifier, popover.background.touch-selection, popover.background.magnifier {
+  popover.background.touch-selection, popover.background.magnifier, .csd popover.background.touch-selection, .csd popover.background.magnifier {
     border: 1px solid rgba(255, 255, 255, 0.1); }
   popover.background separator {
     margin: 3px; }
@@ -4468,10 +4503,13 @@ infobar {
       text-shadow: 0 -1px rgba(0, 0, 0, 0.49553);
       -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.49553);
       box-shadow: inset 0 1px rgba(255, 255, 255, 0.4); }
-    .info button:active,
+    .info button:active, .info button:checked,
     .question button:active,
+    .question button:checked,
     .warning button:active,
-    .error button:active {
+    .warning button:checked,
+    .error button:active,
+    .error button:checked {
       color: #ffffff;
       outline-color: rgba(255, 255, 255, 0.3);
       border-color: #1c5187;
@@ -4733,23 +4771,32 @@ headerbar.selection-mode button.titlebutton,
   .titlebar.selection-mode button.titlebutton:backdrop {
     -gtk-icon-shadow: none; }
 
-textview text selection, textview text selection:focus,
+textview text selection,
+textview text selection:focus,
 .view selection,
-.view selection:focus, iconview:selected, iconview:selected:focus, flowbox flowboxchild:selected, label:selected, label selection, label selection:focus, label selection:hover, entry selection, spinbutton selection, entry selection:focus, spinbutton selection:focus, modelbutton.flat:selected,
+.view selection:focus, iconview:selected, iconview:selected:focus, flowbox flowboxchild:selected, label:selected,
+label selection,
+label selection:focus,
+label selection:hover, entry selection, spinbutton selection,
+entry selection:focus,
+spinbutton selection:focus, modelbutton.flat:selected,
 .menuitem.button.flat:selected, treeview.view:selected, row:selected, calendar:selected, .sidebar :selected {
   background-color: #4a90d9;
   color: #ffffff;
   outline-color: rgba(255, 255, 255, 0.3); }
   textview text selection:disabled,
-  .view selection:disabled, iconview:disabled:selected, flowbox flowboxchild:disabled:selected, label:disabled:selected, label selection:disabled, entry selection:disabled, spinbutton selection:disabled, modelbutton.flat:disabled:selected,
+  .view selection:disabled, iconview:disabled:selected, flowbox flowboxchild:disabled:selected, label:disabled:selected,
+  label selection:disabled, entry selection:disabled, spinbutton selection:disabled, modelbutton.flat:disabled:selected,
   .menuitem.button.flat:disabled:selected, treeview.view:disabled:selected, row:disabled:selected, calendar:disabled:selected, .sidebar :disabled:selected, placessidebar row:selected:disabled label {
     color: #a5c8ec; }
   textview text selection:backdrop,
-  .view selection:backdrop, iconview:backdrop:selected, flowbox flowboxchild:backdrop:selected, label:backdrop:selected, label selection:backdrop, entry selection:backdrop, spinbutton selection:backdrop, modelbutton.flat:backdrop:selected,
+  .view selection:backdrop, iconview:backdrop:selected, flowbox flowboxchild:backdrop:selected, label:backdrop:selected,
+  label selection:backdrop, entry selection:backdrop, spinbutton selection:backdrop, modelbutton.flat:backdrop:selected,
   .menuitem.button.flat:backdrop:selected, treeview.view:backdrop:selected, row:backdrop:selected, calendar:backdrop:selected, .sidebar :backdrop:selected {
     color: #ffffff; }
     textview text selection:backdrop:disabled,
-    .view selection:backdrop:disabled, iconview:backdrop:disabled:selected, flowbox flowboxchild:backdrop:disabled:selected, label:backdrop:disabled:selected, label selection:backdrop:disabled, entry selection:backdrop:disabled, spinbutton selection:backdrop:disabled, modelbutton.flat:backdrop:disabled:selected,
+    .view selection:backdrop:disabled, iconview:backdrop:disabled:selected, flowbox flowboxchild:backdrop:disabled:selected, label:backdrop:disabled:selected,
+    label selection:backdrop:disabled, entry selection:backdrop:disabled, spinbutton selection:backdrop:disabled, modelbutton.flat:backdrop:disabled:selected,
     .menuitem.button.flat:backdrop:disabled:selected, treeview.view:backdrop:disabled:selected, row:backdrop:disabled:selected, calendar:backdrop:disabled:selected, .sidebar :backdrop:disabled:selected, placessidebar row:selected:disabled label:backdrop, placessidebar row:selected:backdrop:disabled label {
       color: #80b1e4; }
 
@@ -4789,7 +4836,6 @@ cursor-handle {
   cursor-handle.insertion-cursor:active:dir(ltr), cursor-handle.insertion-cursor:active:dir(rtl) {
     -gtk-icon-source: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-active.png"), url("assets/slider-horz-scale-has-marks-above-active@2.png")); }
 
-/* Decouple the font of context menus from their entry/textview */
 .context-menu {
   font: initial; }
 
@@ -4797,10 +4843,9 @@ button.circular, headerbar button.circular.titlebutton,
 .titlebar button.circular.titlebutton {
   border-radius: 20px;
   -gtk-outline-radius: 20px; }
-
-button.circular label,
-.titlebar button.circular.titlebutton label {
-  padding: 0; }
+  button.circular label,
+  .titlebar button.circular.titlebutton label {
+    padding: 0; }
 
 frame.keycap {
   background-color: #fefefe;
