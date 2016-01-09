@@ -248,26 +248,20 @@ display_shortcut (GtkContainer    *self,
   keys = get_labels (key, modifier, &n_mods);
   for (i = 0; keys[i]; i++)
     {
-      GtkWidget *frame;
       GtkWidget *disp;
 
       if (i > 0)
         gtk_container_add (self, dim_label ("+"));
 
-      frame = gtk_frame_new (NULL);
-      gtk_style_context_add_class (gtk_widget_get_style_context (frame), "keycap");
-      gtk_widget_show (frame);
-
-      gtk_container_add (self, frame);
-
-      if (i < n_mods)
-        gtk_widget_set_size_request (frame, 50, -1);
-
       disp = gtk_label_new (keys[i]);
+      if (i < n_mods)
+        gtk_widget_set_size_request (disp, 50, -1);
+
+      gtk_style_context_add_class (gtk_widget_get_style_context (disp), "keycap");
       gtk_label_set_use_markup (GTK_LABEL (disp), TRUE);
 
       gtk_widget_show (disp);
-      gtk_container_add (GTK_CONTAINER (frame), disp);
+      gtk_container_add (self, disp);
     }
   g_strfreev (keys);
 }
