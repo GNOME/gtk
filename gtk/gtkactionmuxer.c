@@ -138,7 +138,7 @@ gtk_action_muxer_list_actions (GActionGroup *action_group)
                             actions);
     }
 
-  return (gchar **) g_array_free (actions, FALSE);
+  return (gchar **)(void *) g_array_free (actions, FALSE);
 }
 
 static Group *
