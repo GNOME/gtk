@@ -4386,10 +4386,10 @@ paned > separator {
     padding: 0;
     min-width: 5px;
     min-height: 5px;
-    background-image: none;
-    border: 1px solid #9d9d99; }
+    background-image: linear-gradient(to top, #9d9d99), linear-gradient(to top, #9d9d99);
+    background-size: 1px 1px, 1px 1px; }
     paned > separator.wide:backdrop {
-      border-color: #a5a5a1; }
+      background-image: linear-gradient(to top, #a5a5a1), linear-gradient(to top, #a5a5a1); }
 paned.horizontal > separator {
   background-repeat: repeat-y; }
   paned.horizontal > separator:dir(ltr) {
@@ -4401,16 +4401,16 @@ paned.horizontal > separator {
     padding: 0 0 0 8px;
     background-position: right; }
   paned.horizontal > separator.wide {
-    border-top-style: none;
-    border-bottom-style: none; }
+    background-repeat: repeat-y, repeat-y;
+    background-position: left, right; }
 paned.vertical > separator {
   margin: 0 0 -8px 0;
   padding: 0 0 8px 0;
   background-repeat: repeat-x;
   background-position: top; }
   paned.vertical > separator.wide {
-    border-left-style: none;
-    border-right-style: none; }
+    background-repeat: repeat-x, repeat-x;
+    background-position: bottom, top; }
 
 /**************
  * GtkInfoBar *

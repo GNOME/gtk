@@ -3061,9 +3061,9 @@ paned {
       padding: 0;
       min-width: 5px;
       min-height: 5px;
-      background-image: none;
-      border: 1px solid $borders_color;
-      &:backdrop { border-color: $backdrop_borders_color; }
+      background-image: linear-gradient(to top, $borders_color), linear-gradient(to top, $borders_color);
+      background-size: 1px 1px, 1px 1px;
+      &:backdrop { background-image: linear-gradient(to top, $backdrop_borders_color), linear-gradient(to top, $backdrop_borders_color); }
     }
   }
 
@@ -3081,8 +3081,8 @@ paned {
     }
 
     &.wide {
-      border-top-style: none;
-      border-bottom-style: none;
+      background-repeat: repeat-y, repeat-y;
+      background-position: left, right;
     }
   }
 
@@ -3093,8 +3093,8 @@ paned {
     background-position: top;
 
     &.wide {
-      border-left-style: none;
-      border-right-style: none;
+      background-repeat: repeat-x, repeat-x;
+      background-position: bottom, top;
     }
   }
 }
