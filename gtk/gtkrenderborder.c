@@ -518,9 +518,12 @@ render_frame_stroke (cairo_t       *cr,
                                border_width[GTK_CSS_BOTTOM],
                                border_width[GTK_CSS_LEFT]);
 
-      for (i = 0; i < 4; i++) 
+      for (i = 0; i < 4; i++)
         {
           if (hidden_side & (1 << i))
+            continue;
+
+          if (border_width[i] == 0)
             continue;
 
           cairo_save (cr);
