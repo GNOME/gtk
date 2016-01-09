@@ -2977,9 +2977,10 @@ show_drag_window (GtkNotebook        *notebook,
     }
 
   g_object_ref (page->tab_label);
-  gtk_widget_unparent (page->tab_label);
+  gtk_widget_set_child_visible (page->tab_label, FALSE);
+  gtk_widget_unrealize (page->tab_label);
   gtk_widget_set_parent_window (page->tab_label, priv->drag_window);
-  gtk_widget_set_parent (page->tab_label, widget);
+  gtk_widget_set_child_visible (page->tab_label, TRUE);
   g_object_unref (page->tab_label);
 
   /* the grab will dissapear when the window is hidden */
