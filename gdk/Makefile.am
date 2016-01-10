@@ -374,7 +374,7 @@ endif
 if MS_LIB_AVAILABLE
 noinst_DATA = gdk-win32-$(GTK_API_VERSION).lib
 
-gdk-win32-$(GTK_API_VERSION).lib: libgdk-win32-$(GTK_API_VERSION).la gdk.def
+gdk-win32-$(GTK_API_VERSION).lib: libgdk-3.la gdk.def
 	lib -machine:@LIB_EXE_MACHINE_FLAG@ -name:libgdk-win32-$(GTK_API_VERSION)-@LT_CURRENT_MINUS_AGE@.dll -def:gdk.def -out:$@
 
 install-ms-lib:
