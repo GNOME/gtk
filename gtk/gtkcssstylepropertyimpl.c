@@ -1007,6 +1007,18 @@ icon_theme_value_parse (GtkCssStyleProperty *property,
   return gtk_css_icon_theme_value_parse (parser);
 }
 
+static GtkCssValue *
+caret_shape_parse (GtkCssStyleProperty *property,
+		   GtkCssParser        *parser)
+{
+  GtkCssValue *value = _gtk_css_caret_shape_value_try_parse (parser);
+
+  if (value == NULL)
+    _gtk_css_parser_error (parser, "unknown value for property");
+
+  return value;
+}
+
 /*** REGISTRATION ***/
 
 void
@@ -1820,4 +1832,13 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                                           color_query,
                                           color_assign,
                                           _gtk_css_color_value_new_current_color ());
+  gtk_css_style_property_register        ("caret-shape",
+                                          GTK_CSS_PROPERTY_CARET_SHAPE,
+                                          G_TYPE_NONE,
+                                          GTK_STYLE_PROPERTY_INHERIT,
+                                          GTK_CSS_AFFECTS_TEXT,
+                                          caret_shape_parse,
+                                          NULL,
+                                          NULL,
+					  _gtk_css_caret_shape_value_new (GTK_CSS_CARET_SHAPE_AUTO));
 }

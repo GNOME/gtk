@@ -1009,3 +1009,58 @@ _gtk_css_icon_style_value_get (const GtkCssValue *value)
 
   return value->value;
 }
+
+/* GtkCssCaretShape */
+
+static const GtkCssValueClass GTK_CSS_VALUE_CARET_SHAPE = {
+  gtk_css_value_enum_free,
+  gtk_css_value_enum_compute,
+  gtk_css_value_enum_equal,
+  gtk_css_value_enum_transition,
+  gtk_css_value_enum_print
+};
+
+static GtkCssValue caret_shape_values[] = {
+  { &GTK_CSS_VALUE_CARET_SHAPE, 1, GTK_CSS_CARET_SHAPE_AUTO, "auto" },
+  { &GTK_CSS_VALUE_CARET_SHAPE, 1, GTK_CSS_CARET_SHAPE_BAR, "bar" },
+  { &GTK_CSS_VALUE_CARET_SHAPE, 1, GTK_CSS_CARET_SHAPE_BLOCK, "block" },
+  { &GTK_CSS_VALUE_CARET_SHAPE, 1, GTK_CSS_CARET_SHAPE_UNDERSCORE, "underscore" },
+};
+
+GtkCssValue *
+_gtk_css_caret_shape_value_new (GtkCssCaretShape caret_shape)
+{
+  guint i;
+
+  for (i = 0; i < G_N_ELEMENTS (caret_shape_values); i++)
+    {
+      if (caret_shape_values[i].value == caret_shape)
+        return _gtk_css_value_ref (&caret_shape_values[i]);
+    }
+
+  g_return_val_if_reached (NULL);
+}
+
+GtkCssValue *
+_gtk_css_caret_shape_value_try_parse (GtkCssParser *parser)
+{
+  guint i;
+
+  g_return_val_if_fail (parser != NULL, NULL);
+
+  for (i = 0; i < G_N_ELEMENTS (caret_shape_values); i++)
+    {
+      if (_gtk_css_parser_try (parser, caret_shape_values[i].name, TRUE))
+        return _gtk_css_value_ref (&caret_shape_values[i]);
+    }
+
+  return NULL;
+}
+
+GtkCssCaretShape
+_gtk_css_caret_shape_value_get (const GtkCssValue *value)
+{
+  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_CARET_SHAPE, GTK_CSS_CARET_SHAPE_AUTO);
+
+  return value->value;
+}

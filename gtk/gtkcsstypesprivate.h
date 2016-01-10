@@ -224,6 +224,7 @@ enum { /*< skip >*/
   GTK_CSS_PROPERTY_GTK_KEY_BINDINGS,
   GTK_CSS_PROPERTY_CARET_COLOR,
   GTK_CSS_PROPERTY_SECONDARY_CARET_COLOR,
+  GTK_CSS_PROPERTY_CARET_SHAPE,
   /* add more */
   GTK_CSS_PROPERTY_N_PROPERTIES
 };
@@ -362,6 +363,13 @@ typedef enum /*< skip >*/ {
   GTK_CSS_S,
   GTK_CSS_MS,
 } GtkCssUnit;
+
+typedef enum /*< skip >*/ {
+  GTK_CSS_CARET_SHAPE_AUTO,
+  GTK_CSS_CARET_SHAPE_BAR,
+  GTK_CSS_CARET_SHAPE_BLOCK,
+  GTK_CSS_CARET_SHAPE_UNDERSCORE
+} GtkCssCaretShape;
 
 GtkCssChange            _gtk_css_change_for_sibling              (GtkCssChange       match);
 GtkCssChange            _gtk_css_change_for_child                (GtkCssChange       match);
