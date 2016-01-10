@@ -1064,3 +1064,57 @@ _gtk_css_caret_shape_value_get (const GtkCssValue *value)
 
   return value->value;
 }
+
+/* GtkCssCaretAnimation */
+
+static const GtkCssValueClass GTK_CSS_VALUE_CARET_ANIMATION = {
+  gtk_css_value_enum_free,
+  gtk_css_value_enum_compute,
+  gtk_css_value_enum_equal,
+  gtk_css_value_enum_transition,
+  gtk_css_value_enum_print
+};
+
+static GtkCssValue caret_animation_values[] = {
+  { &GTK_CSS_VALUE_CARET_ANIMATION, 1, GTK_CSS_CARET_ANIMATION_AUTO, "auto" },
+  { &GTK_CSS_VALUE_CARET_ANIMATION, 1, GTK_CSS_CARET_ANIMATION_BLINK, "blink" },
+  { &GTK_CSS_VALUE_CARET_ANIMATION, 1, GTK_CSS_CARET_ANIMATION_NONE, "none" },
+};
+
+GtkCssValue *
+_gtk_css_caret_animation_value_new (GtkCssCaretAnimation caret_animation)
+{
+  guint i;
+
+  for (i = 0; i < G_N_ELEMENTS (caret_animation_values); i++)
+    {
+      if (caret_animation_values[i].value == caret_animation)
+        return _gtk_css_value_ref (&caret_animation_values[i]);
+    }
+
+  g_return_val_if_reached (NULL);
+}
+
+GtkCssValue *
+_gtk_css_caret_animation_value_try_parse (GtkCssParser *parser)
+{
+  guint i;
+
+  g_return_val_if_fail (parser != NULL, NULL);
+
+  for (i = 0; i < G_N_ELEMENTS (caret_animation_values); i++)
+    {
+      if (_gtk_css_parser_try (parser, caret_animation_values[i].name, TRUE))
+        return _gtk_css_value_ref (&caret_animation_values[i]);
+    }
+
+  return NULL;
+}
+
+GtkCssCaretAnimation
+_gtk_css_caret_animation_value_get (const GtkCssValue *value)
+{
+  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_CARET_ANIMATION, GTK_CSS_CARET_ANIMATION_AUTO);
+
+  return value->value;
+}

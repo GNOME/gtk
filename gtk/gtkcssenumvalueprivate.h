@@ -90,6 +90,10 @@ GtkCssValue *    _gtk_css_caret_shape_value_new       (GtkCssCaretShape   caret_
 GtkCssValue *    _gtk_css_caret_shape_value_try_parse (GtkCssParser      *parser);
 GtkCssCaretShape _gtk_css_caret_shape_value_get       (const GtkCssValue *value);
 
+GtkCssValue *        _gtk_css_caret_animation_value_new       (GtkCssCaretAnimation  caret_animation);
+GtkCssValue *        _gtk_css_caret_animation_value_try_parse (GtkCssParser         *parser);
+GtkCssCaretAnimation _gtk_css_caret_animation_value_get       (const GtkCssValue    *value);
+
 G_END_DECLS
 
 #endif /* __GTK_CSS_ENUM_VALUE_PRIVATE_H__ */

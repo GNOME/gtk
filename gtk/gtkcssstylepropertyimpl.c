@@ -1009,9 +1009,21 @@ icon_theme_value_parse (GtkCssStyleProperty *property,
 
 static GtkCssValue *
 caret_shape_parse (GtkCssStyleProperty *property,
-		   GtkCssParser        *parser)
+                   GtkCssParser        *parser)
 {
   GtkCssValue *value = _gtk_css_caret_shape_value_try_parse (parser);
+
+  if (value == NULL)
+    _gtk_css_parser_error (parser, "unknown value for property");
+
+  return value;
+}
+
+static GtkCssValue *
+caret_animation_parse (GtkCssStyleProperty *property,
+                       GtkCssParser        *parser)
+{
+  GtkCssValue *value = _gtk_css_caret_animation_value_try_parse (parser);
 
   if (value == NULL)
     _gtk_css_parser_error (parser, "unknown value for property");
@@ -1841,4 +1853,13 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                                           NULL,
                                           NULL,
 					  _gtk_css_caret_shape_value_new (GTK_CSS_CARET_SHAPE_AUTO));
+  gtk_css_style_property_register        ("caret-animation",
+                                          GTK_CSS_PROPERTY_CARET_ANIMATION,
+                                          G_TYPE_NONE,
+                                          GTK_STYLE_PROPERTY_INHERIT,
+                                          GTK_CSS_AFFECTS_TEXT,
+                                          caret_animation_parse,
+                                          NULL,
+                                          NULL,
+					  _gtk_css_caret_animation_value_new (GTK_CSS_CARET_ANIMATION_AUTO));
 }
