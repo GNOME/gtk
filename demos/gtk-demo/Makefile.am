@@ -27,6 +27,7 @@ demos_base =					\
 	expander.c  				\
         filtermodel.c				\
 	font_features.c				\
+	foreigndrawing.c			\
 	gestures.c				\
 	glarea.c				\
 	headerbar.c				\

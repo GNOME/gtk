@@ -169,7 +169,6 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testpopover			\
 	gdkgears			\
 	listmodel			\
-	foreigndrawing			\
 	testpopup			\
 	$(NULL)
 

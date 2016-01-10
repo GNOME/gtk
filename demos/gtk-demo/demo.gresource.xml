@@ -140,6 +140,7 @@
     <file>expander.c</file>
     <file>filtermodel.c</file>
     <file>flowbox.c</file>
+    <file>foreigndrawing.c</file>
     <file>font_features.c</file>
     <file>gestures.c</file>
     <file>glarea.c</file>

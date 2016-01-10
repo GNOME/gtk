@@ -1,23 +1,15 @@
-/* foreign-drawing.c
- * Copyright (C) 2015 Red Hat, Inc
- * Author: Matthias Clasen
+/* Foreign drawing
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * Many applications can't use GTK+ widgets, for a variety of reasons,
+ * but still want their user interface to appear integrated with the
+ * rest of the desktop, and follow GTK+ themes.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public
- * License along with this library. If not, see <http://www.gnu.org/licenses/>.
+ * This demo shows how to use GtkStyleContext and the gtk_render_ APIs
+ * to achieve this. Note that this is a very simple, non-interactive
+ * example.
  */
 
 #include <gtk/gtk.h>
-
 #include <string.h>
 
 static void
@@ -133,8 +125,6 @@ get_style (GtkStyleContext *parent,
   context = gtk_style_context_new ();
   gtk_style_context_set_path (context, path);
   gtk_style_context_set_parent (context, parent);
-  /* XXX: Why is this necessary? */
-  gtk_style_context_set_state (context, gtk_widget_path_iter_get_state (path, -1));
   gtk_widget_path_unref (path);
 
   return context;
@@ -309,30 +299,39 @@ draw_cb (GtkWidget *widget,
   return FALSE;
 }
 
-int
-main (int argc, char *argv[])
+GtkWidget *
+do_foreigndrawing (GtkWidget *do_widget)
 {
-  GtkWidget *window;
-  GtkWidget *box;
-  GtkWidget *da;
+  static GtkWidget *window = NULL;
 
-  gtk_init (NULL, NULL);
+  if (!window)
+    {
+      GtkWidget *box;
+      GtkWidget *da;
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
-  gtk_container_add (GTK_CONTAINER (window), box);
-  da = gtk_drawing_area_new ();
-  gtk_widget_set_size_request (da, 200, 200);
-  gtk_widget_set_hexpand (da, TRUE);
-  gtk_widget_set_vexpand (da, TRUE);
-  gtk_widget_set_app_paintable (da, TRUE);
-  gtk_container_add (GTK_CONTAINER (box), da);
+      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      gtk_window_set_title (GTK_WINDOW (window), "Foreign drawing");
+      gtk_window_set_screen (GTK_WINDOW (window),
+                             gtk_widget_get_screen (do_widget));
+      g_signal_connect (window, "destroy",
+                        G_CALLBACK (gtk_widget_destroyed), &window);
 
-  g_signal_connect (da, "draw", G_CALLBACK (draw_cb), NULL);
+      box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+      gtk_container_add (GTK_CONTAINER (window), box);
+      da = gtk_drawing_area_new ();
+      gtk_widget_set_size_request (da, 200, 200);
+      gtk_widget_set_hexpand (da, TRUE);
+      gtk_widget_set_vexpand (da, TRUE);
+      gtk_widget_set_app_paintable (da, TRUE);
+      gtk_container_add (GTK_CONTAINER (box), da);
 
-  gtk_widget_show_all (window);
+      g_signal_connect (da, "draw", G_CALLBACK (draw_cb), NULL);
+    }
 
-  gtk_main ();
+  if (!gtk_widget_get_visible (window))
+    gtk_widget_show_all (window);
+  else
+    gtk_widget_destroy (window);
 
-  return 0;
+  return window;
 }
