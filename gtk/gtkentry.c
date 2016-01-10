@@ -71,6 +71,7 @@
 #include "gtkmagnifierprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkcsscustomgadgetprivate.h"
+#include "gtkcssenumvalueprivate.h"
 
 #include "a11y/gtkentryaccessible.h"
 
@@ -6634,6 +6635,8 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
   PangoLayout *layout;
   const char *text;
   gint x, y;
+  GtkCssValue *value;
+  GtkCssCaretShape shape;
 
   context = gtk_widget_get_style_context (widget);
 
@@ -6646,19 +6649,32 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
   else
     cursor_index = g_utf8_offset_to_pointer (text, priv->current_pos + priv->preedit_cursor) - text;
 
-  if (!priv->overwrite_mode)
-    block = FALSE;
-  else
-    block = _gtk_text_util_get_block_cursor_location (layout,
-                                                      cursor_index, &cursor_rect, &block_at_line_end);
+  block = _gtk_text_util_get_block_cursor_location (layout,
+                                                    cursor_index, &cursor_rect, &block_at_line_end);
 
   if (!block)
+    shape = GTK_CSS_CARET_SHAPE_BAR;
+  else
+    {
+      value = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_CARET_SHAPE);
+      shape = _gtk_css_caret_shape_value_get (value);
+
+      if (shape == GTK_CSS_CARET_SHAPE_AUTO)
+        {
+          if (priv->overwrite_mode)
+            shape = GTK_CSS_CARET_SHAPE_BLOCK;
+          else
+            shape = GTK_CSS_CARET_SHAPE_BAR;
+        }
+    }
+
+  if (shape == GTK_CSS_CARET_SHAPE_BAR)
     {
       gtk_render_insertion_cursor (context, cr,
                                    x, y,
                                    layout, cursor_index, priv->resolved_dir);
     }
-  else /* overwrite_mode */
+  else
     {
       GdkRGBA cursor_color;
       GdkRectangle rect;
@@ -6669,6 +6685,12 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
       rect.y = PANGO_PIXELS (cursor_rect.y) + y;
       rect.width = PANGO_PIXELS (cursor_rect.width);
       rect.height = PANGO_PIXELS (cursor_rect.height);
+
+      if (shape == GTK_CSS_CARET_SHAPE_UNDERSCORE)
+        {
+          rect.y = rect.y + rect.height - 1;
+          rect.height = 1;
+        }
 
       _gtk_style_context_get_cursor_color (context, &cursor_color, NULL);
       gdk_cairo_set_source_rgba (cr, &cursor_color);
