@@ -511,7 +511,6 @@ render_frame_stroke (cairo_t       *cr,
       GtkRoundedBox padding_box;
 
       padding_box = *border_box;
-      _gtk_rounded_box_path (&padding_box, cr);
       _gtk_rounded_box_shrink (&padding_box,
                                border_width[GTK_CSS_TOP],
                                border_width[GTK_CSS_RIGHT],
