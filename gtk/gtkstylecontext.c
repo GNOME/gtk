@@ -78,7 +78,7 @@
  * For GTK+ widgets, any #GtkStyleContext returned by
  * gtk_widget_get_style_context() will already have a #GtkWidgetPath, a
  * #GdkScreen and RTL/LTR information set. The style context will be also
- * updated automatically if any of these settings change on the widget.
+ * be updated automatically if any of these settings change on the widget.
  *
  * If you are using the theming layer standalone, you will need to set a
  * widget path and a screen yourself to the created style context through
@@ -86,13 +86,16 @@
  * as updating the context yourself using gtk_style_context_invalidate()
  * whenever any of the conditions change, such as a change in the
  * #GtkSettings:gtk-theme-name setting or a hierarchy change in the rendered
- * widget.
+ * widget. See the “Foreign drawing“ example in gtk3-demo.
  *
  * # Style Classes # {#gtkstylecontext-classes}
  *
- * Widgets can add style classes to their context, which can be used
- * to associate different styles by class
- * (see [Selectors][gtkcssprovider-selectors]).
+ * Widgets can add style classes to their context, which can be used to associate
+ * different styles by class. The documentation for individual widgets lists
+ * which style classes it uses itself, and which style classes may be added by
+ * applications to affect their appearance.
+ *
+ * GTK+ defines macros for a number of style classes.
  *
  * # Style Regions
  *
@@ -100,19 +103,7 @@
  * deprecated and will be removed in a future GTK+ update. Please use style
  * classes instead.
  *
- * The regions used by GTK+ widgets are:
- *
- * ## row
- * Used by #GtkTreeView. Can be used with the flags: `even`, `odd`.
- *
- * ## column
- * Used by #GtkTreeView. Can be used with the flags: `first`, `last`, `sorted`.
- *
- * ## column-header
- * Used by #GtkTreeView.
- *
- * ## tab
- * Used by #GtkNotebook. Can be used with the flags: `even`, `odd`, `first`, `last`.
+ * GTK+ defines macros for a number of style regions.
  *
  * # Custom styling in UI libraries and applications
  *
@@ -787,7 +778,12 @@ gtk_style_context_query_func (guint    id,
  * @state: state to retrieve the property value for
  * @value: (out) (transfer full):  return location for the style property value
  *
- * Gets a style property from @context for the given state.
+ * Gets a style property from @context for the given state. Note that
+ * not all CSS properties that are supported by GTK+ can be retrieved
+ * in this way, since they may not be representable as #GValue.
+ *
+ * GTK+ defines macros for a number of properties that can be used
+ * with this function.
  *
  * When @value is no longer needed, g_value_unset() must be called
  * to free any allocated memory.
@@ -835,8 +831,10 @@ gtk_style_context_get_property (GtkStyleContext *context,
  *
  * Retrieves several style property values from @context for a given state.
  *
+ * See gtk_style_context_get_property() for details.
+ *
  * Since: 3.0
- **/
+ */
 void
 gtk_style_context_get_valist (GtkStyleContext *context,
                               GtkStateFlags    state,
@@ -881,8 +879,10 @@ gtk_style_context_get_valist (GtkStyleContext *context,
  * Retrieves several style property values from @context for a
  * given state.
  *
+ * See gtk_style_context_get_property() for details.
+ *
  * Since: 3.0
- **/
+ */
 void
 gtk_style_context_get (GtkStyleContext *context,
                        GtkStateFlags    state,
@@ -902,8 +902,7 @@ gtk_style_context_get (GtkStyleContext *context,
  * @context: a #GtkStyleContext
  * @id: (allow-none): the id to use or %NULL for none.
  *
- * Sets the CSS ID to be used when rendering with any
- * of the gtk_render_*() functions.
+ * Sets the CSS ID to be used when obtaining style information.
  **/
 void
 gtk_style_context_set_id (GtkStyleContext *context,
@@ -918,7 +917,7 @@ gtk_style_context_set_id (GtkStyleContext *context,
  * gtk_style_context_get_id:
  * @context: a #GtkStyleContext
  *
- * Returns the CSS ID used when rendering.
+ * Returns the CSS ID used when obtaining style information.
  *
  * Returns: the ID or %NULL if no ID is set.
  **/
@@ -935,8 +934,7 @@ gtk_style_context_get_id (GtkStyleContext *context)
  * @context: a #GtkStyleContext
  * @flags: state to represent
  *
- * Sets the state to be used when rendering with any
- * of the gtk_render_*() functions.
+ * Sets the state to be used for style matching.
  *
  * Since: 3.0
  **/
@@ -961,12 +959,12 @@ gtk_style_context_set_state (GtkStyleContext *context,
  * gtk_style_context_get_state:
  * @context: a #GtkStyleContext
  *
- * Returns the state used when rendering. This method should
- * only be used to retrieve the #GtkStateFlags to pass to
- * #GtkStyleContext methods, like gtk_style_context_get_padding().
+ * Returns the state used for style matching.
  *
- * If you need to retrieve the current state of a #GtkWidget you
- * should look at gtk_widget_get_state_flags().
+ * This method should only be used to retrieve the #GtkStateFlags
+ * to pass to #GtkStyleContext methods, like gtk_style_context_get_padding().
+ * If you need to retrieve the current state of a #GtkWidget, use
+ * gtk_widget_get_state_flags().
  *
  * Returns: the state flags
  *
@@ -985,7 +983,7 @@ gtk_style_context_get_state (GtkStyleContext *context)
  * @context: a #GtkStyleContext
  * @scale: scale
  *
- * Sets the scale to use when getting image assets for the style .
+ * Sets the scale to use when getting image assets for the style.
  *
  * Since: 3.10
  **/
@@ -1235,7 +1233,8 @@ gtk_style_context_save_named (GtkStyleContext *context,
   priv = context->priv;
 
   /* Make sure we have the style existing. It is the
-   * parent of the new saved node after all. */
+   * parent of the new saved node after all.
+   */
   if (!gtk_style_context_is_saved (context))
     gtk_style_context_lookup_style (context);
 
@@ -1303,17 +1302,17 @@ gtk_style_context_restore (GtkStyleContext *context)
  * gtk_style_context_get() or any of the gtk_render_*()
  * functions will make use of this new class for styling.
  *
- * In the CSS file format, a #GtkEntry defining an “entry”
+ * In the CSS file format, a #GtkEntry defining a “search”
  * class, would be matched by:
  *
  * |[
- * GtkEntry.entry { ... }
+ * entry.search { ... }
  * ]|
  *
- * While any widget defining an “entry” class would be
+ * While any widget defining a “search” class would be
  * matched by:
  * |[
- * .entry { ... }
+ * .search { ... }
  * ]|
  *
  * Since: 3.0
@@ -1363,7 +1362,7 @@ gtk_style_context_remove_class (GtkStyleContext *context,
  * @class_name: a class name
  *
  * Returns %TRUE if @context currently has defined the
- * given class name
+ * given class name.
  *
  * Returns: %TRUE if @context has @class_name defined
  *
