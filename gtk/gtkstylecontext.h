@@ -152,8 +152,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class to match content rendered in cell views.
  *
- * This is used by cell renderers, e.g. in #GtkIconView
- * and #GtkTreeView.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_CELL "cell"
 
@@ -162,8 +161,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class to match dimmed labels.
  *
- * This should be used for toning down right aligned labels as
- * compared to the entry value.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_DIM_LABEL "dim-label"
 
@@ -172,7 +170,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class to match text entries.
  *
- * This is used by #GtkEntry.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_ENTRY "entry"
 
@@ -181,7 +179,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class to match labels.
  *
- * This is used by #GtkLabel.
+ * Refer to individual widget documentation for used style classes.
  *
  * Since: 3.16
  */
@@ -192,7 +190,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class to match combobox entries.
  *
- * This is used by #GtkComboBox.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_COMBOBOX_ENTRY "combobox-entry"
 
@@ -201,9 +199,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class to match buttons.
  *
- * This is used by #GtkButton and its subclasses, as well
- * as various other widget pieces that appear like buttons,
- * e.g. the arrows in a #GtkCalendar.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_BUTTON "button"
 
@@ -212,7 +208,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class to match lists.
  *
- * This is used by #GtkListBox.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_LIST "list"
 
@@ -221,7 +217,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class to match list rowss.
  *
- * This is used by #GtkListBoxRow.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_LIST_ROW "list-row"
 
@@ -230,7 +226,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class to match calendars.
  *
- * This is not used by GTK+ itself, currently.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_CALENDAR "calendar"
 
@@ -239,7 +235,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class to match sliders.
  *
- * This is used by #GtkSwitch and #GtkRange and its subclasses.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_SLIDER "slider"
 
@@ -247,6 +243,8 @@ struct _GtkStyleContextClass
  * GTK_STYLE_CLASS_BACKGROUND:
  *
  * A CSS class to match the window background.
+ *
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_BACKGROUND "background"
 
@@ -255,15 +253,16 @@ struct _GtkStyleContextClass
  *
  * A CSS class to match the rubberband selection rectangle.
  *
- * This is used in #GtkIconView and #GtkTreeView.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_RUBBERBAND "rubberband"
 
 /**
  * GTK_STYLE_CLASS_CSD:
  *
- * A CSS class that gets added to windows which have
- * client-side decorations.
+ * A CSS class that gets added to windows which have client-side decorations.
+ *
+ * Refer to individual widget documentation for used style classes.
  *
  * Since: 3.14
  */
@@ -273,6 +272,8 @@ struct _GtkStyleContextClass
  * GTK_STYLE_CLASS_TOOLTIP:
  *
  * A CSS class to match tooltip windows.
+ *
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_TOOLTIP "tooltip"
 
@@ -281,7 +282,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class to match menus.
  *
- * This is used in #GtkMenu.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_MENU "menu"
 
@@ -290,9 +291,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class to match context menus.
  *
- * This style class is useful when you want to prevent
- * a context menu from inheriting e.g. font changes from
- * the widget it is attached to.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_CONTEXT_MENU "context-menu"
 
@@ -301,6 +300,8 @@ struct _GtkStyleContextClass
  *
  * A CSS class for touch selection popups on entries
  * and text views.
+ *
+ * Refer to individual widget documentation for used style classes.
  *
  * Since: 3.16
  */
@@ -311,7 +312,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class to menubars.
  *
- * This is used in #GtkMenuBar.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_MENUBAR "menubar"
 
@@ -320,7 +321,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class to match menu items.
  *
- * This is used in #GtkMenuItem and its subclasses.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_MENUITEM "menuitem"
 
@@ -329,7 +330,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class to match toolbars.
  *
- * This is used in #GtkToolbar.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_TOOLBAR "toolbar"
 
@@ -338,8 +339,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class to match primary toolbars.
  *
- * This should be used for the “main” toolbar of an application,
- * right below its menubar.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_PRIMARY_TOOLBAR "primary-toolbar"
 
@@ -348,9 +348,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class to match inline toolbars.
  *
- * This should be used for toolbars that are used to hold
- * actions below lists, as seen e.g. in the left pane of the
- * file chooser.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_INLINE_TOOLBAR "inline-toolbar"
 
@@ -359,7 +357,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class to match statusbars.
  *
- * This is used in #GtkStatusbar.
+ * Refer to individual widget documentation for used style classes.
  *
  * Since: 3.16
  */
@@ -370,8 +368,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class to match radio buttons.
  *
- * This is used in #GtkRadioButton, #GtkRadioMenuItem and
- * #GtkCellRendererToggle.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_RADIO "radio"
 
@@ -380,8 +377,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class to match check boxes.
  *
- * This is used in #GtkCheckButton, #GtkCheckMenuItem and
- * #GtkCellRendererToggle.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_CHECK "check"
 
@@ -390,7 +386,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class to match the default widget.
  *
- * This is used by #GtkButton.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_DEFAULT "default"
 
@@ -399,8 +395,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class to match troughs, as in scrollbars and progressbars.
  *
- * This is used in #GtkRange and its subclasses, #GtkProgressBar
- * and #GtkSwitch.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_TROUGH "trough"
 
@@ -408,6 +403,8 @@ struct _GtkStyleContextClass
  * GTK_STYLE_CLASS_SCROLLBAR:
  *
  * A CSS class to match scrollbars.
+ *
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_SCROLLBAR "scrollbar"
 
@@ -416,8 +413,8 @@ struct _GtkStyleContextClass
  *
  * A CSS class to match the junction area between an horizontal
  * and vertical scrollbar, when they’re both shown.
- * 
- * This is used in #GtkScrolledWindow.
+ *
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_SCROLLBARS_JUNCTION "scrollbars-junction"
 
@@ -426,7 +423,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class to match scale widgets.
  *
- * This is used in #GtkScale.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_SCALE "scale"
 
@@ -436,6 +433,8 @@ struct _GtkStyleContextClass
  * A CSS class to match scale widgets with marks attached,
  * all the marks are above for horizontal #GtkScale.
  * left for vertical #GtkScale.
+ *
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_SCALE_HAS_MARKS_ABOVE "scale-has-marks-above"
 
@@ -445,6 +444,8 @@ struct _GtkStyleContextClass
  * A CSS class to match scale widgets with marks attached,
  * all the marks are below for horizontal #GtkScale,
  * right for vertical #GtkScale.
+ *
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_SCALE_HAS_MARKS_BELOW "scale-has-marks-below"
 
@@ -453,7 +454,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class to match a header element.
  *
- * This is used for the header in #GtkCalendar.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_HEADER "header"
 
@@ -462,7 +463,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class to match an accelerator.
  *
- * This is used for the accelerator in #GtkAccelLabel.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_ACCELERATOR "accelerator"
 
@@ -472,7 +473,7 @@ struct _GtkStyleContextClass
  * A CSS class to match a raised control, such as a raised
  * button on a toolbar.
  *
- * This should be used in conjunction with #GTK_STYLE_CLASS_PRIMARY_TOOLBAR.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_RAISED "raised"
 
@@ -481,6 +482,8 @@ struct _GtkStyleContextClass
  *
  * A CSS class to match a linked area, such as a box containing buttons
  * belonging to the same control.
+ *
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_LINKED "linked"
 
@@ -489,7 +492,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class defining a resize grip.
  *
- * This is used for the resize grip in #GtkWindow.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_GRIP "grip"
 
@@ -498,7 +501,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class defining a dock area.
  *
- * This is used by #GtkHandleBox.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_DOCK "dock"
 
@@ -507,8 +510,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class to use when rendering activity as a progressbar.
  *
- * This is used in #GtkProgressBar and when drawing progress
- * inside a #GtkEntry or in #GtkCellRendererProgress.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_PROGRESSBAR "progressbar"
 
@@ -517,7 +519,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class to use when rendering activity as a “spinner”.
  *
- * This is used by #GtkSpinner and #GtkCellRendererSpinner.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_SPINNER "spinner"
 
@@ -526,7 +528,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class defining marks in a widget, such as in scales.
  *
- * Used in #GtkScale.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_MARK "mark"
 
@@ -535,8 +537,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class defining an expander, such as those in treeviews.
  *
- * Used for drawing expanders in #GtkTreeView, GtkExpander and
- * #GtkToolItemGroup.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_EXPANDER "expander"
 
@@ -545,7 +546,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class defining an spinbutton.
  *
- * This is used in #GtkSpinButton.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_SPINBUTTON "spinbutton"
 
@@ -554,7 +555,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class defining a notebook.
  *
- * Used in #GtkNotebook.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_NOTEBOOK "notebook"
 
@@ -563,8 +564,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class defining a view, such as iconviews or treeviews.
  *
- * This is used in #GtkTreeView, #GtkIconView, #GtkTextView,
- * as well as #GtkCalendar.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_VIEW "view"
 
@@ -574,7 +574,7 @@ struct _GtkStyleContextClass
  * A CSS class defining a sidebar, such as the left side in
  * a file chooser.
  *
- * This is used in #GtkFileChooser and in #GtkAssistant.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_SIDEBAR "sidebar"
 
@@ -583,7 +583,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class defining an image, such as the icon in an entry.
  *
- * This is used when rendering icons in #GtkEntry.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_IMAGE "image"
 
@@ -593,7 +593,7 @@ struct _GtkStyleContextClass
  * A CSS class defining a highlighted area, such as headings in
  * assistants and calendars.
  *
- * This is used in #GtkAssistant and #GtkCalendar.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_HIGHLIGHT "highlight"
 
@@ -604,7 +604,7 @@ struct _GtkStyleContextClass
  * #GtkFrame or the scrolled window frame around the
  * scrollable area.
  *
- * This is used in #GtkFrame and #GtkScrollbar.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_FRAME "frame"
 
@@ -613,8 +613,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class for a drag-and-drop indicator.
  *
- * This is used when drawing an outline around a potential
- * drop target during DND.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_DND "dnd"
 
@@ -623,7 +622,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class for a pane separator, such as those in #GtkPaned.
  *
- * Used in #GtkPaned.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_PANE_SEPARATOR "pane-separator"
 
@@ -632,8 +631,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class for a separator.
  *
- * This is used in #GtkSeparator, #GtkSeparatorMenuItem,
- * #GtkSeparatorToolItem, and when drawing separators in #GtkTreeView.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_SEPARATOR "separator"
 
@@ -643,7 +641,7 @@ struct _GtkStyleContextClass
  * A CSS class for an area displaying an informational message,
  * such as those in infobars.
  *
- * This is used by #GtkInfoBar.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_INFO "info"
 
@@ -653,7 +651,7 @@ struct _GtkStyleContextClass
  * A CSS class for an area displaying a warning message,
  * such as those in infobars.
  *
- * This is used by #GtkInfoBar.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_WARNING "warning"
 
@@ -663,7 +661,7 @@ struct _GtkStyleContextClass
  * A CSS class for an area displaying a question to the user,
  * such as those in infobars.
  *
- * This is used by #GtkInfoBar.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_QUESTION "question"
 
@@ -673,7 +671,7 @@ struct _GtkStyleContextClass
  * A CSS class for an area displaying an error message,
  * such as those in infobars.
  *
- * This is used by #GtkInfoBar.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_ERROR "error"
 
@@ -682,7 +680,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class for horizontally layered widgets.
  *
- * This is used by widgets implementing #GtkOrientable.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_HORIZONTAL "horizontal"
 
@@ -691,7 +689,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class for vertically layered widgets.
  *
- * This is used by widgets implementing #GtkOrientable.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_VERTICAL "vertical"
 
@@ -700,8 +698,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class to indicate an area at the top of a widget.
  *
- * This is used by widgets that can render an area in different
- * positions, such as tabs in a #GtkNotebook.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_TOP "top"
 
@@ -710,8 +707,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class to indicate an area at the bottom of a widget.
  *
- * This is used by widgets that can render an area in different
- * positions, such as tabs in a #GtkNotebook.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_BOTTOM "bottom"
 
@@ -720,8 +716,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class to indicate an area at the left of a widget.
  *
- * This is used by widgets that can render an area in different
- * positions, such as tabs in a #GtkNotebook.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_LEFT "left"
 
@@ -730,8 +725,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class to indicate an area at the right of a widget.
  *
- * This is used by widgets that can render an area in different
- * positions, such as tabs in a #GtkNotebook.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_RIGHT "right"
 
@@ -740,7 +734,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class to use when rendering a pulse in an indeterminate progress bar.
  *
- * This is used by #GtkProgressBar and #GtkEntry.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_PULSE "pulse"
 
@@ -749,8 +743,7 @@ struct _GtkStyleContextClass
  *
  * A CSS class used when rendering an arrow element.
  *
- * Note that #gtk_render_arrow automatically adds this style class
- * to the style context when rendering an arrow element.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_ARROW "arrow"
 
@@ -759,6 +752,8 @@ struct _GtkStyleContextClass
  *
  * A CSS class used when rendering an OSD (On Screen Display) element,
  * on top of another container.
+ *
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_OSD "osd"
 
@@ -768,7 +763,7 @@ struct _GtkStyleContextClass
  * A CSS class used when rendering a level indicator, such
  * as a battery charge level, or a password strength.
  *
- * This is used by #GtkLevelBar.
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_LEVEL_BAR "level-bar"
 
@@ -777,6 +772,8 @@ struct _GtkStyleContextClass
  *
  * A CSS class used when rendering a drag handle for
  * text selection.
+ *
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_CURSOR_HANDLE "cursor-handle"
 
@@ -785,14 +782,17 @@ struct _GtkStyleContextClass
  *
  * A CSS class used when rendering a drag handle for
  * the insertion cursor position.
+ *
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_INSERTION_CURSOR "insertion-cursor"
 
 /**
  * GTK_STYLE_CLASS_TITLEBAR:
  *
- * A CSS class used when rendering a titlebar in a toplevel
- * window.
+ * A CSS class used when rendering a titlebar in a toplevel window.
+ *
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_TITLEBAR "titlebar"
 
@@ -801,6 +801,8 @@ struct _GtkStyleContextClass
  *
  * A CSS class used for the title label in a titlebar in
  * a toplevel window.
+ *
+ * Refer to individual widget documentation for used style classes.
  *
  * Since: 3.14
  */
@@ -812,6 +814,8 @@ struct _GtkStyleContextClass
  * A CSS class used for the subtitle label in a titlebar in
  * a toplevel window.
  *
+ * Refer to individual widget documentation for used style classes.
+ *
  * Since: 3.14
  */
 #define GTK_STYLE_CLASS_SUBTITLE "subtitle"
@@ -822,7 +826,9 @@ struct _GtkStyleContextClass
  * A CSS class used when an element needs the user attention,
  * for instance a button in a stack switcher corresponding to
  * a hidden page that changed state.
-*
+ *
+ * Refer to individual widget documentation for used style classes.
+ *
  * Since: 3.12
  */
 #define GTK_STYLE_CLASS_NEEDS_ATTENTION "needs-attention"
@@ -832,6 +838,8 @@ struct _GtkStyleContextClass
  *
  * A CSS class used when an action (usually a button) is the
  * primary suggested action in a specific context.
+ *
+ * Refer to individual widget documentation for used style classes.
  *
  * Since: 3.12
  */
@@ -844,6 +852,8 @@ struct _GtkStyleContextClass
  * one that is expected to remove or destroy something visible
  * to the user.
  *
+ * Refer to individual widget documentation for used style classes.
+ *
  * Since: 3.12
  */
 #define GTK_STYLE_CLASS_DESTRUCTIVE_ACTION "destructive-action"
@@ -851,7 +861,9 @@ struct _GtkStyleContextClass
 /**
  * GTK_STYLE_CLASS_POPOVER:
  *
- * A CSS class that matches popovers. Used by #GtkPopover.
+ * A CSS class that matches popovers.
+ *
+ * Refer to individual widget documentation for used style classes.
  *
  * Since: 3.14
  */
@@ -864,6 +876,8 @@ struct _GtkStyleContextClass
  *
  * A CSS class that is added to the toplevel windows used for menus.
  *
+ * Refer to individual widget documentation for used style classes.
+ *
  * Since: 3.14
  */
 #define GTK_STYLE_CLASS_POPUP "popup"
@@ -872,6 +886,8 @@ struct _GtkStyleContextClass
  * GTK_STYLE_CLASS_MESSAGE_DIALOG:
  *
  * A CSS class that is added to message dialogs.
+ *
+ * Refer to individual widget documentation for used style classes.
  *
  * Since: 3.14
  */
@@ -884,6 +900,8 @@ struct _GtkStyleContextClass
  * a frame or border (like buttons or entries) should appear
  * without it.
  *
+ * Refer to individual widget documentation for used style classes.
+ *
  * Since: 3.14
  */
 #define GTK_STYLE_CLASS_FLAT "flat"
@@ -892,14 +910,19 @@ struct _GtkStyleContextClass
  * GTK_STYLE_CLASS_READ_ONLY:
  *
  * A CSS class used to indicate a read-only state.
+ *
+ * Refer to individual widget documentation for used style classes.
  */
 #define GTK_STYLE_CLASS_READ_ONLY "read-only"
 
 /**
  * GTK_STYLE_CLASS_OVERSHOOT:
+ *
  * A CSS class that is added on the visual hints that happen
  * when scrolling is attempted past the limits of a scrollable
  * area.
+ *
+ * Refer to individual widget documentation for used style classes.
  *
  * Since: 3.14
  */
@@ -907,9 +930,12 @@ struct _GtkStyleContextClass
 
 /**
  * GTK_STYLE_CLASS_UNDERSHOOT:
+ *
  * A CSS class that is added on the visual hints that happen
  * where content is 'scrolled off' and can be made visible
  * by scrolling.
+ *
+ * Refer to individual widget documentation for used style classes.
  *
  * Since: 3.16
  */
@@ -917,10 +943,13 @@ struct _GtkStyleContextClass
 
 /**
  * GTK_STYLE_CLASS_PAPER:
+ *
  * A CSS class that is added to areas that should look like paper.
  *
  * This is used in print previews and themes are encouraged to
  * style it as black text on white background.
+ *
+ * Refer to individual widget documentation for used style classes.
  *
  * Since: 3.16
  */
@@ -932,6 +961,8 @@ struct _GtkStyleContextClass
  * A CSS class that is added to text view that should use
  * a monospace font.
  *
+ * Refer to individual widget documentation for used style classes.
+ *
  * Since: 3.16
  */
 #define GTK_STYLE_CLASS_MONOSPACE "monospace"
@@ -942,6 +973,8 @@ struct _GtkStyleContextClass
  * A CSS class to indicate that a UI element should be 'wide'.
  * Used by #GtkPaned.
  *
+ * Refer to individual widget documentation for used style classes.
+ *
  * Since: 3.16
  */
 #define GTK_STYLE_CLASS_WIDE "wide"
@@ -950,6 +983,8 @@ struct _GtkStyleContextClass
  * GTK_STYLE_REGION_ROW:
  *
  * A widget region name to define a treeview row.
+ *
+ * Deprecated: 3.20: Don't use regions.
  */
 #define GTK_STYLE_REGION_ROW "row"
 
@@ -957,6 +992,8 @@ struct _GtkStyleContextClass
  * GTK_STYLE_REGION_COLUMN:
  *
  * A widget region name to define a treeview column.
+ *
+ * Deprecated: 3.20: Don't use regions.
  */
 #define GTK_STYLE_REGION_COLUMN "column"
 
@@ -964,6 +1001,8 @@ struct _GtkStyleContextClass
  * GTK_STYLE_REGION_COLUMN_HEADER:
  *
  * A widget region name to define a treeview column header.
+ *
+ * Deprecated: 3.20: Don't use regions.
  */
 #define GTK_STYLE_REGION_COLUMN_HEADER "column-header"
 
@@ -971,6 +1010,8 @@ struct _GtkStyleContextClass
  * GTK_STYLE_REGION_TAB:
  *
  * A widget region name to define a notebook tab.
+ *
+ * Deprecated: 3.20: Don't use regions.
  */
 #define GTK_STYLE_REGION_TAB "tab"
 
