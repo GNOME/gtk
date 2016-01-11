@@ -10345,11 +10345,25 @@ cursor_blinks (GtkEntry *entry)
       priv->editable &&
       priv->selection_bound == priv->current_pos)
     {
-      GtkSettings *settings;
       gboolean blink;
+      GtkStyleContext *context;
+      GtkCssValue *value;
+      GtkCssCaretAnimation anim;
 
-      settings = gtk_widget_get_settings (GTK_WIDGET (entry));
-      g_object_get (settings, "gtk-cursor-blink", &blink, NULL);
+      context = gtk_widget_get_style_context (GTK_WIDGET (entry));
+      value = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_CARET_ANIMATION);
+      anim = _gtk_css_caret_animation_value_get (value);
+      if (anim == GTK_CSS_CARET_ANIMATION_AUTO)
+        {
+          GtkSettings *settings;
+
+          settings = gtk_widget_get_settings (GTK_WIDGET (entry));
+          g_object_get (settings, "gtk-cursor-blink", &blink, NULL);
+        }
+      else if (anim == GTK_CSS_CARET_ANIMATION_BLINK)
+        blink = TRUE;
+      else
+        blink = FALSE;
 
       return blink;
     }
