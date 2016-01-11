@@ -325,7 +325,7 @@ gdk_device_manager_get_display (GdkDeviceManager *device_manager)
  * Since: 3.0
  *
  * Deprecated: 3.20, use gdk_seat_get_pointer(), gdk_seat_get_keyboard()
- *             and gdk_seat_list_slaves() instead.
+ *             and gdk_seat_get_slaves() instead.
  **/
 GList *
 gdk_device_manager_list_devices (GdkDeviceManager *device_manager,
