@@ -1018,7 +1018,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                                                                  P_("Tab gap"),
                                                                  P_("Active tab is drawn with a gap at the bottom"),
                                                                  TRUE,
-                                                                 GTK_PARAM_READABLE));
+                                                                 GTK_PARAM_READABLE | G_PARAM_DEPRECATED));
 
   /**
    * GtkNotebook::switch-page:
