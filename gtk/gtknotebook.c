@@ -2976,12 +2976,11 @@ show_drag_window (GtkNotebook        *notebook,
       gdk_window_set_background_rgba (priv->drag_window, &transparent);
     }
 
-  g_object_ref (page->tab_label);
   gtk_widget_set_child_visible (page->tab_label, FALSE);
   gtk_widget_unrealize (page->tab_label);
   gtk_widget_set_parent_window (page->tab_label, priv->drag_window);
   gtk_widget_set_child_visible (page->tab_label, TRUE);
-  g_object_unref (page->tab_label);
+
   gtk_css_gadget_add_class (page->gadget, GTK_STYLE_CLASS_DND);
 
   /* the grab will dissapear when the window is hidden */
@@ -2999,22 +2998,14 @@ hide_drag_window (GtkNotebook        *notebook,
                   GtkNotebookPage    *page)
 {
   GtkWidget *widget = GTK_WIDGET (notebook);
-  GtkWidget *parent = gtk_widget_get_parent (page->tab_label);
 
   if (gtk_widget_get_window (page->tab_label) != gtk_widget_get_window (widget) ||
       !NOTEBOOK_IS_TAB_LABEL_PARENT (notebook, page))
     {
-      g_object_ref (page->tab_label);
-
-      if (GTK_IS_WINDOW (parent)) /* parent widget is the drag window */
-        gtk_container_remove (GTK_CONTAINER (parent), page->tab_label);
-      else
-        gtk_widget_unparent (page->tab_label);
-
-      gtk_css_node_set_parent (gtk_widget_get_css_node (page->tab_label),
-                               gtk_css_gadget_get_node (page->gadget));
-      gtk_widget_set_parent (page->tab_label, widget);
-      g_object_unref (page->tab_label);
+      gtk_widget_set_child_visible (page->tab_label, FALSE);
+      gtk_widget_unrealize (page->tab_label);
+      gtk_widget_set_parent_window (page->tab_label, NULL);
+      gtk_widget_set_child_visible (page->tab_label, TRUE);
     }
 
   gtk_css_gadget_remove_class (page->gadget, GTK_STYLE_CLASS_DND);
@@ -3077,6 +3068,8 @@ gtk_notebook_stop_reorder (GtkNotebook *notebook)
           g_source_remove (priv->dnd_timer);
           priv->dnd_timer = 0;
         }
+
+      gtk_widget_queue_allocate (GTK_WIDGET (notebook));
     }
 }
 
