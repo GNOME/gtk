@@ -115,9 +115,10 @@
  * │   │   ╰── [arrow]
  * │   ╰── [<action widget>]
  * │
- * ├── <child>
- * ┊
- * ╰── <child>
+ * ╰── stack
+ *     ├── <child>
+ *     ┊
+ *     ╰── <child>
  * ]|
  *
  * GtkNotebook has a main CSS node with name notebook, a subnode
