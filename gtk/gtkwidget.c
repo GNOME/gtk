@@ -17593,8 +17593,7 @@ _gtk_widget_consumes_motion (GtkWidget        *widget,
       if ((!GTK_IS_GESTURE_SINGLE (data->controller) ||
            GTK_IS_GESTURE_DRAG (data->controller) ||
            GTK_IS_GESTURE_SWIPE (data->controller)) &&
-          gtk_gesture_get_sequence_state (GTK_GESTURE (data->controller),
-                                          sequence) != GTK_EVENT_SEQUENCE_DENIED)
+          gtk_gesture_handles_sequence (GTK_GESTURE (data->controller), sequence))
         return TRUE;
     }
 
