@@ -2982,6 +2982,7 @@ show_drag_window (GtkNotebook        *notebook,
   gtk_widget_set_parent_window (page->tab_label, priv->drag_window);
   gtk_widget_set_child_visible (page->tab_label, TRUE);
   g_object_unref (page->tab_label);
+  gtk_css_gadget_add_class (page->gadget, GTK_STYLE_CLASS_DND);
 
   /* the grab will dissapear when the window is hidden */
   gdk_seat_grab (gdk_device_get_seat (device), priv->drag_window,
@@ -3015,6 +3016,8 @@ hide_drag_window (GtkNotebook        *notebook,
       gtk_widget_set_parent (page->tab_label, widget);
       g_object_unref (page->tab_label);
     }
+
+  gtk_css_gadget_remove_class (page->gadget, GTK_STYLE_CLASS_DND);
 
   if (priv->drag_window &&
       gdk_window_is_visible (priv->drag_window))
