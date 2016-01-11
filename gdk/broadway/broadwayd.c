@@ -7,6 +7,7 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <locale.h>
 
 #include <glib.h>
 #include <gio/gio.h>
@@ -433,6 +434,8 @@ main (int argc, char *argv[])
     { "key", 'k', 0, G_OPTION_ARG_STRING, &ssl_key, "SSL key path", "PATH" },
     { NULL }
   };
+
+  setlocale (LC_ALL, "");
 
   context = g_option_context_new ("[:DISPLAY] - broadway display daemon");
   g_option_context_add_main_entries (context, entries, GETTEXT_PACKAGE);
