@@ -291,7 +291,7 @@ gdk_seat_ungrab (GdkSeat *seat)
  *
  * Returns the slave devices that match the given capabilities.
  *
- * Returns: (transfer container) (element-type GdkSeat): A list of #GdkDevices. The list
+ * Returns: (transfer container) (element-type GdkDevice): A list of #GdkDevices. The list
  *          must be freed with g_list_free(), the elements are owned
  *          by GDK and must not be freed.
  *
