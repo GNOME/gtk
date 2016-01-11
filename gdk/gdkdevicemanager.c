@@ -352,7 +352,7 @@ gdk_device_manager_list_devices (GdkDeviceManager *device_manager,
  *
  * Since: 3.0
  *
- * Deprecated: 3.20.
+ * Deprecated: 3.20: Use gdk_seat_get_pointer() instead.
  **/
 GdkDevice *
 gdk_device_manager_get_client_pointer (GdkDeviceManager *device_manager)
