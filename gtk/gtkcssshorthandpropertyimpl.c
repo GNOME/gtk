@@ -869,6 +869,47 @@ parse_text_decoration (GtkCssShorthandProperty  *shorthand,
 }
 
 static gboolean
+parse_caret (GtkCssShorthandProperty  *shorthand,
+             GtkCssValue             **values,
+             GtkCssParser             *parser)
+{
+  do
+  {
+    if (values[0] == NULL &&
+        (values[0] = _gtk_css_caret_shape_value_try_parse (parser)))
+      {
+        if (values[0] == NULL)
+          return FALSE;
+      }
+    else if (values[1] == NULL &&
+             (values[1] = _gtk_css_caret_animation_value_try_parse (parser)))
+      {
+        if (values[1] == NULL)
+          return FALSE;
+      }
+    else if (values[2] == NULL)
+      {
+        values[2] = _gtk_css_color_value_parse (parser);
+        if (values[2] == NULL)
+          return FALSE;
+
+        values[3] = _gtk_css_value_ref (values[2]);
+      }
+    else
+      {
+        /* We parsed and there's still stuff left?
+         * Pretend we didn't notice and let the normal code produce
+         * a 'junk at end of value' error
+         */
+        break;
+      }
+  }
+  while (!value_is_done_parsing (parser));
+
+  return TRUE;
+}
+
+static gboolean
 parse_all (GtkCssShorthandProperty  *shorthand,
            GtkCssValue             **values,
            GtkCssParser             *parser)
@@ -1216,6 +1257,7 @@ _gtk_css_shorthand_property_init_properties (void)
   const char *animation_subproperties[] = { "animation-name", "animation-iteration-count", "animation-duration", "animation-delay", 
                                             "animation-timing-function", "animation-direction", "animation-fill-mode", NULL };
   const char *text_decoration_subproperties[] = { "text-decoration-line", "text-decoration-style", "text-decoration-color", NULL };
+  const char *caret_subproperties[] = { "caret-shape", "caret-animation", "caret-color", "-gtk-secondary-caret-color", NULL };
 
   const char **all_subproperties;
 
@@ -1332,6 +1374,12 @@ _gtk_css_shorthand_property_init_properties (void)
                                           G_TYPE_NONE,
                                           text_decoration_subproperties,
                                           parse_text_decoration,
+                                          NULL,
+                                          NULL);
+  _gtk_css_shorthand_property_register   ("caret",
+                                          G_TYPE_NONE,
+                                          caret_subproperties,
+                                          parse_caret,
                                           NULL,
                                           NULL);
 
