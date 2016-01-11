@@ -88,21 +88,7 @@ $asset_suffix: if($variant=='dark', '-dark', '');
   }
 }
 
-textview text,
 .view {
-  color: $text_color;
-  background-color: $base_color;
-
-  &:backdrop {
-    color: $backdrop_text_color;
-    background-color: $backdrop_base_color;
-  }
-
-  selection,
-  selection:focus { @extend %selected_items; }
-}
-
-iconview {
   color: $text_color;
   background-color: $base_color;
 
@@ -117,6 +103,15 @@ iconview {
     border-radius: 3px;
   }
 }
+
+textview text {
+  @extend .view;
+
+  selection,
+  selection:focus { @extend %selected_items; }
+}
+
+iconview { @extend .view; }
 
 .rubberband,
 rubberband {
@@ -1430,7 +1425,8 @@ treeview.view {
 
   & rubberband { @extend rubberband; } // to avoid borders being overridden by the previously set props
 
-  &:selected {
+  &:selected,
+  &:selected:focus {
     border-radius: 0;
     @extend %selected_items;
   }
