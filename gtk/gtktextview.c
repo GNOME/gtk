@@ -10137,13 +10137,9 @@ text_window_invalidate_cursors (GtkTextWindow *win)
                                     gtk_text_buffer_get_insert (priv->buffer));
 
   if (_gtk_text_layout_get_block_cursor (priv->layout, &strong))
-    {
-      text_window_invalidate_rect (win, &strong);
-      return;
-    }
+    text_window_invalidate_rect (win, &strong);
 
-  gtk_text_layout_get_cursor_locations (priv->layout, &iter,
-                                        &strong, &weak);
+  gtk_text_layout_get_cursor_locations (priv->layout, &iter, &strong, &weak);
 
   /* cursor width calculation as in gtkstylecontext.c:draw_insertion_cursor(),
    * ignoring the text direction be exposing both sides of the cursor
@@ -10154,7 +10150,7 @@ text_window_invalidate_cursors (GtkTextWindow *win)
   gtk_widget_style_get (win->widget,
                         "cursor-aspect-ratio", &cursor_aspect_ratio,
                         NULL);
-  
+
   stem_width = strong.height * cursor_aspect_ratio + 1;
   arrow_width = stem_width + 1;
 

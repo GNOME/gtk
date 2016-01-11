@@ -80,6 +80,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkintl.h"
+#include "gtkcssenumvalueprivate.h"
 
 /* DO NOT go putting private headers in here. This file should only
  * use the semi-public headers, as with gtktextview.c.
@@ -592,7 +593,7 @@ get_selected_clip (GtkTextRenderer    *text_renderer,
       rect.y = y;
       rect.width = PANGO_PIXELS (ranges[2*i + 1]) - PANGO_PIXELS (ranges[2*i]);
       rect.height = height;
-      
+
       cairo_region_union_rectangle (clip_region, &rect);
     }
 
@@ -604,7 +605,8 @@ static void
 render_para (GtkTextRenderer    *text_renderer,
              GtkTextLineDisplay *line_display,
              int                 selection_start_index,
-             int                 selection_end_index)
+             int                 selection_end_index,
+             GtkCssCaretShape    shape)
 {
   GtkStyleContext *context;
   PangoLayout *layout = line_display->layout;
@@ -621,7 +623,7 @@ render_para (GtkTextRenderer    *text_renderer,
   pango_layout_iter_get_layout_extents (iter, NULL, &layout_logical);
 
   /* Adjust for margins */
-  
+
   layout_logical.x += line_display->x_offset * PANGO_SCALE;
   layout_logical.y += line_display->top_margin * PANGO_SCALE;
 
@@ -635,7 +637,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_style_context_get_background_color (context, gtk_style_context_get_state (context), &selection);
 G_GNUC_END_IGNORE_DEPRECATIONS
 
- gtk_style_context_restore (context);
+  gtk_style_context_restore (context);
 
   do
     {
@@ -645,11 +647,11 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       PangoRectangle line_rect;
       int baseline;
       gboolean at_last_line;
-      
+
       pango_layout_iter_get_line_extents (iter, NULL, &line_rect);
       baseline = pango_layout_iter_get_baseline (iter);
       pango_layout_iter_get_line_yrange (iter, &first_y, &last_y);
-      
+
       /* Adjust for margins */
 
       line_rect.x += line_display->x_offset * PANGO_SCALE;
@@ -671,7 +673,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       at_last_line = pango_layout_iter_at_last_line (iter);
       if (at_last_line)
         selection_height += line_display->bottom_margin;
-      
+
       first = FALSE;
 
       if (selection_start_index < byte_offset &&
@@ -681,7 +683,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
           cairo_save (cr);
           gdk_cairo_set_source_rgba (cr, &selection);
-          cairo_rectangle (cr, 
+          cairo_rectangle (cr,
                            line_display->left_margin, selection_y,
                            screen_width, selection_height);
           cairo_fill (cr);
@@ -795,6 +797,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                 }
             }
 	  else if (line_display->has_block_cursor &&
+                   shape != GTK_CSS_CARET_SHAPE_BAR &&
 		   gtk_widget_has_focus (text_renderer->widget) &&
 		   byte_offset <= line_display->insert_index &&
 		   (line_display->insert_index < byte_offset + line->length ||
@@ -805,13 +808,20 @@ G_GNUC_END_IGNORE_DEPRECATIONS
               cairo_t *cr = text_renderer->cr;
 
               /* we draw text using base color on filled cursor rectangle of cursor color
-               * (normally white on black) */
+               * (normally white on black)
+               */
               _gtk_style_context_get_cursor_color (context, &cursor_color, NULL);
 
 	      cursor_rect.x = line_display->x_offset + line_display->block_cursor.x;
 	      cursor_rect.y = line_display->block_cursor.y + line_display->top_margin;
 	      cursor_rect.width = line_display->block_cursor.width;
 	      cursor_rect.height = line_display->block_cursor.height;
+
+              if (shape == GTK_CSS_CARET_SHAPE_UNDERSCORE)
+                {
+                  cursor_rect.y = cursor_rect.y + cursor_rect.height - 1;
+                  cursor_rect.height = 1;
+                }
 
               cairo_save (cr);
 
@@ -877,6 +887,8 @@ gtk_text_layout_draw (GtkTextLayout *layout,
   GSList *tmp_list;
   GList *tmp_widgets;
   GdkRectangle clip;
+  GtkCssValue *value;
+  GtkCssCaretShape shape;
 
   g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
   g_return_if_fail (layout->default_style != NULL);
@@ -887,6 +899,15 @@ gtk_text_layout_draw (GtkTextLayout *layout,
     return;
 
   context = gtk_widget_get_style_context (widget);
+  value = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_CARET_SHAPE);
+  shape = _gtk_css_caret_shape_value_get (value);
+  if (shape == GTK_CSS_CARET_SHAPE_AUTO)
+    {
+      if (layout->overwrite_mode)
+        shape = GTK_CSS_CARET_SHAPE_BLOCK;
+      else
+        shape = GTK_CSS_CARET_SHAPE_BAR;
+    }
 
   line_list = gtk_text_layout_get_lines (layout, clip.y, clip.y + clip.height, &offset_y);
 
@@ -949,12 +970,14 @@ gtk_text_layout_draw (GtkTextLayout *layout,
             }
 
           render_para (text_renderer, line_display,
-                       selection_start_index, selection_end_index);
+                       selection_start_index, selection_end_index,
+                       shape);
 
           /* We paint the cursors last, because they overlap another chunk
            * and need to appear on top.
            */
-          if (line_display->cursors != NULL)
+          if (line_display->cursors != NULL &&
+              shape == GTK_CSS_CARET_SHAPE_BAR)
             {
               int i;
 

@@ -1799,9 +1799,7 @@ get_block_cursor (GtkTextLayout      *layout,
 {
   PangoRectangle pango_pos;
 
-  if (layout->overwrite_mode &&
-      gtk_text_iter_editable (insert_iter, TRUE) &&
-      _gtk_text_util_get_block_cursor_location (display->layout,
+  if (_gtk_text_util_get_block_cursor_location (display->layout,
 						insert_index,
 						&pango_pos,
     					        cursor_at_line_end))
@@ -1835,8 +1833,7 @@ add_cursor (GtkTextLayout      *layout,
        gtk_text_buffer_get_selection_bounds (layout->buffer, NULL, NULL)))
     return;
 
-  if (layout->overwrite_mode &&
-      _gtk_text_btree_mark_is_insert (_gtk_text_buffer_get_btree (layout->buffer),
+  if (_gtk_text_btree_mark_is_insert (_gtk_text_buffer_get_btree (layout->buffer),
 				      seg->body.mark.obj))
     {
       GtkTextIter iter;
@@ -1851,7 +1848,6 @@ add_cursor (GtkTextLayout      *layout,
 	{
 	  display->has_block_cursor = TRUE;
 	  display->cursor_at_line_end = cursor_at_line_end;
-	  return;
 	}
     }
 
