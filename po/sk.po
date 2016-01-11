@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-19 12:15+0000\n"
-"PO-Revision-Date: 2015-12-19 14:45+0100\n"
+"POT-Creation-Date: 2016-01-11 00:17+0000\n"
+"PO-Revision-Date: 2016-01-11 10:46+0100\n"
 "Last-Translator: Dušan Kazik <prescott66@gmail.com>\n"
 "Language-Team: slovenčina <>\n"
 "Language: sk\n"
@@ -656,15 +656,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "Za_vrieť"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:405
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:406
 msgid "Minimize"
 msgstr "Minimalizovať"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:428
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:429
 msgid "Maximize"
 msgstr "Maximalizovať"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:428
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:429
 msgid "Restore"
 msgstr "Obnoviť"
 
@@ -1215,8 +1215,8 @@ msgstr ""
 #: gtk/gtkmountoperation.c:545 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:667 gtk/gtkprintunixdialog.c:740
-#: gtk/gtkwindow.c:12226 gtk/inspector/css-editor.c:257
-#: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:131
+#: gtk/gtkwindow.c:12243 gtk/inspector/css-editor.c:257
+#: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:124
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
 msgstr "_Zrušiť"
@@ -1260,12 +1260,12 @@ msgid "_Preview:"
 msgstr "_Náhľad:"
 
 #: gtk/deprecated/gtkfontsel.c:1693 gtk/gtkpagesetupunixdialog.c:197
-#: gtk/ui/gtkassistant.ui:56
+#: gtk/ui/gtkassistant.ui:49
 msgid "_Apply"
 msgstr "Po_užiť"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:936
-#: gtk/gtkmessagedialog.c:958 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12227
+#: gtk/gtkmessagedialog.c:958 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12244
 msgid "_OK"
 msgstr "_Ok"
 
@@ -1518,7 +1518,7 @@ msgid "_License"
 msgstr "_Licencia"
 
 #: gtk/gtkaboutdialog.c:716 gtk/gtkcustompaperunixdialog.c:329
-#: gtk/gtkmessagedialog.c:940 gtk/ui/gtkassistant.ui:150
+#: gtk/gtkmessagedialog.c:940 gtk/ui/gtkassistant.ui:143
 msgid "_Close"
 msgstr "Za_vrieť"
 
@@ -2108,7 +2108,7 @@ msgctxt "Color channel"
 msgid "Alpha"
 msgstr "Alfa"
 
-#: gtk/gtkcolorswatch.c:432
+#: gtk/gtkcolorswatch.c:361
 msgid "C_ustomize"
 msgstr "_Prispôsobiť"
 
@@ -2586,11 +2586,11 @@ msgstr "(žiadna)"
 msgid "OpenGL context creation failed"
 msgstr "Vytvárania kontextu OpenGL zlyhalo"
 
-#: gtk/gtkheaderbar.c:384
+#: gtk/gtkheaderbar.c:385
 msgid "Application menu"
 msgstr "Ponuka aplikácie"
 
-#: gtk/gtkheaderbar.c:446 gtk/gtkwindow.c:8825
+#: gtk/gtkheaderbar.c:447 gtk/gtkwindow.c:8830
 msgid "Close"
 msgstr "Zavrieť"
 
@@ -2604,13 +2604,13 @@ msgid "Failed to load icon"
 msgstr "Zlyhalo načítanie ikony"
 
 # metóda vstupu
-#: gtk/gtkimmodule.c:530
+#: gtk/gtkimmodule.c:684
 msgctxt "input method menu"
 msgid "Simple"
 msgstr "Jednoduchá"
 
 # metóda vstupu
-#: gtk/gtkimmodule.c:546
+#: gtk/gtkimmodule.c:700
 msgctxt "input method menu"
 msgid "None"
 msgstr "Žiadna"
@@ -2628,19 +2628,19 @@ msgctxt "input method menu"
 msgid "System (%s)"
 msgstr "Systémová (%s)"
 
-#: gtk/gtkinfobar.c:1250 gtk/gtkmessagedialog.c:378
+#: gtk/gtkinfobar.c:1161 gtk/gtkmessagedialog.c:378
 msgid "Information"
 msgstr "Informácie"
 
-#: gtk/gtkinfobar.c:1254 gtk/gtkmessagedialog.c:382
+#: gtk/gtkinfobar.c:1165 gtk/gtkmessagedialog.c:382
 msgid "Question"
 msgstr "Otázka"
 
-#: gtk/gtkinfobar.c:1258 gtk/gtkmessagedialog.c:386
+#: gtk/gtkinfobar.c:1169 gtk/gtkmessagedialog.c:386
 msgid "Warning"
 msgstr "Upozornenie"
 
-#: gtk/gtkinfobar.c:1262 gtk/gtkmessagedialog.c:390
+#: gtk/gtkinfobar.c:1173 gtk/gtkmessagedialog.c:390
 msgid "Error"
 msgstr "Chyba"
 
@@ -2717,17 +2717,17 @@ msgid "Invalid URI"
 msgstr "Neplatné URI"
 
 # button
-#: gtk/gtklockbutton.c:276 gtk/ui/gtklockbutton.ui:28
+#: gtk/gtklockbutton.c:275 gtk/ui/gtklockbutton.ui:30
 msgid "Lock"
 msgstr "Uzamknúť"
 
 # button
-#: gtk/gtklockbutton.c:285 gtk/ui/gtklockbutton.ui:39
+#: gtk/gtklockbutton.c:284 gtk/ui/gtklockbutton.ui:37
 msgid "Unlock"
 msgstr "Odomknúť"
 
 # tooltip
-#: gtk/gtklockbutton.c:294
+#: gtk/gtklockbutton.c:293
 msgid ""
 "Dialog is unlocked.\n"
 "Click to prevent further changes"
@@ -2736,7 +2736,7 @@ msgstr ""
 "Kliknutím zabránite ďalším zmenám"
 
 # tooltip
-#: gtk/gtklockbutton.c:303
+#: gtk/gtklockbutton.c:302
 msgid ""
 "Dialog is locked.\n"
 "Click to make changes"
@@ -2744,7 +2744,7 @@ msgstr ""
 "Dialógové okno je uzamknuté.\n"
 "Kliknutím povolíte zmeny"
 
-#: gtk/gtklockbutton.c:312
+#: gtk/gtklockbutton.c:311
 msgid ""
 "System policy prevents changes.\n"
 "Contact your system administrator"
@@ -3197,7 +3197,6 @@ msgstr "Na tomto počítači"
 #.
 #: gtk/gtkplacesviewrow.c:132
 #, c-format
-#| msgid "%s / %s available"
 msgid "%s / %s available"
 msgid_plural "%s / %s available"
 msgstr[0] "%s / %s dostupných"
@@ -3462,7 +3461,7 @@ msgstr "Zdola nahor"
 msgid "Print"
 msgstr "Tlačiť"
 
-#: gtk/gtkprogressbar.c:692
+#: gtk/gtkprogressbar.c:694
 #, c-format
 msgctxt "progress bar label"
 msgid "%.0f %%"
@@ -3616,23 +3615,23 @@ msgstr "Potiahnutie dvoma prstami doľava"
 msgid "Two finger swipe right"
 msgstr "Potiahnutie dvoma prstami doprava"
 
-#: gtk/gtkshortcutswindow.c:839
+#: gtk/gtkshortcutswindow.c:862
 msgid "Shortcuts"
 msgstr "Klávesové skratky"
 
-#: gtk/gtkshortcutswindow.c:844
+#: gtk/gtkshortcutswindow.c:867
 msgid "Search Results"
 msgstr "Výsledky vyhľadávania"
 
-#: gtk/gtkshortcutswindow.c:898
+#: gtk/gtkshortcutswindow.c:921
 msgid "Search Shortcuts"
 msgstr "Vyhľadajte klávesové skratky"
 
-#: gtk/gtkshortcutswindow.c:963 gtk/ui/gtkfilechooserwidget.ui:309
+#: gtk/gtkshortcutswindow.c:986 gtk/ui/gtkfilechooserwidget.ui:309
 msgid "No Results Found"
 msgstr "Nenašli sa žiadne výsledky"
 
-#: gtk/gtkshortcutswindow.c:970 gtk/ui/gtkfilechooserwidget.ui:323
+#: gtk/gtkshortcutswindow.c:993 gtk/ui/gtkfilechooserwidget.ui:323
 #: gtk/ui/gtkplacesview.ui:181
 msgid "Try a different search"
 msgstr "Skúste vyhľadať niečo iné"
@@ -3841,12 +3840,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:12214
+#: gtk/gtkwindow.c:12231
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Chcete použiť nástroj Inšpektor GTK+?"
 
-#: gtk/gtkwindow.c:12216
+#: gtk/gtkwindow.c:12233
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3857,7 +3856,7 @@ msgstr ""
 "preskúmať a meniť interné vlastnosti ľubovolnej aplikácie GTK+. Jeho "
 "používaním môžete spôsobiť neočakávanie chovanie alebo pád."
 
-#: gtk/gtkwindow.c:12221
+#: gtk/gtkwindow.c:12238
 msgid "Don't show this message again"
 msgstr "Nezobrazovať túto správu znovu"
 
@@ -3958,7 +3957,7 @@ msgid "CSS Property"
 msgstr "Vlastnosť CSS"
 
 #: gtk/inspector/css-node-tree.ui:213 gtk/inspector/prop-list.ui:105
-#: gtk/ui/gtkcoloreditor.ui:291
+#: gtk/ui/gtkcoloreditor.ui:292
 msgid "Value"
 msgstr "Hodnota"
 
@@ -4308,19 +4307,19 @@ msgstr "Kumulatívne"
 msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
 msgstr "Povoliť štatistiky s GOBJECT_DEBUG=instance-count"
 
-#: gtk/inspector/visual.c:275 gtk/inspector/visual.c:290
+#: gtk/inspector/visual.c:286 gtk/inspector/visual.c:301
 msgid "Theme is hardcoded by GTK_THEME"
 msgstr "Téma je vynútená podľa premennej prostredia GTK_THEME"
 
-#: gtk/inspector/visual.c:465
+#: gtk/inspector/visual.c:492
 msgid "Backend does not support window scaling"
 msgstr "Obslužný program nepodporuje škálovanie okna"
 
-#: gtk/inspector/visual.c:504
+#: gtk/inspector/visual.c:531
 msgid "Setting is hardcoded by GTK_TEST_TOUCHSCREEN"
 msgstr "Nastavenie je vynútené z premennej prostredia GTK_TEST_TOUCHSCREEN"
 
-#: gtk/inspector/visual.c:569
+#: gtk/inspector/visual.c:596
 msgid ""
 "Not settable at runtime.\n"
 "Use GDK_GL=always or GDK_GL=disable instead"
@@ -4328,8 +4327,8 @@ msgstr ""
 "Nie je možné nastaviť v relácii.\n"
 "Použite namiesto toho GDK_GL=always alebo GDK_GL=disable"
 
-#: gtk/inspector/visual.c:583 gtk/inspector/visual.c:584
-#: gtk/inspector/visual.c:585
+#: gtk/inspector/visual.c:610 gtk/inspector/visual.c:611
+#: gtk/inspector/visual.c:612
 msgid "GL rendering is disabled"
 msgstr "Vykresľovanie GL je zakázané"
 
@@ -4406,10 +4405,8 @@ msgid "Show Pixel Cache"
 msgstr "Zobraziť medzipamäť pixelov"
 
 #: gtk/inspector/visual.ui:508
-#, fuzzy
-#| msgid "Show _Hidden Files"
 msgid "Show Widget Resizes"
-msgstr "Zobraziť _skryté súbory"
+msgstr "Zobraziť zmeny veľkostí prvkov"
 
 #: gtk/inspector/visual.ui:542
 msgid "Simulate touchscreen"
@@ -5494,15 +5491,15 @@ msgstr "Zobraziť všetky"
 msgid "Quit %s"
 msgstr "Ukončiť %s"
 
-#: gtk/ui/gtkassistant.ui:74
+#: gtk/ui/gtkassistant.ui:67
 msgid "_Next"
 msgstr "_Nasledujúca"
 
-#: gtk/ui/gtkassistant.ui:94
+#: gtk/ui/gtkassistant.ui:87
 msgid "_Back"
 msgstr "_Späť"
 
-#: gtk/ui/gtkassistant.ui:113
+#: gtk/ui/gtkassistant.ui:106
 msgid "_Finish"
 msgstr "_Dokončiť"
 
@@ -5510,39 +5507,39 @@ msgstr "_Dokončiť"
 msgid "Select a Color"
 msgstr "Výber farby"
 
-#: gtk/ui/gtkcoloreditor.ui:63
+#: gtk/ui/gtkcoloreditor.ui:64
 msgid "Color Name"
 msgstr "Názov farby"
 
-#: gtk/ui/gtkcoloreditor.ui:152
+#: gtk/ui/gtkcoloreditor.ui:153
 msgctxt "Color channel"
 msgid "A"
 msgstr "A"
 
-#: gtk/ui/gtkcoloreditor.ui:168
+#: gtk/ui/gtkcoloreditor.ui:169
 msgid "Alpha"
 msgstr "Alfa"
 
-#: gtk/ui/gtkcoloreditor.ui:199
+#: gtk/ui/gtkcoloreditor.ui:200
 msgctxt "Color channel"
 msgid "H"
 msgstr "H"
 
-#: gtk/ui/gtkcoloreditor.ui:215
+#: gtk/ui/gtkcoloreditor.ui:216
 msgid "Hue"
 msgstr "Odtieň"
 
-#: gtk/ui/gtkcoloreditor.ui:247
+#: gtk/ui/gtkcoloreditor.ui:248
 msgctxt "Color Channel"
 msgid "S"
 msgstr "S"
 
-#: gtk/ui/gtkcoloreditor.ui:257
+#: gtk/ui/gtkcoloreditor.ui:258
 msgctxt "Color Channel"
 msgid "V"
 msgstr "V"
 
-#: gtk/ui/gtkcoloreditor.ui:272
+#: gtk/ui/gtkcoloreditor.ui:273
 msgid "Saturation"
 msgstr "Sýtosť"
 
