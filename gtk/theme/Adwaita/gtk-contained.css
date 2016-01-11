@@ -2215,8 +2215,8 @@ popover.background {
     transition: none; }
   popover.background.touch-selection, popover.background.magnifier, .csd popover.background.touch-selection, .csd popover.background.magnifier {
     border: 1px solid rgba(255, 255, 255, 0.1); }
-  popover.background separator {
-    margin: 3px; }
+  popover.background list separator {
+    margin: 0px; }
 
 /*************
  * Notebooks *
