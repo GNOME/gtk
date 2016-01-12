@@ -1223,7 +1223,7 @@ modelbutton.flat,
   outline-offset: -2px; }
   modelbutton.flat:hover,
   .menuitem.button.flat:hover {
-    background-color: #4b5150; }
+    background-color: rgba(238, 238, 236, 0.05); }
   modelbutton.flat check:last-child,
   modelbutton.flat radio:last-child,
   .menuitem.button.flat check:last-child,
@@ -2240,19 +2240,10 @@ popover.background {
   popover.background > .location-bar {
     border-style: none;
     background-color: transparent; }
-  popover.background button.flat, popover.background button.sidebar-button, popover.background headerbar button.titlebutton, headerbar popover.background button.titlebutton,
-  popover.background .titlebar button.titlebutton,
-  .titlebar popover.background button.titlebutton,
-  popover.background button.flat:hover,
-  popover.background button.sidebar-button:hover,
-  popover.background headerbar button.titlebutton:hover,
-  headerbar popover.background button.titlebutton:hover,
-  popover.background .titlebar button.titlebutton:hover,
-  .titlebar popover.background button.titlebutton:hover {
-    text-shadow: none;
-    transition: none; }
   popover.background.touch-selection, popover.background.magnifier, .csd popover.background.touch-selection, .csd popover.background.magnifier {
     border: 1px solid rgba(255, 255, 255, 0.1); }
+  popover.background separator {
+    margin: 3px; }
   popover.background list separator {
     margin: 0px; }
 

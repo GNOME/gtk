@@ -791,7 +791,7 @@ modelbutton.flat,
   outline-offset: -2px;
 
   @extend %undecorated_button;
-  &:hover { background-color: mix($fg_color, $bg_color, 10%); }
+  &:hover { background-color: $base_hover_color; } // FIXME
 
   &:selected { @extend %selected_items; }
 
@@ -903,7 +903,7 @@ spinbutton {
 
       &:hover {
         color: $fg_color;
-        background-color: transparentize($fg_color, 0.95);
+        background-color: $base_hover_color;
       }
 
       &:disabled { color: transparentize($insensitive_fg_color, 0.7); }
@@ -1752,12 +1752,6 @@ popover.background {
     background-color: transparent;
   }
 
-  button.flat,
-  button.flat:hover {
-    text-shadow: none;
-    transition: none;
-  }
-
   &, .csd & {
     &.touch-selection,
     &.magnifier {
@@ -1768,6 +1762,8 @@ popover.background {
 
     &.osd { @extend %osd; }
   }
+
+  separator { margin: 3px; }
 
   list separator { margin: 0px; }
 }
