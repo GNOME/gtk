@@ -1760,14 +1760,6 @@ gtk_button_size_allocate (GtkWidget     *widget,
   GtkAllocation clip;
 
   gtk_widget_set_allocation (widget, allocation);
-
-  if (gtk_widget_get_realized (widget))
-    gdk_window_move_resize (priv->event_window,
-                            allocation->x,
-                            allocation->y,
-                            allocation->width,
-                            allocation->height);
-
   gtk_css_gadget_allocate (priv->gadget,
                            allocation,
                            gtk_widget_get_allocated_baseline (widget),
@@ -1791,6 +1783,17 @@ gtk_button_allocate (GtkCssGadget        *gadget,
   child = gtk_bin_get_child (GTK_BIN (widget));
   if (child && gtk_widget_get_visible (child))
     gtk_widget_size_allocate_with_baseline (child, (GtkAllocation *)allocation, baseline);
+
+  if (gtk_widget_get_realized (widget))
+    {
+      GtkAllocation border_allocation;
+      gtk_css_gadget_get_border_allocation (gadget, &border_allocation, NULL);
+      gdk_window_move_resize (GTK_BUTTON (widget)->priv->event_window,
+                              border_allocation.x,
+                              border_allocation.y,
+                              border_allocation.width,
+                              border_allocation.height);
+    }
 
   gtk_container_get_children_clip (GTK_CONTAINER (widget), out_clip);
 }
