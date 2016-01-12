@@ -2517,7 +2517,7 @@ static void
 gdk_wayland_seat_ungrab (GdkSeat *seat)
 {
   GdkWaylandSeat *wayland_seat = GDK_WAYLAND_SEAT (seat);
-  GdkDisplay *display = gdk_seat_get_display (seat);;
+  GdkDisplay *display = gdk_seat_get_display (seat);
   GdkDeviceGrabInfo *grab;
 
   g_clear_object (&wayland_seat->grab_cursor);
