@@ -198,8 +198,8 @@ _gtk_rounded_box_grow (GtkRoundedBox *box,
     }
 
   gtk_css_border_radius_grow (&box->corner[GTK_CSS_TOP_LEFT], left, top);
-  gtk_css_border_radius_grow (&box->corner[GTK_CSS_TOP_RIGHT], right, bottom);
-  gtk_css_border_radius_grow (&box->corner[GTK_CSS_BOTTOM_RIGHT], right, top);
+  gtk_css_border_radius_grow (&box->corner[GTK_CSS_TOP_RIGHT], right, top);
+  gtk_css_border_radius_grow (&box->corner[GTK_CSS_BOTTOM_RIGHT], right, bottom);
   gtk_css_border_radius_grow (&box->corner[GTK_CSS_BOTTOM_LEFT], left, bottom);
 }
 
