@@ -3497,7 +3497,7 @@ update_arrow_nodes (GtkNotebook *notebook)
 {
   GtkNotebookPrivate *priv = notebook->priv;
   gboolean arrow[4];
-  GtkImageType up_image_type, down_image_type;
+  GtkCssImageBuiltinType up_image_type, down_image_type;
   const char *style_property_name;
   GtkCssNode *tabs_node;
   gint i;
