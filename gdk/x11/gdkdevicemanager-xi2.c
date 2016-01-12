@@ -428,6 +428,7 @@ create_device (GdkDeviceManager *device_manager,
         input_source = GDK_SOURCE_PEN;
       else if (!strstr (tmp_name, "mouse") &&
                !strstr (tmp_name, "pointer") &&
+               !strstr (tmp_name, "qemu usb tablet") &&
                has_abs_axes (display, dev->classes, dev->num_classes))
         input_source = GDK_SOURCE_TOUCHSCREEN;
       else
