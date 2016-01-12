@@ -9335,8 +9335,6 @@ gtk_widget_set_sensitive (GtkWidget *widget,
         }
 
       gtk_widget_propagate_state (widget, &data);
-
-      gtk_widget_queue_resize (widget);
     }
 
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_SENSITIVE]);
