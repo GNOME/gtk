@@ -298,7 +298,10 @@ gtk_widget_path_to_string (const GtkWidgetPath *path)
       if (i > 0)
         g_string_append_c (string, ' ');
 
-      g_string_append (string, g_type_name (gtk_css_node_declaration_get_type (elem->decl)));
+      if (gtk_css_node_declaration_get_name (elem->decl))
+        g_string_append (string, gtk_css_node_declaration_get_name (elem->decl));
+      else
+        g_string_append (string, g_type_name (gtk_css_node_declaration_get_type (elem->decl)));
 
       if (gtk_css_node_declaration_get_id (elem->decl))
         {
