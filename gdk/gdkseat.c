@@ -281,7 +281,7 @@ gdk_seat_ungrab (GdkSeat *seat)
   g_return_if_fail (GDK_IS_SEAT (seat));
 
   seat_class = GDK_SEAT_GET_CLASS (seat);
-  return seat_class->ungrab (seat);
+  seat_class->ungrab (seat);
 }
 
 /**
