@@ -624,8 +624,8 @@ gtk_switch_render_trough (GtkCssGadget *gadget,
 
   pango_layout_get_pixel_extents (layout, NULL, &rect);
 
-  label_x = ((width / 2) - rect.width) / 2;
-  label_y = (height - rect.height) / 2;
+  label_x = x + ((width / 2) - rect.width) / 2;
+  label_y = y + (height - rect.height) / 2;
 
   gtk_render_layout (context, cr, label_x, label_y, layout);
 
@@ -638,8 +638,8 @@ gtk_switch_render_trough (GtkCssGadget *gadget,
 
   pango_layout_get_pixel_extents (layout, NULL, &rect);
 
-  label_x = (width / 2) + ((width / 2) - rect.width) / 2;
-  label_y = (height - rect.height) / 2;
+  label_x = x + (width / 2) + ((width / 2) - rect.width) / 2;
+  label_y = y + (height - rect.height) / 2;
 
   gtk_render_layout (context, cr, label_x, label_y, layout);
 
