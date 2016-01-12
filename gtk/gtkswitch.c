@@ -485,6 +485,17 @@ gtk_switch_allocate_contents (GtkCssGadget        *gadget,
                            &slider_alloc,
                            baseline,
                            out_clip);
+
+  if (gtk_widget_get_realized (GTK_WIDGET (self)))
+    {
+      GtkAllocation border_allocation;
+      gtk_css_gadget_get_border_allocation (gadget, &border_allocation, NULL);
+      gdk_window_move_resize (priv->event_window,
+                              border_allocation.x,
+                              border_allocation.y,
+                              border_allocation.width,
+                              border_allocation.height);
+    }
 }
 
 static void
@@ -495,19 +506,11 @@ gtk_switch_size_allocate (GtkWidget     *widget,
   GtkAllocation clip;
 
   gtk_widget_set_allocation (widget, allocation);
-
-  if (gtk_widget_get_realized (widget))
-    gdk_window_move_resize (priv->event_window,
-                            allocation->x,
-                            allocation->y,
-                            allocation->width,
-                            allocation->height);
-
   gtk_css_gadget_allocate (priv->gadget,
                            allocation,
                            gtk_widget_get_allocated_baseline (widget),
                            &clip);
-  
+
   gtk_widget_set_clip (widget, &clip);
 }
 
