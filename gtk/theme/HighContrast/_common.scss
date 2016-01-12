@@ -88,7 +88,6 @@ $ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 }
 
-textview text,
 .view {
   color: $fg_color;
   background-color: $base_color;
@@ -96,25 +95,22 @@ textview text,
     color: $backdrop_fg_color;
     background-color: $backdrop_base_color;
   }
-  & selection,
-  & selection:focus,
-  & selection:hover {
+  &:selected,
+  &:selected:focus,
+  &:selected:hover { @extend %selected_items; }
+}
+
+textview text {
+  @extend .view;
+
+  selection,
+  selection:focus,
+  selection:hover {
     @extend %selected_items;
   }
 }
 
-iconview {
-  color: $fg_color;
-  background-color: $base_color;
-  &:backdrop {
-    color: $backdrop_fg_color;
-    background-color: $backdrop_base_color;
-  }
-  &:selected,
-  &:selected:focus {
-    @extend %selected_items;
-  }
-}
+iconview { @extend .view ;}
 
 .rubberband,
 rubberband {
