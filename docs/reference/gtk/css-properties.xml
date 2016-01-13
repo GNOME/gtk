@@ -381,7 +381,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry>✓</entry>
               <entry></entry>
               <entry></entry>
-              <entry></entry>
+              <entry>Determines the preferred style for application-loaded icons</entry>
             </row>
             <row>
               <entry>‑gtk‑icon‑theme</entry>
@@ -390,16 +390,16 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry>✓</entry>
               <entry></entry>
               <entry></entry>
-              <entry>Since 3.20</entry>
+              <entry>The icon theme to use with -gtk-icontheme(). Since 3.20</entry>
             </row>
             <row>
               <entry>‑gtk‑icon‑palette</entry>
-              <entry><code>default | 〈name〉 〈color〉 [ , 〈name〉 〈color〉 ]*</code></entry>
+              <entry><code>〈color palette〉</code></entry>
               <entry><code>default</code></entry>
               <entry>✓</entry>
               <entry>✓</entry>
               <entry></entry>
-              <entry>Since 3.20</entry>
+              <entry>Used to recolor symbolic icons (both application-loaded and from -gtk-icontheme()). Since 3.20</entry>
             </row>
             <row>
               <entry>‑gtk‑icon‑shadow</entry>
@@ -426,6 +426,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
 <literallayout><code>〈transform〉 = matrix( 〈number〉 [ , 〈number〉 ]{5} ) | translate( 〈length〉, 〈length〉 ) | translateX( 〈length〉 ) | translateY( 〈length〉 ) |</code>
 <code>                scale( 〈number〉[ , 〈number〉 ]? ) | scaleX( 〈number〉 ) | scaleY( 〈number〉 ) | rotate( 〈angle〉 ) | skew( 〈angle〉 [ , 〈angle〉 ]? ) |</code>
 <code>                skewX( 〈angle〉 ) |  skewY( 〈angle〉 )</code>
+<code>〈color palette〉 = default | 〈name〉 〈color〉 [ , 〈name〉 〈color〉 ]*</code></entry>
 </literallayout>
 
       <para>
@@ -433,8 +434,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
         as arrows, expanders, spinners, checks or radios. -gtk-icon-style and
         -gtk-icon-theme are used when resolving images using the -gtk-icontheme
         syntax. -gtk-icon-palette defines a color palette for recoloring symbolic
-        icons. The recognized names for colors in symbolic icons are "error",
-        "warning" and "success".
+        icons. The recognized names for colors in symbolic icons are error,
+        warning and success.
       </para>
 
       <table pgwide="1">

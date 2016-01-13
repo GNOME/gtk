@@ -797,8 +797,9 @@ label {
 
     <para>
       The specified icon name is used to look up a themed icon, while taking
-      the values of the -gtk-icon-style and -gtk-icon-theme properties. This
-      kind of image is mainly used as value of the -gtk-icon-source property.
+      into account the values of the -gtk-icon-theme and -gtk-icon-palette
+      properties. This kind of image is mainly used as value of the
+      -gtk-icon-source property.
     </para>
 
     <example>
@@ -817,7 +818,7 @@ arrow.fancy {
 
     <para>
       GTK+ supports scaled rendering on hi-resolution displays. This works
-      best if images can be specify normal and hi-resolution variants. From
+      best if images can specify normal and hi-resolution variants. From
       CSS, this can be done with the -gtk-scaled syntax.
     </para>
 
