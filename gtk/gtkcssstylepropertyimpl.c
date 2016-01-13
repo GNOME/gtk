@@ -1052,6 +1052,16 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           NULL,
                                           gtk_css_icon_theme_value_new (NULL));
+  gtk_css_style_property_register        ("-gtk-icon-palette",
+					  GTK_CSS_PROPERTY_ICON_PALETTE,
+					  G_TYPE_NONE,
+					  GTK_STYLE_PROPERTY_ANIMATED | GTK_STYLE_PROPERTY_INHERIT,
+                                          GTK_CSS_AFFECTS_ICON,
+					  icon_palette_parse,
+					  NULL,
+					  NULL,
+					  gtk_css_palette_value_new_default ());
+
 
   /* properties that aren't referenced when computing values
    * start here */
@@ -1767,16 +1777,6 @@ _gtk_css_style_property_init_properties (void)
 					  NULL,
 					  NULL,
 					  _gtk_css_icon_effect_value_new (GTK_CSS_ICON_EFFECT_NONE));
-  gtk_css_style_property_register        ("-gtk-icon-palette",
-					  GTK_CSS_PROPERTY_ICON_PALETTE,
-					  G_TYPE_NONE,
-					  GTK_STYLE_PROPERTY_ANIMATED | GTK_STYLE_PROPERTY_INHERIT,
-                                          GTK_CSS_AFFECTS_ICON,
-					  icon_palette_parse,
-					  NULL,
-					  NULL,
-					  gtk_css_palette_value_new_default ());
-
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_css_style_property_register        ("engine",
