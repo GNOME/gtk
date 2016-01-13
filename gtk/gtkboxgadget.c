@@ -111,7 +111,7 @@ gtk_box_gadget_distribute (GtkBoxGadget     *gadget,
       size -= sizes[i].minimum_size;
     }
 
-  g_assert (size >= 0);
+  g_return_if_fail (size >= 0);
 
   size = gtk_distribute_natural_allocation (size, priv->children->len, sizes);
 
