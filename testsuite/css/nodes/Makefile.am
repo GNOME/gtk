@@ -32,7 +32,8 @@ test_data = \
 	box.rtl.ui	box.rtl.nodes		\
 	buttons.ui 	buttons.nodes 		\
 	entries.ui 	entries.nodes 		\
-	levelbar.ui 	levelbar.nodes 		\
+	levelbar.ltr.ui levelbar.ltr.nodes	\
+	levelbar.rtl.ui levelbar.rtl.nodes	\
 	notebook.ui 	notebook.nodes 		\
 	paned.ltr.ui	paned.ltr.nodes		\
 	paned.rtl.ui	paned.rtl.nodes		\
