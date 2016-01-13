@@ -29,6 +29,20 @@
 #include "gdkwindow.h"
 #include "gdkintl.h"
 #include "gdkenumtypes.h"
+#include "gdkcursor.h"
+
+static struct {
+  GdkDragAction action;
+  const gchar  *name;
+  GdkCursor    *cursor;
+} drag_cursors[] = {
+  { GDK_ACTION_DEFAULT, NULL,       NULL },
+  { GDK_ACTION_ASK,     "dnd-ask",  NULL },
+  { GDK_ACTION_COPY,    "dnd-copy", NULL },
+  { GDK_ACTION_MOVE,    "dnd-move", NULL },
+  { GDK_ACTION_LINK,    "dnd-link", NULL },
+  { 0,                  "dnd-none", NULL },
+};
 
 enum {
   CANCEL,
@@ -711,4 +725,19 @@ gdk_drag_context_handle_source_event (GdkEvent *event)
     }
 
   return FALSE;
+}
+
+GdkCursor *
+gdk_drag_get_cursor (GdkDragAction action)
+{
+  gint i;
+
+  for (i = 0 ; i < G_N_ELEMENTS (drag_cursors) - 1; i++)
+    if (drag_cursors[i].action == action)
+      break;
+
+  if (drag_cursors[i].cursor == NULL)
+    drag_cursors[i].cursor = gdk_cursor_new_from_name (gdk_display_get_default (),
+                                                       drag_cursors[i].name);
+  return drag_cursors[i].cursor;
 }
