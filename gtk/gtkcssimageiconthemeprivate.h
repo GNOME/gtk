@@ -41,6 +41,9 @@ struct _GtkCssImageIconTheme
 
   GtkIconTheme *icon_theme;
   GdkRGBA color;
+  GdkRGBA success;
+  GdkRGBA warning;
+  GdkRGBA error;
   gint scale;
   char *name;
 };

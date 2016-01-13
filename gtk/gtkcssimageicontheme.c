@@ -27,6 +27,7 @@
 #include "gtkcssrgbavalueprivate.h"
 #include "gtksettingsprivate.h"
 #include "gtkstyleproviderprivate.h"
+#include "gtkiconthemeprivate.h"
 
 G_DEFINE_TYPE (GtkCssImageIconTheme, _gtk_css_image_icon_theme, GTK_TYPE_CSS_IMAGE)
 
@@ -66,7 +67,9 @@ gtk_css_image_icon_theme_draw (GtkCssImage        *image,
 
   pixbuf = gtk_icon_info_load_symbolic (icon_info,
                                         &icon_theme->color,
-                                        NULL, NULL, NULL,
+                                        &icon_theme->success,
+                                        &icon_theme->warning,
+                                        &icon_theme->error,
                                         NULL,
                                         &error);
   if (pixbuf == NULL)
@@ -139,7 +142,7 @@ gtk_css_image_icon_theme_compute (GtkCssImage             *image,
   copy->name = g_strdup (icon_theme->name);
   copy->icon_theme = gtk_css_icon_theme_value_get_icon_theme (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_THEME));
   copy->scale = _gtk_style_provider_private_get_scale (provider);
-  copy->color = *_gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_COLOR));
+  gtk_icon_theme_lookup_symbolic_colors (style, &copy->color, &copy->success, &copy->warning, &copy->error);
 
   return GTK_CSS_IMAGE (copy);
 }
