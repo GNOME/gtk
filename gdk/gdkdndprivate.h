@@ -112,6 +112,7 @@ void     gdk_drag_context_set_cursor          (GdkDragContext *context,
                                                GdkCursor      *cursor);
 void     gdk_drag_context_cancel              (GdkDragContext *context);
 gboolean gdk_drag_context_handle_source_event (GdkEvent *event);
+GdkCursor * gdk_drag_get_cursor (GdkDragAction action);
 
 G_END_DECLS
 
