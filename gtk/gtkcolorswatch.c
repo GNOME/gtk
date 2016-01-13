@@ -507,13 +507,6 @@ swatch_size_allocate (GtkWidget     *widget,
 
   gtk_widget_set_allocation (widget, allocation);
 
-  if (gtk_widget_get_realized (widget))
-    gdk_window_move_resize (swatch->priv->event_window,
-                            allocation->x,
-                            allocation->y,
-                            allocation->width,
-                            allocation->height);
-
   gtk_css_gadget_allocate (swatch->priv->gadget,
                            allocation,
                            gtk_widget_get_allocated_baseline (widget),
@@ -526,6 +519,18 @@ swatch_size_allocate (GtkWidget     *widget,
   gdk_rectangle_union (&clip, &clip2, &clip);
 
   gtk_widget_set_clip (widget, &clip);
+
+  if (gtk_widget_get_realized (widget))
+    {
+      GtkAllocation border_allocation;
+      gtk_css_gadget_get_border_allocation(swatch->priv->gadget, &border_allocation, NULL);
+      gdk_window_move_resize (swatch->priv->event_window,
+                              border_allocation.x,
+                              border_allocation.y,
+                              border_allocation.width,
+                              border_allocation.height);
+    }
+
 }
 
 static void
