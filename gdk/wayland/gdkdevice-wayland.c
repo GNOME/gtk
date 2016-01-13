@@ -306,7 +306,7 @@ gdk_wayland_device_set_window_cursor (GdkDevice *device,
   if (device == wd->touch_master)
     return;
 
-  if (wd->pointer_grab_window)
+  if (wd->grab_cursor)
     cursor = wd->grab_cursor;
 
   /* Setting the cursor to NULL means that we should use
@@ -2685,7 +2685,7 @@ gdk_wayland_seat_grab (GdkSeat                *seat,
                                     evtime,
                                     FALSE);
 
-      g_set_object (&wayland_seat->grab_cursor, cursor);
+      gdk_wayland_seat_set_global_cursor (seat, cursor);
       g_set_object (&wayland_seat->cursor, cursor);
       gdk_wayland_device_update_window_cursor (wayland_seat);
     }
@@ -3064,6 +3064,21 @@ gdk_wayland_device_unset_touch_grab (GdkDevice        *gdk_device,
   event = _create_touch_event (device, touch, GDK_TOUCH_CANCEL,
                                GDK_CURRENT_TIME);
   _gdk_wayland_display_deliver_event (device->display, event);
+}
+
+void
+gdk_wayland_seat_set_global_cursor (GdkSeat   *seat,
+                                    GdkCursor *cursor)
+{
+  GdkWaylandSeat *wayland_seat = GDK_WAYLAND_SEAT (seat);
+  GdkDevice *pointer;
+
+  pointer = gdk_seat_get_pointer (seat);
+
+  g_set_object (&wayland_seat->grab_cursor, cursor);
+  gdk_wayland_device_set_window_cursor (pointer,
+                                        gdk_wayland_device_get_focus (pointer),
+                                        NULL);
 }
 
 struct wl_data_device *
