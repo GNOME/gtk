@@ -74,9 +74,11 @@
  *
  * # CSS nodes
  *
- * GtkBox uses a single CSS node with name box. The nodes of the children
- * are always arranged from left to right. So box :first-child will always
- * select the leftmost child, regardless of text direction.
+ * GtkBox uses a single CSS node with name box.
+ *
+ * In horizontal orientation, the nodes of the children are always arranged
+ * from left to right. So :first-child will always select the leftmost child,
+ * regardless of text direction.
  */
 
 #include "config.h"
