@@ -2014,7 +2014,6 @@ scrollbar {
                                          // sadly can't be in '.slider'
                                          // where it belongs
     -GtkRange-stepper-spacing: 0;
-    -GtkRange-trough-under-steppers: 1;
   }
 
   $_slider_margin: 3px;

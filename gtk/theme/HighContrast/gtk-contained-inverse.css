@@ -1619,8 +1619,7 @@ scrollbar {
   -GtkScrollbar-has-forward-stepper: false;
   -GtkRange-slider-width: 20;
   -GtkScrollbar-min-slider-length: 42;
-  -GtkRange-stepper-spacing: 0;
-  -GtkRange-trough-under-steppers: 1; }
+  -GtkRange-stepper-spacing: 0; }
   scrollbar button {
     border: none; }
   scrollbar slider {
