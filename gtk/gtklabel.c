@@ -4584,26 +4584,16 @@ window_to_layout_coords (GtkLabel *label,
 {
   GtkAllocation allocation;
   gint lx, ly;
-  GtkWidget *widget;
 
-  widget = GTK_WIDGET (label);
-  
   /* get layout location in widget->window coords */
   get_layout_location (label, &lx, &ly);
+  gtk_widget_get_allocation (GTK_WIDGET (label), &allocation);
 
-  gtk_widget_get_allocation (widget, &allocation);
+  *x += allocation.x; /* go to widget->window */
+  *x -= lx;                   /* go to layout */
 
-  if (x)
-    {
-      *x += allocation.x; /* go to widget->window */
-      *x -= lx;                   /* go to layout */
-    }
-
-  if (y)
-    {
-      *y += allocation.y; /* go to widget->window */
-      *y -= ly;                   /* go to layout */
-    }
+  *y += allocation.y; /* go to widget->window */
+  *y -= ly;                   /* go to layout */
 }
 
 static void
@@ -4612,26 +4602,17 @@ layout_to_window_coords (GtkLabel *label,
                          gint     *y)
 {
   gint lx, ly;
-  GtkWidget *widget;
   GtkAllocation allocation;
 
-  widget = GTK_WIDGET (label);
-  
   /* get layout location in widget->window coords */
   get_layout_location (label, &lx, &ly);
-  gtk_widget_get_allocation (widget, &allocation);
+  gtk_widget_get_allocation (GTK_WIDGET (label), &allocation);
 
-  if (x)
-    {
-      *x += lx;           /* go to widget->window */
-      *x -= allocation.x; /* go to selection window */
-    }
+  *x += lx;           /* go to widget->window */
+  *x -= allocation.x; /* go to selection window */
 
-  if (y)
-    {
-      *y += ly;           /* go to widget->window */
-      *y -= allocation.y; /* go to selection window */
-    }
+  *y += ly;           /* go to widget->window */
+  *y -= allocation.y; /* go to selection window */
 }
 
 static gboolean
