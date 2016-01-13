@@ -294,6 +294,8 @@ void              gtk_widget_set_csd_input_shape           (GtkWidget           
 
 gboolean          gtk_widget_has_size_request              (GtkWidget *widget);
 
+void              gtk_widget_reset_controllers             (GtkWidget *widget);
+
 /* inline getters */
 
 static inline gboolean

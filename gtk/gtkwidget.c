@@ -13006,17 +13006,7 @@ gtk_widget_propagate_state (GtkWidget    *widget,
         }
 
       if (!gtk_widget_is_sensitive (widget))
-        {
-          EventControllerData *controller_data;
-          GList *l;
-
-          /* Reset all controllers */
-          for (l = priv->event_controllers; l; l = l->next)
-            {
-              controller_data = l->data;
-              gtk_event_controller_reset (controller_data->controller);
-            }
-        }
+        gtk_widget_reset_controllers (widget);
 
       if (GTK_IS_CONTAINER (widget))
         {
@@ -17595,4 +17585,19 @@ _gtk_widget_consumes_motion (GtkWidget        *widget,
     }
 
   return FALSE;
+}
+
+void
+gtk_widget_reset_controllers (GtkWidget *widget)
+{
+  EventControllerData *controller_data;
+  GtkWidgetPrivate *priv = widget->priv;
+  GList *l;
+
+  /* Reset all controllers */
+  for (l = priv->event_controllers; l; l = l->next)
+    {
+      controller_data = l->data;
+      gtk_event_controller_reset (controller_data->controller);
+    }
 }
