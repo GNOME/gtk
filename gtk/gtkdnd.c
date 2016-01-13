@@ -42,6 +42,10 @@
 #endif
 #endif
 
+#ifdef GDK_WINDOWING_WAYLAND
+#include <gdk/wayland/gdkwayland.h>
+#endif
+
 #include "gtkgesturedrag.h"
 #include "gtkgesturesingle.h"
 #include "gtkicontheme.h"
@@ -2174,9 +2178,14 @@ gtk_drag_begin_internal (GtkWidget          *widget,
   GdkAtom selection;
   gboolean managed = FALSE;
 
+  managed =
 #ifdef GDK_WINDOWING_X11
-  managed = GDK_IS_X11_DISPLAY (gtk_widget_get_display (widget));
+    GDK_IS_X11_DISPLAY (gtk_widget_get_display (widget)) ||
 #endif
+#ifdef GDK_WINDOWING_WAYLAND
+    GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)) ||
+#endif
+    FALSE;
 
   pointer = keyboard = NULL;
   ipc_widget = gtk_drag_get_ipc_widget (widget);
