@@ -3194,7 +3194,7 @@ update_icon_state (GtkWidget            *widget,
   else if (icon_info->prelight)
     state |= GTK_STATE_FLAG_PRELIGHT;
 
-  gtk_css_node_set_state (gtk_css_gadget_get_node (icon_info->gadget), state);
+  gtk_css_gadget_set_state (icon_info->gadget, state);
 }
 
 static void

@@ -957,14 +957,14 @@ update_node_state (GtkExpander *expander)
   else
     state &= ~GTK_STATE_FLAG_PRELIGHT;
 
-  gtk_css_node_set_state (gtk_css_gadget_get_node (priv->title_gadget), state);
+  gtk_css_gadget_set_state (priv->title_gadget, state);
 
   if (priv->expanded)
     state |= GTK_STATE_FLAG_CHECKED;
   else
     state &= ~GTK_STATE_FLAG_CHECKED;
 
-  gtk_css_node_set_state (gtk_css_gadget_get_node (priv->arrow_gadget), state);
+  gtk_css_gadget_set_state (priv->arrow_gadget, state);
 }
 
 static void

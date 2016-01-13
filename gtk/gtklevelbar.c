@@ -579,8 +579,7 @@ update_block_nodes (GtkLevelBar *self)
                                                              NULL,
                                                              NULL, NULL, NULL,
                                                              NULL, NULL);
-          gtk_css_node_set_state (gtk_css_gadget_get_node (priv->block_gadget[i]),
-                                  gtk_css_node_get_state (trough_node));
+          gtk_css_gadget_set_state (priv->block_gadget[i], gtk_css_node_get_state (trough_node));
         }
       priv->n_blocks = n_blocks;
     }
@@ -616,9 +615,9 @@ gtk_level_bar_state_flags_changed (GtkWidget     *widget,
 
   state = gtk_widget_get_state_flags (widget);
 
-  gtk_css_node_set_state (gtk_css_gadget_get_node (priv->trough_gadget), state);
+  gtk_css_gadget_set_state (priv->trough_gadget, state);
   for (i = 0; i < priv->n_blocks; i++)
-    gtk_css_node_set_state (gtk_css_gadget_get_node (priv->block_gadget[i]), state);
+    gtk_css_gadget_set_state (priv->block_gadget[i], state);
 
   GTK_WIDGET_CLASS (gtk_level_bar_parent_class)->state_flags_changed (widget, previous_state);
 }

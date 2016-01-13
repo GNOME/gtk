@@ -201,7 +201,7 @@ gtk_model_button_update_state (GtkModelButton *button)
 
   state = gtk_widget_get_state_flags (GTK_WIDGET (button));
 
-  gtk_css_node_set_state (gtk_css_gadget_get_node (button->gadget), state);
+  gtk_css_gadget_set_state (button->gadget, state);
 
   if (button->role == GTK_BUTTON_ROLE_CHECK)
     {
@@ -239,7 +239,7 @@ gtk_model_button_update_state (GtkModelButton *button)
     }
 
   gtk_builtin_icon_set_image (GTK_BUILTIN_ICON (button->indicator_gadget), image_type);
-  gtk_css_node_set_state (gtk_css_gadget_get_node (button->indicator_gadget), state);
+  gtk_css_gadget_set_state (button->indicator_gadget, state);
 }
 
 static void

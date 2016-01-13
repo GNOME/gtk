@@ -3695,8 +3695,7 @@ gtk_menu_handle_scrolling (GtkMenu *menu,
           if (arrow_state != priv->upper_arrow_state)
             {
               priv->upper_arrow_state = arrow_state;
-              gtk_css_node_set_state (gtk_css_gadget_get_node (priv->top_arrow_gadget),
-                                      arrow_state);
+              gtk_css_gadget_set_state (priv->top_arrow_gadget, arrow_state);
 
               gdk_window_invalidate_rect (gtk_widget_get_window (GTK_WIDGET (menu)),
                                           &rect, FALSE);
@@ -3770,8 +3769,7 @@ gtk_menu_handle_scrolling (GtkMenu *menu,
           if (arrow_state != priv->lower_arrow_state)
             {
               priv->lower_arrow_state = arrow_state;
-              gtk_css_node_set_state (gtk_css_gadget_get_node (priv->bottom_arrow_gadget),
-                                      arrow_state);
+              gtk_css_gadget_set_state (priv->bottom_arrow_gadget, arrow_state);
 
               gdk_window_invalidate_rect (gtk_widget_get_window (GTK_WIDGET (menu)),
                                           &rect, FALSE);

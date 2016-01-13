@@ -578,8 +578,8 @@ swatch_state_flags_changed (GtkWidget     *widget,
 {
   GtkColorSwatch *swatch = GTK_COLOR_SWATCH (widget);
 
-  gtk_css_node_set_state (gtk_css_gadget_get_node (swatch->priv->gadget), gtk_widget_get_state_flags (widget));
-  gtk_css_node_set_state (gtk_css_gadget_get_node (swatch->priv->overlay_gadget), gtk_widget_get_state_flags (widget));
+  gtk_css_gadget_set_state (swatch->priv->gadget, gtk_widget_get_state_flags (widget));
+  gtk_css_gadget_set_state (swatch->priv->overlay_gadget, gtk_widget_get_state_flags (widget));
 
   update_icon (swatch);
 

@@ -486,8 +486,7 @@ update_node_state (GtkCheckMenuItem *check_menu_item)
   if (priv->active)
     state |= GTK_STATE_FLAG_CHECKED;
 
-  gtk_css_node_set_state (gtk_css_gadget_get_node (priv->indicator_gadget),
-                          state);
+  gtk_css_gadget_set_state (priv->indicator_gadget, state);
 }
 
 /**

@@ -505,11 +505,11 @@ update_node_state (GtkProgressBar *pbar)
 
   state = gtk_widget_get_state_flags (GTK_WIDGET (pbar));
 
-  gtk_css_node_set_state (gtk_css_gadget_get_node (priv->gadget), state);
-  gtk_css_node_set_state (gtk_css_gadget_get_node (priv->trough_gadget), state);
-  gtk_css_node_set_state (gtk_css_gadget_get_node (priv->progress_gadget), state);
+  gtk_css_gadget_set_state (priv->gadget, state);
+  gtk_css_gadget_set_state (priv->trough_gadget, state);
+  gtk_css_gadget_set_state (priv->progress_gadget, state);
   if (priv->text_gadget)
-    gtk_css_node_set_state (gtk_css_gadget_get_node (priv->text_gadget), state);
+    gtk_css_gadget_set_state (priv->text_gadget, state);
 }
 
 static void

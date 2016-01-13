@@ -156,9 +156,10 @@ gtk_check_button_update_node_state (GtkWidget *widget)
   else
     image_type = GTK_IS_RADIO_BUTTON (widget) ? GTK_CSS_IMAGE_BUILTIN_OPTION : GTK_CSS_IMAGE_BUILTIN_CHECK;
   gtk_builtin_icon_set_image (GTK_BUILTIN_ICON (priv->indicator_gadget), image_type);
-  
-  gtk_css_node_set_state (gtk_css_gadget_get_node (priv->indicator_gadget), state);
+
+  gtk_css_gadget_set_state (priv->indicator_gadget, state);
 }
+
 
 static void
 gtk_check_button_state_flags_changed (GtkWidget     *widget,

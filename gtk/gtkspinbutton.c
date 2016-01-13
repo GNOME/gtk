@@ -956,10 +956,8 @@ update_node_state (GtkSpinButton *spin_button)
 {
   GtkSpinButtonPrivate *priv = spin_button->priv;
 
-  gtk_css_node_set_state (gtk_css_gadget_get_node (priv->up_button),
-                          gtk_spin_button_panel_get_state (spin_button, UP_PANEL));
-  gtk_css_node_set_state (gtk_css_gadget_get_node (priv->down_button),
-                          gtk_spin_button_panel_get_state (spin_button, DOWN_PANEL));
+  gtk_css_gadget_set_state (priv->up_button, gtk_spin_button_panel_get_state (spin_button, UP_PANEL));
+  gtk_css_gadget_set_state (priv->down_button, gtk_spin_button_panel_get_state (spin_button, DOWN_PANEL));
 }
 
 static void

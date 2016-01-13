@@ -1023,10 +1023,7 @@ static void
 gtk_frame_state_flags_changed (GtkWidget     *widget,
                                GtkStateFlags  previous_state)
 {
-  GtkCssNode *border_node;
-
-  border_node = gtk_css_gadget_get_node (GTK_FRAME (widget)->priv->border_gadget);
-  gtk_css_node_set_state (border_node, gtk_widget_get_state_flags (widget));
+  gtk_css_gadget_set_state (GTK_FRAME (widget)->priv->border_gadget, gtk_widget_get_state_flags (widget));
 
   GTK_WIDGET_CLASS (gtk_frame_parent_class)->state_flags_changed (widget, previous_state);
 }
