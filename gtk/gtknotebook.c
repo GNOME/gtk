@@ -2324,7 +2324,7 @@ gtk_notebook_measure_tabs (GtkCssGadget   *gadget,
 {
   GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-  GtkRequisition tabs_requisition;
+  GtkRequisition tabs_requisition = { 0 };
 
   gtk_notebook_get_preferred_tabs_size (notebook, &tabs_requisition);
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
