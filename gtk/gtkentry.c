@@ -4014,15 +4014,6 @@ gtk_entry_render (GtkCssGadget *gadget,
       /* Draw entry_bg, shadow, progress and focus */
       gtk_entry_draw_frame (widget, context, cr);
 
-      /* Draw icons */
-      for (i = 0; i < MAX_ICONS; i++)
-        {
-          EntryIconInfo *icon_info = priv->icons[i];
-
-          if (icon_info != NULL)
-            gtk_css_gadget_draw (icon_info->gadget, cr);
-        }
-
       /* Draw text and cursor */
       cairo_save (cr);
 
