@@ -55,6 +55,7 @@
 #include "gtkselectionprivate.h"
 #include "gtkwindowgroup.h"
 #include "gtkwindowprivate.h"
+#include "gtkwidgetprivate.h"
 
 
 /**
@@ -2308,6 +2309,8 @@ gtk_drag_begin_internal (GtkWidget          *widget,
   info->start_x = start_x;
   info->start_y = start_y;
 
+  gtk_widget_reset_controllers (widget);
+
   g_signal_emit_by_name (widget, "drag-begin", info->context);
 
   /* Ensure that we have an icon before we start the drag; the
@@ -2336,7 +2339,7 @@ gtk_drag_begin_internal (GtkWidget          *widget,
                         G_CALLBACK (gtk_drag_context_dnd_finished_cb), info);
       g_signal_connect (context, "cancel",
                         G_CALLBACK (gtk_drag_context_cancel_cb), info);
-      g_signal_connect (context, "action",
+      g_signal_connect (context, "action-changed",
                         G_CALLBACK (gtk_drag_context_action_cb), info);
 
       selection = gdk_drag_get_selection (context);
