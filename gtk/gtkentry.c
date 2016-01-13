@@ -3720,10 +3720,6 @@ gtk_entry_get_frame_size (GtkEntry *entry,
                           gint     *height)
 {
   GtkAllocation allocation;
-  GtkWidget *widget = GTK_WIDGET (entry);
-  gint req_height, req_baseline, unused, unused2;
-
-  gtk_entry_get_preferred_height_and_baseline_for_width (widget, -1, &req_height, &unused, &req_baseline, &unused2);
 
   gtk_css_gadget_get_content_allocation (entry->priv->gadget, &allocation, NULL);
 
