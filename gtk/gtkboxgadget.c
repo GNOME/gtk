@@ -27,6 +27,12 @@
 #include "gtksizerequest.h"
 #include "gtkwidgetprivate.h"
 
+/* GtkBoxGadget is a container gadget implementation that arranges its
+ * children in a row, either horizontally or vertically. Children can
+ * be either widgets or gadgets, and can be set to expand horizontally
+ * or vertically, or both.
+ */
+
 typedef struct _GtkBoxGadgetPrivate GtkBoxGadgetPrivate;
 struct _GtkBoxGadgetPrivate {
   GtkOrientation orientation;
@@ -389,9 +395,9 @@ gtk_box_gadget_new_for_node (GtkCssNode *node,
 
 GtkCssGadget *
 gtk_box_gadget_new (const char   *name,
-                      GtkWidget    *owner,
-                      GtkCssGadget *parent,
-                      GtkCssGadget *next_sibling)
+                    GtkWidget    *owner,
+                    GtkCssGadget *parent,
+                    GtkCssGadget *next_sibling)
 {
   GtkCssNode *node;
   GtkCssGadget *result;
