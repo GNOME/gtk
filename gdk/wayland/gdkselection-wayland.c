@@ -350,8 +350,69 @@ data_offer_offer (void                 *data,
   info->targets = g_list_prepend (info->targets, atom);
 }
 
+static inline GdkDragAction
+_wl_to_gdk_actions (uint32_t dnd_actions)
+{
+  GdkDragAction actions = 0;
+
+  if (dnd_actions & WL_DATA_DEVICE_MANAGER_DND_ACTION_COPY)
+    actions |= GDK_ACTION_COPY;
+  if (dnd_actions & WL_DATA_DEVICE_MANAGER_DND_ACTION_MOVE)
+    actions |= GDK_ACTION_MOVE;
+  if (dnd_actions & WL_DATA_DEVICE_MANAGER_DND_ACTION_ASK)
+    actions |= GDK_ACTION_ASK;
+
+  return actions;
+}
+
+static void
+data_offer_source_actions (void                 *data,
+                           struct wl_data_offer *wl_data_offer,
+                           uint32_t              source_actions)
+{
+  GdkDragContext *drop_context;
+  GdkDisplay *display;
+  GdkDevice *device;
+  GdkSeat *seat;
+
+  display = gdk_display_get_default ();
+  seat = gdk_display_get_default_seat (display);
+  device = gdk_seat_get_pointer (seat);
+  drop_context = gdk_wayland_device_get_drop_context (device);
+
+  drop_context->actions = _wl_to_gdk_actions (source_actions);
+
+  if (gdk_drag_context_get_dest_window (drop_context))
+    _gdk_wayland_drag_context_emit_event (drop_context, GDK_DRAG_MOTION,
+                                          GDK_CURRENT_TIME);
+}
+
+static void
+data_offer_action (void                 *data,
+                   struct wl_data_offer *wl_data_offer,
+                   uint32_t              action)
+{
+  GdkDragContext *drop_context;
+  GdkDisplay *display;
+  GdkDevice *device;
+  GdkSeat *seat;
+
+  display = gdk_display_get_default ();
+  seat = gdk_display_get_default_seat (display);
+  device = gdk_seat_get_pointer (seat);
+  drop_context = gdk_wayland_device_get_drop_context (device);
+
+  drop_context->action = _wl_to_gdk_actions (action);
+
+  if (gdk_drag_context_get_dest_window (drop_context))
+    _gdk_wayland_drag_context_emit_event (drop_context, GDK_DRAG_MOTION,
+                                          GDK_CURRENT_TIME);
+}
+
 static const struct wl_data_offer_listener data_offer_listener = {
   data_offer_offer,
+  data_offer_source_actions,
+  data_offer_action
 };
 
 DataOfferData *
@@ -569,6 +630,9 @@ gdk_wayland_selection_store (GdkWindow    *window,
   GdkWaylandSelection *selection = gdk_wayland_display_get_selection (display);
   GArray *array;
 
+  if (type == gdk_atom_intern_static_string ("NULL"))
+    return;
+
   array = g_array_new (TRUE, FALSE, sizeof (guchar));
   g_array_append_vals (array, data, len);
 
@@ -701,32 +765,16 @@ data_source_target (void                  *data,
                     const char            *mime_type)
 {
   GdkWaylandSelection *wayland_selection = data;
-  GdkDragContext *context = NULL;
   GdkWindow *window = NULL;
 
   g_debug (G_STRLOC ": %s source = %p, mime_type = %s",
            G_STRFUNC, source, mime_type);
 
-  context = gdk_wayland_drag_context_lookup_by_data_source (source);
-
   if (!mime_type)
-    {
-      if (context)
-        {
-          gdk_wayland_drag_context_set_action (context, 0);
-          _gdk_wayland_drag_context_emit_event (context, GDK_DRAG_STATUS,
-                                                GDK_CURRENT_TIME);
-        }
-      return;
-    }
+    return;
 
   if (source == wayland_selection->dnd_source)
-    {
-      window = wayland_selection->dnd_owner;
-      gdk_wayland_drag_context_set_action (context, GDK_ACTION_COPY);
-      _gdk_wayland_drag_context_emit_event (context, GDK_DRAG_STATUS,
-                                            GDK_CURRENT_TIME);
-    }
+    window = wayland_selection->dnd_owner;
   else if (source == wayland_selection->clipboard_source)
     window = wayland_selection->clipboard_owner;
 
@@ -745,7 +793,6 @@ data_source_send (void                  *data,
                   int32_t                fd)
 {
   GdkWaylandSelection *wayland_selection = data;
-  GdkDragContext *context;
   GdkWindow *window;
 
   g_debug (G_STRLOC ": %s source = %p, mime_type = %s, fd = %d",
@@ -756,8 +803,6 @@ data_source_send (void                  *data,
       close (fd);
       return;
     }
-
-  context = gdk_wayland_drag_context_lookup_by_data_source (source);
 
   if (source == wayland_selection->dnd_source)
     window = wayland_selection->dnd_owner;
@@ -776,13 +821,6 @@ data_source_send (void                  *data,
                                              gdk_atom_intern (mime_type, FALSE),
                                              fd))
     gdk_wayland_selection_check_write (wayland_selection);
-
-  if (context)
-    {
-      _gdk_wayland_drag_context_emit_event (context, GDK_DROP_FINISHED,
-                                            GDK_CURRENT_TIME);
-      gdk_wayland_device_unset_grab (gdk_drag_context_get_device (context));
-    }
 }
 
 static void
@@ -806,22 +844,79 @@ data_source_cancelled (void                  *data,
   else
     return;
 
-  gdk_wayland_selection_unset_data_source (display, atom);
+  context = gdk_wayland_drag_context_lookup_by_data_source (source);
+
+  if (context)
+    gdk_drag_context_cancel (context);
+
   gdk_selection_owner_set (NULL, atom, GDK_CURRENT_TIME, TRUE);
+  gdk_wayland_selection_unset_data_source (display, atom);
+}
 
-  if (source == wayland_selection->dnd_source)
+static void
+data_source_dnd_drop_performed (void                  *data,
+                                struct wl_data_source *source)
+{
+  GdkDragContext *context;
+
+  context = gdk_wayland_drag_context_lookup_by_data_source (source);
+
+  if (!context)
+    return;
+
+  g_signal_emit_by_name (context, "drop-performed", GDK_CURRENT_TIME);
+}
+
+static void
+data_source_dnd_finished (void                  *data,
+                          struct wl_data_source *source)
+{
+  GdkDisplay *display = gdk_display_get_default ();
+  GdkDragContext *context;
+
+  context = gdk_wayland_drag_context_lookup_by_data_source (source);
+
+  if (!context)
+    return;
+
+  if (context->action == GDK_ACTION_MOVE)
     {
-      context = gdk_wayland_drag_context_lookup_by_data_source (source);
-
-      if (context)
-        gdk_wayland_device_unset_grab (gdk_drag_context_get_device (context));
+      gdk_wayland_selection_emit_request (context->source_window,
+                                          atoms[ATOM_DND],
+                                          gdk_atom_intern_static_string ("DELETE"));
     }
+
+  g_signal_emit_by_name (context, "dnd-finished");
+  gdk_selection_owner_set (NULL, atoms[ATOM_DND], GDK_CURRENT_TIME, TRUE);
+  gdk_wayland_selection_unset_data_source (display, atoms[ATOM_DND]);
+}
+
+static void
+data_source_action (void                  *data,
+                    struct wl_data_source *source,
+                    uint32_t               action)
+{
+  GdkDragContext *context;
+
+  g_debug (G_STRLOC ": %s source = %p action=%x",
+           G_STRFUNC, source, action);
+
+  context = gdk_wayland_drag_context_lookup_by_data_source (source);
+
+  if (!context)
+    return;
+
+  context->action = _wl_to_gdk_actions (action);
+  g_signal_emit_by_name (context, "action-changed", context->action);
 }
 
 static const struct wl_data_source_listener data_source_listener = {
   data_source_target,
   data_source_send,
-  data_source_cancelled
+  data_source_cancelled,
+  data_source_dnd_drop_performed,
+  data_source_dnd_finished,
+  data_source_action,
 };
 
 struct wl_data_source *
@@ -1009,7 +1104,7 @@ _gdk_wayland_display_convert_selection (GdkDisplay *display,
   offer = gdk_wayland_selection_get_offer (display, selection);
   target_list = gdk_wayland_selection_get_targets (display, selection);
 
-  if (!offer)
+  if (!offer || target == gdk_atom_intern_static_string ("DELETE"))
     {
       GdkEvent *event;
 
@@ -1184,4 +1279,25 @@ gdk_wayland_selection_clear_targets (GdkDisplay *display,
   wayland_selection->requested_target = GDK_NONE;
   g_array_set_size (wayland_selection->source_targets, 0);
   gdk_wayland_selection_unset_data_source (display, selection);
+}
+
+gboolean
+gdk_wayland_selection_set_current_offer_actions (GdkDisplay *display,
+                                                 uint32_t    action)
+{
+  struct wl_data_offer *offer;
+  uint32_t all_actions = 0;
+
+  offer = gdk_wayland_selection_get_offer (display, atoms[ATOM_DND]);
+
+  if (!offer)
+    return FALSE;
+
+  if (action != 0)
+    all_actions = WL_DATA_DEVICE_MANAGER_DND_ACTION_COPY |
+      WL_DATA_DEVICE_MANAGER_DND_ACTION_MOVE |
+      WL_DATA_DEVICE_MANAGER_DND_ACTION_ASK;
+
+  wl_data_offer_set_actions (offer, all_actions, action);
+  return TRUE;
 }

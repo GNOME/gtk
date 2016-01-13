@@ -24,6 +24,7 @@
 #include "gdkproperty.h"
 #include "gdkprivate-wayland.h"
 #include "gdkdisplay-wayland.h"
+#include "gdkseat-wayland.h"
 
 #include "gdkdeviceprivate.h"
 
@@ -45,6 +46,7 @@ struct _GdkWaylandDragContext
   GdkWindow *dnd_window;
   struct wl_surface *dnd_surface;
   struct wl_data_source *data_source;
+  GdkDragAction selected_action;
   uint32_t serial;
   gdouble x;
   gdouble y;
@@ -82,6 +84,8 @@ gdk_wayland_drag_context_finalize (GObject *object)
       selection_owner = gdk_selection_owner_get_for_display (display, selection);
       if (selection_owner == context->source_window)
         gdk_wayland_selection_unset_data_source (display, selection);
+
+      gdk_drag_context_set_cursor (context, NULL);
     }
 
   if (wayland_context->data_source)
@@ -157,6 +161,21 @@ gdk_wayland_drag_context_find_window (GdkDragContext  *context,
   return NULL;
 }
 
+static inline uint32_t
+gdk_to_wl_actions (GdkDragAction action)
+{
+  uint32_t dnd_actions = 0;
+
+  if (action & (GDK_ACTION_COPY | GDK_ACTION_LINK | GDK_ACTION_PRIVATE))
+    dnd_actions |= WL_DATA_DEVICE_MANAGER_DND_ACTION_COPY;
+  if (action & GDK_ACTION_MOVE)
+    dnd_actions |= WL_DATA_DEVICE_MANAGER_DND_ACTION_MOVE;
+  if (action & GDK_ACTION_ASK)
+    dnd_actions |= WL_DATA_DEVICE_MANAGER_DND_ACTION_ASK;
+
+  return dnd_actions;
+}
+
 void
 gdk_wayland_drag_context_set_action (GdkDragContext *context,
                                      GdkDragAction   action)
@@ -208,6 +227,9 @@ gdk_wayland_drop_context_set_status (GdkDragContext *context,
   GdkDisplay *display;
   struct wl_data_offer *wl_offer;
 
+  if (!context->dest_window)
+    return;
+
   context_wayland = GDK_WAYLAND_DRAG_CONTEXT (context);
 
   display = gdk_device_get_display (gdk_drag_context_get_device (context));
@@ -241,11 +263,32 @@ gdk_wayland_drop_context_set_status (GdkDragContext *context,
 }
 
 static void
+gdk_wayland_drag_context_commit_status (GdkDragContext *context)
+{
+  GdkWaylandDragContext *wayland_context;
+  GdkDisplay *display;
+  uint32_t dnd_actions;
+
+  wayland_context = GDK_WAYLAND_DRAG_CONTEXT (context);
+  display = gdk_device_get_display (gdk_drag_context_get_device (context));
+
+  dnd_actions = gdk_to_wl_actions (wayland_context->selected_action);
+  gdk_wayland_selection_set_current_offer_actions (display, dnd_actions);
+
+  gdk_wayland_drop_context_set_status (context, wayland_context->selected_action != 0);
+}
+
+static void
 gdk_wayland_drag_context_drag_status (GdkDragContext *context,
 				      GdkDragAction   action,
 				      guint32         time_)
 {
-  gdk_wayland_drop_context_set_status (context, action != 0);
+  GdkWaylandDragContext *wayland_context;
+
+  wayland_context = GDK_WAYLAND_DRAG_CONTEXT (context);
+  wayland_context->selected_action = action;
+
+  gdk_wayland_drag_context_commit_status (context);
 }
 
 static void
@@ -263,12 +306,20 @@ gdk_wayland_drag_context_drop_finish (GdkDragContext *context,
 				      guint32         time)
 {
   GdkDisplay *display = gdk_device_get_display (gdk_drag_context_get_device (context));
+  GdkWaylandDragContext *wayland_context;
+  struct wl_data_offer *wl_offer;
   GdkAtom selection;
 
+  wayland_context = GDK_WAYLAND_DRAG_CONTEXT (context);
   selection = gdk_drag_get_selection (context);
+  wl_offer = gdk_wayland_selection_get_offer (display, selection);
 
-  if (gdk_selection_owner_get_for_display (display, selection))
-    gdk_wayland_selection_unset_data_source (display, selection);
+  if (success && wayland_context->selected_action &&
+      wayland_context->selected_action != GDK_ACTION_ASK)
+    {
+      gdk_wayland_drag_context_commit_status (context);
+      wl_data_offer_finish (wl_offer);
+    }
 
   gdk_wayland_selection_set_offer (display, selection, NULL);
 }
@@ -325,6 +376,67 @@ gdk_wayland_drag_context_set_hotspot (GdkDragContext *context,
   gdk_window_invalidate_rect (context_wayland->dnd_window, &damage_rect, FALSE);
 }
 
+static gboolean
+gdk_wayland_drag_context_manage_dnd (GdkDragContext *context,
+                                     GdkWindow      *ipc_window,
+                                     GdkDragAction   actions)
+{
+  GdkWaylandDragContext *context_wayland;
+  GdkWaylandDisplay *display_wayland;
+  GdkDevice *device;
+  GdkWindow *toplevel;
+
+  device = gdk_drag_context_get_device (context);
+  display_wayland = GDK_WAYLAND_DISPLAY (gdk_device_get_display (device));
+  toplevel = _gdk_device_window_at_position (device, NULL, NULL, NULL, TRUE);
+
+  context_wayland = GDK_WAYLAND_DRAG_CONTEXT (context);
+  wl_data_source_set_actions (context_wayland->data_source,
+                              gdk_to_wl_actions (actions));
+
+  wl_data_device_start_drag (gdk_wayland_device_get_data_device (device),
+                             context_wayland->data_source,
+                             gdk_wayland_window_get_wl_surface (toplevel),
+			     context_wayland->dnd_surface,
+                             _gdk_wayland_display_get_serial (display_wayland));
+
+  gdk_seat_ungrab (gdk_device_get_seat (device));
+
+  return TRUE;
+}
+
+static void
+gdk_wayland_drag_context_set_cursor (GdkDragContext *context,
+                                     GdkCursor      *cursor)
+{
+  GdkDevice *device = gdk_drag_context_get_device (context);
+
+  gdk_wayland_seat_set_global_cursor (gdk_device_get_seat (device), cursor);
+}
+
+static void
+gdk_wayland_drag_context_action_changed (GdkDragContext *context,
+                                         GdkDragAction   action)
+{
+  GdkCursor *cursor;
+
+  cursor = gdk_drag_get_cursor (action);
+  gdk_drag_context_set_cursor (context, cursor);
+}
+
+static void
+gdk_wayland_drag_context_drop_performed (GdkDragContext *context,
+                                         guint32         time_)
+{
+  gdk_drag_context_set_cursor (context, NULL);
+}
+
+static void
+gdk_wayland_drag_context_cancel (GdkDragContext *context)
+{
+  gdk_drag_context_set_cursor (context, NULL);
+}
+
 static void
 gdk_wayland_drag_context_class_init (GdkWaylandDragContextClass *klass)
 {
@@ -344,6 +456,11 @@ gdk_wayland_drag_context_class_init (GdkWaylandDragContextClass *klass)
   context_class->get_selection = gdk_wayland_drag_context_get_selection;
   context_class->get_drag_window = gdk_wayland_drag_context_get_drag_window;
   context_class->set_hotspot = gdk_wayland_drag_context_set_hotspot;
+  context_class->manage_dnd = gdk_wayland_drag_context_manage_dnd;
+  context_class->set_cursor = gdk_wayland_drag_context_set_cursor;
+  context_class->action_changed = gdk_wayland_drag_context_action_changed;
+  context_class->drop_performed = gdk_wayland_drag_context_drop_performed;
+  context_class->cancel = gdk_wayland_drag_context_cancel;
 }
 
 GdkDragProtocol
@@ -383,12 +500,8 @@ _gdk_wayland_window_drag_begin (GdkWindow *window,
                                 gint       y_root)
 {
   GdkWaylandDragContext *context_wayland;
-  GdkWaylandDisplay *display_wayland;
   GdkDragContext *context;
-  GdkWindow *toplevel;
   GList *l;
-
-  toplevel = _gdk_device_window_at_position (device, NULL, NULL, NULL, TRUE);
 
   context_wayland = g_object_new (GDK_TYPE_WAYLAND_DRAG_CONTEXT, NULL);
   context = GDK_DRAG_CONTEXT (context_wayland);
@@ -397,7 +510,6 @@ _gdk_wayland_window_drag_begin (GdkWindow *window,
   context->targets = g_list_copy (targets);
 
   gdk_drag_context_set_device (context, device);
-  display_wayland = GDK_WAYLAND_DISPLAY (gdk_device_get_display (device));
 
   context_wayland->dnd_window = create_dnd_window (gdk_window_get_screen (window));
   context_wayland->dnd_surface = gdk_wayland_window_get_wl_surface (context_wayland->dnd_window);
@@ -412,12 +524,6 @@ _gdk_wayland_window_drag_begin (GdkWindow *window,
       wl_data_source_offer (context_wayland->data_source, mimetype);
       g_free (mimetype);
     }
-
-  wl_data_device_start_drag (gdk_wayland_device_get_data_device (device),
-                             context_wayland->data_source,
-                             gdk_wayland_window_get_wl_surface (toplevel),
-			     context_wayland->dnd_surface,
-                             _gdk_wayland_display_get_serial (display_wayland));
 
   return context;
 }

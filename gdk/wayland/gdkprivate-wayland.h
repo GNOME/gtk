@@ -188,7 +188,7 @@ struct wl_data_device * gdk_wayland_device_get_data_device (GdkDevice *gdk_devic
 void gdk_wayland_device_set_selection (GdkDevice             *gdk_device,
                                        struct wl_data_source *source);
 
-void gdk_wayland_device_unset_grab       (GdkDevice        *device);
+GdkDragContext * gdk_wayland_device_get_drop_context (GdkDevice *gdk_device);
 
 void gdk_wayland_device_unset_touch_grab (GdkDevice        *device,
                                           GdkEventSequence *sequence);
@@ -258,6 +258,8 @@ void     gdk_wayland_selection_store   (GdkWindow    *window,
 struct wl_data_source * gdk_wayland_selection_get_data_source (GdkWindow *owner,
                                                                GdkAtom    selection);
 void gdk_wayland_selection_unset_data_source (GdkDisplay *display, GdkAtom selection);
+gboolean gdk_wayland_selection_set_current_offer_actions (GdkDisplay *display,
+                                                          uint32_t    actions);
 
 EGLSurface gdk_wayland_window_get_egl_surface (GdkWindow *window,
                                                EGLConfig config);
