@@ -135,6 +135,8 @@
  * The header node gets one of the style class .top, .bottom,
  * .left or .right, depending on where the tabs are placed. For
  * reorderable pages, the tab node gets the .reorderable-page class.
+ *
+ * A tab node gets the .dnd style class while it is moved with drag-and-drop.
  */
 
 
