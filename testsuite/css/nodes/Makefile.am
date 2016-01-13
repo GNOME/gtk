@@ -34,6 +34,8 @@ test_data = \
 	entries.ui 	entries.nodes 		\
 	levelbar.ui 	levelbar.nodes 		\
 	notebook.ui 	notebook.nodes 		\
+	paned.ltr.ui	paned.ltr.nodes		\
+	paned.rtl.ui	paned.rtl.nodes		\
 	progressbar.ui 	progressbar.nodes 	\
 	$(NULL)
 
