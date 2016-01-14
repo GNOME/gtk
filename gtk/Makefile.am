@@ -405,6 +405,7 @@ gtk_private_h_sources =		\
 	gtkcssimageprivate.h	\
 	gtkcssimagesurfaceprivate.h	\
 	gtkcssimageurlprivate.h	\
+	gtkcssimagerecolorprivate.h	\
 	gtkcssimagescaledprivate.h	\
 	gtkcssimagevalueprivate.h	\
 	gtkcssimagewin32private.h	\
@@ -664,6 +665,7 @@ gtk_base_c_sources = 		\
 	gtkcssimageradial.c	\
 	gtkcssimagesurface.c	\
 	gtkcssimageurl.c	\
+	gtkcssimagerecolor.c	\
 	gtkcssimagescaled.c	\
 	gtkcssimagevalue.c	\
 	gtkcssimagewin32.c	\
