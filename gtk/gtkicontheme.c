@@ -4282,12 +4282,12 @@ rgba_to_pixel(const GdkRGBA  *rgba,
   pixel[3] = 255;
 }
 
-static GdkPixbuf *
-color_symbolic_pixbuf (GdkPixbuf *symbolic,
-                       const GdkRGBA  *fg_color,
-                       const GdkRGBA  *success_color,
-                       const GdkRGBA  *warning_color,
-                       const GdkRGBA  *error_color)
+GdkPixbuf *
+gtk_icon_theme_color_symbolic_pixbuf (GdkPixbuf     *symbolic,
+                                      const GdkRGBA *fg_color,
+                                      const GdkRGBA *success_color,
+                                      const GdkRGBA *warning_color,
+                                      const GdkRGBA *error_color)
 {
   int width, height, x, y, src_stride, dst_stride;
   guchar *src_data, *dst_data;
@@ -4397,11 +4397,11 @@ gtk_icon_info_load_symbolic_png (GtkIconInfo    *icon_info,
       return NULL;
     }
 
-  return color_symbolic_pixbuf (icon_info->pixbuf,
-                                fg ? fg : &fg_default,
-                                success_color ? success_color : &success_default,
-                                warning_color ? warning_color : &warning_default,
-                                error_color ? error_color : &error_default);
+  return gtk_icon_theme_color_symbolic_pixbuf (icon_info->pixbuf,
+                                               fg ? fg : &fg_default,
+                                               success_color ? success_color : &success_default,
+                                               warning_color ? warning_color : &warning_default,
+                                               error_color ? error_color : &error_default);
 }
 
 static GdkPixbuf *
@@ -4537,7 +4537,6 @@ gtk_icon_info_load_symbolic_svg (GtkIconInfo    *icon_info,
 
   return pixbuf;
 }
-
 
 
 static GdkPixbuf *
