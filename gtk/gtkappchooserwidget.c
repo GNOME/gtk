@@ -66,6 +66,10 @@
  *
  * To keep track of the selected application, use the
  * #GtkAppChooserWidget::application-selected and #GtkAppChooserWidget::application-activated signals.
+ *
+ * # CSS nodes
+ *
+ * GtkAppChooserWidget has a single CSS node with name appchooser.
  */
 
 struct _GtkAppChooserWidgetPrivate {
@@ -1108,6 +1112,8 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, refresh_and_emit_app_selected);
   gtk_widget_class_bind_template_callback (widget_class, program_list_selection_activated);
   gtk_widget_class_bind_template_callback (widget_class, widget_button_press_event_cb);
+
+  gtk_widget_class_set_css_name (widget_class, "appchooser");
 }
 
 static void
