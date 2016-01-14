@@ -1630,21 +1630,21 @@ _gtk_css_style_property_init_properties (void)
 
   gtk_css_style_property_register        ("min-width",
                                           GTK_CSS_PROPERTY_MIN_WIDTH,
-                                          G_TYPE_NONE,
+                                          G_TYPE_INT,
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_SIZE,
                                           minmax_parse,
-                                          NULL,
-                                          NULL,
+                                          query_length_as_int,
+                                          assign_length_from_int,
                                           _gtk_css_number_value_new (0, GTK_CSS_PX));
   gtk_css_style_property_register        ("min-height",
                                           GTK_CSS_PROPERTY_MIN_HEIGHT,
-                                          G_TYPE_NONE,
+                                          G_TYPE_INT,
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_SIZE,
                                           minmax_parse,
-                                          NULL,
-                                          NULL,
+                                          query_length_as_int,
+                                          assign_length_from_int,
                                           _gtk_css_number_value_new (0, GTK_CSS_PX));
 
   gtk_css_style_property_register        ("transition-property",
