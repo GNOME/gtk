@@ -112,6 +112,10 @@
  *   </child>
  * </object>
  * ]|
+ *
+ * # CSS nodes
+ *
+ * GtkPrintUnixDialog has a single CSS node with name printdialog.
  */
 
 
@@ -553,6 +557,8 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
   gtk_widget_class_bind_template_callback (widget_class, update_number_up_layout);
   gtk_widget_class_bind_template_callback (widget_class, redraw_page_layout_preview);
   gtk_widget_class_bind_template_callback (widget_class, draw_page_cb);
+
+  gtk_widget_class_set_css_name (widget_class, "printdialog");
 }
 
 /* Returns a toplevel GtkWindow, or NULL if none */
