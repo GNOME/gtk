@@ -55,6 +55,10 @@
  * The #GtkColorChooserWidget is used in the #GtkColorChooserDialog
  * to provide a dialog for selecting colors.
  *
+ * # CSS names
+ *
+ * GtkColorChooserWidget has a single CSS node with name colorchooser.
+ *
  * Since: 3.4
  */
 
@@ -699,6 +703,8 @@ gtk_color_chooser_widget_class_init (GtkColorChooserWidgetClass *class)
   g_object_class_install_property (object_class, PROP_SHOW_EDITOR,
       g_param_spec_boolean ("show-editor", P_("Show editor"), P_("Show editor"),
                             FALSE, GTK_PARAM_READWRITE));
+
+  gtk_widget_class_set_css_name (GTK_WIDGET_CLASS (class), "colorchooser");
 }
 
 /* GtkColorChooser implementation {{{1 */
