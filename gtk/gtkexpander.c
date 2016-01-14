@@ -817,7 +817,7 @@ gtk_expander_allocate_title (GtkCssGadget        *gadget,
       else
         label_allocation.x = allocation->x + label_xoffset;
 
-      label_allocation.y = allocation->y;
+      label_allocation.y = allocation->y + MAX (0, (arrow_height - label_height) / 2);
       label_allocation.height = label_height;
 
       gtk_widget_size_allocate (priv->label_widget, &label_allocation);
@@ -833,7 +833,7 @@ gtk_expander_allocate_title (GtkCssGadget        *gadget,
     arrow_allocation.x = allocation->x + allocation->width - arrow_width;
   else
     arrow_allocation.x = allocation->x;
-  arrow_allocation.y = allocation->y;
+  arrow_allocation.y = allocation->y + MAX (0, (label_height - arrow_height) / 2);
   arrow_allocation.width = arrow_width;
   arrow_allocation.height = arrow_height;
 
