@@ -37,7 +37,7 @@
 #include "win32/gdkwin32.h"
 #endif /* G_OS_WIN32 */
 
-#include "gtkicontheme.h"
+#include "gtkiconthemeprivate.h"
 #include "gtkcsspalettevalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
 #include "gtkdebug.h"
@@ -5464,37 +5464,20 @@ gtk_icon_theme_lookup_by_gicon_for_scale (GtkIconTheme       *icon_theme,
 
       return info;
     }
+  else if (G_IS_FILE_ICON (icon))
+    {
+      GFile *file = g_file_icon_get_file (G_FILE_ICON (icon));
+
+      info = gtk_icon_info_new_for_file (file, size, scale);
+      info->forced_size = (flags & GTK_ICON_LOOKUP_FORCE_SIZE) != 0;
+
+      return info;
+    }
   else if (G_IS_LOADABLE_ICON (icon))
     {
       info = icon_info_new (ICON_THEME_DIR_UNTHEMED, size, 1);
       info->loadable = G_LOADABLE_ICON (g_object_ref (icon));
       info->is_svg = FALSE;
-
-      if (G_IS_FILE_ICON (icon))
-        {
-          GFile *file = g_file_icon_get_file (G_FILE_ICON (icon));
-          if (file != NULL)
-            {
-              info->icon_file = g_object_ref (file);
-              info->is_resource = g_file_has_uri_scheme (file, "resource");
-
-              if (info->is_resource)
-                {
-                  gchar *uri;
-
-                  uri = g_file_get_uri (file);
-                  info->filename = g_strdup (uri + 11); /* resource:// */
-                  g_free (uri);
-                }
-              else
-                {
-                  info->filename = g_file_get_path (file);
-                }
-
-              info->is_svg = suffix_from_name (info->filename) == ICON_SUFFIX_SVG;
-            }
-        }
-
       info->desired_size = size;
       info->desired_scale = scale;
       info->forced_size = (flags & GTK_ICON_LOOKUP_FORCE_SIZE) != 0;
@@ -5572,4 +5555,38 @@ gtk_icon_info_new_for_pixbuf (GtkIconTheme *icon_theme,
   info->scale = 1.0;
 
   return info;
+}
+
+GtkIconInfo *
+gtk_icon_info_new_for_file (GFile *file,
+                            gint   size,
+                            gint   scale)
+{
+  GtkIconInfo *info;
+
+  info = icon_info_new (ICON_THEME_DIR_UNTHEMED, size, 1);
+  info->loadable = G_LOADABLE_ICON (g_file_icon_new (file));
+  info->icon_file = g_object_ref (file);
+  info->is_resource = g_file_has_uri_scheme (file, "resource");
+
+  if (info->is_resource)
+    {
+      gchar *uri;
+
+      uri = g_file_get_uri (file);
+      info->filename = g_strdup (uri + 11); /* resource:// */
+      g_free (uri);
+    }
+  else
+    {
+      info->filename = g_file_get_path (file);
+    }
+
+  info->is_svg = suffix_from_name (info->filename) == ICON_SUFFIX_SVG;
+
+ info->desired_size = size;
+ info->desired_scale = scale;
+ info->forced_size = FALSE;
+
+ return info;
 }
