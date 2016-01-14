@@ -1393,10 +1393,6 @@ headerbar {
  ************/
 
 .path-bar button {
-  padding: 5px 6px 6px;
-
-  &:first-child { padding-left: 8px; }
-  &:last-child { padding-right: 8px; }
   &:only-child {
     padding-left: 12px;
     padding-right: 12px;
@@ -1406,8 +1402,6 @@ headerbar {
   & label:last-child { padding-left: 2px; }
   & label:first-child { padding-right: 2px; }
   & label:only-child { padding-right: 0; padding-left: 0; }
-
-  image { padding-top: 1px; }
 }
 
 /**************

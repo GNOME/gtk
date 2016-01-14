@@ -1976,28 +1976,16 @@ window.csd > .titlebar:not(headerbar) {
 /************
  * Pathbars *
  ************/
-.path-bar button, .path-bar headerbar button.titlebutton, headerbar .path-bar button.titlebutton,
-.path-bar .titlebar button.titlebutton,
-.titlebar .path-bar button.titlebutton {
-  padding: 5px 6px 6px; }
-  .path-bar button:first-child {
-    padding-left: 8px; }
-  .path-bar button:last-child {
-    padding-right: 8px; }
-  .path-bar button:only-child {
-    padding-left: 12px;
-    padding-right: 12px; }
-  .path-bar button label:last-child {
-    padding-left: 2px; }
-  .path-bar button label:first-child {
-    padding-right: 2px; }
-  .path-bar button label:only-child {
-    padding-right: 0;
-    padding-left: 0; }
-  .path-bar button image,
-  .path-bar .titlebar button.titlebutton image,
-  .titlebar .path-bar button.titlebutton image {
-    padding-top: 1px; }
+.path-bar button:only-child {
+  padding-left: 12px;
+  padding-right: 12px; }
+.path-bar button label:last-child {
+  padding-left: 2px; }
+.path-bar button label:first-child {
+  padding-right: 2px; }
+.path-bar button label:only-child {
+  padding-right: 0;
+  padding-left: 0; }
 
 /**************
  * Tree Views *
