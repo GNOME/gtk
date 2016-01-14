@@ -1114,6 +1114,24 @@ gtk_inspector_object_tree_append_object (GtkInspectorObjectTree *wt,
   object_forall (object, child_callback, &data);
 }
 
+static void
+block_selection_changed (GtkInspectorObjectTree *wt)
+{
+  GtkTreeSelection *selection;
+
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (wt->priv->tree));
+  g_signal_handlers_block_by_func (selection, on_selection_changed, wt);
+}
+
+static void
+unblock_selection_changed (GtkInspectorObjectTree *wt)
+{
+  GtkTreeSelection *selection;
+
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (wt->priv->tree));
+  g_signal_handlers_unblock_by_func (selection, on_selection_changed, wt);
+}
+
 gboolean
 select_object_internal (GtkInspectorObjectTree *wt,
                         GObject                *object,
@@ -1130,10 +1148,10 @@ select_object_internal (GtkInspectorObjectTree *wt,
       path = gtk_tree_model_get_path (GTK_TREE_MODEL (wt->priv->model), &iter);
       gtk_tree_view_expand_to_path (GTK_TREE_VIEW (wt->priv->tree), path);
       if (!activate)
-        g_signal_handlers_block_by_func (selection, on_selection_changed, wt);
+        block_selection_changed (wt);
       gtk_tree_selection_select_iter (selection, &iter);
       if (!activate)
-        g_signal_handlers_unblock_by_func (selection, on_selection_changed, wt);
+        unblock_selection_changed (wt);
 
       gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (wt->priv->tree), path, NULL, TRUE, 0.5, 0);
       if (activate)
@@ -1161,6 +1179,8 @@ gtk_inspector_object_tree_scan (GtkInspectorObjectTree *wt,
   GList *toplevels, *l;
   GdkScreen *screen;
   GObject *selected;
+
+  block_selection_changed (wt);
 
   selected = gtk_inspector_object_tree_get_selected (wt);
 
@@ -1191,6 +1211,8 @@ gtk_inspector_object_tree_scan (GtkInspectorObjectTree *wt,
 
   if (selected)
     select_object_internal (wt, selected, FALSE);
+
+  unblock_selection_changed (wt);
 }
 
 static gboolean
