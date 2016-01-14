@@ -717,7 +717,7 @@ label {
       GTK+ extends the CSS syntax for images and also uses it for specifying icons.
     </para>
 
-<literallayout><code>〈gtk image〉 = 〈gtk gradient〉 | 〈themed icon〉 | 〈scaled image〉 | 〈win32 theme part〉</code>
+<literallayout><code>〈gtk image〉 = 〈gtk gradient〉 | 〈themed icon〉 | 〈scaled image〉 | 〈recolored image〉 | 〈win32 theme part〉</code>
 </literallayout>
 
     <para>
@@ -806,8 +806,8 @@ label {
       <title>Using themed icons in CSS</title>
       <programlisting><![CDATA[
 spinner {
-  -gtk-icon-source: -gtk-icontheme('process-working');
-  -gtk-icon-style: symbolic;
+  -gtk-icon-source: -gtk-icontheme('process-working-symbolic');
+  -gtk-icon-palette: success blue, error magenta;
 }
 arrow.fancy {
   -gtk-icon-source: -gtk-icontheme('pan-down');
@@ -841,6 +841,27 @@ arrow {
 ]]></programlisting>
     </example>
 
+<literallayout><code>〈recolored image〉 = -gtk-recolored( 〈url〉[, 〈color palette〉] )</code>
+</literallayout>
+
+    <para>
+      Symbolic icons from the icon theme are recolored according to the
+      -gtk-icon-palette property. The recoloring is sometimes needed for images
+      that are not part of an icon theme, and the -gtk-recolor syntax makes
+      this available. -gtk-recolor requires a url as first argument. The
+      remaining arguments specify the color palette to use. If the palette
+      is not explicitly specified, the current value of the -gtk-icon-palette
+      property is used.
+    </para>
+
+    <example>
+      <title>Recoloring an image</title>
+      <programlisting><![CDATA[
+arrow {
+  -gtk-icon-source: -gtk-recolor(url('check.svg'), success blue, error rgb(255,0,0));
+}
+]]></programlisting>
+    </example>
     <para>
       On Windows, GTK+ allows to refer to system theme parts as images, as follows:
     </para>
