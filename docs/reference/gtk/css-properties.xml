@@ -426,7 +426,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
 <literallayout><code>〈transform〉 = matrix( 〈number〉 [ , 〈number〉 ]{5} ) | translate( 〈length〉, 〈length〉 ) | translateX( 〈length〉 ) | translateY( 〈length〉 ) |</code>
 <code>                scale( 〈number〉[ , 〈number〉 ]? ) | scaleX( 〈number〉 ) | scaleY( 〈number〉 ) | rotate( 〈angle〉 ) | skew( 〈angle〉 [ , 〈angle〉 ]? ) |</code>
 <code>                skewX( 〈angle〉 ) |  skewY( 〈angle〉 )</code>
-<code>〈color palette〉 = default | 〈name〉 〈color〉 [ , 〈name〉 〈color〉 ]*</code></entry>
+<code>〈color palette〉 = default | 〈name〉 〈color〉 [ , 〈name〉 〈color〉 ]*</code>
 </literallayout>
 
       <para>
