@@ -4663,8 +4663,6 @@ button.circular, headerbar button.circular.titlebutton,
   .keycap:backdrop {
     background-color: #2c2c2c;
     color: #949796; }
-  .keycap border {
-    border-style: none; }
 
 *:drop(active):focus,
 *:drop(active) {

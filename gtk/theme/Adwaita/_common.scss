@@ -3714,8 +3714,6 @@ button.circular { // FIXME: aggregate to buttons
     background-color: $backdrop_base_color;
     color: if($variant == 'light', $backdrop_insensitive_color, $backdrop_fg_color);
   }
-
-  border { border-style: none; }
 }
 
 *:drop(active):focus,
