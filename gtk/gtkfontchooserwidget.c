@@ -70,6 +70,10 @@
  * gtk_font_chooser_set_preview_text().
  *
  * Since: 3.2
+ *
+ * # CSS nodes
+ *
+ * GtkFontChooserWidget has a single CSS node with name fontchooser.
  */
 
 
@@ -611,6 +615,8 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, row_deleted_cb);
   gtk_widget_class_bind_template_callback (widget_class, size_change_cb);
   gtk_widget_class_bind_template_callback (widget_class, output_cb);
+
+  gtk_widget_class_set_css_name (widget_class, "fontchooser");
 }
 
 static void
