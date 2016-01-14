@@ -1570,6 +1570,9 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
             event->scroll.type = GDK_SCROLL;
             event->scroll.direction = GDK_SCROLL_SMOOTH;
 
+            if (delta_x == 0.0 && delta_y == 0.0)
+              event->scroll.is_stop = TRUE;
+
             GDK_NOTE(EVENTS,
                      g_message ("smooth scroll: %s\n\tdevice: %u\n\tsource device: %u\n\twindow %ld\n\tdeltas: %f %f",
 #ifdef XINPUT_2_2
