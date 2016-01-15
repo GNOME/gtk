@@ -2674,11 +2674,11 @@ _gdk_wayland_device_manager_remove_seat (GdkDeviceManager *manager,
                                          guint32           id)
 {
   GdkDisplay *display = gdk_device_manager_get_display (manager);
-  GList *l;
+  GList *l, *seats;
 
-  l = gdk_display_list_seats (display);
+  seats = gdk_display_list_seats (display);
 
-  while (l)
+  for (l = seats; l != NULL; l = l->next)
     {
       GdkWaylandSeat *seat = l->data;
 
@@ -2688,6 +2688,8 @@ _gdk_wayland_device_manager_remove_seat (GdkDeviceManager *manager,
       gdk_display_remove_seat (display, GDK_SEAT (seat));
       break;
     }
+
+  g_list_free (seats);
 }
 
 static void
