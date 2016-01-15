@@ -2,7 +2,7 @@
 <interface domain="gtk30">
   <!-- interface-requires gtk+ 3.10 -->
   <template class="GtkMessageDialog" parent="GtkDialog">
-    <property name="title"> </property>
+    <property name="title"></property>
     <property name="resizable">0</property>
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">1</property>
