@@ -596,8 +596,7 @@ gtk_application_startup (GApplication *g_application)
 {
   GtkApplication *application = GTK_APPLICATION (g_application);
 
-  G_APPLICATION_CLASS (gtk_application_parent_class)
-    ->startup (g_application);
+  G_APPLICATION_CLASS (gtk_application_parent_class)->startup (g_application);
 
   gtk_action_muxer_insert (application->priv->muxer, "app", G_ACTION_GROUP (application));
 
@@ -614,6 +613,9 @@ gtk_application_shutdown (GApplication *g_application)
 {
   GtkApplication *application = GTK_APPLICATION (g_application);
 
+  if (application->priv->impl == NULL)
+    return;
+
   gtk_application_impl_shutdown (application->priv->impl);
   g_clear_object (&application->priv->impl);
 
@@ -627,8 +629,7 @@ gtk_application_shutdown (GApplication *g_application)
   /* Synchronize the recent manager singleton */
   _gtk_recent_manager_sync ();
 
-  G_APPLICATION_CLASS (gtk_application_parent_class)
-    ->shutdown (g_application);
+  G_APPLICATION_CLASS (gtk_application_parent_class)->shutdown (g_application);
 }
 
 static gboolean
