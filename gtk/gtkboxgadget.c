@@ -45,6 +45,7 @@ typedef struct _GtkBoxGadgetChild GtkBoxGadgetChild;
 struct _GtkBoxGadgetChild {
   GObject *object;
   ComputeExpandFunc compute_expand;
+  GtkAlign align;
 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkBoxGadget, gtk_box_gadget, GTK_TYPE_CSS_GADGET,
@@ -57,6 +58,26 @@ gtk_box_gadget_child_is_visible (GObject *child)
     return gtk_widget_get_visible (GTK_WIDGET (child));
   else
     return gtk_css_gadget_get_visible (GTK_CSS_GADGET (child));
+}
+
+static GtkAlign
+gtk_box_gadget_child_get_align (GtkBoxGadget      *gadget,
+                                GtkBoxGadgetChild *child)
+{
+  GtkBoxGadgetPrivate *priv = gtk_box_gadget_get_instance_private (GTK_BOX_GADGET (gadget));
+  GtkAlign align;
+
+  if (GTK_IS_WIDGET (child->object))
+    {
+      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+        g_object_get (child->object, "valign", &align, NULL);
+      else
+        g_object_get (child->object, "halign", &align, NULL);
+    }
+  else
+    align = child->align;
+
+  return align;
 }
 
 static void
@@ -281,11 +302,69 @@ gtk_box_gadget_allocate (GtkCssGadget        *gadget,
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       gtk_box_gadget_distribute (GTK_BOX_GADGET (gadget), allocation->width, sizes);
-      for (i = 0 ; i < priv->children->len; i++)
+
+      if (baseline < 0)
+        {
+          for (i = 0; i < priv->children->len; i++)
+            {
+              GtkBoxGadgetChild *child = &g_array_index (priv->children, GtkBoxGadgetChild, i);
+
+              if (gtk_box_gadget_child_get_align (GTK_BOX_GADGET (gadget), child) == GTK_ALIGN_BASELINE)
+                {
+                  gint child_min, child_nat;
+                  gint child_baseline_min, child_baseline_nat;
+
+                  gtk_box_gadget_measure_child (child->object,
+                                                GTK_ORIENTATION_VERTICAL,
+                                                sizes[i].minimum_size,
+                                                &child_min, &child_nat,
+                                                &child_baseline_min, &child_baseline_nat);
+                  baseline = MAX (baseline, child_baseline_min);
+                }
+            }
+        }
+
+      for (i = 0; i < priv->children->len; i++)
         {
           GtkBoxGadgetChild *child = &g_array_index (priv->children, GtkBoxGadgetChild, i);
+          gint child_min, child_nat;
+          gint child_baseline_min, child_baseline_nat;
 
           child_allocation.width = sizes[i].minimum_size;
+          gtk_box_gadget_measure_child (child->object,
+                                        GTK_ORIENTATION_VERTICAL,
+                                        child_allocation.width,
+                                        &child_min, &child_nat,
+                                        &child_baseline_min, &child_baseline_nat);
+          switch (gtk_box_gadget_child_get_align (GTK_BOX_GADGET (gadget), child))
+            {
+            case GTK_ALIGN_FILL:
+              child_allocation.height = allocation->height;
+              child_allocation.y = allocation->y;
+              break;
+            case GTK_ALIGN_START:
+              child_allocation.height = MIN(child_nat, allocation->height);
+              child_allocation.y = allocation->y;
+              break;
+            case GTK_ALIGN_END:
+              child_allocation.height = MIN(child_nat, allocation->height);
+              child_allocation.y = allocation->y + allocation->height - child_allocation.height;
+              break;
+            case GTK_ALIGN_BASELINE:
+              if (child_baseline_min >= 0 && baseline >= 0)
+                {
+                  child_allocation.height = MIN(child_nat, allocation->height);
+                  child_allocation.y = allocation->y + baseline - child_baseline_min;
+                  break;
+                }
+            case GTK_ALIGN_CENTER:
+              child_allocation.height = MIN(child_nat, allocation->height);
+              child_allocation.y = allocation->y + (allocation->height - child_allocation.height) / 2;
+              break;
+            default:
+              g_assert_not_reached ();
+            }
+
           gtk_box_gadget_allocate_child (child->object, &child_allocation, baseline, &child_clip);
           if (i == 0)
             *out_clip = child_clip;
@@ -297,11 +376,42 @@ gtk_box_gadget_allocate (GtkCssGadget        *gadget,
   else
     {
       gtk_box_gadget_distribute (GTK_BOX_GADGET (gadget), allocation->height, sizes);
+
       for (i = 0 ; i < priv->children->len; i++)
         {
           GtkBoxGadgetChild *child = &g_array_index (priv->children, GtkBoxGadgetChild, i);
+          gint child_min, child_nat;
 
           child_allocation.height = sizes[i].minimum_size;
+          gtk_box_gadget_measure_child (child->object,
+                                        GTK_ORIENTATION_HORIZONTAL,
+                                        child_allocation.height,
+                                        &child_min, &child_nat,
+                                        NULL, NULL);
+
+          switch (gtk_box_gadget_child_get_align (GTK_BOX_GADGET (gadget), child))
+            {
+            case GTK_ALIGN_FILL:
+              child_allocation.width = allocation->width;
+              child_allocation.x = allocation->x;
+              break;
+            case GTK_ALIGN_START:
+              child_allocation.width = MIN(child_nat, allocation->width);
+              child_allocation.x = allocation->x;
+              break;
+            case GTK_ALIGN_END:
+              child_allocation.width = MIN(child_nat, allocation->width);
+              child_allocation.x = allocation->x + allocation->width - child_allocation.width;
+              break;
+            case GTK_ALIGN_BASELINE:
+            case GTK_ALIGN_CENTER:
+              child_allocation.width = MIN(child_nat, allocation->width);
+              child_allocation.x = allocation->x + (allocation->width - child_allocation.width) / 2;
+              break;
+            default:
+              g_assert_not_reached ();
+            }
+
           gtk_box_gadget_allocate_child (child->object, &child_allocation, -1, &child_clip);
           if (i == 0)
             *out_clip = child_clip;
@@ -438,13 +548,15 @@ static void
 gtk_box_gadget_insert_object (GtkBoxGadget      *gadget,
                               int                pos,
                               GObject           *object,
-                              ComputeExpandFunc  compute_expand_func)
+                              ComputeExpandFunc  compute_expand_func,
+                              GtkAlign           align)
 {
   GtkBoxGadgetPrivate *priv = gtk_box_gadget_get_instance_private (gadget);
   GtkBoxGadgetChild child;
 
   child.object = g_object_ref (object);
   child.compute_expand = compute_expand_func;
+  child.align = align;
 
   if (pos < 0 || pos >= priv->children->len)
     {
@@ -455,7 +567,6 @@ gtk_box_gadget_insert_object (GtkBoxGadget      *gadget,
     }
   else
     {
-      
       g_array_insert_val (priv->children, pos, child);
       gtk_css_node_insert_before (gtk_css_gadget_get_node (GTK_CSS_GADGET (gadget)),
                                   get_css_node (object),
@@ -471,7 +582,8 @@ gtk_box_gadget_insert_widget (GtkBoxGadget           *gadget,
   gtk_box_gadget_insert_object (gadget,
                                 pos,
                                 G_OBJECT (widget),
-                                (ComputeExpandFunc) gtk_widget_compute_expand);
+                                (ComputeExpandFunc) gtk_widget_compute_expand,
+                                GTK_ALIGN_FILL);
 }
 
 void
@@ -520,13 +632,15 @@ gtk_box_gadget_insert_gadget (GtkBoxGadget *gadget,
                               int           pos,
                               GtkCssGadget *cssgadget,
                               gboolean      hexpand,
-                              gboolean      vexpand)
+                              gboolean      vexpand,
+                              GtkAlign      align)
 {
   gtk_box_gadget_insert_object (gadget,
                                 pos,
                                 G_OBJECT (cssgadget),
                                 hexpand ? (vexpand ? (ComputeExpandFunc) gtk_true : only_horizontal)
-                                        : (vexpand ? only_vertical : (ComputeExpandFunc) gtk_false));
+                                        : (vexpand ? only_vertical : (ComputeExpandFunc) gtk_false),
+                                align);
 }
 
 void
@@ -535,4 +649,3 @@ gtk_box_gadget_remove_gadget (GtkBoxGadget *gadget,
 {
   gtk_box_gadget_remove_object (gadget, G_OBJECT (cssgadget));
 }
-

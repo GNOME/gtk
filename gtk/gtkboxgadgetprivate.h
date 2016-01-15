@@ -21,6 +21,7 @@
 #define __GTK_BOX_GADGET_PRIVATE_H__
 
 #include "gtk/gtkcssgadgetprivate.h"
+#include "gtk/gtkenums.h"
 
 G_BEGIN_DECLS
 
@@ -65,9 +66,11 @@ void                    gtk_box_gadget_insert_gadget            (GtkBoxGadget   
                                                                  int                     pos,
                                                                  GtkCssGadget           *cssgadget,
                                                                  gboolean                hexpand,
-                                                                 gboolean                vexpand);
+                                                                 gboolean                vexpand,
+                                                                 GtkAlign                align);
 void                    gtk_box_gadget_remove_gadget            (GtkBoxGadget           *gadget,
                                                                  GtkCssGadget           *cssgadget);
+
 
 G_END_DECLS
 
