@@ -591,11 +591,11 @@ gtk_expander_destroy (GtkWidget *widget)
 
   g_clear_object (&priv->multipress_gesture);
 
+  GTK_WIDGET_CLASS (gtk_expander_parent_class)->destroy (widget);
+
   g_clear_object (&priv->arrow_gadget);
   g_clear_object (&priv->title_gadget);
   g_clear_object (&priv->gadget);
-
-  GTK_WIDGET_CLASS (gtk_expander_parent_class)->destroy (widget);
 }
 
 static void
