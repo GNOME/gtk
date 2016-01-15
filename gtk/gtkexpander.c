@@ -363,6 +363,15 @@ gtk_expander_class_init (GtkExpanderClass *klass)
                                                          FALSE,
                                                          GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY));
 
+  /**
+   * GtkExpander:spacing:
+   *
+   * Space to put between the label and the child when the
+   * expander is expanded.
+   *
+   * Deprecated: 3.20: This property is deprecated and ignored.
+   *     Use margins on the child instead.
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_SPACING,
                                    g_param_spec_int ("spacing",
@@ -371,7 +380,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
                                                      0,
                                                      G_MAXINT,
                                                      0,
-                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED));
 
   g_object_class_install_property (gobject_class,
                                    PROP_LABEL_WIDGET,
@@ -749,9 +758,9 @@ gtk_expander_allocate (GtkCssGadget        *gadget,
       GtkAllocation child_allocation;
 
       child_allocation.x = allocation->x;
-      child_allocation.y = allocation->y + title_allocation.height + priv->spacing;
+      child_allocation.y = allocation->y + title_allocation.height;
       child_allocation.width = allocation->width;
-      child_allocation.height = allocation->height - title_allocation.height - priv->spacing;
+      child_allocation.height = allocation->height - title_allocation.height;
 
       gtk_widget_size_allocate (child, &child_allocation);
     }
@@ -1641,6 +1650,8 @@ gtk_expander_get_expanded (GtkExpander *expander)
  * pixels to place between expander and the child.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.20: Use margins on the child instead.
  */
 void
 gtk_expander_set_spacing (GtkExpander *expander,
@@ -1668,6 +1679,8 @@ gtk_expander_set_spacing (GtkExpander *expander,
  * Returns: spacing between the expander and child
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.20: Use margins on the child instead.
  */
 gint
 gtk_expander_get_spacing (GtkExpander *expander)
