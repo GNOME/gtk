@@ -4483,6 +4483,9 @@ gtk_combo_box_constructed (GObject *object)
       gtk_widget_show (entry);
       gtk_container_add (GTK_CONTAINER (combo_box), entry);
 
+      context = gtk_widget_get_style_context (GTK_WIDGET (combo_box));
+      gtk_style_context_add_class (context, "linked");
+
       context = gtk_widget_get_style_context (GTK_WIDGET (entry));
       gtk_style_context_add_class (context, "combo");
 
