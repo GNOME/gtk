@@ -849,7 +849,7 @@ _gdk_win32_display_get_selection_property (GdkDisplay *display,
   GDK_NOTE (DND, {
       gchar *type_name = gdk_atom_name (prop->type);
 
-      g_print (" %s format:%d length:%d\n", type_name, prop->format, prop->length);
+      g_print (" %s format:%d length:%"G_GSIZE_FORMAT"\n", type_name, prop->format, prop->length);
       g_free (type_name);
     });
 
