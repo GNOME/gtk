@@ -120,6 +120,7 @@
 #include "a11y/gtkexpanderaccessible.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkcsscustomgadgetprivate.h"
+#include "gtkboxgadgetprivate.h"
 #include "gtkbuiltiniconprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkcontainerprivate.h"
@@ -244,48 +245,6 @@ static void     gesture_multipress_released_cb (GtkGestureMultiPress *gesture,
                                                 gdouble               x,
                                                 gdouble               y,
                                                 GtkExpander          *expander);
-
-/* Gadgets */
-static void     gtk_expander_measure        (GtkCssGadget        *gadget,
-                                             GtkOrientation       orientation,
-                                             int                  for_size,
-                                             int                 *minimum_size,
-                                             int                 *natural_size,
-                                             int                 *minimum_baseline,
-                                             int                 *natural_baseline,
-                                             gpointer             data);
-static void     gtk_expander_allocate       (GtkCssGadget        *gadget,
-                                             const GtkAllocation *allocation,
-                                             int                  baseline,
-                                             GtkAllocation       *out_clip,
-                                             gpointer             data);
-static gboolean gtk_expander_render         (GtkCssGadget        *gadget,
-                                             cairo_t             *cr,
-                                             int                  x,
-                                             int                  y,
-                                             int                  width,
-                                             int                  height,
-                                             gpointer             data);
-static void     gtk_expander_measure_title  (GtkCssGadget        *gadget,
-                                             GtkOrientation       orientation,
-                                             int                  for_size,
-                                             int                 *minimum_size,
-                                             int                 *natural_size,
-                                             int                 *minimum_baseline,
-                                             int                 *natural_baseline,
-                                             gpointer             data);
-static void     gtk_expander_allocate_title (GtkCssGadget        *gadget,
-                                             const GtkAllocation *allocation,
-                                             int                  baseline,
-                                             GtkAllocation       *out_clip,
-                                             gpointer             data);
-static gboolean gtk_expander_render_title   (GtkCssGadget        *gadget,
-                                             cairo_t             *cr,
-                                             int                  x,
-                                             int                  y,
-                                             int                  width,
-                                             int                  height,
-                                             gpointer             data);
 
 G_DEFINE_TYPE_WITH_CODE (GtkExpander, gtk_expander, GTK_TYPE_BIN,
                          G_ADD_PRIVATE (GtkExpander)
@@ -484,28 +443,23 @@ gtk_expander_init (GtkExpander *expander)
   priv->resize_toplevel = 0;
 
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (expander));
-  priv->gadget = gtk_css_custom_gadget_new_for_node (widget_node,
-                                                     GTK_WIDGET (expander),
-                                                     gtk_expander_measure,
-                                                     gtk_expander_allocate,
-                                                     gtk_expander_render,
-                                                     NULL,
-                                                     NULL);
-  priv->title_gadget = gtk_css_custom_gadget_new ("title",
-                                                  GTK_WIDGET (expander),
-                                                  priv->gadget,
-                                                  NULL,
-                                                  gtk_expander_measure_title,
-                                                  gtk_expander_allocate_title,
-                                                  gtk_expander_render_title,
-                                                  NULL,
-                                                  NULL);
+  priv->gadget = gtk_box_gadget_new_for_node (widget_node, GTK_WIDGET (expander));
+  gtk_box_gadget_set_orientation (GTK_BOX_GADGET (priv->gadget), GTK_ORIENTATION_VERTICAL);
+  priv->title_gadget = gtk_box_gadget_new ("title",
+                                           GTK_WIDGET (expander),
+                                           priv->gadget,
+                                           NULL);
+  gtk_box_gadget_set_orientation (GTK_BOX_GADGET (priv->title_gadget), GTK_ORIENTATION_HORIZONTAL);
+  gtk_box_gadget_insert_gadget (GTK_BOX_GADGET (priv->gadget), -1, priv->title_gadget, FALSE, FALSE, GTK_ALIGN_FILL);
+
   priv->arrow_gadget = gtk_builtin_icon_new ("arrow",
                                              GTK_WIDGET (expander),
                                              priv->title_gadget,
                                              NULL);
   gtk_css_gadget_add_class (priv->arrow_gadget, GTK_STYLE_CLASS_HORIZONTAL);
   gtk_builtin_icon_set_default_size_property (GTK_BUILTIN_ICON (priv->arrow_gadget), "expander-size");
+
+  gtk_box_gadget_insert_gadget (GTK_BOX_GADGET (priv->title_gadget), -1, priv->arrow_gadget, FALSE, FALSE, GTK_ALIGN_CENTER);
 
   gtk_drag_dest_set (GTK_WIDGET (expander), 0, NULL, 0, 0);
   gtk_drag_dest_set_track_motion (GTK_WIDGET (expander), TRUE);
@@ -703,156 +657,27 @@ static void
 gtk_expander_size_allocate (GtkWidget     *widget,
                             GtkAllocation *allocation)
 {
+  GtkExpanderPrivate *priv = GTK_EXPANDER (widget)->priv;
   GtkAllocation clip;
 
   gtk_widget_set_allocation (widget, allocation);
 
-  gtk_css_gadget_allocate (GTK_EXPANDER (widget)->priv->gadget,
+  gtk_css_gadget_allocate (priv->gadget,
                            allocation,
                            gtk_widget_get_allocated_baseline (widget),
                            &clip);
 
   gtk_widget_set_clip (widget, &clip);
-}
-
-static void
-gtk_expander_allocate (GtkCssGadget        *gadget,
-                       const GtkAllocation *allocation,
-                       gint                 baseline,
-                       GtkAllocation       *out_clip,
-                       gpointer             data)
-{
-  GtkWidget *widget;
-  GtkExpander *expander;
-  GtkWidget *child;
-  GtkExpanderPrivate *priv;
-  GtkAllocation title_allocation;
-  GtkAllocation title_clip;
-  gint title_height_min, title_height_nat;
-
-  widget = gtk_css_gadget_get_owner (gadget);
-  expander = GTK_EXPANDER (widget);
-  priv = expander->priv;
-  child = gtk_bin_get_child (GTK_BIN (widget));
-
-  gtk_css_gadget_get_preferred_size (priv->title_gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     allocation->width,
-                                     &title_height_min, &title_height_nat,
-                                     NULL, NULL);
-
-  title_allocation.x = allocation->x;
-  title_allocation.y = allocation->y;
-  title_allocation.width = allocation->width;
-  title_allocation.height = CLAMP (title_height_nat, title_height_min, allocation->height);
-
-  gtk_css_gadget_allocate (priv->title_gadget, &title_allocation, baseline, &title_clip);
 
   if (gtk_widget_get_realized (widget))
-    gdk_window_move_resize (priv->event_window,
-                            title_allocation.x, title_allocation.y,
-                            title_allocation.width, title_allocation.height);
-
-  if (child && gtk_widget_get_child_visible (child))
     {
-      GtkAllocation child_allocation;
+      GtkAllocation title_allocation;
 
-      child_allocation.x = allocation->x;
-      child_allocation.y = allocation->y + title_allocation.height;
-      child_allocation.width = allocation->width;
-      child_allocation.height = allocation->height - title_allocation.height;
-
-      gtk_widget_size_allocate (child, &child_allocation);
+      gtk_css_gadget_get_border_allocation (priv->title_gadget, &title_allocation, NULL);
+      gdk_window_move_resize (priv->event_window,
+                              title_allocation.x, title_allocation.y,
+                              title_allocation.width, title_allocation.height);
     }
-
-  gtk_container_get_children_clip (GTK_CONTAINER (expander), out_clip);
-  gdk_rectangle_union (out_clip, &title_clip, out_clip);
-}
-
-static void
-gtk_expander_allocate_title (GtkCssGadget        *gadget,
-                             const GtkAllocation *allocation,
-                             gint                 baseline,
-                             GtkAllocation       *out_clip,
-                             gpointer             data)
-{
-  GtkWidget *widget;
-  GtkExpander *expander;
-  GtkExpanderPrivate *priv;
-  gint arrow_width, arrow_height;
-  gint label_height;
-  gint label_xoffset;
-  GtkAllocation arrow_allocation;
-  GtkAllocation clip;
-
-  widget = gtk_css_gadget_get_owner (gadget);
-  expander = GTK_EXPANDER (widget);
-  priv = expander->priv;
-
-  gtk_css_gadget_get_preferred_size (priv->arrow_gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     -1,
-                                     NULL, &arrow_width,
-                                     NULL, NULL);
-  gtk_css_gadget_get_preferred_size (priv->arrow_gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     -1,
-                                     NULL, &arrow_height,
-                                     NULL, NULL);
-
-  label_xoffset = arrow_width;
-  if (priv->label_widget && gtk_widget_get_visible (priv->label_widget))
-    {
-      GtkAllocation label_allocation;
-      gint label_width;
-
-      gtk_widget_get_preferred_width (priv->label_widget, NULL, &label_width);
-
-      if (priv->label_fill)
-        label_allocation.width = allocation->width - label_xoffset;
-      else
-        label_allocation.width = MIN (label_width, allocation->width - label_xoffset);
-
-      label_allocation.width = MAX (label_allocation.width, 1);
-
-      /* We distribute the minimum height to the label widget and prioritize
-       * the child widget giving it the remaining height
-       */
-      gtk_widget_get_preferred_height_for_width (priv->label_widget,
-                                                 label_allocation.width, &label_height, NULL);
-
-      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-        label_allocation.x = allocation->x + allocation->width - label_xoffset - label_width;
-      else
-        label_allocation.x = allocation->x + label_xoffset;
-
-      label_allocation.y = allocation->y + MAX (0, (arrow_height - label_height) / 2);
-      label_allocation.height = label_height;
-
-      gtk_widget_size_allocate (priv->label_widget, &label_allocation);
-
-      label_height = label_allocation.height;
-    }
-  else
-    {
-      label_height = 0;
-    }
-
-  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-    arrow_allocation.x = allocation->x + allocation->width - arrow_width;
-  else
-    arrow_allocation.x = allocation->x;
-  arrow_allocation.y = allocation->y + MAX (0, (label_height - arrow_height) / 2);
-  arrow_allocation.width = arrow_width;
-  arrow_allocation.height = arrow_height;
-
-  gtk_css_gadget_allocate (priv->arrow_gadget,
-                           &arrow_allocation,
-                           gtk_widget_get_allocated_baseline (widget),
-                           &clip);
-
-  gtk_container_get_children_clip (GTK_CONTAINER (expander), out_clip);
-  gdk_rectangle_union (out_clip, &clip, out_clip);
 }
 
 static void
@@ -884,47 +709,10 @@ gtk_expander_unmap (GtkWidget *widget)
 }
 
 static gboolean
-gtk_expander_render_title (GtkCssGadget *gadget,
-                           cairo_t      *cr,
-                           int           x,
-                           int           y,
-                           int           width,
-                           int           height,
-                           gpointer      data)
-{
-  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
-  GtkExpander *expander = GTK_EXPANDER (widget);
-  GtkExpanderPrivate *priv = expander->priv;
-
-  gtk_css_gadget_draw (priv->arrow_gadget, cr);
-
-  return gtk_widget_has_visible_focus (widget);
-}
-
-static gboolean
 gtk_expander_draw (GtkWidget *widget,
                    cairo_t   *cr)
 {
   gtk_css_gadget_draw (GTK_EXPANDER (widget)->priv->gadget, cr);
-
-  return FALSE;
-}
-
-static gboolean
-gtk_expander_render (GtkCssGadget *gadget,
-                     cairo_t      *cr,
-                     int           x,
-                     int           y,
-                     int           width,
-                     int           height,
-                     gpointer      data)
-{
-  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
-  GtkExpander *expander = GTK_EXPANDER (widget);
-
-  gtk_css_gadget_draw (expander->priv->title_gadget, cr);
-
-  GTK_WIDGET_CLASS (gtk_expander_parent_class)->draw (widget, cr);
 
   return FALSE;
 }
@@ -1310,10 +1098,14 @@ static void
 gtk_expander_add (GtkContainer *container,
                   GtkWidget    *widget)
 {
+  GtkExpander *expander = GTK_EXPANDER (container);
+
   GTK_CONTAINER_CLASS (gtk_expander_parent_class)->add (container, widget);
 
-  gtk_widget_set_child_visible (widget, GTK_EXPANDER (container)->priv->expanded);
   gtk_widget_queue_resize (GTK_WIDGET (container));
+
+  if (expander->priv->expanded)
+    gtk_box_gadget_insert_widget (GTK_BOX_GADGET (expander->priv->gadget), -1, widget);
 }
 
 static void
@@ -1325,7 +1117,10 @@ gtk_expander_remove (GtkContainer *container,
   if (GTK_EXPANDER (expander)->priv->label_widget == widget)
     gtk_expander_set_label_widget (expander, NULL);
   else
-    GTK_CONTAINER_CLASS (gtk_expander_parent_class)->remove (container, widget);
+    {
+      gtk_box_gadget_remove_widget (GTK_BOX_GADGET (expander->priv->gadget), widget);
+      GTK_CONTAINER_CLASS (gtk_expander_parent_class)->remove (container, widget);
+    }
 }
 
 static void
@@ -1400,140 +1195,6 @@ gtk_expander_get_preferred_height_for_width (GtkWidget *widget,
                                      width,
                                      minimum_size, natural_size,
                                      NULL, NULL);
-}
-
-static void
-gtk_expander_measure (GtkCssGadget   *gadget,
-                      GtkOrientation  orientation,
-                      int             for_size,
-                      int            *minimum,
-                      int            *natural,
-                      int            *minimum_baseline,
-                      int            *natural_baseline,
-                      gpointer        data)
-{
-  GtkWidget *widget;
-  GtkExpander *expander;
-  GtkExpanderPrivate *priv;
-  GtkWidget *child;
-
-  widget = gtk_css_gadget_get_owner (gadget);
-  expander = GTK_EXPANDER (widget);
-  priv = expander->priv;
-  child = gtk_bin_get_child (GTK_BIN (widget));
-
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    {
-      gint title_height;
-      gtk_css_gadget_get_preferred_size (priv->title_gadget,
-                                         GTK_ORIENTATION_VERTICAL,
-                                         -1,
-                                         &title_height, NULL,
-                                         NULL, NULL);
-      gtk_css_gadget_get_preferred_size (priv->title_gadget,
-                                         GTK_ORIENTATION_HORIZONTAL,
-                                         title_height,
-                                         minimum, natural,
-                                         NULL, NULL);
-
-      if (child && gtk_widget_get_child_visible (child))
-        {
-          gint child_min, child_nat;
-
-          if (for_size > -1)
-            gtk_widget_get_preferred_width_for_height (child, MAX (for_size - priv->spacing - title_height, 0), &child_min, &child_nat);
-          else
-            gtk_widget_get_preferred_width (child, &child_min, &child_nat);
-
-          *minimum = MAX (*minimum, child_min);
-          *natural = MAX (*natural, child_nat);
-        }
-    }
-  else
-    {
-      gtk_css_gadget_get_preferred_size (priv->title_gadget,
-                                         GTK_ORIENTATION_VERTICAL,
-                                         for_size,
-                                         minimum, natural,
-                                         NULL, NULL);
-
-      if (child && gtk_widget_get_child_visible (child))
-        {
-          gint child_min, child_nat;
-
-          if (for_size > 0)
-            gtk_widget_get_preferred_height_for_width (child,
-                                                       for_size,
-                                                       &child_min, &child_nat);
-          else
-            gtk_widget_get_preferred_height (child, &child_min, &child_nat);
-
-          *minimum += child_min + priv->spacing;
-          *natural += child_nat + priv->spacing;
-        }
-    }
-}
-
-
-static void
-gtk_expander_measure_title (GtkCssGadget   *gadget,
-                            GtkOrientation  orientation,
-                            int             for_size,
-                            int            *minimum,
-                            int            *natural,
-                            int            *minimum_baseline,
-                            int            *natural_baseline,
-                            gpointer        data)
-{
-  GtkWidget *widget;
-  GtkExpander *expander;
-  GtkExpanderPrivate *priv;
-  gint arrow_width, arrow_height;
-  gint label_min, label_nat;
-
-  widget = gtk_css_gadget_get_owner (gadget);
-  expander = GTK_EXPANDER (widget);
-  priv = expander->priv;
-
-  gtk_css_gadget_get_preferred_size (priv->arrow_gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     -1,
-                                     NULL, &arrow_width,
-                                     NULL, NULL);
-  gtk_css_gadget_get_preferred_size (priv->arrow_gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     -1,
-                                     NULL, &arrow_height,
-                                     NULL, NULL);
-
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    {
-      if (priv->label_widget && gtk_widget_get_visible (priv->label_widget))
-        gtk_widget_get_preferred_width (priv->label_widget, &label_min, &label_nat);
-      else
-        label_min = label_nat = 0;
-
-      *minimum = arrow_width + label_min;
-      *natural = arrow_width + label_nat;
-    }
-  else
-    {
-      if (priv->label_widget && gtk_widget_get_visible (priv->label_widget))
-        {
-          if (for_size > 0)
-            gtk_widget_get_preferred_height_for_width (priv->label_widget,
-                                                       MAX (for_size - arrow_width, 1),
-                                                       &label_min, &label_nat);
-          else
-            gtk_widget_get_preferred_height (priv->label_widget,
-                                             &label_min, &label_nat);
-        }
-      else
-        label_min = label_nat = 0;
-
-      *minimum = MAX (arrow_height, label_min);
-      *natural = MAX (arrow_height, label_nat);
-    }
 }
 
 /**
@@ -1612,7 +1273,11 @@ gtk_expander_set_expanded (GtkExpander *expander,
 
   if (child)
     {
-      gtk_widget_set_child_visible (child, priv->expanded);
+      if (priv->expanded)
+        gtk_box_gadget_insert_widget (GTK_BOX_GADGET (priv->gadget), 1, child);
+      else
+        gtk_box_gadget_remove_widget (GTK_BOX_GADGET (priv->gadget), child);
+
       gtk_widget_queue_resize (GTK_WIDGET (expander));
       gtk_expander_resize_toplevel (expander);
     }
@@ -1897,6 +1562,7 @@ gtk_expander_set_label_widget (GtkExpander *expander,
 
   if (priv->label_widget)
     {
+      gtk_box_gadget_remove_widget (GTK_BOX_GADGET (priv->title_gadget), priv->label_widget);
       gtk_widget_set_state_flags (priv->label_widget, 0, TRUE);
       gtk_widget_unparent (priv->label_widget);
     }
@@ -1916,6 +1582,8 @@ gtk_expander_set_label_widget (GtkExpander *expander,
         gtk_widget_set_state_flags (label_widget,
                                     GTK_STATE_FLAG_PRELIGHT,
                                     FALSE);
+
+      gtk_box_gadget_insert_widget (GTK_BOX_GADGET (priv->title_gadget), 1, label_widget);
     }
 
   if (gtk_widget_get_visible (widget))
