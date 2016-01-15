@@ -76,7 +76,8 @@
  * |[<!-- language="plain" -->
  * combobox
  * ├── entry.combo
- * ╰── button.combo
+ * ├── button.combo
+ * ╰── window.popup
  * ]|
  *
  * GtkComboBoxText has a single CSS node with name combobox. It adds

@@ -94,8 +94,9 @@
  *
  * |[<!-- language="plain" -->
  * combobox
- * ╰── button.combo
- *     ╰── arrow
+ * ├── button.combo
+ * │    ╰── arrow
+ * ╰── window.popup
  * ]|
  *
  * GtkComboBox has a single CSS node with name combobox. It adds the
