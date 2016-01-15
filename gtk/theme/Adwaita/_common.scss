@@ -3039,8 +3039,6 @@ messagedialog { // Message Dialog styling
     border-style: none;
     border-top-left-radius: 7px;
     border-top-right-radius: 7px;
-
-    .title { font-size: 0; } // squash the label
   }
 
   &.csd { // rounded bottom border styling for csd version

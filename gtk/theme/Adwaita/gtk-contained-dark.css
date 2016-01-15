@@ -3940,8 +3940,6 @@ messagedialog .titlebar {
   border-style: none;
   border-top-left-radius: 7px;
   border-top-right-radius: 7px; }
-  messagedialog .titlebar .title {
-    font-size: 0; }
 messagedialog.csd.background {
   border-bottom-left-radius: 9px;
   border-bottom-right-radius: 9px; }
