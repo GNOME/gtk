@@ -259,9 +259,11 @@ inner_display_change_window_procedure (HWND   hwnd,
       }
     case WM_DISPLAYCHANGE:
       {
+        GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (_gdk_display);
+
         _gdk_monitor_init ();
-        _gdk_screen_init_root_window_size (GDK_WIN32_SCREEN (_gdk_screen));
-        g_signal_emit_by_name (_gdk_screen, "size_changed");
+        _gdk_screen_init_root_window_size (GDK_WIN32_SCREEN (win32_display->screen));
+        g_signal_emit_by_name (win32_display->screen, "size_changed");
 
         return 0;
       }
@@ -322,6 +324,8 @@ register_display_change_notification (GdkDisplay *display)
 GdkDisplay *
 _gdk_win32_display_open (const gchar *display_name)
 {
+  GdkWin32Display *win32_display;
+
   GDK_NOTE (MISC, g_print ("gdk_display_open: %s\n", (display_name ? display_name : "NULL")));
 
   if (display_name == NULL ||
@@ -341,11 +345,13 @@ _gdk_win32_display_open (const gchar *display_name)
     }
 
   _gdk_display = g_object_new (GDK_TYPE_WIN32_DISPLAY, NULL);
-  _gdk_screen = g_object_new (GDK_TYPE_WIN32_SCREEN, NULL);
+  win32_display = GDK_WIN32_DISPLAY (_gdk_display);
+
+  win32_display->screen = g_object_new (GDK_TYPE_WIN32_SCREEN, NULL);
 
   _gdk_monitor_init ();
-  _gdk_visual_init (_gdk_screen);
-  _gdk_screen_init_root_window (GDK_WIN32_SCREEN (_gdk_screen));
+  _gdk_visual_init (win32_display->screen);
+  _gdk_screen_init_root_window (GDK_WIN32_SCREEN (win32_display->screen));
   _gdk_events_init ();
   _gdk_input_init (_gdk_display);
   _gdk_dnd_init ();
@@ -431,9 +437,9 @@ gdk_win32_display_get_name (GdkDisplay *display)
 static GdkScreen *
 gdk_win32_display_get_default_screen (GdkDisplay *display)
 {
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+  g_return_val_if_fail (GDK_IS_WIN32_DISPLAY (display), NULL);
 
-  return _gdk_screen;
+  return GDK_WIN32_DISPLAY (display)->screen;
 }
 
 static GdkWindow *

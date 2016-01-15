@@ -158,7 +158,7 @@ gdk_win32_screen_get_root_window (GdkScreen *screen)
 static gint
 gdk_win32_screen_get_n_monitors (GdkScreen *screen)
 {
-  g_return_val_if_fail (screen == _gdk_screen, 0);
+  g_return_val_if_fail (screen == gdk_display_get_default_screen (gdk_display_get_default ()), 0);
 
   return _gdk_num_monitors;
 }
@@ -166,7 +166,7 @@ gdk_win32_screen_get_n_monitors (GdkScreen *screen)
 static gint
 gdk_win32_screen_get_primary_monitor (GdkScreen *screen)
 {
-  g_return_val_if_fail (screen == _gdk_screen, 0);
+  g_return_val_if_fail (screen == gdk_display_get_default_screen (gdk_display_get_default ()), 0);
 
   return 0;
 }
@@ -175,7 +175,7 @@ static gint
 gdk_win32_screen_get_monitor_width_mm (GdkScreen *screen,
                                        gint       num_monitor)
 {
-  g_return_val_if_fail (screen == _gdk_screen, 0);
+  g_return_val_if_fail (screen == gdk_display_get_default_screen (gdk_display_get_default ()), 0);
   g_return_val_if_fail (num_monitor < _gdk_num_monitors, 0);
 
   return _gdk_monitors[num_monitor].width_mm;
@@ -185,7 +185,7 @@ static gint
 gdk_win32_screen_get_monitor_height_mm (GdkScreen *screen,
                                         gint       num_monitor)
 {
-  g_return_val_if_fail (screen == _gdk_screen, 0);
+  g_return_val_if_fail (screen == gdk_display_get_default_screen (gdk_display_get_default ()), 0);
   g_return_val_if_fail (num_monitor < _gdk_num_monitors, 0);
 
   return _gdk_monitors[num_monitor].height_mm;
@@ -195,7 +195,7 @@ static gchar *
 gdk_win32_screen_get_monitor_plug_name (GdkScreen *screen,
                                         gint       num_monitor)
 {
-  g_return_val_if_fail (screen == _gdk_screen, 0);
+  g_return_val_if_fail (screen == gdk_display_get_default_screen (gdk_display_get_default ()), 0);
   g_return_val_if_fail (num_monitor < _gdk_num_monitors, 0);
 
   return g_strdup (_gdk_monitors[num_monitor].name);
@@ -206,7 +206,7 @@ gdk_win32_screen_get_monitor_geometry (GdkScreen    *screen,
                                        gint          num_monitor,
                                        GdkRectangle *dest)
 {
-  g_return_if_fail (screen == _gdk_screen);
+  g_return_if_fail (screen == gdk_display_get_default_screen (gdk_display_get_default ()));
   g_return_if_fail (num_monitor < _gdk_num_monitors);
 
   *dest = _gdk_monitors[num_monitor].rect;
@@ -215,7 +215,7 @@ gdk_win32_screen_get_monitor_geometry (GdkScreen    *screen,
 static gint
 gdk_win32_screen_get_number (GdkScreen *screen)
 {
-  g_return_val_if_fail (screen == _gdk_screen, 0);
+  g_return_val_if_fail (screen == gdk_display_get_default_screen (gdk_display_get_default ()), 0);
 
   return 0;
 }

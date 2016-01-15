@@ -256,7 +256,6 @@ void    _gdk_other_api_failed        (const gchar *where,
 extern LRESULT CALLBACK _gdk_win32_window_procedure (HWND, UINT, WPARAM, LPARAM);
 
 extern GdkDisplay       *_gdk_display;
-extern GdkScreen        *_gdk_screen;
 
 extern gint		 _gdk_num_monitors;
 typedef struct _GdkWin32Monitor GdkWin32Monitor;

@@ -28,7 +28,6 @@
 #include "gdkprivate-win32.h"
 
 GdkDisplay	 *_gdk_display = NULL;
-GdkScreen	 *_gdk_screen = NULL;
 
 gint		  _gdk_num_monitors;
 GdkWin32Monitor  *_gdk_monitors = NULL;

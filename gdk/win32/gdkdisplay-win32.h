@@ -26,6 +26,8 @@ struct _GdkWin32Display
 {
   GdkDisplay display;
 
+  GdkScreen *screen;
+
   Win32CursorTheme *cursor_theme;
   gchar *cursor_theme_name;
   int cursor_theme_size;

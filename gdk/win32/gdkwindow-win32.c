@@ -81,7 +81,7 @@ static void    _gdk_win32_impl_release_dc (GdkWindowImplWin32 *impl);
 GdkScreen *
 GDK_WINDOW_SCREEN (GObject *win)
 {
-  return _gdk_screen;
+  return gdk_display_get_default_screen (gdk_display_get_default ());
 }
 
 struct _GdkWin32Window {
@@ -708,7 +708,7 @@ gdk_win32_window_foreign_new_for_display (GdkDisplay      *display,
     return g_object_ref (window);
 
   window = _gdk_display_create_window (display);
-  window->visual = gdk_screen_get_system_visual (_gdk_screen);
+  window->visual = gdk_screen_get_system_visual (gdk_display_get_default_screen (display));
   window->impl = g_object_new (GDK_TYPE_WINDOW_IMPL_WIN32, NULL);
   window->impl_window = window;
   impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
@@ -2136,7 +2136,7 @@ gdk_display_warp_device (GdkDisplay *display,
                          gint        y)
 {
   g_return_if_fail (display == _gdk_display);
-  g_return_if_fail (screen == _gdk_screen);
+  g_return_if_fail (screen == gdk_display_get_default_screen (display));
   g_return_if_fail (GDK_IS_DEVICE (device));
   g_return_if_fail (display == gdk_device_get_display (device));
 
