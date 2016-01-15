@@ -1127,7 +1127,7 @@ searchbar.inline-toolbar toolbutton:backdrop:first-child > button.sidebar-button
 .inline-toolbar headerbar toolbutton:backdrop:first-child > button.titlebutton,
 headerbar .inline-toolbar toolbutton:backdrop:first-child > button.titlebutton,
 .inline-toolbar .titlebar toolbutton:backdrop:first-child > button.titlebutton,
-.titlebar .inline-toolbar toolbutton:backdrop:first-child > button.titlebutton, .linked > combobox:first-child > button.combo {
+.titlebar .inline-toolbar toolbutton:backdrop:first-child > button.titlebutton, combobox.linked button:nth-child(2):dir(rtl), .linked:not(.vertical) > combobox:first-child > button.combo {
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px; }
 .linked:not(.vertical) > entry:last-child, .linked:not(.vertical) > spinbutton:last-child, .inline-toolbar button:last-child, .linked > button:last-child, headerbar .linked > button.titlebutton:last-child,
@@ -1147,7 +1147,7 @@ searchbar.inline-toolbar toolbutton:backdrop:last-child > button.sidebar-button,
 .inline-toolbar headerbar toolbutton:backdrop:last-child > button.titlebutton,
 headerbar .inline-toolbar toolbutton:backdrop:last-child > button.titlebutton,
 .inline-toolbar .titlebar toolbutton:backdrop:last-child > button.titlebutton,
-.titlebar .inline-toolbar toolbutton:backdrop:last-child > button.titlebutton, .linked > combobox:last-child > button.combo {
+.titlebar .inline-toolbar toolbutton:backdrop:last-child > button.titlebutton, combobox.linked button:nth-child(2):dir(ltr), .linked:not(.vertical) > combobox:last-child > button.combo {
   border-top-right-radius: 3px;
   border-bottom-right-radius: 3px;
   border-right-style: solid; }
@@ -1168,7 +1168,7 @@ searchbar.inline-toolbar toolbutton:backdrop:only-child > button.sidebar-button,
 .inline-toolbar headerbar toolbutton:backdrop:only-child > button.titlebutton,
 headerbar .inline-toolbar toolbutton:backdrop:only-child > button.titlebutton,
 .inline-toolbar .titlebar toolbutton:backdrop:only-child > button.titlebutton,
-.titlebar .inline-toolbar toolbutton:backdrop:only-child > button.titlebutton, .linked > combobox:only-child > button.combo {
+.titlebar .inline-toolbar toolbutton:backdrop:only-child > button.titlebutton, .linked:not(.vertical) > combobox:only-child > button.combo {
   border-radius: 3px;
   border-style: solid; }
 
@@ -1529,45 +1529,10 @@ treeview spinbutton spinbutton:focus {
 /**************
  * ComboBoxes *
  **************/
-combobox {
-  text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-  -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923); }
-  combobox > button.combo, headerbar combobox > button.combo.titlebutton,
-  .titlebar combobox > button.combo.titlebutton {
-    padding-left: 8px;
-    padding-right: 8px; }
-  combobox:disabled {
-    color: #8b8e8f;
-    text-shadow: none;
-    -gtk-icon-shadow: none; }
-  combobox:backdrop {
-    color: #8b8e8f;
-    text-shadow: none;
-    -gtk-icon-shadow: none; }
-  combobox:backdrop:disabled {
-    color: #c3c3c0; }
-  combobox arrow {
-    -gtk-icon-source: -gtk-icontheme("pan-down-symbolic");
-    min-height: 16px;
-    min-width: 16px; }
-  combobox menuitem {
-    text-shadow: none; }
-  combobox > entry.combo:dir(ltr), combobox > spinbutton.combo:dir(ltr) {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0; }
-  combobox > entry.combo:dir(rtl), combobox > spinbutton.combo:dir(rtl) {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0; }
-  combobox > button.combo:not(:only-child):dir(ltr), headerbar combobox > button.combo.titlebutton:not(:only-child):dir(ltr),
-  .titlebar combobox > button.combo.titlebutton:not(:only-child):dir(ltr) {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-    border-left-style: none; }
-  combobox > button.combo:not(:only-child):dir(rtl), headerbar combobox > button.combo.titlebutton:not(:only-child):dir(rtl),
-  .titlebar combobox > button.combo.titlebutton:not(:only-child):dir(rtl) {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    border-right-style: none; }
+combobox arrow {
+  -gtk-icon-source: -gtk-icontheme("pan-down-symbolic");
+  min-height: 16px;
+  min-width: 16px; }
 
 /************
  * Toolbars *

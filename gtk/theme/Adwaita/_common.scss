@@ -1051,63 +1051,22 @@ spinbutton {
  * ComboBoxes *
  **************/
 combobox {
-  > button.combo {
-      padding-left: 8px;
-      padding-right: 8px;
-    }
-
-  @include _button_text_shadow;
-
-  &:disabled {
-    color: $insensitive_fg_color;
-    text-shadow: none;
-    -gtk-icon-shadow: none;
-  }
-
-  &:backdrop {
-    color: $backdrop_fg_color;
-    text-shadow: none;
-    -gtk-icon-shadow: none;
-  }
-
-  &:backdrop:disabled { color: $backdrop_insensitive_color; }
-
   arrow {
     -gtk-icon-source: -gtk-icontheme('pan-down-symbolic');
     min-height: 16px;
     min-width: 16px;
   }
 
-  menuitem { text-shadow: none; }
-  > entry.combo {
-    &:dir(ltr) {
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
-    }
-
-    &:dir(rtl) {
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
-    }
-  }
-
-  > button.combo:not(:only-child) {
-    &:dir(ltr) {
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
-      border-left-style: none;
-    }
-
-    &:dir(rtl) {
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
-      border-right-style: none;
+  &.linked {
+    button:nth-child(2) {
+      &:dir(ltr) { @extend %linked:last-child; }
+      &:dir(rtl) { @extend %linked:first-child; }
     }
   }
 }
 
 .linked > combobox > button.combo {
-  // the combo is a composite widget so the way we do button linkind doesn't
+  // the combo is a composite widget so the way we do button linking doesn't
   // work, special case needed. See
   // https://bugzilla.gnome.org/show_bug.cgi?id=733979
 
@@ -1115,9 +1074,9 @@ combobox {
   &:dir(rtl) { @extend %linked_middle; } // specificity bump
 }
 
-.linked > combobox:first-child > button.combo { @extend %linked:first-child; }
-.linked > combobox:last-child > button.combo { @extend %linked:last-child; }
-.linked > combobox:only-child > button.combo { @extend %linked:only-child; }
+.linked:not(.vertical) > combobox:first-child > button.combo { @extend %linked:first-child; }
+.linked:not(.vertical) > combobox:last-child > button.combo { @extend %linked:last-child; }
+.linked:not(.vertical) > combobox:only-child > button.combo { @extend %linked:only-child; }
 
 .linked.vertical > combobox > button.combo { @extend %linked_vertical_middle; }
 .linked.vertical > combobox:first-child > button.combo { @extend %linked_vertical:first-child;}
