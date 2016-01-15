@@ -19,6 +19,7 @@
 #define __GTK_CSS_NODE_PRIVATE_H__
 
 #include "gtkcssnodedeclarationprivate.h"
+#include "gtkcssnodestylecacheprivate.h"
 #include "gtkcssstylechangeprivate.h"
 #include "gtkbitmaskprivate.h"
 #include "gtkcsstypesprivate.h"
@@ -46,6 +47,7 @@ struct _GtkCssNode
 
   GtkCssNodeDeclaration *decl;
   GtkCssStyle           *style;
+  GtkCssNodeStyleCache  *cache;                 /* cache for children to look up styles */
 
   GtkCssChange           pending_changes;       /* changes that accumulated since the style was last computed */
 

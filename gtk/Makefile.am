@@ -416,6 +416,7 @@ gtk_private_h_sources =		\
 	gtkcssmatcherprivate.h	\
 	gtkcssnodeprivate.h		\
 	gtkcssnodedeclarationprivate.h	\
+	gtkcssnodestylecacheprivate.h	\
 	gtkcssnumbervalueprivate.h	\
 	gtkcsspalettevalueprivate.h	\
 	gtkcssparserprivate.h	\
@@ -676,6 +677,7 @@ gtk_base_c_sources = 		\
 	gtkcssmatcher.c		\
 	gtkcssnode.c		\
 	gtkcssnodedeclaration.c	\
+	gtkcssnodestylecache.c	\
 	gtkcssnumbervalue.c	\
 	gtkcsspalettevalue.c	\
 	gtkcssparser.c		\
