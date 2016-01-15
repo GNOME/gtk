@@ -4107,21 +4107,20 @@ calendar {
 /***********
  * Dialogs *
  ***********/
-messagedialog .dialog-action-area button,
-messagedialog .dialog-action-area .titlebar button.titlebutton,
-.titlebar messagedialog .dialog-action-area button.titlebutton {
-  padding: 8px; }
-
-messagedialog.background {
-  background-color: #e8e8e7; }
 messagedialog .titlebar {
+  min-height: 20px;
+  background-image: none;
+  background-color: #e8e8e7;
   border-style: none;
-  box-shadow: inset 0 1px rgba(255, 255, 255, 0.8); }
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px; }
+  messagedialog .titlebar .title {
+    font-size: 0; }
 messagedialog.csd.background {
   border-bottom-left-radius: 9px;
   border-bottom-right-radius: 9px; }
 messagedialog.csd .dialog-action-area button {
-  padding: 12px;
+  padding: 10px 14px;
   border-radius: 0;
   color: #2e3436;
   outline-color: rgba(46, 52, 54, 0.3);
@@ -4305,9 +4304,9 @@ messagedialog.csd .dialog-action-area button:first-child {
   border-bottom-left-radius: 7px;
   -gtk-outline-bottom-left-radius: 5px; }
 
-GtkFileChooserDialog .dialog-action-box {
+filechooser .dialog-action-box {
   border-top: 1px solid #9d9d99; }
-  GtkFileChooserDialog .dialog-action-box:backdrop {
+  filechooser .dialog-action-box:backdrop {
     border-top-color: #a5a5a1; }
 
 /***********
