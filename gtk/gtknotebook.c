@@ -1811,14 +1811,14 @@ gtk_notebook_destroy (GtkWidget *widget)
       priv->source_targets = NULL;
     }
 
+  remove_switch_tab_timer (notebook);
+
+  GTK_WIDGET_CLASS (gtk_notebook_parent_class)->destroy (widget);
+
   g_clear_object (&priv->gadget);
   g_clear_object (&priv->header_gadget);
   g_clear_object (&priv->tabs_gadget);
   g_clear_object (&priv->stack_gadget);
-
-  remove_switch_tab_timer (notebook);
-
-  GTK_WIDGET_CLASS (gtk_notebook_parent_class)->destroy (widget);
 }
 
 static void
