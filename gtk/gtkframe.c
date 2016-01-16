@@ -797,7 +797,8 @@ gtk_frame_allocate (GtkCssGadget        *gadget,
   gtk_frame_compute_child_allocation (frame, &new_allocation);
   priv->child_allocation = new_allocation;
 
-  if (priv->label_widget && gtk_widget_get_visible (priv->label_widget))
+  if (priv->label_widget &&
+      gtk_widget_get_visible (priv->label_widget))
     {
       gint nat_width, width, height;
       gfloat xalign;
@@ -845,13 +846,27 @@ gtk_frame_allocate_border (GtkCssGadget        *gadget,
                            gpointer             data)
 {
   GtkWidget *widget;
+  GtkFramePrivate *priv;
   GtkWidget *child;
+  GtkAllocation child_allocation;
+  gint height_extra;
 
   widget = gtk_css_gadget_get_owner (gadget);
+  priv = GTK_FRAME (widget)->priv;
+
+  if (priv->label_widget &&
+      gtk_widget_get_visible (priv->label_widget))
+    height_extra = priv->label_allocation.height * priv->label_yalign;
+  else
+    height_extra = 0;
+
+  child_allocation = *allocation;
+  child_allocation.y += height_extra;
+  child_allocation.height -= height_extra;
 
   child = gtk_bin_get_child (GTK_BIN (widget));
   if (child && gtk_widget_get_visible (child))
-    gtk_widget_size_allocate (child, (GtkAllocation *)allocation);
+    gtk_widget_size_allocate (child, &child_allocation);
 
   *out_clip = *allocation;
 }
