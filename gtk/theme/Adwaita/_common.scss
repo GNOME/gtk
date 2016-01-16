@@ -1111,7 +1111,6 @@ toolbar {
   &.osd.bottom { border-radius: 0; } // positional classes for `attached` osd toolbars
 
   // toolbar separators
-  separator { background: none; }
   &.horizontal separator { margin: 0 6px; }
   &.vertical separator { margin: 6px 0; }
 }
