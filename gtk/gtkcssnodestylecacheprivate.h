@@ -18,6 +18,7 @@
 #ifndef __GTK_CSS_NODE_STYLE_CACHE_PRIVATE_H__
 #define __GTK_CSS_NODE_STYLE_CACHE_PRIVATE_H__
 
+#include "gtkcssnodedeclarationprivate.h"
 #include "gtkcssstyleprivate.h"
 
 G_BEGIN_DECLS
@@ -25,6 +26,7 @@ G_BEGIN_DECLS
 typedef struct _GtkCssNodeStyleCache GtkCssNodeStyleCache;
 
 GtkCssNodeStyleCache *  gtk_css_node_style_cache_new            (GtkCssStyle            *style);
+GtkCssNodeStyleCache *  gtk_css_node_style_cache_ref            (GtkCssNodeStyleCache   *cache);
 void                    gtk_css_node_style_cache_unref          (GtkCssNodeStyleCache   *cache);
 
 GtkCssStyle *           gtk_css_node_style_cache_get_style      (GtkCssNodeStyleCache   *cache);
