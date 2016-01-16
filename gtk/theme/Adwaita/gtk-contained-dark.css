@@ -53,13 +53,25 @@
     background-color: #215d9c;
     color: #ffffff; }
 
-.view, textview text, iconview {
+.view, iconview,
+.view text,
+iconview text,
+textview text {
   color: white;
   background-color: #292929; }
-  .view:backdrop, textview text:backdrop, iconview:backdrop {
+  .view:backdrop, iconview:backdrop,
+  .view text:backdrop,
+  iconview text:backdrop,
+  textview text:backdrop {
     color: #d5d5d5;
     background-color: #2c2c2c; }
-  .view:selected, textview text:selected, iconview:selected, .view:selected:focus, textview text:selected:focus, iconview:selected:focus {
+  .view:selected, iconview:selected, .view:selected:focus, iconview:selected:focus,
+  .view text:selected,
+  iconview text:selected,
+  textview text:selected,
+  .view text:selected:focus,
+  iconview text:selected:focus,
+  textview text:selected:focus {
     border-radius: 3px; }
 
 .rubberband,
@@ -2185,7 +2197,6 @@ popover.background {
     box-shadow: none; }
   popover.background > list,
   popover.background > .view,
-  textview popover.background > text,
   popover.background > iconview,
   popover.background > toolbar,
   popover.background > .inline-toolbar,
@@ -2949,50 +2960,50 @@ menu menuitem radio {
   menu menuitem radio:disabled {
     color: #676b6b; }
 
-.view.check, textview text.check, iconview.check, .view.radio, textview text.radio, iconview.radio,
+.view.check, iconview.check, .view.radio, iconview.radio,
 row .check, row .radio {
   -gtk-icon-shadow: none; }
-  .view.check:selected, textview text.check:selected, iconview.check:selected, .view.check:hover, textview text.check:hover, iconview.check:hover, .view.radio:selected, textview text.radio:selected, iconview.radio:selected, .view.radio:hover, textview text.radio:hover, iconview.radio:hover,
+  .view.check:selected, iconview.check:selected, .view.check:hover, iconview.check:hover, .view.radio:selected, iconview.radio:selected, .view.radio:hover, iconview.radio:hover,
   row .check:selected,
   row .check:hover, row .radio:selected, row .radio:hover {
     -gtk-icon-shadow: none; }
 
-.view.content-view.check:not(list), textview text.content-view.check:not(list), iconview.content-view.check:not(list) {
+.view.content-view.check:not(list), iconview.content-view.check:not(list) {
   -gtk-icon-shadow: none;
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-selectionmode.png"), url("assets/checkbox-selectionmode@2.png"));
   background-color: transparent; }
 
-.view.content-view.check:hover:not(list), textview text.content-view.check:hover:not(list), iconview.content-view.check:hover:not(list) {
+.view.content-view.check:hover:not(list), iconview.content-view.check:hover:not(list) {
   -gtk-icon-shadow: none;
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-hover-selectionmode.png"), url("assets/checkbox-hover-selectionmode@2.png"));
   background-color: transparent; }
 
-.view.content-view.check:active:not(list), textview text.content-view.check:active:not(list), iconview.content-view.check:active:not(list) {
+.view.content-view.check:active:not(list), iconview.content-view.check:active:not(list) {
   -gtk-icon-shadow: none;
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-active-selectionmode.png"), url("assets/checkbox-active-selectionmode@2.png"));
   background-color: transparent; }
 
-.view.content-view.check:backdrop:not(list), textview text.content-view.check:backdrop:not(list), iconview.content-view.check:backdrop:not(list) {
+.view.content-view.check:backdrop:not(list), iconview.content-view.check:backdrop:not(list) {
   -gtk-icon-shadow: none;
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-backdrop-selectionmode.png"), url("assets/checkbox-backdrop-selectionmode@2.png"));
   background-color: transparent; }
 
-.view.content-view.check:checked:not(list), textview text.content-view.check:checked:not(list), iconview.content-view.check:checked:not(list) {
+.view.content-view.check:checked:not(list), iconview.content-view.check:checked:not(list) {
   -gtk-icon-shadow: none;
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-selectionmode.png"), url("assets/checkbox-checked-selectionmode@2.png"));
   background-color: transparent; }
 
-.view.content-view.check:checked:hover:not(list), textview text.content-view.check:checked:hover:not(list), iconview.content-view.check:checked:hover:not(list) {
+.view.content-view.check:checked:hover:not(list), iconview.content-view.check:checked:hover:not(list) {
   -gtk-icon-shadow: none;
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-hover-selectionmode.png"), url("assets/checkbox-checked-hover-selectionmode@2.png"));
   background-color: transparent; }
 
-.view.content-view.check:checked:active:not(list), textview text.content-view.check:checked:active:not(list), iconview.content-view.check:checked:active:not(list) {
+.view.content-view.check:checked:active:not(list), iconview.content-view.check:checked:active:not(list) {
   -gtk-icon-shadow: none;
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-active-selectionmode.png"), url("assets/checkbox-checked-active-selectionmode@2.png"));
   background-color: transparent; }
 
-.view.content-view.check:backdrop:checked:not(list), textview text.content-view.check:backdrop:checked:not(list), iconview.content-view.check:backdrop:checked:not(list) {
+.view.content-view.check:backdrop:checked:not(list), iconview.content-view.check:backdrop:checked:not(list) {
   -gtk-icon-shadow: none;
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-backdrop-selectionmode.png"), url("assets/checkbox-checked-backdrop-selectionmode@2.png"));
   background-color: transparent; }
@@ -4529,7 +4540,16 @@ headerbar.selection-mode button.titlebutton,
   .titlebar.selection-mode button.titlebutton:backdrop {
     -gtk-icon-shadow: none; }
 
-.view:selected, textview text:selected, iconview:selected, .view:selected:focus, textview text:selected:focus, iconview:selected:focus, textview text selection,
+.view:selected, iconview:selected, .view:selected:focus, iconview:selected:focus,
+.view text:selected,
+iconview text:selected,
+textview text:selected,
+.view text:selected:focus,
+iconview text:selected:focus,
+textview text:selected:focus, .view text selection, iconview text selection,
+.view text selection:focus,
+iconview text selection:focus,
+textview text selection,
 textview text selection:focus, flowbox flowboxchild:selected, label:selected,
 label selection,
 label selection:focus,
@@ -4539,15 +4559,33 @@ spinbutton selection:focus, modelbutton.flat:selected,
 .menuitem.button.flat:selected, treeview.view:selected, treeview.view:selected:focus, row:selected, calendar:selected, .sidebar :selected {
   background-color: #215d9c;
   color: #ffffff; }
-  .view:disabled:selected, textview text:disabled:selected, iconview:disabled:selected, textview text:disabled:selected:focus, iconview:disabled:selected:focus, textview text selection:disabled, flowbox flowboxchild:disabled:selected, label:disabled:selected,
+  .view:disabled:selected, iconview:disabled:selected, iconview:disabled:selected:focus,
+  .view text:disabled:selected,
+  iconview text:disabled:selected,
+  textview text:disabled:selected,
+  iconview text:disabled:selected:focus,
+  textview text:disabled:selected:focus, .view text selection:disabled, iconview text selection:disabled,
+  iconview text selection:disabled:focus,
+  textview text selection:disabled, flowbox flowboxchild:disabled:selected, label:disabled:selected,
   label selection:disabled, entry selection:disabled, spinbutton selection:disabled, modelbutton.flat:disabled:selected,
   .menuitem.button.flat:disabled:selected, treeview.view:disabled:selected:focus, row:disabled:selected, calendar:disabled:selected, .sidebar :disabled:selected, placessidebar row:selected:disabled label {
     color: #90aece; }
-  .view:backdrop:selected, textview text:backdrop:selected, iconview:backdrop:selected, textview text:backdrop:selected:focus, iconview:backdrop:selected:focus, textview text selection:backdrop, flowbox flowboxchild:backdrop:selected, label:backdrop:selected,
+  .view:backdrop:selected, iconview:backdrop:selected, iconview:backdrop:selected:focus,
+  .view text:backdrop:selected,
+  iconview text:backdrop:selected,
+  textview text:backdrop:selected,
+  iconview text:backdrop:selected:focus,
+  textview text:backdrop:selected:focus, .view text selection:backdrop, iconview text selection:backdrop,
+  iconview text selection:backdrop:focus,
+  textview text selection:backdrop, flowbox flowboxchild:backdrop:selected, label:backdrop:selected,
   label selection:backdrop, entry selection:backdrop, spinbutton selection:backdrop, modelbutton.flat:backdrop:selected,
   .menuitem.button.flat:backdrop:selected, treeview.view:backdrop:selected:focus, row:backdrop:selected, calendar:backdrop:selected, .sidebar :backdrop:selected {
     color: #ffffff; }
-    .view:backdrop:disabled:selected, textview text:backdrop:disabled:selected, iconview:backdrop:disabled:selected, textview text selection:backdrop:disabled, flowbox flowboxchild:backdrop:disabled:selected, label:backdrop:disabled:selected,
+    .view:backdrop:disabled:selected, iconview:backdrop:disabled:selected,
+    .view text:backdrop:disabled:selected,
+    iconview text:backdrop:disabled:selected,
+    textview text:backdrop:disabled:selected, .view text selection:backdrop:disabled, iconview text selection:backdrop:disabled,
+    textview text selection:backdrop:disabled, flowbox flowboxchild:backdrop:disabled:selected, label:backdrop:disabled:selected,
     label selection:backdrop:disabled, entry selection:backdrop:disabled, spinbutton selection:backdrop:disabled, modelbutton.flat:backdrop:disabled:selected,
     .menuitem.button.flat:backdrop:disabled:selected, row:backdrop:disabled:selected, calendar:backdrop:disabled:selected, .sidebar :backdrop:disabled:selected, placessidebar row:selected:disabled label:backdrop, placessidebar row:selected:backdrop:disabled label {
       color: #648eba; }

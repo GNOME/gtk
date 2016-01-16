@@ -88,7 +88,8 @@ $asset_suffix: if($variant=='dark', '-dark', '');
   }
 }
 
-.view {
+.view,
+%view {
   color: $text_color;
   background-color: $base_color;
 
@@ -104,11 +105,14 @@ $asset_suffix: if($variant=='dark', '-dark', '');
   }
 }
 
-textview text {
-  @extend .view;
+.view,
+textview {
+  text {
+    @extend %view;
 
-  selection,
-  selection:focus { @extend %selected_items; }
+    selection,
+    selection:focus { @extend %selected_items; }
+  }
 }
 
 iconview { @extend .view; }
@@ -2502,7 +2506,7 @@ scale {
           &.fine-tune trough#{$nth_child} {}
 
           trough#{$nth_child} {
-            slider{
+            slider {
               margin: 0;
               &#{$state} {
                 $_scale_asset: 'assets/slider-#{$dir_infix}-#{$marks_infix}#{$state_infix}#{$suffix}';
@@ -2513,9 +2517,7 @@ scale {
                 background-image: -gtk-scaled(url('#{$_scale_asset}.png'), url('#{$_scale_asset}@2.png'));
 
                 $_scale_slider_bg_pos: bottom;
-                @if $dir_infix == 'horz' {
-                  @if $marks_infix == 'scale-has-marks-above' { $_scale_slider_bg_pos: top; }
-                }
+                @if $dir_infix == 'horz' { @if $marks_infix == 'scale-has-marks-above' { $_scale_slider_bg_pos: top; }}
                 @else {
                   @if $marks_infix == 'scale-has-marks-above' { $_scale_slider_bg_pos: left; }
                   @else { $_scale_slider_bg_pos: right; }
