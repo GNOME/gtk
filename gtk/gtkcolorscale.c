@@ -27,6 +27,7 @@
 #include "gtkaccessible.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
+#include "gtkrenderprivate.h"
 
 #include <math.h>
 
@@ -216,6 +217,7 @@ scale_draw (GtkWidget *widget,
   GtkColorScale *scale = GTK_COLOR_SCALE (widget);
   gint width, height, x_offset, y_offset;
   cairo_pattern_t *pattern;
+  GtkStyleContext *context;
 
   create_surface (scale);
   gtk_color_scale_get_trough_size (scale,
@@ -224,7 +226,9 @@ scale_draw (GtkWidget *widget,
 
   cairo_save (cr);
   cairo_translate (cr, x_offset, y_offset);
-  cairo_rectangle (cr, 0, 0, width, height);
+
+  context = gtk_widget_get_style_context (widget);
+  gtk_render_content_path (context, cr, 0, 0, width, height);
 
   pattern = cairo_pattern_create_for_surface (scale->priv->surface);
   if (gtk_orientable_get_orientation (GTK_ORIENTABLE (widget)) == GTK_ORIENTATION_HORIZONTAL &&
@@ -251,6 +255,8 @@ scale_draw (GtkWidget *widget,
 static void
 gtk_color_scale_init (GtkColorScale *scale)
 {
+  GtkStyleContext *context;
+
   scale->priv = gtk_color_scale_get_instance_private (scale);
 
   gtk_widget_add_events (GTK_WIDGET (scale), GDK_TOUCH_MASK);
@@ -260,6 +266,9 @@ gtk_color_scale_init (GtkColorScale *scale)
                     G_CALLBACK (hold_action), scale);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (scale->priv->long_press_gesture),
                                               GTK_PHASE_TARGET);
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (scale));
+  gtk_style_context_add_class (context, "color");
 }
 
 static void
