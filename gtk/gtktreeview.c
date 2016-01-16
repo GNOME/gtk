@@ -5616,13 +5616,15 @@ gtk_tree_view_draw (GtkWidget *widget,
   else if (tree_view->priv->drag_highlight_window &&
            gtk_cairo_should_draw_window (cr, tree_view->priv->drag_highlight_window))
     {
+      GdkRGBA color;
+      gtk_style_context_get_color (context, gtk_style_context_get_state (context), &color);
       cairo_save (cr);
       gtk_cairo_transform_to_window (cr, GTK_WIDGET (tree_view), tree_view->priv->drag_highlight_window);
       if (tree_view->priv->drag_column_window_state == DRAG_COLUMN_WINDOW_STATE_ORIGINAL)
         {
           cairo_set_source_rgba (cr, 0.0, 0.0, 0.0, 0.0);
           cairo_paint (cr);
-          cairo_set_source_rgb (cr, 0.0, 0.0, 0.0);
+          gdk_cairo_set_source_rgba (cr, &color);
           cairo_rectangle (cr,
                            1, 1,
                            gdk_window_get_width (tree_view->priv->drag_highlight_window) - 2,
@@ -5631,7 +5633,7 @@ gtk_tree_view_draw (GtkWidget *widget,
         }
       else
         {
-          cairo_set_source_rgb (cr, 0.0, 0.0, 0.0);
+          gdk_cairo_set_source_rgba (cr, &color);
           cairo_paint (cr);
         }
       cairo_restore (cr);
