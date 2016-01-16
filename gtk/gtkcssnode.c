@@ -22,7 +22,6 @@
 #include "gtkcssanimatedstyleprivate.h"
 #include "gtkcsssectionprivate.h"
 #include "gtkcssstylepropertyprivate.h"
-#include "gtkdebug.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtksettingsprivate.h"
@@ -1371,23 +1370,6 @@ gtk_css_node_validate_internal (GtkCssNode *cssnode,
                                 gint64      timestamp)
 {
   GtkCssNode *child;
-
-  /* If you run your application with
-   *   GTK_DEBUG=no-css-cache
-   * every invalidation will purge the cache and completely query
-   * everything anew form the cache. This is slow (in particular
-   * when animating), but useful for figuring out bugs.
-   *
-   * We achieve that by pretending that everything that could have
-   * changed has and so we of course totally need to redo everything.
-   *
-   * Note that this also completely revalidates child widgets all
-   * the time.
-   */
-#ifdef G_ENABLE_DEBUG
-  if (GTK_DEBUG_CHECK (NO_CSS_CACHE))
-    cssnode->pending_changes |= GTK_CSS_CHANGE_ANY;
-#endif
 
   if (!cssnode->invalid)
     return;

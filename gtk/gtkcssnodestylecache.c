@@ -19,6 +19,7 @@
 
 #include "gtkcssnodestylecacheprivate.h"
 
+#include "gtkdebug.h"
 #include "gtkcssstaticstyleprivate.h"
 
 struct _GtkCssNodeStyleCache {
@@ -77,6 +78,18 @@ static gboolean
 may_be_stored_in_cache (GtkCssStyle *style)
 {
   GtkCssChange change;
+
+  /* If you run your application with
+   *   GTK_DEBUG=no-css-cache
+   * no caching will happen. This is slow (in particular
+   * when animating), but useful for figuring out bugs.
+   *
+   * We achieve that by disallowing any inserts into caches here.
+   */
+#ifdef G_ENABLE_DEBUG
+  if (GTK_DEBUG_CHECK (NO_CSS_CACHE))
+    return FALSE;
+#endif
 
   if (!GTK_IS_CSS_STATIC_STYLE (style))
     return FALSE;
