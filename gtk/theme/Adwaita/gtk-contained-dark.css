@@ -220,6 +220,8 @@ entry, spinbutton {
     box-shadow: none; }
     entry progress:backdrop, spinbutton progress:backdrop {
       background-color: transparent; }
+  entry:focus progress, spinbutton:focus progress {
+    border-bottom-width: 3px; }
   .linked:not(.vertical) > entry:focus + entry, .linked:not(.vertical) > spinbutton:focus + entry, .linked:not(.vertical) > entry:focus + spinbutton, .linked:not(.vertical) > spinbutton:focus + spinbutton, .linked:not(.vertical) > entry:focus + button, .linked:not(.vertical) > spinbutton:focus + button, .linked:not(.vertical) > entry:focus + combobox > button.combo, .linked:not(.vertical) > spinbutton:focus + combobox > button.combo {
     border-left-color: #0f2b48; }
   entry.error, spinbutton.error {

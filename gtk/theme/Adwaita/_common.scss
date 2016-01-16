@@ -274,6 +274,10 @@ entry {
     &:backdrop { background-color: transparent; }
   }
 
+  &:focus progress {
+    border-bottom-width: 3px;
+  }
+
   .linked:not(.vertical) > & { @extend %linked; }
   .linked:not(.vertical) > &:focus + entry,
   .linked:not(.vertical) > &:focus + button,
