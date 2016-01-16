@@ -33,6 +33,10 @@ gtk_css_style_change_init (GtkCssStyleChange *change,
 
   change->affects = 0;
   change->changes = _gtk_bitmask_new ();
+  
+  /* Make sure we don't do extra work if old and new are equal. */
+  if (old_style == new_style)
+    change->n_compared = GTK_CSS_PROPERTY_N_PROPERTIES;
 }
 
 void
