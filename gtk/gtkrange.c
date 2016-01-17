@@ -1898,8 +1898,10 @@ gtk_range_size_allocate (GtkWidget     *widget,
   GtkRangePrivate *priv = range->priv;
   GtkAllocation clip, trough_clip, slider_clip, stepper_clip;
   GtkAllocation slider_alloc, stepper_alloc;
+  gint baseline;
 
   gtk_widget_set_allocation (widget, allocation);
+  baseline = gtk_widget_get_allocated_baseline (widget);
 
   if (gtk_widget_get_realized (widget))
     gdk_window_move_resize (priv->event_window,
@@ -1915,7 +1917,7 @@ gtk_range_size_allocate (GtkWidget     *widget,
 
   gtk_css_gadget_allocate (priv->slider_gadget,
                            &slider_alloc,
-                           gtk_widget_get_allocated_baseline (widget),
+                           baseline,
                            &slider_clip);
 
   gtk_range_allocate_trough (range, &trough_clip);
@@ -1929,7 +1931,7 @@ gtk_range_size_allocate (GtkWidget     *widget,
 
       gtk_css_gadget_allocate (priv->stepper_a_gadget,
                                &stepper_alloc,
-                               gtk_widget_get_allocated_baseline (widget),
+                               baseline,
                                &stepper_clip);
       gdk_rectangle_union (&clip, &stepper_clip, &clip);
     }
@@ -1942,7 +1944,7 @@ gtk_range_size_allocate (GtkWidget     *widget,
 
       gtk_css_gadget_allocate (priv->stepper_b_gadget,
                                &stepper_alloc,
-                               gtk_widget_get_allocated_baseline (widget),
+                               baseline,
                                &stepper_clip);
       gdk_rectangle_union (&clip, &stepper_clip, &clip);
     }
@@ -1955,7 +1957,7 @@ gtk_range_size_allocate (GtkWidget     *widget,
 
       gtk_css_gadget_allocate (priv->stepper_c_gadget,
                                &stepper_alloc,
-                               gtk_widget_get_allocated_baseline (widget),
+                               baseline,
                                &stepper_clip);
       gdk_rectangle_union (&clip, &stepper_clip, &clip);
     }
@@ -1968,7 +1970,7 @@ gtk_range_size_allocate (GtkWidget     *widget,
 
       gtk_css_gadget_allocate (priv->stepper_d_gadget,
                                &stepper_alloc,
-                               gtk_widget_get_allocated_baseline (widget),
+                               baseline,
                                &stepper_clip);
       gdk_rectangle_union (&clip, &stepper_clip, &clip);
     }
