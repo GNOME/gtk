@@ -156,6 +156,8 @@
                             <property name="visible">True</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
+                            <property name="max-width-chars">2</property>
+                            <property name="width-chars">2</property>
                             <property name="adjustment">cursor_size_adjustment</property>
                             <property name="snap-to-ticks">True</property>
                           </object>
