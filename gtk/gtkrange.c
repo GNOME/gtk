@@ -1986,8 +1986,6 @@ gtk_range_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
 
-  gtk_range_calc_layout (range);
-
   gtk_widget_set_realized (widget, TRUE);
 
   window = gtk_widget_get_parent_window (widget);
