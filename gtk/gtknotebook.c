@@ -6953,7 +6953,7 @@ gtk_notebook_set_show_tabs (GtkNotebook *notebook,
     {
       gtk_widget_set_can_focus (GTK_WIDGET (notebook), TRUE);
       gtk_notebook_update_labels (notebook);
-      gtk_css_gadget_set_visible (priv->header_gadget, FALSE);
+      gtk_css_gadget_set_visible (priv->header_gadget, TRUE);
     }
 
   for (i = 0; i < N_ACTION_WIDGETS; i++)
