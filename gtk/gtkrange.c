@@ -772,15 +772,15 @@ gtk_range_init (GtkRange *range)
                                                    NULL,
                                                    NULL,
                                                    NULL, NULL);
+  gtk_css_gadget_set_state (priv->trough_gadget,
+                            gtk_css_node_get_state (widget_node));
   gtk_css_node_set_parent (gtk_css_gadget_get_node (priv->trough_gadget), widget_node);
-  gtk_css_node_set_state (gtk_css_gadget_get_node (priv->trough_gadget),
-                          gtk_css_node_get_state (widget_node));
 
   priv->slider_gadget = gtk_builtin_icon_new ("slider",
                                               GTK_WIDGET (range),
                                               priv->trough_gadget, NULL);
-  gtk_css_node_set_state (gtk_css_gadget_get_node (priv->slider_gadget),
-                          gtk_css_node_get_state (widget_node));
+  gtk_css_gadget_set_state (priv->slider_gadget,
+                            gtk_css_node_get_state (widget_node));
 
   /* Note: Order is important here.
    * The ::drag-begin handler relies on the state set up by the
@@ -925,7 +925,7 @@ update_stepper_state (GtkRange     *range,
         state |= GTK_STATE_FLAG_PRELIGHT;
     }
 
-  gtk_css_node_set_state (gtk_css_gadget_get_node (gadget), state);
+  gtk_css_gadget_set_state (gadget, state);
 }
 
 static void
@@ -1461,8 +1461,8 @@ gtk_range_set_show_fill_level (GtkRange *range,
                                                      priv->trough_gadget, NULL,
                                                      NULL, NULL, NULL,
                                                      NULL, NULL);
-      gtk_css_node_set_state (gtk_css_gadget_get_node (priv->fill_gadget),
-                              gtk_css_node_get_state (gtk_css_gadget_get_node (priv->trough_gadget)));
+      gtk_css_gadget_set_state (priv->fill_gadget,
+                                gtk_css_node_get_state (gtk_css_gadget_get_node (priv->trough_gadget)));
     }
   else
     {
@@ -2070,7 +2070,7 @@ update_slider_state (GtkRange *range)
   if (priv->grab_location == MOUSE_SLIDER)
     state |= GTK_STATE_FLAG_ACTIVE;
 
-  gtk_css_node_set_state (gtk_css_gadget_get_node (priv->slider_gadget), state);
+  gtk_css_gadget_set_state (priv->slider_gadget, state);
 }
 
 static void
@@ -2089,11 +2089,11 @@ update_trough_state (GtkRange *range)
   if (priv->grab_location == MOUSE_TROUGH)
     state |= GTK_STATE_FLAG_ACTIVE;
 
-  gtk_css_node_set_state (gtk_css_gadget_get_node (priv->trough_gadget), state);
+  gtk_css_gadget_set_state (priv->trough_gadget, state);
   if (priv->highlight_gadget)
-    gtk_css_node_set_state (gtk_css_gadget_get_node (priv->highlight_gadget), state);
+    gtk_css_gadget_set_state (priv->highlight_gadget, state);
   if (priv->fill_gadget)
-    gtk_css_node_set_state (gtk_css_gadget_get_node (priv->fill_gadget), state);
+    gtk_css_gadget_set_state (priv->fill_gadget, state);
 }
 
 static void
@@ -4068,8 +4068,8 @@ _gtk_range_set_has_origin (GtkRange *range,
                                                           priv->trough_gadget, NULL,
                                                           NULL, NULL, NULL,
                                                           NULL, NULL);
-      gtk_css_node_set_state (gtk_css_gadget_get_node (priv->highlight_gadget),
-                              gtk_css_node_get_state (gtk_css_gadget_get_node (priv->trough_gadget)));
+      gtk_css_gadget_set_state (priv->highlight_gadget,
+                                gtk_css_node_get_state (gtk_css_gadget_get_node (priv->trough_gadget)));
     }
   else
     {
@@ -4187,19 +4187,19 @@ sync_stepper_gadget (GtkRange                *range,
     }
 
   widget = GTK_WIDGET (range);
+  widget_node = gtk_widget_get_css_node (widget);
   gadget = gtk_builtin_icon_new ("button",
                                  widget,
                                  NULL, NULL);
   gtk_builtin_icon_set_image (GTK_BUILTIN_ICON (gadget), image_type);
   gtk_css_gadget_add_class (gadget, class);
+  gtk_css_gadget_set_state (gadget, gtk_css_node_get_state (widget_node));
 
   node = gtk_css_gadget_get_node (gadget);
-  widget_node = gtk_widget_get_css_node (widget);
   if (before)
     gtk_css_node_insert_before (widget_node, node, gtk_css_gadget_get_node (before));
   else
     gtk_css_node_insert_after (widget_node, node, gtk_css_gadget_get_node (after));
-  gtk_css_node_set_state (node, gtk_css_node_get_state (widget_node));
 
   *gadget_ptr = gadget;
 }
