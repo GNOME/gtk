@@ -4567,13 +4567,14 @@ gtk_notebook_forall (GtkContainer *container,
         }
     }
 
-  if (include_internals) {
-    for (i = 0; i < N_ACTION_WIDGETS; i++)
-      {
-        if (priv->action_widget[i])
-          (* callback) (priv->action_widget[i], callback_data);
-      }
-  }
+  if (include_internals)
+    {
+      for (i = 0; i < N_ACTION_WIDGETS; i++)
+        {
+          if (priv->action_widget[i])
+            (* callback) (priv->action_widget[i], callback_data);
+        }
+    }
 }
 
 static GType
