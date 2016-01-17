@@ -3889,8 +3889,6 @@ gtk_range_calc_layout (GtkRange *range)
     }
   
   gtk_range_calc_slider (range);
-  gtk_range_update_mouse_location (range);
-
   gtk_range_calc_stepper_sensitivity (range);
 }
 
