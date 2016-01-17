@@ -136,9 +136,15 @@
  * ]|
  *
  * GtkWindow has a main CSS node with name window and style class .background,
- * and a subnode with name decoration. Style classes that are typically used
- * with the main CSS node are .csd, .solid-csd, .ssd, .tiled, .maximized,
- * .fullscreen, .popup, .tooltip.
+ * and a subnode with name decoration.
+ *
+ * Style classes that are typically used with the main CSS node are .csd (when
+ * client-side decorations are in use), .solid-csd (for client-side decorations
+ * without invisible borders), .ssd (used by mutter when rendering server-side
+ * decorations). GtkWindow also represents window states with the following
+ * style classes on the main node: .tiled, .maximized, .fullscreen. Specialized
+ * types of window often add their own discriminating style classes, such as
+ * .popup or .tooltip.
  *
  * GtkWindow adds the .titlebar and .default-decoration style classes to the
  * widget that is added as a titlebar child.
