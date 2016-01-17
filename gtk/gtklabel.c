@@ -4299,6 +4299,14 @@ gtk_label_render (GtkCssGadget *gadget,
 
   context = gtk_widget_get_style_context (widget);
 
+  if (GTK_IS_ACCEL_LABEL (widget))
+    {
+      guint ac_width = gtk_accel_label_get_accel_width (GTK_ACCEL_LABEL (widget));
+      width -= ac_width;
+      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+        x += ac_width;
+    }
+
   if (priv->text && (*priv->text != '\0'))
     {
       lx = ly = 0;

@@ -50,13 +50,13 @@
  * accelerator key on the right of the label text, e.g. “Ctl+S”.
  * It is commonly used in menus to show the keyboard short-cuts for commands.
  *
- * The accelerator key to display is not set explicitly.
- * Instead, the #GtkAccelLabel displays the accelerators which have been added to
- * a particular widget. This widget is set by calling
- * gtk_accel_label_set_accel_widget().
+ * The accelerator key to display is typically not set explicitly (although it
+ * can be, with gtk_accel_label_set_accel()). Instead, the #GtkAccelLabel displays
+ * the accelerators which have been added to a particular widget. This widget is
+ * set by calling gtk_accel_label_set_accel_widget().
  *
- * For example, a #GtkMenuItem widget may have an accelerator added to emit the
- * “activate” signal when the “Ctl+S” key combination is pressed.
+ * For example, a #GtkMenuItem widget may have an accelerator added to emit
+ * the “activate” signal when the “Ctl+S” key combination is pressed.
  * A #GtkAccelLabel is created and added to the #GtkMenuItem, and
  * gtk_accel_label_set_accel_widget() is called with the #GtkMenuItem as the
  * second argument. The #GtkAccelLabel will now display “Ctl+S” after its label.
@@ -449,12 +449,12 @@ gtk_accel_label_draw (GtkWidget *widget,
                       cairo_t   *cr)
 {
   GtkAccelLabel *accel_label = GTK_ACCEL_LABEL (widget);
-  GtkTextDirection direction;
   guint ac_width;
   GtkAllocation allocation;
   GtkRequisition requisition;
 
-  direction = gtk_widget_get_direction (widget);
+  GTK_WIDGET_CLASS (gtk_accel_label_parent_class)->draw (widget, cr);
+
   ac_width = gtk_accel_label_get_accel_width (accel_label);
   gtk_widget_get_allocation (widget, &allocation);
   gtk_widget_get_preferred_size (widget, NULL, &requisition);
@@ -465,45 +465,21 @@ gtk_accel_label_draw (GtkWidget *widget,
       PangoLayout *label_layout;
       PangoLayout *accel_layout;
       GtkLabel *label = GTK_LABEL (widget);
-
       gint x;
       gint y;
 
       context = gtk_widget_get_style_context (widget);
+
       label_layout = gtk_label_get_layout (GTK_LABEL (accel_label));
+      accel_layout = gtk_accel_label_get_accel_layout (accel_label);
 
-      cairo_save (cr);
-
-      /* XXX: Mad hack: We modify the label's width so it renders
-       * properly in its draw function that we chain to.
-       */
-      if (direction == GTK_TEXT_DIR_RTL)
-        cairo_translate (cr, ac_width, 0);
-      if (gtk_label_get_ellipsize (label))
-        pango_layout_set_width (label_layout,
-                                pango_layout_get_width (label_layout) 
-                                - ac_width * PANGO_SCALE);
-      
-      allocation.width -= ac_width;
-      gtk_widget_set_allocation (widget, &allocation);
-      GTK_WIDGET_CLASS (gtk_accel_label_parent_class)->draw (widget, cr);
-      allocation.width += ac_width;
-      gtk_widget_set_allocation (widget, &allocation);
-      if (gtk_label_get_ellipsize (label))
-        pango_layout_set_width (label_layout,
-                                pango_layout_get_width (label_layout)
-                                + ac_width * PANGO_SCALE);
-
-      cairo_restore (cr);
-
-      if (direction == GTK_TEXT_DIR_RTL)
+      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
         x = 0;
       else
         x = gtk_widget_get_allocated_width (widget) - ac_width;
 
       gtk_label_get_layout_offsets (GTK_LABEL (accel_label), NULL, &y);
 
-      accel_layout = gtk_accel_label_get_accel_layout (accel_label);
       y += get_first_baseline (label_layout) - get_first_baseline (accel_layout) - allocation.y;
 
       gtk_style_context_save_to_node (context, accel_label->priv->accel_node);
@@ -512,11 +488,7 @@ gtk_accel_label_draw (GtkWidget *widget,
 
       g_object_unref (accel_layout);
     }
-  else
-    {
-      GTK_WIDGET_CLASS (gtk_accel_label_parent_class)->draw (widget, cr);
-    }
-  
+
   return FALSE;
 }
 
