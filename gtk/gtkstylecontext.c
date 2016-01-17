@@ -778,12 +778,16 @@ gtk_style_context_query_func (guint    id,
  * @state: state to retrieve the property value for
  * @value: (out) (transfer full):  return location for the style property value
  *
- * Gets a style property from @context for the given state. Note that
- * not all CSS properties that are supported by GTK+ can be retrieved
- * in this way, since they may not be representable as #GValue.
+ * Gets a style property from @context for the given state.
  *
+ * Note that not all CSS properties that are supported by GTK+ can be
+ * retrieved in this way, since they may not be representable as #GValue.
  * GTK+ defines macros for a number of properties that can be used
  * with this function.
+ *
+ * Note that passing a state other than the current state of @context
+ * is not recommended unless the style context has been saved with
+ * gtk_style_context_save().
  *
  * When @value is no longer needed, g_value_unset() must be called
  * to free any allocated memory.
@@ -2487,6 +2491,9 @@ gtk_style_context_set_background (GtkStyleContext *context,
  *
  * Gets the foreground color for a given state.
  *
+ * See gtk_style_context_get_property() and
+ * #GTK_STYLE_PROPERTY_COLOR for details.
+ *
  * Since: 3.0
  **/
 void
@@ -2586,7 +2593,9 @@ gtk_style_context_get_border_color (GtkStyleContext *context,
  * @border: (out): return value for the border settings
  *
  * Gets the border for a given state as a #GtkBorder.
- * See %GTK_STYLE_PROPERTY_BORDER_WIDTH.
+ *
+ * See gtk_style_context_get_property() and
+ * #GTK_STYLE_PROPERTY_BORDER_WIDTH for details.
  *
  * Since: 3.0
  **/
@@ -2625,7 +2634,8 @@ gtk_style_context_get_border (GtkStyleContext *context,
  * @padding: (out): return value for the padding settings
  *
  * Gets the padding for a given state as a #GtkBorder.
- * See %GTK_STYLE_PROPERTY_PADDING.
+ * See gtk_style_context_get() and #GTK_STYLE_PROPERTY_PADDING
+ * for details.
  *
  * Since: 3.0
  **/
@@ -2664,7 +2674,8 @@ gtk_style_context_get_padding (GtkStyleContext *context,
  * @margin: (out): return value for the margin settings
  *
  * Gets the margin for a given state as a #GtkBorder.
- * See %GTK_STYLE_PROPERTY_MARGIN.
+ * See gtk_style_property_get() and #GTK_STYLE_PROPERTY_MARGIN
+ * for details.
  *
  * Since: 3.0
  **/
