@@ -975,6 +975,9 @@ gtk_entry_class_init (GtkEntryClass *class)
    * Which kind of shadow to draw around the entry when
    * #GtkEntry:has-frame is set to %TRUE.
    *
+   * Deprecated: 3.20: Use CSS to determine the style of the border;
+   *     the value of this style property is ignored.
+   *
    * Since: 2.12
    */
   entry_props[PROP_SHADOW_TYPE] =
@@ -983,7 +986,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                          P_("Which kind of shadow to draw around the entry when has-frame is set"),
                          GTK_TYPE_SHADOW_TYPE,
                          GTK_SHADOW_IN,
-                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED);
 
   /**
    * GtkEntry:overwrite-mode:
