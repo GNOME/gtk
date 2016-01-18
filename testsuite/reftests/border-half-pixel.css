@@ -1,6 +1,6 @@
 @import "reset-to-defaults.css";
 
-.button {
+button {
   border-top: 0.5px solid red;
   border-bottom: 0.5px solid blue;
 }

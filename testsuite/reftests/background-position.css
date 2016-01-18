@@ -1,17 +1,17 @@
 @import "reset-to-defaults.css";
 
-.button {
+button {
   background-image: url("green-20x20.png");
   background-repeat: no-repeat;
   background-color: red;
 }
 
-.button#ref {
+button#ref {
   background-image: none;
   background-color: lime;
 }
 
-GtkWindow#ref {
+window#ref {
   background-color: red;
 }
 

@@ -4,7 +4,7 @@
   100% { background-color: blue; }
 }
 
-GtkWindow {
+window {
   background-color: #7F0080;
 }
 

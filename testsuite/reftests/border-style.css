@@ -1,6 +1,6 @@
 @import url("reset-to-defaults.css");
 
-GtkButton {
+button {
   background-color: red;
   border-color: lime;
   border-width: 1px;

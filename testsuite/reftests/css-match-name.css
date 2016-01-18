@@ -1,7 +1,6 @@
 @import url("reset-to-defaults.css");
 
 #window {
-  engine: none;
   background-image: none;
   background-color: lime;
   border-radius: 0;

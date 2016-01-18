@@ -1,6 +1,6 @@
 @import "reset-to-defaults.css";
 
-.button {
+button {
   background-image: url("border-image-balls.png");
   color: black;
   text-shadow: 1px 1px white;

@@ -4,7 +4,7 @@
   border-width: 5px;
 }
 
-GtkButton {
+button {
   /* using a nonexistant color because that will lead to the default value */
   border-color: @doesnotexist;
   color: purple;

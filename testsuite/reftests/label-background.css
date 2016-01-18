@@ -1,4 +1,4 @@
-GtkWindow {
+window {
   background: darkred; /* should never be seen */
 }
 

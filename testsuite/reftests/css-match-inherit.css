@@ -1,9 +1,8 @@
 * {
-  engine: none;
   color: inherit;
 }
 
-GtkButton {
+button {
   color: red;
 }
 

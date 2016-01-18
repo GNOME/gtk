@@ -3,7 +3,7 @@
   border-color: red;
 }
 
-GtkButton {
+button {
   background-color: purple;
   border-style: none;
   border-width: 5px;

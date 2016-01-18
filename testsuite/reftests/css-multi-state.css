@@ -1,5 +1,5 @@
 GtkToggleButton:checked,
-#reference:insensitive {
+#reference:disabled {
   color: lime;
 }
 

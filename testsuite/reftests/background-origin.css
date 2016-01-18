@@ -1,10 +1,10 @@
 @import "reset-to-defaults.css";
 
-GtkWindow {
+window {
   background-color: rgb(255,255,255);
 }
 
-GtkButton {
+button {
   border-width: 5px;
   border-style: solid;
   border-color: rgba(255,0,0,0.5);
@@ -52,7 +52,7 @@ GtkButton {
   background-clip: content-box;
 }
 
-GtkButton#reference {
+button#reference {
   border-width: 0;
   background-image: url("reference-background-origin.png");
 }

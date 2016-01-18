@@ -1,29 +1,28 @@
 * {
-  engine: none;
   background-image: none;
 }
 
-.button:nth-child(even) {
+button:nth-child(even) {
   background-color: yellow;
 }
 
-.button:nth-child(odd) {
+button:nth-child(odd) {
   background-color: red;
 }
 
-.button:nth-child(first) {
+button:nth-child(first) {
   background-color: purple;
 }
 
-.button:nth-child(last):nth-child(even) {
+button:nth-child(last):nth-child(even) {
   background-color: lime;
 }
 
-.button:nth-child(last):nth-child(odd) {
+button:nth-child(last):nth-child(odd) {
   background-color: purple;
 }
 
-.button:nth-child(last):nth-child(first) {
+button:nth-child(last):nth-child(first) {
   background-color: blue;
 }
 

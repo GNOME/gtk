@@ -1,5 +1,6 @@
+@import "reset-to-defaults.css";
+
 * {
-  engine: none;
   border-image: url("green-20x20.png") 5000;
   background-image: none;
   background-color: #000;
@@ -9,7 +10,7 @@
   border-radius: 0;
 }
 
-GtkGrid * {
+grid * {
   background-color: lime;
   border-style: none;
   border-width: 0;

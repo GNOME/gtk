@@ -1,5 +1,5 @@
 @import "reset-to-defaults.css";
 
-GtkWindow { background-color: lime; }
+window { background-color: lime; }
 
 #reference * { background-color: lime; }

@@ -6,6 +6,6 @@ GtkGrid GtkEventBox {
   background-color: red
 }
 
-GtkWindow > GtkGrid GtkEventBox {
+window > GtkGrid GtkEventBox {
   background-color: blue
 }

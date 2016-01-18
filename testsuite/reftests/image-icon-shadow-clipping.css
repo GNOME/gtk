@@ -1,5 +1,5 @@
 @import "reset-to-defaults.css";
 
-GtkImage {
-  icon-shadow: 20px 20px tomato;
+image {
+  -gtk-icon-shadow: 20px 20px tomato;
 }

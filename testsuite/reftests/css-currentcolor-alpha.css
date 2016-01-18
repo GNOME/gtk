@@ -1,6 +1,6 @@
 @import "reset-to-defaults.css";
 
-GtkWindow {
+window {
   color: alpha(currentColor, 0.0);
 }
 

@@ -1,6 +1,6 @@
 @import "reset-to-defaults.css";
 
-GtkButton {
+button {
   border-width: 5px;
   border-style: solid;
   border-color: rgb(255,0,0);

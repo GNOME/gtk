@@ -3,10 +3,10 @@
   color: lime;
 }
 
-:insensitive {
+:disabled {
   color: red;
 }
 
-label:insensitive {
+label:disabled {
   color: inherit;
 }

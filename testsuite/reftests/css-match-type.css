@@ -1,13 +1,12 @@
 @import url("reset-to-defaults.css");
 
-GtkWindow {
-  engine: none;
+window {
   background-image: none;
   background-color: lime;
   border-radius: 0;
   border-style: none;
 }
 
-NotGtkWindow {
+Notwindow {
   background-color: red;
 }
