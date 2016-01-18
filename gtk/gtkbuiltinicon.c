@@ -63,6 +63,10 @@ gtk_builtin_icon_get_preferred_size (GtkCssGadget   *gadget,
                                      gint           *natural_baseline)
 {
   GtkBuiltinIconPrivate *priv = gtk_builtin_icon_get_instance_private (GTK_BUILTIN_ICON (gadget));
+  GtkWidget *widget;
+  PangoContext *pango_context;
+  PangoFontMetrics *metrics;
+  int strikethrough;
   double min_size;
   guint property;
 
@@ -73,27 +77,42 @@ gtk_builtin_icon_get_preferred_size (GtkCssGadget   *gadget,
   min_size = _gtk_css_number_value_get (gtk_css_style_get_value (gtk_css_gadget_get_style (gadget), property), 100);
   if (min_size > 0.0)
     {
-      *minimum = *natural = 0;
-      return;
+      *minimum = *natural = min_size;
     }
-
-  if (priv->default_size_property)
+  else if (priv->default_size_property)
     {
       GValue value = G_VALUE_INIT;
 
       /* Do it a bit more complicated here so we get warnings when
-       * somebody sets a non-int proerty. */
+       * somebody sets a non-int proerty.
+       */
       g_value_init (&value, G_TYPE_INT);
       gtk_widget_style_get_property (gtk_css_gadget_get_owner (gadget),
                                      priv->default_size_property,
                                      &value);
       *minimum = *natural = g_value_get_int (&value);
       g_value_unset (&value);
-      return;
+    }
+  else
+    {
+      *minimum = *natural = priv->default_size;
     }
 
-  *minimum = priv->default_size;
-  *natural = priv->default_size;
+  widget = gtk_css_gadget_get_owner (gadget);
+
+  pango_context = gtk_widget_get_pango_context (widget);
+  metrics = pango_context_get_metrics (pango_context,
+                                       pango_context_get_font_description (pango_context),
+                                       pango_context_get_language (pango_context));
+
+  strikethrough = pango_font_metrics_get_strikethrough_position (metrics);
+
+  if (minimum_baseline)
+    *minimum_baseline = *minimum * 0.5 + PANGO_PIXELS (strikethrough);
+  if (natural_baseline)
+    *natural_baseline = *minimum_baseline;
+
+  pango_font_metrics_unref (metrics);
 }
 
 static void
