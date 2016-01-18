@@ -246,6 +246,9 @@ void           gtk_text_view_set_cursor_visible    (GtkTextView   *text_view,
 GDK_AVAILABLE_IN_ALL
 gboolean       gtk_text_view_get_cursor_visible    (GtkTextView   *text_view);
 
+GDK_AVAILABLE_IN_3_20
+void           gtk_text_view_reset_cursor_blink    (GtkTextView   *text_view);
+
 GDK_AVAILABLE_IN_ALL
 void           gtk_text_view_get_cursor_locations  (GtkTextView       *text_view,
                                                     const GtkTextIter *iter,

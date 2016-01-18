@@ -3538,6 +3538,28 @@ gtk_text_view_get_cursor_visible (GtkTextView *text_view)
   return text_view->priv->cursor_visible;
 }
 
+/**
+ * gtk_text_view_reset_cursor_blink:
+ * @text_view: a #GtkTextView
+ *
+ * Ensures that the cursor is shown (i.e. not in an 'off' blink
+ * interval) and resets the time that it will stay blinking (or
+ * visible, in case blinking is disabled).
+ *
+ * This function should be called in response to user input
+ * (e.g. from derived classes that override the textview's
+ * #GtkWidget::key-press-event handler).
+ *
+ * Since: 3.20
+ */
+void
+gtk_text_view_reset_cursor_blink (GtkTextView *text_view)
+{
+  g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
+
+  gtk_text_view_reset_blink_time (text_view);
+  gtk_text_view_pend_cursor_blink (text_view);
+}
 
 /**
  * gtk_text_view_place_cursor_onscreen:
