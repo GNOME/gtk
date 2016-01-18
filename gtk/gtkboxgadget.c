@@ -238,8 +238,10 @@ gtk_box_gadget_measure_opposite (GtkCssGadget   *gadget,
       total_min = MAX (total_min, above_min + below_min);
       total_nat = MAX (total_nat, above_nat + below_nat);
       /* assume GTK_BASELINE_POSITION_CENTER for now */
-      *minimum_baseline = above_min + (total_min - (above_min + below_min)) / 2;
-      *natural_baseline = above_nat + (total_nat - (above_nat + below_nat)) / 2;
+      if (minimum_baseline)
+        *minimum_baseline = above_min + (total_min - (above_min + below_min)) / 2;
+      if (natural_baseline)
+        *natural_baseline = above_nat + (total_nat - (above_nat + below_nat)) / 2;
     }
 
   *minimum = total_min;
