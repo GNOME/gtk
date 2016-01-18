@@ -3060,9 +3060,18 @@ gtk_notebook_stop_reorder (GtkNotebook *notebook)
 
           priv->has_scrolled = FALSE;
           priv->during_reorder = FALSE;
-        }
 
-      hide_drag_window (notebook, priv, page);
+          hide_drag_window (notebook, priv, page);
+        }
+      else
+        {
+          g_object_ref (page->tab_label);
+          gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (page->tab_label)), page->tab_label);
+          gtk_css_node_set_parent (gtk_widget_get_css_node (page->tab_label),
+                                   gtk_css_gadget_get_node (page->gadget));
+          gtk_widget_set_parent (page->tab_label, GTK_WIDGET (notebook));
+          g_object_unref (page->tab_label);
+        }
 
       priv->operation = DRAG_OPERATION_NONE;
 
