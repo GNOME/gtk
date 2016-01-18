@@ -236,6 +236,8 @@ gtk_css_node_dispose (GObject *object)
     }
 
   gtk_css_node_set_invalid (cssnode, FALSE);
+  
+  g_clear_pointer (&cssnode->cache, gtk_css_node_style_cache_unref);
 
   G_OBJECT_CLASS (gtk_css_node_parent_class)->dispose (object);
 }
@@ -314,6 +316,7 @@ lookup_in_global_parent_cache (GtkCssNode                  *node,
   if (parent->cache == NULL)
     return NULL;
 
+  g_assert (node->cache == NULL);
   node->cache = gtk_css_node_style_cache_lookup (parent->cache,
                                                  (GtkCssNodeDeclaration *) decl,
                                                  gtk_css_node_is_first_child (node),
