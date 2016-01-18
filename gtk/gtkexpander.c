@@ -450,7 +450,7 @@ gtk_expander_init (GtkExpander *expander)
                                            priv->gadget,
                                            NULL);
   gtk_box_gadget_set_orientation (GTK_BOX_GADGET (priv->title_gadget), GTK_ORIENTATION_HORIZONTAL);
-  gtk_box_gadget_insert_gadget (GTK_BOX_GADGET (priv->gadget), -1, priv->title_gadget, FALSE, FALSE, GTK_ALIGN_FILL);
+  gtk_box_gadget_insert_gadget (GTK_BOX_GADGET (priv->gadget), -1, priv->title_gadget, FALSE, FALSE, GTK_ALIGN_START);
 
   priv->arrow_gadget = gtk_builtin_icon_new ("arrow",
                                              GTK_WIDGET (expander),
@@ -778,8 +778,13 @@ gtk_expander_direction_changed (GtkWidget        *widget,
                                 GtkTextDirection  previous_direction)
 {
   GtkExpanderPrivate *priv = GTK_EXPANDER (widget)->priv;
+  GtkAlign align;
 
   gtk_box_gadget_reverse_children (GTK_BOX_GADGET (priv->title_gadget));
+
+  align = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL ? GTK_ALIGN_END : GTK_ALIGN_START;
+  gtk_box_gadget_remove_gadget (GTK_BOX_GADGET (priv->gadget), priv->title_gadget);
+  gtk_box_gadget_insert_gadget (GTK_BOX_GADGET (priv->gadget), 0, priv->title_gadget, FALSE, FALSE, align);
 
   GTK_WIDGET_CLASS (gtk_expander_parent_class)->direction_changed (widget, previous_direction);
 }
