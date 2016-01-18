@@ -765,25 +765,6 @@ update_node_state (GtkExpander *expander)
 }
 
 static void
-update_node_ordering (GtkExpander *expander)
-{
-  GtkExpanderPrivate *priv = expander->priv;
-  GtkCssNode *arrow_node, *label_node, *title_node;
-
-  if (!priv->label_widget)
-    return;
-
-  title_node = gtk_css_gadget_get_node (priv->title_gadget);
-  arrow_node = gtk_css_gadget_get_node (priv->arrow_gadget);
-  label_node = gtk_widget_get_css_node (priv->label_widget);
-
-  if (gtk_widget_get_direction (GTK_WIDGET (expander)) == GTK_TEXT_DIR_RTL)
-    gtk_css_node_insert_before (title_node, label_node, arrow_node);
-  else
-    gtk_css_node_insert_after (title_node, label_node, arrow_node);
-}
-
-static void
 gtk_expander_state_flags_changed (GtkWidget     *widget,
                                   GtkStateFlags  previous_state)
 {
@@ -796,7 +777,9 @@ static void
 gtk_expander_direction_changed (GtkWidget        *widget,
                                 GtkTextDirection  previous_direction)
 {
-  update_node_ordering (GTK_EXPANDER (widget));
+  GtkExpanderPrivate *priv = GTK_EXPANDER (widget)->priv;
+
+  gtk_box_gadget_reverse_children (GTK_BOX_GADGET (priv->title_gadget));
 
   GTK_WIDGET_CLASS (gtk_expander_parent_class)->direction_changed (widget, previous_direction);
 }
@@ -1549,7 +1532,8 @@ gtk_expander_set_label_widget (GtkExpander *expander,
                                GtkWidget   *label_widget)
 {
   GtkExpanderPrivate *priv;
-  GtkWidget          *widget;
+  GtkWidget *widget;
+  int pos;
 
   g_return_if_fail (GTK_IS_EXPANDER (expander));
   g_return_if_fail (label_widget == NULL || GTK_IS_WIDGET (label_widget));
@@ -1573,17 +1557,13 @@ gtk_expander_set_label_widget (GtkExpander *expander,
   if (label_widget)
     {
       priv->label_widget = label_widget;
-      gtk_css_node_set_parent (gtk_widget_get_css_node (label_widget),
-                               gtk_css_gadget_get_node (priv->title_gadget));
-      update_node_ordering (expander);
       gtk_widget_set_parent (label_widget, widget);
 
       if (priv->prelight)
-        gtk_widget_set_state_flags (label_widget,
-                                    GTK_STATE_FLAG_PRELIGHT,
-                                    FALSE);
+        gtk_widget_set_state_flags (label_widget, GTK_STATE_FLAG_PRELIGHT, FALSE);
 
-      gtk_box_gadget_insert_widget (GTK_BOX_GADGET (priv->title_gadget), 1, label_widget);
+      pos = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL ? 0 : 1;
+      gtk_box_gadget_insert_widget (GTK_BOX_GADGET (priv->title_gadget), pos, label_widget);
     }
 
   if (gtk_widget_get_visible (widget))
