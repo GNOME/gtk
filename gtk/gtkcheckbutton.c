@@ -152,22 +152,8 @@ gtk_check_button_direction_changed (GtkWidget        *widget,
                                     GtkTextDirection  previous_direction)
 {
   GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (GTK_CHECK_BUTTON (widget));
-  GtkWidget *child;
 
-  child = gtk_bin_get_child (GTK_BIN (widget));
-  if (child)
-    {
-      GtkCssNode *node, *parent, *sibling;
-
-      node = gtk_css_gadget_get_node (priv->indicator_gadget);
-      parent = gtk_css_node_get_parent (node);
-      sibling = gtk_widget_get_css_node (child);
-
-      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
-        gtk_css_node_insert_before (parent, node, sibling);
-      else
-        gtk_css_node_insert_after (parent, node, sibling);
-    }
+  gtk_box_gadget_reverse_children (GTK_BOX_GADGET (priv->gadget));
 
   GTK_WIDGET_CLASS (gtk_check_button_parent_class)->direction_changed (widget, previous_direction);
 }
@@ -188,10 +174,12 @@ gtk_check_button_add (GtkContainer *container,
                       GtkWidget    *widget)
 {
   GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (GTK_CHECK_BUTTON (container));
+  int pos;
 
   GTK_CONTAINER_CLASS (gtk_check_button_parent_class)->add (container, widget);
 
-  gtk_box_gadget_insert_widget (GTK_BOX_GADGET (priv->gadget), 1, widget);
+  pos = gtk_widget_get_direction (GTK_WIDGET (container)) == GTK_TEXT_DIR_RTL ? 0 : 1;
+  gtk_box_gadget_insert_widget (GTK_BOX_GADGET (priv->gadget), pos, widget);
 }
 
 static void
