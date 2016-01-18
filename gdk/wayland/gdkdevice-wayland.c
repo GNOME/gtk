@@ -1072,6 +1072,8 @@ pointer_handle_enter (void              *data,
   device->pointer_focus = wl_surface_get_user_data(surface);
   g_object_ref(device->pointer_focus);
 
+  device->button_modifiers = 0;
+
   device->surface_x = wl_fixed_to_double (sx);
   device->surface_y = wl_fixed_to_double (sy);
   device->enter_serial = serial;
