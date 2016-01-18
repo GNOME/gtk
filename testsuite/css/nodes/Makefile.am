@@ -28,18 +28,20 @@ test_css_nodes_SOURCES = \
 	$(NULL)
 
 test_data = \
-	box.ltr.ui	box.ltr.nodes		\
-	box.rtl.ui	box.rtl.nodes		\
-	buttons.ui 	buttons.nodes 		\
-	entries.ui 	entries.nodes 		\
-	expander.ltr.ui	expander.ltr.nodes	\
-	expander.rtl.ui	expander.rtl.nodes	\
-	levelbar.ltr.ui levelbar.ltr.nodes	\
-	levelbar.rtl.ui levelbar.rtl.nodes	\
-	notebook.ui 	notebook.nodes 		\
-	paned.ltr.ui	paned.ltr.nodes		\
-	paned.rtl.ui	paned.rtl.nodes		\
-	progressbar.ui 	progressbar.nodes 	\
+	box.ltr.ui		box.ltr.nodes		\
+	box.rtl.ui		box.rtl.nodes		\
+	buttons.ui 		buttons.nodes 		\
+	checkbutton.ltr.ui	checkbutton.ltr.nodes	\
+	checkbutton.rtl.ui	checkbutton.rtl.nodes	\
+	entries.ui 		entries.nodes 		\
+	expander.ltr.ui		expander.ltr.nodes	\
+	expander.rtl.ui		expander.rtl.nodes	\
+	levelbar.ltr.ui 	levelbar.ltr.nodes	\
+	levelbar.rtl.ui 	levelbar.rtl.nodes	\
+	notebook.ui 		notebook.nodes 		\
+	paned.ltr.ui		paned.ltr.nodes		\
+	paned.rtl.ui		paned.rtl.nodes		\
+	progressbar.ui 		progressbar.nodes 	\
 	$(NULL)
 
 EXTRA_DIST += $(test_in_files) $(test_data)

@@ -1,0 +1,9 @@
+[window.background:dir(ltr)]
+  decoration:dir(ltr)
+  box.vertical:dir(ltr)
+    checkbutton:dir(ltr)
+      check:dir(ltr)
+      label:dir(ltr)
+    radiobutton:dir(ltr):checked
+      radio:dir(ltr):checked
+      label:dir(ltr)
