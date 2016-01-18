@@ -1090,7 +1090,7 @@ gdk_screen_get_setting (GdkScreen   *screen,
  * @screen: screen to get scale factor for
  * @monitor_num: number of the monitor, between 0 and gdk_screen_get_n_monitors (screen)
  *
- * Returns the internal scale factor that maps from monitor coordiantes
+ * Returns the internal scale factor that maps from monitor coordinates
  * to the actual device pixels. On traditional systems this is 1, but
  * on very high density outputs this can be a higher value (often 2).
  *
