@@ -428,6 +428,9 @@ gdk_drag_status (GdkDragContext *context,
  *
  * This function is called by the drag source.
  *
+ * This function does not need to be called in managed drag and drop
+ * operations. See gdk_drag_context_manage_dnd() for more information.
+ *
  * Returns:
  */
 gboolean
@@ -461,6 +464,9 @@ gdk_drag_motion (GdkDragContext *context,
  * Aborts a drag without dropping.
  *
  * This function is called by the drag source.
+ *
+ * This function does not need to be called in managed drag and drop
+ * operations. See gdk_drag_context_manage_dnd() for more information.
  */
 void
 gdk_drag_abort (GdkDragContext *context,
@@ -479,6 +485,9 @@ gdk_drag_abort (GdkDragContext *context,
  * Drops on the current destination.
  *
  * This function is called by the drag source.
+ *
+ * This function does not need to be called in managed drag and drop
+ * operations. See gdk_drag_context_manage_dnd() for more information.
  */
 void
 gdk_drag_drop (GdkDragContext *context,
