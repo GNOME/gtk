@@ -123,7 +123,8 @@
  * ├── image.left
  * ├── image.right
  * ├── [selection]
- * ╰── [progress[.pulse]]
+ * ├── [progress[.pulse]]
+ * ╰── [window.popup]
  * ]|
  *
  * GtkEntry has a main node with the name entry. Depending on the properties
@@ -137,6 +138,8 @@
  *
  * When the entry shows progress, it adds a subnode with the name progress.
  * The node has the style class .pulse when the shown progress is pulsing.
+ *
+ * The CSS node for a context menu is added as a subnode below entry as well.
  *
  * When touch is used and touch selection handles are shown, they are using
  * CSS nodes with name cursor-handle. They get the .top or .bottom style class
