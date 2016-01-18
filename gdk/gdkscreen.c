@@ -333,9 +333,11 @@ gdk_screen_get_monitor_at_window (GdkScreen      *screen,
 
 /**
  * gdk_screen_width:
- * 
- * Returns the width of the default screen in pixels.
- * 
+ *
+ * Gets the width of the default screen in pixels. The returned
+ * size is in ”application pixels”, not in ”device pixels” (see
+ * gdk_screen_get_monitor_scale_factor()).
+ *
  * Returns: the width of the default screen in pixels.
  **/
 gint
@@ -346,9 +348,11 @@ gdk_screen_width (void)
 
 /**
  * gdk_screen_height:
- * 
- * Returns the height of the default screen in pixels.
- * 
+ *
+ * Gets the height of the default screen in pixels. The returned
+ * size is in ”application pixels”, not in ”device pixels” (see
+ * gdk_screen_get_monitor_scale_factor()).
+ *
  * Returns: the height of the default screen in pixels.
  **/
 gint
@@ -359,10 +363,10 @@ gdk_screen_height (void)
 
 /**
  * gdk_screen_width_mm:
- * 
+ *
  * Returns the width of the default screen in millimeters.
  * Note that on many X servers this value will not be correct.
- * 
+ *
  * Returns: the width of the default screen in millimeters,
  * though it is not always correct.
  **/
@@ -374,10 +378,10 @@ gdk_screen_width_mm (void)
 
 /**
  * gdk_screen_height_mm:
- * 
+ *
  * Returns the height of the default screen in millimeters.
  * Note that on many X servers this value will not be correct.
- * 
+ *
  * Returns: the height of the default screen in millimeters,
  * though it is not always correct.
  **/
@@ -582,7 +586,9 @@ gdk_screen_get_display (GdkScreen *screen)
  * gdk_screen_get_width:
  * @screen: a #GdkScreen
  *
- * Gets the width of @screen in pixels
+ * Gets the width of @screen in pixels. The returned size is in
+ * ”application pixels”, not in ”device pixels” (see
+ * gdk_screen_get_monitor_scale_factor()).
  *
  * Returns: the width of @screen in pixels.
  *
@@ -600,7 +606,9 @@ gdk_screen_get_width (GdkScreen *screen)
  * gdk_screen_get_height:
  * @screen: a #GdkScreen
  *
- * Gets the height of @screen in pixels
+ * Gets the height of @screen in pixels. The returned size is in
+ * ”application pixels”, not in ”device pixels” (see
+ * gdk_screen_get_monitor_scale_factor()).
  *
  * Returns: the height of @screen in pixels.
  *
@@ -815,7 +823,9 @@ gdk_screen_get_monitor_plug_name (GdkScreen *screen,
  *     the monitor geometry
  *
  * Retrieves the #GdkRectangle representing the size and position of
- * the individual monitor within the entire screen area.
+ * the individual monitor within the entire screen area. The returned
+ * geometry is in ”application pixels”, not in ”device pixels” (see
+ * gdk_screen_get_monitor_scale_factor()).
  *
  * Monitor numbers start at 0. To obtain the number of monitors of
  * @screen, use gdk_screen_get_n_monitors().
@@ -845,7 +855,9 @@ gdk_screen_get_monitor_geometry (GdkScreen    *screen,
  *     the monitor workarea
  *
  * Retrieves the #GdkRectangle representing the size and position of
- * the “work area” on a monitor within the entire screen area.
+ * the “work area” on a monitor within the entire screen area. The returned
+ * geometry is in ”application pixels”, not in ”device pixels” (see
+ * gdk_screen_get_monitor_scale_factor()).
  *
  * The work area should be considered when positioning menus and
  * similar popups, to avoid placing them below panels, docks or other
