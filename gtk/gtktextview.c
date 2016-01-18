@@ -78,14 +78,21 @@
  * ├── border.top
  * ├── border.left
  * ├── text
+ * │   ╰── [selection]
  * ├── border.right
- * ╰── border.bottom
+ * ├── border.bottom
+ * ╰── [window.popup]
  * ]|
  *
  * GtkTextView has a main css node with name textview and style class .view,
  * and subnodes for each of the border windows, and the main text area,
  * with names border and text, respectively. The border nodes each get
  * one of the style classes .left, .right, .top or .bottom.
+ *
+ * A node representing the selection will appear below the text node.
+ *
+ * If a context menu is opened, the window node will appear as a subnode
+ * of the main node.
  */
 
 
