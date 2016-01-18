@@ -464,7 +464,6 @@ gtk_accel_label_draw (GtkWidget *widget,
       GtkStyleContext *context;
       PangoLayout *label_layout;
       PangoLayout *accel_layout;
-      GtkLabel *label = GTK_LABEL (widget);
       gint x;
       gint y;
 
