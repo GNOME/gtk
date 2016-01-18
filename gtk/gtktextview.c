@@ -1751,6 +1751,7 @@ gtk_text_view_init (GtkTextView *text_view)
   gtk_css_node_set_name (priv->selection_node, I_("selection"));
   gtk_css_node_set_parent (priv->selection_node, priv->text_window->css_node);
   gtk_css_node_set_state (priv->selection_node, gtk_css_node_get_state (priv->text_window->css_node));
+  gtk_css_node_set_visible (priv->selection_node, FALSE);
   g_object_unref (priv->selection_node);
 }
 
@@ -9086,6 +9087,7 @@ gtk_text_view_mark_set_handler (GtkTextBuffer     *buffer,
 {
   GtkTextView *text_view = GTK_TEXT_VIEW (data);
   gboolean need_reset = FALSE;
+  gboolean has_selection;
 
   if (mark == gtk_text_buffer_get_insert (buffer))
     {
@@ -9105,6 +9107,9 @@ gtk_text_view_mark_set_handler (GtkTextBuffer     *buffer,
       if (text_view->priv->text_handle)
         gtk_text_view_update_handles (text_view,
                                       _gtk_text_handle_get_mode (text_view->priv->text_handle));
+
+      has_selection = gtk_text_buffer_get_selection_bounds (get_buffer (text_view), NULL, NULL);
+      gtk_css_node_set_visible (text_view->priv->selection_node, has_selection);
     }
 }
 
