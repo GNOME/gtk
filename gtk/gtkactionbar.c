@@ -141,8 +141,7 @@ gtk_action_bar_forall (GtkContainer *container,
 
   if (include_internals)
     (* callback) (priv->revealer, callback_data);
- 
-  if (priv->box)
+  else if (priv->box)
     gtk_container_forall (GTK_CONTAINER (priv->box), callback, callback_data);
 }
 
