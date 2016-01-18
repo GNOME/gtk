@@ -2934,7 +2934,12 @@ gdk_x11_display_get_default_seat (GdkDisplay *display)
       pointer = gdk_seat_get_pointer (l->data);
 
       if (gdk_x11_device_get_id (pointer) == device_id)
-        return l->data;
+        {
+          GdkSeat *seat = l->data;
+          g_list_free (seats);
+
+          return seat;
+        }
     }
 
   g_list_free (seats);
