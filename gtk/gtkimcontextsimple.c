@@ -83,7 +83,8 @@ const GtkComposeTableCompact gtk_compose_table_compact = {
   6
 };
 
-static GSList          *global_tables;
+G_LOCK_DEFINE_STATIC (global_tables);
+static GSList *global_tables;
 
 static const guint16 gtk_compose_ignore[] = {
   GDK_KEY_Shift_L,
@@ -1227,13 +1228,25 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
     }
   else
     {
+      gboolean success = FALSE;
+
+      G_LOCK (global_tables);
+
       tmp_list = global_tables;
       while (tmp_list)
         {
           if (check_table (context_simple, tmp_list->data, n_compose))
-            return TRUE;
+            {
+              success = TRUE;
+              break;
+            }
           tmp_list = tmp_list->next;
         }
+
+      G_UNLOCK (global_tables);
+
+      if (success)
+        return TRUE;
 
       GTK_NOTE (MISC, {
 	  g_print ("[ ");
@@ -1431,8 +1444,12 @@ gtk_im_context_simple_add_table (GtkIMContextSimple *context_simple,
 {
   g_return_if_fail (GTK_IS_IM_CONTEXT_SIMPLE (context_simple));
 
+  G_LOCK (global_tables);
+
   global_tables = gtk_compose_table_list_add_array (global_tables,
                                                     data, max_seq_len, n_seqs);
+
+  G_UNLOCK (global_tables);
 }
 
 /*
@@ -1448,6 +1465,10 @@ gtk_im_context_simple_add_compose_file (GtkIMContextSimple *context_simple,
 {
   g_return_if_fail (GTK_IS_IM_CONTEXT_SIMPLE (context_simple));
 
+  G_LOCK (global_tables);
+
   global_tables = gtk_compose_table_list_add_file (global_tables,
                                                    compose_file);
+
+  G_UNLOCK (global_tables);
 }
