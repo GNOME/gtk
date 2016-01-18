@@ -9782,9 +9782,8 @@ _gtk_widget_get_modifier_properties (GtkWidget *widget)
  * This API is mostly meant as a quick way for applications to
  * change a widget appearance. If you are developing a widgets
  * library and intend this change to be themeable, it is better
- * done by setting meaningful CSS classes and regions in your
- * widget/container implementation through gtk_style_context_add_class()
- * and gtk_style_context_add_region().
+ * done by setting meaningful CSS classes in your
+ * widget/container implementation through gtk_style_context_add_class().
  *
  * This way, your widget library can install a #GtkCssProvider
  * with the %GTK_STYLE_PROVIDER_PRIORITY_FALLBACK priority in order
