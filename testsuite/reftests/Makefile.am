@@ -216,9 +216,6 @@ testdata = \
 	css-match-siblings.css \
 	css-match-siblings.ref.ui \
 	css-match-siblings.ui \
-	css-match-subtype.css \
-	css-match-subtype.ref.ui \
-	css-match-subtype.ui \
 	css-match-type.css \
 	css-match-type.ref.ui \
 	css-match-type.ui \
