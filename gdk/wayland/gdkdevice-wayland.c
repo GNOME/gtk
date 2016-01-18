@@ -2614,6 +2614,27 @@ gdk_wayland_seat_get_capabilities (GdkSeat *seat)
   return caps;
 }
 
+static void
+gdk_wayland_seat_set_grab_window (GdkWaylandSeat *seat,
+                                  GdkWindow      *window)
+{
+  if (seat->pointer_grab_window)
+    {
+      _gdk_wayland_window_set_grab_seat (seat->pointer_grab_window, NULL);
+      g_object_remove_weak_pointer (G_OBJECT (seat->pointer_grab_window),
+                                    (gpointer *) &seat->pointer_grab_window);
+      seat->pointer_grab_window = NULL;
+    }
+
+  if (window)
+    {
+      seat->pointer_grab_window = window;
+      g_object_add_weak_pointer (G_OBJECT (window),
+                                 (gpointer *) &seat->pointer_grab_window);
+      _gdk_wayland_window_set_grab_seat (window, GDK_SEAT (seat));
+    }
+}
+
 static GdkGrabStatus
 gdk_wayland_seat_grab (GdkSeat                *seat,
                        GdkWindow              *window,
@@ -2646,16 +2667,15 @@ gdk_wayland_seat_grab (GdkSeat                *seat,
   if (native == NULL || GDK_WINDOW_DESTROYED (native))
     return GDK_GRAB_NOT_VIEWABLE;
 
-  wayland_seat->pointer_grab_window = window;
+  gdk_wayland_seat_set_grab_window (wayland_seat, window);
   wayland_seat->pointer_grab_time = evtime;
-  _gdk_wayland_window_set_grab_seat (window, seat);
 
   if (prepare_func)
     (prepare_func) (seat, window, prepare_func_data);
 
   if (!gdk_window_is_visible (window))
     {
-      _gdk_wayland_window_set_grab_seat (window, NULL);
+      gdk_wayland_seat_set_grab_window (wayland_seat, NULL);
       g_critical ("Window %p has not been made visible in GdkSeatGrabPrepareFunc",
                   window);
       return GDK_GRAB_NOT_VIEWABLE;
@@ -2740,12 +2760,7 @@ gdk_wayland_seat_ungrab (GdkSeat *seat)
 
   g_clear_object (&wayland_seat->grab_cursor);
 
-  if (wayland_seat->pointer_grab_window)
-    {
-      _gdk_wayland_window_set_grab_seat (wayland_seat->pointer_grab_window,
-                                         NULL);
-      wayland_seat->pointer_grab_window = NULL;
-    }
+  gdk_wayland_seat_set_grab_window (wayland_seat, NULL);
 
   if (wayland_seat->master_pointer)
     {
