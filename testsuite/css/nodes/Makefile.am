@@ -38,7 +38,10 @@ test_data = \
 	expander.rtl.ui		expander.rtl.nodes	\
 	levelbar.ltr.ui 	levelbar.ltr.nodes	\
 	levelbar.rtl.ui 	levelbar.rtl.nodes	\
-	notebook.ui 		notebook.nodes 		\
+	notebook.top.ui 	notebook.top.nodes 	\
+	notebook.left.ui 	notebook.left.nodes 	\
+	notebook.right.ui 	notebook.right.nodes 	\
+	notebook.bottom.ui 	notebook.bottom.nodes 	\
 	paned.ltr.ui		paned.ltr.nodes		\
 	paned.rtl.ui		paned.rtl.nodes		\
 	progressbar.ui 		progressbar.nodes 	\
