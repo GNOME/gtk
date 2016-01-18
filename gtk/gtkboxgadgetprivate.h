@@ -70,6 +70,7 @@ void                    gtk_box_gadget_insert_gadget            (GtkBoxGadget   
                                                                  GtkAlign                align);
 void                    gtk_box_gadget_remove_gadget            (GtkBoxGadget           *gadget,
                                                                  GtkCssGadget           *cssgadget);
+void                    gtk_box_gadget_reverse_children         (GtkBoxGadget           *gadget);
 
 
 G_END_DECLS

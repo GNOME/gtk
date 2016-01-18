@@ -651,3 +651,23 @@ gtk_box_gadget_remove_gadget (GtkBoxGadget *gadget,
 {
   gtk_box_gadget_remove_object (gadget, G_OBJECT (cssgadget));
 }
+
+void
+gtk_box_gadget_reverse_children (GtkBoxGadget *gadget)
+{
+  GtkBoxGadgetPrivate *priv = gtk_box_gadget_get_instance_private (GTK_BOX_GADGET (gadget));
+  int i, j;
+
+  gtk_css_node_reverse_children (gtk_css_gadget_get_node (GTK_CSS_GADGET (gadget)));
+
+  for (i = 0, j = priv->children->len - 1; i < j; i++, j--)
+    {
+      GtkBoxGadgetChild *child1 = &g_array_index (priv->children, GtkBoxGadgetChild, i);
+      GtkBoxGadgetChild *child2 = &g_array_index (priv->children, GtkBoxGadgetChild, j);
+      GtkBoxGadgetChild tmp;
+
+      tmp = *child1;
+      *child1 = *child2;
+      *child2 = tmp;
+    }
+}
