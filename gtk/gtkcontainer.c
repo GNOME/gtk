@@ -388,9 +388,6 @@ static void    gtk_container_buildable_custom_finished (GtkBuildable *buildable,
 static gboolean gtk_container_should_propagate_draw (GtkContainer   *container,
                                                      GtkWidget      *child,
                                                      cairo_t        *cr);
-static void gtk_container_propagate_draw_internal (GtkContainer *container,
-                                                   GtkWidget    *child,
-                                                   cairo_t      *cr);
 
 /* --- variables --- */
 static GQuark                vadjustment_key_id;
@@ -3615,7 +3612,7 @@ gtk_container_draw (GtkWidget *widget,
   for (i = 0; i < child_infos->len; i++)
     {
       child_info = &g_array_index (child_infos, ChildOrderInfo, i);
-      gtk_container_propagate_draw_internal (container, child_info->child, cr);
+      gtk_container_propagate_draw (container, child_info->child, cr);
     }
 
   g_array_free (child_infos, TRUE);
@@ -3669,86 +3666,22 @@ gtk_container_should_propagate_draw (GtkContainer   *container,
                                      GtkWidget      *child,
                                      cairo_t        *cr)
 {
-  GdkEventExpose *event;
-  GdkWindow *event_window, *child_in_window;
+  GdkWindow *child_in_window;
 
   if (!_gtk_widget_is_drawable (child))
-    return FALSE;
-
-  /* Only propagate to native child window if we're not handling
-   * an expose (i.e. in a pure gtk_widget_draw() call
-   */
-  event = _gtk_cairo_get_event (cr);
-  if (event &&
-      _gtk_widget_get_has_window (child) &&
-      gdk_window_has_native (_gtk_widget_get_window (child)))
     return FALSE;
 
   /* Never propagate to a child window when exposing a window
    * that is not the one the child widget is in.
    */
-  event_window = _gtk_cairo_get_event_window (cr);
   if (_gtk_widget_get_has_window (child))
     child_in_window = gdk_window_get_parent (_gtk_widget_get_window (child));
   else
     child_in_window = _gtk_widget_get_window (child);
-  if (event_window != NULL && child_in_window != event_window)
+  if (!gtk_cairo_should_draw_window (cr, child_in_window))
     return FALSE;
 
   return TRUE;
-}
-
-static void
-gtk_container_propagate_draw_internal (GtkContainer *container,
-                                       GtkWidget    *child,
-                                       cairo_t      *cr)
-{
-  GtkAllocation allocation;
-  GdkWindow *window, *w;
-  int x, y;
-
-  /* translate coordinates. Ugly business, that. */
-  if (!_gtk_widget_get_has_window (GTK_WIDGET (container)))
-    {
-      _gtk_widget_get_allocation (GTK_WIDGET (container), &allocation);
-      x = -allocation.x;
-      y = -allocation.y;
-    }
-  else
-    {
-      x = 0;
-      y = 0;
-    }
-
-  window = _gtk_widget_get_window (GTK_WIDGET (container));
-
-  for (w = _gtk_widget_get_window (child); w && w != window; w = gdk_window_get_parent (w))
-    {
-      int wx, wy;
-      gdk_window_get_position (w, &wx, &wy);
-      x += wx;
-      y += wy;
-    }
-
-  if (w == NULL)
-    {
-      x = 0;
-      y = 0;
-    }
-
-  if (!_gtk_widget_get_has_window (child))
-    {
-      _gtk_widget_get_allocation (child, &allocation);
-      x += allocation.x;
-      y += allocation.y;
-    }
-
-  cairo_save (cr);
-  cairo_translate (cr, x, y);
-
-  _gtk_widget_draw (child, cr);
-
-  cairo_restore (cr);
 }
 
 static void
@@ -3804,6 +3737,10 @@ gtk_container_propagate_draw (GtkContainer *container,
                               GtkWidget    *child,
                               cairo_t      *cr)
 {
+  GtkAllocation allocation;
+  GdkWindow *window, *w;
+  int x, y;
+
   g_return_if_fail (GTK_IS_CONTAINER (container));
   g_return_if_fail (GTK_IS_WIDGET (child));
   g_return_if_fail (cr != NULL);
@@ -3813,7 +3750,48 @@ gtk_container_propagate_draw (GtkContainer *container,
   if (!gtk_container_should_propagate_draw (container, child, cr))
     return;
 
-  gtk_container_propagate_draw_internal (container, child, cr);
+  /* translate coordinates. Ugly business, that. */
+  if (!_gtk_widget_get_has_window (GTK_WIDGET (container)))
+    {
+      _gtk_widget_get_allocation (GTK_WIDGET (container), &allocation);
+      x = -allocation.x;
+      y = -allocation.y;
+    }
+  else
+    {
+      x = 0;
+      y = 0;
+    }
+
+  window = _gtk_widget_get_window (GTK_WIDGET (container));
+
+  for (w = _gtk_widget_get_window (child); w && w != window; w = gdk_window_get_parent (w))
+    {
+      int wx, wy;
+      gdk_window_get_position (w, &wx, &wy);
+      x += wx;
+      y += wy;
+    }
+
+  if (w == NULL)
+    {
+      x = 0;
+      y = 0;
+    }
+
+  if (!_gtk_widget_get_has_window (child))
+    {
+      _gtk_widget_get_allocation (child, &allocation);
+      x += allocation.x;
+      y += allocation.y;
+    }
+
+  cairo_save (cr);
+  cairo_translate (cr, x, y);
+
+  gtk_widget_draw_internal (child, cr, TRUE);
+
+  cairo_restore (cr);
 }
 
 gboolean

@@ -176,8 +176,9 @@ gboolean     gtk_widget_needs_allocate      (GtkWidget *widget);
 void         gtk_widget_queue_resize_on_widget (GtkWidget *widget);
 void         gtk_widget_ensure_resize       (GtkWidget *widget);
 void         gtk_widget_ensure_allocate     (GtkWidget *widget);
-void         _gtk_widget_draw               (GtkWidget *widget,
-					     cairo_t   *cr);
+void         gtk_widget_draw_internal       (GtkWidget *widget,
+					     cairo_t   *cr,
+                                             gboolean   do_clip);
 void          _gtk_widget_scale_changed     (GtkWidget *widget);
 
 
@@ -215,9 +216,6 @@ const gchar*      _gtk_widget_get_accel_path               (GtkWidget *widget,
                                                             gboolean  *locked);
 
 AtkObject *       _gtk_widget_peek_accessible              (GtkWidget *widget);
-
-GdkWindow *       _gtk_cairo_get_event_window              (cairo_t *cr);
-GdkEventExpose *  _gtk_cairo_get_event                     (cairo_t *cr);
 
 void              _gtk_widget_set_has_default              (GtkWidget *widget,
                                                             gboolean   has_default);

@@ -821,10 +821,6 @@ static void gtk_widget_on_frame_clock_update (GdkFrameClock *frame_clock,
                                               GtkWidget     *widget);
 
 static gboolean event_window_is_still_viewable (GdkEvent *event);
-static void gtk_cairo_set_event_window (cairo_t        *cr,
-					GdkWindow *window);
-static void gtk_cairo_set_event (cairo_t        *cr,
-				 GdkEventExpose *event);
 
 static void gtk_widget_update_input_shape (GtkWidget *widget);
 
@@ -6887,8 +6883,8 @@ gtk_widget_real_mnemonic_activate (GtkWidget *widget,
 
 static const cairo_user_data_key_t event_window_key;
 
-GdkWindow *
-_gtk_cairo_get_event_window (cairo_t *cr)
+static GdkWindow *
+gtk_cairo_get_event_window (cairo_t *cr)
 {
   g_return_val_if_fail (cr != NULL, NULL);
 
@@ -6900,23 +6896,6 @@ gtk_cairo_set_event_window (cairo_t        *cr,
 			    GdkWindow *event_window)
 {
   cairo_set_user_data (cr, &event_window_key, event_window, NULL);
-}
-
-static const cairo_user_data_key_t event_key;
-
-GdkEventExpose *
-_gtk_cairo_get_event (cairo_t *cr)
-{
-  g_return_val_if_fail (cr != NULL, NULL);
-
-  return cairo_get_user_data (cr, &event_key);
-}
-
-static void
-gtk_cairo_set_event (cairo_t        *cr,
-		     GdkEventExpose *event)
-{
-  cairo_set_user_data (cr, &event_key, event, NULL);
 }
 
 /**
@@ -6948,25 +6927,22 @@ gtk_cairo_should_draw_window (cairo_t *cr,
   g_return_val_if_fail (cr != NULL, FALSE);
   g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
 
-  event_window = _gtk_cairo_get_event_window (cr);
+  if (!gdk_window_has_native (window))
+    return TRUE;
+
+  event_window = gtk_cairo_get_event_window (cr);
 
   return event_window == NULL ||
     event_window == window;
 }
 
-static void
-_gtk_widget_draw_internal (GtkWidget *widget,
-                           cairo_t   *cr,
-                           gboolean   clip_to_size,
-			   GdkWindow *window)
+void
+gtk_widget_draw_internal (GtkWidget *widget,
+                          cairo_t   *cr,
+                          gboolean   clip_to_size)
 {
-  GdkWindow *tmp_event_window;
-
   if (!_gtk_widget_is_drawable (widget))
     return;
-
-  tmp_event_window = _gtk_cairo_get_event_window (cr);
-  gtk_cairo_set_event_window (cr, window);
 
   if (clip_to_size)
     {
@@ -6982,7 +6958,7 @@ _gtk_widget_draw_internal (GtkWidget *widget,
     {
       gboolean result;
 
-      gdk_window_mark_paint_from_clip (window, cr);
+      //gdk_window_mark_paint_from_clip (window, cr);
 
       if (g_signal_has_handler_pending (widget, widget_signals[DRAW], 0, FALSE))
         {
@@ -7034,7 +7010,7 @@ _gtk_widget_draw_internal (GtkWidget *widget,
 #endif
 
       if (cairo_status (cr) &&
-          _gtk_cairo_get_event_window (cr))
+          gtk_cairo_get_event_window (cr))
         {
           /* We check the event so we only warn about internal GTK+ calls.
            * Errors might come from PDF streams having write failures and
@@ -7046,112 +7022,13 @@ _gtk_widget_draw_internal (GtkWidget *widget,
                      cairo_status_to_string (cairo_status (cr)));
         }
     }
-
-  gtk_cairo_set_event_window (cr, tmp_event_window);
-}
-
-/* Emit draw() on the widget that owns window,
- * and on any child windows that also belong
- * to the widget.
- */
-static void
-_gtk_widget_draw_windows (GdkWindow *window,
-			  cairo_t   *cr,
-			  int        window_x,
-			  int        window_y)
-{
-  cairo_pattern_t *pattern;
-  gboolean do_clip;
-  GtkWidget *widget = NULL;
-  GList *children, *l;
-  GdkRectangle current_clip, window_clip;
-  int x, y;
-
-  if (!gdk_window_is_viewable (window))
-    return;
-
-  window_clip.x = window_x;
-  window_clip.y = window_y;
-  window_clip.width = gdk_window_get_width (window);
-  window_clip.height = gdk_window_get_height (window);
-
-  /* Cairo paths are fixed point 24.8, but GDK supports 32-bit window
-   * sizes, so we can't feed window_clip to e.g. cairo_rectangle()
-   * directly. Instead, we pre-clip the window clip to the existing
-   * clip regions in full 32-bit precision and feed that to cairo.
-   */
-  if (!gdk_cairo_get_clip_rectangle (cr, &current_clip) ||
-      !gdk_rectangle_intersect (&window_clip, &current_clip, &window_clip))
-    return;
-
-  cairo_save (cr);
-  cairo_rectangle (cr,
-                   window_clip.x, window_clip.y,
-                   window_clip.width, window_clip.height);
-  cairo_clip (cr);
-
-  cairo_translate (cr, window_x, window_y);
-
-  if (gdk_cairo_get_clip_rectangle (cr, NULL))
-    {
-      gdk_window_get_user_data (window, (gpointer *) &widget);
-
-      /* Only clear bg if double buffered. This is what we used
-       * to do before, where begin_paint() did the clearing.
-       */
-      pattern = gdk_window_get_background_pattern (window);
-      if (pattern != NULL && widget->priv->double_buffered)
-        {
-          cairo_save (cr);
-          cairo_set_source (cr, pattern);
-          cairo_paint (cr);
-          cairo_restore (cr);
-        }
-
-      do_clip = _gtk_widget_get_translation_to_window (widget, window, &x, &y);
-      cairo_save (cr);
-      cairo_translate (cr, -x, -y);
-      _gtk_widget_draw_internal (widget, cr, do_clip, window);
-      cairo_restore (cr);
-
-      children = gdk_window_peek_children (window);
-      for (l = g_list_last (children); l != NULL; l = l->prev)
-        {
-          GdkWindow *child_window = l->data;
-          GdkWindowType type;
-          int wx, wy;
-          GtkWidget *window_widget;
-
-          gdk_window_get_user_data (child_window, (gpointer *)&window_widget);
-          if (window_widget != widget)
-            continue;
-
-          if (!gdk_window_is_visible (child_window) ||
-              gdk_window_is_input_only (child_window))
-            continue;
-
-          type = gdk_window_get_window_type (child_window);
-          if (type == GDK_WINDOW_OFFSCREEN ||
-              type == GDK_WINDOW_FOREIGN)
-            continue;
-
-          gdk_window_get_position (child_window, &wx, &wy);
-          _gtk_widget_draw_windows (child_window, cr, wx, wy);
-        }
-    }
-
-  cairo_restore (cr);
 }
 
 void
 _gtk_widget_draw (GtkWidget *widget,
 		  cairo_t   *cr)
 {
-  GdkWindow *window;
-  GList *children, *l;
-  int wx, wy;
   gboolean push_group;
-  GdkWindowType type;
 
   /* We get expose events only on native windows, so the draw
    * implementation has to walk the entire widget hierarchy, except
@@ -7179,48 +7056,7 @@ _gtk_widget_draw (GtkWidget *widget,
   if (push_group)
     cairo_push_group (cr);
 
-  window = _gtk_widget_get_window (widget);
-  if (_gtk_widget_get_has_window (widget))
-    {
-      /* The widget will be completely contained in its window, so just
-       * expose that (and any child window belonging to the widget)
-       */
-      _gtk_widget_draw_windows (window, cr, 0, 0);
-    }
-  else
-    {
-      /* The widget draws in its parent window, so we send a draw() for
-       * that. */
-      _gtk_widget_draw_internal (widget, cr, TRUE, window);
-
-      /* But, it may also have child windows in the parent which we should
-       * draw (after having drawn on the parent)
-       */
-      children = gdk_window_peek_children (window);
-      for (l = g_list_last (children); l != NULL; l = l->prev)
-	{
-          GdkWindow *child_window = l->data;
-          GtkWidget *window_widget;
-
-          gdk_window_get_user_data (child_window, (gpointer *)&window_widget);
-          if (window_widget != widget)
-            continue;
-
-          if (!gdk_window_is_visible (child_window) ||
-              gdk_window_is_input_only (child_window))
-            continue;
-
-          type = gdk_window_get_window_type (child_window);
-          if (type == GDK_WINDOW_OFFSCREEN ||
-              type == GDK_WINDOW_FOREIGN)
-            continue;
-
-          gdk_window_get_position (child_window, &wx, &wy);
-          _gtk_widget_draw_windows (child_window, cr,
-                                    wx - widget->priv->allocation.x,
-                                    wy - widget->priv->allocation.y);
-        }
-    }
+  gtk_widget_draw_internal (widget, cr, TRUE);
 
   if (push_group)
     {
@@ -7261,14 +7097,26 @@ void
 gtk_widget_draw (GtkWidget *widget,
                  cairo_t   *cr)
 {
+  GdkWindow *tmp_event_window;
+
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (!widget->priv->alloc_needed);
   g_return_if_fail (!widget->priv->alloc_needed_on_child);
   g_return_if_fail (cr != NULL);
 
   cairo_save (cr);
-  _gtk_widget_draw (widget, cr);
+
+  /* We have to reset the event here so that draw functions can call
+   * gtk_widget_draw() on random other widgets and get the desired
+   * effect: Drawing all contents, not just the current window.
+   */
+  tmp_event_window = gtk_cairo_get_event_window (cr);
+  gtk_cairo_set_event_window (cr, NULL);
+
+  gtk_widget_draw_internal (widget, cr, TRUE);
+
   cairo_restore (cr);
+  gtk_cairo_set_event_window (cr, tmp_event_window);
 }
 
 static gboolean
@@ -7678,30 +7526,34 @@ gint
 gtk_widget_send_expose (GtkWidget *widget,
 			GdkEvent  *event)
 {
-  gboolean result = FALSE;
   cairo_t *cr;
+  int x, y;
+  gboolean do_clip;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), TRUE);
-  g_return_val_if_fail (_gtk_widget_get_realized (widget), TRUE);
+  g_return_val_if_fail (gtk_widget_get_realized (widget), TRUE);
   g_return_val_if_fail (event != NULL, TRUE);
   g_return_val_if_fail (event->type == GDK_EXPOSE, TRUE);
 
   cr = gdk_cairo_create (event->expose.window);
+  gtk_cairo_set_event_window (cr, event->expose.window);
+
   gdk_cairo_region (cr, event->expose.region);
   cairo_clip (cr);
 
-  gtk_cairo_set_event (cr, &event->expose);
+  do_clip = _gtk_widget_get_translation_to_window (widget,
+                                                   event->expose.window,
+                                                   &x, &y);
+  cairo_translate (cr, -x, -y);
 
-  if (event->expose.window == widget->priv->window)
-    _gtk_widget_draw (widget, cr);
-  else
-    _gtk_widget_draw_windows (event->expose.window, cr, 0, 0);
+  gtk_widget_draw_internal (widget, cr, do_clip);
 
-  gtk_cairo_set_event (cr, NULL);
-
+  /* unset here, so if someone keeps a reference to cr we
+   * don't leak the window. */
+  gtk_cairo_set_event_window (cr, NULL);
   cairo_destroy (cr);
 
-  return result;
+  return FALSE;
 }
 
 static gboolean
