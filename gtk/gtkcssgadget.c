@@ -488,6 +488,110 @@ get_box_padding (GtkCssStyle *style,
   border->right = get_number (style, GTK_CSS_PROPERTY_PADDING_RIGHT);
 }
 
+static gboolean
+allocation_contains_point (GtkAllocation *allocation,
+                           gint           x,
+                           gint           y)
+{
+  return (x >= allocation->x) &&
+    (x < allocation->x + allocation->width) &&
+    (y >= allocation->y) &&
+    (y < allocation->y + allocation->height);
+}
+
+static void
+shift_allocation (GtkCssGadget  *gadget,
+                  GtkAllocation *allocation)
+{
+  GtkCssGadgetPrivate *priv = gtk_css_gadget_get_instance_private (gadget);
+
+  if (priv->owner && !gtk_widget_get_has_window (priv->owner))
+    {
+      GtkAllocation widget_alloc;
+      gtk_widget_get_allocation (priv->owner, &widget_alloc);
+      allocation->x -= widget_alloc.x;
+      allocation->y -= widget_alloc.y;
+    }
+}
+
+/**
+ * gtk_css_gadget_margin_box_contains_point:
+ * @gadget: the #GtkCssGadget being tested
+ * @x: X coordinate of the testing point
+ * @y: Y coordinate of the testing point
+ *
+ * Checks whether the point at the provided coordinates is contained within the
+ *   margin box of the gadget. The (X, Y) are relative to the gadget
+ *   origin.
+ *
+ * Returns: %TRUE if the point at (X, Y) is contained within the margin
+ *   box of the @gadget.
+ */
+gboolean
+gtk_css_gadget_margin_box_contains_point (GtkCssGadget *gadget,
+                                          int           x,
+                                          int           y)
+{
+  GtkAllocation margin_allocation;
+
+  gtk_css_gadget_get_margin_allocation (gadget, &margin_allocation, NULL);
+  shift_allocation (gadget, &margin_allocation);
+
+  return allocation_contains_point (&margin_allocation, x, y);
+}
+
+/**
+ * gtk_css_gadget_border_box_contains_point:
+ * @gadget: the #GtkCssGadget being tested
+ * @x: X coordinate of the testing point
+ * @y: Y coordinate of the testing point
+ *
+ * Checks whether the point at the provided coordinates is contained within the
+ *   border box of the gadget. The (X, Y) are relative to the gadget
+ *   origin.
+ *
+ * Returns: %TRUE if the point at (X, Y) is contained within the border
+ *   box of the @gadget.
+ */
+gboolean
+gtk_css_gadget_border_box_contains_point (GtkCssGadget *gadget,
+                                          int           x,
+                                          int           y)
+{
+  GtkAllocation border_allocation;
+
+  gtk_css_gadget_get_border_allocation (gadget, &border_allocation, NULL);
+  shift_allocation (gadget, &border_allocation);
+
+  return allocation_contains_point (&border_allocation, x, y);
+}
+
+/**
+ * gtk_css_gadget_content_box_contains_point:
+ * @gadget: the #GtkCssGadget being tested
+ * @x: X coordinate of the testing point
+ * @y: Y coordinate of the testing point
+ *
+ * Checks whether the point at the provided coordinates is contained within the
+ *   content box of the gadget. The (X, Y) are relative to the gadget
+ *   origin.
+ *
+ * Returns: %TRUE if the point at (X, Y) is contained within the content
+ *   box of the @gadget.
+ */
+gboolean
+gtk_css_gadget_content_box_contains_point (GtkCssGadget *gadget,
+                                           int           x,
+                                           int           y)
+{
+  GtkAllocation content_allocation;
+
+  gtk_css_gadget_get_content_allocation (gadget, &content_allocation, NULL);
+  shift_allocation (gadget, &content_allocation);
+
+  return allocation_contains_point (&content_allocation, x, y);
+}
+
 /**
  * gtk_css_gadget_get_preferred_size:
  * @gadget: the #GtkCssGadget whose size is requested
@@ -715,21 +819,18 @@ gtk_css_gadget_draw (GtkCssGadget *gadget,
   GtkCssStyle *style;
   int x, y, width, height;
   int contents_x, contents_y, contents_width, contents_height;
+  GtkAllocation margin_allocation;
 
   if (!gtk_css_gadget_get_visible (gadget))
     return;
 
-  x = priv->allocated_size.x;
-  y = priv->allocated_size.y;
-  if (priv->owner && !gtk_widget_get_has_window (priv->owner))
-    {
-      GtkAllocation widget_alloc;
-      gtk_widget_get_allocation (priv->owner, &widget_alloc);
-      x -= widget_alloc.x;
-      y -= widget_alloc.y;
-    }
-  width = priv->allocated_size.width;
-  height = priv->allocated_size.height;
+  gtk_css_gadget_get_margin_allocation (gadget, &margin_allocation, NULL);
+  shift_allocation (gadget, &margin_allocation);
+
+  x = margin_allocation.x;
+  y = margin_allocation.y;
+  width = margin_allocation.width;
+  height = margin_allocation.height;
 
   if (width < 0 || height < 0)
     {

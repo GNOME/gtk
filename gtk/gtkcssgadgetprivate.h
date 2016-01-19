@@ -84,6 +84,16 @@ void            gtk_css_gadget_set_visible              (GtkCssGadget           
                                                          gboolean                visible);
 gboolean        gtk_css_gadget_get_visible              (GtkCssGadget           *gadget);
 
+gboolean        gtk_css_gadget_margin_box_contains_point (GtkCssGadget          *gadget,
+                                                          int                    x,
+                                                          int                    y);
+gboolean        gtk_css_gadget_border_box_contains_point (GtkCssGadget          *gadget,
+                                                          int                    x,
+                                                          int                    y);
+gboolean        gtk_css_gadget_content_box_contains_point (GtkCssGadget         *gadget,
+                                                           int                   x,
+                                                           int                   y);
+
 void            gtk_css_gadget_add_class                (GtkCssGadget           *gadget,
                                                          const char             *name);
 void            gtk_css_gadget_remove_class             (GtkCssGadget           *gadget,
