@@ -3080,11 +3080,13 @@ static gboolean
 gdk_dnd_handle_drop_finished (GdkDragContext *context,
                               const GdkEventDND *event)
 {
+  GdkX11DragContext *x11_context = GDK_X11_DRAG_CONTEXT (context);
+
   if (context != event->context)
     return FALSE;
 
   g_signal_emit_by_name (context, "dnd-finished");
-  gdk_drag_drop_done (context, TRUE);
+  gdk_drag_drop_done (context, !x11_context->drop_failed);
   return TRUE;
 }
 
