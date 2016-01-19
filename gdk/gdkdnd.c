@@ -294,7 +294,7 @@ gdk_drag_context_class_init (GdkDragContextClass *klass)
    * GdkDragContext::drop-performed:
    * @time: the time at which the drop happened.
    *
-   * The drag and drop operation was perfomed on an accepting client.
+   * The drag and drop operation was performed on an accepting client.
    *
    * This signal will only be emitted if the #GdkDragContext manages
    * the drag and drop operation. See gdk_drag_context_manage_dnd()
