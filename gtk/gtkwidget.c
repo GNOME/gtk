@@ -6957,8 +6957,17 @@ gtk_widget_draw_internal (GtkWidget *widget,
   if (gdk_cairo_get_clip_rectangle (cr, NULL))
     {
       gboolean result;
+      gboolean push_group;
 
       //gdk_window_mark_paint_from_clip (window, cr);
+
+      push_group =
+        widget->priv->alpha != 255 &&
+        (!_gtk_widget_is_toplevel (widget) ||
+         gtk_widget_get_visual (widget) == gdk_screen_get_rgba_visual (gtk_widget_get_screen (widget)));
+
+      if (push_group)
+        cairo_push_group (cr);
 
       if (g_signal_has_handler_pending (widget, widget_signals[DRAW], 0, FALSE))
         {
@@ -7009,6 +7018,13 @@ gtk_widget_draw_internal (GtkWidget *widget,
         }
 #endif
 
+      if (push_group)
+        {
+          cairo_pop_group_to_source (cr);
+          cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
+          cairo_paint_with_alpha (cr, widget->priv->alpha / 255.0);
+        }
+
       if (cairo_status (cr) &&
           gtk_cairo_get_event_window (cr))
         {
@@ -7023,49 +7039,6 @@ gtk_widget_draw_internal (GtkWidget *widget,
         }
     }
 }
-
-void
-_gtk_widget_draw (GtkWidget *widget,
-		  cairo_t   *cr)
-{
-  gboolean push_group;
-
-  /* We get expose events only on native windows, so the draw
-   * implementation has to walk the entire widget hierarchy, except
-   * that it stops at native subwindows while we're in an expose
-   * event (_gtk_cairo_get_event () != NULL).
-   *
-   * However, we need to properly clip drawing into child windows
-   * to avoid drawing outside if widgets use e.g. cairo_paint(), so
-   * we traverse over GdkWindows as well as GtkWidgets.
-   *
-   * In order to be able to have opacity groups for entire widgets
-   * that consists of multiple windows we collect all the windows
-   * that belongs to a widget and draw them in one go. This means
-   * we may somewhat reorder GdkWindows when we paint them, but
-   * that’s not generally a problem, as if you want a guaranteed
-   * order you generally use a windowed widget where you control
-   * the window hierarchy.
-   */
-
-  push_group =
-    widget->priv->alpha != 255 &&
-    (!_gtk_widget_is_toplevel (widget) ||
-     gtk_widget_get_visual (widget) == gdk_screen_get_rgba_visual (gtk_widget_get_screen (widget)));
-
-  if (push_group)
-    cairo_push_group (cr);
-
-  gtk_widget_draw_internal (widget, cr, TRUE);
-
-  if (push_group)
-    {
-      cairo_pop_group_to_source (cr);
-      cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
-      cairo_paint_with_alpha (cr, widget->priv->alpha / 255.0);
-    }
-}
-
 
 /**
  * gtk_widget_draw:
