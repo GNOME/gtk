@@ -334,7 +334,7 @@ gdk_drag_context_class_init (GdkDragContextClass *klass)
                   G_TYPE_NONE, 0);
 
   /**
-   * GdkDragContext::action:
+   * GdkDragContext::action-changed:
    * @action: The action currently chosen
    *
    * A new action is being chosen for the drag and drop operation.
@@ -662,8 +662,8 @@ gdk_drag_drop_done (GdkDragContext *context,
  *
  * Once the drag and drop operation is managed, the drag context will
  * emit the following signals:
- * - The #GdkDragContext::action signal whenever the final action to be
- *   performed by the drag and drop operation changes.
+ * - The #GdkDragContext::action-changed signal whenever the final action
+ *   to be performed by the drag and drop operation changes.
  * - The #GdkDragContext::drop-performed signal after the user performs
  *   the drag and drop gesture (typically by releasing the mouse button).
  * - The #GdkDragContext::dnd-finished signal after the drag and drop
