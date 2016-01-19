@@ -3564,9 +3564,9 @@ gtk_container_draw_forall (GtkWidget *widget,
     {
       info.child = widget;
       info.window_depth = G_MAXINT;
-      if (_gtk_widget_get_has_window (widget))
+      window = _gtk_widget_get_window (widget);
+      if (window != gtk_widget_get_window (GTK_WIDGET (data->container)))
         {
-          window = _gtk_widget_get_window (widget);
           siblings = gdk_window_peek_children (gdk_window_get_parent (window));
           info.window_depth = g_list_index (siblings, window);
         }
