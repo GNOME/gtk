@@ -28,7 +28,7 @@
  * @Title: GtkPopoverMenu
  *
  * GtkPopoverMenu is a subclass of #GtkPopover that treats its
- * childen like menus and allows switching between them. It is
+ * children like menus and allows switching between them. It is
  * meant to be used primarily together with #GtkModelButton, but
  * any widget can be used, such as #GtkSpinButton or #GtkScale.
  * In this respect, GtkPopoverMenu is more flexible than popovers

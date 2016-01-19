@@ -1692,7 +1692,7 @@ gtk_stack_set_interpolate_size (GtkStack *stack,
  * @stack: A #GtkStack
  *
  * Returns wether the #GtkStack is set up to interpolate between
- * the sizes of childen on page switch.
+ * the sizes of children on page switch.
  *
  * Returns: %TRUE if child sizes are interpolated
  *
