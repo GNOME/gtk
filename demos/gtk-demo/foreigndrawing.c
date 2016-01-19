@@ -146,15 +146,9 @@ draw_horizontal_scrollbar (GtkWidget     *widget,
   GtkStyleContext *slider_context;
 
   /* This information is taken from the GtkScrollbar docs, see "CSS nodes" */
-  const char *path[3] = {
-    "scrollbar.horizontal",
-    "trough",
-    "slider"
-  };
-
-  scrollbar_context = get_style (NULL, path[0]);
-  trough_context = get_style (scrollbar_context, path[1]);
-  slider_context = get_style (trough_context, path[2]);
+  scrollbar_context = get_style (NULL, "scrollbar.horizontal");
+  trough_context = get_style (scrollbar_context, "trough");
+  slider_context = get_style (trough_context, "slider");
 
   gtk_style_context_set_state (scrollbar_context, state);
   gtk_style_context_set_state (trough_context, state);
@@ -185,13 +179,8 @@ draw_text (GtkWidget     *widget,
   PangoLayout *layout;
 
   /* This information is taken from the GtkLabel docs, see "CSS nodes" */
-  const char *path[2] = {
-    "label.view",
-    "selection"
-  };
-
-  label_context = get_style (NULL, path[0]);
-  selection_context = get_style (label_context, path[1]);
+  label_context = get_style (NULL, "label.view");
+  selection_context = get_style (label_context, "selection");
 
   gtk_style_context_set_state (label_context, state);
 
@@ -223,13 +212,8 @@ draw_check (GtkWidget     *widget,
   GtkStyleContext *check_context;
 
   /* This information is taken from the GtkCheckButton docs, see "CSS nodes" */
-  const char *path[2] = {
-    "checkbutton",
-    "check"
-  };
-
-  button_context = get_style (NULL, path[0]);
-  check_context = get_style (button_context, path[1]);
+  button_context = get_style (NULL, "checkbutton");
+  check_context = get_style (button_context, "check");
 
   gtk_style_context_set_state (check_context, state);
 
@@ -253,13 +237,8 @@ draw_radio (GtkWidget     *widget,
   GtkStyleContext *check_context;
 
   /* This information is taken from the GtkRadioButton docs, see "CSS nodes" */
-  const char *path[2] = {
-    "radiobutton",
-    "radio"
-  };
-
-  button_context = get_style (NULL, path[0]);
-  check_context = get_style (button_context, path[1]);
+  button_context = get_style (NULL, "radiobutton");
+  check_context = get_style (button_context, "radio");
 
   gtk_style_context_set_state (check_context, state);
 
@@ -286,15 +265,9 @@ draw_progress (GtkWidget *widget,
   GtkStyleContext *progress_context;
 
   /* This information is taken from the GtkProgressBar docs, see "CSS nodes" */
-  const char *path[3] = {
-    "progressbar",
-    "trough",
-    "progress"
-  };
-
-  bar_context = get_style (NULL, path[0]);
-  trough_context = get_style (bar_context, path[1]);
-  progress_context = get_style (trough_context, path[2]);
+  bar_context = get_style (NULL, "progressbar");
+  trough_context = get_style (bar_context, "trough");
+  progress_context = get_style (trough_context, "progress");
 
   gtk_render_background (trough_context, cr, x, y, width, height);
   gtk_render_frame (trough_context, cr, x, y, width, height);
