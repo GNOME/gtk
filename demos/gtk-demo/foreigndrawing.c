@@ -6,7 +6,8 @@
  *
  * This demo shows how to use GtkStyleContext and the gtk_render_ APIs
  * to achieve this. Note that this is a very simple, non-interactive
- * example.
+ * example. Also note that the application is responsible for choosing
+ * suitable sizes for the rendered components.
  */
 
 #include <gtk/gtk.h>
@@ -271,6 +272,40 @@ draw_radio (GtkWidget     *widget,
 
 }
 
+static void
+draw_progress (GtkWidget *widget,
+               cairo_t   *cr,
+               gint       x,
+               gint       y,
+               gint       width,
+               gint       height,
+               gint       position)
+{
+  GtkStyleContext *bar_context;
+  GtkStyleContext *trough_context;
+  GtkStyleContext *progress_context;
+
+  /* This information is taken from the GtkProgressBar docs, see "CSS nodes" */
+  const char *path[3] = {
+    "progressbar",
+    "trough",
+    "progress"
+  };
+
+  bar_context = get_style (NULL, path[0]);
+  trough_context = get_style (bar_context, path[1]);
+  progress_context = get_style (trough_context, path[2]);
+
+  gtk_render_background (trough_context, cr, x, y, width, height);
+  gtk_render_frame (trough_context, cr, x, y, width, height);
+  gtk_render_background (progress_context, cr, x, y, position, height);
+  gtk_render_frame (progress_context, cr, x, y, position, height);
+
+  g_object_unref (progress_context);
+  g_object_unref (trough_context);
+  g_object_unref (bar_context);
+}
+
 static gboolean
 draw_cb (GtkWidget *widget,
          cairo_t   *cr)
@@ -295,6 +330,7 @@ draw_cb (GtkWidget *widget,
   draw_check (widget, cr,  40, 130, GTK_STATE_FLAG_CHECKED);
   draw_radio (widget, cr,  70, 130, GTK_STATE_FLAG_NORMAL);
   draw_radio (widget, cr, 100, 130, GTK_STATE_FLAG_CHECKED);
+  draw_progress (widget, cr, 10, 160, width - 20, 6, 50);
 
   return FALSE;
 }
