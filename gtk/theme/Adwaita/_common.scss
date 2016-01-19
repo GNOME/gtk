@@ -2616,6 +2616,8 @@ scale {
 
               $_scale_slider_bg_pos: bottom;
               @if $dir_infix == 'horz' {
+                min-height: 25px;
+                min-width: 20px;
                 @if $marks_infix == 'scale-has-marks-above' {
                   $_scale_slider_bg_pos: top;
                   margin-top: 1px;
@@ -2623,6 +2625,8 @@ scale {
               }
 
               @else {
+                min-height: 20px;
+                min-width: 25px;
                 @if $marks_infix == 'scale-has-marks-above' { $_scale_slider_bg_pos: left bottom; }
                 @else { $_scale_slider_bg_pos: right bottom; }
               }
