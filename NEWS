@@ -16,9 +16,19 @@ Overview of Changes in GTK+ 3.19.7
 * Themes:
  - Many Adwaita fixes
 
+* GTK+ widget drawing scalability has been improved (for containers
+  with many children, like large list boxes or flow boxes).
+
+* Drag-and-Drop has been rearchitected to move the input handling into
+  GDK, where different backends can handle it according to their needs
+  and capabilities. The new, 'managed' DND is currently implemented
+  for X11 and Wayland.
+
 * Wayland:
- - Support kinetic scrolling, using the new events in
-   version 5 of the wl_pointer interface
+ - Support kinetic scrolling, using the new events in version 5 of the
+   wl_pointer interface
+ - Suppport DND actions and drag cancellation that were added in version
+   3 of the wl_data_offer interface
 
 * Bugs fixed:
  722727 Widget state CSS pseudoclasses should work with adjacent selectors
@@ -47,6 +57,8 @@ Overview of Changes in GTK+ 3.19.7
  760680 Emitting "shutdown" signal twice leads to a crash
  760748 GtkTextView should allow hooks for reseting blink time
  760754 gedit crashes detaching a tab
+ 756729 No kinetic scrolling on Wayland
+ 760370 GDK-ify drag and drop
 
 * Translation updates:
  Brazilian Portuguese
