@@ -1,3 +1,60 @@
+Overview of Changes in GTK+ 3.19.7
+==================================
+
+* GtkNotebook:
+ - Has been converted to use gadgets
+ - Style properties have been deprecated
+
+* GtkTextView:
+ - Offers (some) control over cursor blinking
+
+* CSS changes:
+ - Fix rendering of asymmetric borders
+ - Add CSS names to more widgets
+ - Support recoloring icons with -gtk-recolor
+
+* Themes:
+ - Many Adwaita fixes
+
+* Wayland:
+ - Support kinetic scrolling, using the new events in
+   version 5 of the wl_pointer interface
+
+* Bugs fixed:
+ 722727 Widget state CSS pseudoclasses should work with adjacent selectors
+ 722937 problem rendering asymmetric borders with dotted style
+ 748327 W32: GDK can be hypothetically stuck in time
+ 756729 No kinetic scrolling on Wayland
+ 757503 Selected text is white on white (invisible) - Evo / GTK+ 3.19.1
+ 759785 GdkSeat: Suspected errors in documentation
+ 759898 W32: There's a gap between tooltip window and its shadow
+ 760350 Cast the return value of g_array_free to void* before casting to...
+ 760388 MS lib files cannot be generated (with patch)
+ 760416 broadwayd --help shows translated characters as question marks o...
+ 760427 Adwaita: Separators in popovers shouldn't always have margins
+ 760445 regression: openQA no longer able to press ctrl-alt-del to get t...
+ 760509 GdkWindow positions/sizes include css margins
+ 760524 linked comboboxes change size when clicked
+ 760525 Labels in dialog buttons misaligned
+ 760528 GtkFrame child should start below the label widget
+ 760536 ship a mini icon theme for recolarable symbolic icon assets
+ 760572 Inspector highlights "random" widgets
+ 760596 epiphany middle click on link opens an invisible tab
+ 760615 GTK FTBFS with MinGW-w64
+ 760640 Crash in gtk_notebook_set_show_tabs when closing Epiphany
+ 760663 Some labels on RTL in some menus dosn't shown
+ 760668 box gadget: Implement cross-axis alignment
+ 760680 Emitting "shutdown" signal twice leads to a crash
+ 760748 GtkTextView should allow hooks for reseting blink time
+ 760754 gedit crashes detaching a tab
+
+* Translation updates:
+ Brazilian Portuguese
+ Finnish
+ Japanese
+ Slovak
+
+
 Overview of Changes in GTK+ 3.19.6
 ==================================
 
