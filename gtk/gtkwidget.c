@@ -6956,10 +6956,13 @@ gtk_widget_draw_internal (GtkWidget *widget,
 
   if (gdk_cairo_get_clip_rectangle (cr, NULL))
     {
+      GdkWindow *event_window;
       gboolean result;
       gboolean push_group;
 
-      //gdk_window_mark_paint_from_clip (window, cr);
+      event_window = gtk_cairo_get_event_window (cr);
+      if (event_window)
+        gdk_window_mark_paint_from_clip (event_window, cr);
 
       push_group =
         widget->priv->alpha != 255 &&
@@ -7026,7 +7029,7 @@ gtk_widget_draw_internal (GtkWidget *widget,
         }
 
       if (cairo_status (cr) &&
-          gtk_cairo_get_event_window (cr))
+          event_window != NULL)
         {
           /* We check the event so we only warn about internal GTK+ calls.
            * Errors might come from PDF streams having write failures and
