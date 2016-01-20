@@ -315,7 +315,7 @@ gdk_wayland_drag_context_drop_finish (GdkDragContext *context,
   selection = gdk_drag_get_selection (context);
   wl_offer = gdk_wayland_selection_get_offer (display, selection);
 
-  if (success && wayland_context->selected_action &&
+  if (wl_offer && success && wayland_context->selected_action &&
       wayland_context->selected_action != GDK_ACTION_ASK)
     {
       gdk_wayland_drag_context_commit_status (context);
