@@ -8112,8 +8112,36 @@ gtk_widget_real_style_updated (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = widget->priv;
 
-  gtk_widget_update_pango_context (widget);
   gtk_widget_update_alpha (widget);
+
+  if (widget->priv->context)
+    {
+      GtkCssStyleChange *change = gtk_style_context_get_change (widget->priv->context);
+      gboolean has_text = gtk_widget_peek_pango_context (widget) != NULL;
+
+      if (change == NULL ||
+          (has_text && gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_FONT)))
+        gtk_widget_update_pango_context (widget);
+
+      if (widget->priv->anchored)
+        {
+          if (change == NULL ||
+              gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_SIZE) ||
+              (has_text && gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT)))
+            gtk_widget_queue_resize (widget);
+          else if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_CLIP))
+            gtk_widget_queue_allocate (widget);
+          else if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_REDRAW))
+            gtk_widget_queue_draw (widget);
+        }
+    }
+  else
+    {
+      gtk_widget_update_pango_context (widget);
+
+      if (widget->priv->anchored)
+        gtk_widget_queue_resize (widget);
+    }
 
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   if (priv->style != NULL &&
@@ -8129,25 +8157,6 @@ gtk_widget_real_style_updated (GtkWidget *widget)
     }
   G_GNUC_END_IGNORE_DEPRECATIONS;
 
-  if (widget->priv->context)
-    {
-      GtkCssStyleChange *change = gtk_style_context_get_change (widget->priv->context);
-
-      if (widget->priv->anchored)
-        {
-          if (change == NULL || gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_SIZE))
-            gtk_widget_queue_resize (widget);
-          else if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_CLIP))
-            gtk_widget_queue_allocate (widget);
-          else if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_REDRAW))
-            gtk_widget_queue_draw (widget);
-        }
-    }
-  else
-    {
-      if (widget->priv->anchored)
-        gtk_widget_queue_resize (widget);
-    }
 }
 
 static gboolean
