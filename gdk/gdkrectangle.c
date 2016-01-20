@@ -58,6 +58,9 @@
  * The union of rectangles @src1 and @src2 is the smallest rectangle which
  * includes both @src1 and @src2 within it.
  * It is allowed for @dest to be the same as either @src1 or @src2.
+ *
+ * Note that this function does not ignore 'empty' rectangles (ie. with
+ * zero width or height).
  */
 void
 gdk_rectangle_union (const GdkRectangle *src1,
