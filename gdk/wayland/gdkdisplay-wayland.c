@@ -992,6 +992,7 @@ create_shm_pool (struct wl_shm  *shm,
                   filename, g_strerror (errno));
       return NULL;
     }
+  unlink (filename);
 
   stride = width * 4;
   size = stride * height;
@@ -1004,7 +1005,6 @@ create_shm_pool (struct wl_shm  *shm,
     }
 
   data = mmap (NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-  unlink (filename);
 
   if (data == MAP_FAILED)
     {
