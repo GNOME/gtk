@@ -924,14 +924,13 @@ static const struct wl_buffer_listener buffer_listener = {
 
 static struct wl_shm_pool *
 create_shm_pool (struct wl_shm  *shm,
-                 int             width,
-                 int             height,
+                 int             size,
                  size_t         *buf_length,
                  void          **data_out)
 {
   char filename[] = "/tmp/wayland-shm-XXXXXX";
   struct wl_shm_pool *pool;
-  int fd, size, stride;
+  int fd;
   void *data;
 
   fd = mkstemp (filename);
@@ -943,8 +942,6 @@ create_shm_pool (struct wl_shm  *shm,
     }
   unlink (filename);
 
-  stride = width * 4;
-  size = stride * height;
   if (ftruncate (fd, size) < 0)
     {
       g_critical (G_STRLOC ": Truncating temporary file failed: %s",
@@ -1008,7 +1005,7 @@ _gdk_wayland_display_create_shm_surface (GdkWaylandDisplay *display,
   stride = cairo_format_stride_for_width (CAIRO_FORMAT_ARGB32, width*scale);
 
   data->pool = create_shm_pool (display->shm,
-                                width*scale, height*scale,
+                                height*scale*stride,
                                 &data->buf_length,
                                 &data->buf);
 
