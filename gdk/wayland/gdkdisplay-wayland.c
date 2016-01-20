@@ -1005,7 +1005,7 @@ _gdk_wayland_display_create_shm_surface (GdkWaylandDisplay *display,
   data->scale = scale;
   data->busy = FALSE;
 
-  stride = width * 4;
+  stride = cairo_format_stride_for_width (CAIRO_FORMAT_ARGB32, width*scale);
 
   data->pool = create_shm_pool (display->shm,
                                 width*scale, height*scale,
@@ -1016,11 +1016,11 @@ _gdk_wayland_display_create_shm_surface (GdkWaylandDisplay *display,
                                                  CAIRO_FORMAT_ARGB32,
                                                  width*scale,
                                                  height*scale,
-                                                 stride*scale);
+                                                 stride);
 
   data->buffer = wl_shm_pool_create_buffer (data->pool, 0,
                                             width*scale, height*scale,
-                                            stride*scale, WL_SHM_FORMAT_ARGB8888);
+                                            stride, WL_SHM_FORMAT_ARGB8888);
   wl_buffer_add_listener (data->buffer, &buffer_listener, surface);
 
   cairo_surface_set_user_data (surface, &gdk_wayland_cairo_key,
