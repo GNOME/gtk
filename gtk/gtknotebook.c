@@ -208,7 +208,6 @@ struct _GtkNotebookPrivate
   guint          button             : 2;
   guint          child_has_focus    : 1;
   guint          click_child        : 3;
-  guint          during_reorder     : 1;
   guint          remove_in_detach   : 1;
   guint          focus_out          : 1; /* Flag used by ::move-focus-out implementation */
   guint          has_scrolled       : 1;
@@ -2753,7 +2752,6 @@ gtk_notebook_button_press (GtkWidget      *widget,
       /* save press to possibly begin a drag */
       if (page->reorderable || page->detachable)
         {
-          priv->during_reorder = FALSE;
           priv->pressed_button = event->button;
 
           priv->mouse_x = x;
@@ -3015,33 +3013,29 @@ gtk_notebook_stop_reorder (GtkNotebook *notebook)
 
   if (page->reorderable || page->detachable)
     {
-      if (priv->during_reorder)
+      gint old_page_num, page_num, i;
+      GList *element;
+
+      element = get_drop_position (notebook);
+      old_page_num = g_list_position (priv->children, priv->focus_tab);
+      page_num = reorder_tab (notebook, element, priv->focus_tab);
+      gtk_notebook_child_reordered (notebook, page);
+
+      if (priv->has_scrolled || old_page_num != page_num)
         {
-          gint old_page_num, page_num, i;
-          GList *element;
-
-          element = get_drop_position (notebook);
-          old_page_num = g_list_position (priv->children, priv->focus_tab);
-          page_num = reorder_tab (notebook, element, priv->focus_tab);
-          gtk_notebook_child_reordered (notebook, page);
-
-          if (priv->has_scrolled || old_page_num != page_num)
-	    {
-	      for (element = priv->children, i = 0; element; element = element->next, i++)
-		{
-		  if (MIN (old_page_num, page_num) <= i && i <= MAX (old_page_num, page_num))
-		    gtk_widget_child_notify (((GtkNotebookPage *) element->data)->child, "position");
-		}
-	      g_signal_emit (notebook,
-			     notebook_signals[PAGE_REORDERED], 0,
-			     page->child, page_num);
-	    }
-
-          priv->has_scrolled = FALSE;
-          priv->during_reorder = FALSE;
-
-          hide_drag_window (notebook, priv, page);
+          for (element = priv->children, i = 0; element; element = element->next, i++)
+            {
+              if (MIN (old_page_num, page_num) <= i && i <= MAX (old_page_num, page_num))
+                gtk_widget_child_notify (((GtkNotebookPage *) element->data)->child, "position");
+            }
+          g_signal_emit (notebook,
+                         notebook_signals[PAGE_REORDERED], 0,
+                         page->child, page_num);
         }
+
+      priv->has_scrolled = FALSE;
+
+      hide_drag_window (notebook, priv, page);
 
       priv->operation = DRAG_OPERATION_NONE;
 
@@ -3306,10 +3300,9 @@ gtk_notebook_motion_notify (GtkWidget      *widget,
     }
 
   if (page->reorderable &&
-      (priv->during_reorder ||
+      (priv->operation == DRAG_OPERATION_REORDER ||
        gtk_drag_check_threshold (widget, priv->drag_begin_x, priv->drag_begin_y, priv->mouse_x, priv->mouse_y)))
     {
-      priv->during_reorder = TRUE;
       pointer_position = get_pointer_position (notebook);
 
       if (event->window == priv->drag_window &&
