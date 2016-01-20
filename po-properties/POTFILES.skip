@@ -161,6 +161,10 @@ testsuite/a11y/placeholder-text.ui
 testsuite/a11y/stack.ui
 testsuite/css/nodes/buttons.ui
 testsuite/css/nodes/entries.ui
+testsuite/css/nodes/notebook.bottom.ui
+testsuite/css/nodes/notebook.left.ui
+testsuite/css/nodes/notebook.right.ui
+testsuite/css/nodes/notebook.top.ui
 testsuite/css/nodes/notebook.ui
 testsuite/css/style/adjacent-states.ui
 testsuite/css/style/currentcolor.ui
