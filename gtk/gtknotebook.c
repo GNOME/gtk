@@ -208,7 +208,6 @@ struct _GtkNotebookPrivate
   guint          button             : 2;
   guint          child_has_focus    : 1;
   guint          click_child        : 3;
-  guint          during_detach      : 1;
   guint          during_reorder     : 1;
   guint          remove_in_detach   : 1;
   guint          focus_out          : 1; /* Flag used by ::move-focus-out implementation */
@@ -1288,7 +1287,6 @@ gtk_notebook_init (GtkNotebook *notebook)
                                               G_N_ELEMENTS (notebook_targets));
   priv->operation = DRAG_OPERATION_NONE;
   priv->detached_tab = NULL;
-  priv->during_detach = FALSE;
   priv->has_scrolled = FALSE;
 
   if (gtk_widget_get_direction (GTK_WIDGET (notebook)) == GTK_TEXT_DIR_RTL)
@@ -2755,7 +2753,6 @@ gtk_notebook_button_press (GtkWidget      *widget,
       /* save press to possibly begin a drag */
       if (page->reorderable || page->detachable)
         {
-          priv->during_detach = FALSE;
           priv->during_reorder = FALSE;
           priv->pressed_button = event->button;
 
@@ -3072,7 +3069,7 @@ gtk_notebook_button_release (GtkWidget      *widget,
   notebook = GTK_NOTEBOOK (widget);
   priv = notebook->priv;
 
-  if (!priv->during_detach &&
+  if (priv->operation == DRAG_OPERATION_REORDER &&
       priv->cur_page &&
       priv->cur_page->reorderable &&
       event->button == priv->pressed_button)
@@ -3302,7 +3299,6 @@ gtk_notebook_motion_notify (GtkWidget      *widget,
       check_threshold (notebook, priv->mouse_x, priv->mouse_y))
     {
       priv->detached_tab = priv->cur_page;
-      priv->during_detach = TRUE;
 
       gtk_drag_begin_with_coordinates (widget, priv->source_targets, GDK_ACTION_MOVE,
                                        priv->pressed_button, (GdkEvent*) event,
