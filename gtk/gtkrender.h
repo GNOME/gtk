@@ -59,6 +59,15 @@ void        gtk_render_background  (GtkStyleContext     *context,
                                     gdouble              y,
                                     gdouble              width,
                                     gdouble              height);
+
+GDK_AVAILABLE_IN_3_20
+void        gtk_render_background_get_clip  (GtkStyleContext     *context,
+                                             gdouble              x,
+                                             gdouble              y,
+                                             gdouble              width,
+                                             gdouble              height,
+                                             GdkRectangle        *out_clip);
+
 GDK_AVAILABLE_IN_ALL
 void        gtk_render_frame       (GtkStyleContext     *context,
                                     cairo_t             *cr,

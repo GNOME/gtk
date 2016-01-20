@@ -6258,6 +6258,7 @@ gtk_border_free
 <SUBSECTION>
 gtk_render_arrow
 gtk_render_background
+gtk_render_background_get_clip
 gtk_render_check
 gtk_render_expander
 gtk_render_extension
