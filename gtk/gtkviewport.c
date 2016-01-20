@@ -109,6 +109,8 @@ static void gtk_viewport_map                      (GtkWidget        *widget);
 static void gtk_viewport_unmap                    (GtkWidget        *widget);
 static gint gtk_viewport_draw                     (GtkWidget        *widget,
 						   cairo_t          *cr);
+static void gtk_viewport_remove                   (GtkContainer     *container,
+						   GtkWidget        *widget);
 static void gtk_viewport_add                      (GtkContainer     *container,
 						   GtkWidget        *widget);
 static void gtk_viewport_size_allocate            (GtkWidget        *widget,
@@ -387,6 +389,7 @@ gtk_viewport_class_init (GtkViewportClass *class)
   
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_VIEWPORT);
 
+  container_class->remove = gtk_viewport_remove;
   container_class->add = gtk_viewport_add;
   gtk_container_class_handle_border_width (container_class);
 
@@ -488,7 +491,6 @@ gtk_viewport_init (GtkViewport *viewport)
 {
   GtkWidget *widget;
   GtkViewportPrivate *priv;
-  GtkStyleContext *style_context;
   GtkCssNode *widget_node;
 
   viewport->priv = gtk_viewport_get_instance_private (viewport);
@@ -506,9 +508,6 @@ gtk_viewport_init (GtkViewport *viewport)
 
   priv->pixel_cache = _gtk_pixel_cache_new ();
 
-  style_context = gtk_widget_get_style_context (widget);
-  _gtk_pixel_cache_set_style_context (priv->pixel_cache, style_context);
-
   widget_node = gtk_widget_get_css_node (widget);
   priv->gadget = gtk_css_custom_gadget_new_for_node (widget_node,
                                                      widget,
@@ -517,7 +516,7 @@ gtk_viewport_init (GtkViewport *viewport)
                                                      gtk_viewport_render,
                                                      NULL, NULL);
 
-  gtk_style_context_add_class (style_context, GTK_STYLE_CLASS_FRAME);
+  gtk_css_gadget_add_class (priv->gadget, GTK_STYLE_CLASS_FRAME);
   viewport_set_adjustment (viewport, GTK_ORIENTATION_HORIZONTAL, NULL);
   viewport_set_adjustment (viewport, GTK_ORIENTATION_VERTICAL, NULL);
 }
@@ -941,6 +940,19 @@ gtk_viewport_draw (GtkWidget *widget,
 }
 
 static void
+gtk_viewport_remove (GtkContainer *container,
+		     GtkWidget    *child)
+{
+  GtkViewport *viewport = GTK_VIEWPORT (container);
+  GtkViewportPrivate *priv = viewport->priv;
+
+  GTK_CONTAINER_CLASS (gtk_viewport_parent_class)->remove (container, child);
+
+  _gtk_pixel_cache_set_style_context (priv->pixel_cache, NULL);
+
+}
+
+static void
 gtk_viewport_add (GtkContainer *container,
 		  GtkWidget    *child)
 {
@@ -951,6 +963,9 @@ gtk_viewport_add (GtkContainer *container,
   g_return_if_fail (gtk_bin_get_child (bin) == NULL);
 
   gtk_widget_set_parent_window (child, priv->bin_window);
+
+  _gtk_pixel_cache_set_style_context (priv->pixel_cache,
+                                      gtk_widget_get_style_context (child));
 
   GTK_CONTAINER_CLASS (gtk_viewport_parent_class)->add (container, child);
 }
