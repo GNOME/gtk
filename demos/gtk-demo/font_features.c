@@ -139,7 +139,7 @@ do_font_features (GtkWidget *do_widget)
       GtkBuilder *builder;
       int i;
 
-      builder = gtk_builder_new_from_resource ("/font-features/font-features.ui");
+      builder = gtk_builder_new_from_resource ("/font_features/font-features.ui");
 
       gtk_builder_add_callback_symbol (builder, "update", update);
       gtk_builder_add_callback_symbol (builder, "reset", reset);

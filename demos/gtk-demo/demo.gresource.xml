@@ -200,7 +200,7 @@
     <file>glarea-fragment.glsl</file>
     <file>glarea-vertex.glsl</file>
   </gresource>
-  <gresource prefix="/font-features">
+  <gresource prefix="/font_features">
     <file>font-features.ui</file>
   </gresource>
   <gresource prefix="/spinbutton">
