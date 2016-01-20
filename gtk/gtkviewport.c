@@ -574,13 +574,11 @@ gtk_viewport_destroy (GtkWidget *widget)
   viewport_disconnect_adjustment (viewport, GTK_ORIENTATION_HORIZONTAL);
   viewport_disconnect_adjustment (viewport, GTK_ORIENTATION_VERTICAL);
 
-  if (priv->pixel_cache)
-    _gtk_pixel_cache_free (priv->pixel_cache);
-  priv->pixel_cache = NULL;
-
   g_clear_object (&priv->gadget);
 
   GTK_WIDGET_CLASS (gtk_viewport_parent_class)->destroy (widget);
+
+  g_clear_pointer (&priv->pixel_cache, _gtk_pixel_cache_free);
 }
 
 /**
