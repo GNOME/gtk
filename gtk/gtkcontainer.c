@@ -3686,8 +3686,9 @@ gtk_container_should_propagate_draw (GtkContainer   *container,
 
 static void
 union_with_clip (GtkWidget *widget,
-                 gpointer   clip)
+                 gpointer   data)
 {
+  GdkRectangle *clip = data;
   GtkAllocation widget_clip;
 
   if (!gtk_widget_is_visible (widget) ||
@@ -3696,7 +3697,10 @@ union_with_clip (GtkWidget *widget,
 
   gtk_widget_get_clip (widget, &widget_clip);
 
-  gdk_rectangle_union (&widget_clip, clip, clip);
+  if (clip->width == 0 || clip->height == 0)
+    *clip = widget_clip;
+  else
+    gdk_rectangle_union (&widget_clip, clip, clip);
 }
 
 void
