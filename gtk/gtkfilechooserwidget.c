@@ -6474,7 +6474,11 @@ name_entry_get_parent_info_cb (GCancellable *cancellable,
   if (info)
     {
       parent_is_folder = _gtk_file_info_consider_as_directory (info);
-      parent_is_accessible = g_file_info_has_attribute (info, "access::can-execute") &&
+
+      /* Some gvfs backends do not set executable attribute, let's assume that
+       * the folder is accessible even if the attribute is not set.
+       */
+      parent_is_accessible = !g_file_info_has_attribute (info, "access::can-execute") ||
                              g_file_info_get_attribute_boolean (info, "access::can-execute");
     }
 
