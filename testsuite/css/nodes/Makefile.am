@@ -28,23 +28,27 @@ test_css_nodes_SOURCES = \
 	$(NULL)
 
 test_data = \
-	box.ltr.ui		box.ltr.nodes		\
-	box.rtl.ui		box.rtl.nodes		\
-	buttons.ui 		buttons.nodes 		\
-	checkbutton.ltr.ui	checkbutton.ltr.nodes	\
-	checkbutton.rtl.ui	checkbutton.rtl.nodes	\
-	entries.ui 		entries.nodes 		\
-	expander.ltr.ui		expander.ltr.nodes	\
-	expander.rtl.ui		expander.rtl.nodes	\
-	levelbar.ltr.ui 	levelbar.ltr.nodes	\
-	levelbar.rtl.ui 	levelbar.rtl.nodes	\
-	notebook.top.ui 	notebook.top.nodes 	\
-	notebook.left.ui 	notebook.left.nodes 	\
-	notebook.right.ui 	notebook.right.nodes 	\
-	notebook.bottom.ui 	notebook.bottom.nodes 	\
-	paned.ltr.ui		paned.ltr.nodes		\
-	paned.rtl.ui		paned.rtl.nodes		\
-	progressbar.ui 		progressbar.nodes 	\
+	box.ltr.ui		box.ltr.nodes			\
+	box.rtl.ui		box.rtl.nodes			\
+	buttons.ui 		buttons.nodes 			\
+	checkbutton.ltr.ui	checkbutton.ltr.nodes		\
+	checkbutton.rtl.ui	checkbutton.rtl.nodes		\
+	entries.ui 		entries.nodes 			\
+	expander.ltr.ui		expander.ltr.nodes		\
+	expander.rtl.ui		expander.rtl.nodes		\
+	levelbar.ltr.ui 	levelbar.ltr.nodes		\
+	levelbar.rtl.ui 	levelbar.rtl.nodes		\
+	notebook.top.ltr.ui 	notebook.top.ltr.nodes 		\
+	notebook.top.rtl.ui 	notebook.top.rtl.nodes 		\
+	notebook.left.ltr.ui 	notebook.left.ltr.nodes 	\
+	notebook.left.rtl.ui 	notebook.left.rtl.nodes 	\
+	notebook.right.ltr.ui 	notebook.right.ltr.nodes 	\
+	notebook.right.rtl.ui 	notebook.right.rtl.nodes 	\
+	notebook.bottom.ltr.ui 	notebook.bottom.ltr.nodes 	\
+	notebook.bottom.rtl.ui 	notebook.bottom.rtl.nodes 	\
+	paned.ltr.ui		paned.ltr.nodes			\
+	paned.rtl.ui		paned.rtl.nodes			\
+	progressbar.ui 		progressbar.nodes 		\
 	$(NULL)
 
 EXTRA_DIST += $(test_in_files) $(test_data)

@@ -219,6 +219,7 @@ struct _GtkNotebookPrivate
   guint          show_tabs          : 1;
   guint          scrollable         : 1;
   guint          tab_pos            : 2;
+  guint          tabs_reversed      : 1;
 };
 
 enum {
@@ -1290,6 +1291,11 @@ gtk_notebook_init (GtkNotebook *notebook)
   priv->during_detach = FALSE;
   priv->has_scrolled = FALSE;
 
+  if (gtk_widget_get_direction (GTK_WIDGET (notebook)) == GTK_TEXT_DIR_RTL)
+    priv->tabs_reversed = TRUE;
+  else
+    priv->tabs_reversed = FALSE;
+
   gtk_drag_dest_set (GTK_WIDGET (notebook), 0,
                      notebook_targets, G_N_ELEMENTS (notebook_targets),
                      GDK_ACTION_MOVE);
@@ -1825,49 +1831,17 @@ static void
 update_node_ordering (GtkNotebook *notebook)
 {
   GtkNotebookPrivate *priv = notebook->priv;
-  GtkPositionType tab_pos;
-  gboolean is_rtl;
-  GtkCssNode *node, *header_node, *tabs_node;
+  gboolean reverse_tabs;
 
-  tab_pos = get_effective_tab_pos (notebook);
-  is_rtl = gtk_widget_get_direction (GTK_WIDGET (notebook)) == GTK_TEXT_DIR_RTL;
-  header_node = gtk_css_gadget_get_node (priv->header_gadget);
-  tabs_node = gtk_css_gadget_get_node (priv->tabs_gadget);
+  reverse_tabs = (priv->tab_pos == GTK_POS_TOP || priv->tab_pos == GTK_POS_BOTTOM) &&
+                 gtk_widget_get_direction (GTK_WIDGET (notebook)) == GTK_TEXT_DIR_RTL;
 
-  switch (tab_pos)
+  if ((reverse_tabs && !priv->tabs_reversed) ||
+      (!reverse_tabs && priv->tabs_reversed))
     {
-    case GTK_POS_TOP:
-    case GTK_POS_BOTTOM:
-      if (priv->action_widget[ACTION_WIDGET_START])
-        {
-          node = gtk_widget_get_css_node (priv->action_widget[ACTION_WIDGET_START]);
-          if (is_rtl)
-            gtk_css_node_insert_after (header_node, node, tabs_node);
-          else
-            gtk_css_node_insert_before (header_node, node, tabs_node);
-        }
-      if (priv->action_widget[ACTION_WIDGET_END])
-        {
-          node = gtk_widget_get_css_node (priv->action_widget[ACTION_WIDGET_END]);
-          if (is_rtl)
-            gtk_css_node_insert_before (header_node, node, tabs_node);
-          else
-            gtk_css_node_insert_after (header_node, node, tabs_node);
-        }
-      break;
-    case GTK_POS_LEFT:
-    case GTK_POS_RIGHT:
-      if (priv->action_widget[ACTION_WIDGET_START])
-        {
-          node = gtk_widget_get_css_node (priv->action_widget[ACTION_WIDGET_START]);
-          gtk_css_node_insert_before (header_node, node, tabs_node);
-        }
-      if (priv->action_widget[ACTION_WIDGET_END])
-        {
-          node = gtk_widget_get_css_node (priv->action_widget[ACTION_WIDGET_END]);
-          gtk_css_node_insert_after (header_node, node, tabs_node);
-        }
-      break;
+      gtk_box_gadget_reverse_children (GTK_BOX_GADGET (priv->header_gadget));
+      gtk_css_node_reverse_children (gtk_css_gadget_get_node (priv->tabs_gadget));
+      priv->tabs_reversed = reverse_tabs;
     }
 }
 
@@ -4767,6 +4741,9 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
   else
     sibling = priv->arrow_gadget[ARROW_RIGHT_AFTER];
 
+  if (priv->tabs_reversed)
+    gtk_css_node_reverse_children (gtk_css_gadget_get_node (priv->tabs_gadget));
+
   page->gadget = gtk_css_custom_gadget_new ("tab",
                                             GTK_WIDGET (notebook),
                                             priv->tabs_gadget,
@@ -4776,6 +4753,9 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
                                             draw_tab,
                                             page,
                                             NULL);
+  if (priv->tabs_reversed)
+    gtk_css_node_reverse_children (gtk_css_gadget_get_node (priv->tabs_gadget));
+
   gtk_css_gadget_set_state (page->gadget, gtk_css_node_get_state (gtk_css_gadget_get_node (priv->tabs_gadget)));
 
   if (!tab_label)
@@ -7050,6 +7030,8 @@ gtk_notebook_update_tab_pos (GtkNotebook *notebook)
       gtk_box_gadget_set_orientation (GTK_BOX_GADGET (priv->header_gadget), GTK_ORIENTATION_VERTICAL);
       break;
     }
+
+  update_node_ordering (notebook);
 }
 
 /**
@@ -8017,14 +7999,19 @@ gtk_notebook_set_action_widget (GtkNotebook *notebook,
 
   if (widget)
     {
+      int pos;
+
       gtk_css_node_set_parent (gtk_widget_get_css_node (widget),
                                gtk_css_gadget_get_node (priv->header_gadget));
-      gtk_box_gadget_insert_widget (GTK_BOX_GADGET (priv->header_gadget),
-                                    pack_type == GTK_PACK_START ? 0 : -1,
-                                    widget);
+
+      if (priv->tabs_reversed)
+        pos = pack_type == GTK_PACK_START ? -1 : 0;
+      else
+        pos = pack_type == GTK_PACK_START ? 0 : -1;
+
+      gtk_box_gadget_insert_widget (GTK_BOX_GADGET (priv->header_gadget), pos, widget);
       gtk_widget_set_child_visible (widget, priv->show_tabs);
       gtk_widget_set_parent (widget, GTK_WIDGET (notebook));
-      update_node_ordering (notebook);
     }
 
   gtk_widget_queue_resize (GTK_WIDGET (notebook));
