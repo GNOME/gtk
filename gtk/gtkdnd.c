@@ -3206,6 +3206,19 @@ gtk_drag_source_info_free (GtkDragSourceInfo *info)
 static void
 gtk_drag_source_info_destroy (GtkDragSourceInfo *info)
 {
+  g_signal_handlers_disconnect_by_func (info->context,
+                                        gtk_drag_context_drop_performed_cb,
+                                        info);
+  g_signal_handlers_disconnect_by_func (info->context,
+                                        gtk_drag_context_dnd_finished_cb,
+                                        info);
+  g_signal_handlers_disconnect_by_func (info->context,
+                                        gtk_drag_context_cancel_cb,
+                                        info);
+  g_signal_handlers_disconnect_by_func (info->context,
+                                        gtk_drag_context_action_cb,
+                                        info);
+
   g_signal_handlers_disconnect_by_func (info->ipc_widget,
                                         gtk_drag_grab_broken_event_cb,
                                         info);
