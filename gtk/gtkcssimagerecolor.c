@@ -108,17 +108,25 @@ gtk_css_image_recolor_load (GtkCssImageRecolor *recolor,
   GdkRGBA fg, success, warning, error;
   GdkPixbuf *pixbuf;
   GtkCssImage *image;
+  GError *gerror = NULL;
 
   lookup_symbolic_colors (style, palette, &fg, &success, &warning, &error);
 
   info = gtk_icon_info_new_for_file (url->file, 0, 1);
-  pixbuf = gtk_icon_info_load_symbolic (info, &fg, &success, &warning, &error, NULL, NULL);
+  pixbuf = gtk_icon_info_load_symbolic (info, &fg, &success, &warning, &error, NULL, &gerror);
   g_object_unref (info);
 
   if (pixbuf == NULL)
     {
-      g_warning ("Failed to load icon");
-      return NULL;
+      char *uri;
+
+      /* XXX: Get the error somehow back to the CssProvider */
+      uri = g_file_get_uri (url->file);
+      g_warning ("Error loading image '%s': %s\n", uri, gerror->message);
+      g_error_free (gerror);
+      g_free (uri);
+
+      pixbuf = gtk_icon_theme_load_icon (gtk_icon_theme_get_default (), "image-missing", 24, 0, NULL);
     }
 
   image = _gtk_css_image_surface_new_for_pixbuf (pixbuf);
