@@ -149,7 +149,7 @@ gtk_css_image_recolor_compute (GtkCssImage             *image,
   if (recolor->palette)
     palette = _gtk_css_value_compute (recolor->palette, property_id, provider, style, parent_style);
   else
-    palette = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_PALETTE);
+    palette = _gtk_css_value_ref (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_PALETTE));
 
   img = gtk_css_image_recolor_load (recolor, style, palette);
 
