@@ -2230,7 +2230,7 @@ switch {
                   (':checked:active', '-checked-active'),
                   (':backdrop:checked', '-checked-backdrop'),
                   (':backdrop:checked:disabled', '-checked-backdrop-insensitive') {
-    #{$w}#{$s} {
+    treeview.#{$w}#{$s} {
       -gtk-icon-source: -gtk-scaled(url("assets/#{$a}#{$as}#{$asset_suffix}.png"),
                                     url("assets/#{$a}#{$as}#{$asset_suffix}@2.png"));
       -gtk-icon-shadow: if(str-index($s,"backdrop"), none, 0 1px 0 $borders_edge); //no edge highlight for :backdrop
@@ -2240,33 +2240,12 @@ switch {
       // the borders of the light variant versions of checks and radios are
       // too similar in luminosity to the selected background color, hence
       // we need special casing.
-      .view #{$w}#{$s}:selected,
+      .view treeview.#{$w}#{$s}:selected,
       row:selected #{$w}#{$s} {
         -gtk-icon-source: -gtk-scaled(url("assets/selected-#{$a}#{$as}#{$asset_suffix}.png"),
                                       url("assets/selected-#{$a}#{$as}#{$asset_suffix}@2.png"));
       }
     }
-  }
-
-  //menu
-  menu menuitem #{$w} {
-    color: mix($fg_color, $bg_color, 70%);
-    -gtk-icon-source: -gtk-icontheme('#{$a}-symbolic');
-    -gtk-icon-shadow: none;
-    &:hover, &:disabled {
-      -gtk-icon-source: -gtk-icontheme('#{$a}-symbolic');
-      -gtk-icon-shadow: none;
-    }
-    &:checked, &:checked:hover, &:checked:disabled {
-      -gtk-icon-source: -gtk-icontheme('#{$a}-checked-symbolic');
-      -gtk-icon-shadow: none;
-    }
-    &:indeterminate, &:indeterminate:hover, &:indeterminate:disabled {
-      -gtk-icon-source: -gtk-icontheme('#{$a}-mixed-symbolic');
-      -gtk-icon-shadow: none;
-    }
-    &:hover { color: $selected_fg_color; }
-    &:disabled { color: mix($insensitive_fg_color, $bg_color, 50%); }
   }
 }
 
@@ -2307,14 +2286,57 @@ checkbutton.text-button, radiobutton.text-button {
   }
 }
 
-radiobutton radio,
-checkbutton check {
-  min-width: 16px;
-  min-height: 16px;
-  margin: 0 2px 0 2px;
-
+check,
+radio {
+  margin: 0 4px;
   &:only-child { margin: 0; }
+
+  min-height: 14px;
+  min-width: 14px;
+  border: 1px solid;
+  -gtk-icon-source: none;
+  @include button(normal);
+  &:hover { @include button(hover); }
+  &:active { @include button(active); }
+  &:disabled { @include button(insensitive); }
+  &:backdrop {
+    @include button(backdrop);
+    &:disabled { @include button(backdrop-insensitive); }
+  }
+
+  @if $variant == 'light' {
+    // the borders of the light variant versions of checks and radios are too similar in luminosity to the selected background
+    // color, hence we need special casing.
+    row:selected & { border-color: $selected_borders_color; }
+  }
+
+  menu menuitem & {
+    &, &:hover, &:disabled {
+      min-height: 14px;
+      min-width: 14px;
+      background-image: none;
+      background-color: transparent;
+      box-shadow: none;
+      -gtk-icon-shadow: none;
+      color: inherit;
+      border-color: currentColor;
+    }
+  }
 }
+
+check {
+  border-radius: 3px;
+  &:checked { -gtk-icon-source: -gtk-recolor(url("assets/check-symbolic.svg")); }
+  &:indeterminate { -gtk-icon-source: -gtk-recolor(url("assets/dash-symbolic.svg")); }
+}
+
+radio {
+  border-radius: 100%;
+  &:checked { -gtk-icon-source: -gtk-recolor(url("assets/bullet-symbolic.svg")); }
+  &:indeterminate { -gtk-icon-source: -gtk-recolor(url("assets/dash-symbolic.svg")); }
+}
+
+
 
 /************
  * GtkScale *
