@@ -332,7 +332,7 @@
                         <child>
                           <object class="GtkLabel">
                             <property name="visible">true</property>
-                            <property name="label" translatable="yes">Allocated size</property>
+                            <property name="label" translatable="yes">Allocation</property>
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
                             <property name="xalign">0</property>
