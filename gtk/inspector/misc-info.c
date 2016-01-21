@@ -133,21 +133,25 @@ state_flags_changed (GtkWidget *w, GtkStateFlags old_flags, GtkInspectorMiscInfo
 static void
 allocation_changed (GtkWidget *w, GdkRectangle *allocation, GtkInspectorMiscInfo *sl)
 {
+  GtkAllocation alloc;
   GtkAllocation clip;
   gchar *size_label;
   GEnumClass *class;
   GEnumValue *value;
 
-  size_label = g_strdup_printf ("%d × %d",
-                                gtk_widget_get_allocated_width (w),
-                                gtk_widget_get_allocated_height (w));
+  gtk_widget_get_allocation (w, &alloc);
+  size_label = g_strdup_printf ("%d × %d +%d +%d",
+                                alloc.width, alloc.height,
+                                alloc.x, alloc.y);
 
   gtk_label_set_label (GTK_LABEL (sl->priv->allocated_size), size_label);
   g_free (size_label);
 
   gtk_widget_get_clip (w, &clip);
 
-  size_label = g_strdup_printf ("%d × %d", clip.width, clip.height);
+  size_label = g_strdup_printf ("%d × %d +%d +%d",
+                                clip.width, clip.height,
+                                clip.x, clip.y);
   gtk_label_set_label (GTK_LABEL (sl->priv->clip_area), size_label);
   g_free (size_label);
 
