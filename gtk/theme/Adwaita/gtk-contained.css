@@ -3863,6 +3863,7 @@ separator {
  * Lists *
  *********/
 list {
+  color: black;
   background-color: #ffffff;
   border-color: #9d9d99; }
   list:backdrop {
