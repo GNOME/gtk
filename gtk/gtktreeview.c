@@ -6990,6 +6990,11 @@ do_validate_rows (GtkTreeView *tree_view, gboolean queue_resize)
   if (path) gtk_tree_path_free (path);
   g_timer_destroy (timer);
 
+  if (!retval && gtk_widget_get_mapped (GTK_WIDGET (tree_view)))
+    update_prelight (tree_view,
+                     tree_view->priv->event_last_x,
+                     tree_view->priv->event_last_y);
+
   return retval;
 }
 
