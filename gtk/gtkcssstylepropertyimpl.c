@@ -88,7 +88,7 @@ gtk_css_style_property_register (const char *                   name,
   g_assert (initial_value != NULL);
   g_assert (parse_value != NULL);
   g_assert (value_type == G_TYPE_NONE || query_value != NULL);
-  g_assert (value_type == G_TYPE_NONE || assign_value != NULL);
+  g_assert (assign_value == NULL || query_value != NULL);
 
   node = g_object_new (GTK_TYPE_CSS_STYLE_PROPERTY,
                        "value-type", value_type,
@@ -455,6 +455,15 @@ opacity_parse (GtkCssStyleProperty *property,
 	       GtkCssParser        *parser)
 {
   return _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER);
+}
+
+static void
+opacity_query (GtkCssStyleProperty *property,
+               const GtkCssValue   *css_value,
+               GValue              *value)
+{
+  g_value_init (value, G_TYPE_DOUBLE);
+  g_value_set_double (value, _gtk_css_number_value_get (css_value, 100));
 }
 
 
@@ -1761,11 +1770,11 @@ _gtk_css_style_property_init_properties (void)
 
   gtk_css_style_property_register        ("opacity",
                                           GTK_CSS_PROPERTY_OPACITY,
-                                          G_TYPE_NONE,
+                                          G_TYPE_DOUBLE,
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           0,
                                           opacity_parse,
-                                          NULL,
+                                          opacity_query,
                                           NULL,
                                           _gtk_css_number_value_new (1, GTK_CSS_NUMBER));
   gtk_css_style_property_register        ("-gtk-icon-effect",
