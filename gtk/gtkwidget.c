@@ -6927,13 +6927,15 @@ gtk_cairo_should_draw_window (cairo_t *cr,
   g_return_val_if_fail (cr != NULL, FALSE);
   g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
 
-  if (!gdk_window_has_native (window))
-    return TRUE;
-
   event_window = gtk_cairo_get_event_window (cr);
 
-  return event_window == NULL ||
-    event_window == window;
+  if (event_window == NULL)
+    return TRUE;
+
+  while (!gdk_window_has_native (window))
+    window = gdk_window_get_parent (window);
+
+  return event_window == window;
 }
 
 void
