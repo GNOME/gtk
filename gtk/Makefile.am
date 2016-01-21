@@ -1215,9 +1215,13 @@ gtk.gresource.xml: Makefile.am inspector/Makefile.inc
         echo "    <file alias='theme/Adwaita-dark.css'>theme/Adwaita/gtk-dark.css</file>" >> $@; \
         echo "    <file>theme/Adwaita/gtk-contained.css</file>" >> $@; \
         echo "    <file>theme/Adwaita/gtk-contained-dark.css</file>" >> $@; \
-        for f in $(srcdir)/theme/Adwaita/assets/*; do \
+        for f in $(srcdir)/theme/Adwaita/assets/*.png; do \
           n=`basename $$f`; \
           echo "    <file preprocess='to-pixdata'>theme/Adwaita/assets/$$n</file>" >> $@; \
+        done; \
+        for f in $(srcdir)/theme/Adwaita/assets/*.svg; do \
+          n=`basename $$f`; \
+          echo "    <file>theme/Adwaita/assets/$$n</file>" >> $@; \
         done; \
 	echo "    <file alias='theme/HighContrast.css'>theme/HighContrast/gtk.css</file>" >> $@; \
 	echo "    <file alias='theme/HighContrastInverse.css'>theme/HighContrast/gtk-inverse.css</file>" >> $@; \
