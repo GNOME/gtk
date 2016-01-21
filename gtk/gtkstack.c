@@ -2148,6 +2148,12 @@ gtk_stack_render (GtkCssGadget *gadget,
               cairo_destroy (pattern_cr);
             }
 
+          cairo_rectangle (cr,
+                           0, 0,
+                           gtk_widget_get_allocated_width (widget),
+                           gtk_widget_get_allocated_height (widget));
+          cairo_clip (cr);
+
           switch (priv->active_transition_type)
             {
             case GTK_STACK_TRANSITION_TYPE_CROSSFADE:
