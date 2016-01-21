@@ -12893,9 +12893,7 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
   GtkTreeIter iter;
   GtkTreeIter children;
   gboolean collapse;
-  gint x, y;
   GList *list;
-  GdkWindow *child;
   gboolean selection_changed, cursor_changed;
 
   if (animate)
@@ -13004,22 +13002,9 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
   g_signal_emit (tree_view, tree_view_signals[ROW_COLLAPSED], 0, &iter, path);
   
   if (gtk_widget_get_mapped (GTK_WIDGET (tree_view)))
-    {
-      GdkSeat *seat;
-
-      seat = gdk_display_get_default_seat (gtk_widget_get_display (GTK_WIDGET (tree_view)));
-      /* now that we've collapsed all rows, we want to try to set the prelight again */
-      child = gdk_window_get_device_position (gdk_window_get_parent (tree_view->priv->bin_window),
-                                              gdk_seat_get_pointer (seat),
-                                              &x, &y, NULL);
-      if (child == tree_view->priv->bin_window)
-	{
-          y = MAX (0, TREE_WINDOW_Y_TO_RBTREE_Y (tree_view, y));
-
-          _gtk_rbtree_find_offset (tree_view->priv->tree, y, &tree, &node);
-          prelight_or_select (tree_view, tree_view->priv->tree, node, x, y);
-	}
-    }
+    update_prelight (tree_view,
+                     tree_view->priv->event_last_x,
+                     tree_view->priv->event_last_y);
 
   return TRUE;
 }
