@@ -6873,6 +6873,12 @@ _gtk_entry_get_im_context (GtkEntry *entry)
   return entry->priv->im_context;
 }
 
+GtkCssGadget *
+gtk_entry_get_gadget (GtkEntry  *entry)
+{
+  return entry->priv->gadget;
+}
+
 static gint
 gtk_entry_find_position (GtkEntry *entry,
 			 gint      x)

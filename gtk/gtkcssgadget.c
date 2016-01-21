@@ -193,11 +193,13 @@ gtk_css_gadget_unset_node (GtkCssGadget *gadget)
     }
 }
 
-static void
+void
 gtk_css_gadget_set_node (GtkCssGadget *gadget,
                          GtkCssNode   *node)
 {
   GtkCssGadgetPrivate *priv = gtk_css_gadget_get_instance_private (gadget);
+
+  gtk_css_gadget_unset_node (gadget);
 
   if (node != NULL)
     priv->node = g_object_ref (node);
