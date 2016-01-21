@@ -323,8 +323,8 @@ init_display (GtkInspectorGeneral *gen)
       wmm = gdk_screen_get_monitor_width_mm (screen, i);
       hmm = gdk_screen_get_monitor_height_mm (screen, i);
       scale = gdk_screen_get_monitor_scale_factor (screen, i);
-      text = g_strdup_printf ("%d × %d%s, %d × %d mm²",
-                              w, h, scale == 2 ? " @ 2" : "",
+      text = g_strdup_printf ("%d × %d%s, %d × %d mm²",
+                              w, h, scale == 2 ? " @ 2" : "",
                               wmm, hmm);
       label = gtk_label_new (text);
       gtk_label_set_selectable (GTK_LABEL (label), TRUE);
