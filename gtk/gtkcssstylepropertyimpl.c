@@ -1644,7 +1644,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_AFFECTS_SIZE,
                                           minmax_parse,
                                           query_length_as_int,
-                                          assign_length_from_int,
+                                          NULL,
                                           _gtk_css_number_value_new (0, GTK_CSS_PX));
   gtk_css_style_property_register        ("min-height",
                                           GTK_CSS_PROPERTY_MIN_HEIGHT,
@@ -1653,7 +1653,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_AFFECTS_SIZE,
                                           minmax_parse,
                                           query_length_as_int,
-                                          assign_length_from_int,
+                                          NULL,
                                           _gtk_css_number_value_new (0, GTK_CSS_PX));
 
   gtk_css_style_property_register        ("transition-property",
