@@ -3756,9 +3756,7 @@ gtk_container_propagate_draw (GtkContainer *container,
   g_return_if_fail (GTK_IS_CONTAINER (container));
   g_return_if_fail (GTK_IS_WIDGET (child));
   g_return_if_fail (cr != NULL);
-
-  g_assert (_gtk_widget_get_parent (child) == GTK_WIDGET (container) ||
-            SPECIAL_CONTAINER (container));
+  g_return_if_fail (_gtk_widget_get_parent (child) == GTK_WIDGET (container));
 
   if (!gtk_container_should_propagate_draw (container, child, cr))
     return;
