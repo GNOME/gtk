@@ -109,6 +109,7 @@ gtk_box_gadget_measure_child (GObject        *child,
 
 static void
 gtk_box_gadget_distribute (GtkBoxGadget     *gadget,
+                           gint              for_size,
                            gint              size,
                            GtkRequestedSize *sizes)
 {
@@ -123,7 +124,7 @@ gtk_box_gadget_distribute (GtkBoxGadget     *gadget,
 
       gtk_box_gadget_measure_child (child->object,
                                     priv->orientation,
-                                    -1, 
+                                    for_size,
                                     &sizes[i].minimum_size, &sizes[i].natural_size,
                                     NULL, NULL);
       if (gtk_box_gadget_child_is_visible (child->object) &&
@@ -152,6 +153,7 @@ gtk_box_gadget_distribute (GtkBoxGadget     *gadget,
       size -= size / n_expand;
       n_expand--;
     }
+
 }
 
 static void
@@ -203,7 +205,7 @@ gtk_box_gadget_measure_opposite (GtkCssGadget   *gadget,
   if (for_size >= 0)
     {
       sizes = g_newa (GtkRequestedSize, priv->children->len);
-      gtk_box_gadget_distribute (GTK_BOX_GADGET (gadget), for_size, sizes);
+      gtk_box_gadget_distribute (GTK_BOX_GADGET (gadget), -1, for_size, sizes);
     }
 
   above_min = below_min = above_nat = below_nat = -1;
@@ -303,7 +305,7 @@ gtk_box_gadget_allocate (GtkCssGadget        *gadget,
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      gtk_box_gadget_distribute (GTK_BOX_GADGET (gadget), allocation->width, sizes);
+      gtk_box_gadget_distribute (GTK_BOX_GADGET (gadget), allocation->height, allocation->width, sizes);
 
       if (baseline < 0)
         {
@@ -377,7 +379,7 @@ gtk_box_gadget_allocate (GtkCssGadget        *gadget,
     }
   else
     {
-      gtk_box_gadget_distribute (GTK_BOX_GADGET (gadget), allocation->height, sizes);
+      gtk_box_gadget_distribute (GTK_BOX_GADGET (gadget), allocation->width, allocation->height, sizes);
 
       for (i = 0 ; i < priv->children->len; i++)
         {
