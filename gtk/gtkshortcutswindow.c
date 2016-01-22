@@ -371,32 +371,29 @@ gtk_shortcuts_window_forall (GtkContainer *container,
 
   if (include_internal)
     {
-      if (priv->header_bar)
-        callback (GTK_WIDGET (priv->header_bar), callback_data);
-      if (priv->main_box)
-        callback (GTK_WIDGET (priv->main_box), callback_data);
-      if (priv->popover)
-        callback (GTK_WIDGET (priv->popover), callback_data);
+      GTK_CONTAINER_CLASS (gtk_shortcuts_window_parent_class)->forall (container, include_internal, callback, callback_data);
     }
-
-  if (priv->stack)
+  else
     {
-      GList *children, *l;
-      GtkWidget *search;
-      GtkWidget *empty;
-
-      search = gtk_stack_get_child_by_name (GTK_STACK (priv->stack), "internal-search");
-      empty = gtk_stack_get_child_by_name (GTK_STACK (priv->stack), "no-search-results");
-      children = gtk_container_get_children (GTK_CONTAINER (priv->stack));
-      for (l = children; l; l = l->next)
+      if (priv->stack)
         {
-          GtkWidget *child = l->data;
+          GList *children, *l;
+          GtkWidget *search;
+          GtkWidget *empty;
 
-          if (include_internal ||
-              (child != search && child != empty))
-            callback (child, callback_data);
+          search = gtk_stack_get_child_by_name (GTK_STACK (priv->stack), "internal-search");
+          empty = gtk_stack_get_child_by_name (GTK_STACK (priv->stack), "no-search-results");
+          children = gtk_container_get_children (GTK_CONTAINER (priv->stack));
+          for (l = children; l; l = l->next)
+            {
+              GtkWidget *child = l->data;
+
+              if (include_internal ||
+                  (child != search && child != empty))
+                callback (child, callback_data);
+            }
+          g_list_free (children);
         }
-      g_list_free (children);
     }
 }
 

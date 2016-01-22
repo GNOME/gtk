@@ -163,14 +163,15 @@ gtk_shortcuts_section_forall (GtkContainer *container,
 
   if (include_internal)
     {
-      callback (GTK_WIDGET (self->stack), callback_data);
-      callback (GTK_WIDGET (self->footer), callback_data);
+      GTK_CONTAINER_CLASS (gtk_shortcuts_section_parent_class)->forall (container, include_internal, callback, callback_data);
     }
-
-  for (l = self->groups; l; l = l->next)
+  else
     {
-      GtkWidget *group = l->data;
-      callback (group, callback_data);
+      for (l = self->groups; l; l = l->next)
+        {
+          GtkWidget *group = l->data;
+          callback (group, callback_data);
+        }
     }
 }
 
