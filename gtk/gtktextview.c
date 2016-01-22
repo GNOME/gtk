@@ -5914,9 +5914,8 @@ paint_border_window (GtkTextView     *text_view,
       w = gdk_window_get_width (window);
       h = gdk_window_get_height (window);
 
-      gtk_cairo_transform_to_window (cr, GTK_WIDGET (text_view), window);
-
       cairo_save (cr);
+      gtk_cairo_transform_to_window (cr, GTK_WIDGET (text_view), window);
       gtk_render_background (context, cr, 0, 0, w, h);
       cairo_restore (cr);
 
