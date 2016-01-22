@@ -2240,8 +2240,7 @@ switch {
       // the borders of the light variant versions of checks and radios are
       // too similar in luminosity to the selected background color, hence
       // we need special casing.
-      .view treeview.#{$w}#{$s}:selected,
-      row:selected #{$w}#{$s} {
+      .view treeview.#{$w}#{$s}:selected {
         -gtk-icon-source: -gtk-scaled(url("assets/selected-#{$a}#{$as}#{$asset_suffix}.png"),
                                       url("assets/selected-#{$a}#{$as}#{$asset_suffix}@2.png"));
       }
@@ -2335,7 +2334,6 @@ radio {
   &:checked { -gtk-icon-source: -gtk-recolor(url("assets/bullet-symbolic.svg")); }
   &:indeterminate { -gtk-icon-source: -gtk-recolor(url("assets/dash-symbolic.svg")); }
 }
-
 
 
 /************

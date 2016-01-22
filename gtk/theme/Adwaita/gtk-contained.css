@@ -2665,8 +2665,7 @@ treeview.check {
   .titlebar treeview.check button.titlebutton {
     -gtk-icon-shadow: none; }
 
-.view treeview.check:selected, iconview treeview.check:selected,
-row:selected check {
+.view treeview.check:selected, iconview treeview.check:selected {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-unchecked.png"), url("assets/selected-checkbox-unchecked@2.png")); }
 
 treeview.check:hover {
@@ -2677,8 +2676,7 @@ treeview.check:hover {
   .titlebar treeview.check:hover button.titlebutton {
     -gtk-icon-shadow: none; }
 
-.view treeview.check:hover:selected, iconview treeview.check:hover:selected,
-row:selected check:hover {
+.view treeview.check:hover:selected, iconview treeview.check:hover:selected {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-unchecked-hover.png"), url("assets/selected-checkbox-unchecked-hover@2.png")); }
 
 treeview.check:active {
@@ -2689,8 +2687,7 @@ treeview.check:active {
   .titlebar treeview.check:active button.titlebutton {
     -gtk-icon-shadow: none; }
 
-.view treeview.check:active:selected, iconview treeview.check:active:selected,
-row:selected check:active {
+.view treeview.check:active:selected, iconview treeview.check:active:selected {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-unchecked-active.png"), url("assets/selected-checkbox-unchecked-active@2.png")); }
 
 treeview.check:disabled {
@@ -2701,8 +2698,7 @@ treeview.check:disabled {
   .titlebar treeview.check:disabled button.titlebutton {
     -gtk-icon-shadow: none; }
 
-.view treeview.check:disabled:selected, iconview treeview.check:disabled:selected,
-row:selected check:disabled {
+.view treeview.check:disabled:selected, iconview treeview.check:disabled:selected {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-unchecked-insensitive.png"), url("assets/selected-checkbox-unchecked-insensitive@2.png")); }
 
 treeview.check:backdrop {
@@ -2713,8 +2709,7 @@ treeview.check:backdrop {
   .titlebar treeview.check:backdrop button.titlebutton {
     -gtk-icon-shadow: none; }
 
-.view treeview.check:backdrop:selected, iconview treeview.check:backdrop:selected,
-row:selected check:backdrop {
+.view treeview.check:backdrop:selected, iconview treeview.check:backdrop:selected {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-unchecked-backdrop.png"), url("assets/selected-checkbox-unchecked-backdrop@2.png")); }
 
 treeview.check:backdrop:disabled {
@@ -2725,8 +2720,7 @@ treeview.check:backdrop:disabled {
   .titlebar treeview.check:backdrop:disabled button.titlebutton {
     -gtk-icon-shadow: none; }
 
-.view treeview.check:backdrop:disabled:selected, iconview treeview.check:backdrop:disabled:selected,
-row:selected check:backdrop:disabled {
+.view treeview.check:backdrop:disabled:selected, iconview treeview.check:backdrop:disabled:selected {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-unchecked-backdrop-insensitive.png"), url("assets/selected-checkbox-unchecked-backdrop-insensitive@2.png")); }
 
 treeview.check:indeterminate {
@@ -2737,8 +2731,7 @@ treeview.check:indeterminate {
   .titlebar treeview.check:indeterminate button.titlebutton {
     -gtk-icon-shadow: none; }
 
-.view treeview.check:indeterminate:selected, iconview treeview.check:indeterminate:selected,
-row:selected check:indeterminate {
+.view treeview.check:indeterminate:selected, iconview treeview.check:indeterminate:selected {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-mixed.png"), url("assets/selected-checkbox-mixed@2.png")); }
 
 treeview.check:indeterminate:hover {
@@ -2749,8 +2742,7 @@ treeview.check:indeterminate:hover {
   .titlebar treeview.check:indeterminate:hover button.titlebutton {
     -gtk-icon-shadow: none; }
 
-.view treeview.check:indeterminate:hover:selected, iconview treeview.check:indeterminate:hover:selected,
-row:selected check:indeterminate:hover {
+.view treeview.check:indeterminate:hover:selected, iconview treeview.check:indeterminate:hover:selected {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-mixed-hover.png"), url("assets/selected-checkbox-mixed-hover@2.png")); }
 
 treeview.check:indeterminate:selected {
@@ -2761,8 +2753,7 @@ treeview.check:indeterminate:selected {
   .titlebar treeview.check:indeterminate:selected button.titlebutton {
     -gtk-icon-shadow: none; }
 
-.view treeview.check:indeterminate:selected:selected, iconview treeview.check:indeterminate:selected:selected,
-row:selected check:indeterminate:selected {
+.view treeview.check:indeterminate:selected:selected, iconview treeview.check:indeterminate:selected:selected {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-mixed-active.png"), url("assets/selected-checkbox-mixed-active@2.png")); }
 
 treeview.check:indeterminate:backdrop {
@@ -2773,8 +2764,7 @@ treeview.check:indeterminate:backdrop {
   .titlebar treeview.check:indeterminate:backdrop button.titlebutton {
     -gtk-icon-shadow: none; }
 
-.view treeview.check:indeterminate:backdrop:selected, iconview treeview.check:indeterminate:backdrop:selected,
-row:selected check:indeterminate:backdrop {
+.view treeview.check:indeterminate:backdrop:selected, iconview treeview.check:indeterminate:backdrop:selected {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-mixed-backdrop.png"), url("assets/selected-checkbox-mixed-backdrop@2.png")); }
 
 treeview.check:indeterminate:disabled {
@@ -2785,8 +2775,7 @@ treeview.check:indeterminate:disabled {
   .titlebar treeview.check:indeterminate:disabled button.titlebutton {
     -gtk-icon-shadow: none; }
 
-.view treeview.check:indeterminate:disabled:selected, iconview treeview.check:indeterminate:disabled:selected,
-row:selected check:indeterminate:disabled {
+.view treeview.check:indeterminate:disabled:selected, iconview treeview.check:indeterminate:disabled:selected {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-mixed-insensitive.png"), url("assets/selected-checkbox-mixed-insensitive@2.png")); }
 
 treeview.check:indeterminate:disabled:backdrop {
@@ -2797,8 +2786,7 @@ treeview.check:indeterminate:disabled:backdrop {
   .titlebar treeview.check:indeterminate:disabled:backdrop button.titlebutton {
     -gtk-icon-shadow: none; }
 
-.view treeview.check:indeterminate:disabled:backdrop:selected, iconview treeview.check:indeterminate:disabled:backdrop:selected,
-row:selected check:indeterminate:disabled:backdrop {
+.view treeview.check:indeterminate:disabled:backdrop:selected, iconview treeview.check:indeterminate:disabled:backdrop:selected {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-mixed-backdrop-insensitive.png"), url("assets/selected-checkbox-mixed-backdrop-insensitive@2.png")); }
 
 treeview.check:checked {
@@ -2809,8 +2797,7 @@ treeview.check:checked {
   .titlebar treeview.check:checked button.titlebutton {
     -gtk-icon-shadow: none; }
 
-.view treeview.check:checked:selected, iconview treeview.check:checked:selected,
-row:selected check:checked {
+.view treeview.check:checked:selected, iconview treeview.check:checked:selected {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-checked.png"), url("assets/selected-checkbox-checked@2.png")); }
 
 treeview.check:checked:disabled {
@@ -2821,8 +2808,7 @@ treeview.check:checked:disabled {
   .titlebar treeview.check:checked:disabled button.titlebutton {
     -gtk-icon-shadow: none; }
 
-.view treeview.check:checked:disabled:selected, iconview treeview.check:checked:disabled:selected,
-row:selected check:checked:disabled {
+.view treeview.check:checked:disabled:selected, iconview treeview.check:checked:disabled:selected {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-checked-insensitive.png"), url("assets/selected-checkbox-checked-insensitive@2.png")); }
 
 treeview.check:checked:hover {
@@ -2833,8 +2819,7 @@ treeview.check:checked:hover {
   .titlebar treeview.check:checked:hover button.titlebutton {
     -gtk-icon-shadow: none; }
 
-.view treeview.check:checked:hover:selected, iconview treeview.check:checked:hover:selected,
-row:selected check:checked:hover {
+.view treeview.check:checked:hover:selected, iconview treeview.check:checked:hover:selected {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-checked-hover.png"), url("assets/selected-checkbox-checked-hover@2.png")); }
 
 treeview.check:checked:active {
@@ -2845,8 +2830,7 @@ treeview.check:checked:active {
   .titlebar treeview.check:checked:active button.titlebutton {
     -gtk-icon-shadow: none; }
 
-.view treeview.check:checked:active:selected, iconview treeview.check:checked:active:selected,
-row:selected check:checked:active {
+.view treeview.check:checked:active:selected, iconview treeview.check:checked:active:selected {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-checked-active.png"), url("assets/selected-checkbox-checked-active@2.png")); }
 
 treeview.check:backdrop:checked {
@@ -2857,8 +2841,7 @@ treeview.check:backdrop:checked {
   .titlebar treeview.check:backdrop:checked button.titlebutton {
     -gtk-icon-shadow: none; }
 
-.view treeview.check:backdrop:checked:selected, iconview treeview.check:backdrop:checked:selected,
-row:selected check:backdrop:checked {
+.view treeview.check:backdrop:checked:selected, iconview treeview.check:backdrop:checked:selected {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-checked-backdrop.png"), url("assets/selected-checkbox-checked-backdrop@2.png")); }
 
 treeview.check:backdrop:checked:disabled {
@@ -2869,8 +2852,7 @@ treeview.check:backdrop:checked:disabled {
   .titlebar treeview.check:backdrop:checked:disabled button.titlebutton {
     -gtk-icon-shadow: none; }
 
-.view treeview.check:backdrop:checked:disabled:selected, iconview treeview.check:backdrop:checked:disabled:selected,
-row:selected check:backdrop:checked:disabled {
+.view treeview.check:backdrop:checked:disabled:selected, iconview treeview.check:backdrop:checked:disabled:selected {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-checked-backdrop-insensitive.png"), url("assets/selected-checkbox-checked-backdrop-insensitive@2.png")); }
 
 treeview.radio {
@@ -2881,8 +2863,7 @@ treeview.radio {
   .titlebar treeview.radio button.titlebutton {
     -gtk-icon-shadow: none; }
 
-.view treeview.radio:selected, iconview treeview.radio:selected,
-row:selected radio {
+.view treeview.radio:selected, iconview treeview.radio:selected {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-unchecked.png"), url("assets/selected-radio-unchecked@2.png")); }
 
 treeview.radio:hover {
@@ -2893,8 +2874,7 @@ treeview.radio:hover {
   .titlebar treeview.radio:hover button.titlebutton {
     -gtk-icon-shadow: none; }
 
-.view treeview.radio:hover:selected, iconview treeview.radio:hover:selected,
-row:selected radio:hover {
+.view treeview.radio:hover:selected, iconview treeview.radio:hover:selected {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-unchecked-hover.png"), url("assets/selected-radio-unchecked-hover@2.png")); }
 
 treeview.radio:active {
@@ -2905,8 +2885,7 @@ treeview.radio:active {
   .titlebar treeview.radio:active button.titlebutton {
     -gtk-icon-shadow: none; }
 
-.view treeview.radio:active:selected, iconview treeview.radio:active:selected,
-row:selected radio:active {
+.view treeview.radio:active:selected, iconview treeview.radio:active:selected {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-unchecked-active.png"), url("assets/selected-radio-unchecked-active@2.png")); }
 
 treeview.radio:disabled {
@@ -2917,8 +2896,7 @@ treeview.radio:disabled {
   .titlebar treeview.radio:disabled button.titlebutton {
     -gtk-icon-shadow: none; }
 
-.view treeview.radio:disabled:selected, iconview treeview.radio:disabled:selected,
-row:selected radio:disabled {
+.view treeview.radio:disabled:selected, iconview treeview.radio:disabled:selected {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-unchecked-insensitive.png"), url("assets/selected-radio-unchecked-insensitive@2.png")); }
 
 treeview.radio:backdrop {
@@ -2929,8 +2907,7 @@ treeview.radio:backdrop {
   .titlebar treeview.radio:backdrop button.titlebutton {
     -gtk-icon-shadow: none; }
 
-.view treeview.radio:backdrop:selected, iconview treeview.radio:backdrop:selected,
-row:selected radio:backdrop {
+.view treeview.radio:backdrop:selected, iconview treeview.radio:backdrop:selected {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-unchecked-backdrop.png"), url("assets/selected-radio-unchecked-backdrop@2.png")); }
 
 treeview.radio:backdrop:disabled {
@@ -2941,8 +2918,7 @@ treeview.radio:backdrop:disabled {
   .titlebar treeview.radio:backdrop:disabled button.titlebutton {
     -gtk-icon-shadow: none; }
 
-.view treeview.radio:backdrop:disabled:selected, iconview treeview.radio:backdrop:disabled:selected,
-row:selected radio:backdrop:disabled {
+.view treeview.radio:backdrop:disabled:selected, iconview treeview.radio:backdrop:disabled:selected {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-unchecked-backdrop-insensitive.png"), url("assets/selected-radio-unchecked-backdrop-insensitive@2.png")); }
 
 treeview.radio:indeterminate {
@@ -2953,8 +2929,7 @@ treeview.radio:indeterminate {
   .titlebar treeview.radio:indeterminate button.titlebutton {
     -gtk-icon-shadow: none; }
 
-.view treeview.radio:indeterminate:selected, iconview treeview.radio:indeterminate:selected,
-row:selected radio:indeterminate {
+.view treeview.radio:indeterminate:selected, iconview treeview.radio:indeterminate:selected {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-mixed.png"), url("assets/selected-radio-mixed@2.png")); }
 
 treeview.radio:indeterminate:hover {
@@ -2965,8 +2940,7 @@ treeview.radio:indeterminate:hover {
   .titlebar treeview.radio:indeterminate:hover button.titlebutton {
     -gtk-icon-shadow: none; }
 
-.view treeview.radio:indeterminate:hover:selected, iconview treeview.radio:indeterminate:hover:selected,
-row:selected radio:indeterminate:hover {
+.view treeview.radio:indeterminate:hover:selected, iconview treeview.radio:indeterminate:hover:selected {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-mixed-hover.png"), url("assets/selected-radio-mixed-hover@2.png")); }
 
 treeview.radio:indeterminate:selected {
@@ -2977,8 +2951,7 @@ treeview.radio:indeterminate:selected {
   .titlebar treeview.radio:indeterminate:selected button.titlebutton {
     -gtk-icon-shadow: none; }
 
-.view treeview.radio:indeterminate:selected:selected, iconview treeview.radio:indeterminate:selected:selected,
-row:selected radio:indeterminate:selected {
+.view treeview.radio:indeterminate:selected:selected, iconview treeview.radio:indeterminate:selected:selected {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-mixed-active.png"), url("assets/selected-radio-mixed-active@2.png")); }
 
 treeview.radio:indeterminate:backdrop {
@@ -2989,8 +2962,7 @@ treeview.radio:indeterminate:backdrop {
   .titlebar treeview.radio:indeterminate:backdrop button.titlebutton {
     -gtk-icon-shadow: none; }
 
-.view treeview.radio:indeterminate:backdrop:selected, iconview treeview.radio:indeterminate:backdrop:selected,
-row:selected radio:indeterminate:backdrop {
+.view treeview.radio:indeterminate:backdrop:selected, iconview treeview.radio:indeterminate:backdrop:selected {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-mixed-backdrop.png"), url("assets/selected-radio-mixed-backdrop@2.png")); }
 
 treeview.radio:indeterminate:disabled {
@@ -3001,8 +2973,7 @@ treeview.radio:indeterminate:disabled {
   .titlebar treeview.radio:indeterminate:disabled button.titlebutton {
     -gtk-icon-shadow: none; }
 
-.view treeview.radio:indeterminate:disabled:selected, iconview treeview.radio:indeterminate:disabled:selected,
-row:selected radio:indeterminate:disabled {
+.view treeview.radio:indeterminate:disabled:selected, iconview treeview.radio:indeterminate:disabled:selected {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-mixed-insensitive.png"), url("assets/selected-radio-mixed-insensitive@2.png")); }
 
 treeview.radio:indeterminate:disabled:backdrop {
@@ -3013,8 +2984,7 @@ treeview.radio:indeterminate:disabled:backdrop {
   .titlebar treeview.radio:indeterminate:disabled:backdrop button.titlebutton {
     -gtk-icon-shadow: none; }
 
-.view treeview.radio:indeterminate:disabled:backdrop:selected, iconview treeview.radio:indeterminate:disabled:backdrop:selected,
-row:selected radio:indeterminate:disabled:backdrop {
+.view treeview.radio:indeterminate:disabled:backdrop:selected, iconview treeview.radio:indeterminate:disabled:backdrop:selected {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-mixed-backdrop-insensitive.png"), url("assets/selected-radio-mixed-backdrop-insensitive@2.png")); }
 
 treeview.radio:checked {
@@ -3025,8 +2995,7 @@ treeview.radio:checked {
   .titlebar treeview.radio:checked button.titlebutton {
     -gtk-icon-shadow: none; }
 
-.view treeview.radio:checked:selected, iconview treeview.radio:checked:selected,
-row:selected radio:checked {
+.view treeview.radio:checked:selected, iconview treeview.radio:checked:selected {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-checked.png"), url("assets/selected-radio-checked@2.png")); }
 
 treeview.radio:checked:disabled {
@@ -3037,8 +3006,7 @@ treeview.radio:checked:disabled {
   .titlebar treeview.radio:checked:disabled button.titlebutton {
     -gtk-icon-shadow: none; }
 
-.view treeview.radio:checked:disabled:selected, iconview treeview.radio:checked:disabled:selected,
-row:selected radio:checked:disabled {
+.view treeview.radio:checked:disabled:selected, iconview treeview.radio:checked:disabled:selected {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-checked-insensitive.png"), url("assets/selected-radio-checked-insensitive@2.png")); }
 
 treeview.radio:checked:hover {
@@ -3049,8 +3017,7 @@ treeview.radio:checked:hover {
   .titlebar treeview.radio:checked:hover button.titlebutton {
     -gtk-icon-shadow: none; }
 
-.view treeview.radio:checked:hover:selected, iconview treeview.radio:checked:hover:selected,
-row:selected radio:checked:hover {
+.view treeview.radio:checked:hover:selected, iconview treeview.radio:checked:hover:selected {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-checked-hover.png"), url("assets/selected-radio-checked-hover@2.png")); }
 
 treeview.radio:checked:active {
@@ -3061,8 +3028,7 @@ treeview.radio:checked:active {
   .titlebar treeview.radio:checked:active button.titlebutton {
     -gtk-icon-shadow: none; }
 
-.view treeview.radio:checked:active:selected, iconview treeview.radio:checked:active:selected,
-row:selected radio:checked:active {
+.view treeview.radio:checked:active:selected, iconview treeview.radio:checked:active:selected {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-checked-active.png"), url("assets/selected-radio-checked-active@2.png")); }
 
 treeview.radio:backdrop:checked {
@@ -3073,8 +3039,7 @@ treeview.radio:backdrop:checked {
   .titlebar treeview.radio:backdrop:checked button.titlebutton {
     -gtk-icon-shadow: none; }
 
-.view treeview.radio:backdrop:checked:selected, iconview treeview.radio:backdrop:checked:selected,
-row:selected radio:backdrop:checked {
+.view treeview.radio:backdrop:checked:selected, iconview treeview.radio:backdrop:checked:selected {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-checked-backdrop.png"), url("assets/selected-radio-checked-backdrop@2.png")); }
 
 treeview.radio:backdrop:checked:disabled {
@@ -3085,8 +3050,7 @@ treeview.radio:backdrop:checked:disabled {
   .titlebar treeview.radio:backdrop:checked:disabled button.titlebutton {
     -gtk-icon-shadow: none; }
 
-.view treeview.radio:backdrop:checked:disabled:selected, iconview treeview.radio:backdrop:checked:disabled:selected,
-row:selected radio:backdrop:checked:disabled {
+.view treeview.radio:backdrop:checked:disabled:selected, iconview treeview.radio:backdrop:checked:disabled:selected {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-checked-backdrop-insensitive.png"), url("assets/selected-radio-checked-backdrop-insensitive@2.png")); }
 
 .view.check, iconview.check, .view.radio, iconview.radio,
