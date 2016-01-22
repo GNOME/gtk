@@ -111,10 +111,14 @@ select_swatch (GtkColorChooserWidget *cc,
   gtk_widget_queue_draw (GTK_WIDGET (cc->priv->current));
 
   gtk_color_swatch_get_rgba (swatch, &color);
+
   g_settings_set (cc->priv->settings, "selected-color", "(bdddd)",
                   TRUE, color.red, color.green, color.blue, color.alpha);
 
-  g_object_notify (G_OBJECT (cc), "rgba");
+  if (gtk_widget_get_visible (GTK_WIDGET (cc->priv->editor)))
+    gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (cc->priv->editor), &color);
+  else
+    g_object_notify (G_OBJECT (cc), "rgba");
 }
 
 static void
