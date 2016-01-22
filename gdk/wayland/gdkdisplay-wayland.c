@@ -979,24 +979,27 @@ create_shm_pool (struct wl_shm  *shm,
                  size_t         *buf_length,
                  void          **data_out)
 {
-  char filename[] = "/tmp/wayland-shm-XXXXXX";
+  char *filename;
   struct wl_shm_pool *pool;
   int fd;
   void *data;
 
+  filename = g_strconcat (g_get_tmp_dir (), G_DIR_SEPARATOR_S, "wayland-shm-XXXXXX", NULL);
   fd = mkstemp (filename);
   if (fd < 0)
     {
       g_critical (G_STRLOC ": Unable to create temporary file (%s): %s",
                   filename, g_strerror (errno));
+      g_free (filename);
       return NULL;
     }
   unlink (filename);
 
   if (ftruncate (fd, size) < 0)
     {
-      g_critical (G_STRLOC ": Truncating temporary file failed: %s",
-                  g_strerror (errno));
+      g_critical (G_STRLOC ": Truncating temporary file (%s) failed: %s",
+                  filename, g_strerror (errno));
+      g_free (filename);
       close (fd);
       return NULL;
     }
@@ -1005,8 +1008,9 @@ create_shm_pool (struct wl_shm  *shm,
 
   if (data == MAP_FAILED)
     {
-      g_critical (G_STRLOC ": mmap'ping temporary file failed: %s",
-                  g_strerror (errno));
+      g_critical (G_STRLOC ": mmap'ping temporary file (%s) failed: %s",
+                  filename, g_strerror (errno));
+      g_free (filename);
       close (fd);
       return NULL;
     }
@@ -1014,6 +1018,7 @@ create_shm_pool (struct wl_shm  *shm,
   pool = wl_shm_create_pool (shm, fd, size);
 
   close (fd);
+  g_free (filename);
 
   *data_out = data;
   *buf_length = size;
