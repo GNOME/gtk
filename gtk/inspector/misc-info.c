@@ -55,6 +55,8 @@ struct _GtkInspectorMiscInfoPrivate {
   GtkWidget *request_mode;
   GtkWidget *allocated_size_row;
   GtkWidget *allocated_size;
+  GtkWidget *baseline_row;
+  GtkWidget *baseline;
   GtkWidget *clip_area_row;
   GtkWidget *clip_area;
   GtkWidget *tick_callback_row;
@@ -145,6 +147,10 @@ allocation_changed (GtkWidget *w, GdkRectangle *allocation, GtkInspectorMiscInfo
                                 alloc.x, alloc.y);
 
   gtk_label_set_label (GTK_LABEL (sl->priv->allocated_size), size_label);
+  g_free (size_label);
+
+  size_label = g_strdup_printf ("%d", gtk_widget_get_allocated_baseline (w));
+  gtk_label_set_label (GTK_LABEL (sl->priv->baseline), size_label);
   g_free (size_label);
 
   gtk_widget_get_clip (w, &clip);
@@ -414,6 +420,7 @@ gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
       gtk_widget_show (sl->priv->state_row);
       gtk_widget_show (sl->priv->request_mode_row);
       gtk_widget_show (sl->priv->allocated_size_row);
+      gtk_widget_show (sl->priv->baseline_row);
       gtk_widget_show (sl->priv->clip_area_row);
       gtk_widget_show (sl->priv->mnemonic_label_row);
       gtk_widget_show (sl->priv->tick_callback_row);
@@ -437,6 +444,7 @@ gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
       gtk_widget_hide (sl->priv->request_mode_row);
       gtk_widget_hide (sl->priv->mnemonic_label_row);
       gtk_widget_hide (sl->priv->allocated_size_row);
+      gtk_widget_hide (sl->priv->baseline_row);
       gtk_widget_hide (sl->priv->clip_area_row);
       gtk_widget_hide (sl->priv->tick_callback_row);
       gtk_widget_hide (sl->priv->accessible_role_row);
@@ -589,6 +597,8 @@ gtk_inspector_misc_info_class_init (GtkInspectorMiscInfoClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, request_mode);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, allocated_size_row);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, allocated_size);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, baseline_row);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, baseline);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, clip_area_row);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, clip_area);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, tick_callback_row);
