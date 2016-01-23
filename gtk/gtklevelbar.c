@@ -102,6 +102,9 @@
  * mode, the number of filled and unfilled nodes corresponds to blocks that are
  * drawn. The block.filled nodes also get a style class .level-name corresponding
  * to the level for the current value.
+ *
+ * In horizontal orientation, the nodes are always arranged from left to right,
+ * regardless of text direction.
  */
 #include "config.h"
 
