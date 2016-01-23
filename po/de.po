@@ -33,8 +33,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-21 13:22+0000\n"
-"PO-Revision-Date: 2016-01-21 17:47+0100\n"
+"POT-Creation-Date: 2016-01-23 12:15+0000\n"
+"PO-Revision-Date: 2016-01-23 18:20+0100\n"
 "Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de_DE\n"
@@ -2182,44 +2182,44 @@ msgstr "_Rechts:"
 msgid "Paper Margins"
 msgstr "Papierränder"
 
-#: gtk/gtkentry.c:9686 gtk/gtklabel.c:6674 gtk/gtktextview.c:9462
+#: gtk/gtkentry.c:9692 gtk/gtklabel.c:6674 gtk/gtktextview.c:9461
 msgid "Cu_t"
 msgstr "_Ausschneiden"
 
-#: gtk/gtkentry.c:9690 gtk/gtklabel.c:6675 gtk/gtktextview.c:9466
+#: gtk/gtkentry.c:9696 gtk/gtklabel.c:6675 gtk/gtktextview.c:9465
 msgid "_Copy"
 msgstr "_Kopieren"
 
-#: gtk/gtkentry.c:9694 gtk/gtklabel.c:6676 gtk/gtktextview.c:9468
+#: gtk/gtkentry.c:9700 gtk/gtklabel.c:6676 gtk/gtktextview.c:9467
 msgid "_Paste"
 msgstr "_Einfügen"
 
-#: gtk/gtkentry.c:9697 gtk/gtkfilechooserwidget.c:1464
-#: gtk/gtkfilechooserwidget.c:2262 gtk/gtklabel.c:6678 gtk/gtktextview.c:9471
+#: gtk/gtkentry.c:9703 gtk/gtkfilechooserwidget.c:1464
+#: gtk/gtkfilechooserwidget.c:2262 gtk/gtklabel.c:6678 gtk/gtktextview.c:9470
 msgid "_Delete"
 msgstr "_Löschen"
 
-#: gtk/gtkentry.c:9708 gtk/gtklabel.c:6687 gtk/gtktextview.c:9485
+#: gtk/gtkentry.c:9714 gtk/gtklabel.c:6687 gtk/gtktextview.c:9484
 msgid "Select _All"
 msgstr "_Alles auswählen"
 
-#: gtk/gtkentry.c:9886 gtk/gtktextview.c:9695
+#: gtk/gtkentry.c:9892 gtk/gtktextview.c:9694
 msgid "Select all"
 msgstr "Alle auswählen"
 
-#: gtk/gtkentry.c:9889 gtk/gtktextview.c:9698
+#: gtk/gtkentry.c:9895 gtk/gtktextview.c:9697
 msgid "Cut"
 msgstr "Ausschneiden"
 
-#: gtk/gtkentry.c:9892 gtk/gtktextview.c:9701
+#: gtk/gtkentry.c:9898 gtk/gtktextview.c:9700
 msgid "Copy"
 msgstr "Kopieren"
 
-#: gtk/gtkentry.c:9895 gtk/gtktextview.c:9704
+#: gtk/gtkentry.c:9901 gtk/gtktextview.c:9703
 msgid "Paste"
 msgstr "Einfügen"
 
-#: gtk/gtkentry.c:11010
+#: gtk/gtkentry.c:11016
 msgid "Caps Lock is on"
 msgstr "Feststelltaste ist aktiviert"
 
@@ -2891,7 +2891,7 @@ msgstr "Z-Shell"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Prozess mit Kennung %d kann nicht abgewürgt werden: %s"
 
-#: gtk/gtknotebook.c:5068 gtk/gtknotebook.c:7328
+#: gtk/gtknotebook.c:5070 gtk/gtknotebook.c:7330
 #, c-format
 msgid "Page %u"
 msgstr "Seite %u"
@@ -3573,7 +3573,7 @@ msgctxt "keyboard side marker"
 msgid "R"
 msgstr "R"
 
-#: gtk/gtkshortcutssection.c:449
+#: gtk/gtkshortcutssection.c:450
 msgid "_Show All"
 msgstr "_Alle anzeigen"
 
@@ -3601,23 +3601,23 @@ msgstr "Zweifinger-Wischen nach links"
 msgid "Two finger swipe right"
 msgstr "Zweifinger-Wischen nach rechts"
 
-#: gtk/gtkshortcutswindow.c:862
+#: gtk/gtkshortcutswindow.c:859
 msgid "Shortcuts"
 msgstr "Tastenkürzel"
 
-#: gtk/gtkshortcutswindow.c:867
+#: gtk/gtkshortcutswindow.c:864
 msgid "Search Results"
 msgstr "Suchergebnisse"
 
-#: gtk/gtkshortcutswindow.c:921
+#: gtk/gtkshortcutswindow.c:918
 msgid "Search Shortcuts"
 msgstr "Nach Tastenkürzeln suchen"
 
-#: gtk/gtkshortcutswindow.c:986 gtk/ui/gtkfilechooserwidget.ui:309
+#: gtk/gtkshortcutswindow.c:983 gtk/ui/gtkfilechooserwidget.ui:309
 msgid "No Results Found"
 msgstr "Keine Ergebnisse gefunden"
 
-#: gtk/gtkshortcutswindow.c:993 gtk/ui/gtkfilechooserwidget.ui:323
+#: gtk/gtkshortcutswindow.c:990 gtk/ui/gtkfilechooserwidget.ui:323
 #: gtk/ui/gtkplacesview.ui:181
 msgid "Try a different search"
 msgstr "Versuchen Sie eine andere Suche"
@@ -4050,47 +4050,51 @@ msgid "Allocation"
 msgstr "Zuweisung"
 
 #: gtk/inspector/misc-info.ui:369
+msgid "Baseline"
+msgstr "Grundlinie"
+
+#: gtk/inspector/misc-info.ui:403
 msgid "Clip area"
 msgstr "Bereich abschneiden"
 
 # diese Übersetzung möge überprüft werden!
-#: gtk/inspector/misc-info.ui:403
+#: gtk/inspector/misc-info.ui:437
 msgid "Tick callback"
 msgstr "Markier-Rückmeldung"
 
-#: gtk/inspector/misc-info.ui:439
+#: gtk/inspector/misc-info.ui:473
 msgid "Frame count"
 msgstr "Bildzähler"
 
-#: gtk/inspector/misc-info.ui:473
+#: gtk/inspector/misc-info.ui:507
 msgid "Frame rate"
 msgstr "Bildrate"
 
-#: gtk/inspector/misc-info.ui:507
+#: gtk/inspector/misc-info.ui:541
 msgid "Accessible role"
 msgstr "Barrierefreie Rolle"
 
-#: gtk/inspector/misc-info.ui:541
+#: gtk/inspector/misc-info.ui:575
 msgid "Accessible name"
 msgstr "Name des Accessible"
 
-#: gtk/inspector/misc-info.ui:577
+#: gtk/inspector/misc-info.ui:611
 msgid "Accessible description"
 msgstr "Beschreibung des Accessible"
 
-#: gtk/inspector/misc-info.ui:611
+#: gtk/inspector/misc-info.ui:645
 msgid "Mapped"
 msgstr "Abgebildet"
 
-#: gtk/inspector/misc-info.ui:647
+#: gtk/inspector/misc-info.ui:681
 msgid "Realized"
 msgstr "Realisiert"
 
-#: gtk/inspector/misc-info.ui:683
+#: gtk/inspector/misc-info.ui:717
 msgid "Is Toplevel"
 msgstr "Oberste Ebene"
 
-#: gtk/inspector/misc-info.ui:719
+#: gtk/inspector/misc-info.ui:753
 msgid "Child Visible"
 msgstr "Sichtbares Unterelement"
 
