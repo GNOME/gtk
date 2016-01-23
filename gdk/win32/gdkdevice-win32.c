@@ -26,74 +26,7 @@
 #include "gdkdevice-win32.h"
 #include "gdkwin32.h"
 
-static gboolean gdk_device_win32_get_history (GdkDevice      *device,
-                                              GdkWindow      *window,
-                                              guint32         start,
-                                              guint32         stop,
-                                              GdkTimeCoord ***events,
-                                              gint           *n_events);
-static void gdk_device_win32_get_state (GdkDevice       *device,
-                                        GdkWindow       *window,
-                                        gdouble         *axes,
-                                        GdkModifierType *mask);
-static void gdk_device_win32_set_window_cursor (GdkDevice *device,
-                                                GdkWindow *window,
-                                                GdkCursor *cursor);
-static void gdk_device_win32_warp (GdkDevice *device,
-                                   GdkScreen *screen,
-                                   gdouble    x,
-                                   gdouble    y);
-static void gdk_device_win32_query_state (GdkDevice        *device,
-                                          GdkWindow        *window,
-                                          GdkWindow       **root_window,
-                                          GdkWindow       **child_window,
-                                          gdouble          *root_x,
-                                          gdouble          *root_y,
-                                          gdouble          *win_x,
-                                          gdouble          *win_y,
-                                          GdkModifierType  *mask);
-static GdkGrabStatus gdk_device_win32_grab   (GdkDevice     *device,
-                                              GdkWindow     *window,
-                                              gboolean       owner_events,
-                                              GdkEventMask   event_mask,
-                                              GdkWindow     *confine_to,
-                                              GdkCursor     *cursor,
-                                              guint32        time_);
-static void          gdk_device_win32_ungrab (GdkDevice     *device,
-                                              guint32        time_);
-static void      gdk_device_win32_select_window_events (GdkDevice       *device,
-                                                        GdkWindow       *window,
-                                                        GdkEventMask     event_mask);
-
-
 G_DEFINE_TYPE (GdkDeviceWin32, gdk_device_win32, GDK_TYPE_DEVICE)
-
-static void
-gdk_device_win32_class_init (GdkDeviceWin32Class *klass)
-{
-  GdkDeviceClass *device_class = GDK_DEVICE_CLASS (klass);
-
-  device_class->get_history = gdk_device_win32_get_history;
-  device_class->get_state = gdk_device_win32_get_state;
-  device_class->set_window_cursor = gdk_device_win32_set_window_cursor;
-  device_class->warp = gdk_device_win32_warp;
-  device_class->query_state = gdk_device_win32_query_state;
-  device_class->grab = gdk_device_win32_grab;
-  device_class->ungrab = gdk_device_win32_ungrab;
-  device_class->window_at_position = _gdk_device_win32_window_at_position;
-  device_class->select_window_events = gdk_device_win32_select_window_events;
-}
-
-static void
-gdk_device_win32_init (GdkDeviceWin32 *device_win32)
-{
-  GdkDevice *device;
-
-  device = GDK_DEVICE (device_win32);
-
-  _gdk_device_add_axis (device, GDK_NONE, GDK_AXIS_X, 0, 0, 1);
-  _gdk_device_add_axis (device, GDK_NONE, GDK_AXIS_Y, 0, 0, 1);
-}
 
 static gboolean
 gdk_device_win32_get_history (GdkDevice      *device,
@@ -343,4 +276,31 @@ gdk_device_win32_select_window_events (GdkDevice    *device,
                                        GdkWindow    *window,
                                        GdkEventMask  event_mask)
 {
+}
+
+static void
+gdk_device_win32_class_init (GdkDeviceWin32Class *klass)
+{
+  GdkDeviceClass *device_class = GDK_DEVICE_CLASS (klass);
+
+  device_class->get_history = gdk_device_win32_get_history;
+  device_class->get_state = gdk_device_win32_get_state;
+  device_class->set_window_cursor = gdk_device_win32_set_window_cursor;
+  device_class->warp = gdk_device_win32_warp;
+  device_class->query_state = gdk_device_win32_query_state;
+  device_class->grab = gdk_device_win32_grab;
+  device_class->ungrab = gdk_device_win32_ungrab;
+  device_class->window_at_position = _gdk_device_win32_window_at_position;
+  device_class->select_window_events = gdk_device_win32_select_window_events;
+}
+
+static void
+gdk_device_win32_init (GdkDeviceWin32 *device_win32)
+{
+  GdkDevice *device;
+
+  device = GDK_DEVICE (device_win32);
+
+  _gdk_device_add_axis (device, GDK_NONE, GDK_AXIS_X, 0, 0, 1);
+  _gdk_device_add_axis (device, GDK_NONE, GDK_AXIS_Y, 0, 0, 1);
 }
