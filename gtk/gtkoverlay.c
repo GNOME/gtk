@@ -868,12 +868,13 @@ void
 gtk_overlay_add_overlay (GtkOverlay *overlay,
                          GtkWidget  *widget)
 {
-  GtkOverlayPrivate *priv = overlay->priv;
+  GtkOverlayPrivate *priv;
   GtkOverlayChild *child;
 
   g_return_if_fail (GTK_IS_OVERLAY (overlay));
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
+  priv = overlay->priv;
   child = g_slice_new0 (GtkOverlayChild);
   child->widget = widget;
 
