@@ -46,8 +46,25 @@
 
 typedef struct _GdkWindowParentPos GdkWindowParentPos;
 
-static void tmp_unset_bg (GdkWindow *window);
-static void tmp_reset_bg (GdkWindow *window);
+static void
+tmp_unset_bg (GdkWindow *window)
+{
+  GdkWindowImplWin32 *impl;
+
+  impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+
+  impl->no_bg = TRUE;
+}
+
+static void
+tmp_reset_bg (GdkWindow *window)
+{
+  GdkWindowImplWin32 *impl;
+
+  impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+
+  impl->no_bg = FALSE;
+}
 
 void
 _gdk_window_move_resize_child (GdkWindow *window,
@@ -119,26 +136,6 @@ _gdk_win32_window_tmp_unset_bg (GdkWindow *window,
       for (l = window->children; l != NULL; l = l->next)
 	_gdk_win32_window_tmp_unset_bg (l->data, TRUE);
     }
-}
-
-static void
-tmp_unset_bg (GdkWindow *window)
-{
-  GdkWindowImplWin32 *impl;
-
-  impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
-
-  impl->no_bg = TRUE;
-}
-
-static void
-tmp_reset_bg (GdkWindow *window)
-{
-  GdkWindowImplWin32 *impl;
-
-  impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
-
-  impl->no_bg = FALSE;
 }
 
 void
