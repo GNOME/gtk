@@ -30,6 +30,7 @@
 #include "gtkcsswidgetnodeprivate.h"
 #include "gtkrenderbackgroundprivate.h"
 #include "gtkrenderborderprivate.h"
+#include "gtkdebug.h"
 
 /*
  * Gadgets are 'next-generation widgets' - they combine a CSS node
@@ -696,8 +697,8 @@ gtk_css_gadget_draw (GtkCssGadget *gadget,
   if (!gtk_css_gadget_get_visible (gadget))
     return;
 
-  x =  priv->allocated_size.x;
-  y =  priv->allocated_size.y;
+  x = priv->allocated_size.x;
+  y = priv->allocated_size.y;
   if (priv->owner && !gtk_widget_get_has_window (priv->owner))
     {
       GtkAllocation widget_alloc;
@@ -746,6 +747,31 @@ gtk_css_gadget_draw (GtkCssGadget *gadget,
                                   y + margin.top,
                                   width - margin.left - margin.right,
                                   height - margin.top - margin.bottom);
+
+#if G_ENABLE_DEBUG
+  if (GTK_DEBUG_CHECK (BASELINES))
+    {
+      int baseline = priv->allocated_baseline;
+
+      if (baseline != -1)
+        {
+          if (priv->owner && !gtk_widget_get_has_window (priv->owner))
+            {
+              GtkAllocation widget_alloc;
+              gtk_widget_get_allocation (priv->owner, &widget_alloc);
+              baseline -= widget_alloc.y;
+            }
+          cairo_save (cr);
+          cairo_new_path (cr);
+          cairo_move_to (cr, x + margin.left, priv->allocated_baseline + 0.5);
+          cairo_rel_line_to (cr, width - margin.left - margin.right, 0);
+          cairo_set_line_width (cr, 1.0);
+          cairo_set_source_rgba (cr, 1.0, 0, 0.25, 0.25);
+          cairo_stroke (cr);
+          cairo_restore (cr);
+        }
+    }
+#endif
 }
 
 void
