@@ -223,10 +223,10 @@ gtk_box_gadget_measure_opposite (GtkCssGadget   *gadget,
 
       if (child_min_baseline >= 0)
         {
-          above_min = MAX (above_min, child_min - child_min_baseline);
-          below_min = MAX (below_min, child_min_baseline);
-          above_nat = MAX (above_nat, child_nat - child_nat_baseline);
-          below_nat = MAX (below_nat, child_nat_baseline);
+          below_min = MAX (below_min, child_min - child_min_baseline);
+          above_min = MAX (above_min, child_min_baseline);
+          below_nat = MAX (below_nat, child_nat - child_nat_baseline);
+          above_nat = MAX (above_nat, child_nat_baseline);
         }
       else
         {
