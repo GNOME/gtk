@@ -314,7 +314,7 @@ gtk_box_gadget_allocate_child (GObject        *child,
               if (minimum_baseline >= 0 && baseline >= 0)
                 {
                   child_allocation.height = MIN(natural, allocation->height);
-                  child_allocation.y = allocation->y + baseline - minimum_baseline;
+                  child_allocation.y = allocation->y + MAX(0, baseline - minimum_baseline);
                   break;
                 }
             case GTK_ALIGN_CENTER:
