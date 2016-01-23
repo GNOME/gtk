@@ -2387,12 +2387,14 @@ gtk_container_class_handle_border_width (GtkContainerClass *klass)
  * @callback: (scope call) (closure callback_data): a callback
  * @callback_data: callback user data
  *
- * Invokes @callback on each child of @container, including children
- * that are considered “internal” (implementation details of the
- * container). “Internal” children generally weren’t added by the user
- * of the container, but were added by the container implementation
- * itself.  Most applications should use gtk_container_foreach(),
- * rather than gtk_container_forall().
+ * Invokes @callback on each direct child of @container, including
+ * children that are considered “internal” (implementation details
+ * of the container). “Internal” children generally weren’t added
+ * by the user of the container, but were added by the container
+ * implementation itself.
+ *
+ * Most applications should use gtk_container_foreach(), rather
+ * than gtk_container_forall().
  **/
 void
 gtk_container_forall (GtkContainer *container,
@@ -2416,10 +2418,15 @@ gtk_container_forall (GtkContainer *container,
  * @callback: (scope call):  a callback
  * @callback_data: callback user data
  *
- * Invokes @callback on each non-internal child of @container. See
- * gtk_container_forall() for details on what constitutes an
- * “internal” child.  Most applications should use
- * gtk_container_foreach(), rather than gtk_container_forall().
+ * Invokes @callback on each non-internal child of @container.
+ * See gtk_container_forall() for details on what constitutes
+ * an “internal” child. For all practical purposes, this function
+ * should iterate over precisely those child widgets that were
+ * added to the container by the application with explicit add()
+ * calls.
+ *
+ * Most applications should use gtk_container_foreach(),
+ * rather than gtk_container_forall().
  **/
 void
 gtk_container_foreach (GtkContainer *container,
