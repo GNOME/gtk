@@ -161,8 +161,8 @@
           <object class="GtkSpinButton" id="a_entry">
             <property name="visible">1</property>
             <property name="can_focus">1</property>
-            <property name="invisible_char">•</property>
-            <property name="invisible_char_set">1</property>
+            <property name="width-chars">2</property>
+            <property name="max-width-chars">2</property>
             <property name="climb_rate">1</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="a_entry-atkobject">
@@ -208,8 +208,8 @@
           <object class="GtkSpinButton" id="h_entry">
             <property name="visible">1</property>
             <property name="can_focus">1</property>
-            <property name="invisible_char">•</property>
-            <property name="invisible_char_set">1</property>
+            <property name="width-chars">2</property>
+            <property name="max-width-chars">2</property>
             <property name="climb_rate">1</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="h_entry-atkobject">
@@ -266,7 +266,8 @@
           <object class="GtkSpinButton" id="s_entry">
             <property name="visible">1</property>
             <property name="can_focus">1</property>
-            <property name="invisible_char">•</property>
+            <property name="width-chars">2</property>
+            <property name="max-width-chars">2</property>
             <property name="climb_rate">1</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="s_entry-atkobject">
@@ -284,8 +285,8 @@
           <object class="GtkSpinButton" id="v_entry">
             <property name="visible">1</property>
             <property name="can_focus">1</property>
-            <property name="invisible_char">•</property>
-            <property name="invisible_char_set">1</property>
+            <property name="width-chars">2</property>
+            <property name="max-width-chars">2</property>
             <property name="climb_rate">1</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="v_entry-atkobject">
