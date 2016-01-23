@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkWindow" id="window1">
+    <child>
+      <object class="GtkBox">
+        <property name="visible">1</property>
+        <property name="orientation">horizontal</property>
+        <property name="halign">center</property>
+        <property name="valign">center</property>
+        <property name="spacing">10</property>
+        <child>
+          <object class="GtkEntry" id="entry">
+            <property name="visible">1</property>
+            <property name="valign">start</property>
+            <property name="text">unknown</property>
+            <property name="width-chars">25</property>
+            <property name="max-width-chars">25</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkColorChooserWidget" id="chooser">
+            <property name="visible">1</property>
+            <property name="show-editor">1</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

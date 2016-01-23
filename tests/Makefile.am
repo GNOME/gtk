@@ -57,6 +57,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testcalendar			\
 	testclipboard			\
 	testcolorchooser		\
+	testcolorchooser2		\
 	testcombo			\
 	testcombochange			\
 	testcellrenderertext		\
@@ -214,6 +215,7 @@ testcairo_DEPENDENCIES = $(TEST_DEPS)
 testcalendar_DEPENDENCIES = $(TEST_DEPS)
 testclipboard_DEPENDENCIES = $(TEST_DEPS)
 testcolorchooser_DEPENDENCIES = $(TEST_DEPS)
+testcolorchooser2_DEPENDENCIES = $(TEST_DEPS)
 testcombo_DEPENDENCIES = $(TEST_DEPS)
 testcombochange_DEPENDENCIES = $(TEST_DEPS)
 testcellrenderertext_DEPENDENCIES = $(TEST_DEPS)
@@ -523,6 +525,8 @@ testpixbuf_color_SOURCES = testpixbuf-color.c
 testpixbuf_save_SOURCES = testpixbuf-save.c
 
 testcolorchooser_SOURCES = testcolorchooser.c
+
+testcolorchooser2_SOURCES = testcolorchooser2.c
 
 testkineticscrolling_SOURCES = testkineticscrolling.c
 
