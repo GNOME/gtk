@@ -217,7 +217,7 @@ gtk_box_gadget_measure_opposite (GtkCssGadget   *gadget,
 
       gtk_box_gadget_measure_child (child->object,
                                     orientation,
-                                    for_size >= 0 ? sizes[i].minimum_size : for_size,
+                                    for_size >= 0 ? sizes[i].minimum_size : -1,
                                     &child_min, &child_nat,
                                     &child_min_baseline, &child_nat_baseline);
 
@@ -269,23 +269,98 @@ gtk_box_gadget_get_preferred_size (GtkCssGadget   *gadget,
 
 static void
 gtk_box_gadget_allocate_child (GObject        *child,
-                               GtkAllocation *allocation,
-                               int            baseline,
-                               GtkAllocation *out_clip)
+                               GtkOrientation  box_orientation,
+                               GtkAlign        child_align,
+                               GtkAllocation  *allocation,
+                               int             baseline,
+                               GtkAllocation  *out_clip)
 {
   if (GTK_IS_WIDGET (child))
     {
-      gtk_widget_size_allocate_with_baseline (GTK_WIDGET (child),
-                                              allocation,
-                                              baseline);
+      gtk_widget_size_allocate_with_baseline (GTK_WIDGET (child), allocation, baseline);
       gtk_widget_get_clip (GTK_WIDGET (child), out_clip);
     }
   else
     {
-      gtk_css_gadget_allocate (GTK_CSS_GADGET (child),
-                               allocation,
-                               baseline,
-                               out_clip);
+      GtkAllocation child_allocation;
+      int minimum, natural;
+      int minimum_baseline, natural_baseline;
+
+      if (box_orientation == GTK_ORIENTATION_HORIZONTAL)
+        {
+          child_allocation.width = allocation->width;
+          child_allocation.x = allocation->x;
+
+          gtk_css_gadget_get_preferred_size (GTK_CSS_GADGET (child),
+                                             GTK_ORIENTATION_VERTICAL,
+                                             allocation->width,
+                                             &minimum, &natural,
+                                             &minimum_baseline, &natural_baseline);
+          switch (child_align)
+            {
+            case GTK_ALIGN_FILL:
+              child_allocation.height = allocation->height;
+              child_allocation.y = allocation->y;
+              break;
+            case GTK_ALIGN_START:
+              child_allocation.height = MIN(natural, allocation->height);
+              child_allocation.y = allocation->y;
+              break;
+            case GTK_ALIGN_END:
+              child_allocation.height = MIN(natural, allocation->height);
+              child_allocation.y = allocation->y + allocation->height - child_allocation.height;
+              break;
+            case GTK_ALIGN_BASELINE:
+              if (minimum_baseline >= 0 && baseline >= 0)
+                {
+                  child_allocation.height = MIN(natural, allocation->height);
+                  child_allocation.y = allocation->y + baseline - minimum_baseline;
+                  break;
+                }
+            case GTK_ALIGN_CENTER:
+              child_allocation.height = MIN(natural, allocation->height);
+              child_allocation.y = allocation->y + (allocation->height - child_allocation.height) / 2;
+              break;
+            default:
+              g_assert_not_reached ();
+            }
+        }
+      else
+        {
+          child_allocation.height = allocation->height;
+          child_allocation.y = allocation->y;
+
+          gtk_css_gadget_get_preferred_size (GTK_CSS_GADGET (child),
+                                             GTK_ORIENTATION_HORIZONTAL,
+                                             allocation->height,
+                                             &minimum, &natural,
+                                             NULL, NULL);
+
+          switch (child_align)
+            {
+            case GTK_ALIGN_FILL:
+              child_allocation.width = allocation->width;
+              child_allocation.x = allocation->x;
+              break;
+            case GTK_ALIGN_START:
+              child_allocation.width = MIN(natural, allocation->width);
+              child_allocation.x = allocation->x;
+              break;
+            case GTK_ALIGN_END:
+              child_allocation.width = MIN(natural, allocation->width);
+              child_allocation.x = allocation->x + allocation->width - child_allocation.width;
+              break;
+            case GTK_ALIGN_BASELINE:
+            case GTK_ALIGN_CENTER:
+              child_allocation.width = MIN(natural, allocation->width);
+              child_allocation.x = allocation->x + (allocation->width - child_allocation.width) / 2;
+              break;
+            default:
+              g_assert_not_reached ();
+            }
+        }
+
+      gtk_css_gadget_allocate (GTK_CSS_GADGET (child), &child_allocation, baseline, out_clip);
     }
 }
 
@@ -298,6 +373,7 @@ gtk_box_gadget_allocate (GtkCssGadget        *gadget,
   GtkBoxGadgetPrivate *priv = gtk_box_gadget_get_instance_private (GTK_BOX_GADGET (gadget));
   GtkRequestedSize *sizes;
   GtkAllocation child_allocation, child_clip;
+  GtkAlign child_align;
   guint i;
 
   child_allocation = *allocation;
@@ -331,49 +407,23 @@ gtk_box_gadget_allocate (GtkCssGadget        *gadget,
       for (i = 0; i < priv->children->len; i++)
         {
           GtkBoxGadgetChild *child = &g_array_index (priv->children, GtkBoxGadgetChild, i);
-          gint child_min, child_nat;
-          gint child_baseline_min, child_baseline_nat;
-
           child_allocation.width = sizes[i].minimum_size;
-          gtk_box_gadget_measure_child (child->object,
-                                        GTK_ORIENTATION_VERTICAL,
-                                        child_allocation.width,
-                                        &child_min, &child_nat,
-                                        &child_baseline_min, &child_baseline_nat);
-          switch (gtk_box_gadget_child_get_align (GTK_BOX_GADGET (gadget), child))
-            {
-            case GTK_ALIGN_FILL:
-              child_allocation.height = allocation->height;
-              child_allocation.y = allocation->y;
-              break;
-            case GTK_ALIGN_START:
-              child_allocation.height = MIN(child_nat, allocation->height);
-              child_allocation.y = allocation->y;
-              break;
-            case GTK_ALIGN_END:
-              child_allocation.height = MIN(child_nat, allocation->height);
-              child_allocation.y = allocation->y + allocation->height - child_allocation.height;
-              break;
-            case GTK_ALIGN_BASELINE:
-              if (child_baseline_min >= 0 && baseline >= 0)
-                {
-                  child_allocation.height = MIN(child_nat, allocation->height);
-                  child_allocation.y = allocation->y + baseline - child_baseline_min;
-                  break;
-                }
-            case GTK_ALIGN_CENTER:
-              child_allocation.height = MIN(child_nat, allocation->height);
-              child_allocation.y = allocation->y + (allocation->height - child_allocation.height) / 2;
-              break;
-            default:
-              g_assert_not_reached ();
-            }
+          child_allocation.height = allocation->height;
+          child_allocation.y = allocation->y;
 
-          gtk_box_gadget_allocate_child (child->object, &child_allocation, baseline, &child_clip);
+          child_align = gtk_box_gadget_child_get_align (GTK_BOX_GADGET (gadget), child);
+          gtk_box_gadget_allocate_child (child->object,
+                                         priv->orientation,
+                                         child_align,
+                                         &child_allocation,
+                                         baseline,
+                                         &child_clip);
+
           if (i == 0)
             *out_clip = child_clip;
           else
             gdk_rectangle_union (out_clip, &child_clip, out_clip);
+
           child_allocation.x += sizes[i].minimum_size;
         }
     }
@@ -384,43 +434,23 @@ gtk_box_gadget_allocate (GtkCssGadget        *gadget,
       for (i = 0 ; i < priv->children->len; i++)
         {
           GtkBoxGadgetChild *child = &g_array_index (priv->children, GtkBoxGadgetChild, i);
-          gint child_min, child_nat;
-
           child_allocation.height = sizes[i].minimum_size;
-          gtk_box_gadget_measure_child (child->object,
-                                        GTK_ORIENTATION_HORIZONTAL,
-                                        child_allocation.height,
-                                        &child_min, &child_nat,
-                                        NULL, NULL);
+          child_allocation.width = allocation->width;
+          child_allocation.x = allocation->x;
 
-          switch (gtk_box_gadget_child_get_align (GTK_BOX_GADGET (gadget), child))
-            {
-            case GTK_ALIGN_FILL:
-              child_allocation.width = allocation->width;
-              child_allocation.x = allocation->x;
-              break;
-            case GTK_ALIGN_START:
-              child_allocation.width = MIN(child_nat, allocation->width);
-              child_allocation.x = allocation->x;
-              break;
-            case GTK_ALIGN_END:
-              child_allocation.width = MIN(child_nat, allocation->width);
-              child_allocation.x = allocation->x + allocation->width - child_allocation.width;
-              break;
-            case GTK_ALIGN_BASELINE:
-            case GTK_ALIGN_CENTER:
-              child_allocation.width = MIN(child_nat, allocation->width);
-              child_allocation.x = allocation->x + (allocation->width - child_allocation.width) / 2;
-              break;
-            default:
-              g_assert_not_reached ();
-            }
+          child_align = gtk_box_gadget_child_get_align (GTK_BOX_GADGET (gadget), child);
+          gtk_box_gadget_allocate_child (child->object,
+                                         priv->orientation,
+                                         child_align,
+                                         &child_allocation,
+                                         -1,
+                                         &child_clip);
 
-          gtk_box_gadget_allocate_child (child->object, &child_allocation, -1, &child_clip);
           if (i == 0)
             *out_clip = child_clip;
           else
             gdk_rectangle_union (out_clip, &child_clip, out_clip);
+
           child_allocation.y += sizes[i].minimum_size;
         }
     }
