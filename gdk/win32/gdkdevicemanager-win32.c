@@ -66,28 +66,7 @@ static t_WTOverlap p_WTOverlap;
 static t_WTPacket p_WTPacket;
 static t_WTQueueSizeSet p_WTQueueSizeSet;
 
-
-static void    gdk_device_manager_win32_finalize    (GObject *object);
-static void    gdk_device_manager_win32_constructed (GObject *object);
-
-static GList * gdk_device_manager_win32_list_devices (GdkDeviceManager *device_manager,
-                                                      GdkDeviceType     type);
-static GdkDevice * gdk_device_manager_win32_get_client_pointer (GdkDeviceManager *device_manager);
-
-
 G_DEFINE_TYPE (GdkDeviceManagerWin32, gdk_device_manager_win32, GDK_TYPE_DEVICE_MANAGER)
-
-static void
-gdk_device_manager_win32_class_init (GdkDeviceManagerWin32Class *klass)
-{
-  GdkDeviceManagerClass *device_manager_class = GDK_DEVICE_MANAGER_CLASS (klass);
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  object_class->finalize = gdk_device_manager_win32_finalize;
-  object_class->constructed = gdk_device_manager_win32_constructed;
-  device_manager_class->list_devices = gdk_device_manager_win32_list_devices;
-  device_manager_class->get_client_pointer = gdk_device_manager_win32_get_client_pointer;
-}
 
 static GdkDevice *
 create_pointer (GdkDeviceManager *device_manager,
@@ -791,6 +770,18 @@ gdk_device_manager_win32_get_client_pointer (GdkDeviceManager *device_manager)
 
   device_manager_win32 = (GdkDeviceManagerWin32 *) device_manager;
   return device_manager_win32->core_pointer;
+}
+
+static void
+gdk_device_manager_win32_class_init (GdkDeviceManagerWin32Class *klass)
+{
+  GdkDeviceManagerClass *device_manager_class = GDK_DEVICE_MANAGER_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->finalize = gdk_device_manager_win32_finalize;
+  object_class->constructed = gdk_device_manager_win32_constructed;
+  device_manager_class->list_devices = gdk_device_manager_win32_list_devices;
+  device_manager_class->get_client_pointer = gdk_device_manager_win32_get_client_pointer;
 }
 
 void
