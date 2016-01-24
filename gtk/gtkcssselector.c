@@ -726,11 +726,8 @@ comp_id (const GtkCssSelector *a,
 
 DEFINE_SIMPLE_SELECTOR(id, ID, print_id, match_id, hash_id, comp_id, TRUE, FALSE, FALSE)
 
-/* PSEUDOCLASS FOR STATE */
-
-static void
-print_pseudoclass_state (const GtkCssSelector *selector,
-                         GString              *string)
+const gchar *
+gtk_css_pseudoclass_name (GtkStateFlags state)
 {
   static const char * state_names[] = {
     "active",
@@ -749,18 +746,22 @@ print_pseudoclass_state (const GtkCssSelector *selector,
   };
   guint i;
 
-  g_string_append_c (string, ':');
-
   for (i = 0; i < G_N_ELEMENTS (state_names); i++)
     {
-      if (selector->state.state == (1 << i))
-        {
-          g_string_append (string, state_names[i]);
-          return;
-        }
+      if (state == (1 << i))
+        return state_names[i];
     }
 
-  g_assert_not_reached ();
+  return NULL;
+}
+
+/* PSEUDOCLASS FOR STATE */
+static void
+print_pseudoclass_state (const GtkCssSelector *selector,
+                         GString              *string)
+{
+  g_string_append_c (string, ':');
+  g_string_append (string, gtk_css_pseudoclass_name (selector->state.state));
 }
 
 static gboolean
