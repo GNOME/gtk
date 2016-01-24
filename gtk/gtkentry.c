@@ -6505,22 +6505,18 @@ gtk_entry_draw_text (GtkEntry *entry,
 
   if (gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &start_pos, &end_pos))
     {
-      gint *ranges;
-      gint n_ranges, i;
-      PangoRectangle logical_rect;
-      GdkRGBA text_color;
-      GtkStyleContext *context;
+      cairo_region_t *clip;
+      gint range[2];
 
-      context = gtk_widget_get_style_context (GTK_WIDGET (entry));
+      range[0] = MIN (start_pos, end_pos);
+      range[1] = MAX (start_pos, end_pos);
+
       gtk_style_context_save_to_node (context, priv->selection_node);
 
-      pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
-      gtk_entry_get_pixel_ranges (entry, &ranges, &n_ranges);
-      for (i = 0; i < n_ranges; ++i)
-        cairo_rectangle (cr,
-                         - priv->scroll_offset + ranges[2 * i], y,
-			 ranges[2 * i + 1], logical_rect.height);
+      clip = gdk_pango_layout_get_clip_region (layout, x, y, range, 1);
+      gdk_cairo_region (cr, clip);
       cairo_clip (cr);
+      cairo_region_destroy (clip);
 
       gtk_render_background (context, cr,
                              0, 0,
@@ -6531,7 +6527,6 @@ gtk_entry_draw_text (GtkEntry *entry,
       gdk_cairo_set_source_rgba (cr, &text_color);
       pango_cairo_show_layout (cr, layout);
 
-      g_free (ranges);
       gtk_style_context_restore (context);
     }
 
