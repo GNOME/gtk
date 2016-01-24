@@ -3769,10 +3769,9 @@ microphone-sensitivity-medium-symbolic</property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkSpinner">
+                      <object class="GtkColorChooserWidget" id="cchooser">
                         <property name="visible">1</property>
-                        <property name="active">1</property>
-                        <property name="expand">1</property>
+                        <property name="show-editor">1</property>
                       </object>
                     </child>
                   </object>

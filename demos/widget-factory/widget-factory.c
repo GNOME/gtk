@@ -786,10 +786,39 @@ overshot (GtkScrolledWindow *sw, GtkPositionType pos, GtkWidget *widget)
   row = gtk_widget_get_parent (row);
   gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
   g_object_set_data (G_OBJECT (widget), color, row);
+  g_object_set_data (G_OBJECT (row), "color", (gpointer)color);
 }
 
 static void
-populate_colors (GtkWidget *widget)
+rgba_changed (GtkColorChooser *chooser, GParamSpec *pspec, GtkListBox *box)
+{
+  gtk_list_box_select_row (box, NULL);
+}
+
+static void
+set_color (GtkListBox *box, GtkListBoxRow *row, GtkColorChooser *chooser)
+{
+  const char *color;
+  GdkRGBA rgba;
+
+  if (!row)
+    return;
+
+  color = (const char *)g_object_get_data (G_OBJECT (row), "color");
+
+  if (!color)
+    return;
+
+  if (gdk_rgba_parse (&rgba, color))
+    {
+      g_signal_handlers_block_by_func (chooser, rgba_changed, box);
+      gtk_color_chooser_set_rgba (chooser, &rgba);
+      g_signal_handlers_unblock_by_func (chooser, rgba_changed, box);
+    }
+}
+
+static void
+populate_colors (GtkWidget *widget, GtkWidget *chooser)
 {
   struct { const gchar *name; const gchar *color; const gchar *title; } colors[] = {
     { "2.5", "#C8828C", "Red" },
@@ -867,9 +896,12 @@ populate_colors (GtkWidget *widget)
       gtk_list_box_insert (GTK_LIST_BOX (widget), row, -1);
       row = gtk_widget_get_parent (row);
       gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
+      g_object_set_data (G_OBJECT (row), "color", (gpointer)colors[i].color);
       if (colors[i].title)
         g_object_set_data (G_OBJECT (row), "title", (gpointer)colors[i].title);
     }
+
+  g_signal_connect (widget, "row-selected", G_CALLBACK (set_color), chooser);
 
   gtk_list_box_invalidate_headers (GTK_LIST_BOX (widget));
 
@@ -1626,7 +1658,11 @@ activate (GApplication *app)
   gtk_tree_view_set_row_separator_func (GTK_TREE_VIEW (widget), row_separator_func, NULL, NULL);
   gtk_tree_view_expand_all (GTK_TREE_VIEW (widget));
 
-  populate_colors ((GtkWidget *)gtk_builder_get_object (builder, "munsell"));
+  widget = GTK_WIDGET (gtk_builder_get_object (builder, "munsell"));
+  widget2 = GTK_WIDGET (gtk_builder_get_object (builder, "cchooser"));
+
+  populate_colors (widget, widget2);
+  g_signal_connect (widget2, "notify::rgba", G_CALLBACK (rgba_changed), widget);
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "page_combo");
   gtk_combo_box_set_row_separator_func (GTK_COMBO_BOX (widget), page_combo_separator_func, NULL, NULL);
