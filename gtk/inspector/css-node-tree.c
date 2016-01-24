@@ -637,10 +637,10 @@ gtk_inspector_css_node_tree_set_node (GtkInspectorCssNodeTree *cnt,
             g_string_append (s, " ");
           g_string_append (s, strv[i]);
         }
-      g_strfreev (strv);
     }
 
   gtk_label_set_label (GTK_LABEL (cnt->priv->css_node_info), s->str);
+  g_strfreev (strv);
   g_string_free (s, TRUE);
 }
 

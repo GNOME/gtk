@@ -218,6 +218,8 @@ fill_gtk (const gchar *path,
 
       g_free (filename);
     }
+
+  g_dir_close (dir);
 }
 
 static gchar*
@@ -324,6 +326,8 @@ fill_icons (const gchar *path,
 
       g_free (filename);
     }
+
+  g_dir_close (dir);
 }
 
 static void
@@ -384,6 +388,8 @@ fill_cursors (const gchar *path,
 
       g_free (filename);
     }
+
+  g_dir_close (dir);
 }
 
 static void
