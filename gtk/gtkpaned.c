@@ -1921,6 +1921,7 @@ gtk_paned_init (GtkPaned *paned)
   priv->in_recursion = FALSE;
   priv->handle_prelit = FALSE;
   priv->original_position = -1;
+  priv->max_position = G_MAXINT;
 
   priv->handle_pos.x = -1;
   priv->handle_pos.y = -1;
