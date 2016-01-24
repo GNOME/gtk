@@ -526,7 +526,7 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
   GList *list, *first_button;
   gint width;
   gint allocation_width;
-  gboolean need_sliders = FALSE;
+  gboolean need_sliders = TRUE;
   gint up_slider_offset = 0;
   gint down_slider_offset = 0;
   GtkRequisition child_requisition;
@@ -584,7 +584,7 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
       else
 	first_button = path_bar->priv->button_list;
       need_sliders = TRUE;
-      
+
       /* To see how much space we have, and how many buttons we can display.
        * We start at the first button, count forward until hit the new
        * button, then count backwards.
@@ -742,7 +742,7 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
       needs_reorder |= gtk_widget_get_child_visible (path_bar->priv->up_slider_button) == TRUE;
       gtk_widget_set_child_visible (path_bar->priv->up_slider_button, FALSE);
     }
-      
+
   if (need_sliders)
     {
       child_allocation.width = path_bar->priv->slider_width;
