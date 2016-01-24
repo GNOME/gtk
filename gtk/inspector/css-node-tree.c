@@ -36,6 +36,7 @@
 #include "gtkcsssectionprivate.h"
 #include "gtkcssstyleprivate.h"
 #include "gtkcssvalueprivate.h"
+#include "gtkcssselectorprivate.h"
 #include "gtkliststore.h"
 #include "gtksettings.h"
 #include "gtktreeview.h"
@@ -374,30 +375,28 @@ strv_sort (char **strv)
 static gchar *
 format_state_flags (GtkStateFlags state)
 {
-  GFlagsClass *fclass;
-  GString *str;
-  gint i;
-
-  str = g_string_new ("");
-
   if (state)
     {
-      fclass = g_type_class_ref (GTK_TYPE_STATE_FLAGS);
-      for (i = 0; i < fclass->n_values; i++)
+      GString *str;
+      gint i;
+      gboolean first = TRUE;
+
+      str = g_string_new ("");
+
+      for (i = 0; i < 31; i++)
         {
-          if (state & fclass->values[i].value)
+          if (state & (1 << i))
             {
-              if (str->len)
+              if (!first)
                 g_string_append (str, " | ");
-              g_string_append (str, fclass->values[i].value_nick);
+              first = FALSE;
+              g_string_append (str, gtk_css_pseudoclass_name (1 << i));
             }
         }
-      g_type_class_unref (fclass);
+      return g_string_free (str, FALSE);
     }
-  else
-    g_string_append (str, "normal");
 
-  return g_string_free (str, FALSE);
+ return "";
 }
 
 static void
