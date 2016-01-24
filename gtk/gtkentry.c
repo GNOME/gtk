@@ -6467,7 +6467,6 @@ gtk_entry_draw_text (GtkEntry *entry,
 {
   GtkEntryPrivate *priv = entry->priv;
   GtkWidget *widget = GTK_WIDGET (entry);
-  GdkRGBA text_color;
   GtkStyleContext *context;
   PangoLayout *layout;
   gint x, y;
@@ -6482,10 +6481,6 @@ gtk_entry_draw_text (GtkEntry *entry,
   gtk_widget_get_allocation (GTK_WIDGET (entry), &allocation);
   layout = gtk_entry_ensure_layout (entry, TRUE);
 
-  gtk_style_context_get_color (context,
-                               gtk_style_context_get_state (context),
-                               &text_color);
-
   cairo_save (cr);
 
   cairo_rectangle (cr,
@@ -6499,9 +6494,7 @@ gtk_entry_draw_text (GtkEntry *entry,
   if (show_placeholder_text (entry))
     pango_layout_set_width (layout, PANGO_SCALE * gdk_window_get_width (entry->priv->text_area));
 
-  cairo_move_to (cr, x, y);
-  gdk_cairo_set_source_rgba (cr, &text_color);
-  pango_cairo_show_layout (cr, layout);
+  gtk_render_layout (context, cr, x, y, layout);
 
   if (gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &start_pos, &end_pos))
     {
@@ -6522,10 +6515,7 @@ gtk_entry_draw_text (GtkEntry *entry,
                              0, 0,
                              allocation.width, allocation.height);
 
-      cairo_move_to (cr, x, y);
-      gtk_style_context_get_color (context, gtk_style_context_get_state (context), &text_color);
-      gdk_cairo_set_source_rgba (cr, &text_color);
-      pango_cairo_show_layout (cr, layout);
+      gtk_render_layout (context, cr, x, y, layout);
 
       gtk_style_context_restore (context);
     }
