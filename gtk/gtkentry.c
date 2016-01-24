@@ -6462,19 +6462,37 @@ get_layout_position (GtkEntry *entry,
 }
 
 static void
-draw_text_with_color (GtkEntry *entry,
-                      cairo_t  *cr,
-                      GdkRGBA  *default_color)
+gtk_entry_draw_text (GtkEntry *entry,
+                     cairo_t  *cr)
 {
   GtkEntryPrivate *priv = entry->priv;
-  PangoLayout *layout = gtk_entry_ensure_layout (entry, TRUE);
+  GtkWidget *widget = GTK_WIDGET (entry);
+  GdkRGBA text_color;
+  GtkStyleContext *context;
+  PangoLayout *layout;
   gint x, y;
   gint start_pos, end_pos;
   GtkAllocation allocation;
 
+  /* Nothing to display at all */
+  if (gtk_entry_get_display_mode (entry) == DISPLAY_BLANK)
+    return;
+
+  context = gtk_widget_get_style_context (widget);
+  gtk_widget_get_allocation (GTK_WIDGET (entry), &allocation);
+  layout = gtk_entry_ensure_layout (entry, TRUE);
+
+  gtk_style_context_get_color (context,
+                               gtk_style_context_get_state (context),
+                               &text_color);
+
   cairo_save (cr);
 
-  gtk_widget_get_allocation (GTK_WIDGET (entry), &allocation);
+  cairo_rectangle (cr,
+                   0, 0,
+                   gdk_window_get_width (priv->text_area),
+                   gdk_window_get_height (priv->text_area));
+  cairo_clip (cr);
 
   get_layout_position (entry, &x, &y);
 
@@ -6482,7 +6500,7 @@ draw_text_with_color (GtkEntry *entry,
     pango_layout_set_width (layout, PANGO_SCALE * gdk_window_get_width (entry->priv->text_area));
 
   cairo_move_to (cr, x, y);
-  gdk_cairo_set_source_rgba (cr, default_color);
+  gdk_cairo_set_source_rgba (cr, &text_color);
   pango_cairo_show_layout (cr, layout);
 
   if (gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &start_pos, &end_pos))
@@ -6516,37 +6534,6 @@ draw_text_with_color (GtkEntry *entry,
       g_free (ranges);
       gtk_style_context_restore (context);
     }
-  cairo_restore (cr);
-}
-
-static void
-gtk_entry_draw_text (GtkEntry *entry,
-                     cairo_t  *cr)
-{
-  GtkEntryPrivate *priv = entry->priv;
-  GtkWidget *widget = GTK_WIDGET (entry);
-  GdkRGBA text_color;
-  GtkStyleContext *context;
-
-  /* Nothing to display at all */
-  if (gtk_entry_get_display_mode (entry) == DISPLAY_BLANK)
-    return;
-
-  context = gtk_widget_get_style_context (widget);
-
-  gtk_style_context_get_color (context,
-                               gtk_style_context_get_state (context),
-                               &text_color);
-
-  cairo_save (cr);
-
-  cairo_rectangle (cr,
-                   0, 0,
-                   gdk_window_get_width (priv->text_area),
-                   gdk_window_get_height (priv->text_area));
-  cairo_clip (cr);
-
-  draw_text_with_color (entry, cr, &text_color);
 
   cairo_restore (cr);
 }
