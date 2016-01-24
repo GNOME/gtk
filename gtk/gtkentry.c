@@ -6526,11 +6526,7 @@ gtk_entry_draw_text (GtkEntry *entry,
   GtkEntryPrivate *priv = entry->priv;
   GtkWidget *widget = GTK_WIDGET (entry);
   GdkRGBA text_color;
-  GdkRGBA bar_text_color = { 0 };
   GtkStyleContext *context;
-  gint width, height;
-  gint progress_x, progress_y, progress_width, progress_height;
-  gint clip_width, clip_height;
 
   /* Nothing to display at all */
   if (gtk_entry_get_display_mode (entry) == DISPLAY_BLANK)
@@ -6542,72 +6538,15 @@ gtk_entry_draw_text (GtkEntry *entry,
                                gtk_style_context_get_state (context),
                                &text_color);
 
-  /* Get foreground color for progressbars */
-  if (priv->progress_node)
-    {
-      gtk_style_context_save_to_node (context, priv->progress_node);
-      gtk_style_context_get_color (context,
-                                   gtk_style_context_get_state (context),
-                                   &bar_text_color);
-      gtk_style_context_restore (context);
-    }
-
-  get_progress_area (widget,
-                     &progress_x, &progress_y,
-                     &progress_width, &progress_height);
-
   cairo_save (cr);
 
-  clip_width = gdk_window_get_width (priv->text_area);
-  clip_height = gdk_window_get_height (priv->text_area);
-  cairo_rectangle (cr, 0, 0, clip_width, clip_height);
+  cairo_rectangle (cr,
+                   0, 0,
+                   gdk_window_get_width (priv->text_area),
+                   gdk_window_get_height (priv->text_area));
   cairo_clip (cr);
 
-  /* If the color is the same, or the progress area has a zero
-   * size, then we only need to draw once.
-   */
-  if (progress_width == 0 || progress_height == 0 ||
-      gdk_rgba_equal (&text_color, &bar_text_color))
-    {
-      draw_text_with_color (entry, cr, &text_color);
-    }
-  else
-    {
-      int frame_x, frame_y, area_x, area_y;
-
-      width = gdk_window_get_width (priv->text_area);
-      height = gdk_window_get_height (priv->text_area);
-
-      cairo_save (cr);
-
-      cairo_set_fill_rule (cr, CAIRO_FILL_RULE_EVEN_ODD);
-      cairo_rectangle (cr, 0, 0, width, height);
-
-      /* progres area is frame-relative, we need it text-area window
-       * relative */
-      get_frame_size (entry, TRUE, &frame_x, &frame_y, NULL, NULL);
-      gdk_window_get_position (priv->text_area, &area_x, &area_y);
-      progress_x += frame_x - area_x;
-      progress_y += frame_y - area_y;
-
-      cairo_rectangle (cr, progress_x, progress_y,
-                       progress_width, progress_height);
-      cairo_clip (cr);
-      cairo_set_fill_rule (cr, CAIRO_FILL_RULE_WINDING);
-
-      draw_text_with_color (entry, cr, &text_color);
-      cairo_restore (cr);
-
-      cairo_save (cr);
-
-      cairo_rectangle (cr, progress_x, progress_y,
-                       progress_width, progress_height);
-      cairo_clip (cr);
-
-      draw_text_with_color (entry, cr, &bar_text_color);
-
-      cairo_restore (cr);
-    }
+  draw_text_with_color (entry, cr, &text_color);
 
   cairo_restore (cr);
 }
