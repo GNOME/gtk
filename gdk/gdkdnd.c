@@ -272,6 +272,7 @@ gdk_drag_context_class_init (GdkDragContextClass *klass)
 
   /**
    * GdkDragContext::cancel:
+   * @context: The object on which the signal is emitted
    *
    * The drag and drop operation was cancelled.
    *
@@ -292,6 +293,7 @@ gdk_drag_context_class_init (GdkDragContextClass *klass)
 
   /**
    * GdkDragContext::drop-performed:
+   * @context: The object on which the signal is emitted
    * @time: the time at which the drop happened.
    *
    * The drag and drop operation was performed on an accepting client.
@@ -313,6 +315,7 @@ gdk_drag_context_class_init (GdkDragContextClass *klass)
 
   /**
    * GdkDragContext::dnd-finished:
+   * @context: The object on which the signal is emitted
    *
    * The drag and drop operation was finished, the drag destination
    * finished reading all data. The drag source can now free all
@@ -335,6 +338,7 @@ gdk_drag_context_class_init (GdkDragContextClass *klass)
 
   /**
    * GdkDragContext::action-changed:
+   * @context: The object on which the signal is emitted
    * @action: The action currently chosen
    *
    * A new action is being chosen for the drag and drop operation.
