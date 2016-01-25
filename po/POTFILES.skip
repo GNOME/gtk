@@ -32,7 +32,7 @@ demos/gtk-demo/spinbutton.ui
 demos/gtk-demo/spinner.c
 demos/gtk-demo/stack.ui
 demos/gtk-demo/theming.ui
-demos/icon-browser/app-menu.ui
+demos/icon-browser/menus.ui
 demos/icon-browser/window.ui
 demos/widget-factory/menus.ui
 demos/widget-factory/widget-factory.c
@@ -87,9 +87,17 @@ testsuite/a11y/placeholder-text.ui
 testsuite/a11y/stack.ui
 testsuite/css/nodes/buttons.ui
 testsuite/css/nodes/entries.ui
+testsuite/css/nodes/notebook.bottom.ltr.ui
+testsuite/css/nodes/notebook.bottom.rtl.ui
 testsuite/css/nodes/notebook.bottom.ui
+testsuite/css/nodes/notebook.left.ltr.ui
+testsuite/css/nodes/notebook.left.rtl.ui
 testsuite/css/nodes/notebook.left.ui
+testsuite/css/nodes/notebook.right.ltr.ui
+testsuite/css/nodes/notebook.right.rtl.ui
 testsuite/css/nodes/notebook.right.ui
+testsuite/css/nodes/notebook.top.ltr.ui
+testsuite/css/nodes/notebook.top.rtl.ui
 testsuite/css/nodes/notebook.top.ui
 testsuite/css/nodes/notebook.ui
 testsuite/css/style/adjacent-states.ui
