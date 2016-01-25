@@ -3698,29 +3698,16 @@ static void
 gtk_entry_size_allocate (GtkWidget     *widget,
 			 GtkAllocation *allocation)
 {
-  GtkEntry *entry = GTK_ENTRY (widget);
   GdkRectangle clip;
 
   gtk_widget_set_allocation (widget, allocation);
 
-  gtk_css_gadget_allocate (entry->priv->gadget,
+  gtk_css_gadget_allocate (GTK_ENTRY (widget)->priv->gadget,
                            allocation,
                            gtk_widget_get_allocated_baseline (widget),
                            &clip);
 
   gtk_widget_set_clip (widget, &clip);
-
-  if (gtk_widget_get_realized (widget))
-    {
-      GtkEntryCompletion *completion;
-
-      place_windows (entry);
-      gtk_entry_recompute (entry);
-
-      completion = gtk_entry_get_completion (entry);
-      if (completion)
-        _gtk_entry_completion_resize_popup (completion);
-    }
 }
 
 static void
@@ -3730,12 +3717,14 @@ gtk_entry_allocate (GtkCssGadget        *gadget,
                     GtkAllocation       *out_clip,
                     gpointer             data)
 {
+  GtkEntry *entry;
   GtkWidget *widget;
   GtkEntryPrivate *priv;
   gint i;
 
   widget = gtk_css_gadget_get_owner (gadget);
-  priv = GTK_ENTRY (widget)->priv;
+  entry = GTK_ENTRY (widget);
+  priv = entry->priv;
 
   priv->text_allocation = *allocation;
 
@@ -3786,6 +3775,21 @@ gtk_entry_allocate (GtkCssGadget        *gadget,
                                &clip);
 
       gdk_rectangle_union (out_clip, &clip, out_clip);
+    }
+
+  /* Do this here instead of gtk_entry_size_allocate() so it works
+   * inside spinbuttons, which don't chain up.
+   */
+  if (gtk_widget_get_realized (widget))
+    {
+      GtkEntryCompletion *completion;
+
+      place_windows (entry);
+      gtk_entry_recompute (entry);
+
+      completion = gtk_entry_get_completion (entry);
+      if (completion)
+        _gtk_entry_completion_resize_popup (completion);
     }
 }
 
