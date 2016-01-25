@@ -17,7 +17,7 @@ window1
     alpha: 1
     <AtkValue>
     minimum value: 0.000000
-    maximum value: 0.000000
+    maximum value: 2147483647.000000
     current value: 0.000000
     label1
       "label"
