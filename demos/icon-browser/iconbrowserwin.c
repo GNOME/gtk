@@ -840,7 +840,7 @@ icon_browser_window_class_init (IconBrowserWindowClass *class)
   g_type_ensure (ICON_STORE_TYPE);
 
   gtk_widget_class_set_template_from_resource (GTK_WIDGET_CLASS (class),
-                                               "/org/gtk/iconbrowser/window.ui");
+                                               "/org/gtk/iconbrowser/gtk/window.ui");
 
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, context_list);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, filter_model);
