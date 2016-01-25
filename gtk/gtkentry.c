@@ -148,7 +148,6 @@
  * .insertion-cursor.
  */
 
-
 #define MIN_ENTRY_WIDTH  150
 
 #define MAX_ICONS 2
@@ -3509,12 +3508,19 @@ gtk_entry_measure (GtkCssGadget   *gadget,
       char_pixels = (MAX (char_width, digit_width) + PANGO_SCALE - 1) / PANGO_SCALE;
 
       if (priv->width_chars < 0)
-        min = MIN_ENTRY_WIDTH;
+        {
+          if (GTK_IS_SPIN_BUTTON (entry))
+            min = gtk_spin_button_get_text_width (GTK_SPIN_BUTTON (entry));
+          else
+            min = MIN_ENTRY_WIDTH;
+        }
       else
-        min = char_pixels * priv->width_chars;
+        {
+          min = char_pixels * priv->width_chars;
+        }
 
       if (priv->max_width_chars < 0)
-        nat = MIN_ENTRY_WIDTH;
+        nat = min;
       else
         nat = char_pixels * priv->max_width_chars;
 

@@ -1185,6 +1185,36 @@ gtk_spin_button_format_for_value (GtkSpinButton *spin_button,
   return buf;
 }
 
+gint
+gtk_spin_button_get_text_width (GtkSpinButton *spin_button)
+{
+  GtkSpinButtonPrivate *priv = spin_button->priv;
+  gint width, w;
+  PangoLayout *layout;
+  gchar *str;
+
+  layout = pango_layout_copy (gtk_entry_get_layout (GTK_ENTRY (spin_button)));
+
+  /* Get max of MIN_SPIN_BUTTON_WIDTH, size of upper, size of lower */
+  width = MIN_SPIN_BUTTON_WIDTH;
+
+  str = gtk_spin_button_format_for_value (spin_button,
+                                          gtk_adjustment_get_upper (priv->adjustment));
+  w = measure_string_width (layout, str);
+  width = MAX (width, w);
+  g_free (str);
+
+  str = gtk_spin_button_format_for_value (spin_button,
+                                          gtk_adjustment_get_lower (priv->adjustment));
+  w = measure_string_width (layout, str);
+  width = MAX (width, w);
+  g_free (str);
+
+  g_object_unref (layout);
+
+  return width;
+}
+
 static void
 gtk_spin_button_get_preferred_width (GtkWidget *widget,
                                      gint      *minimum,
@@ -1192,38 +1222,8 @@ gtk_spin_button_get_preferred_width (GtkWidget *widget,
 {
   GtkSpinButton *spin_button = GTK_SPIN_BUTTON (widget);
   GtkSpinButtonPrivate *priv = spin_button->priv;
-  GtkEntry *entry = GTK_ENTRY (widget);
 
   GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->get_preferred_width (widget, minimum, natural);
-
-  if (gtk_entry_get_width_chars (entry) < 0)
-    {
-      gint width, w;
-      PangoLayout *layout;
-      gchar *str;
-
-      layout = pango_layout_copy (gtk_entry_get_layout (entry));
-
-      /* Get max of MIN_SPIN_BUTTON_WIDTH, size of upper, size of lower */
-      width = MIN_SPIN_BUTTON_WIDTH;
-
-      str = gtk_spin_button_format_for_value (spin_button,
-                                              gtk_adjustment_get_upper (priv->adjustment));
-      w = measure_string_width (layout, str);
-      width = MAX (width, w);
-      g_free (str);
-
-      str = gtk_spin_button_format_for_value (spin_button,
-                                              gtk_adjustment_get_lower (priv->adjustment));
-      w = measure_string_width (layout, str);
-      width = MAX (width, w);
-      g_free (str);
-
-      *minimum = width;
-      *natural = width;
-
-      g_object_unref (layout);
-    }
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {

@@ -24,6 +24,7 @@
 #include <gtk/gtkentrycompletion.h>
 #include <gtk/gtkentry.h>
 #include <gtk/gtkcssgadgetprivate.h>
+#include <gtk/gtkspinbutton.h>
 
 G_BEGIN_DECLS
 
@@ -90,6 +91,9 @@ GtkIMContext* _gtk_entry_get_im_context    (GtkEntry  *entry);
 GtkCssGadget* gtk_entry_get_gadget         (GtkEntry  *entry);
 void     _gtk_entry_grab_focus             (GtkEntry  *entry,
                                             gboolean   select_all);
+
+/* in gtkspinbutton.c (because I'm too lazy to create gtkspinbuttonprivate.h) */
+gint     gtk_spin_button_get_text_width    (GtkSpinButton *spin_button);
 
 G_END_DECLS
 
