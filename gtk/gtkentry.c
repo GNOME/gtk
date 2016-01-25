@@ -3181,25 +3181,6 @@ update_node_state (GtkEntry *entry)
     gtk_css_node_set_state (priv->selection_node, state);
 }
 
-static GtkCssNode *
-get_entry_node (GtkWidget *widget)
-{
-  if (GTK_IS_SPIN_BUTTON (widget))
-    {
-      const gchar *name;
-      GtkCssNode *node;
-
-      name = I_("entry");
-      node = gtk_css_node_get_first_child (gtk_widget_get_css_node (widget));
-      do {
-        if (gtk_css_node_get_name (node) == name)
-          return node;
-      } while ((node = gtk_css_node_get_next_sibling (node)) != NULL);
-    }
-
-  return gtk_widget_get_css_node (widget);
-}
-
 static void
 update_node_ordering (GtkEntry *entry)
 {
@@ -3248,7 +3229,7 @@ construct_icon_info (GtkWidget            *widget,
   icon_info = g_slice_new0 (EntryIconInfo);
   priv->icons[icon_pos] = icon_info;
 
-  widget_node = get_entry_node (widget);
+  widget_node = gtk_css_gadget_get_node (priv->gadget);
   icon_info->gadget = gtk_icon_helper_new_named ("image", widget);
   _gtk_icon_helper_set_force_scale_pixbuf (GTK_ICON_HELPER (icon_info->gadget), TRUE);
   gtk_css_node_set_parent (gtk_css_gadget_get_node (icon_info->gadget), widget_node);
@@ -6064,7 +6045,7 @@ gtk_entry_set_positions (GtkEntry *entry,
         {
           GtkCssNode *widget_node;
 
-          widget_node = get_entry_node (GTK_WIDGET (entry));
+          widget_node = gtk_css_gadget_get_node (priv->gadget);
           priv->selection_node = gtk_css_node_new ();
           gtk_css_node_set_name (priv->selection_node, I_("selection"));
           gtk_css_node_set_parent (priv->selection_node, widget_node);
@@ -10446,7 +10427,7 @@ gtk_entry_ensure_progress_node (GtkEntry *entry)
   if (priv->progress_node)
     return;
 
-  widget_node = get_entry_node (GTK_WIDGET (entry));
+  widget_node = gtk_css_gadget_get_node (priv->gadget);
   priv->progress_node = gtk_css_node_new ();
   gtk_css_node_set_name (priv->progress_node, I_("progress"));
   gtk_css_node_set_parent (priv->progress_node, widget_node);
