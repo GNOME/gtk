@@ -36,7 +36,7 @@
 
 <refsect1><title>Description</title>
 <para>
-<command>gtk3-icon-browswer</command> is a utility to explore the icons
+<command>gtk3-icon-browser</command> is a utility to explore the icons
 in the current icon theme. It shows icons in various sizes, their symbolic
 variants where available, as well as a description of the icon and its context.
 </para>
