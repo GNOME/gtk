@@ -177,6 +177,7 @@ struct _GtkEntryPrivate
   GtkWidget             *popup_menu;
 
   GdkWindow             *text_area;
+  GtkAllocation          text_allocation;
 
   PangoLayout           *cached_layout;
   PangoAttrList         *attrs;
@@ -634,11 +635,6 @@ static void         gtk_entry_get_text_area_size       (GtkEntry       *entry,
 							gint           *width,
 							gint           *height);
 static void         gtk_entry_get_frame_size           (GtkEntry       *entry,
-							gint           *x,
-							gint           *y,
-							gint           *width,
-							gint           *height);
-static void         get_text_area_size                 (GtkEntry       *entry,
 							gint           *x,
 							gint           *y,
 							gint           *width,
@@ -2822,37 +2818,6 @@ get_icon_width (GtkEntry             *entry,
 }
 
 static void
-get_icon_allocations (GtkEntry      *entry,
-                      GtkAllocation *primary,
-                      GtkAllocation *secondary)
-
-{
-  gint x, y, width, height;
-
-  get_text_area_size (entry, &x, &y, &width, &height);
-
-  primary->y = y;
-  primary->height = height;
-  primary->width = get_icon_width (entry, GTK_ENTRY_ICON_PRIMARY);
-
-  secondary->y = y;
-  secondary->height = height;
-  secondary->width = get_icon_width (entry, GTK_ENTRY_ICON_SECONDARY);
-
-  if (gtk_widget_get_direction (GTK_WIDGET (entry)) == GTK_TEXT_DIR_RTL)
-    {
-      primary->x = x + width - primary->width;
-      secondary->x = x;
-    }
-  else
-    {
-      primary->x = x;
-      secondary->x = x + width - secondary->width;
-    }
-}
-
-
-static void
 begin_change (GtkEntry *entry)
 {
   GtkEntryPrivate *priv = entry->priv;
@@ -3360,7 +3325,6 @@ gtk_entry_realize (GtkWidget *widget)
   GdkWindow *window;
   GdkWindowAttr attributes;
   gint attributes_mask;
-  gint frame_x, frame_y;
   int i;
 
   gtk_widget_set_realized (widget, TRUE);
@@ -3383,11 +3347,10 @@ gtk_entry_realize (GtkWidget *widget)
 			    GDK_LEAVE_NOTIFY_MASK);
   attributes_mask = GDK_WA_X | GDK_WA_Y;
 
-  get_text_area_size (entry, &attributes.x, &attributes.y, &attributes.width, &attributes.height);
-
-  get_frame_size (entry, TRUE, &frame_x, &frame_y, NULL, NULL);
-  attributes.x += frame_x;
-  attributes.y += frame_y;
+  attributes.x = priv->text_allocation.x;
+  attributes.y = priv->text_allocation.y;
+  attributes.width = priv->text_allocation.width;
+  attributes.height = priv->text_allocation.height;
 
   if (gtk_widget_is_sensitive (widget))
     {
@@ -3617,53 +3580,34 @@ gtk_entry_measure (GtkCssGadget   *gadget,
 static void
 place_windows (GtkEntry *entry)
 {
-  GtkWidget *widget = GTK_WIDGET (entry);
   GtkEntryPrivate *priv = entry->priv;
-  gint x, y, width, height;
-  gint frame_x, frame_y;
-  GtkAllocation primary;
-  GtkAllocation secondary;
-  EntryIconInfo *icon_info = NULL;
-  GdkRectangle clip = { 0, 0, 0, 0 };
-
-  get_frame_size (entry, TRUE, &frame_x, &frame_y, NULL, NULL);
-  get_text_area_size (entry, &x, &y, &width, &height);
-  get_icon_allocations (entry, &primary, &secondary);
-
-  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-    x += secondary.width;
-  else
-    x += primary.width;
-  width -= primary.width + secondary.width;
-
-  x += frame_x;
-  y += frame_y;
-  primary.x += frame_x;
-  primary.y += frame_y;
-  secondary.x += frame_x;
-  secondary.y += frame_y;
+  EntryIconInfo *icon_info;
 
   icon_info = priv->icons[GTK_ENTRY_ICON_PRIMARY];
   if (icon_info)
     {
+      GtkAllocation primary;
+
+      gtk_css_gadget_get_border_allocation (icon_info->gadget, &primary, NULL);
       gdk_window_move_resize (icon_info->window,
                               primary.x, primary.y,
                               primary.width, primary.height);
-      gtk_css_gadget_allocate (icon_info->gadget, &primary, -1, &clip);
     }
 
   icon_info = priv->icons[GTK_ENTRY_ICON_SECONDARY];
   if (icon_info)
     {
-      GdkRectangle tmp_clip;
+      GtkAllocation secondary;
+
+      gtk_css_gadget_get_border_allocation (icon_info->gadget, &secondary, NULL);
       gdk_window_move_resize (icon_info->window,
                               secondary.x, secondary.y,
                               secondary.width, secondary.height);
-      gtk_css_gadget_allocate (icon_info->gadget, &secondary, -1, &tmp_clip);
-      gdk_rectangle_union (&clip, &tmp_clip, &clip);
     }
 
-  gdk_window_move_resize (priv->text_area, x, y, width, height);
+  gdk_window_move_resize (priv->text_area,
+                          priv->text_allocation.x, priv->text_allocation.y,
+                          priv->text_allocation.width, priv->text_allocation.height);
 }
 
 static void
@@ -3699,24 +3643,6 @@ gtk_entry_get_text_area_size (GtkEntry *entry,
   if (height)
     *height = req_height;
 }
-
-static void
-get_text_area_size (GtkEntry *entry,
-                    gint     *x,
-                    gint     *y,
-                    gint     *width,
-                    gint     *height)
-{
-  GtkEntryClass *class;
-
-  g_return_if_fail (GTK_IS_ENTRY (entry));
-
-  class = GTK_ENTRY_GET_CLASS (entry);
-
-  g_assert (class->get_text_area_size != NULL);
-  class->get_text_area_size (entry, x, y, width, height);
-}
-
 
 static void
 gtk_entry_get_frame_size (GtkEntry *entry,
@@ -3811,6 +3737,8 @@ gtk_entry_allocate (GtkCssGadget        *gadget,
   widget = gtk_css_gadget_get_owner (gadget);
   priv = GTK_ENTRY (widget)->priv;
 
+  priv->text_allocation = *allocation;
+
   out_clip->x = 0;
   out_clip->y = 0;
   out_clip->width = 0;
@@ -3839,12 +3767,18 @@ gtk_entry_allocate (GtkCssGadget        *gadget,
 
       if ((gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL && i == GTK_ENTRY_ICON_PRIMARY) ||
           (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR && i == GTK_ENTRY_ICON_SECONDARY))
-        icon_alloc.x = allocation->x + allocation->width - width;
+        {
+          icon_alloc.x = allocation->x + allocation->width - width;
+        }
       else
-        icon_alloc.x = allocation->x;
+        {
+          icon_alloc.x = allocation->x;
+          priv->text_allocation.x += width;
+        }
       icon_alloc.y = allocation->y + (allocation->height - height) / 2;
       icon_alloc.width = width;
       icon_alloc.height = height;
+      priv->text_allocation.width -= width;
 
       gtk_css_gadget_allocate (icon_info->gadget,
                                &icon_alloc,
@@ -3913,27 +3847,13 @@ get_progress_area (GtkWidget *widget,
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *private = entry->priv;
-  gint frame_width, text_area_width, text_area_height;
+  GtkAllocation allocation;
 
-  get_text_area_size (entry,
-                      x, y,
-                      &text_area_width, &text_area_height);
-  get_frame_size (entry, FALSE,
-                  NULL, NULL,
-                  &frame_width, NULL);
-
-  *width = text_area_width;
-  *height = text_area_height;
-
-  /* if the text area got resized by a subclass, subtract the left/right
-   * border width, so that the progress bar won't extend over the resized
-   * text area.
-   */
-  if (frame_width > *width)
-    {
-      if (gtk_widget_get_direction (GTK_WIDGET (entry)) == GTK_TEXT_DIR_RTL)
-        *x = (frame_width - *width);
-    }
+  gtk_css_gadget_get_content_allocation (private->gadget, &allocation, NULL);
+  *x = allocation.x;
+  *y = allocation.y;
+  *width = allocation.width;
+  *height = allocation.height;
 
   if (private->progress_pulse_mode)
     {
@@ -4022,8 +3942,6 @@ gtk_entry_render (GtkCssGadget *gadget,
 
       /* Draw text and cursor */
       cairo_save (cr);
-
-      gtk_cairo_transform_to_window (cr, widget, priv->text_area);
 
       if (priv->dnd_position != -1)
         gtk_entry_draw_cursor (GTK_ENTRY (widget), cr, CURSOR_DND);
@@ -4185,7 +4103,7 @@ gtk_entry_move_handle (GtkEntry              *entry,
   GtkEntryPrivate *priv = entry->priv;
 
   if (!_gtk_text_handle_get_is_dragged (priv->text_handle, pos) &&
-      (x < 0 || x > gdk_window_get_width (priv->text_area)))
+      (x < 0 || x > priv->text_allocation.width))
     {
       /* Hide the handle if it's not being manipulated
        * and fell outside of the visible text area.
@@ -4194,23 +4112,14 @@ gtk_entry_move_handle (GtkEntry              *entry,
     }
   else
     {
-      GtkAllocation primary, secondary;
-      gint frame_x, frame_y;
+      GtkAllocation allocation;
       GdkRectangle rect;
-      gint win_x, win_y;
 
-      get_icon_allocations (entry, &primary, &secondary);
-      get_text_area_size (entry, &win_x, &win_y, NULL, NULL);
-      get_frame_size (entry, FALSE, &frame_x, &frame_y, NULL, NULL);
-      rect.x = CLAMP (x, 0, gdk_window_get_width (priv->text_area)) + win_x + frame_x;
-      rect.y = y + win_y + frame_y;
+      gtk_widget_get_allocation (GTK_WIDGET (entry), &allocation);
+      rect.x = x + priv->text_allocation.x - allocation.x;
+      rect.y = y + priv->text_allocation.y - allocation.y;
       rect.width = 1;
       rect.height = height;
-
-      if (gtk_widget_get_direction (GTK_WIDGET (entry)) == GTK_TEXT_DIR_RTL)
-        rect.x += secondary.width;
-      else
-        rect.x += primary.width;
 
       _gtk_text_handle_set_visible (priv->text_handle, pos, TRUE);
       _gtk_text_handle_set_position (priv->text_handle, pos, &rect);
@@ -4417,24 +4326,13 @@ gesture_get_current_point (GtkGestureSingle *gesture,
                            gint             *x,
                            gint             *y)
 {
-  GtkAllocation primary, secondary;
-  gint frame_x, frame_y, tx, ty;
+  gint tx, ty;
   GdkEventSequence *sequence;
   gdouble px, py;
 
   sequence = gtk_gesture_single_get_current_sequence (gesture);
   gtk_gesture_get_point (GTK_GESTURE (gesture), sequence, &px, &py);
-  get_text_area_size (entry, &tx, &ty, NULL, NULL);
-  get_icon_allocations (entry, &primary, &secondary);
-  get_frame_size (entry, FALSE, &frame_x, &frame_y, NULL, NULL);
-
-  if (gtk_widget_get_direction (GTK_WIDGET (entry)) == GTK_TEXT_DIR_RTL)
-    tx += secondary.width;
-  else
-    tx += primary.width;
-
-  tx += frame_x;
-  ty += frame_y;
+  gtk_entry_get_layout_offsets (entry, &tx, &ty);
 
   if (x)
     *x = px - tx;
@@ -4641,31 +4539,22 @@ gtk_entry_show_magnifier (GtkEntry *entry,
                           gint      x,
                           gint      y)
 {
-  GtkAllocation allocation, primary, secondary;
+  GtkAllocation allocation;
   cairo_rectangle_int_t rect;
   GtkEntryPrivate *priv;
-  gint win_y, frame_y;
 
   gtk_entry_ensure_magnifier (entry);
 
-  gtk_css_gadget_get_content_allocation (entry->priv->gadget, &allocation, NULL);
-  get_icon_allocations (entry, &primary, &secondary);
-  get_text_area_size (entry, NULL, &win_y, NULL, NULL);
-  get_frame_size (entry, FALSE, NULL, &frame_y, NULL, NULL);
+  gtk_widget_get_allocation (GTK_WIDGET (entry), &allocation);
 
   priv = entry->priv;
-  rect.x = CLAMP (x, 0, allocation.width - primary.width - secondary.width);
+  rect.x = x + priv->text_allocation.x - allocation.x;
   rect.width = 1;
-  rect.y = win_y + frame_y;
-  rect.height = allocation.height;
-
-  if (gtk_widget_get_direction (GTK_WIDGET (entry)) == GTK_TEXT_DIR_RTL)
-    rect.x += secondary.width;
-  else
-    rect.x += primary.width;
+  rect.y = priv->text_allocation.y - allocation.y;
+  rect.height = priv->text_allocation.height;
 
   _gtk_magnifier_set_coords (GTK_MAGNIFIER (priv->magnifier), rect.x,
-                             rect.y + allocation.height / 2);
+                             rect.y + rect.height / 2);
   gtk_popover_set_pointing_to (GTK_POPOVER (priv->magnifier_popover),
                                &rect);
   gtk_widget_show (priv->magnifier_popover);
@@ -6428,14 +6317,12 @@ get_layout_position (GtkEntry *entry,
   GtkEntryPrivate *priv = entry->priv;
   PangoLayout *layout;
   PangoRectangle logical_rect;
-  gint area_width, area_height;
-  gint y_pos;
+  gint y_pos, area_height;
   PangoLayoutLine *line;
   
   layout = gtk_entry_ensure_layout (entry, TRUE);
 
-  get_text_area_size (entry, NULL, NULL, &area_width, &area_height);
-  area_height = PANGO_SCALE * area_height;
+  area_height = PANGO_SCALE * priv->text_allocation.height;
 
   line = pango_layout_get_lines_readonly (layout)->data;
   pango_layout_line_get_extents (line, NULL, &logical_rect);
@@ -6484,15 +6371,16 @@ gtk_entry_draw_text (GtkEntry *entry,
   cairo_save (cr);
 
   cairo_rectangle (cr,
-                   0, 0,
-                   gdk_window_get_width (priv->text_area),
-                   gdk_window_get_height (priv->text_area));
+                   priv->text_allocation.x - allocation.x,
+                   priv->text_allocation.y - allocation.y,
+                   priv->text_allocation.width,
+                   priv->text_allocation.height);
   cairo_clip (cr);
 
-  get_layout_position (entry, &x, &y);
+  gtk_entry_get_layout_offsets (entry, &x, &y);
 
   if (show_placeholder_text (entry))
-    pango_layout_set_width (layout, PANGO_SCALE * gdk_window_get_width (entry->priv->text_area));
+    pango_layout_set_width (layout, PANGO_SCALE * priv->text_allocation.width);
 
   gtk_render_layout (context, cr, x, y, layout);
 
@@ -6543,7 +6431,7 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
 
   layout = gtk_entry_ensure_layout (entry, TRUE);
   text = pango_layout_get_text (layout);
-  get_layout_position (entry, &x, &y);
+  gtk_entry_get_layout_offsets (entry, &x, &y);
 
   if (type == CURSOR_DND)
     cursor_index = g_utf8_offset_to_pointer (text, priv->dnd_position) - text;
@@ -6609,7 +6497,6 @@ gtk_entry_handle_dragged (GtkTextHandle         *handle,
 {
   gint cursor_pos, selection_bound_pos, tmp_pos;
   GtkEntryPrivate *priv = entry->priv;
-  GtkAllocation primary, secondary;
   GtkTextHandleMode mode;
   gint *min, *max;
 
@@ -6618,13 +6505,6 @@ gtk_entry_handle_dragged (GtkTextHandle         *handle,
   cursor_pos = priv->current_pos;
   selection_bound_pos = priv->selection_bound;
   mode = _gtk_text_handle_get_mode (handle);
-
-  get_icon_allocations (entry, &primary, &secondary);
-
-  if (gtk_widget_get_direction (GTK_WIDGET (entry)) == GTK_TEXT_DIR_RTL)
-    x -= secondary.width;
-  else
-    x -= primary.width;
 
   tmp_pos = gtk_entry_find_position (entry, x + priv->scroll_offset);
 
@@ -6907,7 +6787,7 @@ gtk_entry_adjust_scroll (GtkEntry *entry)
 {
   GtkEntryPrivate *priv = entry->priv;
   gint min_offset, max_offset;
-  gint text_area_width, text_width;
+  gint text_width;
   gint strong_x, weak_x;
   gint strong_xoffset, weak_xoffset;
   gfloat xalign;
@@ -6918,11 +6798,6 @@ gtk_entry_adjust_scroll (GtkEntry *entry)
 
   if (!gtk_widget_get_realized (GTK_WIDGET (entry)))
     return;
-
-  text_area_width = gdk_window_get_width (priv->text_area);
-
-  if (text_area_width < 0)
-    text_area_width = 0;
 
   layout = gtk_entry_ensure_layout (entry, TRUE);
   line = pango_layout_get_lines_readonly (layout)->data;
@@ -6938,14 +6813,14 @@ gtk_entry_adjust_scroll (GtkEntry *entry)
 
   text_width = PANGO_PIXELS(logical_rect.width);
 
-  if (text_width > text_area_width)
+  if (text_width > priv->text_allocation.width)
     {
       min_offset = 0;
-      max_offset = text_width - text_area_width;
+      max_offset = text_width - priv->text_allocation.width;
     }
   else
     {
-      min_offset = (text_width - text_area_width) * xalign;
+      min_offset = (text_width - priv->text_allocation.width) * xalign;
       max_offset = min_offset;
     }
 
@@ -6985,22 +6860,22 @@ gtk_entry_adjust_scroll (GtkEntry *entry)
       priv->scroll_offset += strong_xoffset;
       strong_xoffset = 0;
     }
-  else if (strong_xoffset > text_area_width)
+  else if (strong_xoffset > priv->text_allocation.width)
     {
-      priv->scroll_offset += strong_xoffset - text_area_width;
-      strong_xoffset = text_area_width;
+      priv->scroll_offset += strong_xoffset - priv->text_allocation.width;
+      strong_xoffset = priv->text_allocation.width;
     }
 
   weak_xoffset = weak_x - priv->scroll_offset;
 
-  if (weak_xoffset < 0 && strong_xoffset - weak_xoffset <= text_area_width)
+  if (weak_xoffset < 0 && strong_xoffset - weak_xoffset <= priv->text_allocation.width)
     {
       priv->scroll_offset += weak_xoffset;
     }
-  else if (weak_xoffset > text_area_width &&
-	   strong_xoffset - (weak_xoffset - text_area_width) >= 0)
+  else if (weak_xoffset > priv->text_allocation.width &&
+	   strong_xoffset - (weak_xoffset - priv->text_allocation.width) >= 0)
     {
-      priv->scroll_offset += weak_xoffset - text_area_width;
+      priv->scroll_offset += weak_xoffset - priv->text_allocation.width;
     }
 
   g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_SCROLL_OFFSET]);
@@ -7626,18 +7501,15 @@ gtk_entry_get_text_area (GtkEntry     *entry,
 
   priv = entry->priv;
 
-  if (priv->text_area)
+  if (gtk_widget_get_realized (GTK_WIDGET (entry)))
     {
       GtkAllocation allocation;
-      gint x, y;
 
-      gtk_css_gadget_get_content_allocation (entry->priv->gadget, &allocation, NULL);
-      gdk_window_get_position (priv->text_area, &x, &y);
+      *text_area = priv->text_allocation;
 
-      text_area->x = x - allocation.x;
-      text_area->y = y - allocation.y;
-      text_area->width = gdk_window_get_width (priv->text_area);
-      text_area->height = gdk_window_get_height (priv->text_area);
+      gtk_widget_get_allocation (GTK_WIDGET (entry), &allocation);
+      text_area->x -= allocation.x;
+      text_area->y -= allocation.y;
     }
   else
     {
@@ -8367,21 +8239,23 @@ gtk_entry_get_layout_offsets (GtkEntry *entry,
                               gint     *x,
                               gint     *y)
 {
-  gint text_area_x, text_area_y;
+  GtkEntryPrivate *priv;
+  GtkAllocation allocation;
   
   g_return_if_fail (GTK_IS_ENTRY (entry));
+
+  priv = entry->priv;
+  gtk_widget_get_allocation (GTK_WIDGET (entry), &allocation);
 
   /* this gets coords relative to text area */
   get_layout_position (entry, x, y);
 
   /* convert to widget coords */
-  gtk_entry_get_text_area_size (entry, &text_area_x, &text_area_y, NULL, NULL);
-  
   if (x)
-    *x += text_area_x;
+    *x += priv->text_allocation.x - allocation.x;
 
   if (y)
-    *y += text_area_y;
+    *y += priv->text_allocation.y - allocation.y;
 }
 
 
@@ -9039,25 +8913,26 @@ gtk_entry_get_icon_at_pos (GtkEntry *entry,
                            gint      x,
                            gint      y)
 {
-  GtkAllocation primary;
-  GtkAllocation secondary;
-  gint frame_x, frame_y;
+  GtkEntryPrivate *priv;
+  guint i;
 
   g_return_val_if_fail (GTK_IS_ENTRY (entry), -1);
 
-  get_frame_size (entry, FALSE, &frame_x, &frame_y, NULL, NULL);
-  x -= frame_x;
-  y -= frame_y;
+  priv = entry->priv;
 
-  get_icon_allocations (entry, &primary, &secondary);
+  for (i = 0; i < MAX_ICONS; i++)
+    {
+      EntryIconInfo *icon_info = priv->icons[i];
+      GtkAllocation allocation;
 
-  if (primary.x <= x && x < primary.x + primary.width &&
-      primary.y <= y && y < primary.y + primary.height)
-    return GTK_ENTRY_ICON_PRIMARY;
+      if (icon_info == NULL)
+        continue;
 
-  if (secondary.x <= x && x < secondary.x + secondary.width &&
-      secondary.y <= y && y < secondary.y + secondary.height)
-    return GTK_ENTRY_ICON_SECONDARY;
+      gtk_css_gadget_get_border_allocation (icon_info->gadget, &allocation, NULL);
+      if (x >= allocation.x && x < allocation.x + allocation.width &&
+          y >= allocation.y && y < allocation.y + allocation.height)
+        return i;
+    }
 
   return -1;
 }
@@ -9183,15 +9058,7 @@ gtk_entry_get_icon_area (GtkEntry             *entry,
 
   if (icon_info)
     {
-      GtkAllocation primary;
-      GtkAllocation secondary;
-
-      get_icon_allocations (entry, &primary, &secondary);
-
-      if (icon_pos == GTK_ENTRY_ICON_PRIMARY)
-        *icon_area = primary;
-      else
-        *icon_area = secondary;
+      gtk_css_gadget_get_border_allocation (icon_info->gadget, icon_area, NULL);
     }
   else
     {
@@ -9757,8 +9624,8 @@ bubble_targets_received (GtkClipboard     *clipboard,
   GtkEntry *entry = user_data;
   GtkEntryPrivate *priv = entry->priv;
   cairo_rectangle_int_t rect;
-  GtkAllocation allocation, primary, secondary;
-  gint start_x, end_x, frame_x, frame_y;
+  GtkAllocation allocation;
+  gint start_x, end_x;
   gboolean has_selection;
   gboolean has_clipboard;
   gboolean all_selected;
@@ -9814,38 +9681,26 @@ bubble_targets_received (GtkClipboard     *clipboard,
   if (priv->populate_all)
     g_signal_emit (entry, signals[POPULATE_POPUP], 0, box);
 
-  gtk_css_gadget_get_content_allocation (entry->priv->gadget, &allocation, NULL);
+  gtk_widget_get_allocation (GTK_WIDGET (entry), &allocation);
 
   gtk_entry_get_cursor_locations (entry, CURSOR_STANDARD, &start_x, NULL);
 
   start_x -= priv->scroll_offset;
-  start_x = CLAMP (start_x, 0, gdk_window_get_width (priv->text_area));
-
-  get_text_area_size (entry, &rect.x, &rect.y, NULL, NULL);
-  get_frame_size (entry, FALSE, &frame_x, &frame_y, NULL, NULL);
-
-  get_icon_allocations (entry, &primary, &secondary);
-
-  if (gtk_widget_get_direction (GTK_WIDGET (entry)) == GTK_TEXT_DIR_RTL)
-    rect.x += secondary.width;
-  else
-    rect.x += primary.width;
-
-  rect.x += frame_x;
-  rect.y += frame_y;
-  rect.height = gdk_window_get_height (priv->text_area);
+  start_x = CLAMP (start_x, 0, priv->text_allocation.width);
+  rect.y = priv->text_allocation.y - allocation.y;
+  rect.height = priv->text_allocation.height;
 
   if (has_selection)
     {
       end_x = gtk_entry_get_selection_bound_location (entry) - priv->scroll_offset;
-      end_x = CLAMP (end_x, 0, gdk_window_get_width (priv->text_area));
+      end_x = CLAMP (end_x, 0, priv->text_allocation.width);
 
-      rect.x += MIN (start_x, end_x);
-      rect.width = MAX (start_x, end_x) - MIN (start_x, end_x);
+      rect.x = priv->text_allocation.x - allocation.x + MIN (start_x, end_x);
+      rect.width = ABS (end_x - start_x);
     }
   else
     {
-      rect.x += start_x;
+      rect.x = priv->text_allocation.x - allocation.x + start_x;
       rect.width = 0;
     }
 
@@ -10011,26 +9866,10 @@ gtk_entry_drag_motion (GtkWidget        *widget,
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = entry->priv;
-  GtkAllocation primary, secondary;
-  GtkStyleContext *style_context;
   GtkWidget *source_widget;
   GdkDragAction suggested_action;
   gint new_position, old_position;
   gint sel1, sel2;
-  GtkBorder padding;
-  GtkStateFlags state;
-
-  style_context = gtk_widget_get_style_context (widget);
-  state = gtk_style_context_get_state (style_context);
-  gtk_style_context_get_padding (style_context, state, &padding);
-  x -= padding.left;
-
-  get_icon_allocations (entry, &primary, &secondary);
-
-  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-    x -= secondary.width;
-  else
-    x -= primary.width;
 
   old_position = priv->dnd_position;
   new_position = gtk_entry_find_position (entry, x + priv->scroll_offset);
@@ -10094,25 +9933,9 @@ gtk_entry_drag_data_received (GtkWidget        *widget,
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = entry->priv;
   GtkEditable *editable = GTK_EDITABLE (widget);
-  GtkAllocation primary, secondary;
-  GtkStyleContext *style_context;
-  GtkBorder padding;
   gchar *str;
-  GtkStateFlags state;
 
   str = (gchar *) gtk_selection_data_get_text (selection_data);
-
-  style_context = gtk_widget_get_style_context (widget);
-  state = gtk_style_context_get_state (style_context);
-  gtk_style_context_get_padding (style_context, state, &padding);
-  x -= padding.left;
-
-  get_icon_allocations (entry, &primary, &secondary);
-
-  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-    x -= secondary.width;
-  else
-    x -= primary.width;
 
   if (str && priv->editable)
     {
