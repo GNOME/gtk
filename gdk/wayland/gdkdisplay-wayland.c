@@ -985,7 +985,7 @@ create_shm_pool (struct wl_shm  *shm,
   int ret, fd;
   void *data;
 
-  ret = syscall (SYS_memfd_create, "gdk-wayland", MFD_CLOEXEC);
+  ret = syscall (__NR_memfd_create, "gdk-wayland", MFD_CLOEXEC);
 
   if (ret < 0)
     {
