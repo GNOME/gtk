@@ -338,6 +338,7 @@ gtk_stack_realize (GtkWidget *widget)
   GList *l;
 
   gtk_widget_set_realized (widget, TRUE);
+  gtk_widget_set_window (widget, g_object_ref (gtk_widget_get_parent_window (widget)));
 
   gtk_widget_get_allocation (widget, &allocation);
 
@@ -353,9 +354,8 @@ gtk_stack_realize (GtkWidget *widget)
   attributes_mask = (GDK_WA_X | GDK_WA_Y) | GDK_WA_VISUAL;
 
   priv->view_window =
-    gdk_window_new (gtk_widget_get_parent_window ((GtkWidget*) stack),
+    gdk_window_new (gtk_widget_get_window (GTK_WIDGET (stack)),
                     &attributes, attributes_mask);
-  gtk_widget_set_window (widget, priv->view_window);
   gtk_widget_register_window (widget, priv->view_window);
 
   attributes.x = get_bin_window_x (stack, &allocation);
@@ -391,9 +391,34 @@ gtk_stack_unrealize (GtkWidget *widget)
 
   gtk_widget_unregister_window (widget, priv->bin_window);
   gdk_window_destroy (priv->bin_window);
+  priv->bin_window = NULL;
+  gtk_widget_unregister_window (widget, priv->view_window);
+  gdk_window_destroy (priv->view_window);
   priv->view_window = NULL;
 
   GTK_WIDGET_CLASS (gtk_stack_parent_class)->unrealize (widget);
+}
+
+static void
+gtk_stack_map (GtkWidget *widget)
+{
+  GtkStack *stack = GTK_STACK (widget);
+  GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
+
+  GTK_WIDGET_CLASS (gtk_stack_parent_class)->map (widget);
+
+  gdk_window_show (priv->view_window);
+}
+
+static void
+gtk_stack_unmap (GtkWidget *widget)
+{
+  GtkStack *stack = GTK_STACK (widget);
+  GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
+
+  gdk_window_hide (priv->view_window);
+
+  GTK_WIDGET_CLASS (gtk_stack_parent_class)->unmap (widget);
 }
 
 static void
@@ -412,6 +437,8 @@ gtk_stack_class_init (GtkStackClass *klass)
   widget_class->draw = gtk_stack_draw;
   widget_class->realize = gtk_stack_realize;
   widget_class->unrealize = gtk_stack_unrealize;
+  widget_class->map = gtk_stack_map;
+  widget_class->unmap = gtk_stack_unmap;
   widget_class->get_preferred_height = gtk_stack_get_preferred_height;
   widget_class->get_preferred_height_for_width = gtk_stack_get_preferred_height_for_width;
   widget_class->get_preferred_width = gtk_stack_get_preferred_width;
@@ -2411,6 +2438,8 @@ static void
 gtk_stack_init (GtkStack *stack)
 {
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
+
+  gtk_widget_set_has_window (GTK_WIDGET (stack), FALSE);
 
   priv->vhomogeneous = TRUE;
   priv->hhomogeneous = TRUE;
