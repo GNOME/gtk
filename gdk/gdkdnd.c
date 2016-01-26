@@ -283,7 +283,7 @@ gdk_drag_context_class_init (GdkDragContextClass *klass)
    * Since: 3.20
    */
   signals[CANCEL] =
-    g_signal_new (P_("cancel"),
+    g_signal_new ("cancel",
                   G_TYPE_FROM_CLASS (object_class),
                   G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GdkDragContextClass, cancel),
@@ -305,7 +305,7 @@ gdk_drag_context_class_init (GdkDragContextClass *klass)
    * Since: 3.20
    */
   signals[DROP_PERFORMED] =
-    g_signal_new (P_("drop-performed"),
+    g_signal_new ("drop-performed",
                   G_TYPE_FROM_CLASS (object_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GdkDragContextClass, drop_performed),
@@ -328,7 +328,7 @@ gdk_drag_context_class_init (GdkDragContextClass *klass)
    * Since: 3.20
    */
   signals[DND_FINISHED] =
-    g_signal_new (P_("dnd-finished"),
+    g_signal_new ("dnd-finished",
                   G_TYPE_FROM_CLASS (object_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GdkDragContextClass, dnd_finished),
@@ -350,7 +350,7 @@ gdk_drag_context_class_init (GdkDragContextClass *klass)
    * Since: 3.20
    */
   signals[ACTION_CHANGED] =
-    g_signal_new (P_("action-changed"),
+    g_signal_new ("action-changed",
                   G_TYPE_FROM_CLASS (object_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GdkDragContextClass, action_changed),
