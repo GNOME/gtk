@@ -2925,7 +2925,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    * made based solely on the cursor position and the type of the data, the
    * handler may inspect the dragged data by calling gtk_drag_get_data() and
    * defer the gdk_drag_status() call to the #GtkWidget::drag-data-received
-   * handler. Note that you cannot not pass #GTK_DEST_DEFAULT_DROP,
+   * handler. Note that you must pass #GTK_DEST_DEFAULT_DROP,
    * #GTK_DEST_DEFAULT_MOTION or #GTK_DEST_DEFAULT_ALL to gtk_drag_dest_set()
    * when using the drag-motion signal that way.
    *
