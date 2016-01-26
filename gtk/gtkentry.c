@@ -3302,15 +3302,11 @@ gtk_entry_realize (GtkWidget *widget)
   GtkEntry *entry;
   GtkEntryPrivate *priv;
   EntryIconInfo *icon_info;
-  GdkWindow *window;
   GdkWindowAttr attributes;
   gint attributes_mask;
   int i;
 
-  gtk_widget_set_realized (widget, TRUE);
-  window = gtk_widget_get_parent_window (widget);
-  gtk_widget_set_window (widget, window);
-  g_object_ref (window);
+  GTK_WIDGET_CLASS (gtk_entry_parent_class)->realize (widget);
 
   entry = GTK_ENTRY (widget);
   priv = entry->priv;
