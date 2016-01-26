@@ -101,8 +101,8 @@ LDADDS = \
 	-lm
 
 if BUILD_FONT_DEMO
-AM_CPPFLAGS += $(HARFBUZZ_CFLAGS)
-LDADDS += $(HARFBUZZ_LIBS)
+AM_CPPFLAGS += $(FONTDEMO_CFLAGS)
+LDADDS += $(FONTDEMO_LIBS)
 endif
 
 bin_PROGRAMS = gtk3-demo gtk3-demo-application
