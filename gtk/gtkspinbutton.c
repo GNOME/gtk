@@ -726,32 +726,36 @@ static void
 update_node_ordering (GtkSpinButton *spin_button)
 {
   GtkSpinButtonPrivate *priv = spin_button->priv;
-  GtkCssGadget *middle, *last;
+  int down_button_pos, up_button_pos;
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       if (gtk_widget_get_direction (GTK_WIDGET (spin_button)) == GTK_TEXT_DIR_LTR)
         {
-          middle = priv->down_button;
-          last = priv->up_button;
+          down_button_pos = 1;
+          up_button_pos = -1;
         }
       else
         {
-          middle = priv->down_button;
-          last = gtk_entry_get_gadget (GTK_ENTRY (spin_button));
+          down_button_pos = 1;
+          up_button_pos = 0;
         }
     }
   else
     {
-      middle = gtk_entry_get_gadget (GTK_ENTRY (spin_button));
-      last = priv->down_button;
+      up_button_pos = 0;
+      down_button_pos = -1;
     }
 
   gtk_box_gadget_set_orientation (GTK_BOX_GADGET (priv->gadget), priv->orientation);
-  gtk_box_gadget_remove_gadget (GTK_BOX_GADGET (priv->gadget), middle);
-  gtk_box_gadget_remove_gadget (GTK_BOX_GADGET (priv->gadget), last);
-  gtk_box_gadget_insert_gadget (GTK_BOX_GADGET (priv->gadget), -1, middle, TRUE, TRUE, GTK_ALIGN_FILL);
-  gtk_box_gadget_insert_gadget (GTK_BOX_GADGET (priv->gadget), -1, last, TRUE, TRUE, GTK_ALIGN_FILL);
+  gtk_box_gadget_remove_gadget (GTK_BOX_GADGET (priv->gadget), priv->up_button);
+  gtk_box_gadget_remove_gadget (GTK_BOX_GADGET (priv->gadget), priv->down_button);
+  gtk_box_gadget_insert_gadget (GTK_BOX_GADGET (priv->gadget),
+                                up_button_pos, priv->up_button,
+                                FALSE, TRUE, GTK_ALIGN_FILL);
+  gtk_box_gadget_insert_gadget (GTK_BOX_GADGET (priv->gadget),
+                                down_button_pos, priv->down_button,
+                                FALSE, TRUE, GTK_ALIGN_FILL);
 }
 
 static void
@@ -796,7 +800,7 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   g_object_unref (entry_node);
   gtk_box_gadget_insert_gadget (GTK_BOX_GADGET (priv->gadget), 
                                 -1, gtk_entry_get_gadget (GTK_ENTRY (spin_button)),
-                                TRUE, TRUE, GTK_ALIGN_FILL);
+                                TRUE, FALSE, GTK_ALIGN_FILL);
 
   priv->down_button = gtk_icon_helper_new_named ("button",
                                                  GTK_WIDGET (spin_button));
@@ -807,7 +811,7 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   gtk_css_node_set_state (gtk_css_gadget_get_node (priv->down_button), gtk_css_node_get_state (widget_node));
   gtk_box_gadget_insert_gadget (GTK_BOX_GADGET (priv->gadget), 
                                 -1, priv->down_button,
-                                TRUE, TRUE, GTK_ALIGN_FILL);
+                                FALSE, TRUE, GTK_ALIGN_FILL);
 
   priv->up_button = gtk_icon_helper_new_named ("button",
                                                GTK_WIDGET (spin_button));
@@ -818,7 +822,7 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   gtk_css_node_set_state (gtk_css_gadget_get_node (priv->down_button), gtk_css_node_get_state (widget_node));
   gtk_box_gadget_insert_gadget (GTK_BOX_GADGET (priv->gadget), 
                                 -1, priv->up_button,
-                                TRUE, TRUE, GTK_ALIGN_FILL);
+                                FALSE, TRUE, GTK_ALIGN_FILL);
 
   gtk_spin_button_set_adjustment (spin_button, NULL);
 
