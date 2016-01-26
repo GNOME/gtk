@@ -340,7 +340,7 @@ gtk_stack_realize (GtkWidget *widget)
   gtk_widget_set_realized (widget, TRUE);
   gtk_widget_set_window (widget, g_object_ref (gtk_widget_get_parent_window (widget)));
 
-  gtk_widget_get_allocation (widget, &allocation);
+  gtk_css_gadget_get_content_allocation (priv->gadget, &allocation, NULL);
 
   attributes.x = allocation.x;
   attributes.y = allocation.y;
@@ -359,7 +359,7 @@ gtk_stack_realize (GtkWidget *widget)
   gtk_widget_register_window (widget, priv->view_window);
 
   attributes.x = get_bin_window_x (stack, &allocation);
-  attributes.y = 0;
+  attributes.y = get_bin_window_y (stack, &allocation);
   attributes.width = allocation.width;
   attributes.height = allocation.height;
 
