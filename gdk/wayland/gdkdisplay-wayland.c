@@ -1079,24 +1079,6 @@ gdk_wayland_display_get_wl_compositor (GdkDisplay *display)
   return GDK_WAYLAND_DISPLAY (display)->compositor;
 }
 
-/**
- * gdk_wayland_display_get_xdg_shell:
- * @display: (type GdkWaylandDisplay): a #GdkDisplay
- *
- * Returns the Wayland global singleton shell of a #GdkDisplay.
- *
- * Returns: (transfer none): a Wayland xdg_shell
- *
- * Since: 3.8
- */
-struct xdg_shell *
-gdk_wayland_display_get_xdg_shell (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_WAYLAND_DISPLAY (display), NULL);
-
-  return GDK_WAYLAND_DISPLAY (display)->xdg_shell;
-}
-
 static const cairo_user_data_key_t gdk_wayland_shm_surface_cairo_key;
 
 typedef struct _GdkWaylandCairoSurfaceData {
