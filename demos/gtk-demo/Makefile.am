@@ -26,7 +26,6 @@ demos_base =					\
 	event_axes.c				\
 	expander.c  				\
         filtermodel.c				\
-	font_features.c				\
 	foreigndrawing.c			\
 	gestures.c				\
 	glarea.c				\
@@ -72,7 +71,7 @@ demos_base =					\
 	tree_store.c
 
 if OS_UNIX
-demos = $(demos_base) pagesetup.c
+demos = $(demos_base) font_features.c pagesetup.c
 else
 demos = $(demos_base)
 endif
@@ -177,7 +176,7 @@ uninstall-update-icon-cache:
 MSVCPROJS = gtk3-demo gtk3-demo-application
 
 gtk3_demo_FILES = $(gtk3_demo_SOURCES)
-gtk3_demo_EXCLUDES = pagesetup.c
+gtk3_demo_EXCLUDES = font_features.c|pagesetup.c
 
 gtk3_demo_application_FILES = $(gtk3_demo_application_SOURCES)
 gtk3_demo_application_EXCLUDES = dummy
