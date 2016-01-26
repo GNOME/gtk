@@ -1691,6 +1691,15 @@ fi
 AM_CONDITIONAL(HAVE_COLORD, test "x$have_colord" = "xyes")
 
 ##################################################
+# Check for harfbuzz
+##################################################
+
+PKG_CHECK_MODULES(HARFBUZZ, harfbuzz >= 0.9, have_harfbuzz=yes, have_harfbuzz=no)
+AC_SUBST(HARFBUZZ_CFLAGS)
+AC_SUBST(HARFBUZZ_LIBS)
+AM_CONDITIONAL(BUILD_FONT_DEMO, [ test "x$have_harfbuzz" = xyes ])
+
+##################################################
 # Checks for gtk-doc and docbook-tools
 ##################################################
 

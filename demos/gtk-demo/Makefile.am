@@ -70,11 +70,17 @@ demos_base =					\
 	transparent.c				\
 	tree_store.c
 
-if OS_UNIX
-demos = $(demos_base) font_features.c pagesetup.c
-else
-demos = $(demos_base)
+demos_opt =
+
+if BUILD_FONT_DEMO
+demos_opt += font_features.c
 endif
+
+if OS_UNIX
+demos_opt += pagesetup.c
+endif
+
+demos = $(demos_base) $(demos_opt)
 
 AM_CPPFLAGS = \
 	-I$(top_srcdir) 			\
@@ -93,6 +99,11 @@ LDADDS = \
 	$(GTK_DEP_LIBS)				\
 	$(GDK_DEP_LIBS)				\
 	-lm
+
+if BUILD_FONT_DEMO
+AM_CPPFLAGS += $(HARFBUZZ_CFLAGS)
+LDADDS += $(HARFBUZZ_LIBS)
+endif
 
 bin_PROGRAMS = gtk3-demo gtk3-demo-application
 
