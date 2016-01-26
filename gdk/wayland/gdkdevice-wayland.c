@@ -3676,6 +3676,7 @@ gdk_wayland_seat_grab (GdkSeat                *seat,
   guint32 evtime = event ? gdk_event_get_time (event) : GDK_CURRENT_TIME;
   GdkDisplay *display = gdk_seat_get_display (seat);
   GdkWindow *native;
+  GList *l;
 
   native = gdk_window_get_toplevel (window);
 
@@ -3775,6 +3776,33 @@ gdk_wayland_seat_grab (GdkSeat                *seat,
                                     FALSE);
     }
 
+  if (wayland_seat->tablets &&
+      capabilities & GDK_SEAT_CAPABILITY_TABLET_STYLUS)
+    {
+      for (l = wayland_seat->tablets; l; l = l->next)
+        {
+          GdkWaylandTabletData *tablet = l->data;
+          GdkWindow *prev_focus = gdk_wayland_device_get_focus (tablet->master);
+
+          if (prev_focus != window)
+            device_emit_grab_crossing (tablet->master, prev_focus,
+                                       window, GDK_CROSSING_GRAB, evtime);
+
+          _gdk_display_add_device_grab (display,
+                                        tablet->master,
+                                        window,
+                                        native,
+                                        GDK_OWNERSHIP_NONE,
+                                        owner_events,
+                                        GDK_ALL_EVENTS_MASK,
+                                        _gdk_display_get_next_serial (display),
+                                        evtime,
+                                        FALSE);
+
+          gdk_wayland_device_update_window_cursor (tablet->master);
+        }
+    }
+
   return GDK_GRAB_SUCCESS;
 }
 
@@ -3784,6 +3812,7 @@ gdk_wayland_seat_ungrab (GdkSeat *seat)
   GdkWaylandSeat *wayland_seat = GDK_WAYLAND_SEAT (seat);
   GdkDisplay *display = gdk_seat_get_display (seat);
   GdkDeviceGrabInfo *grab;
+  GList *l;
 
   g_clear_object (&wayland_seat->grab_cursor);
 
@@ -3822,6 +3851,16 @@ gdk_wayland_seat_ungrab (GdkSeat *seat)
   if (wayland_seat->touch_master)
     {
       grab = _gdk_display_get_last_device_grab (display, wayland_seat->touch_master);
+
+      if (grab)
+        grab->serial_end = grab->serial_start;
+    }
+
+  for (l = wayland_seat->tablets; l; l = l->next)
+    {
+      GdkWaylandTabletData *tablet = l->data;
+
+      grab = _gdk_display_get_last_device_grab (display, tablet->master);
 
       if (grab)
         grab->serial_end = grab->serial_start;
