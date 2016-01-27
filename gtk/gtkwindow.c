@@ -11142,6 +11142,8 @@ gtk_XParseGeometry (const char   *string,
  * ]|
  *
  * Returns: %TRUE if string was parsed successfully
+ *
+ * Deprecated: 3.20: Geometry handling in GTK is deprecated.
  **/
 gboolean
 gtk_window_parse_geometry (GtkWindow   *window,

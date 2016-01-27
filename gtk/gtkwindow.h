@@ -439,7 +439,7 @@ GDK_AVAILABLE_IN_ALL
 void     gtk_window_get_position     (GtkWindow   *window,
                                       gint        *root_x,
                                       gint        *root_y);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_20
 gboolean gtk_window_parse_geometry   (GtkWindow   *window,
                                       const gchar *geometry);
 
