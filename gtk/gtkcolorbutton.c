@@ -69,6 +69,7 @@ struct _GtkColorButtonPrivate
   GdkRGBA rgba;
 
   guint use_alpha : 1;  /* Use alpha or not */
+  guint show_editor : 1;
 };
 
 /* Properties */
@@ -79,7 +80,8 @@ enum
   PROP_TITLE,
   PROP_COLOR,
   PROP_ALPHA,
-  PROP_RGBA
+  PROP_RGBA,
+  PROP_SHOW_EDITOR
 };
 
 /* Signals */
@@ -260,6 +262,25 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                                                   NULL, NULL,
                                                   _gtk_marshal_VOID__VOID,
                                                   G_TYPE_NONE, 0);
+
+  /**
+   * GtkColorButton:show-editor:
+   *
+   * Set this property to %TRUE to skip the palette
+   * in the dialog and go directly to the color editor.
+   *
+   * This property should be used in cases where the palette
+   * in the editor would be redundant, such as when the color
+   * button is already part of a palette.
+   *
+   * Since: 3.20
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_SHOW_EDITOR,
+                                   g_param_spec_boolean ("show-editor", P_("Show Editor"),
+                                                         P_("Whether to show the color editor right away"),
+                                                         FALSE,
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 }
 
 static void
@@ -565,6 +586,8 @@ gtk_color_button_clicked (GtkButton *b)
   /* if dialog already exists, make sure it's shown and raised */
   ensure_dialog (button);
 
+  g_object_set (priv->cs_dialog, "show-editor", priv->show_editor, NULL);
+
   gtk_color_chooser_set_use_alpha (GTK_COLOR_CHOOSER (priv->cs_dialog), priv->use_alpha);
 
   gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (priv->cs_dialog), &priv->rgba);
@@ -866,6 +889,16 @@ G_GNUC_END_IGNORE_DEPRECATIONS
     case PROP_RGBA:
       gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (button), g_value_get_boxed (value));
       break;
+    case PROP_SHOW_EDITOR:
+      {
+        gboolean show_editor = g_value_get_boolean (value);
+        if (button->priv->show_editor != show_editor)
+          {
+            button->priv->show_editor = show_editor;
+            g_object_notify (object, "show-editor");
+          }
+      }
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
       break;
@@ -919,6 +952,9 @@ gtk_color_button_get_property (GObject    *object,
         g_value_set_boxed (value, &rgba);
       }
       break;
+    case PROP_SHOW_EDITOR:
+      g_value_set_boolean (value, button->priv->show_editor);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
       break;
@@ -952,3 +988,4 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 G_GNUC_END_IGNORE_DEPRECATIONS
   iface->add_palette = gtk_color_button_add_palette;
 }
+
