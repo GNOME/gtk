@@ -197,9 +197,11 @@ static void
 gtk_model_button_update_state (GtkModelButton *button)
 {
   GtkStateFlags state;
+  GtkStateFlags indicator_state;
   GtkCssImageBuiltinType image_type = GTK_CSS_IMAGE_BUILTIN_NONE;
 
   state = gtk_widget_get_state_flags (GTK_WIDGET (button));
+  indicator_state = state;
 
   gtk_css_gadget_set_state (button->gadget, state);
 
@@ -207,12 +209,12 @@ gtk_model_button_update_state (GtkModelButton *button)
     {
       if (button->active && !button->menu_name)
         {
-          state |= GTK_STATE_FLAG_CHECKED;
+          indicator_state |= GTK_STATE_FLAG_CHECKED;
           image_type = GTK_CSS_IMAGE_BUILTIN_CHECK_CHECKED;
         }
       else
         {
-          state &= ~GTK_STATE_FLAG_CHECKED;
+          indicator_state &= ~GTK_STATE_FLAG_CHECKED;
           image_type = GTK_CSS_IMAGE_BUILTIN_CHECK;
         }
     }
@@ -220,12 +222,12 @@ gtk_model_button_update_state (GtkModelButton *button)
     {
       if (button->active && !button->menu_name)
         {
-          state |= GTK_STATE_FLAG_CHECKED;
+          indicator_state |= GTK_STATE_FLAG_CHECKED;
           image_type = GTK_CSS_IMAGE_BUILTIN_OPTION_CHECKED;
         }
       else
         {
-          state &= ~GTK_STATE_FLAG_CHECKED;
+          indicator_state &= ~GTK_STATE_FLAG_CHECKED;
           image_type = GTK_CSS_IMAGE_BUILTIN_OPTION;
         }
     }
@@ -239,7 +241,13 @@ gtk_model_button_update_state (GtkModelButton *button)
     }
 
   gtk_builtin_icon_set_image (GTK_BUILTIN_ICON (button->indicator_gadget), image_type);
-  gtk_css_gadget_set_state (button->indicator_gadget, state);
+
+  if (button->iconic)
+    gtk_css_gadget_set_state (button->gadget, indicator_state);
+  else
+    gtk_css_gadget_set_state (button->gadget, state);
+
+  gtk_css_gadget_set_state (button->indicator_gadget, indicator_state);
 }
 
 static void
