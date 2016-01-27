@@ -303,7 +303,7 @@ apply_use_header_bar (GtkAssistant *assistant)
   gtk_widget_set_visible (priv->headerbar, priv->use_header_bar);
   if (!priv->use_header_bar)
     gtk_window_set_titlebar (GTK_WINDOW (assistant), NULL);
-  if (priv->use_header_bar)
+  else
     g_signal_connect (priv->action_area, "add", G_CALLBACK (add_cb), assistant);
 }
 
@@ -1365,6 +1365,7 @@ gtk_assistant_destroy (GtkWidget *widget)
       priv->visited_pages = NULL;
     }
 
+  gtk_window_set_titlebar (GTK_WINDOW (widget), NULL);
   GTK_WIDGET_CLASS (gtk_assistant_parent_class)->destroy (widget);
 }
 
