@@ -6373,11 +6373,14 @@ gtk_entry_draw_text (GtkEntry *entry,
 
   if (gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &start_pos, &end_pos))
     {
+      const char *text = pango_layout_get_text (layout);
+      gint start_index = g_utf8_offset_to_pointer (text, start_pos) - text;
+      gint end_index = g_utf8_offset_to_pointer (text, end_pos) - text;
       cairo_region_t *clip;
       gint range[2];
 
-      range[0] = MIN (start_pos, end_pos);
-      range[1] = MAX (start_pos, end_pos);
+      range[0] = MIN (start_index, end_index);
+      range[1] = MAX (start_index, end_index);
 
       gtk_style_context_save_to_node (context, priv->selection_node);
 
