@@ -143,7 +143,7 @@
  *
  * The CSS node for a context menu is added as a subnode below entry as well.
  *
- * The undrshoot nodes are used to draw the underflow indication when content
+ * The undershoot nodes are used to draw the underflow indication when content
  * is scrolled out of view. These nodes get the .left and .right style classes
  * added depending on where the indication is drawn.
  *
