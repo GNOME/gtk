@@ -5234,7 +5234,7 @@ gtk_window_set_default_size (GtkWindow   *window,
  *
  * Since: 3.0
  *
- * Deprecated: 3.20: This function does noting. If you want to set a default
+ * Deprecated: 3.20: This function does nothing. If you want to set a default
  *     size, use gtk_window_set_default_size() instead.
  */
 void
