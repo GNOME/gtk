@@ -443,7 +443,7 @@ GDK_AVAILABLE_IN_ALL
 gboolean gtk_window_parse_geometry   (GtkWindow   *window,
                                       const gchar *geometry);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_20_FOR(gtk_window_set_default_size)
 void gtk_window_set_default_geometry (GtkWindow *window,
                                       gint       width,
                                       gint       height);
