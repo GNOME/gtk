@@ -4369,10 +4369,10 @@ gtk_entry_event (GtkWidget *widget,
 }
 
 static void
-gesture_get_current_point (GtkGestureSingle *gesture,
-                           GtkEntry         *entry,
-                           gint             *x,
-                           gint             *y)
+gesture_get_current_point_in_layout (GtkGestureSingle *gesture,
+                                     GtkEntry         *entry,
+                                     gint             *x,
+                                     gint             *y)
 {
   gint tx, ty;
   GdkEventSequence *sequence;
@@ -4410,7 +4410,7 @@ gtk_entry_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
 
   gtk_gesture_set_sequence_state (GTK_GESTURE (gesture), current,
                                   GTK_EVENT_SEQUENCE_CLAIMED);
-  gesture_get_current_point (GTK_GESTURE_SINGLE (gesture), entry, &x, &y);
+  gesture_get_current_point_in_layout (GTK_GESTURE_SINGLE (gesture), entry, &x, &y);
   gtk_entry_reset_blink_time (entry);
 
   if (!gtk_widget_has_focus (widget))
@@ -4420,7 +4420,7 @@ gtk_entry_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
       priv->in_click = FALSE;
     }
 
-  tmp_pos = gtk_entry_find_position (entry, x + priv->scroll_offset);
+  tmp_pos = gtk_entry_find_position (entry, x);
 
   if (gdk_event_triggers_context_menu ((GdkEvent *) event))
     {
@@ -4472,7 +4472,7 @@ gtk_entry_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
       switch (n_press)
         {
         case 1:
-          if (in_selection (entry, x + priv->scroll_offset))
+          if (in_selection (entry, x))
             {
               if (is_touchscreen)
                 {
@@ -4488,7 +4488,7 @@ gtk_entry_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
                    * clear the selection
                    */
                   priv->in_drag = TRUE;
-                  priv->drag_start_x = x + priv->scroll_offset;
+                  priv->drag_start_x = x;
                   priv->drag_start_y = y;
                }
             }
@@ -4622,7 +4622,7 @@ gtk_entry_drag_gesture_update (GtkGestureDrag *gesture,
 
   gtk_entry_selection_bubble_popup_unset (entry);
 
-  gesture_get_current_point (GTK_GESTURE_SINGLE (gesture), entry, &x, &y);
+  gesture_get_current_point_in_layout (GTK_GESTURE_SINGLE (gesture), entry, &x, &y);
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
   event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
 
@@ -4644,7 +4644,7 @@ gtk_entry_drag_gesture_update (GtkGestureDrag *gesture,
       if (gtk_entry_get_display_mode (entry) == DISPLAY_NORMAL &&
           gtk_drag_check_threshold (widget,
                                     priv->drag_start_x, priv->drag_start_y,
-                                    x + priv->scroll_offset, y))
+                                    x, y))
         {
           gint *ranges;
           gint n_ranges;
@@ -4682,7 +4682,7 @@ gtk_entry_drag_gesture_update (GtkGestureDrag *gesture,
       else if (y >= gdk_window_get_height (priv->text_area))
 	tmp_pos = length;
       else
-	tmp_pos = gtk_entry_find_position (entry, x + priv->scroll_offset);
+	tmp_pos = gtk_entry_find_position (entry, x);
 
       source = gdk_event_get_source_device (event);
       input_source = gdk_device_get_source (source);
@@ -4737,7 +4737,7 @@ gtk_entry_drag_gesture_update (GtkGestureDrag *gesture,
                                     (priv->current_pos == priv->selection_bound) ?
                                     GTK_TEXT_HANDLE_MODE_CURSOR :
                                     GTK_TEXT_HANDLE_MODE_SELECTION);
-          gtk_entry_show_magnifier (entry, x, y);
+          gtk_entry_show_magnifier (entry, x - priv->scroll_offset, y);
         }
     }
 }
