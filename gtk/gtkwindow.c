@@ -4028,13 +4028,11 @@ unset_titlebar (GtkWindow *window)
 {
   GtkWindowPrivate *priv = window->priv;
 
-  if (priv->titlebar != NULL)
-    g_signal_handlers_disconnect_by_func (priv->titlebar,
-                                          on_titlebar_title_notify,
-                                          window);
-
   if (priv->title_box != NULL)
     {
+      g_signal_handlers_disconnect_by_func (priv->title_box,
+                                            on_titlebar_title_notify,
+                                            window);
       gtk_widget_unparent (priv->title_box);
       priv->title_box = NULL;
       priv->titlebar = NULL;
