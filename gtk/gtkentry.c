@@ -122,6 +122,8 @@
  * entry
  * ├── image.left
  * ├── image.right
+ * ├── undershoot.left
+ * ├── undershoot.right
  * ├── [selection]
  * ├── [progress[.pulse]]
  * ╰── [window.popup]
@@ -140,6 +142,10 @@
  * The node has the style class .pulse when the shown progress is pulsing.
  *
  * The CSS node for a context menu is added as a subnode below entry as well.
+ *
+ * The undrshoot nodes are used to draw the underflow indication when content
+ * is scrolled out of view. These nodes get the .left and .right style classes
+ * added depending on where the indication is drawn.
  *
  * When touch is used and touch selection handles are shown, they are using
  * CSS nodes with name cursor-handle. They get the .top or .bottom style class
@@ -209,6 +215,7 @@ struct _GtkEntryPrivate
   GtkCssGadget  *gadget;
   GtkCssNode    *selection_node;
   GtkCssNode    *progress_node;
+  GtkCssNode    *undershoot_node[2];
 
   gfloat        xalign;
 
@@ -647,6 +654,9 @@ static void         get_frame_size                     (GtkEntry       *entry,
 static void         gtk_entry_move_adjustments         (GtkEntry             *entry);
 static void         gtk_entry_update_cached_style_values(GtkEntry      *entry);
 static gboolean     get_middle_click_paste             (GtkEntry *entry);
+static void         gtk_entry_get_scroll_limits        (GtkEntry       *entry,
+                                                        gint           *min_offset,
+                                                        gint           *max_offset);
 
 /* GtkTextHandle handlers */
 static void         gtk_entry_handle_drag_started      (GtkTextHandle         *handle,
@@ -2694,6 +2704,7 @@ gtk_entry_init (GtkEntry *entry)
 {
   GtkEntryPrivate *priv;
   GtkCssNode *widget_node;
+  gint i;
 
   entry->priv = gtk_entry_get_instance_private (entry);
   priv = entry->priv;
@@ -2757,6 +2768,16 @@ gtk_entry_init (GtkEntry *entry)
                                                      gtk_entry_render,
                                                      NULL,
                                                      NULL);
+
+  for (i = 0; i < 2; i++)
+    {
+      priv->undershoot_node[i] = gtk_css_node_new ();
+      gtk_css_node_set_name (priv->undershoot_node[i], I_("undershoot"));
+      gtk_css_node_add_class (priv->undershoot_node[i], g_quark_from_static_string (i == 0 ? GTK_STYLE_CLASS_LEFT : GTK_STYLE_CLASS_RIGHT));
+      gtk_css_node_set_parent (priv->undershoot_node[i], widget_node);
+      gtk_css_node_set_state (priv->undershoot_node[i], gtk_css_node_get_state (widget_node));
+      g_object_unref (priv->undershoot_node[i]);
+    }
 }
 
 static void
@@ -3901,6 +3922,44 @@ gtk_entry_draw (GtkWidget *widget,
   return GDK_EVENT_PROPAGATE;
 }
 
+#define UNDERSHOOT_SIZE 20
+
+static void
+gtk_entry_draw_undershoot (GtkEntry *entry,
+                           cairo_t  *cr)
+{
+  GtkEntryPrivate *priv = entry->priv;
+  GtkStyleContext *context;
+  gint min_offset, max_offset;
+  GtkAllocation allocation;
+  GdkRectangle rect;
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (entry));
+
+  gtk_entry_get_scroll_limits (entry, &min_offset, &max_offset);
+
+  gtk_css_gadget_get_content_allocation (priv->gadget, &rect, NULL);
+  gtk_widget_get_allocation (GTK_WIDGET (entry), &allocation);
+  rect.x -= allocation.x;
+  rect.y -= allocation.y;
+
+  if (priv->scroll_offset > min_offset)
+    {
+      gtk_style_context_save_to_node (context, priv->undershoot_node[0]);
+      gtk_render_background (context, cr, rect.x, rect.y, UNDERSHOOT_SIZE, rect.height);
+      gtk_render_frame (context, cr, rect.x, rect.y, UNDERSHOOT_SIZE, rect.height);
+      gtk_style_context_restore (context);
+    }
+
+  if (priv->scroll_offset < max_offset)
+    {
+      gtk_style_context_save_to_node (context, priv->undershoot_node[1]);
+      gtk_render_background (context, cr, rect.x + rect.width - UNDERSHOOT_SIZE, rect.y, UNDERSHOOT_SIZE, rect.height);
+      gtk_render_frame (context, cr, rect.x + rect.width - UNDERSHOOT_SIZE, rect.y, UNDERSHOOT_SIZE, rect.height);
+      gtk_style_context_restore (context);
+    }
+}
+
 static gboolean
 gtk_entry_render (GtkCssGadget *gadget,
                   cairo_t      *cr,
@@ -3951,6 +4010,8 @@ gtk_entry_render (GtkCssGadget *gadget,
           if (icon_info != NULL)
             gtk_css_gadget_draw (icon_info->gadget, cr);
         }
+
+      gtk_entry_draw_undershoot (entry, cr);
     }
 
   return FALSE;
@@ -6773,21 +6834,16 @@ gtk_entry_get_is_selection_handle_dragged (GtkEntry *entry)
 }
 
 static void
-gtk_entry_adjust_scroll (GtkEntry *entry)
+gtk_entry_get_scroll_limits (GtkEntry *entry,
+                             gint     *min_offset,
+                             gint     *max_offset)
 {
   GtkEntryPrivate *priv = entry->priv;
-  gint min_offset, max_offset;
-  gint text_width;
-  gint strong_x, weak_x;
-  gint strong_xoffset, weak_xoffset;
   gfloat xalign;
   PangoLayout *layout;
   PangoLayoutLine *line;
   PangoRectangle logical_rect;
-  GtkTextHandleMode handle_mode;
-
-  if (!gtk_widget_get_realized (GTK_WIDGET (entry)))
-    return;
+  gint text_width;
 
   layout = gtk_entry_ensure_layout (entry, TRUE);
   line = pango_layout_get_lines_readonly (layout)->data;
@@ -6805,14 +6861,29 @@ gtk_entry_adjust_scroll (GtkEntry *entry)
 
   if (text_width > priv->text_allocation.width)
     {
-      min_offset = 0;
-      max_offset = text_width - priv->text_allocation.width;
+      *min_offset = 0;
+      *max_offset = text_width - priv->text_allocation.width;
     }
   else
     {
-      min_offset = (text_width - priv->text_allocation.width) * xalign;
-      max_offset = min_offset;
+      *min_offset = (text_width - priv->text_allocation.width) * xalign;
+      *max_offset = *min_offset;
     }
+}
+
+static void
+gtk_entry_adjust_scroll (GtkEntry *entry)
+{
+  GtkEntryPrivate *priv = entry->priv;
+  gint min_offset, max_offset;
+  gint strong_x, weak_x;
+  gint strong_xoffset, weak_xoffset;
+  GtkTextHandleMode handle_mode;
+
+  if (!gtk_widget_get_realized (GTK_WIDGET (entry)))
+    return;
+
+  gtk_entry_get_scroll_limits (entry, &min_offset, &max_offset);
 
   priv->scroll_offset = CLAMP (priv->scroll_offset, min_offset, max_offset);
 
