@@ -2255,9 +2255,15 @@ static void
 gdk_x11_display_notify_startup_complete (GdkDisplay  *display,
                                          const gchar *startup_id)
 {
+  gchar *free_this = NULL;
+
   if (startup_id == NULL)
     {
-      startup_id = GDK_X11_DISPLAY (display)->startup_notification_id;
+      GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
+
+      startup_id = free_this = display_x11->startup_notification_id;
+      display_x11->startup_notification_id = NULL;
+
       if (startup_id == NULL)
         return;
     }
@@ -2265,6 +2271,8 @@ gdk_x11_display_notify_startup_complete (GdkDisplay  *display,
   gdk_x11_display_broadcast_startup_message (display, "remove",
                                              "ID", startup_id,
                                              NULL);
+
+  g_free (free_this);
 }
 
 static gboolean

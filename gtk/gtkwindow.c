@@ -542,7 +542,6 @@ static GList       *default_icon_list = NULL;
 static gchar       *default_icon_name = NULL;
 static guint        default_icon_serial = 0;
 static gboolean     disable_startup_notification = FALSE;
-static gboolean     sent_startup_notification = FALSE;
 
 static GQuark       quark_gtk_embedded = 0;
 static GQuark       quark_gtk_window_key_hash = 0;
@@ -6249,9 +6248,8 @@ gtk_window_map (GtkWidget *widget)
           g_free (priv->startup_id);
           priv->startup_id = NULL;
         }
-      else if (!sent_startup_notification)
+      else
         {
-          sent_startup_notification = TRUE;
           gdk_notify_startup_complete ();
         }
     }

@@ -701,8 +701,6 @@ static void
 gtk_application_after_emit (GApplication *application,
                             GVariant     *platform_data)
 {
-  gdk_notify_startup_complete ();
-
   gdk_threads_leave ();
 }
 
