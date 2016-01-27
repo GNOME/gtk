@@ -133,7 +133,11 @@ gtk_box_gadget_distribute (GtkBoxGadget     *gadget,
       size -= sizes[i].minimum_size;
     }
 
-  g_return_if_fail (size >= 0);
+  if G_UNLIKELY (size < 0)
+    {
+      g_critical ("%s: assertion 'size >= 0' failed in %s", G_STRFUNC, G_OBJECT_TYPE_NAME (gtk_css_gadget_get_owner (GTK_CSS_GADGET (gadget))));
+      return;
+    }
 
   size = gtk_distribute_natural_allocation (size, priv->children->len, sizes);
 
