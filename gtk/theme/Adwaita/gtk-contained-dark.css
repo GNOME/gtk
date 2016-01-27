@@ -156,7 +156,7 @@ spinner {
 /****************
  * Text Entries *
  ****************/
-entry, spinbutton {
+entry, spinbutton:not(.vertical) {
   min-height: 32px;
   border: 1px solid;
   padding-left: 8px;
@@ -168,13 +168,13 @@ entry, spinbutton {
   color: white;
   border-color: #1c1f1f;
   box-shadow: inset 0 0 0 1px rgba(33, 93, 156, 0), 0 1px rgba(238, 238, 236, 0); }
-  entry image.left, spinbutton image.left {
+  entry image.left, spinbutton:not(.vertical) image.left {
     padding-left: 0;
     padding-right: 6px; }
-  entry image.right, spinbutton image.right {
+  entry image.right, spinbutton:not(.vertical) image.right {
     padding-left: 6px;
     padding-right: 0; }
-  entry undershoot.left, spinbutton undershoot.left {
+  entry undershoot.left, spinbutton:not(.vertical) undershoot.left {
     background-color: transparent;
     background-image: linear-gradient(to top, rgba(255, 255, 255, 0.2) 50%, rgba(0, 0, 0, 0.2) 50%);
     padding-left: 1px;
@@ -184,7 +184,7 @@ entry, spinbutton {
     background-position: left center;
     border: none;
     box-shadow: none; }
-  entry undershoot.right, spinbutton undershoot.right {
+  entry undershoot.right, spinbutton:not(.vertical) undershoot.right {
     background-color: transparent;
     background-image: linear-gradient(to top, rgba(255, 255, 255, 0.2) 50%, rgba(0, 0, 0, 0.2) 50%);
     padding-right: 1px;
@@ -194,7 +194,7 @@ entry, spinbutton {
     background-position: right center;
     border: none;
     box-shadow: none; }
-  entry.flat, spinbutton.flat, entry.flat:focus, spinbutton.flat:focus {
+  entry.flat, spinbutton.flat:not(.vertical), entry.flat:focus, spinbutton.flat:focus:not(.vertical) {
     padding: 2px;
     background-color: #292929;
     background-image: linear-gradient(to bottom, #1d2020, #242525 3px, #292929 90%);
@@ -203,33 +203,33 @@ entry, spinbutton {
     box-shadow: inset 0 0 0 1px rgba(33, 93, 156, 0);
     border: none;
     border-radius: 0; }
-  entry:focus, spinbutton:focus {
+  entry:focus, spinbutton:focus:not(.vertical) {
     background-color: #292929;
     background-image: linear-gradient(to bottom, #1d2020, #242525 3px, #292929 90%);
     box-shadow: inset 0 0 0 1px #215d9c, 0 1px rgba(238, 238, 236, 0);
     border-color: #0f2b48; }
-  entry:disabled, spinbutton:disabled {
+  entry:disabled, spinbutton:disabled:not(.vertical) {
     background-color: #292929;
     background-image: linear-gradient(to bottom, #1d2020, #242525 3px, #292929 90%);
     color: #949796;
     border-color: #1c1f1f;
     background-image: linear-gradient(to bottom, #333636);
     box-shadow: 0 1px rgba(238, 238, 236, 0); }
-  entry:backdrop, spinbutton:backdrop {
+  entry:backdrop, spinbutton:backdrop:not(.vertical) {
     background-color: #292929;
     background-image: linear-gradient(to bottom, #1d2020, #242525 3px, #292929 90%);
     color: #d5d5d5;
     border-color: #1f2222;
     background-image: linear-gradient(to bottom, #2c2c2c);
     box-shadow: 0 1px rgba(238, 238, 236, 0); }
-  entry:backdrop:disabled, spinbutton:backdrop:disabled {
+  entry:backdrop:disabled, spinbutton:backdrop:disabled:not(.vertical) {
     background-color: #292929;
     background-image: linear-gradient(to bottom, #1d2020, #242525 3px, #292929 90%);
     color: #5d6767;
     border-color: #1f2222;
     background-image: linear-gradient(to bottom, #333636);
     box-shadow: 0 1px rgba(238, 238, 236, 0); }
-  entry progress, spinbutton progress {
+  entry progress, spinbutton:not(.vertical) progress {
     margin: 1px;
     border-radius: 0;
     border-width: 0 0 2px;
@@ -238,41 +238,41 @@ entry, spinbutton {
     background-image: none;
     background-color: transparent;
     box-shadow: none; }
-    entry progress:backdrop, spinbutton progress:backdrop {
+    entry progress:backdrop, spinbutton:not(.vertical) progress:backdrop {
       background-color: transparent; }
-  entry:focus progress, spinbutton:focus progress {
+  entry:focus progress, spinbutton:focus:not(.vertical) progress {
     border-bottom-width: 3px; }
-  .linked:not(.vertical) > entry:focus + entry, .linked:not(.vertical) > spinbutton:focus + entry, .linked:not(.vertical) > entry:focus + spinbutton, .linked:not(.vertical) > spinbutton:focus + spinbutton, .linked:not(.vertical) > entry:focus + button, .linked:not(.vertical) > spinbutton:focus + button, .linked:not(.vertical) > entry:focus + combobox > button.combo, .linked:not(.vertical) > spinbutton:focus + combobox > button.combo {
+  .linked:not(.vertical) > entry:focus + entry, .linked:not(.vertical) > spinbutton:focus:not(.vertical) + entry, .linked:not(.vertical) > entry:focus + spinbutton:not(.vertical), .linked:not(.vertical) > spinbutton:focus:not(.vertical) + spinbutton:not(.vertical), .linked:not(.vertical) > entry:focus + button, .linked:not(.vertical) > spinbutton:focus:not(.vertical) + button, .linked:not(.vertical) > entry:focus + combobox > button.combo, .linked:not(.vertical) > spinbutton:focus:not(.vertical) + combobox > button.combo {
     border-left-color: #0f2b48; }
-  entry.error, spinbutton.error {
+  entry.error, spinbutton.error:not(.vertical) {
     color: #cc0000;
     border-color: #1a0000; }
-    entry.error:focus, spinbutton.error:focus {
+    entry.error:focus, spinbutton.error:focus:not(.vertical) {
       background-color: #292929;
       background-image: linear-gradient(to bottom, #1d2020, #242525 3px, #292929 90%);
       box-shadow: inset 0 0 0 1px #cc0000, 0 1px rgba(238, 238, 236, 0);
       border-color: #1a0000; }
-    entry.error:selected, spinbutton.error:selected, entry.error:selected:focus, spinbutton.error:selected:focus {
+    entry.error:selected, spinbutton.error:selected:not(.vertical), entry.error:selected:focus, spinbutton.error:selected:focus:not(.vertical) {
       background-color: #cc0000; }
-  entry.warning, spinbutton.warning {
+  entry.warning, spinbutton.warning:not(.vertical) {
     color: #f57900;
     border-color: #432100; }
-    entry.warning:focus, spinbutton.warning:focus {
+    entry.warning:focus, spinbutton.warning:focus:not(.vertical) {
       background-color: #292929;
       background-image: linear-gradient(to bottom, #1d2020, #242525 3px, #292929 90%);
       box-shadow: inset 0 0 0 1px #f57900, 0 1px rgba(238, 238, 236, 0);
       border-color: #432100; }
-    entry.warning:selected, spinbutton.warning:selected, entry.warning:selected:focus, spinbutton.warning:selected:focus {
+    entry.warning:selected, spinbutton.warning:selected:not(.vertical), entry.warning:selected:focus, spinbutton.warning:selected:focus:not(.vertical) {
       background-color: #f57900; }
-  entry image, spinbutton image {
+  entry image, spinbutton:not(.vertical) image {
     color: #c7c7c5; }
-    entry image:hover, spinbutton image:hover {
+    entry image:hover, spinbutton:not(.vertical) image:hover {
       color: #eeeeec; }
-    entry image:active, spinbutton image:active {
+    entry image:active, spinbutton:not(.vertical) image:active {
       color: #215d9c; }
-    entry image:backdrop, spinbutton image:backdrop {
+    entry image:backdrop, spinbutton:not(.vertical) image:backdrop {
       color: #7f8281; }
-  .osd entry, .osd spinbutton {
+  .osd entry, .osd spinbutton:not(.vertical) {
     background-color: #292929;
     background-image: linear-gradient(to bottom, #1d2020, #242525 3px, #292929 90%);
     color: white;
@@ -282,7 +282,7 @@ entry, spinbutton {
     box-shadow: none;
     text-shadow: 0 1px black;
     -gtk-icon-shadow: 0 1px black; }
-    .osd entry:focus, .osd spinbutton:focus {
+    .osd entry:focus, .osd spinbutton:focus:not(.vertical) {
       background-color: #292929;
       background-image: linear-gradient(to bottom, #1d2020, #242525 3px, #292929 90%);
       color: white;
@@ -292,7 +292,7 @@ entry, spinbutton {
       box-shadow: inset 0 0 0 1px #215d9c;
       text-shadow: 0 1px black;
       -gtk-icon-shadow: 0 1px black; }
-    .osd entry:backdrop, .osd spinbutton:backdrop {
+    .osd entry:backdrop, .osd spinbutton:backdrop:not(.vertical) {
       background-color: #292929;
       background-image: linear-gradient(to bottom, #1d2020, #242525 3px, #292929 90%);
       color: white;
@@ -302,7 +302,7 @@ entry, spinbutton {
       box-shadow: none;
       text-shadow: none;
       -gtk-icon-shadow: none; }
-    .osd entry:disabled, .osd spinbutton:disabled {
+    .osd entry:disabled, .osd spinbutton:disabled:not(.vertical) {
       background-color: #292929;
       background-image: linear-gradient(to bottom, #1d2020, #242525 3px, #292929 90%);
       color: #878a89;
@@ -313,28 +313,28 @@ entry, spinbutton {
       text-shadow: none;
       -gtk-icon-shadow: none; }
 
-.linked.vertical > entry:not(:last-child), .linked.vertical > spinbutton:not(:last-child) {
+.linked.vertical > entry:not(:last-child), .linked.vertical > spinbutton:not(:last-child):not(.vertical) {
   box-shadow: none; }
-.linked.vertical > entry:focus:not(:last-child), .linked.vertical > spinbutton:focus:not(:last-child) {
+.linked.vertical > entry:focus:not(:last-child), .linked.vertical > spinbutton:focus:not(:last-child):not(.vertical) {
   box-shadow: inset 0 0 0 1px #215d9c; }
-.linked.vertical > entry:not(:disabled) + entry:not(:disabled), .linked.vertical > spinbutton:not(:disabled) + entry:not(:disabled), .linked.vertical > entry:not(:disabled) + spinbutton:not(:disabled), .linked.vertical > spinbutton:not(:disabled) + spinbutton:not(:disabled) {
+.linked.vertical > entry:not(:disabled) + entry:not(:disabled), .linked.vertical > spinbutton:not(:disabled):not(.vertical) + entry:not(:disabled), .linked.vertical > entry:not(:disabled) + spinbutton:not(:disabled):not(.vertical), .linked.vertical > spinbutton:not(:disabled):not(.vertical) + spinbutton:not(:disabled):not(.vertical) {
   border-top-color: #252626;
   background-image: linear-gradient(to bottom, #292929); }
-  .linked.vertical > entry:not(:disabled) + entry:not(:disabled):backdrop, .linked.vertical > spinbutton:not(:disabled) + entry:not(:disabled):backdrop, .linked.vertical > entry:not(:disabled) + spinbutton:not(:disabled):backdrop, .linked.vertical > spinbutton:not(:disabled) + spinbutton:not(:disabled):backdrop {
+  .linked.vertical > entry:not(:disabled) + entry:not(:disabled):backdrop, .linked.vertical > spinbutton:not(:disabled):not(.vertical) + entry:not(:disabled):backdrop, .linked.vertical > entry:not(:disabled) + spinbutton:not(:disabled):backdrop:not(.vertical), .linked.vertical > spinbutton:not(:disabled):not(.vertical) + spinbutton:not(:disabled):backdrop:not(.vertical) {
     border-top-color: #282929;
     background-image: linear-gradient(to bottom, #2c2c2c); }
-.linked.vertical > entry:disabled + entry:disabled, .linked.vertical > spinbutton:disabled + entry:disabled, .linked.vertical > entry:disabled + spinbutton:disabled, .linked.vertical > spinbutton:disabled + spinbutton:disabled {
+.linked.vertical > entry:disabled + entry:disabled, .linked.vertical > spinbutton:disabled:not(.vertical) + entry:disabled, .linked.vertical > entry:disabled + spinbutton:disabled:not(.vertical), .linked.vertical > spinbutton:disabled:not(.vertical) + spinbutton:disabled:not(.vertical) {
   border-top-color: #252626; }
-.linked.vertical > entry + entry:focus:not(:last-child), .linked.vertical > spinbutton + entry:focus:not(:last-child), .linked.vertical > entry + spinbutton:focus:not(:last-child), .linked.vertical > spinbutton + spinbutton:focus:not(:last-child) {
+.linked.vertical > entry + entry:focus:not(:last-child), .linked.vertical > spinbutton:not(.vertical) + entry:focus:not(:last-child), .linked.vertical > entry + spinbutton:focus:not(:last-child):not(.vertical), .linked.vertical > spinbutton:not(.vertical) + spinbutton:focus:not(:last-child):not(.vertical) {
   border-top-color: #0f2b48;
   box-shadow: inset 0 0 0 1px #215d9c; }
-.linked.vertical > entry + entry:focus:last-child, .linked.vertical > spinbutton + entry:focus:last-child, .linked.vertical > entry + spinbutton:focus:last-child, .linked.vertical > spinbutton + spinbutton:focus:last-child {
+.linked.vertical > entry + entry:focus:last-child, .linked.vertical > spinbutton:not(.vertical) + entry:focus:last-child, .linked.vertical > entry + spinbutton:focus:last-child:not(.vertical), .linked.vertical > spinbutton:not(.vertical) + spinbutton:focus:last-child:not(.vertical) {
   border-top-color: #0f2b48; }
-.linked.vertical > entry:focus:not(:only-child) + entry, .linked.vertical > spinbutton:focus:not(:only-child) + entry, .linked.vertical > entry:focus:not(:only-child) + spinbutton, .linked.vertical > spinbutton:focus:not(:only-child) + spinbutton,
+.linked.vertical > entry:focus:not(:only-child) + entry, .linked.vertical > spinbutton:focus:not(:only-child):not(.vertical) + entry, .linked.vertical > entry:focus:not(:only-child) + spinbutton:not(.vertical), .linked.vertical > spinbutton:focus:not(:only-child):not(.vertical) + spinbutton:not(.vertical),
 .linked.vertical > entry:focus:not(:only-child) + button,
-.linked.vertical > spinbutton:focus:not(:only-child) + button,
+.linked.vertical > spinbutton:focus:not(:only-child):not(.vertical) + button,
 .linked.vertical > entry:focus:not(:only-child) + combobox > button.combo,
-.linked.vertical > spinbutton:focus:not(:only-child) + combobox > button.combo {
+.linked.vertical > spinbutton:focus:not(:only-child):not(.vertical) + combobox > button.combo {
   border-top-color: #0f2b48; }
 
 /***********
@@ -1137,14 +1137,14 @@ searchbar.inline-toolbar toolbutton:backdrop > button.sidebar-button,
 .inline-toolbar headerbar toolbutton:backdrop > button.titlebutton,
 headerbar .inline-toolbar toolbutton:backdrop > button.titlebutton,
 .inline-toolbar .titlebar toolbutton:backdrop > button.titlebutton,
-.titlebar .inline-toolbar toolbutton:backdrop > button.titlebutton, .linked:not(.vertical) > entry, .linked:not(.vertical) > spinbutton, .inline-toolbar button, .inline-toolbar headerbar button.titlebutton, headerbar .inline-toolbar button.titlebutton,
+.titlebar .inline-toolbar toolbutton:backdrop > button.titlebutton, .linked:not(.vertical) > entry, .linked:not(.vertical) > spinbutton:not(.vertical), .inline-toolbar button, .inline-toolbar headerbar button.titlebutton, headerbar .inline-toolbar button.titlebutton,
 .inline-toolbar .titlebar button.titlebutton,
 .titlebar .inline-toolbar button.titlebutton, .inline-toolbar button:backdrop, .linked > button, headerbar .linked > button.titlebutton,
 .titlebar .linked > button.titlebutton, .linked > button:hover, .linked > button:active, .linked > button:checked, .linked > button:backdrop, .linked > combobox > button.combo:dir(ltr), .linked > combobox > button.combo:dir(rtl) {
   border-radius: 0;
   border-right-style: none; }
 
-.linked:not(.vertical) > entry:first-child, .linked:not(.vertical) > spinbutton:first-child, .inline-toolbar button:first-child, .linked > button:first-child, headerbar .linked > button.titlebutton:first-child,
+.linked:not(.vertical) > entry:first-child, .linked:not(.vertical) > spinbutton:first-child:not(.vertical), .inline-toolbar button:first-child, .linked > button:first-child, headerbar .linked > button.titlebutton:first-child,
 .titlebar .linked > button.titlebutton:first-child, toolbar.inline-toolbar toolbutton:first-child > button.flat, .inline-toolbar toolbutton:first-child > button.flat, searchbar.inline-toolbar toolbutton:first-child > button.flat,
 .inline-toolbar.location-bar toolbutton:first-child > button.flat, toolbar.inline-toolbar toolbutton:first-child > button.sidebar-button, .inline-toolbar toolbutton:first-child > button.sidebar-button, searchbar.inline-toolbar toolbutton:first-child > button.sidebar-button,
 .inline-toolbar.location-bar toolbutton:first-child > button.sidebar-button, .inline-toolbar headerbar toolbutton:first-child > button.titlebutton, headerbar .inline-toolbar toolbutton:first-child > button.titlebutton,
@@ -1164,7 +1164,7 @@ headerbar .inline-toolbar toolbutton:backdrop:first-child > button.titlebutton,
 .titlebar .inline-toolbar toolbutton:backdrop:first-child > button.titlebutton, combobox.linked button:nth-child(2):dir(rtl), .linked:not(.vertical) > combobox:first-child > button.combo {
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px; }
-.linked:not(.vertical) > entry:last-child, .linked:not(.vertical) > spinbutton:last-child, .inline-toolbar button:last-child, .linked > button:last-child, headerbar .linked > button.titlebutton:last-child,
+.linked:not(.vertical) > entry:last-child, .linked:not(.vertical) > spinbutton:last-child:not(.vertical), .inline-toolbar button:last-child, .linked > button:last-child, headerbar .linked > button.titlebutton:last-child,
 .titlebar .linked > button.titlebutton:last-child, toolbar.inline-toolbar toolbutton:last-child > button.flat, .inline-toolbar toolbutton:last-child > button.flat, searchbar.inline-toolbar toolbutton:last-child > button.flat,
 .inline-toolbar.location-bar toolbutton:last-child > button.flat, toolbar.inline-toolbar toolbutton:last-child > button.sidebar-button, .inline-toolbar toolbutton:last-child > button.sidebar-button, searchbar.inline-toolbar toolbutton:last-child > button.sidebar-button,
 .inline-toolbar.location-bar toolbutton:last-child > button.sidebar-button, .inline-toolbar headerbar toolbutton:last-child > button.titlebutton, headerbar .inline-toolbar toolbutton:last-child > button.titlebutton,
@@ -1185,7 +1185,7 @@ headerbar .inline-toolbar toolbutton:backdrop:last-child > button.titlebutton,
   border-top-right-radius: 3px;
   border-bottom-right-radius: 3px;
   border-right-style: solid; }
-.linked:not(.vertical) > entry:only-child, .linked:not(.vertical) > spinbutton:only-child, .inline-toolbar button:only-child, .linked > button:only-child, headerbar .linked > button.titlebutton:only-child,
+.linked:not(.vertical) > entry:only-child, .linked:not(.vertical) > spinbutton:only-child:not(.vertical), .inline-toolbar button:only-child, .linked > button:only-child, headerbar .linked > button.titlebutton:only-child,
 .titlebar .linked > button.titlebutton:only-child, toolbar.inline-toolbar toolbutton:only-child > button.flat, .inline-toolbar toolbutton:only-child > button.flat, searchbar.inline-toolbar toolbutton:only-child > button.flat,
 .inline-toolbar.location-bar toolbutton:only-child > button.flat, toolbar.inline-toolbar toolbutton:only-child > button.sidebar-button, .inline-toolbar toolbutton:only-child > button.sidebar-button, searchbar.inline-toolbar toolbutton:only-child > button.sidebar-button,
 .inline-toolbar.location-bar toolbutton:only-child > button.sidebar-button, .inline-toolbar headerbar toolbutton:only-child > button.titlebutton, headerbar .inline-toolbar toolbutton:only-child > button.titlebutton,
@@ -1206,21 +1206,21 @@ headerbar .inline-toolbar toolbutton:backdrop:only-child > button.titlebutton,
   border-radius: 3px;
   border-style: solid; }
 
-.linked.vertical > entry, .linked.vertical > spinbutton, .linked.vertical > button, headerbar .linked.vertical > button.titlebutton,
+.linked.vertical > entry, .linked.vertical > spinbutton:not(.vertical), .linked.vertical > button, headerbar .linked.vertical > button.titlebutton,
 .titlebar .linked.vertical > button.titlebutton, .linked.vertical > button:hover, .linked.vertical > button:active, .linked.vertical > button:checked, .linked.vertical > button:backdrop, .linked.vertical > combobox > button.combo {
   border-style: solid solid none solid;
   border-radius: 0; }
 
-.linked.vertical > entry:first-child, .linked.vertical > spinbutton:first-child, .linked.vertical > button:first-child, headerbar .linked.vertical > button.titlebutton:first-child,
+.linked.vertical > entry:first-child, .linked.vertical > spinbutton:first-child:not(.vertical), .linked.vertical > button:first-child, headerbar .linked.vertical > button.titlebutton:first-child,
 .titlebar .linked.vertical > button.titlebutton:first-child, .linked.vertical > combobox:first-child > button.combo {
   border-top-left-radius: 3px;
   border-top-right-radius: 3px; }
-.linked.vertical > entry:last-child, .linked.vertical > spinbutton:last-child, .linked.vertical > button:last-child, headerbar .linked.vertical > button.titlebutton:last-child,
+.linked.vertical > entry:last-child, .linked.vertical > spinbutton:last-child:not(.vertical), .linked.vertical > button:last-child, headerbar .linked.vertical > button.titlebutton:last-child,
 .titlebar .linked.vertical > button.titlebutton:last-child, .linked.vertical > combobox:last-child > button.combo {
   border-bottom-left-radius: 3px;
   border-bottom-right-radius: 3px;
   border-style: solid; }
-.linked.vertical > entry:only-child, .linked.vertical > spinbutton:only-child, .linked.vertical > button:only-child, headerbar .linked.vertical > button.titlebutton:only-child,
+.linked.vertical > entry:only-child, .linked.vertical > spinbutton:only-child:not(.vertical), .linked.vertical > button:only-child, headerbar .linked.vertical > button.titlebutton:only-child,
 .titlebar .linked.vertical > button.titlebutton:only-child, .linked.vertical > combobox:only-child > button.combo {
   border-radius: 3px;
   border-style: solid; }
@@ -1350,35 +1350,44 @@ headerbar button.titlebutton:visited,
 /*****************
  * GtkSpinButton *
  *****************/
-spinbutton:not(.vertical) button,
-spinbutton:not(.vertical) .titlebar button.titlebutton,
-.titlebar spinbutton:not(.vertical) button.titlebutton {
-  background-image: none;
-  border-style: none none none solid;
-  border-color: rgba(28, 31, 31, 0.3);
-  color: #dadad9;
-  border-radius: 0;
-  box-shadow: none; }
-  spinbutton:not(.vertical) button:dir(rtl) {
-    border-style: none solid none none; }
-  spinbutton:not(.vertical) button:hover {
-    color: #eeeeec;
-    background-color: rgba(238, 238, 236, 0.05); }
-  spinbutton:not(.vertical) button:disabled {
-    color: rgba(148, 151, 150, 0.3); }
-  spinbutton:not(.vertical) button:active {
-    box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.2);
-    background-color: rgba(0, 0, 0, 0.1); }
-  spinbutton:not(.vertical) button:backdrop {
-    color: #8a8c8b;
-    border-color: rgba(31, 34, 34, 0.3);
-    background-color: transparent; }
-  spinbutton:not(.vertical) button:backdrop:disabled {
+spinbutton:not(.vertical) {
+  padding: 0; }
+  spinbutton:not(.vertical) entry, spinbutton:not(.vertical) spinbutton:not(.vertical) {
+    background: none;
+    border: none;
+    box-shadow: none; }
+  spinbutton:not(.vertical) button,
+  spinbutton:not(.vertical) .titlebar button.titlebutton,
+  .titlebar spinbutton:not(.vertical) button.titlebutton {
     background-image: none;
-    color: rgba(93, 103, 103, 0.3);
-    border-style: none none none solid; }
-    spinbutton:not(.vertical) button:backdrop:disabled:dir(rtl) {
+    border-style: none none none solid;
+    border-color: rgba(28, 31, 31, 0.3);
+    color: #dadad9;
+    border-radius: 0;
+    box-shadow: none;
+    min-height: 16px;
+    padding-top: 0;
+    padding-bottom: 0; }
+    spinbutton:not(.vertical) button:dir(rtl) {
       border-style: none solid none none; }
+    spinbutton:not(.vertical) button:hover {
+      color: #eeeeec;
+      background-color: rgba(238, 238, 236, 0.05); }
+    spinbutton:not(.vertical) button:disabled {
+      color: rgba(148, 151, 150, 0.3); }
+    spinbutton:not(.vertical) button:active {
+      box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.2);
+      background-color: rgba(0, 0, 0, 0.1); }
+    spinbutton:not(.vertical) button:backdrop {
+      color: #8a8c8b;
+      border-color: rgba(31, 34, 34, 0.3);
+      background-color: transparent; }
+    spinbutton:not(.vertical) button:backdrop:disabled {
+      background-image: none;
+      color: rgba(93, 103, 103, 0.3);
+      border-style: none none none solid; }
+      spinbutton:not(.vertical) button:backdrop:disabled:dir(rtl) {
+        border-style: none solid none none; }
 .osd spinbutton:not(.vertical) button {
   border-color: transparent;
   background-color: transparent;
@@ -1432,78 +1441,78 @@ spinbutton:not(.vertical) .titlebar button.titlebutton,
     border-radius: 0 3px 3px 0; }
   .osd spinbutton:not(.vertical) button:dir(rtl):first-child {
     border-radius: 3px 0 0 3px; }
-spinbutton.vertical {
+spinbutton.vertical entry, spinbutton.vertical spinbutton:not(.vertical) {
   border-radius: 0;
   padding-left: 4px;
   padding-right: 4px; }
-  spinbutton.vertical button,
-  spinbutton.vertical .titlebar button.titlebutton,
-  .titlebar spinbutton.vertical button.titlebutton {
-    padding-top: 8px;
-    padding-bottom: 8px; }
-    spinbutton.vertical button:first-child {
+spinbutton.vertical button,
+spinbutton.vertical .titlebar button.titlebutton,
+.titlebar spinbutton.vertical button.titlebutton {
+  padding-top: 8px;
+  padding-bottom: 8px; }
+  spinbutton.vertical button.up {
+    color: #eeeeec;
+    outline-color: rgba(238, 238, 236, 0.3);
+    border-color: #1c1f1f;
+    background-image: linear-gradient(to bottom, #343a3a, #2f3434 60%, #2a2f2f);
+    text-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
+    -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.05); }
+    spinbutton.vertical button.up:active {
       color: #eeeeec;
       outline-color: rgba(238, 238, 236, 0.3);
       border-color: #1c1f1f;
-      background-image: linear-gradient(to bottom, #343a3a, #2f3434 60%, #2a2f2f);
-      text-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
-      -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
+      background-image: linear-gradient(to bottom, #232727, #2d3232);
+      text-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
+      -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
+      box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
+    spinbutton.vertical button.up:hover {
+      color: #eeeeec;
+      outline-color: rgba(238, 238, 236, 0.3);
+      border-color: #1c1f1f;
+      /*
+      background-image: linear-gradient(to bottom,
+                                        lighten($c, 16%),
+                                        lighten($c, 6%) 40%,
+                                        lighten($c, 2%));
+      */
+      background-image: linear-gradient(to bottom, #3b4242, #343a3a 60%, #2f3434);
+      text-shadow: 0 -1px rgba(0, 0, 0, 0.76376);
+      -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.76376);
       box-shadow: inset 0 1px rgba(255, 255, 255, 0.05); }
-      spinbutton.vertical button:first-child:active {
-        color: #eeeeec;
-        outline-color: rgba(238, 238, 236, 0.3);
-        border-color: #1c1f1f;
-        background-image: linear-gradient(to bottom, #232727, #2d3232);
-        text-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
-        -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
-        box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
-      spinbutton.vertical button:first-child:hover {
-        color: #eeeeec;
-        outline-color: rgba(238, 238, 236, 0.3);
-        border-color: #1c1f1f;
-        /*
-        background-image: linear-gradient(to bottom,
-                                          lighten($c, 16%),
-                                          lighten($c, 6%) 40%,
-                                          lighten($c, 2%));
-        */
-        background-image: linear-gradient(to bottom, #3b4242, #343a3a 60%, #2f3434);
-        text-shadow: 0 -1px rgba(0, 0, 0, 0.76376);
-        -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.76376);
-        box-shadow: inset 0 1px rgba(255, 255, 255, 0.05); }
-      spinbutton.vertical button:first-child:disabled {
-        color: #949796;
-        border-color: #1c1f1f;
+    spinbutton.vertical button.up:disabled {
+      color: #949796;
+      border-color: #1c1f1f;
+      background-image: linear-gradient(to bottom, #333636);
+      text-shadow: none;
+      -gtk-icon-shadow: none;
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
+      spinbutton.vertical button.up:disabled > .label, spinbutton.vertical headerbar button.up.titlebutton:disabled > .label,
+      spinbutton.vertical .titlebar button.up.titlebutton:disabled > .label {
+        color: inherit; }
+    spinbutton.vertical button.up:backdrop {
+      color: #949796;
+      border-color: #1f2222;
+      background-image: linear-gradient(to bottom, #393f3f);
+      text-shadow: none;
+      -gtk-icon-shadow: none;
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
+      spinbutton.vertical button.up:backdrop:disabled {
+        color: #5d6767;
+        border-color: #1f2222;
         background-image: linear-gradient(to bottom, #333636);
         text-shadow: none;
         -gtk-icon-shadow: none;
         box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
-        spinbutton.vertical button:first-child:disabled > .label, spinbutton.vertical headerbar button.titlebutton:first-child:disabled > .label,
-        spinbutton.vertical .titlebar button.titlebutton:first-child:disabled > .label {
+        spinbutton.vertical button.up:backdrop:disabled > .label, spinbutton.vertical headerbar button.up.titlebutton:backdrop:disabled > .label,
+        spinbutton.vertical .titlebar button.up.titlebutton:backdrop:disabled > .label {
           color: inherit; }
-      spinbutton.vertical button:first-child:backdrop {
-        color: #949796;
-        border-color: #1f2222;
-        background-image: linear-gradient(to bottom, #393f3f);
-        text-shadow: none;
-        -gtk-icon-shadow: none;
-        box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
-        spinbutton.vertical button:first-child:backdrop:disabled {
-          color: #5d6767;
-          border-color: #1f2222;
-          background-image: linear-gradient(to bottom, #333636);
-          text-shadow: none;
-          -gtk-icon-shadow: none;
-          box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
-          spinbutton.vertical button:first-child:backdrop:disabled > .label, spinbutton.vertical headerbar button.titlebutton:first-child:backdrop:disabled > .label,
-          spinbutton.vertical .titlebar button.titlebutton:first-child:backdrop:disabled > .label {
-            color: inherit; }
-  spinbutton.vertical button:first-child, spinbutton.vertical button:first-child:active, spinbutton.vertical button:first-child:hover, spinbutton.vertical button:first-child:disabled, spinbutton.vertical button:first-child:backdrop {
-    border-radius: 3px 3px 0 0;
-    border-style: solid solid none solid; }
-  spinbutton.vertical button:last-child {
-    border-radius: 0 0 3px 3px;
-    border-style: none solid solid solid; }
+spinbutton.vertical button.up, spinbutton.vertical button.up:active, spinbutton.vertical button.up:hover, spinbutton.vertical button.up:disabled, spinbutton.vertical button.up:backdrop {
+  border-radius: 3px 3px 0 0;
+  border-style: solid solid none solid; }
+spinbutton.vertical button.down {
+  border-radius: 0 0 3px 3px;
+  border-style: none solid solid solid; }
 .osd spinbutton.vertical button:first-child {
   color: #eeeeec;
   border-color: rgba(0, 0, 0, 0.7);
@@ -1547,9 +1556,9 @@ spinbutton.vertical {
     box-shadow: none;
     text-shadow: none;
     -gtk-icon-shadow: none; }
-treeview spinbutton entry, treeview spinbutton spinbutton,
+treeview spinbutton entry, treeview spinbutton spinbutton:not(.vertical),
 treeview spinbutton entry:focus,
-treeview spinbutton spinbutton:focus {
+treeview spinbutton spinbutton:focus:not(.vertical) {
   padding: 1px;
   border-width: 1px 0;
   border-color: #215d9c;
@@ -1938,12 +1947,12 @@ headerbar {
     .titlebar headerbar.default-decoration button.titlebutton {
       min-height: 26px;
       padding: 0 5px; }
-  .titlebar:not(headerbar) entry, .titlebar:not(headerbar) spinbutton,
+  .titlebar:not(headerbar) entry, .titlebar:not(headerbar) spinbutton:not(.vertical),
   .titlebar:not(headerbar) separator,
   .titlebar:not(headerbar) button,
   .titlebar:not(headerbar) button.titlebutton,
   headerbar entry,
-  headerbar spinbutton,
+  headerbar spinbutton:not(.vertical),
   headerbar separator,
   headerbar button,
   headerbar button.titlebutton,
@@ -4626,9 +4635,8 @@ textview text selection,
 textview text selection:focus, flowbox flowboxchild:selected, label:selected,
 label selection,
 label selection:focus,
-label selection:hover, entry selection, spinbutton selection,
-entry selection:focus,
-spinbutton selection:focus, modelbutton.flat:selected,
+label selection:hover, entry selection, spinbutton:not(.vertical) selection,
+entry selection:focus, modelbutton.flat:selected,
 .menuitem.button.flat:selected, treeview.view:selected, treeview.view:selected:focus, row:selected, calendar:selected, .sidebar :selected {
   background-color: #215d9c;
   color: #ffffff; }
@@ -4640,7 +4648,7 @@ spinbutton selection:focus, modelbutton.flat:selected,
   textview text:disabled:selected:focus, .view text selection:disabled, iconview text selection:disabled,
   iconview text selection:disabled:focus,
   textview text selection:disabled, flowbox flowboxchild:disabled:selected, label:disabled:selected,
-  label selection:disabled, entry selection:disabled, spinbutton selection:disabled, modelbutton.flat:disabled:selected,
+  label selection:disabled, entry selection:disabled, spinbutton:not(.vertical) selection:disabled, modelbutton.flat:disabled:selected,
   .menuitem.button.flat:disabled:selected, treeview.view:disabled:selected:focus, row:disabled:selected, calendar:disabled:selected, .sidebar :disabled:selected, placessidebar row:selected:disabled label {
     color: #90aece; }
   .view:backdrop:selected, iconview:backdrop:selected, iconview:backdrop:selected:focus,
@@ -4651,7 +4659,7 @@ spinbutton selection:focus, modelbutton.flat:selected,
   textview text:backdrop:selected:focus, .view text selection:backdrop, iconview text selection:backdrop,
   iconview text selection:backdrop:focus,
   textview text selection:backdrop, flowbox flowboxchild:backdrop:selected, label:backdrop:selected,
-  label selection:backdrop, entry selection:backdrop, spinbutton selection:backdrop, modelbutton.flat:backdrop:selected,
+  label selection:backdrop, entry selection:backdrop, spinbutton:not(.vertical) selection:backdrop, modelbutton.flat:backdrop:selected,
   .menuitem.button.flat:backdrop:selected, treeview.view:backdrop:selected:focus, row:backdrop:selected, calendar:backdrop:selected, .sidebar :backdrop:selected {
     color: #ffffff; }
     .view:backdrop:disabled:selected, iconview:backdrop:disabled:selected,
@@ -4659,7 +4667,7 @@ spinbutton selection:focus, modelbutton.flat:selected,
     iconview text:backdrop:disabled:selected,
     textview text:backdrop:disabled:selected, .view text selection:backdrop:disabled, iconview text selection:backdrop:disabled,
     textview text selection:backdrop:disabled, flowbox flowboxchild:backdrop:disabled:selected, label:backdrop:disabled:selected,
-    label selection:backdrop:disabled, entry selection:backdrop:disabled, spinbutton selection:backdrop:disabled, modelbutton.flat:backdrop:disabled:selected,
+    label selection:backdrop:disabled, entry selection:backdrop:disabled, spinbutton:not(.vertical) selection:backdrop:disabled, modelbutton.flat:backdrop:disabled:selected,
     .menuitem.button.flat:backdrop:disabled:selected, row:backdrop:disabled:selected, calendar:backdrop:disabled:selected, .sidebar :backdrop:disabled:selected, placessidebar row:selected:disabled label:backdrop, placessidebar row:selected:backdrop:disabled label {
       color: #648eba; }
 

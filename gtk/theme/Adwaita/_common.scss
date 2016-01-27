@@ -902,8 +902,19 @@ button:visited {
  *****************/
 
 spinbutton {
-  @extend entry;
   &:not(.vertical) {
+    // in this horizontal configuration, the whole spinbutton
+    // behaves as the entry, so we extend the entry styling
+    // and nuke the style on the internal entry
+    @extend entry;
+    padding: 0;
+
+    entry {
+      background: none;
+      border: none;
+      box-shadow: none;
+    }
+
     button {
       background-image: none;
       border-style: none none none solid;
@@ -911,6 +922,9 @@ spinbutton {
       color: mix($fg_color, $base_color, 90%);
       border-radius: 0;
       box-shadow: none;
+      min-height: 16px;
+      padding-top: 0;
+      padding-bottom: 0;
 
       &:dir(rtl) { border-style: none solid none none; }
 
@@ -988,15 +1002,20 @@ spinbutton {
 
   // Vertical
   &.vertical {
-    border-radius: 0;
-    padding-left: 4px;
-    padding-right: 4px;
+    // in the vertical configuration, we treat the spinbutton
+    // as a box, and tweak the style of the entry in the middle
+    // so that it's linked
+    entry {
+      border-radius: 0;
+      padding-left: 4px;
+      padding-right: 4px;
+    }
 
     button {
       padding-top: 8px;    //  Same vertical padding as image-buttons
       padding-bottom: 8px; //
 
-      &:first-child {
+      &.up {
         @extend %top_button;
         @include button(normal, $edge:none);
 
@@ -1022,7 +1041,7 @@ spinbutton {
         }
       }
 
-      &:last-child { @extend %bottom_button; }
+      &.down { @extend %bottom_button; }
     }
 
     %top_button {
