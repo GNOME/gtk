@@ -108,6 +108,7 @@ query_for_toplevel (GdkScreen  *screen,
   GtkWidget *popup, *label, *frame;
   GdkCursor *cursor;
   GtkWidget *toplevel = NULL;
+  GdkDevice *device;
 
   popup = gtk_window_new (GTK_WINDOW_POPUP);
   gtk_window_set_screen (GTK_WINDOW (popup), screen);
@@ -124,14 +125,12 @@ query_for_toplevel (GdkScreen  *screen,
 
   gtk_widget_show_all (popup);
   cursor = gdk_cursor_new_from_name (display, "crosshair");
+  device = gtk_get_current_event_device ();
 
-  if (gdk_device_grab (gtk_get_current_event_device (),
-                       gtk_widget_get_window (popup),
-                       GDK_OWNERSHIP_NONE,
-                       FALSE,
-                       GDK_BUTTON_RELEASE_MASK,
-                       cursor,
-                       GDK_CURRENT_TIME) == GDK_GRAB_SUCCESS)
+  if (gdk_seat_grab (gdk_device_get_seat (device),
+                     gtk_widget_get_window (popup),
+                     GDK_SEAT_CAPABILITY_ALL_POINTING,
+                     FALSE, cursor, NULL, NULL, NULL) == GDK_GRAB_SUCCESS)
     {
       gboolean clicked = FALSE;
 
