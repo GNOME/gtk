@@ -104,7 +104,9 @@ parse_compose_value (GtkComposeData *compose_data,
         uch = g_ascii_strtoll(words[1] + 1, NULL, 8);
       /* If we need to handle other escape sequences. */
       else if (uch != '\\')
-        g_assert_not_reached ();
+        {
+          g_warning ("Invalid escape sequence: %s: %s", val, line);
+        }
     }
 
   if (g_utf8_get_char (g_utf8_next_char (words[1])) > 0)
