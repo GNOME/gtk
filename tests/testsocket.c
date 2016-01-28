@@ -281,29 +281,23 @@ grab_window_toggled (GtkToggleButton *button,
 		     GtkWidget       *widget)
 {
   GdkDevice *device = gtk_get_current_event_device ();
-
-  if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD)
-    device = gdk_device_get_associated_device (device);
+  GdkSeat *seat = gdk_device_get_seat (device);
 
   if (gtk_toggle_button_get_active (button))
     {
       int status;
 
-      status = gdk_device_grab (device,
-                                gtk_widget_get_window (widget),
-                                GDK_OWNERSHIP_NONE,
-                                FALSE,
-                                GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK,
-                                NULL,
-                                GDK_CURRENT_TIME);
+      status = gdk_seat_grab (seat, gtk_widget_get_window (widget),
+                              GDK_SEAT_CAPABILITY_KEYBOARD,
+                              FALSE, NULL, NULL, NULL, NULL);
 
       if (status != GDK_GRAB_SUCCESS)
 	g_warning ("Could not grab keyboard!  (%s)", grab_string (status));
 
-    } 
-  else 
+    }
+  else
     {
-      gdk_device_ungrab (device, GDK_CURRENT_TIME);
+      gdk_seat_ungrab (seat);
     }
 }
 
