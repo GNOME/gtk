@@ -16,19 +16,19 @@ window1
     <AtkComponent>
     layer: widget
     alpha: 1
-     
+    
       "label"
       parent: unnamed-GtkContainerAccessible-0
       index: 0
-      name:  
-      state: enabled multi-line sensitive showing visible
+      name: 
+      state: enabled multi-line sensitive
       toolkit: gtk
       <AtkComponent>
       layer: widget
       alpha: 1
       <AtkText>
-      text:  
-      character count: 1
+      text: 
+      character count: 0
       caret offset: 0
       default attributes: bg-color: <omitted>
                           bg-full-height: 0
