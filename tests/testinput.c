@@ -291,7 +291,6 @@ quit (void)
 int
 main (int argc, char *argv[])
 {
-  GdkDeviceManager *device_manager;
   GList *devices, *d;
   GdkEventMask event_mask;
   GtkWidget *window;
@@ -299,11 +298,12 @@ main (int argc, char *argv[])
   GtkWidget *vbox;
   GtkWidget *button;
   GdkWindow *gdk_win;
+  GdkSeat *seat;
 
   gtk_init (&argc, &argv);
 
-  device_manager = gdk_display_get_device_manager (gdk_display_get_default ());
-  current_device = gdk_device_manager_get_client_pointer (device_manager);
+  seat = gdk_display_get_default_seat (gdk_display_get_default ());
+  current_device = gdk_seat_get_pointer (seat);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_widget_set_name (window, "Test Input");
@@ -353,7 +353,7 @@ main (int argc, char *argv[])
 
   gtk_widget_set_events (drawing_area, event_mask);
 
-  devices = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_FLOATING);
+  devices = gdk_seat_get_slaves (seat, GDK_SEAT_CAPABILITY_ALL_POINTING);
 
   for (d = devices; d; d = d->next)
     {
