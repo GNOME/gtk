@@ -3767,8 +3767,13 @@ gtk_label_get_preferred_size (GtkWidget      *widget,
 {
   GtkLabel      *label = GTK_LABEL (widget);
   GtkLabelPrivate  *priv = label->priv;
+  gint xpad, ypad;
   PangoRectangle widest_rect;
   PangoRectangle smallest_rect;
+
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+    gtk_misc_get_padding (GTK_MISC (label), &xpad, &ypad);
+  G_GNUC_END_IGNORE_DEPRECATIONS
 
   if (minimum_baseline)
     *minimum_baseline = -1;
@@ -3837,6 +3842,9 @@ gtk_label_get_preferred_size (GtkWidget      *widget,
           *minimum_size = smallest_rect.width;
           *natural_size = widest_rect.width;
         }
+
+      *minimum_size += xpad * 2;
+      *natural_size += xpad * 2;
     }
   else /* GTK_ORIENTATION_VERTICAL */
     {
@@ -3870,6 +3878,9 @@ gtk_label_get_preferred_size (GtkWidget      *widget,
           *minimum_size = MIN (smallest_rect.height, widest_rect.height);
           *natural_size = MAX (smallest_rect.height, widest_rect.height);
         }
+
+      *minimum_size += ypad * 2;
+      *natural_size += ypad * 2;
     }
 }
 
