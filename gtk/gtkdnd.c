@@ -438,17 +438,19 @@ grab_dnd_keys (GtkWidget *widget,
   window = gtk_widget_get_window (widget);
   if (!GDK_IS_X11_WINDOW (window))
     {
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gdk_device_grab (device,
                        gtk_widget_get_window (widget),
                        GDK_OWNERSHIP_APPLICATION, FALSE,
                        GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK,
                        NULL, time);
+      G_GNUC_END_IGNORE_DEPRECATIONS;
       return;
     }
 
   deviceid = gdk_x11_device_get_id (device);
 
-  if (GDK_IS_X11_DEVICE_MANAGER_XI2 (gdk_display_get_device_manager (gtk_widget_get_display (widget))))
+  if (GDK_IS_X11_DEVICE_XI2 (device))
     using_xi2 = TRUE;
   else
     using_xi2 = FALSE;
@@ -522,13 +524,15 @@ ungrab_dnd_keys (GtkWidget *widget,
   window = gtk_widget_get_window (widget);
   if (!GDK_IS_X11_WINDOW (window))
     {
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gdk_device_ungrab (device, time);
+      G_GNUC_END_IGNORE_DEPRECATIONS;
       return;
     }
 
   deviceid = gdk_x11_device_get_id (device);
 
-  if (GDK_IS_X11_DEVICE_MANAGER_XI2 (gdk_display_get_device_manager (gtk_widget_get_display (widget))))
+  if (GDK_IS_X11_DEVICE_XI2 (device))
     using_xi2 = TRUE;
   else
     using_xi2 = FALSE;
@@ -577,11 +581,13 @@ grab_dnd_keys (GtkWidget *widget,
                GdkDevice *device,
                guint32    time)
 {
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   gdk_device_grab (device,
                    gtk_widget_get_window (widget),
                    GDK_OWNERSHIP_APPLICATION, FALSE,
                    GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK,
                    NULL, time);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
 static void
@@ -589,7 +595,9 @@ ungrab_dnd_keys (GtkWidget *widget,
                  GdkDevice *device,
                  guint32    time)
 {
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   gdk_device_ungrab (device, time);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
 #endif /* GDK_WINDOWING_X11 */
@@ -841,11 +849,13 @@ gtk_drag_update_cursor (GtkDragSourceInfo *info)
       GdkDevice *pointer;
 
       pointer = gdk_drag_context_get_device (info->context);
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gdk_device_grab (pointer,
                        gtk_widget_get_window (info->ipc_widget),
                        GDK_OWNERSHIP_APPLICATION, FALSE,
                        GDK_POINTER_MOTION_MASK | GDK_BUTTON_RELEASE_MASK,
                        cursor, info->grab_time);
+      G_GNUC_END_IGNORE_DEPRECATIONS;
       info->cursor = cursor;
     }
 }
@@ -2230,11 +2240,17 @@ gtk_drag_begin_internal (GtkWidget          *widget,
 
   if (!managed)
     {
-      if (gdk_device_grab (pointer, ipc_window,
-                           GDK_OWNERSHIP_APPLICATION, FALSE,
-                           GDK_POINTER_MOTION_MASK |
-                           GDK_BUTTON_RELEASE_MASK,
-                           cursor, time) != GDK_GRAB_SUCCESS)
+      gboolean grabbed;
+
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+      grabbed = gdk_device_grab (pointer, ipc_window,
+                                 GDK_OWNERSHIP_APPLICATION, FALSE,
+                                 GDK_POINTER_MOTION_MASK |
+                                 GDK_BUTTON_RELEASE_MASK,
+                                 cursor, time) == GDK_GRAB_SUCCESS;
+      G_GNUC_END_IGNORE_DEPRECATIONS;
+
+      if (!grabbed)
         {
           gtk_drag_release_ipc_widget (ipc_widget);
           return NULL;
@@ -2957,10 +2973,12 @@ _gtk_drag_source_handle_event (GtkWidget *widget,
                 GdkDevice *pointer;
 
                 pointer = gdk_drag_context_get_device (context);
+                G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
                 gdk_device_grab (pointer, gtk_widget_get_window (widget),
                                  GDK_OWNERSHIP_APPLICATION, FALSE,
                                  GDK_POINTER_MOTION_MASK | GDK_BUTTON_RELEASE_MASK,
                                  cursor, info->grab_time);
+                G_GNUC_END_IGNORE_DEPRECATIONS;
                 info->cursor = cursor;
               }
             
@@ -3405,7 +3423,10 @@ gtk_drag_end (GtkDragSourceInfo *info,
                                         gtk_drag_key_cb,
                                         info);
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   gdk_device_ungrab (pointer, time);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
+
   ungrab_dnd_keys (info->ipc_widget, keyboard, time);
   gtk_device_grab_remove (info->ipc_widget, pointer);
 }
