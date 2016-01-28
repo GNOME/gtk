@@ -1,3 +1,44 @@
+Overview of Changes in GTK+ 3.18.7
+==================================
+
+* Bugs fixed:
+ 688524 Expose gtk-primary-button-warps-slider as an X setting
+ 722937 problem rendering asymmetric borders with dotted style
+ 728344 Collate setting in Print Dialog does not override PPD setting for...
+ 754868 visual anomaly in gtk path bar
+ 757147 gdk_pixbuf_get_from_window() doesn't honor device scale
+ 758908 The app chooser dialog uses a non standard icon and doesn't wrap ...
+ 758929 GtkEntryCompletion should allow for changing the popdown delay
+ 759079 GtkComboBox triggers segmentation fault in update_menu_sensitivit...
+ 759081 Add 'nullable' to return type of gtk_cell_layout_get_area.
+ 759091 notebook tab stays hovered if mouse leaves slowly
+ 759260 [Adwaita:dark] menus on GtkTreeView barely visible because menu s...
+ 759757 Flow box redraws all children on hover
+ 760141  New gdk_cursor_new_from_name() fallback breaks behavior expected...
+ 760169 GtkColorButton sensitive and insensitive appearances are barely d...
+ 760416 broadwayd --help shows translated characters as question marks on...
+ 760445 regression: openQA no longer able to press ctrl-alt-del to get to...
+ 760615 GTK FTBFS with MinGW-w64
+ 760680 Emitting "shutdown" signal twice leads to a crash
+ 760891 GtkTreeView Cannot expand/collapse rows by mouse
+ 760897 A few clean ups to the shm handling code
+ 760964 hardcodes temp dir to /tmp
+ 761005 GtkColorChooser: make set_rgba work in editor mode
+ 761095 wayland: use shm_open instead of open in tmpdir
+
+* Translation updates
+ Arabic
+ Brazilian Portuguese
+ Czech
+ German
+ Hungarian
+ Indonesian
+ Lithuanian
+ Polish
+ Portuguese
+ Swedish
+
+
 Overview of Changes in GTK+ 3.18.6
 ==================================
 
