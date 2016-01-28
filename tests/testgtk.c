@@ -6949,14 +6949,10 @@ shape_pressed (GtkWidget *widget, GdkEventButton *event)
   p->y = (int) event->y;
 
   gtk_grab_add (widget);
-  gdk_device_grab (gdk_event_get_device ((GdkEvent*)event),
-                   gtk_widget_get_window (widget),
-                   GDK_OWNERSHIP_NONE,
-                   TRUE,
-                   GDK_BUTTON_RELEASE_MASK |
-                   GDK_BUTTON_MOTION_MASK,
-                   NULL,
-                   event->time);
+  gdk_seat_grab (gdk_event_get_seat ((GdkEvent *) event),
+                 gtk_widget_get_window (widget),
+                 GDK_SEAT_CAPABILITY_ALL_POINTING,
+                 TRUE, NULL, (GdkEvent *) event, NULL, NULL);
 }
 
 static void
@@ -6964,7 +6960,7 @@ shape_released (GtkWidget      *widget,
                 GdkEventButton *event)
 {
   gtk_grab_remove (widget);
-  gdk_device_ungrab (gdk_event_get_device ((GdkEvent*)event), event->time);
+  gdk_seat_ungrab (gdk_event_get_seat ((GdkEvent *) event));
 }
 
 static void
@@ -8677,9 +8673,8 @@ snapshot_widget_event (GtkWidget	       *widget,
   if (event->type == GDK_BUTTON_RELEASE)
     {
       gtk_grab_remove (widget);
-      gdk_device_ungrab (gdk_event_get_device (event),
-			 GDK_CURRENT_TIME);
-      
+      gdk_seat_ungrab (gdk_event_get_seat (event));
+
       res_widget = find_widget_at_pointer (gdk_event_get_device (event));
       if (data->is_toplevel && res_widget)
 	res_widget = gtk_widget_get_toplevel (res_widget);
@@ -8730,22 +8725,16 @@ snapshot_widget (GtkButton *button,
   if (device == NULL)
     return;
 
-  if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
-    device = gdk_device_get_associated_device (device);
-
   data->is_toplevel = widget == data->toplevel_button;
 
   if (!data->cursor)
     data->cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget),
 					       GDK_TARGET);
 
-  gdk_device_grab (device,
-                   gtk_widget_get_window (widget),
-                   GDK_OWNERSHIP_APPLICATION,
-		   TRUE,
-		   GDK_BUTTON_RELEASE_MASK,
-		   data->cursor,
-		   GDK_CURRENT_TIME);
+  gdk_seat_grab (gdk_device_get_seat (device),
+                 gtk_widget_get_window (widget),
+                 GDK_SEAT_CAPABILITY_ALL_POINTING,
+                 TRUE, data->cursor, NULL, NULL, NULL);
 
   g_signal_connect (button, "event",
 		    G_CALLBACK (snapshot_widget_event), data);
