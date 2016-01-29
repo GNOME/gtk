@@ -101,7 +101,8 @@ lookup_symbolic_colors (GtkCssStyle *style,
 static GtkCssImage *
 gtk_css_image_recolor_load (GtkCssImageRecolor *recolor,
                             GtkCssStyle        *style,
-                            GtkCssValue        *palette)
+                            GtkCssValue        *palette,
+                            gint                scale)
 {
   GtkCssImageUrl *url = GTK_CSS_IMAGE_URL (recolor);
   GtkIconInfo *info;
@@ -112,7 +113,7 @@ gtk_css_image_recolor_load (GtkCssImageRecolor *recolor,
 
   lookup_symbolic_colors (style, palette, &fg, &success, &warning, &error);
 
-  info = gtk_icon_info_new_for_file (url->file, 0, 1);
+  info = gtk_icon_info_new_for_file (url->file, 0, scale);
   pixbuf = gtk_icon_info_load_symbolic (info, &fg, &success, &warning, &error, NULL, &gerror);
   g_object_unref (info);
 
@@ -145,13 +146,16 @@ gtk_css_image_recolor_compute (GtkCssImage             *image,
   GtkCssImageRecolor *recolor = GTK_CSS_IMAGE_RECOLOR (image);
   GtkCssValue *palette;
   GtkCssImage *img;
+  int scale;
+
+  scale = _gtk_style_provider_private_get_scale (provider);
 
   if (recolor->palette)
     palette = _gtk_css_value_compute (recolor->palette, property_id, provider, style, parent_style);
   else
     palette = _gtk_css_value_ref (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_PALETTE));
 
-  img = gtk_css_image_recolor_load (recolor, style, palette);
+  img = gtk_css_image_recolor_load (recolor, style, palette, scale);
 
   _gtk_css_value_unref (palette);
 
