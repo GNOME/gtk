@@ -52,5 +52,9 @@ void      gdk_seat_default_add_slave    (GdkSeatDefault *seat,
                                          GdkDevice      *device);
 void      gdk_seat_default_remove_slave (GdkSeatDefault *seat,
                                          GdkDevice      *device);
+void      gdk_seat_default_add_tool     (GdkSeatDefault *seat,
+                                         GdkDeviceTool  *tool);
+void      gdk_seat_default_remove_tool  (GdkSeatDefault *seat,
+                                         GdkDeviceTool  *tool);
 
 #endif /* __GDK_SEAT_DEFAULT_PRIVATE_H__ */
