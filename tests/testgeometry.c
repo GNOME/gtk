@@ -21,6 +21,8 @@
 #define GRID_SIZE 20
 #define BORDER 6
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static int window_count = 0;
 const char *geometry_string;
 
