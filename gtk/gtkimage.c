@@ -1675,11 +1675,18 @@ gtk_image_get_content_size (GtkCssGadget   *gadget,
   GtkWidget *widget;
   gint width, height;
   float baseline_align;
+  gint xpad, ypad;
 
   widget = gtk_css_gadget_get_owner (gadget);
 
   _gtk_icon_helper_get_size (GTK_IMAGE (widget)->priv->icon_helper,
                              &width, &height);
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  gtk_misc_get_padding (GTK_MISC (widget), &xpad, &ypad);
+  width += 2 * xpad;
+  height += 2 * ypad;
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
@@ -1721,6 +1728,7 @@ gtk_image_render_contents (GtkCssGadget *gadget,
   GtkImagePrivate *priv;
   gint w, h, baseline;
   gfloat xalign, yalign;
+  gint xpad, ypad;
 
   widget = gtk_css_gadget_get_owner (gadget);
   image = GTK_IMAGE (widget);
@@ -1730,6 +1738,7 @@ gtk_image_render_contents (GtkCssGadget *gadget,
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_misc_get_alignment (GTK_MISC (image), &xalign, &yalign);
+  gtk_misc_get_padding (GTK_MISC (image), &xpad, &ypad);
 G_GNUC_END_IGNORE_DEPRECATIONS
 
   if (gtk_widget_get_direction (widget) != GTK_TEXT_DIR_LTR)
@@ -1737,12 +1746,11 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
   baseline = gtk_widget_get_allocated_baseline (widget);
 
-  x += floor ((width - w) * xalign);
+  x += floor ((width - 2 * xpad - w) * xalign + xpad);
   if (baseline == -1)
-    y += floor ((height - h) * yalign);
+    y += floor ((height - 2 * ypad - h) * yalign + ypad);
   else
-    y += CLAMP (baseline - h * gtk_image_get_baseline_align (image),
-	       0, height - h);
+    y += CLAMP (baseline - h * gtk_image_get_baseline_align (image), ypad, height - 2 * ypad - h);
 
   if (gtk_image_get_storage_type (image) == GTK_IMAGE_ANIMATION)
     {
