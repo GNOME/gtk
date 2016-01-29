@@ -4574,6 +4574,10 @@ colorswatch:disabled {
     box-shadow: none; }
 row:selected colorswatch {
   box-shadow: 0 0 0 2px #ffffff; }
+colorswatch#editor-color-sample {
+  border-radius: 4px; }
+  colorswatch#editor-color-sample overlay {
+    border-radius: 4.5px; }
 
 /********
  * Misc *
