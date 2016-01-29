@@ -447,7 +447,7 @@ gtk_container_get_type (void)
       };
 
       container_type =
-        g_type_register_static (GTK_TYPE_WIDGET, I_("GtkContainer"),
+        g_type_register_static (GTK_TYPE_WIDGET, I_(G_TYPE_GET_VERSIONED_NAME(GtkContainer)),
                                 &container_info, G_TYPE_FLAG_ABSTRACT);
 
       GtkContainer_private_offset =

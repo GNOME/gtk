@@ -77,6 +77,7 @@ deps = 					\
 # we use the general approach here
 libtool_opts =							\
   $(GTK_LINK_FLAGS)						\
+  $(GTK_VERSION_FLAGS)						\
   -version-info $(LT_VERSION_INFO)				\
   -export-dynamic $(no_undefined)				\
   -rpath $(libdir)

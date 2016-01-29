@@ -896,7 +896,7 @@ gtk_widget_get_type (void)
 	NULL /* interface data */
       };
 
-      widget_type = g_type_register_static (G_TYPE_INITIALLY_UNOWNED, "GtkWidget",
+      widget_type = g_type_register_static (G_TYPE_INITIALLY_UNOWNED, G_TYPE_GET_VERSIONED_NAME(GtkWidget),
                                             &widget_info, G_TYPE_FLAG_ABSTRACT);
 
       g_type_add_class_private (widget_type, sizeof (GtkWidgetClassPrivate));

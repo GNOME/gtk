@@ -24,7 +24,7 @@ GType
 /*** BEGIN value-tail ***/
             { 0, NULL, NULL }
         };
-        etype = g_@type@_register_static (g_intern_static_string ("@EnumName@"), values);
+        etype = g_@type@_register_static (g_intern_static_string (G_TYPE_GET_VERSIONED_NAME(@EnumName@)), values);
     }
     return etype;
 }

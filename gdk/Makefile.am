@@ -47,6 +47,7 @@ AM_CPPFLAGS = 				\
 # we use the general approach here
 LDADD = 					\
 	$(GTK_LINK_FLAGS)			\
+	$(GTK_VERSION_FLAGS)			\
 	-version-info $(LT_VERSION_INFO)	\
 	-export-dynamic 			\
 	-rpath $(libdir) 			\

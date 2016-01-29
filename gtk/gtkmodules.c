@@ -589,6 +589,8 @@ _gtk_module_has_mixed_deps (GModule *module_to_check)
   gpointer func;
   gboolean result;
 
+  return FALSE;
+  
   if (!module_to_check)
     module = g_module_open (NULL, 0);
   else

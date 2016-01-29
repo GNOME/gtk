@@ -1866,6 +1866,11 @@ if test "x${enable_Bsymbolic}" = "xyes" ; then
 fi
 AC_SUBST(GTK_LINK_FLAGS)
 
+GTK_VERSION_FLAGS="-Wl,--version-script=\$(top_srcdir)/gtk3.versions"
+AC_SUBST(GTK_VERSION_FLAGS)
+
+AC_DEFINE(G_DEFINE_TYPE_DEFAULT_VERSION, GTK3, [Gtype default version])
+
 AC_CONFIG_FILES([
 README
 INSTALL
