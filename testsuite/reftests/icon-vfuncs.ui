@@ -107,11 +107,11 @@
           </packing>
         </child>
         <child>
-          <object class="GtkArrow" id="arrow1">
+          <object class="GtkImage" id="arrow1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="width_request">16</property>
-            <property name="height_request">16</property>
+            <property name="icon_name">pan-down-symbolic</property>
+            <property name="icon_size">1</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
           </object>
