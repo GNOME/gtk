@@ -1,3 +1,46 @@
+Overview of Changes in GTK+ 3.19.8
+==================================
+
+* GtkEntry:
+ - Complete gadget conversion for entries and spin buttons
+ - Add a visual hint for scrolling ('undershoot')
+
+* GtkStack:
+ - Turn into a no-window widget
+
+* CSS changes:
+ - Allow loading svg imges
+ - Fix baseline handling
+
+* Themes:
+ - new radio / check implementation
+
+* Bugs fixed:
+ 464528 gdk_rectangle_union() and gdk_rectangle_intersect() should ign...
+ 608865 The default value of the property 'max-position' should be 214...
+ 688524 Expose gtk-primary-button-warps-slider as an X setting
+ 690791 gtkwindow only sends startup notification once
+ 727294 Gtk SpinButton Size Greater than Screen Width
+ 754868 visual anomaly in gtk path bar
+ 754990 Missing (out) annotation for gdk_rgba_parse
+ 760522 gtk_misc_set_padding not used for size req
+ 760714 GtkWindow: CSS node documentation is not clear
+ 760754 gedit crashes detaching a tab
+ 760881 file can't be saved if executable attribute is not set
+ 760891 GtkTreeView Cannot expand/collapse rows by mouse
+ 760897 A few clean ups to the shm handling code
+ 760933 Make it possible to query the CSS opacity with gtk_style_conte...
+ 760942 gitg drawing code broken
+ 760967 notebook gadget allocation issue
+ 761005 GtkColorChooser: make set_rgba work in editor mode
+ 761095 wayland: use shm_open instead of open in tmpdir
+ 761128 Selected text in password entry not drawn correctly
+ 761254 GtkDialog exposes public action_box internal child
+
+* Translation updates:
+ German
+
+
 Overview of Changes in GTK+ 3.19.7
 ==================================
 
