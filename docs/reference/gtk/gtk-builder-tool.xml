@@ -62,6 +62,11 @@
     <term><option>enumerate</option></term>
       <listitem><para>Lists all the named objects that are created in the .ui file.</para></listitem>
     </varlistentry>
+    <varlistentry>
+    <term><option>preview</option> <arg choice="opt"><replaceable>ID</replaceable></arg></term>
+      <listitem><para>Preview the object with the given ID. If ID is not specified,
+                try to find a suitable object to preview.</para></listitem>
+    </varlistentry>
   </variablelist>
 </refsect1>
 
