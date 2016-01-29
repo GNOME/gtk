@@ -55,11 +55,23 @@ struct _GdkSeatClass
                               GdkSeatCapabilities  capability);
   GList *     (* get_slaves) (GdkSeat             *seat,
                               GdkSeatCapabilities  capabilities);
+
+  GdkDeviceTool * (* get_tool) (GdkSeat *seat,
+                                guint64  serial);
 };
 
 void gdk_seat_device_added   (GdkSeat   *seat,
                               GdkDevice *device);
 void gdk_seat_device_removed (GdkSeat   *seat,
                               GdkDevice *device);
+
+void gdk_seat_tool_added     (GdkSeat       *seat,
+                              GdkDeviceTool *tool);
+void gdk_seat_tool_removed   (GdkSeat       *seat,
+                              GdkDeviceTool *tool);
+
+GdkDeviceTool *
+     gdk_seat_get_tool       (GdkSeat   *seat,
+                              guint64    serial);
 
 #endif /* __GDK_SEAT_PRIVATE_H__ */
