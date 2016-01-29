@@ -2739,6 +2739,23 @@ levelbar {
   }
 }
 
+/****************
+ * Print dialog *
+*****************/
+
+printdialog {
+  paper {
+    border: 1px solid $borders_color;
+    background: white;
+    padding: 0;
+
+    &:backdrop { border-color: $backdrop_borders_color; }
+  }
+
+  .dialog-action-box {
+    margin: 12px;
+  }
+}
 
 /**********
  * Frames *
@@ -2752,14 +2769,6 @@ frame border,
   border: 1px solid $borders_color;
 
   &.flat { border-style: none; }
-
-  &:backdrop { border-color: $backdrop_borders_color; }
-}
-
-paper {
-  border: 1px solid $borders_color;
-  background: white;
-  padding: 0;
 
   &:backdrop { border-color: $backdrop_borders_color; }
 }

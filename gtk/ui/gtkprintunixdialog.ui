@@ -60,11 +60,6 @@
         <style>
           <class name="view"/>
         </style>
-        <child internal-child="action_box">
-          <object class="GtkBox">
-            <property name="margin">6</property>
-          </object>
-        </child>
         <child>
           <object class="GtkBox" id="box1">
             <property name="visible">1</property>

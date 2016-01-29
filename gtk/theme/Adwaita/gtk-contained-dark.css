@@ -3610,6 +3610,18 @@ levelbar {
     levelbar block.empty:backdrop {
       border-color: rgba(148, 151, 150, 0.15); }
 
+/****************
+ * Print dialog *
+*****************/
+printdialog paper {
+  border: 1px solid #1c1f1f;
+  background: white;
+  padding: 0; }
+  printdialog paper:backdrop {
+    border-color: #1f2222; }
+printdialog .dialog-action-box {
+  margin: 12px; }
+
 /**********
  * Frames *
  **********/
@@ -3625,13 +3637,6 @@ frame border,
     border-style: none; }
   frame border:backdrop,
   .frame:backdrop {
-    border-color: #1f2222; }
-
-paper {
-  border: 1px solid #1c1f1f;
-  background: white;
-  padding: 0; }
-  paper:backdrop {
     border-color: #1f2222; }
 
 actionbar box {
