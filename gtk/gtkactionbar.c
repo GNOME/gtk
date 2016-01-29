@@ -368,8 +368,8 @@ gtk_action_bar_class_init (GtkActionBarClass *klass)
                                                                 G_PARAM_READWRITE));
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/ui/gtkactionbar.ui");
-  gtk_widget_class_bind_template_child_internal_private (widget_class, GtkActionBar, box);
-  gtk_widget_class_bind_template_child_internal_private (widget_class, GtkActionBar, revealer);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkActionBar, box);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkActionBar, revealer);
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_PANEL);
   gtk_widget_class_set_css_name (widget_class, "actionbar");
