@@ -395,7 +395,8 @@ PKG_CHECK_MODULES(GMODULE, [gmodule-2.0])
 if test "$os_win32" != yes; then
     # libtool option to control which symbols are exported
     # right now, symbols starting with _ are not exported
-    LIBTOOL_EXPORT_OPTIONS='-export-symbols-regex "^[[^_]].*"'
+    LIBTOOL_EXPORT_OPTIONS=
+    #'-export-symbols-regex "^[[^_]].*"'
 else
     # We currently use .def files on Windows (for gdk and gtk)
     LIBTOOL_EXPORT_OPTIONS=
@@ -1590,6 +1591,9 @@ fi
 ##################################################
 
 GOBJECT_INTROSPECTION_CHECK([0.9.3])
+
+GTK_VERSION_FLAGS="-Wl,--version-script=\$(top_srcdir)/gtk2.versions"
+AC_SUBST(GTK_VERSION_FLAGS)
 
 ##################################################
 # Checks for gtk-doc and docbook-tools

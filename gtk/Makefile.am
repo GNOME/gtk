@@ -132,6 +132,7 @@ deps =
 # we use the general approach here
 libtool_opts =							\
   -version-info $(LT_VERSION_INFO)				\
+  $(GTK_VERSION_FLAGS)						\
   -export-dynamic $(no_undefined) $(LIBTOOL_EXPORT_OPTIONS)	\
   -rpath $(libdir) $(libgtk_target_ldflags)
 
