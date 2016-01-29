@@ -2321,6 +2321,7 @@ notebook > header {
     notebook > header tab button.flat, notebook > header tab button.sidebar-button, notebook > header tab headerbar button.titlebutton, headerbar notebook > header tab button.titlebutton,
     notebook > header tab .titlebar button.titlebutton,
     .titlebar notebook > header tab button.titlebutton {
+      padding: 0;
       margin-top: 8px;
       margin-bottom: 8px;
       min-width: 18px;
