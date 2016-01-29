@@ -778,15 +778,124 @@ do_enumerate (const gchar *filename)
 }
 
 static void
+set_window_title (GtkWindow  *window,
+                  const char *filename,
+                  const char *id)
+{
+  gchar *name;
+  gchar *title;
+
+  name = g_path_get_basename (filename);
+
+  if (id)
+    title = g_strdup_printf ("%s in %s", id, name);
+  else
+    title = g_strdup (name);
+
+  gtk_window_set_title (window, title);
+
+  g_free (title);
+  g_free (name);
+}
+
+static void
+do_preview (const char *filename,
+            const char *id)
+{
+  GtkBuilder *builder;
+  GError *error = NULL;
+  GObject *object;
+  GtkWidget *window;
+
+  builder = gtk_builder_new ();
+  if (!gtk_builder_add_from_file (builder, filename, &error))
+    {
+      g_printerr ("%s\n", error->message);
+      exit (1);
+    }
+
+  object = NULL;
+
+  if (id)
+    {
+      object = gtk_builder_get_object (builder, id);
+    }
+  else
+    {
+      GSList *objects, *l;
+
+      objects = gtk_builder_get_objects (builder);
+      for (l = objects; l; l = l->next)
+        {
+          GObject *obj = l->data;
+
+          if (GTK_IS_WINDOW (obj))
+            {
+              object = obj;
+              break;
+            }
+          else if (GTK_IS_WIDGET (obj))
+            {
+              if (object == NULL)
+                object = obj;
+            }
+        }
+      g_slist_free (objects);
+    }
+
+  if (object == NULL)
+    {
+      if (id)
+        g_printerr ("No object with ID '%s' found\n", id);
+      else
+        g_printerr ("No previewable object found\n");
+      exit (1);
+    }
+
+  if (!GTK_IS_WIDGET (object))
+    {
+      g_printerr ("Objects of type %s can't be previewed\n", G_OBJECT_TYPE_NAME (object));
+      exit (1);
+    }
+
+  if (GTK_IS_WINDOW (object))
+    window = GTK_WIDGET (object);
+  else
+    {
+      GtkWidget *widget = GTK_WIDGET (object);
+
+      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+
+      if (GTK_IS_BUILDABLE (object))
+        id = gtk_buildable_get_name (GTK_BUILDABLE (object));
+
+      set_window_title (GTK_WINDOW (window), filename, id);
+
+      g_object_ref (widget);
+      if (gtk_widget_get_parent (widget) != NULL)
+        gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (widget)), widget);
+      gtk_container_add (GTK_CONTAINER (window), widget);
+      g_object_unref (widget);
+    }
+
+  gtk_window_present (GTK_WINDOW (window));
+
+  gtk_main ();
+
+  g_object_unref (builder);
+}
+
+static void
 usage (void)
 {
   g_print (_("Usage:\n"
              "  gtk-builder-tool [COMMAND] FILE\n"
              "\n"
              "Commands:\n"
-             "  validate    Validate the file\n"
-             "  simplify    Simplify the file\n"
-             "  enumerate   List all named objects\n"
+             "  validate      Validate the file\n"
+             "  simplify      Simplify the file\n"
+             "  enumerate     List all named objects\n"
+             "  preview [ID]  Preview the named object\n"
              "\n"
              "Perform various tasks on GtkBuilder .ui files.\n"));
   exit (1);
@@ -810,6 +919,23 @@ main (int argc, char *argv[])
     do_simplify (argv[2]);
   else if (strcmp (argv[1], "enumerate") == 0)
     do_enumerate (argv[2]);
+  else if (strcmp (argv[1], "preview") == 0)
+    {
+      const char *filename, *id;
+
+      if (argc > 3)
+        {
+          id = argv[2];
+          filename = argv[3];
+        }
+      else
+        {
+          id = NULL;
+          filename = argv[2];
+        }
+
+      do_preview (filename, id);
+    }
   else
     usage ();
 
