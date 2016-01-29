@@ -7678,8 +7678,10 @@ set_geometry_callback (GtkWidget *entry,
   
   text = gtk_editable_get_chars (GTK_EDITABLE (entry), 0, -1);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (!gtk_window_parse_geometry (target, text))
     g_print ("Bad geometry string '%s'\n", text);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   g_free (text);
 }
