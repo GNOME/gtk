@@ -119,7 +119,10 @@ struct _GdkWindowImplWayland
   GdkWindowTypeHint hint;
   GdkWindow *transient_for;
 
-  cairo_surface_t *cairo_surface;
+  cairo_surface_t *staging_cairo_surface;
+  cairo_surface_t *committed_cairo_surface;
+  cairo_surface_t *backfill_cairo_surface;
+
   int pending_buffer_offset_x;
   int pending_buffer_offset_y;
 
@@ -153,6 +156,7 @@ struct _GdkWindowImplWayland
 
   cairo_region_t *opaque_region;
   cairo_region_t *input_region;
+  cairo_region_t *staged_updates_region;
 };
 
 struct _GdkWindowImplWaylandClass
@@ -191,6 +195,20 @@ _gdk_wayland_screen_add_orphan_dialog (GdkWindow *window)
     orphan_dialogs = g_list_prepend (orphan_dialogs, window);
 }
 
+static void
+drop_cairo_surfaces (GdkWindow *window)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  g_clear_pointer (&impl->staging_cairo_surface, cairo_surface_destroy);
+  g_clear_pointer (&impl->backfill_cairo_surface, cairo_surface_destroy);
+
+  /* We nullify this so if a buffer release comes in later, we won't
+   * try to reuse that buffer since it's no longer suitable
+   */
+  impl->committed_cairo_surface = NULL;
+}
+
 /*
  * gdk_wayland_window_update_size:
  * @drawable: a #GdkDrawableImplWayland.
@@ -208,7 +226,7 @@ gdk_wayland_window_update_size (GdkWindow *window,
   GdkRectangle area;
   cairo_region_t *region;
 
-  g_clear_pointer (&impl->cairo_surface, cairo_surface_destroy);
+  drop_cairo_surfaces (window);
 
   window->width = width;
   window->height = height;
@@ -256,11 +274,11 @@ _gdk_wayland_screen_create_root_window (GdkScreen *screen,
     impl->scale = gdk_screen_get_monitor_scale_factor (screen, 0);
 
   /* logical 1x1 fake buffer */
-  impl->cairo_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                                    impl->scale,
-                                                    impl->scale);
+  impl->staging_cairo_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                                            impl->scale,
+                                                            impl->scale);
 
-  cairo_surface_set_device_scale (impl->cairo_surface, impl->scale, impl->scale);
+  cairo_surface_set_device_scale (impl->staging_cairo_surface, impl->scale, impl->scale);
 
   window->window_type = GDK_WINDOW_ROOT;
   window->depth = 32;
@@ -335,6 +353,37 @@ fill_presentation_time_from_frame_time (GdkFrameTimings *timings,
 
       timings->presentation_time = last_frame_time + timings->refresh_interval;
     }
+}
+
+static void
+read_back_cairo_surface (GdkWindow *window)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  cairo_t *cr;
+  cairo_region_t *paint_region = NULL;
+
+  if (!impl->backfill_cairo_surface)
+    goto out;
+
+  paint_region = cairo_region_copy (window->clip_region);
+  cairo_region_subtract (paint_region, impl->staged_updates_region);
+
+  if (cairo_region_is_empty (paint_region))
+    goto out;
+
+  cr = cairo_create (impl->staging_cairo_surface);
+  cairo_set_source_surface (cr, impl->backfill_cairo_surface, 0, 0);
+  gdk_cairo_region (cr, paint_region);
+  cairo_clip (cr);
+  cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+  cairo_paint (cr);
+  cairo_destroy (cr);
+  cairo_surface_flush (impl->staging_cairo_surface);
+
+out:
+  g_clear_pointer (&paint_region, cairo_region_destroy);
+  g_clear_pointer (&impl->staged_updates_region, cairo_region_destroy);
+  g_clear_pointer (&impl->backfill_cairo_surface, cairo_surface_destroy);
 }
 
 static void
@@ -441,7 +490,21 @@ on_frame_clock_after_paint (GdkFrameClock *clock,
   wl_callback_add_listener (callback, &frame_listener, window);
   _gdk_frame_clock_freeze (clock);
 
+  /* Before we commit a new buffer, make sure we've backfilled
+   * undrawn parts from any old committed buffer
+   */
+  read_back_cairo_surface (window);
+
+  /* From this commit forward, we can't write to the buffer,
+   * it's "live".  In the future, if we need to stage more changes
+   * we have to allocate a new staging buffer and draw to it instead.
+   *
+   * Our one saving grace is if the compositor releases the buffer
+   * before we need to stage any changes, then we can take it back and
+   * use it again.
+   */
   wl_surface_commit (impl->display_server.wl_surface);
+  impl->committed_cairo_surface = g_steal_pointer (&impl->staging_cairo_surface);
 
   g_signal_emit (impl, signals[COMMITTED], 0);
 }
@@ -562,11 +625,11 @@ gdk_wayland_window_attach_image (GdkWindow *window)
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  g_assert (_gdk_wayland_is_shm_surface (impl->cairo_surface));
+  g_assert (_gdk_wayland_is_shm_surface (impl->staging_cairo_surface));
 
   /* Attach this new buffer to the surface */
   wl_surface_attach (impl->display_server.wl_surface,
-                     _gdk_wayland_shm_surface_get_wl_buffer (impl->cairo_surface),
+                     _gdk_wayland_shm_surface_get_wl_buffer (impl->staging_cairo_surface),
                      impl->pending_buffer_offset_x,
                      impl->pending_buffer_offset_y);
   impl->pending_buffer_offset_x = 0;
@@ -580,13 +643,50 @@ gdk_wayland_window_attach_image (GdkWindow *window)
   impl->pending_commit = TRUE;
 }
 
+static const cairo_user_data_key_t gdk_wayland_window_cairo_key;
+
 static void
 buffer_release_callback (void             *_data,
                          struct wl_buffer *wl_buffer)
 {
   cairo_surface_t *cairo_surface = _data;
+  GdkWindowImplWayland *impl = cairo_surface_get_user_data (cairo_surface, &gdk_wayland_window_cairo_key);
 
-  cairo_surface_destroy (cairo_surface);
+  g_return_if_fail (GDK_IS_WINDOW_IMPL_WAYLAND (impl));
+
+  /* The released buffer isn't the latest committed one, we have no further
+   * use for it, so clean it up.
+   */
+  if (impl->committed_cairo_surface != cairo_surface)
+    {
+      /* If this fails, then the surface buffer got reused before it was
+       * released from the compositor
+       */
+      g_warn_if_fail (impl->staging_cairo_surface != cairo_surface);
+
+      cairo_surface_destroy (cairo_surface);
+      return;
+    }
+
+  /* If we've staged updates into a new buffer before the release for this
+   * buffer came in, then we can't reuse this buffer, so unref it. It may still
+   * be alive as a readback buffer though.
+   */
+  if (impl->staging_cairo_surface != NULL)
+    {
+      /* If this fails, then we've allocated a staging buffer prematurely.
+       * We didn't have any screen updates.
+       */
+      g_warn_if_fail (!cairo_region_is_empty (impl->staged_updates_region));
+
+      g_clear_pointer (&impl->committed_cairo_surface, cairo_surface_destroy);
+      return;
+    }
+
+  /* Release came in, we haven't done any interim updates, so we can just use
+   * the old committed buffer again.
+   */
+  impl->staging_cairo_surface = g_steal_pointer (&impl->committed_cairo_surface);
 }
 
 static const struct wl_buffer_listener buffer_listener = {
@@ -601,32 +701,41 @@ gdk_wayland_window_ensure_cairo_surface (GdkWindow *window)
   /* If we are drawing using OpenGL then we only need a logical 1x1 surface. */
   if (impl->display_server.egl_window)
     {
-      if (impl->cairo_surface &&
-          _gdk_wayland_is_shm_surface (impl->cairo_surface))
-        cairo_surface_destroy (impl->cairo_surface);
+      if (impl->staging_cairo_surface &&
+          _gdk_wayland_is_shm_surface (impl->staging_cairo_surface))
+        cairo_surface_destroy (impl->staging_cairo_surface);
 
-      impl->cairo_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                                        impl->scale,
-                                                        impl->scale);
-      cairo_surface_set_device_scale (impl->cairo_surface,
+      impl->staging_cairo_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                                                impl->scale,
+                                                                impl->scale);
+      cairo_surface_set_device_scale (impl->staging_cairo_surface,
                                       impl->scale, impl->scale);
     }
-  else if (!impl->cairo_surface)
+  else if (!impl->staging_cairo_surface)
     {
       GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_window_get_display (impl->wrapper));
       struct wl_buffer *buffer;
 
-      impl->cairo_surface = _gdk_wayland_display_create_shm_surface (display_wayland,
-                                                                     impl->wrapper->width,
-                                                                     impl->wrapper->height,
-                                                                     impl->scale);
-      buffer = _gdk_wayland_shm_surface_get_wl_buffer (impl->cairo_surface);
-      wl_buffer_add_listener (buffer, &buffer_listener, impl->cairo_surface);
+      impl->staging_cairo_surface = _gdk_wayland_display_create_shm_surface (display_wayland,
+                                                                             impl->wrapper->width,
+                                                                             impl->wrapper->height,
+                                                                             impl->scale);
+      cairo_surface_set_user_data (impl->staging_cairo_surface,
+                                   &gdk_wayland_window_cairo_key,
+                                   g_object_ref (impl),
+                                   (cairo_destroy_func_t)
+                                   g_object_unref);
+      buffer = _gdk_wayland_shm_surface_get_wl_buffer (impl->staging_cairo_surface);
+      wl_buffer_add_listener (buffer, &buffer_listener, impl->staging_cairo_surface);
     }
 }
 
-/* Unlike other backends the Cairo surface is not just a cheap wrapper
- * around some other backing.  It is the buffer itself.
+/* The cairo surface returned here uses a memory segment that's shared
+ * with the display server.  This is not a temporary buffer that gets
+ * copied to the display server, but the actual buffer the display server
+ * will ultimately end up sending to the GPU. At the time this happens
+ * impl->committed_cairo_surface gets set to impl->staging_cairo_surface, and
+ * impl->staging_cairo_surface gets nullified.
  */
 static cairo_surface_t *
 gdk_wayland_window_ref_cairo_surface (GdkWindow *window)
@@ -638,9 +747,9 @@ gdk_wayland_window_ref_cairo_surface (GdkWindow *window)
 
   gdk_wayland_window_ensure_cairo_surface (window);
 
-  cairo_surface_reference (impl->cairo_surface);
+  cairo_surface_reference (impl->staging_cairo_surface);
 
-  return impl->cairo_surface;
+  return impl->staging_cairo_surface;
 }
 
 static cairo_surface_t *
@@ -670,6 +779,24 @@ gdk_window_impl_wayland_end_paint (GdkWindow *window)
   if (!window->current_paint.use_gl)
     {
       gdk_wayland_window_attach_image (window);
+
+      /* If there's a committed buffer pending, then track which
+       * updates are staged until the next frame, so we can back
+       * fill the unstaged parts of the staging buffer with the
+       * last frame.
+       */
+      if (impl->committed_cairo_surface != NULL)
+        {
+          if (impl->staged_updates_region == NULL)
+            {
+              impl->staged_updates_region = cairo_region_copy (window->current_paint.region);
+              impl->backfill_cairo_surface = cairo_surface_reference (impl->committed_cairo_surface);
+            }
+          else
+            {
+              cairo_region_union (impl->staged_updates_region, window->current_paint.region);
+            }
+        }
 
       n = cairo_region_num_rectangles (window->current_paint.region);
       for (i = 0; i < n; i++)
@@ -701,6 +828,7 @@ gdk_window_impl_wayland_finalize (GObject *object)
 
   g_clear_pointer (&impl->opaque_region, cairo_region_destroy);
   g_clear_pointer (&impl->input_region, cairo_region_destroy);
+  g_clear_pointer (&impl->staged_updates_region, cairo_region_destroy);
 
   G_OBJECT_CLASS (_gdk_window_impl_wayland_parent_class)->finalize (object);
 }
@@ -1498,8 +1626,8 @@ gdk_wayland_window_show (GdkWindow *window,
 
   _gdk_make_event (window, GDK_MAP, NULL, FALSE);
 
-  if (impl->cairo_surface &&
-      _gdk_wayland_is_shm_surface (impl->cairo_surface))
+  if (impl->staging_cairo_surface &&
+      _gdk_wayland_is_shm_surface (impl->staging_cairo_surface))
     gdk_wayland_window_attach_image (window);
 }
 
@@ -1843,8 +1971,6 @@ gdk_wayland_window_destroy (GdkWindow *window,
                             gboolean   recursing,
                             gboolean   foreign_destroy)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   /* Wayland windows can't be externally destroyed; we may possibly
@@ -1853,8 +1979,7 @@ gdk_wayland_window_destroy (GdkWindow *window,
   g_return_if_fail (!foreign_destroy);
 
   gdk_wayland_window_hide_surface (window);
-
-  g_clear_pointer (&impl->cairo_surface, cairo_surface_destroy);
+  drop_cairo_surfaces (window);
 }
 
 static void
