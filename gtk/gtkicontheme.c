@@ -49,6 +49,7 @@
 #include "gtksettingsprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkprivate.h"
+#include "gdkpixbufutilsprivate.h"
 
 #undef GDK_DEPRECATED
 #undef GDK_DEPRECATED_FOR
@@ -3880,9 +3881,15 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo *icon_info)
             size = scaled_desired_size;
           else
             size = icon_info->dir_size * dir_scale * icon_info->scale;
-          source_pixbuf = gdk_pixbuf_new_from_resource_at_scale (icon_info->filename,
-                                                                 size, size, TRUE,
-                                                                 &icon_info->load_error);
+
+          if (size == 0)
+            source_pixbuf = _gdk_pixbuf_new_from_resource_scaled (icon_info->filename,
+                                                                  icon_info->desired_scale,
+                                                                  &icon_info->load_error);
+          else
+            source_pixbuf = gdk_pixbuf_new_from_resource_at_scale (icon_info->filename,
+                                                                   size, size, TRUE,
+                                                                   &icon_info->load_error);
         }
       else
         source_pixbuf = gdk_pixbuf_new_from_resource (icon_info->filename,
@@ -3910,10 +3917,16 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo *icon_info)
                 size = scaled_desired_size;
               else
                 size = icon_info->dir_size * dir_scale * icon_info->scale;
-              source_pixbuf = gdk_pixbuf_new_from_stream_at_scale (stream,
-                                                                   size, size,
-                                                                   TRUE, NULL,
-                                                                   &icon_info->load_error);
+              if (size == 0)
+                source_pixbuf = _gdk_pixbuf_new_from_stream_scaled (stream,
+                                                                    icon_info->desired_scale,
+                                                                    NULL,
+                                                                    &icon_info->load_error);
+              else
+                source_pixbuf = gdk_pixbuf_new_from_stream_at_scale (stream,
+                                                                     size, size,
+                                                                     TRUE, NULL,
+                                                                     &icon_info->load_error);
             }
           else
             source_pixbuf = gdk_pixbuf_new_from_stream (stream,
