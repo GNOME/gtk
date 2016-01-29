@@ -421,10 +421,10 @@ gtk_search_bar_class_init (GtkSearchBarClass *klass)
   g_object_class_install_properties (object_class, LAST_PROPERTY, widget_props);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/ui/gtksearchbar.ui");
-  gtk_widget_class_bind_template_child_internal_private (widget_class, GtkSearchBar, tool_box);
-  gtk_widget_class_bind_template_child_internal_private (widget_class, GtkSearchBar, revealer);
-  gtk_widget_class_bind_template_child_internal_private (widget_class, GtkSearchBar, box_center);
-  gtk_widget_class_bind_template_child_internal_private (widget_class, GtkSearchBar, close_button);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkSearchBar, tool_box);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkSearchBar, revealer);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkSearchBar, box_center);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkSearchBar, close_button);
 
   gtk_widget_class_set_css_name (widget_class, "searchbar");
 }
