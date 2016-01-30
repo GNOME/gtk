@@ -142,3 +142,16 @@ _gtk_style_provider_private_get_scale (GtkStyleProviderPrivate *provider)
 
   return iface->get_scale (provider);
 }
+
+void
+_gtk_style_provider_private_emit_error (GtkStyleProviderPrivate *provider,
+                                        GtkCssSection           *section,
+                                        GError                  *error)
+{
+  GtkStyleProviderPrivateInterface *iface;
+
+  iface = GTK_STYLE_PROVIDER_PRIVATE_GET_INTERFACE (provider);
+
+  if (iface->emit_error)
+    iface->emit_error (provider, section, error);
+}

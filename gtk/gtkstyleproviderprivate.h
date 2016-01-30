@@ -49,7 +49,9 @@ struct _GtkStyleProviderPrivateInterface
                                                  const GtkCssMatcher     *matcher,
                                                  GtkCssLookup            *lookup,
                                                  GtkCssChange            *out_change);
-
+  void                  (* emit_error)          (GtkStyleProviderPrivate *provider,
+                                                 GtkCssSection           *section,
+                                                 const GError            *error);
   /* signal */
   void                  (* changed)             (GtkStyleProviderPrivate *provider);
 };
@@ -68,6 +70,10 @@ void                    _gtk_style_provider_private_lookup       (GtkStyleProvid
                                                                   GtkCssChange            *out_change);
 
 void                    _gtk_style_provider_private_changed      (GtkStyleProviderPrivate *provider);
+
+void                    _gtk_style_provider_private_emit_error   (GtkStyleProviderPrivate *provider,
+                                                                  GtkCssSection           *section,
+                                                                  GError                  *error);
 
 G_END_DECLS
 

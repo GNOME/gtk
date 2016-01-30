@@ -142,6 +142,9 @@ static void gtk_css_provider_finalize (GObject *object);
 static void gtk_css_style_provider_iface_init (GtkStyleProviderIface *iface);
 static void gtk_css_style_provider_private_iface_init (GtkStyleProviderPrivateInterface *iface);
 static void widget_property_value_list_free (WidgetPropertyValue *head);
+static void gtk_css_style_provider_emit_error (GtkStyleProviderPrivate *provider,
+                                               GtkCssSection           *section,
+                                               const GError            *error);
 
 static gboolean
 gtk_css_provider_load_internal (GtkCssProvider *css_provider,
@@ -406,12 +409,21 @@ gtk_css_scanner_destroy (GtkCssScanner *scanner)
 }
 
 static void
+gtk_css_style_provider_emit_error (GtkStyleProviderPrivate *provider,
+                                   GtkCssSection           *section,
+                                   const GError            *error)
+{
+  g_signal_emit (provider, css_provider_signals[PARSING_ERROR], 0, section, error);
+}
+
+static void
 gtk_css_provider_emit_error (GtkCssProvider *provider,
                              GtkCssScanner  *scanner,
                              const GError   *error)
 {
-  g_signal_emit (provider, css_provider_signals[PARSING_ERROR], 0,
-                 scanner != NULL ? scanner->section : NULL, error);
+  gtk_css_style_provider_emit_error (GTK_STYLE_PROVIDER_PRIVATE (provider),
+                                     scanner ? scanner->section : NULL,
+                                     error);
 }
 
 static void
@@ -421,9 +433,7 @@ gtk_css_scanner_parser_error (GtkCssParser *parser,
 {
   GtkCssScanner *scanner = user_data;
 
-  gtk_css_provider_emit_error (scanner->provider,
-                               scanner,
-                               error);
+  gtk_css_provider_emit_error (scanner->provider, scanner, error);
 }
 
 static GtkCssScanner *
@@ -785,6 +795,7 @@ gtk_css_style_provider_private_iface_init (GtkStyleProviderPrivateInterface *ifa
   iface->get_color = gtk_css_style_provider_get_color;
   iface->get_keyframes = gtk_css_style_provider_get_keyframes;
   iface->lookup = gtk_css_style_provider_lookup;
+  iface->emit_error = gtk_css_style_provider_emit_error;
 }
 
 static void
@@ -834,10 +845,7 @@ gtk_css_provider_take_error (GtkCssProvider *provider,
                              GtkCssScanner  *scanner,
                              GError         *error)
 {
-  gtk_css_provider_emit_error (provider,
-                               scanner,
-                               error);
-
+  gtk_css_provider_emit_error (provider, scanner, error);
   g_error_free (error);
 }
 
