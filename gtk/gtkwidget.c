@@ -6252,8 +6252,8 @@ gtk_widget_common_ancestor (GtkWidget *widget_a,
  * @dest_widget: a #GtkWidget
  * @src_x: X position relative to @src_widget
  * @src_y: Y position relative to @src_widget
- * @dest_x: (out): location to store X position relative to @dest_widget
- * @dest_y: (out): location to store Y position relative to @dest_widget
+ * @dest_x: (out) (optional): location to store X position relative to @dest_widget
+ * @dest_y: (out) (optional): location to store Y position relative to @dest_widget
  *
  * Translate coordinates relative to @src_widget’s allocation to coordinates
  * relative to @dest_widget’s allocations. In order to perform this
