@@ -398,6 +398,7 @@ gtk_private_h_sources =		\
 	gtkcssiconthemevalueprivate.h	\
 	gtkcssimagebuiltinprivate.h	\
 	gtkcssimagecrossfadeprivate.h	\
+	gtkcssimagefallbackprivate.h	\
 	gtkcssimagegradientprivate.h	\
 	gtkcssimageiconthemeprivate.h	\
 	gtkcssimagelinearprivate.h	\
@@ -661,6 +662,7 @@ gtk_base_c_sources = 		\
 	gtkcssimage.c		\
 	gtkcssimagebuiltin.c	\
 	gtkcssimagecrossfade.c	\
+	gtkcssimagefallback.c	\
 	gtkcssimagegradient.c	\
 	gtkcssimageicontheme.c	\
 	gtkcssimagelinear.c	\

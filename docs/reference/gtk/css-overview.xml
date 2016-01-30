@@ -608,8 +608,9 @@ background-color: @bg_color;
       and borders.
     </para>
 
-<literallayout><code>〈image〉 = 〈url〉 | 〈crossfade〉 | 〈gradient〉 | 〈gtk image〉</code>
+<literallayout><code>〈image〉 = 〈url〉 | 〈crossfade〉 | 〈alternatives〉 | 〈gradient〉 | 〈gtk image〉</code>
 <code>〈crossfade〉 = cross-fade( 〈percentage〉, 〈image〉, 〈image〉)</code>
+<code>〈alternatives〉 = image([ 〈image〉, ]* [ 〈image〉 | 〈color〉 ])</code>
 <code>〈gradient〉 = 〈linear gradient〉 | 〈radial gradient〉</code>
 <code>〈linear gradient〉 = [ linear-gradient | repeating-linear-gradient ] (</code>
 <code>                      [ [ 〈angle〉 | to 〈side or corner〉 ] , ]?</code>
@@ -657,6 +658,23 @@ button {
       <programlisting><![CDATA[
 button {
   background-image: cross-fade(50%, url("water-lily.png"), url("buffalo.jpg"));
+}
+]]></programlisting>
+    </example>
+
+    <para>
+      The image() syntax provides a way to specify fallbacks in case an image
+      format may not be supported. Multiple fallback images can be specified,
+      and will be tried in turn until one can be loaded successfully. The
+      last fallback may be a color, which will be rendered as a solid color
+      image.
+    </para>
+
+    <example>
+      <title>Image fallback</title>
+      <programlisting><![CDATA[
+button {
+  background-image: image(url("fancy.svg"), url("plain.png"), green);
 }
 ]]></programlisting>
     </example>
