@@ -747,6 +747,9 @@ add_custom_color (GtkColorChooserWidget *cc,
   if (g_list_length (children) >= 9)
     {
       last = g_list_last (children)->data;
+      if (last == GTK_WIDGET (cc->priv->current))
+        cc->priv->current = NULL;
+
       gtk_widget_destroy (last);
     }
 
