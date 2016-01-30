@@ -953,6 +953,10 @@ gtk_init_with_args (gint                 *argc,
  * There is no need to call this function explicitly if you are using
  * gtk_init(), or gtk_init_check().
  *
+ * Note that many aspects of GTK+ require a display connection to
+ * function, so this way of initializing GTK+ is really only useful
+ * for specialized use cases.
+ *
  * Returns: %TRUE if initialization succeeded, otherwise %FALSE
  */
 gboolean
