@@ -2604,7 +2604,12 @@ location_entry_create (GtkFileChooserWidget *impl)
 
   if (!priv->location_entry)
     {
-      priv->location_entry = _gtk_file_chooser_entry_new (TRUE, TRUE);
+      gboolean eat_escape;
+
+      eat_escape = priv->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
+                   priv->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER;
+
+      priv->location_entry = _gtk_file_chooser_entry_new (TRUE, eat_escape);
       location_entry_setup (impl);
     }
 }
