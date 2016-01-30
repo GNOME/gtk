@@ -11,9 +11,14 @@ Overview of Changes in GTK+ 3.19.8
 * CSS changes:
  - Allow loading svg imges
  - Fix baseline handling
+ - -gtk-recolor() works properly with hi-dpi now
+ - image() can be used in CSS now
 
 * Themes:
  - new radio / check implementation
+
+* Tools:
+ - gtk-builder-tool can now preview .ui files
 
 * Bugs fixed:
  464528 gdk_rectangle_union() and gdk_rectangle_intersect() should ign...
@@ -36,9 +41,12 @@ Overview of Changes in GTK+ 3.19.8
  761095 wayland: use shm_open instead of open in tmpdir
  761128 Selected text in password entry not drawn correctly
  761254 GtkDialog exposes public action_box internal child
+ 761026 File chooser: Make Escape close the dialog
+ 761318 css: Support the image() notation
 
 * Translation updates:
  German
+ Hungarian
 
 
 Overview of Changes in GTK+ 3.19.7
