@@ -99,35 +99,46 @@ lookup_symbolic_colors (GtkCssStyle *style,
 }
 
 static GtkCssImage *
-gtk_css_image_recolor_load (GtkCssImageRecolor *recolor,
-                            GtkCssStyle        *style,
-                            GtkCssValue        *palette,
-                            gint                scale)
+gtk_css_image_recolor_load (GtkCssImageRecolor  *recolor,
+                            GtkCssStyle         *style,
+                            GtkCssValue         *palette,
+                            gint                 scale,
+                            GError             **gerror)
 {
   GtkCssImageUrl *url = GTK_CSS_IMAGE_URL (recolor);
   GtkIconInfo *info;
   GdkRGBA fg, success, warning, error;
   GdkPixbuf *pixbuf;
   GtkCssImage *image;
-  GError *gerror = NULL;
+  GError *local_error = NULL;
 
   lookup_symbolic_colors (style, palette, &fg, &success, &warning, &error);
 
   info = gtk_icon_info_new_for_file (url->file, 0, scale);
-  pixbuf = gtk_icon_info_load_symbolic (info, &fg, &success, &warning, &error, NULL, &gerror);
+  pixbuf = gtk_icon_info_load_symbolic (info, &fg, &success, &warning, &error, NULL, &local_error);
   g_object_unref (info);
 
   if (pixbuf == NULL)
     {
-      char *uri;
+      cairo_surface_t *empty;
 
-      /* XXX: Get the error somehow back to the CssProvider */
-      uri = g_file_get_uri (url->file);
-      g_warning ("Error loading image '%s': %s\n", uri, gerror->message);
-      g_error_free (gerror);
-      g_free (uri);
+      if (gerror)
+        {
+          char *uri;
 
-      pixbuf = gtk_icon_theme_load_icon (gtk_icon_theme_get_default (), "image-missing", 24, 0, NULL);
+          uri = g_file_get_uri (url->file);
+          g_set_error (gerror,
+                       GTK_CSS_PROVIDER_ERROR,
+                       GTK_CSS_PROVIDER_ERROR_FAILED,
+                       "Error loading image '%s': %s", uri, local_error->message);
+          g_error_free (local_error);
+          g_free (uri);
+       }
+
+      empty = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 0, 0);
+      image = _gtk_css_image_surface_new (empty);
+      cairo_surface_destroy (empty);
+      return image;
     }
 
   image = _gtk_css_image_surface_new_for_pixbuf (pixbuf);
@@ -147,6 +158,7 @@ gtk_css_image_recolor_compute (GtkCssImage             *image,
   GtkCssValue *palette;
   GtkCssImage *img;
   int scale;
+  GError *error = NULL;
 
   scale = _gtk_style_provider_private_get_scale (provider);
 
@@ -155,7 +167,14 @@ gtk_css_image_recolor_compute (GtkCssImage             *image,
   else
     palette = _gtk_css_value_ref (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_PALETTE));
 
-  img = gtk_css_image_recolor_load (recolor, style, palette, scale);
+  img = gtk_css_image_recolor_load (recolor, style, palette, scale, &error);
+
+  if (error)
+    {
+      GtkCssSection *section = gtk_css_style_get_section (style, property_id);
+      _gtk_style_provider_private_emit_error (provider, section, error);
+      g_error_free (error);
+    }
 
   _gtk_css_value_unref (palette);
 

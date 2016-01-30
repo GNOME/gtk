@@ -23,14 +23,16 @@
 
 #include "gtkcssimageurlprivate.h"
 #include "gtkcssimagesurfaceprivate.h"
+#include "gtkstyleproviderprivate.h"
 
 G_DEFINE_TYPE (GtkCssImageUrl, _gtk_css_image_url, GTK_TYPE_CSS_IMAGE)
 
 static GtkCssImage *
-gtk_css_image_url_load_image (GtkCssImageUrl *url)
+gtk_css_image_url_load_image (GtkCssImageUrl  *url,
+                              GError         **error)
 {
   GdkPixbuf *pixbuf;
-  GError *error = NULL;
+  GError *local_error = NULL;
   GFileInputStream *input;
 
   if (url->loaded_image)
@@ -44,16 +46,16 @@ gtk_css_image_url_load_image (GtkCssImageUrl *url)
       char *uri = g_file_get_uri (url->file);
       char *resource_path = g_uri_unescape_string (uri + strlen ("resource://"), NULL);
 
-      pixbuf = gdk_pixbuf_new_from_resource (resource_path, &error);
+      pixbuf = gdk_pixbuf_new_from_resource (resource_path, &local_error);
       g_free (resource_path);
       g_free (uri);
     }
   else
     {
-      input = g_file_read (url->file, NULL, &error);
+      input = g_file_read (url->file, NULL, &local_error);
       if (input != NULL)
 	{
-          pixbuf = gdk_pixbuf_new_from_stream (G_INPUT_STREAM (input), NULL, &error);
+          pixbuf = gdk_pixbuf_new_from_stream (G_INPUT_STREAM (input), NULL, &local_error);
           g_object_unref (input);
 	}
       else
@@ -64,18 +66,25 @@ gtk_css_image_url_load_image (GtkCssImageUrl *url)
 
   if (pixbuf == NULL)
     {
-      cairo_surface_t *empty = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 0, 0);
-      char *uri;
+      cairo_surface_t *empty;
 
-      /* XXX: Can we get the error somehow sent to the CssProvider?
-       * I don't like just dumping it to stderr or losing it completely. */
-      uri = g_file_get_uri (url->file);
-      g_warning ("Error loading image '%s': %s", uri, error->message);
-      g_error_free (error);
-      g_free (uri);
+      if (error)
+        {
+          char *uri;
+
+          uri = g_file_get_uri (url->file);
+          g_set_error (error,
+                       GTK_CSS_PROVIDER_ERROR,
+                       GTK_CSS_PROVIDER_ERROR_FAILED,
+                       "Error loading image '%s': %s", uri, local_error->message);
+          g_error_free (local_error);
+          g_free (uri);
+       }
+
+      empty = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 0, 0);
       url->loaded_image = _gtk_css_image_surface_new (empty);
       cairo_surface_destroy (empty);
-      return url->loaded_image; 
+      return url->loaded_image;
     }
 
   url->loaded_image = _gtk_css_image_surface_new_for_pixbuf (pixbuf);
@@ -89,7 +98,7 @@ gtk_css_image_url_get_width (GtkCssImage *image)
 {
   GtkCssImageUrl *url = GTK_CSS_IMAGE_URL (image);
 
-  return _gtk_css_image_get_width (gtk_css_image_url_load_image (url));
+  return _gtk_css_image_get_width (gtk_css_image_url_load_image (url, NULL));
 }
 
 static int
@@ -97,7 +106,7 @@ gtk_css_image_url_get_height (GtkCssImage *image)
 {
   GtkCssImageUrl *url = GTK_CSS_IMAGE_URL (image);
 
-  return _gtk_css_image_get_height (gtk_css_image_url_load_image (url));
+  return _gtk_css_image_get_height (gtk_css_image_url_load_image (url, NULL));
 }
 
 static double
@@ -105,7 +114,7 @@ gtk_css_image_url_get_aspect_ratio (GtkCssImage *image)
 {
   GtkCssImageUrl *url = GTK_CSS_IMAGE_URL (image);
 
-  return _gtk_css_image_get_aspect_ratio (gtk_css_image_url_load_image (url));
+  return _gtk_css_image_get_aspect_ratio (gtk_css_image_url_load_image (url, NULL));
 }
 
 static void
@@ -116,7 +125,7 @@ gtk_css_image_url_draw (GtkCssImage        *image,
 {
   GtkCssImageUrl *url = GTK_CSS_IMAGE_URL (image);
 
-  _gtk_css_image_draw (gtk_css_image_url_load_image (url), cr, width, height);
+  _gtk_css_image_draw (gtk_css_image_url_load_image (url, NULL), cr, width, height);
 }
 
 static GtkCssImage *
@@ -127,8 +136,18 @@ gtk_css_image_url_compute (GtkCssImage             *image,
                            GtkCssStyle             *parent_style)
 {
   GtkCssImageUrl *url = GTK_CSS_IMAGE_URL (image);
+  GtkCssImage *copy;
+  GError *error = NULL;
 
-  return g_object_ref (gtk_css_image_url_load_image (url));
+  copy = gtk_css_image_url_load_image (url, &error);
+  if (error)
+    {
+      GtkCssSection *section = gtk_css_style_get_section (style, property_id);
+      _gtk_style_provider_private_emit_error (provider, section, error);
+      g_error_free (error);
+    }
+
+  return g_object_ref (copy);
 }
 
 static gboolean
@@ -150,7 +169,7 @@ gtk_css_image_url_print (GtkCssImage *image,
 {
   GtkCssImageUrl *url = GTK_CSS_IMAGE_URL (image);
 
-  _gtk_css_image_print (gtk_css_image_url_load_image (url), string);
+  _gtk_css_image_print (gtk_css_image_url_load_image (url, NULL), string);
 }
 
 static void
