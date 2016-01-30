@@ -255,7 +255,8 @@ nobase_insttest_DATA = $(test_icontheme) $(test_ui)
 %.test: %$(EXEEXT) Makefile
 	$(AM_V_GEN) (echo '[Test]' > $@.tmp; \
 	echo 'Type=session' >> $@.tmp; \
-	echo 'Exec=env G_ENABLE_DIAGNOSTIC=0 $(insttestdir)/$<' >> $@.tmp; \
+	echo 'Output=TAP' >> $@.tmp; \
+	echo 'Exec=env G_ENABLE_DIAGNOSTIC=0 $(insttestdir)/$< --tap' >> $@.tmp; \
 	mv $@.tmp $@)
 
 test_files = $(TEST_PROGS:=.test)

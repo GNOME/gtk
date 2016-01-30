@@ -40,7 +40,8 @@ statetest_DATA = $(testdata)
 a11ystate.test: Makefile
 	$(AM_V_GEN) (echo '[Test]' > $@.tmp; \
 	echo 'Type=session-exclusive' >> $@.tmp; \
-	echo 'Exec=env G_ENABLE_DIAGNOSTIC=0 $(insttestdir)/state-record --directory $(statetestdir)' >> $@.tmp; \
+	echo 'Output=TAP' >> $@.tmp; \
+	echo 'Exec=env G_ENABLE_DIAGNOSTIC=0 $(insttestdir)/state-record --tap --directory $(statetestdir)' >> $@.tmp; \
 	mv $@.tmp $@)
 
 testfiles = a11ystate.test

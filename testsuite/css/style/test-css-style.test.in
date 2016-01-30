@@ -1,3 +1,4 @@
 [Test]
-Exec=/bin/sh -c "cd @libexecdir@/installed-tests/gtk+/css/style && @libexecdir@/installed-tests/gtk+/css/style/test-css-style"
+Exec=/bin/sh -c "cd @libexecdir@/installed-tests/gtk+/css/style && @libexecdir@/installed-tests/gtk+/css/style/test-css-style --tap"
 Type=session
+Output=TAP
