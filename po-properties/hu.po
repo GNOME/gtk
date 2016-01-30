@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gtk+-properties master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-01-30 00:21+0000\n"
-"PO-Revision-Date: 2016-01-30 02:21+0100\n"
+"PO-Revision-Date: 2016-01-30 02:22+0100\n"
 "Last-Translator: Gabor Kelemen <kelemeng at ubuntu dot com>\n"
 "Language-Team: Hungarian <openscope at googlegroups dot com>\n"
 "Language: hu\n"
@@ -2903,16 +2903,14 @@ msgid "The selected RGBA color"
 msgstr "A kiválasztott RGBA szín"
 
 #: gtk/gtkcolorbutton.c:280
-#, fuzzy
 #| msgid "Show editor"
 msgid "Show Editor"
 msgstr "Szerkesztő megjelenítése"
 
 #: gtk/gtkcolorbutton.c:281
-#, fuzzy
 #| msgid "Whether to show the close button in the toolbar"
 msgid "Whether to show the color editor right away"
-msgstr "Megjelenjen-e a bezárás gomb az eszköztáron"
+msgstr "Megjelenjen-e azonnal a színszerkesztő"
 
 #: gtk/gtkcolorchooser.c:67
 msgid "Color"
