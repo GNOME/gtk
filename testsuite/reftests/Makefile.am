@@ -453,6 +453,7 @@ EXTRA_DIST += 			\
 	$(testdata)		\
 	reftests-dark.test.in	\
 	reftests-hc.test.in	\
+	reftests-hci.test.in	\
 	reftests.test.in	\
 	$(NULL)
 
@@ -478,7 +479,9 @@ substitutions = \
 built_tests = 			\
 	reftests.test		\
 	reftests-dark.test	\
-	reftests-hc.test
+	reftests-hc.test	\
+	reftests-hci.test	\
+	$(NULL)
 
 DISTCLEANFILES = $(built_tests)
 
