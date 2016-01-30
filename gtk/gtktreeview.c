@@ -4798,29 +4798,26 @@ invalidate_empty_focus (GtkTreeView *tree_view)
   gdk_window_invalidate_rect (tree_view->priv->bin_window, &area, FALSE);
 }
 
-/* Draws a focus rectangle near the edge of the bin_window; used when the tree
- * is empty.
+/* Draws background and a focus rectangle near the edge of the bin_window;
+ * used when the tree is empty.
  */
 static void
-draw_empty_focus (GtkTreeView *tree_view, cairo_t *cr)
+draw_empty (GtkTreeView *tree_view,
+            cairo_t     *cr)
 {
   GtkWidget *widget = GTK_WIDGET (tree_view);
-  gint w, h;
+  GtkStyleContext *context;
+  gint width, height;
 
-  if (!gtk_widget_has_visible_focus (widget))
-    return;
+  context = gtk_widget_get_style_context (widget);
 
-  w = gdk_window_get_width (tree_view->priv->bin_window) - 2;
-  h = gdk_window_get_height (tree_view->priv->bin_window) - 2;
+  width = gdk_window_get_width (tree_view->priv->bin_window);
+  height = gdk_window_get_height (tree_view->priv->bin_window);
 
-  if (w > 0 && h > 0)
-    {
-      GtkStyleContext *context;
+  gtk_render_background (context, cr, 0, 0, width, height);
 
-      context = gtk_widget_get_style_context (widget);
-
-      gtk_render_focus (context, cr, 1, 1, w, h);
-    }
+  if (gtk_widget_has_visible_focus (widget))
+    gtk_render_focus (context, cr, 0, 0, width, height);
 }
 
 typedef enum {
@@ -4988,7 +4985,7 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
 
   if (tree_view->priv->tree == NULL)
     {
-      draw_empty_focus (tree_view, cr);
+      draw_empty (tree_view, cr);
       return TRUE;
     }
 
@@ -5617,6 +5614,7 @@ gtk_tree_view_draw (GtkWidget *widget,
            gtk_cairo_should_draw_window (cr, tree_view->priv->drag_highlight_window))
     {
       GdkRGBA color;
+
       gtk_style_context_get_color (context, gtk_style_context_get_state (context), &color);
       cairo_save (cr);
       gtk_cairo_transform_to_window (cr, GTK_WIDGET (tree_view), tree_view->priv->drag_highlight_window);
