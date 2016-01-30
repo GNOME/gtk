@@ -222,9 +222,6 @@ testdata = \
 	css-multi-state.css \
 	css-multi-state.ref.ui \
 	css-multi-state.ui \
-	entry-progress-coloring.css \
-	entry-progress-coloring.ref.ui \
-	entry-progress-coloring.ui \
 	fixed-widget-stacking.ref.ui \
 	fixed-widget-stacking.ui \
 	flipping-icons.ref.ui \
