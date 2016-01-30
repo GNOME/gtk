@@ -3949,7 +3949,7 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo *icon_info)
     icon_info->scale = image_size / 1000.;
   else if (icon_info->scale < 0.0)
     {
-      if (image_size > 0)
+      if (image_size > 0 && scaled_desired_size > 0)
         icon_info->scale = (gdouble)scaled_desired_size / (gdouble)image_size;
       else
         icon_info->scale = 1.0;
