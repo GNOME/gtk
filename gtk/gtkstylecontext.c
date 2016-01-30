@@ -330,6 +330,9 @@ gtk_style_context_init (GtkStyleContext *context)
 
   priv->screen = gdk_screen_get_default ();
 
+  if (priv->screen == NULL)
+    g_error ("Can't create a GtkStyleContext without a display connection");
+
   priv->property_cache = g_array_new (FALSE, FALSE, sizeof (PropertyValue));
 
   gtk_style_context_set_cascade (context,
