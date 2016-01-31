@@ -380,6 +380,7 @@ testdata = \
 	revealer-wrappable-contents.ui \
 	rotated-layout.ref.ui \
 	rotated-layout.ui \
+	separator-size.css \
 	separator-size.ref.ui \
 	separator-size.ui \
 	set-default-direction.ui \
