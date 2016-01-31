@@ -40,6 +40,8 @@ strip_attributes_if_no_animation (GtkWidget *widget)
   if (enabled)
     return;
 
+  g_message ("Unsetting text attributes because animation is disabled.");
+
   reftest_inhibit_snapshot ();
   gtk_label_set_attributes (GTK_LABEL (widget), NULL);
   g_timeout_add (500, unblock, NULL);
