@@ -15,6 +15,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">XXX</property>
+            <signal name="map" handler="reftest:strip_attributes_if_no_animation"/>
             <attributes>
               <attribute name="foreground" value="#ffff00000000"/>
             </attributes>
@@ -29,6 +30,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">XXX</property>
+            <signal name="map" handler="reftest:strip_attributes_if_no_animation"/>
             <attributes>
               <attribute name="foreground" value="#ffffffff0000"/>
             </attributes>
@@ -43,6 +45,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">XXX</property>
+            <signal name="map" handler="reftest:strip_attributes_if_no_animation"/>
             <attributes>
               <attribute name="foreground" value="#ffff00000000"/>
             </attributes>
@@ -57,6 +60,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">XXX</property>
+            <signal name="map" handler="reftest:strip_attributes_if_no_animation"/>
             <attributes>
               <attribute name="foreground" value="#ffff00000000"/>
             </attributes>
@@ -71,6 +75,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">XXX</property>
+            <signal name="map" handler="reftest:strip_attributes_if_no_animation"/>
             <attributes>
               <attribute name="foreground" value="#ffff00000000"/>
             </attributes>
@@ -85,6 +90,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">XXX</property>
+            <signal name="map" handler="reftest:strip_attributes_if_no_animation"/>
             <attributes>
               <attribute name="foreground" value="#ffff00000000"/>
             </attributes>
@@ -99,6 +105,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">XXX</property>
+            <signal name="map" handler="reftest:strip_attributes_if_no_animation"/>
             <attributes>
               <attribute name="foreground" value="#ffff00000000"/>
             </attributes>
@@ -113,6 +120,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">XXX</property>
+            <signal name="map" handler="reftest:strip_attributes_if_no_animation"/>
             <attributes>
               <attribute name="foreground" value="#ffff00000000"/>
             </attributes>
@@ -127,6 +135,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">XXX</property>
+            <signal name="map" handler="reftest:strip_attributes_if_no_animation"/>
             <attributes>
               <attribute name="foreground" value="#ffff00000000"/>
             </attributes>
@@ -141,6 +150,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">XXX</property>
+            <signal name="map" handler="reftest:strip_attributes_if_no_animation"/>
             <attributes>
               <attribute name="foreground" value="#ffff00000000"/>
             </attributes>
@@ -155,6 +165,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">XXX</property>
+            <signal name="map" handler="reftest:strip_attributes_if_no_animation"/>
             <attributes>
               <attribute name="foreground" value="#ffff00000000"/>
             </attributes>
@@ -169,6 +180,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">XXX</property>
+            <signal name="map" handler="reftest:strip_attributes_if_no_animation"/>
             <attributes>
               <attribute name="foreground" value="#ffff00000000"/>
             </attributes>
@@ -183,6 +195,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">XXX</property>
+            <signal name="map" handler="reftest:strip_attributes_if_no_animation"/>
             <attributes>
               <attribute name="foreground" value="#ffff00000000"/>
             </attributes>
@@ -197,6 +210,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">XXX</property>
+            <signal name="map" handler="reftest:strip_attributes_if_no_animation"/>
             <attributes>
               <attribute name="foreground" value="#ffff00000000"/>
             </attributes>
@@ -211,6 +225,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">XXX</property>
+            <signal name="map" handler="reftest:strip_attributes_if_no_animation"/>
             <attributes>
               <attribute name="foreground" value="#ffff00000000"/>
             </attributes>
@@ -225,6 +240,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">XXX</property>
+            <signal name="map" handler="reftest:strip_attributes_if_no_animation"/>
             <attributes>
               <attribute name="foreground" value="#ffff00000000"/>
             </attributes>
@@ -239,6 +255,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">XXX</property>
+            <signal name="map" handler="reftest:strip_attributes_if_no_animation"/>
             <attributes>
               <attribute name="foreground" value="#ffff00000000"/>
             </attributes>
@@ -253,6 +270,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">XXX</property>
+            <signal name="map" handler="reftest:strip_attributes_if_no_animation"/>
             <attributes>
               <attribute name="foreground" value="#ffffffff0000"/>
             </attributes>
@@ -267,6 +285,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">XXX</property>
+            <signal name="map" handler="reftest:strip_attributes_if_no_animation"/>
             <attributes>
               <attribute name="foreground" value="#ffffffff0000"/>
             </attributes>
@@ -281,6 +300,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">XXX</property>
+            <signal name="map" handler="reftest:strip_attributes_if_no_animation"/>
             <attributes>
               <attribute name="foreground" value="#ffffffff0000"/>
             </attributes>
@@ -295,6 +315,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">XXX</property>
+            <signal name="map" handler="reftest:strip_attributes_if_no_animation"/>
             <attributes>
               <attribute name="foreground" value="#ffffffff0000"/>
             </attributes>
@@ -309,6 +330,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">XXX</property>
+            <signal name="map" handler="reftest:strip_attributes_if_no_animation"/>
             <attributes>
               <attribute name="foreground" value="#ffffffff0000"/>
             </attributes>
@@ -323,6 +345,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">XXX</property>
+            <signal name="map" handler="reftest:strip_attributes_if_no_animation"/>
             <attributes>
               <attribute name="foreground" value="#ffffffff0000"/>
             </attributes>
@@ -337,6 +360,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">XXX</property>
+            <signal name="map" handler="reftest:strip_attributes_if_no_animation"/>
             <attributes>
               <attribute name="foreground" value="#ffffffff0000"/>
             </attributes>
@@ -351,6 +375,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">XXX</property>
+            <signal name="map" handler="reftest:strip_attributes_if_no_animation"/>
             <attributes>
               <attribute name="foreground" value="#ffffffff0000"/>
             </attributes>
@@ -365,6 +390,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">XXX</property>
+            <signal name="map" handler="reftest:strip_attributes_if_no_animation"/>
             <attributes>
               <attribute name="foreground" value="#ffffffff0000"/>
             </attributes>
@@ -379,6 +405,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">XXX</property>
+            <signal name="map" handler="reftest:strip_attributes_if_no_animation"/>
             <attributes>
               <attribute name="foreground" value="#ffffffff0000"/>
             </attributes>
@@ -393,6 +420,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">XXX</property>
+            <signal name="map" handler="reftest:strip_attributes_if_no_animation"/>
             <attributes>
               <attribute name="foreground" value="#ffffffff0000"/>
             </attributes>
@@ -407,6 +435,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">XXX</property>
+            <signal name="map" handler="reftest:strip_attributes_if_no_animation"/>
             <attributes>
               <attribute name="foreground" value="#ffffffff0000"/>
             </attributes>
@@ -421,6 +450,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">XXX</property>
+            <signal name="map" handler="reftest:strip_attributes_if_no_animation"/>
             <attributes>
               <attribute name="foreground" value="#ffffffff0000"/>
             </attributes>
@@ -435,6 +465,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">XXX</property>
+            <signal name="map" handler="reftest:strip_attributes_if_no_animation"/>
             <attributes>
               <attribute name="foreground" value="#ffffffff0000"/>
             </attributes>
@@ -449,6 +480,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">XXX</property>
+            <signal name="map" handler="reftest:strip_attributes_if_no_animation"/>
             <attributes>
               <attribute name="foreground" value="#ffffffff0000"/>
             </attributes>

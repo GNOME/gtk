@@ -506,6 +506,7 @@ libreftest_la_SOURCES =			\
 	statusbar-remove-all.c		\
 	textview-border-windows.c	\
 	textview-tags.c			\
+	label-attributes.c		\
 	$(NULL)
 
 -include $(top_srcdir)/git.mk
