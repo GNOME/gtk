@@ -22,13 +22,6 @@
 
 #include "gdk/gdkkeysyms.h"
 
-/* This file contains the table of the compose sequences,
- * static const guint16 gtk_compose_seqs_compact[] = {}
- * IT is generated from the compose-parse.py script.
- */
-#include "gtkimcontextsimpleseqs.h"
-
-
 G_BEGIN_DECLS
 
 extern const GtkComposeTableCompact gtk_compose_table_compact;

@@ -39,6 +39,7 @@
 #include "gtkcomposetable.h"
 
 #include "gtkimcontextsimpleprivate.h"
+#include "gtkimcontextsimpleseqs.h"
 
 /**
  * SECTION:gtkimcontextsimple
