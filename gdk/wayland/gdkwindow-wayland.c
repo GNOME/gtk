@@ -1288,7 +1288,7 @@ should_map_as_popup (GdkWindow *window)
             return TRUE;
         }
       else
-        g_warning ("Window %p is a temporary window without parent, "
+        g_message ("Window %p is a temporary window without parent, "
                    "application will not be able to position it on screen.",
                    window);
     }
