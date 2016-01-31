@@ -913,6 +913,9 @@ main (int argc, char *argv[])
   if (argc < 3)
     usage ();
 
+  if (strcmp (argv[2], "--help") == 0)
+    usage ();
+
   if (strcmp (argv[1], "validate") == 0)
     do_validate (argv[2]);
   else if (strcmp (argv[1], "simplify") == 0)
