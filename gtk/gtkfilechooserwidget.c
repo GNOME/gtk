@@ -5630,15 +5630,19 @@ gtk_file_chooser_widget_select_file (GtkFileChooser  *chooser,
   GtkFileChooserWidgetPrivate *priv = impl->priv;
   GFile *parent_file;
   gboolean same_path;
+  GtkFileSystemModel *fsmodel;
 
   parent_file = g_file_get_parent (file);
 
   if (!parent_file)
     return gtk_file_chooser_set_current_folder_file (chooser, file, error);
 
+  fsmodel = GTK_FILE_SYSTEM_MODEL (gtk_tree_view_get_model (GTK_TREE_VIEW (priv->browse_files_tree_view)));
+
   if (priv->operation_mode == OPERATION_MODE_SEARCH ||
       priv->operation_mode == OPERATION_MODE_RECENT ||
-      priv->load_state == LOAD_EMPTY)
+      priv->load_state == LOAD_EMPTY ||
+      priv->browse_files_model != fsmodel)
     {
       same_path = FALSE;
     }
