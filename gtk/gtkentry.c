@@ -9119,7 +9119,11 @@ gtk_entry_get_icon_area (GtkEntry             *entry,
 
   if (icon_info)
     {
+      GtkAllocation widget_allocation;
+      gtk_widget_get_allocation (GTK_WIDGET (entry), &widget_allocation);
       gtk_css_gadget_get_border_allocation (icon_info->gadget, icon_area, NULL);
+      icon_area->x -= widget_allocation.x;
+      icon_area->y -= widget_allocation.y;
     }
   else
     {
