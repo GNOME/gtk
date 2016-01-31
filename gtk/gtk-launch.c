@@ -33,9 +33,11 @@
 #endif
 #include <gtk.h>
 
+static gboolean show_version;
 static gchar **args = NULL;
 
 static GOptionEntry entries[] = {
+  { "version", 0, 0, G_OPTION_ARG_NONE, &show_version, NULL, NULL },
   { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &args, NULL, NULL },
   { NULL}
 };
@@ -66,14 +68,14 @@ main (int argc, char *argv[])
 #endif
 
   /* Translators: this message will appear immediately after the */
-  /* usage string - Usage: COMMAND [OPTION]… <THIS_MESSAGE>    */
+  /* usage string - Usage: COMMAND [OPTION...] <THIS_MESSAGE>    */
   context =
-    g_option_context_new (_("APPLICATION [URI…] — launch an APPLICATION with URI."));
+    g_option_context_new (_("APPLICATION [URI...] — launch an APPLICATION"));
 
   /* Translators: this message will appear after the usage string */
   /* and before the list of options.                              */
-  summary = _("Launch specified application by its desktop file info\n"
-              "optionally passing list of URIs as arguments.");
+  summary = _("Launch an application (specified by its desktop file name),\n"
+              "optionally passing one or more URIs as arguments.");
   g_option_context_set_summary (context, summary);
   g_option_context_add_main_entries (context, entries, GETTEXT_PACKAGE);
   g_option_context_add_group (context, gtk_get_option_group (FALSE));
@@ -86,11 +88,19 @@ main (int argc, char *argv[])
     {
       g_printerr (_("Error parsing commandline options: %s\n"), error->message);
       g_printerr ("\n");
-      g_printerr (_("Try \"%s --help\" for more information."),
-                  g_get_prgname ());
+      g_printerr (_("Try \"%s --help\" for more information."), g_get_prgname ());
       g_printerr ("\n");
-      g_error_free(error);
+      g_error_free (error);
       return 1;
+    }
+
+  if (show_version)
+    {
+      g_print ("%d.%d.%d\n",
+               gtk_get_major_version (),
+               gtk_get_minor_version (),
+               gtk_get_micro_version ());
+      return 0;
     }
 
   if (!args)
@@ -99,8 +109,7 @@ main (int argc, char *argv[])
       /* means the user is calling gtk-launch without any argument.  */
       g_printerr (_("%s: missing application name"), g_get_prgname ());
       g_printerr ("\n");
-      g_printerr (_("Try \"%s --help\" for more information."),
-                  g_get_prgname ());
+      g_printerr (_("Try \"%s --help\" for more information."), g_get_prgname ());
       g_printerr ("\n");
       return 1;
     }
@@ -112,7 +121,7 @@ main (int argc, char *argv[])
 #ifdef G_OS_UNIX
   if (g_str_has_suffix (app_name, ".desktop"))
     desktop_file_name = g_strdup (app_name);
-  else 
+  else
     desktop_file_name = g_strconcat (app_name, ".desktop", NULL);
   info = G_APP_INFO (g_desktop_app_info_new (desktop_file_name));
   g_free (desktop_file_name);

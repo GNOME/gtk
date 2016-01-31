@@ -31,7 +31,8 @@
 <refsynopsisdiv>
 <cmdsynopsis>
 <command>gtk-launch</command>
-<arg>APPLICATION</arg>
+<arg choice="opt" rep="repeat">OPTION</arg>
+<arg choice="plain">APPLICATION</arg>
 <arg choice="opt" rep="repeat">URI</arg>
 </cmdsynopsis>
 </refsynopsisdiv>
@@ -60,6 +61,12 @@ application.
     <varlistentry>
     <term><option>-?</option>, <option>--help</option></term>
       <listitem><para>Prints a short help text and exits.</para></listitem>
+    </varlistentry>
+  </variablelist>
+  <variablelist>
+    <varlistentry>
+    <term><option>--version</option></term>
+      <listitem><para>Prints the program version and exits.</para></listitem>
     </varlistentry>
   </variablelist>
 </refsect1>
