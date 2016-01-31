@@ -799,13 +799,30 @@ set_window_title (GtkWindow  *window,
 }
 
 static void
-do_preview (const char *filename,
-            const char *id)
+preview_file (const char *filename,
+              const char *id,
+              const char *cssfile)
 {
   GtkBuilder *builder;
   GError *error = NULL;
   GObject *object;
   GtkWidget *window;
+
+  if (cssfile)
+    {
+      GtkCssProvider *provider;
+
+      provider = gtk_css_provider_new ();
+      if (!gtk_css_provider_load_from_path (provider, cssfile, &error))
+        {
+          g_printerr ("%s\n", error->message);
+          exit (1);
+        }
+
+      gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
+                                                 GTK_STYLE_PROVIDER (provider),
+                                                 GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    }
 
   builder = gtk_builder_new ();
   if (!gtk_builder_add_from_file (builder, filename, &error))
@@ -886,23 +903,74 @@ do_preview (const char *filename,
 }
 
 static void
+do_preview (int          *argc,
+            const char ***argv)
+{
+  GOptionContext *context;
+  char *id = NULL;
+  char *css = NULL;
+  char **filenames = NULL;
+  const GOptionEntry entries[] = {
+    { "id", 0, 0, G_OPTION_ARG_STRING, &id, NULL, NULL },
+    { "css", 0, 0, G_OPTION_ARG_FILENAME, &css, NULL, NULL },
+    { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, NULL, NULL }
+  };
+  GError *error = NULL;
+
+  context = g_option_context_new (NULL);
+  g_option_context_set_help_enabled (context, FALSE);
+  g_option_context_add_main_entries (context, entries, NULL);
+
+  if (!g_option_context_parse (context, argc, (char ***)argv, &error))
+    {
+      g_printerr ("%s\n", error->message);
+      g_error_free (error);
+      exit (1);
+    }
+
+  g_option_context_free (context);
+
+  if (filenames == NULL)
+    {
+      g_printerr ("No .ui file specified\n");
+      exit (1);
+    }
+
+  if (g_strv_length (filenames) > 1)
+    {
+      g_printerr ("Can only preview a single .ui file\n");
+      exit (1);
+    }
+
+  preview_file (filenames[0], id, css);
+
+  g_strfreev (filenames);
+  g_free (id);
+  g_free (css);
+}
+
+static void
 usage (void)
 {
   g_print (_("Usage:\n"
              "  gtk-builder-tool [COMMAND] FILE\n"
              "\n"
              "Commands:\n"
-             "  validate      Validate the file\n"
-             "  simplify      Simplify the file\n"
-             "  enumerate     List all named objects\n"
-             "  preview [ID]  Preview the named object\n"
+             "  validate           Validate the file\n"
+             "  simplify           Simplify the file\n"
+             "  enumerate          List all named objects\n"
+             "  preview [OPTIONS]  Preview the file\n"
+             "\n"
+             "Preview Options:\n"
+             "  --id=ID            Preview only the named object\n"
+             "  --css=FILE         Use style from CSS file\n"
              "\n"
              "Perform various tasks on GtkBuilder .ui files.\n"));
   exit (1);
 }
 
 int
-main (int argc, char *argv[])
+main (int argc, const char *argv[])
 {
   g_set_prgname ("gtk-builder-tool");
 
@@ -916,29 +984,17 @@ main (int argc, char *argv[])
   if (strcmp (argv[2], "--help") == 0)
     usage ();
 
-  if (strcmp (argv[1], "validate") == 0)
-    do_validate (argv[2]);
-  else if (strcmp (argv[1], "simplify") == 0)
-    do_simplify (argv[2]);
-  else if (strcmp (argv[1], "enumerate") == 0)
-    do_enumerate (argv[2]);
-  else if (strcmp (argv[1], "preview") == 0)
-    {
-      const char *filename, *id;
+  argv++;
+  argc--;
 
-      if (argc > 3)
-        {
-          id = argv[2];
-          filename = argv[3];
-        }
-      else
-        {
-          id = NULL;
-          filename = argv[2];
-        }
-
-      do_preview (filename, id);
-    }
+  if (strcmp (argv[0], "validate") == 0)
+    do_validate (argv[1]);
+  else if (strcmp (argv[0], "simplify") == 0)
+    do_simplify (argv[1]);
+  else if (strcmp (argv[0], "enumerate") == 0)
+    do_enumerate (argv[1]);
+  else if (strcmp (argv[0], "preview") == 0)
+    do_preview (&argc, &argv);
   else
     usage ();
 

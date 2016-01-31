@@ -31,6 +31,7 @@
 <cmdsynopsis>
 <command>gtk-builder-tool</command>
 <arg choice="opt"><replaceable>COMMAND</replaceable></arg>
+<arg choice="opt" rep="repeat"><replaceable>OPTION</replaceable></arg>
 <arg choice="plain"><replaceable>FILE</replaceable></arg>
 </cmdsynopsis>
 </refsynopsisdiv>
@@ -63,9 +64,24 @@
       <listitem><para>Lists all the named objects that are created in the .ui file.</para></listitem>
     </varlistentry>
     <varlistentry>
-    <term><option>preview</option> <arg choice="opt"><replaceable>ID</replaceable></arg></term>
-      <listitem><para>Preview the object with the given ID. If ID is not specified,
-                try to find a suitable object to preview.</para></listitem>
+    <term><option>preview</option></term>
+      <listitem><para>Preview the .ui file. This command accepts options
+                to specify the ID of an object and a .css file to use.</para></listitem>
+    </varlistentry>
+  </variablelist>
+</refsect1>
+
+<refsect1><title>Preview Options</title>
+  <para>The <option>preview</option> command accepts the following options:</para>
+  <variablelist>
+    <varlistentry>
+    <term><option>--id=<arg choice="plain">ID</arg></option></term>
+      <listitem><para>The ID of the object to preview. If not specified,
+                gtk-builder-tool will choose a suitable object on its own.</para></listitem>
+    </varlistentry>
+    <varlistentry>
+    <term><option>--css=<arg choice="plain">FILE</arg></option></term>
+      <listitem><para>Load style information from the given .css file.</para></listitem>
     </varlistentry>
   </variablelist>
 </refsect1>
