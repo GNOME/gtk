@@ -132,8 +132,9 @@ snapshot_widget (GtkWidget *widget, SnapshotMode mode)
             gdk_window_get_window_type (window) == GDK_WINDOW_FOREIGN)
           {
             /* give the WM/server some time to sync. They need it.
-             * Also, do use popups instead of toplevls in your tests
-             * whenever you can. */
+             * Also, do use popups instead of toplevels in your tests
+             * whenever you can.
+             */
             gdk_display_sync (gdk_window_get_display (window));
             g_timeout_add (500, quit_when_idle, loop);
             g_main_loop_run (loop);
