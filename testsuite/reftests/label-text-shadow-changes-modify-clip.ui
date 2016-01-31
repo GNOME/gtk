@@ -20,6 +20,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Hello World</property>
+            <signal name="map" handler="reftest:add_reference_class_if_no_animation" swapped="no"/>
           </object>
           <packing>
             <property name="expand">False</property>
