@@ -4758,12 +4758,10 @@ gtk_combo_box_update_title (GtkComboBox *combo_box)
 
   gtk_combo_box_check_appearance (combo_box);
 
-  if (priv->popup_widget &&
-      GTK_IS_MENU (priv->popup_widget))
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-    gtk_menu_set_title (GTK_MENU (priv->popup_widget),
-                        priv->tearoff_title);
-G_GNUC_END_IGNORE_DEPRECATIONS;
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  if (priv->popup_widget && GTK_IS_MENU (priv->popup_widget))
+    gtk_menu_set_title (GTK_MENU (priv->popup_widget), priv->tearoff_title);
+G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 /**
