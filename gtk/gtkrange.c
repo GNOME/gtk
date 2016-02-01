@@ -237,10 +237,6 @@ static void gtk_range_drag_gesture_update         (GtkGestureDrag       *gesture
                                                    gdouble               offset_x,
                                                    gdouble               offset_y,
                                                    GtkRange             *range);
-static void gtk_range_drag_gesture_end            (GtkGestureDrag       *gesture,
-                                                   gdouble               offset_x,
-                                                   gdouble               offset_y,
-                                                   GtkRange             *range);
 static void gtk_range_long_press_gesture_pressed  (GtkGestureLongPress  *gesture,
                                                    gdouble               x,
                                                    gdouble               y,
@@ -804,11 +800,10 @@ gtk_range_init (GtkRange *range)
                     G_CALLBACK (gtk_range_drag_gesture_begin), range);
   g_signal_connect (priv->drag_gesture, "drag-update",
                     G_CALLBACK (gtk_range_drag_gesture_update), range);
-  g_signal_connect (priv->drag_gesture, "drag-end",
-                    G_CALLBACK (gtk_range_drag_gesture_end), range);
 
   priv->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (range));
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->multipress_gesture), 0);
+  gtk_gesture_group (priv->drag_gesture, priv->multipress_gesture);
   g_signal_connect (priv->multipress_gesture, "pressed",
                     G_CALLBACK (gtk_range_multipress_gesture_pressed), range);
   g_signal_connect (priv->multipress_gesture, "released",
@@ -2624,6 +2619,7 @@ gtk_range_multipress_gesture_released (GtkGestureMultiPress *gesture,
 
   priv->mouse_x = x;
   priv->mouse_y = y;
+  range->priv->in_drag = FALSE;
   stop_scrolling (range);
 }
 
@@ -2953,19 +2949,6 @@ gtk_range_drag_gesture_begin (GtkGestureDrag *gesture,
 {
   if (range->priv->grab_location == MOUSE_SLIDER)
     gtk_gesture_set_state (range->priv->drag_gesture, GTK_EVENT_SEQUENCE_CLAIMED);
-}
-
-static void
-gtk_range_drag_gesture_end (GtkGestureDrag       *gesture,
-                            gdouble               offset_x,
-                            gdouble               offset_y,
-                            GtkRange             *range)
-{
-  if (range->priv->grab_location == MOUSE_SLIDER)
-    {
-      range->priv->in_drag = FALSE;
-      stop_scrolling (range);
-    }
 }
 
 static gboolean
