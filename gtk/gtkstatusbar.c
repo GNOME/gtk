@@ -27,7 +27,6 @@
 
 #include "gtkstatusbar.h"
 
-#include "gtkboxprivate.h"
 #include "gtkframe.h"
 #include "gtklabel.h"
 #include "gtkmarshalers.h"
