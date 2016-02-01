@@ -3250,6 +3250,12 @@ _gtk_settings_get_screen (GtkSettings *settings)
   return settings->priv->screen;
 }
 
+static void
+gvalue_free (gpointer data)
+{
+  g_value_unset (data);
+  g_free (data);
+}
 
 static void
 gtk_settings_load_from_key_file (GtkSettings       *settings,
@@ -3359,8 +3365,19 @@ gtk_settings_load_from_key_file (GtkSettings       *settings,
         }
       else
         {
+          GValue *copy;
+
+          copy = g_new0 (GValue, 1);
+
+          g_value_init (copy, G_VALUE_TYPE (&svalue.value));
+          g_value_copy (&svalue.value, copy);
+
+          g_param_spec_set_qdata_full (pspec, g_quark_from_string (key),
+                                       copy, gvalue_free);
+
           if (g_getenv ("GTK_DEBUG"))
             svalue.origin = (gchar *)path;
+
           gtk_settings_set_property_value_internal (settings, key, &svalue, source);
           g_value_unset (&svalue.value);
         }
@@ -3418,12 +3435,18 @@ gtk_settings_reset_property (GtkSettings *settings,
 {
   GtkSettingsPrivate *priv = settings->priv;
   GParamSpec *pspec;
+  GValue *value;
 
   pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (settings), name);
 
   g_return_if_fail (pspec != NULL);
 
-  g_param_value_set_default (pspec, &priv->property_values[pspec->param_id - 1].value);
+  value = g_param_spec_get_qdata (pspec, g_quark_from_string (name));
+
+  if (value != NULL)
+    g_value_copy (value, &priv->property_values[pspec->param_id - 1].value);
+  else
+    g_param_value_set_default (pspec, &priv->property_values[pspec->param_id - 1].value);
 
   priv->property_values[pspec->param_id - 1].source = GTK_SETTINGS_SOURCE_DEFAULT;
   g_object_notify_by_pspec (G_OBJECT (settings), pspec);
