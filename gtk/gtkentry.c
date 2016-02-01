@@ -427,9 +427,6 @@ static void  gtk_entry_get_preferred_height_and_baseline_for_width (GtkWidget *w
                                                                     gint      *natural_baseline);
 static void   gtk_entry_size_allocate        (GtkWidget        *widget,
 					      GtkAllocation    *allocation);
-static void   gtk_entry_draw_frame           (GtkWidget        *widget,
-                                              GtkStyleContext  *context,
-                                              cairo_t          *cr);
 static void   gtk_entry_draw_progress        (GtkWidget        *widget,
                                               GtkStyleContext  *context,
                                               cairo_t          *cr);
@@ -3817,36 +3814,6 @@ should_prelight (GtkEntry             *entry,
 }
 
 static void
-gtk_entry_draw_frame (GtkWidget       *widget,
-                      GtkStyleContext *context,
-                      cairo_t         *cr)
-{
-  gint y = 0, width, height;
-  gint frame_x, frame_y;
-
-  cairo_save (cr);
-
-  get_frame_size (GTK_ENTRY (widget), FALSE, &frame_x, &frame_y, &width, &height);
-
-  cairo_translate (cr, frame_x, frame_y);
-
-  /* Fix a problem with some themes which assume that entry->text_area's
-   * width equals widget->window's width
-   * http://bugzilla.gnome.org/show_bug.cgi?id=466000
-   */
-  if (GTK_IS_SPIN_BUTTON (widget) &&
-      gtk_orientable_get_orientation (GTK_ORIENTABLE (widget)) == GTK_ORIENTATION_VERTICAL)
-    {
-      gtk_entry_get_text_area_size (GTK_ENTRY (widget), NULL, &y, NULL, &height);
-    }
-
-
-  gtk_entry_draw_progress (widget, context, cr);
-
-  cairo_restore (cr);
-}
-
-static void
 get_progress_area (GtkWidget *widget,
                    gint       *x,
                    gint       *y,
@@ -3900,9 +3867,13 @@ gtk_entry_draw_progress (GtkWidget       *widget,
                          cairo_t         *cr)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
+  GtkAllocation allocation;
   gint x, y, width, height;
 
   get_progress_area (widget, &x, &y, &width, &height);
+  gtk_widget_get_allocation (widget, &allocation);
+  x -= allocation.x;
+  y -= allocation.y;
 
   if ((width <= 0) || (height <= 0))
     return;
@@ -3983,8 +3954,8 @@ gtk_entry_render (GtkCssGadget *gadget,
     {
       context = gtk_widget_get_style_context (widget);
 
-      /* Draw entry_bg, shadow, progress and focus */
-      gtk_entry_draw_frame (widget, context, cr);
+      /* Draw progress */
+      gtk_entry_draw_progress (widget, context, cr);
 
       /* Draw text and cursor */
       cairo_save (cr);
