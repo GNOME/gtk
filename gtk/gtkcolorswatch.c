@@ -97,7 +97,6 @@ swatch_draw (GtkWidget *widget,
 }
 
 #define INTENSITY(r, g, b) ((r) * 0.30 + (g) * 0.59 + (b) * 0.11)
-#define PIXBUF_SIZE 16
 
 static gboolean
 gtk_color_swatch_render (GtkCssGadget *gadget,
