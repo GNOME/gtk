@@ -3013,24 +3013,27 @@ gtk_notebook_stop_reorder (GtkNotebook *notebook)
 
   if (page->reorderable || page->detachable)
     {
-      gint old_page_num, page_num, i;
-      GList *element;
-
-      element = get_drop_position (notebook);
-      old_page_num = g_list_position (priv->children, priv->focus_tab);
-      page_num = reorder_tab (notebook, element, priv->focus_tab);
-      gtk_notebook_child_reordered (notebook, page);
-
-      if (priv->has_scrolled || old_page_num != page_num)
+      if (priv->operation == DRAG_OPERATION_REORDER)
         {
-          for (element = priv->children, i = 0; element; element = element->next, i++)
+          gint old_page_num, page_num, i;
+          GList *element;
+
+          element = get_drop_position (notebook);
+          old_page_num = g_list_position (priv->children, priv->focus_tab);
+          page_num = reorder_tab (notebook, element, priv->focus_tab);
+          gtk_notebook_child_reordered (notebook, page);
+
+          if (priv->has_scrolled || old_page_num != page_num)
             {
-              if (MIN (old_page_num, page_num) <= i && i <= MAX (old_page_num, page_num))
-                gtk_widget_child_notify (((GtkNotebookPage *) element->data)->child, "position");
+              for (element = priv->children, i = 0; element; element = element->next, i++)
+                {
+                  if (MIN (old_page_num, page_num) <= i && i <= MAX (old_page_num, page_num))
+                    gtk_widget_child_notify (((GtkNotebookPage *) element->data)->child, "position");
+                }
+              g_signal_emit (notebook,
+                             notebook_signals[PAGE_REORDERED], 0,
+                             page->child, page_num);
             }
-          g_signal_emit (notebook,
-                         notebook_signals[PAGE_REORDERED], 0,
-                         page->child, page_num);
         }
 
       priv->has_scrolled = FALSE;
