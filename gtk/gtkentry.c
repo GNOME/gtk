@@ -428,7 +428,6 @@ static void  gtk_entry_get_preferred_height_and_baseline_for_width (GtkWidget *w
 static void   gtk_entry_size_allocate        (GtkWidget        *widget,
 					      GtkAllocation    *allocation);
 static void   gtk_entry_draw_progress        (GtkWidget        *widget,
-                                              GtkStyleContext  *context,
                                               cairo_t          *cr);
 static gint   gtk_entry_draw                 (GtkWidget        *widget,
                                               cairo_t          *cr);
@@ -3863,13 +3862,14 @@ get_progress_area (GtkWidget *widget,
 
 static void
 gtk_entry_draw_progress (GtkWidget       *widget,
-                         GtkStyleContext *context,
                          cairo_t         *cr)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
+  GtkStyleContext *context;
   GtkAllocation allocation;
   gint x, y, width, height;
 
+  context = gtk_widget_get_style_context (widget);
   get_progress_area (widget, &x, &y, &width, &height);
   gtk_widget_get_allocation (widget, &allocation);
   x -= allocation.x;
@@ -3942,7 +3942,6 @@ gtk_entry_render (GtkCssGadget *gadget,
 {
   GtkWidget *widget;
   GtkEntry *entry;
-  GtkStyleContext *context;
   GtkEntryPrivate *priv;
   int i;
 
@@ -3950,40 +3949,35 @@ gtk_entry_render (GtkCssGadget *gadget,
   entry = GTK_ENTRY (widget);
   priv = entry->priv;
 
-  if (gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)))
+  /* Draw progress */
+  gtk_entry_draw_progress (widget, cr);
+
+  /* Draw text and cursor */
+  cairo_save (cr);
+
+  if (priv->dnd_position != -1)
+    gtk_entry_draw_cursor (GTK_ENTRY (widget), cr, CURSOR_DND);
+
+  gtk_entry_draw_text (GTK_ENTRY (widget), cr);
+
+  /* When no text is being displayed at all, don't show the cursor */
+  if (gtk_entry_get_display_mode (entry) != DISPLAY_BLANK &&
+      gtk_widget_has_focus (widget) &&
+      priv->selection_bound == priv->current_pos && priv->cursor_visible)
+    gtk_entry_draw_cursor (GTK_ENTRY (widget), cr, CURSOR_STANDARD);
+
+  cairo_restore (cr);
+
+  /* Draw icons */
+  for (i = 0; i < MAX_ICONS; i++)
     {
-      context = gtk_widget_get_style_context (widget);
+      EntryIconInfo *icon_info = priv->icons[i];
 
-      /* Draw progress */
-      gtk_entry_draw_progress (widget, context, cr);
-
-      /* Draw text and cursor */
-      cairo_save (cr);
-
-      if (priv->dnd_position != -1)
-        gtk_entry_draw_cursor (GTK_ENTRY (widget), cr, CURSOR_DND);
-
-      gtk_entry_draw_text (GTK_ENTRY (widget), cr);
-
-      /* When no text is being displayed at all, don't show the cursor */
-      if (gtk_entry_get_display_mode (entry) != DISPLAY_BLANK &&
-          gtk_widget_has_focus (widget) &&
-          priv->selection_bound == priv->current_pos && priv->cursor_visible)
-        gtk_entry_draw_cursor (GTK_ENTRY (widget), cr, CURSOR_STANDARD);
-
-      cairo_restore (cr);
-
-      /* Draw icons */
-      for (i = 0; i < MAX_ICONS; i++)
-        {
-          EntryIconInfo *icon_info = priv->icons[i];
-
-          if (icon_info != NULL)
-            gtk_css_gadget_draw (icon_info->gadget, cr);
-        }
-
-      gtk_entry_draw_undershoot (entry, cr);
+      if (icon_info != NULL)
+        gtk_css_gadget_draw (icon_info->gadget, cr);
     }
+
+  gtk_entry_draw_undershoot (entry, cr);
 
   return FALSE;
 }
