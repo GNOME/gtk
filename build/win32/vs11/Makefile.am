@@ -16,8 +16,6 @@ EXTRA_DIST +=	\
 	gtk-encode-symbolic-svg.vcxproj.filters	\
 	gtk-update-icon-cache.vcxproj		\
 	gtk-update-icon-cache.vcxproj.filters	\
-	gtk-query-settings.vcxproj		\
-	gtk-query-settings.vcxproj.filters	\
 	gtk3-demo.vcxproj	\
 	gtk3-demo.vcxproj.filters	\
 	gtk3-demo-application.vcxproj	\

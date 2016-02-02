@@ -26,8 +26,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtk-update-icon-cache", "gt
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtk-builder-tool", "gtk-builder-tool.vcxproj", "{7D2397CF-4C25-45BC-A1BB-CB4B6E154BBD}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtk-query-settings", "gtk-query-settings.vcxproj", "{9F22107A-3EF7-4B52-B269-747B65307F36}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtk3-install", "gtk3-install.vcxproj", "{23BBF35F-78AF-4E8C-983F-7B90448CD7DF}"
 EndProject
 Global
@@ -258,22 +256,6 @@ Global
 		{7D2397CF-4C25-45BC-A1BB-CB4B6E154BBD}.Release_Broadway|Win32.Build.0 = Release|Win32
 		{7D2397CF-4C25-45BC-A1BB-CB4B6E154BBD}.Release_Broadway|x64.ActiveCfg = Release|x64
 		{7D2397CF-4C25-45BC-A1BB-CB4B6E154BBD}.Release_Broadway|x64.Build.0 = Release|x64
-		{9F22107A-3EF7-4B52-B269-747B65307F36}.Debug|Win32.ActiveCfg = Debug|Win32
-		{9F22107A-3EF7-4B52-B269-747B65307F36}.Debug|Win32.Build.0 = Debug|Win32
-		{9F22107A-3EF7-4B52-B269-747B65307F36}.Debug|x64.ActiveCfg = Debug|x64
-		{9F22107A-3EF7-4B52-B269-747B65307F36}.Debug|x64.Build.0 = Debug|x64
-		{9F22107A-3EF7-4B52-B269-747B65307F36}.Release|Win32.ActiveCfg = Release|Win32
-		{9F22107A-3EF7-4B52-B269-747B65307F36}.Release|Win32.Build.0 = Release|Win32
-		{9F22107A-3EF7-4B52-B269-747B65307F36}.Release|x64.ActiveCfg = Release|x64
-		{9F22107A-3EF7-4B52-B269-747B65307F36}.Release|x64.Build.0 = Release|x64
-		{9F22107A-3EF7-4B52-B269-747B65307F36}.Debug_Broadway|Win32.ActiveCfg = Debug|Win32
-		{9F22107A-3EF7-4B52-B269-747B65307F36}.Debug_Broadway|Win32.Build.0 = Debug|Win32
-		{9F22107A-3EF7-4B52-B269-747B65307F36}.Debug_Broadway|x64.ActiveCfg = Debug|x64
-		{9F22107A-3EF7-4B52-B269-747B65307F36}.Debug_Broadway|x64.Build.0 = Debug|x64
-		{9F22107A-3EF7-4B52-B269-747B65307F36}.Release_Broadway|Win32.ActiveCfg = Release|Win32
-		{9F22107A-3EF7-4B52-B269-747B65307F36}.Release_Broadway|Win32.Build.0 = Release|Win32
-		{9F22107A-3EF7-4B52-B269-747B65307F36}.Release_Broadway|x64.ActiveCfg = Release|x64
-		{9F22107A-3EF7-4B52-B269-747B65307F36}.Release_Broadway|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -29,7 +29,6 @@ EXTRA_DIST += \
 	gtk-3.vcprojin			\
 	gtk-builder-tool.vcproj	\
 	gtk-encode-symbolic-svg.vcproj	\
-	gtk-query-settings.vcproj	\
 	gtk-update-icon-cache.vcproj	\
 	gtk3-demo.vcprojin		\
 	gtk3-demo-application.vcprojin	\
