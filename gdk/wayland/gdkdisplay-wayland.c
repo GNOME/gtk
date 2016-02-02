@@ -906,7 +906,6 @@ typedef struct _GdkWaylandCairoSurfaceData {
   struct wl_buffer *buffer;
   GdkWaylandDisplay *display;
   uint32_t scale;
-  gboolean busy;
 } GdkWaylandCairoSurfaceData;
 
 static void
@@ -914,9 +913,7 @@ buffer_release_callback (void             *_data,
                          struct wl_buffer *wl_buffer)
 {
   cairo_surface_t *surface = _data;
-  GdkWaylandCairoSurfaceData *data = cairo_surface_get_user_data (surface, &gdk_wayland_cairo_key);
 
-  data->busy = FALSE;
   cairo_surface_destroy (surface);
 }
 
@@ -1001,7 +998,6 @@ _gdk_wayland_display_create_shm_surface (GdkWaylandDisplay *display,
   data->display = display;
   data->buffer = NULL;
   data->scale = scale;
-  data->busy = FALSE;
 
   stride = cairo_format_stride_for_width (CAIRO_FORMAT_ARGB32, width*scale);
 
@@ -1041,21 +1037,6 @@ _gdk_wayland_shm_surface_get_wl_buffer (cairo_surface_t *surface)
 {
   GdkWaylandCairoSurfaceData *data = cairo_surface_get_user_data (surface, &gdk_wayland_shm_surface_cairo_key);
   return data->buffer;
-}
-
-void
-_gdk_wayland_shm_surface_set_busy (cairo_surface_t *surface)
-{
-  GdkWaylandCairoSurfaceData *data = cairo_surface_get_user_data (surface, &gdk_wayland_cairo_key);
-  data->busy = TRUE;
-  cairo_surface_reference (surface);
-}
-
-gboolean
-_gdk_wayland_shm_surface_get_busy (cairo_surface_t *surface)
-{
-  GdkWaylandCairoSurfaceData *data = cairo_surface_get_user_data (surface, &gdk_wayland_cairo_key);
-  return data->busy;
 }
 
 gboolean

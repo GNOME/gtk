@@ -442,8 +442,6 @@ on_frame_clock_after_paint (GdkFrameClock *clock,
   _gdk_frame_clock_freeze (clock);
 
   wl_surface_commit (impl->display_server.wl_surface);
-  if (_gdk_wayland_is_shm_surface (impl->cairo_surface))
-    _gdk_wayland_shm_surface_set_busy (impl->cairo_surface);
 
   g_signal_emit (impl, signals[COMMITTED], 0);
 }
@@ -641,14 +639,9 @@ gdk_wayland_window_create_similar_image_surface (GdkWindow *     window,
 static gboolean
 gdk_window_impl_wayland_begin_paint (GdkWindow *window)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-
   gdk_wayland_window_ensure_cairo_surface (window);
 
-  if (_gdk_wayland_is_shm_surface (impl->cairo_surface))
-    return _gdk_wayland_shm_surface_get_busy (impl->cairo_surface);
-  else
-    return FALSE;
+  return FALSE;
 }
 
 static void
