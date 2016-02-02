@@ -11,16 +11,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-29 14:40+0000\n"
-"PO-Revision-Date: 2016-01-30 01:41+0100\n"
-"Last-Translator: Gabor Kelemen <kelemeng at ubuntu dot com>\n"
+"POT-Creation-Date: 2016-02-01 12:20+0000\n"
+"PO-Revision-Date: 2016-02-01 16:00+0100\n"
+"Last-Translator: Meskó Balázs <meskobalazs@gmail.com>\n"
 "Language-Team: Hungarian <openscope at googlegroups dot com>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Poedit 1.8.6\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
 #, c-format
@@ -1206,7 +1206,7 @@ msgstr ""
 
 #: gtk/deprecated/gtkcolorseldialog.c:191 gtk/deprecated/gtkfontsel.c:1689
 #: gtk/gtkfilechoosernative.c:370 gtk/gtkfilechoosernative.c:462
-#: gtk/gtkfilechooserwidget.c:1463 gtk/gtkfilechooserwidget.c:6330
+#: gtk/gtkfilechooserwidget.c:1463 gtk/gtkfilechooserwidget.c:6339
 #: gtk/gtkmessagedialog.c:945 gtk/gtkmessagedialog.c:958
 #: gtk/gtkmountoperation.c:545 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545
@@ -1718,38 +1718,36 @@ msgstr "Az érték feldolgozása meghiúsult: %s::%s: %s\n"
 msgid "Can't parse file: %s\n"
 msgstr "A fájl nem dolgozható fel: %s\n"
 
-#: gtk/gtk-builder-tool.c:891
+#: gtk/gtk-builder-tool.c:955
 #, c-format
-#| msgid ""
-#| "Usage:\n"
-#| "  gtk-builder-tool [COMMAND] FILE\n"
-#| "\n"
-#| "Commands:\n"
-#| "  validate    Validate the file\n"
-#| "  simplify    Simplify the file\n"
-#| "  enumerate   List all named objects\n"
-#| "\n"
-#| "Perform various tasks on GtkBuilder .ui files.\n"
 msgid ""
 "Usage:\n"
 "  gtk-builder-tool [COMMAND] FILE\n"
 "\n"
 "Commands:\n"
-"  validate      Validate the file\n"
-"  simplify      Simplify the file\n"
-"  enumerate     List all named objects\n"
-"  preview [ID]  Preview the named object\n"
+"  validate           Validate the file\n"
+"  simplify           Simplify the file\n"
+"  enumerate          List all named objects\n"
+"  preview [OPTIONS]  Preview the file\n"
+"\n"
+"Preview Options:\n"
+"  --id=ID            Preview only the named object\n"
+"  --css=FILE         Use style from CSS file\n"
 "\n"
 "Perform various tasks on GtkBuilder .ui files.\n"
 msgstr ""
 "Használat:\n"
 "  gtk-builder-tool [PARANCS] FÁJL\n"
 "\n"
-"Commands:\n"
+"Parancsok:\n"
 "  validate      A fájl ellenőrzése\n"
 "  simplify      A fájl egyszerűsítése\n"
 "  enumerate     A megnevezett objektumok listázása\n"
 "  preview [ID]  A megnevezett objektum előnézete\n"
+"\n"
+"Előnézeti beállítások:\n"
+"  --id=ID       Csak a megnevezett objektum előnézete\n"
+"  --css=FILE    Stílus használata CSS fájlból\n"
 "\n"
 "Különböző feladatok végrehajtása GtkBuilder .ui fájlokon.\n"
 
@@ -2162,44 +2160,44 @@ msgstr "J_obb:"
 msgid "Paper Margins"
 msgstr "Papírmargók"
 
-#: gtk/gtkentry.c:9531 gtk/gtklabel.c:6687 gtk/gtktextview.c:9461
+#: gtk/gtkentry.c:9535 gtk/gtklabel.c:6687 gtk/gtktextview.c:9461
 msgid "Cu_t"
 msgstr "_Kivágás"
 
-#: gtk/gtkentry.c:9535 gtk/gtklabel.c:6688 gtk/gtktextview.c:9465
+#: gtk/gtkentry.c:9539 gtk/gtklabel.c:6688 gtk/gtktextview.c:9465
 msgid "_Copy"
 msgstr "_Másolás"
 
-#: gtk/gtkentry.c:9539 gtk/gtklabel.c:6689 gtk/gtktextview.c:9467
+#: gtk/gtkentry.c:9543 gtk/gtklabel.c:6689 gtk/gtktextview.c:9467
 msgid "_Paste"
 msgstr "_Beillesztés"
 
-#: gtk/gtkentry.c:9542 gtk/gtkfilechooserwidget.c:1464
+#: gtk/gtkentry.c:9546 gtk/gtkfilechooserwidget.c:1464
 #: gtk/gtkfilechooserwidget.c:2262 gtk/gtklabel.c:6691 gtk/gtktextview.c:9470
 msgid "_Delete"
 msgstr "_Törlés"
 
-#: gtk/gtkentry.c:9553 gtk/gtklabel.c:6700 gtk/gtktextview.c:9484
+#: gtk/gtkentry.c:9557 gtk/gtklabel.c:6700 gtk/gtktextview.c:9484
 msgid "Select _All"
 msgstr "Ö_sszes kijelölése"
 
-#: gtk/gtkentry.c:9731 gtk/gtktextview.c:9694
+#: gtk/gtkentry.c:9735 gtk/gtktextview.c:9694
 msgid "Select all"
 msgstr "Összes kijelölése"
 
-#: gtk/gtkentry.c:9734 gtk/gtktextview.c:9697
+#: gtk/gtkentry.c:9738 gtk/gtktextview.c:9697
 msgid "Cut"
 msgstr "Kivágás"
 
-#: gtk/gtkentry.c:9737 gtk/gtktextview.c:9700
+#: gtk/gtkentry.c:9741 gtk/gtktextview.c:9700
 msgid "Copy"
 msgstr "Másolás"
 
-#: gtk/gtkentry.c:9740 gtk/gtktextview.c:9703
+#: gtk/gtkentry.c:9744 gtk/gtktextview.c:9703
 msgid "Paste"
 msgstr "Beillesztés"
 
-#: gtk/gtkentry.c:10811
+#: gtk/gtkentry.c:10815
 msgid "Caps Lock is on"
 msgstr "A Caps Lock be van kapcsolva"
 
@@ -2421,82 +2419,82 @@ msgid "Location"
 msgstr "Hely"
 
 #. Label
-#: gtk/gtkfilechooserwidget.c:2669
+#: gtk/gtkfilechooserwidget.c:2674
 msgid "_Name:"
 msgstr "_Név:"
 
-#: gtk/gtkfilechooserwidget.c:3290
+#: gtk/gtkfilechooserwidget.c:3295
 msgid "Searching"
 msgstr "Keresés"
 
-#: gtk/gtkfilechooserwidget.c:3295 gtk/gtkfilechooserwidget.c:3309
+#: gtk/gtkfilechooserwidget.c:3300 gtk/gtkfilechooserwidget.c:3314
 #, c-format
 msgid "Searching in %s"
 msgstr "Keresés ebben: %s"
 
-#: gtk/gtkfilechooserwidget.c:3319
+#: gtk/gtkfilechooserwidget.c:3324
 msgid "Enter location"
 msgstr "Adja meg a helyet"
 
-#: gtk/gtkfilechooserwidget.c:3321
+#: gtk/gtkfilechooserwidget.c:3326
 msgid "Enter location or URL"
 msgstr "Adja meg a helyet vagy URL-címet"
 
-#: gtk/gtkfilechooserwidget.c:4359 gtk/gtkfilechooserwidget.c:7257
+#: gtk/gtkfilechooserwidget.c:4364 gtk/gtkfilechooserwidget.c:7266
 #: gtk/ui/gtkfilechooserwidget.ui:234
 msgid "Modified"
 msgstr "Módosítva"
 
-#: gtk/gtkfilechooserwidget.c:4637
+#: gtk/gtkfilechooserwidget.c:4642
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Nem sikerült „%s” tartalmát beolvasni"
 
-#: gtk/gtkfilechooserwidget.c:4641
+#: gtk/gtkfilechooserwidget.c:4646
 msgid "Could not read the contents of the folder"
 msgstr "Nem sikerült beolvasni a mappa tartalmát"
 
-#: gtk/gtkfilechooserwidget.c:4762 gtk/gtkfilechooserwidget.c:4808
+#: gtk/gtkfilechooserwidget.c:4767 gtk/gtkfilechooserwidget.c:4813
 msgid "%H:%M"
 msgstr "%k.%M"
 
-#: gtk/gtkfilechooserwidget.c:4764 gtk/gtkfilechooserwidget.c:4810
+#: gtk/gtkfilechooserwidget.c:4769 gtk/gtkfilechooserwidget.c:4815
 msgid "%l:%M %p"
 msgstr "%l.%M %p"
 
-#: gtk/gtkfilechooserwidget.c:4768
+#: gtk/gtkfilechooserwidget.c:4773
 msgid "Yesterday"
 msgstr "Tegnap"
 
-#: gtk/gtkfilechooserwidget.c:4776
+#: gtk/gtkfilechooserwidget.c:4781
 msgid "%-e %b"
 msgstr "%b %e"
 
-#: gtk/gtkfilechooserwidget.c:4780
+#: gtk/gtkfilechooserwidget.c:4785
 msgid "%-e %b %Y"
 msgstr "%Y %B %e"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: gtk/gtkfilechooserwidget.c:5013 gtk/inspector/prop-editor.c:1671
+#: gtk/gtkfilechooserwidget.c:5018 gtk/inspector/prop-editor.c:1671
 #: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
 msgstr "Ismeretlen"
 
-#: gtk/gtkfilechooserwidget.c:5052 gtk/gtkplacessidebar.c:919
+#: gtk/gtkfilechooserwidget.c:5057 gtk/gtkplacessidebar.c:919
 msgid "Home"
 msgstr "Saját mappa"
 
-#: gtk/gtkfilechooserwidget.c:5545
+#: gtk/gtkfilechooserwidget.c:5550
 msgid "Cannot change to folder because it is not local"
 msgstr "Nem lehet megváltoztatni a mappát, mert az nem helyi"
 
-#: gtk/gtkfilechooserwidget.c:6323 gtk/gtkprintunixdialog.c:664
+#: gtk/gtkfilechooserwidget.c:6332 gtk/gtkprintunixdialog.c:664
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "A(z) „%s” nevű fájl már létezik. Le akarja cserélni?"
 
-#: gtk/gtkfilechooserwidget.c:6326 gtk/gtkprintunixdialog.c:668
+#: gtk/gtkfilechooserwidget.c:6335 gtk/gtkprintunixdialog.c:668
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
@@ -2504,19 +2502,19 @@ msgstr ""
 "A fájl már létezik a(z) „%s” helyen. Lecserélésével a tartalma felül lesz "
 "írva."
 
-#: gtk/gtkfilechooserwidget.c:6331 gtk/gtkprintunixdialog.c:676
+#: gtk/gtkfilechooserwidget.c:6340 gtk/gtkprintunixdialog.c:676
 msgid "_Replace"
 msgstr "_Csere"
 
-#: gtk/gtkfilechooserwidget.c:6545
+#: gtk/gtkfilechooserwidget.c:6554
 msgid "You do not have access to the specified folder."
 msgstr "Nem férhet hozzá a megadott mappához."
 
-#: gtk/gtkfilechooserwidget.c:7168
+#: gtk/gtkfilechooserwidget.c:7177
 msgid "Could not start the search process"
 msgstr "Nem lehet elindítani a keresési folyamatot"
 
-#: gtk/gtkfilechooserwidget.c:7169
+#: gtk/gtkfilechooserwidget.c:7178
 msgid ""
 "The program was not able to create a connection to the indexer daemon. "
 "Please make sure it is running."
@@ -2524,11 +2522,11 @@ msgstr ""
 "A program nem volt képes kapcsolatot létrehozni az indexelő démonhoz. "
 "Győződjön meg róla, hogy az fut."
 
-#: gtk/gtkfilechooserwidget.c:7181
+#: gtk/gtkfilechooserwidget.c:7190
 msgid "Could not send the search request"
 msgstr "Nem lehet elküldeni a keresési kérést"
 
-#: gtk/gtkfilechooserwidget.c:7474
+#: gtk/gtkfilechooserwidget.c:7483
 msgid "Accessed"
 msgstr "Elérés"
 
@@ -2571,12 +2569,12 @@ msgstr "Alkalmazásmenü"
 msgid "Close"
 msgstr "Bezárás"
 
-#: gtk/gtkicontheme.c:2324 gtk/gtkicontheme.c:2388
+#: gtk/gtkicontheme.c:2325 gtk/gtkicontheme.c:2389
 #, c-format
 msgid "Icon '%s' not present in theme %s"
 msgstr "„%s” ikon nincs a(z) „%s” témában"
 
-#: gtk/gtkicontheme.c:4027 gtk/gtkicontheme.c:4394
+#: gtk/gtkicontheme.c:4040 gtk/gtkicontheme.c:4407
 msgid "Failed to load icon"
 msgstr "Nem sikerült betölteni az ikont"
 
@@ -2627,38 +2625,38 @@ msgstr "Hi_vatkozás megnyitása"
 msgid "Copy _Link Address"
 msgstr "_Hivatkozás címének másolása"
 
-#: gtk/gtk-launch.c:71
-msgid "APPLICATION [URI…] — launch an APPLICATION with URI."
-msgstr "ALKALMAZÁS [URI…] — az ALKALMAZÁS elindítása az URI-vel."
+#: gtk/gtk-launch.c:73
+msgid "APPLICATION [URI...] — launch an APPLICATION"
+msgstr "ALKALMAZÁS [URI…] — egy ALKALMAZÁS elindítása"
 
 #. Translators: this message will appear after the usage string
 #. and before the list of options.
-#: gtk/gtk-launch.c:75
+#: gtk/gtk-launch.c:77
 msgid ""
-"Launch specified application by its desktop file info\n"
-"optionally passing list of URIs as arguments."
+"Launch an application (specified by its desktop file name),\n"
+"optionally passing one or more URIs as arguments."
 msgstr ""
-"A megadott alkalmazás elindítása az asztali fájl\n"
-"információival, elhagyható argumentumként URI-ket átadva."
+"Egy alkalmazás elindítása (az asztali fájl nevével megadva),\n"
+"elhagyható argumentumokként URI-kat átadva."
 
-#: gtk/gtk-launch.c:87
+#: gtk/gtk-launch.c:89
 #, c-format
 msgid "Error parsing commandline options: %s\n"
 msgstr "Hiba a parancssori kapcsolók feldolgozásakor: %s\n"
 
-#: gtk/gtk-launch.c:89 gtk/gtk-launch.c:102
+#: gtk/gtk-launch.c:91 gtk/gtk-launch.c:112
 #, c-format
 msgid "Try \"%s --help\" for more information."
 msgstr "További információkért adja ki a következő parancsot: „%s --help”."
 
 #. Translators: the %s is the program name. This error message
 #. means the user is calling gtk-launch without any argument.
-#: gtk/gtk-launch.c:100
+#: gtk/gtk-launch.c:110
 #, c-format
 msgid "%s: missing application name"
 msgstr "%s: hiányzik az alkalmazás neve"
 
-#: gtk/gtk-launch.c:121
+#: gtk/gtk-launch.c:130
 #, c-format
 msgid "Creating AppInfo from id not supported on non unix operating systems"
 msgstr ""
@@ -2667,14 +2665,14 @@ msgstr ""
 
 #. Translators: the first %s is the program name, the second one
 #. is the application name.
-#: gtk/gtk-launch.c:129
+#: gtk/gtk-launch.c:138
 #, c-format
 msgid "%s: no such application %s"
 msgstr "%s: nincs ilyen alkalmazás: %s"
 
 #. Translators: the first %s is the program name, the second one
 #. is the error message.
-#: gtk/gtk-launch.c:147
+#: gtk/gtk-launch.c:156
 #, c-format
 msgid "%s: error launching application: %s\n"
 msgstr "%s: hiba az alkalmazás indításakor: %s\n"
@@ -2762,7 +2760,7 @@ msgstr "GTK+ beállítások megjelenítése"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:1189
+#: gtk/gtkmain.c:1193
 msgid "default:LTR"
 msgstr "default:LTR"
 
