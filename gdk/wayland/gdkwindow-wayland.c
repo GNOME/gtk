@@ -581,6 +581,19 @@ gdk_wayland_window_attach_image (GdkWindow *window)
 }
 
 static void
+buffer_release_callback (void             *_data,
+                         struct wl_buffer *wl_buffer)
+{
+  cairo_surface_t *cairo_surface = _data;
+
+  cairo_surface_destroy (cairo_surface);
+}
+
+static const struct wl_buffer_listener buffer_listener = {
+  buffer_release_callback
+};
+
+static void
 gdk_wayland_window_ensure_cairo_surface (GdkWindow *window)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
@@ -601,11 +614,14 @@ gdk_wayland_window_ensure_cairo_surface (GdkWindow *window)
   else if (!impl->cairo_surface)
     {
       GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_window_get_display (impl->wrapper));
+      struct wl_buffer *buffer;
 
       impl->cairo_surface = _gdk_wayland_display_create_shm_surface (display_wayland,
                                                                      impl->wrapper->width,
                                                                      impl->wrapper->height,
                                                                      impl->scale);
+      buffer = _gdk_wayland_shm_surface_get_wl_buffer (impl->cairo_surface);
+      wl_buffer_add_listener (buffer, &buffer_listener, impl->cairo_surface);
     }
 }
 

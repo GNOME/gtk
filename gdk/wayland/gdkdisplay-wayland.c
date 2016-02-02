@@ -908,19 +908,6 @@ typedef struct _GdkWaylandCairoSurfaceData {
   uint32_t scale;
 } GdkWaylandCairoSurfaceData;
 
-static void
-buffer_release_callback (void             *_data,
-                         struct wl_buffer *wl_buffer)
-{
-  cairo_surface_t *surface = _data;
-
-  cairo_surface_destroy (surface);
-}
-
-static const struct wl_buffer_listener buffer_listener = {
-  buffer_release_callback
-};
-
 static struct wl_shm_pool *
 create_shm_pool (struct wl_shm  *shm,
                  int             size,
@@ -1015,7 +1002,6 @@ _gdk_wayland_display_create_shm_surface (GdkWaylandDisplay *display,
   data->buffer = wl_shm_pool_create_buffer (data->pool, 0,
                                             width*scale, height*scale,
                                             stride, WL_SHM_FORMAT_ARGB8888);
-  wl_buffer_add_listener (data->buffer, &buffer_listener, surface);
 
   cairo_surface_set_user_data (surface, &gdk_wayland_shm_surface_cairo_key,
                                data, gdk_wayland_cairo_surface_destroy);
