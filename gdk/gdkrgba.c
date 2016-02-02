@@ -134,7 +134,7 @@ parse_rgb_value (const gchar  *str,
 
 /**
  * gdk_rgba_parse:
- * @rgba: (out): the #GdkRGBA to fill in
+ * @rgba: the #GdkRGBA to fill in
  * @spec: the string specifying the color
  *
  * Parses a textual representation of a color, filling in
