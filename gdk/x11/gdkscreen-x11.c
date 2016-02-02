@@ -328,8 +328,8 @@ get_work_area (GdkScreen    *screen,
   /* Defaults in case of error */
   area->x = 0;
   area->y = 0;
-  area->width = gdk_screen_get_width (screen) / x11_screen->window_scale;
-  area->height = gdk_screen_get_height (screen) / x11_screen->window_scale;
+  area->width = gdk_screen_get_width (screen);
+  area->height = gdk_screen_get_height (screen);
 
   if (!gdk_x11_screen_supports_net_wm_hint (screen,
                                             gdk_atom_intern_static_string ("_NET_WORKAREA")))
