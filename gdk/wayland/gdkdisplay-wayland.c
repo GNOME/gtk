@@ -897,7 +897,7 @@ gdk_wayland_display_get_xdg_shell (GdkDisplay *display)
   return GDK_WAYLAND_DISPLAY (display)->xdg_shell;
 }
 
-static const cairo_user_data_key_t gdk_wayland_cairo_key;
+static const cairo_user_data_key_t gdk_wayland_shm_surface_cairo_key;
 
 typedef struct _GdkWaylandCairoSurfaceData {
   gpointer buf;
@@ -1021,7 +1021,7 @@ _gdk_wayland_display_create_shm_surface (GdkWaylandDisplay *display,
                                             stride, WL_SHM_FORMAT_ARGB8888);
   wl_buffer_add_listener (data->buffer, &buffer_listener, surface);
 
-  cairo_surface_set_user_data (surface, &gdk_wayland_cairo_key,
+  cairo_surface_set_user_data (surface, &gdk_wayland_shm_surface_cairo_key,
                                data, gdk_wayland_cairo_surface_destroy);
 
   cairo_surface_set_device_scale (surface, scale, scale);
@@ -1039,7 +1039,7 @@ _gdk_wayland_display_create_shm_surface (GdkWaylandDisplay *display,
 struct wl_buffer *
 _gdk_wayland_shm_surface_get_wl_buffer (cairo_surface_t *surface)
 {
-  GdkWaylandCairoSurfaceData *data = cairo_surface_get_user_data (surface, &gdk_wayland_cairo_key);
+  GdkWaylandCairoSurfaceData *data = cairo_surface_get_user_data (surface, &gdk_wayland_shm_surface_cairo_key);
   return data->buffer;
 }
 
@@ -1061,7 +1061,7 @@ _gdk_wayland_shm_surface_get_busy (cairo_surface_t *surface)
 gboolean
 _gdk_wayland_is_shm_surface (cairo_surface_t *surface)
 {
-  return cairo_surface_get_user_data (surface, &gdk_wayland_cairo_key) != NULL;
+  return cairo_surface_get_user_data (surface, &gdk_wayland_shm_surface_cairo_key) != NULL;
 }
 
 GdkWaylandSelection *
