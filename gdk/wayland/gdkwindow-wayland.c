@@ -208,11 +208,7 @@ gdk_wayland_window_update_size (GdkWindow *window,
   GdkRectangle area;
   cairo_region_t *region;
 
-  if (impl->cairo_surface)
-    {
-      cairo_surface_destroy (impl->cairo_surface);
-      impl->cairo_surface = NULL;
-    }
+  g_clear_pointer (&impl->cairo_surface, cairo_surface_destroy);
 
   window->width = width;
   window->height = height;
@@ -1849,12 +1845,7 @@ gdk_wayland_window_destroy (GdkWindow *window,
 
   gdk_wayland_window_hide_surface (window);
 
-  if (impl->cairo_surface)
-    {
-      cairo_surface_finish (impl->cairo_surface);
-      cairo_surface_destroy (impl->cairo_surface);
-      impl->cairo_surface = NULL;
-    }
+  g_clear_pointer (&impl->cairo_surface, cairo_surface_destroy);
 }
 
 static void
