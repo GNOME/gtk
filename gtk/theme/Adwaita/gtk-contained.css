@@ -3639,10 +3639,12 @@ levelbar {
  * Print dialog *
 *****************/
 printdialog paper {
+  color: #2e3436;
   border: 1px solid #9d9d99;
   background: white;
   padding: 0; }
   printdialog paper:backdrop {
+    color: #8b8e8f;
     border-color: #a5a5a1; }
 printdialog .dialog-action-box {
   margin: 12px; }

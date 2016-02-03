@@ -803,6 +803,7 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
   _gtk_print_load_custom_papers (priv->custom_paper_list);
 
   gtk_css_node_set_name (gtk_widget_get_css_node (priv->collate_image), I_("paper"));
+  gtk_css_node_set_name (gtk_widget_get_css_node (priv->page_layout_preview), I_("paper"));
 }
 
 static void
