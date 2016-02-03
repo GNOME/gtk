@@ -2368,9 +2368,9 @@ notebook > header {
       margin-bottom: 4px; }
       notebook > header.left tabs tab.reorderable-page, notebook > header.right tabs tab.reorderable-page {
         border-style: solid none; }
-notebook > stack {
+notebook > stack:not(:only-child) {
   background-color: #292929; }
-  notebook > stack:backdrop {
+  notebook > stack:not(:only-child):backdrop {
     background-color: #2c2c2c; }
 
 /**************
