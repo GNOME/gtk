@@ -3435,16 +3435,20 @@ gtk_settings_reset_property (GtkSettings *settings,
 {
   GtkSettingsPrivate *priv = settings->priv;
   GParamSpec *pspec;
+  GtkRcPropertyParser parser;
   GValue *value;
+  GValue tmp_value = G_VALUE_INIT;
 
   pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (settings), name);
 
   g_return_if_fail (pspec != NULL);
 
+  parser = (GtkRcPropertyParser) g_param_spec_get_qdata (pspec, quark_property_parser);
   value = g_param_spec_get_qdata (pspec, g_quark_from_string (name));
 
-  if (value != NULL)
-    g_value_copy (value, &priv->property_values[pspec->param_id - 1].value);
+  g_value_init (&tmp_value, G_PARAM_SPEC_VALUE_TYPE (pspec));
+  if (value && _gtk_settings_parse_convert (parser, value, pspec, &tmp_value))
+    g_value_copy (&tmp_value, &priv->property_values[pspec->param_id - 1].value);
   else
     g_param_value_set_default (pspec, &priv->property_values[pspec->param_id - 1].value);
 
