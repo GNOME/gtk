@@ -491,7 +491,7 @@ gtk_im_module_initialize (void)
     const GtkIMContextInfo **contexts;					\
     int n_contexts;							\
     extern void _gtk_immodule_ ## m ## _list (const GtkIMContextInfo ***contexts, \
-					      guint                    *n_contexts); \
+					      int                      *n_contexts); \
     extern void _gtk_immodule_ ## m ## _init (GTypeModule *module);	\
     extern void _gtk_immodule_ ## m ## _exit (void);			\
     extern GtkIMContext *_gtk_immodule_ ## m ## _create (const gchar *context_id); \
