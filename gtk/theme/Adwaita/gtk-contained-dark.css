@@ -1439,15 +1439,21 @@ spinbutton:not(.vertical) {
     border-radius: 0 3px 3px 0; }
   .osd spinbutton:not(.vertical) button:dir(rtl):first-child {
     border-radius: 3px 0 0 3px; }
+spinbutton.vertical:disabled {
+  color: #949796; }
+spinbutton.vertical:backdrop:disabled {
+  color: #5d6767; }
 spinbutton.vertical entry, spinbutton.vertical spinbutton:not(.vertical) {
-  border-radius: 0;
-  padding-left: 4px;
-  padding-right: 4px; }
+  min-height: 32px;
+  min-width: 32px;
+  padding: 0;
+  border-radius: 0; }
 spinbutton.vertical button,
 spinbutton.vertical .titlebar button.titlebutton,
 .titlebar spinbutton.vertical button.titlebutton {
-  padding-top: 8px;
-  padding-bottom: 8px; }
+  min-height: 32px;
+  min-width: 32px;
+  padding: 0; }
   spinbutton.vertical button.up {
     color: #eeeeec;
     outline-color: rgba(238, 238, 236, 0.3);

@@ -1005,15 +1005,23 @@ spinbutton {
     // in the vertical configuration, we treat the spinbutton
     // as a box, and tweak the style of the entry in the middle
     // so that it's linked
+
+    // FIXME: this should not be set at all, but otherwise it gets the wrong
+    // color
+    &:disabled { color: $insensitive_fg_color; }
+    &:backdrop:disabled { color: $backdrop_insensitive_color; }
+
     entry {
+      min-height: 32px;
+      min-width: 32px;
+      padding: 0;
       border-radius: 0;
-      padding-left: 4px;
-      padding-right: 4px;
     }
 
     button {
-      padding-top: 8px;    //  Same vertical padding as image-buttons
-      padding-bottom: 8px; //
+      min-height: 32px;
+      min-width: 32px;
+      padding: 0;
 
       &.up {
         @extend %top_button;
