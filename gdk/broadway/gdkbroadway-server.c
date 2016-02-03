@@ -95,7 +95,6 @@ GdkBroadwayServer *
 _gdk_broadway_server_new (const char *display, GError **error)
 {
   GdkBroadwayServer *server;
-  char *basename;
   GSocketClient *client;
   GSocketConnection *connection;
   GInetAddress *inet;
@@ -103,7 +102,6 @@ _gdk_broadway_server_new (const char *display, GError **error)
   GPollableInputStream *pollable;
   GInputStream *in;
   GSource *source;
-  char *path;
   char *local_socket_type = NULL;
   int port;
 
@@ -128,6 +126,8 @@ _gdk_broadway_server_new (const char *display, GError **error)
 #ifdef G_OS_UNIX
   else if (display[0] == ':' && g_ascii_isdigit(display[1]))
     {
+      char *path, *basename;
+
       port = strtol (display + strlen (":"), NULL, 10);
       basename = g_strdup_printf ("broadway%d.socket", port + 1);
       path = g_build_filename (g_get_user_runtime_dir (), basename, NULL);

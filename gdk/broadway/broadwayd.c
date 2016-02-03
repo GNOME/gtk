@@ -416,7 +416,6 @@ main (int argc, char *argv[])
   GInetAddress *inet;
   GSocketAddress *address;
   GSocketService *listener;
-  char *path, *basename;
   char *http_address = NULL;
   char *unixsocket_address = NULL;
   int http_port = 0;
@@ -478,6 +477,8 @@ main (int argc, char *argv[])
 #ifdef G_OS_UNIX
   else if (display[0] == ':' && g_ascii_isdigit(display[1]))
     {
+      char *path, *basename;
+
       port = strtol (display + strlen (":"), NULL, 10);
       basename = g_strdup_printf ("broadway%d.socket", port + 1);
       path = g_build_filename (g_get_user_runtime_dir (), basename, NULL);
