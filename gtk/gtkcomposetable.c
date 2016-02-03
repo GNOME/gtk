@@ -569,8 +569,8 @@ gtk_compose_table_serialize (GtkComposeTable *compose_table,
   p += length;                                                                \
   if (p - contents > total_length)                                            \
     {                                                                         \
-      g_warning ("data size %ld is bigger than %ld",                          \
-                 p - contents, total_length);                                 \
+      g_warning ("data size %lld is bigger than %" G_GSIZE_FORMAT,            \
+                 (long long) (p - contents), total_length);                   \
       g_free (contents);                                                      \
       if (count)                                                              \
         *count = 0;                                                           \
