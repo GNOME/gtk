@@ -910,12 +910,14 @@ spinbutton {
     padding: 0;
 
     entry {
+      margin: 0;
       background: none;
       border: none;
       box-shadow: none;
     }
 
     button {
+      margin: 0;
       background-image: none;
       border-style: none none none solid;
       border-color: transparentize($borders_color, 0.7);
@@ -1351,6 +1353,7 @@ headerbar {
 
   // add vertical margins to headerbar entries, buttons and separators to avoid them spanning the whole height
   entry,
+  spinbutton,
   separator,
   button {
     margin-top: 6px;

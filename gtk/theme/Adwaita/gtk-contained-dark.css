@@ -1351,12 +1351,14 @@ headerbar button.titlebutton:visited,
 spinbutton:not(.vertical) {
   padding: 0; }
   spinbutton:not(.vertical) entry, spinbutton:not(.vertical) spinbutton:not(.vertical) {
+    margin: 0;
     background: none;
     border: none;
     box-shadow: none; }
   spinbutton:not(.vertical) button,
   spinbutton:not(.vertical) .titlebar button.titlebutton,
   .titlebar spinbutton:not(.vertical) button.titlebutton {
+    margin: 0;
     background-image: none;
     border-style: none none none solid;
     border-color: rgba(28, 31, 31, 0.3);
@@ -1952,11 +1954,13 @@ headerbar {
       min-height: 26px;
       padding: 0 5px; }
   .titlebar:not(headerbar) entry, .titlebar:not(headerbar) spinbutton:not(.vertical),
+  .titlebar:not(headerbar) spinbutton,
   .titlebar:not(headerbar) separator,
   .titlebar:not(headerbar) button,
   .titlebar:not(headerbar) button.titlebutton,
   headerbar entry,
   headerbar spinbutton:not(.vertical),
+  headerbar spinbutton,
   headerbar separator,
   headerbar button,
   headerbar button.titlebutton,
