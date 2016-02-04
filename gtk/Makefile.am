@@ -1234,7 +1234,6 @@ gtk.gresource.xml: Makefile.am inspector/Makefile.inc
 	if test "$(win32_theme)" = "yes"; then \
 	  echo "    <file alias='theme/win32/gtk-base.css'>theme/win32/gtk-win32-base.css</file>" >> $@; \
 	  echo "    <file alias='theme/win32/gtk.css'>theme/win32/gtk-win32.css</file>" >> $@; \
-	  echo "    <file alias='theme/win32-classic/gtk.css'>theme/win32/gtk-win32-classic.css</file>" >> $@; \
 	  echo "    <file alias='theme/win32-xp/gtk.css'>theme/win32/gtk-win32-xp.css</file>" >> $@; \
 	fi; \
 	for f in $(srcdir)/cursor/*.png; do \
@@ -1277,7 +1276,6 @@ gesture_sources = 				\
 theme_sources = 				\
 	theme/win32/gtk-win32.css 		\
 	theme/win32/gtk-win32-base.css 		\
-	theme/win32/gtk-win32-classic.css 	\
 	theme/win32/gtk-win32-xp.css 		\
 	theme/Adwaita/assets.txt 		\
 	theme/Adwaita/assets.svg 		\

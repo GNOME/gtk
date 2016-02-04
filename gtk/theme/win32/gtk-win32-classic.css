@@ -1,4 +1,0 @@
-/* We should have a real win32 classic theme that picks up
-   colors from the settings. But for now, at least don't break
-   when win32 is in classic mode by just using raleigh. */
-@import url("Raleigh.css");
