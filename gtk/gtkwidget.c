@@ -3670,6 +3670,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                                                              GTK_PARAM_READABLE));
 
   gtk_widget_class_set_accessible_type (klass, GTK_TYPE_WIDGET_ACCESSIBLE);
+  gtk_widget_class_set_css_name (klass, "widget");
 }
 
 static void
