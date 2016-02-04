@@ -3728,7 +3728,8 @@ void
 gdk_x11_window_set_theme_variant (GdkWindow *window,
                                   char      *variant)
 {
-  gdk_x11_window_set_utf8_property (window, "_GTK_THEME_VARIANT", variant);
+  gdk_x11_window_set_utf8_property (window, "_GTK_THEME_VARIANT",
+                                    variant ? variant : "");
 }
 
 #define GDK_SELECTION_MAX_SIZE(display)                                 \
