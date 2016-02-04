@@ -18,6 +18,7 @@
 #include "config.h"
 
 #include "gtkcssnodedeclarationprivate.h"
+#include "gtkwidgetpathprivate.h"
 
 #include <string.h>
 

@@ -68,6 +68,7 @@
 #include "a11y/gtkwidgetaccessible.h"
 #include "gtkapplicationprivate.h"
 #include "gtkgestureprivate.h"
+#include "gtkwidgetpathprivate.h"
 
 /* for the use of round() */
 #include "fallback-c89.c"

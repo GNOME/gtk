@@ -560,6 +560,7 @@ gtk_private_h_sources =		\
 	gtktreedatalist.h	\
 	gtktreeprivate.h	\
 	gtkwidgetprivate.h	\
+	gtkwidgetpathprivate.h	\
 	gtkwin32themeprivate.h	\
 	gtkwindowprivate.h	\
 	gtktreemenu.h		\

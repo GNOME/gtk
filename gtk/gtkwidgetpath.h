@@ -171,11 +171,6 @@ GDK_AVAILABLE_IN_ALL
 gboolean        gtk_widget_path_has_parent (const GtkWidgetPath *path,
                                             GType                type);
 
-/* private API goes here */
-
-void gtk_widget_path_iter_add_qclass       (GtkWidgetPath       *path,
-                                            gint                 pos,
-                                            GQuark               qname);
 
 G_END_DECLS
 
