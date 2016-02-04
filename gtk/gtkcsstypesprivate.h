@@ -348,6 +348,7 @@ typedef enum /*< skip >*/ {
   GTK_CSS_PT,
   GTK_CSS_EM,
   GTK_CSS_EX,
+  GTK_CSS_REM,
   GTK_CSS_PC,
   GTK_CSS_IN,
   GTK_CSS_CM,

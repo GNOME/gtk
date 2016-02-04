@@ -117,28 +117,26 @@ gtk_css_value_number_compute (GtkCssValue             *number,
     case GTK_CSS_PC:
       return _gtk_css_number_value_new (number->value * 96.0 / 72.0 * 12.0,
                                         GTK_CSS_PX);
-      break;
     case GTK_CSS_IN:
       return _gtk_css_number_value_new (number->value * 96.0,
                                         GTK_CSS_PX);
-      break;
     case GTK_CSS_CM:
       return _gtk_css_number_value_new (number->value * 96.0 * 0.39370078740157477,
                                         GTK_CSS_PX);
-      break;
     case GTK_CSS_MM:
       return _gtk_css_number_value_new (number->value * 96.0 * 0.039370078740157477,
                                         GTK_CSS_PX);
-      break;
     case GTK_CSS_EM:
       return _gtk_css_number_value_new (number->value *
                                         get_base_font_size (property_id, provider, style, parent_style),
                                         GTK_CSS_PX);
-      break;
     case GTK_CSS_EX:
       /* for now we pretend ex is half of em */
       return _gtk_css_number_value_new (number->value * 0.5 * 
                                         get_base_font_size (property_id, provider, style, parent_style),
+                                        GTK_CSS_PX);
+    case GTK_CSS_REM:
+      return _gtk_css_number_value_new (number->value * _gtk_css_font_size_get_default (provider),
                                         GTK_CSS_PX);
     case GTK_CSS_RAD:
       return _gtk_css_number_value_new (number->value * 360.0 / (2 * G_PI),
@@ -191,6 +189,7 @@ gtk_css_value_number_print (const GtkCssValue *number,
     /* [GTK_CSS_PT] = */ "pt",
     /* [GTK_CSS_EM] = */ "em",
     /* [GTK_CSS_EX] = */ "ex",
+    /* [GTK_CSS_REM] = */ "rem",
     /* [GTK_CSS_PC] = */ "pc",
     /* [GTK_CSS_IN] = */ "in",
     /* [GTK_CSS_CM] = */ "cm",
