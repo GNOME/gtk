@@ -1232,11 +1232,10 @@ gtk.gresource.xml: Makefile.am inspector/Makefile.inc
 	echo "    <file>theme/HighContrast/gtk-contained.css</file>" >> $@; \
 	echo "    <file>theme/HighContrast/gtk-contained-inverse.css</file>" >> $@; \
 	if test "$(win32_theme)" = "yes"; then \
-	  for f in $(srcdir)/theme/win32/*.css; do \
-	    n=`basename $$f`; \
-	    m=`echo $$n | cut -b 5-` \
-	    echo "    <file alias='theme/$$m/gtk.css'>theme/win32/$$n</file>" >> $@; \
-	  done; \
+	  echo "    <file alias='theme/win32/gtk-base.css'>theme/win32/gtk-win32-base.css</file>" >> $@; \
+	  echo "    <file alias='theme/win32/gtk.css'>theme/win32/gtk-win32.css</file>" >> $@; \
+	  echo "    <file alias='theme/win32-classic/gtk.css'>theme/win32/gtk-win32-classic.css</file>" >> $@; \
+	  echo "    <file alias='theme/win32-xp/gtk.css'>theme/win32/gtk-win32-xp.css</file>" >> $@; \
 	fi; \
 	for f in $(srcdir)/cursor/*.png; do \
 	  n=`basename $$f`; \
