@@ -24,6 +24,8 @@ BUILT_SOURCES = 				\
 	pointer-gestures-unstable-v1-protocol.c			\
 	xdg-shell-unstable-v5-client-protocol.h			\
 	xdg-shell-unstable-v5-protocol.c			\
+	primary-selection-unstable-v1-client-protocol.h		\
+	primary-selection-unstable-v1-protocol.c		\
 	gtk-shell-client-protocol.h		\
 	gtk-shell-protocol.c
 

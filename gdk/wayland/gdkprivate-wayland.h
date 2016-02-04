@@ -37,6 +37,7 @@
 #include <xkbcommon/xkbcommon.h>
 
 #include "gdkinternals.h"
+#include "primary-selection-unstable-v1-client-protocol.h"
 
 #include "config.h"
 
@@ -184,11 +185,14 @@ void              _gdk_wayland_device_manager_remove_seat (GdkDeviceManager *dev
 GdkKeymap *_gdk_wayland_device_get_keymap (GdkDevice *device);
 uint32_t _gdk_wayland_device_get_implicit_grab_serial(GdkWaylandDevice *device,
                                                       const GdkEvent   *event);
-uint32_t _gdk_wayland_device_get_last_implicit_grab_serial (GdkWaylandDevice  *device,
-                                                            GdkEventSequence **seqence);
+uint32_t _gdk_wayland_seat_get_last_implicit_grab_serial (GdkSeat           *seat,
+                                                          GdkEventSequence **seqence);
 struct wl_data_device * gdk_wayland_device_get_data_device (GdkDevice *gdk_device);
 void gdk_wayland_device_set_selection (GdkDevice             *gdk_device,
                                        struct wl_data_source *source);
+
+void gdk_wayland_seat_set_primary (GdkSeat                                *seat,
+                                   struct zwp_primary_selection_source_v1 *source);
 
 GdkDragContext * gdk_wayland_device_get_drop_context (GdkDevice *gdk_device);
 
@@ -242,11 +246,14 @@ void gdk_wayland_selection_free (GdkWaylandSelection *selection);
 
 void gdk_wayland_selection_ensure_offer (GdkDisplay           *display,
                                          struct wl_data_offer *wl_offer);
+void gdk_wayland_selection_ensure_primary_offer (GdkDisplay                            *display,
+                                                 struct zwp_primary_selection_offer_v1 *wp_offer);
+
 void gdk_wayland_selection_set_offer (GdkDisplay           *display,
                                       GdkAtom               selection,
-                                      struct wl_data_offer *wl_offer);
-struct wl_data_offer * gdk_wayland_selection_get_offer (GdkDisplay *display,
-                                                        GdkAtom     selection);
+                                      gpointer              offer);
+gpointer gdk_wayland_selection_get_offer (GdkDisplay *display,
+                                          GdkAtom     selection);
 GList * gdk_wayland_selection_get_targets (GdkDisplay *display,
                                            GdkAtom     selection);
 

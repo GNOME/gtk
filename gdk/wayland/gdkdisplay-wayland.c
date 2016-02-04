@@ -335,6 +335,12 @@ gdk_registry_handle_global (void               *data,
         wl_registry_bind (display_wayland->wl_registry,
                           id, &zwp_pointer_gestures_v1_interface, version);
     }
+  else if (strcmp (interface, "zwp_primary_selection_device_manager_v1") == 0)
+    {
+      display_wayland->primary_selection_manager =
+        wl_registry_bind(display_wayland->wl_registry, id,
+                         &zwp_primary_selection_device_manager_v1_interface, 1);
+    }
   else
     handled = FALSE;
 
