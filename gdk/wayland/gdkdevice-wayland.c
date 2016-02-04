@@ -96,7 +96,6 @@ struct _GdkWaylandSeat
   GdkWindow *pointer_focus;
   GdkWindow *keyboard_focus;
   GdkAtom pending_selection;
-  struct wl_data_device *data_device;
   double surface_x, surface_y;
   uint32_t time;
   uint32_t enter_serial;
@@ -115,6 +114,8 @@ struct _GdkWaylandSeat
   guint cursor_image_index;
   guint cursor_image_delay;
 
+  struct gtk_primary_selection_device *primary_data_device;
+  struct wl_data_device *data_device;
   GdkDragContext *drop_context;
 
   struct wl_surface *pointer_surface;
@@ -924,6 +925,42 @@ static const struct wl_data_device_listener data_device_listener = {
   data_device_motion,
   data_device_drop,
   data_device_selection
+};
+
+static void
+primary_selection_data_offer (void                                *data,
+                              struct gtk_primary_selection_device *gtk_primary_selection_device,
+                              struct gtk_primary_selection_offer  *gtk_primary_offer)
+{
+  GdkWaylandDeviceData *device = (GdkWaylandDeviceData *) data;
+
+  GDK_NOTE (EVENTS,
+            g_message ("primary selection offer, device %p, data offer %p",
+                       gtk_primary_selection_device, gtk_primary_offer));
+
+  gdk_wayland_selection_ensure_primary_offer (device->display, gtk_primary_offer);
+}
+
+static void
+primary_selection_selection (void                                *data,
+                             struct gtk_primary_selection_device *gtk_primary_selection_device,
+                             struct gtk_primary_selection_offer  *gtk_primary_offer)
+{
+  GdkWaylandDeviceData *device = (GdkWaylandDeviceData *) data;
+  GdkAtom selection;
+
+  GDK_NOTE (EVENTS,
+            g_message ("primary selection selection, device %p, data offer %p",
+                       gtk_primary_selection_device, gtk_primary_offer));
+
+  selection = gdk_atom_intern_static_string ("PRIMARY");
+  gdk_wayland_selection_set_offer (device->display, selection, gtk_primary_offer);
+  emit_selection_owner_change (device->keyboard_focus, selection);
+}
+
+static const struct gtk_primary_selection_device_listener primary_selection_device_listener = {
+  primary_selection_data_offer,
+  primary_selection_selection,
 };
 
 static GdkEvent *
@@ -2883,6 +2920,12 @@ _gdk_wayland_device_manager_add_seat (GdkDeviceManager *device_manager,
   wl_seat_add_listener (seat->wl_seat, &seat_listener, seat);
   wl_seat_set_user_data (seat->wl_seat, seat);
 
+  seat->primary_data_device =
+    gtk_primary_selection_device_manager_get_device (display_wayland->primary_selection_manager,
+                                                     seat->wl_seat);
+  gtk_primary_selection_device_add_listener (seat->primary_data_device,
+                                             &primary_selection_device_listener, seat);
+
   seat->data_device =
     wl_data_device_manager_get_data_device (display_wayland->data_device_manager,
                                             seat->wl_seat);
@@ -3116,6 +3159,23 @@ gdk_wayland_device_set_selection (GdkDevice             *gdk_device,
 
   wl_data_device_set_selection (device->data_device, source,
                                 _gdk_wayland_display_get_serial (display_wayland));
+}
+
+void
+gdk_wayland_seat_set_primary (GdkSeat                             *seat,
+                              struct gtk_primary_selection_source *source)
+{
+  GdkWaylandSeat *wayland_seat = GDK_WAYLAND_SEAT (seat);
+  GdkWaylandDisplay *display_wayland;
+  guint32 serial;
+
+  if (source)
+    {
+      display_wayland = GDK_WAYLAND_DISPLAY (gdk_seat_get_display (seat));
+      serial = _gdk_wayland_display_get_serial (display_wayland);
+      gtk_primary_selection_device_set_selection (wayland_seat->primary_data_device,
+                                                  source, serial);
+    }
 }
 
 struct wl_seat *
