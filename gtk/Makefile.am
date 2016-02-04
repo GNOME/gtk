@@ -1232,9 +1232,8 @@ gtk.gresource.xml: Makefile.am inspector/Makefile.inc
 	echo "    <file>theme/HighContrast/gtk-contained.css</file>" >> $@; \
 	echo "    <file>theme/HighContrast/gtk-contained-inverse.css</file>" >> $@; \
 	if test "$(win32_theme)" = "yes"; then \
-	  echo "    <file alias='theme/win32/gtk-base.css'>theme/win32/gtk-win32-base.css</file>" >> $@; \
-	  echo "    <file alias='theme/win32/gtk.css'>theme/win32/gtk-win32.css</file>" >> $@; \
-	  echo "    <file alias='theme/win32-xp/gtk.css'>theme/win32/gtk-win32-xp.css</file>" >> $@; \
+	  echo "    <file>theme/win32/gtk-win32-base.css</file>" >> $@; \
+	  echo "    <file>theme/win32/gtk.css</file>" >> $@; \
 	fi; \
 	for f in $(srcdir)/cursor/*.png; do \
 	  n=`basename $$f`; \
@@ -1276,7 +1275,6 @@ gesture_sources = 				\
 theme_sources = 				\
 	theme/win32/gtk-win32.css 		\
 	theme/win32/gtk-win32-base.css 		\
-	theme/win32/gtk-win32-xp.css 		\
 	theme/Adwaita/assets.txt 		\
 	theme/Adwaita/assets.svg 		\
 	theme/Adwaita/_colors-public.scss 	\
