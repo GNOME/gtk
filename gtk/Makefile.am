@@ -1213,10 +1213,10 @@ gtk.gresource.xml: Makefile.am inspector/Makefile.inc
 	echo "  <gresource prefix='/org/gtk/libgtk'>" >> $@; \
 	for f in $(srcdir)/theme/Raleigh/*.css; do \
 	  n=`basename $$f`; \
-	  echo "    <file alias='theme/Raleigh.css'>theme/Raleigh/$$n</file>" >> $@; \
+	  echo "    <file alias='theme/Raleigh/gtk.css'>theme/Raleigh/$$n</file>" >> $@; \
 	done; \
-        echo "    <file alias='theme/Adwaita.css'>theme/Adwaita/gtk.css</file>" >> $@; \
-        echo "    <file alias='theme/Adwaita-dark.css'>theme/Adwaita/gtk-dark.css</file>" >> $@; \
+        echo "    <file>theme/Adwaita/gtk.css</file>" >> $@; \
+        echo "    <file>theme/Adwaita/gtk-dark.css</file>" >> $@; \
         echo "    <file>theme/Adwaita/gtk-contained.css</file>" >> $@; \
         echo "    <file>theme/Adwaita/gtk-contained-dark.css</file>" >> $@; \
         for f in $(srcdir)/theme/Adwaita/assets/*.png; do \
@@ -1227,14 +1227,15 @@ gtk.gresource.xml: Makefile.am inspector/Makefile.inc
           n=`basename $$f`; \
           echo "    <file>theme/Adwaita/assets/$$n</file>" >> $@; \
         done; \
-	echo "    <file alias='theme/HighContrast.css'>theme/HighContrast/gtk.css</file>" >> $@; \
-	echo "    <file alias='theme/HighContrastInverse.css'>theme/HighContrast/gtk-inverse.css</file>" >> $@; \
+	echo "    <file>theme/HighContrast/gtk.css</file>" >> $@; \
+	echo "    <file alias='theme/HighContrastInverse/gtk.css'>theme/HighContrast/gtk-inverse.css</file>" >> $@; \
 	echo "    <file>theme/HighContrast/gtk-contained.css</file>" >> $@; \
 	echo "    <file>theme/HighContrast/gtk-contained-inverse.css</file>" >> $@; \
 	if test "$(win32_theme)" = "yes"; then \
 	  for f in $(srcdir)/theme/win32/*.css; do \
 	    n=`basename $$f`; \
-	    echo "    <file alias='theme/$$n'>theme/win32/$$n</file>" >> $@; \
+	    m=`echo $$n | cut -b 5-` \
+	    echo "    <file alias='theme/$$m/gtk.css'>theme/win32/$$n</file>" >> $@; \
 	  done; \
 	fi; \
 	for f in $(srcdir)/cursor/*.png; do \
