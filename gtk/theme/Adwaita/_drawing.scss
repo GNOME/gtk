@@ -261,7 +261,6 @@
     // white with 0 alpha to avoid an ugly transition, since no color means
     // black with 0 alpha
     @include _shadows(inset 0 1px transparentize(white, 1), $_button_edge);
-    > .label { color: inherit; }
   }
   @else if $t==insensitive-active {
   //
@@ -277,7 +276,6 @@
     // white with 0 alpha to avoid an ugly transition, since no color means
     // black with 0 alpha
     @include _shadows(inset 0 1px transparentize(white, 1), $_button_edge);
-    > .label { color: inherit; }
   }
 
   @else if $t==backdrop {
@@ -327,7 +325,6 @@
     // black with 0 alpha
     @include _shadows(inset 0 1px transparentize(white, 1),
                       $_blank_edge);
-    > .label { color: inherit; }
   }
 
   @else if $t==backdrop-insensitive-active {
@@ -344,7 +341,6 @@
     background-image: linear-gradient(to bottom, $_bg);
     @include _shadows(inset 0 1px transparentize(white, 1),
                       $_blank_edge);
-    > .label { color: inherit; }
   }
 
   @else if $t==osd {
