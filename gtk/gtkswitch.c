@@ -322,7 +322,6 @@ gtk_switch_enter (GtkWidget        *widget,
     {
       priv->in_switch = TRUE;
       gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_PRELIGHT, FALSE);
-      gtk_widget_queue_draw (widget);
     }
 
   return FALSE;
@@ -338,7 +337,6 @@ gtk_switch_leave (GtkWidget        *widget,
     {
       priv->in_switch = FALSE;
       gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_PRELIGHT);
-      gtk_widget_queue_draw (widget);
     }
 
   return FALSE;
@@ -1204,8 +1202,6 @@ gtk_switch_set_state (GtkSwitch *sw,
     gtk_widget_unset_state_flags (GTK_WIDGET (sw), GTK_STATE_FLAG_ACTIVE);
 
   g_object_notify (G_OBJECT (sw), "state");
-
-  gtk_widget_queue_draw (GTK_WIDGET (sw));
 }
 
 /**
