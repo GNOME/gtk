@@ -7330,7 +7330,8 @@ search_start_query (GtkFileChooserWidget *impl,
 
   _gtk_search_engine_start (priv->search_engine);
 
-  if (_gtk_file_consider_as_remote (gtk_query_get_location (priv->search_query)))
+  if (gtk_query_get_location (priv->search_query) &&
+      _gtk_file_consider_as_remote (gtk_query_get_location (priv->search_query)))
     gtk_widget_show (priv->remote_warning_bar);
 }
 
