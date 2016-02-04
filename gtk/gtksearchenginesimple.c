@@ -92,7 +92,8 @@ static void
 queue_if_local (SearchThreadData *data,
                 GFile            *file)
 {
-  if (!_gtk_file_consider_as_remote (file) &&
+  if (file &&
+      !_gtk_file_consider_as_remote (file) &&
       !g_file_has_uri_scheme (file, "recent"))
     g_queue_push_tail (data->directories, g_object_ref (file));
 }
