@@ -242,14 +242,19 @@ init_theme (GtkInspectorVisual *vis)
   GHashTable *t;
   GHashTableIter iter;
   gchar *theme, *path;
+  gchar **builtin_themes;
   GList *list, *l;
+  guint i;
 
   t = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
   /* Builtin themes */
-  g_hash_table_add (t, g_strdup ("Adwaita"));
-  g_hash_table_add (t, g_strdup ("HighContrast"));
-  g_hash_table_add (t, g_strdup ("HighContrastInverse"));
-  g_hash_table_add (t, g_strdup ("Raleigh"));
+  builtin_themes = g_resources_enumerate_children ("/org/gtk/libgtk/theme", 0, NULL);
+  for (i = 0; builtin_themes[i] != NULL; i++)
+    {
+      if (g_str_has_suffix (builtin_themes[i], "/"))
+        g_hash_table_add (t, g_strndup (builtin_themes[i], strlen (builtin_themes[i]) - 1));
+    }
+  g_strfreev (builtin_themes);
 
   path = _gtk_css_provider_get_theme_dir ();
   fill_gtk (path, t);
