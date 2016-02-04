@@ -10429,7 +10429,7 @@ tick_cb (GtkWidget     *widget,
         }
     }
 
-  gtk_widget_queue_draw (widget);
+  gtk_widget_queue_allocate (widget);
 
   return G_SOURCE_CONTINUE;
 }
