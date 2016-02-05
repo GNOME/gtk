@@ -47,7 +47,9 @@ gboolean        gtk_css_style_change_affects            (GtkCssStyleChange      
                                                          GtkCssAffects           affects);
 gboolean        gtk_css_style_change_changes_property   (GtkCssStyleChange      *change,
                                                          guint                   id);
+void            gtk_css_style_change_print              (GtkCssStyleChange      *change, GString *string);
 
+char *          gtk_css_style_change_to_string          (GtkCssStyleChange      *change);
 G_END_DECLS
 
 #endif /* __GTK_CSS_STYLE_CHANGE_PRIVATE_H__ */

@@ -110,3 +110,47 @@ gtk_css_style_change_changes_property (GtkCssStyleChange *change,
   return _gtk_bitmask_get (change->changes, id);
 }
 
+void
+gtk_css_style_change_print (GtkCssStyleChange *change,
+                            GString           *string)
+{
+  int i;
+  GtkCssStyle *old = gtk_css_style_change_get_old_style (change);
+  GtkCssStyle *new = gtk_css_style_change_get_new_style (change);
+
+  for (i = 0; i < GTK_CSS_PROPERTY_N_PROPERTIES; i ++)
+    {
+      if (gtk_css_style_change_changes_property (change, i))
+        {
+          GtkCssStyleProperty *prop;
+          GtkCssValue *value;
+          const char *name;
+
+          prop = _gtk_css_style_property_lookup_by_id (i);
+          name = _gtk_style_property_get_name (GTK_STYLE_PROPERTY (prop));
+
+          value = gtk_css_style_get_value (old, i);
+          _gtk_css_value_print (value, string);
+
+          g_string_append_printf (string, "%s: ", name);
+          _gtk_css_value_print (value, string);
+          g_string_append (string, "\n");
+
+          g_string_append_printf (string, "%s: ", name);
+          value = gtk_css_style_get_value (new, i);
+          _gtk_css_value_print (value, string);
+          g_string_append (string, "\n");
+        }
+    }
+
+}
+
+char *
+gtk_css_style_change_to_string (GtkCssStyleChange *change)
+{
+  GString *string = g_string_new ("");
+
+  gtk_css_style_change_print (change, string);
+
+  return g_string_free (string, FALSE);
+}
