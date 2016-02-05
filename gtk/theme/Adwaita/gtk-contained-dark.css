@@ -1196,7 +1196,7 @@ modelbutton.flat,
   outline-offset: -2px; }
   modelbutton.flat:hover,
   .menuitem.button.flat:hover {
-    background-color: rgba(238, 238, 236, 0.05); }
+    background-color: #393f3f; }
   modelbutton.flat check:last-child,
   modelbutton.flat radio:last-child,
   .menuitem.button.flat check:last-child,
@@ -2118,10 +2118,12 @@ menuitem radio {
 popover.background {
   padding: 2px;
   border-radius: 5px;
+  background-color: #2d3232;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); }
   popover.background, .csd popover.background {
     border: 1px solid #1c1f1f; }
   popover.background:backdrop {
+    background-color: #393f3f;
     box-shadow: none; }
   popover.background > list,
   popover.background > .view,
