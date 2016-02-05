@@ -53,7 +53,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
       The following basic datatypes are used throughout:
     </para>
 
-<literallayout><code>〈length〉 = 〈number〉 [ px | pt | em | ex | pc | in | cm | mm ]</code>
+<literallayout><code>〈length〉 = 〈number〉 [ px | pt | em | ex |rem | pc | in | cm | mm ]</code>
 <code>〈percentage〉 = 〈number〉 %</code>
 <code>〈angle〉 = 〈number〉 [ deg | grad | turn ]</code>
 <code>〈time〉 = 〈number〉 [ s | ms ]</code>
@@ -63,6 +63,11 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
       Length values with the em or ex units are resolved using the font
       size value, unless they occur in setting the font-size itself, in
       which case they are resolved using the inherited font size value.
+    </para>
+
+    <para>
+      The rem unit is resolved using the initial font size value, which is
+      not quite the same as the CSS definition of rem.
     </para>
 
     <para>
