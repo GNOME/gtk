@@ -407,6 +407,9 @@ test_data = \
 	pseudo-classes-unknown.ref.css \
         radial.css \
         radial.ref.css \
+	radial-background-position-error.css \
+	radial-background-position-error.errors \
+	radial-background-position-error.ref.css \
 	selector.css \
 	selector.ref.css \
 	shadow.css \

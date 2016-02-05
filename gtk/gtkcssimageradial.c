@@ -273,10 +273,7 @@ gtk_css_image_radial_parse (GtkCssImage  *image,
       {
         radial->position = _gtk_css_position_value_parse (parser);
         if (!radial->position)
-          {
-            _gtk_css_parser_error (parser, "Expected a position after 'at'");
-            return FALSE;
-          }
+          return FALSE;
         found_one = has_position = TRUE;
       }
     else if (!has_size)
