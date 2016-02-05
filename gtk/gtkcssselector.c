@@ -633,7 +633,7 @@ static gboolean
 match_name (const GtkCssSelector *selector,
             const GtkCssMatcher  *matcher)
 {
-  return _gtk_css_matcher_has_name (matcher, selector->name.reference->name, selector->name.reference->type);
+  return _gtk_css_matcher_has_name (matcher, selector->name.reference->name);
 }
 
 static guint

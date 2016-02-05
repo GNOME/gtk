@@ -74,8 +74,7 @@ gtk_css_matcher_widget_path_get_state (const GtkCssMatcher *matcher)
 
 static gboolean
 gtk_css_matcher_widget_path_has_name (const GtkCssMatcher     *matcher,
-                                      /*interned*/ const char *name,
-                                      GType                    type)
+                                      /*interned*/ const char *name)
 {
   const GtkWidgetPath *siblings;
 
@@ -85,11 +84,7 @@ gtk_css_matcher_widget_path_has_name (const GtkCssMatcher     *matcher,
       const char *path_name = gtk_widget_path_iter_get_object_name (siblings, matcher->path.sibling_index);
 
       if (path_name == NULL)
-        {
-          if (type == 0)
-            return FALSE;
-          return g_type_is_a (gtk_widget_path_iter_get_object_type (siblings, matcher->path.sibling_index), type);
-        }
+        path_name = g_type_name (gtk_widget_path_iter_get_object_type (siblings, matcher->path.sibling_index));
 
       return path_name == name;
     }
@@ -98,11 +93,7 @@ gtk_css_matcher_widget_path_has_name (const GtkCssMatcher     *matcher,
       const char *path_name = gtk_widget_path_iter_get_object_name (matcher->path.path, matcher->path.index);
 
       if (path_name == NULL)
-        {
-          if (type == 0)
-            return FALSE;
-          return g_type_is_a (gtk_widget_path_iter_get_object_type (matcher->path.path, matcher->path.index), type);
-        }
+        path_name = g_type_name (gtk_widget_path_iter_get_object_type (matcher->path.path, matcher->path.index));
 
       return path_name == name;
     }
@@ -251,15 +242,9 @@ gtk_css_matcher_node_get_state (const GtkCssMatcher *matcher)
 
 static gboolean
 gtk_css_matcher_node_has_name (const GtkCssMatcher     *matcher,
-                               /*interned*/ const char *name,
-                               GType                    type)
+                               /*interned*/ const char *name)
 {
-  const char *node_name = gtk_css_node_get_name (matcher->node.node);
-
-  if (node_name == NULL)
-    return g_type_is_a (gtk_css_node_get_widget_type (matcher->node.node), type);
-  
-  return node_name == name;
+  return gtk_css_node_get_name (matcher->node.node) == name;
 }
 
 static gboolean
@@ -375,8 +360,7 @@ gtk_css_matcher_any_get_state (const GtkCssMatcher *matcher)
 
 static gboolean
 gtk_css_matcher_any_has_name (const GtkCssMatcher     *matcher,
-                              /*interned*/ const char *name,
-                              GType                    type)
+                              /*interned*/ const char *name)
 {
   return TRUE;
 }
@@ -457,11 +441,10 @@ gtk_css_matcher_superset_get_state (const GtkCssMatcher *matcher)
 
 static gboolean
 gtk_css_matcher_superset_has_name (const GtkCssMatcher     *matcher,
-                                   /*interned*/ const char *name,
-                                   GType                    type)
+                                   /*interned*/ const char *name)
 {
   if (matcher->superset.relevant & GTK_CSS_CHANGE_NAME)
-    return _gtk_css_matcher_has_name (matcher->superset.subset, name, type);
+    return _gtk_css_matcher_has_name (matcher->superset.subset, name);
   else
     return TRUE;
 }
