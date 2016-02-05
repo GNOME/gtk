@@ -1648,8 +1648,6 @@ gtk_combo_box_button_state_flags_changed (GtkWidget     *widget,
                                     gtk_widget_get_state_flags (widget),
                                     TRUE);
     }
-
-  gtk_widget_queue_draw (widget);
 }
 
 static void
