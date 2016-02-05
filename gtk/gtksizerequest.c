@@ -113,10 +113,10 @@ widget_class_has_baseline_support (GtkWidgetClass *widget_class)
 	 parent_class->get_preferred_height_and_baseline_for_width == widget_class->get_preferred_height_and_baseline_for_width)
     {
       if (parent_class->get_preferred_height != widget_class->get_preferred_height ||
-	  parent_class->get_preferred_height_for_width != widget_class->get_preferred_height_for_width)
-	return FALSE;
+          parent_class->get_preferred_height_for_width != widget_class->get_preferred_height_for_width)
+        return FALSE;
 
-	parent_class = g_type_class_peek_parent (parent_class);
+      parent_class = g_type_class_peek_parent (parent_class);
     }
 
   return TRUE;
