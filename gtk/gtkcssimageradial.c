@@ -234,7 +234,6 @@ gtk_css_image_radial_parse (GtkCssImage  *image,
   GtkCssImageRadial *radial = GTK_CSS_IMAGE_RADIAL (image);
   gboolean has_shape = FALSE;
   gboolean has_size = FALSE;
-  gboolean has_position = FALSE;
   gboolean found_one = FALSE;
   guint i;
   static struct {
@@ -269,13 +268,6 @@ gtk_css_image_radial_parse (GtkCssImage  *image,
         radial->circle = FALSE;
         found_one = has_shape = TRUE;
       }
-    else if (!has_position && _gtk_css_parser_try (parser, "at", TRUE))
-      {
-        radial->position = _gtk_css_position_value_parse (parser);
-        if (!radial->position)
-          return FALSE;
-        found_one = has_position = TRUE;
-      }
     else if (!has_size)
       {
         for (i = 0; i < G_N_ELEMENTS (names); i++)
@@ -298,18 +290,30 @@ gtk_css_image_radial_parse (GtkCssImage  *image,
           }
       }
 
-  } while (found_one && !(has_shape && has_size && has_position));
+  } while (found_one && !(has_shape && has_size));
 
-  if ((has_shape || has_size || has_position) &&
-      !_gtk_css_parser_try (parser, ",", TRUE))
+  if (_gtk_css_parser_try (parser, "at", TRUE))
     {
-      _gtk_css_parser_error (parser, "Expected a comma here");
-      return FALSE;
+      radial->position = _gtk_css_position_value_parse (parser);
+      if (!radial->position)
+        return FALSE;
+      if (!_gtk_css_parser_try (parser, ",", TRUE))
+        {
+          _gtk_css_parser_error (parser, "Expected a comma here");
+          return FALSE;
+        }
     }
-
-  if (!has_position)
+  else
     {
-      radial->position = _gtk_css_position_value_new (_gtk_css_number_value_new (50, GTK_CSS_PERCENT), _gtk_css_number_value_new (50, GTK_CSS_PERCENT));
+      radial->position = _gtk_css_position_value_new (_gtk_css_number_value_new (50, GTK_CSS_PERCENT),
+                                                      _gtk_css_number_value_new (50, GTK_CSS_PERCENT));
+
+      if ((has_shape || has_size) &&
+          !_gtk_css_parser_try (parser, ",", TRUE))
+        {
+          _gtk_css_parser_error (parser, "Expected a comma here");
+          return FALSE;
+        }
     }
 
   if (!has_size)

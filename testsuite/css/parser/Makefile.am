@@ -410,6 +410,9 @@ test_data = \
 	radial-background-position-error.css \
 	radial-background-position-error.errors \
 	radial-background-position-error.ref.css \
+	radial-positions.css \
+	radial-positions.errors \
+	radial-positions.ref.css \
 	selector.css \
 	selector.ref.css \
 	shadow.css \
