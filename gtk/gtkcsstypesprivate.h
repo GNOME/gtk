@@ -105,7 +105,8 @@ typedef guint64 GtkCssChange;
  *   if it was cached.
  * @GTK_CSS_AFFECTS_TEXT: Text rendering is affected.
  * @GTK_CSS_AFFECTS_TEXT_ATTRS: Text attributes are affected.
- * @GTK_CSS_AFFECTS_ICON: Icons and icon rendering is affected.
+ * @GTK_CSS_AFFECTS_ICON: Fullcolor icons and their rendering is affected.
+ * @GTK_CSS_AFFECTS_SYMBOLIC_ICON: Symbolic icons and their rendering is affected.
  * @GTK_CSS_AFFECTS_OUTLINE: The outline styling is affected. Outlines
  *   only affect elements that can be focused.
  * @GTK_CSS_AFFECTS_CLIP: Changes in this property may have an effect
@@ -128,15 +129,17 @@ typedef enum {
   GTK_CSS_AFFECTS_TEXT = (1 << 4),
   GTK_CSS_AFFECTS_TEXT_ATTRS = (1 << 5),
   GTK_CSS_AFFECTS_ICON = (1 << 6),
-  GTK_CSS_AFFECTS_OUTLINE = (1 << 7),
-  GTK_CSS_AFFECTS_CLIP = (1 << 8),
-  GTK_CSS_AFFECTS_SIZE = (1 << 9)
+  GTK_CSS_AFFECTS_SYMBOLIC_ICON = (1 << 7),
+  GTK_CSS_AFFECTS_OUTLINE = (1 << 8),
+  GTK_CSS_AFFECTS_CLIP = (1 << 9),
+  GTK_CSS_AFFECTS_SIZE = (1 << 10)
 } GtkCssAffects;
 
 #define GTK_CSS_AFFECTS_REDRAW (GTK_CSS_AFFECTS_FOREGROUND |    \
                                 GTK_CSS_AFFECTS_BACKGROUND |    \
                                 GTK_CSS_AFFECTS_BORDER |        \
                                 GTK_CSS_AFFECTS_ICON |          \
+                                GTK_CSS_AFFECTS_SYMBOLIC_ICON | \
                                 GTK_CSS_AFFECTS_OUTLINE)
 
 enum { /*< skip >*/
