@@ -993,8 +993,6 @@ gtk_flow_box_child_set_selected (GtkFlowBoxChild *child,
         gtk_widget_unset_state_flags (GTK_WIDGET (child),
                                       GTK_STATE_FLAG_SELECTED);
 
-      gtk_widget_queue_draw (GTK_WIDGET (child));
-
       return TRUE;
     }
 

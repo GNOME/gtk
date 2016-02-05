@@ -105,14 +105,10 @@ select_swatch (GtkColorChooserWidget *cc,
     return;
 
   if (cc->priv->current != NULL)
-    {
-      gtk_widget_unset_state_flags (GTK_WIDGET (cc->priv->current), GTK_STATE_FLAG_SELECTED);
-      gtk_widget_queue_draw (GTK_WIDGET (cc->priv->current));
-    }
+    gtk_widget_unset_state_flags (GTK_WIDGET (cc->priv->current), GTK_STATE_FLAG_SELECTED);
 
   gtk_widget_set_state_flags (GTK_WIDGET (swatch), GTK_STATE_FLAG_SELECTED, FALSE);
   cc->priv->current = swatch;
-  gtk_widget_queue_draw (GTK_WIDGET (cc->priv->current));
 
   gtk_color_swatch_get_rgba (swatch, &color);
 

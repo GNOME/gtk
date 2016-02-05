@@ -11921,8 +11921,6 @@ ensure_state_flag_backdrop (GtkWidget *widget)
     gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_BACKDROP, FALSE);
   else
     gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_BACKDROP);
-
-  gtk_widget_queue_draw (widget);
 }
 
 void
