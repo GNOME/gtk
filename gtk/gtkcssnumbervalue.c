@@ -53,7 +53,13 @@ get_base_font_size (guint                    property_id,
 
   return _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_FONT_SIZE), 100);
 }
-                    
+
+static double
+get_dpi (GtkCssStyle *style)
+{
+  return _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_DPI), 96);
+}
+
 static GtkCssValue *
 gtk_css_value_number_compute (GtkCssValue             *number,
                               guint                    property_id,
@@ -112,31 +118,31 @@ gtk_css_value_number_compute (GtkCssValue             *number,
     case GTK_CSS_S:
       return _gtk_css_value_ref (number);
     case GTK_CSS_PT:
-      return _gtk_css_number_value_new (number->value * 96.0 / 72.0,
+      return _gtk_css_number_value_new (number->value * get_dpi (style) / 72.0,
                                         GTK_CSS_PX);
     case GTK_CSS_PC:
-      return _gtk_css_number_value_new (number->value * 96.0 / 72.0 * 12.0,
+      return _gtk_css_number_value_new (number->value * get_dpi (style) / 72.0 * 12.0,
                                         GTK_CSS_PX);
     case GTK_CSS_IN:
-      return _gtk_css_number_value_new (number->value * 96.0,
+      return _gtk_css_number_value_new (number->value * get_dpi (style),
                                         GTK_CSS_PX);
     case GTK_CSS_CM:
-      return _gtk_css_number_value_new (number->value * 96.0 * 0.39370078740157477,
+      return _gtk_css_number_value_new (number->value * get_dpi (style) * 0.39370078740157477,
                                         GTK_CSS_PX);
     case GTK_CSS_MM:
-      return _gtk_css_number_value_new (number->value * 96.0 * 0.039370078740157477,
+      return _gtk_css_number_value_new (number->value * get_dpi (style) * 0.039370078740157477,
                                         GTK_CSS_PX);
     case GTK_CSS_EM:
-      return _gtk_css_number_value_new (number->value * 96.0 / 72.0 *
+      return _gtk_css_number_value_new (number->value * get_dpi (style) / 72.0 *
                                         get_base_font_size (property_id, provider, style, parent_style),
                                         GTK_CSS_PX);
     case GTK_CSS_EX:
       /* for now we pretend ex is half of em */
-      return _gtk_css_number_value_new (number->value * 0.5 * 96.0 / 72.0 *
+      return _gtk_css_number_value_new (number->value * 0.5 * get_dpi (style) / 72.0 *
                                         get_base_font_size (property_id, provider, style, parent_style),
                                         GTK_CSS_PX);
     case GTK_CSS_REM:
-      return _gtk_css_number_value_new (number->value * 96.0 / 72.0 *
+      return _gtk_css_number_value_new (number->value * get_dpi (style) / 72.0 *
                                         _gtk_css_font_size_get_default (provider),
                                         GTK_CSS_PX);
     case GTK_CSS_RAD:
