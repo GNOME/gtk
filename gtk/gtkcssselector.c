@@ -64,11 +64,6 @@ struct _GtkCssSelectorClass {
   guint         is_simple :1;
 };
 
-typedef struct {
-  GType type;
-  const char *name;
-} TypeReference;
-
 typedef enum {
   POSITION_FORWARD,
   POSITION_BACKWARD,
@@ -96,7 +91,7 @@ union _GtkCssSelector
   }                              style_class;
   struct {
     const GtkCssSelectorClass   *class;
-    const TypeReference         *reference;
+    const char                  *name;          /* interned */
   }                              name;
   struct {
     const GtkCssSelectorClass   *class;
@@ -568,86 +563,32 @@ DEFINE_SIMPLE_SELECTOR(any, ANY, print_any, match_any,
 
 /* NAME */
 
-static GHashTable *type_refs_ht = NULL;
-static guint type_refs_last_serial = 0;
-
-static TypeReference *
-get_type_reference (const char *name)
-{
-  TypeReference *ref;
-
-
-  if (type_refs_ht == NULL)
-    type_refs_ht = g_hash_table_new (g_str_hash, g_str_equal);
-
-  ref = g_hash_table_lookup (type_refs_ht, name);
-
-  if (ref != NULL)
-    return ref;
-
-  ref = g_slice_new (TypeReference);
-  ref->name = g_intern_string (name);
-  ref->type = g_type_from_name (ref->name);
-
-  g_hash_table_insert (type_refs_ht,
-		       (gpointer)ref->name, ref);
-
-  return ref;
-}
-
-static void
-update_type_references (void)
-{
-  GHashTableIter iter;
-  guint serial;
-  gpointer value;
-
-  serial = g_type_get_type_registration_serial ();
-
-  if (serial == type_refs_last_serial)
-    return;
-
-  type_refs_last_serial = serial;
-
-  if (type_refs_ht == NULL)
-    return;
-
-  g_hash_table_iter_init (&iter, type_refs_ht);
-  while (g_hash_table_iter_next (&iter,
-				 NULL, &value))
-    {
-      TypeReference *ref = value;
-      if (ref->type == G_TYPE_INVALID)
-	ref->type = g_type_from_name (ref->name);
-    }
-}
-
 static void
 print_name (const GtkCssSelector *selector,
             GString              *string)
 {
-  g_string_append (string, selector->name.reference->name);
+  g_string_append (string, selector->name.name);
 }
 
 static gboolean
 match_name (const GtkCssSelector *selector,
             const GtkCssMatcher  *matcher)
 {
-  return _gtk_css_matcher_has_name (matcher, selector->name.reference->name);
+  return _gtk_css_matcher_has_name (matcher, selector->name.name);
 }
 
 static guint
 hash_name (const GtkCssSelector *a)
 {
-  return g_str_hash (a->name.reference->name);
+  return g_str_hash (a->name.name);
 }
 
 static int
 comp_name (const GtkCssSelector *a,
            const GtkCssSelector *b)
 {
-  return strcmp (a->name.reference->name,
-		 b->name.reference->name);
+  return strcmp (a->name.name,
+		 b->name.name);
 }
 
 DEFINE_SIMPLE_SELECTOR(name, NAME, print_name, match_name, hash_name, comp_name, FALSE, FALSE, TRUE)
@@ -1259,7 +1200,7 @@ parse_selector_negation (GtkCssParser   *parser,
     {
       selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_NOT_NAME,
                                        selector);
-      selector->name.reference = get_type_reference (name);
+      selector->name.name = g_intern_string (name);
       g_free (name);
     }
   else if (_gtk_css_parser_try (parser, "*", FALSE))
@@ -1303,7 +1244,7 @@ parse_simple_selector (GtkCssParser   *parser,
     {
       selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_NAME,
                                        selector);
-      selector->name.reference = get_type_reference (name);
+      selector->name.name = g_intern_string (name);
       g_free (name);
       parsed_something = TRUE;
     }
@@ -1438,8 +1379,6 @@ _gtk_css_selector_matches (const GtkCssSelector *selector,
 
   g_return_val_if_fail (selector != NULL, FALSE);
   g_return_val_if_fail (matcher != NULL, FALSE);
-
-  update_type_references ();
 
   if (!gtk_css_selector_match (selector, matcher))
     return FALSE;
@@ -1588,8 +1527,6 @@ _gtk_css_selector_tree_match_all (const GtkCssSelectorTree *tree,
 				  const GtkCssMatcher *matcher)
 {
   GPtrArray *array = NULL;
-
-  update_type_references ();
 
   for (; tree != NULL;
        tree = gtk_css_selector_tree_get_sibling (tree))
