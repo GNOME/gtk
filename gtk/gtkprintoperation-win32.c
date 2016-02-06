@@ -1350,7 +1350,7 @@ plug_grab_notify (GtkWidget        *widget,
 }
 
 
-static BOOL CALLBACK
+static INT_PTR CALLBACK
 pageDlgProc (HWND wnd, UINT message, WPARAM wparam, LPARAM lparam)
 {
   GtkPrintOperation *op;
