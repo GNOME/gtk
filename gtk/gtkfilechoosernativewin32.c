@@ -182,7 +182,7 @@ ifiledialogevents_OnFolderChange (IFileDialogEvents *self,
     {
       events->got_hwnd = TRUE;
 
-      hr = IFileDialog_QueryInterface (pfd, &IID_IOleWindow, &olew);
+      hr = IFileDialog_QueryInterface (pfd, &IID_IOleWindow, (LPVOID *) &olew);
       if (SUCCEEDED (hr))
         {
           hr = IOleWindow_GetWindow (olew, &dialog_hwnd);
@@ -368,7 +368,7 @@ get_shell_item_for_uri (const char *uri)
   HRESULT hr;
   gunichar2 *uri_w = g_utf8_to_utf16 (uri, -1, NULL, NULL, NULL);
 
-  hr = SHCreateItemFromParsingName(uri_w, 0, &IID_IShellItem, &item);
+  hr = SHCreateItemFromParsingName(uri_w, 0, &IID_IShellItem, (LPVOID *) &item);
   if (SUCCEEDED (hr))
     return item;
   else
@@ -410,11 +410,11 @@ filechooser_win32_thread (gpointer _data)
   if (data->save && !data->folder)
     hr = CoCreateInstance (&CLSID_FileSaveDialog,
                            NULL, CLSCTX_INPROC_SERVER,
-                           &IID_IFileSaveDialog, &pfd);
+                           &IID_IFileSaveDialog, (LPVOID *) &pfd);
   else
     hr = CoCreateInstance (&CLSID_FileOpenDialog,
                            NULL, CLSCTX_INPROC_SERVER,
-                           &IID_IFileOpenDialog, &pfd);
+                           &IID_IFileOpenDialog, (LPVOID *) &pfd);
 
   if (FAILED (hr))
     g_error ("Can't create FileOpenDialog: %s\n", g_win32_error_message (hr));
@@ -466,7 +466,7 @@ filechooser_win32_thread (gpointer _data)
     {
       gunichar2 *label = g_utf8_to_utf16 (data->cancel_label, -1,
                                         NULL, NULL, NULL);
-      hr = IFileDialog_QueryInterface (pfd, &IID_IFileDialog2, &pfd2);
+      hr = IFileDialog_QueryInterface (pfd, &IID_IFileDialog2, (LPVOID *) &pfd2);
       if (SUCCEEDED (hr))
         {
           IFileDialog2_SetCancelButtonLabel (pfd2, label);
@@ -490,7 +490,7 @@ filechooser_win32_thread (gpointer _data)
   if (data->current_file)
     {
       IFileSaveDialog *pfsd;
-      hr = IFileDialog_QueryInterface (pfd, &IID_IFileSaveDialog, &pfsd);
+      hr = IFileDialog_QueryInterface (pfd, &IID_IFileSaveDialog, (LPVOID *) &pfsd);
       if (SUCCEEDED (hr))
         {
           IShellItem *item = get_shell_item_for_file (data->current_file);
@@ -546,7 +546,7 @@ filechooser_win32_thread (gpointer _data)
   if (SUCCEEDED (hr))
     {
       IFileOpenDialog *pfod = NULL;
-      hr = IFileDialog_QueryInterface (pfd,&IID_IFileOpenDialog, &pfod);
+      hr = IFileDialog_QueryInterface (pfd,&IID_IFileOpenDialog, (LPVOID *) &pfod);
 
       if (SUCCEEDED (hr))
         {
