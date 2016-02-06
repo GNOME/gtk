@@ -140,6 +140,9 @@ void     _gtk_icon_helper_set_force_scale_pixbuf (GtkIconHelper *self,
 
 void      gtk_icon_helper_invalidate (GtkIconHelper *self);
 
+void      gtk_icon_helper_invalidate_for_change (GtkIconHelper     *self,
+                                                 GtkCssStyleChange *change);
+
 G_END_DECLS
 
 #endif /* __GTK_ICON_HELPER_H__ */

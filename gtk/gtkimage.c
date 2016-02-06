@@ -1930,8 +1930,7 @@ gtk_image_style_updated (GtkWidget *widget)
     {
       GtkCssStyleChange *change = gtk_style_context_get_change (context);
 
-      if (change && gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_ICON))
-        gtk_icon_helper_invalidate (priv->icon_helper);
+      gtk_icon_helper_invalidate_for_change (priv->icon_helper, change);
     }
 
   GTK_WIDGET_CLASS (gtk_image_parent_class)->style_updated (widget);
