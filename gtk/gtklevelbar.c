@@ -29,9 +29,10 @@
  *
  * Use gtk_level_bar_set_value() to set the current value, and
  * gtk_level_bar_add_offset_value() to set the value offsets at which
- * the bar will be considered in a different state. GTK will add two offsets
- * by default on the level bar: #GTK_LEVEL_BAR_OFFSET_LOW and
- * #GTK_LEVEL_BAR_OFFSET_HIGH, with values 0.25 and 0.75 respectively.
+ * the bar will be considered in a different state. GTK will add a few
+ * offsets by default on the level bar: #GTK_LEVEL_BAR_OFFSET_LOW,
+ * #GTK_LEVEL_BAR_OFFSET_HIGH and #GTK_LEVEL_BAR_OFFSET_FULL, with
+ * values 0.25, 0.75 and 1.0 respectively.
  *
  * ## Adding a custom offset on the bar
  *
@@ -1146,7 +1147,7 @@ gtk_level_bar_init (GtkLevelBar *self)
 
   gtk_level_bar_ensure_offset (self, GTK_LEVEL_BAR_OFFSET_LOW, 0.25);
   gtk_level_bar_ensure_offset (self, GTK_LEVEL_BAR_OFFSET_HIGH, 0.75);
-  gtk_level_bar_ensure_offset (self, "full", 1.0);
+  gtk_level_bar_ensure_offset (self, GTK_LEVEL_BAR_OFFSET_FULL, 1.0);
 
   priv->block_gadget = NULL;
   priv->n_blocks = 0;

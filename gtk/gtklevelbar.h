@@ -54,6 +54,15 @@ G_BEGIN_DECLS
  */
 #define GTK_LEVEL_BAR_OFFSET_HIGH "high"
 
+/**
+ * GTK_LEVEL_BAR_OFFSET_FULL:
+ *
+ * The name used for the stock full offset included by #GtkLevelBar.
+ *
+ * Since: 3.20
+ */
+#define GTK_LEVEL_BAR_OFFSET_FULL "full"
+
 typedef struct _GtkLevelBarClass   GtkLevelBarClass;
 typedef struct _GtkLevelBar        GtkLevelBar;
 typedef struct _GtkLevelBarPrivate GtkLevelBarPrivate;

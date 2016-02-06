@@ -3541,6 +3541,7 @@ gtk_status_icon_get_type
 <TITLE>GtkLevelBar</TITLE>
 GTK_LEVEL_BAR_OFFSET_LOW
 GTK_LEVEL_BAR_OFFSET_HIGH
+GTK_LEVEL_BAR_OFFSET_FULL
 GtkLevelBarMode
 GtkLevelBar
 gtk_level_bar_new
