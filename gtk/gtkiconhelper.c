@@ -49,7 +49,7 @@ struct _GtkIconHelperPrivate {
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkIconHelper, gtk_icon_helper, GTK_TYPE_CSS_GADGET)
 
-void
+static void
 gtk_icon_helper_invalidate (GtkIconHelper *self)
 {
   if (self->priv->rendered_surface != NULL)
