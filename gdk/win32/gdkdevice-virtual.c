@@ -148,7 +148,7 @@ gdk_device_virtual_set_window_cursor (GdkDevice *device,
               parent_window = parent_window->parent;
             }
           else
-            replacement_cursor = _gdk_win32_display_get_cursor_for_type (_gdk_display, GDK_LEFT_PTR);
+            replacement_cursor = _gdk_win32_display_get_cursor_for_type (gdk_device_get_display (device), GDK_LEFT_PTR);
         }
 
       SetCursor (GDK_WIN32_CURSOR (replacement_cursor)->hcursor);

@@ -3401,7 +3401,7 @@ gdk_event_translate (MSG  *msg,
       event->any.window = window;
       g_object_ref (window);
 
-      if (_gdk_input_other_event (event, msg, window))
+      if (gdk_input_other_event (_gdk_display, event, msg, window))
 	_gdk_win32_append_event (event);
       else
 	gdk_event_free (event);

@@ -118,7 +118,7 @@ init_version (GtkInspectorGeneral *gen)
   gtk_label_set_text (GTK_LABEL (gen->priv->gdk_backend), backend);
 }
 
-static void
+static G_GNUC_UNUSED void
 append_extension_row (GtkInspectorGeneral *gen,
                       const gchar         *ext,
                       gboolean             have_ext)
@@ -169,16 +169,13 @@ append_egl_extension_row (GtkInspectorGeneral *gen,
 static void
 init_gl (GtkInspectorGeneral *gen)
 {
-  GdkDisplay *display;
-  gchar *version;
-
-  display = gdk_display_get_default ();
-
 #ifdef GDK_WINDOWING_X11
   if (GDK_IS_X11_DISPLAY (display))
     {
+      GdkDisplay *display = gdk_display_get_default ();
       Display *dpy = GDK_DISPLAY_XDISPLAY (display);
       int error_base, event_base;
+      gchar *version;
 
       if (!glXQueryExtension (dpy, &error_base, &event_base))
         return;
@@ -202,8 +199,10 @@ init_gl (GtkInspectorGeneral *gen)
 #ifdef GDK_WINDOWING_WAYLAND
   if (GDK_IS_WAYLAND_DISPLAY (display))
     {
+      GdkDisplay *display = gdk_display_get_default ();
       EGLDisplay *dpy;
       EGLint major, minor;
+      gchar *version;
 
       dpy = eglGetDisplay ((EGLNativeDisplayType)gdk_wayland_display_get_wl_display (display));
 

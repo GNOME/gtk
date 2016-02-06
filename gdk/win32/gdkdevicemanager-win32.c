@@ -80,7 +80,7 @@ create_pointer (GdkDeviceManager *device_manager,
                        "input-source", GDK_SOURCE_MOUSE,
                        "input-mode", GDK_MODE_SCREEN,
                        "has-cursor", type == GDK_DEVICE_TYPE_MASTER,
-                       "display", _gdk_display,
+                       "display", gdk_device_manager_get_display (device_manager),
                        "device-manager", device_manager,
                        NULL);
 }
@@ -97,7 +97,7 @@ create_keyboard (GdkDeviceManager *device_manager,
                        "input-source", GDK_SOURCE_KEYBOARD,
                        "input-mode", GDK_MODE_SCREEN,
                        "has-cursor", FALSE,
-                       "display", _gdk_display,
+                       "display", gdk_device_manager_get_display (device_manager),
                        "device-manager", device_manager,
                        NULL);
 }
@@ -575,7 +575,7 @@ _gdk_input_wintab_init_check (GdkDeviceManager *_device_manager)
                                  "input-source", GDK_SOURCE_PEN,
                                  "input-mode", GDK_MODE_SCREEN,
                                  "has-cursor", lc.lcOptions & CXO_SYSTEM,
-                                 "display", _gdk_display,
+                                 "display", display,
                                  "device-manager", device_manager,
                                  NULL);
 
@@ -877,9 +877,10 @@ gdk_device_manager_find_wintab_device (GdkDeviceManagerWin32 *device_manager,
 }
 
 gboolean
-_gdk_input_other_event (GdkEvent  *event,
-                        MSG       *msg,
-                        GdkWindow *window)
+gdk_input_other_event (GdkDisplay *display,
+                       GdkEvent   *event,
+                       MSG        *msg,
+                       GdkWindow  *window)
 {
   GdkDeviceManagerWin32 *device_manager;
   GdkDeviceWintab *source_device = NULL;
@@ -900,12 +901,12 @@ _gdk_input_other_event (GdkEvent  *event,
 
   if (event->any.window != wintab_window)
     {
-      g_warning ("_gdk_input_other_event: not wintab_window?");
+      g_warning ("gdk_input_other_event: not wintab_window?");
       return FALSE;
     }
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  device_manager = GDK_DEVICE_MANAGER_WIN32 (gdk_display_get_device_manager (_gdk_display));
+  device_manager = GDK_DEVICE_MANAGER_WIN32 (gdk_display_get_device_manager (display));
 G_GNUC_END_IGNORE_DEPRECATIONS;
   window = gdk_device_get_window_at_position (device_manager->core_pointer, &x, &y);
   if (window == NULL)
@@ -914,7 +915,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS;
   g_object_ref (window);
 
   GDK_NOTE (EVENTS_OR_INPUT,
-	    g_print ("_gdk_input_other_event: window=%p %+d%+d\n",
+	    g_print ("gdk_input_other_event: window=%p %+d%+d\n",
                GDK_WINDOW_HWND (window), x, y));
 
   if (msg->message == WT_PACKET || msg->message == WT_CSRCHANGE)
@@ -943,7 +944,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS;
       if (gdk_device_get_mode (GDK_DEVICE (source_device)) == GDK_MODE_DISABLED)
         return FALSE;
 
-      last_grab = _gdk_display_get_last_device_grab (_gdk_display, GDK_DEVICE (source_device));
+      last_grab = _gdk_display_get_last_device_grab (display, GDK_DEVICE (source_device));
 
       if (last_grab && last_grab->window)
         {
