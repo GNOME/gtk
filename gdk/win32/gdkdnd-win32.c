@@ -1161,8 +1161,7 @@ target_context_new (GdkWindow *window)
   GdkDragContext *context;
   GdkWin32DragContext *context_win32;
   target_drag_context *result;
-  GdkDevice *device;
-  GdkDeviceManager *device_manager;
+  GdkSeat *seat;
 
   context = gdk_drag_context_new ();
   context_win32 = GDK_WIN32_DRAG_CONTEXT (context);
@@ -1174,9 +1173,8 @@ target_context_new (GdkWindow *window)
   result->context->protocol = GDK_DRAG_PROTO_OLE2;
   result->context->is_source = FALSE;
 
-  device_manager = gdk_display_get_device_manager (_gdk_display);
-  device = gdk_device_manager_get_client_pointer (device_manager);
-  gdk_drag_context_set_device (result->context, device);
+  seat = gdk_display_get_default_seat (_gdk_display);
+  gdk_drag_context_set_device (context, gdk_seat_get_pointer (seat));
 
   result->context->source_window = NULL;
 
@@ -1203,8 +1201,7 @@ source_context_new (GdkWindow *window,
   GdkDragContext *context;
   GdkWin32DragContext *context_win32;
   source_drag_context *result;
-  GdkDevice *device;
-  GdkDeviceManager *device_manager;
+  GdkSeat *seat;
 
   context = gdk_drag_context_new ();
   context_win32 = GDK_WIN32_DRAG_CONTEXT (context);
@@ -1216,9 +1213,8 @@ source_context_new (GdkWindow *window,
   result->context->protocol = GDK_DRAG_PROTO_OLE2;
   result->context->is_source = TRUE;
 
-  device_manager = gdk_display_get_device_manager (_gdk_display);
-  device = gdk_device_manager_get_client_pointer (device_manager);
-  gdk_drag_context_set_device (result->context, device);
+  seat = gdk_display_get_default_seat (_gdk_display);
+  gdk_drag_context_set_device (context, gdk_seat_get_pointer (seat));
 
   result->context->source_window = window;
   g_object_ref (window);
@@ -1430,8 +1426,7 @@ gdk_dropfiles_filter (GdkXEvent *xev,
   POINT pt;
   gint nfiles, i;
   gchar *fileName, *linkedFile;
-  GdkDevice *device;
-  GdkDeviceManager *device_manager;
+  GdkSeat *seat;
 
   if (msg->message == WM_DROPFILES)
     {
@@ -1441,9 +1436,8 @@ gdk_dropfiles_filter (GdkXEvent *xev,
       context->protocol = GDK_DRAG_PROTO_WIN32_DROPFILES;
       context->is_source = FALSE;
 
-      device_manager = gdk_display_get_device_manager (_gdk_display);
-      device = gdk_device_manager_get_client_pointer (device_manager);
-      gdk_drag_context_set_device (context, device);
+      seat = gdk_display_get_default_seat (_gdk_display);
+      gdk_drag_context_set_device (context, gdk_seat_get_pointer (seat));
 
       context->source_window = gdk_get_default_root_window ();
       g_object_ref (context->source_window);
@@ -1663,8 +1657,7 @@ local_send_enter (GdkDragContext *context,
 {
   GdkEvent *tmp_event;
   GdkDragContext *new_context;
-  GdkDevice *device;
-  GdkDeviceManager *device_manager;
+  GdkSeat *seat;
 
   GDK_NOTE (DND, g_print ("local_send_enter: context=%p current_dest_drag=%p\n",
 			  context,
@@ -1680,9 +1673,8 @@ local_send_enter (GdkDragContext *context,
   new_context->protocol = GDK_DRAG_PROTO_LOCAL;
   new_context->is_source = FALSE;
 
-  device_manager = gdk_display_get_device_manager (_gdk_display);
-  device = gdk_device_manager_get_client_pointer (device_manager);
-  gdk_drag_context_set_device (new_context, device);
+  seat = gdk_display_get_default_seat (_gdk_display);
+  gdk_drag_context_set_device (context, gdk_seat_get_pointer (seat));
 
   new_context->source_window = context->source_window;
   g_object_ref (new_context->source_window);
@@ -1824,22 +1816,18 @@ _gdk_win32_window_drag_begin (GdkWindow *window,
   if (!use_ole2_dnd)
     {
       GdkDragContext *new_context;
-      GdkDevice *device;
-      GdkDeviceManager *device_manager;
+      GdkSeat *seat;
 
       g_return_val_if_fail (window != NULL, NULL);
 
       new_context = gdk_drag_context_new ();
 
-      device_manager = gdk_display_get_device_manager (_gdk_display);
-      device = gdk_device_manager_get_client_pointer (device_manager);
-      gdk_drag_context_set_device (new_context, device);
+      seat = gdk_display_get_default_seat (_gdk_display);
+      gdk_drag_context_set_device (new_context, gdk_seat_get_pointer (seat));
 
       new_context->is_source = TRUE;
-
       new_context->source_window = window;
       g_object_ref (window);
-      gdk_drag_context_set_device (new_context, device);
 
       new_context->targets = g_list_copy (targets);
       new_context->actions = 0;
