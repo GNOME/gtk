@@ -34,6 +34,10 @@
  * #GTK_LEVEL_BAR_OFFSET_HIGH and #GTK_LEVEL_BAR_OFFSET_FULL, with
  * values 0.25, 0.75 and 1.0 respectively.
  *
+ * Note that it is your responsibility to update preexisting offsets
+ * when changing the minimum or maximum value. GTK+ will simply clamp
+ * them to the new range.
+ *
  * ## Adding a custom offset on the bar
  *
  * |[<!-- language="C" -->
@@ -1266,6 +1270,9 @@ gtk_level_bar_set_value_internal (GtkLevelBar *self,
  *
  * Sets the value of the #GtkLevelBar:min-value property.
  *
+ * You probably want to update preexisting level offsets after calling
+ * this function.
+ *
  * Since: 3.6
  */
 void
@@ -1296,6 +1303,9 @@ gtk_level_bar_set_min_value (GtkLevelBar *self,
  * @value: a positive value
  *
  * Sets the value of the #GtkLevelBar:max-value property.
+ *
+ * You probably want to update preexisting level offsets after calling
+ * this function.
  *
  * Since: 3.6
  */
