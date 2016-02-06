@@ -856,17 +856,14 @@ get_modifier_key_state (void)
 }
 
 static GdkDeviceWintab *
-_gdk_device_manager_find_wintab_device (HCTX hctx,
-                                        UINT cursor)
+gdk_device_manager_find_wintab_device (GdkDeviceManagerWin32 *device_manager,
+                                       HCTX                   hctx,
+                                       UINT                   cursor)
 {
-  GdkDeviceManagerWin32 *device_manager;
   GdkDeviceWintab *device;
   GList *tmp_list;
 
-  device_manager = GDK_DEVICE_MANAGER_WIN32 (gdk_display_get_device_manager (_gdk_display));
-  tmp_list = device_manager->wintab_devices;
-
-  while (tmp_list)
+  for (tmp_list = device_manager->wintab_devices; tmp_list; tmp_list = tmp_list->next)
     {
       device = tmp_list->data;
       tmp_list = tmp_list->next;
@@ -907,7 +904,9 @@ _gdk_input_other_event (GdkEvent  *event,
       return FALSE;
     }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   device_manager = GDK_DEVICE_MANAGER_WIN32 (gdk_display_get_device_manager (_gdk_display));
+G_GNUC_END_IGNORE_DEPRECATIONS;
   window = gdk_device_get_window_at_position (device_manager->core_pointer, &x, &y);
   if (window == NULL)
     window = gdk_get_default_root_window ();
@@ -936,8 +935,9 @@ _gdk_input_other_event (GdkEvent  *event,
           return FALSE;
         }
 
-      if ((source_device = _gdk_device_manager_find_wintab_device ((HCTX) msg->lParam,
-								   packet.pkCursor)) == NULL)
+      if ((source_device = gdk_device_manager_find_wintab_device (device_manager,
+                                                                  (HCTX) msg->lParam,
+                                                                  packet.pkCursor)) == NULL)
         return FALSE;
 
       if (gdk_device_get_mode (GDK_DEVICE (source_device)) == GDK_MODE_DISABLED)
@@ -1114,8 +1114,9 @@ _gdk_input_other_event (GdkEvent  *event,
       return TRUE;
 
     case WT_CSRCHANGE:
-      if ((source_device = _gdk_device_manager_find_wintab_device ((HCTX) msg->lParam,
-								   packet.pkCursor)) == NULL)
+      if ((source_device = gdk_device_manager_find_wintab_device (device_manager,
+                                                                  (HCTX) msg->lParam,
+                                                                  packet.pkCursor)) == NULL)
         return FALSE;
 
       if (gdk_device_get_mode (GDK_DEVICE (source_device)) == GDK_MODE_DISABLED)
