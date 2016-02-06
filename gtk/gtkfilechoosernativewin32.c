@@ -19,6 +19,12 @@
 
 #include "config.h"
 
+/* Vista or newer */
+#define _WIN32_WINNT 0x0600
+#define WINVER _WIN32_WINNT
+#define NTDDI_VERSION NTDDI_VISTA
+#define COBJMACROS
+
 #include "gtkfilechoosernativeprivate.h"
 #include "gtknativedialogprivate.h"
 
@@ -40,12 +46,6 @@
 #include "gtklabel.h"
 #include "gtkfilechooserentry.h"
 #include "gtkfilefilterprivate.h"
-
-/* Vista or newer */
-#define _WIN32_WINNT 0x0600
-#define WINVER _WIN32_WINNT
-#define NTDDI_VERSION NTDDI_VISTA
-#define COBJMACROS
 
 #include "win32/gdkwin32.h"
 #include <shlobj.h>
