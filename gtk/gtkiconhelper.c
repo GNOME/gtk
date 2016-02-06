@@ -63,6 +63,22 @@ gtk_icon_helper_invalidate (GtkIconHelper *self)
     gtk_widget_queue_resize (gtk_css_gadget_get_owner (GTK_CSS_GADGET (self)));
 }
 
+void
+gtk_icon_helper_invalidate_for_change (GtkIconHelper     *self,
+                                       GtkCssStyleChange *change)
+{
+  GtkIconHelperPrivate *priv = self->priv;
+
+  if (change &&
+      ((gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_SYMBOLIC_ICON) &&
+        priv->rendered_surface_is_symbolic) ||
+      (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_ICON) &&
+       !priv->rendered_surface_is_symbolic)))
+    {
+      gtk_icon_helper_invalidate (self);
+    }
+}
+
 static void
 gtk_icon_helper_take_definition (GtkIconHelper      *self,
                                  GtkImageDefinition *def)
@@ -147,8 +163,7 @@ static void
 gtk_icon_helper_style_changed (GtkCssGadget      *gadget,
                                GtkCssStyleChange *change)
 {
-  if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_ICON))
-    gtk_icon_helper_invalidate (GTK_ICON_HELPER (gadget));
+  gtk_icon_helper_invalidate_for_change (GTK_ICON_HELPER (gadget), change);
 
   if (!GTK_IS_CSS_TRANSIENT_NODE (gtk_css_gadget_get_node (gadget)))
     GTK_CSS_GADGET_CLASS (gtk_icon_helper_parent_class)->style_changed (gadget, change);
