@@ -906,23 +906,7 @@ typedef struct _GdkWaylandCairoSurfaceData {
   struct wl_buffer *buffer;
   GdkWaylandDisplay *display;
   uint32_t scale;
-  gboolean busy;
 } GdkWaylandCairoSurfaceData;
-
-static void
-buffer_release_callback (void             *_data,
-                         struct wl_buffer *wl_buffer)
-{
-  cairo_surface_t *surface = _data;
-  GdkWaylandCairoSurfaceData *data = cairo_surface_get_user_data (surface, &gdk_wayland_cairo_key);
-
-  data->busy = FALSE;
-  cairo_surface_destroy (surface);
-}
-
-static const struct wl_buffer_listener buffer_listener = {
-  buffer_release_callback
-};
 
 static struct wl_shm_pool *
 create_shm_pool (struct wl_shm  *shm,
@@ -1001,7 +985,6 @@ _gdk_wayland_display_create_shm_surface (GdkWaylandDisplay *display,
   data->display = display;
   data->buffer = NULL;
   data->scale = scale;
-  data->busy = FALSE;
 
   stride = cairo_format_stride_for_width (CAIRO_FORMAT_ARGB32, width*scale);
 
@@ -1019,7 +1002,6 @@ _gdk_wayland_display_create_shm_surface (GdkWaylandDisplay *display,
   data->buffer = wl_shm_pool_create_buffer (data->pool, 0,
                                             width*scale, height*scale,
                                             stride, WL_SHM_FORMAT_ARGB8888);
-  wl_buffer_add_listener (data->buffer, &buffer_listener, surface);
 
   cairo_surface_set_user_data (surface, &gdk_wayland_shm_surface_cairo_key,
                                data, gdk_wayland_cairo_surface_destroy);
@@ -1041,21 +1023,6 @@ _gdk_wayland_shm_surface_get_wl_buffer (cairo_surface_t *surface)
 {
   GdkWaylandCairoSurfaceData *data = cairo_surface_get_user_data (surface, &gdk_wayland_shm_surface_cairo_key);
   return data->buffer;
-}
-
-void
-_gdk_wayland_shm_surface_set_busy (cairo_surface_t *surface)
-{
-  GdkWaylandCairoSurfaceData *data = cairo_surface_get_user_data (surface, &gdk_wayland_cairo_key);
-  data->busy = TRUE;
-  cairo_surface_reference (surface);
-}
-
-gboolean
-_gdk_wayland_shm_surface_get_busy (cairo_surface_t *surface)
-{
-  GdkWaylandCairoSurfaceData *data = cairo_surface_get_user_data (surface, &gdk_wayland_cairo_key);
-  return data->busy;
 }
 
 gboolean

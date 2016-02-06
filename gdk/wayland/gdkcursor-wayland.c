@@ -401,6 +401,19 @@ _gdk_wayland_display_get_cursor_for_type (GdkDisplay    *display,
                                                               1);
 }
 
+static void
+buffer_release_callback (void             *_data,
+                         struct wl_buffer *wl_buffer)
+{
+  cairo_surface_t *cairo_surface = _data;
+
+  cairo_surface_destroy (cairo_surface);
+}
+
+static const struct wl_buffer_listener buffer_listener = {
+  buffer_release_callback
+};
+
 GdkCursor *
 _gdk_wayland_display_get_cursor_for_surface (GdkDisplay *display,
 					     cairo_surface_t *surface,
@@ -409,6 +422,7 @@ _gdk_wayland_display_get_cursor_for_surface (GdkDisplay *display,
 {
   GdkWaylandCursor *cursor;
   GdkWaylandDisplay *wayland_display = GDK_WAYLAND_DISPLAY (display);
+  struct wl_buffer *buffer;
   cairo_t *cr;
 
   cursor = g_object_new (GDK_TYPE_WAYLAND_CURSOR,
@@ -439,6 +453,10 @@ _gdk_wayland_display_get_cursor_for_surface (GdkDisplay *display,
                                                                            cursor->surface.width,
                                                                            cursor->surface.height,
                                                                            cursor->surface.scale);
+
+  buffer = _gdk_wayland_shm_surface_get_wl_buffer (cursor->surface.cairo_surface);
+  wl_buffer_add_listener (buffer, &buffer_listener, cursor->surface.cairo_surface);
+
   if (surface)
     {
       cr = cairo_create (cursor->surface.cairo_surface);
