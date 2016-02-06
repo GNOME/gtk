@@ -478,17 +478,14 @@ ensure_surface_for_gicon (GtkIconHelper    *self,
       symbolic = FALSE;
     }
 
+  surface = gdk_cairo_surface_create_from_pixbuf (destination, scale, gtk_widget_get_window (gtk_css_gadget_get_owner (GTK_CSS_GADGET (self))));
+
   if (!symbolic)
     {
       GtkCssIconEffect icon_effect;
 
-      surface = gdk_cairo_surface_create_from_pixbuf (destination, scale, gtk_widget_get_window (gtk_css_gadget_get_owner (GTK_CSS_GADGET (self))));
       icon_effect = _gtk_css_icon_effect_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_EFFECT));
       gtk_css_icon_effect_apply (icon_effect, surface);
-    }
-  else
-    {
-      surface = gdk_cairo_surface_create_from_pixbuf (destination, scale, gtk_widget_get_window (gtk_css_gadget_get_owner (GTK_CSS_GADGET (self))));
     }
   g_object_unref (destination);
 
