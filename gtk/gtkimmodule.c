@@ -899,7 +899,7 @@ get_current_input_language (void)
   /* Current thread's keyboard layout */
   kblayout = GetKeyboardLayout(0);
   /* lowest word in the HKL is the LANGID */
-  langid = ((guint32)kblayout) & 0xFFFF;
+  langid = LOWORD (kblayout);
   /* LCID is the LANGID without order */
   lcid = langid;
 
