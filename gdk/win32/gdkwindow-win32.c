@@ -1687,7 +1687,9 @@ gdk_win32_window_set_geometry_hints (GdkWindow         *window,
   impl->hints = *geometry;
 
   if (geom_mask & GDK_HINT_POS)
-    ; /* even the X11 mplementation doesn't care */
+    {
+      /* even the X11 mplementation doesn't care */
+    }
 
   if (geom_mask & GDK_HINT_MIN_SIZE)
     {
