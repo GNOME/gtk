@@ -175,13 +175,15 @@ gdk_win32_drag_context_finalize (GObject *object)
 /* Drag Contexts */
 
 static GdkDragContext *
-gdk_drag_context_new (void)
+gdk_drag_context_new (GdkDisplay *display)
 {
   GdkWin32DragContext *context_win32;
   GdkDragContext *context;
 
   context_win32 = g_object_new (GDK_TYPE_WIN32_DRAG_CONTEXT, NULL);
   context = GDK_DRAG_CONTEXT(context_win32);
+
+  gdk_drag_context_set_device (context, gdk_seat_get_pointer (gdk_display_get_default_seat (display)));
 
   return context;
 }
@@ -379,10 +381,10 @@ get_suggested_action (DWORD grfKeyState)
  * pending GDK event.
  */
 static void
-process_pending_events ()
+process_pending_events (GdkDisplay *display)
 {
   g_main_context_iteration (NULL, FALSE);
-  while (_gdk_event_queue_find_first (_gdk_display))
+  while (_gdk_event_queue_find_first (display))
     g_main_context_iteration (NULL, FALSE);
 }
 
@@ -446,7 +448,7 @@ idroptarget_dragenter (LPDROPTARGET This,
 
   ctx->context->suggested_action = get_suggested_action (grfKeyState);
   dnd_event_put (GDK_DRAG_ENTER, ctx->context, pt, TRUE);
-  process_pending_events ();
+  process_pending_events (gdk_device_get_display (gdk_drag_context_get_device (ctx->context)));
   *pdwEffect = drop_effect_for_action (ctx->context->action);
 
   /* Assume that target can accept the data: In fact it may fail but
@@ -467,7 +469,7 @@ idroptarget_dragover (LPDROPTARGET This,
 
   ctx->context->suggested_action = get_suggested_action (grfKeyState);
   dnd_event_put (GDK_DRAG_MOTION, ctx->context, pt, TRUE);
-  process_pending_events ();
+  process_pending_events (gdk_device_get_display (gdk_drag_context_get_device (ctx->context)));
   *pdwEffect = drop_effect_for_action (ctx->context->action);
 
   return S_OK;
@@ -482,7 +484,7 @@ idroptarget_dragleave (LPDROPTARGET This)
   GDK_NOTE (DND, g_print ("idroptarget_dragleave %p S_OK\n", This));
 
   dnd_event_put (GDK_DRAG_LEAVE, ctx->context, pt, TRUE);
-  process_pending_events ();
+  process_pending_events (gdk_device_get_display (gdk_drag_context_get_device (ctx->context)));
 
   return S_OK;
 }
@@ -508,7 +510,7 @@ idroptarget_drop (LPDROPTARGET This,
 
   ctx->context->suggested_action = get_suggested_action (grfKeyState);
   dnd_event_put (GDK_DROP_START, ctx->context, pt, TRUE);
-  process_pending_events ();
+  process_pending_events (gdk_device_get_display (gdk_drag_context_get_device (ctx->context)));
 
   dnd_data = NULL;
 
@@ -683,7 +685,7 @@ idropsource_querycontinuedrag (LPDROPSOURCE This,
   GDK_NOTE (DND, g_print ("idropsource_querycontinuedrag %p ", This));
 
   if (send_change_events (ctx->context, grfKeyState, fEscapePressed))
-    process_pending_events ();
+    process_pending_events (gdk_device_get_display (gdk_drag_context_get_device (ctx->context)));
 
   if (_dnd_source_state == GDK_WIN32_DND_DROPPED)
     {
@@ -858,7 +860,7 @@ idataobject_getdata (LPDATAOBJECT This,
 
   GDK_NOTE (EVENTS, _gdk_win32_print_event (&e));
   gdk_event_put (&e);
-  process_pending_events ();
+  process_pending_events (gdk_device_get_display (gdk_drag_context_get_device (ctx->context)));
 
   active_pFormatEtc = NULL;
   active_pMedium = NULL;
@@ -1161,9 +1163,8 @@ target_context_new (GdkWindow *window)
   GdkDragContext *context;
   GdkWin32DragContext *context_win32;
   target_drag_context *result;
-  GdkSeat *seat;
 
-  context = gdk_drag_context_new ();
+  context = gdk_drag_context_new (gdk_window_get_display (window));
   context_win32 = GDK_WIN32_DRAG_CONTEXT (context);
 
   result = g_new0 (target_drag_context, 1);
@@ -1172,9 +1173,6 @@ target_context_new (GdkWindow *window)
 
   result->context->protocol = GDK_DRAG_PROTO_OLE2;
   result->context->is_source = FALSE;
-
-  seat = gdk_display_get_default_seat (_gdk_display);
-  gdk_drag_context_set_device (context, gdk_seat_get_pointer (seat));
 
   result->context->source_window = NULL;
 
@@ -1201,9 +1199,8 @@ source_context_new (GdkWindow *window,
   GdkDragContext *context;
   GdkWin32DragContext *context_win32;
   source_drag_context *result;
-  GdkSeat *seat;
 
-  context = gdk_drag_context_new ();
+  context = gdk_drag_context_new (gdk_window_get_display (window));
   context_win32 = GDK_WIN32_DRAG_CONTEXT (context);
 
   result = g_new0 (source_drag_context, 1);
@@ -1212,9 +1209,6 @@ source_context_new (GdkWindow *window,
 
   result->context->protocol = GDK_DRAG_PROTO_OLE2;
   result->context->is_source = TRUE;
-
-  seat = gdk_display_get_default_seat (_gdk_display);
-  gdk_drag_context_set_device (context, gdk_seat_get_pointer (seat));
 
   result->context->source_window = window;
   g_object_ref (window);
@@ -1426,18 +1420,14 @@ gdk_dropfiles_filter (GdkXEvent *xev,
   POINT pt;
   gint nfiles, i;
   gchar *fileName, *linkedFile;
-  GdkSeat *seat;
 
   if (msg->message == WM_DROPFILES)
     {
       GDK_NOTE (DND, g_print ("WM_DROPFILES: %p\n", msg->hwnd));
 
-      context = gdk_drag_context_new ();
+      context = gdk_drag_context_new (gdk_window_get_display (event->any.window));
       context->protocol = GDK_DRAG_PROTO_WIN32_DROPFILES;
       context->is_source = FALSE;
-
-      seat = gdk_display_get_default_seat (_gdk_display);
-      gdk_drag_context_set_device (context, gdk_seat_get_pointer (seat));
 
       context->source_window = gdk_get_default_root_window ();
       g_object_ref (context->source_window);
@@ -1657,7 +1647,6 @@ local_send_enter (GdkDragContext *context,
 {
   GdkEvent *tmp_event;
   GdkDragContext *new_context;
-  GdkSeat *seat;
 
   GDK_NOTE (DND, g_print ("local_send_enter: context=%p current_dest_drag=%p\n",
 			  context,
@@ -1669,12 +1658,9 @@ local_send_enter (GdkDragContext *context,
       current_dest_drag = NULL;
     }
 
-  new_context = gdk_drag_context_new ();
+  new_context = gdk_drag_context_new (gdk_window_get_display (context->source_window));
   new_context->protocol = GDK_DRAG_PROTO_LOCAL;
   new_context->is_source = FALSE;
-
-  seat = gdk_display_get_default_seat (_gdk_display);
-  gdk_drag_context_set_device (context, gdk_seat_get_pointer (seat));
 
   new_context->source_window = context->source_window;
   g_object_ref (new_context->source_window);
@@ -1816,14 +1802,10 @@ _gdk_win32_window_drag_begin (GdkWindow *window,
   if (!use_ole2_dnd)
     {
       GdkDragContext *new_context;
-      GdkSeat *seat;
 
       g_return_val_if_fail (window != NULL, NULL);
 
-      new_context = gdk_drag_context_new ();
-
-      seat = gdk_display_get_default_seat (_gdk_display);
-      gdk_drag_context_set_device (new_context, gdk_seat_get_pointer (seat));
+      new_context = gdk_drag_context_new (gdk_window_get_display (window));
 
       new_context->is_source = TRUE;
       new_context->source_window = window;
@@ -2056,7 +2038,7 @@ gdk_win32_drag_context_find_window (GdkDragContext  *context,
           g_object_ref (dest_window);
         }
       else
-        dest_window = gdk_win32_window_foreign_new_for_display (_gdk_display, a.result);
+        dest_window = gdk_win32_window_foreign_new_for_display (gdk_screen_get_display (screen), a.result);
 
       if (use_ole2_dnd)
         *protocol = GDK_DRAG_PROTO_OLE2;
