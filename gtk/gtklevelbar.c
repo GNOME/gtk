@@ -652,16 +652,18 @@ update_level_style_classes (GtkLevelBar *self)
       offset = l->data;
 
       /* find the right offset for our style class */
-      if ((l->prev == NULL && value <= offset->value) ||
-          (l->next == NULL && value >= offset->value))
+      if (value <= offset->value)
         {
-          value_class = offset->name;
-        }
-      else if (l->prev != NULL)
-        {
-          prev_offset = l->prev->data;
-          if (prev_offset->value <= value && value < offset->value)
-            value_class = offset->name;
+          if (l->prev == NULL)
+            {
+              value_class = offset->name;
+            }
+          else
+            {
+              prev_offset = l->prev->data;
+              if (prev_offset->value < value)
+                value_class = offset->name;
+            }
         }
 
       if (value_class)
