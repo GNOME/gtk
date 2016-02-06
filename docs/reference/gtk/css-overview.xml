@@ -168,8 +168,7 @@ button, entry {
     </para>
 
     <para>
-      Typically widgets have one or more CSS nodes with element names (GTK+ falls
-      back to using the widget type if a widget has no element name) and style
+      All widgets have one or more CSS nodes with element names and style
       classes. When style classes are used in selectors, they have to be prefixed
       with a period. Widget names can be used in selectors like IDs. When used
       in a selector, widget names must be prefixed with a &num; character.
@@ -214,9 +213,9 @@ notebook > entry {
     </example>
 
     <example>
-      <title>Theme any widget within a GtkBin</title>
+      <title>Theme any widget within a GtkBox</title>
       <programlisting><![CDATA[
-GtkBin * {
+box * {
   font: Sans 20
 }
 ]]></programlisting>
@@ -252,7 +251,7 @@ label#title-label {
     <example>
       <title>Theme the entry of a GtkSpinButton</title>
       <programlisting><![CDATA[
-spinbutton.entry {
+spinbutton entry {
   color: 900185;
 }
 ]]></programlisting>
@@ -368,7 +367,7 @@ checkbutton:indeterminate {
             <entry>E</entry>
             <entry>any node with name E</entry>
             <entry><ulink url="http://www.w3.org/TR/css3-selectors/#type-selectors">CSS</ulink></entry>
-            <entry>GTK+ uses the type name of the widget if no CSS name has been set</entry>
+            <entry></entry>
           </row>
           <row>
             <entry>E.class</entry>
