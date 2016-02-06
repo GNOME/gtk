@@ -260,6 +260,7 @@ static IFileDialogEventsVtbl ifde_vtbl = {
   ifiledialogevents_OnOverwrite
 };
 
+static void
 file_dialog_events_send_close (IFileDialogEvents *self)
 {
   FileDialogEvents *events = (FileDialogEvents *)self;
