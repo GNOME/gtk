@@ -184,6 +184,50 @@ gdk_window_impl_win32_finalize (GObject *object)
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
+static void
+gdk_win32_window_end_paint (GdkWindow *window)
+{
+  GdkWindowImplWin32 *impl;
+  RECT window_rect;
+  gint x, y;
+
+  if (window == NULL || GDK_WINDOW_DESTROYED (window))
+    return;
+
+  impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+
+  if (!impl->drag_move_resize_context.native_move_resize_pending)
+    return;
+
+  impl->drag_move_resize_context.native_move_resize_pending = FALSE;
+
+  gdk_window_get_position (window, &x, &y);
+  window_rect.left = x;
+  window_rect.top = y;
+  window_rect.right = window_rect.left + gdk_window_get_width (window);
+  window_rect.bottom = window_rect.top + gdk_window_get_height (window);
+
+  /* Turn client area into window area */
+  _gdk_win32_adjust_client_rect (window, &window_rect);
+
+  /* Convert GDK screen coordinates to W32 desktop coordinates */
+  window_rect.left -= _gdk_offset_x;
+  window_rect.right -= _gdk_offset_x;
+  window_rect.top -= _gdk_offset_y;
+  window_rect.bottom -= _gdk_offset_y;
+
+  GDK_NOTE (EVENTS, g_print ("Setting window position ... "));
+
+  API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window),
+                           SWP_NOZORDER_SPECIFIED,
+	                   window_rect.left, window_rect.top,
+                           window_rect.right - window_rect.left,
+                           window_rect.bottom - window_rect.top,
+	                   SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOREDRAW));
+
+  GDK_NOTE (EVENTS, g_print (" ... set window position\n"));
+}
+
 void
 _gdk_win32_adjust_client_rect (GdkWindow *window,
 			       RECT      *rect)
@@ -2639,19 +2683,272 @@ _gdk_window_get_functions (GdkWindow     *window,
 }
 
 static void
-gdk_win32_window_begin_resize_drag (GdkWindow     *window,
-                              GdkWindowEdge  edge,
-                              GdkDevice     *device,
-                              gint           button,
-                              gint           root_x,
-                              gint           root_y,
-                              guint32        timestamp)
+setup_drag_move_resize_context (GdkWindow                   *window,
+                                GdkW32DragMoveResizeContext *context,
+                                GdkW32WindowDragOp           op,
+                                GdkWindowEdge                edge,
+                                GdkDevice                   *device,
+                                gint                         button,
+                                gint                         root_x,
+                                gint                         root_y,
+                                guint32                      timestamp)
 {
-  WPARAM winedge;
+  RECT rect;
+
+  _gdk_win32_get_window_rect (window, &rect);
+
+  context->op = op;
+  context->edge = edge;
+  context->device = device;
+  context->button = button;
+  context->start_root_x = root_x;
+  context->start_root_y = root_y;
+  context->timestamp = timestamp;
+  context->start_rect = rect;
+
+  GDK_NOTE (EVENTS,
+            g_print ("begin drag moveresize: "
+                     "op %u, edge %d, device %p, "
+                     "button %d, coord %d:%d, time %u\n",
+                     context->op, context->edge, context->device,
+                     context->button, context->start_root_x,
+                     context->start_root_y, context->timestamp));
+}
+
+void
+gdk_win32_window_end_move_resize_drag (GdkWindow *window)
+{
+  GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+  GdkW32DragMoveResizeContext *context = &impl->drag_move_resize_context;
+
+  context->op = GDK_WIN32_DRAGOP_NONE;
+  GDK_NOTE (EVENTS,
+            g_print ("end drag moveresize: "
+                     "op %u, edge %d, device %p, "
+                     "button %d, coord %d:%d, time %u\n",
+                     context->op, context->edge, context->device,
+                     context->button, context->start_root_x,
+                     context->start_root_y, context->timestamp));
+}
+
+void
+gdk_win32_window_do_move_resize_drag (GdkWindow *window,
+                                      gint       x,
+                                      gint       y)
+{
+  RECT rect;
+  RECT new_rect;
+  gint diffy, diffx;
+  MINMAXINFO mmi;
+  GdkWindowImplWin32 *impl;
+  GdkW32DragMoveResizeContext *context;
+  gint width;
+  gint height;
+
+  impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+  context = &impl->drag_move_resize_context;
+
+  if (!_gdk_win32_get_window_rect (window, &rect))
+    return;
+
+  new_rect = context->start_rect;
+  diffx = x - context->start_root_x;
+  diffy = y - context->start_root_y;
+
+  switch (context->op)
+    {
+    case GDK_WIN32_DRAGOP_RESIZE:
+      switch (context->edge)
+        {
+        case GDK_WINDOW_EDGE_NORTH_WEST:
+          new_rect.left += diffx;
+          new_rect.top += diffy;
+          break;
+
+        case GDK_WINDOW_EDGE_NORTH:
+          new_rect.top += diffy;
+          break;
+
+        case GDK_WINDOW_EDGE_NORTH_EAST:
+          new_rect.right += diffx;
+          new_rect.top += diffy;
+          break;
+
+        case GDK_WINDOW_EDGE_WEST:
+          new_rect.left += diffx;
+          break;
+
+        case GDK_WINDOW_EDGE_EAST:
+          new_rect.right += diffx;
+          break;
+
+        case GDK_WINDOW_EDGE_SOUTH_WEST:
+          new_rect.left += diffx;
+          new_rect.bottom += diffy;
+          break;
+
+        case GDK_WINDOW_EDGE_SOUTH:
+          new_rect.bottom += diffy;
+          break;
+
+        case GDK_WINDOW_EDGE_SOUTH_EAST:
+        default:
+          new_rect.right += diffx;
+          new_rect.bottom += diffy;
+          break;
+        }
+
+      /* When handling WM_GETMINMAXINFO, mmi is already populated
+       * by W32 WM and we apply our stuff on top of that.
+       * Here it isn't, so we should at least clear it.
+       */
+      memset (&mmi, 0, sizeof (mmi));
+
+      if (!_gdk_win32_window_fill_min_max_info (window, &mmi))
+        break;
+
+      width = new_rect.right - new_rect.left;
+      height = new_rect.bottom - new_rect.top;
+
+      if (width > mmi.ptMaxTrackSize.x)
+        {
+          switch (context->edge)
+            {
+            case GDK_WINDOW_EDGE_NORTH_WEST:
+            case GDK_WINDOW_EDGE_WEST:
+            case GDK_WINDOW_EDGE_SOUTH_WEST:
+              new_rect.left = new_rect.right - mmi.ptMaxTrackSize.x;
+              break;
+
+            case GDK_WINDOW_EDGE_NORTH_EAST:
+            case GDK_WINDOW_EDGE_EAST:
+            case GDK_WINDOW_EDGE_SOUTH_EAST:
+            default:
+              new_rect.right = new_rect.left + mmi.ptMaxTrackSize.x;
+              break;
+            }
+        }
+      else if (width < mmi.ptMinTrackSize.x)
+        {
+          switch (context->edge)
+            {
+            case GDK_WINDOW_EDGE_NORTH_WEST:
+            case GDK_WINDOW_EDGE_WEST:
+            case GDK_WINDOW_EDGE_SOUTH_WEST:
+              new_rect.left = new_rect.right - mmi.ptMinTrackSize.x;
+              break;
+
+            case GDK_WINDOW_EDGE_NORTH_EAST:
+            case GDK_WINDOW_EDGE_EAST:
+            case GDK_WINDOW_EDGE_SOUTH_EAST:
+            default:
+              new_rect.right = new_rect.left + mmi.ptMinTrackSize.x;
+              break;
+            }
+        }
+
+      if (height > mmi.ptMaxTrackSize.y)
+        {
+          switch (context->edge)
+            {
+            case GDK_WINDOW_EDGE_NORTH_WEST:
+            case GDK_WINDOW_EDGE_NORTH:
+            case GDK_WINDOW_EDGE_NORTH_EAST:
+              new_rect.top = new_rect.bottom - mmi.ptMaxTrackSize.y;
+
+            case GDK_WINDOW_EDGE_SOUTH_WEST:
+            case GDK_WINDOW_EDGE_SOUTH:
+            case GDK_WINDOW_EDGE_SOUTH_EAST:
+            default:
+              new_rect.bottom = new_rect.top + mmi.ptMaxTrackSize.y;
+              break;
+            }
+        }
+      else if (height < mmi.ptMinTrackSize.y)
+        {
+          switch (context->edge)
+            {
+            case GDK_WINDOW_EDGE_NORTH_WEST:
+            case GDK_WINDOW_EDGE_NORTH:
+            case GDK_WINDOW_EDGE_NORTH_EAST:
+              new_rect.top = new_rect.bottom - mmi.ptMinTrackSize.y;
+
+            case GDK_WINDOW_EDGE_SOUTH_WEST:
+            case GDK_WINDOW_EDGE_SOUTH:
+            case GDK_WINDOW_EDGE_SOUTH_EAST:
+            default:
+              new_rect.bottom = new_rect.top + mmi.ptMinTrackSize.y;
+              break;
+            }
+        }
+
+      break;
+    case GDK_WIN32_DRAGOP_MOVE:
+      new_rect.left += diffx;
+      new_rect.top += diffy;
+      new_rect.right += diffx;
+      new_rect.bottom += diffy;
+      break;
+    default:
+      break;
+    }
+
+  if (context->op == GDK_WIN32_DRAGOP_RESIZE &&
+      (rect.left != new_rect.left ||
+       rect.right != new_rect.right ||
+       rect.top != new_rect.top ||
+       rect.bottom != new_rect.bottom))
+    {
+      context->native_move_resize_pending = TRUE;
+      _gdk_win32_do_emit_configure_event (window, new_rect);
+    }
+  else if (context->op == GDK_WIN32_DRAGOP_MOVE &&
+           (rect.left != new_rect.left ||
+            rect.top != new_rect.top))
+    {
+      POINT window_position;
+
+      context->native_move_resize_pending = FALSE;
+
+      _gdk_win32_do_emit_configure_event (window, new_rect);
+
+      /* Turn client area into window area */
+      _gdk_win32_adjust_client_rect (window, &new_rect);
+
+      /* Convert GDK screen coordinates to W32 desktop coordinates */
+      new_rect.left -= _gdk_offset_x;
+      new_rect.right -= _gdk_offset_x;
+      new_rect.top -= _gdk_offset_y;
+      new_rect.bottom -= _gdk_offset_y;
+
+      window_position.x = new_rect.left;
+      window_position.y = new_rect.top;
+
+      /* Move immediately, no need to wait for redraw */
+      API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window),
+                               SWP_NOZORDER_SPECIFIED,
+                               window_position.x, window_position.y,
+                               0, 0,
+                               SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOSIZE));
+    }
+}
+
+static void
+gdk_win32_window_begin_resize_drag (GdkWindow     *window,
+                                    GdkWindowEdge  edge,
+                                    GdkDevice     *device,
+                                    gint           button,
+                                    gint           root_x,
+                                    gint           root_y,
+                                    guint32        timestamp)
+{
+  GdkWindowImplWin32 *impl;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_WINDOW_DESTROYED (window) ||
+      GDK_WINDOW_TYPE (window) == GDK_WINDOW_CHILD ||
+      IsIconic (GDK_WINDOW_HWND (window)))
     return;
 
   /* Tell Windows to start interactively resizing the window by pretending that
@@ -2663,62 +2960,31 @@ gdk_win32_window_begin_resize_drag (GdkWindow     *window,
   if (button != 1)
     return;
 
-  /* Must break the automatic grab that occured when the button was
-   * pressed, otherwise it won't work.
-   */
-  gdk_device_ungrab (device, 0);
+  impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
 
-  switch (edge)
-    {
-    case GDK_WINDOW_EDGE_NORTH_WEST:
-      winedge = HTTOPLEFT;
-      break;
+  if (impl->drag_move_resize_context.op != GDK_WIN32_DRAGOP_NONE)
+    gdk_win32_window_end_move_resize_drag (window);
 
-    case GDK_WINDOW_EDGE_NORTH:
-      winedge = HTTOP;
-      break;
-
-    case GDK_WINDOW_EDGE_NORTH_EAST:
-      winedge = HTTOPRIGHT;
-      break;
-
-    case GDK_WINDOW_EDGE_WEST:
-      winedge = HTLEFT;
-      break;
-
-    case GDK_WINDOW_EDGE_EAST:
-      winedge = HTRIGHT;
-      break;
-
-    case GDK_WINDOW_EDGE_SOUTH_WEST:
-      winedge = HTBOTTOMLEFT;
-      break;
-
-    case GDK_WINDOW_EDGE_SOUTH:
-      winedge = HTBOTTOM;
-      break;
-
-    case GDK_WINDOW_EDGE_SOUTH_EAST:
-    default:
-      winedge = HTBOTTOMRIGHT;
-      break;
-    }
-
-  DefWindowProcW (GDK_WINDOW_HWND (window), WM_NCLBUTTONDOWN, winedge,
-		  MAKELPARAM (root_x - _gdk_offset_x, root_y - _gdk_offset_y));
+  setup_drag_move_resize_context (window, &impl->drag_move_resize_context,
+                                  GDK_WIN32_DRAGOP_RESIZE, edge, device,
+                                  button, root_x, root_y, timestamp);
 }
 
 static void
 gdk_win32_window_begin_move_drag (GdkWindow *window,
-                            GdkDevice *device,
-                            gint       button,
-                            gint       root_x,
-                            gint       root_y,
-                            guint32    timestamp)
+                                  GdkDevice *device,
+                                  gint       button,
+                                  gint       root_x,
+                                  gint       root_y,
+                                  guint32    timestamp)
 {
+  GdkWindowImplWin32 *impl;
+
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_WINDOW_DESTROYED (window) ||
+      GDK_WINDOW_TYPE (window) == GDK_WINDOW_CHILD ||
+      IsIconic (GDK_WINDOW_HWND (window)))
     return;
 
   /* Tell Windows to start interactively moving the window by pretending that
@@ -2730,13 +2996,14 @@ gdk_win32_window_begin_move_drag (GdkWindow *window,
   if (button != 1)
     return;
 
-  /* Must break the automatic grab that occured when the button was pressed,
-   * otherwise it won't work.
-   */
-  gdk_device_ungrab (device, 0);
+  impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
 
-  DefWindowProcW (GDK_WINDOW_HWND (window), WM_NCLBUTTONDOWN, HTCAPTION,
-		  MAKELPARAM (root_x - _gdk_offset_x, root_y - _gdk_offset_y));
+  if (impl->drag_move_resize_context.op != GDK_WIN32_DRAGOP_NONE)
+    gdk_win32_window_end_move_resize_drag (window);
+
+  setup_drag_move_resize_context (window, &impl->drag_move_resize_context,
+                                  GDK_WIN32_DRAGOP_MOVE, GDK_WINDOW_EDGE_NORTH_WEST,
+                                  device, button, root_x, root_y, timestamp);
 }
 
 
@@ -3447,6 +3714,7 @@ gdk_window_impl_win32_class_init (GdkWindowImplWin32Class *klass)
   impl_class->destroy_foreign = gdk_win32_window_destroy_foreign;
   impl_class->get_shape = gdk_win32_window_get_shape;
   //FIXME?: impl_class->get_input_shape = gdk_win32_window_get_input_shape;
+  impl_class->end_paint = gdk_win32_window_end_paint;
 
   //impl_class->beep = gdk_x11_window_beep;
 

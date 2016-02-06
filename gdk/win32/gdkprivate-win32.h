@@ -521,7 +521,19 @@ gchar *_gdk_win32_display_manager_get_atom_name (GdkDisplayManager *manager,
 void _gdk_win32_append_event (GdkEvent *event);
 void _gdk_win32_emit_configure_event (GdkWindow *window);
 
+
 guint32 _gdk_win32_keymap_get_decimal_mark (void);
+
+gboolean _gdk_win32_get_window_rect             (GdkWindow  *window,
+                                                 RECT       *rect);
+void     _gdk_win32_do_emit_configure_event     (GdkWindow  *window,
+                                                 RECT        rect);
+void      gdk_win32_window_do_move_resize_drag  (GdkWindow  *window,
+                                                 gint        x,
+                                                 gint        y);
+void      gdk_win32_window_end_move_resize_drag (GdkWindow  *window);
+gboolean _gdk_win32_window_fill_min_max_info    (GdkWindow  *window,
+                                                 MINMAXINFO *mmi);
 
 /* Initialization */
 void _gdk_win32_windowing_init (void);

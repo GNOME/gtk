@@ -46,6 +46,53 @@ typedef struct _GdkWindowImplWin32Class GdkWindowImplWin32Class;
 #define GDK_IS_WINDOW_IMPL_WIN32_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_WINDOW_IMPL_WIN32))
 #define GDK_WINDOW_IMPL_WIN32_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_WINDOW_IMPL_WIN32, GdkWindowImplWin32Class))
 
+enum _GdkW32WindowDragOp
+{
+  GDK_WIN32_DRAGOP_NONE = 0,
+  GDK_WIN32_DRAGOP_RESIZE,
+  GDK_WIN32_DRAGOP_MOVE,
+  GDK_WIN32_DRAGOP_COUNT
+};
+
+typedef enum _GdkW32WindowDragOp GdkW32WindowDragOp;
+
+struct _GdkW32DragMoveResizeContext
+{
+  /* The kind of drag-operation going on. */
+  GdkW32WindowDragOp op;
+
+  /* The edge that was grabbed for resizing. Not used for moving. */
+  GdkWindowEdge      edge;
+
+  /* Not used */
+  GdkDevice         *device;
+
+  /* Not used */
+  gint               button;
+
+  /* Initial cursor position when the operation began.
+   * Current cursor position is subtracted from it to find how far
+   * to move window border(s).
+   */
+  gint               start_root_x;
+  gint               start_root_y;
+
+  /* Initial window rectangle (position and size).
+   * The window is resized/moved relative to this (see start_root_*).
+   */
+  RECT               start_rect;
+
+  /* Not used */
+  guint32            timestamp;
+
+  /* TRUE if during the next redraw we should call SetWindowPos() to push
+   * the window size and poistion to the native window.
+   */
+  gboolean           native_move_resize_pending;
+};
+
+typedef struct _GdkW32DragMoveResizeContext GdkW32DragMoveResizeContext;
+
 struct _GdkWindowImplWin32
 {
   GdkWindowImpl parent_instance;
@@ -83,6 +130,8 @@ struct _GdkWindowImplWin32
   HDC              hdc;
   int              hdc_count;
   HBITMAP          saved_dc_bitmap; /* Original bitmap for dc */
+
+  GdkW32DragMoveResizeContext drag_move_resize_context;
 };
 
 struct _GdkWindowImplWin32Class

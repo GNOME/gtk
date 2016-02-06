@@ -1408,8 +1408,14 @@ doesnt_want_char (gint mask,
   return !(mask & (GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK));
 }
 
-void
-_gdk_win32_emit_configure_event (GdkWindow *window)
+/* Acquires actual client area size of the underlying native window.
+ * Rectangle is in GDK screen coordinates (_gdk_offset_* is added).
+ * Returns FALSE if configure events should be inhibited,
+ * TRUE otherwise.
+ */
+gboolean
+_gdk_win32_get_window_rect (GdkWindow *window,
+                            RECT      *rect)
 {
   GdkWindowImplWin32 *window_impl;
   RECT client_rect;
@@ -1417,8 +1423,6 @@ _gdk_win32_emit_configure_event (GdkWindow *window)
   HWND hwnd;
 
   window_impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
-  if (window_impl->inhibit_configure)
-    return;
 
   hwnd = GDK_WINDOW_HWND (window);
 
@@ -1434,11 +1438,23 @@ _gdk_win32_emit_configure_event (GdkWindow *window)
       point.y += _gdk_offset_y;
     }
 
-  window->width = client_rect.right - client_rect.left;
-  window->height = client_rect.bottom - client_rect.top;
+  rect->left = point.x;
+  rect->top = point.y;
+  rect->right = point.x + client_rect.right - client_rect.left;
+  rect->bottom = point.y + client_rect.bottom - client_rect.top;
 
-  window->x = point.x;
-  window->y = point.y;
+  return !window_impl->inhibit_configure;
+}
+
+void
+_gdk_win32_do_emit_configure_event (GdkWindow *window,
+                                    RECT       rect)
+{
+  window->width = rect.right - rect.left;
+  window->height = rect.bottom - rect.top;
+
+  window->x = rect.left;
+  window->y = rect.top;
 
   _gdk_window_update_size (window);
 
@@ -1448,14 +1464,25 @@ _gdk_win32_emit_configure_event (GdkWindow *window)
 
       event->configure.window = window;
 
-      event->configure.width = client_rect.right - client_rect.left;
-      event->configure.height = client_rect.bottom - client_rect.top;
+      event->configure.width = rect.right - rect.left;
+      event->configure.height = rect.bottom - rect.top;
 
-      event->configure.x = point.x;
-      event->configure.y = point.y;
+      event->configure.x = rect.left;
+      event->configure.y = rect.top;
 
       _gdk_win32_append_event (event);
     }
+}
+
+void
+_gdk_win32_emit_configure_event (GdkWindow *window)
+{
+  RECT rect;
+
+  if (!_gdk_win32_get_window_rect (window, &rect))
+    return;
+
+  _gdk_win32_do_emit_configure_event (window, rect);
 }
 
 cairo_region_t *
@@ -1874,6 +1901,76 @@ ensure_stacking_on_activate_app (MSG       *msg,
     }
 }
 
+gboolean
+_gdk_win32_window_fill_min_max_info (GdkWindow  *window,
+                                     MINMAXINFO *mmi)
+{
+  GdkWindowImplWin32 *impl;
+  RECT rect;
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return FALSE;
+
+  impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+
+  if (impl->hint_flags & GDK_HINT_MIN_SIZE)
+    {
+      rect.left = rect.top = 0;
+      rect.right = impl->hints.min_width;
+      rect.bottom = impl->hints.min_height;
+
+      _gdk_win32_adjust_client_rect (window, &rect);
+
+      mmi->ptMinTrackSize.x = rect.right - rect.left;
+      mmi->ptMinTrackSize.y = rect.bottom - rect.top;
+    }
+
+  if (impl->hint_flags & GDK_HINT_MAX_SIZE)
+    {
+      int maxw, maxh;
+
+      rect.left = rect.top = 0;
+      rect.right = impl->hints.max_width;
+      rect.bottom = impl->hints.max_height;
+
+      _gdk_win32_adjust_client_rect (window, &rect);
+
+      /* at least on win9x we have the 16 bit trouble */
+      maxw = rect.right - rect.left;
+      maxh = rect.bottom - rect.top;
+      mmi->ptMaxTrackSize.x = maxw > 0 && maxw < G_MAXSHORT ? maxw : G_MAXSHORT;
+      mmi->ptMaxTrackSize.y = maxh > 0 && maxh < G_MAXSHORT ? maxh : G_MAXSHORT;
+    }
+  else
+    {
+      HMONITOR nearest_monitor;
+      MONITORINFO nearest_info;
+
+      nearest_monitor = MonitorFromWindow (GDK_WINDOW_HWND (window), MONITOR_DEFAULTTONEAREST);
+      nearest_info.cbSize = sizeof (nearest_info);
+
+      if (GetMonitorInfoA (nearest_monitor, &nearest_info))
+        {
+          /* MSDN says that we must specify maximized window
+           * size as if it was located on the primary monitor.
+           * However, we still need to account for a taskbar
+           * that might or might not be on the nearest monitor where
+           * window will actually end up.
+           * "0" here is the top-left corner of the primary monitor.
+           */
+          mmi->ptMaxPosition.x = 0 + (nearest_info.rcWork.left - nearest_info.rcMonitor.left);
+          mmi->ptMaxPosition.y = 0 + (nearest_info.rcWork.top - nearest_info.rcMonitor.top);
+          mmi->ptMaxSize.x = nearest_info.rcWork.right - nearest_info.rcWork.left;
+          mmi->ptMaxSize.y = nearest_info.rcWork.bottom - nearest_info.rcWork.top;
+        }
+
+      mmi->ptMaxTrackSize.x = GetSystemMetrics (SM_CXMAXTRACK);
+      mmi->ptMaxTrackSize.y = GetSystemMetrics (SM_CYMAXTRACK);
+    }
+
+  return TRUE;
+}
+
 #define GDK_ANY_BUTTON_MASK (GDK_BUTTON1_MASK | \
 			     GDK_BUTTON2_MASK | \
 			     GDK_BUTTON3_MASK | \
@@ -1887,7 +1984,6 @@ gdk_event_translate (MSG  *msg,
   RECT rect, *drag, orig_drag;
   POINT point;
   MINMAXINFO *mmi;
-  LONG style;
   HWND hwnd;
   GdkCursor *cursor;
   BYTE key_state[256];
@@ -2469,7 +2565,13 @@ gdk_event_translate (MSG  *msg,
       current_root_x = msg->pt.x + _gdk_offset_x;
       current_root_y = msg->pt.y + _gdk_offset_y;
 
-      if (!_gdk_input_ignore_core)
+      impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+
+      if (impl->drag_move_resize_context.op != GDK_WIN32_DRAGOP_NONE)
+        {
+          gdk_win32_window_do_move_resize_drag (window, current_root_x, current_root_y);
+        }
+      else if (!_gdk_input_ignore_core)
 	{
 	  event = gdk_event_new (GDK_MOTION_NOTIFY);
 	  event->motion.window = window;
@@ -2775,6 +2877,11 @@ gdk_event_translate (MSG  *msg,
 	  _modal_move_resize_window = NULL;
 	  _gdk_win32_end_modal_call ();
 	}
+
+      impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+
+      if (impl->drag_move_resize_context.op != GDK_WIN32_DRAGOP_NONE)
+        gdk_win32_window_end_move_resize_drag (window);
       break;
 
     case WM_WINDOWPOSCHANGING:
@@ -3130,11 +3237,8 @@ gdk_event_translate (MSG  *msg,
       break;
 
     case WM_GETMINMAXINFO:
-      if (GDK_WINDOW_DESTROYED (window))
-	break;
-
-      impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
       mmi = (MINMAXINFO*) msg->lParam;
+
       GDK_NOTE (EVENTS, g_print (" (mintrack:%ldx%ld maxtrack:%ldx%ld "
 				 "maxpos:%+ld%+ld maxsize:%ldx%ld)",
 				 mmi->ptMinTrackSize.x, mmi->ptMinTrackSize.y,
@@ -3142,79 +3246,20 @@ gdk_event_translate (MSG  *msg,
 				 mmi->ptMaxPosition.x, mmi->ptMaxPosition.y,
 				 mmi->ptMaxSize.x, mmi->ptMaxSize.y));
 
-      style = GetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE);
+      if (_gdk_win32_window_fill_min_max_info (window, mmi))
+        {
+          /* Don't call DefWindowProcW() */
+          GDK_NOTE (EVENTS,
+                    g_print (" (handled, mintrack:%ldx%ld maxtrack:%ldx%ld "
+                             "maxpos:%+ld%+ld maxsize:%ldx%ld)",
+                             mmi->ptMinTrackSize.x, mmi->ptMinTrackSize.y,
+                             mmi->ptMaxTrackSize.x, mmi->ptMaxTrackSize.y,
+                             mmi->ptMaxPosition.x, mmi->ptMaxPosition.y,
+                             mmi->ptMaxSize.x, mmi->ptMaxSize.y));
 
-      if (impl->hint_flags & GDK_HINT_MIN_SIZE)
-	{
-	  rect.left = rect.top = 0;
-	  rect.right = impl->hints.min_width;
-	  rect.bottom = impl->hints.min_height;
+          return_val = TRUE;
+        }
 
-	  _gdk_win32_adjust_client_rect (window, &rect);
-
-	  mmi->ptMinTrackSize.x = rect.right - rect.left;
-	  mmi->ptMinTrackSize.y = rect.bottom - rect.top;
-	}
-
-      if (impl->hint_flags & GDK_HINT_MAX_SIZE)
-	{
-	  int maxw, maxh;
-
-	  rect.left = rect.top = 0;
-	  rect.right = impl->hints.max_width;
-	  rect.bottom = impl->hints.max_height;
-
-	  _gdk_win32_adjust_client_rect (window, &rect);
-
-	  /* at least on win9x we have the 16 bit trouble */
-	  maxw = rect.right - rect.left;
-	  maxh = rect.bottom - rect.top;
-	  mmi->ptMaxTrackSize.x = maxw > 0 && maxw < G_MAXSHORT ? maxw : G_MAXSHORT;
-	  mmi->ptMaxTrackSize.y = maxh > 0 && maxh < G_MAXSHORT ? maxh : G_MAXSHORT;
-	}
-      /* Assume that these styles are incompatible with CSD,
-       * so there's no reason for us to override the defaults.
-       */
-      else if ((style & (WS_BORDER | WS_THICKFRAME)) == 0)
-	{
-	  HMONITOR nearest_monitor;
-	  MONITORINFO nearest_info;
-
-	  nearest_monitor = MonitorFromWindow (GDK_WINDOW_HWND (window), MONITOR_DEFAULTTONEAREST);
-	  nearest_info.cbSize = sizeof (nearest_info);
-
-	  if (GetMonitorInfoA (nearest_monitor, &nearest_info))
-	    {
-	      /* MSDN says that we must specify maximized window
-	       * size as if it was located on the primary monitor.
-	       * However, we still need to account for a taskbar
-	       * that might or might not be on the nearest monitor where
-	       * window will actually end up.
-               * "0" here is the top-left corner of the primary monitor.
-	       */
-	      mmi->ptMaxPosition.x = 0 + (nearest_info.rcWork.left - nearest_info.rcMonitor.left);
-	      mmi->ptMaxPosition.y = 0 + (nearest_info.rcWork.top - nearest_info.rcMonitor.top);
-	      mmi->ptMaxSize.x = nearest_info.rcWork.right - nearest_info.rcWork.left;
-	      mmi->ptMaxSize.y = nearest_info.rcWork.bottom - nearest_info.rcWork.top;
-	    }
-
-	  mmi->ptMaxTrackSize.x = GetSystemMetrics (SM_CXMAXTRACK);
-	  mmi->ptMaxTrackSize.y = GetSystemMetrics (SM_CYMAXTRACK);
-	}
-
-      if (impl->hint_flags & (GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE))
-	{
-	  /* Don't call DefWindowProcW() */
-	  GDK_NOTE (EVENTS, g_print (" (handled, mintrack:%ldx%ld maxtrack:%ldx%ld "
-				     "maxpos:%+ld%+ld maxsize:%ldx%ld)",
-				     mmi->ptMinTrackSize.x, mmi->ptMinTrackSize.y,
-				     mmi->ptMaxTrackSize.x, mmi->ptMaxTrackSize.y,
-				     mmi->ptMaxPosition.x, mmi->ptMaxPosition.y,
-				     mmi->ptMaxSize.x, mmi->ptMaxSize.y));
-	  return_val = TRUE;
-	}
-
-      return_val = TRUE;
       break;
 
     case WM_CLOSE:
