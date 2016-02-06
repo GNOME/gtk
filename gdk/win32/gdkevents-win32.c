@@ -139,20 +139,6 @@ static int debug_indent = 0;
 static int both_shift_pressed[2]; /* to store keycodes for shift keys */
 
 static void
-assign_object (gpointer lhsp,
-	       gpointer rhs)
-{
-  if (*(gpointer *)lhsp != rhs)
-    {
-      if (*(gpointer *)lhsp != NULL)
-	g_object_unref (*(gpointer *)lhsp);
-      *(gpointer *)lhsp = rhs;
-      if (rhs != NULL)
-	g_object_ref (rhs);
-    }
-}
-
-static void
 track_mouse_event (DWORD dwFlags,
 		   HWND  hwnd)
 {
@@ -1345,7 +1331,7 @@ propagate (GdkWindow  **window,
       else
 	{
 	  GDK_NOTE (EVENTS, g_print (" (to grabber)"));
-	  assign_object (window, grab_window);
+	  g_set_object (window, grab_window);
 	  return TRUE;
 	}
     }
@@ -1376,7 +1362,7 @@ propagate (GdkWindow  **window,
 		    {
 		      /* Grabbed! */
 		      GDK_NOTE (EVENTS, g_print (" (to grabber)"));
-		      assign_object (window, grab_window);
+		      g_set_object (window, grab_window);
 		      return TRUE;
 		    }
 		}
@@ -1388,7 +1374,7 @@ propagate (GdkWindow  **window,
 	    }
 	  else
 	    {
-	      assign_object (window, parent);
+	      g_set_object (window, parent);
 	      /* The only branch where we actually continue the loop */
 	    }
 	}
@@ -2322,7 +2308,7 @@ gdk_event_translate (MSG  *msg,
 		g_print (" (%d,%d)",
 			 GET_X_LPARAM (msg->lParam), GET_Y_LPARAM (msg->lParam)));
 
-      assign_object (&window, find_window_for_mouse_event (window, msg));
+      g_set_object (&window, find_window_for_mouse_event (window, msg));
       /* TODO_CSW?: there used to some synthesize and propagate */
       if (GDK_WINDOW_DESTROYED (window))
 	break;
@@ -2361,7 +2347,7 @@ gdk_event_translate (MSG  *msg,
 		g_print (" (%d,%d)",
 			 GET_X_LPARAM (msg->lParam), GET_Y_LPARAM (msg->lParam)));
 
-      assign_object (&window, find_window_for_mouse_event (window, msg));
+      g_set_object (&window, find_window_for_mouse_event (window, msg));
 
       if (pointer_grab != NULL && pointer_grab->implicit)
 	{
@@ -2390,7 +2376,7 @@ gdk_event_translate (MSG  *msg,
 					  0, /* TODO: Set right mask */
 					  msg->time,
 					  FALSE);
-	      assign_object (&mouse_window, new_window);
+	      g_set_object (&mouse_window, new_window);
 	      mouse_window_ignored_leave = NULL;
 	    }
 	}
@@ -2444,7 +2430,7 @@ gdk_event_translate (MSG  *msg,
 				      0, /* TODO: Set right mask */
 				      msg->time,
 				      FALSE);
-	  assign_object (&mouse_window, new_window);
+	  g_set_object (&mouse_window, new_window);
 	  mouse_window_ignored_leave = NULL;
 	  if (new_window != NULL)
 	    track_mouse_event (TME_LEAVE, GDK_WINDOW_HWND (new_window));
@@ -2459,7 +2445,7 @@ gdk_event_translate (MSG  *msg,
 	  track_mouse_event (TME_LEAVE, GDK_WINDOW_HWND (new_window));
 	}
 
-      assign_object (&window, find_window_for_mouse_event (window, msg));
+      g_set_object (&window, find_window_for_mouse_event (window, msg));
 
       /* If we haven't moved, don't create any GDK event. Windows
        * sends WM_MOUSEMOVE messages after a new window is shows under
@@ -2535,7 +2521,7 @@ gdk_event_translate (MSG  *msg,
 				    0, /* TODO: Set right mask */
 				    msg->time,
 				    FALSE);
-      assign_object (&mouse_window, new_window);
+      g_set_object (&mouse_window, new_window);
       mouse_window_ignored_leave = ignore_leave ? new_window : NULL;
 
 
@@ -2587,7 +2573,7 @@ gdk_event_translate (MSG  *msg,
 
       if (new_window != window)
 	{
-	  assign_object (&window, new_window);
+	  g_set_object (&window, new_window);
 	}
 
       ScreenToClient (msg->hwnd, &point);
