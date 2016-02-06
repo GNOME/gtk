@@ -530,7 +530,8 @@ hcursor_from_name (GdkDisplay  *display,
 }
 
 static GdkCursor*
-cursor_new_from_hcursor (HCURSOR        hcursor,
+cursor_new_from_hcursor (GdkDisplay    *display,
+                         HCURSOR        hcursor,
 			 const gchar   *name,
 			 GdkCursorType  cursor_type)
 {
@@ -539,7 +540,7 @@ cursor_new_from_hcursor (HCURSOR        hcursor,
 
   private = g_object_new (GDK_TYPE_WIN32_CURSOR,
                           "cursor-type", cursor_type,
-                          "display", _gdk_display,
+                          "display", display,
 			  NULL);
 
   private->name = g_strdup (name);
@@ -662,7 +663,7 @@ _gdk_win32_display_get_cursor_for_type (GdkDisplay   *display,
     GDK_NOTE (CURSOR, g_print ("gdk_cursor_new_for_display: %d: %p\n",
 			       cursor_type, hcursor));
 
-  result = cursor_new_from_hcursor (hcursor, cursor_name, cursor_type);
+  result = cursor_new_from_hcursor (display, hcursor, cursor_name, cursor_type);
 
   if (result == NULL)
     return result;
@@ -705,7 +706,7 @@ _gdk_win32_display_get_cursor_for_name (GdkDisplay  *display,
   if (hcursor == NULL)
     return NULL;
 
-  result = cursor_new_from_hcursor (hcursor, name, GDK_X_CURSOR);
+  result = cursor_new_from_hcursor (display, hcursor, name, GDK_X_CURSOR);
 
   /* Blank cursor case */
   if (!name ||
@@ -927,7 +928,6 @@ _gdk_win32_display_get_cursor_for_surface (GdkDisplay      *display,
   GdkPixbuf *pixbuf;
   gint width, height;
 
-  g_return_val_if_fail (display == _gdk_display, NULL);
   g_return_val_if_fail (surface != NULL, NULL);
 
   width = cairo_image_surface_get_width (surface);
@@ -947,32 +947,26 @@ _gdk_win32_display_get_cursor_for_surface (GdkDisplay      *display,
   g_object_unref (pixbuf);
   if (!hcursor)
     return NULL;
-  return cursor_new_from_hcursor (hcursor, NULL, GDK_CURSOR_IS_PIXMAP);
+  return cursor_new_from_hcursor (display, hcursor, NULL, GDK_CURSOR_IS_PIXMAP);
 }
 
 gboolean
 _gdk_win32_display_supports_cursor_alpha (GdkDisplay    *display)
 {
-  g_return_val_if_fail (display == _gdk_display, FALSE);
-
   return TRUE;
 }
 
 gboolean
 _gdk_win32_display_supports_cursor_color (GdkDisplay    *display)
 {
-  g_return_val_if_fail (display == _gdk_display, FALSE);
-
   return TRUE;
 }
 
 void
 _gdk_win32_display_get_default_cursor_size (GdkDisplay *display,
-					    guint       *width,
-					    guint       *height)
+					    guint      *width,
+					    guint      *height)
 {
-  g_return_if_fail (display == _gdk_display);
-
   /* TODO: Use per-monitor DPI functions (8.1 and newer) or
    * calculate DPI ourselves and use that, assuming that 72 dpi
    * corresponds to 32x32 cursors. Take into account that DPI
@@ -990,8 +984,6 @@ _gdk_win32_display_get_maximal_cursor_size (GdkDisplay *display,
 					    guint       *width,
 					    guint       *height)
 {
-  g_return_if_fail (display == _gdk_display);
-
   if (width)
     *width = GetSystemMetrics (SM_CXCURSOR);
   if (height)
