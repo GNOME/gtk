@@ -159,7 +159,9 @@ test_match (void)
   gtk_widget_path_append_type (path, GTK_TYPE_WINDOW);
   gtk_widget_path_append_type (path, GTK_TYPE_BOX);
   gtk_widget_path_append_type (path, GTK_TYPE_BUTTON);
+  gtk_widget_path_iter_set_object_name (path, 0, "window");
   gtk_widget_path_iter_set_name (path, 0, "mywindow");
+  gtk_widget_path_iter_set_object_name (path, 2, "button");
   gtk_widget_path_iter_add_class (path, 2, "button");
   gtk_widget_path_iter_set_state (path, 0, GTK_STATE_FLAG_ACTIVE);
   gtk_style_context_set_path (context, path);
@@ -176,15 +178,15 @@ test_match (void)
   g_assert (gdk_rgba_equal (&color, &expected));
 
   data = "* { color: #f00 }\n"
-         "GtkButton { color: #fff }";
+         "button { color: #fff }";
   gtk_css_provider_load_from_data (provider, data, -1, &error);
   g_assert_no_error (error);
   gtk_style_context_get_color (context, gtk_style_context_get_state (context), &color);
   g_assert (gdk_rgba_equal (&color, &expected));
 
   data = "* { color: #f00 }\n"
-         "GtkButton { color: #fff }\n"
-         "GtkWindow > GtkButton { color: #000 }";
+         "button { color: #fff }\n"
+         "window > button { color: #000 }";
   gtk_css_provider_load_from_data (provider, data, -1, &error);
   g_assert_no_error (error);
   gtk_style_context_get_color (context, gtk_style_context_get_state (context), &color);
@@ -198,7 +200,7 @@ test_match (void)
   g_assert (gdk_rgba_equal (&color, &expected));
 
   data = "* { color: #f00 }\n"
-         "GtkButton { color: #000 }\n"
+         "button { color: #000 }\n"
          ".button { color: #fff }";
   gtk_css_provider_load_from_data (provider, data, -1, &error);
   g_assert_no_error (error);
@@ -206,8 +208,8 @@ test_match (void)
   g_assert (gdk_rgba_equal (&color, &expected));
 
   data = "* { color: #f00 }\n"
-         "GtkButton { color: #000 }\n"
-         "GtkWindow GtkButton { color: #fff }";
+         "button { color: #000 }\n"
+         "window button { color: #fff }";
   gtk_css_provider_load_from_data (provider, data, -1, &error);
   g_assert_no_error (error);
   gtk_style_context_get_color (context, gtk_style_context_get_state (context), &color);
@@ -215,7 +217,7 @@ test_match (void)
 
   data = "* { color: #f00 }\n"
          ".button { color: #000 }\n"
-         "GtkWindow .button { color: #fff }";
+         "window .button { color: #fff }";
   gtk_css_provider_load_from_data (provider, data, -1, &error);
   g_assert_no_error (error);
   gtk_style_context_get_color (context, gtk_style_context_get_state (context), &color);
@@ -230,25 +232,25 @@ test_match (void)
   g_assert (gdk_rgba_equal (&color, &expected));
 
   data = "* { color: #f00 }\n"
-         "GtkWindow .button { color: #000 }\n"
-         "GtkWindow#mywindow .button { color: #fff }";
+         "window .button { color: #000 }\n"
+         "window#mywindow .button { color: #fff }";
   gtk_css_provider_load_from_data (provider, data, -1, &error);
   g_assert_no_error (error);
   gtk_style_context_get_color (context, gtk_style_context_get_state (context), &color);
   g_assert (gdk_rgba_equal (&color, &expected));
 
   data = "* { color: #f00 }\n"
-         "GtkWindow .button { color: #000 }\n"
-         "GObject .button { color: #fff }";
+         "window .button { color: #000 }\n"
+         "window button.button { color: #fff }";
   gtk_css_provider_load_from_data (provider, data, -1, &error);
   g_assert_no_error (error);
   gtk_style_context_get_color (context, gtk_style_context_get_state (context), &color);
   g_assert (gdk_rgba_equal (&color, &expected));
 
   data = "* { color: #f00 }\n"
-         "GtkWindow:backdrop .button { color: #000 }\n"
-         "GtkWindow .button { color: #111 }\n"
-         "GtkWindow:active .button { color: #fff }";
+         "window:backdrop .button { color: #000 }\n"
+         "window .button { color: #111 }\n"
+         "window:active .button { color: #fff }";
   gtk_css_provider_load_from_data (provider, data, -1, &error);
   g_assert_no_error (error);
   gtk_style_context_get_color (context, gtk_style_context_get_state (context), &color);
