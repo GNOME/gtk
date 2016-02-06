@@ -42,6 +42,7 @@ struct _GtkIconHelperPrivate {
 
   guint use_fallback : 1;
   guint force_scale_pixbuf : 1;
+  guint rendered_surface_is_symbolic : 1;
 
   cairo_surface_t *rendered_surface;
 };
@@ -55,6 +56,7 @@ gtk_icon_helper_invalidate (GtkIconHelper *self)
     {
       cairo_surface_destroy (self->priv->rendered_surface);
       self->priv->rendered_surface = NULL;
+      self->priv->rendered_surface_is_symbolic = FALSE;
     }
 
   if (!GTK_IS_CSS_TRANSIENT_NODE (gtk_css_gadget_get_node (GTK_CSS_GADGET (self))))
@@ -205,6 +207,7 @@ gtk_icon_helper_init (GtkIconHelper *self)
 
   self->priv->icon_size = GTK_ICON_SIZE_INVALID;
   self->priv->pixel_size = -1;
+  self->priv->rendered_surface_is_symbolic = FALSE;
 }
 
 static void
@@ -419,6 +422,7 @@ ensure_surface_for_gicon (GtkIconHelper    *self,
                           gint              scale,
                           GIcon            *gicon)
 {
+  GtkIconHelperPrivate *priv = self->priv;
   GtkIconTheme *icon_theme;
   gint width, height;
   GtkIconInfo *info;
@@ -487,6 +491,11 @@ ensure_surface_for_gicon (GtkIconHelper    *self,
       icon_effect = _gtk_css_icon_effect_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_EFFECT));
       gtk_css_icon_effect_apply (icon_effect, surface);
     }
+  else
+    {
+      priv->rendered_surface_is_symbolic = TRUE;
+    }
+
   g_object_unref (destination);
 
   return surface;
