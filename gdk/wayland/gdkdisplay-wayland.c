@@ -276,12 +276,14 @@ gdk_registry_handle_global (void               *data,
     }
   else if (strcmp (interface, "gtk_shell") == 0)
     {
-      if (version == SUPPORTED_GTK_SHELL_VERSION)
+      if (version >= MINIMUM_GTK_SHELL_VERSION)
         {
+          version = MIN (version, SUPPORTED_GTK_SHELL_VERSION);
           display_wayland->gtk_shell =
             wl_registry_bind(display_wayland->wl_registry, id,
-                             &gtk_shell_interface, SUPPORTED_GTK_SHELL_VERSION);
+                             &gtk_shell_interface, version);
           _gdk_wayland_screen_set_has_gtk_shell (display_wayland->screen);
+          display_wayland->gtk_shell_version = version;
         }
     }
   else if (strcmp (interface, "wl_output") == 0)
@@ -557,6 +559,30 @@ gdk_wayland_display_flush (GdkDisplay *display)
     wl_display_flush (GDK_WAYLAND_DISPLAY (display)->wl_display);
 }
 
+static void
+gdk_wayland_display_make_default (GdkDisplay *display)
+{
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+  const gchar *startup_id;
+
+  g_free (display_wayland->startup_notification_id);
+  display_wayland->startup_notification_id = NULL;
+
+  startup_id = g_getenv ("DESKTOP_STARTUP_ID");
+  if (startup_id && *startup_id != '\0')
+    {
+      if (!g_utf8_validate (startup_id, -1, NULL))
+        g_warning ("DESKTOP_STARTUP_ID contains invalid UTF-8");
+      else
+        display_wayland->startup_notification_id = g_strdup (startup_id);
+
+      /* Clear the environment variable so it won't be inherited by
+       * child processes and confuse things.
+       */
+      g_unsetenv ("DESKTOP_STARTUP_ID");
+    }
+}
+
 static gboolean
 gdk_wayland_display_has_pending (GdkDisplay *display)
 {
@@ -649,6 +675,22 @@ static void
 gdk_wayland_display_notify_startup_complete (GdkDisplay  *display,
 					     const gchar *startup_id)
 {
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+  gchar *free_this = NULL;
+
+  if (startup_id == NULL)
+    {
+      startup_id = free_this = display_wayland->startup_notification_id;
+      display_wayland->startup_notification_id = NULL;
+
+      if (startup_id == NULL)
+        return;
+    }
+
+  if (display_wayland->gtk_shell_version >= GTK_SHELL_HAS_SET_STARTUP_ID)
+    gtk_shell_set_startup_id (display_wayland->gtk_shell, startup_id);
+
+  g_free (free_this);
 }
 
 static GdkKeymap *
@@ -701,6 +743,7 @@ gdk_wayland_display_class_init (GdkWaylandDisplayClass *class)
   display_class->beep = gdk_wayland_display_beep;
   display_class->sync = gdk_wayland_display_sync;
   display_class->flush = gdk_wayland_display_flush;
+  display_class->make_default = gdk_wayland_display_make_default;
   display_class->has_pending = gdk_wayland_display_has_pending;
   display_class->queue_events = _gdk_wayland_display_queue_events;
   display_class->get_default_group = gdk_wayland_display_get_default_group;

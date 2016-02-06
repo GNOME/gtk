@@ -94,6 +94,7 @@ struct _GdkWaylandDisplay
   int compositor_version;
   int seat_version;
   int data_device_manager_version;
+  int gtk_shell_version;
 
   struct xkb_context *xkb_context;
 
