@@ -41,7 +41,7 @@ frame {
     border-image: -gtk-win32-theme-part(button, 4 1) 2 2 2 2 stretch;
 }
 
-*:insensitive {
+*:disabled {
     color: -gtk-win32-color(button, 17);
 }
 
@@ -82,7 +82,7 @@ frame {
 
 .dark-area-focus {
     color: #fff;
-:%s/}
+}
 
 notebook > scrolledwindow.frame {
     border-style: none;
@@ -106,7 +106,7 @@ scrolledwindow.frame {
   color: @fg_color;
 }
 
-.view:selected:focused {
+.view:selected:focus {
   background-color: @selected_bg_color;
   color: @selected_fg_color;
 }
@@ -139,20 +139,20 @@ button {
     padding: 3px;
 }
 
-button:insensitive {
+button:disabled {
     background-image: -gtk-win32-theme-part(button, 1 4);
 }
 
-button:focused {
+button:focus {
     background-image: -gtk-win32-theme-part(button, 1 5);
 }
 
-button:prelight, button:prelight:focused {
+button:hover, button:hover:focus {
     background-image: -gtk-win32-theme-part(button, 1 2);
     color: @text_color;
 }
 
-button:active, button:active:focused, button:active:focused:prelight {
+button:active, button:active:focus, button:active:focus:hover {
     background-image: -gtk-win32-theme-part(button, 1 3);
     color: @text_color;
 }
@@ -165,27 +165,27 @@ button:selected {
 /* Checkbuttons */
 
 /* Prevent selected check/radiobuttons from getting the "selected" blue background */
-button.check:prelight:selected,
-button.radio:prelight:selected {
+button.check:hover:selected,
+button.radio:hover:selected {
   background-color: transparent;
 }
 
 /* This is meaningless, it just enables prelight propagation to check/radio mark */
 button.check,
 button.radio,
-button.check:prelight,
-button.radio:prelight {
+button.check:hover,
+button.radio:hover {
   background-image: -gtk-gradient (linear, left top, right bottom, from(transparent), to(transparent));
 }
 
-.check:focused,
+.check:focus,
 .check {
     background-color: transparent;
     background-image: -gtk-win32-theme-part(button, 3 1);
     border-width: 0;
 }
 
-.check:insensitive {
+.check:disabled {
     background-image: -gtk-win32-theme-part(button, 3 4);
 }
 
@@ -193,36 +193,36 @@ button.radio:prelight {
    in a listview where all checkboxes in a row gets prelighted
    whenever the row is prelighted */
 
-button.check:focused:prelight,
-button.check:prelight {
+button.check:focus:hover,
+button.check:hover {
     background-image: -gtk-win32-theme-part(button, 3 2);
 }
 
-check:focused:active,
+check:focus:active,
 check:active {
     background-image: -gtk-win32-theme-part(button, 3 5);
 }
 
-check:active:insensitive {
+check:active:disabled {
     background-image: -gtk-win32-theme-part(button, 3 8);
 }
 
-button.check:focused:active:prelight,
-button.check:active:prelight {
+button.check:focus:active:hover,
+button.check:active:hover {
     background-image: -gtk-win32-theme-part(button, 3 6);
 }
 
-check:focused:inconsistent,
-check:inconsistent {
+check:focus:indeterminate,
+check:indeterminate {
     background-image: -gtk-win32-theme-part(button, 3 9);
 }
 
-check:inconsistent:insensitive {
+check:indeterminate:disabled {
     background-image: -gtk-win32-theme-part(button, 3 12);
 }
 
-check:focused:inconsistent:prelight,
-check:inconsistent:prelight {
+check:focus:indeterminate:hover,
+check:indeterminate:hover {
     background-image: -gtk-win32-theme-part(button, 3 10);
 }
 
@@ -238,11 +238,11 @@ radio {
     border-width: 0;
 }
 
-radio:insensitive {
+radio:disabled {
     background-image: -gtk-win32-theme-part(button, 2 4);
 }
 
-radio:prelight {
+radio:hover {
     background-image: -gtk-win32-theme-part(button, 2 2);
 }
 
@@ -250,23 +250,23 @@ radio:active {
     background-image: -gtk-win32-theme-part(button, 2 5);
 }
 
-radio:active:insensitive {
+radio:active:disabled {
     background-image: -gtk-win32-theme-part(button, 2 8);
 }
 
-radio:active:prelight {
+radio:active:hover {
     background-image: -gtk-win32-theme-part(button, 2 6);
 }
 
-radio:inconsistent {
+radio:indeterminate {
     background-image: -gtk-win32-theme-part(button, 2 1, over (2 5, 0.3));
 }
 
-radio:inconsistent:insensitive {
+radio:indeterminate:disabled {
     background-image: -gtk-win32-theme-part(button, 2 4, over (2 8, 0.3));
 }
 
-radio:inconsistent:prelight {
+radio:indeterminate:hover {
     background-image: -gtk-win32-theme-part(button, 2 4, over(2 6, 0.3));
 }
 
@@ -294,16 +294,16 @@ scrollbar button.bottom {
     background-image: -gtk-win32-theme-part(scrollbar, 1 5);
 }
 
-scrollbar button.bottom:prelight {
+scrollbar button.bottom:hover {
     background-image: -gtk-win32-theme-part(scrollbar, 1 6);
 }
 
 scrollbar button.bottom:active,
-scrollbar button.bottom:active:prelight {
+scrollbar button.bottom:active:hover {
     background-image: -gtk-win32-theme-part(scrollbar, 1 7);
 }
 
-scrollbar button.bottom:insensitive {
+scrollbar button.bottom:disabled {
     background-image: -gtk-win32-theme-part(scrollbar, 1 8);
 }
 
@@ -311,16 +311,16 @@ scrollbar button.top {
     background-image: -gtk-win32-theme-part(scrollbar, 1 1);
 }
 
-scrollbar button.top:prelight {
+scrollbar button.top:hover {
     background-image: -gtk-win32-theme-part(scrollbar, 1 2);
 }
 
 scrollbar button.top:active,
-scrollbar button.top:active:prelight {
+scrollbar button.top:active:hover {
     background-image: -gtk-win32-theme-part(scrollbar, 1 3);
 }
 
-scrollbar button.top:insensitive {
+scrollbar button.top:disabled {
     background-image: -gtk-win32-theme-part(scrollbar, 1 4);
 }
 
@@ -328,16 +328,16 @@ scrollbar button.left {
     background-image: -gtk-win32-theme-part(scrollbar, 1 9);
 }
 
-scrollbar button.left:prelight {
+scrollbar button.left:hover {
     background-image: -gtk-win32-theme-part(scrollbar, 1 10);
 }
 
 scrollbar button.left:active,
-scrollbar button.left:active:prelight {
+scrollbar button.left:active:hover {
     background-image: -gtk-win32-theme-part(scrollbar, 1 11);
 }
 
-scrollbar button.left:insensitive {
+scrollbar button.left:disabled {
     background-image: -gtk-win32-theme-part(scrollbar, 1 12);
 }
 
@@ -345,16 +345,16 @@ scrollbar button.right {
     background-image: -gtk-win32-theme-part(scrollbar, 1 13);
 }
 
-scrollbar button.right:prelight {
+scrollbar button.right:hover {
     background-image: -gtk-win32-theme-part(scrollbar, 1 14);
 }
 
 scrollbar button.right:active,
-scrollbar button.right:active:prelight {
+scrollbar button.right:active:hover {
     background-image: -gtk-win32-theme-part(scrollbar, 1 15);
 }
 
-scrollbar button.right:insensitive {
+scrollbar button.right:disabled {
     background-image: -gtk-win32-theme-part(scrollbar, 1 16);
 }
 
@@ -373,7 +373,7 @@ scrollbar slider {
     background-image: -gtk-win32-theme-part(scrollbar, 2 1, over (8 1));
 }
 
-scrollbar slider:prelight {
+scrollbar slider:hover {
     background-image: -gtk-win32-theme-part(scrollbar, 2 2, over (8 2));
 }
 
@@ -381,7 +381,7 @@ scrollbar slider:active {
     background-image: -gtk-win32-theme-part(scrollbar, 2 3, over (8 3));
 }
 
-scrollbar slider:insensitive {
+scrollbar slider:disabled {
   /* There's a theme part for "disabled slider", but the only app observed
      to have a disabled scrollbar (Notepad) does not draw its slider at all
      when scrollbar is disabled. */
@@ -393,7 +393,7 @@ scrollbar.vertical slider {
     background-image: -gtk-win32-theme-part(scrollbar, 3 1, over (9 1));
 }
 
-scrollbar.vertical slider:prelight {
+scrollbar.vertical slider:hover {
     background-image: -gtk-win32-theme-part(scrollbar, 3 2, over (9 2));
 }
 
@@ -401,7 +401,7 @@ scrollbar.vertical slider:active {
     background-image: -gtk-win32-theme-part(scrollbar, 3 3, over (9 3));
 }
 
-scrollbar.vertical slider:insensitive {
+scrollbar.vertical slider:disabled {
   background-image: none;
   background-color: transparent;
 }
@@ -418,16 +418,16 @@ entry {
     background-image: -gtk-win32-theme-part(edit, 6 1, margins(-1 -1 -1 -1));
     padding: 2px;
 }
-entry:insensitive {
+entry:disabled {
     border-image: -gtk-win32-theme-part(edit, 6 4)  1 1 1 1 stretch;
     background-image: -gtk-win32-theme-part(edit, 6 4, margins(-1 -1 -1 -1));
     color: #a7aba7;
 }
-entry:prelight {
+entry:hover {
     border-image: -gtk-win32-theme-part(edit, 6 2)  1 1 1 1 stretch;
     background-image: -gtk-win32-theme-part(edit, 6 2, margins(-1 -1 -1 -1));
 }
-entry:focused {
+entry:focus {
     border-image: -gtk-win32-theme-part(edit, 6 3)  1 1 1 1 stretch;
     background-image: -gtk-win32-theme-part(edit, 6 3, margins(-1 -1 -1 -1));
 }
@@ -435,142 +435,142 @@ entry:focused {
 /* Spibuttons */
 
 spinbutton button,
-spinbutton button:focused {
+spinbutton button:focus {
     background-color: transparent;
     background-image: -gtk-win32-theme-part(spin, 2 1, margins(0 -1 -1 -1));
     color: rgba(0, 0, 0, 0);
 }
 
 spinbutton button:last-child,
-spinbutton button:focused:last-child {
+spinbutton button:focus:last-child {
     background-image: -gtk-win32-theme-part(spin, 1 1, margins(-1 -1 0 -1));
 }
 
-spinbutton button:prelight,
-spinbutton button:prelight:focused {
+spinbutton button:hover,
+spinbutton button:hover:focus {
     background-image: -gtk-win32-theme-part(spin, 2 2, margins(0 -1 -1 -1));
 }
 
-spinbutton button:prelight:last-child,
-spinbutton button:prelight:focused:last-child {
+spinbutton button:hover:last-child,
+spinbutton button:hover:focus:last-child {
     background-image: -gtk-win32-theme-part(spin, 1 2, margins(-1 -1 0 -1));
 }
 
 
 spinbutton button:active,
-spinbutton button:active:prelight,
-spinbutton button:active:focused,
-spinbutton button:active:prelight:focused {
+spinbutton button:active:hover,
+spinbutton button:active:focus,
+spinbutton button:active:hover:focus {
     background-image: -gtk-win32-theme-part(spin, 2 3, margins(0 -1 -1 -1));
 }
 
 spinbutton button:active:last-child,
-spinbutton button:active:prelight:last-child,
-spinbutton button:active:focused:last-child,
-spinbutton button:active:prelight:focused:last-child {
+spinbutton button:active:hover:last-child,
+spinbutton button:active:focus:last-child,
+spinbutton button:active:hover:focus:last-child {
     background-image: -gtk-win32-theme-part(spin, 1 3, margins(-1 -1 0 -1));
 }
 
-spinbutton button:insensitive {
+spinbutton button:disabled {
     background-image: -gtk-win32-theme-part(spin, 2 4, margins(0 -1 -1 -1));
 }
 
-spinbutton button:insensitive:last-child {
+spinbutton button:disabled:last-child {
     background-image: -gtk-win32-theme-part(spin, 1 4, margins(-1 -1 0 -1));
 }
 
 
 
 spinbutton.vertical button,
-spinbutton.vertical button:focused {
+spinbutton.vertical button:focus {
     background-color: transparent;
     color: rgba(0, 0, 0, 0);
     background-image: -gtk-win32-theme-part(spin, 1 1, margins(0 -1 -0 -1));
 }
 
 spinbutton.vertical button:last-child,
-spinbutton.vertical button:focused:last-child {
+spinbutton.vertical button:focus:last-child {
     background-image: -gtk-win32-theme-part(spin, 2 1, margins(0 -1 0 -1));
 }
 
 
-spinbutton.vertical button:prelight,
-spinbutton.vertical button:prelight:focused {
+spinbutton.vertical button:hover,
+spinbutton.vertical button:hover:focus {
     background-image: -gtk-win32-theme-part(spin, 1 2, margins(0 -1 -0 -1));
 }
 
-spinbutton.vertical button:prelight:last-child,
-spinbutton.vertical button:prelight:focused:last-child {
+spinbutton.vertical button:hover:last-child,
+spinbutton.vertical button:hover:focus:last-child {
     background-image: -gtk-win32-theme-part(spin, 2 2, margins(0 -1 0 -1));
 }
 
 
 spinbutton.vertical button:active,
-spinbutton.vertical button:active:prelight,
-spinbutton.vertical button:active:focused,
-spinbutton.vertical button:active:prelight:focused {
+spinbutton.vertical button:active:hover,
+spinbutton.vertical button:active:focus,
+spinbutton.vertical button:active:hover:focus {
     background-image: -gtk-win32-theme-part(spin, 1 3, margins(0 -1 -0 -1));
 }
 
 spinbutton.vertical button:active:last-child,
-spinbutton.vertical button:active:prelight:last-child,
-spinbutton.vertical button:active:focused:last-child,
-spinbutton.vertical button:active:prelight:focused:last-child {
+spinbutton.vertical button:active:hover:last-child,
+spinbutton.vertical button:active:focus:last-child,
+spinbutton.vertical button:active:hover:focus:last-child {
     background-image: -gtk-win32-theme-part(spin, 2 3, margins(0 -1 0 -1));
 }
 
-spinbutton.vertical button:insensitive {
+spinbutton.vertical button:disabled {
     background-image: -gtk-win32-theme-part(spin, 1 4, margins(0 -1 -0 -1));
 }
 
-spinbutton.vertical button:insensitive:last-child {
+spinbutton.vertical button:disabled:last-child {
     background-image: -gtk-win32-theme-part(spin, 2 4, margins(0 -1 0 -1));
 }
 
 
 
 spinbutton button:dir(rtl),
-spinbutton button:focused:dir(rtl) {
+spinbutton button:focus:dir(rtl) {
     background-color: transparent;
     background-image: -gtk-win32-theme-part(spin, 2 1, margins(0 -1 -1 -1));
     color: rgba(0, 0, 0, 0);
 }
 
 spinbutton button:first-child:dir(rtl),
-spinbutton button:focused:first-child:dir(rtl) {
+spinbutton button:focus:first-child:dir(rtl) {
     background-image: -gtk-win32-theme-part(spin, 1 1, margins(-1 -1 0 -1));
 }
 
-spinbutton button:prelight:dir(rtl),
-spinbutton button:prelight:focused:dir(rtl) {
+spinbutton button:hover:dir(rtl),
+spinbutton button:hover:focus:dir(rtl) {
     background-image: -gtk-win32-theme-part(spin, 2 2, margins(0 -1 -1 -1));
 }
 
-spinbutton button:prelight:first-child:dir(rtl),
-spinbutton button:prelight:focused:first-child:dir(rtl) {
+spinbutton button:hover:first-child:dir(rtl),
+spinbutton button:hover:focus:first-child:dir(rtl) {
     background-image: -gtk-win32-theme-part(spin, 1 2, margins(-1 -1 0 -1));
 }
 
 
 spinbutton button:active:dir(rtl),
-spinbutton button:active:prelight:dir(rtl),
-spinbutton button:active:focused:dir(rtl),
-spinbutton button:active:prelight:focused:dir(rtl) {
+spinbutton button:active:hover:dir(rtl),
+spinbutton button:active:focus:dir(rtl),
+spinbutton button:active:hover:focus:dir(rtl) {
     background-image: -gtk-win32-theme-part(spin, 2 3, margins(0 -1 -1 -1));
 }
 
 spinbutton button:active:first-child:dir(rtl),
-spinbutton button:active:prelight:first-child:dir(rtl),
-spinbutton button:active:focused:first-child:dir(rtl),
-spinbutton button:active:prelight:focused:first-child:dir(rtl) {
+spinbutton button:active:hover:first-child:dir(rtl),
+spinbutton button:active:focus:first-child:dir(rtl),
+spinbutton button:active:hover:focus:first-child:dir(rtl) {
     background-image: -gtk-win32-theme-part(spin, 1 3, margins(-1 -1 0 -1));
 }
 
-spinbutton button:insensitive:dir(rtl) {
+spinbutton button:disabled:dir(rtl) {
     background-image: -gtk-win32-theme-part(spin, 2 4, margins(0 -1 -1 -1));
 }
 
-spinbutton button:insensitive:first-child:dir(rtl) {
+spinbutton button:disabled:first-child:dir(rtl) {
     background-image: -gtk-win32-theme-part(spin, 1 4, margins(-1 -1 0 -1));
 }
 
@@ -612,12 +612,12 @@ scale slider {
     background-image: -gtk-win32-theme-part(trackbar, 3 1);
 }
 
-scale slider:prelight {
+scale slider:hover {
     background-image: -gtk-win32-theme-part(trackbar, 3 2);
 }
 
 scale slider:active,
-scale slider:prelight:active {
+scale slider:hover:active {
     background-image: -gtk-win32-theme-part(trackbar, 3 3);
 }
 
@@ -625,7 +625,7 @@ scale slider:focus {
     background-image: -gtk-win32-theme-part(trackbar, 3 4);
 }
 
-scale slider:insensitive {
+scale slider:disabled {
     background-image: -gtk-win32-theme-part(trackbar, 3 5);
 }
 
@@ -633,12 +633,12 @@ scale.vertical slider {
     background-image: -gtk-win32-theme-part(trackbar, 6 1);
 }
 
-scale.vertical slider:prelight {
+scale.vertical slider:hover {
     background-image: -gtk-win32-theme-part(trackbar, 6 2);
 }
 
 scale.vertical slider:active,
-scale.vertical slider:prelight:active {
+scale.vertical slider:hover:active {
     background-image: -gtk-win32-theme-part(trackbar, 6 3);
 }
 
@@ -646,7 +646,7 @@ scale.vertical slider:focus {
     background-image: -gtk-win32-theme-part(trackbar, 6 4);
 }
 
-scale.vertical slider:insensitive {
+scale.vertical slider:disabled {
     background-image: -gtk-win32-theme-part(trackbar, 6 5);
 }
 
@@ -654,12 +654,12 @@ scale marks.bottom {
     background-image: -gtk-win32-theme-part(trackbar, 4 1, margins(0 -2 0 0));
 }
 
-scale marks.bottom:prelight {
+scale marks.bottom:hover {
     background-image: -gtk-win32-theme-part(trackbar, 4 2, margins(0 -2 0 0));
 }
 
 scale marks.bottom:active,
-scale marks.bottom:prelight:active {
+scale marks.bottom:hover:active {
     background-image: -gtk-win32-theme-part(trackbar, 4 3, margins(0 -2 0 0));
 }
 
@@ -667,7 +667,7 @@ scale marks.bottom:focus {
     background-image: -gtk-win32-theme-part(trackbar, 4 4, margins(0 -2 0 0));
 }
 
-scale marks.bottom:insensitive {
+scale marks.bottom:disabled {
     background-image: -gtk-win32-theme-part(trackbar, 4 5, margins(0 -2 0 0));
 }
 
@@ -675,12 +675,12 @@ scale.vertical marks.bottom {
     background-image: -gtk-win32-theme-part(trackbar, 8 1, margins(0 0 -2 0));
 }
 
-scale.vertical marks.bottom:prelight {
+scale.vertical marks.bottom:hover {
     background-image: -gtk-win32-theme-part(trackbar, 8 2, margins(0 0 -2 0));
 }
 
 scale.vertical marks.bottom:active,
-scale.vertical marks.bottom:prelight:active {
+scale.vertical marks.bottom:hover:active {
     background-image: -gtk-win32-theme-part(trackbar, 8 3, margins(0 0 -2 0));
 }
 
@@ -688,7 +688,7 @@ scale.vertical marks.bottom:focus {
     background-image: -gtk-win32-theme-part(trackbar, 8 4, margins(0 0 -2 0));
 }
 
-scale.vertical marks.bottom:insensitive {
+scale.vertical marks.bottom:disabled {
     background-image: -gtk-win32-theme-part(trackbar, 8 5, margins(0 0 -2 0));
 }
 
@@ -698,12 +698,12 @@ scale marks.top {
     background-image: -gtk-win32-theme-part(trackbar, 5 1, margins(0 -2 0 0));
 }
 
-scale marks.top:prelight {
+scale marks.top:hover {
     background-image: -gtk-win32-theme-part(trackbar, 5 2, margins(0 -2 0 0));
 }
 
 scale marks.top:active,
-scale marks.top:prelight:active {
+scale marks.top:hover:active {
     background-image: -gtk-win32-theme-part(trackbar, 5 3, margins(0 -2 0 0));
 }
 
@@ -711,7 +711,7 @@ scale marks.top:focus {
     background-image: -gtk-win32-theme-part(trackbar, 5 4, margins(0 -2 0 0));
 }
 
-scale marks.top:insensitive {
+scale marks.top:disabled {
     background-image: -gtk-win32-theme-part(trackbar, 5 5, margins(0 -2 0 0));
 }
 
@@ -719,12 +719,12 @@ scale.vertical marks.top {
     background-image: -gtk-win32-theme-part(trackbar, 7 1, margins(0 0 -2 0));
 }
 
-scale.vertical marks.top:prelight {
+scale.vertical marks.top:hover {
     background-image: -gtk-win32-theme-part(trackbar, 7 2, margins(0 0 -2 0));
 }
 
 scale.vertical marks.top:active,
-scale.vertical marks.top:prelight:active {
+scale.vertical marks.top:hover:active {
     background-image: -gtk-win32-theme-part(trackbar, 7 3, margins(0 0 -2 0));
 }
 
@@ -732,7 +732,7 @@ scale.vertical marks.top:focus {
     background-image: -gtk-win32-theme-part(trackbar, 7 4, margins(0 0 -2 0));
 }
 
-scale.vertical marks.top:insensitive {
+scale.vertical marks.top:disabled {
     background-image: -gtk-win32-theme-part(trackbar, 7 5, margins(0 0 -2 0));
 }
 
@@ -750,14 +750,14 @@ progressbar trough {
 
 progressbar progress,
 entry progress,
-entry progress:focused {
+entry progress:focus {
     border-width: 0;
     background-image: -gtk-win32-theme-part(progress, 5 1);
 }
 
 progressbar progress.pulse,
 entry progress.pulse,
-entry progress.pulse:focused {
+entry progress.pulse:focus {
     background-color: transparent;
     background-image: -gtk-win32-theme-part(progress, 8 1);
 }
@@ -790,18 +790,18 @@ combobox-entry button {
     padding: 0px;
 }
 
-combobox-entry button:prelight,
-combobox-entry button:focused,
-combobox-entry button:prelight:focused {
+combobox-entry button:hover,
+combobox-entry button:focus,
+combobox-entry button:hover:focus {
     background-image: -gtk-win32-theme-part(combobox, 1 2);
 }
 combobox-entry button:active,
-combobox-entry button:active:focused,
-combobox-entry button:active:prelight,
-combobox-entry button:active:focused:prelight {
+combobox-entry button:active:focus,
+combobox-entry button:active:hover,
+combobox-entry button:active:focus:hover {
     background-image: -gtk-win32-theme-part(combobox, 1 3);
 }
-combobox-entry button:insensitive {
+combobox-entry button:disabled {
     background-image: -gtk-win32-theme-part(combobox, 1 4);
 }
 
@@ -816,7 +816,7 @@ combobox box {
     color: rgba(255, 0, 0, 0);
     background-image: -gtk-win32-theme-part(combobox, 6 1);
 }
-combobox box:insensitive {
+combobox box:disabled {
     color: rgba(255, 0, 0, 0);
     background-image: -gtk-win32-theme-part(combobox, 6 4);
 }
@@ -826,7 +826,7 @@ combobox-entry box {
     color: rgba(255, 0, 0, 0);
     background-image: none;
 }
-combobox-entry box:insensitive {
+combobox-entry box:disabled {
     color: rgba(255, 0, 0, 0);
     background-image: none;
 }
@@ -834,13 +834,13 @@ combobox-entry box:insensitive {
 combobox-entry GtkArrow {
     color: rgba(255, 0, 0, 0);
 }
-combobox-entry GtkArrow:insensitive {
+combobox-entry GtkArrow:disabled {
     color: rgba(255, 0, 0, 0);
 }
 combobox arrow {
     color: rgba(255, 0, 0, 0);
 }
-combobox arrow:insensitive {
+combobox arrow:disabled {
     color: rgba(255, 0, 0, 0);
 }
 
@@ -853,13 +853,13 @@ toolbar {
 }
 
 toolbar button,
-toolbar button:focused {
+toolbar button:focus {
     background-color: transparent;
     background-image: -gtk-win32-theme-part(toolbar, 1 1);
 }
 
-toolbar button:prelight,
-toolbar button:prelight:focused {
+toolbar button:hover,
+toolbar button:hover:focus {
     background-image: -gtk-win32-theme-part(toolbar, 1 2);
 }
 
@@ -867,11 +867,11 @@ toolbar button:active {
     background-image: -gtk-win32-theme-part(toolbar, 1 3);
 }
 
-toolbar button:active:prelight {
+toolbar button:active:hover {
     background-image: -gtk-win32-theme-part(toolbar, 1 6);
 }
 
-toolbar button:insensitive {
+toolbar button:disabled {
     background-image: -gtk-win32-theme-part(toolbar, 1 4);
 }
 
@@ -884,15 +884,15 @@ column-header button:focus {
     background-image: -gtk-win32-theme-part(header, 1 1);
 }
 
-column-header button:prelight,
-column-header button:prelight:focus {
+column-header button:hover,
+column-header button:hover:focus {
     background-image: -gtk-win32-theme-part(header, 1 2);
 }
 
 column-header button:active,
-column-header button:active:prelight,
+column-header button:active:hover,
 column-header button:active:focus,
-column-header button:active:prelight:focus {
+column-header button:active:hover:focus {
     background-image: -gtk-win32-theme-part(header, 1 3);
 }
 
@@ -904,7 +904,7 @@ switch {
     background-image: -gtk-win32-theme-part(button, 1 1);
 }
 
-switch:insensitive {
+switch:disabled {
     background-image: -gtk-win32-theme-part(button, 1 4);
 }
 
@@ -974,12 +974,12 @@ colorswatch {
     border-width: 1px;
 }
 
-colorswatch:prelight {
+colorswatch:hover {
     border-color: shade (@bg_color, 0.2);
 }
 
 separator,
-separator:prelight {
+separator:hover {
     color: shade (@bg_color, 0.6);
 }
 
@@ -1376,101 +1376,101 @@ list {
 
 /* Modelbuttons */
 
-modelbutton:focused,
+modelbutton:focus,
 modelbutton {
     background-color: transparent;
     background-image: -gtk-win32-theme-part(menu, 14 1);
 }
 
 modelbutton:active,
-modelbutton:active:focused {
+modelbutton:active:focus {
     background-color: transparent;
     background-image: -gtk-win32-theme-part(menu, 14 1);
 }
 
-modelbutton:active:prelight:focused,
-modelbutton:prelight:focused,
-modelbutton:prelight {
+modelbutton:active:hover:focus,
+modelbutton:hover:focus,
+modelbutton:hover {
     background-image: -gtk-win32-theme-part(menu, 14 2);
 }
 
-modelbutton:active:prelight:insensitive:focused,
-modelbutton:prelight:insensitive:focused,
-modelbutton:prelight:insensitive {
+modelbutton:active:hover:disabled:focus,
+modelbutton:hover:disabled:focus,
+modelbutton:hover:disabled {
     background-image: -gtk-win32-theme-part(menu, 14 4);
 }
 
 
-modelbutton radio:focused,
+modelbutton radio:focus,
 modelbutton radio,
-modelbutton radio:prelight,
-modelbutton radio:insensitive {
+modelbutton radio:hover,
+modelbutton radio:disabled {
     background-color: transparent;
     background-image: none;
     border-width: 0;
 }
 
-modelbutton radio:active:focused,
+modelbutton radio:active:focus,
 modelbutton radio:active,
-modelbutton radio:active:prelight {
+modelbutton radio:active:hover {
     background-image: -gtk-win32-theme-part(menu, 12 2, over (11 3));
     border-width: 0;
 }
 
-modelbutton radio:inconsistent:focused,
-modelbutton radio:inconsistent,
-modelbutton radio:inconsistent:insensitive,
-modelbutton radio:inconsistent:prelight,
-modelbutton radio:inconsistent:active,
-modelbutton radio:inconsistent:active:prelight {
+modelbutton radio:indeterminate:focus,
+modelbutton radio:indeterminate,
+modelbutton radio:indeterminate:disabled,
+modelbutton radio:indeterminate:hover,
+modelbutton radio:indeterminate:active,
+modelbutton radio:indeterminate:active:hover {
     background-image: none; /* Fall back to default, this state is not in win32 */
     border-width: 0;
 }
 
-modelbutton radio:insensitive:active:focused,
-modelbutton radio:insensitive:active,
-modelbutton radio:insensitive:active:prelight {
+modelbutton radio:disabled:active:focus,
+modelbutton radio:disabled:active,
+modelbutton radio:disabled:active:hover {
     background-image: -gtk-win32-theme-part(menu, 12 1, over (11 4));
     border-width: 0;
 }
 
-modelbutton check:focused,
+modelbutton check:focus,
 modelbutton check,
-modelbutton check:insensitive,
-modelbutton check:prelight,
-modelbutton check:prelight:focused {
+modelbutton check:disabled,
+modelbutton check:hover,
+modelbutton check:hover:focus {
     background-color: transparent;
     background-image: none;
     border-width: 0;
 }
 
 
-modelbutton check:active:focused, 
+modelbutton check:active:focus, 
 modelbutton check:active, 
-modelbutton check:active:prelight:focused,
-modelbutton check:active:prelight {
+modelbutton check:active:hover:focus,
+modelbutton check:active:hover {
     background-image: -gtk-win32-theme-part(menu, 12 2, over (11 1));
     border-width: 0;
 }
 
-modelbutton check:inconsistent:focused,
-modelbutton check:inconsistent,
-modelbutton check:inconsistent:insensitive,
-modelbutton check:inconsistent:insensitive:focused,
-modelbutton check:inconsistent:prelight,
-modelbutton check:inconsistent:prelight:focused,
-modelbutton check:inconsistent:active,
-modelbutton check:inconsistent:active:focused,
-modelbutton check:inconsistent:active:prelight:focused,
-modelbutton check:inconsistent:active:prelight {
+modelbutton check:indeterminate:focus,
+modelbutton check:indeterminate,
+modelbutton check:indeterminate:disabled,
+modelbutton check:indeterminate:disabled:focus,
+modelbutton check:indeterminate:hover,
+modelbutton check:indeterminate:hover:focus,
+modelbutton check:indeterminate:active,
+modelbutton check:indeterminate:active:focus,
+modelbutton check:indeterminate:active:hover:focus,
+modelbutton check:indeterminate:active:hover {
     background-image: none; /* Fall back to default, this state is not in win32 */
     border-width: 0;
 }
 
-modelbutton check:insensitive:active:focused,
-modelbutton check:insensitive:active,
-modelbutton check:insensitive:active:prelight:focused,
-modelbutton check:insensitive:active:prelight {
+modelbutton check:disabled:active:focus,
+modelbutton check:disabled:active,
+modelbutton check:disabled:active:hover:focus,
+modelbutton check:disabled:active:hover {
     background-image: -gtk-win32-theme-part(menu, 12 1, over (11 2));
     border-width: 0;
 }

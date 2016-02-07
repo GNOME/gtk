@@ -14,71 +14,71 @@ menubar > menuitem {
     background-image: -gtk-win32-theme-part(menu, 8 1);
 }
 
-menubar > menuitem:prelight {
+menubar > menuitem:hover {
     background-image: -gtk-win32-theme-part(menu, 8 3);
 }
 
-menuitem:prelight {
+menuitem:hover {
     background-image: -gtk-win32-theme-part(menu, 14 2);
 }
 
-menuitem:prelight:insensitive {
+menuitem:hover:disabled {
     background-image: -gtk-win32-theme-part(menu, 14 4);
 }
 
 menuitem radio,
-menuitem radio:prelight,
-menuitem radio:insensitive {
+menuitem radio:hover,
+menuitem radio:disabled {
     background-color: transparent;
     background-image: none;
     border-width: 0;
 }
 
 menuitem radio:active, 
-menuitem radio:active:prelight {
+menuitem radio:active:hover {
     background-image: -gtk-win32-theme-part(menu, 11 3);
     border-width: 0;
 }
 
-menuitem radio:inconsistent,
-menuitem radio:inconsistent:insensitive,
-menuitem radio:inconsistent:prelight,
-menuitem radio:inconsistent:active,
-menuitem radio:inconsistent:active:prelight {
+menuitem radio:indeterminate,
+menuitem radio:indeterminate:disabled,
+menuitem radio:indeterminate:hover,
+menuitem radio:indeterminate:active,
+menuitem radio:indeterminate:active:hover {
     background-image: none; /* Fall back to default, this state is not in win32 */
     border-width: 0;
 }
 
-menuitem radio:insensitive:active,
-menuitem radio:insensitive:active:prelight {
+menuitem radio:disabled:active,
+menuitem radio:disabled:active:hover {
     background-image: -gtk-win32-theme-part(menu, 11 4);
     border-width: 0;
 }
 
 menuitem check,
-menuitem check:prelight,
-menuitem check:insensitive {
+menuitem check:hover,
+menuitem check:disabled {
     background-image: none;
     border-width: 0;
 }
 
 menuitem check:active, 
-menuitem check:active:prelight {
+menuitem check:active:hover {
     background-image: -gtk-win32-theme-part(menu, 11 1);
     border-width: 0;
 }
 
-menuitem check:inconsistent,
-menuitem check:inconsistent:insensitive,
-menuitem check:inconsistent:prelight,
-menuitem check:inconsistent:active,
-menuitem check:inconsistent:active:prelight {
+menuitem check:indeterminate,
+menuitem check:indeterminate:disabled,
+menuitem check:indeterminate:hover,
+menuitem check:indeterminate:active,
+menuitem check:indeterminate:active:hover {
     background-image: none; /* Fall back to default, this state is not in win32 */
     border-width: 0;
 }
 
-menuitem check:insensitive:active,
-menuitem check:insensitive:active:prelight{
+menuitem check:disabled:active,
+menuitem check:disabled:active:hover{
     background-image: -gtk-win32-theme-part(menu, 11 2);
     border-width: 0;
 }
@@ -166,7 +166,7 @@ notebook tab.top {
     border-bottom: 0px;
 }
 
-notebook tab.top:prelight {
+notebook tab.top:hover {
     background-image: -gtk-gradient (linear,
                0 0, 0 1,
                color-stop(0, rgb(234, 246, 253)),
@@ -194,7 +194,7 @@ notebook tab.left {
     border-right: 0px;
 }
 
-notebook tab.left:prelight {
+notebook tab.left:hover {
     background-image: -gtk-gradient (linear,
                0 0, 1 0,
                color-stop(0, rgb(234, 246, 253)),
@@ -222,7 +222,7 @@ notebook tab.right {
     border-left: 0px;
 }
 
-notebook tab.right:prelight {
+notebook tab.right:hover {
     background-image: -gtk-gradient (linear,
                1 0, 0 0,
                color-stop(0, rgb(234, 246, 253)),
@@ -249,7 +249,7 @@ notebook tab.bottom {
     border-top: 0px;
 }
 
-notebook tab.bottom:prelight {
+notebook tab.bottom:hover {
     background-image: -gtk-gradient (linear,
                0 1, 0 0,
                color-stop(0, rgb(234, 246, 253)),
@@ -262,13 +262,13 @@ notebook tab.bottom:prelight {
 }
 
 notebook tab:active,
-notebook tab:active:prelight,
+notebook tab:active:hover,
 notebook tab.right:active,
-notebook tab.right:active:prelight,
+notebook tab.right:active:hover,
 notebook tab.bottom:active,
-notebook tab.bottom:active:prelight,
+notebook tab.bottom:active:hover,
 notebook tab.left:active,
-notebook tab.left:active:prelight
+notebook tab.left:active:hover
 {
     /* active tabs are pure white with grey borders, and prelight changes nothing */
     background-image: none;
@@ -276,11 +276,11 @@ notebook tab.left:active:prelight
     border-color: rgb(137, 140, 149);
 }
 
-notebook tab:insensitive,
-notebook tab:insensitive,
-notebook tab.right:insensitive,
-notebook tab.bottom:insensitive,
-notebook tab.left:insensitive
+notebook tab:disabled,
+notebook tab:disabled,
+notebook tab.right:disabled,
+notebook tab.bottom:disabled,
+notebook tab.left:disabled
 {
     /* insensitive tabs are dark grey white with even darker grey borders */
     background-image: none;
@@ -288,10 +288,10 @@ notebook tab.left:insensitive
     border-color: rgb(128, 128, 128);
 }
 
-notebook tab:prelight,
-notebook tab.right:prelight,
-notebook tab.bottom:prelight,
-notebook tab.left:prelight
+notebook tab:hover,
+notebook tab.right:hover,
+notebook tab.bottom:hover,
+notebook tab.left:hover
 {
     /* prelight tabs have blue borders */
     border-color: rgb(60, 127, 177);
@@ -323,7 +323,7 @@ notebook tab.left:active {
 
 /* We're cheating here, using part 6 (listview header group),
    because part 1 (listview item) is empty for some reason */
-row:prelight {
+row:hover {
   background-image: -gtk-win32-theme-part(listview, 6 10);
 }
 
@@ -339,6 +339,6 @@ row:selected:focus {
   background-image: -gtk-win32-theme-part(listview, 6 11);
 }
 
-row:selected:prelight {
+row:selected:hover {
   background-image: -gtk-win32-theme-part(listview, 6 12);
 }
