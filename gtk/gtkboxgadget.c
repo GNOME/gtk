@@ -387,27 +387,6 @@ gtk_box_gadget_allocate (GtkCssGadget        *gadget,
     {
       gtk_box_gadget_distribute (GTK_BOX_GADGET (gadget), allocation->height, allocation->width, sizes);
 
-      if (baseline < 0)
-        {
-          for (i = 0; i < priv->children->len; i++)
-            {
-              GtkBoxGadgetChild *child = &g_array_index (priv->children, GtkBoxGadgetChild, i);
-
-              if (gtk_box_gadget_child_get_align (GTK_BOX_GADGET (gadget), child) == GTK_ALIGN_BASELINE)
-                {
-                  gint child_min, child_nat;
-                  gint child_baseline_min, child_baseline_nat;
-
-                  gtk_box_gadget_measure_child (child->object,
-                                                GTK_ORIENTATION_VERTICAL,
-                                                sizes[i].minimum_size,
-                                                &child_min, &child_nat,
-                                                &child_baseline_min, &child_baseline_nat);
-                  baseline = MAX (baseline, child_baseline_min);
-                }
-            }
-        }
-
       for (i = 0; i < priv->children->len; i++)
         {
           GtkBoxGadgetChild *child = &g_array_index (priv->children, GtkBoxGadgetChild, i);
