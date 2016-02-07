@@ -1396,22 +1396,19 @@ static void
 gtk_im_context_simple_set_client_window  (GtkIMContext *context,
                                           GdkWindow    *window)
 {
-  GdkDisplay *display;
   GtkIMContextSimple *im_context_simple = GTK_IM_CONTEXT_SIMPLE (context);
   gboolean run_compose_table = FALSE;
 
   if (!window)
     return;
 
-  display = gdk_window_get_display (window);
-
   /* Load compose table for X11 or Wayland. */
 #ifdef GDK_WINDOWING_X11
-  if (GDK_IS_X11_DISPLAY (display))
+  if (GDK_IS_X11_DISPLAY (gdk_window_get_display (window)))
     run_compose_table = TRUE;
 #endif
 #ifdef GDK_WINDOWING_WAYLAND
-  if (GDK_IS_WAYLAND_DISPLAY (display))
+  if (GDK_IS_WAYLAND_DISPLAY (gdk_window_get_display (window)))
     run_compose_table = TRUE;
 #endif
 
