@@ -936,8 +936,7 @@ apply_event_filters (GdkWindow  *window,
   GList *tmp_list;
 
   event = gdk_event_new (GDK_NOTHING);
-  if (window != NULL)
-    event->any.window = g_object_ref (window);
+  event->any.window = g_object_ref (window);
   ((GdkEventPrivate *)event)->flags |= GDK_EVENT_PENDING;
 
   /* I think GdkFilterFunc semantics require the passed-in event
@@ -1913,11 +1912,15 @@ gdk_event_translate (MSG  *msg,
 
   int i;
 
+  window = gdk_win32_handle_table_lookup (msg->hwnd);
+
   if (_gdk_default_filters)
     {
       /* Apply global filters */
 
-      GdkFilterReturn result = apply_event_filters (NULL, msg, &_gdk_default_filters);
+      GdkFilterReturn result = apply_event_filters (window ? window : gdk_screen_get_root_window (gdk_display_get_default_screen (_gdk_display)),
+                                                    msg,
+                                                    &_gdk_default_filters);
 
       /* If result is GDK_FILTER_CONTINUE, we continue as if nothing
        * happened. If it is GDK_FILTER_REMOVE or GDK_FILTER_TRANSLATE,
@@ -1926,8 +1929,6 @@ gdk_event_translate (MSG  *msg,
       if (result == GDK_FILTER_REMOVE || result == GDK_FILTER_TRANSLATE)
 	return TRUE;
     }
-
-  window = gdk_win32_handle_table_lookup (msg->hwnd);
 
   if (window == NULL)
     {
