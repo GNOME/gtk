@@ -187,9 +187,9 @@ value_as_pointer (GValue *value)
   if (G_VALUE_HOLDS_UINT (value))
     return GUINT_TO_POINTER(g_value_get_uint (value));
   if (G_VALUE_HOLDS_LONG (value))
-    return (void*) g_value_get_long (value);
+    return GSIZE_TO_POINTER ((gssize) g_value_get_long (value));
   if (G_VALUE_HOLDS_ULONG (value))
-    return (void*) g_value_get_ulong (value);
+    return GSIZE_TO_POINTER (g_value_get_ulong (value));
   if (G_VALUE_HOLDS_FLOAT (value))
     return (void*) (gssize) g_value_get_float (value);
   if (G_VALUE_HOLDS_DOUBLE (value))
