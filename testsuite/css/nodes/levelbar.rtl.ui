@@ -40,6 +40,11 @@
             <property name="max-value">10</property>
             <property name="value">5</property>
             <property name="mode">discrete</property>
+            <offsets>
+              <offset name="low" value="2"/>
+              <offset name="high" value="8"/>
+              <offset name="full" value="10"/>
+            </offsets>
           </object>
         </child>
         <child>
@@ -49,6 +54,11 @@
             <property name="max-value">10</property>
             <property name="value">2</property>
             <property name="mode">discrete</property>
+            <offsets>
+              <offset name="low" value="2"/>
+              <offset name="high" value="8"/>
+              <offset name="full" value="10"/>
+            </offsets>
           </object>
         </child>
         <child>
@@ -58,6 +68,11 @@
             <property name="max-value">10</property>
             <property name="value">8</property>
             <property name="mode">discrete</property>
+            <offsets>
+              <offset name="low" value="2"/>
+              <offset name="high" value="8"/>
+              <offset name="full" value="10"/>
+            </offsets>
           </object>
         </child>
       </object>
