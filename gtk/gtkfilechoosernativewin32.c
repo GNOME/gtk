@@ -397,11 +397,7 @@ filechooser_win32_thread (gpointer _data)
   HRESULT hr;
   IFileDialog *pfd = NULL;
   IFileDialog2 *pfd2 = NULL;
-  gboolean res = FALSE;
   DWORD flags;
-  HWND parent = NULL;
-  HWND dialog_hwnd;
-  GtkWindow *transient_for;
   DWORD cookie;
   GSList *l;
 
@@ -566,7 +562,7 @@ filechooser_win32_thread (gpointer _data)
               IShellItem *item;
               hr = IShellItemArray_GetItemAt (res, i, &item);
               if (FAILED (hr))
-                g_error ("Can't get item at %d: %s\n", i, g_win32_error_message (hr));
+                g_error ("Can't get item at %lu: %s\n", i, g_win32_error_message (hr));
               data_add_shell_item (data, item);
               IShellItem_Release (item);
             }
@@ -673,7 +669,6 @@ gtk_file_chooser_native_win32_show (GtkFileChooserNative *self)
   guint update_preview_signal;
   GSList *filters, *l;
   int n_filters, i;
-  COMDLG_FILTERSPEC *win32_filters;
 
   if (gtk_file_chooser_get_extra_widget (GTK_FILE_CHOOSER (self)) != NULL)
     return FALSE;
