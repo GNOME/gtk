@@ -4948,6 +4948,7 @@ static void
 change_cursor_theme (GtkWidget *widget,
 		     gpointer   data)
 {
+#if defined(GDK_WINDOWING_X11) || defined (GDK_WINDOWING_WAYLAND)
   const gchar *theme;
   gint size;
   GList *children;
@@ -4968,6 +4969,7 @@ change_cursor_theme (GtkWidget *widget,
 #ifdef GDK_WINDOWING_WAYLAND
   if (GDK_IS_WAYLAND_DISPLAY (display))
     gdk_wayland_display_set_cursor_theme (display, theme, size);
+#endif
 #endif
 }
 
