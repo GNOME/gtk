@@ -2,89 +2,89 @@
 
 /* Menus */
 
-.menubar {
+menubar {
     background-color: transparent;
     border-width: 0;
     background-image: -gtk-win32-theme-part(menu, 7 1);
 }
 
-.menubar > .menuitem {
+menubar > menuitem {
     background-color: transparent;
     border-width: 0;
     background-image: -gtk-win32-theme-part(menu, 8 1);
 }
 
-.menubar > .menuitem:prelight {
+menubar > menuitem:prelight {
     background-image: -gtk-win32-theme-part(menu, 8 3);
 }
 
-.menuitem:prelight {
+menuitem:prelight {
     background-image: -gtk-win32-theme-part(menu, 14 2);
 }
 
-.menuitem:prelight:insensitive {
+menuitem:prelight:insensitive {
     background-image: -gtk-win32-theme-part(menu, 14 4);
 }
 
-.menuitem.radio,
-.menuitem.radio:prelight,
-.menuitem.radio:insensitive {
+menuitem radio,
+menuitem radio:prelight,
+menuitem radio:insensitive {
     background-color: transparent;
     background-image: none;
     border-width: 0;
 }
 
-.menuitem.radio:active, 
-.menuitem.radio:active:prelight {
+menuitem radio:active, 
+menuitem radio:active:prelight {
     background-image: -gtk-win32-theme-part(menu, 11 3);
     border-width: 0;
 }
 
-.menuitem.radio:inconsistent,
-.menuitem.radio:inconsistent:insensitive,
-.menuitem.radio:inconsistent:prelight,
-.menuitem.radio:inconsistent:active,
-.menuitem.radio:inconsistent:active:prelight {
+menuitem radio:inconsistent,
+menuitem radio:inconsistent:insensitive,
+menuitem radio:inconsistent:prelight,
+menuitem radio:inconsistent:active,
+menuitem radio:inconsistent:active:prelight {
     background-image: none; /* Fall back to default, this state is not in win32 */
     border-width: 0;
 }
 
-.menuitem.radio:insensitive:active,
-.menuitem.radio:insensitive:active:prelight {
+menuitem radio:insensitive:active,
+menuitem radio:insensitive:active:prelight {
     background-image: -gtk-win32-theme-part(menu, 11 4);
     border-width: 0;
 }
 
-.menuitem.check,
-.menuitem.check:prelight,
-.menuitem.check:insensitive {
+menuitem check,
+menuitem check:prelight,
+menuitem check:insensitive {
     background-image: none;
     border-width: 0;
 }
 
-.menuitem.check:active, 
-.menuitem.check:active:prelight {
+menuitem check:active, 
+menuitem check:active:prelight {
     background-image: -gtk-win32-theme-part(menu, 11 1);
     border-width: 0;
 }
 
-.menuitem.check:inconsistent,
-.menuitem.check:inconsistent:insensitive,
-.menuitem.check:inconsistent:prelight,
-.menuitem.check:inconsistent:active,
-.menuitem.check:inconsistent:active:prelight {
+menuitem check:inconsistent,
+menuitem check:inconsistent:insensitive,
+menuitem check:inconsistent:prelight,
+menuitem check:inconsistent:active,
+menuitem check:inconsistent:active:prelight {
     background-image: none; /* Fall back to default, this state is not in win32 */
     border-width: 0;
 }
 
-.menuitem.check:insensitive:active,
-.menuitem.check:insensitive:active:prelight{
+menuitem check:insensitive:active,
+menuitem check:insensitive:active:prelight{
     background-image: -gtk-win32-theme-part(menu, 11 2);
     border-width: 0;
 }
 
 /* Notebook */
-.notebook {
+notebook {
     /* This prevents a thin half-transparent line between the pane and the tab */
     background-color: -gtk-win32-color(tab, 5);
 
@@ -110,7 +110,7 @@
     -GtkNotebook-tab-curvature: 0;
 }
 
-.notebook tab {
+notebook tab {
     /* Make sure parts not covered by the background are transparent */
     background-color: transparent;
 
@@ -128,8 +128,8 @@
     padding: 2px;
 }
 
-/* W32 has no concept of notebook header (the rectangle where tabs are - including the area where tabs could be, if you add more of them), make it disappear */
-.notebook.header {
+/* W32 has no concept ofnotebook header (the rectangle where tabs are - including the area where tabs could be, if you add more of them), make it disappear */
+notebook.header {
   background-color: transparent;
   background-image: none;
   border-width: 0px;
@@ -151,7 +151,7 @@
  Prelight tab borders are blue.
  Disabled tab borders are darker grey.
  */
-.notebook tab.top {
+notebook tab.top {
     background-image: -gtk-gradient (linear,
                0 0, 0 1,
                color-stop(0, rgb(242, 242, 242)),
@@ -166,7 +166,7 @@
     border-bottom: 0px;
 }
 
-.notebook tab.top:prelight {
+notebook tab.top:prelight {
     background-image: -gtk-gradient (linear,
                0 0, 0 1,
                color-stop(0, rgb(234, 246, 253)),
@@ -178,7 +178,7 @@
                color-stop(1, rgb(167, 217, 245)));
 }
 
-.notebook tab.left {
+notebook tab.left {
     background-image: -gtk-gradient (linear,
                0 0, 1 0,
                color-stop(0, rgb(242, 242, 242)),
@@ -194,7 +194,7 @@
     border-right: 0px;
 }
 
-.notebook tab.left:prelight {
+notebook tab.left:prelight {
     background-image: -gtk-gradient (linear,
                0 0, 1 0,
                color-stop(0, rgb(234, 246, 253)),
@@ -206,7 +206,7 @@
                color-stop(1, rgb(167, 217, 245)));
 }
 
-.notebook tab.right {
+notebook tab.right {
     background-image: -gtk-gradient (linear,
                1 0, 0 0,
                color-stop(0, rgb(242, 242, 242)),
@@ -222,7 +222,7 @@
     border-left: 0px;
 }
 
-.notebook tab.right:prelight {
+notebook tab.right:prelight {
     background-image: -gtk-gradient (linear,
                1 0, 0 0,
                color-stop(0, rgb(234, 246, 253)),
@@ -234,7 +234,7 @@
                color-stop(1, rgb(167, 217, 245)));
 }
 
-.notebook tab.bottom {
+notebook tab.bottom {
     background-image: -gtk-gradient (linear,
                0 1, 0 0,
                color-stop(0, rgb(242, 242, 242)),
@@ -249,7 +249,7 @@
     border-top: 0px;
 }
 
-.notebook tab.bottom:prelight {
+notebook tab.bottom:prelight {
     background-image: -gtk-gradient (linear,
                0 1, 0 0,
                color-stop(0, rgb(234, 246, 253)),
@@ -261,14 +261,14 @@
                color-stop(1, rgb(167, 217, 245)));
 }
 
-.notebook tab:active,
-.notebook tab:active:prelight,
-.notebook tab.right:active,
-.notebook tab.right:active:prelight,
-.notebook tab.bottom:active,
-.notebook tab.bottom:active:prelight,
-.notebook tab.left:active,
-.notebook tab.left:active:prelight
+notebook tab:active,
+notebook tab:active:prelight,
+notebook tab.right:active,
+notebook tab.right:active:prelight,
+notebook tab.bottom:active,
+notebook tab.bottom:active:prelight,
+notebook tab.left:active,
+notebook tab.left:active:prelight
 {
     /* active tabs are pure white with grey borders, and prelight changes nothing */
     background-image: none;
@@ -276,11 +276,11 @@
     border-color: rgb(137, 140, 149);
 }
 
-.notebook tab:insensitive,
-.notebook tab:insensitive,
-.notebook tab.right:insensitive,
-.notebook tab.bottom:insensitive,
-.notebook tab.left:insensitive
+notebook tab:insensitive,
+notebook tab:insensitive,
+notebook tab.right:insensitive,
+notebook tab.bottom:insensitive,
+notebook tab.left:insensitive
 {
     /* insensitive tabs are dark grey white with even darker grey borders */
     background-image: none;
@@ -288,32 +288,32 @@
     border-color: rgb(128, 128, 128);
 }
 
-.notebook tab:prelight,
-.notebook tab.right:prelight,
-.notebook tab.bottom:prelight,
-.notebook tab.left:prelight
+notebook tab:prelight,
+notebook tab.right:prelight,
+notebook tab.bottom:prelight,
+notebook tab.left:prelight
 {
     /* prelight tabs have blue borders */
     border-color: rgb(60, 127, 177);
 }
 
 
-.notebook tab.top:active {
+notebook tab.top:active {
     /* Make active tab "stick out" up by padding it more at the bottom */
     padding-bottom: 4px;
 }
 
-.notebook tab.right:active {
+notebook tab.right:active {
     /* Make active tab "stick out" right by padding it more at the left */
     padding-left: 4px;
 }
 
-.notebook tab.bottom:active {
+notebook tab.bottom:active {
     /* Make active tab "stick out" down by padding it more at the top */
     padding-top: 4px;
 }
 
-.notebook tab.left:active {
+notebook tab.left:active {
     /* Make active tab "stick out" left by padding it more at the right */
     padding-right: 4px;
 }
@@ -323,11 +323,11 @@
 
 /* We're cheating here, using part 6 (listview header group),
    because part 1 (listview item) is empty for some reason */
-.list-row:prelight {
+row:prelight {
   background-image: -gtk-win32-theme-part(listview, 6 10);
 }
 
-.list-row:selected {
+row:selected {
   background-color: transparent;
   /* Override *:selected {} blanket style, keeping the background - bright
      and the text - dark */
@@ -335,10 +335,10 @@
   background-image: -gtk-win32-theme-part(listview, 6 13);
 }
 
-.list-row:selected:focus {
+row:selected:focus {
   background-image: -gtk-win32-theme-part(listview, 6 11);
 }
 
-.list-row:selected:prelight {
+row:selected:prelight {
   background-image: -gtk-win32-theme-part(listview, 6 12);
 }
