@@ -106,8 +106,6 @@ notebook {
        * first(last in RTL?) tab has extra gap that disappears (due to overlapping) when this tab activates
        This can't be emulated in GTK, so we won't even try.
     */
-    -GtkNotebook-tab-overlap: 0;
-    -GtkNotebook-tab-curvature: 0;
 }
 
 notebook tab {
