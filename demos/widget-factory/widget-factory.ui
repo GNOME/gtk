@@ -1098,6 +1098,11 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 <property name="max-value">5</property>
                                 <property name="value">2</property>
                                 <property name="mode">1</property>
+                                <offsets>
+                                  <offset name="low" value="1"/>
+                                  <offset name="high" value="4"/>
+                                  <offset name="full" value="5"/>
+                                </offsets>
                               </object>
                               <packing>
                                 <property name="position">11</property>
