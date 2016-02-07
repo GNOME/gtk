@@ -3555,6 +3555,7 @@ decoration {
                 0 0 0 1px $_wm_border_backdrop;
   }
 
+  .fullscreen &,
   .tiled & { border-radius: 0; }
 
   .popup & { box-shadow: none; }
