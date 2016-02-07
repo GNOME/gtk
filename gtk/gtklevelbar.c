@@ -87,7 +87,13 @@
  * set the minimum value to 0 and the maximum value to 5 after changing the indicator
  * mode to discrete.
  *
- * Since: 3.6
+ * GtkLevelBar was introduced in GTK+ 3.6.
+ *
+ * # GtkLevelBar as GtkBuildable
+ *
+ * The GtkLevelBar implementation of the GtkBuildable interface supports a
+ * custom <offsets> element, which can contain any number of <offset> elements,
+ * each of which must have name and value attributes.
  *
  * # CSS nodes
  *
