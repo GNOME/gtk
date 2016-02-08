@@ -49,7 +49,7 @@ gtk_inspector_magnifier_set_object (GtkInspectorMagnifier *sl,
 
   sl->priv->object = NULL;
 
-  if (!GTK_IS_WIDGET (object))
+  if (!GTK_IS_WIDGET (object) || !gtk_widget_is_visible (GTK_WIDGET (object)))
     {
       gtk_widget_hide (GTK_WIDGET (sl));
       _gtk_magnifier_set_inspected (GTK_MAGNIFIER (sl->priv->magnifier), NULL);
