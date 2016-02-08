@@ -1132,11 +1132,18 @@ show_window_internal (GdkWindow *window,
     }
   else if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP || !focus_on_map)
     {
-      ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNOACTIVATE);
+      if (!IsWindowVisible (GDK_WINDOW_HWND (window)))
+        ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNOACTIVATE);
+      else
+        ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNA);
+    }
+  else if (!IsWindowVisible (GDK_WINDOW_HWND (window)))
+    {
+      ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNORMAL);
     }
   else
     {
-      ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNORMAL);
+      ShowWindow (GDK_WINDOW_HWND (window), SW_SHOW);
     }
 
   /* Sync STATE_ABOVE to TOPMOST */
@@ -2996,8 +3003,10 @@ gdk_win32_window_focus (GdkWindow *window,
     ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWMAXIMIZED);
   else if (window->state & GDK_WINDOW_STATE_ICONIFIED)
     ShowWindow (GDK_WINDOW_HWND (window), SW_RESTORE);
-  else
+  else if (!IsWindowVisible (GDK_WINDOW_HWND (window)))
     ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNORMAL);
+  else
+    ShowWindow (GDK_WINDOW_HWND (window), SW_SHOW);
 
   SetFocus (GDK_WINDOW_HWND (window));
 }
