@@ -1240,7 +1240,7 @@ gtk_gesture_get_sequences (GtkGesture *gesture)
  *
  * Returns the #GdkEventSequence that was last updated on @gesture.
  *
- * Returns: (nullable): The last updated sequence
+ * Returns: (transfer none) (nullable): The last updated sequence
  *
  * Since: 3.14
  **/
