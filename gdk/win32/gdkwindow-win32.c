@@ -3702,19 +3702,26 @@ void
 gdk_window_focus (GdkWindow *window,
                   guint32    timestamp)
 {
+  GdkWindowObject *private;
+
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
-  
+
+  private = (GdkWindowObject *)window;
+
   GDK_NOTE (MISC, g_print ("gdk_window_focus: %p: %s\n",
 			   GDK_WINDOW_HWND (window),
 			   _gdk_win32_window_state_to_string (((GdkWindowObject *) window)->state)));
 
-  if (((GdkWindowObject *) window)->state & GDK_WINDOW_STATE_MAXIMIZED)
+  if (private->state & GDK_WINDOW_STATE_MAXIMIZED)
     ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWMAXIMIZED);
+  else if (private->state & GDK_WINDOW_STATE_ICONIFIED)
+    ShowWindow (GDK_WINDOW_HWND (window), SW_RESTORE);
   else
     ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNORMAL);
+
   SetFocus (GDK_WINDOW_HWND (window));
 }
 
