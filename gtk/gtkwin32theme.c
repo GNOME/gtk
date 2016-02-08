@@ -31,14 +31,6 @@
 
 static HINSTANCE uxtheme_dll = NULL;
 static gboolean use_xp_theme = FALSE;
-static OSVERSIONINFO os_version;
-static HTHEME needs_alpha_fixup1 = NULL;
-static HTHEME needs_alpha_fixup2 = NULL;
-static HTHEME needs_alpha_fixup3 = NULL;
-static HTHEME needs_alpha_fixup4 = NULL;
-static HTHEME needs_alpha_fixup5 = NULL;
-static HTHEME needs_alpha_fixup6 = NULL;
-static HTHEME needs_alpha_fixup7 = NULL;
 
 typedef HRESULT (FAR PASCAL *GetThemeSysFontFunc)           (HTHEME hTheme, int iFontID, OUT LOGFONTW *plf);
 typedef int (FAR PASCAL *GetThemeSysSizeFunc)               (HTHEME hTheme, int iSizeId);
@@ -140,20 +132,6 @@ _gtk_win32_theme_init (void)
     }
 
   hthemes_by_class = g_hash_table_new (g_str_hash, g_str_equal);
-
-  memset (&os_version, 0, sizeof (os_version));
-  os_version.dwOSVersionInfoSize = sizeof (os_version);
-  GetVersionEx (&os_version);
-  if (os_version.dwMajorVersion == 5)
-    {
-      needs_alpha_fixup1 = _gtk_win32_lookup_htheme_by_classname ("scrollbar");
-      needs_alpha_fixup2 = _gtk_win32_lookup_htheme_by_classname ("toolbar");
-      needs_alpha_fixup3 = _gtk_win32_lookup_htheme_by_classname ("button");
-      needs_alpha_fixup4 = _gtk_win32_lookup_htheme_by_classname ("header");
-      needs_alpha_fixup5 = _gtk_win32_lookup_htheme_by_classname ("trackbar");
-      needs_alpha_fixup6 = _gtk_win32_lookup_htheme_by_classname ("status");
-      needs_alpha_fixup7 = _gtk_win32_lookup_htheme_by_classname ("rebar");
-    }
 }
 
 HTHEME
@@ -260,31 +238,6 @@ _gtk_win32_theme_part_create_surface (HTHEME theme,
   hdc = cairo_win32_surface_get_dc (surface);
 
   res = draw_theme_background (theme, hdc, xp_part, state, &rect, &rect);
-
-  /* XP Can't handle rendering some parts on an alpha target */
-  if (has_alpha && 
-      (theme == needs_alpha_fixup1 ||
-       theme == needs_alpha_fixup2 ||
-       (theme == needs_alpha_fixup3 && xp_part == 4) ||
-       theme == needs_alpha_fixup4 ||
-       theme == needs_alpha_fixup5 ||
-       theme == needs_alpha_fixup6 ||
-       theme == needs_alpha_fixup7))
-    {
-      cairo_surface_t *img = cairo_win32_surface_get_image (surface);
-      guint32 *data = (guint32 *)cairo_image_surface_get_data (img);
-      int i, j;
-      GdiFlush ();
-
-      for (i = 0; i < width; i++)
-	{
-	  for (j = 0; j < height; j++)
-	    {
-	      if (data[i+j*width] != 0)
-		data[i+j*width] |= 0xff000000;
-	    }
-	}
-    }
 
   *x_offs_out = x_offs;
   *y_offs_out = y_offs;
