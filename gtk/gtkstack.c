@@ -1690,7 +1690,7 @@ gtk_stack_get_transition_running (GtkStack *stack)
  * @interpolate_size: the new value
  *
  * Sets whether or not @stack will interpolate its size when
- * changing the visible child. If the #GtkStack::interpolate-size
+ * changing the visible child. If the #GtkStack:interpolate-size
  * property is set to %TRUE, @stack will interpolate its size between
  * the current one and the one it'll take after changing the
  * visible child, according to the set transition duration.

@@ -142,7 +142,7 @@
  * ╰── check
  * ]|
  *
- * Iconic model buttons (see #GtkModelButton::iconic) change the name of
+ * Iconic model buttons (see #GtkModelButton:iconic) change the name of
  * their main node to button and add a .model style class to it. The indicator
  * subnode is invisible in this case.
  */

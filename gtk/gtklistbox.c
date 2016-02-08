@@ -3592,7 +3592,7 @@ gtk_list_box_row_get_activatable (GtkListBoxRow *row)
 
 /**
  * gtk_list_box_row_set_selectable:
- * @row: a #GTkListBoxrow
+ * @row: a #GtkListBoxRow
  * @selectable: %TRUE to mark the row as selectable
  *
  * Set the #GtkListBoxRow:selectable property for this row.

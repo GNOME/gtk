@@ -45,7 +45,7 @@
  * The recommended way to construct a GtkShortcutsWindow is with GtkBuilder,
  * by populating a #GtkShortcutsWindow with one or more #GtkShortcutsSection
  * objects, which contain #GtkShortcutsGroups that in turn contain objects of
- * class #GtkShortcutsShortcut or #GtkShortcutsGesture.
+ * class #GtkShortcutsShortcut.
  *
  * # A simple example:
  *

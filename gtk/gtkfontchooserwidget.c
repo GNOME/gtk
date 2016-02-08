@@ -69,11 +69,11 @@
  * To change the text which is shown in the preview area, use
  * gtk_font_chooser_set_preview_text().
  *
- * Since: 3.2
- *
  * # CSS nodes
  *
  * GtkFontChooserWidget has a single CSS node with name fontchooser.
+ *
+ * Since: 3.2
  */
 
 

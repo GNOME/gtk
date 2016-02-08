@@ -2568,7 +2568,7 @@ gtk_style_context_get_background_color (GtkStyleContext *context,
  *
  * Since: 3.0
  *
- * Deprecated: 3.16: Use gtk_render_border() instead.
+ * Deprecated: 3.16: Use gtk_render_frame() instead.
  **/
 void
 gtk_style_context_get_border_color (GtkStyleContext *context,

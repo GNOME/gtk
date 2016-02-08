@@ -208,7 +208,7 @@
  *
  * gtk_label_set_justify() sets how the lines in a label align
  * with one another. If you want to set how the label as a whole
- * aligns in its available space, see the #GtkWidget::halign and
+ * aligns in its available space, see the #GtkWidget:halign and
  * #GtkWidget:valign properties.
  *
  * The #GtkLabel:width-chars and #GtkLabel:max-width-chars properties

@@ -84,7 +84,7 @@
  * properties. Note that GtkSpinButton will by default make its entry
  * large enough to accomodate the lower and upper bounds of the adjustment,
  * which can lead to surprising results. Best practice is to set both
- * the #GtkEntry::width-chars and #GtkEntry::max-width-chars poperties
+ * the #GtkEntry:width-chars and #GtkEntry:max-width-chars poperties
  * to the desired number of characters to display in the entry.
  *
  * # CSS nodes

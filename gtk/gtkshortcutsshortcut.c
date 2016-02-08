@@ -464,7 +464,7 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
    * GtkShortcutsShortcut:accelerator:
    *
    * The accelerator(s) represented by this object. This property is used
-   * if #GtkShorcutsShortcut:shortcut-type is set to #GTK_SHORTCUT_ACCELERATOR.
+   * if #GtkShortcutsShortcut:shortcut-type is set to #GTK_SHORTCUT_ACCELERATOR.
    *
    * The syntax of this property is (an extension of) the syntax understood by
    * gtk_accelerator_parse(). Multiple accelerators can be specified by separating
