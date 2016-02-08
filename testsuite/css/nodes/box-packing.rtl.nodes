@@ -1,0 +1,6 @@
+[window.background:dir(rtl)]
+  decoration:dir(ltr)
+  box.horizontal:dir(rtl)
+    label#end:dir(ltr)
+    label#center:dir(ltr)
+    label#start:dir(ltr)

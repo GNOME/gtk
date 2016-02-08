@@ -30,6 +30,8 @@ test_css_nodes_SOURCES = \
 test_data = \
 	box.ltr.ui		box.ltr.nodes			\
 	box.rtl.ui		box.rtl.nodes			\
+	box-packing.ltr.ui	box-packing.ltr.nodes		\
+	box-packing.rtl.ui	box-packing.rtl.nodes		\
 	buttons.ui 		buttons.nodes 			\
 	checkbutton.ltr.ui	checkbutton.ltr.nodes		\
 	checkbutton.rtl.ui	checkbutton.rtl.nodes		\
