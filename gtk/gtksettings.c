@@ -56,10 +56,6 @@
 #include "win32/gdkwin32.h"
 #endif
 
-#ifdef G_OS_WIN32
-#include "gtkwin32themeprivate.h"
-#endif
-
 #include "deprecated/gtkrc.h"
 
 #ifdef GDK_WINDOWING_QUARTZ

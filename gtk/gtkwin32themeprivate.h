@@ -53,7 +53,6 @@ int                _gtk_win32_theme_int_parse     (GtkCssParser      *parser,
 gboolean           _gtk_win32_theme_color_resolve (const char        *theme_class,
 						   gint               id,
 						   GdkRGBA           *color);
-const char *      _gtk_win32_theme_get_default    (void);
 
 G_END_DECLS
 

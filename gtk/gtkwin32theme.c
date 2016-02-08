@@ -410,15 +410,3 @@ _gtk_win32_theme_color_resolve (const char *theme_class,
   return TRUE;
 }
 
-const char *
-_gtk_win32_theme_get_default (void)
-{
-#ifdef G_OS_WIN32
-  _gtk_win32_theme_init ();
-  
-  if (use_xp_theme)
-    return (os_version.dwMajorVersion >= 6) ? "gtk-win32" : "gtk-win32-xp";
-#endif
-  return "gtk-win32-classic";
-}
-

@@ -61,7 +61,6 @@
 #include "gtkcssstringvalueprivate.h"
 #include "gtkcsstransformvalueprivate.h"
 #include "gtktypebuiltins.h"
-#include "gtkwin32themeprivate.h"
 
 #include "deprecated/gtkthemingengine.h"
 

@@ -32,7 +32,6 @@
 #include "gtkstylepropertyprivate.h"
 #include "gtkstyleproviderprivate.h"
 #include "gtkintl.h"
-#include "gtkwin32themeprivate.h"
 
 #include "deprecated/gtkthemingengine.h"
 #include "deprecated/gtkgradient.h"
