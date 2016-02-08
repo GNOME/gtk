@@ -25,6 +25,7 @@
 
 #ifdef G_OS_WIN32
 
+#include <gdk/win32/gdkwin32.h>
 #include <cairo-win32.h>
 
 #define UXTHEME_DLL "uxtheme.dll"
@@ -73,6 +74,28 @@ static DrawThemeParentBackgroundFunc draw_theme_parent_background = NULL;
 static GetThemePartSizeFunc get_theme_part_size = NULL;
 
 static GHashTable *hthemes_by_class = NULL;
+
+static GdkFilterReturn
+invalidate_win32_themes (GdkXEvent *xevent,
+                         GdkEvent  *event,
+                         gpointer   unused)
+{
+  MSG *msg;
+
+  if (!GDK_IS_WIN32_WINDOW (event->any.window))
+    return GDK_FILTER_CONTINUE;
+
+  msg = (MSG *) xevent;
+  if (msg->message != WM_THEMECHANGED)
+    return GDK_FILTER_CONTINUE;
+
+  if (g_hash_table_size (hthemes_by_class) > 0)
+    gtk_style_context_reset_widgets (gdk_display_get_default_screen (gdk_window_get_display (event->any.window)));
+
+  g_hash_table_remove_all (hthemes_by_class);
+
+  return GDK_FILTER_CONTINUE;
+}
 
 static void
 _gtk_win32_theme_init (void)
@@ -132,6 +155,8 @@ _gtk_win32_theme_init (void)
     }
 
   hthemes_by_class = g_hash_table_new (g_str_hash, g_str_equal);
+
+  gdk_window_add_filter (NULL, invalidate_win32_themes, NULL);
 }
 
 HTHEME
