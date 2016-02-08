@@ -48,7 +48,7 @@ struct _GtkCssImageWin32
 
   gint margins[4];
 
-  HTHEME theme;
+  GtkWin32Theme *theme;
 };
 
 struct _GtkCssImageWin32Class

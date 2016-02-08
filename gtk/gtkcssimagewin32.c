@@ -35,8 +35,8 @@ gtk_css_image_win32_draw (GtkCssImage        *image,
   cairo_surface_t *surface;
   int dx, dy;
 
-  surface = _gtk_win32_theme_part_create_surface (wimage->theme, wimage->part, wimage->state, wimage->margins,
-						  width, height, &dx, &dy);
+  surface = gtk_win32_theme_create_surface (wimage->theme, wimage->part, wimage->state, wimage->margins,
+				            width, height, &dx, &dy);
   
   if (wimage->state2 >= 0)
     {
@@ -44,8 +44,8 @@ gtk_css_image_win32_draw (GtkCssImage        *image,
       cairo_t *cr2;
       int dx2, dy2;
 
-      surface2 = _gtk_win32_theme_part_create_surface (wimage->theme, wimage->part2, wimage->state2, wimage->margins,
-						       width, height, &dx2, &dy2);
+      surface2 = gtk_win32_theme_create_surface (wimage->theme, wimage->part2, wimage->state2, wimage->margins,
+						 width, height, &dx2, &dy2);
 
       cr2 = cairo_create (surface);
 
@@ -92,7 +92,7 @@ gtk_css_image_win32_parse (GtkCssImage  *image,
                              "Expected name as first argument to  '-gtk-win32-theme-part'");
       return FALSE;
     }
-  wimage->theme = _gtk_win32_lookup_htheme_by_classname (class);
+  wimage->theme = gtk_win32_theme_lookup (class);
   g_free (class);
 
   if (! _gtk_css_parser_try (parser, ",", TRUE))
@@ -215,9 +215,23 @@ gtk_css_image_win32_print (GtkCssImage *image,
 }
 
 static void
+gtk_css_image_win32_finalize (GObject *object)
+{
+  GtkCssImageWin32 *wimage = GTK_CSS_IMAGE_WIN32 (object);
+
+  if (wimage->theme)
+    gtk_win32_theme_unref (wimage->theme);
+
+  G_OBJECT_CLASS (_gtk_css_image_win32_parent_class)->finalize (object);
+}
+
+static void
 _gtk_css_image_win32_class_init (GtkCssImageWin32Class *klass)
 {
   GtkCssImageClass *image_class = GTK_CSS_IMAGE_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->finalize = gtk_css_image_win32_finalize;
 
   image_class->draw = gtk_css_image_win32_draw;
   image_class->parse = gtk_css_image_win32_parse;
