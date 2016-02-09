@@ -204,7 +204,8 @@ disconnect_resize_handler (GtkMagnifier *magnifier)
 
   if (priv->resize_handler)
     {
-      g_signal_handler_disconnect (priv->inspected, priv->resize_handler);
+      if (priv->inspected)
+        g_signal_handler_disconnect (priv->inspected, priv->resize_handler);
       priv->resize_handler = 0;
     }
 }
@@ -239,7 +240,8 @@ disconnect_draw_handler (GtkMagnifier *magnifier)
 
   if (priv->draw_handler)
     {
-      g_signal_handler_disconnect (priv->inspected, priv->draw_handler);
+      if (priv->inspected)
+        g_signal_handler_disconnect (priv->inspected, priv->draw_handler);
       priv->draw_handler = 0;
     }
 }
@@ -343,7 +345,13 @@ _gtk_magnifier_set_inspected (GtkMagnifier *magnifier,
   disconnect_draw_handler (magnifier);
   disconnect_resize_handler (magnifier);
 
+  if (priv->inspected)
+    g_object_remove_weak_pointer (G_OBJECT (priv->inspected),
+                                  (gpointer *) &priv->inspected);
   priv->inspected = inspected;
+  if (priv->inspected)
+    g_object_add_weak_pointer (G_OBJECT (priv->inspected),
+                               (gpointer *) &priv->inspected);
 
   connect_draw_handler (magnifier);
   connect_resize_handler (magnifier);
