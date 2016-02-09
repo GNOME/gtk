@@ -991,7 +991,7 @@ gtk_switch_class_init (GtkSwitchClass *klass)
    *
    * The ::state-set signal on GtkSwitch is emitted to change the underlying
    * state. It is emitted when the user changes the switch position. The
-   * default handler keeps the state in sync with the #GtkState:active
+   * default handler keeps the state in sync with the #GtkSwitch:active
    * property.
    *
    * To implement delayed state change, applications can connect to this signal,

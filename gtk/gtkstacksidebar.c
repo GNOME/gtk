@@ -49,13 +49,13 @@
  * GtkStackSidebar has a single CSS node with name stacksidebar and
  * style class .sidebar.
  *
- * When circumstances require it, GtkStackSwitcher adds the
+ * When circumstances require it, GtkStackSidebar adds the
  * .needs-attention style class to the widgets representing the stack
  * pages.
  *
  * Since: 3.16
  */
- 
+
 struct _GtkStackSidebarPrivate
 {
   GtkListBox *list;
