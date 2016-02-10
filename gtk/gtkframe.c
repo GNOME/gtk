@@ -322,6 +322,8 @@ gtk_frame_init (GtkFrame *frame)
                                                        NULL,
                                                        NULL,
                                                        NULL);
+
+  gtk_css_gadget_set_state (priv->border_gadget, gtk_widget_get_state_flags (GTK_WIDGET (frame)));
 }
 
 static void
