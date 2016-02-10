@@ -852,6 +852,7 @@ gtk_spin_button_finalize (GObject *object)
   GtkSpinButtonPrivate *priv = spin_button->priv;
 
   gtk_spin_button_unset_adjustment (spin_button);
+  g_clear_object (&priv->gadget);
 
   g_object_unref (priv->swipe_gesture);
 
