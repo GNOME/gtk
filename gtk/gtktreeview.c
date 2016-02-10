@@ -2978,6 +2978,7 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
       GtkTreeViewChild *child = tmp_list->data;
       GtkTreePath *path;
       GdkRectangle child_rect;
+      int min_x, max_x, min_y, max_y;
       int size;
 
       path = _gtk_tree_path_new_from_rbtree (child->tree, child->node);
@@ -3002,6 +3003,14 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
           child_rect.y -= size / 2;
           child_rect.height += size;
         }
+
+      /* push the rect back in the visible area if needed, preferring the top left corner */
+      min_x = gtk_adjustment_get_value (tree_view->priv->hadjustment);
+      max_x = min_x + allocation->width - child_rect.width;
+      min_y = 0;
+      max_y = min_y + allocation->height - gtk_tree_view_get_effective_header_height (tree_view) - child_rect.height;
+      child_rect.x = MAX (min_x, MIN (child_rect.x, max_x));
+      child_rect.y = MAX (min_y, MIN (child_rect.y, max_y));
 
       gtk_tree_path_free (path);
       gtk_widget_size_allocate (child->widget, &child_rect);
