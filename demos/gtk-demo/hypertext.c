@@ -44,7 +44,7 @@ show_page (GtkTextBuffer *buffer,
   if (page == 1)
     {
       gtk_text_buffer_insert (buffer, &iter, "Some text to show that simple ", -1);
-      insert_link (buffer, &iter, "hypertext", 3);
+      insert_link (buffer, &iter, "hyper text", 3);
       gtk_text_buffer_insert (buffer, &iter, " can easily be realized with ", -1);
       insert_link (buffer, &iter, "tags", 2);
       gtk_text_buffer_insert (buffer, &iter, ".", -1);
@@ -173,9 +173,8 @@ event_after (GtkWidget *text_view,
                                          GTK_TEXT_WINDOW_WIDGET,
                                          ex, ey, &x, &y);
 
-  gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (text_view), &iter, x, y);
-
-  follow_if_link (text_view, &iter);
+  if (gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (text_view), &iter, x, y))
+    follow_if_link (text_view, &iter);
 
   return TRUE;
 }
@@ -197,18 +196,19 @@ set_cursor_if_appropriate (GtkTextView    *text_view,
   GtkTextIter iter;
   gboolean hovering = FALSE;
 
-  gtk_text_view_get_iter_at_location (text_view, &iter, x, y);
-
-  tags = gtk_text_iter_get_tags (&iter);
-  for (tagp = tags;  tagp != NULL;  tagp = tagp->next)
+  if (gtk_text_view_get_iter_at_location (text_view, &iter, x, y))
     {
-      GtkTextTag *tag = tagp->data;
-      gint page = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (tag), "page"));
-
-      if (page != 0)
+      tags = gtk_text_iter_get_tags (&iter);
+      for (tagp = tags;  tagp != NULL;  tagp = tagp->next)
         {
-          hovering = TRUE;
-          break;
+          GtkTextTag *tag = tagp->data;
+          gint page = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (tag), "page"));
+
+          if (page != 0)
+            {
+              hovering = TRUE;
+              break;
+            }
         }
     }
 
@@ -272,6 +272,8 @@ do_hypertext (GtkWidget *do_widget)
 
       view = gtk_text_view_new ();
       gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (view), GTK_WRAP_WORD);
+      gtk_text_view_set_left_margin (GTK_TEXT_VIEW (view), 20);
+      gtk_text_view_set_right_margin (GTK_TEXT_VIEW (view), 20);
       g_signal_connect (view, "key-press-event",
                         G_CALLBACK (key_press_event), NULL);
       g_signal_connect (view, "event-after",
