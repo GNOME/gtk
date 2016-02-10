@@ -395,7 +395,7 @@ format_state_flags (GtkStateFlags state)
       return g_string_free (str, FALSE);
     }
 
- return "";
+ return g_strdup ("");
 }
 
 static void
