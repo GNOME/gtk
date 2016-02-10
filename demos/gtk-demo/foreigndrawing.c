@@ -173,6 +173,51 @@ draw_menu (GtkWidget     *widget,
 }
 
 static void
+draw_notebook (GtkWidget     *widget,
+               cairo_t       *cr,
+               gint           x,
+               gint           y,
+               gint           width,
+               gint           height)
+{
+  GtkStyleContext *notebook_context;
+  GtkStyleContext *stack_context;
+  GtkStyleContext *header_context;
+  GtkStyleContext *tabs_context;
+  GtkStyleContext *tab_context;
+
+  /* This information is taken from the GtkNotebook docs, see "CSS nodes" */
+  notebook_context = get_style (NULL, "notebook.frame");
+
+  gtk_render_background (notebook_context, cr, x, y, width, height);
+  gtk_render_frame (notebook_context, cr, x, y, width, height);
+
+  stack_context = get_style (notebook_context, "stack");
+  gtk_render_background (stack_context, cr, x, y + 30, width, height - 30);
+  gtk_render_frame (stack_context, cr, x, y + 30, width, height - 30);
+
+  header_context = get_style (notebook_context, "header.frame");
+  gtk_render_background (header_context, cr, x, y, width, 30);
+  gtk_render_frame (header_context, cr, x, y, width, 30);
+
+  tabs_context = get_style (header_context, "tabs");
+  gtk_render_background (tabs_context, cr, x, y, width, 30);
+  gtk_render_frame (tabs_context, cr, x, y, width, 30);
+
+  /* what do I need to do to get the box-shadow rendered ? */
+  tab_context = get_style (tabs_context, "tab:active");
+  gtk_render_background (tab_context, cr, x, y, 50, 30);
+  gtk_render_frame (tab_context, cr, x, y, 50, 30);
+
+  g_object_unref (tab_context);
+  g_object_unref (tabs_context);
+  g_object_unref (header_context);
+  g_object_unref (stack_context);
+  g_object_unref (notebook_context);
+}
+
+
+static void
 draw_horizontal_scrollbar (GtkWidget     *widget,
                            cairo_t       *cr,
                            gint           x,
@@ -349,6 +394,8 @@ draw_cb (GtkWidget *widget,
 
   draw_menu (widget, cr, 10 + panewidth, 10, panewidth - 20, 160);
 
+  draw_notebook (widget, cr, 10, 200, panewidth - 20, 160);
+
   return FALSE;
 }
 
@@ -372,7 +419,7 @@ do_foreigndrawing (GtkWidget *do_widget)
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
       gtk_container_add (GTK_CONTAINER (window), box);
       da = gtk_drawing_area_new ();
-      gtk_widget_set_size_request (da, 400, 200);
+      gtk_widget_set_size_request (da, 400, 400);
       gtk_widget_set_hexpand (da, TRUE);
       gtk_widget_set_vexpand (da, TRUE);
       gtk_widget_set_app_paintable (da, TRUE);
