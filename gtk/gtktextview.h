@@ -259,12 +259,12 @@ void           gtk_text_view_get_iter_location     (GtkTextView   *text_view,
                                                     const GtkTextIter *iter,
                                                     GdkRectangle  *location);
 GDK_AVAILABLE_IN_ALL
-void           gtk_text_view_get_iter_at_location  (GtkTextView   *text_view,
+gboolean       gtk_text_view_get_iter_at_location  (GtkTextView   *text_view,
                                                     GtkTextIter   *iter,
                                                     gint           x,
                                                     gint           y);
 GDK_AVAILABLE_IN_ALL
-void           gtk_text_view_get_iter_at_position  (GtkTextView   *text_view,
+gboolean       gtk_text_view_get_iter_at_position  (GtkTextView   *text_view,
                                                     GtkTextIter   *iter,
 						    gint          *trailing,
                                                     gint           x,

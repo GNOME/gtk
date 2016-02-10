@@ -362,7 +362,7 @@ gtk_text_layout_default_style_changed (GtkTextLayout *layout)
 }
 
 void
-gtk_text_layout_set_default_style (GtkTextLayout *layout,
+gtk_text_layout_set_default_style (GtkTextLayout     *layout,
                                    GtkTextAttributes *values)
 {
   g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
@@ -2736,32 +2736,37 @@ gtk_text_layout_get_line_at_y (GtkTextLayout *layout,
   gtk_text_layout_get_iter_at_line (layout, target_iter, line, 0);
 }
 
-void
+gboolean
 gtk_text_layout_get_iter_at_pixel (GtkTextLayout *layout,
                                    GtkTextIter   *target_iter,
-                                   gint           x, 
-				   gint           y)
+                                   gint           x,
+                                   gint           y)
 {
   gint trailing;
+  gboolean inside;
 
-  gtk_text_layout_get_iter_at_position (layout, target_iter, &trailing, x, y);
+  inside = gtk_text_layout_get_iter_at_position (layout, target_iter, &trailing, x, y);
 
-  gtk_text_iter_forward_chars (target_iter, trailing);  
+  gtk_text_iter_forward_chars (target_iter, trailing);
+
+  return inside;
 }
 
-void gtk_text_layout_get_iter_at_position (GtkTextLayout     *layout,
-					   GtkTextIter       *target_iter,
-					   gint              *trailing,
-					   gint               x,
-					   gint               y)
+gboolean
+gtk_text_layout_get_iter_at_position (GtkTextLayout *layout,
+                                      GtkTextIter   *target_iter,
+                                      gint          *trailing,
+                                      gint           x,
+                                      gint           y)
 {
   GtkTextLine *line;
   gint byte_index;
   gint line_top;
   GtkTextLineDisplay *display;
+  gboolean inside;
 
-  g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
-  g_return_if_fail (target_iter != NULL);
+  g_return_val_if_fail (GTK_IS_TEXT_LAYOUT (layout), FALSE);
+  g_return_val_if_fail (target_iter != NULL, FALSE);
 
   get_line_at_y (layout, y, &line, &line_top);
 
@@ -2778,6 +2783,8 @@ void gtk_text_layout_get_iter_at_position (GtkTextLayout     *layout,
       byte_index = _gtk_text_line_byte_count (line);
       if (trailing)
         *trailing = 0;
+
+      inside = FALSE;
     }
   else
     {
@@ -2785,13 +2792,15 @@ void gtk_text_layout_get_iter_at_position (GtkTextLayout     *layout,
         * the right thing even if we are outside the layout in the
         * x-direction.
         */
-      pango_layout_xy_to_index (display->layout, x * PANGO_SCALE, y * PANGO_SCALE,
-                                &byte_index, trailing);
+      inside = pango_layout_xy_to_index (display->layout, x * PANGO_SCALE, y * PANGO_SCALE,
+                                         &byte_index, trailing);
     }
 
   line_display_index_to_iter (layout, display, target_iter, byte_index, 0);
 
   gtk_text_layout_free_line_display (layout, display);
+
+  return inside;
 }
 
 
