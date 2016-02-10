@@ -132,6 +132,47 @@ get_style (GtkStyleContext *parent,
 }
 
 static void
+draw_menu (GtkWidget     *widget,
+           cairo_t       *cr,
+           gint           x,
+           gint           y,
+           gint           width,
+           gint           height)
+{
+  GtkStyleContext *menu_context;
+  GtkStyleContext *menuitem_context;
+  GtkStyleContext *arrowmenuitem_context;
+
+  /* This information is taken from the GtkMenu docs, see "CSS nodes" */
+  menu_context = get_style (NULL, "menu");
+
+  gtk_render_background (menu_context, cr, x, y, width, height);
+  gtk_render_frame (menu_context, cr, x, y, width, height);
+
+  menuitem_context = get_style (menu_context, "menuitem");
+  gtk_style_context_set_state (menuitem_context, GTK_STATE_FLAG_PRELIGHT);
+  gtk_render_background (menuitem_context, cr, x, y, width, 20);
+  gtk_render_frame (menuitem_context, cr, x, y, width, 20);
+
+  /* arrow for left to right */
+  arrowmenuitem_context = get_style (menuitem_context, "arrow");
+  gtk_style_context_set_state (arrowmenuitem_context, GTK_STATE_FLAG_DIR_LTR);
+  gtk_render_arrow (arrowmenuitem_context, cr, G_PI / 2, x + width - 20, y, 20);
+
+  gtk_render_background (menuitem_context, cr, x, y + 20, width, 20);
+  gtk_render_frame (menuitem_context, cr, x, y + 20, width, 20);
+
+  /* arrow for right to left */
+  gtk_style_context_get_state (arrowmenuitem_context);
+  gtk_style_context_set_state (arrowmenuitem_context, GTK_STATE_FLAG_DIR_RTL);
+  gtk_render_arrow (arrowmenuitem_context, cr, G_PI / 2, x, y + 20, 20);
+
+  g_object_unref (arrowmenuitem_context);
+  g_object_unref (menuitem_context);
+  g_object_unref (menu_context);
+}
+
+static void
 draw_horizontal_scrollbar (GtkWidget     *widget,
                            cairo_t       *cr,
                            gint           x,
@@ -283,27 +324,30 @@ static gboolean
 draw_cb (GtkWidget *widget,
          cairo_t   *cr)
 {
-  gint width, height;
+  gint panewidth, width, height;
 
   width = gtk_widget_get_allocated_width (widget);
+  panewidth = width / 2;
   height = gtk_widget_get_allocated_height (widget);
 
   cairo_rectangle (cr, 0, 0, width, height);
   cairo_set_source_rgb (cr, 0, 0, 0);
   cairo_fill (cr);
 
-  draw_horizontal_scrollbar (widget, cr, 10, 10, width - 20, 10, 30, GTK_STATE_FLAG_NORMAL);
-  draw_horizontal_scrollbar (widget, cr, 10, 30, width - 20, 10, 40, GTK_STATE_FLAG_PRELIGHT);
-  draw_horizontal_scrollbar (widget, cr, 10, 50, width - 20, 10, 50, GTK_STATE_FLAG_ACTIVE|GTK_STATE_FLAG_PRELIGHT);
+  draw_horizontal_scrollbar (widget, cr, 10, 10, panewidth - 20, 10, 30, GTK_STATE_FLAG_NORMAL);
+  draw_horizontal_scrollbar (widget, cr, 10, 30, panewidth - 20, 10, 40, GTK_STATE_FLAG_PRELIGHT);
+  draw_horizontal_scrollbar (widget, cr, 10, 50, panewidth - 20, 10, 50, GTK_STATE_FLAG_ACTIVE|GTK_STATE_FLAG_PRELIGHT);
 
-  draw_text (widget, cr, 10,  70, width - 20, 20, "Not selected", GTK_STATE_FLAG_NORMAL);
-  draw_text (widget, cr, 10, 100, width - 20, 20, "Selected", GTK_STATE_FLAG_SELECTED);
+  draw_text (widget, cr, 10,  70, panewidth - 20, 20, "Not selected", GTK_STATE_FLAG_NORMAL);
+  draw_text (widget, cr, 10, 100, panewidth - 20, 20, "Selected", GTK_STATE_FLAG_SELECTED);
 
   draw_check (widget, cr,  10, 130, GTK_STATE_FLAG_NORMAL);
   draw_check (widget, cr,  40, 130, GTK_STATE_FLAG_CHECKED);
   draw_radio (widget, cr,  70, 130, GTK_STATE_FLAG_NORMAL);
   draw_radio (widget, cr, 100, 130, GTK_STATE_FLAG_CHECKED);
-  draw_progress (widget, cr, 10, 160, width - 20, 6, 50);
+  draw_progress (widget, cr, 10, 160, panewidth - 20, 6, 50);
+
+  draw_menu (widget, cr, 10 + panewidth, 10, panewidth - 20, 160);
 
   return FALSE;
 }
@@ -328,7 +372,7 @@ do_foreigndrawing (GtkWidget *do_widget)
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
       gtk_container_add (GTK_CONTAINER (window), box);
       da = gtk_drawing_area_new ();
-      gtk_widget_set_size_request (da, 200, 200);
+      gtk_widget_set_size_request (da, 400, 200);
       gtk_widget_set_hexpand (da, TRUE);
       gtk_widget_set_vexpand (da, TRUE);
       gtk_widget_set_app_paintable (da, TRUE);
