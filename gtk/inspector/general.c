@@ -166,17 +166,17 @@ append_egl_extension_row (GtkInspectorGeneral *gen,
 }
 #endif
 
+
 static void
 init_gl (GtkInspectorGeneral *gen)
 {
 #ifdef GDK_WINDOWING_X11
-  if (GDK_IS_X11_DISPLAY (display))
+  if (GDK_IS_X11_DISPLAY (gdk_display_get_default ()))
     {
       GdkDisplay *display = gdk_display_get_default ();
       Display *dpy = GDK_DISPLAY_XDISPLAY (display);
       int error_base, event_base;
       gchar *version;
-
       if (!glXQueryExtension (dpy, &error_base, &event_base))
         return;
 
@@ -197,7 +197,7 @@ init_gl (GtkInspectorGeneral *gen)
   else
 #endif
 #ifdef GDK_WINDOWING_WAYLAND
-  if (GDK_IS_WAYLAND_DISPLAY (display))
+  if (GDK_IS_WAYLAND_DISPLAY (gdk_display_get_default ()))
     {
       GdkDisplay *display = gdk_display_get_default ();
       EGLDisplay *dpy;
