@@ -1273,7 +1273,7 @@ gtk_notebook_init (GtkNotebook *notebook)
   priv->tab_pos = GTK_POS_TOP;
   priv->scrollable = FALSE;
   priv->in_child = ARROW_NONE;
-  priv->click_child = 0;
+  priv->click_child = ARROW_NONE;
   priv->need_timer = 0;
   priv->child_has_focus = FALSE;
   priv->focus_out = FALSE;
@@ -2533,9 +2533,9 @@ gtk_notebook_show_arrows (GtkNotebook *notebook)
 }
 
 static void
-gtk_notebook_get_arrow_rect (GtkNotebook     *notebook,
-                             GdkRectangle    *rectangle,
-                             GtkNotebookArrow arrow)
+gtk_notebook_get_arrow_rect (GtkNotebook      *notebook,
+                             GdkRectangle     *rectangle,
+                             GtkNotebookArrow  arrow)
 {
   GtkNotebookPrivate *priv = notebook->priv;
 
@@ -2840,7 +2840,7 @@ stop_scrolling (GtkNotebook *notebook)
       priv->timer = 0;
       priv->need_timer = FALSE;
     }
-  priv->click_child = 0;
+  priv->click_child = ARROW_NONE;
   priv->pressed_button = 0;
   gtk_notebook_redraw_arrows (notebook);
 }
