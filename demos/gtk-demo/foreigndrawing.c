@@ -126,6 +126,10 @@ get_style (GtkStyleContext *parent,
   context = gtk_style_context_new ();
   gtk_style_context_set_path (context, path);
   gtk_style_context_set_parent (context, parent);
+  /* Unfortunately, we have to explicitly set the state again here
+   * for it to take effect
+   */
+  gtk_style_context_set_state (context, gtk_widget_path_iter_get_state (path, -1));
   gtk_widget_path_unref (path);
 
   return context;
@@ -149,22 +153,19 @@ draw_menu (GtkWidget     *widget,
   gtk_render_background (menu_context, cr, x, y, width, height);
   gtk_render_frame (menu_context, cr, x, y, width, height);
 
-  menuitem_context = get_style (menu_context, "menuitem");
-  gtk_style_context_set_state (menuitem_context, GTK_STATE_FLAG_PRELIGHT);
+  menuitem_context = get_style (menu_context, "menuitem:hover");
   gtk_render_background (menuitem_context, cr, x, y, width, 20);
   gtk_render_frame (menuitem_context, cr, x, y, width, 20);
 
   /* arrow for left to right */
-  arrowmenuitem_context = get_style (menuitem_context, "arrow");
-  gtk_style_context_set_state (arrowmenuitem_context, GTK_STATE_FLAG_DIR_LTR);
+  arrowmenuitem_context = get_style (menuitem_context, "arrow:dir(ltr)");
   gtk_render_arrow (arrowmenuitem_context, cr, G_PI / 2, x + width - 20, y, 20);
-
   gtk_render_background (menuitem_context, cr, x, y + 20, width, 20);
   gtk_render_frame (menuitem_context, cr, x, y + 20, width, 20);
+  g_object_unref (arrowmenuitem_context);
 
   /* arrow for right to left */
-  gtk_style_context_get_state (arrowmenuitem_context);
-  gtk_style_context_set_state (arrowmenuitem_context, GTK_STATE_FLAG_DIR_RTL);
+  arrowmenuitem_context = get_style (menuitem_context, "arrow:dir(rtl)");
   gtk_render_arrow (arrowmenuitem_context, cr, G_PI / 2, x, y + 20, 20);
 
   g_object_unref (arrowmenuitem_context);
@@ -181,38 +182,42 @@ draw_notebook (GtkWidget     *widget,
                gint           height)
 {
   GtkStyleContext *notebook_context;
-  GtkStyleContext *stack_context;
   GtkStyleContext *header_context;
   GtkStyleContext *tabs_context;
   GtkStyleContext *tab_context;
+  GtkStyleContext *stack_context;
+  gint header_height = 40;
 
   /* This information is taken from the GtkNotebook docs, see "CSS nodes" */
   notebook_context = get_style (NULL, "notebook.frame");
-
   gtk_render_background (notebook_context, cr, x, y, width, height);
   gtk_render_frame (notebook_context, cr, x, y, width, height);
 
-  stack_context = get_style (notebook_context, "stack");
-  gtk_render_background (stack_context, cr, x, y + 30, width, height - 30);
-  gtk_render_frame (stack_context, cr, x, y + 30, width, height - 30);
-
-  header_context = get_style (notebook_context, "header.frame");
-  gtk_render_background (header_context, cr, x, y, width, 30);
-  gtk_render_frame (header_context, cr, x, y, width, 30);
+  header_context = get_style (notebook_context, "header.top");
+  gtk_render_background (header_context, cr, x, y, width, header_height);
+  gtk_render_frame (header_context, cr, x, y, width, header_height);
 
   tabs_context = get_style (header_context, "tabs");
-  gtk_render_background (tabs_context, cr, x, y, width, 30);
-  gtk_render_frame (tabs_context, cr, x, y, width, 30);
+  gtk_render_background (tabs_context, cr, x, y, width, header_height);
+  gtk_render_frame (tabs_context, cr, x, y, width, header_height);
 
-  /* what do I need to do to get the box-shadow rendered ? */
   tab_context = get_style (tabs_context, "tab:active");
-  gtk_render_background (tab_context, cr, x, y, 50, 30);
-  gtk_render_frame (tab_context, cr, x, y, 50, 30);
+  gtk_render_background (tab_context, cr, x, y, width/2, header_height);
+  gtk_render_frame (tab_context, cr, x, y, width/2, header_height);
+  g_object_unref (tab_context);
 
+  tab_context = get_style (tabs_context, "tab");
+  gtk_render_background (tab_context, cr, x + width/2, y, width/2, header_height);
+  gtk_render_frame (tab_context, cr, x + width/2, y, width/2, header_height);
+
+  stack_context = get_style (notebook_context, "stack");
+  gtk_render_background (stack_context, cr, x, y + header_height, width, height - header_height);
+  gtk_render_frame (stack_context, cr, x, y + header_height, width, height - header_height);
+
+  g_object_unref (stack_context);
   g_object_unref (tab_context);
   g_object_unref (tabs_context);
   g_object_unref (header_context);
-  g_object_unref (stack_context);
   g_object_unref (notebook_context);
 }
 
