@@ -157,7 +157,7 @@ invalidate_win32_themes (GdkXEvent *xevent,
 }
 
 static void
-_gtk_win32_theme_init (void)
+gtk_win32_theme_init (void)
 {
   char *buf;
   char dummy;
@@ -224,6 +224,8 @@ gtk_win32_theme_get_htheme (GtkWin32Theme *theme)
   guint16 *wclass;
   char *lower;
   
+  gtk_win32_theme_init ();
+
   if (theme->htheme)
     return theme->htheme;
 
@@ -243,8 +245,6 @@ GtkWin32Theme *
 gtk_win32_theme_lookup (const char *classname)
 {
   GtkWin32Theme *theme;
-
-  _gtk_win32_theme_init ();
 
   theme = g_hash_table_lookup (themes_by_class, classname);
 
