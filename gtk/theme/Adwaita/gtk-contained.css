@@ -3041,7 +3041,7 @@ check:not(:indeterminate):checked {
 radio:not(:indeterminate):checked {
   animation: check_radio 400ms; }
 
-check:indeterminate:checked:active, radio:indeterminate:checked {
+check:indeterminate:checked, radio:indeterminate:checked {
   animation: check_indeterminate 400ms; }
 
 menu menuitem check:not(:indeterminate):checked,
