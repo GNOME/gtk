@@ -21,6 +21,8 @@
 #include <gdk/gdk.h>
 #include <mir_toolkit/mir_client_library.h>
 
+G_BEGIN_DECLS
+
 #define GDK_TYPE_MIR_DISPLAY              (gdk_mir_display_get_type ())
 #define GDK_IS_MIR_DISPLAY(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_MIR_DISPLAY))
 
@@ -44,5 +46,7 @@ MirSurface *gdk_mir_window_get_mir_surface (GdkWindow *window);
 
 GDK_AVAILABLE_IN_3_16
 GType gdk_mir_gl_context_get_type (void) G_GNUC_CONST;
+
+G_END_DECLS
 
 #endif /* __GDK_MIR_H__ */
