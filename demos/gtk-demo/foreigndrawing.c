@@ -174,6 +174,36 @@ draw_menu (GtkWidget     *widget,
 }
 
 static void
+draw_menubar (GtkWidget     *widget,
+              cairo_t       *cr,
+              gint           x,
+              gint           y,
+              gint           width,
+              gint           height)
+{
+  GtkStyleContext *menubar_context;
+  GtkStyleContext *menuitem_context;
+  gint item_width = width / 3;
+
+  /* This information is taken from the GtkMenuBar docs, see "CSS nodes" */
+  menubar_context = get_style (NULL, "menubar.background");
+
+  gtk_render_background (menubar_context, cr, x, y, width, height);
+  gtk_render_frame (menubar_context, cr, x, y, width, height);
+
+  menuitem_context = get_style (menubar_context, "menuitem:hover");
+
+  gtk_render_background (menuitem_context, cr, x, y, item_width, 20);
+  gtk_render_frame (menuitem_context, cr, x, y, item_width, 20);
+
+  gtk_render_background (menuitem_context, cr, x + item_width * 2, y, item_width, 20);
+  gtk_render_frame (menuitem_context, cr, x + item_width * 2, y, item_width, 20);
+
+  g_object_unref (menuitem_context);
+  g_object_unref (menubar_context);
+}
+
+static void
 draw_notebook (GtkWidget     *widget,
                cairo_t       *cr,
                gint           x,
@@ -370,6 +400,57 @@ draw_progress (GtkWidget *widget,
   g_object_unref (bar_context);
 }
 
+static void
+draw_spinbutton (GtkWidget *widget,
+                 cairo_t   *cr,
+                 gint       x,
+                 gint       y,
+                 gint       width)
+{
+  GtkStyleContext *spin_context;
+  GtkStyleContext *entry_context;
+  GtkStyleContext *up_context;
+  GtkStyleContext *down_context;
+
+  GtkIconTheme *icon_theme;
+  GtkIconInfo *icon_info;
+  GdkPixbuf *pixbuf;
+
+  /* This information is taken from the GtkSpinButton docs, see "CSS nodes" */
+  spin_context = get_style (NULL, "spinbutton:focus");
+  entry_context = get_style (NULL, "entry:focus");
+  up_context = get_style (spin_context, "button.up:active");
+  down_context = get_style (spin_context, "button.down");
+
+  gtk_render_background (entry_context, cr, x, y, width, 30);
+  gtk_render_frame (entry_context, cr, x, y, width, 30);
+
+  gtk_render_background (up_context, cr, x + width - 30, y, 30, 30);
+  gtk_render_frame (up_context, cr, x + width - 30, y, 30, 30);
+
+  gtk_render_background (down_context, cr, x + width - 60, y, 30, 30);
+  gtk_render_frame (down_context, cr, x + width - 60, y, 30, 30);
+
+  icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (widget));
+
+  icon_info = gtk_icon_theme_lookup_icon (icon_theme, "list-add-symbolic", 20, 0);
+  pixbuf = gtk_icon_info_load_symbolic_for_context (icon_info, up_context, NULL, NULL);
+  g_object_unref (icon_info);
+  gtk_render_icon (up_context, cr, pixbuf, x + width - 30 + 5, y + 5);
+  g_object_unref (pixbuf);
+
+  icon_info = gtk_icon_theme_lookup_icon (icon_theme, "list-remove-symbolic", 20, 0);
+  pixbuf = gtk_icon_info_load_symbolic_for_context (icon_info, down_context, NULL, NULL);
+  g_object_unref (icon_info);
+  gtk_render_icon (down_context, cr, pixbuf, x + width - 60 + 5, y + 5);
+  g_object_unref (pixbuf);
+
+  g_object_unref (down_context);
+  g_object_unref (up_context);
+  g_object_unref (entry_context);
+  g_object_unref (spin_context);
+}
+
 static gboolean
 draw_cb (GtkWidget *widget,
          cairo_t   *cr)
@@ -397,7 +478,11 @@ draw_cb (GtkWidget *widget,
   draw_radio (widget, cr, 100, 130, GTK_STATE_FLAG_CHECKED);
   draw_progress (widget, cr, 10, 160, panewidth - 20, 6, 50);
 
-  draw_menu (widget, cr, 10 + panewidth, 10, panewidth - 20, 160);
+  draw_menu (widget, cr, 10 + panewidth, 10, panewidth - 20, 80);
+
+  draw_menubar (widget, cr, 10 + panewidth, 100, panewidth - 20, 20);
+
+  draw_spinbutton (widget, cr, 10 + panewidth, 130, panewidth - 20);
 
   draw_notebook (widget, cr, 10, 200, panewidth - 20, 160);
 
