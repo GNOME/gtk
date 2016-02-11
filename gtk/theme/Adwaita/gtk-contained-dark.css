@@ -2870,7 +2870,8 @@ radio {
     box-shadow: none;
     -gtk-icon-shadow: none;
     color: inherit;
-    border-color: currentColor; }
+    border-color: currentColor;
+    animation: none; }
 
 check {
   border-radius: 3px; }
@@ -2885,6 +2886,36 @@ radio {
     -gtk-icon-source: image(-gtk-recolor(url("assets/bullet-symbolic.svg")), -gtk-recolor(url("assets/bullet-symbolic.symbolic.png"))); }
   radio:indeterminate {
     -gtk-icon-source: image(-gtk-recolor(url("assets/dash-symbolic.svg")), -gtk-recolor(url("assets/dash-symbolic.symbolic.png"))); }
+
+@keyframes check_check {
+  from {
+    -gtk-icon-transform: translate(6px, -3px) rotate(-45deg) scaleY(0.2) rotate(45deg) scaleX(0); }
+  to {
+    -gtk-icon-transform: unset; } }
+@keyframes check_radio {
+  from {
+    -gtk-icon-transform: scale(0); }
+  to {
+    -gtk-icon-transform: unset; } }
+@keyframes check_indeterminate {
+  from {
+    -gtk-icon-transform: scale(0, 1); }
+  to {
+    -gtk-icon-transform: unset; } }
+check:not(:indeterminate):checked {
+  animation: check_check 400ms; }
+
+radio:not(:indeterminate):checked {
+  animation: check_radio 400ms; }
+
+check:indeterminate:checked:active, radio:indeterminate:checked {
+  animation: check_indeterminate 400ms; }
+
+menu menuitem check:not(:indeterminate):checked,
+menu menuitem radio:not(:indeterminate):checked,
+menu menuitem check:indeterminate:checked:active,
+menu menuitem radio:indeterminate:checked {
+  animation: none; }
 
 /************
  * GtkScale *
