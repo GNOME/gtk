@@ -145,30 +145,75 @@ draw_menu (GtkWidget     *widget,
 {
   GtkStyleContext *menu_context;
   GtkStyleContext *menuitem_context;
+  GtkStyleContext *hovermenuitem_context;
   GtkStyleContext *arrowmenuitem_context;
+  GtkStyleContext *checkmenuitem_context;
+  GtkStyleContext *radiomenuitem_context;
+  GtkStyleContext *disablemenuitem_context;
 
   /* This information is taken from the GtkMenu docs, see "CSS nodes" */
-  menu_context = get_style (NULL, "menu");
+  menu_context = get_style (gtk_widget_get_style_context(widget), "menu");
 
   gtk_render_background (menu_context, cr, x, y, width, height);
   gtk_render_frame (menu_context, cr, x, y, width, height);
 
-  menuitem_context = get_style (menu_context, "menuitem:hover");
-  gtk_render_background (menuitem_context, cr, x, y, width, 20);
-  gtk_render_frame (menuitem_context, cr, x, y, width, 20);
+  hovermenuitem_context = get_style (menu_context, "menuitem:hover");
+  gtk_render_background (hovermenuitem_context, cr, x, y, width, 20);
+  gtk_render_frame (hovermenuitem_context, cr, x, y, width, 20);
 
   /* arrow for left to right */
-  arrowmenuitem_context = get_style (menuitem_context, "arrow:dir(ltr)");
+  arrowmenuitem_context = get_style (hovermenuitem_context, "arrow:dir(ltr)");
   gtk_render_arrow (arrowmenuitem_context, cr, G_PI / 2, x + width - 20, y, 20);
+  g_object_unref (arrowmenuitem_context);
+
+  menuitem_context = get_style (menu_context, "menuitem");
   gtk_render_background (menuitem_context, cr, x, y + 20, width, 20);
   gtk_render_frame (menuitem_context, cr, x, y + 20, width, 20);
-  g_object_unref (arrowmenuitem_context);
 
-  /* arrow for right to left */
+  disablemenuitem_context = get_style (menu_context, "menuitem:disabled");
+
+  /* arrow for right to left, sensitive */
   arrowmenuitem_context = get_style (menuitem_context, "arrow:dir(rtl)");
   gtk_render_arrow (arrowmenuitem_context, cr, G_PI / 2, x, y + 20, 20);
-
   g_object_unref (arrowmenuitem_context);
+
+  /* arrow for right to left, insensitive */
+  arrowmenuitem_context = get_style (disablemenuitem_context, "arrow:dir(rtl)");
+  gtk_render_arrow (arrowmenuitem_context, cr, G_PI / 2, x + width - 20, y + 20, 20);
+
+  gtk_render_background (menuitem_context, cr, x, y + 40, width, 20);
+  gtk_render_frame (menuitem_context, cr, x, y + 40, width, 20);
+
+  /* check enabled, sensitive */
+  checkmenuitem_context = get_style (menuitem_context, "check:checked");
+  gtk_render_frame (checkmenuitem_context, cr, x + 2, y + 40, 16, 16);
+  gtk_render_check (checkmenuitem_context, cr, x + 2, y + 40, 16, 16);
+  g_object_unref (checkmenuitem_context);
+
+  /* check unchecked, insensitive */
+  checkmenuitem_context = get_style (disablemenuitem_context, "check");
+  gtk_render_frame (checkmenuitem_context, cr, x + width - 18, y + 40, 16, 16);
+  gtk_render_check (checkmenuitem_context, cr, x + width - 18, y + 40, 16, 16);
+
+  gtk_render_background (menuitem_context, cr, x, y + 60, width, 20);
+  gtk_render_frame (menuitem_context, cr, x, y + 60, width, 20);
+
+  /* radio checked, sensitive */
+  radiomenuitem_context = get_style (menuitem_context, "radio:checked");
+  gtk_render_frame (radiomenuitem_context, cr, x + 2, y + 60, 16, 16);
+  gtk_render_option (radiomenuitem_context, cr, x + 2, y + 60, 16, 16);
+  g_object_unref (radiomenuitem_context);
+
+  /* radio unchecked, insensitive */
+  radiomenuitem_context = get_style (disablemenuitem_context, "radio");
+  gtk_render_frame (radiomenuitem_context, cr, x + width - 18, y + 60, 16, 16);
+  gtk_render_option (radiomenuitem_context, cr, x + width - 18, y + 60, 16, 16);
+
+  g_object_unref (disablemenuitem_context);
+  g_object_unref (radiomenuitem_context);
+  g_object_unref (checkmenuitem_context);
+  g_object_unref (arrowmenuitem_context);
+  g_object_unref (hovermenuitem_context);
   g_object_unref (menuitem_context);
   g_object_unref (menu_context);
 }
