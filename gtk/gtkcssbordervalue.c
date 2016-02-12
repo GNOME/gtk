@@ -174,7 +174,7 @@ _gtk_css_border_value_parse (GtkCssParser           *parser,
       if (allow_auto && _gtk_css_parser_try (parser, "auto", TRUE))
         continue;
 
-      if (!_gtk_css_parser_has_number (parser))
+      if (!gtk_css_number_value_can_parse (parser))
         break;
 
       result->values[i] = _gtk_css_number_value_parse (parser, flags);

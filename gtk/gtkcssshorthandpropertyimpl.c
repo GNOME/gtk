@@ -68,7 +68,7 @@ parse_four_numbers (GtkCssShorthandProperty  *shorthand,
 
   for (i = 0; i < 4; i++)
     {
-      if (!_gtk_css_parser_has_number (parser))
+      if (!gtk_css_number_value_can_parse (parser))
         break;
 
       values[i] = _gtk_css_number_value_parse (parser, flags);
@@ -138,7 +138,7 @@ parse_border_radius (GtkCssShorthandProperty  *shorthand,
 
   for (i = 0; i < 4; i++)
     {
-      if (!_gtk_css_parser_has_number (parser))
+      if (!gtk_css_number_value_can_parse (parser))
         break;
       x[i] = _gtk_css_number_value_parse (parser,
                                           GTK_CSS_POSITIVE_ONLY
@@ -165,7 +165,7 @@ parse_border_radius (GtkCssShorthandProperty  *shorthand,
     {
       for (i = 0; i < 4; i++)
         {
-          if (!_gtk_css_parser_has_number (parser))
+          if (!gtk_css_number_value_can_parse (parser))
             break;
           y[i] = _gtk_css_number_value_parse (parser,
                                               GTK_CSS_POSITIVE_ONLY
@@ -335,7 +335,7 @@ parse_border_side (GtkCssShorthandProperty  *shorthand,
   do
   {
     if (values[0] == NULL &&
-         _gtk_css_parser_has_number (parser))
+        gtk_css_number_value_can_parse (parser))
       {
         values[0] = _gtk_css_number_value_parse (parser,
                                                  GTK_CSS_POSITIVE_ONLY
@@ -377,7 +377,7 @@ parse_border (GtkCssShorthandProperty  *shorthand,
   do
   {
     if (values[0] == NULL &&
-         _gtk_css_parser_has_number (parser))
+        gtk_css_number_value_can_parse (parser))
       {
         values[0] = _gtk_css_number_value_parse (parser,
                                                  GTK_CSS_POSITIVE_ONLY
@@ -620,7 +620,7 @@ parse_one_transition (GtkCssShorthandProperty  *shorthand,
     {
       /* the image part */
       if (values[2] == NULL &&
-          _gtk_css_parser_has_number (parser) && !_gtk_css_parser_begins_with (parser, '-'))
+          gtk_css_number_value_can_parse (parser) && !_gtk_css_parser_begins_with (parser, '-'))
         {
           GtkCssValue *number = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_TIME);
 
@@ -725,7 +725,7 @@ parse_one_animation (GtkCssShorthandProperty  *shorthand,
           values[1] = _gtk_css_number_value_new (HUGE_VAL, GTK_CSS_NUMBER);
         }
       else if ((values[1] == NULL || values[3] == NULL) &&
-          _gtk_css_parser_has_number (parser))
+               gtk_css_number_value_can_parse (parser))
         {
           GtkCssValue *value;
           

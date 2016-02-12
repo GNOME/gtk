@@ -282,9 +282,9 @@ gtk_css_image_radial_parse (GtkCssImage  *image,
 
         if (!has_size)
           {
-            if (_gtk_css_parser_has_number (parser))
+            if (gtk_css_number_value_can_parse (parser))
               radial->sizes[0] = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_LENGTH | GTK_CSS_PARSE_PERCENT);
-            if (_gtk_css_parser_has_number (parser))
+            if (gtk_css_number_value_can_parse (parser))
               radial->sizes[1] = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_LENGTH | GTK_CSS_PARSE_PERCENT);
             found_one = has_size = radial->sizes[0] != NULL;
           }
@@ -357,7 +357,7 @@ gtk_css_image_radial_parse (GtkCssImage  *image,
     if (stop.color == NULL)
       return FALSE;
 
-    if (_gtk_css_parser_has_number (parser))
+    if (gtk_css_number_value_can_parse (parser))
       {
         stop.offset = _gtk_css_number_value_parse (parser,
                                                    GTK_CSS_PARSE_PERCENT

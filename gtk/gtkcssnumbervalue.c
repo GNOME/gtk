@@ -48,6 +48,12 @@ _gtk_css_number_value_new (double     value,
   return gtk_css_dimension_value_new (value, unit);
 }
 
+gboolean
+gtk_css_number_value_can_parse (GtkCssParser *parser)
+{
+  return _gtk_css_parser_has_number (parser);
+}
+
 GtkCssValue *
 _gtk_css_number_value_parse (GtkCssParser           *parser,
                              GtkCssNumberParseFlags  flags)

@@ -210,7 +210,7 @@ position_value_parse (GtkCssParser *parser, gboolean try)
     }
   if (names[first].name == NULL)
     {
-      if (_gtk_css_parser_has_number (parser))
+      if (gtk_css_number_value_can_parse (parser))
         {
           missing = &y;
           x = _gtk_css_number_value_parse (parser,
@@ -239,7 +239,7 @@ position_value_parse (GtkCssParser *parser, gboolean try)
 
   if (names[second].name == NULL)
     {
-      if (_gtk_css_parser_has_number (parser))
+      if (gtk_css_number_value_can_parse (parser))
         {
           if (missing != &y)
             {

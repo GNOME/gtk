@@ -310,7 +310,7 @@ gtk_css_image_linear_parse (GtkCssImage  *image,
           return FALSE;
         }
     }
-  else if (_gtk_css_parser_has_number (parser))
+  else if (gtk_css_number_value_can_parse (parser))
     {
       linear->angle = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_ANGLE);
       if (linear->angle == NULL)
@@ -332,7 +332,7 @@ gtk_css_image_linear_parse (GtkCssImage  *image,
     if (stop.color == NULL)
       return FALSE;
 
-    if (_gtk_css_parser_has_number (parser))
+    if (gtk_css_number_value_can_parse (parser))
       {
         stop.offset = _gtk_css_number_value_parse (parser,
                                                    GTK_CSS_PARSE_PERCENT

@@ -132,7 +132,7 @@ _gtk_css_corner_value_parse (GtkCssParser *parser)
   if (x == NULL)
     return NULL;
 
-  if (!_gtk_css_parser_has_number (parser))
+  if (!gtk_css_number_value_can_parse (parser))
     y = _gtk_css_value_ref (x);
   else
     {

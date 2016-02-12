@@ -215,7 +215,7 @@ _gtk_css_shadow_value_parse (GtkCssParser *parser,
   do
   {
     if (values[HOFFSET] == NULL &&
-         _gtk_css_parser_has_number (parser))
+        gtk_css_number_value_can_parse (parser))
       {
         values[HOFFSET] = _gtk_css_number_value_parse (parser,
                                                        GTK_CSS_PARSE_LENGTH
@@ -229,7 +229,7 @@ _gtk_css_shadow_value_parse (GtkCssParser *parser,
         if (values[VOFFSET] == NULL)
           goto fail;
 
-        if (_gtk_css_parser_has_number (parser))
+        if (gtk_css_number_value_can_parse (parser))
           {
             values[RADIUS] = _gtk_css_number_value_parse (parser,
                                                           GTK_CSS_PARSE_LENGTH
@@ -241,7 +241,7 @@ _gtk_css_shadow_value_parse (GtkCssParser *parser,
         else
           values[RADIUS] = _gtk_css_number_value_new (0.0, GTK_CSS_PX);
 
-        if (box_shadow_mode && _gtk_css_parser_has_number (parser))
+        if (box_shadow_mode && gtk_css_number_value_can_parse (parser))
           {
             values[SPREAD] = _gtk_css_number_value_parse (parser,
                                                           GTK_CSS_PARSE_LENGTH

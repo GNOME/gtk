@@ -194,7 +194,7 @@ _gtk_css_bg_size_value_parse (GtkCssParser *parser)
 
   if (_gtk_css_parser_try (parser, "auto", TRUE))
     y = NULL;
-  else if (!_gtk_css_parser_has_number (parser))
+  else if (!gtk_css_number_value_can_parse (parser))
     y = NULL;
   else
     {

@@ -163,7 +163,7 @@ gtk_css_image_cross_fade_parse (GtkCssImage  *image,
       return FALSE;
     }
 
-  if (_gtk_css_parser_has_number (parser))
+  if (gtk_css_number_value_can_parse (parser))
     {
       GtkCssValue *number;
       
