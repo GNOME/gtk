@@ -1831,6 +1831,10 @@ notebook {
       }
     }
 
+    arrow:disabled {
+      color: $insensitive_fg_color;
+    }
+
     tab {
       font-weight: bold;
       min-height: 36px;

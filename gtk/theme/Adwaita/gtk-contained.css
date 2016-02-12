@@ -2203,6 +2203,8 @@ notebook > header {
         box-shadow: none; }
       notebook > header.right > tabs > tab:active {
         box-shadow: inset 3px 0 #4a90d9; }
+  notebook > header arrow:disabled {
+    color: #8b8e8f; }
   notebook > header tab {
     font-weight: bold;
     min-height: 36px;
