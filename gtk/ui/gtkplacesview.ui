@@ -203,6 +203,9 @@
       <object class="GtkActionBar" id="actionbar">
         <property name="visible">1</property>
         <property name="hexpand">1</property>
+        <style>
+          <class name="background"/>
+        </style>
         <child>
           <object class="GtkLabel">
             <property name="visible">1</property>
@@ -224,6 +227,7 @@
             <property name="can_focus">1</property>
             <property name="sensitive">0</property>
             <property name="receives_default">1</property>
+            <property name="valign">center</property>
             <signal name="clicked" handler="on_connect_button_clicked" object="GtkPlacesView" swapped="yes"/>
           </object>
           <packing>
