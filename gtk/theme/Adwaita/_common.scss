@@ -248,6 +248,7 @@ entry {
 
   &.flat,
   &.flat:focus {
+    min-height: 0;
     padding: 2px;
     @include entry(normal, $edge:none);
     border: none;

@@ -195,6 +195,7 @@ entry, spinbutton:not(.vertical) {
     border: none;
     box-shadow: none; }
   entry.flat, spinbutton.flat:not(.vertical), entry.flat:focus, spinbutton.flat:focus:not(.vertical) {
+    min-height: 0;
     padding: 2px;
     background-color: #292929;
     background-image: linear-gradient(to bottom, #1d2020, #242525 3px, #292929 90%);
