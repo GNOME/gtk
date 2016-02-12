@@ -132,10 +132,15 @@ static void
 handle_focus_change (GdkEventCrossing *event)
 {
   GdkToplevelX11 *toplevel;
+  GdkX11Screen *x11_screen;
   gboolean focus_in, had_focus;
 
   toplevel = _gdk_x11_window_get_toplevel (event->window);
+  x11_screen = GDK_X11_SCREEN (gdk_window_get_screen (event->window));
   focus_in = (event->type == GDK_ENTER_NOTIFY);
+
+  if (x11_screen->wmspec_check_window)
+    return;
 
   if (!toplevel || event->detail == GDK_NOTIFY_INFERIOR)
     return;

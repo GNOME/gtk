@@ -820,6 +820,7 @@ _gdk_device_manager_core_handle_focus (GdkWindow *window,
                                        int        mode)
 {
   GdkToplevelX11 *toplevel;
+  GdkX11Screen *x11_screen;
   gboolean had_focus;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -841,6 +842,7 @@ _gdk_device_manager_core_handle_focus (GdkWindow *window,
     return;
 
   had_focus = HAS_FOCUS (toplevel);
+  x11_screen = GDK_X11_SCREEN (gdk_window_get_screen (window));
 
   switch (detail)
     {
@@ -854,6 +856,7 @@ _gdk_device_manager_core_handle_focus (GdkWindow *window,
        * has_focus_window case.
        */
       if (toplevel->has_pointer &&
+          !x11_screen->wmspec_check_window &&
           mode != NotifyGrab &&
 #ifdef XINPUT_2
 	  mode != XINotifyPassiveGrab &&
@@ -884,7 +887,8 @@ _gdk_device_manager_core_handle_focus (GdkWindow *window,
        * but the pointer focus is ignored while a
        * grab is in effect
        */
-      if (mode != NotifyGrab &&
+      if (!x11_screen->wmspec_check_window &&
+          mode != NotifyGrab &&
 #ifdef XINPUT_2
 	  mode != XINotifyPassiveGrab &&
 	  mode != XINotifyPassiveUngrab &&
