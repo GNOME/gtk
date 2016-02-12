@@ -1803,16 +1803,16 @@ gtk_paned_render (GtkCssGadget *gadget,
   cairo_rectangle (cr, x, y, width, height);
   cairo_clip (cr);
 
+  if (gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)) &&
+      priv->child1 && gtk_widget_get_visible (priv->child1) &&
+      priv->child2 && gtk_widget_get_visible (priv->child2))
+    gtk_css_gadget_draw (priv->handle_gadget, cr);
+
   if (gtk_cairo_should_draw_window (cr, priv->child1_window))
     gtk_container_propagate_draw (GTK_CONTAINER (widget), priv->child1, cr);
 
   if (gtk_cairo_should_draw_window (cr, priv->child2_window))
     gtk_container_propagate_draw (GTK_CONTAINER (widget), priv->child2, cr);
-
-  if (gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)) &&
-      priv->child1 && gtk_widget_get_visible (priv->child1) &&
-      priv->child2 && gtk_widget_get_visible (priv->child2))
-    gtk_css_gadget_draw (priv->handle_gadget, cr);
 
   cairo_restore (cr);
 
