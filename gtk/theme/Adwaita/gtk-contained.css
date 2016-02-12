@@ -4133,7 +4133,7 @@ stacksidebar row {
 placessidebar row {
   padding: 0px; }
   placessidebar row > revealer {
-    padding: 4px 14px 4px 12px; }
+    padding: 6px 14px 6px 12px; }
   placessidebar row image.sidebar-icon {
     opacity: 0.7; }
     placessidebar row image.sidebar-icon:dir(ltr) {
