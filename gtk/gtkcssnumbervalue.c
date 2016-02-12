@@ -43,6 +43,42 @@ gtk_css_number_value_has_percent (const GtkCssValue *value)
 }
 
 GtkCssValue *
+gtk_css_number_value_multiply (const GtkCssValue *value,
+                               double             factor)
+{
+  GtkCssNumberValueClass *number_value_class = (GtkCssNumberValueClass *) value->class;
+
+  return number_value_class->multiply (value, factor);
+}
+
+GtkCssValue *
+gtk_css_number_value_add (GtkCssValue *value1,
+                          GtkCssValue *value2)
+{
+  GtkCssValue *sum;
+
+  sum = gtk_css_number_value_try_add (value1, value2);
+  if (sum == NULL)
+    sum = gtk_css_calc_value_new_sum (value1, value2);
+
+  return sum;
+}
+
+GtkCssValue *
+gtk_css_number_value_try_add (const GtkCssValue *value1,
+                              const GtkCssValue *value2)
+{
+  GtkCssNumberValueClass *number_value_class;
+  
+  if (value1->class != value2->class)
+    return NULL;
+
+  number_value_class = (GtkCssNumberValueClass *) value1->class;
+
+  return number_value_class->try_add (value1, value2);
+}
+
+GtkCssValue *
 _gtk_css_number_value_new (double     value,
                            GtkCssUnit unit)
 {

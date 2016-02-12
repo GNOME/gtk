@@ -1,0 +1,7 @@
+a {
+  margin-left: calc(3px + 1em);
+}
+
+a {
+  transition-duration: calc(1s - 100ms + -100ms);
+}

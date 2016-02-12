@@ -22,6 +22,9 @@
 
 G_BEGIN_DECLS
 
+GtkCssValue *   gtk_css_calc_value_new_sum          (GtkCssValue            *value1,
+                                                     GtkCssValue            *value2);
+
 GtkCssValue *   gtk_css_calc_value_parse            (GtkCssParser           *parser,
                                                      GtkCssNumberParseFlags  flags);
 

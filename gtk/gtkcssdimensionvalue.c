@@ -241,6 +241,23 @@ gtk_css_value_dimension_has_percent (const GtkCssValue *value)
   return gtk_css_unit_get_dimension (value->unit) == GTK_CSS_DIMENSION_PERCENTAGE;
 }
 
+static GtkCssValue *
+gtk_css_value_dimension_multiply (const GtkCssValue *value,
+                                  double             factor)
+{
+  return gtk_css_dimension_value_new (value->value * factor, value->unit);
+}
+
+static GtkCssValue *
+gtk_css_value_dimension_try_add (const GtkCssValue *value1,
+                                 const GtkCssValue *value2)
+{
+  if (value1->unit != value2->unit)
+    return NULL;
+
+  return gtk_css_dimension_value_new (value1->value + value2->value, value1->unit);
+}
+
 static const GtkCssNumberValueClass GTK_CSS_VALUE_DIMENSION = {
   {
     gtk_css_value_dimension_free,
@@ -251,7 +268,9 @@ static const GtkCssNumberValueClass GTK_CSS_VALUE_DIMENSION = {
   },
   gtk_css_value_dimension_get,
   gtk_css_value_dimension_get_dimension,
-  gtk_css_value_dimension_has_percent
+  gtk_css_value_dimension_has_percent,
+  gtk_css_value_dimension_multiply,
+  gtk_css_value_dimension_try_add
 };
 
 GtkCssValue *

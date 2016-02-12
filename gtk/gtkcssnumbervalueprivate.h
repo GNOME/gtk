@@ -45,6 +45,10 @@ struct _GtkCssNumberValueClass {
                                                      double                  one_hundred_percent);
   GtkCssDimension       (* get_dimension)           (const GtkCssValue      *value);
   gboolean              (* has_percent)             (const GtkCssValue      *value);
+  GtkCssValue *         (* multiply)                (const GtkCssValue      *value,
+                                                     double                  factor);
+  GtkCssValue *         (* try_add)                 (const GtkCssValue      *value1,
+                                                     const GtkCssValue      *value2);
 };
 
 GtkCssValue *   _gtk_css_number_value_new           (double                  value,
@@ -55,6 +59,12 @@ GtkCssValue *   _gtk_css_number_value_parse         (GtkCssParser           *par
 
 GtkCssDimension gtk_css_number_value_get_dimension  (const GtkCssValue      *value);
 gboolean        gtk_css_number_value_has_percent    (const GtkCssValue      *value);
+GtkCssValue *   gtk_css_number_value_multiply       (const GtkCssValue      *value,
+                                                     double                  factor);
+GtkCssValue *   gtk_css_number_value_add            (GtkCssValue            *value1,
+                                                     GtkCssValue            *value2);
+GtkCssValue *   gtk_css_number_value_try_add        (const GtkCssValue      *value1,
+                                                     const GtkCssValue      *value2);
 
 double          _gtk_css_number_value_get           (const GtkCssValue      *number,
                                                      double                  one_hundred_percent);
