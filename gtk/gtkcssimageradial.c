@@ -416,9 +416,11 @@ gtk_css_image_radial_print (GtkCssImage *image,
     {
       if (radial->sizes[0])
         _gtk_css_value_print (radial->sizes[0], string);
-      g_string_append (string, " ");
       if (radial->sizes[1])
-        _gtk_css_value_print (radial->sizes[1], string);
+        {
+          g_string_append (string, " ");
+          _gtk_css_value_print (radial->sizes[1], string);
+        }
     }
 
   g_string_append (string, " at ");
