@@ -631,7 +631,7 @@ gtk_button_box_child_requisition (GtkWidget  *widget,
 
   nchildren = 0;
   nsecondaries = 0;
-  list = children = gtk_container_get_children (GTK_CONTAINER (widget));
+  list = children = _gtk_box_get_children (GTK_BOX (bbox));
   needed_width = child_min_width;
   needed_height = child_min_height;
   needed_above = 0;
@@ -1123,7 +1123,7 @@ gtk_button_box_allocate (GtkCssGadget        *gadget,
     sizes = heights;
 
   i = 0;
-  list = children = gtk_container_get_children (GTK_CONTAINER (widget));
+  list = children = _gtk_box_get_children (GTK_BOX (widget));
   while (children)
     {
       GtkWidget *child;
