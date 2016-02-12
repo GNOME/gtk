@@ -45,7 +45,8 @@ struct _GtkCssImageLinear
 {
   GtkCssImage parent;
 
-  GtkCssValue *angle; /* warning: We use GTK_CSS_NUMBER as an enum for the corners */
+  guint        side;  /* side the gradient should go to or 0 for angle */
+  GtkCssValue *angle;
   GArray *stops;
   guint repeating :1;
 };
