@@ -36,9 +36,19 @@ typedef enum /*< skip >*/ {
   GTK_CSS_PARSE_TIME = (1 << 6)
 } GtkCssNumberParseFlags;
 
+typedef struct _GtkCssNumberValueClass GtkCssNumberValueClass;
+
+struct _GtkCssNumberValueClass {
+  GtkCssValueClass      value_class;
+
+  double                (* get)                     (const GtkCssValue      *value,
+                                                     double                  one_hundred_percent);
+  GtkCssDimension       (* get_dimension)           (const GtkCssValue      *value);
+  gboolean              (* has_percent)             (const GtkCssValue      *value);
+};
+
 GtkCssValue *   _gtk_css_number_value_new           (double                  value,
                                                      GtkCssUnit              unit);
-/* This function implemented in gtkcssparser.c */
 GtkCssValue *   _gtk_css_number_value_parse         (GtkCssParser           *parser,
                                                      GtkCssNumberParseFlags  flags);
 

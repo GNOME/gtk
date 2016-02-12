@@ -19,8 +19,7 @@
 
 #include "gtkcssparserprivate.h"
 
-#include "gtkcssnumbervalueprivate.h"
-#include "gtkwin32themeprivate.h"
+#include "gtkcssdimensionvalueprivate.h"
 
 #include <errno.h>
 #include <string.h>
@@ -605,8 +604,8 @@ _gtk_css_parser_has_number (GtkCssParser *parser)
 }
 
 GtkCssValue *
-_gtk_css_number_value_parse (GtkCssParser           *parser,
-                             GtkCssNumberParseFlags  flags)
+gtk_css_dimension_value_parse (GtkCssParser           *parser,
+                               GtkCssNumberParseFlags  flags)
 {
   static const struct {
     const char *name;
@@ -721,7 +720,7 @@ _gtk_css_number_value_parse (GtkCssParser           *parser,
 
   _gtk_css_parser_skip_whitespace (parser);
 
-  return _gtk_css_number_value_new (value, unit);
+  return gtk_css_dimension_value_new (value, unit);
 }
 
 /* XXX: we should introduce GtkCssLenght that deals with
