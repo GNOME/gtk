@@ -226,6 +226,8 @@ test_data = \
         border-width.ref.css \
         box-shadow.css \
         box-shadow.ref.css \
+	calc-simple.css \
+	calc-simple.ref.css \
 	close-at-end-of-file.css \
 	close-at-end-of-file.errors \
 	close-at-end-of-file.ref.css \

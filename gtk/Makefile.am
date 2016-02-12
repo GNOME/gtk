@@ -387,6 +387,7 @@ gtk_private_h_sources =		\
 	gtkcssarrayvalueprivate.h	\
 	gtkcssbgsizevalueprivate.h	\
 	gtkcssbordervalueprivate.h	\
+	gtkcsscalcvalueprivate.h	\
 	gtkcsscolorvalueprivate.h	\
 	gtkcsscornervalueprivate.h	\
 	gtkcsscustomgadgetprivate.h	\
@@ -652,6 +653,7 @@ gtk_base_c_sources = 		\
 	gtkcssarrayvalue.c	\
 	gtkcssbgsizevalue.c	\
 	gtkcssbordervalue.c	\
+	gtkcsscalcvalue.c	\
 	gtkcsscolorvalue.c	\
 	gtkcsscornervalue.c	\
 	gtkcsscustomgadget.c	\
