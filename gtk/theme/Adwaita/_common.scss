@@ -1443,8 +1443,9 @@ treeview.view {
 
   &.separator {
     min-height: 2px;
+    color: $bg_color;
 
-    &:backdrop { color: transparentize(black, 0.9); }
+    &:backdrop { color: transparentize($bg_color, 0.9); }
   }
 
   &:backdrop {

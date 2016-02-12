@@ -1921,9 +1921,10 @@ treeview.view {
     treeview.view:disabled:backdrop {
       color: #c3c3c0; }
   treeview.view.separator {
-    min-height: 2px; }
+    min-height: 2px;
+    color: #e8e8e7; }
     treeview.view.separator:backdrop {
-      color: rgba(0, 0, 0, 0.1); }
+      color: rgba(232, 232, 231, 0.1); }
   treeview.view:backdrop {
     border-left-color: #babbbb;
     border-top: #e8e8e7; }
