@@ -265,12 +265,20 @@ _gtk_css_number_value_new (double     value,
   return result;
 }
 
-GtkCssUnit
-_gtk_css_number_value_get_unit (const GtkCssValue *value)
+GtkCssDimension
+gtk_css_number_value_get_dimension (const GtkCssValue *value)
 {
-  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_NUMBER, GTK_CSS_NUMBER);
+  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_NUMBER, GTK_CSS_DIMENSION_PERCENTAGE);
 
-  return value->unit;
+  return gtk_css_unit_get_dimension (value->unit);
+}
+
+gboolean
+gtk_css_number_value_has_percent (const GtkCssValue *value)
+{
+  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_NUMBER, FALSE);
+
+  return gtk_css_unit_get_dimension (value->unit) == GTK_CSS_DIMENSION_PERCENTAGE;
 }
 
 double

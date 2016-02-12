@@ -337,7 +337,7 @@ gtk_css_image_radial_parse (GtkCssImage  *image,
           return FALSE;
         }
 
-      if (radial->sizes[0] && _gtk_css_number_value_get_unit (radial->sizes[0]) == GTK_CSS_PERCENT)
+      if (radial->sizes[0] && gtk_css_number_value_has_percent (radial->sizes[0]))
         {
           _gtk_css_parser_error (parser, "Circular gradient cannot have percentage as size");
           return FALSE;

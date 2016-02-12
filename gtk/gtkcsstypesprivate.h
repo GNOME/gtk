@@ -342,6 +342,14 @@ typedef enum /*< skip >*/ {
 } GtkCssCorner;
 
 typedef enum /*< skip >*/ {
+  GTK_CSS_DIMENSION_PERCENTAGE,
+  GTK_CSS_DIMENSION_NUMBER,
+  GTK_CSS_DIMENSION_LENGTH,
+  GTK_CSS_DIMENSION_ANGLE,
+  GTK_CSS_DIMENSION_TIME
+} GtkCssDimension;
+
+typedef enum /*< skip >*/ {
   /* CSS term: <number> */
   GTK_CSS_NUMBER,
   /* CSS term: <percentage> */
@@ -368,6 +376,8 @@ typedef enum /*< skip >*/ {
 
 GtkCssChange            _gtk_css_change_for_sibling              (GtkCssChange       match);
 GtkCssChange            _gtk_css_change_for_child                (GtkCssChange       match);
+
+GtkCssDimension         gtk_css_unit_get_dimension               (GtkCssUnit         unit);
 
 char *                  gtk_css_change_to_string                 (GtkCssChange       change);
 void                    gtk_css_change_print                     (GtkCssChange       change,

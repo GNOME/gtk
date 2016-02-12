@@ -42,7 +42,9 @@ GtkCssValue *   _gtk_css_number_value_new           (double                  val
 GtkCssValue *   _gtk_css_number_value_parse         (GtkCssParser           *parser,
                                                      GtkCssNumberParseFlags  flags);
 
-GtkCssUnit      _gtk_css_number_value_get_unit      (const GtkCssValue      *value);
+GtkCssDimension gtk_css_number_value_get_dimension  (const GtkCssValue      *value);
+gboolean        gtk_css_number_value_has_percent    (const GtkCssValue      *value);
+
 double          _gtk_css_number_value_get           (const GtkCssValue      *number,
                                                      double                  one_hundred_percent);
 

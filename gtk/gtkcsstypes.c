@@ -138,6 +138,44 @@ gtk_css_change_print (GtkCssChange  change,
     }
 }
 
+GtkCssDimension
+gtk_css_unit_get_dimension (GtkCssUnit unit)
+{
+  switch (unit)
+    {
+    case GTK_CSS_NUMBER:
+      return GTK_CSS_DIMENSION_NUMBER;
+
+    case GTK_CSS_PERCENT:
+      return GTK_CSS_DIMENSION_PERCENTAGE;
+
+    case GTK_CSS_PX:
+    case GTK_CSS_PT:
+    case GTK_CSS_EM:
+    case GTK_CSS_EX:
+    case GTK_CSS_REM:
+    case GTK_CSS_PC:
+    case GTK_CSS_IN:
+    case GTK_CSS_CM:
+    case GTK_CSS_MM:
+      return GTK_CSS_DIMENSION_LENGTH;
+
+    case GTK_CSS_RAD:
+    case GTK_CSS_DEG:
+    case GTK_CSS_GRAD:
+    case GTK_CSS_TURN:
+      return GTK_CSS_DIMENSION_ANGLE;
+
+    case GTK_CSS_S:
+    case GTK_CSS_MS:
+      return GTK_CSS_DIMENSION_TIME;
+
+    default:
+      g_assert_not_reached ();
+      return GTK_CSS_DIMENSION_PERCENTAGE;
+    }
+}
+
 char *
 gtk_css_change_to_string (GtkCssChange change)
 {

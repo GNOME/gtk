@@ -736,7 +736,7 @@ parse_one_animation (GtkCssShorthandProperty  *shorthand,
           if (value == NULL)
             return FALSE;
 
-          if (_gtk_css_number_value_get_unit (value) == GTK_CSS_NUMBER)
+          if (gtk_css_number_value_get_dimension (value) == GTK_CSS_DIMENSION_NUMBER)
             values[1] = value;
           else if (values[2] == NULL)
             values[2] = value;

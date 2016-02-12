@@ -83,11 +83,11 @@ gtk_border_image_compute_border_size (GtkBorderImageSliceSize  sizes[3],
 {
   double start, end;
 
-  if (_gtk_css_number_value_get_unit (start_border) == GTK_CSS_NUMBER)
+  if (gtk_css_number_value_get_dimension (start_border) == GTK_CSS_DIMENSION_NUMBER)
     start = start_border_width * _gtk_css_number_value_get (start_border, 100);
   else
     start = _gtk_css_number_value_get (start_border, area_size);
-  if (_gtk_css_number_value_get_unit (end_border) == GTK_CSS_NUMBER)
+  if (gtk_css_number_value_get_dimension (end_border) == GTK_CSS_DIMENSION_NUMBER)
     end = end_border_width * _gtk_css_number_value_get (end_border, 100);
   else
     end = _gtk_css_number_value_get (end_border, area_size);
