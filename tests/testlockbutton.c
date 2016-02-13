@@ -91,13 +91,13 @@ acquire_async (GPermission         *permission,
                GAsyncReadyCallback  callback,
                gpointer             user_data)
 {
-  GSimpleAsyncResult *result;
+  GTask *result;
   g_print ("GTestPermission::acquire_async\n");
-  result = g_simple_async_result_new ((GObject*)permission,
-                                      callback,
-                                      user_data,
-                                      acquire_async);
-  g_simple_async_result_complete (result);
+  result = g_task_new ((GObject*)permission,
+                       cancellable,
+                       callback,
+                       user_data);
+  g_task_return_boolean (result, TRUE);
   g_object_unref (result);
 }
 
@@ -126,12 +126,12 @@ release_async (GPermission         *permission,
                GAsyncReadyCallback  callback,
                gpointer             user_data)
 {
-  GSimpleAsyncResult *result;
-  result = g_simple_async_result_new ((GObject*)permission,
-                                      callback,
-                                      user_data,
-                                      acquire_async);
-  g_simple_async_result_complete (result);
+  GTask *result;
+  result = g_task_new ((GObject*)permission,
+                       cancellable,
+                       callback,
+                       user_data);
+  g_task_return_boolean (result, TRUE);
   g_object_unref (result);
 }
 
