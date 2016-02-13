@@ -126,6 +126,14 @@ gtk_win32_theme_unref (GtkWin32Theme *theme)
   g_slice_free (GtkWin32Theme, theme);
 }
 
+gboolean
+gtk_win32_theme_equal (GtkWin32Theme *theme1,
+                       GtkWin32Theme *theme2)
+{
+  /* Themes are cached so they're guaranteed unique. */
+  return theme1 == theme2;
+}
+
 #ifdef G_OS_WIN32
 
 static GdkFilterReturn
@@ -213,8 +221,6 @@ gtk_win32_theme_init (void)
       use_xp_theme = FALSE;
     }
 
-  themes_by_class = g_hash_table_new (g_str_hash, g_str_equal);
-
   gdk_window_add_filter (NULL, invalidate_win32_themes, NULL);
 }
 
@@ -245,6 +251,9 @@ GtkWin32Theme *
 gtk_win32_theme_lookup (const char *classname)
 {
   GtkWin32Theme *theme;
+
+  if (G_UNLIKELY (themes_by_class == NULL))
+    themes_by_class = g_hash_table_new (g_str_hash, g_str_equal);
 
   theme = g_hash_table_lookup (themes_by_class, classname);
 
@@ -353,82 +362,22 @@ gtk_win32_theme_create_surface (GtkWin32Theme *theme,
 }
 
 int
-_gtk_win32_theme_int_parse (GtkCssParser      *parser,
-			    int               *value)
+gtk_win32_theme_get_size (GtkWin32Theme *theme,
+			  int            id)
 {
-  char *theme_class;
-  int arg;
 #ifdef G_OS_WIN32
-  GtkWin32Theme *theme;
-  HTHEME htheme;
-#endif
-
-  if (_gtk_css_parser_try (parser,
-			   "-gtk-win32-size",
-			   TRUE))
+  if (use_xp_theme && get_theme_sys_metric != NULL)
     {
-      if (!_gtk_css_parser_try (parser, "(", TRUE))
-	{
-	  _gtk_css_parser_error (parser,
-				 "Expected '(' after '-gtk-win32-size'");
-	  return 0;
-	}
+      HTHEME htheme = gtk_win32_theme_get_htheme (theme);
 
-      theme_class = _gtk_css_parser_try_name (parser, TRUE);
-      if (theme_class == NULL)
-	{
-	  _gtk_css_parser_error (parser,
-				 "Expected name as first argument to  '-gtk-win32-size'");
-	  return 0;
-	}
-
-      if (! _gtk_css_parser_try (parser, ",", TRUE))
-	{
-	  g_free (theme_class);
-	  _gtk_css_parser_error (parser,
-				 "Expected ','");
-	  return 0;
-	}
-
-      if (!_gtk_css_parser_try_int (parser, &arg))
-	{
-	  g_free (theme_class);
-	  _gtk_css_parser_error (parser, "Expected a valid integer value");
-	  return 0;
-	}
-
-      if (!_gtk_css_parser_try (parser, ")", TRUE))
-	{
-	  g_free (theme_class);
-	  _gtk_css_parser_error (parser,
-				 "Expected ')'");
-	  return 0;
-	}
-
-#ifdef G_OS_WIN32
-      theme = gtk_win32_theme_lookup (theme_class);
-      if (use_xp_theme && get_theme_sys_metric != NULL)
-        {
-          htheme = gtk_win32_theme_get_htheme (theme);
-
-	  /* If htheme is NULL it will just return the GetSystemMetrics value */
-	  *value = get_theme_sys_metric (htheme, arg);
-	}
-      else
-	*value = GetSystemMetrics (arg);
-  
-      gtk_win32_theme_unref (theme);
-
-#else
-      *value = 1;
-#endif
-
-      g_free (theme_class);
-
-      return 1;
+      /* If htheme is NULL it will just return the GetSystemMetrics value */
+      return get_theme_sys_metric (htheme, id);
     }
-
+  else
+    return GetSystemMetrics (id);
+#else
   return -1;
+#endif
 }
 
 gboolean
@@ -465,3 +414,9 @@ _gtk_win32_theme_color_resolve (const char *theme_class,
   return TRUE;
 }
 
+void
+gtk_win32_theme_print (GtkWin32Theme *theme,
+                       GString       *string)
+{
+  g_string_append (string, theme->class_name);
+}

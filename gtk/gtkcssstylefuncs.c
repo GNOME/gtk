@@ -36,7 +36,7 @@
 #include "gtkprivatetypebuiltins.h"
 #include "gtkstylecontextprivate.h"
 #include "gtktypebuiltins.h"
-#include "gtkwin32themeprivate.h"
+#include "gtkcsswin32sizevalueprivate.h"
 
 #include "deprecated/gtkthemingengine.h"
 #include "deprecated/gtkgradientprivate.h"
@@ -431,15 +431,18 @@ int_value_parse (GtkCssParser *parser,
 {
   gint i;
 
-  if (_gtk_css_parser_begins_with (parser, '-'))
+  if (_gtk_css_parser_has_prefix (parser, "-gtk"))
     {
-      int res = _gtk_win32_theme_int_parse (parser, &i);
-      if (res >= 0)
-	{
-	  g_value_set_int (value, i);
-	  return res > 0;
-	}
-      /* < 0 => continue */
+      GtkCssValue *cssvalue = gtk_css_win32_size_value_parse (parser, GTK_CSS_PARSE_NUMBER | GTK_CSS_NUMBER_AS_PIXELS);
+
+      if (cssvalue)
+        {
+          g_value_set_int (value, _gtk_css_number_value_get (cssvalue, 100));
+          _gtk_css_value_unref (cssvalue);
+          return TRUE;
+        }
+
+      return FALSE;
     }
 
   if (!_gtk_css_parser_try_int (parser, &i))
@@ -615,18 +618,19 @@ border_value_parse (GtkCssParser *parser,
 
   for (i = 0; i < G_N_ELEMENTS (numbers); i++)
     {
-      if (_gtk_css_parser_begins_with (parser, '-'))
-	{
-	  /* These are strictly speaking signed, but we want to be able to use them
-	     for unsigned types too, as the actual ranges of values make this safe */
-	  int res = _gtk_win32_theme_int_parse (parser, &numbers[i]);
+      if (_gtk_css_parser_has_prefix (parser, "-gtk"))
+        {
+          GtkCssValue *cssvalue = gtk_css_win32_size_value_parse (parser, GTK_CSS_PARSE_NUMBER | GTK_CSS_NUMBER_AS_PIXELS);
 
-	  if (res == 0) /* Parse error, report */
-	    return FALSE;
+          if (cssvalue)
+            {
+              numbers[i] = _gtk_css_number_value_get (cssvalue, 100);
+              _gtk_css_value_unref (cssvalue);
+              return TRUE;
+            }
 
-	  if (res < 0) /* Nothing known to expand */
-	    break;
-	}
+          return FALSE;
+        }
       else
         {
           if (!_gtk_css_parser_try_length (parser, &numbers[i]))

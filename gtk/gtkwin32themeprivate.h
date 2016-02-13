@@ -33,6 +33,12 @@ GtkWin32Theme *         gtk_win32_theme_lookup          (const char     *classna
 GtkWin32Theme *         gtk_win32_theme_ref             (GtkWin32Theme  *theme);
 void                    gtk_win32_theme_unref           (GtkWin32Theme  *theme);
 
+gboolean                gtk_win32_theme_equal           (GtkWin32Theme  *theme1,
+                                                         GtkWin32Theme  *theme2);
+
+void                    gtk_win32_theme_print           (GtkWin32Theme  *theme,
+                                                         GString        *string);
+
 cairo_surface_t *       gtk_win32_theme_create_surface  (GtkWin32Theme *theme,
                                                          int            xp_part,
                                                          int            state,
@@ -41,9 +47,9 @@ cairo_surface_t *       gtk_win32_theme_create_surface  (GtkWin32Theme *theme,
                                                          int            height,
 							 int           *x_offs_out,
 							 int           *y_offs_out);
+int                     gtk_win32_theme_get_size        (GtkWin32Theme *theme,
+			                                 int            id);
 
-int                _gtk_win32_theme_int_parse     (GtkCssParser      *parser,
-						   int               *value);
 gboolean           _gtk_win32_theme_color_resolve (const char        *theme_class,
 						   gint               id,
 						   GdkRGBA           *color);
