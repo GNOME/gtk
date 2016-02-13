@@ -6266,10 +6266,11 @@ get_selected_file_info_from_file_list (GtkFileChooserWidget *impl,
   GtkTreeSelection *selection;
   GtkTreeIter iter;
   GFileInfo *info;
+  GtkTreeModel *model;
 
   g_assert (!priv->select_multiple);
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->browse_files_tree_view));
-  if (!gtk_tree_selection_get_selected (selection, NULL, &iter))
+  if (!gtk_tree_selection_get_selected (selection, &model, &iter))
     {
       *had_selection = FALSE;
       return NULL;
@@ -6277,7 +6278,7 @@ get_selected_file_info_from_file_list (GtkFileChooserWidget *impl,
 
   *had_selection = TRUE;
 
-  info = _gtk_file_system_model_get_info (priv->browse_files_model, &iter);
+  info = _gtk_file_system_model_get_info (GTK_FILE_SYSTEM_MODEL (model), &iter);
   return info;
 }
 
