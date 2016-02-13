@@ -2563,6 +2563,9 @@ static void
 location_entry_changed_cb (GtkEditable          *editable,
                            GtkFileChooserWidget *impl)
 {
+  if (impl->priv->operation_mode == OPERATION_MODE_SEARCH)
+    operation_mode_set (impl, OPERATION_MODE_BROWSE);
+
   if (impl->priv->action != GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
     reset_location_timeout (impl);
 }
