@@ -552,7 +552,7 @@ gtk_css_gadget_get_preferred_size (GtkCssGadget   *gadget,
     }
 
   if (for_size > -1)
-    for_size -= extra_opposite;
+    for_size = MAX (0, for_size - extra_opposite);
 
   if (minimum_baseline)
     *minimum_baseline = -1;
@@ -570,13 +570,13 @@ gtk_css_gadget_get_preferred_size (GtkCssGadget   *gadget,
   *minimum = MAX (min_size, *minimum);
   *natural = MAX (min_size, *natural);
 
-  *minimum += extra_size;
-  *natural += extra_size;
+  *minimum = MAX (0, *minimum + extra_size);
+  *natural = MAX (0, *natural + extra_size);
 
   if (minimum_baseline && *minimum_baseline > -1)
-    *minimum_baseline += extra_baseline;
+    *minimum_baseline = MAX (0, *minimum_baseline + extra_baseline);
   if (natural_baseline && *natural_baseline > -1)
-    *natural_baseline += extra_baseline;
+    *natural_baseline = MAX (0, *natural_baseline + extra_baseline);
 }
 
 /**
@@ -632,6 +632,7 @@ gtk_css_gadget_allocate (GtkCssGadget        *gadget,
   content_allocation.y = allocation->y + extents.top;
   content_allocation.width = allocation->width - extents.left - extents.right;
   content_allocation.height = allocation->height - extents.top - extents.bottom;
+
   if (baseline >= 0)
     baseline -= extents.top;
 
@@ -663,8 +664,8 @@ gtk_css_gadget_allocate (GtkCssGadget        *gadget,
 
   out_clip->x = allocation->x + margin.left - shadow.left;
   out_clip->y = allocation->y + margin.top - shadow.top;
-  out_clip->width = allocation->width - margin.left - margin.right + shadow.left + shadow.right;
-  out_clip->height = allocation->height - margin.top - margin.bottom + shadow.top + shadow.bottom;
+  out_clip->width = MAX (0, allocation->width - margin.left - margin.right + shadow.left + shadow.right);
+  out_clip->height = MAX (0, allocation->height - margin.top - margin.bottom + shadow.top + shadow.bottom);
 
   if (content_clip.width > 0 && content_clip.height > 0)
     gdk_rectangle_union (&content_clip, out_clip, out_clip);
@@ -689,7 +690,7 @@ gtk_css_gadget_draw (GtkCssGadget *gadget,
 {
   GtkCssGadgetPrivate *priv = gtk_css_gadget_get_instance_private (gadget);
   GtkBorder margin, border, padding;
-  gboolean draw_focus;
+  gboolean draw_focus = FALSE;
   GtkCssStyle *style;
   int x, y, width, height;
   int contents_x, contents_y, contents_width, contents_height;
@@ -735,10 +736,11 @@ gtk_css_gadget_draw (GtkCssGadget *gadget,
   contents_width = width - margin.left - margin.right - border.left - border.right - padding.left - padding.right;
   contents_height = height - margin.top - margin.bottom - border.top - border.bottom - padding.top - padding.bottom;
 
-  draw_focus = GTK_CSS_GADGET_GET_CLASS (gadget)->draw (gadget,
-                                                        cr,
-                                                        contents_x, contents_y,
-                                                        contents_width, contents_height);
+  if (contents_width > 0 && contents_height > 0)
+    draw_focus = GTK_CSS_GADGET_GET_CLASS (gadget)->draw (gadget,
+                                                          cr,
+                                                          contents_x, contents_y,
+                                                          contents_width, contents_height);
 
   if (draw_focus)
     gtk_css_style_render_outline (style,
@@ -871,8 +873,8 @@ gtk_css_gadget_get_border_allocation (GtkCssGadget  *gadget,
     {
       allocation->x = priv->allocated_size.x + margin.left;
       allocation->y = priv->allocated_size.y + margin.top;
-      allocation->width = priv->allocated_size.width - margin.left - margin.right;
-      allocation->height = priv->allocated_size.height - margin.top - margin.bottom;
+      allocation->width = MAX (0, priv->allocated_size.width - margin.left - margin.right);
+      allocation->height = MAX (0, priv->allocated_size.height - margin.top - margin.bottom);
     }
   if (baseline)
     {
@@ -916,9 +918,10 @@ gtk_css_gadget_get_content_allocation (GtkCssGadget  *gadget,
     {
       allocation->x = priv->allocated_size.x + extents.left;
       allocation->y = priv->allocated_size.y + extents.top;
-      allocation->width = priv->allocated_size.width - extents.left - extents.right;
-      allocation->height = priv->allocated_size.height - extents.top - extents.bottom;
+      allocation->width = MAX (0, priv->allocated_size.width - extents.left - extents.right);
+      allocation->height = MAX (0, priv->allocated_size.height - extents.top - extents.bottom);
     }
+
   if (baseline)
     {
       if (priv->allocated_baseline >= 0)
