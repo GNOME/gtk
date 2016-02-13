@@ -258,6 +258,33 @@ gtk_css_value_dimension_try_add (const GtkCssValue *value1,
   return gtk_css_dimension_value_new (value1->value + value2->value, value1->unit);
 }
 
+static gint
+gtk_css_value_dimension_get_calc_term_order (const GtkCssValue *value)
+{
+  /* note: the order is alphabetic */
+  guint order_per_unit[] = {
+    /* [GTK_CSS_NUMBER] = */ 0,
+    /* [GTK_CSS_PERCENT] = */ 16,
+    /* [GTK_CSS_PX] = */ 11,
+    /* [GTK_CSS_PT] = */ 10,
+    /* [GTK_CSS_EM] = */ 3,
+    /* [GTK_CSS_EX] = */ 4,
+    /* [GTK_CSS_REM] = */ 13,
+    /* [GTK_CSS_PC] = */ 9,
+    /* [GTK_CSS_IN] = */ 6,
+    /* [GTK_CSS_CM] = */ 1,
+    /* [GTK_CSS_MM] = */ 7,
+    /* [GTK_CSS_RAD] = */ 12,
+    /* [GTK_CSS_DEG] = */ 2,
+    /* [GTK_CSS_GRAD] = */ 5,
+    /* [GTK_CSS_TURN] = */ 15,
+    /* [GTK_CSS_S] = */ 14,
+    /* [GTK_CSS_MS] = */ 8
+  };
+
+  return 1000 + order_per_unit[value->unit];
+}
+
 static const GtkCssNumberValueClass GTK_CSS_VALUE_DIMENSION = {
   {
     gtk_css_value_dimension_free,
@@ -270,7 +297,8 @@ static const GtkCssNumberValueClass GTK_CSS_VALUE_DIMENSION = {
   gtk_css_value_dimension_get_dimension,
   gtk_css_value_dimension_has_percent,
   gtk_css_value_dimension_multiply,
-  gtk_css_value_dimension_try_add
+  gtk_css_value_dimension_try_add,
+  gtk_css_value_dimension_get_calc_term_order
 };
 
 GtkCssValue *

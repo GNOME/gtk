@@ -73,6 +73,9 @@ static void
 gtk_css_calc_array_add (GPtrArray *array, GtkCssValue *value)
 {
   gsize i;
+  gint calc_term_order;
+
+  calc_term_order = gtk_css_number_value_get_calc_term_order (value);
 
   for (i = 0; i < array->len; i++)
     {
@@ -82,6 +85,11 @@ gtk_css_calc_array_add (GPtrArray *array, GtkCssValue *value)
         {
           g_ptr_array_index (array, i) = sum;
           _gtk_css_value_unref (value);
+          return;
+        }
+      else if (gtk_css_number_value_get_calc_term_order (g_ptr_array_index (array, i)) > calc_term_order)
+        {
+          g_ptr_array_insert (array, i, value);
           return;
         }
     }
@@ -235,6 +243,15 @@ gtk_css_value_calc_try_add (const GtkCssValue *value1,
   return NULL;
 }
 
+static gint
+gtk_css_value_calc_get_calc_term_order (const GtkCssValue *value)
+{
+  /* This should never be needed because calc() can't contain calc(),
+   * but eh...
+   */
+  return 0;
+}
+
 static const GtkCssNumberValueClass GTK_CSS_VALUE_CALC = {
   {
     gtk_css_value_calc_free,
@@ -247,7 +264,8 @@ static const GtkCssNumberValueClass GTK_CSS_VALUE_CALC = {
   gtk_css_value_calc_get_dimension,
   gtk_css_value_calc_has_percent,
   gtk_css_value_calc_multiply,
-  gtk_css_value_calc_try_add
+  gtk_css_value_calc_try_add,
+  gtk_css_value_calc_get_calc_term_order
 };
 
 static GtkCssValue *

@@ -78,6 +78,27 @@ gtk_css_number_value_try_add (const GtkCssValue *value1,
   return number_value_class->try_add (value1, value2);
 }
 
+/*
+ * gtk_css_number_value_get_calc_term_order:
+ * @value: Value to compute order for
+ *
+ * Determines the position of @value when printed as part of a calc()
+ * expression. Values with lower numbers are printed first. Note that
+ * these numbers are arbitrary, so when adding new types of values to
+ * print, feel free to change them in implementations so that they
+ * match.
+ *
+ * Returns: Magic value determining placement when printing calc()
+ *     expression.
+ */
+gint
+gtk_css_number_value_get_calc_term_order (const GtkCssValue *value)
+{
+  GtkCssNumberValueClass *number_value_class = (GtkCssNumberValueClass *) value->class;
+
+  return number_value_class->get_calc_term_order (value);
+}
+
 GtkCssValue *
 _gtk_css_number_value_new (double     value,
                            GtkCssUnit unit)

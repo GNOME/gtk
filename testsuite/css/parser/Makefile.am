@@ -227,6 +227,7 @@ test_data = \
         box-shadow.css \
         box-shadow.ref.css \
 	calc.css \
+	calc.ref.css \
 	calc-simple.css \
 	calc-simple.ref.css \
 	close-at-end-of-file.css \
