@@ -53,10 +53,10 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
       The following basic datatypes are used throughout:
     </para>
 
-<literallayout><code>〈length〉 = 〈number〉 [ px | pt | em | ex |rem | pc | in | cm | mm ]</code>
-<code>〈percentage〉 = 〈number〉 %</code>
-<code>〈angle〉 = 〈number〉 [ deg | grad | turn ]</code>
-<code>〈time〉 = 〈number〉 [ s | ms ]</code>
+<literallayout><code>〈length〉 = 〈number〉 [ px | pt | em | ex |rem | pc | in | cm | mm ] | 〈calc expression〉</code>
+<code>〈percentage〉 = 〈number〉 % | 〈calc expression〉</code>
+<code>〈angle〉 = 〈number〉 [ deg | grad | turn ] | 〈calc expression〉</code>
+<code>〈time〉 = 〈number〉 [ s | ms ] | 〈calc expression〉</code>
 </literallayout>
 
     <para>
@@ -68,6 +68,20 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
     <para>
       The rem unit is resolved using the initial font size value, which is
       not quite the same as the CSS definition of rem.
+    </para>
+
+<literallayout><code>〈calc expression〉 = calc( 〈calc sum〉 )</code>
+<code>〈calc sum〉 = 〈calc product〉 [ [ + | - ] 〈calc product〉 ]*</code>
+<code>〈calc product〉 = 〈calc value〉 [ * 〈calc value〉 | / 〈number〉 ]*</code>
+<code>〈calc value〉 = 〈number〉 | 〈length〉 | 〈percentage〉 | 〈angle〉 | 〈time〉 | ( 〈calc sum〉 )</code>
+</literallayout>
+
+    <para>
+      The calc() notation adds considerable expressive power. There are limits
+      on what types can be combined in such an expression (e.g. it does not make
+      sense to add a number and a time). For the full details, see the
+      <ulink url="http://www.w3.org/TR/css3-values/#calc-notation">CSS3 Values and
+      Units</ulink> spec.
     </para>
 
     <para>
