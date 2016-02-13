@@ -1,0 +1,59 @@
+a {
+  margin-left: calc(calc(1px));
+}
+
+b {
+  margin-left: calc(1px + 2s);
+}
+
+c {
+  margin-left: calc(1px - 2s);
+}
+
+d {
+  margin-left: calc(2 * 3);
+}
+
+e {
+  margin-left: calc(2px * 3px);
+}
+
+f {
+  margin-left: calc(2 / 3px);
+}
+
+g {
+  margin-left: calc(2 / 3);
+}
+
+h {
+  margin-left: calc(2px / 3px);
+}
+
+i {
+  margin-left: calc(error);
+}
+
+j {
+  margin-left: calc(1px + error);
+}
+
+k {
+  margin-left: calc(1px - error);
+}
+
+l {
+  margin-left: calc(1 * error);
+}
+
+m {
+  margin-left: calc(1 / error);
+}
+
+n {
+  margin-left: calc(1px * error);
+}
+
+o {
+  margin-left: calc(1px / error);
+}

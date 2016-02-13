@@ -228,6 +228,9 @@ test_data = \
         box-shadow.ref.css \
 	calc.css \
 	calc.ref.css \
+	calc-errors.css \
+	calc-errors.ref.css \
+	calc-errors.errors \
 	calc-simple.css \
 	calc-simple.ref.css \
 	close-at-end-of-file.css \

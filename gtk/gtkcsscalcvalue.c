@@ -317,12 +317,93 @@ gtk_css_calc_value_new_sum (GtkCssValue *value1,
 }
 
 GtkCssValue *
+gtk_css_calc_value_parse_value (GtkCssParser           *parser,
+                                GtkCssNumberParseFlags  flags)
+{
+  if (_gtk_css_parser_has_prefix (parser, "calc"))
+    {
+      _gtk_css_parser_error (parser, "Nested calc() expressions are not allowed.");
+      return NULL;
+    }
+
+  return _gtk_css_number_value_parse (parser, flags);
+}
+
+static gboolean
+is_number (GtkCssValue *value)
+{
+  return gtk_css_number_value_get_dimension (value) == GTK_CSS_DIMENSION_NUMBER
+      && !gtk_css_number_value_has_percent (value);
+}
+
+GtkCssValue *
+gtk_css_calc_value_parse_product (GtkCssParser           *parser,
+                                  GtkCssNumberParseFlags  flags)
+{
+  GtkCssValue *result, *value, *temp;
+  GtkCssNumberParseFlags actual_flags;
+
+  actual_flags = flags | GTK_CSS_PARSE_NUMBER;
+
+  result = gtk_css_calc_value_parse_value (parser, actual_flags);
+  if (result == NULL)
+    return NULL;
+
+  while (_gtk_css_parser_begins_with (parser, '*') || _gtk_css_parser_begins_with (parser, '/'))
+    {
+      if (actual_flags != GTK_CSS_PARSE_NUMBER && !is_number (result))
+        actual_flags = GTK_CSS_PARSE_NUMBER;
+
+      if (_gtk_css_parser_try (parser, "*", TRUE))
+        {
+          value = gtk_css_calc_value_parse_product (parser, actual_flags);
+          if (value == NULL)
+            goto fail;
+          if (is_number (value))
+            temp = gtk_css_number_value_multiply (result, _gtk_css_number_value_get (value, 100));
+          else
+            temp = gtk_css_number_value_multiply (value, _gtk_css_number_value_get (result, 100));
+          _gtk_css_value_unref (value);
+          _gtk_css_value_unref (result);
+          result = temp;
+        }
+      else if (_gtk_css_parser_try (parser, "/", TRUE))
+        {
+          value = gtk_css_calc_value_parse_product (parser, GTK_CSS_PARSE_NUMBER);
+          if (value == NULL)
+            goto fail;
+          temp = gtk_css_number_value_multiply (result, 1.0 / _gtk_css_number_value_get (value, 100));
+          _gtk_css_value_unref (value);
+          _gtk_css_value_unref (result);
+          result = temp;
+        }
+      else
+        {
+          g_assert_not_reached ();
+          goto fail;
+        }
+    }
+
+  if (is_number (result) && !(flags & GTK_CSS_PARSE_NUMBER))
+    {
+      _gtk_css_parser_error (parser, "calc() product term has no units");
+      goto fail;
+    }
+
+  return result;
+
+fail:
+  _gtk_css_value_unref (result);
+  return NULL;
+}
+
+GtkCssValue *
 gtk_css_calc_value_parse_sum (GtkCssParser           *parser,
                               GtkCssNumberParseFlags  flags)
 {
   GtkCssValue *result;
 
-  result = _gtk_css_number_value_parse (parser, flags);
+  result = gtk_css_calc_value_parse_product (parser, flags);
   if (result == NULL)
     return NULL;
 
@@ -332,17 +413,22 @@ gtk_css_calc_value_parse_sum (GtkCssParser           *parser,
 
       if (_gtk_css_parser_try (parser, "+", TRUE))
         {
-          next = _gtk_css_number_value_parse (parser, flags);
+          next = gtk_css_calc_value_parse_product (parser, flags);
+          if (next == NULL)
+            goto fail;
         }
       else if (_gtk_css_parser_try (parser, "-", TRUE))
         {
-          temp = _gtk_css_number_value_parse (parser, flags);
+          temp = gtk_css_calc_value_parse_product (parser, flags);
+          if (temp == NULL)
+            goto fail;
           next = gtk_css_number_value_multiply (temp, -1);
           _gtk_css_value_unref (temp);
         }
       else
         {
           g_assert_not_reached ();
+          goto fail;
         }
 
       temp = gtk_css_number_value_add (result, next);
@@ -352,6 +438,10 @@ gtk_css_calc_value_parse_sum (GtkCssParser           *parser,
     }
 
   return result;
+
+fail:
+  _gtk_css_value_unref (result);
+  return NULL;
 }
 
 GtkCssValue *
@@ -359,6 +449,11 @@ gtk_css_calc_value_parse (GtkCssParser           *parser,
                           GtkCssNumberParseFlags  flags)
 {
   GtkCssValue *value;
+
+  /* This confuses '*' and '/' so we disallow backwards compat. */
+  flags &= ~GTK_CSS_NUMBER_AS_PIXELS;
+  /* This can only be handled at compute time, we allow '-' after all */
+  flags &= ~GTK_CSS_POSITIVE_ONLY;
 
   if (!_gtk_css_parser_try (parser, "calc(", TRUE))
     {

@@ -17,3 +17,7 @@ d {
 e {
   border-left-width: calc(1px + 1px);
 }
+
+f {
+  background-size: calc(2 * 3px + 4px * 5 - 6px / 3);
+}
