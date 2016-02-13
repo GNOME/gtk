@@ -316,6 +316,9 @@ gtk_css_calc_value_new_sum (GtkCssValue *value1,
   return gtk_css_value_new_from_array (array);
 }
 
+GtkCssValue *   gtk_css_calc_value_parse_sum (GtkCssParser           *parser,
+                                              GtkCssNumberParseFlags  flags);
+
 GtkCssValue *
 gtk_css_calc_value_parse_value (GtkCssParser           *parser,
                                 GtkCssNumberParseFlags  flags)
@@ -324,6 +327,22 @@ gtk_css_calc_value_parse_value (GtkCssParser           *parser,
     {
       _gtk_css_parser_error (parser, "Nested calc() expressions are not allowed.");
       return NULL;
+    }
+
+  if (_gtk_css_parser_try (parser, "(", TRUE))
+    {
+      GtkCssValue *result = gtk_css_calc_value_parse_sum (parser, flags);
+      if (result == NULL)
+        return NULL;
+
+      if (!_gtk_css_parser_try (parser, ")", TRUE))
+        {
+          _gtk_css_parser_error (parser, "Missing closing ')' in calc() subterm");
+          _gtk_css_value_unref (result);
+          return NULL;
+        }
+
+      return result;
     }
 
   return _gtk_css_number_value_parse (parser, flags);

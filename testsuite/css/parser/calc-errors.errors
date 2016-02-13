@@ -13,3 +13,7 @@ calc-errors.css:46: error: GTK_CSS_PROVIDER_ERROR_SYNTAX
 calc-errors.css:50: error: GTK_CSS_PROVIDER_ERROR_SYNTAX
 calc-errors.css:54: error: GTK_CSS_PROVIDER_ERROR_SYNTAX
 calc-errors.css:58: error: GTK_CSS_PROVIDER_ERROR_SYNTAX
+calc-errors.css:62: error: GTK_CSS_PROVIDER_ERROR_SYNTAX
+calc-errors.css:66: error: GTK_CSS_PROVIDER_ERROR_SYNTAX
+calc-errors.css:70: error: GTK_CSS_PROVIDER_ERROR_SYNTAX
+calc-errors.css:74: error: GTK_CSS_PROVIDER_ERROR_SYNTAX

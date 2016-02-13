@@ -21,3 +21,19 @@ e {
 f {
   background-size: 24px;
 }
+
+g {
+  background-size: 1px;
+}
+
+h {
+  background-size: calc(27em + 36px);
+}
+
+i {
+  border-top-left-radius: 5px 1px;
+}
+
+j {
+  border-bottom-right-radius: 5px 1px;
+}
