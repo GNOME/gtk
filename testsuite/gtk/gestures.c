@@ -21,13 +21,13 @@ point_press (PointState *point,
              guint       button)
 {
   GdkDisplay *display;
-  GdkDeviceManager *dm;
   GdkDevice *device;
+  GdkSeat *seat;
   GdkEvent *ev;
 
   display = gtk_widget_get_display (widget);
-  dm = gdk_display_get_device_manager (display);
-  device = gdk_device_manager_get_client_pointer (dm);
+  seat = gdk_display_get_default_seat (display);
+  device = gdk_seat_get_pointer (seat);
 
   if (point == &mouse_state)
     {
@@ -70,13 +70,13 @@ point_update (PointState *point,
               gdouble     y)
 {
   GdkDisplay *display;
-  GdkDeviceManager *dm;
   GdkDevice *device;
+  GdkSeat *seat;
   GdkEvent *ev;
 
   display = gtk_widget_get_display (widget);
-  dm = gdk_display_get_device_manager (display);
-  device = gdk_device_manager_get_client_pointer (dm);
+  seat = gdk_display_get_default_seat (display);
+  device = gdk_seat_get_pointer (seat);
 
   point->x = x;
   point->y = y;
@@ -119,16 +119,16 @@ point_release (PointState *point,
                guint       button)
 {
   GdkDisplay *display;
-  GdkDeviceManager *dm;
   GdkDevice *device;
+  GdkSeat *seat;
   GdkEvent *ev;
 
   if (point->widget == NULL)
     return;
 
   display = gtk_widget_get_display (point->widget);
-  dm = gdk_display_get_device_manager (display);
-  device = gdk_device_manager_get_client_pointer (dm);
+  seat = gdk_display_get_default_seat (display);
+  device = gdk_seat_get_pointer (seat);
 
   if (!point->widget)
     return;
