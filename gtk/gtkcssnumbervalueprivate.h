@@ -54,6 +54,10 @@ struct _GtkCssNumberValueClass {
 
 GtkCssValue *   _gtk_css_number_value_new           (double                  value,
                                                      GtkCssUnit              unit);
+GtkCssValue *   gtk_css_number_value_transition     (GtkCssValue            *start,
+                                                     GtkCssValue            *end,
+                                                     guint                   property_id,
+                                                     double                  progress);
 gboolean        gtk_css_number_value_can_parse      (GtkCssParser           *parser);
 GtkCssValue *   _gtk_css_number_value_parse         (GtkCssParser           *parser,
                                                      GtkCssNumberParseFlags  flags);

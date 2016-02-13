@@ -150,15 +150,6 @@ gtk_css_value_calc_equal (const GtkCssValue *value1,
   return TRUE;
 }
 
-static GtkCssValue *
-gtk_css_value_calc_transition (GtkCssValue *start,
-                               GtkCssValue *end,
-                               guint        property_id,
-                               double       progress)
-{
-  return NULL;
-}
-
 static void
 gtk_css_value_calc_print (const GtkCssValue *value,
                           GString           *string)
@@ -257,7 +248,7 @@ static const GtkCssNumberValueClass GTK_CSS_VALUE_CALC = {
     gtk_css_value_calc_free,
     gtk_css_value_calc_compute,
     gtk_css_value_calc_equal,
-    gtk_css_value_calc_transition,
+    gtk_css_number_value_transition,
     gtk_css_value_calc_print
   },
   gtk_css_value_calc_get,

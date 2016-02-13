@@ -167,21 +167,6 @@ gtk_css_value_dimension_equal (const GtkCssValue *number1,
          number1->value == number2->value;
 }
 
-static GtkCssValue *
-gtk_css_value_dimension_transition (GtkCssValue *start,
-                                 GtkCssValue *end,
-                                 guint        property_id,
-                                 double       progress)
-{
-  /* FIXME: This needs to be supported at least for percentages,
-   * but for that we kinda need to support calc(5px + 50%) */
-  if (start->unit != end->unit)
-    return NULL;
-
-  return gtk_css_dimension_value_new (start->value + (end->value - start->value) * progress,
-                                      start->unit);
-}
-
 static void
 gtk_css_value_dimension_print (const GtkCssValue *number,
                             GString           *string)
@@ -290,7 +275,7 @@ static const GtkCssNumberValueClass GTK_CSS_VALUE_DIMENSION = {
     gtk_css_value_dimension_free,
     gtk_css_value_dimension_compute,
     gtk_css_value_dimension_equal,
-    gtk_css_value_dimension_transition,
+    gtk_css_number_value_transition,
     gtk_css_value_dimension_print
   },
   gtk_css_value_dimension_get,

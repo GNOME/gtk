@@ -106,6 +106,25 @@ _gtk_css_number_value_new (double     value,
   return gtk_css_dimension_value_new (value, unit);
 }
 
+GtkCssValue *
+gtk_css_number_value_transition (GtkCssValue *start,
+                                 GtkCssValue *end,
+                                 guint        property_id,
+                                 double       progress)
+{
+  GtkCssValue *result, *mul_start, *mul_end;
+
+  mul_start = gtk_css_number_value_multiply (start, 1 - progress);
+  mul_end = gtk_css_number_value_multiply (end, progress);
+
+  result = gtk_css_number_value_add (mul_start, mul_end);
+
+  _gtk_css_value_unref (mul_start);
+  _gtk_css_value_unref (mul_end);
+
+  return result;
+}
+
 gboolean
 gtk_css_number_value_can_parse (GtkCssParser *parser)
 {
