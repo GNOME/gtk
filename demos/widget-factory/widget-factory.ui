@@ -2738,23 +2738,65 @@ microphone-sensitivity-medium-symbolic</property>
                             <property name="can_focus">1</property>
                             <property name="expanded">1</property>
                             <child>
-                              <object class="GtkScrolledWindow" id="scrolledwindow3">
+                              <object class="GtkBox">
                                 <property name="visible">1</property>
-                                <property name="can_focus">1</property>
-                                <property name="shadow_type">in</property>
-                                <property name="margin-top">6</property>
-                                <property name="height_request">226</property>
+                                <property name="orientation">vertical</property>
                                 <child>
-                                  <object class="GtkIconView" id="iconview1">
+                                  <object class="GtkScrolledWindow" id="scrolledwindow3">
                                     <property name="visible">1</property>
                                     <property name="can_focus">1</property>
-                                    <property name="selection_mode">multiple</property>
-                                    <property name="model">iconsmodel</property>
+                                    <property name="shadow_type">in</property>
+                                    <property name="margin-top">6</property>
+                                    <property name="height_request">226</property>
                                     <child>
-                                      <object class="GtkCellRendererPixbuf" id="iconviewcell"/>
-                                      <attributes>
-                                        <attribute name="icon-name">0</attribute>
-                                      </attributes>
+                                      <object class="GtkIconView" id="iconview1">
+                                        <property name="visible">1</property>
+                                        <property name="can_focus">1</property>
+                                        <property name="selection_mode">multiple</property>
+                                        <property name="model">iconsmodel</property>
+                                        <child>
+                                          <object class="GtkCellRendererPixbuf" id="iconviewcell">
+                                            <property name="stock-size">5</property>
+                                          </object>
+                                          <attributes>
+                                            <attribute name="icon-name">0</attribute>
+                                          </attributes>
+                                        </child>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkToolbar">
+                                    <property name="visible">1</property>
+                                    <property name="icon-size">1</property>
+                                    <property name="toolbar-style">icons</property>
+                                    <style>
+                                      <class name="inline-toolbar"/>
+                                    </style>
+                                    <child>
+                                      <object class="GtkToolButton" id="decrease_button">
+                                        <property name="visible">1</property>
+                                        <property name="icon-name">zoom-out-symbolic</property>
+                                        <property name="label">Remove item</property>
+                                        <signal name="clicked" handler="decrease_icon_size" object="iconview1" swapped="yes"/>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkToolButton" id="increase_button">
+                                        <property name="visible">1</property>
+                                        <property name="icon-name">zoom-in-symbolic</property>
+                                        <property name="label">Add item</property>
+                                        <signal name="clicked" handler="increase_icon_size" object="iconview1" swapped="yes"/>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkToolButton" id="reset_button">
+                                        <property name="visible">1</property>
+                                        <property name="icon-name">zoom-original-symbolic</property>
+                                        <property name="label">Refresh</property>
+                                        <signal name="clicked" handler="reset_icon_size" object="iconview1" swapped="yes"/>
+                                      </object>
                                     </child>
                                   </object>
                                 </child>

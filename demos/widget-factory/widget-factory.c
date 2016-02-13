@@ -1488,6 +1488,124 @@ g_test_permission_class_init (GTestPermissionClass *class)
   permission_class->release_finish = release_finish;
 }
 
+static int icon_sizes[5];
+
+static void
+register_icon_sizes (void)
+{
+  static gboolean registered;
+
+  if (registered)
+    return;
+
+  registered = TRUE;
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  icon_sizes[0] = gtk_icon_size_register ("a", 16, 16);
+  icon_sizes[1] = gtk_icon_size_register ("b", 24, 24);
+  icon_sizes[2] = gtk_icon_size_register ("c", 32, 32);
+  icon_sizes[3] = gtk_icon_size_register ("d", 48, 48);
+  icon_sizes[4] = gtk_icon_size_register ("e", 64, 64);
+G_GNUC_END_IGNORE_DEPRECATIONS
+}
+
+static int
+find_icon_size (GtkIconSize size)
+{
+  gint w, h, w2, h2;
+  gint i;
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  gtk_icon_size_lookup (size, &w, &h);
+  for (i = 0; i < G_N_ELEMENTS (icon_sizes); i++)
+    {
+      gtk_icon_size_lookup (icon_sizes[i], &w2, &h2);
+      if (w == w2)
+        return i;
+    }
+G_GNUC_END_IGNORE_DEPRECATIONS
+
+  return 2;
+}
+
+static void
+update_buttons (GtkWidget *iv, int pos)
+{
+  GtkWidget *button;
+
+  button = GTK_WIDGET (g_object_get_data (G_OBJECT (iv), "increase_button"));
+  gtk_widget_set_sensitive (button, pos + 1 < G_N_ELEMENTS (icon_sizes));
+  button = GTK_WIDGET (g_object_get_data (G_OBJECT (iv), "decrease_button"));
+  gtk_widget_set_sensitive (button, pos > 0);
+}
+
+static void
+increase_icon_size (GtkWidget *iv)
+{
+  GList *cells;
+  GtkCellRendererPixbuf *cell;
+  GtkIconSize size;
+  int i;
+
+  cells = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (iv));
+  cell = cells->data;
+  g_list_free (cells);
+
+  g_object_get (cell, "stock-size", &size, NULL);
+
+  i = find_icon_size (size);
+  i = CLAMP (i + 1, 0, G_N_ELEMENTS (icon_sizes) - 1);
+  size = icon_sizes[i];
+
+  g_object_set (cell, "stock-size", size, NULL);
+
+  update_buttons (iv, i);
+
+  gtk_widget_queue_resize (iv);
+}
+
+static void
+decrease_icon_size (GtkWidget *iv)
+{
+  GList *cells;
+  GtkCellRendererPixbuf *cell;
+  GtkIconSize size;
+  int i;
+
+  cells = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (iv));
+  cell = cells->data;
+  g_list_free (cells);
+
+  g_object_get (cell, "stock-size", &size, NULL);
+
+  i = find_icon_size (size);
+  i = CLAMP (i - 1, 0, G_N_ELEMENTS (icon_sizes) - 1);
+  size = icon_sizes[i];
+
+  g_object_set (cell, "stock-size", size, NULL);
+
+  update_buttons (iv, i);
+
+  gtk_widget_queue_resize (iv);
+}
+
+static void
+reset_icon_size (GtkWidget *iv)
+{
+  GList *cells;
+  GtkCellRendererPixbuf *cell;
+
+  cells = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (iv));
+  cell = cells->data;
+  g_list_free (cells);
+
+  g_object_set (cell, "stock-size", icon_sizes[2], NULL);
+
+  update_buttons (iv, 2);
+
+  gtk_widget_queue_resize (iv);
+}
+
 static void
 activate (GApplication *app)
 {
@@ -1530,6 +1648,7 @@ activate (GApplication *app)
   GAction *action;
 
   g_type_ensure (my_text_view_get_type ());
+  register_icon_sizes ();
 
   provider = gtk_css_provider_new ();
   gtk_css_provider_load_from_resource (provider, "/org/gtk/WidgetFactory/widget-factory.css");
@@ -1548,6 +1667,9 @@ activate (GApplication *app)
   gtk_builder_add_callback_symbol (builder, "on_range_to_changed", (GCallback)on_range_to_changed);
   gtk_builder_add_callback_symbol (builder, "osd_frame_button_press", (GCallback)osd_frame_button_press);
   gtk_builder_add_callback_symbol (builder, "tab_close_cb", (GCallback)tab_close_cb);
+  gtk_builder_add_callback_symbol (builder, "increase_icon_size", (GCallback)increase_icon_size);
+  gtk_builder_add_callback_symbol (builder, "decrease_icon_size", (GCallback)decrease_icon_size);
+  gtk_builder_add_callback_symbol (builder, "reset_icon_size", (GCallback)reset_icon_size);
 
   gtk_builder_connect_signals (builder, NULL);
 
@@ -1745,6 +1867,12 @@ activate (GApplication *app)
                           G_BINDING_SYNC_CREATE);
   gtk_lock_button_set_permission (GTK_LOCK_BUTTON (widget2), permission);
   g_object_unref (permission);
+
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "iconview1");
+  widget2 = (GtkWidget *)gtk_builder_get_object (builder, "increase_button");
+  g_object_set_data (G_OBJECT (widget), "increase_button", widget2);
+  widget2 = (GtkWidget *)gtk_builder_get_object (builder, "decrease_button");
+  g_object_set_data (G_OBJECT (widget), "decrease_button", widget2);
 
   gtk_widget_show_all (GTK_WIDGET (window));
 
