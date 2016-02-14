@@ -393,66 +393,81 @@ $_dot_color: if($variant=='light', $selected_bg_color,
   }
 }
 
-%button,
 button {
+  @at-root %button_basic, &{
+    $_button_transition: all 200ms $ease-out-quad;
 
-  $_button_transition: all 200ms $ease-out-quad;
+    min-height: 24px;
+    min-width: 16px;
+    padding: 4px 8px;
+    border: 1px solid;
+    border-radius: 3px;
+    transition: $_button_transition;
+    @include button(normal);
+    &.flat {
+      @include button(undecorated);
+      // to avoid adiacent buttons borders clashing when transitioning, the transition on the normal state is set
+      // to none, while it's added back in the hover state, so the button decoration will fade in on hover, but
+      // it won't fade out when the pointer leave the button allocation area. To make the transition more evident
+      // in this case the duration is increased.
+      transition: none;
 
-  min-height: 24px;
-  min-width: 16px;
-  padding: 4px 8px;
-  border: 1px solid;
-  border-radius: 3px;
-  transition: $_button_transition;
-  @include button(normal);
-  &.flat {
-    @include button(undecorated);
-    // to avoid adiacent buttons borders clashing when transitioning, the transition on the normal state is set
-    // to none, while it's added back in the hover state, so the button decoration will fade in on hover, but
-    // it won't fade out when the pointer leave the button allocation area. To make the transition more evident
-    // in this case the duration is increased.
-    transition: none;
+      &:hover {
+        transition: $_button_transition;
+        transition-duration: 500ms;
+
+        &:active { transition: $_button_transition; }
+      }
+    }
 
     &:hover {
-      transition: $_button_transition;
-      transition-duration: 500ms;
+      @include button(hover);
+      -gtk-icon-effect: highlight;
+    }
 
-      &:active { transition: $_button_transition; }
+    &:active, &:checked {
+      @include button(active);
+      transition-duration: 50ms;
+    }
+
+    &:backdrop, &.flat:backdrop {
+      @include button(backdrop);
+      -gtk-icon-effect: none;
+
+      &:active, &:checked { @include button(backdrop-active); }
+
+      &:disabled { @include button(backdrop-insensitive); }
+
+      &:disabled:active,
+      &:disabled:checked { @include button(backdrop-insensitive-active); }
+    }
+
+    &.flat:backdrop,
+    &.flat:disabled,
+    &.flat:backdrop:disabled { @include button(undecorated); }
+
+    &:disabled {
+      @include button(insensitive);
+
+      &:active,
+      &:checked { @include button(insensitive-active); }
+    }
+
+    &.text-button {
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    &.text-button.image-button {
+      // those buttons needs uneven horizontal padding, we want the icon side
+      // to have the image-button padding, while the text side the text-button
+      // one, so we're adding the missing padding to the label depending on
+      // its position inside the button
+      label:first-child { padding-left: 8px; }
+      label:last-child { padding-right: 8px; }
     }
   }
 
-  &:hover {
-    @include button(hover);
-    -gtk-icon-effect: highlight;
-  }
-
-  &:active, &:checked {
-    @include button(active);
-    transition-duration: 50ms;
-  }
-
-  &:backdrop, &.flat:backdrop {
-    @include button(backdrop);
-    -gtk-icon-effect: none;
-
-    &:active, &:checked { @include button(backdrop-active); }
-
-    &:disabled { @include button(backdrop-insensitive); }
-
-    &:disabled:active,
-    &:disabled:checked { @include button(backdrop-insensitive-active); }
-  }
-
-  &.flat:backdrop,
-  &.flat:disabled,
-  &.flat:backdrop:disabled { @include button(undecorated); }
-
-  &:disabled {
-    @include button(insensitive);
-
-    &:active,
-    &:checked { @include button(insensitive-active); }
-  }
   // big standalone buttons like in Documents pager
   &.osd {
     &.image-button {
@@ -590,20 +605,6 @@ button {
         &:backdrop { @include button(osd-backdrop, $b_color); }
       }
     }
-  }
-
-  &.text-button {
-    padding-left: 16px;
-    padding-right: 16px;
-  }
-
-  &.text-button.image-button {
-    // those buttons needs uneven horizontal padding, we want the icon side
-    // to have the image-button padding, while the text side the text-button
-    // one, so we're adding the missing padding to the label depending on
-    // its position inside the button
-    label:first-child { padding-left: 8px; }
-    label:last-child { padding-right: 8px; }
   }
 
   .stack-switcher > & {
@@ -1833,7 +1834,7 @@ notebook {
     }
 
     > tabs > arrow {
-      @extend %button;
+      @extend %button_basic;
       @extend button.flat;
 
       min-height: 16px;
@@ -3659,7 +3660,7 @@ decoration {
 // Window Close button
 headerbar button.titlebutton,
 .titlebar button.titlebutton {
-  @extend button;
+  @extend %button_basic;
   @extend button.flat;
   @include _button_text_shadow;
 
