@@ -43,7 +43,6 @@ $asset_suffix: if($variant=='dark', '-dark', '');
 /***************
  * Base States *
  ***************/
-
 .background {
   color: $fg_color;
   background-color: $bg_color;
@@ -201,10 +200,10 @@ textview { // This will get overridden by .view, needed by gedit line numbers
   }
 }
 
+
 /*********************
  * Spinner Animation *
  *********************/
-
 @keyframes spin {
   to { -gtk-icon-transform: rotate(1turn); }
 }
@@ -222,10 +221,10 @@ spinner {
   }
 }
 
+
 /****************
  * Text Entries *
  ****************/
-
 entry {
   min-height: 32px;
   border: 1px solid;
@@ -371,7 +370,6 @@ entry {
 /***********
  * Buttons *
  ***********/
-
 // stuff for .needs-attention
 $_dot_color: if($variant=='light', $selected_bg_color,
                                    lighten($selected_bg_color,15%));
@@ -846,10 +844,10 @@ button.color {
   }
 }
 
+
 /*********
  * Links *
  *********/
-
 *:link {
   color: $link_color;
   &:visited {
@@ -900,10 +898,10 @@ button:visited {
   > label { text-decoration-line: underline; }
 }
 
+
 /*****************
  * GtkSpinButton *
  *****************/
-
 spinbutton {
   &:not(.vertical) {
     // in this horizontal configuration, the whole spinbutton
@@ -1092,6 +1090,7 @@ spinbutton {
   }
 }
 
+
 /**************
  * ComboBoxes *
  **************/
@@ -1127,6 +1126,7 @@ combobox {
 .linked.vertical > combobox:first-child > button.combo { @extend %linked_vertical:first-child;}
 .linked.vertical > combobox:last-child > button.combo { @extend %linked_vertical:last-child; }
 .linked.vertical > combobox:only-child > button.combo { @extend %linked_vertical:only-child; }
+
 
 /************
  * Toolbars *
@@ -1188,10 +1188,10 @@ searchbar,
   }
 }
 
+
 /***************
  * Header bars *
  ***************/
-
 %titlebar,
 headerbar {
   padding: 0 6px;
@@ -1392,10 +1392,10 @@ headerbar {
   @extend %titlebar;
 }
 
+
 /************
  * Pathbars *
  ************/
-
 .path-bar button {
   &:only-child {
     padding-left: 12px;
@@ -1407,6 +1407,7 @@ headerbar {
   & label:first-child { padding-right: 2px; }
   & label:only-child { padding-right: 0; padding-left: 0; }
 }
+
 
 /**************
  * Tree Views *
@@ -1774,7 +1775,6 @@ popover.background {
 /*************
  * Notebooks *
  *************/
-
 notebook {
   > header {
     border-color: $borders_color;
@@ -1979,7 +1979,6 @@ notebook {
 /**************
  * Scrollbars *
  **************/
-
 scrollbar {
   @at-root * {
     -GtkRange-slider-width: 13;
@@ -2103,10 +2102,10 @@ scrollbar {
   }
 }
 
+
 /**********
  * Switch *
  **********/
-
 switch {
   font-weight: bold;
   font-size: smaller;
@@ -2218,10 +2217,10 @@ switch {
   }
 }
 
+
 /*************************
  * Check and Radio items *
  *************************/
-
 // draw regular check and radio items using our PNG assets
 // all assets are rendered from assets.svg. never add pngs directly
 
@@ -2391,7 +2390,6 @@ menu menuitem {
 /************
  * GtkScale *
  ************/
-
 %scale_trough {
   border: 1px solid $borders_color;
   border-radius: 3px;
@@ -2614,7 +2612,6 @@ scale {
 /*****************
  * Progress bars *
  *****************/
-
 progressbar {
   // sizing
   &.horizontal {
@@ -2688,10 +2685,10 @@ progressbar {
   }
 }
 
+
 /*************
  * Level Bar *
  *************/
-
 levelbar {
   box-shadow: _widget_edge(); // needs to be set here to avoid clipping
   block {
@@ -2767,10 +2764,10 @@ levelbar {
   }
 }
 
+
 /****************
  * Print dialog *
 *****************/
-
 printdialog {
   paper {
     color: $fg_color;
@@ -2787,6 +2784,7 @@ printdialog {
     margin: 12px;
   }
 }
+
 
 /**********
  * Frames *
@@ -2877,10 +2875,10 @@ separator {
   min-height: 1px;
 }
 
+
 /*********
  * Lists *
  *********/
-
 list {
   color: $text_color;
   background-color: $base_color;
@@ -2985,7 +2983,6 @@ row {
 /*********************
  * App Notifications *
  *********************/
-
 .app-notification,
 .app-notification.frame {
   @extend %osd;
@@ -3003,10 +3000,10 @@ row {
   border { border: none; }
 }
 
+
 /*************
  * Expanders *
  *************/
-
 expander {
   arrow {
     min-width: 16px;
@@ -3020,6 +3017,7 @@ expander {
     &:checked { -gtk-icon-source: -gtk-icontheme('pan-down-symbolic'); }
   }
 }
+
 
 /************
  * Calendar *
@@ -3076,10 +3074,10 @@ calendar {
   }
 }
 
+
 /***********
  * Dialogs *
  ***********/
-
 messagedialog { // Message Dialog styling
   .titlebar {
     min-height: 20px;
@@ -3192,10 +3190,10 @@ filechooser {
   }
 }
 
+
 /***********
  * Sidebar *
  ***********/
-
 .sidebar {
   border: none;
   background-color: mix($bg_color, $base_color, 50%);
@@ -3225,10 +3223,10 @@ stacksidebar {
   }
 }
 
+
 /****************
  * File chooser *
  ****************/
-
 $_placesidebar_icons_opacity: 0.7;
 
 placessidebar {
@@ -3291,10 +3289,10 @@ placesview {
   row.activatable:hover { background-color: transparent; }
 }
 
+
 /*********
  * Paned *
  *********/
-
 paned {
   > separator {
     min-width: 1px;
@@ -3398,10 +3396,10 @@ infobar { border-style: none; }
   & label:selected:hover {background-color: darken($selected_bg_color, 10%); }
 }
 
+
 /************
  * Tooltips *
  ************/
-
 tooltip {
   &.background {
     // background-color needs to be set this way otherwise it gets drawn twice
@@ -3428,10 +3426,10 @@ tooltip {
   }
 }
 
+
 /*****************
  * Color Chooser *
  *****************/
-
 colorswatch {
   // This widget is made of two boxes one on top of the other, the lower box is colorswatch {} the other one
   // is colorswatch overlay {}, colorswatch has the programmatically set background, so most of the style is
@@ -3554,7 +3552,6 @@ colorswatch {
 /********
  * Misc *
  ********/
-
 //content view (grid/list)
 .content-view {
   background-color: darken($bg_color,7%);
@@ -3588,10 +3585,10 @@ colorswatch {
   }
 }
 
+
 /**********************
  * Window Decorations *
  *********************/
-
 decoration {
   border-radius: 7px 7px 0 0;
   // lamefun trick to get rounded borders regardless of CSD use
@@ -3692,10 +3689,10 @@ headerbar.selection-mode button.titlebutton,
   font: Monospace;
 }
 
+
 /**********************
  * Touch Copy & Paste *
  *********************/
-
 //touch selection handlebars for the Popover.osd above
 cursor-handle {
   background-color: transparent;
