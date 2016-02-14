@@ -3585,7 +3585,7 @@ frame border,
   .frame:backdrop {
     border-color: #a5a5a1; }
 
-actionbar box {
+actionbar > revealer > box {
   padding: 6px;
   border-width: 1px 0 0; }
 
