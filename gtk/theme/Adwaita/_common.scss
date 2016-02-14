@@ -1586,35 +1586,35 @@ treeview.view {
         transition: none; //I shouldn't need this
       }
 
-      &.dnd { @extend header.button.dnd; }
     }
 
     button:last-child,
     button:last-child:backdrop { border-right-style: none; }
   }
 
+  button.dnd,
   header.button.dnd { // for treeview-like derive widgets
-    transition: none;
-    color: $selected_bg_color;
-    box-shadow: inset 1px 1px 0 1px $selected_bg_color,
-                inset -1px 0 0 1px $selected_bg_color,
-                inset 1px 1px $base_color, inset -1px 0 $base_color;;
-
-    &:active { @extend header.button.dnd; }
-
-    &:selected { @extend header.button.dnd; }
-
-    &:hover { @extend header.button.dnd; }
+    &:active, &:selected, &:hover, & {
+      padding: 0 6px;
+      transition: none;
+      background-image: none;
+      background-color: $selected_bg_color;
+      color: $base_color;
+      border-radius: 0;
+      border-style: none;
+      box-shadow: inset 0 0 0 1px $base_color;
+      text-shadow: none;
+    }
   }
 }
 
 %column_header_button {
-  padding: 3px 6px;
-  border-style: none solid solid none;
+  padding: 0 6px;
   border-radius: 0;
   background-image: none;
-  border-color: $bg_color;
   text-shadow: none;
+  border-style: none solid solid none;
+  border-color: $bg_color;
 
   &:disabled {
     border-color: $bg_color;

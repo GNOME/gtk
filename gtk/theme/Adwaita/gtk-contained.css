@@ -1981,18 +1981,28 @@ treeview.view {
   treeview.view header button:last-child,
   treeview.view header button:last-child:backdrop {
     border-right-style: none; }
-  treeview.view header.button.dnd, treeview.view header button.dnd, treeview.view header.button.dnd:active, treeview.view header.button.dnd:selected, treeview.view header.button.dnd:hover {
+  treeview.view button.dnd:active, treeview.view button.dnd:selected, treeview.view button.dnd:hover, treeview.view button.dnd,
+  treeview.view header.button.dnd:active,
+  treeview.view header.button.dnd:selected,
+  treeview.view header.button.dnd:hover,
+  treeview.view header.button.dnd {
+    padding: 0 6px;
     transition: none;
-    color: #4a90d9;
-    box-shadow: inset 1px 1px 0 1px #4a90d9, inset -1px 0 0 1px #4a90d9, inset 1px 1px #ffffff, inset -1px 0 #ffffff; }
+    background-image: none;
+    background-color: #4a90d9;
+    color: #ffffff;
+    border-radius: 0;
+    border-style: none;
+    box-shadow: inset 0 0 0 1px #ffffff;
+    text-shadow: none; }
 
 treeview.view header button, treeview.view header button:hover, treeview.view header button:active {
-  padding: 3px 6px;
-  border-style: none solid solid none;
+  padding: 0 6px;
   border-radius: 0;
   background-image: none;
-  border-color: #e8e8e7;
-  text-shadow: none; }
+  text-shadow: none;
+  border-style: none solid solid none;
+  border-color: #e8e8e7; }
   treeview.view header button:disabled {
     border-color: #e8e8e7;
     background-image: none; }
