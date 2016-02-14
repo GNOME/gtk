@@ -494,12 +494,22 @@ notebook > header > tabs > arrow, headerbar button.titlebutton,
   .titlebar button.text-button.titlebutton, button.text-button {
     padding-left: 16px;
     padding-right: 16px; }
-  notebook > header > tabs > arrow.text-button.image-button label:first-child, headerbar button.text-button.image-button.titlebutton label:first-child,
-  .titlebar button.text-button.image-button.titlebutton label:first-child, button.text-button.image-button label:first-child {
-    padding-left: 8px; }
-  notebook > header > tabs > arrow.text-button.image-button label:last-child, headerbar button.text-button.image-button.titlebutton label:last-child,
-  .titlebar button.text-button.image-button.titlebutton label:last-child, button.text-button.image-button label:last-child {
-    padding-right: 8px; }
+  notebook > header > tabs > arrow.text-button.image-button, headerbar button.text-button.image-button.titlebutton,
+  .titlebar button.text-button.image-button.titlebutton, button.text-button.image-button {
+    padding-left: 0;
+    padding-right: 0; }
+    notebook > header > tabs > arrow.text-button.image-button label:first-child, headerbar button.text-button.image-button.titlebutton label:first-child,
+    .titlebar button.text-button.image-button.titlebutton label:first-child, button.text-button.image-button label:first-child {
+      padding-left: 16px;
+      padding-right: 0; }
+    notebook > header > tabs > arrow.text-button.image-button label:last-child, headerbar button.text-button.image-button.titlebutton label:last-child,
+    .titlebar button.text-button.image-button.titlebutton label:last-child, button.text-button.image-button label:last-child {
+      padding-left: 0;
+      padding-right: 16px; }
+    notebook > header > tabs > arrow.text-button.image-button image, headerbar button.text-button.image-button.titlebutton image,
+    .titlebar button.text-button.image-button.titlebutton image, button.text-button.image-button image {
+      padding-left: 8px;
+      padding-right: 8px; }
 button.osd {
   color: #eeeeec;
   border-radius: 5px;
