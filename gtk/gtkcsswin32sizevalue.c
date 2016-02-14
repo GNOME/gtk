@@ -148,7 +148,6 @@ gtk_css_win32_size_value_parse (GtkCssParser           *parser,
                                 GtkCssNumberParseFlags  flags)
 {
   GtkWin32Theme *theme;
-  char *theme_class;
   GtkCssValue *result;
   int id;
 
@@ -158,36 +157,30 @@ gtk_css_win32_size_value_parse (GtkCssParser           *parser,
       return NULL;
     }
 
-  theme_class = _gtk_css_parser_try_name (parser, TRUE);
-  if (theme_class == NULL)
-    {
-      _gtk_css_parser_error (parser, "Expected name as first argument to  '-gtk-win32-size'");
-      return NULL;
-    }
+  theme = gtk_win32_theme_parse (parser);
+  if (theme == NULL)
+    return NULL;
 
   if (! _gtk_css_parser_try (parser, ",", TRUE))
     {
-      g_free (theme_class);
+      gtk_win32_theme_unref (theme);
       _gtk_css_parser_error (parser, "Expected ','");
       return NULL;
     }
 
   if (!_gtk_css_parser_try_int (parser, &id))
     {
-      g_free (theme_class);
+      gtk_win32_theme_unref (theme);
       _gtk_css_parser_error (parser, "Expected an integer ID");
       return 0;
     }
 
   if (!_gtk_css_parser_try (parser, ")", TRUE))
     {
-      g_free (theme_class);
+      gtk_win32_theme_unref (theme);
       _gtk_css_parser_error (parser, "Expected ')'");
       return NULL;
     }
-
-  theme = gtk_win32_theme_lookup (theme_class);
-  g_free (theme_class);
 
   result = gtk_css_win32_size_value_new (1.0, theme, id);
   gtk_win32_theme_unref (theme);

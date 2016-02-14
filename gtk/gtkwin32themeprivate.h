@@ -28,7 +28,7 @@ typedef struct _GtkWin32Theme GtkWin32Theme;
 
 #define GTK_WIN32_THEME_SYMBOLIC_COLOR_NAME "-gtk-win32-color"
 
-GtkWin32Theme *         gtk_win32_theme_lookup          (const char     *classname);
+GtkWin32Theme *         gtk_win32_theme_parse           (GtkCssParser   *parser);
 
 GtkWin32Theme *         gtk_win32_theme_ref             (GtkWin32Theme  *theme);
 void                    gtk_win32_theme_unref           (GtkWin32Theme  *theme);

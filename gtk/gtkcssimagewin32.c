@@ -70,7 +70,6 @@ gtk_css_image_win32_parse (GtkCssImage  *image,
                            GtkCssParser *parser)
 {
   GtkCssImageWin32 *wimage = GTK_CSS_IMAGE_WIN32 (image);
-  char *class;
 
   if (!_gtk_css_parser_try (parser, "-gtk-win32-theme-part", TRUE))
     {
@@ -85,15 +84,9 @@ gtk_css_image_win32_parse (GtkCssImage  *image,
       return FALSE;
     }
   
-  class = _gtk_css_parser_try_name (parser, TRUE);
-  if (class == NULL)
-    {
-      _gtk_css_parser_error (parser,
-                             "Expected name as first argument to  '-gtk-win32-theme-part'");
-      return FALSE;
-    }
-  wimage->theme = gtk_win32_theme_lookup (class);
-  g_free (class);
+  wimage->theme = gtk_win32_theme_parse (parser);
+  if (wimage->theme == NULL)
+    return FALSE;
 
   if (! _gtk_css_parser_try (parser, ",", TRUE))
     {

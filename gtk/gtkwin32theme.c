@@ -247,7 +247,7 @@ gtk_win32_theme_get_htheme (GtkWin32Theme *theme)
 
 #endif /* G_OS_WIN32 */
 
-GtkWin32Theme *
+static GtkWin32Theme *
 gtk_win32_theme_lookup (const char *classname)
 {
   GtkWin32Theme *theme;
@@ -265,6 +265,25 @@ gtk_win32_theme_lookup (const char *classname)
   theme->class_name = g_strdup (classname);
 
   g_hash_table_insert (themes_by_class, theme->class_name, theme);
+
+  return theme;
+}
+
+GtkWin32Theme *
+gtk_win32_theme_parse (GtkCssParser *parser)
+{
+  GtkWin32Theme *theme;
+  char *class_name;
+
+  class_name = _gtk_css_parser_try_name (parser, TRUE);
+  if (class_name == NULL)
+    {
+      _gtk_css_parser_error (parser, "Expected valid win32 theme name");
+      return NULL;
+    }
+
+  theme = gtk_win32_theme_lookup (class_name);
+  g_free (class_name);
 
   return theme;
 }
