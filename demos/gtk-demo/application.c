@@ -1,17 +1,7 @@
-/* Application Class
- *
- * Demonstrates a simple application.
- *
- * This examples uses GtkApplication, GtkApplicationWindow, GtkBuilder
- * as well as GMenu and GResource. Due to the way GtkApplication is structured,
- * it is run as a separate process.
- */
 
 #include "config.h"
 
 #include <gtk/gtk.h>
-
-#ifdef STANDALONE
 
 typedef GtkApplication DemoApplication;
 typedef GtkApplicationClass DemoApplicationClass;
@@ -356,7 +346,7 @@ startup (GApplication *app)
   G_APPLICATION_CLASS (demo_application_parent_class)->startup (app);
 
   builder = gtk_builder_new ();
-  gtk_builder_add_from_resource (builder, "/application/menus.ui", NULL);
+  gtk_builder_add_from_resource (builder, "/application_demo/menus.ui", NULL);
 
   appmenu = (GMenuModel *)gtk_builder_get_object (builder, "appmenu");
   menubar = (GMenuModel *)gtk_builder_get_object (builder, "menubar");
@@ -528,7 +518,7 @@ demo_application_window_class_init (DemoApplicationWindowClass *class)
   widget_class->window_state_event = demo_application_window_state_event;
   widget_class->destroy = demo_application_window_destroy;
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/application/application.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/application_demo/application.ui");
   gtk_widget_class_bind_template_child (widget_class, DemoApplicationWindow, message);
   gtk_widget_class_bind_template_child (widget_class, DemoApplicationWindow, infobar);
   gtk_widget_class_bind_template_child (widget_class, DemoApplicationWindow, status);
@@ -552,90 +542,3 @@ main (int argc, char *argv[])
 
   return g_application_run (G_APPLICATION (app), 0, NULL);
 }
-
-#else /* !STANDALONE */
-
-static gboolean name_seen;
-static GtkWidget *placeholder;
-
-static void
-on_name_appeared (GDBusConnection *connection,
-                  const gchar     *name,
-                  const gchar     *name_owner,
-                  gpointer         user_data)
-{
-  name_seen = TRUE;
-}
-
-static void
-on_name_vanished (GDBusConnection *connection,
-                  const gchar     *name,
-                  gpointer         user_data)
-{
-  if (!name_seen)
-    return;
-
-  if (placeholder)
-    {
-      gtk_widget_destroy (placeholder);
-      g_object_unref (placeholder);
-      placeholder = NULL;
-    }
-}
-
-#ifdef G_OS_WIN32
-#define APP_EXTENSION ".exe"
-#else
-#define APP_EXTENSION
-#endif
-
-GtkWidget *
-do_application (GtkWidget *toplevel)
-{
-  static guint watch = 0;
-
-  if (watch == 0)
-    watch = g_bus_watch_name (G_BUS_TYPE_SESSION,
-                              "org.gtk.Demo2",
-                              0,
-                              on_name_appeared,
-                              on_name_vanished,
-                              NULL, NULL);
-
-  if (placeholder == NULL)
-    {
-      const gchar *command;
-      GError *error = NULL;
-
-      if (g_file_test ("./gtk3-demo-application" APP_EXTENSION, G_FILE_TEST_IS_EXECUTABLE))
-        command = "./gtk3-demo-application" APP_EXTENSION;
-      else
-        command = "gtk3-demo-application";
-
-      if (!g_spawn_command_line_async (command, &error))
-        {
-          g_warning ("%s", error->message);
-          g_error_free (error);
-        }
-
-      placeholder = gtk_label_new ("");
-      g_object_ref_sink (placeholder);
-    }
-  else
-    {
-      g_dbus_connection_call_sync (g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL),
-                                   "org.gtk.Demo2",
-                                   "/org/gtk/Demo2",
-                                   "org.gtk.Actions",
-                                   "Activate",
-                                   g_variant_new ("(sava{sv})", "quit", NULL, NULL),
-                                   NULL,
-                                   0,
-                                   G_MAXINT,
-                                   NULL, NULL);
-    }
-
-  return placeholder;
-}
-
-#endif

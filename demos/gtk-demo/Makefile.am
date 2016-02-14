@@ -4,7 +4,7 @@ include $(top_srcdir)/Makefile.decl
 ## These should be in the order you want them to appear in the
 ## demo app, which means alphabetized by demo title, not filename
 demos_base =					\
-	application.c				\
+	application_demo.c			\
 	assistant.c				\
 	builder.c				\
 	button_box.c				\
@@ -143,7 +143,7 @@ gtk3_demo_LDADD = $(LDADDS)
 gtk3_demo_LDFLAGS = -export-dynamic
 
 gtk3_demo_application_SOURCES = \
-	application-standalone.c \
+	application.c 		\
 	demo_resources.c
 
 gtk3_demo_application_LDADD = $(LDADDS)

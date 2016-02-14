@@ -3,7 +3,8 @@
   <gresource prefix="/ui">
     <file preprocess="xml-stripblanks">main.ui</file>
   </gresource>
-  <gresource prefix="/application">
+  <gresource prefix="/application_demo">
+    <file>application.c</file>
     <file>application.ui</file>
     <file>menus.ui</file>
   </gresource>
@@ -117,7 +118,7 @@
     <file>gnu-keys.png</file>
   </gresource>
   <gresource prefix="/sources">
-    <file>application.c</file>
+    <file>application_demo.c</file>
     <file>assistant.c</file>
     <file>builder.c</file>
     <file>button_box.c</file>
