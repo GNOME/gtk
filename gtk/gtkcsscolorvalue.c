@@ -62,7 +62,7 @@ struct _GtkCssValue
 
     struct
     {
-      gchar *theme_class;
+      GtkWin32Theme *theme;
       gint id;
     } win32;
   } sym_col;
@@ -90,7 +90,7 @@ gtk_css_value_color_free (GtkCssValue *color)
       _gtk_css_value_unref (color->sym_col.mix.color2);
       break;
     case COLOR_TYPE_WIN32:
-      g_free (color->sym_col.win32.theme_class);
+      gtk_win32_theme_unref (color->sym_col.win32.theme);
       break;
     default:
       break;
@@ -243,10 +243,9 @@ _gtk_css_color_value_resolve (GtkCssValue             *color,
       {
 	GdkRGBA res;
 
-	if (!_gtk_win32_theme_color_resolve (color->sym_col.win32.theme_class,
-					     color->sym_col.win32.id,
-					     &res))
-	  return NULL;
+        gtk_win32_theme_get_color (color->sym_col.win32.theme,
+			           color->sym_col.win32.id,
+				   &res);
 
 	value = _gtk_css_rgba_value_new_from_rgba (&res);
       }
@@ -350,7 +349,7 @@ gtk_css_value_color_equal (const GtkCssValue *value1,
              _gtk_css_value_equal (value1->sym_col.mix.color2,
                                    value2->sym_col.mix.color2);
     case COLOR_TYPE_WIN32:
-      return g_str_equal (value1->sym_col.win32.theme_class, value2->sym_col.win32.theme_class) &&
+      return gtk_win32_theme_equal (value1->sym_col.win32.theme, value2->sym_col.win32.theme) &&
              value1->sym_col.win32.id == value2->sym_col.win32.id;
     case COLOR_TYPE_CURRENT_COLOR:
       return TRUE;
@@ -422,8 +421,9 @@ gtk_css_value_color_print (const GtkCssValue *value,
       break;
     case COLOR_TYPE_WIN32:
       {
-        g_string_append_printf (string, GTK_WIN32_THEME_SYMBOLIC_COLOR_NAME"(%s, %d)", 
-			        value->sym_col.win32.theme_class, value->sym_col.win32.id);
+        g_string_append (string, GTK_WIN32_THEME_SYMBOLIC_COLOR_NAME"(");
+        gtk_win32_theme_print (value->sym_col.win32.theme, string);
+        g_string_append_printf (string, "%d)", value->sym_col.win32.id);
       }
       break;
     case COLOR_TYPE_CURRENT_COLOR:
@@ -532,18 +532,34 @@ _gtk_css_color_value_new_mix (GtkCssValue *color1,
   return value;
 }
 
+static GtkCssValue *
+gtk_css_color_value_new_win32_for_theme (GtkWin32Theme *theme,
+                                         gint           id)
+{
+  GtkCssValue *value;
+
+  gtk_internal_return_val_if_fail (theme != NULL, NULL);
+
+  value = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_COLOR);
+  value->type = COLOR_TYPE_WIN32;
+  value->sym_col.win32.theme = gtk_win32_theme_ref (theme);
+  value->sym_col.win32.id = id;
+
+  return value;
+}
+
 GtkCssValue *
 _gtk_css_color_value_new_win32 (const gchar *theme_class,
                                 gint         id)
 {
+  GtkWin32Theme *theme;
   GtkCssValue *value;
 
   gtk_internal_return_val_if_fail (theme_class != NULL, NULL);
 
-  value = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_COLOR);
-  value->type = COLOR_TYPE_WIN32;
-  value->sym_col.win32.theme_class = g_strdup (theme_class);
-  value->sym_col.win32.id = id;
+  theme = gtk_win32_theme_lookup (theme_class);
+  value = gtk_css_color_value_new_win32_for_theme (theme, id);
+  gtk_win32_theme_unref (theme);
 
   return value;
 }
@@ -571,20 +587,16 @@ static GtkCssValue *
 gtk_css_color_parse_win32 (GtkCssParser *parser)
 {
   GtkCssValue *color;
-  char *class;
+  GtkWin32Theme *theme;
   int id;
 
-  class = _gtk_css_parser_try_name (parser, TRUE);
-  if (class == NULL)
-    {
-      _gtk_css_parser_error (parser,
-			     "Expected name as first argument to  '-gtk-win32-color'");
-      return NULL;
-    }
+  theme = gtk_win32_theme_parse (parser);
+  if (theme == NULL)
+    return NULL;
 
   if (! _gtk_css_parser_try (parser, ",", TRUE))
     {
-      g_free (class);
+      gtk_win32_theme_unref (theme);
       _gtk_css_parser_error (parser,
 			     "Expected ','");
       return NULL;
@@ -592,13 +604,13 @@ gtk_css_color_parse_win32 (GtkCssParser *parser)
 
   if (!_gtk_css_parser_try_int (parser, &id))
     {
-      g_free (class);
+      gtk_win32_theme_unref (theme);
       _gtk_css_parser_error (parser, "Expected a valid integer value");
       return NULL;
     }
 
-  color = _gtk_css_color_value_new_win32 (class, id);
-  g_free (class);
+  color = gtk_css_color_value_new_win32_for_theme (theme, id);
+  gtk_win32_theme_unref (theme);
   return color;
 }
 

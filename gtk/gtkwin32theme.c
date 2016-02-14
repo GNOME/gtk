@@ -64,7 +64,7 @@ typedef HRESULT (FAR PASCAL *GetThemePartSizeFunc)          (HTHEME hTheme,
 							     SIZE *psz);
 
 static GetThemeSysFontFunc get_theme_sys_font = NULL;
-static GetThemeSysColorFunc get_theme_sys_color = NULL;
+static GetThemeSysColorFunc GetThemeSysColor = NULL;
 static GetThemeSysSizeFunc get_theme_sys_metric = NULL;
 static OpenThemeDataFunc OpenThemeData = NULL;
 static CloseThemeDataFunc CloseThemeData = NULL;
@@ -205,7 +205,7 @@ gtk_win32_theme_init (void)
       draw_theme_background = (DrawThemeBackgroundFunc) GetProcAddress (uxtheme_dll, "DrawThemeBackground");
       enable_theme_dialog_texture = (EnableThemeDialogTextureFunc) GetProcAddress (uxtheme_dll, "EnableThemeDialogTexture");
       get_theme_sys_font = (GetThemeSysFontFunc) GetProcAddress (uxtheme_dll, "GetThemeSysFont");
-      get_theme_sys_color = (GetThemeSysColorFunc) GetProcAddress (uxtheme_dll, "GetThemeSysColor");
+      GetThemeSysColor = (GetThemeSysColorFunc) GetProcAddress (uxtheme_dll, "GetThemeSysColor");
       get_theme_sys_metric = (GetThemeSysSizeFunc) GetProcAddress (uxtheme_dll, "GetThemeSysSize");
       is_theme_partially_transparent = (IsThemeBackgroundPartiallyTransparentFunc) GetProcAddress (uxtheme_dll, "IsThemeBackgroundPartiallyTransparent");
       draw_theme_parent_background = (DrawThemeParentBackgroundFunc) GetProcAddress (uxtheme_dll, "DrawThemeParentBackground");
@@ -251,22 +251,27 @@ canonicalize_class_name (const char *classname)
   return g_ascii_strdown (classname, -1);
 }
 
-static GtkWin32Theme *
+GtkWin32Theme *
 gtk_win32_theme_lookup (const char *classname)
 {
   GtkWin32Theme *theme;
+  char *canonical_classname;
 
   if (G_UNLIKELY (themes_by_class == NULL))
     themes_by_class = g_hash_table_new (g_str_hash, g_str_equal);
 
-  theme = g_hash_table_lookup (themes_by_class, classname);
+  canonical_classname = canonicalize_class_name (classname);
+  theme = g_hash_table_lookup (themes_by_class, canonical_classname);
 
   if (theme != NULL)
-    return gtk_win32_theme_ref (theme);
+    {
+      g_free (canonical_classname);
+      return gtk_win32_theme_ref (theme);
+    }
 
   theme = g_slice_new0 (GtkWin32Theme);
   theme->ref_count = 1;
-  theme->class_name = g_strdup (classname);
+  theme->class_name = canonical_classname;
 
   g_hash_table_insert (themes_by_class, theme->class_name, theme);
 
@@ -277,7 +282,7 @@ GtkWin32Theme *
 gtk_win32_theme_parse (GtkCssParser *parser)
 {
   GtkWin32Theme *theme;
-  char *canonical_class_name, *class_name;
+  char *class_name;
 
   class_name = _gtk_css_parser_try_name (parser, TRUE);
   if (class_name == NULL)
@@ -285,10 +290,8 @@ gtk_win32_theme_parse (GtkCssParser *parser)
       _gtk_css_parser_error (parser, "Expected valid win32 theme name");
       return NULL;
     }
-  canonical_class_name = canonicalize_class_name (class_name);
 
-  theme = gtk_win32_theme_lookup (canonical_class_name);
-  g_free (canonical_class_name);
+  theme = gtk_win32_theme_lookup (class_name);
   g_free (class_name);
 
   return theme;
@@ -405,29 +408,24 @@ gtk_win32_theme_get_size (GtkWin32Theme *theme,
 #endif
 }
 
-gboolean
-_gtk_win32_theme_color_resolve (const char *theme_class,
-				gint id,
-				GdkRGBA *color)
+void
+gtk_win32_theme_get_color (GtkWin32Theme *theme,
+                           gint           id,
+                           GdkRGBA       *color)
 {
 #ifdef G_OS_WIN32
-  GtkWin32Theme *theme;
   HTHEME htheme;
   DWORD dcolor;
 
-  theme = gtk_win32_theme_lookup (theme_class);
-  if (use_xp_theme && get_theme_sys_color != NULL)
+  if (use_xp_theme && GetThemeSysColor != NULL)
     {
       htheme = gtk_win32_theme_get_htheme (theme);
 
-      /* if htheme is NULL, it will just return the GetSystemColor()
-         value */
-      dcolor = get_theme_sys_color (htheme, id);
+      /* if htheme is NULL, it will just return the GetSysColor() value */
+      dcolor = GetThemeSysColor (htheme, id);
     }
   else
     dcolor = GetSysColor (id);
-
-  gtk_win32_theme_unref (theme);
 
   color->alpha = 1.0;
   color->red = GetRValue (dcolor) / 255.0;
@@ -436,7 +434,6 @@ _gtk_win32_theme_color_resolve (const char *theme_class,
 #else
   gdk_rgba_parse (color, "pink");
 #endif
-  return TRUE;
 }
 
 void

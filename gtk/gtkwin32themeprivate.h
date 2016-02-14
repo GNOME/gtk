@@ -28,6 +28,7 @@ typedef struct _GtkWin32Theme GtkWin32Theme;
 
 #define GTK_WIN32_THEME_SYMBOLIC_COLOR_NAME "-gtk-win32-color"
 
+GtkWin32Theme *         gtk_win32_theme_lookup          (const char     *class_name);
 GtkWin32Theme *         gtk_win32_theme_parse           (GtkCssParser   *parser);
 
 GtkWin32Theme *         gtk_win32_theme_ref             (GtkWin32Theme  *theme);
@@ -47,12 +48,11 @@ cairo_surface_t *       gtk_win32_theme_create_surface  (GtkWin32Theme *theme,
                                                          int            height,
 							 int           *x_offs_out,
 							 int           *y_offs_out);
-int                     gtk_win32_theme_get_size        (GtkWin32Theme *theme,
-			                                 int            id);
-
-gboolean           _gtk_win32_theme_color_resolve (const char        *theme_class,
-						   gint               id,
-						   GdkRGBA           *color);
+int                     gtk_win32_theme_get_size        (GtkWin32Theme  *theme,
+			                                 int             id);
+void                    gtk_win32_theme_get_color       (GtkWin32Theme  *theme,
+                                                         gint            id,
+                                                         GdkRGBA        *color);
 
 G_END_DECLS
 
