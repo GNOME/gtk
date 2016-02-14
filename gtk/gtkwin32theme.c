@@ -74,7 +74,7 @@ static IsThemeActiveFunc is_theme_active = NULL;
 static IsAppThemedFunc is_app_themed = NULL;
 static IsThemeBackgroundPartiallyTransparentFunc is_theme_partially_transparent = NULL;
 static DrawThemeParentBackgroundFunc draw_theme_parent_background = NULL;
-static GetThemePartSizeFunc get_theme_part_size = NULL;
+static GetThemePartSizeFunc GetThemePartSize = NULL;
 
 #endif
 
@@ -209,7 +209,7 @@ gtk_win32_theme_init (void)
       get_theme_sys_metric = (GetThemeSysSizeFunc) GetProcAddress (uxtheme_dll, "GetThemeSysSize");
       is_theme_partially_transparent = (IsThemeBackgroundPartiallyTransparentFunc) GetProcAddress (uxtheme_dll, "IsThemeBackgroundPartiallyTransparent");
       draw_theme_parent_background = (DrawThemeParentBackgroundFunc) GetProcAddress (uxtheme_dll, "DrawThemeParentBackground");
-      get_theme_part_size = (GetThemePartSizeFunc) GetProcAddress (uxtheme_dll, "GetThemePartSize");
+      GetThemePartSize = (GetThemePartSizeFunc) GetProcAddress (uxtheme_dll, "GetThemePartSize");
     }
 
   if (is_app_themed && is_theme_active)
@@ -337,7 +337,7 @@ gtk_win32_theme_create_surface (GtkWin32Theme *theme,
       rect.bottom = height;
 
       hdc = GetDC (NULL);
-      res = get_theme_part_size (htheme, hdc, xp_part, state, &rect, 2, &size);
+      res = GetThemePartSize (htheme, hdc, xp_part, state, &rect, 2 /*TS_DRAW*/, &size);
       ReleaseDC (NULL, hdc);
 
       if (res == S_OK)
@@ -387,6 +387,53 @@ gtk_win32_theme_create_surface (GtkWin32Theme *theme,
   *y_offs_out = y_offs;
 
   return surface;
+}
+
+void
+gtk_win32_theme_get_part_size (GtkWin32Theme  *theme,
+                               int             part,
+                               int             state,
+                               int            *width,
+                               int            *height)
+{
+#if 0
+  /* Known fallback sizes copied from Wine */
+  struct {
+    int part;
+    int width;
+    int height;
+  } fallback_sizes[] = {
+    { BP_RADIOBUTTON, 13, 13 },
+    { BP_CHECKBOX, 13, 13 },
+  };
+#endif
+#ifdef G_OS_WIN32
+  HTHEME htheme = gtk_win32_theme_get_htheme (theme);
+  SIZE size;
+  HDC hdc;
+  HRESULT res;
+
+  if (use_xp_theme && GetThemePartSize != NULL && htheme != NULL)
+    {
+      hdc = GetDC (NULL);
+      res = GetThemePartSize (htheme, hdc, part, state, NULL, 2 /*TS_DRAW*/, &size);
+      ReleaseDC (NULL, hdc);
+
+      if (SUCCEEDED (res))
+        {
+          if (width)
+            *width = size.cx;
+          if (height)
+            *height = size.cy;
+          return;
+        }
+    }
+#endif
+
+  if (width)
+    *width = 1;
+  if (height)
+    *height = 1;
 }
 
 int

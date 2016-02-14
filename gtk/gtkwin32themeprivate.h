@@ -48,6 +48,12 @@ cairo_surface_t *       gtk_win32_theme_create_surface  (GtkWin32Theme *theme,
                                                          int            height,
 							 int           *x_offs_out,
 							 int           *y_offs_out);
+
+void                    gtk_win32_theme_get_part_size   (GtkWin32Theme  *theme,
+                                                         int             part,
+                                                         int             state,
+                                                         int            *width,
+                                                         int            *height);
 int                     gtk_win32_theme_get_size        (GtkWin32Theme  *theme,
 			                                 int             id);
 void                    gtk_win32_theme_get_color       (GtkWin32Theme  *theme,
