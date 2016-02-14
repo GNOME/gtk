@@ -73,7 +73,7 @@
  *
  * # CSS nodes
  *
- * GtkPopover has a single css node called popover It always gets the
+ * GtkPopover has a single css node called popover. It always gets the
  * .background style class and it gets the .menu style class if it is
  * menu-like (e.g. #GtkPopoverMenu or created using gtk_popover_new_from_model().
  *
