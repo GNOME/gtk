@@ -1796,23 +1796,42 @@ gtk_paned_render (GtkCssGadget *gadget,
   GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
   GtkPaned *paned = GTK_PANED (widget);
   GtkPanedPrivate *priv = paned->priv;
+  GtkAllocation widget_allocation;
+  int window_x, window_y;
 
-  cairo_save (cr);
-  cairo_rectangle (cr, x, y, width, height);
-  cairo_clip (cr);
-
+  gtk_widget_get_allocation (widget, &widget_allocation);
   if (gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)) &&
       priv->child1 && gtk_widget_get_visible (priv->child1) &&
       priv->child2 && gtk_widget_get_visible (priv->child2))
     gtk_css_gadget_draw (priv->handle_gadget, cr);
 
-  if (gtk_cairo_should_draw_window (cr, priv->child1_window))
-    gtk_container_propagate_draw (GTK_CONTAINER (widget), priv->child1, cr);
+  if (priv->child1 && gtk_widget_get_visible (priv->child1))
+    {
+      gdk_window_get_position (priv->child1_window, &window_x, &window_y);
+      cairo_save (cr);
+      cairo_rectangle (cr, 
+                       window_x - widget_allocation.x,
+                       window_y - widget_allocation.y,
+                       gdk_window_get_width (priv->child1_window),
+                       gdk_window_get_height (priv->child1_window));
+      cairo_clip (cr);
+      gtk_container_propagate_draw (GTK_CONTAINER (widget), priv->child1, cr);
+      cairo_restore (cr);
+    }
 
-  if (gtk_cairo_should_draw_window (cr, priv->child2_window))
-    gtk_container_propagate_draw (GTK_CONTAINER (widget), priv->child2, cr);
-
-  cairo_restore (cr);
+  if (priv->child2 && gtk_widget_get_visible (priv->child2))
+    {
+      gdk_window_get_position (priv->child2_window, &window_x, &window_y);
+      cairo_save (cr);
+      cairo_rectangle (cr, 
+                       window_x - widget_allocation.x,
+                       window_y - widget_allocation.y,
+                       gdk_window_get_width (priv->child2_window),
+                       gdk_window_get_height (priv->child2_window));
+      cairo_clip (cr);
+      gtk_container_propagate_draw (GTK_CONTAINER (widget), priv->child2, cr);
+      cairo_restore (cr);
+    }
 
   return FALSE;
 }
