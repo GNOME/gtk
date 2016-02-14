@@ -3757,7 +3757,10 @@ button.circular { // FIXME: aggregate to buttons
 }
 
 *:drop(active):focus,
-*:drop(active) { border: 1px solid black; } // FIXME this makes boxes grow and looks pretty bad, needs to be handled differently
+*:drop(active) { // FIXME figure out a proper color
+  border-color: black;
+  box-shadow: inset 0 0 0 1px black;
+}
 
 stackswitcher button.text-button { min-width: 100px; } // FIXME aggregate with buttons
 
