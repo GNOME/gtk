@@ -470,6 +470,31 @@ fontify (GtkTextBuffer *source_buffer)
   gchar *start_ptr, *end_ptr;
   gchar *tag;
 
+  gtk_text_buffer_create_tag (source_buffer, "source",
+                              "font", "monospace",
+                              NULL);
+  gtk_text_buffer_create_tag (source_buffer, "comment",
+                              "foreground", "DodgerBlue",
+                              NULL);
+  gtk_text_buffer_create_tag (source_buffer, "type",
+                              "foreground", "ForestGreen",
+                              NULL);
+  gtk_text_buffer_create_tag (source_buffer, "string",
+                              "foreground", "RosyBrown",
+                              "weight", PANGO_WEIGHT_BOLD,
+                              NULL);
+  gtk_text_buffer_create_tag (source_buffer, "control",
+                              "foreground", "purple",
+                              NULL);
+  gtk_text_buffer_create_tag (source_buffer, "preprocessor",
+                              "style", PANGO_STYLE_OBLIQUE,
+                              "foreground", "burlywood4",
+                              NULL);
+  gtk_text_buffer_create_tag (source_buffer, "function",
+                              "weight", PANGO_WEIGHT_BOLD,
+                              "foreground", "DarkGoldenrod4",
+                              NULL);
+
   gtk_text_buffer_get_bounds (source_buffer, &start_iter, &tmp_iter);
   gtk_text_buffer_apply_tag_by_name (source_buffer, "source", &start_iter, &tmp_iter);
 
@@ -556,6 +581,8 @@ add_data_tab (const gchar *demoname)
               widget = create_text (&textview, FALSE);
               buffer = gtk_text_buffer_new (NULL);
               gtk_text_buffer_set_text (buffer, g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes));
+              if (g_str_has_suffix (resource_name, ".c"))
+                fontify (buffer);
               gtk_text_view_set_buffer (GTK_TEXT_VIEW (textview), buffer);
             }
           else
@@ -623,30 +650,6 @@ load_file (const gchar *demoname,
                               NULL);
 
   source_buffer = gtk_text_buffer_new (NULL);
-  gtk_text_buffer_create_tag (source_buffer, "source",
-                              "font", "monospace",
-                              NULL);
-  gtk_text_buffer_create_tag (source_buffer, "comment",
-                              "foreground", "DodgerBlue",
-                              NULL);
-  gtk_text_buffer_create_tag (source_buffer, "type",
-                              "foreground", "ForestGreen",
-                              NULL);
-  gtk_text_buffer_create_tag (source_buffer, "string",
-                              "foreground", "RosyBrown",
-                              "weight", PANGO_WEIGHT_BOLD,
-                              NULL);
-  gtk_text_buffer_create_tag (source_buffer, "control",
-                              "foreground", "purple",
-                              NULL);
-  gtk_text_buffer_create_tag (source_buffer, "preprocessor",
-                              "style", PANGO_STYLE_OBLIQUE,
-                              "foreground", "burlywood4",
-                              NULL);
-  gtk_text_buffer_create_tag (source_buffer, "function",
-                              "weight", PANGO_WEIGHT_BOLD,
-                              "foreground", "DarkGoldenrod4",
-                              NULL);
 
   resource_filename = g_strconcat ("/sources/", filename, NULL);
   bytes = g_resources_lookup_data (resource_filename, 0, &err);
