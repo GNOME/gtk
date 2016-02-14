@@ -1547,8 +1547,7 @@ searchbar,
 .location-bar {
   border-style: solid;
   border-color: #1c1f1f;
-  background-color: #303535;
-  box-shadow: inset 0 2px 3px -1px #242828, 0 1px rgba(238, 238, 236, 0); }
+  background-color: #303535; }
   .inline-toolbar:backdrop, searchbar:backdrop,
   .location-bar:backdrop {
     border-color: #1f2222;
