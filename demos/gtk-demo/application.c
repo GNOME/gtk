@@ -487,10 +487,7 @@ demo_application_window_size_allocate (GtkWidget     *widget,
   GTK_WIDGET_CLASS (demo_application_window_parent_class)->size_allocate (widget, allocation);
 
   if (!window->maximized && !window->fullscreen)
-    {
-      window->width = allocation->width;
-      window->height = allocation->height;
-    }
+    gtk_window_get_size (GTK_WINDOW (window), &window->width, &window->height);
 }
 
 static gboolean
