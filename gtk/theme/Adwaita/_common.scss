@@ -3659,6 +3659,7 @@ decoration {
 // Window Close button
 headerbar button.titlebutton,
 .titlebar button.titlebutton {
+  @extend button;
   @extend button.flat;
   @include _button_text_shadow;
 
