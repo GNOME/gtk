@@ -13,6 +13,22 @@
 
 #ifdef STANDALONE
 
+typedef GtkApplication DemoApplication;
+typedef GtkApplicationClass DemoApplicationClass;
+
+G_DEFINE_TYPE (DemoApplication, demo_application, GTK_TYPE_APPLICATION)
+
+typedef struct {
+  GtkApplicationWindow parent_instance;
+
+  GtkWidget *message;
+  GtkWidget *infobar;
+  GtkTextBuffer *buffer;
+} DemoApplicationWindow;
+typedef GtkApplicationWindowClass DemoApplicationWindowClass;
+
+G_DEFINE_TYPE (DemoApplicationWindow, demo_application_window, GTK_TYPE_APPLICATION_WINDOW)
+
 static void create_window (GApplication *app, const char *contents);
 
 static void
@@ -39,10 +55,9 @@ show_action_dialog (GSimpleAction *action)
 static void
 show_action_infobar (GSimpleAction *action,
                      GVariant      *parameter,
-                     gpointer       window)
+                     gpointer       data)
 {
-  GtkWidget *infobar;
-  GtkWidget *message;
+  DemoApplicationWindow *window = data;
   gchar *text;
   const gchar *name;
   const gchar *value;
@@ -50,27 +65,25 @@ show_action_infobar (GSimpleAction *action,
   name = g_action_get_name (G_ACTION (action));
   value = g_variant_get_string (parameter, NULL);
 
-  message = g_object_get_data (G_OBJECT (window), "message");
-  infobar = g_object_get_data (G_OBJECT (window), "infobar");
   text = g_strdup_printf ("You activated radio action: \"%s\".\n"
                           "Current value: %s", name, value);
-  gtk_label_set_text (GTK_LABEL (message), text);
-  gtk_widget_show (infobar);
+  gtk_label_set_text (GTK_LABEL (window->message), text);
+  gtk_widget_show (window->infobar);
   g_free (text);
 }
 
 static void
-activate_action (GSimpleAction  *action,
-                 GVariant       *parameter,
-                 gpointer        user_data)
+activate_action (GSimpleAction *action,
+                 GVariant      *parameter,
+                 gpointer       user_data)
 {
   show_action_dialog (action);
 }
 
 static void
-activate_new (GSimpleAction  *action,
-              GVariant       *parameter,
-              gpointer        user_data)
+activate_new (GSimpleAction *action,
+              GVariant      *parameter,
+              gpointer       user_data)
 {
   GApplication *app = user_data;
 
@@ -79,8 +92,8 @@ activate_new (GSimpleAction  *action,
 
 static void
 open_response_cb (GtkNativeDialog *dialog,
-                  gint response_id,
-                  gpointer user_data)
+                  gint             response_id,
+                  gpointer         user_data)
 {
   GtkFileChooserNative *native = user_data;
   GApplication *app = g_object_get_data (G_OBJECT (native), "app");
@@ -119,9 +132,9 @@ open_response_cb (GtkNativeDialog *dialog,
 
 
 static void
-activate_open (GSimpleAction  *action,
-               GVariant       *parameter,
-               gpointer        user_data)
+activate_open (GSimpleAction *action,
+               GVariant      *parameter,
+               gpointer       user_data)
 {
   GApplication *app = user_data;
   GtkFileChooserNative *native;
@@ -332,6 +345,8 @@ startup (GApplication *app)
   GMenuModel *appmenu;
   GMenuModel *menubar;
 
+  G_APPLICATION_CLASS (demo_application_parent_class)->startup (app);
+
   builder = gtk_builder_new ();
   gtk_builder_add_from_resource (builder, "/application/menus.ui", NULL);
 
@@ -346,66 +361,13 @@ startup (GApplication *app)
 
 static void
 create_window (GApplication *app,
-               const char *content_text)
+               const char   *content)
 {
-  GtkBuilder *builder;
-  GtkWidget *window;
-  GtkWidget *grid;
-  GtkWidget *contents;
-  GtkWidget *status;
-  GtkWidget *message;
-  GtkWidget *button;
-  GtkWidget *infobar;
-  GtkWidget *menutool;
-  GMenuModel *toolmenu;
-  GtkTextBuffer *buffer;
+  DemoApplicationWindow *window;
 
-  window = gtk_application_window_new (GTK_APPLICATION (app));
-  gtk_window_set_title (GTK_WINDOW (window), "Application Class");
-  gtk_window_set_icon_name (GTK_WINDOW (window), "document-open");
-  gtk_window_set_default_size (GTK_WINDOW (window), 200, 200);
-
-  g_action_map_add_action_entries (G_ACTION_MAP (window),
-                                   win_entries, G_N_ELEMENTS (win_entries),
-                                   window);
-
-  builder = gtk_builder_new ();
-  gtk_builder_add_from_resource (builder, "/application/application.ui", NULL);
-
-  grid = (GtkWidget *)gtk_builder_get_object (builder, "grid");
-  contents = (GtkWidget *)gtk_builder_get_object (builder, "contents");
-  status = (GtkWidget *)gtk_builder_get_object (builder, "status");
-  message = (GtkWidget *)gtk_builder_get_object (builder, "message");
-  button = (GtkWidget *)gtk_builder_get_object (builder, "button");
-  infobar = (GtkWidget *)gtk_builder_get_object (builder, "infobar");
-  menutool = (GtkWidget *)gtk_builder_get_object (builder, "menutool");
-  toolmenu = (GMenuModel *)gtk_builder_get_object (builder, "toolmenu");
-
-  g_object_set_data (G_OBJECT (window), "message", message);
-  g_object_set_data (G_OBJECT (window), "infobar", infobar);
-
-  gtk_container_add (GTK_CONTAINER (window), grid);
-
-  gtk_menu_tool_button_set_menu (GTK_MENU_TOOL_BUTTON (menutool),
-                                 gtk_menu_new_from_model (toolmenu));
-
-  gtk_widget_grab_focus (contents);
-  g_signal_connect (button, "clicked", G_CALLBACK (clicked_cb), infobar);
-
-  /* Show text widget info in the statusbar */
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (contents));
-  if (content_text)
-    gtk_text_buffer_set_text (buffer, content_text, -1);
-  g_signal_connect_object (buffer, "changed",
-                           G_CALLBACK (update_statusbar), status, 0);
-  g_signal_connect_object (buffer, "mark-set",
-                           G_CALLBACK (mark_set_callback), status, 0);
-
-  update_statusbar (buffer, GTK_STATUSBAR (status));
-
-  gtk_widget_show_all (window);
-
-  g_object_unref (builder);
+  window = (DemoApplicationWindow *)g_object_new (demo_application_window_get_type (), NULL);
+  if (content)
+    gtk_text_buffer_set_text (window->buffer, content, -1);
 }
 
 static void
@@ -414,16 +376,12 @@ activate (GApplication *app)
   create_window (app, NULL);
 }
 
-int
-main (int argc, char *argv[])
+static void
+demo_application_init (DemoApplication *app)
 {
-  GtkApplication *app;
   GSettings *settings;
   GAction *action;
 
-  gtk_init (NULL, NULL);
-
-  app = gtk_application_new ("org.gtk.Demo2", 0);
   settings = g_settings_new ("org.gtk.Demo");
 
   g_action_map_add_action_entries (G_ACTION_MAP (app),
@@ -433,13 +391,50 @@ main (int argc, char *argv[])
   action = g_settings_create_action (settings, "color");
 
   g_action_map_add_action (G_ACTION_MAP (app), action);
+}
 
-  g_signal_connect (app, "startup", G_CALLBACK (startup), NULL);
-  g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
+static void
+demo_application_class_init (DemoApplicationClass *class)
+{
+  GApplicationClass *app_class = G_APPLICATION_CLASS (class);
 
-  g_application_run (G_APPLICATION (app), 0, NULL);
+  app_class->startup = startup;
+  app_class->activate = activate;
+}
 
-  return 0;
+static void
+demo_application_window_init (DemoApplicationWindow *win)
+{
+  gtk_widget_init_template (GTK_WIDGET (win));
+  g_action_map_add_action_entries (G_ACTION_MAP (win),
+                                   win_entries, G_N_ELEMENTS (win_entries),
+                                   win);
+}
+
+static void
+demo_application_window_class_init (DemoApplicationWindowClass *class)
+{
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
+
+  gtk_widget_class_set_template_from_resource (widget_class, "/application/application.ui");
+  gtk_widget_class_bind_template_child (widget_class, DemoApplicationWindow, message);
+  gtk_widget_class_bind_template_child (widget_class, DemoApplicationWindow, infobar);
+  gtk_widget_class_bind_template_child (widget_class, DemoApplicationWindow, buffer);
+  gtk_widget_class_bind_template_callback (widget_class, clicked_cb);
+  gtk_widget_class_bind_template_callback (widget_class, update_statusbar);
+  gtk_widget_class_bind_template_callback (widget_class, mark_set_callback);
+}
+
+int
+main (int argc, char *argv[])
+{
+  GtkApplication *app;
+
+  app = GTK_APPLICATION (g_object_new (demo_application_get_type (),
+                                       "application-id", "org.gtk.Demo2",
+                                       NULL));
+
+  return g_application_run (G_APPLICATION (app), 0, NULL);
 }
 
 #else /* !STANDALONE */
@@ -513,15 +508,15 @@ do_application (GtkWidget *toplevel)
   else
     {
       g_dbus_connection_call_sync (g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL),
-                              "org.gtk.Demo2",
-                              "/org/gtk/Demo2",
-                              "org.gtk.Actions",
-                              "Activate",
-                              g_variant_new ("(sava{sv})", "quit", NULL, NULL),
-                              NULL,
-                              0,
-                              G_MAXINT,
-                              NULL, NULL);
+                                   "org.gtk.Demo2",
+                                   "/org/gtk/Demo2",
+                                   "org.gtk.Actions",
+                                   "Activate",
+                                   g_variant_new ("(sava{sv})", "quit", NULL, NULL),
+                                   NULL,
+                                   0,
+                                   G_MAXINT,
+                                   NULL, NULL);
     }
 
   return placeholder;
