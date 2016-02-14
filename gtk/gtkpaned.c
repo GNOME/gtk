@@ -1290,15 +1290,13 @@ gtk_paned_get_preferred_height_for_width (GtkWidget *widget,
 }
 
 static void
-flip_child (GtkWidget     *widget,
-            GtkAllocation *child_pos)
+flip_child (const GtkAllocation *allocation,
+            GtkAllocation       *child_pos)
 {
-  GtkAllocation allocation;
   gint x, width;
 
-  gtk_widget_get_allocation (widget, &allocation);
-  x = allocation.x;
-  width = allocation.width;
+  x = allocation->x;
+  width = allocation->width;
 
   child_pos->x = 2 * x + width - child_pos->x - child_pos->width;
 }
@@ -1424,9 +1422,9 @@ gtk_paned_allocate (GtkCssGadget        *gadget,
 
           if (gtk_widget_get_direction (GTK_WIDGET (widget)) == GTK_TEXT_DIR_RTL)
             {
-              flip_child (widget, &(window2_allocation));
-              flip_child (widget, &(window1_allocation));
-              flip_child (widget, &(priv->handle_pos));
+              flip_child (allocation, &(window2_allocation));
+              flip_child (allocation, &(window1_allocation));
+              flip_child (allocation, &(priv->handle_pos));
             }
 
           child1_allocation.x = child1_allocation.y = 0;
