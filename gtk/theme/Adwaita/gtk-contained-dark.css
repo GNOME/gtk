@@ -4288,14 +4288,11 @@ colorswatch#editor-color-sample {
 .osd .scale-popup button.flat, .osd .scale-popup notebook > header > tabs > arrow, .osd .scale-popup button.sidebar-button, .osd .scale-popup headerbar button.titlebutton, headerbar .osd .scale-popup button.titlebutton,
 .osd .scale-popup .titlebar button.titlebutton,
 .titlebar .osd .scale-popup button.titlebutton {
-  padding: 6px;
   border-style: none;
   border-radius: 5px; }
-.scale-popup button {
-  padding: 6px; }
-  .scale-popup button:hover {
-    background-color: rgba(238, 238, 236, 0.1);
-    border-radius: 5px; }
+.scale-popup button:hover {
+  background-color: rgba(238, 238, 236, 0.1);
+  border-radius: 5px; }
 
 /**********************
  * Window Decorations *
