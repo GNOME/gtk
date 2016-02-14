@@ -66,7 +66,7 @@ typedef HRESULT (FAR PASCAL *GetThemePartSizeFunc)          (HTHEME hTheme,
 static GetThemeSysFontFunc get_theme_sys_font = NULL;
 static GetThemeSysColorFunc get_theme_sys_color = NULL;
 static GetThemeSysSizeFunc get_theme_sys_metric = NULL;
-static OpenThemeDataFunc open_theme_data = NULL;
+static OpenThemeDataFunc OpenThemeData = NULL;
 static CloseThemeDataFunc CloseThemeData = NULL;
 static DrawThemeBackgroundFunc draw_theme_background = NULL;
 static EnableThemeDialogTextureFunc enable_theme_dialog_texture = NULL;
@@ -200,7 +200,7 @@ gtk_win32_theme_init (void)
   if (is_app_themed)
     {
       is_theme_active = (IsThemeActiveFunc) GetProcAddress (uxtheme_dll, "IsThemeActive");
-      open_theme_data = (OpenThemeDataFunc) GetProcAddress (uxtheme_dll, "OpenThemeData");
+      OpenThemeData = (OpenThemeDataFunc) GetProcAddress (uxtheme_dll, "OpenThemeData");
       CloseThemeData = (CloseThemeDataFunc) GetProcAddress (uxtheme_dll, "CloseThemeData");
       draw_theme_background = (DrawThemeBackgroundFunc) GetProcAddress (uxtheme_dll, "DrawThemeBackground");
       enable_theme_dialog_texture = (EnableThemeDialogTextureFunc) GetProcAddress (uxtheme_dll, "EnableThemeDialogTexture");
@@ -228,24 +228,28 @@ static HTHEME
 gtk_win32_theme_get_htheme (GtkWin32Theme *theme)
 {
   guint16 *wclass;
-  char *lower;
   
   gtk_win32_theme_init ();
 
   if (theme->htheme)
     return theme->htheme;
 
-  lower = g_ascii_strdown (theme->class_name, -1);
-
-  wclass = g_utf8_to_utf16 (lower, -1, NULL, NULL, NULL);
-  theme->htheme  = open_theme_data (NULL, wclass);
+  wclass = g_utf8_to_utf16 (theme->class_name, -1, NULL, NULL, NULL);
+  theme->htheme  = OpenThemeData (NULL, wclass);
   g_free (wclass);
-  g_free (lower);
 
   return theme->htheme;
 }
 
 #endif /* G_OS_WIN32 */
+
+static char *
+canonicalize_class_name (const char *classname)
+{
+  /* Wine claims class names are case insensitive, so we convert them
+     here to avoid multiple theme objects referencing the same HTHEME. */
+  return g_ascii_strdown (classname, -1);
+}
 
 static GtkWin32Theme *
 gtk_win32_theme_lookup (const char *classname)
@@ -273,7 +277,7 @@ GtkWin32Theme *
 gtk_win32_theme_parse (GtkCssParser *parser)
 {
   GtkWin32Theme *theme;
-  char *class_name;
+  char *canonical_class_name, *class_name;
 
   class_name = _gtk_css_parser_try_name (parser, TRUE);
   if (class_name == NULL)
@@ -281,8 +285,10 @@ gtk_win32_theme_parse (GtkCssParser *parser)
       _gtk_css_parser_error (parser, "Expected valid win32 theme name");
       return NULL;
     }
+  canonical_class_name = canonicalize_class_name (class_name);
 
-  theme = gtk_win32_theme_lookup (class_name);
+  theme = gtk_win32_theme_lookup (canonical_class_name);
+  g_free (canonical_class_name);
   g_free (class_name);
 
   return theme;
