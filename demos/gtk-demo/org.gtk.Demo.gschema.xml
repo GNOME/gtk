@@ -12,6 +12,15 @@
     <key name='color' enum='org.gtk.Demo.Color'>
       <default>'red'</default>
     </key>
+    <key name='window-size' type='(ii)'>
+      <default>(-1, -1)</default>
+    </key>
+    <key name='maximized' type='b'>
+      <default>false</default>
+    </key>
+    <key name='fullscreen' type='b'>
+      <default>false</default>
+    </key>
   </schema>
 
 </schemalist>

@@ -1,11 +1,10 @@
 <?xml version="1.0"?>
 <interface>
-  <template class="DemoApplicationWindow" parent="GtkWindow">
+  <template class="DemoApplicationWindow" parent="GtkApplicationWindow">
     <property name="title" translatable="yes">Application Class</property>
     <property name="default-width">200</property>
     <property name="default-height">200</property>
     <property name="icon-name">document-open</property>
-    <property name="visible">1</property>
     <child>
       <object class="GtkGrid" id="grid">
         <property name="visible">1</property>
@@ -20,7 +19,6 @@
               <object class="GtkMenuToolButton" id="menutool">
                 <property name="visible">1</property>
                 <property name="icon-name">document-open</property>
-                <property name="menumodel">toolmenu</property>
               </object>
             </child>
             <child>
@@ -50,7 +48,6 @@
         </child>
         <child>
           <object class="GtkInfoBar" id="infobar">
-            <property name="visible">1</property>
             <property name="no-show-all">1</property>
             <property name="hexpand">1</property>
             <child internal-child="content_area">
@@ -71,7 +68,7 @@
                     <property name="valign">center</property>
                     <property name="label" translatable="yes">_OK</property>
                     <property name="use_underline">1</property>
-                    <signal name="clicked" handler="cliced_cb" object="infobar"/>
+                    <signal name="clicked" handler="clicked_cb"/>
                   </object>
                 </child>
               </object>
@@ -120,7 +117,7 @@
     </item>
   </menu>
   <object class="GtkTextBuffer" id="buffer">
-    <signal name="changed" handler="update_statusbar" object="status"/>
-    <signal name="mark-set" handler="mark_set_callback" object="status"/>
+    <signal name="changed" handler="update_statusbar"/>
+    <signal name="mark-set" handler="mark_set_callback"/>
   </object>
 </interface>

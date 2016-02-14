@@ -23,7 +23,15 @@ typedef struct {
 
   GtkWidget *message;
   GtkWidget *infobar;
+  GtkWidget *status;
+  GtkWidget *menutool;
+  GMenuModel *toolmenu;
   GtkTextBuffer *buffer;
+
+  int width;
+  int height;
+  gboolean maximized;
+  gboolean fullscreen;
 } DemoApplicationWindow;
 typedef GtkApplicationWindowClass DemoApplicationWindowClass;
 
@@ -241,8 +249,8 @@ activate_quit (GSimpleAction *action,
 }
 
 static void
-update_statusbar (GtkTextBuffer *buffer,
-                  GtkStatusbar  *statusbar)
+update_statusbar (GtkTextBuffer         *buffer,
+                  DemoApplicationWindow *window)
 {
   gchar *msg;
   gint row, col;
@@ -250,7 +258,7 @@ update_statusbar (GtkTextBuffer *buffer,
   GtkTextIter iter;
 
   /* clear any previous message, underflow is allowed */
-  gtk_statusbar_pop (statusbar, 0);
+  gtk_statusbar_pop (GTK_STATUSBAR (window->status), 0);
 
   count = gtk_text_buffer_get_char_count (buffer);
 
@@ -264,18 +272,18 @@ update_statusbar (GtkTextBuffer *buffer,
   msg = g_strdup_printf ("Cursor at row %d column %d - %d chars in document",
                          row, col, count);
 
-  gtk_statusbar_push (statusbar, 0, msg);
+  gtk_statusbar_push (GTK_STATUSBAR (window->status), 0, msg);
 
   g_free (msg);
 }
 
 static void
-mark_set_callback (GtkTextBuffer     *buffer,
-                   const GtkTextIter *new_location,
-                   GtkTextMark       *mark,
-                   gpointer           data)
+mark_set_callback (GtkTextBuffer         *buffer,
+                   const GtkTextIter     *new_location,
+                   GtkTextMark           *mark,
+                   DemoApplicationWindow *window)
 {
-  update_statusbar (buffer, GTK_STATUSBAR (data));
+  update_statusbar (buffer, window);
 }
 
 static void
@@ -333,9 +341,9 @@ static GActionEntry win_entries[] = {
 };
 
 static void
-clicked_cb (GtkWidget *widget, GtkWidget *info)
+clicked_cb (GtkWidget *widget, DemoApplicationWindow *window)
 {
-  gtk_widget_hide (info);
+  gtk_widget_hide (window->infobar);
 }
 
 static void
@@ -365,9 +373,13 @@ create_window (GApplication *app,
 {
   DemoApplicationWindow *window;
 
-  window = (DemoApplicationWindow *)g_object_new (demo_application_window_get_type (), NULL);
+  window = (DemoApplicationWindow *)g_object_new (demo_application_window_get_type (),
+                                                  "application", app,
+                                                  NULL);
   if (content)
     gtk_text_buffer_set_text (window->buffer, content, -1);
+
+  gtk_window_present (GTK_WINDOW (window));
 }
 
 static void
@@ -391,6 +403,8 @@ demo_application_init (DemoApplication *app)
   action = g_settings_create_action (settings, "color");
 
   g_action_map_add_action (G_ACTION_MAP (app), action);
+
+  g_object_unref (settings);
 }
 
 static void
@@ -403,23 +417,127 @@ demo_application_class_init (DemoApplicationClass *class)
 }
 
 static void
-demo_application_window_init (DemoApplicationWindow *win)
+demo_application_window_store_state (DemoApplicationWindow *win)
 {
-  gtk_widget_init_template (GTK_WIDGET (win));
-  g_action_map_add_action_entries (G_ACTION_MAP (win),
+  GSettings *settings;
+
+  settings = g_settings_new ("org.gtk.Demo");
+  g_settings_set (settings, "window-size", "(ii)", win->width, win->height);
+  g_settings_set_boolean (settings, "maximized", win->maximized);
+  g_settings_set_boolean (settings, "fullscreen", win->fullscreen);
+  g_object_unref (settings);
+}
+
+static void
+demo_application_window_load_state (DemoApplicationWindow *win)
+{
+  GSettings *settings;
+
+  settings = g_settings_new ("org.gtk.Demo");
+  g_settings_get (settings, "window-size", "(ii)", &win->width, &win->height);
+  win->maximized = g_settings_get_boolean (settings, "maximized");
+  win->fullscreen = g_settings_get_boolean (settings, "fullscreen");
+  g_object_unref (settings);
+}
+
+static void
+demo_application_window_init (DemoApplicationWindow *window)
+{
+  GtkWidget *menu;
+
+  window->width = -1;
+  window->height = -1;
+  window->maximized = FALSE;
+  window->fullscreen = FALSE;
+
+  gtk_widget_init_template (GTK_WIDGET (window));
+
+  menu = gtk_menu_new_from_model (window->toolmenu);
+  gtk_menu_tool_button_set_menu (GTK_MENU_TOOL_BUTTON (window->menutool), menu);
+
+  g_action_map_add_action_entries (G_ACTION_MAP (window),
                                    win_entries, G_N_ELEMENTS (win_entries),
-                                   win);
+                                   window);
+}
+
+static void
+demo_application_window_constructed (GObject *object)
+{
+  DemoApplicationWindow *window = (DemoApplicationWindow *)object;
+
+  demo_application_window_load_state (window);
+
+  gtk_window_set_default_size (GTK_WINDOW (window), window->width, window->height);
+
+  if (window->maximized)
+    gtk_window_maximize (GTK_WINDOW (window));
+
+  if (window->fullscreen)
+    gtk_window_fullscreen (GTK_WINDOW (window));
+
+  G_OBJECT_CLASS (demo_application_window_parent_class)->constructed (object);
+}
+
+static void
+demo_application_window_size_allocate (GtkWidget     *widget,
+                                       GtkAllocation *allocation)
+{
+  DemoApplicationWindow *window = (DemoApplicationWindow *)widget;
+
+  GTK_WIDGET_CLASS (demo_application_window_parent_class)->size_allocate (widget, allocation);
+
+  if (!window->maximized && !window->fullscreen)
+    {
+      window->width = allocation->width;
+      window->height = allocation->height;
+    }
+}
+
+static gboolean
+demo_application_window_state_event (GtkWidget           *widget,
+                                     GdkEventWindowState *event)
+{
+  DemoApplicationWindow *window = (DemoApplicationWindow *)widget;
+  gboolean res = GDK_EVENT_PROPAGATE;
+
+  if (GTK_WIDGET_CLASS (demo_application_window_parent_class)->window_state_event)
+    res = GTK_WIDGET_CLASS (demo_application_window_parent_class)->window_state_event (widget, event);
+
+  window->maximized = (event->new_window_state & GDK_WINDOW_STATE_MAXIMIZED) != 0;
+  window->fullscreen = (event->new_window_state & GDK_WINDOW_STATE_FULLSCREEN) != 0;
+
+  return res;
+}
+
+static void
+demo_application_window_destroy (GtkWidget *widget)
+{
+  DemoApplicationWindow *window = (DemoApplicationWindow *)widget;
+
+  demo_application_window_store_state (window);
+
+  GTK_WIDGET_CLASS (demo_application_window_parent_class)->destroy (widget);
 }
 
 static void
 demo_application_window_class_init (DemoApplicationWindowClass *class)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
+
+  object_class->constructed = demo_application_window_constructed;
+
+  widget_class->size_allocate = demo_application_window_size_allocate;
+  widget_class->window_state_event = demo_application_window_state_event;
+  widget_class->destroy = demo_application_window_destroy;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/application/application.ui");
   gtk_widget_class_bind_template_child (widget_class, DemoApplicationWindow, message);
   gtk_widget_class_bind_template_child (widget_class, DemoApplicationWindow, infobar);
+  gtk_widget_class_bind_template_child (widget_class, DemoApplicationWindow, status);
   gtk_widget_class_bind_template_child (widget_class, DemoApplicationWindow, buffer);
+  gtk_widget_class_bind_template_child (widget_class, DemoApplicationWindow, menutool);
+  gtk_widget_class_bind_template_child (widget_class, DemoApplicationWindow, toolmenu);
   gtk_widget_class_bind_template_callback (widget_class, clicked_cb);
   gtk_widget_class_bind_template_callback (widget_class, update_statusbar);
   gtk_widget_class_bind_template_callback (widget_class, mark_set_callback);
@@ -432,6 +550,7 @@ main (int argc, char *argv[])
 
   app = GTK_APPLICATION (g_object_new (demo_application_get_type (),
                                        "application-id", "org.gtk.Demo2",
+                                       "flags", G_APPLICATION_HANDLES_OPEN,
                                        NULL));
 
   return g_application_run (G_APPLICATION (app), 0, NULL);
