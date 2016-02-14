@@ -490,6 +490,11 @@ notebook > header > tabs > arrow, headerbar button.titlebutton,
       border-color: #1c1f1f;
       background-image: linear-gradient(to bottom, #313434, #333636);
       box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(238, 238, 236, 0); }
+  notebook > header > tabs > arrow.image-button, headerbar button.image-button.titlebutton,
+  .titlebar button.image-button.titlebutton, button.image-button {
+    min-width: 32px;
+    padding-left: 0;
+    padding-right: 0; }
   notebook > header > tabs > arrow.text-button, headerbar button.text-button.titlebutton,
   .titlebar button.text-button.titlebutton, button.text-button {
     padding-left: 16px;

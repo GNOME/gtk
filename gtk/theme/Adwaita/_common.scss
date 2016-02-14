@@ -451,6 +451,12 @@ button {
       &:checked { @include button(insensitive-active); }
     }
 
+    &.image-button {
+      min-width: 32px;
+      padding-left: 0;
+      padding-right: 0;
+    }
+
     &.text-button {
       padding-left: 16px;
       padding-right: 16px;
