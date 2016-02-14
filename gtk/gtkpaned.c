@@ -718,7 +718,7 @@ initiates_touch_drag (GtkPaned *paned,
   GtkAllocation allocation;
 
 #define TOUCH_EXTRA_AREA_WIDTH 50
-  gtk_widget_get_allocation (GTK_WIDGET (paned), &allocation);
+  gtk_css_gadget_get_content_allocation (priv->gadget, &allocation, NULL);
   gtk_css_gadget_get_preferred_size (priv->handle_gadget,
                                      priv->orientation,
                                      -1,
@@ -761,7 +761,7 @@ gesture_drag_begin_cb (GtkGestureDrag *gesture,
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
   event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
   device = gdk_event_get_source_device (event);
-  gtk_widget_get_allocation (GTK_WIDGET (paned), &allocation);
+  gtk_css_gadget_get_content_allocation (priv->gadget, &allocation, NULL);
   paned->priv->panning = FALSE;
 
   is_touch = (event->type == GDK_TOUCH_BEGIN ||
@@ -1626,7 +1626,7 @@ gtk_paned_create_child_window (GtkPaned  *paned,
                                          NULL, &handle_size,
                                          NULL, NULL);
 
-      gtk_widget_get_allocation (widget, &allocation);
+      gtk_css_gadget_get_content_allocation (priv->gadget, &allocation, NULL);
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL &&
           child == priv->child2 && priv->child1 &&
           gtk_widget_get_visible (priv->child1))
@@ -1963,14 +1963,13 @@ update_drag (GtkPaned *paned,
 {
   GtkPanedPrivate *priv = paned->priv;
   GtkAllocation allocation;
-  GtkWidget *widget = GTK_WIDGET (paned);
   gint pos;
   gint handle_size;
   gint size;
   gint x, y;
 
   gdk_window_get_position (priv->handle, &x, &y);
-  gtk_widget_get_allocation (widget, &allocation);
+  gtk_css_gadget_get_content_allocation (priv->gadget, &allocation, NULL);
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     pos = xpos;
   else
