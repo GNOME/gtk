@@ -1361,7 +1361,7 @@ headerbar {
   }
 
   .tiled &,
-   .maximized & { border-radius: 0; } // squared corners when the window is max'd or tile
+  .maximized & { &:backdrop, & { border-radius: 0; }}
 
   &.default-decoration {
     padding: 0 4px;
@@ -2187,19 +2187,19 @@ switch {
     min-height: 27px;
     border: 1px solid;
     border-radius: 3px;
+    @include slider;
+/*
     @include button(normal);
     box-shadow: inset 0 1px if($variant=='light', white,
                                transparentize(white, 0.85)),
-                inset 0 -2px transparentize($bg_color, 0.4),
+                inset 0 -2px white,
                 inset 0 -1px mix($bg_color, $borders_color, 50%);
+*/
   }
 
   &:hover slider {
-    @include button(hover);
-    box-shadow: inset 0 1px if($variant=='light', white,
-                               transparentize(white, 0.85)),
-                inset 0 -2px transparentize($bg_color, 0.4),
-                inset 0 -1px mix($bg_color, $borders_color, 50%);
+    @include slider;
+    // FIXME hover state todo
   }
 
   &:active slider { border: 1px solid $selected_borders_color; }
@@ -2329,7 +2329,8 @@ radio {
   min-width: 14px;
   border: 1px solid;
   -gtk-icon-source: none;
-  @include button(normal);
+  // @include button(normal);
+  @include slider;
   &:hover { @include button(hover); }
   &:active { @include button(active); }
   &:disabled { @include button(insensitive); }
