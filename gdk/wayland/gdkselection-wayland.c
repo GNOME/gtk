@@ -847,7 +847,7 @@ data_source_cancelled (void                  *data,
   context = gdk_wayland_drag_context_lookup_by_data_source (source);
 
   if (context)
-    gdk_drag_context_cancel (context);
+    gdk_drag_context_cancel (context, GDK_DRAG_CANCEL_ERROR);
 
   gdk_selection_owner_set (NULL, atom, GDK_CURRENT_TIME, TRUE);
   gdk_wayland_selection_unset_data_source (display, atom);

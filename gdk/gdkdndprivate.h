@@ -74,7 +74,8 @@ struct _GdkDragContextClass {
                                  GdkDragAction    actions);
   void        (*set_cursor)     (GdkDragContext  *context,
                                  GdkCursor       *cursor);
-  void        (*cancel)         (GdkDragContext  *context);
+  void        (*cancel)         (GdkDragContext      *context,
+                                 GdkDragCancelReason  reason);
   void        (*drop_performed) (GdkDragContext  *context,
                                  guint32          time);
   void        (*dnd_finished)   (GdkDragContext  *context);
@@ -110,7 +111,8 @@ GList *  gdk_drag_context_list (void);
 
 void     gdk_drag_context_set_cursor          (GdkDragContext *context,
                                                GdkCursor      *cursor);
-void     gdk_drag_context_cancel              (GdkDragContext *context);
+void     gdk_drag_context_cancel              (GdkDragContext      *context,
+                                               GdkDragCancelReason  reason);
 gboolean gdk_drag_context_handle_source_event (GdkEvent *event);
 GdkCursor * gdk_drag_get_cursor (GdkDragAction action);
 

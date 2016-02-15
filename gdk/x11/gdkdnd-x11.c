@@ -240,7 +240,8 @@ static gboolean    gdk_x11_drag_context_manage_dnd     (GdkDragContext *context,
                                                         GdkDragAction   actions);
 static void        gdk_x11_drag_context_set_cursor     (GdkDragContext *context,
                                                         GdkCursor      *cursor);
-static void        gdk_x11_drag_context_cancel         (GdkDragContext *context);
+static void        gdk_x11_drag_context_cancel         (GdkDragContext      *context,
+                                                        GdkDragCancelReason  reason);
 static void        gdk_x11_drag_context_drop_performed (GdkDragContext *context,
                                                         guint32         time);
 
@@ -2821,7 +2822,8 @@ gdk_x11_drag_context_set_cursor (GdkDragContext *context,
 }
 
 static void
-gdk_x11_drag_context_cancel (GdkDragContext *context)
+gdk_x11_drag_context_cancel (GdkDragContext      *context,
+                             GdkDragCancelReason  reason)
 {
   drag_context_ungrab (context);
   gdk_drag_drop_done (context, FALSE);
@@ -2951,7 +2953,7 @@ gdk_dnd_handle_key_event (GdkDragContext    *context,
       switch (event->keyval)
         {
         case GDK_KEY_Escape:
-          gdk_drag_context_cancel (context);
+          gdk_drag_context_cancel (context, GDK_DRAG_CANCEL_USER_CANCELLED);
           return TRUE;
 
         case GDK_KEY_space:
@@ -2966,7 +2968,7 @@ gdk_dnd_handle_key_event (GdkDragContext    *context,
                                      gdk_event_get_time ((GdkEvent *) event));
             }
           else
-            gdk_drag_context_cancel (context);
+            gdk_drag_context_cancel (context, GDK_DRAG_CANCEL_NO_TARGET);
 
           return TRUE;
 
@@ -3029,7 +3031,7 @@ gdk_dnd_handle_grab_broken_event (GdkDragContext           *context,
       event->grab_window == x11_context->ipc_window)
     return FALSE;
 
-  gdk_drag_context_cancel (context);
+  gdk_drag_context_cancel (context, GDK_DRAG_CANCEL_ERROR);
   return TRUE;
 }
 
@@ -3050,7 +3052,7 @@ gdk_dnd_handle_button_event (GdkDragContext       *context,
                              gdk_event_get_time ((GdkEvent *) event));
     }
   else
-    gdk_drag_context_cancel (context);
+    gdk_drag_context_cancel (context, GDK_DRAG_CANCEL_NO_TARGET);
 
   return TRUE;
 }

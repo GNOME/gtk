@@ -976,6 +976,7 @@ gdk_cursor_get_type
 <TITLE>Drag and Drop</TITLE>
 <FILE>dnd</FILE>
 GdkDragContext
+GdkDragCancelReason
 gdk_drag_get_selection
 gdk_drag_abort
 gdk_drop_reply

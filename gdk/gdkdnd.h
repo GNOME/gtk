@@ -65,6 +65,22 @@ typedef enum
 } GdkDragAction;
 
 /**
+ * GdkDragCancelReason:
+ * @GDK_DRAG_CANCEL_NO_TARGET: There is no suitable drop target.
+ * @GDK_DRAG_CANCEL_USER_CANCELLED: Drag cancelled by the user
+ * @GDK_DRAG_CANCEL_ERROR: Unspecified error.
+ *
+ * Used in #GdkDragContext to the reason of a cancelled DND operation.
+ *
+ * Since: 3.20
+ */
+typedef enum {
+  GDK_DRAG_CANCEL_NO_TARGET,
+  GDK_DRAG_CANCEL_USER_CANCELLED,
+  GDK_DRAG_CANCEL_ERROR
+} GdkDragCancelReason;
+
+/**
  * GdkDragProtocol:
  * @GDK_DRAG_PROTO_NONE: no protocol.
  * @GDK_DRAG_PROTO_MOTIF: The Motif DND protocol. No longer supported

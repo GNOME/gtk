@@ -441,7 +441,8 @@ gdk_wayland_drag_context_drop_performed (GdkDragContext *context,
 }
 
 static void
-gdk_wayland_drag_context_cancel (GdkDragContext *context)
+gdk_wayland_drag_context_cancel (GdkDragContext      *context,
+                                 GdkDragCancelReason  reason)
 {
   gdk_drag_context_set_cursor (context, NULL);
 }

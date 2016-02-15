@@ -243,8 +243,9 @@ static void gtk_drag_source_info_destroy       (GtkDragSourceInfo *info);
 static void gtk_drag_context_drop_performed_cb (GdkDragContext    *context,
                                                 guint              time,
                                                 GtkDragSourceInfo *info);
-static void gtk_drag_context_cancel_cb         (GdkDragContext    *context,
-                                                GtkDragSourceInfo *info);
+static void gtk_drag_context_cancel_cb         (GdkDragContext      *context,
+                                                GdkDragCancelReason  reason,
+                                                GtkDragSourceInfo   *info);
 static void gtk_drag_context_action_cb         (GdkDragContext    *context,
                                                 GdkDragAction      action,
                                                 GtkDragSourceInfo *info);
@@ -3454,10 +3455,26 @@ gtk_drag_context_drop_performed_cb (GdkDragContext    *context,
 }
 
 static void
-gtk_drag_context_cancel_cb (GdkDragContext    *context,
-                            GtkDragSourceInfo *info)
+gtk_drag_context_cancel_cb (GdkDragContext      *context,
+                            GdkDragCancelReason  reason,
+                            GtkDragSourceInfo   *info)
 {
-  gtk_drag_cancel_internal (info, GTK_DRAG_RESULT_ERROR, GDK_CURRENT_TIME);
+  GtkDragResult result;
+
+  switch (reason)
+    {
+    case GDK_DRAG_CANCEL_NO_TARGET:
+      result = GTK_DRAG_RESULT_NO_TARGET;
+      break;
+    case GDK_DRAG_CANCEL_USER_CANCELLED:
+      result = GTK_DRAG_RESULT_USER_CANCELLED;
+      break;
+    case GDK_DRAG_CANCEL_ERROR:
+    default:
+      result = GTK_DRAG_RESULT_ERROR;
+      break;
+    }
+  gtk_drag_cancel_internal (info, result, GDK_CURRENT_TIME);
 }
 
 static void

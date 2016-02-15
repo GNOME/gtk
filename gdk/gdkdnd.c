@@ -288,8 +288,8 @@ gdk_drag_context_class_init (GdkDragContextClass *klass)
                   G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GdkDragContextClass, cancel),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
-                  G_TYPE_NONE, 0);
+                  g_cclosure_marshal_VOID__ENUM,
+                  G_TYPE_NONE, 1, GDK_TYPE_DRAG_CANCEL_REASON);
 
   /**
    * GdkDragContext::drop-performed:
@@ -704,11 +704,12 @@ gdk_drag_context_set_cursor (GdkDragContext *context,
 }
 
 void
-gdk_drag_context_cancel (GdkDragContext *context)
+gdk_drag_context_cancel (GdkDragContext      *context,
+                         GdkDragCancelReason  reason)
 {
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
 
-  g_signal_emit (context, signals[CANCEL], 0);
+  g_signal_emit (context, signals[CANCEL], 0, reason);
 }
 
 GList *
