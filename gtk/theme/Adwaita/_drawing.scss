@@ -591,12 +591,3 @@
   border: none;
   box-shadow: none;
 }
-
-@mixin slider {
-  background-image: linear-gradient(to top, darken($headerbar_color, 6%), $headerbar_color 30%);
-  border-color: $borders_color;
-  box-shadow: inset 0 1px if($variant=='light', white, _button_hilight_color($headerbar_color)),
-              inset 0 -2px if($variant=='light', transparentize(white, 0.4), white),
-              inset 0 -1px darken($headerbar_color, 13%),
-              0 1px transparentize(black, 0.9);
-}

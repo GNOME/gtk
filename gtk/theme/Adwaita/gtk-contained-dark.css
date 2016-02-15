@@ -1827,10 +1827,8 @@ headerbar {
         -gtk-icon-source: -gtk-icontheme("pan-down-symbolic");
         color: rgba(255, 255, 255, 0.5);
         -gtk-icon-shadow: none; }
-  .tiled .titlebar:backdrop:not(headerbar), .tiled .titlebar:not(headerbar), .maximized .titlebar:backdrop:not(headerbar), .maximized .titlebar:not(headerbar), .tiled
-  headerbar:backdrop, .tiled
+  .tiled .titlebar:not(headerbar), .maximized .titlebar:not(headerbar), .tiled
   headerbar, .maximized
-  headerbar:backdrop, .maximized
   headerbar {
     border-radius: 0; }
   .default-decoration.titlebar:not(headerbar),
@@ -2416,20 +2414,29 @@ switch {
     min-height: 27px;
     border: 1px solid;
     border-radius: 3px;
-    background-image: linear-gradient(to top, #232727, #323737 30%);
+    color: #eeeeec;
+    outline-color: rgba(238, 238, 236, 0.3);
     border-color: #1c1f1f;
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0.05), inset 0 -2px white, inset 0 -1px #121414, 0 1px rgba(0, 0, 0, 0.1);
-    /*
-        @include button(normal);
-        box-shadow: inset 0 1px if($variant=='light', white,
-                                   transparentize(white, 0.85)),
-                    inset 0 -2px white,
-                    inset 0 -1px mix($bg_color, $borders_color, 50%);
-    */ }
+    background-image: linear-gradient(to bottom, #343a3a, #2f3434 60%, #2a2f2f);
+    text-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
+    -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.05), 0 1px rgba(238, 238, 236, 0);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.15), inset 0 -2px rgba(57, 63, 63, 0.6), inset 0 -1px #2b2f2f; }
   switch:hover slider {
-    background-image: linear-gradient(to top, #232727, #323737 30%);
+    color: #eeeeec;
+    outline-color: rgba(238, 238, 236, 0.3);
     border-color: #1c1f1f;
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0.05), inset 0 -2px white, inset 0 -1px #121414, 0 1px rgba(0, 0, 0, 0.1); }
+    /*
+    background-image: linear-gradient(to bottom,
+                                      lighten($c, 16%),
+                                      lighten($c, 6%) 40%,
+                                      lighten($c, 2%));
+    */
+    background-image: linear-gradient(to bottom, #3b4242, #343a3a 60%, #2f3434);
+    text-shadow: 0 -1px rgba(0, 0, 0, 0.76376);
+    -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.76376);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.05), 0 1px rgba(238, 238, 236, 0);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.15), inset 0 -2px rgba(57, 63, 63, 0.6), inset 0 -1px #2b2f2f; }
   switch:active slider {
     border: 1px solid #0f2b48; }
   switch:disabled slider {
@@ -2812,9 +2819,13 @@ radio {
   min-width: 14px;
   border: 1px solid;
   -gtk-icon-source: none;
-  background-image: linear-gradient(to top, #232727, #323737 30%);
+  color: #eeeeec;
+  outline-color: rgba(238, 238, 236, 0.3);
   border-color: #1c1f1f;
-  box-shadow: inset 0 1px rgba(255, 255, 255, 0.05), inset 0 -2px white, inset 0 -1px #121414, 0 1px rgba(0, 0, 0, 0.1); }
+  background-image: linear-gradient(to bottom, #343a3a, #2f3434 60%, #2a2f2f);
+  text-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
+  -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.05), 0 1px rgba(238, 238, 236, 0); }
   check:only-child,
   radio:only-child {
     margin: 0; }
