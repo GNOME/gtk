@@ -3224,6 +3224,8 @@ filechooser {
   :selected { // FIXME: what this is supposed to select
     @extend %selected_items;
   }
+
+  list { background-color: transparent; }
 }
 
 stacksidebar {

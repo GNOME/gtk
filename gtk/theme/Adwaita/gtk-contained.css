@@ -4134,6 +4134,8 @@ filechooser .dialog-action-box {
   background-color: #f4f4f3; }
   .sidebar:backdrop {
     background-color: #f4f4f3; }
+  .sidebar list {
+    background-color: transparent; }
 
 stacksidebar row {
   padding: 10px 4px; }

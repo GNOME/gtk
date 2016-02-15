@@ -3993,6 +3993,8 @@ filechooser .dialog-action-box {
   background-color: #313434; }
   .sidebar:backdrop {
     background-color: #333636; }
+  .sidebar list {
+    background-color: transparent; }
 
 stacksidebar row {
   padding: 10px 4px; }
