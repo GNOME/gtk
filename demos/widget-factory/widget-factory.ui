@@ -128,6 +128,8 @@
       <column type="gchararray"/>
       <!-- column-name Nick -->
       <column type="gchararray"/>
+      <!-- column-name isRadio -->
+      <column type="gboolean"/>
     </columns>
     <data>
       <row>
@@ -135,18 +137,28 @@
         <col id="1">emblem-default-symbolic</col>
         <col id="2" translatable="yes">Andrea</col>
         <col id="3" translatable="yes">Cimi</col>
+        <col id="4">False</col>
       </row>
       <row>
         <col id="0">False</col>
         <col id="1">emblem-important-symbolic</col>
         <col id="2" translatable="yes">Otto</col>
         <col id="3" translatable="yes">chaotic</col>
+        <col id="4">False</col>
       </row>
       <row>
         <col id="0">True</col>
         <col id="1">weather-clear-night-symbolic</col>
         <col id="2" translatable="yes">Orville</col>
         <col id="3" translatable="yes">Redenbacher</col>
+        <col id="4">False</col>
+      </row>
+      <row>
+        <col id="0">True</col>
+        <col id="1">face-monkey-symbolic</col>
+        <col id="2" translatable="yes">Benjamin</col>
+        <col id="3" translatable="yes">Company</col>
+        <col id="4">True</col>
       </row>
     </data>
   </object>
@@ -1385,6 +1397,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                       <object class="GtkCellRendererToggle" id="cellrenderertoggle1"/>
                                       <attributes>
                                         <attribute name="active">0</attribute>
+                                        <attribute name="radio">4</attribute>
                                       </attributes>
                                     </child>
                                   </object>
