@@ -2258,10 +2258,10 @@ notebook > header {
     notebook > header tab .titlebar button.titlebutton,
     .titlebar notebook > header tab button.titlebutton {
       padding: 0;
-      margin-top: 8px;
-      margin-bottom: 8px;
-      min-width: 18px;
-      min-height: 18px; }
+      margin-top: 4px;
+      margin-bottom: 4px;
+      min-width: 20px;
+      min-height: 20px; }
       notebook > header tab button.flat:hover, notebook > header tab notebook > header > tabs > arrow:hover, notebook > header tab button.sidebar-button:hover, notebook > header tab headerbar button.titlebutton:hover, headerbar notebook > header tab button.titlebutton:hover,
       notebook > header tab .titlebar button.titlebutton:hover,
       .titlebar notebook > header tab button.titlebutton:hover {
@@ -2282,17 +2282,17 @@ notebook > header {
       .titlebar notebook > header tab button.titlebutton:first-child {
         margin-left: -4px;
         margin-right: 4px; }
-  notebook > header.top tabs, notebook > header.bottom tabs {
-    margin-left: 4px;
-    margin-right: 4px; }
+  notebook > header.top, notebook > header.bottom {
+    padding-left: 4px;
+    padding-right: 4px; }
     notebook > header.top tabs tab, notebook > header.bottom tabs tab {
       margin-left: 4px;
       margin-right: 4px; }
       notebook > header.top tabs tab.reorderable-page, notebook > header.bottom tabs tab.reorderable-page {
         border-style: none solid; }
-  notebook > header.left tabs, notebook > header.right tabs {
-    margin-top: 4px;
-    margin-bottom: 4px; }
+  notebook > header.left, notebook > header.right {
+    padding-top: 4px;
+    padding-bottom: 4px; }
     notebook > header.left tabs tab, notebook > header.right tabs tab {
       margin-top: 4px;
       margin-bottom: 4px; }
