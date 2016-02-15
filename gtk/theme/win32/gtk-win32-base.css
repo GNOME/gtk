@@ -312,43 +312,6 @@ button:selected {
   background-color: transparent;
 }
 
-/* Checkbuttons */
-
-/* Prevent selected check/radiobuttons from getting the "selected" blue background */
-button.check:hover:selected,
-button.radio:hover:selected {
-  background-color: transparent;
-}
-
-/* This is meaningless, it just enables prelight propagation to check/radio mark */
-button.check,
-button.radio,
-button.check:hover,
-button.radio:hover {
-  background-image: -gtk-gradient (linear, left top, right bottom, from(transparent), to(transparent));
-}
-
-.check:focus,
-.check {
-    background-color: transparent;
-    border-width: 0;
-}
-
-/* The button here is to avoid problems with checkboxes
-   in a listview where all checkboxes in a row gets prelighted
-   whenever the row is prelighted */
-
-check:selected {
-    background-color: transparent;
-}
-
-/* Radiobuttons */
-
-radio {
-    background-color: transparent;
-    border-width: 0;
-}
-
 /* Scrollbars */
 
 /* TODO: Win32 has different concept for upper and lower trough, we
