@@ -204,6 +204,11 @@ struct _GtkPlacesSidebarClass {
   void    (* show_enter_location)    (GtkPlacesSidebar   *sidebar);
 
   void    (* show_other_locations)   (GtkPlacesSidebar   *sidebar);
+
+  void    (* mount)                  (GtkPlacesSidebar   *sidebar,
+                                      GMountOperation    *mount_operation);
+  void    (* unmount)                (GtkPlacesSidebar   *sidebar,
+                                      GMountOperation    *unmount_operation);
 };
 
 enum {
@@ -216,6 +221,8 @@ enum {
   DRAG_ACTION_ASK,
   DRAG_PERFORM_DROP,
   SHOW_OTHER_LOCATIONS,
+  MOUNT,
+  UNMOUNT,
   LAST_SIGNAL
 };
 
@@ -276,6 +283,8 @@ static void long_press_cb    (GtkGesture      *gesture,
                               gdouble          y,
                               GtkPlacesSidebar *sidebar);
 static void stop_drop_feedback (GtkPlacesSidebar *sidebar);
+static GMountOperation * get_mount_operation (GtkPlacesSidebar *sidebar);
+static GMountOperation * get_unmount_operation (GtkPlacesSidebar *sidebar);
 
 
 /* Identifiers for target types */
@@ -334,6 +343,20 @@ static void
 emit_show_other_locations (GtkPlacesSidebar *sidebar)
 {
   g_signal_emit (sidebar, places_sidebar_signals[SHOW_OTHER_LOCATIONS], 0);
+}
+
+static void
+emit_mount_operation (GtkPlacesSidebar *sidebar,
+                      GMountOperation  *mount_op)
+{
+  g_signal_emit (sidebar, places_sidebar_signals[MOUNT], 0, mount_op);
+}
+
+static void
+emit_unmount_operation (GtkPlacesSidebar *sidebar,
+                        GMountOperation  *mount_op)
+{
+  g_signal_emit (sidebar, places_sidebar_signals[UNMOUNT], 0, mount_op);
 }
 
 static GdkDragAction
@@ -2224,7 +2247,7 @@ mount_volume (GtkPlacesSidebar *sidebar,
 {
   GMountOperation *mount_op;
 
-  mount_op = gtk_mount_operation_new (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (sidebar))));
+  mount_op = get_mount_operation (sidebar);
   g_mount_operation_set_password_save (mount_op, G_PASSWORD_SAVE_FOR_SESSION);
 
   g_object_ref (sidebar);
@@ -2241,7 +2264,7 @@ open_drive (GtkPlacesSidebar   *sidebar,
     {
       GMountOperation *mount_op;
 
-      mount_op = gtk_mount_operation_new (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (sidebar))));
+      mount_op = get_mount_operation (sidebar);
       g_drive_start (drive, G_DRIVE_START_NONE, mount_op, NULL, drive_start_from_bookmark_cb, NULL);
       g_object_unref (mount_op);
     }
@@ -2675,91 +2698,16 @@ unmount_mount_cb (GObject      *source_object,
   g_object_unref (sidebar);
 }
 
-static void
-notify_unmount_done (GMountOperation *op,
-                     const gchar     *message)
+static GMountOperation *
+get_mount_operation (GtkPlacesSidebar *sidebar)
 {
-  GApplication *application;
-  gchar *notification_id;
+  GMountOperation *mount_op;
 
-  /* We only can support this when a default GApplication is set */
-  application = g_application_get_default ();
-  if (application == NULL)
-    return;
+  mount_op = gtk_mount_operation_new (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (sidebar))));
 
-  notification_id = g_strdup_printf ("gtk-mount-operation-%p", op);
-  g_application_withdraw_notification (application, notification_id);
+  emit_mount_operation (sidebar, mount_op);
 
-  if (message != NULL)
-    {
-      GNotification *unplug;
-      GIcon *icon;
-      gchar **strings;
-
-      strings = g_strsplit (message, "\n", 0);
-      icon = g_themed_icon_new ("media-removable");
-      unplug = g_notification_new (strings[0]);
-      g_notification_set_body (unplug, strings[1]);
-      g_notification_set_icon (unplug, icon);
-
-      g_application_send_notification (application, notification_id, unplug);
-      g_object_unref (unplug);
-      g_object_unref (icon);
-      g_strfreev (strings);
-    }
-
-  g_free (notification_id);
-}
-
-static void
-notify_unmount_show (GMountOperation *op,
-                     const gchar     *message)
-{
-  GApplication *application;
-  GNotification *unmount;
-  gchar *notification_id;
-  GIcon *icon;
-  gchar **strings;
-
-  /* We only can support this when a default GApplication is set */
-  application = g_application_get_default ();
-  if (application == NULL)
-    return;
-
-  strings = g_strsplit (message, "\n", 0);
-  icon = g_themed_icon_new ("media-removable");
-
-  unmount = g_notification_new (strings[0]);
-  g_notification_set_body (unmount, strings[1]);
-  g_notification_set_icon (unmount, icon);
-  g_notification_set_priority (unmount, G_NOTIFICATION_PRIORITY_URGENT);
-
-  notification_id = g_strdup_printf ("gtk-mount-operation-%p", op);
-  g_application_send_notification (application, notification_id, unmount);
-  g_object_unref (unmount);
-  g_object_unref (icon);
-  g_strfreev (strings);
-  g_free (notification_id);
-}
-
-static void
-show_unmount_progress_cb (GMountOperation *op,
-                          const gchar     *message,
-                          gint64           time_left,
-                          gint64           bytes_left,
-                          gpointer         user_data)
-{
-  if (bytes_left == 0)
-    notify_unmount_done (op, message);
-  else
-    notify_unmount_show (op, message);
-}
-
-static void
-show_unmount_progress_aborted_cb (GMountOperation *op,
-                                  gpointer         user_data)
-{
-  notify_unmount_done (op, NULL);
+  return mount_op;
 }
 
 static GMountOperation *
@@ -2768,10 +2716,8 @@ get_unmount_operation (GtkPlacesSidebar *sidebar)
   GMountOperation *mount_op;
 
   mount_op = gtk_mount_operation_new (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (sidebar))));
-  g_signal_connect (mount_op, "show-unmount-progress",
-                    G_CALLBACK (show_unmount_progress_cb), sidebar);
-  g_signal_connect (mount_op, "aborted",
-                    G_CALLBACK (show_unmount_progress_aborted_cb), sidebar);
+
+  emit_unmount_operation (sidebar, mount_op);
 
   return mount_op;
 }
@@ -3226,7 +3172,7 @@ start_shortcut_cb (GSimpleAction *action,
     {
       GMountOperation *mount_op;
 
-      mount_op = gtk_mount_operation_new (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (sidebar))));
+      mount_op = get_mount_operation (sidebar);
 
       g_drive_start (drive, G_DRIVE_START_NONE, mount_op, NULL, drive_start_cb, g_object_ref (sidebar));
 
@@ -4382,6 +4328,51 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
                         NULL, NULL,
                         _gtk_marshal_VOID__VOID,
                         G_TYPE_NONE, 0);
+
+  /**
+   * GtkPlacesSidebar::mount:
+   * @sidebar: the object which received the signal.
+   * @mount_operation: the #GMountOperation that is going to start.
+   *
+   * The places sidebar emits this signal when it starts a new operation
+   * because the user clicked on some location that needs mounting.
+   * In this way the application using the #GtkPlacesSidebar can track the
+   * progress of the operation and, for example, show a notification.
+   *
+   * Since: 3.20
+   */
+  places_sidebar_signals [MOUNT] =
+          g_signal_new (I_("mount"),
+                        G_OBJECT_CLASS_TYPE (gobject_class),
+                        G_SIGNAL_RUN_FIRST,
+                        G_STRUCT_OFFSET (GtkPlacesSidebarClass, mount),
+                        NULL, NULL,
+                        _gtk_marshal_VOID__VOID,
+                        G_TYPE_NONE,
+                        1,
+                        G_TYPE_MOUNT_OPERATION);
+  /**
+   * GtkPlacesSidebar::unmount:
+   * @sidebar: the object which received the signal.
+   * @mount_operation: the #GMountOperation that is going to start.
+   *
+   * The places sidebar emits this signal when it starts a new operation
+   * because the user for example ejected some drive or unmounted a mount.
+   * In this way the application using the #GtkPlacesSidebar can track the
+   * progress of the operation and, for example, show a notification.
+   *
+   * Since: 3.20
+   */
+  places_sidebar_signals [UNMOUNT] =
+          g_signal_new (I_("unmount"),
+                        G_OBJECT_CLASS_TYPE (gobject_class),
+                        G_SIGNAL_RUN_FIRST,
+                        G_STRUCT_OFFSET (GtkPlacesSidebarClass, unmount),
+                        NULL, NULL,
+                        _gtk_marshal_VOID__VOID,
+                        G_TYPE_NONE,
+                        1,
+                        G_TYPE_MOUNT_OPERATION);
 
 
   properties[PROP_LOCATION] =
