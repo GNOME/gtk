@@ -19,7 +19,7 @@
           <object class="GtkEventBox" id="event_box">
             <property name="visible">1</property>
             <child>
-              <object class="GtkGrid">
+              <object class="GtkBox">
                 <property name="visible">1</property>
                 <child>
                   <object class="GtkImage" id="icon_widget">
@@ -28,10 +28,6 @@
                       <class name="sidebar-icon"/>
                     </style>
                   </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="label_widget">
@@ -42,10 +38,6 @@
                       <class name="sidebar-label"/>
                     </style>
                   </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkButton" id="eject_button">
@@ -66,10 +58,6 @@
                       <class name="sidebar-button"/>
                     </style>
                   </object>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">0</property>
-                  </packing>
                 </child>
               </object>
             </child>
