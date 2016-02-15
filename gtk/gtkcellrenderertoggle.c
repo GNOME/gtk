@@ -21,6 +21,7 @@
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
+#include "gtkstylecontextprivate.h"
 #include "gtktreeprivate.h"
 #include "a11y/gtkbooleancellaccessible.h"
 
@@ -399,27 +400,28 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer      *cell,
   gdk_cairo_rectangle (cr, cell_area);
   cairo_clip (cr);
 
-  gtk_style_context_save (context);
-  gtk_style_context_set_state (context, state);
 
   if (priv->radio)
     {
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_RADIO);
+      gtk_style_context_save_named (context, "radio");
+      gtk_style_context_set_state (context, state);
       gtk_render_option (context, cr,
                          cell_area->x + x_offset + xpad,
                          cell_area->y + y_offset + ypad,
                          width, height);
+      gtk_style_context_restore (context);
     }
   else
     {
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_CHECK);
+      gtk_style_context_save_named (context, "check");
+      gtk_style_context_set_state (context, state);
       gtk_render_check (context, cr,
                         cell_area->x + x_offset + xpad,
                         cell_area->y + y_offset + ypad,
                         width, height);
+      gtk_style_context_restore (context);
     }
 
-  gtk_style_context_restore (context);
   cairo_restore (cr);
 }
 
