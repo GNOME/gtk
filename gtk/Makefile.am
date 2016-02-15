@@ -445,7 +445,7 @@ gtk_private_h_sources =		\
 	gtkcsstypedvalueprivate.h	\
 	gtkcssunsetvalueprivate.h	\
 	gtkcssvalueprivate.h	\
-        gtkcsswin32sizevalueprviate.h   \
+	gtkcsswin32sizevalueprivate.h   \
 	gtkcsswidgetnodeprivate.h	\
 	gtkcustompaperunixdialog.h \
 	gtkdialogprivate.h 	\
@@ -1280,7 +1280,7 @@ gesture_sources = 				\
 	gesture/gesture-two-finger-swipe-right-symbolic.svg
 
 theme_sources = 				\
-	theme/win32/gtk-win32.css 		\
+	theme/win32/gtk.css	 		\
 	theme/win32/gtk-win32-base.css 		\
 	theme/Adwaita/assets.txt 		\
 	theme/Adwaita/assets.svg 		\
