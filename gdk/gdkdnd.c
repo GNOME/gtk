@@ -285,7 +285,7 @@ gdk_drag_context_class_init (GdkDragContextClass *klass)
   signals[CANCEL] =
     g_signal_new ("cancel",
                   G_TYPE_FROM_CLASS (object_class),
-                  G_SIGNAL_RUN_FIRST,
+                  G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GdkDragContextClass, cancel),
                   NULL, NULL,
                   g_cclosure_marshal_VOID__ENUM,
