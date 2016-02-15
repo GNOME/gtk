@@ -304,6 +304,24 @@ gtk_cell_renderer_toggle_new (void)
   return g_object_new (GTK_TYPE_CELL_RENDERER_TOGGLE, NULL);
 }
 
+static GtkStyleContext *
+gtk_cell_renderer_toggle_save_context (GtkCellRenderer *cell,
+				       GtkWidget       *widget)
+{
+  GtkCellRendererTogglePrivate *priv = GTK_CELL_RENDERER_TOGGLE (cell)->priv;
+
+  GtkStyleContext *context;
+
+  context = gtk_widget_get_style_context (widget);
+
+  if (priv->radio)
+    gtk_style_context_save_named (context, "radio");
+  else
+    gtk_style_context_save_named (context, "check");
+
+  return context;
+}
+                              
 static void
 gtk_cell_renderer_toggle_get_size (GtkCellRenderer    *cell,
 				   GtkWidget          *widget,
@@ -400,28 +418,25 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer      *cell,
   gdk_cairo_rectangle (cr, cell_area);
   cairo_clip (cr);
 
+  context = gtk_cell_renderer_toggle_save_context (cell, widget);
+  gtk_style_context_set_state (context, state);
 
   if (priv->radio)
     {
-      gtk_style_context_save_named (context, "radio");
-      gtk_style_context_set_state (context, state);
       gtk_render_option (context, cr,
                          cell_area->x + x_offset + xpad,
                          cell_area->y + y_offset + ypad,
                          width, height);
-      gtk_style_context_restore (context);
     }
   else
     {
-      gtk_style_context_save_named (context, "check");
-      gtk_style_context_set_state (context, state);
       gtk_render_check (context, cr,
                         cell_area->x + x_offset + xpad,
                         cell_area->y + y_offset + ypad,
                         width, height);
-      gtk_style_context_restore (context);
     }
 
+  gtk_style_context_restore (context);
   cairo_restore (cr);
 }
 
