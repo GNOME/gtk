@@ -326,6 +326,19 @@ button:disabled {
     padding-left: calc(1px + -gtk-win32-part-border-left(button, 1, 4));
 }
 
+/* checkbuttons */
+
+/* This is the magic spacing that's hardcoded in Wine */
+checkbutton:dir(ltr) check,
+radiobutton:dir(ltr) radio {
+  margin-right: 6px;
+}
+
+checkbutton:dir(rtl) check,
+radiobutton:dir(rtl) radio {
+  margin-left: 6px;
+}
+
 /* Scrollbars */
 
 /* TODO: Win32 has different concept for upper and lower trough, we
