@@ -3758,11 +3758,12 @@ button.circular { // FIXME: aggregate to buttons
 .keycap {
   min-width: 20px;
   min-height: 25px;
+  margin-top: 2px;
   padding-bottom: 3px;
   padding-left: 6px;
   padding-right: 6px;
 
-  color: if($variant == 'light', $insensitive_fg_color, $fg_color);
+  color: $fg_color;
   background-color: $base_color;
   border: 1px solid;
   border-color: if($variant == 'light', mix($borders_color, $bg_color, 50%), $borders_color);
@@ -3772,7 +3773,7 @@ button.circular { // FIXME: aggregate to buttons
 
   &:backdrop {
     background-color: $backdrop_base_color;
-    color: if($variant == 'light', $backdrop_insensitive_color, $backdrop_fg_color);
+    color: $backdrop_fg_color;
   }
 }
 

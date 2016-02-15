@@ -4598,10 +4598,11 @@ button.circular {
 .keycap {
   min-width: 20px;
   min-height: 25px;
+  margin-top: 2px;
   padding-bottom: 3px;
   padding-left: 6px;
   padding-right: 6px;
-  color: #8b8e8f;
+  color: #2e3436;
   background-color: #ffffff;
   border: 1px solid;
   border-color: #c3c3c0;
@@ -4610,7 +4611,7 @@ button.circular {
   font-size: smaller; }
   .keycap:backdrop {
     background-color: white;
-    color: #c3c3c0; }
+    color: #8b8e8f; }
 
 *:drop(active):focus,
 *:drop(active) {
