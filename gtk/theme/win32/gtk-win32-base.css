@@ -132,6 +132,154 @@ assistant .sidebar .highlight {
     color:  -gtk-win32-color(button, 9);
 }
 
+/* checkmarks */
+
+check {
+    -gtk-icon-source: -gtk-win32-theme-part(button, 3 1);
+    min-width: -gtk-win32-part-width(button, 3, 1);
+    min-height: -gtk-win32-part-height(button, 3, 1);
+}
+
+check:hover {
+    -gtk-icon-source: -gtk-win32-theme-part(button, 3 2);
+    min-width: -gtk-win32-part-width(button, 3, 2);
+    min-height: -gtk-win32-part-height(button, 3, 2);
+}
+
+check:active {
+    -gtk-icon-source: -gtk-win32-theme-part(button, 3 3);
+    min-width: -gtk-win32-part-width(button, 3, 3);
+    min-height: -gtk-win32-part-height(button, 3, 3);
+}
+
+check:disabled {
+    -gtk-icon-source: -gtk-win32-theme-part(button, 3 4);
+    min-width: -gtk-win32-part-width(button, 3, 4);
+    min-height: -gtk-win32-part-height(button, 3, 4);
+}
+
+check:checked {
+    -gtk-icon-source: -gtk-win32-theme-part(button, 3 5);
+    min-width: -gtk-win32-part-width(button, 3, 5);
+    min-height: -gtk-win32-part-height(button, 3, 5);
+}
+
+check:checked:hover {
+    -gtk-icon-source: -gtk-win32-theme-part(button, 3 6);
+    min-width: -gtk-win32-part-width(button, 3, 6);
+    min-height: -gtk-win32-part-height(button, 3, 6);
+}
+
+check:checked:active {
+    -gtk-icon-source: -gtk-win32-theme-part(button, 3 7);
+    min-width: -gtk-win32-part-width(button, 3, 7);
+    min-height: -gtk-win32-part-height(button, 3, 7);
+}
+
+check:checked:disabled {
+    -gtk-icon-source: -gtk-win32-theme-part(button, 3 8);
+    min-width: -gtk-win32-part-width(button, 3, 8);
+    min-height: -gtk-win32-part-height(button, 3, 8);
+}
+
+check:indeterminate {
+    -gtk-icon-source: -gtk-win32-theme-part(button, 3 9);
+    min-width: -gtk-win32-part-width(button, 3, 9);
+    min-height: -gtk-win32-part-height(button, 3, 9);
+}
+
+check:indeterminate:hover {
+    -gtk-icon-source: -gtk-win32-theme-part(button, 3 10);
+    min-width: -gtk-win32-part-width(button, 3, 10);
+    min-height: -gtk-win32-part-height(button, 3, 10);
+}
+
+check:indeterminate:active {
+    -gtk-icon-source: -gtk-win32-theme-part(button, 3 11);
+    min-width: -gtk-win32-part-width(button, 3, 11);
+    min-height: -gtk-win32-part-height(button, 3, 11);
+}
+
+check:indeterminate:disabled {
+    -gtk-icon-source: -gtk-win32-theme-part(button, 3 12);
+    min-width: -gtk-win32-part-width(button, 3, 12);
+    min-height: -gtk-win32-part-height(button, 3, 12);
+}
+
+/* radiomarks */
+
+radio {
+    -gtk-icon-source: -gtk-win32-theme-part(button, 2 1);
+    min-width: -gtk-win32-part-width(button, 2, 1);
+    min-height: -gtk-win32-part-height(button, 2, 1);
+}
+
+radio:hover {
+    -gtk-icon-source: -gtk-win32-theme-part(button, 2 2);
+    min-width: -gtk-win32-part-width(button, 2, 2);
+    min-height: -gtk-win32-part-height(button, 2, 2);
+}
+
+radio:active {
+    -gtk-icon-source: -gtk-win32-theme-part(button, 2 3);
+    min-width: -gtk-win32-part-width(button, 2, 3);
+    min-height: -gtk-win32-part-height(button, 2, 3);
+}
+
+radio:disabled {
+    -gtk-icon-source: -gtk-win32-theme-part(button, 2 4);
+    min-width: -gtk-win32-part-width(button, 2, 4);
+    min-height: -gtk-win32-part-height(button, 2, 4);
+}
+
+radio:checked {
+    -gtk-icon-source: -gtk-win32-theme-part(button, 2 5);
+    min-width: -gtk-win32-part-width(button, 2, 5);
+    min-height: -gtk-win32-part-height(button, 2, 5);
+}
+
+radio:checked:hover {
+    -gtk-icon-source: -gtk-win32-theme-part(button, 2 6);
+    min-width: -gtk-win32-part-width(button, 2, 6);
+    min-height: -gtk-win32-part-height(button, 2, 6);
+}
+
+radio:checked:active {
+    -gtk-icon-source: -gtk-win32-theme-part(button, 2 7);
+    min-width: -gtk-win32-part-width(button, 2, 7);
+    min-height: -gtk-win32-part-height(button, 2, 7);
+}
+
+radio:checked:disabled {
+    -gtk-icon-source: -gtk-win32-theme-part(button, 2 8);
+    min-width: -gtk-win32-part-width(button, 2, 8);
+    min-height: -gtk-win32-part-height(button, 2, 8);
+}
+
+radio:indeterminate {
+    -gtk-icon-source: cross-fade(30% -gtk-win32-theme-part(button, 2 5), -gtk-win32-theme-part(button, 2 1));
+    min-width: -gtk-win32-part-width(button, 2, 9);
+    min-height: -gtk-win32-part-height(button, 2, 9);
+}
+
+radio:indeterminate:hover {
+    -gtk-icon-source: cross-fade(30% -gtk-win32-theme-part(button, 2 6), -gtk-win32-theme-part(button, 2 2));
+    min-width: -gtk-win32-part-width(button, 2, 2);
+    min-height: -gtk-win32-part-height(button, 2, 2);
+}
+
+radio:indeterminate:active {
+    -gtk-icon-source: cross-fade(30% -gtk-win32-theme-part(button, 2 7), -gtk-win32-theme-part(button, 2 3));
+    min-width: -gtk-win32-part-width(button, 2, 3);
+    min-height: -gtk-win32-part-height(button, 2, 3);
+}
+
+radio:indeterminate:disabled {
+    -gtk-icon-source: cross-fade(30% -gtk-win32-theme-part(button, 2 8), -gtk-win32-theme-part(button, 2 4));
+    min-width: -gtk-win32-part-width(button, 2, 4);
+    min-height: -gtk-win32-part-height(button, 2, 4);
+}
+
 /* Buttons */
 
 button {
@@ -183,50 +331,12 @@ button.radio:hover {
 .check:focus,
 .check {
     background-color: transparent;
-    background-image: -gtk-win32-theme-part(button, 3 1);
     border-width: 0;
-}
-
-.check:disabled {
-    background-image: -gtk-win32-theme-part(button, 3 4);
 }
 
 /* The button here is to avoid problems with checkboxes
    in a listview where all checkboxes in a row gets prelighted
    whenever the row is prelighted */
-
-button.check:focus:hover,
-button.check:hover {
-    background-image: -gtk-win32-theme-part(button, 3 2);
-}
-
-check:focus:active,
-check:active {
-    background-image: -gtk-win32-theme-part(button, 3 5);
-}
-
-check:active:disabled {
-    background-image: -gtk-win32-theme-part(button, 3 8);
-}
-
-button.check:focus:active:hover,
-button.check:active:hover {
-    background-image: -gtk-win32-theme-part(button, 3 6);
-}
-
-check:focus:indeterminate,
-check:indeterminate {
-    background-image: -gtk-win32-theme-part(button, 3 9);
-}
-
-check:indeterminate:disabled {
-    background-image: -gtk-win32-theme-part(button, 3 12);
-}
-
-check:focus:indeterminate:hover,
-check:indeterminate:hover {
-    background-image: -gtk-win32-theme-part(button, 3 10);
-}
 
 check:selected {
     background-color: transparent;
@@ -236,44 +346,7 @@ check:selected {
 
 radio {
     background-color: transparent;
-    background-image: -gtk-win32-theme-part(button, 2 1);
     border-width: 0;
-}
-
-radio:disabled {
-    background-image: -gtk-win32-theme-part(button, 2 4);
-}
-
-radio:hover {
-    background-image: -gtk-win32-theme-part(button, 2 2);
-}
-
-radio:active {
-    background-image: -gtk-win32-theme-part(button, 2 5);
-}
-
-radio:active:disabled {
-    background-image: -gtk-win32-theme-part(button, 2 8);
-}
-
-radio:active:hover {
-    background-image: -gtk-win32-theme-part(button, 2 6);
-}
-
-radio:indeterminate {
-    background-image: -gtk-win32-theme-part(button, 2 1, over (2 5, 0.3));
-}
-
-radio:indeterminate:disabled {
-    background-image: -gtk-win32-theme-part(button, 2 4, over (2 8, 0.3));
-}
-
-radio:indeterminate:hover {
-    background-image: -gtk-win32-theme-part(button, 2 4, over(2 6, 0.3));
-}
-
-radio:selected {
-    background-color: transparent;
 }
 
 /* Scrollbars */
