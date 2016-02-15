@@ -5184,7 +5184,7 @@ gtk_window_set_default_size_internal (GtkWindow    *window,
  * geometry hints for the window (gtk_window_set_geometry_hints() can
  * be used to set these explicitly), the default size will be clamped
  * to the nearest permitted size.
- * 
+ *
  * Unlike gtk_widget_set_size_request(), which sets a size request for
  * a widget and thus would keep users from shrinking the window, this
  * function only sets the initial size, just as if the user had
@@ -5206,7 +5206,12 @@ gtk_window_set_default_size_internal (GtkWindow    *window,
  *
  * Windows can’t actually be 0x0 in size, they must be at least 1x1, but
  * passing 0 for @width and @height is OK, resulting in a 1x1 default size.
- **/
+ *
+ * If you use this function to reestablish a previously saved window size,
+ * note that the appropriate size to save is the one returned by
+ * gtk_window_get_size(). Using the window allocation directly will not
+ * work in all circumstances and can lead to growing or shrinking windows.
+ */
 void       
 gtk_window_set_default_size (GtkWindow   *window,
 			     gint         width,
