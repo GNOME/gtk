@@ -641,6 +641,10 @@ gdk_drag_context_set_hotspot (GdkDragContext *context,
  * be the last call before dropping the reference to the
  * @context.
  *
+ * The #GdkDragContext will only take the first gdk_drag_drop_done()
+ * call as effective, if this function is called multiple times,
+ * all subsequent calls will be ignored.
+ *
  * Since: 3.20
  */
 void
@@ -648,6 +652,11 @@ gdk_drag_drop_done (GdkDragContext *context,
                     gboolean        success)
 {
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
+
+  if (context->drop_done)
+    return;
+
+  context->drop_done = TRUE;
 
   if (GDK_DRAG_CONTEXT_GET_CLASS (context)->drop_done)
     GDK_DRAG_CONTEXT_GET_CLASS (context)->drop_done (context, success);

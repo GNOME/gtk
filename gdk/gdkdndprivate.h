@@ -105,6 +105,8 @@ struct _GdkDragContext {
   guint32 start_time;
 
   GdkDevice *device;
+
+  guint drop_done : 1; /* Whether gdk_drag_drop_done() was performed */
 };
 
 GList *  gdk_drag_context_list (void);
