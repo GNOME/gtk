@@ -22,6 +22,9 @@
 
 .background,
 viewport {
+    /* XXX: This should be the default, but isn't?! */
+    font-family: "Segoe UI", Sans;
+    font-size: 9px;
     background-color: @bg_color;
     color: -gtk-win32-color(button, 18);
     border-color: shade (@bg_color, 0.6);
