@@ -1827,8 +1827,10 @@ headerbar {
         -gtk-icon-source: -gtk-icontheme("pan-down-symbolic");
         color: rgba(255, 255, 255, 0.5);
         -gtk-icon-shadow: none; }
-  .tiled .titlebar:not(headerbar), .maximized .titlebar:not(headerbar), .tiled
+  .tiled .titlebar:backdrop:not(headerbar), .tiled .titlebar:not(headerbar), .maximized .titlebar:backdrop:not(headerbar), .maximized .titlebar:not(headerbar), .tiled
+  headerbar:backdrop, .tiled
   headerbar, .maximized
+  headerbar:backdrop, .maximized
   headerbar {
     border-radius: 0; }
   .default-decoration.titlebar:not(headerbar),
