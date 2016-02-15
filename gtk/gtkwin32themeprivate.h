@@ -49,6 +49,10 @@ cairo_surface_t *       gtk_win32_theme_create_surface  (GtkWin32Theme *theme,
 							 int           *x_offs_out,
 							 int           *y_offs_out);
 
+void                    gtk_win32_theme_get_part_border (GtkWin32Theme  *theme,
+                                                         int             part,
+                                                         int             state,
+                                                         GtkBorder      *out_border);
 void                    gtk_win32_theme_get_part_size   (GtkWin32Theme  *theme,
                                                          int             part,
                                                          int             state,

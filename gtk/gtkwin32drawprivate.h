@@ -21,6 +21,8 @@
 #include <gdk/gdk.h>
 #include <cairo.h>
 
+#include <gtk/gtkborder.h>
+
 G_BEGIN_DECLS
 
 enum {
@@ -68,6 +70,10 @@ void                    gtk_win32_get_theme_part_size           (const char     
                                                                  int             state,
                                                                  int            *width,
                                                                  int            *height);
+void                    gtk_win32_get_theme_margins             (const char     *class_name,
+                                                                 int             part,
+                                                                 int             state,
+                                                                 GtkBorder      *out_margins);
 
 void                    gtk_win32_get_sys_color                 (gint            id,
                                                                  GdkRGBA        *color);

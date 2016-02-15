@@ -24,13 +24,21 @@
 typedef enum {
   GTK_WIN32_SIZE,
   GTK_WIN32_PART_WIDTH,
-  GTK_WIN32_PART_HEIGHT
+  GTK_WIN32_PART_HEIGHT,
+  GTK_WIN32_PART_BORDER_TOP,
+  GTK_WIN32_PART_BORDER_RIGHT,
+  GTK_WIN32_PART_BORDER_BOTTOM,
+  GTK_WIN32_PART_BORDER_LEFT
 } GtkWin32SizeType;
 
 static const char *css_value_names[] = {
   "-gtk-win32-size(",
   "-gtk-win32-part-width(",
-  "-gtk-win32-part-height("
+  "-gtk-win32-part-height(",
+  "-gtk-win32-part-border-top(",
+  "-gtk-win32-part-border-right(",
+  "-gtk-win32-part-border-bottom(",
+  "-gtk-win32-part-border-left("
 };
 
 struct _GtkCssValue {
@@ -63,6 +71,7 @@ gtk_css_value_win32_size_free (GtkCssValue *value)
 static int
 gtk_css_value_win32_compute_size (const GtkCssValue *value)
 {
+  GtkBorder border;
   int size;
 
   switch (value->type)
@@ -76,6 +85,26 @@ gtk_css_value_win32_compute_size (const GtkCssValue *value)
 
     case GTK_WIN32_PART_HEIGHT:
       gtk_win32_theme_get_part_size (value->theme, value->val.part.part, value->val.part.state, NULL, &size);
+      break;
+
+    case GTK_WIN32_PART_BORDER_TOP:
+      gtk_win32_theme_get_part_border (value->theme, value->val.part.part, value->val.part.state, &border);
+      size = border.top;
+      break;
+
+    case GTK_WIN32_PART_BORDER_RIGHT:
+      gtk_win32_theme_get_part_border (value->theme, value->val.part.part, value->val.part.state, &border);
+      size = border.right;
+      break;
+
+    case GTK_WIN32_PART_BORDER_BOTTOM:
+      gtk_win32_theme_get_part_border (value->theme, value->val.part.part, value->val.part.state, &border);
+      size = border.bottom;
+      break;
+
+    case GTK_WIN32_PART_BORDER_LEFT:
+      gtk_win32_theme_get_part_border (value->theme, value->val.part.part, value->val.part.state, &border);
+      size = border.left;
       break;
 
     default:
@@ -139,6 +168,10 @@ gtk_css_value_win32_size_print (const GtkCssValue *value,
 
     case GTK_WIN32_PART_WIDTH:
     case GTK_WIN32_PART_HEIGHT:
+    case GTK_WIN32_PART_BORDER_TOP:
+    case GTK_WIN32_PART_BORDER_RIGHT:
+    case GTK_WIN32_PART_BORDER_BOTTOM:
+    case GTK_WIN32_PART_BORDER_LEFT:
       g_string_append_printf (string, ", %d, %d", value->val.part.part, value->val.part.state);
       break;
 
@@ -317,6 +350,10 @@ gtk_css_win32_size_value_parse (GtkCssParser           *parser,
 
     case GTK_WIN32_PART_WIDTH:
     case GTK_WIN32_PART_HEIGHT:
+    case GTK_WIN32_PART_BORDER_TOP:
+    case GTK_WIN32_PART_BORDER_RIGHT:
+    case GTK_WIN32_PART_BORDER_BOTTOM:
+    case GTK_WIN32_PART_BORDER_LEFT:
       result = gtk_css_win32_size_value_parse_part_size (result, parser);
       break;
 

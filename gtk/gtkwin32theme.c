@@ -64,6 +64,12 @@ typedef HRESULT (FAR PASCAL *GetThemePartSizeFunc)          (HTHEME hTheme,
 							     RECT *prc,
 							     int eSize,
 							     SIZE *psz);
+typedef HRESULT (FAR PASCAL *GetThemeBackgroundExtentFunc)  (HTHEME hTheme,
+							     HDC hdc,
+							     int iPartId,
+							     int iStateId,
+                                                             const RECT *pContentRect,
+                                                             RECT *pExtentRect);
 
 static GetThemeSysFontFunc get_theme_sys_font = NULL;
 static GetThemeSysColorFunc GetThemeSysColor = NULL;
@@ -77,6 +83,7 @@ static IsAppThemedFunc is_app_themed = NULL;
 static IsThemeBackgroundPartiallyTransparentFunc is_theme_partially_transparent = NULL;
 static DrawThemeParentBackgroundFunc draw_theme_parent_background = NULL;
 static GetThemePartSizeFunc GetThemePartSize = NULL;
+static GetThemeBackgroundExtentFunc GetThemeBackgroundExtent = NULL;
 
 #endif
 
@@ -212,6 +219,7 @@ gtk_win32_theme_init (void)
       is_theme_partially_transparent = (IsThemeBackgroundPartiallyTransparentFunc) GetProcAddress (uxtheme_dll, "IsThemeBackgroundPartiallyTransparent");
       draw_theme_parent_background = (DrawThemeParentBackgroundFunc) GetProcAddress (uxtheme_dll, "DrawThemeParentBackground");
       GetThemePartSize = (GetThemePartSizeFunc) GetProcAddress (uxtheme_dll, "GetThemePartSize");
+      GetThemeBackgroundExtent = (GetThemeBackgroundExtentFunc) GetProcAddress (uxtheme_dll, "GetThemeBackgroundExtent");
     }
 
   if (is_app_themed && is_theme_active)
@@ -385,6 +393,43 @@ gtk_win32_theme_create_surface (GtkWin32Theme *theme,
   *y_offs_out = y_offs;
 
   return surface;
+}
+
+void
+gtk_win32_theme_get_part_border (GtkWin32Theme  *theme,
+                                 int             part,
+                                 int             state,
+                                 GtkBorder      *out_border)
+{
+#ifdef G_OS_WIN32
+  HTHEME htheme = gtk_win32_theme_get_htheme (theme);
+  RECT content, extent;
+  HDC hdc;
+  HRESULT res;
+
+  if (use_xp_theme && GetThemeBackgroundExtent != NULL && htheme != NULL)
+    {
+      /* According to Wine source code, these values don't matter
+       * because uxtheme.dll deals with margins internally. */
+      content.left = content.top = 0;
+      content.right = content.bottom = 100;
+
+      hdc = GetDC (NULL);
+      res = GetThemeBackgroundExtent (htheme, hdc, part, state, &content, &extent);
+      ReleaseDC (NULL, hdc);
+
+      if (SUCCEEDED (res))
+        {
+          out_border->top = content.top - extent.top;
+          out_border->left = content.left - extent.left;
+          out_border->bottom = extent.bottom - content.bottom;
+          out_border->right = extent.right - content.right;
+          return;
+        }
+    }
+#endif
+
+  gtk_win32_get_theme_margins (theme->class_name, part, state, out_border);
 }
 
 void

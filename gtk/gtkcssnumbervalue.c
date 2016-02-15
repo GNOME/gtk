@@ -133,7 +133,11 @@ gtk_css_number_value_can_parse (GtkCssParser *parser)
       || _gtk_css_parser_has_prefix (parser, "calc")
       || _gtk_css_parser_has_prefix (parser, "-gtk-win32-size")
       || _gtk_css_parser_has_prefix (parser, "-gtk-win32-part-width")
-      || _gtk_css_parser_has_prefix (parser, "-gtk-win32-part-height");
+      || _gtk_css_parser_has_prefix (parser, "-gtk-win32-part-height")
+      || _gtk_css_parser_has_prefix (parser, "-gtk-win32-part-border-top")
+      || _gtk_css_parser_has_prefix (parser, "-gtk-win32-part-border-left")
+      || _gtk_css_parser_has_prefix (parser, "-gtk-win32-part-border-bottom")
+      || _gtk_css_parser_has_prefix (parser, "-gtk-win32-part-border-right");
 }
 
 GtkCssValue *
@@ -144,7 +148,11 @@ _gtk_css_number_value_parse (GtkCssParser           *parser,
     return gtk_css_calc_value_parse (parser, flags);
   if (_gtk_css_parser_has_prefix (parser, "-gtk-win32-size") ||
       _gtk_css_parser_has_prefix (parser, "-gtk-win32-part-width") ||
-      _gtk_css_parser_has_prefix (parser, "-gtk-win32-part-height"))
+      _gtk_css_parser_has_prefix (parser, "-gtk-win32-part-height") ||
+      _gtk_css_parser_has_prefix (parser, "-gtk-win32-part-border-top") ||
+      _gtk_css_parser_has_prefix (parser, "-gtk-win32-part-border-left") ||
+      _gtk_css_parser_has_prefix (parser, "-gtk-win32-part-border-bottom") ||
+      _gtk_css_parser_has_prefix (parser, "-gtk-win32-part-border-right"))
     return gtk_css_win32_size_value_parse (parser, flags);
 
   return gtk_css_dimension_value_parse (parser, flags);

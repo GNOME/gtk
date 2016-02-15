@@ -86,6 +86,7 @@ struct _GtkWin32ThemePart {
   const char *class_name;
   gint        part;
   gint        size;
+  GtkBorder   margins;
   void        (* draw_func)             (cairo_t        *cr,
                                          int             part,
                                          int             state,
@@ -94,9 +95,9 @@ struct _GtkWin32ThemePart {
 };
 
 static GtkWin32ThemePart theme_parts[] = {
-  { "button", 1,  0, draw_button },
-  { "button", 2, 13, draw_radio },
-  { "button", 3, 13, draw_check }
+  { "button", 1,  0, { 3, 3, 3, 3 }, draw_button },
+  { "button", 2, 13, { 0, 0, 0, 0 }, draw_radio },
+  { "button", 3, 13, { 0, 0, 0, 0 }, draw_check }
 };
 
 static const GtkWin32ThemePart *
@@ -155,6 +156,26 @@ gtk_win32_get_theme_part_size (const char *class_name,
         *width = 1;
       if (height)
         *height = 1;
+    }
+}
+
+void
+gtk_win32_get_theme_margins (const char     *class_name,
+                             int             part,
+                             int             state,
+                             GtkBorder      *out_margins)
+{
+  const GtkWin32ThemePart *theme_part;
+
+  theme_part = get_theme_part (class_name, part);
+
+  if (theme_part)
+    {
+      *out_margins = theme_part->margins;
+    }
+  else
+    {
+      out_margins->top = out_margins->bottom = out_margins->left = out_margins->right = 0;
     }
 }
 
