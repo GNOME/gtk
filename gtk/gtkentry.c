@@ -28,7 +28,6 @@
 
 #include "config.h"
 
-#include <math.h>
 #include <string.h>
 
 #include "gtkbindings.h"
@@ -73,6 +72,8 @@
 #include "gtkcsscustomgadgetprivate.h"
 
 #include "a11y/gtkentryaccessible.h"
+
+#include "fallback-c89.c"
 
 /**
  * SECTION:gtkentry
