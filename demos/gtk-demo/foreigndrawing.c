@@ -150,6 +150,7 @@ draw_menu (GtkWidget     *widget,
   GtkStyleContext *checkmenuitem_context;
   GtkStyleContext *radiomenuitem_context;
   GtkStyleContext *disablemenuitem_context;
+  GtkStyleContext *separatormenuitem_context;
 
   /* This information is taken from the GtkMenu docs, see "CSS nodes" */
   menu_context = get_style (gtk_widget_get_style_context(widget), "menu");
@@ -195,20 +196,25 @@ draw_menu (GtkWidget     *widget,
   gtk_render_frame (checkmenuitem_context, cr, x + width - 18, y + 40, 16, 16);
   gtk_render_check (checkmenuitem_context, cr, x + width - 18, y + 40, 16, 16);
 
-  gtk_render_background (menuitem_context, cr, x, y + 60, width, 20);
-  gtk_render_frame (menuitem_context, cr, x, y + 60, width, 20);
+  /* draw separator */
+  separatormenuitem_context = get_style (menuitem_context, "separator:disabled");
+  gtk_render_line (separatormenuitem_context, cr, x + 1, y + 60, x + width - 2, y + 60);
+
+  gtk_render_background (menuitem_context, cr, x, y + 70, width, 20);
+  gtk_render_frame (menuitem_context, cr, x, y + 70, width, 20);
 
   /* radio checked, sensitive */
   radiomenuitem_context = get_style (menuitem_context, "radio:checked");
-  gtk_render_frame (radiomenuitem_context, cr, x + 2, y + 60, 16, 16);
-  gtk_render_option (radiomenuitem_context, cr, x + 2, y + 60, 16, 16);
+  gtk_render_frame (radiomenuitem_context, cr, x + 2, y + 70, 16, 16);
+  gtk_render_option (radiomenuitem_context, cr, x + 2, y + 70, 16, 16);
   g_object_unref (radiomenuitem_context);
 
   /* radio unchecked, insensitive */
   radiomenuitem_context = get_style (disablemenuitem_context, "radio");
-  gtk_render_frame (radiomenuitem_context, cr, x + width - 18, y + 60, 16, 16);
-  gtk_render_option (radiomenuitem_context, cr, x + width - 18, y + 60, 16, 16);
+  gtk_render_frame (radiomenuitem_context, cr, x + width - 18, y + 70, 16, 16);
+  gtk_render_option (radiomenuitem_context, cr, x + width - 18, y + 70, 16, 16);
 
+  g_object_unref (separatormenuitem_context);
   g_object_unref (disablemenuitem_context);
   g_object_unref (radiomenuitem_context);
   g_object_unref (checkmenuitem_context);
@@ -295,7 +301,6 @@ draw_notebook (GtkWidget     *widget,
   g_object_unref (header_context);
   g_object_unref (notebook_context);
 }
-
 
 static void
 draw_horizontal_scrollbar (GtkWidget     *widget,
@@ -568,11 +573,11 @@ draw_cb (GtkWidget *widget,
   draw_radio (widget, cr, 100, 130, GTK_STATE_FLAG_CHECKED);
   draw_progress (widget, cr, 10, 160, panewidth - 20, 6, 50);
 
-  draw_menu (widget, cr, 10 + panewidth, 10, panewidth - 20, 80);
+  draw_menu (widget, cr, 10 + panewidth, 10, panewidth - 20, 90);
 
-  draw_menubar (widget, cr, 10 + panewidth, 100, panewidth - 20, 20);
+  draw_menubar (widget, cr, 10 + panewidth, 110, panewidth - 20, 20);
 
-  draw_spinbutton (widget, cr, 10 + panewidth, 130, panewidth - 20);
+  draw_spinbutton (widget, cr, 10 + panewidth, 140, panewidth - 20);
 
   draw_notebook (widget, cr, 10, 200, panewidth - 20, 160);
 
