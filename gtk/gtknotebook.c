@@ -5078,6 +5078,8 @@ gtk_notebook_update_labels (GtkNotebook *notebook)
               if (!page->tab_label)
                 {
                   page->tab_label = gtk_label_new (string);
+                  gtk_css_node_set_parent (gtk_widget_get_css_node (page->tab_label),
+                                           gtk_css_gadget_get_node (page->gadget));
                   gtk_widget_set_parent (page->tab_label,
                                          GTK_WIDGET (notebook));
                 }
