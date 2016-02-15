@@ -40,6 +40,8 @@ test_data = \
 	expander.rtl.ui		expander.rtl.nodes		\
 	levelbar.ltr.ui 	levelbar.ltr.nodes		\
 	levelbar.rtl.ui 	levelbar.rtl.nodes		\
+	notebook-arrows.ui 	notebook-arrows.nodes 		\
+	notebook-arrows2.ui 	notebook-arrows2.nodes 		\
 	notebook.top.ltr.ui 	notebook.top.ltr.nodes 		\
 	notebook.top.rtl.ui 	notebook.top.rtl.nodes 		\
 	notebook.left.ltr.ui 	notebook.left.ltr.nodes 	\
