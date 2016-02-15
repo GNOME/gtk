@@ -446,6 +446,51 @@ draw_progress (GtkWidget *widget,
 }
 
 static void
+draw_combobox (GtkWidget *widget,
+               cairo_t   *cr,
+               gint       x,
+               gint       y,
+               gint       width,
+               gboolean   has_entry)
+{
+  GtkStyleContext *combo_context;
+  GtkStyleContext *button_context;
+  GtkStyleContext *entry_context;
+  GtkStyleContext *arrow_context;
+
+  /* This information is taken from the GtkComboBox docs, see "CSS nodes" */
+  combo_context = get_style (NULL, "combobox:focus");
+  button_context = get_style (combo_context, "button:focus");
+  entry_context = get_style (combo_context, "entry:focus");
+  arrow_context = get_style (button_context, "arrow");
+
+  gtk_render_background (combo_context, cr, x, y, width, 30);
+  gtk_render_frame (combo_context, cr, x, y, width, 30);
+
+  if (has_entry)
+    {
+      gtk_style_context_set_junction_sides (entry_context, GTK_JUNCTION_RIGHT);
+      gtk_render_background (entry_context, cr, x, y, width - 30, 30);
+      gtk_render_frame (entry_context, cr, x, y, width - 30, 30);
+
+      gtk_render_background (button_context, cr, x + width - 30, y, 30, 30);
+      gtk_render_frame (button_context, cr, x + width - 30, y, 30, 30);
+    }
+  else
+    {
+      gtk_render_background (button_context, cr, x, y, width, 30);
+      gtk_render_frame (button_context, cr, x, y, width, 30);
+    }
+
+  gtk_render_arrow (arrow_context, cr, G_PI / 2, x + width - 25, y+5, 20);
+
+  g_object_unref (arrow_context);
+  g_object_unref (entry_context);
+  g_object_unref (button_context);
+  g_object_unref (combo_context);
+}
+
+static void
 draw_spinbutton (GtkWidget *widget,
                  cairo_t   *cr,
                  gint       x,
@@ -507,7 +552,7 @@ draw_cb (GtkWidget *widget,
   height = gtk_widget_get_allocated_height (widget);
 
   cairo_rectangle (cr, 0, 0, width, height);
-  cairo_set_source_rgb (cr, 0, 0, 0);
+  cairo_set_source_rgb (cr, 0.6, 0.6, 0.6);
   cairo_fill (cr);
 
   draw_horizontal_scrollbar (widget, cr, 10, 10, panewidth - 20, 10, 30, GTK_STATE_FLAG_NORMAL);
@@ -530,6 +575,10 @@ draw_cb (GtkWidget *widget,
   draw_spinbutton (widget, cr, 10 + panewidth, 130, panewidth - 20);
 
   draw_notebook (widget, cr, 10, 200, panewidth - 20, 160);
+
+  draw_combobox (widget, cr, 10 + panewidth, 200, panewidth - 20, FALSE);
+
+  draw_combobox (widget, cr, 10 + panewidth, 240, panewidth - 20, TRUE);
 
   return FALSE;
 }
