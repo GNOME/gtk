@@ -1854,24 +1854,61 @@ notebook {
       }
     }
 
+    &.top > tabs > arrow {
+      @extend %notebook_vert_arrows;
+      border-top-style: none;
+    }
+
+    &.bottom > tabs > arrow {
+      @extend %notebook_vert_arrows;
+      border-bottom-style: none;
+    }
+
+    @at-root %notebook_vert_arrows {
+      margin-left: -5px;
+      margin-right: -5px;
+      padding-left: 4px;
+      padding-right: 4px;
+
+      &.down { -gtk-icon-source: -gtk-icontheme('pan-start-symbolic'); }
+
+      &.up { -gtk-icon-source: -gtk-icontheme('pan-end-symbolic'); }
+    }
+
+    &.left > tabs > arrow {
+      @extend %notebook_horz_arrows;
+      border-left-style: none;
+    }
+
+    &.right > tabs > arrow {
+      @extend %notebook_horz_arrows;
+      border-right-style: none;
+    }
+
+    @at-root %notebook_horz_arrows {
+      margin-top: -5px;
+      margin-bottom: -5px;
+      padding-top: 4px;
+      padding-bottom: 4px;
+
+      &.down { -gtk-icon-source: -gtk-icontheme('pan-up-symbolic'); }
+
+      &.up { -gtk-icon-source: -gtk-icontheme('pan-down-symbolic'); }
+    }
+
     > tabs > arrow {
       @extend %button_basic;
       @extend button.flat;
 
       min-height: 16px;
       min-width: 16px;
-      margin-left: -5px;
-      margin-right: -5px;
-      padding-left: 4px;
-      padding-right: 4px;
-      border-top-style: none;
       border-radius: 0;
 
       &:hover:not(:active):not(:backdrop) {
+        background-clip: padding-box;
         background-image: none;
         background-color: transparentize(white, 0.7);
-        border-left-color: transparent;
-        border-right-color: transparent;
+        border-color: transparent;
         box-shadow: none;
       }
 
@@ -1880,10 +1917,6 @@ notebook {
         background-color: transparent;
         border-color: transparent;
       }
-
-      &.down { -gtk-icon-source: -gtk-icontheme('pan-start-symbolic'); }
-
-      &.up { -gtk-icon-source: -gtk-icontheme('pan-end-symbolic'); }
     }
 
     tab {

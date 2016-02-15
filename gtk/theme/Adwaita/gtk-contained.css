@@ -2202,29 +2202,46 @@ notebook > header {
         box-shadow: none; }
       notebook > header.right > tabs > tab:active {
         box-shadow: inset 3px 0 #4a90d9; }
-  notebook > header > tabs > arrow {
-    min-height: 16px;
-    min-width: 16px;
+  notebook > header.top > tabs > arrow {
+    border-top-style: none; }
+  notebook > header.bottom > tabs > arrow {
+    border-bottom-style: none; }
+  notebook > header.top > tabs > arrow, notebook > header.bottom > tabs > arrow {
     margin-left: -5px;
     margin-right: -5px;
     padding-left: 4px;
-    padding-right: 4px;
-    border-top-style: none;
+    padding-right: 4px; }
+    notebook > header.top > tabs > arrow.down, notebook > header.bottom > tabs > arrow.down {
+      -gtk-icon-source: -gtk-icontheme("pan-start-symbolic"); }
+    notebook > header.top > tabs > arrow.up, notebook > header.bottom > tabs > arrow.up {
+      -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
+  notebook > header.left > tabs > arrow {
+    border-left-style: none; }
+  notebook > header.right > tabs > arrow {
+    border-right-style: none; }
+  notebook > header.left > tabs > arrow, notebook > header.right > tabs > arrow {
+    margin-top: -5px;
+    margin-bottom: -5px;
+    padding-top: 4px;
+    padding-bottom: 4px; }
+    notebook > header.left > tabs > arrow.down, notebook > header.right > tabs > arrow.down {
+      -gtk-icon-source: -gtk-icontheme("pan-up-symbolic"); }
+    notebook > header.left > tabs > arrow.up, notebook > header.right > tabs > arrow.up {
+      -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); }
+  notebook > header > tabs > arrow {
+    min-height: 16px;
+    min-width: 16px;
     border-radius: 0; }
     notebook > header > tabs > arrow:hover:not(:active):not(:backdrop) {
+      background-clip: padding-box;
       background-image: none;
       background-color: rgba(255, 255, 255, 0.3);
-      border-left-color: transparent;
-      border-right-color: transparent;
+      border-color: transparent;
       box-shadow: none; }
     notebook > header > tabs > arrow:disabled {
       background-image: none;
       background-color: transparent;
       border-color: transparent; }
-    notebook > header > tabs > arrow.down {
-      -gtk-icon-source: -gtk-icontheme("pan-start-symbolic"); }
-    notebook > header > tabs > arrow.up {
-      -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
   notebook > header tab {
     font-weight: bold;
     min-height: 36px;
