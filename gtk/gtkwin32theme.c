@@ -455,6 +455,45 @@ gtk_win32_theme_get_size (GtkWin32Theme *theme,
 #endif
 }
 
+struct {
+  const char *name;
+  GdkRGBA rgba;
+} win32_default_colors[] = {
+#define RGB(r, g, b) { (r)/255.0, (g)/255.0, (b)/255., 1.0 }
+  { "scrollbar", RGB(212, 208, 200) },
+  { "background", RGB(58, 110, 165) },
+  { "activecaption", RGB(10, 36, 106) },
+  { "inactivecaption", RGB(128, 128, 128) },
+  { "menu", RGB(212, 208, 200) },
+  { "window", RGB(255, 255, 255) },
+  { "windowframe", RGB(0, 0, 0) },
+  { "menutext", RGB(0, 0, 0) },
+  { "windowtext", RGB(0, 0, 0) },
+  { "captiontext", RGB(255, 255, 255) },
+  { "activeborder", RGB(212, 208, 200) },
+  { "inactiveborder", RGB(212, 208, 200) },
+  { "appworkspace", RGB(128, 128, 128) },
+  { "highlight", RGB(10, 36, 106) },
+  { "highlighttext", RGB(255, 255, 255) },
+  { "btnface", RGB(212, 208, 200) },
+  { "btnshadow", RGB(128, 128, 128) },
+  { "graytext", RGB(128, 128, 128) },
+  { "btntext", RGB(0, 0, 0) },
+  { "inactivecaptiontext", RGB(212, 208, 200) },
+  { "btnhighlight", RGB(255, 255, 255) },
+  { "3ddkshadow", RGB(64, 64, 64) },
+  { "3dlight", RGB(212, 208, 200) },
+  { "infotext", RGB(0, 0, 0) },
+  { "infobk", RGB(255, 255, 225) },
+  { "alternatebtnface", RGB(181, 181, 181) },
+  { "hotlight", RGB(0, 0, 200) },
+  { "gradientactivecaption", RGB(166, 202, 240) },
+  { "gradientinactivecaption", RGB(192, 192, 192) },
+  { "menuhilight", RGB(10, 36, 106) },
+  { "menubar", RGB(212, 208, 200) }
+#undef RGB
+};
+
 void
 gtk_win32_theme_get_color (GtkWin32Theme *theme,
                            gint           id,
@@ -479,7 +518,10 @@ gtk_win32_theme_get_color (GtkWin32Theme *theme,
   color->green = GetGValue (dcolor) / 255.0;
   color->blue = GetBValue (dcolor) / 255.0;
 #else
-  gdk_rgba_parse (color, "pink");
+  if (id < G_N_ELEMENTS (win32_default_colors))
+    *color = win32_default_colors[id].rgba;
+  else
+    gdk_rgba_parse (color, "black");
 #endif
 }
 
