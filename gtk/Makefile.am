@@ -1238,10 +1238,8 @@ gtk.gresource.xml: Makefile.am inspector/Makefile.inc
 	echo "    <file alias='theme/HighContrastInverse/gtk.css'>theme/HighContrast/gtk-inverse.css</file>" >> $@; \
 	echo "    <file>theme/HighContrast/gtk-contained.css</file>" >> $@; \
 	echo "    <file>theme/HighContrast/gtk-contained-inverse.css</file>" >> $@; \
-	if test "$(win32_theme)" = "yes"; then \
-	  echo "    <file>theme/win32/gtk-win32-base.css</file>" >> $@; \
-	  echo "    <file>theme/win32/gtk.css</file>" >> $@; \
-	fi; \
+	echo "    <file>theme/win32/gtk-win32-base.css</file>" >> $@; \
+	echo "    <file>theme/win32/gtk.css</file>" >> $@; \
 	for f in $(srcdir)/cursor/*.png; do \
 	  n=`basename $$f`; \
 	  echo "    <file>cursor/$$n</file>" >> $@; \
@@ -1367,7 +1365,6 @@ libgtk_3_la_LIBADD = $(libadd)
 libgtk_3_la_DEPENDENCIES = $(deps)
 
 if USE_WIN32
-win32_theme = yes
 libgtk_3_la_LIBADD += -lole32 -lgdi32 -lcomdlg32 -lwinspool -lcomctl32
 libgtk_3_la_LDFLAGS += -Wl,-luuid $(gtk_win32_res_ldflag)
 libgtk_3_la_DEPENDENCIES += $(gtk_win32_res)
