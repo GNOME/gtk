@@ -1364,12 +1364,14 @@ headerbar {
   .maximized & { &:backdrop, & { border-radius: 0; }} // squared corners when the window is maximized or tiled
 
   &.default-decoration {
-    padding: 0 4px;
-    min-height: 36px;
+    padding: 4px;
+    min-height: 28px;
 
-    button {
+    button.titlebutton {
       min-height: 26px;
-      padding: 0 5px;
+      min-width: 26px;
+      margin: 0;
+      padding: 0;
     }
   }
 

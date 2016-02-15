@@ -1839,12 +1839,14 @@ headerbar {
     border-radius: 0; }
   .default-decoration.titlebar:not(headerbar),
   headerbar.default-decoration {
-    padding: 0 4px;
-    min-height: 36px; }
-    .default-decoration.titlebar:not(headerbar) button,
-    headerbar.default-decoration button {
+    padding: 4px;
+    min-height: 28px; }
+    .default-decoration.titlebar:not(headerbar) button.titlebutton,
+    headerbar.default-decoration button.titlebutton {
       min-height: 26px;
-      padding: 0 5px; }
+      min-width: 26px;
+      margin: 0;
+      padding: 0; }
   .titlebar:not(headerbar) entry, .titlebar:not(headerbar) spinbutton:not(.vertical),
   .titlebar:not(headerbar) spinbutton,
   .titlebar:not(headerbar) separator,
