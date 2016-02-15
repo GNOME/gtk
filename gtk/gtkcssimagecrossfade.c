@@ -182,15 +182,15 @@ gtk_css_image_cross_fade_parse (GtkCssImage  *image,
   else
     cross_fade->progress = 0.5;
 
-  cross_fade->start = _gtk_css_image_new_parse (parser);
-  if (cross_fade->start == NULL)
+  cross_fade->end = _gtk_css_image_new_parse (parser);
+  if (cross_fade->end == NULL)
     return FALSE;
 
   if (_gtk_css_parser_try (parser, ",", TRUE))
     {
       /* XXX: allow parsing colors here */
-      cross_fade->end = _gtk_css_image_new_parse (parser);
-      if (cross_fade->end == NULL)
+      cross_fade->start = _gtk_css_image_new_parse (parser);
+      if (cross_fade->start == NULL)
         return FALSE;
     }
 
@@ -215,14 +215,14 @@ gtk_css_image_cross_fade_print (GtkCssImage *image,
       g_string_append_printf (string, "%g%% ", cross_fade->progress * 100.0);
     }
 
-  if (cross_fade->start)
-    _gtk_css_image_print (cross_fade->start, string);
+  if (cross_fade->end)
+    _gtk_css_image_print (cross_fade->end, string);
   else
     g_string_append (string, "none");
-  if (cross_fade->end)
+  if (cross_fade->start)
     {
       g_string_append (string, ", ");
-      _gtk_css_image_print (cross_fade->end, string);
+      _gtk_css_image_print (cross_fade->start, string);
     }
   g_string_append (string, ")");
 }
