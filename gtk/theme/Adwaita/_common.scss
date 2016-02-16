@@ -3252,7 +3252,7 @@ filechooser {
     &:backdrop { border-top-color: $backdrop_borders_color; }
   }
 
-  revealer .view { border-bottom: 1px solid $bg_color; }
+  #pathbarbox { border-bottom: 1px solid $bg_color; }
 }
 
 

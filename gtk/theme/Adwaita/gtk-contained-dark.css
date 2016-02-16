@@ -3755,7 +3755,7 @@ filechooser .dialog-action-box {
   border-top: 1px solid #1c1f1f; }
   filechooser .dialog-action-box:backdrop {
     border-top-color: #1f2222; }
-filechooser revealer .view, filechooser revealer iconview {
+filechooser #pathbarbox {
   border-bottom: 1px solid #393f3f; }
 
 /***********
