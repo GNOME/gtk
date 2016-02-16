@@ -1282,7 +1282,7 @@ attribute_editor (GObject                *object,
                                   "sensitive", 1,
                                   NULL);
   gtk_list_store_append (store, &iter);
-  gtk_list_store_set (store, &iter, 0, _("None"), 1, TRUE, -1);
+  gtk_list_store_set (store, &iter, 0, C_("property name", "None"), 1, TRUE, -1);
   for (i = 0; i < gtk_tree_model_get_n_columns (model); i++)
     {
       text = g_strdup_printf ("%d", i);

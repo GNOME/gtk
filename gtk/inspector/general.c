@@ -222,8 +222,8 @@ init_gl (GtkInspectorGeneral *gen)
   else
 #endif
     {
-      gtk_label_set_text (GTK_LABEL (gen->priv->gl_version), _("None"));
-      gtk_label_set_text (GTK_LABEL (gen->priv->gl_vendor), _("None"));
+      gtk_label_set_text (GTK_LABEL (gen->priv->gl_version), C_("GL version", "None"));
+      gtk_label_set_text (GTK_LABEL (gen->priv->gl_vendor), C_("GL vendor", "None"));
     }
 }
 

@@ -249,10 +249,10 @@ add_size_group (GtkInspectorSizeGroups *sl,
   g_object_set (combo, "margin", 10, NULL);
   gtk_widget_set_halign (combo, GTK_ALIGN_END);
   gtk_widget_set_valign (combo, GTK_ALIGN_BASELINE);
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), _("None"));
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), _("Horizontal"));
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), _("Vertical"));
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), _("Both"));
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), C_("sizegroup mode", "None"));
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), C_("sizegroup mode", "Horizontal"));
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), C_("sizegroup mode", "Vertical"));
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), C_("sizegroup mode", "Both"));
   g_object_bind_property (group, "mode",
                           combo, "active",
                           G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);

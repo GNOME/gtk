@@ -1221,7 +1221,7 @@ gtk_font_button_update_font_info (GtkFontButton *font_button)
   if (priv->font_family)
     fam_name = pango_font_family_get_name (priv->font_family);
   else
-    fam_name = _("None");
+    fam_name = C_("font", "None");
   if (priv->font_face)
     face_name = pango_font_face_get_face_name (priv->font_face);
   else

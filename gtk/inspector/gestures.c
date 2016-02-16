@@ -125,10 +125,10 @@ add_gesture (GtkInspectorGestures *sl,
   gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
 
   combo = gtk_combo_box_text_new ();
-  gtk_combo_box_text_insert_text (GTK_COMBO_BOX_TEXT (combo), GTK_PHASE_NONE, _("None"));
-  gtk_combo_box_text_insert_text (GTK_COMBO_BOX_TEXT (combo), GTK_PHASE_CAPTURE, _("Capture"));
-  gtk_combo_box_text_insert_text (GTK_COMBO_BOX_TEXT (combo), GTK_PHASE_BUBBLE, _("Bubble"));
-  gtk_combo_box_text_insert_text (GTK_COMBO_BOX_TEXT (combo), GTK_PHASE_TARGET, _("Target"));
+  gtk_combo_box_text_insert_text (GTK_COMBO_BOX_TEXT (combo), GTK_PHASE_NONE, C_("event phase", "None"));
+  gtk_combo_box_text_insert_text (GTK_COMBO_BOX_TEXT (combo), GTK_PHASE_CAPTURE, C_("event phase", "Capture"));
+  gtk_combo_box_text_insert_text (GTK_COMBO_BOX_TEXT (combo), GTK_PHASE_BUBBLE, C_("event phase", "Bubble"));
+  gtk_combo_box_text_insert_text (GTK_COMBO_BOX_TEXT (combo), GTK_PHASE_TARGET, C_("event phase", "Target"));
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo), phase);
   gtk_container_add (GTK_CONTAINER (box), combo);
   gtk_widget_show (combo);
