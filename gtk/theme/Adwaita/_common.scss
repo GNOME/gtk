@@ -3294,8 +3294,8 @@ $_placesidebar_icons_opacity: 0.7;
 placessidebar {
   row {
     // Needs overriding of the GtkListBoxRow padding
-    padding: 0px;
     min-height: 36px;
+    padding: 0px;
 
     // Using margins/padding directly in the SidebarRow
     // will make the animation of the new bookmark row jump
@@ -3316,8 +3316,11 @@ placessidebar {
     }
 
     @at-root button.sidebar-button {
-      margin-top: 1px;
-      margin-bottom: 1px;
+      min-height: 26px;
+      min-width: 26px;
+      margin-top: 3px;
+      margin-bottom: 3px;
+      padding: 0;
       @extend button.flat;
       border-radius: 100%;
       -gtk-outline-radius: 100%;

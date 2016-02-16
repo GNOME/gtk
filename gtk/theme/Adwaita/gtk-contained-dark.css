@@ -3779,8 +3779,8 @@ stacksidebar row {
  * File chooser *
  ****************/
 placessidebar row {
-  padding: 0px;
-  min-height: 36px; }
+  min-height: 36px;
+  padding: 0px; }
   placessidebar row > revealer {
     padding: 0 14px; }
   placessidebar row image.sidebar-icon {
@@ -3794,8 +3794,11 @@ placessidebar row {
   placessidebar row label.sidebar-label:dir(rtl) {
     padding-left: 2px; }
   button.sidebar-button {
-    margin-top: 1px;
-    margin-bottom: 1px;
+    min-height: 26px;
+    min-width: 26px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    padding: 0;
     border-radius: 100%;
     -gtk-outline-radius: 100%; }
     button.sidebar-button:not(:hover):not(:active) > image, button.sidebar-button:backdrop > image {
