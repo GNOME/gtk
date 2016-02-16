@@ -593,6 +593,7 @@ static void     clear_model_cache            (GtkFileChooserWidget *impl,
                                               gint                  column);
 static void     set_model_filter             (GtkFileChooserWidget *impl,
                                               GtkFileFilter        *filter);
+static void     switch_to_home_dir           (GtkFileChooserWidget *impl);
 
 
 
@@ -2563,10 +2564,18 @@ static void
 location_entry_changed_cb (GtkEditable          *editable,
                            GtkFileChooserWidget *impl)
 {
-  if (impl->priv->operation_mode == OPERATION_MODE_SEARCH)
-    operation_mode_set (impl, OPERATION_MODE_BROWSE);
+  GtkFileChooserWidgetPrivate *priv = impl->priv;
 
-  if (impl->priv->action != GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
+  if (priv->operation_mode == OPERATION_MODE_SEARCH)
+    {
+      operation_mode_set (impl, OPERATION_MODE_BROWSE);
+      if (priv->current_folder)
+        change_folder_and_display_error (impl, priv->current_folder, FALSE);
+      else
+        switch_to_home_dir (impl);
+    }
+
+  if (priv->action != GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
     reset_location_timeout (impl);
 }
 
