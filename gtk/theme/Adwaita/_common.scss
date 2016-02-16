@@ -1928,12 +1928,15 @@ notebook {
     }
 
     tab {
-      font-weight: bold;
-      min-height: 36px;
-      min-width: 36px;
-      padding-left: 12px;
-      padding-right: 12px;
+      min-height: 30px;
+      min-width: 30px;
+      padding: 3px 12px;
+
+      outline-offset: -5px;
+
       color: $insensitive_fg_color;
+      font-weight: bold;
+
       border-width: 1px;         // for reorderable tabs
       border-color: transparent; //
 
@@ -1981,8 +1984,8 @@ notebook {
         &, &:backdrop { color: gtkalpha(currentColor, 0.3); }
 
         padding: 0;
-        margin-top: 7px;
-        margin-bottom: 7px;
+        margin-top: 4px;
+        margin-bottom: 4px;
         // FIXME: generalize .small-button?
         min-width: 20px;
         min-height: 20px;
