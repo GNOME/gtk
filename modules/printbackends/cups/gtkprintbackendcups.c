@@ -4252,12 +4252,12 @@ static const struct {
   const char *keyword;
   const char *translation;
 } cups_option_translations[] = {
-  { "Duplex", N_("Two Sided") },
-  { "MediaType", N_("Paper Type") },
-  { "InputSlot", N_("Paper Source") },
-  { "OutputBin", N_("Output Tray") },
-  { "Resolution", N_("Resolution") },
-  { "PreFilter", N_("GhostScript pre-filtering") },
+  { "Duplex", NC_("printing option", "Two Sided") },
+  { "MediaType", NC_("printing option", "Paper Type") },
+  { "InputSlot", NC_("printing option", "Paper Source") },
+  { "OutputBin", NC_("printing option", "Output Tray") },
+  { "Resolution", NC_("printing option", "Resolution") },
+  { "PreFilter", NC_("printing option", "GhostScript pre-filtering") }
 };
 
 
@@ -4266,33 +4266,33 @@ static const struct {
   const char *choice;
   const char *translation;
 } cups_choice_translations[] = {
-  { "Duplex", "None", N_("One Sided") },
+  { "Duplex", "None", NC_("printing option value", "One Sided") },
   /* Translators: this is an option of "Two Sided" */
-  { "Duplex", "DuplexNoTumble", N_("Long Edge (Standard)") },
+  { "Duplex", "DuplexNoTumble", NC_("printing option value", "Long Edge (Standard)") },
   /* Translators: this is an option of "Two Sided" */
-  { "Duplex", "DuplexTumble", N_("Short Edge (Flip)") },
+  { "Duplex", "DuplexTumble", NC_("printing option value", "Short Edge (Flip)") },
   /* Translators: this is an option of "Paper Source" */
-  { "InputSlot", "Auto", N_("Auto Select") },
+  { "InputSlot", "Auto", NC_("printing option value", "Auto Select") },
   /* Translators: this is an option of "Paper Source" */
-  { "InputSlot", "AutoSelect", N_("Auto Select") },
+  { "InputSlot", "AutoSelect", NC_("printing option value", "Auto Select") },
   /* Translators: this is an option of "Paper Source" */
-  { "InputSlot", "Default", N_("Printer Default") },
+  { "InputSlot", "Default", NC_("printing option value", "Printer Default") },
   /* Translators: this is an option of "Paper Source" */
-  { "InputSlot", "None", N_("Printer Default") },
+  { "InputSlot", "None", NC_("printing option value", "Printer Default") },
   /* Translators: this is an option of "Paper Source" */
-  { "InputSlot", "PrinterDefault", N_("Printer Default") },
+  { "InputSlot", "PrinterDefault", NC_("printing option value", "Printer Default") },
   /* Translators: this is an option of "Paper Source" */
-  { "InputSlot", "Unspecified", N_("Auto Select") },
+  { "InputSlot", "Unspecified", NC_("printing option value", "Auto Select") },
   /* Translators: this is an option of "Resolution" */
-  { "Resolution", "default", N_("Printer Default") },
+  { "Resolution", "default", NC_("printing option value", "Printer Default") },
   /* Translators: this is an option of "GhostScript" */
-  { "PreFilter", "EmbedFonts", N_("Embed GhostScript fonts only") },
+  { "PreFilter", "EmbedFonts", NC_("printing option value", "Embed GhostScript fonts only") },
   /* Translators: this is an option of "GhostScript" */
-  { "PreFilter", "Level1", N_("Convert to PS level 1") },
+  { "PreFilter", "Level1", NC_("printing option value", "Convert to PS level 1") },
   /* Translators: this is an option of "GhostScript" */
-  { "PreFilter", "Level2", N_("Convert to PS level 2") },
+  { "PreFilter", "Level2", NC_("printing option value", "Convert to PS level 2") },
   /* Translators: this is an option of "GhostScript" */
-  { "PreFilter", "No", N_("No pre-filtering") },
+  { "PreFilter", "No", NC_("printing option value", "No pre-filtering") }
 };
 
 static const struct {
@@ -4301,17 +4301,17 @@ static const struct {
 } cups_group_translations[] = {
 /* Translators: "Miscellaneous" is the label for a button, that opens
    up an extra panel of settings in a print dialog. */
-  { "Miscellaneous", N_("Miscellaneous") },
+  { "Miscellaneous", NC_("printing option group", "Miscellaneous") }
 };
 
 static const struct {
   const char *ppd_keyword;
   const char *name;
 } ppd_option_names[] = {
-  {"Duplex", "gtk-duplex" },
-  {"MediaType", "gtk-paper-type"},
-  {"InputSlot", "gtk-paper-source"},
-  {"OutputBin", "gtk-output-tray"},
+  { "Duplex", "gtk-duplex" },
+  { "MediaType", "gtk-paper-type" },
+  { "InputSlot", "gtk-paper-source" },
+  { "OutputBin", "gtk-output-tray" }
 };
 
 static const struct {
@@ -4319,8 +4319,8 @@ static const struct {
   const char *gtk_option_name;
   const char *translation;
 } ipp_option_translations[] = {
-  { "sides", "gtk-duplex", N_("Two Sided") },
-  { "output-bin", "gtk-output-tray", N_("Output Tray") },
+  { "sides", "gtk-duplex", NC_("printing option", "Two Sided") },
+  { "output-bin", "gtk-output-tray", NC_("printing option", "Output Tray") }
 };
 
 static const struct {
@@ -4363,17 +4363,17 @@ static const struct {
   /* Translators: Private mailbox */
   { "output-bin", "my-mailbox", NC_("output-bin", "My Mailbox") },
   /* Translators: Output tray number %d */
-  { "output-bin", "tray-N", NC_("output-bin", "Tray %d") },
+  { "output-bin", "tray-N", NC_("output-bin", "Tray %d") }
 };
 
 static const struct {
   const char *lpoption;
   const char *name;
 } lpoption_names[] = {
-  {"number-up", "gtk-n-up" },
-  {"number-up-layout", "gtk-n-up-layout"},
-  {"job-billing", "gtk-billing-info"},
-  {"job-priority", "gtk-job-prio"},
+  { "number-up", "gtk-n-up" },
+  { "number-up-layout", "gtk-n-up-layout" },
+  { "job-billing", "gtk-billing-info" },
+  { "job-priority", "gtk-job-prio" }
 };
 
 /* keep sorted when changing */
@@ -4492,7 +4492,9 @@ get_option_text (ppd_file_t   *ppd_file,
   for (i = 0; i < G_N_ELEMENTS (cups_option_translations); i++)
     {
       if (strcmp (cups_option_translations[i].keyword, option->keyword) == 0)
-	return g_strdup (_(cups_option_translations[i].translation));
+        return g_strdup (g_dpgettext2 (GETTEXT_PACKAGE,
+                                       "printing option",
+                                       cups_option_translations[i].translation));
     }
 
   utf8 = ppd_text_to_utf8 (ppd_file, option->text);
@@ -4515,7 +4517,9 @@ get_choice_text (ppd_file_t   *ppd_file,
     {
       if (strcmp (cups_choice_translations[i].keyword, keyword) == 0 &&
 	  strcmp (cups_choice_translations[i].choice, choice->choice) == 0)
-	return g_strdup (_(cups_choice_translations[i].translation));
+        return g_strdup (g_dpgettext2 (GETTEXT_PACKAGE,
+                                       "printing option value",
+                                       cups_choice_translations[i].translation));
     }
   return ppd_text_to_utf8 (ppd_file, choice->text);
 }
@@ -4992,7 +4996,9 @@ handle_option (GtkPrinterOptionSet *set,
 	    {
 	      if (strcmp (cups_group_translations[i].name, toplevel_group->name) == 0)
 		{
-		  option->group = g_strdup (_(cups_group_translations[i].translation));
+                  option->group = g_strdup (g_dpgettext2 (GETTEXT_PACKAGE,
+                                                          "printing option group",
+                                                          cups_group_translations[i].translation));
 		  break;
 		}
 	    }
@@ -5067,7 +5073,9 @@ get_ipp_option_translation (const gchar  *ipp_option_name,
       if (g_strcmp0 (ipp_option_translations[i].ipp_option_name, ipp_option_name) == 0)
         {
           *gtk_option_name = g_strdup (ipp_option_translations[i].gtk_option_name);
-          *translation = g_strdup (_(ipp_option_translations[i].translation));
+          *translation = g_strdup (g_dpgettext2 (GETTEXT_PACKAGE,
+                                                 "printing option",
+                                                 ipp_option_translations[i].translation));
           return TRUE;
         }
     }
@@ -5315,11 +5323,27 @@ cups_printer_get_options (GtkPrinter           *printer,
 
   if (backend != NULL && printer != NULL)
     {
-      char *cover_default[] = {"none", "classified", "confidential", "secret", "standard", "topsecret", "unclassified" };
+      char *cover_default[] = {
+        "none",
+        "classified",
+        "confidential",
+        "secret",
+        "standard",
+        "topsecret",
+        "unclassified"
+      };
       /* Translators, these strings are names for various 'standard' cover
        * pages that the printing system may support.
        */
-      char *cover_display_default[] = {N_("None"), N_("Classified"), N_("Confidential"), N_("Secret"), N_("Standard"), N_("Top Secret"), N_("Unclassified"),};
+      char *cover_display_default[] = {
+        NC_("cover page", "None"),
+        NC_("cover page", "Classified"),
+        NC_("cover page", "Confidential"),
+        NC_("cover page", "Secret"),
+        NC_("cover page", "Standard"),
+        NC_("cover page", "Top Secret"),
+        NC_("cover page", "Unclassified")
+      };
       char **cover = NULL;
       char **cover_display = NULL;
       char **cover_display_translated = NULL;
@@ -5330,9 +5354,8 @@ cups_printer_get_options (GtkPrinter           *printer,
        /* Translators, this string is used to label the pages-per-sheet option
         * in the print dialog
         */
-      option = gtk_printer_option_new ("gtk-n-up", _("Pages per Sheet"), GTK_PRINTER_OPTION_TYPE_PICKONE);
-      gtk_printer_option_choices_from_array (option, G_N_ELEMENTS (n_up),
-					     n_up, n_up);
+      option = gtk_printer_option_new ("gtk-n-up", C_("printer option", "Pages per Sheet"), GTK_PRINTER_OPTION_TYPE_PICKONE);
+      gtk_printer_option_choices_from_array (option, G_N_ELEMENTS (n_up), n_up, n_up);
       default_number_up = g_strdup_printf ("%d", cups_printer->default_number_up);
       gtk_printer_option_set (option, default_number_up);
       g_free (default_number_up);
@@ -5348,7 +5371,7 @@ cups_printer_get_options (GtkPrinter           *printer,
            /* Translators, this string is used to label the option in the print
             * dialog that controls in what order multiple pages are arranged
             */
-          option = gtk_printer_option_new ("gtk-n-up-layout", _("Page Ordering"), GTK_PRINTER_OPTION_TYPE_PICKONE);
+          option = gtk_printer_option_new ("gtk-n-up-layout", C_("printer option", "Page Ordering"), GTK_PRINTER_OPTION_TYPE_PICKONE);
           gtk_printer_option_choices_from_array (option, G_N_ELEMENTS (n_up_layout),
                                                  n_up_layout, n_up_layout_display);
 
@@ -5385,12 +5408,12 @@ cups_printer_get_options (GtkPrinter           *printer,
         }
 
       for (i = 0; i < num_of_covers; i++)
-        cover_display_translated[i] = _(cover_display[i]);
+        cover_display_translated[i] = (gchar *)g_dpgettext2 (GETTEXT_PACKAGE, "cover page", cover_display[i]);
 
       /* Translators, this is the label used for the option in the print
        * dialog that controls the front cover page.
        */
-      option = gtk_printer_option_new ("gtk-cover-before", _("Before"), GTK_PRINTER_OPTION_TYPE_PICKONE);
+      option = gtk_printer_option_new ("gtk-cover-before", C_("printer option", "Before"), GTK_PRINTER_OPTION_TYPE_PICKONE);
       gtk_printer_option_choices_from_array (option, num_of_covers,
 					 cover, cover_display_translated);
 
@@ -5405,7 +5428,7 @@ cups_printer_get_options (GtkPrinter           *printer,
       /* Translators, this is the label used for the option in the print
        * dialog that controls the back cover page.
        */
-      option = gtk_printer_option_new ("gtk-cover-after", _("After"), GTK_PRINTER_OPTION_TYPE_PICKONE);
+      option = gtk_printer_option_new ("gtk-cover-after", C_("printer option", "After"), GTK_PRINTER_OPTION_TYPE_PICKONE);
       gtk_printer_option_choices_from_array (option, num_of_covers,
 					 cover, cover_display_translated);
       if (cups_printer->default_cover_after != NULL)
@@ -5425,7 +5448,7 @@ cups_printer_get_options (GtkPrinter           *printer,
    * a print job is printed. Possible values are 'now', a specified time,
    * or 'on hold'
    */
-  option = gtk_printer_option_new ("gtk-print-time", _("Print at"), GTK_PRINTER_OPTION_TYPE_PICKONE);
+  option = gtk_printer_option_new ("gtk-print-time", C_("printer option", "Print at"), GTK_PRINTER_OPTION_TYPE_PICKONE);
   gtk_printer_option_choices_from_array (option, G_N_ELEMENTS (print_at),
 					 print_at, print_at);
   gtk_printer_option_set (option, "now");
@@ -5436,7 +5459,7 @@ cups_printer_get_options (GtkPrinter           *printer,
   /* Translators: this is the name of the option that allows the user
    * to specify a time when a print job will be printed.
    */
-  option = gtk_printer_option_new ("gtk-print-time-text", _("Print at time"), GTK_PRINTER_OPTION_TYPE_STRING);
+  option = gtk_printer_option_new ("gtk-print-time-text", C_("printer option", "Print at time"), GTK_PRINTER_OPTION_TYPE_STRING);
   gtk_printer_option_set (option, "");
   set_option_from_settings (option, settings);
   gtk_printer_option_set_add (set, option);
@@ -5587,14 +5610,14 @@ cups_printer_get_options (GtkPrinter           *printer,
 #ifdef HAVE_COLORD
   /* TRANSLATORS: this this the ICC color profile to use for this job */
   option = gtk_printer_option_new ("colord-profile",
-                                   _("Printer Profile"),
+                                   C_("printer option", "Printer Profile"),
                                    GTK_PRINTER_OPTION_TYPE_INFO);
 
   /* assign it to the color page */
   option->group = g_strdup ("ColorPage");
 
   /* TRANSLATORS: this is when color profile information is unavailable */
-  gtk_printer_option_set (option, _("Unavailable"));
+  gtk_printer_option_set (option, C_("printer option value", "Unavailable"));
   gtk_printer_option_set_add (set, option);
 
   /* watch to see if the user changed the options */
