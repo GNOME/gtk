@@ -113,6 +113,7 @@ struct _GdkWindowImplWayland
 
   unsigned int mapped : 1;
   unsigned int use_custom_surface : 1;
+  unsigned int pending_buffer_attached : 1;
   unsigned int pending_commit : 1;
   unsigned int awaiting_frame : 1;
   unsigned int position_set : 1;
@@ -482,10 +483,6 @@ on_frame_clock_after_paint (GdkFrameClock *clock,
   if (!impl->pending_commit)
     return;
 
-  impl->pending_commit = FALSE;
-  impl->pending_frame_counter = gdk_frame_clock_get_frame_counter (clock);
-  impl->awaiting_frame = TRUE;
-
   callback = wl_surface_frame (impl->display_server.wl_surface);
   wl_callback_add_listener (callback, &frame_listener, window);
   _gdk_frame_clock_freeze (clock);
@@ -493,7 +490,8 @@ on_frame_clock_after_paint (GdkFrameClock *clock,
   /* Before we commit a new buffer, make sure we've backfilled
    * undrawn parts from any old committed buffer
    */
-  read_back_cairo_surface (window);
+  if (impl->pending_buffer_attached)
+    read_back_cairo_surface (window);
 
   /* From this commit forward, we can't write to the buffer,
    * it's "live".  In the future, if we need to stage more changes
@@ -504,7 +502,14 @@ on_frame_clock_after_paint (GdkFrameClock *clock,
    * use it again.
    */
   wl_surface_commit (impl->display_server.wl_surface);
-  impl->committed_cairo_surface = g_steal_pointer (&impl->staging_cairo_surface);
+
+  if (impl->pending_buffer_attached)
+    impl->committed_cairo_surface = g_steal_pointer (&impl->staging_cairo_surface);
+
+  impl->pending_buffer_attached = FALSE;
+  impl->pending_commit = FALSE;
+  impl->pending_frame_counter = gdk_frame_clock_get_frame_counter (clock);
+  impl->awaiting_frame = TRUE;
 
   g_signal_emit (impl, signals[COMMITTED], 0);
 }
@@ -640,6 +645,7 @@ gdk_wayland_window_attach_image (GdkWindow *window)
   if (display->compositor_version >= WL_SURFACE_HAS_BUFFER_SCALE)
     wl_surface_set_buffer_scale (impl->display_server.wl_surface, impl->scale);
 
+  impl->pending_buffer_attached = TRUE;
   impl->pending_commit = TRUE;
 }
 
