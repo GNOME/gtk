@@ -1,3 +1,83 @@
+Overview of Changes in GTK+ 3.19.9
+==================================
+
+* gtk-builder-tool can now preview .ui files with custom CSS
+
+* gtk3-demo now demonstrates saving window sizes in the application
+  example, and has many more widgets in the foreign drawing example.
+
+* CSS changes:
+ - the rem unit is now supported
+ - calc() expressions are supported, too
+
+* Themes:
+ - Many fixes to Adwaita
+ - The Windows theme is now included on all platforms
+
+* Windows
+ - The Classic and XP themes have been dropped
+ - The remaining theme is being fixed to work with CSS nodes
+ - React to theme changes
+
+* Quartz:
+ - Fix image retrieval from the clipboard
+
+* Wayland:
+ - Fix a significant buffer leak
+
+* Bugs fixed:
+ 677329 Missing focus-in events
+ 698652 Aero-snapped windows in Win7 or 8 gets restored to previous size...
+ 754990 Missing (out) annotation for gdk_rgba_parse
+ 759657 GtkSeparator can segfault from CSS settings
+ 760996 background in notebooks (and other places?) now white
+ 761209 FileChooser crashes when invoked from FileChooserButton
+ 761309 Background missing for empty treeview
+ 761312 memory leak
+ 761332 Creating a GtkStyleContext crashes
+ 761339 [PATCH] skip gtk_widget_path_iter_add_qclass from g-ir-scanner
+ 761363 Unlabeled GtkCheckButton does not respect valign
+ 761381 gtk_settings_reset_property does not always reset to correct value
+ 761402 GtkRange doesn't reset in_drag flag correctly
+ 761428 GtkLevelBar no longer expands vertically
+ 761474 x11: Scaling factor is applied twice on screen work area
+ 761476 Set _GTK_THEME_VARIANT property also for light theme variant
+ 761484 Spinbuttons in headerbars are way too tall
+ 761552 Warnings in filechooser when typing-to-search in Recent
+ 761571 Opaque region incorrectly calculated for fullscreen windows
+ 761686 GtkTreeView theming problems
+ 761716 Notebook scroll arrows appear to be sensitive always
+ 761757 Crash in GtkFileChooserWidget
+ 761775 gtkmagnifier: Avoid a crash if the inspected widget is finalized
+ 761778 GtkShortcutsWindow - key labels are grey, not vertically centered
+ 761791 Places sidebar: row height is too low
+ 761792 Connect to server bar is too tall (and has a big fat connect butt...
+ 761826 double negative in drag drop documentation for drag-motion confus...
+ 761828 add a menu demo to foreigndrawing
+ 761829 undefined reference to `gdk_mir_display_get_type'
+ 761838 Editing widgets may be drawn off the visible area if the column i...
+ 761900 gtk-demo: add spinbutton and menubar foreign drawing examples
+ 761903 gtk3-demo: paned widget can be moved by resizing
+ 761954 Tab detach no longer works
+ 762021 GtkPaned propagates draw to NULL child
+ 762032 Titlebars of windows have become unacceptably large in 3.19.x
+ 762036 Extra widgets sizing messed up
+ 762067 Adwaita: half maximized unfocused window has rounded corners
+ 762080 gtk-demo: add combobox, menu separator and menu check/radio examp...
+
+* Translation updates:
+ Brazilian Portuguese
+ Chinese (Taiwan)
+ French
+ German
+ Hungarian
+ Kazakh
+ Polish
+ Slovak
+ Spanish
+ Swedish
+
+
 Overview of Changes in GTK+ 3.19.8
 ==================================
 
