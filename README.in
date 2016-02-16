@@ -102,6 +102,11 @@ Release notes for 3.18
   GtkCellRendererText is no longer ignored. If you don't want your
   text to be translucent, use opaque colors.
 
+* The way in which GtkLevelBar determines the offset to apply was
+  a bit inconsistent in the past; this has been fixed. Applications
+  that are using custom offsets should double-check that their
+  levels look as expected.
+
 Release notes for 3.16
 ======================
 
