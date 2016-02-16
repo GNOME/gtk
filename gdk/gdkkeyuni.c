@@ -27,7 +27,6 @@
 #include "gdkkeys.h"
 #include "gdktypes.h"
 
-#include <locale.h>
 
 /* Thanks to Markus G. Kuhn <mkuhn@acm.org> for the ksysym<->Unicode
  * mapping functions, from the xterm sources.
@@ -873,23 +872,6 @@ static const struct {
 #endif
 };
 
-static gunichar
-get_decimal_point (void)
-{
-  struct lconv *locale_data;
-  const gchar *decimal_point;
-  gunichar ret;
-
-  locale_data = localeconv ();
-  decimal_point = locale_data->decimal_point;
-
-  ret = g_utf8_get_char_validated (decimal_point, -1);
-  if (ret != (gunichar)-2 && ret != (gunichar)-1)
-    return ret;
-
-  return (gunichar) '.';
-}
-
 /**
  * gdk_keyval_to_unicode:
  * @keyval: a GDK key symbol 
@@ -916,9 +898,6 @@ gdk_keyval_to_unicode (guint keyval)
    */
   if ((keyval & 0xff000000) == 0x01000000)
     return keyval & 0x00ffffff;
-
-  if (keyval == 0xffae)
-    return (guint32) get_decimal_point ();
 
   /* binary search in table */
   while (max >= min) {
