@@ -2279,8 +2279,8 @@ notebook > header {
     notebook > header tab .titlebar button.titlebutton,
     .titlebar notebook > header tab button.titlebutton {
       padding: 0;
-      margin-top: 4px;
-      margin-bottom: 4px;
+      margin-top: 7px;
+      margin-bottom: 7px;
       min-width: 20px;
       min-height: 20px; }
       notebook > header tab button.flat:hover, notebook > header tab notebook > header > tabs > arrow:hover, notebook > header tab button.sidebar-button:hover, notebook > header tab headerbar button.titlebutton:hover, headerbar notebook > header tab button.titlebutton:hover,
