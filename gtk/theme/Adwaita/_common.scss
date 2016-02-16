@@ -1459,10 +1459,12 @@ treeview.view {
 
   &:disabled {
     color: $insensitive_fg_color;
+
     &:selected {
       color: mix($selected_fg_color, $selected_bg_color, 40%);
       &:backdrop { color: mix($backdrop_selected_fg_color, $selected_bg_color, 30%); }
     }
+
     &:backdrop { color: $backdrop_insensitive_color; }
   }
 
@@ -1486,14 +1488,18 @@ treeview.view {
 
   &.expander {
     -gtk-icon-source: -gtk-icontheme('pan-end-symbolic');
+
     &:dir(rtl) { -gtk-icon-source: -gtk-icontheme('pan-end-symbolic-rtl'); }
 
     color: mix($fg_color, $base_color, 70%);
 
     &:hover { color: $fg_color; }
+
     &:selected {
       color: mix($selected_fg_color, $selected_bg_color, 70%);
+
       &:hover { color: $selected_fg_color; }
+
       &:backdrop { color: mix($backdrop_selected_fg_color, $selected_bg_color, 70%); }
     }
 
@@ -2278,52 +2284,6 @@ switch {
 // draw regular check and radio items using our PNG assets
 // all assets are rendered from assets.svg. never add pngs directly
 
-@each $w,$a in ('check', 'checkbox'),
-               ('radio','radio') {
-
-  //standard checks and radios
-  @each $s,$as in ('','-unchecked'),
-                  (':hover', '-unchecked-hover'),
-                  (':active', '-unchecked-active'),
-                  (':disabled','-unchecked-insensitive'),
-                  (':backdrop', '-unchecked-backdrop'),
-                  (':backdrop:disabled', '-unchecked-backdrop-insensitive'),
-                  (':indeterminate', '-mixed'),
-                  (':indeterminate:hover', '-mixed-hover'),
-                  (':indeterminate:selected', '-mixed-active'),
-                  (':indeterminate:backdrop', '-mixed-backdrop'),
-                  (':indeterminate:disabled', '-mixed-insensitive'),
-                  (':indeterminate:disabled:backdrop', '-mixed-backdrop-insensitive'),
-                  (':checked', '-checked'),
-                  (':checked:disabled','-checked-insensitive'),
-                  (':checked:hover', '-checked-hover'),
-                  (':checked:active', '-checked-active'),
-                  (':backdrop:checked', '-checked-backdrop'),
-                  (':backdrop:checked:disabled', '-checked-backdrop-insensitive') {
-    treeview.#{$w}#{$s} {
-      -gtk-icon-source: -gtk-scaled(url("assets/#{$a}#{$as}#{$asset_suffix}.png"),
-                                    url("assets/#{$a}#{$as}#{$asset_suffix}@2.png"));
-      -gtk-icon-shadow: if(str-index($s,"backdrop"), none, 0 1px 0 $borders_edge); //no edge highlight for :backdrop
-      & button.flat { -gtk-icon-shadow: none; }
-    }
-    @if $variant == 'light' {
-      // the borders of the light variant versions of checks and radios are
-      // too similar in luminosity to the selected background color, hence
-      // we need special casing.
-      .view treeview.#{$w}#{$s}:selected {
-        -gtk-icon-source: -gtk-scaled(url("assets/selected-#{$a}#{$as}#{$asset_suffix}.png"),
-                                      url("assets/selected-#{$a}#{$as}#{$asset_suffix}@2.png"));
-      }
-    }
-  }
-}
-
-//treeview and rows
-.view.check, .view.radio,
-row .check, row .radio {
-  -gtk-icon-shadow: none;
-  &:selected, &:hover { -gtk-icon-shadow: none; }
-}
 
 //selection-mode
 @each $s,$as in ('','-selectionmode'),
@@ -2346,6 +2306,7 @@ checkbutton.text-button, radiobutton.text-button {
   // this is for a nice focus on check and radios text
   padding: 1px 2px 4px;
   outline-offset: 0;
+
   &:disabled,
   &:disabled:active,
   &:disabled:indeterminate {
@@ -2358,6 +2319,7 @@ checkbutton.text-button, radiobutton.text-button {
 check,
 radio {
   margin: 0 4px;
+
   &:only-child { margin: 0; }
 
   min-height: 14px;
@@ -2365,11 +2327,13 @@ radio {
   border: 1px solid;
   -gtk-icon-source: none;
   @include button(normal);
+
   &:hover { @include button(hover); }
   &:active { @include button(active); }
   &:disabled { @include button(insensitive); }
   &:backdrop {
     @include button(backdrop);
+
     &:disabled { @include button(backdrop-insensitive); }
   }
 
@@ -2394,6 +2358,7 @@ radio {
   }
 }
 
+%check,
 check {
   border-radius: 3px;
   &:checked { -gtk-icon-source: image(-gtk-recolor(url("assets/check-symbolic.svg")),
@@ -2402,6 +2367,7 @@ check {
                                             -gtk-recolor(url("assets/dash-symbolic.symbolic.png"))); }
 }
 
+%radio,
 radio {
   border-radius: 100%;
   &:checked { -gtk-icon-source: image(-gtk-recolor(url("assets/bullet-symbolic.svg")),
@@ -2438,6 +2404,43 @@ menu menuitem {
   radio:not(:indeterminate):checked,
   check:indeterminate:checked:active,
   radio:indeterminate:checked { animation: none; }
+}
+
+
+// treeview stuff, let's the fun begin:
+treeview.view check:selected {
+  &:focus, &:backdrop, & {
+    &:disabled, & {
+      @extend %check;
+      @if $variant == 'light' { border-color: $selected_borders_color; }
+    }
+  }
+}
+
+treeview.view radio:selected {
+  &:focus, &:backdrop, & {
+    &:disabled, & {
+      @extend %radio;
+      @if $variant == 'light' { border-color: $selected_borders_color; }
+    }
+  }
+}
+
+treeview.view check,
+treeview.view radio {
+  &:dir(rtl), &:dir(ltr) {  // specificity bump
+    &:selected, & {
+      &:focus, &:hover, & { color: $fg_color; }
+
+      &:backdrop {
+        &:hover, & { color: $backdrop_fg_color; }
+
+        &:disabled { color: $backdrop_insensitive_color; }
+      }
+
+      &:disabled { color: $insensitive_fg_color;}
+    }
+  }
 }
 
 

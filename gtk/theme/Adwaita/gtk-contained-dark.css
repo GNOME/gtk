@@ -2489,302 +2489,6 @@ switch {
 /*************************
  * Check and Radio items *
  *************************/
-treeview.check {
-  -gtk-icon-source: -gtk-scaled(url("assets/checkbox-unchecked-dark.png"), url("assets/checkbox-unchecked-dark@2.png"));
-  -gtk-icon-shadow: 0 1px 0 rgba(238, 238, 236, 0.07); }
-  treeview.check button.flat, treeview.check notebook > header > tabs > arrow, treeview.check button.sidebar-button, treeview.check headerbar button.titlebutton, headerbar treeview.check button.titlebutton,
-  treeview.check .titlebar button.titlebutton,
-  .titlebar treeview.check button.titlebutton {
-    -gtk-icon-shadow: none; }
-
-treeview.check:hover {
-  -gtk-icon-source: -gtk-scaled(url("assets/checkbox-unchecked-hover-dark.png"), url("assets/checkbox-unchecked-hover-dark@2.png"));
-  -gtk-icon-shadow: 0 1px 0 rgba(238, 238, 236, 0.07); }
-  treeview.check:hover button.flat, treeview.check:hover notebook > header > tabs > arrow, treeview.check:hover button.sidebar-button, treeview.check:hover headerbar button.titlebutton, headerbar treeview.check:hover button.titlebutton,
-  treeview.check:hover .titlebar button.titlebutton,
-  .titlebar treeview.check:hover button.titlebutton {
-    -gtk-icon-shadow: none; }
-
-treeview.check:active {
-  -gtk-icon-source: -gtk-scaled(url("assets/checkbox-unchecked-active-dark.png"), url("assets/checkbox-unchecked-active-dark@2.png"));
-  -gtk-icon-shadow: 0 1px 0 rgba(238, 238, 236, 0.07); }
-  treeview.check:active button.flat, treeview.check:active notebook > header > tabs > arrow, treeview.check:active button.sidebar-button, treeview.check:active headerbar button.titlebutton, headerbar treeview.check:active button.titlebutton,
-  treeview.check:active .titlebar button.titlebutton,
-  .titlebar treeview.check:active button.titlebutton {
-    -gtk-icon-shadow: none; }
-
-treeview.check:disabled {
-  -gtk-icon-source: -gtk-scaled(url("assets/checkbox-unchecked-insensitive-dark.png"), url("assets/checkbox-unchecked-insensitive-dark@2.png"));
-  -gtk-icon-shadow: 0 1px 0 rgba(238, 238, 236, 0.07); }
-  treeview.check:disabled button.flat, treeview.check:disabled notebook > header > tabs > arrow, treeview.check:disabled button.sidebar-button, treeview.check:disabled headerbar button.titlebutton, headerbar treeview.check:disabled button.titlebutton,
-  treeview.check:disabled .titlebar button.titlebutton,
-  .titlebar treeview.check:disabled button.titlebutton {
-    -gtk-icon-shadow: none; }
-
-treeview.check:backdrop {
-  -gtk-icon-source: -gtk-scaled(url("assets/checkbox-unchecked-backdrop-dark.png"), url("assets/checkbox-unchecked-backdrop-dark@2.png"));
-  -gtk-icon-shadow: none; }
-  treeview.check:backdrop button.flat, treeview.check:backdrop notebook > header > tabs > arrow, treeview.check:backdrop button.sidebar-button, treeview.check:backdrop headerbar button.titlebutton, headerbar treeview.check:backdrop button.titlebutton,
-  treeview.check:backdrop .titlebar button.titlebutton,
-  .titlebar treeview.check:backdrop button.titlebutton {
-    -gtk-icon-shadow: none; }
-
-treeview.check:backdrop:disabled {
-  -gtk-icon-source: -gtk-scaled(url("assets/checkbox-unchecked-backdrop-insensitive-dark.png"), url("assets/checkbox-unchecked-backdrop-insensitive-dark@2.png"));
-  -gtk-icon-shadow: none; }
-  treeview.check:backdrop:disabled button.flat, treeview.check:backdrop:disabled notebook > header > tabs > arrow, treeview.check:backdrop:disabled button.sidebar-button, treeview.check:backdrop:disabled headerbar button.titlebutton, headerbar treeview.check:backdrop:disabled button.titlebutton,
-  treeview.check:backdrop:disabled .titlebar button.titlebutton,
-  .titlebar treeview.check:backdrop:disabled button.titlebutton {
-    -gtk-icon-shadow: none; }
-
-treeview.check:indeterminate {
-  -gtk-icon-source: -gtk-scaled(url("assets/checkbox-mixed-dark.png"), url("assets/checkbox-mixed-dark@2.png"));
-  -gtk-icon-shadow: 0 1px 0 rgba(238, 238, 236, 0.07); }
-  treeview.check:indeterminate button.flat, treeview.check:indeterminate notebook > header > tabs > arrow, treeview.check:indeterminate button.sidebar-button, treeview.check:indeterminate headerbar button.titlebutton, headerbar treeview.check:indeterminate button.titlebutton,
-  treeview.check:indeterminate .titlebar button.titlebutton,
-  .titlebar treeview.check:indeterminate button.titlebutton {
-    -gtk-icon-shadow: none; }
-
-treeview.check:indeterminate:hover {
-  -gtk-icon-source: -gtk-scaled(url("assets/checkbox-mixed-hover-dark.png"), url("assets/checkbox-mixed-hover-dark@2.png"));
-  -gtk-icon-shadow: 0 1px 0 rgba(238, 238, 236, 0.07); }
-  treeview.check:indeterminate:hover button.flat, treeview.check:indeterminate:hover notebook > header > tabs > arrow, treeview.check:indeterminate:hover button.sidebar-button, treeview.check:indeterminate:hover headerbar button.titlebutton, headerbar treeview.check:indeterminate:hover button.titlebutton,
-  treeview.check:indeterminate:hover .titlebar button.titlebutton,
-  .titlebar treeview.check:indeterminate:hover button.titlebutton {
-    -gtk-icon-shadow: none; }
-
-treeview.check:indeterminate:selected {
-  -gtk-icon-source: -gtk-scaled(url("assets/checkbox-mixed-active-dark.png"), url("assets/checkbox-mixed-active-dark@2.png"));
-  -gtk-icon-shadow: 0 1px 0 rgba(238, 238, 236, 0.07); }
-  treeview.check:indeterminate:selected button.flat, treeview.check:indeterminate:selected notebook > header > tabs > arrow, treeview.check:indeterminate:selected button.sidebar-button, treeview.check:indeterminate:selected headerbar button.titlebutton, headerbar treeview.check:indeterminate:selected button.titlebutton,
-  treeview.check:indeterminate:selected .titlebar button.titlebutton,
-  .titlebar treeview.check:indeterminate:selected button.titlebutton {
-    -gtk-icon-shadow: none; }
-
-treeview.check:indeterminate:backdrop {
-  -gtk-icon-source: -gtk-scaled(url("assets/checkbox-mixed-backdrop-dark.png"), url("assets/checkbox-mixed-backdrop-dark@2.png"));
-  -gtk-icon-shadow: none; }
-  treeview.check:indeterminate:backdrop button.flat, treeview.check:indeterminate:backdrop notebook > header > tabs > arrow, treeview.check:indeterminate:backdrop button.sidebar-button, treeview.check:indeterminate:backdrop headerbar button.titlebutton, headerbar treeview.check:indeterminate:backdrop button.titlebutton,
-  treeview.check:indeterminate:backdrop .titlebar button.titlebutton,
-  .titlebar treeview.check:indeterminate:backdrop button.titlebutton {
-    -gtk-icon-shadow: none; }
-
-treeview.check:indeterminate:disabled {
-  -gtk-icon-source: -gtk-scaled(url("assets/checkbox-mixed-insensitive-dark.png"), url("assets/checkbox-mixed-insensitive-dark@2.png"));
-  -gtk-icon-shadow: 0 1px 0 rgba(238, 238, 236, 0.07); }
-  treeview.check:indeterminate:disabled button.flat, treeview.check:indeterminate:disabled notebook > header > tabs > arrow, treeview.check:indeterminate:disabled button.sidebar-button, treeview.check:indeterminate:disabled headerbar button.titlebutton, headerbar treeview.check:indeterminate:disabled button.titlebutton,
-  treeview.check:indeterminate:disabled .titlebar button.titlebutton,
-  .titlebar treeview.check:indeterminate:disabled button.titlebutton {
-    -gtk-icon-shadow: none; }
-
-treeview.check:indeterminate:disabled:backdrop {
-  -gtk-icon-source: -gtk-scaled(url("assets/checkbox-mixed-backdrop-insensitive-dark.png"), url("assets/checkbox-mixed-backdrop-insensitive-dark@2.png"));
-  -gtk-icon-shadow: none; }
-  treeview.check:indeterminate:disabled:backdrop button.flat, treeview.check:indeterminate:disabled:backdrop notebook > header > tabs > arrow, treeview.check:indeterminate:disabled:backdrop button.sidebar-button, treeview.check:indeterminate:disabled:backdrop headerbar button.titlebutton, headerbar treeview.check:indeterminate:disabled:backdrop button.titlebutton,
-  treeview.check:indeterminate:disabled:backdrop .titlebar button.titlebutton,
-  .titlebar treeview.check:indeterminate:disabled:backdrop button.titlebutton {
-    -gtk-icon-shadow: none; }
-
-treeview.check:checked {
-  -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-dark.png"), url("assets/checkbox-checked-dark@2.png"));
-  -gtk-icon-shadow: 0 1px 0 rgba(238, 238, 236, 0.07); }
-  treeview.check:checked button.flat, treeview.check:checked notebook > header > tabs > arrow, treeview.check:checked button.sidebar-button, treeview.check:checked headerbar button.titlebutton, headerbar treeview.check:checked button.titlebutton,
-  treeview.check:checked .titlebar button.titlebutton,
-  .titlebar treeview.check:checked button.titlebutton {
-    -gtk-icon-shadow: none; }
-
-treeview.check:checked:disabled {
-  -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-insensitive-dark.png"), url("assets/checkbox-checked-insensitive-dark@2.png"));
-  -gtk-icon-shadow: 0 1px 0 rgba(238, 238, 236, 0.07); }
-  treeview.check:checked:disabled button.flat, treeview.check:checked:disabled notebook > header > tabs > arrow, treeview.check:checked:disabled button.sidebar-button, treeview.check:checked:disabled headerbar button.titlebutton, headerbar treeview.check:checked:disabled button.titlebutton,
-  treeview.check:checked:disabled .titlebar button.titlebutton,
-  .titlebar treeview.check:checked:disabled button.titlebutton {
-    -gtk-icon-shadow: none; }
-
-treeview.check:checked:hover {
-  -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-hover-dark.png"), url("assets/checkbox-checked-hover-dark@2.png"));
-  -gtk-icon-shadow: 0 1px 0 rgba(238, 238, 236, 0.07); }
-  treeview.check:checked:hover button.flat, treeview.check:checked:hover notebook > header > tabs > arrow, treeview.check:checked:hover button.sidebar-button, treeview.check:checked:hover headerbar button.titlebutton, headerbar treeview.check:checked:hover button.titlebutton,
-  treeview.check:checked:hover .titlebar button.titlebutton,
-  .titlebar treeview.check:checked:hover button.titlebutton {
-    -gtk-icon-shadow: none; }
-
-treeview.check:checked:active {
-  -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-active-dark.png"), url("assets/checkbox-checked-active-dark@2.png"));
-  -gtk-icon-shadow: 0 1px 0 rgba(238, 238, 236, 0.07); }
-  treeview.check:checked:active button.flat, treeview.check:checked:active notebook > header > tabs > arrow, treeview.check:checked:active button.sidebar-button, treeview.check:checked:active headerbar button.titlebutton, headerbar treeview.check:checked:active button.titlebutton,
-  treeview.check:checked:active .titlebar button.titlebutton,
-  .titlebar treeview.check:checked:active button.titlebutton {
-    -gtk-icon-shadow: none; }
-
-treeview.check:backdrop:checked {
-  -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-backdrop-dark.png"), url("assets/checkbox-checked-backdrop-dark@2.png"));
-  -gtk-icon-shadow: none; }
-  treeview.check:backdrop:checked button.flat, treeview.check:backdrop:checked notebook > header > tabs > arrow, treeview.check:backdrop:checked button.sidebar-button, treeview.check:backdrop:checked headerbar button.titlebutton, headerbar treeview.check:backdrop:checked button.titlebutton,
-  treeview.check:backdrop:checked .titlebar button.titlebutton,
-  .titlebar treeview.check:backdrop:checked button.titlebutton {
-    -gtk-icon-shadow: none; }
-
-treeview.check:backdrop:checked:disabled {
-  -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-backdrop-insensitive-dark.png"), url("assets/checkbox-checked-backdrop-insensitive-dark@2.png"));
-  -gtk-icon-shadow: none; }
-  treeview.check:backdrop:checked:disabled button.flat, treeview.check:backdrop:checked:disabled notebook > header > tabs > arrow, treeview.check:backdrop:checked:disabled button.sidebar-button, treeview.check:backdrop:checked:disabled headerbar button.titlebutton, headerbar treeview.check:backdrop:checked:disabled button.titlebutton,
-  treeview.check:backdrop:checked:disabled .titlebar button.titlebutton,
-  .titlebar treeview.check:backdrop:checked:disabled button.titlebutton {
-    -gtk-icon-shadow: none; }
-
-treeview.radio {
-  -gtk-icon-source: -gtk-scaled(url("assets/radio-unchecked-dark.png"), url("assets/radio-unchecked-dark@2.png"));
-  -gtk-icon-shadow: 0 1px 0 rgba(238, 238, 236, 0.07); }
-  treeview.radio button.flat, treeview.radio notebook > header > tabs > arrow, treeview.radio button.sidebar-button, treeview.radio headerbar button.titlebutton, headerbar treeview.radio button.titlebutton,
-  treeview.radio .titlebar button.titlebutton,
-  .titlebar treeview.radio button.titlebutton {
-    -gtk-icon-shadow: none; }
-
-treeview.radio:hover {
-  -gtk-icon-source: -gtk-scaled(url("assets/radio-unchecked-hover-dark.png"), url("assets/radio-unchecked-hover-dark@2.png"));
-  -gtk-icon-shadow: 0 1px 0 rgba(238, 238, 236, 0.07); }
-  treeview.radio:hover button.flat, treeview.radio:hover notebook > header > tabs > arrow, treeview.radio:hover button.sidebar-button, treeview.radio:hover headerbar button.titlebutton, headerbar treeview.radio:hover button.titlebutton,
-  treeview.radio:hover .titlebar button.titlebutton,
-  .titlebar treeview.radio:hover button.titlebutton {
-    -gtk-icon-shadow: none; }
-
-treeview.radio:active {
-  -gtk-icon-source: -gtk-scaled(url("assets/radio-unchecked-active-dark.png"), url("assets/radio-unchecked-active-dark@2.png"));
-  -gtk-icon-shadow: 0 1px 0 rgba(238, 238, 236, 0.07); }
-  treeview.radio:active button.flat, treeview.radio:active notebook > header > tabs > arrow, treeview.radio:active button.sidebar-button, treeview.radio:active headerbar button.titlebutton, headerbar treeview.radio:active button.titlebutton,
-  treeview.radio:active .titlebar button.titlebutton,
-  .titlebar treeview.radio:active button.titlebutton {
-    -gtk-icon-shadow: none; }
-
-treeview.radio:disabled {
-  -gtk-icon-source: -gtk-scaled(url("assets/radio-unchecked-insensitive-dark.png"), url("assets/radio-unchecked-insensitive-dark@2.png"));
-  -gtk-icon-shadow: 0 1px 0 rgba(238, 238, 236, 0.07); }
-  treeview.radio:disabled button.flat, treeview.radio:disabled notebook > header > tabs > arrow, treeview.radio:disabled button.sidebar-button, treeview.radio:disabled headerbar button.titlebutton, headerbar treeview.radio:disabled button.titlebutton,
-  treeview.radio:disabled .titlebar button.titlebutton,
-  .titlebar treeview.radio:disabled button.titlebutton {
-    -gtk-icon-shadow: none; }
-
-treeview.radio:backdrop {
-  -gtk-icon-source: -gtk-scaled(url("assets/radio-unchecked-backdrop-dark.png"), url("assets/radio-unchecked-backdrop-dark@2.png"));
-  -gtk-icon-shadow: none; }
-  treeview.radio:backdrop button.flat, treeview.radio:backdrop notebook > header > tabs > arrow, treeview.radio:backdrop button.sidebar-button, treeview.radio:backdrop headerbar button.titlebutton, headerbar treeview.radio:backdrop button.titlebutton,
-  treeview.radio:backdrop .titlebar button.titlebutton,
-  .titlebar treeview.radio:backdrop button.titlebutton {
-    -gtk-icon-shadow: none; }
-
-treeview.radio:backdrop:disabled {
-  -gtk-icon-source: -gtk-scaled(url("assets/radio-unchecked-backdrop-insensitive-dark.png"), url("assets/radio-unchecked-backdrop-insensitive-dark@2.png"));
-  -gtk-icon-shadow: none; }
-  treeview.radio:backdrop:disabled button.flat, treeview.radio:backdrop:disabled notebook > header > tabs > arrow, treeview.radio:backdrop:disabled button.sidebar-button, treeview.radio:backdrop:disabled headerbar button.titlebutton, headerbar treeview.radio:backdrop:disabled button.titlebutton,
-  treeview.radio:backdrop:disabled .titlebar button.titlebutton,
-  .titlebar treeview.radio:backdrop:disabled button.titlebutton {
-    -gtk-icon-shadow: none; }
-
-treeview.radio:indeterminate {
-  -gtk-icon-source: -gtk-scaled(url("assets/radio-mixed-dark.png"), url("assets/radio-mixed-dark@2.png"));
-  -gtk-icon-shadow: 0 1px 0 rgba(238, 238, 236, 0.07); }
-  treeview.radio:indeterminate button.flat, treeview.radio:indeterminate notebook > header > tabs > arrow, treeview.radio:indeterminate button.sidebar-button, treeview.radio:indeterminate headerbar button.titlebutton, headerbar treeview.radio:indeterminate button.titlebutton,
-  treeview.radio:indeterminate .titlebar button.titlebutton,
-  .titlebar treeview.radio:indeterminate button.titlebutton {
-    -gtk-icon-shadow: none; }
-
-treeview.radio:indeterminate:hover {
-  -gtk-icon-source: -gtk-scaled(url("assets/radio-mixed-hover-dark.png"), url("assets/radio-mixed-hover-dark@2.png"));
-  -gtk-icon-shadow: 0 1px 0 rgba(238, 238, 236, 0.07); }
-  treeview.radio:indeterminate:hover button.flat, treeview.radio:indeterminate:hover notebook > header > tabs > arrow, treeview.radio:indeterminate:hover button.sidebar-button, treeview.radio:indeterminate:hover headerbar button.titlebutton, headerbar treeview.radio:indeterminate:hover button.titlebutton,
-  treeview.radio:indeterminate:hover .titlebar button.titlebutton,
-  .titlebar treeview.radio:indeterminate:hover button.titlebutton {
-    -gtk-icon-shadow: none; }
-
-treeview.radio:indeterminate:selected {
-  -gtk-icon-source: -gtk-scaled(url("assets/radio-mixed-active-dark.png"), url("assets/radio-mixed-active-dark@2.png"));
-  -gtk-icon-shadow: 0 1px 0 rgba(238, 238, 236, 0.07); }
-  treeview.radio:indeterminate:selected button.flat, treeview.radio:indeterminate:selected notebook > header > tabs > arrow, treeview.radio:indeterminate:selected button.sidebar-button, treeview.radio:indeterminate:selected headerbar button.titlebutton, headerbar treeview.radio:indeterminate:selected button.titlebutton,
-  treeview.radio:indeterminate:selected .titlebar button.titlebutton,
-  .titlebar treeview.radio:indeterminate:selected button.titlebutton {
-    -gtk-icon-shadow: none; }
-
-treeview.radio:indeterminate:backdrop {
-  -gtk-icon-source: -gtk-scaled(url("assets/radio-mixed-backdrop-dark.png"), url("assets/radio-mixed-backdrop-dark@2.png"));
-  -gtk-icon-shadow: none; }
-  treeview.radio:indeterminate:backdrop button.flat, treeview.radio:indeterminate:backdrop notebook > header > tabs > arrow, treeview.radio:indeterminate:backdrop button.sidebar-button, treeview.radio:indeterminate:backdrop headerbar button.titlebutton, headerbar treeview.radio:indeterminate:backdrop button.titlebutton,
-  treeview.radio:indeterminate:backdrop .titlebar button.titlebutton,
-  .titlebar treeview.radio:indeterminate:backdrop button.titlebutton {
-    -gtk-icon-shadow: none; }
-
-treeview.radio:indeterminate:disabled {
-  -gtk-icon-source: -gtk-scaled(url("assets/radio-mixed-insensitive-dark.png"), url("assets/radio-mixed-insensitive-dark@2.png"));
-  -gtk-icon-shadow: 0 1px 0 rgba(238, 238, 236, 0.07); }
-  treeview.radio:indeterminate:disabled button.flat, treeview.radio:indeterminate:disabled notebook > header > tabs > arrow, treeview.radio:indeterminate:disabled button.sidebar-button, treeview.radio:indeterminate:disabled headerbar button.titlebutton, headerbar treeview.radio:indeterminate:disabled button.titlebutton,
-  treeview.radio:indeterminate:disabled .titlebar button.titlebutton,
-  .titlebar treeview.radio:indeterminate:disabled button.titlebutton {
-    -gtk-icon-shadow: none; }
-
-treeview.radio:indeterminate:disabled:backdrop {
-  -gtk-icon-source: -gtk-scaled(url("assets/radio-mixed-backdrop-insensitive-dark.png"), url("assets/radio-mixed-backdrop-insensitive-dark@2.png"));
-  -gtk-icon-shadow: none; }
-  treeview.radio:indeterminate:disabled:backdrop button.flat, treeview.radio:indeterminate:disabled:backdrop notebook > header > tabs > arrow, treeview.radio:indeterminate:disabled:backdrop button.sidebar-button, treeview.radio:indeterminate:disabled:backdrop headerbar button.titlebutton, headerbar treeview.radio:indeterminate:disabled:backdrop button.titlebutton,
-  treeview.radio:indeterminate:disabled:backdrop .titlebar button.titlebutton,
-  .titlebar treeview.radio:indeterminate:disabled:backdrop button.titlebutton {
-    -gtk-icon-shadow: none; }
-
-treeview.radio:checked {
-  -gtk-icon-source: -gtk-scaled(url("assets/radio-checked-dark.png"), url("assets/radio-checked-dark@2.png"));
-  -gtk-icon-shadow: 0 1px 0 rgba(238, 238, 236, 0.07); }
-  treeview.radio:checked button.flat, treeview.radio:checked notebook > header > tabs > arrow, treeview.radio:checked button.sidebar-button, treeview.radio:checked headerbar button.titlebutton, headerbar treeview.radio:checked button.titlebutton,
-  treeview.radio:checked .titlebar button.titlebutton,
-  .titlebar treeview.radio:checked button.titlebutton {
-    -gtk-icon-shadow: none; }
-
-treeview.radio:checked:disabled {
-  -gtk-icon-source: -gtk-scaled(url("assets/radio-checked-insensitive-dark.png"), url("assets/radio-checked-insensitive-dark@2.png"));
-  -gtk-icon-shadow: 0 1px 0 rgba(238, 238, 236, 0.07); }
-  treeview.radio:checked:disabled button.flat, treeview.radio:checked:disabled notebook > header > tabs > arrow, treeview.radio:checked:disabled button.sidebar-button, treeview.radio:checked:disabled headerbar button.titlebutton, headerbar treeview.radio:checked:disabled button.titlebutton,
-  treeview.radio:checked:disabled .titlebar button.titlebutton,
-  .titlebar treeview.radio:checked:disabled button.titlebutton {
-    -gtk-icon-shadow: none; }
-
-treeview.radio:checked:hover {
-  -gtk-icon-source: -gtk-scaled(url("assets/radio-checked-hover-dark.png"), url("assets/radio-checked-hover-dark@2.png"));
-  -gtk-icon-shadow: 0 1px 0 rgba(238, 238, 236, 0.07); }
-  treeview.radio:checked:hover button.flat, treeview.radio:checked:hover notebook > header > tabs > arrow, treeview.radio:checked:hover button.sidebar-button, treeview.radio:checked:hover headerbar button.titlebutton, headerbar treeview.radio:checked:hover button.titlebutton,
-  treeview.radio:checked:hover .titlebar button.titlebutton,
-  .titlebar treeview.radio:checked:hover button.titlebutton {
-    -gtk-icon-shadow: none; }
-
-treeview.radio:checked:active {
-  -gtk-icon-source: -gtk-scaled(url("assets/radio-checked-active-dark.png"), url("assets/radio-checked-active-dark@2.png"));
-  -gtk-icon-shadow: 0 1px 0 rgba(238, 238, 236, 0.07); }
-  treeview.radio:checked:active button.flat, treeview.radio:checked:active notebook > header > tabs > arrow, treeview.radio:checked:active button.sidebar-button, treeview.radio:checked:active headerbar button.titlebutton, headerbar treeview.radio:checked:active button.titlebutton,
-  treeview.radio:checked:active .titlebar button.titlebutton,
-  .titlebar treeview.radio:checked:active button.titlebutton {
-    -gtk-icon-shadow: none; }
-
-treeview.radio:backdrop:checked {
-  -gtk-icon-source: -gtk-scaled(url("assets/radio-checked-backdrop-dark.png"), url("assets/radio-checked-backdrop-dark@2.png"));
-  -gtk-icon-shadow: none; }
-  treeview.radio:backdrop:checked button.flat, treeview.radio:backdrop:checked notebook > header > tabs > arrow, treeview.radio:backdrop:checked button.sidebar-button, treeview.radio:backdrop:checked headerbar button.titlebutton, headerbar treeview.radio:backdrop:checked button.titlebutton,
-  treeview.radio:backdrop:checked .titlebar button.titlebutton,
-  .titlebar treeview.radio:backdrop:checked button.titlebutton {
-    -gtk-icon-shadow: none; }
-
-treeview.radio:backdrop:checked:disabled {
-  -gtk-icon-source: -gtk-scaled(url("assets/radio-checked-backdrop-insensitive-dark.png"), url("assets/radio-checked-backdrop-insensitive-dark@2.png"));
-  -gtk-icon-shadow: none; }
-  treeview.radio:backdrop:checked:disabled button.flat, treeview.radio:backdrop:checked:disabled notebook > header > tabs > arrow, treeview.radio:backdrop:checked:disabled button.sidebar-button, treeview.radio:backdrop:checked:disabled headerbar button.titlebutton, headerbar treeview.radio:backdrop:checked:disabled button.titlebutton,
-  treeview.radio:backdrop:checked:disabled .titlebar button.titlebutton,
-  .titlebar treeview.radio:backdrop:checked:disabled button.titlebutton {
-    -gtk-icon-shadow: none; }
-
-.view.check, iconview.check, .view.radio, iconview.radio,
-row .check, row .radio {
-  -gtk-icon-shadow: none; }
-  .view.check:selected, iconview.check:selected, .view.check:hover, iconview.check:hover, .view.radio:selected, iconview.radio:selected, .view.radio:hover, iconview.radio:hover,
-  row .check:selected,
-  row .check:hover, row .radio:selected, row .radio:hover {
-    -gtk-icon-shadow: none; }
-
 .view.content-view.check:not(list), iconview.content-view.check:not(list) {
   -gtk-icon-shadow: none;
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-selectionmode.png"), url("assets/checkbox-selectionmode@2.png"));
@@ -2912,17 +2616,23 @@ radio {
     border-color: currentColor;
     animation: none; }
 
+treeview.view check:selected:focus:disabled, treeview.view check:selected:focus, treeview.view check:selected:backdrop:disabled, treeview.view check:selected:backdrop, treeview.view check:selected:disabled, treeview.view check:selected,
 check {
   border-radius: 3px; }
+  treeview.view check:checked:selected,
   check:checked {
     -gtk-icon-source: image(-gtk-recolor(url("assets/check-symbolic.svg")), -gtk-recolor(url("assets/check-symbolic.symbolic.png"))); }
+  treeview.view check:indeterminate:selected,
   check:indeterminate {
     -gtk-icon-source: image(-gtk-recolor(url("assets/dash-symbolic.svg")), -gtk-recolor(url("assets/dash-symbolic.symbolic.png"))); }
 
+treeview.view radio:selected:focus:disabled, treeview.view radio:selected:focus, treeview.view radio:selected:backdrop:disabled, treeview.view radio:selected:backdrop, treeview.view radio:selected:disabled, treeview.view radio:selected,
 radio {
   border-radius: 100%; }
+  treeview.view radio:checked:selected,
   radio:checked {
     -gtk-icon-source: image(-gtk-recolor(url("assets/bullet-symbolic.svg")), -gtk-recolor(url("assets/bullet-symbolic.symbolic.png"))); }
+  treeview.view radio:indeterminate:selected,
   radio:indeterminate {
     -gtk-icon-source: image(-gtk-recolor(url("assets/dash-symbolic.svg")), -gtk-recolor(url("assets/dash-symbolic.symbolic.png"))); }
 
@@ -2955,6 +2665,43 @@ menu menuitem radio:not(:indeterminate):checked,
 menu menuitem check:indeterminate:checked:active,
 menu menuitem radio:indeterminate:checked {
   animation: none; }
+
+treeview.view check:dir(rtl):selected:focus, treeview.view check:dir(rtl):selected:hover, treeview.view check:dir(rtl):selected, treeview.view check:dir(rtl):focus, treeview.view check:dir(rtl):hover, treeview.view check:dir(rtl), treeview.view check:dir(ltr):selected:focus, treeview.view check:dir(ltr):selected:hover, treeview.view check:dir(ltr):selected, treeview.view check:dir(ltr):focus, treeview.view check:dir(ltr):hover, treeview.view check:dir(ltr),
+treeview.view radio:dir(rtl):selected:focus,
+treeview.view radio:dir(rtl):selected:hover,
+treeview.view radio:dir(rtl):selected,
+treeview.view radio:dir(rtl):focus,
+treeview.view radio:dir(rtl):hover,
+treeview.view radio:dir(rtl),
+treeview.view radio:dir(ltr):selected:focus,
+treeview.view radio:dir(ltr):selected:hover,
+treeview.view radio:dir(ltr):selected,
+treeview.view radio:dir(ltr):focus,
+treeview.view radio:dir(ltr):hover,
+treeview.view radio:dir(ltr) {
+  color: #eeeeec; }
+treeview.view check:dir(rtl):selected:backdrop:hover, treeview.view check:dir(rtl):selected:backdrop, treeview.view check:dir(rtl):backdrop:hover, treeview.view check:dir(rtl):backdrop, treeview.view check:dir(ltr):selected:backdrop:hover, treeview.view check:dir(ltr):selected:backdrop, treeview.view check:dir(ltr):backdrop:hover, treeview.view check:dir(ltr):backdrop,
+treeview.view radio:dir(rtl):selected:backdrop:hover,
+treeview.view radio:dir(rtl):selected:backdrop,
+treeview.view radio:dir(rtl):backdrop:hover,
+treeview.view radio:dir(rtl):backdrop,
+treeview.view radio:dir(ltr):selected:backdrop:hover,
+treeview.view radio:dir(ltr):selected:backdrop,
+treeview.view radio:dir(ltr):backdrop:hover,
+treeview.view radio:dir(ltr):backdrop {
+  color: #949796; }
+treeview.view check:dir(rtl):selected:backdrop:disabled, treeview.view check:dir(rtl):backdrop:disabled, treeview.view check:dir(ltr):selected:backdrop:disabled, treeview.view check:dir(ltr):backdrop:disabled,
+treeview.view radio:dir(rtl):selected:backdrop:disabled,
+treeview.view radio:dir(rtl):backdrop:disabled,
+treeview.view radio:dir(ltr):selected:backdrop:disabled,
+treeview.view radio:dir(ltr):backdrop:disabled {
+  color: #5d6767; }
+treeview.view check:dir(rtl):selected:disabled, treeview.view check:dir(rtl):disabled, treeview.view check:dir(ltr):selected:disabled, treeview.view check:dir(ltr):disabled,
+treeview.view radio:dir(rtl):selected:disabled,
+treeview.view radio:dir(rtl):disabled,
+treeview.view radio:dir(ltr):selected:disabled,
+treeview.view radio:dir(ltr):disabled {
+  color: #949796; }
 
 /************
  * GtkScale *
