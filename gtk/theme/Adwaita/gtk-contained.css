@@ -2033,6 +2033,7 @@ menubar,
     background-color: #e8e8e7; }
   menubar > menuitem,
   .menubar > menuitem {
+    min-height: 16px;
     padding: 4px 8px; }
     menubar > menuitem:hover,
     .menubar > menuitem:hover {
@@ -2057,9 +2058,10 @@ menu,
     background-color: white; }
   menu menuitem,
   .menu menuitem {
-    text-shadow: none;
-    padding: 4px;
-    min-width: 40px; }
+    min-height: 16px;
+    min-width: 40px;
+    padding: 4px 6px;
+    text-shadow: none; }
     menu menuitem:hover,
     .menu menuitem:hover {
       color: #ffffff;
@@ -2627,19 +2629,22 @@ radio {
   row:selected check, row:selected
   radio {
     border-color: #184472; }
-  menu menuitem check, menu menuitem check:hover, menu menuitem check:disabled, menu menuitem
-  radio, menu menuitem
-  radio:hover, menu menuitem
-  radio:disabled {
-    min-height: 14px;
-    min-width: 14px;
-    background-image: none;
-    background-color: transparent;
-    box-shadow: none;
-    -gtk-icon-shadow: none;
-    color: inherit;
-    border-color: currentColor;
-    animation: none; }
+  menu menuitem check, menu menuitem
+  radio {
+    margin: 0; }
+    menu menuitem check, menu menuitem check:hover, menu menuitem check:disabled, menu menuitem
+    radio, menu menuitem
+    radio:hover, menu menuitem
+    radio:disabled {
+      min-height: 14px;
+      min-width: 14px;
+      background-image: none;
+      background-color: transparent;
+      box-shadow: none;
+      -gtk-icon-shadow: none;
+      color: inherit;
+      border-color: currentColor;
+      animation: none; }
 
 treeview.view check:selected:focus:disabled, treeview.view check:selected:focus, treeview.view check:selected:backdrop:disabled, treeview.view check:selected:backdrop, treeview.view check:selected:disabled, treeview.view check:selected,
 check {

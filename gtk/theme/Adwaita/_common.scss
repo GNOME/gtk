@@ -1656,6 +1656,7 @@ menubar,
   &:backdrop { background-color: $backdrop_bg_color; }
 
   > menuitem {
+    min-height: 16px;
     padding: 4px 8px;
 
     &:hover { //Seems like it :hover even with keyboard focus
@@ -1682,9 +1683,10 @@ menu,
   &:backdrop { background-color: $backdrop_menu_color; }
 
   menuitem {
-    text-shadow: none;
-    padding: 4px;
+    min-height: 16px;
     min-width: 40px;
+    padding: 4px 6px;
+    text-shadow: none;
 
     &:hover {
       color: $selected_fg_color;
@@ -2344,6 +2346,8 @@ radio {
   }
 
   menu menuitem & {
+    margin: 0; // this is a workaround for a menu check/radio size allocation issue
+
     &, &:hover, &:disabled {
       min-height: 14px;
       min-width: 14px;
