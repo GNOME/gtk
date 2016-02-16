@@ -782,7 +782,8 @@ gdk_window_impl_wayland_end_paint (GdkWindow *window)
   cairo_rectangle_int_t rect;
   int i, n;
 
-  if (!window->current_paint.use_gl)
+  if (!window->current_paint.use_gl &&
+      !cairo_region_is_empty (window->current_paint.region))
     {
       gdk_wayland_window_attach_image (window);
 
@@ -809,8 +810,9 @@ gdk_window_impl_wayland_end_paint (GdkWindow *window)
         {
           cairo_region_get_rectangle (window->current_paint.region, i, &rect);
           wl_surface_damage (impl->display_server.wl_surface, rect.x, rect.y, rect.width, rect.height);
-          impl->pending_commit = TRUE;
         }
+
+      impl->pending_commit = TRUE;
     }
 }
 
