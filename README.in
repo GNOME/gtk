@@ -82,6 +82,14 @@ Release notes for 3.20
   However, all previously existing objects still derive from GtkWidget,
   so no existing code should break.
 
+* Several fixes for window sizing and placement with client-side
+  decorations may affect applications that are saving and restoring
+  window sizes. The recommended best practice for this which is known
+  to work with client-side and server-side decorations and with older
+  and newer versions of GTK+ is to use gtk_window_get_size() to save
+  and gtk_window_set_default_size() to restore the window size. See
+  https://wiki.gnome.org/HowDoI/SaveWindowState for a detailed example.
+
 Release notes for 3.18
 ======================
 
