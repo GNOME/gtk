@@ -1785,6 +1785,7 @@ _gtk_css_style_property_init_properties (void)
 					  NULL,
 					  NULL,
 					  _gtk_css_icon_effect_value_new (GTK_CSS_ICON_EFFECT_NONE));
+  _gtk_style_property_add_alias ("-gtk-icon-effect", "-gtk-image-effect");
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_css_style_property_register        ("engine",
