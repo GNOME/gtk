@@ -2875,7 +2875,6 @@ scrolledwindow {
   }
   // This is used when content is touch-dragged past boundaries.
   // draws a box on top of the content, the size changes programmatically.
-
   overshoot {
     &.top {
       @include overshoot(top);
@@ -3296,11 +3295,12 @@ placessidebar {
   row {
     // Needs overriding of the GtkListBoxRow padding
     padding: 0px;
+    min-height: 36px;
 
     // Using margins/padding directly in the SidebarRow
     // will make the animation of the new bookmark row jump
     > revealer {
-      padding: 6px 14px 6px 12px;
+      padding: 0 14px;
     }
 
     & image.sidebar-icon {
@@ -3316,7 +3316,8 @@ placessidebar {
     }
 
     @at-root button.sidebar-button {
-      padding: 5px;
+      margin-top: 1px;
+      margin-bottom: 1px;
       @extend button.flat;
       border-radius: 100%;
       -gtk-outline-radius: 100%;

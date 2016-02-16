@@ -3818,9 +3818,10 @@ stacksidebar row {
  * File chooser *
  ****************/
 placessidebar row {
-  padding: 0px; }
+  padding: 0px;
+  min-height: 36px; }
   placessidebar row > revealer {
-    padding: 6px 14px 6px 12px; }
+    padding: 0 14px; }
   placessidebar row image.sidebar-icon {
     opacity: 0.7; }
     placessidebar row image.sidebar-icon:dir(ltr) {
@@ -3832,7 +3833,8 @@ placessidebar row {
   placessidebar row label.sidebar-label:dir(rtl) {
     padding-left: 2px; }
   button.sidebar-button {
-    padding: 5px;
+    margin-top: 1px;
+    margin-bottom: 1px;
     border-radius: 100%;
     -gtk-outline-radius: 100%; }
     button.sidebar-button:not(:hover):not(:active) > image, button.sidebar-button:backdrop > image {
