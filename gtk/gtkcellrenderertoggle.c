@@ -115,7 +115,7 @@ gtk_cell_renderer_toggle_init (GtkCellRendererToggle *celltoggle)
   g_object_set (celltoggle, "mode", GTK_CELL_RENDERER_MODE_ACTIVATABLE, NULL);
   gtk_cell_renderer_set_padding (GTK_CELL_RENDERER (celltoggle), 2, 2);
 
-  priv->indicator_size = TOGGLE_WIDTH;
+  priv->indicator_size = 0;
   priv->inconsistent = FALSE;
 }
 
@@ -171,8 +171,8 @@ gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class)
 						     P_("Size of check or radio indicator"),
 						     0,
 						     G_MAXINT,
-						     TOGGLE_WIDTH,
-						     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+						     0,
+						     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED));
 
   
   /**
@@ -321,7 +321,30 @@ gtk_cell_renderer_toggle_save_context (GtkCellRenderer *cell,
 
   return context;
 }
-                              
+ 
+static void
+calc_indicator_size (GtkStyleContext *context,
+                     gint             indicator_size,
+                     gint            *width,
+                     gint            *height)
+{
+  if (indicator_size != 0)
+    {
+      *width = *height = indicator_size;
+      return;
+    }
+
+  gtk_style_context_get (context, gtk_style_context_get_state (context),
+                         "min-width", width,
+                         "min-height", height,
+                         NULL);
+
+  if (*width == 0)
+    *width = TOGGLE_WIDTH;
+  if (*height == 0)
+    *height = TOGGLE_WIDTH;
+}
+
 static void
 gtk_cell_renderer_toggle_get_size (GtkCellRenderer    *cell,
 				   GtkWidget          *widget,
@@ -346,8 +369,9 @@ gtk_cell_renderer_toggle_get_size (GtkCellRenderer    *cell,
   gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
   gtk_style_context_get_border (context, gtk_style_context_get_state (context), &border);
 
-  calc_width = xpad * 2 + priv->indicator_size + padding.left + padding.right + border.left + border.right;
-  calc_height = ypad * 2 + priv->indicator_size + padding.top + padding.bottom + border.top + border.bottom;
+  calc_indicator_size (context, priv->indicator_size, &calc_width, &calc_height);
+  calc_width += xpad * 2 + padding.left + padding.right + border.left + border.right;
+  calc_height += ypad * 2 + padding.top + padding.bottom + border.top + border.bottom;
 
   gtk_style_context_restore (context);
 
