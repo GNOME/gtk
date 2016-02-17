@@ -100,6 +100,12 @@ gtk_css_image_win32_parse (GtkCssImage  *image,
       return FALSE;
     }
 
+  if (! _gtk_css_parser_try (parser, ",", TRUE))
+    {
+      _gtk_css_parser_error (parser, "Expected ','");
+      return FALSE;
+    }
+
   if (!_gtk_css_parser_try_int (parser, &wimage->state))
     {
       _gtk_css_parser_error (parser, "Expected a valid integer value");
@@ -120,6 +126,12 @@ gtk_css_image_win32_parse (GtkCssImage  *image,
           if (!_gtk_css_parser_try_int (parser, &wimage->part2))
             {
               _gtk_css_parser_error (parser, "Expected a valid integer value");
+              return FALSE;
+            }
+
+          if (! _gtk_css_parser_try (parser, ",", TRUE))
+            {
+              _gtk_css_parser_error (parser, "Expected ','");
               return FALSE;
             }
 

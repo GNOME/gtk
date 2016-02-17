@@ -5,25 +5,25 @@
 menubar {
     background-color: transparent;
     border-width: 0;
-    background-image: -gtk-win32-theme-part(menu, 7 1);
+    background-image: -gtk-win32-theme-part(menu, 7, 1);
 }
 
 menubar > menuitem {
     background-color: transparent;
     border-width: 0;
-    background-image: -gtk-win32-theme-part(menu, 8 1);
+    background-image: -gtk-win32-theme-part(menu, 8, 1);
 }
 
 menubar > menuitem:hover {
-    background-image: -gtk-win32-theme-part(menu, 8 3);
+    background-image: -gtk-win32-theme-part(menu, 8, 3);
 }
 
 menuitem:hover {
-    background-image: -gtk-win32-theme-part(menu, 14 2);
+    background-image: -gtk-win32-theme-part(menu, 14, 2);
 }
 
 menuitem:hover:disabled {
-    background-image: -gtk-win32-theme-part(menu, 14 4);
+    background-image: -gtk-win32-theme-part(menu, 14, 4);
 }
 
 menuitem radio,
@@ -36,7 +36,7 @@ menuitem radio:disabled {
 
 menuitem radio:active, 
 menuitem radio:active:hover {
-    background-image: -gtk-win32-theme-part(menu, 11 3);
+    background-image: -gtk-win32-theme-part(menu, 11, 3);
     border-width: 0;
 }
 
@@ -51,7 +51,7 @@ menuitem radio:indeterminate:active:hover {
 
 menuitem radio:disabled:active,
 menuitem radio:disabled:active:hover {
-    background-image: -gtk-win32-theme-part(menu, 11 4);
+    background-image: -gtk-win32-theme-part(menu, 11, 4);
     border-width: 0;
 }
 
@@ -64,7 +64,7 @@ menuitem check:disabled {
 
 menuitem check:active, 
 menuitem check:active:hover {
-    background-image: -gtk-win32-theme-part(menu, 11 1);
+    background-image: -gtk-win32-theme-part(menu, 11, 1);
     border-width: 0;
 }
 
@@ -79,7 +79,7 @@ menuitem check:indeterminate:active:hover {
 
 menuitem check:disabled:active,
 menuitem check:disabled:active:hover{
-    background-image: -gtk-win32-theme-part(menu, 11 2);
+    background-image: -gtk-win32-theme-part(menu, 11, 2);
     border-width: 0;
 }
 
@@ -94,10 +94,10 @@ notebook {
     background-clip: border-box;
 
     /* W32 theme draws it with borders and all, cut them away */
-    background-image: -gtk-win32-theme-part(tab, 9 1, margins(-1 -3 -2 -1));
+    background-image: -gtk-win32-theme-part(tab, 9, 1, margins(-1 -3 -2 -1));
 
     /* Grab the borders now and duplicate them across the perimeter */
-    border-image: -gtk-win32-theme-part(tab, 9 1, margins(0 -2 -1 0)) 1 1 1 1 repeat;
+    border-image: -gtk-win32-theme-part(tab, 9, 1, margins(0 -2 -1 0)) 1 1 1 1 repeat;
     /* MSW7 themes draw tab overlaps differently. Net result is:
        * inactive tab text never moves no matter which tabs get to be active
        * active tab text moves only up
@@ -322,7 +322,7 @@ notebook tab.left:active {
 /* We're cheating here, using part 6 (listview header group),
    because part 1 (listview item) is empty for some reason */
 row:hover {
-  background-image: -gtk-win32-theme-part(listview, 6 10);
+  background-image: -gtk-win32-theme-part(listview, 6, 10);
 }
 
 row:selected {
@@ -330,13 +330,13 @@ row:selected {
   /* Override *:selected {} blanket style, keeping the background - bright
      and the text - dark */
   color: @text_color;
-  background-image: -gtk-win32-theme-part(listview, 6 13);
+  background-image: -gtk-win32-theme-part(listview, 6, 13);
 }
 
 row:selected:focus {
-  background-image: -gtk-win32-theme-part(listview, 6 11);
+  background-image: -gtk-win32-theme-part(listview, 6, 11);
 }
 
 row:selected:hover {
-  background-image: -gtk-win32-theme-part(listview, 6 12);
+  background-image: -gtk-win32-theme-part(listview, 6, 12);
 }
