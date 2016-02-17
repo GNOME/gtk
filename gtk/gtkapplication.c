@@ -84,8 +84,11 @@
  * dynamic population of a part of the menu structure.
  *
  * If the resources "gtk/menus-appmenu.ui" or "gtk/menus-traditional.ui" are
- * present then these files will be used in preference, depending on the
- * value of gtk_application_prefers_app_menu().
+ * present then these files will be used in preference, depending on the value
+ * of gtk_application_prefers_app_menu(). If the resource "gtk/menus-common.ui"
+ * is present it will be loaded as well. This is useful for storing items that
+ * are referenced from both "gtk/menus-appmenu.ui" and
+ * "gtk/menus-traditional.ui".
  *
  * It is also possible to provide the menus manually using
  * gtk_application_set_app_menu() and gtk_application_set_menubar().
