@@ -96,11 +96,12 @@
  * resources.  See gtk_icon_theme_add_resource_path() for more
  * information.
  *
- * If there is a resource located at "gtk/help-overlay.ui" which is
- * defining a #GtkShortcutsWindow with ID "help_overlay" then GtkApplication
+ * If there is a resource located at "gtk/help-overlay.ui" which
+ * defines a #GtkShortcutsWindow with ID "help_overlay" then GtkApplication
  * associates an instance of this shortcuts window with each
  * #GtkApplicationWindow and sets up keyboard accelerators (Control-F1
- * and Control-?) to open it.
+ * and Control-?) to open it. To create an menu item that displays the
+ * shortcuts window associate the item with the action win.show-help-overlay.
  *
  * ## A simple application ## {#gtkapplication}
  *
