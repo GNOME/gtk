@@ -4347,7 +4347,7 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
                         G_SIGNAL_RUN_FIRST,
                         G_STRUCT_OFFSET (GtkPlacesSidebarClass, mount),
                         NULL, NULL,
-                        _gtk_marshal_VOID__VOID,
+                        _gtk_marshal_VOID__OBJECT,
                         G_TYPE_NONE,
                         1,
                         G_TYPE_MOUNT_OPERATION);
@@ -4369,7 +4369,7 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
                         G_SIGNAL_RUN_FIRST,
                         G_STRUCT_OFFSET (GtkPlacesSidebarClass, unmount),
                         NULL, NULL,
-                        _gtk_marshal_VOID__VOID,
+                        _gtk_marshal_VOID__OBJECT,
                         G_TYPE_NONE,
                         1,
                         G_TYPE_MOUNT_OPERATION);
