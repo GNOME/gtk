@@ -2655,7 +2655,8 @@ scale trough, scale fill, progressbar trough {
   background-color: #2f3434;
   box-shadow: inset 1px 1px rgba(0, 0, 0, 0.1); }
   scale trough:disabled, scale fill:disabled, progressbar trough:disabled {
-    background-color: #333636; }
+    background-color: #333636;
+    box-shadow: none; }
   scale trough:backdrop, scale fill:backdrop, progressbar trough:backdrop, progressbar:backdrop trough {
     background-color: #303535;
     border-color: #1f2222;

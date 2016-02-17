@@ -2444,7 +2444,10 @@ treeview.view radio {
   background-color: $dark_fill;
   box-shadow: inset 1px 1px transparentize(black, 0.9);
 
-  &:disabled { background-color: $insensitive_bg_color; }
+  &:disabled {
+    background-color: $insensitive_bg_color;
+    box-shadow: none;
+  }
 
   &:backdrop {
     background-color: $backdrop_dark_fill;
