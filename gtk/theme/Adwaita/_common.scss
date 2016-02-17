@@ -2176,7 +2176,7 @@ switch {
   font-size: smaller;
   outline-offset: -4px;
   box-shadow: inset 0 1px transparentize(black, 0.9), // needs to be set here
-              _widget_edge();                         // otherwise it gets
+              _widget_edge(transparent);              // otherwise it gets
                                                       // clipped
   // similar to the .scale
   border: 1px solid $borders_color;
@@ -2190,7 +2190,7 @@ switch {
     border-color: $selected_borders_color;
     background-color: $selected_bg_color;
     background-image: none;
-    box-shadow: _widget_edge();
+    box-shadow: _widget_edge(transparent);
     text-shadow: 0 1px transparentize($selected_borders_color, 0.5),
                  0 0 2px transparentize(white, 0.4);
   }
@@ -2200,7 +2200,7 @@ switch {
     border-color: $borders_color;
     background-image: none;
     background-color: $insensitive_bg_color;
-    box-shadow: _widget_edge();
+    box-shadow: _widget_edge(transparent);
     text-shadow: none;
   }
 
@@ -2233,37 +2233,21 @@ switch {
     min-height: 27px;
     border: 1px solid;
     border-radius: 3px;
-    @include button(normal);
-    box-shadow: inset 0 1px if($variant=='light', white,
-                               transparentize(white, 0.85)),
-                inset 0 -2px transparentize($bg_color, 0.4),
-                inset 0 -1px mix($bg_color, $borders_color, 50%);
+    @include button(normal-alt, $edge: $shadow_color);
   }
 
-  &:hover slider {
-    @include button(hover);
-    box-shadow: inset 0 1px if($variant=='light', white,
-                               transparentize(white, 0.85)),
-                inset 0 -2px transparentize($bg_color, 0.4),
-                inset 0 -1px mix($bg_color, $borders_color, 50%);
-  }
+  &:hover slider { @include button(hover-alt, $edge: $shadow_color); }
 
   &:active slider { border: 1px solid $selected_borders_color; }
 
-  &:disabled slider { @include button(insensitive, $edge:none); }
+  &:disabled slider { @include button(insensitive, $edge: none); }
 
   &:backdrop {
-    slider {
-      @include button(backdrop);
-      box-shadow: none;
-    }
+    slider { @include button(backdrop); }
 
     &:active slider { border-color: if($variant == 'light', $selected_bg_color, $selected_borders_color); }
 
-    &:disabled slider {
-      @include button(backdrop-insensitive);
-      box-shadow: none;
-    }
+    &:disabled slider { @include button(backdrop-insensitive); }
   }
 
   row:selected & {
@@ -2331,9 +2315,9 @@ radio {
   min-width: 14px;
   border: 1px solid;
   -gtk-icon-source: none;
-  @include button(normal);
+  @include button(normal-alt, $edge: $shadow_color);
 
-  &:hover { @include button(hover); }
+  &:hover { @include button(hover-alt, $edge: $shadow_color); }
   &:active { @include button(active); }
   &:disabled { @include button(insensitive); }
   &:backdrop {
@@ -2351,7 +2335,7 @@ radio {
   menu menuitem & {
     margin: 0; // this is a workaround for a menu check/radio size allocation issue
 
-    &, &:hover, &:disabled {
+    &, &:hover, &:disabled { //FIXME use button reset mixin
       min-height: 14px;
       min-width: 14px;
       background-image: none;
@@ -2458,13 +2442,9 @@ treeview.view radio {
   border: 1px solid $borders_color;
   border-radius: 3px;
   background-color: $dark_fill;
-  box-shadow: inset 1px 1px transparentize(black, 0.9),
-              _widget_edge();
+  box-shadow: inset 1px 1px transparentize(black, 0.9);
 
-  &:disabled {
-    background-color: $insensitive_bg_color;
-    box-shadow: _widget_edge();
-  }
+  &:disabled { background-color: $insensitive_bg_color; }
 
   &:backdrop {
     background-color: $backdrop_dark_fill;
@@ -2580,13 +2560,11 @@ scale {
   }
 
   slider {
-    // FIXME: scale-has-marks-* missing
-    $_slider_edge_color: transparentize(black, 0.9);
-    @include button(normal, $edge: $_slider_edge_color);
+    @include button(normal-alt, $edge: $shadow_color);
     border: 1px solid darken($borders_color, 3%);
     border-radius: 100%;
 
-    &:hover { @include button(hover, $edge: $_slider_edge_color); }
+    &:hover { @include button(hover-alt, $edge: $shadow_color); }
 
     &:active { border-color: $selected_borders_color; }
 
@@ -2696,7 +2674,6 @@ progressbar {
   font-size: smaller;
   color: transparentize($fg_color, 0.6);
 
-  box-shadow: _widget_edge();      // needs to be set here;
   &:backdrop { box-shadow: none; }
 
   trough { @extend %scale_trough; }
@@ -2754,7 +2731,6 @@ progressbar {
  * Level Bar *
  *************/
 levelbar {
-  box-shadow: _widget_edge(); // needs to be set here to avoid clipping
   block {
     min-width: 32px;
     min-height: 1px;

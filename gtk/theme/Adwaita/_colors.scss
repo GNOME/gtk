@@ -1,4 +1,4 @@
-// When color definition differs for dark and light variant,
+// When color definition differs for dark and light variant
 // it gets @if ed depending on $variant
 
 
@@ -39,6 +39,7 @@ $sidebar_bg_color: mix($bg_color, $base_color, 50%);
 $base_hover_color: transparentize($fg_color, 0.95);
 
 $tooltip_borders_color: transparentize(white, 0.9);
+$shadow_color: transparentize(black, 0.9);
 
 //insensitive state derived colors
 $insensitive_fg_color: mix($fg_color, $bg_color, 50%);

@@ -2364,7 +2364,7 @@ switch {
   font-weight: bold;
   font-size: smaller;
   outline-offset: -4px;
-  box-shadow: inset 0 1px rgba(0, 0, 0, 0.1), 0 1px rgba(255, 255, 255, 0.8);
+  box-shadow: inset 0 1px rgba(0, 0, 0, 0.1), 0 1px transparent;
   border: 1px solid #9d9d99;
   border-radius: 3px;
   color: #2e3436;
@@ -2375,14 +2375,14 @@ switch {
     border-color: #184472;
     background-color: #4a90d9;
     background-image: none;
-    box-shadow: 0 1px rgba(255, 255, 255, 0.8);
+    box-shadow: 0 1px transparent;
     text-shadow: 0 1px rgba(24, 68, 114, 0.5), 0 0 2px rgba(255, 255, 255, 0.6); }
   switch:disabled {
     color: #8b8e8f;
     border-color: #9d9d99;
     background-image: none;
     background-color: #f1f1f1;
-    box-shadow: 0 1px rgba(255, 255, 255, 0.8);
+    box-shadow: 0 1px transparent;
     text-shadow: none; }
   switch:backdrop {
     color: #8b8e8f;
@@ -2410,10 +2410,7 @@ switch {
     outline-color: rgba(46, 52, 54, 0.3);
     border-color: #9d9d99;
     background-image: linear-gradient(to bottom, #e8e8e7, #dededd 60%, #cfcfcd);
-    text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-    -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0.8);
-    box-shadow: inset 0 1px white, inset 0 -2px rgba(232, 232, 231, 0.6), inset 0 -1px #c3c3c0; }
+    box-shadow: inset 0 1px white, inset 0 -2px #e8e8e7, inset 0 -1px #cfcfcd, 0 1px rgba(0, 0, 0, 0.1); }
   switch:hover slider {
     color: #2e3436;
     outline-color: rgba(46, 52, 54, 0.3);
@@ -2421,8 +2418,7 @@ switch {
     background-image: linear-gradient(to bottom, #f7f7f7, #e8e8e7 60%, #dededd);
     text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
     -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-    box-shadow: inset 0 1px white;
-    box-shadow: inset 0 1px white, inset 0 -2px rgba(232, 232, 231, 0.6), inset 0 -1px #c3c3c0; }
+    box-shadow: inset 0 1px white, inset 0 -2px #f7f7f7, inset 0 -1px #d9d9d7, 0 1px rgba(0, 0, 0, 0.1); }
   switch:active slider {
     border: 1px solid #184472; }
   switch:disabled slider {
@@ -2438,8 +2434,7 @@ switch {
     background-image: linear-gradient(to bottom, #e8e8e7);
     text-shadow: none;
     -gtk-icon-shadow: none;
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0);
-    box-shadow: none; }
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
   switch:backdrop:active slider {
     border-color: #4a90d9; }
   switch:backdrop:disabled slider {
@@ -2448,8 +2443,7 @@ switch {
     background-image: linear-gradient(to bottom, #f1f1f1);
     text-shadow: none;
     -gtk-icon-shadow: none;
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0);
-    box-shadow: none; }
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
   row:selected switch {
     box-shadow: none;
     border-color: #184472; }
@@ -2524,9 +2518,7 @@ radio {
   outline-color: rgba(46, 52, 54, 0.3);
   border-color: #9d9d99;
   background-image: linear-gradient(to bottom, #e8e8e7, #dededd 60%, #cfcfcd);
-  text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-  -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-  box-shadow: inset 0 1px rgba(255, 255, 255, 0.8); }
+  box-shadow: inset 0 1px white, inset 0 -2px #e8e8e7, inset 0 -1px #cfcfcd, 0 1px rgba(0, 0, 0, 0.1); }
   check:only-child,
   radio:only-child {
     margin: 0; }
@@ -2538,7 +2530,7 @@ radio {
     background-image: linear-gradient(to bottom, #f7f7f7, #e8e8e7 60%, #dededd);
     text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
     -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-    box-shadow: inset 0 1px white; }
+    box-shadow: inset 0 1px white, inset 0 -2px #f7f7f7, inset 0 -1px #d9d9d7, 0 1px rgba(0, 0, 0, 0.1); }
   check:active,
   radio:active {
     color: #2e3436;
@@ -2692,10 +2684,9 @@ scale trough, scale fill, progressbar trough {
   border: 1px solid #9d9d99;
   border-radius: 3px;
   background-color: #cececc;
-  box-shadow: inset 1px 1px rgba(0, 0, 0, 0.1), 0 1px rgba(255, 255, 255, 0.8); }
+  box-shadow: inset 1px 1px rgba(0, 0, 0, 0.1); }
   scale trough:disabled, scale fill:disabled, progressbar trough:disabled {
-    background-color: #f1f1f1;
-    box-shadow: 0 1px rgba(255, 255, 255, 0.8); }
+    background-color: #f1f1f1; }
   scale trough:backdrop, scale fill:backdrop, progressbar trough:backdrop, progressbar:backdrop trough {
     background-color: #d1d1cf;
     border-color: #a5a5a1;
@@ -2768,9 +2759,7 @@ scale {
     outline-color: rgba(46, 52, 54, 0.3);
     border-color: #9d9d99;
     background-image: linear-gradient(to bottom, #e8e8e7, #dededd 60%, #cfcfcd);
-    text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-    -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0.8), 0 1px rgba(0, 0, 0, 0.1);
+    box-shadow: inset 0 1px white, inset 0 -2px #e8e8e7, inset 0 -1px #cfcfcd, 0 1px rgba(0, 0, 0, 0.1);
     border: 1px solid #969691;
     border-radius: 100%; }
     scale slider:hover {
@@ -2780,7 +2769,7 @@ scale {
       background-image: linear-gradient(to bottom, #f7f7f7, #e8e8e7 60%, #dededd);
       text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
       -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-      box-shadow: inset 0 1px white, 0 1px rgba(0, 0, 0, 0.1); }
+      box-shadow: inset 0 1px white, inset 0 -2px #f7f7f7, inset 0 -1px #d9d9d7, 0 1px rgba(0, 0, 0, 0.1); }
     scale slider:active {
       border-color: #184472; }
     scale slider:disabled {
@@ -3075,8 +3064,7 @@ scale {
  *****************/
 progressbar {
   font-size: smaller;
-  color: rgba(46, 52, 54, 0.4);
-  box-shadow: 0 1px rgba(255, 255, 255, 0.8); }
+  color: rgba(46, 52, 54, 0.4); }
   progressbar.horizontal trough,
   progressbar.horizontal progress {
     min-height: 2px; }
@@ -3119,65 +3107,63 @@ progressbar {
 /*************
  * Level Bar *
  *************/
-levelbar {
-  box-shadow: 0 1px rgba(255, 255, 255, 0.8); }
-  levelbar block {
-    min-width: 32px;
-    min-height: 1px; }
-  levelbar.vertical block {
-    min-width: 1px;
-    min-height: 32px; }
-  levelbar trough {
-    border: 1px solid;
-    padding: 2px;
-    border-radius: 3px;
+levelbar block {
+  min-width: 32px;
+  min-height: 1px; }
+levelbar.vertical block {
+  min-width: 1px;
+  min-height: 32px; }
+levelbar trough {
+  border: 1px solid;
+  padding: 2px;
+  border-radius: 3px;
+  background-color: #ffffff;
+  background-image: linear-gradient(to bottom, #d3d3d1, #fcfcfc 2px, #ffffff 90%);
+  color: black;
+  border-color: #9d9d99;
+  box-shadow: inset 0 0 0 1px rgba(74, 144, 217, 0); }
+  levelbar trough:backdrop {
     background-color: #ffffff;
     background-image: linear-gradient(to bottom, #d3d3d1, #fcfcfc 2px, #ffffff 90%);
-    color: black;
-    border-color: #9d9d99;
-    box-shadow: inset 0 0 0 1px rgba(74, 144, 217, 0); }
-    levelbar trough:backdrop {
-      background-color: #ffffff;
-      background-image: linear-gradient(to bottom, #d3d3d1, #fcfcfc 2px, #ffffff 90%);
-      color: #333333;
-      border-color: #a5a5a1;
-      background-image: linear-gradient(to bottom, white);
-      box-shadow: none; }
-  levelbar.horizontal.discrete block {
-    margin: 0 1px; }
-  levelbar.vertical.discrete block {
-    margin: 1px 0; }
-  levelbar block:not(.empty) {
-    border: 1px solid #2a76c6;
-    background-color: #4a90d9;
-    box-shadow: 0 1px rgba(0, 0, 0, 0.1);
-    border-radius: 1px; }
-    levelbar block:not(.empty):backdrop {
-      border-color: #4a90d9;
-      box-shadow: none; }
-  levelbar block.low {
-    border-color: #c26000;
-    background-color: #f57900; }
-    levelbar block.low:backdrop {
-      border-color: #f57900; }
-  levelbar block.high {
-    border-color: #2a76c6;
-    background-color: #4a90d9; }
-    levelbar block.high:backdrop {
-      border-color: #4a90d9; }
-  levelbar block.full {
-    border-color: #5aa411;
-    background-color: #73d216; }
-    levelbar block.full:backdrop {
-      border-color: #73d216; }
-  levelbar block.empty {
-    border: 1px solid #2a76c6;
-    border-radius: 1px;
-    background-color: transparent;
-    border-color: rgba(46, 52, 54, 0.2);
+    color: #333333;
+    border-color: #a5a5a1;
+    background-image: linear-gradient(to bottom, white);
     box-shadow: none; }
-    levelbar block.empty:backdrop {
-      border-color: rgba(139, 142, 143, 0.15); }
+levelbar.horizontal.discrete block {
+  margin: 0 1px; }
+levelbar.vertical.discrete block {
+  margin: 1px 0; }
+levelbar block:not(.empty) {
+  border: 1px solid #2a76c6;
+  background-color: #4a90d9;
+  box-shadow: 0 1px rgba(0, 0, 0, 0.1);
+  border-radius: 1px; }
+  levelbar block:not(.empty):backdrop {
+    border-color: #4a90d9;
+    box-shadow: none; }
+levelbar block.low {
+  border-color: #c26000;
+  background-color: #f57900; }
+  levelbar block.low:backdrop {
+    border-color: #f57900; }
+levelbar block.high {
+  border-color: #2a76c6;
+  background-color: #4a90d9; }
+  levelbar block.high:backdrop {
+    border-color: #4a90d9; }
+levelbar block.full {
+  border-color: #5aa411;
+  background-color: #73d216; }
+  levelbar block.full:backdrop {
+    border-color: #73d216; }
+levelbar block.empty {
+  border: 1px solid #2a76c6;
+  border-radius: 1px;
+  background-color: transparent;
+  border-color: rgba(46, 52, 54, 0.2);
+  box-shadow: none; }
+  levelbar block.empty:backdrop {
+    border-color: rgba(139, 142, 143, 0.15); }
 
 /****************
  * Print dialog *
