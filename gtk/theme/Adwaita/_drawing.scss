@@ -4,7 +4,8 @@
 
 @function _widget_edge($c:$borders_edge) {
 // outer highlight "used" on most widgets
-  @return 0 1px transparentize($c, 1); // HACK, killme properly
+  @if $c == none { @return none; }
+  @else { @return 0 1px $c; }
 }
 
 @mixin _shadows($shadow1, $shadow2:none, $shadow3:none, $shadow4:none) {
@@ -37,7 +38,7 @@
                                              $c 90%); }
 }
 
-@mixin entry($t, $fc:$selected_bg_color, $edge: $borders_edge) {
+@mixin entry($t, $fc:$selected_bg_color, $edge: none) {
 //
 // Entries drawing function
 //
@@ -175,7 +176,7 @@
   }
 }
 
-@mixin button($t, $c:$bg_color, $tc:$fg_color, $edge: $borders_edge) {
+@mixin button($t, $c:$bg_color, $tc:$fg_color, $edge: none) {
 //
 // Button drawing function
 //
@@ -215,12 +216,6 @@
     color: $tc;
     outline-color: transparentize($tc, 0.7);
     border-color: if($c!=$bg_color, _border_color($c), $borders_color);
-    /*
-    background-image: linear-gradient(to bottom,
-                                      lighten($c, 16%),
-                                      lighten($c, 6%) 40%,
-                                      lighten($c, 2%));
-    */
     @if $variant == 'light' {
       background-image: linear-gradient(to bottom, lighten($c, 6%), $c 60%, darken($c, 4%));
       @include _button_text_shadow($tc,lighten($c, 6%));
@@ -433,7 +428,7 @@
   }
 }
 
-@mixin trough($flat:false, $c:$bg_color, $tc:$fg_color, $noedge:false) {
+@mixin trough($flat:false, $c:$bg_color, $tc:$fg_color, $noedge:true) {
   color: mix($tc, $bg_color, 80%);
   @if $flat { background-image: linear-gradient(to bottom, $c); }
   @else {
