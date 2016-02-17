@@ -310,7 +310,6 @@ gtk_win32_theme_create_surface (GtkWin32Theme *theme,
 				int           *y_offs_out)
 {
   cairo_surface_t *surface;
-  GdkRGBA color;
   cairo_t *cr;
   int x_offs;
   int y_offs;
@@ -378,10 +377,7 @@ gtk_win32_theme_create_surface (GtkWin32Theme *theme,
 
   cr = cairo_create (surface);
   
-  /* XXX: Do something better here (like printing the theme parts) */
-  gdk_rgba_parse (&color, "pink");
-  gdk_cairo_set_source_rgba (cr, &color);
-  cairo_paint (cr);
+  gtk_win32_draw_theme_background (cr, theme->class_name, xp_part, state, width, height);
 
   cairo_destroy (cr);
   
@@ -432,10 +428,7 @@ gtk_win32_theme_get_part_size (GtkWin32Theme  *theme,
     }
 #endif
 
-  if (width)
-    *width = 1;
-  if (height)
-    *height = 1;
+  gtk_win32_get_theme_part_size (theme->class_name, part, state, width, height);
 }
 
 int

@@ -19,6 +19,7 @@
 #define __GTK_WIN32_DRAW_H__
 
 #include <gdk/gdk.h>
+#include <cairo.h>
 
 G_BEGIN_DECLS
 
@@ -56,8 +57,20 @@ enum {
   GTK_WIN32_SYS_COLOR_MENUBAR
 };
 
-void                    gtk_win32_get_sys_color         (gint            id,
-                                                         GdkRGBA        *color);
+void                    gtk_win32_draw_theme_background         (cairo_t        *cr,
+                                                                 const char     *class_name,
+                                                                 int             part,
+                                                                 int             state,
+                                                                 int             width,
+                                                                 int             height);
+void                    gtk_win32_get_theme_part_size           (const char     *class_name,
+                                                                 int             part,
+                                                                 int             state,
+                                                                 int            *width,
+                                                                 int            *height);
+
+void                    gtk_win32_get_sys_color                 (gint            id,
+                                                                 GdkRGBA        *color);
 
 G_END_DECLS
 
