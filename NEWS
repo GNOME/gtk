@@ -64,6 +64,9 @@ Overview of Changes in GTK+ 3.19.9
  762036 Extra widgets sizing messed up
  762067 Adwaita: half maximized unfocused window has rounded corners
  762080 gtk-demo: add combobox, menu separator and menu check/radio examp...
+ 753351 notifications about removable devices being safe to remove stay a...
+ 762120 Black content when using testfilechooser auto completer
+ 762165 Add translation contexts
 
 * Translation updates:
  Brazilian Portuguese
