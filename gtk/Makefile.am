@@ -564,6 +564,7 @@ gtk_private_h_sources =		\
 	gtktreeprivate.h	\
 	gtkwidgetprivate.h	\
 	gtkwidgetpathprivate.h	\
+	gtkwin32drawprivate.h	\
 	gtkwin32themeprivate.h	\
 	gtkwindowprivate.h	\
 	gtktreemenu.h		\
@@ -926,6 +927,7 @@ gtk_base_c_sources = 		\
 	gtkwidgetpath.c		\
 	gtkwindow.c		\
 	gtkwindowgroup.c	\
+	gtkwin32draw.c		\
 	gtkwin32theme.c		\
 	gdkpixbufutils.c
 
