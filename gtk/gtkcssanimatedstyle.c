@@ -294,6 +294,10 @@ gtk_css_animated_style_create_css_transitions (GSList              *animations,
             }
         }
 
+      if (_gtk_css_value_equal (gtk_css_style_get_value (source, i),
+                                gtk_css_style_get_value (base_style, i)))
+        continue;
+
       animation = _gtk_css_transition_new (i,
                                            gtk_css_style_get_value (source, i),
                                            _gtk_css_array_value_get_nth (timing_functions, i),
