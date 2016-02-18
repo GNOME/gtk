@@ -390,8 +390,17 @@ $_dot_color: if($variant=='light', $selected_bg_color,
 }
 
 button {
-  @at-root %button_basic, &{
-    $_button_transition: all 200ms $ease-out-quad;
+  @at-root %button_basic, & {
+    // animating "all" is not needed and also triggers some weird gtk sizing issue so, the transition is restricted
+    // to just the needed properties (see $_button_transition_properties).
+
+    $_button_transition_details: 200ms $ease-out-quad;
+    $_button_transition_properties: background-color, background-image, border-color, box-shadow, text-shadow, -gtk-icon-shadow;
+    $_button_transition:  color $_button_transition_details;
+
+    @each $single_transition in $_button_transition_properties {
+      $_button_transition: $_button_transition, $single_transition $_button_transition_details;
+    }
 
     min-height: 24px;
     min-width: 16px;
