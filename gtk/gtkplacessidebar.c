@@ -451,10 +451,7 @@ add_place (GtkPlacesSidebar            *sidebar,
   if (show_unmount || show_eject)
     g_assert (place_type != PLACES_BOOKMARK);
 
-  if (mount == NULL)
-    show_eject_button = FALSE;
-  else
-    show_eject_button = (show_unmount || show_eject);
+  show_eject_button = (show_unmount || show_eject);
 
   tooltip_escaped = g_markup_escape_text (tooltip, -1);
   row = g_object_new (GTK_TYPE_SIDEBAR_ROW,
