@@ -444,6 +444,16 @@ _gdk_wayland_display_open (const gchar *display_name)
         }
     }
 
+  /* Make sure we have xdg_shell at least */
+  if (display_wayland->xdg_shell == NULL)
+    {
+      g_warning ("Wayland compositor does not support xdg_shell interface,"
+                 " not using Wayland display");
+      g_object_unref (display);
+
+      return NULL;
+    }
+
   gdk_input_init (display);
 
   display_wayland->selection = gdk_wayland_selection_new ();
