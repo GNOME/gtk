@@ -249,8 +249,8 @@ entry {
   &.flat:focus {
     min-height: 0;
     padding: 2px;
-    @include entry(normal, $edge:none);
-    border: none;
+    background-image: none;
+    border-color: transparent;
     border-radius: 0;
   }
 
@@ -263,9 +263,7 @@ entry {
   &:backdrop:disabled { @include entry(backdrop-insensitive); }
 
   selection,
-  selection:focus {
-    @extend %selected_items;
-  }
+  selection:focus { @extend %selected_items; }
 
   progress {
     margin: 1px;
@@ -720,7 +718,7 @@ button {
 // all the following is for the +|- buttons on inline toolbars, that way
 // should really be deprecated...
 .inline-toolbar toolbutton > button { // redefining the button look is
-                                          // needed since those are flat...
+                                      // needed since those are flat...
   @include button(normal);
 
   &:hover { @include button(hover); }
@@ -1047,31 +1045,7 @@ spinbutton {
       min-width: 32px;
       padding: 0;
 
-      &.up {
-        @extend %top_button;
-        @include button(normal, $edge:none);
-
-        &:active {
-          @extend %top_button;
-          @include button(active, $edge:none);
-        }
-
-        &:hover {
-          @extend %top_button;
-          @include button(hover, $edge:none);
-        }
-
-        &:disabled {
-          @extend %top_button;
-          @include button(insensitive, $edge:none);
-        }
-
-        &:backdrop {
-          @extend %top_button;
-          @include button(backdrop, $edge:none);
-          &:disabled { @include button(backdrop-insensitive, $edge:none); }
-        }
-      }
+      &.up { @extend %top_button; }
 
       &.down { @extend %bottom_button; }
     }
@@ -1264,78 +1238,75 @@ headerbar {
     .subtitle:link { @extend *:link:selected;  }
 
     button {
-      @include button(normal, $selected_bg_color, $selected_fg_color, $_hc);
+      @include button(normal, $selected_bg_color, $selected_fg_color);
 
       &.flat { @include button(undecorated); }
 
-      &:hover { @include button(hover, $selected_bg_color, $selected_fg_color, $_hc); }
+      &:hover { @include button(hover, $selected_bg_color, $selected_fg_color); }
 
-      &:active, &:checked { @include button(active, $selected_bg_color, $selected_fg_color, $_hc); }
+      &:active, &:checked { @include button(active, $selected_bg_color, $selected_fg_color); }
 
       &:backdrop,
       &.flat:backdrop {
-        @include button(backdrop, $selected_bg_color, $selected_fg_color, $_hc);
+        @include button(backdrop, $selected_bg_color, $selected_fg_color);
         -gtk-icon-effect: none;
         border-color: $selected_borders_color;
 
         &:active,
         &:checked {
-          @include button(backdrop-active, $selected_bg_color, $selected_fg_color, $_hc);
+          @include button(backdrop-active, $selected_bg_color, $selected_fg_color);
           border-color: $selected_borders_color;
         }
 
         &:disabled {
-          @include button(backdrop-insensitive, $selected_bg_color, $selected_fg_color, $_hc);
+          @include button(backdrop-insensitive, $selected_bg_color, $selected_fg_color);
           border-color: $selected_borders_color;
         }
 
         &:disabled:active,
         &:disabled:checked {
-          @include button(backdrop-insensitive-active, $selected_bg_color,
-                          $selected_fg_color, $_hc);
+          @include button(backdrop-insensitive-active, $selected_bg_color, $selected_fg_color);
           border-color: $selected_borders_color;
         }
       }
 
       &.flat:backdrop,
       &.flat:disabled,
-      &.flat:disabled:backdrop {
-        @include button(undecorated);
-      }
+      &.flat:disabled:backdrop { @include button(undecorated); }
 
       &:disabled {
-        @include button(insensitive, $selected_bg_color, $selected_fg_color, $_hc);
+        @include button(insensitive, $selected_bg_color, $selected_fg_color);
 
         &:active,
-        &:checked { @include button(insensitive-active, $selected_bg_color, $selected_fg_color, $_hc); }
+        &:checked { @include button(insensitive-active, $selected_bg_color, $selected_fg_color); }
       }
 
       &.suggested-action {
-        @include button(normal, $edge:$_hc);
+        @include button(normal);
         border-color: $selected_borders_color;
 
         &:hover {
-          @include button(hover, $edge:$_hc);
+          @include button(hover);
           border-color: $selected_borders_color;
         }
 
         &:active {
-          @include button(active, $edge:$_hc);
+          @include button(active);
           border-color: $selected_borders_color;
         }
 
         &:disabled {
-          @include button(insensitive, $edge:$_hc);
+          @include button(insensitive);
           border-color: $selected_borders_color;
         }
 
         &:backdrop {
-          @include button(backdrop, $edge:$_hc);
+          @include button(backdrop);
           border-color: $selected_borders_color;
         }
 
         &:backdrop:disabled {
-          @include button(backdrop-insensitive, $edge:$_hc);
+          @include button(backdrop-insensitive);
           border-color: $selected_borders_color;
         }
       }
@@ -2240,7 +2211,7 @@ switch {
 
   &:active slider { border: 1px solid $selected_borders_color; }
 
-  &:disabled slider { @include button(insensitive, $edge: none); }
+  &:disabled slider { @include button(insensitive); }
 
   &:backdrop {
     slider { @include button(backdrop); }
@@ -2957,59 +2928,13 @@ row:selected {
   @extend %selected_items;
 
   button {
-    @include button(normal, $edge:none);
     @if $variant == 'light' { border-color: $selected_borders_color; }
 
-    &.flat {
-      @include button(undecorated, $edge:none);
+    &.flat:not(:active):not(:checked):not(:hover):not(disabled) {
       color: $selected_fg_color;
-    }
+      border-color: transparent;
 
-    &:hover {
-      @include button(hover, $edge:none);
-      @if $variant == 'light' { border-color: $selected_borders_color; }
-    }
-
-    &:active,
-    &:checked {
-      @include button(active, $edge:none);
-      @if $variant == 'light' { border-color: $selected_borders_color; }
-    }
-
-    &:backdrop,
-    &.flat:backdrop {
-      @include button(backdrop, $edge:none);
-      @if $variant == 'light' { border-color: $selected_borders_color; }
-
-      &:active,
-      &:checked {
-        @include button(backdrop-active, $edge:none);
-        @if $variant == 'light' { border-color: $selected_borders_color; }
-      }
-
-      &:disabled {
-        @include button(backdrop-insensitive, $edge:none);
-        @if $variant == 'light' { border-color: $selected_borders_color; }
-
-        &:active,
-        &:checked {
-          @include button(backdrop-insensitive-active, $edge:none);
-          @if $variant == 'light' { border-color: $selected_borders_color; }
-        }
-      }
-    }
-
-    &.flat:backdrop {
-      @include button(undecorated);
-      color: if($variant=='light', $backdrop_base_color, $backdrop_fg_color);
-    }
-
-    &:disabled {
-      @include button(insensitive, $edge:none);
-      @if $variant == 'light' { border-color: $selected_borders_color; }
-
-      &:active,
-      &:checked { @include button(insensitive-active, $edge:none); }
+      &:backdrop { color: if($variant=='light', $backdrop_base_color, $backdrop_fg_color); }
     }
   }
 }
@@ -3140,86 +3065,20 @@ messagedialog { // Message Dialog styling
     .dialog-action-area button {
       padding: 10px 14px; // labels are not vertically centered on message dialog, this is a workaround
       border-radius: 0;
-      @include button(normal, $edge:none);
-      @extend %middle_button;
-
-      &:hover {
-        @include button(hover, $edge:none);
-        @extend %middle_button;
-      }
-
-      &:active {
-        @include button(active, $edge:none);
-        @extend %middle_button;
-      }
-
-      &:disabled {
-        @include button(insensitive, $edge:none);
-        @extend %middle_button;
-      }
-
-      &:backdrop {
-        @include button(backdrop, $edge:none);
-        @extend %middle_button;
-      }
-
-      &:backdrop:disabled {
-        @include button(backdrop-insensitive, $edge:none);
-        @extend %middle_button;
-      }
-
-      @each $b_type, $b_color in (suggested-action, $selected_bg_color),
-                                 (destructive-action, $destructive_color) {
-        &.#{$b_type} {
-          @include button(normal, $b_color, white, $edge:none);
-          @extend %middle_button;
-
-          &:hover {
-            @include button(hover, $b_color, white, $edge:none);
-            @extend %middle_button;
-          }
-
-          &:active {
-            @include button(active, $b_color, white, $edge:none);
-            @extend %middle_button;
-          }
-
-          &:backdrop {
-            @include button(backdrop, $b_color, white, $edge:none);
-            @extend %middle_button;
-
-            &:disabled {
-              @include button(backdrop-insensitive, $edge:none);
-              @extend %middle_button;
-            }
-          }
-
-          &:disabled {
-            @include button(insensitive, $edge:none);
-            @extend %middle_button;
-          }
-        }
-      }
-
-      &:first-child{ @extend %first_button; }
-      &:last-child { @extend %last_button; }
-    }
-
-    %middle_button {
       border-left-style: solid;
       border-right-style: none;
       border-bottom-style: none;
-    }
 
-    %last_button {
-      border-bottom-right-radius: 7px;
-      -gtk-outline-bottom-right-radius: 5px;
-    }
+      &:first-child{
+        border-left-style: none;
+        border-bottom-left-radius: 7px;
+        -gtk-outline-bottom-left-radius: 5px;
+      }
 
-    %first_button {
-      border-left-style: none;
-      border-bottom-left-radius: 7px;
-      -gtk-outline-bottom-left-radius: 5px;
+      &:last-child {
+        border-bottom-right-radius: 7px;
+        -gtk-outline-bottom-right-radius: 5px;
+      }
     }
   }
 }
