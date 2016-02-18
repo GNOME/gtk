@@ -80,5 +80,3 @@ gboolean	  _ignore_destroy_clipboard = FALSE;
 
 HGLOBAL           _delayed_rendering_data = NULL;
 GHashTable       *_format_atom_table = NULL;
-
-gboolean          _is_win8_or_later = FALSE;
