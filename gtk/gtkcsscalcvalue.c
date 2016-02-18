@@ -106,7 +106,7 @@ gtk_css_value_calc_compute (GtkCssValue             *value,
 {
   GtkCssValue *result;
   GPtrArray *array;
-  gboolean changed;
+  gboolean changed = FALSE;
   gsize i;
 
   array = g_ptr_array_new ();
