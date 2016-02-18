@@ -29,9 +29,6 @@
 
 GdkDisplay	 *_gdk_display = NULL;
 
-gint		  _gdk_num_monitors;
-GdkWin32Monitor  *_gdk_monitors = NULL;
-
 gint		  _gdk_offset_x, _gdk_offset_y;
 
 HDC		  _gdk_display_hdc;

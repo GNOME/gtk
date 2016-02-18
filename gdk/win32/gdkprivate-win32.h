@@ -257,16 +257,6 @@ extern LRESULT CALLBACK _gdk_win32_window_procedure (HWND, UINT, WPARAM, LPARAM)
 
 extern GdkDisplay       *_gdk_display;
 
-extern gint		 _gdk_num_monitors;
-typedef struct _GdkWin32Monitor GdkWin32Monitor;
-struct _GdkWin32Monitor
-{
-  gchar *name;
-  gint width_mm, height_mm;
-  GdkRectangle rect;
-};
-extern GdkWin32Monitor  *_gdk_monitors;
-
 /* Offsets to add to Windows coordinates (which are relative to the
  * primary monitor's origin, and thus might be negative for monitors
  * to the left and/or above the primary monitor) to get GDK
@@ -545,7 +535,7 @@ void _gdk_win32_emit_configure_event (GdkWindow *window);
 void _gdk_win32_windowing_init (void);
 void _gdk_screen_init_root_window (GdkWin32Screen *screen_win32);
 void _gdk_screen_init_root_window_size (GdkWin32Screen *screen);
-void _gdk_monitor_init(void);
+void _gdk_monitor_init(GdkWin32Screen *screen);
 void _gdk_visual_init (GdkScreen *screen);
 void _gdk_dnd_init    (void);
 void _gdk_events_init (void);

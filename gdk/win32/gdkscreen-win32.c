@@ -25,9 +25,19 @@
 
 #include <dwmapi.h>
 
+typedef struct
+{
+  gchar *name;
+  gint width_mm, height_mm;
+  GdkRectangle rect;
+} GdkWin32Monitor;
+
 struct _GdkWin32Screen
 {
   GdkScreen parent_instance;
+
+  gint num_monitors;
+  GdkWin32Monitor *monitors;
 
   GdkWindow *root_window;
 
@@ -78,9 +88,9 @@ _gdk_screen_init_root_window_size (GdkWin32Screen *screen)
   GdkRectangle rect;
   int i;
 
-  rect = _gdk_monitors[0].rect;
-  for (i = 1; i < _gdk_num_monitors; i++)
-    gdk_rectangle_union (&rect, &_gdk_monitors[i].rect, &rect);
+  rect = screen->monitors[0].rect;
+  for (i = 1; i < screen->num_monitors; i++)
+    gdk_rectangle_union (&rect, &screen->monitors[i].rect, &rect);
 
   screen->root_window->width = rect.width;
   screen->root_window->height = rect.height;
@@ -124,6 +134,126 @@ _gdk_screen_init_root_window (GdkWin32Screen *screen_win32)
   GDK_NOTE (MISC, g_print ("screen->root_window=%p\n", window));
 }
 
+static BOOL CALLBACK
+count_monitor (HMONITOR hmonitor,
+               HDC      hdc,
+               LPRECT   rect,
+               LPARAM   data)
+{
+  gint *n = (gint *) data;
+
+  (*n)++;
+
+  return TRUE;
+}
+
+typedef struct {
+    GdkWin32Screen *screen;
+    gint index;
+} EnumMonitorData;
+
+static BOOL CALLBACK
+enum_monitor (HMONITOR hmonitor,
+              HDC      hdc,
+              LPRECT   rect,
+              LPARAM   param)
+{
+  /* The struct MONITORINFOEX definition is for some reason different
+   * in the winuser.h bundled with mingw64 from that in MSDN and the
+   * official 32-bit mingw (the MONITORINFO part is in a separate "mi"
+   * member). So to keep this easily compileable with either, repeat
+   * the MSDN definition it here.
+   */
+  typedef struct tagMONITORINFOEXA2 {
+    DWORD cbSize;
+    RECT  rcMonitor;
+    RECT  rcWork;
+    DWORD dwFlags;
+    CHAR szDevice[CCHDEVICENAME];
+  } MONITORINFOEXA2;
+
+  EnumMonitorData *data = (EnumMonitorData *) param;
+  GdkWin32Monitor *monitor;
+  MONITORINFOEXA2 monitor_info;
+  HDC hDC;
+
+  g_assert (data->index < data->screen->num_monitors);
+
+  monitor = data->screen->monitors + data->index;
+
+  monitor_info.cbSize = sizeof (MONITORINFOEXA2);
+  GetMonitorInfoA (hmonitor, (MONITORINFO *) &monitor_info);
+
+#ifndef MONITORINFOF_PRIMARY
+#define MONITORINFOF_PRIMARY 1
+#endif
+
+  monitor->name = g_strdup (monitor_info.szDevice);
+  hDC = CreateDCA ("DISPLAY", monitor_info.szDevice, NULL, NULL);
+  monitor->width_mm = GetDeviceCaps (hDC, HORZSIZE);
+  monitor->height_mm = GetDeviceCaps (hDC, VERTSIZE);
+  DeleteDC (hDC);
+  monitor->rect.x = monitor_info.rcMonitor.left;
+  monitor->rect.y = monitor_info.rcMonitor.top;
+  monitor->rect.width = monitor_info.rcMonitor.right - monitor_info.rcMonitor.left;
+  monitor->rect.height = monitor_info.rcMonitor.bottom - monitor_info.rcMonitor.top;
+
+  if (monitor_info.dwFlags & MONITORINFOF_PRIMARY && data->index != 0)
+    {
+      /* Put primary monitor at index 0, just in case somebody needs
+       * to know which one is the primary.
+       */
+      GdkWin32Monitor temp = *monitor;
+      *monitor = data->screen->monitors[0];
+      data->screen->monitors[0] = temp;
+    }
+
+  data->index++;
+
+  return TRUE;
+}
+
+void
+_gdk_monitor_init (GdkWin32Screen *screen)
+{
+  gint count;
+  EnumMonitorData data;
+  gint i;
+
+  count = 0;
+  EnumDisplayMonitors (NULL, NULL, count_monitor, (LPARAM) &count);
+  screen->num_monitors = count;
+
+  screen->monitors = g_renew (GdkWin32Monitor, screen->monitors, screen->num_monitors);
+
+  data.screen = screen;
+  data.index = 0;
+  EnumDisplayMonitors (NULL, NULL, enum_monitor, (LPARAM) &data);
+
+  _gdk_offset_x = G_MININT;
+  _gdk_offset_y = G_MININT;
+
+  /* Calculate offset */
+  for (i = 0; i < screen->num_monitors; i++)
+    {
+      GdkRectangle *rect = &screen->monitors[i].rect;
+      _gdk_offset_x = MAX (_gdk_offset_x, -rect->x);
+      _gdk_offset_y = MAX (_gdk_offset_y, -rect->y);
+    }
+  GDK_NOTE (MISC, g_print ("Multi-monitor offset: (%d,%d)\n",
+                           _gdk_offset_x, _gdk_offset_y));
+
+  /* Translate monitor coords into GDK coordinate space */
+  for (i = 0; i < screen->num_monitors; i++)
+    {
+      GdkRectangle *rect = &screen->monitors[i].rect;
+      rect->x += _gdk_offset_x;
+      rect->y += _gdk_offset_y;
+      GDK_NOTE (MISC, g_print ("Monitor %d: %dx%d@%+d%+d\n", i,
+                               rect->width, rect->height, rect->x, rect->y));
+    }
+}
+
 static GdkDisplay *
 gdk_win32_screen_get_display (GdkScreen *screen)
 {
@@ -165,7 +295,7 @@ gdk_win32_screen_get_n_monitors (GdkScreen *screen)
 {
   g_return_val_if_fail (screen == gdk_display_get_default_screen (gdk_display_get_default ()), 0);
 
-  return _gdk_num_monitors;
+  return GDK_WIN32_SCREEN (screen)->num_monitors;
 }
 
 static gint
@@ -180,30 +310,36 @@ static gint
 gdk_win32_screen_get_monitor_width_mm (GdkScreen *screen,
                                        gint       num_monitor)
 {
-  g_return_val_if_fail (screen == gdk_display_get_default_screen (gdk_display_get_default ()), 0);
-  g_return_val_if_fail (num_monitor < _gdk_num_monitors, 0);
+  GdkWin32Screen *win32_screen = GDK_WIN32_SCREEN (screen);
 
-  return _gdk_monitors[num_monitor].width_mm;
+  g_return_val_if_fail (screen == gdk_display_get_default_screen (gdk_display_get_default ()), 0);
+  g_return_val_if_fail (num_monitor < win32_screen->num_monitors, 0);
+
+  return win32_screen->monitors[num_monitor].width_mm;
 }
 
 static gint
 gdk_win32_screen_get_monitor_height_mm (GdkScreen *screen,
                                         gint       num_monitor)
 {
-  g_return_val_if_fail (screen == gdk_display_get_default_screen (gdk_display_get_default ()), 0);
-  g_return_val_if_fail (num_monitor < _gdk_num_monitors, 0);
+  GdkWin32Screen *win32_screen = GDK_WIN32_SCREEN (screen);
 
-  return _gdk_monitors[num_monitor].height_mm;
+  g_return_val_if_fail (screen == gdk_display_get_default_screen (gdk_display_get_default ()), 0);
+  g_return_val_if_fail (num_monitor < win32_screen->num_monitors, 0);
+
+  return win32_screen->monitors[num_monitor].height_mm;
 }
 
 static gchar *
 gdk_win32_screen_get_monitor_plug_name (GdkScreen *screen,
                                         gint       num_monitor)
 {
-  g_return_val_if_fail (screen == gdk_display_get_default_screen (gdk_display_get_default ()), 0);
-  g_return_val_if_fail (num_monitor < _gdk_num_monitors, 0);
+  GdkWin32Screen *win32_screen = GDK_WIN32_SCREEN (screen);
 
-  return g_strdup (_gdk_monitors[num_monitor].name);
+  g_return_val_if_fail (screen == gdk_display_get_default_screen (gdk_display_get_default ()), NULL);
+  g_return_val_if_fail (num_monitor < win32_screen->num_monitors, NULL);
+
+  return g_strdup (win32_screen->monitors[num_monitor].name);
 }
 
 static void
@@ -211,10 +347,12 @@ gdk_win32_screen_get_monitor_geometry (GdkScreen    *screen,
                                        gint          num_monitor,
                                        GdkRectangle *dest)
 {
-  g_return_if_fail (screen == gdk_display_get_default_screen (gdk_display_get_default ()));
-  g_return_if_fail (num_monitor < _gdk_num_monitors);
+  GdkWin32Screen *win32_screen = GDK_WIN32_SCREEN (screen);
 
-  *dest = _gdk_monitors[num_monitor].rect;
+  g_return_if_fail (screen == gdk_display_get_default_screen (gdk_display_get_default ()));
+  g_return_if_fail (num_monitor < win32_screen->num_monitors);
+
+  *dest = win32_screen->monitors[num_monitor].rect;
 }
 
 static gint
