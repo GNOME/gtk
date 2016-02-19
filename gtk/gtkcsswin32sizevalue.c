@@ -78,6 +78,7 @@ gtk_css_value_win32_compute_size (const GtkCssValue *value)
     {
     case GTK_WIN32_SIZE:
       size = gtk_win32_theme_get_size (value->theme, value->val.size.id);
+      break;
 
     case GTK_WIN32_PART_WIDTH:
       gtk_win32_theme_get_part_size (value->theme, value->val.part.part, value->val.part.state, &size, NULL);
