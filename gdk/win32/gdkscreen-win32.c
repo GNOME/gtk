@@ -403,6 +403,12 @@ gdk_win32_screen_is_composited (GdkScreen *screen)
 static void
 gdk_win32_screen_finalize (GObject *object)
 {
+  GdkWin32Screen *screen = GDK_WIN32_SCREEN (object);
+  gint i;
+
+  for (i = 0; i < screen->num_monitors; i++)
+    g_free (screen->monitors[i].name);
+  g_free (screen->monitors);
 
   G_OBJECT_CLASS (gdk_win32_screen_parent_class)->finalize (object);
 }
