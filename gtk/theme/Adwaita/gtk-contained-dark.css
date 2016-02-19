@@ -2349,16 +2349,16 @@ switch {
     color: #eeeeec;
     outline-color: rgba(238, 238, 236, 0.3);
     border-color: #1c1f1f;
-    background-image: linear-gradient(to bottom, #343a3a, #2f3434 60%, #2a2f2f);
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0.05), inset 0 -2px #393f3f, inset 0 -1px #212424, 0 1px rgba(0, 0, 0, 0.1); }
+    text-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
+    -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
+    background-image: linear-gradient(to bottom, #323737 20%, #2a2f2f 90%);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.05), inset 0 -2px #2f3434, inset 0 -1px #232727, 0 1px rgba(0, 0, 0, 0.1); }
   switch:hover slider {
     color: #eeeeec;
     outline-color: rgba(238, 238, 236, 0.3);
     border-color: #1c1f1f;
-    background-image: linear-gradient(to bottom, #3b4242, #343a3a 60%, #2f3434);
-    text-shadow: 0 -1px rgba(0, 0, 0, 0.76376);
-    -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.76376);
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0.05), inset 0 #393f3f, inset 0 -1px #2a2f2f, 0 1px rgba(0, 0, 0, 0.1); }
+    background-image: linear-gradient(to bottom, #393f3f 20%, #2f3434 90%);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.05), inset 0 -2px #323737, inset 0 -1px #2a2f2f, 0 1px rgba(0, 0, 0, 0.1); }
   switch:active slider {
     border: 1px solid #0f2b48; }
   switch:disabled slider {
@@ -2446,8 +2446,10 @@ radio {
   color: #eeeeec;
   outline-color: rgba(238, 238, 236, 0.3);
   border-color: #1c1f1f;
-  background-image: linear-gradient(to bottom, #343a3a, #2f3434 60%, #2a2f2f);
-  box-shadow: inset 0 1px rgba(255, 255, 255, 0.05), inset 0 -2px #393f3f, inset 0 -1px #212424, 0 1px rgba(0, 0, 0, 0.1); }
+  text-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
+  -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
+  background-image: linear-gradient(to bottom, #323737 20%, #2a2f2f 90%);
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.05), inset 0 -2px #2f3434, inset 0 -1px #232727, 0 1px rgba(0, 0, 0, 0.1); }
   check:only-child,
   radio:only-child {
     margin: 0; }
@@ -2456,10 +2458,8 @@ radio {
     color: #eeeeec;
     outline-color: rgba(238, 238, 236, 0.3);
     border-color: #1c1f1f;
-    background-image: linear-gradient(to bottom, #3b4242, #343a3a 60%, #2f3434);
-    text-shadow: 0 -1px rgba(0, 0, 0, 0.76376);
-    -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.76376);
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0.05), inset 0 #393f3f, inset 0 -1px #2a2f2f, 0 1px rgba(0, 0, 0, 0.1); }
+    background-image: linear-gradient(to bottom, #393f3f 20%, #2f3434 90%);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.05), inset 0 -2px #323737, inset 0 -1px #2a2f2f, 0 1px rgba(0, 0, 0, 0.1); }
   check:active,
   radio:active {
     color: #eeeeec;
@@ -2679,18 +2679,18 @@ scale {
     color: #eeeeec;
     outline-color: rgba(238, 238, 236, 0.3);
     border-color: #1c1f1f;
-    background-image: linear-gradient(to bottom, #343a3a, #2f3434 60%, #2a2f2f);
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0.05), inset 0 -2px #393f3f, inset 0 -1px #212424, 0 1px rgba(0, 0, 0, 0.1);
+    text-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
+    -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
+    background-image: linear-gradient(to bottom, #323737 20%, #2a2f2f 90%);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.05), inset 0 -2px #2f3434, inset 0 -1px #232727, 0 1px rgba(0, 0, 0, 0.1);
     border: 1px solid #151717;
     border-radius: 100%; }
     scale slider:hover {
       color: #eeeeec;
       outline-color: rgba(238, 238, 236, 0.3);
       border-color: #1c1f1f;
-      background-image: linear-gradient(to bottom, #3b4242, #343a3a 60%, #2f3434);
-      text-shadow: 0 -1px rgba(0, 0, 0, 0.76376);
-      -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.76376);
-      box-shadow: inset 0 1px rgba(255, 255, 255, 0.05), inset 0 #393f3f, inset 0 -1px #2a2f2f, 0 1px rgba(0, 0, 0, 0.1); }
+      background-image: linear-gradient(to bottom, #393f3f 20%, #2f3434 90%);
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0.05), inset 0 -2px #323737, inset 0 -1px #2a2f2f, 0 1px rgba(0, 0, 0, 0.1); }
     scale slider:active {
       border-color: #0f2b48; }
     scale slider:disabled {
