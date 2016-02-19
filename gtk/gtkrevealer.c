@@ -339,6 +339,13 @@ gtk_revealer_get_child_allocation (GtkRevealer   *revealer,
           transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT)
         gtk_widget_get_preferred_width_for_height (child, MAX (0, allocation->height - vertical_padding), NULL,
                                                    &child_allocation->width);
+      else if (transition == GTK_REVEALER_TRANSITION_TYPE_NONE)
+        {
+          gtk_widget_get_preferred_width_for_height (child, MAX (0, allocation->height - vertical_padding), NULL,
+                                                     &child_allocation->width);
+          gtk_widget_get_preferred_height_for_width (child, MAX (0, allocation->width - horizontal_padding), NULL,
+                                                     &child_allocation->height);
+        }
       else
         gtk_widget_get_preferred_height_for_width (child, MAX (0, allocation->width - horizontal_padding), NULL,
                                                    &child_allocation->height);
@@ -873,7 +880,8 @@ set_width_with_paddings (GtkRevealer *revealer,
   natural_width = preferred_natural_width + horizontal_padding;
 
   transition = effective_transition (revealer);
-  if (transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT ||
+  if (transition == GTK_REVEALER_TRANSITION_TYPE_NONE ||
+      transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT ||
       transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT)
     {
       /* Paddings are included in the animation */
