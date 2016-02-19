@@ -73,7 +73,7 @@ typedef HRESULT (FAR PASCAL *GetThemeBackgroundExtentFunc)  (HTHEME hTheme,
 
 static GetThemeSysFontFunc get_theme_sys_font = NULL;
 static GetThemeSysColorFunc GetThemeSysColor = NULL;
-static GetThemeSysSizeFunc get_theme_sys_metric = NULL;
+static GetThemeSysSizeFunc GetThemeSysSize = NULL;
 static OpenThemeDataFunc OpenThemeData = NULL;
 static CloseThemeDataFunc CloseThemeData = NULL;
 static DrawThemeBackgroundFunc draw_theme_background = NULL;
@@ -215,7 +215,7 @@ gtk_win32_theme_init (void)
       enable_theme_dialog_texture = (EnableThemeDialogTextureFunc) GetProcAddress (uxtheme_dll, "EnableThemeDialogTexture");
       get_theme_sys_font = (GetThemeSysFontFunc) GetProcAddress (uxtheme_dll, "GetThemeSysFont");
       GetThemeSysColor = (GetThemeSysColorFunc) GetProcAddress (uxtheme_dll, "GetThemeSysColor");
-      get_theme_sys_metric = (GetThemeSysSizeFunc) GetProcAddress (uxtheme_dll, "GetThemeSysSize");
+      GetThemeSysSize = (GetThemeSysSizeFunc) GetProcAddress (uxtheme_dll, "GetThemeSysSize");
       is_theme_partially_transparent = (IsThemeBackgroundPartiallyTransparentFunc) GetProcAddress (uxtheme_dll, "IsThemeBackgroundPartiallyTransparent");
       draw_theme_parent_background = (DrawThemeParentBackgroundFunc) GetProcAddress (uxtheme_dll, "DrawThemeParentBackground");
       GetThemePartSize = (GetThemePartSizeFunc) GetProcAddress (uxtheme_dll, "GetThemePartSize");
@@ -480,16 +480,21 @@ int
 gtk_win32_theme_get_size (GtkWin32Theme *theme,
 			  int            id)
 {
+  int size;
+
 #ifdef G_OS_WIN32
-  if (use_xp_theme && get_theme_sys_metric != NULL)
+  if (use_xp_theme && GetThemeSysSize != NULL)
     {
       HTHEME htheme = gtk_win32_theme_get_htheme (theme);
 
       /* If htheme is NULL it will just return the GetSystemMetrics value */
-      return get_theme_sys_metric (htheme, id);
+      size = GetThemeSysSize (htheme, id);
+      /* fall through on invalid parameter */
+      if (GetLastError () == 0)
+        return size;
     }
-  else
-    return GetSystemMetrics (id);
+
+  return GetSystemMetrics (id);
 #else
   return -1;
 #endif
