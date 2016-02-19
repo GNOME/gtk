@@ -403,11 +403,8 @@ gdk_win32_screen_is_composited (GdkScreen *screen)
 static void
 gdk_win32_screen_finalize (GObject *object)
 {
-}
 
-static void
-gdk_win32_screen_dispose (GObject *object)
-{
+  G_OBJECT_CLASS (gdk_win32_screen_parent_class)->finalize (object);
 }
 
 static void
@@ -416,7 +413,6 @@ gdk_win32_screen_class_init (GdkWin32ScreenClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GdkScreenClass *screen_class = GDK_SCREEN_CLASS (klass);
 
-  object_class->dispose = gdk_win32_screen_dispose;
   object_class->finalize = gdk_win32_screen_finalize;
 
   screen_class->get_display = gdk_win32_screen_get_display;
