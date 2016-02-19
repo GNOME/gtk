@@ -441,6 +441,15 @@ gdk_display_manager_open_display (GdkDisplayManager *manager,
   backend_list = g_getenv ("GDK_BACKEND");
   if (backend_list == NULL)
     backend_list = allowed_backends;
+  else if (g_strcmp0 (backend_list, "help") == 0)
+    {
+      fprintf (stderr, "Supported GDK backends:");
+      for (i = 0; gdk_backends[i].name != NULL; i++)
+        fprintf (stderr, " %s", gdk_backends[i].name);
+      fprintf (stderr, "\n");
+
+      backend_list = allowed_backends;
+    }
   backends = g_strsplit (backend_list, ",", 0);
 
   display = NULL;

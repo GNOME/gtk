@@ -477,7 +477,7 @@ nevertheless.
   <para>
     If set, selects the GDK backend to use. Selecting a backend requires that
     GTK+ is compiled with support for that backend. The following backends can
-    be selected:
+    be selected, provided they are included in the GDK libraries you are using:
     <variablelist>
 
       <varlistentry>
@@ -513,7 +513,8 @@ nevertheless.
     </variablelist>
     Since 3.10, this environment variable can contain a comma-separated list
     of backend names, which are tried in order. The list may also contain
-    a *, which means: try all remaining backends.
+    a *, which means: try all remaining backends. The special value "help" can
+    be used to make GDK print out a list of all available backends.
     For more information about selecting backends, see the gdk_display_manager_get() function.
   </para>
 </formalpara>
