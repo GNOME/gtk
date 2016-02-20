@@ -37,7 +37,7 @@
      bordercolor="#666666"
      borderopacity="1"
      inkscape:current-layer="layer9"
-     inkscape:cx="-16.098116"
+     inkscape:cx="-15.966869"
      inkscape:cy="8.8415069"
      gridtolerance="10"
      inkscape:guide-bbox="true"
@@ -101,7 +101,7 @@
      transform="translate(-401.00015,-339)">
     <path
        style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:Sans;-inkscape-font-specification:Sans;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;baseline-shift:baseline;text-anchor:start;display:inline;overflow:visible;visibility:visible;fill:#bebebe;fill-opacity:1;stroke:none;stroke-width:3;marker:none;enable-background:accumulate"
-       d="m 415.00015,340.98047 -6.5,6.39453 -2.9375,-2.9375 -2.125,2.125 5.0625,5.0625 6.5,-6.60547 0,-4.03906 z"
+       d="m 415.00015,339.98047 -6.5,6.39453 -2.9375,-2.9375 -2.125,2.125 5.0625,5.0625 6.5,-6.60547 0,-4.03906 z"
        id="path8913-6-7-1-5-1"
        inkscape:connector-curvature="0" />
   </g>
