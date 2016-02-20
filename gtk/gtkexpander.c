@@ -450,6 +450,7 @@ gtk_expander_init (GtkExpander *expander)
                                            priv->gadget,
                                            NULL);
   gtk_box_gadget_set_orientation (GTK_BOX_GADGET (priv->title_gadget), GTK_ORIENTATION_HORIZONTAL);
+  gtk_box_gadget_set_draw_focus (GTK_BOX_GADGET (priv->title_gadget), TRUE);
   gtk_box_gadget_insert_gadget (GTK_BOX_GADGET (priv->gadget), -1, priv->title_gadget, FALSE, FALSE, GTK_ALIGN_START);
 
   priv->arrow_gadget = gtk_builtin_icon_new ("arrow",
