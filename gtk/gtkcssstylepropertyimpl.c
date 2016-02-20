@@ -1380,7 +1380,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_PROPERTY_OUTLINE_STYLE,
                                           GTK_TYPE_BORDER_STYLE,
                                           0,
-                                          GTK_CSS_AFFECTS_OUTLINE,
+                                          GTK_CSS_AFFECTS_OUTLINE | GTK_CSS_AFFECTS_CLIP,
                                           parse_border_style,
                                           query_border_style,
                                           assign_border_style,
@@ -1398,7 +1398,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_PROPERTY_OUTLINE_OFFSET,
                                           G_TYPE_INT,
                                           0,
-                                          GTK_CSS_AFFECTS_OUTLINE,
+                                          GTK_CSS_AFFECTS_OUTLINE | GTK_CSS_AFFECTS_CLIP,
                                           outline_parse,
                                           query_length_as_int,
                                           assign_length_from_int,
@@ -1447,8 +1447,8 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           _gtk_css_corner_value_new (_gtk_css_number_value_new (0, GTK_CSS_PX),
                                                                      _gtk_css_number_value_new (0, GTK_CSS_PX)));
-
   _gtk_style_property_add_alias ("-gtk-outline-bottom-left-radius", "outline-bottom-left-radius");
+
   gtk_css_style_property_register        ("background-clip",
                                           GTK_CSS_PROPERTY_BACKGROUND_CLIP,
                                           G_TYPE_NONE,
