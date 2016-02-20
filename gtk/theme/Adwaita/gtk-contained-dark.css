@@ -2765,8 +2765,10 @@ scale {
         -gtk-icon-shadow: none; }
   scale marks {
     color: alpha(currentColor,0.4); }
+  scale.scale-has-marks-above trough slider,
   scale trough:last-child:not(:only-child) slider {
     margin: 0 1px; }
+    scale.scale-has-marks-above trough slider,
     scale trough:last-child:not(:only-child) slider {
       border-style: none;
       border-radius: 0;
@@ -2775,8 +2777,10 @@ scale {
       background-position: top;
       background-repeat: no-repeat;
       box-shadow: none; }
+  scale.scale-has-marks-above trough slider,
   scale trough:last-child:not(:only-child) slider {
     margin: 0 1px; }
+    scale.scale-has-marks-above trough slider:hover,
     scale trough:last-child:not(:only-child) slider:hover {
       border-style: none;
       border-radius: 0;
@@ -2785,8 +2789,10 @@ scale {
       background-position: top;
       background-repeat: no-repeat;
       box-shadow: none; }
+  scale.scale-has-marks-above trough slider,
   scale trough:last-child:not(:only-child) slider {
     margin: 0 1px; }
+    scale.scale-has-marks-above trough slider:active,
     scale trough:last-child:not(:only-child) slider:active {
       border-style: none;
       border-radius: 0;
@@ -2795,8 +2801,10 @@ scale {
       background-position: top;
       background-repeat: no-repeat;
       box-shadow: none; }
+  scale.scale-has-marks-above trough slider,
   scale trough:last-child:not(:only-child) slider {
     margin: 0 1px; }
+    scale.scale-has-marks-above trough slider:disabled,
     scale trough:last-child:not(:only-child) slider:disabled {
       border-style: none;
       border-radius: 0;
@@ -2805,8 +2813,10 @@ scale {
       background-position: top;
       background-repeat: no-repeat;
       box-shadow: none; }
+  scale.scale-has-marks-above trough slider,
   scale trough:last-child:not(:only-child) slider {
     margin: 0 1px; }
+    scale.scale-has-marks-above trough slider:backdrop,
     scale trough:last-child:not(:only-child) slider:backdrop {
       border-style: none;
       border-radius: 0;
@@ -2815,8 +2825,10 @@ scale {
       background-position: top;
       background-repeat: no-repeat;
       box-shadow: none; }
+  scale.scale-has-marks-above trough slider,
   scale trough:last-child:not(:only-child) slider {
     margin: 0 1px; }
+    scale.scale-has-marks-above trough slider:backdrop:disabled,
     scale trough:last-child:not(:only-child) slider:backdrop:disabled {
       border-style: none;
       border-radius: 0;
@@ -2825,8 +2837,10 @@ scale {
       background-position: top;
       background-repeat: no-repeat;
       box-shadow: none; }
+  scale.scale-has-marks-below trough slider,
   scale trough:first-child:not(:only-child) slider {
     margin: 0 1px; }
+    scale.scale-has-marks-below trough slider,
     scale trough:first-child:not(:only-child) slider {
       border-style: none;
       border-radius: 0;
@@ -2834,8 +2848,10 @@ scale {
       background-position: bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
+  scale.scale-has-marks-below trough slider,
   scale trough:first-child:not(:only-child) slider {
     margin: 0 1px; }
+    scale.scale-has-marks-below trough slider:hover,
     scale trough:first-child:not(:only-child) slider:hover {
       border-style: none;
       border-radius: 0;
@@ -2843,8 +2859,10 @@ scale {
       background-position: bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
+  scale.scale-has-marks-below trough slider,
   scale trough:first-child:not(:only-child) slider {
     margin: 0 1px; }
+    scale.scale-has-marks-below trough slider:active,
     scale trough:first-child:not(:only-child) slider:active {
       border-style: none;
       border-radius: 0;
@@ -2852,8 +2870,10 @@ scale {
       background-position: bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
+  scale.scale-has-marks-below trough slider,
   scale trough:first-child:not(:only-child) slider {
     margin: 0 1px; }
+    scale.scale-has-marks-below trough slider:disabled,
     scale trough:first-child:not(:only-child) slider:disabled {
       border-style: none;
       border-radius: 0;
@@ -2861,8 +2881,10 @@ scale {
       background-position: bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
+  scale.scale-has-marks-below trough slider,
   scale trough:first-child:not(:only-child) slider {
     margin: 0 1px; }
+    scale.scale-has-marks-below trough slider:backdrop,
     scale trough:first-child:not(:only-child) slider:backdrop {
       border-style: none;
       border-radius: 0;
@@ -2870,8 +2892,10 @@ scale {
       background-position: bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
+  scale.scale-has-marks-below trough slider,
   scale trough:first-child:not(:only-child) slider {
     margin: 0 1px; }
+    scale.scale-has-marks-below trough slider:backdrop:disabled,
     scale trough:first-child:not(:only-child) slider:backdrop:disabled {
       border-style: none;
       border-radius: 0;
@@ -2879,8 +2903,10 @@ scale {
       background-position: bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
+  scale.vertical.scale-has-marks-above trough slider,
   scale.vertical trough:last-child:not(:only-child) slider {
     margin: 0 1px; }
+    scale.vertical.scale-has-marks-above trough slider,
     scale.vertical trough:last-child:not(:only-child) slider {
       border-style: none;
       border-radius: 0;
@@ -2888,8 +2914,10 @@ scale {
       background-position: left bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
+  scale.vertical.scale-has-marks-above trough slider,
   scale.vertical trough:last-child:not(:only-child) slider {
     margin: 0 1px; }
+    scale.vertical.scale-has-marks-above trough slider:hover,
     scale.vertical trough:last-child:not(:only-child) slider:hover {
       border-style: none;
       border-radius: 0;
@@ -2897,8 +2925,10 @@ scale {
       background-position: left bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
+  scale.vertical.scale-has-marks-above trough slider,
   scale.vertical trough:last-child:not(:only-child) slider {
     margin: 0 1px; }
+    scale.vertical.scale-has-marks-above trough slider:active,
     scale.vertical trough:last-child:not(:only-child) slider:active {
       border-style: none;
       border-radius: 0;
@@ -2906,8 +2936,10 @@ scale {
       background-position: left bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
+  scale.vertical.scale-has-marks-above trough slider,
   scale.vertical trough:last-child:not(:only-child) slider {
     margin: 0 1px; }
+    scale.vertical.scale-has-marks-above trough slider:disabled,
     scale.vertical trough:last-child:not(:only-child) slider:disabled {
       border-style: none;
       border-radius: 0;
@@ -2915,8 +2947,10 @@ scale {
       background-position: left bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
+  scale.vertical.scale-has-marks-above trough slider,
   scale.vertical trough:last-child:not(:only-child) slider {
     margin: 0 1px; }
+    scale.vertical.scale-has-marks-above trough slider:backdrop,
     scale.vertical trough:last-child:not(:only-child) slider:backdrop {
       border-style: none;
       border-radius: 0;
@@ -2924,8 +2958,10 @@ scale {
       background-position: left bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
+  scale.vertical.scale-has-marks-above trough slider,
   scale.vertical trough:last-child:not(:only-child) slider {
     margin: 0 1px; }
+    scale.vertical.scale-has-marks-above trough slider:backdrop:disabled,
     scale.vertical trough:last-child:not(:only-child) slider:backdrop:disabled {
       border-style: none;
       border-radius: 0;
@@ -2933,8 +2969,10 @@ scale {
       background-position: left bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
+  scale.vertical.scale-has-marks-below trough slider,
   scale.vertical trough:first-child:not(:only-child) slider {
     margin: 0 1px; }
+    scale.vertical.scale-has-marks-below trough slider,
     scale.vertical trough:first-child:not(:only-child) slider {
       border-style: none;
       border-radius: 0;
@@ -2942,8 +2980,10 @@ scale {
       background-position: right bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
+  scale.vertical.scale-has-marks-below trough slider,
   scale.vertical trough:first-child:not(:only-child) slider {
     margin: 0 1px; }
+    scale.vertical.scale-has-marks-below trough slider:hover,
     scale.vertical trough:first-child:not(:only-child) slider:hover {
       border-style: none;
       border-radius: 0;
@@ -2951,8 +2991,10 @@ scale {
       background-position: right bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
+  scale.vertical.scale-has-marks-below trough slider,
   scale.vertical trough:first-child:not(:only-child) slider {
     margin: 0 1px; }
+    scale.vertical.scale-has-marks-below trough slider:active,
     scale.vertical trough:first-child:not(:only-child) slider:active {
       border-style: none;
       border-radius: 0;
@@ -2960,8 +3002,10 @@ scale {
       background-position: right bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
+  scale.vertical.scale-has-marks-below trough slider,
   scale.vertical trough:first-child:not(:only-child) slider {
     margin: 0 1px; }
+    scale.vertical.scale-has-marks-below trough slider:disabled,
     scale.vertical trough:first-child:not(:only-child) slider:disabled {
       border-style: none;
       border-radius: 0;
@@ -2969,8 +3013,10 @@ scale {
       background-position: right bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
+  scale.vertical.scale-has-marks-below trough slider,
   scale.vertical trough:first-child:not(:only-child) slider {
     margin: 0 1px; }
+    scale.vertical.scale-has-marks-below trough slider:backdrop,
     scale.vertical trough:first-child:not(:only-child) slider:backdrop {
       border-style: none;
       border-radius: 0;
@@ -2978,8 +3024,10 @@ scale {
       background-position: right bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
+  scale.vertical.scale-has-marks-below trough slider,
   scale.vertical trough:first-child:not(:only-child) slider {
     margin: 0 1px; }
+    scale.vertical.scale-has-marks-below trough slider:backdrop:disabled,
     scale.vertical trough:first-child:not(:only-child) slider:backdrop:disabled {
       border-style: none;
       border-radius: 0;
