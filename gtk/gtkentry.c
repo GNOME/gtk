@@ -184,6 +184,7 @@ struct _GtkEntryPrivate
 
   GdkWindow             *text_area;
   GtkAllocation          text_allocation;
+  int                    text_baseline;
 
   PangoLayout           *cached_layout;
   PangoAttrList         *attrs;
@@ -3632,8 +3633,9 @@ gtk_entry_get_text_area_size (GtkEntry *entry,
 {
   GtkEntryPrivate *priv = entry->priv;
   GtkAllocation allocation;
+  int baseline;
 
-  gtk_css_gadget_get_content_allocation (priv->gadget, &allocation, NULL);
+  gtk_css_gadget_get_content_allocation (priv->gadget, &allocation, &baseline);
 
   if (x)
     *x = allocation.x;
@@ -3646,6 +3648,8 @@ gtk_entry_get_text_area_size (GtkEntry *entry,
 
   if (height)
     *height = allocation.height;
+
+  priv->text_baseline = baseline;
 }
 
 static void
@@ -3730,6 +3734,7 @@ gtk_entry_allocate (GtkCssGadget        *gadget,
   entry = GTK_ENTRY (widget);
   priv = entry->priv;
 
+  priv->text_baseline = -1;
   GTK_ENTRY_GET_CLASS (entry)->get_text_area_size (entry,
                                                    &priv->text_allocation.x,
                                                    &priv->text_allocation.y,
@@ -6305,17 +6310,20 @@ get_layout_position (GtkEntry *entry,
   PangoRectangle logical_rect;
   gint y_pos, area_height;
   PangoLayoutLine *line;
-  
+
   layout = gtk_entry_ensure_layout (entry, TRUE);
 
   area_height = PANGO_SCALE * priv->text_allocation.height;
 
   line = pango_layout_get_lines_readonly (layout)->data;
   pango_layout_line_get_extents (line, NULL, &logical_rect);
-  
+
   /* Align primarily for locale's ascent/descent */
-  y_pos = ((area_height - priv->ascent - priv->descent) / 2 +
-           priv->ascent + logical_rect.y);
+  if (priv->text_baseline < 0)
+    y_pos = ((area_height - priv->ascent - priv->descent) / 2 +
+             priv->ascent + logical_rect.y);
+  else
+    y_pos = PANGO_SCALE * priv->text_baseline - pango_layout_get_baseline (layout);
 
   /* Now see if we need to adjust to fit in actual drawn string */
   if (logical_rect.height > area_height)
@@ -8240,7 +8248,7 @@ gtk_entry_get_layout_offsets (GtkEntry *entry,
 {
   GtkEntryPrivate *priv;
   GtkAllocation allocation;
-  
+
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
   priv = entry->priv;
