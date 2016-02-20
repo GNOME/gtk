@@ -2476,27 +2476,32 @@ treeview.view radio {
 }
 
 scale {
-  -GtkScale-slider-length: 20;
-  -GtkRange-slider-width: 26;
+  -GtkScale-slider-length: 22;
+  -GtkRange-slider-width: 30;
   -GtkRange-trough-border: 2;
 
   outline-offset: -10px;
-  -gtk-outline-radius: 6px;
+  -gtk-outline-radius: 7px;
+
+  &.horizontal {
+    trough { margin: 15px 12px; }
+    slider { margin: 5px 1px; }
+  }
+
+  &.vertical {
+    trough { margin: 12px 15px; }
+    slider { margin: 1px 5px; }
+  }
 
   &.fine-tune {
     outline-offset: -8px;
-    -gtk-outline-radius: 8px;
+    -gtk-outline-radius: 10px;
 
     trough {
-      margin: 11px;
-      &, fill, highlight { border-radius: 4px; }
+      margin: 12px;
+      &, fill, highlight { border-radius: 5px; }
     }
   }
-
-  trough { margin: 13px; }
-
-  &.horizontal slider { margin: 3px 0; }
-  &.vertical slider { margin: 0 3px; }
 
   // the backing bit
   trough { @extend %scale_trough; }
@@ -2596,7 +2601,7 @@ scale {
 
           trough#{$nth_child} {
             slider {
-              margin: 0;
+              margin: 0 1px;
               &#{$state} {
                 $_scale_asset: 'assets/slider-#{$dir_infix}-#{$marks_infix}#{$state_infix}#{$suffix}';
                 // @warn $_file_name; // uncomment for debuggin purpose...
@@ -2606,10 +2611,15 @@ scale {
                 background-image: -gtk-scaled(url('#{$_scale_asset}.png'), url('#{$_scale_asset}@2.png'));
 
                 $_scale_slider_bg_pos: bottom;
-                @if $dir_infix == 'horz' { @if $marks_infix == 'scale-has-marks-above' { $_scale_slider_bg_pos: top; }}
+                @if $dir_infix == 'horz' {
+                  @if $marks_infix == 'scale-has-marks-above' {
+                    $_scale_slider_bg_pos: top;
+                    margin-top: 1px;
+                  }
+                }
                 @else {
-                  @if $marks_infix == 'scale-has-marks-above' { $_scale_slider_bg_pos: left; }
-                  @else { $_scale_slider_bg_pos: right; }
+                  @if $marks_infix == 'scale-has-marks-above' { $_scale_slider_bg_pos: left bottom; }
+                  @else { $_scale_slider_bg_pos: right bottom; }
                 }
 
                 background-position: $_scale_slider_bg_pos;

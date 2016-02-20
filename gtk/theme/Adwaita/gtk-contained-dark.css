@@ -2646,24 +2646,26 @@ scale highlight, progressbar progress {
       border-color: transparent; }
 
 scale {
-  -GtkScale-slider-length: 20;
-  -GtkRange-slider-width: 26;
+  -GtkScale-slider-length: 22;
+  -GtkRange-slider-width: 30;
   -GtkRange-trough-border: 2;
   outline-offset: -10px;
-  -gtk-outline-radius: 6px; }
+  -gtk-outline-radius: 7px; }
+  scale.horizontal trough {
+    margin: 15px 12px; }
+  scale.horizontal slider {
+    margin: 5px 1px; }
+  scale.vertical trough {
+    margin: 12px 15px; }
+  scale.vertical slider {
+    margin: 1px 5px; }
   scale.fine-tune {
     outline-offset: -8px;
-    -gtk-outline-radius: 8px; }
+    -gtk-outline-radius: 10px; }
     scale.fine-tune trough {
-      margin: 11px; }
+      margin: 12px; }
       scale.fine-tune trough, scale.fine-tune trough fill, scale.fine-tune trough highlight {
-        border-radius: 4px; }
-  scale trough {
-    margin: 13px; }
-  scale.horizontal slider {
-    margin: 3px 0; }
-  scale.vertical slider {
-    margin: 0 3px; }
+        border-radius: 5px; }
   scale fill, scale fill:backdrop {
     background-color: #1c1f1f;
     box-shadow: none; }
@@ -2764,61 +2766,67 @@ scale {
   scale marks {
     color: alpha(currentColor,0.4); }
   scale trough:last-child:not(:only-child) slider {
-    margin: 0; }
+    margin: 0 1px; }
     scale trough:last-child:not(:only-child) slider {
       border-style: none;
       border-radius: 0;
       background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-dark.png"), url("assets/slider-horz-scale-has-marks-above-dark@2.png"));
+      margin-top: 1px;
       background-position: top;
       background-repeat: no-repeat;
       box-shadow: none; }
   scale trough:last-child:not(:only-child) slider {
-    margin: 0; }
+    margin: 0 1px; }
     scale trough:last-child:not(:only-child) slider:hover {
       border-style: none;
       border-radius: 0;
       background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-hover-dark.png"), url("assets/slider-horz-scale-has-marks-above-hover-dark@2.png"));
+      margin-top: 1px;
       background-position: top;
       background-repeat: no-repeat;
       box-shadow: none; }
   scale trough:last-child:not(:only-child) slider {
-    margin: 0; }
+    margin: 0 1px; }
     scale trough:last-child:not(:only-child) slider:active {
       border-style: none;
       border-radius: 0;
       background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-active-dark.png"), url("assets/slider-horz-scale-has-marks-above-active-dark@2.png"));
+      margin-top: 1px;
       background-position: top;
       background-repeat: no-repeat;
       box-shadow: none; }
   scale trough:last-child:not(:only-child) slider {
-    margin: 0; }
+    margin: 0 1px; }
     scale trough:last-child:not(:only-child) slider:disabled {
       border-style: none;
       border-radius: 0;
       background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-insensitive-dark.png"), url("assets/slider-horz-scale-has-marks-above-insensitive-dark@2.png"));
+      margin-top: 1px;
       background-position: top;
       background-repeat: no-repeat;
       box-shadow: none; }
   scale trough:last-child:not(:only-child) slider {
-    margin: 0; }
+    margin: 0 1px; }
     scale trough:last-child:not(:only-child) slider:backdrop {
       border-style: none;
       border-radius: 0;
       background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-backdrop-dark.png"), url("assets/slider-horz-scale-has-marks-above-backdrop-dark@2.png"));
+      margin-top: 1px;
       background-position: top;
       background-repeat: no-repeat;
       box-shadow: none; }
   scale trough:last-child:not(:only-child) slider {
-    margin: 0; }
+    margin: 0 1px; }
     scale trough:last-child:not(:only-child) slider:backdrop:disabled {
       border-style: none;
       border-radius: 0;
       background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-backdrop-insensitive-dark.png"), url("assets/slider-horz-scale-has-marks-above-backdrop-insensitive-dark@2.png"));
+      margin-top: 1px;
       background-position: top;
       background-repeat: no-repeat;
       box-shadow: none; }
   scale trough:first-child:not(:only-child) slider {
-    margin: 0; }
+    margin: 0 1px; }
     scale trough:first-child:not(:only-child) slider {
       border-style: none;
       border-radius: 0;
@@ -2827,7 +2835,7 @@ scale {
       background-repeat: no-repeat;
       box-shadow: none; }
   scale trough:first-child:not(:only-child) slider {
-    margin: 0; }
+    margin: 0 1px; }
     scale trough:first-child:not(:only-child) slider:hover {
       border-style: none;
       border-radius: 0;
@@ -2836,7 +2844,7 @@ scale {
       background-repeat: no-repeat;
       box-shadow: none; }
   scale trough:first-child:not(:only-child) slider {
-    margin: 0; }
+    margin: 0 1px; }
     scale trough:first-child:not(:only-child) slider:active {
       border-style: none;
       border-radius: 0;
@@ -2845,7 +2853,7 @@ scale {
       background-repeat: no-repeat;
       box-shadow: none; }
   scale trough:first-child:not(:only-child) slider {
-    margin: 0; }
+    margin: 0 1px; }
     scale trough:first-child:not(:only-child) slider:disabled {
       border-style: none;
       border-radius: 0;
@@ -2854,7 +2862,7 @@ scale {
       background-repeat: no-repeat;
       box-shadow: none; }
   scale trough:first-child:not(:only-child) slider {
-    margin: 0; }
+    margin: 0 1px; }
     scale trough:first-child:not(:only-child) slider:backdrop {
       border-style: none;
       border-radius: 0;
@@ -2863,7 +2871,7 @@ scale {
       background-repeat: no-repeat;
       box-shadow: none; }
   scale trough:first-child:not(:only-child) slider {
-    margin: 0; }
+    margin: 0 1px; }
     scale trough:first-child:not(:only-child) slider:backdrop:disabled {
       border-style: none;
       border-radius: 0;
@@ -2872,111 +2880,111 @@ scale {
       background-repeat: no-repeat;
       box-shadow: none; }
   scale.vertical trough:last-child:not(:only-child) slider {
-    margin: 0; }
+    margin: 0 1px; }
     scale.vertical trough:last-child:not(:only-child) slider {
       border-style: none;
       border-radius: 0;
       background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above-dark.png"), url("assets/slider-vert-scale-has-marks-above-dark@2.png"));
-      background-position: left;
+      background-position: left bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
   scale.vertical trough:last-child:not(:only-child) slider {
-    margin: 0; }
+    margin: 0 1px; }
     scale.vertical trough:last-child:not(:only-child) slider:hover {
       border-style: none;
       border-radius: 0;
       background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above-hover-dark.png"), url("assets/slider-vert-scale-has-marks-above-hover-dark@2.png"));
-      background-position: left;
+      background-position: left bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
   scale.vertical trough:last-child:not(:only-child) slider {
-    margin: 0; }
+    margin: 0 1px; }
     scale.vertical trough:last-child:not(:only-child) slider:active {
       border-style: none;
       border-radius: 0;
       background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above-active-dark.png"), url("assets/slider-vert-scale-has-marks-above-active-dark@2.png"));
-      background-position: left;
+      background-position: left bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
   scale.vertical trough:last-child:not(:only-child) slider {
-    margin: 0; }
+    margin: 0 1px; }
     scale.vertical trough:last-child:not(:only-child) slider:disabled {
       border-style: none;
       border-radius: 0;
       background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above-insensitive-dark.png"), url("assets/slider-vert-scale-has-marks-above-insensitive-dark@2.png"));
-      background-position: left;
+      background-position: left bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
   scale.vertical trough:last-child:not(:only-child) slider {
-    margin: 0; }
+    margin: 0 1px; }
     scale.vertical trough:last-child:not(:only-child) slider:backdrop {
       border-style: none;
       border-radius: 0;
       background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above-backdrop-dark.png"), url("assets/slider-vert-scale-has-marks-above-backdrop-dark@2.png"));
-      background-position: left;
+      background-position: left bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
   scale.vertical trough:last-child:not(:only-child) slider {
-    margin: 0; }
+    margin: 0 1px; }
     scale.vertical trough:last-child:not(:only-child) slider:backdrop:disabled {
       border-style: none;
       border-radius: 0;
       background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above-backdrop-insensitive-dark.png"), url("assets/slider-vert-scale-has-marks-above-backdrop-insensitive-dark@2.png"));
-      background-position: left;
+      background-position: left bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
   scale.vertical trough:first-child:not(:only-child) slider {
-    margin: 0; }
+    margin: 0 1px; }
     scale.vertical trough:first-child:not(:only-child) slider {
       border-style: none;
       border-radius: 0;
       background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below-dark.png"), url("assets/slider-vert-scale-has-marks-below-dark@2.png"));
-      background-position: right;
+      background-position: right bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
   scale.vertical trough:first-child:not(:only-child) slider {
-    margin: 0; }
+    margin: 0 1px; }
     scale.vertical trough:first-child:not(:only-child) slider:hover {
       border-style: none;
       border-radius: 0;
       background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below-hover-dark.png"), url("assets/slider-vert-scale-has-marks-below-hover-dark@2.png"));
-      background-position: right;
+      background-position: right bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
   scale.vertical trough:first-child:not(:only-child) slider {
-    margin: 0; }
+    margin: 0 1px; }
     scale.vertical trough:first-child:not(:only-child) slider:active {
       border-style: none;
       border-radius: 0;
       background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below-active-dark.png"), url("assets/slider-vert-scale-has-marks-below-active-dark@2.png"));
-      background-position: right;
+      background-position: right bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
   scale.vertical trough:first-child:not(:only-child) slider {
-    margin: 0; }
+    margin: 0 1px; }
     scale.vertical trough:first-child:not(:only-child) slider:disabled {
       border-style: none;
       border-radius: 0;
       background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below-insensitive-dark.png"), url("assets/slider-vert-scale-has-marks-below-insensitive-dark@2.png"));
-      background-position: right;
+      background-position: right bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
   scale.vertical trough:first-child:not(:only-child) slider {
-    margin: 0; }
+    margin: 0 1px; }
     scale.vertical trough:first-child:not(:only-child) slider:backdrop {
       border-style: none;
       border-radius: 0;
       background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below-backdrop-dark.png"), url("assets/slider-vert-scale-has-marks-below-backdrop-dark@2.png"));
-      background-position: right;
+      background-position: right bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
   scale.vertical trough:first-child:not(:only-child) slider {
-    margin: 0; }
+    margin: 0 1px; }
     scale.vertical trough:first-child:not(:only-child) slider:backdrop:disabled {
       border-style: none;
       border-radius: 0;
       background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below-backdrop-insensitive-dark.png"), url("assets/slider-vert-scale-has-marks-below-backdrop-insensitive-dark@2.png"));
-      background-position: right;
+      background-position: right bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
 
