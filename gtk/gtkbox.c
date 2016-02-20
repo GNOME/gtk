@@ -1063,7 +1063,8 @@ gtk_box_size_allocate_with_center (GtkWidget           *widget,
         {
           child_allocation.y = allocation->y;
           child_allocation.height = MAX (1, allocation->height);
-          if (packing == GTK_PACK_START)
+          if ((packing == GTK_PACK_START && direction == GTK_TEXT_DIR_LTR) ||
+              (packing == GTK_PACK_END && direction == GTK_TEXT_DIR_RTL))
             x = allocation->x;
           else
             x = allocation->x + allocation->width;
@@ -1110,7 +1111,8 @@ gtk_box_size_allocate_with_center (GtkWidget           *widget,
                   child_allocation.x = x + (child_size - child_allocation.width) / 2;
                 }
 
-              if (packing == GTK_PACK_START)
+              if ((packing == GTK_PACK_START && direction == GTK_TEXT_DIR_LTR) ||
+                  (packing == GTK_PACK_END && direction == GTK_TEXT_DIR_RTL))
                 {
                   x += child_size + priv->spacing;
                 }
@@ -1119,10 +1121,6 @@ gtk_box_size_allocate_with_center (GtkWidget           *widget,
                   x -= child_size + priv->spacing;
                   child_allocation.x -= child_size;
                 }
-
-              if (direction == GTK_TEXT_DIR_RTL)
-                child_allocation.x = allocation->x + allocation->width - (child_allocation.x - allocation->x) - child_allocation.width;
-
             }
           else /* (private->orientation == GTK_ORIENTATION_VERTICAL) */
             {
@@ -1164,10 +1162,16 @@ gtk_box_size_allocate_with_center (GtkWidget           *widget,
   else
     center_pos = allocation->y + (box_size - center_size) / 2;
 
-  if (center_pos < side[GTK_PACK_START])
-    center_pos = side[GTK_PACK_START];
-  else if (center_pos + center_size > side[GTK_PACK_END])
-    center_pos = side[GTK_PACK_END] - center_size;
+  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL &&
+      direction == GTK_TEXT_DIR_RTL)
+    packing = GTK_PACK_END;
+  else
+    packing = GTK_PACK_START;
+
+  if (center_pos < side[packing])
+    center_pos = side[packing];
+  else if (center_pos + center_size > side[1 - packing])
+    center_pos = side[1 - packing] - center_size;
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
