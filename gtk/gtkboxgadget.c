@@ -36,6 +36,7 @@
 typedef struct _GtkBoxGadgetPrivate GtkBoxGadgetPrivate;
 struct _GtkBoxGadgetPrivate {
   GtkOrientation orientation;
+  gboolean draw_focus;
   GArray *children;
 };
 
@@ -448,6 +449,7 @@ gtk_box_gadget_draw (GtkCssGadget *gadget,
                      int           height)
 {
   GtkBoxGadgetPrivate *priv = gtk_box_gadget_get_instance_private (GTK_BOX_GADGET (gadget));
+  GtkWidget *owner = gtk_css_gadget_get_owner (gadget);
   guint i;
 
   for (i = 0 ; i < priv->children->len; i++)
@@ -455,17 +457,13 @@ gtk_box_gadget_draw (GtkCssGadget *gadget,
       GtkBoxGadgetChild *child = &g_array_index (priv->children, GtkBoxGadgetChild, i);
 
       if (GTK_IS_WIDGET (child->object))
-        {
-          gtk_container_propagate_draw (GTK_CONTAINER (gtk_css_gadget_get_owner (gadget)),
-                                        GTK_WIDGET (child->object),
-                                        cr);
-        }
+        gtk_container_propagate_draw (GTK_CONTAINER (owner), GTK_WIDGET (child->object), cr);
       else
-        {
-          gtk_css_gadget_draw (GTK_CSS_GADGET (child->object),
-                               cr);
-        }
+        gtk_css_gadget_draw (GTK_CSS_GADGET (child->object), cr);
     }
+
+  if (priv->draw_focus && gtk_widget_has_visible_focus (owner))
+    return TRUE;
 
   return FALSE;
 }
@@ -550,6 +548,15 @@ gtk_box_gadget_set_orientation (GtkBoxGadget   *gadget,
   GtkBoxGadgetPrivate *priv = gtk_box_gadget_get_instance_private (gadget);
 
   priv->orientation = orientation;
+}
+
+void
+gtk_box_gadget_set_draw_focus (GtkBoxGadget *gadget,
+                               gboolean      draw_focus)
+{
+  GtkBoxGadgetPrivate *priv = gtk_box_gadget_get_instance_private (gadget);
+
+  priv->draw_focus = draw_focus;
 }
 
 static GtkCssNode *
