@@ -266,7 +266,7 @@ entry {
   selection:focus { @extend %selected_items; }
 
   progress {
-    margin: 1px;
+    margin: 2px -6px;
     border-radius: 0;
     border-width: 0 0 2px;
     border-color: $selected_bg_color;
@@ -275,10 +275,6 @@ entry {
     background-color: transparent;
     box-shadow: none;
     &:backdrop { background-color: transparent; }
-  }
-
-  &:focus progress {
-    border-bottom-width: 3px;
   }
 
   .linked:not(.vertical) > & { @extend %linked; }
