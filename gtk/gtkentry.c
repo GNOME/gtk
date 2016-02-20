@@ -3630,31 +3630,22 @@ gtk_entry_get_text_area_size (GtkEntry *entry,
 			      gint     *width,
 			      gint     *height)
 {
-  GtkWidget *widget = GTK_WIDGET (entry);
+  GtkEntryPrivate *priv = entry->priv;
   GtkAllocation allocation;
-  gint req_height, unused;
-  gint frame_height;
 
-  gtk_entry_get_preferred_height_and_baseline_for_width (widget, -1, &req_height, &unused, NULL, NULL);
-
-  gtk_css_gadget_get_content_allocation (entry->priv->gadget, &allocation, NULL);
-
-  if (gtk_widget_get_realized (widget))
-    get_frame_size (entry, TRUE, NULL, NULL, NULL, &frame_height);
-  else
-    frame_height = req_height;
+  gtk_css_gadget_get_content_allocation (priv->gadget, &allocation, NULL);
 
   if (x)
-    *x = 0;
+    *x = allocation.x;
 
   if (y)
-    *y = floor ((frame_height - req_height) / 2);
+    *y = allocation.y;
 
   if (width)
     *width = allocation.width;
 
   if (height)
-    *height = req_height;
+    *height = allocation.height;
 }
 
 static void
@@ -3681,7 +3672,7 @@ gtk_entry_get_frame_size (GtkEntry *entry,
     *height = allocation.height;
 }
 
-static void
+static G_GNUC_UNUSED void
 get_frame_size (GtkEntry *entry,
                 gboolean  relative_to_window,
                 gint     *x,
@@ -3739,7 +3730,11 @@ gtk_entry_allocate (GtkCssGadget        *gadget,
   entry = GTK_ENTRY (widget);
   priv = entry->priv;
 
-  priv->text_allocation = *allocation;
+  GTK_ENTRY_GET_CLASS (entry)->get_text_area_size (entry,
+                                                   &priv->text_allocation.x,
+                                                   &priv->text_allocation.y,
+                                                   &priv->text_allocation.width,
+                                                   &priv->text_allocation.height);
 
   out_clip->x = 0;
   out_clip->y = 0;
@@ -3770,14 +3765,14 @@ gtk_entry_allocate (GtkCssGadget        *gadget,
       if ((gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL && i == GTK_ENTRY_ICON_PRIMARY) ||
           (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR && i == GTK_ENTRY_ICON_SECONDARY))
         {
-          icon_alloc.x = allocation->x + allocation->width - width;
+          icon_alloc.x = priv->text_allocation.x + priv->text_allocation.width - width;
         }
       else
         {
-          icon_alloc.x = allocation->x;
+          icon_alloc.x = priv->text_allocation.x;
           priv->text_allocation.x += width;
         }
-      icon_alloc.y = allocation->y + (allocation->height - height) / 2;
+      icon_alloc.y = priv->text_allocation.y + (priv->text_allocation.height - height) / 2;
       icon_alloc.width = width;
       icon_alloc.height = height;
       priv->text_allocation.width -= width;
