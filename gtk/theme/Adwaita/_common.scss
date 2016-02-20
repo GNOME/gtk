@@ -2593,8 +2593,6 @@ scale {
                                  (':backdrop', '-backdrop'),
                                  (':backdrop:disabled', '-backdrop-insensitive') {
 
-          &.fine-tune trough#{$nth_child} {}
-
           trough#{$nth_child} {
             slider {
               margin: 0 1px;
