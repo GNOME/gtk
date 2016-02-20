@@ -1985,7 +1985,7 @@ drop_files_as_bookmarks (GtkPlacesSidebar *sidebar,
       GFile *f = G_FILE (l->data);
       GFileInfo *info = g_file_query_info (f,
                                            G_FILE_ATTRIBUTE_STANDARD_TYPE,
-                                           G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS,
+                                           G_FILE_QUERY_INFO_NONE,
                                            NULL,
                                            NULL);
 
