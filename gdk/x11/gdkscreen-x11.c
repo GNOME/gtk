@@ -621,12 +621,21 @@ init_randr15 (GdkScreen *screen)
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
   GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
   XRRMonitorInfo *rr_monitors;
+  XRRScreenResources *resources;
+  RROutput output;
+  RROutput first_output = None;
+  gboolean randr12_compat = FALSE;
   int num_rr_monitors;
   int i;
   GArray *monitors;
   XID primary_output = None;
 
   if (!display_x11->have_randr15)
+    return FALSE;
+
+  resources = XRRGetScreenResourcesCurrent (x11_screen->xdisplay,
+                                            x11_screen->xroot_window);
+  if (!resources)
     return FALSE;
 
   rr_monitors = XRRGetMonitors (x11_screen->xdisplay,
@@ -638,8 +647,25 @@ init_randr15 (GdkScreen *screen)
 
   monitors = g_array_sized_new (FALSE, TRUE, sizeof (GdkX11Monitor),
                                 num_rr_monitors);
+
   for (i = 0; i < num_rr_monitors; i++)
     {
+      output = rr_monitors[i].outputs[0];
+      XRROutputInfo *output_info =
+        XRRGetOutputInfo (x11_screen->xdisplay, resources, output);
+
+      /* Non RandR1.2+ X driver have output name "default" */
+      randr12_compat |= !g_strcmp0 (output_info->name, "default");
+
+      if (output_info->connection == RR_Disconnected)
+        {
+          XRRFreeOutputInfo (output_info);
+          continue;
+        }
+
+      if (first_output == None)
+        first_output = output;
+
       GdkX11Monitor monitor;
       init_monitor_geometry (&monitor,
                              rr_monitors[i].x,
@@ -649,28 +675,52 @@ init_randr15 (GdkScreen *screen)
 
       monitor.width_mm = rr_monitors[i].mwidth;
       monitor.height_mm = rr_monitors[i].mheight;
-      monitor.output = rr_monitors[i].outputs[0];
+      monitor.output = output;
+      monitor.output_name = g_strndup (output_info->name, output_info->nameLen);
+
       if (rr_monitors[i].primary)
         primary_output = monitor.output;
 
       g_array_append_val (monitors, monitor);
+      XRRFreeOutputInfo (output_info);
     }
   XRRFreeMonitors (rr_monitors);
+
+  /* non RandR 1.2+ X driver doesn't return any usable multihead data */
+  if (randr12_compat)
+    {
+      guint n_monitors = monitors->len;
+
+      free_monitors ((GdkX11Monitor *)g_array_free (monitors, FALSE),
+		     n_monitors);
+      return FALSE;
+    }
 
   g_array_sort (monitors,
                 (GCompareFunc) monitor_compare_function);
   x11_screen->n_monitors = monitors->len;
   x11_screen->monitors = (GdkX11Monitor *) g_array_free (monitors, FALSE);
-
   x11_screen->primary_monitor = 0;
 
-  for (i = 0; i < x11_screen->n_monitors; i++)
+  for (i = 0; i < x11_screen->n_monitors; ++i)
     {
       if (x11_screen->monitors[i].output == primary_output)
         {
           x11_screen->primary_monitor = i;
           break;
         }
+
+      /* No RandR1.3+ available or no primary set, fall back to prefer LVDS as primary if present */
+      if (primary_output == None &&
+          g_ascii_strncasecmp (x11_screen->monitors[i].output_name, "LVDS", 4) == 0)
+        {
+          x11_screen->primary_monitor = i;
+          break;
+        }
+
+      /* No primary specified and no LVDS found */
+      if (x11_screen->monitors[i].output == first_output)
+        x11_screen->primary_monitor = i;
     }
 
   return x11_screen->n_monitors > 0;
