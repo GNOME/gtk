@@ -1,6 +1,5 @@
 @define-color bg_color -gtk-win32-color(button, 15);
 @define-color text_color -gtk-win32-color(button, 18);
-@define-color base_color #fff;
 @define-color selected_bg_color -gtk-win32-color(button, 13);
 @define-color selected_fg_color -gtk-win32-color(button, 14);
 @define-color info_fg_color rgb (181, 171, 156);
@@ -25,9 +24,8 @@ viewport {
     /* XXX: This should be the default, but isn't?! */
     font-family: "Segoe UI", Sans;
     font-size: 9px;
-    background-color: @bg_color;
-    color: -gtk-win32-color(button, 18);
-    border-color: shade (@bg_color, 0.6);
+    background-color: -gtk-win32-color(window, 15);
+    color: -gtk-win32-color(window, 18);
 }
 
 * {
@@ -105,12 +103,12 @@ scrolledwindow.frame {
 .view {
   border-width: 0;
   border-radius: 0;
-  background-color: @base_color;
+  background-color: -gtk-win32-color(edit, 5);
   color: @text_color;
 }
 
 .view:selected {
-  background-color: shade (@bg_color, 0.9);
+  background-color: shade (-gtk-win32-color(edit, 5), 0.9);
   color: @fg_color;
 }
 
