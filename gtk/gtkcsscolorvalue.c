@@ -23,6 +23,7 @@
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkhslaprivate.h"
 #include "gtkstylepropertyprivate.h"
+#include "gtkwin32drawprivate.h"
 #include "gtkwin32themeprivate.h"
 
 #include "gtkprivate.h"
@@ -421,9 +422,15 @@ gtk_css_value_color_print (const GtkCssValue *value,
       break;
     case COLOR_TYPE_WIN32:
       {
+        const char *name;
         g_string_append (string, GTK_WIN32_THEME_SYMBOLIC_COLOR_NAME"(");
         gtk_win32_theme_print (value->sym_col.win32.theme, string);
-        g_string_append_printf (string, "%d)", value->sym_col.win32.id);
+        name = gtk_win32_get_sys_color_name_for_id (value->sym_col.win32.id);
+        if (name)
+          g_string_append (string, name);
+        else
+          g_string_append_printf (string, "%d", value->sym_col.win32.id);
+        g_string_append (string, ")");
       }
       break;
     case COLOR_TYPE_CURRENT_COLOR:
@@ -588,6 +595,7 @@ gtk_css_color_parse_win32 (GtkCssParser *parser)
 {
   GtkCssValue *color;
   GtkWin32Theme *theme;
+  char *name;
   int id;
 
   theme = gtk_win32_theme_parse (parser);
@@ -602,7 +610,19 @@ gtk_css_color_parse_win32 (GtkCssParser *parser)
       return NULL;
     }
 
-  if (!_gtk_css_parser_try_int (parser, &id))
+  name = _gtk_css_parser_try_ident (parser, TRUE);
+  if (name)
+    {
+      id = gtk_win32_get_sys_color_id_for_name (name);
+      if (id == -1)
+        {
+          _gtk_css_parser_error (parser, "'%s' is not a win32 color name.", name);
+          g_free (name);
+          return NULL;
+        }
+      g_free (name);
+    }
+  else if (!_gtk_css_parser_try_int (parser, &id))
     {
       gtk_win32_theme_unref (theme);
       _gtk_css_parser_error (parser, "Expected a valid integer value");
