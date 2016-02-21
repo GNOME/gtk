@@ -515,6 +515,7 @@ gtk_css_gadget_get_preferred_size (GtkCssGadget   *gadget,
   GtkBorder margin, border, padding;
   int min_size, extra_size, extra_opposite, extra_baseline;
   int unused_minimum, unused_natural;
+  int forced_minimum, forced_natural;
 
   if (minimum == NULL)
     minimum = &unused_minimum;
@@ -567,16 +568,25 @@ gtk_css_gadget_get_preferred_size (GtkCssGadget   *gadget,
 
   g_warn_if_fail (*minimum <= *natural);
 
-  *minimum = MAX (min_size, *minimum);
-  *natural = MAX (min_size, *natural);
-
-  *minimum = MAX (0, *minimum + extra_size);
-  *natural = MAX (0, *natural + extra_size);
+  forced_minimum = MAX (*minimum, min_size);
+  forced_natural = MAX (*natural, min_size);
 
   if (minimum_baseline && *minimum_baseline > -1)
-    *minimum_baseline = MAX (0, *minimum_baseline + extra_baseline);
+    {
+      if (*minimum > 0)
+        *minimum_baseline = *minimum_baseline * forced_minimum / *minimum;
+      *minimum_baseline = MAX (0, *minimum_baseline + extra_baseline);
+    }
   if (natural_baseline && *natural_baseline > -1)
-    *natural_baseline = MAX (0, *natural_baseline + extra_baseline);
+    {
+      if (*natural > 0)
+        *natural_baseline = *natural_baseline * forced_natural / *natural;
+      *natural_baseline = MAX (0, *natural_baseline + extra_baseline);
+    }
+
+  *minimum = MAX (0, forced_minimum + extra_size);
+  *natural = MAX (0, forced_natural + extra_size);
+
 }
 
 /**
