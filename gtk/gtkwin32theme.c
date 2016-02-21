@@ -495,7 +495,7 @@ gtk_win32_theme_get_size (GtkWin32Theme *theme,
 
   return GetSystemMetrics (id);
 #else
-  return -1;
+  return gtk_win32_get_sys_metric (id);
 #endif
 }
 

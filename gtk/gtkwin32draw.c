@@ -179,7 +179,126 @@ gtk_win32_get_theme_margins (const char     *class_name,
     }
 }
 
-struct {
+static int
+FIXME_IMPLEMENT (int id)
+{
+  g_warning ("win32 sys metric %d not implemented", id);
+  return 0;
+}
+
+static struct {
+  const char *name;
+  int         value;
+  int         (* get_value) (int id);
+} win32_default_metrics[] = {
+  { "cxscreen",            0, FIXME_IMPLEMENT },
+  { "cyscreen",            0, FIXME_IMPLEMENT },
+  { "cxvscroll",          16, NULL },
+  { "cyhscroll",          16, NULL },
+  { "cycaption",          16, NULL },
+  { "cxborder",            1, NULL },
+  { "cyborder",            1, NULL },
+  { "cxdlgframe",          3, NULL },
+  { "cydlgframe",          3, NULL },
+  { "cyvthumb",           16, NULL },
+  { "cxhthumb",           16, NULL },
+  { "cxicon",             32, NULL },
+  { "cyicon",             32, NULL },
+  { "cxcursor",           32, NULL },
+  { "cycursor",           32, NULL },
+  { "cymenu",             19, NULL },
+  { "cxfullscreen", 0, FIXME_IMPLEMENT },
+  { "cyfullscreen", 0, FIXME_IMPLEMENT },
+  { "cykanjiwindow",       0, NULL },
+  { "mousepresent",        1, NULL },
+  { "cyvscroll",          16, NULL },
+  { "cxhscroll",          16, NULL },
+  { "debug",               0, NULL },
+  { "swapbutton",          0, NULL },
+  { "reserved1",           0, NULL },
+  { "reserved2",           0, NULL },
+  { "reserved3",           0, NULL },
+  { "reserved4",           0, NULL },
+  { "cxmin",             112, NULL },
+  { "cymin",              24, NULL },
+  { "cxsize",             18, NULL },
+  { "cysize",             15, NULL },
+  { "cxframe",             4, NULL },
+  { "cyframe",             4, NULL },
+  { "cxmintrack",        112, NULL },
+  { "cymintrack",         24, NULL },
+  { "cxdoubleclk",         0, FIXME_IMPLEMENT },
+  { "cydoubleclk",         0, FIXME_IMPLEMENT },
+  { "cxiconspacing",      75, NULL },
+  { "cyiconspacing",      75, NULL },
+  { "menudropalignment",   0, NULL },
+  { "penwindows",          0, NULL },
+  { "dbcsenabled",         1, NULL },
+  { "cmousebuttons",       3, NULL },
+  { "secure",              0, NULL },
+  { "cxedge",              2, NULL },
+  { "cyedge",              2, NULL },
+  { "cxminspacing",      160, NULL },
+  { "cyminspacing",       21, NULL },
+  { "cxsmicon",           16, NULL },
+  { "cysmicon",           16, NULL },
+  { "cysmcaption",        16, NULL },
+  { "cxsmsize",           15, NULL },
+  { "cysmsize",           15, NULL },
+  { "cxmenusize",         18, NULL },
+  { "cymenusize",         18, NULL },
+  { "arrange",             8, NULL },
+  { "cxminimized",       160, NULL },
+  { "cyminimized",        21, NULL },
+  { "cxmaxtrack", 0, FIXME_IMPLEMENT },
+  { "cymaxtrack", 0, FIXME_IMPLEMENT },
+  { "cxmaximized", 0, FIXME_IMPLEMENT },
+  { "cymaximized", 0, FIXME_IMPLEMENT },
+  { "network",             3, NULL },
+  { NULL,                  0, NULL },
+  { NULL,                  0, NULL },
+  { NULL,                  0, NULL },
+  { "cleanboot",           0, NULL },
+  { "cxdrag",              4, NULL },
+  { "cydrag",              4, NULL },
+  { "showsounds",          0, NULL },
+  { "cxmenucheck",        13, NULL },
+  { "cymenucheck",        13, NULL },
+  { "slowmachine",         0, NULL },
+  { "mideastenabled",      0, NULL },
+  { "mousewheelpresent",   1, NULL },
+  { "xvirtualscreen", 0, FIXME_IMPLEMENT },
+  { "yvirtualscreen", 0, FIXME_IMPLEMENT },
+  { "cxvirtualscreen", 0, FIXME_IMPLEMENT },
+  { "cyvirtualscreen", 0, FIXME_IMPLEMENT },
+  { "cmonitors", 0, FIXME_IMPLEMENT },
+  { "samedisplayformat",   1, NULL },
+  { "immenabled",          1, NULL },
+  { "cxfocusborder",       1, NULL },
+  { "cyfocusborder",       1, NULL },
+  { NULL,                  0, NULL },
+  { "tabletpc",            0, NULL },
+  { "mediacenter",         0, NULL },
+  { "starter",             0, NULL },
+  { "serverr2",            0, NULL },
+  { "cmetrics",           90, NULL },
+  { "mousehorizontalwheelpresent", 0, NULL },
+  { "cxpaddedborder",      0, NULL }
+};
+
+int
+gtk_win32_get_sys_metric (gint id)
+{
+  if (id >= 0 && id < G_N_ELEMENTS (win32_default_metrics))
+    return 0;
+
+  if (win32_default_metrics[id].get_value)
+    return win32_default_metrics[id].get_value (id);
+
+  return win32_default_metrics[id].value;
+}
+
+static struct {
   const char *name;
   GdkRGBA rgba;
 } win32_default_colors[] = {
