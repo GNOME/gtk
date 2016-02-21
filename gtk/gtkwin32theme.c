@@ -480,12 +480,11 @@ int
 gtk_win32_theme_get_size (GtkWin32Theme *theme,
 			  int            id)
 {
-  int size;
-
 #ifdef G_OS_WIN32
   if (use_xp_theme && GetThemeSysSize != NULL)
     {
       HTHEME htheme = gtk_win32_theme_get_htheme (theme);
+      int size;
 
       /* If htheme is NULL it will just return the GetSystemMetrics value */
       size = GetThemeSysSize (htheme, id);
