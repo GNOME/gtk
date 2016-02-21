@@ -1397,7 +1397,7 @@ _gtk_css_style_property_init_properties (void)
   gtk_css_style_property_register        ("outline-offset",
                                           GTK_CSS_PROPERTY_OUTLINE_OFFSET,
                                           G_TYPE_INT,
-                                          0,
+                                          GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_OUTLINE | GTK_CSS_AFFECTS_CLIP,
                                           outline_parse,
                                           query_length_as_int,
