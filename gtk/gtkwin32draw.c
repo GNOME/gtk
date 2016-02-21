@@ -129,7 +129,13 @@ gtk_win32_draw_theme_background (cairo_t    *cr,
   theme_part = get_theme_part (class_name, part);
 
   if (theme_part)
-    theme_part->draw_func (cr, part, state, width, height);
+    {
+      theme_part->draw_func (cr, part, state, width, height);
+    }
+  else
+    {
+      g_warning ("No fallback code to draw background for class \"%s\", part %d", class_name, part);
+    }
 }
 
 void
