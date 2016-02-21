@@ -2645,7 +2645,6 @@ scale highlight, progressbar progress {
       border-color: transparent; }
 
 scale {
-  -GtkScale-slider-length: 22;
   outline-offset: -10px;
   -gtk-outline-radius: 7px; }
   scale.horizontal trough {
@@ -2653,12 +2652,14 @@ scale {
     min-height: 3px; }
   scale.horizontal slider {
     margin: 5px 1px;
-    min-height: 22px; }
+    min-height: 22px;
+    min-width: 22px; }
   scale.vertical trough {
     margin: 12px 15px;
     min-width: 3px; }
   scale.vertical slider {
     margin: 1px 5px;
+    min-height: 22px;
     min-width: 22px; }
   scale.fine-tune {
     outline-offset: -8px;

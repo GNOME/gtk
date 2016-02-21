@@ -268,12 +268,14 @@ gtk_scale_update_style (GtkScale *scale)
 {
   gint slider_length;
   GtkRange *range;
+  GtkCssGadget *slider_gadget;
 
   range = GTK_RANGE (scale);
-
-  gtk_widget_style_get (GTK_WIDGET (scale),
-                        "slider-length", &slider_length,
-                        NULL);
+  slider_gadget = gtk_range_get_slider_gadget (range);
+  gtk_css_gadget_get_preferred_size (slider_gadget,
+                                     gtk_orientable_get_orientation (GTK_ORIENTABLE (scale)), -1,
+                                     &slider_length, NULL,
+                                     NULL, NULL);
 
   gtk_range_set_min_slider_size (range, slider_length);
   gtk_scale_clear_layout (scale);
@@ -376,12 +378,20 @@ gtk_scale_class_init (GtkScaleClass *class)
 
   g_object_class_install_properties (gobject_class, LAST_PROP, properties);
 
+  /**
+   * GtkScale:slider-length:
+   *
+   * Length of scale's slider.
+   *
+   * Deprecated: 3.20: Use min-height/min-width CSS properties on the slider
+   *   element instead. The value of this style property is ignored.
+   */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("slider-length",
                                                              P_("Slider Length"),
                                                              P_("Length of scale's slider"),
                                                              0, G_MAXINT, 31,
-                                                             GTK_PARAM_READABLE));
+                                                             GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("value-spacing",
@@ -1086,7 +1096,7 @@ gtk_scale_get_preferred_width (GtkWidget *widget,
       gint slider_length;
       gint w;
 
-      gtk_widget_style_get (widget, "slider-length", &slider_length, NULL);
+      slider_length = gtk_range_get_min_slider_size (GTK_RANGE (widget));
 
       gtk_scale_get_mark_label_size (GTK_SCALE (widget), GTK_POS_TOP, &n1, &w1, &h1, &n2, &w2, &h2);
 
@@ -1113,7 +1123,7 @@ gtk_scale_get_preferred_height (GtkWidget *widget,
       gint slider_length;
       gint h;
 
-      gtk_widget_style_get (widget, "slider-length", &slider_length, NULL);
+      slider_length = gtk_range_get_min_slider_size (GTK_RANGE (widget));
 
       gtk_scale_get_mark_label_size (GTK_SCALE (widget), GTK_POS_TOP, &n1, &w1, &h1, &n2, &w2, &h2);
       h1 = (n1 - 1) * h1 + MAX (h1, slider_length);
@@ -1159,13 +1169,17 @@ gtk_scale_draw (GtkWidget *widget,
   GtkRange *range = GTK_RANGE (scale);
   GtkStyleContext *context;
   gint *marks;
-  gint slider_width;
   gint value_spacing;
   gint min_sep = 4;
+  GtkCssGadget *slider_gadget;
+  GtkAllocation slider_alloc;
 
   context = gtk_widget_get_style_context (widget);
+  slider_gadget = gtk_range_get_slider_gadget (range);
+  gtk_css_gadget_get_content_allocation (slider_gadget,
+                                         &slider_alloc, NULL);
+
   gtk_widget_style_get (widget,
-                        "slider-width", &slider_width,
                         "value-spacing", &value_spacing,
                         NULL);
 
@@ -1200,14 +1214,14 @@ gtk_scale_draw (GtkWidget *widget,
               x1 = marks[i];
               if (mark->position == GTK_POS_TOP)
                 {
-                  y1 = range_rect.y + slider_width / 4;
+                  y1 = range_rect.y + slider_alloc.height / 4;
                   y2 = range_rect.y;
                   min_pos = min_pos_before;
                   max_pos = find_next_pos (widget, m, marks + i, GTK_POS_TOP) - min_sep;
                 }
               else
                 {
-                  y1 = range_rect.y + range_rect.height - slider_width / 4;
+                  y1 = range_rect.y + slider_alloc.height / 4;
                   y2 = range_rect.y + range_rect.height;
                   min_pos = min_pos_after;
                   max_pos = find_next_pos (widget, m, marks + i, GTK_POS_BOTTOM) - min_sep;
@@ -1245,14 +1259,14 @@ gtk_scale_draw (GtkWidget *widget,
             {
               if (mark->position == GTK_POS_TOP)
                 {
-                  x1 = range_rect.x + slider_width / 4;
+                  x1 = range_rect.x + slider_alloc.width / 4;
                   x2 = range_rect.x;
                   min_pos = min_pos_before;
                   max_pos = find_next_pos (widget, m, marks + i, GTK_POS_TOP) - min_sep;
                 }
               else
                 {
-                  x1 = range_rect.x + range_rect.width - slider_width / 4;
+                  x1 = range_rect.x + slider_alloc.width / 4;
                   x2 = range_rect.x + range_rect.width;
                   min_pos = min_pos_after;
                   max_pos = find_next_pos (widget, m, marks + i, GTK_POS_BOTTOM) - min_sep;

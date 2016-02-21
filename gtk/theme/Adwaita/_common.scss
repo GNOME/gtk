@@ -2483,8 +2483,6 @@ treeview.view radio {
 }
 
 scale {
-  -GtkScale-slider-length: 22;
-
   outline-offset: -10px;
   -gtk-outline-radius: 7px;
 
@@ -2496,6 +2494,7 @@ scale {
     slider {
       margin: 5px 1px;
       min-height: 22px;
+      min-width: 22px;
     }
   }
 
@@ -2506,6 +2505,7 @@ scale {
     }
     slider {
       margin: 1px 5px;
+      min-height: 22px;
       min-width: 22px;
     }
   }

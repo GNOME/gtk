@@ -3995,3 +3995,9 @@ gtk_range_get_trough_node (GtkRange *range)
 {
   return gtk_css_gadget_get_node (range->priv->trough_gadget);
 }
+
+GtkCssGadget *
+gtk_range_get_slider_gadget (GtkRange *range)
+{
+  return range->priv->slider_gadget;
+}
