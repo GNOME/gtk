@@ -19,6 +19,7 @@
 
 #include "gtkcsswin32sizevalueprivate.h"
 
+#include "gtkwin32drawprivate.h"
 #include "gtkwin32themeprivate.h"
 
 typedef enum {
@@ -164,7 +165,13 @@ gtk_css_value_win32_size_print (const GtkCssValue *value,
   switch (value->type)
     {
     case GTK_WIN32_SIZE:
-      g_string_append_printf (string, ", %d", value->val.size.id);
+      {
+        const char *name = gtk_win32_get_sys_metric_name_for_id (value->val.size.id);
+        if (name)
+          g_string_append (string, name);
+        else
+          g_string_append_printf (string, ", %d", value->val.size.id);
+      }
       break;
 
     case GTK_WIN32_PART_WIDTH:
@@ -271,7 +278,22 @@ static GtkCssValue *
 gtk_css_win32_size_value_parse_size (GtkCssValue *value,
                                      GtkCssParser *parser)
 {
-  if (!_gtk_css_parser_try_int (parser, &value->val.size.id))
+  char *name;
+
+  name = _gtk_css_parser_try_ident (parser, TRUE);
+  if (name)
+    {
+      value->val.size.id = gtk_win32_get_sys_metric_id_for_name (name);
+      if (value->val.size.id == -1)
+        {
+          _gtk_css_parser_error (parser, "'%s' is not a name for a win32 metric.", name);
+          _gtk_css_value_unref (value);
+          g_free (name);
+          return NULL;
+        }
+      g_free (name);
+    }
+  else if (!_gtk_css_parser_try_int (parser, &value->val.size.id))
     {
       _gtk_css_value_unref (value);
       _gtk_css_parser_error (parser, "Expected an integer ID");
