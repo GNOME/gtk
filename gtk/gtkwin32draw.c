@@ -19,6 +19,111 @@
 
 #include "gtkwin32drawprivate.h"
 
+typedef enum {
+  ICON_CLOSE,
+  ICON_MINIMIZE,
+  ICON_MAXIMIZE,
+  ICON_RESTORE
+} Icon;
+
+const guchar icon_close_pixels[] = {
+  0x00, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00,
+  0x0c, 0x06, 0x00, 0x00,
+  0x1c, 0x07, 0x00, 0x00,
+  0xb8, 0x03, 0x00, 0x00,
+  0xf0, 0x01, 0x00, 0x00,
+  0xe0, 0x00, 0x00, 0x00,
+  0xf0, 0x01, 0x00, 0x00,
+  0xb8, 0x03, 0x00, 0x00,
+  0x1c, 0x07, 0x00, 0x00,
+  0x0c, 0x06, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00
+};
+
+const guchar icon_minimize_pixels[] = {
+  0x00, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00,
+  0xfc, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00
+};
+
+const guchar icon_maximize_pixels[] = {
+  0x00, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00,
+  0xfe, 0x07, 0x00, 0x00,
+  0xfe, 0x07, 0x00, 0x00,
+  0x02, 0x04, 0x00, 0x00,
+  0x02, 0x04, 0x00, 0x00,
+  0x02, 0x04, 0x00, 0x00,
+  0x02, 0x04, 0x00, 0x00,
+  0x02, 0x04, 0x00, 0x00,
+  0x02, 0x04, 0x00, 0x00,
+  0xfe, 0x07, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00
+};
+
+const guchar icon_restore_pixels[] = {
+  0x00, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00,
+  0xf8, 0x07, 0x00, 0x00,
+  0xf8, 0x07, 0x00, 0x00,
+  0x08, 0x04, 0x00, 0x00,
+  0x08, 0x04, 0x00, 0x00,
+  0xfe, 0x04, 0x00, 0x00,
+  0x82, 0x07, 0x00, 0x00,
+  0x82, 0x00, 0x00, 0x00,
+  0x82, 0x00, 0x00, 0x00,
+  0xfe, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00
+};
+
+static struct {
+  int width;
+  int height;
+  gsize pixels_size;
+  const guchar *pixels;
+} icon_masks[] = {
+  { 13, 13, sizeof (icon_close_pixels), icon_close_pixels },
+  { 13, 13, sizeof (icon_minimize_pixels), icon_minimize_pixels },
+  { 13, 13, sizeof (icon_maximize_pixels), icon_maximize_pixels },
+  { 13, 13, sizeof (icon_restore_pixels), icon_restore_pixels }
+};
+
+static void
+mask_icon (cairo_t *cr,
+           Icon     icon,
+           double   x,
+           double   y,
+           double   width,
+           double   height)
+{
+  cairo_surface_t *surface;
+
+  surface = cairo_image_surface_create_for_data ((guchar *) icon_masks[icon].pixels,
+                                                 CAIRO_FORMAT_A1,
+                                                 icon_masks[icon].width,
+                                                 icon_masks[icon].height,
+                                                 icon_masks[icon].pixels_size / icon_masks[icon].height);
+  cairo_mask_surface (cr,
+                      surface,
+                      x + (width - icon_masks[icon].width) / 2,
+                      y + (height - icon_masks[icon].height) / 2);
+  cairo_surface_destroy (surface);
+}
+
 static void
 gtk_cairo_set_source_sys_color (cairo_t *cr,
                                 gint     id)
@@ -54,7 +159,7 @@ draw_button (cairo_t *cr,
   cairo_rectangle (cr, 1, 1, width - 2, height - 2);
   cairo_fill (cr);
 }
-            
+
 static void
 draw_check (cairo_t *cr,
             int      part,
@@ -94,6 +199,41 @@ draw_window (cairo_t *cr,
   cairo_fill (cr);
 }
 
+static void
+draw_window_button (cairo_t *cr,
+                    int      part,
+                    int      state,
+                    int      width,
+                    int      height)
+{
+  Icon icon;
+
+
+  switch (part)
+    {
+    case 15: /* minimize */
+      icon = ICON_MINIMIZE;
+      break;
+    case 17: /* maximize */
+      icon = ICON_MAXIMIZE;
+      break;
+    default:
+      g_assert_not_reached ();
+    case 18: /* close */
+      icon = ICON_CLOSE;
+      break;
+    case 21: /* restore */
+      icon = ICON_RESTORE;
+      break;
+    }
+
+  draw_button (cr, 0, state, width, height);
+
+  gtk_cairo_set_source_sys_color (cr, state == 4 ? GTK_WIN32_SYS_COLOR_BTNSHADOW
+                                                 : GTK_WIN32_SYS_COLOR_BTNTEXT);
+  mask_icon (cr, icon, 1, 1, width - 2, height - 2);
+}
+
 typedef struct _GtkWin32ThemePart GtkWin32ThemePart;
 struct _GtkWin32ThemePart {
   const char *class_name;
@@ -108,10 +248,14 @@ struct _GtkWin32ThemePart {
 };
 
 static GtkWin32ThemePart theme_parts[] = {
-  { "button", 1,  0, { 3, 3, 3, 3 }, draw_button },
-  { "button", 2, 13, { 0, 0, 0, 0 }, draw_radio },
-  { "button", 3, 13, { 0, 0, 0, 0 }, draw_check },
-  { "window", 1,  0, { 0, 0, 0, 0 }, draw_window }
+  { "button",  1,  0, { 3, 3, 3, 3 }, draw_button },
+  { "button",  2, 13, { 0, 0, 0, 0 }, draw_radio },
+  { "button",  3, 13, { 0, 0, 0, 0 }, draw_check },
+  { "window",  1,  0, { 0, 0, 0, 0 }, draw_window },
+  { "window", 15,  0, { 0, 0, 0, 0 }, draw_window_button },
+  { "window", 17,  0, { 0, 0, 0, 0 }, draw_window_button },
+  { "window", 18,  0, { 0, 0, 0, 0 }, draw_window_button },
+  { "window", 21,  0, { 0, 0, 0, 0 }, draw_window_button }
 };
 
 static const GtkWin32ThemePart *
