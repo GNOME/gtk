@@ -584,8 +584,8 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   add_spin_binding (binding_set, GDK_KEY_KP_Down, 0, GTK_SCROLL_STEP_DOWN);
   add_spin_binding (binding_set, GDK_KEY_Page_Up, 0, GTK_SCROLL_PAGE_UP);
   add_spin_binding (binding_set, GDK_KEY_Page_Down, 0, GTK_SCROLL_PAGE_DOWN);
-  add_spin_binding (binding_set, GDK_KEY_End, 0, GTK_SCROLL_END);
-  add_spin_binding (binding_set, GDK_KEY_Home, 0, GTK_SCROLL_START);
+  add_spin_binding (binding_set, GDK_KEY_End, GDK_CONTROL_MASK, GTK_SCROLL_END);
+  add_spin_binding (binding_set, GDK_KEY_Home, GDK_CONTROL_MASK, GTK_SCROLL_START);
   add_spin_binding (binding_set, GDK_KEY_Page_Up, GDK_CONTROL_MASK, GTK_SCROLL_END);
   add_spin_binding (binding_set, GDK_KEY_Page_Down, GDK_CONTROL_MASK, GTK_SCROLL_START);
 
