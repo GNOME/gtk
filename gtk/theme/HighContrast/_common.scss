@@ -1458,15 +1458,12 @@ scrollbar {
   background-clip: padding-box;
   background-image: none;
   border-style: solid;
-  -GtkRange-trough-border: 0;
   -GtkScrollbar-has-backward-stepper: false;
   -GtkScrollbar-has-forward-stepper: false;
   -GtkRange-slider-width: 20;
   -GtkScrollbar-min-slider-length: 42; // minimum size for the slider.
                                        // sadly can't be in '.slider'
                                        // where it belongs
-
-  -GtkRange-stepper-spacing: 0;
 
   trough { @extend junction; }
 
@@ -1664,7 +1661,6 @@ scale.scale-has-marks-above.scale-has-marks-below,
 scale.vertical.scale-has-marks-above.scale-has-marks-below {
   -GtkScale-slider-length: 20;
   -GtkRange-slider-width: 20;
-  -GtkRange-trough-border: 2;
   outline-offset: -9px;
   -gtk-outline-radius: 4px;
 

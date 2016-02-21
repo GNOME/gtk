@@ -2219,12 +2219,9 @@ notebook > stack:not(:only-child) {
  * Scrollbars *
  **************/
 * {
-  -GtkRange-slider-width: 13;
-  -GtkRange-trough-border: 0;
   -GtkScrollbar-has-backward-stepper: false;
   -GtkScrollbar-has-forward-stepper: false;
-  -GtkScrollbar-min-slider-length: 42;
-  -GtkRange-stepper-spacing: 0; }
+  -GtkScrollbar-min-slider-length: 42; }
 scrollbar button {
   border: none; }
 scrollbar.vertical button.down {
@@ -2236,8 +2233,7 @@ scrollbar.horizontal button.down {
 scrollbar.horizontal button.up {
   -gtk-icon-source: -gtk-icontheme("pan-left-symbolic"); }
 scrollbar.overlay-indicator:not(.dragging):not(.hovering) {
-  opacity: 0.4;
-  -GtkRange-slider-width: 5px; }
+  opacity: 0.4; }
   scrollbar.overlay-indicator:not(.dragging):not(.hovering) slider {
     margin: 0;
     background-color: #eeeeec;
@@ -2248,10 +2244,12 @@ scrollbar.overlay-indicator:not(.dragging):not(.hovering) {
     background-color: transparent; }
   scrollbar.overlay-indicator:not(.dragging):not(.hovering).vertical slider {
     margin-top: 2px;
-    margin-bottom: 2px; }
+    margin-bottom: 2px;
+    min-width: 5px; }
   scrollbar.overlay-indicator:not(.dragging):not(.hovering).horizontal slider {
     margin-left: 2px;
-    margin-right: 2px; }
+    margin-right: 2px;
+    min-height: 5px; }
 scrollbar.overlay-indicator.dragging, scrollbar.overlay-indicator.hovering {
   opacity: 0.7; }
 scrollbar trough {
@@ -2276,7 +2274,8 @@ scrollbar slider {
 scrollbar.fine-tune slider {
   margin: 4px; }
 scrollbar.vertical slider {
-  margin-left: 4px; }
+  margin-left: 4px;
+  min-width: 6px; }
   scrollbar.vertical slider:dir(rtl) {
     margin-left: 3px;
     margin-right: 4px; }
@@ -2291,7 +2290,8 @@ scrollbar.vertical trough {
     border-left-style: none;
     border-right-style: solid; }
 scrollbar.horizontal slider {
-  margin-top: 4px; }
+  margin-top: 4px;
+  min-height: 6px; }
 scrollbar.horizontal.fine-tune slider {
   margin-top: 5px; }
 scrollbar.horizontal trough {
@@ -2646,18 +2646,20 @@ scale highlight, progressbar progress {
 
 scale {
   -GtkScale-slider-length: 22;
-  -GtkRange-slider-width: 30;
-  -GtkRange-trough-border: 2;
   outline-offset: -10px;
   -gtk-outline-radius: 7px; }
   scale.horizontal trough {
-    margin: 15px 12px; }
+    margin: 15px 12px;
+    min-height: 3px; }
   scale.horizontal slider {
-    margin: 5px 1px; }
+    margin: 5px 1px;
+    min-height: 22px; }
   scale.vertical trough {
-    margin: 12px 15px; }
+    margin: 12px 15px;
+    min-width: 3px; }
   scale.vertical slider {
-    margin: 1px 5px; }
+    margin: 1px 5px;
+    min-width: 22px; }
   scale.fine-tune {
     outline-offset: -8px;
     -gtk-outline-radius: 10px; }

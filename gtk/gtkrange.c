@@ -521,6 +521,14 @@ gtk_range_class_init (GtkRangeClass *class)
 
   g_object_class_install_properties (gobject_class, LAST_PROP, properties);
 
+  /**
+   * GtkRange:slider-width:
+   *
+   * Width of scrollbar or scale thumb.
+   *
+   * Depreacated: 3.20: Use the min-height/min-width CSS properties on the
+   *   slider element. The value of this style property is ignored.
+   */
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("slider-width",
 							     P_("Slider Width"),
@@ -528,7 +536,15 @@ gtk_range_class_init (GtkRangeClass *class)
 							     0,
 							     G_MAXINT,
 							     14,
-							     GTK_PARAM_READABLE));
+							     GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
+  /**
+   * GtkRange:trough-border:
+   *
+   * Spacing between thumb/steppers and outer trough bevel.
+   *
+   * Depreacated: 3.20: Use the margin/padding CSS properties on the through and
+   *   stepper elements. The value of this style property is ignored.
+   */
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("trough-border",
                                                              P_("Trough Border"),
@@ -536,7 +552,15 @@ gtk_range_class_init (GtkRangeClass *class)
                                                              0,
                                                              G_MAXINT,
                                                              1,
-                                                             GTK_PARAM_READABLE));
+                                                             GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
+  /**
+   * GtkRange:stepper-size:
+   *
+   * Length of step buttons at ends.
+   *
+   * Depreacated: 3.20: Use the min-height/min-width CSS properties on the
+   *   stepper elements. The value of this style property is ignored.
+   */
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("stepper-size",
 							     P_("Stepper Size"),
@@ -544,12 +568,15 @@ gtk_range_class_init (GtkRangeClass *class)
 							     0,
 							     G_MAXINT,
 							     14,
-							     GTK_PARAM_READABLE));
+							     GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
   /**
    * GtkRange:stepper-spacing:
    *
    * The spacing between the stepper buttons and thumb. Note that
    * stepper-spacing won't have any effect if there are no steppers.
+   *
+   * Depreacated: 3.20: Use the margin CSS property on the stepper elements.
+   *   The value of this style property is ignored.
    */
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("stepper-spacing",
@@ -558,7 +585,7 @@ gtk_range_class_init (GtkRangeClass *class)
                                                              0,
 							     G_MAXINT,
 							     0,
-							     GTK_PARAM_READABLE));
+							     GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   /**
    * GtkRange:arrow-displacement-x:

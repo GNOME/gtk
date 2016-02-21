@@ -547,7 +547,6 @@ notebook > header > tabs > tab:only-child:checked {
 
 scrollbar {
     background-color: transparent;
-    -GtkRange-trough-border: 0;
     -GtkRange-arrow-scaling: 0.0;
     -GtkRange-slider-width: -gtk-win32-size(scrollbar, cyhscroll);
 }
@@ -865,7 +864,6 @@ scale {
     -GtkScale-value-spacing: 0;
     -GtkScale-slider-length: 12;
     -GtkRange-slider-width: 20;
-    -GtkRange-trough-border: 0;
 }
 
 scale trough {

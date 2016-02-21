@@ -2006,14 +2006,11 @@ notebook {
  **************/
 scrollbar {
   @at-root * {
-    -GtkRange-slider-width: 13;
-    -GtkRange-trough-border: 0;
     -GtkScrollbar-has-backward-stepper: false;
     -GtkScrollbar-has-forward-stepper: false;
     -GtkScrollbar-min-slider-length: 42; // minimum size for the slider.
                                          // sadly can't be in '.slider'
                                          // where it belongs
-    -GtkRange-stepper-spacing: 0;
   }
 
   $_slider_margin: 3px;
@@ -2043,8 +2040,6 @@ scrollbar {
     &:not(.dragging):not(.hovering) { // Overlay scrolling indicator
       opacity: 0.4;
 
-      -GtkRange-slider-width: 5px;
-
       slider {
         margin: 0;
         background-color: $fg_color;
@@ -2061,11 +2056,13 @@ scrollbar {
       &.vertical slider {
         margin-top: $_slider_margin - 1px;
         margin-bottom: $_slider_margin - 1px;
+        min-width: 5px;
       }
 
       &.horizontal slider {
         margin-left: $_slider_margin - 1px;
         margin-right: $_slider_margin - 1px;
+        min-height: 5px;
       }
     }
 
@@ -2109,6 +2106,7 @@ scrollbar {
   &.vertical {
     slider {
       margin-left: 1px + $_slider_margin;
+      min-width: 6px;
 
       &:dir(rtl) {
         margin-left: $_slider_margin;
@@ -2136,7 +2134,10 @@ scrollbar {
   }
 
   &.horizontal {
-    slider { margin-top: 1px + $_slider_margin; }
+    slider {
+      margin-top: 1px + $_slider_margin;
+      min-height: 6px;
+    }
 
     &.fine-tune slider { margin-top: 1px + $_slider_fine_tune_margin; }
 
@@ -2483,20 +2484,30 @@ treeview.view radio {
 
 scale {
   -GtkScale-slider-length: 22;
-  -GtkRange-slider-width: 30;
-  -GtkRange-trough-border: 2;
 
   outline-offset: -10px;
   -gtk-outline-radius: 7px;
 
   &.horizontal {
-    trough { margin: 15px 12px; }
-    slider { margin: 5px 1px; }
+    trough {
+      margin: 15px 12px;
+      min-height: 3px;
+    }
+    slider {
+      margin: 5px 1px;
+      min-height: 22px;
+    }
   }
 
   &.vertical {
-    trough { margin: 12px 15px; }
-    slider { margin: 1px 5px; }
+    trough {
+      margin: 12px 15px;
+      min-width: 3px;
+    }
+    slider {
+      margin: 1px 5px;
+      min-width: 22px;
+    }
   }
 
   &.fine-tune {
