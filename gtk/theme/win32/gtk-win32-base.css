@@ -346,11 +346,11 @@ scrollbar {
     background-color: transparent;
     -GtkRange-trough-border: 0;
     -GtkRange-arrow-scaling: 0.0;
-    -GtkRange-slider-width: -gtk-win32-size(scrollbar, 3);
+    -GtkRange-slider-width: -gtk-win32-size(scrollbar, cyhscroll);
 }
 
 scrollbar.vertical {
-    -GtkRange-slider-width: -gtk-win32-size(scrollbar, 2);
+    -GtkRange-slider-width: -gtk-win32-size(scrollbar, cxvscroll);
 }
 
 scrollbar button.bottom {
