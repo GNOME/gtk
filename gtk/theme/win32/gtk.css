@@ -86,7 +86,7 @@ menuitem check:disabled:active:hover{
 /* Notebook */
 notebook {
     /* This prevents a thin half-transparent line between the pane and the tab */
-    background-color: -gtk-win32-color(tab, 5);
+    background-color: -gtk-win32-color(tab, window);
 
     border-width: 1px 1px 1px 1px;
     border-style: solid;

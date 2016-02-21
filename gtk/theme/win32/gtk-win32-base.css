@@ -1,7 +1,7 @@
-@define-color bg_color -gtk-win32-color(button, 15);
-@define-color text_color -gtk-win32-color(button, 18);
-@define-color selected_bg_color -gtk-win32-color(button, 13);
-@define-color selected_fg_color -gtk-win32-color(button, 14);
+@define-color bg_color -gtk-win32-color(button, btnface);
+@define-color text_color -gtk-win32-color(button, btntext);
+@define-color selected_bg_color -gtk-win32-color(button, highlight);
+@define-color selected_fg_color -gtk-win32-color(button, highlighttext);
 @define-color info_fg_color rgb (181, 171, 156);
 @define-color info_bg_color rgb (252, 252, 189);
 @define-color warning_fg_color rgb (173, 120, 41);
@@ -24,8 +24,8 @@ viewport {
     /* XXX: This should be the default, but isn't?! */
     font-family: "Segoe UI", Sans;
     font-size: 9px;
-    background-color: -gtk-win32-color(window, 15);
-    color: -gtk-win32-color(window, 18);
+    background-color: -gtk-win32-color(window, btnface);
+    color: -gtk-win32-color(window, btntext);
 }
 
 * {
@@ -33,11 +33,11 @@ viewport {
 }
 
 :link {
-    color: -gtk-win32-color(button, 26);
+    color: -gtk-win32-color(button, hotlight);
 }
 
 :visited {
-    color: -gtk-win32-color(button, 26);
+    color: -gtk-win32-color(button, hotlight);
 }
 
 frame {
@@ -48,7 +48,7 @@ frame {
 }
 
 *:disabled {
-    color: -gtk-win32-color(button, 17);
+    color: -gtk-win32-color(button, graytext);
 }
 
 *:selected,
@@ -103,12 +103,12 @@ scrolledwindow.frame {
 .view {
   border-width: 0;
   border-radius: 0;
-  background-color: -gtk-win32-color(edit, 5);
+  background-color: -gtk-win32-color(edit, window);
   color: @text_color;
 }
 
 .view:selected {
-  background-color: shade (-gtk-win32-color(edit, 5), 0.9);
+  background-color: shade (-gtk-win32-color(edit, window), 0.9);
   color: @fg_color;
 }
 
@@ -120,17 +120,17 @@ scrolledwindow.frame {
 tooltip {
     background-color: transparent;
     background-image: -gtk-win32-theme-part(tooltip, 3, 1);
-    color: -gtk-win32-color(button, 23);
+    color: -gtk-win32-color(button, infotext);
     border-width: 0px;
 }
 
 tooltip * {
-    color: -gtk-win32-color(button, 23);
+    color: -gtk-win32-color(button, infotext);
 }
 
 assistant .sidebar .highlight {
     font: bold;
-    color:  -gtk-win32-color(button, 9);
+    color:  -gtk-win32-color(button, captiontext);
 }
 
 /* checkmarks */
@@ -870,7 +870,7 @@ combobox-entry button:disabled {
 
 /* Dropdown list should have "window" color, as listbox contents do (usually it's "white") */
 combobox cellview * {
-    background-color: -gtk-win32-color(listview, 5);
+    background-color: -gtk-win32-color(listview, window);
 }
 
 /* Draw "arrow" for non-entry comboboxes. Select the box, since selecting
@@ -985,19 +985,19 @@ switch slider {
 /* Menus */
 
 menu {
-    background-color: -gtk-win32-color(button, 4);
-    border-color: shade (-gtk-win32-color(button, 4), 0.6);
+    background-color: -gtk-win32-color(button, menu);
+    border-color: shade (-gtk-win32-color(button, menu), 0.6);
     border-style: solid;
     border-width: 1px;
     padding: 2px;
 }
 
 menuitem {
-    color: -gtk-win32-color(button, 7);
+    color: -gtk-win32-color(button, menutext);
 }
 
 menubar menuitem *:backdrop {
-    color: mix (-gtk-win32-color(button, 7), white, 0.5);
+    color: mix (-gtk-win32-color(button, menutext), white, 0.5);
 }
 
 menubar > menuitem {
@@ -1107,7 +1107,7 @@ popover > toolbar {
 
 /* Listbox */
 list {
-  background-color: -gtk-win32-color(listbox, 5);
+  background-color: -gtk-win32-color(listbox, window);
 }
 
 /* Dim label */
