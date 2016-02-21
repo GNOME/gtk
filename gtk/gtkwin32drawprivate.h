@@ -168,6 +168,9 @@ void                    gtk_win32_get_theme_margins             (const char     
                                                                  GtkBorder      *out_margins);
 
 int                     gtk_win32_get_sys_metric                (gint            id);
+
+const char *            gtk_win32_get_sys_color_name_for_id     (gint            id);
+int                     gtk_win32_get_sys_color_id_for_name     (const char     *name);
 void                    gtk_win32_get_sys_color                 (gint            id,
                                                                  GdkRGBA        *color);
 

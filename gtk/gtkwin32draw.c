@@ -501,6 +501,31 @@ static struct {
 #undef RGB
 };
 
+const char *
+gtk_win32_get_sys_color_name_for_id (gint id)
+{
+  if (id >= 0 && id < G_N_ELEMENTS (win32_default_colors))
+    return win32_default_colors[id].name;
+  else
+    return NULL;
+}
+
+int
+gtk_win32_get_sys_color_id_for_name (const char *name)
+{
+  int i;
+
+  g_return_val_if_fail (name != NULL, -1);
+
+  for (i = 0; i < G_N_ELEMENTS (win32_default_colors); i++)
+    {
+      if (g_str_equal (name, win32_default_colors[i].name))
+        return i;
+    }
+
+  return -1;
+}
+
 void
 gtk_win32_get_sys_color (gint     id,
                          GdkRGBA *color)
