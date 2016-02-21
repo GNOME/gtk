@@ -450,6 +450,34 @@ static struct {
   { "cxpaddedborder",      0, NULL }
 };
 
+const char *
+gtk_win32_get_sys_metric_name_for_id (gint id)
+{
+  if (id >= 0 && id < G_N_ELEMENTS (win32_default_metrics))
+    return win32_default_metrics[id].name;
+  else
+    return NULL;
+}
+
+int
+gtk_win32_get_sys_metric_id_for_name (const char *name)
+{
+  int i;
+
+  g_return_val_if_fail (name != NULL, -1);
+
+  for (i = 0; i < G_N_ELEMENTS (win32_default_metrics); i++)
+    {
+      if (win32_default_metrics[i].name == NULL)
+        continue;
+
+      if (g_str_equal (name, win32_default_metrics[i].name))
+        return i;
+    }
+
+  return -1;
+}
+
 int
 gtk_win32_get_sys_metric (gint id)
 {
