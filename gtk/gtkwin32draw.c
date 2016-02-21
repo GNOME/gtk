@@ -81,6 +81,19 @@ draw_radio (cairo_t *cr,
   cairo_stroke (cr);
 }
 
+static void
+draw_window (cairo_t *cr,
+             int      part,
+             int      state,
+             int      width,
+             int      height)
+{
+  gtk_cairo_set_source_sys_color (cr, state == 2 ? GTK_WIN32_SYS_COLOR_INACTIVECAPTION
+                                                 : GTK_WIN32_SYS_COLOR_ACTIVECAPTION);
+  cairo_rectangle (cr, 0, 0, width, height);
+  cairo_fill (cr);
+}
+
 typedef struct _GtkWin32ThemePart GtkWin32ThemePart;
 struct _GtkWin32ThemePart {
   const char *class_name;
@@ -97,7 +110,8 @@ struct _GtkWin32ThemePart {
 static GtkWin32ThemePart theme_parts[] = {
   { "button", 1,  0, { 3, 3, 3, 3 }, draw_button },
   { "button", 2, 13, { 0, 0, 0, 0 }, draw_radio },
-  { "button", 3, 13, { 0, 0, 0, 0 }, draw_check }
+  { "button", 3, 13, { 0, 0, 0, 0 }, draw_check },
+  { "window", 1,  0, { 0, 0, 0, 0 }, draw_window }
 };
 
 static const GtkWin32ThemePart *
