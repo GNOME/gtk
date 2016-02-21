@@ -1414,7 +1414,7 @@ msgstr "ਫਾਇਲ ਨੂੰ ਲੋਡ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕ
 #, c-format
 #| msgid "Failed to open file %s : %s\n"
 msgid "Can't save file %s: %s\n"
-msgstr "ਫਾਇਲ ਨੂੰ ਸੰਭਾਲਿਆ ਨਹੀਂ ਜਾ ਸਕਦਾ: %s\n"
+msgstr "ਫਾਇਲ %s ਨੂੰ ਸੰਭਾਲਿਆ ਨਹੀਂ ਜਾ ਸਕਦਾ: %s\n"
 
 #: gtk/encodesymbolic.c:319
 #, c-format
