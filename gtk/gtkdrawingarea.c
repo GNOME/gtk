@@ -56,9 +56,10 @@
  * area to display a circle in the normal widget foreground
  * color.
  *
- * Note that GDK automatically clears the exposed area to the
- * background color before sending the expose event, and that
- * drawing is implicitly clipped to the exposed area.
+ * Note that GDK automatically clears the exposed area before sending
+ * the expose event, and that drawing is implicitly clipped to the exposed
+ * area. If you want to have a theme-provided background, you need
+ * to call gtk_render_background() in your ::draw method.
  *
  * ## Simple GtkDrawingArea usage
  *
@@ -68,16 +69,22 @@
  * {
  *   guint width, height;
  *   GdkRGBA color;
+ *   GtkStyleContext *context;
+ *
+ *   context = gtk_widget_get_style_context (widget);
  *
  *   width = gtk_widget_get_allocated_width (widget);
  *   height = gtk_widget_get_allocated_height (widget);
+ *
+ *   gtk_render_background (context, cr, 0, 0, width, height);
+ *
  *   cairo_arc (cr,
  *              width / 2.0, height / 2.0,
  *              MIN (width, height) / 2.0,
  *              0, 2 * G_PI);
  *
- *   gtk_style_context_get_color (gtk_widget_get_style_context (widget),
- *                                0,
+ *   gtk_style_context_get_color (context,
+ *                                gtk_style_context_get_state (context),
  *                                &color);
  *   gdk_cairo_set_source_rgba (cr, &color);
  *
