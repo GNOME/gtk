@@ -691,6 +691,18 @@ render_border (cairo_t       *cr,
   cairo_restore (cr);
 }
 
+gboolean
+gtk_css_style_render_has_border (GtkCssStyle *style)
+{
+  if (_gtk_css_image_value_get_image (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_IMAGE_SOURCE)))
+    return TRUE;
+
+  return _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100) > 0
+      || _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100) > 0
+      || _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 100) > 0
+      || _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100) > 0;
+}
+
 void
 gtk_css_style_render_border (GtkCssStyle      *style,
                              cairo_t          *cr,
@@ -745,6 +757,70 @@ gtk_css_style_render_border (GtkCssStyle      *style,
     }
 }
 
+gboolean
+gtk_css_style_render_border_get_clip (GtkCssStyle  *style,
+                                      gdouble       x,
+                                      gdouble       y,
+                                      gdouble       width,
+                                      gdouble       height,
+                                      GdkRectangle *out_clip)
+{
+  if (!gtk_css_style_render_has_border (style))
+    return FALSE;
+
+  out_clip->x = floor (x);
+  out_clip->y = floor (y);
+  out_clip->width = ceil (x + width) - out_clip->x;
+  out_clip->height = ceil (y + height) - out_clip->y;
+
+  return TRUE;
+}
+
+gboolean
+gtk_css_style_render_has_outline (GtkCssStyle *style)
+{
+  return _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_OUTLINE_WIDTH), 100) > 0;
+}
+
+static void
+compute_outline_rect (GtkCssStyle       *style,
+                      gdouble            x,
+                      gdouble            y,
+                      gdouble            width,
+                      gdouble            height,
+                      cairo_rectangle_t *out_rect)
+{
+  double offset, owidth;
+
+  owidth = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_OUTLINE_WIDTH), 100);
+  offset = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_OUTLINE_OFFSET), 100);
+
+  if (width <= -2 * offset)
+    {
+      x += width / 2;
+      out_rect->x = x - owidth;
+      out_rect->width = 2 * owidth;
+    }
+  else
+    {
+      out_rect->x = x - offset - owidth;
+      out_rect->width = width + 2 * (offset + owidth);
+    }
+
+  if (height <= -2 * offset)
+    {
+      y += height / 2;
+      out_rect->y = y - owidth;
+      out_rect->height = 2 * owidth;
+    }
+  else
+    {
+      out_rect->y = y - offset - owidth;
+      out_rect->height = height + 2 * (offset + owidth);
+    }
+
+}
+                      
 void
 gtk_css_style_render_outline (GtkCssStyle *style,
                               cairo_t     *cr,
@@ -761,24 +837,42 @@ gtk_css_style_render_outline (GtkCssStyle *style,
   border_style[0] = _gtk_css_border_style_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_OUTLINE_STYLE));
   if (border_style[0] != GTK_BORDER_STYLE_NONE)
     {
-      int offset;
+      cairo_rectangle_t rect;
+
+      compute_outline_rect (style, x, y, width, height, &rect);
 
       border_style[1] = border_style[2] = border_style[3] = border_style[0];
       border_width[0] = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_OUTLINE_WIDTH), 100);
       border_width[3] = border_width[2] = border_width[1] = border_width[0];
       colors[0] = *_gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_OUTLINE_COLOR));
       colors[3] = colors[2] = colors[1] = colors[0];
-      offset = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_OUTLINE_OFFSET), 100);
 
-      _gtk_rounded_box_init_rect (&border_box, x, y, width, height);
-      _gtk_rounded_box_shrink (&border_box,
-                               - border_width[GTK_CSS_TOP] - offset,
-                               - border_width[GTK_CSS_RIGHT] - offset,
-                               - border_width[GTK_CSS_LEFT] - offset,
-                               - border_width[GTK_CSS_BOTTOM] - offset);
+      _gtk_rounded_box_init_rect (&border_box, rect.x, rect.y, rect.width, rect.height);
       _gtk_rounded_box_apply_outline_radius_for_style (&border_box, style, GTK_JUNCTION_NONE);
 
       render_border (cr, &border_box, border_width, 0, colors, border_style);
     }
 }
 
+gboolean
+gtk_css_style_render_outline_get_clip (GtkCssStyle  *style,
+                                       gdouble       x,
+                                       gdouble       y,
+                                       gdouble       width,
+                                       gdouble       height,
+                                       GdkRectangle *out_clip)
+{
+  cairo_rectangle_t rect;
+
+  if (!gtk_css_style_render_has_outline (style))
+    return FALSE;
+
+  compute_outline_rect (style, x, y, width, height, &rect);
+
+  out_clip->x = floor (rect.x);
+  out_clip->y = floor (rect.y);
+  out_clip->width = ceil (rect.x + rect.width) - out_clip->x;
+  out_clip->height = ceil (rect.y + rect.height) - out_clip->y;
+
+  return TRUE;
+}

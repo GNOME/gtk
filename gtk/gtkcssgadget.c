@@ -601,6 +601,7 @@ gtk_css_gadget_allocate (GtkCssGadget        *gadget,
 {
   GtkCssGadgetPrivate *priv = gtk_css_gadget_get_instance_private (gadget);
   GtkAllocation content_allocation;
+  GtkAllocation tmp_clip;
   GtkAllocation content_clip = { 0, 0, 0, 0 };
   GtkBorder margin, border, padding, shadow, extents;
   GtkCssStyle *style;
@@ -669,6 +670,14 @@ gtk_css_gadget_allocate (GtkCssGadget        *gadget,
 
   if (content_clip.width > 0 && content_clip.height > 0)
     gdk_rectangle_union (&content_clip, out_clip, out_clip);
+
+  if (gtk_css_style_render_outline_get_clip (style,
+                                             allocation->x + margin.left,
+                                             allocation->y + margin.top,
+                                             allocation->width - margin.left - margin.right,
+                                             allocation->height - margin.top - margin.bottom,
+                                             &tmp_clip))
+    gdk_rectangle_union (&tmp_clip, out_clip, out_clip);
 }
 
 /**

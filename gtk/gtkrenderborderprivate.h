@@ -28,20 +28,36 @@
 
 G_BEGIN_DECLS
 
-void    gtk_css_style_render_border     (GtkCssStyle            *style,
-                                         cairo_t                *cr,
-                                         gdouble                 x,
-                                         gdouble                 y,
-                                         gdouble                 width,
-                                         gdouble                 height,
-                                         guint                   hidden_side,
-                                         GtkJunctionSides        junction);
-void    gtk_css_style_render_outline    (GtkCssStyle            *style,
-                                         cairo_t                *cr,
-                                         gdouble                 x,
-                                         gdouble                 y,
-                                         gdouble                 width,
-                                         gdouble                 height);
+gboolean        gtk_css_style_render_has_border         (GtkCssStyle            *style);
+void            gtk_css_style_render_border             (GtkCssStyle            *style,
+                                                         cairo_t                *cr,
+                                                         gdouble                 x,
+                                                         gdouble                 y,
+                                                         gdouble                 width,
+                                                         gdouble                 height,
+                                                         guint                   hidden_side,
+                                                         GtkJunctionSides        junction);
+gboolean        gtk_css_style_render_border_get_clip    (GtkCssStyle            *style,
+                                                         gdouble                 x,
+                                                         gdouble                 y,
+                                                         gdouble                 width,
+                                                         gdouble                 height,
+                                                         GdkRectangle           *out_clip) G_GNUC_WARN_UNUSED_RESULT;
+
+gboolean        gtk_css_style_render_has_outline        (GtkCssStyle            *style);
+void            gtk_css_style_render_outline            (GtkCssStyle            *style,
+                                                         cairo_t                *cr,
+                                                         gdouble                 x,
+                                                         gdouble                 y,
+                                                         gdouble                 width,
+                                                         gdouble                 height);
+gboolean        gtk_css_style_render_outline_get_clip   (GtkCssStyle            *style,
+                                                         gdouble                 x,
+                                                         gdouble                 y,
+                                                         gdouble                 width,
+                                                         gdouble                 height,
+                                                         GdkRectangle           *out_clip) G_GNUC_WARN_UNUSED_RESULT;
+
 
 G_END_DECLS
 
