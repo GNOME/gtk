@@ -330,7 +330,7 @@
                                   <object class="GtkLabel" id="label4">
                                     <property name="visible">1</property>
                                     <property name="halign">start</property>
-                                    <property name="valign">center</property>
+                                    <property name="valign">baseline</property>
                                     <property name="label" translatable="yes">Copie_s:</property>
                                     <property name="use_underline">1</property>
                                     <property name="mnemonic_widget">copies_spin</property>
@@ -344,6 +344,7 @@
                                   <object class="GtkSpinButton" id="copies_spin">
                                     <property name="visible">1</property>
                                     <property name="can_focus">1</property>
+                                    <property name="valign">baseline</property>
                                     <property name="invisible_char">•</property>
                                     <property name="activates_default">1</property>
                                     <property name="adjustment">copies_spin_adjustment</property>
@@ -594,6 +595,7 @@
                                   <object class="GtkBox" id="box5">
                                     <property name="visible">1</property>
                                     <property name="spacing">6</property>
+                                    <property name="valign">baseline</property>
                                     <child>
                                       <object class="GtkSpinButton" id="scale_spin">
                                         <property name="visible">1</property>
