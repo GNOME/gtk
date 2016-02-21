@@ -2857,7 +2857,7 @@ gtk_drag_set_icon_name (GdkDragContext *context,
   GtkImageDefinition *def;
 
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
-  g_return_if_fail (icon_name != NULL);
+  g_return_if_fail (icon_name != NULL && icon_name[0] != '\0');
 
   def = gtk_image_definition_new_icon_name (icon_name);
   set_icon_helper (context, def, hot_x, hot_y);
