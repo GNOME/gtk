@@ -2763,11 +2763,9 @@ scale {
         -gtk-icon-shadow: none; }
   scale marks {
     color: alpha(currentColor,0.4); }
-  scale.color.horizontal trough slider,
-  trough:last-child:not(:only-child) slider {
+  scale.color.horizontal trough slider, scale.horizontal trough:last-child:not(:only-child) slider {
     margin: 0 1px; }
-    scale.color.horizontal trough slider,
-    trough:last-child:not(:only-child) slider {
+    scale.color.horizontal trough slider, scale.horizontal trough:last-child:not(:only-child) slider {
       border-style: none;
       border-radius: 0;
       background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-dark.png"), url("assets/slider-horz-scale-has-marks-above-dark@2.png"));
@@ -2775,11 +2773,9 @@ scale {
       background-position: top;
       background-repeat: no-repeat;
       box-shadow: none; }
-  scale.color.horizontal trough slider,
-  trough:last-child:not(:only-child) slider {
+  scale.color.horizontal trough slider, scale.horizontal trough:last-child:not(:only-child) slider {
     margin: 0 1px; }
-    scale.color.horizontal trough slider:hover,
-    trough:last-child:not(:only-child) slider:hover {
+    scale.color.horizontal trough slider:hover, scale.horizontal trough:last-child:not(:only-child) slider:hover {
       border-style: none;
       border-radius: 0;
       background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-hover-dark.png"), url("assets/slider-horz-scale-has-marks-above-hover-dark@2.png"));
@@ -2787,11 +2783,9 @@ scale {
       background-position: top;
       background-repeat: no-repeat;
       box-shadow: none; }
-  scale.color.horizontal trough slider,
-  trough:last-child:not(:only-child) slider {
+  scale.color.horizontal trough slider, scale.horizontal trough:last-child:not(:only-child) slider {
     margin: 0 1px; }
-    scale.color.horizontal trough slider:active,
-    trough:last-child:not(:only-child) slider:active {
+    scale.color.horizontal trough slider:active, scale.horizontal trough:last-child:not(:only-child) slider:active {
       border-style: none;
       border-radius: 0;
       background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-active-dark.png"), url("assets/slider-horz-scale-has-marks-above-active-dark@2.png"));
@@ -2799,11 +2793,9 @@ scale {
       background-position: top;
       background-repeat: no-repeat;
       box-shadow: none; }
-  scale.color.horizontal trough slider,
-  trough:last-child:not(:only-child) slider {
+  scale.color.horizontal trough slider, scale.horizontal trough:last-child:not(:only-child) slider {
     margin: 0 1px; }
-    scale.color.horizontal trough slider:disabled,
-    trough:last-child:not(:only-child) slider:disabled {
+    scale.color.horizontal trough slider:disabled, scale.horizontal trough:last-child:not(:only-child) slider:disabled {
       border-style: none;
       border-radius: 0;
       background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-insensitive-dark.png"), url("assets/slider-horz-scale-has-marks-above-insensitive-dark@2.png"));
@@ -2811,11 +2803,9 @@ scale {
       background-position: top;
       background-repeat: no-repeat;
       box-shadow: none; }
-  scale.color.horizontal trough slider,
-  trough:last-child:not(:only-child) slider {
+  scale.color.horizontal trough slider, scale.horizontal trough:last-child:not(:only-child) slider {
     margin: 0 1px; }
-    scale.color.horizontal trough slider:backdrop,
-    trough:last-child:not(:only-child) slider:backdrop {
+    scale.color.horizontal trough slider:backdrop, scale.horizontal trough:last-child:not(:only-child) slider:backdrop {
       border-style: none;
       border-radius: 0;
       background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-backdrop-dark.png"), url("assets/slider-horz-scale-has-marks-above-backdrop-dark@2.png"));
@@ -2823,11 +2813,9 @@ scale {
       background-position: top;
       background-repeat: no-repeat;
       box-shadow: none; }
-  scale.color.horizontal trough slider,
-  trough:last-child:not(:only-child) slider {
+  scale.color.horizontal trough slider, scale.horizontal trough:last-child:not(:only-child) slider {
     margin: 0 1px; }
-    scale.color.horizontal trough slider:backdrop:disabled,
-    trough:last-child:not(:only-child) slider:backdrop:disabled {
+    scale.color.horizontal trough slider:backdrop:disabled, scale.horizontal trough:last-child:not(:only-child) slider:backdrop:disabled {
       border-style: none;
       border-radius: 0;
       background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-backdrop-insensitive-dark.png"), url("assets/slider-horz-scale-has-marks-above-backdrop-insensitive-dark@2.png"));
@@ -2835,186 +2823,162 @@ scale {
       background-position: top;
       background-repeat: no-repeat;
       box-shadow: none; }
-  trough:first-child:not(:only-child) slider {
+  scale.horizontal trough:first-child:not(:only-child) slider {
     margin: 0 1px; }
-    trough:first-child:not(:only-child) slider {
+    scale.horizontal trough:first-child:not(:only-child) slider {
       border-style: none;
       border-radius: 0;
       background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-below-dark.png"), url("assets/slider-horz-scale-has-marks-below-dark@2.png"));
       background-position: bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
-  trough:first-child:not(:only-child) slider {
+  scale.horizontal trough:first-child:not(:only-child) slider {
     margin: 0 1px; }
-    trough:first-child:not(:only-child) slider:hover {
+    scale.horizontal trough:first-child:not(:only-child) slider:hover {
       border-style: none;
       border-radius: 0;
       background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-below-hover-dark.png"), url("assets/slider-horz-scale-has-marks-below-hover-dark@2.png"));
       background-position: bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
-  trough:first-child:not(:only-child) slider {
+  scale.horizontal trough:first-child:not(:only-child) slider {
     margin: 0 1px; }
-    trough:first-child:not(:only-child) slider:active {
+    scale.horizontal trough:first-child:not(:only-child) slider:active {
       border-style: none;
       border-radius: 0;
       background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-below-active-dark.png"), url("assets/slider-horz-scale-has-marks-below-active-dark@2.png"));
       background-position: bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
-  trough:first-child:not(:only-child) slider {
+  scale.horizontal trough:first-child:not(:only-child) slider {
     margin: 0 1px; }
-    trough:first-child:not(:only-child) slider:disabled {
+    scale.horizontal trough:first-child:not(:only-child) slider:disabled {
       border-style: none;
       border-radius: 0;
       background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-below-insensitive-dark.png"), url("assets/slider-horz-scale-has-marks-below-insensitive-dark@2.png"));
       background-position: bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
-  trough:first-child:not(:only-child) slider {
+  scale.horizontal trough:first-child:not(:only-child) slider {
     margin: 0 1px; }
-    trough:first-child:not(:only-child) slider:backdrop {
+    scale.horizontal trough:first-child:not(:only-child) slider:backdrop {
       border-style: none;
       border-radius: 0;
       background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-below-backdrop-dark.png"), url("assets/slider-horz-scale-has-marks-below-backdrop-dark@2.png"));
       background-position: bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
-  trough:first-child:not(:only-child) slider {
+  scale.horizontal trough:first-child:not(:only-child) slider {
     margin: 0 1px; }
-    trough:first-child:not(:only-child) slider:backdrop:disabled {
+    scale.horizontal trough:first-child:not(:only-child) slider:backdrop:disabled {
       border-style: none;
       border-radius: 0;
       background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-below-backdrop-insensitive-dark.png"), url("assets/slider-horz-scale-has-marks-below-backdrop-insensitive-dark@2.png"));
       background-position: bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
-  scale.color.vertical:dir(rtl) trough slider,
-  trough:last-child:not(:only-child) slider {
+  scale.color.vertical:dir(rtl) trough slider, scale.vertical trough:last-child:not(:only-child) slider {
     margin: 0 1px; }
-    scale.color.vertical:dir(rtl) trough slider,
-    trough:last-child:not(:only-child) slider {
+    scale.color.vertical:dir(rtl) trough slider, scale.vertical trough:last-child:not(:only-child) slider {
       border-style: none;
       border-radius: 0;
       background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above-dark.png"), url("assets/slider-vert-scale-has-marks-above-dark@2.png"));
       background-position: left bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
-  scale.color.vertical:dir(rtl) trough slider,
-  trough:last-child:not(:only-child) slider {
+  scale.color.vertical:dir(rtl) trough slider, scale.vertical trough:last-child:not(:only-child) slider {
     margin: 0 1px; }
-    scale.color.vertical:dir(rtl) trough slider:hover,
-    trough:last-child:not(:only-child) slider:hover {
+    scale.color.vertical:dir(rtl) trough slider:hover, scale.vertical trough:last-child:not(:only-child) slider:hover {
       border-style: none;
       border-radius: 0;
       background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above-hover-dark.png"), url("assets/slider-vert-scale-has-marks-above-hover-dark@2.png"));
       background-position: left bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
-  scale.color.vertical:dir(rtl) trough slider,
-  trough:last-child:not(:only-child) slider {
+  scale.color.vertical:dir(rtl) trough slider, scale.vertical trough:last-child:not(:only-child) slider {
     margin: 0 1px; }
-    scale.color.vertical:dir(rtl) trough slider:active,
-    trough:last-child:not(:only-child) slider:active {
+    scale.color.vertical:dir(rtl) trough slider:active, scale.vertical trough:last-child:not(:only-child) slider:active {
       border-style: none;
       border-radius: 0;
       background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above-active-dark.png"), url("assets/slider-vert-scale-has-marks-above-active-dark@2.png"));
       background-position: left bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
-  scale.color.vertical:dir(rtl) trough slider,
-  trough:last-child:not(:only-child) slider {
+  scale.color.vertical:dir(rtl) trough slider, scale.vertical trough:last-child:not(:only-child) slider {
     margin: 0 1px; }
-    scale.color.vertical:dir(rtl) trough slider:disabled,
-    trough:last-child:not(:only-child) slider:disabled {
+    scale.color.vertical:dir(rtl) trough slider:disabled, scale.vertical trough:last-child:not(:only-child) slider:disabled {
       border-style: none;
       border-radius: 0;
       background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above-insensitive-dark.png"), url("assets/slider-vert-scale-has-marks-above-insensitive-dark@2.png"));
       background-position: left bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
-  scale.color.vertical:dir(rtl) trough slider,
-  trough:last-child:not(:only-child) slider {
+  scale.color.vertical:dir(rtl) trough slider, scale.vertical trough:last-child:not(:only-child) slider {
     margin: 0 1px; }
-    scale.color.vertical:dir(rtl) trough slider:backdrop,
-    trough:last-child:not(:only-child) slider:backdrop {
+    scale.color.vertical:dir(rtl) trough slider:backdrop, scale.vertical trough:last-child:not(:only-child) slider:backdrop {
       border-style: none;
       border-radius: 0;
       background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above-backdrop-dark.png"), url("assets/slider-vert-scale-has-marks-above-backdrop-dark@2.png"));
       background-position: left bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
-  scale.color.vertical:dir(rtl) trough slider,
-  trough:last-child:not(:only-child) slider {
+  scale.color.vertical:dir(rtl) trough slider, scale.vertical trough:last-child:not(:only-child) slider {
     margin: 0 1px; }
-    scale.color.vertical:dir(rtl) trough slider:backdrop:disabled,
-    trough:last-child:not(:only-child) slider:backdrop:disabled {
+    scale.color.vertical:dir(rtl) trough slider:backdrop:disabled, scale.vertical trough:last-child:not(:only-child) slider:backdrop:disabled {
       border-style: none;
       border-radius: 0;
       background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above-backdrop-insensitive-dark.png"), url("assets/slider-vert-scale-has-marks-above-backdrop-insensitive-dark@2.png"));
       background-position: left bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
-  scale.color.vertical:dir(ltr) trough slider,
-  trough:first-child:not(:only-child) slider {
+  scale.color.vertical:dir(ltr) trough slider, scale.vertical trough:first-child:not(:only-child) slider {
     margin: 0 1px; }
-    scale.color.vertical:dir(ltr) trough slider,
-    trough:first-child:not(:only-child) slider {
+    scale.color.vertical:dir(ltr) trough slider, scale.vertical trough:first-child:not(:only-child) slider {
       border-style: none;
       border-radius: 0;
       background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below-dark.png"), url("assets/slider-vert-scale-has-marks-below-dark@2.png"));
       background-position: right bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
-  scale.color.vertical:dir(ltr) trough slider,
-  trough:first-child:not(:only-child) slider {
+  scale.color.vertical:dir(ltr) trough slider, scale.vertical trough:first-child:not(:only-child) slider {
     margin: 0 1px; }
-    scale.color.vertical:dir(ltr) trough slider:hover,
-    trough:first-child:not(:only-child) slider:hover {
+    scale.color.vertical:dir(ltr) trough slider:hover, scale.vertical trough:first-child:not(:only-child) slider:hover {
       border-style: none;
       border-radius: 0;
       background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below-hover-dark.png"), url("assets/slider-vert-scale-has-marks-below-hover-dark@2.png"));
       background-position: right bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
-  scale.color.vertical:dir(ltr) trough slider,
-  trough:first-child:not(:only-child) slider {
+  scale.color.vertical:dir(ltr) trough slider, scale.vertical trough:first-child:not(:only-child) slider {
     margin: 0 1px; }
-    scale.color.vertical:dir(ltr) trough slider:active,
-    trough:first-child:not(:only-child) slider:active {
+    scale.color.vertical:dir(ltr) trough slider:active, scale.vertical trough:first-child:not(:only-child) slider:active {
       border-style: none;
       border-radius: 0;
       background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below-active-dark.png"), url("assets/slider-vert-scale-has-marks-below-active-dark@2.png"));
       background-position: right bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
-  scale.color.vertical:dir(ltr) trough slider,
-  trough:first-child:not(:only-child) slider {
+  scale.color.vertical:dir(ltr) trough slider, scale.vertical trough:first-child:not(:only-child) slider {
     margin: 0 1px; }
-    scale.color.vertical:dir(ltr) trough slider:disabled,
-    trough:first-child:not(:only-child) slider:disabled {
+    scale.color.vertical:dir(ltr) trough slider:disabled, scale.vertical trough:first-child:not(:only-child) slider:disabled {
       border-style: none;
       border-radius: 0;
       background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below-insensitive-dark.png"), url("assets/slider-vert-scale-has-marks-below-insensitive-dark@2.png"));
       background-position: right bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
-  scale.color.vertical:dir(ltr) trough slider,
-  trough:first-child:not(:only-child) slider {
+  scale.color.vertical:dir(ltr) trough slider, scale.vertical trough:first-child:not(:only-child) slider {
     margin: 0 1px; }
-    scale.color.vertical:dir(ltr) trough slider:backdrop,
-    trough:first-child:not(:only-child) slider:backdrop {
+    scale.color.vertical:dir(ltr) trough slider:backdrop, scale.vertical trough:first-child:not(:only-child) slider:backdrop {
       border-style: none;
       border-radius: 0;
       background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below-backdrop-dark.png"), url("assets/slider-vert-scale-has-marks-below-backdrop-dark@2.png"));
       background-position: right bottom;
       background-repeat: no-repeat;
       box-shadow: none; }
-  scale.color.vertical:dir(ltr) trough slider,
-  trough:first-child:not(:only-child) slider {
+  scale.color.vertical:dir(ltr) trough slider, scale.vertical trough:first-child:not(:only-child) slider {
     margin: 0 1px; }
-    scale.color.vertical:dir(ltr) trough slider:backdrop:disabled,
-    trough:first-child:not(:only-child) slider:backdrop:disabled {
+    scale.color.vertical:dir(ltr) trough slider:backdrop:disabled, scale.vertical trough:first-child:not(:only-child) slider:backdrop:disabled {
       border-style: none;
       border-radius: 0;
       background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below-backdrop-insensitive-dark.png"), url("assets/slider-vert-scale-has-marks-below-backdrop-insensitive-dark@2.png"));

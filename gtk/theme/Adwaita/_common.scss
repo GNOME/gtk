@@ -2580,47 +2580,45 @@ scale {
   // FIXME: OSD and selected list rows missing, I don't feel like adding the other 144 assets needed for those...
   $suffix: if($variant == 'light', '', '-dark');
 
-  @each $dir_class, $dir_infix in ('', 'horz'),
-                                  ('.vertical', 'vert') {
+  @each $dir_class, $dir_infix in ('horizontal', 'horz'),
+                                  ('vertical', 'vert') {
     @each $marks_infix, $nth_child in ('scale-has-marks-above', ':last-child:not(:only-child)'),
                                       ('scale-has-marks-below', ':first-child:not(:only-child)') {
 
-      &#{$dir_class} {
-        @each $state, $state_infix in ('', ''),
-                                 (':hover', '-hover'),
-                                 (':active', '-active'),
-                                 (':disabled', '-insensitive'),
-                                 (':backdrop', '-backdrop'),
-                                 (':backdrop:disabled', '-backdrop-insensitive') {
+      @each $state, $state_infix in ('', ''),
+                               (':hover', '-hover'),
+                               (':active', '-active'),
+                               (':disabled', '-insensitive'),
+                               (':backdrop', '-backdrop'),
+                               (':backdrop:disabled', '-backdrop-insensitive') {
 
-          @at-root %#{$marks_infix}-#{$dir_infix},
-          trough#{$nth_child} {
-            slider {
-              margin: 0 1px;
-              &#{$state} {
-                $_scale_asset: 'assets/slider-#{$dir_infix}-#{$marks_infix}#{$state_infix}#{$suffix}';
-                // @warn $_file_name; // uncomment for debuggin purpose...
-                border-style: none;
-                border-radius: 0;
+        @at-root %#{$marks_infix}-#{$dir_infix},
+        &.#{$dir_class} trough#{$nth_child} {
+          slider {
+            margin: 0 1px;
+            &#{$state} {
+              $_scale_asset: 'assets/slider-#{$dir_infix}-#{$marks_infix}#{$state_infix}#{$suffix}';
+              @warn $_scale_asset; // uncomment for debuggin purpose...
+              border-style: none;
+              border-radius: 0;
 
-                background-image: -gtk-scaled(url('#{$_scale_asset}.png'), url('#{$_scale_asset}@2.png'));
+              background-image: -gtk-scaled(url('#{$_scale_asset}.png'), url('#{$_scale_asset}@2.png'));
 
-                $_scale_slider_bg_pos: bottom;
-                @if $dir_infix == 'horz' {
-                  @if $marks_infix == 'scale-has-marks-above' {
-                    $_scale_slider_bg_pos: top;
-                    margin-top: 1px;
-                  }
+              $_scale_slider_bg_pos: bottom;
+              @if $dir_infix == 'horz' {
+                @if $marks_infix == 'scale-has-marks-above' {
+                  $_scale_slider_bg_pos: top;
+                  margin-top: 1px;
                 }
-                @else {
-                  @if $marks_infix == 'scale-has-marks-above' { $_scale_slider_bg_pos: left bottom; }
-                  @else { $_scale_slider_bg_pos: right bottom; }
-                }
-
-                background-position: $_scale_slider_bg_pos;
-                background-repeat: no-repeat;
-                box-shadow: none;
               }
+              @else {
+                @if $marks_infix == 'scale-has-marks-above' { $_scale_slider_bg_pos: left bottom; }
+                @else { $_scale_slider_bg_pos: right bottom; }
+              }
+
+              background-position: $_scale_slider_bg_pos;
+              background-repeat: no-repeat;
+              box-shadow: none;
             }
           }
         }
