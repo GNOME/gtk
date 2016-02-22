@@ -481,7 +481,7 @@ gtk_win32_get_sys_metric_id_for_name (const char *name)
 int
 gtk_win32_get_sys_metric (gint id)
 {
-  if (id >= 0 && id < G_N_ELEMENTS (win32_default_metrics))
+  if (id < 0 || id >= G_N_ELEMENTS (win32_default_metrics))
     return 0;
 
   if (win32_default_metrics[id].get_value)
@@ -558,9 +558,12 @@ void
 gtk_win32_get_sys_color (gint     id,
                          GdkRGBA *color)
 {
-  if (id < G_N_ELEMENTS (win32_default_colors))
-    *color = win32_default_colors[id].rgba;
-  else
-    gdk_rgba_parse (color, "black");
+  if (id < 0 || id >= G_N_ELEMENTS (win32_default_colors))
+    {
+      gdk_rgba_parse (color, "black");
+      return;
+    }
+
+  *color = win32_default_colors[id].rgba;
 }
 
