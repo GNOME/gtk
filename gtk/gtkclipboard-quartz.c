@@ -754,7 +754,7 @@ gtk_clipboard_wait_for_text (GtkClipboard *clipboard)
 GdkPixbuf *
 gtk_clipboard_wait_for_image (GtkClipboard *clipboard)
 {
-  GdkAtom target = gdk_atom_intern_static_string("image/tiff")
+  GdkAtom target = gdk_atom_intern_static_string("image/tiff");
   int i;
   GtkSelectionData *data;
 
