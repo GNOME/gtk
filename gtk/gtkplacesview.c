@@ -1197,7 +1197,6 @@ server_mount_ready_cb (GObject      *source_file,
         {
           GMount *mount_point;
           GError *error;
-          GFile *enclosing_location;
 
           error = NULL;
           mount_point = g_file_find_enclosing_mount (location, NULL, &error);
@@ -1209,11 +1208,7 @@ server_mount_ready_cb (GObject      *source_file,
               goto out;
             }
 
-          enclosing_location = g_mount_get_default_location (mount_point);
-
-          emit_open_location (view, enclosing_location, priv->open_flags);
-
-          g_object_unref (enclosing_location);
+          emit_open_location (view, location, priv->open_flags);
         }
     }
 
