@@ -261,7 +261,6 @@ _gdk_win32_display_set_selection_owner (GdkDisplay *display,
   HWND hwnd;
   GdkEvent tmp_event;
 
-  g_return_val_if_fail (display == _gdk_display, FALSE);
   g_return_val_if_fail (selection != GDK_NONE, FALSE);
 
   GDK_NOTE (DND, {
@@ -337,7 +336,6 @@ _gdk_win32_display_get_selection_owner (GdkDisplay *display,
 {
   GdkWindow *window;
 
-  g_return_val_if_fail (display == _gdk_display, NULL);
   g_return_val_if_fail (selection != GDK_NONE, NULL);
 
   if (selection == GDK_SELECTION_CLIPBOARD)
@@ -887,8 +885,6 @@ _gdk_win32_display_send_selection_notify (GdkDisplay   *display,
 					  GdkAtom     	property,
 					  guint32     	time)
 {
-  g_return_if_fail (display == _gdk_display);
-
   GDK_NOTE (DND, {
       gchar *sel_name = gdk_atom_name (selection);
       gchar *tgt_name = gdk_atom_name (target);
@@ -917,8 +913,6 @@ gdk_text_property_to_text_list_for_display (GdkDisplay   *display,
   gchar *result;
   const gchar *charset;
   gchar *source_charset;
-
-  g_return_val_if_fail (display == _gdk_display, 0);
 
   GDK_NOTE (DND, {
       gchar *enc_name = gdk_atom_name (encoding);
@@ -1041,7 +1035,6 @@ _gdk_win32_display_text_property_to_utf8_list (GdkDisplay    *display,
 {
   g_return_val_if_fail (text != NULL, 0);
   g_return_val_if_fail (length >= 0, 0);
-  g_return_val_if_fail (display == _gdk_display, 0);
 
   if (encoding == GDK_TARGET_STRING)
     {
@@ -1075,7 +1068,6 @@ gdk_string_to_compound_text_for_display (GdkDisplay  *display,
 {
   g_return_val_if_fail (str != NULL, 0);
   g_return_val_if_fail (length >= 0, 0);
-  g_return_val_if_fail (display == _gdk_display, 0);
 
   GDK_NOTE (DND, g_print ("gdk_string_to_compound_text_for_display: %.20s\n", str));
 
@@ -1112,7 +1104,6 @@ gdk_utf8_to_compound_text_for_display (GdkDisplay  *display,
                                        gint        *length)
 {
   g_return_val_if_fail (str != NULL, FALSE);
-  g_return_val_if_fail (display == _gdk_display, FALSE);
 
   GDK_NOTE (DND, g_print ("gdk_utf8_to_compound_text_for_display: %.20s\n", str));
 

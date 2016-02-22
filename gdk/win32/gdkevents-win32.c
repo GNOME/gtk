@@ -447,15 +447,17 @@ find_window_for_mouse_event (GdkWindow* reported_window,
 			     MSG*       msg)
 {
   POINT pt;
+  GdkDisplay *display;
   GdkDeviceManagerWin32 *device_manager;
   GdkWindow *event_window;
   HWND hwnd;
   RECT rect;
   GdkDeviceGrabInfo *grab;
 
-  device_manager = GDK_DEVICE_MANAGER_WIN32 (gdk_display_get_device_manager (_gdk_display));
+  display = gdk_display_get_default ();
+  device_manager = GDK_DEVICE_MANAGER_WIN32 (gdk_display_get_device_manager (display));
 
-  grab = _gdk_display_get_last_device_grab (_gdk_display, device_manager->core_pointer);
+  grab = _gdk_display_get_last_device_grab (display, device_manager->core_pointer);
   if (grab == NULL)
     return reported_window;
 
@@ -844,16 +846,19 @@ fixup_event (GdkEvent *event)
 void
 _gdk_win32_append_event (GdkEvent *event)
 {
+  GdkDisplay *display;
   GList *link;
+
+  display = gdk_display_get_default ();
 
   fixup_event (event);
 #if 1
-  link = _gdk_event_queue_append (_gdk_display, event);
+  link = _gdk_event_queue_append (display, event);
   GDK_NOTE (EVENTS, _gdk_win32_print_event (event));
   /* event morphing, the passed in may not be valid afterwards */
-  _gdk_windowing_got_event (_gdk_display, link, event, 0);
+  _gdk_windowing_got_event (display, link, event, 0);
 #else
-  _gdk_event_queue_append (_gdk_display, event);
+  _gdk_event_queue_append (display, event);
   GDK_NOTE (EVENTS, _gdk_win32_print_event (event));
 #endif
 }
@@ -932,6 +937,7 @@ apply_event_filters (GdkWindow  *window,
 {
   GdkFilterReturn result = GDK_FILTER_CONTINUE;
   GdkEvent *event;
+  GdkDisplay *display;
   GList *node;
   GList *tmp_list;
 
@@ -939,11 +945,13 @@ apply_event_filters (GdkWindow  *window,
   event->any.window = g_object_ref (window);
   ((GdkEventPrivate *)event)->flags |= GDK_EVENT_PENDING;
 
+  display = gdk_display_get_default ();
+
   /* I think GdkFilterFunc semantics require the passed-in event
    * to already be in the queue. The filter func can generate
    * more events and append them after it if it likes.
    */
-  node = _gdk_event_queue_append (_gdk_display, event);
+  node = _gdk_event_queue_append (display, event);
 
   tmp_list = *filters;
   while (tmp_list)
@@ -979,7 +987,7 @@ apply_event_filters (GdkWindow  *window,
 
   if (result == GDK_FILTER_CONTINUE || result == GDK_FILTER_REMOVE)
     {
-      _gdk_event_queue_remove_link (_gdk_display, node);
+      _gdk_event_queue_remove_link (display, node);
       g_list_free_1 (node);
       gdk_event_free (event);
     }
@@ -989,6 +997,7 @@ apply_event_filters (GdkWindow  *window,
       fixup_event (event);
       GDK_NOTE (EVENTS, _gdk_win32_print_event (event));
     }
+
   return result;
 }
 
@@ -1639,7 +1648,6 @@ handle_nchittest (HWND hwnd,
   return TRUE;
 }
 
-
 static void
 generate_button_event (GdkEventType      type,
                        gint              button,
@@ -1652,7 +1660,7 @@ generate_button_event (GdkEventType      type,
   if (_gdk_input_ignore_core)
     return;
 
-  device_manager = GDK_DEVICE_MANAGER_WIN32 (gdk_display_get_device_manager (_gdk_display));
+  device_manager = GDK_DEVICE_MANAGER_WIN32 (gdk_display_get_device_manager (gdk_display_get_default ()));
 
   event->button.window = window;
   event->button.time = _gdk_win32_get_next_tick (msg->time);
@@ -1892,6 +1900,7 @@ gdk_event_translate (MSG  *msg,
   wchar_t wbuf[100];
   gint ccount;
 
+  GdkDisplay *display;
   GdkWindow *window = NULL;
   GdkWindowImplWin32 *impl;
 
@@ -1912,13 +1921,14 @@ gdk_event_translate (MSG  *msg,
 
   int i;
 
+  display = gdk_display_get_default ();
   window = gdk_win32_handle_table_lookup (msg->hwnd);
 
   if (_gdk_default_filters)
     {
       /* Apply global filters */
 
-      GdkFilterReturn result = apply_event_filters (window ? window : gdk_screen_get_root_window (gdk_display_get_default_screen (_gdk_display)),
+      GdkFilterReturn result = apply_event_filters (window ? window : gdk_screen_get_root_window (gdk_display_get_default_screen (display)),
                                                     msg,
                                                     &_gdk_default_filters);
 
@@ -1950,12 +1960,12 @@ gdk_event_translate (MSG  *msg,
       return FALSE;
     }
 
-  device_manager = gdk_display_get_device_manager (_gdk_display);
+  device_manager = gdk_display_get_device_manager (display);
   device_manager_win32 = GDK_DEVICE_MANAGER_WIN32 (device_manager);
 
-  keyboard_grab = _gdk_display_get_last_device_grab (_gdk_display,
+  keyboard_grab = _gdk_display_get_last_device_grab (display,
                                                      device_manager_win32->core_keyboard);
-  pointer_grab = _gdk_display_get_last_device_grab (_gdk_display,
+  pointer_grab = _gdk_display_get_last_device_grab (display,
                                                     device_manager_win32->core_pointer);
 
   g_object_ref (window);
@@ -1991,7 +2001,7 @@ gdk_event_translate (MSG  *msg,
       event = gdk_event_new (GDK_NOTHING);
       ((GdkEventPrivate *)event)->flags |= GDK_EVENT_PENDING;
 
-      node = _gdk_event_queue_append (_gdk_display, event);
+      node = _gdk_event_queue_append (display, event);
 
       tmp_list = client_filters;
       while (tmp_list)
@@ -2014,7 +2024,7 @@ gdk_event_translate (MSG  *msg,
       switch (result)
 	{
 	case GDK_FILTER_REMOVE:
-	  _gdk_event_queue_remove_link (_gdk_display, node);
+	  _gdk_event_queue_remove_link (display, node);
 	  g_list_free_1 (node);
 	  gdk_event_free (event);
 	  return_val = TRUE;
@@ -2145,7 +2155,7 @@ gdk_event_translate (MSG  *msg,
 	  ToUnicode (VK_PACKET, HIWORD (msg->lParam), key_state, wbuf, 1, 0) == 1)
 	event->key.keyval = gdk_unicode_to_keyval (wbuf[0]);
       else
-	gdk_keymap_translate_keyboard_state (_gdk_win32_display_get_keymap (_gdk_display),
+	gdk_keymap_translate_keyboard_state (_gdk_win32_display_get_keymap (display),
 					     event->key.hardware_keycode,
 					     event->key.state,
 					     event->key.group,
@@ -2370,7 +2380,7 @@ gdk_event_translate (MSG  *msg,
 		  if (PtInRect (&rect, client_pt))
 		    new_window = gdk_win32_handle_table_lookup (hwnd);
 		}
-	      synthesize_crossing_events (_gdk_display,
+	      synthesize_crossing_events (display,
 					  pointer_grab->native_window, new_window,
 					  GDK_CROSSING_UNGRAB,
 					  &msg->pt,
@@ -2424,7 +2434,7 @@ gdk_event_translate (MSG  *msg,
 	  GDK_NOTE (EVENTS, g_print (" mouse_sinwod %p -> %p",
 				     mouse_window ? GDK_WINDOW_HWND (mouse_window) : NULL,
 				     new_window ? GDK_WINDOW_HWND (new_window) : NULL));
-	  synthesize_crossing_events (_gdk_display,
+	  synthesize_crossing_events (display,
 				      mouse_window, new_window,
 				      GDK_CROSSING_NORMAL,
 				      &msg->pt,
@@ -2515,7 +2525,7 @@ gdk_event_translate (MSG  *msg,
 	}
 
       if (!ignore_leave)
-	synthesize_crossing_events (_gdk_display,
+	synthesize_crossing_events (display,
 				    mouse_window, new_window,
 				    GDK_CROSSING_NORMAL,
 				    &msg->pt,
@@ -3402,7 +3412,7 @@ gdk_event_translate (MSG  *msg,
       event->any.window = window;
       g_object_ref (window);
 
-      if (gdk_input_other_event (_gdk_display, event, msg, window))
+      if (gdk_input_other_event (display, event, msg, window))
 	_gdk_win32_append_event (event);
       else
 	gdk_event_free (event);
@@ -3439,16 +3449,19 @@ static gboolean
 gdk_event_prepare (GSource *source,
 		   gint    *timeout)
 {
+  GdkDisplay *display;
   gboolean retval;
+
+  display = gdk_display_get_default ();
 
   gdk_threads_enter ();
 
   *timeout = -1;
 
-  if (_gdk_display->event_pause_count > 0)
-    retval =_gdk_event_queue_find_first (_gdk_display) != NULL;
+  if (display->event_pause_count > 0)
+    retval =_gdk_event_queue_find_first (display) != NULL;
   else
-    retval = (_gdk_event_queue_find_first (_gdk_display) != NULL ||
+    retval = (_gdk_event_queue_find_first (display) != NULL ||
               (modal_win32_dialog == NULL &&
                GetQueueStatus (QS_ALLINPUT) != 0));
 
@@ -3460,14 +3473,17 @@ gdk_event_prepare (GSource *source,
 static gboolean
 gdk_event_check (GSource *source)
 {
+  GdkDisplay *display;
   gboolean retval;
+
+  display = gdk_display_get_default ();
 
   gdk_threads_enter ();
 
-  if (_gdk_display->event_pause_count > 0)
-    retval = _gdk_event_queue_find_first (_gdk_display) != NULL;
+  if (display->event_pause_count > 0)
+    retval = _gdk_event_queue_find_first (display) != NULL;
   else if (event_poll_fd.revents & G_IO_IN)
-    retval = (_gdk_event_queue_find_first (_gdk_display) != NULL ||
+    retval = (_gdk_event_queue_find_first (display) != NULL ||
               (modal_win32_dialog == NULL &&
                GetQueueStatus (QS_ALLINPUT) != 0));
   else
@@ -3483,12 +3499,15 @@ gdk_event_dispatch (GSource     *source,
 		    GSourceFunc  callback,
 		    gpointer     user_data)
 {
+  GdkDisplay *display;
   GdkEvent *event;
+
+  display = gdk_display_get_default ();
 
   gdk_threads_enter ();
 
-  _gdk_win32_display_queue_events (_gdk_display);
-  event = _gdk_event_unqueue (_gdk_display);
+  _gdk_win32_display_queue_events (display);
+  event = _gdk_event_unqueue (display);
 
   if (event)
     {

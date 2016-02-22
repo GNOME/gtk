@@ -448,6 +448,8 @@ _gdk_win32_display_create_window_impl (GdkDisplay    *display,
   /* check consistency of redundant information */
   guint remaining_mask = attributes_mask;
 
+  g_return_if_fail (display == gdk_display_get_default ());
+
   GDK_NOTE (MISC,
 	    g_print ("_gdk_window_impl_new: %s %s\n",
 		     (window->window_type == GDK_WINDOW_TOPLEVEL ? "TOPLEVEL" :
@@ -692,8 +694,8 @@ _gdk_win32_display_create_window_impl (GdkDisplay    *display,
 }
 
 GdkWindow *
-gdk_win32_window_foreign_new_for_display (GdkDisplay      *display,
-                                          HWND             anid)
+gdk_win32_window_foreign_new_for_display (GdkDisplay *display,
+                                          HWND        anid)
 {
   GdkWindow *window;
   GdkWindowImplWin32 *impl;
@@ -701,8 +703,6 @@ gdk_win32_window_foreign_new_for_display (GdkDisplay      *display,
   HANDLE parent;
   RECT rect;
   POINT point;
-
-  g_return_val_if_fail (display == _gdk_display, NULL);
 
   if ((window = gdk_win32_window_lookup_for_display (display, anid)) != NULL)
     return g_object_ref (window);
@@ -1960,7 +1960,8 @@ gdk_win32_window_set_device_cursor (GdkWindow *window,
     /* Use default cursor otherwise. Setting it to NULL will make it use
      * system-default cursor, which is not controlled by GTK cursor theming.
      */
-    impl->cursor = _gdk_win32_display_get_cursor_for_type (_gdk_display, GDK_LEFT_PTR);
+    impl->cursor = _gdk_win32_display_get_cursor_for_type (gdk_display_get_default (),
+                                                           GDK_LEFT_PTR);
 
   /* Destroy the previous cursor */
   if (previous_cursor != NULL)
@@ -2144,7 +2145,7 @@ gdk_display_warp_device (GdkDisplay *display,
                          gint        x,
                          gint        y)
 {
-  g_return_if_fail (display == _gdk_display);
+  g_return_if_fail (display == gdk_display_get_default ());
   g_return_if_fail (screen == gdk_display_get_default_screen (display));
   g_return_if_fail (GDK_IS_DEVICE (device));
   g_return_if_fail (display == gdk_device_get_display (device));
@@ -3227,7 +3228,7 @@ GdkWindow *
 gdk_win32_window_lookup_for_display (GdkDisplay *display,
                                      HWND        anid)
 {
-  g_return_val_if_fail (display == _gdk_display, NULL);
+  g_return_val_if_fail (display == gdk_display_get_default (), NULL);
 
   return (GdkWindow*) gdk_win32_handle_table_lookup (anid);
 }
