@@ -2593,6 +2593,7 @@ scale {
                                  (':backdrop', '-backdrop'),
                                  (':backdrop:disabled', '-backdrop-insensitive') {
 
+          @at-root %#{$marks_infix}-#{$dir_infix},
           trough#{$nth_child} {
             slider {
               margin: 0 1px;
@@ -2624,6 +2625,14 @@ scale {
           }
         }
       }
+    }
+  }
+
+  &.color {
+    &.horizontal { trough { @extend %scale-has-marks-above-horz; }}
+    &.vertical {
+      &:dir(ltr) trough { @extend %scale-has-marks-below-vert; }
+      &:dir(rtl) trough { @extend %scale-has-marks-above-vert; }
     }
   }
 }
