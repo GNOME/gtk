@@ -2595,10 +2595,10 @@ scale {
         @at-root %#{$marks_infix}-#{$dir_infix},
         &.#{$dir_class} trough#{$nth_child} {
           slider {
-            margin: 0 1px;
             &#{$state} {
+              margin: 0 1px;
               $_scale_asset: 'assets/slider-#{$dir_infix}-#{$marks_infix}#{$state_infix}#{$suffix}';
-              @warn $_scale_asset; // uncomment for debuggin purpose...
+              //@warn $_scale_asset; // uncomment for debuggin purpose...
               border-style: none;
               border-radius: 0;
 
@@ -2611,6 +2611,7 @@ scale {
                   margin-top: 1px;
                 }
               }
+
               @else {
                 @if $marks_infix == 'scale-has-marks-above' { $_scale_slider_bg_pos: left bottom; }
                 @else { $_scale_slider_bg_pos: right bottom; }

@@ -2795,227 +2795,203 @@ scale {
   scale marks {
     color: alpha(currentColor,0.4); }
   scale.color.horizontal trough slider, scale.horizontal trough:last-child:not(:only-child) slider {
-    margin: 0 1px; }
-    scale.color.horizontal trough slider, scale.horizontal trough:last-child:not(:only-child) slider {
-      border-style: none;
-      border-radius: 0;
-      background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above.png"), url("assets/slider-horz-scale-has-marks-above@2.png"));
-      margin-top: 1px;
-      background-position: top;
-      background-repeat: no-repeat;
-      box-shadow: none; }
-  scale.color.horizontal trough slider, scale.horizontal trough:last-child:not(:only-child) slider {
-    margin: 0 1px; }
-    scale.color.horizontal trough slider:hover, scale.horizontal trough:last-child:not(:only-child) slider:hover {
-      border-style: none;
-      border-radius: 0;
-      background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-hover.png"), url("assets/slider-horz-scale-has-marks-above-hover@2.png"));
-      margin-top: 1px;
-      background-position: top;
-      background-repeat: no-repeat;
-      box-shadow: none; }
-  scale.color.horizontal trough slider, scale.horizontal trough:last-child:not(:only-child) slider {
-    margin: 0 1px; }
-    scale.color.horizontal trough slider:active, scale.horizontal trough:last-child:not(:only-child) slider:active {
-      border-style: none;
-      border-radius: 0;
-      background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-active.png"), url("assets/slider-horz-scale-has-marks-above-active@2.png"));
-      margin-top: 1px;
-      background-position: top;
-      background-repeat: no-repeat;
-      box-shadow: none; }
-  scale.color.horizontal trough slider, scale.horizontal trough:last-child:not(:only-child) slider {
-    margin: 0 1px; }
-    scale.color.horizontal trough slider:disabled, scale.horizontal trough:last-child:not(:only-child) slider:disabled {
-      border-style: none;
-      border-radius: 0;
-      background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-insensitive.png"), url("assets/slider-horz-scale-has-marks-above-insensitive@2.png"));
-      margin-top: 1px;
-      background-position: top;
-      background-repeat: no-repeat;
-      box-shadow: none; }
-  scale.color.horizontal trough slider, scale.horizontal trough:last-child:not(:only-child) slider {
-    margin: 0 1px; }
-    scale.color.horizontal trough slider:backdrop, scale.horizontal trough:last-child:not(:only-child) slider:backdrop {
-      border-style: none;
-      border-radius: 0;
-      background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-backdrop.png"), url("assets/slider-horz-scale-has-marks-above-backdrop@2.png"));
-      margin-top: 1px;
-      background-position: top;
-      background-repeat: no-repeat;
-      box-shadow: none; }
-  scale.color.horizontal trough slider, scale.horizontal trough:last-child:not(:only-child) slider {
-    margin: 0 1px; }
-    scale.color.horizontal trough slider:backdrop:disabled, scale.horizontal trough:last-child:not(:only-child) slider:backdrop:disabled {
-      border-style: none;
-      border-radius: 0;
-      background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-backdrop-insensitive.png"), url("assets/slider-horz-scale-has-marks-above-backdrop-insensitive@2.png"));
-      margin-top: 1px;
-      background-position: top;
-      background-repeat: no-repeat;
-      box-shadow: none; }
+    margin: 0 1px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above.png"), url("assets/slider-horz-scale-has-marks-above@2.png"));
+    margin-top: 1px;
+    background-position: top;
+    background-repeat: no-repeat;
+    box-shadow: none; }
+  scale.color.horizontal trough slider:hover, scale.horizontal trough:last-child:not(:only-child) slider:hover {
+    margin: 0 1px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-hover.png"), url("assets/slider-horz-scale-has-marks-above-hover@2.png"));
+    margin-top: 1px;
+    background-position: top;
+    background-repeat: no-repeat;
+    box-shadow: none; }
+  scale.color.horizontal trough slider:active, scale.horizontal trough:last-child:not(:only-child) slider:active {
+    margin: 0 1px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-active.png"), url("assets/slider-horz-scale-has-marks-above-active@2.png"));
+    margin-top: 1px;
+    background-position: top;
+    background-repeat: no-repeat;
+    box-shadow: none; }
+  scale.color.horizontal trough slider:disabled, scale.horizontal trough:last-child:not(:only-child) slider:disabled {
+    margin: 0 1px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-insensitive.png"), url("assets/slider-horz-scale-has-marks-above-insensitive@2.png"));
+    margin-top: 1px;
+    background-position: top;
+    background-repeat: no-repeat;
+    box-shadow: none; }
+  scale.color.horizontal trough slider:backdrop, scale.horizontal trough:last-child:not(:only-child) slider:backdrop {
+    margin: 0 1px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-backdrop.png"), url("assets/slider-horz-scale-has-marks-above-backdrop@2.png"));
+    margin-top: 1px;
+    background-position: top;
+    background-repeat: no-repeat;
+    box-shadow: none; }
+  scale.color.horizontal trough slider:backdrop:disabled, scale.horizontal trough:last-child:not(:only-child) slider:backdrop:disabled {
+    margin: 0 1px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-backdrop-insensitive.png"), url("assets/slider-horz-scale-has-marks-above-backdrop-insensitive@2.png"));
+    margin-top: 1px;
+    background-position: top;
+    background-repeat: no-repeat;
+    box-shadow: none; }
   scale.horizontal trough:first-child:not(:only-child) slider {
-    margin: 0 1px; }
-    scale.horizontal trough:first-child:not(:only-child) slider {
-      border-style: none;
-      border-radius: 0;
-      background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-below.png"), url("assets/slider-horz-scale-has-marks-below@2.png"));
-      background-position: bottom;
-      background-repeat: no-repeat;
-      box-shadow: none; }
-  scale.horizontal trough:first-child:not(:only-child) slider {
-    margin: 0 1px; }
-    scale.horizontal trough:first-child:not(:only-child) slider:hover {
-      border-style: none;
-      border-radius: 0;
-      background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-below-hover.png"), url("assets/slider-horz-scale-has-marks-below-hover@2.png"));
-      background-position: bottom;
-      background-repeat: no-repeat;
-      box-shadow: none; }
-  scale.horizontal trough:first-child:not(:only-child) slider {
-    margin: 0 1px; }
-    scale.horizontal trough:first-child:not(:only-child) slider:active {
-      border-style: none;
-      border-radius: 0;
-      background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-below-active.png"), url("assets/slider-horz-scale-has-marks-below-active@2.png"));
-      background-position: bottom;
-      background-repeat: no-repeat;
-      box-shadow: none; }
-  scale.horizontal trough:first-child:not(:only-child) slider {
-    margin: 0 1px; }
-    scale.horizontal trough:first-child:not(:only-child) slider:disabled {
-      border-style: none;
-      border-radius: 0;
-      background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-below-insensitive.png"), url("assets/slider-horz-scale-has-marks-below-insensitive@2.png"));
-      background-position: bottom;
-      background-repeat: no-repeat;
-      box-shadow: none; }
-  scale.horizontal trough:first-child:not(:only-child) slider {
-    margin: 0 1px; }
-    scale.horizontal trough:first-child:not(:only-child) slider:backdrop {
-      border-style: none;
-      border-radius: 0;
-      background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-below-backdrop.png"), url("assets/slider-horz-scale-has-marks-below-backdrop@2.png"));
-      background-position: bottom;
-      background-repeat: no-repeat;
-      box-shadow: none; }
-  scale.horizontal trough:first-child:not(:only-child) slider {
-    margin: 0 1px; }
-    scale.horizontal trough:first-child:not(:only-child) slider:backdrop:disabled {
-      border-style: none;
-      border-radius: 0;
-      background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-below-backdrop-insensitive.png"), url("assets/slider-horz-scale-has-marks-below-backdrop-insensitive@2.png"));
-      background-position: bottom;
-      background-repeat: no-repeat;
-      box-shadow: none; }
+    margin: 0 1px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-below.png"), url("assets/slider-horz-scale-has-marks-below@2.png"));
+    background-position: bottom;
+    background-repeat: no-repeat;
+    box-shadow: none; }
+  scale.horizontal trough:first-child:not(:only-child) slider:hover {
+    margin: 0 1px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-below-hover.png"), url("assets/slider-horz-scale-has-marks-below-hover@2.png"));
+    background-position: bottom;
+    background-repeat: no-repeat;
+    box-shadow: none; }
+  scale.horizontal trough:first-child:not(:only-child) slider:active {
+    margin: 0 1px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-below-active.png"), url("assets/slider-horz-scale-has-marks-below-active@2.png"));
+    background-position: bottom;
+    background-repeat: no-repeat;
+    box-shadow: none; }
+  scale.horizontal trough:first-child:not(:only-child) slider:disabled {
+    margin: 0 1px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-below-insensitive.png"), url("assets/slider-horz-scale-has-marks-below-insensitive@2.png"));
+    background-position: bottom;
+    background-repeat: no-repeat;
+    box-shadow: none; }
+  scale.horizontal trough:first-child:not(:only-child) slider:backdrop {
+    margin: 0 1px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-below-backdrop.png"), url("assets/slider-horz-scale-has-marks-below-backdrop@2.png"));
+    background-position: bottom;
+    background-repeat: no-repeat;
+    box-shadow: none; }
+  scale.horizontal trough:first-child:not(:only-child) slider:backdrop:disabled {
+    margin: 0 1px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-below-backdrop-insensitive.png"), url("assets/slider-horz-scale-has-marks-below-backdrop-insensitive@2.png"));
+    background-position: bottom;
+    background-repeat: no-repeat;
+    box-shadow: none; }
   scale.color.vertical:dir(rtl) trough slider, scale.vertical trough:last-child:not(:only-child) slider {
-    margin: 0 1px; }
-    scale.color.vertical:dir(rtl) trough slider, scale.vertical trough:last-child:not(:only-child) slider {
-      border-style: none;
-      border-radius: 0;
-      background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above.png"), url("assets/slider-vert-scale-has-marks-above@2.png"));
-      background-position: left bottom;
-      background-repeat: no-repeat;
-      box-shadow: none; }
-  scale.color.vertical:dir(rtl) trough slider, scale.vertical trough:last-child:not(:only-child) slider {
-    margin: 0 1px; }
-    scale.color.vertical:dir(rtl) trough slider:hover, scale.vertical trough:last-child:not(:only-child) slider:hover {
-      border-style: none;
-      border-radius: 0;
-      background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above-hover.png"), url("assets/slider-vert-scale-has-marks-above-hover@2.png"));
-      background-position: left bottom;
-      background-repeat: no-repeat;
-      box-shadow: none; }
-  scale.color.vertical:dir(rtl) trough slider, scale.vertical trough:last-child:not(:only-child) slider {
-    margin: 0 1px; }
-    scale.color.vertical:dir(rtl) trough slider:active, scale.vertical trough:last-child:not(:only-child) slider:active {
-      border-style: none;
-      border-radius: 0;
-      background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above-active.png"), url("assets/slider-vert-scale-has-marks-above-active@2.png"));
-      background-position: left bottom;
-      background-repeat: no-repeat;
-      box-shadow: none; }
-  scale.color.vertical:dir(rtl) trough slider, scale.vertical trough:last-child:not(:only-child) slider {
-    margin: 0 1px; }
-    scale.color.vertical:dir(rtl) trough slider:disabled, scale.vertical trough:last-child:not(:only-child) slider:disabled {
-      border-style: none;
-      border-radius: 0;
-      background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above-insensitive.png"), url("assets/slider-vert-scale-has-marks-above-insensitive@2.png"));
-      background-position: left bottom;
-      background-repeat: no-repeat;
-      box-shadow: none; }
-  scale.color.vertical:dir(rtl) trough slider, scale.vertical trough:last-child:not(:only-child) slider {
-    margin: 0 1px; }
-    scale.color.vertical:dir(rtl) trough slider:backdrop, scale.vertical trough:last-child:not(:only-child) slider:backdrop {
-      border-style: none;
-      border-radius: 0;
-      background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above-backdrop.png"), url("assets/slider-vert-scale-has-marks-above-backdrop@2.png"));
-      background-position: left bottom;
-      background-repeat: no-repeat;
-      box-shadow: none; }
-  scale.color.vertical:dir(rtl) trough slider, scale.vertical trough:last-child:not(:only-child) slider {
-    margin: 0 1px; }
-    scale.color.vertical:dir(rtl) trough slider:backdrop:disabled, scale.vertical trough:last-child:not(:only-child) slider:backdrop:disabled {
-      border-style: none;
-      border-radius: 0;
-      background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above-backdrop-insensitive.png"), url("assets/slider-vert-scale-has-marks-above-backdrop-insensitive@2.png"));
-      background-position: left bottom;
-      background-repeat: no-repeat;
-      box-shadow: none; }
+    margin: 0 1px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above.png"), url("assets/slider-vert-scale-has-marks-above@2.png"));
+    background-position: left bottom;
+    background-repeat: no-repeat;
+    box-shadow: none; }
+  scale.color.vertical:dir(rtl) trough slider:hover, scale.vertical trough:last-child:not(:only-child) slider:hover {
+    margin: 0 1px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above-hover.png"), url("assets/slider-vert-scale-has-marks-above-hover@2.png"));
+    background-position: left bottom;
+    background-repeat: no-repeat;
+    box-shadow: none; }
+  scale.color.vertical:dir(rtl) trough slider:active, scale.vertical trough:last-child:not(:only-child) slider:active {
+    margin: 0 1px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above-active.png"), url("assets/slider-vert-scale-has-marks-above-active@2.png"));
+    background-position: left bottom;
+    background-repeat: no-repeat;
+    box-shadow: none; }
+  scale.color.vertical:dir(rtl) trough slider:disabled, scale.vertical trough:last-child:not(:only-child) slider:disabled {
+    margin: 0 1px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above-insensitive.png"), url("assets/slider-vert-scale-has-marks-above-insensitive@2.png"));
+    background-position: left bottom;
+    background-repeat: no-repeat;
+    box-shadow: none; }
+  scale.color.vertical:dir(rtl) trough slider:backdrop, scale.vertical trough:last-child:not(:only-child) slider:backdrop {
+    margin: 0 1px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above-backdrop.png"), url("assets/slider-vert-scale-has-marks-above-backdrop@2.png"));
+    background-position: left bottom;
+    background-repeat: no-repeat;
+    box-shadow: none; }
+  scale.color.vertical:dir(rtl) trough slider:backdrop:disabled, scale.vertical trough:last-child:not(:only-child) slider:backdrop:disabled {
+    margin: 0 1px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above-backdrop-insensitive.png"), url("assets/slider-vert-scale-has-marks-above-backdrop-insensitive@2.png"));
+    background-position: left bottom;
+    background-repeat: no-repeat;
+    box-shadow: none; }
   scale.color.vertical:dir(ltr) trough slider, scale.vertical trough:first-child:not(:only-child) slider {
-    margin: 0 1px; }
-    scale.color.vertical:dir(ltr) trough slider, scale.vertical trough:first-child:not(:only-child) slider {
-      border-style: none;
-      border-radius: 0;
-      background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below.png"), url("assets/slider-vert-scale-has-marks-below@2.png"));
-      background-position: right bottom;
-      background-repeat: no-repeat;
-      box-shadow: none; }
-  scale.color.vertical:dir(ltr) trough slider, scale.vertical trough:first-child:not(:only-child) slider {
-    margin: 0 1px; }
-    scale.color.vertical:dir(ltr) trough slider:hover, scale.vertical trough:first-child:not(:only-child) slider:hover {
-      border-style: none;
-      border-radius: 0;
-      background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below-hover.png"), url("assets/slider-vert-scale-has-marks-below-hover@2.png"));
-      background-position: right bottom;
-      background-repeat: no-repeat;
-      box-shadow: none; }
-  scale.color.vertical:dir(ltr) trough slider, scale.vertical trough:first-child:not(:only-child) slider {
-    margin: 0 1px; }
-    scale.color.vertical:dir(ltr) trough slider:active, scale.vertical trough:first-child:not(:only-child) slider:active {
-      border-style: none;
-      border-radius: 0;
-      background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below-active.png"), url("assets/slider-vert-scale-has-marks-below-active@2.png"));
-      background-position: right bottom;
-      background-repeat: no-repeat;
-      box-shadow: none; }
-  scale.color.vertical:dir(ltr) trough slider, scale.vertical trough:first-child:not(:only-child) slider {
-    margin: 0 1px; }
-    scale.color.vertical:dir(ltr) trough slider:disabled, scale.vertical trough:first-child:not(:only-child) slider:disabled {
-      border-style: none;
-      border-radius: 0;
-      background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below-insensitive.png"), url("assets/slider-vert-scale-has-marks-below-insensitive@2.png"));
-      background-position: right bottom;
-      background-repeat: no-repeat;
-      box-shadow: none; }
-  scale.color.vertical:dir(ltr) trough slider, scale.vertical trough:first-child:not(:only-child) slider {
-    margin: 0 1px; }
-    scale.color.vertical:dir(ltr) trough slider:backdrop, scale.vertical trough:first-child:not(:only-child) slider:backdrop {
-      border-style: none;
-      border-radius: 0;
-      background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below-backdrop.png"), url("assets/slider-vert-scale-has-marks-below-backdrop@2.png"));
-      background-position: right bottom;
-      background-repeat: no-repeat;
-      box-shadow: none; }
-  scale.color.vertical:dir(ltr) trough slider, scale.vertical trough:first-child:not(:only-child) slider {
-    margin: 0 1px; }
-    scale.color.vertical:dir(ltr) trough slider:backdrop:disabled, scale.vertical trough:first-child:not(:only-child) slider:backdrop:disabled {
-      border-style: none;
-      border-radius: 0;
-      background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below-backdrop-insensitive.png"), url("assets/slider-vert-scale-has-marks-below-backdrop-insensitive@2.png"));
-      background-position: right bottom;
-      background-repeat: no-repeat;
-      box-shadow: none; }
+    margin: 0 1px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below.png"), url("assets/slider-vert-scale-has-marks-below@2.png"));
+    background-position: right bottom;
+    background-repeat: no-repeat;
+    box-shadow: none; }
+  scale.color.vertical:dir(ltr) trough slider:hover, scale.vertical trough:first-child:not(:only-child) slider:hover {
+    margin: 0 1px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below-hover.png"), url("assets/slider-vert-scale-has-marks-below-hover@2.png"));
+    background-position: right bottom;
+    background-repeat: no-repeat;
+    box-shadow: none; }
+  scale.color.vertical:dir(ltr) trough slider:active, scale.vertical trough:first-child:not(:only-child) slider:active {
+    margin: 0 1px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below-active.png"), url("assets/slider-vert-scale-has-marks-below-active@2.png"));
+    background-position: right bottom;
+    background-repeat: no-repeat;
+    box-shadow: none; }
+  scale.color.vertical:dir(ltr) trough slider:disabled, scale.vertical trough:first-child:not(:only-child) slider:disabled {
+    margin: 0 1px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below-insensitive.png"), url("assets/slider-vert-scale-has-marks-below-insensitive@2.png"));
+    background-position: right bottom;
+    background-repeat: no-repeat;
+    box-shadow: none; }
+  scale.color.vertical:dir(ltr) trough slider:backdrop, scale.vertical trough:first-child:not(:only-child) slider:backdrop {
+    margin: 0 1px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below-backdrop.png"), url("assets/slider-vert-scale-has-marks-below-backdrop@2.png"));
+    background-position: right bottom;
+    background-repeat: no-repeat;
+    box-shadow: none; }
+  scale.color.vertical:dir(ltr) trough slider:backdrop:disabled, scale.vertical trough:first-child:not(:only-child) slider:backdrop:disabled {
+    margin: 0 1px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below-backdrop-insensitive.png"), url("assets/slider-vert-scale-has-marks-below-backdrop-insensitive@2.png"));
+    background-position: right bottom;
+    background-repeat: no-repeat;
+    box-shadow: none; }
 
 /*****************
  * Progress bars *
