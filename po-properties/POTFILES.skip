@@ -161,6 +161,8 @@ testsuite/a11y/placeholder-text.ui
 testsuite/a11y/stack.ui
 testsuite/css/nodes/buttons.ui
 testsuite/css/nodes/entries.ui
+testsuite/css/nodes/notebook-arrows2.ui
+testsuite/css/nodes/notebook-arrows.ui
 testsuite/css/nodes/notebook.bottom.ltr.ui
 testsuite/css/nodes/notebook.bottom.rtl.ui
 testsuite/css/nodes/notebook.bottom.ui
