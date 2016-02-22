@@ -63,8 +63,12 @@ cd $(SolutionDir)&#x0D;&#x0A;
 		      "
 	/>
 	<UserMacro
-		Name="GenerateGtkWin32RC"
-		Value="$(PythonPath)\python ..\process-in-win32.py --gtkwin32rc --gtk3manifest"
+		Name="CopyGtkWin32RC"
+		Value="copy ..\..\..\gtk\gtk-win32.rc.body ..\..\..\gtk\gtk-win32.rc"
+	/>
+	<UserMacro
+		Name="GenerateGtkWin32Manifest"
+		Value="$(PythonPath)\python ..\replace.py --action=replace-var --input=..\..\..\gtk\libgtk3.manifest.in --output=..\..\..\gtk\libgtk3.manifest --var=EXE_MANIFEST_ARCHITECTURE --outstring=*"
 	/>
 	<UserMacro
 		Name="CopyDemosH"
