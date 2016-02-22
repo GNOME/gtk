@@ -35,6 +35,11 @@ gtk_win32_res_ldflag = -Wl,gtk-win32-res.o
 gtk-win32-res.o : gtk-win32.rc libgtk3.manifest
 	$(WINDRES) gtk-win32.rc $@
 
+gtk-win32.rc: gtk-win32.rc.body
+	echo "#include <winuser.h>" >>$@
+	cat $< >>$@
+	echo "ISOLATIONAWARE_MANIFEST_RESOURCE_ID RT_MANIFEST libgtk3.manifest" >>$@
+
 gtk.def: libgtk-3.la
 	echo "LIBRARY libgtk-$(GTK_MAJOR_VERSION)-@LT_CURRENT_MINUS_AGE@" >$@
 	echo "EXPORTS" >>$@
@@ -1124,6 +1129,10 @@ MAINTAINERCLEANFILES = \
 
 DISTCLEANFILES =
 
+if OS_WIN32
+DISTCLEANFILES += gtk-win32.rc
+endif
+
 EXTRA_DIST += $(gtk_all_private_h_sources) $(gtk_extra_sources)
 EXTRA_DIST += $(gtk_built_sources)
 
@@ -1587,7 +1596,8 @@ EXTRA_DIST +=                   \
 	deprecated/Makefile.inc	\
 	inspector/Makefile.inc	\
 	libgtk3.manifest.in	\
-	gtk-win32.rc.in		\
+	gtk-win32.rc.body.in	\
+	gtk-win32.rc.body	\
 	gtkwin32embed.h		\
 	gtkwin32embedwidget.h	\
 	gtkwin32embedwidget.c	\

@@ -1943,7 +1943,7 @@ gdk/gdkversionmacros.h
 gtk/Makefile
 gtk/makefile.msc
 gtk/gtkversion.h
-gtk/gtk-win32.rc
+gtk/gtk-win32.rc.body
 gtk/libgtk3.manifest
 libgail-util/Makefile
 modules/Makefile

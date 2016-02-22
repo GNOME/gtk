@@ -64,7 +64,8 @@ $(PythonPath)\python $(GlibEtcInstallRoot)\bin\gdbus-codegen --interface-prefix 
 
 cd $(SolutionDir)
     </GenerateGtkDbusBuiltSources>
-    <GenerateGtkWin32RC>$(PythonPath)\python ..\process-in-win32.py --gtkwin32rc --gtk3manifest</GenerateGtkWin32RC>
+    <CopyGtkWin32RC>copy ..\..\..\gtk\gtk-win32.rc.body ..\..\..\gtk\gtk-win32.rc</CopyGtkWin32RC>
+    <GenerateGtkWin32Manifest>$(PythonPath)\python ..\replace.py --action=replace-var --input=..\..\..\gtk\libgtk3.manifest.in --output=..\..\..\gtk\libgtk3.manifest --var=EXE_MANIFEST_ARCHITECTURE --outstring=*</GenerateGtkWin32Manifest>
     <CopyDemosH>copy ..\..\..\demos\gtk-demo\demos.h.win32 ..\..\..\demos\gtk-demo\demos.h</CopyDemosH>
   </PropertyGroup>
   <PropertyGroup>
@@ -83,8 +84,11 @@ cd $(SolutionDir)
     <BuildMacro Include="GenerateGtkDbusBuiltSources">
       <Value>$(GenerateGtkDbusBuiltSources)</Value>
     </BuildMacro>
-    <BuildMacro Include="GenerateGtkWin32RC">
-      <Value>$(GenerateGtkWin32RC)</Value>
+    <BuildMacro Include="CopyGtkWin32RC">
+      <Value>$(CopyGtkWin32RC)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GenerateGtkWin32Manifest">
+      <Value>$(GenerateGtkWin32Manifest)</Value>
     </BuildMacro>
     <BuildMacro Include="CopyDemosH">
       <Value>$(CopyDemosH)</Value>

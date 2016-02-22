@@ -8,6 +8,6 @@ SUBDIRS =	\
 	vs12	\
 	vs14
 
-EXTRA_DIST += process-in-win32.py
+EXTRA_DIST += replace.py
 
 -include $(top_srcdir)/git.mk
