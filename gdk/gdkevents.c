@@ -2106,9 +2106,11 @@ _gdk_event_button_generate (GdkDisplay *display,
 			    GdkEvent   *event)
 {
   GdkMultipleClickInfo *info;
+  GdkDevice *source_device;
 
   g_return_if_fail (event->type == GDK_BUTTON_PRESS);
 
+  source_device = gdk_event_get_source_device (event);
   info = g_hash_table_lookup (display->multiple_click_info, event->button.device);
 
   if (G_UNLIKELY (!info))
@@ -2123,6 +2125,7 @@ _gdk_event_button_generate (GdkDisplay *display,
   if ((event->button.time < (info->button_click_time[1] + 2 * display->double_click_time)) &&
       (event->button.window == info->button_window[1]) &&
       (event->button.button == info->button_number[1]) &&
+      (source_device == info->last_slave) &&
       (ABS (event->button.x - info->button_x[1]) <= display->double_click_distance) &&
       (ABS (event->button.y - info->button_y[1]) <= display->double_click_distance))
     {
@@ -2136,10 +2139,12 @@ _gdk_event_button_generate (GdkDisplay *display,
       info->button_number[0] = -1;
       info->button_x[0] = info->button_x[1] = 0;
       info->button_y[0] = info->button_y[1] = 0;
+      info->last_slave = NULL;
     }
   else if ((event->button.time < (info->button_click_time[0] + display->double_click_time)) &&
 	   (event->button.window == info->button_window[0]) &&
 	   (event->button.button == info->button_number[0]) &&
+           (source_device == info->last_slave) &&
 	   (ABS (event->button.x - info->button_x[0]) <= display->double_click_distance) &&
 	   (ABS (event->button.y - info->button_y[0]) <= display->double_click_distance))
     {
@@ -2155,6 +2160,7 @@ _gdk_event_button_generate (GdkDisplay *display,
       info->button_x[0] = event->button.x;
       info->button_y[1] = info->button_y[0];
       info->button_y[0] = event->button.y;
+      info->last_slave = source_device;
     }
   else
     {
@@ -2168,6 +2174,7 @@ _gdk_event_button_generate (GdkDisplay *display,
       info->button_x[0] = event->button.x;
       info->button_y[1] = 0;
       info->button_y[0] = event->button.y;
+      info->last_slave = source_device;
     }
 }
 

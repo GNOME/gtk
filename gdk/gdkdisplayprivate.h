@@ -88,6 +88,7 @@ typedef struct
   gint button_number[2];        /* last 2 buttons to be pressed */
   gint button_x[2];             /* last 2 button click positions */
   gint button_y[2];
+  GdkDevice *last_slave;
 } GdkMultipleClickInfo;
 
 struct _GdkDisplay
