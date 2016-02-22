@@ -35,6 +35,8 @@ HDC		  _gdk_display_hdc;
 HINSTANCE	  _gdk_dll_hinstance;
 HINSTANCE	  _gdk_app_hmodule;
 
+gboolean	  _gdk_input_ignore_core;
+
 HKL		  _gdk_input_locale;
 gboolean	  _gdk_input_locale_is_ime;
 UINT		  _gdk_input_codepage;

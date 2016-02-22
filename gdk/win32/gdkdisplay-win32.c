@@ -20,6 +20,7 @@
 #include "gdk.h"
 #include "gdkprivate-win32.h"
 #include "gdkdisplay-win32.h"
+#include "gdkdevicemanager-win32.h"
 #include "gdkglcontext-win32.h"
 #include "gdkwin32display.h"
 #include "gdkwin32screen.h"
@@ -27,6 +28,37 @@
 #include "gdkwin32.h"
 
 static int debug_indent = 0;
+
+static GList *
+gdk_win32_display_list_devices (GdkDisplay *display)
+{
+  g_return_val_if_fail (display == gdk_display_get_default (), NULL);
+
+  return GDK_WIN32_DISPLAY (display)->input_devices;
+}
+
+static void
+_gdk_input_init (GdkDisplay *display)
+{
+  GdkDeviceManagerWin32 *device_manager;
+  GList *devices;
+
+  _gdk_input_ignore_core = FALSE;
+
+  device_manager = g_object_new (GDK_TYPE_DEVICE_MANAGER_WIN32,
+                                 "display", display,
+                                 NULL);
+  display->device_manager = GDK_DEVICE_MANAGER (device_manager);
+
+  display->core_pointer = device_manager->core_pointer;
+
+  devices = g_list_append (NULL, display->core_pointer);
+  devices = g_list_concat (devices, g_list_copy (device_manager->wintab_devices));
+
+  GDK_WIN32_DISPLAY (display)->input_devices = devices;
+
+  _gdk_input_wintab_init_check (GDK_DEVICE_MANAGER (device_manager));
+}
 
 /**
  * gdk_win32_display_set_cursor_theme:
@@ -624,6 +656,8 @@ gdk_win32_display_finalize (GObject *object)
 {
   GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (object);
 
+  g_list_free (display_win32->input_devices);
+
   _gdk_win32_display_finalize_cursors (display_win32);
   _gdk_win32_dnd_exit ();
 
@@ -691,7 +725,7 @@ gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
   display_class->supports_input_shapes = gdk_win32_display_supports_input_shapes;
   display_class->supports_composite = gdk_win32_display_supports_composite;
 
-  display_class->list_devices = _gdk_win32_display_list_devices;
+  display_class->list_devices = gdk_win32_display_list_devices;
   //? display_class->get_app_launch_context = _gdk_win32_display_get_app_launch_context;
   display_class->get_cursor_for_type = _gdk_win32_display_get_cursor_for_type;
   display_class->get_cursor_for_name = _gdk_win32_display_get_cursor_for_name;

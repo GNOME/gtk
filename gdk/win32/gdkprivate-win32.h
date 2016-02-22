@@ -268,6 +268,8 @@ extern HDC		 _gdk_display_hdc;
 extern HINSTANCE	 _gdk_dll_hinstance;
 extern HINSTANCE	 _gdk_app_hmodule;
 
+extern gboolean		 _gdk_input_ignore_core;
+
 /* These are thread specific, but GDK/win32 works OK only when invoked
  * from a single thread anyway.
  */
@@ -539,7 +541,6 @@ void _gdk_monitor_init(GdkWin32Screen *screen);
 void _gdk_visual_init (GdkScreen *screen);
 void _gdk_dnd_init    (void);
 void _gdk_events_init (void);
-void _gdk_input_init  (GdkDisplay *display);
 void _gdk_input_wintab_init_check (GdkDeviceManager *device_manager);
 
 #endif /* __GDK_PRIVATE_WIN32_H__ */

@@ -45,7 +45,6 @@ libgdk_win32_la_SOURCES = \
 	gdkglcontext-win32.c \
 	gdkglcontext-win32.h \
 	gdkglobals-win32.c \
-	gdkinput.c \
 	gdkkeys-win32.c \
 	gdkmain-win32.c \
 	gdkprivate-win32.h \

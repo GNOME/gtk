@@ -3376,7 +3376,7 @@ gdk_event_translate (MSG  *msg,
                                      GET_Y_LPARAM (msg->lParam), ret_valp);
       break;
 
-      /* Handle WINTAB events here, as we know that gdkinput.c will
+      /* Handle WINTAB events here, as we know that the device manager will
        * use the fixed WT_DEFBASE as lcMsgBase, and we thus can use the
        * constants as case labels.
        */

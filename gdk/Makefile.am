@@ -312,7 +312,6 @@ w32_introspection_files =		\
 	win32/gdkevents-win32.c		\
 	win32/gdkgeometry-win32.c	\
 	win32/gdkglobals-win32.c	\
-	win32/gdkinput.c		\
 	win32/gdkkeys-win32.c		\
 	win32/gdkmain-win32.c		\
 	win32/gdkproperty-win32.c	\
