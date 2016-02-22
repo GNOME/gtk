@@ -234,6 +234,25 @@ draw_window_button (cairo_t *cr,
   mask_icon (cr, icon, 1, 1, width - 2, height - 2);
 }
 
+static void
+draw_tooltip (cairo_t *cr,
+              int      part,
+              int      state,
+              int      width,
+              int      height)
+{
+  int xborder = gtk_win32_get_sys_metric (GTK_WIN32_SYS_METRIC_CXDLGFRAME) -
+                gtk_win32_get_sys_metric (GTK_WIN32_SYS_METRIC_CXEDGE);
+  int yborder = gtk_win32_get_sys_metric (GTK_WIN32_SYS_METRIC_CYDLGFRAME) -
+                gtk_win32_get_sys_metric (GTK_WIN32_SYS_METRIC_CYEDGE);
+
+  cairo_rectangle (cr, 0, 0, width, height);
+  cairo_rectangle (cr, width - xborder, yborder,
+                   - (width - 2 * xborder), height - 2 * yborder);
+  gtk_cairo_set_source_sys_color (cr, GTK_WIN32_SYS_COLOR_WINDOWFRAME);
+  cairo_fill (cr);
+}
+
 typedef struct _GtkWin32ThemePart GtkWin32ThemePart;
 struct _GtkWin32ThemePart {
   const char *class_name;
@@ -251,6 +270,7 @@ static GtkWin32ThemePart theme_parts[] = {
   { "button",  1,  0, { 3, 3, 3, 3 }, draw_button },
   { "button",  2, 13, { 0, 0, 0, 0 }, draw_radio },
   { "button",  3, 13, { 0, 0, 0, 0 }, draw_check },
+  { "tooltip", 1,  0, { 0, 0, 0, 0 }, draw_tooltip },
   { "window",  1,  0, { 0, 0, 0, 0 }, draw_window },
   { "window", 15,  0, { 0, 0, 0, 0 }, draw_window_button },
   { "window", 17,  0, { 0, 0, 0, 0 }, draw_window_button },

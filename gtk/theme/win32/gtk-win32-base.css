@@ -117,15 +117,11 @@ scrolledwindow.frame {
   color: @selected_fg_color;
 }
 
-tooltip {
-    background-color: transparent;
-    background-image: -gtk-win32-theme-part(tooltip, 3, 1);
+tooltip, tooltip.background {
+    background-color: -gtk-win32-color(tooltip, infobk);
+    background-image: -gtk-win32-theme-part(tooltip, 1, 1);
     color: -gtk-win32-color(button, infotext);
-    border-width: 0px;
-}
-
-tooltip * {
-    color: -gtk-win32-color(button, infotext);
+    padding: 2px;
 }
 
 assistant .sidebar .highlight {
