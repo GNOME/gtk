@@ -46,6 +46,7 @@ typedef struct _GtkGestureMultiPressPrivate GtkGestureMultiPressPrivate;
 struct _GtkGestureMultiPressPrivate
 {
   GdkRectangle rect;
+  GdkDevice *current_device;
   gdouble initial_press_x;
   gdouble initial_press_y;
   guint double_click_timeout_id;
@@ -112,6 +113,7 @@ _gtk_gesture_multi_press_stop (GtkGestureMultiPress *gesture)
   if (priv->n_presses == 0)
     return;
 
+  priv->current_device = NULL;
   priv->current_button = 0;
   priv->n_presses = 0;
   g_signal_emit (gesture, signals[STOPPED], 0);
@@ -196,6 +198,7 @@ gtk_gesture_multi_press_begin (GtkGesture       *gesture,
   guint n_presses, button = 1;
   GdkEventSequence *current;
   const GdkEvent *event;
+  GdkDevice *device;
   gdouble x, y;
 
   if (!gtk_gesture_handles_sequence (gesture, sequence))
@@ -205,6 +208,7 @@ gtk_gesture_multi_press_begin (GtkGesture       *gesture,
   priv = gtk_gesture_multi_press_get_instance_private (multi_press);
   event = gtk_gesture_get_last_event (gesture, sequence);
   current = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+  device = gdk_event_get_source_device (event);
 
   if (event->type == GDK_BUTTON_PRESS)
     button = event->button.button;
@@ -218,6 +222,11 @@ gtk_gesture_multi_press_begin (GtkGesture       *gesture,
       priv->current_button != button)
     _gtk_gesture_multi_press_stop (multi_press);
 
+  /* Reset also if the device changed */
+  if (priv->current_device && priv->current_device != device)
+    _gtk_gesture_multi_press_stop (multi_press);
+
+  priv->current_device = device;
   priv->current_button = button;
   _gtk_gesture_multi_press_update_timeout (multi_press);
   gtk_gesture_get_point (gesture, current, &x, &y);
