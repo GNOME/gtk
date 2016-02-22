@@ -44,12 +44,6 @@ GList            *_gdk_input_devices;
 GList            *_gdk_input_windows;
 
 GList *
-gdk_devices_list (void)
-{
-  return _gdk_win32_display_list_devices (_gdk_display);
-}
-
-GList *
 _gdk_win32_display_list_devices (GdkDisplay *dpy)
 {
   g_return_val_if_fail (dpy == _gdk_display, NULL);
