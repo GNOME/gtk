@@ -425,6 +425,7 @@ gtk_css_value_color_print (const GtkCssValue *value,
         const char *name;
         g_string_append (string, GTK_WIN32_THEME_SYMBOLIC_COLOR_NAME"(");
         gtk_win32_theme_print (value->sym_col.win32.theme, string);
+        g_string_append (string, ", ");
         name = gtk_win32_get_sys_color_name_for_id (value->sym_col.win32.id);
         if (name)
           g_string_append (string, name);
