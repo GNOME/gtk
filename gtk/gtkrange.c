@@ -1852,11 +1852,7 @@ gtk_range_allocate_trough (GtkCssGadget        *gadget,
   GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
   GtkRange *range = GTK_RANGE (widget);
   GtkRangePrivate *priv = range->priv;
-  GtkAllocation border_alloc;
   GtkAllocation slider_alloc, widget_alloc;
-
-  /* Note: fill/highlight are allocated on top of the trough, not inside */
-  gtk_css_gadget_get_border_allocation (gadget, &border_alloc, NULL);
 
   /* Slider */
   gtk_range_calc_marks (range);
@@ -1881,7 +1877,7 @@ gtk_range_allocate_trough (GtkCssGadget        *gadget,
       gdouble level, fill;
       GtkAllocation fill_alloc, fill_clip;
 
-      fill_alloc = border_alloc;
+      fill_alloc = *allocation;
 
       level = CLAMP (priv->fill_level,
                      gtk_adjustment_get_lower (priv->adjustment),
@@ -1898,14 +1894,14 @@ gtk_range_allocate_trough (GtkCssGadget        *gadget,
           fill_alloc.width *= fill;
 
           if (should_invert (range))
-            fill_alloc.x += border_alloc.width - fill_alloc.width;
+            fill_alloc.x += allocation->width - fill_alloc.width;
         }
       else
         {
           fill_alloc.height *= fill;
 
           if (should_invert (range))
-            fill_alloc.y += border_alloc.height - (fill_alloc.height * fill);
+            fill_alloc.y += allocation->height - (fill_alloc.height * fill);
         }
 
       gtk_css_gadget_allocate (priv->fill_gadget,
@@ -1921,32 +1917,32 @@ gtk_range_allocate_trough (GtkCssGadget        *gadget,
 
       gtk_css_gadget_get_content_allocation (priv->slider_gadget,
                                              &slider_alloc, NULL);
-      highlight_alloc = border_alloc;
+      highlight_alloc = *allocation;
 
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
         {
           if (!should_invert (range))
             {
-              highlight_alloc.x = border_alloc.x;
-              highlight_alloc.width = slider_alloc.x + slider_alloc.width / 2 - border_alloc.x;
+              highlight_alloc.x = allocation->x;
+              highlight_alloc.width = slider_alloc.x + slider_alloc.width / 2 - allocation->x;
             }
           else
             {
               highlight_alloc.x = slider_alloc.x + slider_alloc.width / 2;
-              highlight_alloc.width = border_alloc.x + border_alloc.width - highlight_alloc.x;
+              highlight_alloc.width = allocation->x + allocation->width - highlight_alloc.x;
             }
     }
       else
         {
           if (!should_invert (range))
             {
-              highlight_alloc.y = border_alloc.y;
-              highlight_alloc.height = slider_alloc.y + slider_alloc.height / 2 - border_alloc.y;
+              highlight_alloc.y = allocation->y;
+              highlight_alloc.height = slider_alloc.y + slider_alloc.height / 2 - allocation->y;
             }
           else
             {
               highlight_alloc.y = slider_alloc.y + slider_alloc.height / 2;
-              highlight_alloc.height = border_alloc.y + border_alloc.height - highlight_alloc.y;
+              highlight_alloc.height = allocation->y + allocation->height - highlight_alloc.y;
             }
         }
 
