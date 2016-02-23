@@ -2254,6 +2254,8 @@ gtk_range_render_trough (GtkCssGadget *gadget,
   if (priv->has_origin)
     gtk_css_gadget_draw (priv->highlight_gadget, cr);
 
+  gtk_css_gadget_draw (priv->slider_gadget, cr);
+
   return gtk_widget_has_visible_focus (widget);
 }
 
@@ -2270,8 +2272,6 @@ gtk_range_draw (GtkWidget *widget,
 
   if (draw_trough)
     gtk_css_gadget_draw (priv->trough_gadget, cr);
-
-  gtk_css_gadget_draw (priv->slider_gadget, cr);
 
   if (priv->stepper_a_gadget)
     gtk_css_gadget_draw (priv->stepper_a_gadget, cr);
