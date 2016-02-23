@@ -2268,14 +2268,8 @@ gtk_range_draw (GtkWidget *widget,
 {
   GtkRange *range = GTK_RANGE (widget);
   GtkRangePrivate *priv = range->priv;
-  gboolean draw_trough = TRUE;
 
-  if (GTK_IS_COLOR_SCALE (widget))
-      draw_trough = FALSE;
-
-  if (draw_trough)
-    gtk_css_gadget_draw (priv->trough_gadget, cr);
-
+  gtk_css_gadget_draw (priv->trough_gadget, cr);
   gtk_css_gadget_draw (priv->slider_gadget, cr);
 
   if (priv->stepper_a_gadget)

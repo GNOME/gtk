@@ -23,6 +23,7 @@
 #include "gtkgesturelongpress.h"
 #include "gtkcolorutils.h"
 #include "gtkorientable.h"
+#include "gtkrangeprivate.h"
 #include "gtkstylecontext.h"
 #include "gtkaccessible.h"
 #include "gtkprivate.h"
@@ -255,6 +256,7 @@ scale_draw (GtkWidget *widget,
 static void
 gtk_color_scale_init (GtkColorScale *scale)
 {
+  GtkCssNode *trough_node;
   GtkStyleContext *context;
 
   scale->priv = gtk_color_scale_get_instance_private (scale);
@@ -269,6 +271,9 @@ gtk_color_scale_init (GtkColorScale *scale)
 
   context = gtk_widget_get_style_context (GTK_WIDGET (scale));
   gtk_style_context_add_class (context, "color");
+
+  trough_node = gtk_range_get_trough_node (GTK_RANGE (scale));
+  gtk_css_node_set_visible (trough_node, FALSE);
 }
 
 static void
