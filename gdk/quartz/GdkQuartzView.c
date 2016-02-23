@@ -684,7 +684,7 @@
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
   NSRect rect;
 
-  if (!impl->toplevel)
+  if (!impl || !impl->toplevel)
     return;
 
   if (trackingRect)
