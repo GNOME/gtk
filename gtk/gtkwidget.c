@@ -6035,17 +6035,14 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
     }
 
 #ifdef G_ENABLE_DEBUG
-  if (GTK_DEBUG_CHECK (GEOMETRY))
-    {
-      if ((min_width > real_allocation.width || min_height > real_allocation.height) &&
-          !GTK_IS_SCROLLABLE (widget))
-        g_warning ("gtk_widget_size_allocate(): attempt to underallocate %s%s %s %p. "
-                   "Allocation is %dx%d, but minimum required size is %dx%d.",
-                   priv->parent ? G_OBJECT_TYPE_NAME (priv->parent) : "", priv->parent ? "'s child" : "toplevel",
-                   G_OBJECT_TYPE_NAME (widget), widget,
-                   real_allocation.width, real_allocation.height,
-                   min_width, min_height);
-    }
+  if ((min_width > real_allocation.width || min_height > real_allocation.height) &&
+      !GTK_IS_SCROLLABLE (widget))
+    g_warning ("gtk_widget_size_allocate(): attempt to underallocate %s%s %s %p. "
+               "Allocation is %dx%d, but minimum required size is %dx%d.",
+               priv->parent ? G_OBJECT_TYPE_NAME (priv->parent) : "", priv->parent ? "'s child" : "toplevel",
+               G_OBJECT_TYPE_NAME (widget), widget,
+               real_allocation.width, real_allocation.height,
+               min_width, min_height);
 #endif
   /* Now that we have the right natural height and width, go ahead and remove any margins from the
    * allocated sizes and possibly limit them to the natural sizes */
