@@ -2269,25 +2269,14 @@ gtk_range_draw (GtkWidget *widget,
   GtkRange *range = GTK_RANGE (widget);
   GtkRangePrivate *priv = range->priv;
   gboolean draw_trough = TRUE;
-  gboolean draw_slider = TRUE;
 
-  if (GTK_IS_SCALE (widget) &&
-      gtk_adjustment_get_upper (priv->adjustment) == gtk_adjustment_get_lower (priv->adjustment))
-    {
-      draw_trough = TRUE;
-      draw_slider = FALSE;
-    }
   if (GTK_IS_COLOR_SCALE (widget))
-    {
       draw_trough = FALSE;
-      draw_slider = TRUE;
-    }
 
   if (draw_trough)
     gtk_css_gadget_draw (priv->trough_gadget, cr);
 
-  if (draw_slider)
-    gtk_css_gadget_draw (priv->slider_gadget, cr);
+  gtk_css_gadget_draw (priv->slider_gadget, cr);
 
   if (priv->stepper_a_gadget)
     gtk_css_gadget_draw (priv->stepper_a_gadget, cr);
