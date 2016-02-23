@@ -3021,20 +3021,22 @@ _gdk_wayland_device_get_implicit_grab_serial (GdkWaylandDevice *device,
 }
 
 uint32_t
-_gdk_wayland_device_get_last_implicit_grab_serial (GdkWaylandDevice  *device,
-                                                   GdkEventSequence **sequence)
+_gdk_wayland_seat_get_last_implicit_grab_serial (GdkSeat           *seat,
+                                                 GdkEventSequence **sequence)
 {
+  GdkWaylandSeat *wayland_seat;
   GdkWaylandTouchData *touch;
   GHashTableIter iter;
   uint32_t serial = 0;
 
-  g_hash_table_iter_init (&iter, device->device->touches);
+  wayland_seat = GDK_WAYLAND_SEAT (seat);
+  g_hash_table_iter_init (&iter, wayland_seat->touches);
 
   if (sequence)
     *sequence = NULL;
 
-  if (device->device->button_press_serial > serial)
-    serial = device->device->button_press_serial;
+  if (wayland_seat->button_press_serial > serial)
+    serial = wayland_seat->button_press_serial;
 
   while (g_hash_table_iter_next (&iter, NULL, (gpointer *) &touch))
     {
