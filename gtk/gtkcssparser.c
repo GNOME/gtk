@@ -599,8 +599,15 @@ _gtk_css_parser_try_double (GtkCssParser *parser,
 gboolean
 _gtk_css_parser_has_number (GtkCssParser *parser)
 {
+  char c;
+
+  if (parser->data[0] == '-' || parser->data[0] == '+')
+    c = parser->data[1];
+  else
+    c = parser->data[0];
+
   /* ahem */
-  return strchr ("+-0123456789.", parser->data[0]) != NULL;
+  return g_ascii_isdigit (c) || c == '.';
 }
 
 GtkCssValue *

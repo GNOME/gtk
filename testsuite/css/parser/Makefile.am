@@ -195,6 +195,8 @@ test_data = \
 	background-shorthand-single.ref.css \
         background-size.css \
         background-size.ref.css \
+	background-win32-color-is-no-error.css \
+	background-win32-color-is-no-error.ref.css \
 	border.css \
 	border.errors \
 	border.ref.css \
