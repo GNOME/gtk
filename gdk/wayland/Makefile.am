@@ -24,6 +24,8 @@ BUILT_SOURCES = 				\
 	pointer-gestures-unstable-v1-protocol.c			\
 	xdg-shell-unstable-v5-client-protocol.h			\
 	xdg-shell-unstable-v5-protocol.c			\
+	gtk-primary-selection-client-protocol.h			\
+	gtk-primary-selection-protocol.c			\
 	gtk-shell-client-protocol.h		\
 	gtk-shell-protocol.c
 
@@ -89,6 +91,7 @@ endef
 	$(AM_V_GEN)$(WAYLAND_SCANNER) client-header < $< > $@
 
 EXTRA_DIST += 					\
+	protocol/gtk-primary-selection.xml	\
 	protocol/gtk-shell.xml
 
 -include $(top_srcdir)/git.mk
