@@ -126,12 +126,42 @@ struct _GdkWindowImplWin32
   guint inhibit_configure : 1;
   guint override_redirect : 1;
 
+  /* Set to TRUE if window is using true layered mode adjustments
+   * via UpdateLayeredWindow().
+   * Layered windows that get SetLayeredWindowAttributes() called
+   * on them are not true layered windows.
+   */
+  guint layered : 1;
+
+  /* GDK does not keep window contents around, it just draws new
+   * stuff over the window where changes occurred.
+   * cache_surface retains old window contents, because
+   * UpdateLayeredWindow() doesn't do partial redraws.
+   */
+  cairo_surface_t *cache_surface;
   cairo_surface_t *cairo_surface;
+
+  /* Unlike window-backed surfaces, DIB-backed surface
+   * does not provide a way to query its size,
+   * so we have to remember it ourselves.
+   */
+  gint             dib_width;
+  gint             dib_height;
+
+  /* If the client wants uniformly-transparent window,
+   * we remember the opacity value here and apply it
+   * during UpdateLayredWindow() call, for layered windows.
+   */
+  gdouble          layered_opacity;
+
   HDC              hdc;
   int              hdc_count;
   HBITMAP          saved_dc_bitmap; /* Original bitmap for dc */
 
   GdkW32DragMoveResizeContext drag_move_resize_context;
+
+  /* Decorations set by gdk_window_set_decorations() or NULL if unset */
+  GdkWMDecoration* decorations;
 };
 
 struct _GdkWindowImplWin32Class

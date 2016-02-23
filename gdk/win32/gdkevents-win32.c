@@ -1645,17 +1645,14 @@ handle_nchittest (HWND hwnd,
                   gint *ret_valp)
 {
   RECT rect;
-  LONG style;
 
   if (window == NULL || window->input_shape == NULL)
     return FALSE;
 
-  style = GetWindowLong (hwnd, GWL_STYLE);
-
-  /* Assume that these styles are incompatible with CSD,
-   * so there's no reason for us to override the defaults.
+  /* If the window has decorations, DefWindowProc() will take
+   * care of NCHITTEST.
    */
-  if (style & (WS_BORDER | WS_THICKFRAME))
+  if (!_gdk_win32_window_lacks_wm_decorations (window))
     return FALSE;
 
   if (!GetWindowRect (hwnd, &rect))

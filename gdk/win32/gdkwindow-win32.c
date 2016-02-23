@@ -181,7 +181,17 @@ gdk_window_impl_win32_finalize (GObject *object)
       window_impl->hicon_small = NULL;
     }
 
+  g_free (window_impl->decorations);
+
   G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
+static gboolean
+gdk_win32_window_begin_paint (GdkWindow *window)
+{
+  GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+
+  return !impl->layered;
 }
 
 static void
@@ -190,13 +200,19 @@ gdk_win32_window_end_paint (GdkWindow *window)
   GdkWindowImplWin32 *impl;
   RECT window_rect;
   gint x, y;
+  HDC hdc;
+  POINT window_position;
+  SIZE window_size;
+  POINT source_point;
+  BLENDFUNCTION blender;
+  cairo_t *cr;
 
   if (window == NULL || GDK_WINDOW_DESTROYED (window))
     return;
 
   impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
 
-  if (!impl->drag_move_resize_context.native_move_resize_pending)
+  if (!impl->layered && !impl->drag_move_resize_context.native_move_resize_pending)
     return;
 
   impl->drag_move_resize_context.native_move_resize_pending = FALSE;
@@ -216,16 +232,57 @@ gdk_win32_window_end_paint (GdkWindow *window)
   window_rect.top -= _gdk_offset_y;
   window_rect.bottom -= _gdk_offset_y;
 
-  GDK_NOTE (EVENTS, g_print ("Setting window position ... "));
+  if (!impl->layered)
+    {
+      GDK_NOTE (EVENTS, g_print ("Setting window position ... "));
 
-  API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window),
-                           SWP_NOZORDER_SPECIFIED,
-	                   window_rect.left, window_rect.top,
-                           window_rect.right - window_rect.left,
-                           window_rect.bottom - window_rect.top,
-	                   SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOREDRAW));
+      API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window),
+                               SWP_NOZORDER_SPECIFIED,
+	                       window_rect.left, window_rect.top,
+                               window_rect.right - window_rect.left,
+                               window_rect.bottom - window_rect.top,
+                               SWP_NOACTIVATE | SWP_NOZORDER));
 
-  GDK_NOTE (EVENTS, g_print (" ... set window position\n"));
+      GDK_NOTE (EVENTS, g_print (" ... set window position\n"));
+
+      return;
+    }
+
+  window_position.x = window_rect.left;
+  window_position.y = window_rect.top;
+  window_size.cx = window_rect.right - window_rect.left;
+  window_size.cy = window_rect.bottom - window_rect.top;
+
+  cairo_surface_flush (impl->cairo_surface);
+
+  /* we always draw in the top-left corner of the surface */
+  source_point.x = source_point.y = 0;
+
+  blender.BlendOp = AC_SRC_OVER;
+  blender.BlendFlags = 0;
+  blender.AlphaFormat = AC_SRC_ALPHA;
+  blender.SourceConstantAlpha = impl->layered_opacity * 255;
+
+  /* Update cache surface contents */
+  cr = cairo_create (impl->cache_surface);
+
+  cairo_set_source_surface (cr, window->current_paint.surface, 0, 0);
+  gdk_cairo_region (cr, window->current_paint.region);
+  cairo_clip (cr);
+
+  cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+  cairo_paint (cr);
+
+  cairo_destroy (cr);
+
+  cairo_surface_flush (impl->cache_surface);
+  hdc = cairo_win32_surface_get_dc (impl->cache_surface);
+
+  /* Move, resize and redraw layered window in one call */
+  API_CALL (UpdateLayeredWindow, (GDK_WINDOW_HWND (window), NULL,
+                                  &window_position, &window_size,
+                                  hdc, &source_point,
+                                  0, &blender, ULW_ALPHA));
 }
 
 void
@@ -242,6 +299,7 @@ _gdk_win32_adjust_client_rect (GdkWindow *window,
 gboolean
 _gdk_win32_window_enable_transparency (GdkWindow *window)
 {
+  GdkWindowImplWin32 *impl;
   GdkScreen *screen;
   DWM_BLURBEHIND blur_behind;
   HRGN empty_region;
@@ -250,6 +308,12 @@ _gdk_win32_window_enable_transparency (GdkWindow *window)
 
   if (window == NULL || GDK_WINDOW_HWND (window) == NULL)
     return FALSE;
+
+  impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+
+  /* layered windows don't need blurbehind for transparency */
+  if (impl->layered)
+    return TRUE;
 
   screen = gdk_window_get_screen (window);
 
@@ -537,6 +601,8 @@ _gdk_win32_display_create_window_impl (GdkDisplay    *display,
               (gdk_screen_get_rgba_visual (screen) == attributes->visual));
 
   impl->override_redirect = override_redirect;
+  impl->layered = FALSE;
+  impl->layered_opacity = 1.0;
 
   /* wclass is not any longer set always, but if is ... */
   if ((attributes_mask & GDK_WA_WMCLASS) == GDK_WA_WMCLASS)
@@ -2435,6 +2501,72 @@ update_single_bit (LONG    *style,
     *style &= ~style_bit;
 }
 
+/*
+ * Returns TRUE if window has no decorations.
+ * Usually it means CSD windows, because GTK
+ * calls gdk_window_set_decorations (window, 0);
+ * This is used to decide whether a toplevel should
+ * be made layered, thus it
+ * only returns TRUE for toplevels (until GTK minimal
+ * system requirements are lifted to Windows 8 or newer,
+ * because only toplevels can be layered).
+ */
+gboolean
+_gdk_win32_window_lacks_wm_decorations (GdkWindow *window)
+{
+  GdkWindowImplWin32 *impl;
+  LONG style;
+  gboolean has_any_decorations;
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return FALSE;
+
+  /* only toplevels can be layered */
+  if (!WINDOW_IS_TOPLEVEL (window))
+    return FALSE;
+
+  impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+
+  /* This is because GTK calls gdk_window_set_decorations (window, 0),
+   * even though GdkWMDecoration docs indicate that 0 does NOT mean
+   * "no decorations".
+   */
+  if (impl->decorations &&
+      *impl->decorations == 0)
+    return TRUE;
+
+  if (GDK_WINDOW_HWND (window) == 0)
+    return FALSE;
+
+  style = GetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE);
+
+  if (style == 0)
+    {
+      DWORD w32_error = GetLastError ();
+
+      GDK_NOTE (MISC, g_print ("Failed to get style of window %p (handle %p): %lu\n",
+                               window, GDK_WINDOW_HWND (window), w32_error));
+      return FALSE;
+    }
+
+  /* Keep this in sync with update_style_bits() */
+  /* We don't check what get_effective_window_decorations()
+   * has to say, because it gives suggestions based on
+   * various hints, while we want *actual* decorations,
+   * or their absence.
+   */
+  has_any_decorations = FALSE;
+
+  if (style & (WS_BORDER | WS_THICKFRAME | WS_CAPTION |
+               WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX))
+    has_any_decorations = TRUE;
+  else
+    GDK_NOTE (MISC, g_print ("Window %p (handle %p): has no decorations (style %lx)\n",
+                             window, GDK_WINDOW_HWND (window), style));
+
+  return !has_any_decorations;
+}
+
 static void
 update_style_bits (GdkWindow *window)
 {
@@ -2480,9 +2612,22 @@ update_style_bits (GdkWindow *window)
       new_exstyle &= ~WS_EX_TOOLWINDOW;
     }
 
+  /* We can get away with using layered windows
+   * only when no decorations are needed. It can mean
+   * CSD or borderless non-CSD windows (tooltips?).
+   */
+  if (_gdk_win32_window_lacks_wm_decorations (window))
+    impl->layered = g_strcmp0 (g_getenv ("GDK_WIN32_LAYERED"), "0") != 0;
+
+  if (impl->layered)
+    new_exstyle |= WS_EX_LAYERED;
+  else
+    new_exstyle &= ~WS_EX_LAYERED;
+
   if (get_effective_window_decorations (window, &decorations))
     {
       all = (decorations & GDK_DECOR_ALL);
+      /* Keep this in sync with the test in _gdk_win32_window_lacks_wm_decorations() */
       update_single_bit (&new_style, all, decorations & GDK_DECOR_BORDER, WS_BORDER);
       update_single_bit (&new_style, all, decorations & GDK_DECOR_RESIZEH, WS_THICKFRAME);
       update_single_bit (&new_style, all, decorations & GDK_DECOR_TITLE, WS_CAPTION);
@@ -2583,24 +2728,16 @@ update_system_menu (GdkWindow *window)
     }
 }
 
-static GQuark
-get_decorations_quark ()
-{
-  static GQuark quark = 0;
-
-  if (!quark)
-    quark = g_quark_from_static_string ("gdk-window-decorations");
-
-  return quark;
-}
-
 static void
 gdk_win32_window_set_decorations (GdkWindow      *window,
-			    GdkWMDecoration decorations)
+				  GdkWMDecoration decorations)
 {
+  GdkWindowImplWin32 *impl;
   GdkWMDecoration* decorations_copy;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
+
+  impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
 
   GDK_NOTE (MISC, g_print ("gdk_window_set_decorations: %p: %s %s%s%s%s%s%s\n",
 			   GDK_WINDOW_HWND (window),
@@ -2612,26 +2749,30 @@ gdk_win32_window_set_decorations (GdkWindow      *window,
 			   (decorations & GDK_DECOR_MINIMIZE ? "MINIMIZE " : ""),
 			   (decorations & GDK_DECOR_MAXIMIZE ? "MAXIMIZE " : "")));
 
-  decorations_copy = g_malloc (sizeof (GdkWMDecoration));
-  *decorations_copy = decorations;
-  g_object_set_qdata_full (G_OBJECT (window), get_decorations_quark (), decorations_copy, g_free);
+  if (!impl->decorations)
+    impl->decorations = g_malloc (sizeof (GdkWMDecoration));
+
+  *impl->decorations = decorations;
 
   update_style_bits (window);
 }
 
 static gboolean
 gdk_win32_window_get_decorations (GdkWindow       *window,
-			    GdkWMDecoration *decorations)
+				  GdkWMDecoration *decorations)
 {
-  GdkWMDecoration* decorations_set;
+  GdkWindowImplWin32 *impl;
 
   g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
 
-  decorations_set = g_object_get_qdata (G_OBJECT (window), get_decorations_quark ());
-  if (decorations_set)
-    *decorations = *decorations_set;
+  impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
 
-  return (decorations_set != NULL);
+  if (impl->decorations == NULL)
+    return FALSE;
+
+  *decorations = *impl->decorations;
+
+  return TRUE;
 }
 
 static GQuark
@@ -2907,6 +3048,7 @@ gdk_win32_window_do_move_resize_drag (GdkWindow *window,
             rect.top != new_rect.top))
     {
       POINT window_position;
+      BLENDFUNCTION blender;
 
       context->native_move_resize_pending = FALSE;
 
@@ -2924,12 +3066,22 @@ gdk_win32_window_do_move_resize_drag (GdkWindow *window,
       window_position.x = new_rect.left;
       window_position.y = new_rect.top;
 
-      /* Move immediately, no need to wait for redraw */
-      API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window),
-                               SWP_NOZORDER_SPECIFIED,
-                               window_position.x, window_position.y,
-                               0, 0,
-                               SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOSIZE));
+      blender.BlendOp = AC_SRC_OVER;
+      blender.BlendFlags = 0;
+      blender.AlphaFormat = AC_SRC_ALPHA;
+      blender.SourceConstantAlpha = impl->layered_opacity * 255;
+
+      /* Size didn't change, so move immediately, no need to wait for redraw */
+      if (impl->layered)
+        API_CALL (UpdateLayeredWindow, (GDK_WINDOW_HWND (window), NULL,
+                                      &window_position, NULL, NULL, NULL,
+                                      0, &blender, ULW_ALPHA));
+      else
+        API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window),
+                                 SWP_NOZORDER_SPECIFIED,
+                                 window_position.x, window_position.y,
+                                 0, 0,
+                                 SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOSIZE));
     }
 }
 
@@ -3507,6 +3659,7 @@ gdk_win32_window_set_opacity (GdkWindow *window,
   LONG exstyle;
   typedef BOOL (WINAPI *PFN_SetLayeredWindowAttributes) (HWND, COLORREF, BYTE, DWORD);
   PFN_SetLayeredWindowAttributes setLayeredWindowAttributes = NULL;
+  GdkWindowImplWin32 *impl;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -3517,6 +3670,14 @@ gdk_win32_window_set_opacity (GdkWindow *window,
     opacity = 0;
   else if (opacity > 1)
     opacity = 1;
+
+  impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+
+  impl->layered_opacity = opacity;
+
+  if (impl->layered)
+    /* Layered windows have opacity applied elsewhere */
+    return;
 
   exstyle = GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE);
 
@@ -3589,6 +3750,12 @@ _gdk_win32_impl_acquire_dc (GdkWindowImplWin32 *impl)
       GDK_WINDOW_DESTROYED (impl->wrapper))
     return NULL;
 
+  /* We don't call this function for layered windows, but
+   * in case we do...
+   */
+  if (impl->layered)
+    return NULL;
+
   if (!impl->hdc)
     {
       impl->hdc = GetDC (impl->handle);
@@ -3617,6 +3784,9 @@ _gdk_win32_impl_acquire_dc (GdkWindowImplWin32 *impl)
 static void
 _gdk_win32_impl_release_dc (GdkWindowImplWin32 *impl)
 {
+  if (impl->layered)
+    return;
+
   g_return_if_fail (impl->hdc_count > 0);
 
   impl->hdc_count--;
@@ -3654,6 +3824,75 @@ gdk_win32_cairo_surface_destroy (void *data)
 }
 
 static cairo_surface_t *
+gdk_win32_ref_cairo_surface_layered (GdkWindow          *window,
+                                     GdkWindowImplWin32 *impl)
+{
+  gint x, y, width, height;
+  RECT window_rect;
+
+  gdk_window_get_position (window, &x, &y);
+  window_rect.left = x;
+  window_rect.top = y;
+  window_rect.right = window_rect.left + gdk_window_get_width (window);
+  window_rect.bottom = window_rect.top + gdk_window_get_height (window);
+
+  /* Turn client area into window area */
+  _gdk_win32_adjust_client_rect (window, &window_rect);
+
+  width = window_rect.right - window_rect.left;
+  height = window_rect.bottom - window_rect.top;
+
+  if (width > impl->dib_width ||
+      height > impl->dib_height)
+    {
+      cairo_surface_t *new_cache;
+      cairo_t *cr;
+
+      /* Create larger cache surface, copy old cache surface over it */
+      new_cache = cairo_win32_surface_create_with_dib (CAIRO_FORMAT_ARGB32, width, height);
+
+      if (impl->cache_surface)
+        {
+          cr = cairo_create (new_cache);
+          cairo_set_source_surface (cr, impl->cache_surface, 0, 0);
+          cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+          cairo_paint (cr);
+          cairo_destroy (cr);
+          cairo_surface_flush (new_cache);
+
+          cairo_surface_destroy (impl->cache_surface);
+        }
+
+      impl->cache_surface = new_cache;
+
+      if (impl->cairo_surface)
+        cairo_surface_destroy (impl->cairo_surface);
+
+      impl->cairo_surface = NULL;
+    }
+
+  /* This is separate, because cairo_surface gets killed
+   * off frequently by outside code, whereas cache_surface
+   * is only killed by us, above.
+   */
+  if (!impl->cairo_surface)
+    {
+      impl->cairo_surface = cairo_win32_surface_create_with_dib (CAIRO_FORMAT_ARGB32, width, height);
+      impl->dib_width = width;
+      impl->dib_height = height;
+
+      cairo_surface_set_user_data (impl->cairo_surface, &gdk_win32_cairo_key,
+				   impl, gdk_win32_cairo_surface_destroy);
+    }
+  else
+    {
+      cairo_surface_reference (impl->cairo_surface);
+    }
+
+  return impl->cairo_surface;
+}
+
+static cairo_surface_t *
 gdk_win32_ref_cairo_surface (GdkWindow *window)
 {
   GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
@@ -3661,6 +3900,9 @@ gdk_win32_ref_cairo_surface (GdkWindow *window)
   if (GDK_IS_WINDOW_IMPL_WIN32 (impl) &&
       GDK_WINDOW_DESTROYED (impl->wrapper))
     return NULL;
+
+  if (impl->layered)
+    return gdk_win32_ref_cairo_surface_layered (window, impl);
 
   if (!impl->cairo_surface)
     {
@@ -3714,6 +3956,7 @@ gdk_window_impl_win32_class_init (GdkWindowImplWin32Class *klass)
   impl_class->destroy_foreign = gdk_win32_window_destroy_foreign;
   impl_class->get_shape = gdk_win32_window_get_shape;
   //FIXME?: impl_class->get_input_shape = gdk_win32_window_get_input_shape;
+  impl_class->begin_paint = gdk_win32_window_begin_paint;
   impl_class->end_paint = gdk_win32_window_end_paint;
 
   //impl_class->beep = gdk_x11_window_beep;

@@ -535,6 +535,8 @@ void      gdk_win32_window_end_move_resize_drag (GdkWindow  *window);
 gboolean _gdk_win32_window_fill_min_max_info    (GdkWindow  *window,
                                                  MINMAXINFO *mmi);
 
+gboolean _gdk_win32_window_lacks_wm_decorations (GdkWindow *window);
+
 /* Initialization */
 void _gdk_win32_windowing_init (void);
 void _gdk_dnd_init    (void);
