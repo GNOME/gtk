@@ -3632,16 +3632,17 @@ gtk_entry_get_text_area_size (GtkEntry *entry,
 			      gint     *height)
 {
   GtkEntryPrivate *priv = entry->priv;
-  GtkAllocation allocation;
+  GtkAllocation allocation, widget_allocation;
   int baseline;
 
   gtk_css_gadget_get_content_allocation (priv->gadget, &allocation, &baseline);
+  gtk_widget_get_allocation (GTK_WIDGET (entry), &widget_allocation);
 
   if (x)
-    *x = allocation.x;
+    *x = allocation.x - widget_allocation.x;
 
   if (y)
-    *y = allocation.y;
+    *y = allocation.y - widget_allocation.y;
 
   if (width)
     *width = allocation.width;
@@ -3728,6 +3729,7 @@ gtk_entry_allocate (GtkCssGadget        *gadget,
   GtkEntry *entry;
   GtkWidget *widget;
   GtkEntryPrivate *priv;
+  GtkAllocation widget_allocation;
   gint i;
 
   widget = gtk_css_gadget_get_owner (gadget);
@@ -3740,6 +3742,9 @@ gtk_entry_allocate (GtkCssGadget        *gadget,
                                                    &priv->text_allocation.y,
                                                    &priv->text_allocation.width,
                                                    &priv->text_allocation.height);
+  gtk_widget_get_allocation (widget, &widget_allocation);
+  priv->text_allocation.x += widget_allocation.x;
+  priv->text_allocation.y += widget_allocation.y;
 
   out_clip->x = 0;
   out_clip->y = 0;
