@@ -467,28 +467,42 @@ scrollbar.vertical slider:disabled {
 
 /* Entry */
 
-/* We apply the border as a border combined with the background so that
-   gtk_entry_set_has_frame works */
-
+textview.view,
 entry {
-    border-width: 1px;
-    border-style: solid;
-    border-image: -gtk-win32-theme-part(edit, 6, 1)  1 1 1 1 stretch;
-    background-image: -gtk-win32-theme-part(edit, 6, 1, margins(-1 -1 -1 -1));
-    padding: 2px;
+    background-image: -gtk-win32-theme-part(edit, 1, 1);
+    /* The 1em/3 is the "margin" that Windows uses. I'm pretty sure that's the "ABC width"
+       of the font. But we don't get those fancy things in CSS. */
+    padding: -gtk-win32-size(edit, cyedge) calc(-gtk-win32-size(edit, cxedge) + 1em/3);
 }
-entry:disabled {
-    border-image: -gtk-win32-theme-part(edit, 6, 4)  1 1 1 1 stretch;
-    background-image: -gtk-win32-theme-part(edit, 6, 4, margins(-1 -1 -1 -1));
-    color: #a7aba7;
-}
-entry:hover {
-    border-image: -gtk-win32-theme-part(edit, 6, 2)  1 1 1 1 stretch;
-    background-image: -gtk-win32-theme-part(edit, 6, 2, margins(-1 -1 -1 -1));
-}
+
+textview.view:focus,
 entry:focus {
-    border-image: -gtk-win32-theme-part(edit, 6, 3)  1 1 1 1 stretch;
-    background-image: -gtk-win32-theme-part(edit, 6, 3, margins(-1 -1 -1 -1));
+    background-image: -gtk-win32-theme-part(edit, 1, 3);
+}
+
+textview.view:disabled,
+entry:disabled {
+    background-image: -gtk-win32-theme-part(edit, 1, 4);
+    color: -gtk-win32-color(edit, graytext);
+}
+
+selection {
+    background: -gtk-win32-color(edit, highlight);
+    color: -gtk-win32-color(edit, highlighttext);
+}
+
+entry.flat {
+  padding: 0px;
+  background-image: -gtk-win32-theme-part(edit, 3, 1);
+}
+
+entry.flat:focus {
+    background-image: -gtk-win32-theme-part(edit, 3, 3);
+}
+
+entry.flat:disabled {
+    background-image: -gtk-win32-theme-part(edit, 3, 4);
+    color: -gtk-win32-color(edit, graytext);
 }
 
 /* Spibuttons */

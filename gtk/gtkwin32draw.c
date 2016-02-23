@@ -187,6 +187,41 @@ draw_radio (cairo_t *cr,
 }
 
 static void
+draw_edit (cairo_t *cr,
+           int      part,
+           int      state,
+           int      width,
+           int      height)
+{
+  int xborder = gtk_win32_get_sys_metric (GTK_WIN32_SYS_METRIC_CXBORDER);
+  int yborder = gtk_win32_get_sys_metric (GTK_WIN32_SYS_METRIC_CYBORDER);
+
+  cairo_rectangle (cr, 0, 0, width, height);
+  gtk_cairo_set_source_sys_color (cr, (state == 6 || state == 4) ? GTK_WIN32_SYS_COLOR_BTNFACE
+                                                                 : GTK_WIN32_SYS_COLOR_WINDOW);
+  cairo_fill_preserve (cr);
+
+  cairo_rectangle (cr, width - xborder, yborder,
+                   - (width - 2 * xborder), height - 2 * yborder);
+  gtk_cairo_set_source_sys_color (cr, GTK_WIN32_SYS_COLOR_WINDOWFRAME);
+  cairo_fill (cr);
+}
+
+static void
+draw_edit_noborder (cairo_t *cr,
+                    int      part,
+                    int      state,
+                    int      width,
+                    int      height)
+{
+
+  cairo_rectangle (cr, 0, 0, width, height);
+  gtk_cairo_set_source_sys_color (cr, (state == 6 || state == 4) ? GTK_WIN32_SYS_COLOR_BTNFACE
+                                                                 : GTK_WIN32_SYS_COLOR_WINDOW);
+  cairo_fill (cr);
+}
+
+static void
 draw_window (cairo_t *cr,
              int      part,
              int      state,
@@ -270,6 +305,12 @@ static GtkWin32ThemePart theme_parts[] = {
   { "button",  1,  0, { 3, 3, 3, 3 }, draw_button },
   { "button",  2, 13, { 0, 0, 0, 0 }, draw_radio },
   { "button",  3, 13, { 0, 0, 0, 0 }, draw_check },
+  { "edit",    1,  0, { 0, 0, 0, 0 }, draw_edit },
+  { "edit",    3,  0, { 0, 0, 0, 0 }, draw_edit_noborder },
+  { "edit",    6,  0, { 0, 0, 0, 0 }, draw_edit },
+  { "edit",    7,  0, { 0, 0, 0, 0 }, draw_edit },
+  { "edit",    8,  0, { 0, 0, 0, 0 }, draw_edit },
+  { "edit",    9,  0, { 0, 0, 0, 0 }, draw_edit },
   { "tooltip", 1,  0, { 0, 0, 0, 0 }, draw_tooltip },
   { "window",  1,  0, { 0, 0, 0, 0 }, draw_window },
   { "window", 15,  0, { 0, 0, 0, 0 }, draw_window_button },
