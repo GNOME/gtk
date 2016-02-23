@@ -1950,7 +1950,6 @@ gtk_range_allocate_trough (GtkCssGadget        *gadget,
                                &highlight_alloc,
                                baseline,
                                &highlight_clip);
-
       gdk_rectangle_union (out_clip, &highlight_clip, out_clip);
     }
 }
