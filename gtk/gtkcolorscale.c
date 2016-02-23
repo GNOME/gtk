@@ -23,6 +23,7 @@
 #include "gtkgesturelongpress.h"
 #include "gtkcolorutils.h"
 #include "gtkorientable.h"
+#include "gtkrangeprivate.h"
 #include "gtkstylecontext.h"
 #include "gtkaccessible.h"
 #include "gtkprivate.h"
@@ -62,14 +63,20 @@ gtk_color_scale_get_trough_size (GtkColorScale *scale,
                                  gint *height_out)
 {
   GtkWidget *widget = GTK_WIDGET (scale);
+  GtkCssGadget *slider_gadget;
   gint width, height;
   gint x_offset, y_offset;
   gint slider_width, slider_height;
 
-  gtk_widget_style_get (widget,
-                        "slider-width", &slider_width,
-                        "slider-length", &slider_height,
-                        NULL);
+  slider_gadget = gtk_range_get_slider_gadget (GTK_RANGE (scale));
+  gtk_css_gadget_get_preferred_size (slider_gadget,
+                                     GTK_ORIENTATION_HORIZONTAL, -1,
+                                     &slider_width, NULL,
+                                     NULL, NULL);
+  gtk_css_gadget_get_preferred_size (slider_gadget,
+                                     GTK_ORIENTATION_VERTICAL, -1,
+                                     &slider_height, NULL,
+                                     NULL, NULL);
 
   width = gtk_widget_get_allocated_width (widget);
   height = gtk_widget_get_allocated_height (widget);
