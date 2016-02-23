@@ -1765,7 +1765,10 @@ gtk_range_measure_trough (GtkCssGadget   *gadget,
   GtkRangePrivate *priv = range->priv;
   gint min, nat;
 
-  *minimum = *natural = 0;
+  gtk_css_gadget_get_preferred_size (priv->slider_gadget,
+                                     orientation, for_size,
+                                     minimum, natural,
+                                     NULL, NULL);
 
   if (priv->fill_gadget)
     {
@@ -1797,37 +1800,18 @@ gtk_range_size_request (GtkWidget      *widget,
   GtkRange *range = GTK_RANGE (widget);
   GtkRangePrivate *priv = range->priv;
   GtkBorder border = { 0 };
-  gint box_min, box_nat, slider_min, slider_nat;
 
-  /* First, measure everything */
+  /* Measure the main box */
   gtk_css_gadget_get_preferred_size (priv->gadget,
                                      orientation,
                                      -1,
-                                     &box_min, &box_nat,
-                                     NULL, NULL);
-  gtk_css_gadget_get_preferred_size (priv->slider_gadget,
-                                     orientation,
-                                     -1,
-                                     &slider_min, &slider_nat,
+                                     minimum, natural,
                                      NULL, NULL);
 
   if (GTK_RANGE_GET_CLASS (range)->get_range_border)
     GTK_RANGE_GET_CLASS (range)->get_range_border (range, &border);
 
-  if (priv->orientation != orientation)
-    {
-      /* If we're measuring opposite orientation, return the maximum size */
-      *minimum = MAX (box_min, slider_min);
-      *natural = MAX (box_nat, slider_nat);
-    }
-  else
-    {
-      /* Otherwise, we report the box size */
-      *minimum = box_min;
-      *natural = box_nat;
-    }
-
-  /* Finally, add the border */
+  /* Add the border */
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       *minimum += border.left + border.right;
@@ -1859,67 +1843,6 @@ gtk_range_get_preferred_height (GtkWidget *widget,
 }
 
 static void
-gtk_range_allocate_highlight (GtkRange *range,
-                              GtkAllocation *out_clip)
-{
-  GtkRangePrivate *priv = range->priv;
-  int baseline;
-  GtkAllocation trough_alloc, highlight_alloc, slider_alloc;
-  int highlight_min;
-
-  g_assert (priv->has_origin);
-
-  /* Note: the highlight is allocated on top of the trough, not inside */
-  gtk_css_gadget_get_border_allocation (priv->trough_gadget,
-                                        &trough_alloc, &baseline);
-  gtk_css_gadget_get_content_allocation (priv->slider_gadget,
-                                         &slider_alloc, NULL);
-
-  gtk_css_gadget_get_preferred_size (priv->highlight_gadget,
-                                     priv->orientation, -1,
-                                     &highlight_min, NULL,
-                                     NULL, NULL);
-
-  highlight_alloc = trough_alloc;
-
-  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-    {
-      if (!should_invert (range))
-        {
-          highlight_alloc.x = trough_alloc.x;
-          highlight_alloc.width = slider_alloc.x + slider_alloc.width / 2 - trough_alloc.x;
-        }
-      else
-        {
-          highlight_alloc.x = slider_alloc.x + slider_alloc.width / 2;
-          highlight_alloc.width = trough_alloc.x + trough_alloc.width - highlight_alloc.x;
-        }
-
-      highlight_alloc.width = MAX (highlight_min, highlight_alloc.width);
-    }
-  else
-    {
-      if (!should_invert (range))
-        {
-          highlight_alloc.y = trough_alloc.y;
-          highlight_alloc.height = slider_alloc.y + slider_alloc.height / 2 - trough_alloc.y;
-        }
-      else
-        {
-          highlight_alloc.y = slider_alloc.y + slider_alloc.height / 2;
-          highlight_alloc.height = trough_alloc.y + trough_alloc.height - highlight_alloc.y;
-        }
-
-      highlight_alloc.height = MAX (highlight_min, highlight_alloc.height);
-    }
-
-  gtk_css_gadget_allocate (priv->highlight_gadget,
-                           &highlight_alloc,
-                           baseline,
-                           out_clip);
-}
-
-static void
 gtk_range_allocate_trough (GtkCssGadget        *gadget,
                            const GtkAllocation *allocation,
                            int                  baseline,
@@ -1929,17 +1852,36 @@ gtk_range_allocate_trough (GtkCssGadget        *gadget,
   GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
   GtkRange *range = GTK_RANGE (widget);
   GtkRangePrivate *priv = range->priv;
+  GtkAllocation border_alloc;
+  GtkAllocation slider_alloc, widget_alloc;
+
+  /* Note: fill/highlight are allocated on top of the trough, not inside */
+  gtk_css_gadget_get_border_allocation (gadget, &border_alloc, NULL);
+
+  /* Slider */
+  gtk_range_calc_marks (range);
+  gtk_range_calc_stepper_sensitivity (range);
+
+  gtk_widget_get_allocation (widget, &widget_alloc);
+  gtk_range_compute_slider_position (range,
+                                     gtk_adjustment_get_value (priv->adjustment),
+                                     &slider_alloc);
+  slider_alloc.x += widget_alloc.x;
+  slider_alloc.y += widget_alloc.y;
+
+  gtk_css_gadget_allocate (priv->slider_gadget,
+                           &slider_alloc,
+                           gtk_widget_get_allocated_baseline (widget),
+                           out_clip);
 
   if (priv->show_fill_level &&
       gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_page_size (priv->adjustment) -
       gtk_adjustment_get_lower (priv->adjustment) != 0)
     {
       gdouble level, fill;
-      GtkAllocation gadget_alloc, fill_alloc, fill_clip;
+      GtkAllocation fill_alloc, fill_clip;
 
-      /* Note: the fill is allocated on top of the trough, not inside */
-      gtk_css_gadget_get_border_allocation (gadget, &gadget_alloc, NULL);
-      fill_alloc = gadget_alloc;
+      fill_alloc = border_alloc;
 
       level = CLAMP (priv->fill_level,
                      gtk_adjustment_get_lower (priv->adjustment),
@@ -1956,14 +1898,14 @@ gtk_range_allocate_trough (GtkCssGadget        *gadget,
           fill_alloc.width *= fill;
 
           if (should_invert (range))
-            fill_alloc.x += gadget_alloc.width - fill_alloc.width;
+            fill_alloc.x += border_alloc.width - fill_alloc.width;
         }
       else
         {
           fill_alloc.height *= fill;
 
           if (should_invert (range))
-            fill_alloc.y += gadget_alloc.height - (fill_alloc.height * fill);
+            fill_alloc.y += border_alloc.height - (fill_alloc.height * fill);
         }
 
       gtk_css_gadget_allocate (priv->fill_gadget,
@@ -1971,6 +1913,49 @@ gtk_range_allocate_trough (GtkCssGadget        *gadget,
                                baseline,
                                &fill_clip);
       gdk_rectangle_union (out_clip, &fill_clip, out_clip);
+    }
+
+  if (priv->has_origin)
+    {
+      GtkAllocation highlight_alloc, highlight_clip;
+
+      gtk_css_gadget_get_content_allocation (priv->slider_gadget,
+                                             &slider_alloc, NULL);
+      highlight_alloc = border_alloc;
+
+      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+        {
+          if (!should_invert (range))
+            {
+              highlight_alloc.x = border_alloc.x;
+              highlight_alloc.width = slider_alloc.x + slider_alloc.width / 2 - border_alloc.x;
+            }
+          else
+            {
+              highlight_alloc.x = slider_alloc.x + slider_alloc.width / 2;
+              highlight_alloc.width = border_alloc.x + border_alloc.width - highlight_alloc.x;
+            }
+    }
+      else
+        {
+          if (!should_invert (range))
+            {
+              highlight_alloc.y = border_alloc.y;
+              highlight_alloc.height = slider_alloc.y + slider_alloc.height / 2 - border_alloc.y;
+            }
+          else
+            {
+              highlight_alloc.y = slider_alloc.y + slider_alloc.height / 2;
+              highlight_alloc.height = border_alloc.y + border_alloc.height - highlight_alloc.y;
+            }
+        }
+
+      gtk_css_gadget_allocate (priv->highlight_gadget,
+                               &highlight_alloc,
+                               baseline,
+                               &highlight_clip);
+
+      gdk_rectangle_union (out_clip, &highlight_clip, out_clip);
     }
 }
 
@@ -2105,7 +2090,7 @@ gtk_range_size_allocate (GtkWidget     *widget,
 {
   GtkRange *range = GTK_RANGE (widget);
   GtkRangePrivate *priv = range->priv;
-  GtkAllocation clip, slider_alloc, slider_clip, highlight_clip;
+  GtkAllocation clip;
 
   gtk_widget_set_allocation (widget, allocation);
 
@@ -2114,30 +2099,7 @@ gtk_range_size_allocate (GtkWidget     *widget,
                             allocation->x, allocation->y,
                             allocation->width, allocation->height);
 
-  /* Box */
   gtk_range_allocate_box (range, &clip);
-
-  /* Slider and highlight */
-  gtk_range_calc_marks (range);
-  gtk_range_calc_stepper_sensitivity (range);
-
-  gtk_range_compute_slider_position (range,
-                                     gtk_adjustment_get_value (priv->adjustment),
-                                     &slider_alloc);
-  slider_alloc.x += allocation->x;
-  slider_alloc.y += allocation->y;
-
-  gtk_css_gadget_allocate (priv->slider_gadget,
-                           &slider_alloc,
-                           gtk_widget_get_allocated_baseline (widget),
-                           &slider_clip);
-  gdk_rectangle_union (&clip, &slider_clip, &clip);
-
-  if (priv->has_origin)
-    {
-      gtk_range_allocate_highlight (range, &highlight_clip);
-      gdk_rectangle_union (&clip, &highlight_clip, &clip);
-    }
 
   gtk_widget_set_clip (widget, &clip);
 }
