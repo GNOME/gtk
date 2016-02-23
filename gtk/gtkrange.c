@@ -2259,8 +2259,6 @@ gtk_range_render_trough (GtkCssGadget *gadget,
   if (priv->has_origin)
     gtk_css_gadget_draw (priv->highlight_gadget, cr);
 
-  gtk_css_gadget_draw (priv->slider_gadget, cr);
-
   return gtk_widget_has_visible_focus (widget);
 }
 
@@ -2271,7 +2269,20 @@ gtk_range_draw (GtkWidget *widget,
   GtkRange *range = GTK_RANGE (widget);
   GtkRangePrivate *priv = range->priv;
 
-  gtk_css_gadget_draw (priv->gadget, cr);
+  gtk_css_gadget_draw (priv->trough_gadget, cr);
+  gtk_css_gadget_draw (priv->slider_gadget, cr);
+
+  if (priv->stepper_a_gadget)
+    gtk_css_gadget_draw (priv->stepper_a_gadget, cr);
+
+  if (priv->stepper_b_gadget)
+    gtk_css_gadget_draw (priv->stepper_b_gadget, cr);
+
+  if (priv->stepper_c_gadget)
+    gtk_css_gadget_draw (priv->stepper_c_gadget, cr);
+
+  if (priv->stepper_d_gadget)
+    gtk_css_gadget_draw (priv->stepper_d_gadget, cr);
 
   return GDK_EVENT_PROPAGATE;
 }
