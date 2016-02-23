@@ -2230,8 +2230,7 @@ notebook > stack:not(:only-child) {
  **************/
 * {
   -GtkScrollbar-has-backward-stepper: false;
-  -GtkScrollbar-has-forward-stepper: false;
-  -GtkScrollbar-min-slider-length: 42; }
+  -GtkScrollbar-has-forward-stepper: false; }
 scrollbar button {
   border: none; }
 scrollbar.vertical button.down {
@@ -2285,6 +2284,7 @@ scrollbar.fine-tune slider {
   margin: 4px; }
 scrollbar.vertical slider {
   margin-left: 4px;
+  min-height: 42px;
   min-width: 6px; }
   scrollbar.vertical slider:dir(rtl) {
     margin-left: 3px;
@@ -2301,7 +2301,8 @@ scrollbar.vertical trough {
     border-right-style: solid; }
 scrollbar.horizontal slider {
   margin-top: 4px;
-  min-height: 6px; }
+  min-height: 6px;
+  min-width: 42px; }
 scrollbar.horizontal.fine-tune slider {
   margin-top: 5px; }
 scrollbar.horizontal trough {

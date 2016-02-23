@@ -30,6 +30,7 @@
 
 #include "gtkadjustment.h"
 #include "gtkintl.h"
+#include "gtkorientable.h"
 #include "gtkprivate.h"
 
 
@@ -92,6 +93,14 @@ gtk_scrollbar_class_init (GtkScrollbarClass *class)
 
   widget_class->style_updated = gtk_scrollbar_style_updated;
 
+  /**
+   * GtkScrollbar:min-slider-length:
+   *
+   * Minimum length of scrollbar slider.
+   *
+   * Deprecated: 3.20: Use min-height/min-width CSS properties on the slider
+   *   element instead. The value of this style property is ignored.
+   */
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("min-slider-length",
 							     P_("Minimum Slider Length"),
@@ -99,7 +108,7 @@ gtk_scrollbar_class_init (GtkScrollbarClass *class)
 							     0,
 							     G_MAXINT,
 							     21,
-							     GTK_PARAM_READABLE));
+							     GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_boolean ("fixed-slider-length",
@@ -148,9 +157,14 @@ gtk_scrollbar_update_style (GtkScrollbar *scrollbar)
   gboolean has_a, has_b, has_c, has_d;
   GtkRange *range = GTK_RANGE (scrollbar);
   GtkWidget *widget = GTK_WIDGET (scrollbar);
+  GtkCssGadget *slider_gadget = gtk_range_get_slider_gadget (range);
+
+  gtk_css_gadget_get_preferred_size (slider_gadget,
+                                     gtk_orientable_get_orientation (GTK_ORIENTABLE (scrollbar)), -1,
+                                     &slider_length, NULL,
+                                     NULL, NULL);
 
   gtk_widget_style_get (widget,
-                        "min-slider-length", &slider_length,
                         "fixed-slider-length", &fixed_size,
                         "has-backward-stepper", &has_a,
                         "has-secondary-forward-stepper", &has_b,
