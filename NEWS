@@ -1,3 +1,45 @@
+Overview of Changes in GTK+ 3.19.10
+===================================
+
+* GTK+ will now list included backends when seeing the
+  environment variable GDK_BACKEND=help
+
+* Themes
+ - Windows theme improvements
+ - Adwaita cleanups
+
+* Wayland
+ - Implement startup notification
+
+* Bugs fixed:
+ 309300 Adjust the key binding for setting the spin box's value to the min...
+ 723659 touchpad: please do not interpret tap and click as double-click
+ 754743 Middle click on "Other Locations" doesn't open a new tab
+ 756659 Nautilus's Connect to server wont honor remote path
+ 760714 GtkWindow: CSS node documentation is not clear
+ 761431 Document overlay help action name
+ 761432 Document that GtkApplication loads menus from gtk/menus-common.ui
+ 761760 Welcome graphic and heading is misaligned
+ 762258 wayland: gtk3 apps segfault with plasma-wayland/kwin_wayland
+ 762315 Assistant pages have no padding which looks weird
+ 762319 issues with randr 1.5
+ 762392 gtk_drag_source_set_icon_name with empty string puts widget in bad...
+
+* Translation updates:
+ Brazilian Portuguese
+ Catalan
+ Chinese (Taiwan)
+ Galician
+ German
+ Polish
+ Punjabi
+ Serbian
+ Slovak
+ Spanish
+ Swedish
+ Thai
+
+
 Overview of Changes in GTK+ 3.19.9
 ==================================
 
