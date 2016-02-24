@@ -544,6 +544,21 @@ _gtk_text_handle_update_scrollable (GtkTextHandle *handle,
                         handle);
 }
 
+static GtkWidget *
+gtk_text_handle_lookup_scrollable (GtkTextHandle *handle)
+{
+  GtkTextHandlePrivate *priv;
+  GtkWidget *scrolled_window;
+
+  priv = handle->priv;
+  scrolled_window = gtk_widget_get_ancestor (priv->parent,
+                                             GTK_TYPE_SCROLLED_WINDOW);
+  if (!scrolled_window)
+    return NULL;
+
+  return gtk_bin_get_child (GTK_BIN (scrolled_window));
+}
+
 static void
 _gtk_text_handle_parent_hierarchy_changed (GtkWidget     *widget,
                                            GtkWindow     *previous_toplevel,
@@ -574,7 +589,7 @@ _gtk_text_handle_parent_hierarchy_changed (GtkWidget     *widget,
         }
     }
 
-  scrollable = gtk_widget_get_ancestor (widget, GTK_TYPE_SCROLLABLE);
+  scrollable = gtk_text_handle_lookup_scrollable (handle);
   _gtk_text_handle_update_scrollable (handle, GTK_SCROLLABLE (scrollable));
 }
 
@@ -603,7 +618,7 @@ _gtk_text_handle_set_parent (GtkTextHandle *handle,
                           G_CALLBACK (_gtk_text_handle_parent_hierarchy_changed),
                           handle);
 
-      scrollable = gtk_widget_get_ancestor (parent, GTK_TYPE_SCROLLABLE);
+      scrollable = gtk_text_handle_lookup_scrollable (handle);
     }
 
   _gtk_text_handle_update_scrollable (handle, GTK_SCROLLABLE (scrollable));
