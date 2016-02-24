@@ -163,6 +163,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testlogout			\
 	teststack			\
 	testrevealer			\
+	testrevealer2			\
 	testtitlebar			\
 	testsplitheaders		\
 	testactionbar			\
@@ -310,6 +311,7 @@ testgmenu_DEPENDENCIES = $(TEST_DEPS)
 testlogout_DEPENDENCIES = $(TEST_DEPS)
 teststack_DEPENDENCIES = $(TEST_DEPS)
 testrevealer_DEPENDENCIES = $(TEST_DEPS)
+testrevealer2_DEPENDENCIES = $(TEST_DEPS)
 testtitlebar_DEPENDENCIES = $(TEST_DEPS)
 testwindowsize_DEPENDENCIES = $(TEST_DEPS)
 listmodel_DEPENDENCIES = $(TEST_DEPS)
@@ -533,6 +535,8 @@ testkineticscrolling_SOURCES = testkineticscrolling.c
 teststack_SOURCES = teststack.c
 
 testrevealer_SOURCES = testrevealer.c
+
+testrevealer2_SOURCES = testrevealer2.c
 
 testtitlebar_SOURCES = testtitlebar.c
 
