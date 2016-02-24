@@ -2832,6 +2832,7 @@ location_mode_set (GtkFileChooserWidget *impl,
 /* Callback used when the places sidebar asks us to show other locations */
 static void
 places_sidebar_show_other_locations_cb (GtkPlacesSidebar     *sidebar,
+                                        GtkPlacesOpenFlags    open_flags,
                                         GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;

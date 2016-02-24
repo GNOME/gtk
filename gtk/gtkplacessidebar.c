@@ -340,9 +340,11 @@ emit_show_enter_location (GtkPlacesSidebar *sidebar)
 }
 
 static void
-emit_show_other_locations (GtkPlacesSidebar *sidebar)
+emit_show_other_locations (GtkPlacesSidebar   *sidebar,
+                           GtkPlacesOpenFlags  open_flags)
 {
-  g_signal_emit (sidebar, places_sidebar_signals[SHOW_OTHER_LOCATIONS], 0);
+  g_signal_emit (sidebar, places_sidebar_signals[SHOW_OTHER_LOCATIONS], 0,
+                 open_flags);
 }
 
 static void
@@ -2311,7 +2313,7 @@ open_row (GtkSidebarRow      *row,
                 NULL);
 
   if (place_type == PLACES_OTHER_LOCATIONS)
-    emit_show_other_locations (sidebar);
+    emit_show_other_locations (sidebar, open_flags);
   else if (uri != NULL)
     open_uri (sidebar, uri, open_flags);
   else if (place_type == PLACES_CONNECT_TO_SERVER)
@@ -4308,12 +4310,16 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
   /**
    * GtkPlacesSidebar::show-other-locations:
    * @sidebar: the object which received the signal.
+   * @open_flags: a single value from #GtkPlacesOpenFlags specifying how it should be opened.
    *
    * The places sidebar emits this signal when it needs the calling
    * application to present a way to show other locations e.g. drives
    * and network access points.
    * For example, the application may bring up a page showing persistent
    * volumes and discovered network addresses.
+   * Since 3.20 the signal added the @open_flags parameter in order to be able
+   * to specify whether the user choose to open the other locations in a different
+   * tab or window. In this way it behaves like the open-location signal.
    *
    * Since: 3.18
    */
@@ -4324,7 +4330,8 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
                         G_STRUCT_OFFSET (GtkPlacesSidebarClass, show_other_locations),
                         NULL, NULL,
                         _gtk_marshal_VOID__VOID,
-                        G_TYPE_NONE, 0);
+                        G_TYPE_NONE, 1,
+                        GTK_TYPE_PLACES_OPEN_FLAGS);
 
   /**
    * GtkPlacesSidebar::mount:

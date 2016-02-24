@@ -95,6 +95,11 @@ Release notes for 3.20
   on having a theme-provided background, call gtk_render_background()
   from your ::draw handler.
 
+* The GtkPlacesSidebar added a GtkPlacesOpenFlags parameter to the
+  other-locations signal in order to allow opening new windows or
+  tabs as done with other locations. This breaks the API for those
+  using the other-locations signal.
+
 Release notes for 3.18
 ======================
 
