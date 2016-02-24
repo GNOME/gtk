@@ -3850,7 +3850,7 @@ sync_stepper_gadget (GtkRange                *range,
                      GtkCssGadget           **gadget_ptr,
                      const gchar             *class,
                      GtkCssImageBuiltinType   image_type,
-                     int                      position)
+                     GtkCssGadget            *prev_sibling)
 {
   GtkWidget *widget;
   GtkCssGadget *gadget;
@@ -3864,6 +3864,8 @@ sync_stepper_gadget (GtkRange                *range,
 
   if (!should_have_stepper)
     {
+      if (*gadget_ptr != NULL)
+        gtk_box_gadget_remove_gadget (GTK_BOX_GADGET (priv->gadget), *gadget_ptr);
       g_clear_object (gadget_ptr);
       return;
     }
@@ -3877,8 +3879,8 @@ sync_stepper_gadget (GtkRange                *range,
   gtk_css_gadget_add_class (gadget, class);
   gtk_css_gadget_set_state (gadget, gtk_css_node_get_state (widget_node));
 
-  gtk_box_gadget_insert_gadget (GTK_BOX_GADGET (priv->gadget), position,
-                                gadget, FALSE, FALSE, GTK_ALIGN_FILL);
+  gtk_box_gadget_insert_gadget_after (GTK_BOX_GADGET (priv->gadget), prev_sibling,
+                                      gadget, FALSE, FALSE, GTK_ALIGN_FILL);
   *gadget_ptr = gadget;
 }
 
@@ -3890,44 +3892,34 @@ _gtk_range_set_steppers (GtkRange *range,
                          gboolean  has_d)
 {
   GtkRangePrivate *priv = range->priv;
-  int pos = 0;
 
   sync_stepper_gadget (range,
                        has_a, &priv->stepper_a_gadget,
                        "up",
                        priv->orientation == GTK_ORIENTATION_VERTICAL ?
                        GTK_CSS_IMAGE_BUILTIN_ARROW_UP : GTK_CSS_IMAGE_BUILTIN_ARROW_LEFT,
-                       pos);
-  if (has_a)
-    pos++;
+                       NULL);
 
   sync_stepper_gadget (range,
                        has_b, &priv->stepper_b_gadget,
                        "down",
                        priv->orientation == GTK_ORIENTATION_VERTICAL ?
                        GTK_CSS_IMAGE_BUILTIN_ARROW_DOWN : GTK_CSS_IMAGE_BUILTIN_ARROW_RIGHT,
-                       pos);
-  if (has_b)
-    pos++;
-
-  /* account for the trough in the box */
-  pos++;
+                       priv->stepper_a_gadget);
 
   sync_stepper_gadget (range,
                        has_c, &priv->stepper_c_gadget,
                        "up",
                        priv->orientation == GTK_ORIENTATION_VERTICAL ?
                        GTK_CSS_IMAGE_BUILTIN_ARROW_UP : GTK_CSS_IMAGE_BUILTIN_ARROW_LEFT,
-                       pos);
-  if (has_c)
-    pos++;
+                       priv->trough_gadget);
 
   sync_stepper_gadget (range,
                        has_d, &priv->stepper_d_gadget,
                        "down",
                        priv->orientation == GTK_ORIENTATION_VERTICAL ?
                        GTK_CSS_IMAGE_BUILTIN_ARROW_DOWN : GTK_CSS_IMAGE_BUILTIN_ARROW_RIGHT,
-                       pos);
+                       priv->stepper_c_gadget ? priv->stepper_c_gadget : priv->trough_gadget);
 
   gtk_widget_queue_resize (GTK_WIDGET (range));
 }
