@@ -4048,8 +4048,6 @@ msgstr "Rótulo"
 msgid "Action"
 msgstr "Ação"
 
-#  Drop-down item
-#  https://developer.mozilla.org/en-US/docs/Web/API/Event/eventPhase
 #: gtk/inspector/menu.ui:61
 msgid "Target"
 msgstr "Destino"
