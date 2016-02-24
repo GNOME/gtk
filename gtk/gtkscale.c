@@ -1650,7 +1650,7 @@ gtk_scale_add_mark (GtkScale        *scale,
           widget_node = gtk_widget_get_css_node (GTK_WIDGET (scale));
           priv->top_marks_node = gtk_css_node_new ();
           gtk_css_node_set_name (priv->top_marks_node, I_("marks"));
-          gtk_css_node_insert_before (widget_node, priv->top_marks_node, gtk_range_get_trough_node (GTK_RANGE (scale)));
+          gtk_css_node_insert_after (widget_node, priv->top_marks_node, NULL);
           gtk_css_node_set_parent (priv->top_marks_node, widget_node);
           gtk_css_node_add_class (priv->top_marks_node, g_quark_from_static_string (GTK_STYLE_CLASS_TOP));
           gtk_css_node_set_state (priv->top_marks_node, gtk_css_node_get_state (widget_node));
@@ -1665,7 +1665,7 @@ gtk_scale_add_mark (GtkScale        *scale,
           widget_node = gtk_widget_get_css_node (GTK_WIDGET (scale));
           priv->bottom_marks_node = gtk_css_node_new ();
           gtk_css_node_set_name (priv->bottom_marks_node, I_("marks"));
-          gtk_css_node_insert_after (widget_node, priv->bottom_marks_node, gtk_range_get_trough_node (GTK_RANGE (scale)));
+          gtk_css_node_insert_before (widget_node, priv->bottom_marks_node, NULL);
           gtk_css_node_add_class (priv->bottom_marks_node, g_quark_from_static_string (GTK_STYLE_CLASS_BOTTOM));
           gtk_css_node_set_state (priv->bottom_marks_node, gtk_css_node_get_state (widget_node));
           g_object_unref (priv->bottom_marks_node);

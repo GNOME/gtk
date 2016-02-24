@@ -3924,12 +3924,6 @@ _gtk_range_set_steppers (GtkRange *range,
   gtk_widget_queue_resize (GTK_WIDGET (range));
 }
 
-GtkCssNode *
-gtk_range_get_trough_node (GtkRange *range)
-{
-  return gtk_css_gadget_get_node (range->priv->trough_gadget);
-}
-
 GtkCssGadget *
 gtk_range_get_slider_gadget (GtkRange *range)
 {
