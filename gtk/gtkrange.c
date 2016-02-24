@@ -3390,18 +3390,11 @@ gtk_range_move_slider (GtkRange     *range,
     gtk_widget_error_bell (GTK_WIDGET (range));
 }
 
-#define POINT_IN_RECT(xcoord, ycoord, rect) \
- ((xcoord) >= (rect).x &&                   \
-  (xcoord) <  ((rect).x + (rect).width) &&  \
-  (ycoord) >= (rect).y &&                   \
-  (ycoord) <  ((rect).y + (rect).height))
-
 /* Update mouse location, return TRUE if it changes */
 static void
 gtk_range_update_mouse_location (GtkRange *range)
 {
   GtkRangePrivate *priv = range->priv;
-  GtkAllocation allocation;
   gint x, y;
   MouseLocation old;
   GtkWidget *widget = GTK_WIDGET (range);
@@ -3410,8 +3403,6 @@ gtk_range_update_mouse_location (GtkRange *range)
 
   x = priv->mouse_x;
   y = priv->mouse_y;
-
-  gtk_widget_get_allocation (widget, &allocation);
 
   if (priv->grab_location != MOUSE_OUTSIDE)
     priv->mouse_location = priv->grab_location;
@@ -3431,7 +3422,7 @@ gtk_range_update_mouse_location (GtkRange *range)
     priv->mouse_location = MOUSE_SLIDER;
   else if (gtk_css_gadget_content_box_contains_point (priv->trough_gadget, x, y))
     priv->mouse_location = MOUSE_TROUGH;
-  else if (POINT_IN_RECT (x, y, allocation))
+  else if (gtk_css_gadget_margin_box_contains_point (priv->gadget, x, y))
     priv->mouse_location = MOUSE_WIDGET;
   else
     priv->mouse_location = MOUSE_OUTSIDE;
