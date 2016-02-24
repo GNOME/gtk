@@ -125,6 +125,9 @@ static void
 generate_key_event (GdkWindow *window, GdkEventType type, guint state, guint keyval, guint16 keycode, gboolean is_modifier, guint32 event_time)
 {
   GdkEvent *event;
+  GdkDisplay *display;
+  GdkSeat *seat;
+  GdkDevice *keyboard;
 
   event = gdk_event_new (type);
   event->key.state = state;
@@ -134,13 +137,25 @@ generate_key_event (GdkWindow *window, GdkEventType type, guint state, guint key
   event->key.time = event_time;
   set_key_event_string (&event->key);
 
-  send_event (window, _gdk_mir_device_manager_get_keyboard (gdk_display_get_device_manager (gdk_window_get_display (window))), event);
+  display = gdk_window_get_display (window);
+  seat = gdk_display_get_default_seat (display);
+  keyboard = gdk_seat_get_keyboard (seat);
+
+  send_event (window, keyboard, event);
 }
 
 static GdkDevice *
 get_pointer (GdkWindow *window)
 {
-  return gdk_device_manager_get_client_pointer (gdk_display_get_device_manager (gdk_window_get_display (window)));
+  GdkDisplay *display;
+  GdkSeat *seat;
+  GdkDevice *pointer;
+
+  display = gdk_window_get_display (window);
+  seat = gdk_display_get_default_seat (display);
+  pointer = gdk_seat_get_pointer (seat);
+
+  return pointer;
 }
 
 static void

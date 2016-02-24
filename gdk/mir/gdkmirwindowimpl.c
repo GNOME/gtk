@@ -271,7 +271,15 @@ create_mir_surface (GdkDisplay *display,
 static GdkDevice *
 get_pointer (GdkWindow *window)
 {
-  return gdk_device_manager_get_client_pointer (gdk_display_get_device_manager (gdk_window_get_display (window)));
+  GdkDisplay *display;
+  GdkSeat *seat;
+  GdkDevice *pointer;
+
+  display = gdk_window_get_display (window);
+  seat = gdk_display_get_default_seat (display);
+  pointer = gdk_seat_get_pointer (seat);
+
+  return pointer;
 }
 
 static void
