@@ -93,6 +93,12 @@ gboolean        gtk_css_gadget_border_box_contains_point (GtkCssGadget          
 gboolean        gtk_css_gadget_content_box_contains_point (GtkCssGadget         *gadget,
                                                            int                   x,
                                                            int                   y);
+void            gtk_css_gadget_get_margin_box           (GtkCssGadget           *gadget,
+                                                         GtkAllocation          *box);
+void            gtk_css_gadget_get_border_box           (GtkCssGadget           *gadget,
+                                                         GtkAllocation          *box);
+void            gtk_css_gadget_get_content_box          (GtkCssGadget           *gadget,
+                                                         GtkAllocation          *box);
 
 void            gtk_css_gadget_add_class                (GtkCssGadget           *gadget,
                                                          const char             *name);

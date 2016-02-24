@@ -956,6 +956,57 @@ gtk_css_gadget_queue_draw (GtkCssGadget *gadget)
   gtk_widget_queue_draw (gtk_css_gadget_get_owner (gadget));
 }
 
+/**
+ * gtk_css_gadget_get_margin_box:
+ * @gadget: a #GtkCssGadget
+ * @box: (out): Return location for gadget's the margin box
+ *
+ * Returns the margin box of the gadget. The box coordinates are relative to
+ *   the gadget origin. Compare with gtk_css_gadget_get_margin_allocation(),
+ *   which returns the margin box in the widget allocation coordinates.
+ */
+void
+gtk_css_gadget_get_margin_box (GtkCssGadget  *gadget,
+                               GtkAllocation *box)
+{
+  gtk_css_gadget_get_margin_allocation (gadget, box, NULL);
+  shift_allocation (gadget, box);
+}
+
+/**
+ * gtk_css_gadget_get_border_box:
+ * @gadget: a #GtkCssGadget
+ * @box: (out): Return location for gadget's the border box
+ *
+ * Returns the border box of the gadget. The box coordinates are relative to
+ *   the gadget origin. Compare with gtk_css_gadget_get_border_allocation(),
+ *   which returns the border box in the widget allocation coordinates.
+ */
+void
+gtk_css_gadget_get_border_box (GtkCssGadget  *gadget,
+                               GtkAllocation *box)
+{
+  gtk_css_gadget_get_border_allocation (gadget, box, NULL);
+  shift_allocation (gadget, box);
+}
+
+/**
+ * gtk_css_gadget_get_content_box:
+ * @gadget: a #GtkCssGadget
+ * @box: (out): Return location for gadget's the content box
+ *
+ * Returns the content box of the gadget. The box coordinates are relative to
+ *   the gadget origin. Compare with gtk_css_gadget_get_content_allocation(),
+ *   which returns the content box in the widget allocation coordinates.
+ */
+void
+gtk_css_gadget_get_content_box (GtkCssGadget  *gadget,
+                                GtkAllocation *box)
+{
+  gtk_css_gadget_get_content_allocation (gadget, box, NULL);
+  shift_allocation (gadget, box);
+}
+
 void
 gtk_css_gadget_get_margin_allocation (GtkCssGadget  *gadget,
                                       GtkAllocation *allocation,
