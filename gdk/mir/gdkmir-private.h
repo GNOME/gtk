@@ -121,16 +121,6 @@ EGLSurface _gdk_mir_window_get_egl_surface (GdkWindow *window, EGLConfig config)
 
 EGLSurface _gdk_mir_window_get_dummy_egl_surface (GdkWindow *window, EGLConfig config);
 
-void _gdk_mir_print_modifiers (unsigned int modifiers);
-
-void _gdk_mir_print_key_event (const MirInputEvent *event);
-
-void _gdk_mir_print_motion_event (const MirInputEvent *event);
-
-void _gdk_mir_print_surface_event (const MirSurfaceEvent *event);
-
-void _gdk_mir_print_resize_event (const MirResizeEvent *event);
-
 void _gdk_mir_print_event (const MirEvent *event);
 
 #endif /* __GDK_PRIVATE_MIR_H__ */

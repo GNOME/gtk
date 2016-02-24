@@ -17,7 +17,7 @@
 
 #include "gdkmir-private.h"
 
-void
+static void
 _gdk_mir_print_modifiers (unsigned int modifiers)
 {
   g_printerr (" Modifiers");
@@ -58,7 +58,7 @@ _gdk_mir_print_modifiers (unsigned int modifiers)
   g_printerr ("\n");
 }
 
-void
+static void
 _gdk_mir_print_key_event (const MirInputEvent *event)
 {
   const MirKeyboardEvent *keyboard_event = mir_input_event_get_keyboard_event (event);
@@ -147,7 +147,7 @@ _gdk_mir_print_touch_event (const MirInputEvent *event)
     }
 }
 
-void
+static void
 _gdk_mir_print_motion_event (const MirInputEvent *event)
 {
   const MirPointerEvent *pointer_event = mir_input_event_get_pointer_event (event);
@@ -199,7 +199,7 @@ _gdk_mir_print_motion_event (const MirInputEvent *event)
   g_printerr (" Event Time %lli\n", (long long int) mir_input_event_get_event_time (event));
 }
 
-void
+static void
 _gdk_mir_print_surface_event (const MirSurfaceEvent *event)
 {
   g_printerr ("SURFACE\n");
@@ -226,15 +226,15 @@ _gdk_mir_print_surface_event (const MirSurfaceEvent *event)
   g_printerr (" Value %i\n", mir_surface_event_get_attribute_value (event));
 }
 
-void
+static void
 _gdk_mir_print_resize_event (const MirResizeEvent *event)
 {
   g_printerr ("RESIZE\n");
   g_printerr (" Size (%i, %i)\n", mir_resize_event_get_width (event), mir_resize_event_get_height (event));
 }
 
-void
-_gdk_mir_print_close_event (const MirCloseSurfaceEvent *event)
+static void
+_gdk_mir_print_close_event (void)
 {
   g_printerr ("CLOSED\n");
 }
@@ -275,7 +275,7 @@ _gdk_mir_print_event (const MirEvent *event)
       _gdk_mir_print_resize_event (mir_event_get_resize_event (event));
       break;
     case mir_event_type_close_surface:
-      _gdk_mir_print_close_event (mir_event_get_close_surface_event (event));
+      _gdk_mir_print_close_event ();
       break;
     default:
       g_printerr ("EVENT %u\n", mir_event_get_type (event));

@@ -1152,7 +1152,9 @@ gdk_mir_window_impl_register_dnd (GdkWindow *window)
 static GdkDragContext *
 gdk_mir_window_impl_drag_begin (GdkWindow *window,
                                 GdkDevice *device,
-                                GList     *targets)
+                                GList     *targets,
+                                gint       x_root,
+                                gint       y_root)
 {
   //g_printerr ("gdk_mir_window_impl_drag_begin window=%p\n", window);
   return NULL;
