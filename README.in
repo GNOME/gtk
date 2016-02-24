@@ -75,6 +75,15 @@ Even better are git-formatted patches. (Use git format-patch)
 Release notes for 3.20
 ======================
 
+* The way theming works in GTK+ has been reworked pretty fundamentally
+  in this release, to be able to implement many more CSS features and
+  generally give themes more power. As a result, custom CSS that is
+  shipped with applications and third-party themes will need adjustments.
+  Widgets now use element names much more than style classes; type
+  names are no longer used in style matching. Every widget now documents
+  the element names it has and the style classes it uses. The GTK+
+  inspector can also be helpful in finding this information.
+
 * The GtkFileChooser interface pre-requisite changed from GtkWidget
   to GObject, allowing non-widget implementations of this interface.
   This is a minor change in ABI, as apps are no longer guaranteed
