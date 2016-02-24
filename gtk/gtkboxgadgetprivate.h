@@ -76,6 +76,13 @@ void                    gtk_box_gadget_remove_gadget            (GtkBoxGadget   
                                                                  GtkCssGadget           *cssgadget);
 void                    gtk_box_gadget_reverse_children         (GtkBoxGadget           *gadget);
 
+void                    gtk_box_gadget_set_gadget_expand        (GtkBoxGadget           *gadget,
+                                                                 GtkCssGadget           *cssgadget,
+                                                                 gboolean                hexpand,
+                                                                 gboolean                vexpand);
+void                    gtk_box_gadget_set_gadget_align         (GtkBoxGadget           *gadget,
+                                                                 GtkCssGadget           *cssgadget,
+                                                                 GtkAlign                align);
 
 G_END_DECLS
 

@@ -622,9 +622,10 @@ gtk_box_gadget_insert_widget (GtkBoxGadget           *gadget,
                                 GTK_ALIGN_FILL);
 }
 
-void
-gtk_box_gadget_remove_object (GtkBoxGadget *gadget,
-                              GObject      *object)
+static GtkBoxGadgetChild *
+gtk_box_gadget_find_object (GtkBoxGadget *gadget,
+                            GObject      *object,
+                            int          *position)
 {
   GtkBoxGadgetPrivate *priv = gtk_box_gadget_get_instance_private (gadget);
   guint i;
@@ -635,10 +636,28 @@ gtk_box_gadget_remove_object (GtkBoxGadget *gadget,
 
       if (child->object == object)
         {
-          gtk_css_node_set_parent (get_css_node (object), NULL);
-          g_array_remove_index (priv->children, i);
-          break;
+          if (position)
+            *position = i;
+          return child;
         }
+    }
+
+  return NULL;
+}
+
+static void
+gtk_box_gadget_remove_object (GtkBoxGadget *gadget,
+                              GObject      *object)
+{
+  GtkBoxGadgetPrivate *priv = gtk_box_gadget_get_instance_private (gadget);
+  GtkBoxGadgetChild *child;
+  int position;
+
+  child = gtk_box_gadget_find_object (gadget, object, &position);
+  if (child)
+    {
+      gtk_css_node_set_parent (get_css_node (child->object), NULL);
+      g_array_remove_index (priv->children, position);
     }
 }
 
@@ -663,6 +682,14 @@ only_vertical (GObject        *object,
   return orientation == GTK_ORIENTATION_VERTICAL;
 }
 
+static ComputeExpandFunc
+expand_func_from_flags (gboolean hexpand,
+                        gboolean vexpand)
+{
+  return hexpand ? (vexpand ? (ComputeExpandFunc) gtk_true : only_horizontal)
+                 : (vexpand ? only_vertical : (ComputeExpandFunc) gtk_false);
+}
+
 void
 gtk_box_gadget_insert_gadget (GtkBoxGadget *gadget,
                               int           pos,
@@ -671,11 +698,13 @@ gtk_box_gadget_insert_gadget (GtkBoxGadget *gadget,
                               gboolean      vexpand,
                               GtkAlign      align)
 {
+  ComputeExpandFunc func;
+
+  func = expand_func_from_flags (hexpand, vexpand);
   gtk_box_gadget_insert_object (gadget,
                                 pos,
                                 G_OBJECT (cssgadget),
-                                hexpand ? (vexpand ? (ComputeExpandFunc) gtk_true : only_horizontal)
-                                        : (vexpand ? only_vertical : (ComputeExpandFunc) gtk_false),
+                                func,
                                 align);
 }
 
@@ -704,4 +733,45 @@ gtk_box_gadget_reverse_children (GtkBoxGadget *gadget)
       *child1 = *child2;
       *child2 = tmp;
     }
+}
+
+void
+gtk_box_gadget_set_gadget_expand (GtkBoxGadget *gadget,
+                                  GtkCssGadget *cssgadget,
+                                  gboolean      hexpand,
+                                  gboolean      vexpand)
+{
+  GtkBoxGadgetChild *child;
+  ComputeExpandFunc func;
+
+  child = gtk_box_gadget_find_object (gadget, G_OBJECT (cssgadget), NULL);
+
+  if (!child)
+    return;
+
+  func = expand_func_from_flags (hexpand, vexpand);
+  if (child->compute_expand == func)
+    return;
+
+  child->compute_expand = func;
+  gtk_css_gadget_queue_resize (GTK_CSS_GADGET (gadget));
+}
+
+void
+gtk_box_gadget_set_gadget_align (GtkBoxGadget *gadget,
+                                 GtkCssGadget *cssgadget,
+                                 GtkAlign      align)
+{
+  GtkBoxGadgetChild *child;
+
+  child = gtk_box_gadget_find_object (gadget, G_OBJECT (cssgadget), NULL);
+
+  if (!child)
+    return;
+
+  if (child->align == align)
+    return;
+
+  child->align = align;
+  gtk_css_gadget_queue_resize (GTK_CSS_GADGET (gadget));
 }
