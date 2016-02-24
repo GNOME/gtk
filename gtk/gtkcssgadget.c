@@ -532,12 +532,9 @@ gtk_css_gadget_margin_box_contains_point (GtkCssGadget *gadget,
                                           int           x,
                                           int           y)
 {
-  GtkAllocation margin_allocation;
-
-  gtk_css_gadget_get_margin_allocation (gadget, &margin_allocation, NULL);
-  shift_allocation (gadget, &margin_allocation);
-
-  return allocation_contains_point (&margin_allocation, x, y);
+  GtkAllocation margin_box;
+  gtk_css_gadget_get_margin_box (gadget, &margin_box);
+  return allocation_contains_point (&margin_box, x, y);
 }
 
 /**
@@ -558,12 +555,9 @@ gtk_css_gadget_border_box_contains_point (GtkCssGadget *gadget,
                                           int           x,
                                           int           y)
 {
-  GtkAllocation border_allocation;
-
-  gtk_css_gadget_get_border_allocation (gadget, &border_allocation, NULL);
-  shift_allocation (gadget, &border_allocation);
-
-  return allocation_contains_point (&border_allocation, x, y);
+  GtkAllocation border_box;
+  gtk_css_gadget_get_border_box (gadget, &border_box);
+  return allocation_contains_point (&border_box, x, y);
 }
 
 /**
@@ -584,12 +578,9 @@ gtk_css_gadget_content_box_contains_point (GtkCssGadget *gadget,
                                            int           x,
                                            int           y)
 {
-  GtkAllocation content_allocation;
-
-  gtk_css_gadget_get_content_allocation (gadget, &content_allocation, NULL);
-  shift_allocation (gadget, &content_allocation);
-
-  return allocation_contains_point (&content_allocation, x, y);
+  GtkAllocation content_box;
+  gtk_css_gadget_get_content_box (gadget, &content_box);
+  return allocation_contains_point (&content_box, x, y);
 }
 
 /**
@@ -819,18 +810,17 @@ gtk_css_gadget_draw (GtkCssGadget *gadget,
   GtkCssStyle *style;
   int x, y, width, height;
   int contents_x, contents_y, contents_width, contents_height;
-  GtkAllocation margin_allocation;
+  GtkAllocation margin_box;
 
   if (!gtk_css_gadget_get_visible (gadget))
     return;
 
-  gtk_css_gadget_get_margin_allocation (gadget, &margin_allocation, NULL);
-  shift_allocation (gadget, &margin_allocation);
+  gtk_css_gadget_get_margin_box (gadget, &margin_box);
 
-  x = margin_allocation.x;
-  y = margin_allocation.y;
-  width = margin_allocation.width;
-  height = margin_allocation.height;
+  x = margin_box.x;
+  y = margin_box.y;
+  width = margin_box.width;
+  height = margin_box.height;
 
   if (width < 0 || height < 0)
     {
