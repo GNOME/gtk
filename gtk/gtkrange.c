@@ -103,6 +103,7 @@ struct _GtkRangePrivate
    *               a b      c d
    */
   GtkCssGadget *gadget;
+  GtkCssGadget *contents_gadget;
   GtkCssGadget *stepper_a_gadget;
   GtkCssGadget *stepper_b_gadget;
   GtkCssGadget *stepper_c_gadget;
@@ -296,7 +297,26 @@ static gboolean      gtk_range_render_trough            (GtkCssGadget *gadget,
                                                          int           width,
                                                          int           height,
                                                          gpointer      user_data);
-
+static void          gtk_range_measure                  (GtkCssGadget   *gadget,
+                                                         GtkOrientation  orientation,
+                                                         gint            for_size,
+                                                         gint           *minimum,
+                                                         gint           *natural,
+                                                         gint           *minimum_baseline,
+                                                         gint           *natural_baseline,
+                                                         gpointer        user_data);
+static void          gtk_range_allocate                 (GtkCssGadget        *gadget,
+                                                         const GtkAllocation *allocation,
+                                                         int                  baseline,
+                                                         GtkAllocation       *out_clip,
+                                                         gpointer             data);
+static gboolean      gtk_range_render                   (GtkCssGadget *gadget,
+                                                         cairo_t      *cr,
+                                                         int           x,
+                                                         int           y,
+                                                         int           width,
+                                                         int           height,
+                                                         gpointer      user_data);
 
 G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GtkRange, gtk_range, GTK_TYPE_WIDGET,
                                   G_ADD_PRIVATE (GtkRange)
@@ -665,13 +685,13 @@ gtk_range_sync_orientation (GtkRange *range)
 
   orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (range));
   _gtk_orientable_set_style_classes (GTK_ORIENTABLE (range));
-  gtk_box_gadget_set_orientation (GTK_BOX_GADGET (priv->gadget), orientation);
+  gtk_box_gadget_set_orientation (GTK_BOX_GADGET (priv->contents_gadget), orientation);
 
   if (orientation == GTK_ORIENTATION_VERTICAL)
-    gtk_box_gadget_set_gadget_expand (GTK_BOX_GADGET (priv->gadget),
+    gtk_box_gadget_set_gadget_expand (GTK_BOX_GADGET (priv->contents_gadget),
                                       priv->trough_gadget, FALSE, TRUE);
   else
-    gtk_box_gadget_set_gadget_expand (GTK_BOX_GADGET (priv->gadget),
+    gtk_box_gadget_set_gadget_expand (GTK_BOX_GADGET (priv->contents_gadget),
                                       priv->trough_gadget, TRUE, FALSE);
 }
 
@@ -803,8 +823,15 @@ gtk_range_init (GtkRange *range)
   _gtk_orientable_set_style_classes (GTK_ORIENTABLE (range));
 
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (range));
-  priv->gadget = gtk_box_gadget_new_for_node (widget_node, GTK_WIDGET (range));
-
+  priv->gadget = gtk_css_custom_gadget_new_for_node (widget_node,
+                                                     GTK_WIDGET (range),
+                                                     gtk_range_measure,
+                                                     gtk_range_allocate,
+                                                     gtk_range_render,
+                                                     NULL, NULL);
+  priv->contents_gadget = gtk_box_gadget_new ("contents",
+                                              GTK_WIDGET (range),
+                                              priv->gadget, NULL);
   priv->trough_gadget = gtk_css_custom_gadget_new ("trough",
                                                    GTK_WIDGET (range),
                                                    NULL, NULL,
@@ -814,7 +841,7 @@ gtk_range_init (GtkRange *range)
                                                    NULL, NULL);
   gtk_css_gadget_set_state (priv->trough_gadget,
                             gtk_css_node_get_state (widget_node));
-  gtk_box_gadget_insert_gadget (GTK_BOX_GADGET (priv->gadget), -1, priv->trough_gadget,
+  gtk_box_gadget_insert_gadget (GTK_BOX_GADGET (priv->contents_gadget), -1, priv->trough_gadget,
                                 TRUE, FALSE, GTK_ALIGN_CENTER);
 
   priv->slider_gadget = gtk_builtin_icon_new ("slider",
@@ -1246,7 +1273,7 @@ gtk_range_get_range_rect (GtkRange     *range,
 
   priv = range->priv;
 
-  measure_one_gadget_alloc (range, priv->gadget, FALSE, range_rect);
+  measure_one_gadget_alloc (range, priv->contents_gadget, FALSE, range_rect);
 }
 
 /**
@@ -1713,6 +1740,7 @@ gtk_range_destroy (GtkWidget *widget)
   g_clear_object (&priv->long_press_gesture);
 
   g_clear_object (&priv->gadget);
+  g_clear_object (&priv->contents_gadget);
   g_clear_object (&priv->trough_gadget);
   g_clear_object (&priv->fill_gadget);
   g_clear_object (&priv->highlight_gadget);
@@ -1788,17 +1816,22 @@ gtk_range_measure_trough (GtkCssGadget   *gadget,
 }
 
 static void
-gtk_range_size_request (GtkWidget      *widget,
-                        GtkOrientation  orientation,
-                        gint           *minimum,
-                        gint           *natural)
+gtk_range_measure (GtkCssGadget   *gadget,
+                   GtkOrientation  orientation,
+                   gint            for_size,
+                   gint           *minimum,
+                   gint           *natural,
+                   gint           *minimum_baseline,
+                   gint           *natural_baseline,
+                   gpointer        user_data)
 {
+  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
   GtkRange *range = GTK_RANGE (widget);
   GtkRangePrivate *priv = range->priv;
   GtkBorder border = { 0 };
 
   /* Measure the main box */
-  gtk_css_gadget_get_preferred_size (priv->gadget,
+  gtk_css_gadget_get_preferred_size (priv->contents_gadget,
                                      orientation,
                                      -1,
                                      minimum, natural,
@@ -1818,6 +1851,20 @@ gtk_range_size_request (GtkWidget      *widget,
       *minimum += border.top + border.bottom;
       *natural += border.top + border.bottom;
     }
+}
+
+static void
+gtk_range_size_request (GtkWidget      *widget,
+                        GtkOrientation  orientation,
+                        gint           *minimum,
+                        gint           *natural)
+{
+  GtkRange *range = GTK_RANGE (widget);
+  GtkRangePrivate *priv = range->priv;
+
+  gtk_css_gadget_get_preferred_size (priv->gadget, orientation, -1,
+                                     minimum, natural,
+                                     NULL, NULL);
 }
 
 static void
@@ -1955,11 +2002,11 @@ gtk_range_allocate_trough (GtkCssGadget        *gadget,
  * give space to border over dimensions in one direction.
  */
 static void
-clamp_dimensions (GtkAllocation *allocation,
-                  int           *width,
-                  int           *height,
-                  GtkBorder     *border,
-                  gboolean       border_expands_horizontally)
+clamp_dimensions (const GtkAllocation *allocation,
+                  int                 *width,
+                  int                 *height,
+                  GtkBorder           *border,
+                  gboolean             border_expands_horizontally)
 {
   gint extra, shortage;
 
@@ -2038,41 +2085,43 @@ clamp_dimensions (GtkAllocation *allocation,
 }
 
 static void
-gtk_range_allocate_box (GtkRange      *range,
-                        GtkAllocation *out_clip)
+gtk_range_allocate (GtkCssGadget        *gadget,
+                    const GtkAllocation *allocation,
+                    int                  baseline,
+                    GtkAllocation       *out_clip,
+                    gpointer             data)
 {
+  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
+  GtkRange *range = GTK_RANGE (widget);
   GtkRangePrivate *priv = range->priv;
-  GtkWidget *widget = GTK_WIDGET (range);
   GtkBorder border = { 0 };
-  GtkAllocation box_alloc, widget_alloc;
+  GtkAllocation box_alloc;
   int box_min_width, box_min_height;
-
-  gtk_widget_get_allocation (widget, &widget_alloc);
 
   if (GTK_RANGE_GET_CLASS (range)->get_range_border)
     GTK_RANGE_GET_CLASS (range)->get_range_border (range, &border);
 
-  measure_one_gadget (priv->gadget, &box_min_width, &box_min_height);
+  measure_one_gadget (priv->contents_gadget, &box_min_width, &box_min_height);
 
   if (priv->orientation == GTK_ORIENTATION_VERTICAL)
-    clamp_dimensions (&widget_alloc, &box_min_width, &box_min_height, &border, TRUE);
+    clamp_dimensions (allocation, &box_min_width, &box_min_height, &border, TRUE);
   else
-    clamp_dimensions (&widget_alloc, &box_min_width, &box_min_height, &border, FALSE);
+    clamp_dimensions (allocation, &box_min_width, &box_min_height, &border, FALSE);
 
-  box_alloc.x = border.left + widget_alloc.x;
-  box_alloc.y = border.top + widget_alloc.y;
+  box_alloc.x = border.left + allocation->x;
+  box_alloc.y = border.top + allocation->y;
   box_alloc.width = box_min_width;
   box_alloc.height = box_min_height;
 
-  gtk_css_gadget_allocate (priv->gadget,
+  gtk_css_gadget_allocate (priv->contents_gadget,
                            &box_alloc,
-                           gtk_widget_get_allocated_baseline (widget),
+                           baseline,
                            out_clip);
 
   /* TODO: we should compute a proper clip from get_range_border(),
    * but this will at least give us outset shadows.
    */
-  gdk_rectangle_union (out_clip, &widget_alloc, out_clip);
+  gdk_rectangle_union (out_clip, allocation, out_clip);
 }
 
 static void
@@ -2090,8 +2139,10 @@ gtk_range_size_allocate (GtkWidget     *widget,
                             allocation->x, allocation->y,
                             allocation->width, allocation->height);
 
-  gtk_range_allocate_box (range, &clip);
-
+  gtk_css_gadget_allocate (priv->gadget,
+                           allocation,
+                           gtk_widget_get_allocated_baseline (widget),
+                           &clip);
   gtk_widget_set_clip (widget, &clip);
 }
 
@@ -2256,13 +2307,22 @@ gtk_range_render_trough (GtkCssGadget *gadget,
 }
 
 static gboolean
-gtk_range_draw (GtkWidget *widget,
-                cairo_t   *cr)
+gtk_range_render (GtkCssGadget *gadget,
+                  cairo_t      *cr,
+                  int           x,
+                  int           y,
+                  int           width,
+                  int           height,
+                  gpointer      user_data)
 {
+  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
   GtkRange *range = GTK_RANGE (widget);
   GtkRangePrivate *priv = range->priv;
   gboolean draw_trough = TRUE;
 
+  /* HACK: we can't render the contents box directly because
+   * GtkColorScale wants to omit the trough but still draw the slider...
+   */
   if (GTK_IS_COLOR_SCALE (widget))
       draw_trough = FALSE;
 
@@ -2280,6 +2340,18 @@ gtk_range_draw (GtkWidget *widget,
 
   if (priv->stepper_d_gadget)
     gtk_css_gadget_draw (priv->stepper_d_gadget, cr);
+
+  return FALSE;
+}
+
+static gboolean
+gtk_range_draw (GtkWidget *widget,
+                cairo_t   *cr)
+{
+  GtkRange *range = GTK_RANGE (widget);
+  GtkRangePrivate *priv = range->priv;
+
+  gtk_css_gadget_draw (priv->gadget, cr);
 
   return GDK_EVENT_PROPAGATE;
 }
@@ -3865,7 +3937,7 @@ sync_stepper_gadget (GtkRange                *range,
   if (!should_have_stepper)
     {
       if (*gadget_ptr != NULL)
-        gtk_box_gadget_remove_gadget (GTK_BOX_GADGET (priv->gadget), *gadget_ptr);
+        gtk_box_gadget_remove_gadget (GTK_BOX_GADGET (priv->contents_gadget), *gadget_ptr);
       g_clear_object (gadget_ptr);
       return;
     }
@@ -3879,7 +3951,7 @@ sync_stepper_gadget (GtkRange                *range,
   gtk_css_gadget_add_class (gadget, class);
   gtk_css_gadget_set_state (gadget, gtk_css_node_get_state (widget_node));
 
-  gtk_box_gadget_insert_gadget_after (GTK_BOX_GADGET (priv->gadget), prev_sibling,
+  gtk_box_gadget_insert_gadget_after (GTK_BOX_GADGET (priv->contents_gadget), prev_sibling,
                                       gadget, FALSE, FALSE, GTK_ALIGN_FILL);
   *gadget_ptr = gadget;
 }
