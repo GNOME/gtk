@@ -3177,29 +3177,29 @@ gdk_event_translate (MSG  *msg,
        */
       else if ((style & (WS_BORDER | WS_THICKFRAME)) == 0)
 	{
-	  HMONITOR winmon;
-	  MONITORINFO moninfo;
+	  HMONITOR nearest_monitor;
+	  MONITORINFO nearest_info;
 
-	  winmon = MonitorFromWindow (GDK_WINDOW_HWND (window), MONITOR_DEFAULTTONEAREST);
+	  nearest_monitor = MonitorFromWindow (GDK_WINDOW_HWND (window), MONITOR_DEFAULTTONEAREST);
+	  nearest_info.cbSize = sizeof (nearest_info);
 
-	  moninfo.cbSize = sizeof (moninfo);
-
-	  if (GetMonitorInfoA (winmon, &moninfo))
+	  if (GetMonitorInfoA (nearest_monitor, &nearest_info))
 	    {
-	      mmi->ptMaxTrackSize.x = moninfo.rcWork.right - moninfo.rcWork.left;
-	      mmi->ptMaxTrackSize.y = moninfo.rcWork.bottom - moninfo.rcWork.top;
-	      mmi->ptMaxPosition.x = moninfo.rcWork.left;
-	      mmi->ptMaxPosition.y = moninfo.rcWork.top;
+	      /* MSDN says that we must specify maximized window
+	       * size as if it was located on the primary monitor.
+	       * However, we still need to account for a taskbar
+	       * that might or might not be on the nearest monitor where
+	       * window will actually end up.
+               * "0" here is the top-left corner of the primary monitor.
+	       */
+	      mmi->ptMaxPosition.x = 0 + (nearest_info.rcWork.left - nearest_info.rcMonitor.left);
+	      mmi->ptMaxPosition.y = 0 + (nearest_info.rcWork.top - nearest_info.rcMonitor.top);
+	      mmi->ptMaxSize.x = nearest_info.rcWork.right - nearest_info.rcWork.left;
+	      mmi->ptMaxSize.y = nearest_info.rcWork.bottom - nearest_info.rcWork.top;
 	    }
-	  else
-	    {
-	      /* Apparently, this is just a very big number (bigger than any widget
-               * could realistically be) to make sure the window is as big as
-               * possible when maximized.
-               */
-	      mmi->ptMaxTrackSize.x = 30000;
-	      mmi->ptMaxTrackSize.y = 30000;
-	    }
+
+	  mmi->ptMaxTrackSize.x = GetSystemMetrics (SM_CXMAXTRACK);
+	  mmi->ptMaxTrackSize.y = GetSystemMetrics (SM_CYMAXTRACK);
 	}
 
       if (impl->hint_flags & (GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE))
