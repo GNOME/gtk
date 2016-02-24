@@ -691,6 +691,40 @@ expand_func_from_flags (gboolean hexpand,
 }
 
 void
+gtk_box_gadget_insert_gadget_before (GtkBoxGadget *gadget,
+                                     GtkCssGadget *sibling,
+                                     GtkCssGadget *cssgadget,
+                                     gboolean      hexpand,
+                                     gboolean      vexpand,
+                                     GtkAlign      align)
+{
+  /* Insert at the end if no sibling specified */
+  int pos = -1;
+
+  if (sibling)
+    gtk_box_gadget_find_object (gadget, G_OBJECT (sibling), &pos);
+
+  gtk_box_gadget_insert_gadget (gadget, pos, cssgadget, hexpand, vexpand, align);
+}
+
+void
+gtk_box_gadget_insert_gadget_after (GtkBoxGadget *gadget,
+                                    GtkCssGadget *sibling,
+                                    GtkCssGadget *cssgadget,
+                                    gboolean      hexpand,
+                                    gboolean      vexpand,
+                                    GtkAlign      align)
+{
+  /* Insert at the beginning if no sibling specified */
+  int pos = 0;
+
+  if (sibling && gtk_box_gadget_find_object (gadget, G_OBJECT (sibling), &pos))
+    pos++;
+
+  gtk_box_gadget_insert_gadget (gadget, pos, cssgadget, hexpand, vexpand, align);
+}
+
+void
 gtk_box_gadget_insert_gadget (GtkBoxGadget *gadget,
                               int           pos,
                               GtkCssGadget *cssgadget,

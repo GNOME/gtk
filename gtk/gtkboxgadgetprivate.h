@@ -72,6 +72,19 @@ void                    gtk_box_gadget_insert_gadget            (GtkBoxGadget   
                                                                  gboolean                hexpand,
                                                                  gboolean                vexpand,
                                                                  GtkAlign                align);
+void                    gtk_box_gadget_insert_gadget_before     (GtkBoxGadget           *gadget,
+                                                                 GtkCssGadget           *sibling,
+                                                                 GtkCssGadget           *cssgadget,
+                                                                 gboolean                hexpand,
+                                                                 gboolean                vexpand,
+                                                                 GtkAlign                align);
+void                    gtk_box_gadget_insert_gadget_after      (GtkBoxGadget           *gadget,
+                                                                 GtkCssGadget           *sibling,
+                                                                 GtkCssGadget           *cssgadget,
+                                                                 gboolean                hexpand,
+                                                                 gboolean                vexpand,
+                                                                 GtkAlign                align);
+
 void                    gtk_box_gadget_remove_gadget            (GtkBoxGadget           *gadget,
                                                                  GtkCssGadget           *cssgadget);
 void                    gtk_box_gadget_reverse_children         (GtkBoxGadget           *gadget);
