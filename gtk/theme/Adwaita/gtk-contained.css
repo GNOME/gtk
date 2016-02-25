@@ -2676,372 +2676,382 @@ scale highlight, progressbar progress {
     .osd scale highlight:disabled, scale .osd highlight:disabled, .osd progressbar progress:disabled, progressbar .osd progress:disabled {
       border-color: transparent; }
 
-scale.horizontal {
-  min-height: 34px;
-  padding-left: 12px;
-  padding-right: 12px; }
-  scale.horizontal trough {
-    padding-left: 2px;
-    padding-right: 2px; }
-    scale.horizontal trough fill,
-    scale.horizontal trough highlight {
-      margin: -1px -3px; }
-scale.vertical {
-  min-width: 34px;
-  padding-top: 12px;
-  padding-bottom: 12px; }
-  scale.vertical trough {
-    padding-top: 2px;
-    padding-bottom: 2px; }
-    scale.vertical trough fill,
-    scale.vertical trough highlight {
-      margin: -3px -1px; }
-scale trough {
-  outline-offset: 11px;
-  -gtk-outline-radius: 4px; }
-  scale trough slider {
-    min-height: 20px;
-    min-width: 20px;
-    margin: -9px; }
-scale fill, scale fill:backdrop {
-  background-color: #9d9d99;
-  box-shadow: none; }
-scale fill:disabled, scale fill:disabled:backdrop {
-  border-color: transparent;
-  background-color: transparent; }
-.osd scale fill {
-  background-color: rgba(91, 91, 90, 0.775); }
-  .osd scale fill:disabled, .osd scale fill:disabled:backdrop {
+scale {
+  min-height: 10px;
+  min-width: 10px;
+  padding: 12px; }
+  scale fill,
+  scale highlight {
+    margin: -1px; }
+  scale slider {
+    min-height: 18px;
+    min-width: 18px;
+    margin: -8px; }
+  scale.fine-tune slider {
+    margin: -6px; }
+  scale fill, scale fill:backdrop {
+    background-color: #9d9d99;
+    box-shadow: none; }
+  scale fill:disabled, scale fill:disabled:backdrop {
     border-color: transparent;
     background-color: transparent; }
-scale slider {
-  color: #2e3436;
-  outline-color: rgba(46, 52, 54, 0.3);
-  border-color: #9d9d99;
-  text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-  -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-  background-image: linear-gradient(to bottom, #f4f4f4 20%, #e8e8e7 90%);
-  box-shadow: inset 0 1px white, inset 0 -2px #ededec, inset 0 -1px #cacac8, 0 1px rgba(0, 0, 0, 0.1);
-  border: 1px solid #969691;
-  border-radius: 100%; }
-  scale slider:hover {
+  .osd scale fill {
+    background-color: rgba(91, 91, 90, 0.775); }
+    .osd scale fill:disabled, .osd scale fill:disabled:backdrop {
+      border-color: transparent;
+      background-color: transparent; }
+  scale slider {
     color: #2e3436;
     outline-color: rgba(46, 52, 54, 0.3);
     border-color: #9d9d99;
-    background-image: linear-gradient(to bottom, #fefefe 10%, #f2f2f1 90%);
-    box-shadow: inset 0 1px white, inset 0 -2px #f4f4f4, inset 0 -1px #cfcfcd, 0 1px rgba(0, 0, 0, 0.1); }
-  scale slider:active {
-    border-color: #184472; }
-  scale slider:disabled {
-    color: #8b8e8f;
-    border-color: #9d9d99;
-    background-image: linear-gradient(to bottom, #f1f1f1);
-    text-shadow: none;
-    -gtk-icon-shadow: none;
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
-  scale slider:backdrop {
-    color: #8b8e8f;
-    border-color: #a5a5a1;
-    background-image: linear-gradient(to bottom, #e8e8e7);
-    text-shadow: none;
-    -gtk-icon-shadow: none;
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
-    scale slider:backdrop:disabled {
-      color: #c3c3c0;
-      border-color: #a5a5a1;
+    text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
+    -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
+    background-image: linear-gradient(to bottom, #f4f4f4 20%, #e8e8e7 90%);
+    box-shadow: inset 0 1px white, inset 0 -2px #ededec, inset 0 -1px #cacac8, 0 1px rgba(0, 0, 0, 0.1);
+    border: 1px solid #969691;
+    border-radius: 100%; }
+    scale slider:hover {
+      color: #2e3436;
+      outline-color: rgba(46, 52, 54, 0.3);
+      border-color: #9d9d99;
+      background-image: linear-gradient(to bottom, #fefefe 10%, #f2f2f1 90%);
+      box-shadow: inset 0 1px white, inset 0 -2px #f4f4f4, inset 0 -1px #cfcfcd, 0 1px rgba(0, 0, 0, 0.1); }
+    scale slider:active {
+      border-color: #184472; }
+    scale slider:disabled {
+      color: #8b8e8f;
+      border-color: #9d9d99;
       background-image: linear-gradient(to bottom, #f1f1f1);
       text-shadow: none;
       -gtk-icon-shadow: none;
       box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
-  row:selected scale slider, row:selected scale slider:disabled {
-    border-color: #184472; }
-  .osd scale slider {
-    color: #eeeeec;
-    border-color: rgba(0, 0, 0, 0.7);
-    background-image: linear-gradient(to bottom, rgba(32, 37, 38, 0.8));
-    background-clip: padding-box;
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0.1);
-    text-shadow: 0 1px black;
-    -gtk-icon-shadow: 0 1px black;
-    outline-color: rgba(238, 238, 236, 0.3);
-    border-color: rgba(0, 0, 0, 0.7);
-    background-color: #202526; }
-    .osd scale slider:hover {
-      color: white;
-      border-color: rgba(0, 0, 0, 0.7);
-      background-image: linear-gradient(to bottom, rgba(60, 69, 71, 0.8));
-      background-clip: padding-box;
-      box-shadow: inset 0 1px rgba(255, 255, 255, 0.1);
-      text-shadow: 0 1px black;
-      -gtk-icon-shadow: 0 1px black;
-      outline-color: rgba(238, 238, 236, 0.3); }
-    .osd scale slider:active {
-      color: white;
-      border-color: rgba(0, 0, 0, 0.7);
-      background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7));
-      background-clip: padding-box;
-      box-shadow: none;
+    scale slider:backdrop {
+      color: #8b8e8f;
+      border-color: #a5a5a1;
+      background-image: linear-gradient(to bottom, #e8e8e7);
       text-shadow: none;
       -gtk-icon-shadow: none;
-      outline-color: rgba(238, 238, 236, 0.3); }
-    .osd scale slider:disabled {
-      color: #878a89;
-      border-color: rgba(0, 0, 0, 0.7);
-      background-image: linear-gradient(to bottom, rgba(53, 57, 58, 0.5));
-      background-clip: padding-box;
-      box-shadow: none;
-      text-shadow: none;
-      -gtk-icon-shadow: none; }
-    .osd scale slider:backdrop {
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
+      scale slider:backdrop:disabled {
+        color: #c3c3c0;
+        border-color: #a5a5a1;
+        background-image: linear-gradient(to bottom, #f1f1f1);
+        text-shadow: none;
+        -gtk-icon-shadow: none;
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
+    row:selected scale slider, row:selected scale slider:disabled {
+      border-color: #184472; }
+    .osd scale slider {
       color: #eeeeec;
       border-color: rgba(0, 0, 0, 0.7);
       background-image: linear-gradient(to bottom, rgba(32, 37, 38, 0.8));
       background-clip: padding-box;
-      box-shadow: none;
-      text-shadow: none;
-      -gtk-icon-shadow: none; }
-scale marks {
-  color: alpha(currentColor,0.4); }
-scale.color.horizontal trough > slider, scale.horizontal trough:last-child:not(:only-child) > slider {
-  border-style: none;
-  border-radius: 0;
-  background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above.png"), url("assets/slider-horz-scale-has-marks-above@2.png"));
-  min-height: 26px;
-  min-width: 22px;
-  margin-top: -13px;
-  background-position: top;
-  background-repeat: no-repeat;
-  box-shadow: none; }
-scale.color.horizontal trough > slider:hover, scale.horizontal trough:last-child:not(:only-child) > slider:hover {
-  border-style: none;
-  border-radius: 0;
-  background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-hover.png"), url("assets/slider-horz-scale-has-marks-above-hover@2.png"));
-  min-height: 26px;
-  min-width: 22px;
-  margin-top: -13px;
-  background-position: top;
-  background-repeat: no-repeat;
-  box-shadow: none; }
-scale.color.horizontal trough > slider:active, scale.horizontal trough:last-child:not(:only-child) > slider:active {
-  border-style: none;
-  border-radius: 0;
-  background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-active.png"), url("assets/slider-horz-scale-has-marks-above-active@2.png"));
-  min-height: 26px;
-  min-width: 22px;
-  margin-top: -13px;
-  background-position: top;
-  background-repeat: no-repeat;
-  box-shadow: none; }
-scale.color.horizontal trough > slider:disabled, scale.horizontal trough:last-child:not(:only-child) > slider:disabled {
-  border-style: none;
-  border-radius: 0;
-  background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-insensitive.png"), url("assets/slider-horz-scale-has-marks-above-insensitive@2.png"));
-  min-height: 26px;
-  min-width: 22px;
-  margin-top: -13px;
-  background-position: top;
-  background-repeat: no-repeat;
-  box-shadow: none; }
-scale.color.horizontal trough > slider:backdrop, scale.horizontal trough:last-child:not(:only-child) > slider:backdrop {
-  border-style: none;
-  border-radius: 0;
-  background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-backdrop.png"), url("assets/slider-horz-scale-has-marks-above-backdrop@2.png"));
-  min-height: 26px;
-  min-width: 22px;
-  margin-top: -13px;
-  background-position: top;
-  background-repeat: no-repeat;
-  box-shadow: none; }
-scale.color.horizontal trough > slider:backdrop:disabled, scale.horizontal trough:last-child:not(:only-child) > slider:backdrop:disabled {
-  border-style: none;
-  border-radius: 0;
-  background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-backdrop-insensitive.png"), url("assets/slider-horz-scale-has-marks-above-backdrop-insensitive@2.png"));
-  min-height: 26px;
-  min-width: 22px;
-  margin-top: -13px;
-  background-position: top;
-  background-repeat: no-repeat;
-  box-shadow: none; }
-scale.horizontal trough:first-child:not(:only-child) > slider {
-  border-style: none;
-  border-radius: 0;
-  background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-below.png"), url("assets/slider-horz-scale-has-marks-below@2.png"));
-  min-height: 26px;
-  min-width: 22px;
-  margin-bottom: -13px;
-  background-position: bottom;
-  background-repeat: no-repeat;
-  box-shadow: none; }
-scale.horizontal trough:first-child:not(:only-child) > slider:hover {
-  border-style: none;
-  border-radius: 0;
-  background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-below-hover.png"), url("assets/slider-horz-scale-has-marks-below-hover@2.png"));
-  min-height: 26px;
-  min-width: 22px;
-  margin-bottom: -13px;
-  background-position: bottom;
-  background-repeat: no-repeat;
-  box-shadow: none; }
-scale.horizontal trough:first-child:not(:only-child) > slider:active {
-  border-style: none;
-  border-radius: 0;
-  background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-below-active.png"), url("assets/slider-horz-scale-has-marks-below-active@2.png"));
-  min-height: 26px;
-  min-width: 22px;
-  margin-bottom: -13px;
-  background-position: bottom;
-  background-repeat: no-repeat;
-  box-shadow: none; }
-scale.horizontal trough:first-child:not(:only-child) > slider:disabled {
-  border-style: none;
-  border-radius: 0;
-  background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-below-insensitive.png"), url("assets/slider-horz-scale-has-marks-below-insensitive@2.png"));
-  min-height: 26px;
-  min-width: 22px;
-  margin-bottom: -13px;
-  background-position: bottom;
-  background-repeat: no-repeat;
-  box-shadow: none; }
-scale.horizontal trough:first-child:not(:only-child) > slider:backdrop {
-  border-style: none;
-  border-radius: 0;
-  background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-below-backdrop.png"), url("assets/slider-horz-scale-has-marks-below-backdrop@2.png"));
-  min-height: 26px;
-  min-width: 22px;
-  margin-bottom: -13px;
-  background-position: bottom;
-  background-repeat: no-repeat;
-  box-shadow: none; }
-scale.horizontal trough:first-child:not(:only-child) > slider:backdrop:disabled {
-  border-style: none;
-  border-radius: 0;
-  background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-below-backdrop-insensitive.png"), url("assets/slider-horz-scale-has-marks-below-backdrop-insensitive@2.png"));
-  min-height: 26px;
-  min-width: 22px;
-  margin-bottom: -13px;
-  background-position: bottom;
-  background-repeat: no-repeat;
-  box-shadow: none; }
-scale.color.vertical:dir(rtl) trough > slider, scale.vertical trough:last-child:not(:only-child) > slider {
-  border-style: none;
-  border-radius: 0;
-  background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above.png"), url("assets/slider-vert-scale-has-marks-above@2.png"));
-  min-height: 22px;
-  min-width: 26px;
-  margin-left: -13px;
-  background-position: left bottom;
-  background-repeat: no-repeat;
-  box-shadow: none; }
-scale.color.vertical:dir(rtl) trough > slider:hover, scale.vertical trough:last-child:not(:only-child) > slider:hover {
-  border-style: none;
-  border-radius: 0;
-  background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above-hover.png"), url("assets/slider-vert-scale-has-marks-above-hover@2.png"));
-  min-height: 22px;
-  min-width: 26px;
-  margin-left: -13px;
-  background-position: left bottom;
-  background-repeat: no-repeat;
-  box-shadow: none; }
-scale.color.vertical:dir(rtl) trough > slider:active, scale.vertical trough:last-child:not(:only-child) > slider:active {
-  border-style: none;
-  border-radius: 0;
-  background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above-active.png"), url("assets/slider-vert-scale-has-marks-above-active@2.png"));
-  min-height: 22px;
-  min-width: 26px;
-  margin-left: -13px;
-  background-position: left bottom;
-  background-repeat: no-repeat;
-  box-shadow: none; }
-scale.color.vertical:dir(rtl) trough > slider:disabled, scale.vertical trough:last-child:not(:only-child) > slider:disabled {
-  border-style: none;
-  border-radius: 0;
-  background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above-insensitive.png"), url("assets/slider-vert-scale-has-marks-above-insensitive@2.png"));
-  min-height: 22px;
-  min-width: 26px;
-  margin-left: -13px;
-  background-position: left bottom;
-  background-repeat: no-repeat;
-  box-shadow: none; }
-scale.color.vertical:dir(rtl) trough > slider:backdrop, scale.vertical trough:last-child:not(:only-child) > slider:backdrop {
-  border-style: none;
-  border-radius: 0;
-  background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above-backdrop.png"), url("assets/slider-vert-scale-has-marks-above-backdrop@2.png"));
-  min-height: 22px;
-  min-width: 26px;
-  margin-left: -13px;
-  background-position: left bottom;
-  background-repeat: no-repeat;
-  box-shadow: none; }
-scale.color.vertical:dir(rtl) trough > slider:backdrop:disabled, scale.vertical trough:last-child:not(:only-child) > slider:backdrop:disabled {
-  border-style: none;
-  border-radius: 0;
-  background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above-backdrop-insensitive.png"), url("assets/slider-vert-scale-has-marks-above-backdrop-insensitive@2.png"));
-  min-height: 22px;
-  min-width: 26px;
-  margin-left: -13px;
-  background-position: left bottom;
-  background-repeat: no-repeat;
-  box-shadow: none; }
-scale.color.vertical:dir(ltr) trough > slider, scale.vertical trough:first-child:not(:only-child) > slider {
-  border-style: none;
-  border-radius: 0;
-  background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below.png"), url("assets/slider-vert-scale-has-marks-below@2.png"));
-  min-height: 22px;
-  min-width: 26px;
-  margin-right: -13px;
-  background-position: right bottom;
-  background-repeat: no-repeat;
-  box-shadow: none; }
-scale.color.vertical:dir(ltr) trough > slider:hover, scale.vertical trough:first-child:not(:only-child) > slider:hover {
-  border-style: none;
-  border-radius: 0;
-  background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below-hover.png"), url("assets/slider-vert-scale-has-marks-below-hover@2.png"));
-  min-height: 22px;
-  min-width: 26px;
-  margin-right: -13px;
-  background-position: right bottom;
-  background-repeat: no-repeat;
-  box-shadow: none; }
-scale.color.vertical:dir(ltr) trough > slider:active, scale.vertical trough:first-child:not(:only-child) > slider:active {
-  border-style: none;
-  border-radius: 0;
-  background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below-active.png"), url("assets/slider-vert-scale-has-marks-below-active@2.png"));
-  min-height: 22px;
-  min-width: 26px;
-  margin-right: -13px;
-  background-position: right bottom;
-  background-repeat: no-repeat;
-  box-shadow: none; }
-scale.color.vertical:dir(ltr) trough > slider:disabled, scale.vertical trough:first-child:not(:only-child) > slider:disabled {
-  border-style: none;
-  border-radius: 0;
-  background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below-insensitive.png"), url("assets/slider-vert-scale-has-marks-below-insensitive@2.png"));
-  min-height: 22px;
-  min-width: 26px;
-  margin-right: -13px;
-  background-position: right bottom;
-  background-repeat: no-repeat;
-  box-shadow: none; }
-scale.color.vertical:dir(ltr) trough > slider:backdrop, scale.vertical trough:first-child:not(:only-child) > slider:backdrop {
-  border-style: none;
-  border-radius: 0;
-  background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below-backdrop.png"), url("assets/slider-vert-scale-has-marks-below-backdrop@2.png"));
-  min-height: 22px;
-  min-width: 26px;
-  margin-right: -13px;
-  background-position: right bottom;
-  background-repeat: no-repeat;
-  box-shadow: none; }
-scale.color.vertical:dir(ltr) trough > slider:backdrop:disabled, scale.vertical trough:first-child:not(:only-child) > slider:backdrop:disabled {
-  border-style: none;
-  border-radius: 0;
-  background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below-backdrop-insensitive.png"), url("assets/slider-vert-scale-has-marks-below-backdrop-insensitive@2.png"));
-  min-height: 22px;
-  min-width: 26px;
-  margin-right: -13px;
-  background-position: right bottom;
-  background-repeat: no-repeat;
-  box-shadow: none; }
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0.1);
+      text-shadow: 0 1px black;
+      -gtk-icon-shadow: 0 1px black;
+      outline-color: rgba(238, 238, 236, 0.3);
+      border-color: rgba(0, 0, 0, 0.7);
+      background-color: #202526; }
+      .osd scale slider:hover {
+        color: white;
+        border-color: rgba(0, 0, 0, 0.7);
+        background-image: linear-gradient(to bottom, rgba(60, 69, 71, 0.8));
+        background-clip: padding-box;
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0.1);
+        text-shadow: 0 1px black;
+        -gtk-icon-shadow: 0 1px black;
+        outline-color: rgba(238, 238, 236, 0.3); }
+      .osd scale slider:active {
+        color: white;
+        border-color: rgba(0, 0, 0, 0.7);
+        background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7));
+        background-clip: padding-box;
+        box-shadow: none;
+        text-shadow: none;
+        -gtk-icon-shadow: none;
+        outline-color: rgba(238, 238, 236, 0.3); }
+      .osd scale slider:disabled {
+        color: #878a89;
+        border-color: rgba(0, 0, 0, 0.7);
+        background-image: linear-gradient(to bottom, rgba(53, 57, 58, 0.5));
+        background-clip: padding-box;
+        box-shadow: none;
+        text-shadow: none;
+        -gtk-icon-shadow: none; }
+      .osd scale slider:backdrop {
+        color: #eeeeec;
+        border-color: rgba(0, 0, 0, 0.7);
+        background-image: linear-gradient(to bottom, rgba(32, 37, 38, 0.8));
+        background-clip: padding-box;
+        box-shadow: none;
+        text-shadow: none;
+        -gtk-icon-shadow: none; }
+  scale marks {
+    color: alpha(currentColor,0.4); }
+  scale.color.horizontal trough > trough > slider, scale.horizontal contents:last-child:not(:only-child) > trough > slider {
+    margin: -9px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above.png"), url("assets/slider-horz-scale-has-marks-above@2.png"));
+    min-height: 26px;
+    min-width: 22px;
+    margin-top: -13px;
+    background-position: top;
+    background-repeat: no-repeat;
+    box-shadow: none; }
+  scale.color.horizontal trough > trough > slider:hover, scale.horizontal contents:last-child:not(:only-child) > trough > slider:hover {
+    margin: -9px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-hover.png"), url("assets/slider-horz-scale-has-marks-above-hover@2.png"));
+    min-height: 26px;
+    min-width: 22px;
+    margin-top: -13px;
+    background-position: top;
+    background-repeat: no-repeat;
+    box-shadow: none; }
+  scale.color.horizontal trough > trough > slider:active, scale.horizontal contents:last-child:not(:only-child) > trough > slider:active {
+    margin: -9px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-active.png"), url("assets/slider-horz-scale-has-marks-above-active@2.png"));
+    min-height: 26px;
+    min-width: 22px;
+    margin-top: -13px;
+    background-position: top;
+    background-repeat: no-repeat;
+    box-shadow: none; }
+  scale.color.horizontal trough > trough > slider:disabled, scale.horizontal contents:last-child:not(:only-child) > trough > slider:disabled {
+    margin: -9px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-insensitive.png"), url("assets/slider-horz-scale-has-marks-above-insensitive@2.png"));
+    min-height: 26px;
+    min-width: 22px;
+    margin-top: -13px;
+    background-position: top;
+    background-repeat: no-repeat;
+    box-shadow: none; }
+  scale.color.horizontal trough > trough > slider:backdrop, scale.horizontal contents:last-child:not(:only-child) > trough > slider:backdrop {
+    margin: -9px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-backdrop.png"), url("assets/slider-horz-scale-has-marks-above-backdrop@2.png"));
+    min-height: 26px;
+    min-width: 22px;
+    margin-top: -13px;
+    background-position: top;
+    background-repeat: no-repeat;
+    box-shadow: none; }
+  scale.color.horizontal trough > trough > slider:backdrop:disabled, scale.horizontal contents:last-child:not(:only-child) > trough > slider:backdrop:disabled {
+    margin: -9px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-backdrop-insensitive.png"), url("assets/slider-horz-scale-has-marks-above-backdrop-insensitive@2.png"));
+    min-height: 26px;
+    min-width: 22px;
+    margin-top: -13px;
+    background-position: top;
+    background-repeat: no-repeat;
+    box-shadow: none; }
+  scale.horizontal contents:first-child:not(:only-child) > trough > slider {
+    margin: -9px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-below.png"), url("assets/slider-horz-scale-has-marks-below@2.png"));
+    min-height: 26px;
+    min-width: 22px;
+    margin-bottom: -13px;
+    background-position: bottom;
+    background-repeat: no-repeat;
+    box-shadow: none; }
+  scale.horizontal contents:first-child:not(:only-child) > trough > slider:hover {
+    margin: -9px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-below-hover.png"), url("assets/slider-horz-scale-has-marks-below-hover@2.png"));
+    min-height: 26px;
+    min-width: 22px;
+    margin-bottom: -13px;
+    background-position: bottom;
+    background-repeat: no-repeat;
+    box-shadow: none; }
+  scale.horizontal contents:first-child:not(:only-child) > trough > slider:active {
+    margin: -9px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-below-active.png"), url("assets/slider-horz-scale-has-marks-below-active@2.png"));
+    min-height: 26px;
+    min-width: 22px;
+    margin-bottom: -13px;
+    background-position: bottom;
+    background-repeat: no-repeat;
+    box-shadow: none; }
+  scale.horizontal contents:first-child:not(:only-child) > trough > slider:disabled {
+    margin: -9px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-below-insensitive.png"), url("assets/slider-horz-scale-has-marks-below-insensitive@2.png"));
+    min-height: 26px;
+    min-width: 22px;
+    margin-bottom: -13px;
+    background-position: bottom;
+    background-repeat: no-repeat;
+    box-shadow: none; }
+  scale.horizontal contents:first-child:not(:only-child) > trough > slider:backdrop {
+    margin: -9px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-below-backdrop.png"), url("assets/slider-horz-scale-has-marks-below-backdrop@2.png"));
+    min-height: 26px;
+    min-width: 22px;
+    margin-bottom: -13px;
+    background-position: bottom;
+    background-repeat: no-repeat;
+    box-shadow: none; }
+  scale.horizontal contents:first-child:not(:only-child) > trough > slider:backdrop:disabled {
+    margin: -9px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-horz-scale-has-marks-below-backdrop-insensitive.png"), url("assets/slider-horz-scale-has-marks-below-backdrop-insensitive@2.png"));
+    min-height: 26px;
+    min-width: 22px;
+    margin-bottom: -13px;
+    background-position: bottom;
+    background-repeat: no-repeat;
+    box-shadow: none; }
+  scale.color.vertical:dir(rtl) trough > trough > slider, scale.vertical contents:last-child:not(:only-child) > trough > slider {
+    margin: -9px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above.png"), url("assets/slider-vert-scale-has-marks-above@2.png"));
+    min-height: 22px;
+    min-width: 26px;
+    margin-left: -13px;
+    background-position: left bottom;
+    background-repeat: no-repeat;
+    box-shadow: none; }
+  scale.color.vertical:dir(rtl) trough > trough > slider:hover, scale.vertical contents:last-child:not(:only-child) > trough > slider:hover {
+    margin: -9px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above-hover.png"), url("assets/slider-vert-scale-has-marks-above-hover@2.png"));
+    min-height: 22px;
+    min-width: 26px;
+    margin-left: -13px;
+    background-position: left bottom;
+    background-repeat: no-repeat;
+    box-shadow: none; }
+  scale.color.vertical:dir(rtl) trough > trough > slider:active, scale.vertical contents:last-child:not(:only-child) > trough > slider:active {
+    margin: -9px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above-active.png"), url("assets/slider-vert-scale-has-marks-above-active@2.png"));
+    min-height: 22px;
+    min-width: 26px;
+    margin-left: -13px;
+    background-position: left bottom;
+    background-repeat: no-repeat;
+    box-shadow: none; }
+  scale.color.vertical:dir(rtl) trough > trough > slider:disabled, scale.vertical contents:last-child:not(:only-child) > trough > slider:disabled {
+    margin: -9px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above-insensitive.png"), url("assets/slider-vert-scale-has-marks-above-insensitive@2.png"));
+    min-height: 22px;
+    min-width: 26px;
+    margin-left: -13px;
+    background-position: left bottom;
+    background-repeat: no-repeat;
+    box-shadow: none; }
+  scale.color.vertical:dir(rtl) trough > trough > slider:backdrop, scale.vertical contents:last-child:not(:only-child) > trough > slider:backdrop {
+    margin: -9px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above-backdrop.png"), url("assets/slider-vert-scale-has-marks-above-backdrop@2.png"));
+    min-height: 22px;
+    min-width: 26px;
+    margin-left: -13px;
+    background-position: left bottom;
+    background-repeat: no-repeat;
+    box-shadow: none; }
+  scale.color.vertical:dir(rtl) trough > trough > slider:backdrop:disabled, scale.vertical contents:last-child:not(:only-child) > trough > slider:backdrop:disabled {
+    margin: -9px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-above-backdrop-insensitive.png"), url("assets/slider-vert-scale-has-marks-above-backdrop-insensitive@2.png"));
+    min-height: 22px;
+    min-width: 26px;
+    margin-left: -13px;
+    background-position: left bottom;
+    background-repeat: no-repeat;
+    box-shadow: none; }
+  scale.color.vertical:dir(ltr) trough > trough > slider, scale.vertical contents:first-child:not(:only-child) > trough > slider {
+    margin: -9px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below.png"), url("assets/slider-vert-scale-has-marks-below@2.png"));
+    min-height: 22px;
+    min-width: 26px;
+    margin-right: -13px;
+    background-position: right bottom;
+    background-repeat: no-repeat;
+    box-shadow: none; }
+  scale.color.vertical:dir(ltr) trough > trough > slider:hover, scale.vertical contents:first-child:not(:only-child) > trough > slider:hover {
+    margin: -9px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below-hover.png"), url("assets/slider-vert-scale-has-marks-below-hover@2.png"));
+    min-height: 22px;
+    min-width: 26px;
+    margin-right: -13px;
+    background-position: right bottom;
+    background-repeat: no-repeat;
+    box-shadow: none; }
+  scale.color.vertical:dir(ltr) trough > trough > slider:active, scale.vertical contents:first-child:not(:only-child) > trough > slider:active {
+    margin: -9px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below-active.png"), url("assets/slider-vert-scale-has-marks-below-active@2.png"));
+    min-height: 22px;
+    min-width: 26px;
+    margin-right: -13px;
+    background-position: right bottom;
+    background-repeat: no-repeat;
+    box-shadow: none; }
+  scale.color.vertical:dir(ltr) trough > trough > slider:disabled, scale.vertical contents:first-child:not(:only-child) > trough > slider:disabled {
+    margin: -9px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below-insensitive.png"), url("assets/slider-vert-scale-has-marks-below-insensitive@2.png"));
+    min-height: 22px;
+    min-width: 26px;
+    margin-right: -13px;
+    background-position: right bottom;
+    background-repeat: no-repeat;
+    box-shadow: none; }
+  scale.color.vertical:dir(ltr) trough > trough > slider:backdrop, scale.vertical contents:first-child:not(:only-child) > trough > slider:backdrop {
+    margin: -9px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below-backdrop.png"), url("assets/slider-vert-scale-has-marks-below-backdrop@2.png"));
+    min-height: 22px;
+    min-width: 26px;
+    margin-right: -13px;
+    background-position: right bottom;
+    background-repeat: no-repeat;
+    box-shadow: none; }
+  scale.color.vertical:dir(ltr) trough > trough > slider:backdrop:disabled, scale.vertical contents:first-child:not(:only-child) > trough > slider:backdrop:disabled {
+    margin: -9px;
+    border-style: none;
+    border-radius: 0;
+    background-image: -gtk-scaled(url("assets/slider-vert-scale-has-marks-below-backdrop-insensitive.png"), url("assets/slider-vert-scale-has-marks-below-backdrop-insensitive@2.png"));
+    min-height: 22px;
+    min-width: 26px;
+    margin-right: -13px;
+    background-position: right bottom;
+    background-repeat: no-repeat;
+    box-shadow: none; }
 
 /*****************
  * Progress bars *
