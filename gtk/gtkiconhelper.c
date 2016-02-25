@@ -123,11 +123,6 @@ gtk_icon_helper_get_preferred_size (GtkCssGadget   *gadget,
     *minimum = *natural = icon_width;
   else
     *minimum = *natural = icon_height;
-
-  if (minimum_baseline)
-    *minimum_baseline = 0;
-  if (natural_baseline)
-    *natural_baseline = 0;
 }
 
 static void
