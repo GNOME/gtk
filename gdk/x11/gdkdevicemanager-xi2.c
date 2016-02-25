@@ -487,6 +487,7 @@ create_device (GdkDeviceManager *device_manager,
                          "device-id", dev->deviceid,
                          "vendor-id", vendor_id,
                          "product-id", product_id,
+                         "num-touches", num_touches,
                          NULL);
 
   translate_device_classes (display, device, dev->classes, dev->num_classes);
