@@ -2984,7 +2984,7 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
       path = _gtk_tree_path_new_from_rbtree (child->tree, child->node);
       gtk_tree_view_get_cell_area (tree_view, path, child->column, &child_rect);
       child_rect.x += child->border.left;
-      child_rect.y += child->border.right;
+      child_rect.y += child->border.top;
       child_rect.width -= child->border.left + child->border.right;
       child_rect.height -= child->border.top + child->border.bottom;
 
