@@ -274,13 +274,26 @@ init_env (GtkInspectorGeneral *gen)
 }
 
 static void
-init_display (GtkInspectorGeneral *gen)
+populate_display (GdkScreen *screen, GtkInspectorGeneral *gen)
 {
-  GdkScreen *screen;
   gchar *name;
   gint i;
+  GList *children, *l;
+  GtkWidget *child;
 
-  screen = gdk_screen_get_default ();
+  children = gtk_container_get_children (GTK_CONTAINER (gen->priv->x_box));
+  for (l = children; l; l = l->next)
+    {
+      child = l->data;
+      if (gtk_widget_is_ancestor (gen->priv->x_display, child) ||
+          gtk_widget_is_ancestor (gen->priv->x_rgba, child) ||
+          gtk_widget_is_ancestor (gen->priv->x_composited, child))
+        continue;
+
+      gtk_widget_destroy (child);
+    }
+  g_list_free (children);
+
   name = gdk_screen_make_display_name (screen);
   gtk_label_set_label (GTK_LABEL (gen->priv->x_display), name);
   g_free (name);
@@ -341,6 +354,20 @@ init_display (GtkInspectorGeneral *gen)
 
       gtk_list_box_insert (GTK_LIST_BOX (gen->priv->x_box), row, -1);
     }
+}
+
+static void
+init_display (GtkInspectorGeneral *gen)
+{
+  GdkScreen *screen;
+
+  screen = gdk_screen_get_default ();
+
+  g_signal_connect (screen, "size-changed", G_CALLBACK (populate_display), gen);
+  g_signal_connect (screen, "composited-changed", G_CALLBACK (populate_display), gen);
+  g_signal_connect (screen, "monitors-changed", G_CALLBACK (populate_display), gen);
+
+  populate_display (screen, gen);
 }
 
 static void
