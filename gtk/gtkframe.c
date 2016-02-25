@@ -265,6 +265,8 @@ gtk_frame_class_init (GtkFrameClass *class)
   container_class->remove = gtk_frame_remove;
   container_class->forall = gtk_frame_forall;
 
+  gtk_container_class_handle_border_width (container_class);
+
   class->compute_child_allocation = gtk_frame_real_compute_child_allocation;
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_FRAME_ACCESSIBLE);
@@ -889,26 +891,25 @@ gtk_frame_real_compute_child_allocation (GtkFrame      *frame,
 {
   GtkFramePrivate *priv = frame->priv;
   GtkAllocation allocation;
-  gint border_width, height;
+  gint height;
 
   gtk_css_gadget_get_content_allocation (priv->gadget, &allocation, NULL);
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (frame));
 
   if (priv->label_widget)
     {
       gint nat_width, width;
 
       gtk_widget_get_preferred_width (priv->label_widget, NULL, &nat_width);
-      width = MIN (allocation.width - 2 * border_width, nat_width);
+      width = MIN (allocation.width, nat_width);
       gtk_widget_get_preferred_height_for_width (priv->label_widget, width, &height, NULL);
     }
   else
     height = 0;
 
-  child_allocation->x = allocation.x + border_width;
-  child_allocation->y = allocation.y + border_width + height;
-  child_allocation->width = MAX (1, allocation.width - 2 * border_width);
-  child_allocation->height = MAX (1, allocation.height - 2 * border_width - height);
+  child_allocation->x = allocation.x;
+  child_allocation->y = allocation.y + height;
+  child_allocation->width = MAX (1, allocation.width);
+  child_allocation->height = MAX (1, allocation.height - height);
 }
 
 static void
@@ -926,13 +927,10 @@ gtk_frame_measure (GtkCssGadget   *gadget,
   GtkFramePrivate *priv;
   GtkWidget *child;
   gint child_min, child_nat;
-  guint border_width;
 
   widget = gtk_css_gadget_get_owner (gadget);
   frame = GTK_FRAME (widget);
   priv = frame->priv;
-
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
   if (priv->label_widget && gtk_widget_get_visible (priv->label_widget))
     {
@@ -946,7 +944,7 @@ gtk_frame_measure (GtkCssGadget   *gadget,
         {
           if (for_size > 0)
             gtk_widget_get_preferred_height_for_width (priv->label_widget,
-                                                       for_size - 2 * border_width, &child_min, &child_nat);
+                                                       for_size, &child_min, &child_nat);
           else
             gtk_widget_get_preferred_height (priv->label_widget, &child_min, &child_nat);
 
@@ -972,7 +970,7 @@ gtk_frame_measure (GtkCssGadget   *gadget,
       else
         {
           if (for_size > 0)
-            gtk_widget_get_preferred_height_for_width (child, for_size - 2 * border_width, &child_min, &child_nat);
+            gtk_widget_get_preferred_height_for_width (child, for_size, &child_min, &child_nat);
           else
             gtk_widget_get_preferred_height (child, &child_min, &child_nat);
 
@@ -981,8 +979,6 @@ gtk_frame_measure (GtkCssGadget   *gadget,
         }
     }
 
-  *minimum += 2 * border_width;
-  *natural += 2 * border_width;
 }
 
 static void
