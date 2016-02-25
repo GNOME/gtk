@@ -91,6 +91,7 @@ enum {
   PROP_VENDOR_ID,
   PROP_PRODUCT_ID,
   PROP_SEAT,
+  PROP_NUM_TOUCHES,
   LAST_PROP
 };
 
@@ -287,6 +288,24 @@ gdk_device_class_init (GdkDeviceClass *klass)
                            G_PARAM_READWRITE |
                            G_PARAM_STATIC_STRINGS);
 
+  /**
+   * GdkDevice:num-touches:
+   *
+   * The maximal number of concurrent touches on a touch device.
+   * Will be 0 if the device is not a touch device or if the number
+   * of touches is unknown.
+   *
+   * Since: 3.20
+   */
+  device_props[PROP_NUM_TOUCHES] =
+      g_param_spec_uint ("num-touches",
+                         P_("Number of concurrent touches"),
+                         P_("Number of concurrent touches"),
+                         0, G_MAXUINT,
+                         0,
+                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
+                         G_PARAM_STATIC_STRINGS);
+
   g_object_class_install_properties (object_class, LAST_PROP, device_props);
 
   /**
@@ -400,6 +419,9 @@ gdk_device_set_property (GObject      *object,
     case PROP_SEAT:
       device->seat = g_value_get_object (value);
       break;
+    case PROP_NUM_TOUCHES:
+      device->num_touches = g_value_get_uint (value);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -451,6 +473,9 @@ gdk_device_get_property (GObject    *object,
       break;
     case PROP_SEAT:
       g_value_set_object (value, device->seat);
+      break;
+    case PROP_NUM_TOUCHES:
+      g_value_set_uint (value, device->num_touches);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);

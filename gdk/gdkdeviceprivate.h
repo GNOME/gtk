@@ -57,6 +57,7 @@ struct _GdkDevice
   GList *slaves;
   GdkDeviceType type;
   GArray *axes;
+  guint num_touches;
 
   gchar *vendor_id;
   gchar *product_id;
