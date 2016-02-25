@@ -380,6 +380,7 @@ add_device (GtkInspectorGeneral *gen,
   char *text;
   GString *str;
   int i;
+  uint n_touches;
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 40);
   g_object_set (box,
@@ -504,6 +505,38 @@ add_device (GtkInspectorGeneral *gen,
       gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
       gtk_label_set_xalign (GTK_LABEL (label), 0.0);
       gtk_box_pack_start (GTK_BOX (box), label, TRUE, TRUE, 0);
+
+      row = gtk_list_box_row_new ();
+      gtk_container_add (GTK_CONTAINER (row), box);
+      gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
+      gtk_widget_show_all (row);
+
+      gtk_list_box_insert (GTK_LIST_BOX (gen->priv->device_box), row, -1);
+    }
+
+  g_object_get (device, "num-touches", &n_touches, NULL);
+  if (n_touches > 0)
+    {
+      box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 40);
+      g_object_set (box,
+                    "margin", 10,
+                    "margin-start", 30,
+                    NULL);
+
+      label = gtk_label_new ("Touches");
+      gtk_widget_set_halign (label, GTK_ALIGN_START);
+      gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
+      gtk_label_set_xalign (GTK_LABEL (label), 0.0);
+      gtk_box_pack_start (GTK_BOX (box), label, FALSE, FALSE, 0);
+
+      text = g_strdup_printf ("%d", n_touches);
+      label = gtk_label_new (text);
+      gtk_label_set_selectable (GTK_LABEL (label), TRUE);
+      gtk_widget_set_halign (label, GTK_ALIGN_END);
+      gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
+      gtk_label_set_xalign (GTK_LABEL (label), 0.0);
+      gtk_box_pack_start (GTK_BOX (box), label, TRUE, TRUE, 0);
+      g_free (text);
 
       row = gtk_list_box_row_new ();
       gtk_container_add (GTK_CONTAINER (row), box);
