@@ -37,6 +37,7 @@
 #include "gtkmarshalers.h"
 #include "gtkmenu.h"
 #include "gtkmenuitem.h"
+#include "gtkrenderbackgroundprivate.h"
 #include "gtkseparatormenuitem.h"
 #include "gtksettings.h"
 #include "gtkselectionprivate.h"
@@ -51,7 +52,6 @@
 #include "gtkscrollable.h"
 #include "gtktypebuiltins.h"
 #include "gtktexthandleprivate.h"
-#include "gtkstylecontextprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkpopover.h"
 #include "gtktoolbar.h"
@@ -1685,7 +1685,6 @@ gtk_text_view_init (GtkTextView *text_view)
 
   context = gtk_widget_get_style_context (GTK_WIDGET (text_view));
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_VIEW);
-  _gtk_pixel_cache_set_style_context (priv->pixel_cache, context);
 
   /* Set up default style */
   priv->wrap_mode = GTK_WRAP_NONE;
@@ -9775,10 +9774,18 @@ node_style_changed_cb (GtkCssNode        *node,
                        GtkCssStyleChange *change,
                        GtkWidget         *widget)
 {
+  GtkTextViewPrivate *priv = GTK_TEXT_VIEW (widget)->priv;
+
   if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_SIZE | GTK_CSS_AFFECTS_CLIP))
     gtk_widget_queue_resize (widget);
   else
     gtk_widget_queue_draw (widget);
+
+  if (node == priv->text_window->css_node)
+    {
+      GtkCssStyle *style = gtk_css_style_change_get_new_style (change);
+      gtk_pixel_cache_set_is_opaque (priv->pixel_cache, gtk_css_style_render_background_is_opaque (style));
+    }
 }
 
 static void

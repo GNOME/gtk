@@ -54,8 +54,8 @@ void           _gtk_pixel_cache_set_content      (GtkPixelCache         *cache,
 gboolean       _gtk_pixel_cache_get_always_cache (GtkPixelCache         *cache);
 void           _gtk_pixel_cache_set_always_cache (GtkPixelCache         *cache,
                                                   gboolean               always_cache);
-void           _gtk_pixel_cache_set_style_context(GtkPixelCache         *cache,
-                                                  GtkStyleContext       *style_context);
+void           gtk_pixel_cache_set_is_opaque     (GtkPixelCache         *cache,
+                                                  gboolean               is_opaque);
 
 
 G_END_DECLS

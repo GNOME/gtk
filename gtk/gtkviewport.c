@@ -33,7 +33,8 @@
 #include "gtkpixelcacheprivate.h"
 #include "gtkprivate.h"
 #include "gtkscrollable.h"
-#include "gtkrender.h"
+#include "gtkrenderbackgroundprivate.h"
+#include "gtkstylecontextprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 
@@ -938,16 +939,32 @@ gtk_viewport_draw (GtkWidget *widget,
 }
 
 static void
+gtk_viewport_update_pixelcache_opacity (GtkWidget   *child,
+                                        GtkViewport *viewport)
+{
+  GtkViewportPrivate *priv = viewport->priv;
+
+  gtk_pixel_cache_set_is_opaque (priv->pixel_cache,
+                                 gtk_css_style_render_background_is_opaque (
+                                   gtk_style_context_lookup_style (
+                                     gtk_widget_get_style_context (child))));
+}
+
+static void
 gtk_viewport_remove (GtkContainer *container,
 		     GtkWidget    *child)
 {
   GtkViewport *viewport = GTK_VIEWPORT (container);
   GtkViewportPrivate *priv = viewport->priv;
 
+  if (g_signal_handlers_disconnect_by_func (child, gtk_viewport_update_pixelcache_opacity, viewport) != 1)
+    {
+      g_assert_not_reached ();
+    }
+
   GTK_CONTAINER_CLASS (gtk_viewport_parent_class)->remove (container, child);
 
-  _gtk_pixel_cache_set_style_context (priv->pixel_cache, NULL);
-
+  gtk_pixel_cache_set_is_opaque (priv->pixel_cache, FALSE);
 }
 
 static void
@@ -961,11 +978,11 @@ gtk_viewport_add (GtkContainer *container,
   g_return_if_fail (gtk_bin_get_child (bin) == NULL);
 
   gtk_widget_set_parent_window (child, priv->bin_window);
-
-  _gtk_pixel_cache_set_style_context (priv->pixel_cache,
-                                      gtk_widget_get_style_context (child));
-
+  
   GTK_CONTAINER_CLASS (gtk_viewport_parent_class)->add (container, child);
+
+  g_signal_connect (child, "style-updated", G_CALLBACK (gtk_viewport_update_pixelcache_opacity), viewport);
+  gtk_viewport_update_pixelcache_opacity (child, viewport);
 }
 
 static void
