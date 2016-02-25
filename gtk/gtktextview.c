@@ -5856,16 +5856,15 @@ draw_text (cairo_t  *cr,
 {
   GtkWidget *widget = user_data;
   GtkTextView *text_view = GTK_TEXT_VIEW (widget);
+  GtkTextViewPrivate *priv = text_view->priv;
   GtkStyleContext *context;
-  GdkRectangle bg_rect;
-
-  gdk_cairo_get_clip_rectangle (cr, &bg_rect);
 
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_save_to_node (context, text_view->priv->text_window->css_node);
   gtk_render_background (context, cr,
-                         bg_rect.x, bg_rect.y,
-                         bg_rect.width, bg_rect.height);
+                         -priv->xoffset, -priv->yoffset,
+                         MAX (SCREEN_WIDTH (text_view), priv->width),
+                         MAX (SCREEN_HEIGHT (text_view), priv->height));
   gtk_style_context_restore (context);
 
   if (GTK_TEXT_VIEW_GET_CLASS (text_view)->draw_layer != NULL)
@@ -5875,7 +5874,7 @@ draw_text (cairo_t  *cr,
       cairo_restore (cr);
 
       cairo_save (cr);
-      cairo_translate (cr, -text_view->priv->xoffset, -text_view->priv->yoffset);
+      cairo_translate (cr, -priv->xoffset, -priv->yoffset);
       GTK_TEXT_VIEW_GET_CLASS (text_view)->draw_layer (text_view, GTK_TEXT_VIEW_LAYER_BELOW_TEXT, cr);
       cairo_restore (cr);
     }
@@ -5889,7 +5888,7 @@ draw_text (cairo_t  *cr,
       cairo_restore (cr);
 
       cairo_save (cr);
-      cairo_translate (cr, -text_view->priv->xoffset, -text_view->priv->yoffset);
+      cairo_translate (cr, -priv->xoffset, -priv->yoffset);
       GTK_TEXT_VIEW_GET_CLASS (text_view)->draw_layer (text_view, GTK_TEXT_VIEW_LAYER_ABOVE_TEXT, cr);
       cairo_restore (cr);
     }
