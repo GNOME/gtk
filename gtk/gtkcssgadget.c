@@ -577,14 +577,12 @@ gtk_css_gadget_get_preferred_size (GtkCssGadget   *gadget,
 
   if (minimum_baseline && *minimum_baseline > -1)
     {
-      if (*minimum > 0)
-        *minimum_baseline = *minimum_baseline * forced_minimum / *minimum;
+      *minimum_baseline += 0.5 * (forced_minimum - *minimum);
       *minimum_baseline = MAX (0, *minimum_baseline + extra_baseline);
     }
   if (natural_baseline && *natural_baseline > -1)
     {
-      if (*natural > 0)
-        *natural_baseline = *natural_baseline * forced_natural / *natural;
+      *natural_baseline += 0.5 * (forced_natural - *natural);
       *natural_baseline = MAX (0, *natural_baseline + extra_baseline);
     }
 
