@@ -105,6 +105,8 @@ struct _GdkWaylandSeat
   gboolean have_server_repeat;
   uint32_t server_repeat_rate;
   uint32_t server_repeat_delay;
+
+  struct wl_callback *repeat_callback;
   guint32 repeat_timer;
   guint32 repeat_key;
   guint32 repeat_count;
@@ -175,6 +177,10 @@ struct _GdkWaylandDeviceManagerClass
   GdkDeviceManagerClass parent_class;
 };
 
+static void deliver_key_event (GdkWaylandDeviceData *device,
+                               uint32_t              time_,
+                               uint32_t              key,
+                               uint32_t              state);
 GType gdk_wayland_device_manager_get_type (void);
 
 G_DEFINE_TYPE (GdkWaylandDeviceManager,
@@ -1692,6 +1698,8 @@ stop_key_repeat (GdkWaylandDeviceData *device)
       g_source_remove (device->repeat_timer);
       device->repeat_timer = 0;
     }
+
+  g_clear_pointer (&device->repeat_callback, wl_callback_destroy);
 }
 
 static void
@@ -1762,12 +1770,39 @@ deliver_key_event (GdkWaylandDeviceData *device,
   g_source_set_name_by_id (device->repeat_timer, "[gtk+] keyboard_repeat");
 }
 
+static void
+sync_after_repeat_callback (void               *data,
+                            struct wl_callback *callback,
+                            uint32_t            time)
+{
+  GdkWaylandDeviceData *device = data;
+
+  g_clear_pointer (&device->repeat_callback, wl_callback_destroy);
+
+  deliver_key_event (device, device->time, device->repeat_key, 1);
+}
+
+static const struct wl_callback_listener sync_after_repeat_callback_listener = {
+  sync_after_repeat_callback
+};
+
 static gboolean
 keyboard_repeat (gpointer data)
 {
   GdkWaylandDeviceData *device = data;
+  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (device->display);
 
-  deliver_key_event (device, device->time, device->repeat_key, 1);
+  /* Ping the server and wait for the timeout.  We won't process
+   * key repeat until it responds, since a hung server could lead
+   * to a delayed key release event. We don't want to generate
+   * repeat events long after the user released the key, just because
+   * the server is tardy in telling us the user released the key.
+   */
+  device->repeat_callback = wl_display_sync (display->wl_display);
+
+  wl_callback_add_listener (device->repeat_callback,
+                            &sync_after_repeat_callback_listener,
+                            device);
 
   return G_SOURCE_REMOVE;
 }
