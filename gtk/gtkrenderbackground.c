@@ -25,6 +25,7 @@
 
 #include "gtkcssarrayvalueprivate.h"
 #include "gtkcssbgsizevalueprivate.h"
+#include "gtkcsscornervalueprivate.h"
 #include "gtkcssenumvalueprivate.h"
 #include "gtkcssimagevalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
@@ -343,4 +344,25 @@ gtk_css_style_render_background (GtkCssStyle      *style,
                                     TRUE);
 
   cairo_restore (cr);
+}
+
+static gboolean
+corner_value_is_right_angle (GtkCssValue *value)
+{
+  return _gtk_css_corner_value_get_x (value, 100) <= 0.0 &&
+         _gtk_css_corner_value_get_y (value, 100) <= 0.0;
+}
+
+gboolean
+gtk_css_style_render_background_is_opaque (GtkCssStyle *style)
+{
+  const GdkRGBA *color;
+
+  color = _gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
+
+  return color->alpha >= 1.0
+      && corner_value_is_right_angle (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_LEFT_RADIUS))
+      && corner_value_is_right_angle (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_RIGHT_RADIUS))
+      && corner_value_is_right_angle (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_RIGHT_RADIUS))
+      && corner_value_is_right_angle (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_LEFT_RADIUS));
 }

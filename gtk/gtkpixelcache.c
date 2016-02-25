@@ -19,6 +19,7 @@
 
 #include "gtkdebug.h"
 #include "gtkpixelcacheprivate.h"
+#include "gtkrenderbackgroundprivate.h"
 #include "gtkstylecontextprivate.h"
 
 #define BLOW_CACHE_TIMEOUT_SEC 20
@@ -198,7 +199,7 @@ _gtk_pixel_cache_create_surface_if_needed (GtkPixelCache         *cache,
     {
       content = CAIRO_CONTENT_COLOR_ALPHA;
       if (cache->style_context &&
-          _gtk_style_context_is_background_opaque (cache->style_context))
+          gtk_css_style_render_background_is_opaque (gtk_style_context_lookup_style (cache->style_context)))
         content = CAIRO_CONTENT_COLOR;
     }
 

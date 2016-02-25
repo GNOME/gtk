@@ -27,7 +27,6 @@
 #include "gtkcontainerprivate.h"
 #include "gtkcssanimatedstyleprivate.h"
 #include "gtkcsscolorvalueprivate.h"
-#include "gtkcsscornervalueprivate.h"
 #include "gtkcssenumvalueprivate.h"
 #include "gtkcssimagevalueprivate.h"
 #include "gtkcssnodedeclarationprivate.h"
@@ -45,6 +44,7 @@
 #include "gtkdebug.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
+#include "gtkrenderbackgroundprivate.h"
 #include "gtkrendericonprivate.h"
 #include "gtksettings.h"
 #include "gtksettingsprivate.h"
@@ -2435,13 +2435,6 @@ gtk_style_context_invalidate (GtkStyleContext *context)
   gtk_style_context_validate (context, NULL);
 }
 
-static gboolean
-corner_value_is_right_angle (GtkCssValue *value)
-{
-  return _gtk_css_corner_value_get_x (value, 100) <= 0.0 &&
-         _gtk_css_corner_value_get_y (value, 100) <= 0.0;
-}
-
 /**
  * gtk_style_context_set_background:
  * @context: a #GtkStyleContext
@@ -2460,8 +2453,6 @@ void
 gtk_style_context_set_background (GtkStyleContext *context,
                                   GdkWindow       *window)
 {
-  const GdkRGBA *color;
-
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -2473,10 +2464,12 @@ gtk_style_context_set_background (GtkStyleContext *context,
    *
    * We could indeed just set black instead of the color we have.
    */
-  color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
-
-  if (_gtk_style_context_is_background_opaque (context))
+  if (gtk_css_style_render_background_is_opaque (gtk_style_context_lookup_style (context)))
     {
+      const GdkRGBA *color;
+
+      color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
+
       gdk_window_set_background_rgba (window, color);
     }
   else
@@ -3186,22 +3179,6 @@ gtk_gradient_resolve_for_context (GtkGradient     *gradient,
                                      GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
                                      gtk_style_context_lookup_style (context),
                                      priv->parent ? gtk_style_context_lookup_style (priv->parent) : NULL);
-}
-
-gboolean
-_gtk_style_context_is_background_opaque (GtkStyleContext *context)
-{
-  const GdkRGBA *color;
-
-  g_return_val_if_fail (context != NULL, FALSE);
-
-  color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
-
-  return (color->alpha >= 1.0 &&
-          corner_value_is_right_angle (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_LEFT_RADIUS)) &&
-          corner_value_is_right_angle (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_RIGHT_RADIUS)) &&
-          corner_value_is_right_angle (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_RIGHT_RADIUS)) &&
-          corner_value_is_right_angle (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_LEFT_RADIUS)));
 }
 
 /**

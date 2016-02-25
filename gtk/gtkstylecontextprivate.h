@@ -70,8 +70,6 @@ void           _gtk_style_context_get_icon_extents           (GtkStyleContext   
                                                               gint                width,
                                                               gint                height);
 
-gboolean       _gtk_style_context_is_background_opaque       (GtkStyleContext *context);
-
 PangoAttrList *_gtk_style_context_get_pango_attributes       (GtkStyleContext *context);
 
 /* Accessibility support */

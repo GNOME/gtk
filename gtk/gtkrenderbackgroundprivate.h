@@ -28,13 +28,15 @@
 
 G_BEGIN_DECLS
 
-void gtk_css_style_render_background  (GtkCssStyle          *style,
-                                       cairo_t              *cr,
-                                       gdouble               x,
-                                       gdouble               y,
-                                       gdouble               width,
-                                       gdouble               height,
-                                       GtkJunctionSides      junction);
+void            gtk_css_style_render_background                 (GtkCssStyle          *style,
+                                                                 cairo_t              *cr,
+                                                                 gdouble               x,
+                                                                 gdouble               y,
+                                                                 gdouble               width,
+                                                                 gdouble               height,
+                                                                 GtkJunctionSides      junction);
+gboolean        gtk_css_style_render_background_is_opaque       (GtkCssStyle          *style);
+
 
 G_END_DECLS
 
