@@ -175,6 +175,14 @@ static void     gtk_frame_measure        (GtkCssGadget        *gadget,
                                           gint                *minimum_baseline,
                                           gint                *natural_baseline,
                                           gpointer             data);
+static void     gtk_frame_measure_border (GtkCssGadget        *gadget,
+                                          GtkOrientation       orientation,
+                                          gint                 for_size,
+                                          gint                *minimum_size,
+                                          gint                *natural_size,
+                                          gint                *minimum_baseline,
+                                          gint                *natural_baseline,
+                                          gpointer             data);
 static void     gtk_frame_allocate       (GtkCssGadget        *gadget,
                                           const GtkAllocation *allocation,
                                           int                  baseline,
@@ -319,7 +327,7 @@ gtk_frame_init (GtkFrame *frame)
                                                        GTK_WIDGET (frame),
                                                        priv->gadget,
                                                        NULL,
-                                                       NULL,
+                                                       gtk_frame_measure_border,
                                                        gtk_frame_allocate_border,
                                                        NULL,
                                                        NULL,
@@ -925,7 +933,6 @@ gtk_frame_measure (GtkCssGadget   *gadget,
   GtkWidget *widget;
   GtkFrame *frame;
   GtkFramePrivate *priv;
-  GtkWidget *child;
   gint child_min, child_nat;
 
   widget = gtk_css_gadget_get_owner (gadget);
@@ -958,14 +965,37 @@ gtk_frame_measure (GtkCssGadget   *gadget,
       *natural = 0;
     }
 
+  gtk_css_gadget_get_preferred_size (priv->border_gadget,
+                                     orientation,
+                                     for_size,
+                                     &child_min,
+                                     &child_nat,
+                                     NULL, NULL);
+
+  *minimum += child_min;
+  *natural += child_nat;
+}
+
+static void
+gtk_frame_measure_border (GtkCssGadget   *gadget,
+                          GtkOrientation  orientation,
+                          int             for_size,
+                          int            *minimum,
+                          int            *natural,
+                          int            *minimum_baseline,
+                          int            *natural_baseline,
+                          gpointer        data)
+{
+  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
+  GtkWidget *child;
+  int child_min, child_nat;
+
   child = gtk_bin_get_child (GTK_BIN (widget));
   if (child && gtk_widget_get_visible (child))
     {
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
         {
           gtk_widget_get_preferred_width (child, &child_min, &child_nat);
-          *minimum = MAX (*minimum, child_min);
-          *natural = MAX (*natural, child_nat);
         }
       else
         {
@@ -973,13 +1003,18 @@ gtk_frame_measure (GtkCssGadget   *gadget,
             gtk_widget_get_preferred_height_for_width (child, for_size, &child_min, &child_nat);
           else
             gtk_widget_get_preferred_height (child, &child_min, &child_nat);
-
-          *minimum += child_min;
-          *natural += child_nat;
         }
-    }
 
+      *minimum = child_min;
+      *natural = child_nat;
+    }
+  else
+    {
+      *minimum = 0;
+      *natural = 0;
+    }
 }
+
 
 static void
 gtk_frame_get_preferred_width (GtkWidget *widget,
