@@ -352,6 +352,7 @@ add_device (GtkInspectorGeneral *gen,
   GtkWidget *row;
   char *text;
   GString *str;
+  int i;
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 40);
   g_object_set (box,
@@ -396,9 +397,6 @@ add_device (GtkInspectorGeneral *gen,
       break;
     }
 
-  if (gdk_device_get_mode (device) == GDK_MODE_DISABLED)
-    g_string_append (str, ", disabled");
-
   label = gtk_label_new (str->str);
   gtk_label_set_selectable (GTK_LABEL (label), TRUE);
   gtk_widget_set_halign (label, GTK_ALIGN_END);
@@ -413,6 +411,140 @@ add_device (GtkInspectorGeneral *gen,
   gtk_widget_show_all (row);
 
   gtk_list_box_insert (GTK_LIST_BOX (gen->priv->device_box), row, -1);
+
+  if (gdk_device_get_vendor_id (device))
+    {
+      box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 40);
+      g_object_set (box,
+                    "margin", 10,
+                    "margin-start", 30,
+                    NULL);
+
+      label = gtk_label_new ("Vendor");
+      gtk_widget_set_halign (label, GTK_ALIGN_START);
+      gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
+      gtk_label_set_xalign (GTK_LABEL (label), 0.0);
+      gtk_box_pack_start (GTK_BOX (box), label, FALSE, FALSE, 0);
+
+      label = gtk_label_new (gdk_device_get_vendor_id (device));
+      gtk_label_set_selectable (GTK_LABEL (label), TRUE);
+      gtk_widget_set_halign (label, GTK_ALIGN_END);
+      gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
+      gtk_label_set_xalign (GTK_LABEL (label), 0.0);
+      gtk_box_pack_start (GTK_BOX (box), label, TRUE, TRUE, 0);
+
+      row = gtk_list_box_row_new ();
+      gtk_container_add (GTK_CONTAINER (row), box);
+      gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
+      gtk_widget_show_all (row);
+
+      gtk_list_box_insert (GTK_LIST_BOX (gen->priv->device_box), row, -1);
+    }
+
+  if (gdk_device_get_product_id (device))
+    {
+      box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 40);
+      g_object_set (box,
+                    "margin", 10,
+                    "margin-start", 30,
+                    NULL);
+
+      label = gtk_label_new ("Product");
+      gtk_widget_set_halign (label, GTK_ALIGN_START);
+      gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
+      gtk_label_set_xalign (GTK_LABEL (label), 0.0);
+      gtk_box_pack_start (GTK_BOX (box), label, FALSE, FALSE, 0);
+
+      label = gtk_label_new (gdk_device_get_product_id (device));
+      gtk_label_set_selectable (GTK_LABEL (label), TRUE);
+      gtk_widget_set_halign (label, GTK_ALIGN_END);
+      gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
+      gtk_label_set_xalign (GTK_LABEL (label), 0.0);
+      gtk_box_pack_start (GTK_BOX (box), label, TRUE, TRUE, 0);
+
+      row = gtk_list_box_row_new ();
+      gtk_container_add (GTK_CONTAINER (row), box);
+      gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
+      gtk_widget_show_all (row);
+
+      gtk_list_box_insert (GTK_LIST_BOX (gen->priv->device_box), row, -1);
+    }
+
+  str = g_string_new ("");
+
+  if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD &&
+      gdk_device_get_n_axes (device) > 0)
+    {
+      for (i = 0; i < gdk_device_get_n_axes (device); i++)
+        {
+          switch (gdk_device_get_axis_use (device, i))
+            {
+            case GDK_AXIS_X:
+              if (str->len > 0)
+                g_string_append (str, ", ");
+              g_string_append (str, "X");
+              break;
+            case GDK_AXIS_Y:
+              if (str->len > 0)
+                g_string_append (str, ", ");
+              g_string_append (str, "Y");
+              break;
+            case GDK_AXIS_PRESSURE:
+              if (str->len > 0)
+                g_string_append (str, ", ");
+              g_string_append (str, "Pressure");
+              break;
+            case GDK_AXIS_XTILT:
+              if (str->len > 0)
+                g_string_append (str, ", ");
+              g_string_append (str, "X Tilt");
+              break;
+            case GDK_AXIS_YTILT:
+              if (str->len > 0)
+                g_string_append (str, ", ");
+              g_string_append (str, "Y Tilt");
+              break;
+            case GDK_AXIS_WHEEL:
+              if (str->len > 0)
+                g_string_append (str, ", ");
+              g_string_append (str, "Wheel");
+              break;
+            default:
+              break;
+            }
+        }
+    }
+
+  if (str->len > 0)
+    {
+      box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 40);
+      g_object_set (box,
+                    "margin", 10,
+                    "margin-start", 30,
+                    NULL);
+
+      label = gtk_label_new ("Axes");
+      gtk_widget_set_halign (label, GTK_ALIGN_START);
+      gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
+      gtk_label_set_xalign (GTK_LABEL (label), 0.0);
+      gtk_box_pack_start (GTK_BOX (box), label, FALSE, FALSE, 0);
+
+      label = gtk_label_new (str->str);
+      gtk_label_set_selectable (GTK_LABEL (label), TRUE);
+      gtk_widget_set_halign (label, GTK_ALIGN_END);
+      gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
+      gtk_label_set_xalign (GTK_LABEL (label), 0.0);
+      gtk_box_pack_start (GTK_BOX (box), label, TRUE, TRUE, 0);
+
+      row = gtk_list_box_row_new ();
+      gtk_container_add (GTK_CONTAINER (row), box);
+      gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
+      gtk_widget_show_all (row);
+
+      gtk_list_box_insert (GTK_LIST_BOX (gen->priv->device_box), row, -1);
+    }
+
+  g_string_free (str, TRUE);
 }
 
 static void
