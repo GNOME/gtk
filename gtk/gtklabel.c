@@ -86,7 +86,8 @@
  *
  * GtkLabel has a single CSS node with the name label. A wide variety
  * of style classes may be applied to labels, such as .title, .subtitle,
- * .dim-label, etc.
+ * .dim-label, etc. In the #GtkShortcutsWindow, labels are used wth the
+ * .keycap style class.
  *
  * If the label has a selection, it gets a subnode with name selection.
  *

@@ -81,8 +81,7 @@
  *
  * GtkFrame has a main CSS node with name frame and a subnode with
  * name border. The border node is used to render the visible border.
- * The style class .flat can appear with the main node. In the
- * #GtkShortcutsWindow, frames are used with the .keycap style class.
+ * The style class .flat can appear with the main node.
  */
 
 
