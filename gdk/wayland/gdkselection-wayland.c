@@ -18,6 +18,7 @@
 #include "config.h"
 
 #include <fcntl.h>
+#include <unistd.h>
 
 #include <gio/gunixinputstream.h>
 #include <gio/gunixoutputstream.h>
@@ -224,25 +225,35 @@ selection_buffer_remove_requestor (SelectionBuffer *buffer,
   return TRUE;
 }
 
+static inline glong
+get_buffer_size (void)
+{
+  return sysconf (_SC_PAGESIZE);
+}
+
 static void
 selection_buffer_read_cb (GObject      *object,
                           GAsyncResult *result,
                           gpointer      user_data)
 {
   SelectionBuffer *buffer = user_data;
+  gboolean finished = TRUE;
   GError *error = NULL;
   GBytes *bytes;
 
   bytes = g_input_stream_read_bytes_finish (buffer->stream, result, &error);
 
-  if (bytes && g_bytes_get_size (bytes) > 0)
+  if (bytes)
     {
+      finished = g_bytes_get_size (bytes) < get_buffer_size ();
       selection_buffer_append_data (buffer,
                                     g_bytes_get_data (bytes, NULL),
                                     g_bytes_get_size (bytes));
-      selection_buffer_read (buffer);
       g_bytes_unref (bytes);
     }
+
+  if (!finished)
+    selection_buffer_read (buffer);
   else
     {
       if (error)
@@ -256,9 +267,6 @@ selection_buffer_read_cb (GObject      *object,
       g_input_stream_close (buffer->stream, NULL, NULL);
       g_clear_object (&buffer->stream);
       g_clear_object (&buffer->cancellable);
-
-      if (bytes)
-        g_bytes_unref (bytes);
     }
 
   selection_buffer_unref (buffer);
@@ -268,7 +276,8 @@ static void
 selection_buffer_read (SelectionBuffer *buffer)
 {
   selection_buffer_ref (buffer);
-  g_input_stream_read_bytes_async (buffer->stream, 1000, G_PRIORITY_DEFAULT,
+  g_input_stream_read_bytes_async (buffer->stream, get_buffer_size(),
+                                   G_PRIORITY_DEFAULT,
                                    buffer->cancellable, selection_buffer_read_cb,
                                    buffer);
 }
