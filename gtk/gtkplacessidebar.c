@@ -132,6 +132,7 @@ struct _GtkPlacesSidebar {
   gchar *rename_uri;
 
   gulong trash_monitor_changed_id;
+  GtkWidget *trash_row;
 
   /* DND */
   GList     *drag_list; /* list of GFile */
@@ -879,6 +880,14 @@ is_external_volume (GVolume *volume)
 }
 
 static void
+update_trash_icon (GtkPlacesSidebar *sidebar)
+{
+  if (sidebar->trash_row)
+    gtk_sidebar_row_set_icon (GTK_SIDEBAR_ROW (sidebar->trash_row),
+                              _gtk_trash_monitor_get_icon (sidebar->trash_monitor));
+}
+
+static void
 update_places (GtkPlacesSidebar *sidebar)
 {
   GList *mounts, *l, *ll;
@@ -980,11 +989,11 @@ update_places (GtkPlacesSidebar *sidebar)
     {
       mount_uri = "trash:///"; /* No need to strdup */
       icon = _gtk_trash_monitor_get_icon (sidebar->trash_monitor);
-      add_place (sidebar, PLACES_BUILT_IN,
-                 SECTION_COMPUTER,
-                 _("Trash"), icon, mount_uri,
-                 NULL, NULL, NULL, 0,
-                 _("Open the trash"));
+      sidebar->trash_row = add_place (sidebar, PLACES_BUILT_IN,
+                                      SECTION_COMPUTER,
+                                      _("Trash"), icon, mount_uri,
+                                      NULL, NULL, NULL, 0,
+                                      _("Open the trash"));
       g_object_unref (icon);
     }
 
@@ -3773,7 +3782,7 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 
   sidebar->trash_monitor = _gtk_trash_monitor_get ();
   sidebar->trash_monitor_changed_id = g_signal_connect_swapped (sidebar->trash_monitor, "trash-state-changed",
-                                                                G_CALLBACK (update_places), sidebar);
+                                                                G_CALLBACK (update_trash_icon), sidebar);
 
   gtk_widget_set_size_request (GTK_WIDGET (sidebar), 140, 280);
 

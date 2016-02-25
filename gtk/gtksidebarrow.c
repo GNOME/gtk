@@ -156,11 +156,7 @@ gtk_sidebar_row_set_property (GObject      *object,
       break;
 
     case PROP_ICON:
-      g_set_object (&self->icon, g_value_get_object (value));
-      if (self->icon != NULL)
-        gtk_image_set_from_gicon (GTK_IMAGE (self->icon_widget), self->icon, GTK_ICON_SIZE_MENU);
-      else
-        gtk_image_clear (GTK_IMAGE (self->icon_widget));
+      gtk_sidebar_row_set_icon (self, g_value_get_object (value));
       break;
 
     case PROP_LABEL:
@@ -239,7 +235,7 @@ gtk_sidebar_row_set_property (GObject      *object,
                                  (GtkCallback) gtk_widget_destroy,
                                  NULL);
 
-	  context = gtk_widget_get_style_context (GTK_WIDGET (self));
+          context = gtk_widget_get_style_context (GTK_WIDGET (self));
           gtk_style_context_add_class (context, "sidebar-placeholder-row");
         }
       break;
@@ -281,6 +277,25 @@ gtk_sidebar_row_hide (GtkSidebarRow *self,
   gtk_revealer_set_reveal_child (GTK_REVEALER (self->revealer), FALSE);
 
   gtk_revealer_set_transition_duration (GTK_REVEALER (self->revealer), transition_duration);
+}
+
+void
+gtk_sidebar_row_set_icon (GtkSidebarRow *self,
+                          GIcon         *icon)
+{
+  g_return_if_fail (GTK_IS_SIDEBAR_ROW (self));
+
+  if (self->icon != icon)
+    {
+      g_set_object (&self->icon, icon);
+      if (self->icon != NULL)
+        gtk_image_set_from_gicon (GTK_IMAGE (self->icon_widget), self->icon,
+                                  GTK_ICON_SIZE_MENU);
+      else
+        gtk_image_clear (GTK_IMAGE (self->icon_widget));
+
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ICON]);
+    }
 }
 
 static void
