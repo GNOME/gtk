@@ -1180,7 +1180,6 @@ server_mount_ready_cb (GObject      *source_file,
   gtk_button_set_label (GTK_BUTTON (priv->connect_button), _("Con_nect"));
   gtk_widget_set_sensitive (priv->address_entry, TRUE);
   priv->connecting_to_server = FALSE;
-  update_loading (view);
 
   if (should_show)
     {
@@ -1194,25 +1193,9 @@ server_mount_ready_cb (GObject      *source_file,
       gtk_entry_set_text (GTK_ENTRY (priv->address_entry), "");
 
       if (priv->should_open_location)
-        {
-          GMount *mount_point;
-          GError *error;
-
-          error = NULL;
-          mount_point = g_file_find_enclosing_mount (location, NULL, &error);
-
-          if (error)
-            {
-              emit_show_error_message (view, _("Unable to access location"), error->message);
-              g_clear_error (&error);
-              goto out;
-            }
-
-          emit_open_location (view, location, priv->open_flags);
-        }
+        emit_open_location (view, location, priv->open_flags);
     }
 
-out:
   update_places (view);
 }
 
