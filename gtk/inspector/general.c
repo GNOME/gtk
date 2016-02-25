@@ -380,7 +380,7 @@ add_device (GtkInspectorGeneral *gen,
   char *text;
   GString *str;
   int i;
-  uint n_touches;
+  guint n_touches;
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 40);
   g_object_set (box,
