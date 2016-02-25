@@ -2991,8 +2991,8 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
       gtk_widget_get_preferred_width (GTK_WIDGET (child->widget), &size, NULL);
       if (size > child_rect.width)
         {
-          child_rect.x -= size / 2;
-          child_rect.width += size;
+          child_rect.x -= (size - child_rect.width) / 2;
+          child_rect.width = size;
         }
 
       gtk_widget_get_preferred_height_for_width (GTK_WIDGET (child->widget),
@@ -3000,8 +3000,8 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
                                                  &size, NULL);
       if (size > child_rect.height)
         {
-          child_rect.y -= size / 2;
-          child_rect.height += size;
+          child_rect.y -= (size - child_rect.height) / 2;
+          child_rect.height = size;
         }
 
       /* push the rect back in the visible area if needed, preferring the top left corner */
