@@ -284,7 +284,11 @@ gtk_css_gadget_class_init (GtkCssGadgetClass *klass)
 static void
 gtk_css_gadget_init (GtkCssGadget *gadget)
 {
+  GtkCssGadgetPrivate *priv = gtk_css_gadget_get_instance_private (gadget);
 
+  priv->allocated_size.width = -1;
+  priv->allocated_size.height = -1;
+  priv->allocated_baseline = -1;
 }
 
 /**
@@ -728,6 +732,16 @@ gtk_css_gadget_draw (GtkCssGadget *gadget,
     }
   width = priv->allocated_size.width;
   height = priv->allocated_size.height;
+
+  if (width < 0 || height < 0)
+    {
+      g_warning ("Drawing a gadget with negative dimensions. "
+                 "Did you forget to allocate a size?");
+      x = 0;
+      y = 0;
+      width = gtk_widget_get_allocated_width (priv->owner);
+      height = gtk_widget_get_allocated_height (priv->owner);
+    }
 
   style = gtk_css_gadget_get_style (gadget);
   get_box_margin (style, &margin);
