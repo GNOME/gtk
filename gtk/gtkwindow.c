@@ -9902,18 +9902,24 @@ gtk_window_draw (GtkWidget *widget,
 
           if (priv->use_client_shadow)
             {
+              GtkBorder padding, border;
+
+              gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
+              gtk_style_context_get_border (context, gtk_style_context_get_state (context), &border);
+              sum_borders (&border, &padding);
+
               gtk_render_background (context, cr,
-                                     window_border.left, window_border.top,
+                                     window_border.left - border.left, window_border.top - border.top,
                                      allocation.width -
-                                     (window_border.left + window_border.right),
+                                     (window_border.left + window_border.right - border.left - border.right),
                                      allocation.height -
-                                     (window_border.top + window_border.bottom));
+                                     (window_border.top + window_border.bottom - border.top - border.bottom));
               gtk_render_frame (context, cr,
-                                window_border.left, window_border.top,
+                                window_border.left - border.left, window_border.top - border.top,
                                 allocation.width -
-                                (window_border.left + window_border.right),
+                                (window_border.left + window_border.right - border.left - border.right),
                                 allocation.height -
-                                (window_border.top + window_border.bottom));
+                                (window_border.top + window_border.bottom - border.top - border.bottom));
             }
           else
             {
