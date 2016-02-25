@@ -59,6 +59,7 @@ struct _GtkInspectorGeneralPrivate
   GtkWidget *env_box;
   GtkWidget *x_box;
   GtkWidget *gl_box;
+  GtkWidget *device_box;
   GtkWidget *gtk_version;
   GtkWidget *gdk_backend;
   GtkWidget *gl_version;
@@ -343,6 +344,164 @@ init_display (GtkInspectorGeneral *gen)
 }
 
 static void
+add_device (GtkInspectorGeneral *gen,
+            GdkDevice           *device)
+{
+  GtkWidget *box;
+  GtkWidget *label;
+  GtkWidget *row;
+  char *text;
+  GString *str;
+
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 40);
+  g_object_set (box,
+                "margin", 10,
+                "margin-start", 20,
+                NULL);
+
+  text = g_strdup_printf ("%s", gdk_device_get_name (device));
+  label = gtk_label_new (text);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
+  gtk_label_set_xalign (GTK_LABEL (label), 0.0);
+  gtk_box_pack_start (GTK_BOX (box), label, FALSE, FALSE, 0);
+  g_free (text);
+
+  str = g_string_new ("");
+  switch (gdk_device_get_source (device))
+    {
+    case GDK_SOURCE_MOUSE:
+      g_string_append (str, "Mouse");
+      break;
+    case GDK_SOURCE_PEN:
+      g_string_append (str, "Pen");
+      break;
+    case GDK_SOURCE_ERASER:
+      g_string_append (str, "Eraser");
+      break;
+    case GDK_SOURCE_CURSOR:
+      g_string_append (str, "Cursor");
+      break;
+    case GDK_SOURCE_KEYBOARD:
+      g_string_append (str, "Keyboard");
+      break;
+    case GDK_SOURCE_TOUCHSCREEN:
+      g_string_append (str, "Touchscreen");
+      break;
+    case GDK_SOURCE_TOUCHPAD:
+      g_string_append (str, "Touchpad");
+      break;
+    default:
+      g_string_append (str, "Unknown");
+      break;
+    }
+
+  if (gdk_device_get_mode (device) == GDK_MODE_DISABLED)
+    g_string_append (str, ", disabled");
+
+  label = gtk_label_new (str->str);
+  gtk_label_set_selectable (GTK_LABEL (label), TRUE);
+  gtk_widget_set_halign (label, GTK_ALIGN_END);
+  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
+  gtk_label_set_xalign (GTK_LABEL (label), 0.0);
+  gtk_box_pack_start (GTK_BOX (box), label, TRUE, TRUE, 0);
+  g_string_free (str, TRUE);
+
+  row = gtk_list_box_row_new ();
+  gtk_container_add (GTK_CONTAINER (row), box);
+  gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
+  gtk_widget_show_all (row);
+
+  gtk_list_box_insert (GTK_LIST_BOX (gen->priv->device_box), row, -1);
+}
+
+static void
+add_seat (GtkInspectorGeneral *gen,
+          GdkSeat             *seat,
+          int                  num)
+{
+  GtkWidget *box;
+  GtkWidget *label;
+  GtkWidget *row;
+  GdkSeatCapabilities capabilities;
+  struct {
+    GdkSeatCapabilities cap;
+    const char *name;
+  } caps[] = {
+    { GDK_SEAT_CAPABILITY_POINTER,       "Pointer" },
+    { GDK_SEAT_CAPABILITY_TOUCH,         "Touch" },
+    { GDK_SEAT_CAPABILITY_TABLET_STYLUS, "Tablet" },
+    { GDK_SEAT_CAPABILITY_KEYBOARD,      "Keyboard" },
+    { 0, NULL }
+  };
+  GString *str;
+  char *text;
+  int i;
+  GList *list, *l;
+
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 40);
+  g_object_set (box, "margin", 10, NULL);
+
+  text = g_strdup_printf ("Seat %d", num);
+  label = gtk_label_new (text);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
+  gtk_label_set_xalign (GTK_LABEL (label), 0.0);
+  gtk_box_pack_start (GTK_BOX (box), label, FALSE, FALSE, 0);
+  g_free (text);
+
+  str = g_string_new ("");
+  capabilities = gdk_seat_get_capabilities (seat);
+  for (i = 0; caps[i].cap != 0; i++)
+    {
+      if (capabilities & caps[i].cap)
+        {
+          if (str->len > 0)
+            g_string_append (str, ", ");
+          g_string_append (str, caps[i].name);
+        }
+    }
+
+  label = gtk_label_new (str->str);
+  gtk_label_set_selectable (GTK_LABEL (label), TRUE);
+  gtk_widget_set_halign (label, GTK_ALIGN_END);
+  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
+  gtk_label_set_xalign (GTK_LABEL (label), 0.0);
+  gtk_box_pack_start (GTK_BOX (box), label, TRUE, TRUE, 0);
+  g_string_free (str, TRUE);
+
+  row = gtk_list_box_row_new ();
+  gtk_container_add (GTK_CONTAINER (row), box);
+  gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
+  gtk_widget_show_all (row);
+
+  gtk_list_box_insert (GTK_LIST_BOX (gen->priv->device_box), row, -1);
+
+  list = gdk_seat_get_slaves (seat, GDK_SEAT_CAPABILITY_ALL);
+
+  for (l = list; l; l = l->next)
+    add_device (gen, GDK_DEVICE (l->data));
+
+  g_list_free (list);
+}
+
+static void
+init_device (GtkInspectorGeneral *gen)
+{
+  GdkDisplay *display;
+  GList *list, *l;
+  int i;
+
+  display = gdk_display_get_default ();
+  list = gdk_display_list_seats (display);
+
+  for (l = list, i = 0; l; l = l->next, i++)
+    add_seat (gen, GDK_SEAT (l->data), i);
+
+  g_list_free (list);
+}
+
+static void
 gtk_inspector_general_init (GtkInspectorGeneral *gen)
 {
   gen->priv = gtk_inspector_general_get_instance_private (gen);
@@ -350,6 +509,7 @@ gtk_inspector_general_init (GtkInspectorGeneral *gen)
   init_version (gen);
   init_env (gen);
   init_display (gen);
+  init_device (gen);
   init_gl (gen);
 }
 
@@ -364,6 +524,10 @@ keynav_failed (GtkWidget *widget, GtkDirectionType direction, GtkInspectorGenera
   else if (direction == GTK_DIR_DOWN && widget == gen->priv->env_box)
     next = gen->priv->x_box;
   else if (direction == GTK_DIR_DOWN && widget == gen->priv->x_box)
+    next = gen->priv->gl_box;
+  else if (direction == GTK_DIR_DOWN && widget == gen->priv->gl_box)
+    next = gen->priv->device_box;
+  else if (direction == GTK_DIR_UP && widget == gen->priv->device_box)
     next = gen->priv->gl_box;
   else if (direction == GTK_DIR_UP && widget == gen->priv->gl_box)
     next = gen->priv->x_box;
@@ -414,6 +578,7 @@ gtk_inspector_general_constructed (GObject *object)
    g_signal_connect (gen->priv->env_box, "keynav-failed", G_CALLBACK (keynav_failed), gen);
    g_signal_connect (gen->priv->x_box, "keynav-failed", G_CALLBACK (keynav_failed), gen);
    g_signal_connect (gen->priv->gl_box, "keynav-failed", G_CALLBACK (keynav_failed), gen);
+   g_signal_connect (gen->priv->device_box, "keynav-failed", G_CALLBACK (keynav_failed), gen);
 }
 
 static void
@@ -444,6 +609,7 @@ gtk_inspector_general_class_init (GtkInspectorGeneralClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, x_display);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, x_composited);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, x_rgba);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, device_box);
 }
 
 // vim: set et sw=2 ts=2:

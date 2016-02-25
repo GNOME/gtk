@@ -547,6 +547,20 @@
             </child>
           </object>
         </child>
+
+        <child>
+          <object class="GtkFrame" id="device_frame">
+            <property name="visible">True</property>
+            <property name="halign">center</property>
+            <child>
+              <object class="GtkListBox" id="device_box">
+                <property name="visible">True</property>
+                <property name="selection-mode">none</property>
+              </object>
+            </child>
+          </object>
+        </child>
+
       </object>
     </child>
   </template>
@@ -576,6 +590,7 @@
       <widget name="gl_frame"/>
       <widget name="env_frame"/>
       <widget name="x_frame"/>
+      <widget name="device_frame"/>
     </widgets>
   </object>
 </interface>
