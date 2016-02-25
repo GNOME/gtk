@@ -6111,7 +6111,7 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
 #ifdef G_ENABLE_DEBUG
   if (GTK_DEBUG_CHECK (GEOMETRY) && gtk_widget_get_resize_needed (widget))
     {
-      g_warning ("%s %p or a child called gtk_widget_queue_resize() during size_allocte().",
+      g_warning ("%s %p or a child called gtk_widget_queue_resize() during size_allocate().",
                  gtk_widget_get_name (widget), widget);
     }
 #endif
