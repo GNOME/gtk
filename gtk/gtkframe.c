@@ -867,7 +867,7 @@ gtk_frame_allocate_border (GtkCssGadget        *gadget,
 
   if (priv->label_widget &&
       gtk_widget_get_visible (priv->label_widget))
-    height_extra = priv->label_allocation.height * priv->label_yalign;
+    height_extra = priv->label_allocation.height * (1 - priv->label_yalign);
   else
     height_extra = 0;
 
