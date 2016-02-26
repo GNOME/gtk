@@ -6758,7 +6758,7 @@ update_border_windows (GtkWindow *window)
   cairo_region_t *region;
   cairo_rectangle_int_t rect;
   gint width, height;
-  GtkBorder border;
+  GtkBorder border, tmp;
   GtkBorder window_border;
   GtkStyleContext *context;
 
@@ -6769,6 +6769,10 @@ update_border_windows (GtkWindow *window)
 
   gtk_style_context_save_to_node (context, priv->decoration_node);
   gtk_style_context_get_margin (context, gtk_style_context_get_state (context), &border);
+  gtk_style_context_get_border (context, gtk_style_context_get_state (context), &tmp);
+  sum_borders (&border, &tmp);
+  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &tmp);
+  sum_borders (&border, &tmp);
   gtk_widget_style_get (widget,
                         "decoration-resize-handle", &handle,
                         NULL);
