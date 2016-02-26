@@ -994,7 +994,8 @@ update_places (GtkPlacesSidebar *sidebar)
                                       _("Trash"), icon, mount_uri,
                                       NULL, NULL, NULL, 0,
                                       _("Open the trash"));
-      g_object_add_weak_pointer (G_OBJECT (sidebar->trash_row), &sidebar->trash_row);
+      g_object_add_weak_pointer (G_OBJECT (sidebar->trash_row),
+                                 (gpointer *) &sidebar->trash_row);
       g_object_unref (icon);
     }
 
@@ -4044,7 +4045,8 @@ gtk_places_sidebar_dispose (GObject *object)
 
   if (sidebar->trash_row)
     {
-      g_object_remove_weak_pointer (G_OBJECT (sidebar->trash_row), &sidebar->trash_row);
+      g_object_remove_weak_pointer (G_OBJECT (sidebar->trash_row),
+                                    (gpointer *) &sidebar->trash_row);
       sidebar->trash_row = NULL;
     }
 
