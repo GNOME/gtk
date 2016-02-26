@@ -370,6 +370,8 @@ init_display (GtkInspectorGeneral *gen)
   populate_display (screen, gen);
 }
 
+static void populate_seats (GtkInspectorGeneral *gen);
+
 static void
 add_device (GtkInspectorGeneral *gen,
             GdkDevice           *device)
@@ -573,6 +575,13 @@ add_seat (GtkInspectorGeneral *gen,
   int i;
   GList *list, *l;
 
+  if (!g_object_get_data (G_OBJECT (seat), "inspector-connected"))
+    {
+      g_object_set_data (G_OBJECT (seat), "inspector-connected", GINT_TO_POINTER (1));
+      g_signal_connect_swapped (seat, "device-added", G_CALLBACK (populate_seats), gen);
+      g_signal_connect_swapped (seat, "device-removed", G_CALLBACK (populate_seats), gen);
+    }
+
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 40);
   g_object_set (box, "margin", 10, NULL);
 
@@ -620,19 +629,34 @@ add_seat (GtkInspectorGeneral *gen,
 }
 
 static void
-init_device (GtkInspectorGeneral *gen)
+populate_seats (GtkInspectorGeneral *gen)
 {
-  GdkDisplay *display;
+  GdkDisplay *display = gdk_display_get_default ();
   GList *list, *l;
   int i;
 
-  display = gdk_display_get_default ();
+  list = gtk_container_get_children (GTK_CONTAINER (gen->priv->device_box));
+  for (l = list; l; l = l->next)
+    gtk_widget_destroy (GTK_WIDGET (l->data));
+  g_list_free (list);
+
   list = gdk_display_list_seats (display);
 
   for (l = list, i = 0; l; l = l->next, i++)
     add_seat (gen, GDK_SEAT (l->data), i);
 
   g_list_free (list);
+}
+
+static void
+init_device (GtkInspectorGeneral *gen)
+{
+  GdkDisplay *display = gdk_display_get_default ();
+
+  g_signal_connect_swapped (display, "seat-added", G_CALLBACK (populate_seats), gen);
+  g_signal_connect_swapped (display, "seat-removed", G_CALLBACK (populate_seats), gen);
+
+  populate_seats (gen);
 }
 
 static void
@@ -643,8 +667,8 @@ gtk_inspector_general_init (GtkInspectorGeneral *gen)
   init_version (gen);
   init_env (gen);
   init_display (gen);
-  init_device (gen);
   init_gl (gen);
+  init_device (gen);
 }
 
 static gboolean
