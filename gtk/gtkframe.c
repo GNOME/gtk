@@ -938,13 +938,23 @@ gtk_frame_measure (GtkCssGadget   *gadget,
   frame = GTK_FRAME (widget);
   priv = frame->priv;
 
+  gtk_css_gadget_get_preferred_size (priv->border_gadget,
+                                     orientation,
+                                     for_size,
+                                     &child_min,
+                                     &child_nat,
+                                     NULL, NULL);
+
+  *minimum = child_min;
+  *natural = child_nat;
+
   if (priv->label_widget && gtk_widget_get_visible (priv->label_widget))
     {
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
         {
           gtk_widget_get_preferred_width (priv->label_widget, &child_min, &child_nat);
-          *minimum = child_min;
-          *natural = child_nat;
+          *minimum = MAX (child_min, *minimum);
+          *natural = MAX (child_nat, *natural);
         }
       else
         {
@@ -954,25 +964,10 @@ gtk_frame_measure (GtkCssGadget   *gadget,
           else
             gtk_widget_get_preferred_height (priv->label_widget, &child_min, &child_nat);
 
-          *minimum = child_min;
-          *natural = child_nat;
+          *minimum += child_min;
+          *natural += child_nat;
         }
     }
-  else
-    {
-      *minimum = 0;
-      *natural = 0;
-    }
-
-  gtk_css_gadget_get_preferred_size (priv->border_gadget,
-                                     orientation,
-                                     for_size,
-                                     &child_min,
-                                     &child_nat,
-                                     NULL, NULL);
-
-  *minimum += child_min;
-  *natural += child_nat;
 }
 
 static void
