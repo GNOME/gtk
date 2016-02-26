@@ -533,6 +533,8 @@ gchar *_gdk_win32_display_manager_get_atom_name (GdkDisplayManager *manager,
 void _gdk_win32_append_event (GdkEvent *event);
 void _gdk_win32_emit_configure_event (GdkWindow *window);
 
+guint32 _gdk_win32_keymap_get_decimal_mark (void);
+
 /* Initialization */
 void _gdk_win32_windowing_init (void);
 void _gdk_screen_init_root_window (GdkWin32Screen *screen_win32);
