@@ -111,7 +111,7 @@ gdk_seat_class_init (GdkSeatClass *klass)
    * @seat: the object on which the signal is emitted
    * @device: the newly added #GdkDevice.
    *
-   * The ::device-added signal is emitted either when a new input
+   * The ::device-added signal is emitted when a new input
    * device is related to this seat.
    *
    * Since: 3.20
@@ -131,7 +131,7 @@ gdk_seat_class_init (GdkSeatClass *klass)
    * @seat: the object on which the signal is emitted
    * @device: the just removed #GdkDevice.
    *
-   * The ::device-removed signal is emitted either when an
+   * The ::device-removed signal is emitted when an
    * input device is removed (e.g. unplugged).
    *
    * Since: 3.20
