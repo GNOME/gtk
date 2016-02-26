@@ -457,24 +457,10 @@ button {
     }
 
     &.text-button.image-button {
-      // those buttons needs uneven horizontal padding, we want the icon side
-      // to have the image-button padding, while the text side the text-button
-      // one, so we're adding the missing padding to the label depending on
-      // its position inside the button
-      padding-left: 0;
-      padding-right: 0;
+      padding-left: 8px;
+      padding-right: 8px;
 
-      label:first-child {
-        padding-left: 16px;
-        padding-right: 0;
-      }
-
-      label:last-child {
-        padding-left: 0;
-        padding-right: 16px;
-      }
-
-      image {
+      label {
         padding-left: 8px;
         padding-right: 8px;
       }
