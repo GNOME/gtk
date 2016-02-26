@@ -500,6 +500,8 @@ void _gdk_win32_emit_configure_event (GdkWindow *window);
 GdkWindow *_gdk_win32_find_window_for_mouse_event (GdkWindow* reported_window,
 						   MSG*       msg);
 
+guint32 _gdk_win32_keymap_get_decimal_mark (void);
+
 /* Initialization */
 void _gdk_windowing_window_init (GdkScreen *screen);
 void _gdk_root_window_size_init (void);
