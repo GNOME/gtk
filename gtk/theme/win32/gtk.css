@@ -394,6 +394,9 @@ decoration:disabled {
     margin-right: -gtk-win32-size(button, cxedge);
     min-width: calc(-gtk-win32-size(button, cxsize) - 2 * -gtk-win32-size(button, cxedge));
     min-height: calc(-gtk-win32-size(button, cysize) - 2 * -gtk-win32-size(button, cyedge));
+    background-repeat: no-repeat;
+    background-size: 100% calc(-gtk-win32-size(button, cysize) - 2 * -gtk-win32-size(button, cyedge));
+    background-position: 50% calc(100% - -gtk-win32-size(window, cycaption) + -gtk-win32-size(window, cysize) - -gtk-win32-size(window, cyedge));
 }
 
 /* XXX: headerbar insists on 6px spacing between buttons. Windows doesn't
