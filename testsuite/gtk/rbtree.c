@@ -505,6 +505,8 @@ test_reorder (void)
   g_assert (i == n);
 
   _gtk_rbtree_free (tree);
+
+  g_free (reorder);
 }
 
 int
