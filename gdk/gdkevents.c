@@ -2145,12 +2145,32 @@ _gdk_event_button_generate (GdkDisplay *display,
     }
 }
 
+static GList *
+gdk_get_pending_window_state_event_link (GdkWindow *window)
+{
+  GdkDisplay *display = gdk_window_get_display (window);
+  GList *tmp_list;
+
+  for (tmp_list = display->queued_events; tmp_list; tmp_list = tmp_list->next)
+    {
+      GdkEventPrivate *event = tmp_list->data;
+
+      if (event->event.type == GDK_WINDOW_STATE &&
+          event->event.window_state.window == window)
+        return tmp_list;
+    }
+
+  return NULL;
+}
+
 void
 _gdk_set_window_state (GdkWindow      *window,
                        GdkWindowState  new_state)
 {
+  GdkDisplay *display = gdk_window_get_display (window);
   GdkEvent temp_event;
   GdkWindowState old;
+  GList *pending_event_link;
 
   g_return_if_fail (window != NULL);
 
@@ -2159,10 +2179,21 @@ _gdk_set_window_state (GdkWindow      *window,
   temp_event.window_state.send_event = FALSE;
   temp_event.window_state.new_window_state = new_state;
 
-  old = window->state;
-
-  if (temp_event.window_state.new_window_state == old)
+  if (temp_event.window_state.new_window_state == window->state)
     return; /* No actual work to do, nothing changed. */
+
+  pending_event_link = gdk_get_pending_window_state_event_link (window);
+  if (pending_event_link)
+    {
+      old = window->old_state;
+      _gdk_event_queue_remove_link (display, pending_event_link);
+      g_list_free_1 (pending_event_link);
+    }
+  else
+    {
+      old = window->state;
+      window->old_state = old;
+    }
 
   temp_event.window_state.changed_mask = new_state ^ old;
 
@@ -2185,7 +2216,7 @@ _gdk_set_window_state (GdkWindow      *window,
     {
     case GDK_WINDOW_TOPLEVEL:
     case GDK_WINDOW_TEMP: /* ? */
-      gdk_display_put_event (gdk_window_get_display (window), &temp_event);
+      gdk_display_put_event (display, &temp_event);
       break;
     case GDK_WINDOW_FOREIGN:
     case GDK_WINDOW_ROOT:
