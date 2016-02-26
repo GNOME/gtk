@@ -541,6 +541,15 @@ gtk_builder_get_parameters (GtkBuilder  *builder,
     }
 }
 
+static const gchar *
+object_get_name (GObject *object)
+{
+  if (GTK_IS_BUILDABLE (object))
+    return gtk_buildable_get_name (GTK_BUILDABLE (object));
+  else
+    return g_object_get_data (object, "gtk-builder-name");
+}
+
 static GObject *
 gtk_builder_get_internal_child (GtkBuilder   *builder,
                                 ObjectInfo   *info,
@@ -561,7 +570,7 @@ gtk_builder_get_internal_child (GtkBuilder   *builder,
       GTK_NOTE (BUILDER,
                 g_print ("Trying to get internal child %s from %s\n",
                          childname,
-                         gtk_buildable_get_name (GTK_BUILDABLE (info->object))));
+                         object_get_name (info->object)));
 
       if (GTK_IS_BUILDABLE (info->object))
           obj = gtk_buildable_get_internal_child (GTK_BUILDABLE (info->object),
@@ -850,8 +859,7 @@ _gtk_builder_add (GtkBuilder *builder,
 
   if (!child_info->parent)
     {
-      g_warning ("%s: Not adding, No parent",
-                 gtk_buildable_get_name (GTK_BUILDABLE (object)));
+      g_warning ("%s: Not adding, No parent", object_get_name (object));
       return;
     }
 
@@ -861,9 +869,7 @@ _gtk_builder_add (GtkBuilder *builder,
   g_assert (GTK_IS_BUILDABLE (parent));
 
   GTK_NOTE (BUILDER,
-            g_print ("adding %s to %s\n",
-                     gtk_buildable_get_name (GTK_BUILDABLE (object)),
-                     gtk_buildable_get_name (GTK_BUILDABLE (parent))));
+            g_print ("adding %s to %s\n", object_get_name (object), object_get_name (parent)));
 
   gtk_buildable_add_child (GTK_BUILDABLE (parent), builder, object,
                            child_info->type);
