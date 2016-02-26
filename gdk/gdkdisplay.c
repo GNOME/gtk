@@ -213,7 +213,7 @@ gdk_display_class_init (GdkDisplayClass *class)
   /**
    * GdkDisplay::seat-removed:
    * @display: the object on which the signal is emitted
-   * @seat: the seat that was just added
+   * @seat: the seat that was just removed
    *
    * The ::seat-removed signal is emitted whenever a seat is removed
    * by the windowing system.
