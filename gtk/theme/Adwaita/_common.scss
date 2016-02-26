@@ -1365,7 +1365,7 @@ headerbar {
     box-shadow: none;
   }
 
-  separator { background-color: $borders_color; }
+  > separator { background-color: $borders_color; }
 
   @extend %titlebar;
 }

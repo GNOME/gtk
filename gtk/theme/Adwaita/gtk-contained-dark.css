@@ -1766,7 +1766,7 @@ window.csd > .titlebar:not(headerbar) {
   border-style: none;
   border-color: transparent;
   box-shadow: none; }
-.titlebar:not(headerbar) separator {
+.titlebar:not(headerbar) > separator {
   background-color: #1c1f1f; }
 
 /************
