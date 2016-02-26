@@ -1988,6 +1988,9 @@ notebook {
         }
       }
     }
+
+    &.top tab { padding-bottom: 4px; }
+    &.bottom tab { padding-top: 4px; }
   }
 
   > stack:not(:only-child) { // the :not(:only-child) is for "hidden" notebooks
