@@ -2268,13 +2268,9 @@ gtk_stack_allocate (GtkCssGadget        *gadget,
           else if (valign == GTK_ALIGN_CENTER &&
                    child_allocation.height > allocation->height)
             child_allocation.y -= (nat - allocation->height) / 2;
+        }
 
-          gtk_widget_size_allocate (priv->visible_child->widget, &child_allocation);
-        }
-      else
-        {
-          gtk_widget_size_allocate (priv->visible_child->widget, &child_allocation);
-        }
+      gtk_widget_size_allocate (priv->visible_child->widget, &child_allocation);
     }
 
    if (gtk_widget_get_realized (widget))
