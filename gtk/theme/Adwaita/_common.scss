@@ -1341,7 +1341,9 @@ headerbar {
       padding: 0;
     }
   }
+}
 
+headerbar {
   // add vertical margins to headerbar entries, buttons and separators to avoid them spanning the whole height
   entry,
   spinbutton,
@@ -1376,6 +1378,8 @@ headerbar {
     border-color: transparent;
     box-shadow: none;
   }
+
+  separator { background-color: $borders_color; }
 
   @extend %titlebar;
 }

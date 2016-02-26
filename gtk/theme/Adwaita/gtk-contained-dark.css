@@ -1750,17 +1750,13 @@ headerbar {
       min-width: 26px;
       margin: 0;
       padding: 0; }
-  .titlebar:not(headerbar) entry, .titlebar:not(headerbar) spinbutton:not(.vertical),
-  .titlebar:not(headerbar) spinbutton,
-  .titlebar:not(headerbar) separator,
-  .titlebar:not(headerbar) button,
-  headerbar entry,
-  headerbar spinbutton:not(.vertical),
-  headerbar spinbutton,
-  headerbar separator,
-  headerbar button {
-    margin-top: 6px;
-    margin-bottom: 6px; }
+
+headerbar entry, headerbar spinbutton:not(.vertical),
+headerbar spinbutton,
+headerbar separator,
+headerbar button {
+  margin-top: 6px;
+  margin-bottom: 6px; }
 
 .titlebar, .titlebar:backdrop {
   border-top-left-radius: 7px;
@@ -1778,6 +1774,8 @@ window.csd > .titlebar:not(headerbar) {
   border-style: none;
   border-color: transparent;
   box-shadow: none; }
+.titlebar:not(headerbar) separator {
+  background-color: #1c1f1f; }
 
 /************
  * Pathbars *
