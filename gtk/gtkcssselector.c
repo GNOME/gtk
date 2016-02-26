@@ -842,7 +842,7 @@ match_pseudoclass_position (const GtkCssSelector *selector,
 static guint
 hash_pseudoclass_position (const GtkCssSelector *a)
 {
-  return (((a->position.type << POSITION_NUMBER_BITS) | a->position.a) << POSITION_NUMBER_BITS) | a->position.b;
+  return (guint)(((((gulong)a->position.type) << POSITION_NUMBER_BITS) | a->position.a) << POSITION_NUMBER_BITS) | a->position.b;
 }
 
 static int
