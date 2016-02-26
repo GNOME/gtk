@@ -1688,6 +1688,15 @@ typedef struct {
 } SubParserData;
 
 static void
+free_action_widget_info (gpointer data)
+{
+  ActionWidgetInfo *item = data;
+
+  g_free (item->widget_name);
+  g_free (item);
+}
+
+static void
 parser_start_element (GMarkupParseContext *context,
                       const gchar         *element_name,
                       const gchar        **names,
@@ -1894,12 +1903,9 @@ gtk_dialog_buildable_custom_finished (GtkBuildable *buildable,
 
       if (item->is_default)
         gtk_widget_grab_default (GTK_WIDGET (object));
-
-      g_free (item->widget_name);
-      g_free (item);
     }
 
-  g_slist_free (data->items);
+  g_slist_free_full (data->items, free_action_widget_info);
   g_string_free (data->string, TRUE);
   g_slice_free (SubParserData, data);
 
