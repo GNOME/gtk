@@ -152,12 +152,15 @@ struct _GdkWindowImplWayland
   int margin_right;
   int margin_top;
   int margin_bottom;
-  
+
   int initial_fullscreen_monitor;
 
   cairo_region_t *opaque_region;
   cairo_region_t *input_region;
   cairo_region_t *staged_updates_region;
+
+  int saved_width;
+  int saved_height;
 };
 
 struct _GdkWindowImplWaylandClass
@@ -184,6 +187,8 @@ _gdk_window_impl_wayland_init (GdkWindowImplWayland *impl)
 {
   impl->scale = 1;
   impl->initial_fullscreen_monitor = -1;
+  impl->saved_width = -1;
+  impl->saved_height = -1;
 }
 
 /* Keep a list of orphaned dialogs (i.e. without parent) */
@@ -208,6 +213,30 @@ drop_cairo_surfaces (GdkWindow *window)
    * try to reuse that buffer since it's no longer suitable
    */
   impl->committed_cairo_surface = NULL;
+}
+
+static void
+_gdk_wayland_window_save_size (GdkWindow *window)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  if (window->state & (GDK_WINDOW_STATE_FULLSCREEN | GDK_WINDOW_STATE_MAXIMIZED))
+    return;
+
+  impl->saved_width = window->width - impl->margin_left - impl->margin_right;
+  impl->saved_height = window->height - impl->margin_top - impl->margin_bottom;
+}
+
+static void
+_gdk_wayland_window_clear_saved_size (GdkWindow *window)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  if (window->state & (GDK_WINDOW_STATE_FULLSCREEN | GDK_WINDOW_STATE_MAXIMIZED))
+    return;
+
+  impl->saved_width = -1;
+  impl->saved_height = -1;
 }
 
 /*
@@ -1132,6 +1161,7 @@ xdg_surface_configure (void               *data,
   GdkWindow *window = GDK_WINDOW (data);
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   GdkWindowState new_state = 0;
+  gboolean maximized_or_fullscreen;
   uint32_t *p;
 
   wl_array_for_each (p, states)
@@ -1156,12 +1186,29 @@ xdg_surface_configure (void               *data,
         }
     }
 
+   maximized_or_fullscreen =
+       new_state & (GDK_WINDOW_STATE_MAXIMIZED | GDK_WINDOW_STATE_FULLSCREEN);
+
+    /* According to xdg_shell, an xdg_surface.configure with size 0x0
+     * should be interpreted as that it is up to the client to set a
+     * size.
+     *
+     * When transitioning from maximize or fullscreen state, this means
+     * the client should configure its size back to what it was before
+     * being maximize or fullscreen.
+     */
+   if (width == 0 && height == 0 && !maximized_or_fullscreen)
+    {
+      width = impl->saved_width;
+      height = impl->saved_height;
+    }
+
    if (width > 0 && height > 0)
     {
       GdkWindowHints geometry_mask = impl->geometry_mask;
 
       /* Ignore size increments for maximized/fullscreen windows */
-      if (new_state & (GDK_WINDOW_STATE_MAXIMIZED | GDK_WINDOW_STATE_FULLSCREEN))
+      if (maximized_or_fullscreen)
         geometry_mask &= ~GDK_HINT_RESIZE_INC;
 
       gdk_window_constrain_size (&impl->geometry_hints,
@@ -1170,6 +1217,9 @@ xdg_surface_configure (void               *data,
                                  height + impl->margin_top + impl->margin_bottom,
                                  &width,
                                  &height);
+
+      /* Save size for next time we get 0x0 */
+      _gdk_wayland_window_save_size (window);
 
       gdk_wayland_window_configure (window, width, height, impl->scale);
     }
@@ -1739,6 +1789,7 @@ gdk_wayland_window_hide_surface (GdkWindow *window)
         orphan_dialogs = g_list_remove (orphan_dialogs, window);
     }
 
+  _gdk_wayland_window_clear_saved_size (window);
   impl->pending_commit = FALSE;
   impl->mapped = FALSE;
 }
@@ -2293,6 +2344,7 @@ gdk_wayland_window_maximize (GdkWindow *window)
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
+  _gdk_wayland_window_save_size (window);
   if (impl->display_server.xdg_surface)
     xdg_surface_set_maximized (impl->display_server.xdg_surface);
   else
@@ -2324,6 +2376,7 @@ gdk_wayland_window_fullscreen_on_monitor (GdkWindow *window, gint monitor)
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
+  _gdk_wayland_window_save_size (window);
   if (impl->display_server.xdg_surface)
     xdg_surface_set_fullscreen (impl->display_server.xdg_surface, fullscreen_output);
   else {
@@ -2342,6 +2395,7 @@ gdk_wayland_window_fullscreen (GdkWindow *window)
 
   impl->initial_fullscreen_monitor = -1;
 
+  _gdk_wayland_window_save_size (window);
   if (impl->display_server.xdg_surface)
     xdg_surface_set_fullscreen (impl->display_server.xdg_surface, NULL);
   else
