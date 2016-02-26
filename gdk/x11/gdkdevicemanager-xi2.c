@@ -194,6 +194,7 @@ translate_valuator_class (GdkDisplay          *display,
     label = GDK_NONE;
 
   _gdk_device_add_axis (device, label, use, min, max, resolution);
+  GDK_NOTE (INPUT, g_message ("\n\taxis: %s %s", gdk_atom_name (label), use == GDK_AXIS_IGNORE ? "(ignored)" : "(used)"));
 }
 
 static void
