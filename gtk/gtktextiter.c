@@ -3073,9 +3073,12 @@ inside_sentence_func (const PangoLogAttr *attrs,
                       gint                len)
 {
   /* Find next sentence start or end */
-  while (offset >= min_offset &&
-         !(attrs[offset].is_sentence_start || attrs[offset].is_sentence_end))
-    --offset;
+  while (!(attrs[offset].is_sentence_start || attrs[offset].is_sentence_end))
+    {
+      --offset;
+      if (offset < min_offset)
+        return FALSE;
+    }
 
   return attrs[offset].is_sentence_start;
 }
