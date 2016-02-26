@@ -916,6 +916,15 @@ typedef struct
 } SubParserData;
 
 static void
+action_widget_info_free (gpointer data)
+{
+  ActionWidgetInfo *item = data;
+
+  g_free (item->name);
+  g_free (item);
+}
+
+static void
 parser_start_element (GMarkupParseContext  *context,
                       const gchar          *element_name,
                       const gchar         **names,
@@ -1096,12 +1105,9 @@ gtk_info_bar_buildable_custom_finished (GtkBuildable *buildable,
       if (ad->response_id == GTK_RESPONSE_HELP)
         gtk_button_box_set_child_secondary (GTK_BUTTON_BOX (info_bar->priv->action_area),
                                             GTK_WIDGET (object), TRUE);
-
-      g_free (item->name);
-      g_free (item);
     }
 
-  g_slist_free (data->items);
+  g_slist_free_full (data->items, action_widget_info_free);
   g_string_free (data->string, TRUE);
   g_slice_free (SubParserData, data);
 }
