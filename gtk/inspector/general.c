@@ -274,6 +274,43 @@ init_env (GtkInspectorGeneral *gen)
 }
 
 static void
+add_label_row (GtkListBox *list,
+               const char *name,
+               const char *value,
+               gint        indent)
+{
+  GtkWidget *box;
+  GtkWidget *label;
+  GtkWidget *row;
+
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 40);
+  g_object_set (box,
+                "margin", 10,
+                "margin-start", 10 + indent,
+                NULL);
+
+  label = gtk_label_new (name);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
+  gtk_label_set_xalign (GTK_LABEL (label), 0.0);
+  gtk_box_pack_start (GTK_BOX (box), label, FALSE, FALSE, 0);
+
+  label = gtk_label_new (value);
+  gtk_label_set_selectable (GTK_LABEL (label), TRUE);
+  gtk_widget_set_halign (label, GTK_ALIGN_END);
+  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
+  gtk_label_set_xalign (GTK_LABEL (label), 1.0);
+  gtk_box_pack_start (GTK_BOX (box), label, TRUE, TRUE, 0);
+
+  row = gtk_list_box_row_new ();
+  gtk_container_add (GTK_CONTAINER (row), box);
+  gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
+  gtk_widget_show_all (row);
+
+  gtk_list_box_insert (GTK_LIST_BOX (list), row, -1);
+}
+
+static void
 populate_display (GdkScreen *screen, GtkInspectorGeneral *gen)
 {
   gchar *name;
@@ -306,28 +343,17 @@ populate_display (GdkScreen *screen, GtkInspectorGeneral *gen)
 
   for (i = 0; i < gdk_screen_get_n_monitors (screen); i++)
     {
-      GtkWidget *row;
-      GtkWidget *box;
-      GtkWidget *label;
-      gchar *text;
+      gchar *name;
+      gchar *value;
       gchar *plug_name;
       GdkRectangle rect;
       gint w, h, wmm, hmm, scale;
 
-      box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 40);
-      g_object_set (box, "margin", 10, NULL);
-
       plug_name = gdk_screen_get_monitor_plug_name (screen, i);
       if (plug_name)
-        text = g_strdup_printf ("Monitor %s", plug_name);
+        name = g_strdup_printf ("Monitor %s", plug_name);
       else
-        text = g_strdup_printf ("Monitor %d", i);
-      label = gtk_label_new (text);
-      gtk_widget_set_halign (label, GTK_ALIGN_START);
-      gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
-      gtk_label_set_xalign (GTK_LABEL (label), 0.0);
-      gtk_box_pack_start (GTK_BOX (box), label, FALSE, FALSE, 0);
-      g_free (text);
+        name = g_strdup_printf ("Monitor %d", i);
       g_free (plug_name);
 
       gdk_screen_get_monitor_geometry (screen, i, &rect);
@@ -336,23 +362,14 @@ populate_display (GdkScreen *screen, GtkInspectorGeneral *gen)
       wmm = gdk_screen_get_monitor_width_mm (screen, i);
       hmm = gdk_screen_get_monitor_height_mm (screen, i);
       scale = gdk_screen_get_monitor_scale_factor (screen, i);
-      text = g_strdup_printf ("%d × %d%s, %d × %d mm²",
-                              w, h, scale == 2 ? " @ 2" : "",
-                              wmm, hmm);
-      label = gtk_label_new (text);
-      gtk_label_set_selectable (GTK_LABEL (label), TRUE);
-      gtk_widget_set_halign (label, GTK_ALIGN_END);
-      gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
-      gtk_label_set_xalign (GTK_LABEL (label), 1.0);
-      gtk_box_pack_start (GTK_BOX (box), label, TRUE, TRUE, 0);
-      g_free (text);
+      value = g_strdup_printf ("%d × %d%s, %d × %d mm²",
+                               w, h, scale == 2 ? " @ 2" : "",
+                               wmm, hmm);
 
-      row = gtk_list_box_row_new ();
-      gtk_container_add (GTK_CONTAINER (row), box);
-      gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
-      gtk_widget_show_all (row);
+      add_label_row (GTK_LIST_BOX (gen->priv->x_box), name, value, 0);
 
-      gtk_list_box_insert (GTK_LIST_BOX (gen->priv->x_box), row, -1);
+      g_free (name);
+      g_free (value);
     }
 }
 
@@ -376,71 +393,43 @@ static void
 add_device (GtkInspectorGeneral *gen,
             GdkDevice           *device)
 {
-  GtkWidget *box;
-  GtkWidget *label;
-  GtkWidget *row;
-  char *text;
+  const gchar *name, *value;
   GString *str;
   int i;
   guint n_touches;
+  gchar *text;
 
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 40);
-  g_object_set (box,
-                "margin", 10,
-                "margin-start", 20,
-                NULL);
+  name = gdk_device_get_name (device);
 
-  text = g_strdup_printf ("%s", gdk_device_get_name (device));
-  label = gtk_label_new (text);
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
-  gtk_label_set_xalign (GTK_LABEL (label), 0.0);
-  gtk_box_pack_start (GTK_BOX (box), label, FALSE, FALSE, 0);
-  g_free (text);
-
-  str = g_string_new ("");
   switch (gdk_device_get_source (device))
     {
     case GDK_SOURCE_MOUSE:
-      g_string_append (str, "Mouse");
+      value = "Mouse";
       break;
     case GDK_SOURCE_PEN:
-      g_string_append (str, "Pen");
+      value = "Pen";
       break;
     case GDK_SOURCE_ERASER:
-      g_string_append (str, "Eraser");
+      value = "Eraser";
       break;
     case GDK_SOURCE_CURSOR:
-      g_string_append (str, "Cursor");
+      value = "Cursor";
       break;
     case GDK_SOURCE_KEYBOARD:
-      g_string_append (str, "Keyboard");
+      value = "Keyboard";
       break;
     case GDK_SOURCE_TOUCHSCREEN:
-      g_string_append (str, "Touchscreen");
+      value = "Touchscreen";
       break;
     case GDK_SOURCE_TOUCHPAD:
-      g_string_append (str, "Touchpad");
+      value = "Touchpad";
       break;
     default:
-      g_string_append (str, "Unknown");
+      value = "Unknown";
       break;
     }
 
-  label = gtk_label_new (str->str);
-  gtk_label_set_selectable (GTK_LABEL (label), TRUE);
-  gtk_widget_set_halign (label, GTK_ALIGN_END);
-  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
-  gtk_label_set_xalign (GTK_LABEL (label), 0.0);
-  gtk_box_pack_start (GTK_BOX (box), label, TRUE, TRUE, 0);
-  g_string_free (str, TRUE);
-
-  row = gtk_list_box_row_new ();
-  gtk_container_add (GTK_CONTAINER (row), box);
-  gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
-  gtk_widget_show_all (row);
-
-  gtk_list_box_insert (GTK_LIST_BOX (gen->priv->device_box), row, -1);
+  add_label_row (GTK_LIST_BOX (gen->priv->device_box), name, value, 10);
 
   str = g_string_new ("");
 
@@ -488,67 +477,17 @@ add_device (GtkInspectorGeneral *gen,
     }
 
   if (str->len > 0)
-    {
-      box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 40);
-      g_object_set (box,
-                    "margin", 10,
-                    "margin-start", 30,
-                    NULL);
+    add_label_row (GTK_LIST_BOX (gen->priv->device_box), "Axes", str->str, 20);
 
-      label = gtk_label_new ("Axes");
-      gtk_widget_set_halign (label, GTK_ALIGN_START);
-      gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
-      gtk_label_set_xalign (GTK_LABEL (label), 0.0);
-      gtk_box_pack_start (GTK_BOX (box), label, FALSE, FALSE, 0);
-
-      label = gtk_label_new (str->str);
-      gtk_label_set_selectable (GTK_LABEL (label), TRUE);
-      gtk_widget_set_halign (label, GTK_ALIGN_END);
-      gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
-      gtk_label_set_xalign (GTK_LABEL (label), 0.0);
-      gtk_box_pack_start (GTK_BOX (box), label, TRUE, TRUE, 0);
-
-      row = gtk_list_box_row_new ();
-      gtk_container_add (GTK_CONTAINER (row), box);
-      gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
-      gtk_widget_show_all (row);
-
-      gtk_list_box_insert (GTK_LIST_BOX (gen->priv->device_box), row, -1);
-    }
+  g_string_free (str, TRUE);
 
   g_object_get (device, "num-touches", &n_touches, NULL);
   if (n_touches > 0)
     {
-      box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 40);
-      g_object_set (box,
-                    "margin", 10,
-                    "margin-start", 30,
-                    NULL);
-
-      label = gtk_label_new ("Touches");
-      gtk_widget_set_halign (label, GTK_ALIGN_START);
-      gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
-      gtk_label_set_xalign (GTK_LABEL (label), 0.0);
-      gtk_box_pack_start (GTK_BOX (box), label, FALSE, FALSE, 0);
-
       text = g_strdup_printf ("%d", n_touches);
-      label = gtk_label_new (text);
-      gtk_label_set_selectable (GTK_LABEL (label), TRUE);
-      gtk_widget_set_halign (label, GTK_ALIGN_END);
-      gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
-      gtk_label_set_xalign (GTK_LABEL (label), 0.0);
-      gtk_box_pack_start (GTK_BOX (box), label, TRUE, TRUE, 0);
+      add_label_row (GTK_LIST_BOX (gen->priv->device_box), "Touches", text, 20);
       g_free (text);
-
-      row = gtk_list_box_row_new ();
-      gtk_container_add (GTK_CONTAINER (row), box);
-      gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
-      gtk_widget_show_all (row);
-
-      gtk_list_box_insert (GTK_LIST_BOX (gen->priv->device_box), row, -1);
     }
-
-  g_string_free (str, TRUE);
 }
 
 static void
@@ -556,9 +495,6 @@ add_seat (GtkInspectorGeneral *gen,
           GdkSeat             *seat,
           int                  num)
 {
-  GtkWidget *box;
-  GtkWidget *label;
-  GtkWidget *row;
   GdkSeatCapabilities capabilities;
   struct {
     GdkSeatCapabilities cap;
@@ -582,16 +518,7 @@ add_seat (GtkInspectorGeneral *gen,
       g_signal_connect_swapped (seat, "device-removed", G_CALLBACK (populate_seats), gen);
     }
 
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 40);
-  g_object_set (box, "margin", 10, NULL);
-
   text = g_strdup_printf ("Seat %d", num);
-  label = gtk_label_new (text);
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
-  gtk_label_set_xalign (GTK_LABEL (label), 0.0);
-  gtk_box_pack_start (GTK_BOX (box), label, FALSE, FALSE, 0);
-  g_free (text);
 
   str = g_string_new ("");
   capabilities = gdk_seat_get_capabilities (seat);
@@ -605,20 +532,9 @@ add_seat (GtkInspectorGeneral *gen,
         }
     }
 
-  label = gtk_label_new (str->str);
-  gtk_label_set_selectable (GTK_LABEL (label), TRUE);
-  gtk_widget_set_halign (label, GTK_ALIGN_END);
-  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
-  gtk_label_set_xalign (GTK_LABEL (label), 0.0);
-  gtk_box_pack_start (GTK_BOX (box), label, TRUE, TRUE, 0);
-  g_string_free (str, TRUE);
-
-  row = gtk_list_box_row_new ();
-  gtk_container_add (GTK_CONTAINER (row), box);
-  gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
-  gtk_widget_show_all (row);
-
-  gtk_list_box_insert (GTK_LIST_BOX (gen->priv->device_box), row, -1);
+  add_label_row (GTK_LIST_BOX (gen->priv->device_box), text, str->str, 0);
+  g_free (text);
+  g_string_free (str, FALSE);
 
   list = gdk_seat_get_slaves (seat, GDK_SEAT_CAPABILITY_ALL);
 
