@@ -315,6 +315,7 @@ struct _GdkWindow
   /* We store the old expose areas to support buffer-age optimizations */
   cairo_region_t *old_updated_area[2];
 
+  GdkWindowState old_state;
   GdkWindowState state;
 
   guint8 alpha;
