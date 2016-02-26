@@ -241,6 +241,7 @@ gtk_level_bar_ensure_offset (GtkLevelBar *self,
 {
   GList *existing;
   GtkLevelBarOffset *offset = NULL;
+  GtkLevelBarOffset *new_offset;
 
   existing = g_list_find_custom (self->priv->offsets, name, offset_find_func);
   if (existing)
@@ -249,14 +250,15 @@ gtk_level_bar_ensure_offset (GtkLevelBar *self,
   if (offset && (offset->value == value))
     return FALSE;
 
+  new_offset = gtk_level_bar_offset_new (name, value);
+
   if (offset)
     {
       gtk_level_bar_offset_free (offset);
       self->priv->offsets = g_list_delete_link (self->priv->offsets, existing);
     }
 
-  offset = gtk_level_bar_offset_new (name, value);
-  self->priv->offsets = g_list_insert_sorted (self->priv->offsets, offset, offset_sort_func);
+  self->priv->offsets = g_list_insert_sorted (self->priv->offsets, new_offset, offset_sort_func);
 
   return TRUE;
 }
