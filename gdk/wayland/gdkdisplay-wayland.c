@@ -392,6 +392,7 @@ _gdk_wayland_display_prepare_cursor_themes (GdkWaylandDisplay *display_wayland)
   OnHasGlobalsClosure *closure;
   static const char *required_cursor_theme_globals[] = {
       "wl_shm",
+      NULL
   };
 
   closure = g_new0 (OnHasGlobalsClosure, 1);
