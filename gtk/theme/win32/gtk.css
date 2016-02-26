@@ -343,16 +343,48 @@ row:selected:hover {
 
 /* Titlebar */
 
-.titlebar {
-    background: -gtk-win32-theme-part(window, 1, 1);
-    min-height: -gtk-win32-size(window, cycaption);
+decoration {
+  padding: calc(-gtk-win32-size(window, cyframe) + -gtk-win32-size(window, cxpaddedborder))
+           calc(-gtk-win32-size(window, cxframe) + -gtk-win32-size(window, cxpaddedborder));
+  background-image: -gtk-win32-theme-part(window, 1, 1),
+                    -gtk-win32-theme-part(window, 9, 1),
+                    -gtk-win32-theme-part(window, 7, 1),
+                    -gtk-win32-theme-part(window, 8, 1);
+  background-size: 100% -gtk-win32-size(window, cycaption),
+                   100% calc(-gtk-win32-size(window, cyframe) + -gtk-win32-size(window, cxpaddedborder)),
+                   calc(-gtk-win32-size(window, cxframe) + -gtk-win32-size(window, cxpaddedborder)) calc(100% - 2 * (-gtk-win32-size(window, cyframe) + -gtk-win32-size(window, cxpaddedborder))),
+                   calc(-gtk-win32-size(window, cxframe) + -gtk-win32-size(window, cxpaddedborder)) calc(100% - 2 * (-gtk-win32-size(window, cyframe) + -gtk-win32-size(window, cxpaddedborder)));
+  background-position: top, bottom, left, right;
+  background-repeat: no-repeat;
+}
+.titlebar { 
+  margin: calc(0px - -gtk-win32-size(window, cyframe) - -gtk-win32-size(window, cxpaddedborder))
+          calc(0px - -gtk-win32-size(window, cxframe) - -gtk-win32-size(window, cxpaddedborder));
+  margin-bottom: 0px;
+  padding: calc(-gtk-win32-size(window, cyframe) + -gtk-win32-size(window, cxpaddedborder))
+           calc(-gtk-win32-size(window, cxframe) + -gtk-win32-size(window, cxpaddedborder));
+  padding-bottom: 0px;
+  background: -gtk-win32-theme-part(window, 1, 1);
+  min-height: calc(-gtk-win32-size(window, cycaption) - -gtk-win32-size(window, cyframe) - -gtk-win32-size(window, cxpaddedborder));
 }
 
+decoration:backdrop {
+  background-image: -gtk-win32-theme-part(window, 1, 2),
+                    -gtk-win32-theme-part(window, 9, 2),
+                    -gtk-win32-theme-part(window, 7, 2),
+                    -gtk-win32-theme-part(window, 8, 2);
+}
 .titlebar:backdrop {
     background: -gtk-win32-theme-part(window, 1, 2);
 }
 
-window .titlebar:disabled {
+decoration:disabled {
+  background-image: -gtk-win32-theme-part(window, 1, 3),
+                    -gtk-win32-theme-part(window, 9, 3),
+                    -gtk-win32-theme-part(window, 7, 3),
+                    -gtk-win32-theme-part(window, 8, 3);
+}
+.titlebar:disabled {
     background: -gtk-win32-theme-part(window, 1, 3);
 }
 
