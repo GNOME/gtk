@@ -216,7 +216,11 @@ static void
 gtk_css_image_win32_print (GtkCssImage *image,
                            GString     *string)
 {
-  g_string_append (string, "none /* printing win32 theme components is not implemented */");
+  GtkCssImageWin32 *wimage = GTK_CSS_IMAGE_WIN32 (image);
+
+  g_string_append (string, "-gtk-win32-theme-part(");
+  gtk_win32_theme_print (wimage->theme, string);
+  g_string_append_printf (string, ", %d, %d)", wimage->part, wimage->state);
 }
 
 static void
