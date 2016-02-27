@@ -28,6 +28,10 @@
 #include "gdk.h"
 #include "gdkalias.h"
 
+#ifdef GDK_WINDOWING_WIN32
+#include "win32/gdkprivate-win32.h"
+#endif
+
 /* Thanks to Markus G. Kuhn <mkuhn@acm.org> for the ksysym<->Unicode
  * mapping functions, from the xterm sources.
  */
