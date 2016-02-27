@@ -467,3 +467,30 @@ gdk_visual_get_screen (GdkVisual *visual)
 
   return visual->screen;
 }
+
+void
+gdk_visual_decompose_mask (gulong  mask,
+                           gint   *shift,
+                           gint   *prec)
+{
+  *shift = 0;
+  *prec = 0;
+
+  if (mask == 0)
+    {
+      g_warning ("Mask is 0 in visual. Server bug ?");
+      return;
+    }
+
+  while (!(mask & 0x1))
+    {
+      (*shift)++;
+      mask >>= 1;
+    }
+
+  while (mask & 0x1)
+    {
+      (*prec)++;
+      mask >>= 1;
+    }
+}

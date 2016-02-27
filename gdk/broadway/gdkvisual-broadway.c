@@ -40,11 +40,6 @@ struct _GdkBroadwayVisualClass
   GObjectClass parent_class;
 };
 
-static void     gdk_visual_decompose_mask (gulong     mask,
-					   gint      *shift,
-					   gint      *prec);
-
-
 G_DEFINE_TYPE (GdkBroadwayVisual, gdk_broadway_visual, GDK_TYPE_VISUAL)
 
 static void
@@ -258,31 +253,4 @@ _gdk_broadway_screen_list_visuals (GdkScreen *screen)
     list = g_list_append (list, broadway_screen->visuals[i]);
 
   return list;
-}
-
-static void
-gdk_visual_decompose_mask (gulong  mask,
-			   gint   *shift,
-			   gint   *prec)
-{
-  *shift = 0;
-  *prec = 0;
-
-  if (mask == 0)
-    {
-      g_warning ("Mask is 0 in visual. Server bug ?");
-      return;
-    }
-
-  while (!(mask & 0x1))
-    {
-      (*shift)++;
-      mask >>= 1;
-    }
-
-  while (mask & 0x1)
-    {
-      (*prec)++;
-      mask >>= 1;
-    }
 }

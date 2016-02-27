@@ -45,9 +45,6 @@ struct _GdkX11VisualClass
 };
 
 static void     gdk_visual_add            (GdkVisual *visual);
-static void     gdk_visual_decompose_mask (gulong     mask,
-					   gint      *shift,
-					   gint      *prec);
 static guint    gdk_visual_hash           (Visual    *key);
 static gboolean gdk_visual_equal          (Visual    *a,
 					   Visual    *b);
@@ -499,33 +496,6 @@ gdk_visual_add (GdkVisual *visual)
                                                 (GEqualFunc) gdk_visual_equal);
 
   g_hash_table_insert (x11_screen->visual_hash, GDK_X11_VISUAL (visual)->xvisual, visual);
-}
-
-static void
-gdk_visual_decompose_mask (gulong  mask,
-                           gint   *shift,
-                           gint   *prec)
-{
-  *shift = 0;
-  *prec = 0;
-
-  if (mask == 0)
-    {
-      g_warning ("Mask is 0 in visual. Server bug ?");
-      return;
-    }
-
-  while (!(mask & 0x1))
-    {
-      (*shift)++;
-      mask >>= 1;
-    }
-
-  while (mask & 0x1)
-    {
-      (*prec)++;
-      mask >>= 1;
-    }
 }
 
 static guint

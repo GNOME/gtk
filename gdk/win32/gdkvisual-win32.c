@@ -31,10 +31,6 @@
 #include "gdkprivate-win32.h"
 #include "gdkvisualprivate.h"
 
-static void  gdk_visual_decompose_mask (gulong     mask,
-					gint      *shift,
-					gint      *prec);
-
 static GdkVisual *system_visual = NULL;
 static GdkVisual *rgba_visual = NULL;
 
@@ -352,25 +348,4 @@ _gdk_win32_screen_list_visuals (GdkScreen *screen)
   result = g_list_append (result, (gpointer) system_visual);
 
   return result;
-}
-
-static void
-gdk_visual_decompose_mask (gulong  mask,
-			   gint   *shift,
-			   gint   *prec)
-{
-  *shift = 0;
-  *prec = 0;
-
-  while (!(mask & 0x1))
-    {
-      (*shift)++;
-      mask >>= 1;
-    }
-
-  while (mask & 0x1)
-    {
-      (*prec)++;
-      mask >>= 1;
-    }
 }

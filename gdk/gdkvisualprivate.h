@@ -59,6 +59,10 @@ struct _GdkVisualClass
   GObjectClass parent_class;
 };
 
+void        gdk_visual_decompose_mask       (gulong  mask,
+                                             gint   *shift,
+                                             gint   *prec);
+
 G_END_DECLS
 
 #endif
