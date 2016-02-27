@@ -3378,10 +3378,10 @@ update_tab_state (GtkNotebook *notebook)
     {
       GtkNotebookPage *page = l->data;
 
-      tab_state = state & ~(GTK_STATE_FLAG_ACTIVE | GTK_STATE_FLAG_PRELIGHT);
+      tab_state = state & ~(GTK_STATE_FLAG_CHECKED | GTK_STATE_FLAG_PRELIGHT);
 
       if (page == priv->cur_page)
-        tab_state |= GTK_STATE_FLAG_ACTIVE;
+        tab_state |= GTK_STATE_FLAG_CHECKED;
       if (page == priv->prelight_tab)
         tab_state |= GTK_STATE_FLAG_PRELIGHT;
 
@@ -6134,11 +6134,11 @@ gtk_notebook_real_switch_page (GtkNotebook     *notebook,
   if (priv->cur_page)
     {
       gtk_widget_set_child_visible (priv->cur_page->child, FALSE);
-      gtk_css_gadget_remove_state (priv->cur_page->gadget, GTK_STATE_FLAG_ACTIVE);
+      gtk_css_gadget_remove_state (priv->cur_page->gadget, GTK_STATE_FLAG_CHECKED);
     }
 
   priv->cur_page = page;
-  gtk_css_gadget_add_state (page->gadget, GTK_STATE_FLAG_ACTIVE);
+  gtk_css_gadget_add_state (page->gadget, GTK_STATE_FLAG_CHECKED);
   gtk_css_gadget_set_visible (priv->header_gadget, priv->show_tabs);
 
   if (!priv->focus_tab ||
