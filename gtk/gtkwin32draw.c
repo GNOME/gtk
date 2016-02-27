@@ -395,6 +395,34 @@ draw_window_button (cairo_t *cr,
 }
 
 static void
+draw_tab_item (cairo_t *cr,
+               int      part,
+               int      state,
+               int      width,
+               int      height)
+{
+  draw_edge (cr, EDGE_RAISED, 0, 0, width, height + 2);
+
+  gtk_cairo_set_source_sys_color (cr, GTK_WIN32_SYS_COLOR_BTNFACE);
+  cairo_rectangle (cr, 2, 2, width - 4, height - 2);
+  cairo_fill (cr);
+}
+
+static void
+draw_tab_pane (cairo_t *cr,
+               int      part,
+               int      state,
+               int      width,
+               int      height)
+{
+  draw_edge (cr, EDGE_RAISED, 0, 0, width, height);
+
+  gtk_cairo_set_source_sys_color (cr, GTK_WIN32_SYS_COLOR_BTNFACE);
+  cairo_rectangle (cr, 2, 2, width - 4, height - 4);
+  cairo_fill (cr);
+}
+
+static void
 draw_tooltip (cairo_t *cr,
               int      part,
               int      state,
@@ -436,6 +464,15 @@ static GtkWin32ThemePart theme_parts[] = {
   { "edit",    7,  0, { 0, 0, 0, 0 }, draw_edit },
   { "edit",    8,  0, { 0, 0, 0, 0 }, draw_edit },
   { "edit",    9,  0, { 0, 0, 0, 0 }, draw_edit },
+  { "tab",     1,  0, { 0, 0, 0, 0 }, draw_tab_item },
+  { "tab",     2,  0, { 0, 0, 0, 0 }, draw_tab_item },
+  { "tab",     3,  0, { 0, 0, 0, 0 }, draw_tab_item },
+  { "tab",     4,  0, { 0, 0, 0, 0 }, draw_tab_item },
+  { "tab",     5,  0, { 0, 0, 0, 0 }, draw_tab_item },
+  { "tab",     6,  0, { 0, 0, 0, 0 }, draw_tab_item },
+  { "tab",     7,  0, { 0, 0, 0, 0 }, draw_tab_item },
+  { "tab",     8,  0, { 0, 0, 0, 0 }, draw_tab_item },
+  { "tab",     9,  0, { 0, 0, 0, 0 }, draw_tab_pane },
   { "tooltip", 1,  0, { 0, 0, 0, 0 }, draw_tooltip },
   { "window",  1,  0, { 0, 0, 0, 0 }, draw_window },
   { "window",  7,  0, { 0, 0, 0, 0 }, draw_window_left },
