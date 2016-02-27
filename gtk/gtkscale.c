@@ -34,6 +34,7 @@
 #include "gtkbindings.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
+#include "gtkcsscustomgadgetprivate.h"
 #include "gtkicontheme.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
@@ -124,8 +125,8 @@ struct _GtkScalePrivate
 
   GSList       *marks;
 
-  GtkCssNode   *top_marks_node;
-  GtkCssNode   *bottom_marks_node;
+  GtkCssGadget *top_marks_gadget;
+  GtkCssGadget *bottom_marks_gadget;
 
   gint          digits;
 
@@ -1568,16 +1569,8 @@ gtk_scale_clear_marks (GtkScale *scale)
   g_slist_free_full (priv->marks, gtk_scale_mark_free);
   priv->marks = NULL;
 
-  if (priv->top_marks_node)
-    {
-      gtk_css_node_set_parent (priv->top_marks_node, NULL);
-      priv->top_marks_node = NULL;
-    }
-  if (priv->bottom_marks_node)
-    {
-      gtk_css_node_set_parent (priv->bottom_marks_node, NULL);
-      priv->bottom_marks_node = NULL;
-    }
+  g_clear_object (&priv->top_marks_gadget);
+  g_clear_object (&priv->bottom_marks_gadget);
 
   _gtk_range_set_stop_values (GTK_RANGE (scale), NULL, 0);
 
@@ -1624,6 +1617,7 @@ gtk_scale_add_mark (GtkScale        *scale,
   g_return_if_fail (GTK_IS_SCALE (scale));
 
   priv = scale->priv;
+  widget_node = gtk_widget_get_css_node (GTK_WIDGET (scale));
 
   mark = g_new (GtkScaleMark, 1);
   mark->value = value;
@@ -1640,32 +1634,37 @@ gtk_scale_add_mark (GtkScale        *scale,
 
   if (mark->position == GTK_POS_TOP)
     {
-      if (!priv->top_marks_node)
+      if (!priv->top_marks_gadget)
         {
-          widget_node = gtk_widget_get_css_node (GTK_WIDGET (scale));
-          priv->top_marks_node = gtk_css_node_new ();
-          gtk_css_node_set_name (priv->top_marks_node, I_("marks"));
-          gtk_css_node_insert_after (widget_node, priv->top_marks_node, NULL);
-          gtk_css_node_set_parent (priv->top_marks_node, widget_node);
-          gtk_css_node_add_class (priv->top_marks_node, g_quark_from_static_string (GTK_STYLE_CLASS_TOP));
-          gtk_css_node_set_state (priv->top_marks_node, gtk_css_node_get_state (widget_node));
-          g_object_unref (priv->top_marks_node);
+          priv->top_marks_gadget =
+            gtk_css_custom_gadget_new ("marks",
+                                       GTK_WIDGET (scale), NULL, NULL,
+                                       NULL,
+                                       NULL,
+                                       NULL,
+                                       NULL, NULL);
+          gtk_css_node_insert_after (widget_node, gtk_css_gadget_get_node (priv->top_marks_gadget), NULL);
+          gtk_css_gadget_add_class (priv->top_marks_gadget, GTK_STYLE_CLASS_TOP);
+          gtk_css_gadget_set_state (priv->top_marks_gadget, gtk_css_node_get_state (widget_node));
         }
-      marks_node = priv->top_marks_node;
+      marks_node = gtk_css_gadget_get_node (priv->top_marks_gadget);
     }
   else
     {
-      if (!priv->bottom_marks_node)
+      if (!priv->bottom_marks_gadget)
         {
-          widget_node = gtk_widget_get_css_node (GTK_WIDGET (scale));
-          priv->bottom_marks_node = gtk_css_node_new ();
-          gtk_css_node_set_name (priv->bottom_marks_node, I_("marks"));
-          gtk_css_node_insert_before (widget_node, priv->bottom_marks_node, NULL);
-          gtk_css_node_add_class (priv->bottom_marks_node, g_quark_from_static_string (GTK_STYLE_CLASS_BOTTOM));
-          gtk_css_node_set_state (priv->bottom_marks_node, gtk_css_node_get_state (widget_node));
-          g_object_unref (priv->bottom_marks_node);
+          priv->bottom_marks_gadget =
+            gtk_css_custom_gadget_new ("marks",
+                                       GTK_WIDGET (scale), NULL, NULL,
+                                       NULL,
+                                       NULL,
+                                       NULL,
+                                       NULL, NULL);
+          gtk_css_node_insert_before (widget_node, gtk_css_gadget_get_node (priv->bottom_marks_gadget), NULL);
+          gtk_css_gadget_add_class (priv->bottom_marks_gadget, GTK_STYLE_CLASS_BOTTOM);
+          gtk_css_gadget_set_state (priv->bottom_marks_gadget, gtk_css_node_get_state (widget_node));
         }
-      marks_node = priv->bottom_marks_node;
+      marks_node = gtk_css_gadget_get_node (priv->bottom_marks_gadget);
     }
 
   mark->node = gtk_css_node_new ();
