@@ -135,28 +135,109 @@ gtk_cairo_set_source_sys_color (cairo_t *cr,
 }
 
 static void
+draw_outline (cairo_t *cr,
+              int      top_color_id,
+              int      bottom_color_id,
+              int      x,
+              int      y,
+              int      width,
+              int      height)
+{
+  gtk_cairo_set_source_sys_color (cr, top_color_id);
+  cairo_rectangle (cr, x, y,     width, 1);
+  cairo_rectangle (cr, x, y,     1,     height);
+  cairo_fill (cr);
+
+  gtk_cairo_set_source_sys_color (cr, bottom_color_id);
+  cairo_rectangle (cr, x + width, y + height, -1,     -height);
+  cairo_rectangle (cr, x + width, y + height, -width, -1);
+  cairo_fill (cr);
+}
+
+typedef enum {
+  EDGE_RAISED_OUTER = 1 << 0,
+  EDGE_SUNKEN_OUTER = 1 << 1,
+  EDGE_RAISED_INNER = 1 << 2,
+  EDGE_SUNKEN_INNER = 1 << 3,
+  EDGE_RAISED       = (EDGE_RAISED_OUTER | EDGE_RAISED_INNER),
+  EDGE_SUNKEN       = (EDGE_SUNKEN_OUTER | EDGE_SUNKEN_INNER),
+  EDGE_ETCHED       = (EDGE_SUNKEN_OUTER | EDGE_RAISED_INNER),
+  EDGE_BUMP         = (EDGE_RAISED_OUTER | EDGE_SUNKEN_INNER)
+} GtkWin32Edge;
+
+static void
+draw_edge (cairo_t      *cr,
+           GtkWin32Edge  edge,
+           int           x,
+           int           y,
+           int           width,
+           int           height)
+{
+  switch (edge & (EDGE_RAISED_OUTER | EDGE_SUNKEN_OUTER))
+    {
+    case EDGE_RAISED_OUTER:
+      draw_outline (cr,
+                    GTK_WIN32_SYS_COLOR_BTNHIGHLIGHT,
+                    GTK_WIN32_SYS_COLOR_3DDKSHADOW,
+                    x, y, width, height);
+      break;
+    case EDGE_SUNKEN_OUTER:
+      draw_outline (cr,
+                    GTK_WIN32_SYS_COLOR_3DDKSHADOW,
+                    GTK_WIN32_SYS_COLOR_BTNHIGHLIGHT,
+                    x, y, width, height);
+      break;
+    case (EDGE_RAISED_OUTER | EDGE_SUNKEN_OUTER):
+      return;
+    default:
+      break;
+    }
+
+  x += 1;
+  y += 1;
+  width -= 2;
+  height -= 2;
+
+  switch (edge & (EDGE_RAISED_INNER | EDGE_SUNKEN_INNER))
+    {
+    case EDGE_RAISED_INNER:
+      draw_outline (cr,
+                    GTK_WIN32_SYS_COLOR_3DLIGHT,
+                    GTK_WIN32_SYS_COLOR_BTNSHADOW,
+                    x, y, width, height);
+      break;
+    case EDGE_SUNKEN_INNER:
+      draw_outline (cr,
+                    GTK_WIN32_SYS_COLOR_BTNSHADOW,
+                    GTK_WIN32_SYS_COLOR_3DLIGHT,
+                    x, y, width, height);
+      break;
+    case (EDGE_RAISED_INNER | EDGE_SUNKEN_INNER):
+      return;
+    default:
+      break;
+    }
+}
+           
+static void
 draw_button (cairo_t *cr,
              int      part,
              int      state,
              int      width,
              int      height)
 {
-  gboolean is_down = (state == 3);
-  int top_color = is_down ? GTK_WIN32_SYS_COLOR_BTNSHADOW : GTK_WIN32_SYS_COLOR_BTNHIGHLIGHT;
-  int bot_color = is_down ? GTK_WIN32_SYS_COLOR_BTNHIGHLIGHT : GTK_WIN32_SYS_COLOR_BTNSHADOW;
+#if 0
+  /* These are the colors for !BF_SOFT, should we ever split out DrawEdge() */
+  int out_top_color = is_down ? GTK_WIN32_SYS_COLOR_3DLIGHT : GTK_WIN32_SYS_COLOR_BTNSHADOW;
+  int out_bot_color = is_down ? GTK_WIN32_SYS_COLOR_BTNHIGHLIGHT : GTK_WIN32_SYS_COLOR_3DDKSHADOW;
+  int in_top_color = is_down ? GTK_WIN32_SYS_COLOR_3DDKSHADOW : GTK_WIN32_SYS_COLOR_BTNHIGHLIGHT;
+  int in_bot_color = is_down ? GTK_WIN32_SYS_COLOR_BTNSHADOW : GTK_WIN32_SYS_COLOR_3DLIGHT;
+#endif
 
-  gtk_cairo_set_source_sys_color (cr, top_color);
-  cairo_rectangle (cr, 0, 0, width - 1, 1);
-  cairo_rectangle (cr, 0, 1, 1, height - 1);
-  cairo_fill (cr);
-
-  gtk_cairo_set_source_sys_color (cr, bot_color);
-  cairo_rectangle (cr, width - 1, 0, 1, height -1);
-  cairo_rectangle (cr, 0, height - 1, width, 1);
-  cairo_fill (cr);
+  draw_edge (cr, state == 3 ? EDGE_SUNKEN : EDGE_RAISED, 0, 0, width, height);
 
   gtk_cairo_set_source_sys_color (cr, GTK_WIN32_SYS_COLOR_BTNFACE);
-  cairo_rectangle (cr, 1, 1, width - 2, height - 2);
+  cairo_rectangle (cr, 2, 2, width - 4, height - 4);
   cairo_fill (cr);
 }
 
