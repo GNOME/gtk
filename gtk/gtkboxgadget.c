@@ -36,8 +36,10 @@
 typedef struct _GtkBoxGadgetPrivate GtkBoxGadgetPrivate;
 struct _GtkBoxGadgetPrivate {
   GtkOrientation orientation;
-  gboolean draw_focus;
   GArray *children;
+
+  guint draw_focus : 1;
+  guint draw_reverse : 1;
 };
 
 typedef gboolean (* ComputeExpandFunc) (GObject *object, GtkOrientation orientation);
@@ -452,9 +454,10 @@ gtk_box_gadget_draw (GtkCssGadget *gadget,
   GtkWidget *owner = gtk_css_gadget_get_owner (gadget);
   guint i;
 
-  for (i = 0 ; i < priv->children->len; i++)
+  for (i = 0; i < priv->children->len; i++)
     {
-      GtkBoxGadgetChild *child = &g_array_index (priv->children, GtkBoxGadgetChild, i);
+      guint draw_index = priv->draw_reverse ? priv->children->len - 1 - i : i;
+      GtkBoxGadgetChild *child = &g_array_index (priv->children, GtkBoxGadgetChild, draw_index);
 
       if (GTK_IS_WIDGET (child->object))
         gtk_container_propagate_draw (GTK_CONTAINER (owner), GTK_WIDGET (child->object), cr);
@@ -557,6 +560,15 @@ gtk_box_gadget_set_draw_focus (GtkBoxGadget *gadget,
   GtkBoxGadgetPrivate *priv = gtk_box_gadget_get_instance_private (gadget);
 
   priv->draw_focus = draw_focus;
+}
+
+void
+gtk_box_gadget_set_draw_reverse (GtkBoxGadget *gadget,
+                                 gboolean      draw_reverse)
+{
+  GtkBoxGadgetPrivate *priv = gtk_box_gadget_get_instance_private (gadget);
+
+  priv->draw_reverse = draw_reverse;
 }
 
 static GtkCssNode *
