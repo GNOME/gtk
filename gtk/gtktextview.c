@@ -5861,7 +5861,7 @@ draw_text (cairo_t  *cr,
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_save_to_node (context, text_view->priv->text_window->css_node);
   gtk_render_background (context, cr,
-                         -priv->xoffset, -priv->yoffset,
+                         -priv->xoffset, -priv->yoffset - priv->top_border,
                          MAX (SCREEN_WIDTH (text_view), priv->width),
                          MAX (SCREEN_HEIGHT (text_view), priv->height));
   gtk_style_context_restore (context);
