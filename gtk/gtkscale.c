@@ -176,12 +176,12 @@ static void     gtk_scale_style_updated           (GtkWidget      *widget);
 static void     gtk_scale_get_range_border        (GtkRange       *range,
                                                    GtkBorder      *border);
 static void     gtk_scale_get_mark_label_size     (GtkScale        *scale,
-                                                   gint            *count1,
-                                                   gint            *width1,
-                                                   gint            *height1,
-                                                   gint            *count2,
-                                                   gint            *width2,
-                                                   gint            *height2);
+                                                   gint            *count_top,
+                                                   gint            *width_top,
+                                                   gint            *height_top,
+                                                   gint            *count_bottom,
+                                                   gint            *width_bottom,
+                                                   gint            *height_bottom);
 static void     gtk_scale_finalize                (GObject        *object);
 static void     gtk_scale_screen_changed          (GtkWidget      *widget,
                                                    GdkScreen      *old_screen);
@@ -912,27 +912,29 @@ gtk_scale_get_range_border (GtkRange  *range,
   if (priv->marks)
     {
       gint value_spacing;
-      gint n1, w1, h1, n2, w2, h2;
+      gint n_top, w_top, h_top, n_bottom, w_bottom, h_bottom;
 
       gtk_widget_style_get (widget,
                             "value-spacing", &value_spacing,
                             NULL);
 
-      gtk_scale_get_mark_label_size (scale, &n1, &w1, &h1, &n2, &w2, &h2);
+      gtk_scale_get_mark_label_size (scale,
+                                     &n_top, &w_top, &h_top,
+                                     &n_bottom, &w_bottom, &h_bottom);
 
       if (gtk_orientable_get_orientation (GTK_ORIENTABLE (scale)) == GTK_ORIENTATION_HORIZONTAL)
         {
-          if (h1 > 0)
-            border->top += h1 + value_spacing;
-          if (h2 > 0)
-            border->bottom += h2 + value_spacing;
+          if (h_top > 0)
+            border->top += h_top + value_spacing;
+          if (h_bottom > 0)
+            border->bottom += h_bottom + value_spacing;
         }
       else
         {
-          if (w1 > 0)
-            border->left += w1 + value_spacing;
-          if (w2 > 0)
-            border->right += w2 + value_spacing;
+          if (w_top > 0)
+            border->left += w_top + value_spacing;
+          if (w_bottom > 0)
+            border->right += w_bottom + value_spacing;
         }
     }
 }
@@ -993,12 +995,12 @@ gtk_scale_get_value_size (GtkScale *scale,
 
 static void
 gtk_scale_get_mark_label_size (GtkScale        *scale,
-                               gint            *count1,
-                               gint            *width1,
-                               gint            *height1,
-                               gint            *count2,
-                               gint            *width2,
-                               gint            *height2)
+                               gint            *count_top,
+                               gint            *width_top,
+                               gint            *height_top,
+                               gint            *count_bottom,
+                               gint            *width_bottom,
+                               gint            *height_bottom)
 {
   GtkScalePrivate *priv = scale->priv;
   PangoLayout *layout;
@@ -1006,9 +1008,9 @@ gtk_scale_get_mark_label_size (GtkScale        *scale,
   GSList *m;
   gint w, h;
 
-  *count1 = *count2 = 0;
-  *width1 = *width2 = 0;
-  *height1 = *height2 = 0;
+  *count_top = *count_bottom = 0;
+  *width_top = *width_bottom = 0;
+  *height_top = *height_bottom = 0;
 
   layout = gtk_widget_create_pango_layout (GTK_WIDGET (scale), NULL);
 
@@ -1032,15 +1034,15 @@ gtk_scale_get_mark_label_size (GtkScale        *scale,
 
       if (mark->position == GTK_POS_TOP)
         {
-          (*count1)++;
-          *width1 = MAX (*width1, w);
-          *height1 = MAX (*height1, h);
+          (*count_top)++;
+          *width_top = MAX (*width_top, w);
+          *height_top = MAX (*height_top, h);
         }
       else
         {
-          (*count2)++;
-          *width2 = MAX (*width2, w);
-          *height2 = MAX (*height2, h);
+          (*count_bottom)++;
+          *width_bottom = MAX (*width_bottom, w);
+          *height_bottom = MAX (*height_bottom, h);
         }
     }
 
@@ -1071,7 +1073,7 @@ gtk_scale_get_preferred_width (GtkWidget *widget,
   
   if (gtk_orientable_get_orientation (GTK_ORIENTABLE (widget)) == GTK_ORIENTATION_HORIZONTAL)
     {
-      gint n1, w1, h1, n2, w2, h2;
+      gint n_top, w_top, h_top, n_bottom, w_bottom, h_bottom;
       GtkCssGadget *slider_gadget;
       gint slider_length;
       gint w;
@@ -1082,11 +1084,13 @@ gtk_scale_get_preferred_width (GtkWidget *widget,
                                          &slider_length, NULL,
                                          NULL, NULL);
 
-      gtk_scale_get_mark_label_size (GTK_SCALE (widget), &n1, &w1, &h1, &n2, &w2, &h2);
+      gtk_scale_get_mark_label_size (GTK_SCALE (widget),
+                                     &n_top, &w_top, &h_top,
+                                     &n_bottom, &w_bottom, &h_bottom);
 
-      w1 = (n1 - 1) * w1 + MAX (w1, slider_length);
-      w2 = (n2 - 1) * w2 + MAX (w2, slider_length);
-      w = MAX (w1, w2);
+      w_top = (n_top - 1) * w_top + MAX (w_top, slider_length);
+      w_bottom = (n_bottom - 1) * w_bottom + MAX (w_bottom, slider_length);
+      w = MAX (w_top, w_bottom);
 
       *minimum = MAX (*minimum, w);
       *natural = MAX (*natural, w);
@@ -1103,7 +1107,7 @@ gtk_scale_get_preferred_height (GtkWidget *widget,
 
   if (gtk_orientable_get_orientation (GTK_ORIENTABLE (widget)) == GTK_ORIENTATION_VERTICAL)
     {
-      gint n1, w1, h1, n2, w2, h2;
+      gint n_top, w_top, h_top, n_bottom, w_bottom, h_bottom;
       GtkCssGadget *slider_gadget;
       gint slider_length;
       gint h;
@@ -1114,10 +1118,12 @@ gtk_scale_get_preferred_height (GtkWidget *widget,
                                          &slider_length, NULL,
                                          NULL, NULL);
 
-      gtk_scale_get_mark_label_size (GTK_SCALE (widget), &n1, &w1, &h1, &n2, &w2, &h2);
-      h1 = (n1 - 1) * h1 + MAX (h1, slider_length);
-      h2 = (n2 - 1) * h1 + MAX (h2, slider_length);
-      h = MAX (h1, h2);
+      gtk_scale_get_mark_label_size (GTK_SCALE (widget),
+                                     &n_top, &w_top, &h_top,
+                                     &n_bottom, &w_bottom, &h_bottom);
+      h_top = (n_top - 1) * h_top + MAX (h_top, slider_length);
+      h_bottom = (n_bottom - 1) * h_top + MAX (h_bottom, slider_length);
+      h = MAX (h_top, h_bottom);
 
       *minimum = MAX (*minimum, h);
       *natural = MAX (*natural, h);
