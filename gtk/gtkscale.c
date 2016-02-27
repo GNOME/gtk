@@ -176,7 +176,6 @@ static void     gtk_scale_style_updated           (GtkWidget      *widget);
 static void     gtk_scale_get_range_border        (GtkRange       *range,
                                                    GtkBorder      *border);
 static void     gtk_scale_get_mark_label_size     (GtkScale        *scale,
-                                                   GtkPositionType  position,
                                                    gint            *count1,
                                                    gint            *width1,
                                                    gint            *height1,
@@ -919,7 +918,7 @@ gtk_scale_get_range_border (GtkRange  *range,
                             "value-spacing", &value_spacing,
                             NULL);
 
-      gtk_scale_get_mark_label_size (scale, GTK_POS_TOP, &n1, &w1, &h1, &n2, &w2, &h2);
+      gtk_scale_get_mark_label_size (scale, &n1, &w1, &h1, &n2, &w2, &h2);
 
       if (gtk_orientable_get_orientation (GTK_ORIENTABLE (scale)) == GTK_ORIENTATION_HORIZONTAL)
         {
@@ -994,7 +993,6 @@ gtk_scale_get_value_size (GtkScale *scale,
 
 static void
 gtk_scale_get_mark_label_size (GtkScale        *scale,
-                               GtkPositionType  position,
                                gint            *count1,
                                gint            *width1,
                                gint            *height1,
@@ -1032,7 +1030,7 @@ gtk_scale_get_mark_label_size (GtkScale        *scale,
           h = 0;
         }
 
-      if (mark->position == position)
+      if (mark->position == GTK_POS_TOP)
         {
           (*count1)++;
           *width1 = MAX (*width1, w);
@@ -1084,7 +1082,7 @@ gtk_scale_get_preferred_width (GtkWidget *widget,
                                          &slider_length, NULL,
                                          NULL, NULL);
 
-      gtk_scale_get_mark_label_size (GTK_SCALE (widget), GTK_POS_TOP, &n1, &w1, &h1, &n2, &w2, &h2);
+      gtk_scale_get_mark_label_size (GTK_SCALE (widget), &n1, &w1, &h1, &n2, &w2, &h2);
 
       w1 = (n1 - 1) * w1 + MAX (w1, slider_length);
       w2 = (n2 - 1) * w2 + MAX (w2, slider_length);
@@ -1116,7 +1114,7 @@ gtk_scale_get_preferred_height (GtkWidget *widget,
                                          &slider_length, NULL,
                                          NULL, NULL);
 
-      gtk_scale_get_mark_label_size (GTK_SCALE (widget), GTK_POS_TOP, &n1, &w1, &h1, &n2, &w2, &h2);
+      gtk_scale_get_mark_label_size (GTK_SCALE (widget), &n1, &w1, &h1, &n2, &w2, &h2);
       h1 = (n1 - 1) * h1 + MAX (h1, slider_length);
       h2 = (n2 - 1) * h1 + MAX (h2, slider_length);
       h = MAX (h1, h2);
