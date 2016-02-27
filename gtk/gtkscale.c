@@ -263,24 +263,6 @@ gtk_scale_notify (GObject    *object,
     G_OBJECT_CLASS (gtk_scale_parent_class)->notify (object, pspec);
 }
 
-static void
-gtk_scale_update_style (GtkScale *scale)
-{
-  gint slider_length;
-  GtkRange *range;
-  GtkCssGadget *slider_gadget;
-
-  range = GTK_RANGE (scale);
-  slider_gadget = gtk_range_get_slider_gadget (range);
-  gtk_css_gadget_get_preferred_size (slider_gadget,
-                                     gtk_orientable_get_orientation (GTK_ORIENTABLE (scale)), -1,
-                                     &slider_length, NULL,
-                                     NULL, NULL);
-
-  gtk_range_set_min_slider_size (range, slider_length);
-  gtk_scale_clear_layout (scale);
-}
-
 #define add_slider_binding(binding_set, keyval, mask, scroll)              \
   gtk_binding_entry_add_signal (binding_set, keyval, mask,                 \
                                 I_("move-slider"), 1, \
@@ -536,6 +518,7 @@ gtk_scale_init (GtkScale *scale)
   gtk_widget_set_can_focus (GTK_WIDGET (scale), TRUE);
 
   gtk_range_set_slider_size_fixed (range, TRUE);
+  gtk_range_set_slider_use_min_size (range, TRUE);
 
   _gtk_range_set_has_origin (range, TRUE);
 
@@ -545,8 +528,6 @@ gtk_scale_init (GtkScale *scale)
   gtk_range_set_round_digits (range, priv->digits);
 
   gtk_range_set_flippable (range, TRUE);
-
-  gtk_scale_update_style (scale);
 }
 
 static void
@@ -1071,7 +1052,7 @@ gtk_scale_get_mark_label_size (GtkScale        *scale,
 static void
 gtk_scale_style_updated (GtkWidget *widget)
 {
-  gtk_scale_update_style (GTK_SCALE (widget));
+  gtk_scale_clear_layout (GTK_SCALE (widget));
 
   GTK_WIDGET_CLASS (gtk_scale_parent_class)->style_updated (widget);
 }
@@ -1093,10 +1074,15 @@ gtk_scale_get_preferred_width (GtkWidget *widget,
   if (gtk_orientable_get_orientation (GTK_ORIENTABLE (widget)) == GTK_ORIENTATION_HORIZONTAL)
     {
       gint n1, w1, h1, n2, w2, h2;
+      GtkCssGadget *slider_gadget;
       gint slider_length;
       gint w;
 
-      slider_length = gtk_range_get_min_slider_size (GTK_RANGE (widget));
+      slider_gadget = gtk_range_get_slider_gadget (GTK_RANGE (widget));
+      gtk_css_gadget_get_preferred_size (slider_gadget,
+                                         GTK_ORIENTATION_HORIZONTAL, -1,
+                                         &slider_length, NULL,
+                                         NULL, NULL);
 
       gtk_scale_get_mark_label_size (GTK_SCALE (widget), GTK_POS_TOP, &n1, &w1, &h1, &n2, &w2, &h2);
 
@@ -1120,10 +1106,15 @@ gtk_scale_get_preferred_height (GtkWidget *widget,
   if (gtk_orientable_get_orientation (GTK_ORIENTABLE (widget)) == GTK_ORIENTATION_VERTICAL)
     {
       gint n1, w1, h1, n2, w2, h2;
+      GtkCssGadget *slider_gadget;
       gint slider_length;
       gint h;
 
-      slider_length = gtk_range_get_min_slider_size (GTK_RANGE (widget));
+      slider_gadget = gtk_range_get_slider_gadget (GTK_RANGE (widget));
+      gtk_css_gadget_get_preferred_size (slider_gadget,
+                                         GTK_ORIENTATION_VERTICAL, -1,
+                                         &slider_length, NULL,
+                                         NULL, NULL);
 
       gtk_scale_get_mark_label_size (GTK_SCALE (widget), GTK_POS_TOP, &n1, &w1, &h1, &n2, &w2, &h2);
       h1 = (n1 - 1) * h1 + MAX (h1, slider_length);

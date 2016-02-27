@@ -152,17 +152,10 @@ gtk_scrollbar_class_init (GtkScrollbarClass *class)
 static void
 gtk_scrollbar_update_style (GtkScrollbar *scrollbar)
 {
-  gint slider_length;
   gboolean fixed_size;
   gboolean has_a, has_b, has_c, has_d;
   GtkRange *range = GTK_RANGE (scrollbar);
   GtkWidget *widget = GTK_WIDGET (scrollbar);
-  GtkCssGadget *slider_gadget = gtk_range_get_slider_gadget (range);
-
-  gtk_css_gadget_get_preferred_size (slider_gadget,
-                                     gtk_orientable_get_orientation (GTK_ORIENTABLE (scrollbar)), -1,
-                                     &slider_length, NULL,
-                                     NULL, NULL);
 
   gtk_widget_style_get (widget,
                         "fixed-slider-length", &fixed_size,
@@ -172,7 +165,6 @@ gtk_scrollbar_update_style (GtkScrollbar *scrollbar)
                         "has-forward-stepper", &has_d,
                         NULL);
 
-  gtk_range_set_min_slider_size (range, slider_length);
   gtk_range_set_slider_size_fixed (range, fixed_size);
   _gtk_range_set_steppers (range, has_a, has_b, has_c, has_d);
 }
@@ -181,6 +173,7 @@ static void
 gtk_scrollbar_init (GtkScrollbar *scrollbar)
 {
   gtk_scrollbar_update_style (scrollbar);
+  gtk_range_set_slider_use_min_size (GTK_RANGE (scrollbar), TRUE);
 }
 
 static void

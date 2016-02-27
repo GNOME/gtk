@@ -128,6 +128,7 @@ struct _GtkRangePrivate
   guint flippable              : 1;
   guint inverted               : 1;
   guint slider_size_fixed      : 1;
+  guint slider_use_min_size    : 1;
   guint trough_click_forward   : 1;  /* trough click was on the forward side of slider */
 
   /* Stepper sensitivity */
@@ -1108,6 +1109,19 @@ gtk_range_get_flippable (GtkRange *range)
   g_return_val_if_fail (GTK_IS_RANGE (range), FALSE);
 
   return range->priv->flippable;
+}
+
+void
+gtk_range_set_slider_use_min_size (GtkRange *range,
+                                   gboolean  use_min_size)
+{
+  GtkRangePrivate *priv = range->priv;
+
+  if (use_min_size != priv->slider_use_min_size)
+    {
+      priv->slider_use_min_size = use_min_size;
+      gtk_css_gadget_queue_resize (priv->slider_gadget);
+    }
 }
 
 /**
@@ -3425,10 +3439,12 @@ gtk_range_compute_slider_position (GtkRange     *range,
 {
   GtkRangePrivate *priv = range->priv;
   GtkAllocation trough_content_alloc;
-  int slider_width, slider_height;
+  int slider_width, slider_height, min_slider_size;
 
   measure_one_gadget (priv->slider_gadget, &slider_width, &slider_height);
   gtk_css_gadget_get_content_box (priv->trough_gadget, &trough_content_alloc);
+
+  min_slider_size = priv->min_slider_size;
 
   if (priv->orientation == GTK_ORIENTATION_VERTICAL)
     {
@@ -3440,6 +3456,9 @@ gtk_range_compute_slider_position (GtkRange     *range,
       slider_rect->x = trough_content_alloc.x + (int) floor ((trough_content_alloc.width - slider_width) / 2);
       slider_rect->width = slider_width;
 
+      if (priv->slider_use_min_size)
+        min_slider_size = slider_height;
+
       /* Compute slider position/length */
       top = trough_content_alloc.y;
       bottom = top + trough_content_alloc.height;
@@ -3447,8 +3466,8 @@ gtk_range_compute_slider_position (GtkRange     *range,
       /* Scale slider half extends over the trough edge */
       if (GTK_IS_SCALE (range))
         {
-          top -= priv->min_slider_size / 2;
-          bottom += priv->min_slider_size / 2;
+          top -= min_slider_size / 2;
+          bottom += min_slider_size / 2;
         }
 
       /* slider height is the fraction (page_size /
@@ -3459,11 +3478,11 @@ gtk_range_compute_slider_position (GtkRange     *range,
         height = ((bottom - top) * (gtk_adjustment_get_page_size (priv->adjustment) /
                                      (gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_lower (priv->adjustment))));
       else
-        height = priv->min_slider_size;
+        height = min_slider_size;
 
-      if (height < priv->min_slider_size ||
+      if (height < min_slider_size ||
           priv->slider_size_fixed)
-        height = priv->min_slider_size;
+        height = min_slider_size;
 
       height = MIN (height, trough_content_alloc.height);
       
@@ -3491,6 +3510,9 @@ gtk_range_compute_slider_position (GtkRange     *range,
       slider_rect->y = trough_content_alloc.y + (int) floor ((trough_content_alloc.height - slider_height) / 2);
       slider_rect->height = slider_height;
 
+      if (priv->slider_use_min_size)
+        min_slider_size = slider_width;
+
       /* Compute slider position/length */
       left = trough_content_alloc.x;
       right = left + trough_content_alloc.width;
@@ -3498,8 +3520,8 @@ gtk_range_compute_slider_position (GtkRange     *range,
       /* Scale slider half extends over the trough edge */
       if (GTK_IS_SCALE (range))
         {
-          left -= priv->min_slider_size / 2;
-          right += priv->min_slider_size / 2;
+          left -= min_slider_size / 2;
+          right += min_slider_size / 2;
         }
 
       /* slider width is the fraction (page_size /
@@ -3510,11 +3532,11 @@ gtk_range_compute_slider_position (GtkRange     *range,
         width = ((right - left) * (gtk_adjustment_get_page_size (priv->adjustment) /
                                  (gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_lower (priv->adjustment))));
       else
-        width = priv->min_slider_size;
+        width = min_slider_size;
 
-      if (width < priv->min_slider_size ||
+      if (width < min_slider_size ||
           priv->slider_size_fixed)
-        width = priv->min_slider_size;
+        width = min_slider_size;
 
       width = MIN (width, trough_content_alloc.width);
 
