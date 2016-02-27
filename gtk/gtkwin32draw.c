@@ -309,9 +309,53 @@ draw_window (cairo_t *cr,
              int      width,
              int      height)
 {
+  draw_edge (cr, EDGE_RAISED, 0, 0, width, height + 2);
+
   gtk_cairo_set_source_sys_color (cr, state == 2 ? GTK_WIN32_SYS_COLOR_INACTIVECAPTION
                                                  : GTK_WIN32_SYS_COLOR_ACTIVECAPTION);
-  cairo_rectangle (cr, 0, 0, width, height);
+  cairo_rectangle (cr, 2, 2, width - 4, height - 2);
+  cairo_fill (cr);
+}
+
+static void
+draw_window_left (cairo_t *cr,
+                  int      part,
+                  int      state,
+                  int      width,
+                  int      height)
+{
+  draw_edge (cr, EDGE_RAISED, 0, -2, width + 2, height + 4);
+
+  gtk_cairo_set_source_sys_color (cr, GTK_WIN32_SYS_COLOR_BTNFACE);
+  cairo_rectangle (cr, 2, 0, width - 2, height);
+  cairo_fill (cr);
+}
+
+static void
+draw_window_right (cairo_t *cr,
+                   int      part,
+                   int      state,
+                   int      width,
+                   int      height)
+{
+  draw_edge (cr, EDGE_RAISED, -2, -2, width + 2, height + 4);
+
+  gtk_cairo_set_source_sys_color (cr, GTK_WIN32_SYS_COLOR_BTNFACE);
+  cairo_rectangle (cr, 0, 0, width - 2, height);
+  cairo_fill (cr);
+}
+
+static void
+draw_window_bottom (cairo_t *cr,
+                    int      part,
+                    int      state,
+                    int      width,
+                    int      height)
+{
+  draw_edge (cr, EDGE_RAISED, 0, -2, width, height + 2);
+
+  gtk_cairo_set_source_sys_color (cr, GTK_WIN32_SYS_COLOR_BTNFACE);
+  cairo_rectangle (cr, 2, 0, width - 4, height - 2);
   cairo_fill (cr);
 }
 
@@ -394,6 +438,9 @@ static GtkWin32ThemePart theme_parts[] = {
   { "edit",    9,  0, { 0, 0, 0, 0 }, draw_edit },
   { "tooltip", 1,  0, { 0, 0, 0, 0 }, draw_tooltip },
   { "window",  1,  0, { 0, 0, 0, 0 }, draw_window },
+  { "window",  7,  0, { 0, 0, 0, 0 }, draw_window_left },
+  { "window",  8,  0, { 0, 0, 0, 0 }, draw_window_right },
+  { "window",  9,  0, { 0, 0, 0, 0 }, draw_window_bottom },
   { "window", 15,  0, { 0, 0, 0, 0 }, draw_window_button },
   { "window", 17,  0, { 0, 0, 0, 0 }, draw_window_button },
   { "window", 18,  0, { 0, 0, 0, 0 }, draw_window_button },
