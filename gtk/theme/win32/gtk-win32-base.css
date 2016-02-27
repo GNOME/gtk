@@ -90,10 +90,6 @@ frame {
     color: #fff;
 }
 
-notebook > scrolledwindow.frame {
-    border-style: none;
-}
-
 scrolledwindow.frame {
   border-style: solid;
   border-width: 2px;
@@ -331,6 +327,212 @@ radiobutton:dir(ltr) radio {
 checkbutton:dir(rtl) check,
 radiobutton:dir(rtl) radio {
   margin-left: 6px;
+}
+
+/* Notebooks */
+
+notebook > stack {
+    background-image: -gtk-win32-theme-part(tab, 9, 1);
+}
+
+notebook > header > tabs {
+    padding: 2px;
+}
+
+notebook > header.top > tabs {
+    padding-bottom: 0px;
+}
+
+notebook > header.right > tabs {
+    padding-left: 0px;
+}
+
+notebook > header.bottom > tabs {
+    padding-top: 0px;
+}
+
+notebook > header.left > tabs {
+    padding-right: 0px;
+}
+
+notebook > header > tabs > tab {
+    background-image: -gtk-win32-theme-part(tab, 1, 1);
+    padding-top: calc(1px + -gtk-win32-part-border-top(tab, 1, 1));
+    padding-right: calc(3px + -gtk-win32-part-border-right(tab, 1, 1));
+    padding-bottom: calc(2px + -gtk-win32-part-border-bottom(tab, 1, 1));
+    padding-left: calc(3px + -gtk-win32-part-border-left(tab, 1, 1));
+}
+
+notebook > header > tabs > tab:hover {
+    background-image: -gtk-win32-theme-part(tab, 1, 2);
+    padding-top: calc(1px + -gtk-win32-part-border-top(tab, 1, 2));
+    padding-right: calc(3px + -gtk-win32-part-border-right(tab, 1, 2));
+    padding-bottom: calc(2px + -gtk-win32-part-border-bottom(tab, 1, 2));
+    padding-left: calc(3px + -gtk-win32-part-border-left(tab, 1, 2));
+}
+
+notebook > header > tabs > tab:focus {
+    background-image: -gtk-win32-theme-part(tab, 1, 5);
+    padding-top: calc(1px + -gtk-win32-part-border-top(tab, 1, 5));
+    padding-right: calc(3px + -gtk-win32-part-border-right(tab, 1, 5));
+    padding-bottom: calc(2px + -gtk-win32-part-border-bottom(tab, 1, 5));
+    padding-left: calc(3px + -gtk-win32-part-border-left(tab, 1, 5));
+}
+
+notebook > header > tabs > tab:disabled {
+    background-image: -gtk-win32-theme-part(tab, 1, 4);
+    padding-top: calc(1px + -gtk-win32-part-border-top(tab, 1, 4));
+    padding-right: calc(3px + -gtk-win32-part-border-right(tab, 1, 4));
+    padding-bottom: calc(2px + -gtk-win32-part-border-bottom(tab, 1, 4));
+    padding-left: calc(3px + -gtk-win32-part-border-left(tab, 1, 4));
+}
+
+notebook > header > tabs > tab:checked {
+    background-image: -gtk-win32-theme-part(tab, 5, 3);
+    padding-top: calc(1px + -gtk-win32-part-border-top(tab, 5, 3));
+    padding-right: calc(5px + -gtk-win32-part-border-right(tab, 5, 3));
+    padding-bottom: calc(4px + -gtk-win32-part-border-bottom(tab, 5, 3));
+    padding-left: calc(5px + -gtk-win32-part-border-left(tab, 5, 3));
+    margin: -2px;
+}
+
+notebook > header > tabs > tab:first-child {
+    background-image: -gtk-win32-theme-part(tab, 2, 1);
+    padding-top: calc(1px + -gtk-win32-part-border-top(tab, 2, 1));
+    padding-right: calc(3px + -gtk-win32-part-border-right(tab, 2, 1));
+    padding-bottom: calc(2px + -gtk-win32-part-border-bottom(tab, 2, 1));
+    padding-left: calc(3px + -gtk-win32-part-border-left(tab, 2, 1));
+}
+
+notebook > header > tabs > tab:first-child:hover {
+    background-image: -gtk-win32-theme-part(tab, 2, 2);
+    padding-top: calc(1px + -gtk-win32-part-border-top(tab, 2, 2));
+    padding-right: calc(3px + -gtk-win32-part-border-right(tab, 2, 2));
+    padding-bottom: calc(2px + -gtk-win32-part-border-bottom(tab, 2, 2));
+    padding-left: calc(3px + -gtk-win32-part-border-left(tab, 2, 2));
+}
+
+notebook > header > tabs > tab:first-child:focus {
+    background-image: -gtk-win32-theme-part(tab, 1, 5);
+    padding-top: calc(1px + -gtk-win32-part-border-top(tab, 2, 5));
+    padding-right: calc(3px + -gtk-win32-part-border-right(tab, 2, 5));
+    padding-bottom: calc(2px + -gtk-win32-part-border-bottom(tab, 2, 5));
+    padding-left: calc(3px + -gtk-win32-part-border-left(tab, 2, 5));
+}
+
+notebook > header > tabs > tab:first-child:disabled {
+    background-image: -gtk-win32-theme-part(tab, 1, 4);
+    padding-top: calc(1px + -gtk-win32-part-border-top(tab, 2, 4));
+    padding-right: calc(3px + -gtk-win32-part-border-right(tab, 2, 4));
+    padding-bottom: calc(2px + -gtk-win32-part-border-bottom(tab, 2, 4));
+    padding-left: calc(3px + -gtk-win32-part-border-left(tab, 2, 4));
+}
+
+notebook > header > tabs > tab:first-child:checked {
+    background-image: -gtk-win32-theme-part(tab, 6, 3);
+    padding-top: calc(1px + -gtk-win32-part-border-top(tab, 6, 3));
+    padding-right: calc(5px + -gtk-win32-part-border-right(tab, 6, 3));
+    padding-bottom: calc(4px + -gtk-win32-part-border-bottom(tab, 6, 3));
+    padding-left: calc(5px + -gtk-win32-part-border-left(tab, 6, 3));
+    margin: -2px;
+}
+
+notebook > header > tabs > tab:last-child {
+    background-image: -gtk-win32-theme-part(tab, 3, 1);
+    padding-top: calc(1px + -gtk-win32-part-border-top(tab, 3, 1));
+    padding-right: calc(3px + -gtk-win32-part-border-right(tab, 3, 1));
+    padding-bottom: calc(2px + -gtk-win32-part-border-bottom(tab, 3, 1));
+    padding-left: calc(3px + -gtk-win32-part-border-left(tab, 3, 1));
+}
+
+notebook > header > tabs > tab:last-child:hover {
+    background-image: -gtk-win32-theme-part(tab, 3, 2);
+    padding-top: calc(1px + -gtk-win32-part-border-top(tab, 3, 2));
+    padding-right: calc(3px + -gtk-win32-part-border-right(tab, 3, 2));
+    padding-bottom: calc(2px + -gtk-win32-part-border-bottom(tab, 3, 2));
+    padding-left: calc(3px + -gtk-win32-part-border-left(tab, 3, 2));
+}
+
+notebook > header > tabs > tab:last-child:focus {
+    background-image: -gtk-win32-theme-part(tab, 3, 5);
+    padding-top: calc(1px + -gtk-win32-part-border-top(tab, 3, 5));
+    padding-right: calc(3px + -gtk-win32-part-border-right(tab, 3, 5));
+    padding-bottom: calc(2px + -gtk-win32-part-border-bottom(tab, 3, 5));
+    padding-left: calc(3px + -gtk-win32-part-border-left(tab, 3, 5));
+}
+
+notebook > header > tabs > tab:last-child:disabled {
+    background-image: -gtk-win32-theme-part(tab, 3, 4);
+    padding-top: calc(1px + -gtk-win32-part-border-top(tab, 3, 4));
+    padding-right: calc(3px + -gtk-win32-part-border-right(tab, 3, 4));
+    padding-bottom: calc(2px + -gtk-win32-part-border-bottom(tab, 3, 4));
+    padding-left: calc(3px + -gtk-win32-part-border-left(tab, 3, 4));
+}
+
+notebook > header > tabs > tab:last-child:checked {
+    background-image: -gtk-win32-theme-part(tab, 7, 3);
+    padding-top: calc(1px + -gtk-win32-part-border-top(tab, 7, 3));
+    padding-right: calc(5px + -gtk-win32-part-border-right(tab, 7, 3));
+    padding-bottom: calc(4px + -gtk-win32-part-border-bottom(tab, 7, 3));
+    padding-left: calc(5px + -gtk-win32-part-border-left(tab, 7, 3));
+    margin: -2px;
+}
+
+notebook > header > tabs > tab:only-child {
+    background-image: -gtk-win32-theme-part(tab, 4, 1);
+    padding-top: calc(1px + -gtk-win32-part-border-top(tab, 4, 1));
+    padding-right: calc(3px + -gtk-win32-part-border-right(tab, 4, 1));
+    padding-bottom: calc(2px + -gtk-win32-part-border-bottom(tab, 4, 1));
+    padding-left: calc(3px + -gtk-win32-part-border-left(tab, 4, 1));
+}
+
+notebook > header > tabs > tab:only-child:hover {
+    background-image: -gtk-win32-theme-part(tab, 4, 2);
+    padding-top: calc(1px + -gtk-win32-part-border-top(tab, 4, 2));
+    padding-right: calc(3px + -gtk-win32-part-border-right(tab, 4, 2));
+    padding-bottom: calc(2px + -gtk-win32-part-border-bottom(tab, 4, 2));
+    padding-left: calc(3px + -gtk-win32-part-border-left(tab, 4, 2));
+}
+
+notebook > header > tabs > tab:only-child:focus {
+    background-image: -gtk-win32-theme-part(tab, 4, 5);
+    padding-top: calc(1px + -gtk-win32-part-border-top(tab, 4, 5));
+    padding-right: calc(3px + -gtk-win32-part-border-right(tab, 4, 5));
+    padding-bottom: calc(2px + -gtk-win32-part-border-bottom(tab, 4, 5));
+    padding-left: calc(3px + -gtk-win32-part-border-left(tab, 4, 5));
+}
+
+notebook > header > tabs > tab:only-child:disabled {
+    background-image: -gtk-win32-theme-part(tab, 4, 4);
+    padding-top: calc(1px + -gtk-win32-part-border-top(tab, 4, 4));
+    padding-right: calc(3px + -gtk-win32-part-border-right(tab, 4, 4));
+    padding-bottom: calc(2px + -gtk-win32-part-border-bottom(tab, 4, 4));
+    padding-left: calc(3px + -gtk-win32-part-border-left(tab, 4, 4));
+}
+
+notebook > header > tabs > tab:only-child:checked {
+    background-image: -gtk-win32-theme-part(tab, 8, 3);
+    padding-top: calc(1px + -gtk-win32-part-border-top(tab, 8, 3));
+    padding-right: calc(5px + -gtk-win32-part-border-right(tab, 8, 3));
+    padding-bottom: calc(4px + -gtk-win32-part-border-bottom(tab, 8, 3));
+    padding-left: calc(5px + -gtk-win32-part-border-left(tab, 8, 3));
+    margin: -2px;
+}
+
+notebook > header.top > tabs > tab:checked {
+    margin-bottom: -1px;
+}
+
+notebook > header.right > tabs > tab:checked {
+    margin-left: -1px;
+}
+
+notebook > header.bottom > tabs > tab:checked {
+    margin-top: -1px;
+}
+
+notebook > header.left > tabs > tab:checked {
+    margin-right: -1px;
 }
 
 /* Scrollbars */
