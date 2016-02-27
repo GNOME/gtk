@@ -4795,11 +4795,16 @@ text_window_set_padding (GtkTextView     *text_view,
                          GtkStyleContext *context)
 {
   GtkTextViewPrivate *priv;
-  GtkBorder padding;
+  GtkBorder padding, border;
 
   priv = text_view->priv;
 
   gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
+  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &border);
+  padding.left += border.left;
+  padding.right += border.right;
+  padding.top += border.top;
+  padding.bottom += border.bottom;
 
   if (padding.left != priv->left_padding ||
       padding.right != priv->right_padding ||
@@ -5864,6 +5869,10 @@ draw_text (cairo_t  *cr,
                          -priv->xoffset, -priv->yoffset - priv->top_border,
                          MAX (SCREEN_WIDTH (text_view), priv->width),
                          MAX (SCREEN_HEIGHT (text_view), priv->height));
+  gtk_render_frame (context, cr,
+                    -priv->xoffset, -priv->yoffset - priv->top_border,
+                    MAX (SCREEN_WIDTH (text_view), priv->width),
+                    MAX (SCREEN_HEIGHT (text_view), priv->height));
   gtk_style_context_restore (context);
 
   if (GTK_TEXT_VIEW_GET_CLASS (text_view)->draw_layer != NULL)
