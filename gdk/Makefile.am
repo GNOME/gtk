@@ -318,7 +318,6 @@ w32_introspection_files =		\
 	win32/gdkscreen-win32.c		\
 	win32/gdkselection-win32.c	\
 	win32/gdktestutils-win32.c	\
-	win32/gdkvisual-win32.c		\
 	win32/gdkwin32.h		\
 	win32/gdkwin32cursor.h		\
 	win32/gdkwin32display.h		\

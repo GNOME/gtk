@@ -267,7 +267,6 @@ _gdk_win32_display_open (const gchar *display_name)
   win32_display->screen = g_object_new (GDK_TYPE_WIN32_SCREEN, NULL);
 
   _gdk_monitor_init (GDK_WIN32_SCREEN (win32_display->screen));
-  _gdk_visual_init (win32_display->screen);
   _gdk_screen_init_root_window (GDK_WIN32_SCREEN (win32_display->screen));
   _gdk_events_init ();
   _gdk_input_init (_gdk_display);

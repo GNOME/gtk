@@ -39,6 +39,11 @@ struct _GdkWin32Screen
   gint num_monitors;
   GdkWin32Monitor *monitors;
 
+  GdkVisual *system_visual;
+  GdkVisual *rgba_visual;
+  gint available_visual_depths[1];
+  GdkVisualType available_visual_types[1];
+
   GdkWindow *root_window;
 
   gint always_composited : 1;
@@ -50,6 +55,206 @@ struct _GdkWin32ScreenClass
 };
 
 G_DEFINE_TYPE (GdkWin32Screen, gdk_win32_screen, GDK_TYPE_SCREEN)
+
+static gint
+get_color_precision (gulong mask)
+{
+  gint p = 0;
+
+  while (mask & 0x1)
+    {
+      p++;
+      mask >>= 1;
+    }
+
+  return p;
+}
+
+static GdkVisual *
+init_visual (GdkScreen *screen,
+             gboolean is_rgba)
+{
+  GdkVisual *visual;
+  struct
+  {
+    BITMAPINFOHEADER bi;
+    union
+    {
+      RGBQUAD colors[256];
+      DWORD fields[256];
+    } u;
+  } bmi;
+  HBITMAP hbm;
+
+  const gint rastercaps = GetDeviceCaps (_gdk_display_hdc, RASTERCAPS);
+  const int numcolors = GetDeviceCaps (_gdk_display_hdc, NUMCOLORS);
+  gint bitspixel = GetDeviceCaps (_gdk_display_hdc, BITSPIXEL);
+  gint map_entries = 0;
+
+  visual = g_object_new (GDK_TYPE_VISUAL, NULL);
+  visual->screen = screen;
+
+  if (rastercaps & RC_PALETTE)
+    {
+      const int sizepalette = GetDeviceCaps (_gdk_display_hdc, SIZEPALETTE);
+      gchar *max_colors = getenv ("GDK_WIN32_MAX_COLORS");
+      visual->type = GDK_VISUAL_PSEUDO_COLOR;
+
+      g_assert (sizepalette == 256);
+
+      if (max_colors != NULL)
+        _gdk_max_colors = atoi (max_colors);
+
+      map_entries = _gdk_max_colors;
+
+      if (map_entries >= 16 && map_entries < sizepalette)
+        {
+          if (map_entries < 32)
+            {
+              map_entries = 16;
+              visual->type = GDK_VISUAL_STATIC_COLOR;
+              bitspixel = 4;
+            }
+          else if (map_entries < 64)
+            {
+              map_entries = 32;
+              bitspixel = 5;
+            }
+          else if (map_entries < 128)
+            {
+              map_entries = 64;
+              bitspixel = 6;
+            }
+          else if (map_entries < 256)
+            {
+              map_entries = 128;
+              bitspixel = 7;
+            }
+          else
+            g_assert_not_reached ();
+        }
+      else
+        map_entries = sizepalette;
+    }
+  else if (bitspixel == 1 && numcolors == 16)
+    {
+      bitspixel = 4;
+      visual->type = GDK_VISUAL_STATIC_COLOR;
+      map_entries = 16;
+    }
+  else if (bitspixel == 1)
+    {
+      visual->type = GDK_VISUAL_STATIC_GRAY;
+      map_entries = 2;
+    }
+  else if (bitspixel == 4)
+    {
+      visual->type = GDK_VISUAL_STATIC_COLOR;
+      map_entries = 16;
+    }
+  else if (bitspixel == 8)
+    {
+      visual->type = GDK_VISUAL_STATIC_COLOR;
+      map_entries = 256;
+    }
+  else if (bitspixel == 16)
+    {
+      visual->type = GDK_VISUAL_TRUE_COLOR;
+#if 1
+      /* This code by Mike Enright,
+       * see http://www.users.cts.com/sd/m/menright/display.html
+       */
+      memset (&bmi, 0, sizeof (bmi));
+      bmi.bi.biSize = sizeof (bmi.bi);
+
+      hbm = CreateCompatibleBitmap (_gdk_display_hdc, 1, 1);
+      GetDIBits (_gdk_display_hdc, hbm, 0, 1, NULL,
+                 (BITMAPINFO *) &bmi, DIB_RGB_COLORS);
+      GetDIBits (_gdk_display_hdc, hbm, 0, 1, NULL,
+                 (BITMAPINFO *) &bmi, DIB_RGB_COLORS);
+      DeleteObject (hbm);
+
+      if (bmi.bi.biCompression != BI_BITFIELDS)
+        {
+          /* Either BI_RGB or BI_RLE_something
+           * .... or perhaps (!!) something else.
+           * Theoretically biCompression might be
+           * mmioFourCC('c','v','i','d') but I doubt it.
+           */
+          if (bmi.bi.biCompression == BI_RGB)
+            {
+              /* It's 555 */
+              bitspixel = 15;
+              visual->red_mask   = 0x00007C00;
+              visual->green_mask = 0x000003E0;
+              visual->blue_mask  = 0x0000001F;
+            }
+          else
+            {
+              g_assert_not_reached ();
+            }
+        }
+      else
+        {
+          DWORD allmasks =
+            bmi.u.fields[0] | bmi.u.fields[1] | bmi.u.fields[2];
+          int k = 0;
+          while (allmasks)
+            {
+              if (allmasks&1)
+                k++;
+              allmasks/=2;
+            }
+          bitspixel = k;
+          visual->red_mask = bmi.u.fields[0];
+          visual->green_mask = bmi.u.fields[1];
+          visual->blue_mask  = bmi.u.fields[2];
+        }
+#else
+      /* Old, incorrect (but still working) code. */
+#if 0
+      visual->red_mask   = 0x0000F800;
+      visual->green_mask = 0x000007E0;
+      visual->blue_mask  = 0x0000001F;
+#else
+      visual->red_mask   = 0x00007C00;
+      visual->green_mask = 0x000003E0;
+      visual->blue_mask  = 0x0000001F;
+#endif
+#endif
+    }
+  else if (bitspixel == 24 || bitspixel == 32)
+    {
+      if (!is_rgba)
+        bitspixel = 24;
+      visual->type = GDK_VISUAL_TRUE_COLOR;
+      visual->red_mask   = 0x00FF0000;
+      visual->green_mask = 0x0000FF00;
+      visual->blue_mask  = 0x000000FF;
+    }
+  else
+    g_error ("_gdk_visual_init: unsupported BITSPIXEL: %d\n", bitspixel);
+
+  visual->depth = bitspixel;
+  visual->byte_order = GDK_LSB_FIRST;
+  visual->bits_per_rgb = 42; /* Not used? */
+
+  if ((visual->type != GDK_VISUAL_TRUE_COLOR) &&
+      (visual->type != GDK_VISUAL_DIRECT_COLOR))
+    {
+      visual->red_mask = 0;
+      visual->green_mask = 0;
+      visual->blue_mask = 0;
+    }
+  else
+    map_entries = 1 << (MAX (get_color_precision (visual->red_mask),
+                             MAX (get_color_precision (visual->green_mask),
+                                  get_color_precision (visual->blue_mask))));
+
+  visual->colormap_size = map_entries;
+
+  return visual;
+}
 
 static void
 gdk_win32_screen_init (GdkWin32Screen *win32_screen)
@@ -77,6 +282,12 @@ gdk_win32_screen_init (GdkWin32Screen *win32_screen)
 
   if (logpixelsx > 0)
     _gdk_screen_set_resolution (screen, logpixelsx);
+
+  win32_screen->system_visual = init_visual (screen, FALSE);
+  win32_screen->rgba_visual = init_visual (screen, TRUE);
+
+  win32_screen->available_visual_depths[0] = win32_screen->rgba_visual->depth;
+  win32_screen->available_visual_types[0] = win32_screen->rgba_visual->type;
 
   /* On Windows 8 and later, DWM (composition) is always enabled */
   win32_screen->always_composited = g_win32_check_windows_version (6, 2, 0, G_WIN32_OS_ANY);
@@ -400,6 +611,109 @@ gdk_win32_screen_is_composited (GdkScreen *screen)
     }
 }
 
+static gint
+gdk_win32_screen_visual_get_best_depth (GdkScreen *screen)
+{
+  return GDK_WIN32_SCREEN (screen)->available_visual_depths[0];
+}
+
+static GdkVisualType
+gdk_win32_screen_visual_get_best_type (GdkScreen *screen)
+{
+  return GDK_WIN32_SCREEN (screen)->available_visual_types[0];
+}
+
+static GdkVisual *
+gdk_win32_screen_get_system_visual (GdkScreen *screen)
+{
+  return GDK_WIN32_SCREEN (screen)->system_visual;
+}
+
+static GdkVisual *
+gdk_win32_screen_get_rgba_visual (GdkScreen *screen)
+{
+  return GDK_WIN32_SCREEN (screen)->rgba_visual;
+}
+
+static GdkVisual*
+gdk_win32_screen_visual_get_best (GdkScreen *screen)
+{
+  return GDK_WIN32_SCREEN (screen)->rgba_visual;
+}
+
+static GdkVisual *
+gdk_win32_screen_visual_get_best_with_depth (GdkScreen *screen,
+                                             gint       depth)
+{
+  GdkWin32Screen *win32_screen = GDK_WIN32_SCREEN (screen);
+
+  if (depth == win32_screen->rgba_visual->depth)
+    return win32_screen->rgba_visual;
+  else if (depth == win32_screen->system_visual->depth)
+    return win32_screen->system_visual;
+
+  return NULL;
+}
+
+static GdkVisual *
+gdk_win32_screen_visual_get_best_with_type (GdkScreen     *screen,
+                                            GdkVisualType  visual_type)
+{
+  GdkWin32Screen *win32_screen = GDK_WIN32_SCREEN (screen);
+
+  if (visual_type == win32_screen->rgba_visual->type)
+    return win32_screen->rgba_visual;
+  else if (visual_type == win32_screen->system_visual->type)
+    return win32_screen->system_visual;
+
+  return NULL;
+}
+
+static GdkVisual *
+gdk_win32_screen_visual_get_best_with_both (GdkScreen     *screen,
+                                            gint           depth,
+                                            GdkVisualType  visual_type)
+{
+  GdkWin32Screen *win32_screen = GDK_WIN32_SCREEN (screen);
+
+  if ((depth == win32_screen->rgba_visual->depth) && (visual_type == win32_screen->rgba_visual->type))
+    return win32_screen->rgba_visual;
+  else if ((depth == win32_screen->system_visual->depth) && (visual_type == win32_screen->system_visual->type))
+    return win32_screen->system_visual;
+
+  return NULL;
+}
+
+static void
+gdk_win32_screen_query_depths (GdkScreen  *screen,
+                               gint      **depths,
+                               gint       *count)
+{
+  *count = 1;
+  *depths = GDK_WIN32_SCREEN (screen)->available_visual_depths;
+}
+
+static void
+gdk_win32_screen_query_visual_types (GdkScreen      *screen,
+                                     GdkVisualType **visual_types,
+                                     gint           *count)
+{
+  *count = 1;
+  *visual_types = GDK_WIN32_SCREEN (screen)->available_visual_types;
+}
+
+static GList *
+gdk_win32_screen_list_visuals (GdkScreen *screen)
+{
+  GdkWin32Screen *win32_screen = GDK_WIN32_SCREEN (screen);
+  GList *result = NULL;
+
+  result = g_list_append (result, win32_screen->rgba_visual);
+  result = g_list_append (result, win32_screen->system_visual);
+
+  return result;
+}
+
 static void
 gdk_win32_screen_finalize (GObject *object)
 {
@@ -435,20 +749,20 @@ gdk_win32_screen_class_init (GdkWin32ScreenClass *klass)
   screen_class->get_monitor_plug_name = gdk_win32_screen_get_monitor_plug_name;
   screen_class->get_monitor_geometry = gdk_win32_screen_get_monitor_geometry;
   screen_class->get_monitor_workarea = gdk_win32_screen_get_monitor_geometry;
-  screen_class->get_system_visual = _gdk_win32_screen_get_system_visual;
-  screen_class->get_rgba_visual = _gdk_win32_screen_get_rgba_visual;
   screen_class->is_composited = gdk_win32_screen_is_composited;
   screen_class->make_display_name = gdk_win32_screen_make_display_name;
   screen_class->get_active_window = gdk_win32_screen_get_active_window;
   screen_class->get_window_stack = gdk_win32_screen_get_window_stack;
   screen_class->get_setting = _gdk_win32_screen_get_setting;
-  screen_class->visual_get_best_depth = _gdk_win32_screen_visual_get_best_depth;
-  screen_class->visual_get_best_type = _gdk_win32_screen_visual_get_best_type;
-  screen_class->visual_get_best = _gdk_win32_screen_visual_get_best;
-  screen_class->visual_get_best_with_depth = _gdk_win32_screen_visual_get_best_with_depth;
-  screen_class->visual_get_best_with_type = _gdk_win32_screen_visual_get_best_with_type;
-  screen_class->visual_get_best_with_both = _gdk_win32_screen_visual_get_best_with_both;
-  screen_class->query_depths = _gdk_win32_screen_query_depths;
-  screen_class->query_visual_types = _gdk_win32_screen_query_visual_types;
-  screen_class->list_visuals = _gdk_win32_screen_list_visuals;
+  screen_class->get_system_visual = gdk_win32_screen_get_system_visual;
+  screen_class->get_rgba_visual = gdk_win32_screen_get_rgba_visual;
+  screen_class->visual_get_best_depth = gdk_win32_screen_visual_get_best_depth;
+  screen_class->visual_get_best_type = gdk_win32_screen_visual_get_best_type;
+  screen_class->visual_get_best = gdk_win32_screen_visual_get_best;
+  screen_class->visual_get_best_with_depth = gdk_win32_screen_visual_get_best_with_depth;
+  screen_class->visual_get_best_with_type = gdk_win32_screen_visual_get_best_with_type;
+  screen_class->visual_get_best_with_both = gdk_win32_screen_visual_get_best_with_both;
+  screen_class->query_depths = gdk_win32_screen_query_depths;
+  screen_class->query_visual_types = gdk_win32_screen_query_visual_types;
+  screen_class->list_visuals = gdk_win32_screen_list_visuals;
 }

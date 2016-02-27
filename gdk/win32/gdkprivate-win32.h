@@ -508,20 +508,7 @@ void _gdk_win32_window_change_property (GdkWindow    *window,
 void _gdk_win32_window_delete_property (GdkWindow *window, GdkAtom    property);
 
 /* Stray GdkWin32Screen members */
-GdkVisual *_gdk_win32_screen_get_system_visual (GdkScreen *screen);
-GdkVisual *_gdk_win32_screen_get_rgba_visual (GdkScreen *screen);
 gboolean _gdk_win32_screen_get_setting (GdkScreen   *screen, const gchar *name, GValue *value);
-gint _gdk_win32_screen_visual_get_best_depth (GdkScreen *screen);
-GdkVisualType _gdk_win32_screen_visual_get_best_type (GdkScreen *screen);
-GdkVisual *_gdk_win32_screen_visual_get_best (GdkScreen *screen);
-GdkVisual *_gdk_win32_screen_visual_get_best_with_depth (GdkScreen *screen, gint depth);
-GdkVisual *_gdk_win32_screen_visual_get_best_with_type (GdkScreen *screen, GdkVisualType visual_type);
-GdkVisual *_gdk_win32_screen_visual_get_best_with_both (GdkScreen *screen, gint depth, GdkVisualType visual_type);
-void _gdk_win32_screen_query_depths  (GdkScreen *screen, gint **depths, gint  *count);
-void _gdk_win32_screen_query_visual_types (GdkScreen      *screen,
-				           GdkVisualType **visual_types,
-				           gint           *count);
-GList *_gdk_win32_screen_list_visuals (GdkScreen *screen);
 
 /* Distributed display manager implementation */
 GdkDisplay *_gdk_win32_display_open (const gchar *display_name);
@@ -540,7 +527,6 @@ void _gdk_win32_windowing_init (void);
 void _gdk_screen_init_root_window (GdkWin32Screen *screen_win32);
 void _gdk_screen_init_root_window_size (GdkWin32Screen *screen);
 void _gdk_monitor_init(GdkWin32Screen *screen);
-void _gdk_visual_init (GdkScreen *screen);
 void _gdk_dnd_init    (void);
 void _gdk_events_init (void);
 void _gdk_input_wintab_init_check (GdkDeviceManager *device_manager);
