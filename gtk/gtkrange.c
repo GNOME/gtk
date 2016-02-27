@@ -1185,6 +1185,9 @@ gtk_range_get_slider_size_fixed (GtkRange *range)
  * This function is useful mainly for #GtkRange subclasses.
  *
  * Since: 2.20
+ *
+ * Deprecated: 3.20: Use the min-height/min-width CSS properties on the slider
+ *   node.
  **/
 void
 gtk_range_set_min_slider_size (GtkRange *range,
@@ -1216,6 +1219,9 @@ gtk_range_set_min_slider_size (GtkRange *range,
  * Returns: The minimum size of the range’s slider.
  *
  * Since: 2.20
+ *
+ * Deprecated: 3.20: Use the min-height/min-width CSS properties on the slider
+ *   node.
  **/
 gint
 gtk_range_get_min_slider_size (GtkRange *range)
