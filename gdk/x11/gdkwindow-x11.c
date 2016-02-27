@@ -2920,6 +2920,7 @@ gdk_window_x11_set_back_color (GdkWindow *window,
 	   * it's likely alpha, so we set them to 1s.
 	   */
 	  guint padding, pixel;
+	  gint red_prec, red_shift, green_prec, green_shift, blue_prec, blue_shift;
 
 	  /* Shifting by >= width-of-type isn't defined in C */
 	  if (visual->depth >= 32)
@@ -2928,10 +2929,14 @@ gdk_window_x11_set_back_color (GdkWindow *window,
 	    padding = ((~(guint32)0)) << visual->depth;
 	  
 	  pixel = ~ (visual->red_mask | visual->green_mask | visual->blue_mask | padding);
-	  
-	  pixel += (((int) (red   * ((1 << visual->red_prec  ) - 1))) << visual->red_shift  ) +
-		   (((int) (green * ((1 << visual->green_prec) - 1))) << visual->green_shift) +
-		   (((int) (blue  * ((1 << visual->blue_prec ) - 1))) << visual->blue_shift );
+
+          gdk_visual_get_red_pixel_details (visual, NULL, &red_shift, &red_prec);
+          gdk_visual_get_green_pixel_details (visual, NULL, &green_shift, &green_prec);
+          gdk_visual_get_blue_pixel_details (visual, NULL, &blue_shift, &blue_prec);
+
+          pixel += (((int) (red   * ((1 << red_prec  ) - 1))) << red_shift  ) +
+                   (((int) (green * ((1 << green_prec) - 1))) << green_shift) +
+                   (((int) (blue  * ((1 << blue_prec ) - 1))) << blue_shift );
 
           XSetWindowBackground (GDK_WINDOW_XDISPLAY (window),
                                 GDK_WINDOW_XID (window), pixel);

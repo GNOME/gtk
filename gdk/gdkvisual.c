@@ -351,6 +351,44 @@ gdk_visual_get_bits_per_rgb (GdkVisual *visual)
   return visual->bits_per_rgb;
 }
 
+static void
+gdk_visual_get_pixel_details (GdkVisual *visual,
+                              gulong     pixel_mask,
+                              guint32   *mask,
+                              gint      *shift,
+                              gint      *precision)
+{
+  gulong m = 0;
+  gint s = 0;
+  gint p = 0;
+
+  if (pixel_mask != 0)
+    {
+      m = pixel_mask;
+      while (!(m & 0x1))
+        {
+          s++;
+          m >>= 1;
+        }
+
+      m = pixel_mask;
+      while (m & 0x1)
+        {
+          p++;
+          m >>= 1;
+        }
+    }
+
+  if (mask)
+    *mask = pixel_mask;
+
+  if (shift)
+    *shift = s;
+
+  if (precision)
+    *precision = p;
+}
+
 /**
  * gdk_visual_get_red_pixel_details:
  * @visual: A #GdkVisual
@@ -374,14 +412,7 @@ gdk_visual_get_red_pixel_details (GdkVisual *visual,
 {
   g_return_if_fail (GDK_IS_VISUAL (visual));
 
-  if (mask)
-    *mask = visual->red_mask;
-
-  if (shift)
-    *shift = visual->red_shift;
-
-  if (precision)
-    *precision = visual->red_prec;
+  gdk_visual_get_pixel_details (visual, visual->red_mask, mask, shift, precision);
 }
 
 /**
@@ -407,14 +438,7 @@ gdk_visual_get_green_pixel_details (GdkVisual *visual,
 {
   g_return_if_fail (GDK_IS_VISUAL (visual));
 
-  if (mask)
-    *mask = visual->green_mask;
-
-  if (shift)
-    *shift = visual->green_shift;
-
-  if (precision)
-    *precision = visual->green_prec;
+  gdk_visual_get_pixel_details (visual, visual->green_mask, mask, shift, precision);
 }
 
 /**
@@ -440,14 +464,7 @@ gdk_visual_get_blue_pixel_details (GdkVisual *visual,
 {
   g_return_if_fail (GDK_IS_VISUAL (visual));
 
-  if (mask)
-    *mask = visual->blue_mask;
-
-  if (shift)
-    *shift = visual->blue_shift;
-
-  if (precision)
-    *precision = visual->blue_prec;
+  gdk_visual_get_pixel_details (visual, visual->blue_mask, mask, shift, precision);
 }
 
 /**
@@ -466,31 +483,4 @@ gdk_visual_get_screen (GdkVisual *visual)
   g_return_val_if_fail (GDK_IS_VISUAL (visual), NULL);
 
   return visual->screen;
-}
-
-void
-gdk_visual_decompose_mask (gulong  mask,
-                           gint   *shift,
-                           gint   *prec)
-{
-  *shift = 0;
-  *prec = 0;
-
-  if (mask == 0)
-    {
-      g_warning ("Mask is 0 in visual. Server bug ?");
-      return;
-    }
-
-  while (!(mask & 0x1))
-    {
-      (*shift)++;
-      mask >>= 1;
-    }
-
-  while (mask & 0x1)
-    {
-      (*prec)++;
-      mask >>= 1;
-    }
 }

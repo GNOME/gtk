@@ -84,15 +84,6 @@ _gdk_broadway_screen_init_visuals (GdkScreen *screen)
   visuals[0]->blue_mask = 0xff;
   visuals[0]->colormap_size = 256;
   visuals[0]->bits_per_rgb = 8;
-  gdk_visual_decompose_mask (visuals[0]->red_mask,
-			     &visuals[0]->red_shift,
-			     &visuals[0]->red_prec);
-  gdk_visual_decompose_mask (visuals[0]->green_mask,
-			     &visuals[0]->green_shift,
-			     &visuals[0]->green_prec);
-  gdk_visual_decompose_mask (visuals[0]->blue_mask,
-			     &visuals[0]->blue_shift,
-			     &visuals[0]->blue_prec);
 
   visuals[1] = g_object_new (GDK_TYPE_BROADWAY_VISUAL, NULL);
   visuals[1]->screen = screen;
@@ -104,15 +95,6 @@ _gdk_broadway_screen_init_visuals (GdkScreen *screen)
   visuals[1]->blue_mask = 0xff;
   visuals[1]->colormap_size = 256;
   visuals[1]->bits_per_rgb = 8;
-  gdk_visual_decompose_mask (visuals[1]->red_mask,
-			     &visuals[1]->red_shift,
-			     &visuals[1]->red_prec);
-  gdk_visual_decompose_mask (visuals[1]->green_mask,
-			     &visuals[1]->green_shift,
-			     &visuals[1]->green_prec);
-  gdk_visual_decompose_mask (visuals[1]->blue_mask,
-			     &visuals[1]->blue_shift,
-			     &visuals[1]->blue_prec);
 
   broadway_screen->system_visual = visuals[1];
   broadway_screen->rgba_visual = visuals[0];

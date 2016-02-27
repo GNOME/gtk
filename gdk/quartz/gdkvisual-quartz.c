@@ -55,16 +55,6 @@ create_standard_visual (GdkScreen *screen,
   visual->red_mask = 0xff0000;
   visual->green_mask = 0xff00;
   visual->blue_mask = 0xff;
-  
-  gdk_visual_decompose_mask (visual->red_mask,
-			     &visual->red_shift,
-			     &visual->red_prec);
-  gdk_visual_decompose_mask (visual->green_mask,
-			     &visual->green_shift,
-			     &visual->green_prec);
-  gdk_visual_decompose_mask (visual->blue_mask,
-			     &visual->blue_shift,
-			     &visual->blue_prec);
 
   return visual;
 }

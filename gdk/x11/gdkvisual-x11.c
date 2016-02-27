@@ -175,34 +175,12 @@ _gdk_x11_screen_init_visuals (GdkScreen *screen)
 	  visuals[nvisuals]->bits_per_rgb = visual_list[i].bits_per_rgb;
 	  GDK_X11_VISUAL (visuals[nvisuals])->xvisual = visual_list[i].visual;
 
-	  if ((visuals[nvisuals]->type == GDK_VISUAL_TRUE_COLOR) ||
-	      (visuals[nvisuals]->type == GDK_VISUAL_DIRECT_COLOR))
-	    {
-	      gdk_visual_decompose_mask (visuals[nvisuals]->red_mask,
-					 &visuals[nvisuals]->red_shift,
-					 &visuals[nvisuals]->red_prec);
-
-	      gdk_visual_decompose_mask (visuals[nvisuals]->green_mask,
-					 &visuals[nvisuals]->green_shift,
-					 &visuals[nvisuals]->green_prec);
-
-	      gdk_visual_decompose_mask (visuals[nvisuals]->blue_mask,
-					 &visuals[nvisuals]->blue_shift,
-					 &visuals[nvisuals]->blue_prec);
-	    }
-	  else
+	  if ((visuals[nvisuals]->type != GDK_VISUAL_TRUE_COLOR) &&
+	      (visuals[nvisuals]->type != GDK_VISUAL_DIRECT_COLOR))
 	    {
 	      visuals[nvisuals]->red_mask = 0;
-	      visuals[nvisuals]->red_shift = 0;
-	      visuals[nvisuals]->red_prec = 0;
-
 	      visuals[nvisuals]->green_mask = 0;
-	      visuals[nvisuals]->green_shift = 0;
-	      visuals[nvisuals]->green_prec = 0;
-
 	      visuals[nvisuals]->blue_mask = 0;
-	      visuals[nvisuals]->blue_shift = 0;
-	      visuals[nvisuals]->blue_prec = 0;
 	    }
 
 	  nvisuals += 1;

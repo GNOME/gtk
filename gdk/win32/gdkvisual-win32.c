@@ -38,6 +38,20 @@ static gint available_depths[1];
 
 static GdkVisualType available_types[1];
 
+static gint
+get_color_precision (gulong mask)
+{
+  gint p = 0;
+
+  while (mask & 0x1)
+    {
+      p++;
+      mask >>= 1;
+    }
+
+  return p;
+}
+
 static void
 _gdk_visual_init_internal (GdkScreen *screen, gboolean is_rgba)
 {
@@ -206,38 +220,18 @@ _gdk_visual_init_internal (GdkScreen *screen, gboolean is_rgba)
   visual->byte_order = GDK_LSB_FIRST;
   visual->bits_per_rgb = 42; /* Not used? */
 
-  if ((visual->type == GDK_VISUAL_TRUE_COLOR) ||
-      (visual->type == GDK_VISUAL_DIRECT_COLOR))
-    {
-      gdk_visual_decompose_mask (visual->red_mask,
-				 &visual->red_shift,
-				 &visual->red_prec);
-
-      gdk_visual_decompose_mask (visual->green_mask,
-				 &visual->green_shift,
-				 &visual->green_prec);
-
-      gdk_visual_decompose_mask (visual->blue_mask,
-				 &visual->blue_shift,
-				 &visual->blue_prec);
-      map_entries = 1 << (MAX (visual->red_prec,
-			       MAX (visual->green_prec,
-				    visual->blue_prec)));
-    }
-  else
+  if ((visual->type != GDK_VISUAL_TRUE_COLOR) &&
+      (visual->type != GDK_VISUAL_DIRECT_COLOR))
     {
       visual->red_mask = 0;
-      visual->red_shift = 0;
-      visual->red_prec = 0;
-
       visual->green_mask = 0;
-      visual->green_shift = 0;
-      visual->green_prec = 0;
-
       visual->blue_mask = 0;
-      visual->blue_shift = 0;
-      visual->blue_prec = 0;
     }
+  else
+    map_entries = 1 << (MAX (get_color_precision (visual->red_mask),
+                             MAX (get_color_precision (visual->green_mask),
+                                  get_color_precision (visual->blue_mask))));
+
   visual->colormap_size = map_entries;
 
   available_depths[0] = visual->depth;
