@@ -519,22 +519,6 @@ notebook > header > tabs > tab:only-child:checked {
     margin: -2px;
 }
 
-notebook > header.top > tabs > tab:checked {
-    margin-bottom: -1px;
-}
-
-notebook > header.right > tabs > tab:checked {
-    margin-left: -1px;
-}
-
-notebook > header.bottom > tabs > tab:checked {
-    margin-top: -1px;
-}
-
-notebook > header.left > tabs > tab:checked {
-    margin-right: -1px;
-}
-
 /* Scrollbars */
 
 /* TODO: Win32 has different concept for upper and lower trough, we
