@@ -2920,11 +2920,14 @@ _gdk_wayland_device_manager_add_seat (GdkDeviceManager *device_manager,
   wl_seat_add_listener (seat->wl_seat, &seat_listener, seat);
   wl_seat_set_user_data (seat->wl_seat, seat);
 
-  seat->primary_data_device =
-    gtk_primary_selection_device_manager_get_device (display_wayland->primary_selection_manager,
-                                                     seat->wl_seat);
-  gtk_primary_selection_device_add_listener (seat->primary_data_device,
-                                             &primary_selection_device_listener, seat);
+  if (display_wayland->primary_selection_manager)
+    {
+      seat->primary_data_device =
+        gtk_primary_selection_device_manager_get_device (display_wayland->primary_selection_manager,
+                                                         seat->wl_seat);
+      gtk_primary_selection_device_add_listener (seat->primary_data_device,
+                                                 &primary_selection_device_listener, seat);
+    }
 
   seat->data_device =
     wl_data_device_manager_get_data_device (display_wayland->data_device_manager,

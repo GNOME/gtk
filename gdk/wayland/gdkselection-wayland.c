@@ -1089,10 +1089,13 @@ gdk_wayland_selection_get_data_source (GdkWindow *owner,
 
   if (selection == atoms[ATOM_PRIMARY])
     {
-      source = gtk_primary_selection_device_manager_create_source (display_wayland->primary_selection_manager);
-      gtk_primary_selection_source_add_listener (source,
-                                                 &primary_source_listener,
-                                                 wayland_selection);
+      if (display_wayland->primary_selection_manager)
+        {
+          source = gtk_primary_selection_device_manager_create_source (display_wayland->primary_selection_manager);
+          gtk_primary_selection_source_add_listener (source,
+                                                     &primary_source_listener,
+                                                     wayland_selection);
+        }
     }
   else
     {
