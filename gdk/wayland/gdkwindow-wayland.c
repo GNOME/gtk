@@ -674,19 +674,32 @@ buffer_release_callback (void             *_data,
       return;
     }
 
-  /* If we've staged updates into a new buffer before the release for this
-   * buffer came in, then we can't reuse this buffer, so unref it. It may still
-   * be alive as a readback buffer though.
-   */
-  if (impl->staging_cairo_surface != NULL)
+  if (impl->staged_updates_region != NULL)
     {
-      /* If this fails, then we've allocated a staging buffer prematurely.
-       * We didn't have any screen updates.
+      /* If this fails, then we're tracking staged updates on a staging surface
+       * that doesn't exist.
        */
-      g_warn_if_fail (!cairo_region_is_empty (impl->staged_updates_region));
+      g_warn_if_fail (impl->staging_cairo_surface != NULL);
 
-      g_clear_pointer (&impl->committed_cairo_surface, cairo_surface_destroy);
-      return;
+      /* If we've staged updates into a new buffer before the release for this
+       * buffer came in, then we can't reuse this buffer, so unref it. It may still
+       * be alive as a readback buffer though (via impl->backfill_cairo_surface).
+       *
+       * It's possible a staging surface was allocated but no updates were staged.
+       * If that happened, clean up that staging surface now, since the old commit
+       * buffer is available again, and reusing the old commit buffer for future
+       * updates will save having to do a read back later.
+       */
+      if (!cairo_region_is_empty (impl->staged_updates_region))
+        {
+          g_clear_pointer (&impl->committed_cairo_surface, cairo_surface_destroy);
+          return;
+        }
+      else
+        {
+          g_clear_pointer (&impl->staged_updates_region, cairo_region_destroy);
+          g_clear_pointer (&impl->staging_cairo_surface, cairo_surface_destroy);
+        }
     }
 
   /* Release came in, we haven't done any interim updates, so we can just use
