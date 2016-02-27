@@ -40,13 +40,6 @@ viewport {
     color: -gtk-win32-color(button, hotlight);
 }
 
-frame {
-    border-width: 2px;
-    border-style: solid;
-    background-color: transparent;
-    border-image: -gtk-win32-theme-part(button, 4, 1) 2 2 2 2 stretch;
-}
-
 *:disabled {
     color: -gtk-win32-color(button, graytext);
 }
@@ -327,6 +320,34 @@ radiobutton:dir(ltr) radio {
 checkbutton:dir(rtl) check,
 radiobutton:dir(rtl) radio {
   margin-left: 6px;
+}
+
+/* Frame */
+
+frame {
+  padding: 0px 10px;
+}
+
+frame > border {
+    margin: 0px -10px;
+    background-image: -gtk-win32-theme-part(button, 4, 1);
+    padding-top: -gtk-win32-part-border-top(button, 4, 1);
+    padding-right: -gtk-win32-part-border-right(button, 4, 1);
+    padding-bottom: -gtk-win32-part-border-bottom(button, 4, 1);
+    padding-left: -gtk-win32-part-border-left(button, 4, 1);
+}
+
+frame:disabled > border {
+    margin: 0px -10px;
+    background-image: -gtk-win32-theme-part(button, 4, 2);
+    padding-top: -gtk-win32-part-border-top(button, 4, 2);
+    padding-right: -gtk-win32-part-border-right(button, 4, 2);
+    padding-bottom: -gtk-win32-part-border-bottom(button, 4, 2);
+    padding-left: -gtk-win32-part-border-left(button, 4, 2);
+}
+
+frame > :not(border) {
+    margin: 0px 2px;
 }
 
 /* Notebooks */

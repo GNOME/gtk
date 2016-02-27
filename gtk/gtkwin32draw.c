@@ -168,6 +168,7 @@ typedef enum {
 static void
 draw_edge (cairo_t      *cr,
            GtkWin32Edge  edge,
+           gboolean      soft,
            int           x,
            int           y,
            int           width,
@@ -177,13 +178,13 @@ draw_edge (cairo_t      *cr,
     {
     case EDGE_RAISED_OUTER:
       draw_outline (cr,
-                    GTK_WIN32_SYS_COLOR_BTNHIGHLIGHT,
+                    soft ? GTK_WIN32_SYS_COLOR_BTNHIGHLIGHT : GTK_WIN32_SYS_COLOR_3DLIGHT,
                     GTK_WIN32_SYS_COLOR_3DDKSHADOW,
                     x, y, width, height);
       break;
     case EDGE_SUNKEN_OUTER:
       draw_outline (cr,
-                    GTK_WIN32_SYS_COLOR_3DDKSHADOW,
+                    soft ? GTK_WIN32_SYS_COLOR_3DDKSHADOW : GTK_WIN32_SYS_COLOR_BTNSHADOW,
                     GTK_WIN32_SYS_COLOR_BTNHIGHLIGHT,
                     x, y, width, height);
       break;
@@ -202,13 +203,13 @@ draw_edge (cairo_t      *cr,
     {
     case EDGE_RAISED_INNER:
       draw_outline (cr,
-                    GTK_WIN32_SYS_COLOR_3DLIGHT,
+                    soft ? GTK_WIN32_SYS_COLOR_3DLIGHT : GTK_WIN32_SYS_COLOR_BTNHIGHLIGHT,
                     GTK_WIN32_SYS_COLOR_BTNSHADOW,
                     x, y, width, height);
       break;
     case EDGE_SUNKEN_INNER:
       draw_outline (cr,
-                    GTK_WIN32_SYS_COLOR_BTNSHADOW,
+                    soft ? GTK_WIN32_SYS_COLOR_BTNSHADOW : GTK_WIN32_SYS_COLOR_3DDKSHADOW,
                     GTK_WIN32_SYS_COLOR_3DLIGHT,
                     x, y, width, height);
       break;
@@ -226,15 +227,21 @@ draw_button (cairo_t *cr,
              int      width,
              int      height)
 {
-#if 0
-  /* These are the colors for !BF_SOFT, should we ever split out DrawEdge() */
-  int out_top_color = is_down ? GTK_WIN32_SYS_COLOR_3DLIGHT : GTK_WIN32_SYS_COLOR_BTNSHADOW;
-  int out_bot_color = is_down ? GTK_WIN32_SYS_COLOR_BTNHIGHLIGHT : GTK_WIN32_SYS_COLOR_3DDKSHADOW;
-  int in_top_color = is_down ? GTK_WIN32_SYS_COLOR_3DDKSHADOW : GTK_WIN32_SYS_COLOR_BTNHIGHLIGHT;
-  int in_bot_color = is_down ? GTK_WIN32_SYS_COLOR_BTNSHADOW : GTK_WIN32_SYS_COLOR_3DLIGHT;
-#endif
+  draw_edge (cr, state == 3 ? EDGE_SUNKEN : EDGE_RAISED, TRUE, 0, 0, width, height);
 
-  draw_edge (cr, state == 3 ? EDGE_SUNKEN : EDGE_RAISED, 0, 0, width, height);
+  gtk_cairo_set_source_sys_color (cr, GTK_WIN32_SYS_COLOR_BTNFACE);
+  cairo_rectangle (cr, 2, 2, width - 4, height - 4);
+  cairo_fill (cr);
+}
+
+static void
+draw_frame (cairo_t *cr,
+            int      part,
+            int      state,
+            int      width,
+            int      height)
+{
+  draw_edge (cr, EDGE_ETCHED, FALSE, 0, 0, width, height);
 
   gtk_cairo_set_source_sys_color (cr, GTK_WIN32_SYS_COLOR_BTNFACE);
   cairo_rectangle (cr, 2, 2, width - 4, height - 4);
@@ -309,7 +316,7 @@ draw_window (cairo_t *cr,
              int      width,
              int      height)
 {
-  draw_edge (cr, EDGE_RAISED, 0, 0, width, height + 2);
+  draw_edge (cr, EDGE_RAISED, TRUE, 0, 0, width, height + 2);
 
   gtk_cairo_set_source_sys_color (cr, state == 2 ? GTK_WIN32_SYS_COLOR_INACTIVECAPTION
                                                  : GTK_WIN32_SYS_COLOR_ACTIVECAPTION);
@@ -324,7 +331,7 @@ draw_window_left (cairo_t *cr,
                   int      width,
                   int      height)
 {
-  draw_edge (cr, EDGE_RAISED, 0, -2, width + 2, height + 4);
+  draw_edge (cr, EDGE_RAISED, TRUE, 0, -2, width + 2, height + 4);
 
   gtk_cairo_set_source_sys_color (cr, GTK_WIN32_SYS_COLOR_BTNFACE);
   cairo_rectangle (cr, 2, 0, width - 2, height);
@@ -338,7 +345,7 @@ draw_window_right (cairo_t *cr,
                    int      width,
                    int      height)
 {
-  draw_edge (cr, EDGE_RAISED, -2, -2, width + 2, height + 4);
+  draw_edge (cr, EDGE_RAISED, TRUE, -2, -2, width + 2, height + 4);
 
   gtk_cairo_set_source_sys_color (cr, GTK_WIN32_SYS_COLOR_BTNFACE);
   cairo_rectangle (cr, 0, 0, width - 2, height);
@@ -352,7 +359,7 @@ draw_window_bottom (cairo_t *cr,
                     int      width,
                     int      height)
 {
-  draw_edge (cr, EDGE_RAISED, 0, -2, width, height + 2);
+  draw_edge (cr, EDGE_RAISED, TRUE, 0, -2, width, height + 2);
 
   gtk_cairo_set_source_sys_color (cr, GTK_WIN32_SYS_COLOR_BTNFACE);
   cairo_rectangle (cr, 2, 0, width - 4, height - 2);
@@ -401,7 +408,7 @@ draw_tab_item (cairo_t *cr,
                int      width,
                int      height)
 {
-  draw_edge (cr, EDGE_RAISED, 0, 0, width, height + 2);
+  draw_edge (cr, EDGE_RAISED, TRUE, 0, 0, width, height + 2);
 
   gtk_cairo_set_source_sys_color (cr, GTK_WIN32_SYS_COLOR_BTNFACE);
   cairo_rectangle (cr, 2, 2, width - 4, height - 2);
@@ -415,7 +422,7 @@ draw_tab_pane (cairo_t *cr,
                int      width,
                int      height)
 {
-  draw_edge (cr, EDGE_RAISED, 0, 0, width, height);
+  draw_edge (cr, EDGE_RAISED, TRUE, 0, 0, width, height);
 
   gtk_cairo_set_source_sys_color (cr, GTK_WIN32_SYS_COLOR_BTNFACE);
   cairo_rectangle (cr, 2, 2, width - 4, height - 4);
@@ -458,6 +465,7 @@ static GtkWin32ThemePart theme_parts[] = {
   { "button",  1,  0, { 3, 3, 3, 3 }, draw_button },
   { "button",  2, 13, { 0, 0, 0, 0 }, draw_radio },
   { "button",  3, 13, { 0, 0, 0, 0 }, draw_check },
+  { "button",  4,  0, { 3, 3, 3, 3 }, draw_frame },
   { "edit",    1,  0, { 0, 0, 0, 0 }, draw_edit },
   { "edit",    3,  0, { 0, 0, 0, 0 }, draw_edit_noborder },
   { "edit",    6,  0, { 0, 0, 0, 0 }, draw_edit },
