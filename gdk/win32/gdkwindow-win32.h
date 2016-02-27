@@ -64,10 +64,15 @@ struct _GdkW32DragMoveResizeContext
   /* The edge that was grabbed for resizing. Not used for moving. */
   GdkWindowEdge      edge;
 
-  /* Not used */
+  /* The device used to initiate the op.
+   * We grab it at the beginning and ungrab it at the end.
+   */
   GdkDevice         *device;
 
-  /* Not used */
+  /* The button pressed down to initiate the op.
+   * The op will be canceled only when *this* button
+   * is released.
+   */
   gint               button;
 
   /* Initial cursor position when the operation began.
@@ -89,6 +94,9 @@ struct _GdkW32DragMoveResizeContext
    * the window size and poistion to the native window.
    */
   gboolean           native_move_resize_pending;
+
+  /* The cursor we should use while the operation is running. */
+  GdkCursor         *cursor;
 };
 
 typedef struct _GdkW32DragMoveResizeContext GdkW32DragMoveResizeContext;

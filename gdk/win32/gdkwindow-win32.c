@@ -2062,16 +2062,17 @@ gdk_win32_window_set_device_cursor (GdkWindow *window,
    */
   previous_cursor = impl->cursor;
 
-  GDK_DEVICE_GET_CLASS (device)->set_window_cursor (device, window, cursor);
-
   if (cursor)
     impl->cursor = g_object_ref (cursor);
   else
-    /* Use default cursor otherwise. Setting it to NULL will make it use
-     * system-default cursor, which is not controlled by GTK cursor theming.
+    /* Use default cursor otherwise. Don't just set NULL cursor,
+     * because that will just hide the cursor, which is not
+     * what the caller probably wanted.
      */
-    impl->cursor = _gdk_win32_display_get_cursor_for_type (gdk_display_get_default (),
+    impl->cursor = _gdk_win32_display_get_cursor_for_type (gdk_device_get_display (device),
                                                            GDK_LEFT_PTR);
+
+  GDK_DEVICE_GET_CLASS (device)->set_window_cursor (device, window, impl->cursor);
 
   /* Destroy the previous cursor */
   if (previous_cursor != NULL)
@@ -2823,6 +2824,49 @@ _gdk_window_get_functions (GdkWindow     *window,
   return (functions_set != NULL);
 }
 
+static const gchar *
+get_cursor_name_from_op (GdkW32WindowDragOp op,
+                         GdkWindowEdge      edge)
+{
+  switch (op)
+    {
+    case GDK_WIN32_DRAGOP_MOVE:
+      return "move";
+    case GDK_WIN32_DRAGOP_RESIZE:
+      switch (edge)
+        {
+        case GDK_WINDOW_EDGE_NORTH_WEST:
+          return "nw-resize";
+        case GDK_WINDOW_EDGE_NORTH:
+          return "n-resize";
+        case GDK_WINDOW_EDGE_NORTH_EAST:
+          return "ne-resize";
+        case GDK_WINDOW_EDGE_WEST:
+          return "w-resize";
+        case GDK_WINDOW_EDGE_EAST:
+          return "e-resize";
+        case GDK_WINDOW_EDGE_SOUTH_WEST:
+          return "sw-resize";
+        case GDK_WINDOW_EDGE_SOUTH:
+          return "s-resize";
+        case GDK_WINDOW_EDGE_SOUTH_EAST:
+          return "e-resize";
+        }
+      /* default: warn about unhandled enum values,
+       * fallthrough to GDK_WIN32_DRAGOP_NONE case
+       */
+    case GDK_WIN32_DRAGOP_COUNT:
+      g_assert_not_reached ();
+    case GDK_WIN32_DRAGOP_NONE:
+      return "default";
+    /* default: warn about unhandled enum values */
+    }
+
+  g_assert_not_reached ();
+
+  return NULL;
+}
+
 static void
 setup_drag_move_resize_context (GdkWindow                   *window,
                                 GdkW32DragMoveResizeContext *context,
@@ -2835,8 +2879,32 @@ setup_drag_move_resize_context (GdkWindow                   *window,
                                 guint32                      timestamp)
 {
   RECT rect;
+  const gchar *cursor_name;
+  gint x, y;
+  GdkWindow *pointer_window;
+  GdkDisplay *display = gdk_device_get_display (device);
 
   _gdk_win32_get_window_rect (window, &rect);
+
+  cursor_name = get_cursor_name_from_op (op, edge);
+
+  context->cursor = _gdk_win32_display_get_cursor_for_name (display, cursor_name);
+
+  gdk_window_get_root_origin (window, &x, &y);
+  x -= root_x;
+  y -= root_y;
+  pointer_window = gdk_device_get_window_at_position (device, &x, &y);
+
+  /* Note: This triggers a WM_CAPTURECHANGED, which will trigger
+   * gdk_win32_window_end_move_resize_drag(), which will end
+   * our op before it even begins, but only if context->op is not NONE.
+   * This is why we first do the grab, *then* set the op.
+   */
+  gdk_device_grab (device, pointer_window,
+                   GDK_OWNERSHIP_NONE, FALSE,
+                   GDK_ALL_EVENTS_MASK,
+                   context->cursor,
+                   timestamp);
 
   context->op = op;
   context->edge = edge;
@@ -2848,9 +2916,10 @@ setup_drag_move_resize_context (GdkWindow                   *window,
   context->start_rect = rect;
 
   GDK_NOTE (EVENTS,
-            g_print ("begin drag moveresize: "
+            g_print ("begin drag moveresize: window %p, toplevel %p, "
                      "op %u, edge %d, device %p, "
                      "button %d, coord %d:%d, time %u\n",
+                     window, gdk_window_get_toplevel (window),
                      context->op, context->edge, context->device,
                      context->button, context->start_root_x,
                      context->start_root_y, context->timestamp));
@@ -2863,10 +2932,16 @@ gdk_win32_window_end_move_resize_drag (GdkWindow *window)
   GdkW32DragMoveResizeContext *context = &impl->drag_move_resize_context;
 
   context->op = GDK_WIN32_DRAGOP_NONE;
+
+  gdk_device_ungrab (context->device, GDK_CURRENT_TIME);
+
+  g_clear_object (&context->cursor);
+
   GDK_NOTE (EVENTS,
-            g_print ("end drag moveresize: "
+            g_print ("end drag moveresize: window %p, toplevel %p,"
                      "op %u, edge %d, device %p, "
                      "button %d, coord %d:%d, time %u\n",
+                     window, gdk_window_get_toplevel (window),
                      context->op, context->edge, context->device,
                      context->button, context->start_root_x,
                      context->start_root_y, context->timestamp));

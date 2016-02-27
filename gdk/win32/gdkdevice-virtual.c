@@ -94,7 +94,6 @@ gdk_device_virtual_set_window_cursor (GdkDevice *device,
 {
   GdkWindow *parent_window;
   GdkWindowImplWin32 *impl;
-  GdkCursor *replacement_cursor;
   GdkCursor *previous_cursor;
 
   impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
@@ -103,55 +102,27 @@ gdk_device_virtual_set_window_cursor (GdkDevice *device,
 
   if (cursor != NULL && GDK_WIN32_CURSOR (cursor)->hcursor != NULL)
     {
-      /* If the pointer is over our window, set new cursor */
-      GdkWindow *curr_window = gdk_window_get_device_position (window, device, NULL, NULL, NULL);
-
-      if (curr_window == window ||
-          (curr_window && window == gdk_window_get_toplevel (curr_window)))
-        SetCursor (GDK_WIN32_CURSOR (cursor)->hcursor);
-      else
-        {
-          /* Climb up the tree and find whether our window is the
-           * first ancestor that has cursor defined, and if so, set
-           * new cursor.
-           */
-          while (curr_window && curr_window->impl &&
-                 !GDK_WINDOW_IMPL_WIN32 (curr_window->impl)->cursor)
-            {
-              curr_window = curr_window->parent;
-              if (curr_window == GDK_WINDOW (window))
-                {
-                  SetCursor (GDK_WIN32_CURSOR (cursor)->hcursor);
-                  break;
-                }
-            }
-        }
+      SetCursor (GDK_WIN32_CURSOR (cursor)->hcursor);
     }
-
-  /* Unset the previous cursor: Need to make sure it's no longer in
-   * use before we destroy it, in case we're not over our window but
-   * the cursor is still set to our old one.
-   */
-  if (previous_cursor != NULL &&
-      GetCursor () == GDK_WIN32_CURSOR (previous_cursor)->hcursor)
+  else if (previous_cursor != NULL &&
+           GetCursor () == GDK_WIN32_CURSOR (previous_cursor)->hcursor)
     {
-      /* Look for a suitable cursor to use instead */
-      replacement_cursor = NULL;
-      parent_window = GDK_WINDOW (window)->parent;
-
-      while (replacement_cursor == NULL)
-        {
-          if (parent_window)
-            {
-              impl = GDK_WINDOW_IMPL_WIN32 (parent_window->impl);
-              replacement_cursor = impl->cursor;
-              parent_window = parent_window->parent;
-            }
-          else
-            replacement_cursor = _gdk_win32_display_get_cursor_for_type (gdk_device_get_display (device), GDK_LEFT_PTR);
-        }
-
-      SetCursor (GDK_WIN32_CURSOR (replacement_cursor)->hcursor);
+      /* The caller will unref previous_cursor shortly,
+       * but it holds the handle to currently-used cursor,
+       * and we can't call SetCursor(NULL).
+       */
+      g_warning (G_STRLOC ": Refusing to replace cursor %p (handle %p) with NULL. "
+                 "Expect ugly results.",
+                 previous_cursor, GDK_WIN32_CURSOR (previous_cursor)->hcursor);
+    }
+  else
+    {
+      /* Up the stack all effors were made already to ensure that
+       * the "cursor" argument is non-NULL.
+       * If it is, calling SetCursor(NULL) is absolutely not
+       * the right decision, so we just warn and bail out.
+       */
+      g_warning (G_STRLOC ": Refusing to set NULL cursor");
     }
 }
 

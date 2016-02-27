@@ -2460,6 +2460,8 @@ gdk_event_translate (MSG  *msg,
 	  /* We keep the implicit grab until no buttons at all are held down */
 	  if ((state & GDK_ANY_BUTTON_MASK & ~(GDK_BUTTON1_MASK << (button - 1))) == 0)
 	    {
+	      GdkWindow *native_window = pointer_grab->native_window;
+
 	      ReleaseCapture ();
 
 	      new_window = NULL;
@@ -2473,8 +2475,9 @@ gdk_event_translate (MSG  *msg,
 		  if (PtInRect (&rect, client_pt))
 		    new_window = gdk_win32_handle_table_lookup (hwnd);
 		}
+
 	      synthesize_crossing_events (display,
-					  pointer_grab->native_window, new_window,
+					  native_window, new_window,
 					  GDK_CROSSING_UNGRAB,
 					  &msg->pt,
 					  0, /* TODO: Set right mask */
@@ -2487,6 +2490,13 @@ gdk_event_translate (MSG  *msg,
 
       generate_button_event (GDK_BUTTON_RELEASE, button,
 			     window, msg);
+
+      impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+
+      /* End a drag op when the same button that started it is released */
+      if (impl->drag_move_resize_context.op != GDK_WIN32_DRAGOP_NONE &&
+          impl->drag_move_resize_context.button == button)
+        gdk_win32_window_end_move_resize_drag (window);
 
       return_val = TRUE;
       break;
