@@ -320,7 +320,7 @@ process_input_messages (GdkBroadwayServer *server)
       if (reply->base.type == BROADWAY_REPLY_EVENT)
 	_gdk_broadway_events_got_input (&reply->event.msg);
       else
-	g_warning ("Unhandled reply type %d\n", reply->base.type);
+	g_warning ("Unhandled reply type %d", reply->base.type);
       g_free (reply);
     }
 }

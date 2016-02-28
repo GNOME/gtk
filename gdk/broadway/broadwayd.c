@@ -302,7 +302,7 @@ client_handle_request (BroadwayClient *client,
       broadway_server_set_show_keyboard (server, request->set_show_keyboard.show_keyboard);
       break;
     default:
-      g_warning ("Unknown request of type %d\n", request->base.type);
+      g_warning ("Unknown request of type %d", request->base.type);
     }
 
 

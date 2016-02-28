@@ -318,7 +318,7 @@ broadway_output_put_buffer (BroadwayOutput *output,
   if (!g_output_stream_write_all (out, encoded->str, encoded->len,
                                   NULL, NULL, NULL) ||
       !g_output_stream_close (out, NULL, NULL))
-    g_warning ("compression failed\n");
+    g_warning ("compression failed");
 
 
   len = g_memory_output_stream_get_data_size (G_MEMORY_OUTPUT_STREAM (out_mem));

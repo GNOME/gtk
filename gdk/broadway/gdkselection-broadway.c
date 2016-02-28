@@ -136,7 +136,7 @@ _gdk_broadway_display_convert_selection (GdkDisplay *display,
 					 GdkAtom    target,
 					 guint32    time)
 {
-  g_warning ("convert_selection not implemented\n");
+  g_warning ("convert_selection not implemented");
 }
 
 gint
@@ -153,7 +153,7 @@ _gdk_broadway_display_get_selection_property (GdkDisplay *display,
   if (data)
     *data = NULL;
 
-  g_warning ("get_selection_property not implemented\n");
+  g_warning ("get_selection_property not implemented");
 
   return 0;
 }
@@ -168,7 +168,7 @@ _gdk_broadway_display_send_selection_notify (GdkDisplay      *display,
 {
   g_return_if_fail (GDK_IS_DISPLAY (display));
 
-  g_warning ("send_selection_notify not implemented\n");
+  g_warning ("send_selection_notify not implemented");
 }
 
 
