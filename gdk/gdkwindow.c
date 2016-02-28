@@ -4678,12 +4678,14 @@ gdk_window_get_pointer (GdkWindow	  *window,
 			GdkModifierType   *mask)
 {
   GdkDisplay *display;
+  GdkDevice *pointer;
 
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
 
   display = gdk_window_get_display (window);
+  pointer = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
 
-  return gdk_window_get_device_position (window, display->core_pointer, x, y, mask);
+  return gdk_window_get_device_position (window, pointer, x, y, mask);
 }
 
 /**
