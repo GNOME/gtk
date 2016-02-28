@@ -1,4 +1,5 @@
 demos/gtk-demo/application.ui
+demos/gtk-demo/appmenu.ui
 demos/gtk-demo/appwindow.c
 demos/gtk-demo/button_box.c
 demos/gtk-demo/changedisplay.c
