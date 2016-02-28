@@ -162,7 +162,7 @@ _gdk_quartz_display_text_property_to_utf8_list (GdkDisplay    *display,
     {
       gchar *enc_name = gdk_atom_name (encoding);
 
-      g_warning ("gdk_text_property_to_utf8_list_for_display: encoding %s not handled\n", enc_name);
+      g_warning ("gdk_text_property_to_utf8_list_for_display: encoding %s not handled", enc_name);
       g_free (enc_name);
 
       if (list)
