@@ -68,7 +68,6 @@
 
 - (void) dealloc
 {
-  g_print ("Deallocating GtkQuartzStatusIcon\n");
   [current_image release];
   [ns_item release];
   [ns_bar release];

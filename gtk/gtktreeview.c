@@ -12524,10 +12524,6 @@ gtk_tree_view_scroll_to_cell (GtkTreeView       *tree_view,
   g_return_if_fail (col_align >= 0.0 && col_align <= 1.0);
   g_return_if_fail (path != NULL || column != NULL);
 
-#if 0
-  g_print ("gtk_tree_view_scroll_to_cell:\npath: %s\ncolumn: %s\nuse_align: %d\nrow_align: %f\ncol_align: %f\n",
-	   gtk_tree_path_to_string (path), column?"non-null":"null", use_align, row_align, col_align);
-#endif
   row_align = CLAMP (row_align, 0.0, 1.0);
   col_align = CLAMP (col_align, 0.0, 1.0);
 

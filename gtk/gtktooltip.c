@@ -88,8 +88,6 @@
  */
 
 
-#undef DEBUG_TOOLTIP
-
 #define HOVER_TIMEOUT          500
 #define BROWSE_TIMEOUT         60
 #define BROWSE_DISABLE_TIMEOUT 500
@@ -527,17 +525,6 @@ child_location_foreach (GtkWidget *child,
 					child_loc->x, child_loc->y,
 					&x, &y))
     {
-#ifdef DEBUG_TOOLTIP
-      g_print ("candidate: %s  alloc=[(%d,%d)  %dx%d]     (%d, %d)->(%d, %d)\n",
-	       gtk_widget_get_name (child),
-               child_allocation.x,
-               child_allocation.y,
-               child_allocation.width,
-               child_allocation.height,
-	       child_loc->x, child_loc->y,
-	       x, y);
-#endif /* DEBUG_TOOLTIP */
-
       /* (x, y) relative to child's allocation. */
       if (x >= 0 && x < child_allocation.width
 	  && y >= 0 && y < child_allocation.height)
@@ -635,12 +622,6 @@ _gtk_widget_find_at_coords (GdkWindow *window,
 
   if (!event_widget)
     return NULL;
-
-#ifdef DEBUG_TOOLTIP
-  g_print ("event window %p (belonging to %p (%s))  (%d, %d)\n",
-	   window, event_widget, gtk_widget_get_name (event_widget),
-	   window_x, window_y);
-#endif
 
   /* Coordinates are relative to event window */
   child_loc.x = window_x;
@@ -1464,21 +1445,6 @@ _gtk_tooltip_handle_event (GdkEvent *event)
 
       return;
     }
-
-#ifdef DEBUG_TOOLTIP
-  if (has_tooltip_widget)
-    {
-    GtkAllocation allocation;
-    gtk_widget_get_allocation (has_tooltip_widget, &allocation);
-    g_print ("%p (%s) at (%d, %d) %dx%d     pointer: (%d, %d)\n",
-	     has_tooltip_widget, gtk_widget_get_name (has_tooltip_widget),
-	     allocation.x,
-	     allocation.y,
-	     allocation.width,
-	     allocation.height,
-	     x, y);
-    }
-#endif /* DEBUG_TOOLTIP */
 
   /* Always poll for a next motion event */
   gdk_event_request_motions (&event->motion);

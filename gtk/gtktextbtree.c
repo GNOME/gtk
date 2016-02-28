@@ -6041,12 +6041,6 @@ gtk_text_btree_get_tag_info (GtkTextBTree *tree,
       info->toggle_count = 0;
 
       tree->tag_infos = g_slist_prepend (tree->tag_infos, info);
-
-#if 0
-      g_print ("Created tag info %p for tag %s(%p)\n",
-               info, info->tag->name ? info->tag->name : "anon",
-               info->tag);
-#endif
     }
 
   return info;
@@ -6067,12 +6061,6 @@ gtk_text_btree_remove_tag_info (GtkTextBTree *tree,
       info = list->data;
       if (info->tag == tag)
         {
-#if 0
-          g_print ("Removing tag info %p for tag %s(%p)\n",
-                   info, info->tag->name ? info->tag->name : "anon",
-                   info->tag);
-#endif
-          
           if (prev != NULL)
             {
               prev->next = list->next;

@@ -9096,19 +9096,12 @@ clamp_window_to_rectangle (gint               *x,
                            gint                h,
                            const GdkRectangle *rect)
 {
-#ifdef DEBUGGING_OUTPUT
-  g_print ("%s: %+d%+d %dx%d: %+d%+d: %dx%d", G_STRFUNC, rect->x, rect->y, rect->width, rect->height, *x, *y, w, h);
-#endif
-
   /* If it is too large, center it. If it fits on the monitor but is
    * partially outside, move it to the closest edge. Do this
    * separately in x and y directions.
    */
   clamp (x, w, rect->x, rect->width);
   clamp (y, h, rect->y, rect->height);
-#ifdef DEBUGGING_OUTPUT
-  g_print (" ==> %+d%+d: %dx%d\n", *x, *y, w, h);
-#endif
 }
 
 

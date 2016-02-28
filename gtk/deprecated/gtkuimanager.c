@@ -277,9 +277,6 @@
  * ]|
  */
 
-
-#undef DEBUG_UI_MANAGER
-
 typedef enum
 {
   NODE_TYPE_UNDECIDED,
@@ -2549,10 +2546,6 @@ update_node (GtkUIManager *manager,
   GtkAction *action;
   const gchar *action_name;
   NodeUIReference *ref;
-  
-#ifdef DEBUG_UI_MANAGER
-  GList *tmp;
-#endif
 
   g_return_if_fail (node != NULL);
   g_return_if_fail (NODE_INFO (node) != NULL);
@@ -2567,19 +2560,6 @@ update_node (GtkUIManager *manager,
       in_popup = TRUE;
       popup_accels = info->popup_accels;
     }
-
-#ifdef DEBUG_UI_MANAGER
-  g_print ("update_node name=%s dirty=%d popup %d (", 
-	   info->name, info->dirty, in_popup);
-  for (tmp = info->uifiles; tmp != NULL; tmp = tmp->next)
-    {
-      NodeUIReference *ref = tmp->data;
-      g_print("%s:%u", g_quark_to_string (ref->action_quark), ref->merge_id);
-      if (tmp->next)
-	g_print (", ");
-    }
-  g_print (")\n");
-#endif
 
   if (info->uifiles == NULL) {
     /* We may need to remove this node.

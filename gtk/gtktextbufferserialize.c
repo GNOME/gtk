@@ -358,28 +358,6 @@ serialize_tags (SerializationContext *context)
   g_string_append (context->tag_table_str, " </tags>\n");
 }
 
-#if 0
-static void
-dump_tag_list (const gchar *str,
-               GList       *list)
-{
-  g_print ("%s: ", str);
-
-  if (!list)
-    g_print ("(empty)");
-  else
-    {
-      while (list)
-	{
-	  g_print ("%s ", ((GtkTextTag *)list->data)->name);
-	  list = list->next;
-	}
-    }
-
-  g_print ("\n");
-}
-#endif
-
 static void
 find_list_delta (GSList  *old_list,
                  GSList  *new_list,
