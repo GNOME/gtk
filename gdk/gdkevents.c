@@ -119,25 +119,6 @@ _gdk_event_queue_find_first (GdkDisplay *display)
 }
 
 /**
- * _gdk_event_queue_prepend:
- * @display: a #GdkDisplay
- * @event: Event to prepend.
- *
- * Prepends an event before the head of the event queue.
- *
- * Returns: the newly prepended list node.
- **/
-GList*
-_gdk_event_queue_prepend (GdkDisplay *display,
-			  GdkEvent   *event)
-{
-  display->queued_events = g_list_prepend (display->queued_events, event);
-  if (!display->queued_tail)
-    display->queued_tail = display->queued_events;
-  return display->queued_events;
-}
-
-/**
  * _gdk_event_queue_append:
  * @display: a #GdkDisplay
  * @event: Event to append.
