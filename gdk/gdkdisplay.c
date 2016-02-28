@@ -2373,7 +2373,7 @@ gdk_display_add_seat (GdkDisplay *display,
   g_return_if_fail (GDK_IS_DISPLAY (display));
   g_return_if_fail (GDK_IS_SEAT (seat));
 
-  display->seats = g_list_prepend (display->seats, g_object_ref (seat));
+  display->seats = g_list_append (display->seats, g_object_ref (seat));
   g_signal_emit (display, signals[SEAT_ADDED], 0, seat);
 }
 
