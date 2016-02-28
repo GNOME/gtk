@@ -38,6 +38,25 @@ change_theme_state (GSimpleAction *action,
   g_simple_action_set_state (action, state);
 }
 
+static GtkWidget *page_stack;
+
+static void
+change_transition_state (GSimpleAction *action,
+                         GVariant      *state,
+                         gpointer       user_data)
+{
+  GtkStackTransitionType transition;
+
+  if (g_variant_get_boolean (state))
+    transition = GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT;
+  else
+    transition = GTK_STACK_TRANSITION_TYPE_NONE;
+
+  gtk_stack_set_transition_type (GTK_STACK (page_stack), transition);
+
+  g_simple_action_set_state (action, state);
+}
+
 static gboolean
 get_idle (gpointer data)
 {
@@ -1621,6 +1640,7 @@ activate (GApplication *app)
   GtkCssProvider *provider;
   static GActionEntry win_entries[] = {
     { "dark", NULL, NULL, "false", change_theme_state },
+    { "transition", NULL, NULL, "false", change_transition_state },
     { "search", activate_search, NULL, NULL, NULL },
     { "delete", activate_delete, NULL, NULL, NULL },
     { "busy", get_busy, NULL, NULL, NULL },
@@ -1756,6 +1776,8 @@ activate (GApplication *app)
   g_signal_connect (widget, "clicked", G_CALLBACK (action_dialog_button_clicked), stack);
   g_signal_connect (stack, "notify::visible-child-name", G_CALLBACK (page_changed_cb), NULL);
   page_changed_cb (stack, NULL, NULL);
+
+  page_stack = stack;
 
   dialog = (GtkWidget *)gtk_builder_get_object (builder, "preference_dialog");
   g_signal_connect (dialog, "response", G_CALLBACK (close_dialog), NULL);

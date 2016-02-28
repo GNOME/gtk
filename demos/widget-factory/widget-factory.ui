@@ -11,6 +11,10 @@
         <attribute name="label" translatable="yes">Dark Theme</attribute>
         <attribute name="action">win.dark</attribute>
       </item>
+      <item>
+        <attribute name="label" translatable="yes">Slide Pages</attribute>
+        <attribute name="action">win.transition</attribute>
+      </item>
     </section>
   </menu>
   <menu id="dinner_menu">
@@ -433,7 +437,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
           <object class="GtkStack" id="toplevel_stack">
             <property name="visible">1</property>
             <property name="transition-duration">1000</property>
-            <property name="transition-type">slide-left-right</property>
             <child>
               <object class="GtkBox" id="page1">
                 <property name="visible">1</property>
