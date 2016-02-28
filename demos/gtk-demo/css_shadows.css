@@ -29,7 +29,7 @@ button {
 
 button:hover {
   text-shadow: 3px 3px 5px alpha(black, 0.75);
-  icon-shadow: 3px 3px 5px alpha(black, 0.75);
+  -gtk-icon-shadow: 3px 3px 5px alpha(black, 0.75);
   box-shadow: 3px 3px 5px alpha(black, 0.5) inset;
   border: solid 1px alpha(black, 0.75);
 }
@@ -37,7 +37,7 @@ button:hover {
 button:active {
   padding: 11px 9px 9px 11px;
   text-shadow: 1px 1px 2.5px alpha(black, 0.6);
-  icon-shadow: 1px 1px 2.5px alpha(black, 0.6);
+  -gtk-icon-shadow: 1px 1px 2.5px alpha(black, 0.6);
 }
 
 

@@ -10,12 +10,12 @@
   background-color: #4a90d9;
 }
 
-.scrollbar.trough,
+scrollbar trough,
 .scrollbars-junction {
   background-color: alpha(white, 0.80);
 }
 
-.scrollbar.slider {
+scrollbar slider {
   border-width: 3px;
   border-style: solid;
   border-radius: 10px;
@@ -24,11 +24,11 @@
   background-color: #999;
 }
 
-.scrollbar.slider:prelight {
+scrollbar slider:hover {
   background-color: #555;
 }
 
-.pane-separator {
+paned separator {
   background-color: alpha(white, 0.80);
   background-image: linear-gradient(transparent, transparent 1px, #999 1px, #999 4px, transparent 4px);
   background-size: 40px auto;
@@ -36,6 +36,6 @@
   background-position: center;
 }
 
-.pane-separator:prelight {
+paned separator:hover {
   background-image: linear-gradient(transparent, transparent 1px, #555 1px, #555 4px, transparent 4px);
 }
