@@ -107,7 +107,6 @@ gdk_mir_device_manager_constructed (GObject *object)
   _gdk_device_set_associated_device (device_manager->pointer, device_manager->keyboard);
 
   display = gdk_device_manager_get_display (GDK_DEVICE_MANAGER (device_manager));
-  display->core_pointer = device_manager->pointer;
 
   seat = gdk_seat_default_new_for_master_pair (device_manager->pointer, device_manager->keyboard);
   gdk_display_add_seat (display, seat);

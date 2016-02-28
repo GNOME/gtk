@@ -87,9 +87,8 @@ gdk_quartz_display_init_input (GdkDisplay *display)
   g_list_free (list);
 
   /* Add the core pointer to the devices list */
-  display->core_pointer = GDK_QUARTZ_DEVICE_MANAGER_CORE (device_manager)->core_pointer;
   display_quartz->input_devices = g_list_prepend (display_quartz->input_devices,
-                                                  g_object_ref (display->core_pointer));
+                                                  g_object_ref (GDK_QUARTZ_DEVICE_MANAGER_CORE (device_manager)->core_pointer));
 }
 
 GdkDisplay *

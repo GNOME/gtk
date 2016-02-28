@@ -111,10 +111,10 @@ gdk_input_init (GdkDisplay *display)
   GdkWaylandDisplay *display_wayland;
 
   display_wayland = GDK_WAYLAND_DISPLAY (display);
-  display->core_pointer = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
 
   /* Add the core pointer to the devices list */
-  display_wayland->input_devices = g_list_prepend (display_wayland->input_devices, display->core_pointer);
+  display_wayland->input_devices = g_list_prepend (display_wayland->input_devices,
+                                                   gdk_seat_get_pointer (gdk_display_get_default_seat (display)));
 }
 
 static void

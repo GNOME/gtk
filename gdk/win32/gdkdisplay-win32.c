@@ -50,10 +50,8 @@ _gdk_input_init (GdkDisplay *display)
                                  NULL);
   display->device_manager = GDK_DEVICE_MANAGER (device_manager);
 
-  display->core_pointer = device_manager->core_pointer;
-
-  devices = g_list_append (NULL, display->core_pointer);
-  devices = g_list_concat (devices, g_list_copy (device_manager->wintab_devices));
+  devices = g_list_copy (device_manager->wintab_devices);
+  devices = g_list_prepend (devices, device_manager->core_pointer);
 
   GDK_WIN32_DISPLAY (display)->input_devices = devices;
 

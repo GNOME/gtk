@@ -97,9 +97,8 @@ gdk_broadway_display_init_input (GdkDisplay *display)
   g_list_free (list);
 
   /* Add the core pointer to the devices list */
-  display->core_pointer = GDK_BROADWAY_DEVICE_MANAGER (device_manager)->core_pointer;
   broadway_display->input_devices = g_list_prepend (broadway_display->input_devices,
-                                                    g_object_ref (display->core_pointer));
+                                                    g_object_ref (GDK_BROADWAY_DEVICE_MANAGER (device_manager)->core_pointer));
   G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
