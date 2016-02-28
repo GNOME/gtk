@@ -289,6 +289,8 @@ gdk_win32_screen_init (GdkWin32Screen *win32_screen)
   win32_screen->available_visual_depths[0] = win32_screen->rgba_visual->depth;
   win32_screen->available_visual_types[0] = win32_screen->rgba_visual->type;
 
+  _gdk_screen_init_monitors (win32_screen);
+
   /* On Windows 8 and later, DWM (composition) is always enabled */
   win32_screen->always_composited = g_win32_check_windows_version (6, 2, 0, G_WIN32_OS_ANY);
 }
@@ -425,7 +427,7 @@ enum_monitor (HMONITOR hmonitor,
 }
 
 void
-_gdk_monitor_init (GdkWin32Screen *screen)
+_gdk_screen_init_monitors (GdkWin32Screen *screen)
 {
   gint count;
   EnumMonitorData data;
