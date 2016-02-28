@@ -85,13 +85,17 @@
                     </child>
                     <child>
                       <object class="GtkTreeViewColumn" id="treeviewcolumn1">
-                        <property name="title" translatable="yes">column</property>
                         <child>
                           <object class="GtkCellRendererText" id="cellrenderertext1"/>
                           <attributes>
                             <attribute name="style">4</attribute>
                             <attribute name="text">1</attribute>
                           </attributes>
+                        </child>
+                        <child>
+                          <object class="GtkCellRendererText">
+                            <property name="text">  </property>
+                          </object>
                         </child>
                       </object>
                     </child>
