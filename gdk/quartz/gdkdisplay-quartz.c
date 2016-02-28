@@ -86,26 +86,10 @@ gdk_quartz_display_init_input (GdkDisplay *display)
 
   g_list_free (list);
 
-  /* Now set "core" pointer to the first master device that is a pointer. */
-  list = gdk_device_manager_list_devices (device_manager,
-                                          GDK_DEVICE_TYPE_MASTER);
-
-  for (l = list; l; l = l->next)
-    {
-      GdkDevice *device = l->data;
-
-      if (gdk_device_get_source (device) != GDK_SOURCE_MOUSE)
-        continue;
-
-      display->core_pointer = device;
-      break;
-    }
-
   /* Add the core pointer to the devices list */
+  display->core_pointer = GDK_QUARTZ_DEVICE_MANAGER_CORE (device_manager)->core_pointer;
   display_quartz->input_devices = g_list_prepend (display_quartz->input_devices,
                                                   g_object_ref (display->core_pointer));
-
-  g_list_free (list);
 }
 
 GdkDisplay *
