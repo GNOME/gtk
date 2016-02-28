@@ -16256,9 +16256,9 @@ gtk_widget_ensure_allocate (GtkWidget *widget)
       priv->alloc_needed_on_child = FALSE;
 
       if (GTK_IS_CONTAINER (widget))
-        gtk_container_foreach (GTK_CONTAINER (widget),
-                               (GtkCallback) gtk_widget_ensure_allocate,
-                               NULL);
+        gtk_container_forall (GTK_CONTAINER (widget),
+                              (GtkCallback) gtk_widget_ensure_allocate,
+                              NULL);
     }
 }
 
