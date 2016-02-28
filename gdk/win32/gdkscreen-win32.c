@@ -256,45 +256,6 @@ init_visual (GdkScreen *screen,
   return visual;
 }
 
-static void
-gdk_win32_screen_init (GdkWin32Screen *win32_screen)
-{
-  GdkScreen *screen = GDK_SCREEN (win32_screen);
-  HDC screen_dc;
-  int logpixelsx = -1;
-  const gchar *font_resolution;
-
-  screen_dc = GetDC (NULL);
-
-  if (screen_dc)
-    {
-      logpixelsx = GetDeviceCaps(screen_dc, LOGPIXELSX);
-      ReleaseDC (NULL, screen_dc);
-    }
-
-  font_resolution = g_getenv ("GDK_WIN32_FONT_RESOLUTION");
-  if (font_resolution)
-    {
-      int env_logpixelsx = atol (font_resolution);
-      if (env_logpixelsx > 0)
-        logpixelsx = env_logpixelsx;
-    }
-
-  if (logpixelsx > 0)
-    _gdk_screen_set_resolution (screen, logpixelsx);
-
-  win32_screen->system_visual = init_visual (screen, FALSE);
-  win32_screen->rgba_visual = init_visual (screen, TRUE);
-
-  win32_screen->available_visual_depths[0] = win32_screen->rgba_visual->depth;
-  win32_screen->available_visual_types[0] = win32_screen->rgba_visual->type;
-
-  _gdk_screen_init_monitors (win32_screen);
-
-  /* On Windows 8 and later, DWM (composition) is always enabled */
-  win32_screen->always_composited = g_win32_check_windows_version (6, 2, 0, G_WIN32_OS_ANY);
-}
-
 void
 _gdk_screen_init_root_window_size (GdkWin32Screen *screen)
 {
@@ -465,6 +426,45 @@ _gdk_screen_init_monitors (GdkWin32Screen *screen)
       GDK_NOTE (MISC, g_print ("Monitor %d: %dx%d@%+d%+d\n", i,
                                rect->width, rect->height, rect->x, rect->y));
     }
+}
+
+static void
+gdk_win32_screen_init (GdkWin32Screen *win32_screen)
+{
+  GdkScreen *screen = GDK_SCREEN (win32_screen);
+  HDC screen_dc;
+  int logpixelsx = -1;
+  const gchar *font_resolution;
+
+  screen_dc = GetDC (NULL);
+
+  if (screen_dc)
+    {
+      logpixelsx = GetDeviceCaps(screen_dc, LOGPIXELSX);
+      ReleaseDC (NULL, screen_dc);
+    }
+
+  font_resolution = g_getenv ("GDK_WIN32_FONT_RESOLUTION");
+  if (font_resolution)
+    {
+      int env_logpixelsx = atol (font_resolution);
+      if (env_logpixelsx > 0)
+        logpixelsx = env_logpixelsx;
+    }
+
+  if (logpixelsx > 0)
+    _gdk_screen_set_resolution (screen, logpixelsx);
+
+  win32_screen->system_visual = init_visual (screen, FALSE);
+  win32_screen->rgba_visual = init_visual (screen, TRUE);
+
+  win32_screen->available_visual_depths[0] = win32_screen->rgba_visual->depth;
+  win32_screen->available_visual_types[0] = win32_screen->rgba_visual->type;
+
+  _gdk_screen_init_monitors (win32_screen);
+
+  /* On Windows 8 and later, DWM (composition) is always enabled */
+  win32_screen->always_composited = g_win32_check_windows_version (6, 2, 0, G_WIN32_OS_ANY);
 }
 
 static GdkDisplay *
