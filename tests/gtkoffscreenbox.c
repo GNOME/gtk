@@ -386,7 +386,7 @@ gtk_offscreen_box_add (GtkContainer *container,
   else if (!offscreen_box->child2)
     gtk_offscreen_box_add2 (offscreen_box, widget);
   else
-    g_warning ("GtkOffscreenBox cannot have more than 2 children\n");
+    g_warning ("GtkOffscreenBox cannot have more than 2 children");
 }
 
 void

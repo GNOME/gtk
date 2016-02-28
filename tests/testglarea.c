@@ -66,7 +66,7 @@ create_shader (int type, const char *src)
       buffer = g_malloc (log_len + 1);
       glGetShaderInfoLog (shader, log_len, NULL, buffer);
 
-      g_warning ("Compile failure in %s shader:\n%s\n",
+      g_warning ("Compile failure in %s shader:\n%s",
                  type == GL_VERTEX_SHADER ? "vertex" : "fragment",
                  buffer);
 
@@ -158,7 +158,7 @@ init_shaders (const char *vertex_shader_code,
       buffer = g_malloc (log_len + 1);
       glGetProgramInfoLog (program, log_len, NULL, buffer);
 
-      g_warning ("Linking failure:\n%s\n", buffer);
+      g_warning ("Linking failure:\n%s", buffer);
 
       g_free (buffer);
 

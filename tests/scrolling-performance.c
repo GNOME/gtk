@@ -17,7 +17,7 @@ create_widget_factory_content (void)
                              "../demos/widget-factory/widget-factory.ui",
                              &error);
   if (error != NULL)
-    g_error ("Failed to create widgets: %s\n", error->message);
+    g_error ("Failed to create widgets: %s", error->message);
 
   result = GTK_WIDGET (gtk_builder_get_object (builder, "box1"));
   g_object_ref (result);
