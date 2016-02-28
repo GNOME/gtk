@@ -37,7 +37,7 @@
 #include <xkbcommon/xkbcommon.h>
 
 #include "gdkinternals.h"
-#include "gtk-primary-selection-client-protocol.h"
+#include "wayland/gtk-primary-selection-client-protocol.h"
 
 #include "config.h"
 
