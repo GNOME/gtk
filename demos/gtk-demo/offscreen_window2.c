@@ -267,7 +267,7 @@ gtk_mirror_bin_add (GtkContainer *container,
       bin->child = widget;
     }
   else
-    g_warning ("GtkMirrorBin cannot have more than one child\n");
+    g_warning ("GtkMirrorBin cannot have more than one child");
 }
 
 static void

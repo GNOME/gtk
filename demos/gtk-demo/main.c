@@ -587,7 +587,7 @@ add_data_tab (const gchar *demoname)
             }
           else
             {
-              g_warning ("Don't know how to display resource '%s'\n", resource_name);
+              g_warning ("Don't know how to display resource '%s'", resource_name);
               widget = NULL;
             }
 
@@ -657,7 +657,7 @@ load_file (const gchar *demoname,
 
   if (bytes == NULL)
     {
-      g_warning ("Cannot open source for %s: %s\n", filename, err->message);
+      g_warning ("Cannot open source for %s: %s", filename, err->message);
       g_error_free (err);
       return;
     }

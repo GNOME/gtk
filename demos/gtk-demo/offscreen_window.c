@@ -328,7 +328,7 @@ gtk_rotated_bin_add (GtkContainer *container,
       bin->child = widget;
     }
   else
-    g_warning ("GtkRotatedBin cannot have more than one child\n");
+    g_warning ("GtkRotatedBin cannot have more than one child");
 }
 
 static void
