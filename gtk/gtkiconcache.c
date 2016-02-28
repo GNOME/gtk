@@ -70,8 +70,7 @@ _gtk_icon_cache_unref (GtkIconCache *cache)
 
   if (cache->ref_count == 0)
     {
-      GTK_NOTE (ICONTHEME, 
-		g_print ("unmapping icon cache\n"));
+      GTK_NOTE (ICONTHEME, g_message ("unmapping icon cache"));
 
       if (cache->map)
 	g_mapped_file_unref (cache->map);
@@ -93,8 +92,7 @@ _gtk_icon_cache_new_for_path (const gchar *path)
    /* Check if we have a cache file */
   cache_filename = g_build_filename (path, "icon-theme.cache", NULL);
 
-  GTK_NOTE (ICONTHEME, 
-	    g_print ("look for cache in %s\n", path));
+  GTK_NOTE (ICONTHEME, g_message ("look for icon cache in %s", path));
 
   if (g_stat (path, &path_st) < 0)
     goto done;
@@ -122,7 +120,7 @@ _gtk_icon_cache_new_for_path (const gchar *path)
   /* Verify cache is uptodate */
   if (st.st_mtime < path_st.st_mtime)
     {
-      GTK_NOTE (ICONTHEME, g_print ("cache outdated\n"));
+      GTK_NOTE (ICONTHEME, g_message ("icon cache outdated"));
       goto done; 
     }
 
@@ -151,7 +149,7 @@ _gtk_icon_cache_new_for_path (const gchar *path)
     }
 #endif 
 
-  GTK_NOTE (ICONTHEME, g_print ("found cache for %s\n", path));
+  GTK_NOTE (ICONTHEME, g_message ("found icon cache for %s", path));
 
   cache = g_new0 (GtkIconCache, 1);
   cache->ref_count = 1;
@@ -502,8 +500,7 @@ _gtk_icon_cache_get_icon (GtkIconCache *cache,
 
   if (type != 0)
     {
-      GTK_NOTE (ICONTHEME,
-		g_print ("invalid pixel data type %u\n", type));
+      GTK_NOTE (ICONTHEME, g_message ("invalid pixel data type %u", type));
       return NULL;
     }
 
@@ -514,8 +511,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 				(guchar *)(cache->buffer + pixel_data_offset + 8),
 				&error))
     {
-      GTK_NOTE (ICONTHEME,
-		g_print ("could not deserialize data: %s\n", error->message));
+      GTK_NOTE (ICONTHEME, g_message ("could not deserialize data: %s", error->message));
       g_error_free (error);
 
       return NULL;
@@ -529,8 +525,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 				     cache);
   if (!pixbuf)
     {
-      GTK_NOTE (ICONTHEME,
-		g_print ("could not convert pixdata to pixbuf: %s\n", error->message));
+      GTK_NOTE (ICONTHEME, g_message ("could not convert pixdata to pixbuf: %s", error->message));
       g_error_free (error);
 
       return NULL;

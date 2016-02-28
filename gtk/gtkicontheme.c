@@ -805,8 +805,8 @@ do_theme_change (GtkIconTheme *icon_theme)
   if (!priv->themes_valid)
     return;
 
-  GTK_NOTE (ICONTHEME, 
-            g_print ("change to icon theme \"%s\"\n", priv->current_theme));
+  GTK_NOTE (ICONTHEME,
+            g_message ("change to icon theme \"%s\"", priv->current_theme));
   blow_themes (icon_theme);
 
   queue_theme_changed (icon_theme);
@@ -1423,13 +1423,16 @@ load_themes (GtkIconTheme *icon_theme)
 
   GTK_NOTE (ICONTHEME, {
     GList *l;
-    g_print ("Current icon themes ");
+    GString *s;
+    s = g_string_new ("Current icon themes ");
     for (l = icon_theme->priv->themes; l; l = l->next)
       {
         IconTheme *theme = l->data;
-        g_print ("%s ", theme->name);
+        g_string_append (s, theme->name);
+        g_string_append_c (s, ' ');
       }
-    g_print ("\n");
+    g_message ("%s", s->str);
+    g_string_free (s, TRUE);
   });
 }
 
@@ -1706,7 +1709,7 @@ real_choose_icon (GtkIconTheme       *icon_theme,
   /* This is used in the icontheme unit test */
   GTK_NOTE (ICONTHEME,
             for (i = 0; icon_names[i]; i++)
-              g_print ("\tlookup name: %s\n", icon_names[i]));
+              g_message ("\tlookup name: %s", icon_names[i]));
 
   /* For symbolic icons, do a search in all registered themes first;
    * a theme that inherits them from a parent theme might provide
@@ -2023,8 +2026,7 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *icon_theme,
   g_return_val_if_fail ((flags & GTK_ICON_LOOKUP_NO_SVG) == 0 ||
                         (flags & GTK_ICON_LOOKUP_FORCE_SVG) == 0, NULL);
 
-  GTK_NOTE (ICONTHEME, 
-            g_print ("gtk_icon_theme_lookup_icon %s\n", icon_name));
+  GTK_NOTE (ICONTHEME, g_message ("looking up icon %s", icon_name));
 
   return gtk_icon_theme_lookup_icon_for_scale (icon_theme, icon_name,
                                                size, 1, flags);
@@ -2065,8 +2067,7 @@ gtk_icon_theme_lookup_icon_for_scale (GtkIconTheme       *icon_theme,
                         (flags & GTK_ICON_LOOKUP_FORCE_SVG) == 0, NULL);
   g_return_val_if_fail (scale >= 1, NULL);
 
-  GTK_NOTE (ICONTHEME, 
-            g_print ("gtk_icon_theme_lookup_icon %s\n", icon_name));
+  GTK_NOTE (ICONTHEME, g_message ("looking up icon %s for scale %d", icon_name, scale));
 
   if (flags & GTK_ICON_LOOKUP_GENERIC_FALLBACK)
     {
@@ -2931,8 +2932,7 @@ theme_dir_get_icon_suffix (IconThemeDir *dir,
   else
     suffix = GPOINTER_TO_UINT (g_hash_table_lookup (dir->icons, icon_name));
 
-  GTK_NOTE (ICONTHEME, 
-            g_print ("get_icon_suffix%s %u\n", dir->cache ? " (cached)" : "", suffix));
+  GTK_NOTE (ICONTHEME, g_message ("get icon suffix%s: %u", dir->cache ? " (cached)" : "", suffix));
 
   return suffix;
 }
@@ -3040,8 +3040,7 @@ theme_lookup_icon (IconTheme   *theme,
     {
       dir = l->data;
 
-      GTK_NOTE (ICONTHEME,
-                g_print ("theme_lookup_icon dir %s\n", dir->dir));
+      GTK_NOTE (ICONTHEME, g_message ("look up icon dir %s", dir->dir));
       suffix = theme_dir_get_icon_suffix (dir, icon_name, NULL);
       if (best_suffix (suffix, allow_svg) != ICON_SUFFIX_NONE)
         {
@@ -3188,7 +3187,7 @@ scan_directory (GtkIconThemePrivate *icon_theme,
   GDir *gdir;
   const gchar *name;
 
-  GTK_NOTE (ICONTHEME, g_print ("scanning directory %s\n", full_dir));
+  GTK_NOTE (ICONTHEME, g_message ("scanning directory %s", full_dir));
 
   gdir = g_dir_open (full_dir, 0, NULL);
 
@@ -3226,7 +3225,7 @@ scan_resources (GtkIconThemePrivate  *icon_theme,
   gint i;
   gchar **children;
 
-  GTK_NOTE (ICONTHEME, g_print ("scanning resources %s\n", full_dir));
+  GTK_NOTE (ICONTHEME, g_message ("scanning resources %s", full_dir));
 
   children = g_resources_enumerate_children (full_dir, 0, NULL);
   if (!children)
@@ -4491,13 +4490,13 @@ gtk_icon_info_load_symbolic_svg (GtkIconInfo    *icon_info,
 
   GTK_NOTE (ICONTHEME,
   if (icon_info->dir_type == ICON_THEME_DIR_UNTHEMED)
-    g_print ("Symbolic icon %s is not in an icon theme directory",
-             icon_info->key.icon_names ? icon_info->key.icon_names[0] : icon_info->filename);
+    g_message ("Symbolic icon %s is not in an icon theme directory",
+               icon_info->key.icon_names ? icon_info->key.icon_names[0] : icon_info->filename);
   else if (icon_info->dir_size * icon_info->dir_scale != symbolic_size)
-    g_print ("Symbolic icon %s of size %d is in an icon theme directory of size %d",
-             icon_info->key.icon_names ? icon_info->key.icon_names[0] : icon_info->filename,
-             symbolic_size,
-             icon_info->dir_size * icon_info->dir_scale)
+    g_message ("Symbolic icon %s of size %d is in an icon theme directory of size %d",
+               icon_info->key.icon_names ? icon_info->key.icon_names[0] : icon_info->filename,
+               symbolic_size,
+               icon_info->dir_size * icon_info->dir_scale)
   );
 
   width = g_strdup_printf ("%d", icon_info->symbolic_width);

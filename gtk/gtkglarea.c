@@ -691,8 +691,8 @@ gtk_gl_area_draw (GtkWidget *widget,
   w = gtk_widget_get_allocated_width (widget) * scale;
   h = gtk_widget_get_allocated_height (widget) * scale;
 
-  status = glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT);
-  if (status ==  GL_FRAMEBUFFER_COMPLETE_EXT)
+  status = glCheckFramebufferStatusEXT (GL_FRAMEBUFFER_EXT);
+  if (status == GL_FRAMEBUFFER_COMPLETE_EXT)
     {
       if (priv->needs_render || priv->auto_render)
         {
@@ -716,7 +716,7 @@ gtk_gl_area_draw (GtkWidget *widget,
     }
   else
     {
-      g_print ("fb setup not supported\n");
+      g_warning ("fb setup not supported");
     }
 
   return TRUE;

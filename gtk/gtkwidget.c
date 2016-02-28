@@ -5984,13 +5984,11 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
 	}
 
       name = g_type_name (G_OBJECT_TYPE (G_OBJECT (widget)));
-      g_print ("gtk_widget_size_allocate: %*s%s %d %d %d %d",
-	       2 * depth, " ", name,
-	       allocation->x, allocation->y,
-	       allocation->width, allocation->height);
-      if (baseline != -1)
-	g_print (" baseline: %d", baseline);
-      g_print ("\n");
+      g_message ("gtk_widget_size_allocate: %*s%s %d %d %d %d, baseline %d",
+                 2 * depth, " ", name,
+                 allocation->x, allocation->y,
+                 allocation->width, allocation->height,
+                 baseline);
     }
 #endif /* G_ENABLE_DEBUG */
 
@@ -15514,10 +15512,10 @@ gtk_widget_set_clip (GtkWidget           *widget,
 	}
 
       name = g_type_name (G_OBJECT_TYPE (G_OBJECT (widget)));
-      g_print ("gtk_widget_set_clip:      %*s%s %d %d %d %d\n",
-	       2 * depth, " ", name,
-	       clip->x, clip->y,
-	       clip->width, clip->height);
+      g_message ("gtk_widget_set_clip:      %*s%s %d %d %d %d",
+	         2 * depth, " ", name,
+	         clip->x, clip->y,
+	         clip->width, clip->height);
     }
 #endif /* G_ENABLE_DEBUG */
 

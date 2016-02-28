@@ -568,9 +568,8 @@ gtk_builder_get_internal_child (GtkBuilder   *builder,
         break;
 
       GTK_NOTE (BUILDER,
-                g_print ("Trying to get internal child %s from %s\n",
-                         childname,
-                         object_get_name (info->object)));
+                g_message ("Trying to get internal child %s from %s",
+                           childname, object_get_name (info->object)));
 
       if (GTK_IS_BUILDABLE (info->object))
           obj = gtk_buildable_get_internal_child (GTK_BUILDABLE (info->object),
@@ -731,7 +730,7 @@ _gtk_builder_construct (GtkBuilder  *builder,
         g_object_ref_sink (obj);
 
       GTK_NOTE (BUILDER,
-                g_print ("created %s of type %s\n", info->id, g_type_name (info->type)));
+                g_message ("created %s of type %s", info->id, g_type_name (info->type)));
 
       for (i = 0; i < construct_parameters->len; i++)
         {
@@ -765,7 +764,7 @@ _gtk_builder_construct (GtkBuilder  *builder,
       if (GTK_DEBUG_CHECK (BUILDER))
         {
           gchar *str = g_strdup_value_contents ((const GValue*)&param->value);
-          g_print ("set %s: %s = %s\n", info->id, param->name, str);
+          g_message ("set %s: %s = %s", info->id, param->name, str);
           g_free (str);
         }
 #endif
@@ -829,7 +828,7 @@ _gtk_builder_apply_properties (GtkBuilder  *builder,
       if (GTK_DEBUG_CHECK (BUILDER))
         {
           gchar *str = g_strdup_value_contents ((const GValue*)&param->value);
-          g_print ("set %s: %s = %s\n", info->id, param->name, str);
+          g_message ("set %s: %s = %s", info->id, param->name, str);
           g_free (str);
         }
 #endif
@@ -869,7 +868,7 @@ _gtk_builder_add (GtkBuilder *builder,
   g_assert (GTK_IS_BUILDABLE (parent));
 
   GTK_NOTE (BUILDER,
-            g_print ("adding %s to %s\n", object_get_name (object), object_get_name (parent)));
+            g_message ("adding %s to %s", object_get_name (object), object_get_name (parent)));
 
   gtk_buildable_add_child (GTK_BUILDABLE (parent), builder, object,
                            child_info->type);

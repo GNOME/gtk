@@ -715,7 +715,7 @@ gtk_tray_icon_manager_filter (GdkXEvent *xevent,
       xev->xclient.data.l[1] == icon->priv->selection_atom)
     {
       GTK_NOTE (PLUGSOCKET,
-		g_print ("GtkStatusIcon %p: tray manager appeared\n", icon));
+                g_message ("GtkStatusIcon %p: tray manager appeared", icon));
 
       gtk_tray_icon_update_manager_window (icon);
     }
@@ -725,7 +725,7 @@ gtk_tray_icon_manager_filter (GdkXEvent *xevent,
 	  xev->xproperty.atom == icon->priv->orientation_atom)
 	{
           GTK_NOTE (PLUGSOCKET,
-		    g_print ("GtkStatusIcon %p: got PropertyNotify on manager window for orientation atom\n", icon));
+                    g_message ("GtkStatusIcon %p: got PropertyNotify on manager window for orientation atom", icon));
 
 	  gtk_tray_icon_get_orientation_property (icon);
 	}
@@ -733,7 +733,7 @@ gtk_tray_icon_manager_filter (GdkXEvent *xevent,
                xev->xproperty.atom == icon->priv->colors_atom)
         {
           GTK_NOTE (PLUGSOCKET,
-                    g_print ("GtkStatusIcon %p: got PropertyNotify on manager window for colors atom\n", icon));
+                    g_message ("GtkStatusIcon %p: got PropertyNotify on manager window for colors atom", icon));
 
           gtk_tray_icon_get_colors_property (icon);
         }
@@ -750,14 +750,14 @@ gtk_tray_icon_manager_filter (GdkXEvent *xevent,
       else if (xev->xany.type == DestroyNotify)
 	{
           GTK_NOTE (PLUGSOCKET,
-		    g_print ("GtkStatusIcon %p: got DestroyNotify for manager window\n", icon));
+                    g_message ("GtkStatusIcon %p: got DestroyNotify for manager window", icon));
 
 	  gtk_tray_icon_manager_window_destroyed (icon);
 	}
       else
         {
           GTK_NOTE (PLUGSOCKET,
-                    g_print ("GtkStatusIcon %p: got other message on manager window\n", icon));
+                    g_message ("GtkStatusIcon %p: got other message on manager window", icon));
         }
     }
   
@@ -801,8 +801,8 @@ static void
 gtk_tray_icon_send_dock_request (GtkTrayIcon *icon)
 {
   GTK_NOTE (PLUGSOCKET,
-	    g_print ("GtkStatusIcon %p: sending dock request to manager window %lx\n",
-	    	     icon, (gulong) icon->priv->manager_window));
+            g_message ("GtkStatusIcon %p: sending dock request to manager window %lx",
+                       icon, (gulong) icon->priv->manager_window));
 
   gtk_tray_icon_send_manager_message (icon,
 				      SYSTEM_TRAY_REQUEST_DOCK,
@@ -820,14 +820,14 @@ gtk_tray_icon_update_manager_window (GtkTrayIcon *icon)
   Display *xdisplay = GDK_DISPLAY_XDISPLAY (display);
 
   GTK_NOTE (PLUGSOCKET,
-	    g_print ("GtkStatusIcon %p: updating tray icon manager window, current manager window: %lx\n",
-		     icon, (gulong) icon->priv->manager_window));
+            g_message ("GtkStatusIcon %p: updating tray icon manager window, current manager window: %lx",
+                       icon, (gulong) icon->priv->manager_window));
 
   if (icon->priv->manager_window != None)
     return;
 
   GTK_NOTE (PLUGSOCKET,
-	    g_print ("GtkStatusIcon %p: trying to find manager window\n", icon));
+            g_message ("GtkStatusIcon %p: trying to find manager window", icon));
 
   XGrabServer (xdisplay);
   
@@ -846,8 +846,8 @@ gtk_tray_icon_update_manager_window (GtkTrayIcon *icon)
       GdkWindow *gdkwin;
 
       GTK_NOTE (PLUGSOCKET,
-        g_print ("GtkStatusIcon %p: is being managed by window %lx\n",
-                 icon, (gulong) icon->priv->manager_window));
+                g_message ("GtkStatusIcon %p: is being managed by window %lx",
+                           icon, (gulong) icon->priv->manager_window));
 
       gdkwin = gdk_x11_window_lookup_for_display (display,
                                                   icon->priv->manager_window);
@@ -883,7 +883,7 @@ gtk_tray_icon_update_manager_window (GtkTrayIcon *icon)
   else
     {
       GTK_NOTE (PLUGSOCKET,
-                g_print ("GtkStatusIcon %p: no tray manager found\n", icon));
+                g_message ("GtkStatusIcon %p: no tray manager found", icon));
     }
 }
 
@@ -893,7 +893,7 @@ gtk_tray_icon_manager_window_destroyed (GtkTrayIcon *icon)
   g_return_if_fail (icon->priv->manager_window != None);
 
   GTK_NOTE (PLUGSOCKET,
-	    g_print ("GtkStatusIcon %p: tray manager window destroyed\n", icon));
+            g_message ("GtkStatusIcon %p: tray manager window destroyed", icon));
 
   gtk_tray_icon_clear_manager_window (icon);
 }
@@ -902,13 +902,9 @@ static gboolean
 gtk_tray_icon_delete (GtkWidget   *widget,
 		      GdkEventAny *event)
 {
-#ifdef G_ENABLE_DEBUG
-  GtkTrayIcon *icon = GTK_TRAY_ICON (widget);
-#endif
-
   GTK_NOTE (PLUGSOCKET,
-	    g_print ("GtkStatusIcon %p: delete notify, tray manager window %lx\n",
-		     icon, (gulong) icon->priv->manager_window));
+            g_message ("GtkStatusIcon %p: delete notify, tray manager window %lx",
+                       widget, (gulong) GTK_TRAY_ICON (widget)->priv->manager_window));
 
   /* A bug in X server versions up to x.org 1.5.0 means that:
    * XFixesChangeSaveSet(...., SaveSetRoot, SaveSetUnmap) doesn't work properly
@@ -966,11 +962,12 @@ gtk_tray_icon_realize (GtkWidget *widget)
     }
 
   GTK_NOTE (PLUGSOCKET,
-	    g_print ("GtkStatusIcon %p: realized, window: %lx, socket window: %lx\n",
-		     widget,
-		     (gulong) GDK_WINDOW_XID (window),
-		     gtk_plug_get_socket_window (GTK_PLUG (icon)) ?
-		     (gulong) GDK_WINDOW_XID (gtk_plug_get_socket_window (GTK_PLUG (icon))) : 0UL));
+            g_message ("GtkStatusIcon %p: realized, window: %lx, socket window: %lx",
+                       widget,
+                       (gulong) GDK_WINDOW_XID (window),
+                       gtk_plug_get_socket_window (GTK_PLUG (icon))
+                       ? (gulong) GDK_WINDOW_XID (gtk_plug_get_socket_window (GTK_PLUG (icon)))
+                       : 0UL));
 
   if (icon->priv->manager_window != None)
     gtk_tray_icon_send_dock_request (icon);

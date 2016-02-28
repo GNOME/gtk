@@ -318,8 +318,9 @@ parse_object (GMarkupParseContext  *context,
         {
           data->requested_object_level = data->cur_object_level;
 
-          GTK_NOTE (BUILDER, g_print ("requested object \"%s\" found at level %d\n",
-                                      object_id, data->requested_object_level));
+          GTK_NOTE (BUILDER,
+                    g_message ("requested object \"%s\" found at level %d",
+                               object_id, data->requested_object_level));
 
           data->inside_requested_object = TRUE;
         }
@@ -937,7 +938,7 @@ start_element (GMarkupParseContext  *context,
           g_string_insert_c (tags, 0, ' ');
           g_string_truncate (tags, tags->len - 1);
         }
-      g_print ("<%s%s>\n", element_name, tags->str);
+      g_message ("<%s%s>", element_name, tags->str);
       g_string_free (tags, TRUE);
     }
 #endif
@@ -1008,7 +1009,7 @@ end_element (GMarkupParseContext  *context,
 {
   ParserData *data = (ParserData*)user_data;
 
-  GTK_NOTE (BUILDER, g_print ("</%s>\n", element_name));
+  GTK_NOTE (BUILDER, g_message ("</%s>", element_name));
 
   if (data->subparser && data->subparser->start)
     {
@@ -1060,8 +1061,9 @@ end_element (GMarkupParseContext  *context,
       if (data->requested_objects && data->inside_requested_object &&
           (data->cur_object_level == data->requested_object_level))
         {
-          GTK_NOTE (BUILDER, g_print ("requested object end found at level %d\n",
-                                      data->requested_object_level));
+          GTK_NOTE (BUILDER,
+                    g_message ("requested object end found at level %d",
+                               data->requested_object_level));
 
           data->inside_requested_object = FALSE;
         }

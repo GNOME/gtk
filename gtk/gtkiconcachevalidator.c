@@ -26,7 +26,7 @@
 #define check(name,condition) \
   if (!(condition)) \
     { \
-      VERBOSE(g_print ("bad %s\n", (name))); \
+      VERBOSE(g_message ("bad %s", (name))); \
       return FALSE; \
     }
 
