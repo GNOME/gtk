@@ -990,7 +990,7 @@ xdnd_status_filter (GdkXEvent *xev,
       if (!(action != 0) != !(flags & 1))
         {
           GDK_NOTE (DND,
-                    g_warning ("Received status event with flags not corresponding to action!\n"));
+                    g_warning ("Received status event with flags not corresponding to action!"));
           action = 0;
         }
 
@@ -1424,8 +1424,7 @@ xdnd_check_dest (GdkDisplay *display,
           else
             {
               GDK_NOTE (DND,
-                        g_warning ("Invalid XdndProxy "
-                                   "property on window %ld\n", win));
+                        g_warning ("Invalid XdndProxy property on window %ld", win));
             }
 
           XFree (proxy_data);
@@ -1450,8 +1449,7 @@ xdnd_check_dest (GdkDisplay *display,
           else
             {
               GDK_NOTE (DND,
-                        g_warning ("Invalid XdndAware "
-                                   "property on window %ld\n", win));
+                        g_warning ("Invalid XdndAware property on window %ld", win));
             }
 
           XFree (version);
