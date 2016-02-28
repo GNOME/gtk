@@ -248,7 +248,7 @@ check_iter (GtkTreeModelRefCount *ref_model,
       else
         {
           if (may_assert)
-            g_error ("Expected ref count %d, but node has never been referenced.\n", expected_ref_count);
+            g_error ("Expected ref count %d, but node has never been referenced.", expected_ref_count);
           return FALSE;
         }
     }

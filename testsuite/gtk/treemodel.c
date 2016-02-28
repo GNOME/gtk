@@ -138,7 +138,7 @@ signal_monitor_generic_handler (SignalMonitor *m,
       gchar *path_str;
 
       path_str = gtk_tree_path_to_string (path);
-      g_error ("Signal queue empty, got signal %s path %s\n",
+      g_error ("Signal queue empty, got signal %s path %s",
                signal_name_to_string (signal), path_str);
       g_free (path_str);
 
@@ -147,7 +147,7 @@ signal_monitor_generic_handler (SignalMonitor *m,
 
   if (m->client != model)
     {
-      g_error ("Model mismatch; expected %p, got %p\n",
+      g_error ("Model mismatch; expected %p, got %p",
                m->client, model);
       g_assert_not_reached ();
     }
@@ -171,7 +171,7 @@ signal_monitor_generic_handler (SignalMonitor *m,
       s_path_str = gtk_tree_path_to_string (s->path);
       path_str = gtk_tree_path_to_string (path);
 
-      g_error ("Signals don't match; expected signal %s path %s, got signal %s path %s\n",
+      g_error ("Signals don't match; expected signal %s path %s, got signal %s path %s",
                signal_name_to_string (s->signal), s_path_str,
                signal_name_to_string (signal), path_str);
 

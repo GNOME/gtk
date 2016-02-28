@@ -220,7 +220,7 @@ check_specific_tag_in_range (GtkTextBuffer     *buffer,
     }
 
   if (count != buffer_count)
-    g_error ("Counted %d tags iterating by char, %d iterating forward by tag toggle\n",
+    g_error ("Counted %d tags iterating by char, %d iterating forward by tag toggle",
              buffer_count, count);
   
   state = FALSE;
@@ -593,7 +593,7 @@ run_tests (GtkTextBuffer *buffer)
   g_hash_table_destroy (tag_states);
 
   if (count != buffer_count)
-    g_error ("Counted %d tags iterating by char, %d iterating by tag toggle\n",
+    g_error ("Counted %d tags iterating by char, %d iterating by tag toggle",
              buffer_count, count);
 
   check_specific_tag (buffer, "fg_red");
@@ -1035,7 +1035,7 @@ test_logical_motion (void)
   while (gtk_text_iter_forward_cursor_position (&iter));
 
   if (!gtk_text_iter_is_end (&iter))
-    g_error ("Expected to stop at the end iterator\n");
+    g_error ("Expected to stop at the end iterator");
 
   if (!gtk_text_iter_is_cursor_position (&iter))
     g_error ("Should be a cursor position before the end iterator");
@@ -1063,10 +1063,10 @@ test_logical_motion (void)
   while (gtk_text_iter_backward_cursor_position (&iter));
 
   if (i != -1)
-    g_error ("Expected %d steps, there were actually %d\n", expected_steps - i, i);
+    g_error ("Expected %d steps, there were actually %d", expected_steps - i, i);
 
   if (!gtk_text_iter_is_start (&iter))
-    g_error ("Expected to stop at the start iterator\n");
+    g_error ("Expected to stop at the start iterator");
 
 
   /* Check sentence boundaries */
@@ -1108,10 +1108,10 @@ test_logical_motion (void)
   while (gtk_text_iter_forward_sentence_end (&iter));
 
   if (i != expected_steps)
-    g_error ("Expected %d steps, there were actually %d\n", expected_steps, i);
+    g_error ("Expected %d steps, there were actually %d", expected_steps, i);
 
   if (!gtk_text_iter_is_end (&iter))
-    g_error ("Expected to stop at the end iterator\n");
+    g_error ("Expected to stop at the end iterator");
   
   gtk_text_buffer_set_text (buffer, "Hi.\nHi. \nHi! Hi. Hi? Hi.", -1);
 
@@ -1151,10 +1151,10 @@ test_logical_motion (void)
   while (gtk_text_iter_backward_sentence_start (&iter));
 
   if (i != expected_steps)
-    g_error ("Expected %d steps, there were actually %d\n", expected_steps, i);
+    g_error ("Expected %d steps, there were actually %d", expected_steps, i);
 
   if (gtk_text_iter_get_offset (&iter) != 0)
-    g_error ("Expected to stop at the start iterator\n");
+    g_error ("Expected to stop at the start iterator");
   
   g_object_unref (buffer);
 }
