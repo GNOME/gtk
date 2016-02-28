@@ -525,7 +525,6 @@ guint32 _gdk_win32_keymap_get_decimal_mark (void);
 /* Initialization */
 void _gdk_win32_windowing_init (void);
 void _gdk_screen_init_monitors (GdkWin32Screen *screen);
-void _gdk_screen_init_root_window (GdkWin32Screen *screen_win32);
 void _gdk_screen_init_root_window_size (GdkWin32Screen *screen);
 void _gdk_dnd_init    (void);
 void _gdk_events_init (void);

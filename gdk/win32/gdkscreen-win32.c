@@ -270,8 +270,8 @@ _gdk_screen_init_root_window_size (GdkWin32Screen *screen)
   screen->root_window->height = rect.height;
 }
 
-void
-_gdk_screen_init_root_window (GdkWin32Screen *screen_win32)
+static void
+init_root_window (GdkWin32Screen *screen_win32)
 {
   GdkScreen *screen;
   GdkWindow *window;
@@ -462,6 +462,8 @@ gdk_win32_screen_init (GdkWin32Screen *win32_screen)
   win32_screen->available_visual_types[0] = win32_screen->rgba_visual->type;
 
   _gdk_screen_init_monitors (win32_screen);
+
+  init_root_window (win32_screen);
 
   /* On Windows 8 and later, DWM (composition) is always enabled */
   win32_screen->always_composited = g_win32_check_windows_version (6, 2, 0, G_WIN32_OS_ANY);
