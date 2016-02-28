@@ -26,7 +26,7 @@
         <property name="visible">1</property>
         <property name="show-close-button">1</property>
         <child>
-          <object class="GtkButton" id="run_button">
+          <object class="GtkButton">
             <property name="visible">1</property>
             <property name="valign">center</property>
             <property name="can_focus">1</property>
@@ -35,7 +35,7 @@
               <class name="text-button"/>
             </style>
             <child>
-              <object class="GtkLabel" id="run_label">
+              <object class="GtkLabel">
                 <property name="visible">1</property>
                 <property name="label" translatable="yes">Run</property>
               </object>
@@ -45,13 +45,13 @@
       </object>
     </child>
     <child>
-      <object class="GtkBox" id="box1">
+      <object class="GtkBox">
         <property name="visible">1</property>
         <child>
           <object class="GtkFrame">
             <property name="visible">1</property>
             <child>
-              <object class="GtkScrolledWindow" id="scrolledwindow">
+              <object class="GtkScrolledWindow">
                 <property name="width_request">120</property>
                 <property name="visible">1</property>
                 <property name="can_focus">1</property>
@@ -69,9 +69,9 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkTreeViewColumn" id="treeviewcolumn1">
+                      <object class="GtkTreeViewColumn">
                         <child>
-                          <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                          <object class="GtkCellRendererText"/>
                           <attributes>
                             <attribute name="style">4</attribute>
                             <attribute name="text">1</attribute>
@@ -98,7 +98,7 @@
             <property name="enable_popup">1</property>
             <property name="show_border">0</property>
             <child>
-              <object class="GtkScrolledWindow" id="scrolledwindow1">
+              <object class="GtkScrolledWindow">
                 <property name="visible">1</property>
                 <property name="can_focus">1</property>
                 <child>
@@ -122,7 +122,7 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="label1">
+              <object class="GtkLabel">
                 <property name="visible">1</property>
                 <property name="label" translatable="yes">_Info</property>
                 <property name="use_underline">1</property>
@@ -155,7 +155,7 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="label2">
+              <object class="GtkLabel">
                 <property name="visible">1</property>
                 <property name="label" translatable="yes">Source</property>
               </object>

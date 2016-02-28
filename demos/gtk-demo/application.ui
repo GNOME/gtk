@@ -6,10 +6,10 @@
     <property name="default-height">200</property>
     <property name="icon-name">document-open</property>
     <child>
-      <object class="GtkGrid" id="grid">
+      <object class="GtkGrid">
         <property name="visible">1</property>
         <child>
-          <object class="GtkToolbar" id="toolbar">
+          <object class="GtkToolbar">
             <property name="visible">1</property>
             <property name="hexpand">1</property>
             <style>
@@ -22,19 +22,19 @@
               </object>
             </child>
             <child>
-              <object class="GtkToolButton" id="quit">
+              <object class="GtkToolButton">
                 <property name="visible">1</property>
                 <property name="icon-name">application-exit</property>
                 <property name="action-name">app.quit</property>
               </object>
             </child>
             <child>
-              <object class="GtkSeparatorToolItem" id="sep">
+              <object class="GtkSeparatorToolItem">
                 <property name="visible">1</property>
               </object>
             </child>
             <child>
-              <object class="GtkToolButton" id="logo">
+              <object class="GtkToolButton">
                 <property name="visible">1</property>
                 <property name="icon-name">applications-other</property>
                 <property name="action-name">win.logo</property>
@@ -61,9 +61,9 @@
               </object>
             </child>
             <child internal-child="action_area">
-              <object class="GtkBox" id="action_area">
+              <object class="GtkBox">
                 <child>
-                  <object class="GtkButton" id="button">
+                  <object class="GtkButton">
                     <property name="visible">1</property>
                     <property name="valign">center</property>
                     <property name="label" translatable="yes">_OK</property>
@@ -80,11 +80,11 @@
           </packing>
         </child>
         <child>
-          <object class="GtkScrolledWindow" id="sw">
+          <object class="GtkScrolledWindow">
             <property name="visible">1</property>
             <property name="shadow-type">in</property>
             <child>
-              <object class="GtkTextView" id="contents">
+              <object class="GtkTextView">
                 <property name="visible">1</property>
                 <property name="hexpand">1</property>
                 <property name="vexpand">1</property>

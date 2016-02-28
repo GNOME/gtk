@@ -4,7 +4,7 @@
     <property name="row-spacing">6</property>
     <property name="orientation">vertical</property>
     <child>
-      <object class="GtkToolbar" id="toolbar1">
+      <object class="GtkToolbar">
         <property name="visible">1</property>
         <property name="hexpand">1</property>
         <property name="show-arrow">0</property>
@@ -12,7 +12,7 @@
           <class name="primary-toolbar"/>
         </style>
         <child>
-          <object class="GtkToggleToolButton" id="toolbutton1">
+          <object class="GtkToggleToolButton">
             <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
             <property name="use_action_appearance">0</property>
@@ -26,7 +26,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkToggleToolButton" id="toolbutton2">
+          <object class="GtkToggleToolButton">
             <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
             <property name="use_action_appearance">0</property>
@@ -41,7 +41,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkToggleToolButton" id="toolbutton3">
+          <object class="GtkToggleToolButton">
             <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
             <property name="sensitive">0</property>
@@ -55,7 +55,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkToggleToolButton" id="toolbutton5">
+          <object class="GtkToggleToolButton">
             <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
             <property name="label" translatable="yes">Raised</property>
@@ -71,7 +71,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkToggleToolButton" id="toolbutton6">
+          <object class="GtkToggleToolButton">
             <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
             <property name="label" translatable="yes">Raised Active</property>
@@ -88,7 +88,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkToggleToolButton" id="toolbutton4">
+          <object class="GtkToggleToolButton">
             <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
             <property name="sensitive">0</property>
@@ -103,7 +103,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkToolItem" id="toolitementry">
+          <object class="GtkToolItem">
             <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
             <child>
@@ -118,7 +118,7 @@
           </object>
         </child>
         <child>
-          <object class="GtkToolItem" id="toolitemswitch">
+          <object class="GtkToolItem">
             <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
             <child>
@@ -132,7 +132,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkBox" id="box1">
+      <object class="GtkBox">
         <property name="visible">1</property>
         <property name="valign">center</property>
         <property name="halign">center</property>
@@ -140,7 +140,7 @@
           <class name="linked"/>
         </style>
         <child>
-          <object class="GtkButton" id="button1">
+          <object class="GtkButton">
             <property name="label" translatable="yes">Hi, I am a button</property>
             <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
@@ -150,8 +150,8 @@
           </object>
         </child>
         <child>
-          <object class="GtkButton" id="button2">
-            <property name="label" translatable="yes">And I&apos;m another button</property>
+          <object class="GtkButton">
+            <property name="label" translatable="yes">And I'm another button</property>
             <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
             <property name="can_focus">1</property>
@@ -163,7 +163,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="button3">
+          <object class="GtkButton">
             <property name="label" translatable="yes">This is a button party!</property>
             <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
@@ -178,7 +178,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkToolbar" id="itoolbar1">
+      <object class="GtkToolbar">
         <property name="visible">1</property>
         <property name="hexpand">1</property>
         <property name="icon_size">1</property>
@@ -186,7 +186,7 @@
           <class name="inline-toolbar"/>
         </style>
         <child>
-          <object class="GtkToggleToolButton" id="itoolbutton1">
+          <object class="GtkToggleToolButton">
             <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
             <property name="use_action_appearance">0</property>
@@ -199,7 +199,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkToggleToolButton" id="itoolbutton2">
+          <object class="GtkToggleToolButton">
             <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
             <property name="use_action_appearance">0</property>
@@ -212,7 +212,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkToggleToolButton" id="itoolbutton3">
+          <object class="GtkToggleToolButton">
             <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
             <property name="use_action_appearance">0</property>
@@ -226,7 +226,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkToggleToolButton" id="itoolbutton4">
+          <object class="GtkToggleToolButton">
             <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
             <property name="use_action_appearance">0</property>
@@ -240,7 +240,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkToggleToolButton" id="itoolbutton5">
+          <object class="GtkToggleToolButton">
             <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
             <property name="sensitive">0</property>
@@ -254,7 +254,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkToggleToolButton" id="itoolbutton6">
+          <object class="GtkToggleToolButton">
             <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
             <property name="sensitive">0</property>

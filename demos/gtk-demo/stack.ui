@@ -4,10 +4,10 @@
   <object class="GtkWindow" id="window1">
     <property name="title" translatable="yes">Stack</property>
     <child>
-      <object class="GtkGrid" id="grid1">
+      <object class="GtkGrid">
         <property name="visible">1</property>
         <child>
-          <object class="GtkStackSwitcher" id="switcher">
+          <object class="GtkStackSwitcher">
             <property name="visible">1</property>
             <property name="stack">stack</property>
             <property name="halign">center</property>
@@ -23,7 +23,7 @@
             <property name="can_focus">1</property>
             <property name="transition-type">crossfade</property>
             <child>
-              <object class="GtkImage" id="image1">
+              <object class="GtkImage">
                 <property name="visible">1</property>
                 <property name="margin-top">20</property>
                 <property name="margin-bottom">20</property>
@@ -35,7 +35,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkCheckButton" id="checkbutton1">
+              <object class="GtkCheckButton">
                 <property name="label" translatable="yes">Page 2</property>
                 <property name="visible">1</property>
                 <property name="can_focus">1</property>
@@ -49,7 +49,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkSpinner" id="spinner1">
+              <object class="GtkSpinner">
                 <property name="visible">1</property>
                 <property name="halign">center</property>
                 <property name="valign">center</property>

@@ -18,7 +18,7 @@
             <property name="tooltip-text">Reset</property>
             <signal name="clicked" handler="reset" swapped="no"/>
             <child>
-              <object class="GtkImage" id="image1">
+              <object class="GtkImage">
                 <property name="visible">1</property>
                 <property name="icon_name">view-refresh-symbolic</property>
               </object>
@@ -31,12 +31,12 @@
       <object class="GtkBox">
         <property name="visible">1</property>
         <child>
-          <object class="GtkScrolledWindow" id="scrolledwindow1">
+          <object class="GtkScrolledWindow">
             <property name="visible">1</property>
             <property name="can_focus">1</property>
             <property name="hscrollbar_policy">never</property>
             <child>
-              <object class="GtkViewport" id="viewport1">
+              <object class="GtkViewport">
                 <property name="visible">1</property>
                 <child>
                   <object class="GtkBox">
