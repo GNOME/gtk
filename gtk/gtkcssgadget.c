@@ -825,7 +825,9 @@ gtk_css_gadget_draw (GtkCssGadget *gadget,
   if (width < 0 || height < 0)
     {
       g_warning ("Drawing a gadget with negative dimensions. "
-                 "Did you forget to allocate a size?");
+                 "Did you forget to allocate a size? (node %s owner %s)",
+                 gtk_css_node_get_name (gtk_css_gadget_get_node (gadget)),
+                 G_OBJECT_TYPE_NAME (gtk_css_gadget_get_owner (gadget)));
       x = 0;
       y = 0;
       width = gtk_widget_get_allocated_width (priv->owner);
