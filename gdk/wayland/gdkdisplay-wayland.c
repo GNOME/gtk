@@ -814,7 +814,7 @@ gdk_wayland_display_set_cursor_theme (GdkDisplay  *display,
   theme = wl_cursor_theme_load (name, size, wayland_display->shm);
   if (theme == NULL)
     {
-      g_warning ("Failed to load cursor theme %s\n", name);
+      g_warning ("Failed to load cursor theme %s", name);
       return;
     }
 
@@ -853,7 +853,7 @@ _gdk_wayland_display_get_scaled_cursor_theme (GdkWaylandDisplay *wayland_display
                                     wayland_display->shm);
       if (theme == NULL)
         {
-          g_warning ("Failed to load cursor theme %s with scale %u\n",
+          g_warning ("Failed to load cursor theme %s with scale %u",
                      wayland_display->cursor_theme_name, scale);
           return NULL;
         }

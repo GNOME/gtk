@@ -258,7 +258,7 @@ selection_buffer_read_cb (GObject      *object,
     {
       if (error)
         {
-          g_warning (G_STRLOC ": error reading selection buffer: %s\n", error->message);
+          g_warning (G_STRLOC ": error reading selection buffer: %s", error->message);
           g_error_free (error);
         }
       else
