@@ -256,6 +256,100 @@ gtk_scale_notify (GObject    *object,
     G_OBJECT_CLASS (gtk_scale_parent_class)->notify (object, pspec);
 }
 
+static void
+gtk_scale_size_allocate (GtkWidget     *widget,
+                         GtkAllocation *allocation)
+{
+  GtkScale *scale = GTK_SCALE (widget);
+  GtkScalePrivate *priv = scale->priv;
+  GtkAllocation clip, marks_clip, range_rect, marks_rect;
+  GtkOrientation orientation;
+
+  GTK_WIDGET_CLASS (gtk_scale_parent_class)->size_allocate (widget, allocation);
+
+  gtk_widget_get_clip (widget, &clip);
+  orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (widget));
+  gtk_range_get_range_rect (GTK_RANGE (scale), &range_rect);
+
+  range_rect.x += allocation->x;
+  range_rect.y += allocation->y;
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    {
+      int marks_height = 0;
+
+      if (priv->top_marks_gadget)
+        {
+          gtk_css_gadget_get_preferred_size (priv->top_marks_gadget,
+                                             GTK_ORIENTATION_VERTICAL, -1,
+                                             &marks_height, NULL,
+                                             NULL, NULL);
+          marks_rect = range_rect;
+          marks_rect.y -= marks_height;
+          marks_rect.height = marks_height;
+          gtk_css_gadget_allocate (priv->top_marks_gadget,
+                                   &marks_rect,
+                                   -1,
+                                   &marks_clip);
+          gdk_rectangle_union (&clip, &marks_clip, &clip);
+        }
+
+      if (priv->bottom_marks_gadget)
+        {
+          gtk_css_gadget_get_preferred_size (priv->bottom_marks_gadget,
+                                             GTK_ORIENTATION_VERTICAL, -1,
+                                             &marks_height, NULL,
+                                             NULL, NULL);
+          marks_rect = range_rect;
+          marks_rect.y += range_rect.height;
+          marks_rect.height = marks_height;
+          gtk_css_gadget_allocate (priv->bottom_marks_gadget,
+                                   &marks_rect,
+                                   -1,
+                                   &marks_clip);
+          gdk_rectangle_union (&clip, &marks_clip, &clip);
+        }
+    }
+  else
+    {
+      int marks_width = 0;
+
+      if (priv->top_marks_gadget)
+        {
+          gtk_css_gadget_get_preferred_size (priv->top_marks_gadget,
+                                             GTK_ORIENTATION_HORIZONTAL, -1,
+                                             &marks_width, NULL,
+                                             NULL, NULL);
+          marks_rect = range_rect;
+          marks_rect.x -= marks_width;
+          marks_rect.width = marks_width;
+          gtk_css_gadget_allocate (priv->top_marks_gadget,
+                                   &marks_rect,
+                                   -1,
+                                   &marks_clip);
+          gdk_rectangle_union (&clip, &marks_clip, &clip);
+        }
+
+      if (priv->bottom_marks_gadget)
+        {
+          gtk_css_gadget_get_preferred_size (priv->bottom_marks_gadget,
+                                             GTK_ORIENTATION_HORIZONTAL, -1,
+                                             &marks_width, NULL,
+                                             NULL, NULL);
+          marks_rect = range_rect;
+          marks_rect.x += range_rect.width;
+          marks_rect.width = marks_width;
+          gtk_css_gadget_allocate (priv->bottom_marks_gadget,
+                                   &marks_rect,
+                                   -1,
+                                   &marks_clip);
+          gdk_rectangle_union (&clip, &marks_clip, &clip);
+        }
+    }
+
+  gtk_widget_set_clip (widget, &clip);
+}
+
 #define add_slider_binding(binding_set, keyval, mask, scroll)              \
   gtk_binding_entry_add_signal (binding_set, keyval, mask,                 \
                                 I_("move-slider"), 1, \
@@ -281,6 +375,7 @@ gtk_scale_class_init (GtkScaleClass *class)
   widget_class->style_updated = gtk_scale_style_updated;
   widget_class->screen_changed = gtk_scale_screen_changed;
   widget_class->draw = gtk_scale_draw;
+  widget_class->size_allocate = gtk_scale_size_allocate;
   widget_class->get_preferred_width = gtk_scale_get_preferred_width;
   widget_class->get_preferred_height = gtk_scale_get_preferred_height;
 
@@ -1254,7 +1349,7 @@ gtk_scale_draw (GtkWidget *widget,
   if (priv->marks)
     {
       GtkOrientation orientation;
-      GdkRectangle range_rect;
+      GdkRectangle range_rect, marks_alloc;
       gint i;
       gint x1, x2, x3, y1, y2, y3;
       PangoLayout *layout;
@@ -1282,15 +1377,17 @@ gtk_scale_draw (GtkWidget *widget,
               x1 = marks[i];
               if (mark->position == GTK_POS_TOP)
                 {
-                  y1 = range_rect.y + slider_alloc.height / 4;
-                  y2 = range_rect.y;
+                  gtk_css_gadget_get_content_box (priv->top_marks_gadget, &marks_alloc);
+                  y1 = marks_alloc.y + marks_alloc.height;
+                  y2 = marks_alloc.y + marks_alloc.height - slider_alloc.height / 4;
                   min_pos = min_pos_before;
                   max_pos = find_next_pos (widget, m, marks + i, GTK_POS_TOP) - min_sep;
                 }
               else
                 {
-                  y1 = range_rect.y + slider_alloc.height / 4;
-                  y2 = range_rect.y + range_rect.height;
+                  gtk_css_gadget_get_content_box (priv->bottom_marks_gadget, &marks_alloc);
+                  y1 = marks_alloc.y;
+                  y2 = marks_alloc.y + slider_alloc.height / 4;
                   min_pos = min_pos_after;
                   max_pos = find_next_pos (widget, m, marks + i, GTK_POS_BOTTOM) - min_sep;
                 }
@@ -1327,15 +1424,17 @@ gtk_scale_draw (GtkWidget *widget,
             {
               if (mark->position == GTK_POS_TOP)
                 {
-                  x1 = range_rect.x + slider_alloc.width / 4;
-                  x2 = range_rect.x;
+                  gtk_css_gadget_get_content_box (priv->top_marks_gadget, &marks_alloc);
+                  x1 = marks_alloc.x + slider_alloc.width / 4;
+                  x2 = marks_alloc.x;
                   min_pos = min_pos_before;
                   max_pos = find_next_pos (widget, m, marks + i, GTK_POS_TOP) - min_sep;
                 }
               else
                 {
-                  x1 = range_rect.x + slider_alloc.width / 4;
-                  x2 = range_rect.x + range_rect.width;
+                  gtk_css_gadget_get_content_box (priv->bottom_marks_gadget, &marks_alloc);
+                  x1 = marks_alloc.x;
+                  x2 = marks_alloc.x + slider_alloc.width / 4;
                   min_pos = min_pos_after;
                   max_pos = find_next_pos (widget, m, marks + i, GTK_POS_BOTTOM) - min_sep;
                 }
