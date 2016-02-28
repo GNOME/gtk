@@ -2297,8 +2297,6 @@ gtk_range_render_trough (GtkCssGadget *gadget,
   if (priv->has_origin)
     gtk_css_gadget_draw (priv->highlight_gadget, cr);
 
-  gtk_css_gadget_draw (priv->slider_gadget, cr);
-
   return gtk_widget_has_visible_focus (widget);
 }
 
@@ -2318,13 +2316,11 @@ gtk_range_render (GtkCssGadget *gadget,
   /* HACK: we can't render the contents box directly because
    * GtkColorScale wants to omit the trough but still draw the slider...
    */
-  if (GTK_IS_COLOR_SCALE (widget))
-    {
-      gtk_css_gadget_draw (priv->slider_gadget, cr);
-      return FALSE;
-    }
+  if (!GTK_IS_COLOR_SCALE (widget))
+    gtk_css_gadget_draw (priv->contents_gadget, cr);
 
-  gtk_css_gadget_draw (priv->contents_gadget, cr);
+  /* Draw the slider last, so that e.g. the focus ring stays below it */
+  gtk_css_gadget_draw (priv->slider_gadget, cr);
 
   return FALSE;
 }
