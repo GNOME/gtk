@@ -1196,7 +1196,7 @@ gtk_get_locale_direction (void)
   if (g_strcmp0 (e, "default:RTL") == 0)
     dir = GTK_TEXT_DIR_RTL;
   else if (g_strcmp0 (e, "default:LTR") != 0)
-    g_warning ("Whoever translated default:LTR did so wrongly. Defaulting to LTR.\n");
+    g_warning ("Whoever translated default:LTR did so wrongly. Defaulting to LTR.");
 
   return dir;
 }

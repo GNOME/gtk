@@ -8589,7 +8589,7 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
 
       if (!retval)
         {
-          g_warning ("error pasting: %s\n", error->message);
+          g_warning ("error pasting: %s", error->message);
           g_clear_error (&error);
         }
     }

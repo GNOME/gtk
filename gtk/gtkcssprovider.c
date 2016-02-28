@@ -555,7 +555,7 @@ verify_tree_match_results (GtkCssProvider *provider,
       should_match = _gtk_css_selector_matches (ruleset->selector, matcher);
       if (found != !!should_match)
 	{
-	  g_error ("expected rule '%s' to %s, but it %s\n",
+	  g_error ("expected rule '%s' to %s, but it %s",
 		   _gtk_css_selector_to_string (ruleset->selector),
 		   should_match ? "match" : "not match",
 		   found ? "matched" : "didn't match");

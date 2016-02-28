@@ -761,7 +761,7 @@ gtk_socket_add_grabbed_key (GtkSocket       *socket,
 			    find_accel_key,
 			    &grabbed_key))
     {
-      g_warning ("GtkSocket: request to add already present grabbed key %u,%#x\n",
+      g_warning ("GtkSocket: request to add already present grabbed key %u,%#x",
 		 keyval, modifiers);
       g_free (grabbed_key);
       return;
@@ -788,7 +788,7 @@ gtk_socket_remove_grabbed_key (GtkSocket      *socket,
 			       GdkModifierType modifiers)
 {
   if (!gtk_accel_group_disconnect_key (socket->priv->accel_group, keyval, modifiers))
-    g_warning ("GtkSocket: request to remove non-present grabbed key %u,%#x\n",
+    g_warning ("GtkSocket: request to remove non-present grabbed key %u,%#x",
 	       keyval, modifiers);
 }
 
@@ -1292,13 +1292,13 @@ xembed_get_info (GdkWindow     *window,
 
   if (type != xembed_info_atom)
     {
-      g_warning ("_XEMBED_INFO property has wrong type\n");
+      g_warning ("_XEMBED_INFO property has wrong type");
       return FALSE;
     }
   
   if (nitems < 2)
     {
-      g_warning ("_XEMBED_INFO too short\n");
+      g_warning ("_XEMBED_INFO too short");
       XFree (data);
       return FALSE;
     }

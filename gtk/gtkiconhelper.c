@@ -239,7 +239,7 @@ ensure_icon_size (GtkIconHelper *self,
         }
       else
         {
-          g_warning ("Invalid icon size %d\n", self->priv->icon_size);
+          g_warning ("Invalid icon size %d", self->priv->icon_size);
           width = height = 24;
         }
     }

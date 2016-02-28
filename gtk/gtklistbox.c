@@ -2435,7 +2435,7 @@ gtk_list_box_remove (GtkContainer *container,
         }
       else
         {
-          g_warning ("Tried to remove non-child %p\n", child);
+          g_warning ("Tried to remove non-child %p", child);
         }
       return;
     }
@@ -2443,7 +2443,7 @@ gtk_list_box_remove (GtkContainer *container,
   row = GTK_LIST_BOX_ROW (child);
   if (g_sequence_iter_get_sequence (ROW_PRIV (row)->iter) != priv->children)
     {
-      g_warning ("Tried to remove non-child %p\n", child);
+      g_warning ("Tried to remove non-child %p", child);
       return;
     }
 

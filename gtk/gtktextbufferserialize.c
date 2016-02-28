@@ -72,7 +72,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
     }
   else
     {
-      g_warning ("Type %s is not serializable\n", g_type_name (value->g_type));
+      g_warning ("Type %s is not serializable", g_type_name (value->g_type));
     }
 G_GNUC_END_IGNORE_DEPRECATIONS
 
@@ -192,7 +192,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
     }
   else
     {
-      g_warning ("Type %s can not be deserialized\n", g_type_name (value->g_type));
+      g_warning ("Type %s can not be deserialized", g_type_name (value->g_type));
     }
 G_GNUC_END_IGNORE_DEPRECATIONS
 

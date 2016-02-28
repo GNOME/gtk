@@ -199,7 +199,7 @@ gtk_cell_renderer_spinner_update_size (GtkCellRendererSpinner *cell,
 
   if (!gtk_icon_size_lookup (priv->icon_size, &priv->size, NULL))
     {
-      g_warning ("Invalid icon size %u\n", priv->icon_size);
+      g_warning ("Invalid icon size %u", priv->icon_size);
       priv->size = 24;
     }
 }

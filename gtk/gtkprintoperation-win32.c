@@ -1676,7 +1676,7 @@ gtk_print_operation_run_with_dialog (GtkPrintOperation *op,
 
       initialized = InitCommonControlsEx (&icc);
       if (!initialized)
-        g_warning ("Failed to InitCommonControlsEx: %lu\n", GetLastError ());
+        g_warning ("Failed to InitCommonControlsEx: %lu", GetLastError ());
 
       _gtk_load_dll_with_libgtk3_manifest ("comdlg32.dll");
 

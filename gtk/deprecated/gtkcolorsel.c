@@ -867,7 +867,7 @@ color_sample_drop_handle (GtkWidget        *widget,
    */
   if (length != 8)
     {
-      g_warning ("Received invalid color data\n");
+      g_warning ("Received invalid color data");
       return;
     }
 
@@ -1595,7 +1595,7 @@ palette_drop_handle (GtkWidget        *widget,
    */
   if (length != 8)
     {
-      g_warning ("Received invalid color data\n");
+      g_warning ("Received invalid color data");
       return;
     }
 

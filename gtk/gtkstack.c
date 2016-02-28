@@ -722,7 +722,7 @@ gtk_stack_set_child_property (GtkContainer *container,
             continue;
           if (g_strcmp0 (info2->name, name) == 0)
             {
-              g_warning ("Duplicate child name in GtkStack: %s\n", name);
+              g_warning ("Duplicate child name in GtkStack: %s", name);
               break;
             }
         }

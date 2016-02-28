@@ -120,7 +120,7 @@ _gtk_load_dll_with_libgtk3_manifest (const gchar *dll_name)
 
   if (activation_ctx_handle == INVALID_HANDLE_VALUE &&
       error_code != ERROR_SXS_PROCESS_DEFAULT_ALREADY_SET)
-    g_warning ("Failed to CreateActCtx for module %p, resource %p: %lu\n",
+    g_warning ("Failed to CreateActCtx for module %p, resource %p: %lu",
                gtk_dll, resource_name, GetLastError ());
   else if (error_code != ERROR_SXS_PROCESS_DEFAULT_ALREADY_SET)
     {
@@ -128,12 +128,12 @@ _gtk_load_dll_with_libgtk3_manifest (const gchar *dll_name)
       activated = ActivateActCtx (activation_ctx_handle, &activation_cookie);
 
       if (!activated)
-        g_warning ("Failed to ActivateActCtx: %lu\n", GetLastError ());
+        g_warning ("Failed to ActivateActCtx: %lu", GetLastError ());
 
       LoadLibraryA (dll_name);
 
       if (activated && !DeactivateActCtx (0, activation_cookie))
-        g_warning ("Failed to DeactivateActCtx: %lu\n", GetLastError ());
+        g_warning ("Failed to DeactivateActCtx: %lu", GetLastError ());
 
       ReleaseActCtx (activation_ctx_handle);
     }

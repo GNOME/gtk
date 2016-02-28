@@ -260,7 +260,7 @@ gtk_paper_size_new (const gchar *name)
         size = gtk_paper_size_new_from_info (info);
       else
         {
-          g_warning ("Unknown paper size %s\n", name);
+          g_warning ("Unknown paper size %s", name);
           size = g_slice_new0 (GtkPaperSize);
           size->name = g_strdup (name);
           size->display_name = g_strdup (name);

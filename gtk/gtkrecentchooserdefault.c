@@ -1228,7 +1228,7 @@ gtk_recent_chooser_default_add_filter (GtkRecentChooser *chooser,
   
   if (g_slist_find (impl->priv->filters, filter))
     {
-      g_warning ("gtk_recent_chooser_add_filter() called on filter already in list\n");
+      g_warning ("gtk_recent_chooser_add_filter() called on filter already in list");
       return;
     }
   
@@ -1261,7 +1261,7 @@ gtk_recent_chooser_default_remove_filter (GtkRecentChooser *chooser,
   
   if (filter_idx < 0)
     {
-      g_warning ("gtk_recent_chooser_remove_filter() called on filter not in list\n");
+      g_warning ("gtk_recent_chooser_remove_filter() called on filter not in list");
       return;  
     }
   

@@ -2961,7 +2961,7 @@ settings_update_cursor_theme (GtkSettings *settings)
     gdk_win32_display_set_cursor_theme (display, theme, size);
   else
 #endif
-    g_warning ("GtkSettings Cursor Theme: Unsupported GDK backend\n");
+    g_warning ("GtkSettings Cursor Theme: Unsupported GDK backend");
   g_free (theme);
 }
 

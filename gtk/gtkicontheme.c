@@ -1192,12 +1192,12 @@ insert_theme (GtkIconTheme *icon_theme,
   theme->display_name = 
     g_key_file_get_locale_string (theme_file, "Icon Theme", "Name", NULL, NULL);
   if (!theme->display_name)
-    g_warning ("Theme file for %s has no name\n", theme_name);
+    g_warning ("Theme file for %s has no name", theme_name);
 
   dirs = g_key_file_get_string_list (theme_file, "Icon Theme", "Directories", NULL, NULL);
   if (!dirs)
     {
-      g_warning ("Theme file for %s has no directories\n", theme_name);
+      g_warning ("Theme file for %s has no directories", theme_name);
       priv->themes = g_list_remove (priv->themes, theme);
       g_free (theme->name);
       g_free (theme->display_name);

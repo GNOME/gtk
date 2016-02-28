@@ -246,7 +246,7 @@ swatch_drag_data_received (GtkWidget        *widget,
    */
   if (length != 8)
     {
-      g_warning ("Received invalid color data\n");
+      g_warning ("Received invalid color data");
       return;
     }
 

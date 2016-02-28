@@ -3256,7 +3256,7 @@ gtk_flow_box_remove (GtkContainer *container,
       child = (GtkFlowBoxChild*)gtk_widget_get_parent (widget);
       if (!GTK_IS_FLOW_BOX_CHILD (child))
         {
-          g_warning ("Tried to remove non-child %p\n", widget);
+          g_warning ("Tried to remove non-child %p", widget);
           return;
         }
     }

@@ -144,7 +144,7 @@ _gtk_icon_cache_new_for_path (const gchar *path)
       if (!_gtk_icon_cache_validate (&info))
         {
           g_mapped_file_unref (map);
-          g_warning ("Icon cache '%s' is invalid\n", cache_filename);
+          g_warning ("Icon cache '%s' is invalid", cache_filename);
 
           goto done;
         }

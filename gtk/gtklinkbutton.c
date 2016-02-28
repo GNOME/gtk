@@ -574,7 +574,7 @@ gtk_link_button_new (const gchar *uri)
       if (conv_err)
         {
           g_warning ("Attempting to convert URI '%s' to UTF-8, but failed "
-                     "with error: %s\n",
+                     "with error: %s",
                      uri,
                      conv_err->message);
           g_error_free (conv_err);

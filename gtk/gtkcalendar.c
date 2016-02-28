@@ -800,7 +800,7 @@ gtk_calendar_init (GtkCalendar *calendar)
   if (strcmp (year_before, "calendar:YM") == 0)
     priv->year_before = 1;
   else if (strcmp (year_before, "calendar:MY") != 0)
-    g_warning ("Whoever translated calendar:MY did so wrongly.\n");
+    g_warning ("Whoever translated calendar:MY did so wrongly.");
 
 #ifdef G_OS_WIN32
   priv->week_start = 0;
@@ -826,7 +826,7 @@ gtk_calendar_init (GtkCalendar *calendar)
   else if (week_origin == 19971201) /* Monday */
     week_1stday = 1;
   else
-    g_warning ("Unknown value of _NL_TIME_WEEK_1STDAY.\n");
+    g_warning ("Unknown value of _NL_TIME_WEEK_1STDAY.");
 
   priv->week_start = (week_1stday + first_weekday - 1) % 7;
 #else
@@ -843,7 +843,7 @@ gtk_calendar_init (GtkCalendar *calendar)
 
   if (priv->week_start < 0 || priv->week_start > 6)
     {
-      g_warning ("Whoever translated calendar:week_start:0 did so wrongly.\n");
+      g_warning ("Whoever translated calendar:week_start:0 did so wrongly.");
       priv->week_start = 0;
     }
 #endif
@@ -3454,7 +3454,7 @@ gtk_calendar_drag_data_received (GtkWidget        *widget,
 
   if (!g_date_valid (date))
     {
-      g_warning ("Received invalid date data\n");
+      g_warning ("Received invalid date data");
       g_date_free (date);
       gtk_drag_finish (context, FALSE, FALSE, time);
       return;

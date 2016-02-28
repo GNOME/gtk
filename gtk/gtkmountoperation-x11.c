@@ -160,7 +160,7 @@ get_utf8_property (Display *xdisplay,
 
   if (!g_utf8_validate (val, nitems, NULL))
     {
-      g_warning ("Property %s contained invalid UTF-8\n",
+      g_warning ("Property %s contained invalid UTF-8",
                  gdk_x11_get_xatom_name (atom));
       XFree (val);
       return NULL;

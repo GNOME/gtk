@@ -106,7 +106,7 @@ real_add (const GtkStockItem *items,
         {
           if (item->modifier & NON_STATIC_MASK)
             {
-              g_warning ("Bit 29 set in stock accelerator.\n");
+              g_warning ("Bit 29 set in stock accelerator.");
               copy = TRUE;
             }
 

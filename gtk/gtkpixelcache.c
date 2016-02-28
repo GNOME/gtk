@@ -78,7 +78,7 @@ _gtk_pixel_cache_free (GtkPixelCache *cache)
       cache->surface ||
       cache->surface_dirty)
     {
-      g_warning ("pixel cache freed that wasn't unmapped: tag %u surface %p sirty %p",
+      g_warning ("pixel cache freed that wasn't unmapped: tag %u surface %p dirty %p",
                  cache->timeout_tag, cache->surface, cache->surface_dirty);
     }
 

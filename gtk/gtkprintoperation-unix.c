@@ -305,7 +305,7 @@ _gtk_print_operation_platform_backend_launch_preview (GtkPrintOperation *op,
     {
       gchar* uri;
 
-      g_warning ("%s %s", _("Error launching preview"), error->message);
+      g_warning ("Error launching preview: %s", error->message);
 
       g_error_free (error);
       error = NULL;

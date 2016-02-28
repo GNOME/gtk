@@ -1404,7 +1404,7 @@ gtk_window_titlebar_action (GtkWindow      *window,
     gtk_window_do_popup (window, (GdkEventButton*) event);
   else
     {
-      g_warning ("Unsupported titlebar action %s\n", action);
+      g_warning ("Unsupported titlebar action %s", action);
       retval = FALSE;
     }
 
@@ -2395,7 +2395,7 @@ gtk_window_set_wmclass (GtkWindow *window,
   priv->wmclass_class = g_strdup (wmclass_class);
 
   if (_gtk_widget_get_realized (GTK_WIDGET (window)))
-    g_warning ("gtk_window_set_wmclass: shouldn't set wmclass after window is realized!\n");
+    g_warning ("gtk_window_set_wmclass: shouldn't set wmclass after window is realized!");
 }
 
 /**
@@ -9462,7 +9462,7 @@ gtk_window_move_resize (GtkWindow *window)
 		 "size_changed: %d pos_changed: %d hints_changed: %d\n"
 		 "configure_notify_received: %d\n"
 		 "configure_request_count: %d\n"
-		 "position_constraints_changed: %d\n",
+		 "position_constraints_changed: %d",
 		 priv->title ? priv->title : "(no title)",
 		 info->last.configure_request.x,
 		 info->last.configure_request.y,
@@ -11268,7 +11268,7 @@ gtk_window_activate_menubar (GtkWindow   *window,
 
   if (keyval == 0)
     {
-      g_warning ("Failed to parse menu bar accelerator '%s'\n", accel);
+      g_warning ("Failed to parse menu bar accelerator '%s'", accel);
       g_free (accel);
       return FALSE;
     }

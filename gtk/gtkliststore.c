@@ -431,7 +431,7 @@ gtk_list_store_new (gint n_columns,
       GType type = va_arg (args, GType);
       if (! _gtk_tree_data_list_check_type (type))
         {
-          g_warning ("%s: Invalid type %s\n", G_STRLOC, g_type_name (type));
+          g_warning ("%s: Invalid type %s", G_STRLOC, g_type_name (type));
           g_object_unref (retval);
           va_end (args);
 
@@ -472,7 +472,7 @@ gtk_list_store_newv (gint   n_columns,
     {
       if (! _gtk_tree_data_list_check_type (types[i]))
 	{
-	  g_warning ("%s: Invalid type %s\n", G_STRLOC, g_type_name (types[i]));
+	  g_warning ("%s: Invalid type %s", G_STRLOC, g_type_name (types[i]));
 	  g_object_unref (retval);
 	  return NULL;
 	}
@@ -513,7 +513,7 @@ gtk_list_store_set_column_types (GtkListStore *list_store,
     {
       if (! _gtk_tree_data_list_check_type (types[i]))
 	{
-	  g_warning ("%s: Invalid type %s\n", G_STRLOC, g_type_name (types[i]));
+	  g_warning ("%s: Invalid type %s", G_STRLOC, g_type_name (types[i]));
 	  continue;
 	}
       gtk_list_store_set_column_type (list_store, i, types[i]);
@@ -549,7 +549,7 @@ gtk_list_store_set_column_type (GtkListStore *list_store,
 
   if (!_gtk_tree_data_list_check_type (type))
     {
-      g_warning ("%s: Invalid type %s\n", G_STRLOC, g_type_name (type));
+      g_warning ("%s: Invalid type %s", G_STRLOC, g_type_name (type));
       return;
     }
 
@@ -830,7 +830,7 @@ gtk_list_store_real_set_value (GtkListStore *list_store,
     {
       if (! (g_value_type_transformable (G_VALUE_TYPE (value), priv->column_headers[column])))
 	{
-	  g_warning ("%s: Unable to convert from %s to %s\n",
+	  g_warning ("%s: Unable to convert from %s to %s",
 		     G_STRLOC,
 		     g_type_name (G_VALUE_TYPE (value)),
 		     g_type_name (priv->column_headers[column]));
@@ -840,7 +840,7 @@ gtk_list_store_real_set_value (GtkListStore *list_store,
       g_value_init (&real_value, priv->column_headers[column]);
       if (!g_value_transform (value, &real_value))
 	{
-	  g_warning ("%s: Unable to make conversion from %s to %s\n",
+	  g_warning ("%s: Unable to make conversion from %s to %s",
 		     G_STRLOC,
 		     g_type_name (G_VALUE_TYPE (value)),
 		     g_type_name (priv->column_headers[column]));

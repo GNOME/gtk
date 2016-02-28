@@ -760,7 +760,7 @@ call_password_proxy_cb (GObject      *source,
                                                               &error))
     {
       result = G_MOUNT_OPERATION_ABORTED;
-      g_warning ("Shell mount operation error: %s\n", error->message);
+      g_warning ("Shell mount operation error: %s", error->message);
       g_error_free (error);
       goto out;
     }
@@ -927,7 +927,7 @@ call_question_proxy_cb (GObject      *source,
                                                               &error))
     {
       result = G_MOUNT_OPERATION_ABORTED;
-      g_warning ("Shell mount operation error: %s\n", error->message);
+      g_warning ("Shell mount operation error: %s", error->message);
       g_error_free (error);
       goto out;
     }
@@ -1549,7 +1549,7 @@ call_processes_proxy_cb (GObject     *source,
                                                                 &error))
     {
       result = G_MOUNT_OPERATION_ABORTED;
-      g_warning ("Shell mount operation error: %s\n", error->message);
+      g_warning ("Shell mount operation error: %s", error->message);
       g_error_free (error);
       goto out;
     }

@@ -1550,7 +1550,7 @@ _gtk_rbtree_test_height (GtkRBTree *tree,
     computed_offset += node->children->root->offset;
 
   if (GTK_RBNODE_GET_HEIGHT (node) + computed_offset != node->offset)
-    g_error ("node has broken offset\n");
+    g_error ("node has broken offset");
 
   if (!_gtk_rbtree_is_nil (node->left))
     _gtk_rbtree_test_height (tree, node->left);

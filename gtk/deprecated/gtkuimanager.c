@@ -734,7 +734,7 @@ gtk_ui_manager_buildable_construct_child (GtkBuildable *buildable,
   widget = gtk_ui_manager_get_widget (GTK_UI_MANAGER (buildable), name);
   if (!widget)
     {
-      g_error ("Unknown ui manager child: %s\n", name);
+      g_error ("Unknown ui manager child: %s", name);
       g_free (name);
       return NULL;
     }
@@ -983,7 +983,7 @@ gtk_ui_manager_insert_action_group (GtkUIManager   *manager,
       if (strcmp (gtk_action_group_get_name (group), group_name) == 0)
         {
           g_warning ("Inserting action group '%s' into UI manager which "
-		     "already has a group with this name\n", group_name);
+		     "already has a group with this name", group_name);
           break;
         }
     }
@@ -2184,8 +2184,7 @@ gtk_ui_manager_add_ui (GtkUIManager        *manager,
 
   if (node_type == NODE_TYPE_UNDECIDED)
     {
-      g_warning ("item type %d not suitable for adding at '%s'", 
-		 type, path);
+      g_warning ("item type %d not suitable for adding at '%s'", type, path);
       return;
     }
    

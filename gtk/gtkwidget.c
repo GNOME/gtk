@@ -9486,12 +9486,12 @@ gtk_widget_set_parent (GtkWidget *widget,
 
   if (priv->parent != NULL)
     {
-      g_warning ("Can't set a parent on widget which has a parent\n");
+      g_warning ("Can't set a parent on widget which has a parent");
       return;
     }
   if (_gtk_widget_is_toplevel (widget))
     {
-      g_warning ("Can't set a parent on a toplevel widget\n");
+      g_warning ("Can't set a parent on a toplevel widget");
       return;
     }
 

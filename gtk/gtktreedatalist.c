@@ -452,7 +452,7 @@ _gtk_tree_data_list_compare_func (GtkTreeModel *model,
     case G_TYPE_BOXED:
     case G_TYPE_OBJECT:
     default:
-      g_warning ("Attempting to sort on invalid type %s\n", g_type_name (type));
+      g_warning ("Attempting to sort on invalid type %s", g_type_name (type));
       retval = FALSE;
       break;
     }

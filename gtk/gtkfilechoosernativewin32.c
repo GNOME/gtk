@@ -85,7 +85,7 @@ g_warning_hr (const char *msg, HRESULT hr)
 {
   char *errmsg;
   errmsg = g_win32_error_message (hr);
-  g_warning ("%s: %s\n", msg, errmsg);
+  g_warning ("%s: %s", msg, errmsg);
   g_free (errmsg);
 }
 
@@ -413,11 +413,11 @@ filechooser_win32_thread (gpointer _data)
                            &IID_IFileOpenDialog, (LPVOID *) &pfd);
 
   if (FAILED (hr))
-    g_error ("Can't create FileOpenDialog: %s\n", g_win32_error_message (hr));
+    g_error ("Can't create FileOpenDialog: %s", g_win32_error_message (hr));
 
   hr = IFileDialog_GetOptions (pfd, &flags);
   if (FAILED (hr))
-    g_error ("Can't get FileDialog options: %s\n", g_win32_error_message (hr));
+    g_error ("Can't get FileDialog options: %s", g_win32_error_message (hr));
 
   flags |= FOS_FORCEFILESYSTEM;
 
@@ -440,7 +440,7 @@ filechooser_win32_thread (gpointer _data)
 
   hr = IFileDialog_SetOptions (pfd, flags);
   if (FAILED (hr))
-    g_error ("Can't set FileDialog options: %s\n", g_win32_error_message (hr));
+    g_error ("Can't set FileDialog options: %s", g_win32_error_message (hr));
 
   if (data->title)
     {
@@ -536,7 +536,7 @@ filechooser_win32_thread (gpointer _data)
 
   hr = IFileDialog_Advise (pfd, data->events, &cookie);
   if (FAILED (hr))
-    g_error ("Can't Advise FileDialog: %s\n", g_win32_error_message (hr));
+    g_error ("Can't Advise FileDialog: %s", g_win32_error_message (hr));
 
   hr = IFileDialog_Show (pfd, data->parent);
   if (SUCCEEDED (hr))
@@ -551,18 +551,18 @@ filechooser_win32_thread (gpointer _data)
 
           hr = IFileOpenDialog_GetResults (pfod, &res);
           if (FAILED (hr))
-            g_error ("Can't get FileOpenDialog results: %s\n", g_win32_error_message (hr));
+            g_error ("Can't get FileOpenDialog results: %s", g_win32_error_message (hr));
 
           hr = IShellItemArray_GetCount (res, &count);
           if (FAILED (hr))
-            g_error ("Can't get FileOpenDialog count: %s\n", g_win32_error_message (hr));
+            g_error ("Can't get FileOpenDialog count: %s", g_win32_error_message (hr));
 
           for (i = 0; i < count; i++)
             {
               IShellItem *item;
               hr = IShellItemArray_GetItemAt (res, i, &item);
               if (FAILED (hr))
-                g_error ("Can't get item at %lu: %s\n", i, g_win32_error_message (hr));
+                g_error ("Can't get item at %lu: %s", i, g_win32_error_message (hr));
               data_add_shell_item (data, item);
               IShellItem_Release (item);
             }
@@ -575,7 +575,7 @@ filechooser_win32_thread (gpointer _data)
           IShellItem *item;
           hr = IFileDialog_GetResult (pfd, &item);
           if (FAILED (hr))
-            g_error ("Can't get FileDialog result: %s\n", g_win32_error_message (hr));
+            g_error ("Can't get FileDialog result: %s", g_win32_error_message (hr));
 
           data_add_shell_item (data, item);
           IShellItem_Release (item);
@@ -584,7 +584,7 @@ filechooser_win32_thread (gpointer _data)
 
   hr = IFileDialog_Unadvise (pfd, cookie);
   if (FAILED (hr))
-    g_error ("Can't Unadvise FileDialog: %s\n", g_win32_error_message (hr));
+    g_error ("Can't Unadvise FileDialog: %s", g_win32_error_message (hr));
 
   IFileDialog_Release ((IUnknown *)pfd);
 

@@ -6045,7 +6045,7 @@ gtk_file_chooser_widget_add_filter (GtkFileChooser *chooser,
 
   if (g_slist_find (priv->filters, filter))
     {
-      g_warning ("gtk_file_chooser_add_filter() called on filter already in list\n");
+      g_warning ("gtk_file_chooser_add_filter() called on filter already in list");
       return;
     }
 
@@ -6078,7 +6078,7 @@ gtk_file_chooser_widget_remove_filter (GtkFileChooser *chooser,
 
   if (filter_index < 0)
     {
-      g_warning ("gtk_file_chooser_remove_filter() called on filter not in list\n");
+      g_warning ("gtk_file_chooser_remove_filter() called on filter not in list");
       return;
     }
 
