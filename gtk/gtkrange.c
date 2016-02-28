@@ -2314,28 +2314,17 @@ gtk_range_render (GtkCssGadget *gadget,
   GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
   GtkRange *range = GTK_RANGE (widget);
   GtkRangePrivate *priv = range->priv;
-  gboolean draw_trough = TRUE;
 
   /* HACK: we can't render the contents box directly because
    * GtkColorScale wants to omit the trough but still draw the slider...
    */
   if (GTK_IS_COLOR_SCALE (widget))
-      draw_trough = FALSE;
+    {
+      gtk_css_gadget_draw (priv->slider_gadget, cr);
+      return FALSE;
+    }
 
-  if (draw_trough)
-    gtk_css_gadget_draw (priv->trough_gadget, cr);
-
-  if (priv->stepper_a_gadget)
-    gtk_css_gadget_draw (priv->stepper_a_gadget, cr);
-
-  if (priv->stepper_b_gadget)
-    gtk_css_gadget_draw (priv->stepper_b_gadget, cr);
-
-  if (priv->stepper_c_gadget)
-    gtk_css_gadget_draw (priv->stepper_c_gadget, cr);
-
-  if (priv->stepper_d_gadget)
-    gtk_css_gadget_draw (priv->stepper_d_gadget, cr);
+  gtk_css_gadget_draw (priv->contents_gadget, cr);
 
   return FALSE;
 }
