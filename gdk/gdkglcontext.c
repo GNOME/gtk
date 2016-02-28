@@ -662,19 +662,19 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
     g_warning ("GL implementation doesn't support any form of non-power-of-two textures");
 
   GDK_NOTE (OPENGL,
-            g_print ("OpenGL version: %d.%d\n"
-                     "Extensions checked:\n"
-                     " - GL_ARB_texture_non_power_of_two: %s\n"
-                     " - GL_ARB_texture_rectangle: %s\n"
-                     " - GL_EXT_framebuffer_blit: %s\n"
-                     " - GL_GREMEDY_frame_terminator: %s\n"
-                     "Using texture rectangle: %s\n",
-                     priv->gl_version / 10, priv->gl_version % 10,
-                     has_npot ? "yes" : "no",
-                     has_texture_rectangle ? "yes" : "no",
-                     priv->has_gl_framebuffer_blit ? "yes" : "no",
-                     priv->has_frame_terminator ? "yes" : "no",
-                     priv->use_texture_rectangle ? "yes" : "no"));
+            g_message ("OpenGL version: %d.%d\n"
+                       "Extensions checked:\n"
+                       " - GL_ARB_texture_non_power_of_two: %s\n"
+                       " - GL_ARB_texture_rectangle: %s\n"
+                       " - GL_EXT_framebuffer_blit: %s\n"
+                       " - GL_GREMEDY_frame_terminator: %s\n"
+                       "Using texture rectangle: %s",
+                       priv->gl_version / 10, priv->gl_version % 10,
+                       has_npot ? "yes" : "no",
+                       has_texture_rectangle ? "yes" : "no",
+                       priv->has_gl_framebuffer_blit ? "yes" : "no",
+                       priv->has_frame_terminator ? "yes" : "no",
+                       priv->use_texture_rectangle ? "yes" : "no"));
 
   priv->extensions_checked = TRUE;
 }
