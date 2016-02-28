@@ -249,7 +249,7 @@ enable_plugin (const gchar *name)
       g_print ("Menus of '%s' plugin added\n", name);
     }
   else
-    g_warning ("Plugin menu not found\n");
+    g_warning ("Plugin menu not found");
 
   if (g_strcmp0 (name, "red") == 0)
     is_red_plugin_enabled = TRUE;
@@ -284,7 +284,7 @@ disable_plugin (const gchar *name)
         }
     }
   else
-    g_warning ("Plugin menu not found\n");
+    g_warning ("Plugin menu not found");
 
   g_action_map_remove_action (G_ACTION_MAP (g_application_get_default ()), name);
   g_print ("Actions of '%s' plugin removed\n", name);
