@@ -256,8 +256,8 @@ init_visual (GdkScreen *screen,
   return visual;
 }
 
-void
-_gdk_screen_init_root_window_size (GdkWin32Screen *screen)
+static void
+init_root_window_size (GdkWin32Screen *screen)
 {
   GdkRectangle rect;
   int i;
@@ -294,13 +294,13 @@ init_root_window (GdkWin32Screen *screen_win32)
 
   screen_win32->root_window = window;
 
-  _gdk_screen_init_root_window_size (screen_win32);
+  init_root_window_size (screen_win32);
 
   window->x = 0;
   window->y = 0;
   window->abs_x = 0;
   window->abs_y = 0;
-  /* width and height already initialised in _gdk_screen_init_root_window_size() */
+  /* width and height already initialised in init_root_window_size() */
   window->viewable = TRUE;
 
   gdk_win32_handle_table_insert ((HANDLE *) &impl_win32->handle, window);
@@ -387,8 +387,8 @@ enum_monitor (HMONITOR hmonitor,
   return TRUE;
 }
 
-void
-_gdk_screen_init_monitors (GdkWin32Screen *screen)
+static void
+init_monitors (GdkWin32Screen *screen)
 {
   gint count;
   EnumMonitorData data;
@@ -461,12 +461,19 @@ gdk_win32_screen_init (GdkWin32Screen *win32_screen)
   win32_screen->available_visual_depths[0] = win32_screen->rgba_visual->depth;
   win32_screen->available_visual_types[0] = win32_screen->rgba_visual->type;
 
-  _gdk_screen_init_monitors (win32_screen);
-
+  init_monitors (win32_screen);
   init_root_window (win32_screen);
 
   /* On Windows 8 and later, DWM (composition) is always enabled */
   win32_screen->always_composited = g_win32_check_windows_version (6, 2, 0, G_WIN32_OS_ANY);
+}
+
+void
+_gdk_win32_screen_on_displaychange_event (GdkWin32Screen *screen)
+{
+  init_monitors (screen);
+  init_root_window_size (screen);
+  g_signal_emit_by_name (screen, "size-changed");
 }
 
 static GdkDisplay *

@@ -178,10 +178,6 @@ inner_display_change_window_procedure (HWND   hwnd,
       {
         GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (_gdk_display);
 
-        _gdk_screen_init_monitors (GDK_WIN32_SCREEN (win32_display->screen));
-        _gdk_screen_init_root_window_size (GDK_WIN32_SCREEN (win32_display->screen));
-        g_signal_emit_by_name (win32_display->screen, "size_changed");
-
         return 0;
       }
     default:

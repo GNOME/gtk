@@ -509,6 +509,7 @@ void _gdk_win32_window_delete_property (GdkWindow *window, GdkAtom    property);
 
 /* Stray GdkWin32Screen members */
 gboolean _gdk_win32_screen_get_setting (GdkScreen   *screen, const gchar *name, GValue *value);
+void _gdk_win32_screen_on_displaychange_event (GdkWin32Screen *screen);
 
 /* Distributed display manager implementation */
 GdkDisplay *_gdk_win32_display_open (const gchar *display_name);
@@ -524,8 +525,6 @@ guint32 _gdk_win32_keymap_get_decimal_mark (void);
 
 /* Initialization */
 void _gdk_win32_windowing_init (void);
-void _gdk_screen_init_monitors (GdkWin32Screen *screen);
-void _gdk_screen_init_root_window_size (GdkWin32Screen *screen);
 void _gdk_dnd_init    (void);
 void _gdk_events_init (void);
 void _gdk_input_wintab_init_check (GdkDeviceManager *device_manager);
