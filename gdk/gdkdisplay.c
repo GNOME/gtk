@@ -601,6 +601,7 @@ gdk_display_get_pointer (GdkDisplay      *display,
 			 GdkModifierType *mask)
 {
   GdkScreen *default_screen;
+  GdkSeat *default_seat;
   GdkWindow *root;
   gdouble tmp_x, tmp_y;
   GdkModifierType tmp_mask;
@@ -611,11 +612,12 @@ gdk_display_get_pointer (GdkDisplay      *display,
     return;
 
   default_screen = gdk_display_get_default_screen (display);
+  default_seat = gdk_display_get_default_seat (display);
 
   /* We call _gdk_device_query_state() here manually instead of
    * gdk_device_get_position() because we care about the modifier mask */
 
-  _gdk_device_query_state (display->core_pointer,
+  _gdk_device_query_state (gdk_seat_get_pointer (default_seat),
                            gdk_screen_get_root_window (default_screen),
                            &root, NULL,
                            &tmp_x, &tmp_y,
@@ -657,9 +659,13 @@ gdk_display_get_window_at_pointer (GdkDisplay *display,
 				   gint       *win_x,
 				   gint       *win_y)
 {
+  GdkDevice *pointer;
+
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
-  return gdk_device_get_window_at_position (display->core_pointer, win_x, win_y);
+  pointer = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
+
+  return gdk_device_get_window_at_position (pointer, win_x, win_y);
 }
 
 static void
@@ -2026,11 +2032,12 @@ gdk_display_warp_pointer (GdkDisplay *display,
                           gint        x,
                           gint        y)
 {
+  GdkDevice *pointer;
+
   g_return_if_fail (GDK_IS_DISPLAY (display));
 
-  gdk_device_warp (display->core_pointer,
-                   screen,
-                   x, y);
+  pointer = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
+  gdk_device_warp (pointer, screen, x, y);
 }
 
 gulong
