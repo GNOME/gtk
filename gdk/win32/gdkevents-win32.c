@@ -1678,7 +1678,7 @@ generate_button_event (GdkEventType      type,
   _gdk_win32_append_event (event);
 }
 
-/**
+/*
  * Used by the stacking functions to see if a window
  * should be always on top.
  * Restacking is only done if both windows are either ontop
