@@ -9511,8 +9511,7 @@ _gdk_windowing_got_event (GdkDisplay *display,
   GdkDevice *device, *source_device;
   gboolean is_toplevel;
 
-  if (gdk_event_get_time (event) != GDK_CURRENT_TIME)
-    display->last_event_time = gdk_event_get_time (event);
+  _gdk_display_update_last_event (display, event);
 
   device = gdk_event_get_device (event);
   source_device = gdk_event_get_source_device (event);
@@ -9751,6 +9750,7 @@ gdk_window_create_similar_surface (GdkWindow *     window,
                                    int             height)
 {
   GdkDisplay *display;
+  GdkRenderingMode rendering_mode;
   cairo_surface_t *window_surface, *surface;
   double sx, sy;
 
@@ -9761,7 +9761,9 @@ gdk_window_create_similar_surface (GdkWindow *     window,
   cairo_surface_get_device_scale (window_surface, &sx, &sy);
 
   display = gdk_window_get_display (window);
-  switch (display->rendering_mode)
+  rendering_mode = gdk_display_get_rendering_mode (display);
+
+  switch (rendering_mode)
   {
     case GDK_RENDERING_MODE_RECORDING:
       {
@@ -9783,7 +9785,6 @@ gdk_window_create_similar_surface (GdkWindow *     window,
                                               width, height);
       break;
   }
-
 
   cairo_surface_destroy (window_surface);
 

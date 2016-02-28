@@ -1072,6 +1072,14 @@ switch_to_pointer_grab (GdkDisplay        *display,
 }
 
 void
+_gdk_display_update_last_event (GdkDisplay     *display,
+                                const GdkEvent *event)
+{
+  if (gdk_event_get_time (event) != GDK_CURRENT_TIME)
+    display->last_event_time = gdk_event_get_time (event);
+}
+
+void
 _gdk_display_device_grab_update (GdkDisplay *display,
                                  GdkDevice  *device,
                                  GdkDevice  *source_device,

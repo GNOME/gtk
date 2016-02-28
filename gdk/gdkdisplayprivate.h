@@ -254,6 +254,8 @@ typedef void (* GdkDisplayPointerInfoForeach) (GdkDisplay           *display,
                                                GdkPointerWindowInfo *device_info,
                                                gpointer              user_data);
 
+void                _gdk_display_update_last_event    (GdkDisplay     *display,
+                                                       const GdkEvent *event);
 void                _gdk_display_device_grab_update   (GdkDisplay *display,
                                                        GdkDevice  *device,
                                                        GdkDevice  *source_device,
