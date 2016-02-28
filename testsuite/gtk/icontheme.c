@@ -123,7 +123,10 @@ assert_icon_lookup_fails (const char         *icon_name,
 static GList *lookups = NULL;
 
 static void
-print_func (const gchar *string)
+log_func (const gchar    *log_domain,
+          GLogLevelFlags  log_level,
+          const gchar    *string,
+          gpointer        user_data)
 {
   if (g_str_has_prefix (string, "\tlookup name: "))
     {
@@ -141,7 +144,6 @@ assert_lookup_order (const char         *icon_name,
                      ...)
 {
   guint debug_flags;
-  GPrintFunc old_print_func;
   va_list args;
   const gchar *s;
   GtkIconInfo *info;
@@ -149,10 +151,10 @@ assert_lookup_order (const char         *icon_name,
 
   debug_flags = gtk_get_debug_flags ();
   gtk_set_debug_flags (debug_flags | GTK_DEBUG_ICONTHEME);
-  old_print_func = g_set_print_handler (print_func);
+  g_log_set_handler ("Gtk", G_LOG_LEVEL_MESSAGE, log_func, NULL);
 
   g_assert (lookups == NULL);
-  
+
   info = gtk_icon_theme_lookup_icon (get_test_icontheme (FALSE), icon_name, size, flags);
   if (info)
     g_object_unref (info);
@@ -173,7 +175,7 @@ assert_lookup_order (const char         *icon_name,
   g_list_free_full (lookups, g_free);
   lookups = NULL;
 
-  g_set_print_handler (old_print_func);
+  g_log_set_handler ("Gtk", G_LOG_LEVEL_MESSAGE, g_log_default_handler, NULL);
   gtk_set_debug_flags (debug_flags);
 }
 
