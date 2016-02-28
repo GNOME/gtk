@@ -32,7 +32,6 @@
             <child type="title">
               <object class="GtkStackSwitcher" id="tabs">
                 <property name="visible">True</property>
-                <property name="margin">6</property>
                 <property name="stack">stack</property>
               </object>
             </child>
