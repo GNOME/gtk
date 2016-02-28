@@ -920,7 +920,7 @@ startup (GApplication *app)
   gchar *ids[] = { "appmenu", NULL };
 
   builder = gtk_builder_new ();
-  gtk_builder_add_objects_from_resource (builder, "/ui/main.ui", ids, NULL);
+  gtk_builder_add_objects_from_resource (builder, "/ui/appmenu.ui", ids, NULL);
 
   appmenu = (GMenuModel *)gtk_builder_get_object (builder, "appmenu");
 
