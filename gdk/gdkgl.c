@@ -73,7 +73,7 @@ create_shader (int         type,
       buffer = g_malloc (log_len + 1);
       glGetShaderInfoLog (shader, log_len, NULL, buffer);
 
-      g_warning ("Compile failure in %s shader:\n%s\n", get_vertex_type_name (type), buffer);
+      g_warning ("Compile failure in %s shader:\n%s", get_vertex_type_name (type), buffer);
       g_free (buffer);
 
       glDeleteShader (shader);

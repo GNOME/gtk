@@ -181,7 +181,7 @@ gdk_seat_default_get_master (GdkSeat             *seat,
     case GDK_SEAT_CAPABILITY_KEYBOARD:
       return priv->master_keyboard;
     default:
-      g_warning ("Unhandled capability %x\n", capability);
+      g_warning ("Unhandled capability %x", capability);
       break;
     }
 

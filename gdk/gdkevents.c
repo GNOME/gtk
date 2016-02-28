@@ -1665,7 +1665,7 @@ gdk_event_get_device (const GdkEvent *event)
         GdkSeat *seat;
 
         g_warning ("Event with type %d not holding a GdkDevice. "
-                   "It is most likely synthesized outside Gdk/GTK+\n",
+                   "It is most likely synthesized outside Gdk/GTK+",
                    event->type);
 
         display = gdk_window_get_display (event->any.window);
@@ -2373,7 +2373,7 @@ gdk_event_get_seat (const GdkEvent *event)
       GdkDevice *device;
 
       g_warning ("Event with type %d not holding a GdkSeat. "
-                 "It is most likely synthesized outside Gdk/GTK+\n",
+                 "It is most likely synthesized outside Gdk/GTK+",
                  event->type);
 
       device = gdk_event_get_device (event);

@@ -503,7 +503,7 @@ gdk_window_finalize (GObject *object)
     {
       if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
 	{
-	  g_warning ("losing last reference to undestroyed window\n");
+	  g_warning ("losing last reference to undestroyed window");
 	  _gdk_window_destroy (window, FALSE);
 	}
       else
@@ -1303,7 +1303,7 @@ gdk_window_new (GdkWindow     *parent,
 
   if (GDK_WINDOW_DESTROYED (parent))
     {
-      g_warning ("gdk_window_new(): parent is destroyed\n");
+      g_warning ("gdk_window_new(): parent is destroyed");
       return NULL;
     }
 
@@ -1460,7 +1460,7 @@ gdk_window_new (GdkWindow     *parent,
 
       if (gdk_window_get_paint_gl_context (window, &error) == NULL)
         {
-          g_warning ("Unable to force GL enabled: %s\n", error->message);
+          g_warning ("Unable to force GL enabled: %s", error->message);
           g_error_free (error);
         }
     }
