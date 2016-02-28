@@ -96,28 +96,11 @@ gdk_broadway_display_init_input (GdkDisplay *display)
 
   g_list_free (list);
 
-  /* Now set "core" pointer to the first
-   * master device that is a pointer.
-   */
-  list = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_MASTER);
-
-  for (l = list; l; l = l->next)
-    {
-      device = l->data;
-
-      if (gdk_device_get_source (device) != GDK_SOURCE_MOUSE)
-        continue;
-
-      display->core_pointer = device;
-      break;
-    }
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-
   /* Add the core pointer to the devices list */
+  display->core_pointer = GDK_BROADWAY_DEVICE_MANAGER (device_manager)->core_pointer;
   broadway_display->input_devices = g_list_prepend (broadway_display->input_devices,
-                                               g_object_ref (display->core_pointer));
-
-  g_list_free (list);
+                                                    g_object_ref (display->core_pointer));
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
 GdkDisplay *
