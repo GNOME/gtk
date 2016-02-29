@@ -176,6 +176,7 @@ inner_display_change_window_procedure (HWND   hwnd,
       {
         GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (_gdk_display);
 
+        _gdk_win32_screen_on_displaychange_event (GDK_WIN32_SCREEN (win32_display->screen));
         return 0;
       }
     default:
