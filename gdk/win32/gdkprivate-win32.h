@@ -527,6 +527,5 @@ guint32 _gdk_win32_keymap_get_decimal_mark (void);
 void _gdk_win32_windowing_init (void);
 void _gdk_dnd_init    (void);
 void _gdk_events_init (void);
-void _gdk_input_wintab_init_check (GdkDeviceManager *device_manager);
 
 #endif /* __GDK_PRIVATE_WIN32_H__ */

@@ -54,8 +54,6 @@ _gdk_input_init (GdkDisplay *display)
   devices = g_list_prepend (devices, device_manager->core_pointer);
 
   GDK_WIN32_DISPLAY (display)->input_devices = devices;
-
-  _gdk_input_wintab_init_check (GDK_DEVICE_MANAGER (device_manager));
 }
 
 /**

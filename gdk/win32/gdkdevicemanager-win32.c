@@ -347,11 +347,10 @@ print_cursor (int index)
 }
 #endif
 
-void
-_gdk_input_wintab_init_check (GdkDeviceManager *_device_manager)
+static void
+wintab_init_check (GdkDeviceManagerWin32 *device_manager)
 {
-  GdkDeviceManagerWin32 *device_manager = (GdkDeviceManagerWin32 *)_device_manager;
-  GdkDisplay *display = gdk_device_manager_get_display (_device_manager);
+  GdkDisplay *display = gdk_device_manager_get_display (GDK_DEVICE_MANAGER (device_manager));
   GdkWindow *root = gdk_screen_get_root_window (gdk_display_get_default_screen (display));
   static gboolean wintab_initialized = FALSE;
   GdkDeviceWintab *device;
@@ -727,6 +726,8 @@ gdk_device_manager_win32_constructed (GObject *object)
   gdk_seat_default_add_slave (GDK_SEAT_DEFAULT (seat), device_manager->system_pointer);
   gdk_seat_default_add_slave (GDK_SEAT_DEFAULT (seat), device_manager->system_keyboard);
   g_object_unref (seat);
+
+  wintab_init_check (device_manager);
 }
 
 static GList *
