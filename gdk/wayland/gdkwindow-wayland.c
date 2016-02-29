@@ -946,8 +946,12 @@ gdk_wayland_window_update_dialogs (GdkWindow *window)
   for (l = orphan_dialogs; l; l = l->next)
     {
       GdkWindow *w = l->data;
-      GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (w->impl);
+      GdkWindowImplWayland *impl;
 
+      if (!GDK_IS_WINDOW_IMPL_WAYLAND(w->impl))
+        continue;
+
+      impl = GDK_WINDOW_IMPL_WAYLAND (w->impl);
       if (w == window)
 	continue;
       if (impl->hint != GDK_WINDOW_TYPE_HINT_DIALOG)
@@ -2215,8 +2219,12 @@ check_transient_for_loop (GdkWindow *window,
 {
   while (parent)
     {
-      GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (parent->impl);
+      GdkWindowImplWayland *impl;
 
+      if (!GDK_IS_WINDOW_IMPL_WAYLAND(parent->impl))
+        return FALSE;
+
+      impl = GDK_WINDOW_IMPL_WAYLAND (parent->impl);
       if (impl->transient_for == window)
         return TRUE;
       parent = impl->transient_for;
