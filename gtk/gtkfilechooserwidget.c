@@ -2831,8 +2831,9 @@ location_mode_set (GtkFileChooserWidget *impl,
 
 /* Callback used when the places sidebar asks us to show other locations */
 static void
-places_sidebar_show_other_locations_cb (GtkPlacesSidebar     *sidebar,
-                                        GtkFileChooserWidget *impl)
+places_sidebar_show_other_locations_with_flags_cb (GtkPlacesSidebar     *sidebar,
+                                                   GtkPlacesOpenFlags    open_flags,
+                                                   GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
@@ -8504,7 +8505,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_callback (widget_class, path_bar_clicked);
   gtk_widget_class_bind_template_callback (widget_class, places_sidebar_open_location_cb);
   gtk_widget_class_bind_template_callback (widget_class, places_sidebar_show_error_message_cb);
-  gtk_widget_class_bind_template_callback (widget_class, places_sidebar_show_other_locations_cb);
+  gtk_widget_class_bind_template_callback (widget_class, places_sidebar_show_other_locations_with_flags_cb);
   gtk_widget_class_bind_template_callback (widget_class, search_entry_activate_cb);
   gtk_widget_class_bind_template_callback (widget_class, search_entry_stop_cb);
   gtk_widget_class_bind_template_callback (widget_class, new_folder_popover_active);

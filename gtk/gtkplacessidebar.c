@@ -206,6 +206,9 @@ struct _GtkPlacesSidebarClass {
 
   void    (* show_other_locations)   (GtkPlacesSidebar   *sidebar);
 
+  void    (* show_other_locations_with_flags)   (GtkPlacesSidebar   *sidebar,
+                                                 GtkPlacesOpenFlags  open_flags);
+
   void    (* mount)                  (GtkPlacesSidebar   *sidebar,
                                       GMountOperation    *mount_operation);
   void    (* unmount)                (GtkPlacesSidebar   *sidebar,
@@ -222,6 +225,7 @@ enum {
   DRAG_ACTION_ASK,
   DRAG_PERFORM_DROP,
   SHOW_OTHER_LOCATIONS,
+  SHOW_OTHER_LOCATIONS_WITH_FLAGS,
   MOUNT,
   UNMOUNT,
   LAST_SIGNAL
@@ -344,6 +348,14 @@ static void
 emit_show_other_locations (GtkPlacesSidebar *sidebar)
 {
   g_signal_emit (sidebar, places_sidebar_signals[SHOW_OTHER_LOCATIONS], 0);
+}
+
+static void
+emit_show_other_locations_with_flags (GtkPlacesSidebar   *sidebar,
+                                      GtkPlacesOpenFlags  open_flags)
+{
+  g_signal_emit (sidebar, places_sidebar_signals[SHOW_OTHER_LOCATIONS_WITH_FLAGS],
+                 0, open_flags);
 }
 
 static void
@@ -2322,17 +2334,30 @@ open_row (GtkSidebarRow      *row,
                 NULL);
 
   if (place_type == PLACES_OTHER_LOCATIONS)
-    emit_show_other_locations (sidebar);
+    {
+      emit_show_other_locations (sidebar);
+      emit_show_other_locations_with_flags (sidebar, open_flags);
+    }
   else if (uri != NULL)
-    open_uri (sidebar, uri, open_flags);
+    {
+      open_uri (sidebar, uri, open_flags);
+    }
   else if (place_type == PLACES_CONNECT_TO_SERVER)
-    emit_show_connect_to_server (sidebar);
+    {
+      emit_show_connect_to_server (sidebar);
+    }
   else if (place_type == PLACES_ENTER_LOCATION)
-    emit_show_enter_location (sidebar);
+    {
+      emit_show_enter_location (sidebar);
+    }
   else if (volume != NULL)
-    open_volume (sidebar, volume, open_flags);
+    {
+      open_volume (sidebar, volume, open_flags);
+    }
   else if (drive != NULL)
-    open_drive (sidebar, drive, open_flags);
+    {
+      open_drive (sidebar, drive, open_flags);
+    }
 
   g_object_unref (sidebar);
   if (drive)
@@ -4333,16 +4358,43 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
    * For example, the application may bring up a page showing persistent
    * volumes and discovered network addresses.
    *
+   * Deprecated: 3.20: use the #GtkPlacesSidebar::show-other-locations-with-flags
+   * which includes the open flags in order to allow the user to specify to open
+   * in a new tab or window, in a similar way than #GtkPlacesSidebar::open-location
+   *
    * Since: 3.18
    */
   places_sidebar_signals [SHOW_OTHER_LOCATIONS] =
           g_signal_new (I_("show-other-locations"),
                         G_OBJECT_CLASS_TYPE (gobject_class),
-                        G_SIGNAL_RUN_FIRST,
+                        G_SIGNAL_RUN_FIRST | G_SIGNAL_DEPRECATED,
                         G_STRUCT_OFFSET (GtkPlacesSidebarClass, show_other_locations),
                         NULL, NULL,
                         _gtk_marshal_VOID__VOID,
                         G_TYPE_NONE, 0);
+
+  /**
+   * GtkPlacesSidebar::show-other-locations-with-flags:
+   * @sidebar: the object which received the signal.
+   * @open_flags: a single value from #GtkPlacesOpenFlags specifying how it should be opened.
+   *
+   * The places sidebar emits this signal when it needs the calling
+   * application to present a way to show other locations e.g. drives
+   * and network access points.
+   * For example, the application may bring up a page showing persistent
+   * volumes and discovered network addresses.
+   *
+   * Since: 3.20
+   */
+  places_sidebar_signals [SHOW_OTHER_LOCATIONS_WITH_FLAGS] =
+          g_signal_new (I_("show-other-locations-with-flags"),
+                        G_OBJECT_CLASS_TYPE (gobject_class),
+                        G_SIGNAL_RUN_FIRST,
+                        G_STRUCT_OFFSET (GtkPlacesSidebarClass, show_other_locations_with_flags),
+                        NULL, NULL,
+                        _gtk_marshal_VOID__VOID,
+                        G_TYPE_NONE, 1,
+                        GTK_TYPE_PLACES_OPEN_FLAGS);
 
   /**
    * GtkPlacesSidebar::mount:
