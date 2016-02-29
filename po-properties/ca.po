@@ -3346,7 +3346,7 @@ msgid ""
 "mode)"
 msgstr ""
 "Si és «FALSE» (fals) mostrarà el «caràcter d'invisibilitat» en lloc del text "
-"actual (mode de contrasenya)"
+"real (mode de contrasenya)"
 
 #: ../gtk/gtkentry.c:872
 msgid "FALSE removes outside bevel from entry"
