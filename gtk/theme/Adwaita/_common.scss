@@ -2578,8 +2578,14 @@ scale {
   }
 
   marks { color: gtkalpha(currentColor, 0.4); }
-  &.horizontal marks { min-height: 8px; }
-  &.vertical marks { min-width: 8px; }
+  &.horizontal mark indicator {
+    min-height: 8px;
+    min-width: 1px;
+  }
+  &.vertical mark indicator {
+    min-height: 1px;
+    min-width: 8px;
+  }
 
   // *WARNING* scale with marks madness following
 
