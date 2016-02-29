@@ -7586,6 +7586,7 @@ gtk_notebook_child_reordered (GtkNotebook     *notebook,
                              gtk_css_gadget_get_node (page->gadget),
                              sibling);
   gtk_notebook_update_labels (notebook);
+  gtk_css_gadget_queue_allocate (priv->tabs_gadget);
 }
 
 static void
