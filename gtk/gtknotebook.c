@@ -1601,8 +1601,8 @@ gtk_notebook_reorder_tab (GtkNotebook      *notebook,
 {
   GtkNotebookPrivate *priv = notebook->priv;
   GtkDirectionType effective_direction = get_effective_direction (notebook, direction_type);
-  GList *last, *child;
-  gint page_num;
+  GList *last, *child, *element;
+  gint page_num, old_page_num, i;
 
   if (!gtk_widget_is_focus (GTK_WIDGET (notebook)) || !priv->show_tabs)
     return FALSE;
@@ -1638,11 +1638,18 @@ gtk_notebook_reorder_tab (GtkNotebook      *notebook,
   if (!child || child->data == priv->cur_page)
     return FALSE;
 
+  old_page_num = g_list_position (priv->children, priv->focus_tab);
   if (effective_direction == GTK_DIR_RIGHT)
     page_num = reorder_tab (notebook, child->next, priv->focus_tab);
   else
     page_num = reorder_tab (notebook, child, priv->focus_tab);
-
+  
+  gtk_notebook_child_reordered (notebook, priv->focus_tab->data);
+  for (element = priv->children, i = 0; element; element = element->next, i++)
+    {
+      if (MIN (old_page_num, page_num) <= i && i <= MAX (old_page_num, page_num))
+        gtk_widget_child_notify (((GtkNotebookPage *) element->data)->child, "position");
+    }
   g_signal_emit (notebook,
                  notebook_signals[PAGE_REORDERED],
                  0,
