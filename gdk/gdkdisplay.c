@@ -1851,35 +1851,18 @@ gdk_display_list_devices (GdkDisplay *display)
 
   if (!display->input_devices)
     {
-      GdkDeviceManager *device_manager;
-      GdkDevice *device;
-      GList *list, *l;
+      GdkSeat *seat;
 
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      device_manager = gdk_display_get_device_manager (display);
+      seat = gdk_display_get_default_seat (display);
 
-      /* For backwards compatibility, just add
-       * floating devices that are not keyboards.
+      /* For backwards compatibility we only include pointing
+       * devices (the core pointer and the slaves).
+       * We store the list since this deprecated function does
+       * not transfer the list ownership.
        */
-      list = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_FLOATING);
-
-      for (l = list; l; l = l->next)
-        {
-          device = l->data;
-
-          if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
-            continue;
-
-          display->input_devices = g_list_prepend (display->input_devices, g_object_ref (l->data));
-        }
-
-      g_list_free (list);
-
-      G_GNUC_END_IGNORE_DEPRECATIONS;
-
-      /* Add the core pointer to the devices list */
-      device = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
-      display->input_devices = g_list_prepend (display->input_devices, g_object_ref (device));
+      display->input_devices = gdk_seat_get_slaves (seat, GDK_SEAT_CAPABILITY_ALL_POINTING);
+      display->input_devices = g_list_prepend (display->input_devices, gdk_seat_get_pointer (seat));
+      g_list_foreach (display->input_devices, (GFunc) g_object_ref, NULL);
     }
 
   return display->input_devices;
