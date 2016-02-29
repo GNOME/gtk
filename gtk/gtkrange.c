@@ -1940,7 +1940,7 @@ gtk_range_allocate_trough (GtkCssGadget        *gadget,
           fill_alloc.height *= fill;
 
           if (should_invert (range))
-            fill_alloc.y += allocation->height - (fill_alloc.height * fill);
+            fill_alloc.y += allocation->height - fill_alloc.height;
         }
 
       gtk_css_gadget_allocate (priv->fill_gadget,
