@@ -113,12 +113,15 @@ extern gboolean _gdk_debug_updates;
 
 #ifdef G_ENABLE_DEBUG
 
-#define GDK_NOTE(type,action)                G_STMT_START { \
-    if (_gdk_debug_flags & GDK_DEBUG_##type)                \
+#define GDK_DEBUG_CHECK(type) G_UNLIKELY (_gdk_debug_flags & GDK_DEBUG_##type)
+
+#define GDK_NOTE(type,action)                G_STMT_START {     \
+    if (GDK_DEBUG_CHECK (type))                                 \
        { action; };                          } G_STMT_END
 
 #else /* !G_ENABLE_DEBUG */
 
+#define GDK_DEBUG_CHECK(type) 0
 #define GDK_NOTE(type,action)
 
 #endif /* G_ENABLE_DEBUG */

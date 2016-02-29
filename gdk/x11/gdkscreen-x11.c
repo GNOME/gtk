@@ -526,7 +526,7 @@ init_fake_xinerama (GdkScreen *screen)
   Window win;
   gint w, h;
 
-  if (!(_gdk_debug_flags & GDK_DEBUG_XINERAMA))
+  if (!GDK_DEBUG_CHECK (XINERAMA))
     return FALSE;
   
   /* Fake Xinerama mode by splitting the screen into 4 monitors.

@@ -179,7 +179,7 @@ translate_key_event (GdkDisplay              *display,
   _gdk_x11_event_translate_keyboard_string (&event->key);
 
 #ifdef G_ENABLE_DEBUG
-  if (_gdk_debug_flags & GDK_DEBUG_EVENTS)
+  if (GDK_DEBUG_CHECK (EVENTS))
     {
       g_message ("%s:\t\twindow: %ld     key: %12s  %d",
                  event->type == GDK_KEY_PRESS ? "key press  " : "key release",

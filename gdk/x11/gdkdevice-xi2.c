@@ -447,7 +447,7 @@ gdk_x11_device_xi2_grab (GdkDevice    *device,
                                                         &mask.mask_len);
 
 #ifdef G_ENABLE_DEBUG
-  if (_gdk_debug_flags & GDK_DEBUG_NOGRABS)
+  if (GDK_DEBUG_CHECK (NOGRABS))
     status = GrabSuccess;
   else
 #endif

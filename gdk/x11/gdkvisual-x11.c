@@ -248,7 +248,7 @@ _gdk_x11_screen_init_visuals (GdkScreen *screen)
     }
 
 #ifdef G_ENABLE_DEBUG
-  if (_gdk_debug_flags & GDK_DEBUG_MISC)
+  if (GDK_DEBUG_CHECK (MISC))
     {
       static const gchar *const visual_names[] =
       {

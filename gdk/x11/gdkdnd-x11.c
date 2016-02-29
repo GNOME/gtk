@@ -1500,7 +1500,7 @@ xdnd_read_actions (GdkX11DragContext *context_x11)
           context_x11->xdnd_have_actions = TRUE;
 
 #ifdef G_ENABLE_DEBUG
-          if (_gdk_debug_flags & GDK_DEBUG_DND)
+          if (GDK_DEBUG_CHECK (DND))
             {
               GString *action_str = g_string_new (NULL);
               if (context->actions & GDK_ACTION_MOVE)
@@ -1763,7 +1763,7 @@ xdnd_enter_filter (GdkXEvent *xev,
     }
 
 #ifdef G_ENABLE_DEBUG
-  if (_gdk_debug_flags & GDK_DEBUG_DND)
+  if (GDK_DEBUG_CHECK (DND))
     print_target_list (context->targets);
 #endif /* G_ENABLE_DEBUG */
 

@@ -386,7 +386,7 @@ gdk_frame_clock_paint_idle (void *data)
             {
 	      int iter;
 #ifdef G_ENABLE_DEBUG
-              if ((_gdk_debug_flags & GDK_DEBUG_FRAMES) != 0)
+              if (GDK_DEBUG_CHECK (FRAMES))
                 {
                   if (priv->phase != GDK_FRAME_CLOCK_PHASE_LAYOUT &&
                       (priv->requested & GDK_FRAME_CLOCK_PHASE_LAYOUT))
@@ -415,7 +415,7 @@ gdk_frame_clock_paint_idle (void *data)
           if (priv->freeze_count == 0)
             {
 #ifdef G_ENABLE_DEBUG
-              if ((_gdk_debug_flags & GDK_DEBUG_FRAMES) != 0)
+              if (GDK_DEBUG_CHECK (FRAMES))
                 {
                   if (priv->phase != GDK_FRAME_CLOCK_PHASE_PAINT &&
                       (priv->requested & GDK_FRAME_CLOCK_PHASE_PAINT))
@@ -441,7 +441,7 @@ gdk_frame_clock_paint_idle (void *data)
               priv->phase = GDK_FRAME_CLOCK_PHASE_NONE;
 
 #ifdef G_ENABLE_DEBUG
-              if ((_gdk_debug_flags & GDK_DEBUG_FRAMES) != 0)
+              if (GDK_DEBUG_CHECK (FRAMES))
                 timings->frame_end_time = g_get_monotonic_time ();
 #endif /* G_ENABLE_DEBUG */
             }
@@ -452,7 +452,7 @@ gdk_frame_clock_paint_idle (void *data)
     }
 
 #ifdef G_ENABLE_DEBUG
-  if ((_gdk_debug_flags & GDK_DEBUG_FRAMES) != 0)
+  if (GDK_DEBUG_CHECK (FRAMES))
     {
       if (timings && timings->complete)
         _gdk_frame_clock_debug_print_timings (clock, timings);

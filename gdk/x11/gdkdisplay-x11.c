@@ -590,7 +590,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 
     case VisibilityNotify:
 #ifdef G_ENABLE_DEBUG
-      if (_gdk_debug_flags & GDK_DEBUG_EVENTS)
+      if (GDK_DEBUG_CHECK (EVENTS))
 	switch (xevent->xvisibility.state)
 	  {
 	  case VisibilityFullyObscured:
@@ -1236,7 +1236,7 @@ _gdk_wm_protocols_filter (GdkXEvent *xev,
 
               timings->complete = TRUE;
 #ifdef G_ENABLE_DEBUG
-              if ((_gdk_debug_flags & GDK_DEBUG_FRAMES) != 0)
+              if (GDK_DEBUG_CHECK (FRAMES))
                 _gdk_frame_clock_debug_print_timings (clock, timings);
 #endif /* G_ENABLE_DEBUG */
             }

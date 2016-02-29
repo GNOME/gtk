@@ -345,7 +345,7 @@ gdk_x11_device_core_grab (GdkDevice    *device,
     xconfine_to = GDK_WINDOW_XID (confine_to);
 
 #ifdef G_ENABLE_DEBUG
-  if (_gdk_debug_flags & GDK_DEBUG_NOGRABS)
+  if (GDK_DEBUG_CHECK (NOGRABS))
     status = GrabSuccess;
   else
 #endif

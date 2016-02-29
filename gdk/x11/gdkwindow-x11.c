@@ -407,7 +407,7 @@ gdk_x11_window_end_frame (GdkWindow *window)
   if (impl->toplevel->current_counter_value % 2 == 1)
     {
 #ifdef G_ENABLE_DEBUG
-      if ((_gdk_debug_flags & GDK_DEBUG_FRAMES) != 0)
+      if (GDK_DEBUG_CHECK (FRAMES))
         {
           XImage *image = XGetImage (GDK_WINDOW_XDISPLAY (window),
                                      GDK_WINDOW_XID (window),
