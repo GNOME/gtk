@@ -79,20 +79,24 @@
  * scale[.fine-tune]
  * ├── marks.top
  * │   ├── mark
+ * │   ┊    ├── [label]
+ * │   ┊    ╰── indicator
  * ┊   ┊
  * │   ╰── mark
- * ├── trough
- * │   ├── slider
- * │   ├── [highlight]
- * │   ╰── [fill]
+ * ├── contents
+ * │   ╰── trough
+ * │       ├── slider
+ * │       ├── [highlight]
+ * │       ╰── [fill]
  * ╰── marks.bottom
  *     ├── mark
- *     ┊
+ *     ┊    ├── indicator
+ *     ┊    ╰── [label]
  *     ╰── mark
  * ]|
  *
- * GtkScale has a main CSS node with name scale, and subnodes with names
- * trough and slider.
+ * GtkScale has a main CSS node with name scale and a subnode for its contents,
+ * with subnodes named trough and slider.
  *
  * The main node gets the style class .fine-tune added when the scale is in
  * 'fine-tuning' mode.
@@ -105,9 +109,14 @@
  * there is a subnode with name fill below the trough node that is used for
  * rendering the filled in part of the trough.
  *
- * If marks are present, there is a marks subnode before or after the trough
+ * If marks are present, there is a marks subnode before or after the contents
  * node, below which each mark gets a node with name mark. The marks nodes get
  * either the .top or .bottom style class.
+ *
+ * The mark node has a subnode named indicator. If the mark has text, it also
+ * has a subnode named label. When the mark is either above or left of the
+ * scale, the label subnode is the first when present. Otherwise, the indicator
+ * subnode is the first.
  */
 
 
