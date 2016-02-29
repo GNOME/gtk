@@ -106,18 +106,6 @@ _gdk_wayland_display_async_roundtrip (GdkWaylandDisplay *display_wayland)
 }
 
 static void
-gdk_input_init (GdkDisplay *display)
-{
-  GdkWaylandDisplay *display_wayland;
-
-  display_wayland = GDK_WAYLAND_DISPLAY (display);
-
-  /* Add the core pointer to the devices list */
-  display_wayland->input_devices = g_list_prepend (display_wayland->input_devices,
-                                                   gdk_seat_get_pointer (gdk_display_get_default_seat (display)));
-}
-
-static void
 xdg_shell_ping (void             *data,
                 struct xdg_shell *xdg_shell,
                 uint32_t          serial)
@@ -463,8 +451,6 @@ _gdk_wayland_display_open (const gchar *display_name)
       return NULL;
     }
 
-  gdk_input_init (display);
-
   display_wayland->selection = gdk_wayland_selection_new ();
 
   g_signal_emit_by_name (display, "opened");
@@ -476,9 +462,6 @@ static void
 gdk_wayland_display_dispose (GObject *object)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (object);
-
-  g_list_foreach (display_wayland->input_devices,
-		  (GFunc) g_object_run_dispose, NULL);
 
   _gdk_screen_close (display_wayland->screen);
 
@@ -514,9 +497,6 @@ gdk_wayland_display_finalize (GObject *object)
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (object);
 
   _gdk_wayland_display_finalize_cursors (display_wayland);
-
-  /* input GdkDevice list */
-  g_list_free_full (display_wayland->input_devices, g_object_unref);
 
   g_object_unref (display_wayland->screen);
 
@@ -652,14 +632,6 @@ gdk_wayland_display_supports_composite (GdkDisplay *display)
   return FALSE;
 }
 
-static GList *
-gdk_wayland_display_list_devices (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-
-  return GDK_WAYLAND_DISPLAY (display)->input_devices;
-}
-
 static void
 gdk_wayland_display_before_process_all_updates (GdkDisplay *display)
 {
@@ -761,7 +733,6 @@ gdk_wayland_display_class_init (GdkWaylandDisplayClass *class)
   display_class->supports_shapes = gdk_wayland_display_supports_shapes;
   display_class->supports_input_shapes = gdk_wayland_display_supports_input_shapes;
   display_class->supports_composite = gdk_wayland_display_supports_composite;
-  display_class->list_devices = gdk_wayland_display_list_devices;
   display_class->get_app_launch_context = _gdk_wayland_display_get_app_launch_context;
   display_class->get_default_cursor_size = _gdk_wayland_display_get_default_cursor_size;
   display_class->get_maximal_cursor_size = _gdk_wayland_display_get_maximal_cursor_size;

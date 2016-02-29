@@ -1338,42 +1338,6 @@ gdk_event_init (GdkDisplay *display)
 }
 
 static void
-gdk_x11_display_init_input (GdkDisplay *display)
-{
-  GdkX11Display *display_x11;
-  GdkDeviceManager *device_manager;
-  GdkDevice *device;
-  GList *list, *l;
-
-  display_x11 = GDK_X11_DISPLAY (display);
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  device_manager = gdk_display_get_device_manager (display);
-
-  /* For backwards compatibility, just add
-   * floating devices that are not keyboards.
-   */
-  list = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_FLOATING);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-
-  for (l = list; l; l = l->next)
-    {
-      device = l->data;
-
-      if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
-        continue;
-
-      display_x11->input_devices = g_list_prepend (display_x11->input_devices,
-                                                   g_object_ref (l->data));
-    }
-
-  g_list_free (list);
-
-  display_x11->input_devices = g_list_prepend (display_x11->input_devices,
-                                               g_object_ref (gdk_seat_get_pointer (gdk_display_get_default_seat (display))));
-}
-
-static void
 set_sm_client_id (GdkDisplay  *display,
                   const gchar *sm_client_id)
 {
@@ -1639,8 +1603,6 @@ _gdk_x11_display_open (const gchar *display_name)
   }
 #endif
 
-  gdk_x11_display_init_input (display);
-
   _gdk_x11_screen_setup (display_x11->screen);
 
   g_signal_emit_by_name (display, "opened");
@@ -1898,8 +1860,6 @@ gdk_x11_display_dispose (GObject *object)
 {
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (object);
 
-  g_list_foreach (display_x11->input_devices, (GFunc) g_object_run_dispose, NULL);
-
   _gdk_screen_close (display_x11->screen);
 
   if (display_x11->event_source)
@@ -1935,9 +1895,6 @@ gdk_x11_display_finalize (GObject *object)
 
   /* List of event window extraction functions */
   g_slist_free_full (display_x11->event_types, g_free);
-
-  /* input GdkDevice list */
-  g_list_free_full (display_x11->input_devices, g_object_unref);
 
   /* input GdkWindow list */
   g_list_free_full (display_x11->input_windows, g_free);
@@ -2497,14 +2454,6 @@ gdk_x11_display_supports_composite (GdkDisplay *display)
 	 x11_display->have_xfixes;
 }
 
-static GList *
-gdk_x11_display_list_devices (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-
-  return GDK_X11_DISPLAY (display)->input_devices;
-}
-
 /**
  * gdk_x11_register_standard_event_type:
  * @display: (type GdkX11Display): a #GdkDisplay
@@ -2981,7 +2930,6 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
   display_class->supports_shapes = gdk_x11_display_supports_shapes;
   display_class->supports_input_shapes = gdk_x11_display_supports_input_shapes;
   display_class->supports_composite = gdk_x11_display_supports_composite;
-  display_class->list_devices = gdk_x11_display_list_devices;
   display_class->get_app_launch_context = _gdk_x11_display_get_app_launch_context;
   display_class->get_cursor_for_type = _gdk_x11_display_get_cursor_for_type;
   display_class->get_cursor_for_name = _gdk_x11_display_get_cursor_for_name;

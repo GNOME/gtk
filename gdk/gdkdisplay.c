@@ -293,6 +293,8 @@ gdk_display_dispose (GObject *object)
   display->queued_events = NULL;
   display->queued_tail = NULL;
 
+  g_list_foreach (display->input_devices, (GFunc) g_object_run_dispose, NULL);
+
   if (device_manager)
     {
       /* this is to make it drop devices which may require using the X
@@ -320,6 +322,8 @@ gdk_display_finalize (GObject *object)
   g_hash_table_destroy (display->motion_hint_info);
   g_hash_table_destroy (display->pointers_info);
   g_hash_table_destroy (display->multiple_click_info);
+
+  g_list_free_full (display->input_devices, g_object_unref);
 
   if (display->device_manager)
     g_object_unref (display->device_manager);
@@ -1845,7 +1849,40 @@ gdk_display_list_devices (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
-  return GDK_DISPLAY_GET_CLASS (display)->list_devices (display);
+  if (!display->input_devices)
+    {
+      GdkDeviceManager *device_manager;
+      GdkDevice *device;
+      GList *list, *l;
+
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+      device_manager = gdk_display_get_device_manager (display);
+
+      /* For backwards compatibility, just add
+       * floating devices that are not keyboards.
+       */
+      list = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_FLOATING);
+
+      for (l = list; l; l = l->next)
+        {
+          device = l->data;
+
+          if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
+            continue;
+
+          display->input_devices = g_list_prepend (display->input_devices, g_object_ref (l->data));
+        }
+
+      g_list_free (list);
+
+      G_GNUC_END_IGNORE_DEPRECATIONS;
+
+      /* Add the core pointer to the devices list */
+      device = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
+      display->input_devices = g_list_prepend (display->input_devices, g_object_ref (device));
+    }
+
+  return display->input_devices;
 }
 
 static GdkAppLaunchContext *

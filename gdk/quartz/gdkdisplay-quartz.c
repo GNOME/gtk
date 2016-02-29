@@ -31,8 +31,6 @@
 struct _GdkQuartzDisplay
 {
   GdkDisplay display;
-
-  GList *input_devices;
 };
 
 struct _GdkQuartzDisplayClass
@@ -58,39 +56,6 @@ _gdk_device_manager_new (GdkDisplay *display)
                        NULL);
 }
 
-static void
-gdk_quartz_display_init_input (GdkDisplay *display)
-{
-  GdkQuartzDisplay *display_quartz;
-  GdkDeviceManager *device_manager;
-  GList *list, *l;
-
-  display_quartz = GDK_QUARTZ_DISPLAY (display);
-  device_manager = gdk_display_get_device_manager (_gdk_display);
-
-  /* For backwards compabitility, just add floating devices that are
-   * not keyboards.
-   */
-  list = gdk_device_manager_list_devices (device_manager,
-                                          GDK_DEVICE_TYPE_FLOATING);
-  for (l = list; l; l = l->next)
-    {
-      GdkDevice *device = l->data;
-
-      if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
-        continue;
-
-      display_quartz->input_devices = g_list_prepend (display_quartz->input_devices,
-                                                      g_object_ref (l->data));
-    }
-
-  g_list_free (list);
-
-  /* Add the core pointer to the devices list */
-  display_quartz->input_devices = g_list_prepend (display_quartz->input_devices,
-                                                  g_object_ref (GDK_QUARTZ_DEVICE_MANAGER_CORE (device_manager)->core_pointer));
-}
-
 GdkDisplay *
 _gdk_quartz_display_open (const gchar *display_name)
 {
@@ -109,8 +74,6 @@ _gdk_quartz_display_open (const gchar *display_name)
   _gdk_quartz_window_init_windowing (_gdk_display, _gdk_screen);
 
   _gdk_quartz_events_init ();
-
-  gdk_quartz_display_init_input (_gdk_display);
 
 #if 0
   /* FIXME: Remove the #if 0 when we have these functions */
@@ -220,14 +183,6 @@ gdk_quartz_display_supports_composite (GdkDisplay *display)
   return FALSE;
 }
 
-static GList *
-gdk_quartz_display_list_devices (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-
-  return GDK_QUARTZ_DISPLAY (display)->input_devices;
-}
-
 static gulong
 gdk_quartz_display_get_next_serial (GdkDisplay *display)
 {
@@ -254,9 +209,6 @@ gdk_quartz_display_dispose (GObject *object)
 {
   GdkQuartzDisplay *display_quartz = GDK_QUARTZ_DISPLAY (object);
 
-  g_list_foreach (display_quartz->input_devices,
-                  (GFunc) g_object_run_dispose, NULL);
-
   G_OBJECT_CLASS (gdk_quartz_display_parent_class)->dispose (object);
 }
 
@@ -264,8 +216,6 @@ static void
 gdk_quartz_display_finalize (GObject *object)
 {
   GdkQuartzDisplay *display_quartz = GDK_QUARTZ_DISPLAY (object);
-
-  g_list_free_full (display_quartz->input_devices, g_object_unref);
 
   G_OBJECT_CLASS (gdk_quartz_display_parent_class)->finalize (object);
 }
@@ -296,7 +246,6 @@ gdk_quartz_display_class_init (GdkQuartzDisplayClass *class)
   display_class->supports_shapes = gdk_quartz_display_supports_shapes;
   display_class->supports_input_shapes = gdk_quartz_display_supports_input_shapes;
   display_class->supports_composite = gdk_quartz_display_supports_composite;
-  display_class->list_devices = gdk_quartz_display_list_devices;
   display_class->get_cursor_for_type = _gdk_quartz_display_get_cursor_for_type;
   display_class->get_cursor_for_name = _gdk_quartz_display_get_cursor_for_name;
   display_class->get_cursor_for_surface = _gdk_quartz_display_get_cursor_for_surface;

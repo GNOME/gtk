@@ -111,6 +111,7 @@ struct _GdkDisplay
   GHashTable *device_grabs;
   GHashTable *motion_hint_info;
   GdkDeviceManager *device_manager;
+  GList *input_devices; /* Deprecated, only used to keep gdk_display_list_devices working */
 
   GHashTable *pointers_info;  /* GdkPointerWindowInfo for each device */
   guint32 last_event_time;    /* Last reported event time from server */
@@ -175,7 +176,6 @@ struct _GdkDisplayClass
                                                          gdouble          x,
                                                          gdouble          y);
 
-  GList *                    (*list_devices)       (GdkDisplay *display);
   GdkAppLaunchContext *      (*get_app_launch_context) (GdkDisplay *display);
 
   void                       (*before_process_all_updates) (GdkDisplay *display);

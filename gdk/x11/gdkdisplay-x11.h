@@ -97,10 +97,6 @@ struct _GdkX11Display
   /* translation queue */
   GQueue *translate_queue;
 
-  /* Input device */
-  /* input GdkDevice list */
-  GList *input_devices;
-
   /* input GdkWindow list */
   GList *input_windows;
 

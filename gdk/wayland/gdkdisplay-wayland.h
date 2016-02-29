@@ -54,9 +54,6 @@ struct _GdkWaylandDisplay
   GdkDisplay parent_instance;
   GdkScreen *screen;
 
-  /* input GdkDevice list */
-  GList *input_devices;
-
   /* Startup notification */
   gchar *startup_notification_id;
 
