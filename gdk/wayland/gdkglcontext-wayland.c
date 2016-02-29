@@ -181,7 +181,7 @@ gdk_wayland_gl_context_realize (GdkGLContext *context,
       return FALSE;
     }
 
-  GDK_NOTE (OPENGL, g_print ("Created EGL context[%p]\n", ctx));
+  GDK_NOTE (OPENGL, g_message ("Created EGL context[%p]", ctx));
 
   context_wayland->egl_context = ctx;
 
@@ -285,19 +285,18 @@ gdk_wayland_display_init_gl (GdkDisplay *display)
     epoxy_has_egl_extension (dpy, "EGL_KHR_surfaceless_context");
 
   GDK_NOTE (OPENGL,
-            g_print ("EGL API version %d.%d found\n"
-                     " - Vendor: %s\n"
-                     " - Version: %s\n"
-                     " - Client APIs: %s\n"
-                     " - Extensions:\n"
-                     "\t%s\n"
-                     ,
-                     display_wayland->egl_major_version,
-                     display_wayland->egl_minor_version,
-                     eglQueryString (dpy, EGL_VENDOR),
-                     eglQueryString(dpy, EGL_VERSION),
-                     eglQueryString(dpy, EGL_CLIENT_APIS),
-                     eglQueryString(dpy, EGL_EXTENSIONS)));
+            g_message ("EGL API version %d.%d found\n"
+                       " - Vendor: %s\n"
+                       " - Version: %s\n"
+                       " - Client APIs: %s\n"
+                       " - Extensions:\n"
+                       "\t%s",
+                       display_wayland->egl_major_version,
+                       display_wayland->egl_minor_version,
+                       eglQueryString (dpy, EGL_VENDOR),
+                       eglQueryString (dpy, EGL_VERSION),
+                       eglQueryString (dpy, EGL_CLIENT_APIS),
+                       eglQueryString (dpy, EGL_EXTENSIONS)));
 
   return TRUE;
 }
@@ -434,7 +433,7 @@ gdk_x11_gl_context_dispose (GObject *gobject)
         eglMakeCurrent(display_wayland->egl_display, EGL_NO_SURFACE, EGL_NO_SURFACE,
                        EGL_NO_CONTEXT);
 
-      GDK_NOTE (OPENGL, g_print ("Destroying EGL context\n"));
+      GDK_NOTE (OPENGL, g_message ("Destroying EGL context"));
 
       eglDestroyContext (display_wayland->egl_display,
                          context_wayland->egl_context);
