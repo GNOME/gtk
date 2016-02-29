@@ -110,11 +110,6 @@ Release notes for 3.20
   However, all previously existing objects still derive from GtkWidget,
   so no existing code should break.
 
-* The GtkPlacesSidebar added a GtkPlacesOpenFlags parameter to the
-  other-locations signal in order to allow opening new windows or
-  tabs as done with other locations. This breaks the API for those
-  using the other-locations signal.
-
 * The way in which GtkLevelBar determines the offset to apply was
   a bit inconsistent in the past; this has been fixed. Applications
   that are using custom offsets should double-check that their
