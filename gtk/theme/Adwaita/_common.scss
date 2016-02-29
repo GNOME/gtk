@@ -2578,6 +2578,8 @@ scale {
   }
 
   marks { color: gtkalpha(currentColor, 0.4); }
+  &.horizontal marks { min-height: 8px; }
+  &.vertical marks { min-width: 8px; }
 
   // *WARNING* scale with marks madness following
 

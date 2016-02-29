@@ -2757,6 +2757,10 @@ scale {
         -gtk-icon-shadow: none; }
   scale marks {
     color: alpha(currentColor,0.4); }
+  scale.horizontal marks {
+    min-height: 8px; }
+  scale.vertical marks {
+    min-width: 8px; }
   scale.color.horizontal trough > trough > slider, scale.horizontal contents:last-child:not(:only-child) > trough > slider {
     margin: -9px;
     border-style: none;
