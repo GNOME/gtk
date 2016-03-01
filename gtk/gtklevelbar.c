@@ -586,7 +586,10 @@ update_block_nodes (GtkLevelBar *self)
   else if (n_blocks < priv->n_blocks)
     {
       for (i = n_blocks; i < priv->n_blocks; i++)
-        g_clear_object (&priv->block_gadget[i]);
+        {
+          gtk_css_node_set_parent (gtk_css_gadget_get_node (priv->block_gadget[i]), NULL);
+          g_clear_object (&priv->block_gadget[i]);
+        }
       priv->block_gadget = g_renew (GtkCssGadget*, priv->block_gadget, n_blocks);
       priv->n_blocks = n_blocks;
     }
