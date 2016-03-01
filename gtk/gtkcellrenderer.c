@@ -1817,7 +1817,7 @@ gtk_cell_renderer_get_state (GtkCellRenderer      *cell,
   if (widget)
     state |= gtk_widget_get_state_flags (widget);
 
-  state &= ~(GTK_STATE_FLAG_FOCUSED | GTK_STATE_FLAG_PRELIGHT | GTK_STATE_FLAG_SELECTED);
+  state &= ~(GTK_STATE_FLAG_FOCUSED | GTK_STATE_FLAG_PRELIGHT | GTK_STATE_FLAG_SELECTED | GTK_STATE_FLAG_DROP_ACTIVE);
 
   if ((state & GTK_STATE_FLAG_INSENSITIVE) != 0 ||
       (cell && !gtk_cell_renderer_get_sensitive (cell)) ||
