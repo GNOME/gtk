@@ -2689,6 +2689,9 @@ scale {
     margin: -8px; }
   scale.fine-tune slider {
     margin: -6px; }
+  scale trough {
+    outline-offset: 2px;
+    -gtk-outline-radius: 4px; }
   scale fill, scale fill:backdrop {
     background-color: #9d9d99;
     box-shadow: none; }

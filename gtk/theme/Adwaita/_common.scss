@@ -2504,7 +2504,12 @@ scale {
   }
 
   // the backing bit
-  trough { @extend %scale_trough; }
+  trough {
+    @extend %scale_trough;
+
+    outline-offset: 2px;
+    -gtk-outline-radius: 4px;
+  }
 
   // the colored part of the backing bit
   highlight { @extend %scale_highlight; }
