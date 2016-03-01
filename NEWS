@@ -1,3 +1,49 @@
+Overview of Changes in GTK+ 3.19.11
+===================================
+
+
+* Inspector:
+ - Show input device information
+ - Update monitor information when it changes
+
+* Wayland:
+ - Implement primary selection (using a private protocol
+   with mutter for now)
+
+* GtkRange, GtkScale and GtkScrollbar have been ported to use gadgets
+
+* Themes:
+ - Windows theme improvements
+
+* Bugs fixed:
+ 756751 Keypad decimal point patch prevents entry of comma in german keypad...
+ 760482 GtkFrame cuts off bottom 2 pixels of child
+ 761767 gcc6: Don't return bool from a const gchar* function
+ 762123 Frame Layouting issue in Quadrapassel
+ 762561 Implement primary selection protocol
+ 762593 Solid separator in gnome-tweak-tool header bar
+ 762614 Commit 51af704 gadget: Be careful in geometry calculations breaks v...
+ 762629 GDK W32: Wrong MINMAXINFO calculation
+ 762677 gtkplacessidebar: avoid irresponsible UI while trashing
+ 762713 [Wayland] GDK doesn't remember unmaximized or unfullscreen size
+ 762720 Moving Epiphany tabs with keyboard shortcuts visually broken
+ 762755 Epiphany, Eye of GNOME crash when run in gdkwindow-wayland.c buffer...
+ 762820 Remove "core_pointer" from the GdkDisplay struct
+ 762887 yelp crashes most of the time on startup with gtk+ 3.19.10
+ 762891 gdk: remove the display->list_devices vfunc
+
+
+* Translation updates:
+ Brazilian Portuguese
+ Catalan
+ French
+ Galician
+ Hungarian
+ Occitan
+ Polish
+ Swedish
+
+
 Overview of Changes in GTK+ 3.19.10
 ===================================
 
