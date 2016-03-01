@@ -1740,6 +1740,9 @@ deliver_key_event (GdkWaylandDeviceData *device,
                        event->key.hardware_keycode, event->key.keyval,
                        event->key.string, event->key.state));
 
+  if (state == 0)
+    return;
+
   if (!xkb_keymap_key_repeats (xkb_keymap, key))
     return;
 
@@ -1748,9 +1751,6 @@ deliver_key_event (GdkWaylandDeviceData *device,
 
   device->repeat_count++;
   device->repeat_key = key;
-
-  if (state == 0)
-    return;
 
   if (device->repeat_count == 1)
     timeout = delay;
