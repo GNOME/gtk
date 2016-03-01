@@ -1869,8 +1869,12 @@ gtk_scale_mark_free (gpointer data)
 {
   GtkScaleMark *mark = data;
 
+  if (mark->label_gadget)
+    gtk_css_node_set_parent (gtk_css_gadget_get_node (mark->label_gadget), NULL);
   g_clear_object (&mark->label_gadget);
+  gtk_css_node_set_parent (gtk_css_gadget_get_node (mark->indicator_gadget), NULL);
   g_object_unref (mark->indicator_gadget);
+  gtk_css_node_set_parent (gtk_css_gadget_get_node (mark->gadget), NULL);
   g_object_unref (mark->gadget);
   g_free (mark->markup);
   g_free (mark);
@@ -1896,7 +1900,11 @@ gtk_scale_clear_marks (GtkScale *scale)
   g_slist_free_full (priv->marks, gtk_scale_mark_free);
   priv->marks = NULL;
 
+  if (priv->top_marks_gadget)
+    gtk_css_node_set_parent (gtk_css_gadget_get_node (priv->top_marks_gadget), NULL);
   g_clear_object (&priv->top_marks_gadget);
+  if (priv->bottom_marks_gadget)
+    gtk_css_node_set_parent (gtk_css_gadget_get_node (priv->bottom_marks_gadget), NULL);
   g_clear_object (&priv->bottom_marks_gadget);
 
   _gtk_range_set_stop_values (GTK_RANGE (scale), NULL, 0);
