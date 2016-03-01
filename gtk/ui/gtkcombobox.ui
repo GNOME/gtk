@@ -3,20 +3,25 @@
   <!-- interface-requires gtk+ 3.10 -->
   <template class="GtkComboBox" parent="GtkBin">
     <child>
-      <object class="GtkToggleButton" id="button">
+      <object class="GtkBox" id="box">
         <property name="visible">1</property>
-        <signal name="toggled" handler="gtk_combo_box_button_toggled" swapped="no"/>
         <child>
-          <object class="GtkBox">
+          <object class="GtkToggleButton" id="button">
             <property name="visible">1</property>
+            <signal name="toggled" handler="gtk_combo_box_button_toggled" swapped="no"/>
             <child>
-              <object class="GtkIcon" id="arrow">
+              <object class="GtkBox">
                 <property name="visible">1</property>
-                <property name="css_name">arrow</property>
+                <child>
+                  <object class="GtkIcon" id="arrow">
+                    <property name="visible">1</property>
+                    <property name="css_name">arrow</property>
+                  </object>
+                  <packing>
+                    <property name="pack_type">end</property>
+                  </packing>
+                </child>
               </object>
-              <packing>
-                <property name="pack_type">end</property>
-              </packing>
             </child>
           </object>
         </child>

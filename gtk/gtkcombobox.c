@@ -124,6 +124,7 @@ struct _GtkComboBoxPrivate
 
   GtkWidget *cell_view;
 
+  GtkWidget *box;
   GtkWidget *button;
   GtkWidget *arrow;
 
@@ -480,7 +481,7 @@ gtk_combo_box_real_get_width (GtkWidget *widget,
   else
     gtk_widget_get_preferred_width (child, &child_min, &child_nat);
 
-  gtk_widget_get_preferred_width (priv->button,
+  gtk_widget_get_preferred_width (priv->box,
                                   &but_min, &but_nat);
 
   *minimum_size = child_min + but_min;
@@ -503,14 +504,14 @@ gtk_combo_box_real_get_height (GtkWidget *widget,
 
   if (child == priv->cell_view)
     {
-      gtk_widget_get_preferred_height_for_width (priv->button,
+      gtk_widget_get_preferred_height_for_width (priv->box,
                                                  avail_size,
                                                  &min_height, &nat_height);
     }
   else
     {
-      gtk_widget_get_preferred_width (priv->button, &but_width, NULL);
-      gtk_widget_get_preferred_height_for_width (priv->button,
+      gtk_widget_get_preferred_width (priv->box, &but_width, NULL);
+      gtk_widget_get_preferred_height_for_width (priv->box,
                                                  but_width,
                                                  &but_height, NULL);
 
@@ -564,13 +565,13 @@ gtk_combo_box_allocate (GtkCssGadget        *gadget,
   if (child_widget == priv->cell_view)
     {
       child = *allocation;
-      gtk_widget_size_allocate (priv->button, &child);
+      gtk_widget_size_allocate (priv->box, &child);
     }
   else
     {
       GtkAllocation button_allocation;
 
-      gtk_widget_get_preferred_size (priv->button,
+      gtk_widget_get_preferred_size (priv->box,
                                      &req, NULL);
 
       if (is_rtl)
@@ -584,7 +585,7 @@ gtk_combo_box_allocate (GtkCssGadget        *gadget,
       button_allocation.height = allocation->height;
       button_allocation.height = MAX (1, button_allocation.height);
 
-      gtk_widget_size_allocate (priv->button,
+      gtk_widget_size_allocate (priv->box,
                                 &button_allocation);
 
       if (is_rtl)
@@ -652,7 +653,7 @@ gtk_combo_box_render (GtkCssGadget *gadget,
   GtkWidget *child;
 
   gtk_container_propagate_draw (GTK_CONTAINER (widget),
-                                priv->button, cr);
+                                priv->box, cr);
 
   child = gtk_bin_get_child (GTK_BIN (widget));
 
@@ -1370,6 +1371,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                               GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/ui/gtkcombobox.ui");
+  gtk_widget_class_bind_template_child_internal_private (widget_class, GtkComboBox, box);
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkComboBox, button);
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkComboBox, arrow);
   gtk_widget_class_bind_template_callback (widget_class, gtk_combo_box_button_toggled);
@@ -2723,8 +2725,8 @@ gtk_combo_box_forall (GtkContainer *container,
 
   if (include_internals)
     {
-      if (priv->button)
-        (* callback) (priv->button, callback_data);
+      if (priv->box)
+        (* callback) (priv->box, callback_data);
     }
 
   child = gtk_bin_get_child (GTK_BIN (container));
@@ -4391,12 +4393,13 @@ gtk_combo_box_destroy (GtkWidget *widget)
       priv->popup_idle_id = 0;
     }
 
-  if (priv->button)
+  if (priv->box)
     {
       /* destroy things (unparent will kill the latest ref from us)
        * last unref on button will destroy the arrow
        */
-      gtk_widget_unparent (priv->button);
+      gtk_widget_unparent (priv->box);
+      priv->box = NULL;
       priv->button = NULL;
       priv->arrow = NULL;
       if (priv->cell_view)
