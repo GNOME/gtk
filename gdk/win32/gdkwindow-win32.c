@@ -138,6 +138,8 @@ _gdk_window_impl_win32_get_type (void)
 static void
 gdk_window_impl_win32_init (GdkWindowImplWin32 *impl)
 {
+  GdkDisplay *display = gdk_display_get_default ();
+
   impl->toplevel_window_type = -1;
   impl->cursor = NULL;
   impl->hicon_big = NULL;
@@ -148,6 +150,14 @@ gdk_window_impl_win32_init (GdkWindowImplWin32 *impl)
   impl->transient_children = NULL;
   impl->num_transients = 0;
   impl->changing_state = FALSE;
+
+  if (display != NULL)
+    /* Replace WM-defined default cursor with the default cursor
+     * from our theme. Otherwise newly-opened windows (such as popup
+     * menus of all kinds) will have WM-default cursor when they are
+     * first shown, which will be replaced by our cursor only later on.
+     */
+    impl->cursor = _gdk_win32_display_get_cursor_for_type (display, GDK_LEFT_PTR);
 }
 
 static void
