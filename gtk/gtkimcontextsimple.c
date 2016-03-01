@@ -232,16 +232,12 @@ init_compose_table_thread_cb (GTask            *task,
                               gpointer          task_data,
                               GCancellable     *cancellable)
 {
-  GtkIMContextSimple *im_context_simple;
-
   if (g_task_return_error_if_cancelled (task))
     return;
 
   g_return_if_fail (GTK_IS_IM_CONTEXT_SIMPLE (task_data));
 
-  im_context_simple = GTK_IM_CONTEXT_SIMPLE (task_data);
-
-  gtk_im_context_simple_init_compose_table (im_context_simple);
+  gtk_im_context_simple_init_compose_table (GTK_IM_CONTEXT_SIMPLE (task_data));
 }
 
 void
@@ -252,7 +248,7 @@ init_compose_table_async (GtkIMContextSimple   *im_context_simple,
 {
   GTask *task = g_task_new (NULL, cancellable, callback, user_data);
   g_task_set_source_tag (task, init_compose_table_async);
-  g_task_set_task_data (task, im_context_simple, NULL);
+  g_task_set_task_data (task, g_object_ref (im_context_simple), g_object_unref);
   g_task_run_in_thread (task, init_compose_table_thread_cb);
   g_object_unref (task);
 }
