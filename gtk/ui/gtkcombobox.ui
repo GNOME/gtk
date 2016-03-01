@@ -5,6 +5,9 @@
     <child>
       <object class="GtkBox" id="box">
         <property name="visible">1</property>
+        <style>
+          <class name="linked"/>
+        </style>
         <child>
           <object class="GtkToggleButton" id="button">
             <property name="visible">1</property>
@@ -24,6 +27,9 @@
               </object>
             </child>
           </object>
+          <packing>
+            <property name="pack_type">end</property>
+          </packing>
         </child>
       </object>
     </child>
