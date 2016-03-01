@@ -756,6 +756,28 @@ gtk_combo_box_draw (GtkWidget *widget,
 }
 
 static void
+gtk_combo_box_compute_expand (GtkWidget *widget,
+                              gboolean  *hexpand,
+                              gboolean  *vexpand)
+{
+  GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
+  GtkComboBoxPrivate *priv = combo_box->priv;
+  GtkWidget *child;
+
+  child = gtk_bin_get_child (GTK_BIN (combo_box));
+  if (child && child != priv->cell_view)
+    {
+      *hexpand = gtk_widget_compute_expand (child, GTK_ORIENTATION_HORIZONTAL);
+      *vexpand = gtk_widget_compute_expand (child, GTK_ORIENTATION_VERTICAL);
+    }
+  else
+    {
+      *hexpand = FALSE;
+      *vexpand = FALSE;
+    }
+}
+
+static void
 gtk_combo_box_class_init (GtkComboBoxClass *klass)
 {
   GObjectClass *object_class;
@@ -783,6 +805,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
   widget_class->get_preferred_width_for_height = gtk_combo_box_get_preferred_width_for_height;
   widget_class->destroy = gtk_combo_box_destroy;
   widget_class->direction_changed = gtk_combo_box_direction_changed;
+  widget_class->compute_expand = gtk_combo_box_compute_expand;
 
   object_class = (GObjectClass *)klass;
   object_class->constructed = gtk_combo_box_constructed;
@@ -1748,6 +1771,7 @@ gtk_combo_box_create_child (GtkComboBox *combo_box)
     {
       child = gtk_cell_view_new_with_context (priv->area, NULL);
       priv->cell_view = child;
+      gtk_widget_set_hexpand (child, TRUE);
       gtk_cell_view_set_fit_model (GTK_CELL_VIEW (priv->cell_view), TRUE);
       gtk_cell_view_set_model (GTK_CELL_VIEW (priv->cell_view), priv->model);
       gtk_container_add (GTK_CONTAINER (gtk_widget_get_parent (priv->arrow)),
