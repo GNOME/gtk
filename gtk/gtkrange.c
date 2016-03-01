@@ -1568,6 +1568,7 @@ gtk_range_set_show_fill_level (GtkRange *range,
     }
   else
     {
+      gtk_css_node_set_parent (gtk_css_gadget_get_node (priv->fill_gadget), NULL);
       g_clear_object (&priv->fill_gadget);
     }
 
@@ -3807,6 +3808,7 @@ _gtk_range_set_has_origin (GtkRange *range,
     }
   else
     {
+      gtk_css_node_set_parent (gtk_css_gadget_get_node (priv->highlight_gadget), NULL);
       g_clear_object (&priv->highlight_gadget);
     }
 }
@@ -3917,7 +3919,10 @@ sync_stepper_gadget (GtkRange                *range,
   if (!should_have_stepper)
     {
       if (*gadget_ptr != NULL)
-        gtk_box_gadget_remove_gadget (GTK_BOX_GADGET (priv->contents_gadget), *gadget_ptr);
+        {
+          gtk_css_node_set_parent (gtk_css_gadget_get_node (*gadget_ptr), NULL);
+          gtk_box_gadget_remove_gadget (GTK_BOX_GADGET (priv->contents_gadget), *gadget_ptr);
+        }
       g_clear_object (gadget_ptr);
       return;
     }
