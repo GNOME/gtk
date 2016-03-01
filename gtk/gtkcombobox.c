@@ -1721,17 +1721,40 @@ gtk_combo_box_button_toggled (GtkWidget *widget,
 }
 
 static void
-gtk_combo_box_create_cell_view (GtkComboBox *combo_box)
+gtk_combo_box_create_child (GtkComboBox *combo_box)
 {
   GtkComboBoxPrivate *priv = combo_box->priv;
+  GtkWidget *child;
 
-  priv->cell_view = gtk_cell_view_new_with_context (priv->area, NULL);
-  gtk_cell_view_set_fit_model (GTK_CELL_VIEW (priv->cell_view), TRUE);
-  gtk_cell_view_set_model (GTK_CELL_VIEW (priv->cell_view), priv->model);
-  gtk_container_add (GTK_CONTAINER (gtk_widget_get_parent (priv->arrow)),
-                     priv->cell_view);
-  _gtk_bin_set_child (GTK_BIN (combo_box), priv->cell_view);
-  gtk_widget_show (priv->cell_view);
+  if (priv->has_entry)
+    {
+      GtkWidget *entry;
+      GtkStyleContext *context;
+
+      entry = gtk_entry_new ();
+      gtk_widget_show (entry);
+      gtk_container_add (GTK_CONTAINER (combo_box), entry);
+
+      context = gtk_widget_get_style_context (GTK_WIDGET (combo_box));
+      gtk_style_context_add_class (context, "linked");
+
+      context = gtk_widget_get_style_context (GTK_WIDGET (entry));
+      gtk_style_context_add_class (context, "combo");
+
+      g_signal_connect (combo_box, "changed",
+                        G_CALLBACK (gtk_combo_box_entry_active_changed), NULL);
+    }
+  else
+    {
+      child = gtk_cell_view_new_with_context (priv->area, NULL);
+      priv->cell_view = child;
+      gtk_cell_view_set_fit_model (GTK_CELL_VIEW (priv->cell_view), TRUE);
+      gtk_cell_view_set_model (GTK_CELL_VIEW (priv->cell_view), priv->model);
+      gtk_container_add (GTK_CONTAINER (gtk_widget_get_parent (priv->arrow)),
+                         priv->cell_view);
+      _gtk_bin_set_child (GTK_BIN (combo_box), priv->cell_view);
+      gtk_widget_show (priv->cell_view);
+    }
 }
 
 static void
@@ -1820,8 +1843,7 @@ gtk_combo_box_remove (GtkContainer *container,
       priv->popup_widget = NULL;
     }
 
-  if (!priv->cell_view)
-    gtk_combo_box_create_cell_view (combo_box);
+  gtk_combo_box_create_child (combo_box);
 
   if (appears_as_list)
     gtk_combo_box_list_setup (combo_box);
@@ -4468,33 +4490,17 @@ gtk_combo_box_constructed (GObject *object)
       g_object_ref_sink (priv->area);
     }
 
-  gtk_combo_box_create_cell_view (combo_box);
+  gtk_combo_box_create_child (combo_box);
 
   gtk_combo_box_check_appearance (combo_box);
 
   if (priv->has_entry)
     {
-      GtkWidget *entry;
-      GtkStyleContext *context;
-
-      entry = gtk_entry_new ();
-      gtk_widget_show (entry);
-      gtk_container_add (GTK_CONTAINER (combo_box), entry);
-
-      context = gtk_widget_get_style_context (GTK_WIDGET (combo_box));
-      gtk_style_context_add_class (context, "linked");
-
-      context = gtk_widget_get_style_context (GTK_WIDGET (entry));
-      gtk_style_context_add_class (context, "combo");
-
       priv->text_renderer = gtk_cell_renderer_text_new ();
       gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo_box),
                                   priv->text_renderer, TRUE);
 
       gtk_combo_box_set_active (GTK_COMBO_BOX (combo_box), -1);
-
-      g_signal_connect (combo_box, "changed",
-                        G_CALLBACK (gtk_combo_box_entry_active_changed), NULL);
     }
 }
 
