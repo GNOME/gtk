@@ -1694,7 +1694,7 @@ stop_key_repeat (GdkWaylandDeviceData *device)
     }
 }
 
-static gboolean
+static void
 deliver_key_event (GdkWaylandDeviceData *device,
                    uint32_t              time_,
                    uint32_t              key,
@@ -1705,7 +1705,9 @@ deliver_key_event (GdkWaylandDeviceData *device,
   struct xkb_keymap *xkb_keymap;
   GdkKeymap *keymap;
   xkb_keysym_t sym;
-  guint delay, interval;
+  guint delay, interval, timeout;
+
+  stop_key_repeat (device);
 
   keymap = device->keymap;
   xkb_state = _gdk_wayland_keymap_get_xkb_state (keymap);
@@ -1739,38 +1741,25 @@ deliver_key_event (GdkWaylandDeviceData *device,
                        event->key.string, event->key.state));
 
   if (!xkb_keymap_key_repeats (xkb_keymap, key))
-    return FALSE;
+    return;
 
   if (!get_key_repeat (device, &delay, &interval))
-    return FALSE;
+    return;
 
   device->repeat_count++;
   device->repeat_key = key;
 
   if (state == 0)
-    {
-      stop_key_repeat (device);
-      return FALSE;
-    }
+    return;
+
+  if (device->repeat_count == 1)
+    timeout = delay;
   else
-    {
-      switch (device->repeat_count)
-        {
-        case 1:
-          stop_key_repeat (device);
-          device->repeat_timer =
-            gdk_threads_add_timeout (delay, keyboard_repeat, device);
-          g_source_set_name_by_id (device->repeat_timer, "[gtk+] keyboard_repeat");
-          return TRUE;
-        case 2:
-          device->repeat_timer =
-            gdk_threads_add_timeout (interval, keyboard_repeat, device);
-          g_source_set_name_by_id (device->repeat_timer, "[gtk+] keyboard_repeat");
-          return FALSE;
-        default:
-          return TRUE;
-        }
-    }
+    timeout = interval;
+
+  device->repeat_timer =
+    gdk_threads_add_timeout (timeout, keyboard_repeat, device);
+  g_source_set_name_by_id (device->repeat_timer, "[gtk+] keyboard_repeat");
 }
 
 static gboolean
@@ -1778,7 +1767,9 @@ keyboard_repeat (gpointer data)
 {
   GdkWaylandDeviceData *device = data;
 
-  return deliver_key_event (device, device->time, device->repeat_key, 1);
+  deliver_key_event (device, device->time, device->repeat_key, 1);
+
+  return G_SOURCE_REMOVE;
 }
 
 static void
