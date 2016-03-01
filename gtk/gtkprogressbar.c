@@ -1516,6 +1516,8 @@ gtk_progress_bar_set_show_text (GtkProgressBar *pbar,
     }
   else
     {
+      if (priv->text_gadget)
+        gtk_css_node_set_parent (gtk_css_gadget_get_node (priv->text_gadget), NULL);
       g_clear_object (&priv->text_gadget);
     }
 
