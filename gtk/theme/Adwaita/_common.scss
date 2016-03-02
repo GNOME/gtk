@@ -2589,10 +2589,15 @@ scale {
   marks {
     color: gtkalpha(currentColor, 0.4);
 
-    &.top { margin-bottom: $_marks_distance; }
-    &.bottom { margin-top: $_marks_distance; }
-    &.left { margin-right: $_marks_distance; }
-    &.right { margin-left: $_marks_distance; }
+    @each $marks_pos, $marks_margin in (top, bottom),
+                                       (bottom, top),
+                                       (left, right),
+                                       (right, left) {
+      &.#{$marks_pos} {
+        margin-#{$marks_margin}: $_marks_distance;
+        margin-#{$marks_pos}: -($_marks_distance+$_marks_lenght);
+      }
+    }
   }
 
   &.horizontal  indicator {

@@ -2648,7 +2648,20 @@ scale highlight, progressbar progress {
 scale {
   min-height: 10px;
   min-width: 10px;
-  padding: 12px; }
+  padding: 12px;
+  /*
+      &.top {
+        margin-bottom: $_marks_distance;
+        margin-top: -($_marks_distance+$_marks_lenght);
+      }
+  
+      &.bottom {
+        margin-top: $_marks_distance;
+      }
+      &.left { margin-right: $_marks_distance; }
+      &.right { margin-left: $_marks_distance; }
+    }
+  */ }
   scale fill,
   scale highlight {
     margin: -1px; }
@@ -2761,13 +2774,17 @@ scale {
   scale marks {
     color: alpha(currentColor,0.4); }
     scale marks.top {
-      margin-bottom: 6px; }
+      margin-bottom: 6px;
+      margin-top: -12px; }
     scale marks.bottom {
-      margin-top: 6px; }
+      margin-top: 6px;
+      margin-bottom: -12px; }
     scale marks.left {
-      margin-right: 6px; }
+      margin-right: 6px;
+      margin-left: -12px; }
     scale marks.right {
-      margin-left: 6px; }
+      margin-left: 6px;
+      margin-right: -12px; }
   scale.horizontal indicator {
     min-height: 6px;
     min-width: 1px; }
