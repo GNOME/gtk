@@ -180,6 +180,9 @@ testdata = \
 	box-shadow-spread.css \
 	box-shadow-spread.ref.ui \
 	box-shadow-spread.ui \
+	box-shadow-changes-modify-clip.css \
+	box-shadow-changes-modify-clip.ref.ui \
+	box-shadow-changes-modify-clip.ui \
 	button-wrapping.ui \
 	button-wrapping.ref.ui \
 	cellrenderer-pixbuf-stock-rtl.css \
