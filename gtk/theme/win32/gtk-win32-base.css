@@ -711,54 +711,79 @@ entry.flat:disabled {
     color: -gtk-win32-color(edit, graytext);
 }
 
-/* Spibuttons */
+/* Spinbutton (horizontal) */
 
-spinbutton button,
-spinbutton button:focus {
-    background-color: transparent;
-    background-image: -gtk-win32-theme-part(spin, 2, 1, margins(0 -1 -1 -1));
-    color: rgba(0, 0, 0, 0);
+spinbutton.horizontal  {
+  padding: 2px 1px;
+  background-image: -gtk-win32-theme-part(edit, 1, 1);
 }
 
-spinbutton button:last-child,
-spinbutton button:focus:last-child {
-    background-image: -gtk-win32-theme-part(spin, 1, 1, margins(-1 -1 0 -1));
+spinbutton.horizontal:focus {
+    background-image: -gtk-win32-theme-part(edit, 1, 3);
 }
 
-spinbutton button:hover,
-spinbutton button:hover:focus {
-    background-image: -gtk-win32-theme-part(spin, 2, 2, margins(0 -1 -1 -1));
+spinbutton.horizontal:disabled {
+    background-image: -gtk-win32-theme-part(edit, 1, 4);
 }
 
-spinbutton button:hover:last-child,
-spinbutton button:hover:focus:last-child {
-    background-image: -gtk-win32-theme-part(spin, 1, 2, margins(-1 -1 0 -1));
+spinbutton.horizontal entry {
+  all: unset;
+  padding: 0px calc(1em/3);
 }
 
-
-spinbutton button:active,
-spinbutton button:active:hover,
-spinbutton button:active:focus,
-spinbutton button:active:hover:focus {
-    background-image: -gtk-win32-theme-part(spin, 2, 3, margins(0 -1 -1 -1));
+spinbutton.horizontal button {
+  all: unset;
+  color: transparent;
+  min-width: 15px;
+  min-height: 9px;
+  background-size: 15px 9px;
+  background-repeat: no-repeat;
 }
 
-spinbutton button:active:last-child,
-spinbutton button:active:hover:last-child,
-spinbutton button:active:focus:last-child,
-spinbutton button:active:hover:focus:last-child {
-    background-image: -gtk-win32-theme-part(spin, 1, 3, margins(-1 -1 0 -1));
+spinbutton.horizontal button.down {
+  background-image: -gtk-win32-theme-part(spin, 2, 1);
+  background-position: top center;
+  padding-left: 1px;
+  margin-left: -1px;
+  margin-top: 8px;
+  margin-bottom: -8px;
+  margin-right: -1px;
 }
 
-spinbutton button:disabled {
-    background-image: -gtk-win32-theme-part(spin, 2, 4, margins(0 -1 -1 -1));
+spinbutton.horizontal button.up {
+  background-image: -gtk-win32-theme-part(spin, 1, 1);
+  background-position: bottom center;
+  margin-top: -8px;
+  margin-bottom: 8px;
+  margin-left: -16px;
+  margin-right: -1px;
 }
 
-spinbutton button:disabled:last-child {
-    background-image: -gtk-win32-theme-part(spin, 1, 4, margins(-1 -1 0 -1));
+spinbutton.horizontal button.down:hover {
+    background-image: -gtk-win32-theme-part(spin, 2, 2);
 }
 
+spinbutton.horizontal button.up:hover {
+    background-image: -gtk-win32-theme-part(spin, 1, 2);
+}
 
+spinbutton.horizontal button.down:active {
+    background-image: -gtk-win32-theme-part(spin, 2, 3);
+}
+
+spinbutton.horizontal button.up:active {
+    background-image: -gtk-win32-theme-part(spin, 1, 3);
+}
+
+spinbutton.horizontal button.down:disabled {
+    background-image: -gtk-win32-theme-part(spin, 2, 4);
+}
+
+spinbutton.horizontal button.up:disabled {
+    background-image: -gtk-win32-theme-part(spin, 1, 4);
+}
+
+/* Spinbutton (vertical) */
 
 spinbutton.vertical button,
 spinbutton.vertical button:focus {
