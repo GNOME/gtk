@@ -31,6 +31,8 @@
 
 #include "wm-button-layout-translation.h"
 
+#include "canberra.h"
+
 typedef struct _GdkWaylandScreen      GdkWaylandScreen;
 typedef struct _GdkWaylandScreenClass GdkWaylandScreenClass;
 
@@ -70,6 +72,7 @@ struct _GdkWaylandScreen
 
   GHashTable *settings;
   GsdXftSettings xft_settings;
+  ca_context *ca_context;
 
   guint32    shell_capabilities;
 };
@@ -158,6 +161,9 @@ gdk_wayland_screen_finalize (GObject *object)
   g_object_unref (screen_wayland->visual);
 
   deinit_multihead (GDK_SCREEN (object));
+
+  if (screen_wayland->ca_context)
+    ca_context_destroy (screen_wayland->ca_context);
 
   g_hash_table_destroy (screen_wayland->settings);
 
@@ -595,6 +601,83 @@ find_translation_entry_by_setting (const gchar *setting)
   return NULL;
 }
 
+ca_context *
+gdk_wayland_screen_get_ca_context (GdkScreen *screen)
+{
+  GdkWaylandScreen *screen_wayland = GDK_WAYLAND_SCREEN (screen);
+  ca_context *c;
+  ca_proplist *p;
+  const char *name;
+  GSettings *settings;
+
+  if (screen_wayland->ca_context)
+    goto out;
+
+  if (ca_context_create (&c) != CA_SUCCESS)
+    return NULL;
+
+  if (ca_proplist_create (&p) != CA_SUCCESS)
+    {
+      ca_context_destroy (c);
+      return NULL;
+    }
+
+  name = g_get_application_name ();
+  if (name)
+    ca_proplist_sets (p, CA_PROP_APPLICATION_NAME, name);
+
+  settings = g_hash_table_lookup (screen_wayland->settings, "org.gnome.desktop.sound");
+
+  if (settings)
+    {
+      char *theme_name;
+      gboolean event_sounds;
+
+      theme_name = g_settings_get_string (settings, "theme-name");
+      event_sounds = g_settings_get_boolean (settings, "event-sounds");
+
+      ca_proplist_sets (p, CA_PROP_CANBERRA_XDG_THEME_NAME, theme_name);
+      ca_proplist_sets (p, CA_PROP_CANBERRA_ENABLE, event_sounds ? "1" : "0");
+
+      g_free (theme_name);
+    }
+
+  ca_context_change_props_full (c, p);
+  ca_proplist_destroy (p);
+
+  screen_wayland->ca_context = c;
+
+out:
+  return screen_wayland->ca_context;
+}
+
+static void
+update_sound_settings (GSettings  *settings,
+                       const char *key,
+                       GdkScreen  *screen)
+{
+  GdkWaylandScreen *screen_wayland = GDK_WAYLAND_SCREEN (screen);
+
+  if (screen_wayland->ca_context == NULL)
+    return;
+
+  if (strcmp (key, "theme-name") == 0)
+    {
+      gchar *theme_name;
+
+      theme_name = g_settings_get_string (settings, key);
+      ca_context_change_props (screen_wayland->ca_context, CA_PROP_CANBERRA_XDG_THEME_NAME, theme_name, NULL);
+      g_free (theme_name);
+    }
+  else if (strcmp (key, "event-sounds") == 0)
+    {
+      gboolean event_sounds;
+
+      event_sounds = g_settings_get_boolean (settings, key);
+      ca_context_change_props (screen_wayland->ca_context, CA_PROP_CANBERRA_ENABLE, event_sounds ? "1" : "0", NULL);
+    }
+}
+
 static void
 settings_changed (GSettings   *settings,
                   const gchar *key,
@@ -606,6 +689,9 @@ settings_changed (GSettings   *settings,
 
   if (entry != NULL)
     {
+      if (strcmp (entry->schema, "org.gnome.desktop.sound") == 0)
+        update_sound_settings (settings, key, screen);
+
       if (entry->type != G_TYPE_NONE)
         notify_setting (screen, entry->setting);
       else

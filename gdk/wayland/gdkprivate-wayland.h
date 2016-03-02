@@ -36,6 +36,8 @@
 
 #include <xkbcommon/xkbcommon.h>
 
+#include <canberra.h>
+
 #include "gdkinternals.h"
 #include "wayland/gtk-primary-selection-client-protocol.h"
 
@@ -275,5 +277,7 @@ EGLSurface gdk_wayland_window_get_dummy_egl_surface (GdkWindow *window,
 
 void gdk_wayland_seat_set_global_cursor (GdkSeat   *seat,
                                          GdkCursor *cursor);
+
+ca_context *gdk_wayland_screen_get_ca_context (GdkScreen *screen);
 
 #endif /* __GDK_PRIVATE_WAYLAND_H__ */
