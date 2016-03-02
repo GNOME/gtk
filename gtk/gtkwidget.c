@@ -15520,6 +15520,23 @@ gtk_widget_set_clip (GtkWidget           *widget,
 #endif /* G_ENABLE_DEBUG */
 
   priv->clip = *clip;
+
+  while (priv->parent &&
+         _gtk_widget_get_window (widget) == _gtk_widget_get_window (priv->parent))
+    {
+      GtkWidgetPrivate *parent_priv = priv->parent->priv;
+      GdkRectangle union_rect;
+
+      gdk_rectangle_union (&priv->clip,
+                           &parent_priv->clip,
+                           &union_rect);
+
+      if (gdk_rectangle_equal (&parent_priv->clip, &union_rect))
+        break;
+
+      parent_priv->clip = union_rect;
+      priv = parent_priv;
+    }
 }
 
 /*
