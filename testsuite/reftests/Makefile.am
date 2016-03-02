@@ -499,8 +499,8 @@ libreftest_la_CFLAGS = $(gtk_reftest_CFLAGS)
 libreftest_la_LIBADD = $(gtk_reftest_LDADD)
 libreftest_la_SOURCES =			\
 	expand-expander.c		\
+	frame-inhibitor.c	\
 	image-recording-surface.c	\
-	label-text-shadow-changes-modify-clip.c	\
 	letter-spacing.c		\
 	set-default-direction.c		\
 	statusbar-remove-all.c		\
