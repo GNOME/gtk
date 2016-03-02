@@ -1691,65 +1691,13 @@ get_key_repeat (GdkWaylandDeviceData *device,
 }
 
 static void
-stop_key_repeat (GdkWaylandDeviceData *device)
+start_key_repeat (GdkWaylandDeviceData *device,
+                  uint32_t              key)
 {
-  if (device->repeat_timer)
-    {
-      g_source_remove (device->repeat_timer);
-      device->repeat_timer = 0;
-    }
-
-  g_clear_pointer (&device->repeat_callback, wl_callback_destroy);
-}
-
-static void
-deliver_key_event (GdkWaylandDeviceData *device,
-                   uint32_t              time_,
-                   uint32_t              key,
-                   uint32_t              state)
-{
-  GdkEvent *event;
-  struct xkb_state *xkb_state;
   struct xkb_keymap *xkb_keymap;
-  GdkKeymap *keymap;
-  xkb_keysym_t sym;
   guint delay, interval, timeout;
 
-  stop_key_repeat (device);
-
-  keymap = device->keymap;
-  xkb_state = _gdk_wayland_keymap_get_xkb_state (keymap);
-  xkb_keymap = _gdk_wayland_keymap_get_xkb_keymap (keymap);
-
-  sym = xkb_state_key_get_one_sym (xkb_state, key);
-
-  device->time = time_;
-  device->key_modifiers = gdk_keymap_get_modifier_state (keymap);
-
-  event = gdk_event_new (state ? GDK_KEY_PRESS : GDK_KEY_RELEASE);
-  event->key.window = device->keyboard_focus ? g_object_ref (device->keyboard_focus) : NULL;
-  gdk_event_set_device (event, device->master_keyboard);
-  gdk_event_set_source_device (event, device->keyboard);
-  gdk_event_set_seat (event, gdk_device_get_seat (device->master_keyboard));
-  event->key.time = time_;
-  event->key.state = device->button_modifiers | device->key_modifiers;
-  event->key.group = 0;
-  event->key.hardware_keycode = key;
-  event->key.keyval = sym;
-  event->key.is_modifier = _gdk_wayland_keymap_key_is_modifier (keymap, key);
-
-  translate_keyboard_string (&event->key);
-
-  _gdk_wayland_display_deliver_event (device->display, event);
-
-  GDK_NOTE (EVENTS,
-            g_message ("keyboard event, code %d, sym %d, "
-                       "string %s, mods 0x%x",
-                       event->key.hardware_keycode, event->key.keyval,
-                       event->key.string, event->key.state));
-
-  if (state == 0)
-    return;
+  xkb_keymap = _gdk_wayland_keymap_get_xkb_keymap (device->keymap);
 
   if (!xkb_keymap_key_repeats (xkb_keymap, key))
     return;
@@ -1768,6 +1716,76 @@ deliver_key_event (GdkWaylandDeviceData *device,
   device->repeat_timer =
     gdk_threads_add_timeout (timeout, keyboard_repeat, device);
   g_source_set_name_by_id (device->repeat_timer, "[gtk+] keyboard_repeat");
+}
+
+static void
+stop_key_repeat (GdkWaylandDeviceData *device)
+{
+  if (device->repeat_timer)
+    {
+      g_source_remove (device->repeat_timer);
+      device->repeat_timer = 0;
+    }
+
+  g_clear_pointer (&device->repeat_callback, wl_callback_destroy);
+}
+
+static Gdkevent *
+translate_key_event (GdkWaylandDeviceData *device,
+                     uint32_t              time_,
+                     uint32_t              key,
+                     uint32_t              state)
+{
+  GdkEvent *event;
+  struct xkb_state *xkb_state;
+  xkb_keysym_t sym;
+
+  xkb_state = _gdk_wayland_keymap_get_xkb_state (device->keymap);
+  sym = xkb_state_key_get_one_sym (xkb_state, key);
+
+  event = gdk_event_new (state ? GDK_KEY_PRESS : GDK_KEY_RELEASE);
+  event->key.window = device->keyboard_focus ? g_object_ref (device->keyboard_focus) : NULL;
+  gdk_event_set_device (event, device->master_keyboard);
+  gdk_event_set_source_device (event, device->keyboard);
+  gdk_event_set_seat (event, gdk_device_get_seat (device->master_keyboard));
+  event->key.time = time_;
+  event->key.state = device->button_modifiers | device->key_modifiers;
+  event->key.group = 0;
+  event->key.hardware_keycode = key;
+  event->key.keyval = sym;
+  event->key.is_modifier = _gdk_wayland_keymap_key_is_modifier (keymap, key);
+
+  translate_keyboard_string (&event->key);
+
+  return event;
+}
+
+static void
+deliver_key_event (GdkWaylandDeviceData *device,
+                   uint32_t              time_,
+                   uint32_t              key,
+                   uint32_t              state)
+{
+  GdkEvent *event;
+
+  device->time = time_;
+  device->key_modifiers = gdk_keymap_get_modifier_state (device->keymap);
+
+  event = translate_key_event (device, time_, key, state);
+  _gdk_wayland_display_deliver_event (device->display, event);
+
+  GDK_NOTE (EVENTS,
+            g_message ("keyboard event, code %d, sym %d, "
+                       "string %s, mods 0x%x",
+                       event->key.hardware_keycode, event->key.keyval,
+                       event->key.string, event->key.state));
+
+  stop_key_repeat (device);
+
+  if (state == 0)
+    return;
+
+  start_key_repeat (device, key);
 }
 
 static void
