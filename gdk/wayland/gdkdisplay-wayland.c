@@ -27,7 +27,9 @@
 #include <sys/syscall.h>
 
 #include <glib.h>
+#include "gdkintl.h"
 #include "gdkwayland.h"
+#include "gdkprivate-wayland.h"
 #include "gdkdisplay.h"
 #include "gdkdisplay-wayland.h"
 #include "gdkscreen.h"
@@ -38,6 +40,8 @@
 #include "gdkprivate-wayland.h"
 #include "gdkglcontext-wayland.h"
 #include "pointer-gestures-unstable-v1-client-protocol.h"
+
+#include <canberra.h>
 
 /**
  * SECTION:wayland_interaction
@@ -522,7 +526,25 @@ gdk_wayland_display_get_default_screen (GdkDisplay *display)
 static void
 gdk_wayland_display_beep (GdkDisplay *display)
 {
+  ca_context *c;
+  ca_proplist *p;
+
   g_return_if_fail (GDK_IS_DISPLAY (display));
+
+  c = gdk_wayland_screen_get_ca_context (gdk_display_get_default_screen (display));
+  if (!c)
+    return;
+
+  ca_proplist_create (&p);
+  ca_proplist_sets (p, CA_PROP_EVENT_ID, "bell-window-system");
+  ca_proplist_sets (p, CA_PROP_EVENT_DESCRIPTION, _("Bell event"));
+  ca_proplist_sets (p, CA_PROP_CANBERRA_CACHE_CONTROL, "permanent");
+
+  ca_proplist_setf (p, CA_PROP_APPLICATION_PROCESS_ID, "%d", getpid ());
+
+  ca_context_play_full (c, 1, p, NULL, NULL);
+
+  ca_proplist_destroy (p);
 }
 
 static void
