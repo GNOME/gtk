@@ -9133,6 +9133,14 @@ gtk_window_compute_configure_request (GtkWindow    *window,
   gtk_window_compute_configure_request_size (window,
                                              &new_geometry, new_flags,
                                              &w, &h);
+  /* If not resizeable, set min/max to what we have */
+  if (!priv->resizable)
+    {
+      new_flags |= GDK_HINT_MAX_SIZE;
+
+      new_geometry.max_width = new_geometry.min_width = w;
+      new_geometry.max_height = new_geometry.min_height = h;
+    }
 
   gtk_window_constrain_size (window,
                              &new_geometry, new_flags,
@@ -9861,13 +9869,6 @@ gtk_window_compute_hints (GtkWindow   *window,
 	new_geometry->max_height += extra_height;
 
       new_geometry->max_height = MAX (new_geometry->max_height, new_geometry->min_height);
-    }
-  else if (!priv->resizable)
-    {
-      *new_flags |= GDK_HINT_MAX_SIZE;
-      
-      new_geometry->max_width = new_geometry->min_width;
-      new_geometry->max_height = new_geometry->min_height;
     }
 
   *new_flags |= GDK_HINT_WIN_GRAVITY;
