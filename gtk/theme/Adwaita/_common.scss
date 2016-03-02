@@ -2501,9 +2501,13 @@ scale {
   }
 
   &.fine-tune {
-    slider {
-      // something weird happening here
-      margin: -6px;
+    slider { margin: -6px; }
+
+    fill,
+    highlight,
+    trough {
+      border-radius: 5px;
+      -gtk-outline-radius: 7px;
     }
   }
 
@@ -2512,7 +2516,7 @@ scale {
     @extend %scale_trough;
 
     outline-offset: 2px;
-    -gtk-outline-radius: 4px;
+    -gtk-outline-radius: 5px;
   }
 
   // the colored part of the backing bit
@@ -2589,24 +2593,42 @@ scale {
   marks {
     color: gtkalpha(currentColor, 0.4);
 
-    @each $marks_pos, $marks_margin in (top, bottom),
-                                       (bottom, top),
-                                       (left, right),
-                                       (right, left) {
-      &.#{$marks_pos} {
+    @each $marks_class, $marks_pos, $marks_margin in (top, top, bottom),
+                                                     (bottom, bottom, top),
+                                                     (top, left, right),
+                                                     (bottom, right, left) {
+      &.#{$marks_class} {
         margin-#{$marks_margin}: $_marks_distance;
-        margin-#{$marks_pos}: -($_marks_distance+$_marks_lenght);
+        margin-#{$marks_pos}: -($_marks_distance + $_marks_lenght);
       }
     }
   }
 
-  &.horizontal  indicator {
-    min-height: $_marks_lenght;
-    min-width: 1px;
+  &.fine-tune marks {
+    @each $marks_class, $marks_pos, $marks_margin in (top, top, bottom),
+                                                     (bottom, bottom, top),
+                                                     (top, left, right),
+                                                     (bottom, right, left) {
+      &.#{$marks_pos} {
+        margin-#{$marks_margin}: $_marks_distance;
+        margin-#{$marks_pos}: -($_marks_distance + $_marks_lenght - 2px);
+      }
+    }
   }
-  &.vertical indicator {
-    min-height: 1px;
-    min-width: $_marks_lenght;
+
+  &.horizontal {
+    indicator {
+      min-height: $_marks_lenght;
+      min-width: 1px;
+    }
+    &.fine-tune indicator { min-height: ($_marks_lenght - 2px); }
+  }
+  &.vertical {
+    indicator {
+      min-height: 1px;
+      min-width: $_marks_lenght;
+    }
+    &.fine-tune indicator { min-width: ($_marks_lenght - 2px); }
   }
 
   // *WARNING* scale with marks madness following
@@ -2625,14 +2647,11 @@ scale {
                                (':backdrop', '-backdrop'),
                                (':backdrop:disabled', '-backdrop-insensitive') {
         @at-root %#{$marks_infix}-#{$dir_infix},
-        &.#{$dir_class} contents#{$nth_child} {
-          > trough > slider {
+        &.#{$dir_class} {
+          contents#{$nth_child} > trough > slider {
             &#{$state} {
               margin: -9px;
               $_scale_asset: 'assets/slider-#{$dir_infix}-#{$marks_infix}#{$state_infix}#{$suffix}';
-              //@warn $dir_class;
-              //@warn $marks_pos;
-              //@warn $_scale_asset; // uncomment for debuggin purpose...
               border-style: none;
               border-radius: 0;
 
@@ -2671,6 +2690,20 @@ scale {
               background-position: $_scale_slider_bg_pos;
               background-repeat: no-repeat;
               box-shadow: none;
+            }
+          }
+
+          &.fine-tune contents#{$nth_child} > trough > slider {
+            margin: -7px;
+
+            @if $dir_class == 'horizontal' {
+              @if $marks_infix == 'scale-has-marks-above' { margin-top: -11px; }
+              @else { margin-bottom: -11px; }
+            }
+
+            @else {
+              @if $marks_infix == 'scale-has-marks-above' { margin-left: -11px; }
+              @else { margin-right: -11px; }
             }
           }
         }
