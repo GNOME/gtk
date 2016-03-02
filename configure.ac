@@ -1922,7 +1922,6 @@ docs/tools/Makefile
 build/Makefile
 build/gtk-introspection-msvc.mak
 build/win32/Makefile
-build/win32/crypt/Makefile
 build/win32/vs9/Makefile
 build/win32/vs9/gtk3-version-paths.vsprops
 build/win32/vs10/Makefile
