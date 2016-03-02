@@ -2483,6 +2483,10 @@ treeview.view radio {
 
 scale {
   // sizing
+
+  $_marks_lenght: 6px;
+  $_marks_distance: 6px;
+
   min-height: 10px;
   min-width: 10px;
   padding: 12px;
@@ -2582,14 +2586,22 @@ scale {
     }
   }
 
-  marks { color: gtkalpha(currentColor, 0.4); }
-  &.horizontal mark indicator {
-    min-height: 8px;
+  marks {
+    color: gtkalpha(currentColor, 0.4);
+
+    &.top { margin-bottom: $_marks_distance; }
+    &.bottom { margin-top: $_marks_distance; }
+    &.left { margin-right: $_marks_distance; }
+    &.right { margin-left: $_marks_distance; }
+  }
+
+  &.horizontal  indicator {
+    min-height: $_marks_lenght;
     min-width: 1px;
   }
-  &.vertical mark indicator {
+  &.vertical indicator {
     min-height: 1px;
-    min-width: 8px;
+    min-width: $_marks_lenght;
   }
 
   // *WARNING* scale with marks madness following
