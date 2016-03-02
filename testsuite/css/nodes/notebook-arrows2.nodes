@@ -4,7 +4,7 @@
     header.top:dir(ltr)
       tabs:dir(ltr)
         arrow.down:disabled:dir(ltr)
-        tab:active:dir(ltr)
+        tab:dir(ltr):checked
           label#tab1:dir(ltr)
         tab:dir(ltr)
           label#tab2:dir(ltr)

@@ -7,7 +7,7 @@
       tabs:dir(ltr)
         tab:dir(ltr)
           label#tab2:dir(ltr)
-        tab:active:dir(ltr)
+        tab:dir(ltr):checked
           label#tab1:dir(ltr)
       button#start.text-button:dir(rtl)
         label:dir(ltr)
