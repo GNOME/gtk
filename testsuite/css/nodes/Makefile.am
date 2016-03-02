@@ -35,6 +35,7 @@ test_data = \
 	buttons.ui 		buttons.nodes 			\
 	checkbutton.ltr.ui	checkbutton.ltr.nodes		\
 	checkbutton.rtl.ui	checkbutton.rtl.nodes		\
+	combobox.ui		combobox.nodes			\
 	entries.ui 		entries.nodes 			\
 	expander.ltr.ui		expander.ltr.nodes		\
 	expander.rtl.ui		expander.rtl.nodes		\

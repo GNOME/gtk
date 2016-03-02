@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.0 -->
+  <object class="GtkWindow" id="window1">
+    <property name="can_focus">False</property>
+    <property name="type">popup</property>
+    <child>
+      <object class="GtkBox" id="box1">
+        <child>
+          <object class="GtkComboBoxText" id="combo1">
+            <property name="visible">True</property>
+            <items>
+              <item id="one">One</item>
+              <item id="two">Two</item>
+              <item id="three">Three</item>
+            </items>
+          </object>
+        </child>
+        <child>
+          <object class="GtkComboBoxText" id="combo2">
+            <property name="visible">True</property>
+            <property name="has-entry">True</property>
+            <items>
+              <item id="one">One</item>
+              <item id="two">Two</item>
+              <item id="three">Three</item>
+            </items>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
