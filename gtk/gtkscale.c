@@ -2018,7 +2018,7 @@ gtk_scale_add_mark (GtkScale        *scale,
                                NULL,
                                gtk_scale_render_mark_indicator,
                                mark, NULL);
-  if (mark->markup)
+  if (mark->markup && *mark->markup)
     mark->label_gadget =
       gtk_css_custom_gadget_new ("label",
                                  GTK_WIDGET (scale), mark->gadget,
