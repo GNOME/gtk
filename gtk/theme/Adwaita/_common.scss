@@ -280,7 +280,7 @@ entry {
   .linked:not(.vertical) > & { @extend %linked; }
   .linked:not(.vertical) > &:focus + entry,
   .linked:not(.vertical) > &:focus + button,
-  .linked:not(.vertical) > &:focus + combobox > button.combo { border-left-color: entry_focus_border(); }
+  .linked:not(.vertical) > &:focus + combobox > box > button.combo { border-left-color: entry_focus_border(); }
 
   // entry error and warning style
   @each $e_type, $e_color in (error, $error_color),
@@ -357,7 +357,7 @@ entry {
   // :not(:only-child) is a specificity bump hack.
   > entry:focus:not(:only-child) + entry,
   > entry:focus:not(:only-child) + button,
-  > entry:focus:not(:only-child) + combobox > button.combo { border-top-color: entry_focus_border(); }
+  > entry:focus:not(:only-child) + combobox > box > button.combo { border-top-color: entry_focus_border(); }
 }
 
 
@@ -1086,7 +1086,7 @@ combobox {
   }
 }
 
-.linked > combobox > button.combo {
+.linked > combobox > box > button.combo {
   // the combo is a composite widget so the way we do button linking doesn't
   // work, special case needed. See
   // https://bugzilla.gnome.org/show_bug.cgi?id=733979
@@ -1095,14 +1095,14 @@ combobox {
   &:dir(rtl) { @extend %linked_middle; } // specificity bump
 }
 
-.linked:not(.vertical) > combobox:first-child > button.combo { @extend %linked:first-child; }
-.linked:not(.vertical) > combobox:last-child > button.combo { @extend %linked:last-child; }
-.linked:not(.vertical) > combobox:only-child > button.combo { @extend %linked:only-child; }
+.linked:not(.vertical) > combobox:first-child > box > button.combo { @extend %linked:first-child; }
+.linked:not(.vertical) > combobox:last-child > box > button.combo { @extend %linked:last-child; }
+.linked:not(.vertical) > combobox:only-child > box > button.combo { @extend %linked:only-child; }
 
-.linked.vertical > combobox > button.combo { @extend %linked_vertical_middle; }
-.linked.vertical > combobox:first-child > button.combo { @extend %linked_vertical:first-child;}
-.linked.vertical > combobox:last-child > button.combo { @extend %linked_vertical:last-child; }
-.linked.vertical > combobox:only-child > button.combo { @extend %linked_vertical:only-child; }
+.linked.vertical > combobox > box > button.combo { @extend %linked_vertical_middle; }
+.linked.vertical > combobox:first-child > box > button.combo { @extend %linked_vertical:first-child;}
+.linked.vertical > combobox:last-child > box > button.combo { @extend %linked_vertical:last-child; }
+.linked.vertical > combobox:only-child > box > button.combo { @extend %linked_vertical:only-child; }
 
 
 /************
