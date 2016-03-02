@@ -95,8 +95,9 @@
  * combobox
  * ├── box.linked
  * │   ╰── button.combo
- * │       ├── cellview
- * │       ╰── arrow
+ * │       ╰── box
+ * │           ├── cellview
+ * │           ╰── arrow
  * ╰── window.popup
  * ]|
  *
@@ -109,7 +110,8 @@
  * ├── box.linked
  * │   ├── entry.combo
  * │   ╰── button.combo
- * │       ╰── arrow
+ * │       ╰── box
+ * │           ╰── arrow
  * ╰── window.popup
  * ]|
  *

@@ -74,15 +74,16 @@
  * # CSS nodes
  *
  * |[<!-- language="plain" -->
- * combobox.linked
- * ├── entry.combo
- * ├── button.combo
- * ╰── window.popup
+ * combobox
+ * ╰── box.linked
+ *     ├── entry.combo
+ *     ├── button.combo
+ *     ╰── window.popup
  * ]|
  *
  * GtkComboBoxText has a single CSS node with name combobox. It adds
  * the style class .combo to the main CSS nodes of its entry and button
- * children, and the .linked class to the main node.
+ * children, and the .linked class to the node of its internal box.
  */
 
 static void     gtk_combo_box_text_buildable_interface_init     (GtkBuildableIface *iface);
