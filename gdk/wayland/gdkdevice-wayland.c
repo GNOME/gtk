@@ -112,6 +112,10 @@ struct _GdkWaylandSeat
   guint32 repeat_count;
   GSettings *keyboard_settings;
 
+  guint32 slow_key_timer;
+  guint32 slow_key;
+  GSettings *a11y_settings;
+
   guint cursor_timeout_id;
   guint cursor_image_index;
   guint cursor_image_delay;
@@ -177,6 +181,10 @@ struct _GdkWaylandDeviceManagerClass
   GdkDeviceManagerClass parent_class;
 };
 
+static void process_key_event (GdkWaylandDeviceData *device,
+                               uint32_t              time_,
+                               uint32_t              key,
+                               uint32_t              state);
 static void deliver_key_event (GdkWaylandDeviceData *device,
                                uint32_t              time_,
                                uint32_t              key,
@@ -1519,6 +1527,7 @@ keyboard_handle_enter (void               *data,
 }
 
 static void stop_key_repeat (GdkWaylandDeviceData *device);
+static void stop_slow_keys (GdkWaylandDeviceData *device);
 
 static void
 keyboard_handle_leave (void               *data,
@@ -1539,6 +1548,7 @@ keyboard_handle_leave (void               *data,
    */
 
   stop_key_repeat (device);
+  stop_slow_keys (device);
 
   _gdk_wayland_display_update_serial (display, serial);
 
@@ -1690,6 +1700,130 @@ get_key_repeat (GdkWaylandDeviceData *device,
   return repeat;
 }
 
+static GSettings *
+get_a11y_settings (GdkWaylandDeviceData *device)
+{
+  if (!device->a11y_settings)
+    {
+      GSettingsSchemaSource *source;
+      GSettingsSchema *schema;
+
+      source = g_settings_schema_source_get_default ();
+      schema = g_settings_schema_source_lookup (source, "org.gnome.desktop.a11y.keyboard", FALSE);
+      if (schema != NULL)
+        {
+          device->a11y_settings = g_settings_new_full (schema, NULL, NULL);
+          g_settings_schema_unref (schema);
+        }
+    }
+
+  return device->a11y_settings;
+}
+
+static gboolean
+get_slow_keys_enabled (GdkWaylandDeviceData *device)
+{
+  GSettings *a11y_settings = get_a11y_settings (device);
+
+  if (a11y_settings)
+    return g_settings_get_boolean (a11y_settings, "slowkeys-enable");
+
+  return FALSE;
+}
+
+static gboolean
+get_slow_keys_beep_on_press (GdkWaylandDeviceData *device)
+{
+  GSettings *a11y_settings = get_a11y_settings (device);
+
+  if (a11y_settings)
+    return g_settings_get_boolean (a11y_settings, "slowkeys-beep-press");
+
+  return FALSE;
+}
+
+static gboolean
+get_slow_keys_beep_on_accept (GdkWaylandDeviceData *device)
+{
+  GSettings *a11y_settings = get_a11y_settings (device);
+
+  if (a11y_settings)
+    return g_settings_get_boolean (a11y_settings, "slowkeys-beep-accept");
+
+  return FALSE;
+}
+
+static gboolean
+get_slow_keys_beep_on_reject (GdkWaylandDeviceData *device)
+{
+  GSettings *a11y_settings = get_a11y_settings (device);
+
+  if (a11y_settings)
+    return g_settings_get_boolean (a11y_settings, "slowkeys-beep-reject");
+
+  return FALSE;
+}
+
+static gint
+get_slow_keys_delay (GdkWaylandDeviceData *device)
+{
+  GSettings *a11y_settings = get_a11y_settings (device);
+
+  if (a11y_settings)
+    return g_settings_get_int (a11y_settings, "slowkeys-delay");
+
+  return 100;
+}
+
+static void start_key_repeat (GdkWaylandDeviceData *device,
+                              uint32_t              key);
+
+static gboolean
+slow_key (gpointer data)
+{
+  GdkWaylandDeviceData *device = data;
+  uint32_t key;
+
+  key = device->slow_key;
+
+  if (key != 0)
+    deliver_key_event (device, device->time, key, 1);
+
+  device->slow_key = 0;
+  device->slow_key_timer = 0;
+
+  start_key_repeat (device, key);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+start_slow_keys (GdkWaylandDeviceData *device,
+                 uint32_t              key)
+{
+  guint timeout;
+
+  timeout = get_slow_keys_delay (device);
+
+  device->slow_key = key;
+
+  device->slow_key_timer =
+    gdk_threads_add_timeout (timeout, slow_key, device);
+  g_source_set_name_by_id (device->slow_key_timer, "[gtk+] slow_key");
+}
+
+static void
+stop_slow_keys (GdkWaylandDeviceData *device)
+{
+  device->slow_key = 0;
+
+  if (device->slow_key_timer)
+    {
+      g_source_remove (device->slow_key_timer);
+      device->slow_key_timer = 0;
+    }
+}
+
 static void
 start_key_repeat (GdkWaylandDeviceData *device,
                   uint32_t              key)
@@ -1705,10 +1839,9 @@ start_key_repeat (GdkWaylandDeviceData *device,
   if (!get_key_repeat (device, &delay, &interval))
     return;
 
-  device->repeat_count++;
   device->repeat_key = key;
 
-  if (device->repeat_count == 1)
+  if (device->repeat_count == 0)
     timeout = delay;
   else
     timeout = interval;
@@ -1730,7 +1863,7 @@ stop_key_repeat (GdkWaylandDeviceData *device)
   g_clear_pointer (&device->repeat_callback, wl_callback_destroy);
 }
 
-static Gdkevent *
+static GdkEvent *
 translate_key_event (GdkWaylandDeviceData *device,
                      uint32_t              time_,
                      uint32_t              key,
@@ -1753,7 +1886,7 @@ translate_key_event (GdkWaylandDeviceData *device,
   event->key.group = 0;
   event->key.hardware_keycode = key;
   event->key.keyval = sym;
-  event->key.is_modifier = _gdk_wayland_keymap_key_is_modifier (keymap, key);
+  event->key.is_modifier = _gdk_wayland_keymap_key_is_modifier (device->keymap, key);
 
   translate_keyboard_string (&event->key);
 
@@ -1768,24 +1901,69 @@ deliver_key_event (GdkWaylandDeviceData *device,
 {
   GdkEvent *event;
 
-  device->time = time_;
-  device->key_modifiers = gdk_keymap_get_modifier_state (device->keymap);
+  if (state == 1)
+    {
+      device->repeat_count++;
+      if (get_slow_keys_enabled (device) &&
+          get_slow_keys_beep_on_accept (device))
+        gdk_display_beep (device->display);
+    }
 
   event = translate_key_event (device, time_, key, state);
   _gdk_wayland_display_deliver_event (device->display, event);
+}
+
+static void
+process_key_event (GdkWaylandDeviceData *device,
+                   uint32_t              time_,
+                   uint32_t              key,
+                   uint32_t              state)
+{
+  gboolean deliver = TRUE;
+
+  device->time = time_;
+  device->key_modifiers = gdk_keymap_get_modifier_state (device->keymap);
 
   GDK_NOTE (EVENTS,
-            g_message ("keyboard event, code %d, sym %d, "
-                       "string %s, mods 0x%x",
-                       event->key.hardware_keycode, event->key.keyval,
-                       event->key.string, event->key.state));
+            g_message ("process key %s, code %d, modifiers 0x%x",
+                       state ? "press" : "release",
+                       key, device->key_modifiers));
+
+  if (get_slow_keys_enabled (device))
+    {
+      if (state)
+        {
+          if (device->slow_key == key)
+            return;
+
+          if (device->repeat_count == 0 &&
+              get_slow_keys_beep_on_press (device))
+            gdk_display_beep (device->display);
+
+          start_slow_keys (device, key);
+          deliver = FALSE;
+        }
+      else
+        {
+          if (device->slow_key == key)
+            {
+              if (get_slow_keys_beep_on_reject (device))
+                gdk_display_beep (device->display);
+              deliver = FALSE;
+            }
+          stop_slow_keys (device);
+        }
+    }
 
   stop_key_repeat (device);
+  if (!get_slow_keys_enabled (device))
+    {
+      if (state == 1)
+        start_key_repeat (device, key);
+    }
 
-  if (state == 0)
-    return;
-
-  start_key_repeat (device, key);
+  if (deliver)
+    deliver_key_event (device, time_, key, state);
 }
 
 static void
@@ -1798,6 +1976,7 @@ sync_after_repeat_callback (void               *data,
   g_clear_pointer (&device->repeat_callback, wl_callback_destroy);
 
   deliver_key_event (device, device->time, device->repeat_key, 1);
+  start_key_repeat (device, device->repeat_key);
 }
 
 static const struct wl_callback_listener sync_after_repeat_callback_listener = {
@@ -1822,6 +2001,8 @@ keyboard_repeat (gpointer data)
                             &sync_after_repeat_callback_listener,
                             device);
 
+  device->repeat_timer = 0;
+
   return G_SOURCE_REMOVE;
 }
 
@@ -1841,7 +2022,8 @@ keyboard_handle_key (void               *data,
 
   device->repeat_count = 0;
   _gdk_wayland_display_update_serial (display, serial);
-  deliver_key_event (data, time, key + 8, state_w);
+
+  process_key_event (data, time, key + 8, state_w);
 }
 
 static void
@@ -2671,10 +2853,12 @@ gdk_wayland_seat_finalize (GObject *object)
   wl_surface_destroy (seat->pointer_surface);
   /* FIXME: destroy data_device */
   g_clear_object (&seat->keyboard_settings);
+  g_clear_object (&seat->a11y_settings);
   g_clear_object (&seat->drop_context);
   g_hash_table_destroy (seat->touches);
   gdk_window_destroy (seat->foreign_dnd_window);
   stop_key_repeat (seat);
+  stop_slow_keys (seat);
 
   G_OBJECT_CLASS (gdk_wayland_seat_parent_class)->finalize (object);
 }
