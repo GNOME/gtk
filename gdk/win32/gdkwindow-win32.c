@@ -3133,7 +3133,12 @@ gdk_win32_window_do_move_resize_drag (GdkWindow *window,
             rect.top != new_rect.top))
     {
       POINT window_position;
+      SIZE window_size;
       BLENDFUNCTION blender;
+      HDC hdc;
+      SIZE *window_size_ptr;
+      POINT source_point = { 0, 0 };
+      POINT *source_point_ptr;
 
       context->native_move_resize_pending = FALSE;
 
@@ -3150,6 +3155,8 @@ gdk_win32_window_do_move_resize_drag (GdkWindow *window,
 
       window_position.x = new_rect.left;
       window_position.y = new_rect.top;
+      window_size.cx = new_rect.right - new_rect.left;
+      window_size.cy = new_rect.bottom - new_rect.top;
 
       blender.BlendOp = AC_SRC_OVER;
       blender.BlendFlags = 0;
@@ -3157,16 +3164,41 @@ gdk_win32_window_do_move_resize_drag (GdkWindow *window,
       blender.SourceConstantAlpha = impl->layered_opacity * 255;
 
       /* Size didn't change, so move immediately, no need to wait for redraw */
+      /* Strictly speaking, we don't need to supply hdc, source_point and
+       * window_size here. However, without these arguments
+       * the window moves but does not update its contents on Windows 7 when
+       * desktop composition is off. This forces us to provide hdc and
+       * source_point. window_size is here to avoid the function
+       * inexplicably failing with error 317.
+       */
       if (impl->layered)
-        API_CALL (UpdateLayeredWindow, (GDK_WINDOW_HWND (window), NULL,
-                                      &window_position, NULL, NULL, NULL,
-                                      0, &blender, ULW_ALPHA));
+        {
+          if (gdk_screen_is_composited (gdk_window_get_screen (window)))
+            {
+              hdc = NULL;
+              window_size_ptr = NULL;
+              source_point_ptr = NULL;
+            }
+          else
+            {
+              hdc = cairo_win32_surface_get_dc (impl->cache_surface);
+              window_size_ptr = &window_size;
+              source_point_ptr = &source_point;
+            }
+
+          API_CALL (UpdateLayeredWindow, (GDK_WINDOW_HWND (window), NULL,
+                                          &window_position, window_size_ptr,
+                                          hdc, source_point_ptr,
+                                          0, &blender, ULW_ALPHA));
+        }
       else
-        API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window),
-                                 SWP_NOZORDER_SPECIFIED,
-                                 window_position.x, window_position.y,
-                                 0, 0,
-                                 SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOSIZE));
+        {
+          API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window),
+                                   SWP_NOZORDER_SPECIFIED,
+                                   window_position.x, window_position.y,
+                                   0, 0,
+                                   SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOSIZE));
+        }
     }
 }
 
