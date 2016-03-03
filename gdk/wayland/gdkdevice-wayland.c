@@ -116,6 +116,10 @@ struct _GdkWaylandSeat
   guint32 slow_key;
   guint32 ignore_key_timer;
   guint32 ignore_key;
+  uint32_t mods_depressed;
+  uint32_t mods_latched;
+  uint32_t mods_locked;
+  uint32_t group;
   GSettings *a11y_settings;
 
   guint cursor_timeout_id;
@@ -1821,6 +1825,49 @@ get_toggle_keys_enabled (GdkWaylandDeviceData *device)
   return FALSE;
 }
 
+static gboolean
+get_sticky_keys_enabled (GdkWaylandDeviceData *device)
+{
+  GSettings *a11y_settings = get_a11y_settings (device);
+
+  if (a11y_settings)
+    return g_settings_get_boolean (a11y_settings, "stickykeys-enable");
+
+  return FALSE;
+}
+
+static void
+set_sticky_keys_enabled (GdkWaylandDeviceData *device,
+                         gboolean              enabled)
+{
+  GSettings *a11y_settings = get_a11y_settings (device);
+
+  if (a11y_settings)
+    g_settings_set_boolean (a11y_settings, "stickykeys-enable", enabled);
+}
+
+static gboolean
+get_sticky_keys_modifier_beep (GdkWaylandDeviceData *device)
+{
+  GSettings *a11y_settings = get_a11y_settings (device);
+
+  if (a11y_settings)
+    return g_settings_get_boolean (a11y_settings, "stickykeys-modifier-beep");
+
+  return FALSE;
+}
+
+static gboolean
+get_sticky_keys_two_key_off (GdkWaylandDeviceData *device)
+{
+  GSettings *a11y_settings = get_a11y_settings (device);
+
+  if (a11y_settings)
+    return g_settings_get_boolean (a11y_settings, "stickykeys-two-key-off");
+
+  return FALSE;
+}
+
 static void start_key_repeat (GdkWaylandDeviceData *device,
                               uint32_t              key);
 
@@ -1996,10 +2043,12 @@ deliver_key_event (GdkWaylandDeviceData *device,
                    uint32_t              state)
 {
   GdkEvent *event;
+  struct xkb_state *xkb_state;
 
   if (state == 1)
     {
       device->repeat_count++;
+
       if (get_slow_keys_enabled (device) &&
           get_slow_keys_beep_on_accept (device))
         gdk_display_beep (device->display);
@@ -2007,6 +2056,19 @@ deliver_key_event (GdkWaylandDeviceData *device,
 
   event = translate_key_event (device, time_, key, state);
   _gdk_wayland_display_deliver_event (device->display, event);
+
+  if (state == 1)
+    {
+      if (get_sticky_keys_enabled (device) &&
+          !_gdk_wayland_keymap_key_is_modifier (device->keymap, key))
+        {
+          device->mods_latched = 0;
+
+          device->key_modifiers = device->mods_locked;
+          xkb_state = _gdk_wayland_keymap_get_xkb_state (device->keymap);
+          xkb_state_update_mask (xkb_state, 0, 0, device->mods_locked, device->group, 0, 0);
+        }
+    }
 }
 
 static void
@@ -2016,6 +2078,7 @@ process_key_event (GdkWaylandDeviceData *device,
                    uint32_t              state)
 {
   gboolean deliver = TRUE;
+  struct xkb_state *xkb_state;
 
   device->time = time_;
   device->key_modifiers = gdk_keymap_get_modifier_state (device->keymap);
@@ -2024,6 +2087,22 @@ process_key_event (GdkWaylandDeviceData *device,
             g_message ("process key %s, code %d, modifiers 0x%x",
                        state ? "press" : "release",
                        key, device->key_modifiers));
+
+  if (get_sticky_keys_enabled (device))
+    {
+      if (state && device->mods_depressed &&
+          get_sticky_keys_two_key_off (device))
+        {
+          set_sticky_keys_enabled (device, FALSE);
+          device->mods_depressed = 0;
+          device->mods_latched = 0;
+          device->mods_locked = 0;
+
+          device->key_modifiers = 0;
+          xkb_state = _gdk_wayland_keymap_get_xkb_state (device->keymap);
+          xkb_state_update_mask (xkb_state, 0, 0, 0, device->group, 0, 0);
+        }
+    }
 
   if (get_slow_keys_enabled (device))
     {
@@ -2159,11 +2238,41 @@ keyboard_handle_modifiers (void               *data,
   PangoDirection direction;
   GdkModifierType modifiers;
 
+  device->mods_depressed = mods_depressed;
+
+  if (get_sticky_keys_enabled (device))
+    {
+      if (mods_depressed == 0)
+        return;
+
+      if (get_sticky_keys_modifier_beep (device))
+        gdk_display_beep (device->display);
+
+      if (device->mods_locked & mods_depressed)
+        {
+          device->mods_locked &= ~mods_depressed;
+        }
+      else if (device->mods_latched == mods_depressed)
+        {
+          device->mods_locked = mods_depressed;
+          device->mods_latched = 0;
+        }
+      else
+        {
+          device->mods_latched = mods_depressed;
+        }
+
+      mods_depressed = 0;
+      mods_latched = device->mods_latched;
+      mods_locked = device->mods_locked;
+    }
+
   keymap = device->keymap;
   direction = gdk_keymap_get_direction (keymap);
   xkb_state = _gdk_wayland_keymap_get_xkb_state (keymap);
   modifiers = device->key_modifiers;
   device->key_modifiers = mods_depressed | mods_latched | mods_locked;
+  device->group = group;
 
   xkb_state_update_mask (xkb_state, mods_depressed, mods_latched, mods_locked, group, 0, 0);
 
