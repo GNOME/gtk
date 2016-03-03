@@ -114,6 +114,8 @@ struct _GdkWaylandSeat
 
   guint32 slow_key_timer;
   guint32 slow_key;
+  guint32 ignore_key_timer;
+  guint32 ignore_key;
   GSettings *a11y_settings;
 
   guint cursor_timeout_id;
@@ -1775,6 +1777,39 @@ get_slow_keys_delay (GdkWaylandDeviceData *device)
   return 100;
 }
 
+static gboolean
+get_bounce_keys_enabled (GdkWaylandDeviceData *device)
+{
+  GSettings *a11y_settings = get_a11y_settings (device);
+
+  if (a11y_settings)
+    return g_settings_get_boolean (a11y_settings, "bouncekeys-enable");
+
+  return FALSE;
+}
+
+static gboolean
+get_bounce_keys_beep_on_reject (GdkWaylandDeviceData *device)
+{
+  GSettings *a11y_settings = get_a11y_settings (device);
+
+  if (a11y_settings)
+    return g_settings_get_boolean (a11y_settings, "bouncekeys-beep-reject");
+
+  return FALSE;
+}
+
+static gint
+get_bounce_keys_delay (GdkWaylandDeviceData *device)
+{
+  GSettings *a11y_settings = get_a11y_settings (device);
+
+  if (a11y_settings)
+    return g_settings_get_int (a11y_settings, "bouncekeys-delay");
+
+  return 100;
+}
+
 static void start_key_repeat (GdkWaylandDeviceData *device,
                               uint32_t              key);
 
@@ -1821,6 +1856,44 @@ stop_slow_keys (GdkWaylandDeviceData *device)
     {
       g_source_remove (device->slow_key_timer);
       device->slow_key_timer = 0;
+    }
+}
+
+static gboolean
+bounce_key (gpointer data)
+{
+  GdkWaylandDeviceData *device = data;
+
+  device->ignore_key = 0;
+  device->ignore_key_timer = 0;
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+start_bounce_keys (GdkWaylandDeviceData *device,
+                   uint32_t              key)
+{
+  guint timeout;
+
+  timeout = get_bounce_keys_delay (device);
+
+  device->ignore_key = key;
+
+  device->ignore_key_timer =
+    gdk_threads_add_timeout (timeout, bounce_key, device);
+  g_source_set_name_by_id (device->ignore_key_timer, "[gtk+] bounce_key");
+}
+
+static void
+stop_bounce_keys (GdkWaylandDeviceData *device)
+{
+  device->ignore_key = 0;
+
+  if (device->ignore_key_timer)
+    {
+      g_source_remove (device->ignore_key_timer);
+      device->ignore_key_timer = 0;
     }
 }
 
@@ -1952,6 +2025,28 @@ process_key_event (GdkWaylandDeviceData *device,
               deliver = FALSE;
             }
           stop_slow_keys (device);
+        }
+    }
+
+  if (get_bounce_keys_enabled (device))
+    {
+      if (state)
+        {
+          if (device->ignore_key == key)
+            {
+              if (get_bounce_keys_beep_on_reject (device))
+                gdk_display_beep (device->display);
+              deliver = FALSE;
+            }
+        }
+      else
+        {
+          if (device->ignore_key == key)
+            {
+              stop_bounce_keys (device);
+              deliver = FALSE;
+            }
+          start_bounce_keys (device, key);
         }
     }
 
@@ -2859,6 +2954,7 @@ gdk_wayland_seat_finalize (GObject *object)
   gdk_window_destroy (seat->foreign_dnd_window);
   stop_key_repeat (seat);
   stop_slow_keys (seat);
+  stop_bounce_keys (seat);
 
   G_OBJECT_CLASS (gdk_wayland_seat_parent_class)->finalize (object);
 }
