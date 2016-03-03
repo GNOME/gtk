@@ -289,13 +289,6 @@ static GtkRevealerTransitionType
 effective_transition (GtkRevealer *revealer)
 {
   GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
-  gboolean animations_enabled;
-
-  g_object_get (gtk_widget_get_settings (GTK_WIDGET (revealer)),
-                "gtk-enable-animations", &animations_enabled,
-                NULL);
-  if (!animations_enabled)
-    return GTK_REVEALER_TRANSITION_TYPE_NONE;
 
   if (gtk_widget_get_direction (GTK_WIDGET (revealer)) == GTK_TEXT_DIR_RTL)
     {
@@ -339,13 +332,6 @@ gtk_revealer_get_child_allocation (GtkRevealer   *revealer,
           transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT)
         gtk_widget_get_preferred_width_for_height (child, MAX (0, allocation->height - vertical_padding), NULL,
                                                    &child_allocation->width);
-      else if (transition == GTK_REVEALER_TRANSITION_TYPE_NONE)
-        {
-          gtk_widget_get_preferred_width_for_height (child, MAX (0, allocation->height - vertical_padding), NULL,
-                                                     &child_allocation->width);
-          gtk_widget_get_preferred_height_for_width (child, MAX (0, allocation->width - horizontal_padding), NULL,
-                                                     &child_allocation->height);
-        }
       else
         gtk_widget_get_preferred_height_for_width (child, MAX (0, allocation->width - horizontal_padding), NULL,
                                                    &child_allocation->height);
@@ -636,6 +622,7 @@ gtk_revealer_start_animation (GtkRevealer *revealer,
   GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
   GtkWidget *widget = GTK_WIDGET (revealer);
   GtkRevealerTransitionType transition;
+  gboolean animations_enabled;
 
   if (priv->target_pos == target)
     return;
@@ -643,10 +630,15 @@ gtk_revealer_start_animation (GtkRevealer *revealer,
   priv->target_pos = target;
   g_object_notify_by_pspec (G_OBJECT (revealer), props[PROP_REVEAL_CHILD]);
 
+  g_object_get (gtk_widget_get_settings (GTK_WIDGET (revealer)),
+                "gtk-enable-animations", &animations_enabled,
+                NULL);
+
   transition = effective_transition (revealer);
   if (gtk_widget_get_mapped (widget) &&
       priv->transition_duration != 0 &&
-      transition != GTK_REVEALER_TRANSITION_TYPE_NONE)
+      transition != GTK_REVEALER_TRANSITION_TYPE_NONE &&
+      animations_enabled)
     {
       priv->source_pos = priv->current_pos;
       priv->start_time = gdk_frame_clock_get_frame_time (gtk_widget_get_frame_clock (widget));
