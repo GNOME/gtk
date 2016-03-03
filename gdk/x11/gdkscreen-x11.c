@@ -653,6 +653,9 @@ init_randr15 (GdkScreen *screen)
         XRRGetOutputInfo (x11_screen->xdisplay, resources, output);
       GdkX11Monitor monitor;
 
+      if (output_info == NULL)
+        continue;
+
       /* Non RandR1.2+ X driver have output name "default" */
       randr12_compat |= !g_strcmp0 (output_info->name, "default");
 
