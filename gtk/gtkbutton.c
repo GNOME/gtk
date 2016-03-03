@@ -42,7 +42,8 @@
  * image or label, respectively. It may also receive the .flat style class.
  *
  * Other style classes that are commonly used with GtkButton include
- * .suggested-action and .destructive-action.
+ * .suggested-action and .destructive-action. In special cases, buttons
+ * can be made round by adding the .circular style class.
  *
  * Button-like widgets like #GtkToggleButton, #GtkMenuButton, #GtkVolumeButton,
  * #GtkLockButton, #GtkColorButton, #GtkFontButton or #GtkFileChooserButton use
