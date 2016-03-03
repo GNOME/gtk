@@ -1110,14 +1110,14 @@ combobox {
  ************/
 toolbar {
   -GtkWidget-window-dragging: true;
-  padding: 4px;
+  padding: 4px 3px 3px 4px;
   background-color: $bg_color;
   // on OSD
   .osd & { background-color: transparent; }
 
   // stand-alone OSD toolbars
   &.osd {
-    padding: 13px;
+    padding: 13px 12px 12px 13px;
     border: none;
     border-radius: 5px;
     background-color: $osd_bg_color;
@@ -1129,8 +1129,18 @@ toolbar {
   &.osd.bottom { border-radius: 0; } // positional classes for `attached` osd toolbars
 
   // toolbar separators
-  &.horizontal separator { margin: 0 6px; }
-  &.vertical separator { margin: 6px 0; }
+  &.horizontal separator { margin: 0 7px 1px 6px; }
+  &.vertical separator { margin: 6px 1px 7px 0; }
+
+  &:not(.inline-toolbar) {
+    switch,
+    scale,
+    entry,
+    button {
+      margin-right: 1px;
+      margin-bottom: 1px;
+      }
+  }
 }
 
 //searchbar, location-bar & inline-toolbar

@@ -1424,14 +1424,14 @@ combobox arrow {
 toolbar, .inline-toolbar, searchbar,
 .location-bar {
   -GtkWidget-window-dragging: true;
-  padding: 4px;
+  padding: 4px 3px 3px 4px;
   background-color: #e8e8e7; }
   .osd toolbar, .osd .inline-toolbar, .osd searchbar,
   .osd .location-bar {
     background-color: transparent; }
   toolbar.osd, .osd.inline-toolbar, searchbar.osd,
   .osd.location-bar {
-    padding: 13px;
+    padding: 13px 12px 12px 13px;
     border: none;
     border-radius: 5px;
     background-color: rgba(32, 37, 38, 0.8); }
@@ -1443,10 +1443,30 @@ toolbar, .inline-toolbar, searchbar,
     border-radius: 0; }
   toolbar.horizontal separator, .horizontal.inline-toolbar separator, searchbar.horizontal separator,
   .horizontal.location-bar separator {
-    margin: 0 6px; }
+    margin: 0 7px 1px 6px; }
   toolbar.vertical separator, .vertical.inline-toolbar separator, searchbar.vertical separator,
   .vertical.location-bar separator {
-    margin: 6px 0; }
+    margin: 6px 1px 7px 0; }
+  toolbar:not(.inline-toolbar) switch, .inline-toolbar:not(.inline-toolbar) switch, searchbar:not(.inline-toolbar) switch,
+  .location-bar:not(.inline-toolbar) switch,
+  toolbar:not(.inline-toolbar) scale,
+  .inline-toolbar:not(.inline-toolbar) scale,
+  searchbar:not(.inline-toolbar) scale,
+  .location-bar:not(.inline-toolbar) scale,
+  toolbar:not(.inline-toolbar) entry,
+  .inline-toolbar:not(.inline-toolbar) entry,
+  searchbar:not(.inline-toolbar) entry,
+  .location-bar:not(.inline-toolbar) entry,
+  toolbar:not(.inline-toolbar) spinbutton:not(.vertical),
+  .inline-toolbar:not(.inline-toolbar) spinbutton:not(.vertical),
+  searchbar:not(.inline-toolbar) spinbutton:not(.vertical),
+  .location-bar:not(.inline-toolbar) spinbutton:not(.vertical),
+  toolbar:not(.inline-toolbar) button,
+  .inline-toolbar:not(.inline-toolbar) button,
+  searchbar:not(.inline-toolbar) button,
+  .location-bar:not(.inline-toolbar) button {
+    margin-right: 1px;
+    margin-bottom: 1px; }
 
 .inline-toolbar {
   border-width: 0 1px 1px;
