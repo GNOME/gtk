@@ -120,6 +120,9 @@ struct _GdkWaylandSeat
   uint32_t mods_latched;
   uint32_t mods_locked;
   uint32_t group;
+  uint32_t shift_count;
+  uint32_t last_shift_time;
+  guint32 toggle_slow_keys_timer;
   GSettings *a11y_settings;
 
   guint cursor_timeout_id;
@@ -1737,6 +1740,22 @@ get_slow_keys_enabled (GdkWaylandDeviceData *device)
   return FALSE;
 }
 
+static void
+set_slow_keys_enabled (GdkWaylandDeviceData *device,
+                       gboolean              enabled)
+{
+  GSettings *a11y_settings = get_a11y_settings (device);
+
+  if (a11y_settings)
+    g_settings_set_boolean (a11y_settings, "slowkeys-enable", enabled);
+}
+
+static void
+toggle_slow_keys_enabled (GdkWaylandDeviceData *device)
+{
+  set_slow_keys_enabled (device, !get_slow_keys_enabled (device));
+}
+
 static gboolean
 get_slow_keys_beep_on_press (GdkWaylandDeviceData *device)
 {
@@ -1846,6 +1865,12 @@ set_sticky_keys_enabled (GdkWaylandDeviceData *device,
     g_settings_set_boolean (a11y_settings, "stickykeys-enable", enabled);
 }
 
+static void
+toggle_sticky_keys_enabled (GdkWaylandDeviceData *device)
+{
+  set_sticky_keys_enabled (device, !get_sticky_keys_enabled (device));
+}
+
 static gboolean
 get_sticky_keys_modifier_beep (GdkWaylandDeviceData *device)
 {
@@ -1864,6 +1889,17 @@ get_sticky_keys_two_key_off (GdkWaylandDeviceData *device)
 
   if (a11y_settings)
     return g_settings_get_boolean (a11y_settings, "stickykeys-two-key-off");
+
+  return FALSE;
+}
+
+static gboolean
+get_access_keys_enabled (GdkWaylandDeviceData *device)
+{
+  GSettings *a11y_settings = get_a11y_settings (device);
+
+  if (a11y_settings)
+    return g_settings_get_boolean (a11y_settings, "enable");
 
   return FALSE;
 }
@@ -2006,6 +2042,35 @@ stop_key_repeat (GdkWaylandDeviceData *device)
   g_clear_pointer (&device->repeat_callback, wl_callback_destroy);
 }
 
+static gboolean
+toggle_slow_keys (gpointer data)
+{
+  GdkWaylandDeviceData *device = data;
+
+  toggle_slow_keys_enabled (device);
+  device->toggle_slow_keys_timer = 0;
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+start_toggle_slow_keys (GdkWaylandDeviceData *device)
+{
+  device->toggle_slow_keys_timer =
+    gdk_threads_add_timeout (8000, toggle_slow_keys, device);
+  g_source_set_name_by_id (device->toggle_slow_keys_timer, "[gtk+] toggle_slow_keys");
+}
+
+static void
+stop_toggle_slow_keys (GdkWaylandDeviceData *device)
+{
+  if (device->toggle_slow_keys_timer)
+    {
+      g_source_remove (device->toggle_slow_keys_timer);
+      device->toggle_slow_keys_timer = 0;
+    }
+}
+
 static GdkEvent *
 translate_key_event (GdkWaylandDeviceData *device,
                      uint32_t              time_,
@@ -2101,6 +2166,45 @@ process_key_event (GdkWaylandDeviceData *device,
           device->key_modifiers = 0;
           xkb_state = _gdk_wayland_keymap_get_xkb_state (device->keymap);
           xkb_state_update_mask (xkb_state, 0, 0, 0, device->group, 0, 0);
+        }
+    }
+
+  if (get_access_keys_enabled (device))
+    {
+      xkb_keysym_t sym;
+
+      xkb_state = _gdk_wayland_keymap_get_xkb_state (device->keymap);
+      sym = xkb_state_key_get_one_sym (xkb_state, key);
+      if (state)
+        {
+          if (sym == XKB_KEY_Shift_L || sym == XKB_KEY_Shift_R)
+            {
+              start_toggle_slow_keys (device);
+              if (!get_slow_keys_enabled (device))
+                {
+                  if (time_ - device->last_shift_time > 15000)
+                    device->shift_count = 1;
+                  else
+                    device->shift_count++;
+                  device->last_shift_time = time_;
+                }
+            }
+          else
+            stop_toggle_slow_keys (device);
+        }
+      else
+        {
+          if (sym == XKB_KEY_Shift_L || sym == XKB_KEY_Shift_R)
+            {
+              stop_toggle_slow_keys (device);
+              if (device->shift_count >= 5)
+                {
+                  toggle_sticky_keys_enabled (device);
+                  device->shift_count = 0;
+                }
+            }
+          else
+            device->shift_count = 0;
         }
     }
 
@@ -3091,6 +3195,7 @@ gdk_wayland_seat_finalize (GObject *object)
   stop_key_repeat (seat);
   stop_slow_keys (seat);
   stop_bounce_keys (seat);
+  stop_toggle_slow_keys (seat);
 
   G_OBJECT_CLASS (gdk_wayland_seat_parent_class)->finalize (object);
 }
