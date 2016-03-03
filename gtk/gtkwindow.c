@@ -9138,8 +9138,10 @@ gtk_window_compute_configure_request (GtkWindow    *window,
     {
       new_flags |= GDK_HINT_MAX_SIZE;
 
-      new_geometry.max_width = new_geometry.min_width = w;
-      new_geometry.max_height = new_geometry.min_height = h;
+      new_geometry.min_width = MAX (w, new_geometry.min_width);
+      new_geometry.max_width = new_geometry.min_width;
+      new_geometry.min_height = MAX (h, new_geometry.min_height);
+      new_geometry.max_height = new_geometry.min_height;
     }
 
   gtk_window_constrain_size (window,
