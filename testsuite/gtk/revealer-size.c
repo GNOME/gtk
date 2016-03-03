@@ -11,7 +11,7 @@ keep_size (int      direction,
   gboolean animations_before;
   int min_height, min_width;
   int min_child_width, min_child_height;
-  GtkRevealer *revealer = gtk_revealer_new ();
+  GtkRevealer *revealer = GTK_REVEALER (gtk_revealer_new ());
   GtkWidget   *child    = gtk_button_new_with_label ("Some Text!");
   GtkSettings *settings = gtk_settings_get_default ();
 
@@ -110,7 +110,7 @@ slide_down_animations ()
 static void
 slide_down_no_animations ()
 {
-  keep_size (KEEP_WIDTH, GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN, TRUE);
+  keep_size (KEEP_WIDTH, GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN, FALSE);
 }
 
 static void
@@ -122,7 +122,7 @@ slide_up_animations ()
 static void
 slide_up_no_animations ()
 {
-  keep_size (KEEP_WIDTH, GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP, TRUE);
+  keep_size (KEEP_WIDTH, GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP, FALSE);
 }
 
 int
