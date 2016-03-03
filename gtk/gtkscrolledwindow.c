@@ -477,13 +477,13 @@ update_scrollbar_positions (GtkScrolledWindow *scrolled_window)
           (priv->window_placement == GTK_CORNER_TOP_LEFT ||
            priv->window_placement == GTK_CORNER_BOTTOM_LEFT)))
         {
-          gtk_style_context_add_class (context, GTK_STYLE_CLASS_LEFT);
-          gtk_style_context_remove_class (context, GTK_STYLE_CLASS_RIGHT);
+          gtk_style_context_add_class (context, GTK_STYLE_CLASS_RIGHT);
+          gtk_style_context_remove_class (context, GTK_STYLE_CLASS_LEFT);
         }
       else
         {
-          gtk_style_context_remove_class (context, GTK_STYLE_CLASS_LEFT);
-          gtk_style_context_add_class (context, GTK_STYLE_CLASS_RIGHT);
+          gtk_style_context_remove_class (context, GTK_STYLE_CLASS_RIGHT);
+          gtk_style_context_add_class (context, GTK_STYLE_CLASS_LEFT);
         }
     }
 }
