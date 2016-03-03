@@ -1810,6 +1810,17 @@ get_bounce_keys_delay (GdkWaylandDeviceData *device)
   return 100;
 }
 
+static gboolean
+get_toggle_keys_enabled (GdkWaylandDeviceData *device)
+{
+  GSettings *a11y_settings = get_a11y_settings (device);
+
+  if (a11y_settings)
+    return g_settings_get_boolean (a11y_settings, "togglekeys-enable");
+
+  return FALSE;
+}
+
 static void start_key_repeat (GdkWaylandDeviceData *device,
                               uint32_t              key);
 
@@ -1894,6 +1905,18 @@ stop_bounce_keys (GdkWaylandDeviceData *device)
     {
       g_source_remove (device->ignore_key_timer);
       device->ignore_key_timer = 0;
+    }
+}
+
+static void
+toggle_keys_apply (GdkWaylandDeviceData *device,
+                   GdkModifierType       from,
+                   GdkModifierType       to)
+{
+  if (get_toggle_keys_enabled (device))
+    {
+      if ((from ^ to) & (GDK_LOCK_MASK | GDK_MOD4_MASK))
+        gdk_display_beep (device->display);
     }
 }
 
@@ -2134,13 +2157,17 @@ keyboard_handle_modifiers (void               *data,
   GdkKeymap *keymap;
   struct xkb_state *xkb_state;
   PangoDirection direction;
+  GdkModifierType modifiers;
 
   keymap = device->keymap;
   direction = gdk_keymap_get_direction (keymap);
   xkb_state = _gdk_wayland_keymap_get_xkb_state (keymap);
+  modifiers = device->key_modifiers;
   device->key_modifiers = mods_depressed | mods_latched | mods_locked;
 
   xkb_state_update_mask (xkb_state, mods_depressed, mods_latched, mods_locked, group, 0, 0);
+
+  toggle_keys_apply (device, modifiers, device->key_modifiers);
 
   g_signal_emit_by_name (keymap, "state-changed");
   if (direction != gdk_keymap_get_direction (keymap))
