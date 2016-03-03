@@ -73,6 +73,7 @@ TEST_PROGS += 			\
 	typename		\
 	window			\
 	displayclose		\
+	revealer-size \
 	$(NULL)
 
 if OS_UNIX
