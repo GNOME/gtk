@@ -2744,7 +2744,6 @@ gdk_win32_window_set_decorations (GdkWindow      *window,
 				  GdkWMDecoration decorations)
 {
   GdkWindowImplWin32 *impl;
-  GdkWMDecoration* decorations_copy;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
