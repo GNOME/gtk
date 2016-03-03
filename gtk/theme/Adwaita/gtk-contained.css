@@ -1046,82 +1046,42 @@ button.destructive-action {
     background-image: linear-gradient(to bottom, #e4e4e4);
     box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
 
-toolbar.inline-toolbar toolbutton > button.flat, .inline-toolbar toolbutton > button.flat, searchbar.inline-toolbar toolbutton > button.flat,
-.inline-toolbar.location-bar toolbutton > button.flat, toolbar.inline-toolbar toolbutton > button.sidebar-button, .inline-toolbar toolbutton > button.sidebar-button, searchbar.inline-toolbar toolbutton > button.sidebar-button,
-.inline-toolbar.location-bar toolbutton > button.sidebar-button, .inline-toolbar headerbar toolbutton > button.titlebutton, headerbar .inline-toolbar toolbutton > button.titlebutton,
-.inline-toolbar .titlebar toolbutton > button.titlebutton,
-.titlebar .inline-toolbar toolbutton > button.titlebutton,
+toolbar.inline-toolbar toolbutton > button.flat, toolbar.inline-toolbar toolbutton > button.sidebar-button, toolbar.inline-toolbar headerbar toolbutton > button.titlebutton, headerbar toolbar.inline-toolbar toolbutton > button.titlebutton,
+toolbar.inline-toolbar .titlebar toolbutton > button.titlebutton,
+.titlebar toolbar.inline-toolbar toolbutton > button.titlebutton,
 toolbar.inline-toolbar toolbutton:backdrop > button.flat,
-.inline-toolbar toolbutton:backdrop > button.flat,
-searchbar.inline-toolbar toolbutton:backdrop > button.flat,
-.inline-toolbar.location-bar toolbutton:backdrop > button.flat,
 toolbar.inline-toolbar toolbutton:backdrop > button.sidebar-button,
-.inline-toolbar toolbutton:backdrop > button.sidebar-button,
-searchbar.inline-toolbar toolbutton:backdrop > button.sidebar-button,
-.inline-toolbar.location-bar toolbutton:backdrop > button.sidebar-button,
-.inline-toolbar headerbar toolbutton:backdrop > button.titlebutton,
-headerbar .inline-toolbar toolbutton:backdrop > button.titlebutton,
-.inline-toolbar .titlebar toolbutton:backdrop > button.titlebutton,
-.titlebar .inline-toolbar toolbutton:backdrop > button.titlebutton, .linked:not(.vertical) > entry, .linked:not(.vertical) > spinbutton:not(.vertical), .inline-toolbar button, .inline-toolbar button:backdrop, .linked > button, .linked > button:hover, .linked > button:active, .linked > button:checked, .linked > button:backdrop, .linked > combobox > box > button.combo:dir(ltr), .linked > combobox > box > button.combo:dir(rtl) {
+toolbar.inline-toolbar headerbar toolbutton:backdrop > button.titlebutton,
+headerbar toolbar.inline-toolbar toolbutton:backdrop > button.titlebutton, .linked:not(.vertical) > entry, .linked:not(.vertical) > spinbutton:not(.vertical), .inline-toolbar button, .inline-toolbar button:backdrop, .linked > button, .linked > button:hover, .linked > button:active, .linked > button:checked, .linked > button:backdrop, .linked > combobox > box > button.combo:dir(ltr), .linked > combobox > box > button.combo:dir(rtl) {
   border-radius: 0;
   border-right-style: none; }
 
-.linked:not(.vertical) > entry:first-child, .linked:not(.vertical) > spinbutton:first-child:not(.vertical), .inline-toolbar button:first-child, .linked > button:first-child, toolbar.inline-toolbar toolbutton:first-child > button.flat, .inline-toolbar toolbutton:first-child > button.flat, searchbar.inline-toolbar toolbutton:first-child > button.flat,
-.inline-toolbar.location-bar toolbutton:first-child > button.flat, toolbar.inline-toolbar toolbutton:first-child > button.sidebar-button, .inline-toolbar toolbutton:first-child > button.sidebar-button, searchbar.inline-toolbar toolbutton:first-child > button.sidebar-button,
-.inline-toolbar.location-bar toolbutton:first-child > button.sidebar-button, .inline-toolbar headerbar toolbutton:first-child > button.titlebutton, headerbar .inline-toolbar toolbutton:first-child > button.titlebutton,
-.inline-toolbar .titlebar toolbutton:first-child > button.titlebutton,
-.titlebar .inline-toolbar toolbutton:first-child > button.titlebutton,
+.linked:not(.vertical) > entry:first-child, .linked:not(.vertical) > spinbutton:first-child:not(.vertical), .inline-toolbar button:first-child, .linked > button:first-child, toolbar.inline-toolbar toolbutton:first-child > button.flat, toolbar.inline-toolbar toolbutton:first-child > button.sidebar-button, toolbar.inline-toolbar headerbar toolbutton:first-child > button.titlebutton, headerbar toolbar.inline-toolbar toolbutton:first-child > button.titlebutton,
+toolbar.inline-toolbar .titlebar toolbutton:first-child > button.titlebutton,
+.titlebar toolbar.inline-toolbar toolbutton:first-child > button.titlebutton,
 toolbar.inline-toolbar toolbutton:backdrop:first-child > button.flat,
-.inline-toolbar toolbutton:backdrop:first-child > button.flat,
-searchbar.inline-toolbar toolbutton:backdrop:first-child > button.flat,
-.inline-toolbar.location-bar toolbutton:backdrop:first-child > button.flat,
 toolbar.inline-toolbar toolbutton:backdrop:first-child > button.sidebar-button,
-.inline-toolbar toolbutton:backdrop:first-child > button.sidebar-button,
-searchbar.inline-toolbar toolbutton:backdrop:first-child > button.sidebar-button,
-.inline-toolbar.location-bar toolbutton:backdrop:first-child > button.sidebar-button,
-.inline-toolbar headerbar toolbutton:backdrop:first-child > button.titlebutton,
-headerbar .inline-toolbar toolbutton:backdrop:first-child > button.titlebutton,
-.inline-toolbar .titlebar toolbutton:backdrop:first-child > button.titlebutton,
-.titlebar .inline-toolbar toolbutton:backdrop:first-child > button.titlebutton, combobox.linked button:nth-child(2):dir(rtl), .linked:not(.vertical) > combobox:first-child > box > button.combo {
+toolbar.inline-toolbar headerbar toolbutton:backdrop:first-child > button.titlebutton,
+headerbar toolbar.inline-toolbar toolbutton:backdrop:first-child > button.titlebutton, combobox.linked button:nth-child(2):dir(rtl), .linked:not(.vertical) > combobox:first-child > box > button.combo {
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px; }
-.linked:not(.vertical) > entry:last-child, .linked:not(.vertical) > spinbutton:last-child:not(.vertical), .inline-toolbar button:last-child, .linked > button:last-child, toolbar.inline-toolbar toolbutton:last-child > button.flat, .inline-toolbar toolbutton:last-child > button.flat, searchbar.inline-toolbar toolbutton:last-child > button.flat,
-.inline-toolbar.location-bar toolbutton:last-child > button.flat, toolbar.inline-toolbar toolbutton:last-child > button.sidebar-button, .inline-toolbar toolbutton:last-child > button.sidebar-button, searchbar.inline-toolbar toolbutton:last-child > button.sidebar-button,
-.inline-toolbar.location-bar toolbutton:last-child > button.sidebar-button, .inline-toolbar headerbar toolbutton:last-child > button.titlebutton, headerbar .inline-toolbar toolbutton:last-child > button.titlebutton,
-.inline-toolbar .titlebar toolbutton:last-child > button.titlebutton,
-.titlebar .inline-toolbar toolbutton:last-child > button.titlebutton,
+.linked:not(.vertical) > entry:last-child, .linked:not(.vertical) > spinbutton:last-child:not(.vertical), .inline-toolbar button:last-child, .linked > button:last-child, toolbar.inline-toolbar toolbutton:last-child > button.flat, toolbar.inline-toolbar toolbutton:last-child > button.sidebar-button, toolbar.inline-toolbar headerbar toolbutton:last-child > button.titlebutton, headerbar toolbar.inline-toolbar toolbutton:last-child > button.titlebutton,
+toolbar.inline-toolbar .titlebar toolbutton:last-child > button.titlebutton,
+.titlebar toolbar.inline-toolbar toolbutton:last-child > button.titlebutton,
 toolbar.inline-toolbar toolbutton:backdrop:last-child > button.flat,
-.inline-toolbar toolbutton:backdrop:last-child > button.flat,
-searchbar.inline-toolbar toolbutton:backdrop:last-child > button.flat,
-.inline-toolbar.location-bar toolbutton:backdrop:last-child > button.flat,
 toolbar.inline-toolbar toolbutton:backdrop:last-child > button.sidebar-button,
-.inline-toolbar toolbutton:backdrop:last-child > button.sidebar-button,
-searchbar.inline-toolbar toolbutton:backdrop:last-child > button.sidebar-button,
-.inline-toolbar.location-bar toolbutton:backdrop:last-child > button.sidebar-button,
-.inline-toolbar headerbar toolbutton:backdrop:last-child > button.titlebutton,
-headerbar .inline-toolbar toolbutton:backdrop:last-child > button.titlebutton,
-.inline-toolbar .titlebar toolbutton:backdrop:last-child > button.titlebutton,
-.titlebar .inline-toolbar toolbutton:backdrop:last-child > button.titlebutton, combobox.linked button:nth-child(2):dir(ltr), .linked:not(.vertical) > combobox:last-child > box > button.combo {
+toolbar.inline-toolbar headerbar toolbutton:backdrop:last-child > button.titlebutton,
+headerbar toolbar.inline-toolbar toolbutton:backdrop:last-child > button.titlebutton, combobox.linked button:nth-child(2):dir(ltr), .linked:not(.vertical) > combobox:last-child > box > button.combo {
   border-top-right-radius: 3px;
   border-bottom-right-radius: 3px;
   border-right-style: solid; }
-.linked:not(.vertical) > entry:only-child, .linked:not(.vertical) > spinbutton:only-child:not(.vertical), .inline-toolbar button:only-child, .linked > button:only-child, toolbar.inline-toolbar toolbutton:only-child > button.flat, .inline-toolbar toolbutton:only-child > button.flat, searchbar.inline-toolbar toolbutton:only-child > button.flat,
-.inline-toolbar.location-bar toolbutton:only-child > button.flat, toolbar.inline-toolbar toolbutton:only-child > button.sidebar-button, .inline-toolbar toolbutton:only-child > button.sidebar-button, searchbar.inline-toolbar toolbutton:only-child > button.sidebar-button,
-.inline-toolbar.location-bar toolbutton:only-child > button.sidebar-button, .inline-toolbar headerbar toolbutton:only-child > button.titlebutton, headerbar .inline-toolbar toolbutton:only-child > button.titlebutton,
-.inline-toolbar .titlebar toolbutton:only-child > button.titlebutton,
-.titlebar .inline-toolbar toolbutton:only-child > button.titlebutton,
+.linked:not(.vertical) > entry:only-child, .linked:not(.vertical) > spinbutton:only-child:not(.vertical), .inline-toolbar button:only-child, .linked > button:only-child, toolbar.inline-toolbar toolbutton:only-child > button.flat, toolbar.inline-toolbar toolbutton:only-child > button.sidebar-button, toolbar.inline-toolbar headerbar toolbutton:only-child > button.titlebutton, headerbar toolbar.inline-toolbar toolbutton:only-child > button.titlebutton,
+toolbar.inline-toolbar .titlebar toolbutton:only-child > button.titlebutton,
+.titlebar toolbar.inline-toolbar toolbutton:only-child > button.titlebutton,
 toolbar.inline-toolbar toolbutton:backdrop:only-child > button.flat,
-.inline-toolbar toolbutton:backdrop:only-child > button.flat,
-searchbar.inline-toolbar toolbutton:backdrop:only-child > button.flat,
-.inline-toolbar.location-bar toolbutton:backdrop:only-child > button.flat,
 toolbar.inline-toolbar toolbutton:backdrop:only-child > button.sidebar-button,
-.inline-toolbar toolbutton:backdrop:only-child > button.sidebar-button,
-searchbar.inline-toolbar toolbutton:backdrop:only-child > button.sidebar-button,
-.inline-toolbar.location-bar toolbutton:backdrop:only-child > button.sidebar-button,
-.inline-toolbar headerbar toolbutton:backdrop:only-child > button.titlebutton,
-headerbar .inline-toolbar toolbutton:backdrop:only-child > button.titlebutton,
-.inline-toolbar .titlebar toolbutton:backdrop:only-child > button.titlebutton,
-.titlebar .inline-toolbar toolbutton:backdrop:only-child > button.titlebutton, .linked:not(.vertical) > combobox:only-child > box > button.combo {
+toolbar.inline-toolbar headerbar toolbutton:backdrop:only-child > button.titlebutton,
+headerbar toolbar.inline-toolbar toolbutton:backdrop:only-child > button.titlebutton, .linked:not(.vertical) > combobox:only-child > box > button.combo {
   border-radius: 3px;
   border-style: solid; }
 
@@ -1424,47 +1384,29 @@ combobox arrow {
 toolbar, .inline-toolbar, searchbar,
 .location-bar {
   -GtkWidget-window-dragging: true;
-  padding: 4px 3px 3px 4px;
+  padding: 4px;
   background-color: #e8e8e7; }
-  .osd toolbar, .osd .inline-toolbar, .osd searchbar,
-  .osd .location-bar {
+
+toolbar {
+  padding: 4px 3px 3px 4px; }
+  .osd toolbar {
     background-color: transparent; }
-  toolbar.osd, .osd.inline-toolbar, searchbar.osd,
-  .osd.location-bar {
-    padding: 13px 12px 12px 13px;
+  toolbar.osd {
+    padding: 13px;
     border: none;
     border-radius: 5px;
     background-color: rgba(32, 37, 38, 0.8); }
-  toolbar.osd.left, .osd.left.inline-toolbar, searchbar.osd.left,
-  .osd.left.location-bar, toolbar.osd.right, .osd.right.inline-toolbar, searchbar.osd.right,
-  .osd.right.location-bar, toolbar.osd.top, .osd.top.inline-toolbar, searchbar.osd.top,
-  .osd.top.location-bar, toolbar.osd.bottom, .osd.bottom.inline-toolbar, searchbar.osd.bottom,
-  .osd.bottom.location-bar {
+  toolbar.osd.left, toolbar.osd.right, toolbar.osd.top, toolbar.osd.bottom {
     border-radius: 0; }
-  toolbar.horizontal separator, .horizontal.inline-toolbar separator, searchbar.horizontal separator,
-  .horizontal.location-bar separator {
+  toolbar.horizontal separator {
     margin: 0 7px 1px 6px; }
-  toolbar.vertical separator, .vertical.inline-toolbar separator, searchbar.vertical separator,
-  .vertical.location-bar separator {
+  toolbar.vertical separator {
     margin: 6px 1px 7px 0; }
-  toolbar:not(.inline-toolbar) switch, .inline-toolbar:not(.inline-toolbar) switch, searchbar:not(.inline-toolbar) switch,
-  .location-bar:not(.inline-toolbar) switch,
-  toolbar:not(.inline-toolbar) scale,
-  .inline-toolbar:not(.inline-toolbar) scale,
-  searchbar:not(.inline-toolbar) scale,
-  .location-bar:not(.inline-toolbar) scale,
-  toolbar:not(.inline-toolbar) entry,
-  .inline-toolbar:not(.inline-toolbar) entry,
-  searchbar:not(.inline-toolbar) entry,
-  .location-bar:not(.inline-toolbar) entry,
-  toolbar:not(.inline-toolbar) spinbutton:not(.vertical),
-  .inline-toolbar:not(.inline-toolbar) spinbutton:not(.vertical),
-  searchbar:not(.inline-toolbar) spinbutton:not(.vertical),
-  .location-bar:not(.inline-toolbar) spinbutton:not(.vertical),
-  toolbar:not(.inline-toolbar) button,
-  .inline-toolbar:not(.inline-toolbar) button,
-  searchbar:not(.inline-toolbar) button,
-  .location-bar:not(.inline-toolbar) button {
+  toolbar:not(.inline-toolbar):not(.osd) switch,
+  toolbar:not(.inline-toolbar):not(.osd) scale,
+  toolbar:not(.inline-toolbar):not(.osd) entry,
+  toolbar:not(.inline-toolbar):not(.osd) spinbutton:not(.vertical),
+  toolbar:not(.inline-toolbar):not(.osd) button {
     margin-right: 1px;
     margin-bottom: 1px; }
 
@@ -2058,10 +2000,7 @@ popover.background {
   popover.background > list,
   popover.background > .view,
   popover.background > iconview,
-  popover.background > toolbar,
-  popover.background > .inline-toolbar,
-  popover.background > searchbar,
-  popover.background > .location-bar {
+  popover.background > toolbar {
     border-style: none;
     background-color: transparent; }
   popover.background.touch-selection, popover.background.magnifier, .csd popover.background.touch-selection, .csd popover.background.magnifier {
