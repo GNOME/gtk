@@ -3389,20 +3389,20 @@ gtk_range_update_mouse_location (GtkRange *range)
   if (priv->grab_location != MOUSE_OUTSIDE)
     priv->mouse_location = priv->grab_location;
   else if (priv->stepper_a_gadget &&
-           gtk_css_gadget_content_box_contains_point (priv->stepper_a_gadget, x, y))
+           gtk_css_gadget_border_box_contains_point (priv->stepper_a_gadget, x, y))
     priv->mouse_location = MOUSE_STEPPER_A;
   else if (priv->stepper_b_gadget &&
-           gtk_css_gadget_content_box_contains_point (priv->stepper_b_gadget, x, y))
+           gtk_css_gadget_border_box_contains_point (priv->stepper_b_gadget, x, y))
     priv->mouse_location = MOUSE_STEPPER_B;
   else if (priv->stepper_c_gadget &&
-           gtk_css_gadget_content_box_contains_point (priv->stepper_c_gadget, x, y))
+           gtk_css_gadget_border_box_contains_point (priv->stepper_c_gadget, x, y))
     priv->mouse_location = MOUSE_STEPPER_C;
   else if (priv->stepper_d_gadget &&
-           gtk_css_gadget_content_box_contains_point (priv->stepper_d_gadget, x, y))
+           gtk_css_gadget_border_box_contains_point (priv->stepper_d_gadget, x, y))
     priv->mouse_location = MOUSE_STEPPER_D;
-  else if (gtk_css_gadget_content_box_contains_point (priv->slider_gadget, x, y))
+  else if (gtk_css_gadget_border_box_contains_point (priv->slider_gadget, x, y))
     priv->mouse_location = MOUSE_SLIDER;
-  else if (gtk_css_gadget_content_box_contains_point (priv->trough_gadget, x, y))
+  else if (gtk_css_gadget_border_box_contains_point (priv->trough_gadget, x, y))
     priv->mouse_location = MOUSE_TROUGH;
   else if (gtk_css_gadget_margin_box_contains_point (priv->gadget, x, y))
     priv->mouse_location = MOUSE_WIDGET;
