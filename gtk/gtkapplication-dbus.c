@@ -153,17 +153,14 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
       goto out;
     }
 
-  /* FIXME: should we reuse the D-Bus application id here ? */
-  dbus->app_id = g_strdup (g_get_prgname ());
-
   if (!register_session)
     goto out;
 
-  g_debug ("Registering client '%s' '%s'", dbus->app_id, client_id);
+  g_debug ("Registering client '%s' '%s'", dbus->application_id, client_id);
 
   res = g_dbus_proxy_call_sync (dbus->sm_proxy,
                                 "RegisterClient",
-                                g_variant_new ("(ss)", dbus->app_id, client_id),
+                                g_variant_new ("(ss)", dbus->application_id, client_id),
                                 G_DBUS_CALL_FLAGS_NONE,
                                 G_MAXINT,
                                 NULL,
@@ -391,7 +388,7 @@ gtk_application_impl_dbus_inhibit (GtkApplicationImpl         *impl,
   res = g_dbus_proxy_call_sync (dbus->sm_proxy,
                                 "Inhibit",
                                 g_variant_new ("(s@usu)",
-                                               dbus->app_id,
+                                               dbus->application_id,
                                                window ? gtk_application_impl_dbus_get_window_system_id (dbus, window) : g_variant_new_uint32 (0),
                                                reason,
                                                flags),
@@ -517,7 +514,6 @@ gtk_application_impl_dbus_finalize (GObject *object)
 
   g_free (dbus->app_menu_path);
   g_free (dbus->menubar_path);
-  g_free (dbus->app_id);
 
   G_OBJECT_CLASS (gtk_application_impl_dbus_parent_class)->finalize (object);
 }

@@ -133,7 +133,6 @@ typedef struct
   guint            menubar_id;
 
   /* Session management... */
-  gchar           *app_id; /* actually prgname... */
   GDBusProxy      *sm_proxy;
   GDBusProxy      *client_proxy;
   gchar           *client_path;
