@@ -657,7 +657,11 @@ gtk_css_gadget_get_preferred_size (GtkCssGadget   *gadget,
   if (for_size > -1)
     {
       if (for_size < min_for_size)
-        g_warning ("for_size smaller than min-size: %d < %d", for_size, min_for_size);
+        g_warning ("for_size smaller than min-size (%d < %d) "
+                   "while measuring gadget (node %s, owner %s)",
+                   for_size, min_for_size,
+                   gtk_css_node_get_name (gtk_css_gadget_get_node (gadget)),
+                   G_OBJECT_TYPE_NAME (gtk_css_gadget_get_owner (gadget)));
 
       for_size = MAX (0, for_size - extra_opposite);
     }
@@ -755,7 +759,7 @@ gtk_css_gadget_allocate (GtkCssGadget        *gadget,
   if (content_allocation.width < 0)
     {
       g_warning ("Negative content width %d (allocation %d, extents %dx%d) "
-                 "while allocating gadget (node %s, owner %s)\n",
+                 "while allocating gadget (node %s, owner %s)",
                  content_allocation.width, allocation->width,
                  extents.left, extents.right,
                  gtk_css_node_get_name (gtk_css_gadget_get_node (gadget)),
@@ -766,7 +770,7 @@ gtk_css_gadget_allocate (GtkCssGadget        *gadget,
   if (content_allocation.height < 0)
     {
       g_warning ("Negative content height %d (allocation %d, extents %dx%d) "
-                 "while allocating gadget (node %s, owner %s)\n",
+                 "while allocating gadget (node %s, owner %s)",
                  content_allocation.height, allocation->height,
                  extents.top, extents.bottom,
                  gtk_css_node_get_name (gtk_css_gadget_get_node (gadget)),
