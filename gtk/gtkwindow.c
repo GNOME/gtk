@@ -479,6 +479,10 @@ static void     gtk_window_constrain_position        (GtkWindow    *window,
                                                       gint          new_height,
                                                       gint         *x,
                                                       gint         *y);
+static void     gtk_window_update_fixed_size         (GtkWindow    *window,
+                                                      GdkGeometry  *new_geometry,
+                                                      gint          new_width,
+                                                      gint          new_height);
 static void     gtk_window_compute_hints             (GtkWindow    *window,
                                                       GdkGeometry  *new_geometry,
                                                       guint        *new_flags);
@@ -9133,17 +9137,7 @@ gtk_window_compute_configure_request (GtkWindow    *window,
   gtk_window_compute_configure_request_size (window,
                                              &new_geometry, new_flags,
                                              &w, &h);
-  /* If not resizeable, set min/max to what we have */
-  if (!priv->resizable)
-    {
-      new_flags |= GDK_HINT_MAX_SIZE;
-
-      new_geometry.min_width = MAX (w, new_geometry.min_width);
-      new_geometry.max_width = new_geometry.min_width;
-      new_geometry.min_height = MAX (h, new_geometry.min_height);
-      new_geometry.max_height = new_geometry.min_height;
-    }
-
+  gtk_window_update_fixed_size (window, &new_geometry, w, h);
   gtk_window_constrain_size (window,
                              &new_geometry, new_flags,
                              w, h,
@@ -9773,6 +9767,44 @@ gtk_window_constrain_size (GtkWindow   *window,
                              new_width, new_height);
 }
 
+/* For non-resizable windows, make sure the given width/height fits
+ * in the geometry contrains and update the geometry hints to match
+ * the given width/height if not.
+ * This is to make sure that non-resizable windows get the default
+ * width/height if set, but can still grow if their content requires.
+ *
+ * Note: Fixed size windows with a default size set will not shrink
+ * when their content requires less size.
+ */
+static void
+gtk_window_update_fixed_size (GtkWindow   *window,
+                              GdkGeometry *new_geometry,
+                              gint         new_width,
+                              gint         new_height)
+{
+  GtkWindowPrivate *priv = window->priv;
+  gint default_width;
+  gint default_height;
+
+  /* Adjust the geometry hints for non-resizable windows only */
+  if (priv->resizable)
+    return;
+
+  /* if a default size is set, make sure the hints allow for the new size */
+  gtk_window_get_default_size (window, &default_width, &default_height);
+  if (default_width > -1)
+    {
+      new_geometry->min_width = MAX (new_width, new_geometry->min_width);
+      new_geometry->max_width = new_geometry->min_width;
+    }
+
+  if (default_height > -1)
+    {
+      new_geometry->min_height = MAX (new_height, new_geometry->min_height);
+      new_geometry->max_height = new_geometry->min_height;
+    }
+}
+
 /* Compute the set of geometry hints and flags for a window
  * based on the application set geometry, and requisition
  * of the window. gtk_widget_get_preferred_size() must have been
@@ -9871,6 +9903,13 @@ gtk_window_compute_hints (GtkWindow   *window,
 	new_geometry->max_height += extra_height;
 
       new_geometry->max_height = MAX (new_geometry->max_height, new_geometry->min_height);
+    }
+  else if (!priv->resizable)
+    {
+      *new_flags |= GDK_HINT_MAX_SIZE;
+
+      new_geometry->max_width = new_geometry->min_width;
+      new_geometry->max_height = new_geometry->min_height;
     }
 
   *new_flags |= GDK_HINT_WIN_GRAVITY;
