@@ -787,6 +787,9 @@ gtk_expander_direction_changed (GtkWidget        *widget,
   gtk_box_gadget_remove_gadget (GTK_BOX_GADGET (priv->gadget), priv->title_gadget);
   gtk_box_gadget_insert_gadget (GTK_BOX_GADGET (priv->gadget), 0, priv->title_gadget, FALSE, FALSE, align);
 
+  gtk_box_gadget_set_allocate_reverse (GTK_BOX_GADGET (priv->title_gadget),
+                                       gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
+
   GTK_WIDGET_CLASS (gtk_expander_parent_class)->direction_changed (widget, previous_direction);
 }
 
