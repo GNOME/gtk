@@ -615,6 +615,7 @@ gtk_css_gadget_get_preferred_size (GtkCssGadget   *gadget,
   int min_size, extra_size, extra_opposite, extra_baseline;
   int unused_minimum, unused_natural;
   int forced_minimum, forced_natural;
+  int min_for_size;
 
   if (minimum == NULL)
     minimum = &unused_minimum;
@@ -642,6 +643,7 @@ gtk_css_gadget_get_preferred_size (GtkCssGadget   *gadget,
       extra_opposite = margin.top + margin.bottom + border.top + border.bottom + padding.top + padding.bottom;
       extra_baseline = margin.left + border.left + padding.left;
       min_size = get_number (style, GTK_CSS_PROPERTY_MIN_WIDTH);
+      min_for_size = get_number (style, GTK_CSS_PROPERTY_MIN_HEIGHT);
     }
   else
     {
@@ -649,10 +651,16 @@ gtk_css_gadget_get_preferred_size (GtkCssGadget   *gadget,
       extra_opposite = margin.left + margin.right + border.left + border.right + padding.left + padding.right;
       extra_baseline = margin.top + border.top + padding.top;
       min_size = get_number (style, GTK_CSS_PROPERTY_MIN_HEIGHT);
+      min_for_size = get_number (style, GTK_CSS_PROPERTY_MIN_WIDTH);
     }
 
   if (for_size > -1)
-    for_size = MAX (0, for_size - extra_opposite);
+    {
+      if (for_size < min_for_size)
+        g_warning ("for_size smaller than min-size: %d < %d", for_size, min_for_size);
+
+      for_size = MAX (0, for_size - extra_opposite);
+    }
 
   if (minimum_baseline)
     *minimum_baseline = -1;
