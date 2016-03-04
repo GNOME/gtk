@@ -2516,6 +2516,16 @@ scale {
   }
 
   &.fine-tune {
+    &.horizontal {
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
+
+    &.vertical {
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+
     slider { margin: -6px; }
 
     fill,
@@ -2630,7 +2640,6 @@ scale {
       }
     }
   }
-
   &.horizontal {
     indicator {
       min-height: $_marks_lenght;
@@ -2645,7 +2654,6 @@ scale {
     }
     &.fine-tune indicator { min-width: ($_marks_lenght - 2px); }
   }
-
   // *WARNING* scale with marks madness following
 
   // FIXME: OSD and selected list rows missing, I don't feel like adding the other 144 assets needed for those...

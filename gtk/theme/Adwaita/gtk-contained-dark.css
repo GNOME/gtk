@@ -2615,6 +2615,12 @@ scale {
     min-height: 18px;
     min-width: 18px;
     margin: -8px; }
+  scale.fine-tune.horizontal {
+    padding-top: 10px;
+    padding-bottom: 10px; }
+  scale.fine-tune.vertical {
+    padding-left: 10px;
+    padding-right: 10px; }
   scale.fine-tune slider {
     margin: -6px; }
   scale.fine-tune fill,
