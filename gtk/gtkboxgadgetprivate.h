@@ -60,6 +60,8 @@ void                    gtk_box_gadget_set_draw_focus           (GtkBoxGadget   
                                                                  gboolean                draw_focus);
 void                    gtk_box_gadget_set_draw_reverse         (GtkBoxGadget           *gadget,
                                                                  gboolean                draw_reverse);
+void                    gtk_box_gadget_set_allocate_reverse     (GtkBoxGadget           *gadget,
+                                                                 gboolean                allocate_reverse);
 
 void                    gtk_box_gadget_insert_widget            (GtkBoxGadget           *gadget,
                                                                  int                     pos,

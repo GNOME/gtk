@@ -40,6 +40,7 @@ struct _GtkBoxGadgetPrivate {
 
   guint draw_focus : 1;
   guint draw_reverse : 1;
+  guint allocate_reverse : 1;
 };
 
 typedef gboolean (* ComputeExpandFunc) (GObject *object, GtkOrientation orientation);
@@ -390,12 +391,18 @@ gtk_box_gadget_allocate (GtkCssGadget        *gadget,
     {
       gtk_box_gadget_distribute (GTK_BOX_GADGET (gadget), allocation->height, allocation->width, sizes);
 
+      if (priv->allocate_reverse)
+        child_allocation.x = allocation->x + allocation->width;
+
       for (i = 0; i < priv->children->len; i++)
         {
-          GtkBoxGadgetChild *child = &g_array_index (priv->children, GtkBoxGadgetChild, i);
-          child_allocation.width = sizes[i].minimum_size;
+          guint idx = priv->allocate_reverse ? priv->children->len - 1 - i : i;
+          GtkBoxGadgetChild *child = &g_array_index (priv->children, GtkBoxGadgetChild, idx);
+          child_allocation.width = sizes[idx].minimum_size;
           child_allocation.height = allocation->height;
           child_allocation.y = allocation->y;
+          if (priv->allocate_reverse)
+            child_allocation.x -= child_allocation.width;
 
           child_align = gtk_box_gadget_child_get_align (GTK_BOX_GADGET (gadget), child);
           gtk_box_gadget_allocate_child (child->object,
@@ -410,19 +417,26 @@ gtk_box_gadget_allocate (GtkCssGadget        *gadget,
           else
             gdk_rectangle_union (out_clip, &child_clip, out_clip);
 
-          child_allocation.x += sizes[i].minimum_size;
+          if (!priv->allocate_reverse)
+            child_allocation.x += sizes[idx].minimum_size;
         }
     }
   else
     {
       gtk_box_gadget_distribute (GTK_BOX_GADGET (gadget), allocation->width, allocation->height, sizes);
 
+      if (priv->allocate_reverse)
+        child_allocation.y = allocation->y + allocation->height;
+
       for (i = 0 ; i < priv->children->len; i++)
         {
-          GtkBoxGadgetChild *child = &g_array_index (priv->children, GtkBoxGadgetChild, i);
-          child_allocation.height = sizes[i].minimum_size;
+          guint idx = priv->allocate_reverse ? priv->children->len - 1 - i : i;
+          GtkBoxGadgetChild *child = &g_array_index (priv->children, GtkBoxGadgetChild, idx);
+          child_allocation.height = sizes[idx].minimum_size;
           child_allocation.width = allocation->width;
           child_allocation.x = allocation->x;
+          if (priv->allocate_reverse)
+            child_allocation.y -= child_allocation.height;
 
           child_align = gtk_box_gadget_child_get_align (GTK_BOX_GADGET (gadget), child);
           gtk_box_gadget_allocate_child (child->object,
@@ -437,7 +451,8 @@ gtk_box_gadget_allocate (GtkCssGadget        *gadget,
           else
             gdk_rectangle_union (out_clip, &child_clip, out_clip);
 
-          child_allocation.y += sizes[i].minimum_size;
+          if (!priv->allocate_reverse)
+            child_allocation.y += sizes[idx].minimum_size;
         }
     }
 }
@@ -569,6 +584,15 @@ gtk_box_gadget_set_draw_reverse (GtkBoxGadget *gadget,
   GtkBoxGadgetPrivate *priv = gtk_box_gadget_get_instance_private (gadget);
 
   priv->draw_reverse = draw_reverse;
+}
+
+void
+gtk_box_gadget_set_allocate_reverse (GtkBoxGadget *gadget,
+                                     gboolean      allocate_reverse)
+{
+  GtkBoxGadgetPrivate *priv = gtk_box_gadget_get_instance_private (gadget);
+
+  priv->allocate_reverse = allocate_reverse;
 }
 
 static GtkCssNode *
