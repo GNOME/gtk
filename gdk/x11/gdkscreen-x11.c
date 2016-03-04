@@ -649,9 +649,13 @@ init_randr15 (GdkScreen *screen)
   for (i = 0; i < num_rr_monitors; i++)
     {
       RROutput output = rr_monitors[i].outputs[0];
-      XRROutputInfo *output_info =
-        XRRGetOutputInfo (x11_screen->xdisplay, resources, output);
+      XRROutputInfo *output_info;
       GdkX11Monitor monitor;
+
+      gdk_x11_display_error_trap_push (display);
+      output_info = XRRGetOutputInfo (x11_screen->xdisplay, resources, output);
+      if (gdk_x11_display_error_trap_pop (display))
+        continue;
 
       if (output_info == NULL)
         continue;
