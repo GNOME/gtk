@@ -444,6 +444,7 @@ gtk_private_h_sources =		\
 	gtkcssstylechangeprivate.h 	\
 	gtkcssstyleprivate.h 	\
 	gtkcssstylepropertyprivate.h \
+	gtkcsstokenizerprivate.h	\
 	gtkcsstransformvalueprivate.h	\
 	gtkcsstransientnodeprivate.h	\
 	gtkcsstransitionprivate.h	\
@@ -714,6 +715,7 @@ gtk_base_c_sources = 		\
 	gtkcssstylefuncs.c	\
 	gtkcssstyleproperty.c	\
 	gtkcssstylepropertyimpl.c \
+	gtkcsstokenizer.c	\
 	gtkcsstransformvalue.c	\
 	gtkcsstransientnode.c	\
 	gtkcsstransition.c	\
