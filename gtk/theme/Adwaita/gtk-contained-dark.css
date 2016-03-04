@@ -2742,10 +2742,10 @@ scale {
   scale.fine-tune marks.bottom {
     margin-top: 6px;
     margin-bottom: -10px; }
-  scale.fine-tune marks.left {
+  scale.fine-tune marks.top {
     margin-right: 6px;
     margin-left: -10px; }
-  scale.fine-tune marks.right {
+  scale.fine-tune marks.bottom {
     margin-left: 6px;
     margin-right: -10px; }
   scale.horizontal indicator {
