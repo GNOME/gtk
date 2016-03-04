@@ -1804,6 +1804,8 @@ keyboard_repeat (gpointer data)
                             &sync_after_repeat_callback_listener,
                             device);
 
+  device->repeat_timer = 0;
+
   return G_SOURCE_REMOVE;
 }
 
