@@ -278,6 +278,8 @@ static gboolean      gtk_range_key_press                (GtkWidget     *range,
 							 GdkEventKey   *event);
 static void          gtk_range_state_flags_changed      (GtkWidget     *widget,
                                                          GtkStateFlags  previous_state);
+static void          gtk_range_direction_changed        (GtkWidget     *widget,
+                                                         GtkTextDirection  previous_direction);
 static void          gtk_range_measure_trough           (GtkCssGadget   *gadget,
                                                          GtkOrientation  orientation,
                                                          gint            for_size,
@@ -352,6 +354,7 @@ gtk_range_class_init (GtkRangeClass *class)
   widget_class->scroll_event = gtk_range_scroll_event;
   widget_class->key_press_event = gtk_range_key_press;
   widget_class->state_flags_changed = gtk_range_state_flags_changed;
+  widget_class->direction_changed = gtk_range_direction_changed;
 
   class->move_slider = gtk_range_move_slider;
   class->change_value = gtk_range_real_change_value;
@@ -961,6 +964,60 @@ gtk_range_set_adjustment (GtkRange      *range,
     }
 }
 
+static gboolean
+should_invert (GtkRange *range)
+{
+  GtkRangePrivate *priv = range->priv;
+
+  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+    return
+      (priv->inverted && !priv->flippable) ||
+      (priv->inverted && priv->flippable && gtk_widget_get_direction (GTK_WIDGET (range)) == GTK_TEXT_DIR_LTR) ||
+      (!priv->inverted && priv->flippable && gtk_widget_get_direction (GTK_WIDGET (range)) == GTK_TEXT_DIR_RTL);
+  else
+    return priv->inverted;
+}
+
+static void
+update_highlight_position (GtkRange *range)
+{
+  GtkRangePrivate *priv = range->priv;
+
+  if (!priv->highlight_gadget)
+    return;
+
+  if (should_invert (range))
+    {
+      gtk_css_gadget_remove_class (priv->highlight_gadget, GTK_STYLE_CLASS_TOP);
+      gtk_css_gadget_add_class (priv->highlight_gadget, GTK_STYLE_CLASS_BOTTOM);
+    }
+  else
+    {
+      gtk_css_gadget_remove_class (priv->highlight_gadget, GTK_STYLE_CLASS_BOTTOM);
+      gtk_css_gadget_add_class (priv->highlight_gadget, GTK_STYLE_CLASS_TOP);
+    }
+}
+
+static void
+update_fill_position (GtkRange *range)
+{
+  GtkRangePrivate *priv = range->priv;
+
+  if (!priv->fill_gadget)
+    return;
+
+  if (should_invert (range))
+    {
+      gtk_css_gadget_remove_class (priv->fill_gadget, GTK_STYLE_CLASS_TOP);
+      gtk_css_gadget_add_class (priv->fill_gadget, GTK_STYLE_CLASS_BOTTOM);
+    }
+  else
+    {
+      gtk_css_gadget_remove_class (priv->fill_gadget, GTK_STYLE_CLASS_BOTTOM);
+      gtk_css_gadget_add_class (priv->fill_gadget, GTK_STYLE_CLASS_TOP);
+    }
+}
+
 static void
 update_stepper_state (GtkRange     *range,
                       Stepper       stepper,
@@ -1039,6 +1096,9 @@ gtk_range_set_inverted (GtkRange *range,
       priv->inverted = setting;
 
       update_steppers_state (range);
+      update_fill_position (range);
+      update_highlight_position (range);
+
       gtk_widget_queue_resize (GTK_WIDGET (range));
 
       g_object_notify_by_pspec (G_OBJECT (range), properties[PROP_INVERTED]);
@@ -1088,6 +1148,8 @@ gtk_range_set_flippable (GtkRange *range,
   if (flippable != priv->flippable)
     {
       priv->flippable = flippable;
+      update_fill_position (range);
+      update_highlight_position (range);
 
       gtk_widget_queue_allocate (GTK_WIDGET (range));
     }
@@ -1565,6 +1627,8 @@ gtk_range_set_show_fill_level (GtkRange *range,
                                                      NULL, NULL);
       gtk_css_gadget_set_state (priv->fill_gadget,
                                 gtk_css_node_get_state (gtk_css_gadget_get_node (priv->trough_gadget)));
+
+      update_fill_position (range);
     }
   else
     {
@@ -1708,20 +1772,6 @@ gtk_range_get_fill_level (GtkRange *range)
   g_return_val_if_fail (GTK_IS_RANGE (range), 0.0);
 
   return range->priv->fill_level;
-}
-
-static gboolean
-should_invert (GtkRange *range)
-{
-  GtkRangePrivate *priv = range->priv;
-
-  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-    return
-      (priv->inverted && !priv->flippable) ||
-      (priv->inverted && priv->flippable && gtk_widget_get_direction (GTK_WIDGET (range)) == GTK_TEXT_DIR_LTR) ||
-      (!priv->inverted && priv->flippable && gtk_widget_get_direction (GTK_WIDGET (range)) == GTK_TEXT_DIR_RTL);
-  else
-    return priv->inverted;
 }
 
 static void
@@ -2262,6 +2312,18 @@ update_trough_state (GtkRange *range)
     gtk_css_gadget_set_state (priv->highlight_gadget, state);
   if (priv->fill_gadget)
     gtk_css_gadget_set_state (priv->fill_gadget, state);
+}
+
+static void
+gtk_range_direction_changed (GtkWidget        *widget,
+                             GtkTextDirection  previous_direction)
+{
+  GtkRange *range = GTK_RANGE (widget);
+
+  update_fill_position (range);
+  update_highlight_position (range);
+
+  GTK_WIDGET_CLASS (gtk_range_parent_class)->direction_changed (widget, previous_direction);
 }
 
 static void
@@ -3805,6 +3867,8 @@ _gtk_range_set_has_origin (GtkRange *range,
                                                           NULL, NULL);
       gtk_css_gadget_set_state (priv->highlight_gadget,
                                 gtk_css_node_get_state (gtk_css_gadget_get_node (priv->trough_gadget)));
+
+      update_highlight_position (range);
     }
   else
     {
