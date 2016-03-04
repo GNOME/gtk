@@ -9001,9 +9001,6 @@ gtk_window_compute_configure_request_size (GtkWindow   *window,
   *height = MAX (*height, 1);
 }
 
-#undef INCLUDE_CSD_SIZE
-#undef EXCLUDE_CSD_SIZE
-
 static GtkWindowPosition
 get_effective_position (GtkWindow *window)
 {
@@ -9774,7 +9771,7 @@ gtk_window_constrain_size (GtkWindow   *window,
  * width/height if set, but can still grow if their content requires.
  *
  * Note: Fixed size windows with a default size set will not shrink
- * when their content requires less size.
+ * smaller than the default size when their content requires less size.
  */
 static void
 gtk_window_update_fixed_size (GtkWindow   *window,
@@ -9783,25 +9780,33 @@ gtk_window_update_fixed_size (GtkWindow   *window,
                               gint         new_height)
 {
   GtkWindowPrivate *priv = window->priv;
-  gint default_width;
-  gint default_height;
+  GtkWindowGeometryInfo *info;
 
   /* Adjust the geometry hints for non-resizable windows only */
   if (priv->resizable)
     return;
 
-  /* if a default size is set, make sure the hints allow for the new size */
-  gtk_window_get_default_size (window, &default_width, &default_height);
-  if (default_width > -1)
+  info = gtk_window_get_geometry_info (window, FALSE);
+  if (info)
     {
-      new_geometry->min_width = MAX (new_width, new_geometry->min_width);
-      new_geometry->max_width = new_geometry->min_width;
-    }
+      gint default_width_csd = info->default_width;
+      gint default_height_csd = info->default_height;
 
-  if (default_height > -1)
-    {
-      new_geometry->min_height = MAX (new_height, new_geometry->min_height);
-      new_geometry->max_height = new_geometry->min_height;
+      gtk_window_update_csd_size (window,
+                                  &default_width_csd, &default_height_csd,
+                                  INCLUDE_CSD_SIZE);
+
+      if (info->default_width > -1)
+        {
+          new_geometry->min_width = MAX (default_width_csd, new_width);
+          new_geometry->max_width = new_geometry->min_width;
+        }
+
+      if (info->default_height > -1)
+        {
+          new_geometry->min_height = MAX (default_height_csd, new_height);
+          new_geometry->max_height = new_geometry->min_height;
+        }
     }
 }
 
@@ -9915,6 +9920,9 @@ gtk_window_compute_hints (GtkWindow   *window,
   *new_flags |= GDK_HINT_WIN_GRAVITY;
   new_geometry->win_gravity = priv->gravity;
 }
+
+#undef INCLUDE_CSD_SIZE
+#undef EXCLUDE_CSD_SIZE
 
 /***********************
  * Redrawing functions *
