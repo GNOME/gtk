@@ -136,6 +136,8 @@ testsuite/reftests/box-order.ui
 testsuite/reftests/box-packing.ui
 testsuite/reftests/box-pseudo-classes.ref.ui
 testsuite/reftests/box-pseudo-classes.ui
+testsuite/reftests/box-shadow-changes-modify-clip.ref.ui
+testsuite/reftests/box-shadow-changes-modify-clip.ui
 testsuite/reftests/box-shadow-spread.ref.ui
 testsuite/reftests/box-shadow-spread.ui
 testsuite/reftests/button-wrapping.ref.ui
