@@ -10547,7 +10547,6 @@ gtk_entry_set_progress_fraction (GtkEntry *entry,
   gtk_entry_stop_pulse_mode (entry);
 
   gtk_entry_ensure_progress_gadget (entry);
-  gtk_css_gadget_set_visible (private->progress_gadget, TRUE);
 
   fraction = CLAMP (fraction, 0.0, 1.0);
   private->progress_fraction = fraction;
@@ -10555,6 +10554,8 @@ gtk_entry_set_progress_fraction (GtkEntry *entry,
 
   if (fraction != old_fraction)
     {
+      gtk_css_gadget_set_visible (private->progress_gadget, fraction > 0);
+
       g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_PROGRESS_FRACTION]);
       gtk_widget_queue_allocate (widget);
     }
