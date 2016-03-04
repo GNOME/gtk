@@ -177,9 +177,9 @@ int main (int argc, char *argv[])
   scale = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, 0, 100, 1);
   scales = g_slist_prepend (scales, scale);
   gtk_scale_set_draw_value (GTK_SCALE (scale), FALSE);
-  gtk_scale_add_mark (GTK_SCALE (scale), marks[0], GTK_POS_BOTTOM, labels[0]);
-  gtk_scale_add_mark (GTK_SCALE (scale), marks[1], GTK_POS_BOTTOM, NULL);
-  gtk_scale_add_mark (GTK_SCALE (scale), marks[2], GTK_POS_BOTTOM, labels[2]);
+  gtk_scale_add_mark (GTK_SCALE (scale), marks[0], GTK_POS_TOP, labels[0]);
+  gtk_scale_add_mark (GTK_SCALE (scale), marks[1], GTK_POS_TOP, NULL);
+  gtk_scale_add_mark (GTK_SCALE (scale), marks[2], GTK_POS_TOP, labels[2]);
   gtk_container_add (GTK_CONTAINER (frame), scale);
   gtk_box_pack_start (GTK_BOX (box), frame, FALSE, FALSE, 0);
 
