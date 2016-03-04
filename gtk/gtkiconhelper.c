@@ -69,11 +69,11 @@ gtk_icon_helper_invalidate_for_change (GtkIconHelper     *self,
 {
   GtkIconHelperPrivate *priv = self->priv;
 
-  if (change &&
+  if (change == NULL ||
       ((gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_SYMBOLIC_ICON) &&
         priv->rendered_surface_is_symbolic) ||
-      (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_ICON) &&
-       !priv->rendered_surface_is_symbolic)))
+       (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_ICON) &&
+        !priv->rendered_surface_is_symbolic)))
     {
       gtk_icon_helper_invalidate (self);
     }
