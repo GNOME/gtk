@@ -68,6 +68,7 @@ static const struct {
   {"Gtk/PrimaryButtonWarpsSlider", "gtk-primary-button-warps-slider"},
   {"Gtk/RecentFilesMaxAge",   "gtk-recent-files-max-age"},
   {"Gtk/RecentFilesEnabled",  "gtk-recent-files-enabled"},
+  {"Gtk/KeynavUseCaret",      "gtk-keynav-use-caret"},
 
   /* These are here in order to be recognized, but are not sent to
      gtk as they are handled internally by gdk: */
