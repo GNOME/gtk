@@ -21,7 +21,10 @@ $menu_color: if($variant == 'light', $base_color, mix($bg_color, $base_color, 20
 $popover_bg_color: $bg_color;
 $popover_hover_color: lighten($bg_color, 5%);
 
-$scrollbar_bg_color: darken($bg_color, 7%);
+$scrollbar_bg_color: if($variant == 'light', mix($bg_color, $fg_color, 80%), mix($base_color, $bg_color, 50%));
+$scrollbar_slider_color: mix($fg_color, $bg_color, 60%);
+$scrollbar_slider_hover_color: mix($fg_color, $bg_color, 80%);
+$scrollbar_slider_active_color: if($variant=='light', darken($selected_bg_color, 10%), lighten($selected_bg_color, 10%));
 
 $warning_color: #f57900;
 $error_color: #cc0000;
@@ -58,5 +61,6 @@ $backdrop_dark_fill: mix($backdrop_borders_color, $backdrop_bg_color, 35%);
 $backdrop_sidebar_bg_color: mix($backdrop_bg_color, $backdrop_base_color, 50%);
 
 $backdrop_scrollbar_bg_color: darken($backdrop_bg_color, 3%);
+$backdrop_scrollbar_slider_color: mix($backdrop_fg_color, $backdrop_bg_color, 40%);
 
 $backdrop_menu_color: if($variant == 'light', $backdrop_base_color, mix($backdrop_bg_color, $backdrop_base_color, 20%));

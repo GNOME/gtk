@@ -2187,85 +2187,141 @@ notebook > stack:not(:only-child) {
 /**************
  * Scrollbars *
  **************/
-* {
-  -GtkScrollbar-has-backward-stepper: false;
-  -GtkScrollbar-has-forward-stepper: false; }
-scrollbar button {
-  border: none; }
-scrollbar.vertical button.down {
-  -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); }
-scrollbar.vertical button.up {
-  -gtk-icon-source: -gtk-icontheme("pan-up-symbolic"); }
-scrollbar.horizontal button.down {
-  -gtk-icon-source: -gtk-icontheme("pan-right-symbolic"); }
-scrollbar.horizontal button.up {
-  -gtk-icon-source: -gtk-icontheme("pan-left-symbolic"); }
-scrollbar.overlay-indicator:not(.dragging):not(.hovering) {
-  opacity: 0.4; }
-  scrollbar.overlay-indicator:not(.dragging):not(.hovering) slider {
-    margin: 0;
-    background-color: #2e3436;
-    border: 1px solid white;
-    background-clip: padding-box; }
-  scrollbar.overlay-indicator:not(.dragging):not(.hovering) trough {
-    border-style: none;
-    background-color: transparent; }
-  scrollbar.overlay-indicator:not(.dragging):not(.hovering).vertical slider {
-    margin-top: 2px;
-    margin-bottom: 2px;
-    min-width: 5px; }
-  scrollbar.overlay-indicator:not(.dragging):not(.hovering).horizontal slider {
-    margin-left: 2px;
-    margin-right: 2px;
-    min-height: 5px; }
-scrollbar.overlay-indicator.dragging, scrollbar.overlay-indicator.hovering {
-  opacity: 0.7; }
-scrollbar trough {
-  background-color: #d7d7d5;
-  border: 1px none #9d9d99; }
-  scrollbar trough:backdrop {
+scrollbar {
+  background-color: #c3c4c4;
+  transition: 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+  * {
+    -GtkScrollbar-has-backward-stepper: false;
+    -GtkScrollbar-has-forward-stepper: false; }
+  scrollbar.top {
+    border-bottom: 1px solid #9d9d99; }
+  scrollbar.bottom {
+    border-top: 1px solid #9d9d99; }
+  scrollbar.left {
+    border-right: 1px solid #9d9d99; }
+  scrollbar.right {
+    border-left: 1px solid #9d9d99; }
+  scrollbar:backdrop {
     background-color: #e1e1df;
-    border-color: #a5a5a1; }
-scrollbar slider {
-  background-color: #787c7d; }
-  scrollbar slider:hover {
-    background-color: #535859; }
-  scrollbar slider:hover:active {
-    background-color: #2a76c6; }
-  scrollbar slider:backdrop {
-    background-color: #c3c4c4; }
-  scrollbar slider:disabled {
+    border-color: backdrop_borders_color; }
+  scrollbar slider {
+    min-width: 8px;
+    min-height: 8px;
+    margin: -1px;
+    border: 4px solid transparent;
+    border-radius: 8px;
+    background-clip: padding-box;
+    background-color: #787c7d; }
+    scrollbar slider:hover {
+      background-color: #535859; }
+    scrollbar slider:hover:active {
+      background-color: #2a76c6; }
+    scrollbar slider:backdrop {
+      background-color: #c3c4c4; }
+    scrollbar slider:disabled {
+      background-color: transparent; }
+  scrollbar.fine-tune slider {
+    min-width: 4px;
+    min-height: 4px;
+    border-width: 6px; }
+  scrollbar.overlay-indicator:not(.dragging):not(.hovering) {
+    border: none;
+    opacity: 0.4;
     background-color: transparent; }
-scrollbar slider {
-  border-radius: 100px;
-  margin: 3px; }
-scrollbar.fine-tune slider {
-  margin: 4px; }
-scrollbar.vertical slider {
-  margin-left: 4px;
-  min-height: 42px;
-  min-width: 6px; }
-  scrollbar.vertical slider:dir(rtl) {
-    margin-left: 3px;
-    margin-right: 4px; }
-scrollbar.vertical.fine-tune slider {
-  margin-left: 5px; }
-  scrollbar.vertical.fine-tune slider:dir(rtl) {
-    margin-left: 4px;
-    margin-right: 5px; }
-scrollbar.vertical trough {
-  border-left-style: solid; }
-  scrollbar.vertical trough:dir(rtl) {
-    border-left-style: none;
-    border-right-style: solid; }
-scrollbar.horizontal slider {
-  margin-top: 4px;
-  min-height: 6px;
-  min-width: 42px; }
-scrollbar.horizontal.fine-tune slider {
-  margin-top: 5px; }
-scrollbar.horizontal trough {
-  border-top-style: solid; }
+    scrollbar.overlay-indicator:not(.dragging):not(.hovering) slider {
+      margin: 0;
+      min-width: 3px;
+      min-height: 3px;
+      background-color: #2e3436;
+      border: 1px solid white; }
+    scrollbar.overlay-indicator:not(.dragging):not(.hovering) button {
+      min-width: 5px;
+      min-height: 5px;
+      background-color: #2e3436;
+      background-clip: padding-box;
+      border-radius: 100%;
+      border: 1px solid white;
+      -gtk-icon-source: none; }
+    scrollbar.overlay-indicator:not(.dragging):not(.hovering).horizontal slider {
+      margin: 0 2px;
+      min-width: 40px; }
+    scrollbar.overlay-indicator:not(.dragging):not(.hovering).horizontal button {
+      margin: 1px 2px;
+      min-width: 5px; }
+    scrollbar.overlay-indicator:not(.dragging):not(.hovering).vertical slider {
+      margin: 2px 0;
+      min-height: 40px; }
+    scrollbar.overlay-indicator:not(.dragging):not(.hovering).vertical button {
+      margin: 2px 1px;
+      min-height: 5px; }
+  scrollbar.overlay-indicator.dragging, scrollbar.overlay-indicator.hovering {
+    opacity: 0.8; }
+  scrollbar.horizontal slider {
+    min-width: 40px; }
+  scrollbar.vertical slider {
+    min-height: 40px; }
+  scrollbar button {
+    padding: 0;
+    min-width: 14px;
+    min-height: 14px;
+    border-style: none;
+    border-radius: 0;
+    transition-property: min-height, min-width, color;
+    border-color: transparent;
+    background-color: transparent;
+    background-image: none;
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0);
+    text-shadow: none;
+    -gtk-icon-shadow: none;
+    color: #787c7d; }
+    scrollbar button:hover {
+      border-color: transparent;
+      background-color: transparent;
+      background-image: none;
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0);
+      text-shadow: none;
+      -gtk-icon-shadow: none;
+      color: #535859; }
+    scrollbar button:active, scrollbar button:checked {
+      border-color: transparent;
+      background-color: transparent;
+      background-image: none;
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0);
+      text-shadow: none;
+      -gtk-icon-shadow: none;
+      color: #2a76c6; }
+    scrollbar button:disabled {
+      border-color: transparent;
+      background-color: transparent;
+      background-image: none;
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0);
+      text-shadow: none;
+      -gtk-icon-shadow: none;
+      color: rgba(120, 124, 125, 0.2); }
+    scrollbar button:backdrop {
+      border-color: transparent;
+      background-color: transparent;
+      background-image: none;
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0);
+      text-shadow: none;
+      -gtk-icon-shadow: none;
+      color: #c3c4c4; }
+      scrollbar button:backdrop:disabled {
+        border-color: transparent;
+        background-color: transparent;
+        background-image: none;
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0);
+        text-shadow: none;
+        -gtk-icon-shadow: none;
+        color: rgba(195, 196, 196, 0.2); }
+  scrollbar.vertical button.down {
+    -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); }
+  scrollbar.vertical button.up {
+    -gtk-icon-source: -gtk-icontheme("pan-up-symbolic"); }
+  scrollbar.horizontal button.down {
+    -gtk-icon-source: -gtk-icontheme("pan-right-symbolic"); }
+  scrollbar.horizontal button.up {
+    -gtk-icon-source: -gtk-icontheme("pan-left-symbolic"); }
 
 /**********
  * Switch *
@@ -3398,7 +3454,7 @@ placessidebar junction,
 scrolledwindow junction {
   border-color: transparent;
   border-image: linear-gradient(to bottom, #9d9d99 1px, transparent 1px) 0 0 0 1/0 1px stretch;
-  background-color: #d7d7d5; }
+  background-color: #c3c4c4; }
   placessidebar junction:dir(rtl),
   scrolledwindow junction:dir(rtl) {
     border-image-slice: 0 1 0 0; }
