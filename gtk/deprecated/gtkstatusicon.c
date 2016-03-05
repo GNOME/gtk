@@ -1465,7 +1465,7 @@ gtk_status_icon_size_allocate (GtkStatusIcon *status_icon,
   else
     size = allocation->width;
 
-  if (priv->size != size)
+  if (priv->size - 1 > size || priv->size + 1 < size)
     {
       priv->size = size;
 
