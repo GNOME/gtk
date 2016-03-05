@@ -33,7 +33,6 @@
                     <property name="halign">center</property>
                     <property name="valign">start</property>
                     <property name="wrap">1</property>
-                    <property name="selectable">1</property>
                     <property name="max-width-chars">60</property>
                   </object>
                   <packing>
@@ -47,7 +46,6 @@
                     <property name="halign">center</property>
                     <property name="valign">start</property>
                     <property name="wrap">1</property>
-                    <property name="selectable">1</property>
                     <property name="max-width-chars">60</property>
                   </object>
                   <packing>

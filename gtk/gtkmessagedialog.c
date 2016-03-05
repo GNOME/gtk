@@ -310,6 +310,8 @@ gtk_message_dialog_init (GtkMessageDialog *dialog)
 {
   GtkMessageDialogPrivate *priv;
   GtkWidget *action_area;
+  GtkSettings *settings;
+  gboolean use_caret;
 
   dialog->priv = gtk_message_dialog_get_instance_private (dialog);
   priv = dialog->priv;
@@ -326,6 +328,11 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   action_area = gtk_dialog_get_action_area (GTK_DIALOG (dialog));
 G_GNUC_END_IGNORE_DEPRECATIONS
   gtk_button_box_set_layout (GTK_BUTTON_BOX (action_area), GTK_BUTTONBOX_EXPAND);
+
+  settings = gtk_widget_get_settings (GTK_WIDGET (dialog));
+  g_object_get (settings, "gtk-keynav-use-caret", &use_caret, NULL);
+  gtk_label_set_selectable (GTK_LABEL (priv->label), use_caret);
+  gtk_label_set_selectable (GTK_LABEL (priv->secondary_label), use_caret);
 }
 
 static void
