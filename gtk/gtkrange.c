@@ -2617,13 +2617,13 @@ update_initial_slider_position (GtkRange      *range,
 
   if (priv->orientation == GTK_ORIENTATION_VERTICAL)
     {
-      priv->slide_initial_slider_position = slider_alloc->y;
-      priv->slide_initial_coordinate_delta = y - slider_alloc->y;
+      priv->slide_initial_slider_position = MAX (0, slider_alloc->y);
+      priv->slide_initial_coordinate_delta = y - priv->slide_initial_slider_position;
     }
   else
     {
-      priv->slide_initial_slider_position = slider_alloc->x;
-      priv->slide_initial_coordinate_delta = x - slider_alloc->x;
+      priv->slide_initial_slider_position = MAX (0, slider_alloc->x);
+      priv->slide_initial_coordinate_delta = x - priv->slide_initial_slider_position;
     }
 }
 
