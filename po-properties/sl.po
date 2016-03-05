@@ -8,14 +8,14 @@
 # Andrej Žnidaršič <andrej.znidarsic@gmail.com>, 2010.
 # Klemen Košir <klemen.kosir@gmx.com>, 2010-2011.
 # Martin Srebotnjak <miles@filmsi.net>, 2007-2014.
-# Matej Urbančič <mateju@svn.gnome.org>, 2007-2015.
+# Matej Urbančič <mateju@svn.gnome.org>, 2007-2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-07 11:55+0000\n"
-"PO-Revision-Date: 2016-02-07 16:59+0100\n"
+"POT-Creation-Date: 2016-03-05 20:54+0100\n"
+"PO-Revision-Date: 2016-03-05 20:55+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenščina <gnome-si@googlegroups.com>\n"
 "Language: sl\n"
@@ -124,7 +124,7 @@ msgstr "Privzeti prikaz za GDK"
 
 #: gdk/gdkglcontext.c:265
 msgid "The GDK display used to create the GL context"
-msgstr "Okno GDK, ki je zavezano s kontekstom GL"
+msgstr "Okno GDK, ki je zavezano s predmetom GL"
 
 #: gdk/gdkglcontext.c:280 gtk/gtkwidget.c:1448
 msgid "Window"
@@ -140,7 +140,7 @@ msgstr "Deljeni kontekst"
 
 #: gdk/gdkglcontext.c:297
 msgid "The GL context this context shares data with"
-msgstr "Kontekst GL, s katerim si ta kontekst deli podatke"
+msgstr "Predmet GL, s katerim si ta deli podatke"
 
 #: gdk/gdkscreen.c:91
 msgid "Font options"
@@ -1864,7 +1864,7 @@ msgstr "Območje"
 
 #: gtk/gtkcellareacontext.c:116
 msgid "The Cell Area this context was created for"
-msgstr "Celično območje za katero je bila ustvarjena vsebina"
+msgstr "Celično območje, za katero je bila ustvarjena vsebina"
 
 #: gtk/gtkcellareacontext.c:132 gtk/gtkcellareacontext.c:151 gtk/gtktreeviewcolumn.c:306
 msgid "Minimum Width"
@@ -5935,7 +5935,7 @@ msgstr "Postavitev okna"
 
 #: gtk/gtkscrolledwindow.c:482
 msgid "Where the contents are located with respect to the scrollbars."
-msgstr "Kje se nahaja vsebina glede na drsnike."
+msgstr "Kje je vsebina glede na drsnike."
 
 #: gtk/gtkscrolledwindow.c:501
 msgid "Window Placement Set"
