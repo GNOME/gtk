@@ -170,6 +170,9 @@ struct _GdkWindowImplWin32
 
   /* Decorations set by gdk_window_set_decorations() or NULL if unset */
   GdkWMDecoration* decorations;
+
+  /* No. of windows to force layered windows off */
+  guint suppress_layered;
 };
 
 struct _GdkWindowImplWin32Class

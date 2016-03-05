@@ -241,7 +241,6 @@ gdk_win32_window_end_paint (GdkWindow *window)
   window_rect.right -= _gdk_offset_x;
   window_rect.top -= _gdk_offset_y;
   window_rect.bottom -= _gdk_offset_y;
-
   if (!impl->layered)
     {
       GDK_NOTE (EVENTS, g_print ("Setting window position ... "));
@@ -2626,9 +2625,18 @@ update_style_bits (GdkWindow *window)
   /* We can get away with using layered windows
    * only when no decorations are needed. It can mean
    * CSD or borderless non-CSD windows (tooltips?).
+   *
+   * If this window cannot use layered windows, disable it always.
+   * This currently applies to windows using OpenGL, which
+   * does not work with layered windows.
    */
-  if (_gdk_win32_window_lacks_wm_decorations (window))
-    impl->layered = g_strcmp0 (g_getenv ("GDK_WIN32_LAYERED"), "0") != 0;
+  if (impl->suppress_layered == 0)
+    {
+      if (_gdk_win32_window_lacks_wm_decorations (window))
+        impl->layered = g_strcmp0 (g_getenv ("GDK_WIN32_LAYERED"), "0") != 0;
+    }
+  else
+    impl->layered = FALSE;
 
   if (impl->layered)
     new_exstyle |= WS_EX_LAYERED;
