@@ -1633,7 +1633,7 @@ gdk_wayland_window_map (GdkWindow *window)
             }
 
           if (transient_for)
-            transient_for = get_popup_parent (gdk_window_get_toplevel (transient_for));
+            transient_for = get_popup_parent (gdk_window_get_effective_toplevel (transient_for));
 
           /* If the position was not explicitly set, start the popup at the
            * position of the device that holds the grab.
