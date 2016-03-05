@@ -220,7 +220,8 @@ enum {
   PROP_DIALOGS_USE_HEADER,
   PROP_ENABLE_PRIMARY_PASTE,
   PROP_RECENT_FILES_ENABLED,
-  PROP_LONG_PRESS_TIME
+  PROP_LONG_PRESS_TIME,
+  PROP_KEYNAV_USE_CARET
 };
 
 /* --- prototypes --- */
@@ -1723,6 +1724,24 @@ gtk_settings_class_init (GtkSettingsClass *class)
 								GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_LONG_PRESS_TIME);
+
+  /**
+   * GtkSettings:gtk-keynav-use-caret:
+   *
+   * Whether GTK+ should make sure that text can be navigated with
+   * a caret, even if it is not editable. This is useful when using
+   * a screen reader.
+   *
+   * Since: 3.20
+   */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_boolean ("gtk-keynav-use-caret",
+                                                                   P_("Whether to show cursor in text"),
+                                                                   P_("Whether to show cursor in text"),
+                                                                   FALSE,
+                                                                   GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_KEYNAV_USE_CARET);
 }
 
 static void
