@@ -1376,9 +1376,10 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    * GtkTextView::toggle-cursor-visible:
    * @text_view: the object which received the signal
    *
-   * The ::toggle-cursor-visible signal is a 
-   * [keybinding signal][GtkBindingSignal] 
-   * which gets emitted to toggle the visibility of the cursor.
+   * The ::toggle-cursor-visible signal is a
+   * [keybinding signal][GtkBindingSignal]
+   * which gets emitted to toggle the #GtkTextView:cursor-visible
+   * property.
    *
    * The default binding for this signal is F7.
    */ 
@@ -3491,10 +3492,13 @@ gtk_text_view_toggle_cursor_visible (GtkTextView *text_view)
  * @text_view: a #GtkTextView
  * @setting: whether to show the insertion cursor
  *
- * Toggles whether the insertion point is displayed. A buffer with no editable
- * text probably shouldn’t have a visible cursor, so you may want to turn
- * the cursor off.
- **/
+ * Toggles whether the insertion point should be displayed. A buffer with
+ * no editable text probably shouldn’t have a visible cursor, so you may
+ * want to turn the cursor off.
+ *
+ * Note that this property may be overridden by the
+ * #GtkSettings:gtk-keynave-use-caret settings.
+ */
 void
 gtk_text_view_set_cursor_visible (GtkTextView *text_view,
 				  gboolean     setting)
@@ -3527,10 +3531,10 @@ gtk_text_view_set_cursor_visible (GtkTextView *text_view,
  * gtk_text_view_get_cursor_visible:
  * @text_view: a #GtkTextView
  *
- * Find out whether the cursor is being displayed.
+ * Find out whether the cursor should be displayed.
  *
  * Returns: whether the insertion mark is visible
- **/
+ */
 gboolean
 gtk_text_view_get_cursor_visible (GtkTextView *text_view)
 {
@@ -5304,6 +5308,8 @@ gtk_text_view_handle_drag_finished (GtkTextHandle         *handle,
     gtk_widget_hide (priv->magnifier_popover);
 }
 
+static gboolean cursor_visible (GtkTextView *text_view);
+
 static void
 gtk_text_view_update_handles (GtkTextView       *text_view,
                               GtkTextHandleMode  mode)
@@ -5326,7 +5332,7 @@ gtk_text_view_update_handles (GtkTextView       *text_view,
     }
 
   if (mode == GTK_TEXT_HANDLE_MODE_CURSOR &&
-      (!gtk_widget_is_sensitive (GTK_WIDGET (text_view)) || !priv->cursor_visible))
+      (!gtk_widget_is_sensitive (GTK_WIDGET (text_view)) || !cursor_visible (text_view)))
     {
       mode = GTK_TEXT_HANDLE_MODE_NONE;
     }
@@ -5741,7 +5747,7 @@ gtk_text_view_focus_in_event (GtkWidget *widget, GdkEventFocus *event)
 
   gtk_text_view_reset_blink_time (text_view);
 
-  if (priv->cursor_visible && priv->layout)
+  if (cursor_visible (text_view) && priv->layout)
     {
       gtk_text_layout_set_cursor_visible (priv->layout, TRUE);
       gtk_text_view_check_cursor_blink (text_view);
@@ -5776,7 +5782,7 @@ gtk_text_view_focus_out_event (GtkWidget *widget, GdkEventFocus *event)
 
   DV(g_print (G_STRLOC": focus_out_event\n"));
   
-  if (priv->cursor_visible && priv->layout)
+  if (cursor_visible (text_view) && priv->layout)
     {
       gtk_text_view_check_cursor_blink (text_view);
       gtk_text_layout_set_cursor_visible (priv->layout, FALSE);
@@ -6164,6 +6170,17 @@ cursor_blinks (GtkTextView *text_view)
 }
 
 static gboolean
+cursor_visible (GtkTextView *text_view)
+{
+  GtkSettings *settings = gtk_widget_get_settings (GTK_WIDGET (text_view));
+  gboolean use_caret;
+
+  g_object_get (settings, "gtk-keynav-use-caret", &use_caret, NULL);
+
+   return use_caret || text_view->priv->cursor_visible;
+}
+
+static gboolean
 get_middle_click_paste (GtkTextView *text_view)
 {
   GtkSettings *settings;
@@ -6225,7 +6242,7 @@ blink_cb (gpointer data)
     }
 
   g_assert (priv->layout);
-  g_assert (priv->cursor_visible);
+  g_assert (cursor_visible (text_view));
 
   visible = gtk_text_layout_get_cursor_visible (priv->layout);
 
@@ -6288,7 +6305,7 @@ gtk_text_view_check_cursor_blink (GtkTextView *text_view)
   GtkTextViewPrivate *priv = text_view->priv;
 
   if (priv->layout != NULL &&
-      priv->cursor_visible &&
+      cursor_visible (text_view) &&
       gtk_widget_has_focus (GTK_WIDGET (text_view)))
     {
       if (cursor_blinks (text_view))
@@ -6322,7 +6339,7 @@ gtk_text_view_pend_cursor_blink (GtkTextView *text_view)
   GtkTextViewPrivate *priv = text_view->priv;
 
   if (priv->layout != NULL &&
-      priv->cursor_visible &&
+      cursor_visible (text_view) &&
       gtk_widget_has_focus (GTK_WIDGET (text_view)) &&
       cursor_blinks (text_view))
     {
@@ -6401,7 +6418,7 @@ gtk_text_view_move_cursor (GtkTextView     *text_view,
 
   priv = text_view->priv;
 
-  if (!priv->cursor_visible) 
+  if (!cursor_visible (text_view))
     {
       GtkScrollStep scroll_step;
       gdouble old_xpos, old_ypos;
@@ -7945,7 +7962,7 @@ gtk_text_view_ensure_layout (GtkTextView *text_view)
       if (get_buffer (text_view))
         gtk_text_layout_set_buffer (priv->layout, get_buffer (text_view));
 
-      if ((gtk_widget_has_focus (widget) && priv->cursor_visible))
+      if ((gtk_widget_has_focus (widget) && cursor_visible (text_view)))
         gtk_text_view_pend_cursor_blink (text_view);
       else
         gtk_text_layout_set_cursor_visible (priv->layout, FALSE);
@@ -8381,9 +8398,7 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
 
   if (suggested_action != 0)
     {
-      gtk_text_mark_set_visible (priv->dnd_mark,
-                                 priv->cursor_visible);
-      
+      gtk_text_mark_set_visible (priv->dnd_mark, cursor_visible (text_view));
       gdk_drag_status (context, suggested_action, time);
     }
   else
