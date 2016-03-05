@@ -2203,7 +2203,7 @@ scrollbar {
     border-left: 1px solid #9d9d99; }
   scrollbar:backdrop {
     background-color: #e1e1df;
-    border-color: backdrop_borders_color; }
+    border-color: #a5a5a1; }
   scrollbar slider {
     min-width: 8px;
     min-height: 8px;

@@ -2193,7 +2193,7 @@ scrollbar {
     border-left: 1px solid #1c1f1f; }
   scrollbar:backdrop {
     background-color: #323737;
-    border-color: backdrop_borders_color; }
+    border-color: #1f2222; }
   scrollbar slider {
     min-width: 8px;
     min-height: 8px;
