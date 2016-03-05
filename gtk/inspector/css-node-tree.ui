@@ -180,6 +180,7 @@
                     <property name="model">prop_model</property>
                     <property name="search-column">0</property>
                     <property name="enable-search">0</property>
+                    <property name="enable-grid-lines">vertical</property>
                     <child>
                       <object class="GtkTreeViewColumn" id="prop_name_column">
                         <property name="title" translatable="yes">CSS Property</property>
