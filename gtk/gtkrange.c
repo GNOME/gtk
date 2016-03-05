@@ -2608,6 +2608,26 @@ gtk_range_key_press (GtkWidget   *widget,
 }
 
 static void
+update_initial_slider_position (GtkRange      *range,
+                                gdouble        x,
+                                gdouble        y,
+                                GtkAllocation *slider_alloc)
+{
+  GtkRangePrivate *priv = range->priv;
+
+  if (priv->orientation == GTK_ORIENTATION_VERTICAL)
+    {
+      priv->slide_initial_slider_position = slider_alloc->y;
+      priv->slide_initial_coordinate_delta = y - slider_alloc->y;
+    }
+  else
+    {
+      priv->slide_initial_slider_position = slider_alloc->x;
+      priv->slide_initial_coordinate_delta = x - slider_alloc->x;
+    }
+}
+
+static void
 gtk_range_long_press_gesture_pressed (GtkGestureLongPress *gesture,
                                       gdouble              x,
                                       gdouble              y,
@@ -2617,21 +2637,11 @@ gtk_range_long_press_gesture_pressed (GtkGestureLongPress *gesture,
   GtkAllocation slider_alloc;
 
   gtk_range_update_mouse_location (range);
-  gtk_css_gadget_get_border_box (priv->slider_gadget, &slider_alloc);
 
   if (priv->mouse_location == MOUSE_SLIDER && !priv->zoom)
     {
-      if (priv->orientation == GTK_ORIENTATION_VERTICAL)
-        {
-          priv->slide_initial_slider_position = slider_alloc.y;
-          priv->slide_initial_coordinate_delta = y - slider_alloc.y;
-        }
-      else
-        {
-          priv->slide_initial_slider_position = slider_alloc.x;
-          priv->slide_initial_coordinate_delta = x - slider_alloc.x;
-        }
-
+      gtk_css_gadget_get_border_box (priv->slider_gadget, &slider_alloc);
+      update_initial_slider_position (range, x, y, &slider_alloc);
       update_zoom_state (range, TRUE);
     }
 }
@@ -2693,17 +2703,7 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
       if (shift_pressed)
         update_zoom_state (range, TRUE);
 
-      if (priv->orientation == GTK_ORIENTATION_VERTICAL)
-        {
-          priv->slide_initial_slider_position = slider_alloc.y;
-          priv->slide_initial_coordinate_delta = y - slider_alloc.y;
-        }
-      else
-        {
-          priv->slide_initial_slider_position = slider_alloc.x;
-          priv->slide_initial_coordinate_delta = x - slider_alloc.x;
-        }
-
+      update_initial_slider_position (range, x, y, &slider_alloc);
       range_grab_add (range, MOUSE_SLIDER);
 
       gtk_widget_queue_draw (widget);
@@ -2753,17 +2753,7 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
       new_value = slider_low_value + (slider_high_value - slider_low_value) / 2;
 
       gtk_range_compute_slider_position (range, new_value, &slider);
-
-      if (priv->orientation == GTK_ORIENTATION_VERTICAL)
-        {
-          priv->slide_initial_slider_position = slider.y;
-          priv->slide_initial_coordinate_delta = y - slider.y;
-        }
-      else
-        {
-          priv->slide_initial_slider_position = slider.x;
-          priv->slide_initial_coordinate_delta = x - slider.x;
-        }
+      update_initial_slider_position (range, x, y, &slider);
 
       range_grab_add (range, MOUSE_SLIDER);
 
