@@ -4,6 +4,7 @@ window1
   name: Information
   state: enabled sensitive showing visible
   toolkit: gtk
+  window-type: dialog
   <AtkComponent>
   layer: window
   alpha: 1
@@ -88,7 +89,7 @@ window1
           parent: message_area
           index: 0
           name: Information
-          state: enabled focusable multi-line sensitive showing visible
+          state: enabled multi-line sensitive showing visible
           toolkit: gtk
           <AtkComponent>
           layer: widget
@@ -96,8 +97,7 @@ window1
           <AtkText>
           text: Information
           character count: 11
-          caret offset: 11
-          selection 0: (0, 11) Information
+          caret offset: 0
           default attributes: bg-color: <omitted>
                               bg-full-height: 0
                               direction: <omitted>
@@ -129,7 +129,7 @@ window1
           parent: message_area
           index: 1
           name: More Information
-          state: enabled focusable multi-line sensitive showing visible
+          state: enabled multi-line sensitive showing visible
           toolkit: gtk
           <AtkComponent>
           layer: widget
