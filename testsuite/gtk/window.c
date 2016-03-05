@@ -88,9 +88,6 @@ test_default_size (void)
   g_assert_cmpint (w, ==, 300);
   g_assert_cmpint (h, ==, 300);
 
-  g_assert_cmpint (gtk_widget_get_allocated_width (window), ==, 300);
-  g_assert_cmpint (gtk_widget_get_allocated_height (window), ==, 300);
-
   g_assert_cmpint (gtk_widget_get_allocated_width (box), ==, 300);
   g_assert_cmpint (gtk_widget_get_allocated_height (box), ==, 300);
 
