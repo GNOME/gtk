@@ -108,14 +108,20 @@ extern gint       _gdk_input_ignore_core;
 
 GdkCursor *_gdk_win32_grab_cursor;
 
+typedef struct
+{
+  GSource source;
+
+  GdkDisplay *display;
+  GPollFD event_poll_fd;
+} GdkWin32EventSource;
+
 static GSourceFuncs event_funcs = {
   gdk_event_prepare,
   gdk_event_check,
   gdk_event_dispatch,
   NULL
 };
-
-GPollFD event_poll_fd;
 
 static GdkWindow *mouse_window = NULL;
 static GdkWindow *mouse_window_ignored_leave = NULL;
@@ -286,9 +292,10 @@ _gdk_win32_window_procedure (HWND   hwnd,
 }
 
 void
-_gdk_events_init (void)
+_gdk_events_init (GdkDisplay *display)
 {
   GSource *source;
+  GdkWin32EventSource *event_source;
 
 #if 0
   int i, j, n;
@@ -376,20 +383,22 @@ _gdk_events_init (void)
   GDK_NOTE (EVENTS, g_print ("latin_locale = %08x\n", (guint) latin_locale));
 #endif
 
-  source = g_source_new (&event_funcs, sizeof (GSource));
+  source = g_source_new (&event_funcs, sizeof (GdkWin32EventSource));
   g_source_set_name (source, "GDK Win32 event source");
   g_source_set_priority (source, GDK_PRIORITY_EVENTS);
 
+  event_source = (GdkWin32EventSource *)source;
+  event_source->display = display;
 #ifdef G_WITH_CYGWIN
-  event_poll_fd.fd = open ("/dev/windows", O_RDONLY);
-  if (event_poll_fd.fd == -1)
+  event_source->event_poll_fd.fd = open ("/dev/windows", O_RDONLY);
+  if (event_source->event_poll_fd.fd == -1)
     g_error ("can't open \"/dev/windows\": %s", g_strerror (errno));
 #else
-  event_poll_fd.fd = G_WIN32_MSG_HANDLE;
+  event_source->event_poll_fd.fd = G_WIN32_MSG_HANDLE;
 #endif
-  event_poll_fd.events = G_IO_IN;
+  event_source->event_poll_fd.events = G_IO_IN;
 
-  g_source_add_poll (source, &event_poll_fd);
+  g_source_add_poll (source, &event_source->event_poll_fd);
   g_source_set_can_recurse (source, TRUE);
   g_source_attach (source, NULL);
 }
@@ -3501,19 +3510,17 @@ static gboolean
 gdk_event_prepare (GSource *source,
 		   gint    *timeout)
 {
-  GdkDisplay *display;
+  GdkWin32EventSource *event_source = (GdkWin32EventSource *)source;
   gboolean retval;
-
-  display = gdk_display_get_default ();
 
   gdk_threads_enter ();
 
   *timeout = -1;
 
-  if (display->event_pause_count > 0)
-    retval =_gdk_event_queue_find_first (display) != NULL;
+  if (event_source->display->event_pause_count > 0)
+    retval =_gdk_event_queue_find_first (event_source->display) != NULL;
   else
-    retval = (_gdk_event_queue_find_first (display) != NULL ||
+    retval = (_gdk_event_queue_find_first (event_source->display) != NULL ||
               (modal_win32_dialog == NULL &&
                GetQueueStatus (QS_ALLINPUT) != 0));
 
@@ -3525,17 +3532,15 @@ gdk_event_prepare (GSource *source,
 static gboolean
 gdk_event_check (GSource *source)
 {
-  GdkDisplay *display;
+  GdkWin32EventSource *event_source = (GdkWin32EventSource *)source;
   gboolean retval;
-
-  display = gdk_display_get_default ();
 
   gdk_threads_enter ();
 
-  if (display->event_pause_count > 0)
-    retval = _gdk_event_queue_find_first (display) != NULL;
-  else if (event_poll_fd.revents & G_IO_IN)
-    retval = (_gdk_event_queue_find_first (display) != NULL ||
+  if (event_source->display->event_pause_count > 0)
+    retval = _gdk_event_queue_find_first (event_source->display) != NULL;
+  else if (event_source->event_poll_fd.revents & G_IO_IN)
+    retval = (_gdk_event_queue_find_first (event_source->display) != NULL ||
               (modal_win32_dialog == NULL &&
                GetQueueStatus (QS_ALLINPUT) != 0));
   else
@@ -3548,18 +3553,16 @@ gdk_event_check (GSource *source)
 
 static gboolean
 gdk_event_dispatch (GSource     *source,
-		    GSourceFunc  callback,
-		    gpointer     user_data)
+                    GSourceFunc  callback,
+                    gpointer     user_data)
 {
-  GdkDisplay *display;
+  GdkWin32EventSource *event_source = (GdkWin32EventSource *)source;
   GdkEvent *event;
-
-  display = gdk_display_get_default ();
 
   gdk_threads_enter ();
 
-  _gdk_win32_display_queue_events (display);
-  event = _gdk_event_unqueue (display);
+  _gdk_win32_display_queue_events (event_source->display);
+  event = _gdk_event_unqueue (event_source->display);
 
   if (event)
     {
@@ -3569,11 +3572,11 @@ gdk_event_dispatch (GSource     *source,
 
       /* Do drag & drop if it is still pending */
       if (_dnd_source_state == GDK_WIN32_DND_PENDING)
-	{
-	  _dnd_source_state = GDK_WIN32_DND_DRAGGING;
-	  _gdk_win32_dnd_do_dragdrop ();
-	  _dnd_source_state = GDK_WIN32_DND_NONE;
-	}
+        {
+          _dnd_source_state = GDK_WIN32_DND_DRAGGING;
+          _gdk_win32_dnd_do_dragdrop ();
+          _dnd_source_state = GDK_WIN32_DND_NONE;
+        }
     }
 
   gdk_threads_leave ();

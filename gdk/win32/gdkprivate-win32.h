@@ -540,6 +540,6 @@ gboolean _gdk_win32_window_lacks_wm_decorations (GdkWindow *window);
 /* Initialization */
 void _gdk_win32_windowing_init (void);
 void _gdk_dnd_init    (void);
-void _gdk_events_init (void);
+void _gdk_events_init (GdkDisplay *display);
 
 #endif /* __GDK_PRIVATE_WIN32_H__ */
