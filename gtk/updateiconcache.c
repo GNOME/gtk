@@ -39,6 +39,7 @@
 
 #include <glib.h>
 #include <glib/gstdio.h>
+#undef GDK_PIXBUF_DISABLE_DEPRECATED
 #include <gdk-pixbuf/gdk-pixdata.h>
 #include <glib/gi18n.h>
 #include "gtkiconcachevalidator.h"

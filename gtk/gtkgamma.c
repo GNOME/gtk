@@ -31,6 +31,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#undef GDK_PIXBUF_DISABLE_DEPRECATED
 #include <gdk-pixbuf/gdk-pixdata.h>
 
 #include "gtkgamma.h"

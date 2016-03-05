@@ -29,6 +29,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+#undef GDK_PIXBUF_DISABLE_DEPRECATED
 #include "gdk-pixbuf/gdk-pixdata.h"
 #include "gtktextbufferserialize.h"
 #include "gtkintl.h"
