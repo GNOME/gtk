@@ -87,6 +87,7 @@
                     <property name="visible">True</property>
                     <property name="model">model</property>
                     <property name="enable-search">False</property>
+                    <property name="enable-grid-lines">vertical</property>
                     <signal name="row-activated" handler="row_activated"/>
                     <child internal-child="selection">
                       <object class="GtkTreeSelection">

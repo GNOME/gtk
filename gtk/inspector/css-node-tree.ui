@@ -80,6 +80,7 @@
                 <property name="visible">1</property>
                 <property name="search-column">0</property>
                 <property name="enable-search">0</property>
+                <property name="enable-grid-lines">vertical</property>
                 <signal name="row-activated" handler="row_activated"/>
                 <signal name="button-press-event" handler="button_pressed"/>
                 <child internal-child="selection">
