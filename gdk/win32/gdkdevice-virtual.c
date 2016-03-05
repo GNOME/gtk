@@ -92,13 +92,8 @@ gdk_device_virtual_set_window_cursor (GdkDevice *device,
 				      GdkWindow *window,
 				      GdkCursor *cursor)
 {
-  GdkWindow *parent_window;
-  GdkWindowImplWin32 *impl;
-  GdkCursor *previous_cursor;
-
-  impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
-
-  previous_cursor = impl->cursor;
+  GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+  GdkCursor *previous_cursor = impl->cursor;
 
   if (cursor != NULL && GDK_WIN32_CURSOR (cursor)->hcursor != NULL)
     {
