@@ -2178,15 +2178,11 @@ notebook > stack:not(:only-child) {
  * Scrollbars *
  **************/
 scrollbar {
-  /*
-    // disable steppers
-    @at-root * {
-      -GtkScrollbar-has-backward-stepper: false;
-      -GtkScrollbar-has-forward-stepper: false;
-    }
-  */
   background-color: #313434;
   transition: 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+  * {
+    -GtkScrollbar-has-backward-stepper: false;
+    -GtkScrollbar-has-forward-stepper: false; }
   scrollbar.top {
     border-bottom: 1px solid #1c1f1f; }
   scrollbar.bottom {
@@ -2219,7 +2215,7 @@ scrollbar {
     min-height: 4px;
     border-width: 6px; }
   scrollbar.overlay-indicator:not(.dragging):not(.hovering) {
-    border: none;
+    border-color: transparent;
     opacity: 0.4;
     background-color: transparent; }
     scrollbar.overlay-indicator:not(.dragging):not(.hovering) slider {
@@ -2316,6 +2312,10 @@ scrollbar {
     -gtk-icon-source: -gtk-icontheme("pan-right-symbolic"); }
   scrollbar.horizontal button.up {
     -gtk-icon-source: -gtk-icontheme("pan-left-symbolic"); }
+
+treeview ~ scrollbar.vertical {
+  border-top: 1px solid #1c1f1f;
+  margin-top: -1px; }
 
 /**********
  * Switch *

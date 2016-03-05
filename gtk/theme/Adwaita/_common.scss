@@ -2069,7 +2069,7 @@ scrollbar {
 
   &.overlay-indicator {
     &:not(.dragging):not(.hovering) {
-      border: none;
+      border-color: transparent;
       opacity: 0.4;
       background-color: transparent;
 
@@ -2173,6 +2173,11 @@ scrollbar {
       &.up { -gtk-icon-source: -gtk-icontheme('pan-left-symbolic'); }
     }
   }
+}
+
+treeview ~ scrollbar.vertical {
+  border-top: 1px solid $borders_color;
+  margin-top: -1px;
 }
 
 /**********
