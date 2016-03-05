@@ -2044,8 +2044,8 @@ scrollbar {
 
   // slider
   slider {
-    min-width: 8px;
-    min-height: 8px;
+    min-width: 6px;
+    min-height: 6px;
     margin: -1px;
     border: 4px solid transparent;
     border-radius: 8px;
@@ -2127,8 +2127,8 @@ scrollbar {
   // button styling
   button {
     padding: 0;
-    min-width: 14px;
-    min-height: 14px;
+    min-width: 12px;
+    min-height: 12px;
     border-style: none;
     border-radius: 0;
     transition-property: min-height, min-width, color;
