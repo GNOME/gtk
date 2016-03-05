@@ -1,3 +1,26 @@
+Overview of Changes from GTK+ 2.24.29 to 2.24.30
+================================================
+
+* Win32:
+ - Build fixes
+
+* X11:
+ - Support Randr 1.5 monitor information
+
+* Bug fixes:
+ 722815 OS X: Deliver GdkModifierType during 'drag-motion'
+ 612611 Fix interaction between scrolling menus and automatic mnemonics
+ 699652 win32: On focus restore the window if iconified
+ 698652 win32: Properly handle show and focus
+        OS X: Fix clipboard image retrieval
+        OS X: Fix a crash when fullscreening
+ 758893 Prevent status icon size dithering
+
+* Translation updates:
+ Japanese
+ Thai
+
+
 Overview of Changes from GTK+ 2.24.28 to 2.24.29
 ================================================
 
