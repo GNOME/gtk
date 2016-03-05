@@ -16,16 +16,23 @@ test_simplify = \
 EXTRA_DIST += \
 	$(test_simplify)	\
 	test-simplify.in	\
+	test-settings.in	\
 	$(NULL)
 
 TESTS_ENVIRONMENT = \
-	GTK_BUILDER_TOOL="$(top_builddir)/gtk/gtk-builder-tool"
+	GTK_BUILDER_TOOL="$(top_builddir)/gtk/gtk-builder-tool" \
+	GTK_QUERY_SETTINGS="$(top_builddir)/gtk/gtk-query-settings" \
+	$(NULL)
 
 TEST_PROGS += \
 	test-simplify	\
+	test-settings	\
 	$(NULL)
 
 test-simplify:test-simplify.in
+	$(AM_V_GEN) cp $< $@
+
+test-settings:test-settings.in
 	$(AM_V_GEN) cp $< $@
 
 if BUILDOPT_INSTALL_TESTS
@@ -33,7 +40,7 @@ insttestdir = $(libexecdir)/installed-tests/$(PACKAGE)
 insttest_SCRIPTS = $(TEST_PROGS)
 nobase_insttest_DATA = $(test_simplify)
 
-test-simplify.test: test-simplify Makefile
+%.test: % Makefile
 	$(AM_V_GEN) (echo '[Test]' > $@.tmp; \
 	echo 'Type=session' >> $@.tmp; \
 	echo 'Output=TAP' >> $@.tmp; \
@@ -43,7 +50,7 @@ test-simplify.test: test-simplify Makefile
 test_files = $(TEST_PROGS:=.test)
 
 DISTCLEANFILES = \
-	test-simplify		\
+	$(TEST_PROGS)		\
 	$(test_files)		\
 	$(NULL)
 
