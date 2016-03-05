@@ -1837,7 +1837,7 @@ gtk_range_measure_trough (GtkCssGadget   *gadget,
   gint min, nat;
 
   gtk_css_gadget_get_preferred_size (priv->slider_gadget,
-                                     orientation, for_size,
+                                     orientation, -1,
                                      minimum, natural,
                                      NULL, NULL);
 
