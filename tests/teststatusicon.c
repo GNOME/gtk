@@ -33,11 +33,13 @@ static TestStatus status = TEST_STATUS_INFO;
 static gint timeout = 0;
 static GSList *icons = NULL;
 
-static void
+static gboolean
 size_changed_cb (GtkStatusIcon *icon,
 		 int size)
 {
   g_print ("status icon %p size-changed size = %d\n", icon, size);
+
+  return FALSE;
 }
 
 static void
