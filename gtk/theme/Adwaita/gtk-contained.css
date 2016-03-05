@@ -2222,8 +2222,11 @@ scrollbar {
       background-color: transparent; }
   scrollbar.fine-tune slider {
     min-width: 4px;
-    min-height: 4px;
-    border-width: 6px; }
+    min-height: 4px; }
+  scrollbar.fine-tune.horizontal slider {
+    border-width: 5px 4px; }
+  scrollbar.fine-tune.vertical slider {
+    border-width: 4px 5px; }
   scrollbar.overlay-indicator:not(.dragging):not(.hovering) {
     border-color: transparent;
     opacity: 0.4;

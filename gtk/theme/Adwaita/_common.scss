@@ -2061,10 +2061,14 @@ scrollbar {
     &:disabled { background-color: transparent; }
   }
 
-  &.fine-tune slider {
-    min-width: 4px;
-    min-height: 4px;
-    border-width: 6px;
+  &.fine-tune {
+    slider {
+      min-width: 4px;
+      min-height: 4px;
+    }
+
+    &.horizontal slider { border-width: 5px 4px; }
+    &.vertical slider { border-width: 4px 5px; }
   }
 
   &.overlay-indicator {
