@@ -2753,7 +2753,7 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
                         x - slider_alloc.width);
 
       /* compute new value for warped slider */
-      new_value = slider_low_value + (slider_high_value - slider_low_value) / 2;
+      new_value = (slider_low_value + slider_high_value) / 2;
 
       gtk_range_compute_slider_position (range, new_value, &slider);
       update_initial_slider_position (range, x, y, &slider);
