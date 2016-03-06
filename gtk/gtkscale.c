@@ -1251,10 +1251,12 @@ gtk_scale_set_draw_value (GtkScale *scale,
 			  gboolean  draw_value)
 {
   GtkScalePrivate *priv;
+  GtkWidget *widget;
 
   g_return_if_fail (GTK_IS_SCALE (scale));
 
   priv = scale->priv;
+  widget = GTK_WIDGET (scale);
 
   draw_value = draw_value != FALSE;
 
@@ -1265,9 +1267,9 @@ gtk_scale_set_draw_value (GtkScale *scale,
         {
           GtkCssNode *widget_node;
 
-          widget_node = gtk_widget_get_css_node (GTK_WIDGET (scale));
+          widget_node = gtk_widget_get_css_node (widget);
           priv->value_gadget = gtk_css_custom_gadget_new ("value",
-                                                          GTK_WIDGET (scale), NULL, NULL,
+                                                          widget, NULL, NULL,
                                                           gtk_scale_measure_value,
                                                           NULL,
                                                           gtk_scale_render_value,
@@ -1292,7 +1294,7 @@ gtk_scale_set_draw_value (GtkScale *scale,
 
       gtk_scale_clear_layout (scale);
 
-      gtk_widget_queue_resize (GTK_WIDGET (scale));
+      gtk_widget_queue_resize (widget);
 
       g_object_notify_by_pspec (G_OBJECT (scale), properties[PROP_DRAW_VALUE]);
     }
@@ -2039,6 +2041,7 @@ gtk_scale_add_mark (GtkScale        *scale,
                     GtkPositionType  position,
                     const gchar     *markup)
 {
+  GtkWidget *widget;
   GtkScalePrivate *priv;
   GtkScaleMark *mark;
   GSList *m;
@@ -2049,7 +2052,8 @@ gtk_scale_add_mark (GtkScale        *scale,
   g_return_if_fail (GTK_IS_SCALE (scale));
 
   priv = scale->priv;
-  widget_node = gtk_widget_get_css_node (GTK_WIDGET (scale));
+  widget = GTK_WIDGET (scale);
+  widget_node = gtk_widget_get_css_node (widget);
 
   mark = g_new0 (GtkScaleMark, 1);
   mark->value = value;
@@ -2070,7 +2074,7 @@ gtk_scale_add_mark (GtkScale        *scale,
         {
           priv->top_marks_gadget =
             gtk_css_custom_gadget_new ("marks",
-                                       GTK_WIDGET (scale), NULL, NULL,
+                                       widget, NULL, NULL,
                                        gtk_scale_measure_marks,
                                        gtk_scale_allocate_marks,
                                        gtk_scale_render_marks,
@@ -2089,7 +2093,7 @@ gtk_scale_add_mark (GtkScale        *scale,
         {
           priv->bottom_marks_gadget =
             gtk_css_custom_gadget_new ("marks",
-                                       GTK_WIDGET (scale), NULL, NULL,
+                                       widget, NULL, NULL,
                                        gtk_scale_measure_marks,
                                        gtk_scale_allocate_marks,
                                        gtk_scale_render_marks,
@@ -2105,7 +2109,7 @@ gtk_scale_add_mark (GtkScale        *scale,
 
   mark->gadget =
     gtk_css_custom_gadget_new ("mark",
-                               GTK_WIDGET (scale), NULL, NULL,
+                               widget, NULL, NULL,
                                gtk_scale_measure_mark,
                                gtk_scale_allocate_mark,
                                gtk_scale_render_mark,
@@ -2114,7 +2118,7 @@ gtk_scale_add_mark (GtkScale        *scale,
 
   mark->indicator_gadget =
     gtk_css_custom_gadget_new ("indicator",
-                               GTK_WIDGET (scale), mark->gadget, NULL,
+                               widget, mark->gadget, NULL,
                                NULL,
                                NULL,
                                gtk_scale_render_mark_indicator,
@@ -2122,7 +2126,7 @@ gtk_scale_add_mark (GtkScale        *scale,
   if (mark->markup && *mark->markup)
     mark->label_gadget =
       gtk_css_custom_gadget_new ("label",
-                                 GTK_WIDGET (scale), mark->gadget,
+                                 widget, mark->gadget,
                                  mark->position == GTK_POS_TOP ?
                                  NULL : mark->indicator_gadget,
                                  gtk_scale_measure_mark_label,
@@ -2164,7 +2168,7 @@ gtk_scale_add_mark (GtkScale        *scale,
 
   g_free (values);
 
-  gtk_widget_queue_resize (GTK_WIDGET (scale));
+  gtk_widget_queue_resize (widget);
 }
 
 static GtkBuildableIface *parent_buildable_iface;
