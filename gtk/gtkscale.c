@@ -785,6 +785,14 @@ gtk_scale_class_init (GtkScaleClass *class)
                                                              0, G_MAXINT, 31,
                                                              GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
+  /**
+   * GtkScale:value-spacing:
+   *
+   * Space between value text and the slider/trough area.
+   *
+   * Deprecated: 3.20: Use min-height/min-width CSS properties on the value
+   *   element instead. The value of this style property is ignored.
+   */
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("value-spacing",
 							     P_("Value spacing"),
@@ -792,7 +800,7 @@ gtk_scale_class_init (GtkScaleClass *class)
 							     0,
 							     G_MAXINT,
 							     2,
-							     GTK_PARAM_READABLE));
+							     GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
   
   /* All bindings (even arrow keys) are on both h/v scale, because
    * blind users etc. don't care about scale orientation.
