@@ -46,7 +46,6 @@ typedef enum
 
 typedef struct _GtkRBTree GtkRBTree;
 typedef struct _GtkRBNode GtkRBNode;
-typedef struct _GtkRBTreeView GtkRBTreeView;
 
 typedef void (*GtkRBTreeTraverseFunc) (GtkRBTree  *tree,
                                        GtkRBNode  *node,
