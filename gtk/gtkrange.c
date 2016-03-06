@@ -69,6 +69,7 @@
 #define TIMEOUT_REPEAT      250
 #define AUTOSCROLL_FACTOR   20
 #define SCROLL_EDGE_SIZE    15
+#define MARK_SNAP_LENGTH    12
 
 typedef struct _GtkRangeStepTimer GtkRangeStepTimer;
 
@@ -2834,7 +2835,6 @@ update_slider_position (GtkRange *range,
   gdouble mark_value;
   gdouble mark_delta;
   gdouble zoom;
-  gint slider_start, slider_end;
   gint i;
   GtkAllocation slider_alloc, trough_alloc;
 
@@ -2874,7 +2874,6 @@ update_slider_position (GtkRange *range,
   new_value = coord_to_value (range, c);
   next_value = coord_to_value (range, c + 1);
   mark_delta = fabs (next_value - new_value);
-  gtk_range_get_slider_range (range, &slider_start, &slider_end);
 
   for (i = 0; i < priv->n_marks; i++)
     {
@@ -2882,7 +2881,7 @@ update_slider_position (GtkRange *range,
 
       if (fabs (gtk_adjustment_get_value (priv->adjustment) - mark_value) < 3 * mark_delta)
         {
-          if (fabs (new_value - mark_value) < (slider_end - slider_start) * 0.5 * mark_delta)
+          if (fabs (new_value - mark_value) < MARK_SNAP_LENGTH * mark_delta)
             {
               new_value = mark_value;
               break;
