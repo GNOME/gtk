@@ -431,6 +431,7 @@ gtk_private_h_sources =		\
 	gtkcsspathnodeprivate.h	\
 	gtkcsspositionvalueprivate.h	\
 	gtkcssproviderprivate.h	\
+	gtkcssrbtreeprivate.h	\
 	gtkcssrepeatvalueprivate.h	\
 	gtkcssrgbavalueprivate.h	\
 	gtkcsssectionprivate.h 	\
@@ -700,6 +701,7 @@ gtk_base_c_sources = 		\
 	gtkcsspathnode.c	\
 	gtkcsspositionvalue.c	\
 	gtkcssprovider.c	\
+	gtkcssrbtree.c		\
 	gtkcssrepeatvalue.c	\
 	gtkcssrgbavalue.c	\
 	gtkcsssection.c 	\

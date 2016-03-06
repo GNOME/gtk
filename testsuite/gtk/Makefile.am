@@ -43,6 +43,7 @@ TEST_PROGS += 			\
 	check-cursor-names	\
 	clipboard		\
 	cssprovider		\
+	cssrbtree		\
 	defaultvalue		\
 	entry			\
 	firefox-stylecontext	\
@@ -93,6 +94,14 @@ treemodel_SOURCES = 		\
 	$(NULL)
 
 builder_LDFLAGS = -export-dynamic
+
+cssrbtree_CFLAGS  = -DGTK_COMPILATION -UG_ENABLE_DEBUG
+cssrbtree_LDADD = $(GTK_DEP_LIBS)
+cssrbtree_SOURCES = 				\
+	cssrbtree.c 				\
+	$(top_srcdir)/gtk/gtkcssrbtreeprivate.h	\
+	$(top_srcdir)/gtk/gtkcssrbtree.c	\
+	$(NULL)
 
 rbtree_CFLAGS  = -DGTK_COMPILATION -UG_ENABLE_DEBUG
 rbtree_LDADD = $(GTK_DEP_LIBS)
