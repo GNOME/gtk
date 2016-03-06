@@ -78,6 +78,7 @@
                         <property name="visible">1</property>
                         <property name="label" translatable="yes">Save _As</property>
                         <property name="use-underline">1</property>
+                        <accelerator key="s" modifiers="primary | shift-mask" signal="activate"/>
                       </object>
                     </child>
                     <child>
