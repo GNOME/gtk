@@ -1132,20 +1132,21 @@ gtk_spin_button_get_text_width (GtkSpinButton *spin_button)
   gint width, w;
   PangoLayout *layout;
   gchar *str;
+  gdouble value;
 
   layout = pango_layout_copy (gtk_entry_get_layout (GTK_ENTRY (spin_button)));
 
   /* Get max of MIN_SPIN_BUTTON_WIDTH, size of upper, size of lower */
   width = MIN_SPIN_BUTTON_WIDTH;
 
-  str = gtk_spin_button_format_for_value (spin_button,
-                                          gtk_adjustment_get_upper (priv->adjustment));
+  value = CLAMP (gtk_adjustment_get_upper (priv->adjustment), -1e7, 1e7);
+  str = gtk_spin_button_format_for_value (spin_button, value);
   w = measure_string_width (layout, str);
   width = MAX (width, w);
   g_free (str);
 
-  str = gtk_spin_button_format_for_value (spin_button,
-                                          gtk_adjustment_get_lower (priv->adjustment));
+  value = CLAMP (gtk_adjustment_get_lower (priv->adjustment), -1e7, 1e7);
+  str = gtk_spin_button_format_for_value (spin_button, value);
   w = measure_string_width (layout, str);
   width = MAX (width, w);
   g_free (str);
