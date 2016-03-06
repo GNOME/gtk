@@ -1361,7 +1361,7 @@ gtk_range_get_slider_range (GtkRange *range,
 
   priv = range->priv;
 
-  gtk_css_gadget_get_border_box (priv->slider_gadget, &slider_alloc);
+  gtk_css_gadget_get_margin_box (priv->slider_gadget, &slider_alloc);
 
   if (priv->orientation == GTK_ORIENTATION_VERTICAL)
     {
@@ -2537,7 +2537,7 @@ coord_to_value (GtkRange *range,
   gint    slider_length;
   GtkAllocation slider_alloc, trough_alloc;
 
-  gtk_css_gadget_get_border_box (priv->slider_gadget, &slider_alloc);
+  gtk_css_gadget_get_margin_box (priv->slider_gadget, &slider_alloc);
   gtk_css_gadget_get_content_box (priv->trough_gadget, &trough_alloc);
 
   if (priv->orientation == GTK_ORIENTATION_VERTICAL)
@@ -2580,7 +2580,7 @@ gtk_range_key_press (GtkWidget   *widget,
   device = gdk_event_get_device ((GdkEvent *) event);
   device = gdk_device_get_associated_device (device);
 
-  gtk_css_gadget_get_border_box (priv->slider_gadget, &slider_alloc);
+  gtk_css_gadget_get_margin_box (priv->slider_gadget, &slider_alloc);
 
   if (gtk_gesture_is_active (priv->drag_gesture) &&
       device == gtk_gesture_get_device (priv->drag_gesture) &&
@@ -2640,7 +2640,7 @@ gtk_range_long_press_gesture_pressed (GtkGestureLongPress *gesture,
 
   if (priv->mouse_location == MOUSE_SLIDER && !priv->zoom)
     {
-      gtk_css_gadget_get_border_box (priv->slider_gadget, &slider_alloc);
+      gtk_css_gadget_get_margin_box (priv->slider_gadget, &slider_alloc);
       update_initial_slider_position (range, x, y, &slider_alloc);
       update_zoom_state (range, TRUE);
     }
@@ -2681,7 +2681,7 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
   priv->mouse_y = y;
 
   gtk_range_update_mouse_location (range);
-  gtk_css_gadget_get_border_box (priv->slider_gadget, &slider_alloc);
+  gtk_css_gadget_get_margin_box (priv->slider_gadget, &slider_alloc);
 
   g_object_get (gtk_widget_get_settings (widget),
                 "gtk-primary-button-warps-slider", &primary_warps,
@@ -2838,7 +2838,7 @@ update_slider_position (GtkRange *range,
   gint i;
   GtkAllocation slider_alloc, trough_alloc;
 
-  gtk_css_gadget_get_border_box (priv->slider_gadget, &slider_alloc);
+  gtk_css_gadget_get_margin_box (priv->slider_gadget, &slider_alloc);
   gtk_css_gadget_get_margin_box (priv->trough_gadget, &trough_alloc);
 
   if (priv->zoom)
