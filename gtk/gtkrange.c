@@ -2720,8 +2720,6 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
 
       range_grab_add (range, priv->mouse_location);
 
-      gtk_range_queue_draw_location (range, priv->mouse_location);
-
       scroll = range_get_scroll_for_grab (range);
       if (scroll == GTK_SCROLL_START || scroll == GTK_SCROLL_END)
         gtk_range_scroll (range, scroll);
