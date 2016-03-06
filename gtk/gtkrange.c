@@ -2436,7 +2436,6 @@ update_zoom_state (GtkRange *range,
     gtk_style_context_add_class (context, "fine-tune");
   else
     gtk_style_context_remove_class (context, "fine-tune");
-  gtk_widget_queue_draw (GTK_WIDGET (range));
 
   range->priv->zoom = enabled;
 }
