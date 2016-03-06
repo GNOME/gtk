@@ -270,7 +270,7 @@ static void          gtk_range_adjustment_changed       (GtkAdjustment *adjustme
 static void          gtk_range_add_step_timer           (GtkRange      *range,
                                                          GtkScrollType  step);
 static void          gtk_range_remove_step_timer        (GtkRange      *range);
-static void          gtk_range_queue_draw_location      (GtkRange      *range,
+static void          gtk_range_queue_allocate_location  (GtkRange      *range,
                                                          MouseLocation  location);
 static gboolean      gtk_range_real_change_value        (GtkRange      *range,
                                                          GtkScrollType  scroll,
@@ -2416,7 +2416,7 @@ range_grab_add (GtkRange      *range,
    * is the only widget receiving the pointer events.
    */
   priv->grab_location = location;
-  gtk_range_queue_draw_location (range, location);
+  gtk_range_queue_allocate_location (range, location);
 
   update_slider_state (range);
   update_steppers_state (range);
@@ -2449,7 +2449,7 @@ range_grab_remove (GtkRange *range)
 
   context = gtk_widget_get_style_context (GTK_WIDGET (range));
 
-  gtk_range_queue_draw_location (range, priv->grab_location);
+  gtk_range_queue_allocate_location (range, priv->grab_location);
   priv->grab_location = MOUSE_OUTSIDE;
 
   gtk_range_update_mouse_location (range);
@@ -3466,8 +3466,8 @@ gtk_range_update_mouse_location (GtkRange *range)
 
   if (old != priv->mouse_location)
     {
-      gtk_range_queue_draw_location (range, old);
-      gtk_range_queue_draw_location (range, priv->mouse_location);
+      gtk_range_queue_allocate_location (range, old);
+      gtk_range_queue_allocate_location (range, priv->mouse_location);
 
       if (priv->mouse_location == MOUSE_OUTSIDE)
         gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_PRELIGHT);
@@ -3617,10 +3617,10 @@ gtk_range_calc_slider (GtkRange *range)
 
   gtk_css_gadget_set_visible (priv->slider_gadget, visible);
 
-  gtk_range_queue_draw_location (range, MOUSE_SLIDER);
+  gtk_range_queue_allocate_location (range, MOUSE_SLIDER);
 
   if (priv->has_origin)
-    gtk_range_queue_draw_location (range, MOUSE_TROUGH);
+    gtk_range_queue_allocate_location (range, MOUSE_TROUGH);
 
   gtk_range_update_mouse_location (range);
 }
@@ -3674,16 +3674,16 @@ gtk_range_calc_stepper_sensitivity (GtkRange *range)
     {
       update_steppers_state (range);
 
-      gtk_range_queue_draw_location (range, MOUSE_STEPPER_A);
-      gtk_range_queue_draw_location (range, MOUSE_STEPPER_B);
-      gtk_range_queue_draw_location (range, MOUSE_STEPPER_C);
-      gtk_range_queue_draw_location (range, MOUSE_STEPPER_D);
+      gtk_range_queue_allocate_location (range, MOUSE_STEPPER_A);
+      gtk_range_queue_allocate_location (range, MOUSE_STEPPER_B);
+      gtk_range_queue_allocate_location (range, MOUSE_STEPPER_C);
+      gtk_range_queue_allocate_location (range, MOUSE_STEPPER_D);
     }
 }
 
 static void
-gtk_range_queue_draw_location (GtkRange      *range,
-                               MouseLocation  location)
+gtk_range_queue_allocate_location (GtkRange      *range,
+                                   MouseLocation  location)
 {
   GtkRangePrivate *priv = range->priv;
   GtkCssGadget *gadget;
