@@ -14257,7 +14257,14 @@ accel_group_start_element (GMarkupParseContext  *context,
 
       if (modifiers_str != NULL)
         {
-          if (!_gtk_builder_flags_from_string (GDK_TYPE_MODIFIER_TYPE,
+          GFlagsValue aliases[2] = {
+            { 0, "primary", "primary" },
+            { 0, NULL, NULL }
+          };
+
+          aliases[0].value = _gtk_get_primary_accel_mod ();
+
+          if (!_gtk_builder_flags_from_string (GDK_TYPE_MODIFIER_TYPE, aliases,
                                                modifiers_str, &modifiers, error))
             {
               _gtk_builder_prefix_error (data->builder, context, error);

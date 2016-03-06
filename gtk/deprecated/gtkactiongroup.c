@@ -437,6 +437,7 @@ accelerator_start_element (GMarkupParseContext *context,
       else if (strcmp (names[i], "modifiers") == 0)
 	{
 	  if (!_gtk_builder_flags_from_string (GDK_TYPE_MODIFIER_TYPE,
+                                               NULL,
 					       values[i],
 					       &modifiers,
 					       error))

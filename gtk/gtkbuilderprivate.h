@@ -162,10 +162,11 @@ gboolean _gtk_builder_enum_from_string (GType         type,
                                         const gchar  *string,
                                         gint         *enum_value,
                                         GError      **error);
-gboolean  _gtk_builder_flags_from_string (GType       type,
-					  const char *string,
-					  guint      *value,
-					  GError    **error);
+gboolean  _gtk_builder_flags_from_string (GType         type,
+                                          GFlagsValue  *aliases,
+					  const char   *string,
+					  guint        *value,
+					  GError      **error);
 const gchar * _gtk_builder_parser_translate (const gchar *domain,
                                              const gchar *context,
                                              const gchar *text);

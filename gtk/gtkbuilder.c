@@ -1954,7 +1954,7 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
       {
         guint flags_value;
 
-        if (!_gtk_builder_flags_from_string (type, string, &flags_value, error))
+        if (!_gtk_builder_flags_from_string (type, NULL, string, &flags_value, error))
           {
             ret = FALSE;
             break;
@@ -2202,13 +2202,14 @@ _gtk_builder_enum_from_string (GType         type,
 
 gboolean
 _gtk_builder_flags_from_string (GType         type,
+                                GFlagsValue  *aliases,
                                 const gchar  *string,
                                 guint        *flags_value,
                                 GError      **error)
 {
   GFlagsClass *fclass;
   gchar *endptr, *prevptr;
-  guint i, j, value;
+  guint i, j, k, value;
   gchar *flagstr;
   GFlagsValue *fv;
   const gchar *flag;
@@ -2268,7 +2269,23 @@ _gtk_builder_flags_from_string (GType         type,
           if (endptr > flag)
             {
               *endptr = '\0';
-              fv = g_flags_get_value_by_name (fclass, flag);
+
+              fv = NULL;
+
+              if (aliases)
+                {
+                  for (k = 0; aliases[k].value_nick; k++)
+                    {
+                      if (g_ascii_strcasecmp (aliases[k].value_nick, flag) == 0)
+                        {
+                          fv = &aliases[k];
+                          break;
+                        }
+                    }
+                }
+
+              if (!fv)
+                fv = g_flags_get_value_by_name (fclass, flag);
 
               if (!fv)
                 fv = g_flags_get_value_by_nick (fclass, flag);
