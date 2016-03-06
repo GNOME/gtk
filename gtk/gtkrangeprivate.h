@@ -52,6 +52,7 @@ void               _gtk_range_set_steppers                 (GtkRange      *range
 void               gtk_range_set_slider_use_min_size       (GtkRange      *range,
                                                             gboolean       use_min_size);
 GtkCssGadget      *gtk_range_get_slider_gadget             (GtkRange *range);
+GtkCssGadget      *gtk_range_get_gadget                    (GtkRange *range);
 
 G_END_DECLS
 

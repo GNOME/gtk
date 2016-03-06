@@ -2641,6 +2641,8 @@ scale {
     }
   }
 
+  value { color: gtkalpha(currentColor, 0.4); }
+
   marks {
     color: gtkalpha(currentColor, 0.4);
 

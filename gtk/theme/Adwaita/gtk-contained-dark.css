@@ -2793,6 +2793,8 @@ scale {
         box-shadow: none;
         text-shadow: none;
         -gtk-icon-shadow: none; }
+  scale value {
+    color: alpha(currentColor,0.4); }
   scale marks {
     color: alpha(currentColor,0.4); }
     scale marks.top {
