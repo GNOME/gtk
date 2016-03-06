@@ -399,7 +399,10 @@ gtk_toggle_button_get_property (GObject      *object,
  *
  * Sets whether the button is displayed as a separate indicator and label.
  * You can call this function on a checkbutton or a radiobutton with
- * @draw_indicator = %FALSE to make the button look like a normal button
+ * @draw_indicator = %FALSE to make the button look like a normal button.
+ *
+ * This can be used to create linked strip of buttons that work like
+ * a #GtkStackSwitcher.
  *
  * This function only affects instances of classes like #GtkCheckButton
  * and #GtkRadioButton that derive from #GtkToggleButton,
