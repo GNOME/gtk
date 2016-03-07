@@ -315,15 +315,6 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkInspectorCssEditor" id="widget_css_editor">
-                            <property name="global">False</property>
-                          </object>
-                          <packing>
-                            <property name="name">css</property>
-                            <property name="title" translatable="yes">CSS</property>
-                          </packing>
-                        </child>
-                        <child>
                           <object class="GtkInspectorSizeGroups" id="size_groups"/>
                           <packing>
                             <property name="name">size-groups</property>
@@ -406,7 +397,6 @@
         <child>
           <object class="GtkInspectorCssEditor">
             <property name="visible">True</property>
-            <property name="global">True</property>
           </object>
           <packing>
             <property name="name">css</property>
