@@ -310,6 +310,7 @@ gtk/inspector/css-editor.c
 gtk/inspector/css-node-tree.c
 gtk/inspector/general.c
 gtk/inspector/gestures.c
+gtk/inspector/gtkstackcombo.c
 gtk/inspector/menu.c
 gtk/inspector/misc-info.c
 gtk/inspector/prop-editor.c
