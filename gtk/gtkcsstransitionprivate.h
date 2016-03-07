@@ -21,6 +21,7 @@
 #define __GTK_CSS_TRANSITION_PRIVATE_H__
 
 #include "gtkstyleanimationprivate.h"
+#include "gtkprogresstrackerprivate.h"
 
 G_BEGIN_DECLS
 
@@ -38,11 +39,10 @@ struct _GtkCssTransition
 {
   GtkStyleAnimation parent;
 
-  guint        property;
-  GtkCssValue *start;
-  GtkCssValue *ease;
-  gint64       start_time;
-  gint64       end_time;
+  guint               property;
+  GtkCssValue        *start;
+  GtkCssValue        *ease;
+  GtkProgressTracker  tracker;
 };
 
 struct _GtkCssTransitionClass
@@ -55,8 +55,9 @@ GType                   _gtk_css_transition_get_type        (void) G_GNUC_CONST;
 GtkStyleAnimation *     _gtk_css_transition_new             (guint               property,
                                                              GtkCssValue        *start,
                                                              GtkCssValue        *ease,
-                                                             gint64              start_time_us,
-                                                             gint64              end_time_us);
+                                                             gint64              timestamp,
+                                                             gint64              duration_us,
+                                                             gint64              delay_us);
 
 guint                   _gtk_css_transition_get_property    (GtkCssTransition   *transition);
 
