@@ -370,7 +370,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                              g_param_spec_int ("gtk-double-click-time",
                                                                P_("Double Click Time"),
                                                                P_("Maximum time allowed between two clicks for them to be considered a double click (in milliseconds)"),
-                                                               0, G_MAXINT, 250,
+                                                               0, G_MAXINT, 400,
                                                                GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_DOUBLE_CLICK_TIME);
