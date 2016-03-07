@@ -858,6 +858,22 @@ gdk_window_impl_wayland_end_paint (GdkWindow *window)
     }
 }
 
+static gboolean
+gdk_window_impl_wayland_beep (GdkWindow *window)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkWaylandDisplay *display_wayland =
+    GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
+
+  if (!display_wayland->gtk_shell)
+    return FALSE;
+
+  gtk_shell1_system_bell (display_wayland->gtk_shell,
+                          impl->display_server.gtk_surface);
+
+  return TRUE;
+}
+
 static void
 gdk_window_impl_wayland_finalize (GObject *object)
 {
@@ -2787,7 +2803,7 @@ _gdk_window_impl_wayland_class_init (GdkWindowImplWaylandClass *klass)
   impl_class->get_input_shape = gdk_wayland_window_get_input_shape;
   impl_class->begin_paint = gdk_window_impl_wayland_begin_paint;
   impl_class->end_paint = gdk_window_impl_wayland_end_paint;
-  /* impl_class->beep */
+  impl_class->beep = gdk_window_impl_wayland_beep;
 
   impl_class->focus = gdk_wayland_window_focus;
   impl_class->set_type_hint = gdk_wayland_window_set_type_hint;

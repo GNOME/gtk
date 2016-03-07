@@ -519,7 +519,16 @@ gdk_wayland_display_get_default_screen (GdkDisplay *display)
 static void
 gdk_wayland_display_beep (GdkDisplay *display)
 {
+  GdkWaylandDisplay *display_wayland;
+
   g_return_if_fail (GDK_IS_DISPLAY (display));
+
+  display_wayland = GDK_WAYLAND_DISPLAY (display);
+
+  if (!display_wayland->gtk_shell)
+    return;
+
+  gtk_shell1_system_bell (display_wayland->gtk_shell, NULL);
 }
 
 static void

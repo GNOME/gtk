@@ -24,6 +24,10 @@
     <request name="set_startup_id">
       <arg name="startup_id" type="string" allow-null="true"/>
     </request>
+
+    <request name="system_bell">
+      <arg name="surface" type="object" interface="gtk_surface1" allow-null="true"/>
+    </request>
   </interface>
 
   <interface name="gtk_surface1" version="1">
