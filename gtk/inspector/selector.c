@@ -36,7 +36,6 @@ struct _GtkInspectorSelectorPrivate
 {
   GtkTreeStore *model;
   GtkTreeView *tree;
-  GtkWidget *object_title;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorSelector, gtk_inspector_selector, GTK_TYPE_BOX)
@@ -56,7 +55,6 @@ gtk_inspector_selector_class_init (GtkInspectorSelectorClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/selector.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorSelector, model);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorSelector, tree);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorSelector, object_title);
 }
 
 void
@@ -67,7 +65,6 @@ gtk_inspector_selector_set_object (GtkInspectorSelector *oh,
   gint i;
   GtkWidget *widget;
   gchar *path, **words;
-  const gchar *title;
 
   gtk_tree_store_clear (oh->priv->model);
 
@@ -76,9 +73,6 @@ gtk_inspector_selector_set_object (GtkInspectorSelector *oh,
       gtk_widget_hide (GTK_WIDGET (oh));
       return;
     }
-
-  title = (const gchar *)g_object_get_data (object, "gtk-inspector-object-title");
-  gtk_label_set_label (GTK_LABEL (oh->priv->object_title), title);
 
   widget = GTK_WIDGET (object);
 

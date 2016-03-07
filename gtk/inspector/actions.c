@@ -44,7 +44,6 @@ struct _GtkInspectorActionsPrivate
   GtkListStore *model;
   GHashTable *groups;
   GHashTable *iters;
-  GtkWidget *object_title;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorActions, gtk_inspector_actions, GTK_TYPE_BOX)
@@ -231,13 +230,6 @@ gtk_inspector_actions_set_object (GtkInspectorActions *sl,
           g_free (prefixes);
         }
     }
-
-  if (G_IS_OBJECT (object))
-    {
-      const gchar *title;
-      title = (const gchar *)g_object_get_data (object, "gtk-inspector-object-title");
-      gtk_label_set_label (GTK_LABEL (sl->priv->object_title), title);
-    }
 }
 
 static void
@@ -286,7 +278,6 @@ gtk_inspector_actions_class_init (GtkInspectorActionsClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/actions.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorActions, model);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorActions, object_title);
   gtk_widget_class_bind_template_callback (widget_class, row_activated);
 }
 

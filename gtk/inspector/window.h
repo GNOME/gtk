@@ -50,6 +50,9 @@ typedef struct
   GtkWidget *object_buttons;
   GtkWidget *object_details_button;
   GtkWidget *select_object;
+  GtkWidget *object_start_stack;
+  GtkWidget *object_center_stack;
+  GtkWidget *object_title;
   GtkWidget *prop_list;
   GtkWidget *child_prop_list;
   GtkWidget *selector;

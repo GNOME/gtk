@@ -23,13 +23,19 @@
 #include "gtkmagnifierprivate.h"
 
 #include "gtklabel.h"
+#include "gtkadjustment.h"
 
+enum
+{
+  PROP_0,
+  PROP_ADJUSTMENT
+};
 
 struct _GtkInspectorMagnifierPrivate
 {
   GtkWidget *object;
   GtkWidget *magnifier;
-  GtkWidget *object_title;
+  GtkAdjustment *adjustment;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorMagnifier, gtk_inspector_magnifier, GTK_TYPE_BOX)
@@ -45,8 +51,6 @@ void
 gtk_inspector_magnifier_set_object (GtkInspectorMagnifier *sl,
                                     GObject              *object)
 {
-  const gchar *title;
-
   sl->priv->object = NULL;
 
   if (!GTK_IS_WIDGET (object) || !gtk_widget_is_visible (GTK_WIDGET (object)))
@@ -55,9 +59,6 @@ gtk_inspector_magnifier_set_object (GtkInspectorMagnifier *sl,
       _gtk_magnifier_set_inspected (GTK_MAGNIFIER (sl->priv->magnifier), NULL);
       return;
     }
-
-  title = (const gchar *)g_object_get_data (object, "gtk-inspector-object-title");
-  gtk_label_set_label (GTK_LABEL (sl->priv->object_title), title);
 
   gtk_widget_show (GTK_WIDGET (sl));
 
@@ -68,13 +69,71 @@ gtk_inspector_magnifier_set_object (GtkInspectorMagnifier *sl,
 }
 
 static void
+get_property (GObject    *object,
+              guint       param_id,
+              GValue     *value,
+              GParamSpec *pspec)
+{
+  GtkInspectorMagnifier *sl = GTK_INSPECTOR_MAGNIFIER (object);
+
+  switch (param_id)
+    {
+    case PROP_ADJUSTMENT:
+      g_value_take_object (value, sl->priv->adjustment);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+      break;
+    }
+}
+
+static void
+set_property (GObject      *object,
+              guint         param_id,
+              const GValue *value,
+              GParamSpec   *pspec)
+{
+  GtkInspectorMagnifier *sl = GTK_INSPECTOR_MAGNIFIER (object);
+
+  switch (param_id)
+    {
+    case PROP_ADJUSTMENT:
+      sl->priv->adjustment = g_value_get_object (value);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+      break;
+    }
+}
+
+static void
+constructed (GObject *object)
+{
+  GtkInspectorMagnifier *sl = GTK_INSPECTOR_MAGNIFIER (object);
+
+  g_object_bind_property (sl->priv->adjustment, "value",
+                          sl->priv->magnifier, "magnification",
+                          G_BINDING_SYNC_CREATE);
+}
+
+static void
 gtk_inspector_magnifier_class_init (GtkInspectorMagnifierClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  object_class->get_property = get_property;
+  object_class->set_property = set_property;
+  object_class->constructed = constructed;
+
+  g_object_class_install_property (object_class, PROP_ADJUSTMENT,
+      g_param_spec_object ("adjustment", NULL, NULL,
+                           GTK_TYPE_ADJUSTMENT, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/magnifier.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMagnifier, magnifier);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMagnifier, object_title);
 }
 
 // vim: set et sw=2 ts=2:

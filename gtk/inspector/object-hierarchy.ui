@@ -8,15 +8,6 @@
   <template class="GtkInspectorObjectHierarchy" parent="GtkBox">
     <property name="orientation">vertical</property>
     <child>
-      <object class="GtkLabel" id="object_title">
-        <property name="visible">True</property>
-        <property name="halign">fill</property>
-        <property name="valign">center</property>
-        <property name="margin-top">12</property>
-        <property name="margin-bottom">12</property>
-      </object>
-    </child>
-    <child>
       <object class="GtkScrolledWindow">
         <property name="visible">True</property>
         <property name="hscrollbar-policy">never</property>
@@ -27,6 +18,7 @@
             <property name="visible">True</property>
             <property name="model">model</property>
             <property name="enable-search">False</property>
+            <property name="headers-visible">False</property>
             <property name="enable-tree-lines">1</property>
             <property name="show-expanders">0</property>
             <property name="level-indentation">18</property>
@@ -37,14 +29,13 @@
             </child>
             <child>
               <object class="GtkTreeViewColumn">
-                <property name="title" translatable="yes">Class Hierarchy</property>
                 <child>
                   <object class="GtkCellRendererText">
                     <property name="scale">0.8</property>
                   </object>
                   <attributes>
                     <attribute name="text">0</attribute>
-                  </attributes> 
+                  </attributes>
                 </child>
               </object>
             </child>

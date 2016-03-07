@@ -38,6 +38,13 @@ enum
   COLUMN_HOOK_ID
 };
 
+enum
+{
+  PROP_0,
+  PROP_TRACE_BUTTON,
+  PROP_CLEAR_BUTTON
+};
+
 struct _GtkInspectorSignalsListPrivate
 {
   GtkWidget *view;
@@ -46,7 +53,6 @@ struct _GtkInspectorSignalsListPrivate
   GtkWidget *log_win;
   GtkWidget *trace_button;
   GtkWidget *clear_button;
-  GtkWidget *object_title;
   GtkTreeViewColumn *count_column;
   GtkCellRenderer *count_renderer;
   GObject *object;
@@ -150,14 +156,7 @@ gtk_inspector_signals_list_set_object (GtkInspectorSignalsList *sl,
   sl->priv->object = object;
 
   if (object)
-    {
-      const gchar *title;
-
-      title = (const gchar *)g_object_get_data (object, "gtk-inspector-object-title");
-      gtk_label_set_label (GTK_LABEL (sl->priv->object_title), title);
-
-      read_signals_from_object (sl, object);
-    }
+    read_signals_from_object (sl, object);
 }
 
 static void
@@ -338,9 +337,81 @@ clear_log (GtkButton *button, GtkInspectorSignalsList *sl)
 }
 
 static void
+get_property (GObject    *object,
+              guint       param_id,
+              GValue     *value,
+              GParamSpec *pspec)
+{
+  GtkInspectorSignalsList *sl = GTK_INSPECTOR_SIGNALS_LIST (object);
+
+  switch (param_id)
+    {
+    case PROP_TRACE_BUTTON:
+      g_value_take_object (value, sl->priv->trace_button);
+      break;
+
+    case PROP_CLEAR_BUTTON:
+      g_value_take_object (value, sl->priv->trace_button);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+      break;
+    }
+}
+
+static void
+set_property (GObject      *object,
+              guint         param_id,
+              const GValue *value,
+              GParamSpec   *pspec)
+{
+  GtkInspectorSignalsList *sl = GTK_INSPECTOR_SIGNALS_LIST (object);
+
+  switch (param_id)
+    {
+    case PROP_TRACE_BUTTON:
+      sl->priv->trace_button = g_value_get_object (value);
+      break;
+
+    case PROP_CLEAR_BUTTON:
+      sl->priv->clear_button = g_value_get_object (value);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+      break;
+    }
+}
+
+static void
+constructed (GObject *object)
+{
+  GtkInspectorSignalsList *sl = GTK_INSPECTOR_SIGNALS_LIST (object);
+
+  g_signal_connect (sl->priv->trace_button, "toggled",
+                    G_CALLBACK (toggle_tracing), sl);
+  g_signal_connect (sl->priv->clear_button, "clicked",
+                    G_CALLBACK (clear_log), sl);
+}
+
+static void
 gtk_inspector_signals_list_class_init (GtkInspectorSignalsListClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  object_class->constructed = constructed;
+  object_class->get_property = get_property;
+  object_class->set_property = set_property;
+
+  g_object_class_install_property (object_class, PROP_TRACE_BUTTON,
+      g_param_spec_object ("trace-button", NULL, NULL,
+                           GTK_TYPE_WIDGET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+
+  g_object_class_install_property (object_class, PROP_CLEAR_BUTTON,
+      g_param_spec_object ("clear-button", NULL, NULL,
+                           GTK_TYPE_WIDGET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/signals-list.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorSignalsList, view);
@@ -349,11 +420,6 @@ gtk_inspector_signals_list_class_init (GtkInspectorSignalsListClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorSignalsList, log_win);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorSignalsList, count_column);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorSignalsList, count_renderer);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorSignalsList, trace_button);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorSignalsList, clear_button);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorSignalsList, object_title);
-  gtk_widget_class_bind_template_callback (widget_class, toggle_tracing);
-  gtk_widget_class_bind_template_callback (widget_class, clear_log);
 }
 
 // vim: set et sw=2 ts=2:

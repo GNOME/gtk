@@ -40,7 +40,6 @@ struct _GtkInspectorObjectHierarchyPrivate
 {
   GtkTreeStore *model;
   GtkTreeView *tree;
-  GtkWidget *object_title;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorObjectHierarchy, gtk_inspector_object_hierarchy, GTK_TYPE_BOX)
@@ -60,7 +59,6 @@ gtk_inspector_object_hierarchy_class_init (GtkInspectorObjectHierarchyClass *kla
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/object-hierarchy.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorObjectHierarchy, model);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorObjectHierarchy, tree);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorObjectHierarchy, object_title);
 }
 
 void
@@ -75,7 +73,6 @@ gtk_inspector_object_hierarchy_set_object (GtkInspectorObjectHierarchy *oh,
   GHashTableIter hit;
   GType *ifaces;
   gint i;
-  const gchar *title;
 
   gtk_tree_store_clear (oh->priv->model);
 
@@ -84,9 +81,6 @@ gtk_inspector_object_hierarchy_set_object (GtkInspectorObjectHierarchy *oh,
 
   interfaces = g_hash_table_new (g_str_hash, g_str_equal);
   type = ((GTypeInstance*)object)->g_class->g_type;
-
-  title = (const gchar *)g_object_get_data (object, "gtk-inspector-object-title");
-  gtk_label_set_label (GTK_LABEL (oh->priv->object_title), title);
 
   do
     {

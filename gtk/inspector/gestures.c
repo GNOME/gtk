@@ -53,7 +53,8 @@ gtk_inspector_gestures_init (GtkInspectorGestures *sl)
                 "orientation", GTK_ORIENTATION_VERTICAL,
                 "margin-start", 60,
                 "margin-end", 60,
-                "margin-bottom", 60,
+                "margin-top", 60,
+                "margin-bottom", 30,
                 "spacing", 10,
                 NULL);
 }
@@ -169,7 +170,7 @@ add_gesture_group (GtkInspectorGestures *sl,
       add_gesture (sl, object, listbox, g, phase);
       g_hash_table_remove (hash, g);
     }
-  g_list_free (list); 
+  g_list_free (list);
 
   gtk_container_add (GTK_CONTAINER (sl), frame);
 }
@@ -182,24 +183,12 @@ gtk_inspector_gestures_set_object (GtkInspectorGestures *sl,
   GHashTableIter iter;
   GList *list, *l;
   gint phase;
-  const gchar *title;
-  GtkWidget *label;
 
   clear_all (sl);
   gtk_widget_hide (GTK_WIDGET (sl));
 
   if (!GTK_IS_WIDGET (object))
     return;
-
-  title = (const gchar *)g_object_get_data (object, "gtk-inspector-object-title");
-  label = gtk_label_new (title);
-
-  gtk_widget_set_halign (label, GTK_ALIGN_FILL);
-  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-  gtk_widget_set_margin_top (label, 12);
-  gtk_widget_set_margin_bottom (label, 30);
-  gtk_widget_show (label);
-  gtk_container_add (GTK_CONTAINER (sl), label);
 
   hash = g_hash_table_new (g_direct_hash, g_direct_equal);
   for (phase = GTK_PHASE_NONE; phase <= GTK_PHASE_TARGET; phase++)
@@ -209,7 +198,7 @@ gtk_inspector_gestures_set_object (GtkInspectorGestures *sl,
         g_hash_table_insert (hash, l->data, GINT_TO_POINTER (phase));
       g_list_free (list);
     }
-      
+
   if (g_hash_table_size (hash))
     gtk_widget_show (GTK_WIDGET (sl));
 

@@ -65,15 +65,10 @@ enum
 struct _GtkInspectorCssNodeTreePrivate
 {
   GtkWidget *node_tree;
-  GtkWidget *stack;
-  GtkWidget *node_list_button;
-  GtkWidget *prop_list_button;
-  GtkWidget *css_node_info;
   GtkTreeModel *node_model;
   GtkTreeViewColumn *node_name_column;
   GtkTreeViewColumn *node_id_column;
   GtkTreeViewColumn *node_classes_column;
-  GtkWidget *object_title;
   GtkListStore *prop_model;
   GtkWidget *prop_tree;
   GtkTreeViewColumn *prop_name_column;
@@ -138,22 +133,6 @@ row_activated (GtkTreeView             *tv,
   gtk_tree_view_convert_bin_window_to_widget_coords (tv, npe.rect.x, npe.rect.y, &npe.rect.x, &npe.rect.y);
 
   show_node_prop_editor (&npe);
-}
-
-static void
-switch_to_node_list (GtkInspectorCssNodeTree *cnt)
-{
-  gtk_stack_set_visible_child_name (GTK_STACK (cnt->priv->stack), "node-list");
-  gtk_widget_show (cnt->priv->prop_list_button);
-  gtk_widget_hide (cnt->priv->node_list_button);
-}
-
-static void
-switch_to_prop_list (GtkInspectorCssNodeTree *cnt)
-{
-  gtk_stack_set_visible_child_name (GTK_STACK (cnt->priv->stack), "prop-list");
-  gtk_widget_show (cnt->priv->node_list_button);
-  gtk_widget_hide (cnt->priv->prop_list_button);
 }
 
 static void
@@ -228,7 +207,6 @@ show_node_popover (GtkInspectorCssNodeTree *cnt,
                          "visible", TRUE,
                          "text", _("CSS properties"),
                          NULL);
-  g_signal_connect_swapped (button, "clicked", G_CALLBACK (switch_to_prop_list), cnt);
   gtk_container_add (GTK_CONTAINER (box), button);
 
   gtk_tree_path_free (path);
@@ -331,23 +309,16 @@ gtk_inspector_css_node_tree_class_init (GtkInspectorCssNodeTreeClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/css-node-tree.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssNodeTree, node_tree);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssNodeTree, object_title);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssNodeTree, node_name_column);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssNodeTree, node_id_column);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssNodeTree, node_classes_column);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssNodeTree, prop_name_column);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssNodeTree, prop_model);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssNodeTree, prop_name_column);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssNodeTree, stack);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssNodeTree, prop_list_button);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssNodeTree, node_list_button);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssNodeTree, css_node_info);
 
   gtk_widget_class_bind_template_callback (widget_class, row_activated);
   gtk_widget_class_bind_template_callback (widget_class, selection_changed);
   gtk_widget_class_bind_template_callback (widget_class, button_pressed);
-  gtk_widget_class_bind_template_callback (widget_class, switch_to_node_list);
-  gtk_widget_class_bind_template_callback (widget_class, switch_to_prop_list);
 }
 
 static int
@@ -486,7 +457,6 @@ gtk_inspector_css_node_tree_set_object (GtkInspectorCssNodeTree *cnt,
                                         GObject                 *object)
 {
   GtkInspectorCssNodeTreePrivate *priv;
-  const gchar *title;
   GtkCssNode *node, *root;
   GtkTreePath *path;
   GtkTreeIter iter;
@@ -495,9 +465,6 @@ gtk_inspector_css_node_tree_set_object (GtkInspectorCssNodeTree *cnt,
 
   priv = cnt->priv;
 
-  title = (const gchar *)g_object_get_data (object, "gtk-inspector-object-title");
-  gtk_label_set_label (GTK_LABEL (priv->object_title), title);
-
   if (!GTK_IS_WIDGET (object))
     {
       gtk_widget_hide (GTK_WIDGET (cnt));
@@ -505,8 +472,6 @@ gtk_inspector_css_node_tree_set_object (GtkInspectorCssNodeTree *cnt,
     }
 
   gtk_widget_show (GTK_WIDGET (cnt));
-
-  switch_to_node_list (cnt);
 
   root = node = gtk_widget_get_css_node (GTK_WIDGET (object));
   while (gtk_css_node_get_parent (root))
@@ -585,11 +550,6 @@ gtk_inspector_css_node_tree_set_node (GtkInspectorCssNodeTree *cnt,
                                       GtkCssNode              *node)
 {
   GtkInspectorCssNodeTreePrivate *priv = cnt->priv;
-  GString *s;
-  GType type;
-  const gchar *name;
-  gchar **strv;
-  gint i;
 
   if (priv->node == node)
     return;
@@ -604,37 +564,6 @@ gtk_inspector_css_node_tree_set_node (GtkInspectorCssNodeTree *cnt,
   priv->node = node;
 
   g_signal_connect (node, "style-changed", G_CALLBACK (gtk_inspector_css_node_tree_update_style_cb), cnt);
-
-  s = g_string_new ("");
-  type = gtk_css_node_get_widget_type (node);
-  if (type != G_TYPE_NONE && type != G_TYPE_INVALID)
-    g_string_append (s, g_type_name (type));
-
-  name = gtk_css_node_get_name (node);
-  if (name)
-    {
-      if (s->len > 0)
-        g_string_append (s, " — ");
-      g_string_append (s, name);
-    }
-
-  strv = gtk_css_node_get_classes (node);
-  if (strv[0] != NULL)
-    {
-      strv_sort (strv);
-      if (s->len > 0)
-        g_string_append (s, " — ");
-      for (i = 0; strv[i]; i++)
-        {
-          if (i > 0)
-            g_string_append (s, " ");
-          g_string_append (s, strv[i]);
-        }
-    }
-
-  gtk_label_set_label (GTK_LABEL (cnt->priv->css_node_info), s->str);
-  g_strfreev (strv);
-  g_string_free (s, TRUE);
 }
 
 // vim: set et sw=2 ts=2:
