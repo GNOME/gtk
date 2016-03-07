@@ -301,8 +301,9 @@ gtk_css_animated_style_create_css_transitions (GSList              *animations,
       animation = _gtk_css_transition_new (i,
                                            gtk_css_style_get_value (source, i),
                                            _gtk_css_array_value_get_nth (timing_functions, i),
-                                           timestamp + delay * G_USEC_PER_SEC,
-                                           timestamp + (delay + duration) * G_USEC_PER_SEC);
+                                           timestamp,
+                                           duration * G_USEC_PER_SEC,
+                                           delay * G_USEC_PER_SEC);
       animations = g_slist_prepend (animations, animation);
     }
 
