@@ -44,10 +44,6 @@
 #define WL_SURFACE_HAS_BUFFER_SCALE 3
 #define WL_POINTER_HAS_FRAME 5
 
-#define SUPPORTED_GTK_SHELL_VERSION 3
-#define MINIMUM_GTK_SHELL_VERSION   2
-#define GTK_SHELL_HAS_SET_STARTUP_ID 3
-
 #define GDK_WINDOW_IS_WAYLAND(win)    (GDK_IS_WINDOW_IMPL_WAYLAND (((GdkWindow *)win)->impl))
 
 GdkKeymap *_gdk_wayland_keymap_new (void);

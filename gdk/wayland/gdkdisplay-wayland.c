@@ -262,17 +262,14 @@ gdk_registry_handle_global (void               *data,
       xdg_shell_use_unstable_version (display_wayland->xdg_shell, XDG_SHELL_VERSION_CURRENT);
       xdg_shell_add_listener (display_wayland->xdg_shell, &xdg_shell_listener, display_wayland);
     }
-  else if (strcmp (interface, "gtk_shell") == 0)
+  else if (strcmp (interface, "gtk_shell1") == 0)
     {
-      if (version >= MINIMUM_GTK_SHELL_VERSION)
-        {
-          version = MIN (version, SUPPORTED_GTK_SHELL_VERSION);
-          display_wayland->gtk_shell =
-            wl_registry_bind(display_wayland->wl_registry, id,
-                             &gtk_shell_interface, version);
-          _gdk_wayland_screen_set_has_gtk_shell (display_wayland->screen);
-          display_wayland->gtk_shell_version = version;
-        }
+      display_wayland->gtk_shell =
+        wl_registry_bind(display_wayland->wl_registry, id,
+                         &gtk_shell1_interface,
+                         1);
+      _gdk_wayland_screen_set_has_gtk_shell (display_wayland->screen);
+      display_wayland->gtk_shell_version = version;
     }
   else if (strcmp (interface, "wl_output") == 0)
     {
@@ -666,8 +663,8 @@ gdk_wayland_display_notify_startup_complete (GdkDisplay  *display,
         return;
     }
 
-  if (display_wayland->gtk_shell_version >= GTK_SHELL_HAS_SET_STARTUP_ID)
-    gtk_shell_set_startup_id (display_wayland->gtk_shell, startup_id);
+  if (display_wayland->gtk_shell)
+    gtk_shell1_set_startup_id (display_wayland->gtk_shell, startup_id);
 
   g_free (free_this);
 }

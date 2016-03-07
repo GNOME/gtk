@@ -1,12 +1,9 @@
 <protocol name="gtk">
 
-  <interface name="gtk_shell" version="3">
+  <interface name="gtk_shell1" version="1">
     <description summary="gtk specific extensions">
       gtk_shell is a protocol extension providing additional features for
-      clients implementing it. It is not backward compatible, and a client must
-      always only bind to the specific version it implements. If a client binds
-      to a version different from the version the server provides, an error will
-      be raised.
+      clients implementing it.
     </description>
 
     <enum name="capability">
@@ -20,16 +17,16 @@
     </event>
 
     <request name="get_gtk_surface">
-      <arg name="gtk_surface" type="new_id" interface="gtk_surface"/>
+      <arg name="gtk_surface" type="new_id" interface="gtk_surface1"/>
       <arg name="surface" type="object" interface="wl_surface"/>
     </request>
 
-    <request name="set_startup_id" since="3">
+    <request name="set_startup_id">
       <arg name="startup_id" type="string" allow-null="true"/>
     </request>
   </interface>
 
-  <interface name="gtk_surface" version="3">
+  <interface name="gtk_surface1" version="1">
     <request name="set_dbus_properties">
       <arg name="application_id" type="string" allow-null="true"/>
       <arg name="app_menu_path" type="string" allow-null="true"/>

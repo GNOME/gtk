@@ -102,7 +102,7 @@ struct _GdkWindowImplWayland
     struct wl_surface    *wl_surface;
     struct xdg_surface   *xdg_surface;
     struct xdg_popup     *xdg_popup;
-    struct gtk_surface   *gtk_surface;
+    struct gtk_surface1  *gtk_surface;
     struct wl_subsurface *wl_subsurface;
     struct wl_egl_window *egl_window;
     struct wl_egl_window *dummy_egl_window;
@@ -1779,7 +1779,7 @@ gdk_wayland_window_hide_surface (GdkWindow *window)
 
       if (impl->display_server.gtk_surface)
         {
-          gtk_surface_destroy (impl->display_server.gtk_surface);
+          gtk_surface1_destroy (impl->display_server.gtk_surface);
           impl->display_server.gtk_surface = NULL;
         }
 
@@ -2120,8 +2120,9 @@ gdk_wayland_window_init_gtk_surface (GdkWindow *window)
   if (display->gtk_shell == NULL)
     return;
 
-  impl->display_server.gtk_surface = gtk_shell_get_gtk_surface (display->gtk_shell,
-                                                 impl->display_server.wl_surface);
+  impl->display_server.gtk_surface =
+    gtk_shell1_get_gtk_surface (display->gtk_shell,
+                                impl->display_server.wl_surface);
 }
 
 static void
@@ -2134,9 +2135,9 @@ maybe_set_gtk_surface_modal (GdkWindow *window)
     return;
 
   if (window->modal_hint)
-    gtk_surface_set_modal (impl->display_server.gtk_surface);
+    gtk_surface1_set_modal (impl->display_server.gtk_surface);
   else
-    gtk_surface_unset_modal (impl->display_server.gtk_surface);
+    gtk_surface1_unset_modal (impl->display_server.gtk_surface);
 
 }
 
@@ -3024,13 +3025,13 @@ maybe_set_gtk_surface_dbus_properties (GdkWindow *window)
   if (impl->display_server.gtk_surface == NULL)
     return;
 
-  gtk_surface_set_dbus_properties (impl->display_server.gtk_surface,
-                                   impl->application.application_id,
-                                   impl->application.app_menu_path,
-                                   impl->application.menubar_path,
-                                   impl->application.window_object_path,
-                                   impl->application.application_object_path,
-                                   impl->application.unique_bus_name);
+  gtk_surface1_set_dbus_properties (impl->display_server.gtk_surface,
+                                    impl->application.application_id,
+                                    impl->application.app_menu_path,
+                                    impl->application.menubar_path,
+                                    impl->application.window_object_path,
+                                    impl->application.application_object_path,
+                                    impl->application.unique_bus_name);
   impl->application.was_set = TRUE;
 }
 

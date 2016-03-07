@@ -647,9 +647,9 @@ init_settings (GdkScreen *screen)
 }
 
 static void
-gtk_shell_handle_capabilities (void             *data,
-			       struct gtk_shell *shell,
-			       uint32_t          capabilities)
+gtk_shell_handle_capabilities (void              *data,
+                               struct gtk_shell1 *shell,
+                               uint32_t           capabilities)
 {
   GdkScreen *screen = data;
   GdkWaylandScreen *screen_wayland = GDK_WAYLAND_SCREEN (data);
@@ -661,7 +661,7 @@ gtk_shell_handle_capabilities (void             *data,
   notify_setting (screen, "gtk-shell-shows-desktop");
 }
 
-struct gtk_shell_listener gdk_screen_gtk_shell_listener = {
+struct gtk_shell1_listener gdk_screen_gtk_shell_listener = {
   gtk_shell_handle_capabilities
 };
 
@@ -670,7 +670,9 @@ _gdk_wayland_screen_set_has_gtk_shell (GdkScreen *screen)
 {
   GdkWaylandDisplay *wayland_display = GDK_WAYLAND_DISPLAY (GDK_WAYLAND_SCREEN (screen)->display);
 
-  gtk_shell_add_listener (wayland_display->gtk_shell, &gdk_screen_gtk_shell_listener, screen);
+  gtk_shell1_add_listener (wayland_display->gtk_shell,
+                           &gdk_screen_gtk_shell_listener,
+                           screen);
 }
 
 static void
@@ -764,7 +766,7 @@ set_decoration_layout_from_entry (GdkScreen        *screen,
 static gboolean
 set_capability_setting (GdkScreen                 *screen,
                         GValue                    *value,
-                        enum gtk_shell_capability  test)
+                        enum gtk_shell1_capability test)
 {
   GdkWaylandScreen *wayland_screen = GDK_WAYLAND_SCREEN (screen);
 
@@ -793,13 +795,16 @@ gdk_wayland_screen_get_setting (GdkScreen   *screen,
    }
 
   if (strcmp (name, "gtk-shell-shows-app-menu") == 0)
-    return set_capability_setting (screen, value, GTK_SHELL_CAPABILITY_GLOBAL_APP_MENU);
+    return set_capability_setting (screen, value,
+                                   GTK_SHELL1_CAPABILITY_GLOBAL_APP_MENU);
 
   if (strcmp (name, "gtk-shell-shows-menubar") == 0)
-    return set_capability_setting (screen, value, GTK_SHELL_CAPABILITY_GLOBAL_MENU_BAR);
+    return set_capability_setting (screen, value,
+                                   GTK_SHELL1_CAPABILITY_GLOBAL_MENU_BAR);
 
   if (strcmp (name, "gtk-shell-shows-desktop") == 0)
-    return set_capability_setting (screen, value, GTK_SHELL_CAPABILITY_DESKTOP_ICONS);
+    return set_capability_setting (screen, value,
+                                   GTK_SHELL1_CAPABILITY_DESKTOP_ICONS);
 
   if (strcmp (name, "gtk-dialogs-use-header") == 0)
     {
