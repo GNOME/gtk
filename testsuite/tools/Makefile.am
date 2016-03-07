@@ -54,7 +54,7 @@ DISTCLEANFILES = \
 	$(test_files)		\
 	$(NULL)
 
-testmetadir = #(datadir)/installed-tests/$(PACKAGE)
+testmetadir = $(datadir)/installed-tests/$(PACKAGE)
 testmeta_DATA = $(test_files)
 endif
 
