@@ -44,7 +44,7 @@ nobase_insttest_DATA = $(test_simplify)
 	$(AM_V_GEN) (echo '[Test]' > $@.tmp; \
 	echo 'Type=session' >> $@.tmp; \
 	echo 'Output=TAP' >> $@.tmp; \
-	echo 'Exec env G_ENABLE_DIAGNOSTIC=0 TEST_DATA_DIR="$(insttestdir)/simplify" $(insttestdir)/$<' >> $@.tmp; \
+	echo 'Exec=env G_ENABLE_DIAGNOSTIC=0 TEST_DATA_DIR="$(insttestdir)/simplify" $(insttestdir)/$<' >> $@.tmp; \
 	mv $@.tmp $@)
 
 test_files = $(TEST_PROGS:=.test)
