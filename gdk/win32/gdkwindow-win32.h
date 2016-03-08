@@ -46,6 +46,44 @@ typedef struct _GdkWindowImplWin32Class GdkWindowImplWin32Class;
 #define GDK_IS_WINDOW_IMPL_WIN32_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_WINDOW_IMPL_WIN32))
 #define GDK_WINDOW_IMPL_WIN32_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_WINDOW_IMPL_WIN32, GdkWindowImplWin32Class))
 
+enum _GdkWin32AeroSnapCombo
+{
+  GDK_WIN32_AEROSNAP_COMBO_NOTHING = 0,
+  GDK_WIN32_AEROSNAP_COMBO_UP,
+  GDK_WIN32_AEROSNAP_COMBO_DOWN,
+  GDK_WIN32_AEROSNAP_COMBO_LEFT,
+  GDK_WIN32_AEROSNAP_COMBO_RIGHT,
+  /* Same order as non-shift variants. We use it to do things like:
+   * AEROSNAP_UP + 4 = AEROSNAP_SHIFTUP
+   */
+  GDK_WIN32_AEROSNAP_COMBO_SHIFTUP,
+  GDK_WIN32_AEROSNAP_COMBO_SHIFTDOWN,
+  GDK_WIN32_AEROSNAP_COMBO_SHIFTLEFT,
+  GDK_WIN32_AEROSNAP_COMBO_SHIFTRIGHT
+};
+
+typedef enum _GdkWin32AeroSnapCombo GdkWin32AeroSnapCombo;
+
+enum _GdkWin32AeroSnapState
+{
+  GDK_WIN32_AEROSNAP_STATE_UNDETERMINED = 0,
+  GDK_WIN32_AEROSNAP_STATE_HALFLEFT,
+  GDK_WIN32_AEROSNAP_STATE_HALFRIGHT,
+  GDK_WIN32_AEROSNAP_STATE_FULLUP,
+};
+
+typedef enum _GdkWin32AeroSnapState GdkWin32AeroSnapState;
+
+struct _GdkRectangleDouble
+{
+  gdouble x;
+  gdouble y;
+  gdouble width;
+  gdouble height;
+};
+
+typedef struct _GdkRectangleDouble GdkRectangleDouble;
+
 enum _GdkW32WindowDragOp
 {
   GDK_WIN32_DRAGOP_NONE = 0,
@@ -172,6 +210,19 @@ struct _GdkWindowImplWin32
   HBITMAP          saved_dc_bitmap; /* Original bitmap for dc */
 
   GdkW32DragMoveResizeContext drag_move_resize_context;
+
+  /* Remembers where the window was snapped.
+   * Some snap operations change their meaning if
+   * the window is already snapped.
+   */
+  GdkWin32AeroSnapState snap_state;
+
+  /* Remembers window position before it was snapped.
+   * This is used to unsnap it.
+   * Position and size are percentages of the workarea
+   * of the monitor on which the window was before it was snapped.
+   */
+  GdkRectangleDouble *snap_stash;
 
   /* Decorations set by gdk_window_set_decorations() or NULL if unset */
   GdkWMDecoration* decorations;

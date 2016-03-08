@@ -2288,6 +2288,48 @@ gdk_event_translate (MSG  *msg,
       if (GDK_WINDOW_DESTROYED (window))
 	break;
 
+      if (msg->message == WM_KEYUP &&
+          !GDK_WINDOW_DESTROYED (gdk_window_get_toplevel (window)) &&
+          _gdk_win32_window_lacks_wm_decorations (gdk_window_get_toplevel (window)) && /* For CSD only */
+          ((GetKeyState (VK_LWIN) & 0x8000) ||
+           (GetKeyState (VK_RWIN) & 0x8000)))
+	{
+	  GdkWin32AeroSnapCombo combo = GDK_WIN32_AEROSNAP_COMBO_NOTHING;
+	  gboolean lshiftdown = GetKeyState (VK_LSHIFT) & 0x8000;
+          gboolean rshiftdown = GetKeyState (VK_RSHIFT) & 0x8000;
+          gboolean oneshiftdown = (lshiftdown || rshiftdown) && !(lshiftdown && rshiftdown);
+
+	  switch (msg->wParam)
+	    {
+	    case VK_UP:
+	      combo = GDK_WIN32_AEROSNAP_COMBO_UP;
+	      break;
+	    case VK_DOWN:
+	      combo = GDK_WIN32_AEROSNAP_COMBO_DOWN;
+	      break;
+	    case VK_LEFT:
+	      combo = GDK_WIN32_AEROSNAP_COMBO_LEFT;
+	      break;
+	    case VK_RIGHT:
+	      combo = GDK_WIN32_AEROSNAP_COMBO_RIGHT;
+	      break;
+	    }
+
+	  if (oneshiftdown && combo != GDK_WIN32_AEROSNAP_COMBO_NOTHING)
+	    combo += 4;
+
+	  /* These are the only combos that Windows WM does handle for us */
+	  if (combo == GDK_WIN32_AEROSNAP_COMBO_SHIFTLEFT ||
+              combo == GDK_WIN32_AEROSNAP_COMBO_SHIFTRIGHT)
+            combo = GDK_WIN32_AEROSNAP_COMBO_NOTHING;
+
+	  if (combo != GDK_WIN32_AEROSNAP_COMBO_NOTHING)
+	    {
+	      _gdk_win32_window_handle_aerosnap (gdk_window_get_toplevel (window), combo);
+	      break;
+	    }
+	}
+
       event = gdk_event_new ((msg->message == WM_KEYDOWN ||
 			      msg->message == WM_SYSKEYDOWN) ?
 			     GDK_KEY_PRESS : GDK_KEY_RELEASE);

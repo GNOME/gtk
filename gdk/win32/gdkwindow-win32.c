@@ -42,6 +42,8 @@
 
 #include <cairo-win32.h>
 #include <dwmapi.h>
+#include <math.h>
+#include "fallback-c89.c"
 
 static void gdk_window_impl_win32_init       (GdkWindowImplWin32      *window);
 static void gdk_window_impl_win32_class_init (GdkWindowImplWin32Class *klass);
@@ -2917,6 +2919,277 @@ _gdk_window_get_functions (GdkWindow     *window,
     *functions = *functions_set;
 
   return (functions_set != NULL);
+}
+
+static void
+unsnap (GdkWindow  *window,
+        GdkScreen  *screen,
+        gint        monitor)
+{
+  GdkWindowImplWin32 *impl;
+  GdkRectangle rect;
+
+  impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+
+  impl->snap_state = GDK_WIN32_AEROSNAP_STATE_UNDETERMINED;
+
+  if (impl->snap_stash == NULL)
+    return;
+
+  gdk_screen_get_monitor_workarea (screen, monitor, &rect);
+
+  GDK_NOTE (MISC, g_print ("Monitor work area %d x %d @ %d : %d\n", rect.width, rect.height, rect.x, rect.y));
+
+  /* Calculate actual unsnapped window size based on its
+   * old relative size. Same for position.
+   */
+  rect.x += round (rect.width * impl->snap_stash->x);
+  rect.y += round (rect.height * impl->snap_stash->y);
+  rect.width = round (rect.width * impl->snap_stash->width);
+  rect.height = round (rect.height * impl->snap_stash->height);
+
+  GDK_NOTE (MISC, g_print ("Unsnapped window size %d x %d @ %d : %d\n", rect.width, rect.height, rect.x, rect.y));
+
+  gdk_window_move_resize (window, rect.x, rect.y,
+                          rect.width, rect.height);
+
+  g_clear_pointer (&impl->snap_stash, g_free);
+}
+
+static void
+stash_window (GdkWindow          *window,
+              GdkWindowImplWin32 *impl,
+              GdkScreen          *screen,
+              gint                monitor)
+{
+  gint x, y;
+  gint width;
+  gint height;
+  WINDOWPLACEMENT placement;
+  HMONITOR hmonitor;
+  MONITORINFO hmonitor_info;
+
+  placement.length = sizeof(WINDOWPLACEMENT);
+
+  /* Use W32 API to get unmaximized window size, which GDK doesn't remember */
+  if (!GetWindowPlacement (GDK_WINDOW_HWND (window), &placement))
+    return;
+
+  /* MSDN is very vague, but in practice rcNormalPosition is the same as GetWindowRect(),
+   * only with adjustments for toolbars (which creates rather weird coodinate space issues).
+   * We need to get monitor info and apply workarea vs monitorarea diff to turn
+   * these into screen coordinates proper.
+   */
+  hmonitor = MonitorFromWindow (GDK_WINDOW_HWND (window), MONITOR_DEFAULTTONEAREST);
+  hmonitor_info.cbSize = sizeof (hmonitor_info);
+
+  if (!GetMonitorInfoA (hmonitor, &hmonitor_info))
+    return;
+
+  if (impl->snap_stash == NULL)
+    impl->snap_stash = g_new0 (GdkRectangleDouble, 1);
+
+  GDK_NOTE (MISC, g_print ("monitor work area  %ld x %ld @ %ld : %ld\n",
+                           hmonitor_info.rcWork.right - hmonitor_info.rcWork.left,
+                           hmonitor_info.rcWork.bottom - hmonitor_info.rcWork.top,
+                           hmonitor_info.rcWork.left,
+                           hmonitor_info.rcWork.top));
+  GDK_NOTE (MISC, g_print ("monitor      area  %ld x %ld @ %ld : %ld\n",
+                           hmonitor_info.rcMonitor.right - hmonitor_info.rcMonitor.left,
+                           hmonitor_info.rcMonitor.bottom - hmonitor_info.rcMonitor.top,
+                           hmonitor_info.rcMonitor.left,
+                           hmonitor_info.rcMonitor.top));
+  GDK_NOTE (MISC, g_print ("window  work place %ld x %ld @ %ld : %ld\n",
+                           placement.rcNormalPosition.right - placement.rcNormalPosition.left,
+                           placement.rcNormalPosition.bottom - placement.rcNormalPosition.top,
+                           placement.rcNormalPosition.left,
+                           placement.rcNormalPosition.top));
+
+  width = placement.rcNormalPosition.right - placement.rcNormalPosition.left;
+  height = placement.rcNormalPosition.bottom - placement.rcNormalPosition.top;
+  x = placement.rcNormalPosition.left - hmonitor_info.rcMonitor.left;
+  y = placement.rcNormalPosition.top - hmonitor_info.rcMonitor.top;
+
+  impl->snap_stash->x = (gdouble) (x) / (gdouble) (hmonitor_info.rcWork.right - hmonitor_info.rcWork.left);
+  impl->snap_stash->y = (gdouble) (y) / (gdouble) (hmonitor_info.rcWork.bottom - hmonitor_info.rcWork.top);
+  impl->snap_stash->width = (gdouble) width / (gdouble) (hmonitor_info.rcWork.right - hmonitor_info.rcWork.left);
+  impl->snap_stash->height = (gdouble) height / (gdouble) (hmonitor_info.rcWork.bottom - hmonitor_info.rcWork.top);
+
+  GDK_NOTE (MISC, g_print ("Stashed window %d x %d @ %d : %d as %f x %f @ %f : %f\n",
+                           width, height, x, y,
+                           impl->snap_stash->width, impl->snap_stash->height, impl->snap_stash->x, impl->snap_stash->y));
+}
+
+static void
+snap_up (GdkWindow *window,
+         GdkScreen *screen,
+         gint       monitor)
+{
+  SHORT maxysize;
+  gint x, y;
+  gint width;
+  GdkWindowImplWin32 *impl;
+
+  impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+
+  impl->snap_state = GDK_WIN32_AEROSNAP_STATE_FULLUP;
+
+  maxysize = GetSystemMetrics (SM_CYMAXTRACK);
+  gdk_window_get_position (window, &x, &y);
+  width = gdk_window_get_width (window);
+
+  stash_window (window, impl, screen, monitor);
+
+  gdk_window_move_resize (window, x, 0, width, maxysize);
+}
+
+static void
+snap_left (GdkWindow *window,
+           GdkScreen *screen,
+           gint       monitor,
+           gint       snap_monitor)
+{
+  GdkRectangle rect;
+  GdkWindowImplWin32 *impl;
+
+  impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+
+  impl->snap_state = GDK_WIN32_AEROSNAP_STATE_HALFLEFT;
+
+  gdk_screen_get_monitor_workarea (screen, snap_monitor, &rect);
+
+  stash_window (window, impl, screen, monitor);
+
+  rect.width = rect.width / 2;
+
+  gdk_window_move_resize (window, rect.x, rect.y, rect.width, rect.height);
+}
+
+static void
+snap_right (GdkWindow *window,
+            GdkScreen *screen,
+            gint       monitor,
+            gint       snap_monitor)
+{
+  GdkRectangle rect;
+  GdkWindowImplWin32 *impl;
+
+  impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+
+  impl->snap_state = GDK_WIN32_AEROSNAP_STATE_HALFRIGHT;
+
+  gdk_screen_get_monitor_workarea (screen, snap_monitor, &rect);
+
+  stash_window (window, impl, screen, monitor);
+
+  rect.width /= 2;
+  rect.x += rect.width;
+
+  gdk_window_move_resize (window, rect.x, rect.y, rect.width, rect.height);
+}
+
+void
+_gdk_win32_window_handle_aerosnap (GdkWindow            *window,
+                                   GdkWin32AeroSnapCombo combo)
+{
+  GdkWindowImplWin32 *impl;
+  GdkDisplay *display;
+  GdkScreen *screen;
+  gint n_monitors, monitor;
+  GdkWindowState window_state = gdk_window_get_state (window);
+  gboolean minimized = window_state & GDK_WINDOW_STATE_ICONIFIED;
+  gboolean maximized = window_state & GDK_WINDOW_STATE_MAXIMIZED;
+  gboolean halfsnapped;
+
+  impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+  display = gdk_window_get_display (window);
+  screen = gdk_display_get_default_screen (display);
+  n_monitors = gdk_screen_get_n_monitors (screen);
+  monitor = gdk_screen_get_monitor_at_window (screen, window);
+
+  if (minimized && maximized)
+    minimized = FALSE;
+
+  halfsnapped = (impl->snap_state == GDK_WIN32_AEROSNAP_STATE_HALFRIGHT ||
+                 impl->snap_state == GDK_WIN32_AEROSNAP_STATE_HALFLEFT ||
+                 impl->snap_state == GDK_WIN32_AEROSNAP_STATE_FULLUP);
+
+  switch (combo)
+    {
+    case GDK_WIN32_AEROSNAP_COMBO_NOTHING:
+      /* Do nothing */
+      break;
+    case GDK_WIN32_AEROSNAP_COMBO_UP:
+      if (!maximized)
+        {
+	  unsnap (window, screen, monitor);
+          gdk_window_maximize (window);
+        }
+      break;
+    case GDK_WIN32_AEROSNAP_COMBO_DOWN:
+    case GDK_WIN32_AEROSNAP_COMBO_SHIFTDOWN:
+      if (maximized)
+        {
+	  gdk_window_unmaximize (window);
+	  unsnap (window, screen, monitor);
+        }
+      else if (halfsnapped)
+	unsnap (window, screen, monitor);
+      else if (!minimized)
+	gdk_window_iconify (window);
+      break;
+    case GDK_WIN32_AEROSNAP_COMBO_LEFT:
+      if (maximized)
+        gdk_window_unmaximize (window);
+
+      if (impl->snap_state == GDK_WIN32_AEROSNAP_STATE_UNDETERMINED ||
+	  impl->snap_state == GDK_WIN32_AEROSNAP_STATE_FULLUP)
+	{
+	  unsnap (window, screen, monitor);
+	  snap_left (window, screen, monitor, monitor);
+	}
+      else if (impl->snap_state == GDK_WIN32_AEROSNAP_STATE_HALFLEFT)
+	{
+	  unsnap (window, screen, monitor);
+	  snap_right (window, screen, monitor, monitor - 1 >= 0 ? monitor - 1 : n_monitors - 1);
+	}
+      else if (impl->snap_state == GDK_WIN32_AEROSNAP_STATE_HALFRIGHT)
+	{
+	  unsnap (window, screen, monitor);
+	}
+      break;
+    case GDK_WIN32_AEROSNAP_COMBO_RIGHT:
+      if (maximized)
+        gdk_window_unmaximize (window);
+
+      if (impl->snap_state == GDK_WIN32_AEROSNAP_STATE_UNDETERMINED ||
+	  impl->snap_state == GDK_WIN32_AEROSNAP_STATE_FULLUP)
+	{
+	  unsnap (window, screen, monitor);
+	  snap_right (window, screen, monitor, monitor);
+	}
+      else if (impl->snap_state == GDK_WIN32_AEROSNAP_STATE_HALFLEFT)
+	{
+	  unsnap (window, screen, monitor);
+	}
+      else if (impl->snap_state == GDK_WIN32_AEROSNAP_STATE_HALFRIGHT)
+	{
+	  unsnap (window, screen, monitor);
+	  snap_left (window, screen, monitor, monitor + 1 < n_monitors ? monitor + 1 : 0);
+	}
+      break;
+    case GDK_WIN32_AEROSNAP_COMBO_SHIFTUP:
+      if (!maximized &&
+          impl->snap_state == GDK_WIN32_AEROSNAP_STATE_UNDETERMINED)
+	{
+	  snap_up (window, screen, monitor);
+	}
+      break;
+    case GDK_WIN32_AEROSNAP_COMBO_SHIFTLEFT:
+    case GDK_WIN32_AEROSNAP_COMBO_SHIFTRIGHT:
+      /* No implementation needed at the moment */
+      break;
+    }
 }
 
 static const gchar *

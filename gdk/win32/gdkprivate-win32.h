@@ -536,6 +536,9 @@ void _gdk_win32_emit_configure_event (GdkWindow *window);
 
 guint32 _gdk_win32_keymap_get_decimal_mark (void);
 
+void     _gdk_win32_window_handle_aerosnap      (GdkWindow            *window,
+                                                 GdkWin32AeroSnapCombo combo);
+
 gboolean _gdk_win32_get_window_rect             (GdkWindow  *window,
                                                  RECT       *rect);
 void     _gdk_win32_do_emit_configure_event     (GdkWindow  *window,
