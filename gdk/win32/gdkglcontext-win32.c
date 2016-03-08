@@ -75,7 +75,7 @@ _gdk_win32_gl_context_dispose (GObject *gobject)
        * trigger update_style_bits() to enable layered windows again
        */
       if (impl->suppress_layered == 0)
-        gdk_window_set_type_hint (window, gdk_window_get_type_hint (window));
+        _gdk_win32_window_update_style_bits (window);
     }
 
   G_OBJECT_CLASS (gdk_win32_gl_context_parent_class)->dispose (gobject);
@@ -527,7 +527,7 @@ _gdk_win32_gl_context_realize (GdkGLContext *context,
    * disable layered windows by triggering update_style_bits()
    */
   if (impl->suppress_layered == 1)
-    gdk_window_set_type_hint (window, gdk_window_get_type_hint (window));
+    _gdk_win32_window_update_style_bits (window);
 
   return TRUE;
 }

@@ -190,6 +190,8 @@ void  _gdk_win32_window_tmp_reset_bg  (GdkWindow *window,
 void  _gdk_win32_window_tmp_unset_parent_bg (GdkWindow *window);
 void  _gdk_win32_window_tmp_reset_parent_bg (GdkWindow *window);
 
+void  _gdk_win32_window_update_style_bits   (GdkWindow *window);
+
 G_END_DECLS
 
 #endif /* __GDK_WINDOW_WIN32_H__ */

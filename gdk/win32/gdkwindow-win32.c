@@ -67,7 +67,6 @@ struct _FullscreenInfo
  */
 #define SWP_NOZORDER_SPECIFIED HWND_TOP
 
-static void     update_style_bits         (GdkWindow         *window);
 static gboolean _gdk_window_get_functions (GdkWindow         *window,
                                            GdkWMFunction     *functions);
 static HDC     _gdk_win32_impl_acquire_dc (GdkWindowImplWin32 *impl);
@@ -1845,7 +1844,7 @@ gdk_win32_window_set_geometry_hints (GdkWindow         *window,
       GDK_NOTE (MISC, g_print ("... GRAVITY: %d\n", geometry->win_gravity));
     }
 
-  update_style_bits (window);
+  _gdk_win32_window_update_style_bits (window);
 }
 
 static void
@@ -2559,7 +2558,7 @@ _gdk_win32_window_lacks_wm_decorations (GdkWindow *window)
       return FALSE;
     }
 
-  /* Keep this in sync with update_style_bits() */
+  /* Keep this in sync with _gdk_win32_window_update_style_bits() */
   /* We don't check what get_effective_window_decorations()
    * has to say, because it gives suggestions based on
    * various hints, while we want *actual* decorations,
@@ -2577,8 +2576,8 @@ _gdk_win32_window_lacks_wm_decorations (GdkWindow *window)
   return !has_any_decorations;
 }
 
-static void
-update_style_bits (GdkWindow *window)
+void
+_gdk_win32_window_update_style_bits (GdkWindow *window)
 {
   GdkWindowImplWin32 *impl = (GdkWindowImplWin32 *)window->impl;
   GdkWMDecoration decorations;
@@ -2657,14 +2656,14 @@ update_style_bits (GdkWindow *window)
 
   if (old_style == new_style && old_exstyle == new_exstyle )
     {
-      GDK_NOTE (MISC, g_print ("update_style_bits: %p: no change\n",
+      GDK_NOTE (MISC, g_print ("_gdk_win32_window_update_style_bits: %p: no change\n",
 			       GDK_WINDOW_HWND (window)));
       return;
     }
 
   if (old_style != new_style)
     {
-      GDK_NOTE (MISC, g_print ("update_style_bits: %p: STYLE: %s => %s\n",
+      GDK_NOTE (MISC, g_print ("_gdk_win32_window_update_style_bits: %p: STYLE: %s => %s\n",
 			       GDK_WINDOW_HWND (window),
 			       _gdk_win32_window_style_to_string (old_style),
 			       _gdk_win32_window_style_to_string (new_style)));
@@ -2674,7 +2673,7 @@ update_style_bits (GdkWindow *window)
 
   if (old_exstyle != new_exstyle)
     {
-      GDK_NOTE (MISC, g_print ("update_style_bits: %p: EXSTYLE: %s => %s\n",
+      GDK_NOTE (MISC, g_print ("_gdk_win32_window_update_style_bits: %p: EXSTYLE: %s => %s\n",
 			       GDK_WINDOW_HWND (window),
 			       _gdk_win32_window_exstyle_to_string (old_exstyle),
 			       _gdk_win32_window_exstyle_to_string (new_exstyle)));
@@ -2772,7 +2771,7 @@ gdk_win32_window_set_decorations (GdkWindow      *window,
 
   *impl->decorations = decorations;
 
-  update_style_bits (window);
+  _gdk_win32_window_update_style_bits (window);
 }
 
 static gboolean
@@ -3476,7 +3475,7 @@ gdk_win32_window_unfullscreen (GdkWindow *window)
 
       g_object_set_data (G_OBJECT (window), "fullscreen-info", NULL);
       g_free (fi);
-      update_style_bits (window);
+      _gdk_win32_window_update_style_bits (window);
     }
 }
 
@@ -3676,7 +3675,7 @@ gdk_win32_window_set_type_hint (GdkWindow        *window,
 
   ((GdkWindowImplWin32 *)window->impl)->type_hint = hint;
 
-  update_style_bits (window);
+  _gdk_win32_window_update_style_bits (window);
 }
 
 static GdkWindowTypeHint
