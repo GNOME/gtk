@@ -68,37 +68,35 @@ static double
 gtk_css_animation_get_progress_from_iteration (GtkCssAnimation *animation,
                                                double           iteration)
 {
-  double d;
+  gboolean reverse;
+  double completed;
 
-  iteration = CLAMP (iteration, 0, animation->iteration_count);
+  iteration = CLAMP (iteration, 0.0, animation->iteration_count);
+  completed = floor (iteration);
 
   switch (animation->direction)
     {
     case GTK_CSS_DIRECTION_NORMAL:
-      if (iteration == animation->iteration_count)
-        return 1;
-      else
-        return iteration - floor (iteration);
+      reverse =   completed == iteration && iteration > 0;
+      break;
     case GTK_CSS_DIRECTION_REVERSE:
-      if (iteration == animation->iteration_count)
-        return 1;
-      else
-        return ceil (iteration) - iteration;
+      reverse = !(completed == iteration && iteration > 0);
+      break;
     case GTK_CSS_DIRECTION_ALTERNATE:
-      d = floor (iteration);
-      if (fmod (d, 2))
-        return 1 + d - iteration;
-      else
-        return iteration - d;
+      reverse =   fmod (iteration, 2) >= 1.0;
+      break;
     case GTK_CSS_DIRECTION_ALTERNATE_REVERSE:
-      d = floor (iteration);
-      if (fmod (d, 2))
-        return iteration - d;
-      else
-        return 1 + d - iteration;
+      reverse = !(fmod (iteration, 2) >= 1.0);
+      break;
     default:
-      g_return_val_if_reached (0);
+      g_return_val_if_reached (0.0);
     }
+
+  iteration -= completed;
+  if (reverse)
+    iteration = 1.0 - iteration;
+
+  return iteration;
 }
 
 static void

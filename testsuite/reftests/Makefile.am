@@ -83,6 +83,9 @@ testdata = \
 	animation-direction.css \
 	animation-direction.ref.ui \
 	animation-direction.ui \
+	animation-fill-mode-iteration-count.css \
+	animation-fill-mode-iteration-count.ref.ui \
+	animation-fill-mode-iteration-count.ui \
 	background-area.css \
 	background-area.ref.ui \
 	background-area.ui \
