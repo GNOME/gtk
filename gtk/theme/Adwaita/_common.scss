@@ -870,6 +870,7 @@ button.color {
     color: $selected_bg_color;
   }
 
+  @at-root %link_selected,
   &:selected,
   *:selected & {
     color: mix($selected_fg_color, $selected_bg_color, 80%);
@@ -3459,6 +3460,8 @@ infobar { border-style: none; }
   & label:selected,
   & label:selected:focus,
   & label:selected:hover {background-color: darken($selected_bg_color, 10%); }
+
+  *:link { @extend %link_selected; }
 }
 
 

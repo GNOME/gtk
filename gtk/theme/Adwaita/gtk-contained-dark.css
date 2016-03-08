@@ -1183,7 +1183,17 @@ button:visited {
   button:backdrop:hover:selected:visited, .selection-mode.titlebar:not(headerbar) .subtitle:backdrop:hover:link,
   headerbar.selection-mode .subtitle:backdrop:hover:link {
     color: #215d9c; }
-  *:link:selected, button:selected:link,
+  .info *:link, .info button:link,
+  .info button:visited,
+  .question *:link,
+  .question button:link,
+  .question button:visited,
+  .warning *:link,
+  .warning button:link,
+  .warning button:visited,
+  .error *:link,
+  .error button:link,
+  .error button:visited, *:link:selected, button:selected:link,
   button:selected:visited, .selection-mode.titlebar:not(headerbar) .subtitle:link,
   headerbar.selection-mode .subtitle:link, *:selected *:link, *:selected button:link,
   *:selected button:visited {
