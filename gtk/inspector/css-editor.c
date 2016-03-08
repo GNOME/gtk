@@ -144,7 +144,6 @@ get_current_text (GtkTextBuffer *buffer)
 
   gtk_text_buffer_get_start_iter (buffer, &start);
   gtk_text_buffer_get_end_iter (buffer, &end);
-  gtk_text_buffer_remove_all_tags (buffer, &start, &end);
 
   return gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
 }
