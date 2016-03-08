@@ -432,6 +432,7 @@ create_device (GdkDeviceManager *device_manager,
                !strstr (tmp_name, "pointer") &&
                !strstr (tmp_name, "qemu usb tablet") &&
                !strstr (tmp_name, "spice vdagent tablet") &&
+               !strstr (tmp_name, "virtualbox usb tablet") &&
                has_abs_axes (display, dev->classes, dev->num_classes))
         input_source = GDK_SOURCE_TOUCHSCREEN;
       else
