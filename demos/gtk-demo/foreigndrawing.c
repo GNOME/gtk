@@ -2,12 +2,12 @@
  *
  * Many applications can't use GTK+ widgets, for a variety of reasons,
  * but still want their user interface to appear integrated with the
- * rest of the desktop, and follow GTK+ themes.
+ * rest of the desktop, and follow GTK+ themes. This demo shows how to
+ * use GtkStyleContext and the gtk_render_ APIs to achieve this.
  *
- * This demo shows how to use GtkStyleContext and the gtk_render_ APIs
- * to achieve this. Note that this is a very simple, non-interactive
- * example. Also note that the application is responsible for choosing
- * suitable sizes for the rendered components.
+ * Note that this is a very simple, non-interactive example and does
+ * not show how to come up with theme-compliant sizes by using CSS padding,
+ * margins and min-width or min-height.
  */
 
 #include <gtk/gtk.h>
@@ -334,8 +334,9 @@ draw_horizontal_scrollbar (GtkWidget     *widget,
   gtk_render_frame (contents_context, cr, x, y, width, height);
   gtk_render_background (trough_context, cr, x, y, width, height);
   gtk_render_frame (trough_context, cr, x, y, width, height);
-  gtk_render_background (slider_context, cr, x + position, y - 2, 30, height + 4);
-  gtk_render_frame (slider_context, cr, x + position, y, 30, height);
+  /* The theme uses negative margins, this is where the -1 comes from */
+  gtk_render_background (slider_context, cr, x + position, y - 1, 30, height + 2);
+  gtk_render_frame (slider_context, cr, x + position, y - 1, 30, height + 2);
 
   g_object_unref (slider_context);
   g_object_unref (trough_context);
@@ -569,9 +570,9 @@ draw_cb (GtkWidget *widget,
   cairo_set_source_rgb (cr, 0.6, 0.6, 0.6);
   cairo_fill (cr);
 
-  draw_horizontal_scrollbar (widget, cr, 10, 10, panewidth - 20, 10, 30, GTK_STATE_FLAG_NORMAL);
-  draw_horizontal_scrollbar (widget, cr, 10, 30, panewidth - 20, 10, 40, GTK_STATE_FLAG_PRELIGHT);
-  draw_horizontal_scrollbar (widget, cr, 10, 50, panewidth - 20, 10, 50, GTK_STATE_FLAG_ACTIVE|GTK_STATE_FLAG_PRELIGHT);
+  draw_horizontal_scrollbar (widget, cr, 10, 10, panewidth - 20, 12, 30, GTK_STATE_FLAG_NORMAL);
+  draw_horizontal_scrollbar (widget, cr, 10, 30, panewidth - 20, 12, 40, GTK_STATE_FLAG_PRELIGHT);
+  draw_horizontal_scrollbar (widget, cr, 10, 50, panewidth - 20, 12, 50, GTK_STATE_FLAG_ACTIVE|GTK_STATE_FLAG_PRELIGHT);
 
   draw_text (widget, cr, 10,  70, panewidth - 20, 20, "Not selected", GTK_STATE_FLAG_NORMAL);
   draw_text (widget, cr, 10, 100, panewidth - 20, 20, "Selected", GTK_STATE_FLAG_SELECTED);
