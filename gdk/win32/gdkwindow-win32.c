@@ -62,12 +62,40 @@ struct _FullscreenInfo
   LONG  style;
 };
 
+struct _AeroSnapEdgeRegion
+{
+  /* The rectangle along the edge of the desktop
+   * that allows application of the snap transformation.
+   */
+  GdkRectangle edge;
+
+  /* A subregion of the "edge". When the pointer hits
+   * this region, the transformation is revealed.
+   * Usually it is 1-pixel thick and is located at the
+   * very edge of the screen. When there's a toolbar
+   * at that edge, the "trigger" and the "edge" regions
+   * are extended to cover that toolbar.
+   */
+  GdkRectangle trigger;
+};
+
+typedef struct _AeroSnapEdgeRegion AeroSnapEdgeRegion;
+
 /* Use this for hWndInsertAfter (2nd argument to SetWindowPos()) if
  * SWP_NOZORDER flag is used. Otherwise it's unobvious why a particular
  * argument is used. Using NULL is misleading, because
  * NULL is equivalent to HWND_TOP.
  */
 #define SWP_NOZORDER_SPECIFIED HWND_TOP
+
+/* Size of the regions at the edges of the desktop where
+ * snapping can take place (in pixels)
+ */
+#define AEROSNAP_REGION_THICKNESS (20)
+/* Size of the subregions that actually trigger the snapping prompt
+ * (in pixels).
+ */
+#define AEROSNAP_REGION_TRIGGER_THICKNESS (1)
 
 static gboolean _gdk_window_get_functions (GdkWindow         *window,
                                            GdkWMFunction     *functions);
@@ -2925,6 +2953,195 @@ _gdk_window_get_functions (GdkWindow     *window,
 }
 
 static void
+log_region (gchar *prefix, AeroSnapEdgeRegion *region)
+{
+  GDK_NOTE (MISC, g_print ("Region %s:\n"
+                           "edge %d x %d @ %d x %d\n"
+                           "trig %d x %d @ %d x %d\n",
+                           prefix,
+                           region->edge.width,
+                           region->edge.height,
+                           region->edge.x,
+                           region->edge.y,
+                           region->trigger.width,
+                           region->trigger.height,
+                           region->trigger.x,
+                           region->trigger.y));
+}
+
+static void
+calculate_aerosnap_regions (GdkW32DragMoveResizeContext *context)
+{
+  GdkDisplay *display;
+  GdkScreen *screen;
+  gint n_monitors, monitor, other_monitor;
+
+  display = gdk_display_get_default ();
+  screen = gdk_display_get_default_screen (display);
+  n_monitors = gdk_screen_get_n_monitors (screen);
+
+#define _M_UP 0
+#define _M_DOWN 1
+#define _M_LEFT 2
+#define _M_RIGHT 3
+
+  for (monitor = 0; monitor < n_monitors; monitor++)
+    {
+      GdkRectangle wa;
+      GdkRectangle geometry;
+      AeroSnapEdgeRegion snap_region;
+      gboolean move_edge[4] = { TRUE, FALSE, TRUE, TRUE };
+      gboolean resize_edge[2] = { TRUE, TRUE };
+      gint diff;
+      gint thickness, trigger_thickness;
+
+      gdk_screen_get_monitor_workarea (screen, monitor, &wa);
+      gdk_screen_get_monitor_geometry (screen, monitor, &geometry);
+
+      for (other_monitor = 0;
+           other_monitor < n_monitors &&
+           (move_edge[_M_UP] || move_edge[_M_LEFT] ||
+           move_edge[_M_RIGHT] || resize_edge[_M_DOWN]);
+           other_monitor++)
+        {
+          GdkRectangle other_wa;
+
+          if (other_monitor == monitor)
+            continue;
+
+          gdk_screen_get_monitor_workarea (screen, other_monitor, &other_wa);
+
+          /* An edge triggers AeroSnap only if there are no
+           * monitors beyond that edge.
+           * Even if there's another monitor, but it does not cover
+           * the whole edge (it's smaller or is not aligned to
+           * the corner of current monitor), that edge is still
+           * removed from the trigger list.
+           */
+          if (other_wa.x >= wa.x + wa.width)
+            move_edge[_M_RIGHT] = FALSE;
+
+          if (other_wa.x + other_wa.width <= wa.x)
+            move_edge[_M_LEFT] = FALSE;
+
+          if (other_wa.y + other_wa.height <= wa.y)
+            {
+              move_edge[_M_UP] = FALSE;
+              resize_edge[_M_UP] = FALSE;
+            }
+
+          if (other_wa.y >= wa.y + wa.height)
+            {
+              /* no move_edge for the bottom edge, just resize_edge */
+              resize_edge[_M_DOWN] = FALSE;
+            }
+        }
+
+      /* TODO: scale it for Hi-DPI displays? */
+      thickness = AEROSNAP_REGION_THICKNESS;
+      /* TODO: scale it for Hi-DPI displays? */
+      trigger_thickness = AEROSNAP_REGION_TRIGGER_THICKNESS;
+
+      snap_region.edge = wa;
+      snap_region.trigger = wa;
+      snap_region.edge.height = thickness;
+      snap_region.trigger.height = trigger_thickness;
+
+      /* Extend both regions into toolbar space.
+       * When there's no toolbar, diff == 0.
+       */
+      diff = wa.y - geometry.y;
+      snap_region.edge.height += diff;
+      snap_region.edge.y -= diff;
+      snap_region.trigger.height += diff;
+      snap_region.trigger.y -= diff;
+
+      if (move_edge[_M_UP])
+        g_array_append_val (context->maximize_regions, snap_region);
+
+      if (resize_edge[_M_UP])
+        g_array_append_val (context->fullup_regions, snap_region);
+
+      snap_region.edge = wa;
+      snap_region.trigger = wa;
+      snap_region.edge.width = thickness;
+      snap_region.trigger.width = trigger_thickness;
+
+      diff = wa.x - geometry.x;
+      snap_region.edge.width += diff;
+      snap_region.edge.x -= diff;
+      snap_region.trigger.width += diff;
+      snap_region.trigger.x -= diff;
+
+      if (move_edge[_M_LEFT])
+        g_array_append_val (context->halfleft_regions, snap_region);
+
+      snap_region.edge = wa;
+      snap_region.trigger = wa;
+      snap_region.edge.x += wa.width - thickness;
+      snap_region.edge.width = thickness;
+      snap_region.trigger.x += wa.width - trigger_thickness;
+      snap_region.trigger.width = trigger_thickness;
+
+      diff = (geometry.x + geometry.width) - (wa.x + wa.width);
+      snap_region.edge.width += diff;
+      snap_region.trigger.width += diff;
+
+      if (move_edge[_M_RIGHT])
+        g_array_append_val (context->halfright_regions, snap_region);
+
+      snap_region.edge = wa;
+      snap_region.trigger = wa;
+      snap_region.edge.y += wa.height - thickness;
+      snap_region.edge.height = thickness;
+      snap_region.trigger.y += wa.height - trigger_thickness;
+      snap_region.trigger.height = trigger_thickness;
+
+      diff = (geometry.y + geometry.height) - (wa.y + wa.height);
+      snap_region.edge.height += diff;
+      snap_region.trigger.height += diff;
+
+      if (resize_edge[_M_DOWN])
+        g_array_append_val (context->fullup_regions, snap_region);
+    }
+
+#undef _M_UP
+#undef _M_DOWN
+#undef _M_LEFT
+#undef _M_RIGHT
+
+  gint i;
+
+  for (i = 0; i < context->maximize_regions->len; i++)
+    log_region ("maximize", &g_array_index (context->maximize_regions, AeroSnapEdgeRegion, i));
+
+  for (i = 0; i < context->halfleft_regions->len; i++)
+    log_region ("halfleft", &g_array_index (context->halfleft_regions, AeroSnapEdgeRegion, i));
+
+  for (i = 0; i < context->halfright_regions->len; i++)
+    log_region ("halfright", &g_array_index (context->halfright_regions, AeroSnapEdgeRegion, i));
+
+  for (i = 0; i < context->fullup_regions->len; i++)
+    log_region ("fullup", &g_array_index (context->fullup_regions, AeroSnapEdgeRegion, i));
+}
+
+static void
+discard_snapinfo (GdkWindow *window)
+{
+  GdkWindowImplWin32 *impl;
+
+  impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+
+  impl->snap_state = GDK_WIN32_AEROSNAP_STATE_UNDETERMINED;
+
+  if (impl->snap_stash == NULL)
+    return;
+
+  g_clear_pointer (&impl->snap_stash, g_free);
+  g_clear_pointer (&impl->snap_stash_int, g_free);
+}
+
+static void
 unsnap (GdkWindow  *window,
         GdkScreen  *screen,
         gint        monitor)
@@ -3246,6 +3463,294 @@ _gdk_win32_window_handle_aerosnap (GdkWindow            *window,
     }
 }
 
+static void
+apply_snap (GdkWindow             *window,
+            GdkWin32AeroSnapState  snap)
+{
+  GdkScreen *screen;
+  gint monitor;
+
+  screen = gdk_display_get_default_screen (gdk_window_get_display (window));
+  monitor = gdk_screen_get_monitor_at_window (screen, window);
+
+  switch (snap)
+    {
+    case GDK_WIN32_AEROSNAP_STATE_UNDETERMINED:
+      break;
+    case GDK_WIN32_AEROSNAP_STATE_MAXIMIZE:
+      unsnap (window, screen, monitor);
+      gdk_window_maximize (window);
+      break;
+    case GDK_WIN32_AEROSNAP_STATE_HALFLEFT:
+      unsnap (window, screen, monitor);
+      snap_left (window, screen, monitor, monitor);
+      break;
+    case GDK_WIN32_AEROSNAP_STATE_HALFRIGHT:
+      unsnap (window, screen, monitor);
+      snap_right (window, screen, monitor, monitor);
+      break;
+    case GDK_WIN32_AEROSNAP_STATE_FULLUP:
+      snap_up (window, screen, monitor);
+      break;
+    }
+}
+
+static void
+start_indicator_drawing (GdkW32DragMoveResizeContext *context,
+                         GdkRectangle                 from,
+                         GdkRectangle                 to)
+{
+  (void) context;
+  (void) from;
+  (void) to;
+
+  GDK_NOTE (MISC, g_print ("Start drawing snap indicator %d x %d @ %d : %d -> %d x %d @ %d : %d\n",
+                           from.width, from.height, from.x, from.y, to.width, to.height, to.x, to.y));
+}
+
+static void
+update_fullup_indicator (GdkWindow                   *window,
+                         GdkW32DragMoveResizeContext *context)
+{
+  (void) window;
+  (void) context;
+
+  GDK_NOTE (MISC, g_print ("Update fullup indicator\n"));
+}
+
+static void
+start_indicator (GdkWindow                   *window,
+                 GdkW32DragMoveResizeContext *context,
+                 gint                         x,
+                 gint                         y,
+                 GdkWin32AeroSnapState        state)
+{
+  GdkScreen *screen;
+  gint monitor;
+  GdkRectangle workarea;
+  SHORT maxysize;
+  GdkRectangle start_size, end_size;
+
+  screen = gdk_window_get_screen (window);
+  monitor = gdk_screen_get_monitor_at_point (screen, x, y);
+  gdk_screen_get_monitor_workarea (screen, monitor, &workarea);
+
+  maxysize = GetSystemMetrics (SM_CYMAXTRACK);
+  gdk_window_get_position (window, &start_size.x, &start_size.y);
+  start_size.width = gdk_window_get_width (window);
+  start_size.height = gdk_window_get_height (window);
+
+  end_size = start_size;
+
+  switch (state)
+    {
+    case GDK_WIN32_AEROSNAP_STATE_UNDETERMINED:
+      return;
+    case GDK_WIN32_AEROSNAP_STATE_MAXIMIZE:
+      end_size.x = workarea.x;
+      end_size.y = workarea.y;
+      end_size.width = workarea.width;
+      end_size.height = workarea.height;
+      break;
+    case GDK_WIN32_AEROSNAP_STATE_HALFLEFT:
+      end_size.x = workarea.x;
+      end_size.y = workarea.y;
+      end_size.width = workarea.width / 2;
+      end_size.height = workarea.height;
+      break;
+    case GDK_WIN32_AEROSNAP_STATE_HALFRIGHT:
+      end_size.x = workarea.x + workarea.width / 2;
+      end_size.y = workarea.y;
+      end_size.width = workarea.width / 2;
+      end_size.height = workarea.height;
+      break;
+    case GDK_WIN32_AEROSNAP_STATE_FULLUP:
+      end_size.height = maxysize;
+      break;
+    }
+
+  start_indicator_drawing (context, start_size, end_size);
+}
+
+static void
+stop_indicator (GdkWindow                   *window,
+                GdkW32DragMoveResizeContext *context)
+{
+  (void) window;
+  (void) context;
+
+  GDK_NOTE (MISC, g_print ("Stop drawing snap indicator\n"));
+}
+
+static gint
+point_in_aerosnap_region (gint x, gint y, AeroSnapEdgeRegion *region)
+{
+  gint edge, trigger;
+
+  edge = (x >= region->edge.x &&
+          y >= region->edge.y &&
+          x <= region->edge.x + region->edge.width &&
+          y <= region->edge.y + region->edge.height) ? 1 : 0;
+  trigger = (x >= region->trigger.x &&
+             y >= region->trigger.y &&
+             x <= region->trigger.x + region->trigger.width &&
+             y <= region->trigger.y + region->trigger.height) ? 1 : 0;
+  return edge + trigger;
+}
+
+static void
+handle_aerosnap_move_resize (GdkWindow                   *window,
+                             GdkW32DragMoveResizeContext *context,
+                             gint                         x,
+                             gint                         y)
+{
+  gint i;
+  AeroSnapEdgeRegion *reg;
+  gint maximize = 0;
+  gint halfleft = 0;
+  gint halfright = 0;
+  gint fullup = 0;
+
+  for (i = 0; i < context->maximize_regions->len && maximize == 0; i++)
+    {
+      reg = &g_array_index (context->maximize_regions, AeroSnapEdgeRegion, i);
+      maximize = point_in_aerosnap_region (x, y, reg);
+    }
+
+  for (i = 0; i < context->halfleft_regions->len && halfleft == 0; i++)
+    {
+      reg = &g_array_index (context->halfleft_regions, AeroSnapEdgeRegion, i);
+      halfleft = point_in_aerosnap_region (x, y, reg);
+    }
+
+  for (i = 0; i < context->halfright_regions->len && halfright == 0; i++)
+    {
+      reg = &g_array_index (context->halfright_regions, AeroSnapEdgeRegion, i);
+      halfright = point_in_aerosnap_region (x, y, reg);
+    }
+
+  for (i = 0; i < context->fullup_regions->len && fullup == 0; i++)
+    {
+      reg = &g_array_index (context->fullup_regions, AeroSnapEdgeRegion, i);
+      fullup = point_in_aerosnap_region (x, y, reg);
+    }
+
+  GDK_NOTE (MISC, g_print ("AeroSnap: point %d : %d - max: %d, left %d, right %d, up %d\n",
+                           x, y, maximize, halfleft, halfright, fullup));
+
+  if (!context->revealed)
+    {
+      if (context->op == GDK_WIN32_DRAGOP_MOVE && maximize == 2)
+        {
+          context->revealed = TRUE;
+          context->current_snap = GDK_WIN32_AEROSNAP_STATE_MAXIMIZE;
+          start_indicator (window, context, x, y, context->current_snap);
+        }
+      else if (context->op == GDK_WIN32_DRAGOP_MOVE && halfleft == 2)
+        {
+          context->revealed = TRUE;
+          context->current_snap = GDK_WIN32_AEROSNAP_STATE_HALFLEFT;
+          start_indicator (window, context, x, y, context->current_snap);
+        }
+      else if (context->op == GDK_WIN32_DRAGOP_MOVE && halfright == 2)
+        {
+          context->revealed = TRUE;
+          context->current_snap = GDK_WIN32_AEROSNAP_STATE_HALFRIGHT;
+          start_indicator (window, context, x, y, context->current_snap);
+        }
+      else if (context->op == GDK_WIN32_DRAGOP_RESIZE && fullup == 2)
+        {
+          context->revealed = TRUE;
+          context->current_snap = GDK_WIN32_AEROSNAP_STATE_FULLUP;
+          start_indicator (window, context, x, y, context->current_snap);
+        }
+
+      return;
+    }
+
+  switch (context->current_snap)
+    {
+    case GDK_WIN32_AEROSNAP_STATE_UNDETERMINED:
+      if (context->op == GDK_WIN32_DRAGOP_RESIZE && fullup > 0)
+        {
+          context->current_snap = GDK_WIN32_AEROSNAP_STATE_FULLUP;
+          start_indicator (window, context, x, y, context->current_snap);
+        }
+      break;
+    case GDK_WIN32_AEROSNAP_STATE_MAXIMIZE:
+      if (context->op == GDK_WIN32_DRAGOP_MOVE && maximize > 0)
+        break;
+      if (context->op == GDK_WIN32_DRAGOP_MOVE && halfleft > 0)
+        {
+          context->current_snap = GDK_WIN32_AEROSNAP_STATE_HALFLEFT;
+          start_indicator (window, context, x, y, context->current_snap);
+        }
+      else if (context->op == GDK_WIN32_DRAGOP_MOVE && halfright > 0)
+        {
+          context->current_snap = GDK_WIN32_AEROSNAP_STATE_HALFRIGHT;
+          start_indicator (window, context, x, y, context->current_snap);
+        }
+      else
+        {
+          context->current_snap = GDK_WIN32_AEROSNAP_STATE_UNDETERMINED;
+          stop_indicator (window, context);
+          context->revealed = FALSE;
+        }
+      break;
+    case GDK_WIN32_AEROSNAP_STATE_HALFLEFT:
+      if (context->op == GDK_WIN32_DRAGOP_MOVE && halfleft > 0)
+        break;
+      if (context->op == GDK_WIN32_DRAGOP_MOVE && maximize > 0)
+        {
+          context->current_snap = GDK_WIN32_AEROSNAP_STATE_MAXIMIZE;
+          start_indicator (window, context, x, y, context->current_snap);
+        }
+      else if (context->op == GDK_WIN32_DRAGOP_MOVE && halfright > 0)
+        {
+          context->current_snap = GDK_WIN32_AEROSNAP_STATE_HALFRIGHT;
+          start_indicator (window, context, x, y, context->current_snap);
+        }
+      else
+        {
+          context->current_snap = GDK_WIN32_AEROSNAP_STATE_UNDETERMINED;
+          stop_indicator (window, context);
+          context->revealed = FALSE;
+        }
+      break;
+    case GDK_WIN32_AEROSNAP_STATE_HALFRIGHT:
+      if (context->op == GDK_WIN32_DRAGOP_MOVE && halfright > 0)
+        break;
+      if (context->op == GDK_WIN32_DRAGOP_MOVE && maximize > 0)
+        {
+          context->current_snap = GDK_WIN32_AEROSNAP_STATE_MAXIMIZE;
+          start_indicator (window, context, x, y, context->current_snap);
+        }
+      else if (context->op == GDK_WIN32_DRAGOP_MOVE && halfleft > 0)
+        {
+          context->current_snap = GDK_WIN32_AEROSNAP_STATE_HALFLEFT;
+          start_indicator (window, context, x, y, context->current_snap);
+        }
+      else
+        {
+          context->current_snap = GDK_WIN32_AEROSNAP_STATE_UNDETERMINED;
+          stop_indicator (window, context);
+          context->revealed = FALSE;
+        }
+      break;
+    case GDK_WIN32_AEROSNAP_STATE_FULLUP:
+      if (context->op == GDK_WIN32_DRAGOP_RESIZE && fullup > 0)
+        {
+          update_fullup_indicator (window, context);
+          break;
+        }
+
+      context->current_snap = GDK_WIN32_AEROSNAP_STATE_UNDETERMINED;
+      stop_indicator (window, context);
+      break;
+    }
+}
+
+
 static const gchar *
 get_cursor_name_from_op (GdkW32WindowDragOp op,
                          GdkWindowEdge      edge)
@@ -3341,7 +3846,158 @@ setup_drag_move_resize_context (GdkWindow                   *window,
   RECT rect;
   const gchar *cursor_name;
   GdkWindow *pointer_window;
+  GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
   GdkDisplay *display = gdk_device_get_display (device);
+  gboolean maximized = gdk_window_get_state (window) & GDK_WINDOW_STATE_MAXIMIZED;
+
+  /* Before we drag, we need to undo any maximization or snapping.
+   * TODO: don't unsnap halfleft/halfright/fullup when doing
+   * horizongal resizing. There's also the case where
+   * a halfleft/halfright window isn't unsnapped when it's
+   * being moved horizontally, but it's more difficult to implement.
+   */
+  if (maximized ||
+      (impl->snap_state == GDK_WIN32_AEROSNAP_STATE_HALFRIGHT ||
+       impl->snap_state == GDK_WIN32_AEROSNAP_STATE_HALFLEFT ||
+       impl->snap_state == GDK_WIN32_AEROSNAP_STATE_FULLUP))
+    {
+      GdkScreen *screen;
+      gint monitor;
+      gint wx, wy, wwidth, wheight;
+      gboolean pointer_outside_of_window;
+      gint offsetx, offsety;
+      gboolean left_half;
+
+      screen = gdk_display_get_default_screen (gdk_window_get_display (window));
+      monitor = gdk_screen_get_monitor_at_window (screen, window);
+      gdk_window_get_geometry (window, &wx, &wy, &wwidth, &wheight);
+
+      pointer_outside_of_window = root_x < wx || root_x > wx + wwidth ||
+                                  root_y < wy || root_y > wy + wheight;
+      /* Calculate the offset of the pointer relative to the window */
+      offsetx = root_x - wx;
+      offsety = root_y - wy;
+
+      /* Figure out in which half of the window the pointer is.
+       * The code currently only concerns itself with horizontal
+       * dimension (left/right halves).
+       * There's no upper/lower half, because usually window
+       * is dragged by its upper half anyway. If that changes, adjust
+       * accordingly.
+       */
+      left_half = (offsetx < wwidth / 2);
+
+      /* Inverse the offset for it to be from the right edge */
+      if (!left_half)
+        offsetx = wwidth - offsetx;
+
+      GDK_NOTE (MISC, g_print ("Pointer at %d : %d, this is %d : %d relative to the window's %s\n",
+                               root_x, root_y, offsetx, offsety,
+                               left_half ? "left half" : "right half"));
+
+      /* Move window in such a way that on unmaximization/unsnapping the pointer
+       * is still pointing at the appropriate half of the window,
+       * with the same offset from the left or right edge. If the new
+       * window size is too small, and adding that offset puts the pointer
+       * into the other half or even beyond, move the pointer to the middle.
+       */
+      if (!pointer_outside_of_window && maximized)
+        {
+          WINDOWPLACEMENT placement;
+          gint unmax_width, unmax_height;
+
+          placement.length = sizeof (placement);
+          API_CALL (GetWindowPlacement, (GDK_WINDOW_HWND (window), &placement));
+
+          GDK_NOTE (MISC, g_print ("W32 WM unmaximized window placement is %ld x %ld @ %ld : %ld\n",
+                                   placement.rcNormalPosition.right - placement.rcNormalPosition.left,
+                                   placement.rcNormalPosition.bottom - placement.rcNormalPosition.top,
+                                   placement.rcNormalPosition.left + _gdk_offset_x,
+                                   placement.rcNormalPosition.top + _gdk_offset_y));
+
+          unmax_width = placement.rcNormalPosition.right - placement.rcNormalPosition.left;
+          unmax_height = placement.rcNormalPosition.bottom - placement.rcNormalPosition.top;
+
+          if (offsetx < unmax_width && offsety < unmax_height)
+            {
+              placement.rcNormalPosition.top = root_y - offsety - _gdk_offset_y;
+              placement.rcNormalPosition.bottom = placement.rcNormalPosition.top + unmax_height;
+
+              if (left_half)
+                {
+                  placement.rcNormalPosition.left = root_x - offsetx - _gdk_offset_x;
+                  placement.rcNormalPosition.right = placement.rcNormalPosition.left + unmax_width;
+                }
+              else
+                {
+                  placement.rcNormalPosition.right = root_x + offsetx - _gdk_offset_x;
+                  placement.rcNormalPosition.left = placement.rcNormalPosition.right - unmax_width;
+                }
+            }
+          else
+            {
+              placement.rcNormalPosition.left = root_x - unmax_width / 2 - _gdk_offset_x;
+              placement.rcNormalPosition.top = root_y - unmax_height / 2 - _gdk_offset_y;
+              placement.rcNormalPosition.right = placement.rcNormalPosition.left + unmax_width;
+              placement.rcNormalPosition.bottom = placement.rcNormalPosition.top + unmax_height;
+            }
+
+          GDK_NOTE (MISC, g_print ("Unmaximized window will be at %ld : %ld\n",
+                                   placement.rcNormalPosition.left + _gdk_offset_x,
+                                   placement.rcNormalPosition.top + _gdk_offset_y));
+
+          API_CALL (SetWindowPlacement, (GDK_WINDOW_HWND (window), &placement));
+        }
+      else if (!pointer_outside_of_window && impl->snap_stash_int)
+        {
+          GdkRectangle new_pos;
+
+          new_pos.width = impl->snap_stash_int->width;
+          new_pos.height = impl->snap_stash_int->height;
+
+          if (offsetx < new_pos.width && offsety < new_pos.height)
+            {
+              new_pos.y = root_y - offsety;
+
+              if (left_half)
+                new_pos.x = root_x - offsetx;
+              else
+                new_pos.x = root_x + offsetx - new_pos.width;
+            }
+          else
+            {
+              new_pos.x = root_x - new_pos.width / 2;
+              new_pos.y = root_y - new_pos.height / 2;
+            }
+
+          GDK_NOTE (MISC, g_print ("Unsnapped window to %d : %d\n",
+                                   new_pos.x, new_pos.y));
+          discard_snapinfo (window);
+          gdk_window_move_resize (window, new_pos.x, new_pos.y,
+                                  new_pos.width, new_pos.height);
+        }
+
+
+      if (maximized)
+        gdk_window_unmaximize (window);
+      else
+        unsnap (window, screen, monitor);
+
+      if (pointer_outside_of_window)
+        {
+          /* Pointer outside of the window, move pointer into window */
+          GDK_NOTE (MISC, g_print ("Pointer at %d : %d is outside of %d x %d @ %d : %d, move it to %d : %d\n",
+                                   root_x, root_y, wwidth, wheight, wx, wy, wx + wwidth / 2, wy + wheight / 2));
+          root_x = wx + wwidth / 2;
+          /* This is Gnome behaviour. Windows WM would put the pointer
+           * in the middle of the titlebar, but GDK doesn't know where
+           * the titlebar is, if any.
+           */
+          root_y = wy + wheight / 2;
+          gdk_device_warp (device, screen,
+                           root_x, root_y);
+        }
+    }
 
   _gdk_win32_get_window_rect (window, &rect);
 
@@ -3371,6 +4027,15 @@ setup_drag_move_resize_context (GdkWindow                   *window,
   context->timestamp = timestamp;
   context->start_rect = rect;
 
+  context->shape_indicator = NULL;
+  context->revealed = FALSE;
+  context->halfleft_regions = g_array_new (FALSE, FALSE, sizeof (AeroSnapEdgeRegion));
+  context->halfright_regions = g_array_new (FALSE, FALSE, sizeof (AeroSnapEdgeRegion));
+  context->maximize_regions = g_array_new (FALSE, FALSE, sizeof (AeroSnapEdgeRegion));
+  context->fullup_regions = g_array_new (FALSE, FALSE, sizeof (AeroSnapEdgeRegion));
+
+  calculate_aerosnap_regions (context);
+
   GDK_NOTE (EVENTS,
             g_print ("begin drag moveresize: window %p, toplevel %p, "
                      "op %u, edge %d, device %p, "
@@ -3379,6 +4044,11 @@ setup_drag_move_resize_context (GdkWindow                   *window,
                      context->op, context->edge, context->device,
                      context->button, context->start_root_x,
                      context->start_root_y, context->timestamp));
+
+  if (context->current_snap != GDK_WIN32_AEROSNAP_STATE_UNDETERMINED)
+    apply_snap (window, context->current_snap);
+
+  context->current_snap = GDK_WIN32_AEROSNAP_STATE_UNDETERMINED;
 }
 
 void
@@ -3392,6 +4062,13 @@ gdk_win32_window_end_move_resize_drag (GdkWindow *window)
   gdk_device_ungrab (context->device, GDK_CURRENT_TIME);
 
   g_clear_object (&context->cursor);
+
+  context->revealed = FALSE;
+  g_clear_object (&context->shape_indicator);
+  g_clear_pointer (&context->halfleft_regions, g_array_unref);
+  g_clear_pointer (&context->halfright_regions, g_array_unref);
+  g_clear_pointer (&context->maximize_regions, g_array_unref);
+  g_clear_pointer (&context->fullup_regions, g_array_unref);
 
   GDK_NOTE (EVENTS,
             g_print ("end drag moveresize: window %p, toplevel %p,"
@@ -3646,6 +4323,10 @@ gdk_win32_window_do_move_resize_drag (GdkWindow *window,
                                    SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOSIZE));
         }
     }
+
+  if (context->op == GDK_WIN32_DRAGOP_RESIZE ||
+      context->op == GDK_WIN32_DRAGOP_MOVE)
+    handle_aerosnap_move_resize (window, context, x, y);
 }
 
 static void

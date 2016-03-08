@@ -70,6 +70,8 @@ enum _GdkWin32AeroSnapState
   GDK_WIN32_AEROSNAP_STATE_HALFLEFT,
   GDK_WIN32_AEROSNAP_STATE_HALFRIGHT,
   GDK_WIN32_AEROSNAP_STATE_FULLUP,
+  /* Maximize state is only used by edge-snap */
+  GDK_WIN32_AEROSNAP_STATE_MAXIMIZE
 };
 
 typedef enum _GdkWin32AeroSnapState GdkWin32AeroSnapState;
@@ -135,6 +137,47 @@ struct _GdkW32DragMoveResizeContext
 
   /* The cursor we should use while the operation is running. */
   GdkCursor         *cursor;
+
+  /* This window looks like an outline and is drawn under the window
+   * that is being dragged. It indicates the shape the dragged window
+   * will take if released at a particular point.
+   */
+  HWND               shape_indicator;
+
+  /* Indicates that a transformation was revealed:
+   *
+   * For drag-resize: If it's FALSE,
+   * then the pointer have not yet hit a trigger that triggers fullup.
+   * If TRUE, then the pointer did hit a trigger that triggers fullup
+   * at some point during this drag op.
+   * This is used to prevent drag-resize from triggering
+   * a transformation when first approaching a trigger of the work area -
+   * one must drag it all the way to the very trigger to trigger; afterwards
+   * a transformation will start triggering at some distance from the trigger
+   * for as long as the op is still running. This is how AeroSnap works.
+   *
+   * For drag-move: If it's FALSE,
+   * then the pointer have not yet hit a trigger, even if it is
+   * already within a edge region.
+   * If it's TRUE, then the pointer did hit a trigger within an
+   * edge region, and have not yet left an edge region
+   * (passing from one edge region into another doesn't count).
+   */
+  gboolean           revealed;
+
+  /* Arrays of GdkRectangle pairs, describing the areas of the virtual
+   * desktop that trigger various AeroSnap window transofrmations
+   * Coordinates are GDK screen coordinates.
+   */
+  GArray            *halfleft_regions;
+  GArray            *halfright_regions;
+  GArray            *maximize_regions;
+  GArray            *fullup_regions;
+
+  /* Current pointer position will result in this kind of snapping,
+   * if the drag op is finished.
+   */
+  GdkWin32AeroSnapState current_snap;
 };
 
 typedef struct _GdkW32DragMoveResizeContext GdkW32DragMoveResizeContext;
