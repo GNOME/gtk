@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.14\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-03-08 00:20+0000\n"
-"PO-Revision-Date: 2016-03-08 09:44+0200\n"
+"PO-Revision-Date: 2016-03-08 09:49+0200\n"
 "Last-Translator: Miroslav Nikolić <miroslavnikolic@rocketmail.com>\n"
 "Language-Team: Serbian <(nothing)>\n"
 "Language: sr\n"
@@ -4437,7 +4437,6 @@ msgid "Class Hierarchy"
 msgstr "Hijerarhija razreda"
 
 #: gtk/inspector/window.ui:422
-#, fuzzy
 #| msgid "Selector"
 msgid "CSS Selector"
 msgstr "CSS izabornik"
