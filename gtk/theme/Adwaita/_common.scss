@@ -2020,7 +2020,7 @@ notebook {
  * Scrollbars *
  **************/
 scrollbar {
-  $_slider_min_lenght: 40px;
+  $_slider_min_length: 40px;
 
   // disable steppers
   @at-root * {
@@ -2098,7 +2098,7 @@ scrollbar {
       &.horizontal {
         slider {
           margin: 0 2px;
-          min-width: $_slider_min_lenght;
+          min-width: $_slider_min_length;
         }
 
         button {
@@ -2110,7 +2110,7 @@ scrollbar {
       &.vertical {
         slider {
           margin: 2px 0;
-          min-height: $_slider_min_lenght;
+          min-height: $_slider_min_length;
         }
 
         button {
@@ -2124,9 +2124,9 @@ scrollbar {
     &.hovering { opacity: 0.8; }
   }
 
-  &.horizontal slider { min-width: $_slider_min_lenght; }
+  &.horizontal slider { min-width: $_slider_min_length; }
 
-  &.vertical slider { min-height: $_slider_min_lenght; }
+  &.vertical slider { min-height: $_slider_min_length; }
 
   // button styling
   button {
