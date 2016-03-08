@@ -227,8 +227,6 @@ update_style (GtkInspectorCssEditor *ce)
   text = get_current_text (ce->priv->text);
   gtk_css_provider_load_from_data (ce->priv->provider, text, -1, NULL);
   g_free (text);
-
-  gtk_style_context_reset_widgets (gdk_screen_get_default ());
 }
 
 static gboolean
