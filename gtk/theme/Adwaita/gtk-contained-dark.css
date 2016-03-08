@@ -1734,16 +1734,19 @@ window.csd > .titlebar:not(headerbar) {
 /************
  * Pathbars *
  ************/
-.path-bar button:only-child {
-  padding-left: 12px;
-  padding-right: 12px; }
-.path-bar button label:last-child {
-  padding-left: 2px; }
-.path-bar button label:first-child {
-  padding-right: 2px; }
-.path-bar button label:only-child {
-  padding-right: 0;
-  padding-left: 0; }
+.path-bar button.text-button, .path-bar button.image-button, .path-bar button {
+  padding-left: 4px;
+  padding-right: 4px; }
+.path-bar button.text-button.image-button label {
+  padding-left: 0;
+  padding-right: 0; }
+.path-bar button.text-button.image-button label:last-child, .path-bar button label:last-child {
+  padding-right: 8px; }
+.path-bar button.text-button.image-button label:first-child, .path-bar button label:first-child {
+  padding-left: 8px; }
+.path-bar button image {
+  padding-left: 4px;
+  padding-right: 4px; }
 
 /**************
  * Tree Views *
