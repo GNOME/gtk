@@ -2093,6 +2093,19 @@ static void
 gdk_wayland_window_focus (GdkWindow *window,
                           guint32    timestamp)
 {
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  if (!impl->display_server.gtk_surface)
+    return;
+
+  /* We didn't have an event to fetch a time from, meaning we have nothing valid
+   * to send. This should rather be translated to a 'needs-attention' request or
+   * something.
+   */
+  if (timestamp == GDK_CURRENT_TIME)
+    return;
+
+  gtk_surface1_present (impl->display_server.gtk_surface, timestamp);
 }
 
 static void

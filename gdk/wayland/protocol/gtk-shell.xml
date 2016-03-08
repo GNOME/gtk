@@ -42,6 +42,10 @@
 
     <request name="set_modal"/>
     <request name="unset_modal"/>
+
+    <request name="present">
+      <arg name="time" type="uint"/>
+    </request>
   </interface>
 
 </protocol>
