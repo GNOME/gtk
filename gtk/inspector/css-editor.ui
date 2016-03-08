@@ -3,6 +3,18 @@
   <object class="GtkTextTagTable" id="tags">
     <child type="tag">
       <object class="GtkTextTag">
+        <property name="name">comment</property>
+        <property name="foreground">blue</property>
+      </object>
+    </child>
+    <child type="tag">
+      <object class="GtkTextTag">
+        <property name="name">string</property>
+        <property name="foreground">red</property>
+      </object>
+    </child>
+    <child type="tag">
+      <object class="GtkTextTag">
         <property name="name">warning</property>
         <property name="underline">single</property>
         <property name="underline-rgba">darkorange</property>

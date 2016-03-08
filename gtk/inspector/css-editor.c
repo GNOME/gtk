@@ -26,6 +26,8 @@
 #include "css-editor.h"
 
 #include "gtkcssprovider.h"
+#include "gtkcssrbtreeprivate.h"
+#include "gtkcsstokenizerprivate.h"
 #include "gtkstyleprovider.h"
 #include "gtkstylecontext.h"
 #include "gtktextview.h"
@@ -37,10 +39,30 @@
 #include "gtktextiter.h"
 
 
+typedef struct _GtkCssChunk GtkCssChunk;
+typedef struct _GtkCssChunkSize GtkCssChunkSize;
+
+struct _GtkCssChunkSize
+{
+  gsize              bytes;
+  gsize              chars;
+  gsize              line_breaks;
+  gsize              line_bytes;
+  gsize              line_chars;
+};
+
+struct _GtkCssChunk
+{
+  GtkCssToken        token;
+
+  GtkCssChunkSize    size;
+};
+
 struct _GtkInspectorCssEditorPrivate
 {
   GtkWidget *view;
   GtkTextBuffer *text;
+  GtkCssRbTree *tokens;
   GtkCssProvider *provider;
   GtkToggleButton *disable_button;
   guint timeout;
@@ -61,6 +83,62 @@ css_error_free (gpointer data)
   g_free (error);
 }
 
+static void
+gtk_css_chunk_clear (gpointer data)
+{
+  GtkCssChunk *chunk = data;
+
+  gtk_css_token_clear (&chunk->token);
+}
+
+static void
+gtk_css_chunk_size_clear (GtkCssChunkSize *size)
+{
+  size->bytes = 0;
+  size->chars = 0;
+  size->line_breaks = 0;
+  size->line_bytes = 0;
+  size->line_chars = 0;
+}
+
+static void
+gtk_css_chunk_size_add (GtkCssChunkSize *size,
+                        GtkCssChunkSize *add)
+{
+  size->bytes += add->bytes;
+  size->chars += add->chars;
+  size->line_breaks += add->line_breaks;
+  if (add->line_breaks)
+    {
+      size->line_bytes = add->line_bytes;
+      size->line_chars = add->line_chars;
+    }
+  else
+    {
+      size->line_bytes += add->bytes;
+      size->line_chars += add->chars;
+    }
+}
+
+static void
+gtk_css_chunk_augment (GtkCssRbTree *tree,
+                       gpointer      aug,
+                       gpointer      node,
+                       gpointer      lnode,
+                       gpointer      rnode)
+{
+  GtkCssChunkSize *size = aug;
+  GtkCssChunk *chunk = node;
+
+  gtk_css_chunk_size_clear (size);
+
+  if (lnode)
+    gtk_css_chunk_size_add (size, gtk_css_rb_tree_get_augment (tree, lnode));
+  gtk_css_chunk_size_add (size, &chunk->size);
+  if (rnode)
+    gtk_css_chunk_size_add (size, gtk_css_rb_tree_get_augment (tree, rnode));
+}
+ 
 static gboolean
 query_tooltip_cb (GtkWidget             *widget,
                   gint                   x,
@@ -216,6 +294,132 @@ save_clicked (GtkButton             *button,
 }
 
 static void
+gtk_css_chunk_get_iters (GtkInspectorCssEditor *ce,
+                         GtkCssChunk           *chunk,
+                         GtkTextIter           *start,
+                         GtkTextIter           *end)
+{
+  GtkInspectorCssEditorPrivate *priv = ce->priv;
+  GtkCssChunk *c, *l, *prev = NULL;
+  gsize offset;
+
+  offset = 0;
+  l = gtk_css_rb_tree_get_left (priv->tokens, chunk);
+  if (l)
+    {
+      GtkCssChunkSize *size = gtk_css_rb_tree_get_augment (priv->tokens, l);
+      offset = size->chars;
+    }
+  else
+    {
+      offset = 0;
+    }
+  prev = chunk;
+  for (c = gtk_css_rb_tree_get_parent (priv->tokens, chunk);
+       c != NULL;
+       c = gtk_css_rb_tree_get_parent (priv->tokens, c))
+    {
+      l = gtk_css_rb_tree_get_left (priv->tokens, c);
+
+      if (l != prev)
+        {
+          GtkCssChunkSize *size = gtk_css_rb_tree_get_augment (priv->tokens, l);
+          offset += size->chars;
+          offset += c->size.chars;
+        }
+      prev = c;
+    }
+
+  if (start)
+    gtk_text_buffer_get_iter_at_offset (priv->text, start, offset);
+  if (end)
+    gtk_text_buffer_get_iter_at_offset (priv->text, end, offset + chunk->size.chars);
+}
+
+static void
+update_token_tags (GtkInspectorCssEditor *ce,
+                   GtkCssChunk           *start,
+                   GtkCssChunk           *end)
+{
+  GtkInspectorCssEditorPrivate *priv = ce->priv;
+  GtkCssChunk *chunk;
+
+  for (chunk = start;
+       chunk != end;
+       chunk = gtk_css_rb_tree_get_next (priv->tokens, chunk))
+    {
+      GtkTextIter start, end;
+      const char *tag_name;
+
+      if (chunk->token.type == GTK_CSS_TOKEN_COMMENT)
+        tag_name = "comment";
+      else if (chunk->token.type == GTK_CSS_TOKEN_STRING)
+        tag_name = "string";
+      else
+        continue;
+
+      gtk_css_chunk_get_iters (ce, chunk, &start, &end);
+      gtk_text_buffer_apply_tag_by_name (priv->text, tag_name, &start, &end);
+    }
+}
+
+static void
+update_tokenize (GtkInspectorCssEditor *ce)
+{
+  GtkInspectorCssEditorPrivate *priv = ce->priv;
+  GtkCssTokenizer *tokenizer;
+  GtkCssChunk *chunk;
+  GBytes *gbytes;
+  char *text;
+  gsize bytes = 0;
+  gsize chars = 0;
+  gsize lines = 1;
+
+  if (priv->tokens)
+    gtk_css_rb_tree_unref (priv->tokens);
+  priv->tokens = gtk_css_rb_tree_new (GtkCssChunk,
+                                      GtkCssChunkSize,
+                                      gtk_css_chunk_augment,
+                                      gtk_css_chunk_clear,
+                                      NULL);
+
+  text = get_current_text (priv->text);
+  gbytes = g_bytes_new_take (text, strlen (text));
+  tokenizer = gtk_css_tokenizer_new (gbytes, NULL, ce, NULL);
+  chunk = gtk_css_rb_tree_insert_after (priv->tokens, NULL);
+
+  for (gtk_css_tokenizer_read_token (tokenizer, &chunk->token);
+       chunk->token.type != GTK_CSS_TOKEN_EOF;
+       gtk_css_tokenizer_read_token (tokenizer, &chunk->token))
+    {
+      chunk->size.bytes = gtk_css_tokenizer_get_byte (tokenizer) - bytes;
+      bytes += chunk->size.bytes;
+      chunk->size.chars = gtk_css_tokenizer_get_char (tokenizer) - chars;
+      chars += chunk->size.chars;
+      chunk->size.line_breaks = gtk_css_tokenizer_get_line (tokenizer) - lines;
+      lines += chunk->size.line_breaks;
+      if (chunk->size.line_breaks)
+        {
+          chunk->size.line_bytes = gtk_css_tokenizer_get_line_byte (tokenizer);
+          chunk->size.line_chars = gtk_css_tokenizer_get_line_char (tokenizer);
+        }
+      else
+        {
+          chunk->size.line_bytes = chunk->size.bytes;
+          chunk->size.line_chars = chunk->size.chars;
+        }
+
+      chunk = gtk_css_rb_tree_insert_after (priv->tokens, chunk);
+    } 
+
+  gtk_css_rb_tree_remove (priv->tokens, chunk);
+  gtk_css_tokenizer_unref (tokenizer);
+  g_bytes_unref (gbytes);
+
+  update_token_tags (ce, gtk_css_rb_tree_get_first (priv->tokens), NULL);
+}
+
+static void
 update_style (GtkInspectorCssEditor *ce)
 {
   gchar *text;
@@ -228,6 +432,16 @@ update_style (GtkInspectorCssEditor *ce)
   g_free (text);
 }
 
+static void
+clear_all_tags (GtkInspectorCssEditor *ce)
+{
+  GtkTextIter start, end;
+
+  gtk_text_buffer_get_start_iter (ce->priv->text, &start);
+  gtk_text_buffer_get_end_iter (ce->priv->text, &end);
+  gtk_text_buffer_remove_all_tags (ce->priv->text, &start, &end);
+}
+
 static gboolean
 update_timeout (gpointer data)
 {
@@ -235,7 +449,9 @@ update_timeout (gpointer data)
 
   ce->priv->timeout = 0;
 
+  clear_all_tags (ce);
   update_style (ce);
+  update_tokenize (ce);
 
   return G_SOURCE_REMOVE;
 }
@@ -313,6 +529,11 @@ gtk_inspector_css_editor_init (GtkInspectorCssEditor *ce)
 {
   ce->priv = gtk_inspector_css_editor_get_instance_private (ce);
   gtk_widget_init_template (GTK_WIDGET (ce));
+  ce->priv->tokens = gtk_css_rb_tree_new (GtkCssChunk,
+                                          GtkCssChunkSize,
+                                          gtk_css_chunk_augment,
+                                          gtk_css_chunk_clear,
+                                          NULL);
 }
 
 static void
@@ -331,6 +552,9 @@ finalize (GObject *object)
 
   if (ce->priv->timeout != 0)
     g_source_remove (ce->priv->timeout);
+
+  if (ce->priv->tokens)
+    gtk_css_rb_tree_unref (ce->priv->tokens);
 
   destroy_provider (ce);
 
