@@ -1906,7 +1906,7 @@ menubar,
 menu,
 .menu {
   margin: 4px;
-  padding: 0px;
+  padding: 2px 0px;
   background-color: #ffffff;
   border: 1px solid #9d9d99; }
   .csd menu, .csd
