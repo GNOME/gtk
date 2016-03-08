@@ -2,7 +2,7 @@
  *
  * Demonstrates a simple application.
  *
- * This examples uses GtkApplication, GtkApplicationWindow, GtkBuilder
+ * This example uses GtkApplication, GtkApplicationWindow, GtkBuilder
  * as well as GMenu and GResource. Due to the way GtkApplication is structured,
  * it is run as a separate process.
  */
