@@ -313,24 +313,33 @@ draw_horizontal_scrollbar (GtkWidget     *widget,
                            GtkStateFlags  state)
 {
   GtkStyleContext *scrollbar_context;
+  GtkStyleContext *contents_context;
   GtkStyleContext *trough_context;
   GtkStyleContext *slider_context;
 
   /* This information is taken from the GtkScrollbar docs, see "CSS nodes" */
   scrollbar_context = get_style (NULL, "scrollbar.horizontal");
-  trough_context = get_style (scrollbar_context, "trough");
+  contents_context = get_style (scrollbar_context, "contents");
+  trough_context = get_style (contents_context, "trough");
   slider_context = get_style (trough_context, "slider");
 
   gtk_style_context_set_state (scrollbar_context, state);
+  gtk_style_context_set_state (contents_context, state);
   gtk_style_context_set_state (trough_context, state);
   gtk_style_context_set_state (slider_context, state);
 
+  gtk_render_background (scrollbar_context, cr, x, y, width, height);
+  gtk_render_frame (scrollbar_context, cr, x, y, width, height);
+  gtk_render_background (contents_context, cr, x, y, width, height);
+  gtk_render_frame (contents_context, cr, x, y, width, height);
   gtk_render_background (trough_context, cr, x, y, width, height);
   gtk_render_frame (trough_context, cr, x, y, width, height);
-  gtk_render_slider (slider_context, cr, x + position, y + 1, 30, height - 2, GTK_ORIENTATION_HORIZONTAL);
+  gtk_render_background (slider_context, cr, x + position, y - 2, 30, height + 4);
+  gtk_render_frame (slider_context, cr, x + position, y, 30, height);
 
   g_object_unref (slider_context);
   g_object_unref (trough_context);
+  g_object_unref (contents_context);
   g_object_unref (scrollbar_context);
 }
 
