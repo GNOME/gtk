@@ -3351,7 +3351,9 @@ frame border,
 
 actionbar > revealer > box {
   padding: 6px;
-  border-width: 1px 0 0; }
+  border-top: 1px solid #9d9d99; }
+  actionbar > revealer > box:backdrop {
+    border-color: #a5a5a1; }
 
 placessidebar viewport.frame,
 scrolledwindow viewport.frame {

@@ -2972,7 +2972,9 @@ frame border,
 
 actionbar > revealer >  box {
   padding: 6px;
-  border-width: 1px 0 0;
+  border-top: 1px solid $borders_color;
+
+  &:backdrop { border-color: $backdrop_borders_color; }
 }
 
 placessidebar,
@@ -3245,8 +3247,6 @@ filechooser {
   }
 
   #pathbarbox { border-bottom: 1px solid $bg_color; }
-
-  actionbar > revealer > box { border-top: 1px solid $borders_color; } // this is the bottom bar when present
 }
 
 
