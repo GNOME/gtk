@@ -224,6 +224,9 @@ struct _GdkWindowImplWin32
    */
   GdkRectangleDouble *snap_stash;
 
+  /* Also remember the same position, but in absolute form. */
+  GdkRectangle *snap_stash_int;
+
   /* Decorations set by gdk_window_set_decorations() or NULL if unset */
   GdkWMDecoration* decorations;
 

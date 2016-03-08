@@ -180,6 +180,9 @@ gdk_window_impl_win32_finalize (GObject *object)
 
   g_clear_object (&window_impl->cursor);
 
+  g_clear_pointer (&window_impl->snap_stash, g_free);
+  g_clear_pointer (&window_impl->snap_stash_int, g_free);
+
   if (window_impl->hicon_big != NULL)
     {
       GDI_CALL (DestroyIcon, (window_impl->hicon_big));
@@ -2940,13 +2943,55 @@ unsnap (GdkWindow  *window,
 
   GDK_NOTE (MISC, g_print ("Monitor work area %d x %d @ %d : %d\n", rect.width, rect.height, rect.x, rect.y));
 
-  /* Calculate actual unsnapped window size based on its
-   * old relative size. Same for position.
-   */
-  rect.x += round (rect.width * impl->snap_stash->x);
-  rect.y += round (rect.height * impl->snap_stash->y);
-  rect.width = round (rect.width * impl->snap_stash->width);
-  rect.height = round (rect.height * impl->snap_stash->height);
+  if (rect.width >= impl->snap_stash_int->width &&
+      rect.height >= impl->snap_stash_int->height)
+    {
+      /* If the window fits into new work area without resizing it,
+       * place it into new work area without resizing it.
+       */
+      gdouble left, right, up, down, hratio, vratio;
+      gdouble hscale, vscale;
+      gdouble new_left, new_up;
+
+      left = impl->snap_stash->x;
+      right = 1.0 - (impl->snap_stash->x + impl->snap_stash->width);
+      up = impl->snap_stash->y;
+      down = 1.0 - (impl->snap_stash->y + impl->snap_stash->height);
+      hscale = 1.0;
+
+      if (right > 0.001)
+        {
+          hratio = left / right;
+          hscale = hratio / (1.0 + hratio);
+        }
+
+      new_left = (gdouble) (rect.width - impl->snap_stash_int->width) * hscale;
+
+      vscale = 1.0;
+
+      if (down > 0.001)
+        {
+          vratio = up / down;
+          vscale = vratio / (1.0 + vratio);
+        }
+
+      new_up = (gdouble) (rect.height - impl->snap_stash_int->height) * vscale;
+
+      rect.x = round (rect.x + new_left);
+      rect.y = round (rect.y + new_up);
+      rect.width = impl->snap_stash_int->width;
+      rect.height = impl->snap_stash_int->height;
+    }
+  else
+    {
+      /* Calculate actual unsnapped window size based on its
+       * old relative size. Same for position.
+       */
+      rect.x += round (rect.width * impl->snap_stash->x);
+      rect.y += round (rect.height * impl->snap_stash->y);
+      rect.width = round (rect.width * impl->snap_stash->width);
+      rect.height = round (rect.height * impl->snap_stash->height);
+    }
 
   GDK_NOTE (MISC, g_print ("Unsnapped window size %d x %d @ %d : %d\n", rect.width, rect.height, rect.x, rect.y));
 
@@ -2954,6 +2999,7 @@ unsnap (GdkWindow  *window,
                           rect.width, rect.height);
 
   g_clear_pointer (&impl->snap_stash, g_free);
+  g_clear_pointer (&impl->snap_stash_int, g_free);
 }
 
 static void
@@ -2989,6 +3035,9 @@ stash_window (GdkWindow          *window,
   if (impl->snap_stash == NULL)
     impl->snap_stash = g_new0 (GdkRectangleDouble, 1);
 
+  if (impl->snap_stash_int == NULL)
+    impl->snap_stash_int = g_new0 (GdkRectangle, 1);
+
   GDK_NOTE (MISC, g_print ("monitor work area  %ld x %ld @ %ld : %ld\n",
                            hmonitor_info.rcWork.right - hmonitor_info.rcWork.left,
                            hmonitor_info.rcWork.bottom - hmonitor_info.rcWork.top,
@@ -3014,6 +3063,11 @@ stash_window (GdkWindow          *window,
   impl->snap_stash->y = (gdouble) (y) / (gdouble) (hmonitor_info.rcWork.bottom - hmonitor_info.rcWork.top);
   impl->snap_stash->width = (gdouble) width / (gdouble) (hmonitor_info.rcWork.right - hmonitor_info.rcWork.left);
   impl->snap_stash->height = (gdouble) height / (gdouble) (hmonitor_info.rcWork.bottom - hmonitor_info.rcWork.top);
+
+  impl->snap_stash_int->x = x;
+  impl->snap_stash_int->y = y;
+  impl->snap_stash_int->width = width;
+  impl->snap_stash_int->height = height;
 
   GDK_NOTE (MISC, g_print ("Stashed window %d x %d @ %d : %d as %f x %f @ %f : %f\n",
                            width, height, x, y,
