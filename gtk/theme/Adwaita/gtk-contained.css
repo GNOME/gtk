@@ -105,10 +105,6 @@ headerbar .subtitle {
 assistant .sidebar {
   background-color: #ffffff;
   border-top: 1px solid #9d9d99; }
-  assistant .sidebar:dir(ltr) {
-    border-right: 1px solid #9d9d99; }
-  assistant .sidebar:dir(rtl) {
-    border-left: 1px solid #9d9d99; }
   assistant .sidebar:backdrop {
     background-color: white;
     border-color: #a5a5a1; }
@@ -3335,17 +3331,17 @@ printdialog .dialog-action-box {
 /**********
  * Frames *
  **********/
-frame border,
+frame > border,
 .frame {
   box-shadow: none;
   margin: 0;
   padding: 0;
   border-radius: 0;
   border: 1px solid #9d9d99; }
-  frame border.flat,
+  frame > border.flat,
   .frame.flat {
     border-style: none; }
-  frame border:backdrop,
+  frame > border:backdrop,
   .frame:backdrop {
     border-color: #a5a5a1; }
 
@@ -3634,12 +3630,23 @@ filechooser #pathbarbox {
  * Sidebar *
  ***********/
 .sidebar {
-  border: none;
+  border-style: none;
   background-color: #f4f4f3; }
+  stacksidebar.sidebar:dir(ltr) list, stacksidebar.sidebar.left list, stacksidebar.sidebar.left:dir(rtl) list, .sidebar:dir(ltr), .sidebar.left, .sidebar.left:dir(rtl) {
+    border-right: 1px solid #9d9d99;
+    border-left-style: none; }
+  stacksidebar.sidebar:dir(rtl) list
+  .sidebar:dir(rtl), stacksidebar.sidebar.right list
+  .sidebar:dir(rtl), .sidebar.right {
+    border-left: 1px solid #9d9d99;
+    border-right-style: none; }
   .sidebar:backdrop {
-    background-color: #f4f4f3; }
+    background-color: #f4f4f3;
+    border-color: #a5a5a1; }
   .sidebar list {
     background-color: transparent; }
+  paned .sidebar.left, paned .sidebar.right, paned .sidebar.left:dir(rtl), paned .sidebar:dir(rtl), paned .sidebar:dir(ltr), paned .sidebar {
+    border-style: none; }
 
 stacksidebar row {
   padding: 10px 4px; }
