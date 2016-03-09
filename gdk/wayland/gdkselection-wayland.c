@@ -823,34 +823,8 @@ data_source_target (void                  *data,
                     struct wl_data_source *source,
                     const char            *mime_type)
 {
-  GdkWaylandSelection *wayland_selection = data;
-  GdkWindow *window = NULL;
-  GdkAtom selection;
-
   g_debug (G_STRLOC ": %s source = %p, mime_type = %s",
            G_STRFUNC, source, mime_type);
-
-  if (!mime_type)
-    return;
-
-  if (source == wayland_selection->dnd_source)
-    {
-      selection = atoms[ATOM_DND];
-      window = wayland_selection->dnd_owner;
-    }
-  else if (source == wayland_selection->clipboard_source)
-    {
-      selection = atoms[ATOM_CLIPBOARD];
-      window = wayland_selection->clipboard_owner;
-    }
-
-  if (!window)
-    return;
-
-  gdk_wayland_selection_request_target (wayland_selection, window,
-                                        selection,
-                                        gdk_atom_intern (mime_type, FALSE),
-                                        -1);
 }
 
 static void
