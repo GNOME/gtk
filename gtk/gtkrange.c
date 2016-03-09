@@ -2302,6 +2302,8 @@ update_trough_state (GtkRange *range)
 
   state &= ~(GTK_STATE_FLAG_PRELIGHT | GTK_STATE_FLAG_ACTIVE);
 
+  gtk_css_gadget_set_state (priv->contents_gadget, state);
+
   if (priv->mouse_location == MOUSE_TROUGH && !(state & GTK_STATE_FLAG_INSENSITIVE))
     state |= GTK_STATE_FLAG_PRELIGHT;
 
@@ -2418,6 +2420,7 @@ range_grab_add (GtkRange      *range,
   priv->grab_location = location;
   gtk_range_queue_allocate_location (range, location);
 
+  update_trough_state (range);
   update_slider_state (range);
   update_steppers_state (range);
 
@@ -3473,6 +3476,7 @@ gtk_range_update_mouse_location (GtkRange *range)
       else
         gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_PRELIGHT, FALSE);
 
+      update_trough_state (range);
       update_slider_state (range);
       update_steppers_state (range);
     }
