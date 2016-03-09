@@ -216,28 +216,6 @@ show_node_popover (GtkInspectorCssNodeTree *cnt,
   g_signal_connect (popover, "unmap", G_CALLBACK (gtk_widget_destroy), NULL);
 }
 
-static gboolean
-button_pressed (GtkWidget               *widget,
-                GdkEventButton          *event,
-                GtkInspectorCssNodeTree *cnt)
-{
-  static gboolean in_press = FALSE;
-
-  if (in_press)
-    return FALSE;
-
-  if (!gdk_event_triggers_context_menu ((GdkEvent *)event))
-    return FALSE;
-
-  in_press = TRUE;
-  gtk_widget_event (cnt->priv->node_tree, (GdkEvent *) event);
-  in_press = FALSE;
-
- show_node_popover (cnt, event->x, event->y);
-
-  return TRUE;
-}
-
 static void
 gtk_inspector_css_node_tree_set_node (GtkInspectorCssNodeTree *cnt,
                                       GtkCssNode              *node);
@@ -318,7 +296,6 @@ gtk_inspector_css_node_tree_class_init (GtkInspectorCssNodeTreeClass *klass)
 
   gtk_widget_class_bind_template_callback (widget_class, row_activated);
   gtk_widget_class_bind_template_callback (widget_class, selection_changed);
-  gtk_widget_class_bind_template_callback (widget_class, button_pressed);
 }
 
 static int
