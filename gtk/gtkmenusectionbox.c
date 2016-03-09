@@ -195,9 +195,25 @@ gtk_menu_section_box_remove_func (gint     position,
                                   gpointer user_data)
 {
   GtkMenuSectionBox *box = user_data;
+  GtkMenuTrackerItem *item;
+  GtkWidget *widget;
   GList *children;
 
   children = gtk_container_get_children (GTK_CONTAINER (box->item_box));
+
+  widget = g_list_nth_data (children, position);
+
+  item = g_object_get_data (G_OBJECT (widget), "GtkMenuTrackerItem");
+  if (gtk_menu_tracker_item_get_has_link (item, G_MENU_LINK_SUBMENU)) {
+    GtkWidget *stack, *subbox;
+
+    stack = gtk_widget_get_ancestor (GTK_WIDGET (box->toplevel), GTK_TYPE_STACK);
+    subbox = gtk_stack_get_child_by_name (GTK_STACK (stack), gtk_menu_tracker_item_get_label (item));
+    if (subbox != NULL) {
+      gtk_container_remove (GTK_CONTAINER (stack), subbox);
+    }
+  }
+
   gtk_widget_destroy (g_list_nth_data (children, position));
   g_list_free (children);
 
