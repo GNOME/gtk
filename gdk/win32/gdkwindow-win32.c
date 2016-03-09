@@ -195,36 +195,12 @@ gdk_window_impl_win32_finalize (GObject *object)
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
-static gboolean
-gdk_win32_window_begin_paint (GdkWindow *window)
-{
-  GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
-
-  return !impl->layered;
-}
-
 static void
-gdk_win32_window_end_paint (GdkWindow *window)
+gdk_win32_window_get_queued_window_rect (GdkWindow *window,
+                                         RECT      *return_window_rect)
 {
-  GdkWindowImplWin32 *impl;
-  RECT window_rect;
   gint x, y;
-  HDC hdc;
-  POINT window_position;
-  SIZE window_size;
-  POINT source_point;
-  BLENDFUNCTION blender;
-  cairo_t *cr;
-
-  if (window == NULL || GDK_WINDOW_DESTROYED (window))
-    return;
-
-  impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
-
-  if (!impl->layered && !impl->drag_move_resize_context.native_move_resize_pending)
-    return;
-
-  impl->drag_move_resize_context.native_move_resize_pending = FALSE;
+  RECT window_rect;
 
   gdk_window_get_position (window, &x, &y);
   window_rect.left = x;
@@ -240,18 +216,105 @@ gdk_win32_window_end_paint (GdkWindow *window)
   window_rect.right -= _gdk_offset_x;
   window_rect.top -= _gdk_offset_y;
   window_rect.bottom -= _gdk_offset_y;
+
+  *return_window_rect = window_rect;
+}
+
+static void
+gdk_win32_window_apply_queued_move_resize (GdkWindow *window,
+                                           RECT       window_rect)
+{
+  GDK_NOTE (EVENTS, g_print ("Setting window position ... "));
+
+  API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window),
+                           SWP_NOZORDER_SPECIFIED,
+                           window_rect.left, window_rect.top,
+                           window_rect.right - window_rect.left,
+                           window_rect.bottom - window_rect.top,
+                           SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOREDRAW));
+
+  GDK_NOTE (EVENTS, g_print (" ... set window position\n"));
+}
+
+static gboolean
+gdk_win32_window_begin_paint (GdkWindow *window)
+{
+  GdkWindowImplWin32 *impl;
+  RECT window_rect;
+
+  if (window == NULL || GDK_WINDOW_DESTROYED (window))
+    return TRUE;
+
+  impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+
+  /* Layered windows are moved *after* repaint.
+   * We supply our own surface, return FALSE to make GDK use it.
+   */
+  if (impl->layered)
+    return FALSE;
+
+  /* Non-GL windows are moved *after* repaint.
+   * We don't supply our own surface, return TRUE to make GDK create
+   * one by itself.
+   */
+  if (!window->current_paint.use_gl)
+    return TRUE;
+
+  /* GL windows are moved *before* repaint (otherwise
+   * repainting doesn't work), but if there's no move queued up,
+   * return immediately. Doesn't matter what we return, GDK
+   * will create a surface anyway, as if we returned TRUE.
+   */
+  if (!impl->drag_move_resize_context.native_move_resize_pending)
+    return TRUE;
+
+  impl->drag_move_resize_context.native_move_resize_pending = FALSE;
+
+  /* Get the position/size of the window that GDK wants,
+   * apply it.
+   */
+  gdk_win32_window_get_queued_window_rect (window, &window_rect);
+  gdk_win32_window_apply_queued_move_resize (window, window_rect);
+
+  return TRUE;
+}
+
+static void
+gdk_win32_window_end_paint (GdkWindow *window)
+{
+  GdkWindowImplWin32 *impl;
+  RECT window_rect;
+  HDC hdc;
+  POINT window_position;
+  SIZE window_size;
+  POINT source_point;
+  BLENDFUNCTION blender;
+  cairo_t *cr;
+
+  if (window == NULL || GDK_WINDOW_DESTROYED (window))
+    return;
+
+  impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+
+  /* GL windows are moved *before* repaint */
+  if (window->current_paint.use_gl)
+    return;
+
+  /* No move/resize is queued up, and we don't need to update
+   * the contents of a layered window, so return immediately.
+   */
+  if (!impl->layered &&
+      !impl->drag_move_resize_context.native_move_resize_pending)
+    return;
+
+  impl->drag_move_resize_context.native_move_resize_pending = FALSE;
+
+  /* Get the position/size of the window that GDK wants. */
+  gdk_win32_window_get_queued_window_rect (window, &window_rect);
+
   if (!impl->layered)
     {
-      GDK_NOTE (EVENTS, g_print ("Setting window position ... "));
-
-      API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window),
-                               SWP_NOZORDER_SPECIFIED,
-	                       window_rect.left, window_rect.top,
-                               window_rect.right - window_rect.left,
-                               window_rect.bottom - window_rect.top,
-                               SWP_NOACTIVATE | SWP_NOZORDER));
-
-      GDK_NOTE (EVENTS, g_print (" ... set window position\n"));
+      gdk_win32_window_apply_queued_move_resize (window, window_rect);
 
       return;
     }
