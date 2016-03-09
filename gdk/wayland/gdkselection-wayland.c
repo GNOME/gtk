@@ -964,7 +964,7 @@ data_source_dnd_finished (void                  *data,
 
   g_signal_emit_by_name (context, "dnd-finished");
   gdk_selection_owner_set (NULL, atoms[ATOM_DND], GDK_CURRENT_TIME, TRUE);
-  gdk_wayland_selection_unset_data_source (display, atoms[ATOM_DND]);
+  gdk_wayland_selection_clear_targets (display, atoms[ATOM_DND]);
 }
 
 static void
