@@ -597,6 +597,8 @@ async_write_data_new (GdkWaylandSelection *selection)
   write_data->stream =
     g_unix_output_stream_new (selection->stored_selection.fd, TRUE);
 
+  selection->stored_selection.fd = -1;
+
   return write_data;
 }
 
