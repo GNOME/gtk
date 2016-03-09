@@ -1096,8 +1096,11 @@ headerbar toolbar.inline-toolbar toolbutton:backdrop:only-child > button.titlebu
   border-radius: 3px;
   border-style: solid; }
 
-modelbutton.flat,
-.menuitem.button.flat, modelbutton.flat:backdrop, modelbutton.flat:backdrop:hover,
+modelbutton.flat, popover.background checkbutton,
+popover.background radiobutton,
+.menuitem.button.flat, modelbutton.flat:backdrop, popover.background checkbutton:backdrop,
+popover.background radiobutton:backdrop, modelbutton.flat:backdrop:hover, popover.background checkbutton:backdrop:hover,
+popover.background radiobutton:backdrop:hover,
 .menuitem.button.flat:backdrop,
 .menuitem.button.flat:backdrop:hover, button:link,
 button:visited, button:link:hover, button:link:active, button:link:checked,
@@ -1114,34 +1117,46 @@ button:visited:backdrop, menu arrow,
   -gtk-icon-shadow: none; }
 
 /* menu buttons */
-modelbutton.flat,
+modelbutton.flat, popover.background checkbutton,
+popover.background radiobutton,
 .menuitem.button.flat {
   min-height: 26px;
   padding-left: 5px;
   padding-right: 5px;
   border-radius: 3px;
   outline-offset: -2px; }
-  modelbutton.flat:hover,
+  modelbutton.flat:hover, popover.background checkbutton:hover,
+  popover.background radiobutton:hover,
   .menuitem.button.flat:hover {
     background-color: #f4f4f4; }
-  modelbutton.flat check:last-child,
+  modelbutton.flat check:last-child, popover.background checkbutton check:last-child,
+  popover.background radiobutton check:last-child,
   modelbutton.flat radio:last-child,
+  popover.background checkbutton radio:last-child,
+  popover.background radiobutton radio:last-child,
   .menuitem.button.flat check:last-child,
   .menuitem.button.flat radio:last-child {
     margin-left: 8px; }
-  modelbutton.flat check:first-child,
+  modelbutton.flat check:first-child, popover.background checkbutton check:first-child,
+  popover.background radiobutton check:first-child,
   modelbutton.flat radio:first-child,
+  popover.background checkbutton radio:first-child,
+  popover.background radiobutton radio:first-child,
   .menuitem.button.flat check:first-child,
   .menuitem.button.flat radio:first-child {
     margin-right: 8px; }
 
-modelbutton.flat arrow {
+modelbutton.flat arrow, popover.background checkbutton arrow,
+popover.background radiobutton arrow {
   background: none; }
-  modelbutton.flat arrow:hover {
+  modelbutton.flat arrow:hover, popover.background checkbutton arrow:hover,
+  popover.background radiobutton arrow:hover {
     background: none; }
-  modelbutton.flat arrow.left {
+  modelbutton.flat arrow.left, popover.background checkbutton arrow.left,
+  popover.background radiobutton arrow.left {
     -gtk-icon-source: -gtk-icontheme("pan-start-symbolic"); }
-  modelbutton.flat arrow.right {
+  modelbutton.flat arrow.right, popover.background checkbutton arrow.right,
+  popover.background radiobutton arrow.right {
     -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
 
 button.color {
@@ -2482,8 +2497,12 @@ switch {
   background-color: transparent; }
 
 checkbutton.text-button, radiobutton.text-button {
-  padding: 1px 2px 4px;
+  padding: 2px 0;
   outline-offset: 0; }
+  checkbutton.text-button label:not(:only-child):first-child, radiobutton.text-button label:not(:only-child):first-child {
+    margin-left: 4px; }
+  checkbutton.text-button label:not(:only-child):last-child, radiobutton.text-button label:not(:only-child):last-child {
+    margin-right: 4px; }
   checkbutton.text-button:disabled, checkbutton.text-button:disabled:active, checkbutton.text-button:disabled:indeterminate, radiobutton.text-button:disabled, radiobutton.text-button:disabled:active, radiobutton.text-button:disabled:indeterminate {
     color: #8b8e8f; }
     checkbutton.text-button:disabled:backdrop, checkbutton.text-button:disabled:active:backdrop, checkbutton.text-button:disabled:indeterminate:backdrop, radiobutton.text-button:disabled:backdrop, radiobutton.text-button:disabled:active:backdrop, radiobutton.text-button:disabled:indeterminate:backdrop {
@@ -4033,7 +4052,8 @@ textview text selection:focus, flowbox flowboxchild:selected, label:selected,
 label selection,
 label selection:focus,
 label selection:hover, entry selection, spinbutton:not(.vertical) selection,
-entry selection:focus, modelbutton.flat:selected,
+entry selection:focus, modelbutton.flat:selected, popover.background checkbutton:selected,
+popover.background radiobutton:selected,
 .menuitem.button.flat:selected, treeview.view:selected, treeview.view:selected:focus, row:selected, calendar:selected, .sidebar :selected {
   background-color: #4a90d9;
   color: #ffffff;
@@ -4046,7 +4066,8 @@ entry selection:focus, modelbutton.flat:selected,
   textview text:disabled:selected:focus, .view text selection:disabled, iconview text selection:disabled,
   iconview text selection:disabled:focus,
   textview text selection:disabled, flowbox flowboxchild:disabled:selected, label:disabled:selected,
-  label selection:disabled, entry selection:disabled, spinbutton:not(.vertical) selection:disabled, modelbutton.flat:disabled:selected,
+  label selection:disabled, entry selection:disabled, spinbutton:not(.vertical) selection:disabled, modelbutton.flat:disabled:selected, popover.background checkbutton:disabled:selected,
+  popover.background radiobutton:disabled:selected,
   .menuitem.button.flat:disabled:selected, treeview.view:disabled:selected:focus, row:disabled:selected, calendar:disabled:selected, .sidebar :disabled:selected, placessidebar row:selected:disabled label {
     color: #a5c8ec; }
   .view:backdrop:selected, iconview:backdrop:selected, iconview:backdrop:selected:focus,
@@ -4057,7 +4078,8 @@ entry selection:focus, modelbutton.flat:selected,
   textview text:backdrop:selected:focus, .view text selection:backdrop, iconview text selection:backdrop,
   iconview text selection:backdrop:focus,
   textview text selection:backdrop, flowbox flowboxchild:backdrop:selected, label:backdrop:selected,
-  label selection:backdrop, entry selection:backdrop, spinbutton:not(.vertical) selection:backdrop, modelbutton.flat:backdrop:selected,
+  label selection:backdrop, entry selection:backdrop, spinbutton:not(.vertical) selection:backdrop, modelbutton.flat:backdrop:selected, popover.background checkbutton:backdrop:selected,
+  popover.background radiobutton:backdrop:selected,
   .menuitem.button.flat:backdrop:selected, treeview.view:backdrop:selected:focus, row:backdrop:selected, calendar:backdrop:selected, .sidebar :backdrop:selected {
     color: #ffffff; }
     .view:backdrop:disabled:selected, iconview:backdrop:disabled:selected,
@@ -4065,7 +4087,8 @@ entry selection:focus, modelbutton.flat:selected,
     iconview text:backdrop:disabled:selected,
     textview text:backdrop:disabled:selected, .view text selection:backdrop:disabled, iconview text selection:backdrop:disabled,
     textview text selection:backdrop:disabled, flowbox flowboxchild:backdrop:disabled:selected, label:backdrop:disabled:selected,
-    label selection:backdrop:disabled, entry selection:backdrop:disabled, spinbutton:not(.vertical) selection:backdrop:disabled, modelbutton.flat:backdrop:disabled:selected,
+    label selection:backdrop:disabled, entry selection:backdrop:disabled, spinbutton:not(.vertical) selection:backdrop:disabled, modelbutton.flat:backdrop:disabled:selected, popover.background checkbutton:backdrop:disabled:selected,
+    popover.background radiobutton:backdrop:disabled:selected,
     .menuitem.button.flat:backdrop:disabled:selected, row:backdrop:disabled:selected, calendar:backdrop:disabled:selected, .sidebar :backdrop:disabled:selected, placessidebar row:selected:disabled label:backdrop, placessidebar row:selected:backdrop:disabled label {
       color: #80b1e4; }
 
