@@ -764,3 +764,53 @@ gdk_drag_get_cursor (GdkDragAction action)
                                                        drag_cursors[i].name);
   return drag_cursors[i].cursor;
 }
+
+static void
+gdk_drag_context_commit_drag_status (GdkDragContext *context)
+{
+  GdkDragContextClass *context_class;
+
+  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
+  g_return_if_fail (!context->is_source);
+
+  context_class = GDK_DRAG_CONTEXT_GET_CLASS (context);
+
+  if (context_class->commit_drag_status)
+    context_class->commit_drag_status (context);
+}
+
+gboolean
+gdk_drag_context_handle_dest_event (GdkEvent *event)
+{
+  GdkDragContext *context = NULL;
+  GList *l;
+
+  switch (event->type)
+    {
+    case GDK_DRAG_MOTION:
+    case GDK_DROP_START:
+      context = event->dnd.context;
+      break;
+    case GDK_SELECTION_NOTIFY:
+      for (l = contexts; l; l = l->next)
+        {
+          GdkDragContext *c = l->data;
+
+          if (!c->is_source &&
+              event->selection.selection == gdk_drag_get_selection (c))
+            {
+              context = c;
+              break;
+            }
+        }
+      break;
+    default:
+      return FALSE;
+    }
+
+  if (!context)
+    return FALSE;
+
+  gdk_drag_context_commit_drag_status (context);
+  return TRUE;;
+}

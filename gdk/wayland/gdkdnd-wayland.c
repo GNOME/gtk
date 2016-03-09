@@ -287,8 +287,6 @@ gdk_wayland_drag_context_drag_status (GdkDragContext *context,
 
   wayland_context = GDK_WAYLAND_DRAG_CONTEXT (context);
   wayland_context->selected_action = action;
-
-  gdk_wayland_drag_context_commit_status (context);
 }
 
 static void
@@ -471,6 +469,7 @@ gdk_wayland_drag_context_class_init (GdkWaylandDragContextClass *klass)
   context_class->action_changed = gdk_wayland_drag_context_action_changed;
   context_class->drop_performed = gdk_wayland_drag_context_drop_performed;
   context_class->cancel = gdk_wayland_drag_context_cancel;
+  context_class->commit_drag_status = gdk_wayland_drag_context_commit_status;
 }
 
 GdkDragProtocol

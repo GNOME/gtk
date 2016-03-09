@@ -84,6 +84,8 @@ struct _GdkDragContextClass {
                                  const GdkEvent  *event);
   void        (*action_changed) (GdkDragContext  *context,
                                  GdkDragAction    action);
+
+  void        (*commit_drag_status) (GdkDragContext  *context);
 };
 
 struct _GdkDragContext {
@@ -116,6 +118,7 @@ void     gdk_drag_context_set_cursor          (GdkDragContext *context,
 void     gdk_drag_context_cancel              (GdkDragContext      *context,
                                                GdkDragCancelReason  reason);
 gboolean gdk_drag_context_handle_source_event (GdkEvent *event);
+gboolean gdk_drag_context_handle_dest_event   (GdkEvent *event);
 GdkCursor * gdk_drag_get_cursor (GdkDragAction action);
 
 G_END_DECLS
