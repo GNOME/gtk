@@ -6665,6 +6665,7 @@ file_system_model_got_thumbnail (GObject *object, GAsyncResult *res, gpointer da
   /* file was deleted */
   if (!_gtk_file_system_model_get_iter_for_file (model, &iter, file))
     {
+      g_object_unref (queried);
       GDK_THREADS_LEAVE ();
       return;
     }
@@ -6678,6 +6679,7 @@ file_system_model_got_thumbnail (GObject *object, GAsyncResult *res, gpointer da
   _gtk_file_system_model_update_file (model, file, info);
 
   g_object_unref (info);
+  g_object_unref (queried);
 
   GDK_THREADS_LEAVE ();
 }

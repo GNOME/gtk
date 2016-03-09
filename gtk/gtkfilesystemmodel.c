@@ -1231,6 +1231,8 @@ gtk_file_system_model_query_done (GObject *     object,
   id = node_get_for_file (model, file);
   gtk_file_system_model_sort_node (model, id);
 
+  g_object_unref (info);
+
   gdk_threads_leave ();
 }
 
