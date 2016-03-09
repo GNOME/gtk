@@ -80,6 +80,7 @@
                 <property name="orientation">vertical</property>
                 <property name="adjustment">h_adj</property>
                 <property name="draw_value">False</property>
+                <property name="has_origin">False</property>
                 <signal name="popup-menu" handler="popup_edit" swapped="no"/>
               </object>
               <packing>
@@ -94,6 +95,7 @@
                 <property name="adjustment">a_adj</property>
                 <property name="draw_value">False</property>
                 <property name="scale_type">1</property>
+                <property name="has_origin">False</property>
                 <style>
                   <class name="scale-has-marks-above"/>
                 </style>
