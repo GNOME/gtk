@@ -7655,6 +7655,9 @@ gtk_window_configure_event (GtkWidget         *widget,
   if (!_gtk_widget_is_toplevel (widget))
     return FALSE;
 
+  if (_gtk_widget_get_window (widget) != event->window)
+    return TRUE;
+
   /* If this is a gratuitous ConfigureNotify that's already
    * the same as our allocation, then we can fizzle it out.
    * This is the case for dragging windows around.
