@@ -27,7 +27,7 @@
 #include "gtkalignment.h"
 #include "gtkcelllayout.h"
 #include "gtkcellrenderertext.h"
-#include "gtkentry.h"
+#include "gtkentryprivate.h"
 #include "gtkfilesystemmodel.h"
 #include "gtklabel.h"
 #include "gtkmain.h"
@@ -363,7 +363,7 @@ explicitly_complete (GtkFileChooserEntry *chooser_entry)
       
       text = gtk_file_chooser_entry_get_completion_text (chooser_entry);
       text_len = strlen (text);
-      completion = gtk_entry_completion_compute_prefix (gtk_entry_get_completion (GTK_ENTRY (chooser_entry)), text);
+      completion = _gtk_entry_completion_compute_prefix (gtk_entry_get_completion (GTK_ENTRY (chooser_entry)), text);
       completion_len = completion ? strlen (completion) : 0;
 
       if (completion_len > text_len)

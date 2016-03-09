@@ -1571,18 +1571,16 @@ gtk_entry_completion_cursor_on_match (GtkEntryCompletion *completion,
   return TRUE;
 }
 
-static gchar *
-gtk_entry_completion_compute_prefix (GtkEntryCompletion *completion)
+gchar *
+_gtk_entry_completion_compute_prefix (GtkEntryCompletion *completion,
+				      const char         *key)
 {
   GtkTreeIter iter;
   gchar *prefix = NULL;
   gboolean valid;
-  const gchar *key;
 
   if (completion->priv->text_column < 0)
     return NULL;
-
-  key = gtk_entry_get_text (GTK_ENTRY (completion->priv->entry));
 
   valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (completion->priv->filter_model),
 					 &iter);
@@ -1753,7 +1751,8 @@ gtk_entry_completion_insert_prefix (GtkEntryCompletion *completion)
     g_signal_handler_block (completion->priv->entry,
                             completion->priv->insert_text_id);
 
-  prefix = gtk_entry_completion_compute_prefix (completion);
+  prefix = _gtk_entry_completion_compute_prefix (completion,
+						 gtk_entry_get_text (GTK_ENTRY (completion->priv->entry)));
   if (prefix)
     {
       g_signal_emit (completion, entry_completion_signals[INSERT_PREFIX],
