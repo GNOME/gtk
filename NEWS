@@ -1,3 +1,18 @@
+Overview of Changes in GTK+ 3.18.9
+==================================
+
+* Bugs fixed:
+ 677329 Missing focus-in events
+ 761474 x11: Scaling factor is applied twice on screen work area
+ 762468 wayland: Switching between fullscreen and unfullscreen too fast...
+ 762907 gnome-shell crashes after undocking
+ 763017 tooltip text is not shown
+
+* Translation updates:
+ Scottish Gaelic
+ Slovenian
+
+
 Overview of Changes in GTK+ 3.18.8
 ==================================
 
