@@ -20,6 +20,7 @@
 
 #include "gtk/gtkcssmatcherprivate.h"
 #include "gtk/gtkcssparserprivate.h"
+#include "gtk/gtkcsstokensourceprivate.h"
 
 G_BEGIN_DECLS
 
@@ -28,6 +29,7 @@ typedef struct _GtkCssSelectorTree GtkCssSelectorTree;
 typedef struct _GtkCssSelectorTreeBuilder GtkCssSelectorTreeBuilder;
 
 GtkCssSelector *  _gtk_css_selector_parse           (GtkCssParser           *parser);
+GtkCssSelector *  gtk_css_selector_token_parse      (GtkCssTokenSource      *parser);
 void              _gtk_css_selector_free            (GtkCssSelector         *selector);
 
 char *            _gtk_css_selector_to_string       (const GtkCssSelector   *selector);

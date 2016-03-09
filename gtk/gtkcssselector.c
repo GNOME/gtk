@@ -25,6 +25,8 @@
 #include "gtkcssprovider.h"
 #include "gtkstylecontextprivate.h"
 
+#include <errno.h>
+#include <stdlib.h>
 #if defined(_MSC_VER) && _MSC_VER >= 1500
 # include <intrin.h>
 #endif
@@ -1102,42 +1104,42 @@ parse_selector_pseudo_class_nth_child (GtkCssParser   *parser,
   return selector;
 }
 
+static const struct {
+  const char    *name;
+  gboolean       deprecated;
+  GtkStateFlags  state_flag;
+  PositionType   position_type;
+  int            position_a;
+  int            position_b;
+} pseudo_classes[] = {
+  { "first-child",   0, 0,                           POSITION_FORWARD,  0, 1 },
+  { "last-child",    0, 0,                           POSITION_BACKWARD, 0, 1 },
+  { "only-child",    0, 0,                           POSITION_ONLY,     0, 0 },
+  { "sorted",        1, 0,                           POSITION_SORTED,   0, 0 },
+  { "active",        0, GTK_STATE_FLAG_ACTIVE, },
+  { "prelight",      1, GTK_STATE_FLAG_PRELIGHT, },
+  { "hover",         0, GTK_STATE_FLAG_PRELIGHT, },
+  { "selected",      0, GTK_STATE_FLAG_SELECTED, },
+  { "insensitive",   1, GTK_STATE_FLAG_INSENSITIVE, },
+  { "disabled",      0, GTK_STATE_FLAG_INSENSITIVE, },
+  { "inconsistent",  1, GTK_STATE_FLAG_INCONSISTENT, },
+  { "indeterminate", 0, GTK_STATE_FLAG_INCONSISTENT, },
+  { "focused",       1, GTK_STATE_FLAG_FOCUSED, },
+  { "focus",         0, GTK_STATE_FLAG_FOCUSED, },
+  { "backdrop",      0, GTK_STATE_FLAG_BACKDROP, },
+  { "dir(ltr)",      0, GTK_STATE_FLAG_DIR_LTR, },
+  { "dir(rtl)",      0, GTK_STATE_FLAG_DIR_RTL, },
+  { "link",          0, GTK_STATE_FLAG_LINK, },
+  { "visited",       0, GTK_STATE_FLAG_VISITED, },
+  { "checked",       0, GTK_STATE_FLAG_CHECKED, },
+  { "drop(active)",  0, GTK_STATE_FLAG_DROP_ACTIVE, }
+};
+
 static GtkCssSelector *
 parse_selector_pseudo_class (GtkCssParser   *parser,
                              GtkCssSelector *selector,
                              gboolean        negate)
 {
-  static const struct {
-    const char    *name;
-    gboolean       deprecated;
-    GtkStateFlags  state_flag;
-    PositionType   position_type;
-    int            position_a;
-    int            position_b;
-  } pseudo_classes[] = {
-    { "first-child",   0, 0,                           POSITION_FORWARD,  0, 1 },
-    { "last-child",    0, 0,                           POSITION_BACKWARD, 0, 1 },
-    { "only-child",    0, 0,                           POSITION_ONLY,     0, 0 },
-    { "sorted",        1, 0,                           POSITION_SORTED,   0, 0 },
-    { "active",        0, GTK_STATE_FLAG_ACTIVE, },
-    { "prelight",      1, GTK_STATE_FLAG_PRELIGHT, },
-    { "hover",         0, GTK_STATE_FLAG_PRELIGHT, },
-    { "selected",      0, GTK_STATE_FLAG_SELECTED, },
-    { "insensitive",   1, GTK_STATE_FLAG_INSENSITIVE, },
-    { "disabled",      0, GTK_STATE_FLAG_INSENSITIVE, },
-    { "inconsistent",  1, GTK_STATE_FLAG_INCONSISTENT, },
-    { "indeterminate", 0, GTK_STATE_FLAG_INCONSISTENT, },
-    { "focused",       1, GTK_STATE_FLAG_FOCUSED, },
-    { "focus",         0, GTK_STATE_FLAG_FOCUSED, },
-    { "backdrop",      0, GTK_STATE_FLAG_BACKDROP, },
-    { "dir(ltr)",      0, GTK_STATE_FLAG_DIR_LTR, },
-    { "dir(rtl)",      0, GTK_STATE_FLAG_DIR_RTL, },
-    { "link",          0, GTK_STATE_FLAG_LINK, },
-    { "visited",       0, GTK_STATE_FLAG_VISITED, },
-    { "checked",       0, GTK_STATE_FLAG_CHECKED, },
-    { "drop(active)",  0, GTK_STATE_FLAG_DROP_ACTIVE, }
-
-  };
   guint i;
 
   if (_gtk_css_parser_try (parser, "nth-child", FALSE))
@@ -1300,6 +1302,539 @@ _gtk_css_selector_parse (GtkCssParser *parser)
         selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_CHILD, selector);
       else
         selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_DESCENDANT, selector);
+    }
+
+  return selector;
+}
+
+GtkCssSelector *
+token_parse_selector_class (GtkCssTokenSource *source,
+                            GtkCssSelector    *selector,
+                            gboolean           negate)
+{
+  const GtkCssToken *token;
+
+  gtk_css_token_source_consume_token (source);
+  token = gtk_css_token_source_get_token (source);
+
+  if (gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
+    {
+      selector = gtk_css_selector_new (negate ? &GTK_CSS_SELECTOR_NOT_CLASS
+                                              : &GTK_CSS_SELECTOR_CLASS,
+                                       selector);
+      selector->style_class.style_class = g_quark_from_string (token->string.string);
+      gtk_css_token_source_consume_token (source);
+      return selector;
+    }
+  else
+    {
+      gtk_css_token_source_error (source, "No class name after '.' in selector");
+      if (selector)
+        _gtk_css_selector_free (selector);
+      return NULL;
+    }
+}
+
+static gboolean
+parse_plus_b (GtkCssTokenSource *source,
+              gboolean           negate,
+              gint              *b)
+{
+  const GtkCssToken *token;
+  gboolean has_seen_sign;
+
+  gtk_css_token_source_consume_whitespace (source);
+  token = gtk_css_token_source_get_token (source);
+
+  if (negate)
+    {
+      has_seen_sign = TRUE;
+    }
+  else
+    {
+      if (gtk_css_token_is_delim (token, '+'))
+        {
+          gtk_css_token_source_consume_token (source);
+          gtk_css_token_source_consume_whitespace (source);
+          has_seen_sign = TRUE;
+        }
+      else if (gtk_css_token_is_delim (token, '-'))
+        {
+          gtk_css_token_source_consume_token (source);
+          gtk_css_token_source_consume_whitespace (source);
+          negate = TRUE;
+          has_seen_sign = TRUE;
+        }
+    }
+
+  token = gtk_css_token_source_get_token (source);
+  if (gtk_css_token_is (token, GTK_CSS_TOKEN_INTEGER))
+    {
+      if (has_seen_sign && token->number.number >= 0)
+        {
+          *b = token->number.number;
+          if (negate)
+            *b = - *b;
+          return TRUE;
+        }
+    }
+  
+  gtk_css_token_source_error (source, "Not a valid an+b type");
+  return FALSE;
+}
+
+gboolean
+parse_a_n_plus_b (GtkCssTokenSource *source,
+                  gint              *a,
+                  gint              *b)
+{
+  const GtkCssToken *token;
+
+  token = gtk_css_token_source_get_token (source);
+
+  if (gtk_css_token_is_ident (token, "even"))
+    {
+      *a = 2;
+      *b = 0;
+      gtk_css_token_source_consume_token (source);
+      return TRUE;
+    }
+  else if (gtk_css_token_is_ident (token, "odd"))
+    {
+      *a = 2;
+      *b = 1;
+      gtk_css_token_source_consume_token (source);
+      return TRUE;
+    }
+  else if (gtk_css_token_is (token, GTK_CSS_TOKEN_INTEGER))
+    {
+      *a = 0;
+      *b = token->number.number;
+      gtk_css_token_source_consume_token (source);
+      return TRUE;
+    }
+  else if (gtk_css_token_is (token, GTK_CSS_TOKEN_INTEGER_DIMENSION) &&
+           g_ascii_strcasecmp (token->dimension.dimension, "n") == 0)
+    {
+      *a = token->dimension.value;
+      gtk_css_token_source_consume_token (source);
+      return parse_plus_b (source, FALSE, b);
+    }
+  else if (gtk_css_token_is (token, GTK_CSS_TOKEN_INTEGER_DIMENSION) &&
+           g_ascii_strcasecmp (token->dimension.dimension, "n-") == 0)
+    {
+      *a = token->dimension.value;
+      gtk_css_token_source_consume_token (source);
+      return parse_plus_b (source, TRUE, b);
+    }
+  else if (gtk_css_token_is (token, GTK_CSS_TOKEN_INTEGER_DIMENSION) &&
+           g_ascii_strncasecmp (token->dimension.dimension, "n-", 2) == 0)
+    {
+      char *end;
+      *a = token->dimension.value;
+      errno = 0;
+      *b = strtoul (token->dimension.dimension + 2, &end, 10);
+      if (*end == '\0' && errno == 0)
+        {
+          gtk_css_token_source_consume_token (source);
+          return TRUE;
+        }
+    }
+  else if (gtk_css_token_is_ident (token, "-n"))
+    {
+      *a = -1;
+      gtk_css_token_source_consume_token (source);
+      return parse_plus_b (source, FALSE, b);
+    }
+  else if (gtk_css_token_is_ident (token, "-n-"))
+    {
+      *a = -1;
+      gtk_css_token_source_consume_token (source);
+      return parse_plus_b (source, TRUE, b);
+    }
+  
+  gtk_css_token_source_error (source, "Not a valid an+b type");
+  return FALSE;
+}
+GtkCssSelector *
+token_parse_selector_pseudo_class (GtkCssTokenSource *source,
+                                   GtkCssSelector    *selector,
+                                   gboolean           negate)
+{
+  const GtkCssToken *token;
+
+  gtk_css_token_source_consume_token (source);
+  token = gtk_css_token_source_get_token (source);
+
+  if (gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
+    {
+      guint i;
+
+      for (i = 0; i < G_N_ELEMENTS (pseudo_classes); i++)
+        {
+          if (g_ascii_strcasecmp (pseudo_classes[i].name, token->string.string) == 0)
+            {
+              if (pseudo_classes[i].state_flag)
+                {
+                  selector = gtk_css_selector_new (negate ? &GTK_CSS_SELECTOR_NOT_PSEUDOCLASS_STATE
+                                                          : &GTK_CSS_SELECTOR_PSEUDOCLASS_STATE,
+                                                   selector);
+                  selector->state.state = pseudo_classes[i].state_flag;
+                  if (pseudo_classes[i].deprecated)
+                    {
+                      if (pseudo_classes[i + 1].state_flag == pseudo_classes[i].state_flag)
+                        gtk_css_token_source_deprecated (source,
+                                                         "The :%s pseudo-class is deprecated. Use :%s instead.",
+                                                         pseudo_classes[i].name,
+                                                         pseudo_classes[i + 1].name);
+                      else
+                        gtk_css_token_source_deprecated (source,
+                                                         "The :%s pseudo-class is deprecated.",
+                                                         pseudo_classes[i].name);
+                    }
+                }
+              else
+                {
+                  selector = gtk_css_selector_new (negate ? &GTK_CSS_SELECTOR_NOT_PSEUDOCLASS_POSITION
+                                                          : &GTK_CSS_SELECTOR_PSEUDOCLASS_POSITION,
+                                                   selector);
+                  selector->position.type = pseudo_classes[i].position_type;
+                  selector->position.a = pseudo_classes[i].position_a;
+                  selector->position.b = pseudo_classes[i].position_b;
+                }
+              gtk_css_token_source_consume_token (source);
+              return selector;
+            }
+        }
+          
+      gtk_css_token_source_unknown (source, "Unknown name of pseudo-class");
+      if (selector)
+        _gtk_css_selector_free (selector);
+      return NULL;
+    }
+  else if (gtk_css_token_is (token, GTK_CSS_TOKEN_FUNCTION))
+    {
+      gint a, b;
+
+      if (gtk_css_token_is_function (token, "nth-child"))
+        {
+          gtk_css_token_source_consume_token (source);
+          if (parse_a_n_plus_b (source, &a, &b))
+            {
+              selector = gtk_css_selector_new (negate ? &GTK_CSS_SELECTOR_NOT_PSEUDOCLASS_POSITION
+                                                      : &GTK_CSS_SELECTOR_PSEUDOCLASS_POSITION,
+                                               selector);
+              selector->position.type = POSITION_FORWARD;
+              selector->position.a = a;
+              selector->position.b = b;
+            }
+          else
+            {
+              if (selector)
+                _gtk_css_selector_free (selector);
+              return NULL;
+            }
+          gtk_css_token_source_consume_whitespace (source);
+          token = gtk_css_token_source_get_token (source);
+          if (!gtk_css_token_is (token, GTK_CSS_TOKEN_CLOSE_PARENS))
+            {
+              gtk_css_token_source_error (source, "Expected ')' at end of :nth-child()");
+              if (selector)
+                _gtk_css_selector_free (selector);
+              return NULL;
+            }
+          gtk_css_token_source_consume_token (source);
+        }
+      else if (gtk_css_token_is_function (token, "nth-last-child"))
+        {
+          gtk_css_token_source_consume_token (source);
+          if (parse_a_n_plus_b (source, &a, &b))
+            {
+              selector = gtk_css_selector_new (negate ? &GTK_CSS_SELECTOR_NOT_PSEUDOCLASS_POSITION
+                                                      : &GTK_CSS_SELECTOR_PSEUDOCLASS_POSITION,
+                                               selector);
+              selector->position.type = POSITION_BACKWARD;
+              selector->position.a = a;
+              selector->position.b = b;
+            }
+          else
+            {
+              if (selector)
+                _gtk_css_selector_free (selector);
+              return NULL;
+            }
+          gtk_css_token_source_consume_whitespace (source);
+          token = gtk_css_token_source_get_token (source);
+          if (!gtk_css_token_is (token, GTK_CSS_TOKEN_CLOSE_PARENS))
+            {
+              gtk_css_token_source_error (source, "Expected ')' at end of :nth-last-child()");
+              if (selector)
+                _gtk_css_selector_free (selector);
+              return NULL;
+            }
+          gtk_css_token_source_consume_token (source);
+        }
+      else if (gtk_css_token_is_function (token, "not"))
+        {
+          if (negate)
+            {
+              gtk_css_token_source_error (source, "Nesting of :not() not allowed");
+              if (selector)
+                _gtk_css_selector_free (selector);
+              return NULL;
+            }
+          else
+            {
+              gtk_css_token_source_consume_token (source);
+              token = gtk_css_token_source_get_token (source);
+
+              if (gtk_css_token_is_delim (token, '*'))
+                {
+                  selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_ANY, selector);
+                  gtk_css_token_source_consume_token (source);
+                }
+              else if (gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
+                {
+                  selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_NOT_NAME, selector);
+                  selector->name.name = g_intern_string (token->string.string);
+                  gtk_css_token_source_consume_token (source);
+                }
+              else if (gtk_css_token_is (token, GTK_CSS_TOKEN_HASH_ID))
+                {
+                  selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_NOT_ID, selector);
+                  selector->id.name = g_intern_string (token->string.string);
+                  gtk_css_token_source_consume_token (source);
+                }
+              else if (gtk_css_token_is_delim (token, '.'))
+                {
+                  selector = token_parse_selector_class (source, selector, TRUE);
+                }
+              else if (gtk_css_token_is (token, GTK_CSS_TOKEN_COLON))
+                {
+                  selector = token_parse_selector_pseudo_class (source, selector, TRUE);
+                }
+              else
+                {
+                  gtk_css_token_source_error (source, "Invalid contents of :not() selector");
+                  if (selector)
+                    _gtk_css_selector_free (selector);
+                  selector = NULL;
+                  return NULL;
+                }
+
+              gtk_css_token_source_consume_whitespace (source);
+              token = gtk_css_token_source_get_token (source);
+              if (gtk_css_token_is (token, GTK_CSS_TOKEN_CLOSE_PARENS))
+                {
+                  gtk_css_token_source_consume_token (source);
+                }
+              else
+                {
+                  gtk_css_token_source_error (source, "Invalid contents of :not() selector");
+                  if (selector)
+                    _gtk_css_selector_free (selector);
+                  selector = NULL;
+                  return NULL;
+                }
+            }
+        }
+      else if (gtk_css_token_is_function (token, "dir"))
+        {
+          gtk_css_token_source_consume_token (source);
+          gtk_css_token_source_consume_whitespace (source);
+          token = gtk_css_token_source_get_token (source);
+          if (gtk_css_token_is_ident (token, "ltr"))
+            {
+              selector = gtk_css_selector_new (negate ? &GTK_CSS_SELECTOR_NOT_PSEUDOCLASS_STATE
+                                                      : &GTK_CSS_SELECTOR_PSEUDOCLASS_STATE,
+                                               selector);
+              selector->state.state = GTK_STATE_FLAG_DIR_LTR;
+              gtk_css_token_source_consume_token (source);
+            }
+          else if (gtk_css_token_is_ident (token, "rtl"))
+            {
+              selector = gtk_css_selector_new (negate ? &GTK_CSS_SELECTOR_NOT_PSEUDOCLASS_STATE
+                                                      : &GTK_CSS_SELECTOR_PSEUDOCLASS_STATE,
+                                               selector);
+              selector->state.state = GTK_STATE_FLAG_DIR_LTR;
+              gtk_css_token_source_consume_token (source);
+            }
+          else
+            {
+              gtk_css_token_source_error (source, "Expected :dir(ltr) or :dir(rtl)");
+              if (selector)
+                _gtk_css_selector_free (selector);
+              selector = NULL;
+              return NULL;
+            }
+          gtk_css_token_source_consume_whitespace (source);
+          token = gtk_css_token_source_get_token (source);
+          if (!gtk_css_token_is (token, GTK_CSS_TOKEN_CLOSE_PARENS))
+            {
+              gtk_css_token_source_error (source, "Expected ')' at end of :dir()");
+              if (selector)
+                _gtk_css_selector_free (selector);
+              return NULL;
+            }
+          gtk_css_token_source_consume_token (source);
+        }
+      else if (gtk_css_token_is_function (token, "drop"))
+        {
+          gtk_css_token_source_consume_token (source);
+          gtk_css_token_source_consume_whitespace (source);
+          token = gtk_css_token_source_get_token (source);
+          if (gtk_css_token_is_ident (token, "active"))
+            {
+              selector = gtk_css_selector_new (negate ? &GTK_CSS_SELECTOR_NOT_PSEUDOCLASS_STATE
+                                                      : &GTK_CSS_SELECTOR_PSEUDOCLASS_STATE,
+                                               selector);
+              selector->state.state = GTK_STATE_FLAG_DROP_ACTIVE;
+              gtk_css_token_source_consume_token (source);
+            }
+          else
+            {
+              gtk_css_token_source_error (source, "Expected :drop(active)");
+              if (selector)
+                _gtk_css_selector_free (selector);
+              selector = NULL;
+              return NULL;
+            }
+          gtk_css_token_source_consume_whitespace (source);
+          token = gtk_css_token_source_get_token (source);
+          if (!gtk_css_token_is (token, GTK_CSS_TOKEN_CLOSE_PARENS))
+            {
+              gtk_css_token_source_error (source, "Expected ')' at end of :drop()");
+              if (selector)
+                _gtk_css_selector_free (selector);
+              return NULL;
+            }
+          gtk_css_token_source_consume_token (source);
+        }
+      else
+        {
+          gtk_css_token_source_unknown (source, "Unknown pseudoclass");
+          if (selector)
+            _gtk_css_selector_free (selector);
+          return NULL;
+        }
+    }
+  else
+    {
+      gtk_css_token_source_error (source, "Unknown pseudoclass");
+      if (selector)
+        _gtk_css_selector_free (selector);
+      return NULL;
+    }
+
+  return selector;
+}
+
+GtkCssSelector *
+token_parse_simple_selector (GtkCssTokenSource *source,
+                             GtkCssSelector    *selector)
+{
+  gboolean parsed_something = FALSE;
+  const GtkCssToken *token;
+
+  do {
+      token = gtk_css_token_source_get_token (source);
+
+      if (!parsed_something && gtk_css_token_is_delim (token, '*'))
+        {
+          selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_ANY, selector);
+          gtk_css_token_source_consume_token (source);
+        }
+      else if (!parsed_something && gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
+        {
+          selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_NAME, selector);
+          selector->name.name = g_intern_string (token->string.string);
+          gtk_css_token_source_consume_token (source);
+        }
+      else if (gtk_css_token_is (token, GTK_CSS_TOKEN_HASH_ID))
+        {
+          selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_ID, selector);
+          selector->id.name = g_intern_string (token->string.string);
+          gtk_css_token_source_consume_token (source);
+        }
+      else if (gtk_css_token_is_delim (token, '.'))
+        {
+          selector = token_parse_selector_class (source, selector, FALSE);
+        }
+      else if (gtk_css_token_is (token, GTK_CSS_TOKEN_COLON))
+        {
+          selector = token_parse_selector_pseudo_class (source, selector, FALSE);
+        }
+      else
+        {
+          if (!parsed_something)
+            {
+              gtk_css_token_source_error (source, "Expected a valid selector");
+              if (selector)
+                _gtk_css_selector_free (selector);
+              selector = NULL;
+            }
+          break;
+        }
+
+      parsed_something = TRUE;
+    }
+  while (TRUE);
+
+  return selector;
+}
+
+GtkCssSelector *
+gtk_css_selector_token_parse (GtkCssTokenSource *source)
+{
+  GtkCssSelector *selector = NULL;
+  const GtkCssToken *token;
+
+  while (TRUE)
+    {
+      gboolean seen_whitespace = FALSE;
+
+      selector = token_parse_simple_selector (source, selector);
+      if (selector == NULL)
+        {
+          gtk_css_token_source_consume_all (source);
+          return NULL;
+        }
+
+      seen_whitespace = gtk_css_token_source_consume_whitespace (source);
+      token = gtk_css_token_source_get_token (source);
+
+      if (gtk_css_token_is_delim (token, '+'))
+        {
+          selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_ADJACENT, selector);
+          gtk_css_token_source_consume_token (source);
+        }
+      else if (gtk_css_token_is_delim (token, '~'))
+        {
+          selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_SIBLING, selector);
+          gtk_css_token_source_consume_token (source);
+        }
+      else if (gtk_css_token_is_delim (token, '>'))
+        {
+          selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_CHILD, selector);
+          gtk_css_token_source_consume_token (source);
+        }
+      else if (gtk_css_token_is (token, GTK_CSS_TOKEN_EOF))
+        {
+          break;
+        }
+      else if (seen_whitespace)
+        {
+          selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_DESCENDANT, selector);
+        }
+      else
+        {
+           gtk_css_token_source_error (source, "Expected a valid selector");
+           _gtk_css_selector_free (selector);
+           gtk_css_token_source_consume_all (source);
+          return NULL;
+        }
+
+      gtk_css_token_source_consume_whitespace (source);
     }
 
   return selector;

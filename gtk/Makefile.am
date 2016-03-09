@@ -434,6 +434,8 @@ gtk_private_h_sources =		\
 	gtkcssrbtreeprivate.h	\
 	gtkcssrepeatvalueprivate.h	\
 	gtkcssrgbavalueprivate.h	\
+	gtkcssruleprivate.h	\
+	gtkcssrulelistprivate.h	\
 	gtkcsssectionprivate.h 	\
 	gtkcssselectorprivate.h	\
 	gtkcssshadowsvalueprivate.h	\
@@ -445,7 +447,11 @@ gtk_private_h_sources =		\
 	gtkcssstylechangeprivate.h 	\
 	gtkcssstyleprivate.h 	\
 	gtkcssstylepropertyprivate.h \
+	gtkcssstyledeclarationprivate.h \
+	gtkcssstyleruleprivate.h	\
+	gtkcssstylesheetprivate.h	\
 	gtkcsstokenizerprivate.h	\
+	gtkcsstokensourceprivate.h	\
 	gtkcsstransformvalueprivate.h	\
 	gtkcsstransientnodeprivate.h	\
 	gtkcsstransitionprivate.h	\
@@ -704,11 +710,15 @@ gtk_base_c_sources = 		\
 	gtkcssrbtree.c		\
 	gtkcssrepeatvalue.c	\
 	gtkcssrgbavalue.c	\
+	gtkcssrule.c		\
+	gtkcssrulelist.c	\
 	gtkcsssection.c 	\
 	gtkcssselector.c	\
 	gtkcssstringvalue.c	\
 	gtkcssstyle.c		\
 	gtkcssstylechange.c 	\
+	gtkcssstyledeclaration.c \
+	gtkcssstylerule.c	\
 	gtkcssshadowsvalue.c	\
 	gtkcssshadowvalue.c	\
 	gtkcssshorthandproperty.c \
@@ -717,7 +727,9 @@ gtk_base_c_sources = 		\
 	gtkcssstylefuncs.c	\
 	gtkcssstyleproperty.c	\
 	gtkcssstylepropertyimpl.c \
+	gtkcssstylesheet.c	\
 	gtkcsstokenizer.c	\
+	gtkcsstokensource.c	\
 	gtkcsstransformvalue.c	\
 	gtkcsstransientnode.c	\
 	gtkcsstransition.c	\
