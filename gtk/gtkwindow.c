@@ -272,6 +272,10 @@ struct _GtkWindowPrivate
   GtkCssNode *decoration_node;
 };
 
+static const GtkTargetEntry dnd_dest_targets [] = {
+  { "application/x-rootwindow-drop", 0, 0 },
+};
+
 enum {
   SET_FOCUS,
   FRAME_EVENT,
@@ -1693,6 +1697,11 @@ gtk_window_init (GtkWindow *window)
   gtk_css_node_add_class (widget_node, g_quark_from_static_string (GTK_STYLE_CLASS_BACKGROUND));
 
   priv->scale = gtk_widget_get_scale_factor (widget);
+
+  gtk_drag_dest_set (GTK_WIDGET (window),
+                     GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_DROP,
+                     dnd_dest_targets, G_N_ELEMENTS (dnd_dest_targets),
+                     GDK_ACTION_MOVE);
 }
 
 static void
