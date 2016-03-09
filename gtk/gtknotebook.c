@@ -219,6 +219,7 @@ struct _GtkNotebookPrivate
   guint          scrollable         : 1;
   guint          tab_pos            : 2;
   guint          tabs_reversed      : 1;
+  guint          rootwindow_drop    : 1;
 };
 
 enum {
@@ -311,10 +312,14 @@ struct _GtkNotebookPage
   gulong notify_visible_handler;
 };
 
-static const GtkTargetEntry notebook_targets [] = {
+static const GtkTargetEntry src_notebook_targets [] = {
   { "GTK_NOTEBOOK_TAB", GTK_TARGET_SAME_APP, 0 },
+  { "application/x-rootwindow-drop", 0, 0 },
 };
 
+static const GtkTargetEntry dst_notebook_targets [] = {
+  { "GTK_NOTEBOOK_TAB", GTK_TARGET_SAME_APP, 0 },
+};
 
 /*** GtkNotebook Methods ***/
 static gboolean gtk_notebook_select_page         (GtkNotebook      *notebook,
@@ -1282,8 +1287,8 @@ gtk_notebook_init (GtkNotebook *notebook)
   priv->pressed_button = 0;
   priv->dnd_timer = 0;
   priv->switch_tab_timer = 0;
-  priv->source_targets = gtk_target_list_new (notebook_targets,
-                                              G_N_ELEMENTS (notebook_targets));
+  priv->source_targets = gtk_target_list_new (src_notebook_targets,
+                                              G_N_ELEMENTS (src_notebook_targets));
   priv->operation = DRAG_OPERATION_NONE;
   priv->detached_tab = NULL;
   priv->has_scrolled = FALSE;
@@ -1294,7 +1299,7 @@ gtk_notebook_init (GtkNotebook *notebook)
     priv->tabs_reversed = FALSE;
 
   gtk_drag_dest_set (GTK_WIDGET (notebook), 0,
-                     notebook_targets, G_N_ELEMENTS (notebook_targets),
+                     dst_notebook_targets, G_N_ELEMENTS (dst_notebook_targets),
                      GDK_ACTION_MOVE);
 
   gtk_drag_dest_set_track_motion (GTK_WIDGET (notebook), TRUE);
@@ -3677,7 +3682,24 @@ gtk_notebook_drag_end (GtkWidget      *widget,
 
   gtk_notebook_stop_reorder (notebook);
 
-  if (priv->detached_tab)
+  if (priv->rootwindow_drop)
+    {
+      GtkNotebook *notebook = GTK_NOTEBOOK (widget);
+      GtkNotebookPrivate *priv = notebook->priv;
+      GtkNotebook *dest_notebook = NULL;
+      gint x, y;
+
+      gdk_device_get_position (gdk_drag_context_get_device (context),
+                               NULL, &x, &y);
+      g_signal_emit (notebook, notebook_signals[CREATE_WINDOW], 0,
+                     priv->detached_tab->child, x, y, &dest_notebook);
+
+      if (dest_notebook)
+        do_detach_tab (notebook, dest_notebook, priv->detached_tab->child, 0, 0);
+
+      priv->rootwindow_drop = FALSE;
+    }
+  else if (priv->detached_tab)
     gtk_notebook_switch_page (notebook, priv->detached_tab);
 
   _gtk_bin_set_child (GTK_BIN (priv->dnd_window), NULL);
@@ -3701,10 +3723,13 @@ gtk_notebook_drag_failed (GtkWidget      *widget,
                           GdkDragContext *context,
                           GtkDragResult   result)
 {
+  GtkNotebook *notebook = GTK_NOTEBOOK (widget);
+  GtkNotebookPrivate *priv = notebook->priv;
+
+  priv->rootwindow_drop = FALSE;
+
   if (result == GTK_DRAG_RESULT_NO_TARGET)
     {
-      GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-      GtkNotebookPrivate *priv = notebook->priv;
       GtkNotebook *dest_notebook = NULL;
       gint x, y;
 
@@ -3971,19 +3996,24 @@ gtk_notebook_drag_data_get (GtkWidget        *widget,
                             guint             info,
                             guint             time)
 {
+  GtkNotebook *notebook = GTK_NOTEBOOK (widget);
+  GtkNotebookPrivate *priv = notebook->priv;
   GdkAtom target;
 
   target = gtk_selection_data_get_target (data);
   if (target == gdk_atom_intern_static_string ("GTK_NOTEBOOK_TAB"))
     {
-      GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-      GtkNotebookPrivate *priv = notebook->priv;
-
       gtk_selection_data_set (data,
                               target,
                               8,
                               (void*) &priv->detached_tab->child,
                               sizeof (gpointer));
+      priv->rootwindow_drop = FALSE;
+    }
+  else if (target == gdk_atom_intern_static_string ("application/x-rootwindow-drop"))
+    {
+      gtk_selection_data_set (data, target, 8, NULL, 0);
+      priv->rootwindow_drop = TRUE;
     }
 }
 
