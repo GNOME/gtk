@@ -4003,7 +4003,10 @@ gtk_text_view_size_request (GtkWidget      *widget,
   border_width = gtk_container_get_border_width (GTK_CONTAINER (text_view));
   requisition->width += border_width * 2;
   requisition->height += border_width * 2;
-  
+
+  requisition->height += priv->top_border + priv->bottom_border;
+  requisition->width += priv->left_border + priv->right_border;
+
   tmp_list = priv->children;
   while (tmp_list != NULL)
     {
