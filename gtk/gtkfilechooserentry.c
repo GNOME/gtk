@@ -421,6 +421,8 @@ gtk_file_chooser_entry_tab_handler (GtkWidget *widget,
       (state & GDK_CONTROL_MASK) == GDK_CONTROL_MASK)
     return FALSE;
 
+  /* This is a bit evil -- it makes Tab never leave the entry. It basically
+   * makes it 'safe' for people to hit. */
   gtk_editable_get_selection_bounds (editable, &start, &end);
       
   if (start != end)
