@@ -667,8 +667,7 @@ gdk_wayland_selection_check_write (GdkWaylandSelection *selection)
 {
   AsyncWriteData *write_data;
 
-  if (selection->stored_selection.fd < 0 ||
-      selection->stored_selection.data_len == 0)
+  if (selection->stored_selection.fd < 0)
     return FALSE;
 
   /* Cancel any previous ongoing async write */
