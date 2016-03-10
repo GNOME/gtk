@@ -263,6 +263,8 @@ match_selected_callback (GtkEntryCompletion  *completion,
                             -1,
                             &pos);
 
+  gtk_editable_set_position (GTK_EDITABLE (chooser_entry), pos);
+
   g_free (path);
 
   return TRUE;
