@@ -28,7 +28,6 @@
                 <property name="enable-search">0</property>
                 <property name="enable-grid-lines">vertical</property>
                 <signal name="row-activated" handler="row_activated"/>
-                <signal name="button-press-event" handler="button_pressed"/>
                 <child internal-child="selection">
                   <object class="GtkTreeSelection">
                     <signal name="changed" handler="selection_changed"/>
