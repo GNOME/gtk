@@ -33,16 +33,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-18 00:21+0000\n"
-"PO-Revision-Date: 2016-02-18 10:06+0100\n"
+"POT-Creation-Date: 2016-03-10 12:20+0000\n"
+"PO-Revision-Date: 2016-03-10 19:57+0100\n"
 "Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
-"Language: de_DE\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.7\n"
+"X-Generator: Poedit 1.8.7.1\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
 #, c-format
@@ -453,26 +453,26 @@ msgctxt "keyboard label"
 msgid "Suspend"
 msgstr "In Bereitschaft versetzen"
 
-#: gdk/mir/gdkmirglcontext.c:48 gdk/mir/gdkmirwindowimpl.c:1348
-#: gdk/wayland/gdkglcontext-wayland.c:394 gdk/win32/gdkglcontext-win32.c:527
+#: gdk/mir/gdkmirglcontext.c:48 gdk/mir/gdkmirwindowimpl.c:1358
+#: gdk/wayland/gdkglcontext-wayland.c:393 gdk/win32/gdkglcontext-win32.c:556
 #: gdk/x11/gdkglcontext-x11.c:1254
 msgid "No GL implementation is available"
 msgstr "Es ist keine GL-Implementierung verfügbar"
 
 #: gdk/mir/gdkmirglcontext.c:89 gdk/wayland/gdkglcontext-wayland.c:180
-#: gdk/win32/gdkglcontext-win32.c:492 gdk/x11/gdkglcontext-x11.c:707
+#: gdk/win32/gdkglcontext-win32.c:510 gdk/x11/gdkglcontext-x11.c:707
 #: gdk/x11/gdkglcontext-x11.c:754
 msgid "Unable to create a GL context"
 msgstr "GL-Kontext kann nicht erstellt werden"
 
-#: gdk/mir/gdkmirwindowimpl.c:1310 gdk/mir/gdkmirwindowimpl.c:1320
-#: gdk/wayland/gdkglcontext-wayland.c:355
-#: gdk/wayland/gdkglcontext-wayland.c:365 gdk/win32/gdkglcontext-win32.c:464
+#: gdk/mir/gdkmirwindowimpl.c:1320 gdk/mir/gdkmirwindowimpl.c:1330
+#: gdk/wayland/gdkglcontext-wayland.c:354
+#: gdk/wayland/gdkglcontext-wayland.c:364 gdk/win32/gdkglcontext-win32.c:482
 #: gdk/x11/gdkglcontext-x11.c:948
 msgid "No available configurations for the given pixel format"
 msgstr "Es sind keine Einstellungen für das angegebene Pixelformat vorhanden"
 
-#: gdk/mir/gdkmirwindowimpl.c:1356
+#: gdk/mir/gdkmirwindowimpl.c:1366
 msgid "3.2 core GL profile is not available on EGL implementation"
 msgstr "3.2 core GL-Profile ist nicht in der EGL-Implementierung verfügbar"
 
@@ -480,11 +480,11 @@ msgstr "3.2 core GL-Profile ist nicht in der EGL-Implementierung verfügbar"
 msgid "Not implemented on OS X"
 msgstr "Nicht unter Mac OS X implementiert"
 
-#: gdk/wayland/gdkglcontext-wayland.c:402
+#: gdk/wayland/gdkglcontext-wayland.c:401
 msgid "Core GL is not available on EGL implementation"
 msgstr "core GL ist nicht in der EGL-Implementierung verfügbar"
 
-#: gdk/win32/gdkglcontext-win32.c:536
+#: gdk/win32/gdkglcontext-win32.c:565
 msgid ""
 "The WGL_ARB_create_context extension needed to create core profiles is not "
 "available"
@@ -1055,7 +1055,7 @@ msgctxt "Stock label"
 msgid "Zoom _Out"
 msgstr "Ansicht ver_kleinern"
 
-#: gtk/a11y/gtkmenubuttonaccessible.c:102 gtk/inspector/window.ui:351
+#: gtk/a11y/gtkmenubuttonaccessible.c:102 gtk/inspector/window.ui:459
 msgid "Menu"
 msgstr "Menü"
 
@@ -1236,13 +1236,13 @@ msgstr ""
 
 #: gtk/deprecated/gtkcolorseldialog.c:191 gtk/deprecated/gtkfontsel.c:1689
 #: gtk/gtkfilechoosernative.c:370 gtk/gtkfilechoosernative.c:462
-#: gtk/gtkfilechooserwidget.c:1464 gtk/gtkfilechooserwidget.c:6352
-#: gtk/gtkmessagedialog.c:945 gtk/gtkmessagedialog.c:958
+#: gtk/gtkfilechooserwidget.c:1464 gtk/gtkfilechooserwidget.c:6353
+#: gtk/gtkmessagedialog.c:952 gtk/gtkmessagedialog.c:965
 #: gtk/gtkmountoperation.c:545 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:673 gtk/gtkprintunixdialog.c:746
-#: gtk/gtkwindow.c:12253 gtk/inspector/css-editor.c:257
-#: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:124
+#: gtk/gtkwindow.c:12315 gtk/inspector/css-editor.c:208
+#: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
 msgstr "_Abbrechen"
@@ -1285,12 +1285,12 @@ msgid "_Preview:"
 msgstr "_Vorschau:"
 
 #: gtk/deprecated/gtkfontsel.c:1693 gtk/gtkpagesetupunixdialog.c:197
-#: gtk/ui/gtkassistant.ui:49
+#: gtk/ui/gtkassistant.ui:50
 msgid "_Apply"
 msgstr "An_wenden"
 
-#: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:937
-#: gtk/gtkmessagedialog.c:959 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12254
+#: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944
+#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12316
 msgid "_OK"
 msgstr "_OK"
 
@@ -1416,17 +1416,17 @@ msgctxt "Stock label"
 msgid "_Yes"
 msgstr "_Ja"
 
-#: gtk/deprecated/gtkuimanager.c:1779
+#: gtk/deprecated/gtkuimanager.c:1776
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Unerwarteter, öffnender Tag »%s« in Zeile %d, Zeichen %d"
 
-#: gtk/deprecated/gtkuimanager.c:1869
+#: gtk/deprecated/gtkuimanager.c:1866
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Unerwartete Zeichendaten in Zeile %d, Zeichen %d"
 
-#: gtk/deprecated/gtkuimanager.c:2724
+#: gtk/deprecated/gtkuimanager.c:2703
 msgid "Empty"
 msgstr "Leer"
 
@@ -1527,7 +1527,7 @@ msgid "_License"
 msgstr "_Lizenz"
 
 #: gtk/gtkaboutdialog.c:716 gtk/gtkcustompaperunixdialog.c:329
-#: gtk/gtkmessagedialog.c:941 gtk/ui/gtkassistant.ui:143
+#: gtk/gtkmessagedialog.c:948 gtk/ui/gtkassistant.ui:144
 msgid "_Close"
 msgstr "_Schließen"
 
@@ -1694,7 +1694,7 @@ msgid "Other Applications"
 msgstr "Weitere Anwendungen"
 
 #: gtk/gtkapplicationwindow.c:341 gtk/gtkprintoperation-unix.c:481
-#: gtk/gtkprintoperation-win32.c:1453 gtk/inspector/prop-editor.c:1668
+#: gtk/gtkprintoperation-win32.c:1453 gtk/inspector/prop-editor.c:1686
 msgid "Application"
 msgstr "Anwendung"
 
@@ -2113,12 +2113,12 @@ msgstr "Benutzerdefinierte Farbe %d: %s"
 msgid "Color Plane"
 msgstr "Farbwähler"
 
-#: gtk/gtkcolorscale.c:318
+#: gtk/gtkcolorscale.c:325
 msgctxt "Color channel"
 msgid "Hue"
 msgstr "Farbton"
 
-#: gtk/gtkcolorscale.c:320
+#: gtk/gtkcolorscale.c:327
 msgctxt "Color channel"
 msgid "Alpha"
 msgstr "Alpha"
@@ -2138,7 +2138,7 @@ msgid "default:mm"
 msgstr "default:mm"
 
 #. And show the custom paper dialog
-#: gtk/gtkcustompaperunixdialog.c:405 gtk/gtkprintunixdialog.c:3310
+#: gtk/gtkcustompaperunixdialog.c:405 gtk/gtkprintunixdialog.c:3313
 msgid "Manage Custom Sizes"
 msgstr "Benutzerdefinierte Größen verwalten"
 
@@ -2192,44 +2192,44 @@ msgstr "_Rechts:"
 msgid "Paper Margins"
 msgstr "Papierränder"
 
-#: gtk/gtkentry.c:9478 gtk/gtklabel.c:6687 gtk/gtktextview.c:9463
+#: gtk/gtkentry.c:9486 gtk/gtklabel.c:6688 gtk/gtktextview.c:9488
 msgid "Cu_t"
 msgstr "_Ausschneiden"
 
-#: gtk/gtkentry.c:9482 gtk/gtklabel.c:6688 gtk/gtktextview.c:9467
+#: gtk/gtkentry.c:9490 gtk/gtklabel.c:6689 gtk/gtktextview.c:9492
 msgid "_Copy"
 msgstr "_Kopieren"
 
-#: gtk/gtkentry.c:9486 gtk/gtklabel.c:6689 gtk/gtktextview.c:9469
+#: gtk/gtkentry.c:9494 gtk/gtklabel.c:6690 gtk/gtktextview.c:9494
 msgid "_Paste"
 msgstr "_Einfügen"
 
-#: gtk/gtkentry.c:9489 gtk/gtkfilechooserwidget.c:1465
-#: gtk/gtkfilechooserwidget.c:2263 gtk/gtklabel.c:6691 gtk/gtktextview.c:9472
+#: gtk/gtkentry.c:9497 gtk/gtkfilechooserwidget.c:1465
+#: gtk/gtkfilechooserwidget.c:2263 gtk/gtklabel.c:6692 gtk/gtktextview.c:9497
 msgid "_Delete"
 msgstr "_Löschen"
 
-#: gtk/gtkentry.c:9500 gtk/gtklabel.c:6700 gtk/gtktextview.c:9486
+#: gtk/gtkentry.c:9508 gtk/gtklabel.c:6701 gtk/gtktextview.c:9511
 msgid "Select _All"
 msgstr "_Alles auswählen"
 
-#: gtk/gtkentry.c:9678 gtk/gtktextview.c:9696
+#: gtk/gtkentry.c:9686 gtk/gtktextview.c:9721
 msgid "Select all"
 msgstr "Alle auswählen"
 
-#: gtk/gtkentry.c:9681 gtk/gtktextview.c:9699
+#: gtk/gtkentry.c:9689 gtk/gtktextview.c:9724
 msgid "Cut"
 msgstr "Ausschneiden"
 
-#: gtk/gtkentry.c:9684 gtk/gtktextview.c:9702
+#: gtk/gtkentry.c:9692 gtk/gtktextview.c:9727
 msgid "Copy"
 msgstr "Kopieren"
 
-#: gtk/gtkentry.c:9687 gtk/gtktextview.c:9705
+#: gtk/gtkentry.c:9695 gtk/gtktextview.c:9730
 msgid "Paste"
 msgstr "Einfügen"
 
-#: gtk/gtkentry.c:10747
+#: gtk/gtkentry.c:10756
 msgid "Caps Lock is on"
 msgstr "Feststelltaste ist aktiviert"
 
@@ -2237,7 +2237,7 @@ msgstr "Feststelltaste ist aktiviert"
 msgid "Select a File"
 msgstr "Datei auswählen"
 
-#: gtk/gtkfilechooserbutton.c:107 gtk/gtkplacessidebar.c:957
+#: gtk/gtkfilechooserbutton.c:107 gtk/gtkplacessidebar.c:975
 msgid "Desktop"
 msgstr "Schreibtisch"
 
@@ -2255,11 +2255,11 @@ msgstr "_Name"
 
 #. Open item is always present
 #: gtk/gtkfilechoosernative.c:371 gtk/gtkfilechoosernative.c:456
-#: gtk/gtkplacessidebar.c:3380 gtk/gtkplacesview.c:1600
+#: gtk/gtkplacessidebar.c:3413 gtk/gtkplacesview.c:1578
 msgid "_Open"
 msgstr "Ö_ffnen"
 
-#: gtk/gtkfilechoosernative.c:456 gtk/inspector/css-editor.c:258
+#: gtk/gtkfilechoosernative.c:456 gtk/inspector/css-editor.c:209
 msgid "_Save"
 msgstr "_Speichern"
 
@@ -2423,7 +2423,7 @@ msgstr "O_rt kopieren"
 msgid "_Add to Bookmarks"
 msgstr "Zu Lesezeichen _hinzufügen"
 
-#: gtk/gtkfilechooserwidget.c:2262 gtk/gtkplacessidebar.c:2495
+#: gtk/gtkfilechooserwidget.c:2262 gtk/gtkplacessidebar.c:2528
 #: gtk/ui/gtkfilechooserwidget.ui:525
 msgid "_Rename"
 msgstr "_Umbenennen"
@@ -2449,7 +2449,7 @@ msgid "Sort _Folders before Files"
 msgstr "_Ordner vor Dateien anzeigen"
 
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2595 gtk/inspector/css-node-tree.ui:215
+#: gtk/gtkfilechooserwidget.c:2595 gtk/inspector/css-node-tree.ui:141
 #: gtk/ui/gtkfilechooserwidget.ui:207 gtk/ui/gtkprintunixdialog.ui:123
 msgid "Location"
 msgstr "Standort"
@@ -2459,81 +2459,81 @@ msgstr "Standort"
 msgid "_Name:"
 msgstr "_Name:"
 
-#: gtk/gtkfilechooserwidget.c:3307
+#: gtk/gtkfilechooserwidget.c:3308
 msgid "Searching"
 msgstr "Suchen"
 
-#: gtk/gtkfilechooserwidget.c:3312 gtk/gtkfilechooserwidget.c:3326
+#: gtk/gtkfilechooserwidget.c:3313 gtk/gtkfilechooserwidget.c:3327
 #, c-format
 msgid "Searching in %s"
 msgstr "Suchen in %s"
 
-#: gtk/gtkfilechooserwidget.c:3336
+#: gtk/gtkfilechooserwidget.c:3337
 msgid "Enter location"
 msgstr "Ort angeben"
 
-#: gtk/gtkfilechooserwidget.c:3338
+#: gtk/gtkfilechooserwidget.c:3339
 msgid "Enter location or URL"
 msgstr "Ort oder Adresse angeben"
 
 # CHECK
-#: gtk/gtkfilechooserwidget.c:4376 gtk/gtkfilechooserwidget.c:7279
+#: gtk/gtkfilechooserwidget.c:4377 gtk/gtkfilechooserwidget.c:7280
 #: gtk/ui/gtkfilechooserwidget.ui:235
 msgid "Modified"
 msgstr "Letzte Änderung"
 
-#: gtk/gtkfilechooserwidget.c:4654
+#: gtk/gtkfilechooserwidget.c:4655
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Inhalt von %s konnte nicht gelesen werden"
 
-#: gtk/gtkfilechooserwidget.c:4658
+#: gtk/gtkfilechooserwidget.c:4659
 msgid "Could not read the contents of the folder"
 msgstr "Inhalt des Ordners konnte nicht gelesen werden"
 
-#: gtk/gtkfilechooserwidget.c:4779 gtk/gtkfilechooserwidget.c:4825
+#: gtk/gtkfilechooserwidget.c:4780 gtk/gtkfilechooserwidget.c:4826
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserwidget.c:4781 gtk/gtkfilechooserwidget.c:4827
+#: gtk/gtkfilechooserwidget.c:4782 gtk/gtkfilechooserwidget.c:4828
 msgid "%l:%M %p"
 msgstr "%l:%M %p"
 
-#: gtk/gtkfilechooserwidget.c:4785
+#: gtk/gtkfilechooserwidget.c:4786
 msgid "Yesterday"
 msgstr "Gestern"
 
-#: gtk/gtkfilechooserwidget.c:4793
+#: gtk/gtkfilechooserwidget.c:4794
 msgid "%-e %b"
 msgstr "%-e. %b"
 
-#: gtk/gtkfilechooserwidget.c:4797
+#: gtk/gtkfilechooserwidget.c:4798
 msgid "%-e %b %Y"
 msgstr "%-e. %b %Y"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: gtk/gtkfilechooserwidget.c:5030 gtk/inspector/prop-editor.c:1671
+#: gtk/gtkfilechooserwidget.c:5031 gtk/inspector/prop-editor.c:1689
 #: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
 msgstr "Unbekannt"
 
-#: gtk/gtkfilechooserwidget.c:5069 gtk/gtkplacessidebar.c:942
+#: gtk/gtkfilechooserwidget.c:5070 gtk/gtkplacessidebar.c:960
 msgid "Home"
 msgstr "Persönlicher Ordner"
 
-#: gtk/gtkfilechooserwidget.c:5562
+#: gtk/gtkfilechooserwidget.c:5563
 msgid "Cannot change to folder because it is not local"
 msgstr ""
 "Es konnte nicht in den angegebenen Ordner gewechselt werden, weil dieser "
 "nicht lokal ist."
 
-#: gtk/gtkfilechooserwidget.c:6345 gtk/gtkprintunixdialog.c:664
+#: gtk/gtkfilechooserwidget.c:6346 gtk/gtkprintunixdialog.c:664
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "Eine Datei namens »%s« existiert bereits. Möchten Sie diese ersetzen?"
 
-#: gtk/gtkfilechooserwidget.c:6348 gtk/gtkprintunixdialog.c:668
+#: gtk/gtkfilechooserwidget.c:6349 gtk/gtkprintunixdialog.c:668
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
@@ -2541,19 +2541,19 @@ msgstr ""
 "Die Datei existiert bereits in »%s«. Durch ihr Ersetzen wird sämtlicher "
 "Inhalt überschrieben."
 
-#: gtk/gtkfilechooserwidget.c:6353 gtk/gtkprintunixdialog.c:676
+#: gtk/gtkfilechooserwidget.c:6354 gtk/gtkprintunixdialog.c:676
 msgid "_Replace"
 msgstr "_Ersetzen"
 
-#: gtk/gtkfilechooserwidget.c:6567
+#: gtk/gtkfilechooserwidget.c:6568
 msgid "You do not have access to the specified folder."
 msgstr "Sie haben keinen Zugriff auf den angegebenen Ordner."
 
-#: gtk/gtkfilechooserwidget.c:7190
+#: gtk/gtkfilechooserwidget.c:7191
 msgid "Could not start the search process"
 msgstr "Der Suchprozess konnte nicht gestartet werden"
 
-#: gtk/gtkfilechooserwidget.c:7191
+#: gtk/gtkfilechooserwidget.c:7192
 msgid ""
 "The program was not able to create a connection to the indexer daemon. "
 "Please make sure it is running."
@@ -2561,11 +2561,11 @@ msgstr ""
 "Es konnte keine Verbindung zum Indexer-Dienst hergestellt werden. Bitte "
 "stellen Sie sicher, dass er läuft."
 
-#: gtk/gtkfilechooserwidget.c:7203
+#: gtk/gtkfilechooserwidget.c:7204
 msgid "Could not send the search request"
 msgstr "Die Suchanfrage konnte nicht gestellt werden"
 
-#: gtk/gtkfilechooserwidget.c:7497
+#: gtk/gtkfilechooserwidget.c:7498
 msgid "Accessed"
 msgstr "Zugegriffen"
 
@@ -2599,16 +2599,16 @@ msgstr "Erstellen des OpenGL-Kontexts ist gescheitert"
 msgid "Application menu"
 msgstr "Anwendungsmenü"
 
-#: gtk/gtkheaderbar.c:447 gtk/gtkwindow.c:8840
+#: gtk/gtkheaderbar.c:447 gtk/gtkwindow.c:8857
 msgid "Close"
 msgstr "Schließen"
 
-#: gtk/gtkicontheme.c:2325 gtk/gtkicontheme.c:2389
+#: gtk/gtkicontheme.c:2326 gtk/gtkicontheme.c:2390
 #, c-format
 msgid "Icon '%s' not present in theme %s"
 msgstr "Symbol »%s« nicht im Thema %s vorhanden"
 
-#: gtk/gtkicontheme.c:4040 gtk/gtkicontheme.c:4407
+#: gtk/gtkicontheme.c:4039 gtk/gtkicontheme.c:4406
 msgid "Failed to load icon"
 msgstr "Symbol konnte nicht geladen werden"
 
@@ -2633,39 +2633,39 @@ msgctxt "input method menu"
 msgid "System (%s)"
 msgstr "System (%s)"
 
-#: gtk/gtkinfobar.c:1161 gtk/gtkmessagedialog.c:378
+#: gtk/gtkinfobar.c:1167 gtk/gtkmessagedialog.c:385
 msgid "Information"
 msgstr "Information"
 
-#: gtk/gtkinfobar.c:1165 gtk/gtkmessagedialog.c:382
+#: gtk/gtkinfobar.c:1171 gtk/gtkmessagedialog.c:389
 msgid "Question"
 msgstr "Frage"
 
-#: gtk/gtkinfobar.c:1169 gtk/gtkmessagedialog.c:386
+#: gtk/gtkinfobar.c:1175 gtk/gtkmessagedialog.c:393
 msgid "Warning"
 msgstr "Warnung"
 
-#: gtk/gtkinfobar.c:1173 gtk/gtkmessagedialog.c:390
+#: gtk/gtkinfobar.c:1179 gtk/gtkmessagedialog.c:397
 msgid "Error"
 msgstr "Fehler"
 
 #. Open Link
-#: gtk/gtklabel.c:6668
+#: gtk/gtklabel.c:6669
 msgid "_Open Link"
 msgstr "Link ö_ffnen"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6677
+#: gtk/gtklabel.c:6678
 msgid "Copy _Link Address"
 msgstr "Link-Adresse _kopieren"
 
-#: gtk/gtk-launch.c:73
+#: gtk/gtk-launch.c:74
 msgid "APPLICATION [URI...] — launch an APPLICATION"
 msgstr "ANWENDUNG [URI …] – eine ANWENDUNG starten."
 
 #. Translators: this message will appear after the usage string
 #. and before the list of options.
-#: gtk/gtk-launch.c:77
+#: gtk/gtk-launch.c:78
 msgid ""
 "Launch an application (specified by its desktop file name),\n"
 "optionally passing one or more URIs as arguments."
@@ -2673,24 +2673,24 @@ msgstr ""
 "Eine durch deren desktop-Datei angegebene Anwendung starten\n"
 "und optional eine oder mehrere URIs als Argumente übergeben."
 
-#: gtk/gtk-launch.c:89
+#: gtk/gtk-launch.c:90
 #, c-format
 msgid "Error parsing commandline options: %s\n"
 msgstr "Fehler beim Verarbeiten der Befehlszeilenoptionen: %s\n"
 
-#: gtk/gtk-launch.c:91 gtk/gtk-launch.c:112
+#: gtk/gtk-launch.c:92 gtk/gtk-launch.c:113
 #, c-format
 msgid "Try \"%s --help\" for more information."
 msgstr "Versuchen Sie »%s --help« für mehr Informationen."
 
 #. Translators: the %s is the program name. This error message
 #. means the user is calling gtk-launch without any argument.
-#: gtk/gtk-launch.c:110
+#: gtk/gtk-launch.c:111
 #, c-format
 msgid "%s: missing application name"
 msgstr "%s: Anwendungsname fehlt"
 
-#: gtk/gtk-launch.c:130
+#: gtk/gtk-launch.c:140
 #, c-format
 msgid "Creating AppInfo from id not supported on non unix operating systems"
 msgstr ""
@@ -2699,14 +2699,14 @@ msgstr ""
 
 #. Translators: the first %s is the program name, the second one
 #. is the application name.
-#: gtk/gtk-launch.c:138
+#: gtk/gtk-launch.c:148
 #, c-format
 msgid "%s: no such application %s"
 msgstr "%s: keine solche Anwendung %s"
 
 #. Translators: the first %s is the program name, the second one
 #. is the error message.
-#: gtk/gtk-launch.c:156
+#: gtk/gtk-launch.c:166
 #, c-format
 msgid "%s: error launching application: %s\n"
 msgstr "%s: Fehler beim Starten der Anwendung: %s\n"
@@ -2800,11 +2800,11 @@ msgstr "GTK+-Optionen anzeigen"
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmessagedialog.c:949
+#: gtk/gtkmessagedialog.c:956
 msgid "_No"
 msgstr "_Nein"
 
-#: gtk/gtkmessagedialog.c:950
+#: gtk/gtkmessagedialog.c:957
 msgid "_Yes"
 msgstr "_Ja"
 
@@ -2895,7 +2895,7 @@ msgstr "Z-Shell"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Prozess mit Kennung %d kann nicht abgewürgt werden: %s"
 
-#: gtk/gtknotebook.c:5073 gtk/gtknotebook.c:7335
+#: gtk/gtknotebook.c:5081 gtk/gtknotebook.c:7347
 #, c-format
 msgid "Page %u"
 msgstr "Seite %u"
@@ -2928,12 +2928,12 @@ msgstr ""
 " Oben: %s %s\n"
 " Unten: %s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:878 gtk/gtkprintunixdialog.c:3364
+#: gtk/gtkpagesetupunixdialog.c:878 gtk/gtkprintunixdialog.c:3367
 msgid "Manage Custom Sizes…"
 msgstr "Benutzerdefinierte Größen verwalten …"
 
 #: gtk/gtkpagesetupunixdialog.c:900 gtk/ui/gtkpagesetupunixdialog.ui:31
-#: gtk/ui/gtkprintunixdialog.ui:852
+#: gtk/ui/gtkprintunixdialog.ui:854
 msgid "Page Setup"
 msgstr "Seite einrichten"
 
@@ -2941,198 +2941,197 @@ msgstr "Seite einrichten"
 msgid "File System Root"
 msgstr "Dateisystem-Wurzel"
 
-#: gtk/gtkplacessidebar.c:931
+#: gtk/gtkplacessidebar.c:949
 msgid "Recent"
 msgstr "Zuletzt verwendet"
 
-#: gtk/gtkplacessidebar.c:933
+#: gtk/gtkplacessidebar.c:951
 msgid "Recent files"
 msgstr "Zuletzt verwendete Dateien"
 
-#: gtk/gtkplacessidebar.c:944
+#: gtk/gtkplacessidebar.c:962
 msgid "Open your personal folder"
 msgstr "Ihren persönlichen Ordner öffnen"
 
-#: gtk/gtkplacessidebar.c:959
+#: gtk/gtkplacessidebar.c:977
 msgid "Open the contents of your desktop in a folder"
 msgstr "Inhalt Ihres Schreibtisch-Ordners in einem Ordner öffnen"
 
-#: gtk/gtkplacessidebar.c:973
+#: gtk/gtkplacessidebar.c:991
 msgid "Enter Location"
 msgstr "Geben Sie den Ort an"
 
-#: gtk/gtkplacessidebar.c:975
+#: gtk/gtkplacessidebar.c:993
 msgid "Manually enter a location"
 msgstr "Geben Sie den Ort manuell an"
 
-#: gtk/gtkplacessidebar.c:986
+#: gtk/gtkplacessidebar.c:1004
 msgid "Trash"
 msgstr "Papierkorb"
 
-#: gtk/gtkplacessidebar.c:988
+#: gtk/gtkplacessidebar.c:1006
 msgid "Open the trash"
 msgstr "Den Papierkorb öffnen"
 
-#: gtk/gtkplacessidebar.c:1057 gtk/gtkplacessidebar.c:1085
-#: gtk/gtkplacessidebar.c:1292
+#: gtk/gtkplacessidebar.c:1077 gtk/gtkplacessidebar.c:1105
+#: gtk/gtkplacessidebar.c:1312
 #, c-format
 msgid "Mount and open “%s”"
 msgstr "»%s« einhängen und öffnen"
 
-#: gtk/gtkplacessidebar.c:1172
+#: gtk/gtkplacessidebar.c:1192
 msgid "Open the contents of the file system"
 msgstr "Inhalt des Dateisystems öffnen"
 
-#: gtk/gtkplacessidebar.c:1256
+#: gtk/gtkplacessidebar.c:1276
 msgid "New bookmark"
 msgstr "Neues Lesezeichen"
 
-#: gtk/gtkplacessidebar.c:1258
+#: gtk/gtkplacessidebar.c:1278
 msgid "Add a new bookmark"
 msgstr "Neues Lesezeichen hinzufügen"
 
-#: gtk/gtkplacessidebar.c:1271
+#: gtk/gtkplacessidebar.c:1291
 msgid "Connect to Server"
 msgstr "Mit Server verbinden"
 
-#: gtk/gtkplacessidebar.c:1273
+#: gtk/gtkplacessidebar.c:1293
 msgid "Connect to a network server address"
 msgstr "Mit einer Netzwerk-Server-Adresse verbinden"
 
-#: gtk/gtkplacessidebar.c:1335
+#: gtk/gtkplacessidebar.c:1355
 msgid "Other Locations"
 msgstr "Andere Orte"
 
-#: gtk/gtkplacessidebar.c:1336
+#: gtk/gtkplacessidebar.c:1356
 msgid "Show other locations"
 msgstr "Andere Orte anzeigen"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: gtk/gtkplacessidebar.c:2126 gtk/gtkplacessidebar.c:3400
+#: gtk/gtkplacessidebar.c:2146 gtk/gtkplacessidebar.c:3433
 msgid "_Start"
 msgstr "_Starten"
 
-#: gtk/gtkplacessidebar.c:2127 gtk/gtkplacessidebar.c:3401
+#: gtk/gtkplacessidebar.c:2147 gtk/gtkplacessidebar.c:3434
 msgid "_Stop"
 msgstr "_Stopp"
 
 #. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
-#: gtk/gtkplacessidebar.c:2134
+#: gtk/gtkplacessidebar.c:2154
 msgid "_Power On"
 msgstr "An_schalten"
 
-#: gtk/gtkplacessidebar.c:2135
+#: gtk/gtkplacessidebar.c:2155
 msgid "_Safely Remove Drive"
 msgstr "Laufwerk _sicher entfernen"
 
-#: gtk/gtkplacessidebar.c:2139
+#: gtk/gtkplacessidebar.c:2159
 msgid "_Connect Drive"
 msgstr "Laufwerk _verbinden"
 
-#: gtk/gtkplacessidebar.c:2140
+#: gtk/gtkplacessidebar.c:2160
 msgid "_Disconnect Drive"
 msgstr "Laufwerk _trennen"
 
-#: gtk/gtkplacessidebar.c:2144
+#: gtk/gtkplacessidebar.c:2164
 msgid "_Start Multi-disk Device"
 msgstr "Multimedienlaufwerk _starten"
 
-#: gtk/gtkplacessidebar.c:2145
+#: gtk/gtkplacessidebar.c:2165
 msgid "_Stop Multi-disk Device"
 msgstr "Multimedienlaufwerk _stoppen"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
-#: gtk/gtkplacessidebar.c:2150
+#: gtk/gtkplacessidebar.c:2170
 msgid "_Unlock Device"
 msgstr "Gerät _entsperren"
 
-#: gtk/gtkplacessidebar.c:2151
+#: gtk/gtkplacessidebar.c:2171
 msgid "_Lock Device"
 msgstr "Gerät _sperren"
 
-#: gtk/gtkplacessidebar.c:2189 gtk/gtkplacessidebar.c:3148
+#: gtk/gtkplacessidebar.c:2209 gtk/gtkplacessidebar.c:3181
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "Starten von »%s« nicht möglich"
 
-#: gtk/gtkplacessidebar.c:2219
+#: gtk/gtkplacessidebar.c:2239
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "Auf »%s« kann nicht zugegriffen werden"
 
-#: gtk/gtkplacessidebar.c:2420
+#: gtk/gtkplacessidebar.c:2453
 msgid "This name is already taken"
 msgstr "Dieser Name ist bereits vergeben"
 
-#: gtk/gtkplacessidebar.c:2489 gtk/inspector/actions.ui:52
-#: gtk/inspector/css-node-tree.ui:93 gtk/inspector/object-tree.ui:109
-#: gtk/inspector/signals-list.ui:90 gtk/ui/gtkfilechooserwidget.ui:189
-#: gtk/ui/gtkfilechooserwidget.ui:499
+#: gtk/gtkplacessidebar.c:2522 gtk/inspector/actions.ui:43
+#: gtk/inspector/css-node-tree.ui:39 gtk/inspector/object-tree.ui:110
+#: gtk/ui/gtkfilechooserwidget.ui:189 gtk/ui/gtkfilechooserwidget.ui:499
 msgid "Name"
 msgstr "Name"
 
-#: gtk/gtkplacessidebar.c:2689
+#: gtk/gtkplacessidebar.c:2722
 #, c-format
 msgid "Unable to unmount “%s”"
 msgstr "»%s« kann nicht ausgehängt werden"
 
-#: gtk/gtkplacessidebar.c:2865
+#: gtk/gtkplacessidebar.c:2898
 #, c-format
 msgid "Unable to stop “%s”"
 msgstr "Stoppen von »%s« nicht möglich"
 
-#: gtk/gtkplacessidebar.c:2894
+#: gtk/gtkplacessidebar.c:2927
 #, c-format
 msgid "Unable to eject “%s”"
 msgstr "Auswerfen von »%s« nicht möglich"
 
-#: gtk/gtkplacessidebar.c:2923 gtk/gtkplacessidebar.c:2952
+#: gtk/gtkplacessidebar.c:2956 gtk/gtkplacessidebar.c:2985
 #, c-format
 msgid "Unable to eject %s"
 msgstr "Auswerfen von %s nicht möglich"
 
-#: gtk/gtkplacessidebar.c:3100
+#: gtk/gtkplacessidebar.c:3133
 #, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr "»%s« konnte nicht nach Datenträgeränderungen befragt werden"
 
-#: gtk/gtkplacessidebar.c:3383 gtk/gtkplacesview.c:1610
+#: gtk/gtkplacessidebar.c:3416 gtk/gtkplacesview.c:1588
 msgid "Open in New _Tab"
 msgstr "In neuem _Reiter öffnen"
 
-#: gtk/gtkplacessidebar.c:3386 gtk/gtkplacesview.c:1621
+#: gtk/gtkplacessidebar.c:3419 gtk/gtkplacesview.c:1599
 msgid "Open in New _Window"
 msgstr "In neuem _Fenster öffnen"
 
-#: gtk/gtkplacessidebar.c:3390
+#: gtk/gtkplacessidebar.c:3423
 msgid "_Add Bookmark"
 msgstr "Lesezeichen _hinzufügen"
 
-#: gtk/gtkplacessidebar.c:3391
+#: gtk/gtkplacessidebar.c:3424
 msgid "_Remove"
 msgstr "_Entfernen"
 
-#: gtk/gtkplacessidebar.c:3392
+#: gtk/gtkplacessidebar.c:3425
 msgid "Rename…"
 msgstr "Umbenennen …"
 
-#: gtk/gtkplacessidebar.c:3396 gtk/gtkplacesview.c:1655
+#: gtk/gtkplacessidebar.c:3429 gtk/gtkplacesview.c:1633
 msgid "_Mount"
 msgstr "_Einhängen"
 
-#: gtk/gtkplacessidebar.c:3397 gtk/gtkplacesview.c:1645
+#: gtk/gtkplacessidebar.c:3430 gtk/gtkplacesview.c:1623
 msgid "_Unmount"
 msgstr "_Aushängen"
 
-#: gtk/gtkplacessidebar.c:3398
+#: gtk/gtkplacessidebar.c:3431
 msgid "_Eject"
 msgstr "_Auswerfen"
 
-#: gtk/gtkplacessidebar.c:3399
+#: gtk/gtkplacessidebar.c:3432
 msgid "_Detect Media"
 msgstr "Medium _erkennen"
 
-#: gtk/gtkplacessidebar.c:3845 gtk/gtkplacesview.c:1053
+#: gtk/gtkplacessidebar.c:3878 gtk/gtkplacesview.c:1053
 msgid "Computer"
 msgstr "Rechner"
 
@@ -3145,7 +3144,7 @@ msgid "No network locations found"
 msgstr "Keine Netzwerkorte gefunden"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1163 gtk/gtkplacesview.c:1207 gtk/gtkplacesview.c:1258
+#: gtk/gtkplacesview.c:1163 gtk/gtkplacesview.c:1236
 msgid "Unable to access location"
 msgstr "Zugriff auf den Ort ist nicht möglich"
 
@@ -3155,32 +3154,32 @@ msgid "Con_nect"
 msgstr "_Verbinden"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1321
+#: gtk/gtkplacesview.c:1299
 msgid "Unable to unmount volume"
 msgstr "Aushängen des Datenträgers nicht möglich"
 
 #. Allow to cancel the operation
-#: gtk/gtkplacesview.c:1403
+#: gtk/gtkplacesview.c:1381
 msgid "Cance_l"
 msgstr "_Abbrechen"
 
-#: gtk/gtkplacesview.c:1645
+#: gtk/gtkplacesview.c:1623
 msgid "_Disconnect"
 msgstr "_Trennen"
 
-#: gtk/gtkplacesview.c:1655
+#: gtk/gtkplacesview.c:1633
 msgid "_Connect"
 msgstr "_Verbinden"
 
-#: gtk/gtkplacesview.c:1820
+#: gtk/gtkplacesview.c:1798
 msgid "Unable to get remote server location"
 msgstr "Entfernter Server-Ort kann nicht ermittelt werden"
 
-#: gtk/gtkplacesview.c:1957 gtk/gtkplacesview.c:1966
+#: gtk/gtkplacesview.c:1935 gtk/gtkplacesview.c:1944
 msgid "Networks"
 msgstr "Netzwerke"
 
-#: gtk/gtkplacesview.c:1957 gtk/gtkplacesview.c:1966
+#: gtk/gtkplacesview.c:1935 gtk/gtkplacesview.c:1944
 msgid "On This Computer"
 msgstr "Auf diesem Rechner"
 
@@ -3215,7 +3214,7 @@ msgstr "Passwort _behalten"
 msgid "Select a filename"
 msgstr "Dateiname auswählen"
 
-#: gtk/gtkprinteroptionwidget.c:766
+#: gtk/gtkprinteroptionwidget.c:767
 msgid "Not available"
 msgstr "Nicht verfügbar"
 
@@ -3300,10 +3299,6 @@ msgstr ""
 "Der häufigste Grund hierfür ist, dass keine temporäre Datei erzeugt werden "
 "konnte."
 
-#: gtk/gtkprintoperation-unix.c:308
-msgid "Error launching preview"
-msgstr "Fehler beim Aufrufen der Druckvorschau"
-
 #: gtk/gtkprintoperation-win32.c:617
 msgid "Printer offline"
 msgstr "Drucker offline"
@@ -3371,7 +3366,7 @@ msgstr "_Drucken"
 msgid "Getting printer information failed"
 msgstr "Holen der Informationen über Drucker ist gescheitert"
 
-#: gtk/gtkprintunixdialog.c:2065
+#: gtk/gtkprintunixdialog.c:2068
 msgid "Getting printer information…"
 msgstr "Informationen über Drucker werden geholt …"
 
@@ -3381,67 +3376,67 @@ msgstr "Informationen über Drucker werden geholt …"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: gtk/gtkprintunixdialog.c:3093
+#: gtk/gtkprintunixdialog.c:3096
 #: modules/printbackends/cups/gtkprintbackendcups.c:5279
 msgid "Left to right, top to bottom"
 msgstr "Links nach rechts, oben nach unten"
 
-#: gtk/gtkprintunixdialog.c:3093
+#: gtk/gtkprintunixdialog.c:3096
 #: modules/printbackends/cups/gtkprintbackendcups.c:5279
 msgid "Left to right, bottom to top"
 msgstr "Links nach rechts, unten nach oben"
 
-#: gtk/gtkprintunixdialog.c:3094
+#: gtk/gtkprintunixdialog.c:3097
 #: modules/printbackends/cups/gtkprintbackendcups.c:5280
 msgid "Right to left, top to bottom"
 msgstr "Rechts nach links, oben nach unten"
 
-#: gtk/gtkprintunixdialog.c:3094
+#: gtk/gtkprintunixdialog.c:3097
 #: modules/printbackends/cups/gtkprintbackendcups.c:5280
 msgid "Right to left, bottom to top"
 msgstr "Rechts nach links, unten nach oben"
 
-#: gtk/gtkprintunixdialog.c:3095
+#: gtk/gtkprintunixdialog.c:3098
 #: modules/printbackends/cups/gtkprintbackendcups.c:5281
 msgid "Top to bottom, left to right"
 msgstr "Oben nach unten, links nach rechts"
 
-#: gtk/gtkprintunixdialog.c:3095
+#: gtk/gtkprintunixdialog.c:3098
 #: modules/printbackends/cups/gtkprintbackendcups.c:5281
 msgid "Top to bottom, right to left"
 msgstr "Oben nach unten, rechts nach links"
 
-#: gtk/gtkprintunixdialog.c:3096
+#: gtk/gtkprintunixdialog.c:3099
 #: modules/printbackends/cups/gtkprintbackendcups.c:5282
 msgid "Bottom to top, left to right"
 msgstr "Unten nach oben, links nach rechts"
 
-#: gtk/gtkprintunixdialog.c:3096
+#: gtk/gtkprintunixdialog.c:3099
 #: modules/printbackends/cups/gtkprintbackendcups.c:5282
 msgid "Bottom to top, right to left"
 msgstr "Unten nach oben, rechts nach links"
 
-#: gtk/gtkprintunixdialog.c:3100 gtk/gtkprintunixdialog.c:3113
+#: gtk/gtkprintunixdialog.c:3103 gtk/gtkprintunixdialog.c:3116
 msgid "Page Ordering"
 msgstr "Reihenfolge"
 
-#: gtk/gtkprintunixdialog.c:3129
+#: gtk/gtkprintunixdialog.c:3132
 msgid "Left to right"
 msgstr "Links nach rechts"
 
-#: gtk/gtkprintunixdialog.c:3130
+#: gtk/gtkprintunixdialog.c:3133
 msgid "Right to left"
 msgstr "Rechts nach links"
 
-#: gtk/gtkprintunixdialog.c:3142
+#: gtk/gtkprintunixdialog.c:3145
 msgid "Top to bottom"
 msgstr "Oben nach unten"
 
-#: gtk/gtkprintunixdialog.c:3143
+#: gtk/gtkprintunixdialog.c:3146
 msgid "Bottom to top"
 msgstr "Unten nach oben"
 
-#: gtk/gtkprintunixdialog.c:3386
+#: gtk/gtkprintunixdialog.c:3389
 msgid "Print"
 msgstr "Drucken"
 
@@ -3649,68 +3644,68 @@ msgstr "Unbekannter Fehler beim Deserialisieren von %s"
 msgid "No deserialize function found for format %s"
 msgstr "Es konnte keine Deserialisierungs-Funktion für %s gefunden werden"
 
-#: gtk/gtktextbufferserialize.c:806 gtk/gtktextbufferserialize.c:832
+#: gtk/gtktextbufferserialize.c:784 gtk/gtktextbufferserialize.c:810
 #, c-format
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
 msgstr "Es wurde sowohl »id« als auch »name« im <%s>-Element gefunden"
 
-#: gtk/gtktextbufferserialize.c:816 gtk/gtktextbufferserialize.c:842
+#: gtk/gtktextbufferserialize.c:794 gtk/gtktextbufferserialize.c:820
 #, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
 msgstr "Das Attribut »%s« wurde zwei Mal im <%s>-Element gefunden"
 
-#: gtk/gtktextbufferserialize.c:858
+#: gtk/gtktextbufferserialize.c:836
 #, c-format
 msgid "<%s> element has invalid ID \"%s\""
 msgstr "<%s>-Element hat ungültige Kennung »%s«"
 
-#: gtk/gtktextbufferserialize.c:868
+#: gtk/gtktextbufferserialize.c:846
 #, c-format
 msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
 msgstr "<%s>-Element hat weder ein »name«- noch ein »id«-Attribut"
 
-#: gtk/gtktextbufferserialize.c:955
+#: gtk/gtktextbufferserialize.c:933
 #, c-format
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
 msgstr "Attribut »%s« wurde zwei Mal im selben <%s>-Element verwendet"
 
-#: gtk/gtktextbufferserialize.c:973 gtk/gtktextbufferserialize.c:998
+#: gtk/gtktextbufferserialize.c:951 gtk/gtktextbufferserialize.c:976
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
 msgstr "Attribut »%s« ist in diesem Kontext ungültig im <%s>-Element"
 
-#: gtk/gtktextbufferserialize.c:1037
+#: gtk/gtktextbufferserialize.c:1015
 #, c-format
 msgid "Tag \"%s\" has not been defined."
 msgstr "Tag »%s« wurde nicht definiert."
 
-#: gtk/gtktextbufferserialize.c:1049
+#: gtk/gtktextbufferserialize.c:1027
 msgid "Anonymous tag found and tags can not be created."
 msgstr "Anonymer Tag wurde gefunden und Tags können nicht erstellt werden."
 
-#: gtk/gtktextbufferserialize.c:1060
+#: gtk/gtktextbufferserialize.c:1038
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
 msgstr ""
 "Tag »%s« existiert nicht im Puffer und Tags können nicht erstellt werden."
 
-#: gtk/gtktextbufferserialize.c:1161 gtk/gtktextbufferserialize.c:1236
-#: gtk/gtktextbufferserialize.c:1341 gtk/gtktextbufferserialize.c:1415
+#: gtk/gtktextbufferserialize.c:1139 gtk/gtktextbufferserialize.c:1214
+#: gtk/gtktextbufferserialize.c:1319 gtk/gtktextbufferserialize.c:1393
 #, c-format
 msgid "Element <%s> is not allowed below <%s>"
 msgstr "Element »%s« ist unterhalb von »%s« nicht erlaubt"
 
-#: gtk/gtktextbufferserialize.c:1192
+#: gtk/gtktextbufferserialize.c:1170
 #, c-format
 msgid "\"%s\" is not a valid attribute type"
 msgstr "»%s« ist kein gültiger Attributstyp"
 
-#: gtk/gtktextbufferserialize.c:1200
+#: gtk/gtktextbufferserialize.c:1178
 #, c-format
 msgid "\"%s\" is not a valid attribute name"
 msgstr "»%s« ist kein gültiger Attributsname"
 
-#: gtk/gtktextbufferserialize.c:1210
+#: gtk/gtktextbufferserialize.c:1188
 #, c-format
 msgid ""
 "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
@@ -3718,40 +3713,40 @@ msgstr ""
 "»%s« konnte für das Attribut »%s« nicht in einen Wert vom Typ »%s« "
 "konvertiert werden"
 
-#: gtk/gtktextbufferserialize.c:1219
+#: gtk/gtktextbufferserialize.c:1197
 #, c-format
 msgid "\"%s\" is not a valid value for attribute \"%s\""
 msgstr "»%s« ist kein gültiger Wert für das Attribut »%s«"
 
-#: gtk/gtktextbufferserialize.c:1304
+#: gtk/gtktextbufferserialize.c:1282
 #, c-format
 msgid "Tag \"%s\" already defined"
 msgstr "Tag »%s« wurde bereits definiert"
 
-#: gtk/gtktextbufferserialize.c:1317
+#: gtk/gtktextbufferserialize.c:1295
 #, c-format
 msgid "Tag \"%s\" has invalid priority \"%s\""
 msgstr "Tag »%s« hat ungültige Priorität »%s«"
 
-#: gtk/gtktextbufferserialize.c:1370
+#: gtk/gtktextbufferserialize.c:1348
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
 msgstr "Äußerstes Element im Text muss <text_view_markup> sein, nicht <%s>"
 
-#: gtk/gtktextbufferserialize.c:1379 gtk/gtktextbufferserialize.c:1395
+#: gtk/gtktextbufferserialize.c:1357 gtk/gtktextbufferserialize.c:1373
 #, c-format
 msgid "A <%s> element has already been specified"
 msgstr "Ein <%s>-Element wurde bereits festgelegt"
 
-#: gtk/gtktextbufferserialize.c:1401
+#: gtk/gtktextbufferserialize.c:1379
 msgid "A <text> element can't occur before a <tags> element"
 msgstr "Ein <text>-Element kann nicht für einem <tags>-Element auftreten"
 
-#: gtk/gtktextbufferserialize.c:1807
+#: gtk/gtktextbufferserialize.c:1785
 msgid "Serialized data is malformed"
 msgstr "Serialisierte Daten sind fehlerhaft"
 
-#: gtk/gtktextbufferserialize.c:1886
+#: gtk/gtktextbufferserialize.c:1864
 msgid ""
 "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""
@@ -3821,12 +3816,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:12241
+#: gtk/gtkwindow.c:12303
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Wollen Sie den GTK+ Inspektor verwenden?"
 
-#: gtk/gtkwindow.c:12243
+#: gtk/gtkwindow.c:12305
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3837,7 +3832,7 @@ msgstr ""
 "Interna einer beliebigen GTK+-Anwendung zu untersuchen und zu verändern. "
 "Dabei kann die Anwendung unerwünscht arbeiten oder abstürzen."
 
-#: gtk/gtkwindow.c:12248
+#: gtk/gtkwindow.c:12310
 msgid "Don't show this message again"
 msgstr "Zeige diese Meldung nicht mehr"
 
@@ -3845,28 +3840,28 @@ msgstr "Zeige diese Meldung nicht mehr"
 msgid "Activate"
 msgstr "Aktivieren"
 
-#: gtk/inspector/action-editor.c:302 gtk/inspector/actions.ui:91
-#: gtk/inspector/css-node-tree.ui:132 gtk/inspector/misc-info.ui:110
+#: gtk/inspector/action-editor.c:302 gtk/inspector/actions.ui:82
+#: gtk/inspector/css-node-tree.ui:78 gtk/inspector/misc-info.ui:102
 msgid "State"
 msgstr "Status"
 
-#: gtk/inspector/actions.ui:39 gtk/inspector/general.ui:115
+#: gtk/inspector/actions.ui:30 gtk/inspector/general.ui:115
 msgid "Prefix"
 msgstr "Präfix"
 
-#: gtk/inspector/actions.ui:65
+#: gtk/inspector/actions.ui:56
 msgid "Enabled"
 msgstr "Aktiviert"
 
-#: gtk/inspector/actions.ui:78
+#: gtk/inspector/actions.ui:69
 msgid "Parameter Type"
 msgstr "Parametertyp"
 
-#: gtk/inspector/css-editor.c:148 gtk/inspector/css-editor.c:154
+#: gtk/inspector/css-editor.c:118
 msgid "You can type here any CSS rule recognized by GTK+."
 msgstr "Sie können hier beliebige von GTK+ erkannte CSS-Regeln eingeben."
 
-#: gtk/inspector/css-editor.c:149 gtk/inspector/css-editor.c:155
+#: gtk/inspector/css-editor.c:119
 msgid ""
 "You can temporarily disable this custom CSS by clicking on the “Pause” "
 "button above."
@@ -3874,16 +3869,12 @@ msgstr ""
 "Sie können vorübergehend dieses benutzerdefinierte CSS deaktivieren, indem "
 "Sie oben auf den Knopf »Pause« klicken."
 
-#: gtk/inspector/css-editor.c:150
+#: gtk/inspector/css-editor.c:120
 msgid "Changes are applied instantly and globally, for the whole application."
 msgstr ""
 "Änderungen werden sofort und global für die gesamte Anwendung umgesetzt."
 
-#: gtk/inspector/css-editor.c:156
-msgid "Changes are applied instantly, only for this selected widget."
-msgstr "Änderungen werden sofort und nur für das gewählte Widget umgesetzt."
-
-#: gtk/inspector/css-editor.c:218
+#: gtk/inspector/css-editor.c:169
 #, c-format
 msgid "Saving CSS failed"
 msgstr "Speichern des CSS ist fehlgeschlagen"
@@ -3896,50 +3887,21 @@ msgstr "Dieses eigene CSS deaktivieren"
 msgid "Save the current CSS"
 msgstr "Das aktuelle CSS speichern"
 
-#: gtk/inspector/css-node-tree.c:205
-msgid "Change name"
-msgstr "Namen ändern"
-
-#: gtk/inspector/css-node-tree.c:220
-msgid "Change classes"
-msgstr "Klassen ändern"
-
-# Auch wenn im Original die Tastenkürzel kollidieren (_Preferences),
-# wir verwenden Ei_genschaften.
-#: gtk/inspector/css-node-tree.c:229
-msgid "CSS properties"
-msgstr "CSS-Eigenschaften"
-
-# CHECK
-#: gtk/inspector/css-node-tree.ui:30
-msgid "Show all CSS nodes"
-msgstr "Alle CSS-Knoten anzeigen"
-
-# Auch wenn im Original die Tastenkürzel kollidieren (_Preferences),
-# wir verwenden Ei_genschaften.
-#: gtk/inspector/css-node-tree.ui:50
-msgid "Show CSS properties"
-msgstr "CSS-Eigenschaften anzeigen"
-
-#: gtk/inspector/css-node-tree.ui:106
+#: gtk/inspector/css-node-tree.ui:52
 msgid "ID"
 msgstr "KENNUNG"
 
-#: gtk/inspector/css-node-tree.ui:119
-msgid "Classes"
-msgstr "Klassen"
-
-#: gtk/inspector/css-node-tree.ui:161
-msgid "Node:"
-msgstr "Knoten:"
+#: gtk/inspector/css-node-tree.ui:65 gtk/inspector/object-tree.ui:142
+msgid "Style Classes"
+msgstr "Stilklassen"
 
 # Auch wenn im Original die Tastenkürzel kollidieren (_Preferences),
 # wir verwenden Ei_genschaften.
-#: gtk/inspector/css-node-tree.ui:184
+#: gtk/inspector/css-node-tree.ui:110
 msgid "CSS Property"
 msgstr "CSS-Eigenschaft"
 
-#: gtk/inspector/css-node-tree.ui:199 gtk/inspector/prop-list.ui:105
+#: gtk/inspector/css-node-tree.ui:125 gtk/inspector/prop-list.ui:50
 #: gtk/ui/gtkcoloreditor.ui:293
 msgid "Value"
 msgstr "Wert"
@@ -3948,12 +3910,12 @@ msgstr "Wert"
 msgid "Show data"
 msgstr "Daten Zeigen"
 
-#: gtk/inspector/general.c:225
+#: gtk/inspector/general.c:226
 msgctxt "GL version"
 msgid "None"
 msgstr "Keine"
 
-#: gtk/inspector/general.c:226
+#: gtk/inspector/general.c:227
 msgctxt "GL vendor"
 msgid "None"
 msgstr "Keiner"
@@ -3986,147 +3948,139 @@ msgstr "GL-Version"
 msgid "GL Vendor"
 msgstr "GL-Hersteller"
 
-#: gtk/inspector/gestures.c:128
+#: gtk/inspector/gestures.c:129
 msgctxt "event phase"
 msgid "None"
 msgstr "Keine"
 
-#: gtk/inspector/gestures.c:129
+#: gtk/inspector/gestures.c:130
 msgctxt "event phase"
 msgid "Capture"
 msgstr "Erfassen"
 
-#: gtk/inspector/gestures.c:130
+#: gtk/inspector/gestures.c:131
 msgctxt "event phase"
 msgid "Bubble"
 msgstr "Blase"
 
-#: gtk/inspector/gestures.c:131
+#: gtk/inspector/gestures.c:132
 msgctxt "event phase"
 msgid "Target"
 msgstr "Ziel"
 
-#: gtk/inspector/menu.c:93
+#: gtk/inspector/menu.c:92
 msgid "Unnamed section"
 msgstr "Unbenannter Abschnitt"
 
-#: gtk/inspector/menu.ui:35 gtk/inspector/object-tree.ui:124
+#: gtk/inspector/menu.ui:26 gtk/inspector/object-tree.ui:125
 msgid "Label"
 msgstr "Bezeichnung"
 
-#: gtk/inspector/menu.ui:48 gtk/inspector/prop-editor.c:1385
+#: gtk/inspector/menu.ui:39 gtk/inspector/prop-editor.c:1385
 msgid "Action"
 msgstr "Aktion"
 
-#: gtk/inspector/menu.ui:61
+#: gtk/inspector/menu.ui:52
 msgid "Target"
 msgstr "Ziel"
 
-#: gtk/inspector/menu.ui:74
+#: gtk/inspector/menu.ui:65
 msgid "Icon"
 msgstr "Symbol"
 
-#: gtk/inspector/misc-info.ui:42
+#: gtk/inspector/misc-info.ui:34
 msgid "Address"
 msgstr "Adresse"
 
-#: gtk/inspector/misc-info.ui:76
+#: gtk/inspector/misc-info.ui:68
 msgid "Reference count"
 msgstr "Referenzzähler"
 
-#: gtk/inspector/misc-info.ui:144
+#: gtk/inspector/misc-info.ui:136
 msgid "Buildable ID"
 msgstr "Buildable ID"
 
-#: gtk/inspector/misc-info.ui:178
+#: gtk/inspector/misc-info.ui:170
 msgid "Default Widget"
 msgstr "Vorgegebenes Widget"
 
 # Auch wenn im Original die Tastenkürzel kollidieren (_Preferences),
 # wir verwenden Ei_genschaften.
-#: gtk/inspector/misc-info.ui:200 gtk/inspector/misc-info.ui:244
+#: gtk/inspector/misc-info.ui:192 gtk/inspector/misc-info.ui:236
 #: gtk/inspector/prop-editor.c:1071 gtk/inspector/prop-editor.c:1268
 #: gtk/inspector/prop-editor.c:1393 gtk/inspector/prop-editor.c:1504
-#: gtk/inspector/window.ui:268
+#: gtk/inspector/window.ui:382
 msgid "Properties"
 msgstr "Eigenschaften"
 
-#: gtk/inspector/misc-info.ui:221
+#: gtk/inspector/misc-info.ui:213
 msgid "Focus Widget"
 msgstr "Widget fokussieren"
 
-#: gtk/inspector/misc-info.ui:266
+#: gtk/inspector/misc-info.ui:258
 msgid "Mnemonic Label"
 msgstr "Beschriftung für Menükürzelbuchstaben"
 
-#: gtk/inspector/misc-info.ui:301
+#: gtk/inspector/misc-info.ui:293
 msgid "Request mode"
 msgstr "Anfragemodus"
 
-#: gtk/inspector/misc-info.ui:335
+#: gtk/inspector/misc-info.ui:327
 msgid "Allocation"
 msgstr "Zuweisung"
 
-#: gtk/inspector/misc-info.ui:369
+#: gtk/inspector/misc-info.ui:361
 msgid "Baseline"
 msgstr "Grundlinie"
 
-#: gtk/inspector/misc-info.ui:403
+#: gtk/inspector/misc-info.ui:395
 msgid "Clip area"
 msgstr "Bereich abschneiden"
 
 # diese Übersetzung möge überprüft werden!
-#: gtk/inspector/misc-info.ui:437
+#: gtk/inspector/misc-info.ui:429
 msgid "Tick callback"
 msgstr "Markier-Rückmeldung"
 
-#: gtk/inspector/misc-info.ui:473
+#: gtk/inspector/misc-info.ui:465
 msgid "Frame count"
 msgstr "Bildzähler"
 
-#: gtk/inspector/misc-info.ui:507
+#: gtk/inspector/misc-info.ui:499
 msgid "Frame rate"
 msgstr "Bildrate"
 
-#: gtk/inspector/misc-info.ui:541
+#: gtk/inspector/misc-info.ui:533
 msgid "Accessible role"
 msgstr "Barrierefreie Rolle"
 
-#: gtk/inspector/misc-info.ui:575
+#: gtk/inspector/misc-info.ui:567
 msgid "Accessible name"
 msgstr "Name des Accessible"
 
-#: gtk/inspector/misc-info.ui:611
+#: gtk/inspector/misc-info.ui:603
 msgid "Accessible description"
 msgstr "Beschreibung des Accessible"
 
-#: gtk/inspector/misc-info.ui:645
+#: gtk/inspector/misc-info.ui:637
 msgid "Mapped"
 msgstr "Abgebildet"
 
-#: gtk/inspector/misc-info.ui:681
+#: gtk/inspector/misc-info.ui:673
 msgid "Realized"
 msgstr "Realisiert"
 
-#: gtk/inspector/misc-info.ui:717
+#: gtk/inspector/misc-info.ui:709
 msgid "Is Toplevel"
 msgstr "Oberste Ebene"
 
-#: gtk/inspector/misc-info.ui:753
+#: gtk/inspector/misc-info.ui:745
 msgid "Child Visible"
 msgstr "Sichtbares Unterelement"
 
-#: gtk/inspector/object-hierarchy.ui:32
-msgid "Class Hierarchy"
-msgstr "Klassenhierarchie"
-
-#: gtk/inspector/object-tree.ui:94
+#: gtk/inspector/object-tree.ui:95
 msgid "Object"
 msgstr "Objekt"
-
-#: gtk/inspector/object-tree.ui:141
-msgid "Style Classes"
-msgstr "Stilklassen"
 
 #: gtk/inspector/prop-editor.c:679
 #, c-format
@@ -4183,7 +4137,7 @@ msgstr "umgekehrt"
 msgid "bidirectional, inverted"
 msgstr "bidirektional, umgekehrt"
 
-#: gtk/inspector/prop-editor.c:1490 gtk/inspector/prop-editor.c:1586
+#: gtk/inspector/prop-editor.c:1490 gtk/inspector/prop-editor.c:1604
 msgid "bidirectional"
 msgstr "bidirektional"
 
@@ -4191,86 +4145,85 @@ msgstr "bidirektional"
 msgid "Binding:"
 msgstr "Kürzel:"
 
-#: gtk/inspector/prop-editor.c:1605
+#: gtk/inspector/prop-editor.c:1623
 msgid "Setting:"
 msgstr "Einstellung:"
 
-#: gtk/inspector/prop-editor.c:1645
+#: gtk/inspector/prop-editor.c:1663
 msgid "Source:"
 msgstr "Quelle:"
 
-#: gtk/inspector/prop-editor.c:1647
+#: gtk/inspector/prop-editor.c:1665
 msgid "Reset"
 msgstr "Zurücksetzen"
 
-#: gtk/inspector/prop-editor.c:1658
+#: gtk/inspector/prop-editor.c:1676
 msgid "Default"
 msgstr "Standard"
 
-#: gtk/inspector/prop-editor.c:1661
+#: gtk/inspector/prop-editor.c:1679
 msgid "Theme"
 msgstr "Thema"
 
-#: gtk/inspector/prop-editor.c:1664
+#: gtk/inspector/prop-editor.c:1682
 msgid "XSettings"
 msgstr "XSettings"
 
 # Auch wenn im Original die Tastenkürzel kollidieren (_Preferences),
 # wir verwenden Ei_genschaften.
-#: gtk/inspector/prop-list.ui:89
+#: gtk/inspector/prop-list.ui:34
 msgid "Property"
 msgstr "Eigenschaft"
 
-#: gtk/inspector/prop-list.ui:123
+#: gtk/inspector/prop-list.ui:68 gtk/inspector/statistics.ui:53
+msgid "Type"
+msgstr "Typ"
+
+#: gtk/inspector/prop-list.ui:86
 msgid "Attribute"
 msgstr "Attribut"
 
-#: gtk/inspector/prop-list.ui:139 gtk/inspector/signals-list.ui:127
+#: gtk/inspector/prop-list.ui:102 gtk/inspector/signals-list.ui:73
 msgid "Defined At"
 msgstr "Definiert bei"
 
-#: gtk/inspector/resource-list.ui:99
+#: gtk/inspector/resource-list.ui:100
 msgid "Path"
 msgstr "Pfad"
 
-#: gtk/inspector/resource-list.ui:117 gtk/inspector/signals-list.ui:117
+#: gtk/inspector/resource-list.ui:118 gtk/inspector/signals-list.ui:63
 msgid "Count"
 msgstr "Zähler"
 
-#: gtk/inspector/resource-list.ui:129 gtk/ui/gtkfilechooserwidget.ui:223
+#: gtk/inspector/resource-list.ui:130 gtk/ui/gtkfilechooserwidget.ui:223
 msgid "Size"
 msgstr "Größe"
 
-#: gtk/inspector/resource-list.ui:162
+#: gtk/inspector/resource-list.ui:163
 msgid "Name:"
 msgstr "Name:"
 
-#: gtk/inspector/resource-list.ui:186
+#: gtk/inspector/resource-list.ui:187
 msgid "Type:"
 msgstr "Typ:"
 
-#: gtk/inspector/resource-list.ui:209
+#: gtk/inspector/resource-list.ui:210
 msgid "Size:"
 msgstr "Größe:"
 
-#: gtk/inspector/selector.ui:32 gtk/inspector/window.ui:305
+#: gtk/inspector/selector.ui:31
 msgid "Selector"
 msgstr "Selektor"
 
-#: gtk/inspector/signals-list.c:111
+#: gtk/inspector/signals-list.c:117
 msgid "Yes"
 msgstr "Ja"
 
-#: gtk/inspector/signals-list.ui:32
-msgid "Trace signal emissions on this object"
-msgstr "Signal-Aussendungen dieses Objekts verfolgen"
+#: gtk/inspector/signals-list.ui:36
+msgid "Signal"
+msgstr "Signal"
 
-# _Löschen haben wir schon und ist unangebracht
-#: gtk/inspector/signals-list.ui:53
-msgid "Clear log"
-msgstr "Protokoll leeren"
-
-#: gtk/inspector/signals-list.ui:104
+#: gtk/inspector/signals-list.ui:50
 msgid "Connected"
 msgstr "Verbunden"
 
@@ -4301,10 +4254,6 @@ msgstr "Vertikal"
 msgctxt "sizegroup mode"
 msgid "Both"
 msgstr "Beides"
-
-#: gtk/inspector/statistics.ui:53
-msgid "Type"
-msgstr "Typ"
 
 #: gtk/inspector/statistics.ui:68
 msgid "Self 1"
@@ -4468,90 +4417,103 @@ msgstr "Softwareoberflächen"
 msgid "Texture Rectangle Extension"
 msgstr "Textur-Rechteck-Erweiterung"
 
-#: gtk/inspector/window.ui:24
+#: gtk/inspector/window.ui:31
 msgid "Select an Object"
 msgstr "Wählen Sie ein Objekt"
 
-#: gtk/inspector/window.ui:47 gtk/inspector/window.ui:127
+#: gtk/inspector/window.ui:54 gtk/inspector/window.ui:134
 msgid "Show Details"
 msgstr "Details anzeigen"
 
-#: gtk/inspector/window.ui:70
+#: gtk/inspector/window.ui:77
 msgid "Show all Objects"
 msgstr "Alle Objekte zeigen"
 
-#: gtk/inspector/window.ui:100
+#: gtk/inspector/window.ui:107
 msgid "Collect Statistics"
 msgstr "Statistiken sammeln"
 
 # CHECK
-#: gtk/inspector/window.ui:149
+#: gtk/inspector/window.ui:156
 msgid "Show all Resources"
 msgstr "Alle Ressourcen anzeigen"
 
-#: gtk/inspector/window.ui:257
+#: gtk/inspector/window.ui:267
+msgid "Trace signal emissions on this object"
+msgstr "Signal-Aussendungen dieses Objekts verfolgen"
+
+# _Löschen haben wir schon und ist unangebracht
+#: gtk/inspector/window.ui:284
+msgid "Clear log"
+msgstr "Protokoll leeren"
+
+#: gtk/inspector/window.ui:370
 msgid "Miscellaneous"
 msgstr "Erweitert"
 
-#: gtk/inspector/window.ui:277
+#: gtk/inspector/window.ui:393
 msgid "Signals"
 msgstr "Signale"
 
 # Auch wenn im Original die Tastenkürzel kollidieren (_Preferences),
 # wir verwenden Ei_genschaften.
-#: gtk/inspector/window.ui:287
+#: gtk/inspector/window.ui:404
 msgid "Child Properties"
 msgstr "Eigenschaften des Unterelements"
 
-#: gtk/inspector/window.ui:296
-msgid "Hierarchy"
-msgstr "Hierarchie"
+#: gtk/inspector/window.ui:413
+msgid "Class Hierarchy"
+msgstr "Klassenhierarchie"
 
-#: gtk/inspector/window.ui:314
+#: gtk/inspector/window.ui:422
+msgid "CSS Selector"
+msgstr "CSS-Selektor"
+
+#: gtk/inspector/window.ui:431
 msgid "CSS nodes"
 msgstr "CSS-Knoten"
 
-#: gtk/inspector/window.ui:323 gtk/inspector/window.ui:413
-msgid "CSS"
-msgstr "CSS"
-
-#: gtk/inspector/window.ui:330
+#: gtk/inspector/window.ui:438
 msgid "Size Groups"
 msgstr "Gruppengröße anpassen"
 
-#: gtk/inspector/window.ui:337
+#: gtk/inspector/window.ui:445
 msgid "Data"
 msgstr "Daten"
 
-#: gtk/inspector/window.ui:344
+#: gtk/inspector/window.ui:452
 msgid "Actions"
 msgstr "Aktionen"
 
-#: gtk/inspector/window.ui:360
+#: gtk/inspector/window.ui:468
 msgid "Gestures"
 msgstr "Gesten"
 
-#: gtk/inspector/window.ui:368
+#: gtk/inspector/window.ui:477
 msgid "Magnifier"
 msgstr "Lupe"
 
-#: gtk/inspector/window.ui:383
+#: gtk/inspector/window.ui:490
 msgid "Objects"
 msgstr "Objekte"
 
-#: gtk/inspector/window.ui:393
+#: gtk/inspector/window.ui:500
 msgid "Statistics"
 msgstr "Statistiken"
 
-#: gtk/inspector/window.ui:403
+#: gtk/inspector/window.ui:510
 msgid "Resources"
 msgstr "Ressourcen"
 
-#: gtk/inspector/window.ui:422
+#: gtk/inspector/window.ui:519
+msgid "CSS"
+msgstr "CSS"
+
+#: gtk/inspector/window.ui:528
 msgid "Visual"
 msgstr "Visuell"
 
-#: gtk/inspector/window.ui:431 gtk/ui/gtkprintunixdialog.ui:425
+#: gtk/inspector/window.ui:537 gtk/ui/gtkprintunixdialog.ui:426
 msgid "General"
 msgstr "Allgemein"
 
@@ -5519,15 +5481,15 @@ msgstr "Alle anzeigen"
 msgid "Quit %s"
 msgstr "%s beenden"
 
-#: gtk/ui/gtkassistant.ui:67
+#: gtk/ui/gtkassistant.ui:68
 msgid "_Next"
 msgstr "_Weiter"
 
-#: gtk/ui/gtkassistant.ui:87
+#: gtk/ui/gtkassistant.ui:88
 msgid "_Back"
 msgstr "_Zurück"
 
-#: gtk/ui/gtkassistant.ui:106
+#: gtk/ui/gtkassistant.ui:107
 msgid "_Finish"
 msgstr "_Fertigstellen"
 
@@ -5621,7 +5583,7 @@ msgstr "_Format für:"
 
 # Auch wenn im Original die Tastenkürzel kollidieren (_Preferences),
 # wir verwenden Ei_genschaften.
-#: gtk/ui/gtkpagesetupunixdialog.ui:80 gtk/ui/gtkprintunixdialog.ui:745
+#: gtk/ui/gtkpagesetupunixdialog.ui:80 gtk/ui/gtkprintunixdialog.ui:747
 msgid "_Paper size:"
 msgstr "Ei_genschaften:"
 
@@ -5629,19 +5591,19 @@ msgstr "Ei_genschaften:"
 msgid "_Orientation:"
 msgstr "_Ausrichtung:"
 
-#: gtk/ui/gtkpagesetupunixdialog.ui:152 gtk/ui/gtkprintunixdialog.ui:792
+#: gtk/ui/gtkpagesetupunixdialog.ui:152 gtk/ui/gtkprintunixdialog.ui:794
 msgid "Portrait"
 msgstr "Hochformat"
 
-#: gtk/ui/gtkpagesetupunixdialog.ui:188 gtk/ui/gtkprintunixdialog.ui:794
+#: gtk/ui/gtkpagesetupunixdialog.ui:188 gtk/ui/gtkprintunixdialog.ui:796
 msgid "Reverse portrait"
 msgstr "Kopfstehendes Hochformat"
 
-#: gtk/ui/gtkpagesetupunixdialog.ui:224 gtk/ui/gtkprintunixdialog.ui:793
+#: gtk/ui/gtkpagesetupunixdialog.ui:224 gtk/ui/gtkprintunixdialog.ui:795
 msgid "Landscape"
 msgstr "Querformat"
 
-#: gtk/ui/gtkpagesetupunixdialog.ui:259 gtk/ui/gtkprintunixdialog.ui:795
+#: gtk/ui/gtkpagesetupunixdialog.ui:259 gtk/ui/gtkprintunixdialog.ui:797
 msgid "Reverse landscape"
 msgstr "Kopfstehendes Querformat"
 
@@ -5724,102 +5686,102 @@ msgstr "Kopien"
 msgid "Copie_s:"
 msgstr "_Kopien:"
 
-#: gtk/ui/gtkprintunixdialog.ui:360
+#: gtk/ui/gtkprintunixdialog.ui:361
 msgid "C_ollate"
 msgstr "_Zusammentragen"
 
-#: gtk/ui/gtkprintunixdialog.ui:374
+#: gtk/ui/gtkprintunixdialog.ui:375
 msgid "_Reverse"
 msgstr "_Rückwärts"
 
-#: gtk/ui/gtkprintunixdialog.ui:451
+#: gtk/ui/gtkprintunixdialog.ui:452
 msgid "Layout"
 msgstr "Layout"
 
-#: gtk/ui/gtkprintunixdialog.ui:474
+#: gtk/ui/gtkprintunixdialog.ui:475
 msgid "T_wo-sided:"
 msgstr "_Beidseitig"
 
-#: gtk/ui/gtkprintunixdialog.ui:499
+#: gtk/ui/gtkprintunixdialog.ui:500
 msgid "Pages per _side:"
 msgstr "Seiten pro _Blatt:"
 
-#: gtk/ui/gtkprintunixdialog.ui:526
+#: gtk/ui/gtkprintunixdialog.ui:527
 msgid "Page or_dering:"
 msgstr "_Reihenfolge:"
 
-#: gtk/ui/gtkprintunixdialog.ui:552
+#: gtk/ui/gtkprintunixdialog.ui:553
 msgid "_Only print:"
 msgstr "Be_schränken auf:"
 
-#: gtk/ui/gtkprintunixdialog.ui:569
+#: gtk/ui/gtkprintunixdialog.ui:570
 msgid "All sheets"
 msgstr "Alle Seiten"
 
-#: gtk/ui/gtkprintunixdialog.ui:570
+#: gtk/ui/gtkprintunixdialog.ui:571
 msgid "Even sheets"
 msgstr "Gerade Seiten"
 
-#: gtk/ui/gtkprintunixdialog.ui:571
+#: gtk/ui/gtkprintunixdialog.ui:572
 msgid "Odd sheets"
 msgstr "Ungerade Seiten"
 
-#: gtk/ui/gtkprintunixdialog.ui:584
+#: gtk/ui/gtkprintunixdialog.ui:585
 msgid "Sc_ale:"
 msgstr "S_kalierung:"
 
-#: gtk/ui/gtkprintunixdialog.ui:647
+#: gtk/ui/gtkprintunixdialog.ui:649
 msgid "Paper"
 msgstr "Papier"
 
-#: gtk/ui/gtkprintunixdialog.ui:670
+#: gtk/ui/gtkprintunixdialog.ui:672
 msgid "Paper _type:"
 msgstr "Papier_typ:"
 
-#: gtk/ui/gtkprintunixdialog.ui:695
+#: gtk/ui/gtkprintunixdialog.ui:697
 msgid "Paper _source:"
 msgstr "Papiere_inzug:"
 
-#: gtk/ui/gtkprintunixdialog.ui:720
+#: gtk/ui/gtkprintunixdialog.ui:722
 msgid "Output t_ray:"
 msgstr "Ausgabes_chacht:"
 
-#: gtk/ui/gtkprintunixdialog.ui:774
+#: gtk/ui/gtkprintunixdialog.ui:776
 msgid "Or_ientation:"
 msgstr "_Ausrichtung:"
 
-#: gtk/ui/gtkprintunixdialog.ui:874
+#: gtk/ui/gtkprintunixdialog.ui:876
 msgid "Job Details"
 msgstr "Druckauftrag"
 
-#: gtk/ui/gtkprintunixdialog.ui:897
+#: gtk/ui/gtkprintunixdialog.ui:899
 msgid "Pri_ority:"
 msgstr "_Priorität:"
 
 # CHECK
-#: gtk/ui/gtkprintunixdialog.ui:921
+#: gtk/ui/gtkprintunixdialog.ui:923
 msgid "_Billing info:"
 msgstr "_Abrechnungsinfo:"
 
 # CHECK
-#: gtk/ui/gtkprintunixdialog.ui:965
+#: gtk/ui/gtkprintunixdialog.ui:967
 msgid "Print Document"
 msgstr "Druckauftrag ausführen"
 
 #. this is one of the choices for the print at option in the print dialog
-#: gtk/ui/gtkprintunixdialog.ui:985
+#: gtk/ui/gtkprintunixdialog.ui:987
 msgid "_Now"
 msgstr "_Jetzt"
 
 #. this is one of the choices for the print at option in the print dialog. It also serves as the label for an entry that allows the user to enter a time.
-#: gtk/ui/gtkprintunixdialog.ui:1001
+#: gtk/ui/gtkprintunixdialog.ui:1003
 msgid "A_t:"
 msgstr "_Um:"
 
 #. Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.
-#: gtk/ui/gtkprintunixdialog.ui:1005 gtk/ui/gtkprintunixdialog.ui:1007
-#: gtk/ui/gtkprintunixdialog.ui:1026 gtk/ui/gtkprintunixdialog.ui:1028
-#: gtk/ui/gtkprintunixdialog.ui:1035
+#: gtk/ui/gtkprintunixdialog.ui:1007 gtk/ui/gtkprintunixdialog.ui:1009
+#: gtk/ui/gtkprintunixdialog.ui:1028 gtk/ui/gtkprintunixdialog.ui:1030
+#: gtk/ui/gtkprintunixdialog.ui:1037
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
@@ -5827,58 +5789,58 @@ msgstr ""
 "Geben Sie an, wann der Druckauftrag\n"
 "starten soll, z.B.: 15:30, 14:50:45"
 
-#: gtk/ui/gtkprintunixdialog.ui:1034
+#: gtk/ui/gtkprintunixdialog.ui:1036
 msgid "Time of print"
 msgstr "Uhrzeit des Druckauftrags"
 
 #. this is one of the choices for the print at option in the print dialog. It means that the print job will not be printed until it explicitly gets 'released'.
-#: gtk/ui/gtkprintunixdialog.ui:1048
+#: gtk/ui/gtkprintunixdialog.ui:1050
 msgid "On _hold"
 msgstr "In _Warteschleife stellen"
 
-#: gtk/ui/gtkprintunixdialog.ui:1052 gtk/ui/gtkprintunixdialog.ui:1053
+#: gtk/ui/gtkprintunixdialog.ui:1054 gtk/ui/gtkprintunixdialog.ui:1055
 msgid "Hold the job until it is explicitly released"
 msgstr "Hält den Druckauftrag an, bis er explizit freigegeben wird"
 
-#: gtk/ui/gtkprintunixdialog.ui:1090
+#: gtk/ui/gtkprintunixdialog.ui:1092
 msgid "Add Cover Page"
 msgstr "Deckblatt hinzufügen"
 
 #. this is the label used for the option in the print dialog that controls the front cover page.
-#: gtk/ui/gtkprintunixdialog.ui:1113
+#: gtk/ui/gtkprintunixdialog.ui:1115
 msgid "Be_fore:"
 msgstr "Be_vor:"
 
 #. this is the label used for the option in the print dialog that controls the back cover page.
-#: gtk/ui/gtkprintunixdialog.ui:1137
+#: gtk/ui/gtkprintunixdialog.ui:1139
 msgid "_After:"
 msgstr "_Nach:"
 
-#: gtk/ui/gtkprintunixdialog.ui:1179
+#: gtk/ui/gtkprintunixdialog.ui:1181
 msgid "Job"
 msgstr "Auftrag"
 
 #. This will appear as a tab label in the print dialog.
-#: gtk/ui/gtkprintunixdialog.ui:1212
+#: gtk/ui/gtkprintunixdialog.ui:1214
 msgid "Image Quality"
 msgstr "Druckqualität"
 
 #. This will appear as a tab label in the print dialog.
-#: gtk/ui/gtkprintunixdialog.ui:1245
+#: gtk/ui/gtkprintunixdialog.ui:1247
 msgid "Color"
 msgstr "Farbe"
 
 # CHECK
 #. This will appear as a tab label in the print dialog. It's a typographical term, as in "Binding and finishing"
-#: gtk/ui/gtkprintunixdialog.ui:1278
+#: gtk/ui/gtkprintunixdialog.ui:1280
 msgid "Finishing"
 msgstr "Nachbearbeitung"
 
-#: gtk/ui/gtkprintunixdialog.ui:1311
+#: gtk/ui/gtkprintunixdialog.ui:1313
 msgid "Advanced"
 msgstr "Erweitert"
 
-#: gtk/ui/gtkprintunixdialog.ui:1335
+#: gtk/ui/gtkprintunixdialog.ui:1337
 msgid "Some of the settings in the dialog conflict"
 msgstr "Einige Einstellungen in diesem Dialog stehen in Konflikt zueinander"
 
@@ -6729,3 +6691,37 @@ msgstr "Test-Ausgabe.%s"
 msgid "Print to Test Printer"
 msgstr "Mit Test-Drucker drucken"
 
+#~ msgid "Error launching preview"
+#~ msgstr "Fehler beim Aufrufen der Druckvorschau"
+
+#~ msgid "Changes are applied instantly, only for this selected widget."
+#~ msgstr "Änderungen werden sofort und nur für das gewählte Widget umgesetzt."
+
+#~ msgid "Change name"
+#~ msgstr "Namen ändern"
+
+#~ msgid "Change classes"
+#~ msgstr "Klassen ändern"
+
+# Auch wenn im Original die Tastenkürzel kollidieren (_Preferences),
+# wir verwenden Ei_genschaften.
+#~ msgid "CSS properties"
+#~ msgstr "CSS-Eigenschaften"
+
+# CHECK
+#~ msgid "Show all CSS nodes"
+#~ msgstr "Alle CSS-Knoten anzeigen"
+
+# Auch wenn im Original die Tastenkürzel kollidieren (_Preferences),
+# wir verwenden Ei_genschaften.
+#~ msgid "Show CSS properties"
+#~ msgstr "CSS-Eigenschaften anzeigen"
+
+#~ msgid "Classes"
+#~ msgstr "Klassen"
+
+#~ msgid "Node:"
+#~ msgstr "Knoten:"
+
+#~ msgid "Hierarchy"
+#~ msgstr "Hierarchie"
