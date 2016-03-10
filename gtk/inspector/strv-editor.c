@@ -21,6 +21,8 @@
 #include "strv-editor.h"
 #include "gtkbutton.h"
 #include "gtkentry.h"
+#include "gtkbox.h"
+#include "gtkstylecontext.h"
 #include "gtkorientable.h"
 #include "gtkmarshalers.h"
 
@@ -60,6 +62,7 @@ add_string (GtkInspectorStrvEditor *editor,
   GtkWidget *button;
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_style_context_add_class (gtk_widget_get_style_context (box), "linked");
   gtk_widget_show (box);
 
   entry = gtk_entry_new ();
@@ -70,6 +73,7 @@ add_string (GtkInspectorStrvEditor *editor,
   g_signal_connect_swapped (entry, "notify::text", G_CALLBACK (emit_changed), editor);
 
   button = gtk_button_new_from_icon_name ("user-trash-symbolic", GTK_ICON_SIZE_MENU);
+  gtk_style_context_add_class (gtk_widget_get_style_context (button), "image-button");
   gtk_widget_show (button);
   gtk_box_pack_start (GTK_BOX (box), button, FALSE, FALSE, 0);
   g_signal_connect (button, "clicked", G_CALLBACK (remove_string), editor);
@@ -91,11 +95,13 @@ add_cb (GtkButton              *button,
 static void
 gtk_inspector_strv_editor_init (GtkInspectorStrvEditor *editor)
 {
+  gtk_box_set_spacing (GTK_BOX (editor), 6);
   gtk_orientable_set_orientation (GTK_ORIENTABLE (editor), GTK_ORIENTATION_VERTICAL);
-  editor->box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+  editor->box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
   gtk_widget_show (editor->box);
 
   editor->button = gtk_button_new_from_icon_name ("list-add-symbolic", GTK_ICON_SIZE_MENU);
+  gtk_style_context_add_class (gtk_widget_get_style_context (editor->button), "image-button");
   gtk_widget_set_focus_on_click (editor->button, FALSE);
   gtk_widget_set_halign (editor->button, GTK_ALIGN_END);
   gtk_widget_show (editor->button);
