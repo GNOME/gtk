@@ -6,6 +6,7 @@
       <column type="gchararray"/>
       <column type="gchararray"/>
       <column type="gchararray"/>
+      <column type="gchararray"/>
       <column type="gboolean"/>
       <column type="gchararray"/>
     </columns>
@@ -23,7 +24,7 @@
           <object class="GtkTreeView" id="tree">
             <property name="visible">True</property>
             <property name="model">model</property>
-            <property name="tooltip-column">3</property>
+            <property name="tooltip-column">4</property>
             <property name="search-column">0</property>
             <property name="enable-search">True</property>
             <property name="enable-grid-lines">vertical</property>
@@ -39,7 +40,7 @@
                   </object>
                   <attributes>
                     <attribute name="text">0</attribute>
-                    <attribute name="sensitive">4</attribute>
+                    <attribute name="sensitive">5</attribute>
                   </attributes>
                 </child>
               </object>
@@ -57,7 +58,25 @@
                   </object>
                   <attributes>
                     <attribute name="text">1</attribute>
-                    <attribute name="sensitive">4</attribute>
+                    <attribute name="sensitive">5</attribute>
+                  </attributes>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn">
+                <property name="title" translatable="yes">Type</property>
+                <property name="resizable">True</property>
+                <child>
+                  <object class="GtkCellRendererText">
+                    <property name="scale">0.8</property>
+                    <property name="editable">False</property>
+                    <property name="width-chars">20</property>
+                    <property name="ellipsize">end</property>
+                  </object>
+                  <attributes>
+                    <attribute name="text">2</attribute>
+                    <attribute name="sensitive">5</attribute>
                   </attributes>
                 </child>
               </object>
@@ -72,8 +91,8 @@
                     <property name="editable">False</property>
                   </object>
                   <attributes>
-                    <attribute name="text">5</attribute>
-                    <attribute name="sensitive">4</attribute>
+                    <attribute name="text">6</attribute>
+                    <attribute name="sensitive">5</attribute>
                   </attributes>
                 </child>
               </object>
@@ -87,8 +106,8 @@
                     <property name="scale">0.8</property>
                   </object>
                   <attributes>
-                    <attribute name="text">2</attribute>
-                    <attribute name="sensitive">4</attribute>
+                    <attribute name="text">3</attribute>
+                    <attribute name="sensitive">5</attribute>
                   </attributes>
                 </child>
               </object>

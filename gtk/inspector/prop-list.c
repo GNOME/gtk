@@ -41,6 +41,7 @@ enum
 {
   COLUMN_NAME,
   COLUMN_VALUE,
+  COLUMN_TYPE,
   COLUMN_DEFINED_AT,
   COLUMN_TOOLTIP,
   COLUMN_WRITABLE,
@@ -300,13 +301,116 @@ gtk_inspector_prop_list_class_init (GtkInspectorPropListClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, hierarchy_changed);
 }
 
+/* Like g_strdup_value_contents, but keeps the type name separate */
+static void
+strdup_value_contents (const GValue  *value,
+                       gchar        **contents,
+                       gchar        **type)
+{
+  const gchar *src;
+
+  if (G_VALUE_HOLDS_STRING (value))
+    {
+      src = g_value_get_string (value);
+
+      *type = g_strdup ("char*");
+
+      if (!src)
+        {
+          *contents = g_strdup ("NULL");
+        }
+      else
+        {
+          gchar *s = g_strescape (src, NULL);
+          *contents = g_strdup_printf ("\"%s\"", s);
+          g_free (s);
+        }
+    }
+  else if (g_value_type_transformable (G_VALUE_TYPE (value), G_TYPE_STRING))
+    {
+      GValue tmp_value = G_VALUE_INIT;
+
+      *type = g_strdup (g_type_name (G_VALUE_TYPE (value)));
+
+      g_value_init (&tmp_value, G_TYPE_STRING);
+      g_value_transform (value, &tmp_value);
+      src = g_value_get_string (&tmp_value);
+      if (!src)
+        *contents = g_strdup ("NULL");
+      else
+        *contents = g_strescape (src, NULL);
+      g_value_unset (&tmp_value);
+    }
+  else if (g_value_fits_pointer (value))
+    {
+      gpointer p = g_value_peek_pointer (value);
+
+      if (!p)
+        {
+          *type = g_strdup (g_type_name (G_VALUE_TYPE (value)));
+          *contents = g_strdup ("NULL");
+        }
+      else if (G_VALUE_HOLDS_OBJECT (value))
+        {
+          *type = g_strdup (G_OBJECT_TYPE_NAME (p));
+          *contents = g_strdup_printf ("%p", p);
+        }
+      else if (G_VALUE_HOLDS_PARAM (value))
+        {
+          *type = g_strdup (G_PARAM_SPEC_TYPE_NAME (p));
+          *contents = g_strdup_printf ("%p", p);
+        }
+      else if (G_VALUE_HOLDS (value, G_TYPE_STRV))
+        {
+          GStrv strv = g_value_get_boxed (value);
+          GString *tmp = g_string_new ("[");
+
+          while (*strv != NULL)
+            {
+              gchar *escaped = g_strescape (*strv, NULL);
+
+              g_string_append_printf (tmp, "\"%s\"", escaped);
+              g_free (escaped);
+
+              if (*++strv != NULL)
+                g_string_append (tmp, ", ");
+            }
+
+          g_string_append (tmp, "]");
+          *type = g_strdup ("char**");
+          *contents = g_string_free (tmp, FALSE);
+        }
+      else if (G_VALUE_HOLDS_BOXED (value))
+        {
+          *type = g_strdup (g_type_name (G_VALUE_TYPE (value)));
+          *contents = g_strdup_printf ("%p", p);
+        }
+      else if (G_VALUE_HOLDS_POINTER (value))
+        {
+          *type = g_strdup ("gpointer");
+          *contents = g_strdup_printf ("%p", p);
+        }
+      else
+        {
+          *type = g_strdup ("???");
+          *contents = g_strdup ("???");
+        }
+    }
+  else
+    {
+      *type = g_strdup ("???");
+      *contents = g_strdup ("???");
+    }
+}
+
 static void
 gtk_inspector_prop_list_update_prop (GtkInspectorPropList *pl,
                                      GtkTreeIter          *iter,
                                      GParamSpec           *prop)
 {
   GValue gvalue = {0};
-  gchar *value = NULL;
+  gchar *value;
+  gchar *type;
   gchar *attribute = NULL;
 
   g_value_init (&gvalue, prop->value_type);
@@ -322,17 +426,7 @@ gtk_inspector_prop_list_update_prop (GtkInspectorPropList *pl,
   else
     g_object_get_property (pl->priv->object, prop->name, &gvalue);
 
-  if (G_VALUE_HOLDS_ENUM (&gvalue))
-    {
-      GEnumClass *enum_class = G_PARAM_SPEC_ENUM (prop)->enum_class;
-      GEnumValue *enum_value = g_enum_get_value (enum_class, g_value_get_enum (&gvalue));
-
-      value = g_strdup (enum_value->value_name);
-    }
-  else
-    {
-      value = g_strdup_value_contents (&gvalue);
-    }
+  strdup_value_contents (&gvalue, &value, &type);
 
   if (GTK_IS_CELL_RENDERER (pl->priv->object))
     {
@@ -356,6 +450,7 @@ gtk_inspector_prop_list_update_prop (GtkInspectorPropList *pl,
   gtk_list_store_set (pl->priv->model, iter,
                       COLUMN_NAME, prop->name,
                       COLUMN_VALUE, value ? value : "",
+                      COLUMN_TYPE, type ? type : "",
                       COLUMN_DEFINED_AT, g_type_name (prop->owner_type),
                       COLUMN_TOOLTIP, g_param_spec_get_blurb (prop),
                       COLUMN_WRITABLE, (prop->flags & G_PARAM_WRITABLE) != 0,
@@ -363,6 +458,7 @@ gtk_inspector_prop_list_update_prop (GtkInspectorPropList *pl,
                       -1);
 
   g_free (value);
+  g_free (type);
   g_free (attribute);
   g_value_unset (&gvalue);
 }
