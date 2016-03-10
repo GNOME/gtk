@@ -19,8 +19,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-07 00:21+0000\n"
-"PO-Revision-Date: 2016-03-07 11:48+0100\n"
+"POT-Creation-Date: 2016-03-10 12:22+0000\n"
+"PO-Revision-Date: 2016-03-10 18:19+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -218,8 +218,8 @@ msgid "The cell renderer represented by this accessible"
 msgstr "La renderización de la celda representada por este accesible"
 
 #: gtk/deprecated/gtkaction.c:243 gtk/deprecated/gtkactiongroup.c:200
-#: gtk/deprecated/gtkthemingengine.c:247 gtk/gtkprinter.c:121
-#: gtk/gtkstack.c:513 gtk/gtktextmark.c:136
+#: gtk/deprecated/gtkthemingengine.c:247 gtk/gtkcssnode.c:626
+#: gtk/gtkprinter.c:121 gtk/gtkstack.c:513 gtk/gtktextmark.c:136
 msgid "Name"
 msgstr "Nombre"
 
@@ -355,8 +355,8 @@ msgid "Whether the action is enabled."
 msgstr "Indica si la acción está activada."
 
 #: gtk/deprecated/gtkaction.c:481 gtk/deprecated/gtkactiongroup.c:228
-#: gtk/deprecated/gtkstatusicon.c:307 gtk/gtknativedialog.c:242
-#: gtk/gtktreeviewcolumn.c:246 gtk/gtkwidget.c:1157
+#: gtk/deprecated/gtkstatusicon.c:307 gtk/gtkcssnode.c:637
+#: gtk/gtknativedialog.c:242 gtk/gtktreeviewcolumn.c:246 gtk/gtkwidget.c:1157
 msgid "Visible"
 msgstr "Visible"
 
@@ -1305,16 +1305,18 @@ msgid "The widget referenced by this accessible."
 msgstr "El widget referenciado por este accesible"
 
 #: gtk/gtkactionable.c:71
-msgid "action name"
-msgstr "nombre de la acción"
+#| msgid "action name"
+msgid "Action name"
+msgstr "Nombre de la acción"
 
 #: gtk/gtkactionable.c:72
 msgid "The name of the associated action, like 'app.quit'"
 msgstr "El nombre de la acción seleccionada, por ejemplo «app.quit»"
 
 #: gtk/gtkactionable.c:76
-msgid "action target value"
-msgstr "acción del valor objetivo"
+#| msgid "action target value"
+msgid "Action target value"
+msgstr "Acción del valor objetivo"
 
 #: gtk/gtkactionable.c:77
 msgid "The parameter for action invocations"
@@ -3176,6 +3178,46 @@ msgstr "Hijo"
 msgid "Can be used to add a new child to the container"
 msgstr "Puede usarse para añadir un hijo nuevo al contenedor"
 
+#: gtk/gtkcssnode.c:616
+msgid "Style Classes"
+msgstr "Clases de estilo"
+
+#: gtk/gtkcssnode.c:616
+#| msgid "List of icon names"
+msgid "List of classes"
+msgstr "Lista de clases"
+
+#: gtk/gtkcssnode.c:621 gtk/gtkcssstyleproperty.c:223
+msgid "ID"
+msgstr "ID"
+
+#: gtk/gtkcssnode.c:621
+msgid "Unique ID"
+msgstr "ID único"
+
+#: gtk/gtkcssnode.c:631 gtk/gtkswitch.c:910
+msgid "State"
+msgstr "Estado"
+
+#: gtk/gtkcssnode.c:631
+#| msgid "State Message"
+msgid "State flags"
+msgstr "Indicadores de estado"
+
+#: gtk/gtkcssnode.c:637
+msgid "If other nodes can see this node"
+msgstr "Si otros nodos pueden ver este nodo"
+
+#: gtk/gtkcssnode.c:642
+#| msgid "Widget name"
+msgid "Widget type"
+msgstr "Tipo de widget"
+
+#: gtk/gtkcssnode.c:642
+#| msgid "The name of the widget"
+msgid "GType of the widget"
+msgstr "GType del widget"
+
 #: gtk/gtkcssshorthandproperty.c:170
 msgid "Subproperties"
 msgstr "Subpropiedades"
@@ -3199,10 +3241,6 @@ msgstr "Afecta a"
 #: gtk/gtkcssstyleproperty.c:216
 msgid "Set if the value affects the sizing of elements"
 msgstr "Establecer si el valor afecta al tamaño de los elementos"
-
-#: gtk/gtkcssstyleproperty.c:223
-msgid "ID"
-msgstr "ID"
 
 #: gtk/gtkcssstyleproperty.c:224
 msgid "The numeric id for quick access"
@@ -7426,7 +7464,6 @@ msgstr ""
 "larga (en milisegundos)"
 
 #: gtk/gtksettings.c:1739 gtk/gtksettings.c:1740
-#| msgid "Whether to show a sort indicator"
 msgid "Whether to show cursor in text"
 msgstr "Indica si se debe mostrar el cursor en el texto"
 
@@ -7665,7 +7702,8 @@ msgid "Whether this page needs attention"
 msgstr "Indica si la página necesita atención"
 
 #: gtk/gtkstacksidebar.c:449 gtk/gtkstackswitcher.c:582
-#: gtk/gtkstackswitcher.c:583
+#: gtk/gtkstackswitcher.c:583 gtk/inspector/gtkstackcombo.c:232
+#: gtk/inspector/gtkstackcombo.c:233
 msgid "Stack"
 msgstr "Pila"
 
@@ -7720,10 +7758,6 @@ msgstr "El tipo de valor devuelto por GtkStyleContext"
 #: gtk/gtkswitch.c:896
 msgid "Whether the switch is on or off"
 msgstr "Indica si el interruptor está encendido o apagado"
-
-#: gtk/gtkswitch.c:910
-msgid "State"
-msgstr "Estado"
 
 #: gtk/gtkswitch.c:911
 msgid "The backend state"
