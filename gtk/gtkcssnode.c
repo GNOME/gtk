@@ -613,39 +613,33 @@ gtk_css_node_class_init (GtkCssNodeClass *klass)
 		  G_TYPE_POINTER);
 
   cssnode_properties[PROP_CLASSES] =
-    g_param_spec_boxed ("classes", "Classes",
-                         "List of classes",
+    g_param_spec_boxed ("classes", P_("Style Classes"), P_("List of classes"),
                          G_TYPE_STRV,
                          G_PARAM_READWRITE
                          | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
   cssnode_properties[PROP_ID] =
-    g_param_spec_string ("id", "ID",
-                         "Unique ID",
+    g_param_spec_string ("id", P_("ID"), P_("Unique ID"),
                          NULL,
                          G_PARAM_READWRITE
                          | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
   cssnode_properties[PROP_NAME] =
-    g_param_spec_string ("name", "Name",
-                         "Name identifying the type of node",
+    g_param_spec_string ("name", P_("Name"), "Name identifying the type of node",
                          NULL,
                          G_PARAM_READWRITE
                          | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
   cssnode_properties[PROP_STATE] =
-    g_param_spec_flags ("state", "State",
-                        "State flags",
+    g_param_spec_flags ("state", P_("State"), P_("State flags"),
                         GTK_TYPE_STATE_FLAGS,
                         0,
                         G_PARAM_READWRITE
                         | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
   cssnode_properties[PROP_VISIBLE] =
-    g_param_spec_boolean ("visible", "Visible",
-                          "If other nodes can see this node",
+    g_param_spec_boolean ("visible", P_("Visible"), P_("If other nodes can see this node"),
                           TRUE,
                           G_PARAM_READWRITE
                           | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
   cssnode_properties[PROP_WIDGET_TYPE] =
-    g_param_spec_gtype ("widget-type", "Widget type",
-                        "GType of the widget",
+    g_param_spec_gtype ("widget-type", P_("Widget type"), P_("GType of the widget"),
                         G_TYPE_NONE,
                         G_PARAM_READWRITE
                         | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);

@@ -62,7 +62,7 @@
                 <child>
                   <object class="GtkTreeViewColumn" id="node_classes_column">
                     <property name="resizable">1</property>
-                    <property name="title" translatable="yes">Classes</property>
+                    <property name="title" translatable="yes">Style Classes</property>
                     <child>
                       <object class="GtkCellRendererText"/>
                       <attributes>
