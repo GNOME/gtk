@@ -103,7 +103,8 @@ static void set_complete_on_load (GtkFileChooserEntry *chooser_entry,
                                   gboolean             complete_on_load);
 static void refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry);
 static void set_completion_folder (GtkFileChooserEntry *chooser_entry,
-                                   GFile               *folder);
+                                   GFile               *folder,
+				   char                *dir_part);
 static void finished_loading_cb (GtkFileSystemModel  *model,
                                  GError              *error,
 		                 GtkFileChooserEntry *chooser_entry);
@@ -234,7 +235,7 @@ gtk_file_chooser_entry_dispose (GObject *object)
 {
   GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (object);
 
-  set_completion_folder (chooser_entry, NULL);
+  set_completion_folder (chooser_entry, NULL, NULL);
 
   G_OBJECT_CLASS (_gtk_file_chooser_entry_parent_class)->dispose (object);
 }
@@ -360,7 +361,7 @@ explicitly_complete (GtkFileChooserEntry *chooser_entry)
     {
       char *completion, *text;
       gsize completion_len, text_len;
-      
+
       text = gtk_file_chooser_entry_get_completion_text (chooser_entry);
       text_len = strlen (text);
       completion = _gtk_entry_completion_compute_prefix (gtk_entry_get_completion (GTK_ENTRY (chooser_entry)), text);
@@ -502,11 +503,11 @@ completion_store_set (GtkFileSystemModel  *model,
       if (_gtk_file_info_consider_as_directory (info))
         suffix = G_DIR_SEPARATOR_S;
 
-      g_value_take_string (value, g_strconcat (
-              prefix,
-              g_file_info_get_display_name (info),
-              suffix,
-              NULL));
+      g_value_take_string (value,
+			   g_strconcat (prefix,
+					g_file_info_get_display_name (info),
+					suffix,
+					NULL));
       break;
     default:
       g_assert_not_reached ();
@@ -577,24 +578,31 @@ finished_loading_cb (GtkFileSystemModel  *model,
 
 static void
 set_completion_folder (GtkFileChooserEntry *chooser_entry,
-                       GFile               *folder_file)
+                       GFile               *folder_file,
+		       char                *dir_part)
 {
   if (folder_file &&
       chooser_entry->local_only
       && !_gtk_file_has_native_path (folder_file))
     folder_file = NULL;
 
-  if ((chooser_entry->current_folder_file
-       && folder_file
-       && g_file_equal (folder_file, chooser_entry->current_folder_file))
-      || chooser_entry->current_folder_file == folder_file)
-    return;
+  if (((chooser_entry->current_folder_file
+	&& folder_file
+	&& g_file_equal (folder_file, chooser_entry->current_folder_file))
+       || chooser_entry->current_folder_file == folder_file)
+      && g_strcmp0 (dir_part, chooser_entry->dir_part) == 0)
+    {
+      return;
+    }
 
   if (chooser_entry->current_folder_file)
     {
       g_object_unref (chooser_entry->current_folder_file);
       chooser_entry->current_folder_file = NULL;
     }
+
+  g_free (chooser_entry->dir_part);
+  chooser_entry->dir_part = g_strdup (dir_part);
   
   chooser_entry->current_folder_loaded = FALSE;
 
@@ -612,26 +620,26 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry)
 {
   GFile *folder_file;
   char *text, *last_slash, *old_file_part;
+  char *dir_part;
 
   old_file_part = chooser_entry->file_part;
-  g_free (chooser_entry->dir_part);
 
   text = gtk_file_chooser_entry_get_completion_text (chooser_entry);
 
   last_slash = strrchr (text, G_DIR_SEPARATOR);
   if (last_slash)
     {
-      chooser_entry->dir_part = g_strndup (text, last_slash - text + 1);
+      dir_part = g_strndup (text, last_slash - text + 1);
       chooser_entry->file_part = g_strdup (last_slash + 1);
     }
   else
     {
-      chooser_entry->dir_part = g_strdup ("");
+      dir_part = g_strdup ("");
       chooser_entry->file_part = g_strdup (text);
     }
 
   folder_file = gtk_file_chooser_get_directory_for_text (chooser_entry, text);
-  set_completion_folder (chooser_entry, folder_file);
+  set_completion_folder (chooser_entry, folder_file, dir_part);
   if (folder_file)
     g_object_unref (folder_file);
 
