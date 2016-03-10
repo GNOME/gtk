@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-10 00:32+0000\n"
-"PO-Revision-Date: 2016-03-10 08:47+0200\n"
+"POT-Creation-Date: 2016-03-10 10:40+0000\n"
+"PO-Revision-Date: 2016-03-10 11:53+0200\n"
 "Last-Translator: Miroslav Nikolić <miroslavnikolic@rocketmail.com>\n"
 "Language-Team: Serbian <(nothing)>\n"
 "Language: sr\n"
@@ -1276,16 +1276,18 @@ msgid "The widget referenced by this accessible."
 msgstr "Element na koji ukazuje ovaj pristupni."
 
 #: gtk/gtkactionable.c:71
-msgid "action name"
-msgstr "naziv radnje"
+#| msgid "action name"
+msgid "Action name"
+msgstr "Naziv radnje"
 
 #: gtk/gtkactionable.c:72
 msgid "The name of the associated action, like 'app.quit'"
 msgstr "Naziv pripadajuće radnje, kao „app.quit“"
 
 #: gtk/gtkactionable.c:76
-msgid "action target value"
-msgstr "vrednost mete radnje"
+#| msgid "action target value"
+msgid "Action target value"
+msgstr "Vrednost mete radnje"
 
 #: gtk/gtkactionable.c:77
 msgid "The parameter for action invocations"
@@ -3141,7 +3143,6 @@ msgid "Style Classes"
 msgstr "Razredi stila"
 
 #: gtk/gtkcssnode.c:616
-#| msgid "List of icon names"
 msgid "List of classes"
 msgstr "Spisak razreda"
 
@@ -3158,7 +3159,6 @@ msgid "State"
 msgstr "Stanje"
 
 #: gtk/gtkcssnode.c:631
-#| msgid "State Message"
 msgid "State flags"
 msgstr "Zastavica stanja"
 
@@ -3167,12 +3167,10 @@ msgid "If other nodes can see this node"
 msgstr "Da li ostali čvorovi mogu da vide ovaj čvor"
 
 #: gtk/gtkcssnode.c:642
-#| msgid "Widget name"
 msgid "Widget type"
 msgstr "Vrsta elementa"
 
 #: gtk/gtkcssnode.c:642
-#| msgid "The name of the widget"
 msgid "GType of the widget"
 msgstr "Gvrsta elementa"
 
