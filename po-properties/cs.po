@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-08 12:21+0000\n"
-"PO-Revision-Date: 2016-03-08 18:52+0100\n"
+"POT-Creation-Date: 2016-03-10 05:05+0000\n"
+"PO-Revision-Date: 2016-03-10 10:46+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -214,8 +214,8 @@ msgid "The cell renderer represented by this accessible"
 msgstr "Vykreslování buňky reprezentované tímto dostupným prvkem"
 
 #: gtk/deprecated/gtkaction.c:243 gtk/deprecated/gtkactiongroup.c:200
-#: gtk/deprecated/gtkthemingengine.c:247 gtk/gtkprinter.c:121
-#: gtk/gtkstack.c:513 gtk/gtktextmark.c:136
+#: gtk/deprecated/gtkthemingengine.c:247 gtk/gtkcssnode.c:626
+#: gtk/gtkprinter.c:121 gtk/gtkstack.c:513 gtk/gtktextmark.c:136
 msgid "Name"
 msgstr "Název"
 
@@ -344,8 +344,8 @@ msgid "Whether the action is enabled."
 msgstr "Jestli je akce povolena."
 
 #: gtk/deprecated/gtkaction.c:481 gtk/deprecated/gtkactiongroup.c:228
-#: gtk/deprecated/gtkstatusicon.c:307 gtk/gtknativedialog.c:242
-#: gtk/gtktreeviewcolumn.c:246 gtk/gtkwidget.c:1157
+#: gtk/deprecated/gtkstatusicon.c:307 gtk/gtkcssnode.c:637
+#: gtk/gtknativedialog.c:242 gtk/gtktreeviewcolumn.c:246 gtk/gtkwidget.c:1157
 msgid "Visible"
 msgstr "Viditelný"
 
@@ -1275,16 +1275,18 @@ msgid "The widget referenced by this accessible."
 msgstr "Widget odkazovaný tímto dostupným prvkem."
 
 #: gtk/gtkactionable.c:71
-msgid "action name"
-msgstr "název akce"
+#| msgid "action name"
+msgid "Action name"
+msgstr "Název činnosti"
 
 #: gtk/gtkactionable.c:72
 msgid "The name of the associated action, like 'app.quit'"
 msgstr "Název asociované akce, např. „app.quit“"
 
 #: gtk/gtkactionable.c:76
-msgid "action target value"
-msgstr "cílová hodnota akce"
+#| msgid "action target value"
+msgid "Action target value"
+msgstr "Cílová hodnota činnosti"
 
 #: gtk/gtkactionable.c:77
 msgid "The parameter for action invocations"
@@ -3124,6 +3126,46 @@ msgstr "Potomek"
 msgid "Can be used to add a new child to the container"
 msgstr "Dá se použít pro přidání potomka do kontejneru"
 
+#: gtk/gtkcssnode.c:616
+msgid "Style Classes"
+msgstr "Třída stylu"
+
+#: gtk/gtkcssnode.c:616
+#| msgid "List of icon names"
+msgid "List of classes"
+msgstr "Seznam tříd"
+
+#: gtk/gtkcssnode.c:621 gtk/gtkcssstyleproperty.c:223
+msgid "ID"
+msgstr "ID"
+
+#: gtk/gtkcssnode.c:621
+msgid "Unique ID"
+msgstr "Jedinečný identifikátor"
+
+#: gtk/gtkcssnode.c:631 gtk/gtkswitch.c:910
+msgid "State"
+msgstr "Stav"
+
+#: gtk/gtkcssnode.c:631
+#| msgid "State Message"
+msgid "State flags"
+msgstr "Příznak stav"
+
+#: gtk/gtkcssnode.c:637
+msgid "If other nodes can see this node"
+msgstr "Jestli ostatní uzly mohou vidět tento uzel"
+
+#: gtk/gtkcssnode.c:642
+#| msgid "Widget name"
+msgid "Widget type"
+msgstr "Typ widgetu"
+
+#: gtk/gtkcssnode.c:642
+#| msgid "The name of the widget"
+msgid "GType of the widget"
+msgstr "GType widgetu"
+
 #: gtk/gtkcssshorthandproperty.c:170
 msgid "Subproperties"
 msgstr "Podvlastnosti"
@@ -3147,10 +3189,6 @@ msgstr "Ovlivňuje"
 #: gtk/gtkcssstyleproperty.c:216
 msgid "Set if the value affects the sizing of elements"
 msgstr "Nastaveno v případě, že hodnota ovlivňuje velikost prvků"
-
-#: gtk/gtkcssstyleproperty.c:223
-msgid "ID"
-msgstr "ID"
 
 #: gtk/gtkcssstyleproperty.c:224
 msgid "The numeric id for quick access"
@@ -7553,10 +7591,6 @@ msgstr "Typ hodnoty vracený objektem GtkStyleContext"
 #: gtk/gtkswitch.c:896
 msgid "Whether the switch is on or off"
 msgstr "Jestli je přepínač zapnut nebo vypnut"
-
-#: gtk/gtkswitch.c:910
-msgid "State"
-msgstr "Stav"
 
 #: gtk/gtkswitch.c:911
 msgid "The backend state"
