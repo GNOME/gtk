@@ -639,9 +639,13 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry)
     }
 
   folder_file = gtk_file_chooser_get_directory_for_text (chooser_entry, text);
+
   set_completion_folder (chooser_entry, folder_file, dir_part);
+
   if (folder_file)
     g_object_unref (folder_file);
+
+  g_free (dir_part);
 
   if (chooser_entry->completion_store &&
       (g_strcmp0 (old_file_part, chooser_entry->file_part) != 0))
