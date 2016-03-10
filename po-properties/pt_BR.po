@@ -20,16 +20,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-05 18:45+0000\n"
-"PO-Revision-Date: 2016-03-05 15:54-0300\n"
-"Last-Translator: Rafael Fontenelle <rffontenelle@gmail.com>\n"
+"POT-Creation-Date: 2016-03-10 12:36+0000\n"
+"PO-Revision-Date: 2016-03-10 09:40-0300\n"
+"Last-Translator: Artur de Aquino Morais <artur.morais93@outlook.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 1.8.7\n"
+"X-Generator: Poedit 1.8.4\n"
 
 #: gdk/gdkapplaunchcontext.c:127 gdk/gdkcursor.c:139 gdk/gdkdevicemanager.c:181
 #: gdk/gdkglcontext.c:265 gdk/gdkseat.c:158 gdk/gdkseat.c:159
@@ -217,8 +217,8 @@ msgid "The cell renderer represented by this accessible"
 msgstr "O renderizador de célula representado por este objeto acessível"
 
 #: gtk/deprecated/gtkaction.c:243 gtk/deprecated/gtkactiongroup.c:200
-#: gtk/deprecated/gtkthemingengine.c:247 gtk/gtkprinter.c:121
-#: gtk/gtkstack.c:513 gtk/gtktextmark.c:136
+#: gtk/deprecated/gtkthemingengine.c:247 gtk/gtkcssnode.c:626
+#: gtk/gtkprinter.c:121 gtk/gtkstack.c:513 gtk/gtktextmark.c:136
 msgid "Name"
 msgstr "Nome"
 
@@ -348,8 +348,8 @@ msgid "Whether the action is enabled."
 msgstr "Se a ação está habilitada."
 
 #: gtk/deprecated/gtkaction.c:481 gtk/deprecated/gtkactiongroup.c:228
-#: gtk/deprecated/gtkstatusicon.c:307 gtk/gtknativedialog.c:242
-#: gtk/gtktreeviewcolumn.c:246 gtk/gtkwidget.c:1157
+#: gtk/deprecated/gtkstatusicon.c:307 gtk/gtkcssnode.c:637
+#: gtk/gtknativedialog.c:242 gtk/gtktreeviewcolumn.c:246 gtk/gtkwidget.c:1157
 msgid "Visible"
 msgstr "Visível"
 
@@ -663,8 +663,8 @@ msgid ""
 "A boolean value indicating whether the handlebox's child is attached or "
 "detached."
 msgstr ""
-"Um valor booleano indicando se a filha da caixa de manipulação está "
-"anexada ou desanexada."
+"Um valor booleano indicando se a filha da caixa de manipulação está anexada "
+"ou desanexada."
 
 #: gtk/deprecated/gtkimagemenuitem.c:226 gtk/gtkbutton.c:360
 msgid "Image widget"
@@ -1285,16 +1285,16 @@ msgid "The widget referenced by this accessible."
 msgstr "O componente referenciado por este objeto acessível."
 
 #: gtk/gtkactionable.c:71
-msgid "action name"
-msgstr "nome da ação"
+msgid "Action name"
+msgstr "Nome da ação"
 
 #: gtk/gtkactionable.c:72
 msgid "The name of the associated action, like 'app.quit'"
 msgstr "O nome da ação associada, exemplo \"app.quit\""
 
 #: gtk/gtkactionable.c:76
-msgid "action target value"
-msgstr "valor alvo da ação"
+msgid "Action target value"
+msgstr "Valor alvo da ação"
 
 #: gtk/gtkactionable.c:77
 msgid "The parameter for action invocations"
@@ -2349,7 +2349,7 @@ msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
 msgstr "O alinhamento vertical do texto, de 0 (topo) até 1 (base)."
 
 #: gtk/gtkcellrendererprogress.c:226 gtk/gtklevelbar.c:1087
-#: gtk/gtkmodelbutton.c:1178 gtk/gtkprogressbar.c:260 gtk/gtkrange.c:461
+#: gtk/gtkmodelbutton.c:1178 gtk/gtkprogressbar.c:260 gtk/gtkrange.c:462
 msgid "Inverted"
 msgstr "Invertido"
 
@@ -2357,7 +2357,7 @@ msgstr "Invertido"
 msgid "Invert the direction in which the progress bar grows"
 msgstr "Inverter a direção de crescimento da barra de progresso"
 
-#: gtk/gtkcellrendererspin.c:113 gtk/gtkrange.c:454 gtk/gtkscalebutton.c:215
+#: gtk/gtkcellrendererspin.c:113 gtk/gtkrange.c:455 gtk/gtkscalebutton.c:215
 #: gtk/gtkspinbutton.c:376
 msgid "Adjustment"
 msgstr "Ajustamento"
@@ -2374,7 +2374,7 @@ msgstr "Taxa de aumento"
 msgid "The acceleration rate when you hold down a button"
 msgstr "O taxa de aceleração quando você obtém um botão pressionado"
 
-#: gtk/gtkcellrendererspin.c:143 gtk/gtkscale.c:645 gtk/gtkspinbutton.c:392
+#: gtk/gtkcellrendererspin.c:143 gtk/gtkscale.c:743 gtk/gtkspinbutton.c:392
 msgid "Digits"
 msgstr "Dígitos"
 
@@ -3145,6 +3145,42 @@ msgstr "Filho"
 msgid "Can be used to add a new child to the container"
 msgstr "Pode ser usado para adicionar novos filhos ao container"
 
+#: gtk/gtkcssnode.c:616
+msgid "Style Classes"
+msgstr "Estilo de classes"
+
+#: gtk/gtkcssnode.c:616
+msgid "List of classes"
+msgstr "Lista de classes"
+
+#: gtk/gtkcssnode.c:621 gtk/gtkcssstyleproperty.c:223
+msgid "ID"
+msgstr "ID"
+
+#: gtk/gtkcssnode.c:621
+msgid "Unique ID"
+msgstr "ID único"
+
+#: gtk/gtkcssnode.c:631 gtk/gtkswitch.c:910
+msgid "State"
+msgstr "Estado"
+
+#: gtk/gtkcssnode.c:631
+msgid "State flags"
+msgstr "Opções de estado"
+
+#: gtk/gtkcssnode.c:637
+msgid "If other nodes can see this node"
+msgstr "Se outros nós pode ver este nó"
+
+#: gtk/gtkcssnode.c:642
+msgid "Widget type"
+msgstr "Tipo do componente"
+
+#: gtk/gtkcssnode.c:642
+msgid "GType of the widget"
+msgstr "GType do componente"
+
 #: gtk/gtkcssshorthandproperty.c:170
 msgid "Subproperties"
 msgstr "Subpropriedades"
@@ -3168,10 +3204,6 @@ msgstr "Afeta"
 #: gtk/gtkcssstyleproperty.c:216
 msgid "Set if the value affects the sizing of elements"
 msgstr "Define se o valor afeta o tamanho de elementos"
-
-#: gtk/gtkcssstyleproperty.c:223
-msgid "ID"
-msgstr "ID"
 
 #: gtk/gtkcssstyleproperty.c:224
 msgid "The numeric id for quick access"
@@ -6094,21 +6126,21 @@ msgstr "O GtkRadioMenuItem a cujo grupo este componente pertence."
 msgid "The radio tool button whose group this button belongs to."
 msgstr "O GtkRadioToolButton a cujo grupo este botão pertence."
 
-#: gtk/gtkrange.c:455
+#: gtk/gtkrange.c:456
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr "O GtkAdjustment que contém o valor atual deste objeto \"range\""
 
-#: gtk/gtkrange.c:462
+#: gtk/gtkrange.c:463
 msgid "Invert direction slider moves to increase range value"
 msgstr ""
 "Inverter direção em que o deslizador se move para aumentar o valor de \"range"
 "\""
 
-#: gtk/gtkrange.c:468
+#: gtk/gtkrange.c:469
 msgid "Lower stepper sensitivity"
 msgstr "Sensibilidade do incrementador inferior"
 
-#: gtk/gtkrange.c:469
+#: gtk/gtkrange.c:470
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
@@ -6116,11 +6148,11 @@ msgstr ""
 "A política de sensibilidade para o incrementador que aponta para o lado "
 "inferior do ajustamento"
 
-#: gtk/gtkrange.c:476
+#: gtk/gtkrange.c:477
 msgid "Upper stepper sensitivity"
 msgstr "Sensibilidade do incrementador superior"
 
-#: gtk/gtkrange.c:477
+#: gtk/gtkrange.c:478
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
@@ -6128,95 +6160,95 @@ msgstr ""
 "A política de sensibilidade para o incrementador que aponta para o lado "
 "superior do ajustamento"
 
-#: gtk/gtkrange.c:493
+#: gtk/gtkrange.c:494
 msgid "Show Fill Level"
 msgstr "Mostrar nível de preenchimento"
 
-#: gtk/gtkrange.c:494
+#: gtk/gtkrange.c:495
 msgid "Whether to display a fill level indicator graphics on trough."
 msgstr "Exibir ou não um indicador de nível de preenchimento na calha."
 
-#: gtk/gtkrange.c:509
+#: gtk/gtkrange.c:510
 msgid "Restrict to Fill Level"
 msgstr "Restringir ao nível de preenchimento"
 
-#: gtk/gtkrange.c:510
+#: gtk/gtkrange.c:511
 msgid "Whether to restrict the upper boundary to the fill level."
 msgstr "Restringir ou não o limite superior ou nível de preenchimento."
 
-#: gtk/gtkrange.c:524
+#: gtk/gtkrange.c:525
 msgid "Fill Level"
 msgstr "Nível de preenchimento"
 
-#: gtk/gtkrange.c:525
+#: gtk/gtkrange.c:526
 msgid "The fill level."
 msgstr "O nível de preenchimento."
 
-#: gtk/gtkrange.c:540
+#: gtk/gtkrange.c:541
 msgid "Round Digits"
 msgstr "Arredondar dígitos"
 
-#: gtk/gtkrange.c:541
+#: gtk/gtkrange.c:542
 msgid "The number of digits to round the value to."
 msgstr "O número de dígitos para arredondar em um valor."
 
-#: gtk/gtkrange.c:558 gtk/gtkswitch.c:945
+#: gtk/gtkrange.c:559 gtk/gtkswitch.c:945
 msgid "Slider Width"
 msgstr "Largura da barra deslizante"
 
-#: gtk/gtkrange.c:559
+#: gtk/gtkrange.c:560
 msgid "Width of scrollbar or scale thumb"
 msgstr "Largura da barra de rolagem ou indicador de escala"
 
-#: gtk/gtkrange.c:574
+#: gtk/gtkrange.c:575
 msgid "Trough Border"
 msgstr "Borda da calha"
 
-#: gtk/gtkrange.c:575
+#: gtk/gtkrange.c:576
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr "Espaçamento entre indicador/incrementadores e relevo externo da calha"
 
-#: gtk/gtkrange.c:590
+#: gtk/gtkrange.c:591
 msgid "Stepper Size"
 msgstr "Tamanho do incrementador"
 
-#: gtk/gtkrange.c:591
+#: gtk/gtkrange.c:592
 msgid "Length of step buttons at ends"
 msgstr "Tamanho dos botões de incremento nas extremidades"
 
-#: gtk/gtkrange.c:607
+#: gtk/gtkrange.c:608
 msgid "Stepper Spacing"
 msgstr "Espaçamento do incrementador"
 
-#: gtk/gtkrange.c:608
+#: gtk/gtkrange.c:609
 msgid "Spacing between step buttons and thumb"
 msgstr "Espaçamento entre os botões de incremento e o indicador"
 
-#: gtk/gtkrange.c:623
+#: gtk/gtkrange.c:624
 msgid "Arrow X Displacement"
 msgstr "Deslocamento X da seta"
 
-#: gtk/gtkrange.c:624
+#: gtk/gtkrange.c:625
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
 msgstr ""
 "A que distância na direção x mover a seta quando o botão for pressionado"
 
-#: gtk/gtkrange.c:639
+#: gtk/gtkrange.c:640
 msgid "Arrow Y Displacement"
 msgstr "Deslocamento Y da seta"
 
-#: gtk/gtkrange.c:640
+#: gtk/gtkrange.c:641
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr ""
 "A que distância na direção y mover a seta quando o botão for pressionado"
 
-#: gtk/gtkrange.c:659
+#: gtk/gtkrange.c:660
 msgid "Trough Under Steppers"
 msgstr "Calha sob os incrementadores"
 
-#: gtk/gtkrange.c:660
+#: gtk/gtkrange.c:661
 msgid ""
 "Whether to draw trough for full length of range or exclude the steppers and "
 "spacing"
@@ -6224,11 +6256,11 @@ msgstr ""
 "Desenhar calha por todo o comprimento do \"range\" ou excluir os "
 "incrementadores e espaçamento"
 
-#: gtk/gtkrange.c:676
+#: gtk/gtkrange.c:677
 msgid "Arrow scaling"
 msgstr "Escala de seta"
 
-#: gtk/gtkrange.c:677
+#: gtk/gtkrange.c:678
 msgid "Arrow scaling with regard to scroll button size"
 msgstr "Seta de dimensionamento com respeito ao tamanho do botão de rolagem"
 
@@ -6366,48 +6398,48 @@ msgstr "Ícones"
 msgid "List of icon names"
 msgstr "Lista de nomes de ícones"
 
-#: gtk/gtkscale.c:646
+#: gtk/gtkscale.c:744
 msgid "The number of decimal places that are displayed in the value"
 msgstr "O número de casas decimais exibidas no valor"
 
-#: gtk/gtkscale.c:653
+#: gtk/gtkscale.c:751
 msgid "Draw Value"
 msgstr "Mostrar valor"
 
-#: gtk/gtkscale.c:654
+#: gtk/gtkscale.c:752
 msgid "Whether the current value is displayed as a string next to the slider"
 msgstr ""
 "Se o valor atual é exibido como uma \"string\" próxima à barra de deslizar"
 
-#: gtk/gtkscale.c:660
+#: gtk/gtkscale.c:758
 msgid "Has Origin"
 msgstr "Tem origem"
 
-#: gtk/gtkscale.c:661
+#: gtk/gtkscale.c:759
 msgid "Whether the scale has an origin"
 msgstr "Se o a escala tem uma origem"
 
-#: gtk/gtkscale.c:667
+#: gtk/gtkscale.c:765
 msgid "Value Position"
 msgstr "Posição do valor"
 
-#: gtk/gtkscale.c:668
+#: gtk/gtkscale.c:766
 msgid "The position in which the current value is displayed"
 msgstr "A posição onde o valor atual é exibido"
 
-#: gtk/gtkscale.c:685
+#: gtk/gtkscale.c:783
 msgid "Slider Length"
 msgstr "Comprimento da barra deslizante"
 
-#: gtk/gtkscale.c:686
+#: gtk/gtkscale.c:784
 msgid "Length of scale's slider"
 msgstr "Comprimento da barra deslizante da escala"
 
-#: gtk/gtkscale.c:692
+#: gtk/gtkscale.c:798
 msgid "Value spacing"
 msgstr "Valor de espaçamento"
 
-#: gtk/gtkscale.c:693
+#: gtk/gtkscale.c:799
 msgid "Space between value text and the slider/trough area"
 msgstr "Espaço entre o texto do valor e a área da barra de deslizar/calha"
 
@@ -7585,7 +7617,8 @@ msgid "Whether this page needs attention"
 msgstr "Se essa página precisa de atenção"
 
 #: gtk/gtkstacksidebar.c:449 gtk/gtkstackswitcher.c:582
-#: gtk/gtkstackswitcher.c:583
+#: gtk/gtkstackswitcher.c:583 gtk/inspector/gtkstackcombo.c:232
+#: gtk/inspector/gtkstackcombo.c:233
 msgid "Stack"
 msgstr "Pilha"
 
@@ -7640,10 +7673,6 @@ msgstr "O tipo do valor retornado pelo GtkStyleContext"
 #: gtk/gtkswitch.c:896
 msgid "Whether the switch is on or off"
 msgstr "Se a alternação está ativa ou inativa"
-
-#: gtk/gtkswitch.c:910
-msgid "State"
-msgstr "Estado"
 
 #: gtk/gtkswitch.c:911
 msgid "The backend state"
