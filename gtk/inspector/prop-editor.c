@@ -1712,6 +1712,20 @@ constructed (GObject *object)
   can_modify = ((spec->flags & G_PARAM_WRITABLE) != 0 &&
                 (spec->flags & G_PARAM_CONSTRUCT_ONLY) == 0);
 
+  if ((spec->flags & G_PARAM_CONSTRUCT_ONLY) != 0)
+    label = gtk_label_new ("(construct-only)");
+  else if ((spec->flags & G_PARAM_WRITABLE) == 0)
+    label = gtk_label_new ("(not writable)");
+  else
+    label = NULL;
+
+  if (label)
+    {
+      gtk_widget_show (label);
+      gtk_style_context_add_class (gtk_widget_get_style_context (label), GTK_STYLE_CLASS_DIM_LABEL);
+      gtk_container_add (GTK_CONTAINER (editor), label);
+    }
+
   /* By reaching this, we already know the property is readable.
    * Since all we can do for a GObject is dive down into it's properties
    * and inspect bindings and such, pretend to be mutable.

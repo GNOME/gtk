@@ -412,6 +412,7 @@ gtk_inspector_prop_list_update_prop (GtkInspectorPropList *pl,
   gchar *value;
   gchar *type;
   gchar *attribute = NULL;
+  gboolean writable;
 
   g_value_init (&gvalue, prop->value_type);
   if (pl->priv->child_properties)
@@ -447,13 +448,16 @@ gtk_inspector_prop_list_update_prop (GtkInspectorPropList *pl,
          attribute = g_strdup_printf ("%d", column);
     }
 
+  writable = ((prop->flags & G_PARAM_WRITABLE) != 0) &&
+             ((prop->flags & G_PARAM_CONSTRUCT_ONLY) == 0);
+
   gtk_list_store_set (pl->priv->model, iter,
                       COLUMN_NAME, prop->name,
                       COLUMN_VALUE, value ? value : "",
                       COLUMN_TYPE, type ? type : "",
                       COLUMN_DEFINED_AT, g_type_name (prop->owner_type),
                       COLUMN_TOOLTIP, g_param_spec_get_blurb (prop),
-                      COLUMN_WRITABLE, (prop->flags & G_PARAM_WRITABLE) != 0,
+                      COLUMN_WRITABLE, writable,
                       COLUMN_ATTRIBUTE, attribute ? attribute : "",
                       -1);
 
