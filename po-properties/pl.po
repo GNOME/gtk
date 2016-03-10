@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-10 00:32+0000\n"
-"PO-Revision-Date: 2016-03-10 03:40+0100\n"
+"POT-Creation-Date: 2016-03-10 12:22+0000\n"
+"PO-Revision-Date: 2016-03-10 17:28+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -1288,16 +1288,16 @@ msgid "The widget referenced by this accessible."
 msgstr "Widżet przedstawiany przez ten obiekt dostępności."
 
 #: gtk/gtkactionable.c:71
-msgid "action name"
-msgstr "nazwa działania"
+msgid "Action name"
+msgstr "Nazwa działania"
 
 #: gtk/gtkactionable.c:72
 msgid "The name of the associated action, like 'app.quit'"
 msgstr "Nazwa powiązanego działania, taka jak „app.quit”"
 
 #: gtk/gtkactionable.c:76
-msgid "action target value"
-msgstr "działanie cel wartość"
+msgid "Action target value"
+msgstr "Wartość celu działania"
 
 #: gtk/gtkactionable.c:77
 msgid "The parameter for action invocations"
@@ -5469,8 +5469,8 @@ msgstr "Ustalenie pozycji"
 #: gtk/gtkpaned.c:377
 msgid "TRUE if the Position property should be used"
 msgstr ""
-"Po ustawieniu wartości TRUE powinna być używana właściwość „Position” "
-"(pozycja)"
+"Po ustawieniu wartości TRUE powinna być używana właściwość "
+"„Position” (pozycja)"
 
 #: gtk/gtkpaned.c:393
 msgid "Minimal Position"
