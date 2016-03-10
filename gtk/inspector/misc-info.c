@@ -59,6 +59,9 @@ struct _GtkInspectorMiscInfoPrivate {
   GtkWidget *baseline;
   GtkWidget *clip_area_row;
   GtkWidget *clip_area;
+  GtkWidget *frame_clock_row;
+  GtkWidget *frame_clock;
+  GtkWidget *frame_clock_button;
   GtkWidget *tick_callback_row;
   GtkWidget *tick_callback;
   GtkWidget *framerate_row;
@@ -284,6 +287,37 @@ show_mnemonic_label (GtkWidget *button, GtkInspectorMiscInfo *sl)
     show_object (sl, G_OBJECT (widget), "properties");
 }
 
+static void
+show_frame_clock (GtkWidget *button, GtkInspectorMiscInfo *sl)
+{
+  GObject *clock;
+
+  clock = (GObject *)gtk_widget_get_frame_clock (GTK_WIDGET (sl->priv->object));
+  if (clock)
+    show_object (sl, G_OBJECT (clock), "properties");
+}
+
+static void
+update_frame_clock (GtkInspectorMiscInfo *sl)
+{
+  GObject *clock;
+
+  clock = (GObject *)gtk_widget_get_frame_clock (GTK_WIDGET (sl->priv->object));
+  if (clock)
+    {
+      gchar *tmp;
+      tmp = g_strdup_printf ("%p", clock);
+      gtk_label_set_label (GTK_LABEL (sl->priv->frame_clock), tmp);
+      g_free (tmp);
+      gtk_widget_set_sensitive (sl->priv->frame_clock_button, TRUE);
+    }
+  else
+    {
+      gtk_label_set_label (GTK_LABEL (sl->priv->frame_clock), "NULL");
+      gtk_widget_set_sensitive (sl->priv->frame_clock_button, FALSE);
+    }
+}
+
 static gboolean
 update_info (gpointer data)
 {
@@ -334,6 +368,8 @@ update_info (gpointer data)
       gtk_widget_set_visible (sl->priv->realized, gtk_widget_get_realized (GTK_WIDGET (sl->priv->object)));
       gtk_widget_set_visible (sl->priv->is_toplevel, gtk_widget_is_toplevel (GTK_WIDGET (sl->priv->object)));
       gtk_widget_set_visible (sl->priv->child_visible, gtk_widget_get_child_visible (GTK_WIDGET (sl->priv->object)));
+
+      update_frame_clock (sl);
     }
 
   if (GTK_IS_BUILDABLE (sl->priv->object))
@@ -425,6 +461,7 @@ gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
       gtk_widget_show (sl->priv->realized_row);
       gtk_widget_show (sl->priv->is_toplevel_row);
       gtk_widget_show (sl->priv->is_toplevel_row);
+      gtk_widget_show (sl->priv->frame_clock_row);
 
       g_signal_connect_object (object, "state-flags-changed", G_CALLBACK (state_flags_changed), sl, 0);
       state_flags_changed (GTK_WIDGET (sl->priv->object), 0, sl);
@@ -448,6 +485,7 @@ gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
       gtk_widget_hide (sl->priv->realized_row);
       gtk_widget_hide (sl->priv->is_toplevel_row);
       gtk_widget_hide (sl->priv->child_visible_row);
+      gtk_widget_hide (sl->priv->frame_clock_row);
     }
 
   if (GTK_IS_BUILDABLE (object))
@@ -595,6 +633,9 @@ gtk_inspector_misc_info_class_init (GtkInspectorMiscInfoClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, baseline);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, clip_area_row);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, clip_area);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, frame_clock_row);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, frame_clock);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, frame_clock_button);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, tick_callback_row);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, tick_callback);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, framecount_row);
@@ -618,6 +659,7 @@ gtk_inspector_misc_info_class_init (GtkInspectorMiscInfoClass *klass)
 
   gtk_widget_class_bind_template_callback (widget_class, show_default_widget);
   gtk_widget_class_bind_template_callback (widget_class, show_focus_widget);
+  gtk_widget_class_bind_template_callback (widget_class, show_frame_clock);
 }
 
 // vim: set et sw=2 ts=2:
