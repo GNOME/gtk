@@ -1558,6 +1558,24 @@ typedef struct
 } GSettingsBinding;
 
 static void
+add_attribute_info (GtkInspectorPropEditor *editor,
+                    GParamSpec             *spec)
+{
+  if (GTK_IS_CELL_RENDERER (editor->priv->object))
+    gtk_container_add (GTK_CONTAINER (editor),
+                       attribute_editor (editor->priv->object, spec, editor));
+}
+
+static void
+add_actionable_info (GtkInspectorPropEditor *editor)
+{
+  if (GTK_IS_ACTIONABLE (editor->priv->object) &&
+      g_strcmp0 (editor->priv->name, "action-name") == 0)
+    gtk_container_add (GTK_CONTAINER (editor),
+                       action_editor (editor->priv->object, editor));
+}
+
+static void
 add_settings_info (GtkInspectorPropEditor *editor)
 {
   gchar *key;
@@ -1694,10 +1712,9 @@ constructed (GObject *object)
   can_modify = ((spec->flags & G_PARAM_WRITABLE) != 0 &&
                 (spec->flags & G_PARAM_CONSTRUCT_ONLY) == 0);
 
-  /*
-   * By reaching this, we already know the property is readable.
-   * Since all we can do for a GObject is dive down into it's properties and
-   * inspect bindings and such, pretend to be mutable.
+  /* By reaching this, we already know the property is readable.
+   * Since all we can do for a GObject is dive down into it's properties
+   * and inspect bindings and such, pretend to be mutable.
    */
   if (g_type_is_a (spec->value_type, G_TYPE_OBJECT))
     can_modify = TRUE;
@@ -1709,15 +1726,8 @@ constructed (GObject *object)
   gtk_widget_show (editor->priv->editor);
   gtk_container_add (GTK_CONTAINER (editor), editor->priv->editor);
 
-  if (GTK_IS_CELL_RENDERER (editor->priv->object))
-    gtk_container_add (GTK_CONTAINER (editor),
-                       attribute_editor (editor->priv->object, spec, editor));
-
-  if (GTK_IS_ACTIONABLE (editor->priv->object) &&
-      g_strcmp0 (editor->priv->name, "action-name") == 0)
-    gtk_container_add (GTK_CONTAINER (editor),
-                       action_editor (editor->priv->object, editor));
-
+  add_attribute_info (editor, spec);
+  add_actionable_info (editor);
   add_binding_info (editor);
   add_settings_info (editor);
   add_gtk_settings_info (editor);
@@ -1817,7 +1827,7 @@ gtk_inspector_prop_editor_class_init (GtkInspectorPropEditorClass *klass)
                            NULL, G_PARAM_READWRITE|G_PARAM_CONSTRUCT));
 
   g_object_class_install_property (object_class, PROP_IS_CHILD_PROPERTY,
-      g_param_spec_boolean ("is-child-property", "Child property", "Child property",
+      g_param_spec_boolean ("is-child-property", "Child property", "Whether this is a child property",
                             FALSE, G_PARAM_READWRITE|G_PARAM_CONSTRUCT));
 }
 
