@@ -1,30 +1,27 @@
 # Serbian translation of gtk+
 # Courtesy of Prevod.org team (http://prevod.org/) -- 2003—2016.
 # This file is distributed under the same license as the gtk package.
-#
-# Translators: 
+# Translators:
 # Данило Шеган <dsegan@gmx.net>
 # Александар Урошевић <urke@users.sourceforge.net>, 2004.
 # Бранко Кокановић <branko.kokanovic@gmail.com>, 2009.
 # Мирослав Николић <miroslavnikolic@rocketmail.com>, 2011—2016.
 # Марко М. Костић <marko.m.kostic@gmail.com>, 2016.
-# 
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-06 19:13+0000\n"
-"PO-Revision-Date: 2016-03-06 21:20+0100\n"
-"Last-Translator: Марко М. Костић <marko.m.kostic@gmail.com>\n"
-"Language-Team: Serbian <gnom@prevod.org>\n"
+"POT-Creation-Date: 2016-03-10 00:32+0000\n"
+"PO-Revision-Date: 2016-03-10 08:47+0200\n"
+"Last-Translator: Мирослав Николић <miroslavnikolic@rocketmail.com>\n"
+"Language-Team: Serbian <(nothing)>\n"
 "Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=n==1? 3 : n%10==1 && n%100!=11 ? 0 : n"
-"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=4; plural=n==1? 3 : n%10==1 && n%100!=11 ? 0 : "
+"n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Project-Style: gnome\n"
-"X-Generator: Poedit 1.8.6\n"
 
 #: gdk/gdkapplaunchcontext.c:127 gdk/gdkcursor.c:139 gdk/gdkdevicemanager.c:181
 #: gdk/gdkglcontext.c:265 gdk/gdkseat.c:158 gdk/gdkseat.c:159
@@ -213,8 +210,8 @@ msgid "The cell renderer represented by this accessible"
 msgstr "Исцртавач ћелије представљен овим приступним"
 
 #: gtk/deprecated/gtkaction.c:243 gtk/deprecated/gtkactiongroup.c:200
-#: gtk/deprecated/gtkthemingengine.c:247 gtk/gtkprinter.c:121
-#: gtk/gtkstack.c:513 gtk/gtktextmark.c:136
+#: gtk/deprecated/gtkthemingengine.c:247 gtk/gtkcssnode.c:626
+#: gtk/gtkprinter.c:121 gtk/gtkstack.c:513 gtk/gtktextmark.c:136
 msgid "Name"
 msgstr "Назив"
 
@@ -346,8 +343,8 @@ msgid "Whether the action is enabled."
 msgstr "Да ли је радња укључена."
 
 #: gtk/deprecated/gtkaction.c:481 gtk/deprecated/gtkactiongroup.c:228
-#: gtk/deprecated/gtkstatusicon.c:307 gtk/gtknativedialog.c:242
-#: gtk/gtktreeviewcolumn.c:246 gtk/gtkwidget.c:1157
+#: gtk/deprecated/gtkstatusicon.c:307 gtk/gtkcssnode.c:637
+#: gtk/gtknativedialog.c:242 gtk/gtktreeviewcolumn.c:246 gtk/gtkwidget.c:1157
 msgid "Visible"
 msgstr "Видљиво"
 
@@ -3139,6 +3136,46 @@ msgstr "Садржани елемент"
 msgid "Can be used to add a new child to the container"
 msgstr "Може се користити за додавање нових елемената у садржаоц"
 
+#: gtk/gtkcssnode.c:616
+msgid "Style Classes"
+msgstr "Разреди стила"
+
+#: gtk/gtkcssnode.c:616
+#| msgid "List of icon names"
+msgid "List of classes"
+msgstr "Списак разреда"
+
+#: gtk/gtkcssnode.c:621 gtk/gtkcssstyleproperty.c:223
+msgid "ID"
+msgstr "ИБ"
+
+#: gtk/gtkcssnode.c:621
+msgid "Unique ID"
+msgstr "Јединствени ИБ"
+
+#: gtk/gtkcssnode.c:631 gtk/gtkswitch.c:910
+msgid "State"
+msgstr "Стaњe"
+
+#: gtk/gtkcssnode.c:631
+#| msgid "State Message"
+msgid "State flags"
+msgstr "Заставица стања"
+
+#: gtk/gtkcssnode.c:637
+msgid "If other nodes can see this node"
+msgstr "Да ли остали чворови могу да виде овај чвор"
+
+#: gtk/gtkcssnode.c:642
+#| msgid "Widget name"
+msgid "Widget type"
+msgstr "Врста елемента"
+
+#: gtk/gtkcssnode.c:642
+#| msgid "The name of the widget"
+msgid "GType of the widget"
+msgstr "Гврста елемента"
+
 #: gtk/gtkcssshorthandproperty.c:170
 msgid "Subproperties"
 msgstr "Подособине"
@@ -3162,10 +3199,6 @@ msgstr "Утиче на"
 #: gtk/gtkcssstyleproperty.c:216
 msgid "Set if the value affects the sizing of elements"
 msgstr "Постављено ако вредност утиче на величину елемената"
-
-#: gtk/gtkcssstyleproperty.c:223
-msgid "ID"
-msgstr "ИБ"
 
 #: gtk/gtkcssstyleproperty.c:224
 msgid "The numeric id for quick access"
@@ -7526,7 +7559,8 @@ msgid "Whether this page needs attention"
 msgstr "Да ли ова страница захтева пажњу"
 
 #: gtk/gtkstacksidebar.c:449 gtk/gtkstackswitcher.c:582
-#: gtk/gtkstackswitcher.c:583
+#: gtk/gtkstackswitcher.c:583 gtk/inspector/gtkstackcombo.c:232
+#: gtk/inspector/gtkstackcombo.c:233
 msgid "Stack"
 msgstr "Штек"
 
@@ -7581,10 +7615,6 @@ msgstr "Врста вредности коју враћа садржај Гтк 
 #: gtk/gtkswitch.c:896
 msgid "Whether the switch is on or off"
 msgstr "Да ли је прекидач укључен или искључен"
-
-#: gtk/gtkswitch.c:910
-msgid "State"
-msgstr "Стaњe"
 
 #: gtk/gtkswitch.c:911
 msgid "The backend state"
