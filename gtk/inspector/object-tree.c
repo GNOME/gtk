@@ -610,20 +610,31 @@ on_selection_changed (GtkTreeSelection       *selection,
   g_signal_emit (wt, signals[OBJECT_SELECTED], 0, object);
 }
 
+typedef struct {
+  GObject *dead_object;
+  GtkTreeWalk *walk;
+  GtkTreePath *walk_pos;
+} RemoveData;
+
 static gboolean
 remove_cb (GtkTreeModel *model,
            GtkTreePath  *path,
            GtkTreeIter  *iter,
            gpointer      data)
 {
-  GObject *dead_object = data;
+  RemoveData *remove_data = data;
   GObject *lookup;
 
   gtk_tree_model_get (model, iter, OBJECT, &lookup, -1);
 
-  if (lookup == dead_object)
+  if (lookup == remove_data->dead_object)
     {
+      if (remove_data->walk_pos != NULL &&
+          gtk_tree_path_compare (path, remove_data->walk_pos) == 0)
+        gtk_tree_walk_reset (remove_data->walk, NULL);
+
       gtk_tree_store_remove (GTK_TREE_STORE (model), iter);
+
       return TRUE;
     }
 
@@ -634,8 +645,20 @@ static void
 gtk_object_tree_remove_dead_object (gpointer data, GObject *dead_object)
 {
   GtkInspectorObjectTree *wt = data;
+  GtkTreeIter iter;
+  RemoveData remove_data;
 
-  gtk_tree_model_foreach (GTK_TREE_MODEL (wt->priv->model), remove_cb, dead_object);
+  remove_data.dead_object = dead_object;
+  remove_data.walk = wt->priv->walk;
+  if (gtk_tree_walk_get_position (wt->priv->walk, &iter))
+    remove_data.walk_pos = gtk_tree_model_get_path (GTK_TREE_MODEL (wt->priv->model), &iter);
+  else
+    remove_data.walk_pos = NULL;
+
+  gtk_tree_model_foreach (GTK_TREE_MODEL (wt->priv->model), remove_cb, &remove_data);
+
+  if (remove_data.walk_pos)
+    gtk_tree_path_free (remove_data.walk_pos);
 }
 
 static gboolean
@@ -661,6 +684,7 @@ clear_store (GtkInspectorObjectTree *wt)
     {
       gtk_tree_model_foreach (GTK_TREE_MODEL (wt->priv->model), weak_unref_cb, wt);
       gtk_tree_store_clear (wt->priv->model);
+      gtk_tree_walk_reset (wt->priv->walk, NULL);
     }
 }
 
@@ -679,7 +703,6 @@ map_or_unmap (GSignalInvocationHint *ihint,
     gtk_tree_store_set (wt->priv->model, &iter,
                         SENSITIVE, gtk_widget_get_mapped (widget),
                         -1);
-
   return TRUE;
 }
 
