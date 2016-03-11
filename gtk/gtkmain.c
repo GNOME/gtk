@@ -694,6 +694,7 @@ static void
 default_display_notify_cb (GdkDisplayManager *dm)
 {
   _gtk_accessibility_init ();
+  gtk_set_debug_flags (debug_flags);
 }
 
 static void
@@ -796,6 +797,24 @@ post_parse_hook (GOptionContext *context,
   return TRUE;
 }
 
+guint
+gtk_get_display_debug_flags (GdkDisplay *display)
+{
+  if (display)
+    return GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (display), "gtk-debug-flags"));
+  else
+    return debug_flags;
+}
+
+void
+gtk_set_display_debug_flags (GdkDisplay *display,
+                             guint       flags)
+{
+  if (display)
+    g_object_set_data (G_OBJECT (display), "gtk-debug-flags", GUINT_TO_POINTER (flags));
+  else
+    debug_flags = flags;
+}
 
 /**
  * gtk_get_debug_flags:
@@ -810,7 +829,7 @@ post_parse_hook (GOptionContext *context,
 guint
 gtk_get_debug_flags (void)
 {
-  return debug_flags;
+  return gtk_get_display_debug_flags (gdk_display_get_default ());
 }
 
 /**
@@ -821,7 +840,7 @@ gtk_get_debug_flags (void)
 void
 gtk_set_debug_flags (guint flags)
 {
-  debug_flags = flags;
+  gtk_set_display_debug_flags (gdk_display_get_default (), flags);
 }
 
 gboolean
@@ -832,7 +851,7 @@ gtk_simulate_touchscreen (void)
   if (test_touchscreen == 0)
     test_touchscreen = g_getenv ("GTK_TEST_TOUCHSCREEN") != NULL ? 1 : -1;
 
-  return test_touchscreen > 0 || (debug_flags & GTK_DEBUG_TOUCHSCREEN) != 0;
+  return test_touchscreen > 0 || (gtk_get_debug_flags () & GTK_DEBUG_TOUCHSCREEN) != 0;
  }
 
 /**
@@ -1027,7 +1046,7 @@ gtk_init_check (int    *argc,
 
   ret = GDK_PRIVATE_CALL (gdk_display_open_default) () != NULL;
 
-  if (debug_flags & GTK_DEBUG_INTERACTIVE)
+  if (gtk_get_debug_flags () & GTK_DEBUG_INTERACTIVE)
     gtk_window_set_interactive_debugging (TRUE);
 
   return ret;

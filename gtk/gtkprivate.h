@@ -97,6 +97,18 @@ void _gtk_load_dll_with_libgtk3_manifest (const char *dllname);
 
 gboolean        gtk_simulate_touchscreen (void);
 
+guint gtk_get_display_debug_flags (GdkDisplay *display);
+
+#ifdef G_ENABLE_DEBUG
+
+#define GTK_DISPLAY_DEBUG_CHECK(display,type) G_UNLIKELY (gtk_get_display_debug_flags (display) & GTK_DEBUG_##type)
+
+#else
+
+#define GTK_DISPLAY_DEBUG_CHECK(display,type) 0
+
+#endif /* G_ENABLE_DEBUG */
+
 G_END_DECLS
 
 #endif /* __GTK_PRIVATE_H__ */
