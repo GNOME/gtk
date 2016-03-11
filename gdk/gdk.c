@@ -138,31 +138,31 @@ static GCallback gdk_threads_lock = NULL;
 static GCallback gdk_threads_unlock = NULL;
 
 static const GDebugKey gdk_gl_keys[] = {
-  {"disable",               GDK_GL_DISABLE},
-  {"always",                GDK_GL_ALWAYS},
-  {"software-draw",         GDK_GL_SOFTWARE_DRAW_GL | GDK_GL_SOFTWARE_DRAW_SURFACE},
-  {"software-draw-gl",      GDK_GL_SOFTWARE_DRAW_GL},
-  {"software-draw-surface", GDK_GL_SOFTWARE_DRAW_SURFACE},
-  {"texture-rectangle",     GDK_GL_TEXTURE_RECTANGLE},
-  {"legacy",                GDK_GL_LEGACY},
+  { "disable",               GDK_GL_DISABLE },
+  { "always",                GDK_GL_ALWAYS },
+  { "software-draw",         GDK_GL_SOFTWARE_DRAW_GL | GDK_GL_SOFTWARE_DRAW_SURFACE} ,
+  { "software-draw-gl",      GDK_GL_SOFTWARE_DRAW_GL },
+  { "software-draw-surface", GDK_GL_SOFTWARE_DRAW_SURFACE },
+  { "texture-rectangle",     GDK_GL_TEXTURE_RECTANGLE },
+  { "legacy",                GDK_GL_LEGACY }
 };
 
 #ifdef G_ENABLE_DEBUG
 static const GDebugKey gdk_debug_keys[] = {
-  {"events",        GDK_DEBUG_EVENTS},
-  {"misc",          GDK_DEBUG_MISC},
-  {"dnd",           GDK_DEBUG_DND},
-  {"xim",           GDK_DEBUG_XIM},
-  {"nograbs",       GDK_DEBUG_NOGRABS},
-  {"input",         GDK_DEBUG_INPUT},
-  {"cursor",        GDK_DEBUG_CURSOR},
-  {"multihead",     GDK_DEBUG_MULTIHEAD},
-  {"xinerama",      GDK_DEBUG_XINERAMA},
-  {"draw",          GDK_DEBUG_DRAW},
-  {"eventloop",     GDK_DEBUG_EVENTLOOP},
-  {"frames",        GDK_DEBUG_FRAMES},
-  {"settings",      GDK_DEBUG_SETTINGS},
-  {"opengl",        GDK_DEBUG_OPENGL},
+  { "events",        GDK_DEBUG_EVENTS },
+  { "misc",          GDK_DEBUG_MISC },
+  { "dnd",           GDK_DEBUG_DND },
+  { "xim",           GDK_DEBUG_XIM },
+  { "nograbs",       GDK_DEBUG_NOGRABS },
+  { "input",         GDK_DEBUG_INPUT },
+  { "cursor",        GDK_DEBUG_CURSOR },
+  { "multihead",     GDK_DEBUG_MULTIHEAD },
+  { "xinerama",      GDK_DEBUG_XINERAMA },
+  { "draw",          GDK_DEBUG_DRAW },
+  { "eventloop",     GDK_DEBUG_EVENTLOOP },
+  { "frames",        GDK_DEBUG_FRAMES },
+  { "settings",      GDK_DEBUG_SETTINGS },
+  { "opengl",        GDK_DEBUG_OPENGL }
 };
 
 static gboolean
