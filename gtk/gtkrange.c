@@ -551,7 +551,7 @@ gtk_range_class_init (GtkRangeClass *class)
    *
    * Width of scrollbar or scale thumb.
    *
-   * Depreacated: 3.20: Use the min-height/min-width CSS properties on the
+   * Deprecated: 3.20: Use the min-height/min-width CSS properties on the
    *   slider element. The value of this style property is ignored.
    */
   gtk_widget_class_install_style_property (widget_class,
@@ -567,7 +567,7 @@ gtk_range_class_init (GtkRangeClass *class)
    *
    * Spacing between thumb/steppers and outer trough bevel.
    *
-   * Depreacated: 3.20: Use the margin/padding CSS properties on the through and
+   * Deprecated: 3.20: Use the margin/padding CSS properties on the trough and
    *   stepper elements. The value of this style property is ignored.
    */
   gtk_widget_class_install_style_property (widget_class,
@@ -583,7 +583,7 @@ gtk_range_class_init (GtkRangeClass *class)
    *
    * Length of step buttons at ends.
    *
-   * Depreacated: 3.20: Use the min-height/min-width CSS properties on the
+   * Deprecated: 3.20: Use the min-height/min-width CSS properties on the
    *   stepper elements. The value of this style property is ignored.
    */
   gtk_widget_class_install_style_property (widget_class,
@@ -600,7 +600,7 @@ gtk_range_class_init (GtkRangeClass *class)
    * The spacing between the stepper buttons and thumb. Note that
    * stepper-spacing won't have any effect if there are no steppers.
    *
-   * Depreacated: 3.20: Use the margin CSS property on the stepper elements.
+   * Deprecated: 3.20: Use the margin CSS property on the stepper elements.
    *   The value of this style property is ignored.
    */
   gtk_widget_class_install_style_property (widget_class,
