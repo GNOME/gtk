@@ -39,3 +39,6 @@ gboolean      gtk_tree_walk_next_match (GtkTreeWalk *walk,
                                         gboolean     force_move,
                                         gboolean     backwards,
                                         GtkTreeIter *iter);
+
+gboolean      gtk_tree_walk_get_position (GtkTreeWalk *walk,
+                                          GtkTreeIter *iter);

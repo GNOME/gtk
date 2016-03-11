@@ -88,7 +88,7 @@ gtk_tree_walk_step_forward (GtkTreeWalk *walk)
   if (gtk_tree_model_iter_children (walk->model, &next, &walk->position))
     {
       walk->position = next;
-      return TRUE; 
+      return TRUE;
     }
 
   next = walk->position;
@@ -98,7 +98,7 @@ gtk_tree_walk_step_forward (GtkTreeWalk *walk)
       if (gtk_tree_model_iter_next (walk->model, &next))
         {
           walk->position = next;
-          return TRUE; 
+          return TRUE;
         }
     }
   while (gtk_tree_model_iter_parent (walk->model, &next, &up));
@@ -189,7 +189,7 @@ row_is_match (GtkTreeWalk *walk)
   return TRUE;
 }
 
-gboolean 
+gboolean
 gtk_tree_walk_next_match (GtkTreeWalk *walk,
                           gboolean     force_move,
                           gboolean     backwards,
@@ -202,7 +202,7 @@ gtk_tree_walk_next_match (GtkTreeWalk *walk,
   was_visited = walk->visited;
   position = walk->position;
 
-  do 
+  do
     {
       if (moved || (!force_move && walk->visited))
         {
@@ -220,4 +220,12 @@ gtk_tree_walk_next_match (GtkTreeWalk *walk,
   walk->position = position;
 
   return FALSE;
+}
+
+gboolean
+gtk_tree_walk_get_position (GtkTreeWalk *walk,
+                            GtkTreeIter *iter)
+{
+  *iter = walk->position;
+  return walk->visited;
 }
