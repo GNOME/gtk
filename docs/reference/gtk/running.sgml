@@ -140,11 +140,11 @@ additional environment variables.
   <variablelist>
     <varlistentry>
       <term>actions</term>
-      <listitem><para>Actions and menu models.</para></listitem>
+      <listitem><para>Actions and menu models</para></listitem>
     </varlistentry>
     <varlistentry>
       <term>baselines</term>
-      <listitem><para>Baselines.</para></listitem>
+      <listitem><para>Show baselines</para></listitem>
     </varlistentry>
     <varlistentry>
       <term>builder</term>
@@ -160,7 +160,7 @@ additional environment variables.
     </varlistentry>
     <varlistentry>
       <term>interactive</term>
-      <listitem><para>Open the <link linkend="interactive-debugging">interactive debugger</link>.</para></listitem>
+      <listitem><para>Open the <link linkend="interactive-debugging">interactive debugger</link></para></listitem>
     </varlistentry>
     <varlistentry>
       <term>keybindings</term>
@@ -176,11 +176,11 @@ additional environment variables.
     </varlistentry>
     <varlistentry>
       <term>no-css-cache</term>
-      <listitem><para>Bypass caching for CSS style properties.</para></listitem>
+      <listitem><para>Bypass caching for CSS style properties</para></listitem>
     </varlistentry>
     <varlistentry>
       <term>no-pixel-cache</term>
-      <listitem><para>Disable the pixel cache.</para></listitem>
+      <listitem><para>Disable the pixel cache</para></listitem>
     </varlistentry>
     <varlistentry>
       <term>plugsocket</term>
@@ -188,7 +188,7 @@ additional environment variables.
     </varlistentry>
     <varlistentry>
       <term>pixel-cache</term>
-      <listitem><para>Pixel cache.</para></listitem>
+      <listitem><para>Pixel cache</para></listitem>
     </varlistentry>
     <varlistentry>
       <term>printing</term>
