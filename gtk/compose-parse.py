@@ -811,9 +811,9 @@ if opt_gtk:
 	ct_index = start_offset
 	for line_num in range(len(compose_table)):
 		for i in range(WIDTHOFCOMPOSETABLE):
-			occurences = compose_table[line_num][i+1]
+			occurrences = compose_table[line_num][i+1]
 			compose_table[line_num][i+1] = ct_index
-			ct_index += occurences * (i+2)
+			ct_index += occurrences * (i+2)
 
 	for sequence in xorg_compose_sequences:
 		ct_second_part.append(map(convert_UnotationToHex, sequence))

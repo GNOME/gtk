@@ -165,7 +165,7 @@ struct _GtkPlacesSidebar {
 
   guint mounting               : 1;
   guint  drag_data_received    : 1;
-  guint drop_occured           : 1;
+  guint drop_occurred          : 1;
   guint show_recent_set        : 1;
   guint show_recent            : 1;
   guint show_desktop_set       : 1;
@@ -1877,7 +1877,7 @@ drag_data_received_callback (GtkWidget        *list_box,
 
   g_signal_stop_emission_by_name (list_box, "drag-data-received");
 
-  if (!sidebar->drop_occured)
+  if (!sidebar->drop_occurred)
     return;
 
   target_row = gtk_list_box_get_row_at_y (GTK_LIST_BOX (sidebar->list_box), y);
@@ -1949,7 +1949,7 @@ drag_data_received_callback (GtkWidget        *list_box,
     }
 
 out:
-  sidebar->drop_occured = FALSE;
+  sidebar->drop_occurred = FALSE;
   gtk_drag_finish (context, success, FALSE, time);
   stop_drop_feedback (sidebar);
   g_free (target_uri);
@@ -2012,7 +2012,7 @@ drag_drop_callback (GtkWidget      *list_box,
   gboolean retval = FALSE;
   GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (user_data);
 
-  sidebar->drop_occured = TRUE;
+  sidebar->drop_occurred = TRUE;
   retval = get_drag_data (sidebar->list_box, context, time);
   g_signal_stop_emission_by_name (sidebar->list_box, "drag-drop");
 
