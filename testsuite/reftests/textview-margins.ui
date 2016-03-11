@@ -8,7 +8,8 @@
   <object class="GtkWindow" id="window">
     <property name="can_focus">False</property>
     <property name="type">popup</property>
-    <property name="default_width">100</property>
+    <property name="default_width">106</property>
+    <property name="resizable">0</property>
     <child>
       <object class="GtkTextView" id="textview1">
         <property name="visible">True</property>
