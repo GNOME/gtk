@@ -10,10 +10,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-08 00:20+0000\n"
-"PO-Revision-Date: 2016-03-08 09:49+0200\n"
+"POT-Creation-Date: 2016-03-11 00:18+0000\n"
+"PO-Revision-Date: 2016-03-11 03:16+0200\n"
 "Last-Translator: Miroslav Nikolić <miroslavnikolic@rocketmail.com>\n"
-"Language-Team: Serbian <(nothing)>\n"
+"Language-Team: Serbian <(gnom@prevod.org)>\n"
 "Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -434,20 +434,20 @@ msgid "Suspend"
 msgstr "Obustavi"
 
 #: gdk/mir/gdkmirglcontext.c:48 gdk/mir/gdkmirwindowimpl.c:1358
-#: gdk/wayland/gdkglcontext-wayland.c:393 gdk/win32/gdkglcontext-win32.c:527
+#: gdk/wayland/gdkglcontext-wayland.c:393 gdk/win32/gdkglcontext-win32.c:556
 #: gdk/x11/gdkglcontext-x11.c:1254
 msgid "No GL implementation is available"
 msgstr "Nije dostupna GL podrška"
 
 #: gdk/mir/gdkmirglcontext.c:89 gdk/wayland/gdkglcontext-wayland.c:180
-#: gdk/win32/gdkglcontext-win32.c:492 gdk/x11/gdkglcontext-x11.c:707
+#: gdk/win32/gdkglcontext-win32.c:510 gdk/x11/gdkglcontext-x11.c:707
 #: gdk/x11/gdkglcontext-x11.c:754
 msgid "Unable to create a GL context"
 msgstr "Ne mogu da napravim GL sadržaj"
 
 #: gdk/mir/gdkmirwindowimpl.c:1320 gdk/mir/gdkmirwindowimpl.c:1330
 #: gdk/wayland/gdkglcontext-wayland.c:354
-#: gdk/wayland/gdkglcontext-wayland.c:364 gdk/win32/gdkglcontext-win32.c:464
+#: gdk/wayland/gdkglcontext-wayland.c:364 gdk/win32/gdkglcontext-win32.c:482
 #: gdk/x11/gdkglcontext-x11.c:948
 msgid "No available configurations for the given pixel format"
 msgstr "Nema dostupnih podešavanja za izabrani format piksela"
@@ -464,7 +464,7 @@ msgstr "Nije sprovedeno na OS X-u"
 msgid "Core GL is not available on EGL implementation"
 msgstr "Jezgarni GL nije dostupan uz EGL podršku"
 
-#: gdk/win32/gdkglcontext-win32.c:536
+#: gdk/win32/gdkglcontext-win32.c:565
 msgid ""
 "The WGL_ARB_create_context extension needed to create core profiles is not "
 "available"
@@ -1219,7 +1219,7 @@ msgstr ""
 #: gtk/gtkmountoperation.c:545 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:673 gtk/gtkprintunixdialog.c:746
-#: gtk/gtkwindow.c:12312 gtk/inspector/css-editor.c:208
+#: gtk/gtkwindow.c:12315 gtk/inspector/css-editor.c:208
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -1268,7 +1268,7 @@ msgid "_Apply"
 msgstr "_Primeni"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944
-#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12313
+#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12316
 msgid "_OK"
 msgstr "U _redu"
 
@@ -1672,7 +1672,7 @@ msgid "Other Applications"
 msgstr "Ostali programi"
 
 #: gtk/gtkapplicationwindow.c:341 gtk/gtkprintoperation-unix.c:481
-#: gtk/gtkprintoperation-win32.c:1453 gtk/inspector/prop-editor.c:1668
+#: gtk/gtkprintoperation-win32.c:1453 gtk/inspector/prop-editor.c:1686
 msgid "Application"
 msgstr "Program"
 
@@ -2167,40 +2167,40 @@ msgstr "De_sno:"
 msgid "Paper Margins"
 msgstr "Margine"
 
-#: gtk/gtkentry.c:9486 gtk/gtklabel.c:6688 gtk/gtktextview.c:9485
+#: gtk/gtkentry.c:9486 gtk/gtklabel.c:6688 gtk/gtktextview.c:9488
 msgid "Cu_t"
 msgstr "_Iseci"
 
-#: gtk/gtkentry.c:9490 gtk/gtklabel.c:6689 gtk/gtktextview.c:9489
+#: gtk/gtkentry.c:9490 gtk/gtklabel.c:6689 gtk/gtktextview.c:9492
 msgid "_Copy"
 msgstr "_Umnoži"
 
-#: gtk/gtkentry.c:9494 gtk/gtklabel.c:6690 gtk/gtktextview.c:9491
+#: gtk/gtkentry.c:9494 gtk/gtklabel.c:6690 gtk/gtktextview.c:9494
 msgid "_Paste"
 msgstr "U_baci"
 
 #: gtk/gtkentry.c:9497 gtk/gtkfilechooserwidget.c:1465
-#: gtk/gtkfilechooserwidget.c:2263 gtk/gtklabel.c:6692 gtk/gtktextview.c:9494
+#: gtk/gtkfilechooserwidget.c:2263 gtk/gtklabel.c:6692 gtk/gtktextview.c:9497
 msgid "_Delete"
 msgstr "_Obriši"
 
-#: gtk/gtkentry.c:9508 gtk/gtklabel.c:6701 gtk/gtktextview.c:9508
+#: gtk/gtkentry.c:9508 gtk/gtklabel.c:6701 gtk/gtktextview.c:9511
 msgid "Select _All"
 msgstr "Izaberi _sve"
 
-#: gtk/gtkentry.c:9686 gtk/gtktextview.c:9718
+#: gtk/gtkentry.c:9686 gtk/gtktextview.c:9721
 msgid "Select all"
 msgstr "Izaberi sve"
 
-#: gtk/gtkentry.c:9689 gtk/gtktextview.c:9721
+#: gtk/gtkentry.c:9689 gtk/gtktextview.c:9724
 msgid "Cut"
 msgstr "Iseci"
 
-#: gtk/gtkentry.c:9692 gtk/gtktextview.c:9724
+#: gtk/gtkentry.c:9692 gtk/gtktextview.c:9727
 msgid "Copy"
 msgstr "Umnoži"
 
-#: gtk/gtkentry.c:9695 gtk/gtktextview.c:9727
+#: gtk/gtkentry.c:9695 gtk/gtktextview.c:9730
 msgid "Paste"
 msgstr "Ubaci"
 
@@ -2423,7 +2423,7 @@ msgid "Sort _Folders before Files"
 msgstr "Por_eđaj fascikle pre datoteka"
 
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2595 gtk/inspector/css-node-tree.ui:142
+#: gtk/gtkfilechooserwidget.c:2595 gtk/inspector/css-node-tree.ui:141
 #: gtk/ui/gtkfilechooserwidget.ui:207 gtk/ui/gtkprintunixdialog.ui:123
 msgid "Location"
 msgstr "Putanja"
@@ -2486,7 +2486,7 @@ msgstr "%-e %b %Y"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: gtk/gtkfilechooserwidget.c:5031 gtk/inspector/prop-editor.c:1671
+#: gtk/gtkfilechooserwidget.c:5031 gtk/inspector/prop-editor.c:1689
 #: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
 msgstr "Nepoznato"
@@ -2571,7 +2571,7 @@ msgstr "Ne mogu da napravim OpenGL sadržaj"
 msgid "Application menu"
 msgstr "Izbornik programa"
 
-#: gtk/gtkheaderbar.c:447 gtk/gtkwindow.c:8854
+#: gtk/gtkheaderbar.c:447 gtk/gtkwindow.c:8857
 msgid "Close"
 msgstr "Zatvori"
 
@@ -3033,7 +3033,7 @@ msgid "This name is already taken"
 msgstr "Ovo ime je već zauzeto"
 
 #: gtk/gtkplacessidebar.c:2522 gtk/inspector/actions.ui:43
-#: gtk/inspector/css-node-tree.ui:40 gtk/inspector/object-tree.ui:110
+#: gtk/inspector/css-node-tree.ui:39 gtk/inspector/object-tree.ui:110
 #: gtk/ui/gtkfilechooserwidget.ui:189 gtk/ui/gtkfilechooserwidget.ui:499
 msgid "Name"
 msgstr "Naziv"
@@ -3779,12 +3779,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:12300
+#: gtk/gtkwindow.c:12303
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Da li želite da koristite Gtk+ Nadzornika?"
 
-#: gtk/gtkwindow.c:12302
+#: gtk/gtkwindow.c:12305
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3795,7 +3795,7 @@ msgstr ""
 "istražujete i menjate unutrašnjost bilo kog Gtk+ programa. Njegovo korišćenje "
 "može izazvati do pada ili urušavanja programa."
 
-#: gtk/gtkwindow.c:12307
+#: gtk/gtkwindow.c:12310
 msgid "Don't show this message again"
 msgstr "Više ne prikazuj ovu poruku"
 
@@ -3804,7 +3804,7 @@ msgid "Activate"
 msgstr "Pokreni"
 
 #: gtk/inspector/action-editor.c:302 gtk/inspector/actions.ui:82
-#: gtk/inspector/css-node-tree.ui:79 gtk/inspector/misc-info.ui:102
+#: gtk/inspector/css-node-tree.ui:78 gtk/inspector/misc-info.ui:102
 msgid "State"
 msgstr "Stanje"
 
@@ -3848,31 +3848,19 @@ msgstr "Isključi ovaj proizvoljni CSS"
 msgid "Save the current CSS"
 msgstr "Sačuvaj tekući CSS"
 
-#: gtk/inspector/css-node-tree.c:184
-msgid "Change name"
-msgstr "Promeni naziv"
-
-#: gtk/inspector/css-node-tree.c:199
-msgid "Change classes"
-msgstr "Promeni razrede"
-
-#: gtk/inspector/css-node-tree.c:208
-msgid "CSS properties"
-msgstr "Svojstva CSS-a"
-
-#: gtk/inspector/css-node-tree.ui:53
+#: gtk/inspector/css-node-tree.ui:52
 msgid "ID"
 msgstr "IB"
 
-#: gtk/inspector/css-node-tree.ui:66
-msgid "Classes"
-msgstr "Razredi"
+#: gtk/inspector/css-node-tree.ui:65 gtk/inspector/object-tree.ui:142
+msgid "Style Classes"
+msgstr "Razredi stilova"
 
-#: gtk/inspector/css-node-tree.ui:111
+#: gtk/inspector/css-node-tree.ui:110
 msgid "CSS Property"
 msgstr "Svojstvo CSS-a"
 
-#: gtk/inspector/css-node-tree.ui:126 gtk/inspector/prop-list.ui:49
+#: gtk/inspector/css-node-tree.ui:125 gtk/inspector/prop-list.ui:50
 #: gtk/ui/gtkcoloreditor.ui:293
 msgid "Value"
 msgstr "Vrednost"
@@ -3975,89 +3963,92 @@ msgstr "Izgradivi IB"
 msgid "Default Widget"
 msgstr "Osnovni element"
 
-#: gtk/inspector/misc-info.ui:192 gtk/inspector/misc-info.ui:236
-#: gtk/inspector/prop-editor.c:1071 gtk/inspector/prop-editor.c:1268
-#: gtk/inspector/prop-editor.c:1393 gtk/inspector/prop-editor.c:1504
-#: gtk/inspector/window.ui:382
+#: gtk/inspector/misc-info.ui:192 gtk/inspector/misc-info.ui:237
+#: gtk/inspector/misc-info.ui:453 gtk/inspector/prop-editor.c:1071
+#: gtk/inspector/prop-editor.c:1268 gtk/inspector/prop-editor.c:1393
+#: gtk/inspector/prop-editor.c:1504 gtk/inspector/window.ui:382
 msgid "Properties"
 msgstr "Svojstva"
 
-#: gtk/inspector/misc-info.ui:213
+#: gtk/inspector/misc-info.ui:214
 msgid "Focus Widget"
 msgstr "Element fokusa"
 
-#: gtk/inspector/misc-info.ui:258
+#: gtk/inspector/misc-info.ui:259
 msgid "Mnemonic Label"
 msgstr "Mnemonički natpis"
 
-#: gtk/inspector/misc-info.ui:293
+#: gtk/inspector/misc-info.ui:294
 msgid "Request mode"
 msgstr "Režim zahteva"
 
-#: gtk/inspector/misc-info.ui:327
+#: gtk/inspector/misc-info.ui:328
 msgid "Allocation"
 msgstr "Raspoređivanje"
 
-#: gtk/inspector/misc-info.ui:361
+#: gtk/inspector/misc-info.ui:362
 msgid "Baseline"
 msgstr "Podnožje"
 
-#: gtk/inspector/misc-info.ui:395
+#: gtk/inspector/misc-info.ui:396
 msgid "Clip area"
 msgstr "Iseci oblast"
 
-#: gtk/inspector/misc-info.ui:429
+# Treba proveriti na šta se odnosi.
+# Možda je ovo „https://developer.gnome.org/gdk3/stable/GdkFrameClock.html“
+#: gtk/inspector/misc-info.ui:430
+msgid "Frame Clock"
+msgstr "Vreme osvežavanja okvira"
+
+#: gtk/inspector/misc-info.ui:475
 msgid "Tick callback"
 msgstr "Otkucaj ponovnog poziva"
 
 # Treba proveriti na šta se odnosi.
-#: gtk/inspector/misc-info.ui:465
+# Isto kao gore.
+#: gtk/inspector/misc-info.ui:511
 msgid "Frame count"
-msgstr "Broj kadra"
+msgstr "Broj okvira"
 
 # Treba proveriti na šta se odnosi.
-#: gtk/inspector/misc-info.ui:499
+#: gtk/inspector/misc-info.ui:545
 msgid "Frame rate"
-msgstr "Učestalost kadra"
+msgstr "Učestalost okvira"
 
 # Treba proveriti na šta se odnosi.
-#: gtk/inspector/misc-info.ui:533
+#: gtk/inspector/misc-info.ui:579
 msgid "Accessible role"
 msgstr "Dostupna funkcija"
 
 # Treba proveriti na šta se odnosi.
-#: gtk/inspector/misc-info.ui:567
+#: gtk/inspector/misc-info.ui:613
 msgid "Accessible name"
 msgstr "Pristupačno ime"
 
 # Treba proveriti na šta se odnosi.
-#: gtk/inspector/misc-info.ui:603
+#: gtk/inspector/misc-info.ui:649
 msgid "Accessible description"
 msgstr "Pristupačan opis"
 
-#: gtk/inspector/misc-info.ui:637
+#: gtk/inspector/misc-info.ui:683
 msgid "Mapped"
 msgstr "Mapirano"
 
-#: gtk/inspector/misc-info.ui:673
+#: gtk/inspector/misc-info.ui:719
 msgid "Realized"
 msgstr "Ostvareno"
 
-#: gtk/inspector/misc-info.ui:709
+#: gtk/inspector/misc-info.ui:755
 msgid "Is Toplevel"
-msgstr "Ja najvišeg nivoa"
+msgstr "Je najvišeg nivoa"
 
-#: gtk/inspector/misc-info.ui:745
+#: gtk/inspector/misc-info.ui:791
 msgid "Child Visible"
 msgstr "Vidljiv podrod"
 
 #: gtk/inspector/object-tree.ui:95
 msgid "Object"
 msgstr "Predmet"
-
-#: gtk/inspector/object-tree.ui:142
-msgid "Style Classes"
-msgstr "Razredi stilova"
 
 #: gtk/inspector/prop-editor.c:679
 #, c-format
@@ -4114,7 +4105,7 @@ msgstr "izvrnuto"
 msgid "bidirectional, inverted"
 msgstr "dvosmerno, izvrnuto"
 
-#: gtk/inspector/prop-editor.c:1490 gtk/inspector/prop-editor.c:1586
+#: gtk/inspector/prop-editor.c:1490 gtk/inspector/prop-editor.c:1604
 msgid "bidirectional"
 msgstr "dvosmerno"
 
@@ -4122,39 +4113,43 @@ msgstr "dvosmerno"
 msgid "Binding:"
 msgstr "Uvezivanje:"
 
-#: gtk/inspector/prop-editor.c:1605
+#: gtk/inspector/prop-editor.c:1623
 msgid "Setting:"
 msgstr "Podešavanje:"
 
-#: gtk/inspector/prop-editor.c:1645
+#: gtk/inspector/prop-editor.c:1663
 msgid "Source:"
 msgstr "Izvor:"
 
-#: gtk/inspector/prop-editor.c:1647
+#: gtk/inspector/prop-editor.c:1665
 msgid "Reset"
 msgstr "Ponovo postavi"
 
-#: gtk/inspector/prop-editor.c:1658
+#: gtk/inspector/prop-editor.c:1676
 msgid "Default"
 msgstr "Osnovno"
 
-#: gtk/inspector/prop-editor.c:1661
+#: gtk/inspector/prop-editor.c:1679
 msgid "Theme"
 msgstr "Tema"
 
-#: gtk/inspector/prop-editor.c:1664
+#: gtk/inspector/prop-editor.c:1682
 msgid "XSettings"
 msgstr "Podešavanja Iksa"
 
-#: gtk/inspector/prop-list.ui:33
+#: gtk/inspector/prop-list.ui:34
 msgid "Property"
 msgstr "Osobine"
 
-#: gtk/inspector/prop-list.ui:67
+#: gtk/inspector/prop-list.ui:68 gtk/inspector/statistics.ui:53
+msgid "Type"
+msgstr "Vrsta"
+
+#: gtk/inspector/prop-list.ui:86
 msgid "Attribute"
 msgstr "Osobina"
 
-#: gtk/inspector/prop-list.ui:83 gtk/inspector/signals-list.ui:73
+#: gtk/inspector/prop-list.ui:102 gtk/inspector/signals-list.ui:73
 msgid "Defined At"
 msgstr "Određena na"
 
@@ -4191,7 +4186,6 @@ msgid "Yes"
 msgstr "Da"
 
 #: gtk/inspector/signals-list.ui:36
-#| msgid "Signals"
 msgid "Signal"
 msgstr "Signal"
 
@@ -4226,10 +4220,6 @@ msgstr "Uspravno"
 msgctxt "sizegroup mode"
 msgid "Both"
 msgstr "Oba"
-
-#: gtk/inspector/statistics.ui:53
-msgid "Type"
-msgstr "Vrsta"
 
 #: gtk/inspector/statistics.ui:68
 msgid "Self 1"
@@ -4437,7 +4427,6 @@ msgid "Class Hierarchy"
 msgstr "Hijerarhija razreda"
 
 #: gtk/inspector/window.ui:422
-#| msgid "Selector"
 msgid "CSS Selector"
 msgstr "CSS izabornik"
 
@@ -6652,6 +6641,18 @@ msgstr "test-izlaz.%s"
 #: modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
 msgstr "Štampaj na probnom štampaču"
+
+#~ msgid "Change name"
+#~ msgstr "Promeni naziv"
+
+#~ msgid "Change classes"
+#~ msgstr "Promeni razrede"
+
+#~ msgid "CSS properties"
+#~ msgstr "Svojstva CSS-a"
+
+#~ msgid "Classes"
+#~ msgstr "Razredi"
 
 #~ msgid "Error launching preview"
 #~ msgstr "Greška pri pokretanju pregleda"
