@@ -1750,7 +1750,8 @@ gtk_text_view_init (GtkTextView *text_view)
   priv->selection_node = gtk_css_node_new ();
   gtk_css_node_set_name (priv->selection_node, I_("selection"));
   gtk_css_node_set_parent (priv->selection_node, priv->text_window->css_node);
-  gtk_css_node_set_state (priv->selection_node, gtk_css_node_get_state (priv->text_window->css_node));
+  gtk_css_node_set_state (priv->selection_node,
+                          gtk_css_node_get_state (priv->text_window->css_node) & ~GTK_STATE_FLAG_DROP_ACTIVE);
   gtk_css_node_set_visible (priv->selection_node, FALSE);
   g_object_unref (priv->selection_node);
 }
@@ -4922,6 +4923,9 @@ gtk_text_view_state_flags_changed (GtkWidget     *widget,
 
   state = gtk_widget_get_state_flags (widget);
   gtk_css_node_set_state (priv->text_window->css_node, state);
+
+  state &= ~GTK_STATE_FLAG_DROP_ACTIVE;
+
   gtk_css_node_set_state (priv->selection_node, state);
   if (priv->left_window)
     gtk_css_node_set_state (priv->left_window->css_node, state);
@@ -8318,6 +8322,8 @@ gtk_text_view_drag_leave (GtkWidget        *widget,
     g_source_remove (priv->scroll_timeout);
 
   priv->scroll_timeout = 0;
+
+  gtk_drag_unhighlight (widget);
 }
 
 static gboolean
@@ -8419,6 +8425,8 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
       gdk_threads_add_timeout (100, drag_scan_timeout, text_view);
     g_source_set_name_by_id (text_view->priv->scroll_timeout, "[gtk+] drag_scan_timeout");
   }
+
+  gtk_drag_highlight (widget);
 
   /* TRUE return means don't propagate the drag motion to parent
    * widgets that may also be drop sites.
