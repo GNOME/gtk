@@ -273,6 +273,7 @@ entry {
     background-image: none;
     background-color: transparent;
     box-shadow: none;
+
     &:backdrop { background-color: transparent; }
   }
 
@@ -280,6 +281,10 @@ entry {
   .linked:not(.vertical) > &:focus + entry,
   .linked:not(.vertical) > &:focus + button,
   .linked:not(.vertical) > &:focus + combobox > box > button.combo { border-left-color: entry_focus_border(); }
+
+  .linked:not(.vertical) > &:drop(active) + entry,
+  .linked:not(.vertical) > &:drop(active) + button,
+  .linked:not(.vertical) > &:drop(active) + combobox > box > button.combo { border-left-color: $drop_target_color; }
 
   // entry error and warning style
   @each $e_type, $e_color in (error, $error_color),
@@ -313,6 +318,13 @@ entry {
 
     &:disabled { @include entry(osd-insensitive); }
   }
+
+  &:drop(active) {
+    &:focus, & {
+      border-color: $drop_target_color;
+      box-shadow: inset 0 0 0 1px $drop_target_color;
+    }
+  }
 }
 
 // Vertically linked entries
@@ -325,6 +337,8 @@ entry {
 
   // add back the focus shadow
   > entry:focus:not(:last-child) { box-shadow: entry_focus_shadow(); }
+
+  > entry:drop(active):not(:last-child) { box-shadow: inset 0 0 0 1px $drop_target_color; }
 
   // brighter border between linked entries
   > entry:not(:disabled) + entry:not(:disabled) {
@@ -346,17 +360,26 @@ entry {
     box-shadow: entry_focus_shadow();
   }
 
+  > entry + entry:drop(active):not(:last-child) {
+    border-top-color: $drop_target_color;
+    box-shadow: inset 0 0 0 1px $drop_target_color;
+  }
+
   // just recolor the top border on the last focused entry, since we don't reset the shadow here letting that be
   // inherited by the entry styling.
-  > entry + entry:focus:last-child {
-    border-top-color: entry_focus_border();
-  }
+  > entry + entry:focus:last-child { border-top-color: entry_focus_border(); }
+
+  > entry + entry:drop(active):last-child { border-top-color: $drop_target_color; }
 
   // this takes care of coloring the top border of the focused entry subsequent widget.
   // :not(:only-child) is a specificity bump hack.
   > entry:focus:not(:only-child) + entry,
   > entry:focus:not(:only-child) + button,
   > entry:focus:not(:only-child) + combobox > box > button.combo { border-top-color: entry_focus_border(); }
+
+  > entry:drop(active):not(:only-child) + entry,
+  > entry:drop(active):not(:only-child) + button,
+  > entry:drop(active):not(:only-child) + combobox > box > button.combo { border-top-color: $drop_target_color; }
 }
 
 
@@ -463,6 +486,11 @@ button {
         padding-left: 8px;
         padding-right: 8px;
       }
+    }
+
+    &:drop(active) {
+      border-color: $drop_target_color;
+      box-shadow: inset 0 0 0 1px $drop_target_color;
     }
   }
 
@@ -1015,6 +1043,11 @@ spinbutton {
     &:disabled { color: $insensitive_fg_color; }
     &:backdrop:disabled { color: $backdrop_insensitive_color; }
 
+    &:drop(active) {
+      border-color: transparent;
+      box-shadow: none;
+    }
+
     entry {
       min-height: 32px;
       min-width: 32px;
@@ -1045,6 +1078,7 @@ spinbutton {
   // OSD vertical
   .osd &.vertical button:first-child {
     @include button(osd);
+
     &:hover { @include button(osd-hover);}
 
     &:active { @include button(osd-active); }
@@ -1083,6 +1117,12 @@ combobox {
       &:dir(ltr) { @extend %linked:last-child; }
       &:dir(rtl) { @extend %linked:first-child; }
     }
+  }
+
+  &:drop(active) { // FIXME: untested
+    box-shadow: none;
+
+    button.combo { @extend button:drop(active); }
   }
 }
 
@@ -3975,7 +4015,7 @@ button.circular { // FIXME: aggregate to buttons
 }
 
 *:drop(active):focus,
-*:drop(active) { // FIXME figure out a proper color
+*:drop(active) { // FIXME needs to be done widget by widget, this wildcard should really die
   border-color: black;
   box-shadow: inset 0 0 0 1px black;
 }

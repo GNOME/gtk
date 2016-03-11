@@ -44,6 +44,8 @@ $base_hover_color: transparentize($fg_color, 0.95);
 $tooltip_borders_color: transparentize(white, 0.9);
 $shadow_color: transparentize(black, 0.9);
 
+$drop_target_color: black; // FIXME: we need something different than black here...
+
 //insensitive state derived colors
 $insensitive_fg_color: mix($fg_color, $bg_color, 50%);
 $insensitive_bg_color: mix($bg_color, $base_color, 60%);

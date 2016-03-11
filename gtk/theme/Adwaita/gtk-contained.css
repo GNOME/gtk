@@ -235,6 +235,8 @@ entry, spinbutton:not(.vertical) {
       background-color: transparent; }
   .linked:not(.vertical) > entry:focus + entry, .linked:not(.vertical) > spinbutton:focus:not(.vertical) + entry, .linked:not(.vertical) > entry:focus + spinbutton:not(.vertical), .linked:not(.vertical) > spinbutton:focus:not(.vertical) + spinbutton:not(.vertical), .linked:not(.vertical) > entry:focus + button, .linked:not(.vertical) > spinbutton:focus:not(.vertical) + button, .linked:not(.vertical) > entry:focus + combobox > box > button.combo, .linked:not(.vertical) > spinbutton:focus:not(.vertical) + combobox > box > button.combo {
     border-left-color: #4a90d9; }
+  .linked:not(.vertical) > entry:drop(active) + entry, .linked:not(.vertical) > spinbutton:drop(active):not(.vertical) + entry, .linked:not(.vertical) > entry:drop(active) + spinbutton:not(.vertical), .linked:not(.vertical) > spinbutton:drop(active):not(.vertical) + spinbutton:not(.vertical), .linked:not(.vertical) > entry:drop(active) + button, .linked:not(.vertical) > spinbutton:drop(active):not(.vertical) + button, .linked:not(.vertical) > entry:drop(active) + combobox > box > button.combo, .linked:not(.vertical) > spinbutton:drop(active):not(.vertical) + combobox > box > button.combo {
+    border-left-color: black; }
   entry.error, spinbutton.error:not(.vertical) {
     color: #cc0000;
     border-color: #cc0000; }
@@ -303,11 +305,16 @@ entry, spinbutton:not(.vertical) {
       box-shadow: none;
       text-shadow: none;
       -gtk-icon-shadow: none; }
+  entry:drop(active):focus, spinbutton:drop(active):focus:not(.vertical), entry:drop(active), spinbutton:drop(active):not(.vertical) {
+    border-color: black;
+    box-shadow: inset 0 0 0 1px black; }
 
 .linked.vertical > entry:not(:last-child), .linked.vertical > spinbutton:not(:last-child):not(.vertical) {
   box-shadow: none; }
 .linked.vertical > entry:focus:not(:last-child), .linked.vertical > spinbutton:focus:not(:last-child):not(.vertical) {
   box-shadow: inset 0 0 0 1px #4a90d9; }
+.linked.vertical > entry:drop(active):not(:last-child), .linked.vertical > spinbutton:drop(active):not(:last-child):not(.vertical) {
+  box-shadow: inset 0 0 0 1px black; }
 .linked.vertical > entry:not(:disabled) + entry:not(:disabled), .linked.vertical > spinbutton:not(:disabled):not(.vertical) + entry:not(:disabled), .linked.vertical > entry:not(:disabled) + spinbutton:not(:disabled):not(.vertical), .linked.vertical > spinbutton:not(:disabled):not(.vertical) + spinbutton:not(:disabled):not(.vertical) {
   border-top-color: #e2e2e0;
   background-image: linear-gradient(to bottom, #ffffff); }
@@ -319,14 +326,25 @@ entry, spinbutton:not(.vertical) {
 .linked.vertical > entry + entry:focus:not(:last-child), .linked.vertical > spinbutton:not(.vertical) + entry:focus:not(:last-child), .linked.vertical > entry + spinbutton:focus:not(:last-child):not(.vertical), .linked.vertical > spinbutton:not(.vertical) + spinbutton:focus:not(:last-child):not(.vertical) {
   border-top-color: #4a90d9;
   box-shadow: inset 0 0 0 1px #4a90d9; }
+.linked.vertical > entry + entry:drop(active):not(:last-child), .linked.vertical > spinbutton:not(.vertical) + entry:drop(active):not(:last-child), .linked.vertical > entry + spinbutton:drop(active):not(:last-child):not(.vertical), .linked.vertical > spinbutton:not(.vertical) + spinbutton:drop(active):not(:last-child):not(.vertical) {
+  border-top-color: black;
+  box-shadow: inset 0 0 0 1px black; }
 .linked.vertical > entry + entry:focus:last-child, .linked.vertical > spinbutton:not(.vertical) + entry:focus:last-child, .linked.vertical > entry + spinbutton:focus:last-child:not(.vertical), .linked.vertical > spinbutton:not(.vertical) + spinbutton:focus:last-child:not(.vertical) {
   border-top-color: #4a90d9; }
+.linked.vertical > entry + entry:drop(active):last-child, .linked.vertical > spinbutton:not(.vertical) + entry:drop(active):last-child, .linked.vertical > entry + spinbutton:drop(active):last-child:not(.vertical), .linked.vertical > spinbutton:not(.vertical) + spinbutton:drop(active):last-child:not(.vertical) {
+  border-top-color: black; }
 .linked.vertical > entry:focus:not(:only-child) + entry, .linked.vertical > spinbutton:focus:not(:only-child):not(.vertical) + entry, .linked.vertical > entry:focus:not(:only-child) + spinbutton:not(.vertical), .linked.vertical > spinbutton:focus:not(:only-child):not(.vertical) + spinbutton:not(.vertical),
 .linked.vertical > entry:focus:not(:only-child) + button,
 .linked.vertical > spinbutton:focus:not(:only-child):not(.vertical) + button,
 .linked.vertical > entry:focus:not(:only-child) + combobox > box > button.combo,
 .linked.vertical > spinbutton:focus:not(:only-child):not(.vertical) + combobox > box > button.combo {
   border-top-color: #4a90d9; }
+.linked.vertical > entry:drop(active):not(:only-child) + entry, .linked.vertical > spinbutton:drop(active):not(:only-child):not(.vertical) + entry, .linked.vertical > entry:drop(active):not(:only-child) + spinbutton:not(.vertical), .linked.vertical > spinbutton:drop(active):not(:only-child):not(.vertical) + spinbutton:not(.vertical),
+.linked.vertical > entry:drop(active):not(:only-child) + button,
+.linked.vertical > spinbutton:drop(active):not(:only-child):not(.vertical) + button,
+.linked.vertical > entry:drop(active):not(:only-child) + combobox > box > button.combo,
+.linked.vertical > spinbutton:drop(active):not(:only-child):not(.vertical) + combobox > box > button.combo {
+  border-top-color: black; }
 
 /***********
  * Buttons *
@@ -491,6 +509,12 @@ notebook > header > tabs > arrow, headerbar button.titlebutton,
     .titlebar button.text-button.image-button.titlebutton label, button.text-button.image-button label {
       padding-left: 8px;
       padding-right: 8px; }
+  notebook > header > tabs > arrow:drop(active), headerbar button.titlebutton:drop(active), headerbar combobox:drop(active) button.titlebutton.combo, combobox:drop(active) headerbar button.titlebutton.combo,
+  .titlebar button.titlebutton:drop(active),
+  .titlebar combobox:drop(active) button.titlebutton.combo,
+  combobox:drop(active) .titlebar button.titlebutton.combo, button:drop(active), combobox:drop(active) button.combo {
+    border-color: black;
+    box-shadow: inset 0 0 0 1px black; }
 button.osd {
   color: #eeeeec;
   border-radius: 5px;
@@ -1324,6 +1348,9 @@ spinbutton.vertical:disabled {
   color: #8b8e8f; }
 spinbutton.vertical:backdrop:disabled {
   color: #c3c3c0; }
+spinbutton.vertical:drop(active) {
+  border-color: transparent;
+  box-shadow: none; }
 spinbutton.vertical entry, spinbutton.vertical spinbutton:not(.vertical) {
   min-height: 32px;
   min-width: 32px;
@@ -1398,6 +1425,8 @@ combobox arrow {
   -gtk-icon-source: -gtk-icontheme("pan-down-symbolic");
   min-height: 16px;
   min-width: 16px; }
+combobox:drop(active) {
+  box-shadow: none; }
 
 /************
  * Toolbars *
