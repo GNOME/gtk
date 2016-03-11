@@ -4110,6 +4110,9 @@ colorswatch#editor-color-sample {
   colorswatch#editor-color-sample overlay {
     border-radius: 4.5px; }
 
+colorchooser .popover.osd {
+  border-radius: 5px; }
+
 /********
  * Misc *
  ********/
