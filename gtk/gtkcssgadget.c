@@ -887,6 +887,28 @@ gtk_css_gadget_draw (GtkCssGadget *gadget,
                                   height - margin.top - margin.bottom);
 
 #if G_ENABLE_DEBUG
+  if (GTK_DEBUG_CHECK (LAYOUT))
+    {
+      cairo_save (cr);
+      cairo_new_path (cr);
+      cairo_rectangle (cr,
+                       x + margin.left,
+                       y + margin.top,
+                       width - margin.left - margin.right,
+                       height - margin.top - margin.bottom);
+      cairo_set_line_width (cr, 1.0);
+      cairo_set_source_rgba (cr, 0, 0, 1.0, 0.33);
+      cairo_stroke (cr);
+      cairo_rectangle (cr,
+                       contents_x,
+                       contents_y,
+                       contents_width,
+                       contents_height);
+      cairo_set_line_width (cr, 1.0);
+      cairo_set_source_rgba (cr, 1.0, 0, 1.0, 0.33);
+      cairo_stroke (cr);
+      cairo_restore (cr);
+    }
   if (GTK_DEBUG_CHECK (BASELINES))
     {
       int baseline = priv->allocated_baseline;
