@@ -2771,7 +2771,7 @@ gtk_entry_init (GtkEntry *entry)
       gtk_css_node_set_name (priv->undershoot_node[i], I_("undershoot"));
       gtk_css_node_add_class (priv->undershoot_node[i], g_quark_from_static_string (i == 0 ? GTK_STYLE_CLASS_LEFT : GTK_STYLE_CLASS_RIGHT));
       gtk_css_node_set_parent (priv->undershoot_node[i], widget_node);
-      gtk_css_node_set_state (priv->undershoot_node[i], gtk_css_node_get_state (widget_node));
+      gtk_css_node_set_state (priv->undershoot_node[i], gtk_css_node_get_state (widget_node) & ~GTK_STATE_FLAG_DROP_ACTIVE);
       g_object_unref (priv->undershoot_node[i]);
     }
 }
@@ -3175,7 +3175,7 @@ update_icon_state (GtkWidget            *widget,
     return;
 
   state = gtk_widget_get_state_flags (widget);
-  state &= ~GTK_STATE_FLAG_PRELIGHT;
+  state &= ~(GTK_STATE_FLAG_PRELIGHT | GTK_STATE_FLAG_DROP_ACTIVE);
 
   if ((state & GTK_STATE_FLAG_INSENSITIVE) || icon_info->insensitive)
     state |= GTK_STATE_FLAG_INSENSITIVE;
@@ -3192,11 +3192,15 @@ update_node_state (GtkEntry *entry)
   GtkStateFlags state;
 
   state = gtk_widget_get_state_flags (GTK_WIDGET (entry));
+  state &= ~GTK_STATE_FLAG_DROP_ACTIVE;
 
   if (priv->progress_gadget)
     gtk_css_gadget_set_state (priv->progress_gadget, state);
   if (priv->selection_node)
     gtk_css_node_set_state (priv->selection_node, state);
+
+  gtk_css_node_set_state (priv->undershoot_node[0], state);
+  gtk_css_node_set_state (priv->undershoot_node[1], state);
 }
 
 static void
