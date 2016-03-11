@@ -1520,7 +1520,7 @@ gtk_tree_model_iter_previous (GtkTreeModel *tree_model,
  * If @parent is %NULL returns the first node, equivalent to
  * `gtk_tree_model_get_iter_first (tree_model, iter);`
  *
- * Returns: %TRUE, if @child has been set to the first child
+ * Returns: %TRUE, if @iter has been set to the first child
  */
 gboolean
 gtk_tree_model_iter_children (GtkTreeModel *tree_model,
