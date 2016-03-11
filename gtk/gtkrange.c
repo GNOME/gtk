@@ -3429,6 +3429,15 @@ gtk_range_move_slider (GtkRange     *range,
     gtk_widget_error_bell (GTK_WIDGET (range));
 }
 
+static gboolean
+rectangle_contains_point (GdkRectangle *rect,
+                          gint          x,
+                          gint          y)
+{
+  return (x >= rect->x) && (x < rect->x + rect->width) &&
+         (y >= rect->y) && (y < rect->y + rect->height);
+}
+
 /* Update mouse location, return TRUE if it changes */
 static void
 gtk_range_update_mouse_location (GtkRange *range)
@@ -3437,11 +3446,16 @@ gtk_range_update_mouse_location (GtkRange *range)
   gint x, y;
   MouseLocation old;
   GtkWidget *widget = GTK_WIDGET (range);
+  GdkRectangle trough_alloc, slider_alloc, slider_trace;
 
   old = priv->mouse_location;
 
   x = priv->mouse_x;
   y = priv->mouse_y;
+
+  gtk_css_gadget_get_border_box (priv->trough_gadget, &trough_alloc);
+  gtk_css_gadget_get_border_box (priv->slider_gadget, &slider_alloc);
+  gdk_rectangle_union (&slider_alloc, &trough_alloc, &slider_trace);
 
   if (priv->grab_location != MOUSE_OUTSIDE)
     priv->mouse_location = priv->grab_location;
@@ -3459,7 +3473,7 @@ gtk_range_update_mouse_location (GtkRange *range)
     priv->mouse_location = MOUSE_STEPPER_D;
   else if (gtk_css_gadget_border_box_contains_point (priv->slider_gadget, x, y))
     priv->mouse_location = MOUSE_SLIDER;
-  else if (gtk_css_gadget_border_box_contains_point (priv->trough_gadget, x, y))
+  else if (rectangle_contains_point (&slider_trace, x, y))
     priv->mouse_location = MOUSE_TROUGH;
   else if (gtk_css_gadget_margin_box_contains_point (priv->gadget, x, y))
     priv->mouse_location = MOUSE_WIDGET;
