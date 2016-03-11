@@ -2201,6 +2201,7 @@ _gdk_set_window_state (GdkWindow      *window,
     {
       old = window->old_state;
       _gdk_event_queue_remove_link (display, pending_event_link);
+      gdk_event_free (pending_event_link->data);
       g_list_free_1 (pending_event_link);
     }
   else
