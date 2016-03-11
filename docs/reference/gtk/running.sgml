@@ -218,7 +218,10 @@ additional environment variables.
       <term>resize</term>
       <listitem><para>Highlight resizing widgets</para></listitem>
     </varlistentry>
-
+    <varlistentry>
+      <term>layout</term>
+      <listitem><para>Show layout borders</para></listitem>
+    </varlistentry>
   </variablelist>
   The special value <literal>all</literal> can be used to turn on all
   debug options. The special value <literal>help</literal> can be used
