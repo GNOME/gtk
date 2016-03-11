@@ -4808,7 +4808,7 @@ text_window_set_padding (GtkTextView     *text_view,
   priv = text_view->priv;
 
   gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
-  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &border);
+  gtk_style_context_get_border (context, gtk_style_context_get_state (context), &border);
   padding.left += border.left;
   padding.right += border.right;
   padding.top += border.top;
