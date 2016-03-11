@@ -332,14 +332,6 @@ entry {
 .linked.vertical {
   > entry { @extend %linked_vertical; }
 
-  // remove the edge hilight and the focus shadow (unfortunatelly)
-  > entry:not(:last-child) { box-shadow: none; }
-
-  // add back the focus shadow
-  > entry:focus:not(:last-child) { box-shadow: entry_focus_shadow(); }
-
-  > entry:drop(active):not(:last-child) { box-shadow: inset 0 0 0 1px $drop_target_color; }
-
   // brighter border between linked entries
   > entry:not(:disabled) + entry:not(:disabled) {
     border-top-color: mix($borders_color, $base_color, 30%);
@@ -355,21 +347,13 @@ entry {
   > entry:disabled + entry:disabled { border-top-color: mix($borders_color, $base_color, 30%); }
 
   // color back the top border of a linked focused entry following another entry and add back the focus shadow.
-  > entry + entry:focus:not(:last-child) {
+  // :not(:only-child) is a specificity bump hack.
+  > entry + entry:focus:not(:only-child) {
     border-top-color: entry_focus_border();
-    box-shadow: entry_focus_shadow();
   }
-
-  > entry + entry:drop(active):not(:last-child) {
+  > entry + entry:drop(active):not(:only-child) {
     border-top-color: $drop_target_color;
-    box-shadow: inset 0 0 0 1px $drop_target_color;
   }
-
-  // just recolor the top border on the last focused entry, since we don't reset the shadow here letting that be
-  // inherited by the entry styling.
-  > entry + entry:focus:last-child { border-top-color: entry_focus_border(); }
-
-  > entry + entry:drop(active):last-child { border-top-color: $drop_target_color; }
 
   // this takes care of coloring the top border of the focused entry subsequent widget.
   // :not(:only-child) is a specificity bump hack.
