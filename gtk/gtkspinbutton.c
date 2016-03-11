@@ -926,7 +926,7 @@ gtk_spin_button_panel_get_state (GtkSpinButton *spin_button,
 
   state = gtk_widget_get_state_flags (GTK_WIDGET (spin_button));
 
-  state &= ~(GTK_STATE_FLAG_ACTIVE | GTK_STATE_FLAG_PRELIGHT);
+  state &= ~(GTK_STATE_FLAG_ACTIVE | GTK_STATE_FLAG_PRELIGHT | GTK_STATE_FLAG_DROP_ACTIVE);
 
   if ((state & GTK_STATE_FLAG_INSENSITIVE) ||
       gtk_spin_button_panel_at_limit (spin_button, panel) ||
