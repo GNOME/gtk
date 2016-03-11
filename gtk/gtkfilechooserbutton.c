@@ -471,6 +471,8 @@ gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
   gtk_widget_class_bind_template_callback (widget_class, button_clicked_cb);
   gtk_widget_class_bind_template_callback (widget_class, combo_box_changed_cb);
   gtk_widget_class_bind_template_callback (widget_class, combo_box_notify_popup_shown_cb);
+
+  gtk_widget_class_set_css_name (widget_class, "filechooserbutton");
 }
 
 static void
