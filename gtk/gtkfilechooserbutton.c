@@ -278,6 +278,8 @@ static gboolean gtk_file_chooser_button_mnemonic_activate  (GtkWidget        *wi
 static void     gtk_file_chooser_button_style_updated      (GtkWidget        *widget);
 static void     gtk_file_chooser_button_screen_changed     (GtkWidget        *widget,
 							    GdkScreen        *old_screen);
+static void     gtk_file_chooser_button_state_flags_changed (GtkWidget       *widget,
+                                                             GtkStateFlags    previous_state);
 
 /* Utility Functions */
 static GtkIconTheme *get_icon_theme               (GtkWidget            *widget);
@@ -386,6 +388,7 @@ gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
   widget_class->style_updated = gtk_file_chooser_button_style_updated;
   widget_class->screen_changed = gtk_file_chooser_button_screen_changed;
   widget_class->mnemonic_activate = gtk_file_chooser_button_mnemonic_activate;
+  widget_class->state_flags_changed = gtk_file_chooser_button_state_flags_changed;
 
   /**
    * GtkFileChooserButton::file-set:
@@ -994,6 +997,27 @@ gtk_file_chooser_button_finalize (GObject *object)
 /* ********************* *
  *  GtkWidget Functions  *
  * ********************* */
+
+static void
+gtk_file_chooser_button_state_flags_changed (GtkWidget     *widget,
+                                             GtkStateFlags  previous_state)
+{
+  GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (widget);
+  GtkFileChooserButtonPrivate *priv = button->priv;
+  GtkWidget *child;
+
+  if (gtk_widget_get_visible (priv->button))
+    child = priv->button;
+  else
+    child = priv->combo_box;
+
+  if (gtk_widget_get_state_flags (widget) & GTK_STATE_FLAG_DROP_ACTIVE)
+    gtk_widget_set_state_flags (child, GTK_STATE_FLAG_DROP_ACTIVE, FALSE);
+  else
+    gtk_widget_unset_state_flags (child, GTK_STATE_FLAG_DROP_ACTIVE);
+
+  GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->state_flags_changed (widget, previous_state);
+}
 
 static void
 gtk_file_chooser_button_destroy (GtkWidget *widget)
