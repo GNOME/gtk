@@ -2162,6 +2162,7 @@ calendar_paint_header (GtkCalendar *calendar, cairo_t *cr)
   GtkCalendarPrivate *priv = calendar->priv;
   GtkAllocation allocation;
   GtkStyleContext *context;
+  GtkStateFlags state;
   GtkBorder padding;
   char buffer[255];
   gint x, y;
@@ -2193,7 +2194,12 @@ calendar_paint_header (GtkCalendar *calendar, cairo_t *cr)
   max_month_width = priv->max_month_width;
   max_year_width = priv->max_year_width;
 
+  state = gtk_style_context_get_state (context);
+  state &= ~GTK_STATE_FLAG_DROP_ACTIVE;
+
   gtk_style_context_save (context);
+
+  gtk_style_context_set_state (context, state);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_HEADER);
 
   gtk_render_background (context, cr, 0, 0, header_width, priv->header_h);
@@ -2272,6 +2278,7 @@ calendar_paint_day_names (GtkCalendar *calendar,
   GtkWidget *widget = GTK_WIDGET (calendar);
   GtkCalendarPrivate *priv = calendar->priv;
   GtkStyleContext *context;
+  GtkStateFlags state;
   GtkBorder padding, day_name_padding;
   GtkAllocation allocation;
   char buffer[255];
@@ -2303,7 +2310,12 @@ calendar_paint_day_names (GtkCalendar *calendar,
    * Draw rectangles as inverted background for the labels.
    */
 
+  state = gtk_style_context_get_state (context);
+  state &= ~GTK_STATE_FLAG_DROP_ACTIVE;
+
   gtk_style_context_save (context);
+
+  gtk_style_context_set_state (context, state);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_HIGHLIGHT);
 
   gtk_render_background (context, cr,
@@ -2359,6 +2371,7 @@ calendar_paint_week_numbers (GtkCalendar *calendar,
   GtkWidget *widget = GTK_WIDGET (calendar);
   GtkCalendarPrivate *priv = calendar->priv;
   GtkStyleContext *context;
+  GtkStateFlags state;
   GtkBorder padding, week_padding;
   gint row, x_loc, y_loc;
   gint day_height;
@@ -2380,7 +2393,12 @@ calendar_paint_week_numbers (GtkCalendar *calendar,
   else
     x = gtk_widget_get_allocated_width (widget) - priv->week_width - (padding.right + inner_border);
 
+  state = gtk_style_context_get_state (context);
+  state &= ~GTK_STATE_FLAG_DROP_ACTIVE;
+
   gtk_style_context_save (context);
+
+  gtk_style_context_set_state (context, state);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_HIGHLIGHT);
 
   if (priv->display_flags & GTK_CALENDAR_SHOW_DAY_NAMES)
@@ -2535,7 +2553,7 @@ calendar_paint_day (GtkCalendar *calendar,
 
   gtk_style_context_save (context);
 
-  state &= ~(GTK_STATE_FLAG_INCONSISTENT | GTK_STATE_FLAG_ACTIVE | GTK_STATE_FLAG_SELECTED);
+  state &= ~(GTK_STATE_FLAG_INCONSISTENT | GTK_STATE_FLAG_ACTIVE | GTK_STATE_FLAG_SELECTED | GTK_STATE_FLAG_DROP_ACTIVE);
 
   if (priv->day_month[row][col] == MONTH_PREV ||
       priv->day_month[row][col] == MONTH_NEXT)
