@@ -2369,6 +2369,7 @@ radio {
   min-width: 14px;
   border: 1px solid;
   -gtk-icon-source: none;
+
   @include button(normal-alt, $edge: $shadow_color);
 
   &:hover { @include button(hover-alt, $edge: $shadow_color); }
@@ -2384,6 +2385,15 @@ radio {
     // the borders of the light variant versions of checks and radios are too similar in luminosity to the selected background
     // color, hence we need special casing.
     row:selected & { border-color: $selected_borders_color; }
+  }
+
+  .osd & {
+    @include button(osd);
+
+    &:hover { @include button(osd); }
+    &:active { @include button(osd-active); }
+    &:backdrop { @include button(osd-backdrop); }
+    &:disabled { @include button(osd-insensitive); }
   }
 
   menu menuitem & {
