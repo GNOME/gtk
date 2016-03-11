@@ -55,6 +55,7 @@ struct _GtkInspectorVisualPrivate
   GtkWidget *rendering_mode_combo;
   GtkWidget *updates_switch;
   GtkWidget *baselines_switch;
+  GtkWidget *layout_switch;
   GtkWidget *touchscreen_switch;
 
   GtkWidget *gl_box;
@@ -159,6 +160,22 @@ baselines_activate (GtkSwitch *sw)
     flags |= GTK_DEBUG_BASELINES;
   else
     flags &= ~GTK_DEBUG_BASELINES;
+
+  gtk_set_debug_flags (flags);
+  redraw_everything ();
+}
+
+static void
+layout_activate (GtkSwitch *sw)
+{
+  guint flags;
+
+  flags = gtk_get_debug_flags ();
+
+  if (gtk_switch_get_active (sw))
+    flags |= GTK_DEBUG_LAYOUT;
+  else
+    flags &= ~GTK_DEBUG_LAYOUT;
 
   gtk_set_debug_flags (flags);
   redraw_everything ();
@@ -726,6 +743,7 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, updates_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, direction_combo);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, baselines_switch);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, layout_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, theme_combo);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, dark_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, cursor_combo);
@@ -749,6 +767,7 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, direction_changed);
   gtk_widget_class_bind_template_callback (widget_class, rendering_mode_changed);
   gtk_widget_class_bind_template_callback (widget_class, baselines_activate);
+  gtk_widget_class_bind_template_callback (widget_class, layout_activate);
   gtk_widget_class_bind_template_callback (widget_class, pixelcache_activate);
   gtk_widget_class_bind_template_callback (widget_class, widget_resize_activate);
   gtk_widget_class_bind_template_callback (widget_class, software_gl_activate);
