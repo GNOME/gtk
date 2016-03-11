@@ -6988,7 +6988,7 @@ gtk_widget_draw_internal (GtkWidget *widget,
         }
 
 #ifdef G_ENABLE_DEBUG
-      if (GTK_DEBUG_CHECK (BASELINES))
+      if (GTK_DISPLAY_DEBUG_CHECK (gtk_widget_get_display (widget), BASELINES))
 	{
 	  gint baseline = gtk_widget_get_allocated_baseline (widget);
 	  gint width = gtk_widget_get_allocated_width (widget);
@@ -7005,8 +7005,7 @@ gtk_widget_draw_internal (GtkWidget *widget,
 	      cairo_restore (cr);
 	    }
 	}
-
-      if (GTK_DEBUG_CHECK (RESIZE) &&
+      if (GTK_DISPLAY_DEBUG_CHECK (gtk_widget_get_display (widget), RESIZE) &&
           widget->priv->highlight_resize)
         {
           GtkAllocation alloc;

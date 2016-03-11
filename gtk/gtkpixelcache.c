@@ -18,6 +18,7 @@
 #include "config.h"
 
 #include "gtkdebug.h"
+#include "gtkprivate.h"
 #include "gtkpixelcacheprivate.h"
 #include "gtkrenderbackgroundprivate.h"
 #include "gtkstylecontextprivate.h"
@@ -186,7 +187,7 @@ _gtk_pixel_cache_create_surface_if_needed (GtkPixelCache         *cache,
   cairo_content_t content;
 
 #ifdef G_ENABLE_DEBUG
-  if (GTK_DEBUG_CHECK (NO_PIXEL_CACHE))
+  if (GTK_DISPLAY_DEBUG_CHECK (gdk_window_get_display (window), NO_PIXEL_CACHE))
     return;
 #endif
 
@@ -329,6 +330,7 @@ _gtk_pixel_cache_set_position (GtkPixelCache         *cache,
 
 static void
 _gtk_pixel_cache_repaint (GtkPixelCache         *cache,
+                          GdkWindow             *window,
                           GtkPixelCacheDrawFunc  draw,
                           cairo_rectangle_int_t *view_rect,
                           cairo_rectangle_int_t *canvas_rect,
@@ -361,7 +363,7 @@ _gtk_pixel_cache_repaint (GtkPixelCache         *cache,
       cairo_restore (backing_cr);
 
 #ifdef G_ENABLE_DEBUG
-      if (GTK_DEBUG_CHECK (PIXEL_CACHE))
+      if (GTK_DISPLAY_DEBUG_CHECK (gdk_window_get_display (window), PIXEL_CACHE))
         {
           GdkRGBA colors[] = {
             { 1, 0, 0, 0.08},
@@ -449,7 +451,7 @@ _gtk_pixel_cache_draw (GtkPixelCache         *cache,
   _gtk_pixel_cache_create_surface_if_needed (cache, window,
                                              view_rect, canvas_rect);
   _gtk_pixel_cache_set_position (cache, view_rect, canvas_rect);
-  _gtk_pixel_cache_repaint (cache, draw, view_rect, canvas_rect, user_data);
+  _gtk_pixel_cache_repaint (cache, window, draw, view_rect, canvas_rect, user_data);
 
   if (cache->surface && context_is_unscaled (cr) &&
       /* Don't use backing surface if rendering elsewhere */
