@@ -119,6 +119,10 @@ textview {
   background-color: #313434; }
   textview:backdrop {
     background-color: #333636; }
+  textview:drop(active), textview:drop(active) > text {
+    box-shadow: none; }
+  textview:drop(active) > text {
+    background-color: rgba(90, 164, 17, 0.1); }
 
 popover.background.touch-selection, popover.background.magnifier, .csd popover.background.touch-selection, .csd popover.background.magnifier, popover.background.osd, .csd popover.background.osd, .app-notification,
 .app-notification.frame, .osd .scale-popup, .osd {
