@@ -5937,7 +5937,7 @@ msgstr "Cédille"
 #: modules/input/imcyrillic-translit.c:215
 msgctxt "input menthod menu"
 msgid "Cyrillic (Transliterated)"
-msgstr "Cyrilice (transliterovaná)"
+msgstr "Azbuka (transliterovaná)"
 
 #: modules/input/imime.c:30
 msgctxt "input method menu"
