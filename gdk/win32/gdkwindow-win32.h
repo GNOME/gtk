@@ -98,6 +98,9 @@ typedef enum _GdkW32WindowDragOp GdkW32WindowDragOp;
 
 struct _GdkW32DragMoveResizeContext
 {
+  /* The window that is being moved/resized */
+  GdkWindow         *window;
+
   /* The kind of drag-operation going on. */
   GdkW32WindowDragOp op;
 
@@ -141,8 +144,38 @@ struct _GdkW32DragMoveResizeContext
   /* This window looks like an outline and is drawn under the window
    * that is being dragged. It indicates the shape the dragged window
    * will take if released at a particular point.
+   * Indicator window size always matches the target indicator shape,
+   * the the actual indicator drawn on it might not, depending on
+   * how much time elapsed since the animation started.
    */
   HWND               shape_indicator;
+
+  /* Used to draw the indicator */
+  cairo_surface_t   *indicator_surface;
+  gint               indicator_surface_width;
+  gint               indicator_surface_height;
+
+  /* Size/position of shape_indicator */
+  GdkRectangle       indicator_window_rect;
+
+  /* Indicator will animate to occupy this rectangle */
+  GdkRectangle       indicator_target;
+
+  /* Indicator will start animating from this rectangle */
+  GdkRectangle       indicator_start;
+
+  /* Timestamp of the animation start */
+  gint64             indicator_start_time;
+
+  /* Timer that drives the animation */
+  guint              timer;
+
+  /* A special timestamp, if we want to draw not how
+   * the animation should look *now*, but how it should
+   * look at arbitrary moment of time.
+   * Set to 0 to tell GDK to use current time.
+   */
+  gint64             draw_timestamp;
 
   /* Indicates that a transformation was revealed:
    *

@@ -97,6 +97,34 @@ typedef struct _AeroSnapEdgeRegion AeroSnapEdgeRegion;
  */
 #define AEROSNAP_REGION_TRIGGER_THICKNESS (1)
 
+/* The gap between the snap indicator and the edge of the work area
+ * (in pixels).
+ */
+#define AEROSNAP_INDICATOR_EDGE_GAP (10)
+
+/* Width of the outline of the snap indicator
+ * (in pixels).
+ */
+#define AEROSNAP_INDICATOR_LINE_WIDTH (3.0)
+
+/* Corner radius of the snap indicator.
+ */
+#define AEROSNAP_INDICATOR_CORNER_RADIUS (3.0)
+
+/* The time it takes for snap indicator to expand/shrink
+ * from current window size to future position of the
+ * snapped window (in microseconds).
+ */
+#define AEROSNAP_INDICATOR_ANIMATION_DURATION (200 * 1000)
+
+/* Opacity if the snap indicator. */
+#define AEROSNAP_INDICATOR_OPACITY (0.5)
+
+/* The interval between snap indicator redraws (in milliseconds).
+ * 16 is ~ 1/60 of a second, for ~60 FPS.
+ */
+#define AEROSNAP_INDICATOR_ANIMATION_TICK (16)
+
 static gboolean _gdk_window_get_functions (GdkWindow         *window,
                                            GdkWMFunction     *functions);
 static HDC     _gdk_win32_impl_acquire_dc (GdkWindowImplWin32 *impl);
@@ -2952,6 +2980,7 @@ _gdk_window_get_functions (GdkWindow     *window,
   return (functions_set != NULL);
 }
 
+#if defined(MORE_AEROSNAP_DEBUGGING)
 static void
 log_region (gchar *prefix, AeroSnapEdgeRegion *region)
 {
@@ -2968,6 +2997,7 @@ log_region (gchar *prefix, AeroSnapEdgeRegion *region)
                            region->trigger.x,
                            region->trigger.y));
 }
+#endif
 
 static void
 calculate_aerosnap_regions (GdkW32DragMoveResizeContext *context)
@@ -2975,6 +3005,9 @@ calculate_aerosnap_regions (GdkW32DragMoveResizeContext *context)
   GdkDisplay *display;
   GdkScreen *screen;
   gint n_monitors, monitor, other_monitor;
+#if defined(MORE_AEROSNAP_DEBUGGING)
+  gint i;
+#endif
 
   display = gdk_display_get_default ();
   screen = gdk_display_get_default_screen (display);
@@ -3110,8 +3143,7 @@ calculate_aerosnap_regions (GdkW32DragMoveResizeContext *context)
 #undef _M_LEFT
 #undef _M_RIGHT
 
-  gint i;
-
+#if defined(MORE_AEROSNAP_DEBUGGING)
   for (i = 0; i < context->maximize_regions->len; i++)
     log_region ("maximize", &g_array_index (context->maximize_regions, AeroSnapEdgeRegion, i));
 
@@ -3123,6 +3155,7 @@ calculate_aerosnap_regions (GdkW32DragMoveResizeContext *context)
 
   for (i = 0; i < context->fullup_regions->len; i++)
     log_region ("fullup", &g_array_index (context->fullup_regions, AeroSnapEdgeRegion, i));
+#endif
 }
 
 static void
@@ -3305,7 +3338,7 @@ snap_up (GdkWindow *window,
 
   impl->snap_state = GDK_WIN32_AEROSNAP_STATE_FULLUP;
 
-  maxysize = GetSystemMetrics (SM_CYMAXTRACK);
+  maxysize = GetSystemMetrics (SM_CYVIRTUALSCREEN);
   gdk_window_get_position (window, &x, &y);
   width = gdk_window_get_width (window);
 
@@ -3495,27 +3528,440 @@ apply_snap (GdkWindow             *window,
     }
 }
 
+static gboolean
+ensure_snap_indicator_exists (GdkW32DragMoveResizeContext *context)
+{
+  if (context->shape_indicator == NULL)
+    {
+      HWND handle;
+      ATOM klass;
+      klass = RegisterGdkClass (GDK_WINDOW_TOPLEVEL, GDK_WINDOW_TYPE_HINT_SPLASHSCREEN);
+
+      handle = CreateWindowExW (WS_EX_TRANSPARENT | WS_EX_LAYERED | WS_EX_NOACTIVATE,
+                                MAKEINTRESOURCEW (klass),
+                                L"",
+                                WS_POPUP,
+                                0,
+                                0,
+                                0, 0,
+                                NULL,
+                                NULL,
+                                _gdk_app_hmodule,
+                                NULL);
+
+      context->shape_indicator = handle;
+    }
+
+  return context->shape_indicator != NULL;
+}
+
+static gboolean
+ensure_snap_indicator_surface (GdkW32DragMoveResizeContext *context,
+                          gint                         width,
+                          gint                         height)
+{
+  if (context->indicator_surface != NULL &&
+      (context->indicator_surface_width < width ||
+       context->indicator_surface_height < height))
+    {
+      cairo_surface_destroy (context->indicator_surface);
+      context->indicator_surface = NULL;
+    }
+
+  if (context->indicator_surface == NULL)
+    context->indicator_surface = cairo_win32_surface_create_with_dib (CAIRO_FORMAT_ARGB32, width, height);
+
+  if (cairo_surface_status (context->indicator_surface) != CAIRO_STATUS_SUCCESS)
+    {
+      cairo_surface_destroy (context->indicator_surface);
+      context->indicator_surface = NULL;
+
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
+/* Indicator is drawn with some inward offset, so that it does
+ * not hug screen edges.
+ */
+static void
+adjust_indicator_rectangle (GdkRectangle *rect,
+                            gboolean      inward)
+{
+  gdouble inverter;
+  gint gap;
+#if defined(MORE_AEROSNAP_DEBUGGING)
+  GdkRectangle cache = *rect;
+#endif
+
+  if (inward)
+    inverter = 1.0;
+  else
+    inverter = -1.0;
+
+  /* TODO: Adjust for HiDPI? */
+  gap = AEROSNAP_INDICATOR_EDGE_GAP;
+
+  rect->x += gap * inverter;
+  rect->y += gap * inverter;
+  rect->width -= gap * 2 * inverter;
+  rect->height -= gap * 2 * inverter;
+
+#if defined(MORE_AEROSNAP_DEBUGGING)
+  GDK_NOTE (MISC, g_print ("Adjusted %d x %d @ %d : %d -> %d x %d @ %d : %d\n",
+                           cache.width, cache.height, cache.x, cache.y,
+                           rect->width, rect->height, rect->x, rect->y));
+#endif
+}
+
+static void
+rounded_rectangle (cairo_t  *cr,
+                   gint      x,
+                   gint      y,
+                   gint      width,
+                   gint      height,
+                   gdouble   radius,
+                   gdouble   line_width,
+                   GdkRGBA  *fill,
+                   GdkRGBA  *outline)
+{
+  gdouble degrees = M_PI / 180.0;
+
+  if (fill == NULL && outline == NULL)
+    return;
+
+  cairo_save (cr);
+  cairo_new_sub_path (cr);
+  cairo_arc (cr, x + width - radius, y + radius, radius, -90 * degrees, 0 * degrees);
+  cairo_arc (cr, x + width - radius, y + height - radius, radius, 0 * degrees, 90 * degrees);
+  cairo_arc (cr, x + radius, y + height - radius, radius, 90 * degrees, 180 * degrees);
+  cairo_arc (cr, x + radius, y + radius, radius, 180 * degrees, 270 * degrees);
+  cairo_close_path (cr);
+
+  if (fill)
+    {
+      cairo_set_source_rgba (cr, fill->red, fill->green, fill->blue, fill->alpha);
+
+      if (outline)
+        cairo_fill_preserve (cr);
+      else
+        cairo_fill (cr);
+    }
+
+  if (outline)
+    {
+      cairo_set_source_rgba (cr, outline->red, outline->green, outline->blue, outline->alpha);
+      cairo_set_line_width (cr, line_width);
+      cairo_stroke (cr);
+    }
+
+  cairo_restore (cr);
+}
+
+/* Translates linear animation scale into some kind of curve */
+static gdouble
+curve (gdouble val)
+{
+  /* TODO: try different curves. For now it's just linear */
+  return val;
+}
+
+static gboolean
+draw_indicator (GdkW32DragMoveResizeContext *context,
+                gint64                       timestamp)
+{
+  cairo_t *cr;
+  GdkRGBA outline = {0, 0, 1.0, 1.0};
+  GdkRGBA fill = {0, 0, 1.0, 0.8};
+  GdkRectangle current_rect;
+  gint64 current_time = g_get_monotonic_time ();
+  gdouble animation_progress;
+  gboolean last_draw;
+  gdouble line_width;
+  gdouble corner_radius;
+  gint64 animation_duration;
+
+  /* TODO: Adjust for HiDPI? */
+  line_width = AEROSNAP_INDICATOR_LINE_WIDTH;
+  /* TODO: Adjust for HiDPI? */
+  corner_radius = AEROSNAP_INDICATOR_CORNER_RADIUS;
+  animation_duration = AEROSNAP_INDICATOR_ANIMATION_DURATION;
+  last_draw = FALSE;
+
+  if (timestamp == 0 &&
+      current_time - context->indicator_start_time > animation_duration)
+    {
+      timestamp = context->indicator_start_time + animation_duration;
+      last_draw = TRUE;
+    }
+
+  if (timestamp != 0)
+    current_time = timestamp;
+
+  animation_progress = (gdouble) (current_time - context->indicator_start_time) / animation_duration;
+
+  if (animation_progress > 1.0)
+    animation_progress = 1.0;
+
+  if (animation_progress < 0)
+    animation_progress = 0;
+
+  animation_progress = curve (animation_progress);
+
+  current_rect = context->indicator_start;
+  current_rect.x += (context->indicator_target.x - context->indicator_start.x) * animation_progress;
+  current_rect.y += (context->indicator_target.y - context->indicator_start.y) * animation_progress;
+  current_rect.width += (context->indicator_target.width - context->indicator_start.width) * animation_progress;
+  current_rect.height += (context->indicator_target.height - context->indicator_start.height) * animation_progress;
+
+  if (context->op == GDK_WIN32_DRAGOP_RESIZE && last_draw)
+    {
+      switch (context->edge)
+        {
+        case GDK_WINDOW_EDGE_NORTH_WEST:
+          current_rect.x = context->indicator_target.x + (context->indicator_target.width - current_rect.width);
+          current_rect.y = context->indicator_target.y + (context->indicator_target.height - current_rect.height);
+          break;
+        case GDK_WINDOW_EDGE_NORTH:
+          current_rect.y = context->indicator_target.y + (context->indicator_target.height - current_rect.height);
+          break;
+        case GDK_WINDOW_EDGE_WEST:
+          current_rect.x = context->indicator_target.x + (context->indicator_target.width - current_rect.width);
+          break;
+        case GDK_WINDOW_EDGE_SOUTH_WEST:
+          current_rect.x = context->indicator_target.x + (context->indicator_target.width - current_rect.width);
+          current_rect.y = context->indicator_target.y;
+          break;
+        case GDK_WINDOW_EDGE_NORTH_EAST:
+          current_rect.x = context->indicator_target.x;
+          current_rect.y = context->indicator_target.y + (context->indicator_target.height - current_rect.height);
+          break;
+        case GDK_WINDOW_EDGE_SOUTH_EAST:
+          current_rect.x = context->indicator_target.x;
+          current_rect.y = context->indicator_target.y;
+          break;
+        case GDK_WINDOW_EDGE_SOUTH:
+          current_rect.y = context->indicator_target.y;
+          break;
+        case GDK_WINDOW_EDGE_EAST:
+          current_rect.x = context->indicator_target.x;
+          break;
+        }
+    }
+
+  cr = cairo_create (context->indicator_surface);
+  rounded_rectangle (cr,
+                     current_rect.x - context->indicator_window_rect.x,
+                     current_rect.y - context->indicator_window_rect.y,
+                     current_rect.width, current_rect.height,
+                     corner_radius,
+                     line_width,
+                     &fill, &outline);
+  cairo_destroy (cr);
+
+#if defined(MORE_AEROSNAP_DEBUGGING)
+  GDK_NOTE (MISC, g_print ("Indicator is %d x %d @ %d : %d; current time is %" G_GINT64_FORMAT "\n",
+                           current_rect.width, current_rect.height,
+                           current_rect.x - context->indicator_window_rect.x,
+                           current_rect.y - context->indicator_window_rect.y,
+                           current_time));
+#endif
+
+  return last_draw;
+}
+
+static gboolean
+redraw_indicator (gpointer user_data)
+{
+  GdkW32DragMoveResizeContext *context = user_data;
+  POINT window_position;
+  SIZE window_size;
+  BLENDFUNCTION blender;
+  HDC hdc;
+  POINT source_point = { 0, 0 };
+  gboolean last_draw;
+  gdouble indicator_opacity;
+
+  indicator_opacity = AEROSNAP_INDICATOR_OPACITY;
+
+  if (GDK_WINDOW_DESTROYED (context->window) ||
+      !ensure_snap_indicator_exists (context) ||
+      !ensure_snap_indicator_surface (context,
+                                 context->indicator_window_rect.width,
+                                 context->indicator_window_rect.height))
+    {
+      context->timer = 0;
+      return G_SOURCE_REMOVE;
+    }
+
+  last_draw = draw_indicator (context, context->draw_timestamp);
+
+  window_position.x = context->indicator_window_rect.x - _gdk_offset_x;
+  window_position.y = context->indicator_window_rect.y - _gdk_offset_y;
+  window_size.cx = context->indicator_window_rect.width;
+  window_size.cy = context->indicator_window_rect.height;
+
+  blender.BlendOp = AC_SRC_OVER;
+  blender.BlendFlags = 0;
+  blender.AlphaFormat = AC_SRC_ALPHA;
+  blender.SourceConstantAlpha = 255 * indicator_opacity;
+
+  hdc = cairo_win32_surface_get_dc (context->indicator_surface);
+
+  API_CALL (SetWindowPos, (context->shape_indicator,
+                           GDK_WINDOW_HWND (context->window),
+                           0, 0, 0, 0,
+                           SWP_NOMOVE | SWP_NOSIZE | SWP_NOREDRAW | SWP_SHOWWINDOW | SWP_NOACTIVATE));
+
+#if defined(MORE_AEROSNAP_DEBUGGING)
+  GDK_NOTE (MISC, g_print ("Indicator window position is %ld x %ld @ %ld : %ld\n",
+                           window_size.cx, window_size.cy,
+                           window_position.x, window_position.y));
+#endif
+
+  API_CALL (UpdateLayeredWindow, (context->shape_indicator, NULL,
+                                  &window_position, &window_size,
+                                  hdc, &source_point,
+                                  0, &blender, ULW_ALPHA));
+
+  if (last_draw)
+    context->timer = 0;
+
+  return last_draw ? G_SOURCE_REMOVE : G_SOURCE_CONTINUE;
+}
+
+static GdkRectangle
+unity_of_rects (GdkRectangle a,
+                GdkRectangle b)
+{
+  GdkRectangle u = b;
+
+  if (a.x < u.x)
+    {
+      u.width += u.x - a.x;
+      u.x = a.x;
+    }
+
+  if (a.y < u.y)
+    {
+      u.height += (u.y - a.y);
+      u.y = a.y;
+    }
+
+  if (a.x + a.width > u.x + u.width)
+    u.width += (a.x + a.width) - (u.x + u.width);
+
+  if (a.y + a.height > u.y + u.height)
+    u.height += (a.y + a.height) - (u.y + u.height);
+
+#if defined(MORE_AEROSNAP_DEBUGGING)
+  GDK_NOTE (MISC, g_print ("Unified 2 rects into %d x %d @ %d : %d\n",
+                           u.width, u.height, u.x, u.y));
+#endif
+
+  return u;
+}
+
 static void
 start_indicator_drawing (GdkW32DragMoveResizeContext *context,
                          GdkRectangle                 from,
                          GdkRectangle                 to)
 {
-  (void) context;
-  (void) from;
-  (void) to;
+  GdkRectangle to_adjusted, from_adjusted, from_or_to;
+  gint64 indicator_animation_tick = AEROSNAP_INDICATOR_ANIMATION_TICK;
 
   GDK_NOTE (MISC, g_print ("Start drawing snap indicator %d x %d @ %d : %d -> %d x %d @ %d : %d\n",
                            from.width, from.height, from.x, from.y, to.width, to.height, to.x, to.y));
+
+  if (GDK_WINDOW_DESTROYED (context->window))
+    return;
+
+  if (!ensure_snap_indicator_exists (context))
+    return;
+
+  from_or_to = unity_of_rects (from, to);
+
+  if (!ensure_snap_indicator_surface (context, from_or_to.width, from_or_to.height))
+    return;
+
+  to_adjusted = to;
+  adjust_indicator_rectangle (&to_adjusted, TRUE);
+  from_adjusted = from;
+  adjust_indicator_rectangle (&from_adjusted, TRUE);
+
+  context->draw_timestamp = 0;
+  context->indicator_start = from_adjusted;
+  context->indicator_target = to_adjusted;
+  context->indicator_window_rect = from_or_to;
+  context->indicator_start_time = g_get_monotonic_time ();
+
+  if (context->timer)
+    {
+      g_source_remove (context->timer);
+      context->timer = 0;
+    }
+
+  context->timer = g_timeout_add_full (G_PRIORITY_DEFAULT,
+                                       indicator_animation_tick,
+                                       redraw_indicator,
+                                       context,
+                                       NULL);
 }
 
 static void
 update_fullup_indicator (GdkWindow                   *window,
                          GdkW32DragMoveResizeContext *context)
 {
-  (void) window;
-  (void) context;
+  SHORT maxysize;
+  GdkRectangle from, to;
+  GdkRectangle to_adjusted, from_adjusted, from_or_to;
 
   GDK_NOTE (MISC, g_print ("Update fullup indicator\n"));
+
+  if (GDK_WINDOW_DESTROYED (context->window))
+    return;
+
+  if (context->shape_indicator == NULL)
+    return;
+
+  maxysize = GetSystemMetrics (SM_CYVIRTUALSCREEN);
+  gdk_window_get_position (window, &to.x, &to.y);
+  to.width = gdk_window_get_width (window);
+  to.height = gdk_window_get_height (window);
+
+  to.y = 0;
+  to.height = maxysize;
+  from = context->indicator_target;
+
+  if (context->timer == 0)
+    {
+      from_adjusted = from;
+      adjust_indicator_rectangle (&from_adjusted, FALSE);
+
+      GDK_NOTE (MISC, g_print ("Restart fullup animation from %d x %d @ %d : %d -> %d x %d @ %d x %d\n",
+                               context->indicator_target.width, context->indicator_target.height,
+                               context->indicator_target.x, context->indicator_target.y,
+                               to.width, to.height, to.x, to.y));
+      start_indicator_drawing (context, from_adjusted, to);
+
+      return;
+    }
+
+  from_or_to = unity_of_rects (from, to);
+
+  to_adjusted = to;
+  adjust_indicator_rectangle (&to_adjusted, TRUE);
+
+  GDK_NOTE (MISC, g_print ("Retarget fullup animation %d x %d @ %d : %d -> %d x %d @ %d x %d\n",
+                           context->indicator_target.width, context->indicator_target.height,
+                           context->indicator_target.x, context->indicator_target.y,
+                           to_adjusted.width, to_adjusted.height, to_adjusted.x, to_adjusted.y));
+
+  context->indicator_target = to_adjusted;
+  context->indicator_window_rect = from_or_to;
+
+  ensure_snap_indicator_surface (context, from_or_to.width, from_or_to.height);
 }
 
 static void
@@ -3535,7 +3981,7 @@ start_indicator (GdkWindow                   *window,
   monitor = gdk_screen_get_monitor_at_point (screen, x, y);
   gdk_screen_get_monitor_workarea (screen, monitor, &workarea);
 
-  maxysize = GetSystemMetrics (SM_CYMAXTRACK);
+  maxysize = GetSystemMetrics (SM_CYVIRTUALSCREEN);
   gdk_window_get_position (window, &start_size.x, &start_size.y);
   start_size.width = gdk_window_get_width (window);
   start_size.height = gdk_window_get_height (window);
@@ -3565,6 +4011,7 @@ start_indicator (GdkWindow                   *window,
       end_size.height = workarea.height;
       break;
     case GDK_WIN32_AEROSNAP_STATE_FULLUP:
+      end_size.y = 0;
       end_size.height = maxysize;
       break;
     }
@@ -3576,10 +4023,19 @@ static void
 stop_indicator (GdkWindow                   *window,
                 GdkW32DragMoveResizeContext *context)
 {
-  (void) window;
-  (void) context;
-
   GDK_NOTE (MISC, g_print ("Stop drawing snap indicator\n"));
+
+  if (context->timer)
+    {
+      g_source_remove (context->timer);
+      context->timer = 0;
+    }
+
+  API_CALL (SetWindowPos, (context->shape_indicator,
+                           SWP_NOZORDER_SPECIFIED,
+                           0, 0, 0, 0,
+                           SWP_NOZORDER | SWP_NOMOVE |
+                           SWP_NOSIZE | SWP_NOREDRAW | SWP_HIDEWINDOW | SWP_NOACTIVATE));
 }
 
 static gint
@@ -3610,6 +4066,23 @@ handle_aerosnap_move_resize (GdkWindow                   *window,
   gint halfleft = 0;
   gint halfright = 0;
   gint fullup = 0;
+  gboolean fullup_edge = FALSE;
+
+  if (context->op == GDK_WIN32_DRAGOP_RESIZE)
+    switch (context->edge)
+      {
+      case GDK_WINDOW_EDGE_NORTH_WEST:
+      case GDK_WINDOW_EDGE_NORTH_EAST:
+      case GDK_WINDOW_EDGE_WEST:
+      case GDK_WINDOW_EDGE_EAST:
+      case GDK_WINDOW_EDGE_SOUTH_WEST:
+      case GDK_WINDOW_EDGE_SOUTH_EAST:
+        break;
+      case GDK_WINDOW_EDGE_SOUTH:
+      case GDK_WINDOW_EDGE_NORTH:
+        fullup_edge = TRUE;
+        break;
+      }
 
   for (i = 0; i < context->maximize_regions->len && maximize == 0; i++)
     {
@@ -3635,8 +4108,10 @@ handle_aerosnap_move_resize (GdkWindow                   *window,
       fullup = point_in_aerosnap_region (x, y, reg);
     }
 
+#if defined(MORE_AEROSNAP_DEBUGGING)
   GDK_NOTE (MISC, g_print ("AeroSnap: point %d : %d - max: %d, left %d, right %d, up %d\n",
                            x, y, maximize, halfleft, halfright, fullup));
+#endif
 
   if (!context->revealed)
     {
@@ -3658,7 +4133,7 @@ handle_aerosnap_move_resize (GdkWindow                   *window,
           context->current_snap = GDK_WIN32_AEROSNAP_STATE_HALFRIGHT;
           start_indicator (window, context, x, y, context->current_snap);
         }
-      else if (context->op == GDK_WIN32_DRAGOP_RESIZE && fullup == 2)
+      else if (context->op == GDK_WIN32_DRAGOP_RESIZE && fullup == 2 && fullup_edge)
         {
           context->revealed = TRUE;
           context->current_snap = GDK_WIN32_AEROSNAP_STATE_FULLUP;
@@ -3738,7 +4213,7 @@ handle_aerosnap_move_resize (GdkWindow                   *window,
         }
       break;
     case GDK_WIN32_AEROSNAP_STATE_FULLUP:
-      if (context->op == GDK_WIN32_DRAGOP_RESIZE && fullup > 0)
+      if (context->op == GDK_WIN32_DRAGOP_RESIZE && fullup > 0 && fullup_edge)
         {
           update_fullup_indicator (window, context);
           break;
@@ -4018,6 +4493,7 @@ setup_drag_move_resize_context (GdkWindow                   *window,
                    context->cursor,
                    timestamp);
 
+  context->window = g_object_ref (window);
   context->op = op;
   context->edge = edge;
   context->device = device;
@@ -4064,7 +4540,28 @@ gdk_win32_window_end_move_resize_drag (GdkWindow *window)
   g_clear_object (&context->cursor);
 
   context->revealed = FALSE;
-  g_clear_object (&context->shape_indicator);
+
+  if (context->timer)
+    {
+      g_source_remove (context->timer);
+      context->timer = 0;
+    }
+
+  g_clear_object (&context->window);
+
+  if (context->indicator_surface)
+    {
+      cairo_surface_destroy (context->indicator_surface);
+      context->indicator_surface = NULL;
+    }
+
+  if (context->shape_indicator)
+    {
+      stop_indicator (window, context);
+      DestroyWindow (context->shape_indicator);
+      context->shape_indicator = NULL;
+    }
+
   g_clear_pointer (&context->halfleft_regions, g_array_unref);
   g_clear_pointer (&context->halfright_regions, g_array_unref);
   g_clear_pointer (&context->maximize_regions, g_array_unref);
