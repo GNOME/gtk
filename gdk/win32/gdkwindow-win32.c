@@ -2929,7 +2929,7 @@ get_cursor_name_from_op (GdkW32WindowDragOp op,
         case GDK_WINDOW_EDGE_SOUTH:
           return "s-resize";
         case GDK_WINDOW_EDGE_SOUTH_EAST:
-          return "e-resize";
+          return "se-resize";
         }
       /* default: warn about unhandled enum values,
        * fallthrough to GDK_WIN32_DRAGOP_NONE case
