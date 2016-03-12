@@ -361,9 +361,8 @@ notebook > header > tabs > arrow, headerbar button.titlebutton,
   text-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
   -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
   box-shadow: inset 0 1px rgba(255, 255, 255, 0.05); }
-  notebook > header > tabs > arrow.flat, headerbar notebook > header > tabs > arrow.titlebutton, headerbar button.titlebutton,
-  .titlebar notebook > header > tabs > arrow.titlebutton,
-  .titlebar button.titlebutton, button.flat, notebook > header > tabs > arrow, button.sidebar-button, headerbar button.titlebutton,
+  notebook > header > tabs > arrow, headerbar button.titlebutton,
+  .titlebar button.titlebutton, button.flat, button.sidebar-button, headerbar button.titlebutton,
   .titlebar button.titlebutton {
     border-color: transparent;
     background-color: transparent;
@@ -372,15 +371,13 @@ notebook > header > tabs > arrow, headerbar button.titlebutton,
     text-shadow: none;
     -gtk-icon-shadow: none;
     transition: none; }
-    notebook > header > tabs > arrow.flat:hover, headerbar notebook > header > tabs > arrow.titlebutton:hover, headerbar button.titlebutton:hover,
-    .titlebar notebook > header > tabs > arrow.titlebutton:hover,
-    .titlebar button.titlebutton:hover, button.flat:hover, notebook > header > tabs > arrow:hover, button.sidebar-button:hover, headerbar button.titlebutton:hover,
+    notebook > header > tabs > arrow:hover, headerbar button.titlebutton:hover,
+    .titlebar button.titlebutton:hover, button.flat:hover, button.sidebar-button:hover, headerbar button.titlebutton:hover,
     .titlebar button.titlebutton:hover {
       transition: all 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
       transition-duration: 500ms; }
-      notebook > header > tabs > arrow.flat:hover:active, headerbar notebook > header > tabs > arrow.titlebutton:hover:active, headerbar button.titlebutton:hover:active,
-      .titlebar notebook > header > tabs > arrow.titlebutton:hover:active,
-      .titlebar button.titlebutton:hover:active, button.flat:hover:active, notebook > header > tabs > arrow:hover:active, button.sidebar-button:hover:active, headerbar button.titlebutton:hover:active,
+      notebook > header > tabs > arrow:hover:active, headerbar button.titlebutton:hover:active,
+      .titlebar button.titlebutton:hover:active, button.flat:hover:active, button.sidebar-button:hover:active, headerbar button.titlebutton:hover:active,
       .titlebar button.titlebutton:hover:active {
         transition: all 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94); }
   notebook > header > tabs > arrow:hover, headerbar button.titlebutton:hover,
@@ -404,10 +401,9 @@ notebook > header > tabs > arrow, headerbar button.titlebutton,
     -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
     box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6);
     transition-duration: 50ms; }
-  notebook > header > tabs > arrow:backdrop.flat, headerbar notebook > header > tabs > arrow.titlebutton:backdrop, headerbar button.titlebutton:backdrop,
-  .titlebar notebook > header > tabs > arrow.titlebutton:backdrop,
+  notebook > header > tabs > arrow:backdrop, headerbar button.titlebutton:backdrop,
   .titlebar button.titlebutton:backdrop, notebook > header > tabs > arrow:backdrop, headerbar button.titlebutton:backdrop,
-  .titlebar button.titlebutton:backdrop, button:backdrop.flat, notebook > header > tabs > arrow:backdrop, button.sidebar-button:backdrop, headerbar button.titlebutton:backdrop,
+  .titlebar button.titlebutton:backdrop, button:backdrop.flat, button.sidebar-button:backdrop, headerbar button.titlebutton:backdrop,
   .titlebar button.titlebutton:backdrop, button:backdrop {
     color: #949796;
     border-color: #1f2222;
@@ -416,23 +412,20 @@ notebook > header > tabs > arrow, headerbar button.titlebutton,
     -gtk-icon-shadow: none;
     box-shadow: inset 0 1px rgba(255, 255, 255, 0);
     -gtk-icon-effect: none; }
-    notebook > header > tabs > arrow:backdrop.flat:active, headerbar notebook > header > tabs > arrow.titlebutton:backdrop:active, headerbar button.titlebutton:backdrop:active,
-    .titlebar notebook > header > tabs > arrow.titlebutton:backdrop:active,
-    .titlebar button.titlebutton:backdrop:active, notebook > header > tabs > arrow:backdrop.flat:checked, headerbar notebook > header > tabs > arrow.titlebutton:backdrop:checked, headerbar button.titlebutton:backdrop:checked,
-    .titlebar notebook > header > tabs > arrow.titlebutton:backdrop:checked,
+    notebook > header > tabs > arrow:backdrop:active, headerbar button.titlebutton:backdrop:active,
+    .titlebar button.titlebutton:backdrop:active, notebook > header > tabs > arrow:backdrop:checked, headerbar button.titlebutton:backdrop:checked,
     .titlebar button.titlebutton:backdrop:checked, notebook > header > tabs > arrow:backdrop:active, headerbar button.titlebutton:backdrop:active,
     .titlebar button.titlebutton:backdrop:active, notebook > header > tabs > arrow:backdrop:checked, headerbar button.titlebutton:backdrop:checked,
-    .titlebar button.titlebutton:backdrop:checked, button:backdrop.flat:active, notebook > header > tabs > arrow:backdrop:active, button.sidebar-button:backdrop:active, headerbar button.titlebutton:backdrop:active,
-    .titlebar button.titlebutton:backdrop:active, button:backdrop.flat:checked, notebook > header > tabs > arrow:backdrop:checked, button.sidebar-button:backdrop:checked, headerbar button.titlebutton:backdrop:checked,
+    .titlebar button.titlebutton:backdrop:checked, button:backdrop.flat:active, button.sidebar-button:backdrop:active, headerbar button.titlebutton:backdrop:active,
+    .titlebar button.titlebutton:backdrop:active, button:backdrop.flat:checked, button.sidebar-button:backdrop:checked, headerbar button.titlebutton:backdrop:checked,
     .titlebar button.titlebutton:backdrop:checked, button:backdrop:active, button:backdrop:checked {
       color: #949796;
       border-color: #1f2222;
       background-image: linear-gradient(to bottom, #303535);
       box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
-    notebook > header > tabs > arrow:backdrop.flat:disabled, headerbar notebook > header > tabs > arrow.titlebutton:backdrop:disabled, headerbar button.titlebutton:backdrop:disabled,
-    .titlebar notebook > header > tabs > arrow.titlebutton:backdrop:disabled,
+    notebook > header > tabs > arrow:backdrop:disabled, headerbar button.titlebutton:backdrop:disabled,
     .titlebar button.titlebutton:backdrop:disabled, notebook > header > tabs > arrow:backdrop:disabled, headerbar button.titlebutton:backdrop:disabled,
-    .titlebar button.titlebutton:backdrop:disabled, button:backdrop.flat:disabled, notebook > header > tabs > arrow:backdrop:disabled, button.sidebar-button:backdrop:disabled, headerbar button.titlebutton:backdrop:disabled,
+    .titlebar button.titlebutton:backdrop:disabled, button:backdrop.flat:disabled, button.sidebar-button:backdrop:disabled, headerbar button.titlebutton:backdrop:disabled,
     .titlebar button.titlebutton:backdrop:disabled, button:backdrop:disabled {
       color: #5d6767;
       border-color: #1f2222;
@@ -440,28 +433,23 @@ notebook > header > tabs > arrow, headerbar button.titlebutton,
       text-shadow: none;
       -gtk-icon-shadow: none;
       box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
-      notebook > header > tabs > arrow:backdrop.flat:disabled:active, headerbar notebook > header > tabs > arrow.titlebutton:backdrop:disabled:active, headerbar button.titlebutton:backdrop:disabled:active,
-      .titlebar notebook > header > tabs > arrow.titlebutton:backdrop:disabled:active,
-      .titlebar button.titlebutton:backdrop:disabled:active, notebook > header > tabs > arrow:backdrop.flat:disabled:checked, headerbar notebook > header > tabs > arrow.titlebutton:backdrop:disabled:checked, headerbar button.titlebutton:backdrop:disabled:checked,
-      .titlebar notebook > header > tabs > arrow.titlebutton:backdrop:disabled:checked,
+      notebook > header > tabs > arrow:backdrop:disabled:active, headerbar button.titlebutton:backdrop:disabled:active,
+      .titlebar button.titlebutton:backdrop:disabled:active, notebook > header > tabs > arrow:backdrop:disabled:checked, headerbar button.titlebutton:backdrop:disabled:checked,
       .titlebar button.titlebutton:backdrop:disabled:checked, notebook > header > tabs > arrow:backdrop:disabled:active, headerbar button.titlebutton:backdrop:disabled:active,
       .titlebar button.titlebutton:backdrop:disabled:active, notebook > header > tabs > arrow:backdrop:disabled:checked, headerbar button.titlebutton:backdrop:disabled:checked,
-      .titlebar button.titlebutton:backdrop:disabled:checked, button:backdrop.flat:disabled:active, notebook > header > tabs > arrow:backdrop:disabled:active, button.sidebar-button:backdrop:disabled:active, headerbar button.titlebutton:backdrop:disabled:active,
-      .titlebar button.titlebutton:backdrop:disabled:active, button:backdrop.flat:disabled:checked, notebook > header > tabs > arrow:backdrop:disabled:checked, button.sidebar-button:backdrop:disabled:checked, headerbar button.titlebutton:backdrop:disabled:checked,
+      .titlebar button.titlebutton:backdrop:disabled:checked, button:backdrop.flat:disabled:active, button.sidebar-button:backdrop:disabled:active, headerbar button.titlebutton:backdrop:disabled:active,
+      .titlebar button.titlebutton:backdrop:disabled:active, button:backdrop.flat:disabled:checked, button.sidebar-button:backdrop:disabled:checked, headerbar button.titlebutton:backdrop:disabled:checked,
       .titlebar button.titlebutton:backdrop:disabled:checked, button:backdrop:disabled:active, button:backdrop:disabled:checked {
         color: #5d6767;
         border-color: #1f2222;
         background-image: linear-gradient(to bottom, #272929);
         box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
-  notebook > header > tabs > arrow.flat:backdrop, headerbar notebook > header > tabs > arrow.titlebutton:backdrop, headerbar button.titlebutton:backdrop,
-  .titlebar notebook > header > tabs > arrow.titlebutton:backdrop,
-  .titlebar button.titlebutton:backdrop, notebook > header > tabs > arrow.flat:disabled, headerbar notebook > header > tabs > arrow.titlebutton:disabled, headerbar button.titlebutton:disabled,
-  .titlebar notebook > header > tabs > arrow.titlebutton:disabled,
-  .titlebar button.titlebutton:disabled, notebook > header > tabs > arrow.flat:backdrop:disabled, headerbar notebook > header > tabs > arrow.titlebutton:backdrop:disabled, headerbar button.titlebutton:backdrop:disabled,
-  .titlebar notebook > header > tabs > arrow.titlebutton:backdrop:disabled,
-  .titlebar button.titlebutton:backdrop:disabled, button.flat:backdrop, notebook > header > tabs > arrow:backdrop, button.sidebar-button:backdrop, headerbar button.titlebutton:backdrop,
-  .titlebar button.titlebutton:backdrop, button.flat:disabled, notebook > header > tabs > arrow:disabled, button.sidebar-button:disabled, headerbar button.titlebutton:disabled,
-  .titlebar button.titlebutton:disabled, button.flat:backdrop:disabled, notebook > header > tabs > arrow:backdrop:disabled, button.sidebar-button:backdrop:disabled, headerbar button.titlebutton:backdrop:disabled,
+  notebook > header > tabs > arrow:backdrop, headerbar button.titlebutton:backdrop,
+  .titlebar button.titlebutton:backdrop, notebook > header > tabs > arrow:disabled, headerbar button.titlebutton:disabled,
+  .titlebar button.titlebutton:disabled, notebook > header > tabs > arrow:backdrop:disabled, headerbar button.titlebutton:backdrop:disabled,
+  .titlebar button.titlebutton:backdrop:disabled, button.flat:backdrop, button.sidebar-button:backdrop, headerbar button.titlebutton:backdrop,
+  .titlebar button.titlebutton:backdrop, button.flat:disabled, button.sidebar-button:disabled, headerbar button.titlebutton:disabled,
+  .titlebar button.titlebutton:disabled, button.flat:backdrop:disabled, button.sidebar-button:backdrop:disabled, headerbar button.titlebutton:backdrop:disabled,
   .titlebar button.titlebutton:backdrop:disabled {
     border-color: transparent;
     background-color: transparent;
@@ -608,14 +596,13 @@ popover.background.touch-selection button, popover.background.magnifier button, 
     box-shadow: none;
     text-shadow: none;
     -gtk-icon-shadow: none; }
-  popover.background.touch-selection button.flat, popover.background.touch-selection notebook > header > tabs > arrow, popover.background.touch-selection button.sidebar-button, popover.background.touch-selection headerbar button.titlebutton, headerbar popover.background.touch-selection button.titlebutton,
+  popover.background.touch-selection button.flat, popover.background.touch-selection button.sidebar-button, popover.background.touch-selection headerbar button.titlebutton, headerbar popover.background.touch-selection button.titlebutton,
   popover.background.touch-selection .titlebar button.titlebutton,
-  .titlebar popover.background.touch-selection button.titlebutton, popover.background.magnifier button.flat, popover.background.magnifier notebook > header > tabs > arrow, popover.background.magnifier button.sidebar-button, popover.background.magnifier headerbar button.titlebutton, headerbar popover.background.magnifier button.titlebutton,
+  .titlebar popover.background.touch-selection button.titlebutton, popover.background.magnifier button.flat, popover.background.magnifier button.sidebar-button, popover.background.magnifier headerbar button.titlebutton, headerbar popover.background.magnifier button.titlebutton,
   popover.background.magnifier .titlebar button.titlebutton,
-  .titlebar popover.background.magnifier button.titlebutton, .csd popover.background.touch-selection notebook > header > tabs > arrow, .csd popover.background.magnifier notebook > header > tabs > arrow, .app-notification button.flat, .app-notification notebook > header > tabs > arrow, .app-notification button.sidebar-button, .app-notification headerbar button.titlebutton, headerbar .app-notification button.titlebutton,
+  .titlebar popover.background.magnifier button.titlebutton, .app-notification button.flat, .app-notification button.sidebar-button, .app-notification headerbar button.titlebutton, headerbar .app-notification button.titlebutton,
   .app-notification .titlebar button.titlebutton,
-  .titlebar .app-notification button.titlebutton,
-  .app-notification.frame notebook > header > tabs > arrow, .osd button.flat, .osd notebook > header > tabs > arrow, .osd button.sidebar-button, .osd headerbar button.titlebutton, headerbar .osd button.titlebutton,
+  .titlebar .app-notification button.titlebutton, .osd button.flat, .osd button.sidebar-button, .osd headerbar button.titlebutton, headerbar .osd button.titlebutton,
   .osd .titlebar button.titlebutton,
   .titlebar .osd button.titlebutton {
     border-color: transparent;
@@ -627,13 +614,13 @@ popover.background.touch-selection button, popover.background.magnifier button, 
     box-shadow: none;
     text-shadow: 0 1px black;
     -gtk-icon-shadow: 0 1px black; }
-    popover.background.touch-selection button.flat:hover, popover.background.touch-selection notebook > header > tabs > arrow:hover, popover.background.touch-selection button.sidebar-button:hover, popover.background.touch-selection headerbar button.titlebutton:hover, headerbar popover.background.touch-selection button.titlebutton:hover,
+    popover.background.touch-selection button.flat:hover, popover.background.touch-selection button.sidebar-button:hover, popover.background.touch-selection headerbar button.titlebutton:hover, headerbar popover.background.touch-selection button.titlebutton:hover,
     popover.background.touch-selection .titlebar button.titlebutton:hover,
-    .titlebar popover.background.touch-selection button.titlebutton:hover, popover.background.magnifier button.flat:hover, popover.background.magnifier notebook > header > tabs > arrow:hover, popover.background.magnifier button.sidebar-button:hover, popover.background.magnifier headerbar button.titlebutton:hover, headerbar popover.background.magnifier button.titlebutton:hover,
+    .titlebar popover.background.touch-selection button.titlebutton:hover, popover.background.magnifier button.flat:hover, popover.background.magnifier button.sidebar-button:hover, popover.background.magnifier headerbar button.titlebutton:hover, headerbar popover.background.magnifier button.titlebutton:hover,
     popover.background.magnifier .titlebar button.titlebutton:hover,
-    .titlebar popover.background.magnifier button.titlebutton:hover, .app-notification button.flat:hover, .app-notification notebook > header > tabs > arrow:hover, .app-notification button.sidebar-button:hover, .app-notification headerbar button.titlebutton:hover, headerbar .app-notification button.titlebutton:hover,
+    .titlebar popover.background.magnifier button.titlebutton:hover, .app-notification button.flat:hover, .app-notification button.sidebar-button:hover, .app-notification headerbar button.titlebutton:hover, headerbar .app-notification button.titlebutton:hover,
     .app-notification .titlebar button.titlebutton:hover,
-    .titlebar .app-notification button.titlebutton:hover, .osd button.flat:hover, .osd notebook > header > tabs > arrow:hover, .osd button.sidebar-button:hover, .osd headerbar button.titlebutton:hover, headerbar .osd button.titlebutton:hover,
+    .titlebar .app-notification button.titlebutton:hover, .osd button.flat:hover, .osd button.sidebar-button:hover, .osd headerbar button.titlebutton:hover, headerbar .osd button.titlebutton:hover,
     .osd .titlebar button.titlebutton:hover,
     .titlebar .osd button.titlebutton:hover {
       color: white;
@@ -644,13 +631,13 @@ popover.background.touch-selection button, popover.background.magnifier button, 
       text-shadow: 0 1px black;
       -gtk-icon-shadow: 0 1px black;
       outline-color: rgba(238, 238, 236, 0.3); }
-    popover.background.touch-selection button.flat:disabled, popover.background.touch-selection notebook > header > tabs > arrow:disabled, popover.background.touch-selection button.sidebar-button:disabled, popover.background.touch-selection headerbar button.titlebutton:disabled, headerbar popover.background.touch-selection button.titlebutton:disabled,
+    popover.background.touch-selection button.flat:disabled, popover.background.touch-selection button.sidebar-button:disabled, popover.background.touch-selection headerbar button.titlebutton:disabled, headerbar popover.background.touch-selection button.titlebutton:disabled,
     popover.background.touch-selection .titlebar button.titlebutton:disabled,
-    .titlebar popover.background.touch-selection button.titlebutton:disabled, popover.background.magnifier button.flat:disabled, popover.background.magnifier notebook > header > tabs > arrow:disabled, popover.background.magnifier button.sidebar-button:disabled, popover.background.magnifier headerbar button.titlebutton:disabled, headerbar popover.background.magnifier button.titlebutton:disabled,
+    .titlebar popover.background.touch-selection button.titlebutton:disabled, popover.background.magnifier button.flat:disabled, popover.background.magnifier button.sidebar-button:disabled, popover.background.magnifier headerbar button.titlebutton:disabled, headerbar popover.background.magnifier button.titlebutton:disabled,
     popover.background.magnifier .titlebar button.titlebutton:disabled,
-    .titlebar popover.background.magnifier button.titlebutton:disabled, .app-notification button.flat:disabled, .app-notification notebook > header > tabs > arrow:disabled, .app-notification button.sidebar-button:disabled, .app-notification headerbar button.titlebutton:disabled, headerbar .app-notification button.titlebutton:disabled,
+    .titlebar popover.background.magnifier button.titlebutton:disabled, .app-notification button.flat:disabled, .app-notification button.sidebar-button:disabled, .app-notification headerbar button.titlebutton:disabled, headerbar .app-notification button.titlebutton:disabled,
     .app-notification .titlebar button.titlebutton:disabled,
-    .titlebar .app-notification button.titlebutton:disabled, .osd button.flat:disabled, .osd notebook > header > tabs > arrow:disabled, .osd button.sidebar-button:disabled, .osd headerbar button.titlebutton:disabled, headerbar .osd button.titlebutton:disabled,
+    .titlebar .app-notification button.titlebutton:disabled, .osd button.flat:disabled, .osd button.sidebar-button:disabled, .osd headerbar button.titlebutton:disabled, headerbar .osd button.titlebutton:disabled,
     .osd .titlebar button.titlebutton:disabled,
     .titlebar .osd button.titlebutton:disabled {
       color: #878a89;
@@ -663,13 +650,13 @@ popover.background.touch-selection button, popover.background.magnifier button, 
       background-image: none;
       border-color: transparent;
       box-shadow: none; }
-    popover.background.touch-selection button.flat:backdrop, popover.background.touch-selection notebook > header > tabs > arrow:backdrop, popover.background.touch-selection button.sidebar-button:backdrop, popover.background.touch-selection headerbar button.titlebutton:backdrop, headerbar popover.background.touch-selection button.titlebutton:backdrop,
+    popover.background.touch-selection button.flat:backdrop, popover.background.touch-selection button.sidebar-button:backdrop, popover.background.touch-selection headerbar button.titlebutton:backdrop, headerbar popover.background.touch-selection button.titlebutton:backdrop,
     popover.background.touch-selection .titlebar button.titlebutton:backdrop,
-    .titlebar popover.background.touch-selection button.titlebutton:backdrop, popover.background.magnifier button.flat:backdrop, popover.background.magnifier notebook > header > tabs > arrow:backdrop, popover.background.magnifier button.sidebar-button:backdrop, popover.background.magnifier headerbar button.titlebutton:backdrop, headerbar popover.background.magnifier button.titlebutton:backdrop,
+    .titlebar popover.background.touch-selection button.titlebutton:backdrop, popover.background.magnifier button.flat:backdrop, popover.background.magnifier button.sidebar-button:backdrop, popover.background.magnifier headerbar button.titlebutton:backdrop, headerbar popover.background.magnifier button.titlebutton:backdrop,
     popover.background.magnifier .titlebar button.titlebutton:backdrop,
-    .titlebar popover.background.magnifier button.titlebutton:backdrop, .app-notification button.flat:backdrop, .app-notification notebook > header > tabs > arrow:backdrop, .app-notification button.sidebar-button:backdrop, .app-notification headerbar button.titlebutton:backdrop, headerbar .app-notification button.titlebutton:backdrop,
+    .titlebar popover.background.magnifier button.titlebutton:backdrop, .app-notification button.flat:backdrop, .app-notification button.sidebar-button:backdrop, .app-notification headerbar button.titlebutton:backdrop, headerbar .app-notification button.titlebutton:backdrop,
     .app-notification .titlebar button.titlebutton:backdrop,
-    .titlebar .app-notification button.titlebutton:backdrop, .osd button.flat:backdrop, .osd notebook > header > tabs > arrow:backdrop, .osd button.sidebar-button:backdrop, .osd headerbar button.titlebutton:backdrop, headerbar .osd button.titlebutton:backdrop,
+    .titlebar .app-notification button.titlebutton:backdrop, .osd button.flat:backdrop, .osd button.sidebar-button:backdrop, .osd headerbar button.titlebutton:backdrop, headerbar .osd button.titlebutton:backdrop,
     .osd .titlebar button.titlebutton:backdrop,
     .titlebar .osd button.titlebutton:backdrop {
       border-color: transparent;
@@ -678,21 +665,21 @@ popover.background.touch-selection button, popover.background.magnifier button, 
       box-shadow: inset 0 1px rgba(255, 255, 255, 0);
       text-shadow: none;
       -gtk-icon-shadow: none; }
-    popover.background.touch-selection button.flat:active, popover.background.touch-selection notebook > header > tabs > arrow:active, popover.background.touch-selection button.sidebar-button:active, popover.background.touch-selection headerbar button.titlebutton:active, headerbar popover.background.touch-selection button.titlebutton:active,
+    popover.background.touch-selection button.flat:active, popover.background.touch-selection button.sidebar-button:active, popover.background.touch-selection headerbar button.titlebutton:active, headerbar popover.background.touch-selection button.titlebutton:active,
     popover.background.touch-selection .titlebar button.titlebutton:active,
-    .titlebar popover.background.touch-selection button.titlebutton:active, popover.background.magnifier button.flat:active, popover.background.magnifier notebook > header > tabs > arrow:active, popover.background.magnifier button.sidebar-button:active, popover.background.magnifier headerbar button.titlebutton:active, headerbar popover.background.magnifier button.titlebutton:active,
+    .titlebar popover.background.touch-selection button.titlebutton:active, popover.background.magnifier button.flat:active, popover.background.magnifier button.sidebar-button:active, popover.background.magnifier headerbar button.titlebutton:active, headerbar popover.background.magnifier button.titlebutton:active,
     popover.background.magnifier .titlebar button.titlebutton:active,
-    .titlebar popover.background.magnifier button.titlebutton:active, .app-notification button.flat:active, .app-notification notebook > header > tabs > arrow:active, .app-notification button.sidebar-button:active, .app-notification headerbar button.titlebutton:active, headerbar .app-notification button.titlebutton:active,
+    .titlebar popover.background.magnifier button.titlebutton:active, .app-notification button.flat:active, .app-notification button.sidebar-button:active, .app-notification headerbar button.titlebutton:active, headerbar .app-notification button.titlebutton:active,
     .app-notification .titlebar button.titlebutton:active,
-    .titlebar .app-notification button.titlebutton:active, popover.background.touch-selection button.flat:checked, popover.background.touch-selection notebook > header > tabs > arrow:checked, popover.background.touch-selection button.sidebar-button:checked, popover.background.touch-selection headerbar button.titlebutton:checked, headerbar popover.background.touch-selection button.titlebutton:checked,
+    .titlebar .app-notification button.titlebutton:active, popover.background.touch-selection button.flat:checked, popover.background.touch-selection button.sidebar-button:checked, popover.background.touch-selection headerbar button.titlebutton:checked, headerbar popover.background.touch-selection button.titlebutton:checked,
     popover.background.touch-selection .titlebar button.titlebutton:checked,
-    .titlebar popover.background.touch-selection button.titlebutton:checked, popover.background.magnifier button.flat:checked, popover.background.magnifier notebook > header > tabs > arrow:checked, popover.background.magnifier button.sidebar-button:checked, popover.background.magnifier headerbar button.titlebutton:checked, headerbar popover.background.magnifier button.titlebutton:checked,
+    .titlebar popover.background.touch-selection button.titlebutton:checked, popover.background.magnifier button.flat:checked, popover.background.magnifier button.sidebar-button:checked, popover.background.magnifier headerbar button.titlebutton:checked, headerbar popover.background.magnifier button.titlebutton:checked,
     popover.background.magnifier .titlebar button.titlebutton:checked,
-    .titlebar popover.background.magnifier button.titlebutton:checked, .app-notification button.flat:checked, .app-notification notebook > header > tabs > arrow:checked, .app-notification button.sidebar-button:checked, .app-notification headerbar button.titlebutton:checked, headerbar .app-notification button.titlebutton:checked,
+    .titlebar popover.background.magnifier button.titlebutton:checked, .app-notification button.flat:checked, .app-notification button.sidebar-button:checked, .app-notification headerbar button.titlebutton:checked, headerbar .app-notification button.titlebutton:checked,
     .app-notification .titlebar button.titlebutton:checked,
-    .titlebar .app-notification button.titlebutton:checked, .osd button.flat:active, .osd notebook > header > tabs > arrow:active, .osd button.sidebar-button:active, .osd headerbar button.titlebutton:active, headerbar .osd button.titlebutton:active,
+    .titlebar .app-notification button.titlebutton:checked, .osd button.flat:active, .osd button.sidebar-button:active, .osd headerbar button.titlebutton:active, headerbar .osd button.titlebutton:active,
     .osd .titlebar button.titlebutton:active,
-    .titlebar .osd button.titlebutton:active, .osd button.flat:checked, .osd notebook > header > tabs > arrow:checked, .osd button.sidebar-button:checked, .osd headerbar button.titlebutton:checked, headerbar .osd button.titlebutton:checked,
+    .titlebar .osd button.titlebutton:active, .osd button.flat:checked, .osd button.sidebar-button:checked, .osd headerbar button.titlebutton:checked, headerbar .osd button.titlebutton:checked,
     .osd .titlebar button.titlebutton:checked,
     .titlebar .osd button.titlebutton:checked {
       color: white;
@@ -711,7 +698,7 @@ button.suggested-action {
   text-shadow: 0 -1px rgba(0, 0, 0, 0.70353);
   -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.70353);
   box-shadow: inset 0 1px rgba(255, 255, 255, 0.05); }
-  button.suggested-action.flat, notebook > header > tabs > arrow.suggested-action, button.suggested-action.sidebar-button, headerbar button.suggested-action.titlebutton,
+  button.suggested-action.flat, button.suggested-action.sidebar-button, headerbar button.suggested-action.titlebutton,
   .titlebar button.suggested-action.titlebutton {
     border-color: transparent;
     background-color: transparent;
@@ -736,7 +723,7 @@ button.suggested-action {
     text-shadow: 0 -1px rgba(0, 0, 0, 0.78353);
     -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.78353);
     box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
-  button.suggested-action:backdrop, button.suggested-action.flat:backdrop, notebook > header > tabs > arrow.suggested-action:backdrop, button.suggested-action.sidebar-button:backdrop, headerbar button.suggested-action.titlebutton:backdrop,
+  button.suggested-action:backdrop, button.suggested-action.flat:backdrop, button.suggested-action.sidebar-button:backdrop, headerbar button.suggested-action.titlebutton:backdrop,
   .titlebar button.suggested-action.titlebutton:backdrop {
     color: #d3dfeb;
     border-color: #0b1e33;
@@ -744,14 +731,14 @@ button.suggested-action {
     text-shadow: none;
     -gtk-icon-shadow: none;
     box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
-    button.suggested-action:backdrop:active, button.suggested-action:backdrop:checked, button.suggested-action.flat:backdrop:active, notebook > header > tabs > arrow.suggested-action:backdrop:active, button.suggested-action.sidebar-button:backdrop:active, headerbar button.suggested-action.titlebutton:backdrop:active,
-    .titlebar button.suggested-action.titlebutton:backdrop:active, button.suggested-action.flat:backdrop:checked, notebook > header > tabs > arrow.suggested-action:backdrop:checked, button.suggested-action.sidebar-button:backdrop:checked, headerbar button.suggested-action.titlebutton:backdrop:checked,
+    button.suggested-action:backdrop:active, button.suggested-action:backdrop:checked, button.suggested-action.flat:backdrop:active, button.suggested-action.sidebar-button:backdrop:active, headerbar button.suggested-action.titlebutton:backdrop:active,
+    .titlebar button.suggested-action.titlebutton:backdrop:active, button.suggested-action.flat:backdrop:checked, button.suggested-action.sidebar-button:backdrop:checked, headerbar button.suggested-action.titlebutton:backdrop:checked,
     .titlebar button.suggested-action.titlebutton:backdrop:checked {
       color: #d1dae3;
       border-color: #0b1e33;
       background-image: linear-gradient(to bottom, #184472);
       box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
-    button.suggested-action:backdrop:disabled, button.suggested-action.flat:backdrop:disabled, notebook > header > tabs > arrow.suggested-action:backdrop:disabled, button.suggested-action.sidebar-button:backdrop:disabled, headerbar button.suggested-action.titlebutton:backdrop:disabled,
+    button.suggested-action:backdrop:disabled, button.suggested-action.flat:backdrop:disabled, button.suggested-action.sidebar-button:backdrop:disabled, headerbar button.suggested-action.titlebutton:backdrop:disabled,
     .titlebar button.suggested-action.titlebutton:backdrop:disabled {
       color: #5d6767;
       border-color: #1f2222;
@@ -759,16 +746,16 @@ button.suggested-action {
       text-shadow: none;
       -gtk-icon-shadow: none;
       box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
-      button.suggested-action:backdrop:disabled:active, button.suggested-action:backdrop:disabled:checked, button.suggested-action.flat:backdrop:disabled:active, notebook > header > tabs > arrow.suggested-action:backdrop:disabled:active, button.suggested-action.sidebar-button:backdrop:disabled:active, headerbar button.suggested-action.titlebutton:backdrop:disabled:active,
-      .titlebar button.suggested-action.titlebutton:backdrop:disabled:active, button.suggested-action.flat:backdrop:disabled:checked, notebook > header > tabs > arrow.suggested-action:backdrop:disabled:checked, button.suggested-action.sidebar-button:backdrop:disabled:checked, headerbar button.suggested-action.titlebutton:backdrop:disabled:checked,
+      button.suggested-action:backdrop:disabled:active, button.suggested-action:backdrop:disabled:checked, button.suggested-action.flat:backdrop:disabled:active, button.suggested-action.sidebar-button:backdrop:disabled:active, headerbar button.suggested-action.titlebutton:backdrop:disabled:active,
+      .titlebar button.suggested-action.titlebutton:backdrop:disabled:active, button.suggested-action.flat:backdrop:disabled:checked, button.suggested-action.sidebar-button:backdrop:disabled:checked, headerbar button.suggested-action.titlebutton:backdrop:disabled:checked,
       .titlebar button.suggested-action.titlebutton:backdrop:disabled:checked {
         color: #6c88a7;
         border-color: #0b1e33;
         background-image: linear-gradient(to bottom, #1d4877);
         box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
-  button.suggested-action.flat:backdrop, notebook > header > tabs > arrow.suggested-action:backdrop, button.suggested-action.sidebar-button:backdrop, headerbar button.suggested-action.titlebutton:backdrop,
-  .titlebar button.suggested-action.titlebutton:backdrop, button.suggested-action.flat:disabled, notebook > header > tabs > arrow.suggested-action:disabled, button.suggested-action.sidebar-button:disabled, headerbar button.suggested-action.titlebutton:disabled,
-  .titlebar button.suggested-action.titlebutton:disabled, button.suggested-action.flat:backdrop:disabled, notebook > header > tabs > arrow.suggested-action:backdrop:disabled, button.suggested-action.sidebar-button:backdrop:disabled, headerbar button.suggested-action.titlebutton:backdrop:disabled,
+  button.suggested-action.flat:backdrop, button.suggested-action.sidebar-button:backdrop, headerbar button.suggested-action.titlebutton:backdrop,
+  .titlebar button.suggested-action.titlebutton:backdrop, button.suggested-action.flat:disabled, button.suggested-action.sidebar-button:disabled, headerbar button.suggested-action.titlebutton:disabled,
+  .titlebar button.suggested-action.titlebutton:disabled, button.suggested-action.flat:backdrop:disabled, button.suggested-action.sidebar-button:backdrop:disabled, headerbar button.suggested-action.titlebutton:backdrop:disabled,
   .titlebar button.suggested-action.titlebutton:backdrop:disabled {
     border-color: transparent;
     background-color: transparent;
@@ -840,7 +827,7 @@ button.destructive-action {
   text-shadow: 0 -1px rgba(0, 0, 0, 0.64078);
   -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.64078);
   box-shadow: inset 0 1px rgba(255, 255, 255, 0.2); }
-  button.destructive-action.flat, notebook > header > tabs > arrow.destructive-action, button.destructive-action.sidebar-button, headerbar button.destructive-action.titlebutton,
+  button.destructive-action.flat, button.destructive-action.sidebar-button, headerbar button.destructive-action.titlebutton,
   .titlebar button.destructive-action.titlebutton {
     border-color: transparent;
     background-color: transparent;
@@ -865,7 +852,7 @@ button.destructive-action {
     text-shadow: 0 -1px rgba(0, 0, 0, 0.72078);
     -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.72078);
     box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
-  button.destructive-action:backdrop, button.destructive-action.flat:backdrop, notebook > header > tabs > arrow.destructive-action:backdrop, button.destructive-action.sidebar-button:backdrop, headerbar button.destructive-action.titlebutton:backdrop,
+  button.destructive-action:backdrop, button.destructive-action.flat:backdrop, button.destructive-action.sidebar-button:backdrop, headerbar button.destructive-action.titlebutton:backdrop,
   .titlebar button.destructive-action.titlebutton:backdrop {
     color: #f7cfcf;
     border-color: #5e0707;
@@ -873,14 +860,14 @@ button.destructive-action {
     text-shadow: none;
     -gtk-icon-shadow: none;
     box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
-    button.destructive-action:backdrop:active, button.destructive-action:backdrop:checked, button.destructive-action.flat:backdrop:active, notebook > header > tabs > arrow.destructive-action:backdrop:active, button.destructive-action.sidebar-button:backdrop:active, headerbar button.destructive-action.titlebutton:backdrop:active,
-    .titlebar button.destructive-action.titlebutton:backdrop:active, button.destructive-action.flat:backdrop:checked, notebook > header > tabs > arrow.destructive-action:backdrop:checked, button.destructive-action.sidebar-button:backdrop:checked, headerbar button.destructive-action.titlebutton:backdrop:checked,
+    button.destructive-action:backdrop:active, button.destructive-action:backdrop:checked, button.destructive-action.flat:backdrop:active, button.destructive-action.sidebar-button:backdrop:active, headerbar button.destructive-action.titlebutton:backdrop:active,
+    .titlebar button.destructive-action.titlebutton:backdrop:active, button.destructive-action.flat:backdrop:checked, button.destructive-action.sidebar-button:backdrop:checked, headerbar button.destructive-action.titlebutton:backdrop:checked,
     .titlebar button.destructive-action.titlebutton:backdrop:checked {
       color: #edcece;
       border-color: #5e0707;
       background-image: linear-gradient(to bottom, #a60c0c);
       box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
-    button.destructive-action:backdrop:disabled, button.destructive-action.flat:backdrop:disabled, notebook > header > tabs > arrow.destructive-action:backdrop:disabled, button.destructive-action.sidebar-button:backdrop:disabled, headerbar button.destructive-action.titlebutton:backdrop:disabled,
+    button.destructive-action:backdrop:disabled, button.destructive-action.flat:backdrop:disabled, button.destructive-action.sidebar-button:backdrop:disabled, headerbar button.destructive-action.titlebutton:backdrop:disabled,
     .titlebar button.destructive-action.titlebutton:backdrop:disabled {
       color: #5d6767;
       border-color: #1f2222;
@@ -888,16 +875,16 @@ button.destructive-action {
       text-shadow: none;
       -gtk-icon-shadow: none;
       box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
-      button.destructive-action:backdrop:disabled:active, button.destructive-action:backdrop:disabled:checked, button.destructive-action.flat:backdrop:disabled:active, notebook > header > tabs > arrow.destructive-action:backdrop:disabled:active, button.destructive-action.sidebar-button:backdrop:disabled:active, headerbar button.destructive-action.titlebutton:backdrop:disabled:active,
-      .titlebar button.destructive-action.titlebutton:backdrop:disabled:active, button.destructive-action.flat:backdrop:disabled:checked, notebook > header > tabs > arrow.destructive-action:backdrop:disabled:checked, button.destructive-action.sidebar-button:backdrop:disabled:checked, headerbar button.destructive-action.titlebutton:backdrop:disabled:checked,
+      button.destructive-action:backdrop:disabled:active, button.destructive-action:backdrop:disabled:checked, button.destructive-action.flat:backdrop:disabled:active, button.destructive-action.sidebar-button:backdrop:disabled:active, headerbar button.destructive-action.titlebutton:backdrop:disabled:active,
+      .titlebar button.destructive-action.titlebutton:backdrop:disabled:active, button.destructive-action.flat:backdrop:disabled:checked, button.destructive-action.sidebar-button:backdrop:disabled:checked, headerbar button.destructive-action.titlebutton:backdrop:disabled:checked,
       .titlebar button.destructive-action.titlebutton:backdrop:disabled:checked {
         color: #c46565;
         border-color: #5e0707;
         background-image: linear-gradient(to bottom, #a41212);
         box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
-  button.destructive-action.flat:backdrop, notebook > header > tabs > arrow.destructive-action:backdrop, button.destructive-action.sidebar-button:backdrop, headerbar button.destructive-action.titlebutton:backdrop,
-  .titlebar button.destructive-action.titlebutton:backdrop, button.destructive-action.flat:disabled, notebook > header > tabs > arrow.destructive-action:disabled, button.destructive-action.sidebar-button:disabled, headerbar button.destructive-action.titlebutton:disabled,
-  .titlebar button.destructive-action.titlebutton:disabled, button.destructive-action.flat:backdrop:disabled, notebook > header > tabs > arrow.destructive-action:backdrop:disabled, button.destructive-action.sidebar-button:backdrop:disabled, headerbar button.destructive-action.titlebutton:backdrop:disabled,
+  button.destructive-action.flat:backdrop, button.destructive-action.sidebar-button:backdrop, headerbar button.destructive-action.titlebutton:backdrop,
+  .titlebar button.destructive-action.titlebutton:backdrop, button.destructive-action.flat:disabled, button.destructive-action.sidebar-button:disabled, headerbar button.destructive-action.titlebutton:disabled,
+  .titlebar button.destructive-action.titlebutton:disabled, button.destructive-action.flat:backdrop:disabled, button.destructive-action.sidebar-button:backdrop:disabled, headerbar button.destructive-action.titlebutton:backdrop:disabled,
   .titlebar button.destructive-action.titlebutton:backdrop:disabled {
     border-color: transparent;
     background-color: transparent;
@@ -1520,10 +1507,9 @@ headerbar {
       text-shadow: 0 -1px rgba(0, 0, 0, 0.70353);
       -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.70353);
       box-shadow: inset 0 1px rgba(255, 255, 255, 0.05); }
-      .selection-mode.titlebar:not(headerbar) button.flat, .selection-mode.titlebar:not(headerbar) notebook > header > tabs > arrow, .selection-mode.titlebar:not(headerbar) button.sidebar-button,
+      .selection-mode.titlebar:not(headerbar) button.flat, .selection-mode.titlebar:not(headerbar) button.sidebar-button,
       .selection-mode.titlebar:not(headerbar) button.titlebutton,
       headerbar.selection-mode button.flat,
-      headerbar.selection-mode notebook > header > tabs > arrow,
       headerbar.selection-mode button.sidebar-button,
       headerbar.selection-mode button.titlebutton {
         border-color: transparent;
@@ -1551,10 +1537,9 @@ headerbar {
         text-shadow: 0 -1px rgba(0, 0, 0, 0.78353);
         -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.78353);
         box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
-      .selection-mode.titlebar:not(headerbar) button:backdrop.flat, .selection-mode.titlebar:not(headerbar) notebook > header > tabs > arrow:backdrop, .selection-mode.titlebar:not(headerbar) button.sidebar-button:backdrop,
+      .selection-mode.titlebar:not(headerbar) button:backdrop.flat, .selection-mode.titlebar:not(headerbar) button.sidebar-button:backdrop,
       .selection-mode.titlebar:not(headerbar) button.titlebutton:backdrop, .selection-mode.titlebar:not(headerbar) button:backdrop,
       headerbar.selection-mode button:backdrop.flat,
-      headerbar.selection-mode notebook > header > tabs > arrow:backdrop,
       headerbar.selection-mode button.sidebar-button:backdrop,
       headerbar.selection-mode button.titlebutton:backdrop,
       headerbar.selection-mode button:backdrop {
@@ -1566,15 +1551,13 @@ headerbar {
         box-shadow: inset 0 1px rgba(255, 255, 255, 0);
         -gtk-icon-effect: none;
         border-color: #0f2b48; }
-        .selection-mode.titlebar:not(headerbar) button:backdrop.flat:active, .selection-mode.titlebar:not(headerbar) notebook > header > tabs > arrow:backdrop:active, .selection-mode.titlebar:not(headerbar) button.sidebar-button:backdrop:active,
-        .selection-mode.titlebar:not(headerbar) button.titlebutton:backdrop:active, .selection-mode.titlebar:not(headerbar) button:backdrop.flat:checked, .selection-mode.titlebar:not(headerbar) notebook > header > tabs > arrow:backdrop:checked, .selection-mode.titlebar:not(headerbar) button.sidebar-button:backdrop:checked,
+        .selection-mode.titlebar:not(headerbar) button:backdrop.flat:active, .selection-mode.titlebar:not(headerbar) button.sidebar-button:backdrop:active,
+        .selection-mode.titlebar:not(headerbar) button.titlebutton:backdrop:active, .selection-mode.titlebar:not(headerbar) button:backdrop.flat:checked, .selection-mode.titlebar:not(headerbar) button.sidebar-button:backdrop:checked,
         .selection-mode.titlebar:not(headerbar) button.titlebutton:backdrop:checked, .selection-mode.titlebar:not(headerbar) button:backdrop:active, .selection-mode.titlebar:not(headerbar) button:backdrop:checked,
         headerbar.selection-mode button:backdrop.flat:active,
-        headerbar.selection-mode notebook > header > tabs > arrow:backdrop:active,
         headerbar.selection-mode button.sidebar-button:backdrop:active,
         headerbar.selection-mode button.titlebutton:backdrop:active,
         headerbar.selection-mode button:backdrop.flat:checked,
-        headerbar.selection-mode notebook > header > tabs > arrow:backdrop:checked,
         headerbar.selection-mode button.sidebar-button:backdrop:checked,
         headerbar.selection-mode button.titlebutton:backdrop:checked,
         headerbar.selection-mode button:backdrop:active,
@@ -1584,10 +1567,9 @@ headerbar {
           background-image: linear-gradient(to bottom, #184472);
           box-shadow: inset 0 1px rgba(255, 255, 255, 0);
           border-color: #0f2b48; }
-        .selection-mode.titlebar:not(headerbar) button:backdrop.flat:disabled, .selection-mode.titlebar:not(headerbar) notebook > header > tabs > arrow:backdrop:disabled, .selection-mode.titlebar:not(headerbar) button.sidebar-button:backdrop:disabled,
+        .selection-mode.titlebar:not(headerbar) button:backdrop.flat:disabled, .selection-mode.titlebar:not(headerbar) button.sidebar-button:backdrop:disabled,
         .selection-mode.titlebar:not(headerbar) button.titlebutton:backdrop:disabled, .selection-mode.titlebar:not(headerbar) button:backdrop:disabled,
         headerbar.selection-mode button:backdrop.flat:disabled,
-        headerbar.selection-mode notebook > header > tabs > arrow:backdrop:disabled,
         headerbar.selection-mode button.sidebar-button:backdrop:disabled,
         headerbar.selection-mode button.titlebutton:backdrop:disabled,
         headerbar.selection-mode button:backdrop:disabled {
@@ -1598,15 +1580,13 @@ headerbar {
           -gtk-icon-shadow: none;
           box-shadow: inset 0 1px rgba(255, 255, 255, 0);
           border-color: #0f2b48; }
-          .selection-mode.titlebar:not(headerbar) button:backdrop.flat:disabled:active, .selection-mode.titlebar:not(headerbar) notebook > header > tabs > arrow:backdrop:disabled:active, .selection-mode.titlebar:not(headerbar) button.sidebar-button:backdrop:disabled:active,
-          .selection-mode.titlebar:not(headerbar) button.titlebutton:backdrop:disabled:active, .selection-mode.titlebar:not(headerbar) button:backdrop.flat:disabled:checked, .selection-mode.titlebar:not(headerbar) notebook > header > tabs > arrow:backdrop:disabled:checked, .selection-mode.titlebar:not(headerbar) button.sidebar-button:backdrop:disabled:checked,
+          .selection-mode.titlebar:not(headerbar) button:backdrop.flat:disabled:active, .selection-mode.titlebar:not(headerbar) button.sidebar-button:backdrop:disabled:active,
+          .selection-mode.titlebar:not(headerbar) button.titlebutton:backdrop:disabled:active, .selection-mode.titlebar:not(headerbar) button:backdrop.flat:disabled:checked, .selection-mode.titlebar:not(headerbar) button.sidebar-button:backdrop:disabled:checked,
           .selection-mode.titlebar:not(headerbar) button.titlebutton:backdrop:disabled:checked, .selection-mode.titlebar:not(headerbar) button:backdrop:disabled:active, .selection-mode.titlebar:not(headerbar) button:backdrop:disabled:checked,
           headerbar.selection-mode button:backdrop.flat:disabled:active,
-          headerbar.selection-mode notebook > header > tabs > arrow:backdrop:disabled:active,
           headerbar.selection-mode button.sidebar-button:backdrop:disabled:active,
           headerbar.selection-mode button.titlebutton:backdrop:disabled:active,
           headerbar.selection-mode button:backdrop.flat:disabled:checked,
-          headerbar.selection-mode notebook > header > tabs > arrow:backdrop:disabled:checked,
           headerbar.selection-mode button.sidebar-button:backdrop:disabled:checked,
           headerbar.selection-mode button.titlebutton:backdrop:disabled:checked,
           headerbar.selection-mode button:backdrop:disabled:active,
@@ -1616,20 +1596,17 @@ headerbar {
             background-image: linear-gradient(to bottom, #1d4877);
             box-shadow: inset 0 1px rgba(255, 255, 255, 0);
             border-color: #0f2b48; }
-      .selection-mode.titlebar:not(headerbar) button.flat:backdrop, .selection-mode.titlebar:not(headerbar) notebook > header > tabs > arrow:backdrop, .selection-mode.titlebar:not(headerbar) button.sidebar-button:backdrop,
-      .selection-mode.titlebar:not(headerbar) button.titlebutton:backdrop, .selection-mode.titlebar:not(headerbar) button.flat:disabled, .selection-mode.titlebar:not(headerbar) notebook > header > tabs > arrow:disabled, .selection-mode.titlebar:not(headerbar) button.sidebar-button:disabled,
-      .selection-mode.titlebar:not(headerbar) button.titlebutton:disabled, .selection-mode.titlebar:not(headerbar) button.flat:backdrop:disabled, .selection-mode.titlebar:not(headerbar) notebook > header > tabs > arrow:backdrop:disabled, .selection-mode.titlebar:not(headerbar) button.sidebar-button:backdrop:disabled,
+      .selection-mode.titlebar:not(headerbar) button.flat:backdrop, .selection-mode.titlebar:not(headerbar) button.sidebar-button:backdrop,
+      .selection-mode.titlebar:not(headerbar) button.titlebutton:backdrop, .selection-mode.titlebar:not(headerbar) button.flat:disabled, .selection-mode.titlebar:not(headerbar) button.sidebar-button:disabled,
+      .selection-mode.titlebar:not(headerbar) button.titlebutton:disabled, .selection-mode.titlebar:not(headerbar) button.flat:backdrop:disabled, .selection-mode.titlebar:not(headerbar) button.sidebar-button:backdrop:disabled,
       .selection-mode.titlebar:not(headerbar) button.titlebutton:backdrop:disabled,
       headerbar.selection-mode button.flat:backdrop,
-      headerbar.selection-mode notebook > header > tabs > arrow:backdrop,
       headerbar.selection-mode button.sidebar-button:backdrop,
       headerbar.selection-mode button.titlebutton:backdrop,
       headerbar.selection-mode button.flat:disabled,
-      headerbar.selection-mode notebook > header > tabs > arrow:disabled,
       headerbar.selection-mode button.sidebar-button:disabled,
       headerbar.selection-mode button.titlebutton:disabled,
       headerbar.selection-mode button.flat:backdrop:disabled,
-      headerbar.selection-mode notebook > header > tabs > arrow:backdrop:disabled,
       headerbar.selection-mode button.sidebar-button:backdrop:disabled,
       headerbar.selection-mode button.titlebutton:backdrop:disabled {
         border-color: transparent;
@@ -2132,9 +2109,12 @@ notebook > header {
       border-color: transparent;
       box-shadow: none; }
     notebook > header > tabs > arrow:disabled {
-      background-image: none;
+      border-color: transparent;
       background-color: transparent;
-      border-color: transparent; }
+      background-image: none;
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0);
+      text-shadow: none;
+      -gtk-icon-shadow: none; }
   notebook > header tab {
     min-height: 30px;
     min-width: 30px;
@@ -2166,7 +2146,7 @@ notebook > header {
       notebook > header tab:backdrop:checked.reorderable-page {
         border-color: #1f2222;
         background-color: #393f3f; }
-    notebook > header tab button.flat, notebook > header tab notebook > header > tabs > arrow, notebook > header tab button.sidebar-button, notebook > header tab headerbar button.titlebutton, headerbar notebook > header tab button.titlebutton,
+    notebook > header tab button.flat, notebook > header tab button.sidebar-button, notebook > header tab headerbar button.titlebutton, headerbar notebook > header tab button.titlebutton,
     notebook > header tab .titlebar button.titlebutton,
     .titlebar notebook > header tab button.titlebutton {
       padding: 0;
@@ -2174,22 +2154,22 @@ notebook > header {
       margin-bottom: 4px;
       min-width: 20px;
       min-height: 20px; }
-      notebook > header tab button.flat:hover, notebook > header tab notebook > header > tabs > arrow:hover, notebook > header tab button.sidebar-button:hover, notebook > header tab headerbar button.titlebutton:hover, headerbar notebook > header tab button.titlebutton:hover,
+      notebook > header tab button.flat:hover, notebook > header tab button.sidebar-button:hover, notebook > header tab headerbar button.titlebutton:hover, headerbar notebook > header tab button.titlebutton:hover,
       notebook > header tab .titlebar button.titlebutton:hover,
       .titlebar notebook > header tab button.titlebutton:hover {
         color: currentColor; }
-      notebook > header tab button.flat, notebook > header tab notebook > header > tabs > arrow, notebook > header tab button.sidebar-button, notebook > header tab headerbar button.titlebutton, headerbar notebook > header tab button.titlebutton,
+      notebook > header tab button.flat, notebook > header tab button.sidebar-button, notebook > header tab headerbar button.titlebutton, headerbar notebook > header tab button.titlebutton,
       notebook > header tab .titlebar button.titlebutton,
-      .titlebar notebook > header tab button.titlebutton, notebook > header tab button.flat:backdrop, notebook > header tab notebook > header > tabs > arrow:backdrop, notebook > header tab button.sidebar-button:backdrop, notebook > header tab headerbar button.titlebutton:backdrop, headerbar notebook > header tab button.titlebutton:backdrop,
+      .titlebar notebook > header tab button.titlebutton, notebook > header tab button.flat:backdrop, notebook > header tab button.sidebar-button:backdrop, notebook > header tab headerbar button.titlebutton:backdrop, headerbar notebook > header tab button.titlebutton:backdrop,
       notebook > header tab .titlebar button.titlebutton:backdrop,
       .titlebar notebook > header tab button.titlebutton:backdrop {
         color: alpha(currentColor,0.3); }
-      notebook > header tab button.flat:last-child, notebook > header tab notebook > header > tabs > arrow:last-child, notebook > header tab button.sidebar-button:last-child, notebook > header tab headerbar button.titlebutton:last-child, headerbar notebook > header tab button.titlebutton:last-child,
+      notebook > header tab button.flat:last-child, notebook > header tab button.sidebar-button:last-child, notebook > header tab headerbar button.titlebutton:last-child, headerbar notebook > header tab button.titlebutton:last-child,
       notebook > header tab .titlebar button.titlebutton:last-child,
       .titlebar notebook > header tab button.titlebutton:last-child {
         margin-left: 4px;
         margin-right: -4px; }
-      notebook > header tab button.flat:first-child, notebook > header tab notebook > header > tabs > arrow:first-child, notebook > header tab button.sidebar-button:first-child, notebook > header tab headerbar button.titlebutton:first-child, headerbar notebook > header tab button.titlebutton:first-child,
+      notebook > header tab button.flat:first-child, notebook > header tab button.sidebar-button:first-child, notebook > header tab headerbar button.titlebutton:first-child, headerbar notebook > header tab button.titlebutton:first-child,
       notebook > header tab .titlebar button.titlebutton:first-child,
       .titlebar notebook > header tab button.titlebutton:first-child {
         margin-left: -4px;
@@ -3649,12 +3629,12 @@ row.activatable:selected.has-open-popup, row.activatable:selected:hover {
 row.activatable:selected:backdrop {
   background-color: #215d9c; }
 
-row:selected button.flat:not(:active):not(:checked):not(:hover):not(disabled), row:selected notebook > header > tabs > arrow:not(:active):not(:checked):not(:hover):not(disabled), row:selected button.sidebar-button:not(:active):not(:checked):not(:hover):not(disabled), row:selected headerbar button.titlebutton:not(:active):not(:checked):not(:hover):not(disabled), headerbar row:selected button.titlebutton:not(:active):not(:checked):not(:hover):not(disabled),
+row:selected button.flat:not(:active):not(:checked):not(:hover):not(disabled), row:selected button.sidebar-button:not(:active):not(:checked):not(:hover):not(disabled), row:selected headerbar button.titlebutton:not(:active):not(:checked):not(:hover):not(disabled), headerbar row:selected button.titlebutton:not(:active):not(:checked):not(:hover):not(disabled),
 row:selected .titlebar button.titlebutton:not(:active):not(:checked):not(:hover):not(disabled),
 .titlebar row:selected button.titlebutton:not(:active):not(:checked):not(:hover):not(disabled) {
   color: #ffffff;
   border-color: transparent; }
-  row:selected button.flat:not(:active):not(:checked):not(:hover):not(disabled):backdrop, row:selected notebook > header > tabs > arrow:not(:active):not(:checked):not(:hover):not(disabled):backdrop, row:selected button.sidebar-button:not(:active):not(:checked):not(:hover):not(disabled):backdrop, row:selected headerbar button.titlebutton:not(:active):not(:checked):not(:hover):not(disabled):backdrop, headerbar row:selected button.titlebutton:not(:active):not(:checked):not(:hover):not(disabled):backdrop,
+  row:selected button.flat:not(:active):not(:checked):not(:hover):not(disabled):backdrop, row:selected button.sidebar-button:not(:active):not(:checked):not(:hover):not(disabled):backdrop, row:selected headerbar button.titlebutton:not(:active):not(:checked):not(:hover):not(disabled):backdrop, headerbar row:selected button.titlebutton:not(:active):not(:checked):not(:hover):not(disabled):backdrop,
   row:selected .titlebar button.titlebutton:not(:active):not(:checked):not(:hover):not(disabled):backdrop,
   .titlebar row:selected button.titlebutton:not(:active):not(:checked):not(:hover):not(disabled):backdrop {
     color: #949796; }
@@ -4098,7 +4078,7 @@ colorchooser .popover.osd {
   .content-view:backdrop {
     background-color: #282c2c; }
 
-.osd .scale-popup button.flat, .osd .scale-popup notebook > header > tabs > arrow, .osd .scale-popup button.sidebar-button, .osd .scale-popup headerbar button.titlebutton, headerbar .osd .scale-popup button.titlebutton,
+.osd .scale-popup button.flat, .osd .scale-popup button.sidebar-button, .osd .scale-popup headerbar button.titlebutton, headerbar .osd .scale-popup button.titlebutton,
 .osd .scale-popup .titlebar button.titlebutton,
 .titlebar .osd .scale-popup button.titlebutton {
   border-style: none;

@@ -1999,7 +1999,7 @@ notebook {
     > tabs > arrow {
       @extend %button_basic;
 
-      @extend button.flat;
+      @extend %button_basic.flat;
 
       min-height: 16px;
       min-width: 16px;
@@ -2013,11 +2013,7 @@ notebook {
         box-shadow: none;
       }
 
-      &:disabled {
-        background-image: none;
-        background-color: transparent;
-        border-color: transparent;
-      }
+      &:disabled { @include button(undecorated); }
     }
 
     tab {
