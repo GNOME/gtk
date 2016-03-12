@@ -5,9 +5,7 @@
  * rest of the desktop, and follow GTK+ themes. This demo shows how to
  * use GtkStyleContext and the gtk_render_ APIs to achieve this.
  *
- * Note that this is a very simple, non-interactive example and does
- * not show how to come up with theme-compliant sizes by using CSS padding,
- * margins and min-width or min-height.
+ * Note that this is a very simple, non-interactive example.
  */
 
 #include <gtk/gtk.h>
@@ -110,18 +108,10 @@ append_element (GtkWidgetPath *path,
 }
 
 static GtkStyleContext *
-get_style (GtkStyleContext *parent,
-           const char      *selector)
+create_context_for_path (GtkWidgetPath   *path,
+                         GtkStyleContext *parent)
 {
-  GtkWidgetPath *path;
   GtkStyleContext *context;
-
-  if (parent)
-    path = gtk_widget_path_copy (gtk_style_context_get_path (parent));
-  else
-    path = gtk_widget_path_new ();
-
-  append_element (path, selector);
 
   context = gtk_style_context_new ();
   gtk_style_context_set_path (context, path);
@@ -135,93 +125,273 @@ get_style (GtkStyleContext *parent,
   return context;
 }
 
+static GtkStyleContext *
+get_style (GtkStyleContext *parent,
+           const char      *selector)
+{
+  GtkWidgetPath *path;
+
+  if (parent)
+    path = gtk_widget_path_copy (gtk_style_context_get_path (parent));
+  else
+    path = gtk_widget_path_new ();
+
+  append_element (path, selector);
+
+  return create_context_for_path (path, parent);
+}
+
+static GtkStyleContext *
+get_style_with_siblings (GtkStyleContext *parent,
+                         const char      *selector,
+                         const char     **siblings,
+                         gint             position)
+{
+  GtkWidgetPath *path, *siblings_path;
+  guint i;
+
+  if (parent)
+    path = gtk_widget_path_copy (gtk_style_context_get_path (parent));
+  else
+    path = gtk_widget_path_new ();
+
+  siblings_path = gtk_widget_path_new ();
+  for (i = 0; siblings[i]; i++)
+    append_element (siblings_path, siblings[i]);
+
+  gtk_widget_path_append_with_siblings (path, siblings_path, position);
+  gtk_widget_path_unref (siblings_path);
+
+  return create_context_for_path (path, parent);
+}
+
 static void
-draw_menu (GtkWidget     *widget,
-           cairo_t       *cr,
-           gint           x,
-           gint           y,
-           gint           width,
-           gint           height)
+draw_style_common (GtkStyleContext *context,
+                   cairo_t         *cr,
+                   gint             x,
+                   gint             y,
+                   gint             width,
+                   gint             height,
+                   gint            *contents_x,
+                   gint            *contents_y,
+                   gint            *contents_width,
+                   gint            *contents_height)
+{
+  GtkBorder margin, border, padding;
+  int min_width, min_height;
+
+  gtk_style_context_get_margin (context, gtk_style_context_get_state (context), &margin);
+  gtk_style_context_get_border (context, gtk_style_context_get_state (context), &border);
+  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
+
+  gtk_style_context_get (context, gtk_style_context_get_state (context),
+                         "min-width", &min_width,
+                         "min-height", &min_height,
+                         NULL);
+  x += margin.left;
+  y += margin.top;
+  width -= margin.left + margin.right;
+  height -= margin.top + margin.bottom;
+
+  width = MAX (width, min_width);
+  height = MAX (height, min_height);
+
+  gtk_render_background (context, cr, x, y, width, height);
+  gtk_render_frame (context, cr, x, y, width, height);
+
+  if (contents_x)
+    *contents_x = x + border.left + padding.left;
+  if (contents_y)
+    *contents_y = y + border.top + padding.top;
+  if (contents_width)
+    *contents_width = width - border.left - border.right - padding.left - padding.right;
+  if (contents_height)
+    *contents_height = height - border.top - border.bottom - padding.top - padding.bottom;
+}
+
+static void
+query_size (GtkStyleContext *context,
+            gint            *width,
+            gint            *height)
+{
+  GtkBorder margin, border, padding;
+  int min_width, min_height;
+
+  gtk_style_context_get_margin (context, gtk_style_context_get_state (context), &margin);
+  gtk_style_context_get_border (context, gtk_style_context_get_state (context), &border);
+  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
+
+  gtk_style_context_get (context, gtk_style_context_get_state (context),
+                         "min-width", &min_width,
+                         "min-height", &min_height,
+                         NULL);
+
+  min_width += margin.left + margin.right + border.left + border.right + padding.left + padding.right;
+  min_height += margin.top + margin.bottom + border.top + border.bottom + padding.top + padding.bottom;
+
+  if (width)
+    *width = MAX (*width, min_width);
+  if (height)
+    *height = MAX (*height, min_height);
+}
+
+static void
+draw_menu (GtkWidget *widget,
+           cairo_t   *cr,
+           gint       x,
+           gint       y,
+           gint       width,
+           gint      *height)
 {
   GtkStyleContext *menu_context;
   GtkStyleContext *menuitem_context;
   GtkStyleContext *hovermenuitem_context;
+  GtkStyleContext *hoveredarrowmenuitem_context;
   GtkStyleContext *arrowmenuitem_context;
   GtkStyleContext *checkmenuitem_context;
+  GtkStyleContext *disabledarrowmenuitem_context;
+  GtkStyleContext *disabledcheckmenuitem_context;
   GtkStyleContext *radiomenuitem_context;
   GtkStyleContext *disablemenuitem_context;
+  GtkStyleContext *disabledradiomenuitem_context;
   GtkStyleContext *separatormenuitem_context;
+  gint menuitem1_height, menuitem2_height, menuitem3_height, menuitem4_height, menuitem5_height;
+  gint contents_x, contents_y, contents_width, contents_height;
+  gint menu_x, menu_y, menu_width, menu_height;
+  gint arrow_width, arrow_height, arrow_size;
+  gint toggle_x, toggle_y, toggle_width, toggle_height;
 
   /* This information is taken from the GtkMenu docs, see "CSS nodes" */
   menu_context = get_style (gtk_widget_get_style_context(widget), "menu");
-
-  gtk_render_background (menu_context, cr, x, y, width, height);
-  gtk_render_frame (menu_context, cr, x, y, width, height);
-
   hovermenuitem_context = get_style (menu_context, "menuitem:hover");
-  gtk_render_background (hovermenuitem_context, cr, x, y, width, 20);
-  gtk_render_frame (hovermenuitem_context, cr, x, y, width, 20);
-
-  /* arrow for left to right */
-  arrowmenuitem_context = get_style (hovermenuitem_context, "arrow:dir(ltr)");
-  gtk_render_arrow (arrowmenuitem_context, cr, G_PI / 2, x + width - 20, y, 20);
-  g_object_unref (arrowmenuitem_context);
-
+  hoveredarrowmenuitem_context = get_style (hovermenuitem_context, "arrow.right:dir(ltr)");
   menuitem_context = get_style (menu_context, "menuitem");
-  gtk_render_background (menuitem_context, cr, x, y + 20, width, 20);
-  gtk_render_frame (menuitem_context, cr, x, y + 20, width, 20);
-
-  disablemenuitem_context = get_style (menu_context, "menuitem:disabled");
-
-  /* arrow for right to left, sensitive */
   arrowmenuitem_context = get_style (menuitem_context, "arrow:dir(rtl)");
-  gtk_render_arrow (arrowmenuitem_context, cr, G_PI / 2, x, y + 20, 20);
-  g_object_unref (arrowmenuitem_context);
-
-  /* arrow for right to left, insensitive */
-  arrowmenuitem_context = get_style (disablemenuitem_context, "arrow:dir(rtl)");
-  gtk_render_arrow (arrowmenuitem_context, cr, G_PI / 2, x + width - 20, y + 20, 20);
-
-  gtk_render_background (menuitem_context, cr, x, y + 40, width, 20);
-  gtk_render_frame (menuitem_context, cr, x, y + 40, width, 20);
-
-  /* check enabled, sensitive */
+  disablemenuitem_context = get_style (menu_context, "menuitem:disabled");
+  disabledarrowmenuitem_context = get_style (disablemenuitem_context, "arrow:dir(rtl)");
   checkmenuitem_context = get_style (menuitem_context, "check:checked");
-  gtk_render_frame (checkmenuitem_context, cr, x + 2, y + 40, 16, 16);
-  gtk_render_check (checkmenuitem_context, cr, x + 2, y + 40, 16, 16);
-  g_object_unref (checkmenuitem_context);
-
-  /* check unchecked, insensitive */
-  checkmenuitem_context = get_style (disablemenuitem_context, "check");
-  gtk_render_frame (checkmenuitem_context, cr, x + width - 18, y + 40, 16, 16);
-  gtk_render_check (checkmenuitem_context, cr, x + width - 18, y + 40, 16, 16);
-
-  /* draw separator */
-  separatormenuitem_context = get_style (menuitem_context, "separator:disabled");
-  gtk_render_line (separatormenuitem_context, cr, x + 1, y + 60, x + width - 2, y + 60);
-
-  gtk_render_background (menuitem_context, cr, x, y + 70, width, 20);
-  gtk_render_frame (menuitem_context, cr, x, y + 70, width, 20);
-
-  /* radio checked, sensitive */
+  disabledcheckmenuitem_context = get_style (disablemenuitem_context, "check");
+  separatormenuitem_context = get_style (menu_context, "separator:disabled");
   radiomenuitem_context = get_style (menuitem_context, "radio:checked");
-  gtk_render_frame (radiomenuitem_context, cr, x + 2, y + 70, 16, 16);
-  gtk_render_option (radiomenuitem_context, cr, x + 2, y + 70, 16, 16);
-  g_object_unref (radiomenuitem_context);
+  disabledradiomenuitem_context = get_style (disablemenuitem_context, "radio");
 
-  /* radio unchecked, insensitive */
-  radiomenuitem_context = get_style (disablemenuitem_context, "radio");
-  gtk_render_frame (radiomenuitem_context, cr, x + width - 18, y + 70, 16, 16);
-  gtk_render_option (radiomenuitem_context, cr, x + width - 18, y + 70, 16, 16);
+  *height = 0;
+  query_size (menu_context, NULL, height);
+  menuitem1_height = 0;
+  query_size (hovermenuitem_context, NULL, &menuitem1_height);
+  query_size (hoveredarrowmenuitem_context, NULL, &menuitem1_height);
+  *height += menuitem1_height;
+  menuitem2_height = 0;
+  query_size (menu_context, NULL, &menuitem5_height);
+  query_size (menuitem_context, NULL, &menuitem2_height);
+  query_size (arrowmenuitem_context, NULL, &menuitem2_height);
+  query_size (disabledarrowmenuitem_context, NULL, &menuitem2_height);
+  *height += menuitem2_height;
+  menuitem3_height = 0;
+  query_size (menu_context, NULL, &menuitem5_height);
+  query_size (menuitem_context, NULL, &menuitem3_height);
+  query_size (checkmenuitem_context, NULL, &menuitem3_height);
+  query_size (disabledcheckmenuitem_context, NULL, &menuitem3_height);
+  *height += menuitem3_height;
+  menuitem4_height = 0;
+  query_size (menu_context, NULL, &menuitem5_height);
+  query_size (separatormenuitem_context, NULL, &menuitem4_height);
+  *height += menuitem4_height;
+  menuitem5_height = 0;
+  query_size (menu_context, NULL, &menuitem5_height);
+  query_size (menuitem_context, NULL, &menuitem5_height);
+  query_size (radiomenuitem_context, NULL, &menuitem5_height);
+  query_size (disabledradiomenuitem_context, NULL, &menuitem5_height);
+  *height += menuitem5_height;
 
-  g_object_unref (separatormenuitem_context);
-  g_object_unref (disablemenuitem_context);
-  g_object_unref (radiomenuitem_context);
-  g_object_unref (checkmenuitem_context);
-  g_object_unref (arrowmenuitem_context);
-  g_object_unref (hovermenuitem_context);
-  g_object_unref (menuitem_context);
+  draw_style_common (menu_context, cr, x, y, width, *height,
+                     &menu_x, &menu_y, &menu_width, &menu_height);
+
+  /* Hovered with right arrow */
+  gtk_style_context_get (hoveredarrowmenuitem_context, gtk_style_context_get_state (hoveredarrowmenuitem_context),
+                         "min-width", &arrow_width, "min-height", &arrow_height, NULL);
+  arrow_size = MIN (arrow_width, arrow_height);
+  draw_style_common (hovermenuitem_context, cr, menu_x, menu_y, menu_width, menuitem1_height,
+                     &contents_x, &contents_y, &contents_width, &contents_height);
+  gtk_render_arrow (hoveredarrowmenuitem_context, cr, G_PI / 2,
+                    contents_x + contents_width - arrow_size,
+                    contents_y + (contents_height - arrow_size) / 2, arrow_size);
+
+  /* Left arrow sensitive, and right arrow insensitive */
+  draw_style_common (menuitem_context, cr, menu_x, menu_y + menuitem1_height, menu_width, menuitem2_height,
+                     &contents_x, &contents_y, &contents_width, &contents_height);
+  gtk_style_context_get (arrowmenuitem_context, gtk_style_context_get_state (arrowmenuitem_context),
+                         "min-width", &arrow_width, "min-height", &arrow_height, NULL);
+  arrow_size = MIN (arrow_width, arrow_height);
+  gtk_render_arrow (arrowmenuitem_context, cr, G_PI / 2,
+                    contents_x,
+                    contents_y + (contents_height - arrow_size) / 2, arrow_size);
+  gtk_style_context_get (disabledarrowmenuitem_context, gtk_style_context_get_state (disabledarrowmenuitem_context),
+                         "min-width", &arrow_width, "min-height", &arrow_height, NULL);
+  arrow_size = MIN (arrow_width, arrow_height);
+  gtk_render_arrow (disabledarrowmenuitem_context, cr, G_PI / 2,
+                    contents_x + contents_width - arrow_size,
+                    contents_y + (contents_height - arrow_size) / 2, arrow_size);
+
+
+  /* Left check enabled, sensitive, and right check unchecked, insensitive */
+  draw_style_common (menuitem_context, cr, menu_x, menu_y + menuitem1_height + menuitem2_height, menu_width, menuitem3_height,
+                     &contents_x, &contents_y, &contents_width, &contents_height);
+  gtk_style_context_get (checkmenuitem_context, gtk_style_context_get_state (checkmenuitem_context),
+                         "min-width", &toggle_width, "min-height", &toggle_height, NULL);
+  draw_style_common (checkmenuitem_context, cr,
+                     contents_x,
+                     contents_y,
+                     toggle_width, toggle_height,
+                     &toggle_x, &toggle_y, &toggle_width, &toggle_height);
+  gtk_render_check (checkmenuitem_context, cr, toggle_x, toggle_y, toggle_width, toggle_height);
+  gtk_style_context_get (disabledcheckmenuitem_context, gtk_style_context_get_state (disabledcheckmenuitem_context),
+                         "min-width", &toggle_width, "min-height", &toggle_height, NULL);
+  draw_style_common (disabledcheckmenuitem_context, cr,
+                     contents_x + contents_width - toggle_width,
+                     contents_y,
+                     toggle_width, toggle_height,
+                     &toggle_x, &toggle_y, &toggle_width, &toggle_height);
+  gtk_render_check (disabledcheckmenuitem_context, cr, toggle_x, toggle_y, toggle_width, toggle_height);
+
+  /* Separator */
+  draw_style_common (separatormenuitem_context, cr, menu_x, menu_y + menuitem1_height + menuitem2_height + menuitem3_height,
+                     menu_width, menuitem4_height,
+                     NULL, NULL, NULL, NULL);
+
+  /* Left check enabled, sensitive, and right check unchecked, insensitive */
+  draw_style_common (menuitem_context, cr, menu_x, menu_y + menuitem1_height + menuitem2_height + menuitem3_height + menuitem4_height,
+                     menu_width, menuitem5_height,
+                     &contents_x, &contents_y, &contents_width, &contents_height);
+  gtk_style_context_get (radiomenuitem_context, gtk_style_context_get_state (radiomenuitem_context),
+                         "min-width", &toggle_width, "min-height", &toggle_height, NULL);
+  draw_style_common (radiomenuitem_context, cr,
+                     contents_x,
+                     contents_y,
+                     toggle_width, toggle_height,
+                     &toggle_x, &toggle_y, &toggle_width, &toggle_height);
+  gtk_render_check (radiomenuitem_context, cr, toggle_x, toggle_y, toggle_width, toggle_height);
+  gtk_style_context_get (disabledradiomenuitem_context, gtk_style_context_get_state (disabledradiomenuitem_context),
+                         "min-width", &toggle_width, "min-height", &toggle_height, NULL);
+  draw_style_common (disabledradiomenuitem_context, cr,
+                     contents_x + contents_width - toggle_width,
+                     contents_y,
+                     toggle_width, toggle_height,
+                     &toggle_x, &toggle_y, &toggle_width, &toggle_height);
+  gtk_render_check (disabledradiomenuitem_context, cr, toggle_x, toggle_y, toggle_width, toggle_height);
+
   g_object_unref (menu_context);
+  g_object_unref (menuitem_context);
+  g_object_unref (hovermenuitem_context);
+  g_object_unref (hoveredarrowmenuitem_context);
+  g_object_unref (arrowmenuitem_context);
+  g_object_unref (checkmenuitem_context);
+  g_object_unref (disabledarrowmenuitem_context);
+  g_object_unref (disabledcheckmenuitem_context);
+  g_object_unref (radiomenuitem_context);
+  g_object_unref (disablemenuitem_context);
+  g_object_unref (disabledradiomenuitem_context);
+  g_object_unref (separatormenuitem_context);
 }
 
 static void
@@ -230,28 +400,49 @@ draw_menubar (GtkWidget     *widget,
               gint           x,
               gint           y,
               gint           width,
-              gint           height)
+              gint          *height)
 {
+  GtkStyleContext *frame_context;
+  GtkStyleContext *border_context;
   GtkStyleContext *menubar_context;
+  GtkStyleContext *hovered_menuitem_context;
   GtkStyleContext *menuitem_context;
-  gint item_width = width / 3;
+  gint contents_x, contents_y, contents_width, contents_height;
+  gint item_width;
+
+  /* Menubar background is the same color as our base background, so use a frame */
+  frame_context = get_style (NULL, "frame");
+  border_context = get_style (frame_context, "border");
 
   /* This information is taken from the GtkMenuBar docs, see "CSS nodes" */
-  menubar_context = get_style (NULL, "menubar.background");
+  menubar_context = get_style (NULL, "menubar");
+  hovered_menuitem_context = get_style (menubar_context, "menuitem:hover");
+  menuitem_context = get_style (menubar_context, "menuitem");
 
-  gtk_render_background (menubar_context, cr, x, y, width, height);
-  gtk_render_frame (menubar_context, cr, x, y, width, height);
+  *height = 0;
+  query_size (frame_context, NULL, height);
+  query_size (border_context, NULL, height);
+  query_size (menubar_context, NULL, height);
+  query_size (hovered_menuitem_context, NULL, height);
+  query_size (menuitem_context, NULL, height);
 
-  menuitem_context = get_style (menubar_context, "menuitem:hover");
-
-  gtk_render_background (menuitem_context, cr, x, y, item_width, 20);
-  gtk_render_frame (menuitem_context, cr, x, y, item_width, 20);
-
-  gtk_render_background (menuitem_context, cr, x + item_width * 2, y, item_width, 20);
-  gtk_render_frame (menuitem_context, cr, x + item_width * 2, y, item_width, 20);
+  draw_style_common (frame_context, cr, x, y, width, *height,
+                     NULL, NULL, NULL, NULL);
+  draw_style_common (border_context, cr, x, y, width, *height,
+                     &contents_x, &contents_y, &contents_width, &contents_height);
+  draw_style_common (menubar_context, cr, contents_x, contents_y, contents_width, contents_height,
+                     NULL, NULL, NULL, NULL);
+  item_width = contents_width / 3;
+  draw_style_common (hovered_menuitem_context, cr, contents_x, contents_y, item_width, contents_height,
+                     NULL, NULL, NULL, NULL);
+  draw_style_common (menuitem_context, cr, contents_x + item_width * 2, contents_y, item_width, contents_height,
+                     NULL, NULL, NULL, NULL);
 
   g_object_unref (menuitem_context);
+  g_object_unref (hovered_menuitem_context);
   g_object_unref (menubar_context);
+  g_object_unref (border_context);
+  g_object_unref (frame_context);
 }
 
 static void
@@ -265,39 +456,40 @@ draw_notebook (GtkWidget     *widget,
   GtkStyleContext *notebook_context;
   GtkStyleContext *header_context;
   GtkStyleContext *tabs_context;
-  GtkStyleContext *tab_context;
+  GtkStyleContext *tab1_context, *tab2_context;
   GtkStyleContext *stack_context;
-  gint header_height = 40;
+  gint header_height;
+  gint contents_x, contents_y, contents_width, contents_height;
 
   /* This information is taken from the GtkNotebook docs, see "CSS nodes" */
   notebook_context = get_style (NULL, "notebook.frame");
-  gtk_render_background (notebook_context, cr, x, y, width, height);
-  gtk_render_frame (notebook_context, cr, x, y, width, height);
-
   header_context = get_style (notebook_context, "header.top");
-  gtk_render_background (header_context, cr, x, y, width, header_height);
-  gtk_render_frame (header_context, cr, x, y, width, header_height);
-
   tabs_context = get_style (header_context, "tabs");
-  gtk_render_background (tabs_context, cr, x, y, width, header_height);
-  gtk_render_frame (tabs_context, cr, x, y, width, header_height);
-
-  tab_context = get_style (tabs_context, "tab:active");
-  gtk_render_background (tab_context, cr, x, y, width/2, header_height);
-  gtk_render_frame (tab_context, cr, x, y, width/2, header_height);
-  g_object_unref (tab_context);
-
-  tab_context = get_style (tabs_context, "tab");
-  gtk_render_background (tab_context, cr, x + width/2, y, width/2, header_height);
-  gtk_render_frame (tab_context, cr, x + width/2, y, width/2, header_height);
-
+  tab1_context = get_style (tabs_context, "tab:checked");
+  tab2_context = get_style (tabs_context, "tab:hover");
   stack_context = get_style (notebook_context, "stack");
-  gtk_render_background (stack_context, cr, x, y + header_height, width, height - header_height);
-  gtk_render_frame (stack_context, cr, x, y + header_height, width, height - header_height);
+
+  header_height = 0;
+  query_size (notebook_context, NULL, &header_height);
+  query_size (header_context, NULL, &header_height);
+  query_size (tabs_context, NULL, &header_height);
+  query_size (tab1_context, NULL, &header_height);
+  query_size (tab2_context, NULL, &header_height);
+
+  draw_style_common (notebook_context, cr, x, y, width, height, NULL, NULL, NULL, NULL);
+  draw_style_common (header_context, cr, x, y, width, header_height, NULL, NULL, NULL, NULL);
+  draw_style_common (tabs_context, cr, x, y, width, header_height, NULL, NULL, NULL, NULL);
+  draw_style_common (tab1_context, cr, x, y, width / 2, header_height,
+                     &contents_x, &contents_y, &contents_width, &contents_height);
+  draw_style_common (tab2_context, cr, x + width / 2, y, width / 2, header_height,
+                     NULL, NULL, NULL, NULL);
+  draw_style_common (stack_context, cr, x, y + header_height, width,height - header_height,
+                     NULL, NULL, NULL, NULL);
 
   g_object_unref (stack_context);
-  g_object_unref (tab_context);
   g_object_unref (tabs_context);
+  g_object_unref (tab1_context);
+  g_object_unref (tab2_context);
   g_object_unref (header_context);
   g_object_unref (notebook_context);
 }
@@ -308,17 +500,18 @@ draw_horizontal_scrollbar (GtkWidget     *widget,
                            gint           x,
                            gint           y,
                            gint           width,
-                           gint           height,
                            gint           position,
-                           GtkStateFlags  state)
+                           GtkStateFlags  state,
+                           gint          *height)
 {
   GtkStyleContext *scrollbar_context;
   GtkStyleContext *contents_context;
   GtkStyleContext *trough_context;
   GtkStyleContext *slider_context;
+  gint slider_width;
 
   /* This information is taken from the GtkScrollbar docs, see "CSS nodes" */
-  scrollbar_context = get_style (NULL, "scrollbar.horizontal");
+  scrollbar_context = get_style (NULL, "scrollbar.horizontal.bottom");
   contents_context = get_style (scrollbar_context, "contents");
   trough_context = get_style (contents_context, "trough");
   slider_context = get_style (trough_context, "slider");
@@ -328,15 +521,19 @@ draw_horizontal_scrollbar (GtkWidget     *widget,
   gtk_style_context_set_state (trough_context, state);
   gtk_style_context_set_state (slider_context, state);
 
-  gtk_render_background (scrollbar_context, cr, x, y, width, height);
-  gtk_render_frame (scrollbar_context, cr, x, y, width, height);
-  gtk_render_background (contents_context, cr, x, y, width, height);
-  gtk_render_frame (contents_context, cr, x, y, width, height);
-  gtk_render_background (trough_context, cr, x, y, width, height);
-  gtk_render_frame (trough_context, cr, x, y, width, height);
-  /* The theme uses negative margins, this is where the -1 comes from */
-  gtk_render_background (slider_context, cr, x + position, y - 1, 30, height + 2);
-  gtk_render_frame (slider_context, cr, x + position, y - 1, 30, height + 2);
+  *height = 0;
+  query_size (scrollbar_context, NULL, height);
+  query_size (contents_context, NULL, height);
+  query_size (trough_context, NULL, height);
+  query_size (slider_context, NULL, height);
+
+  gtk_style_context_get (slider_context, gtk_style_context_get_state (slider_context),
+                         "min-width", &slider_width, NULL);
+
+  draw_style_common (scrollbar_context, cr, x, y, width, *height, NULL, NULL, NULL, NULL);
+  draw_style_common (contents_context, cr, x, y, width, *height, NULL, NULL, NULL, NULL);
+  draw_style_common (trough_context, cr, x, y, width, *height, NULL, NULL, NULL, NULL);
+  draw_style_common (slider_context, cr, x + position, y, slider_width, *height, NULL, NULL, NULL, NULL);
 
   g_object_unref (slider_context);
   g_object_unref (trough_context);
@@ -387,10 +584,13 @@ draw_check (GtkWidget     *widget,
             cairo_t       *cr,
             gint           x,
             gint           y,
-            GtkStateFlags  state)
+            GtkStateFlags  state,
+            gint          *width,
+            gint          *height)
 {
   GtkStyleContext *button_context;
   GtkStyleContext *check_context;
+  gint contents_x, contents_y, contents_width, contents_height;
 
   /* This information is taken from the GtkCheckButton docs, see "CSS nodes" */
   button_context = get_style (NULL, "checkbutton");
@@ -398,9 +598,14 @@ draw_check (GtkWidget     *widget,
 
   gtk_style_context_set_state (check_context, state);
 
-  gtk_render_background (check_context, cr, x, y, 20, 20);
-  gtk_render_frame (check_context, cr, x, y, 20, 20);
-  gtk_render_check (check_context, cr, x, y, 20, 20);
+  *width = *height = 0;
+  query_size (button_context, width, height);
+  query_size (check_context, width, height);
+
+  draw_style_common (button_context, cr, x, y, *width, *height, NULL, NULL, NULL, NULL);
+  draw_style_common (check_context, cr, x, y, *width, *height,
+                     &contents_x, &contents_y, &contents_width, &contents_height);
+  gtk_render_check (check_context, cr, contents_x, contents_y, contents_width, contents_height);
 
   g_object_unref (check_context);
   g_object_unref (button_context);
@@ -412,10 +617,13 @@ draw_radio (GtkWidget     *widget,
             cairo_t       *cr,
             gint           x,
             gint           y,
-            GtkStateFlags  state)
+            GtkStateFlags  state,
+            gint          *width,
+            gint          *height)
 {
   GtkStyleContext *button_context;
   GtkStyleContext *check_context;
+  gint contents_x, contents_y, contents_width, contents_height;
 
   /* This information is taken from the GtkRadioButton docs, see "CSS nodes" */
   button_context = get_style (NULL, "radiobutton");
@@ -423,9 +631,14 @@ draw_radio (GtkWidget     *widget,
 
   gtk_style_context_set_state (check_context, state);
 
-  gtk_render_background (check_context, cr, x, y, 20, 20);
-  gtk_render_frame (check_context, cr, x, y, 20, 20);
-  gtk_render_option (check_context, cr, x, y, 20, 20);
+  *width = *height = 0;
+  query_size (button_context, width, height);
+  query_size (check_context, width, height);
+
+  draw_style_common (button_context, cr, x, y, *width, *height, NULL, NULL, NULL, NULL);
+  draw_style_common (check_context, cr, x, y, *width, *height,
+                     &contents_x, &contents_y, &contents_width, &contents_height);
+  gtk_render_check (check_context, cr, contents_x, contents_y, contents_width, contents_height);
 
   g_object_unref (check_context);
   g_object_unref (button_context);
@@ -438,26 +651,86 @@ draw_progress (GtkWidget *widget,
                gint       x,
                gint       y,
                gint       width,
-               gint       height,
-               gint       position)
+               gint       position,
+               gint      *height)
 {
   GtkStyleContext *bar_context;
   GtkStyleContext *trough_context;
   GtkStyleContext *progress_context;
 
   /* This information is taken from the GtkProgressBar docs, see "CSS nodes" */
-  bar_context = get_style (NULL, "progressbar");
+  bar_context = get_style (NULL, "progressbar.horizontal");
   trough_context = get_style (bar_context, "trough");
-  progress_context = get_style (trough_context, "progress");
+  progress_context = get_style (trough_context, "progress.left");
 
-  gtk_render_background (trough_context, cr, x, y, width, height);
-  gtk_render_frame (trough_context, cr, x, y, width, height);
-  gtk_render_background (progress_context, cr, x, y, position, height);
-  gtk_render_frame (progress_context, cr, x, y, position, height);
+  *height = 0;
+  query_size (bar_context, NULL, height);
+  query_size (trough_context, NULL, height);
+  query_size (progress_context, NULL, height);
+
+  draw_style_common (bar_context, cr, x, y, width, *height, NULL, NULL, NULL, NULL);
+  draw_style_common (trough_context, cr, x, y, width, *height, NULL, NULL, NULL, NULL);
+  draw_style_common (progress_context, cr, x, y, position, *height, NULL, NULL, NULL, NULL);
 
   g_object_unref (progress_context);
   g_object_unref (trough_context);
   g_object_unref (bar_context);
+}
+
+static void
+draw_scale (GtkWidget *widget,
+            cairo_t   *cr,
+            gint       x,
+            gint       y,
+            gint       width,
+            gint       position,
+            gint      *height)
+{
+  GtkStyleContext *scale_context;
+  GtkStyleContext *contents_context;
+  GtkStyleContext *trough_context;
+  GtkStyleContext *slider_context;
+  GtkStyleContext *highlight_context;
+  gint contents_x, contents_y, contents_width, contents_height;
+  gint trough_height, slider_height;
+
+  scale_context = get_style (NULL, "scale.horizontal");
+  contents_context = get_style (scale_context, "contents");
+  trough_context = get_style (contents_context, "trough");
+  slider_context = get_style (trough_context, "slider");
+  highlight_context = get_style (trough_context, "highlight.top");
+
+  *height = 0;
+  query_size (scale_context, NULL, height);
+  query_size (contents_context, NULL, height);
+  query_size (trough_context, NULL, height);
+  query_size (slider_context, NULL, height);
+  query_size (highlight_context, NULL, height);
+
+  draw_style_common (scale_context, cr, x, y, width, *height,
+                     &contents_x, &contents_y, &contents_width, &contents_height);
+  draw_style_common (contents_context, cr, contents_x, contents_y, contents_width, contents_height,
+                     &contents_x, &contents_y, &contents_width, &contents_height);
+  /* Scale trough defines its size querying slider and highlight */
+  trough_height = 0;
+  query_size (trough_context, NULL, &trough_height);
+  slider_height = 0;
+  query_size (slider_context, NULL, &slider_height);
+  query_size (highlight_context, NULL, &slider_height);
+  trough_height += slider_height;
+  draw_style_common (trough_context, cr, contents_x, contents_y, contents_width, trough_height,
+                     &contents_x, &contents_y, &contents_width, &contents_height);
+  draw_style_common (highlight_context, cr, contents_x, contents_y,
+                     contents_width / 2, contents_height,
+                     NULL, NULL, NULL, NULL);
+  draw_style_common (slider_context, cr, contents_x + position, contents_y, contents_height, contents_height,
+                     NULL, NULL, NULL, NULL);
+
+  g_object_unref (scale_context);
+  g_object_unref (contents_context);
+  g_object_unref (trough_context);
+  g_object_unref (slider_context);
+  g_object_unref (highlight_context);
 }
 
 static void
@@ -466,41 +739,78 @@ draw_combobox (GtkWidget *widget,
                gint       x,
                gint       y,
                gint       width,
-               gboolean   has_entry)
+               gboolean   has_entry,
+               gint      *height)
 {
   GtkStyleContext *combo_context;
+  GtkStyleContext *box_context;
   GtkStyleContext *button_context;
+  GtkStyleContext *button_box_context;
   GtkStyleContext *entry_context;
   GtkStyleContext *arrow_context;
+  gint contents_x, contents_y, contents_width, contents_height;
+  gint button_width;
+  gint arrow_width, arrow_height, arrow_size;
 
   /* This information is taken from the GtkComboBox docs, see "CSS nodes" */
   combo_context = get_style (NULL, "combobox:focus");
-  button_context = get_style (combo_context, "button:focus");
-  entry_context = get_style (combo_context, "entry:focus");
-  arrow_context = get_style (button_context, "arrow");
-
-  gtk_render_background (combo_context, cr, x, y, width, 30);
-  gtk_render_frame (combo_context, cr, x, y, width, 30);
-
+  box_context = get_style (combo_context, "box.horizontal.linked");
   if (has_entry)
     {
-      gtk_style_context_set_junction_sides (entry_context, GTK_JUNCTION_RIGHT);
-      gtk_render_background (entry_context, cr, x, y, width - 30, 30);
-      gtk_render_frame (entry_context, cr, x, y, width - 30, 30);
+      const char *siblings[3] = { "entry.combo:focus", "button.combo" , NULL };
 
-      gtk_render_background (button_context, cr, x + width - 30, y, 30, 30);
-      gtk_render_frame (button_context, cr, x + width - 30, y, 30, 30);
+      entry_context = get_style_with_siblings (box_context, "entry.combo:focus", siblings, 0);
+      button_context = get_style_with_siblings (box_context, "button.combo", siblings, 1);
     }
   else
     {
-      gtk_render_background (button_context, cr, x, y, width, 30);
-      gtk_render_frame (button_context, cr, x, y, width, 30);
+      const char *siblings[2] = { "button.combo" , NULL };
+
+      button_context = get_style_with_siblings (box_context, "button.combo", siblings, 0);
+    }
+  button_box_context = get_style (button_context, "box.horizontal");
+  arrow_context = get_style (button_box_context, "arrow");
+
+  *height = 0;
+  query_size (combo_context, NULL, height);
+  query_size (box_context, NULL, height);
+  if (has_entry)
+    query_size (entry_context, NULL, height);
+  query_size (button_context, NULL, height);
+  query_size (button_box_context, NULL, height);
+  query_size (arrow_context, NULL, height);
+
+  gtk_style_context_get (arrow_context, gtk_style_context_get_state (arrow_context),
+                         "min-width", &arrow_width, "min-height", &arrow_height, NULL);
+  arrow_size = MIN (arrow_width, arrow_height);
+
+  draw_style_common (combo_context, cr, x, y, width, *height, NULL, NULL, NULL, NULL);
+  draw_style_common (box_context, cr, x, y, width, *height, NULL, NULL, NULL, NULL);
+  if (has_entry)
+    {
+      button_width = *height;
+      draw_style_common (entry_context, cr, x, y, width - button_width, *height, NULL, NULL, NULL, NULL);
+      draw_style_common (button_context, cr, x + width - button_width, y, button_width, *height,
+                         &contents_x, &contents_y, &contents_width, &contents_height);
+    }
+  else
+    {
+      button_width = width;
+      draw_style_common (button_context, cr, x, y, width, *height,
+                         &contents_x, &contents_y, &contents_width, &contents_height);
     }
 
-  gtk_render_arrow (arrow_context, cr, G_PI / 2, x + width - 25, y+5, 20);
+  draw_style_common (button_box_context, cr, contents_x, contents_y, contents_width, contents_height,
+                     NULL, NULL, NULL, NULL);
+  draw_style_common (arrow_context, cr, contents_x, contents_y, contents_width, contents_height,
+                     NULL, NULL, NULL, NULL);
+  gtk_render_arrow (arrow_context, cr, G_PI / 2,
+                    contents_x + contents_width - arrow_size,
+                    contents_y + (contents_height - arrow_size) / 2, arrow_size);
 
   g_object_unref (arrow_context);
-  g_object_unref (entry_context);
+  if (has_entry)
+    g_object_unref (entry_context);
   g_object_unref (button_context);
   g_object_unref (combo_context);
 }
@@ -510,44 +820,59 @@ draw_spinbutton (GtkWidget *widget,
                  cairo_t   *cr,
                  gint       x,
                  gint       y,
-                 gint       width)
+                 gint       width,
+                 gint      *height)
 {
   GtkStyleContext *spin_context;
   GtkStyleContext *entry_context;
   GtkStyleContext *up_context;
   GtkStyleContext *down_context;
-
   GtkIconTheme *icon_theme;
   GtkIconInfo *icon_info;
   GdkPixbuf *pixbuf;
+  gint icon_width, icon_height, icon_size;
+  gint button_width;
+  gint contents_x, contents_y, contents_width, contents_height;
 
   /* This information is taken from the GtkSpinButton docs, see "CSS nodes" */
-  spin_context = get_style (NULL, "spinbutton:focus");
+  spin_context = get_style (NULL, "spinbutton.horizontal:focus");
   entry_context = get_style (NULL, "entry:focus");
-  up_context = get_style (spin_context, "button.up:active");
-  down_context = get_style (spin_context, "button.down");
+  up_context = get_style (spin_context, "button.up:focus:active");
+  down_context = get_style (spin_context, "button.down:focus");
 
-  gtk_render_background (entry_context, cr, x, y, width, 30);
-  gtk_render_frame (entry_context, cr, x, y, width, 30);
+  *height = 0;
+  query_size (spin_context, NULL, height);
+  query_size (entry_context, NULL, height);
+  query_size (up_context, NULL, height);
+  query_size (down_context, NULL, height);
+  button_width = *height;
 
-  gtk_render_background (up_context, cr, x + width - 30, y, 30, 30);
-  gtk_render_frame (up_context, cr, x + width - 30, y, 30, 30);
-
-  gtk_render_background (down_context, cr, x + width - 60, y, 30, 30);
-  gtk_render_frame (down_context, cr, x + width - 60, y, 30, 30);
+  draw_style_common (spin_context, cr, x, y, width, *height, NULL, NULL, NULL, NULL);
+  draw_style_common (entry_context, cr, x, y, width, *height, NULL, NULL, NULL, NULL);
 
   icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (widget));
 
-  icon_info = gtk_icon_theme_lookup_icon (icon_theme, "list-add-symbolic", 20, 0);
+  gtk_style_context_get (up_context, gtk_style_context_get_state (up_context),
+                         "min-width", &icon_width, "min-height", &icon_height, NULL);
+  icon_size = MIN (icon_width, icon_height);
+  icon_info = gtk_icon_theme_lookup_icon (icon_theme, "list-add-symbolic", icon_size, 0);
   pixbuf = gtk_icon_info_load_symbolic_for_context (icon_info, up_context, NULL, NULL);
   g_object_unref (icon_info);
-  gtk_render_icon (up_context, cr, pixbuf, x + width - 30 + 5, y + 5);
+  draw_style_common (up_context, cr, x + width - button_width, y, button_width, *height,
+                     &contents_x, &contents_y, &contents_width, &contents_height);
+  gtk_render_icon (up_context, cr, pixbuf, contents_x, contents_y + (contents_height - icon_size) / 2);
   g_object_unref (pixbuf);
 
-  icon_info = gtk_icon_theme_lookup_icon (icon_theme, "list-remove-symbolic", 20, 0);
+
+  gtk_style_context_get (down_context, gtk_style_context_get_state (down_context),
+                         "min-width", &icon_width, "min-height", &icon_height, NULL);
+  icon_size = MIN (icon_width, icon_height);
+  icon_info = gtk_icon_theme_lookup_icon (icon_theme, "list-remove-symbolic", icon_size, 0);
   pixbuf = gtk_icon_info_load_symbolic_for_context (icon_info, down_context, NULL, NULL);
   g_object_unref (icon_info);
-  gtk_render_icon (down_context, cr, pixbuf, x + width - 60 + 5, y + 5);
+  draw_style_common (down_context, cr, x + width - 2 * button_width, y, button_width, *height,
+                     &contents_x, &contents_y, &contents_width, &contents_height);
+  gtk_render_icon (down_context, cr, pixbuf, contents_x, contents_y + (contents_height - icon_size) / 2);
   g_object_unref (pixbuf);
 
   g_object_unref (down_context);
@@ -561,39 +886,64 @@ draw_cb (GtkWidget *widget,
          cairo_t   *cr)
 {
   gint panewidth, width, height;
+  gint x, y;
 
   width = gtk_widget_get_allocated_width (widget);
   panewidth = width / 2;
   height = gtk_widget_get_allocated_height (widget);
 
   cairo_rectangle (cr, 0, 0, width, height);
-  cairo_set_source_rgb (cr, 0.6, 0.6, 0.6);
+  cairo_set_source_rgb (cr, 0.9, 0.9, 0.9);
   cairo_fill (cr);
 
-  draw_horizontal_scrollbar (widget, cr, 10, 10, panewidth - 20, 12, 30, GTK_STATE_FLAG_NORMAL);
-  draw_horizontal_scrollbar (widget, cr, 10, 30, panewidth - 20, 12, 40, GTK_STATE_FLAG_PRELIGHT);
-  draw_horizontal_scrollbar (widget, cr, 10, 50, panewidth - 20, 12, 50, GTK_STATE_FLAG_ACTIVE|GTK_STATE_FLAG_PRELIGHT);
+  x = y = 10;
+  draw_horizontal_scrollbar (widget, cr, x, y, panewidth - 20, 30, GTK_STATE_FLAG_NORMAL, &height);
+  y += height + 8;
+  draw_horizontal_scrollbar (widget, cr, x, y, panewidth - 20, 40, GTK_STATE_FLAG_PRELIGHT, &height);
+  y += height + 8;
+  draw_horizontal_scrollbar (widget, cr, x, y, panewidth - 20, 50, GTK_STATE_FLAG_ACTIVE|GTK_STATE_FLAG_PRELIGHT, &height);
 
-  draw_text (widget, cr, 10,  70, panewidth - 20, 20, "Not selected", GTK_STATE_FLAG_NORMAL);
-  draw_text (widget, cr, 10, 100, panewidth - 20, 20, "Selected", GTK_STATE_FLAG_SELECTED);
+  y += height + 8;
+  draw_text (widget, cr, x,  y, panewidth - 20, 20, "Not selected", GTK_STATE_FLAG_NORMAL);
+  y += 20 + 10;
+  draw_text (widget, cr, x, y, panewidth - 20, 20, "Selected", GTK_STATE_FLAG_SELECTED);
 
-  draw_check (widget, cr,  10, 130, GTK_STATE_FLAG_NORMAL);
-  draw_check (widget, cr,  40, 130, GTK_STATE_FLAG_CHECKED);
-  draw_radio (widget, cr,  70, 130, GTK_STATE_FLAG_NORMAL);
-  draw_radio (widget, cr, 100, 130, GTK_STATE_FLAG_CHECKED);
-  draw_progress (widget, cr, 10, 160, panewidth - 20, 6, 50);
+  x = 10;
+  y += 20 + 10;
+  draw_check (widget, cr,  x, y, GTK_STATE_FLAG_NORMAL, &width, &height);
+  x += width + 10;
+  draw_check (widget, cr,  x, y, GTK_STATE_FLAG_CHECKED, &width, &height);
+  x += width + 10;
+  draw_radio (widget, cr,  x, y, GTK_STATE_FLAG_NORMAL, &width, &height);
+  x += width + 10;
+  draw_radio (widget, cr, x, y, GTK_STATE_FLAG_CHECKED, &width, &height);
+  x = 10;
 
-  draw_menu (widget, cr, 10 + panewidth, 10, panewidth - 20, 90);
+  y += height + 10;
+  draw_progress (widget, cr, x, y, panewidth - 20, 50, &height);
 
-  draw_menubar (widget, cr, 10 + panewidth, 110, panewidth - 20, 20);
+  y += height + 10;
+  draw_scale (widget, cr, x, y, panewidth - 20, 75, &height);
 
-  draw_spinbutton (widget, cr, 10 + panewidth, 140, panewidth - 20);
+  y += height + 20;
+  draw_notebook (widget, cr, x, y, panewidth - 20, 160);
 
-  draw_notebook (widget, cr, 10, 200, panewidth - 20, 160);
+  /* Second column */
+  x += panewidth;
+  y = 10;
+  draw_menu (widget, cr, x, y, panewidth - 20, &height);
 
-  draw_combobox (widget, cr, 10 + panewidth, 200, panewidth - 20, FALSE);
+  y += height + 10;
+  draw_menubar (widget, cr, x, y, panewidth - 20, &height);
 
-  draw_combobox (widget, cr, 10 + panewidth, 240, panewidth - 20, TRUE);
+  y += height + 20;
+  draw_spinbutton (widget, cr, x, y, panewidth - 20, &height);
+
+  y += height + 30;
+  draw_combobox (widget, cr, x, y, panewidth - 20, FALSE, &height);
+
+  y += height + 10;
+  draw_combobox (widget, cr, 10 + panewidth, y, panewidth - 20, TRUE, &height);
 
   return FALSE;
 }
