@@ -2005,7 +2005,7 @@ notebook {
       min-width: 16px;
       border-radius: 0;
 
-      &:hover:not(:checked):not(:backdrop) {
+      &:hover:not(:active):not(:backdrop) {
         background-clip: padding-box;
         background-image: none;
         background-color: transparentize(white, 0.7);

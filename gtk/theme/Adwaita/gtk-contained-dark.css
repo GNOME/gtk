@@ -2125,7 +2125,7 @@ notebook > header {
     min-height: 16px;
     min-width: 16px;
     border-radius: 0; }
-    notebook > header > tabs > arrow:hover:not(:checked):not(:backdrop) {
+    notebook > header > tabs > arrow:hover:not(:active):not(:backdrop) {
       background-clip: padding-box;
       background-image: none;
       background-color: rgba(255, 255, 255, 0.3);
