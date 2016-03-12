@@ -2946,6 +2946,44 @@ get_cursor_name_from_op (GdkW32WindowDragOp op,
   return NULL;
 }
 
+static gboolean
+point_in_window (GdkWindow *window,
+		 gdouble    x,
+                 gdouble    y)
+{
+  return x >= 0 && x < window->width &&
+         y >= 0 && y < window->height &&
+         (window->shape == NULL ||
+          cairo_region_contains_point (window->shape, x, y)) &&
+         (window->input_shape == NULL ||
+          cairo_region_contains_point (window->input_shape, x, y));
+}
+
+static GdkWindow *
+child_window_at_coordinates (GdkWindow *window,
+                             gint       root_x,
+                             gint       root_y)
+{
+  gint x, y;
+  GList *l;
+  GList *children;
+
+  children = gdk_window_peek_children (window);
+  gdk_window_get_root_origin (window, &x, &y);
+  x = root_x - x;
+  y = root_y - y;
+
+  for (l = children; l; l = g_list_next (l))
+    {
+      GdkWindow *child = GDK_WINDOW (l->data);
+
+      if (point_in_window (child, x, y))
+        return child;
+    }
+
+  return window;
+}
+
 static void
 setup_drag_move_resize_context (GdkWindow                   *window,
                                 GdkW32DragMoveResizeContext *context,
@@ -2959,7 +2997,6 @@ setup_drag_move_resize_context (GdkWindow                   *window,
 {
   RECT rect;
   const gchar *cursor_name;
-  gint x, y;
   GdkWindow *pointer_window;
   GdkDisplay *display = gdk_device_get_display (device);
 
@@ -2969,10 +3006,7 @@ setup_drag_move_resize_context (GdkWindow                   *window,
 
   context->cursor = _gdk_win32_display_get_cursor_for_name (display, cursor_name);
 
-  gdk_window_get_root_origin (window, &x, &y);
-  x -= root_x;
-  y -= root_y;
-  pointer_window = gdk_device_get_window_at_position (device, &x, &y);
+  pointer_window = child_window_at_coordinates (window, root_x, root_y);
 
   /* Note: This triggers a WM_CAPTURECHANGED, which will trigger
    * gdk_win32_window_end_move_resize_drag(), which will end
@@ -2998,7 +3032,7 @@ setup_drag_move_resize_context (GdkWindow                   *window,
             g_print ("begin drag moveresize: window %p, toplevel %p, "
                      "op %u, edge %d, device %p, "
                      "button %d, coord %d:%d, time %u\n",
-                     window, gdk_window_get_toplevel (window),
+                     pointer_window, gdk_window_get_toplevel (window),
                      context->op, context->edge, context->device,
                      context->button, context->start_root_x,
                      context->start_root_y, context->timestamp));
