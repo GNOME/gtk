@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-05 22:04+0100\n"
-"PO-Revision-Date: 2016-03-05 22:07+0100\n"
+"POT-Creation-Date: 2016-03-12 19:39+0100\n"
+"PO-Revision-Date: 2016-03-12 19:46+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -457,9 +457,8 @@ msgid "3.2 core GL profile is not available on EGL implementation"
 msgstr "Profil jedra GL 3.2 ni na voljo v okolju EGL"
 
 #: gdk/quartz/gdkglcontext-quartz.c:37
-#, fuzzy
 msgid "Not implemented on OS X"
-msgstr "Na tem OS predmet GCredentials ni podprt"
+msgstr "Ni vprogramirano v OS X"
 
 #: gdk/wayland/gdkglcontext-wayland.c:377
 msgid "Core GL is not available on EGL implementation"
@@ -1419,21 +1418,19 @@ msgid "Invalid size %s\n"
 msgstr "Neveljavna velikost %s\n"
 
 #: gtk/encodesymbolic.c:279 gtk/gtk-builder-tool.c:591
-#, fuzzy, c-format
+#, c-format
 msgid "Can't load file: %s\n"
-msgstr ""
-"Datoteke %s ni mogoče naložiti:\n"
-"Velikost datoteke je večja kot največja dovoljena velikost za ta račun (%s)."
+msgstr "Ni mogoče naložiti datoteke %s\n"
 
 #: gtk/encodesymbolic.c:307 gtk/encodesymbolic.c:313
-#, fuzzy, c-format
+#, c-format
 msgid "Can't save file %s: %s\n"
-msgstr "Ni mogoče najti metapodatkovne datoteke %s"
+msgstr "Ni mogoče shraniti datoteke %s: %s\n"
 
 #: gtk/encodesymbolic.c:319
-#, fuzzy, c-format
+#, c-format
 msgid "Can't close stream"
-msgstr "Ni mogoče zapreti povezave: %s\n"
+msgstr "Ni mogoče zapreti pretoka"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
@@ -1703,29 +1700,29 @@ msgid "Text may not appear inside <%s>"
 msgstr "Besedilo se ne sme pojaviti znotraj <%s>"
 
 #: gtk/gtk-builder-tool.c:97
-#, fuzzy, c-format
+#, c-format
 msgid "Packing property %s::%s not found\n"
-msgstr "Pakiranje iz \"%s\" v \"%s\""
+msgstr "Lastnosti pakiranja %s::%s ni mogoče najti\n"
 
 #: gtk/gtk-builder-tool.c:99
-#, fuzzy, c-format
+#, c-format
 msgid "Cell property %s::%s not found\n"
-msgstr "Iskanje cilja s celico %s je vrnilo rešitev."
+msgstr "Lastnosti celice %s::%s ni mogoče najti\n"
 
 #: gtk/gtk-builder-tool.c:101
-#, fuzzy, c-format
+#, c-format
 msgid "Property %s::%s not found\n"
-msgstr "Lastnost '%s' ne obstaja"
+msgstr "Lastnost %s::%s ne obstaja\n"
 
 #: gtk/gtk-builder-tool.c:109
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't parse value for %s::%s: %s\n"
-msgstr "Ni mogoče razčleniti dvojne vrednosti '%s' za %s"
+msgstr "Ni mogoče razčleniti vrednosti za %s::%s: %s\n"
 
 #: gtk/gtk-builder-tool.c:612
-#, fuzzy, c-format
+#, c-format
 msgid "Can't parse file: %s\n"
-msgstr "Ni mogoče razčleniti datoteke '%s', zato bo prezrta"
+msgstr "Ni mogoče razčleniti datoteke: %s\n"
 
 #: gtk/gtk-builder-tool.c:783
 #, c-format
@@ -1740,6 +1737,15 @@ msgid ""
 "\n"
 "Perform various tasks on GtkBuilder .ui files.\n"
 msgstr ""
+"Uporaba:\n"
+"  gtk-builder-tool [UKAZ] DATOTEKA\n"
+"\n"
+"Ukazi:\n"
+"  validate    preveri veljavnost datoteke\n"
+"  simplify    poenostavi datoteko\n"
+"  enumerate   izpiše seznam vseh poimenovanih predmetov\n"
+"\n"
+"Izvajanje različnih ukazov na datotekah GtkBuilder .ui.\n"
 
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -2082,9 +2088,8 @@ msgid "Alpha"
 msgstr "Alfa"
 
 #: gtk/gtkcolorswatch.c:423
-#, fuzzy
 msgid "C_ustomize"
-msgstr "%c"
+msgstr "Prila_godi"
 
 #. Translate to the default units to use for presenting
 #. * lengths to the user. Translate to default:inch if you
@@ -2276,95 +2281,82 @@ msgid "The folder contents could not be displayed"
 msgstr "Vsebine mape ni mogoče prikazati"
 
 #: gtk/gtkfilechooserwidget.c:849
-#, fuzzy
 msgid "The file could not be deleted"
-msgstr "Oznake %s ni mogoče izbrisati: %s"
+msgstr "Datoteke ni mogoče izbrisati"
 
 #: gtk/gtkfilechooserwidget.c:857
-#, fuzzy
 msgid "The file could not be moved to the Trash"
-msgstr "Datoteke \"%s\" ni mogoče premakniti v smeti."
+msgstr "Datoteke ni mogoče premakniti v smeti."
 
 #: gtk/gtkfilechooserwidget.c:1002
-#, fuzzy
 msgid "A folder with that name already exists"
-msgstr "Mapa z enakim imenom v “%s” že obstaja?"
+msgstr "Mapa z enakim imenom že obstaja."
 
 #: gtk/gtkfilechooserwidget.c:1004
-#, fuzzy
 msgid "A file with that name already exists"
-msgstr "Predmet s tem imenom že obstaja"
+msgstr "Datoteka s tem imenom že obstaja."
 
 #: gtk/gtkfilechooserwidget.c:1039
-#, fuzzy
 msgid "A folder cannot be called “.”"
-msgstr "Ime mape ne sme vsebovati '/'"
+msgstr "Mape ni mogoče poimenovati “.”"
 
 #: gtk/gtkfilechooserwidget.c:1040
-#, fuzzy
 msgid "A file cannot be called “.”"
-msgstr "Datoteka obstaja, vendar je ni mogoče prepisati."
+msgstr "Datoteke ni mogoče poimenovati “.”"
 
 #: gtk/gtkfilechooserwidget.c:1043
-#, fuzzy
 msgid "A folder cannot be called “..”"
-msgstr "Ime mape ne sme vsebovati '/'"
+msgstr "Mape ni mogoče poimenovati “..”"
 
 #: gtk/gtkfilechooserwidget.c:1044
-#, fuzzy
 msgid "A file cannot be called “..”"
-msgstr "Datoteka obstaja, vendar je ni mogoče prepisati."
+msgstr "Datoteke ni mogoče poimenovati “..”"
 
 #: gtk/gtkfilechooserwidget.c:1047
-#, fuzzy
 msgid "Folder names cannot contain “/”"
-msgstr "Ime mape ne sme vsebovati '/'"
+msgstr "Ime mape ne sme vsebovati \"/\""
 
 #: gtk/gtkfilechooserwidget.c:1048
-#, fuzzy
 msgid "File names cannot contain “/”"
-msgstr "Ni mogoče uporabiti '%c' v imenu datoteke"
+msgstr "Ime datoteke ne sme vsebovati \"/\""
 
 #: gtk/gtkfilechooserwidget.c:1074
 msgid "Folder names should not begin with a space"
-msgstr ""
+msgstr "Ime mape se ne sme začeti s presledkom"
 
 #: gtk/gtkfilechooserwidget.c:1075
 msgid "File names should not begin with a space"
-msgstr ""
+msgstr "Ime datoteke se ne sme začeti s presledkom"
 
 #: gtk/gtkfilechooserwidget.c:1079
 msgid "Folder names should not end with a space"
-msgstr ""
+msgstr "Ime mape se ne sme končati s presledkom"
 
 #: gtk/gtkfilechooserwidget.c:1080
 msgid "File names should not end with a space"
-msgstr ""
+msgstr "Ime datoteke se ne sme končati s presledkom"
 
 #: gtk/gtkfilechooserwidget.c:1083
-#, fuzzy
 msgid "Folder names starting with a “.” are hidden"
-msgstr "Ime mape ne sme vsebovati '/'"
+msgstr "Ime mape, ki se začne  z \".\" je skrita mapa"
 
 #: gtk/gtkfilechooserwidget.c:1084
-#, fuzzy
 msgid "File names starting with a “.” are hidden"
-msgstr "Priložena je skrita datoteka."
+msgstr "Ime datoteke, ki se začne  z \".\" pomeni skrito datoteko"
 
 #: gtk/gtkfilechooserwidget.c:1454
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to permanently delete “%s”?"
 msgstr "Ali ste prepričani, da želite trajno izbrisati \"%s\"?"
 
 #: gtk/gtkfilechooserwidget.c:1457
-#, fuzzy, c-format
+#, c-format
 msgid "If you delete an item, it will be permanently lost."
 msgstr "V primeru, da predmet izbrišete, bo trajno izgubljen."
 
 #: gtk/gtkfilechooserwidget.c:1591
-#, fuzzy
 msgid "The file could not be renamed"
-msgstr "Predmeta ni mogoče preimenovati."
+msgstr "Datoteke ni mogoče preimenovati."
 
 #: gtk/gtkfilechooserwidget.c:1903
 msgid "Could not select file"
@@ -2388,12 +2380,10 @@ msgstr "_Dodaj med zaznamke"
 
 #: gtk/gtkfilechooserwidget.c:2256 gtk/gtkplacessidebar.c:2461
 #: gtk/ui/gtkfilechooserwidget.ui:524
-#, fuzzy
 msgid "_Rename"
 msgstr "P_reimenuj"
 
 #: gtk/gtkfilechooserwidget.c:2258
-#, fuzzy
 msgid "_Move to Trash"
 msgstr "Premakni v _smeti"
 
@@ -2406,9 +2396,8 @@ msgid "Show _Size Column"
 msgstr "Pokaži stolpec _velikosti"
 
 #: gtk/gtkfilechooserwidget.c:2264
-#, fuzzy
 msgid "Show _Time"
-msgstr "Preklopi prikaz zasedenosti časa"
+msgstr "Pokaži _čas"
 
 #: gtk/gtkfilechooserwidget.c:2265
 msgid "Sort _Folders before Files"
@@ -2430,19 +2419,17 @@ msgid "Searching"
 msgstr "Poteka iskanje"
 
 #: gtk/gtkfilechooserwidget.c:3298 gtk/gtkfilechooserwidget.c:3312
-#, fuzzy, c-format
+#, c-format
 msgid "Searching in %s"
-msgstr "Vir za brskanje in iskanje fotografij flickr uporabnika %s"
+msgstr "Iskanje v %s"
 
 #: gtk/gtkfilechooserwidget.c:3322
-#, fuzzy
 msgid "Enter location"
 msgstr "Vpis mesta"
 
 #: gtk/gtkfilechooserwidget.c:3324
-#, fuzzy
 msgid "Enter location or URL"
-msgstr "Vnesite naslov URL"
+msgstr "Vpišite mesto ali naslov URL"
 
 #: gtk/gtkfilechooserwidget.c:4362 gtk/gtkfilechooserwidget.c:7260
 #: gtk/ui/gtkfilechooserwidget.ui:234
@@ -2463,12 +2450,10 @@ msgid "%H:%M"
 msgstr "%H:%M"
 
 #: gtk/gtkfilechooserwidget.c:4767 gtk/gtkfilechooserwidget.c:4813
-#, fuzzy
 msgid "%l:%M %p"
 msgstr "%l:%M %p"
 
 #: gtk/gtkfilechooserwidget.c:4771
-#, fuzzy
 msgid "Yesterday"
 msgstr "Včeraj"
 
@@ -2511,9 +2496,8 @@ msgid "_Replace"
 msgstr "_Zamenjaj"
 
 #: gtk/gtkfilechooserwidget.c:6548
-#, fuzzy
 msgid "You do not have access to the specified folder."
-msgstr "Nimate dovoljenj za dostop do ciljne mape."
+msgstr "Ni ustreznih dovoljenj za dostop do navedene mape."
 
 #: gtk/gtkfilechooserwidget.c:7171
 msgid "Could not start the search process"
@@ -2954,9 +2938,8 @@ msgid "New bookmark"
 msgstr "Nov zaznamek"
 
 #: gtk/gtkplacessidebar.c:1224
-#, fuzzy
 msgid "Add a new bookmark"
-msgstr "Dodaj zaznamek."
+msgstr "Dodaj nov zaznamek"
 
 #: gtk/gtkplacessidebar.c:1237
 msgid "Connect to Server"
@@ -2971,9 +2954,8 @@ msgid "Other Locations"
 msgstr "Druga mesta"
 
 #: gtk/gtkplacessidebar.c:1302
-#, fuzzy
 msgid "Show other locations"
-msgstr "Pokaže podatke o mestih."
+msgstr "Pokaži druga mesta"
 
 #. Adjust start/stop items to reflect the type of the drive
 #: gtk/gtkplacessidebar.c:2092 gtk/gtkplacessidebar.c:3443
@@ -3029,9 +3011,8 @@ msgid "Unable to access “%s”"
 msgstr "Ni mogoč dostop do “%s”"
 
 #: gtk/gtkplacessidebar.c:2386
-#, fuzzy
 msgid "This name is already taken"
-msgstr "Bližnjica \"%s\" je uporabljena za \"%s\"."
+msgstr "To ime je že uporabljeno"
 
 #: gtk/gtkplacessidebar.c:2455 gtk/inspector/actions.ui:52
 #: gtk/inspector/classes-list.ui:80 gtk/inspector/css-node-tree.ui:17
@@ -3106,14 +3087,12 @@ msgid "Computer"
 msgstr "Računalnik"
 
 #: gtk/gtkplacesview.c:882
-#, fuzzy
 msgid "Searching for network locations"
-msgstr "Iskanje ..."
+msgstr "Iskanje omrežnih mest"
 
 #: gtk/gtkplacesview.c:889
-#, fuzzy
 msgid "No network locations found"
-msgstr "Mesta"
+msgstr "Ni omrežnih mest"
 
 #. if it wasn't cancelled show a dialog
 #: gtk/gtkplacesview.c:1164 gtk/gtkplacesview.c:1208 gtk/gtkplacesview.c:1259
@@ -3145,7 +3124,7 @@ msgstr "_Poveži"
 
 #: gtk/gtkplacesview.c:1821
 msgid "Unable to get remote server location"
-msgstr ""
+msgstr "Oddaljenega mesta strežnika ni mogoče najti"
 
 #: gtk/gtkplacesview.c:1958 gtk/gtkplacesview.c:1967
 msgid "Networks"
@@ -4327,9 +4306,8 @@ msgid "Style Properties"
 msgstr "Lastnosti slova"
 
 #: gtk/inspector/window.ui:328
-#, fuzzy
 msgid "CSS nodes"
-msgstr "_Zloži vse"
+msgstr "Vozlišča CSS"
 
 #: gtk/inspector/window.ui:337 gtk/inspector/window.ui:427
 msgid "CSS"
@@ -5397,15 +5375,13 @@ msgstr "Datoteke"
 
 #: gtk/ui/gtkfilechooserwidget.ui:260
 msgid "Remote location — only searching the current folder"
-msgstr ""
+msgstr "Oddaljeno mesto — iskanje le trenutne mape"
 
 #: gtk/ui/gtkfilechooserwidget.ui:309
-#, fuzzy
 msgid "No Results Found"
 msgstr "Ni zadetkov"
 
 #: gtk/ui/gtkfilechooserwidget.ui:323 gtk/ui/gtkplacesview.ui:184
-#, fuzzy
 msgid "Try a different search"
 msgstr "Poskusite drugačno iskanje"
 
@@ -5434,14 +5410,12 @@ msgid "Font Family"
 msgstr "Družina pisav"
 
 #: gtk/ui/gtkfontchooserwidget.ui:119
-#, fuzzy
 msgid "Preview text"
 msgstr "Besedilo za predogled"
 
 #: gtk/ui/gtkfontchooserwidget.ui:186
-#, fuzzy
 msgid "No Fonts Found"
-msgstr "Pisave"
+msgstr "Ni najdenih pisav"
 
 #: gtk/ui/gtkpagesetupunixdialog.ui:47
 msgid "_Format for:"
@@ -5481,12 +5455,10 @@ msgstr "Po poti navzgor"
 
 #. Translators: Server as any successfully connected network address
 #: gtk/ui/gtkplacesview.ui:42
-#, fuzzy
 msgid "No recent servers found"
-msgstr "Nedavni strežniki"
+msgstr "Ni najdenih nedavnih strežnikov"
 
 #: gtk/ui/gtkplacesview.ui:65
-#, fuzzy
 msgid "Recent Servers"
 msgstr "Nedavni strežniki"
 
@@ -5495,12 +5467,10 @@ msgid "No results found"
 msgstr "Ni zadetkov"
 
 #: gtk/ui/gtkplacesview.ui:214
-#, fuzzy
 msgid "Connect to _Server"
-msgstr "Poveži s strežnikom"
+msgstr "Poveži s _strežnikom"
 
 #: gtk/ui/gtkplacesview.ui:246
-#, fuzzy
 msgid "Enter server address…"
 msgstr "Vpis naslova strežnika ..."
 
@@ -6249,7 +6219,7 @@ msgstr "Pokaži &dvojiško"
 #, fuzzy
 msgctxt "output-bin"
 msgid "Center Bin"
-msgstr "Na _sredini"
+msgstr "Pokaži &dvojiško"
 
 #. Translators: Rear output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4352
@@ -6288,24 +6258,23 @@ msgstr " (%'d"
 
 #. Translators: Output mailbox number %d
 #: modules/printbackends/cups/gtkprintbackendcups.c:4362
-#, fuzzy, c-format
+#, c-format
 msgctxt "output-bin"
 msgid "Mailbox %d"
-msgstr "Poštni predal - %s"
+msgstr "Poštni predal %d"
 
 #. Translators: Private mailbox
 #: modules/printbackends/cups/gtkprintbackendcups.c:4364
-#, fuzzy
 msgctxt "output-bin"
 msgid "My Mailbox"
-msgstr "Uvažanje poštnega predala"
+msgstr "Poštni predal"
 
 #. Translators: Output tray number %d
 #: modules/printbackends/cups/gtkprintbackendcups.c:4366
-#, fuzzy, c-format
+#, c-format
 msgctxt "output-bin"
 msgid "Tray %d"
-msgstr "Pladenj za papir"
+msgstr "Pladenj %d"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
