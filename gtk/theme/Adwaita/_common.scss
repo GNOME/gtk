@@ -3407,6 +3407,11 @@ filechooser {
   #pathbarbox { border-bottom: 1px solid $bg_color; }
 }
 
+filechooserbutton:drop(active) {
+  box-shadow: none;
+  border-color: transparent;
+}
+
 
 /***********
  * Sidebar *

@@ -3756,6 +3756,10 @@ filechooser .dialog-action-box {
 filechooser #pathbarbox {
   border-bottom: 1px solid #393f3f; }
 
+filechooserbutton:drop(active) {
+  box-shadow: none;
+  border-color: transparent; }
+
 /***********
  * Sidebar *
  ***********/
