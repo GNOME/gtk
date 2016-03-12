@@ -3608,17 +3608,18 @@ placessidebar {
     }
 
     @at-root button.sidebar-button {
+      @extend %button_basic.flat;
+
       min-height: 26px;
       min-width: 26px;
       margin-top: 3px;
       margin-bottom: 3px;
       padding: 0;
-      @extend button.flat;
       border-radius: 100%;
       -gtk-outline-radius: 100%;
 
       &:not(:hover):not(:active) > image,
-      &:backdrop > image { opacity: $_placesidebar_icons_opacity };
+      &:backdrop > image { opacity: $_placesidebar_icons_opacity; }
     }
   }
 
