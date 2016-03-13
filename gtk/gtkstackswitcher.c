@@ -21,6 +21,7 @@
 #include "gtkstackswitcher.h"
 #include "gtkradiobutton.h"
 #include "gtklabel.h"
+#include "gtkdnd.h"
 #include "gtkorientable.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
@@ -53,6 +54,8 @@
  * stack pages.
  */
 
+#define TIMEOUT_EXPAND 500
+
 typedef struct _GtkStackSwitcherPrivate GtkStackSwitcherPrivate;
 struct _GtkStackSwitcherPrivate
 {
@@ -60,6 +63,8 @@ struct _GtkStackSwitcherPrivate
   GHashTable *buttons;
   gint icon_size;
   gboolean in_child_changed;
+  GtkWidget *switch_button;
+  guint switch_timer;
 };
 
 enum {
@@ -76,6 +81,8 @@ gtk_stack_switcher_init (GtkStackSwitcher *switcher)
   GtkStyleContext *context;
   GtkStackSwitcherPrivate *priv;
 
+  gtk_widget_set_has_window (GTK_WIDGET (switcher), FALSE);
+
   priv = gtk_stack_switcher_get_instance_private (switcher);
 
   priv->icon_size = GTK_ICON_SIZE_MENU;
@@ -87,6 +94,9 @@ gtk_stack_switcher_init (GtkStackSwitcher *switcher)
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_LINKED);
 
   gtk_orientable_set_orientation (GTK_ORIENTABLE (switcher), GTK_ORIENTATION_HORIZONTAL);
+
+  gtk_drag_dest_set (GTK_WIDGET (switcher), 0, NULL, 0, 0);
+  gtk_drag_dest_set_track_motion (GTK_WIDGET (switcher), TRUE);
 }
 
 static void
@@ -242,6 +252,102 @@ on_needs_attention_updated (GtkWidget        *widget,
 }
 
 static void
+remove_switch_timer (GtkStackSwitcher *self)
+{
+  GtkStackSwitcherPrivate *priv;
+
+  priv = gtk_stack_switcher_get_instance_private (self);
+
+  if (priv->switch_timer)
+    {
+      g_source_remove (priv->switch_timer);
+      priv->switch_timer = 0;
+    }
+}
+
+static gboolean
+gtk_stack_switcher_switch_timeout (gpointer data)
+{
+  GtkStackSwitcher *self = data;
+  GtkStackSwitcherPrivate *priv;
+  GtkWidget *button;
+
+  priv = gtk_stack_switcher_get_instance_private (self);
+
+  priv->switch_timer = 0;
+
+  button = priv->switch_button;
+  priv->switch_button = NULL;
+
+  if (button)
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
+
+  return G_SOURCE_REMOVE;
+}
+
+static gboolean
+gtk_stack_switcher_drag_motion (GtkWidget      *widget,
+                                GdkDragContext *context,
+                                gint            x,
+                                gint            y,
+                                guint           time)
+{
+  GtkStackSwitcher *self = GTK_STACK_SWITCHER (widget);
+  GtkStackSwitcherPrivate *priv;
+  GtkAllocation allocation;
+  GtkWidget *button;
+  GHashTableIter iter;
+  gpointer value;
+  gboolean retval = FALSE;
+
+  gtk_widget_get_allocation (widget, &allocation);
+
+  priv = gtk_stack_switcher_get_instance_private (self);
+
+  x += allocation.x;
+  y += allocation.y;
+
+  button = NULL;
+  g_hash_table_iter_init (&iter, priv->buttons);
+  while (g_hash_table_iter_next (&iter, NULL, &value))
+    {
+      gtk_widget_get_allocation (GTK_WIDGET (value), &allocation);
+      if (x >= allocation.x && x <= allocation.x + allocation.width &&
+          y >= allocation.y && y <= allocation.y + allocation.height)
+        {
+          button = GTK_WIDGET (value);
+          retval = TRUE;
+          break;
+        }
+    }
+
+  if (button != priv->switch_button)
+    remove_switch_timer (self);
+
+  priv->switch_button = button;
+
+  if (button && !priv->switch_timer)
+    {
+      priv->switch_timer = gdk_threads_add_timeout (TIMEOUT_EXPAND,
+                                                    gtk_stack_switcher_switch_timeout,
+                                                    self);
+      g_source_set_name_by_id (priv->switch_timer, "[gtk+] gtk_stack_switcher_switch_timeout");
+    }
+
+  return retval;
+}
+
+static void
+gtk_stack_switcher_drag_leave (GtkWidget      *widget,
+                               GdkDragContext *context,
+                               guint           time)
+{
+  GtkStackSwitcher *self = GTK_STACK_SWITCHER (widget);
+
+  remove_switch_timer (self);
+}
+
+static void
 add_child (GtkWidget        *widget,
            GtkStackSwitcher *self)
 {
@@ -252,6 +358,7 @@ add_child (GtkWidget        *widget,
   priv = gtk_stack_switcher_get_instance_private (self);
 
   button = gtk_radio_button_new (NULL);
+
   gtk_widget_set_focus_on_click (button, FALSE);
   gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (button), FALSE);
 
@@ -530,6 +637,7 @@ gtk_stack_switcher_dispose (GObject *object)
 {
   GtkStackSwitcher *switcher = GTK_STACK_SWITCHER (object);
 
+  remove_switch_timer (switcher);
   gtk_stack_switcher_set_stack (switcher, NULL);
 
   G_OBJECT_CLASS (gtk_stack_switcher_parent_class)->dispose (object);
@@ -559,6 +667,8 @@ gtk_stack_switcher_class_init (GtkStackSwitcherClass *class)
   object_class->dispose = gtk_stack_switcher_dispose;
   object_class->finalize = gtk_stack_switcher_finalize;
 
+  widget_class->drag_motion = gtk_stack_switcher_drag_motion;
+  widget_class->drag_leave = gtk_stack_switcher_drag_leave;
   /**
    * GtkStackSwitcher:icon-size:
    *
