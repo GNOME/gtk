@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-05 18:45+0000\n"
-"PO-Revision-Date: 2016-03-05 21:36+0200\n"
+"POT-Creation-Date: 2016-03-13 12:21+0000\n"
+"PO-Revision-Date: 2016-03-13 21:13+0200\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -213,8 +213,8 @@ msgid "The cell renderer represented by this accessible"
 msgstr "Šio prieigos taško reprezentuojamas ląstelės piešėjas"
 
 #: gtk/deprecated/gtkaction.c:243 gtk/deprecated/gtkactiongroup.c:200
-#: gtk/deprecated/gtkthemingengine.c:247 gtk/gtkprinter.c:121
-#: gtk/gtkstack.c:513 gtk/gtktextmark.c:136
+#: gtk/deprecated/gtkthemingengine.c:247 gtk/gtkcssnode.c:626
+#: gtk/gtkprinter.c:121 gtk/gtkstack.c:513 gtk/gtktextmark.c:136
 msgid "Name"
 msgstr "Vardas"
 
@@ -343,8 +343,8 @@ msgid "Whether the action is enabled."
 msgstr "Ar veiksmas yra įjungtas."
 
 #: gtk/deprecated/gtkaction.c:481 gtk/deprecated/gtkactiongroup.c:228
-#: gtk/deprecated/gtkstatusicon.c:307 gtk/gtknativedialog.c:242
-#: gtk/gtktreeviewcolumn.c:246 gtk/gtkwidget.c:1157
+#: gtk/deprecated/gtkstatusicon.c:307 gtk/gtkcssnode.c:637
+#: gtk/gtknativedialog.c:242 gtk/gtktreeviewcolumn.c:246 gtk/gtkwidget.c:1157
 msgid "Visible"
 msgstr "Matoma"
 
@@ -897,7 +897,7 @@ msgid "The contents of the tooltip for this tray icon"
 msgstr "Dėklo piktogramos paaiškinimo turinys"
 
 #: gtk/deprecated/gtkstatusicon.c:436 gtk/gtkcolorbutton.c:189
-#: gtk/gtkfilechooserbutton.c:434 gtk/gtkfontbutton.c:476
+#: gtk/gtkfilechooserbutton.c:437 gtk/gtkfontbutton.c:476
 #: gtk/gtkheaderbar.c:1928 gtk/gtkprintjob.c:132 gtk/gtkshortcutsgroup.c:289
 #: gtk/gtkshortcutssection.c:375 gtk/gtkshortcutsshortcut.c:529
 #: gtk/gtkstack.c:520 gtk/gtktreeviewcolumn.c:316
@@ -1093,7 +1093,7 @@ msgstr "Paraštė"
 msgid "Padding that should be put around icons in the tray"
 msgstr "Tarpai, kurie turi būti aplink piktogramas dėkle"
 
-#: gtk/deprecated/gtktrayicon-x11.c:178 gtk/gtkstackswitcher.c:573
+#: gtk/deprecated/gtktrayicon-x11.c:178 gtk/gtkstackswitcher.c:683
 msgid "Icon Size"
 msgstr "Piktogramos dydis"
 
@@ -1272,16 +1272,18 @@ msgid "The widget referenced by this accessible."
 msgstr "Šio prieigos taško pasiekiamas elementas"
 
 #: gtk/gtkactionable.c:71
-msgid "action name"
-msgstr "veiksmo vardas"
+#| msgid "action name"
+msgid "Action name"
+msgstr "Veiksmo vardas"
 
 #: gtk/gtkactionable.c:72
 msgid "The name of the associated action, like 'app.quit'"
 msgstr "Susieto veiksmo vardas, pvz. „app.quit“"
 
 #: gtk/gtkactionable.c:76
-msgid "action target value"
-msgstr "veiksmo tikslo vertė."
+#| msgid "action target value"
+msgid "Action target value"
+msgstr "Veiksmo tikslo vertė"
 
 #: gtk/gtkactionable.c:77
 msgid "The parameter for action invocations"
@@ -2331,7 +2333,7 @@ msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
 msgstr "Vertikalus lygiavimas, nuo 0 (viršus) iki 1 (apačia)."
 
 #: gtk/gtkcellrendererprogress.c:226 gtk/gtklevelbar.c:1087
-#: gtk/gtkmodelbutton.c:1178 gtk/gtkprogressbar.c:260 gtk/gtkrange.c:461
+#: gtk/gtkmodelbutton.c:1178 gtk/gtkprogressbar.c:260 gtk/gtkrange.c:462
 msgid "Inverted"
 msgstr "Inversinis"
 
@@ -2339,7 +2341,7 @@ msgstr "Inversinis"
 msgid "Invert the direction in which the progress bar grows"
 msgstr "Apsukti pažangos juostos augimo kryptį"
 
-#: gtk/gtkcellrendererspin.c:113 gtk/gtkrange.c:454 gtk/gtkscalebutton.c:215
+#: gtk/gtkcellrendererspin.c:113 gtk/gtkrange.c:455 gtk/gtkscalebutton.c:215
 #: gtk/gtkspinbutton.c:376
 msgid "Adjustment"
 msgstr "Slankiklis"
@@ -2356,7 +2358,7 @@ msgstr "Spartėjimo greitis greitis"
 msgid "The acceleration rate when you hold down a button"
 msgstr "Spartėjimo greitis, kai laikote mygtuką nuspaustą"
 
-#: gtk/gtkcellrendererspin.c:143 gtk/gtkscale.c:645 gtk/gtkspinbutton.c:392
+#: gtk/gtkcellrendererspin.c:143 gtk/gtkscale.c:743 gtk/gtkspinbutton.c:392
 msgid "Digits"
 msgstr "Skaitmenys"
 
@@ -2572,7 +2574,7 @@ msgstr ""
 "Pageidaujama vieta užrašo elipsavimui, jeigu langelio atvaizduokliui "
 "nepakanka vietos parodyti visam užrašui"
 
-#: gtk/gtkcellrenderertext.c:503 gtk/gtkfilechooserbutton.c:448
+#: gtk/gtkcellrenderertext.c:503 gtk/gtkfilechooserbutton.c:451
 #: gtk/gtklabel.c:979
 msgid "Width In Characters"
 msgstr "Plotis simboliais"
@@ -2926,7 +2928,7 @@ msgstr "Ar turi būti rodoma alfa"
 msgid "Show editor"
 msgstr "Rodyti redaktorių"
 
-#: gtk/gtkcolorscale.c:375
+#: gtk/gtkcolorscale.c:258
 msgid "Scale type"
 msgstr "Skalės tipas"
 
@@ -3124,6 +3126,46 @@ msgstr "Vaikinis objektas"
 msgid "Can be used to add a new child to the container"
 msgstr "Gali būti naudojamas pridėti naują vaikinį objektą į konteinerį"
 
+#: gtk/gtkcssnode.c:616
+msgid "Style Classes"
+msgstr "Stilių klasės"
+
+#: gtk/gtkcssnode.c:616
+#| msgid "List of icon names"
+msgid "List of classes"
+msgstr "Klasių sąrašas"
+
+#: gtk/gtkcssnode.c:621 gtk/gtkcssstyleproperty.c:223
+msgid "ID"
+msgstr "ID"
+
+#: gtk/gtkcssnode.c:621
+msgid "Unique ID"
+msgstr "Unikalus ID"
+
+#: gtk/gtkcssnode.c:631 gtk/gtkswitch.c:910
+msgid "State"
+msgstr "Būsena"
+
+#: gtk/gtkcssnode.c:631
+#| msgid "State Message"
+msgid "State flags"
+msgstr "Būsenos požymiai"
+
+#: gtk/gtkcssnode.c:637
+msgid "If other nodes can see this node"
+msgstr "Ar kitos viršūnės gali matyti šią"
+
+#: gtk/gtkcssnode.c:642
+#| msgid "Widget name"
+msgid "Widget type"
+msgstr "Elemento tipas"
+
+#: gtk/gtkcssnode.c:642
+#| msgid "The name of the widget"
+msgid "GType of the widget"
+msgstr "Elemento GType"
+
 #: gtk/gtkcssshorthandproperty.c:170
 msgid "Subproperties"
 msgstr "Po-savybės"
@@ -3147,10 +3189,6 @@ msgstr "Įtakoja"
 #: gtk/gtkcssstyleproperty.c:216
 msgid "Set if the value affects the sizing of elements"
 msgstr "Nustatyta, jei vertė įtakoja elementų dydžius"
-
-#: gtk/gtkcssstyleproperty.c:223
-msgid "ID"
-msgstr "ID"
 
 #: gtk/gtkcssstyleproperty.c:224
 msgid "The numeric id for quick access"
@@ -3761,19 +3799,19 @@ msgstr "Skleistuko rodyklės dydis"
 msgid "Spacing around expander arrow"
 msgstr "Tarpas aplink skleistuko rodyklę"
 
-#: gtk/gtkfilechooserbutton.c:419
+#: gtk/gtkfilechooserbutton.c:422
 msgid "Dialog"
 msgstr "Dialogas"
 
-#: gtk/gtkfilechooserbutton.c:420
+#: gtk/gtkfilechooserbutton.c:423
 msgid "The file chooser dialog to use."
 msgstr "Naudotinas failų parinkiklio dialogas."
 
-#: gtk/gtkfilechooserbutton.c:435
+#: gtk/gtkfilechooserbutton.c:438
 msgid "The title of the file chooser dialog."
 msgstr "Failų parinkiklio dialogo antraštė."
 
-#: gtk/gtkfilechooserbutton.c:449
+#: gtk/gtkfilechooserbutton.c:452
 msgid "The desired width of the button widget, in characters."
 msgstr "Pageidaujamas mygtuko plotis simboliais."
 
@@ -6024,133 +6062,133 @@ msgstr "Meniu žymimoji akutė, kurios grupei priklauso šis objektas."
 msgid "The radio tool button whose group this button belongs to."
 msgstr "Žymimoji akutė, kurios grupei priklauso šis objektas."
 
-#: gtk/gtkrange.c:455
+#: gtk/gtkrange.c:456
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr ""
 "GtkAdjustment kintamasis, kuris saugo dabartinę objekto srities reikšmę"
 
-#: gtk/gtkrange.c:462
+#: gtk/gtkrange.c:463
 msgid "Invert direction slider moves to increase range value"
 msgstr "Pakeisti juostos judėjimo kryptį"
 
-#: gtk/gtkrange.c:468
+#: gtk/gtkrange.c:469
 msgid "Lower stepper sensitivity"
 msgstr "Žingsnio atgal jautrumas"
 
-#: gtk/gtkrange.c:469
+#: gtk/gtkrange.c:470
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
 msgstr "Žingsnių, mažinančių lauko reikšmę, dydis"
 
-#: gtk/gtkrange.c:476
+#: gtk/gtkrange.c:477
 msgid "Upper stepper sensitivity"
 msgstr "Žingsnio į priekį jautrumas"
 
-#: gtk/gtkrange.c:477
+#: gtk/gtkrange.c:478
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
 msgstr "Žingsnių, didinančių lauko reikšmę, dydis"
 
-#: gtk/gtkrange.c:493
+#: gtk/gtkrange.c:494
 msgid "Show Fill Level"
 msgstr "Rodyti pilnumo lygį"
 
-#: gtk/gtkrange.c:494
+#: gtk/gtkrange.c:495
 msgid "Whether to display a fill level indicator graphics on trough."
 msgstr "Ar rodyti pilnumo lygio indikatoriaus paveikslėlį įduboje."
 
-#: gtk/gtkrange.c:509
+#: gtk/gtkrange.c:510
 msgid "Restrict to Fill Level"
 msgstr "Apriboti užpildymo lygiu"
 
-#: gtk/gtkrange.c:510
+#: gtk/gtkrange.c:511
 msgid "Whether to restrict the upper boundary to the fill level."
 msgstr "Ar apriboti viršutinį rėžį užpildymo lygiu"
 
-#: gtk/gtkrange.c:524
+#: gtk/gtkrange.c:525
 msgid "Fill Level"
 msgstr "Užpildymo lygis"
 
-#: gtk/gtkrange.c:525
+#: gtk/gtkrange.c:526
 msgid "The fill level."
 msgstr "Užpildymo lygis."
 
-#: gtk/gtkrange.c:540
+#: gtk/gtkrange.c:541
 msgid "Round Digits"
 msgstr "Apvalinimo skaitmenys"
 
-#: gtk/gtkrange.c:541
+#: gtk/gtkrange.c:542
 msgid "The number of digits to round the value to."
 msgstr "Skaitmenų skaičius reikšmės apvalinimui."
 
-#: gtk/gtkrange.c:558 gtk/gtkswitch.c:945
+#: gtk/gtkrange.c:559 gtk/gtkswitch.c:945
 msgid "Slider Width"
 msgstr "Juostos plotis"
 
-#: gtk/gtkrange.c:559
+#: gtk/gtkrange.c:560
 msgid "Width of scrollbar or scale thumb"
 msgstr "Persukimo juostos plotis arba mastelis"
 
-#: gtk/gtkrange.c:574
+#: gtk/gtkrange.c:575
 msgid "Trough Border"
 msgstr "Tarpinis rėmelis"
 
-#: gtk/gtkrange.c:575
+#: gtk/gtkrange.c:576
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr "Tarpas tarp peržiūros/navigacijos ir išorinio rėmelio"
 
-#: gtk/gtkrange.c:590
+#: gtk/gtkrange.c:591
 msgid "Stepper Size"
 msgstr "Žingsnio dydis"
 
-#: gtk/gtkrange.c:591
+#: gtk/gtkrange.c:592
 msgid "Length of step buttons at ends"
 msgstr "Prasukimo mygtukų ilgis"
 
-#: gtk/gtkrange.c:607
+#: gtk/gtkrange.c:608
 msgid "Stepper Spacing"
 msgstr "Žingsnio protarpis"
 
-#: gtk/gtkrange.c:608
+#: gtk/gtkrange.c:609
 msgid "Spacing between step buttons and thumb"
 msgstr "Tarpas tarp navigacijos mygtukų ir peržiūros"
 
-#: gtk/gtkrange.c:623
+#: gtk/gtkrange.c:624
 msgid "Arrow X Displacement"
 msgstr "Rodyklės X atitraukimas"
 
-#: gtk/gtkrange.c:624
+#: gtk/gtkrange.c:625
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
 msgstr "Kaip toli patraukti rodyklę horizontaliai, kai mygtukas atleistas"
 
-#: gtk/gtkrange.c:639
+#: gtk/gtkrange.c:640
 msgid "Arrow Y Displacement"
 msgstr "Rodyklės Y atitraukimas"
 
-#: gtk/gtkrange.c:640
+#: gtk/gtkrange.c:641
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "Kaip toli patraukti rodyklę vertikaliai, kai mygtukas atleistas"
 
-#: gtk/gtkrange.c:659
+#: gtk/gtkrange.c:660
 msgid "Trough Under Steppers"
 msgstr "Įduba po žingsniais"
 
-#: gtk/gtkrange.c:660
+#: gtk/gtkrange.c:661
 msgid ""
 "Whether to draw trough for full length of range or exclude the steppers and "
 "spacing"
 msgstr ""
 "Ar piešti įdubą visam intervalui, ar išskaičiuoti žingsnius ir paraštes"
 
-#: gtk/gtkrange.c:676
+#: gtk/gtkrange.c:677
 msgid "Arrow scaling"
 msgstr "Rodyklės mastelis"
 
-#: gtk/gtkrange.c:677
+#: gtk/gtkrange.c:678
 msgid "Arrow scaling with regard to scroll button size"
 msgstr "Rodyklės dydis, atsižvelgiant į slinkties mygtuko didį"
 
@@ -6287,47 +6325,47 @@ msgstr "Piktogramos"
 msgid "List of icon names"
 msgstr "Piktogramų pavadinimų sąrašas"
 
-#: gtk/gtkscale.c:646
+#: gtk/gtkscale.c:744
 msgid "The number of decimal places that are displayed in the value"
 msgstr "Išvedamų dešimtainių skaičių kiekis"
 
-#: gtk/gtkscale.c:653
+#: gtk/gtkscale.c:751
 msgid "Draw Value"
 msgstr "Rodyti reikšmę"
 
-#: gtk/gtkscale.c:654
+#: gtk/gtkscale.c:752
 msgid "Whether the current value is displayed as a string next to the slider"
 msgstr "Ar esama reikšmė turi būti išvesta greta slankmačio"
 
-#: gtk/gtkscale.c:660
+#: gtk/gtkscale.c:758
 msgid "Has Origin"
 msgstr "Turi kilmę"
 
-#: gtk/gtkscale.c:661
+#: gtk/gtkscale.c:759
 msgid "Whether the scale has an origin"
 msgstr "Ar skalė turi kilmę"
 
-#: gtk/gtkscale.c:667
+#: gtk/gtkscale.c:765
 msgid "Value Position"
 msgstr "Reikšmės padėtis"
 
-#: gtk/gtkscale.c:668
+#: gtk/gtkscale.c:766
 msgid "The position in which the current value is displayed"
 msgstr "Vieta, kur išvedama esama reikšmė"
 
-#: gtk/gtkscale.c:685
+#: gtk/gtkscale.c:783
 msgid "Slider Length"
 msgstr "Slankiklio ilgis"
 
-#: gtk/gtkscale.c:686
+#: gtk/gtkscale.c:784
 msgid "Length of scale's slider"
 msgstr "Mastelio slankiklio ilgis"
 
-#: gtk/gtkscale.c:692
+#: gtk/gtkscale.c:798
 msgid "Value spacing"
 msgstr "Reikšmės atitraukimas"
 
-#: gtk/gtkscale.c:693
+#: gtk/gtkscale.c:799
 msgid "Space between value text and the slider/trough area"
 msgstr "Tarpas tarp reikšmės teksto ir slankiklio srities"
 
@@ -7250,7 +7288,6 @@ msgstr ""
 "paspaudimu (milisekundėmis)"
 
 #: gtk/gtksettings.c:1739 gtk/gtksettings.c:1740
-#| msgid "Whether to show a sort indicator"
 msgid "Whether to show cursor in text"
 msgstr "Ar rodyti žymeklį tekste"
 
@@ -7482,8 +7519,9 @@ msgstr "Reikia dėmesio"
 msgid "Whether this page needs attention"
 msgstr "Ar šiam puslapiui reikia dėmesio"
 
-#: gtk/gtkstacksidebar.c:449 gtk/gtkstackswitcher.c:582
-#: gtk/gtkstackswitcher.c:583
+#: gtk/gtkstacksidebar.c:449 gtk/gtkstackswitcher.c:692
+#: gtk/gtkstackswitcher.c:693 gtk/inspector/gtkstackcombo.c:232
+#: gtk/inspector/gtkstackcombo.c:233
 msgid "Stack"
 msgstr "Krūva"
 
@@ -7491,7 +7529,7 @@ msgstr "Krūva"
 msgid "Associated stack for this GtkStackSidebar"
 msgstr "Su šiuo GtkStackSidebar susieta krūva"
 
-#: gtk/gtkstackswitcher.c:574
+#: gtk/gtkstackswitcher.c:684
 msgid "Symbolic size to use for named icon"
 msgstr "Simbolinis dydis pavadintai piktogramai"
 
@@ -7538,10 +7576,6 @@ msgstr "Reikšmės tipas, kurį grąžina GtkStyleContext"
 #: gtk/gtkswitch.c:896
 msgid "Whether the switch is on or off"
 msgstr "Ar jungiklis įjungtas, ar išjungtas"
-
-#: gtk/gtkswitch.c:910
-msgid "State"
-msgstr "Būsena"
 
 #: gtk/gtkswitch.c:911
 msgid "The backend state"
