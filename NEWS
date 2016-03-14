@@ -70,6 +70,7 @@ Overview of Changes in GTK+ 3.19.12
  763380 colorscale input popup difficult to use with a pointer
  763387 Make window creation hooks in tab DnD work on wayland
  763628 W32: Shortcuts window is gtk3-demo misplaced on multidisplay desktop
+ 763650 window: stop stomping on resize-mode set by external API
 
 * Translation updates:
  Brazilian Portuguese
