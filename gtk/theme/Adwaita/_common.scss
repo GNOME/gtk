@@ -499,6 +499,7 @@ button {
     }
 
     &:drop(active) {
+      color: $drop_target_color;
       border-color: $drop_target_color;
       box-shadow: inset 0 0 0 1px $drop_target_color;
     }
@@ -3662,6 +3663,11 @@ placessidebar {
       color: $drop_target_color;
       box-shadow: inset 0 1px $drop_target_color,
                   inset 0 -1px $drop_target_color;
+
+      &:selected {
+        color: $selected_fg_color;
+        background-color: $drop_target_color;
+      }
     }
   }
 }
