@@ -1,3 +1,100 @@
+Overview of Changes in GTK+ 3.19.12
+===================================
+
+* GTK+ now respects default size even for windows that are not resizable
+
+* GtkScale and GtkScrollbar have received multiple fixes for fallout from
+  the gadget port
+
+* GtkStackSwitcher will now switch pages when hovered during drag-and-drop
+
+* Inspector:
+ - The per-object CSS editor has been dropped; the global one is sufficient
+ - The sidebar has been replaced by a combo box
+ - Add a Show Layout option to the Visual tab
+ - CSS node tree and style properties are now on the same page
+ - The frame clock is shown in the Miscellaneous page
+ - Isolate the inspector from visual debugging effects
+ - Numerous smaller UI improvements
+
+* Themes:
+ - Windows theme: handle spin buttons and switches
+ - Adwaita: Fixes for scales, combo boxes, info bars, action bars, radio and
+   check buttons, side bars, etc
+ - Adwaita has gained a new style of drop target highlighting
+
+* Wayland:
+ - Synchronize key repeat with server
+ - Add a bell request to gtk_shell and use it to implement gdk_window_beep
+ - Add a focus request to gtk_shell and use it to implement gtk_window_present
+ - Dropping tabs to create new windows is now supported
+
+* Windows:
+ - Use a custom drag-resize implementation
+ - Use layered windows
+ - Provide workarea information
+
+* OS X:
+ - Native zoom and rotate gestures are now supported
+
+* Bug fixes:
+ 583780 gtk_toggle_button_set_mode() documentation should suggest when it is...
+ 699891 Support for Primary keybinding in builder XML
+ 720950 Default double-click interval should be increased
+ 748872 W32: Use layered windows
+ 756450 GTK file chooser completion dropdown sets cursor in wrong position
+ 757942 Input event (e. g. typing on keyboard) is sent repeatedly during hig...
+ 759899 W32: CSD is not enabled by default
+ 760276 Quartz does not support GtkGesture Zoom and Rotate (NSEventTypeMagni...
+ 761629 W32: WM window drag-resizing code does not work well with GTK
+ 762397 GtkToolButton needs left & right padding and margin
+ 762811 Adwaita: nonsquare image buttons
+ 762820 Remove "core_pointer" from the GdkDisplay struct
+ 762891 gdk: remove the display->list_devices vfunc
+ 762902 GDK W32: Newly-opened windows (such as popups) have unthemed cursor
+ 762907 gnome-shell crashes after undocking
+ 762945 Wrong allignemet in some places
+ 762974 GtkWindow: gtk_window_set_default_size() does not work with fixed si...
+ 762996 Revealer doesn't reveal the entire width of a ListBox that has Revea...
+ 763001 implement beeping
+ 763012 GDK W32: No gdk_win32_screen_get_monitor_workarea()
+ 763017 tooltip text is not shown
+ 763023 Segfault in init_randr15()
+ 763080 Layered Window crashes GDKGLWin32
+ 763103 gtk-launch: add hack to close up dbus-daemon race
+ 763216 GtkTextView's top-margin/bottom-margin don't work with non-scrolling...
+ 763285 gdkwindow/Win32: Make update_style_bits() available across the GDK-W...
+ 763287 GDK-Win32: GL area does not redraw on resize
+ 763298 wayland: connection flooded when dragging
+ 763351 [wayland] high cpu usage on open popover
+ 763380 colorscale input popup difficult to use with a pointer
+ 763387 Make window creation hooks in tab DnD work on wayland
+ 763628 W32: Shortcuts window is gtk3-demo misplaced on multidisplay desktop
+
+* Translation updates:
+ Brazilian Portuguese
+ Catalan
+ Czech
+ Finnish
+ French
+ Galician
+ German
+ Greek
+ Hebrew
+ Hungarian
+ Japanese
+ Kazakh
+ Korean
+ Lithuanian
+ Polish
+ Russian
+ Serbian
+ Slovak
+ Slovenian
+ Spanish
+ Swedish
+
+
 Overview of Changes in GTK+ 3.19.11
 ===================================
 
