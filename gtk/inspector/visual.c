@@ -31,11 +31,15 @@
 #include "gtkwindow.h"
 #include "gtkcssproviderprivate.h"
 
+#include <math.h>
+
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"
 #endif
 
 #include "gdk/gdk-private.h"
+
+#define EPSILON               1e-10
 
 struct _GtkInspectorVisualPrivate
 {
@@ -51,6 +55,8 @@ struct _GtkInspectorVisualPrivate
   GtkWidget *animation_switch;
   GtkWidget *font_scale_scale;
   GtkAdjustment *scale_adjustment;
+  GtkAdjustment *slowdown_adjustment;
+  GtkWidget *slowdown_entry;
   GtkAdjustment *cursor_size_adjustment;
   GtkAdjustment *font_scale_adjustment;
 
@@ -562,6 +568,62 @@ init_animation (GtkInspectorVisual *vis)
 }
 
 static void
+update_slowdown (GtkInspectorVisual *vis,
+                 gdouble slowdown,
+                 gboolean update_adjustment,
+                 gboolean update_entry)
+{
+  _gtk_set_slowdown (slowdown);
+
+  if (update_adjustment)
+    gtk_adjustment_set_value (vis->priv->slowdown_adjustment,
+                              log2 (slowdown));
+
+  if (update_entry)
+    {
+      gchar *str = g_strdup_printf ("%0.*f", 2, slowdown);
+
+      gtk_entry_set_text (GTK_ENTRY (vis->priv->slowdown_entry), str);
+      g_free (str);
+    }
+}
+
+static void
+slowdown_adjustment_changed (GtkAdjustment *adjustment,
+                             GtkInspectorVisual *vis)
+{
+  gdouble value = gtk_adjustment_get_value (adjustment);
+  gdouble previous = CLAMP (log2 (_gtk_get_slowdown ()),
+                            gtk_adjustment_get_lower (adjustment),
+                            gtk_adjustment_get_upper (adjustment));
+
+  if (fabs (value - previous) > EPSILON)
+    update_slowdown (vis, exp2 (value), FALSE, TRUE);
+}
+
+static void
+slowdown_entry_activated (GtkEntry *entry,
+                          GtkInspectorVisual *vis)
+{
+  gdouble slowdown;
+  gchar *err = NULL;
+
+  slowdown = g_strtod (gtk_entry_get_text (entry), &err);
+  if (err != NULL)
+    update_slowdown (vis, slowdown, TRUE, FALSE);
+}
+
+static void
+init_slowdown (GtkInspectorVisual *vis)
+{
+  update_slowdown (vis, _gtk_get_slowdown (), TRUE, TRUE);
+  g_signal_connect (vis->priv->slowdown_adjustment, "value-changed",
+                    G_CALLBACK (slowdown_adjustment_changed), vis);
+  g_signal_connect (vis->priv->slowdown_entry, "activate",
+                    G_CALLBACK (slowdown_entry_activated), vis);
+}
+
+static void
 update_touchscreen (GtkSwitch *sw)
 {
   GtkDebugFlag flags;
@@ -743,6 +805,7 @@ gtk_inspector_visual_init (GtkInspectorVisual *vis)
   init_rendering_mode (vis);
   init_updates (vis);
   init_animation (vis);
+  init_slowdown (vis);
   init_touchscreen (vis);
   init_gl (vis);
 }
@@ -786,6 +849,8 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, hidpi_spin);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, scale_adjustment);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, animation_switch);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, slowdown_adjustment);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, slowdown_entry);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, touchscreen_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, visual_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, debug_box);
