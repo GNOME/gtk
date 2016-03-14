@@ -397,6 +397,7 @@ gtk_private_h_sources =		\
 	gtkcsscornervalueprivate.h	\
 	gtkcsscustomgadgetprivate.h	\
 	gtkcsscustompropertyprivate.h 	\
+	gtkcssdeclarationprivate.h	\
 	gtkcssdimensionvalueprivate.h	\
 	gtkcsseasevalueprivate.h	\
 	gtkcssenginevalueprivate.h	\
@@ -673,6 +674,7 @@ gtk_base_c_sources = 		\
 	gtkcsscornervalue.c	\
 	gtkcsscustomgadget.c	\
 	gtkcsscustomproperty.c	\
+	gtkcssdeclaration.c	\
 	gtkcssdimensionvalue.c	\
 	gtkcsseasevalue.c	\
 	gtkcssenumvalue.c	\

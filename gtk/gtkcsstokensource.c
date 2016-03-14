@@ -283,6 +283,25 @@ gtk_css_token_source_consume_all (GtkCssTokenSource *source)
     }
 }
 
+char *
+gtk_css_token_source_consume_to_string (GtkCssTokenSource *source)
+{
+  GString *string;
+  const GtkCssToken *token;
+
+  string = g_string_new (NULL);
+
+  for (token = gtk_css_token_source_get_token (source);
+       !gtk_css_token_is (token, GTK_CSS_TOKEN_EOF);
+       token = gtk_css_token_source_get_token (source))
+    {
+      gtk_css_token_print (token, string);
+      gtk_css_token_source_consume_token (source);
+    }
+
+  return g_string_free (string, FALSE);
+}
+
 gboolean
 gtk_css_token_source_consume_whitespace (GtkCssTokenSource *source)
 {

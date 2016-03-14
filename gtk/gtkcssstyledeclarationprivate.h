@@ -48,12 +48,16 @@ GType                   gtk_css_style_declaration_get_type              (void) G
 
 GtkCssStyleDeclaration *gtk_css_style_declaration_new                   (GtkCssRule             *parent_rule);
 
+void                    gtk_css_style_declaration_parse                 (GtkCssStyleDeclaration *style,
+                                                                         GtkCssTokenSource      *source);
+
+/* GtkCssStyleDeclaration DOM */
 void                    gtk_css_style_declaration_print_css_text        (GtkCssStyleDeclaration *declaration,
                                                                          GString                *string);
 char *                  gtk_css_style_declaration_get_css_text          (GtkCssStyleDeclaration *declaration);
-
-/* GtkCssStyleDeclaration DOM */
 gsize                   gtk_css_style_declaration_get_length            (GtkCssStyleDeclaration *declaration);
+char *                  gtk_css_style_declaration_get_item              (GtkCssStyleDeclaration *declaration,
+                                                                         gssize                  size);
 
 
 G_END_DECLS

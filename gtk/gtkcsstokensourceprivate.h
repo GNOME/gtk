@@ -61,6 +61,7 @@ const GtkCssToken *     gtk_css_token_source_get_token          (GtkCssTokenSour
 GtkCssTokenType         gtk_css_token_get_pending_block         (GtkCssTokenSource      *source);
 
 void                    gtk_css_token_source_consume_all        (GtkCssTokenSource      *source);
+char *                  gtk_css_token_source_consume_to_string  (GtkCssTokenSource      *source);
 gboolean                gtk_css_token_source_consume_whitespace (GtkCssTokenSource      *source);
 
 void                    gtk_css_token_source_emit_error         (GtkCssTokenSource      *source,

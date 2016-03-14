@@ -21,8 +21,7 @@
 
 #include "gtkcssstyledeclarationprivate.h"
 
-#include "gtkcssselectorprivate.h"
-#include "gtkcssstylesheetprivate.h"
+#include "gtkcssdeclarationprivate.h"
 
 typedef struct _GtkCssStyleDeclarationPrivate GtkCssStyleDeclarationPrivate;
 struct _GtkCssStyleDeclarationPrivate {
@@ -64,3 +63,43 @@ gtk_css_style_declaration_new (GtkCssRule *parent_rule)
   return g_object_new (GTK_TYPE_CSS_STYLE_DECLARATION, NULL);
 }
 
+void
+gtk_css_style_declaration_parse (GtkCssStyleDeclaration *style,
+                                 GtkCssTokenSource      *source)
+{
+  GtkCssStyleDeclarationPrivate *priv;
+  GtkCssTokenSource *decl_source;
+  GtkCssDeclaration *declaration;
+  const GtkCssToken *token;
+
+  priv = gtk_css_style_declaration_get_instance_private (style);
+
+  for (token = gtk_css_token_source_get_token (source);
+       !gtk_css_token_is (token, GTK_CSS_TOKEN_EOF);
+       token = gtk_css_token_source_get_token (source))
+    {
+      if (gtk_css_token_is (token, GTK_CSS_TOKEN_SEMICOLON) ||
+          gtk_css_token_is (token, GTK_CSS_TOKEN_WHITESPACE))
+        {
+          gtk_css_token_source_consume_token (source);
+          continue;
+        }
+      else if (gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
+        {
+          decl_source = gtk_css_token_source_new_for_part (source, GTK_CSS_TOKEN_SEMICOLON);
+          declaration = gtk_css_declaration_new_parse (style, decl_source);
+          if (declaration)
+            g_ptr_array_add (priv->declarations, declaration);
+          gtk_css_token_source_unref (decl_source);
+          gtk_css_token_source_consume_token (source);
+        }
+      else
+        {
+          gtk_css_token_source_error (source, "Expected property declaration");
+          decl_source = gtk_css_token_source_new_for_part (source, GTK_CSS_TOKEN_SEMICOLON);
+          gtk_css_token_source_consume_all (decl_source);
+          gtk_css_token_source_unref (decl_source);
+          gtk_css_token_source_consume_token (source);
+        }
+    }
+}
