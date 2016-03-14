@@ -636,6 +636,7 @@ do_pre_parse_initialization (int    *argc,
                              char ***argv)
 {
   const gchar *env_string;
+  double slowdown;
   
   if (pre_initialized)
     return;
@@ -672,6 +673,13 @@ do_pre_parse_initialization (int    *argc,
         gtk_modules_string = g_string_new (NULL);
 
       g_string_append (gtk_modules_string, env_string);
+    }
+
+  env_string = g_getenv ("GTK_SLOWDOWN");
+  if (env_string)
+    {
+      slowdown = g_ascii_strtod (env_string, NULL);
+      _gtk_set_slowdown (slowdown);
     }
 }
 
