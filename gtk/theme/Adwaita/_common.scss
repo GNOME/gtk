@@ -410,7 +410,7 @@ $_dot_color: if($variant=='light', $selected_bg_color,
 }
 
 button {
-  @at-root %button_basic, &{
+  @at-root %button_basic, & {
     $_button_transition: all 200ms $ease-out-quad;
 
     min-height: 24px;
@@ -681,14 +681,18 @@ button {
       padding-right: 2px;
     }
 
-    &.needs-attention > label,
-    &.needs-attention > image { @extend %needs_attention; }
-    &.needs-attention:active > label,
-    &.needs-attention:active > image,
-    &.needs-attention:checked > label,
-    &.needs-attention:checked > image {
-      animation: none;
-      background-image: none;
+    &.needs-attention {
+      > label,
+      > image { @extend %needs_attention; }
+
+      &:active,
+      &:checked {
+        > label,
+        > image {
+          animation: none;
+          background-image: none;
+        }
+      }
     }
   }
 
@@ -935,7 +939,6 @@ button.color {
 
 button:link,
 button:visited {
-  // FIXME: aggregate with buttons
   @extend %undecorated_button;
 
   @extend *:link;
@@ -950,12 +953,6 @@ button:visited {
     text-shadow: none;
   }
 
-  &:backdrop {
-    @extend %undecorated_button; //This shouldn't be needed but avoids
-                                 //a weird transition which for some reason
-                                 //makes borders blink on hover
-  }
-
   > label { text-decoration-line: underline; }
 }
 
@@ -968,7 +965,7 @@ spinbutton {
     // in this horizontal configuration, the whole spinbutton
     // behaves as the entry, so we extend the entry styling
     // and nuke the style on the internal entry
-    @extend entry;
+    @extend %entry;
 
     padding: 0;
 
@@ -1161,7 +1158,7 @@ combobox {
   &:drop(active) { // FIXME: untested
     box-shadow: none;
 
-    button.combo { @extend button:drop(active); }
+    button.combo { @extend %button_basic:drop(active); }
   }
 }
 
@@ -1222,6 +1219,7 @@ toolbar {
     switch,
     scale,
     entry,
+    spinbutton,
     button {
       margin-right: 1px;
       margin-bottom: 1px;
@@ -1243,7 +1241,9 @@ toolbar {
 searchbar,
 .location-bar {
   @extend %toolbar;
+
   @extend %darkbar;
+
   border-width: 0 0 1px;
   padding: 3px;
 }
@@ -1295,6 +1295,7 @@ headerbar {
     font-size: smaller;
     padding-left: 12px;
     padding-right: 12px;
+
     @extend .dim-label;
   }
 
@@ -1402,21 +1403,21 @@ headerbar {
     }
 
     .selection-menu {
-      border-color: transparentize($selected_bg_color, 1);
-      background-image: linear-gradient(to bottom, transparentize($selected_bg_color, 1));
-      box-shadow: none;
-      padding-left: 10px;
-      padding-right: 10px;
+      &:backdrop, & {
+        border-color: transparentize($selected_bg_color, 1);
+        background-image: linear-gradient(to bottom, transparentize($selected_bg_color, 1));
+        box-shadow: none;
+        padding-left: 10px;
+        padding-right: 10px;
 
-      GtkArrow { -GtkArrow-arrow-scaling: 1; }
+        GtkArrow { -GtkArrow-arrow-scaling: 1; }
 
-      .arrow {
-        -gtk-icon-source: -gtk-icontheme('pan-down-symbolic');
-        color: transparentize($selected_fg_color,0.5);
-        -gtk-icon-shadow: none;
+        .arrow {
+          -gtk-icon-source: -gtk-icontheme('pan-down-symbolic');
+          color: transparentize($selected_fg_color,0.5);
+          -gtk-icon-shadow: none;
+        }
       }
-
-      &:backdrop { @extend .selection-menu };
     }
   }
 
@@ -2949,6 +2950,7 @@ scale {
       slider {
         &:hover, &:backdrop, & {
           @extend %scale-has-marks-above-horz;
+
           margin-bottom: -15px;
           margin-top: 6px;
         }
@@ -3083,6 +3085,7 @@ progressbar {
 
   progress {
     @extend %scale_highlight;
+
     border-radius: 1.5px;
 
     &.left {
@@ -3380,6 +3383,7 @@ row {
 .app-notification,
 .app-notification.frame {
   @extend %osd;
+
   padding: 10px;
   border-radius: 0 0 5px 5px;
   background-color: $osd_bg_color;
@@ -3422,6 +3426,7 @@ calendar {
 
   &:selected {
     @extend %selected_items;
+
     border-radius: 3px;
   }
 
@@ -3434,20 +3439,24 @@ calendar {
 
   &.button {
     @extend %undecorated_button;
+
     color: transparentize($fg_color, 0.55);
 
     &:hover {
       @extend %undecorated_button;
+
       color: $fg_color;
     }
 
     &:backdrop {
       @extend %undecorated_button;
+
       color: transparentize($backdrop_fg_color,0.55);
     }
 
     &:disabled {
       @extend %undecorated_button;
+
       color:  transparentize($insensitive_fg_color,0.55);
     }
   }
@@ -3564,12 +3573,12 @@ filechooserbutton:drop(active) {
 
 stacksidebar {
   &.sidebar {
-    &:dir(ltr) list,
-    &.left list,
-    &.left:dir(rtl) list { @extend %sidebar_left; }
+    &:dir(ltr),
+    &.left,
+    &.left:dir(rtl) { list { @extend %sidebar_left; }}
 
-    &:dir(rtl) list,
-    &.right list { @extend %sidebar_right; }
+    &:dir(rtl),
+    &.right { list { @extend %sidebar_right; }}
   }
 
   row {
@@ -3582,6 +3591,7 @@ stacksidebar {
 
     &.needs-attention > label {
       @extend %needs_attention;
+
       background-size: 6px 6px, 0 0;
     }
   }
@@ -3628,8 +3638,8 @@ placessidebar {
       border-radius: 100%;
       -gtk-outline-radius: 100%;
 
-      &:not(:hover):not(:active) > image,
-      &:backdrop > image { opacity: $_placesidebar_icons_opacity; }
+      &:not(:hover):not(:active),
+      &:backdrop { > image { opacity: $_placesidebar_icons_opacity; }}
     }
   }
 
@@ -3764,9 +3774,7 @@ infobar { border-style: none; }
     }
   }
 
-  & label:selected,
-  & label:selected:focus,
-  & label:selected:hover {background-color: darken($selected_bg_color, 10%); }
+  & label:selected { &:focus, &:hover, & { background-color: darken($selected_bg_color, 10%); }}
 
   *:link { @extend %link_selected; }
 }
@@ -3956,9 +3964,7 @@ colorchooser .popover.osd { border-radius: 5px; }
       border-radius: 5px;
     }
 
-    &:backdrop,
-    &:backdrop:hover,
-    &:backdrop:disabled { @extend %undecorated_button; }
+    &:backdrop { &:hover, &:disabled, & {@extend %undecorated_button; }}
   }
 }
 
@@ -4064,9 +4070,7 @@ headerbar.selection-mode button.titlebutton,
   }
 }
 
-.monospace {
-  font: Monospace;
-}
+.monospace { font: Monospace; }
 
 
 /**********************
