@@ -16,16 +16,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-05 18:45+0000\n"
-"PO-Revision-Date: 2016-03-05 22:55+0300\n"
+"POT-Creation-Date: 2016-03-14 00:16+0000\n"
+"PO-Revision-Date: 2016-03-14 14:35+0300\n"
 "Last-Translator: Stas Solovey <whats_up@tut.by>\n"
-"Language-Team: Russian <gnome-cyr@gnome.org>\n"
+"Language-Team: Русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
 "X-Generator: Gtranslator 2.91.7\n"
 
 #: gdk/gdkapplaunchcontext.c:127 gdk/gdkcursor.c:139 gdk/gdkdevicemanager.c:181
@@ -214,8 +214,8 @@ msgid "The cell renderer represented by this accessible"
 msgstr "Отрисовщик ячейки, представленный этим вспомогательным объектом"
 
 #: gtk/deprecated/gtkaction.c:243 gtk/deprecated/gtkactiongroup.c:200
-#: gtk/deprecated/gtkthemingengine.c:247 gtk/gtkprinter.c:121
-#: gtk/gtkstack.c:513 gtk/gtktextmark.c:136
+#: gtk/deprecated/gtkthemingengine.c:247 gtk/gtkcssnode.c:626
+#: gtk/gtkprinter.c:121 gtk/gtkstack.c:513 gtk/gtktextmark.c:136
 msgid "Name"
 msgstr "Наименование"
 
@@ -349,8 +349,8 @@ msgid "Whether the action is enabled."
 msgstr "Включено ли действие."
 
 #: gtk/deprecated/gtkaction.c:481 gtk/deprecated/gtkactiongroup.c:228
-#: gtk/deprecated/gtkstatusicon.c:307 gtk/gtknativedialog.c:242
-#: gtk/gtktreeviewcolumn.c:246 gtk/gtkwidget.c:1157
+#: gtk/deprecated/gtkstatusicon.c:307 gtk/gtkcssnode.c:637
+#: gtk/gtknativedialog.c:242 gtk/gtktreeviewcolumn.c:246 gtk/gtkwidget.c:1157
 msgid "Visible"
 msgstr "Видимый"
 
@@ -907,7 +907,7 @@ msgid "The contents of the tooltip for this tray icon"
 msgstr "Содержимое всплывающей подсказки значка панели уведомлений"
 
 #: gtk/deprecated/gtkstatusicon.c:436 gtk/gtkcolorbutton.c:189
-#: gtk/gtkfilechooserbutton.c:434 gtk/gtkfontbutton.c:476
+#: gtk/gtkfilechooserbutton.c:437 gtk/gtkfontbutton.c:476
 #: gtk/gtkheaderbar.c:1928 gtk/gtkprintjob.c:132 gtk/gtkshortcutsgroup.c:289
 #: gtk/gtkshortcutssection.c:375 gtk/gtkshortcutsshortcut.c:529
 #: gtk/gtkstack.c:520 gtk/gtktreeviewcolumn.c:316
@@ -1103,7 +1103,7 @@ msgstr "Дополнение"
 msgid "Padding that should be put around icons in the tray"
 msgstr "Дополнения вокруг значков в панели уведомлений"
 
-#: gtk/deprecated/gtktrayicon-x11.c:178 gtk/gtkstackswitcher.c:573
+#: gtk/deprecated/gtktrayicon-x11.c:178 gtk/gtkstackswitcher.c:683
 msgid "Icon Size"
 msgstr "Размер значка"
 
@@ -1286,16 +1286,18 @@ msgid "The widget referenced by this accessible."
 msgstr "Виджет, на который ссылается этот вспомогательный объект."
 
 #: gtk/gtkactionable.c:71
-msgid "action name"
-msgstr "имя действия"
+#| msgid "action name"
+msgid "Action name"
+msgstr "Имя действия"
 
 #: gtk/gtkactionable.c:72
 msgid "The name of the associated action, like 'app.quit'"
 msgstr "Название связанного действия, например «app.quit»"
 
 #: gtk/gtkactionable.c:76
-msgid "action target value"
-msgstr "цель действия"
+#| msgid "action target value"
+msgid "Action target value"
+msgstr "Значение цели действия"
 
 #: gtk/gtkactionable.c:77
 msgid "The parameter for action invocations"
@@ -2355,7 +2357,7 @@ msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
 msgstr "Вертикальное выравнивание от 0 (вверх) до 1 (вниз)."
 
 #: gtk/gtkcellrendererprogress.c:226 gtk/gtklevelbar.c:1087
-#: gtk/gtkmodelbutton.c:1178 gtk/gtkprogressbar.c:260 gtk/gtkrange.c:461
+#: gtk/gtkmodelbutton.c:1178 gtk/gtkprogressbar.c:260 gtk/gtkrange.c:462
 msgid "Inverted"
 msgstr "Инвертированное"
 
@@ -2363,7 +2365,7 @@ msgstr "Инвертированное"
 msgid "Invert the direction in which the progress bar grows"
 msgstr "Обратное направление роста индикатора выполнения"
 
-#: gtk/gtkcellrendererspin.c:113 gtk/gtkrange.c:454 gtk/gtkscalebutton.c:215
+#: gtk/gtkcellrendererspin.c:113 gtk/gtkrange.c:455 gtk/gtkscalebutton.c:215
 #: gtk/gtkspinbutton.c:376
 msgid "Adjustment"
 msgstr "Подгонка"
@@ -2380,7 +2382,7 @@ msgstr "Ускорение"
 msgid "The acceleration rate when you hold down a button"
 msgstr "Ускорение прокрутки значений при удерживании нажатой кнопки"
 
-#: gtk/gtkcellrendererspin.c:143 gtk/gtkscale.c:645 gtk/gtkspinbutton.c:392
+#: gtk/gtkcellrendererspin.c:143 gtk/gtkscale.c:743 gtk/gtkspinbutton.c:392
 msgid "Digits"
 msgstr "Цифры"
 
@@ -2596,7 +2598,7 @@ msgstr ""
 "Желаемое место эллиптизации строки, если механизму отображения строки в "
 "ячейке не хватает места для отображения всей строки."
 
-#: gtk/gtkcellrenderertext.c:503 gtk/gtkfilechooserbutton.c:448
+#: gtk/gtkcellrenderertext.c:503 gtk/gtkfilechooserbutton.c:451
 #: gtk/gtklabel.c:979
 msgid "Width In Characters"
 msgstr "Ширина в символах"
@@ -2952,7 +2954,7 @@ msgstr "Показывать ли значение прозрачности"
 msgid "Show editor"
 msgstr "Показывать редактор"
 
-#: gtk/gtkcolorscale.c:375
+#: gtk/gtkcolorscale.c:258
 msgid "Scale type"
 msgstr "Тип масштаба"
 
@@ -3153,6 +3155,46 @@ msgid "Can be used to add a new child to the container"
 msgstr ""
 "Может быть использовано для добавления нового дочернего элемента в контейнер"
 
+#: gtk/gtkcssnode.c:616
+msgid "Style Classes"
+msgstr "Стиль класса"
+
+#: gtk/gtkcssnode.c:616
+#| msgid "List of icon names"
+msgid "List of classes"
+msgstr "Список классов"
+
+#: gtk/gtkcssnode.c:621 gtk/gtkcssstyleproperty.c:223
+msgid "ID"
+msgstr "ID"
+
+#: gtk/gtkcssnode.c:621
+msgid "Unique ID"
+msgstr "Уникальный ID"
+
+#: gtk/gtkcssnode.c:631 gtk/gtkswitch.c:910
+msgid "State"
+msgstr "Состояние"
+
+#: gtk/gtkcssnode.c:631
+#| msgid "State Message"
+msgid "State flags"
+msgstr "Флаги состояния"
+
+#: gtk/gtkcssnode.c:637
+msgid "If other nodes can see this node"
+msgstr "Если другие узлы могут видеть этот узел"
+
+#: gtk/gtkcssnode.c:642
+#| msgid "Widget name"
+msgid "Widget type"
+msgstr "Тип виджета"
+
+#: gtk/gtkcssnode.c:642
+#| msgid "The name of the widget"
+msgid "GType of the widget"
+msgstr "GType виджета"
+
 #: gtk/gtkcssshorthandproperty.c:170
 msgid "Subproperties"
 msgstr "Подчинённые свойства"
@@ -3176,10 +3218,6 @@ msgstr "Влияет"
 #: gtk/gtkcssstyleproperty.c:216
 msgid "Set if the value affects the sizing of elements"
 msgstr "Установите, если значение может влиять на размеры элементов"
-
-#: gtk/gtkcssstyleproperty.c:223
-msgid "ID"
-msgstr "ID"
 
 #: gtk/gtkcssstyleproperty.c:224
 msgid "The numeric id for quick access"
@@ -3801,19 +3839,19 @@ msgstr "Размер стрелки экспандера"
 msgid "Spacing around expander arrow"
 msgstr "Отступ от стрелки экспандера"
 
-#: gtk/gtkfilechooserbutton.c:419
+#: gtk/gtkfilechooserbutton.c:422
 msgid "Dialog"
 msgstr "Диалоговое окно"
 
-#: gtk/gtkfilechooserbutton.c:420
+#: gtk/gtkfilechooserbutton.c:423
 msgid "The file chooser dialog to use."
 msgstr "Используемое диалоговое окно выбора файлов."
 
-#: gtk/gtkfilechooserbutton.c:435
+#: gtk/gtkfilechooserbutton.c:438
 msgid "The title of the file chooser dialog."
 msgstr "Заголовок диалогового окна выбора файлов."
 
-#: gtk/gtkfilechooserbutton.c:449
+#: gtk/gtkfilechooserbutton.c:452
 msgid "The desired width of the button widget, in characters."
 msgstr "Желаемая ширина виджета кнопки, в символах."
 
@@ -6096,141 +6134,141 @@ msgstr "Радио элемент меню, группе которого при
 msgid "The radio tool button whose group this button belongs to."
 msgstr "Радио-кнопка, группе которой принадлежит эта кнопка."
 
-#: gtk/gtkrange.c:455
+#: gtk/gtkrange.c:456
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr ""
 "Объект GtkAdjustment, где хранится текущее значение объекта типа «диапазон»"
 
-#: gtk/gtkrange.c:462
+#: gtk/gtkrange.c:463
 msgid "Invert direction slider moves to increase range value"
 msgstr "Инвертировать области, отмеченной ползунками, для увеличения диапазона"
 
-#: gtk/gtkrange.c:468
+#: gtk/gtkrange.c:469
 msgid "Lower stepper sensitivity"
 msgstr "Чувствительность сдвига вниз"
 
-#: gtk/gtkrange.c:469
+#: gtk/gtkrange.c:470
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
 msgstr ""
 "Политика чувствительности для сдвига вниз в сторону уменьшения промежутка"
 
-#: gtk/gtkrange.c:476
+#: gtk/gtkrange.c:477
 msgid "Upper stepper sensitivity"
 msgstr "Чувствительность сдвига вверх"
 
-#: gtk/gtkrange.c:477
+#: gtk/gtkrange.c:478
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
 msgstr ""
 "Политика чувствительности для сдвига вверх в сторону увеличения промежутка"
 
-#: gtk/gtkrange.c:493
+#: gtk/gtkrange.c:494
 msgid "Show Fill Level"
 msgstr "Показывать уровень заполнения"
 
-#: gtk/gtkrange.c:494
+#: gtk/gtkrange.c:495
 msgid "Whether to display a fill level indicator graphics on trough."
 msgstr "Рисовать индикатор уровня наполнения на желобке"
 
-#: gtk/gtkrange.c:509
+#: gtk/gtkrange.c:510
 msgid "Restrict to Fill Level"
 msgstr "Ограничивать уровнем заполнения"
 
-#: gtk/gtkrange.c:510
+#: gtk/gtkrange.c:511
 msgid "Whether to restrict the upper boundary to the fill level."
 msgstr "Ограничить верхнее значение уровнем наполнения."
 
-#: gtk/gtkrange.c:524
+#: gtk/gtkrange.c:525
 msgid "Fill Level"
 msgstr "Уровень наполнения"
 
-#: gtk/gtkrange.c:525
+#: gtk/gtkrange.c:526
 msgid "The fill level."
 msgstr "уровень наполнения."
 
-#: gtk/gtkrange.c:540
+#: gtk/gtkrange.c:541
 msgid "Round Digits"
 msgstr "Округление после знака"
 
-#: gtk/gtkrange.c:541
+#: gtk/gtkrange.c:542
 msgid "The number of digits to round the value to."
 msgstr "Количество знаков, после которого выполняется округление."
 
-#: gtk/gtkrange.c:558 gtk/gtkswitch.c:945
+#: gtk/gtkrange.c:559 gtk/gtkswitch.c:945
 msgid "Slider Width"
 msgstr "Ширина полосы прокрутки"
 
-#: gtk/gtkrange.c:559
+#: gtk/gtkrange.c:560
 msgid "Width of scrollbar or scale thumb"
 msgstr "Ширина полосы прокрутки или указателя масштаба"
 
-#: gtk/gtkrange.c:574
+#: gtk/gtkrange.c:575
 msgid "Trough Border"
 msgstr "Граница направляющей"
 
-#: gtk/gtkrange.c:575
+#: gtk/gtkrange.c:576
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr ""
 "Расстояние между указателем/кнопками перемещения и внешней границей "
 "направляющей"
 
-#: gtk/gtkrange.c:590
+#: gtk/gtkrange.c:591
 msgid "Stepper Size"
 msgstr "Размер кнопки перемещения"
 
-#: gtk/gtkrange.c:591
+#: gtk/gtkrange.c:592
 msgid "Length of step buttons at ends"
 msgstr "Длина кнопок перемещения от края до края"
 
-#: gtk/gtkrange.c:607
+#: gtk/gtkrange.c:608
 msgid "Stepper Spacing"
 msgstr "Расстояние между кнопками перемещения"
 
-#: gtk/gtkrange.c:608
+#: gtk/gtkrange.c:609
 msgid "Spacing between step buttons and thumb"
 msgstr "Расстояние между кнопками перемещения и указателем"
 
-#: gtk/gtkrange.c:623
+#: gtk/gtkrange.c:624
 msgid "Arrow X Displacement"
 msgstr "Горизонтальное смещение стрелки"
 
-#: gtk/gtkrange.c:624
+#: gtk/gtkrange.c:625
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
 msgstr ""
 "Насколько стрелка будет перемещаться в горизонтальном направлении при "
 "нажатии кнопки"
 
-#: gtk/gtkrange.c:639
+#: gtk/gtkrange.c:640
 msgid "Arrow Y Displacement"
 msgstr "Вертикальное смещение стрелки"
 
-#: gtk/gtkrange.c:640
+#: gtk/gtkrange.c:641
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr ""
 "Насколько стрелка будет перемещаться в вертикальном направлении при нажатии "
 "кнопки"
 
-#: gtk/gtkrange.c:659
+#: gtk/gtkrange.c:660
 msgid "Trough Under Steppers"
 msgstr "Желобок под метками"
 
-#: gtk/gtkrange.c:660
+#: gtk/gtkrange.c:661
 msgid ""
 "Whether to draw trough for full length of range or exclude the steppers and "
 "spacing"
 msgstr ""
 "Рисовать ли желобок во всю длину прокрутки или исключать кнопки и промежутки"
 
-#: gtk/gtkrange.c:676
+#: gtk/gtkrange.c:677
 msgid "Arrow scaling"
 msgstr "Растяжение стрелки"
 
-#: gtk/gtkrange.c:677
+#: gtk/gtkrange.c:678
 msgid "Arrow scaling with regard to scroll button size"
 msgstr "Растяжение стрелки по отношению к размеру кнопки прокрутки"
 
@@ -6369,47 +6407,47 @@ msgstr "Значки"
 msgid "List of icon names"
 msgstr "Список имён значков"
 
-#: gtk/gtkscale.c:646
+#: gtk/gtkscale.c:744
 msgid "The number of decimal places that are displayed in the value"
 msgstr "Число десятичных цифр, отображаемых для значения"
 
-#: gtk/gtkscale.c:653
+#: gtk/gtkscale.c:751
 msgid "Draw Value"
 msgstr "Показывать значение"
 
-#: gtk/gtkscale.c:654
+#: gtk/gtkscale.c:752
 msgid "Whether the current value is displayed as a string next to the slider"
 msgstr "Будет ли текущее значение отображаться в виде строки рядом с ползунком"
 
-#: gtk/gtkscale.c:660
+#: gtk/gtkscale.c:758
 msgid "Has Origin"
 msgstr "Исходное значение"
 
-#: gtk/gtkscale.c:661
+#: gtk/gtkscale.c:759
 msgid "Whether the scale has an origin"
 msgstr "Имеется ли исходное значение"
 
-#: gtk/gtkscale.c:667
+#: gtk/gtkscale.c:765
 msgid "Value Position"
 msgstr "Расположение значения"
 
-#: gtk/gtkscale.c:668
+#: gtk/gtkscale.c:766
 msgid "The position in which the current value is displayed"
 msgstr "Место, в котором отображается текущее значение"
 
-#: gtk/gtkscale.c:685
+#: gtk/gtkscale.c:783
 msgid "Slider Length"
 msgstr "Длина полосы прокрутки"
 
-#: gtk/gtkscale.c:686
+#: gtk/gtkscale.c:784
 msgid "Length of scale's slider"
 msgstr "Длина полосы прокрутки"
 
-#: gtk/gtkscale.c:692
+#: gtk/gtkscale.c:798
 msgid "Value spacing"
 msgstr "Значение отступа"
 
-#: gtk/gtkscale.c:693
+#: gtk/gtkscale.c:799
 msgid "Space between value text and the slider/trough area"
 msgstr ""
 "Расстояние между отображаемым значением и областью ползунка/направляющей"
@@ -7350,7 +7388,6 @@ msgstr ""
 "миллисекундах)"
 
 #: gtk/gtksettings.c:1739 gtk/gtksettings.c:1740
-#| msgid "Whether to show a sort indicator"
 msgid "Whether to show cursor in text"
 msgstr "Определяет отображение курсора в тексте"
 
@@ -7588,8 +7625,9 @@ msgstr "Требует действия"
 msgid "Whether this page needs attention"
 msgstr "Требует ли действия эта страница"
 
-#: gtk/gtkstacksidebar.c:449 gtk/gtkstackswitcher.c:582
-#: gtk/gtkstackswitcher.c:583
+#: gtk/gtkstacksidebar.c:449 gtk/gtkstackswitcher.c:692
+#: gtk/gtkstackswitcher.c:693 gtk/inspector/gtkstackcombo.c:232
+#: gtk/inspector/gtkstackcombo.c:233
 msgid "Stack"
 msgstr "Стек"
 
@@ -7597,7 +7635,7 @@ msgstr "Стек"
 msgid "Associated stack for this GtkStackSidebar"
 msgstr "Связанный стек для этого GtkStackSidebar"
 
-#: gtk/gtkstackswitcher.c:574
+#: gtk/gtkstackswitcher.c:684
 msgid "Symbolic size to use for named icon"
 msgstr "Символьный размер используемый для именованного значка"
 
@@ -7644,10 +7682,6 @@ msgstr "Тип значения, возвращённый GtkStyleContext"
 #: gtk/gtkswitch.c:896
 msgid "Whether the switch is on or off"
 msgstr "Включен или выключен переключатель"
-
-#: gtk/gtkswitch.c:910
-msgid "State"
-msgstr "Состояние"
 
 #: gtk/gtkswitch.c:911
 msgid "The backend state"
