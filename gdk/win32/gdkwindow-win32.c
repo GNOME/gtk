@@ -1207,7 +1207,7 @@ show_window_internal (GdkWindow *window,
 	  else
 	    {
 	      center_on_rect.left = 0;
-	      center_on_rect.right = 0;
+	      center_on_rect.top = 0;
 	      center_on_rect.right = GetSystemMetrics (SM_CXSCREEN);
 	      center_on_rect.bottom = GetSystemMetrics (SM_CYSCREEN);
 	    }
@@ -1218,8 +1218,8 @@ show_window_internal (GdkWindow *window,
 	{
 	  GdkWindow *owner = window_impl->transient_owner;
 	  /* Center on transient parent */
-	  center_on_rect.left = owner->x;
-	  center_on_rect.top = owner->y;
+	  center_on_rect.left = owner->x - _gdk_offset_x;
+	  center_on_rect.top = owner->y - _gdk_offset_y;
 	  center_on_rect.right = center_on_rect.left + owner->width;
 	  center_on_rect.bottom = center_on_rect.top + owner->height;
 	  _gdk_win32_adjust_client_rect (GDK_WINDOW (owner), &center_on_rect);
