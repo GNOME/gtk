@@ -1376,10 +1376,8 @@ captured_event_cb (GtkWidget *widget,
   else if (event->type == GDK_LEAVE_NOTIFY && on_scrollbar &&
            event->crossing.mode == GDK_CROSSING_UNGRAB)
     {
-      if (event_widget == priv->hindicator.scrollbar)
-        check_update_scrollbar_proximity (sw, &priv->hindicator, event);
-      else if (event_widget == priv->vindicator.scrollbar)
-        check_update_scrollbar_proximity (sw, &priv->vindicator, event);
+      check_update_scrollbar_proximity (sw, &priv->vindicator, event);
+      check_update_scrollbar_proximity (sw, &priv->hindicator, event);
     }
 
   return GDK_EVENT_PROPAGATE;
