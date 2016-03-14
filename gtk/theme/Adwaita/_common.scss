@@ -3645,18 +3645,25 @@ placessidebar {
       &:not(:hover):not(:active),
       &:backdrop { > image { opacity: $_placesidebar_icons_opacity; }}
     }
+
+    // in the sidebar case it makes no sense to click the selected row
+    &:selected:active { box-shadow: none; }
+
+    &.sidebar-placeholder-row {
+      padding: 0 8px;
+      min-height: 2px;
+      background-image: image($drop_target_color);
+      background-clip: content-box;
+    }
+
+    &.sidebar-new-bookmark-row { color: $selected_bg_color; }
+
+    &:drop(active):not(:disabled) {
+      color: $drop_target_color;
+      box-shadow: inset 0 1px $drop_target_color,
+                  inset 0 -1px $drop_target_color;
+    }
   }
-
-  // in the sidebar case it makes no sense to click the selected row
-  row:selected:active { box-shadow: none; }
-
-   // looks like the label doesn't get all the states so work around
-  row:selected:disabled label { @extend %selected_items:disabled; }
-  row:selected:backdrop:disabled label { @extend %selected_items:backdrop:disabled; }
-
-  row.sidebar-placeholder-row { border: solid 1px $selected_bg_color; }
-
-  row.sidebar-new-bookmark-row { color: $selected_bg_color; }
 }
 
 placesview {
