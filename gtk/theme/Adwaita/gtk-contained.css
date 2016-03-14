@@ -119,10 +119,6 @@ textview {
   background-color: #f4f4f3; }
   textview:backdrop {
     background-color: #f4f4f3; }
-  textview:drop(active), textview:drop(active) > text {
-    box-shadow: none; }
-  textview:drop(active) > text {
-    background-color: rgba(78, 154, 6, 0.1); }
 
 popover.background.touch-selection, popover.background.magnifier, .csd popover.background.touch-selection, .csd popover.background.magnifier, popover.background.osd, .csd popover.background.osd, .app-notification,
 .app-notification.frame, .osd .scale-popup, .osd {
@@ -4193,8 +4189,8 @@ button.circular {
 
 *:drop(active):focus,
 *:drop(active) {
-  border-color: black;
-  box-shadow: inset 0 0 0 1px black; }
+  border-color: #4e9a06;
+  box-shadow: inset 0 0 0 1px #4e9a06; }
 
 stackswitcher button.text-button {
   min-width: 100px; }

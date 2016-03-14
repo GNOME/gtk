@@ -189,11 +189,12 @@ textview { // This will get overridden by .view, needed by gedit line numbers
 
   &:backdrop { background-color: mix($backdrop_bg_color, $backdrop_base_color, 50%); }
 
-  &:drop(active) {
-    &, & > text { box-shadow: none; }
+  // &:drop(active) {
+  //   &, & > text { box-shadow: none; }
+  //
+  //   > text { background-color: transparentize($drop_target_color, 0.9); }
+  // }
 
-    > text { background-color: transparentize($drop_target_color, 0.9); }
-  }
 }
 
 %osd, .osd {
@@ -4159,8 +4160,8 @@ button.circular { // FIXME: aggregate to buttons
 
 *:drop(active):focus,
 *:drop(active) { // FIXME needs to be done widget by widget, this wildcard should really die
-  border-color: black;
-  box-shadow: inset 0 0 0 1px black;
+  border-color: $drop_target_color;
+  box-shadow: inset 0 0 0 1px $drop_target_color;
 }
 
 stackswitcher button.text-button { min-width: 100px; } // FIXME aggregate with buttons
