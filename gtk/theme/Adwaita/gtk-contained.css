@@ -528,6 +528,13 @@ notebook > header > tabs > arrow, headerbar button.titlebutton,
   .titlebar button.titlebutton:drop(active), button:drop(active) {
     border-color: black;
     box-shadow: inset 0 0 0 1px black; }
+row:selected button {
+  border-color: #184472; }
+  row:selected button.sidebar-button:not(:active):not(:checked):not(:hover):not(disabled), row:selected button.flat:not(:active):not(:checked):not(:hover):not(disabled) {
+    color: #ffffff;
+    border-color: transparent; }
+    row:selected button.sidebar-button:not(:active):not(:checked):not(:hover):not(disabled):backdrop, row:selected button.flat:not(:active):not(:checked):not(:hover):not(disabled):backdrop {
+      color: white; }
 button.osd {
   color: #eeeeec;
   border-radius: 5px;
@@ -3411,10 +3418,8 @@ actionbar > revealer > box {
   actionbar > revealer > box:backdrop {
     border-color: #a5a5a1; }
 
-placessidebar viewport.frame,
 scrolledwindow viewport.frame {
   border-style: none; }
-placessidebar overshoot.top,
 scrolledwindow overshoot.top {
   background-image: -gtk-gradient(radial, center top, 0, center top, 0.5, to(#84847f), to(rgba(132, 132, 127, 0))), -gtk-gradient(radial, center top, 0, center top, 0.6, from(rgba(46, 52, 54, 0.07)), to(rgba(46, 52, 54, 0)));
   background-size: 100% 5%, 100% 100%;
@@ -3423,7 +3428,6 @@ scrolledwindow overshoot.top {
   background-color: transparent;
   border: none;
   box-shadow: none; }
-  placessidebar overshoot.top:backdrop,
   scrolledwindow overshoot.top:backdrop {
     background-image: -gtk-gradient(radial, center top, 0, center top, 0.5, to(#a5a5a1), to(rgba(165, 165, 161, 0)));
     background-size: 100% 5%;
@@ -3432,7 +3436,6 @@ scrolledwindow overshoot.top {
     background-color: transparent;
     border: none;
     box-shadow: none; }
-placessidebar overshoot.bottom,
 scrolledwindow overshoot.bottom {
   background-image: -gtk-gradient(radial, center bottom, 0, center bottom, 0.5, to(#84847f), to(rgba(132, 132, 127, 0))), -gtk-gradient(radial, center bottom, 0, center bottom, 0.6, from(rgba(46, 52, 54, 0.07)), to(rgba(46, 52, 54, 0)));
   background-size: 100% 5%, 100% 100%;
@@ -3441,7 +3444,6 @@ scrolledwindow overshoot.bottom {
   background-color: transparent;
   border: none;
   box-shadow: none; }
-  placessidebar overshoot.bottom:backdrop,
   scrolledwindow overshoot.bottom:backdrop {
     background-image: -gtk-gradient(radial, center bottom, 0, center bottom, 0.5, to(#a5a5a1), to(rgba(165, 165, 161, 0)));
     background-size: 100% 5%;
@@ -3450,7 +3452,6 @@ scrolledwindow overshoot.bottom {
     background-color: transparent;
     border: none;
     box-shadow: none; }
-placessidebar overshoot.left,
 scrolledwindow overshoot.left {
   background-image: -gtk-gradient(radial, left center, 0, left center, 0.5, to(#84847f), to(rgba(132, 132, 127, 0))), -gtk-gradient(radial, left center, 0, left center, 0.6, from(rgba(46, 52, 54, 0.07)), to(rgba(46, 52, 54, 0)));
   background-size: 5% 100%, 100% 100%;
@@ -3459,7 +3460,6 @@ scrolledwindow overshoot.left {
   background-color: transparent;
   border: none;
   box-shadow: none; }
-  placessidebar overshoot.left:backdrop,
   scrolledwindow overshoot.left:backdrop {
     background-image: -gtk-gradient(radial, left center, 0, left center, 0.5, to(#a5a5a1), to(rgba(165, 165, 161, 0)));
     background-size: 5% 100%;
@@ -3468,7 +3468,6 @@ scrolledwindow overshoot.left {
     background-color: transparent;
     border: none;
     box-shadow: none; }
-placessidebar overshoot.right,
 scrolledwindow overshoot.right {
   background-image: -gtk-gradient(radial, right center, 0, right center, 0.5, to(#84847f), to(rgba(132, 132, 127, 0))), -gtk-gradient(radial, right center, 0, right center, 0.6, from(rgba(46, 52, 54, 0.07)), to(rgba(46, 52, 54, 0)));
   background-size: 5% 100%, 100% 100%;
@@ -3477,7 +3476,6 @@ scrolledwindow overshoot.right {
   background-color: transparent;
   border: none;
   box-shadow: none; }
-  placessidebar overshoot.right:backdrop,
   scrolledwindow overshoot.right:backdrop {
     background-image: -gtk-gradient(radial, right center, 0, right center, 0.5, to(#a5a5a1), to(rgba(165, 165, 161, 0)));
     background-size: 5% 100%;
@@ -3486,7 +3484,6 @@ scrolledwindow overshoot.right {
     background-color: transparent;
     border: none;
     box-shadow: none; }
-placessidebar undershoot.top,
 scrolledwindow undershoot.top {
   background-color: transparent;
   background-image: linear-gradient(to left, rgba(255, 255, 255, 0.2) 50%, rgba(0, 0, 0, 0.2) 50%);
@@ -3497,7 +3494,6 @@ scrolledwindow undershoot.top {
   background-position: center top;
   border: none;
   box-shadow: none; }
-placessidebar undershoot.bottom,
 scrolledwindow undershoot.bottom {
   background-color: transparent;
   background-image: linear-gradient(to left, rgba(255, 255, 255, 0.2) 50%, rgba(0, 0, 0, 0.2) 50%);
@@ -3508,7 +3504,6 @@ scrolledwindow undershoot.bottom {
   background-position: center bottom;
   border: none;
   box-shadow: none; }
-placessidebar undershoot.left,
 scrolledwindow undershoot.left {
   background-color: transparent;
   background-image: linear-gradient(to top, rgba(255, 255, 255, 0.2) 50%, rgba(0, 0, 0, 0.2) 50%);
@@ -3519,7 +3514,6 @@ scrolledwindow undershoot.left {
   background-position: left center;
   border: none;
   box-shadow: none; }
-placessidebar undershoot.right,
 scrolledwindow undershoot.right {
   background-color: transparent;
   background-image: linear-gradient(to top, rgba(255, 255, 255, 0.2) 50%, rgba(0, 0, 0, 0.2) 50%);
@@ -3530,15 +3524,12 @@ scrolledwindow undershoot.right {
   background-position: right center;
   border: none;
   box-shadow: none; }
-placessidebar junction,
 scrolledwindow junction {
   border-color: transparent;
   border-image: linear-gradient(to bottom, #9d9d99 1px, transparent 1px) 0 0 0 1/0 1px stretch;
   background-color: #c3c4c4; }
-  placessidebar junction:dir(rtl),
   scrolledwindow junction:dir(rtl) {
     border-image-slice: 0 1 0 0; }
-  placessidebar junction:backdrop,
   scrolledwindow junction:backdrop {
     border-image-source: linear-gradient(to bottom, #a5a5a1 1px, transparent 1px);
     background-color: #e1e1df; }
@@ -3561,31 +3552,22 @@ list {
   list row {
     padding: 2px; }
 
-row.activatable.has-open-popup, row.activatable:hover {
-  background-color: rgba(46, 52, 54, 0.05); }
-row.activatable:active {
-  box-shadow: inset 0 2px 2px -2px rgba(0, 0, 0, 0.2); }
-row.activatable:backdrop:hover {
-  background-color: transparent; }
-row.activatable:selected:active {
-  box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.5); }
-row.activatable:selected.has-open-popup, row.activatable:selected:hover {
-  background-color: #4787c9; }
-row.activatable:selected:backdrop {
-  background-color: #4a90d9; }
-
-row:selected button {
-  border-color: #184472; }
-  row:selected button.flat:not(:active):not(:checked):not(:hover):not(disabled) {
-    color: #ffffff;
-    border-color: transparent; }
-    row:selected button.flat:not(:active):not(:checked):not(:hover):not(disabled):backdrop {
-      color: white; }
-
 row {
   transition: all 150ms cubic-bezier(0.25, 0.46, 0.45, 0.94); }
   row:hover {
     transition: none; }
+  row.activatable.has-open-popup, row.activatable:hover {
+    background-color: rgba(46, 52, 54, 0.05); }
+  row.activatable:active {
+    box-shadow: inset 0 2px 2px -2px rgba(0, 0, 0, 0.2); }
+  row.activatable:backdrop:hover {
+    background-color: transparent; }
+  row.activatable:selected:active {
+    box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.5); }
+  row.activatable:selected.has-open-popup, row.activatable:selected:hover {
+    background-color: #4787c9; }
+  row.activatable:selected:backdrop {
+    background-color: #4a90d9; }
 
 /*********************
  * App Notifications *
@@ -3719,6 +3701,8 @@ stacksidebar row {
 /****************
  * File chooser *
  ****************/
+placessidebar > viewport.frame {
+  border-style: none; }
 placessidebar row {
   min-height: 36px;
   padding: 0px; }

@@ -504,6 +504,20 @@ button {
     }
   }
 
+  @at-root %button_selected, & {
+    row:selected & {
+      @if $variant == 'light' { border-color: $selected_borders_color; }
+
+      &.flat:not(:active):not(:checked):not(:hover):not(disabled) {
+        color: $selected_fg_color;
+        border-color: transparent;
+
+        &:backdrop { color: if($variant=='light', $backdrop_base_color, $backdrop_fg_color); }
+      }
+    }
+  }
+
+
   // big standalone buttons like in Documents pager
   &.osd {
     &.image-button {
@@ -3251,11 +3265,11 @@ actionbar > revealer >  box {
   &:backdrop { border-color: $backdrop_borders_color; }
 }
 
-placessidebar,
 scrolledwindow {
   viewport.frame { // avoid double borders when viewport inside scrolled window
     border-style: none;
   }
+
   // This is used when content is touch-dragged past boundaries.
   // draws a box on top of the content, the size changes programmatically.
   overshoot {
@@ -3335,45 +3349,31 @@ list {
   row { padding: 2px; }
 }
 
-row.activatable {
-  &.has-open-popup, // this is for indicathing which row generated a popover see https://bugzilla.gnome.org/show_bug.cgi?id=754411
-
-  &:hover { background-color: if(variant == light, transparentize($fg_color, 0.9), transparentize($fg_color, 0.95)); }
-
-  &:active { box-shadow: inset 0 2px 2px -2px transparentize(black, 0.8); }
-
-  &:backdrop:hover { background-color: transparent; }
-
-  &:selected {
-    &:active { box-shadow: inset 0 2px 3px -1px transparentize(black, 0.5); }
-
-    &.has-open-popup,
-    &:hover { background-color: mix($fg_color, $selected_bg_color, 10%); }
-
-    &:backdrop { background-color: $selected_bg_color; }
-  }
-}
-
-row:selected {
-  @extend %selected_items;
-
-  button {
-    @if $variant == 'light' { border-color: $selected_borders_color; }
-
-    &.flat:not(:active):not(:checked):not(:hover):not(disabled) {
-      color: $selected_fg_color;
-      border-color: transparent;
-
-      &:backdrop { color: if($variant=='light', $backdrop_base_color, $backdrop_fg_color); }
-    }
-  }
-}
-
-// transition
 row {
   transition: all 150ms $ease-out-quad;
 
   &:hover { transition: none; }
+
+  &.activatable {
+    &.has-open-popup, // this is for indicathing which row generated a popover see https://bugzilla.gnome.org/show_bug.cgi?id=754411
+
+    &:hover { background-color: if(variant == light, transparentize($fg_color, 0.9), transparentize($fg_color, 0.95)); }
+
+    &:active { box-shadow: inset 0 2px 2px -2px transparentize(black, 0.8); }
+
+    &:backdrop:hover { background-color: transparent; }
+
+    &:selected {
+      &:active { box-shadow: inset 0 2px 3px -1px transparentize(black, 0.5); }
+
+      &.has-open-popup,
+      &:hover { background-color: mix($fg_color, $selected_bg_color, 10%); }
+
+      &:backdrop { background-color: $selected_bg_color; }
+    }
+  }
+
+  &:selected { @extend %selected_items; }
 }
 
 
@@ -3604,6 +3604,8 @@ stacksidebar {
 $_placesidebar_icons_opacity: 0.7;
 
 placessidebar {
+  > viewport.frame { border-style: none; }
+
   row {
     // Needs overriding of the GtkListBoxRow padding
     min-height: 36px;
@@ -3629,6 +3631,8 @@ placessidebar {
 
     @at-root button.sidebar-button {
       @extend %button_basic.flat;
+
+      @extend %button_selected.flat;
 
       min-height: 26px;
       min-width: 26px;
