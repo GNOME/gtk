@@ -46,7 +46,8 @@ gtk_css_token_source_at_finalize (GtkCssTokenSource *source)
 }
 
 static void
-gtk_css_token_source_at_consume_token (GtkCssTokenSource *source)
+gtk_css_token_source_at_consume_token (GtkCssTokenSource *source,
+                                       GObject           *consumer)
 {
   GtkCssTokenSourceAt *at = (GtkCssTokenSourceAt *) source;
   const GtkCssToken *token;
@@ -56,7 +57,7 @@ gtk_css_token_source_at_consume_token (GtkCssTokenSource *source)
 
   if (gtk_css_token_get_pending_block (source))
     {
-      gtk_css_token_source_consume_token (at->source);
+      gtk_css_token_source_consume_token_as (at->source, consumer);
       return;
     }
 
@@ -68,7 +69,7 @@ gtk_css_token_source_at_consume_token (GtkCssTokenSource *source)
   else if (gtk_css_token_is (token, GTK_CSS_TOKEN_OPEN_CURLY))
     at->inside_curly_block = TRUE;
 
-  gtk_css_token_source_consume_token (at->source);
+  gtk_css_token_source_consume_token_as (at->source, consumer);
 }
 
 const GtkCssToken *
@@ -105,6 +106,8 @@ gtk_css_token_source_new_at (GtkCssTokenSource *source)
   GtkCssTokenSourceAt *at = gtk_css_token_source_new (GtkCssTokenSourceAt, &GTK_CSS_TOKEN_SOURCE_AT);
 
   at->source = gtk_css_token_source_ref (source);
+  gtk_css_token_source_set_consumer (&at->parent,
+                                     gtk_css_token_source_get_consumer (source));
 
   return &at->parent;
 }

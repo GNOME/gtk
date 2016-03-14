@@ -68,7 +68,7 @@ gtk_css_style_rule_new (GtkCssRule       *parent_rule,
   return g_object_new (GTK_TYPE_CSS_STYLE_RULE, NULL);
 }
 
-static GtkCssStyleRule *
+static gboolean
 gtk_css_style_rule_parse_selectors (GtkCssStyleRule   *rule,
                                     GtkCssTokenSource *source)
 {
@@ -76,6 +76,8 @@ gtk_css_style_rule_parse_selectors (GtkCssStyleRule   *rule,
   GtkCssTokenSource *child_source;
   GtkCssSelector *selector;
   const GtkCssToken *token;
+
+  gtk_css_token_source_set_consumer (source, G_OBJECT (rule));
 
   for (token = gtk_css_token_source_get_token (source);
        !gtk_css_token_is (token, GTK_CSS_TOKEN_EOF);
@@ -86,15 +88,13 @@ gtk_css_style_rule_parse_selectors (GtkCssStyleRule   *rule,
       selector = gtk_css_selector_token_parse (child_source);
       gtk_css_token_source_unref (child_source);
       if (selector == NULL)
-        {
-          g_object_unref (rule);
-          return NULL;
-        }
+        return FALSE;
+
       g_ptr_array_add (priv->selectors, selector);
       gtk_css_token_source_consume_token (source);
     }
 
-  return rule;
+  return TRUE;
 }
 
 GtkCssRule *
@@ -105,6 +105,7 @@ gtk_css_style_rule_new_parse (GtkCssTokenSource *source,
   GtkCssStyleRulePrivate *priv;
   GtkCssTokenSource *child_source;
   GtkCssStyleRule *rule;
+  gboolean success;
 
   g_return_val_if_fail (source != NULL, NULL);
   g_return_val_if_fail (parent_rule == NULL || GTK_IS_CSS_RULE (parent_rule), NULL);
@@ -113,18 +114,27 @@ gtk_css_style_rule_new_parse (GtkCssTokenSource *source,
   rule = GTK_CSS_STYLE_RULE (gtk_css_style_rule_new (parent_rule, parent_style_sheet));
   priv = gtk_css_style_rule_get_instance_private (rule);
 
+  gtk_css_token_source_set_consumer (source, G_OBJECT (rule));
   child_source = gtk_css_token_source_new_for_part (source, GTK_CSS_TOKEN_OPEN_CURLY);
-  rule = gtk_css_style_rule_parse_selectors (rule, child_source);
+  success = gtk_css_style_rule_parse_selectors (rule, child_source);
   gtk_css_token_source_unref (child_source);
 
   gtk_css_token_source_consume_token (source);
   child_source = gtk_css_token_source_new_for_part (source, GTK_CSS_TOKEN_CLOSE_CURLY);
-  if (rule == NULL)
-    gtk_css_token_source_consume_all (child_source);
-  else
+  if (success)
     gtk_css_style_declaration_parse (priv->style, child_source);
+  else
+    {
+      gtk_css_token_source_consume_all (child_source);
+    }
   gtk_css_token_source_unref (child_source);
   gtk_css_token_source_consume_token (source);
+
+  if (!success)
+    {
+      g_object_unref (rule);
+      return NULL;
+    }
 
   return GTK_CSS_RULE (rule);
 }

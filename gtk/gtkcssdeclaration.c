@@ -77,32 +77,35 @@ GtkCssDeclaration *
 gtk_css_declaration_new_parse (GtkCssStyleDeclaration *style,
                                GtkCssTokenSource      *source)
 {
+  GtkCssDeclarationPrivate *priv;
   const GtkCssToken *token;
   GtkCssDeclaration *decl;
-  char *name, *value;
 
+  decl = g_object_new (GTK_TYPE_CSS_DECLARATION, NULL);
+  priv = gtk_css_declaration_get_instance_private (decl);
+
+  gtk_css_token_source_set_consumer (source, G_OBJECT (decl));
+
+  priv->style = style;
   token = gtk_css_token_source_get_token (source);
   if (!gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
     {
       gtk_css_token_source_consume_all (source);
+      g_object_unref (decl);
       return NULL;
     }
-  name = g_strdup (token->string.string);
+  priv->name = g_strdup (token->string.string);
   gtk_css_token_source_consume_token (source);
   gtk_css_token_source_consume_whitespace (source);
   token = gtk_css_token_source_get_token (source);
   if (!gtk_css_token_is (token, GTK_CSS_TOKEN_COLON))
     {
-      g_free (name);
       gtk_css_token_source_consume_all (source);
+      g_object_unref (decl);
       return NULL;
     }
 
-  value = gtk_css_token_source_consume_to_string (source);
-
-  decl = gtk_css_declaration_new (style, name, value);
-  g_free (name);
-  g_free (value);
+  priv->value = gtk_css_token_source_consume_to_string (source);
 
   return decl;
 }

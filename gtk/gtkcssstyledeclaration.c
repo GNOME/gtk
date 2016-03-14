@@ -73,6 +73,7 @@ gtk_css_style_declaration_parse (GtkCssStyleDeclaration *style,
   const GtkCssToken *token;
 
   priv = gtk_css_style_declaration_get_instance_private (style);
+  gtk_css_token_source_set_consumer (source, G_OBJECT (style));
 
   for (token = gtk_css_token_source_get_token (source);
        !gtk_css_token_is (token, GTK_CSS_TOKEN_EOF);
@@ -82,7 +83,6 @@ gtk_css_style_declaration_parse (GtkCssStyleDeclaration *style,
           gtk_css_token_is (token, GTK_CSS_TOKEN_WHITESPACE))
         {
           gtk_css_token_source_consume_token (source);
-          continue;
         }
       else if (gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
         {

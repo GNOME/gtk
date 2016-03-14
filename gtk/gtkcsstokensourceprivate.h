@@ -32,13 +32,15 @@ struct _GtkCssTokenSource
 {
   const GtkCssTokenSourceClass *klass;
   gint ref_count;
+  GObject *consumer;
   GSList *blocks; /* of GPOINTER_TO_UINT(GtkCssTokenType) */
 };
 
 struct _GtkCssTokenSourceClass
 {
   void                  (* finalize)                            (GtkCssTokenSource      *source);
-  void                  (* consume_token)                       (GtkCssTokenSource      *source);
+  void                  (* consume_token)                       (GtkCssTokenSource      *source,
+                                                                 GObject                *consumer);
   const GtkCssToken *   (* get_token)                           (GtkCssTokenSource      *source);
   void                  (* error)                               (GtkCssTokenSource      *source,
                                                                  const GError           *error);
@@ -56,6 +58,8 @@ GtkCssTokenSource *     gtk_css_token_source_alloc              (gsize          
                                                                  const GtkCssTokenSourceClass *klass);
 
 void                    gtk_css_token_source_consume_token      (GtkCssTokenSource      *source);
+void                    gtk_css_token_source_consume_token_as   (GtkCssTokenSource      *source,
+                                                                 GObject                *consumer);
 const GtkCssToken *     gtk_css_token_source_get_token          (GtkCssTokenSource      *source);
 
 GtkCssTokenType         gtk_css_token_get_pending_block         (GtkCssTokenSource      *source);
@@ -75,6 +79,11 @@ void                    gtk_css_token_source_unknown            (GtkCssTokenSour
 void                    gtk_css_token_source_deprecated         (GtkCssTokenSource      *source,
                                                                  const char             *format,
                                                                  ...) G_GNUC_PRINTF(2, 3);
+
+GObject *               gtk_css_token_source_get_consumer       (GtkCssTokenSource      *source);
+void                    gtk_css_token_source_set_consumer       (GtkCssTokenSource      *source,
+                                                                 GObject                *consumer);
+                                                                 
 
 
 G_END_DECLS

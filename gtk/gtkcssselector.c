@@ -1590,7 +1590,7 @@ token_parse_selector_pseudo_class (GtkCssTokenSource *source,
 
               if (gtk_css_token_is_delim (token, '*'))
                 {
-                  selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_ANY, selector);
+                  selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_NOT_ANY, selector);
                   gtk_css_token_source_consume_token (source);
                 }
               else if (gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))

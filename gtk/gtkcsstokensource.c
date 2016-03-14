@@ -40,7 +40,8 @@ gtk_css_token_source_tokenizer_finalize (GtkCssTokenSource *source)
 }
 
 static void
-gtk_css_token_source_tokenizer_consume_token (GtkCssTokenSource *source)
+gtk_css_token_source_tokenizer_consume_token (GtkCssTokenSource *source,
+                                              GObject           *consumer)
 {
   GtkCssTokenSourceTokenizer *tok = (GtkCssTokenSourceTokenizer *) source;
 
@@ -54,9 +55,7 @@ gtk_css_token_source_tokenizer_get_token (GtkCssTokenSource   *source)
 
   if (gtk_css_token_is (&tok->current_token, GTK_CSS_TOKEN_EOF))
     {
-      do {
-       gtk_css_tokenizer_read_token (tok->tokenizer, &tok->current_token);
-      } while (gtk_css_token_is (&tok->current_token, GTK_CSS_TOKEN_COMMENT));
+      gtk_css_tokenizer_read_token (tok->tokenizer, &tok->current_token);
 
 #if 0
       if (!gtk_css_token_is (&tok->current_token, GTK_CSS_TOKEN_EOF)) {
@@ -121,7 +120,8 @@ gtk_css_token_source_part_finalize (GtkCssTokenSource *source)
 }
 
 static void
-gtk_css_token_source_part_consume_token (GtkCssTokenSource *source)
+gtk_css_token_source_part_consume_token (GtkCssTokenSource *source,
+                                         GObject           *consumer)
 {
   GtkCssTokenSourcePart *part = (GtkCssTokenSourcePart *) source;
   const GtkCssToken *token;
@@ -133,7 +133,7 @@ gtk_css_token_source_part_consume_token (GtkCssTokenSource *source)
         return;
     }
 
-  gtk_css_token_source_consume_token (part->source);
+  gtk_css_token_source_consume_token_as (part->source, consumer);
 }
 
 static const GtkCssToken *
@@ -179,6 +179,8 @@ gtk_css_token_source_new_for_part (GtkCssTokenSource *source,
   part = gtk_css_token_source_new (GtkCssTokenSourcePart, &GTK_CSS_TOKEN_SOURCE_PART);
   part->source = gtk_css_token_source_ref (source);
   part->end_type = end_type;
+  gtk_css_token_source_set_consumer (&part->parent,
+                                     gtk_css_token_source_get_consumer (source));
 
   return &part->parent;
 }
@@ -213,6 +215,8 @@ gtk_css_token_source_unref (GtkCssTokenSource *source)
 
   source->klass->finalize (source);
 
+  g_clear_object (&source->consumer);
+
   g_free (source);
 }
 
@@ -236,7 +240,7 @@ gtk_css_token_source_consume_token_as (GtkCssTokenSource *source,
         source->blocks = g_slist_remove (source->blocks, source->blocks->data);
     }
 
-  source->klass->consume_token (source);
+  source->klass->consume_token (source, consumer);
 
   token = gtk_css_token_source_get_token (source);
   switch (token->type)
@@ -267,7 +271,17 @@ gtk_css_token_source_consume_token_as (GtkCssTokenSource *source,
 const GtkCssToken *
 gtk_css_token_source_get_token (GtkCssTokenSource *source)
 {
-  return source->klass->get_token (source);
+  const GtkCssToken *token;
+
+  for (token = source->klass->get_token (source);
+       gtk_css_token_is (token, GTK_CSS_TOKEN_COMMENT);
+       token = source->klass->get_token (source))
+    {
+      /* use vfunc here to avoid infloop */
+      source->klass->consume_token (source, source->consumer);
+    }
+
+  return token;
 }
 
 void
@@ -384,5 +398,18 @@ gtk_css_token_source_deprecated (GtkCssTokenSource *source,
   gtk_css_token_source_emit_error (source, error);
   g_error_free (error);
   va_end (args);
+}
+
+GObject *
+gtk_css_token_source_get_consumer (GtkCssTokenSource *source)
+{
+  return source->consumer;
+}
+
+void
+gtk_css_token_source_set_consumer (GtkCssTokenSource *source,
+                                   GObject           *consumer)
+{
+  g_set_object (&source->consumer, consumer);
 }
 

@@ -77,6 +77,8 @@ gtk_css_rule_list_parse (GtkCssRuleList    *rule_list,
   g_return_if_fail (parent_rule == NULL || GTK_IS_CSS_RULE (parent_rule));
   g_return_if_fail (GTK_IS_CSS_STYLE_SHEET (parent_style_sheet));
 
+  gtk_css_token_source_set_consumer (source, G_OBJECT (rule_list));
+
   for (token = gtk_css_token_source_get_token (source);
        token->type != GTK_CSS_TOKEN_EOF;
        token = gtk_css_token_source_get_token (source))
