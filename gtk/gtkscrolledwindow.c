@@ -1167,7 +1167,8 @@ check_update_scrollbar_proximity (GtkScrolledWindow *sw,
                                   Indicator         *indicator,
                                   GdkEvent          *event)
 {
-  gboolean indicator_close, on_scrollbar;
+  GtkScrolledWindowPrivate *priv = sw->priv;
+  gboolean indicator_close, on_scrollbar, on_other_scrollbar;
   GtkWidget *event_widget;
 
   event_widget = gtk_get_event_widget (event);
@@ -1175,6 +1176,10 @@ check_update_scrollbar_proximity (GtkScrolledWindow *sw,
   indicator_close = event_close_to_indicator (sw, indicator, event);
   on_scrollbar = (event_widget == indicator->scrollbar &&
                   event->type != GDK_LEAVE_NOTIFY);
+  on_other_scrollbar = (!on_scrollbar &&
+                        event->type != GDK_LEAVE_NOTIFY &&
+                        (event_widget == priv->hindicator.scrollbar ||
+                         event_widget == priv->vindicator.scrollbar));
 
   if (indicator->over_timeout_id)
     {
@@ -1184,7 +1189,7 @@ check_update_scrollbar_proximity (GtkScrolledWindow *sw,
 
   if (on_scrollbar)
     indicator_set_over (indicator, TRUE);
-  else if (indicator_close)
+  else if (indicator_close && !on_other_scrollbar)
     indicator->over_timeout_id = gdk_threads_add_timeout (30, enable_over_timeout_cb, indicator);
   else
     indicator_set_over (indicator, FALSE);
