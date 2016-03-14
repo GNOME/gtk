@@ -131,7 +131,8 @@ update_axes_from_event (GdkEvent  *event,
   source_device = gdk_event_get_source_device (event);
   sequence = gdk_event_get_event_sequence (event);
 
-  if (event->type == GDK_TOUCH_END)
+  if (event->type == GDK_TOUCH_END ||
+      event->type == GDK_TOUCH_CANCEL)
     {
       g_hash_table_remove (data->touch_info, sequence);
       return;
