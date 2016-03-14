@@ -368,12 +368,23 @@ gtk_path_bar_get_preferred_width (GtkWidget *widget,
   /* Theoretically, the slider could be bigger than the other button.  But we're
    * not going to worry about that now.
    */
-  path_bar->priv->slider_width = MIN (height * 2 / 3 + 5, height);
+  path_bar->priv->slider_width = 0;
+
+  gtk_widget_get_preferred_width (path_bar->priv->up_slider_button, &child_min, &child_nat);
   if (path_bar->priv->button_list && path_bar->priv->button_list->next != NULL)
     {
-      *minimum += path_bar->priv->slider_width * 2;
-      *natural += path_bar->priv->slider_width * 2;
+      *minimum += child_min;
+      *natural += child_nat;
     }
+  path_bar->priv->slider_width = MAX (path_bar->priv->slider_width, child_min);
+
+  gtk_widget_get_preferred_width (path_bar->priv->down_slider_button, &child_min, &child_nat);
+  if (path_bar->priv->button_list && path_bar->priv->button_list->next != NULL)
+    {
+      *minimum += child_min;
+      *natural += child_nat;
+    }
+  path_bar->priv->slider_width = MAX (path_bar->priv->slider_width, child_min);
 }
 
 static void
@@ -398,6 +409,14 @@ gtk_path_bar_get_preferred_height (GtkWidget *widget,
       *minimum = MAX (*minimum, child_min);
       *natural = MAX (*natural, child_nat);
     }
+
+  gtk_widget_get_preferred_height (path_bar->priv->up_slider_button, &child_min, &child_nat);
+  *minimum = MAX (*minimum, child_min);
+  *natural = MAX (*natural, child_nat);
+
+  gtk_widget_get_preferred_height (path_bar->priv->down_slider_button, &child_min, &child_nat);
+  *minimum = MAX (*minimum, child_min);
+  *natural = MAX (*natural, child_nat);
 }
 
 static void
