@@ -97,61 +97,43 @@ static void
 update_has_trash_and_notify (GtkTrashMonitor *monitor,
 			     gboolean has_trash)
 {
+  if (monitor->has_trash == !!has_trash)
+    return;
+
   monitor->has_trash = !!has_trash;
 
   g_signal_emit (monitor, signals[TRASH_STATE_CHANGED], 0); 
 }
 
+/* Use G_FILE_ATTRIBUTE_TRASH_ITEM_COUNT since we only want to know whether the
+ * trash is empty or not, not access its children. This is available for the
+ * trash backend since it uses a cache. In this way we prevent flooding the
+ * trash backend with enumeration requests when trashing > 1000 files
+ */
 static void
-trash_enumerate_next_files_cb (GObject *source,
-			       GAsyncResult *result,
-			       gpointer user_data)
+trash_query_info_cb (GObject *source,
+                     GAsyncResult *result,
+                     gpointer user_data)
 {
   GtkTrashMonitor *monitor = GTK_TRASH_MONITOR (user_data);
-  GFileEnumerator *enumerator;
-  GList *infos;
+  GFileInfo *info;
+  guint32 item_count;
+  gboolean has_trash = FALSE;
 
-  enumerator = G_FILE_ENUMERATOR (source);
+  info = g_file_query_info_finish (G_FILE (source), result, NULL);
 
-  infos = g_file_enumerator_next_files_finish (enumerator, result, NULL);
-  if (infos)
+  if (info != NULL)
     {
-      update_has_trash_and_notify (monitor, TRUE);
-      g_list_free_full (infos, g_object_unref);
+      item_count = g_file_info_get_attribute_uint32 (info,
+                                                     G_FILE_ATTRIBUTE_TRASH_ITEM_COUNT);
+      has_trash = item_count > 0;
+
+      g_object_unref (info);
     }
-  else
-    {
-      update_has_trash_and_notify (monitor, FALSE);
-    }
+
+  update_has_trash_and_notify (monitor, has_trash);
 
   g_object_unref (monitor); /* was reffed in recompute_trash_state() */
-}
-
-/* Callback used from g_file_enumerate_children_async() - this is what enumerates "trash:///" */
-static void
-trash_enumerate_children_cb (GObject *source,
-			     GAsyncResult *result,
-			     gpointer user_data)
-{
-  GtkTrashMonitor *monitor = GTK_TRASH_MONITOR (user_data);
-  GFileEnumerator *enumerator;
-
-  enumerator = g_file_enumerate_children_finish (G_FILE (source), result, NULL);
-  if (enumerator)
-    {
-      g_file_enumerator_next_files_async (enumerator,
-					  1,
-					  G_PRIORITY_DEFAULT,
-					  NULL,
-					  trash_enumerate_next_files_cb,
-					  monitor);
-      g_object_unref (enumerator);
-    }
-  else
-    {
-      update_has_trash_and_notify (monitor, FALSE);
-      g_object_unref (monitor); /* was reffed in recompute_trash_state() */
-    }
 }
 
 /* Asynchronously recomputes whether there is trash or not */
@@ -160,16 +142,12 @@ recompute_trash_state (GtkTrashMonitor *monitor)
 {
   GFile *file;
 
-  g_object_ref (monitor);
-
   file = g_file_new_for_uri ("trash:///");
-  g_file_enumerate_children_async (file,
-				   G_FILE_ATTRIBUTE_STANDARD_TYPE,
-				   G_FILE_QUERY_INFO_NONE,
-				   G_PRIORITY_DEFAULT,
-				   NULL,
-				   trash_enumerate_children_cb,
-				   monitor);
+  g_file_query_info_async (file,
+                           G_FILE_ATTRIBUTE_TRASH_ITEM_COUNT,
+                           G_FILE_QUERY_INFO_NONE,
+                           G_PRIORITY_DEFAULT, NULL,
+                           trash_query_info_cb, g_object_ref (monitor));
 
   g_object_unref (file);
 }
