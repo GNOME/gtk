@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-08 00:20+0000\n"
-"PO-Revision-Date: 2016-03-08 08:40+0100\n"
+"POT-Creation-Date: 2016-03-13 12:19+0000\n"
+"PO-Revision-Date: 2016-03-13 15:11+0100\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <openscope at gmail dot com>\n"
 "Language: hu\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.2\n"
+"X-Generator: Poedit 1.8.7\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
 #, c-format
@@ -76,7 +76,7 @@ msgstr "Beállítandó GDK hibakeresési jelzőbitek"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:239 gdk/gdk.c:242 gtk/gtkmain.c:462 gtk/gtkmain.c:465
+#: gdk/gdk.c:239 gdk/gdk.c:242 gtk/gtkmain.c:463 gtk/gtkmain.c:466
 msgid "FLAGS"
 msgstr "JELZŐK"
 
@@ -432,20 +432,20 @@ msgid "Suspend"
 msgstr "Felfüggesztés"
 
 #: gdk/mir/gdkmirglcontext.c:48 gdk/mir/gdkmirwindowimpl.c:1358
-#: gdk/wayland/gdkglcontext-wayland.c:393 gdk/win32/gdkglcontext-win32.c:527
+#: gdk/wayland/gdkglcontext-wayland.c:393 gdk/win32/gdkglcontext-win32.c:556
 #: gdk/x11/gdkglcontext-x11.c:1254
 msgid "No GL implementation is available"
 msgstr "Nem érhető el GL megvalósítás"
 
 #: gdk/mir/gdkmirglcontext.c:89 gdk/wayland/gdkglcontext-wayland.c:180
-#: gdk/win32/gdkglcontext-win32.c:492 gdk/x11/gdkglcontext-x11.c:707
+#: gdk/win32/gdkglcontext-win32.c:510 gdk/x11/gdkglcontext-x11.c:707
 #: gdk/x11/gdkglcontext-x11.c:754
 msgid "Unable to create a GL context"
 msgstr "Nem lehet létrehozni GL környezetet"
 
 #: gdk/mir/gdkmirwindowimpl.c:1320 gdk/mir/gdkmirwindowimpl.c:1330
 #: gdk/wayland/gdkglcontext-wayland.c:354
-#: gdk/wayland/gdkglcontext-wayland.c:364 gdk/win32/gdkglcontext-win32.c:464
+#: gdk/wayland/gdkglcontext-wayland.c:364 gdk/win32/gdkglcontext-win32.c:482
 #: gdk/x11/gdkglcontext-x11.c:948
 msgid "No available configurations for the given pixel format"
 msgstr "Nincs elérhető beállítás a megadott képpontformátumhoz"
@@ -462,7 +462,7 @@ msgstr "Nincs megvalósítva OS X rendszeren"
 msgid "Core GL is not available on EGL implementation"
 msgstr "Az alap GL nem érhető el az EGL megvalósításban"
 
-#: gdk/win32/gdkglcontext-win32.c:536
+#: gdk/win32/gdkglcontext-win32.c:565
 msgid ""
 "The WGL_ARB_create_context extension needed to create core profiles is not "
 "available"
@@ -1211,7 +1211,7 @@ msgstr ""
 #: gtk/gtkmountoperation.c:545 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:673 gtk/gtkprintunixdialog.c:746
-#: gtk/gtkwindow.c:12312 gtk/inspector/css-editor.c:208
+#: gtk/gtkwindow.c:12315 gtk/inspector/css-editor.c:208
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -1260,7 +1260,7 @@ msgid "_Apply"
 msgstr "_Alkalmaz"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944
-#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12313
+#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12316
 msgid "_OK"
 msgstr "_OK"
 
@@ -1664,7 +1664,7 @@ msgid "Other Applications"
 msgstr "Más alkalmazások"
 
 #: gtk/gtkapplicationwindow.c:341 gtk/gtkprintoperation-unix.c:481
-#: gtk/gtkprintoperation-win32.c:1453 gtk/inspector/prop-editor.c:1668
+#: gtk/gtkprintoperation-win32.c:1453 gtk/inspector/prop-editor.c:1686
 msgid "Application"
 msgstr "Alkalmazás"
 
@@ -1793,7 +1793,7 @@ msgstr "2000"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1893 gtk/gtkcalendar.c:2571
+#: gtk/gtkcalendar.c:1893 gtk/gtkcalendar.c:2589
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -1809,7 +1809,7 @@ msgstr "%d"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1925 gtk/gtkcalendar.c:2437
+#: gtk/gtkcalendar.c:1925 gtk/gtkcalendar.c:2455
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -1826,7 +1826,7 @@ msgstr "%d"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:2216
+#: gtk/gtkcalendar.c:2222
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -2082,12 +2082,12 @@ msgstr "%d. egyéni szín: %s"
 msgid "Color Plane"
 msgstr "Színsík"
 
-#: gtk/gtkcolorscale.c:325
+#: gtk/gtkcolorscale.c:211
 msgctxt "Color channel"
 msgid "Hue"
 msgstr "Színárnyalat"
 
-#: gtk/gtkcolorscale.c:327
+#: gtk/gtkcolorscale.c:213
 msgctxt "Color channel"
 msgid "Alpha"
 msgstr "Alfa"
@@ -2160,44 +2160,44 @@ msgstr "J_obb:"
 msgid "Paper Margins"
 msgstr "Papírmargók"
 
-#: gtk/gtkentry.c:9486 gtk/gtklabel.c:6688 gtk/gtktextview.c:9485
+#: gtk/gtkentry.c:9490 gtk/gtklabel.c:6688 gtk/gtktextview.c:9496
 msgid "Cu_t"
 msgstr "_Kivágás"
 
-#: gtk/gtkentry.c:9490 gtk/gtklabel.c:6689 gtk/gtktextview.c:9489
+#: gtk/gtkentry.c:9494 gtk/gtklabel.c:6689 gtk/gtktextview.c:9500
 msgid "_Copy"
 msgstr "_Másolás"
 
-#: gtk/gtkentry.c:9494 gtk/gtklabel.c:6690 gtk/gtktextview.c:9491
+#: gtk/gtkentry.c:9498 gtk/gtklabel.c:6690 gtk/gtktextview.c:9502
 msgid "_Paste"
 msgstr "_Beillesztés"
 
-#: gtk/gtkentry.c:9497 gtk/gtkfilechooserwidget.c:1465
-#: gtk/gtkfilechooserwidget.c:2263 gtk/gtklabel.c:6692 gtk/gtktextview.c:9494
+#: gtk/gtkentry.c:9501 gtk/gtkfilechooserwidget.c:1465
+#: gtk/gtkfilechooserwidget.c:2263 gtk/gtklabel.c:6692 gtk/gtktextview.c:9505
 msgid "_Delete"
 msgstr "_Törlés"
 
-#: gtk/gtkentry.c:9508 gtk/gtklabel.c:6701 gtk/gtktextview.c:9508
+#: gtk/gtkentry.c:9512 gtk/gtklabel.c:6701 gtk/gtktextview.c:9519
 msgid "Select _All"
 msgstr "Ö_sszes kijelölése"
 
-#: gtk/gtkentry.c:9686 gtk/gtktextview.c:9718
+#: gtk/gtkentry.c:9690 gtk/gtktextview.c:9729
 msgid "Select all"
 msgstr "Összes kijelölése"
 
-#: gtk/gtkentry.c:9689 gtk/gtktextview.c:9721
+#: gtk/gtkentry.c:9693 gtk/gtktextview.c:9732
 msgid "Cut"
 msgstr "Kivágás"
 
-#: gtk/gtkentry.c:9692 gtk/gtktextview.c:9724
+#: gtk/gtkentry.c:9696 gtk/gtktextview.c:9735
 msgid "Copy"
 msgstr "Másolás"
 
-#: gtk/gtkentry.c:9695 gtk/gtktextview.c:9727
+#: gtk/gtkentry.c:9699 gtk/gtktextview.c:9738
 msgid "Paste"
 msgstr "Beillesztés"
 
-#: gtk/gtkentry.c:10756
+#: gtk/gtkentry.c:10760
 msgid "Caps Lock is on"
 msgstr "A Caps Lock be van kapcsolva"
 
@@ -2213,7 +2213,7 @@ msgstr "Asztal"
 msgid "(None)"
 msgstr "(Nincs)"
 
-#: gtk/gtkfilechooserbutton.c:2125
+#: gtk/gtkfilechooserbutton.c:2151
 msgid "Other…"
 msgstr "Egyéb…"
 
@@ -2413,7 +2413,7 @@ msgid "Sort _Folders before Files"
 msgstr "_Mappák rendezése a fájlok előtt"
 
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2595 gtk/inspector/css-node-tree.ui:142
+#: gtk/gtkfilechooserwidget.c:2595 gtk/inspector/css-node-tree.ui:141
 #: gtk/ui/gtkfilechooserwidget.ui:207 gtk/ui/gtkprintunixdialog.ui:123
 msgid "Location"
 msgstr "Hely"
@@ -2476,7 +2476,7 @@ msgstr "%Y %B %e"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: gtk/gtkfilechooserwidget.c:5031 gtk/inspector/prop-editor.c:1671
+#: gtk/gtkfilechooserwidget.c:5031 gtk/inspector/prop-editor.c:1689
 #: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
 msgstr "Ismeretlen"
@@ -2560,7 +2560,7 @@ msgstr "Az OpenGL környezet létrehozása meghiúsult"
 msgid "Application menu"
 msgstr "Alkalmazásmenü"
 
-#: gtk/gtkheaderbar.c:447 gtk/gtkwindow.c:8854
+#: gtk/gtkheaderbar.c:447 gtk/gtkwindow.c:8857
 msgid "Close"
 msgstr "Bezárás"
 
@@ -2713,40 +2713,40 @@ msgstr ""
 "Keresse meg a rendszergazdát."
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:455
+#: gtk/gtkmain.c:456
 msgid "Load additional GTK+ modules"
 msgstr "További GTK+ modulok betöltése"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:456
+#: gtk/gtkmain.c:457
 msgid "MODULES"
 msgstr "MODULOK"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:458
+#: gtk/gtkmain.c:459
 msgid "Make all warnings fatal"
 msgstr "Minden figyelmeztetés végzetes legyen"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:461
+#: gtk/gtkmain.c:462
 msgid "GTK+ debugging flags to set"
 msgstr "Beállítandó Gtk+ debug jelzőbitek"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:464
+#: gtk/gtkmain.c:465
 msgid "GTK+ debugging flags to unset"
 msgstr "Kikapcsolandó Gtk+ jelzőbitek"
 
-#: gtk/gtkmain.c:788
+#: gtk/gtkmain.c:790
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Nem nyitható meg a megjelenítő: %s"
 
-#: gtk/gtkmain.c:865
+#: gtk/gtkmain.c:885
 msgid "GTK+ Options"
 msgstr "GTK+ beállításai"
 
-#: gtk/gtkmain.c:865
+#: gtk/gtkmain.c:885
 msgid "Show GTK+ Options"
 msgstr "GTK+ beállítások megjelenítése"
 
@@ -2755,7 +2755,7 @@ msgstr "GTK+ beállítások megjelenítése"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:1193
+#: gtk/gtkmain.c:1213
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -3022,7 +3022,7 @@ msgid "This name is already taken"
 msgstr "A név már létezik"
 
 #: gtk/gtkplacessidebar.c:2522 gtk/inspector/actions.ui:43
-#: gtk/inspector/css-node-tree.ui:40 gtk/inspector/object-tree.ui:110
+#: gtk/inspector/css-node-tree.ui:39 gtk/inspector/object-tree.ui:110
 #: gtk/ui/gtkfilechooserwidget.ui:189 gtk/ui/gtkfilechooserwidget.ui:499
 msgid "Name"
 msgstr "Név"
@@ -3769,12 +3769,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:12300
+#: gtk/gtkwindow.c:12303
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Szeretné használni a GTK+ vizsgálót?"
 
-#: gtk/gtkwindow.c:12302
+#: gtk/gtkwindow.c:12305
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3785,7 +3785,7 @@ msgstr ""
 "alkalmazás belső működésének felfedezését és módosítását. A használata miatt "
 "az alkalmazás hibásan működhet vagy összeomolhat."
 
-#: gtk/gtkwindow.c:12307
+#: gtk/gtkwindow.c:12310
 msgid "Don't show this message again"
 msgstr "Ne jelenjen meg többé ez az üzenet"
 
@@ -3794,7 +3794,7 @@ msgid "Activate"
 msgstr "Aktiválás"
 
 #: gtk/inspector/action-editor.c:302 gtk/inspector/actions.ui:82
-#: gtk/inspector/css-node-tree.ui:79 gtk/inspector/misc-info.ui:102
+#: gtk/inspector/css-node-tree.ui:78 gtk/inspector/misc-info.ui:102
 msgid "State"
 msgstr "Állapot"
 
@@ -3840,32 +3840,20 @@ msgstr "Ezen egyéni CSS letiltása"
 msgid "Save the current CSS"
 msgstr "A jelenlegi CSS mentése"
 
-#: gtk/inspector/css-node-tree.c:184
-msgid "Change name"
-msgstr "Név cseréje"
-
-#: gtk/inspector/css-node-tree.c:199
-msgid "Change classes"
-msgstr "Osztályok cseréje"
-
-#: gtk/inspector/css-node-tree.c:208
-msgid "CSS properties"
-msgstr "CSS tulajdonságok"
-
-#: gtk/inspector/css-node-tree.ui:53
+#: gtk/inspector/css-node-tree.ui:52
 msgid "ID"
 msgstr "ID"
 
-#: gtk/inspector/css-node-tree.ui:66
-msgid "Classes"
-msgstr "Osztályok"
+#: gtk/inspector/css-node-tree.ui:65 gtk/inspector/object-tree.ui:142
+msgid "Style Classes"
+msgstr "Stílusosztályok"
 
-#: gtk/inspector/css-node-tree.ui:111
+#: gtk/inspector/css-node-tree.ui:110
 msgid "CSS Property"
 msgstr "CSS tulajdonság"
 
-#: gtk/inspector/css-node-tree.ui:126 gtk/inspector/prop-list.ui:49
-#: gtk/ui/gtkcoloreditor.ui:293
+#: gtk/inspector/css-node-tree.ui:125 gtk/inspector/prop-list.ui:50
+#: gtk/ui/gtkcoloreditor.ui:295
 msgid "Value"
 msgstr "Érték"
 
@@ -3967,84 +3955,84 @@ msgstr "Lefordítható azonosító"
 msgid "Default Widget"
 msgstr "Alapértelmezett felületi elem"
 
-#: gtk/inspector/misc-info.ui:192 gtk/inspector/misc-info.ui:236
-#: gtk/inspector/prop-editor.c:1071 gtk/inspector/prop-editor.c:1268
-#: gtk/inspector/prop-editor.c:1393 gtk/inspector/prop-editor.c:1504
-#: gtk/inspector/window.ui:382
+#: gtk/inspector/misc-info.ui:192 gtk/inspector/misc-info.ui:237
+#: gtk/inspector/misc-info.ui:453 gtk/inspector/prop-editor.c:1071
+#: gtk/inspector/prop-editor.c:1268 gtk/inspector/prop-editor.c:1393
+#: gtk/inspector/prop-editor.c:1504 gtk/inspector/window.ui:382
 msgid "Properties"
 msgstr "Tulajdonságok"
 
-#: gtk/inspector/misc-info.ui:213
+#: gtk/inspector/misc-info.ui:214
 msgid "Focus Widget"
 msgstr "Felületi elem fókuszba"
 
-#: gtk/inspector/misc-info.ui:258
+#: gtk/inspector/misc-info.ui:259
 msgid "Mnemonic Label"
 msgstr "Címke hívóbetűje"
 
-#: gtk/inspector/misc-info.ui:293
+#: gtk/inspector/misc-info.ui:294
 msgid "Request mode"
 msgstr "Kérés mód"
 
-#: gtk/inspector/misc-info.ui:327
+#: gtk/inspector/misc-info.ui:328
 msgid "Allocation"
 msgstr "Lefoglalás"
 
-#: gtk/inspector/misc-info.ui:361
+#: gtk/inspector/misc-info.ui:362
 msgid "Baseline"
 msgstr "Alapvonal"
 
-#: gtk/inspector/misc-info.ui:395
+#: gtk/inspector/misc-info.ui:396
 msgid "Clip area"
 msgstr "Vágási terület"
 
-#: gtk/inspector/misc-info.ui:429
+#: gtk/inspector/misc-info.ui:430
+msgid "Frame Clock"
+msgstr "Képkockaszám óra"
+
+#: gtk/inspector/misc-info.ui:475
 msgid "Tick callback"
 msgstr "Órajel visszahívás"
 
-#: gtk/inspector/misc-info.ui:465
+#: gtk/inspector/misc-info.ui:511
 msgid "Frame count"
 msgstr "Képkockaszám"
 
-#: gtk/inspector/misc-info.ui:499
+#: gtk/inspector/misc-info.ui:545
 msgid "Frame rate"
 msgstr "Képkockasebesség"
 
-#: gtk/inspector/misc-info.ui:533
+#: gtk/inspector/misc-info.ui:579
 msgid "Accessible role"
 msgstr "Akadálymentes szerep"
 
-#: gtk/inspector/misc-info.ui:567
+#: gtk/inspector/misc-info.ui:613
 msgid "Accessible name"
 msgstr "Akadálymentes név"
 
-#: gtk/inspector/misc-info.ui:603
+#: gtk/inspector/misc-info.ui:649
 msgid "Accessible description"
 msgstr "Akadálymentes leírás"
 
-#: gtk/inspector/misc-info.ui:637
+#: gtk/inspector/misc-info.ui:683
 msgid "Mapped"
 msgstr "Leképezett"
 
-#: gtk/inspector/misc-info.ui:673
+#: gtk/inspector/misc-info.ui:719
 msgid "Realized"
 msgstr "Megvalósult"
 
-#: gtk/inspector/misc-info.ui:709
+#: gtk/inspector/misc-info.ui:755
 msgid "Is Toplevel"
 msgstr "Felsőszintű-e"
 
-#: gtk/inspector/misc-info.ui:745
+#: gtk/inspector/misc-info.ui:791
 msgid "Child Visible"
 msgstr "Látható gyermek"
 
 #: gtk/inspector/object-tree.ui:95
 msgid "Object"
 msgstr "Objektum"
-
-#: gtk/inspector/object-tree.ui:142
-msgid "Style Classes"
-msgstr "Stílusosztályok"
 
 #: gtk/inspector/prop-editor.c:679
 #, c-format
@@ -4101,7 +4089,7 @@ msgstr "fordított"
 msgid "bidirectional, inverted"
 msgstr "kétirányú, fordított"
 
-#: gtk/inspector/prop-editor.c:1490 gtk/inspector/prop-editor.c:1586
+#: gtk/inspector/prop-editor.c:1490 gtk/inspector/prop-editor.c:1604
 msgid "bidirectional"
 msgstr "kétirányú"
 
@@ -4109,39 +4097,43 @@ msgstr "kétirányú"
 msgid "Binding:"
 msgstr "Kötés:"
 
-#: gtk/inspector/prop-editor.c:1605
+#: gtk/inspector/prop-editor.c:1623
 msgid "Setting:"
 msgstr "Beállítás:"
 
-#: gtk/inspector/prop-editor.c:1645
+#: gtk/inspector/prop-editor.c:1663
 msgid "Source:"
 msgstr "Forrás:"
 
-#: gtk/inspector/prop-editor.c:1647
+#: gtk/inspector/prop-editor.c:1665
 msgid "Reset"
 msgstr "Visszaállítás"
 
-#: gtk/inspector/prop-editor.c:1658
+#: gtk/inspector/prop-editor.c:1676
 msgid "Default"
 msgstr "Alapértelmezett"
 
-#: gtk/inspector/prop-editor.c:1661
+#: gtk/inspector/prop-editor.c:1679
 msgid "Theme"
 msgstr "Téma"
 
-#: gtk/inspector/prop-editor.c:1664
+#: gtk/inspector/prop-editor.c:1682
 msgid "XSettings"
 msgstr "X beállítások"
 
-#: gtk/inspector/prop-list.ui:33
+#: gtk/inspector/prop-list.ui:34
 msgid "Property"
 msgstr "Tulajdonság"
 
-#: gtk/inspector/prop-list.ui:67
+#: gtk/inspector/prop-list.ui:68 gtk/inspector/statistics.ui:53
+msgid "Type"
+msgstr "Típus"
+
+#: gtk/inspector/prop-list.ui:86
 msgid "Attribute"
 msgstr "Attribútum"
 
-#: gtk/inspector/prop-list.ui:83 gtk/inspector/signals-list.ui:73
+#: gtk/inspector/prop-list.ui:102 gtk/inspector/signals-list.ui:73
 msgid "Defined At"
 msgstr "Definiálva itt:"
 
@@ -4178,7 +4170,6 @@ msgid "Yes"
 msgstr "Igen"
 
 #: gtk/inspector/signals-list.ui:36
-#| msgid "Signals"
 msgid "Signal"
 msgstr "Szignál"
 
@@ -4214,10 +4205,6 @@ msgctxt "sizegroup mode"
 msgid "Both"
 msgstr "Mindkettő"
 
-#: gtk/inspector/statistics.ui:53
-msgid "Type"
-msgstr "Típus"
-
 #: gtk/inspector/statistics.ui:68
 msgid "Self 1"
 msgstr "Önmaga 1"
@@ -4246,19 +4233,19 @@ msgstr "Halmozott"
 msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
 msgstr "Statisztika engedélyezése a GOBJECT_DEBUG=instance-count használatával"
 
-#: gtk/inspector/visual.c:293 gtk/inspector/visual.c:308
+#: gtk/inspector/visual.c:310 gtk/inspector/visual.c:325
 msgid "Theme is hardcoded by GTK_THEME"
 msgstr "A téma bedrótozva a GTK_THEME-ben"
 
-#: gtk/inspector/visual.c:503
+#: gtk/inspector/visual.c:520
 msgid "Backend does not support window scaling"
 msgstr "A háttérprogram nem támogatja az ablak átméretezését"
 
-#: gtk/inspector/visual.c:542
+#: gtk/inspector/visual.c:559
 msgid "Setting is hardcoded by GTK_TEST_TOUCHSCREEN"
 msgstr "A beállítás bedrótozva a GTK_TEST_TOUCHSCREEN-ben"
 
-#: gtk/inspector/visual.c:607
+#: gtk/inspector/visual.c:624
 msgid ""
 "Not settable at runtime.\n"
 "Use GDK_GL=always or GDK_GL=disable instead"
@@ -4266,8 +4253,8 @@ msgstr ""
 "Nem állítható be futási időben.\n"
 "GDK_GL=always vagy GDK_GL=disable értéket használjon helyette"
 
-#: gtk/inspector/visual.c:621 gtk/inspector/visual.c:622
-#: gtk/inspector/visual.c:623
+#: gtk/inspector/visual.c:638 gtk/inspector/visual.c:639
+#: gtk/inspector/visual.c:640
 msgid "GL rendering is disabled"
 msgstr "GL megjelenítés ki van kapcsolva"
 
@@ -4340,42 +4327,46 @@ msgid "Show Baselines"
 msgstr "Alapvonalak megjelenítése"
 
 #: gtk/inspector/visual.ui:476
+msgid "Show Layout Borders"
+msgstr "Elrendezési határvonalak megjelenítése"
+
+#: gtk/inspector/visual.ui:510
 msgid "Show Pixel Cache"
 msgstr "Képpont-gyorsítótár megjelenítése"
 
-#: gtk/inspector/visual.ui:510
+#: gtk/inspector/visual.ui:544
 msgid "Show Widget Resizes"
 msgstr "Felületielem-átméretezések megjelenítése"
 
-#: gtk/inspector/visual.ui:544
+#: gtk/inspector/visual.ui:578
 msgid "Simulate touchscreen"
 msgstr "Érintőképernyő szimulálása"
 
-#: gtk/inspector/visual.ui:589
+#: gtk/inspector/visual.ui:623
 msgid "GL Rendering"
 msgstr "GL megjelenítés"
 
-#: gtk/inspector/visual.ui:601
+#: gtk/inspector/visual.ui:635
 msgid "When needed"
 msgstr "Amikor szükséges"
 
-#: gtk/inspector/visual.ui:602
+#: gtk/inspector/visual.ui:636
 msgid "Always"
 msgstr "Mindig"
 
-#: gtk/inspector/visual.ui:603
+#: gtk/inspector/visual.ui:637
 msgid "Disabled"
 msgstr "Letiltva"
 
-#: gtk/inspector/visual.ui:627
+#: gtk/inspector/visual.ui:661
 msgid "Software GL"
 msgstr "Szoftveres GL"
 
-#: gtk/inspector/visual.ui:661
+#: gtk/inspector/visual.ui:695
 msgid "Software Surfaces"
 msgstr "Szoftveres felületek"
 
-#: gtk/inspector/visual.ui:695
+#: gtk/inspector/visual.ui:729
 msgid "Texture Rectangle Extension"
 msgstr "Mintázat téglalap kiterjesztés"
 
@@ -4424,7 +4415,6 @@ msgid "Class Hierarchy"
 msgstr "Osztályhierarchia"
 
 #: gtk/inspector/window.ui:422
-#| msgid "Selector"
 msgid "CSS Selector"
 msgstr "CSS-kiválasztó"
 
@@ -5456,35 +5446,35 @@ msgstr "Válasszon egy színt"
 msgid "Color Name"
 msgstr "Szín neve"
 
-#: gtk/ui/gtkcoloreditor.ui:153
+#: gtk/ui/gtkcoloreditor.ui:155
 msgctxt "Color channel"
 msgid "A"
 msgstr "A"
 
-#: gtk/ui/gtkcoloreditor.ui:169
+#: gtk/ui/gtkcoloreditor.ui:171
 msgid "Alpha"
 msgstr "Alfa"
 
-#: gtk/ui/gtkcoloreditor.ui:200
+#: gtk/ui/gtkcoloreditor.ui:202
 msgctxt "Color channel"
 msgid "H"
 msgstr "H"
 
-#: gtk/ui/gtkcoloreditor.ui:216
+#: gtk/ui/gtkcoloreditor.ui:218
 msgid "Hue"
 msgstr "Árnyalat"
 
-#: gtk/ui/gtkcoloreditor.ui:248
+#: gtk/ui/gtkcoloreditor.ui:250
 msgctxt "Color Channel"
 msgid "S"
 msgstr "S"
 
-#: gtk/ui/gtkcoloreditor.ui:258
+#: gtk/ui/gtkcoloreditor.ui:260
 msgctxt "Color Channel"
 msgid "V"
 msgstr "V"
 
-#: gtk/ui/gtkcoloreditor.ui:274
+#: gtk/ui/gtkcoloreditor.ui:276
 msgid "Saturation"
 msgstr "Telítettség"
 
@@ -6639,6 +6629,18 @@ msgstr "tesztkimenet.%s"
 #: modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
 msgstr "Nyomtatás tesztnyomtatóra"
+
+#~ msgid "Change name"
+#~ msgstr "Név cseréje"
+
+#~ msgid "Change classes"
+#~ msgstr "Osztályok cseréje"
+
+#~ msgid "CSS properties"
+#~ msgstr "CSS tulajdonságok"
+
+#~ msgid "Classes"
+#~ msgstr "Osztályok"
 
 #~ msgid "Error launching preview"
 #~ msgstr "Hiba az előnézet indításakor"
