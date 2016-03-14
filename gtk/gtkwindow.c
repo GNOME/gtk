@@ -1637,9 +1637,7 @@ gtk_window_init (GtkWindow *window)
   _gtk_widget_set_is_toplevel (widget, TRUE);
   _gtk_widget_set_anchored (widget, TRUE);
 
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  gtk_container_set_resize_mode (GTK_CONTAINER (window), GTK_RESIZE_QUEUE);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
+  gtk_container_set_default_resize_mode (GTK_CONTAINER (window), GTK_RESIZE_QUEUE);
 
   priv->title = NULL;
   priv->wmclass_name = g_strdup (g_get_prgname ());
@@ -7140,9 +7138,7 @@ gtk_window_realize (GtkWidget *widget)
 
   if (gtk_widget_get_parent_window (widget))
     {
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      gtk_container_set_resize_mode (GTK_CONTAINER (widget), GTK_RESIZE_PARENT);
-      G_GNUC_END_IGNORE_DEPRECATIONS;
+      gtk_container_set_default_resize_mode (GTK_CONTAINER (widget), GTK_RESIZE_PARENT);
 
       attributes.x = allocation.x;
       attributes.y = allocation.y;
@@ -7166,9 +7162,7 @@ gtk_window_realize (GtkWidget *widget)
       return;
     }
 
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  gtk_container_set_resize_mode (GTK_CONTAINER (window), GTK_RESIZE_QUEUE);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
+  gtk_container_set_default_resize_mode (GTK_CONTAINER (window), GTK_RESIZE_QUEUE);
 
   /* ensure widget tree is properly size allocated */
   if (allocation.x == -1 &&

@@ -287,6 +287,7 @@ struct _GtkContainerPrivate
   guint reallocate_redraws : 1;
   guint restyle_pending    : 1;
   guint resize_mode        : 2;
+  guint resize_mode_set    : 1;
   guint request_mode       : 2;
 };
 
@@ -1909,6 +1910,28 @@ gtk_container_remove (GtkContainer *container,
   g_object_unref (container);
 }
 
+static void
+gtk_container_real_set_resize_mode (GtkContainer  *container,
+                                    GtkResizeMode  resize_mode)
+{
+  GtkWidget *widget = GTK_WIDGET (container);
+  GtkContainerPrivate *priv = container->priv;
+
+  if (_gtk_widget_is_toplevel (widget) &&
+      resize_mode == GTK_RESIZE_PARENT)
+    {
+      resize_mode = GTK_RESIZE_QUEUE;
+    }
+
+  if (priv->resize_mode != resize_mode)
+    {
+      priv->resize_mode = resize_mode;
+
+      gtk_widget_queue_resize (widget);
+      g_object_notify_by_pspec (G_OBJECT (container), container_props[PROP_RESIZE_MODE]);
+    }
+}
+
 /**
  * gtk_container_set_resize_mode:
  * @container: a #GtkContainer
@@ -1929,26 +1952,26 @@ gtk_container_set_resize_mode (GtkContainer  *container,
                                GtkResizeMode  resize_mode)
 {
   GtkContainerPrivate *priv;
-  GtkWidget *widget = (GtkWidget *)container;
 
   g_return_if_fail (GTK_IS_CONTAINER (container));
   g_return_if_fail (resize_mode <= GTK_RESIZE_IMMEDIATE);
 
   priv = container->priv;
+  priv->resize_mode_set = TRUE;
 
-  if (_gtk_widget_is_toplevel (widget) &&
-      resize_mode == GTK_RESIZE_PARENT)
-    {
-      resize_mode = GTK_RESIZE_QUEUE;
-    }
+  gtk_container_real_set_resize_mode (container, resize_mode);
+}
 
-  if (priv->resize_mode != resize_mode)
-    {
-      priv->resize_mode = resize_mode;
+void
+gtk_container_set_default_resize_mode (GtkContainer *container,
+                                       GtkResizeMode resize_mode)
+{
+  GtkContainerPrivate *priv = container->priv;
 
-      gtk_widget_queue_resize (widget);
-      g_object_notify_by_pspec (G_OBJECT (container), container_props[PROP_RESIZE_MODE]);
-    }
+  if (priv->resize_mode_set)
+    return;
+
+  gtk_container_real_set_resize_mode (container, resize_mode);
 }
 
 /**

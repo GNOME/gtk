@@ -44,6 +44,8 @@ void      _gtk_container_set_border_width_set   (GtkContainer *container,
                                                  gboolean      border_width_set);
 void      gtk_container_get_children_clip       (GtkContainer  *container,
                                                  GtkAllocation *out_clip);
+void      gtk_container_set_default_resize_mode (GtkContainer *container,
+                                                 GtkResizeMode resize_mode);
 
 G_END_DECLS
 
