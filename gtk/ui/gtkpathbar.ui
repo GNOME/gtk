@@ -23,7 +23,7 @@
       </object>
     </child>
     <style>
-      <class name="image-button"/>
+      <class name="slider-button"/>
     </style>
   </object>
   <object class="GtkButton" id="up_slider_button">
@@ -48,7 +48,7 @@
       </object>
     </child>
     <style>
-      <class name="image-button"/>
+      <class name="slider-button"/>
     </style>
   </object>
 </interface>

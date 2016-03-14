@@ -1637,6 +1637,9 @@ window.csd > .titlebar:not(headerbar) {
 .path-bar button image {
   padding-left: 4px;
   padding-right: 4px; }
+.path-bar button.slider-button {
+  padding-left: 0;
+  padding-right: 0; }
 
 /**************
  * Tree Views *

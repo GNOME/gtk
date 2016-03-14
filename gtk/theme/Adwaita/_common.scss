@@ -1496,6 +1496,11 @@ headerbar {
     padding-left: 4px;
     padding-right: 4px;
   }
+
+  &.slider-button {
+    padding-left: 0;
+    padding-right: 0;
+  }
 }
 
 /**************
