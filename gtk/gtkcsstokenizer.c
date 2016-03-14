@@ -504,12 +504,14 @@ gtk_css_tokenizer_get_line_char (GtkCssTokenizer *tokenizer)
 }
 
 static void
-gtk_css_tokenizer_parse_error (GtkCssTokenizer *tokenizer,
-                               const char      *format,
-                               ...) G_GNUC_PRINTF(2, 3);
+gtk_css_tokenizer_parse_error (GtkCssTokenizer   *tokenizer,
+                               const GtkCssToken *token,
+                               const char        *format,
+                               ...) G_GNUC_PRINTF(3, 4);
 static void
-gtk_css_tokenizer_parse_error (GtkCssTokenizer *tokenizer,
-                               const char      *format,
+gtk_css_tokenizer_parse_error (GtkCssTokenizer   *tokenizer,
+                               const GtkCssToken *token,
+                               const char        *format,
                                ...)
 {
   GError *error;
@@ -522,7 +524,7 @@ gtk_css_tokenizer_parse_error (GtkCssTokenizer *tokenizer,
   va_end (args);
 
   if (tokenizer->error_func)
-    tokenizer->error_func (tokenizer, error, tokenizer->user_data);
+    tokenizer->error_func (tokenizer, token, error, tokenizer->user_data);
   else
     g_print ("error: %s\n", error->message);
 
@@ -854,24 +856,24 @@ gtk_css_tokenizer_read_url (GtkCssTokenizer  *tokenizer,
             }
           else
             {
-              gtk_css_tokenizer_parse_error (tokenizer, "Whitespace only allowed at start and end of url");
               gtk_css_tokenizer_read_bad_url (tokenizer, token);
+              gtk_css_tokenizer_parse_error (tokenizer, token, "Whitespace only allowed at start and end of url");
               return;
             }
         }
       else if (is_non_printable (*tokenizer->data))
         {
-          gtk_css_tokenizer_parse_error (tokenizer, "Nonprintable character 0x%02X in url", *tokenizer->data);
           gtk_css_tokenizer_read_bad_url (tokenizer, token);
           g_string_free (url, TRUE);
+          gtk_css_tokenizer_parse_error (tokenizer, token, "Nonprintable character 0x%02X in url", *tokenizer->data);
           return;
         }
       else if (*tokenizer->data == '"' ||
                *tokenizer->data == '\'' ||
                *tokenizer->data == '(')
         {
-          gtk_css_tokenizer_parse_error (tokenizer, "Invalid character %c in url", *tokenizer->data);
           gtk_css_tokenizer_read_bad_url (tokenizer, token);
+          gtk_css_tokenizer_parse_error (tokenizer, token, "Invalid character %c in url", *tokenizer->data);
           g_string_free (url, TRUE);
           return;
         }
@@ -881,8 +883,8 @@ gtk_css_tokenizer_read_url (GtkCssTokenizer  *tokenizer,
         }
       else if (*tokenizer->data == '\\')
         {
-          gtk_css_tokenizer_parse_error (tokenizer, "Newline may not follow '\' escape character");
           gtk_css_tokenizer_read_bad_url (tokenizer, token);
+          gtk_css_tokenizer_parse_error (tokenizer, token, "Newline may not follow '\' escape character");
           g_string_free (url, TRUE);
           return;
         }
@@ -1092,9 +1094,9 @@ gtk_css_tokenizer_read_string (GtkCssTokenizer *tokenizer,
         }
       else if (is_newline (*tokenizer->data))
         {
-          gtk_css_tokenizer_parse_error (tokenizer, "Newlines inside strings must be escaped");
           g_string_free (string, TRUE);
           gtk_css_token_init (token, GTK_CSS_TOKEN_BAD_STRING);
+          gtk_css_tokenizer_parse_error (tokenizer, token, "Newlines inside strings must be escaped");
           return;
         }
       else
@@ -1125,7 +1127,7 @@ gtk_css_tokenizer_read_comment (GtkCssTokenizer *tokenizer,
     }
 
   gtk_css_token_init (token, GTK_CSS_TOKEN_COMMENT);
-  gtk_css_tokenizer_parse_error (tokenizer, "Comment not terminated at end of document.");
+  gtk_css_tokenizer_parse_error (tokenizer, token, "Comment not terminated at end of document.");
 }
 
 static void
@@ -1292,8 +1294,8 @@ gtk_css_tokenizer_read_token (GtkCssTokenizer  *tokenizer,
         }
       else
         {
-          gtk_css_tokenizer_parse_error (tokenizer, "Newline may not follow '\' escape character");
           gtk_css_token_init (token, GTK_CSS_TOKEN_DELIM, '\\');
+          gtk_css_tokenizer_parse_error (tokenizer, token, "Newline may not follow '\' escape character");
         }
       break;
 

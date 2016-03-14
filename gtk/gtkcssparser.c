@@ -20,6 +20,7 @@
 #include "gtkcssparserprivate.h"
 
 #include "gtkcssdimensionvalueprivate.h"
+#include "gtkcsstokenizerprivate.h"
 
 #include <errno.h>
 #include <string.h>
@@ -46,6 +47,52 @@ struct _GtkCssParser
   guint                  line;
 };
 
+#include "gtkcssstylesheetprivate.h"
+
+static void
+do_the_tokenizer (const char *data)
+{
+#if 0
+  GtkCssTokenizer *tokenizer;
+  GtkCssToken token;
+  GBytes *bytes;
+
+  bytes = g_bytes_new_static (data, strlen (data));
+  tokenizer = gtk_css_tokenizer_new (bytes, NULL, NULL, NULL);
+  g_bytes_unref (bytes);
+
+  for (gtk_css_tokenizer_read_token (tokenizer, &token);
+       token.type != GTK_CSS_TOKEN_EOF;
+       gtk_css_tokenizer_read_token (tokenizer, &token))
+    {
+      char *s = gtk_css_token_to_string (&token);
+      g_print ("%3zu:%02zu %2d %s\n",
+               gtk_css_tokenizer_get_line (tokenizer), gtk_css_tokenizer_get_line_char (tokenizer),
+               token.type, s);
+      g_free (s);
+      gtk_css_token_clear (&token);
+    }
+
+  gtk_css_tokenizer_unref (tokenizer);
+#else
+  GtkCssStyleSheet *sheet;
+  GtkCssTokenSource *source;
+  GtkCssTokenizer *tokenizer;
+  GBytes *bytes;
+  
+  bytes = g_bytes_new_static (data, strlen (data));
+  tokenizer = gtk_css_tokenizer_new (bytes, NULL, NULL, NULL);
+  source = gtk_css_token_source_new_for_tokenizer (tokenizer);
+  sheet = gtk_css_style_sheet_new ();
+  gtk_css_style_sheet_parse (sheet, source);
+
+  g_object_unref (sheet);
+  gtk_css_token_source_unref (source);
+  gtk_css_tokenizer_unref (tokenizer);
+  g_bytes_unref (bytes);
+#endif
+}
+
 GtkCssParser *
 _gtk_css_parser_new (const char            *data,
                      GFile                 *file,
@@ -56,6 +103,8 @@ _gtk_css_parser_new (const char            *data,
 
   g_return_val_if_fail (data != NULL, NULL);
   g_return_val_if_fail (file == NULL || G_IS_FILE (file), NULL);
+
+  do_the_tokenizer (data);
 
   parser = g_slice_new0 (GtkCssParser);
 
