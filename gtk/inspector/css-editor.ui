@@ -15,6 +15,12 @@
     </child>
     <child type="tag">
       <object class="GtkTextTag">
+        <property name="name">declaration</property>
+        <property name="foreground">darkblue</property>
+      </object>
+    </child>
+    <child type="tag">
+      <object class="GtkTextTag">
         <property name="name">warning</property>
         <property name="underline">single</property>
         <property name="underline-rgba">darkorange</property>

@@ -25,9 +25,12 @@
 
 #include "css-editor.h"
 
+#include "gtkcssdeclarationprivate.h"
 #include "gtkcssprovider.h"
 #include "gtkcssrbtreeprivate.h"
+#include "gtkcssstylesheetprivate.h"
 #include "gtkcsstokenizerprivate.h"
+#include "gtkcsstokensourceprivate.h"
 #include "gtkstyleprovider.h"
 #include "gtkstylecontext.h"
 #include "gtktextview.h"
@@ -41,6 +44,7 @@
 
 typedef struct _GtkCssChunk GtkCssChunk;
 typedef struct _GtkCssChunkSize GtkCssChunkSize;
+typedef struct _GtkCssChunkTokenSource GtkCssChunkTokenSource;
 
 struct _GtkCssChunkSize
 {
@@ -53,9 +57,19 @@ struct _GtkCssChunkSize
 
 struct _GtkCssChunk
 {
+  /* must be first element so we can cast between them */
   GtkCssToken        token;
 
   GtkCssChunkSize    size;
+  GObject           *consumer;
+  GError            *error;
+};
+
+struct _GtkCssChunkTokenSource
+{
+  GtkCssTokenSource parent;
+  GtkCssRbTree *tree;
+  GtkCssChunk  *chunk;
 };
 
 struct _GtkInspectorCssEditorPrivate
@@ -64,24 +78,10 @@ struct _GtkInspectorCssEditorPrivate
   GtkTextBuffer *text;
   GtkCssRbTree *tokens;
   GtkCssProvider *provider;
+  GtkCssStyleSheet *style_sheet;
   GtkToggleButton *disable_button;
   guint timeout;
-  GList *errors;
 };
-
-typedef struct {
-  GError *error;
-  GtkTextIter start;
-  GtkTextIter end;
-} CssError;
-
-static void
-css_error_free (gpointer data)
-{
-  CssError *error = data;
-  g_error_free (error->error);
-  g_free (error);
-}
 
 static void
 gtk_css_chunk_clear (gpointer data)
@@ -89,6 +89,8 @@ gtk_css_chunk_clear (gpointer data)
   GtkCssChunk *chunk = data;
 
   gtk_css_token_clear (&chunk->token);
+  g_clear_object (&chunk->consumer);
+  g_clear_error (&chunk->error);
 }
 
 static void
@@ -139,6 +141,108 @@ gtk_css_chunk_augment (GtkCssRbTree *tree,
     gtk_css_chunk_size_add (size, gtk_css_rb_tree_get_augment (tree, rnode));
 }
  
+static void
+gtk_css_chunk_token_source_finalize (GtkCssTokenSource *source)
+{
+  GtkCssChunkTokenSource *chunk = (GtkCssChunkTokenSource *) source;
+
+  gtk_css_rb_tree_unref (chunk->tree);
+}
+
+static void
+gtk_css_chunk_token_source_consume_token (GtkCssTokenSource *source,
+                                          GObject           *consumer)
+{
+  GtkCssChunkTokenSource *chunk = (GtkCssChunkTokenSource *) source;
+
+  if (chunk->chunk == NULL)
+    return;
+
+  chunk->chunk->consumer = g_object_ref (consumer);
+  chunk->chunk = gtk_css_rb_tree_get_next (chunk->tree, chunk->chunk);
+}
+
+static const GtkCssToken *
+gtk_css_chunk_token_source_get_token (GtkCssTokenSource   *source)
+{
+  GtkCssChunkTokenSource *chunk = (GtkCssChunkTokenSource *) source;
+  static const GtkCssToken eof_token = { GTK_CSS_TOKEN_EOF };
+
+  if (chunk->chunk == NULL)
+    return &eof_token;
+
+  return &chunk->chunk->token;
+}
+
+static void
+gtk_css_chunk_token_source_error (GtkCssTokenSource *source,
+                                  const GError      *error)
+{
+  GtkCssChunkTokenSource *chunk = (GtkCssChunkTokenSource *) source;
+
+  if (chunk->chunk == NULL)
+    return;
+
+  if (chunk->chunk->error)
+    g_warning ("figure out what to do with two errors on the same token");
+  else
+    chunk->chunk->error = g_error_copy (error);
+}
+
+const GtkCssTokenSourceClass GTK_CSS_CHUNK_TOKEN_SOURCE = {
+  gtk_css_chunk_token_source_finalize,
+  gtk_css_chunk_token_source_consume_token,
+  gtk_css_chunk_token_source_get_token,
+  gtk_css_chunk_token_source_error,
+};
+
+static GtkCssTokenSource *
+gtk_css_chunk_token_source_new (GtkCssRbTree *tree)
+{
+  GtkCssChunkTokenSource *chunk;
+
+  chunk = gtk_css_token_source_new (GtkCssChunkTokenSource, &GTK_CSS_CHUNK_TOKEN_SOURCE);
+  chunk->tree = gtk_css_rb_tree_ref (tree);
+  chunk->chunk = gtk_css_rb_tree_get_first (tree);
+
+  return &chunk->parent;
+}
+
+static gint
+compare_chunk_to_offset (GtkCssRbTree *tree,
+                         gpointer      node,
+                         gpointer      offsetp)
+{
+  GtkCssChunk *left, *chunk;
+  gsize *offset = offsetp;
+
+  chunk = node;
+
+  left = gtk_css_rb_tree_get_left (tree, chunk);
+  if (left)
+    {
+      GtkCssChunkSize *left_size = gtk_css_rb_tree_get_augment (tree, left);
+      if (*offset < left_size->chars)
+        return 1;
+      *offset -= left_size->chars;
+    }
+
+  if (*offset < chunk->size.chars)
+    return 0;
+
+  *offset -= chunk->size.chars;
+  return -1;
+}
+
+static GtkCssChunk *
+find_chunk_for_offset (GtkInspectorCssEditor *ce,
+                       gsize                  offset)
+{
+  GtkInspectorCssEditorPrivate *priv = ce->priv;
+
+  return gtk_css_rb_tree_find (priv->tokens, NULL, NULL, compare_chunk_to_offset, &offset);
+}
+
 static gboolean
 query_tooltip_cb (GtkWidget             *widget,
                   gint                   x,
@@ -147,37 +251,48 @@ query_tooltip_cb (GtkWidget             *widget,
                   GtkTooltip            *tooltip,
                   GtkInspectorCssEditor *ce)
 {
-  GtkTextIter iter;
-  GList *l;
+  GtkCssChunk *chunk;
+  GString *s;
 
   if (keyboard_tip)
     {
       gint offset;
 
       g_object_get (ce->priv->text, "cursor-position", &offset, NULL);
-      gtk_text_buffer_get_iter_at_offset (ce->priv->text, &iter, offset);
+      chunk = find_chunk_for_offset (ce, offset);
     }
   else
     {
-      gint bx, by, trailing;
+      GtkTextIter iter;
+      gint bx, by;
 
       gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (ce->priv->view), GTK_TEXT_WINDOW_TEXT,
                                              x, y, &bx, &by);
-      gtk_text_view_get_iter_at_position (GTK_TEXT_VIEW (ce->priv->view), &iter, &trailing, bx, by);
+      if (!gtk_text_view_get_iter_at_position (GTK_TEXT_VIEW (ce->priv->view), &iter, NULL, bx, by))
+        return FALSE;
+
+      chunk = find_chunk_for_offset (ce, gtk_text_iter_get_offset (&iter));
     }
 
-  for (l = ce->priv->errors; l; l = l->next)
+  if (!chunk)
+    return FALSE;
+
+  s = g_string_new (NULL);
+
+  gtk_css_token_print (&chunk->token, s);
+  g_string_append (s, "\n");
+  g_string_append (s, G_OBJECT_TYPE_NAME (chunk->consumer));
+
+  if (chunk->error)
     {
-      CssError *css_error = l->data;
-
-      if (gtk_text_iter_in_range (&iter, &css_error->start, &css_error->end))
-        {
-          gtk_tooltip_set_text (tooltip, css_error->error->message);
-          return TRUE;
-        }
+      g_string_append (s, "\n");
+      g_string_append (s, chunk->error->message);
     }
 
-  return FALSE;
+  gtk_tooltip_set_text (tooltip, s->str);
+  g_string_free (s, TRUE);
+
+  return TRUE;
 }
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorCssEditor, gtk_inspector_css_editor, GTK_TYPE_BOX)
@@ -337,30 +452,118 @@ gtk_css_chunk_get_iters (GtkInspectorCssEditor *ce,
 }
 
 static void
+update_style_sheet (GtkInspectorCssEditor *ce)
+{
+  GtkInspectorCssEditorPrivate *priv = ce->priv;
+  GtkCssTokenSource *source;
+
+  source = gtk_css_chunk_token_source_new (priv->tokens);
+  g_object_unref (priv->style_sheet);
+  priv->style_sheet = gtk_css_style_sheet_new ();
+  gtk_css_style_sheet_parse (priv->style_sheet, source);
+
+  gtk_css_token_source_unref (source);
+}
+
+static gboolean
+apply_comment (GtkInspectorCssEditor *ce,
+               GtkCssChunk           *chunk)
+{
+  return chunk->token.type == GTK_CSS_TOKEN_COMMENT;
+}
+
+static gboolean
+apply_string (GtkInspectorCssEditor *ce,
+               GtkCssChunk           *chunk)
+{
+  return chunk->token.type == GTK_CSS_TOKEN_STRING
+      || chunk->token.type == GTK_CSS_TOKEN_BAD_STRING;
+}
+
+static gboolean
+apply_declaration (GtkInspectorCssEditor *ce,
+                   GtkCssChunk           *chunk)
+{
+  GtkCssChunk *prev;
+
+  if (chunk->token.type != GTK_CSS_TOKEN_IDENT ||
+      !GTK_IS_CSS_DECLARATION (chunk->consumer))
+    return FALSE;
+
+  prev = gtk_css_rb_tree_get_previous (ce->priv->tokens, chunk);
+  if (prev->consumer == chunk->consumer)
+    return FALSE;
+
+  return TRUE;
+}
+
+static gboolean
+apply_error (GtkInspectorCssEditor *ce,
+             GtkCssChunk           *chunk)
+{
+  return chunk->error
+      && !g_error_matches (chunk->error, GTK_CSS_PROVIDER_ERROR, GTK_CSS_PROVIDER_ERROR_DEPRECATED);
+}
+
+static gboolean
+apply_warning (GtkInspectorCssEditor *ce,
+               GtkCssChunk           *chunk)
+{
+  return chunk->error
+      && g_error_matches (chunk->error, GTK_CSS_PROVIDER_ERROR, GTK_CSS_PROVIDER_ERROR_DEPRECATED);
+}
+
+static struct {
+  const char *tag_name;
+  gboolean (* apply_func) (GtkInspectorCssEditor *ce,
+                           GtkCssChunk           *chunk);
+} tag_list[] = {
+  { "comment", apply_comment },
+  { "string", apply_string },
+  { "declaration", apply_declaration },
+  { "error", apply_error },
+  { "warning", apply_warning },
+};
+
+static void
 update_token_tags (GtkInspectorCssEditor *ce,
                    GtkCssChunk           *start,
                    GtkCssChunk           *end)
 {
   GtkInspectorCssEditorPrivate *priv = ce->priv;
   GtkCssChunk *chunk;
+  guint i;
 
   for (chunk = start;
        chunk != end;
        chunk = gtk_css_rb_tree_get_next (priv->tokens, chunk))
     {
       GtkTextIter start, end;
-      const char *tag_name;
-
-      if (chunk->token.type == GTK_CSS_TOKEN_COMMENT)
-        tag_name = "comment";
-      else if (chunk->token.type == GTK_CSS_TOKEN_STRING)
-        tag_name = "string";
-      else
-        continue;
 
       gtk_css_chunk_get_iters (ce, chunk, &start, &end);
-      gtk_text_buffer_apply_tag_by_name (priv->text, tag_name, &start, &end);
+
+      for (i = 0; i < G_N_ELEMENTS (tag_list); i++)
+        {
+          if (!tag_list[i].apply_func (ce, chunk))
+            continue;
+
+          gtk_text_buffer_apply_tag_by_name (priv->text, tag_list[i].tag_name, &start, &end);
+        }
     }
+}
+
+static void
+tokenizer_error (GtkCssTokenizer   *tokenizer,
+                 const GtkCssToken *token,
+                 const GError      *error,
+                 gpointer           unused)
+{
+  GtkCssChunk *chunk = (GtkCssChunk *) token;
+
+  if (chunk->error)
+    g_warning ("figure out what to do with two errors on the same token");
+  else
+    chunk->error = g_error_copy (error);
 }
 
 static void
@@ -385,7 +588,7 @@ update_tokenize (GtkInspectorCssEditor *ce)
 
   text = get_current_text (priv->text);
   gbytes = g_bytes_new_take (text, strlen (text));
-  tokenizer = gtk_css_tokenizer_new (gbytes, NULL, ce, NULL);
+  tokenizer = gtk_css_tokenizer_new (gbytes, tokenizer_error, ce, NULL);
   chunk = gtk_css_rb_tree_insert_after (priv->tokens, NULL);
 
   for (gtk_css_tokenizer_read_token (tokenizer, &chunk->token);
@@ -415,17 +618,12 @@ update_tokenize (GtkInspectorCssEditor *ce)
   gtk_css_rb_tree_remove (priv->tokens, chunk);
   gtk_css_tokenizer_unref (tokenizer);
   g_bytes_unref (gbytes);
-
-  update_token_tags (ce, gtk_css_rb_tree_get_first (priv->tokens), NULL);
 }
 
 static void
 update_style (GtkInspectorCssEditor *ce)
 {
   gchar *text;
-
-  g_list_free_full (ce->priv->errors, css_error_free);
-  ce->priv->errors = NULL;
 
   text = get_current_text (ce->priv->text);
   gtk_css_provider_load_from_data (ce->priv->provider, text, -1, NULL);
@@ -452,6 +650,8 @@ update_timeout (gpointer data)
   clear_all_tags (ce);
   update_style (ce);
   update_tokenize (ce);
+  update_style_sheet (ce);
+  update_token_tags (ce, gtk_css_rb_tree_get_first (ce->priv->tokens), NULL);
 
   return G_SOURCE_REMOVE;
 }
@@ -464,44 +664,6 @@ text_changed (GtkTextBuffer         *buffer,
     g_source_remove (ce->priv->timeout);
 
   ce->priv->timeout = g_timeout_add (100, update_timeout, ce); 
-
-  g_list_free_full (ce->priv->errors, css_error_free);
-  ce->priv->errors = NULL;
-}
-
-static void
-show_parsing_error (GtkCssProvider        *provider,
-                    GtkCssSection         *section,
-                    const GError          *error,
-                    GtkInspectorCssEditor *ce)
-{
-  const char *tag_name;
-  GtkTextBuffer *buffer = GTK_TEXT_BUFFER (ce->priv->text);
-  CssError *css_error;
-
-  css_error = g_new (CssError, 1);
-  css_error->error = g_error_copy (error);
-
-  gtk_text_buffer_get_iter_at_line_index (buffer,
-                                          &css_error->start,
-                                          gtk_css_section_get_start_line (section),
-                                          gtk_css_section_get_start_position (section));
-  gtk_text_buffer_get_iter_at_line_index (buffer,
-                                          &css_error->end,
-                                          gtk_css_section_get_end_line (section),
-                                          gtk_css_section_get_end_position (section));
-
-  if (g_error_matches (error, GTK_CSS_PROVIDER_ERROR, GTK_CSS_PROVIDER_ERROR_DEPRECATED))
-    tag_name = "warning";
-  else
-    tag_name = "error";
-
-  if (gtk_text_iter_equal (&css_error->start, &css_error->end))
-    gtk_text_iter_forward_char (&css_error->end);
-
-  gtk_text_buffer_apply_tag_by_name (buffer, tag_name, &css_error->start, &css_error->end);
-
-  ce->priv->errors = g_list_prepend (ce->priv->errors, css_error);
 }
 
 static void
@@ -511,9 +673,6 @@ create_provider (GtkInspectorCssEditor *ce)
   gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
                                              GTK_STYLE_PROVIDER (ce->priv->provider),
                                              GTK_STYLE_PROVIDER_PRIORITY_USER);
-
-  g_signal_connect (ce->priv->provider, "parsing-error",
-                    G_CALLBACK (show_parsing_error), ce);
 }
 
 static void
@@ -529,6 +688,7 @@ gtk_inspector_css_editor_init (GtkInspectorCssEditor *ce)
 {
   ce->priv = gtk_inspector_css_editor_get_instance_private (ce);
   gtk_widget_init_template (GTK_WIDGET (ce));
+  ce->priv->style_sheet = gtk_css_style_sheet_new ();
   ce->priv->tokens = gtk_css_rb_tree_new (GtkCssChunk,
                                           GtkCssChunkSize,
                                           gtk_css_chunk_augment,
@@ -556,9 +716,9 @@ finalize (GObject *object)
   if (ce->priv->tokens)
     gtk_css_rb_tree_unref (ce->priv->tokens);
 
-  destroy_provider (ce);
+  g_object_unref (ce->priv->style_sheet);
 
-  g_list_free_full (ce->priv->errors, css_error_free);
+  destroy_provider (ce);
 
   G_OBJECT_CLASS (gtk_inspector_css_editor_parent_class)->finalize (object);
 }
