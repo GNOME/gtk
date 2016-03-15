@@ -21,6 +21,7 @@
 #define __GTK_WIN32_THEME_PART_H__
 
 #include "gtkcssparserprivate.h"
+#include "gtkcsstokensourceprivate.h"
 
 G_BEGIN_DECLS
 
@@ -30,6 +31,7 @@ typedef struct _GtkWin32Theme GtkWin32Theme;
 
 GtkWin32Theme *         gtk_win32_theme_lookup          (const char     *class_name);
 GtkWin32Theme *         gtk_win32_theme_parse           (GtkCssParser   *parser);
+GtkWin32Theme *         gtk_win32_theme_token_parse     (GtkCssTokenSource *source);
 
 GtkWin32Theme *         gtk_win32_theme_ref             (GtkWin32Theme  *theme);
 void                    gtk_win32_theme_unref           (GtkWin32Theme  *theme);

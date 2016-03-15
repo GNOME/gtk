@@ -860,3 +860,350 @@ _gtk_css_color_value_parse (GtkCssParser *parser)
   return NULL;
 }
 
+static gboolean
+parse_comma (GtkCssTokenSource *source)
+{
+  gtk_css_token_source_consume_whitespace (source);
+  if (!gtk_css_token_is (gtk_css_token_source_get_token (source), GTK_CSS_TOKEN_COMMA))
+    {
+      gtk_css_token_source_error (source, "Expected ','");
+      gtk_css_token_source_consume_all (source);
+      return FALSE;
+    }
+
+  gtk_css_token_source_consume_token (source);
+  gtk_css_token_source_consume_whitespace (source);
+  return TRUE;
+}
+
+static gboolean
+parse_number (GtkCssTokenSource *source,
+              double            *d)
+{
+  const GtkCssToken *token;
+
+  token = gtk_css_token_source_get_token (source);
+  if (gtk_css_token_is (token, GTK_CSS_TOKEN_INTEGER) ||
+      gtk_css_token_is (token, GTK_CSS_TOKEN_NUMBER))
+    {
+      *d = token->number.number;
+      gtk_css_token_source_consume_token (source);
+      return TRUE;
+    }
+  else
+    {
+      gtk_css_token_source_error (source, "Expected a number.");
+      gtk_css_token_source_consume_all (source);
+      return FALSE;
+    }
+}
+
+static gboolean
+parse_percentage (GtkCssTokenSource *source,
+                  double            *d)
+{
+  const GtkCssToken *token;
+
+  token = gtk_css_token_source_get_token (source);
+  if (gtk_css_token_is (token, GTK_CSS_TOKEN_PERCENTAGE))
+    {
+      *d = token->number.number;
+      gtk_css_token_source_consume_token (source);
+      return TRUE;
+    }
+  else
+    {
+      gtk_css_token_source_error (source, "Expected a percentage.");
+      gtk_css_token_source_consume_all (source);
+      return FALSE;
+    }
+}
+
+GtkCssValue *
+gtk_css_color_value_token_parse (GtkCssTokenSource *source)
+{
+  const GtkCssToken *token;
+  GtkCssValue *value;
+
+  token = gtk_css_token_source_get_token (source);
+  if (gtk_css_token_is_ident (token, "currentColor"))
+    {
+      value = _gtk_css_color_value_new_current_color ();
+      gtk_css_token_source_consume_token (source);
+    }
+  else if (gtk_css_token_is_ident (token, "transparent"))
+    {
+      GdkRGBA transparent = { 0, 0, 0, 0 };
+      
+      value = _gtk_css_color_value_new_literal (&transparent);
+      gtk_css_token_source_consume_token (source);
+    }
+  else if (gtk_css_token_is (token, GTK_CSS_TOKEN_FUNCTION))
+    {
+      if (gtk_css_token_is_function (token, "rgb") ||
+          gtk_css_token_is_function (token, "rgba"))
+        {
+          gboolean has_alpha = gtk_css_token_is_function (token, "rgba");
+          GdkRGBA rgba;
+
+          gtk_css_token_source_consume_token (source);
+          gtk_css_token_source_consume_whitespace (source);
+
+          token = gtk_css_token_source_get_token (source);
+          if (gtk_css_token_is (token, GTK_CSS_TOKEN_PERCENTAGE))
+            {
+              if (!parse_percentage (source, &rgba.red) ||
+                  !parse_comma (source) ||
+                  !parse_percentage (source, &rgba.green) ||
+                  !parse_comma (source) ||
+                  !parse_percentage (source, &rgba.blue))
+                return NULL;
+              rgba.red = CLAMP (rgba.red, 0, 100.0) / 100.0;
+              rgba.green = CLAMP (rgba.green, 0, 100.0) / 100.0;
+              rgba.blue = CLAMP (rgba.blue, 0, 100.0) / 100.0;
+            }
+          else
+            {
+              if (!parse_number (source, &rgba.red) ||
+                  !parse_comma (source) ||
+                  !parse_number (source, &rgba.green) ||
+                  !parse_number (source, &rgba.blue))
+                return NULL;
+              rgba.red = CLAMP (rgba.red, 0, 255.0) / 255.0;
+              rgba.green = CLAMP (rgba.green, 0, 255.0) / 255.0;
+              rgba.blue = CLAMP (rgba.blue, 0, 255.0) / 255.0;
+            }
+
+          if (has_alpha)
+            {
+              if (!parse_comma (source) ||
+                  !parse_number (source, &rgba.alpha))
+                return NULL;
+              rgba.alpha = CLAMP (rgba.alpha, 0, 1.0);
+            }
+          else
+            rgba.alpha = 1.0;
+
+          value = _gtk_css_color_value_new_literal (&rgba);
+        }
+      else if (gtk_css_token_is_function (token, "lighter"))
+        {
+          GtkCssValue *child;
+
+          gtk_css_token_source_consume_token (source);
+          gtk_css_token_source_consume_whitespace (source);
+
+          child = gtk_css_color_value_token_parse (source);
+          if (child == NULL)
+            return NULL;
+
+          value = _gtk_css_color_value_new_shade (child, 1.3);
+
+          _gtk_css_value_unref (child);
+        }
+      else if (gtk_css_token_is_function (token, "darker"))
+        {
+          GtkCssValue *child;
+
+          gtk_css_token_source_consume_token (source);
+          gtk_css_token_source_consume_whitespace (source);
+
+          child = gtk_css_color_value_token_parse (source);
+          if (child == NULL)
+            return NULL;
+
+          value = _gtk_css_color_value_new_shade (child, 0.7);
+
+          _gtk_css_value_unref (child);
+        }
+      else if (gtk_css_token_is_function (token, "shade"))
+        {
+          GtkCssValue *child;
+          double d;
+
+          gtk_css_token_source_consume_token (source);
+          gtk_css_token_source_consume_whitespace (source);
+
+          child = gtk_css_color_value_token_parse (source);
+          if (child == NULL)
+            return NULL;
+          if (!parse_comma (source) ||
+              !parse_number (source, &d))
+            {
+              _gtk_css_value_unref (child);
+              return NULL;
+            }
+
+          value = _gtk_css_color_value_new_shade (child, d);
+
+          _gtk_css_value_unref (child);
+        }
+      else if (gtk_css_token_is_function (token, "alpha"))
+        {
+          GtkCssValue *child;
+          double d;
+
+          gtk_css_token_source_consume_token (source);
+          gtk_css_token_source_consume_whitespace (source);
+
+          child = gtk_css_color_value_token_parse (source);
+          if (child == NULL)
+            return NULL;
+          if (!parse_comma (source) ||
+              !parse_number (source, &d))
+            {
+              _gtk_css_value_unref (child);
+              return NULL;
+            }
+
+          value = _gtk_css_color_value_new_alpha (child, d);
+
+          _gtk_css_value_unref (child);
+        }
+      else if (gtk_css_token_is_function (token, "mix"))
+        {
+          GtkCssValue *child1, *child2;
+          double d;
+
+          gtk_css_token_source_consume_token (source);
+          gtk_css_token_source_consume_whitespace (source);
+
+          child1 = gtk_css_color_value_token_parse (source);
+          if (child1 == NULL)
+            return NULL;
+          if (!parse_comma (source) ||
+              !(child2 = gtk_css_color_value_token_parse (source)))
+            {
+              _gtk_css_value_unref (child1);
+              return NULL;
+            }
+          if (!parse_comma (source) ||
+              !parse_number (source, &d))
+            {
+              _gtk_css_value_unref (child1);
+              _gtk_css_value_unref (child2);
+              return NULL;
+            }
+          value = _gtk_css_color_value_new_mix (child1, child2, d);
+          _gtk_css_value_unref (child1);
+          _gtk_css_value_unref (child2);
+        }
+      else if (gtk_css_token_is_function (token, GTK_WIN32_THEME_SYMBOLIC_COLOR_NAME))
+        {
+          GtkWin32Theme *theme;
+          int id;
+
+          gtk_css_token_source_consume_token (source);
+          gtk_css_token_source_consume_whitespace (source);
+
+          theme = gtk_win32_theme_token_parse (source);
+          if (theme == NULL)
+            return NULL;
+
+          if (!parse_comma (source))
+            {
+              gtk_win32_theme_unref (theme);
+              return NULL;
+            }
+
+          token = gtk_css_token_source_get_token (source);
+          if (gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
+            {
+              id = gtk_win32_get_sys_color_id_for_name (token->string.string);
+              if (id == -1)
+                {
+                  gtk_css_token_source_error (source, "'%s' is not a win32 color name.", token->string.string);
+                  gtk_css_token_source_consume_all (source);
+                  return NULL;
+                }
+              gtk_css_token_source_consume_token (source);
+            }
+          else if (gtk_css_token_is (token, GTK_CSS_TOKEN_INTEGER))
+            {
+              id = token->number.number;
+              gtk_css_token_source_consume_token (source);
+            }
+          else
+            {
+              gtk_css_token_source_error (source, "Expected a valid integer value");
+              gtk_css_token_source_consume_all (source);
+              gtk_win32_theme_unref (theme);
+              return NULL;
+            }
+
+          value = gtk_css_color_value_new_win32_for_theme (theme, id);
+          gtk_win32_theme_unref (theme);
+        }
+      
+      gtk_css_token_source_consume_whitespace (source);
+      token = gtk_css_token_source_get_token (source);
+      if (!gtk_css_token_is (token, GTK_CSS_TOKEN_CLOSE_PARENS))
+        {
+          gtk_css_token_source_error (source, "No closing ')' in color definition");
+          gtk_css_token_source_consume_all (source);
+          return NULL;
+        }
+      gtk_css_token_source_consume_token (source);
+    }
+  else if (gtk_css_token_is (token, GTK_CSS_TOKEN_AT_KEYWORD))
+    {
+      value = _gtk_css_color_value_new_name (token->string.string);
+      gtk_css_token_source_consume_token (source);
+    }
+  else if (gtk_css_token_is (token, GTK_CSS_TOKEN_HASH_ID) ||
+           gtk_css_token_is (token, GTK_CSS_TOKEN_HASH_UNRESTRICTED))
+    {
+      GdkRGBA rgba;
+      const char *s = token->string.string;
+
+      if (g_ascii_isxdigit (s[0]) && g_ascii_isxdigit (s[1]) && g_ascii_isxdigit (s[2]) && s[3] == '\0')
+        {
+          rgba.red = g_ascii_xdigit_value(s[0]) / 15.0;
+          rgba.green = g_ascii_xdigit_value(s[1]) / 15.0;
+          rgba.blue = g_ascii_xdigit_value(s[2]) / 15.0;
+          rgba.alpha = 1.0;
+        }
+      else if (g_ascii_isxdigit (s[0]) && g_ascii_isxdigit (s[1]) && g_ascii_isxdigit (s[2]) &&
+               g_ascii_isxdigit (s[3]) && g_ascii_isxdigit (s[4]) && g_ascii_isxdigit (s[5]) &&
+               s[6] == '\0')
+        {
+          rgba.red = (g_ascii_xdigit_value(s[0]) * 16 + g_ascii_xdigit_value(s[1])) / 255.0;
+          rgba.green = (g_ascii_xdigit_value(s[2]) * 16 + g_ascii_xdigit_value(s[3])) / 255.0;
+          rgba.blue = (g_ascii_xdigit_value(s[4]) * 16 + g_ascii_xdigit_value(s[5])) / 255.0;
+          rgba.alpha = 1.0;
+        }
+      else
+        {
+          gtk_css_token_source_error (source, "Not a valid color value, needs to be #RGB or #RRGGBB");
+          gtk_css_token_source_consume_all (source);
+          return NULL;
+        }
+      value = _gtk_css_color_value_new_literal (&rgba);
+      gtk_css_token_source_consume_token (source);
+    }
+  else if (gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
+    {
+      GdkRGBA rgba;
+      const char *name = token->string.string;
+
+      if (!gdk_rgba_parse (&rgba, name))
+        {
+          gtk_css_token_source_error (source, "'%s' is not a valid color name", name);
+          gtk_css_token_source_consume_all (source);
+          return NULL;
+        }
+
+      value = _gtk_css_color_value_new_literal (&rgba);
+      gtk_css_token_source_consume_token (source);
+    }
+  else
+    {
+      gtk_css_token_source_error (source, "Not a color definition");
+      gtk_css_token_source_consume_all (source);
+      return NULL;
+    }
+
+  return value;
+
+  return NULL;
+}

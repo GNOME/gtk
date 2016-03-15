@@ -247,6 +247,14 @@ gtk_css_token_is_ident (const GtkCssToken *token,
 }
 
 gboolean
+gtk_css_token_is_function (const GtkCssToken *token,
+                           const char        *ident)
+{
+  return gtk_css_token_is (token, GTK_CSS_TOKEN_FUNCTION)
+      && (g_ascii_strcasecmp (token->string.string, ident) == 0);
+}
+
+gboolean
 gtk_css_token_is_delim (const GtkCssToken *token,
                         gunichar           delim)
 {

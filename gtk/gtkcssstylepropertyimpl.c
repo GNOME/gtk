@@ -72,15 +72,16 @@ typedef enum {
 } GtkStylePropertyFlags;
 
 static void
-gtk_css_style_property_register (const char *                   name,
-                                 guint                          expected_id,
-                                 GType                          value_type,
-                                 GtkStylePropertyFlags          flags,
-                                 GtkCssAffects                  affects,
-                                 GtkCssStylePropertyParseFunc   parse_value,
-                                 GtkCssStylePropertyQueryFunc   query_value,
-                                 GtkCssStylePropertyAssignFunc  assign_value,
-                                 GtkCssValue *                  initial_value)
+gtk_css_style_property_register (const char *                      name,
+                                 guint                             expected_id,
+                                 GType                             value_type,
+                                 GtkStylePropertyFlags             flags,
+                                 GtkCssAffects                     affects,
+                                 GtkCssStylePropertyParseFunc      parse_value,
+                                 GtkCssStylePropertyTokenParseFunc token_parse_value,
+                                 GtkCssStylePropertyQueryFunc      query_value,
+                                 GtkCssStylePropertyAssignFunc     assign_value,
+                                 GtkCssValue *                     initial_value)
 {
   GtkCssStyleProperty *node;
 
@@ -99,6 +100,8 @@ gtk_css_style_property_register (const char *                   name,
                        NULL);
 
   node->parse_value = parse_value;
+  if (token_parse_value)
+    node->token_parse = token_parse_value;
   node->query_value = query_value;
   node->assign_value = assign_value;
 
@@ -178,6 +181,13 @@ color_parse (GtkCssStyleProperty *property,
              GtkCssParser        *parser)
 {
   return _gtk_css_color_value_parse (parser);
+}
+
+static GtkCssValue *
+color_token_parse (GtkCssStyleProperty *property,
+                   GtkCssTokenSource   *source)
+{
+  return gtk_css_color_value_token_parse (source);
 }
 
 static void
@@ -1030,6 +1040,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_FOREGROUND | GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_SYMBOLIC_ICON,
                                           color_parse,
+                                          color_token_parse,
                                           color_query,
                                           color_assign,
                                           _gtk_css_color_value_new_rgba (1, 1, 1, 1));
@@ -1041,6 +1052,7 @@ _gtk_css_style_property_init_properties (void)
                                           dpi_parse,
                                           NULL,
                                           NULL,
+                                          NULL,
                                           _gtk_css_number_value_new (96.0, GTK_CSS_NUMBER));
   gtk_css_style_property_register        ("font-size",
                                           GTK_CSS_PROPERTY_FONT_SIZE,
@@ -1048,6 +1060,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_FONT | GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_SIZE,
                                           font_size_parse,
+                                          NULL,
                                           query_length_as_double,
                                           assign_length_from_double,
                                           _gtk_css_font_size_value_new (GTK_CSS_FONT_SIZE_MEDIUM));
@@ -1059,6 +1072,7 @@ _gtk_css_style_property_init_properties (void)
                                           icon_theme_value_parse,
                                           NULL,
                                           NULL,
+                                          NULL,
                                           gtk_css_icon_theme_value_new (NULL));
   gtk_css_style_property_register        ("-gtk-icon-palette",
 					  GTK_CSS_PROPERTY_ICON_PALETTE,
@@ -1066,6 +1080,7 @@ _gtk_css_style_property_init_properties (void)
 					  GTK_STYLE_PROPERTY_ANIMATED | GTK_STYLE_PROPERTY_INHERIT,
                                           GTK_CSS_AFFECTS_SYMBOLIC_ICON,
 					  icon_palette_parse,
+                                          NULL,
 					  NULL,
 					  NULL,
 					  gtk_css_palette_value_new_default ());
@@ -1079,6 +1094,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_BACKGROUND,
                                           color_parse,
+                                          color_token_parse,
                                           color_query,
                                           color_assign,
                                           _gtk_css_color_value_new_rgba (0, 0, 0, 0));
@@ -1089,6 +1105,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_INHERIT,
                                           GTK_CSS_AFFECTS_FONT | GTK_CSS_AFFECTS_TEXT,
                                           font_family_parse,
+                                          NULL,
                                           font_family_query,
                                           font_family_assign,
                                           _gtk_css_array_value_new (_gtk_css_string_value_new ("Sans")));
@@ -1098,6 +1115,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_INHERIT,
                                           GTK_CSS_AFFECTS_FONT | GTK_CSS_AFFECTS_TEXT,
                                           parse_pango_style,
+                                          NULL,
                                           query_pango_style,
                                           assign_pango_style,
                                           _gtk_css_font_style_value_new (PANGO_STYLE_NORMAL));
@@ -1107,6 +1125,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_INHERIT,
                                           GTK_CSS_AFFECTS_FONT | GTK_CSS_AFFECTS_TEXT,
                                           parse_pango_variant,
+                                          NULL,
                                           query_pango_variant,
                                           assign_pango_variant,
                                           _gtk_css_font_variant_value_new (PANGO_VARIANT_NORMAL));
@@ -1116,6 +1135,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_FONT | GTK_CSS_AFFECTS_TEXT,
                                           parse_pango_weight,
+                                          NULL,
                                           query_pango_weight,
                                           assign_pango_weight,
                                           _gtk_css_font_weight_value_new (PANGO_WEIGHT_NORMAL));
@@ -1125,6 +1145,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_INHERIT,
                                           GTK_CSS_AFFECTS_FONT | GTK_CSS_AFFECTS_TEXT,
                                           parse_pango_stretch,
+                                          NULL,
                                           query_pango_stretch,
                                           assign_pango_stretch,
                                           _gtk_css_font_stretch_value_new (PANGO_STRETCH_NORMAL));
@@ -1137,6 +1158,7 @@ _gtk_css_style_property_init_properties (void)
                                           parse_letter_spacing,
                                           NULL,
                                           NULL,
+                                          NULL,
                                           _gtk_css_number_value_new (0.0, GTK_CSS_PX));
 
   gtk_css_style_property_register        ("text-decoration-line",
@@ -1147,6 +1169,7 @@ _gtk_css_style_property_init_properties (void)
                                           parse_text_decoration_line,
                                           NULL,
                                           NULL,
+                                          NULL,
                                           _gtk_css_text_decoration_line_value_new (GTK_CSS_TEXT_DECORATION_LINE_NONE));
   gtk_css_style_property_register        ("text-decoration-color",
                                           GTK_CSS_PROPERTY_TEXT_DECORATION_COLOR,
@@ -1154,6 +1177,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_TEXT_ATTRS,
                                           color_parse,
+                                          color_token_parse,
                                           NULL,
                                           NULL,
                                           _gtk_css_color_value_new_current_color ());
@@ -1163,6 +1187,7 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_TEXT_ATTRS,
                                           parse_text_decoration_style,
+                                          NULL,
                                           NULL,
                                           NULL,
                                           _gtk_css_text_decoration_style_value_new (GTK_CSS_TEXT_DECORATION_STYLE_SOLID));
@@ -1175,6 +1200,7 @@ _gtk_css_style_property_init_properties (void)
                                           shadow_value_parse,
                                           NULL,
                                           NULL,
+                                          NULL,
                                           _gtk_css_shadows_value_new_none ());
 
   gtk_css_style_property_register        ("box-shadow",
@@ -1185,6 +1211,7 @@ _gtk_css_style_property_init_properties (void)
                                           box_shadow_value_parse,
                                           NULL,
                                           NULL,
+                                          NULL,
                                           _gtk_css_shadows_value_new_none ());
 
   gtk_css_style_property_register        ("margin-top",
@@ -1193,6 +1220,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_SIZE,
                                           parse_margin,
+                                          NULL,
                                           query_length_as_int,
                                           assign_length_from_int,
                                           _gtk_css_number_value_new (0.0, GTK_CSS_PX));
@@ -1202,6 +1230,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_SIZE,
                                           parse_margin,
+                                          NULL,
                                           query_length_as_int,
                                           assign_length_from_int,
                                           _gtk_css_number_value_new (0.0, GTK_CSS_PX));
@@ -1211,6 +1240,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_SIZE,
                                           parse_margin,
+                                          NULL,
                                           query_length_as_int,
                                           assign_length_from_int,
                                           _gtk_css_number_value_new (0.0, GTK_CSS_PX));
@@ -1220,6 +1250,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_SIZE,
                                           parse_margin,
+                                          NULL,
                                           query_length_as_int,
                                           assign_length_from_int,
                                           _gtk_css_number_value_new (0.0, GTK_CSS_PX));
@@ -1229,6 +1260,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_SIZE,
                                           parse_padding,
+                                          NULL,
                                           query_length_as_int,
                                           assign_length_from_int,
                                           _gtk_css_number_value_new (0.0, GTK_CSS_PX));
@@ -1238,6 +1270,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_SIZE,
                                           parse_padding,
+                                          NULL,
                                           query_length_as_int,
                                           assign_length_from_int,
                                           _gtk_css_number_value_new (0.0, GTK_CSS_PX));
@@ -1247,6 +1280,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_SIZE,
                                           parse_padding,
+                                          NULL,
                                           query_length_as_int,
                                           assign_length_from_int,
                                           _gtk_css_number_value_new (0.0, GTK_CSS_PX));
@@ -1256,6 +1290,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_SIZE,
                                           parse_padding,
+                                          NULL,
                                           query_length_as_int,
                                           assign_length_from_int,
                                           _gtk_css_number_value_new (0.0, GTK_CSS_PX));
@@ -1268,6 +1303,7 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           GTK_CSS_AFFECTS_BORDER,
                                           parse_border_style,
+                                          NULL,
                                           query_border_style,
                                           assign_border_style,
                                           _gtk_css_border_style_value_new (GTK_BORDER_STYLE_NONE));
@@ -1277,6 +1313,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_BORDER | GTK_CSS_AFFECTS_SIZE,
                                           parse_border_width,
+                                          NULL,
                                           query_length_as_int,
                                           assign_length_from_int,
                                           _gtk_css_number_value_new (0.0, GTK_CSS_PX));
@@ -1286,6 +1323,7 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           GTK_CSS_AFFECTS_BORDER,
                                           parse_border_style,
+                                          NULL,
                                           query_border_style,
                                           assign_border_style,
                                           _gtk_css_border_style_value_new (GTK_BORDER_STYLE_NONE));
@@ -1295,6 +1333,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_BORDER | GTK_CSS_AFFECTS_SIZE,
                                           parse_border_width,
+                                          NULL,
                                           query_length_as_int,
                                           assign_length_from_int,
                                           _gtk_css_number_value_new (0.0, GTK_CSS_PX));
@@ -1304,6 +1343,7 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           GTK_CSS_AFFECTS_BORDER,
                                           parse_border_style,
+                                          NULL,
                                           query_border_style,
                                           assign_border_style,
                                           _gtk_css_border_style_value_new (GTK_BORDER_STYLE_NONE));
@@ -1313,6 +1353,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_BORDER | GTK_CSS_AFFECTS_SIZE,
                                           parse_border_width,
+                                          NULL,
                                           query_length_as_int,
                                           assign_length_from_int,
                                           _gtk_css_number_value_new (0.0, GTK_CSS_PX));
@@ -1322,6 +1363,7 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           GTK_CSS_AFFECTS_BORDER,
                                           parse_border_style,
+                                          NULL,
                                           query_border_style,
                                           assign_border_style,
                                           _gtk_css_border_style_value_new (GTK_BORDER_STYLE_NONE));
@@ -1331,6 +1373,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_BORDER | GTK_CSS_AFFECTS_SIZE,
                                           parse_border_width,
+                                          NULL,
                                           query_length_as_int,
                                           assign_length_from_int,
                                           _gtk_css_number_value_new (0.0, GTK_CSS_PX));
@@ -1343,6 +1386,7 @@ _gtk_css_style_property_init_properties (void)
                                           border_corner_radius_value_parse,
                                           NULL,
                                           NULL,
+                                          NULL,
                                           _gtk_css_corner_value_new (_gtk_css_number_value_new (0, GTK_CSS_PX),
                                                                      _gtk_css_number_value_new (0, GTK_CSS_PX)));
   gtk_css_style_property_register        ("border-top-right-radius",
@@ -1351,6 +1395,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_BACKGROUND | GTK_CSS_AFFECTS_BORDER,
                                           border_corner_radius_value_parse,
+                                          NULL,
                                           NULL,
                                           NULL,
                                           _gtk_css_corner_value_new (_gtk_css_number_value_new (0, GTK_CSS_PX),
@@ -1363,6 +1408,7 @@ _gtk_css_style_property_init_properties (void)
                                           border_corner_radius_value_parse,
                                           NULL,
                                           NULL,
+                                          NULL,
                                           _gtk_css_corner_value_new (_gtk_css_number_value_new (0, GTK_CSS_PX),
                                                                      _gtk_css_number_value_new (0, GTK_CSS_PX)));
   gtk_css_style_property_register        ("border-bottom-left-radius",
@@ -1371,6 +1417,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_BACKGROUND | GTK_CSS_AFFECTS_BORDER,
                                           border_corner_radius_value_parse,
+                                          NULL,
                                           NULL,
                                           NULL,
                                           _gtk_css_corner_value_new (_gtk_css_number_value_new (0, GTK_CSS_PX),
@@ -1382,6 +1429,7 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           GTK_CSS_AFFECTS_OUTLINE | GTK_CSS_AFFECTS_CLIP,
                                           parse_border_style,
+                                          NULL,
                                           query_border_style,
                                           assign_border_style,
                                           _gtk_css_border_style_value_new (GTK_BORDER_STYLE_NONE));
@@ -1391,6 +1439,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_OUTLINE | GTK_CSS_AFFECTS_CLIP,
                                           parse_border_width,
+                                          NULL,
                                           query_length_as_int,
                                           assign_length_from_int,
                                           _gtk_css_number_value_new (0.0, GTK_CSS_PX));
@@ -1400,6 +1449,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_OUTLINE | GTK_CSS_AFFECTS_CLIP,
                                           outline_parse,
+                                          NULL,
                                           query_length_as_int,
                                           assign_length_from_int,
                                           _gtk_css_number_value_new (0.0, GTK_CSS_PX));
@@ -1410,6 +1460,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_OUTLINE,
                                           border_corner_radius_value_parse,
+                                          NULL,
                                           NULL,
                                           NULL,
                                           _gtk_css_corner_value_new (_gtk_css_number_value_new (0, GTK_CSS_PX),
@@ -1423,6 +1474,7 @@ _gtk_css_style_property_init_properties (void)
                                           border_corner_radius_value_parse,
                                           NULL,
                                           NULL,
+                                          NULL,
                                           _gtk_css_corner_value_new (_gtk_css_number_value_new (0, GTK_CSS_PX),
                                                                      _gtk_css_number_value_new (0, GTK_CSS_PX)));
   _gtk_style_property_add_alias ("-gtk-outline-top-right-radius", "outline-top-right-radius");
@@ -1434,6 +1486,7 @@ _gtk_css_style_property_init_properties (void)
                                           border_corner_radius_value_parse,
                                           NULL,
                                           NULL,
+                                          NULL,
                                           _gtk_css_corner_value_new (_gtk_css_number_value_new (0, GTK_CSS_PX),
                                                                      _gtk_css_number_value_new (0, GTK_CSS_PX)));
   _gtk_style_property_add_alias ("-gtk-outline-bottom-right-radius", "outline-bottom-right-radius");
@@ -1443,6 +1496,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_OUTLINE,
                                           border_corner_radius_value_parse,
+                                          NULL,
                                           NULL,
                                           NULL,
                                           _gtk_css_corner_value_new (_gtk_css_number_value_new (0, GTK_CSS_PX),
@@ -1457,6 +1511,7 @@ _gtk_css_style_property_init_properties (void)
                                           parse_css_area,
                                           NULL,
                                           NULL,
+                                          NULL,
                                           _gtk_css_array_value_new (_gtk_css_area_value_new (GTK_CSS_AREA_BORDER_BOX)));
   gtk_css_style_property_register        ("background-origin",
                                           GTK_CSS_PROPERTY_BACKGROUND_ORIGIN,
@@ -1464,6 +1519,7 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           GTK_CSS_AFFECTS_BACKGROUND,
                                           parse_css_area,
+                                          NULL,
                                           NULL,
                                           NULL,
                                           _gtk_css_array_value_new (_gtk_css_area_value_new (GTK_CSS_AREA_PADDING_BOX)));
@@ -1475,6 +1531,7 @@ _gtk_css_style_property_init_properties (void)
                                           background_size_parse,
                                           NULL,
                                           NULL,
+                                          NULL,
                                           _gtk_css_array_value_new (_gtk_css_bg_size_value_new (NULL, NULL)));
   gtk_css_style_property_register        ("background-position",
                                           GTK_CSS_PROPERTY_BACKGROUND_POSITION,
@@ -1482,6 +1539,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_BACKGROUND,
                                           background_position_parse,
+                                          NULL,
                                           NULL,
                                           NULL,
                                           _gtk_css_array_value_new (_gtk_css_position_value_new (_gtk_css_number_value_new (0, GTK_CSS_PERCENT),
@@ -1493,6 +1551,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_BORDER,
                                           color_parse,
+                                          color_token_parse,
                                           color_query,
                                           color_assign,
                                           _gtk_css_color_value_new_current_color ());
@@ -1502,6 +1561,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_BORDER,
                                           color_parse,
+                                          color_token_parse,
                                           color_query,
                                           color_assign,
                                           _gtk_css_color_value_new_current_color ());
@@ -1511,6 +1571,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_BORDER,
                                           color_parse,
+                                          color_token_parse,
                                           color_query,
                                           color_assign,
                                           _gtk_css_color_value_new_current_color ());
@@ -1520,6 +1581,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_BORDER,
                                           color_parse,
+                                          color_token_parse,
                                           color_query,
                                           color_assign,
                                           _gtk_css_color_value_new_current_color ());
@@ -1529,6 +1591,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_OUTLINE,
                                           color_parse,
+                                          color_token_parse,
                                           color_query,
                                           color_assign,
                                           _gtk_css_color_value_new_current_color ());
@@ -1541,6 +1604,7 @@ _gtk_css_style_property_init_properties (void)
                                           background_repeat_value_parse,
                                           NULL,
                                           NULL,
+                                          NULL,
                                           _gtk_css_array_value_new (_gtk_css_background_repeat_value_new (GTK_CSS_REPEAT_STYLE_REPEAT,
                                                                                                           GTK_CSS_REPEAT_STYLE_REPEAT)));
   gtk_css_style_property_register        ("background-image",
@@ -1549,6 +1613,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_BACKGROUND,
                                           background_image_value_parse,
+                                          NULL,
                                           background_image_value_query,
                                           background_image_value_assign,
                                           _gtk_css_array_value_new (_gtk_css_image_value_new (NULL)));
@@ -1559,6 +1624,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_BORDER,
                                           css_image_value_parse,
+                                          NULL,
                                           css_image_value_query,
                                           css_image_value_assign,
                                           _gtk_css_image_value_new (NULL));
@@ -1570,6 +1636,7 @@ _gtk_css_style_property_init_properties (void)
                                           border_image_repeat_parse,
                                           NULL,
                                           NULL,
+                                          NULL,
                                           _gtk_css_border_repeat_value_new (GTK_CSS_REPEAT_STYLE_STRETCH,
                                                                             GTK_CSS_REPEAT_STYLE_STRETCH));
 
@@ -1579,6 +1646,7 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           GTK_CSS_AFFECTS_BORDER,
                                           border_image_slice_parse,
+                                          NULL,
                                           query_border,
                                           assign_border,
                                           _gtk_css_border_value_new (_gtk_css_number_value_new (100, GTK_CSS_PERCENT),
@@ -1591,6 +1659,7 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           GTK_CSS_AFFECTS_BORDER,
                                           border_image_width_parse,
+                                          NULL,
                                           query_border,
                                           assign_border,
                                           _gtk_css_border_value_new (_gtk_css_number_value_new (1, GTK_CSS_NUMBER),
@@ -1606,6 +1675,7 @@ _gtk_css_style_property_init_properties (void)
                                           css_image_value_parse_with_builtin,
                                           NULL,
                                           NULL,
+                                          NULL,
                                           _gtk_css_image_value_new (gtk_css_image_builtin_new ()));
   gtk_css_style_property_register        ("-gtk-icon-shadow",
                                           GTK_CSS_PROPERTY_ICON_SHADOW,
@@ -1613,6 +1683,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_ICON | GTK_CSS_AFFECTS_SYMBOLIC_ICON | GTK_CSS_AFFECTS_CLIP,
                                           shadow_value_parse,
+                                          NULL,
                                           NULL,
                                           NULL,
                                           _gtk_css_shadows_value_new_none ());
@@ -1625,6 +1696,7 @@ _gtk_css_style_property_init_properties (void)
                                           icon_style_parse,
                                           NULL,
                                           NULL,
+                                          NULL,
                                           _gtk_css_icon_style_value_new (GTK_CSS_ICON_STYLE_REQUESTED));
   gtk_css_style_property_register        ("-gtk-icon-transform",
                                           GTK_CSS_PROPERTY_ICON_TRANSFORM,
@@ -1632,6 +1704,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_ICON | GTK_CSS_AFFECTS_SYMBOLIC_ICON | GTK_CSS_AFFECTS_CLIP,
                                           transform_value_parse,
+                                          NULL,
                                           NULL,
                                           NULL,
                                           _gtk_css_transform_value_new_none ());
@@ -1642,6 +1715,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_SIZE,
                                           minmax_parse,
+                                          NULL,
                                           query_length_as_int,
                                           NULL,
                                           _gtk_css_number_value_new (0, GTK_CSS_PX));
@@ -1651,6 +1725,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_SIZE,
                                           minmax_parse,
+                                          NULL,
                                           query_length_as_int,
                                           NULL,
                                           _gtk_css_number_value_new (0, GTK_CSS_PX));
@@ -1663,6 +1738,7 @@ _gtk_css_style_property_init_properties (void)
                                           transition_property_parse,
                                           NULL,
                                           NULL,
+                                          NULL,
                                           _gtk_css_array_value_new (_gtk_css_ident_value_new ("all")));
   gtk_css_style_property_register        ("transition-duration",
                                           GTK_CSS_PROPERTY_TRANSITION_DURATION,
@@ -1672,6 +1748,7 @@ _gtk_css_style_property_init_properties (void)
                                           transition_time_parse,
                                           NULL,
                                           NULL,
+                                          NULL,
                                           _gtk_css_array_value_new (_gtk_css_number_value_new (0, GTK_CSS_S)));
   gtk_css_style_property_register        ("transition-timing-function",
                                           GTK_CSS_PROPERTY_TRANSITION_TIMING_FUNCTION,
@@ -1679,6 +1756,7 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           0,
                                           transition_timing_function_parse,
+                                          NULL,
                                           NULL,
                                           NULL,
                                           _gtk_css_array_value_new (
@@ -1691,6 +1769,7 @@ _gtk_css_style_property_init_properties (void)
                                           transition_time_parse,
                                           NULL,
                                           NULL,
+                                          NULL,
                                           _gtk_css_array_value_new (_gtk_css_number_value_new (0, GTK_CSS_S)));
 
   gtk_css_style_property_register        ("animation-name",
@@ -1699,6 +1778,7 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           0,
                                           transition_property_parse,
+                                          NULL,
                                           NULL,
                                           NULL,
                                           _gtk_css_array_value_new (_gtk_css_ident_value_new ("none")));
@@ -1710,6 +1790,7 @@ _gtk_css_style_property_init_properties (void)
                                           transition_time_parse,
                                           NULL,
                                           NULL,
+                                          NULL,
                                           _gtk_css_array_value_new (_gtk_css_number_value_new (0, GTK_CSS_S)));
   gtk_css_style_property_register        ("animation-timing-function",
                                           GTK_CSS_PROPERTY_ANIMATION_TIMING_FUNCTION,
@@ -1717,6 +1798,7 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           0,
                                           transition_timing_function_parse,
+                                          NULL,
                                           NULL,
                                           NULL,
                                           _gtk_css_array_value_new (
@@ -1729,6 +1811,7 @@ _gtk_css_style_property_init_properties (void)
                                           iteration_count_parse,
                                           NULL,
                                           NULL,
+                                          NULL,
                                           _gtk_css_array_value_new (_gtk_css_number_value_new (1, GTK_CSS_NUMBER)));
   gtk_css_style_property_register        ("animation-direction",
                                           GTK_CSS_PROPERTY_ANIMATION_DIRECTION,
@@ -1736,6 +1819,7 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           0,
                                           parse_css_direction,
+                                          NULL,
                                           NULL,
                                           NULL,
                                           _gtk_css_array_value_new (_gtk_css_direction_value_new (GTK_CSS_DIRECTION_NORMAL)));
@@ -1747,6 +1831,7 @@ _gtk_css_style_property_init_properties (void)
                                           parse_css_play_state,
                                           NULL,
                                           NULL,
+                                          NULL,
                                           _gtk_css_array_value_new (_gtk_css_play_state_value_new (GTK_CSS_PLAY_STATE_RUNNING)));
   gtk_css_style_property_register        ("animation-delay",
                                           GTK_CSS_PROPERTY_ANIMATION_DELAY,
@@ -1754,6 +1839,7 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           0,
                                           transition_time_parse,
+                                          NULL,
                                           NULL,
                                           NULL,
                                           _gtk_css_array_value_new (_gtk_css_number_value_new (0, GTK_CSS_S)));
@@ -1765,6 +1851,7 @@ _gtk_css_style_property_init_properties (void)
                                           parse_css_fill_mode,
                                           NULL,
                                           NULL,
+                                          NULL,
                                           _gtk_css_array_value_new (_gtk_css_fill_mode_value_new (GTK_CSS_FILL_NONE)));
 
   gtk_css_style_property_register        ("opacity",
@@ -1773,6 +1860,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           0,
                                           opacity_parse,
+                                          NULL,
                                           opacity_query,
                                           NULL,
                                           _gtk_css_number_value_new (1, GTK_CSS_NUMBER));
@@ -1782,6 +1870,7 @@ _gtk_css_style_property_init_properties (void)
 					  GTK_STYLE_PROPERTY_INHERIT,
                                           GTK_CSS_AFFECTS_ICON,
 					  image_effect_parse,
+                                          NULL,
 					  NULL,
 					  NULL,
 					  _gtk_css_icon_effect_value_new (GTK_CSS_ICON_EFFECT_NONE));
@@ -1794,6 +1883,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
                                           0,
                                           0,
                                           engine_parse,
+                                          NULL,
                                           engine_query,
                                           engine_assign,
                                           _gtk_css_engine_value_new (gtk_theming_engine_load (NULL)));
@@ -1806,6 +1896,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                                           0,
                                           0,
                                           bindings_value_parse,
+                                          NULL,
                                           bindings_value_query,
                                           bindings_value_assign,
                                           _gtk_css_array_value_new (_gtk_css_string_value_new (NULL)));
@@ -1817,6 +1908,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                                           GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_TEXT,
                                           color_parse,
+                                          color_token_parse,
                                           color_query,
                                           color_assign,
                                           _gtk_css_color_value_new_current_color ());
@@ -1826,6 +1918,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                                           GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_TEXT,
                                           color_parse,
+                                          color_token_parse,
                                           color_query,
                                           color_assign,
                                           _gtk_css_color_value_new_current_color ());

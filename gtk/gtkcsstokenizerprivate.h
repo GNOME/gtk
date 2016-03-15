@@ -113,6 +113,8 @@ gboolean                gtk_css_token_is_finite                 (const GtkCssTok
 #define gtk_css_token_is(token, _type) ((token)->type == (_type))
 gboolean                gtk_css_token_is_ident                  (const GtkCssToken      *token,
                                                                  const char             *ident);
+gboolean                gtk_css_token_is_function               (const GtkCssToken      *token,
+                                                                 const char             *ident);
 gboolean                gtk_css_token_is_delim                  (const GtkCssToken      *token,
                                                                  gunichar                delim);
 

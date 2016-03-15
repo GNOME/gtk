@@ -307,6 +307,26 @@ gtk_win32_theme_parse (GtkCssParser *parser)
   return theme;
 }
 
+GtkWin32Theme *
+gtk_win32_theme_token_parse (GtkCssTokenSource *source)
+{
+  GtkWin32Theme *theme;
+  const GtkCssToken *token;
+
+  token = gtk_css_token_source_get_token (source);
+  if (!gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
+    {
+      gtk_css_token_source_error (source, "Expected valid win32 theme name");
+      gtk_css_token_source_consume_all (source);
+      return NULL;
+    }
+
+  theme = gtk_win32_theme_lookup (token->string.string);
+  gtk_css_token_source_consume_token (source);
+
+  return theme;
+}
+
 cairo_surface_t *
 gtk_win32_theme_create_surface (GtkWin32Theme *theme,
                                 int            xp_part,

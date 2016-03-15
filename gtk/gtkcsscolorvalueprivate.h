@@ -19,6 +19,7 @@
 #define __GTK_CSS_COLOR_VALUE_PRIVATE_H__
 
 #include "gtkcssparserprivate.h"
+#include "gtkcsstokensourceprivate.h"
 #include "gtkcssvalueprivate.h"
 
 G_BEGIN_DECLS
@@ -42,6 +43,7 @@ GtkCssValue *   _gtk_css_color_value_new_win32          (const gchar    *theme_c
 GtkCssValue *   _gtk_css_color_value_new_current_color  (void);
 
 GtkCssValue *   _gtk_css_color_value_parse              (GtkCssParser   *parser);
+GtkCssValue *   gtk_css_color_value_token_parse         (GtkCssTokenSource       *source);
 
 GtkCssValue *   _gtk_css_color_value_resolve            (GtkCssValue             *color,
                                                          GtkStyleProviderPrivate *provider,
