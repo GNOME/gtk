@@ -3546,6 +3546,47 @@ apply_snap (GdkWindow             *window,
     }
 }
 
+/* Registers a dumb window class. This window
+ * has DefWindowProc() for a window procedure and
+ * does not do anything that GdkWindow-bound HWNDs do.
+ */
+static ATOM
+RegisterGdkDumbClass ()
+{
+  static ATOM klassDUMB = 0;
+  static WNDCLASSEXW wcl;
+  ATOM klass = 0;
+
+  wcl.cbSize = sizeof (WNDCLASSEX);
+  wcl.style = 0; /* DON'T set CS_<H,V>REDRAW. It causes total redraw
+                  * on WM_SIZE and WM_MOVE. Flicker, Performance!
+                  */
+  wcl.lpfnWndProc = DefWindowProcW;
+  wcl.cbClsExtra = 0;
+  wcl.cbWndExtra = 0;
+  wcl.hInstance = _gdk_app_hmodule;
+  wcl.hIcon = 0;
+  wcl.hIconSm = 0;
+  wcl.lpszMenuName = NULL;
+  wcl.hbrBackground = NULL;
+  wcl.hCursor = LoadCursor (NULL, IDC_ARROW);
+  wcl.style |= CS_OWNDC;
+  wcl.lpszClassName = L"gdkWindowDumb";
+
+  if (klassDUMB == 0)
+    klassDUMB = RegisterClassExW (&wcl);
+
+  klass = klassDUMB;
+
+  if (klass == 0)
+    {
+      WIN32_API_FAILED ("RegisterClassExW");
+      g_error ("That is a fatal error");
+    }
+
+  return klass;
+}
+
 static gboolean
 ensure_snap_indicator_exists (GdkW32DragMoveResizeContext *context)
 {
@@ -3553,7 +3594,7 @@ ensure_snap_indicator_exists (GdkW32DragMoveResizeContext *context)
     {
       HWND handle;
       ATOM klass;
-      klass = RegisterGdkClass (GDK_WINDOW_TOPLEVEL, GDK_WINDOW_TYPE_HINT_SPLASHSCREEN);
+      klass = RegisterGdkDumbClass ();
 
       handle = CreateWindowExW (WS_EX_TRANSPARENT | WS_EX_LAYERED | WS_EX_NOACTIVATE,
                                 MAKEINTRESOURCEW (klass),
