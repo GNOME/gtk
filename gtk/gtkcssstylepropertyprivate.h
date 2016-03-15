@@ -34,13 +34,15 @@ G_BEGIN_DECLS
 typedef struct _GtkCssStyleProperty           GtkCssStyleProperty;
 typedef struct _GtkCssStylePropertyClass      GtkCssStylePropertyClass;
 
-typedef GtkCssValue *    (* GtkCssStylePropertyParseFunc)  (GtkCssStyleProperty    *property,
-                                                            GtkCssParser           *parser);
-typedef void             (* GtkCssStylePropertyQueryFunc)  (GtkCssStyleProperty    *property,
-                                                            const GtkCssValue      *cssvalue,
-                                                            GValue                 *value);
-typedef GtkCssValue *    (* GtkCssStylePropertyAssignFunc) (GtkCssStyleProperty    *property,
-                                                            const GValue           *value);
+typedef GtkCssValue *    (* GtkCssStylePropertyParseFunc)       (GtkCssStyleProperty    *property,
+                                                                 GtkCssParser           *parser);
+typedef GtkCssValue *    (* GtkCssStylePropertyTokenParseFunc)  (GtkCssStyleProperty    *property,
+                                                                 GtkCssTokenSource      *source);
+typedef void             (* GtkCssStylePropertyQueryFunc)       (GtkCssStyleProperty    *property,
+                                                                 const GtkCssValue      *cssvalue,
+                                                                 GValue                 *value);
+typedef GtkCssValue *    (* GtkCssStylePropertyAssignFunc)      (GtkCssStyleProperty    *property,
+                                                                 const GValue           *value);
 struct _GtkCssStyleProperty
 {
   GtkStyleProperty parent;
@@ -52,6 +54,7 @@ struct _GtkCssStyleProperty
   guint animated :1;
 
   GtkCssStylePropertyParseFunc parse_value;
+  GtkCssStylePropertyTokenParseFunc token_parse;
   GtkCssStylePropertyQueryFunc query_value;
   GtkCssStylePropertyAssignFunc assign_value;
 };

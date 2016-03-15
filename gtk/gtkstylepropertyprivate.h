@@ -19,6 +19,7 @@
 #define __GTK_STYLEPROPERTY_PRIVATE_H__
 
 #include "gtkcssparserprivate.h"
+#include "gtkcsstokensourceprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkcssvalueprivate.h"
 
@@ -57,8 +58,10 @@ struct _GtkStylePropertyClass
                                                             GValue                 *value,
                                                             GtkStyleQueryFunc       query_func,
                                                             gpointer                query_data);
-  GtkCssValue *     (* parse_value)                        (GtkStyleProperty *      property,
+  GtkCssValue *     (* parse_value)                        (GtkStyleProperty       *property,
                                                             GtkCssParser           *parser);
+  GtkCssValue *     (* token_parse)                        (GtkStyleProperty       *property,
+                                                            GtkCssTokenSource      *source);
 
   GHashTable   *properties;
 };
@@ -76,6 +79,8 @@ const char *             _gtk_style_property_get_name      (GtkStyleProperty    
 
 GtkCssValue *            _gtk_style_property_parse_value   (GtkStyleProperty *      property,
                                                             GtkCssParser           *parser);
+GtkCssValue *            gtk_style_property_token_parse    (GtkStyleProperty       *property,
+                                                            GtkCssTokenSource      *source);
 
 GType                    _gtk_style_property_get_value_type(GtkStyleProperty *      property);
 void                     _gtk_style_property_query         (GtkStyleProperty *      property,

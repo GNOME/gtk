@@ -159,6 +159,56 @@ _gtk_style_property_parse_value (GtkStyleProperty *property,
 }
 
 /**
+ * _gtk_style_property_parse_value:
+ * @property: the property
+ * @parser: the parser to parse from
+ *
+ * Tries to parse the given @property from the given @parser into
+ * @value. The type that @value will be assigned is dependant on
+ * the parser and no assumptions must be made about it. If the
+ * parsing fails, %FALSE will be returned and @value will be
+ * left uninitialized.
+ *
+ * Only if @property is a #GtkCssShorthandProperty, the @value will
+ * always be a #GtkCssValue whose values can be queried with
+ * _gtk_css_array_value_get_nth().
+ *
+ * Returns: %NULL on failure or the parsed #GtkCssValue
+ **/
+GtkCssValue *
+gtk_style_property_token_parse (GtkStyleProperty  *property,
+                                GtkCssTokenSource *source)
+{
+  GtkStylePropertyClass *klass;
+  GtkCssValue *value;
+
+  g_return_val_if_fail (GTK_IS_STYLE_PROPERTY (property), NULL);
+  g_return_val_if_fail (source != NULL, NULL);
+
+  klass = GTK_STYLE_PROPERTY_GET_CLASS (property);
+
+  gtk_css_token_source_consume_whitespace (source);
+
+  value = klass->token_parse (property, source);
+
+  if (value == NULL)
+    return NULL;
+
+  gtk_css_token_source_consume_whitespace (source);
+
+  if (!gtk_css_token_is (gtk_css_token_source_get_token (source),
+                         GTK_CSS_TOKEN_EOF))
+    {
+      gtk_css_token_source_error (source, "Junk at end of value");
+      gtk_css_token_source_consume_all (source);
+      _gtk_css_value_unref (value);
+      return NULL;
+    }
+
+  return value;
+}
+
+/**
  * _gtk_style_property_assign:
  * @property: the property
  * @props: The properties to assign to

@@ -193,6 +193,80 @@ gtk_css_style_property_parse_value (GtkStyleProperty *property,
 }
 
 static void
+forward_error_to_source (GtkCssParser *parser,
+                         const GError *error,
+                         gpointer      source)
+{
+  /* XXX: This is bad because it doesn't emit the error on the right token */
+  gtk_css_token_source_emit_error (source, error);
+}
+
+static GtkCssValue *
+gtk_css_style_property_token_parse_default (GtkCssStyleProperty *property,
+                                            GtkCssTokenSource   *source)
+{
+  GtkCssParser *parser;
+  GtkCssValue *value;
+  char *str;
+
+  str = gtk_css_token_source_consume_to_string (source);
+  parser = _gtk_css_parser_new (str,
+                                NULL,
+                                forward_error_to_source,
+                                source);
+  value = property->parse_value (property, parser);
+  _gtk_css_parser_free (parser);
+  g_free (str);
+
+  return value;
+}
+
+static GtkCssValue *
+gtk_css_style_property_token_parse (GtkStyleProperty  *property,
+                                    GtkCssTokenSource *source)
+{
+  GtkCssStyleProperty *style_property = GTK_CSS_STYLE_PROPERTY (property);
+  const GtkCssToken *token;
+  GtkCssValue *value;
+
+  token = gtk_css_token_source_get_token (source);
+  if (gtk_css_token_is_ident (token, "initial"))
+    {
+      /* the initial value can be explicitly specified with the
+       * ‘initial’ keyword which all properties accept.
+       */
+      value = _gtk_css_initial_value_new ();
+      gtk_css_token_source_consume_token (source);
+    }
+  else if (gtk_css_token_is_ident (token, "inherit"))
+    {
+      /* All properties accept the ‘inherit’ value which
+       * explicitly specifies that the value will be determined
+       * by inheritance. The ‘inherit’ value can be used to
+       * strengthen inherited values in the cascade, and it can
+       * also be used on properties that are not normally inherited.
+       */
+      value = _gtk_css_inherit_value_new ();
+      gtk_css_token_source_consume_token (source);
+    }
+  else if (gtk_css_token_is_ident (token, "unset"))
+    {
+      /* If the cascaded value of a property is the unset keyword,
+       * then if it is an inherited property, this is treated as
+       * inherit, and if it is not, this is treated as initial.
+       */
+      value = _gtk_css_unset_value_new ();
+      gtk_css_token_source_consume_token (source);
+    }
+  else
+    {
+      value = (* style_property->token_parse) (style_property, source);
+    }
+
+  return value;
+}
+
+static void
 _gtk_css_style_property_class_init (GtkCssStylePropertyClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -242,6 +316,7 @@ _gtk_css_style_property_class_init (GtkCssStylePropertyClass *klass)
   property_class->assign = _gtk_css_style_property_assign;
   property_class->query = _gtk_css_style_property_query;
   property_class->parse_value = gtk_css_style_property_parse_value;
+  property_class->token_parse = gtk_css_style_property_token_parse;
 
   klass->style_properties = g_ptr_array_new ();
 
@@ -260,6 +335,7 @@ static void
 _gtk_css_style_property_init (GtkCssStyleProperty *property)
 {
   property->parse_value = gtk_css_style_property_real_parse_value;
+  property->token_parse = gtk_css_style_property_token_parse_default;
 }
 
 /**

@@ -156,6 +156,112 @@ gtk_css_shorthand_property_parse_value (GtkStyleProperty *property,
   return result;
 }
 
+static GtkCssValue *
+gtk_css_shorthand_property_token_parse (GtkStyleProperty  *property,
+                                        GtkCssTokenSource *source)
+{
+  GtkCssShorthandProperty *shorthand = GTK_CSS_SHORTHAND_PROPERTY (property);
+  const GtkCssToken *token;
+  GtkCssValue **data;
+  GtkCssValue *result;
+  guint i;
+
+  data = g_new0 (GtkCssValue *, shorthand->subproperties->len);
+
+  token = gtk_css_token_source_get_token (source);
+  if (gtk_css_token_is_ident (token, "initial"))
+    {
+      /* the initial value can be explicitly specified with the
+       * ‘initial’ keyword which all properties accept.
+       */
+      for (i = 0; i < shorthand->subproperties->len; i++)
+        {
+          data[i] = _gtk_css_initial_value_new ();
+        }
+      gtk_css_token_source_consume_token (source);
+    }
+  else if (gtk_css_token_is_ident (token, "inherit"))
+    {
+      /* All properties accept the ‘inherit’ value which
+       * explicitly specifies that the value will be determined
+       * by inheritance. The ‘inherit’ value can be used to
+       * strengthen inherited values in the cascade, and it can
+       * also be used on properties that are not normally inherited.
+       */
+      for (i = 0; i < shorthand->subproperties->len; i++)
+        {
+          data[i] = _gtk_css_inherit_value_new ();
+        }
+      gtk_css_token_source_consume_token (source);
+    }
+  else if (gtk_css_token_is_ident (token, "unset"))
+    {
+      /* If the cascaded value of a property is the unset keyword,
+       * then if it is an inherited property, this is treated as
+       * inherit, and if it is not, this is treated as initial.
+       */
+      for (i = 0; i < shorthand->subproperties->len; i++)
+        {
+          data[i] = _gtk_css_unset_value_new ();
+        }
+      gtk_css_token_source_consume_token (source);
+    }
+  else if (!shorthand->token_parse (shorthand, data, source))
+    {
+      for (i = 0; i < shorthand->subproperties->len; i++)
+        {
+          if (data[i] != NULL)
+            _gtk_css_value_unref (data[i]);
+        }
+      g_free (data);
+      return NULL;
+    }
+
+  /* All values that aren't set by the parse func are set to their
+   * default values here.
+   * XXX: Is the default always initial or can it be inherit? */
+  for (i = 0; i < shorthand->subproperties->len; i++)
+    {
+      if (data[i] == NULL)
+        data[i] = _gtk_css_initial_value_new ();
+    }
+
+  result = _gtk_css_array_value_new_from_array (data, shorthand->subproperties->len);
+  g_free (data);
+  
+  return result;
+}
+
+static void
+forward_error_to_source (GtkCssParser *parser,
+                         const GError *error,
+                         gpointer      source)
+{
+  /* XXX: This is bad because it doesn't emit the error on the right token */
+  gtk_css_token_source_emit_error (source, error);
+}
+
+static gboolean
+gtk_css_shorthand_token_parse_default (GtkCssShorthandProperty *shorthand,
+                                       GtkCssValue            **values,
+                                       GtkCssTokenSource       *source)
+{
+  GtkCssParser *parser;
+  char *str;
+  gboolean result;
+
+  str = gtk_css_token_source_consume_to_string (source);
+  parser = _gtk_css_parser_new (str,
+                                NULL,
+                                forward_error_to_source,
+                                source);
+  result = shorthand->parse (shorthand, values, parser);
+  _gtk_css_parser_free (parser);
+  g_free (str);
+
+  return result;
+}
+
 static void
 _gtk_css_shorthand_property_class_init (GtkCssShorthandPropertyClass *klass)
 {
@@ -175,12 +281,15 @@ _gtk_css_shorthand_property_class_init (GtkCssShorthandPropertyClass *klass)
   property_class->assign = _gtk_css_shorthand_property_assign;
   property_class->query = _gtk_css_shorthand_property_query;
   property_class->parse_value = gtk_css_shorthand_property_parse_value;
+  property_class->token_parse = gtk_css_shorthand_property_token_parse;
 }
 
 static void
 _gtk_css_shorthand_property_init (GtkCssShorthandProperty *shorthand)
 {
   shorthand->subproperties = g_ptr_array_new_with_free_func (g_object_unref);
+
+  shorthand->token_parse = gtk_css_shorthand_token_parse_default;
 }
 
 GtkCssStyleProperty *

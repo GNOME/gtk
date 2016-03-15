@@ -75,6 +75,7 @@ do_the_tokenizer (const char *data)
 
   gtk_css_tokenizer_unref (tokenizer);
 #else
+#if 0
   GtkCssStyleSheet *sheet;
   GtkCssTokenSource *source;
   GtkCssTokenizer *tokenizer;
@@ -90,6 +91,7 @@ do_the_tokenizer (const char *data)
   gtk_css_token_source_unref (source);
   gtk_css_tokenizer_unref (tokenizer);
   g_bytes_unref (bytes);
+#endif
 #endif
 }
 

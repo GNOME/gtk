@@ -43,6 +43,14 @@ gtk_css_custom_property_parse_value (GtkStyleProperty *property,
   return NULL;
 }
 
+static GtkCssValue *
+gtk_css_custom_property_token_parse (GtkStyleProperty  *property,
+                                     GtkCssTokenSource *source)
+{
+  gtk_css_token_source_unknown (source, "Custom CSS properties are no longer supported.");
+  return NULL;
+}
+
 static void
 gtk_css_custom_property_query (GtkStyleProperty   *property,
                                GValue             *value,
@@ -81,6 +89,7 @@ _gtk_css_custom_property_class_init (GtkCssCustomPropertyClass *klass)
   GtkStylePropertyClass *property_class = GTK_STYLE_PROPERTY_CLASS (klass);
 
   property_class->parse_value = gtk_css_custom_property_parse_value;
+  property_class->token_parse = gtk_css_custom_property_token_parse;
   property_class->query = gtk_css_custom_property_query;
   property_class->assign = gtk_css_custom_property_assign;
 }
