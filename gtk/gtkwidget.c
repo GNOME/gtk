@@ -3484,7 +3484,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    * The "focus-padding" style property defines the width, in pixels,
    * between focus indicator and the widget 'box'.
    *
-   * Deprecated: 3.14: use the padding CSS properties instead.
+   * Deprecated: 3.14: use the outline-offset CSS properties instead.
    */
   gtk_widget_class_install_style_property (klass,
 					   g_param_spec_int ("focus-padding",
