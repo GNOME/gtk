@@ -25,6 +25,8 @@
 
 #include <gtk/gtkbox.h>
 
+#include "gtkcssnodeprivate.h"
+
 #define GTK_TYPE_INSPECTOR_CSS_EDITOR            (gtk_inspector_css_editor_get_type())
 #define GTK_INSPECTOR_CSS_EDITOR(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_INSPECTOR_CSS_EDITOR, GtkInspectorCssEditor))
 #define GTK_INSPECTOR_CSS_EDITOR_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), GTK_TYPE_INSPECTOR_CSS_EDITOR, GtkInspectorCssEditorClass))
@@ -49,8 +51,9 @@ typedef struct _GtkInspectorCssEditorClass
 G_BEGIN_DECLS
 
 GType      gtk_inspector_css_editor_get_type   (void);
-void       gtk_inspector_css_editor_set_object (GtkInspectorCssEditor *ce,
-                                                GObject               *object);
+
+void       gtk_inspector_css_editor_set_node   (GtkInspectorCssEditor *ce,
+                                                GtkCssNode            *node);
 
 G_END_DECLS
 

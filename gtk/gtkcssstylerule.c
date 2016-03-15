@@ -139,6 +139,31 @@ gtk_css_style_rule_new_parse (GtkCssTokenSource *source,
   return GTK_CSS_RULE (rule);
 }
 
+gsize
+gtk_css_style_rule_get_n_selectors (GtkCssStyleRule *rule)
+{
+  GtkCssStyleRulePrivate *priv;
+  
+  g_return_val_if_fail (GTK_IS_CSS_STYLE_RULE (rule), 0);
+
+  priv = gtk_css_style_rule_get_instance_private (rule);
+
+  return priv->selectors->len;
+}
+
+GtkCssSelector *
+gtk_css_style_rule_get_selector (GtkCssStyleRule *rule,
+                                 gsize            id)
+{
+  GtkCssStyleRulePrivate *priv;
+  
+  g_return_val_if_fail (GTK_IS_CSS_STYLE_RULE (rule), 0);
+
+  priv = gtk_css_style_rule_get_instance_private (rule);
+
+  return g_ptr_array_index (priv->selectors, id);
+}
+
 GtkCssStyleDeclaration *
 gtk_css_style_rule_get_style (GtkCssStyleRule *rule)
 {

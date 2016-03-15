@@ -28,6 +28,7 @@
 #include "gtkcssdeclarationprivate.h"
 #include "gtkcssprovider.h"
 #include "gtkcssrbtreeprivate.h"
+#include "gtkcssstyleruleprivate.h"
 #include "gtkcssstylesheetprivate.h"
 #include "gtkcsstokenizerprivate.h"
 #include "gtkcsstokensourceprivate.h"
@@ -79,6 +80,7 @@ struct _GtkInspectorCssEditorPrivate
   GtkCssRbTree *tokens;
   GtkCssProvider *provider;
   GtkCssStyleSheet *style_sheet;
+  GtkCssNode *node;
   GtkToggleButton *disable_button;
   guint timeout;
 };
@@ -498,6 +500,54 @@ apply_declaration (GtkInspectorCssEditor *ce,
 }
 
 static gboolean
+apply_selector (GtkInspectorCssEditor *ce,
+                GtkCssChunk           *chunk)
+{
+  GtkCssChunk *prev;
+
+  if (!GTK_IS_CSS_STYLE_RULE (chunk->consumer))
+    return FALSE;
+
+  for (prev = chunk;
+       prev->consumer == chunk->consumer;
+       prev = gtk_css_rb_tree_get_previous (ce->priv->tokens, prev))
+    {
+      if (gtk_css_token_is (&chunk->token, GTK_CSS_TOKEN_OPEN_CURLY))
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
+static gboolean
+apply_selector_matching (GtkInspectorCssEditor *ce,
+                         GtkCssChunk           *chunk)
+{
+  GtkCssMatcher matcher;
+  GtkCssStyleRule *rule;
+  gsize i;
+
+  if (ce->priv->node == NULL)
+    return FALSE;
+
+  if (!apply_selector (ce, chunk))
+    return FALSE;
+
+  rule = GTK_CSS_STYLE_RULE (chunk->consumer);
+  gtk_css_node_init_matcher (ce->priv->node, &matcher);
+
+  for (i = 0; i < gtk_css_style_rule_get_n_selectors (rule); i++)
+    {
+      GtkCssSelector *selector = gtk_css_style_rule_get_selector (rule, i);
+
+      if (_gtk_css_selector_matches (selector, &matcher))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
 apply_error (GtkInspectorCssEditor *ce,
              GtkCssChunk           *chunk)
 {
@@ -520,6 +570,9 @@ static struct {
 } tag_list[] = {
   { "comment", apply_comment },
   { "string", apply_string },
+  { "declaration", apply_declaration },
+  { "selector", apply_selector },
+  { "selector-matching", apply_selector_matching },
   { "declaration", apply_declaration },
   { "error", apply_error },
   { "warning", apply_warning },
@@ -713,8 +766,12 @@ finalize (GObject *object)
   if (ce->priv->timeout != 0)
     g_source_remove (ce->priv->timeout);
 
+  gtk_inspector_css_editor_set_node (ce, NULL);
+
   if (ce->priv->tokens)
     gtk_css_rb_tree_unref (ce->priv->tokens);
+
+  gtk_inspector_css_editor_set_node (ce, NULL);
 
   g_object_unref (ce->priv->style_sheet);
 
@@ -740,6 +797,49 @@ gtk_inspector_css_editor_class_init (GtkInspectorCssEditorClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, save_clicked);
   gtk_widget_class_bind_template_callback (widget_class, text_changed);
   gtk_widget_class_bind_template_callback (widget_class, query_tooltip_cb);
+}
+
+static void
+gtk_inspector_css_editor_node_changed_cb (GtkCssNode            *node,
+                                          GtkCssStyleChange     *change,
+                                          GtkInspectorCssEditor *ce)
+{
+  clear_all_tags (ce);
+  update_token_tags (ce, gtk_css_rb_tree_get_first (ce->priv->tokens), NULL);
+}
+
+void
+gtk_inspector_css_editor_set_node (GtkInspectorCssEditor *ce,
+                                   GtkCssNode            *node)
+{
+  GtkInspectorCssEditorPrivate *priv;
+
+  g_return_if_fail (GTK_INSPECTOR_IS_CSS_EDITOR (ce));
+  g_return_if_fail (node == NULL || GTK_IS_CSS_NODE (node));
+
+  priv = ce->priv;
+
+  if (priv->node == node)
+    return;
+
+  if (priv->node)
+    {
+      g_signal_handlers_disconnect_by_func (priv->node, gtk_inspector_css_editor_node_changed_cb, ce);
+    }
+
+  priv->node = node;
+
+  if (node)
+    {
+      g_object_ref (node);
+      g_signal_connect (priv->node,
+                        "style-changed",
+                        G_CALLBACK (gtk_inspector_css_editor_node_changed_cb),
+                        ce);
+    }
+
+  clear_all_tags (ce);
+  update_token_tags (ce, gtk_css_rb_tree_get_first (ce->priv->tokens), NULL);
 }
 
 // vim: set et sw=2 ts=2:

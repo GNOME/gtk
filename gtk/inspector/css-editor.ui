@@ -10,7 +10,19 @@
     <child type="tag">
       <object class="GtkTextTag">
         <property name="name">string</property>
-        <property name="foreground">red</property>
+        <property name="foreground">darkred</property>
+      </object>
+    </child>
+    <child type="tag">
+      <object class="GtkTextTag">
+        <property name="name">selector</property>
+        <property name="foreground">darkgreen</property>
+      </object>
+    </child>
+    <child type="tag">
+      <object class="GtkTextTag">
+        <property name="name">selector-matching</property>
+        <property name="background">yellow</property>
       </object>
     </child>
     <child type="tag">

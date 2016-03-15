@@ -21,6 +21,7 @@
 #define __GTK_CSS_STYLE_RULE_PRIVATE_H__
 
 #include "gtk/gtkcssruleprivate.h"
+#include "gtk/gtkcssselectorprivate.h"
 #include "gtk/gtkcssstyledeclarationprivate.h"
 
 G_BEGIN_DECLS
@@ -50,6 +51,10 @@ GType                   gtk_css_style_rule_get_type             (void) G_GNUC_CO
 GtkCssRule *            gtk_css_style_rule_new_parse            (GtkCssTokenSource      *source,
                                                                  GtkCssRule             *parent_rule,
                                                                  GtkCssStyleSheet       *parent_style_sheet);
+
+gsize                   gtk_css_style_rule_get_n_selectors      (GtkCssStyleRule        *rule);
+GtkCssSelector *        gtk_css_style_rule_get_selector         (GtkCssStyleRule        *rule,
+                                                                 gsize                   id);
 
 GtkCssStyleDeclaration *gtk_css_style_rule_get_style            (GtkCssStyleRule        *rule);
 
