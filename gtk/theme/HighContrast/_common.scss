@@ -1669,6 +1669,7 @@ treeview.view radio {
   box-shadow: none;
 
   &:disabled {
+    border-color: $insensitive_borders_color;
     background-color: $insensitive_bg_color;
   }
 
@@ -1676,7 +1677,7 @@ treeview.view radio {
     background-color: $backdrop_dark_fill;
     border-color: $backdrop_borders_color;
 
-    &:disabled { background-color: $insensitive_bg_color; }
+    &:disabled { background-color: $insensitive_bg_color; border-color: $insensitive_borders_color; }
   }
 
   // ...on selected list rows

@@ -1826,12 +1826,14 @@ scale trough, scale fill {
   background-color: gray;
   box-shadow: none; }
   scale trough:disabled, scale fill:disabled {
+    border-color: silver;
     background-color: white; }
   scale trough:backdrop, scale fill:backdrop {
     background-color: #b3b3b3;
     border-color: #8d8d8d; }
     scale trough:backdrop:disabled, scale fill:backdrop:disabled {
-      background-color: white; }
+      background-color: white;
+      border-color: silver; }
   row:selected scale trough, scale row:selected trough, row:selected scale fill, scale row:selected fill, row:selected scale trough:disabled, scale row:selected trough:disabled, row:selected scale fill:disabled, scale row:selected fill:disabled {
     border-color: #000; }
   .osd scale trough, scale .osd trough, .osd scale fill, scale .osd fill {
