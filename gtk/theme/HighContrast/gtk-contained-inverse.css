@@ -1810,6 +1810,13 @@ checkbutton check {
   checkbutton check:only-child {
     margin: 0; }
 
+treeview.view check,
+treeview.view radio {
+  color: #fff; }
+  treeview.view check:hover,
+  treeview.view radio:hover {
+    color: #fff; }
+
 /************
  * GtkScale *
  ************/

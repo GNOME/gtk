@@ -1653,6 +1653,12 @@ checkbutton check {
   }
 }
 
+treeview.view check,
+treeview.view radio {
+  color: $fg_color;
+  &:hover { color: $fg_color; }
+}
+
 /************
  * GtkScale *
  ************/
