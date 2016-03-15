@@ -5765,6 +5765,26 @@ GtkShowWindow (HWND hwnd,
 }
 
 static void
+gdk_win32_window_set_shadow_width (GdkWindow *window,
+                                   gint       left,
+                                   gint       right,
+                                   gint       top,
+                                   gint       bottom)
+{
+  GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  impl->margins.left = left;
+  impl->margins.right = right;
+  impl->margins.top = top;
+  impl->margins.bottom = bottom;
+  impl->margins_x = left + right;
+  impl->margins_y = top + bottom;
+}
+
+static void
 gdk_window_impl_win32_class_init (GdkWindowImplWin32Class *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -5840,6 +5860,7 @@ gdk_window_impl_win32_class_init (GdkWindowImplWin32Class *klass)
   impl_class->get_decorations = gdk_win32_window_get_decorations;
   impl_class->set_functions = gdk_win32_window_set_functions;
 
+  impl_class->set_shadow_width = gdk_win32_window_set_shadow_width;
   impl_class->begin_resize_drag = gdk_win32_window_begin_resize_drag;
   impl_class->begin_move_drag = gdk_win32_window_begin_move_drag;
   impl_class->set_opacity = gdk_win32_window_set_opacity;

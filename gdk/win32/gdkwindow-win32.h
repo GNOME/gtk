@@ -244,6 +244,13 @@ struct _GdkWindowImplWin32
   gint initial_x;
   gint initial_y;
 
+  /* left/right/top/bottom width of the shadow/resize-grip around the window */
+  RECT margins;
+
+  /* left+right and top+bottom from @margins */
+  gint margins_x;
+  gint margins_y;
+
   guint no_bg : 1;
   guint inhibit_configure : 1;
   guint override_redirect : 1;

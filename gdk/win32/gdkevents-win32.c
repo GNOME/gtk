@@ -2044,8 +2044,8 @@ _gdk_win32_window_fill_min_max_info (GdkWindow  *window,
           mmi->ptMaxSize.y = nearest_info.rcWork.bottom - nearest_info.rcWork.top;
         }
 
-      mmi->ptMaxTrackSize.x = GetSystemMetrics (SM_CXMAXTRACK);
-      mmi->ptMaxTrackSize.y = GetSystemMetrics (SM_CYMAXTRACK);
+      mmi->ptMaxTrackSize.x = GetSystemMetrics (SM_CXVIRTUALSCREEN) + impl->margins_x;
+      mmi->ptMaxTrackSize.y = GetSystemMetrics (SM_CYVIRTUALSCREEN) + impl->margins_y;
     }
 
   return TRUE;
