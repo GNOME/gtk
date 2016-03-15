@@ -3331,20 +3331,28 @@ snap_up (GdkWindow *window,
 {
   SHORT maxysize;
   gint x, y;
-  gint width;
+  gint width, height;
   GdkWindowImplWin32 *impl;
 
   impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
 
   impl->snap_state = GDK_WIN32_AEROSNAP_STATE_FULLUP;
 
+  stash_window (window, impl, screen, monitor);
+
   maxysize = GetSystemMetrics (SM_CYVIRTUALSCREEN);
   gdk_window_get_position (window, &x, &y);
   width = gdk_window_get_width (window);
 
-  stash_window (window, impl, screen, monitor);
+  y = 0;
+  height = maxysize;
 
-  gdk_window_move_resize (window, x, 0, width, maxysize);
+  x -= impl->margins.left;
+  y -= impl->margins.top;
+  width += impl->margins_x;
+  height += impl->margins_y;
+
+  gdk_window_move_resize (window, x, y, width, height);
 }
 
 static void
@@ -3365,6 +3373,11 @@ snap_left (GdkWindow *window,
   stash_window (window, impl, screen, monitor);
 
   rect.width = rect.width / 2;
+
+  rect.x -= impl->margins.left;
+  rect.y -= impl->margins.top;
+  rect.width += impl->margins_x;
+  rect.height += impl->margins_y;
 
   gdk_window_move_resize (window, rect.x, rect.y, rect.width, rect.height);
 }
@@ -3388,6 +3401,11 @@ snap_right (GdkWindow *window,
 
   rect.width /= 2;
   rect.x += rect.width;
+
+  rect.x -= impl->margins.left;
+  rect.y -= impl->margins.top;
+  rect.width += impl->margins_x;
+  rect.height += impl->margins_y;
 
   gdk_window_move_resize (window, rect.x, rect.y, rect.width, rect.height);
 }
@@ -4326,19 +4344,60 @@ setup_drag_move_resize_context (GdkWindow                   *window,
   gboolean maximized = gdk_window_get_state (window) & GDK_WINDOW_STATE_MAXIMIZED;
 
   /* Before we drag, we need to undo any maximization or snapping.
-   * TODO: don't unsnap halfleft/halfright/fullup when doing
-   * horizongal resizing. There's also the case where
+   * AeroSnap behaviour:
+   *   If snapped halfleft/halfright:
+   *     horizontal resize:
+   *       resize
+   *       don't unsnap
+   *       keep stashed unsnapped size intact
+   *     vertical resize:
+   *       resize
+   *       unsnap to new size (merge cached unsnapped state with current
+   *                           snapped state in such a way that the gripped edge
+   *                           does not move)
+   *     diagonal resize:
+   *       difficult to test (first move is usually either purely
+   *                          horizontal or purely vertical, in which
+   *                          case the above behaviour applies)
+   *   If snapped up:
+   *     horizontal resize:
+   *       resize
+   *       don't unsnap
+   *       apply new width and x position to unsnapped cache,
+   *         so that unsnapped window only regains its height
+   *         and y position, but inherits x and width from
+   *         the fullup snapped state
+   *     vertical resize:
+   *       unsnap to new size (merge cached unsnapped state with current
+   *                           snapped state in such a way that the gripped edge
+   *                           does not move)
+   *
+   * This implementation behaviour:
+   *   If snapped halfleft/halfright/fullup:
+   *     any resize:
+   *       unsnap to current size, discard cached pre-snap state
+   *
+   * TODO: make this implementation behave as AeroSnap on resizes?
+   * There's also the case where
    * a halfleft/halfright window isn't unsnapped when it's
    * being moved horizontally, but it's more difficult to implement.
    */
-  if (maximized ||
+  if (op == GDK_WIN32_DRAGOP_RESIZE &&
       (impl->snap_state == GDK_WIN32_AEROSNAP_STATE_HALFRIGHT ||
        impl->snap_state == GDK_WIN32_AEROSNAP_STATE_HALFLEFT ||
        impl->snap_state == GDK_WIN32_AEROSNAP_STATE_FULLUP))
     {
+      discard_snapinfo (window);
+    }
+  else if (maximized ||
+           (impl->snap_state == GDK_WIN32_AEROSNAP_STATE_HALFRIGHT ||
+            impl->snap_state == GDK_WIN32_AEROSNAP_STATE_HALFLEFT ||
+            impl->snap_state == GDK_WIN32_AEROSNAP_STATE_FULLUP))
+    {
       GdkScreen *screen;
       gint monitor;
       gint wx, wy, wwidth, wheight;
+      gint swx, swy, swwidth, swheight;
       gboolean pointer_outside_of_window;
       gint offsetx, offsety;
       gboolean left_half;
@@ -4347,11 +4406,29 @@ setup_drag_move_resize_context (GdkWindow                   *window,
       monitor = gdk_screen_get_monitor_at_window (screen, window);
       gdk_window_get_geometry (window, &wx, &wy, &wwidth, &wheight);
 
-      pointer_outside_of_window = root_x < wx || root_x > wx + wwidth ||
-                                  root_y < wy || root_y > wy + wheight;
+      swx = wx;
+      swy = wy;
+      swwidth = wwidth;
+      swheight = wheight;
+
+      /* Subtract window shadow. We don't want pointer to go outside of
+       * the visible window during drag-move. For drag-resize it's OK.
+       * Don't take shadow into account if the window is maximized -
+       * maximized windows don't have shadows.
+       */
+      if (op == GDK_WIN32_DRAGOP_MOVE && !maximized)
+        {
+          swx += impl->margins.left;
+          swy += impl->margins.top;
+          swwidth -= impl->margins_x;
+          swheight -= impl->margins_y;
+        }
+
+      pointer_outside_of_window = root_x < swx || root_x > swx + swwidth ||
+                                  root_y < swy || root_y > swy + swheight;
       /* Calculate the offset of the pointer relative to the window */
-      offsetx = root_x - wx;
-      offsety = root_y - wy;
+      offsetx = root_x - swx;
+      offsety = root_y - swy;
 
       /* Figure out in which half of the window the pointer is.
        * The code currently only concerns itself with horizontal
@@ -4360,11 +4437,11 @@ setup_drag_move_resize_context (GdkWindow                   *window,
        * is dragged by its upper half anyway. If that changes, adjust
        * accordingly.
        */
-      left_half = (offsetx < wwidth / 2);
+      left_half = (offsetx < swwidth / 2);
 
       /* Inverse the offset for it to be from the right edge */
       if (!left_half)
-        offsetx = wwidth - offsetx;
+        offsetx = swwidth - offsetx;
 
       GDK_NOTE (MISC, g_print ("Pointer at %d : %d, this is %d : %d relative to the window's %s\n",
                                root_x, root_y, offsetx, offsety,
@@ -4380,6 +4457,7 @@ setup_drag_move_resize_context (GdkWindow                   *window,
         {
           WINDOWPLACEMENT placement;
           gint unmax_width, unmax_height;
+          gint shadow_unmax_width, shadow_unmax_height;
 
           placement.length = sizeof (placement);
           API_CALL (GetWindowPlacement, (GDK_WINDOW_HWND (window), &placement));
@@ -4393,26 +4471,34 @@ setup_drag_move_resize_context (GdkWindow                   *window,
           unmax_width = placement.rcNormalPosition.right - placement.rcNormalPosition.left;
           unmax_height = placement.rcNormalPosition.bottom - placement.rcNormalPosition.top;
 
-          if (offsetx < unmax_width && offsety < unmax_height)
+          shadow_unmax_width = unmax_width - impl->margins_x;
+          shadow_unmax_height = unmax_height - impl->margins_y;
+
+          if (offsetx < (shadow_unmax_width / 2) && offsety < (shadow_unmax_height / 2))
             {
-              placement.rcNormalPosition.top = root_y - offsety - _gdk_offset_y;
+              placement.rcNormalPosition.top = root_y - (offsety + impl->margins.top) - _gdk_offset_y;
               placement.rcNormalPosition.bottom = placement.rcNormalPosition.top + unmax_height;
 
               if (left_half)
                 {
-                  placement.rcNormalPosition.left = root_x - offsetx - _gdk_offset_x;
+                  placement.rcNormalPosition.left = root_x - (offsetx + impl->margins.left) - _gdk_offset_x;
                   placement.rcNormalPosition.right = placement.rcNormalPosition.left + unmax_width;
                 }
               else
                 {
-                  placement.rcNormalPosition.right = root_x + offsetx - _gdk_offset_x;
+                  placement.rcNormalPosition.right = root_x + (offsetx + impl->margins.right) - _gdk_offset_x;
                   placement.rcNormalPosition.left = placement.rcNormalPosition.right - unmax_width;
                 }
             }
           else
             {
               placement.rcNormalPosition.left = root_x - unmax_width / 2 - _gdk_offset_x;
-              placement.rcNormalPosition.top = root_y - unmax_height / 2 - _gdk_offset_y;
+
+              if (offsety < shadow_unmax_height / 2)
+                placement.rcNormalPosition.top = root_y - (offsety + impl->margins.top) - _gdk_offset_y;
+              else
+                placement.rcNormalPosition.top = root_y - unmax_height / 2 - _gdk_offset_y;
+
               placement.rcNormalPosition.right = placement.rcNormalPosition.left + unmax_width;
               placement.rcNormalPosition.bottom = placement.rcNormalPosition.top + unmax_height;
             }
@@ -4426,18 +4512,26 @@ setup_drag_move_resize_context (GdkWindow                   *window,
       else if (!pointer_outside_of_window && impl->snap_stash_int)
         {
           GdkRectangle new_pos;
+          GdkRectangle snew_pos;
 
           new_pos.width = impl->snap_stash_int->width;
           new_pos.height = impl->snap_stash_int->height;
+          snew_pos = new_pos;
 
-          if (offsetx < new_pos.width && offsety < new_pos.height)
+          if (op == GDK_WIN32_DRAGOP_MOVE)
             {
-              new_pos.y = root_y - offsety;
+              snew_pos.width -= impl->margins_x;
+              snew_pos.height -= impl->margins_y;
+            }
+
+          if (offsetx < snew_pos.width / 2 && offsety < snew_pos.height / 2)
+            {
+              new_pos.y = root_y - (offsety + impl->margins.top);
 
               if (left_half)
-                new_pos.x = root_x - offsetx;
+                new_pos.x = root_x - (offsetx + impl->margins.left);
               else
-                new_pos.x = root_x + offsetx - new_pos.width;
+                new_pos.x = root_x + (offsetx + impl->margins.left) - new_pos.width;
             }
           else
             {
@@ -5774,6 +5868,15 @@ gdk_win32_window_set_shadow_width (GdkWindow *window,
   GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
 
   if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  GDK_NOTE (MISC, g_print ("gdk_win32_window_set_shadow_width: window %p, "
+                           "left %d, top %d, right %d, bottom %d\n",
+                           window, left, top, right, bottom));
+
+  impl->zero_margins = left == 0 && right == 0 && top == 0 && bottom == 0;
+
+  if (impl->zero_margins)
     return;
 
   impl->margins.left = left;

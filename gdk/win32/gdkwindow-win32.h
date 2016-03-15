@@ -251,6 +251,10 @@ struct _GdkWindowImplWin32
   gint margins_x;
   gint margins_y;
 
+  /* Set to TRUE when GTK tells us that margins are 0 everywhere.
+   * We don't actually set margins to 0, we just set this bit.
+   */
+  guint zero_margins : 1;
   guint no_bg : 1;
   guint inhibit_configure : 1;
   guint override_redirect : 1;
