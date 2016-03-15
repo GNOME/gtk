@@ -1813,114 +1813,205 @@ checkbutton check {
 /************
  * GtkScale *
  ************/
-scale,
-scale.scale-has-marks-above.scale-has-marks-below,
-scale.vertical.scale-has-marks-above.scale-has-marks-below {
-  -GtkScale-slider-length: 20;
-  -GtkRange-slider-width: 20;
-  outline-offset: -9px;
-  -gtk-outline-radius: 4px; }
-  scale.fine-tune,
-  scale.scale-has-marks-above.scale-has-marks-below.fine-tune,
-  scale.vertical.scale-has-marks-above.scale-has-marks-below.fine-tune {
-    outline-offset: -7px;
-    -gtk-outline-radius: 6px; }
-    scale.fine-tune trough,
-    scale.scale-has-marks-above.scale-has-marks-below.fine-tune trough,
-    scale.vertical.scale-has-marks-above.scale-has-marks-below.fine-tune trough {
-      border-radius: 4px;
-      margin: 8px; }
-  scale trough slider,
-  scale.scale-has-marks-above.scale-has-marks-below trough slider,
-  scale.vertical.scale-has-marks-above.scale-has-marks-below trough slider {
+scale trough, scale fill {
+  border: 2px solid gray;
+  border-radius: 4px;
+  background-color: gray;
+  box-shadow: none; }
+  scale trough:disabled, scale fill:disabled {
+    background-color: white; }
+  scale trough:backdrop, scale fill:backdrop {
+    background-color: #b3b3b3;
+    border-color: #8d8d8d; }
+    scale trough:backdrop:disabled, scale fill:backdrop:disabled {
+      background-color: white; }
+  row:selected scale trough, scale row:selected trough, row:selected scale fill, scale row:selected fill, row:selected scale trough:disabled, scale row:selected trough:disabled, row:selected scale fill:disabled, scale row:selected fill:disabled {
+    border-color: #000; }
+  .osd scale trough, scale .osd trough, .osd scale fill, scale .osd fill {
+    border-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0);
+    box-shadow: none;
+    outline-color: rgba(255, 255, 255, 0.2); }
+    .osd scale trough:disabled, scale .osd trough:disabled, .osd scale fill:disabled, scale .osd fill:disabled {
+      background-color: white; }
+
+scale highlight {
+  border: 2px solid #000;
+  border-radius: 4px;
+  background-color: #000; }
+  scale highlight:disabled {
+    background-color: transparent;
+    border-color: transparent; }
+  scale highlight:backdrop {
+    border-color: #b3b3b3; }
+    scale highlight:backdrop:disabled {
+      background-color: transparent;
+      border-color: transparent; }
+  row:selected scale highlight, scale row:selected highlight, row:selected scale highlight:disabled, scale row:selected highlight:disabled {
+    border-color: #000; }
+  .osd scale highlight, scale .osd highlight {
+    border-color: rgba(255, 255, 255, 0.2); }
+    .osd scale highlight:disabled, scale .osd highlight:disabled {
+      border-color: transparent; }
+
+scale {
+  min-height: 10px;
+  min-width: 10px;
+  padding: 12px; }
+  scale fill,
+  scale highlight {
+    margin: -1px; }
+  scale slider {
+    min-height: 18px;
+    min-width: 18px;
+    margin: -9px; }
+  scale.fine-tune.horizontal {
+    padding-top: 9px;
+    padding-bottom: 9px;
+    min-height: 16px; }
+  scale.fine-tune.vertical {
+    padding-left: 9px;
+    padding-right: 9px;
+    min-width: 16px; }
+  scale.fine-tune slider {
+    margin: -6px; }
+  scale.fine-tune fill,
+  scale.fine-tune highlight,
+  scale.fine-tune trough {
+    border-radius: 5px;
+    -gtk-outline-radius: 7px; }
+  scale trough {
+    outline-offset: 2px;
+    -gtk-outline-radius: 5px; }
+  scale fill, scale fill:backdrop {
+    background-color: gray;
+    box-shadow: none; }
+  scale fill:disabled, scale fill:disabled:backdrop {
+    border-color: transparent;
+    background-color: transparent; }
+  .osd scale fill {
+    background-color: rgba(255, 255, 255, 0.4); }
+    .osd scale fill:disabled, .osd scale fill:disabled:backdrop {
+      border-color: transparent;
+      background-color: transparent; }
+  scale slider {
     border-width: 2px;
     border-style: solid;
     color: #000;
     background-image: none;
     background-color: #fff;
     border-color: gray;
-    border-radius: 50%;
-    border-color: #787878; }
-    scale trough slider:hover,
-    scale.scale-has-marks-above.scale-has-marks-below trough slider:hover,
-    scale.vertical.scale-has-marks-above.scale-has-marks-below trough slider:hover {
+    border: 2px solid gray;
+    border-radius: 100%; }
+    scale slider:hover {
       border-width: 2px;
       border-style: solid;
       color: #000;
       background-color: #fff;
       border-color: gray;
-      background-image: none;
-      border-color: #787878;
-      border-radius: 50%; }
-    scale trough slider:disabled,
-    scale.scale-has-marks-above.scale-has-marks-below trough slider:disabled,
-    scale.vertical.scale-has-marks-above.scale-has-marks-below trough slider:disabled {
-      border-style: solid;
-      border-radius: 50%;
-      background-image: none;
-      box-shadow: none; }
-    scale trough slider:backdrop,
-    scale.scale-has-marks-above.scale-has-marks-below trough slider:backdrop,
-    scale.vertical.scale-has-marks-above.scale-has-marks-below trough slider:backdrop {
-      border-style: solid;
-      border-radius: 50%;
-      border-color: #858585;
-      background-image: none;
-      box-shadow: none; }
-    scale trough slider:backdrop:disabled,
-    scale.scale-has-marks-above.scale-has-marks-below trough slider:backdrop:disabled,
-    scale.vertical.scale-has-marks-above.scale-has-marks-below trough slider:backdrop:disabled {
+      background-image: none; }
+    scale slider:active {
+      border-color: #000; }
+    scale slider:disabled {
       border-width: 2px;
       border-style: solid;
       color: gray;
       background-color: white;
       border-color: silver;
-      background-image: none; }
-    scale trough slider:active,
-    scale.scale-has-marks-above.scale-has-marks-below trough slider:active,
-    scale.vertical.scale-has-marks-above.scale-has-marks-below trough slider:active {
-      border: 1px solid black; }
-  scale trough,
-  scale.scale-has-marks-above.scale-has-marks-below trough,
-  scale.vertical.scale-has-marks-above.scale-has-marks-below trough {
-    margin: 10px;
-    border-width: 1px;
-    border-style: solid;
-    border-radius: 3px;
-    border-color: gray;
-    background-color: #cccccc;
-    box-shadow: inset 1px 1px rgba(0, 0, 0, 0.1); }
-    scale trough.highlight,
-    scale.scale-has-marks-above.scale-has-marks-below trough.highlight,
-    scale.vertical.scale-has-marks-above.scale-has-marks-below trough.highlight {
-      border-color: #000;
-      background-color: #000; }
-      scale trough.highlight:backdrop,
-      scale.scale-has-marks-above.scale-has-marks-below trough.highlight:backdrop,
-      scale.vertical.scale-has-marks-above.scale-has-marks-below trough.highlight:backdrop {
-        border-color: gray;
-        background-color: gray;
-        box-shadow: none; }
-    scale trough:disabled, scale trough.hilight:disabled,
-    scale.scale-has-marks-above.scale-has-marks-below trough:disabled,
-    scale.scale-has-marks-above.scale-has-marks-below trough.hilight:disabled,
-    scale.vertical.scale-has-marks-above.scale-has-marks-below trough:disabled,
-    scale.vertical.scale-has-marks-above.scale-has-marks-below trough.hilight:disabled {
-      border-color: silver;
-      background-color: white; }
-    scale trough:backdrop,
-    scale.scale-has-marks-above.scale-has-marks-below trough:backdrop,
-    scale.vertical.scale-has-marks-above.scale-has-marks-below trough:backdrop {
+      background-image: none;
+      text-shadow: none;
+      -gtk-icon-shadow: none; }
+    scale slider:backdrop {
+      border-width: 2px;
+      border-style: solid;
+      color: #000;
+      background-color: #fff;
       border-color: #8d8d8d;
-      background-color: silver;
-      box-shadow: none; }
-    scale trough:backdrop:disabled, scale trough .hilight:backdrop:disabled,
-    scale.scale-has-marks-above.scale-has-marks-below trough:backdrop:disabled,
-    scale.scale-has-marks-above.scale-has-marks-below trough .hilight:backdrop:disabled,
-    scale.vertical.scale-has-marks-above.scale-has-marks-below trough:backdrop:disabled,
-    scale.vertical.scale-has-marks-above.scale-has-marks-below trough .hilight:backdrop:disabled {
-      border-color: gray;
-      background-color: #fff; }
+      background-image: none;
+      text-shadow: none;
+      -gtk-icon-shadow: none; }
+      scale slider:backdrop:disabled {
+        border-width: 2px;
+        border-style: solid;
+        color: gray;
+        background-color: white;
+        border-color: silver;
+        background-image: none; }
+    row:selected scale slider, row:selected scale slider:disabled {
+      border-color: #000; }
+    .osd scale slider {
+      border-width: 2px;
+      border-style: solid;
+      color: #fff;
+      background-image: none;
+      background-color: rgba(0, 0, 0, 0.8);
+      border-color: rgba(255, 255, 255, 0.2);
+      box-shadow: none;
+      border-color: rgba(255, 255, 255, 0.2);
+      background-color: black; }
+      .osd scale slider:hover {
+        border-width: 2px;
+        border-style: solid;
+        color: #fff;
+        background-color: rgba(77, 77, 77, 0.8);
+        border-color: rgba(255, 255, 255, 0.2);
+        box-shadow: none; }
+      .osd scale slider:active {
+        border-width: 2px;
+        border-style: solid;
+        color: rgba(0, 0, 0, 0.8);
+        background-color: #fff;
+        border-color: rgba(255, 255, 255, 0.2);
+        box-shadow: none; }
+      .osd scale slider:disabled {
+        border-width: 2px;
+        border-style: solid;
+        border-color: rgba(255, 255, 255, 0.2);
+        color: gray; }
+      .osd scale slider:backdrop {
+        border-width: 2px;
+        border-style: solid; }
+        .osd scale slider:backdrop:disabled {
+          border-width: 2px;
+          border-style: solid; }
+  scale value {
+    color: alpha(currentColor,0.4); }
+  scale marks {
+    color: alpha(currentColor,0.4); }
+    scale marks.top {
+      margin-bottom: 6px;
+      margin-top: -12px; }
+    scale marks.bottom {
+      margin-top: 6px;
+      margin-bottom: -12px; }
+    scale marks.top {
+      margin-right: 6px;
+      margin-left: -12px; }
+    scale marks.bottom {
+      margin-left: 6px;
+      margin-right: -12px; }
+  scale.fine-tune marks.top {
+    margin-bottom: 6px;
+    margin-top: -9px; }
+  scale.fine-tune marks.bottom {
+    margin-top: 6px;
+    margin-bottom: -9px; }
+  scale.fine-tune marks.top {
+    margin-right: 6px;
+    margin-left: -9px; }
+  scale.fine-tune marks.bottom {
+    margin-left: 6px;
+    margin-right: -9px; }
+  scale.horizontal indicator {
+    min-height: 6px;
+    min-width: 1px; }
+  scale.horizontal.fine-tune indicator {
+    min-height: 3px; }
+  scale.vertical indicator {
+    min-height: 1px;
+    min-width: 6px; }
+  scale.vertical.fine-tune indicator {
+    min-width: 3px; }
 
 /*****************
  * Progress bars *

@@ -19,6 +19,7 @@ $warning_color: #f57900;
 $error_color: #cc0000;
 $success_color: #73d216;
 $destructive_color: #ef2929;
+$dark_fill: mix($fg_color, $bg_color, 50%);
 
 $osd_fg_color: #fff;
 $osd_bg_color: transparentize(#000,0.2);
@@ -34,6 +35,7 @@ $backdrop_base_color: $base_color;
 $backdrop_bg_color: $bg_color;
 $backdrop_fg_color: $fg_color;
 $backdrop_borders_color: mix($borders_color, $bg_color, 90%);
+$backdrop_dark_fill: mix($fg_color, $bg_color, 30%);
 
 //apps rely on some named colors to be exported
 /* GTK NAMED COLORS */
