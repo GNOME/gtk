@@ -206,7 +206,7 @@
   //
     color: $insensitive_fg_color;
     background-color: $insensitive_bg_color;
-    border-color: $backdrop_borders_color;
+    border-color: $insensitive_borders_color;
     background-image: none;
   }
 
@@ -215,7 +215,7 @@
   // backdrop insensitive pushed button
   //
     color: $insensitive_fg_color;
-    border-color: $backdrop_borders_color;
+    border-color: $insensitive_borders_color;
     background-image: none;
     background-color: mix($backdrop_borders_color,$backdrop_bg_color, 8%);
   }

@@ -27,7 +27,7 @@ $osd_borders_color: transparentize(#fff,0.8);
 //insensitive state derived colors
 $insensitive_fg_color: mix($fg_color, $bg_color, 50%);
 $insensitive_bg_color: mix($bg_color, $base_color, 60%);
-$insensitive_borders_color: $borders_color;
+$insensitive_borders_color: mix($borders_color, $base_color, 50%);
 
 //colors for the backdrop state, derived from the main colors.
 $backdrop_base_color: $base_color;
