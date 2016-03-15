@@ -827,6 +827,7 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
                                                        NULL),
                                 "visible", TRUE,
                                 NULL);
+  gtk_style_context_add (gtk_widget_get_style_context (search_button), "image-button");
   gtk_container_add (GTK_CONTAINER (priv->header_bar), GTK_WIDGET (search_button));
 
   priv->main_box = g_object_new (GTK_TYPE_BOX,
