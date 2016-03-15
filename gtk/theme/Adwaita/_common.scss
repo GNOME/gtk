@@ -2710,15 +2710,18 @@ scale {
   min-width: 10px;
   padding: 12px;
 
+  // those are inside the trough node, I need them to show their own border over the trough one, so negative margin
   fill,
   highlight { margin: -1px; }
 
+  // the slider is inside the trough, so to have make it bigger there's a negative margin
   slider {
     min-height: 18px;
     min-width: 18px;
     margin: -9px;
   }
 
+  // click-and-hold the slider to activate
   &.fine-tune {
     &.horizontal {
       padding-top: 9px;
@@ -2732,6 +2735,7 @@ scale {
       min-width: 16px;
     }
 
+    // to make the trough grow in fine-tune mode
     slider { margin: -6px; }
 
     fill,
@@ -2885,6 +2889,8 @@ scale {
           %#{$marks_infix}-#{$dir_infix},
           contents#{$nth_child} > trough > slider {
             &#{$state} {
+              // an asymmetric slider asset is used here, so the margins are uneven, the smaller
+              // margin is set on the point side.
               margin: -10px;
               $_scale_asset: 'assets/slider-#{$dir_infix}-#{$marks_infix}#{$state_infix}#{$suffix}';
               border-style: none;
@@ -2931,6 +2937,7 @@ scale {
 
           @at-root %#{$marks_infix}-#{$dir_infix}-fine-tune,
           &.fine-tune contents#{$nth_child} > trough > slider {
+            // bigger negative margins to make the trough grow here as well
             margin: -7px;
 
             @if $dir_class == 'horizontal' {
