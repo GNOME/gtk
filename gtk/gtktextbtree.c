@@ -2650,14 +2650,18 @@ redisplay_region (GtkTextBTree      *tree,
       else
         end_y = _gtk_text_btree_find_line_top (tree, end_line, view->view_id);
 
+      ld = _gtk_text_line_get_data (start_line, view->view_id);
+      if (ld)
+        start_y -= ld->top_ink;
+
       ld = _gtk_text_line_get_data (end_line, view->view_id);
       if (ld)
-        end_y += ld->height;
+        end_y += ld->height + ld->bottom_ink;
 
       if (cursors_only)
 	gtk_text_layout_cursors_changed (view->layout, start_y,
 					 end_y - start_y,
-					  end_y - start_y);
+					 end_y - start_y);
       else
 	gtk_text_layout_changed (view->layout, start_y,
 				 end_y - start_y,
@@ -3616,6 +3620,8 @@ _gtk_text_line_data_new (GtkTextLayout *layout,
   line_data->next = NULL;
   line_data->width = 0;
   line_data->height = 0;
+  line_data->top_ink = 0;
+  line_data->bottom_ink = 0;
   line_data->valid = FALSE;
 
   return line_data;

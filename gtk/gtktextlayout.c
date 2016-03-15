@@ -1041,23 +1041,31 @@ gtk_text_layout_validate_yrange (GtkTextLayout *layout,
       if (!line_data || !line_data->valid)
         {
           gint old_height, new_height;
+          gint top_ink, bottom_ink;
 	  
 	  old_height = line_data ? line_data->height : 0;
+          top_ink = line_data ? line_data->top_ink : 0;
+          bottom_ink = line_data ? line_data->bottom_ink : 0;
 
           _gtk_text_btree_validate_line (_gtk_text_buffer_get_btree (layout->buffer),
                                          line, layout);
           line_data = _gtk_text_line_get_data (line, layout);
 
 	  new_height = line_data ? line_data->height : 0;
+          if (line_data)
+            {
+              top_ink = MAX (top_ink, line_data->top_ink);
+              bottom_ink = MAX (bottom_ink, line_data->bottom_ink);
+            }
 
           delta_height += new_height - old_height;
           
           first_line = line;
-          first_line_y = -seen - new_height;
+          first_line_y = -seen - new_height - top_ink;
           if (!last_line)
             {
               last_line = line;
-              last_line_y = -seen;
+              last_line_y = -seen + bottom_ink;
             }
         }
 
@@ -1074,23 +1082,31 @@ gtk_text_layout_validate_yrange (GtkTextLayout *layout,
       if (!line_data || !line_data->valid)
         {
           gint old_height, new_height;
+          gint top_ink, bottom_ink;
 	  
 	  old_height = line_data ? line_data->height : 0;
+          top_ink = line_data ? line_data->top_ink : 0;
+          bottom_ink = line_data ? line_data->bottom_ink : 0;
 
           _gtk_text_btree_validate_line (_gtk_text_buffer_get_btree (layout->buffer),
                                          line, layout);
           line_data = _gtk_text_line_get_data (line, layout);
 	  new_height = line_data ? line_data->height : 0;
+          if (line_data)
+            {
+              top_ink = MAX (top_ink, line_data->top_ink);
+              bottom_ink = MAX (bottom_ink, line_data->bottom_ink);
+            }
 
           delta_height += new_height - old_height;
           
           if (!first_line)
             {
               first_line = line;
-              first_line_y = seen;
+              first_line_y = seen - top_ink;
             }
           last_line = line;
-          last_line_y = seen + new_height;
+          last_line_y = seen + new_height + bottom_ink;
         }
 
       seen += line_data ? line_data->height : 0;
@@ -1152,6 +1168,7 @@ gtk_text_layout_real_wrap (GtkTextLayout   *layout,
                            GtkTextLineData *line_data)
 {
   GtkTextLineDisplay *display;
+  PangoRectangle ink_rect, logical_rect;
 
   g_return_val_if_fail (GTK_IS_TEXT_LAYOUT (layout), NULL);
   g_return_val_if_fail (line != NULL, NULL);
@@ -1166,6 +1183,9 @@ gtk_text_layout_real_wrap (GtkTextLayout   *layout,
   line_data->width = display->width;
   line_data->height = display->height;
   line_data->valid = TRUE;
+  pango_layout_get_pixel_extents (display->layout, &ink_rect, &logical_rect);
+  line_data->top_ink = MAX (0, logical_rect.x - ink_rect.x);
+  line_data->bottom_ink = MAX (0, logical_rect.x + logical_rect.width - ink_rect.x - ink_rect.width);
   gtk_text_layout_free_line_display (layout, display);
 
   return line_data;
