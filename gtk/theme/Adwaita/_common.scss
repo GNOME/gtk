@@ -1552,11 +1552,11 @@ treeview.view {
 
       @extend %selected_items;
     }
- 
+
     &:backdrop, & {
       border-left-color: mix($selected_fg_color, $selected_bg_color, 50%);
       border-top-color: transparentize($fg_color, 0.9); // doesn't work unfortunatelly
-    } 
+    }
   }
 
   &:disabled {
@@ -1615,6 +1615,7 @@ treeview.view {
 
     border: 1px solid $selected_borders_color;
     border-radius: 4px;
+    background-color: $selected_bg_color;
     background-image: linear-gradient(to bottom,
                                       $selected_bg_color,
                                       darken($selected_bg_color,10%));
@@ -1624,26 +1625,30 @@ treeview.view {
                                                   transparentize(black,0.9));
 
     &:selected {
-      @if $variant == 'light' {
-         color: $selected_bg_color;
-         box-shadow: none;
-      }
+      &:focus, & {
+        border-radius: 4px;
 
-      @else { box-shadow: inset 0 1px transparentize(white, 0.95); }
-
-      background-image: linear-gradient(to bottom,
-                                        $base_color,
-                                        darken($base_color,10%));
-
-      &:backdrop {
         @if $variant == 'light' {
           color: $selected_bg_color;
-          border-color: $selected_borders_color; // otherwise it gets inherited by .view(?!?)
+          box-shadow: none;
         }
 
-        @else { border-color: $backdrop_base_color; }
+        @else { box-shadow: inset 0 1px transparentize(white, 0.95); }
 
-        background-color: $backdrop_base_color;
+        background-image: linear-gradient(to bottom,
+                                          $base_color,
+                                          darken($base_color,10%));
+
+        &:backdrop {
+          @if $variant == 'light' {
+            color: $selected_bg_color;
+            border-color: $selected_borders_color; // otherwise it gets inherited by .view(?!?)
+          }
+
+          @else { border-color: $backdrop_base_color; }
+
+          background-color: $backdrop_base_color;
+        }
       }
     }
 
@@ -1662,14 +1667,17 @@ treeview.view {
     border-radius: 4px;
 
     &:selected {
-      background-color: if($variant == 'light',
-                           transparentize($selected_fg_color, 0.7),
-                           darken($selected_bg_color, 10%));
+      &:focus, & {
+        background-color: if($variant == 'light',
+                             transparentize($selected_fg_color, 0.7),
+                             darken($selected_bg_color, 10%));
+        border-radius: 4px;
 
-      @if $variant == 'light' {
-        border-width: 1px 0;
-        border-style: solid;
-        border-color: $selected_bg_color;
+        @if $variant == 'light' {
+          border-width: 1px 0;
+          border-style: solid;
+          border-color: $selected_bg_color;
+        }
       }
     }
   }
@@ -3728,7 +3736,7 @@ paned {
       background-size: 1px 1px, 1px 1px;
 
       &:backdrop {
-        background-image: linear-gradient(to top, $backdrop_borders_color), 
+        background-image: linear-gradient(to top, $backdrop_borders_color),
                           linear-gradient(to top, $backdrop_borders_color);
       }
     }
