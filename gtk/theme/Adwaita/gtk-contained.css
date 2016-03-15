@@ -1990,16 +1990,19 @@ popover.background {
  * Notebooks *
  *************/
 notebook > header {
+  padding: 1px;
   border-color: #9d9d99;
   border-width: 1px;
   background-color: #cececc; }
   notebook > header:backdrop {
     border-color: #a5a5a1;
     background-color: #d1d1cf; }
+  notebook > header tabs {
+    margin: -1px; }
   notebook > header.top {
     border-bottom-style: solid; }
     notebook > header.top > tabs {
-      margin-bottom: -1px; }
+      margin-bottom: -2px; }
       notebook > header.top > tabs > tab:hover {
         box-shadow: inset 0 -3px #9d9d99; }
       notebook > header.top > tabs > tab:backdrop {
@@ -2009,7 +2012,7 @@ notebook > header {
   notebook > header.bottom {
     border-top-style: solid; }
     notebook > header.bottom > tabs {
-      margin-top: -1px; }
+      margin-top: -2px; }
       notebook > header.bottom > tabs > tab:hover {
         box-shadow: inset 0 3px #9d9d99; }
       notebook > header.bottom > tabs > tab:backdrop {
@@ -2019,7 +2022,7 @@ notebook > header {
   notebook > header.left {
     border-right-style: solid; }
     notebook > header.left > tabs {
-      margin-right: -1px; }
+      margin-right: -2px; }
       notebook > header.left > tabs > tab:hover {
         box-shadow: inset -3px 0 #9d9d99; }
       notebook > header.left > tabs > tab:backdrop {
@@ -2029,7 +2032,7 @@ notebook > header {
   notebook > header.right {
     border-left-style: solid; }
     notebook > header.right > tabs {
-      margin-left: -1px; }
+      margin-left: -2px; }
       notebook > header.right > tabs > tab:hover {
         box-shadow: inset 3px 0 #9d9d99; }
       notebook > header.right > tabs > tab:backdrop {
@@ -2126,17 +2129,31 @@ notebook > header {
       notebook > header tab button.flat:first-child {
         margin-left: -4px;
         margin-right: 4px; }
-  notebook > header.top, notebook > header.bottom {
+  notebook > header.top tabs, notebook > header.bottom tabs {
     padding-left: 4px;
     padding-right: 4px; }
+    notebook > header.top tabs:not(:only-child), notebook > header.bottom tabs:not(:only-child) {
+      margin-left: 3px;
+      margin-right: 3px; }
+      notebook > header.top tabs:not(:only-child):first-child, notebook > header.bottom tabs:not(:only-child):first-child {
+        margin-left: -1px; }
+      notebook > header.top tabs:not(:only-child):last-child, notebook > header.bottom tabs:not(:only-child):last-child {
+        margin-right: -1px; }
     notebook > header.top tabs tab, notebook > header.bottom tabs tab {
       margin-left: 4px;
       margin-right: 4px; }
       notebook > header.top tabs tab.reorderable-page, notebook > header.bottom tabs tab.reorderable-page {
         border-style: none solid; }
-  notebook > header.left, notebook > header.right {
+  notebook > header.left tabs, notebook > header.right tabs {
     padding-top: 4px;
     padding-bottom: 4px; }
+    notebook > header.left tabs:not(:only-child), notebook > header.right tabs:not(:only-child) {
+      margin-top: 3px;
+      margin-bottom: 3px; }
+      notebook > header.left tabs:not(:only-child):first-child, notebook > header.right tabs:not(:only-child):first-child {
+        margin-top: -1px; }
+      notebook > header.left tabs:not(:only-child):last-child, notebook > header.right tabs:not(:only-child):last-child {
+        margin-bottom: -1px; }
     notebook > header.left tabs tab, notebook > header.right tabs tab {
       margin-top: 4px;
       margin-bottom: 4px; }

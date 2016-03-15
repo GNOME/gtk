@@ -1926,6 +1926,7 @@ popover.background {
  *************/
 notebook {
   > header {
+    padding: 1px;
     border-color: $borders_color;
     border-width: 1px;
     background-color: $dark_fill;
@@ -1935,10 +1936,12 @@ notebook {
       background-color: $backdrop_dark_fill;
     }
 
+    tabs { margin: -1px; }
+
     &.top {
       border-bottom-style: solid;
       > tabs {
-        margin-bottom: -1px;
+        margin-bottom: -2px;
         > tab {
           &:hover { box-shadow: inset 0 -3px $borders_color; }
 
@@ -1952,7 +1955,7 @@ notebook {
     &.bottom {
       border-top-style: solid;
       > tabs {
-        margin-top: -1px;
+        margin-top: -2px;
         > tab {
           &:hover { box-shadow: inset 0 3px $borders_color; }
 
@@ -1966,7 +1969,7 @@ notebook {
     &.left {
       border-right-style: solid;
       > tabs {
-        margin-right: -1px;
+        margin-right: -2px;
         > tab {
           &:hover { box-shadow: inset -3px 0 $borders_color; }
 
@@ -1980,7 +1983,7 @@ notebook {
     &.right {
       border-left-style: solid;
       > tabs {
-        margin-left: -1px;
+        margin-left: -2px;
         > tab {
           &:hover { box-shadow: inset 3px 0 $borders_color; }
 
@@ -2134,10 +2137,18 @@ notebook {
 
     &.top,
     &.bottom {
-      padding-left: 4px;
-      padding-right: 4px;
-
       tabs {
+        padding-left: 4px;
+        padding-right: 4px;
+
+        &:not(:only-child) {
+          margin-left: 3px;
+          margin-right: 3px;
+
+          &:first-child { margin-left: -1px; }
+          &:last-child { margin-right: -1px; }
+        }
+
         tab {
           margin-left: 4px;
           margin-right: 4px;
@@ -2149,10 +2160,18 @@ notebook {
 
     &.left,
     &.right {
-      padding-top: 4px;
-      padding-bottom: 4px;
-
       tabs {
+        padding-top: 4px;
+        padding-bottom: 4px;
+
+        &:not(:only-child) {
+          margin-top: 3px;
+          margin-bottom: 3px;
+
+          &:first-child { margin-top: -1px; }
+          &:last-child { margin-bottom: -1px; }
+        }
+
         tab {
           margin-top: 4px;
           margin-bottom: 4px;
