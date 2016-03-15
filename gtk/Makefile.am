@@ -1249,6 +1249,14 @@ gtk.gresource.xml: Makefile.am inspector/Makefile.inc
 	echo "    <file alias='theme/HighContrastInverse/gtk.css'>theme/HighContrast/gtk-inverse.css</file>" >> $@; \
 	echo "    <file>theme/HighContrast/gtk-contained.css</file>" >> $@; \
 	echo "    <file>theme/HighContrast/gtk-contained-inverse.css</file>" >> $@; \
+	      for f in $(srcdir)/theme/HighContrast/assets/*.png; do \
+          n=`basename $$f`; \
+          echo "    <file preprocess='to-pixdata'>theme/HighContrast/assets/$$n</file>" >> $@; \
+        done; \
+        for f in $(srcdir)/theme/HighContrast/assets/*.svg; do \
+          n=`basename $$f`; \
+          echo "    <file>theme/HighContrast/assets/$$n</file>" >> $@; \
+        done; \
 	echo "    <file>theme/win32/gtk-win32-base.css</file>" >> $@; \
 	echo "    <file>theme/win32/gtk.css</file>" >> $@; \
 	for f in $(srcdir)/cursor/*.png; do \
