@@ -9787,9 +9787,11 @@ gtk_window_update_fixed_size (GtkWindow   *window,
 {
   GtkWindowPrivate *priv = window->priv;
   GtkWindowGeometryInfo *info;
+  gboolean has_size_request;
 
   /* Adjust the geometry hints for non-resizable windows only */
-  if (priv->resizable)
+  has_size_request = gtk_widget_has_size_request (GTK_WIDGET (window));
+  if (priv->resizable || has_size_request)
     return;
 
   info = gtk_window_get_geometry_info (window, FALSE);
