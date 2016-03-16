@@ -1056,17 +1056,17 @@ show_window_recurse (GdkWindow *window, gboolean hide_window)
 		{
 		  if (gdk_window_get_state (window) & GDK_WINDOW_STATE_MAXIMIZED)
 		    {
-		      ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWMAXIMIZED);
+		      GtkShowWindow (GDK_WINDOW_HWND (window), SW_SHOWMAXIMIZED);
 		    }
 		  else
 		    {
-		      ShowWindow (GDK_WINDOW_HWND (window), SW_RESTORE);
+		      GtkShowWindow (GDK_WINDOW_HWND (window), SW_RESTORE);
 		    }
 		}
 	    }
 	  else
 	    {
-	      ShowWindow (GDK_WINDOW_HWND (window), SW_MINIMIZE);
+	      GtkShowWindow (GDK_WINDOW_HWND (window), SW_MINIMIZE);
 	    }
 	}
 

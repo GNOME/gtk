@@ -1145,7 +1145,7 @@ show_window_internal (GdkWindow *window,
       !already_mapped &&
       (window->state & GDK_WINDOW_STATE_ICONIFIED))
     {
-      ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWMINNOACTIVE);
+      GtkShowWindow (GDK_WINDOW_HWND (window), SW_SHOWMINNOACTIVE);
       return;
     }
 
@@ -1318,29 +1318,29 @@ show_window_internal (GdkWindow *window,
     }
   else if (window->state & GDK_WINDOW_STATE_MAXIMIZED)
     {
-      ShowWindow (GDK_WINDOW_HWND (window), SW_MAXIMIZE);
+      GtkShowWindow (GDK_WINDOW_HWND (window), SW_MAXIMIZE);
     }
   else if (window->state & GDK_WINDOW_STATE_ICONIFIED)
     {
       if (focus_on_map)
-	ShowWindow (GDK_WINDOW_HWND (window), SW_RESTORE);
+        GtkShowWindow (GDK_WINDOW_HWND (window), SW_RESTORE);
       else
-	ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNOACTIVATE);
+        GtkShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNOACTIVATE);
     }
   else if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP || !focus_on_map)
     {
       if (!IsWindowVisible (GDK_WINDOW_HWND (window)))
-        ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNOACTIVATE);
+        GtkShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNOACTIVATE);
       else
-        ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNA);
+        GtkShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNA);
     }
   else if (!IsWindowVisible (GDK_WINDOW_HWND (window)))
     {
-      ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNORMAL);
+      GtkShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNORMAL);
     }
   else
     {
-      ShowWindow (GDK_WINDOW_HWND (window), SW_SHOW);
+      GtkShowWindow (GDK_WINDOW_HWND (window), SW_SHOW);
     }
 
   /* Sync STATE_ABOVE to TOPMOST */
@@ -1395,7 +1395,7 @@ gdk_win32_window_hide (GdkWindow *window)
     }
   else
     {
-      ShowWindow (GDK_WINDOW_HWND (window), SW_HIDE);
+      GtkShowWindow (GDK_WINDOW_HWND (window), SW_HIDE);
     }
 }
 
@@ -3415,7 +3415,7 @@ gdk_win32_window_iconify (GdkWindow *window)
   if (GDK_WINDOW_IS_MAPPED (window))
     {
       old_active_window = GetActiveWindow ();
-      ShowWindow (GDK_WINDOW_HWND (window), SW_MINIMIZE);
+      GtkShowWindow (GDK_WINDOW_HWND (window), SW_MINIMIZE);
       if (old_active_window != GDK_WINDOW_HWND (window))
 	SetActiveWindow (old_active_window);
     }
@@ -3486,7 +3486,7 @@ gdk_win32_window_maximize (GdkWindow *window)
 			   _gdk_win32_window_state_to_string (window->state)));
 
   if (GDK_WINDOW_IS_MAPPED (window))
-    ShowWindow (GDK_WINDOW_HWND (window), SW_MAXIMIZE);
+    GtkShowWindow (GDK_WINDOW_HWND (window), SW_MAXIMIZE);
   else
     gdk_synthesize_window_state (window,
 				 0,
@@ -3506,7 +3506,7 @@ gdk_win32_window_unmaximize (GdkWindow *window)
 			   _gdk_win32_window_state_to_string (window->state)));
 
   if (GDK_WINDOW_IS_MAPPED (window))
-    ShowWindow (GDK_WINDOW_HWND (window), SW_RESTORE);
+    GtkShowWindow (GDK_WINDOW_HWND (window), SW_RESTORE);
   else
     gdk_synthesize_window_state (window,
 				 GDK_WINDOW_STATE_MAXIMIZED,
@@ -3658,13 +3658,13 @@ gdk_win32_window_focus (GdkWindow *window,
 			   _gdk_win32_window_state_to_string (window->state)));
 
   if (window->state & GDK_WINDOW_STATE_MAXIMIZED)
-    ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWMAXIMIZED);
+    GtkShowWindow (GDK_WINDOW_HWND (window), SW_SHOWMAXIMIZED);
   else if (window->state & GDK_WINDOW_STATE_ICONIFIED)
-    ShowWindow (GDK_WINDOW_HWND (window), SW_RESTORE);
+    GtkShowWindow (GDK_WINDOW_HWND (window), SW_RESTORE);
   else if (!IsWindowVisible (GDK_WINDOW_HWND (window)))
-    ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNORMAL);
+    GtkShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNORMAL);
   else
-    ShowWindow (GDK_WINDOW_HWND (window), SW_SHOW);
+    GtkShowWindow (GDK_WINDOW_HWND (window), SW_SHOW);
 
   SetFocus (GDK_WINDOW_HWND (window));
 }
@@ -4182,6 +4182,81 @@ gdk_win32_ref_cairo_surface (GdkWindow *window)
     cairo_surface_reference (impl->cairo_surface);
 
   return impl->cairo_surface;
+}
+
+BOOL WINAPI
+GtkShowWindow (HWND hwnd,
+               int  cmd_show)
+{
+  cairo_t *cr;
+  cairo_surface_t *surface;
+  RECT window_rect;
+  HDC hdc;
+  POINT window_position;
+  SIZE window_size;
+  POINT source_point;
+  BLENDFUNCTION blender;
+
+  switch (cmd_show)
+    {
+    case SW_FORCEMINIMIZE:
+    case SW_HIDE:
+    case SW_MINIMIZE:
+      break;
+    case SW_MAXIMIZE:
+    case SW_RESTORE:
+    case SW_SHOW:
+    case SW_SHOWDEFAULT:
+    case SW_SHOWMINIMIZED:
+    case SW_SHOWMINNOACTIVE:
+    case SW_SHOWNA:
+    case SW_SHOWNOACTIVATE:
+    case SW_SHOWNORMAL:
+      if (IsWindowVisible (hwnd))
+        break;
+
+      if ((WS_EX_LAYERED & GetWindowLongPtr (hwnd, GWL_EXSTYLE)) != WS_EX_LAYERED)
+        break;
+
+      /* Window was hidden, will be shown. Erase it, GDK will repaint soon,
+       * but not soon enough, so it's possible to see old content before
+       * the next redraw, unless we erase the window first.
+       */
+      GetWindowRect (hwnd, &window_rect);
+      source_point.x = source_point.y = 0;
+
+      window_position.x = window_rect.left;
+      window_position.y = window_rect.top;
+      window_size.cx = window_rect.right - window_rect.left;
+      window_size.cy = window_rect.bottom - window_rect.top;
+
+      blender.BlendOp = AC_SRC_OVER;
+      blender.BlendFlags = 0;
+      blender.AlphaFormat = AC_SRC_ALPHA;
+      blender.SourceConstantAlpha = 255;
+
+      /* Create a surface of appropriate size and clear it */
+      surface = cairo_win32_surface_create_with_dib (CAIRO_FORMAT_ARGB32, window_size.cx, window_size.cy);
+      cr = cairo_create (surface);
+      cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+      cairo_set_source_rgba (cr, 1.0, 1.0, 1.0, 0.0);
+      cairo_paint (cr);
+      cairo_destroy (cr);
+      cairo_surface_flush (surface);
+      hdc = cairo_win32_surface_get_dc (surface);
+
+      /* No API_CALL() wrapper, don't check for errors */
+      UpdateLayeredWindow (hwnd, NULL,
+                           &window_position, &window_size,
+                           hdc, &source_point,
+                           0, &blender, ULW_ALPHA);
+
+      cairo_surface_destroy (surface);
+
+      break;
+    }
+
+  return ShowWindow (hwnd, cmd_show);
 }
 
 static void
