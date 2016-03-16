@@ -358,93 +358,160 @@ $_dot_color: $selected_bg_color;
   }
 }
 
+
 button {
-  $_button_transition: all 200ms $ease-out-quad;
+  @at-root %button_basic, & {
+    $_button_transition: all 200ms $ease-out-quad;
 
-  min-height: 24px;
-  min-width: 16px;
-  padding: 4px 8px;
-  border: 1px solid;
-  border-radius: 3px;
-  transition: $_button_transition;
-  @include button(normal);
-  &:hover, &.flat:hover {
-    @include button(hover);
-    -gtk-icon-effect: highlight;
-  }
-  &:active, &.flat:active,
-  &:checked, &.flat:checked {
-    @include button(active);
-    transition-duration: 50ms;
-  }
-  &:backdrop, &.flat:backdrop {
-    @include button(backdrop);
-    &:active, &:checked {
-      @include button(backdrop-active);
-    }
-    &:disabled {
-      @include button(backdrop-insensitive);
-    }
-    &:disabled:active {
-      @include button(backdrop-insensitive-active);
-    }
-  }
-  //&:selected, &.flat:selected,       Why this?
-  //&:selected:focus, &.flat:focus {
-  //  @extend %selected_items;
-  //}
-  &:disabled {
-    @include button(insensitive);
-    &:active, &.flat:active {
-      @include button(insensitive-active);
-    }
+    min-height: 24px;
+    min-width: 16px;
+    padding: 4px 8px;
+    border: 1px solid;
+    border-radius: 3px;
+    transition: $_button_transition;
 
-  }
-  &.flat, &.flat:backdrop, &.flat:disabled:backdrop {
-    @extend %undecorated_button;
-  }
-  
-  &.image-button {
-    min-width: 24px;
-    padding-left: 4px;
-    padding-right: 4px;
-  }
+    @include button(normal);
 
-  &.text-button {
-    padding-left: 16px;
-    padding-right: 16px;
-  }
+    &.flat {
+      @include button(undecorated);
+      // to avoid adiacent buttons borders clashing when transitioning, the transition on the normal state is set
+      // to none, while it's added back in the hover state, so the button decoration will fade in on hover, but
+      // it won't fade out when the pointer leave the button allocation area. To make the transition more evident
+      // in this case the duration is increased.
+      transition: none;
 
-  &.text-button.image-button {
-    padding-left: 8px;
-    padding-right: 8px;
-
-    label {
-      padding-left: 8px;
-      padding-right: 8px;
-    }
-  }
-
-  // Suggested and Destructive Action buttons
-  @each $b_type, $b_color in (suggested-action, $suggested_color),
-                              (destructive-action, $destructive_color) {
-    &.#{$b_type} {
-      @include button(normal,$b_color, white);
       &:hover {
-        @include button(hover,$b_color, white);
+        transition: $_button_transition;
+        transition-duration: 500ms;
+
+        &:active { transition: $_button_transition; }
       }
-      &:active, &:checked {
-        @include button(active,$b_color, white);
-      }
-      &:backdrop {
-        @include button(backdrop,$b_color,white);
+    }
+
+    &:hover {
+      @include button(hover);
+      -gtk-icon-effect: highlight;
+    }
+
+    &:active,
+    &:checked {
+      @include button(active);
+
+      transition-duration: 50ms;
+    }
+
+    &:backdrop {
+      &.flat, & {
+        @include button(backdrop);
+
+        -gtk-icon-effect: none;
+
+        &:active,
+        &:checked { @include button(backdrop-active); }
+
         &:disabled {
           @include button(backdrop-insensitive);
+
+          &:active,
+          &:checked { @include button(backdrop-insensitive-active); }
         }
       }
-      &:disabled {
-        @include button(insensitive);
+    }
+
+    &.flat { &:backdrop, &:disabled, &:backdrop:disabled { @include button(undecorated); }}
+
+    &:disabled {
+      @include button(insensitive);
+
+      &:active,
+      &:checked { @include button(insensitive-active); }
+    }
+
+    &.image-button {
+      min-width: 24px;
+      padding-left: 4px;
+      padding-right: 4px;
+    }
+
+    &.text-button {
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    &.text-button.image-button {
+      padding-left: 8px;
+      padding-right: 8px;
+
+      label {
+        padding-left: 8px;
+        padding-right: 8px;
       }
+    }
+
+    &:drop(active) {
+      color: $fg_color;
+      border-color: $fg_color;
+      box-shadow: inset 0 0 0 1px $fg_color;
+    }
+  }
+
+  @at-root %button_selected, & {
+    row:selected & {
+      @if $variant == 'light' { border-color: $selected_borders_color; }
+
+      &.flat:not(:active):not(:checked):not(:hover):not(disabled) {
+        color: $selected_fg_color;
+        border-color: transparent;
+
+        &:backdrop { color: if($variant=='light', $backdrop_base_color, $backdrop_fg_color); }
+      }
+    }
+  }
+
+
+  // big standalone buttons like in Documents pager
+  &.osd {
+    &.image-button {
+      min-height: 48px;
+      min-width: 48px;
+    }
+
+    color: $osd_fg_color;
+    border-radius: 5px;
+    outline-color: transparentize($osd_fg_color, 0.7);  //FIXME: define a color var?
+
+    @include button(osd);
+
+    border: none;
+    box-shadow: none;
+
+    &:hover {
+      @include button(osd-hover);
+
+      border: none;
+      box-shadow: none;
+    }
+
+    &:active,
+    &:checked {
+      @include button(osd-active);
+
+      border: none;
+      box-shadow: none;
+    }
+
+    &:disabled {
+      &:backdrop, & {
+        @include button(osd-insensitive);
+
+        border: none;
+      }
+    }
+
+    &:backdrop {
+      @include button(osd-backdrop);
+
+      border: none;
     }
   }
 
@@ -485,9 +552,114 @@ button {
     }
   }
 
-  // buttons in header bars and action bars
-  &.image-button { padding: 8px; }
-  &.text-button { padding: 6px 8px 5px; } // due to font metrics
+  // Suggested and Destructive Action buttons
+  @each $b_type, $b_color in (suggested-action, $selected_bg_color),
+                             (destructive-action, $destructive_color) {
+    &.#{$b_type} {
+      @include button(normal, $b_color, white);
+
+      &.flat {
+        @include button(undecorated);
+
+        color: $b_color; //FIXME: does it work on the dark variant?
+      }
+
+      &:hover { @include button(hover, $b_color, white); }
+
+      &:active,
+      &:checked { @include button(active, $b_color, white); }
+
+      &:backdrop,
+      &.flat:backdrop {
+        @include button(backdrop, $b_color, white);
+
+        &:active,
+        &:checked { @include button(backdrop-active, $b_color, white); }
+
+        &:disabled {
+          @include button(backdrop-insensitive);
+
+          &:active,
+          &:checked { @include button(backdrop-insensitive-active, $b_color, white); }
+        }
+      }
+
+      &.flat {
+        &:backdrop, &:disabled, &:backdrop:disabled {
+          @include button(undecorated);
+
+          color: transparentize($b_color, 0.2);
+        }
+      }
+
+      &:disabled {
+        @include button(insensitive);
+
+        &:active,
+        &:checked { @include button(insensitive-active, $b_color, white); }
+      }
+
+      .osd & {
+        @include button(osd, $b_color);
+
+        &:hover { @include button(osd-hover, $b_color); }
+
+        &:active,
+        &:checked { &:backdrop, & { @include button(osd-active, $b_color); }}
+
+        &:disabled { &:backdrop, & { @include button(osd-insensitive, $b_color); }}
+
+        &:backdrop { @include button(osd-backdrop, $b_color); }
+      }
+    }
+  }
+
+  .stack-switcher > & {
+    // to position the needs attention dot, padding is added to the button
+    // child, a label needs just lateral padding while an icon needs vertical
+    // padding added too.
+
+    outline-offset: -3px; // needs to be set or it gets overriden by GtkRadioButton outline-offset
+
+    > label {
+      padding-left: 6px;  // label padding
+      padding-right: 6px; //
+    }
+
+    > image {
+      padding-left: 6px;   // image padding
+      padding-right: 6px;  //
+      padding-top: 3px;    //
+      padding-bottom: 3px; //
+    }
+
+    &.text-button {
+      // compensate text-button paddings
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+
+    &.image-button {
+      // we want image buttons to have a 1:1 aspect ratio, so compensation
+      // of the padding added to the GtkImage is needed
+      padding-left: 2px;
+      padding-right: 2px;
+    }
+
+    &.needs-attention {
+      > label,
+      > image { @extend %needs_attention; }
+
+      &:active,
+      &:checked {
+        > label,
+        > image {
+          animation: none;
+          background-image: none;
+        }
+      }
+    }
+  }
 
   //inline-toolbar buttons
   .inline-toolbar &, .inline-toolbar &:backdrop {
@@ -496,7 +668,7 @@ button {
     @extend %linked;
   }
 
-  .primary-toolbar & { -gtk-icon-shadow: none; } // tango icons don't need added shadows
+  .primary-toolbar & { -gtk-icon-shadow: none; } // tango icons don't need shadows
 
   .linked > &,
   .linked > &:hover,
@@ -511,49 +683,10 @@ button {
   .linked.vertical > &:backdrop { @extend %linked_vertical; }
 }
 
-// all the following is for the +|- buttons on inline toolbars, that way
-// should really be reprecated...
-.inline-toolbar toolbutton > button { // redefining the button look is
-                                               // needed since those are flat...
-  @include button(normal, $edge: none); // the box-shadow outset doesn't work
-                                          // in this case, hence $edge: none
-  &:hover { @include button(hover, $edge: none); }
-  &:active { @include button(active, $edge: none); }
-  &:disabled { @include button(insensitive, $edge: none); }
-  &:disabled:active { @include button(insensitive-active, $edge:none); }
-  &:backdrop { @include button(backdrop); };
-  &:backdrop:active { @include button(backdrop-active); }
-  &:backdrop:disabled { @include button(backdrop-insensitive); }
-  &:backdrop:disabled:active { @include button(backdrop-insensitive-active);}
-}
-toolbar.inline-toolbar toolbutton { // .inline-toolbar.toolbar here for
-                                        // higher specificity than the previous
-                                        // "button look" selector
-  & > button.flat {
-    border-radius: 0;
-    border-left-style: none;
-  }
-  &:dir(rtl) > button.flat {}
-  &:first-child > button.flat {
-    border-radius: 3px 0 0 3px;
-    border-left-style: solid;
-  }
-  &:last-child > button.flat {
-    border-radius: 0 3px 3px 0;
-  }
-  &:last-child:dir(rtl) > button.flat {
-    border-right-style: solid;
-  }
-  &:only-child > button.flat {
-    border-radius: 3px;
-    border-style: solid;
-  }
-}
-
 %needs_attention {
   animation: needs_attention 150ms ease-in;
-  $_dot_shadow: $fg_color;
-  $_dot_shadow_r: 0.5;
+  $_dot_shadow: _text_shadow_color();
+  $_dot_shadow_r: if($variant=='light',0.5,0.45);
   background-image: -gtk-gradient(radial,
                                   center center, 0,
                                   center center, 0.5,
@@ -566,33 +699,85 @@ toolbar.inline-toolbar toolbutton { // .inline-toolbar.toolbar here for
                                   to(transparent));
   background-size: 6px 6px, 6px 6px;
   background-repeat: no-repeat;
-  background-position: right 3px, right 4px;
+
+  @if $variant == 'light' { background-position: right 3px, right 4px; }
+
+  @else { background-position: right 3px, right 2px; }
+
   &:backdrop { background-size: 6px 6px, 0 0;}
+
   &:dir(rtl) {
-    background-position: left 3px, left 4px;
+    @if $variant == 'light' { background-position: left 3px, left 4px; }
+
+    @else { background-position: left 3px, left 2px; }
   }
+}
+
+
+// all the following is for the +|- buttons on inline toolbars, that way
+// should really be deprecated...
+.inline-toolbar toolbutton > button { // redefining the button look is
+                                      // needed since those are flat...
+  @include button(normal);
+
+  &:hover { @include button(hover); }
+
+  &:active,
+  &:checked{ @include button(active); }
+
+  &:disabled {
+    @include button(insensitive);
+
+    &:active,
+    &:checked { @include button(insensitive-active); }
+  }
+
+  &:backdrop {
+    @include button(backdrop);
+
+    &:active,
+    &:checked { @include button(backdrop-active); }
+
+    &:disabled {
+      @include button(backdrop-insensitive);
+
+      &:active,
+      &:checked { @include button(backdrop-insensitive-active); }
+    }
+  }
+}
+
+// More inline toolbar buttons
+toolbar.inline-toolbar toolbutton,
+toolbar.inline-toolbar toolbutton:backdrop {
+  & > button.flat { @extend %linked_middle; }
+
+  &:first-child > button.flat { @extend %linked:first-child; }
+
+  &:last-child > button.flat { @extend %linked:last-child; }
+
+  &:only-child > button.flat { @extend %linked:only-child; }
 }
 
 %linked_middle {
   border-radius: 0;
-  border-left-style: none;
-  &:dir(rtl) {
-    border-radius: 0; // needed when including %linked_middle:dir(rtl)
-    border-right-style: none;
-    border-left-style: solid
-  }
+  border-right-style: none;
 }
 
 %linked {
   @extend %linked_middle;
+
   &:first-child {
-    border-radius: 3px 0 0 3px;
-    border-left-style: solid;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
   }
+
   &:last-child {
-    border-radius: 0 3px 3px 0;
-    &:dir(rtl) { border-right-style: solid; }
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border-right-style: solid;
   }
+
   &:only-child {
     border-radius: 3px;
     border-style: solid;
@@ -600,20 +785,24 @@ toolbar.inline-toolbar toolbutton { // .inline-toolbar.toolbar here for
 }
 
 %linked_vertical_middle {
-  border-left-style: solid;
-  border-top-style: none;
+  border-style: solid solid none solid;
   border-radius: 0;
 }
 
-%linked_vertical {
+%linked_vertical{
   @extend %linked_vertical_middle;
+
   &:first-child {
-    border-style: solid;
-    border-radius: 3px 3px 0 0;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
   }
+
   &:last-child {
-    border-radius: 0 0 3px 3px;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border-style: solid;
   }
+
   &:only-child {
     border-radius: 3px;
     border-style: solid;
@@ -621,9 +810,11 @@ toolbar.inline-toolbar toolbutton { // .inline-toolbar.toolbar here for
 }
 
 %undecorated_button {
-  border-color: transparent;
   background-color: transparent;
   background-image: none;
+  border-color: transparent;
+  box-shadow: inset 0 1px transparentize(white,1),
+              0 1px transparentize(white, 1);
   text-shadow: none;
   -gtk-icon-shadow: none;
 }
@@ -678,6 +869,7 @@ button.color {
     }
   }
 }
+
 
 /*********
  * Links *
@@ -902,80 +1094,44 @@ spinbutton {
  * ComboBoxes *
  **************/
 combobox {
-  > button.combo {
-    padding-left: 8px;
-    padding-right: 8px;
-  }
-
-  @include _button_text_shadow;
-
-  &:disabled {
-    color: $insensitive_fg_color;
-    text-shadow: none;
-    -gtk-icon-shadow: none;
-  }
-  &:backdrop {
-    color: $backdrop_fg_color;
-    text-shadow: none;
-    -gtk-icon-shadow: none;
-  }
-  &:backdrop:disabled {
-    color: $insensitive_fg_color;
-  }
-  & arrow {
+  arrow {
     -gtk-icon-source: -gtk-icontheme('pan-down-symbolic');
     min-height: 16px;
     min-width: 16px;
   }
-  .menuitem { text-shadow: none; }
-  & > entry.combo {
-    border-radius: 3px 0 0 3px;
-    &:dir(rtl) {
-      border-radius: 0 3px 3px 0;
+
+  &.linked {
+    button:nth-child(2) {
+      &:dir(ltr) { @extend %linked:last-child; }
+      &:dir(rtl) { @extend %linked:first-child; }
     }
   }
-  & > button.combo:not(:only-child) {
-    &:dir(ltr) {
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
-      border-left-style: none;
-    }
-    &:dir(rtl) {
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
-      border-right-style: none;
-    }
+
+  &:drop(active) { // FIXME: untested
+    box-shadow: none;
+
+    button.combo { @extend %button_basic:drop(active); }
   }
 }
 
-.linked > combobox > button.combo {
-  // The combo is a composite widget so the way we do
-  // button linking doesn't work, special case needed.
-  // See https://bugzilla.gnome.org/show_bug.cgi?id=733979
-  &:dir(ltr) { @extend %linked_middle; } // specificity bump
-  &:dir(rtl) { @extend %linked_middle:dir(rtl); }
+.linked > combobox > box > button.combo {
+  // the combo is a composite widget so the way we do button linking doesn't
+  // work, special case needed. See
+  // https://bugzilla.gnome.org/show_bug.cgi?id=733979
+
+  &:dir(ltr),
+  &:dir(rtl) { @extend %linked_middle; } // specificity bump
 }
-.linked > combobox:first-child > button.combo {
-  @extend %linked:first-child;
-}
-.linked > combobox:last-child > button.combo {
-  @extend %linked:last-child;
-}
-.linked > combobox:only-child > button.combo {
-  @extend %linked:only-child;
-}
-.linked.vertical > combobox  > button.combo {
-  @extend %linked_vertical_middle;
-}
-.linked.vertical > combobox:first-child > button.combo {
-  @extend %linked_vertical:first-child;
-}
-.linked.vertical > combobox:last-child > button.combo {
-  @extend %linked_vertical:last-child;
-}
-.linked.vertical > combobox:only-child > button.combo {
-  @extend %linked_vertical:only-child;
-}
+
+.linked:not(.vertical) > combobox:first-child > box > button.combo { @extend %linked:first-child; }
+.linked:not(.vertical) > combobox:last-child > box > button.combo { @extend %linked:last-child; }
+.linked:not(.vertical) > combobox:only-child > box > button.combo { @extend %linked:only-child; }
+
+.linked.vertical > combobox > box > button.combo { @extend %linked_vertical_middle; }
+.linked.vertical > combobox:first-child > box > button.combo { @extend %linked_vertical:first-child;}
+.linked.vertical > combobox:last-child > box > button.combo { @extend %linked_vertical:last-child; }
+.linked.vertical > combobox:only-child > box > button.combo { @extend %linked_vertical:only-child; }
+
 
 /************
  * Toolbars *
