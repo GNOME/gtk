@@ -108,6 +108,18 @@ flowbox flowboxchild {
 label:disabled, label:backdrop:disabled {
   color: gray; }
 
+popover.background.touch-selection, popover.background.magnifier, .csd popover.background.touch-selection, .csd popover.background.magnifier, popover.background.osd, .csd popover.background.osd, .osd {
+  color: #fff;
+  border: none;
+  background-color: rgba(0, 0, 0, 0.8);
+  background-clip: padding-box;
+  outline-color: rgba(255, 255, 255, 0.3);
+  text-shadow: 0 1px black;
+  -gtk-icon-shadow: 0 1px black; }
+  popover.background.touch-selection:backdrop, popover.background.magnifier:backdrop, popover.background.osd:backdrop, .osd:backdrop {
+    text-shadow: none;
+    -gtk-icon-shadow: none; }
+
 /*********************
  * Spinner Animation *
  *********************/
@@ -536,6 +548,67 @@ button {
       background-image: none;
       text-shadow: none;
       -gtk-icon-shadow: none; }
+  popover.background.touch-selection button, popover.background.magnifier button, .csd popover.background.touch-selection button, .csd popover.background.magnifier button, .osd button {
+    border-width: 2px;
+    border-style: solid;
+    color: #fff;
+    background-image: none;
+    background-color: rgba(0, 0, 0, 0.8);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: none; }
+    popover.background.touch-selection button:hover, popover.background.magnifier button:hover, .osd button:hover {
+      border-width: 2px;
+      border-style: solid;
+      color: #fff;
+      background-color: rgba(77, 77, 77, 0.8);
+      border-color: rgba(255, 255, 255, 0.2);
+      box-shadow: none; }
+    popover.background.touch-selection button:active:backdrop, popover.background.magnifier button:active:backdrop, popover.background.touch-selection button:active, popover.background.magnifier button:active, popover.background.touch-selection button:checked:backdrop, popover.background.magnifier button:checked:backdrop, popover.background.touch-selection button:checked, popover.background.magnifier button:checked, .osd button:active:backdrop, .osd button:active, .osd button:checked:backdrop, .osd button:checked {
+      border-width: 2px;
+      border-style: solid;
+      color: rgba(0, 0, 0, 0.8);
+      background-color: #fff;
+      border-color: rgba(255, 255, 255, 0.2);
+      box-shadow: none; }
+    popover.background.touch-selection button:disabled:backdrop, popover.background.magnifier button:disabled:backdrop, popover.background.touch-selection button:disabled, popover.background.magnifier button:disabled, .osd button:disabled:backdrop, .osd button:disabled {
+      border-width: 2px;
+      border-style: solid;
+      border-color: rgba(255, 255, 255, 0.2);
+      color: gray; }
+    popover.background.touch-selection button:backdrop, popover.background.magnifier button:backdrop, .osd button:backdrop {
+      border-width: 2px;
+      border-style: solid; }
+    popover.background.touch-selection button.flat, popover.background.touch-selection button.sidebar-button, popover.background.magnifier button.flat, popover.background.magnifier button.sidebar-button, .osd button.flat, .osd button.sidebar-button {
+      border-width: 2px;
+      border-style: solid;
+      box-shadow: none;
+      text-shadow: 0 1px black;
+      -gtk-icon-shadow: 0 1px black; }
+      popover.background.touch-selection button.flat:hover, popover.background.touch-selection button.sidebar-button:hover, popover.background.magnifier button.flat:hover, popover.background.magnifier button.sidebar-button:hover, .osd button.flat:hover, .osd button.sidebar-button:hover {
+        border-width: 2px;
+        border-style: solid;
+        color: #fff;
+        background-color: rgba(77, 77, 77, 0.8);
+        border-color: rgba(255, 255, 255, 0.2);
+        box-shadow: none; }
+      popover.background.touch-selection button.flat:disabled, popover.background.touch-selection button.sidebar-button:disabled, popover.background.magnifier button.flat:disabled, popover.background.magnifier button.sidebar-button:disabled, .osd button.flat:disabled, .osd button.sidebar-button:disabled {
+        border-width: 2px;
+        border-style: solid;
+        border-color: rgba(255, 255, 255, 0.2);
+        color: gray;
+        background-image: none;
+        border-color: transparent;
+        box-shadow: none; }
+      popover.background.touch-selection button.flat:backdrop, popover.background.touch-selection button.sidebar-button:backdrop, popover.background.magnifier button.flat:backdrop, popover.background.magnifier button.sidebar-button:backdrop, .osd button.flat:backdrop, .osd button.sidebar-button:backdrop {
+        border-width: 2px;
+        border-style: solid; }
+      popover.background.touch-selection button.flat:active, popover.background.touch-selection button.sidebar-button:active, popover.background.magnifier button.flat:active, popover.background.magnifier button.sidebar-button:active, popover.background.touch-selection button.flat:checked, popover.background.touch-selection button.sidebar-button:checked, popover.background.magnifier button.flat:checked, popover.background.magnifier button.sidebar-button:checked, .osd button.flat:active, .osd button.sidebar-button:active, .osd button.flat:checked, .osd button.sidebar-button:checked {
+        border-width: 2px;
+        border-style: solid;
+        color: rgba(0, 0, 0, 0.8);
+        background-color: #fff;
+        border-color: rgba(255, 255, 255, 0.2);
+        box-shadow: none; }
   button.image-button {
     padding: 8px; }
   button.text-button {
@@ -672,9 +745,13 @@ stacksidebar row.needs-attention > label {
   border-radius: 3px;
   border-style: solid; }
 
-button.flat, button.sidebar-button, button.flat:backdrop, button.sidebar-button:backdrop, button.flat:disabled:backdrop, button.sidebar-button:disabled:backdrop, modelbutton.flat,
-.menuitem.button.flat, modelbutton.flat:backdrop,
-.menuitem.button.flat:backdrop, button:link, button:visited, button:link:hover, button:link:active, button:visited:hover, button:visited:active, button:link:backdrop, button:visited:backdrop, notebook tab button, row.activatable,
+button.flat, button.sidebar-button, button.flat:backdrop, button.sidebar-button:backdrop, button.flat:disabled:backdrop, button.sidebar-button:disabled:backdrop, modelbutton.flat, popover.background checkbutton,
+popover.background radiobutton,
+.menuitem.button.flat, modelbutton.flat:backdrop, popover.background checkbutton:backdrop,
+popover.background radiobutton:backdrop, modelbutton.flat:backdrop:hover, popover.background checkbutton:backdrop:hover,
+popover.background radiobutton:backdrop:hover,
+.menuitem.button.flat:backdrop,
+.menuitem.button.flat:backdrop:hover, button:link, button:visited, button:link:hover, button:link:active, button:visited:hover, button:visited:active, button:link:backdrop, button:visited:backdrop, notebook tab button, row.activatable,
 row.activatable:backdrop,
 row.activatable:backdrop:active,
 row.activatable:backdrop:checked,
@@ -690,22 +767,56 @@ row.activatable:disabled:checked, calendar.button, calendar.button:hover, calend
   -gtk-icon-shadow: none; }
 
 /* menu buttons */
-modelbutton.flat,
+modelbutton.flat, popover.background checkbutton,
+popover.background radiobutton,
 .menuitem.button.flat {
-  outline-offset: -1px; }
-  modelbutton.flat:backdrop,
-  .menuitem.button.flat:backdrop {
-    color: #000; }
-    modelbutton.flat:backdrop:hover,
-    .menuitem.button.flat:backdrop:hover {
-      color: #fff;
-      background-color: #000; }
-  modelbutton.flat:disabled,
-  .menuitem.button.flat:disabled {
-    color: gray; }
+  min-height: 26px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-radius: 3px;
+  outline-offset: -2px; }
+  modelbutton.flat:hover, popover.background checkbutton:hover,
+  popover.background radiobutton:hover,
+  .menuitem.button.flat:hover {
+    background-color: white; }
+  modelbutton.flat check:last-child, popover.background checkbutton check:last-child,
+  popover.background radiobutton check:last-child,
+  modelbutton.flat radio:last-child,
+  popover.background checkbutton radio:last-child,
+  popover.background radiobutton radio:last-child,
+  .menuitem.button.flat check:last-child,
+  .menuitem.button.flat radio:last-child {
+    margin-left: 8px; }
+  modelbutton.flat check:first-child, popover.background checkbutton check:first-child,
+  popover.background radiobutton check:first-child,
+  modelbutton.flat radio:first-child,
+  popover.background checkbutton radio:first-child,
+  popover.background radiobutton radio:first-child,
+  .menuitem.button.flat check:first-child,
+  .menuitem.button.flat radio:first-child {
+    margin-right: 8px; }
+
+modelbutton.flat arrow, popover.background checkbutton arrow,
+popover.background radiobutton arrow {
+  background: none; }
+  modelbutton.flat arrow:hover, popover.background checkbutton arrow:hover,
+  popover.background radiobutton arrow:hover {
+    background: none; }
+  modelbutton.flat arrow.left, popover.background checkbutton arrow.left,
+  popover.background radiobutton arrow.left {
+    -gtk-icon-source: -gtk-icontheme("pan-start-symbolic"); }
+  modelbutton.flat arrow.right, popover.background checkbutton arrow.right,
+  popover.background radiobutton arrow.right {
+    -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
 
 button.color {
   padding: 4px; }
+  button.color colorswatch:only-child {
+    box-shadow: 0 1px _text_shadow_color(); }
+    button.color colorswatch:only-child, button.color colorswatch:only-child overlay {
+      border-radius: 0; }
+    button.color colorswatch:only-child:disabled, button.color colorswatch:only-child:backdrop {
+      box-shadow: none; }
 
 /*********
  * Links *
@@ -1323,71 +1434,46 @@ menuitem check, menuitem radio {
 /***************
  * Popovers   *
  ***************/
-popover {
-  margin: 10px;
+popover.background {
   padding: 2px;
-  border-color: gray;
-  border-width: 1px;
-  border-style: solid;
   border-radius: 5px;
   background-color: #fff;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.5); }
-  popover:backdrop {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); }
+  popover.background, .csd popover.background {
+    border: 1px solid gray; }
+  popover.background:backdrop {
+    background-color: #fff;
     box-shadow: none; }
-  popover > .list, popover > .view, textview popover > text, popover > iconview, popover > toolbar, popover > searchbar {
+  popover.background > list,
+  popover.background > .view,
+  textview popover.background > text,
+  popover.background > iconview,
+  popover.background > toolbar,
+  popover.background > searchbar {
+    border-style: none;
     background-color: transparent; }
-  popover separator, popover placessidebar .view separator, placessidebar .view popover separator, popover placessidebar textview text separator, placessidebar textview text popover separator, popover textview placessidebar text separator, textview placessidebar text popover separator, popover placessidebar iconview separator, placessidebar iconview popover separator,
-  popover placessidebar .view separator:backdrop,
-  placessidebar .view popover separator:backdrop,
-  popover placessidebar textview text separator:backdrop,
-  placessidebar textview text popover separator:backdrop,
-  popover textview placessidebar text separator:backdrop,
-  textview placessidebar text popover separator:backdrop,
-  popover placessidebar iconview separator:backdrop,
-  placessidebar iconview popover separator:backdrop {
-    color: #000;
-    background-color: transparent;
-    border: 0; }
-  popover button.flat, popover button.sidebar-button,
-  popover button.flat:hover,
-  popover button.sidebar-button:hover {
-    color: #000;
-    text-shadow: none;
-    transition: none; }
-  popover.magnifier, popover.osd {
-    background-image: none;
-    background-color: rgba(0, 0, 0, 0.8);
-    border: 1px solid gray;
-    color: #fff; }
-    popover.magnifier button, popover.osd button {
-      color: white;
-      text-shadow: none;
-      border-width: 2px;
-      border-style: solid;
-      color: #fff;
-      background-image: none;
-      background-color: rgba(0, 0, 0, 0.8);
-      border-color: rgba(255, 255, 255, 0.2);
-      box-shadow: none; }
-      popover.magnifier button:hover, popover.osd button:hover {
-        border-width: 2px;
-        border-style: solid;
-        color: #fff;
-        background-color: rgba(77, 77, 77, 0.8);
-        border-color: rgba(255, 255, 255, 0.2);
-        box-shadow: none; }
-      popover.magnifier button:active, popover.osd button:active {
-        border-width: 2px;
-        border-style: solid;
-        color: rgba(0, 0, 0, 0.8);
-        background-color: #fff;
-        border-color: rgba(255, 255, 255, 0.2);
-        box-shadow: none; }
-      popover.magnifier button:disabled, popover.osd button:disabled {
-        border-width: 2px;
-        border-style: solid;
-        border-color: rgba(255, 255, 255, 0.2);
-        color: gray; }
+  popover.background.touch-selection, popover.background.magnifier, .csd popover.background.touch-selection, .csd popover.background.magnifier {
+    border: 1px solid rgba(255, 255, 255, 0.1); }
+  popover.background separator,
+  popover.background placessidebar .view separator:backdrop,
+  placessidebar .view popover.background separator:backdrop,
+  popover.background placessidebar textview text separator:backdrop,
+  placessidebar textview text popover.background separator:backdrop,
+  popover.background textview placessidebar text separator:backdrop,
+  textview placessidebar text popover.background separator:backdrop,
+  popover.background placessidebar iconview separator:backdrop,
+  placessidebar iconview popover.background separator:backdrop {
+    margin: 3px; }
+  popover.background list separator,
+  popover.background list placessidebar .view separator:backdrop,
+  placessidebar .view popover.background list separator:backdrop,
+  popover.background list placessidebar textview text separator:backdrop,
+  placessidebar textview text popover.background list separator:backdrop,
+  popover.background list textview placessidebar text separator:backdrop,
+  textview placessidebar text popover.background list separator:backdrop,
+  popover.background list placessidebar iconview separator:backdrop,
+  placessidebar iconview popover.background list separator:backdrop {
+    margin: 0px; }
 
 /*****************
  * Notebooks and *
@@ -2258,8 +2344,8 @@ textview text selection:hover, flowbox flowboxchild:selected, label selection, l
 entry selection:focus, spinbutton selection
 entry selection:focus, entry selection
 spinbutton selection:focus, spinbutton selection
-spinbutton selection:focus, modelbutton.flat:hover, modelbutton.flat:selected,
-.menuitem.button.flat:hover,
+spinbutton selection:focus, modelbutton.flat:selected, popover.background checkbutton:selected,
+popover.background radiobutton:selected,
 .menuitem.button.flat:selected, treeview.view:selected, row.activatable:selected, .sidebar:selected, placessidebar .view:selected, placessidebar textview text:selected, textview placessidebar text:selected, placessidebar iconview:selected, placessidebar calendar:selected {
   background-color: #000;
   color: #fff;
@@ -2268,8 +2354,8 @@ spinbutton selection:focus, modelbutton.flat:hover, modelbutton.flat:selected,
   entry selection:backdrop:focus, spinbutton selection
   entry selection:backdrop:focus, entry selection
   spinbutton selection:backdrop:focus, spinbutton selection
-  spinbutton selection:backdrop:focus, modelbutton.flat:backdrop:hover, modelbutton.flat:backdrop:selected,
-  .menuitem.button.flat:backdrop:hover,
+  spinbutton selection:backdrop:focus, modelbutton.flat:backdrop:selected, popover.background checkbutton:backdrop:selected,
+  popover.background radiobutton:backdrop:selected,
   .menuitem.button.flat:backdrop:selected, row.activatable:backdrop:selected, .sidebar:backdrop:selected {
     background-color: gray;
     color: #fff; }

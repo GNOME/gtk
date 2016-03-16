@@ -142,6 +142,21 @@ label {
   }
 }
 
+%osd, .osd {
+  color: $osd_fg_color;
+  border: none;
+  background-color: $osd_bg_color;
+  background-clip: padding-box;
+  outline-color: transparentize($osd_fg_color, 0.7);
+  text-shadow: 0 1px black;
+  -gtk-icon-shadow: 0 1px black;
+
+  &:backdrop {
+    text-shadow: none;
+    -gtk-icon-shadow: none;
+  }
+}
+
 /*********************
  * Spinner Animation *
  *********************/
@@ -415,6 +430,43 @@ button {
     }
   }
 
+  //overlay / OSD style
+  @at-root %osd_button,
+  .osd & {
+    @include button(osd);
+
+    &:hover { @include button(osd-hover); }
+
+    &:active,
+    &:checked { &:backdrop, & { @include button(osd-active); }}
+
+    &:disabled { &:backdrop, & { @include button(osd-insensitive); }}
+
+    &:backdrop { @include button(osd-backdrop); }
+
+    &.flat {
+      @include button(undecorated);
+
+      box-shadow: none; //FIXME respect no edge on the button mixin
+      text-shadow: 0 1px black;
+      -gtk-icon-shadow: 0 1px black;
+
+      &:hover { @include button(osd-hover); }
+
+      &:disabled {
+        @include button(osd-insensitive);
+        background-image: none;
+        border-color: transparent;
+        box-shadow: none;
+      }
+
+      &:backdrop { @include button(undecorated); }
+
+      &:active,
+      &:checked { @include button(osd-active); }
+    }
+  }
+
   // buttons in header bars and action bars
   &.image-button { padding: 8px; }
   &.text-button { padding: 6px 8px 5px; } // due to font metrics
@@ -561,19 +613,53 @@ toolbar.inline-toolbar toolbutton { // .inline-toolbar.toolbar here for
 /* menu buttons */
 modelbutton.flat,
 .menuitem.button.flat {
+  min-height: 26px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-radius: 3px;
+  outline-offset: -2px;
+
   @extend %undecorated_button;
-  outline-offset: -1px;
-  &:hover, &:selected { @extend %selected_items; }
-  &:backdrop {
-    color: $backdrop_fg_color;
-    @extend %undecorated_button;
-    &:hover { color: $selected_fg_color; background-color: $selected_bg_color; }
-  }
-  &:disabled { color: $insensitive_fg_color; }
+
+  &:hover { background-color: $popover_hover_color; }
+
+  &:selected { @extend %selected_items; }
+
+  &:backdrop,
+  &:backdrop:hover { @extend %undecorated_button; }
+
+  // FIXME: remove the following when the checks/radios rewrite lands
+  check:last-child,
+  radio:last-child { margin-left: 8px; }
+
+  check:first-child,
+  radio:first-child { margin-right: 8px; }
 }
 
-button.color { padding: 4px; } // Uniform padding on the
-                                        // GtkColorButton.button
+modelbutton.flat arrow {
+  background: none;
+
+  &:hover { background: none; }
+
+  &.left { -gtk-icon-source: -gtk-icontheme("pan-start-symbolic"); }
+
+  &.right { -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
+}
+
+button.color {
+  padding: 4px;
+
+  colorswatch:only-child {
+    &, overlay { border-radius: 0; }
+
+    @if $variant == 'light' {
+      box-shadow: 0 1px _text_shadow_color();
+
+      &:disabled,
+      &:backdrop { box-shadow: none; }
+    }
+  }
+}
 
 /*********
  * Links *
@@ -1191,52 +1277,46 @@ menuitem {
  * Popovers   *
  ***************/
 
-popover {
-  margin: 10px;
+popover.background {
   padding: 2px;
-  border-color: $borders-color;
-  border-width: 1px;
-  border-style: solid;
   border-radius: 5px;
-  //background-clip: border-box;
-  background-color: $bg_color;
+  background-color: $popover_bg_color;
 
-  box-shadow: 0 2px 3px transparentize(black, 0.5);
+  &, .csd & { border: 1px solid $borders_color; }
+
+  box-shadow: 0 1px 2px transparentize(black, 0.7);
+
   &:backdrop {
+    background-color: $backdrop_bg_color;
     box-shadow: none;
   }
-  & > .list,
-  & > .view,
-  & > toolbar {
+
+  > list,
+  > .view,
+  > toolbar {
+    border-style: none;
     background-color: transparent;
   }
-  separator {
-    color: $fg_color;
-    background-color: transparent;
-    border: 0;
-  }
-  button.flat,
-  button.flat:hover {
-    color: $fg_color;
-    text-shadow: none;
-    transition: none;
-  }
-  &.magnifier,
-  &.osd { // Also used for touch cutnpaste overlays
-          // FIXME Doesn't work
-    background-image: none;
-    background-color: $osd_bg_color;
-    border: 1px solid $borders_color;
-    color: $osd_fg_color;
-    button {
-      color: white;
-      text-shadow: none;
-      @include button(osd);
-      &:hover { @include button(osd-hover); };
-      &:active { @include button(osd-active); };
-      &:disabled { @include button(osd-insensitive); };
+
+  &, .csd & {
+    &.touch-selection,
+    &.magnifier {
+      @extend %osd;
+
+      border: 1px solid transparentize(white, 0.9);
+
+      button { @extend %osd_button };
     }
+
+    &.osd { @extend %osd; }
   }
+
+  separator { margin: 3px; }
+
+  list separator { margin: 0px; }
+
+  checkbutton,
+  radiobutton { @extend modelbutton.flat; }
 }
 
 /*****************
