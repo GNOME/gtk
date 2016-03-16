@@ -192,35 +192,6 @@ gtk_css_style_property_parse_value (GtkStyleProperty *property,
   return (* style_property->parse_value) (style_property, parser);
 }
 
-static void
-forward_error_to_source (GtkCssParser *parser,
-                         const GError *error,
-                         gpointer      source)
-{
-  /* XXX: This is bad because it doesn't emit the error on the right token */
-  gtk_css_token_source_emit_error (source, error);
-}
-
-static GtkCssValue *
-gtk_css_style_property_token_parse_default (GtkCssStyleProperty *property,
-                                            GtkCssTokenSource   *source)
-{
-  GtkCssParser *parser;
-  GtkCssValue *value;
-  char *str;
-
-  str = gtk_css_token_source_consume_to_string (source);
-  parser = _gtk_css_parser_new (str,
-                                NULL,
-                                forward_error_to_source,
-                                source);
-  value = property->parse_value (property, parser);
-  _gtk_css_parser_free (parser);
-  g_free (str);
-
-  return value;
-}
-
 static GtkCssValue *
 gtk_css_style_property_token_parse (GtkStyleProperty  *property,
                                     GtkCssTokenSource *source)
@@ -260,7 +231,7 @@ gtk_css_style_property_token_parse (GtkStyleProperty  *property,
     }
   else
     {
-      value = (* style_property->token_parse) (style_property, source);
+      value = (* style_property->token_parse) (source, style_property);
     }
 
   return value;
@@ -331,11 +302,19 @@ gtk_css_style_property_real_parse_value (GtkCssStyleProperty *property,
   return NULL;
 }
 
+static GtkCssValue *
+gtk_css_style_property_real_token_parse (GtkCssTokenSource   *source,
+                                         GtkCssStyleProperty *property)
+{
+  g_assert_not_reached ();
+  return NULL;
+}
+
 static void
 _gtk_css_style_property_init (GtkCssStyleProperty *property)
 {
   property->parse_value = gtk_css_style_property_real_parse_value;
-  property->token_parse = gtk_css_style_property_token_parse_default;
+  property->token_parse = gtk_css_style_property_real_token_parse;
 }
 
 /**
