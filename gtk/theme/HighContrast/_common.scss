@@ -182,141 +182,155 @@ spinner {
  * Text Entries *
  ****************/
 
-entry, spinbutton {
-  padding: 7px 4px;
-  border-radius: 3px;
-  border-width: 1px;
-  transition: all 200ms ease-out;
-  @include entry(normal);
-  &.flat, &.flat:focus {
-    padding: 2px;
-    @include entry(normal, $edge: none);
-    border: none;
-    border-radius: 0;
+%entry,
+entry {
+  %entry_basic, & {
+    min-height: 32px;
+    padding-left: 8px;
+    padding-right: 8px;
+    border: 1px solid;
+    border-radius: 3px;
+    transition: all 200ms $ease-out-quad;
+
+    @include entry(normal);
+
+    image { // icons inside the entry
+      &.left { padding-left: 0; padding-right: 6px; }
+      &.right { padding-left: 6px; padding-right: 0; }
+    }
+
+    undershoot {
+      &.left { @include undershoot(left); }
+      &.right { @include undershoot(right); }
+    }
+
+    &.flat {
+      &:focus, & {
+        min-height: 0;
+        padding: 2px;
+        background-image: none;
+        border-color: transparent;
+        border-radius: 0;
+      }
+    }
+
+    &:focus { @include entry(focus); }
+
+    &:disabled { @include entry(insensitive); }
+
+    &:backdrop { @include entry(backdrop); }
+
+    &:backdrop:disabled { @include entry(backdrop-insensitive); }
+
+    selection { &:focus, & { @extend %selected_items; }}
+
+    // entry error and warning style
+    @each $e_type, $e_color in (error, $error_color),
+                               (warning, $warning_color) {
+      &.#{$e_type} {
+        color: $e_color;
+        border-color: entry_focus_border($e_color);
+
+        &:focus { @include entry(focus, $e_color); }
+
+        &:selected { &:focus, & { background-color: $e_color; }}
+      }
+    }
+
+    & image { // entry icons colors
+      color: mix($fg_color, $base_color, 80%);
+
+      &:hover { color: $fg_color; }
+
+      &:active { color: $selected_bg_color; }
+
+      &:backdrop { color: mix($backdrop_fg_color, $backdrop_base_color, 80%); }
+    }
+
+    &:drop(active) {
+      &:focus, & {
+        border-color: $fg_color;
+        box-shadow: inset 0 0 0 1px $fg_color;
+      }
+    }
+
+    .osd & {
+      @include entry(osd);
+
+      &:focus { @include entry(osd-focus); }
+
+      &:backdrop { @include entry(osd-backdrop); }
+
+      &:disabled { @include entry(osd-insensitive); }
+    }
   }
-  &:focus { @include entry(focus); }
-  &:disabled { @include entry(insensitive); }
-  &:backdrop { @include entry(backdrop); }
-  &:backdrop:disabled { @include entry(backdrop-insensitive); }
-  & selection, & selection:backdrop {
-    background-color: $selected_bg_color;
-    color: $selected_fg_color;
-  }
-  & selection
-  & selection:focus {
-    @extend %selected_items;
-  }
-  & progress {
-    margin: 1px;
+
+  progress {
+    margin: 2px -6px;
+    background-color: transparent;
+    background-image: none;
     border-radius: 0;
     border-width: 0 0 2px;
     border-color: $selected_bg_color;
     border-style: solid;
-    background-image: none;
-    background-color: transparent;
     box-shadow: none;
+
     &:backdrop { background-color: transparent; }
   }
-  .linked & {
-    &:first-child {
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
-      &:dir(rtl) { border-right-style: none;}
-    }
-    &:last-child {
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
-      border-left-style: none;
-      &:dir(rtl) { border-left-style: solid; }
-    }
-  }
-  .linked.vertical & { //FIXME comment stuff and make the whole thing smarter.
-    @include entry(normal);
-    background-image: linear-gradient(to bottom, $base_color);
-    border-bottom-color: mix($borders_color, $base_color, 30%);
-    box-shadow: none;
+
+   // linked entries
+  .linked:not(.vertical) > & { @extend %linked; }
+  .linked:not(.vertical) > &:focus + &,
+  .linked:not(.vertical) > &:focus + button,
+  .linked:not(.vertical) > &:focus + combobox > box > button.combo { border-left-color: entry_focus_border(); }
+
+  .linked:not(.vertical) > &:drop(active) + &,
+  .linked:not(.vertical) > &:drop(active) + button,
+  .linked:not(.vertical) > &:drop(active) + combobox > box > button.combo { border-left-color: $fg_color; }
+
+  // Vertically linked entries
+  // FIXME: take care of "colored" entries
+  .linked.vertical > & {
     @extend %linked_vertical;
-    &:focus {
-      border-color: entry_focus_border($selected_bg_color);
-      box-shadow: entry_focus_glow($selected_bg_color),
-                  0 -1px 0 0 entry_focus_border($selected_bg_color);
-      @extend %linked_vertical;
-    }
-    &:disabled {
-      @include entry(insensitive);
-      border-bottom-color: mix($borders_color, $base_color, 30%);
-      @extend %linked_vertical;
-      &:backdrop {
-        @include entry(backdrop-insensitive);
-        border-bottom-color: mix($backdrop_borders_color, $backdrop_base_color, 30%);
-        @extend %linked_vertical;
-      }
-    }
-    &:backdrop {
-      @include entry(backdrop);
-      border-bottom-color: mix($backdrop_borders_color, $backdrop_base_color, 30%);
-      @extend %linked_vertical;
-    }
-    &:first-child {
-      @include entry(normal);
-      border-bottom-color: mix($borders_color, $base_color, 30%);
-      &:focus { @include entry(focus); }
-      &:disabled {
-        @include entry(insensitive);
-        border-bottom-color: mix($backdrop_borders_color, $backdrop_base_color, 30%);
-        @extend %linked_vertical:first-child;
-        &:backdrop {
-          @include entry(backdrop-insensitive);
-          border-bottom-color: mix($backdrop_borders_color, $backdrop_base_color, 30%);
-          border-top-style: solid;
-        }
-      }
-      &:backdrop {
-        @include entry(backdrop);
-        border-bottom-color: mix($backdrop_borders_color, $backdrop_base_color, 30%);
-        @extend %linked_vertical:first-child;
-      }
-    }
-    &:last-child {
-      @include entry(normal);
-      border-top-width: 0;
+
+    // brighter border between linked entries
+    &:not(:disabled) + entry:not(:disabled),
+    &:not(:disabled) + %entry:not(:disabled) {
+      border-top-color: mix($borders_color, $base_color, 30%);
       background-image: linear-gradient(to bottom, $base_color);
-      box-shadow: none;
-      &:focus {
-        border-color: entry_focus_border($selected_bg_color);
-        box-shadow: entry_focus_glow($selected_bg_color),
-                    0 -1px 0 0 entry_focus_border($selected_bg_color);
-        @extend %linked_vertical:last-child;
-      }
-      &:disabled {
-        @include entry(insensitive);
-        @extend %linked_vertical:last-child;
-        &:backdrop {
-          @include entry(backdrop-insensitive);
-          @extend %linked_vertical:last-child;
-        }
-      }
+
       &:backdrop {
-        @include entry(backdrop);
-        @extend %linked_vertical:last-child;
+        border-top-color: mix($backdrop_borders_color, $backdrop_base_color, 30%);
+        background-image: linear-gradient(to bottom, $backdrop_base_color);
       }
     }
-  }
-  
-  &.error {
-    color: $error_color;
-    border-color: $error_color;
-    &:focus { @include entry(focus, $error_color); }
-    &:selected, &:selected:focus {
-      background-color: $error_color;
+
+    // brighter border between linked insensitive entries
+    &:disabled + %entry:disabled,
+    &:disabled + entry:disabled { border-top-color: mix($borders_color, $base_color, 30%); }
+
+    // color back the top border of a linked focused entry following another entry and add back the focus shadow.
+    // :not(:only-child) is a specificity bump hack.
+    + %entry:focus:not(:only-child),
+    + entry:focus:not(:only-child) { border-top-color: entry_focus_border(); }
+
+    + %entry:drop(active):not(:only-child),
+    + entry:drop(active):not(:only-child) { border-top-color: $fg_color; }
+
+    // this takes care of coloring the top border of the focused entry subsequent widget.
+    // :not(:only-child) is a specificity bump hack.
+    &:focus:not(:only-child) {
+      + %entry,
+      + entry,
+      + button,
+      + combobox > box > button.combo { border-top-color: entry_focus_border(); }
     }
-  }
-  &.warning {
-    color: $warning_color;
-    border-color: $warning_color;
-    &:focus { @include entry(focus, $warning_color); }
-    &:selected, &:selected:focus {
-      background-color: $warning_color;
+
+    &:drop(active):not(:only-child) {
+      + %entry,
+      + entry,
+      + button,
+      + combobox > box > button.combo { border-top-color: $fg_color; }
     }
   }
 }
@@ -345,9 +359,14 @@ $_dot_color: $selected_bg_color;
 }
 
 button {
+  $_button_transition: all 200ms $ease-out-quad;
+
+  min-height: 24px;
+  min-width: 16px;
+  padding: 4px 8px;
+  border: 1px solid;
   border-radius: 3px;
-  transition: all 200ms ease-out;
-  padding: 4px 6px;
+  transition: $_button_transition;
   @include button(normal);
   &:hover, &.flat:hover {
     @include button(hover);
@@ -384,29 +403,28 @@ button {
   &.flat, &.flat:backdrop, &.flat:disabled:backdrop {
     @extend %undecorated_button;
   }
-  //overlay / OSD style
-  .osd & {
-    padding: 6px;
-    border-width: 1px 1px 2px 1px;
-    @include button(osd);
-    @extend %linked;
-    &:hover {
-      @include button(osd-hover);
-      @extend %linked;
-    }
-    &:active, &:checked {
-      @include button(osd-active);
-      @extend %linked;
-    }
-    &:disabled {
-      @include button(osd-insensitive);
-      @extend %linked;
-    }
-    &:backdrop {
-      @include button(osd-backdrop);
-      @extend %linked;
+  
+  &.image-button {
+    min-width: 24px;
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+
+  &.text-button {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  &.text-button.image-button {
+    padding-left: 8px;
+    padding-right: 8px;
+
+    label {
+      padding-left: 8px;
+      padding-right: 8px;
     }
   }
+
   // Suggested and Destructive Action buttons
   @each $b_type, $b_color in (suggested-action, $suggested_color),
                               (destructive-action, $destructive_color) {
