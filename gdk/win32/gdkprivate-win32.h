@@ -537,6 +537,9 @@ gboolean _gdk_win32_window_fill_min_max_info    (GdkWindow  *window,
 
 gboolean _gdk_win32_window_lacks_wm_decorations (GdkWindow *window);
 
+BOOL WINAPI GtkShowWindow (HWND hwnd,
+                           int  cmd_show);
+
 /* Initialization */
 void _gdk_win32_windowing_init (void);
 void _gdk_dnd_init    (void);
