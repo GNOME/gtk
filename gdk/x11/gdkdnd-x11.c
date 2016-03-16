@@ -2616,7 +2616,10 @@ gdk_x11_drag_context_drop_done (GdkDragContext *context,
   cairo_t *cr;
 
   if (success)
-    return;
+    {
+      gdk_window_hide (x11_context->drag_window);
+      return;
+    }
 
   win_surface = _gdk_window_ref_cairo_surface (x11_context->drag_window);
   surface = gdk_window_create_similar_surface (x11_context->drag_window,

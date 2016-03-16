@@ -446,6 +446,19 @@ gdk_wayland_drag_context_cancel (GdkDragContext      *context,
 }
 
 static void
+gdk_wayland_drag_context_drop_done (GdkDragContext *context,
+                                    gboolean        success)
+{
+  GdkWaylandDragContext *context_wayland = GDK_WAYLAND_DRAG_CONTEXT (context);
+
+  if (success)
+    {
+      if (context_wayland->dnd_window)
+        gdk_window_hide (context_wayland->dnd_window);
+    }
+}
+
+static void
 gdk_wayland_drag_context_class_init (GdkWaylandDragContextClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -464,6 +477,7 @@ gdk_wayland_drag_context_class_init (GdkWaylandDragContextClass *klass)
   context_class->get_selection = gdk_wayland_drag_context_get_selection;
   context_class->get_drag_window = gdk_wayland_drag_context_get_drag_window;
   context_class->set_hotspot = gdk_wayland_drag_context_set_hotspot;
+  context_class->drop_done = gdk_wayland_drag_context_drop_done;
   context_class->manage_dnd = gdk_wayland_drag_context_manage_dnd;
   context_class->set_cursor = gdk_wayland_drag_context_set_cursor;
   context_class->action_changed = gdk_wayland_drag_context_action_changed;
