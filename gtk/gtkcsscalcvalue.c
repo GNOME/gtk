@@ -485,3 +485,217 @@ gtk_css_calc_value_parse (GtkCssParser           *parser,
   return value;
 }
 
+GtkCssValue * gtk_css_calc_value_token_parse_sum (GtkCssTokenSource      *source,
+                                                  GtkCssNumberParseFlags  flags);
+
+GtkCssValue *
+gtk_css_calc_value_token_parse_value (GtkCssTokenSource      *source,
+                                      GtkCssNumberParseFlags  flags)
+{
+  const GtkCssToken *token;
+  GtkCssValue *result;
+
+  token = gtk_css_token_source_get_token (source);
+
+  if (gtk_css_token_is_function (token, "calc"))
+    {
+      gtk_css_token_source_error (source, "Nested calc() expressions are not allowed.");
+      gtk_css_token_source_consume_all (source);
+      return NULL;
+    }
+  else if (gtk_css_token_is (token, GTK_CSS_TOKEN_OPEN_PARENS))
+    {
+      gtk_css_token_source_consume_token (source);
+      gtk_css_token_source_consume_whitespace (source);
+
+      result = gtk_css_calc_value_token_parse_sum (source, flags);
+      if (result == NULL)
+        return NULL;
+
+      token = gtk_css_token_source_get_token (source);
+      if (!gtk_css_token_is (token, GTK_CSS_TOKEN_CLOSE_PARENS))
+        {
+          gtk_css_token_source_error (source, "Missing closing ')' in calc() subterm");
+          gtk_css_token_source_consume_all (source);
+          _gtk_css_value_unref (result);
+          return NULL;
+        }
+
+      gtk_css_token_source_consume_token (source);
+      gtk_css_token_source_consume_whitespace (source);
+
+      return result;
+    }
+  else
+    {
+      result = gtk_css_number_value_token_parse (source, flags);
+      if (result == NULL)
+        return NULL;
+
+      gtk_css_token_source_consume_whitespace (source);
+    }
+
+  return result;
+}
+
+GtkCssValue *
+gtk_css_calc_value_token_parse_product (GtkCssTokenSource      *source,
+                                        GtkCssNumberParseFlags  flags)
+{
+  GtkCssValue *result, *value, *temp;
+  GtkCssNumberParseFlags actual_flags;
+
+  actual_flags = flags | GTK_CSS_PARSE_NUMBER;
+
+  result = gtk_css_calc_value_token_parse_value (source, actual_flags);
+  if (result == NULL)
+    return NULL;
+
+  while (TRUE)
+    {
+      const GtkCssToken *token = gtk_css_token_source_get_token (source);
+
+      if (actual_flags != GTK_CSS_PARSE_NUMBER && !is_number (result))
+        actual_flags = GTK_CSS_PARSE_NUMBER;
+
+      if (gtk_css_token_is_delim (token, '*'))
+        {
+          gtk_css_token_source_consume_token (source);
+          gtk_css_token_source_consume_whitespace (source);
+
+          value = gtk_css_calc_value_token_parse_product (source, actual_flags);
+          if (value == NULL)
+            goto fail;
+          if (is_number (value))
+            temp = gtk_css_number_value_multiply (result, _gtk_css_number_value_get (value, 100));
+          else
+            temp = gtk_css_number_value_multiply (value, _gtk_css_number_value_get (result, 100));
+          _gtk_css_value_unref (value);
+          _gtk_css_value_unref (result);
+          result = temp;
+        }
+      else if (gtk_css_token_is_delim (token, '/'))
+        {
+          gtk_css_token_source_consume_token (source);
+          gtk_css_token_source_consume_whitespace (source);
+
+          value = gtk_css_calc_value_token_parse_product (source, GTK_CSS_PARSE_NUMBER);
+          if (value == NULL)
+            goto fail;
+          temp = gtk_css_number_value_multiply (result, 1.0 / _gtk_css_number_value_get (value, 100));
+          _gtk_css_value_unref (value);
+          _gtk_css_value_unref (result);
+          result = temp;
+        }
+      else
+        {
+          break;
+        }
+    }
+
+  if (is_number (result) && !(flags & GTK_CSS_PARSE_NUMBER))
+    {
+      gtk_css_token_source_error (source, "calc() product term has no units");
+      gtk_css_token_source_consume_all (source);
+      goto fail;
+    }
+
+  return result;
+
+fail:
+  _gtk_css_value_unref (result);
+  return NULL;
+}
+
+GtkCssValue *
+gtk_css_calc_value_token_parse_sum (GtkCssTokenSource      *source,
+                                    GtkCssNumberParseFlags  flags)
+{
+  GtkCssValue *result;
+  const GtkCssToken *token;
+
+  result = gtk_css_calc_value_token_parse_product (source, flags);
+  if (result == NULL)
+    return NULL;
+
+  while (TRUE)
+    {
+      GtkCssValue *next, *temp;
+
+      token = gtk_css_token_source_get_token (source);
+      if (gtk_css_token_is_delim (token, '+'))
+        {
+          gtk_css_token_source_consume_token (source);
+          gtk_css_token_source_consume_whitespace (source);
+
+          next = gtk_css_calc_value_token_parse_product (source, flags);
+          if (next == NULL)
+            goto fail;
+        }
+      else if (gtk_css_token_is_delim (token, '-'))
+        {
+          gtk_css_token_source_consume_token (source);
+          gtk_css_token_source_consume_whitespace (source);
+
+          temp = gtk_css_calc_value_token_parse_product (source, flags);
+          if (temp == NULL)
+            goto fail;
+          next = gtk_css_number_value_multiply (temp, -1);
+          _gtk_css_value_unref (temp);
+        }
+      else
+        {
+          break;
+        }
+
+      temp = gtk_css_number_value_add (result, next);
+      _gtk_css_value_unref (result);
+      _gtk_css_value_unref (next);
+      result = temp;
+    }
+
+  return result;
+
+fail:
+  _gtk_css_value_unref (result);
+  return NULL;
+}
+
+GtkCssValue *
+gtk_css_calc_value_token_parse (GtkCssTokenSource      *source,
+                                GtkCssNumberParseFlags  flags)
+{
+  const GtkCssToken *token;
+  GtkCssValue *value;
+
+  /* This confuses '*' and '/' so we disallow backwards compat. */
+  flags &= ~GTK_CSS_NUMBER_AS_PIXELS;
+  /* This can only be handled at compute time, we allow negative numbers everywhere */
+  flags &= ~GTK_CSS_POSITIVE_ONLY;
+
+  token = gtk_css_token_source_get_token (source);
+  if (!gtk_css_token_is_function (token, "calc"))
+    {
+      gtk_css_token_source_error (source, "Expected 'calc('");
+      gtk_css_token_source_consume_all (source);
+      return NULL;
+    }
+  gtk_css_token_source_consume_token (source);
+  gtk_css_token_source_consume_whitespace (source);
+
+  value = gtk_css_calc_value_token_parse_sum (source, flags);
+  if (value == NULL)
+    return NULL;
+
+  token = gtk_css_token_source_get_token (source);
+  if (!gtk_css_token_is (token, GTK_CSS_TOKEN_CLOSE_PARENS))
+    {
+      _gtk_css_value_unref (value);
+      gtk_css_token_source_error (source, "Expected ')' after calc() statement");
+      gtk_css_token_source_consume_all (source);
+      return NULL;
+    }
+  gtk_css_token_source_consume_token (source);
+
+  return value;
+}

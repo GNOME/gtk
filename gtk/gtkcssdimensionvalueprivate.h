@@ -30,6 +30,9 @@ GtkCssValue *   gtk_css_dimension_value_new         (double                  val
 GtkCssValue *   gtk_css_dimension_value_parse       (GtkCssParser           *parser,
                                                      GtkCssNumberParseFlags  flags);
 
+GtkCssValue *   gtk_css_dimension_value_token_parse (GtkCssTokenSource      *source,
+                                                     GtkCssNumberParseFlags  flags);
+
 G_END_DECLS
 
 #endif /* __GTK_CSS_DIMENSION_VALUE_PRIVATE_H__ */

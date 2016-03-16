@@ -323,3 +323,112 @@ gtk_css_dimension_value_new (double     value,
   return result;
 }
 
+GtkCssValue *
+gtk_css_dimension_value_token_parse (GtkCssTokenSource      *source,
+                                     GtkCssNumberParseFlags  flags)
+{
+  const GtkCssToken *token = gtk_css_token_source_get_token (source);
+  double d;
+  GtkCssUnit unit;
+
+  if ((gtk_css_token_is (token, GTK_CSS_TOKEN_INTEGER) ||
+       gtk_css_token_is (token, GTK_CSS_TOKEN_NUMBER)) &&
+      ((flags & (GTK_CSS_PARSE_NUMBER | GTK_CSS_NUMBER_AS_PIXELS)) ||
+       (token->number.number == 0.0 && (flags & (GTK_CSS_PARSE_LENGTH | GTK_CSS_PARSE_ANGLE)))))
+    {
+      d = token->number.number;
+      if (flags & GTK_CSS_NUMBER_AS_PIXELS)
+        {
+          if (d != 0.0)
+            gtk_css_token_source_deprecated (source, "Not using units is deprecated. Assuming 'px'.");
+          unit = GTK_CSS_PX;
+        }
+      else
+        {
+          if (flags & GTK_CSS_PARSE_NUMBER)
+            unit = GTK_CSS_NUMBER;
+          else if (flags & GTK_CSS_PARSE_LENGTH)
+            unit = GTK_CSS_PX;
+          else if (flags & GTK_CSS_PARSE_ANGLE)
+            unit = GTK_CSS_DEG;
+        }
+    }
+  else if (gtk_css_token_is (token, GTK_CSS_TOKEN_PERCENTAGE) &&
+           (flags & GTK_CSS_PARSE_PERCENT))
+    {
+      d = token->number.number;
+      unit = GTK_CSS_PERCENT;
+    }
+  else if (gtk_css_token_is (token, GTK_CSS_TOKEN_INTEGER_DIMENSION) ||
+           gtk_css_token_is (token, GTK_CSS_TOKEN_DIMENSION))
+    {
+      static const struct {
+        const char *name;
+        GtkCssUnit unit;
+        GtkCssNumberParseFlags flag;
+      } units[] = {
+        { "px",   GTK_CSS_PX,      GTK_CSS_PARSE_LENGTH },
+        { "pt",   GTK_CSS_PT,      GTK_CSS_PARSE_LENGTH },
+        { "em",   GTK_CSS_EM,      GTK_CSS_PARSE_LENGTH },
+        { "ex",   GTK_CSS_EX,      GTK_CSS_PARSE_LENGTH },
+        { "rem",  GTK_CSS_REM,     GTK_CSS_PARSE_LENGTH },
+        { "pc",   GTK_CSS_PC,      GTK_CSS_PARSE_LENGTH },
+        { "in",   GTK_CSS_IN,      GTK_CSS_PARSE_LENGTH },
+        { "cm",   GTK_CSS_CM,      GTK_CSS_PARSE_LENGTH },
+        { "mm",   GTK_CSS_MM,      GTK_CSS_PARSE_LENGTH },
+        { "rad",  GTK_CSS_RAD,     GTK_CSS_PARSE_ANGLE  },
+        { "deg",  GTK_CSS_DEG,     GTK_CSS_PARSE_ANGLE  },
+        { "grad", GTK_CSS_GRAD,    GTK_CSS_PARSE_ANGLE  },
+        { "turn", GTK_CSS_TURN,    GTK_CSS_PARSE_ANGLE  },
+        { "s",    GTK_CSS_S,       GTK_CSS_PARSE_TIME   },
+        { "ms",   GTK_CSS_MS,      GTK_CSS_PARSE_TIME   }
+      };
+      guint i;
+
+      for (i = 0; i < G_N_ELEMENTS (units); i++)
+        {
+          if ((flags & units[i].flag) == 0)
+            continue;
+
+          if (g_ascii_strcasecmp (units[i].name, token->dimension.dimension) == 0)
+            {
+              d = token->dimension.value;
+              unit = units[i].unit;
+              break;
+            }
+        }
+
+      if (i == G_N_ELEMENTS (units))
+        {
+          gtk_css_token_source_error (source, "'%s' is not a valid unit.", token->dimension.dimension);
+          gtk_css_token_source_consume_all (source);
+          return NULL;
+        }
+    }
+  else
+    {
+      if (flags & GTK_CSS_PARSE_LENGTH)
+        gtk_css_token_source_error (source, "Expected a length");
+      else if (flags & GTK_CSS_PARSE_ANGLE)
+        gtk_css_token_source_error (source, "Expected an angle");
+      else if (flags & GTK_CSS_PARSE_TIME)
+        gtk_css_token_source_error (source, "Expected a time");
+      else if (flags & GTK_CSS_PARSE_PERCENT)
+        gtk_css_token_source_error (source, "Expected a percentage");
+      else
+        gtk_css_token_source_error (source, "Expected a number");
+      gtk_css_token_source_consume_all (source);
+      return NULL;
+    }
+  
+  if ((flags & GTK_CSS_POSITIVE_ONLY) && d < 0.0)
+    {
+      gtk_css_token_source_error (source, "Negative values are not allowed");
+      gtk_css_token_source_consume_all (source);
+      return NULL;
+    }
+
+  gtk_css_token_source_consume_token (source);
+  return gtk_css_dimension_value_new (d, unit);
+}
+

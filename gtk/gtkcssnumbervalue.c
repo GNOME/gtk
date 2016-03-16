@@ -158,6 +158,26 @@ _gtk_css_number_value_parse (GtkCssParser           *parser,
   return gtk_css_dimension_value_parse (parser, flags);
 }
 
+GtkCssValue *
+gtk_css_number_value_token_parse (GtkCssTokenSource      *source,
+                                  GtkCssNumberParseFlags  flags)
+{
+  const GtkCssToken *token = gtk_css_token_source_get_token (source);
+
+  if (gtk_css_token_is_function (token, "calc"))
+    return gtk_css_calc_value_token_parse (source, flags);
+  else if (gtk_css_token_is_function (token, "-gtk-win32-size") ||
+           gtk_css_token_is_function (token, "-gtk-win32-part-width") ||
+           gtk_css_token_is_function (token, "-gtk-win32-part-height") ||
+           gtk_css_token_is_function (token, "-gtk-win32-part-border-top") ||
+           gtk_css_token_is_function (token, "-gtk-win32-part-border-left") ||
+           gtk_css_token_is_function (token, "-gtk-win32-part-border-bottom") ||
+           gtk_css_token_is_function (token, "-gtk-win32-part-border-right"))
+    return gtk_css_win32_size_value_token_parse (source, flags);
+  else
+    return gtk_css_dimension_value_token_parse (source, flags);
+}
+
 double
 _gtk_css_number_value_get (const GtkCssValue *number,
                            double             one_hundred_percent)

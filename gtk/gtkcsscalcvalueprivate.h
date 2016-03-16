@@ -27,6 +27,8 @@ GtkCssValue *   gtk_css_calc_value_new_sum          (GtkCssValue            *val
 
 GtkCssValue *   gtk_css_calc_value_parse            (GtkCssParser           *parser,
                                                      GtkCssNumberParseFlags  flags);
+GtkCssValue *   gtk_css_calc_value_token_parse      (GtkCssTokenSource      *source,
+                                                     GtkCssNumberParseFlags  flags);
 
 G_END_DECLS
 

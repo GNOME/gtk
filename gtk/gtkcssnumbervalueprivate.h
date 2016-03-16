@@ -21,6 +21,7 @@
 #define __GTK_CSS_NUMBER_VALUE_PRIVATE_H__
 
 #include "gtkcssparserprivate.h"
+#include "gtkcsstokensourceprivate.h"
 #include "gtkcsstypesprivate.h"
 #include "gtkcssvalueprivate.h"
 
@@ -60,6 +61,8 @@ GtkCssValue *   gtk_css_number_value_transition     (GtkCssValue            *sta
                                                      double                  progress);
 gboolean        gtk_css_number_value_can_parse      (GtkCssParser           *parser);
 GtkCssValue *   _gtk_css_number_value_parse         (GtkCssParser           *parser,
+                                                     GtkCssNumberParseFlags  flags);
+GtkCssValue *   gtk_css_number_value_token_parse    (GtkCssTokenSource      *source,
                                                      GtkCssNumberParseFlags  flags);
 
 GtkCssDimension gtk_css_number_value_get_dimension  (const GtkCssValue      *value);
