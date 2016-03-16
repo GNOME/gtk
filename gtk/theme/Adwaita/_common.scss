@@ -2617,44 +2617,26 @@ menu menuitem {
   radio:indeterminate:checked { animation: none; }
 }
 
-
-// treeview stuff, let's the fun begin:
-treeview.view check:selected {
-  &:focus, &:backdrop, & {
-    &:disabled, & {
-      @extend %check;
-
-      @if $variant == 'light' { border-color: $selected_borders_color; }
-    }
-  }
-}
-
-treeview.view radio:selected {
-  &:focus, &:backdrop, & {
-    &:disabled, & {
-      @extend %radio;
-
-      @if $variant == 'light' { border-color: $selected_borders_color; }
-    }
-  }
-}
-
 treeview.view check,
 treeview.view radio {
-  &:dir(rtl), &:dir(ltr) {  // specificity bump
-    &:selected, & {
-      &:focus, &:hover, & { color: $fg_color; }
+  &:selected {
+    &:focus, & {
+      color: $fg_color;
 
-      &:backdrop {
-        &:hover, & { color: $backdrop_fg_color; }
+      @if $variant == 'light' { border-color: $selected_borders_color; }
+    }
 
-        &:disabled { color: $backdrop_insensitive_color; }
-      }
+    &:disabled {
+      color: $insensitive_fg_color;
 
-      &:disabled { color: $insensitive_fg_color;}
+      &:backdrop { color: $backdrop_insensitive_color; }
     }
   }
+
+  &:backdrop { &:selected, & { color: $backdrop_fg_color; }}
 }
+
+treeview.view radio:selected { &:focus, & { @extend %radio; }} // This is a workaround
 
 
 /************

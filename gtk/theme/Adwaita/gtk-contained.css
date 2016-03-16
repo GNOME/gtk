@@ -2593,17 +2593,14 @@ radio {
       border-color: currentColor;
       animation: none; }
 
-treeview.view check:selected:focus:disabled, treeview.view check:selected:focus, treeview.view check:selected:backdrop:disabled, treeview.view check:selected:backdrop, treeview.view check:selected:disabled, treeview.view check:selected,
 check {
   border-radius: 3px; }
-  treeview.view check:checked:selected,
   check:checked {
     -gtk-icon-source: image(-gtk-recolor(url("assets/check-symbolic.svg")), -gtk-recolor(url("assets/check-symbolic.symbolic.png"))); }
-  treeview.view check:indeterminate:selected,
   check:indeterminate {
     -gtk-icon-source: image(-gtk-recolor(url("assets/dash-symbolic.svg")), -gtk-recolor(url("assets/dash-symbolic.symbolic.png"))); }
 
-treeview.view radio:selected:focus:disabled, treeview.view radio:selected:focus, treeview.view radio:selected:backdrop:disabled, treeview.view radio:selected:backdrop, treeview.view radio:selected:disabled, treeview.view radio:selected,
+treeview.view radio:selected:focus, treeview.view radio:selected,
 radio {
   border-radius: 100%; }
   treeview.view radio:checked:selected,
@@ -2643,47 +2640,20 @@ menu menuitem check:indeterminate:checked:active,
 menu menuitem radio:indeterminate:checked {
   animation: none; }
 
-treeview.view check:selected:focus:disabled, treeview.view check:selected:focus, treeview.view check:selected:backdrop:disabled, treeview.view check:selected:backdrop, treeview.view check:selected:disabled, treeview.view check:selected {
+treeview.view check:selected:focus, treeview.view check:selected,
+treeview.view radio:selected:focus,
+treeview.view radio:selected {
+  color: #2e3436;
   border-color: #184472; }
-
-treeview.view radio:selected:focus:disabled, treeview.view radio:selected:focus, treeview.view radio:selected:backdrop:disabled, treeview.view radio:selected:backdrop, treeview.view radio:selected:disabled, treeview.view radio:selected {
-  border-color: #184472; }
-
-treeview.view check:dir(rtl):selected:focus, treeview.view check:dir(rtl):selected:hover, treeview.view check:dir(rtl):selected, treeview.view check:dir(rtl):focus, treeview.view check:dir(rtl):hover, treeview.view check:dir(rtl), treeview.view check:dir(ltr):selected:focus, treeview.view check:dir(ltr):selected:hover, treeview.view check:dir(ltr):selected, treeview.view check:dir(ltr):focus, treeview.view check:dir(ltr):hover, treeview.view check:dir(ltr),
-treeview.view radio:dir(rtl):selected:focus,
-treeview.view radio:dir(rtl):selected:hover,
-treeview.view radio:dir(rtl):selected,
-treeview.view radio:dir(rtl):focus,
-treeview.view radio:dir(rtl):hover,
-treeview.view radio:dir(rtl),
-treeview.view radio:dir(ltr):selected:focus,
-treeview.view radio:dir(ltr):selected:hover,
-treeview.view radio:dir(ltr):selected,
-treeview.view radio:dir(ltr):focus,
-treeview.view radio:dir(ltr):hover,
-treeview.view radio:dir(ltr) {
-  color: #2e3436; }
-treeview.view check:dir(rtl):selected:backdrop:hover, treeview.view check:dir(rtl):selected:backdrop, treeview.view check:dir(rtl):backdrop:hover, treeview.view check:dir(rtl):backdrop, treeview.view check:dir(ltr):selected:backdrop:hover, treeview.view check:dir(ltr):selected:backdrop, treeview.view check:dir(ltr):backdrop:hover, treeview.view check:dir(ltr):backdrop,
-treeview.view radio:dir(rtl):selected:backdrop:hover,
-treeview.view radio:dir(rtl):selected:backdrop,
-treeview.view radio:dir(rtl):backdrop:hover,
-treeview.view radio:dir(rtl):backdrop,
-treeview.view radio:dir(ltr):selected:backdrop:hover,
-treeview.view radio:dir(ltr):selected:backdrop,
-treeview.view radio:dir(ltr):backdrop:hover,
-treeview.view radio:dir(ltr):backdrop {
+treeview.view check:selected:disabled,
+treeview.view radio:selected:disabled {
   color: #8b8e8f; }
-treeview.view check:dir(rtl):selected:backdrop:disabled, treeview.view check:dir(rtl):backdrop:disabled, treeview.view check:dir(ltr):selected:backdrop:disabled, treeview.view check:dir(ltr):backdrop:disabled,
-treeview.view radio:dir(rtl):selected:backdrop:disabled,
-treeview.view radio:dir(rtl):backdrop:disabled,
-treeview.view radio:dir(ltr):selected:backdrop:disabled,
-treeview.view radio:dir(ltr):backdrop:disabled {
-  color: #c3c3c0; }
-treeview.view check:dir(rtl):selected:disabled, treeview.view check:dir(rtl):disabled, treeview.view check:dir(ltr):selected:disabled, treeview.view check:dir(ltr):disabled,
-treeview.view radio:dir(rtl):selected:disabled,
-treeview.view radio:dir(rtl):disabled,
-treeview.view radio:dir(ltr):selected:disabled,
-treeview.view radio:dir(ltr):disabled {
+  treeview.view check:selected:disabled:backdrop,
+  treeview.view radio:selected:disabled:backdrop {
+    color: #c3c3c0; }
+treeview.view check:backdrop:selected, treeview.view check:backdrop,
+treeview.view radio:backdrop:selected,
+treeview.view radio:backdrop {
   color: #8b8e8f; }
 
 /************
