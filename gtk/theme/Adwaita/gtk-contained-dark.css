@@ -552,6 +552,8 @@ row:selected button.sidebar-button:not(:active):not(:checked):not(:hover):not(di
   row:selected button.sidebar-button:not(:active):not(:checked):not(:hover):not(disabled):backdrop, row:selected button.flat:not(:active):not(:checked):not(:hover):not(disabled):backdrop {
     color: #949796; }
 button.osd {
+  min-width: 24px;
+  min-height: 32px;
   color: #eeeeec;
   border-radius: 5px;
   outline-color: rgba(238, 238, 236, 0.3);
@@ -566,8 +568,7 @@ button.osd {
   border: none;
   box-shadow: none; }
   button.osd.image-button {
-    min-height: 48px;
-    min-width: 48px; }
+    min-width: 32px; }
   button.osd:hover {
     color: white;
     border-color: rgba(0, 0, 0, 0.7);
