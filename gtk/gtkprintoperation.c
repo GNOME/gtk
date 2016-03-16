@@ -3283,9 +3283,10 @@ gtk_print_operation_run (GtkPrintOperation        *op,
   if (run_print_pages)
     print_pages (op, parent, do_print, result);
 
-  if (priv->error && error)
+  if (priv->error)
     {
-      *error = g_error_copy (priv->error);
+      if (error)
+        *error = g_error_copy (priv->error);
       result = GTK_PRINT_OPERATION_RESULT_ERROR;
     }
   else if (priv->cancelled)
