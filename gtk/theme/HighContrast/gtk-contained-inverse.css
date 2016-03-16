@@ -3296,9 +3296,14 @@ cursor-handle {
 button.circular {
   border-radius: 20px;
   -gtk-outline-radius: 20px; }
-
-button.circular label {
-  padding: 0; }
+  button.circular label {
+    padding: 0; }
+  row:selected button.circular {
+    color: #fff; }
+    row:selected button.circular:hover {
+      color: #fff; }
+    row:selected button.circular:active {
+      color: #fff; }
 
 .keycap {
   min-width: 18px;

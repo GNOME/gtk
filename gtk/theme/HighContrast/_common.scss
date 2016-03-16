@@ -2993,13 +2993,16 @@ cursor-handle {
   }
 }
 
-button.circular {
+button.circular { // FIXME: aggregate to buttons
   border-radius: 20px;
   -gtk-outline-radius: 20px;
-}
 
-button.circular label {
-  padding: 0;
+  label { padding: 0; }
+  row:selected & { 
+    color: $selected_fg_color; 
+    &:hover { color: $fg_color; }
+    &:active { color: $selected_fg_color; }
+  }
 }
 
 // shortcut window keys
