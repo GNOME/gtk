@@ -1212,7 +1212,7 @@ gtk_scale_measure_value (GtkCssGadget   *gadget,
       g_object_unref (layout);
     }
 
-  if (orientation)
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
     *minimum = *natural = width;
   else
     *minimum = *natural = height;
