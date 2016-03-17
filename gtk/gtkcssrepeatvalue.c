@@ -205,6 +205,60 @@ _gtk_css_background_repeat_value_try_parse (GtkCssParser *parser)
   return _gtk_css_background_repeat_value_new (x, y);
 }
 
+static gboolean
+gtk_css_background_repeat_value_from_token (const GtkCssToken *token,
+                                            GtkCssRepeatStyle *style)
+{
+  if (gtk_css_token_is_ident (token, "repeat"))
+    *style = GTK_CSS_REPEAT_STYLE_REPEAT;
+  else if (gtk_css_token_is_ident (token, "space"))
+    *style = GTK_CSS_REPEAT_STYLE_SPACE;
+  else if (gtk_css_token_is_ident (token, "round"))
+    *style = GTK_CSS_REPEAT_STYLE_ROUND;
+  else if (gtk_css_token_is_ident (token, "no-repeat"))
+    *style = GTK_CSS_REPEAT_STYLE_NO_REPEAT;
+  else
+    return FALSE;
+
+  return TRUE;
+}
+
+GtkCssValue *
+gtk_css_background_repeat_value_token_parse (GtkCssTokenSource *source)
+{
+  GtkCssRepeatStyle x, y;
+  const GtkCssToken *token;
+
+  token = gtk_css_token_source_get_token (source);
+  if (gtk_css_token_is_ident (token, "repeat-x"))
+    {
+      gtk_css_token_source_consume_token (source);
+      return _gtk_css_background_repeat_value_new (GTK_CSS_REPEAT_STYLE_REPEAT, GTK_CSS_REPEAT_STYLE_NO_REPEAT);
+    }
+  if (gtk_css_token_is_ident (token, "repeat-y"))
+    {
+      gtk_css_token_source_consume_token (source);
+      return _gtk_css_background_repeat_value_new (GTK_CSS_REPEAT_STYLE_NO_REPEAT, GTK_CSS_REPEAT_STYLE_REPEAT);
+    }
+
+  if (!gtk_css_background_repeat_value_from_token (token, &x))
+    {
+      gtk_css_token_source_error (source, "Not a repeat-style");
+      gtk_css_token_source_consume_all (source);
+      return NULL;
+    }
+
+  gtk_css_token_source_consume_token (source);
+  gtk_css_token_source_consume_whitespace (source);
+  token = gtk_css_token_source_get_token (source);
+  if (gtk_css_background_repeat_value_from_token (token, &y))
+    gtk_css_token_source_consume_token (source);
+  else
+    y = x;
+
+  return _gtk_css_background_repeat_value_new (x, y);
+}
+
 GtkCssRepeatStyle
 _gtk_css_background_repeat_value_get_x (const GtkCssValue *repeat)
 {
@@ -289,6 +343,49 @@ _gtk_css_border_repeat_value_try_parse (GtkCssParser *parser)
     return NULL;
 
   if (!_gtk_css_border_repeat_style_try (parser, &y))
+    y = x;
+
+  return _gtk_css_border_repeat_value_new (x, y);
+}
+
+static gboolean
+gtk_css_border_repeat_value_from_token (const GtkCssToken *token,
+                                        GtkCssRepeatStyle *style)
+{
+  if (gtk_css_token_is_ident (token, "repeat"))
+    *style = GTK_CSS_REPEAT_STYLE_REPEAT;
+  else if (gtk_css_token_is_ident (token, "space"))
+    *style = GTK_CSS_REPEAT_STYLE_SPACE;
+  else if (gtk_css_token_is_ident (token, "round"))
+    *style = GTK_CSS_REPEAT_STYLE_ROUND;
+  else if (gtk_css_token_is_ident (token, "stretch"))
+    *style = GTK_CSS_REPEAT_STYLE_STRETCH;
+  else
+    return FALSE;
+
+  return TRUE;
+}
+
+GtkCssValue *
+gtk_css_border_repeat_value_token_parse (GtkCssTokenSource *source)
+{
+  GtkCssRepeatStyle x, y;
+  const GtkCssToken *token;
+
+  token = gtk_css_token_source_get_token (source);
+  if (!gtk_css_border_repeat_value_from_token (token, &x))
+    {
+      gtk_css_token_source_error (source, "Not a repeat style");
+      gtk_css_token_source_consume_all (source);
+      return NULL;
+    }
+
+  gtk_css_token_source_consume_token (source);
+  gtk_css_token_source_consume_whitespace (source);
+  token = gtk_css_token_source_get_token (source);
+  if (gtk_css_border_repeat_value_from_token (token, &y))
+    gtk_css_token_source_consume_token (source);
+  else
     y = x;
 
   return _gtk_css_border_repeat_value_new (x, y);

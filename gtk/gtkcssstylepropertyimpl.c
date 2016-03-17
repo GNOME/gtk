@@ -1412,6 +1412,13 @@ background_repeat_value_parse (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
+background_repeat_value_token_parse (GtkCssTokenSource   *source,
+                                     GtkCssStyleProperty *property)
+{
+  return gtk_css_array_value_token_parse (source, gtk_css_background_repeat_value_token_parse);
+}
+
+static GtkCssValue *
 background_size_parse (GtkCssStyleProperty *property,
                        GtkCssParser        *parser)
 {
@@ -2009,7 +2016,7 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           GTK_CSS_AFFECTS_BACKGROUND,
                                           background_repeat_value_parse,
-                                          gtk_css_style_property_token_parse_default,
+                                          background_repeat_value_token_parse,
                                           NULL,
                                           NULL,
                                           _gtk_css_array_value_new (_gtk_css_background_repeat_value_new (GTK_CSS_REPEAT_STYLE_REPEAT,
@@ -2041,7 +2048,7 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           GTK_CSS_AFFECTS_BORDER,
                                           border_image_repeat_parse,
-                                          gtk_css_style_property_token_parse_default,
+                                          (GtkCssStylePropertyTokenParseFunc) gtk_css_border_repeat_value_token_parse,
                                           NULL,
                                           NULL,
                                           _gtk_css_border_repeat_value_new (GTK_CSS_REPEAT_STYLE_STRETCH,
