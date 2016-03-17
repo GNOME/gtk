@@ -1564,7 +1564,8 @@ treeview.view.progressbar {
  *********/
 menubar,
 .menubar {
-  padding: 0px; }
+  padding: 0px;
+  box-shadow: inset 0 -1px gray; }
   menubar > menuitem,
   .menubar > menuitem {
     padding: 4px 8px; }
