@@ -205,6 +205,76 @@ _gtk_css_border_value_parse (GtkCssParser           *parser,
 }
 
 GtkCssValue *
+gtk_css_border_value_token_parse (GtkCssTokenSource      *source,
+                                  GtkCssNumberParseFlags  flags,
+                                  gboolean                allow_auto,
+                                  gboolean                allow_fill)
+{
+  GtkCssValue *result;
+  const GtkCssToken *token;
+  int i;
+
+  result = _gtk_css_border_value_new (NULL, NULL, NULL, NULL);
+
+  token = gtk_css_token_source_get_token (source);
+  if (allow_fill && gtk_css_token_is_ident (token, "fill"))
+    {
+      result->fill = TRUE;
+      gtk_css_token_source_consume_token (source);
+      gtk_css_token_source_consume_whitespace (source);
+      token = gtk_css_token_source_get_token (source);
+    }
+
+  for (i = 0;
+       !gtk_css_token_is (token, GTK_CSS_TOKEN_EOF);
+       i++, token = gtk_css_token_source_get_token (source))
+    {
+      if (allow_fill && !result->fill && gtk_css_token_is_ident (token, "fill"))
+        {
+          result->fill = TRUE;
+          gtk_css_token_source_consume_token (source);
+          gtk_css_token_source_consume_whitespace (source);
+          i--;
+          break;
+        }
+
+      if (allow_auto && gtk_css_token_is_ident (token, "auto"))
+        {
+          gtk_css_token_source_consume_token (source);
+          gtk_css_token_source_consume_whitespace (source);
+          continue;
+        }
+
+      if (i == 4)
+        break;
+
+      result->values[i] = gtk_css_number_value_token_parse (source, flags);
+      if (result->values[i] == NULL)
+        {
+          _gtk_css_value_unref (result);
+          return NULL;
+        }
+      gtk_css_token_source_consume_whitespace (source);
+    }
+
+  if (i <= 0)
+    {
+      gtk_css_token_source_error (source, "Expected a number");
+      gtk_css_token_source_consume_all (source);
+      _gtk_css_value_unref (result);
+      return NULL;
+    }
+
+  for (; i < 4; i++)
+    {
+      if (result->values[(i - 1) >> 1])
+        result->values[i] = _gtk_css_value_ref (result->values[(i - 1) >> 1]);
+    }
+
+  return result;
+}
+
+GtkCssValue *
 _gtk_css_border_value_get_top (const GtkCssValue *value)
 {
   g_return_val_if_fail (value->class == &GTK_CSS_VALUE_BORDER, NULL);

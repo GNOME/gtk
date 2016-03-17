@@ -1123,6 +1123,18 @@ border_image_slice_parse (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
+border_image_slice_token_parse (GtkCssTokenSource   *source,
+                                GtkCssStyleProperty *property)
+{
+  return gtk_css_border_value_token_parse (source,
+                                           GTK_CSS_PARSE_PERCENT
+                                           | GTK_CSS_PARSE_NUMBER
+                                           | GTK_CSS_POSITIVE_ONLY,
+                                           FALSE,
+                                           TRUE);
+}
+
+static GtkCssValue *
 border_image_width_parse (GtkCssStyleProperty *property,
                           GtkCssParser        *parser)
 {
@@ -1133,6 +1145,19 @@ border_image_width_parse (GtkCssStyleProperty *property,
                                       | GTK_CSS_POSITIVE_ONLY,
                                       TRUE,
                                       FALSE);
+}
+
+static GtkCssValue *
+border_image_width_token_parse (GtkCssTokenSource   *source,
+                                GtkCssStyleProperty *property)
+{
+  return gtk_css_border_value_token_parse (source,
+                                           GTK_CSS_PARSE_PERCENT
+                                           | GTK_CSS_PARSE_LENGTH
+                                           | GTK_CSS_PARSE_NUMBER
+                                           | GTK_CSS_POSITIVE_ONLY,
+                                           TRUE,
+                                           FALSE);
 }
 
 static GtkCssValue *
@@ -2021,7 +2046,7 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           GTK_CSS_AFFECTS_BORDER,
                                           border_image_slice_parse,
-                                          gtk_css_style_property_token_parse_default,
+                                          border_image_slice_token_parse,
                                           query_border,
                                           assign_border,
                                           _gtk_css_border_value_new (_gtk_css_number_value_new (100, GTK_CSS_PERCENT),
@@ -2034,7 +2059,7 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           GTK_CSS_AFFECTS_BORDER,
                                           border_image_width_parse,
-                                          gtk_css_style_property_token_parse_default,
+                                          border_image_width_token_parse,
                                           query_border,
                                           assign_border,
                                           _gtk_css_border_value_new (_gtk_css_number_value_new (1, GTK_CSS_NUMBER),

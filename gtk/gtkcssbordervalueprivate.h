@@ -21,6 +21,7 @@
 #define __GTK_CSS_BORDER_VALUE_PRIVATE_H__
 
 #include "gtkcssparserprivate.h"
+#include "gtkcsstokensourceprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssvalueprivate.h"
 
@@ -31,6 +32,10 @@ GtkCssValue *   _gtk_css_border_value_new           (GtkCssValue            *top
                                                      GtkCssValue            *bottom,
                                                      GtkCssValue            *left);
 GtkCssValue *   _gtk_css_border_value_parse         (GtkCssParser           *parser,
+                                                     GtkCssNumberParseFlags  flags,
+                                                     gboolean                allow_auto,
+                                                     gboolean                allow_fill);
+GtkCssValue *   gtk_css_border_value_token_parse    (GtkCssTokenSource      *source,
                                                      GtkCssNumberParseFlags  flags,
                                                      gboolean                allow_auto,
                                                      gboolean                allow_fill);
