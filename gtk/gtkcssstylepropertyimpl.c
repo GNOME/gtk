@@ -284,6 +284,53 @@ font_family_parse (GtkCssStyleProperty *property,
   return _gtk_css_array_value_parse (parser, font_family_parse_one);
 }
 
+static GtkCssValue *
+font_family_token_parse_one (GtkCssTokenSource *source)
+{
+  const GtkCssToken *token;
+  
+  token = gtk_css_token_source_get_token (source);
+
+  if (gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
+    {
+      GString *string = g_string_new (token->string.string);
+
+      gtk_css_token_source_consume_token (source);
+      gtk_css_token_source_consume_whitespace (source);
+      for (token = gtk_css_token_source_get_token (source);
+           gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT);
+           token = gtk_css_token_source_get_token (source))
+        {
+          g_string_append_c (string, ' ');
+          g_string_append (string, token->string.string);
+          gtk_css_token_source_consume_token (source);
+          gtk_css_token_source_consume_whitespace (source);
+        }
+
+      return _gtk_css_string_value_new_take (g_string_free (string, FALSE));
+    }
+  else if (gtk_css_token_is (token, GTK_CSS_TOKEN_STRING))
+    {
+      GtkCssValue *result = _gtk_css_string_value_new (token->string.string);
+      
+      gtk_css_token_source_consume_token (source);
+      return result;
+    }
+  else
+    {
+      gtk_css_token_source_error (source, "Expected a string");
+      gtk_css_token_source_consume_all (source);
+      return NULL;
+    }
+}
+
+static GtkCssValue *
+font_family_token_parse (GtkCssTokenSource   *source,
+                         GtkCssStyleProperty *property)
+{
+  return gtk_css_array_value_token_parse (source, font_family_token_parse_one);
+}
+
 static void
 font_family_query (GtkCssStyleProperty *property,
                    const GtkCssValue   *css_value,
@@ -520,6 +567,19 @@ parse_css_area (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
+token_parse_css_area_one (GtkCssTokenSource *source)
+{
+  return token_parse_enum (source, gtk_css_area_value_from_token);
+}
+
+static GtkCssValue *
+token_parse_css_area (GtkCssTokenSource   *source,
+                      GtkCssStyleProperty *property)
+{
+  return gtk_css_array_value_token_parse (source, token_parse_css_area_one);
+}
+
+static GtkCssValue *
 parse_one_css_direction (GtkCssParser *parser)
 {
   GtkCssValue *value = _gtk_css_direction_value_try_parse (parser);
@@ -535,6 +595,19 @@ parse_css_direction (GtkCssStyleProperty *property,
                      GtkCssParser        *parser)
 {
   return _gtk_css_array_value_parse (parser, parse_one_css_direction);
+}
+
+static GtkCssValue *
+token_parse_css_direction_one (GtkCssTokenSource *source)
+{
+  return token_parse_enum (source, gtk_css_direction_value_from_token);
+}
+
+static GtkCssValue *
+token_parse_css_direction (GtkCssTokenSource   *source,
+                           GtkCssStyleProperty *property)
+{
+  return gtk_css_array_value_token_parse (source, token_parse_css_direction_one);
 }
 
 static GtkCssValue *
@@ -580,6 +653,19 @@ parse_css_play_state (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
+token_parse_css_play_state_one (GtkCssTokenSource *source)
+{
+  return token_parse_enum (source, gtk_css_play_state_value_from_token);
+}
+
+static GtkCssValue *
+token_parse_css_play_state (GtkCssTokenSource   *source,
+                            GtkCssStyleProperty *property)
+{
+  return gtk_css_array_value_token_parse (source, token_parse_css_play_state_one);
+}
+
+static GtkCssValue *
 parse_one_css_fill_mode (GtkCssParser *parser)
 {
   GtkCssValue *value = _gtk_css_fill_mode_value_try_parse (parser);
@@ -595,6 +681,19 @@ parse_css_fill_mode (GtkCssStyleProperty *property,
                      GtkCssParser        *parser)
 {
   return _gtk_css_array_value_parse (parser, parse_one_css_fill_mode);
+}
+
+static GtkCssValue *
+token_parse_css_fill_mode_one (GtkCssTokenSource *source)
+{
+  return token_parse_enum (source, gtk_css_fill_mode_value_from_token);
+}
+
+static GtkCssValue *
+token_parse_css_fill_mode (GtkCssTokenSource   *source,
+                           GtkCssStyleProperty *property)
+{
+  return gtk_css_array_value_token_parse (source, token_parse_css_fill_mode_one);
 }
 
 static GtkCssValue *
@@ -673,6 +772,45 @@ bindings_value_parse (GtkCssStyleProperty *property,
                       GtkCssParser        *parser)
 {
   return _gtk_css_array_value_parse (parser, bindings_value_parse_one);
+}
+
+static GtkCssValue *
+bindings_value_token_parse_one (GtkCssTokenSource *source)
+{
+  const GtkCssToken *token = gtk_css_token_source_get_token (source);
+
+  if (gtk_css_token_is_ident (token, "none"))
+    {
+      gtk_css_token_source_consume_token (source);
+      return _gtk_css_string_value_new (NULL);
+    }
+  else if (gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
+    {
+      GtkCssValue *value;
+
+      if (!gtk_binding_set_find (token->string.string))
+        {
+          gtk_css_token_source_error (source, "No binding set named '%s'", token->string.string);
+          gtk_css_token_source_consume_all (source);
+          return NULL;
+        }
+      value = _gtk_css_string_value_new (token->string.string);
+      gtk_css_token_source_consume_token (source);
+      return value;
+    }
+  else
+    {
+      gtk_css_token_source_error (source, "Not a valid binding name");
+      gtk_css_token_source_consume_all (source);
+      return NULL;
+    }
+}
+
+static GtkCssValue *
+bindings_value_token_parse (GtkCssTokenSource   *source,
+                            GtkCssStyleProperty *property)
+{
+  return gtk_css_array_value_token_parse (source, bindings_value_token_parse_one);
 }
 
 static void
@@ -1039,6 +1177,34 @@ transition_property_parse (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
+transition_property_token_parse_one (GtkCssTokenSource *source)
+{
+  const GtkCssToken *token;
+  GtkCssValue *value;
+
+  token = gtk_css_token_source_get_token (source);
+  if (gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
+    {
+      value = _gtk_css_ident_value_new (token->string.string);
+      gtk_css_token_source_consume_token (source);
+      return value;
+    }
+  else
+    {
+      gtk_css_token_source_error (source, "Expected an identifier");
+      gtk_css_token_source_consume_all (source);
+      return NULL;
+    }
+}
+
+static GtkCssValue *
+transition_property_token_parse (GtkCssTokenSource   *source,
+                                 GtkCssStyleProperty *property)
+{
+  return gtk_css_array_value_token_parse (source, transition_property_token_parse_one);
+}
+
+static GtkCssValue *
 transition_time_parse_one (GtkCssParser *parser)
 {
   return _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_TIME);
@@ -1049,6 +1215,19 @@ transition_time_parse (GtkCssStyleProperty *property,
                        GtkCssParser        *parser)
 {
   return _gtk_css_array_value_parse (parser, transition_time_parse_one);
+}
+
+static GtkCssValue *
+transition_time_token_parse_one (GtkCssTokenSource *source)
+{
+  return gtk_css_number_value_token_parse (source, GTK_CSS_PARSE_TIME);
+}
+
+static GtkCssValue *
+transition_time_token_parse (GtkCssTokenSource   *source,
+                             GtkCssStyleProperty *property)
+{
+  return gtk_css_array_value_token_parse (source, transition_time_token_parse_one);
 }
 
 static GtkCssValue *
@@ -1072,6 +1251,28 @@ iteration_count_parse (GtkCssStyleProperty *property,
                        GtkCssParser        *parser)
 {
   return _gtk_css_array_value_parse (parser, iteration_count_parse_one);
+}
+
+static GtkCssValue *
+iteration_count_token_parse_one (GtkCssTokenSource *source)
+{
+  const GtkCssToken *token;
+
+  token = gtk_css_token_source_get_token (source);
+  if (gtk_css_token_is_ident (token, "infinite"))
+    {
+      gtk_css_token_source_consume_token (source);
+      return _gtk_css_number_value_new (HUGE_VAL, GTK_CSS_NUMBER);
+    }
+
+  return gtk_css_number_value_token_parse (source, GTK_CSS_PARSE_NUMBER | GTK_CSS_POSITIVE_ONLY);
+}
+
+static GtkCssValue *
+iteration_count_token_parse (GtkCssTokenSource   *source,
+                             GtkCssStyleProperty *property)
+{
+  return gtk_css_array_value_token_parse (source, iteration_count_token_parse_one);
 }
 
 static GtkCssValue *
@@ -1279,7 +1480,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_INHERIT,
                                           GTK_CSS_AFFECTS_FONT | GTK_CSS_AFFECTS_TEXT,
                                           font_family_parse,
-                                          gtk_css_style_property_token_parse_default,
+                                          font_family_token_parse,
                                           font_family_query,
                                           font_family_assign,
                                           _gtk_css_array_value_new (_gtk_css_string_value_new ("Sans")));
@@ -1683,7 +1884,7 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           GTK_CSS_AFFECTS_BACKGROUND,
                                           parse_css_area,
-                                          gtk_css_style_property_token_parse_default,
+                                          token_parse_css_area,
                                           NULL,
                                           NULL,
                                           _gtk_css_array_value_new (_gtk_css_area_value_new (GTK_CSS_AREA_BORDER_BOX)));
@@ -1693,7 +1894,7 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           GTK_CSS_AFFECTS_BACKGROUND,
                                           parse_css_area,
-                                          gtk_css_style_property_token_parse_default,
+                                          token_parse_css_area,
                                           NULL,
                                           NULL,
                                           _gtk_css_array_value_new (_gtk_css_area_value_new (GTK_CSS_AREA_PADDING_BOX)));
@@ -1910,7 +2111,7 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           0,
                                           transition_property_parse,
-                                          gtk_css_style_property_token_parse_default,
+                                          transition_property_token_parse,
                                           NULL,
                                           NULL,
                                           _gtk_css_array_value_new (_gtk_css_ident_value_new ("all")));
@@ -1920,7 +2121,7 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           0,
                                           transition_time_parse,
-                                          gtk_css_style_property_token_parse_default,
+                                          transition_time_token_parse,
                                           NULL,
                                           NULL,
                                           _gtk_css_array_value_new (_gtk_css_number_value_new (0, GTK_CSS_S)));
@@ -1941,7 +2142,7 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           0,
                                           transition_time_parse,
-                                          gtk_css_style_property_token_parse_default,
+                                          transition_time_token_parse,
                                           NULL,
                                           NULL,
                                           _gtk_css_array_value_new (_gtk_css_number_value_new (0, GTK_CSS_S)));
@@ -1952,7 +2153,7 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           0,
                                           transition_property_parse,
-                                          gtk_css_style_property_token_parse_default,
+                                          transition_property_token_parse,
                                           NULL,
                                           NULL,
                                           _gtk_css_array_value_new (_gtk_css_ident_value_new ("none")));
@@ -1962,7 +2163,7 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           0,
                                           transition_time_parse,
-                                          gtk_css_style_property_token_parse_default,
+                                          transition_time_token_parse,
                                           NULL,
                                           NULL,
                                           _gtk_css_array_value_new (_gtk_css_number_value_new (0, GTK_CSS_S)));
@@ -1983,7 +2184,7 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           0,
                                           iteration_count_parse,
-                                          gtk_css_style_property_token_parse_default,
+                                          iteration_count_token_parse,
                                           NULL,
                                           NULL,
                                           _gtk_css_array_value_new (_gtk_css_number_value_new (1, GTK_CSS_NUMBER)));
@@ -1993,7 +2194,7 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           0,
                                           parse_css_direction,
-                                          gtk_css_style_property_token_parse_default,
+                                          token_parse_css_direction,
                                           NULL,
                                           NULL,
                                           _gtk_css_array_value_new (_gtk_css_direction_value_new (GTK_CSS_DIRECTION_NORMAL)));
@@ -2003,7 +2204,7 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           0,
                                           parse_css_play_state,
-                                          gtk_css_style_property_token_parse_default,
+                                          token_parse_css_play_state,
                                           NULL,
                                           NULL,
                                           _gtk_css_array_value_new (_gtk_css_play_state_value_new (GTK_CSS_PLAY_STATE_RUNNING)));
@@ -2013,7 +2214,7 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           0,
                                           transition_time_parse,
-                                          gtk_css_style_property_token_parse_default,
+                                          transition_time_token_parse,
                                           NULL,
                                           NULL,
                                           _gtk_css_array_value_new (_gtk_css_number_value_new (0, GTK_CSS_S)));
@@ -2023,7 +2224,7 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           0,
                                           parse_css_fill_mode,
-                                          gtk_css_style_property_token_parse_default,
+                                          token_parse_css_fill_mode,
                                           NULL,
                                           NULL,
                                           _gtk_css_array_value_new (_gtk_css_fill_mode_value_new (GTK_CSS_FILL_NONE)));
@@ -2070,7 +2271,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                                           0,
                                           0,
                                           bindings_value_parse,
-                                          gtk_css_style_property_token_parse_default,
+                                          bindings_value_token_parse,
                                           bindings_value_query,
                                           bindings_value_assign,
                                           _gtk_css_array_value_new (_gtk_css_string_value_new (NULL)));

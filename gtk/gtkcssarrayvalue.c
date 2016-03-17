@@ -380,6 +380,39 @@ _gtk_css_array_value_parse (GtkCssParser *parser,
 }
 
 GtkCssValue *
+gtk_css_array_value_token_parse (GtkCssTokenSource *source,
+                                 GtkCssValue       *(* parse_func) (GtkCssTokenSource *))
+{
+  GtkCssValue *value, *result;
+  GPtrArray *values;
+
+  values = g_ptr_array_new ();
+
+  while (TRUE) {
+    gtk_css_token_source_consume_whitespace (source);
+    value = parse_func (source);
+
+    if (value == NULL)
+      {
+        g_ptr_array_set_free_func (values, (GDestroyNotify) _gtk_css_value_unref);
+        g_ptr_array_free (values, TRUE);
+        return NULL;
+      }
+
+    g_ptr_array_add (values, value);
+    gtk_css_token_source_consume_whitespace (source);
+    if (!gtk_css_token_is (gtk_css_token_source_get_token (source), GTK_CSS_TOKEN_COMMA))
+      break;
+    gtk_css_token_source_consume_token (source);
+    gtk_css_token_source_consume_whitespace (source);
+  }
+
+  result = _gtk_css_array_value_new_from_array ((GtkCssValue **) values->pdata, values->len);
+  g_ptr_array_free (values, TRUE);
+  return result;
+}
+
+GtkCssValue *
 _gtk_css_array_value_get_nth (const GtkCssValue *value,
                               guint              i)
 {

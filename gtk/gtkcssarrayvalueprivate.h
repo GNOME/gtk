@@ -21,6 +21,7 @@
 #define __GTK_CSS_ARRAY_VALUE_PRIVATE_H__
 
 #include "gtkcssparserprivate.h"
+#include "gtkcsstokensourceprivate.h"
 #include "gtkcssvalueprivate.h"
 #include "gtktypes.h"
 
@@ -31,6 +32,8 @@ GtkCssValue *       _gtk_css_array_value_new_from_array (GtkCssValue          **
                                                          guint                  n_values);
 GtkCssValue *       _gtk_css_array_value_parse          (GtkCssParser          *parser,
                                                          GtkCssValue *          (* parse_func) (GtkCssParser *));
+GtkCssValue *       gtk_css_array_value_token_parse     (GtkCssTokenSource     *source,
+                                                         GtkCssValue *          (* parse_func) (GtkCssTokenSource *));
 
 GtkCssValue *       _gtk_css_array_value_get_nth        (const GtkCssValue     *value,
                                                          guint                  i);
