@@ -7,6 +7,8 @@ AM_CPPFLAGS =				\
 	-I$(top_srcdir)			\
 	-I$(top_builddir)/gdk		\
 	-I$(top_srcdir)/gdk		\
+	-I$(top_builddir)/gsk		\
+	-I$(top_srcdir)/gsk		\
 	$(GTK_DEBUG_FLAGS)		\
 	$(GTK_DEP_CFLAGS)		\
 	$(GDK_DEP_CFLAGS)
@@ -16,6 +18,7 @@ DEPS = \
 
 LDADD = \
 	$(top_builddir)/gtk/libgtk-3.la	\
+	$(top_builddir)/gsk/libgsk-3.la	\
 	$(top_builddir)/gdk/libgdk-3.la	\
 	$(GTK_DEP_LIBS)			\
 	$(GDK_DEP_LIBS)			\
@@ -172,6 +175,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	gdkgears			\
 	listmodel			\
 	testpopup			\
+	testgskrenderer			\
 	$(NULL)
 
 if USE_X11
@@ -300,6 +304,7 @@ testtitlebar_DEPENDENCIES = $(TEST_DEPS)
 testwindowsize_DEPENDENCIES = $(TEST_DEPS)
 listmodel_DEPENDENCIES = $(TEST_DEPS)
 foreigndrawing_DEPENDENCIES = $(TEST_DEPS)
+testgskrenderer_DEPENDENCIES = $(TEST_DEPS)
 
 animated_resizing_SOURCES = 	\
 	animated-resizing.c	\
@@ -539,6 +544,8 @@ testglblending_SOURCES =	\
 listmodel_SOURCES = listmodel.c
 
 foreigndrawing_SOURCES = foreigndrawing.c
+
+testgskrenderer_SOURCES = testgskrenderer.c
 
 EXTRA_DIST += 			\
 	gradient1.png		\
