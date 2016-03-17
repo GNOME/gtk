@@ -3112,19 +3112,9 @@ decoration {
 
 // Window Close button
 button.titlebutton {
-  padding: 8px;
-  border-color: transparent;
-  background-image: none;
-  transition-property: border, box-shadow, color;
-  box-shadow: inset 0 1px transparentize(white,1),
-              0 1px transparentize($borders_edge,1);
-  &:hover { @include button(normal); }
-  &:active { @include button(active); }
-  &:backdrop {
-    @include button(backdrop);
-    border-color: transparent;
-    transition-property: border, box-shadow, color;
-  }
+  @extend %button_basic;
+
+  @extend %button_basic.flat;
 }
 
 /**********************
