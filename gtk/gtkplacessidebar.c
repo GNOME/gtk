@@ -3345,8 +3345,6 @@ append_separator (GtkWidget *box)
   separator = g_object_new (GTK_TYPE_SEPARATOR,
                             "orientation", GTK_ORIENTATION_HORIZONTAL,
                             "visible", TRUE,
-                            "margin-start", 12,
-                            "margin-end", 12,
                             "margin-top", 6,
                             "margin-bottom", 6,
                             NULL);
