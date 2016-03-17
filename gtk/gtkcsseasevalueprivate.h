@@ -21,6 +21,7 @@
 #define __GTK_CSS_EASE_VALUE_PRIVATE_H__
 
 #include "gtkcssparserprivate.h"
+#include "gtkcsstokensourceprivate.h"
 #include "gtkcssvalueprivate.h"
 
 G_BEGIN_DECLS
@@ -31,6 +32,7 @@ GtkCssValue *   _gtk_css_ease_value_new_cubic_bezier  (double                x1,
                                                        double                y2);
 gboolean        _gtk_css_ease_value_can_parse         (GtkCssParser         *parser);
 GtkCssValue *   _gtk_css_ease_value_parse             (GtkCssParser         *parser);
+GtkCssValue *   gtk_css_ease_value_token_parse        (GtkCssTokenSource    *source);
 
 double          _gtk_css_ease_value_transform         (const GtkCssValue    *ease,
                                                        double                progress);

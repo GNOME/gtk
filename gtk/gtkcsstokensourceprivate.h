@@ -68,6 +68,12 @@ void                    gtk_css_token_source_consume_all        (GtkCssTokenSour
 char *                  gtk_css_token_source_consume_to_string  (GtkCssTokenSource      *source);
 gboolean                gtk_css_token_source_consume_whitespace (GtkCssTokenSource      *source);
 
+gboolean                gtk_css_token_source_consume_function   (GtkCssTokenSource      *source,
+                                                                 guint                   min_args,
+                                                                 guint                   max_args,
+                                                                 gboolean (* parse_func) (GtkCssTokenSource *, guint, gpointer),
+                                                                 gpointer                data);
+
 void                    gtk_css_token_source_emit_error         (GtkCssTokenSource      *source,
                                                                  const GError           *error);
 void                    gtk_css_token_source_error              (GtkCssTokenSource      *source,

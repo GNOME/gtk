@@ -333,6 +333,76 @@ gtk_css_token_source_consume_whitespace (GtkCssTokenSource *source)
   return seen_whitespace;
 }
 
+gboolean
+gtk_css_token_source_consume_function (GtkCssTokenSource      *source,
+                                       guint                   min_args,
+                                       guint                   max_args,
+                                       gboolean (* parse_func) (GtkCssTokenSource *, guint, gpointer),
+                                       gpointer                data)
+{
+  const GtkCssToken *token;
+  GtkCssTokenSource *func_source;
+  gboolean result = FALSE;
+  char *function_name;
+  guint arg;
+
+  token = gtk_css_token_source_get_token (source);
+  g_return_val_if_fail (gtk_css_token_is (token, GTK_CSS_TOKEN_FUNCTION), FALSE);
+  function_name = g_strdup (token->string.string);
+  gtk_css_token_source_consume_token (source);
+  func_source = gtk_css_token_source_new_for_part (source, GTK_CSS_TOKEN_CLOSE_PARENS);
+
+  for (arg = 0; arg < max_args; arg++)
+    {
+      gtk_css_token_source_consume_whitespace (func_source);
+      if (!parse_func (func_source, arg, data))
+        {
+          gtk_css_token_source_consume_all (func_source);
+          break;
+        }
+      gtk_css_token_source_consume_whitespace (func_source);
+      token = gtk_css_token_source_get_token (func_source);
+      if (gtk_css_token_is (token, GTK_CSS_TOKEN_EOF))
+        {
+          if (arg + 1 < min_args)
+            {
+              gtk_css_token_source_error (source, "%s() requires at least %u arguments", function_name, min_args);
+              gtk_css_token_source_consume_all (source);
+            }
+          else
+            {
+              result = TRUE;
+            }
+          break;
+        }
+      else if (gtk_css_token_is (token, GTK_CSS_TOKEN_COMMA))
+        {
+          gtk_css_token_source_consume_token (func_source);
+          continue;
+        }
+      else
+        {
+          gtk_css_token_source_error (func_source, "Unexpected data at end of %s() argument", function_name);
+          gtk_css_token_source_consume_all (func_source);
+          break;
+        }
+    }
+
+  gtk_css_token_source_unref (func_source);
+  token = gtk_css_token_source_get_token (source);
+  if (!gtk_css_token_is (token, GTK_CSS_TOKEN_CLOSE_PARENS))
+    {
+      gtk_css_token_source_error (source, "Expected ')' at end of %s()", function_name);
+      gtk_css_token_source_consume_all (source);
+      g_free (function_name);
+      return FALSE;
+    }
+  gtk_css_token_source_consume_token (source);
+  g_free (function_name);
+
+  return result;
+}
+
 GtkCssTokenType
 gtk_css_token_get_pending_block (GtkCssTokenSource *source)
 {

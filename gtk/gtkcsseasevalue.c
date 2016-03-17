@@ -327,6 +327,139 @@ _gtk_css_ease_value_parse (GtkCssParser *parser)
   return NULL;
 }
 
+static gboolean
+token_parse_cubic_bezier (GtkCssTokenSource *source,
+                          guint              n,
+                          gpointer           data)
+{
+  double *numbers = data;
+  const GtkCssToken *token;
+
+  token = gtk_css_token_source_get_token (source);
+  if (gtk_css_token_is (token, GTK_CSS_TOKEN_INTEGER) ||
+      gtk_css_token_is (token, GTK_CSS_TOKEN_NUMBER))
+    {
+      numbers[n] = token->number.number;
+      if (n % 2 == 0 &&
+          (numbers[n] < 0 || numbers[n] > 1.0))
+        {
+          gtk_css_token_source_error (source, "Value %g out of range. Must be from 0.0 to 1.0", numbers[n]);
+          return FALSE;
+        }
+      gtk_css_token_source_consume_token (source);
+      return TRUE;
+    }
+  else
+    {
+      gtk_css_token_source_error (source, "Expected a number");
+      gtk_css_token_source_consume_all (source);
+      return FALSE;
+    }
+}
+
+static gboolean
+token_parse_steps (GtkCssTokenSource *source,
+                   guint              nth_argument,
+                   gpointer           data)
+{
+  GtkCssValue *value = data;
+  const GtkCssToken *token;
+
+  token = gtk_css_token_source_get_token (source);
+  if (nth_argument == 0)
+    {
+      if (!gtk_css_token_is (token, GTK_CSS_TOKEN_INTEGER))
+        {
+          gtk_css_token_source_error (source, "Expected a positive integer for number of steps");
+          gtk_css_token_source_consume_all (source);
+          return FALSE;
+        }
+      else if (token->number.number <= 0)
+        {
+          gtk_css_token_source_error (source, "Number of steps must be greater than 0");
+          gtk_css_token_source_consume_all (source);
+          return FALSE;
+        }
+      value->u.steps.steps = token->number.number;
+      gtk_css_token_source_consume_token (source);
+      return TRUE;
+    }
+  else
+    {
+      if (gtk_css_token_is_ident (token, "start"))
+        value->u.steps.start = TRUE;
+      else if (gtk_css_token_is_ident (token, "end"))
+        value->u.steps.start = FALSE;
+      else
+        {
+          gtk_css_token_source_error (source, "Only allowed values are 'start' and 'end'");
+          gtk_css_token_source_consume_all (source);
+          return FALSE;
+        }
+      gtk_css_token_source_consume_token (source);
+      return TRUE;
+    }
+}
+
+GtkCssValue *
+gtk_css_ease_value_token_parse (GtkCssTokenSource *source)
+{
+  const GtkCssToken *token;
+  guint i;
+
+  token = gtk_css_token_source_get_token (source);
+  for (i = 0; i < G_N_ELEMENTS (parser_values); i++)
+    {
+      if (parser_values[i].needs_custom)
+        continue;
+
+      if (gtk_css_token_is_ident (token, parser_values[i].name))
+        {
+          gtk_css_token_source_consume_token (source);
+
+          if (parser_values[i].is_bezier)
+            return _gtk_css_ease_value_new_cubic_bezier (parser_values[i].values[0],
+                                                         parser_values[i].values[1],
+                                                         parser_values[i].values[2],
+                                                         parser_values[i].values[3]);
+          else
+            return _gtk_css_ease_value_new_steps (parser_values[i].values[0],
+                                                  parser_values[i].values[1] != 0.0);
+        }
+    }
+
+  if (gtk_css_token_is_function (token, "cubic-bezier"))
+    {
+      double numbers[4];
+
+      if (!gtk_css_token_source_consume_function (source, 4, 4, token_parse_cubic_bezier, numbers))
+        {
+          gtk_css_token_source_consume_all (source);
+          return NULL;
+        }
+      return _gtk_css_ease_value_new_cubic_bezier (numbers[0], numbers[1], numbers[2], numbers[3]);
+    }
+  else if (gtk_css_token_is_function (token, "steps"))
+    {
+      GtkCssValue *value = _gtk_css_ease_value_new_steps (1, FALSE);
+
+      if (!gtk_css_token_source_consume_function (source, 1, 2, token_parse_steps, value))
+        {
+          _gtk_css_value_unref (value);
+          gtk_css_token_source_consume_all (source);
+          return NULL;
+        }
+
+      return value;
+    }
+  else
+    {
+      gtk_css_token_source_error (source, "Unknown ease value");
+      gtk_css_token_source_consume_all (source);
+      return NULL;
+    }
+}
+
 double
 _gtk_css_ease_value_transform (const GtkCssValue *ease,
                                double             progress)

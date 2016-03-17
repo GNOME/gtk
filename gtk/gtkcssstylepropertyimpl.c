@@ -1263,6 +1263,13 @@ transition_timing_function_parse (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
+transition_timing_function_token_parse (GtkCssTokenSource   *source,
+                                        GtkCssStyleProperty *property)
+{
+  return gtk_css_array_value_token_parse (source, gtk_css_ease_value_token_parse);
+}
+
+static GtkCssValue *
 iteration_count_parse_one (GtkCssParser *parser)
 {
   if (_gtk_css_parser_try (parser, "infinite", TRUE))
@@ -2156,7 +2163,7 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           0,
                                           transition_timing_function_parse,
-                                          gtk_css_style_property_token_parse_default,
+                                          transition_timing_function_token_parse,
                                           NULL,
                                           NULL,
                                           _gtk_css_array_value_new (
@@ -2198,7 +2205,7 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           0,
                                           transition_timing_function_parse,
-                                          gtk_css_style_property_token_parse_default,
+                                          transition_timing_function_token_parse,
                                           NULL,
                                           NULL,
                                           _gtk_css_array_value_new (
