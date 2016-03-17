@@ -8829,6 +8829,106 @@ popup_position_func (GtkMenu   *menu,
 {
 }
 
+static GdkWindowState
+gtk_window_get_state (GtkWindow *window)
+{
+  GdkWindowState state;
+  GdkWindow *gdk_window;
+
+  gdk_window = gtk_widget_get_window (GTK_WIDGET (window));
+
+  state = 0;
+
+  if (gdk_window)
+    state = gdk_window_get_state (gdk_window);
+
+  return state;
+}
+
+static void
+restore_window_clicked (GtkMenuItem *menuitem,
+                        gpointer     user_data)
+{
+  GtkWindow *window = GTK_WINDOW (user_data);
+  GtkWindowPrivate *priv = window->priv;
+  GdkWindowState state;
+
+  if (priv->maximized)
+    {
+      gtk_window_unmaximize (window);
+
+      return;
+    }
+
+  state = gtk_window_get_state (window);
+
+  if (state & GDK_WINDOW_STATE_ICONIFIED)
+    gtk_window_deiconify (window);
+}
+
+static void
+move_window_clicked (GtkMenuItem *menuitem,
+                     gpointer     user_data)
+{
+  GtkWindow *window = GTK_WINDOW (user_data);
+
+  gtk_window_begin_move_drag (window,
+                              0, /* 0 means "use keyboard" */
+                              0, 0,
+                              GDK_CURRENT_TIME);
+}
+
+static void
+resize_window_clicked (GtkMenuItem *menuitem,
+                       gpointer     user_data)
+{
+  GtkWindow *window = GTK_WINDOW (user_data);
+
+  gtk_window_begin_resize_drag  (window,
+                                 0,
+                                 0, /* 0 means "use keyboard" */
+                                 0, 0,
+                                 GDK_CURRENT_TIME);
+}
+
+static void
+minimize_window_clicked (GtkMenuItem *menuitem,
+                         gpointer     user_data)
+{
+  GtkWindow *window = GTK_WINDOW (user_data);
+  GtkWindowPrivate *priv = window->priv;
+
+  /* Turns out, we can't iconify a maximized window */
+  if (priv->maximized)
+    gtk_window_unmaximize (window);
+
+  gtk_window_iconify (window);
+}
+
+static void
+maximize_window_clicked (GtkMenuItem *menuitem,
+                         gpointer     user_data)
+{
+  GtkWindow *window = GTK_WINDOW (user_data);
+  GdkWindowState state;
+
+  state = gtk_window_get_state (window);
+
+  if (state & GDK_WINDOW_STATE_ICONIFIED)
+    gtk_window_deiconify (window);
+
+  gtk_window_maximize (window);
+}
+
+static void
+ontop_window_clicked (GtkMenuItem *menuitem,
+                      gpointer     user_data)
+{
+  GtkWindow *window = (GtkWindow *)user_data;
+
+  gtk_window_set_keep_above (window, !window->priv->above_initially);
+}
+
 static void
 close_window_clicked (GtkMenuItem *menuitem,
                       gpointer     user_data)
@@ -8845,9 +8945,16 @@ gtk_window_do_popup_fallback (GtkWindow      *window,
 {
   GtkWindowPrivate *priv = window->priv;
   GtkWidget *menuitem;
+  GdkWindowState state;
+  gboolean maximized, iconified;
 
   if (priv->popup_menu)
     gtk_widget_destroy (priv->popup_menu);
+
+  state = gtk_window_get_state (window);
+
+  iconified = (state & GDK_WINDOW_STATE_ICONIFIED) == GDK_WINDOW_STATE_ICONIFIED;
+  maximized = priv->maximized && !iconified;
 
   priv->popup_menu = gtk_menu_new ();
   gtk_style_context_add_class (gtk_widget_get_style_context (priv->popup_menu),
@@ -8856,6 +8963,76 @@ gtk_window_do_popup_fallback (GtkWindow      *window,
   gtk_menu_attach_to_widget (GTK_MENU (priv->popup_menu),
                              GTK_WIDGET (window),
                              popup_menu_detach);
+
+  menuitem = gtk_menu_item_new_with_label (_("Restore"));
+  gtk_widget_show (menuitem);
+  /* "Restore" means "Unmaximize" or "Unminimize"
+   * (yes, some WMs allow window menu to be shown for minimized windows).
+   * Not restorable:
+   *   - visible windows that are not maximized or minimized
+   *   - non-resizable windows that are not minimized
+   *   - non-normal windows
+   */
+  if ((gtk_widget_is_visible (GTK_WIDGET (window)) &&
+       !(maximized || iconified)) ||
+      (!iconified && !priv->resizable) ||
+      priv->type_hint != GDK_WINDOW_TYPE_HINT_NORMAL)
+    gtk_widget_set_sensitive (menuitem, FALSE);
+  g_signal_connect (G_OBJECT (menuitem), "activate",
+                    G_CALLBACK (restore_window_clicked), window);
+  gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
+
+  menuitem = gtk_menu_item_new_with_label (_("Move"));
+  gtk_widget_show (menuitem);
+  if (maximized || iconified)
+    gtk_widget_set_sensitive (menuitem, FALSE);
+  g_signal_connect (G_OBJECT (menuitem), "activate",
+                    G_CALLBACK (move_window_clicked), window);
+  gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
+
+  menuitem = gtk_menu_item_new_with_label (_("Resize"));
+  gtk_widget_show (menuitem);
+  if (!priv->resizable || maximized || iconified)
+    gtk_widget_set_sensitive (menuitem, FALSE);
+  g_signal_connect (G_OBJECT (menuitem), "activate",
+                    G_CALLBACK (resize_window_clicked), window);
+  gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
+
+  menuitem = gtk_menu_item_new_with_label (_("Minimize"));
+  gtk_widget_show (menuitem);
+  if (iconified ||
+      priv->type_hint != GDK_WINDOW_TYPE_HINT_NORMAL)
+    gtk_widget_set_sensitive (menuitem, FALSE);
+  g_signal_connect (G_OBJECT (menuitem), "activate",
+                    G_CALLBACK (minimize_window_clicked), window);
+  gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
+
+  menuitem = gtk_menu_item_new_with_label (_("Maximize"));
+  gtk_widget_show (menuitem);
+  if (maximized ||
+      !priv->resizable ||
+      priv->type_hint != GDK_WINDOW_TYPE_HINT_NORMAL)
+    gtk_widget_set_sensitive (menuitem, FALSE);
+  g_signal_connect (G_OBJECT (menuitem), "activate",
+                    G_CALLBACK (maximize_window_clicked), window);
+  gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
+
+  menuitem = gtk_separator_menu_item_new ();
+  gtk_widget_show (menuitem);
+  gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
+
+  menuitem = gtk_check_menu_item_new_with_label (_("Always on Top"));
+  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menuitem), priv->above_initially);
+  if (maximized)
+    gtk_widget_set_sensitive (menuitem, FALSE);
+  gtk_widget_show (menuitem);
+  g_signal_connect (G_OBJECT (menuitem), "activate",
+                    G_CALLBACK (ontop_window_clicked), window);
+  gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
+
+  menuitem = gtk_separator_menu_item_new ();
+  gtk_widget_show (menuitem);
+  gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
 
   menuitem = gtk_menu_item_new_with_label (_("Close"));
   gtk_widget_show (menuitem);
