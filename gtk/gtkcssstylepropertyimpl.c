@@ -141,6 +141,27 @@ gtk_css_style_property_register (const char *                      name,
 
 /*** IMPLEMENTATIONS ***/
 
+static GtkCssValue *
+token_parse_enum (GtkCssTokenSource   *source,
+                  GtkCssValue *      (* func) (const GtkCssToken *))
+{
+  const GtkCssToken *token;
+  GtkCssValue *value;
+
+  token = gtk_css_token_source_get_token (source);
+  value = func (token);
+  if (value == NULL)
+    {
+      gtk_css_token_source_error (source, "Unknown value for property");
+      gtk_css_token_source_consume_all (source);
+      return NULL;
+    }
+
+  gtk_css_token_source_consume_token (source);
+
+  return value;
+}
+
 static void
 query_length_as_int (GtkCssStyleProperty *property,
                      const GtkCssValue   *css_value,
@@ -317,6 +338,13 @@ parse_pango_style (GtkCssStyleProperty *property,
   return value;
 }
 
+static GtkCssValue *
+token_parse_pango_style (GtkCssTokenSource   *source,
+                         GtkCssStyleProperty *property)
+{
+  return token_parse_enum (source, gtk_css_font_style_value_from_token);
+}
+
 static void
 query_pango_style (GtkCssStyleProperty *property,
                     const GtkCssValue   *css_value,
@@ -343,6 +371,13 @@ parse_pango_weight (GtkCssStyleProperty *property,
     _gtk_css_parser_error (parser, "unknown value for property");
 
   return value;
+}
+
+static GtkCssValue *
+token_parse_pango_weight (GtkCssTokenSource   *source,
+                          GtkCssStyleProperty *property)
+{
+  return token_parse_enum (source, gtk_css_font_weight_value_from_token);
 }
 
 static void
@@ -373,6 +408,13 @@ parse_pango_variant (GtkCssStyleProperty *property,
   return value;
 }
 
+static GtkCssValue *
+token_parse_pango_variant (GtkCssTokenSource   *source,
+                           GtkCssStyleProperty *property)
+{
+  return token_parse_enum (source, gtk_css_font_variant_value_from_token);
+}
+
 static void
 query_pango_variant (GtkCssStyleProperty *property,
                      const GtkCssValue   *css_value,
@@ -401,6 +443,13 @@ parse_pango_stretch (GtkCssStyleProperty *property,
   return value;
 }
 
+static GtkCssValue *
+token_parse_pango_stretch (GtkCssTokenSource   *source,
+                           GtkCssStyleProperty *property)
+{
+  return token_parse_enum (source, gtk_css_font_stretch_value_from_token);
+}
+
 static void
 query_pango_stretch (GtkCssStyleProperty *property,
                      const GtkCssValue   *css_value,
@@ -427,6 +476,13 @@ parse_border_style (GtkCssStyleProperty *property,
     _gtk_css_parser_error (parser, "unknown value for property");
 
   return value;
+}
+
+static GtkCssValue *
+token_parse_border_style (GtkCssTokenSource   *source,
+                          GtkCssStyleProperty *property)
+{
+  return token_parse_enum (source, gtk_css_border_style_value_from_token);
 }
 
 static void
@@ -554,6 +610,13 @@ image_effect_parse (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
+image_effect_token_parse (GtkCssTokenSource   *source,
+                          GtkCssStyleProperty *property)
+{
+  return token_parse_enum (source, gtk_css_icon_effect_value_from_token);
+}
+
+static GtkCssValue *
 icon_palette_parse (GtkCssStyleProperty *property,
 		    GtkCssParser        *parser)
 {
@@ -570,6 +633,13 @@ icon_style_parse (GtkCssStyleProperty *property,
     _gtk_css_parser_error (parser, "unknown value for property");
 
   return value;
+}
+
+static GtkCssValue *
+icon_style_token_parse (GtkCssTokenSource   *source,
+                        GtkCssStyleProperty *property)
+{
+  return token_parse_enum (source, gtk_css_icon_style_value_from_token);
 }
 
 static GtkCssValue *
@@ -692,6 +762,13 @@ parse_text_decoration_line (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
+token_parse_text_decoration_line (GtkCssTokenSource   *source,
+                                  GtkCssStyleProperty *property)
+{
+  return token_parse_enum (source, gtk_css_text_decoration_line_value_from_token);
+}
+
+static GtkCssValue *
 parse_text_decoration_style (GtkCssStyleProperty *property,
                              GtkCssParser        *parser)
 {
@@ -701,6 +778,13 @@ parse_text_decoration_style (GtkCssStyleProperty *property,
     _gtk_css_parser_error (parser, "unknown value for property");
 
   return value;
+}
+
+static GtkCssValue *
+token_parse_text_decoration_style (GtkCssTokenSource   *source,
+                                   GtkCssStyleProperty *property)
+{
+  return token_parse_enum (source, gtk_css_text_decoration_style_value_from_token);
 }
 
 static GtkCssValue *
@@ -1205,7 +1289,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_INHERIT,
                                           GTK_CSS_AFFECTS_FONT | GTK_CSS_AFFECTS_TEXT,
                                           parse_pango_style,
-                                          gtk_css_style_property_token_parse_default,
+                                          token_parse_pango_style,
                                           query_pango_style,
                                           assign_pango_style,
                                           _gtk_css_font_style_value_new (PANGO_STYLE_NORMAL));
@@ -1215,7 +1299,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_INHERIT,
                                           GTK_CSS_AFFECTS_FONT | GTK_CSS_AFFECTS_TEXT,
                                           parse_pango_variant,
-                                          gtk_css_style_property_token_parse_default,
+                                          token_parse_pango_variant,
                                           query_pango_variant,
                                           assign_pango_variant,
                                           _gtk_css_font_variant_value_new (PANGO_VARIANT_NORMAL));
@@ -1225,7 +1309,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_FONT | GTK_CSS_AFFECTS_TEXT,
                                           parse_pango_weight,
-                                          gtk_css_style_property_token_parse_default,
+                                          token_parse_pango_weight,
                                           query_pango_weight,
                                           assign_pango_weight,
                                           _gtk_css_font_weight_value_new (PANGO_WEIGHT_NORMAL));
@@ -1235,7 +1319,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_INHERIT,
                                           GTK_CSS_AFFECTS_FONT | GTK_CSS_AFFECTS_TEXT,
                                           parse_pango_stretch,
-                                          gtk_css_style_property_token_parse_default,
+                                          token_parse_pango_stretch,
                                           query_pango_stretch,
                                           assign_pango_stretch,
                                           _gtk_css_font_stretch_value_new (PANGO_STRETCH_NORMAL));
@@ -1257,7 +1341,7 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_TEXT_ATTRS,
                                           parse_text_decoration_line,
-                                          gtk_css_style_property_token_parse_default,
+                                          token_parse_text_decoration_line,
                                           NULL,
                                           NULL,
                                           _gtk_css_text_decoration_line_value_new (GTK_CSS_TEXT_DECORATION_LINE_NONE));
@@ -1277,7 +1361,7 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_TEXT_ATTRS,
                                           parse_text_decoration_style,
-                                          gtk_css_style_property_token_parse_default,
+                                          token_parse_text_decoration_style,
                                           NULL,
                                           NULL,
                                           _gtk_css_text_decoration_style_value_new (GTK_CSS_TEXT_DECORATION_STYLE_SOLID));
@@ -1393,7 +1477,7 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           GTK_CSS_AFFECTS_BORDER,
                                           parse_border_style,
-                                          gtk_css_style_property_token_parse_default,
+                                          token_parse_border_style,
                                           query_border_style,
                                           assign_border_style,
                                           _gtk_css_border_style_value_new (GTK_BORDER_STYLE_NONE));
@@ -1413,7 +1497,7 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           GTK_CSS_AFFECTS_BORDER,
                                           parse_border_style,
-                                          gtk_css_style_property_token_parse_default,
+                                          token_parse_border_style,
                                           query_border_style,
                                           assign_border_style,
                                           _gtk_css_border_style_value_new (GTK_BORDER_STYLE_NONE));
@@ -1433,7 +1517,7 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           GTK_CSS_AFFECTS_BORDER,
                                           parse_border_style,
-                                          gtk_css_style_property_token_parse_default,
+                                          token_parse_border_style,
                                           query_border_style,
                                           assign_border_style,
                                           _gtk_css_border_style_value_new (GTK_BORDER_STYLE_NONE));
@@ -1453,7 +1537,7 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           GTK_CSS_AFFECTS_BORDER,
                                           parse_border_style,
-                                          gtk_css_style_property_token_parse_default,
+                                          token_parse_border_style,
                                           query_border_style,
                                           assign_border_style,
                                           _gtk_css_border_style_value_new (GTK_BORDER_STYLE_NONE));
@@ -1519,7 +1603,7 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           GTK_CSS_AFFECTS_OUTLINE | GTK_CSS_AFFECTS_CLIP,
                                           parse_border_style,
-                                          gtk_css_style_property_token_parse_default,
+                                          token_parse_border_style,
                                           query_border_style,
                                           assign_border_style,
                                           _gtk_css_border_style_value_new (GTK_BORDER_STYLE_NONE));
@@ -1784,7 +1868,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_INHERIT,
                                           GTK_CSS_AFFECTS_ICON | GTK_CSS_AFFECTS_SYMBOLIC_ICON,
                                           icon_style_parse,
-                                          gtk_css_style_property_token_parse_default,
+                                          icon_style_token_parse,
                                           NULL,
                                           NULL,
                                           _gtk_css_icon_style_value_new (GTK_CSS_ICON_STYLE_REQUESTED));
@@ -1960,7 +2044,7 @@ _gtk_css_style_property_init_properties (void)
 					  GTK_STYLE_PROPERTY_INHERIT,
                                           GTK_CSS_AFFECTS_ICON,
 					  image_effect_parse,
-                                          gtk_css_style_property_token_parse_default,
+					  image_effect_token_parse,
 					  NULL,
 					  NULL,
 					  _gtk_css_icon_effect_value_new (GTK_CSS_ICON_EFFECT_NONE));

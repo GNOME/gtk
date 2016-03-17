@@ -102,6 +102,23 @@ _gtk_css_border_style_value_new (GtkBorderStyle border_style)
 }
 
 GtkCssValue *
+gtk_css_border_style_value_from_token (const GtkCssToken *token)
+{
+  guint i;
+
+  if (!gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
+    return NULL;
+
+  for (i = 0; i < G_N_ELEMENTS (border_style_values); i++)
+    {
+      if (gtk_css_token_is_ident (token, border_style_values[i].name))
+        return _gtk_css_value_ref (&border_style_values[i]);
+    }
+
+  return NULL;
+}
+
+GtkCssValue *
 _gtk_css_border_style_value_try_parse (GtkCssParser *parser)
 {
   guint i;
@@ -244,6 +261,23 @@ _gtk_css_font_size_value_new (GtkCssFontSize font_size)
 }
 
 GtkCssValue *
+gtk_css_font_size_value_from_token (const GtkCssToken *token)
+{
+  guint i;
+
+  if (!gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
+    return NULL;
+
+  for (i = 0; i < G_N_ELEMENTS (font_size_values); i++)
+    {
+      if (gtk_css_token_is_ident (token, font_size_values[i].name))
+        return _gtk_css_value_ref (&font_size_values[i]);
+    }
+
+  return NULL;
+}
+
+GtkCssValue *
 _gtk_css_font_size_value_try_parse (GtkCssParser *parser)
 {
   guint i;
@@ -292,6 +326,23 @@ _gtk_css_font_style_value_new (PangoStyle font_style)
 }
 
 GtkCssValue *
+gtk_css_font_style_value_from_token (const GtkCssToken *token)
+{
+  guint i;
+
+  if (!gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
+    return NULL;
+
+  for (i = 0; i < G_N_ELEMENTS (font_style_values); i++)
+    {
+      if (gtk_css_token_is_ident (token, font_style_values[i].name))
+        return _gtk_css_value_ref (&font_style_values[i]);
+    }
+
+  return NULL;
+}
+
+GtkCssValue *
 _gtk_css_font_style_value_try_parse (GtkCssParser *parser)
 {
   guint i;
@@ -336,6 +387,23 @@ _gtk_css_font_variant_value_new (PangoVariant font_variant)
   g_return_val_if_fail ((gint)font_variant < G_N_ELEMENTS (font_variant_values), NULL);
 
   return _gtk_css_value_ref (&font_variant_values[font_variant]);
+}
+
+GtkCssValue *
+gtk_css_font_variant_value_from_token (const GtkCssToken *token)
+{
+  guint i;
+
+  if (!gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
+    return NULL;
+
+  for (i = 0; i < G_N_ELEMENTS (font_variant_values); i++)
+    {
+      if (gtk_css_token_is_ident (token, font_variant_values[i].name))
+        return _gtk_css_value_ref (&font_variant_values[i]);
+    }
+
+  return NULL;
 }
 
 GtkCssValue *
@@ -468,6 +536,23 @@ _gtk_css_font_weight_value_new (PangoWeight font_weight)
 }
 
 GtkCssValue *
+gtk_css_font_weight_value_from_token (const GtkCssToken *token)
+{
+  guint i;
+
+  if (!gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
+    return NULL;
+
+  for (i = 0; i < G_N_ELEMENTS (font_weight_values); i++)
+    {
+      if (gtk_css_token_is_ident (token, font_weight_values[i].name))
+        return _gtk_css_value_ref (&font_weight_values[i]);
+    }
+
+  return NULL;
+}
+
+GtkCssValue *
 _gtk_css_font_weight_value_try_parse (GtkCssParser *parser)
 {
   guint i;
@@ -530,6 +615,23 @@ _gtk_css_font_stretch_value_new (PangoStretch font_stretch)
 }
 
 GtkCssValue *
+gtk_css_font_stretch_value_from_token (const GtkCssToken *token)
+{
+  guint i;
+
+  if (!gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
+    return NULL;
+
+  for (i = 0; i < G_N_ELEMENTS (font_stretch_values); i++)
+    {
+      if (gtk_css_token_is_ident (token, font_stretch_values[i].name))
+        return _gtk_css_value_ref (&font_stretch_values[i]);
+    }
+
+  return NULL;
+}
+
+GtkCssValue *
 _gtk_css_font_stretch_value_try_parse (GtkCssParser *parser)
 {
   guint i;
@@ -578,6 +680,23 @@ _gtk_css_text_decoration_line_value_new (GtkTextDecorationLine line)
 }
 
 GtkCssValue *
+gtk_css_text_decoration_line_value_from_token (const GtkCssToken *token)
+{
+  guint i;
+
+  if (!gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
+    return NULL;
+
+  for (i = 0; i < G_N_ELEMENTS (text_decoration_line_values); i++)
+    {
+      if (gtk_css_token_is_ident (token, text_decoration_line_values[i].name))
+        return _gtk_css_value_ref (&text_decoration_line_values[i]);
+    }
+
+  return NULL;
+}
+
+GtkCssValue *
 _gtk_css_text_decoration_line_value_try_parse (GtkCssParser *parser)
 {
   guint i;
@@ -623,6 +742,23 @@ _gtk_css_text_decoration_style_value_new (GtkTextDecorationStyle style)
   g_return_val_if_fail (style < G_N_ELEMENTS (text_decoration_style_values), NULL);
 
   return _gtk_css_value_ref (&text_decoration_style_values[style]);
+}
+
+GtkCssValue *
+gtk_css_text_decoration_style_value_from_token (const GtkCssToken *token)
+{
+  guint i;
+
+  if (!gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
+    return NULL;
+
+  for (i = 0; i < G_N_ELEMENTS (text_decoration_style_values); i++)
+    {
+      if (gtk_css_token_is_ident (token, text_decoration_style_values[i].name))
+        return _gtk_css_value_ref (&text_decoration_style_values[i]);
+    }
+
+  return NULL;
 }
 
 GtkCssValue *
@@ -680,6 +816,23 @@ _gtk_css_area_value_new (GtkCssArea area)
 }
 
 GtkCssValue *
+gtk_css_area_value_from_token (const GtkCssToken *token)
+{
+  guint i;
+
+  if (!gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
+    return NULL;
+
+  for (i = 0; i < G_N_ELEMENTS (area_values); i++)
+    {
+      if (gtk_css_token_is_ident (token, area_values[i].name))
+        return _gtk_css_value_ref (&area_values[i]);
+    }
+
+  return NULL;
+}
+
+GtkCssValue *
 _gtk_css_area_value_try_parse (GtkCssParser *parser)
 {
   guint i;
@@ -732,6 +885,23 @@ _gtk_css_direction_value_new (GtkCssDirection direction)
     }
 
   g_return_val_if_reached (NULL);
+}
+
+GtkCssValue *
+gtk_css_direction_value_from_token (const GtkCssToken *token)
+{
+  guint i;
+
+  if (!gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
+    return NULL;
+
+  for (i = 0; i < G_N_ELEMENTS (direction_values); i++)
+    {
+      if (gtk_css_token_is_ident (token, direction_values[i].name))
+        return _gtk_css_value_ref (&direction_values[i]);
+    }
+
+  return NULL;
 }
 
 GtkCssValue *
@@ -791,6 +961,23 @@ _gtk_css_play_state_value_new (GtkCssPlayState play_state)
 }
 
 GtkCssValue *
+gtk_css_play_state_value_from_token (const GtkCssToken *token)
+{
+  guint i;
+
+  if (!gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
+    return NULL;
+
+  for (i = 0; i < G_N_ELEMENTS (play_state_values); i++)
+    {
+      if (gtk_css_token_is_ident (token, play_state_values[i].name))
+        return _gtk_css_value_ref (&play_state_values[i]);
+    }
+
+  return NULL;
+}
+
+GtkCssValue *
 _gtk_css_play_state_value_try_parse (GtkCssParser *parser)
 {
   guint i;
@@ -846,6 +1033,23 @@ _gtk_css_fill_mode_value_new (GtkCssFillMode fill_mode)
 }
 
 GtkCssValue *
+gtk_css_fill_mode_value_from_token (const GtkCssToken *token)
+{
+  guint i;
+
+  if (!gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
+    return NULL;
+
+  for (i = 0; i < G_N_ELEMENTS (fill_mode_values); i++)
+    {
+      if (gtk_css_token_is_ident (token, fill_mode_values[i].name))
+        return _gtk_css_value_ref (&fill_mode_values[i]);
+    }
+
+  return NULL;
+}
+
+GtkCssValue *
 _gtk_css_fill_mode_value_try_parse (GtkCssParser *parser)
 {
   guint i;
@@ -879,24 +1083,41 @@ static const GtkCssValueClass GTK_CSS_VALUE_ICON_EFFECT = {
   gtk_css_value_enum_print
 };
 
-static GtkCssValue image_effect_values[] = {
+static GtkCssValue icon_effect_values[] = {
   { &GTK_CSS_VALUE_ICON_EFFECT, 1, GTK_CSS_ICON_EFFECT_NONE, "none" },
   { &GTK_CSS_VALUE_ICON_EFFECT, 1, GTK_CSS_ICON_EFFECT_HIGHLIGHT, "highlight" },
   { &GTK_CSS_VALUE_ICON_EFFECT, 1, GTK_CSS_ICON_EFFECT_DIM, "dim" }
 };
 
 GtkCssValue *
-_gtk_css_icon_effect_value_new (GtkCssIconEffect image_effect)
+_gtk_css_icon_effect_value_new (GtkCssIconEffect icon_effect)
 {
   guint i;
 
-  for (i = 0; i < G_N_ELEMENTS (image_effect_values); i++)
+  for (i = 0; i < G_N_ELEMENTS (icon_effect_values); i++)
     {
-      if (image_effect_values[i].value == image_effect)
-        return _gtk_css_value_ref (&image_effect_values[i]);
+      if (icon_effect_values[i].value == icon_effect)
+        return _gtk_css_value_ref (&icon_effect_values[i]);
     }
 
   g_return_val_if_reached (NULL);
+}
+
+GtkCssValue *
+gtk_css_icon_effect_value_from_token (const GtkCssToken *token)
+{
+  guint i;
+
+  if (!gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
+    return NULL;
+
+  for (i = 0; i < G_N_ELEMENTS (icon_effect_values); i++)
+    {
+      if (gtk_css_token_is_ident (token, icon_effect_values[i].name))
+        return _gtk_css_value_ref (&icon_effect_values[i]);
+    }
+
+  return NULL;
 }
 
 GtkCssValue *
@@ -906,10 +1127,10 @@ _gtk_css_icon_effect_value_try_parse (GtkCssParser *parser)
 
   g_return_val_if_fail (parser != NULL, NULL);
 
-  for (i = 0; i < G_N_ELEMENTS (image_effect_values); i++)
+  for (i = 0; i < G_N_ELEMENTS (icon_effect_values); i++)
     {
-      if (_gtk_css_parser_try (parser, image_effect_values[i].name, TRUE))
-        return _gtk_css_value_ref (&image_effect_values[i]);
+      if (_gtk_css_parser_try (parser, icon_effect_values[i].name, TRUE))
+        return _gtk_css_value_ref (&icon_effect_values[i]);
     }
 
   return NULL;
@@ -984,6 +1205,23 @@ _gtk_css_icon_style_value_new (GtkCssIconStyle icon_style)
     }
 
   g_return_val_if_reached (NULL);
+}
+
+GtkCssValue *
+gtk_css_icon_style_value_from_token (const GtkCssToken *token)
+{
+  guint i;
+
+  if (!gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
+    return NULL;
+
+  for (i = 0; i < G_N_ELEMENTS (icon_style_values); i++)
+    {
+      if (gtk_css_token_is_ident (token, icon_style_values[i].name))
+        return _gtk_css_value_ref (&icon_style_values[i]);
+    }
+
+  return NULL;
 }
 
 GtkCssValue *
