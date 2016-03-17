@@ -834,16 +834,16 @@ button.destructive-action {
 .stack-switcher > button.needs-attention > label,
 .stack-switcher > button.needs-attention > image, stacksidebar row.needs-attention > label {
   animation: needs_attention 150ms ease-in;
-  background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(#000), to(transparent)), -gtk-gradient(radial, center center, 0, center center, 0.5, to(_text_shadow_color()), to(transparent));
-  background-size: 6px 6px, 6px 6px;
+  background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(#000), to(transparent));
+  background-size: 6px 6px;
   background-repeat: no-repeat;
-  background-position: right 3px, right 4px; }
+  background-position: right 3px; }
   .stack-switcher > button.needs-attention > label:backdrop,
   .stack-switcher > button.needs-attention > image:backdrop, stacksidebar row.needs-attention > label:backdrop {
-    background-size: 6px 6px, 0 0; }
+    background-size: 6px 6px; }
   .stack-switcher > button.needs-attention > label:dir(rtl),
   .stack-switcher > button.needs-attention > image:dir(rtl), stacksidebar row.needs-attention > label:dir(rtl) {
-    background-position: left 3px, left 4px; }
+    background-position: left 3px; }
 
 .inline-toolbar toolbutton > button {
   border-width: 2px;
@@ -1034,12 +1034,10 @@ popover.background radiobutton arrow {
 
 button.color {
   padding: 4px; }
-  button.color colorswatch:only-child {
-    box-shadow: 0 1px _text_shadow_color(); }
-    button.color colorswatch:only-child, button.color colorswatch:only-child overlay {
-      border-radius: 0; }
-    button.color colorswatch:only-child:disabled, button.color colorswatch:only-child:backdrop {
-      box-shadow: none; }
+  button.color colorswatch:only-child, button.color colorswatch:only-child overlay {
+    border-radius: 0; }
+  button.color colorswatch:only-child:disabled, button.color colorswatch:only-child:backdrop {
+    box-shadow: none; }
 
 /*********
  * Links *
