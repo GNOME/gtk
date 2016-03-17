@@ -2470,7 +2470,7 @@ levelbar {
 }
 
 /**********
- * rames *
+ * frames *
  **********/
 frame border,
 .frame {
@@ -2480,7 +2480,7 @@ frame border,
   padding: 0;
 }
 
-actionbar box {
+actionbar > revealer > box {
   padding: 6px;
   border-width: 1px 0 0;
   border-color: $borders_color;

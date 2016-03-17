@@ -2533,7 +2533,7 @@ popover.background radiobutton:selected,
     color: #fff; }
 
 /**********
- * rames *
+ * frames *
  **********/
 frame border,
 .frame {
@@ -2546,7 +2546,7 @@ frame border,
   .frame:backdrop {
     border-color: #737373; }
 
-actionbar box {
+actionbar > revealer > box {
   padding: 6px;
   border-width: 1px 0 0;
   border-color: gray;
