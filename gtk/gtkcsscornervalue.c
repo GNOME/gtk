@@ -151,6 +151,39 @@ _gtk_css_corner_value_parse (GtkCssParser *parser)
   return _gtk_css_corner_value_new (x, y);
 }
 
+GtkCssValue *
+gtk_css_corner_value_token_parse (GtkCssTokenSource *source)
+{
+  GtkCssValue *x, *y;
+
+  x = gtk_css_number_value_token_parse (source,
+                                        GTK_CSS_POSITIVE_ONLY
+                                        | GTK_CSS_PARSE_PERCENT
+                                        | GTK_CSS_NUMBER_AS_PIXELS
+                                        | GTK_CSS_PARSE_LENGTH);
+  if (x == NULL)
+    return NULL;
+
+  gtk_css_token_source_consume_whitespace (source);
+  if (gtk_css_token_is (gtk_css_token_source_get_token (source), GTK_CSS_TOKEN_EOF))
+    y = _gtk_css_value_ref (x);
+  else
+    {
+      y = gtk_css_number_value_token_parse (source,
+                                            GTK_CSS_POSITIVE_ONLY
+                                            | GTK_CSS_PARSE_PERCENT
+                                            | GTK_CSS_NUMBER_AS_PIXELS
+                                            | GTK_CSS_PARSE_LENGTH);
+      if (y == NULL)
+        {
+          _gtk_css_value_unref (x);
+          return NULL;
+        }
+    }
+
+  return _gtk_css_corner_value_new (x, y);
+}
+
 double
 _gtk_css_corner_value_get_x (const GtkCssValue *corner,
                              double             one_hundred_percent)

@@ -21,6 +21,7 @@
 #define __GTK_CSS_CORNER_VALUE_PRIVATE_H__
 
 #include "gtkcssparserprivate.h"
+#include "gtkcsstokensourceprivate.h"
 #include "gtkcssvalueprivate.h"
 
 G_BEGIN_DECLS
@@ -28,6 +29,7 @@ G_BEGIN_DECLS
 GtkCssValue *   _gtk_css_corner_value_new           (GtkCssValue            *x,
                                                      GtkCssValue            *y);
 GtkCssValue *   _gtk_css_corner_value_parse         (GtkCssParser           *parser);
+GtkCssValue *   gtk_css_corner_value_token_parse    (GtkCssTokenSource      *source);
 
 double          _gtk_css_corner_value_get_x         (const GtkCssValue      *corner,
                                                      double                  one_hundred_percent);
