@@ -162,6 +162,32 @@ gtk_css_icon_theme_value_parse (GtkCssParser *parser)
   return result;
 }
 
+GtkCssValue *
+gtk_css_icon_theme_value_token_parse (GtkCssTokenSource *source)
+{
+  const GtkCssToken *token = gtk_css_token_source_get_token (source);
+
+  if (gtk_css_token_is (token, GTK_CSS_TOKEN_STRING))
+    {
+      GtkIconTheme *icontheme;
+      GtkCssValue *value;
+      
+      icontheme = gtk_icon_theme_new ();
+      gtk_icon_theme_set_custom_theme (icontheme, token->string.string);
+      value = gtk_css_icon_theme_value_new (icontheme);
+      g_object_unref (icontheme);
+
+      gtk_css_token_source_consume_token (source);
+      return value;
+    }
+  else
+    {
+      gtk_css_token_source_error (source, "Expected a string");
+      gtk_css_token_source_consume_all (source);
+      return NULL;
+    }
+}
+
 GtkIconTheme *
 gtk_css_icon_theme_value_get_icon_theme (GtkCssValue *value)
 {

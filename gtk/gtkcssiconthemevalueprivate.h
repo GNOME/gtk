@@ -23,6 +23,7 @@
 #include "gtkicontheme.h"
 
 #include "gtkcssparserprivate.h"
+#include "gtkcsstokensourceprivate.h"
 #include "gtkcssvalueprivate.h"
 
 G_BEGIN_DECLS
@@ -30,6 +31,7 @@ G_BEGIN_DECLS
 GtkCssValue *   gtk_css_icon_theme_value_new            (GtkIconTheme           *icontheme);
 
 GtkCssValue *   gtk_css_icon_theme_value_parse          (GtkCssParser           *parser);
+GtkCssValue *   gtk_css_icon_theme_value_token_parse    (GtkCssTokenSource      *source);
 
 GtkIconTheme *  gtk_css_icon_theme_value_get_icon_theme (GtkCssValue            *value);
 
