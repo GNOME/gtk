@@ -273,7 +273,7 @@ init_theme (GtkInspectorVisual *vis)
     }
   g_strfreev (builtin_themes);
 
-  path = _gtk_css_provider_get_theme_dir ();
+  path = _gtk_get_theme_dir ();
   fill_gtk (path, t);
   g_free (path);
 

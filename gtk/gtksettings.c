@@ -3219,7 +3219,7 @@ settings_update_theme (GtkSettings *settings)
   GtkSettingsPrivate *priv = settings->priv;
   gchar *theme_name;
   gchar *theme_variant;
-  gchar *theme_dir;
+  const gchar *theme_dir;
   gchar *path;
 
   get_theme_name (settings, &theme_name, &theme_variant);
@@ -3228,16 +3228,17 @@ settings_update_theme (GtkSettings *settings)
                                 theme_name, theme_variant);
 
   /* reload per-theme settings */
-  theme_dir = _gtk_css_provider_get_theme_dir ();
-  path = g_build_filename (theme_dir, theme_name, "gtk-3.0", "settings.ini", NULL);
-
-  if (g_file_test (path, G_FILE_TEST_EXISTS))
-    gtk_settings_load_from_key_file (settings, path, GTK_SETTINGS_SOURCE_THEME);
+  theme_dir = _gtk_css_provider_get_theme_dir (priv->theme_provider);
+  if (theme_dir)
+    {
+      path = g_build_filename (theme_dir, "settings.ini", NULL);
+      if (g_file_test (path, G_FILE_TEST_EXISTS))
+        gtk_settings_load_from_key_file (settings, path, GTK_SETTINGS_SOURCE_THEME);
+      g_free (path);
+    }
 
   g_free (theme_name);
   g_free (theme_variant);
-  g_free (theme_dir);
-  g_free (path);
 }
 
 static void

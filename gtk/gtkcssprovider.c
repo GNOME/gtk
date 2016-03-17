@@ -130,6 +130,7 @@ struct _GtkCssProviderPrivate
   GArray *rulesets;
   GtkCssSelectorTree *tree;
   GResource *resource;
+  gchar *path;
 };
 
 enum {
@@ -827,6 +828,8 @@ gtk_css_provider_finalize (GObject *object)
       priv->resource = NULL;
     }
 
+  g_free (priv->path);
+
   G_OBJECT_CLASS (gtk_css_provider_parent_class)->finalize (object);
 }
 
@@ -904,7 +907,7 @@ gtk_css_provider_invalid_token (GtkCssProvider *provider,
                           "expected %s", expected);
 }
 
-static void 
+static void
 css_provider_commit (GtkCssProvider *css_provider,
                      GSList         *selectors,
                      GtkCssRuleset  *ruleset)
@@ -945,6 +948,12 @@ gtk_css_provider_reset (GtkCssProvider *css_provider)
       g_resources_unregister (priv->resource);
       g_resource_unref (priv->resource);
       priv->resource = NULL;
+    }
+
+  if (priv->path)
+    {
+      g_free (priv->path);
+      priv->path = NULL;
     }
 
   g_hash_table_remove_all (priv->symbolic_colors);
@@ -1976,18 +1985,23 @@ gtk_css_provider_get_default (void)
 }
 
 gchar *
-_gtk_css_provider_get_theme_dir (void)
+_gtk_get_theme_dir (void)
 {
   const gchar *var;
-  gchar *path;
 
   var = g_getenv ("GTK_DATA_PREFIX");
-  if (var)
-    path = g_build_filename (var, "share", "themes", NULL);
-  else
-    path = g_build_filename (_gtk_get_data_prefix (), "share", "themes", NULL);
+  if (var == NULL)
+    var = _gtk_get_data_prefix ();
+  return g_build_filename (var, "share", "themes", NULL);
+}
 
-  return path;
+/* Return the path that this providers gtk.css was loaded from,
+ * if it is part of a theme, otherwise NULL.
+ */
+const gchar *
+_gtk_css_provider_get_theme_dir (GtkCssProvider *provider)
+{
+  return provider->priv->path;
 }
 
 #if (GTK_MINOR_VERSION % 2)
@@ -2058,9 +2072,9 @@ _gtk_css_find_theme (const gchar *name,
                      const gchar *variant)
 {
   gchar *path;
-  const gchar *var;
   const char *const *dirs;
   int i;
+  char *dir;
 
   /* First look in the user's data directory */
   path = _gtk_css_find_theme_dir (g_get_user_data_dir (), "themes", name, variant);
@@ -2082,11 +2096,9 @@ _gtk_css_find_theme (const gchar *name,
     }
 
   /* Finally, try in the default theme directory */
-  var = g_getenv ("GTK_DATA_PREFIX");
-  if (!var)
-    var = _gtk_get_data_prefix ();
-
-  path = _gtk_css_find_theme_dir (var, "share" G_DIR_SEPARATOR_S "themes", name, variant);
+  dir = _gtk_get_theme_dir ();
+  path = _gtk_css_find_theme_dir (dir, NULL, name, variant);
+  g_free (dir);
 
   return path;
 }
@@ -2151,9 +2163,9 @@ _gtk_css_provider_load_named (GtkCssProvider *provider,
 
       /* Only set this after load, as load_from_path will clear it */
       provider->priv->resource = resource;
+      provider->priv->path = dir;
 
       g_free (path);
-      g_free (dir);
     }
   else
     {
