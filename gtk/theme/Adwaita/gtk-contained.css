@@ -3778,14 +3778,14 @@ paned > separator {
   paned > separator:backdrop {
     background-image: linear-gradient(to top, #a5a5a1); }
   paned > separator.wide {
-    margin: 0;
-    padding: 0;
     min-width: 5px;
     min-height: 5px;
-    background-image: linear-gradient(to top, #9d9d99), linear-gradient(to top, #9d9d99);
+    background-color: #e8e8e7;
+    background-image: image(#9d9d99), image(#9d9d99);
     background-size: 1px 1px, 1px 1px; }
     paned > separator.wide:backdrop {
-      background-image: linear-gradient(to top, #a5a5a1), linear-gradient(to top, #a5a5a1); }
+      background-color: #e8e8e7;
+      background-image: image(#a5a5a1), image(#a5a5a1); }
 paned.horizontal > separator {
   background-repeat: repeat-y; }
   paned.horizontal > separator:dir(ltr) {
@@ -3797,6 +3797,8 @@ paned.horizontal > separator {
     padding: 0 0 0 8px;
     background-position: right; }
   paned.horizontal > separator.wide {
+    margin: 0;
+    padding: 0;
     background-repeat: repeat-y, repeat-y;
     background-position: left, right; }
 paned.vertical > separator {
@@ -3805,6 +3807,8 @@ paned.vertical > separator {
   background-repeat: repeat-x;
   background-position: top; }
   paned.vertical > separator.wide {
+    margin: 0;
+    padding: 0;
     background-repeat: repeat-x, repeat-x;
     background-position: bottom, top; }
 

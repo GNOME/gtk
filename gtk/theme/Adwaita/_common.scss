@@ -3719,25 +3719,25 @@ paned {
     -gtk-icon-source: none; // defeats the ugly default handle decoration
     border-style: none; // just to be sure
     background-color: transparent;
-    // using background istead of a border since the border will get rendered twice (?)
-    background-image: linear-gradient(to top, $borders_color);
+    // workaround, using background istead of a border since the border will get rendered twice (?)
+    background-image: image($borders_color);
     background-size: 1px 1px;
 
-    &:selected { background-image: linear-gradient(to top, $selected_bg_color); } // FIXME is this needed?
+    &:selected { background-image: image($selected_bg_color); } // FIXME is this needed?
 
-    &:backdrop { background-image: linear-gradient(to top, $backdrop_borders_color); }
+    &:backdrop { background-image: image($backdrop_borders_color); }
 
     &.wide {
-      margin: 0;
-      padding: 0;
       min-width: 5px;
       min-height: 5px;
-      background-image: linear-gradient(to top, $borders_color), linear-gradient(to top, $borders_color);
+      background-color: $bg_color;
+      background-image: image($borders_color), image($borders_color);
       background-size: 1px 1px, 1px 1px;
 
       &:backdrop {
-        background-image: linear-gradient(to top, $backdrop_borders_color),
-                          linear-gradient(to top, $backdrop_borders_color);
+        background-color: $backdrop_bg_color;
+        background-image: image($backdrop_borders_color),
+                          image($backdrop_borders_color);
       }
     }
   }
@@ -3757,6 +3757,8 @@ paned {
     }
 
     &.wide {
+      margin: 0;
+      padding: 0;
       background-repeat: repeat-y, repeat-y;
       background-position: left, right;
     }
@@ -3769,6 +3771,8 @@ paned {
     background-position: top;
 
     &.wide {
+      margin: 0;
+      padding: 0;
       background-repeat: repeat-x, repeat-x;
       background-position: bottom, top;
     }
