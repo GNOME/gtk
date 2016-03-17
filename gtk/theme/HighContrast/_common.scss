@@ -386,6 +386,12 @@ button {
 
         &:active { transition: $_button_transition; }
       }
+      
+      &:backdrop, 
+      &:disabled, 
+      &:backdrop:disabled {
+        @include button(undecorated-insensitive);
+      }
     }
 
     &:hover {
@@ -401,24 +407,20 @@ button {
     }
 
     &:backdrop {
-      &.flat, & {
-        @include button(backdrop);
+      @include button(backdrop);
 
-        -gtk-icon-effect: none;
+      -gtk-icon-effect: none;
+
+      &:active,
+      &:checked { @include button(backdrop-active); }
+
+      &:disabled {
+        @include button(backdrop-insensitive);
 
         &:active,
-        &:checked { @include button(backdrop-active); }
-
-        &:disabled {
-          @include button(backdrop-insensitive);
-
-          &:active,
-          &:checked { @include button(backdrop-insensitive-active); }
-        }
+        &:checked { @include button(backdrop-insensitive-active); }
       }
     }
-
-    &.flat { &:backdrop, &:disabled, &:backdrop:disabled { @include button(undecorated); }}
 
     &:disabled {
       @include button(insensitive);

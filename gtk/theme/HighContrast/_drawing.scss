@@ -259,6 +259,13 @@
     background-image: none;
     border-color: transparent;
   }
+  
+  @else if $t==undecorated-insensitive {
+    color: $insensitive_fg_color;
+    background-color: transparent;
+    background-image: none;
+    border-color: transparent;
+  }
 }
 
 @mixin overshoot($p, $t:normal, $c:$fg_color) {
