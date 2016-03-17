@@ -1618,16 +1618,16 @@ gtk_path_bar_set_file_finish (struct SetFileInfo *info,
       gtk_path_bar_clear_buttons (info->path_bar);
       info->path_bar->priv->button_list = g_list_reverse (info->new_buttons);
       info->path_bar->priv->fake_root = info->fake_root;
-      prev = gtk_widget_get_css_node (info->path_bar->priv->up_slider_button);
+      prev = gtk_widget_get_css_node (info->path_bar->priv->down_slider_button);
 
       for (l = info->path_bar->priv->button_list; l; l = l->next)
 	{
 	  GtkWidget *button = BUTTON_DATA (l->data)->button;
           GtkCssNode *node = gtk_widget_get_css_node (button);
 
-          gtk_css_node_insert_after (gtk_widget_get_css_node (GTK_WIDGET (info->path_bar)),
-                                     node,
-                                     prev);
+          gtk_css_node_insert_before (gtk_widget_get_css_node (GTK_WIDGET (info->path_bar)),
+                                      node,
+                                      prev);
 	  gtk_container_add (GTK_CONTAINER (info->path_bar), button);
           prev = node;
 	}
