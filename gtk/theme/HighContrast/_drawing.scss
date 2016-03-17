@@ -166,8 +166,6 @@
     background-color: $insensitive_bg_color;
     border-color: $insensitive_borders_color;
     background-image: none;
-    text-shadow: none;
-    -gtk-icon-shadow: none;
   }
   @else if $t==insensitive-active {
   //
@@ -187,8 +185,6 @@
     background-color: if($c!=$bg_color, $c, $backdrop_bg_color);
     border-color: if($c!=$bg_color, $c, $backdrop_borders_color);
     background-image: none;
-    text-shadow: none;
-    -gtk-icon-shadow: none;
   }
 
   @else if $t==backdrop-active {
@@ -229,8 +225,8 @@
     background-image: none;
     background-color: $osd_bg_color;
     border-color: $osd_borders_color;
-    box-shadow: none;
   }
+
   @else if $t==osd-hover {
   //
   // active osd button
@@ -238,8 +234,8 @@
     color: $osd_fg_color;
     background-color: lighten($osd_bg_color,30%);
     border-color: $osd_borders_color;
-    box-shadow: none;
   }
+
   @else if $t==osd-active {
   //
   // active osd button
@@ -256,7 +252,13 @@
     border-color: $osd_borders_color;
     color: $insensitive_fg_color;
   }
-  
+
+  @else if $t==undecorated {
+    color: $tc;
+    background-color: transparent;
+    background-image: none;
+    border-color: transparent;
+  }
 }
 
 @mixin overshoot($p, $t:normal, $c:$fg_color) {
