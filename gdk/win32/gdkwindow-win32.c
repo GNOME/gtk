@@ -224,16 +224,24 @@ static void
 gdk_win32_window_apply_queued_move_resize (GdkWindow *window,
                                            RECT       window_rect)
 {
-  GDK_NOTE (EVENTS, g_print ("Setting window position ... "));
+  if (!IsIconic (GDK_WINDOW_HWND (window)))
+    {
+      GDK_NOTE (EVENTS, g_print ("Setting window position ... "));
 
-  API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window),
-                           SWP_NOZORDER_SPECIFIED,
-                           window_rect.left, window_rect.top,
-                           window_rect.right - window_rect.left,
-                           window_rect.bottom - window_rect.top,
-                           SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOREDRAW));
+      API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window),
+                               SWP_NOZORDER_SPECIFIED,
+                               window_rect.left, window_rect.top,
+                               window_rect.right - window_rect.left,
+                               window_rect.bottom - window_rect.top,
+                               SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOREDRAW));
 
-  GDK_NOTE (EVENTS, g_print (" ... set window position\n"));
+      GDK_NOTE (EVENTS, g_print (" ... set window position\n"));
+
+      return;
+    }
+
+  /* Don't move iconic windows */
+  /* TODO: use SetWindowPlacement() to change non-minimized window position */
 }
 
 static gboolean
@@ -348,6 +356,14 @@ gdk_win32_window_end_paint (GdkWindow *window)
 
   cairo_surface_flush (impl->cache_surface);
   hdc = cairo_win32_surface_get_dc (impl->cache_surface);
+
+  /* Don't use UpdateLayeredWindow on minimized windows */
+  if (IsIconic (GDK_WINDOW_HWND (window)))
+    {
+      gdk_win32_window_apply_queued_move_resize (window, window_rect);
+
+      return;
+    }
 
   /* Move, resize and redraw layered window in one call */
   API_CALL (UpdateLayeredWindow, (GDK_WINDOW_HWND (window), NULL,
