@@ -2767,6 +2767,9 @@ row.activatable {
   .app-notification .button,
   .app-notification.frame .button {
     padding: 6px; }
+  .app-notification border,
+  .app-notification.frame border {
+    border-width: 0; }
 
 /*************
  * Expanders *
