@@ -180,15 +180,18 @@ static void
 gtk_css_chunk_token_source_error (GtkCssTokenSource *source,
                                   const GError      *error)
 {
-  GtkCssChunkTokenSource *chunk = (GtkCssChunkTokenSource *) source;
+  GtkCssChunkTokenSource *chunk_source = (GtkCssChunkTokenSource *) source;
+  GtkCssChunk *chunk;
 
-  if (chunk->chunk == NULL)
-    return;
+  if (chunk_source->chunk != NULL)
+    chunk = chunk_source->chunk;
+  else
+    chunk = gtk_css_rb_tree_get_last (chunk_source->tree);
 
-  if (chunk->chunk->error)
+  if (chunk->error)
     g_warning ("figure out what to do with two errors on the same token");
   else
-    chunk->chunk->error = g_error_copy (error);
+    chunk->error = g_error_copy (error);
 }
 
 const GtkCssTokenSourceClass GTK_CSS_CHUNK_TOKEN_SOURCE = {
