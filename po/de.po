@@ -1,8 +1,6 @@
 # German GTK+ translation
 # Copyright (C) 1998-2004 Free Software Foundation, Inc.
-#
 # IM = Input method => Eingabemethode
-#
 # #. * Translators, the strings in the 'keyboard label' context are
 # #. * display names for keyboard keys. Some of them have prefixes like
 # #. * XF86 or ISO_ - these should be removed in the translation. Similarly,
@@ -12,9 +10,6 @@
 # #. * XF86AudioMute - Audio mute
 # #. * Scroll_lock   - Scroll lock
 # #. * KP_Space      - Space (keypad)
-#
-#
-#
 # Daniel Egger <Daniel.Egger@t-online>, 1998.
 # Karsten Weiss <karsten@addx.au.s.shuttle.de>, 1999.
 # Matthias Warkus <mawarkus@gnome.org>, 2001, 2002.
@@ -26,23 +21,25 @@
 # Jakob Kramer <jakob.kramer@gmx.de>, 2010.
 # Paul Seyfert <pseyfert@mathphys.fsk.uni-heidelberg.de>, 2011.
 # Christian Kirbach <Christian.Kirbach@googlemail.com>, 2009-2011, 2012.
-#
+# Tobias Bannert <tobannert@gmail.com>, 2016.
 msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ master\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-15 18:21+0200\n"
-"PO-Revision-Date: 2012-07-15 18:21+0200\n"
-"Last-Translator: Christian Kirbach <Christian.Kirbach@googlemail.com>\n"
-"Language-Team: Deutsch <gnome-de@gnome.org>\n"
-"Language: \n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
+"2b&keywords=I18N+L10N&component=.General\n"
+"POT-Creation-Date: 2016-02-08 12:05+0000\n"
+"PO-Revision-Date: 2016-02-08 20:21+0200\n"
+"Last-Translator: Tobias Bannert <tobannert@gmail.com>\n"
+"Language-Team: -\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Virtaal 0.7.1\n"
 "X-Poedit-Language: German\n"
 "X-Poedit-Country: GERMANY\n"
-"X-Generator: Gtranslator 2.91.5\n"
+"X-Project-Style: gnome\n"
 
 #: ../gdk/gdk.c:153
 #, c-format
@@ -374,7 +371,7 @@ msgstr "Bildschirmschoner"
 #: ../gdk/keyname-table.h:4005
 msgctxt "keyboard label"
 msgid "XF86Battery"
-msgstr "Batterie"
+msgstr "Akku"
 
 #: ../gdk/keyname-table.h:4006
 msgctxt "keyboard label"
@@ -666,7 +663,7 @@ msgstr "_Größe:"
 msgid "_Preview:"
 msgstr "_Vorschau:"
 
-#: ../gtk/deprecated/gtkfontsel.c:1736 ../gtk/gtkfontchooserdialog.c:183
+#: ../gtk/deprecated/gtkfontsel.c:1718 ../gtk/gtkfontchooserdialog.c:183
 msgid "Font Selection"
 msgstr "Schriftwahl"
 
@@ -702,7 +699,7 @@ msgstr "_Lizenz"
 
 #: ../gtk/gtkaboutdialog.c:980
 msgid "Could not show link"
-msgstr "Link konnte nicht angezeigt werden"
+msgstr "Verweis konnte nicht angezeigt werden"
 
 #: ../gtk/gtkaboutdialog.c:1017
 msgid "Homepage"
@@ -864,7 +861,7 @@ msgstr "Weitere Anwendungen anzeigen"
 
 #: ../gtk/gtkappchooserwidget.c:603
 msgid "Default Application"
-msgstr "Standard-Anwendung"
+msgstr "Vorgabeanwendung"
 
 #: ../gtk/gtkappchooserwidget.c:741
 msgid "Recommended Applications"
@@ -892,7 +889,7 @@ msgstr ""
 #: ../gtk/gtkapplicationwindow.c:325 ../gtk/gtkprintoperation-unix.c:475
 #: ../gtk/gtkprintoperation-win32.c:1445
 msgid "Application"
-msgstr "Anwendunge"
+msgstr "Anwendung"
 
 #: ../gtk/gtkassistant.c:1004
 msgid "C_ontinue"
@@ -1387,15 +1384,15 @@ msgstr "_Rechts:"
 msgid "Paper Margins"
 msgstr "Papierränder"
 
-#: ../gtk/gtkentry.c:8777 ../gtk/gtktextview.c:8249
+#: ../gtk/gtkentry.c:8778 ../gtk/gtktextview.c:8249
 msgid "Input _Methods"
 msgstr "Eingabe_methoden"
 
-#: ../gtk/gtkentry.c:8791 ../gtk/gtktextview.c:8263
+#: ../gtk/gtkentry.c:8792 ../gtk/gtktextview.c:8263
 msgid "_Insert Unicode Control Character"
 msgstr "_Unicode-Steuerzeichen einfügen"
 
-#: ../gtk/gtkentry.c:10252
+#: ../gtk/gtkentry.c:10254
 msgid "Caps Lock is on"
 msgstr "Feststelltaste ist aktiviert"
 
@@ -1805,16 +1802,16 @@ msgstr "System (%s)"
 #. Open Link
 #: ../gtk/gtklabel.c:6217
 msgid "_Open Link"
-msgstr "Link ö_ffnen"
+msgstr "Verweis ö_ffnen"
 
 #. Copy Link Address
 #: ../gtk/gtklabel.c:6229
 msgid "Copy _Link Address"
-msgstr "Link-Adresse _kopieren"
+msgstr "Verweisadresse _kopieren"
 
 #: ../gtk/gtklinkbutton.c:499
 msgid "Copy URL"
-msgstr "URL kopieren"
+msgstr "Adresse kopieren"
 
 #: ../gtk/gtklinkbutton.c:665
 msgid "Invalid URI"
@@ -2000,7 +1997,7 @@ msgstr "%d"
 #: ../gtk/gtkpagesetup.c:646 ../gtk/gtkpapersize.c:846
 #: ../gtk/gtkpapersize.c:886
 msgid "Not a valid page setup file"
-msgstr "Keine gültige Seiteneinstellungs-Datei"
+msgstr "Keine gültige Seiteneinstellungsdatei"
 
 #: ../gtk/gtkpagesetupunixdialog.c:167
 msgid "Any Printer"
@@ -2108,17 +2105,17 @@ msgstr "Daten werden gesendet"
 #: ../gtk/gtkprintoperation.c:1781
 msgctxt "print operation status"
 msgid "Waiting"
-msgstr "Warten"
+msgstr "Es wird gewartet"
 
 #: ../gtk/gtkprintoperation.c:1782
 msgctxt "print operation status"
 msgid "Blocking on issue"
-msgstr "Blockiert wegen Problem"
+msgstr "Wegen eines Problems gesperrt"
 
 #: ../gtk/gtkprintoperation.c:1783
 msgctxt "print operation status"
 msgid "Printing"
-msgstr "Drucken"
+msgstr "Es wird gedruckt"
 
 #: ../gtk/gtkprintoperation.c:1784
 msgctxt "print operation status"
@@ -2137,7 +2134,7 @@ msgstr "%d wird vorbereitet"
 
 #: ../gtk/gtkprintoperation.c:2354 ../gtk/gtkprintoperation.c:2984
 msgid "Preparing"
-msgstr "Vorbereitung"
+msgstr "Es wird vorbereitet"
 
 #: ../gtk/gtkprintoperation.c:2357
 #, c-format
@@ -2160,7 +2157,7 @@ msgstr "Fehler beim Aufrufen der Druckvorschau"
 
 #: ../gtk/gtkprintoperation-win32.c:609
 msgid "Printer offline"
-msgstr "Drucker offline"
+msgstr "Drucker nicht verbunden"
 
 #: ../gtk/gtkprintoperation-win32.c:611
 msgid "Out of paper"
@@ -2260,7 +2257,7 @@ msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
 msgstr ""
-"Geben Sie einen oder mehrere Druckbereiche ein,\n"
+"Bitte einen oder mehrere Druckbereiche angeben,\n"
 "z.B. 5-11,19,85"
 
 #: ../gtk/gtkprintunixdialog.c:2313
@@ -2295,42 +2292,42 @@ msgstr "Allgemein"
 #. * multiple pages on a sheet when printing
 #.
 #: ../gtk/gtkprintunixdialog.c:3107
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3680
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3681
 msgid "Left to right, top to bottom"
 msgstr "Links nach rechts, oben nach unten"
 
 #: ../gtk/gtkprintunixdialog.c:3107
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3680
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3681
 msgid "Left to right, bottom to top"
 msgstr "Links nach rechts, unten nach oben"
 
 #: ../gtk/gtkprintunixdialog.c:3108
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3681
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3682
 msgid "Right to left, top to bottom"
 msgstr "Rechts nach links, oben nach unten"
 
 #: ../gtk/gtkprintunixdialog.c:3108
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3681
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3682
 msgid "Right to left, bottom to top"
 msgstr "Rechts nach links, unten nach oben"
 
 #: ../gtk/gtkprintunixdialog.c:3109
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3682
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3683
 msgid "Top to bottom, left to right"
 msgstr "Oben nach unten, links nach rechts"
 
 #: ../gtk/gtkprintunixdialog.c:3109
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3682
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3683
 msgid "Top to bottom, right to left"
 msgstr "Oben nach unten, rechts nach links"
 
 #: ../gtk/gtkprintunixdialog.c:3110
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3683
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3684
 msgid "Bottom to top, left to right"
 msgstr "Unten nach oben, links nach rechts"
 
 #: ../gtk/gtkprintunixdialog.c:3110
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3683
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3684
 msgid "Bottom to top, right to left"
 msgstr "Unten nach oben, rechts nach links"
 
@@ -2338,7 +2335,7 @@ msgstr "Unten nach oben, rechts nach links"
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: ../gtk/gtkprintunixdialog.c:3114 ../gtk/gtkprintunixdialog.c:3127
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3717
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3718
 msgid "Page Ordering"
 msgstr "Reihenfolge"
 
@@ -2360,7 +2357,7 @@ msgstr "Unten nach oben"
 
 #: ../gtk/gtkprintunixdialog.c:3397
 msgid "Layout"
-msgstr "Layout"
+msgstr "Ausrichtung"
 
 #: ../gtk/gtkprintunixdialog.c:3401
 msgid "T_wo-sided:"
@@ -2627,15 +2624,15 @@ msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%d. %s"
 
-#: ../gtk/gtkrecentmanager.c:998 ../gtk/gtkrecentmanager.c:1011
-#: ../gtk/gtkrecentmanager.c:1148 ../gtk/gtkrecentmanager.c:1158
-#: ../gtk/gtkrecentmanager.c:1210 ../gtk/gtkrecentmanager.c:1219
-#: ../gtk/gtkrecentmanager.c:1234
+#: ../gtk/gtkrecentmanager.c:1010 ../gtk/gtkrecentmanager.c:1023
+#: ../gtk/gtkrecentmanager.c:1160 ../gtk/gtkrecentmanager.c:1170
+#: ../gtk/gtkrecentmanager.c:1222 ../gtk/gtkrecentmanager.c:1231
+#: ../gtk/gtkrecentmanager.c:1246
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "Es konnte kein Eintrag mit der Adresse »%s« gefunden werden"
 
-#: ../gtk/gtkrecentmanager.c:2434
+#: ../gtk/gtkrecentmanager.c:2446
 #, c-format
 msgid "No registered application with name '%s' for item with URI '%s' found"
 msgstr ""
@@ -3143,12 +3140,12 @@ msgstr "_Einpassen"
 #: ../gtk/gtkstock.c:451
 msgctxt "Stock label"
 msgid "Zoom _In"
-msgstr "_Heranzoomen"
+msgstr "Ver_größern"
 
 #: ../gtk/gtkstock.c:452
 msgctxt "Stock label"
 msgid "Zoom _Out"
-msgstr "_Wegzoomen"
+msgstr "Ver_kleinern"
 
 #. Translators: if the "on" state label requires more than three
 #. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
@@ -4236,12 +4233,12 @@ msgstr "Datei %s konnte nicht geöffnet werden: %s\n"
 #: ../gtk/updateiconcache.c:1490 ../gtk/updateiconcache.c:1520
 #, c-format
 msgid "Failed to write cache file: %s\n"
-msgstr "Cache-Datei konnte nicht gespeichert werden: %s\n"
+msgstr "Zwischenspeicherdatei konnte nicht gespeichert werden: %s\n"
 
 #: ../gtk/updateiconcache.c:1530
 #, c-format
 msgid "The generated cache was invalid.\n"
-msgstr "Der erstellte Cache war ungültig.\n"
+msgstr "Der erstellte Zwischenspeicher war ungültig.\n"
 
 #: ../gtk/updateiconcache.c:1544
 #, c-format
@@ -4263,11 +4260,12 @@ msgstr "»%s« konnte nicht zurück in »%s« umbenannt werden: %s.\n"
 #: ../gtk/updateiconcache.c:1595
 #, c-format
 msgid "Cache file created successfully.\n"
-msgstr "Cache-Datei wurde erfolgreich erstellt.\n"
+msgstr "Zwischenspeicherdatei wurde erfolgreich erstellt.\n"
 
 #: ../gtk/updateiconcache.c:1634
 msgid "Overwrite an existing cache, even if up to date"
-msgstr "Existierenden Cache überschreiben, auch wenn dieser aktuell ist"
+msgstr ""
+"Vorhandenen Zwischenspeicher überschreiben, auch wenn dieser aktuell ist"
 
 #: ../gtk/updateiconcache.c:1635
 msgid "Don't check for the existence of index.theme"
@@ -4275,7 +4273,7 @@ msgstr "Nicht auf Existenz von index.theme überprüfen"
 
 #: ../gtk/updateiconcache.c:1636
 msgid "Don't include image data in the cache"
-msgstr "Bilddaten nicht in Cache einbinden"
+msgstr "Bilddaten nicht in den Zwischenspeicher einbinden"
 
 #: ../gtk/updateiconcache.c:1637
 msgid "Output a C header file"
@@ -4287,7 +4285,7 @@ msgstr "Detaillierte Ausgabe deaktivieren"
 
 #: ../gtk/updateiconcache.c:1639
 msgid "Validate existing icon cache"
-msgstr "Symbol-Cache wird überprüft"
+msgstr "Symbolzwischenspeicher wird überprüft"
 
 #: ../gtk/updateiconcache.c:1706
 #, c-format
@@ -4297,7 +4295,7 @@ msgstr "Datei nicht gefunden: %s\n"
 #: ../gtk/updateiconcache.c:1712
 #, c-format
 msgid "Not a valid icon cache: %s\n"
-msgstr "Kein gültiger Symbol-Cache: %s\n"
+msgstr "Kein gültiger Symbolzwischenspeicher: %s\n"
 
 #: ../gtk/updateiconcache.c:1725
 #, c-format
@@ -4310,9 +4308,9 @@ msgid ""
 "No theme index file in '%s'.\n"
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
-"Keine Themenindex-Datei in »%s«.\n"
-"Wenn Sie hier wirklich einen Symbol-Cache erstellen möchten, verwenden Sie "
-"bitte --ignore-theme-index.\n"
+"Keine Themenindexdatei in »%s«.\n"
+"Wenn Sie hier wirklich einen Symbolzwischenspeicher erstellen möchten, "
+"verwenden Sie bitte --ignore-theme-index.\n"
 
 #. ID
 #: ../modules/input/imam-et.c:452
@@ -4523,103 +4521,103 @@ msgstr "Pausiert; Aufträge werden abgewiesen"
 msgid "Rejecting Jobs"
 msgstr "Aufträge werden abgewiesen"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2903
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2904
 msgid "Two Sided"
 msgstr "Beidseitig"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2904
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2905
 msgid "Paper Type"
 msgstr "Papierart"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2905
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2906
 msgid "Paper Source"
 msgstr "Papiereinzug"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2906
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2907
 msgid "Output Tray"
 msgstr "Ausgabeschacht"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2907
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2908
 msgid "Resolution"
 msgstr "Auflösung"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2908
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2909
 msgid "GhostScript pre-filtering"
 msgstr "GhostScript-Vorfilterung"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2917
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2918
 msgid "One Sided"
 msgstr "Einseitig"
 
 #. Translators: this is an option of "Two Sided"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2919
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2920
 msgid "Long Edge (Standard)"
 msgstr "Langer Rand (Vorgabe)"
 
 #. Translators: this is an option of "Two Sided"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2921
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2922
 msgid "Short Edge (Flip)"
 msgstr "Kurzer Rand (Umdrehen)"
 
 #. Translators: this is an option of "Paper Source"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2923
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2925
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2933
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2924
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2926
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2934
 msgid "Auto Select"
 msgstr "Automatische Auswahl"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2927
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2929
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2931
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2935
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3423
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2928
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2930
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2932
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2936
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3424
 msgid "Printer Default"
-msgstr "Vorgabe-Drucker"
+msgstr "Vorgabedrucker"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2937
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2938
 msgid "Embed GhostScript fonts only"
 msgstr "Nur GhostScript-Schriften einbinden"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2939
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2940
 msgid "Convert to PS level 1"
 msgstr "Zu PS Level 1 konvertieren"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2941
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2942
 msgid "Convert to PS level 2"
 msgstr "Zu PS Level 2 konvertieren"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2943
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2944
 msgid "No pre-filtering"
 msgstr "Keine Vorfilterung"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2952
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2953
 msgid "Miscellaneous"
 msgstr "Erweitert"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3675
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3676
 msgid "Urgent"
 msgstr "Dringend"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3675
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3676
 msgid "High"
 msgstr "Hoch"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3675
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3676
 msgid "Medium"
 msgstr "Mittel"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3675
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3676
 msgid "Low"
 msgstr "Niedrig"
 
@@ -4627,14 +4625,14 @@ msgstr "Niedrig"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3701
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3702
 msgid "Pages per Sheet"
 msgstr "Seiten pro Blatt"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3738
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3739
 msgid "Job Priority"
 msgstr "Priorität"
 
@@ -4642,52 +4640,52 @@ msgstr "Priorität"
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3749
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3750
 msgid "Billing Info"
 msgstr "Abrechnungsinfo"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3764
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3765
 msgid "None"
 msgstr "Keine"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3764
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3765
 msgid "Classified"
 msgstr "Klassifiziert"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3764
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3765
 msgid "Confidential"
 msgstr "Vertraulich"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3764
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3765
 msgid "Secret"
 msgstr "Geheim"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3764
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3765
 msgid "Standard"
 msgstr "Standard"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3764
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3765
 msgid "Top Secret"
 msgstr "Streng geheim"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3764
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3765
 msgid "Unclassified"
 msgstr "Unklassifiziert"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3799
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3800
 msgid "Before"
 msgstr "Vorne"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3814
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3815
 msgid "After"
 msgstr "Hinten"
 
@@ -4695,14 +4693,14 @@ msgstr "Hinten"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3834
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3835
 msgid "Print at"
 msgstr "Drucken um"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3845
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3846
 msgid "Print at time"
 msgstr "Drucken zu Uhrzeit"
 
@@ -4710,17 +4708,17 @@ msgstr "Drucken zu Uhrzeit"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3880
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3881
 #, c-format
 msgid "Custom %sx%s"
 msgstr "Benutzerdefiniert %s×%s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3961
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3962
 msgid "Printer Profile"
 msgstr "Druckerfarbprofil"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3968
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3969
 msgid "Unavailable"
 msgstr "Nicht verfügbar"
 
@@ -4790,7 +4788,7 @@ msgstr "Befehlszeile"
 #. SUN_BRANDING
 #: ../modules/printbackends/papi/gtkprintbackendpapi.c:809
 msgid "printer offline"
-msgstr "Drucker offline"
+msgstr "Drucker nicht verbunden"
 
 #. SUN_BRANDING
 #: ../modules/printbackends/papi/gtkprintbackendpapi.c:827
@@ -4820,7 +4818,7 @@ msgstr "Test-Ausgabe.%s"
 
 #: ../modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
-msgstr "Mit Test-Drucke drucken"
+msgstr "Mit Testdrucker drucken"
 
 #~ msgid "Caps Lock and Num Lock are on"
 #~ msgstr "Feststelltaste und Nummernblock-Feststelltaste sind aktiviert"
