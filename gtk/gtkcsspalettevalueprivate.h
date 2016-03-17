@@ -21,6 +21,7 @@
 #define __GTK_CSS_PALETTE_VALUE_PRIVATE_H__
 
 #include "gtkcssparserprivate.h"
+#include "gtkcsstokensourceprivate.h"
 #include "gtkcssvalueprivate.h"
 
 G_BEGIN_DECLS
@@ -28,6 +29,7 @@ G_BEGIN_DECLS
 GtkCssValue *   gtk_css_palette_value_new_default       (void);
 
 GtkCssValue *   gtk_css_palette_value_parse             (GtkCssParser        *parser);
+GtkCssValue *   gtk_css_palette_value_token_parse       (GtkCssTokenSource   *source);
 
 const GdkRGBA * gtk_css_palette_value_get_color         (GtkCssValue         *value,
                                                          const char          *color_name);

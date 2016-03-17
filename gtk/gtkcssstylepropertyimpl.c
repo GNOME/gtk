@@ -1455,7 +1455,7 @@ _gtk_css_style_property_init_properties (void)
 					  GTK_STYLE_PROPERTY_ANIMATED | GTK_STYLE_PROPERTY_INHERIT,
                                           GTK_CSS_AFFECTS_SYMBOLIC_ICON,
 					  icon_palette_parse,
-                                          gtk_css_style_property_token_parse_default,
+                                          (GtkCssStylePropertyTokenParseFunc) gtk_css_palette_value_token_parse,
 					  NULL,
 					  NULL,
 					  gtk_css_palette_value_new_default ());

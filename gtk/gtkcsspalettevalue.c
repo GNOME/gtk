@@ -242,6 +242,58 @@ gtk_css_palette_value_parse (GtkCssParser *parser)
   return result;
 }
 
+GtkCssValue *
+gtk_css_palette_value_token_parse (GtkCssTokenSource *source)
+{
+  GtkCssValue *result, *color;
+  const GtkCssToken *token;
+  char *ident;
+
+  token = gtk_css_token_source_get_token (source);
+  if (gtk_css_token_is_ident (token, "default"))
+    {
+      gtk_css_token_source_consume_token (source);
+      return gtk_css_palette_value_new_default ();
+    }
+  
+  result = gtk_css_palette_value_new_empty ();
+
+  while (TRUE)
+    {
+      token = gtk_css_token_source_get_token (source);
+      if (!gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
+        {
+          gtk_css_token_source_error (source, "Expected color name");
+          gtk_css_token_source_consume_all (source);
+          _gtk_css_value_unref (result);
+          return NULL;
+        }
+      ident = g_strdup (token->string.string);
+      gtk_css_token_source_consume_token (source);
+      gtk_css_token_source_consume_whitespace (source);
+      
+      color = gtk_css_color_value_token_parse (source);
+      if (color == NULL)
+        {
+          g_free (ident);
+          _gtk_css_value_unref (result);
+          return NULL;
+        }
+
+      gtk_css_palette_value_add_color (result, ident, color);
+      g_free (ident);
+
+      gtk_css_token_source_consume_whitespace (source);
+      token = gtk_css_token_source_get_token (source);
+      if (!gtk_css_token_is (token, GTK_CSS_TOKEN_COMMA))
+        break;
+      gtk_css_token_source_consume_token (source);
+      gtk_css_token_source_consume_whitespace (source);
+  }
+
+  return result;
+}
+
 const GdkRGBA *
 gtk_css_palette_value_get_color (GtkCssValue *value,
                                  const char  *name)
