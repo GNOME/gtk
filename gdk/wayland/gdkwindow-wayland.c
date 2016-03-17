@@ -256,6 +256,11 @@ gdk_wayland_window_update_size (GdkWindow *window,
   GdkRectangle area;
   cairo_region_t *region;
 
+  if ((window->width == width) &&
+      (window->height == height) &&
+      (impl->scale == scale))
+    return;
+
   drop_cairo_surfaces (window);
 
   window->width = width;
