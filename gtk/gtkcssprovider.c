@@ -61,12 +61,15 @@
  * gtk_style_context_add_provider_for_screen().
 
  * In addition, certain files will be read when GTK+ is initialized. First, the
- * file $XDG_CONFIG_HOME/gtk-3.0/gtk.css` is loaded if it exists. Then, GTK+ tries
- * to load `$HOME/.themes/theme-name/gtk-3.0/gtk.css`, falling back to
+ * file $XDG_CONFIG_HOME/gtk-3.0/gtk.css` is loaded if it exists. Then, GTK+
+ * loads the first existing file among
+ * `XDG_DATA_HOME/themes/theme-name/gtk-VERSION/gtk.css`,
+ * `$HOME/.themes/theme-name/gtk-VERSION/gtk.css`,
+ * `$XDG_DATA_DIRS/themes/theme-name/gtk-VERSION/gtk.css` and
  * `DATADIR/share/themes/THEME/gtk-VERSION/gtk.css`, where THEME is the name of
  * the current theme (see the #GtkSettings:gtk-theme-name setting), DATADIR
- * is the prefix configured when GTK+ was compiled, unless overridden by the
- * `GTK_DATA_PREFIX` environment variable, and VERSION is the GTK+ version number.
+ * is the prefix configured when GTK+ was compiled (unless overridden by the
+ * `GTK_DATA_PREFIX` environment variable), and VERSION is the GTK+ version number.
  * If no file is found for the current version, GTK+ tries older versions all the
  * way back to 3.0.
  *
@@ -2056,8 +2059,10 @@ _gtk_css_find_theme (const gchar *name,
 {
   gchar *path;
   const gchar *var;
+  const char *const *dirs;
+  int i;
 
-  /* First look in the user's config directory */
+  /* First look in the user's data directory */
   path = _gtk_css_find_theme_dir (g_get_user_data_dir (), "themes", name, variant);
   if (path)
     return path;
@@ -2066,6 +2071,15 @@ _gtk_css_find_theme (const gchar *name,
   path = _gtk_css_find_theme_dir (g_get_home_dir (), ".themes", name, variant);
   if (path)
     return path;
+
+  /* Look in system data directories */
+  dirs = g_get_system_data_dirs ();
+  for (i = 0; dirs[i]; i++)
+    {
+      path = _gtk_css_find_theme_dir (dirs[i], "themes", name, variant);
+      if (path)
+        return path;
+    }
 
   /* Finally, try in the default theme directory */
   var = g_getenv ("GTK_DATA_PREFIX");
