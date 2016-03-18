@@ -291,6 +291,262 @@ _gtk_css_position_value_try_parse (GtkCssParser *parser)
   return position_value_parse (parser, TRUE);
 }
 
+gboolean
+gtk_css_position_value_check_token (const GtkCssToken *token)
+{
+  return gtk_css_token_is_ident (token, "center")
+      || gtk_css_token_is_ident (token, "left")
+      || gtk_css_token_is_ident (token, "right")
+      || gtk_css_token_is_ident (token, "top")
+      || gtk_css_token_is_ident (token, "bottom")
+      || gtk_css_number_value_check_token (token);
+}
+
+typedef enum {
+  NONE = 0,
+  CENTER,
+  LEFT,
+  RIGHT,
+  TOP,
+  BOTTOM
+} Keyword;
+
+static Keyword
+get_keyword (const GtkCssToken *token)
+{
+  if (gtk_css_token_is_ident (token, "center"))
+    return CENTER;
+  else if (gtk_css_token_is_ident (token, "left"))
+    return LEFT;
+  else if (gtk_css_token_is_ident (token, "right"))
+    return RIGHT;
+  else if (gtk_css_token_is_ident (token, "top"))
+    return TOP;
+  else if (gtk_css_token_is_ident (token, "bottom"))
+    return BOTTOM;
+  else
+    return NONE;
+}
+
+static GtkCssValue *
+value_from_keyword (Keyword      keyword,
+                    GtkCssValue *value)
+{
+  switch (keyword)
+    {
+    default:
+    case NONE:
+      g_assert_not_reached ();
+      return NULL;
+    case CENTER:
+      g_assert (value == NULL);
+      return _gtk_css_number_value_new (50, GTK_CSS_PERCENT);
+    case LEFT:
+    case TOP:
+      if (value)
+        return value;
+      else
+        return _gtk_css_number_value_new (0, GTK_CSS_PERCENT);
+    case RIGHT:
+    case BOTTOM:
+      if (value == NULL)
+        return _gtk_css_number_value_new (100, GTK_CSS_PERCENT);
+      else
+        {
+          GtkCssValue *mult = gtk_css_number_value_multiply (value, -1);
+          GtkCssValue *hundred = _gtk_css_number_value_new (100, GTK_CSS_PERCENT);
+          GtkCssValue *sum = gtk_css_number_value_add (hundred, mult);
+
+          _gtk_css_value_unref (mult);
+          _gtk_css_value_unref (hundred);
+          _gtk_css_value_unref (value);
+          return sum;
+        }
+    }
+}
+
+static gboolean
+keywords_compatible (Keyword a, Keyword b)
+{
+  if ((a == LEFT || a == RIGHT) && (b == LEFT || b == RIGHT))
+    return FALSE;
+  if ((a == TOP || a == BOTTOM) && (b == TOP || b == BOTTOM))
+    return FALSE;
+
+  return TRUE;
+}
+
+static gboolean
+keywords_need_swap (Keyword x, Keyword y)
+{
+  /* NB: We assume the keywords are compatible here */
+  return x == TOP || x == BOTTOM
+      || y == LEFT || y == RIGHT;
+}
+
+GtkCssValue *
+gtk_css_position_value_token_parse (GtkCssTokenSource *source)
+{
+  const GtkCssToken *token;
+  GtkCssValue *x, *y;
+  Keyword keyword;
+
+  token = gtk_css_token_source_get_token (source);
+
+  keyword = get_keyword (token);
+  if (keyword == NONE)
+    {
+      /* NUMBER ... */
+      x = gtk_css_number_value_token_parse (source, GTK_CSS_PARSE_PERCENT | GTK_CSS_PARSE_LENGTH);
+      if (x == NULL)
+        return NULL;
+
+      token = gtk_css_token_source_get_token (source);
+      keyword = get_keyword (token);
+      if (keyword == NONE)
+        {
+          if (gtk_css_number_value_check_token (token))
+            {
+              /* NUMBER NUMBER */
+              y = gtk_css_number_value_token_parse (source, GTK_CSS_PARSE_PERCENT | GTK_CSS_PARSE_LENGTH);
+              if (y == NULL)
+                {
+                  _gtk_css_value_unref (x);
+                  return NULL;
+                }
+            }
+          else
+            {
+              /* NUMBER */
+              y = value_from_keyword (CENTER, NULL);
+            }
+        }
+      else if (keyword == LEFT || keyword == RIGHT)
+        {
+          gtk_css_token_source_error (source, "\"left\" and \"right\" may not follow a number");
+          gtk_css_token_source_consume_all (source);
+          _gtk_css_value_unref (x);
+          return NULL;
+        }
+      else
+        {
+          /* NUMBER KEYWORD */
+          y = value_from_keyword (keyword, NULL);
+        }
+    }
+  else
+    {
+      /* KEYWORD ... */
+      Keyword keyword2;
+      GtkCssValue *value;
+
+      gtk_css_token_source_consume_token (source);
+      token = gtk_css_token_source_get_token (source);
+      keyword2 = get_keyword (token);
+      if (keyword2 != NONE)
+        {
+          /* KEYWORD KEYWORD ... */
+          if (!keywords_compatible (keyword, keyword2))
+            {
+              gtk_css_token_source_error (source, "Two keywords for same axis");
+              gtk_css_token_source_consume_all (source);
+              return NULL;
+            }
+          gtk_css_token_source_consume_token (source);
+          token = gtk_css_token_source_get_token (source);
+          if (keyword2 != CENTER && gtk_css_number_value_check_token (token))
+            {
+              /* KEYWORD KEYWORD NUMBER */
+              value = gtk_css_number_value_token_parse (source, GTK_CSS_PARSE_PERCENT | GTK_CSS_PARSE_LENGTH);
+              if (value == NULL)
+                return NULL;
+            }
+          else
+            value = NULL;
+
+          if (keywords_need_swap (keyword, keyword2))
+            {
+              x = value_from_keyword (keyword2, value);
+              y = value_from_keyword (keyword, NULL);
+            }
+          else
+            {
+              x = value_from_keyword (keyword, NULL);
+              y = value_from_keyword (keyword2, value);
+            }
+        }
+      else
+        {
+          if (gtk_css_number_value_check_token (token))
+            {
+              /* KEYWORD NUMBER ... */
+              x = gtk_css_number_value_token_parse (source, GTK_CSS_PARSE_PERCENT | GTK_CSS_PARSE_LENGTH);
+              if (x == NULL)
+                return NULL;
+              
+              token = gtk_css_token_source_get_token (source);
+              keyword2 = get_keyword (token);
+              if (keyword2 == NONE)
+                {
+                  /* KEYWORD NUMBER */
+                  if (keyword == TOP || keyword == BOTTOM)
+                    {
+                      x = value_from_keyword (LEFT, x);
+                      y = value_from_keyword (keyword, NULL);
+                    }
+                  else
+                    {
+                      y = value_from_keyword (LEFT, x);
+                      x = value_from_keyword (keyword, NULL);
+                    }
+                }
+              else
+                {
+                  /* KEYWORD NUMBER KEYWORD ... */
+                  if (!keywords_compatible (keyword, keyword2))
+                    {
+                      gtk_css_token_source_error (source, "Two keywords for same axis");
+                      gtk_css_token_source_consume_all (source);
+                      return NULL;
+                    }
+
+                  gtk_css_token_source_consume_token (source);
+                  token = gtk_css_token_source_get_token (source);
+                  if (keyword2 != CENTER && gtk_css_number_value_check_token (token))
+                    {
+                      /* KEYWORD NUMBER KEYWORD NUMBER */
+                      y = gtk_css_number_value_token_parse (source, GTK_CSS_PARSE_PERCENT | GTK_CSS_PARSE_LENGTH);
+                      if (y == NULL)
+                        return NULL;
+                    }
+                  else
+                    y = NULL;
+
+                  if (keywords_need_swap (keyword, keyword2))
+                    {
+                      value = value_from_keyword (keyword2, y);
+                      y = value_from_keyword (keyword, x);
+                      x = value;
+                    }
+                  else
+                    {
+                      x = value_from_keyword (keyword, x);
+                      y = value_from_keyword (keyword, y);
+                    }
+                }
+            }
+          else
+            {
+              /* KEYWORD */
+              x = value_from_keyword (keyword, NULL);
+              y = value_from_keyword (CENTER, NULL);
+            }
+        }
+    }
+
+  return _gtk_css_position_value_new (x, y);
+}
+
 double
 _gtk_css_position_value_get_x (const GtkCssValue *position,
                                double             one_hundred_percent)

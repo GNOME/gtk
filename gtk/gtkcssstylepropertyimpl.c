@@ -1445,6 +1445,13 @@ background_position_parse (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
+background_position_token_parse (GtkCssTokenSource   *source,
+                                 GtkCssStyleProperty *property)
+{
+  return gtk_css_array_value_token_parse (source, gtk_css_position_value_token_parse);
+}
+
+static GtkCssValue *
 icon_theme_value_parse (GtkCssStyleProperty *property,
 		        GtkCssParser        *parser)
 {
@@ -1965,7 +1972,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_BACKGROUND,
                                           background_position_parse,
-                                          gtk_css_style_property_token_parse_default,
+                                          background_position_token_parse,
                                           NULL,
                                           NULL,
                                           _gtk_css_array_value_new (_gtk_css_position_value_new (_gtk_css_number_value_new (0, GTK_CSS_PERCENT),

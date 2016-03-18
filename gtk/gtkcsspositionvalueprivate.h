@@ -21,6 +21,7 @@
 #define __GTK_CSS_POSITION_VALUE_PRIVATE_H__
 
 #include "gtkcssparserprivate.h"
+#include "gtkcsstokensourceprivate.h"
 #include "gtkcssvalueprivate.h"
 
 G_BEGIN_DECLS
@@ -29,6 +30,8 @@ GtkCssValue *   _gtk_css_position_value_new           (GtkCssValue            *x
                                                        GtkCssValue            *y);
 GtkCssValue *   _gtk_css_position_value_parse         (GtkCssParser           *parser);
 GtkCssValue *   _gtk_css_position_value_try_parse     (GtkCssParser           *parser);
+gboolean        gtk_css_position_value_check_token    (const GtkCssToken      *token);
+GtkCssValue *   gtk_css_position_value_token_parse    (GtkCssTokenSource      *source);
 
 double          _gtk_css_position_value_get_x         (const GtkCssValue      *position,
                                                      double                  one_hundred_percent);
