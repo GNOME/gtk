@@ -3968,6 +3968,33 @@ gdk_win32_window_is_win32 (GdkWindow *window)
   return GDK_WINDOW_IS_WIN32 (window);
 }
 
+static gboolean
+gdk_win32_window_show_window_menu (GdkWindow *window,
+                                   GdkEvent  *event)
+{
+  double event_x, event_y;
+  gint x, y;
+
+  switch (event->type)
+    {
+    case GDK_BUTTON_PRESS:
+    case GDK_BUTTON_RELEASE:
+    case GDK_TOUCH_BEGIN:
+    case GDK_TOUCH_END:
+      break;
+    default:
+      return FALSE;
+    }
+
+  gdk_event_get_root_coords (event, &event_x, &event_y);
+  x = event_x - _gdk_offset_x;
+  y = event_y - _gdk_offset_y;
+
+  SendMessage (GDK_WINDOW_HWND (window), WM_SYSMENU, 0, MAKELPARAM (x, y));
+
+  return TRUE;
+}
+
 /**
  * _gdk_win32_acquire_dc
  * @impl: a Win32 #GdkWindowImplWin32 implementation
@@ -4197,6 +4224,8 @@ gdk_window_impl_win32_class_init (GdkWindowImplWin32Class *klass)
 
   //impl_class->beep = gdk_x11_window_beep;
 
+
+  impl_class->show_window_menu = gdk_win32_window_show_window_menu;
   impl_class->focus = gdk_win32_window_focus;
   impl_class->set_type_hint = gdk_win32_window_set_type_hint;
   impl_class->get_type_hint = gdk_win32_window_get_type_hint;

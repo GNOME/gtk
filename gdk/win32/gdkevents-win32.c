@@ -1910,6 +1910,77 @@ ensure_stacking_on_activate_app (MSG       *msg,
     }
 }
 
+static gboolean
+handle_wm_sysmenu (GdkWindow *window, MSG *msg, gint *ret_valp)
+{
+  GdkWindowImplWin32 *impl;
+  LONG_PTR style, tmp_style;
+  gboolean maximized, minimized;
+  LONG_PTR additional_styles;
+
+  impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+
+  style = GetWindowLongPtr (msg->hwnd, GWL_STYLE);
+
+  maximized = IsZoomed (msg->hwnd);
+  minimized = IsIconic (msg->hwnd);
+  additional_styles = 0;
+
+  if (!(style & WS_SYSMENU))
+    additional_styles |= WS_SYSMENU;
+
+  if (!maximized && !(style & WS_MAXIMIZEBOX))
+    additional_styles |= WS_MAXIMIZEBOX;
+
+  if (!minimized && !(style & WS_MINIMIZEBOX))
+    additional_styles |= WS_MINIMIZEBOX;
+
+  if (!minimized && !maximized && !(style & WS_SIZEBOX))
+    additional_styles |= WS_SIZEBOX;
+
+  if (additional_styles == 0)
+    /* The caller will eventually pass this to DefWindowProc (),
+     * only without the style dance, which isn't needed, as it turns out.
+     */
+    return FALSE;
+
+  /* Note: This code will enable resizing, maximizing and minimizing windows
+   * via window menu even if these are non-CSD windows that were explicitly
+   * forbidden from doing this by removing the appropriate styles,
+   * or if these are CSD windows that were explicitly forbidden from doing
+   * this by removing appropriate decorations from the headerbar and/or
+   * changing hints or properties.
+   *
+   * If doing this for non-CSD windows is not desired,
+   * do a _gdk_win32_window_lacks_wm_decorations() check and return FALSE
+   * if it doesn't pass.
+   *
+   * If doing this for CSD windows with disabled decorations is not desired,
+   * tough luck - GDK can't know which CSD decorations are enabled, and which
+   * are not.
+   *
+   * If doing this for CSD windows with particular hints is not desired,
+   * check window hints here and return FALSE (DefWindowProc() will return
+   * FALSE later) or set *ret_valp to 0 and return TRUE.
+   */
+  tmp_style = style | additional_styles;
+  GDK_NOTE (EVENTS, g_print (" Handling WM_SYSMENU: style 0x%lx -> 0x%lx\n", style, tmp_style));
+  impl->have_temp_styles = TRUE;
+  impl->temp_styles = additional_styles;
+  SetWindowLongPtr (msg->hwnd, GWL_STYLE, tmp_style);
+
+  *ret_valp = DefWindowProc (msg->hwnd, msg->message, msg->wParam, msg->lParam);
+
+  tmp_style = GetWindowLongPtr (msg->hwnd, GWL_STYLE);
+  style = tmp_style & ~additional_styles;
+
+  GDK_NOTE (EVENTS, g_print (" Handling WM_SYSMENU: style 0x%lx <- 0x%lx\n", style, tmp_style));
+  SetWindowLongPtr (msg->hwnd, GWL_STYLE, style);
+  impl->have_temp_styles = FALSE;
+
+  return TRUE;
+}
+
 gboolean
 _gdk_win32_window_fill_min_max_info (GdkWindow  *window,
                                      MINMAXINFO *mmi)
@@ -2857,6 +2928,30 @@ gdk_event_translate (MSG  *msg,
           return_val = TRUE;
           *ret_valp = TRUE;
         }
+      break;
+
+    case WM_SYSMENU:
+      return_val = handle_wm_sysmenu (window, msg, ret_valp);
+      break;
+
+    case WM_INITMENU:
+      impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+
+      if (impl->have_temp_styles)
+        {
+          LONG_PTR window_style;
+
+          window_style = GetWindowLongPtr (GDK_WINDOW_HWND (window),
+                                           GWL_STYLE);
+          /* Handling WM_SYSMENU added extra styles to this window,
+           * remove them now.
+           */
+          window_style &= ~impl->temp_styles;
+          SetWindowLongPtr (GDK_WINDOW_HWND (window),
+                            GWL_STYLE,
+                            window_style);
+        }
+
       break;
 
     case WM_SYSCOMMAND:
