@@ -957,6 +957,7 @@ spinbutton {
   .osd &:not(.vertical) {
     border-color: $osd_borders_color;
     color: $fg_color;
+    box-shadow: none;
     
     &:focus, &:active {
       border-color: opacify($osd_borders_color,0.5);
@@ -964,9 +965,12 @@ spinbutton {
     }
     
     entry {
-      box-shadow: inset 0 2px 3px -1px transparentize(black, 0.8);
+      box-shadow: none;
       color: $fg_color;
       text-shadow: none;
+      &:focus, &:active {
+        box-shadow: inset 0 2px 3px -1px transparentize(black, 0.8);
+      }
     }
     
     button {
@@ -992,9 +996,10 @@ spinbutton {
       &:backdrop {
         @include button(undecorated);
 
-        color: $osd_fg_color;
+        color: $insensitive_fg_color;
         border-color: transparentize($borders_color,0.9);
         box-shadow: none;
+        border-style: none none none solid;
       }
 
       &:disabled {
@@ -1002,6 +1007,7 @@ spinbutton {
 
         color: $insensitive_fg_color;
         border-color: transparentize($borders_color,0.9);
+        border-style: none none none solid;
         box-shadow: none;
       }
 

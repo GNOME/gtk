@@ -1104,14 +1104,17 @@ spinbutton:not(.vertical) {
         border-style: none solid none none; }
 .osd spinbutton:not(.vertical) {
   border-color: rgba(255, 255, 255, 0.2);
-  color: #fff; }
+  color: #fff;
+  box-shadow: none; }
   .osd spinbutton:not(.vertical):focus, .osd spinbutton:not(.vertical):active {
     border-color: rgba(255, 255, 255, 0.7);
     box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.2); }
   .osd spinbutton:not(.vertical) entry {
-    box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.2);
+    box-shadow: none;
     color: #fff;
     text-shadow: none; }
+    .osd spinbutton:not(.vertical) entry:focus, .osd spinbutton:not(.vertical) entry:active {
+      box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.2); }
   .osd spinbutton:not(.vertical) button {
     border-width: 2px;
     border-style: solid;
@@ -1144,12 +1147,14 @@ spinbutton:not(.vertical) {
       background-color: transparent;
       background-image: none;
       border-color: transparent;
-      color: #fff;
+      color: gray;
       border-color: rgba(128, 128, 128, 0.1);
-      box-shadow: none; }
+      box-shadow: none;
+      border-style: none none none solid; }
     .osd spinbutton:not(.vertical) button:disabled {
       color: gray;
       border-color: rgba(128, 128, 128, 0.1);
+      border-style: none none none solid;
       box-shadow: none; }
     .osd spinbutton:not(.vertical) button:last-child {
       border-radius: 0 3px 3px 0; }
