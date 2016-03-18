@@ -119,6 +119,7 @@ static const LicenseInfo gtk_license_info [] = {
   { N_("Custom License") , NULL },
   { N_("GNU General Public License, version 2 or later"), "http://www.gnu.org/licenses/old-licenses/gpl-2.0.html" },
   { N_("GNU General Public License, version 3 or later"), "http://www.gnu.org/licenses/gpl-3.0.html" },
+  { N_("GNU Affero General Public License, version 3 or later"), "http://www.gnu.org/licenses/agpl-3.0.html" },
   { N_("GNU Lesser General Public License, version 2.1 or later"), "http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html" },
   { N_("GNU Lesser General Public License, version 3 or later"), "http://www.gnu.org/licenses/lgpl-3.0.html" },
   { N_("BSD 2-Clause License"), "http://opensource.org/licenses/bsd-license.php" },

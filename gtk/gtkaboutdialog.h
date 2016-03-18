@@ -49,6 +49,7 @@ typedef struct _GtkAboutDialogPrivate GtkAboutDialogPrivate;
  *   developer
  * @GTK_LICENSE_GPL_2_0: The GNU General Public License, version 2.0 or later
  * @GTK_LICENSE_GPL_3_0: The GNU General Public License, version 3.0 or later
+ * @GTK_LICENSE_AGPL_3_0: The GNU Affero General Public License, version 3.0 or later. Since: 3.22
  * @GTK_LICENSE_LGPL_2_1: The GNU Lesser General Public License, version 2.1 or later
  * @GTK_LICENSE_LGPL_3_0: The GNU Lesser General Public License, version 3.0 or later
  * @GTK_LICENSE_BSD: The BSD standard license
@@ -71,6 +72,8 @@ typedef enum {
 
   GTK_LICENSE_GPL_2_0,
   GTK_LICENSE_GPL_3_0,
+
+  GTK_LICENSE_AGPL_3_0,
 
   GTK_LICENSE_LGPL_2_1,
   GTK_LICENSE_LGPL_3_0,
