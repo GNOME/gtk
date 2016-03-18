@@ -21,6 +21,7 @@
 #define __GTK_CSS_ENGINE_VALUE_PRIVATE_H__
 
 #include "gtkcssparserprivate.h"
+#include "gtkcsstokensourceprivate.h"
 #include "gtkcssvalueprivate.h"
 #include "deprecated/gtkthemingengine.h"
 
@@ -28,6 +29,7 @@ G_BEGIN_DECLS
 
 GtkCssValue *       _gtk_css_engine_value_new           (GtkThemingEngine       *engine);
 GtkCssValue *       _gtk_css_engine_value_parse         (GtkCssParser           *parser);
+GtkCssValue *       gtk_css_engine_value_token_parse    (GtkCssTokenSource      *source);
 
 GtkThemingEngine *  _gtk_css_engine_value_get_engine    (const GtkCssValue      *engine);
 

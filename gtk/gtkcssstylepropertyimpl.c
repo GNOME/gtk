@@ -2345,7 +2345,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
                                           0,
                                           0,
                                           engine_parse,
-                                          gtk_css_style_property_token_parse_default,
+                                          (GtkCssStylePropertyTokenParseFunc) gtk_css_engine_value_token_parse,
                                           engine_query,
                                           engine_assign,
                                           _gtk_css_engine_value_new (gtk_theming_engine_load (NULL)));

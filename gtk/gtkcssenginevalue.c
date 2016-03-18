@@ -130,6 +130,40 @@ _gtk_css_engine_value_parse (GtkCssParser *parser)
   return _gtk_css_engine_value_new (engine);
 }
 
+GtkCssValue *
+gtk_css_engine_value_token_parse (GtkCssTokenSource *source)
+{
+  GtkThemingEngine *engine;
+  const GtkCssToken *token;
+
+  token = gtk_css_token_source_get_token (source);
+  if (gtk_css_token_is_ident (token, "none"))
+    {
+      gtk_css_token_source_consume_token (source);
+      return _gtk_css_engine_value_new (gtk_theming_engine_load (NULL));
+    }
+
+  if (!gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
+    {
+      gtk_css_token_source_error (source, "Expected a valid theme name");
+      gtk_css_token_source_consume_all (source);
+      return NULL;
+    }
+
+  engine = gtk_theming_engine_load (token->string.string);
+
+  if (engine == NULL)
+    {
+      gtk_css_token_source_error (source, "Theming engine '%s' not found", token->string.string);
+      gtk_css_token_source_consume_all (source);
+      return NULL;
+    }
+
+  gtk_css_token_source_consume_token (source);
+
+  return _gtk_css_engine_value_new (engine);
+}
+
 GtkThemingEngine *
 _gtk_css_engine_value_get_engine (const GtkCssValue *value)
 {
