@@ -3067,10 +3067,16 @@ messagedialog.csd {
     border-left-style: none;
     border-bottom-left-radius: 7px; }
 
-GtkFileChooserDialog .dialog-action-box {
+filechooser .dialog-action-box {
   border-top: 1px solid gray; }
-  GtkFileChooserDialog .dialog-action-box:backdrop {
+  filechooser .dialog-action-box:backdrop {
     border-top-color: #8d8d8d; }
+filechooser #pathbarbox {
+  border-bottom: 1px solid #fff; }
+
+filechooserbutton:drop(active) {
+  box-shadow: none;
+  border-color: transparent; }
 
 /***********
  * Sidebar *
@@ -3590,7 +3596,8 @@ button.circular {
 
 *:drop(active):focus,
 *:drop(active) {
-  border: 1px solid black; }
+  border-color: #000;
+  box-shadow: inset 0 0 0 2px fg_color; }
 
 stackswitcher button.text-button {
   min-width: 100px; }
