@@ -113,9 +113,7 @@ popover.background.touch-selection, popover.background.magnifier, .csd popover.b
   border: none;
   background-color: rgba(0, 0, 0, 0.8);
   background-clip: padding-box;
-  outline-color: rgba(255, 255, 255, 0.3);
-  text-shadow: 0 1px black;
-  -gtk-icon-shadow: 0 1px black; }
+  outline-color: rgba(255, 255, 255, 0.3); }
   popover.background.touch-selection:backdrop, popover.background.magnifier:backdrop, popover.background.osd:backdrop, .osd:backdrop {
     text-shadow: none;
     -gtk-icon-shadow: none; }
@@ -1068,6 +1066,7 @@ button:link, button:visited {
 spinbutton:not(.vertical) {
   border-width: 2px;
   border-color: gray;
+  box-shadow: none;
   padding: 0; }
   spinbutton:not(.vertical) entry {
     min-width: 28px;
@@ -1083,8 +1082,7 @@ spinbutton:not(.vertical) {
     color: #e7e7e7;
     background-image: none;
     border-style: none none none solid;
-    border-radius: 0;
-    box-shadow: none; }
+    border-radius: 0; }
     spinbutton:not(.vertical) button:dir(rtl) {
       border-style: none solid none none; }
     spinbutton:not(.vertical) button:hover {
@@ -1093,8 +1091,7 @@ spinbutton:not(.vertical) {
     spinbutton:not(.vertical) button:disabled {
       color: rgba(128, 128, 128, 0.3); }
     spinbutton:not(.vertical) button:active {
-      background-color: rgba(0, 0, 0, 0.1);
-      box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.2); }
+      background-color: rgba(0, 0, 0, 0.1); }
     spinbutton:not(.vertical) button:backdrop {
       color: #fff;
       background-color: transparent;
@@ -1105,22 +1102,17 @@ spinbutton:not(.vertical) {
       border-style: none none none solid; }
       spinbutton:not(.vertical) button:backdrop:disabled:dir(rtl) {
         border-style: none solid none none; }
-.osd spinbutton:not(.vertical) button {
-  border-width: 2px;
-  border-style: solid;
-  color: #fff;
-  background-color: transparent;
-  background-image: none;
-  border-color: transparent;
-  color: #fff;
-  border-style: none none none solid;
-  border-color: rgba(255, 255, 255, 0);
-  border-radius: 0;
-  box-shadow: none;
-  -gtk-icon-shadow: 0 1px black; }
-  .osd spinbutton:not(.vertical) button:dir(rtl) {
-    border-style: none solid none none; }
-  .osd spinbutton:not(.vertical) button:hover {
+.osd spinbutton:not(.vertical) {
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #fff; }
+  .osd spinbutton:not(.vertical):focus, .osd spinbutton:not(.vertical):active {
+    border-color: rgba(255, 255, 255, 0.7);
+    box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.2); }
+  .osd spinbutton:not(.vertical) entry {
+    box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.2);
+    color: #fff;
+    text-shadow: none; }
+  .osd spinbutton:not(.vertical) button {
     border-width: 2px;
     border-style: solid;
     color: #fff;
@@ -1128,36 +1120,41 @@ spinbutton:not(.vertical) {
     background-image: none;
     border-color: transparent;
     color: #fff;
-    border-color: rgba(255, 255, 255, 0.5);
-    background-color: rgba(255, 255, 255, 0.1);
-    -gtk-icon-shadow: 0 1px black;
+    border-style: none none none solid;
+    border-color: rgba(128, 128, 128, 0.2);
+    border-radius: 0;
     box-shadow: none; }
-  .osd spinbutton:not(.vertical) button:backdrop {
-    border-width: 2px;
-    border-style: solid;
-    color: #fff;
-    background-color: transparent;
-    background-image: none;
-    border-color: transparent;
-    color: #fff;
-    border-color: rgba(255, 255, 255, 0.5);
-    -gtk-icon-shadow: none;
-    box-shadow: none; }
-  .osd spinbutton:not(.vertical) button:disabled {
-    border-width: 2px;
-    border-style: solid;
-    color: #fff;
-    background-color: transparent;
-    background-image: none;
-    border-color: transparent;
-    color: gray;
-    border-color: rgba(128, 128, 128, 0.5);
-    -gtk-icon-shadow: none;
-    box-shadow: none; }
-  .osd spinbutton:not(.vertical) button:last-child {
-    border-radius: 0 3px 3px 0; }
-  .osd spinbutton:not(.vertical) button:dir(rtl):first-child {
-    border-radius: 3px 0 0 3px; }
+    .osd spinbutton:not(.vertical) button:dir(rtl) {
+      border-style: none solid none none; }
+    .osd spinbutton:not(.vertical) button:hover {
+      border-width: 2px;
+      border-style: solid;
+      color: #fff;
+      background-color: transparent;
+      background-image: none;
+      border-color: transparent;
+      border-style: none none none solid;
+      border-color: rgba(128, 128, 128, 0.2);
+      background-color: rgba(255, 255, 255, 0.1);
+      box-shadow: none; }
+    .osd spinbutton:not(.vertical) button:backdrop {
+      border-width: 2px;
+      border-style: solid;
+      color: #fff;
+      background-color: transparent;
+      background-image: none;
+      border-color: transparent;
+      color: #fff;
+      border-color: rgba(128, 128, 128, 0.1);
+      box-shadow: none; }
+    .osd spinbutton:not(.vertical) button:disabled {
+      color: gray;
+      border-color: rgba(128, 128, 128, 0.1);
+      box-shadow: none; }
+    .osd spinbutton:not(.vertical) button:last-child {
+      border-radius: 0 3px 3px 0; }
+    .osd spinbutton:not(.vertical) button:dir(rtl):first-child {
+      border-radius: 3px 0 0 3px; }
 spinbutton.vertical {
   border-width: 2px;
   border-color: gray; }
