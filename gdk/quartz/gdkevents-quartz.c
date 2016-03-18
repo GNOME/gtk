@@ -921,6 +921,9 @@ fill_pinch_event (GdkWindow *window,
     FP_STATE_IDLE,
     FP_STATE_UPDATE
   } last_state = FP_STATE_IDLE;
+  GdkQuartzDeviceManagerCore *device_manager;
+
+  device_manager = GDK_QUARTZ_DEVICE_MANAGER_CORE (_gdk_display->device_manager);
 
   event->any.type = GDK_TOUCHPAD_PINCH;
   event->touchpad_pinch.window = window;
@@ -933,7 +936,7 @@ fill_pinch_event (GdkWindow *window,
   event->touchpad_pinch.n_fingers = 2;
   event->touchpad_pinch.dx = 0.0;
   event->touchpad_pinch.dy = 0.0;
-  gdk_event_set_device (event, _gdk_display->core_pointer);
+  gdk_event_set_device (event, device_manager->core_pointer);
 
   switch ([nsevent phase])
     {
