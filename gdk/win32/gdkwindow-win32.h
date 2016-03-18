@@ -141,6 +141,11 @@ struct _GdkWindowImplWin32
    */
   guint layered : 1;
 
+  /* If TRUE, the @temp_styles is set to the styles that were temporarily
+   * added to this window.
+   */
+  guint have_temp_styles : 1;
+
   /* GDK does not keep window contents around, it just draws new
    * stuff over the window where changes occurred.
    * cache_surface retains old window contents, because
@@ -173,6 +178,12 @@ struct _GdkWindowImplWin32
 
   /* No. of windows to force layered windows off */
   guint suppress_layered;
+
+  /* Temporary styles that this window got for the purpose of
+   * handling WM_SYSMENU.
+   * They are removed at the first opportunity (usually WM_INITMENU).
+   */
+  LONG_PTR temp_styles;
 };
 
 struct _GdkWindowImplWin32Class

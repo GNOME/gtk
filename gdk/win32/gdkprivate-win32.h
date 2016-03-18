@@ -97,6 +97,18 @@
 #define WM_MOUSEHWHEEL 0x20E
 #endif
 
+/* According to
+ * http://blog.airesoft.co.uk/2009/11/wm_messages/
+ * this is the actual internal name MS uses for this undocumented message.
+ * According to
+ * https://bugs.winehq.org/show_bug.cgi?id=15055
+ * wParam is 0
+ * lParam is a pair of virtual desktop coordinates for the popup
+ */
+#ifndef WM_SYSMENU
+#define WM_SYSMENU 0x313
+#endif
+
 #ifndef CF_DIBV5
 #define CF_DIBV5 17
 #endif
