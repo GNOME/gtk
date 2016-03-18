@@ -1090,6 +1090,28 @@ font_size_parse (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
+font_size_token_parse (GtkCssTokenSource   *source,
+                       GtkCssStyleProperty *property)
+{
+  const GtkCssToken *token;
+  GtkCssValue *value;
+
+  token = gtk_css_token_source_get_token (source);
+  value = gtk_css_font_size_value_from_token (token);
+  if (value != NULL)
+    {
+      gtk_css_token_source_consume_token (source);
+      return value;
+    }
+
+  return gtk_css_number_value_token_parse (source,
+                                           GTK_CSS_PARSE_LENGTH
+                                           | GTK_CSS_PARSE_PERCENT
+                                           | GTK_CSS_POSITIVE_ONLY
+                                           | GTK_CSS_NUMBER_AS_PIXELS);
+}
+
+static GtkCssValue *
 outline_parse (GtkCssStyleProperty *property,
                GtkCssParser        *parser)
 {
@@ -1500,7 +1522,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_FONT | GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_SIZE,
                                           font_size_parse,
-                                          gtk_css_style_property_token_parse_default,
+                                          font_size_token_parse,
                                           query_length_as_double,
                                           assign_length_from_double,
                                           _gtk_css_font_size_value_new (GTK_CSS_FONT_SIZE_MEDIUM));
