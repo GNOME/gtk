@@ -231,7 +231,7 @@ gtk_css_style_property_token_parse (GtkStyleProperty  *property,
     }
   else
     {
-      value = (* style_property->token_parse) (source, style_property);
+      value = (* style_property->token_parse) (source);
     }
 
   return value;
@@ -303,8 +303,7 @@ gtk_css_style_property_real_parse_value (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
-gtk_css_style_property_real_token_parse (GtkCssTokenSource   *source,
-                                         GtkCssStyleProperty *property)
+gtk_css_style_property_real_token_parse (GtkCssTokenSource *source)
 {
   g_assert_not_reached ();
   return NULL;

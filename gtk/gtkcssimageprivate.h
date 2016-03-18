@@ -24,6 +24,7 @@
 #include <glib-object.h>
 
 #include "gtk/gtkcssparserprivate.h"
+#include "gtk/gtkcsstokensourceprivate.h"
 #include "gtk/gtkcsstypesprivate.h"
 
 G_BEGIN_DECLS
@@ -77,6 +78,9 @@ struct _GtkCssImageClass
   /* parse CSS, return TRUE on success */
   gboolean     (* parse)                           (GtkCssImage                *image,
                                                     GtkCssParser               *parser);
+  /* parse CSS, return TRUE on success */
+  gboolean     (* token_parse)                     (GtkCssImage                *image,
+                                                    GtkCssTokenSource          *source);
   /* print to CSS */
   void         (* print)                           (GtkCssImage                *image,
                                                     GString                    *string);
@@ -86,6 +90,8 @@ GType          _gtk_css_image_get_type             (void) G_GNUC_CONST;
 
 gboolean       _gtk_css_image_can_parse            (GtkCssParser               *parser);
 GtkCssImage *  _gtk_css_image_new_parse            (GtkCssParser               *parser);
+gboolean       gtk_css_image_check_token           (const GtkCssToken          *token);
+GtkCssImage *  gtk_css_image_new_token_parse       (GtkCssTokenSource          *source);
 
 int            _gtk_css_image_get_width            (GtkCssImage                *image);
 int            _gtk_css_image_get_height           (GtkCssImage                *image);

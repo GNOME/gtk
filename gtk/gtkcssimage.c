@@ -97,6 +97,37 @@ gtk_css_image_real_transition (GtkCssImage *start,
 }
 
 static void
+forward_error_to_source (GtkCssParser *parser,
+                         const GError *error,
+                         gpointer      source)
+{
+  /* XXX: This is bad because it doesn't emit the error on the right token */
+  gtk_css_token_source_emit_error (source, error);
+}
+
+static gboolean
+gtk_css_image_real_token_parse (GtkCssImage       *image,
+                                GtkCssTokenSource *source)
+{
+  GtkCssImageClass *klass;
+  GtkCssParser *parser;
+  char *str;
+  gboolean success;
+
+  str = gtk_css_token_source_consume_to_string (source);
+  parser = _gtk_css_parser_new (str,
+                                NULL,
+                                forward_error_to_source,
+                                source);
+  klass = GTK_CSS_IMAGE_GET_CLASS (image);
+  success = klass->parse (image, parser);
+  _gtk_css_parser_free (parser);
+  g_free (str);
+
+  return success;
+}
+
+static void
 _gtk_css_image_class_init (GtkCssImageClass *klass)
 {
   klass->get_width = gtk_css_image_real_get_width;
@@ -105,6 +136,7 @@ _gtk_css_image_class_init (GtkCssImageClass *klass)
   klass->compute = gtk_css_image_real_compute;
   klass->equal = gtk_css_image_real_equal;
   klass->transition = gtk_css_image_real_transition;
+  klass->token_parse = gtk_css_image_real_token_parse;
 }
 
 static void
@@ -410,26 +442,27 @@ _gtk_css_image_get_surface (GtkCssImage     *image,
   return result;
 }
 
+static const struct {
+  const char *prefix;
+  GType (* type_func) (void);
+} image_types[] = {
+  { "url", _gtk_css_image_url_get_type },
+  { "-gtk-gradient", _gtk_css_image_gradient_get_type },
+  { "-gtk-icontheme", _gtk_css_image_icon_theme_get_type },
+  { "-gtk-scaled", _gtk_css_image_scaled_get_type },
+  { "-gtk-recolor", _gtk_css_image_recolor_get_type },
+  { "-gtk-win32-theme-part", _gtk_css_image_win32_get_type },
+  { "linear-gradient", _gtk_css_image_linear_get_type },
+  { "repeating-linear-gradient", _gtk_css_image_linear_get_type },
+  { "radial-gradient", _gtk_css_image_radial_get_type },
+  { "repeating-radial-gradient", _gtk_css_image_radial_get_type },
+  { "cross-fade", _gtk_css_image_cross_fade_get_type },
+  { "image", _gtk_css_image_fallback_get_type }
+};
+
 static GType
 gtk_css_image_get_parser_type (GtkCssParser *parser)
 {
-  static const struct {
-    const char *prefix;
-    GType (* type_func) (void);
-  } image_types[] = {
-    { "url", _gtk_css_image_url_get_type },
-    { "-gtk-gradient", _gtk_css_image_gradient_get_type },
-    { "-gtk-icontheme", _gtk_css_image_icon_theme_get_type },
-    { "-gtk-scaled", _gtk_css_image_scaled_get_type },
-    { "-gtk-recolor", _gtk_css_image_recolor_get_type },
-    { "-gtk-win32-theme-part", _gtk_css_image_win32_get_type },
-    { "linear-gradient", _gtk_css_image_linear_get_type },
-    { "repeating-linear-gradient", _gtk_css_image_linear_get_type },
-    { "radial-gradient", _gtk_css_image_radial_get_type },
-    { "repeating-radial-gradient", _gtk_css_image_radial_get_type },
-    { "cross-fade", _gtk_css_image_cross_fade_get_type },
-    { "image", _gtk_css_image_fallback_get_type }
-  };
   guint i;
 
   for (i = 0; i < G_N_ELEMENTS (image_types); i++)
@@ -478,6 +511,60 @@ _gtk_css_image_new_parse (GtkCssParser *parser)
 
   klass = GTK_CSS_IMAGE_GET_CLASS (image);
   if (!klass->parse (image, parser))
+    {
+      g_object_unref (image);
+      return NULL;
+    }
+
+  return image;
+}
+
+static GType
+gtk_css_image_get_type_from_token (const GtkCssToken *token)
+{
+  guint i;
+
+  for (i = 0; i < G_N_ELEMENTS (image_types); i++)
+    {
+      if (gtk_css_token_is_function (token, image_types[i].prefix))
+        return image_types[i].type_func ();
+    }
+
+  if (gtk_css_token_is (token, GTK_CSS_TOKEN_URL))
+    return _gtk_css_image_url_get_type ();
+
+  return G_TYPE_INVALID;
+}
+
+gboolean
+gtk_css_image_check_token (const GtkCssToken *token)
+{
+  return gtk_css_image_get_type_from_token (token) != G_TYPE_INVALID;
+}
+
+GtkCssImage *
+gtk_css_image_new_token_parse (GtkCssTokenSource *source)
+{
+  const GtkCssToken *token;
+  GtkCssImageClass *klass;
+  GtkCssImage *image;
+  GType image_type;
+
+  g_return_val_if_fail (source != NULL, NULL);
+
+  token = gtk_css_token_source_get_token (source);
+  image_type = gtk_css_image_get_type_from_token (token);
+  if (image_type == G_TYPE_INVALID)
+    {
+      gtk_css_token_source_error (source, "Not a valid image");
+      gtk_css_token_source_consume_all (source);
+      return NULL;
+    }
+
+  image = g_object_new (image_type, NULL);
+
+  klass = GTK_CSS_IMAGE_GET_CLASS (image);
+  if (!klass->token_parse (image, source))
     {
       g_object_unref (image);
       return NULL;
