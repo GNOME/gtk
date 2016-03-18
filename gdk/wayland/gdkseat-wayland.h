@@ -31,7 +31,6 @@
 #define GDK_IS_WAYLAND_SEAT_CLASS(c)  (G_TYPE_CHECK_CLASS_TYPE ((c), GDK_TYPE_WAYLAND_SEAT))
 #define GDK_WAYLAND_SEAT_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GDK_TYPE_WAYLAND_SEAT, GdkWaylandSeatClass))
 
-typedef struct _GdkWaylandSeat GdkWaylandDeviceData;
 typedef struct _GdkWaylandSeat GdkWaylandSeat;
 typedef struct _GdkWaylandSeatClass GdkWaylandSeatClass;
 
