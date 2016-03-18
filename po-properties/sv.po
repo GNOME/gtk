@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-05 03:45+0000\n"
-"PO-Revision-Date: 2016-03-05 10:26+0100\n"
+"POT-Creation-Date: 2016-03-12 12:22+0000\n"
+"PO-Revision-Date: 2016-03-12 19:40+0100\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -209,8 +209,8 @@ msgid "The cell renderer represented by this accessible"
 msgstr "Cellrenderaren som representeras av detta hjälpmedel"
 
 #: gtk/deprecated/gtkaction.c:243 gtk/deprecated/gtkactiongroup.c:200
-#: gtk/deprecated/gtkthemingengine.c:247 gtk/gtkprinter.c:121
-#: gtk/gtkstack.c:513 gtk/gtktextmark.c:136
+#: gtk/deprecated/gtkthemingengine.c:247 gtk/gtkcssnode.c:626
+#: gtk/gtkprinter.c:121 gtk/gtkstack.c:513 gtk/gtktextmark.c:136
 msgid "Name"
 msgstr "Namn"
 
@@ -343,8 +343,8 @@ msgid "Whether the action is enabled."
 msgstr "Huruvida åtgärden är aktiverad."
 
 #: gtk/deprecated/gtkaction.c:481 gtk/deprecated/gtkactiongroup.c:228
-#: gtk/deprecated/gtkstatusicon.c:307 gtk/gtknativedialog.c:242
-#: gtk/gtktreeviewcolumn.c:246 gtk/gtkwidget.c:1157
+#: gtk/deprecated/gtkstatusicon.c:307 gtk/gtkcssnode.c:637
+#: gtk/gtknativedialog.c:242 gtk/gtktreeviewcolumn.c:246 gtk/gtkwidget.c:1157
 msgid "Visible"
 msgstr "Synlig"
 
@@ -910,7 +910,7 @@ msgid "The contents of the tooltip for this tray icon"
 msgstr "Innehållet i inforutan för denna aktivitetsfältsikon"
 
 #: gtk/deprecated/gtkstatusicon.c:436 gtk/gtkcolorbutton.c:189
-#: gtk/gtkfilechooserbutton.c:434 gtk/gtkfontbutton.c:476
+#: gtk/gtkfilechooserbutton.c:437 gtk/gtkfontbutton.c:476
 #: gtk/gtkheaderbar.c:1928 gtk/gtkprintjob.c:132 gtk/gtkshortcutsgroup.c:289
 #: gtk/gtkshortcutssection.c:375 gtk/gtkshortcutsshortcut.c:529
 #: gtk/gtkstack.c:520 gtk/gtktreeviewcolumn.c:316
@@ -1289,16 +1289,16 @@ msgid "The widget referenced by this accessible."
 msgstr "Gränssnittskomponenten som hänvisas till av detta hjälpmedel."
 
 #: gtk/gtkactionable.c:71
-msgid "action name"
-msgstr "åtgärdsnamn"
+msgid "Action name"
+msgstr "Åtgärdsnamn"
 
 #: gtk/gtkactionable.c:72
 msgid "The name of the associated action, like 'app.quit'"
 msgstr "Namnet på det associerade åtgärden, som ”app.quit”"
 
 #: gtk/gtkactionable.c:76
-msgid "action target value"
-msgstr "åtgärdens målvärde"
+msgid "Action target value"
+msgstr "Åtgärdens målvärde"
 
 #: gtk/gtkactionable.c:77
 msgid "The parameter for action invocations"
@@ -2365,7 +2365,7 @@ msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
 msgstr "Den lodräta textjusteringen, från 0 (överst) till 1 (nederst)."
 
 #: gtk/gtkcellrendererprogress.c:226 gtk/gtklevelbar.c:1087
-#: gtk/gtkmodelbutton.c:1178 gtk/gtkprogressbar.c:260 gtk/gtkrange.c:461
+#: gtk/gtkmodelbutton.c:1178 gtk/gtkprogressbar.c:260 gtk/gtkrange.c:462
 msgid "Inverted"
 msgstr "Inverterad"
 
@@ -2373,7 +2373,7 @@ msgstr "Inverterad"
 msgid "Invert the direction in which the progress bar grows"
 msgstr "Invertera riktningen i vilken förloppsindikatorn växer"
 
-#: gtk/gtkcellrendererspin.c:113 gtk/gtkrange.c:454 gtk/gtkscalebutton.c:215
+#: gtk/gtkcellrendererspin.c:113 gtk/gtkrange.c:455 gtk/gtkscalebutton.c:215
 #: gtk/gtkspinbutton.c:376
 msgid "Adjustment"
 msgstr "Justering"
@@ -2390,7 +2390,7 @@ msgstr "Klättringsfrekvens"
 msgid "The acceleration rate when you hold down a button"
 msgstr "Accelerationen då du trycker ner en knapp"
 
-#: gtk/gtkcellrendererspin.c:143 gtk/gtkscale.c:645 gtk/gtkspinbutton.c:392
+#: gtk/gtkcellrendererspin.c:143 gtk/gtkscale.c:743 gtk/gtkspinbutton.c:392
 msgid "Digits"
 msgstr "Siffror"
 
@@ -2608,7 +2608,7 @@ msgstr ""
 "Den föredragna platsen att elliptisera strängen, om cellrenderaren inte har "
 "tillräckligt med utrymme för att visa hela strängen"
 
-#: gtk/gtkcellrenderertext.c:503 gtk/gtkfilechooserbutton.c:448
+#: gtk/gtkcellrenderertext.c:503 gtk/gtkfilechooserbutton.c:451
 #: gtk/gtklabel.c:979
 msgid "Width In Characters"
 msgstr "Bredd i antal tecken"
@@ -2964,7 +2964,7 @@ msgstr "Huruvida alfa ska visas"
 msgid "Show editor"
 msgstr "Visa redigerare"
 
-#: gtk/gtkcolorscale.c:375
+#: gtk/gtkcolorscale.c:258
 msgid "Scale type"
 msgstr "Skalningstyp"
 
@@ -3166,6 +3166,42 @@ msgstr "Underordnad"
 msgid "Can be used to add a new child to the container"
 msgstr "Kan användas för att lägga till en ny underordnad till behållaren"
 
+#: gtk/gtkcssnode.c:616
+msgid "Style Classes"
+msgstr "Stilklasser"
+
+#: gtk/gtkcssnode.c:616
+msgid "List of classes"
+msgstr "Lista över klasser"
+
+#: gtk/gtkcssnode.c:621 gtk/gtkcssstyleproperty.c:223
+msgid "ID"
+msgstr "ID"
+
+#: gtk/gtkcssnode.c:621
+msgid "Unique ID"
+msgstr "Unikt ID"
+
+#: gtk/gtkcssnode.c:631 gtk/gtkswitch.c:910
+msgid "State"
+msgstr "Tillstånd"
+
+#: gtk/gtkcssnode.c:631
+msgid "State flags"
+msgstr "Tillståndsflaggor"
+
+#: gtk/gtkcssnode.c:637
+msgid "If other nodes can see this node"
+msgstr "Om andra noder kan se denna nod"
+
+#: gtk/gtkcssnode.c:642
+msgid "Widget type"
+msgstr "Gränssnittskomponenttyp"
+
+#: gtk/gtkcssnode.c:642
+msgid "GType of the widget"
+msgstr "GType för gränssnittskomponenten"
+
 #: gtk/gtkcssshorthandproperty.c:170
 msgid "Subproperties"
 msgstr "Underegenskaper"
@@ -3189,10 +3225,6 @@ msgstr "Påverkar"
 #: gtk/gtkcssstyleproperty.c:216
 msgid "Set if the value affects the sizing of elements"
 msgstr "Sätt om värdet påverkar elementens förmåga till omfång"
-
-#: gtk/gtkcssstyleproperty.c:223
-msgid "ID"
-msgstr "ID"
 
 # Osäker.
 #: gtk/gtkcssstyleproperty.c:224
@@ -3811,19 +3843,19 @@ msgstr "Storlek på expanderarpilen"
 msgid "Spacing around expander arrow"
 msgstr "Avstånd runt expanderarpil"
 
-#: gtk/gtkfilechooserbutton.c:419
+#: gtk/gtkfilechooserbutton.c:422
 msgid "Dialog"
 msgstr "Dialog"
 
-#: gtk/gtkfilechooserbutton.c:420
+#: gtk/gtkfilechooserbutton.c:423
 msgid "The file chooser dialog to use."
 msgstr "Filväljardialogen att använda."
 
-#: gtk/gtkfilechooserbutton.c:435
+#: gtk/gtkfilechooserbutton.c:438
 msgid "The title of the file chooser dialog."
 msgstr "Titeln på filväljardialogen."
 
-#: gtk/gtkfilechooserbutton.c:449
+#: gtk/gtkfilechooserbutton.c:452
 msgid "The desired width of the button widget, in characters."
 msgstr "Den önskade bredden på knappkomponenten i antal tecken."
 
@@ -6095,125 +6127,125 @@ msgstr "Det radioknappsobjekt vars grupp denna komponent tillhör."
 msgid "The radio tool button whose group this button belongs to."
 msgstr "Den radioknapp vars grupp denna knapp tillhör."
 
-#: gtk/gtkrange.c:455
+#: gtk/gtkrange.c:456
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr ""
 "GtkAdjustment som innehåller det aktuella värdet på detta intervallobjekt"
 
-#: gtk/gtkrange.c:462
+#: gtk/gtkrange.c:463
 msgid "Invert direction slider moves to increase range value"
 msgstr ""
 "Invertera riktningen som skjutreglaget flyttar sig för att öka "
 "intervallvärdet"
 
-#: gtk/gtkrange.c:468
+#: gtk/gtkrange.c:469
 msgid "Lower stepper sensitivity"
 msgstr "Lägre stegarkänslighet"
 
-#: gtk/gtkrange.c:469
+#: gtk/gtkrange.c:470
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
 msgstr "Känslighetspolicyn för stegaren som pekar till justeringens lägre sida"
 
-#: gtk/gtkrange.c:476
+#: gtk/gtkrange.c:477
 msgid "Upper stepper sensitivity"
 msgstr "Övre stegarkänslighet"
 
-#: gtk/gtkrange.c:477
+#: gtk/gtkrange.c:478
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
 msgstr "Känslighetspolicyn för stegaren som pekar till justeringens övre sida"
 
-#: gtk/gtkrange.c:493
+#: gtk/gtkrange.c:494
 msgid "Show Fill Level"
 msgstr "Visa fyllnadsnivå"
 
-#: gtk/gtkrange.c:494
+#: gtk/gtkrange.c:495
 msgid "Whether to display a fill level indicator graphics on trough."
 msgstr "Huruvida en fyllnadsnivåindikator ska visas vid tråg."
 
-#: gtk/gtkrange.c:509
+#: gtk/gtkrange.c:510
 msgid "Restrict to Fill Level"
 msgstr "Begränsa till fyllnadsnivå"
 
-#: gtk/gtkrange.c:510
+#: gtk/gtkrange.c:511
 msgid "Whether to restrict the upper boundary to the fill level."
 msgstr "Huruvida den övre fyllnadsnivågränsen ska begränsas."
 
-#: gtk/gtkrange.c:524
+#: gtk/gtkrange.c:525
 msgid "Fill Level"
 msgstr "Fyllnadsnivå"
 
-#: gtk/gtkrange.c:525
+#: gtk/gtkrange.c:526
 msgid "The fill level."
 msgstr "Fyllnadsnivån."
 
-#: gtk/gtkrange.c:540
+#: gtk/gtkrange.c:541
 msgid "Round Digits"
 msgstr "Avrundade siffror"
 
-#: gtk/gtkrange.c:541
+#: gtk/gtkrange.c:542
 msgid "The number of digits to round the value to."
 msgstr "Antalet siffror att runda av värdet till."
 
-#: gtk/gtkrange.c:558 gtk/gtkswitch.c:945
+#: gtk/gtkrange.c:559 gtk/gtkswitch.c:945
 msgid "Slider Width"
 msgstr "Bredd på skjutreglage"
 
-#: gtk/gtkrange.c:559
+#: gtk/gtkrange.c:560
 msgid "Width of scrollbar or scale thumb"
 msgstr "Bredd på rullningslisten eller skalning"
 
-#: gtk/gtkrange.c:574
+#: gtk/gtkrange.c:575
 msgid "Trough Border"
 msgstr "Trågkant"
 
 # Förslag mottages tacksamt
-#: gtk/gtkrange.c:575
+#: gtk/gtkrange.c:576
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr "Utrymme mellan tumme/stegare och yttre trågavfasning"
 
-#: gtk/gtkrange.c:590
+#: gtk/gtkrange.c:591
 msgid "Stepper Size"
 msgstr "Stegarstorlek"
 
-#: gtk/gtkrange.c:591
+#: gtk/gtkrange.c:592
 msgid "Length of step buttons at ends"
 msgstr "Längd på stegknappar vid ändarna"
 
-#: gtk/gtkrange.c:607
+#: gtk/gtkrange.c:608
 msgid "Stepper Spacing"
 msgstr "Stegarutrymme"
 
-#: gtk/gtkrange.c:608
+#: gtk/gtkrange.c:609
 msgid "Spacing between step buttons and thumb"
 msgstr "Utrymme mellan stegknappar och steg"
 
-#: gtk/gtkrange.c:623
+#: gtk/gtkrange.c:624
 msgid "Arrow X Displacement"
 msgstr "X-förflyttning av pil"
 
-#: gtk/gtkrange.c:624
+#: gtk/gtkrange.c:625
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
 msgstr "Hur långt bort i x-riktningen pilen ska flyttas då knappen trycks ner"
 
-#: gtk/gtkrange.c:639
+#: gtk/gtkrange.c:640
 msgid "Arrow Y Displacement"
 msgstr "Y-förflyttning av pil"
 
-#: gtk/gtkrange.c:640
+#: gtk/gtkrange.c:641
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "Hur långt bort i y-riktningen pilen ska flyttas då knappen trycks ner"
 
-#: gtk/gtkrange.c:659
+#: gtk/gtkrange.c:660
 msgid "Trough Under Steppers"
 msgstr "Tråg under stegare"
 
-#: gtk/gtkrange.c:660
+#: gtk/gtkrange.c:661
 msgid ""
 "Whether to draw trough for full length of range or exclude the steppers and "
 "spacing"
@@ -6221,11 +6253,11 @@ msgstr ""
 "Huruvida tråget ska ritas ut för hela längden eller undanta stegarna och "
 "mellanrum"
 
-#: gtk/gtkrange.c:676
+#: gtk/gtkrange.c:677
 msgid "Arrow scaling"
 msgstr "Pilskalning"
 
-#: gtk/gtkrange.c:677
+#: gtk/gtkrange.c:678
 msgid "Arrow scaling with regard to scroll button size"
 msgstr "Pilskalning med hänseende till storleken för rullningsknapp"
 
@@ -6365,47 +6397,47 @@ msgstr "Ikoner"
 msgid "List of icon names"
 msgstr "Lista över ikonnamn"
 
-#: gtk/gtkscale.c:646
+#: gtk/gtkscale.c:744
 msgid "The number of decimal places that are displayed in the value"
 msgstr "Antalet tecken som visas i värdet"
 
-#: gtk/gtkscale.c:653
+#: gtk/gtkscale.c:751
 msgid "Draw Value"
 msgstr "Visa värde"
 
-#: gtk/gtkscale.c:654
+#: gtk/gtkscale.c:752
 msgid "Whether the current value is displayed as a string next to the slider"
 msgstr "Huruvida det aktuella värdet visas som en sträng bredvid skjutreglaget"
 
-#: gtk/gtkscale.c:660
+#: gtk/gtkscale.c:758
 msgid "Has Origin"
 msgstr "Har ursprung"
 
-#: gtk/gtkscale.c:661
+#: gtk/gtkscale.c:759
 msgid "Whether the scale has an origin"
 msgstr "Huruvida skalningen har ett ursprung"
 
-#: gtk/gtkscale.c:667
+#: gtk/gtkscale.c:765
 msgid "Value Position"
 msgstr "Värdeposition"
 
-#: gtk/gtkscale.c:668
+#: gtk/gtkscale.c:766
 msgid "The position in which the current value is displayed"
 msgstr "Positionen som det aktuella värdet visas på"
 
-#: gtk/gtkscale.c:685
+#: gtk/gtkscale.c:783
 msgid "Slider Length"
 msgstr "Längd på skjutreglaget"
 
-#: gtk/gtkscale.c:686
+#: gtk/gtkscale.c:784
 msgid "Length of scale's slider"
 msgstr "Längd på skalans skjutreglage"
 
-#: gtk/gtkscale.c:692
+#: gtk/gtkscale.c:798
 msgid "Value spacing"
 msgstr "Värdeutrymme"
 
-#: gtk/gtkscale.c:693
+#: gtk/gtkscale.c:799
 msgid "Space between value text and the slider/trough area"
 msgstr "Utrymme mellan värdetext och skjutreglage/trågområdet"
 
@@ -7573,7 +7605,8 @@ msgid "Whether this page needs attention"
 msgstr "Huruvida denna sida behöver uppmärksamhet"
 
 #: gtk/gtkstacksidebar.c:449 gtk/gtkstackswitcher.c:582
-#: gtk/gtkstackswitcher.c:583
+#: gtk/gtkstackswitcher.c:583 gtk/inspector/gtkstackcombo.c:232
+#: gtk/inspector/gtkstackcombo.c:233
 msgid "Stack"
 msgstr "Stack"
 
@@ -7628,10 +7661,6 @@ msgstr "Värdetypen som returneras av GtkStyleContext"
 #: gtk/gtkswitch.c:896
 msgid "Whether the switch is on or off"
 msgstr "Huruvida växelknappen är på eller av"
-
-#: gtk/gtkswitch.c:910
-msgid "State"
-msgstr "Tillstånd"
 
 #: gtk/gtkswitch.c:911
 msgid "The backend state"
