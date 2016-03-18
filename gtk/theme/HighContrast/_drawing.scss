@@ -58,8 +58,8 @@
   @if $t==focus {
     border-color: $fc;
     @include _shadows(inset 0 2px 2px -2px mix(black, $base_color, 50%),
-                      inset 0 0 2px 1px mix($fc,$base_color,20%),
-                        $_entry_edge);
+                      inset 0 0 0 1px $fc,
+                      $_entry_edge);
   }
   @if $t==insensitive {
     color: $insensitive_fg_color;
