@@ -221,7 +221,6 @@ gtk_css_border_value_token_parse (GtkCssTokenSource      *source,
     {
       result->fill = TRUE;
       gtk_css_token_source_consume_token (source);
-      gtk_css_token_source_consume_whitespace (source);
       token = gtk_css_token_source_get_token (source);
     }
 
@@ -233,7 +232,6 @@ gtk_css_border_value_token_parse (GtkCssTokenSource      *source,
         {
           result->fill = TRUE;
           gtk_css_token_source_consume_token (source);
-          gtk_css_token_source_consume_whitespace (source);
           i--;
           break;
         }
@@ -241,7 +239,6 @@ gtk_css_border_value_token_parse (GtkCssTokenSource      *source,
       if (allow_auto && gtk_css_token_is_ident (token, "auto"))
         {
           gtk_css_token_source_consume_token (source);
-          gtk_css_token_source_consume_whitespace (source);
           continue;
         }
 
@@ -254,7 +251,6 @@ gtk_css_border_value_token_parse (GtkCssTokenSource      *source,
           _gtk_css_value_unref (result);
           return NULL;
         }
-      gtk_css_token_source_consume_whitespace (source);
     }
 
   if (i <= 0)

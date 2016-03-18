@@ -389,7 +389,6 @@ gtk_css_array_value_token_parse (GtkCssTokenSource *source,
   values = g_ptr_array_new ();
 
   while (TRUE) {
-    gtk_css_token_source_consume_whitespace (source);
     value = parse_func (source);
 
     if (value == NULL)
@@ -400,11 +399,9 @@ gtk_css_array_value_token_parse (GtkCssTokenSource *source,
       }
 
     g_ptr_array_add (values, value);
-    gtk_css_token_source_consume_whitespace (source);
     if (!gtk_css_token_is (gtk_css_token_source_get_token (source), GTK_CSS_TOKEN_COMMA))
       break;
     gtk_css_token_source_consume_token (source);
-    gtk_css_token_source_consume_whitespace (source);
   }
 
   result = _gtk_css_array_value_new_from_array ((GtkCssValue **) values->pdata, values->len);

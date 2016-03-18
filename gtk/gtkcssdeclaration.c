@@ -71,7 +71,6 @@ gtk_css_declaration_new_parse (GtkCssStyleDeclaration *style,
 
   gtk_css_token_source_set_consumer (source, G_OBJECT (decl));
 
-  gtk_css_token_source_consume_whitespace (source);
   priv->style = style;
   token = gtk_css_token_source_get_token (source);
   if (!gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
@@ -96,7 +95,6 @@ gtk_css_declaration_new_parse (GtkCssStyleDeclaration *style,
                                      "The '%s' property has been renamed to '%s'",
                                      name, _gtk_style_property_get_name (priv->prop));
   gtk_css_token_source_consume_token (source);
-  gtk_css_token_source_consume_whitespace (source);
   g_free (name);
 
   token = gtk_css_token_source_get_token (source);

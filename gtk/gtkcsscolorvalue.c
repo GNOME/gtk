@@ -863,7 +863,6 @@ _gtk_css_color_value_parse (GtkCssParser *parser)
 static gboolean
 parse_comma (GtkCssTokenSource *source)
 {
-  gtk_css_token_source_consume_whitespace (source);
   if (!gtk_css_token_is (gtk_css_token_source_get_token (source), GTK_CSS_TOKEN_COMMA))
     {
       gtk_css_token_source_error (source, "Expected ','");
@@ -872,7 +871,6 @@ parse_comma (GtkCssTokenSource *source)
     }
 
   gtk_css_token_source_consume_token (source);
-  gtk_css_token_source_consume_whitespace (source);
   return TRUE;
 }
 
@@ -968,7 +966,6 @@ gtk_css_color_value_token_parse (GtkCssTokenSource *source)
           GdkRGBA rgba;
 
           gtk_css_token_source_consume_token (source);
-          gtk_css_token_source_consume_whitespace (source);
 
           token = gtk_css_token_source_get_token (source);
           if (gtk_css_token_is (token, GTK_CSS_TOKEN_PERCENTAGE))
@@ -1013,7 +1010,6 @@ gtk_css_color_value_token_parse (GtkCssTokenSource *source)
           GtkCssValue *child;
 
           gtk_css_token_source_consume_token (source);
-          gtk_css_token_source_consume_whitespace (source);
 
           child = gtk_css_color_value_token_parse (source);
           if (child == NULL)
@@ -1028,7 +1024,6 @@ gtk_css_color_value_token_parse (GtkCssTokenSource *source)
           GtkCssValue *child;
 
           gtk_css_token_source_consume_token (source);
-          gtk_css_token_source_consume_whitespace (source);
 
           child = gtk_css_color_value_token_parse (source);
           if (child == NULL)
@@ -1044,7 +1039,6 @@ gtk_css_color_value_token_parse (GtkCssTokenSource *source)
           double d;
 
           gtk_css_token_source_consume_token (source);
-          gtk_css_token_source_consume_whitespace (source);
 
           child = gtk_css_color_value_token_parse (source);
           if (child == NULL)
@@ -1066,7 +1060,6 @@ gtk_css_color_value_token_parse (GtkCssTokenSource *source)
           double d;
 
           gtk_css_token_source_consume_token (source);
-          gtk_css_token_source_consume_whitespace (source);
 
           child = gtk_css_color_value_token_parse (source);
           if (child == NULL)
@@ -1088,7 +1081,6 @@ gtk_css_color_value_token_parse (GtkCssTokenSource *source)
           double d;
 
           gtk_css_token_source_consume_token (source);
-          gtk_css_token_source_consume_whitespace (source);
 
           child1 = gtk_css_color_value_token_parse (source);
           if (child1 == NULL)
@@ -1116,7 +1108,6 @@ gtk_css_color_value_token_parse (GtkCssTokenSource *source)
           int id;
 
           gtk_css_token_source_consume_token (source);
-          gtk_css_token_source_consume_whitespace (source);
 
           theme = gtk_win32_theme_token_parse (source);
           if (theme == NULL)
@@ -1157,7 +1148,6 @@ gtk_css_color_value_token_parse (GtkCssTokenSource *source)
           gtk_win32_theme_unref (theme);
         }
       
-      gtk_css_token_source_consume_whitespace (source);
       token = gtk_css_token_source_get_token (source);
       if (!gtk_css_token_is (token, GTK_CSS_TOKEN_CLOSE_PARENS))
         {

@@ -83,7 +83,6 @@ gtk_css_style_rule_parse_selectors (GtkCssStyleRule   *rule,
        !gtk_css_token_is (token, GTK_CSS_TOKEN_EOF);
        token = gtk_css_token_source_get_token (source))
     {
-      gtk_css_token_source_consume_whitespace (source);
       child_source = gtk_css_token_source_new_for_part (source, GTK_CSS_TOKEN_COMMA);
       selector = gtk_css_selector_token_parse (child_source);
       gtk_css_token_source_unref (child_source);

@@ -49,7 +49,7 @@ gtk_css_token_source_tokenizer_consume_token (GtkCssTokenSource *source,
 }
 
 static const GtkCssToken *
-gtk_css_token_source_tokenizer_get_token (GtkCssTokenSource   *source)
+gtk_css_token_source_tokenizer_peek_token (GtkCssTokenSource   *source)
 {
   GtkCssTokenSourceTokenizer *tok = (GtkCssTokenSourceTokenizer *) source;
 
@@ -87,7 +87,7 @@ gtk_css_token_source_tokenizer_error (GtkCssTokenSource *source,
 const GtkCssTokenSourceClass GTK_CSS_TOKEN_SOURCE_TOKENIZER = {
   gtk_css_token_source_tokenizer_finalize,
   gtk_css_token_source_tokenizer_consume_token,
-  gtk_css_token_source_tokenizer_get_token,
+  gtk_css_token_source_tokenizer_peek_token,
   gtk_css_token_source_tokenizer_error,
 };
 
@@ -128,7 +128,7 @@ gtk_css_token_source_part_consume_token (GtkCssTokenSource *source,
 
   if (!gtk_css_token_get_pending_block (source))
     {
-      token = gtk_css_token_source_get_token (part->source);
+      token = gtk_css_token_source_peek_token (part->source);
       if (gtk_css_token_is (token, part->end_type))
         return;
     }
@@ -137,13 +137,13 @@ gtk_css_token_source_part_consume_token (GtkCssTokenSource *source,
 }
 
 static const GtkCssToken *
-gtk_css_token_source_part_get_token (GtkCssTokenSource *source)
+gtk_css_token_source_part_peek_token (GtkCssTokenSource *source)
 {
   GtkCssTokenSourcePart *part = (GtkCssTokenSourcePart *) source;
   static const GtkCssToken eof_token = { GTK_CSS_TOKEN_EOF };
   const GtkCssToken *token;
 
-  token = gtk_css_token_source_get_token (part->source);
+  token = gtk_css_token_source_peek_token (part->source);
   if (!gtk_css_token_get_pending_block (source) &&
       gtk_css_token_is (token, part->end_type))
     return &eof_token;
@@ -163,7 +163,7 @@ gtk_css_token_source_part_error (GtkCssTokenSource *source,
 const GtkCssTokenSourceClass GTK_CSS_TOKEN_SOURCE_PART = {
   gtk_css_token_source_part_finalize,
   gtk_css_token_source_part_consume_token,
-  gtk_css_token_source_part_get_token,
+  gtk_css_token_source_part_peek_token,
   gtk_css_token_source_part_error,
 };
 
@@ -235,14 +235,14 @@ gtk_css_token_source_consume_token_as (GtkCssTokenSource *source,
   
   if (source->blocks)
     {
-      token = gtk_css_token_source_get_token (source);
+      token = gtk_css_token_source_peek_token (source);
       if (gtk_css_token_is (token, GPOINTER_TO_UINT (source->blocks->data)))
         source->blocks = g_slist_remove (source->blocks, source->blocks->data);
     }
 
   source->klass->consume_token (source, consumer);
 
-  token = gtk_css_token_source_get_token (source);
+  token = gtk_css_token_source_peek_token (source);
   switch (token->type)
     {
     case GTK_CSS_TOKEN_FUNCTION:
@@ -269,16 +269,22 @@ gtk_css_token_source_consume_token_as (GtkCssTokenSource *source,
 }
 
 const GtkCssToken *
+gtk_css_token_source_peek_token (GtkCssTokenSource *source)
+{
+  return source->klass->peek_token (source);
+}
+
+const GtkCssToken *
 gtk_css_token_source_get_token (GtkCssTokenSource *source)
 {
   const GtkCssToken *token;
 
-  for (token = source->klass->get_token (source);
-       gtk_css_token_is (token, GTK_CSS_TOKEN_COMMENT);
-       token = source->klass->get_token (source))
+  for (token = gtk_css_token_source_peek_token (source);
+       gtk_css_token_is (token, GTK_CSS_TOKEN_COMMENT) ||
+       gtk_css_token_is (token, GTK_CSS_TOKEN_WHITESPACE);
+       token = gtk_css_token_source_peek_token (source))
     {
-      /* use vfunc here to avoid infloop */
-      source->klass->consume_token (source, source->consumer);
+      gtk_css_token_source_consume_token (source);
     }
 
   return token;
@@ -305,32 +311,17 @@ gtk_css_token_source_consume_to_string (GtkCssTokenSource *source)
 
   string = g_string_new (NULL);
 
-  for (token = gtk_css_token_source_get_token (source);
+  for (token = gtk_css_token_source_peek_token (source);
        !gtk_css_token_is (token, GTK_CSS_TOKEN_EOF);
-       token = gtk_css_token_source_get_token (source))
+       token = gtk_css_token_source_peek_token (source))
     {
+      if (gtk_css_token_is (token, GTK_CSS_TOKEN_COMMENT))
+        continue;
       gtk_css_token_print (token, string);
       gtk_css_token_source_consume_token (source);
     }
 
   return g_string_free (string, FALSE);
-}
-
-gboolean
-gtk_css_token_source_consume_whitespace (GtkCssTokenSource *source)
-{
-  const GtkCssToken *token;
-  gboolean seen_whitespace = FALSE;
-
-  for (token = gtk_css_token_source_get_token (source);
-       gtk_css_token_is (token, GTK_CSS_TOKEN_WHITESPACE);
-       token = gtk_css_token_source_get_token (source))
-    {
-      seen_whitespace = TRUE;
-      gtk_css_token_source_consume_token (source);
-    }
-
-  return seen_whitespace;
 }
 
 gboolean
@@ -354,13 +345,11 @@ gtk_css_token_source_consume_function (GtkCssTokenSource      *source,
 
   for (arg = 0; arg < max_args; arg++)
     {
-      gtk_css_token_source_consume_whitespace (func_source);
       if (!parse_func (func_source, arg, data))
         {
           gtk_css_token_source_consume_all (func_source);
           break;
         }
-      gtk_css_token_source_consume_whitespace (func_source);
       token = gtk_css_token_source_get_token (func_source);
       if (gtk_css_token_is (token, GTK_CSS_TOKEN_EOF))
         {

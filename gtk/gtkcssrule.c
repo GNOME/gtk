@@ -61,7 +61,7 @@ gtk_css_token_source_at_consume_token (GtkCssTokenSource *source,
       return;
     }
 
-  token = gtk_css_token_source_get_token (at->source);
+  token = gtk_css_token_source_peek_token (at->source);
   if (gtk_css_token_is (token, GTK_CSS_TOKEN_SEMICOLON))
     at->done = TRUE;
   else if (at->inside_curly_block && gtk_css_token_is (token, GTK_CSS_TOKEN_CLOSE_CURLY))
@@ -73,7 +73,7 @@ gtk_css_token_source_at_consume_token (GtkCssTokenSource *source,
 }
 
 const GtkCssToken *
-gtk_css_token_source_at_get_token (GtkCssTokenSource *source)
+gtk_css_token_source_at_peek_token (GtkCssTokenSource *source)
 {
   GtkCssTokenSourceAt *at = (GtkCssTokenSourceAt *) source;
   static GtkCssToken eof_token = { GTK_CSS_TOKEN_EOF };
@@ -81,7 +81,7 @@ gtk_css_token_source_at_get_token (GtkCssTokenSource *source)
   if (at->done)
     return &eof_token;
 
-  return gtk_css_token_source_get_token (at->source);
+  return gtk_css_token_source_peek_token (at->source);
 }
 
 static void
@@ -96,7 +96,7 @@ gtk_css_token_source_at_error (GtkCssTokenSource *source,
 static const GtkCssTokenSourceClass GTK_CSS_TOKEN_SOURCE_AT = {
   gtk_css_token_source_at_finalize,
   gtk_css_token_source_at_consume_token,
-  gtk_css_token_source_at_get_token,
+  gtk_css_token_source_at_peek_token,
   gtk_css_token_source_at_error
 };
 

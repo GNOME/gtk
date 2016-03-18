@@ -269,12 +269,10 @@ gtk_css_shadows_value_token_parse (GtkCssTokenSource *source,
         }
 
       g_ptr_array_add (values, value);
-      gtk_css_token_source_consume_whitespace (source);
       token = gtk_css_token_source_get_token (source);
       if (!gtk_css_token_is (token, GTK_CSS_TOKEN_COMMA))
         break;
       gtk_css_token_source_consume_token (source);
-      gtk_css_token_source_consume_whitespace (source);
     }
 
   result = gtk_css_shadows_value_new ((GtkCssValue **) values->pdata, values->len);

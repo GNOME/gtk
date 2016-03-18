@@ -270,7 +270,6 @@ gtk_css_palette_value_token_parse (GtkCssTokenSource *source)
         }
       ident = g_strdup (token->string.string);
       gtk_css_token_source_consume_token (source);
-      gtk_css_token_source_consume_whitespace (source);
       
       color = gtk_css_color_value_token_parse (source);
       if (color == NULL)
@@ -283,12 +282,10 @@ gtk_css_palette_value_token_parse (GtkCssTokenSource *source)
       gtk_css_palette_value_add_color (result, ident, color);
       g_free (ident);
 
-      gtk_css_token_source_consume_whitespace (source);
       token = gtk_css_token_source_get_token (source);
       if (!gtk_css_token_is (token, GTK_CSS_TOKEN_COMMA))
         break;
       gtk_css_token_source_consume_token (source);
-      gtk_css_token_source_consume_whitespace (source);
   }
 
   return result;

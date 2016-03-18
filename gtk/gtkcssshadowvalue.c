@@ -319,14 +319,12 @@ gtk_css_shadow_value_token_parse (GtkCssTokenSource *source,
         {
           inset = TRUE;
           gtk_css_token_source_consume_token (source);
-          gtk_css_token_source_consume_whitespace (source);
         }
       else if (values[COLOR] == NULL && gtk_css_color_value_check_token (token))
         {
           values[COLOR] = gtk_css_color_value_token_parse (source);
           if (values[COLOR] == NULL)
             goto fail;
-          gtk_css_token_source_consume_whitespace (source);
         }
       else if (values[HOFFSET] == NULL && gtk_css_number_value_check_token (token))
         {
@@ -335,14 +333,12 @@ gtk_css_shadow_value_token_parse (GtkCssTokenSource *source,
                                                               | GTK_CSS_NUMBER_AS_PIXELS);
           if (values[HOFFSET] == NULL)
             goto fail;
-          gtk_css_token_source_consume_whitespace (source);
 
           values[VOFFSET] = gtk_css_number_value_token_parse (source,
                                                               GTK_CSS_PARSE_LENGTH
                                                               | GTK_CSS_NUMBER_AS_PIXELS);
           if (values[VOFFSET] == NULL)
             goto fail;
-          gtk_css_token_source_consume_whitespace (source);
 
           if (gtk_css_number_value_check_token (gtk_css_token_source_get_token (source)))
             {
@@ -352,7 +348,6 @@ gtk_css_shadow_value_token_parse (GtkCssTokenSource *source,
                                                                  | GTK_CSS_NUMBER_AS_PIXELS);
               if (values[RADIUS] == NULL)
                 goto fail;
-              gtk_css_token_source_consume_whitespace (source);
             }
           else
             values[RADIUS] = _gtk_css_number_value_new (0.0, GTK_CSS_PX);
@@ -365,7 +360,6 @@ gtk_css_shadow_value_token_parse (GtkCssTokenSource *source,
                                                                | GTK_CSS_NUMBER_AS_PIXELS);
             if (values[SPREAD] == NULL)
               goto fail;
-            gtk_css_token_source_consume_whitespace (source);
           }
         else
           values[SPREAD] = _gtk_css_number_value_new (0.0, GTK_CSS_PX);

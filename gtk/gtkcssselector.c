@@ -1315,7 +1315,12 @@ token_parse_selector_class (GtkCssTokenSource *source,
   const GtkCssToken *token;
 
   gtk_css_token_source_consume_token (source);
-  token = gtk_css_token_source_get_token (source);
+  for (token = gtk_css_token_source_peek_token (source);
+       gtk_css_token_is (token, GTK_CSS_TOKEN_COMMENT);
+       token = gtk_css_token_source_peek_token (source))
+    {
+      gtk_css_token_source_consume_token (source);
+    }
 
   if (gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
     {
@@ -1343,7 +1348,6 @@ parse_plus_b (GtkCssTokenSource *source,
   const GtkCssToken *token;
   gboolean has_seen_sign;
 
-  gtk_css_token_source_consume_whitespace (source);
   token = gtk_css_token_source_get_token (source);
 
   if (negate)
@@ -1355,13 +1359,11 @@ parse_plus_b (GtkCssTokenSource *source,
       if (gtk_css_token_is_delim (token, '+'))
         {
           gtk_css_token_source_consume_token (source);
-          gtk_css_token_source_consume_whitespace (source);
           has_seen_sign = TRUE;
         }
       else if (gtk_css_token_is_delim (token, '-'))
         {
           gtk_css_token_source_consume_token (source);
-          gtk_css_token_source_consume_whitespace (source);
           negate = TRUE;
           has_seen_sign = TRUE;
         }
@@ -1456,6 +1458,7 @@ parse_a_n_plus_b (GtkCssTokenSource *source,
   gtk_css_token_source_error (source, "Not a valid an+b type");
   return FALSE;
 }
+
 GtkCssSelector *
 token_parse_selector_pseudo_class (GtkCssTokenSource *source,
                                    GtkCssSelector    *selector,
@@ -1464,7 +1467,12 @@ token_parse_selector_pseudo_class (GtkCssTokenSource *source,
   const GtkCssToken *token;
 
   gtk_css_token_source_consume_token (source);
-  token = gtk_css_token_source_get_token (source);
+  for (token = gtk_css_token_source_peek_token (source);
+       gtk_css_token_is (token, GTK_CSS_TOKEN_COMMENT);
+       token = gtk_css_token_source_peek_token (source))
+    {
+      gtk_css_token_source_consume_token (source);
+    }
 
   if (gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
     {
@@ -1534,7 +1542,6 @@ token_parse_selector_pseudo_class (GtkCssTokenSource *source,
                 _gtk_css_selector_free (selector);
               return NULL;
             }
-          gtk_css_token_source_consume_whitespace (source);
           token = gtk_css_token_source_get_token (source);
           if (!gtk_css_token_is (token, GTK_CSS_TOKEN_CLOSE_PARENS))
             {
@@ -1563,7 +1570,6 @@ token_parse_selector_pseudo_class (GtkCssTokenSource *source,
                 _gtk_css_selector_free (selector);
               return NULL;
             }
-          gtk_css_token_source_consume_whitespace (source);
           token = gtk_css_token_source_get_token (source);
           if (!gtk_css_token_is (token, GTK_CSS_TOKEN_CLOSE_PARENS))
             {
@@ -1622,7 +1628,6 @@ token_parse_selector_pseudo_class (GtkCssTokenSource *source,
                   return NULL;
                 }
 
-              gtk_css_token_source_consume_whitespace (source);
               token = gtk_css_token_source_get_token (source);
               if (gtk_css_token_is (token, GTK_CSS_TOKEN_CLOSE_PARENS))
                 {
@@ -1641,7 +1646,6 @@ token_parse_selector_pseudo_class (GtkCssTokenSource *source,
       else if (gtk_css_token_is_function (token, "dir"))
         {
           gtk_css_token_source_consume_token (source);
-          gtk_css_token_source_consume_whitespace (source);
           token = gtk_css_token_source_get_token (source);
           if (gtk_css_token_is_ident (token, "ltr"))
             {
@@ -1667,7 +1671,6 @@ token_parse_selector_pseudo_class (GtkCssTokenSource *source,
               selector = NULL;
               return NULL;
             }
-          gtk_css_token_source_consume_whitespace (source);
           token = gtk_css_token_source_get_token (source);
           if (!gtk_css_token_is (token, GTK_CSS_TOKEN_CLOSE_PARENS))
             {
@@ -1681,7 +1684,6 @@ token_parse_selector_pseudo_class (GtkCssTokenSource *source,
       else if (gtk_css_token_is_function (token, "drop"))
         {
           gtk_css_token_source_consume_token (source);
-          gtk_css_token_source_consume_whitespace (source);
           token = gtk_css_token_source_get_token (source);
           if (gtk_css_token_is_ident (token, "active"))
             {
@@ -1699,7 +1701,6 @@ token_parse_selector_pseudo_class (GtkCssTokenSource *source,
               selector = NULL;
               return NULL;
             }
-          gtk_css_token_source_consume_whitespace (source);
           token = gtk_css_token_source_get_token (source);
           if (!gtk_css_token_is (token, GTK_CSS_TOKEN_CLOSE_PARENS))
             {
@@ -1737,7 +1738,12 @@ token_parse_simple_selector (GtkCssTokenSource *source,
   const GtkCssToken *token;
 
   do {
-      token = gtk_css_token_source_get_token (source);
+      for (token = gtk_css_token_source_peek_token (source);
+           gtk_css_token_is (token, GTK_CSS_TOKEN_COMMENT);
+           token = gtk_css_token_source_peek_token (source))
+        {
+          gtk_css_token_source_consume_token (source);
+        }
 
       if (!parsed_something && gtk_css_token_is_delim (token, '*'))
         {
@@ -1800,8 +1806,14 @@ gtk_css_selector_token_parse (GtkCssTokenSource *source)
           return NULL;
         }
 
-      seen_whitespace = gtk_css_token_source_consume_whitespace (source);
-      token = gtk_css_token_source_get_token (source);
+      for (token = gtk_css_token_source_peek_token (source);
+           gtk_css_token_is (token, GTK_CSS_TOKEN_COMMENT) || 
+           gtk_css_token_is (token, GTK_CSS_TOKEN_WHITESPACE);
+           token = gtk_css_token_source_peek_token (source))
+        {
+          seen_whitespace |= gtk_css_token_is (token, GTK_CSS_TOKEN_WHITESPACE);
+          gtk_css_token_source_consume_token (source);
+        }
 
       if (gtk_css_token_is_delim (token, '+'))
         {
@@ -1834,7 +1846,7 @@ gtk_css_selector_token_parse (GtkCssTokenSource *source)
           return NULL;
         }
 
-      gtk_css_token_source_consume_whitespace (source);
+      token = gtk_css_token_source_get_token (source);
     }
 
   return selector;

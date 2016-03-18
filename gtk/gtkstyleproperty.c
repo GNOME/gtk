@@ -187,14 +187,10 @@ gtk_style_property_token_parse (GtkStyleProperty  *property,
 
   klass = GTK_STYLE_PROPERTY_GET_CLASS (property);
 
-  gtk_css_token_source_consume_whitespace (source);
-
   value = klass->token_parse (property, source);
 
   if (value == NULL)
     return NULL;
-
-  gtk_css_token_source_consume_whitespace (source);
 
   if (!gtk_css_token_is (gtk_css_token_source_get_token (source),
                          GTK_CSS_TOKEN_EOF))

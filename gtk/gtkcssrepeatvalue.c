@@ -249,7 +249,6 @@ gtk_css_background_repeat_value_token_parse (GtkCssTokenSource *source)
     }
 
   gtk_css_token_source_consume_token (source);
-  gtk_css_token_source_consume_whitespace (source);
   token = gtk_css_token_source_get_token (source);
   if (gtk_css_background_repeat_value_from_token (token, &y))
     gtk_css_token_source_consume_token (source);
@@ -381,7 +380,6 @@ gtk_css_border_repeat_value_token_parse (GtkCssTokenSource *source)
     }
 
   gtk_css_token_source_consume_token (source);
-  gtk_css_token_source_consume_whitespace (source);
   token = gtk_css_token_source_get_token (source);
   if (gtk_css_border_repeat_value_from_token (token, &y))
     gtk_css_token_source_consume_token (source);

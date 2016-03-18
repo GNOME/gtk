@@ -296,7 +296,6 @@ font_family_token_parse_one (GtkCssTokenSource *source)
       GString *string = g_string_new (token->string.string);
 
       gtk_css_token_source_consume_token (source);
-      gtk_css_token_source_consume_whitespace (source);
       for (token = gtk_css_token_source_get_token (source);
            gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT);
            token = gtk_css_token_source_get_token (source))
@@ -304,7 +303,6 @@ font_family_token_parse_one (GtkCssTokenSource *source)
           g_string_append_c (string, ' ');
           g_string_append (string, token->string.string);
           gtk_css_token_source_consume_token (source);
-          gtk_css_token_source_consume_whitespace (source);
         }
 
       return _gtk_css_string_value_new_take (g_string_free (string, FALSE));

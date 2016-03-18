@@ -506,7 +506,6 @@ gtk_css_calc_value_token_parse_value (GtkCssTokenSource      *source,
   else if (gtk_css_token_is (token, GTK_CSS_TOKEN_OPEN_PARENS))
     {
       gtk_css_token_source_consume_token (source);
-      gtk_css_token_source_consume_whitespace (source);
 
       result = gtk_css_calc_value_token_parse_sum (source, flags);
       if (result == NULL)
@@ -522,7 +521,6 @@ gtk_css_calc_value_token_parse_value (GtkCssTokenSource      *source,
         }
 
       gtk_css_token_source_consume_token (source);
-      gtk_css_token_source_consume_whitespace (source);
 
       return result;
     }
@@ -531,8 +529,6 @@ gtk_css_calc_value_token_parse_value (GtkCssTokenSource      *source,
       result = gtk_css_number_value_token_parse (source, flags);
       if (result == NULL)
         return NULL;
-
-      gtk_css_token_source_consume_whitespace (source);
     }
 
   return result;
@@ -561,7 +557,6 @@ gtk_css_calc_value_token_parse_product (GtkCssTokenSource      *source,
       if (gtk_css_token_is_delim (token, '*'))
         {
           gtk_css_token_source_consume_token (source);
-          gtk_css_token_source_consume_whitespace (source);
 
           value = gtk_css_calc_value_token_parse_product (source, actual_flags);
           if (value == NULL)
@@ -577,7 +572,6 @@ gtk_css_calc_value_token_parse_product (GtkCssTokenSource      *source,
       else if (gtk_css_token_is_delim (token, '/'))
         {
           gtk_css_token_source_consume_token (source);
-          gtk_css_token_source_consume_whitespace (source);
 
           value = gtk_css_calc_value_token_parse_product (source, GTK_CSS_PARSE_NUMBER);
           if (value == NULL)
@@ -626,7 +620,6 @@ gtk_css_calc_value_token_parse_sum (GtkCssTokenSource      *source,
       if (gtk_css_token_is_delim (token, '+'))
         {
           gtk_css_token_source_consume_token (source);
-          gtk_css_token_source_consume_whitespace (source);
 
           next = gtk_css_calc_value_token_parse_product (source, flags);
           if (next == NULL)
@@ -635,7 +628,6 @@ gtk_css_calc_value_token_parse_sum (GtkCssTokenSource      *source,
       else if (gtk_css_token_is_delim (token, '-'))
         {
           gtk_css_token_source_consume_token (source);
-          gtk_css_token_source_consume_whitespace (source);
 
           temp = gtk_css_calc_value_token_parse_product (source, flags);
           if (temp == NULL)
@@ -681,7 +673,6 @@ gtk_css_calc_value_token_parse (GtkCssTokenSource      *source,
       return NULL;
     }
   gtk_css_token_source_consume_token (source);
-  gtk_css_token_source_consume_whitespace (source);
 
   value = gtk_css_calc_value_token_parse_sum (source, flags);
   if (value == NULL)

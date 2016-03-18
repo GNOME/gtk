@@ -164,7 +164,6 @@ gtk_css_corner_value_token_parse (GtkCssTokenSource *source)
   if (x == NULL)
     return NULL;
 
-  gtk_css_token_source_consume_whitespace (source);
   if (gtk_css_token_is (gtk_css_token_source_get_token (source), GTK_CSS_TOKEN_EOF))
     y = _gtk_css_value_ref (x);
   else
