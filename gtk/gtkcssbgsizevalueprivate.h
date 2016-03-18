@@ -20,8 +20,9 @@
 #ifndef __GTK_CSS_BG_SIZE_VALUE_PRIVATE_H__
 #define __GTK_CSS_BG_SIZE_VALUE_PRIVATE_H__
 
-#include "gtkcssparserprivate.h"
 #include "gtkcssimageprivate.h"
+#include "gtkcssparserprivate.h"
+#include "gtkcsstokensourceprivate.h"
 #include "gtkcssvalueprivate.h"
 
 G_BEGIN_DECLS
@@ -29,6 +30,7 @@ G_BEGIN_DECLS
 GtkCssValue *   _gtk_css_bg_size_value_new          (GtkCssValue            *x,
                                                      GtkCssValue            *y);
 GtkCssValue *   _gtk_css_bg_size_value_parse        (GtkCssParser           *parser);
+GtkCssValue *   gtk_css_bg_size_value_token_parse   (GtkCssTokenSource      *source);
 
 void            _gtk_css_bg_size_value_compute_size (const GtkCssValue      *bg_size,
                                                      GtkCssImage            *image,

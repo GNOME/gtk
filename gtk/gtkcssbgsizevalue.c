@@ -212,6 +212,65 @@ _gtk_css_bg_size_value_parse (GtkCssParser *parser)
   return _gtk_css_bg_size_value_new (x, y);
 }
 
+GtkCssValue *
+gtk_css_bg_size_value_token_parse (GtkCssTokenSource *source)
+{
+  const GtkCssToken *token;
+  GtkCssValue *x, *y;
+
+  token = gtk_css_token_source_get_token (source);
+  if (gtk_css_token_is_ident (token, "cover"))
+    {
+      gtk_css_token_source_consume_token (source);
+      return _gtk_css_value_ref (&cover_singleton);
+    }
+  if (gtk_css_token_is_ident (token, "contain"))
+    {
+      gtk_css_token_source_consume_token (source);
+      return _gtk_css_value_ref (&contain_singleton);
+    }
+
+  if (gtk_css_token_is_ident (token, "auto"))
+    {
+      gtk_css_token_source_consume_token (source);
+      x = NULL;
+    }
+  else
+    {
+      x = gtk_css_number_value_token_parse (source,
+                                            GTK_CSS_POSITIVE_ONLY
+                                            | GTK_CSS_PARSE_PERCENT
+                                            | GTK_CSS_PARSE_LENGTH);
+      if (x == NULL)
+        return NULL;
+    }
+
+  token = gtk_css_token_source_get_token (source);
+  if (gtk_css_token_is_ident (token, "auto"))
+    {
+      gtk_css_token_source_consume_token (source);
+      y = NULL;
+    }
+  else if (!gtk_css_number_value_check_token (token))
+    {
+      y = NULL;
+    }
+  else
+    {
+      y = gtk_css_number_value_token_parse (source,
+                                            GTK_CSS_POSITIVE_ONLY
+                                            | GTK_CSS_PARSE_PERCENT
+                                            | GTK_CSS_PARSE_LENGTH);
+      if (y == NULL)
+        {
+          _gtk_css_value_unref (x);
+          return NULL;
+        }
+    }
+
+  return _gtk_css_bg_size_value_new (x, y);
+}
+
 static void
 gtk_css_bg_size_compute_size_for_cover_contain (gboolean     cover,
                                                 GtkCssImage *image,

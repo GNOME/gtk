@@ -1438,6 +1438,13 @@ background_size_parse (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
+background_size_token_parse (GtkCssTokenSource   *source,
+                             GtkCssStyleProperty *property)
+{
+  return gtk_css_array_value_token_parse (source, gtk_css_bg_size_value_token_parse);
+}
+
+static GtkCssValue *
 background_position_parse (GtkCssStyleProperty *property,
 			   GtkCssParser        *parser)
 {
@@ -1962,7 +1969,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_BACKGROUND,
                                           background_size_parse,
-                                          gtk_css_style_property_token_parse_default,
+                                          background_size_token_parse,
                                           NULL,
                                           NULL,
                                           _gtk_css_array_value_new (_gtk_css_bg_size_value_new (NULL, NULL)));
