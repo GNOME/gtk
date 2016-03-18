@@ -16,6 +16,11 @@ $borders_color: mix($bg_color,$fg_color,50%);
 $borders_edge: if($variant == 'light', #fff, #000);
 $link_color: $selected_bg_color;
 
+$scrollbar_bg_color: if($variant == 'light', mix($bg_color, $fg_color, 95%), mix($base_color, $bg_color, 60%));
+$scrollbar_slider_color: mix($fg_color, $bg_color, 60%);
+$scrollbar_slider_hover_color: mix($fg_color, $bg_color, 80%);
+$scrollbar_slider_active_color: if($variant=='light', darken($selected_bg_color, 10%), lighten($selected_bg_color, 10%));
+
 $suggested_color: #4a90d9;
 $warning_color: #f57900;
 $error_color: #cc0000;
@@ -38,6 +43,8 @@ $backdrop_bg_color: $bg_color;
 $backdrop_fg_color: $fg_color;
 $backdrop_borders_color: mix($borders_color, $bg_color, 90%);
 $backdrop_dark_fill: mix($fg_color, $bg_color, 30%);
+$backdrop_scrollbar_bg_color: darken($backdrop_bg_color, 3%);
+$backdrop_scrollbar_slider_color: mix($backdrop_fg_color, $backdrop_bg_color, 40%);
 
 //apps rely on some named colors to be exported
 /* GTK NAMED COLORS */
