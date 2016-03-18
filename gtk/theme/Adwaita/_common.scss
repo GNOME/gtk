@@ -2986,7 +2986,7 @@ scale {
       }
 
       slider {
-        &:hover, &:backdrop, & {
+        &:hover, &:backdrop, &:disabled, &:backdrop:disabled, & {
           @extend %scale-has-marks-above-horz;
 
           margin-bottom: -15px;
@@ -3007,7 +3007,7 @@ scale {
         }
 
         slider {
-          &:hover, &:backdrop, & {
+          &:hover, &:backdrop, &:disabled, &:backdrop:disabled, & {
             @extend %scale-has-marks-below-vert;
 
             margin-left: -15px;
@@ -3027,7 +3027,7 @@ scale {
         }
 
         slider {
-          &:hover, &:backdrop, & {
+          &:hover, &:backdrop, &:disabled, &:backdrop:disabled, & {
             @extend %scale-has-marks-above-vert;
 
             margin-right: -15px;

@@ -2869,7 +2869,7 @@ scale {
     min-width: 6px; }
   scale.vertical.fine-tune indicator {
     min-width: 3px; }
-  scale.color.horizontal slider:hover, scale.color.horizontal slider:backdrop, scale.color.horizontal slider,
+  scale.color.horizontal slider:hover, scale.color.horizontal slider:backdrop, scale.color.horizontal slider:disabled, scale.color.horizontal slider:backdrop:disabled, scale.color.horizontal slider,
   scale.horizontal contents:last-child:not(:only-child) > trough > slider {
     margin: -10px;
     border-style: none;
@@ -2884,7 +2884,7 @@ scale {
   scale.color.fine-tune.horizontal slider, scale.horizontal.fine-tune contents:last-child:not(:only-child) > trough > slider {
     margin: -7px;
     margin-top: -11px; }
-  scale.color.horizontal slider:hover,
+  scale.color.horizontal slider:hover, scale.color.horizontal slider:hover:backdrop:disabled,
   scale.horizontal contents:last-child:not(:only-child) > trough > slider:hover {
     margin: -10px;
     border-style: none;
@@ -2899,7 +2899,7 @@ scale {
   scale.color.fine-tune.horizontal slider, scale.horizontal.fine-tune contents:last-child:not(:only-child) > trough > slider {
     margin: -7px;
     margin-top: -11px; }
-  scale.color.horizontal slider:active,
+  scale.color.horizontal slider:active:backdrop:disabled, scale.color.horizontal slider:active,
   scale.horizontal contents:last-child:not(:only-child) > trough > slider:active {
     margin: -10px;
     border-style: none;
@@ -3043,7 +3043,7 @@ scale {
   scale.horizontal.fine-tune contents:first-child:not(:only-child) > trough > slider {
     margin: -7px;
     margin-bottom: -11px; }
-  scale.color.vertical:dir(rtl) slider:hover, scale.color.vertical:dir(rtl) slider:backdrop, scale.color.vertical:dir(rtl) slider,
+  scale.color.vertical:dir(rtl) slider:hover, scale.color.vertical:dir(rtl) slider:backdrop, scale.color.vertical:dir(rtl) slider:disabled, scale.color.vertical:dir(rtl) slider:backdrop:disabled, scale.color.vertical:dir(rtl) slider,
   scale.vertical contents:last-child:not(:only-child) > trough > slider {
     margin: -10px;
     border-style: none;
@@ -3058,7 +3058,7 @@ scale {
   scale.color.fine-tune.vertical:dir(rtl) slider, scale.vertical.fine-tune contents:last-child:not(:only-child) > trough > slider {
     margin: -7px;
     margin-left: -11px; }
-  scale.color.vertical:dir(rtl) slider:hover,
+  scale.color.vertical:dir(rtl) slider:hover, scale.color.vertical:dir(rtl) slider:hover:backdrop:disabled,
   scale.vertical contents:last-child:not(:only-child) > trough > slider:hover {
     margin: -10px;
     border-style: none;
@@ -3073,7 +3073,7 @@ scale {
   scale.color.fine-tune.vertical:dir(rtl) slider, scale.vertical.fine-tune contents:last-child:not(:only-child) > trough > slider {
     margin: -7px;
     margin-left: -11px; }
-  scale.color.vertical:dir(rtl) slider:active,
+  scale.color.vertical:dir(rtl) slider:active:backdrop:disabled, scale.color.vertical:dir(rtl) slider:active,
   scale.vertical contents:last-child:not(:only-child) > trough > slider:active {
     margin: -10px;
     border-style: none;
@@ -3133,7 +3133,7 @@ scale {
   scale.color.fine-tune.vertical:dir(rtl) slider, scale.vertical.fine-tune contents:last-child:not(:only-child) > trough > slider {
     margin: -7px;
     margin-left: -11px; }
-  scale.color.vertical:dir(ltr) slider:hover, scale.color.vertical:dir(ltr) slider:backdrop, scale.color.vertical:dir(ltr) slider,
+  scale.color.vertical:dir(ltr) slider:hover, scale.color.vertical:dir(ltr) slider:backdrop, scale.color.vertical:dir(ltr) slider:disabled, scale.color.vertical:dir(ltr) slider:backdrop:disabled, scale.color.vertical:dir(ltr) slider,
   scale.vertical contents:first-child:not(:only-child) > trough > slider {
     margin: -10px;
     border-style: none;
@@ -3148,7 +3148,7 @@ scale {
   scale.color.fine-tune.vertical:dir(ltr) slider, scale.vertical.fine-tune contents:first-child:not(:only-child) > trough > slider {
     margin: -7px;
     margin-right: -11px; }
-  scale.color.vertical:dir(ltr) slider:hover,
+  scale.color.vertical:dir(ltr) slider:hover, scale.color.vertical:dir(ltr) slider:hover:backdrop:disabled,
   scale.vertical contents:first-child:not(:only-child) > trough > slider:hover {
     margin: -10px;
     border-style: none;
@@ -3163,7 +3163,7 @@ scale {
   scale.color.fine-tune.vertical:dir(ltr) slider, scale.vertical.fine-tune contents:first-child:not(:only-child) > trough > slider {
     margin: -7px;
     margin-right: -11px; }
-  scale.color.vertical:dir(ltr) slider:active,
+  scale.color.vertical:dir(ltr) slider:active:backdrop:disabled, scale.color.vertical:dir(ltr) slider:active,
   scale.vertical contents:first-child:not(:only-child) > trough > slider:active {
     margin: -10px;
     border-style: none;
@@ -3236,7 +3236,7 @@ scale {
         background-position: 0 -3px;
         border-top-left-radius: 0;
         border-top-right-radius: 0; }
-      scale.color.horizontal slider:hover, scale.color.horizontal slider:backdrop, scale.color.horizontal slider {
+      scale.color.horizontal slider:hover, scale.color.horizontal slider:backdrop, scale.color.horizontal slider:disabled, scale.color.horizontal slider:backdrop:disabled, scale.color.horizontal slider {
         margin-bottom: -15px;
         margin-top: 6px; }
     scale.color.vertical:dir(ltr) {
@@ -3246,7 +3246,7 @@ scale {
         background-position: 3px 0;
         border-bottom-right-radius: 0;
         border-top-right-radius: 0; }
-      scale.color.vertical:dir(ltr) slider:hover, scale.color.vertical:dir(ltr) slider:backdrop, scale.color.vertical:dir(ltr) slider {
+      scale.color.vertical:dir(ltr) slider:hover, scale.color.vertical:dir(ltr) slider:backdrop, scale.color.vertical:dir(ltr) slider:disabled, scale.color.vertical:dir(ltr) slider:backdrop:disabled, scale.color.vertical:dir(ltr) slider {
         margin-left: -15px;
         margin-right: 6px; }
     scale.color.vertical:dir(rtl) {
@@ -3256,7 +3256,7 @@ scale {
         background-position: -3px 0;
         border-bottom-left-radius: 0;
         border-top-left-radius: 0; }
-      scale.color.vertical:dir(rtl) slider:hover, scale.color.vertical:dir(rtl) slider:backdrop, scale.color.vertical:dir(rtl) slider {
+      scale.color.vertical:dir(rtl) slider:hover, scale.color.vertical:dir(rtl) slider:backdrop, scale.color.vertical:dir(rtl) slider:disabled, scale.color.vertical:dir(rtl) slider:backdrop:disabled, scale.color.vertical:dir(rtl) slider {
         margin-right: -15px;
         margin-left: 6px; }
     scale.color.fine-tune.horizontal {
@@ -3771,12 +3771,12 @@ paned > separator {
   -gtk-icon-source: none;
   border-style: none;
   background-color: transparent;
-  background-image: linear-gradient(to top, #9d9d99);
+  background-image: image(#9d9d99);
   background-size: 1px 1px; }
   paned > separator:selected {
-    background-image: linear-gradient(to top, #4a90d9); }
+    background-image: image(#4a90d9); }
   paned > separator:backdrop {
-    background-image: linear-gradient(to top, #a5a5a1); }
+    background-image: image(#a5a5a1); }
   paned > separator.wide {
     min-width: 5px;
     min-height: 5px;
