@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-14 23:11+0000\n"
-"PO-Revision-Date: 2016-03-17 21:06+0100\n"
+"POT-Creation-Date: 2016-03-18 00:20+0000\n"
+"PO-Revision-Date: 2016-03-18 09:27+0100\n"
 "Last-Translator: Milo Casagrande <milo@milo.name>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -5593,7 +5593,7 @@ msgstr "Famiglia carattere"
 
 #: gtk/ui/gtkfontchooserwidget.ui:119
 msgid "Preview text"
-msgstr "Anteprima testo"
+msgstr "Testo di anteprima"
 
 #: gtk/ui/gtkfontchooserwidget.ui:186
 msgid "No Fonts Found"
@@ -5640,7 +5640,7 @@ msgstr "Su nel percorso"
 #. Translators: Server as any successfully connected network address
 #: gtk/ui/gtkplacesview.ui:42
 msgid "No recent servers found"
-msgstr "Nessuna server recente trovato"
+msgstr "Nessun server recente trovato"
 
 #: gtk/ui/gtkplacesview.ui:65
 msgid "Recent Servers"
