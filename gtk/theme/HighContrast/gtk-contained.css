@@ -1095,7 +1095,8 @@ spinbutton:not(.vertical) {
     spinbutton:not(.vertical) button:disabled {
       color: rgba(128, 128, 128, 0.3); }
     spinbutton:not(.vertical) button:active {
-      background-color: rgba(0, 0, 0, 0.1); }
+      background-color: rgba(0, 0, 0, 0.8);
+      color: #fff; }
     spinbutton:not(.vertical) button:backdrop {
       color: #000;
       background-color: transparent;
@@ -1133,6 +1134,9 @@ spinbutton:not(.vertical) {
     box-shadow: none; }
     .osd spinbutton:not(.vertical) button:dir(rtl) {
       border-style: none solid none none; }
+    .osd spinbutton:not(.vertical) button:active {
+      background-color: rgba(0, 0, 0, 0.8);
+      color: #fff; }
     .osd spinbutton:not(.vertical) button:hover {
       border-width: 2px;
       border-style: solid;

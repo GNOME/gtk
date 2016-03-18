@@ -934,7 +934,8 @@ spinbutton {
       &:disabled { color: transparentize($insensitive_fg_color, 0.7); }
 
       &:active {
-        background-color: transparentize(black, 0.9);
+        background-color: $osd_bg_color;
+        color: $osd_fg_color;
       }
 
       &:backdrop {
@@ -984,6 +985,10 @@ spinbutton {
 
       &:dir(rtl) { border-style: none solid none none; }
 
+      &:active {
+        background-color: $osd_bg_color;
+        color: $osd_fg_color;
+      }
       &:hover {
         @include button(undecorated);
         
@@ -1090,7 +1095,6 @@ spinbutton {
     }
   }
 }
-
 
 /**************
  * ComboBoxes *
