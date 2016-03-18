@@ -333,28 +333,19 @@ token_parse_cubic_bezier (GtkCssTokenSource *source,
                           gpointer           data)
 {
   double *numbers = data;
-  const GtkCssToken *token;
 
-  token = gtk_css_token_source_get_token (source);
-  if (gtk_css_token_is (token, GTK_CSS_TOKEN_INTEGER) ||
-      gtk_css_token_is (token, GTK_CSS_TOKEN_NUMBER))
+  if (!gtk_css_token_source_consume_number (source, &numbers[n]))
+    return FALSE;
+
+  /* XXX: This error is too late */
+  if (n % 2 == 0 &&
+      (numbers[n] < 0 || numbers[n] > 1.0))
     {
-      numbers[n] = token->number.number;
-      if (n % 2 == 0 &&
-          (numbers[n] < 0 || numbers[n] > 1.0))
-        {
-          gtk_css_token_source_error (source, "Value %g out of range. Must be from 0.0 to 1.0", numbers[n]);
-          return FALSE;
-        }
-      gtk_css_token_source_consume_token (source);
-      return TRUE;
-    }
-  else
-    {
-      gtk_css_token_source_error (source, "Expected a number");
-      gtk_css_token_source_consume_all (source);
+      gtk_css_token_source_error (source, "Value %g out of range. Must be from 0.0 to 1.0", numbers[n]);
       return FALSE;
     }
+
+  return TRUE;
 }
 
 static gboolean

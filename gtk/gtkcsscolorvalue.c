@@ -875,28 +875,6 @@ parse_comma (GtkCssTokenSource *source)
 }
 
 static gboolean
-parse_number (GtkCssTokenSource *source,
-              double            *d)
-{
-  const GtkCssToken *token;
-
-  token = gtk_css_token_source_get_token (source);
-  if (gtk_css_token_is (token, GTK_CSS_TOKEN_INTEGER) ||
-      gtk_css_token_is (token, GTK_CSS_TOKEN_NUMBER))
-    {
-      *d = token->number.number;
-      gtk_css_token_source_consume_token (source);
-      return TRUE;
-    }
-  else
-    {
-      gtk_css_token_source_error (source, "Expected a number.");
-      gtk_css_token_source_consume_all (source);
-      return FALSE;
-    }
-}
-
-static gboolean
 parse_percentage (GtkCssTokenSource *source,
                   double            *d)
 {
@@ -982,11 +960,11 @@ gtk_css_color_value_token_parse (GtkCssTokenSource *source)
             }
           else
             {
-              if (!parse_number (source, &rgba.red) ||
+              if (!gtk_css_token_source_consume_number (source, &rgba.red) ||
                   !parse_comma (source) ||
-                  !parse_number (source, &rgba.green) ||
+                  !gtk_css_token_source_consume_number (source, &rgba.green) ||
                   !parse_comma (source) ||
-                  !parse_number (source, &rgba.blue))
+                  !gtk_css_token_source_consume_number (source, &rgba.blue))
                 return NULL;
               rgba.red = CLAMP (rgba.red, 0, 255.0) / 255.0;
               rgba.green = CLAMP (rgba.green, 0, 255.0) / 255.0;
@@ -996,7 +974,7 @@ gtk_css_color_value_token_parse (GtkCssTokenSource *source)
           if (has_alpha)
             {
               if (!parse_comma (source) ||
-                  !parse_number (source, &rgba.alpha))
+                  !gtk_css_token_source_consume_number (source, &rgba.alpha))
                 return NULL;
               rgba.alpha = CLAMP (rgba.alpha, 0, 1.0);
             }
@@ -1044,7 +1022,7 @@ gtk_css_color_value_token_parse (GtkCssTokenSource *source)
           if (child == NULL)
             return NULL;
           if (!parse_comma (source) ||
-              !parse_number (source, &d))
+              !gtk_css_token_source_consume_number (source, &d))
             {
               _gtk_css_value_unref (child);
               return NULL;
@@ -1065,7 +1043,7 @@ gtk_css_color_value_token_parse (GtkCssTokenSource *source)
           if (child == NULL)
             return NULL;
           if (!parse_comma (source) ||
-              !parse_number (source, &d))
+              !gtk_css_token_source_consume_number (source, &d))
             {
               _gtk_css_value_unref (child);
               return NULL;
@@ -1092,7 +1070,7 @@ gtk_css_color_value_token_parse (GtkCssTokenSource *source)
               return NULL;
             }
           if (!parse_comma (source) ||
-              !parse_number (source, &d))
+              !gtk_css_token_source_consume_number (source, &d))
             {
               _gtk_css_value_unref (child1);
               _gtk_css_value_unref (child2);

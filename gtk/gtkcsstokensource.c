@@ -21,6 +21,7 @@
 
 #include "gtkcsstokensourceprivate.h"
 
+#include "gtkcssnumbervalueprivate.h"
 #include "gtkcssprovider.h"
 
 typedef struct _GtkCssTokenSourceTokenizer GtkCssTokenSourceTokenizer;
@@ -390,6 +391,32 @@ gtk_css_token_source_consume_function (GtkCssTokenSource      *source,
   g_free (function_name);
 
   return result;
+}
+
+gboolean
+gtk_css_token_source_consume_number (GtkCssTokenSource *source,
+                                     double            *number)
+{
+  const GtkCssToken *token;
+  GtkCssValue *value;
+
+  token = gtk_css_token_source_get_token (source);
+  if (gtk_css_token_is (token, GTK_CSS_TOKEN_NUMBER) ||
+      gtk_css_token_is (token, GTK_CSS_TOKEN_INTEGER))
+    {
+      *number = token->number.number;
+      gtk_css_token_source_consume_token (source);
+      return TRUE;
+    }
+
+  /* because CSS allows calc() in numbers. Go CSS! */
+  value = gtk_css_number_value_token_parse (source, GTK_CSS_PARSE_NUMBER);
+  if (value == NULL)
+    return FALSE;
+
+  *number = _gtk_css_number_value_get (value, 100);
+  _gtk_css_value_unref (value);
+  return TRUE;
 }
 
 GtkCssTokenType
