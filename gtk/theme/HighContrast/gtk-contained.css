@@ -2047,7 +2047,9 @@ treeview ~ scrollbar.vertical {
  * Switch *
  **********/
 switch {
-  font: bold condensed 9;
+  font-size: smaller;
+  font-stretch: condensed;
+  font-weight: bold;
   outline-offset: -4px;
   border-width: 1px;
   border-style: solid;
