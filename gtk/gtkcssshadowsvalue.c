@@ -240,6 +240,48 @@ _gtk_css_shadows_value_parse (GtkCssParser *parser,
   return result;
 }
 
+GtkCssValue *
+gtk_css_shadows_value_token_parse (GtkCssTokenSource *source,
+                                   gboolean           box_shadow_mode)
+{
+  GtkCssValue *value, *result;
+  const GtkCssToken *token;
+  GPtrArray *values;
+
+  token = gtk_css_token_source_get_token (source);
+  if (gtk_css_token_is_ident (token, "none"))
+    {
+      gtk_css_token_source_consume_token (source);
+      return _gtk_css_shadows_value_new_none ();
+    }
+
+  values = g_ptr_array_new ();
+
+  while (TRUE)
+    {
+      value = gtk_css_shadow_value_token_parse (source, box_shadow_mode);
+
+      if (value == NULL)
+        {
+          g_ptr_array_set_free_func (values, (GDestroyNotify) _gtk_css_value_unref);
+          g_ptr_array_free (values, TRUE);
+          return NULL;
+        }
+
+      g_ptr_array_add (values, value);
+      gtk_css_token_source_consume_whitespace (source);
+      token = gtk_css_token_source_get_token (source);
+      if (!gtk_css_token_is (token, GTK_CSS_TOKEN_COMMA))
+        break;
+      gtk_css_token_source_consume_token (source);
+      gtk_css_token_source_consume_whitespace (source);
+    }
+
+  result = gtk_css_shadows_value_new ((GtkCssValue **) values->pdata, values->len);
+  g_ptr_array_free (values, TRUE);
+  return result;
+}
+
 gboolean
 _gtk_css_shadows_value_is_none (const GtkCssValue *shadows)
 {

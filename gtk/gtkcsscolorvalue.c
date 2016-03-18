@@ -919,6 +919,27 @@ parse_percentage (GtkCssTokenSource *source,
     }
 }
 
+gboolean
+gtk_css_color_value_check_token (const GtkCssToken *token)
+{
+  GdkRGBA rgba;
+
+  return gtk_css_token_is_ident (token, "currentColor")
+      || gtk_css_token_is_ident (token, "transparent")
+      || gtk_css_token_is_function (token, "rgb")
+      || gtk_css_token_is_function (token, "rgba")
+      || gtk_css_token_is_function (token, "lighter")
+      || gtk_css_token_is_function (token, "darker")
+      || gtk_css_token_is_function (token, "shade")
+      || gtk_css_token_is_function (token, "alpha")
+      || gtk_css_token_is_function (token, "mix")
+      || gtk_css_token_is_function (token, GTK_WIN32_THEME_SYMBOLIC_COLOR_NAME)
+      || gtk_css_token_is (token, GTK_CSS_TOKEN_AT_KEYWORD)
+      || gtk_css_token_is (token, GTK_CSS_TOKEN_HASH_ID)
+      || gtk_css_token_is (token, GTK_CSS_TOKEN_HASH_UNRESTRICTED)
+      || (gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT) && gdk_rgba_parse (&rgba, token->string.string));
+}
+
 GtkCssValue *
 gtk_css_color_value_token_parse (GtkCssTokenSource *source)
 {
@@ -967,6 +988,7 @@ gtk_css_color_value_token_parse (GtkCssTokenSource *source)
               if (!parse_number (source, &rgba.red) ||
                   !parse_comma (source) ||
                   !parse_number (source, &rgba.green) ||
+                  !parse_comma (source) ||
                   !parse_number (source, &rgba.blue))
                 return NULL;
               rgba.red = CLAMP (rgba.red, 0, 255.0) / 255.0;

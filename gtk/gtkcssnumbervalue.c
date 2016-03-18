@@ -158,6 +158,24 @@ _gtk_css_number_value_parse (GtkCssParser           *parser,
   return gtk_css_dimension_value_parse (parser, flags);
 }
 
+gboolean
+gtk_css_number_value_check_token (const GtkCssToken *token)
+{
+  return gtk_css_token_is (token, GTK_CSS_TOKEN_INTEGER)
+      || gtk_css_token_is (token, GTK_CSS_TOKEN_NUMBER)
+      || gtk_css_token_is (token, GTK_CSS_TOKEN_DIMENSION)
+      || gtk_css_token_is (token, GTK_CSS_TOKEN_INTEGER_DIMENSION)
+      || gtk_css_token_is (token, GTK_CSS_TOKEN_PERCENTAGE)
+      || gtk_css_token_is_function (token, "calc")
+      || gtk_css_token_is_function (token, "-gtk-win32-size")
+      || gtk_css_token_is_function (token, "-gtk-win32-part-width")
+      || gtk_css_token_is_function (token, "-gtk-win32-part-height")
+      || gtk_css_token_is_function (token, "-gtk-win32-part-border-top")
+      || gtk_css_token_is_function (token, "-gtk-win32-part-border-left")
+      || gtk_css_token_is_function (token, "-gtk-win32-part-border-bottom")
+      || gtk_css_token_is_function (token, "-gtk-win32-part-border-right");
+}
+
 GtkCssValue *
 gtk_css_number_value_token_parse (GtkCssTokenSource      *source,
                                   GtkCssNumberParseFlags  flags)

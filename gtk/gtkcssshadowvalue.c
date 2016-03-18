@@ -293,6 +293,110 @@ fail:
   return NULL;
 }
 
+GtkCssValue *
+gtk_css_shadow_value_token_parse (GtkCssTokenSource *source,
+                                  gboolean           box_shadow_mode)
+{
+  enum {
+    HOFFSET,
+    VOFFSET,
+    RADIUS,
+    SPREAD,
+    COLOR,
+    N_VALUES
+  };
+  GtkCssValue *values[N_VALUES] = { NULL, };
+  gboolean inset = FALSE;
+  const GtkCssToken *token;
+  guint i;
+
+  for (token = gtk_css_token_source_get_token (source);
+       !gtk_css_token_is (token, GTK_CSS_TOKEN_EOF);
+       token = gtk_css_token_source_get_token (source))
+    {
+      if (box_shadow_mode && !inset &&
+          gtk_css_token_is_ident (token, "inset"))
+        {
+          inset = TRUE;
+          gtk_css_token_source_consume_token (source);
+          gtk_css_token_source_consume_whitespace (source);
+        }
+      else if (values[COLOR] == NULL && gtk_css_color_value_check_token (token))
+        {
+          values[COLOR] = gtk_css_color_value_token_parse (source);
+          if (values[COLOR] == NULL)
+            goto fail;
+          gtk_css_token_source_consume_whitespace (source);
+        }
+      else if (values[HOFFSET] == NULL && gtk_css_number_value_check_token (token))
+        {
+          values[HOFFSET] = gtk_css_number_value_token_parse (source,
+                                                              GTK_CSS_PARSE_LENGTH
+                                                              | GTK_CSS_NUMBER_AS_PIXELS);
+          if (values[HOFFSET] == NULL)
+            goto fail;
+          gtk_css_token_source_consume_whitespace (source);
+
+          values[VOFFSET] = gtk_css_number_value_token_parse (source,
+                                                              GTK_CSS_PARSE_LENGTH
+                                                              | GTK_CSS_NUMBER_AS_PIXELS);
+          if (values[VOFFSET] == NULL)
+            goto fail;
+          gtk_css_token_source_consume_whitespace (source);
+
+          if (gtk_css_number_value_check_token (gtk_css_token_source_get_token (source)))
+            {
+              values[RADIUS] = gtk_css_number_value_token_parse (source,
+                                                                 GTK_CSS_PARSE_LENGTH
+                                                                 | GTK_CSS_POSITIVE_ONLY
+                                                                 | GTK_CSS_NUMBER_AS_PIXELS);
+              if (values[RADIUS] == NULL)
+                goto fail;
+              gtk_css_token_source_consume_whitespace (source);
+            }
+          else
+            values[RADIUS] = _gtk_css_number_value_new (0.0, GTK_CSS_PX);
+
+        if (box_shadow_mode &&
+            gtk_css_number_value_check_token (gtk_css_token_source_get_token (source)))
+          {
+            values[SPREAD] = gtk_css_number_value_token_parse (source,
+                                                               GTK_CSS_PARSE_LENGTH
+                                                               | GTK_CSS_NUMBER_AS_PIXELS);
+            if (values[SPREAD] == NULL)
+              goto fail;
+            gtk_css_token_source_consume_whitespace (source);
+          }
+        else
+          values[SPREAD] = _gtk_css_number_value_new (0.0, GTK_CSS_PX);
+        }
+      else if (values[HOFFSET] == NULL)
+        {
+          gtk_css_token_source_error (source, "Expected a shadow definition");
+          gtk_css_token_source_consume_all (source);
+          goto fail;
+        }
+      else
+        break;
+    }
+
+  if (values[COLOR] == NULL)
+    values[COLOR] = _gtk_css_color_value_new_current_color ();
+
+  return gtk_css_shadow_value_new (values[HOFFSET], values[VOFFSET],
+                                   values[RADIUS], values[SPREAD],
+                                   inset, values[COLOR]);
+
+fail:
+  for (i = 0; i < N_VALUES; i++)
+    {
+      if (values[i])
+        _gtk_css_value_unref (values[i]);
+    }
+
+  return NULL;
+}
+
 static gboolean
 needs_blur (const GtkCssValue *shadow)
 {

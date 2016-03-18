@@ -933,10 +933,24 @@ box_shadow_value_parse (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
+box_shadow_value_token_parse (GtkCssTokenSource   *source,
+                              GtkCssStyleProperty *property)
+{
+  return gtk_css_shadows_value_token_parse (source, TRUE);
+}
+
+static GtkCssValue *
 shadow_value_parse (GtkCssStyleProperty *property,
                     GtkCssParser        *parser)
 {
   return _gtk_css_shadows_value_parse (parser, FALSE);
+}
+
+static GtkCssValue *
+shadow_value_token_parse (GtkCssTokenSource   *source,
+                          GtkCssStyleProperty *property)
+{
+  return gtk_css_shadows_value_token_parse (source, FALSE);
 }
 
 static GtkCssValue *
@@ -1612,7 +1626,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_CLIP,
                                           shadow_value_parse,
-                                          gtk_css_style_property_token_parse_default,
+                                          shadow_value_token_parse,
                                           NULL,
                                           NULL,
                                           _gtk_css_shadows_value_new_none ());
@@ -1623,7 +1637,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_BACKGROUND | GTK_CSS_AFFECTS_CLIP,
                                           box_shadow_value_parse,
-                                          gtk_css_style_property_token_parse_default,
+                                          box_shadow_value_token_parse,
                                           NULL,
                                           NULL,
                                           _gtk_css_shadows_value_new_none ());
@@ -2097,7 +2111,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_ICON | GTK_CSS_AFFECTS_SYMBOLIC_ICON | GTK_CSS_AFFECTS_CLIP,
                                           shadow_value_parse,
-                                          gtk_css_style_property_token_parse_default,
+                                          shadow_value_token_parse,
                                           NULL,
                                           NULL,
                                           _gtk_css_shadows_value_new_none ());

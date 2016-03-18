@@ -42,8 +42,9 @@ GtkCssValue *   _gtk_css_color_value_new_win32          (const gchar    *theme_c
                                                          gint            id);
 GtkCssValue *   _gtk_css_color_value_new_current_color  (void);
 
-GtkCssValue *   _gtk_css_color_value_parse              (GtkCssParser   *parser);
+GtkCssValue *   _gtk_css_color_value_parse              (GtkCssParser            *parser);
 GtkCssValue *   gtk_css_color_value_token_parse         (GtkCssTokenSource       *source);
+gboolean        gtk_css_color_value_check_token         (const GtkCssToken       *token);
 
 GtkCssValue *   _gtk_css_color_value_resolve            (GtkCssValue             *color,
                                                          GtkStyleProviderPrivate *provider,

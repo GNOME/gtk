@@ -25,6 +25,7 @@
 
 #include "gtktypes.h"
 #include "gtkcssparserprivate.h"
+#include "gtkcsstokensourceprivate.h"
 #include "gtkcssvalueprivate.h"
 #include "gtkroundedboxprivate.h"
 
@@ -33,6 +34,8 @@ G_BEGIN_DECLS
 GtkCssValue *   _gtk_css_shadow_value_new_for_transition (GtkCssValue           *target);
 
 GtkCssValue *   _gtk_css_shadow_value_parse           (GtkCssParser             *parser,
+                                                       gboolean                  box_shadow_mode);
+GtkCssValue *   gtk_css_shadow_value_token_parse      (GtkCssTokenSource        *source,
                                                        gboolean                  box_shadow_mode);
 
 gboolean        _gtk_css_shadow_value_get_inset       (const GtkCssValue        *shadow);

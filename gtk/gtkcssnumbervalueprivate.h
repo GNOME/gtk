@@ -62,6 +62,7 @@ GtkCssValue *   gtk_css_number_value_transition     (GtkCssValue            *sta
 gboolean        gtk_css_number_value_can_parse      (GtkCssParser           *parser);
 GtkCssValue *   _gtk_css_number_value_parse         (GtkCssParser           *parser,
                                                      GtkCssNumberParseFlags  flags);
+gboolean        gtk_css_number_value_check_token    (const GtkCssToken      *token);
 GtkCssValue *   gtk_css_number_value_token_parse    (GtkCssTokenSource      *source,
                                                      GtkCssNumberParseFlags  flags);
 
