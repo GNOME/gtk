@@ -2166,7 +2166,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_ICON | GTK_CSS_AFFECTS_SYMBOLIC_ICON | GTK_CSS_AFFECTS_CLIP,
                                           transform_value_parse,
-                                          gtk_css_style_property_token_parse_default,
+                                          (GtkCssStylePropertyTokenParseFunc) gtk_css_transform_value_token_parse,
                                           NULL,
                                           NULL,
                                           _gtk_css_transform_value_new_none ());

@@ -21,12 +21,14 @@
 #define __GTK_CSS_TRANSFORM_VALUE_PRIVATE_H__
 
 #include "gtkcssparserprivate.h"
+#include "gtkcsstokensourceprivate.h"
 #include "gtkcssvalueprivate.h"
 
 G_BEGIN_DECLS
 
 GtkCssValue *   _gtk_css_transform_value_new_none       (void);
 GtkCssValue *   _gtk_css_transform_value_parse          (GtkCssParser           *parser);
+GtkCssValue *   gtk_css_transform_value_token_parse     (GtkCssTokenSource      *source);
 
 gboolean        _gtk_css_transform_value_get_matrix     (const GtkCssValue      *transform,
                                                          cairo_matrix_t         *matrix);
