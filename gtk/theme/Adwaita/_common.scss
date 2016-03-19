@@ -150,15 +150,26 @@ label {
     &:backdrop { color: $backdrop_fg_color; }
   }
 
-  &:selected,
-  selection,
-  selection:focus,
-  selection:hover { @extend %selected_items; }
+  row:selected &,
+  &:selected { @extend %selected_items; }
+
+  selection {
+    background-color: $selected_bg_color;
+    color: $selected_fg_color;
+  }
 
   &:disabled {
     color: $insensitive_fg_color;
 
+    selection { @extend %selected_items:disabled; }
+
     &:backdrop { color: $backdrop_insensitive_color; }
+  }
+
+  &:backdrop {
+    color: $backdrop_fg_color;
+
+    selection { @extend %selected_items:backdrop; }
   }
 }
 

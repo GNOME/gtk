@@ -51,14 +51,13 @@
 // normal, focus, insensitive, backdrop, backdrop-insensitive, osd, osd-focus, osd-backdrop;
 //
 
-  background-color: $base_color;
-  background-image: entry_gradient($base_color);
   $_blank_edge: if($edge == none, none, 0 1px transparentize($edge, 1));
   $_entry_edge: if($edge == none, none, _widget_edge($edge));
 
   @if $t==normal {
     color: $text_color;
     border-color: $borders_color;
+    background-image: entry_gradient($base_color);
     @include _shadows(entry_focus_shadow(transparentize($fc, 1)), $_entry_edge);
     // for the transition to work the number of shadows in different states needs to match, hence the transparent shadow here.
   }
@@ -71,7 +70,6 @@
     border-color: $borders_color;
     background-image: linear-gradient(to bottom, $insensitive_bg_color);
     box-shadow: $_entry_edge;
-
   }
   @if $t==backdrop {
     color: $backdrop_text_color;
@@ -295,7 +293,8 @@
   //
     $_bg: if($c!=$bg_color, mix($c, $base_color, 85%), $insensitive_bg_color);
 
-    color: if($tc!=$fg_color, mix($tc, $_bg, 50%), $insensitive_fg_color);
+    label, & { color: if($tc!=$fg_color, mix($tc, $_bg, 50%), $insensitive_fg_color); }
+
     border-color: if($c!=$bg_color, _border_color($c),
                                     $insensitive_borders_color);
     background-image: linear-gradient(to bottom, $_bg);
@@ -313,7 +312,8 @@
                             $insensitive_bg_color);
     $_bc: if($c!=$bg_color, _border_color($c), $insensitive_borders_color);
 
-    color: if($c!=$bg_color, mix($tc, $_bg, 60%), $insensitive_fg_color);
+    label, & { color: if($c!=$bg_color, mix($tc, $_bg, 60%), $insensitive_fg_color); }
+
     border-color: $_bc;
     background-image: linear-gradient(to bottom, mix($_bc, $_bg, 10%), $_bg);
     // white with 0 alpha to avoid an ugly transition, since no color means
@@ -328,7 +328,8 @@
     $_bg: if($c!=$bg_color,$c,$backdrop_bg_color);
     $_bc: if($variant=='light',$c,_border_color($c));
 
-    color: if($tc!=$fg_color,mix($tc, $_bg, 80%), $backdrop_fg_color);
+    label, & { color: if($tc!=$fg_color,mix($tc, $_bg, 80%), $backdrop_fg_color); }
+
     border-color: if($c!=$bg_color, $_bc, $backdrop_borders_color);
     background-image: linear-gradient(to bottom, $_bg);
     text-shadow: none;
@@ -344,7 +345,8 @@
     $_bg: if($c!=$bg_color, darken($c, 10%), $backdrop_dark_fill);
     $_bc: if($variant=='light',$_bg,_border_color($c));
 
-    color: if($tc!=$fg_color, mix($tc, $_bg, 80%), $backdrop_fg_color);
+    label, & { color: if($tc!=$fg_color, mix($tc, $_bg, 80%), $backdrop_fg_color); }
+
     border-color: if($c!=$bg_color, $_bc, $backdrop_borders_color);
     background-image: linear-gradient(to bottom, $_bg);
     @include _shadows(inset 0 1px transparentize(white, 1),
@@ -359,7 +361,8 @@
     $_bg: if($c!=$bg_color, mix($c, $base_color, 85%), $insensitive_bg_color);
     $_bc: if($variant=='light', $_bg,_border_color($c));
 
-    color: if($c!=$bg_color, mix($tc, $_bg, 35%), $backdrop_insensitive_color);
+    label, & { color: if($c!=$bg_color, mix($tc, $_bg, 35%), $backdrop_insensitive_color); }
+
     border-color: if($c!=$bg_color, $_bc, $backdrop_borders_color);
     background-image: linear-gradient(to bottom, $_bg);
     text-shadow: none;
@@ -379,7 +382,8 @@
                             darken($insensitive_bg_color, 5%));
     $_bc: if($variant=='light', $_bg,_border_color($c));
 
-    color: if($c!=$bg_color, mix($tc, $_bg, 35%), $backdrop_insensitive_color);
+    label { color: if($c!=$bg_color, mix($tc, $_bg, 35%), $backdrop_insensitive_color); }
+
     border-color: if($c!=$bg_color, $_bc, $backdrop_borders_color);
     background-image: linear-gradient(to bottom, $_bg);
     @include _shadows(inset 0 1px transparentize(white, 1),
