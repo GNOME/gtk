@@ -180,6 +180,53 @@ gtk_css_image_scaled_parse (GtkCssImage  *image,
   return TRUE;
 }
 
+static gboolean
+token_parse_arg (GtkCssTokenSource *source,
+                 guint              arg,
+                 gpointer           data)
+{
+  GPtrArray *images = data;
+  GtkCssImage *image;
+
+  image = gtk_css_image_new_token_parse (source);
+  if (image == NULL)
+    return FALSE;
+
+  g_ptr_array_add (images, image);
+
+  return TRUE;
+}
+
+static gboolean
+gtk_css_image_scaled_token_parse (GtkCssImage       *image,
+                                  GtkCssTokenSource *source)
+{
+  GtkCssImageScaled *scaled = GTK_CSS_IMAGE_SCALED (image);
+  const GtkCssToken *token;
+  GPtrArray *images;
+
+  token = gtk_css_token_source_get_token (source);
+  if (!gtk_css_token_is_function (token, "-gtk-scaled"))
+    {
+      gtk_css_token_source_error (source, "Expected '-gtk-scaled('");
+      gtk_css_token_source_consume_all (source);
+      return FALSE;
+    }
+
+  images = g_ptr_array_new_with_free_func (g_object_unref);
+
+  if (!gtk_css_token_source_consume_function (source, 1, G_MAXUINT, token_parse_arg, images))
+    {
+      g_ptr_array_free (images, TRUE);
+      return FALSE;
+    }
+
+  scaled->n_images = images->len;
+  scaled->images = (GtkCssImage **) g_ptr_array_free (images, FALSE);
+
+  return TRUE;
+}
+
 static void
 _gtk_css_image_scaled_class_init (GtkCssImageScaledClass *klass)
 {
@@ -191,6 +238,7 @@ _gtk_css_image_scaled_class_init (GtkCssImageScaledClass *klass)
   image_class->get_aspect_ratio = gtk_css_image_scaled_get_aspect_ratio;
   image_class->draw = gtk_css_image_scaled_draw;
   image_class->parse = gtk_css_image_scaled_parse;
+  image_class->token_parse = gtk_css_image_scaled_token_parse;
   image_class->compute = gtk_css_image_scaled_compute;
   image_class->print = gtk_css_image_scaled_print;
 
