@@ -2258,7 +2258,14 @@ gtk_stack_allocate (GtkCssGadget        *gadget,
   child_allocation.height = allocation->height;
 
   if (priv->last_visible_child)
-    gtk_widget_size_allocate (priv->last_visible_child->widget, &child_allocation);
+    {
+      int min, nat;
+
+      gtk_widget_get_preferred_height_for_width (priv->last_visible_child->widget,
+                                                 allocation->width,
+                                                 &min, &nat);
+      gtk_widget_size_allocate (priv->last_visible_child->widget, &child_allocation);
+    }
 
   if (priv->visible_child)
     {
