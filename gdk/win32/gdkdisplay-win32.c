@@ -380,37 +380,45 @@ inner_clipboard_window_procedure (HWND   hwnd,
     case WM_CLIPBOARDUPDATE:
     case WM_DRAWCLIPBOARD:
       {
-        int success;
-        HWND hwndOwner;
-#ifdef G_ENABLE_DEBUG
-        UINT nFormat = 0;
-#endif
+        HWND hwnd_owner;
+        HWND hwnd_opener;
         GdkEvent *event;
         GdkWindow *owner;
 
-        success = OpenClipboard (hwnd);
-        if (!success)
-          {
-            g_warning ("Failed to OpenClipboard on window handle %p", hwnd);
-            return 0;
-          }
+        hwnd_owner = GetClipboardOwner ();
 
-        hwndOwner = GetClipboardOwner ();
-        owner = gdk_win32_window_lookup_for_display (_gdk_display, hwndOwner);
-        if (owner == NULL)
-          owner = gdk_win32_window_foreign_new_for_display (_gdk_display, hwndOwner);
+        if ((hwnd_owner == NULL) &&
+            (GetLastError () != ERROR_SUCCESS))
+            WIN32_API_FAILED ("GetClipboardOwner");
 
-        GDK_NOTE (DND, g_print (" drawclipboard owner: %p", hwndOwner));
+        hwnd_opener = GetOpenClipboardWindow ();
+
+        GDK_NOTE (DND, g_print (" drawclipboard owner: %p; opener %p ", hwnd_owner, hwnd_opener));
 
 #ifdef G_ENABLE_DEBUG
         if (_gdk_debug_flags & GDK_DEBUG_DND)
           {
-            while ((nFormat = EnumClipboardFormats (nFormat)) != 0)
-              g_print ("%s ", _gdk_win32_cf_to_string (nFormat));
+            if (OpenClipboard (hwnd))
+              {
+                UINT nFormat = 0;
+
+                while ((nFormat = EnumClipboardFormats (nFormat)) != 0)
+                  g_print ("%s ", _gdk_win32_cf_to_string (nFormat));
+
+                CloseClipboard ();
+              }
+            else
+              {
+                WIN32_API_FAILED ("OpenClipboard");
+              }
           }
 #endif
 
         GDK_NOTE (DND, g_print (" \n"));
+
+        owner = gdk_win32_window_lookup_for_display (_gdk_display, hwnd_owner);
+        if (owner == NULL)
+          owner = gdk_win32_window_foreign_new_for_display (_gdk_display, hwnd_owner);
 
         event = gdk_event_new (GDK_OWNER_CHANGE);
         event->owner_change.window = gdk_get_default_root_window ();
@@ -420,8 +428,6 @@ inner_clipboard_window_procedure (HWND   hwnd,
         event->owner_change.time = _gdk_win32_get_next_tick (0);
         event->owner_change.selection_time = GDK_CURRENT_TIME;
         _gdk_win32_append_event (event);
-
-        CloseClipboard ();
 
         if (_hwnd_next_viewer != NULL)
           return SendMessage (_hwnd_next_viewer, message, wparam, lparam);

@@ -194,12 +194,6 @@ _gdk_win32_window_change_property (GdkWindow    *window,
 
       if (type == _utf8_string)
 	{
-	  if (!OpenClipboard (GDK_WINDOW_HWND (window)))
-	    {
-	      WIN32_API_FAILED ("OpenClipboard");
-	      return;
-	    }
-
 	  wcptr = g_utf8_to_utf16 ((char *) data, nelements, NULL, &wclen, &err);
           if (err != NULL)
             {
@@ -207,6 +201,13 @@ _gdk_win32_window_change_property (GdkWindow    *window,
               g_clear_error (&err);
               return;
             }
+
+	  if (!OpenClipboard (GDK_WINDOW_HWND (window)))
+	    {
+	      WIN32_API_FAILED ("OpenClipboard");
+	      g_free (wcptr);
+	      return;
+	    }
 
 	  wclen++;		/* Terminating 0 */
 	  size = wclen * 2;

@@ -492,6 +492,8 @@ _gdk_win32_display_convert_selection (GdkDisplay *display,
             }
         }
 
+      API_CALL (CloseClipboard, ());
+
       GDK_NOTE (DND, {
 	  int i;
 
@@ -514,8 +516,6 @@ _gdk_win32_display_convert_selection (GdkDisplay *display,
 				  ntargets * sizeof (GdkAtom));
       else
 	property = GDK_NONE;
-
-      API_CALL (CloseClipboard, ());
     }
   else if (selection == GDK_SELECTION_CLIPBOARD && target == _utf8_string)
     {
