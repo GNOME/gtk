@@ -278,10 +278,11 @@ _gdk_win32_window_procedure (HWND   hwnd,
 {
   LRESULT retval;
 
-  GDK_NOTE (EVENTS, g_print ("%s%*s%s %p",
+  GDK_NOTE (EVENTS, g_print ("%s%*s%s %p %#x %#lx",
 			     (debug_indent > 0 ? "\n" : ""),
 			     debug_indent, "",
-			     _gdk_win32_message_to_string (message), hwnd));
+			     _gdk_win32_message_to_string (message), hwnd,
+			     wparam, lparam));
   debug_indent += 2;
   retval = inner_window_procedure (hwnd, message, wparam, lparam);
   debug_indent -= 2;
@@ -679,7 +680,9 @@ _gdk_win32_print_event (const GdkEvent *event)
     default: g_assert_not_reached ();
     }
 
-  g_print (" %p ", event->any.window ? GDK_WINDOW_HWND (event->any.window) : NULL);
+  g_print (" %p @ %ums ",
+           event->any.window ? GDK_WINDOW_HWND (event->any.window) : NULL,
+           gdk_event_get_time (event));
 
   switch (event->any.type)
     {
