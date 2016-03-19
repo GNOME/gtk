@@ -28,6 +28,7 @@ typedef struct _GtkCssTokenSourceTokenizer GtkCssTokenSourceTokenizer;
 struct _GtkCssTokenSourceTokenizer {
   GtkCssTokenSource parent;
   GtkCssTokenizer *tokenizer;
+  GFile *location;
   GtkCssToken current_token;
 };
 
@@ -38,6 +39,8 @@ gtk_css_token_source_tokenizer_finalize (GtkCssTokenSource *source)
 
   gtk_css_token_clear (&tok->current_token);
   gtk_css_tokenizer_unref (tok->tokenizer);
+  if (tok->location)
+    g_object_unref (tok->location);
 }
 
 static void
@@ -85,22 +88,35 @@ gtk_css_token_source_tokenizer_error (GtkCssTokenSource *source,
            error->message);
 }
 
+static GFile *
+gtk_css_token_source_tokenizer_get_location (GtkCssTokenSource *source)
+{
+  GtkCssTokenSourceTokenizer *tok = (GtkCssTokenSourceTokenizer *) source;
+
+  return tok->location;
+}
+
 const GtkCssTokenSourceClass GTK_CSS_TOKEN_SOURCE_TOKENIZER = {
   gtk_css_token_source_tokenizer_finalize,
   gtk_css_token_source_tokenizer_consume_token,
   gtk_css_token_source_tokenizer_peek_token,
   gtk_css_token_source_tokenizer_error,
+  gtk_css_token_source_tokenizer_get_location,
 };
 
 GtkCssTokenSource *
-gtk_css_token_source_new_for_tokenizer (GtkCssTokenizer *tokenizer)
+gtk_css_token_source_new_for_tokenizer (GtkCssTokenizer *tokenizer,
+                                        GFile           *location)
 {
   GtkCssTokenSourceTokenizer *source;
 
   g_return_val_if_fail (tokenizer != NULL, NULL);
+  g_return_val_if_fail (location == NULL || G_IS_FILE (location), NULL);
 
   source = gtk_css_token_source_new (GtkCssTokenSourceTokenizer, &GTK_CSS_TOKEN_SOURCE_TOKENIZER);
   source->tokenizer = gtk_css_tokenizer_ref (tokenizer);
+  if (location)
+    source->location = g_object_ref (location);
 
   return &source->parent;
 }
@@ -161,11 +177,20 @@ gtk_css_token_source_part_error (GtkCssTokenSource *source,
   gtk_css_token_source_emit_error (part->source, error);
 }
 
+static GFile *
+gtk_css_token_source_part_get_location (GtkCssTokenSource *source)
+{
+  GtkCssTokenSourcePart *part = (GtkCssTokenSourcePart *) source;
+
+  return gtk_css_token_source_get_location (part->source);
+}
+
 const GtkCssTokenSourceClass GTK_CSS_TOKEN_SOURCE_PART = {
   gtk_css_token_source_part_finalize,
   gtk_css_token_source_part_consume_token,
   gtk_css_token_source_part_peek_token,
   gtk_css_token_source_part_error,
+  gtk_css_token_source_part_get_location,
 };
 
 GtkCssTokenSource *
@@ -419,6 +444,83 @@ gtk_css_token_source_consume_number (GtkCssTokenSource *source,
   return TRUE;
 }
 
+GFile *
+gtk_css_token_source_resolve_url (GtkCssTokenSource *source,
+                                  const char        *url)
+{
+  char *scheme;
+  GFile *file, *location, *base;
+
+  scheme = g_uri_parse_scheme (url);
+  if (scheme != NULL)
+    {
+      file = g_file_new_for_uri (url);
+      g_free (scheme);
+      return file;
+    }
+
+  location = gtk_css_token_source_get_location (source);
+  if (location)
+    {
+      base = g_file_get_parent (location);
+    }
+  else
+    {
+      char *dir = g_get_current_dir ();
+      base = g_file_new_for_path (dir);
+      g_free (dir);
+    }
+
+  file = g_file_resolve_relative_path (base, url);
+  g_object_unref (base);
+
+  return file;
+}
+
+GFile *
+gtk_css_token_source_consume_url (GtkCssTokenSource *source)
+{
+  const GtkCssToken *token;
+  GFile *file;
+
+  token = gtk_css_token_source_get_token (source);
+  if (gtk_css_token_is (token, GTK_CSS_TOKEN_URL))
+    {
+      file = gtk_css_token_source_resolve_url (source, token->string.string);
+      gtk_css_token_source_consume_token (source);
+      return file;
+    }
+  else if (gtk_css_token_is_function (token, "url"))
+    {
+      gtk_css_token_source_consume_token (source);
+      token = gtk_css_token_source_get_token (source);
+      if (!gtk_css_token_is (token, GTK_CSS_TOKEN_STRING))
+        {
+          gtk_css_token_source_error (source, "Expected string inside url()");
+          gtk_css_token_source_consume_all (source);
+          return NULL;
+        }
+      file = gtk_css_token_source_resolve_url (source, token->string.string);
+      gtk_css_token_source_consume_token (source);
+      token = gtk_css_token_source_get_token (source);
+      if (!gtk_css_token_is (token, GTK_CSS_TOKEN_CLOSE_PARENS))
+        {
+          gtk_css_token_source_error (source, "Expected closing ')' for url()");
+          gtk_css_token_source_consume_all (source);
+          g_object_unref (file);
+          return NULL;
+        }
+      gtk_css_token_source_consume_token (source);
+      return file;
+    }
+  else
+    {
+      gtk_css_token_source_error (source, "Expected url()");
+      gtk_css_token_source_consume_all (source);
+      return NULL;
+    }
+}
+
 GtkCssTokenType
 gtk_css_token_get_pending_block (GtkCssTokenSource *source)
 {
@@ -484,6 +586,12 @@ gtk_css_token_source_deprecated (GtkCssTokenSource *source,
   gtk_css_token_source_emit_error (source, error);
   g_error_free (error);
   va_end (args);
+}
+
+GFile *
+gtk_css_token_source_get_location (GtkCssTokenSource *source)
+{
+  return source->klass->get_location (source);
 }
 
 GObject *

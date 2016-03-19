@@ -194,11 +194,18 @@ gtk_css_chunk_token_source_error (GtkCssTokenSource *source,
     chunk->error = g_error_copy (error);
 }
 
+static GFile *
+gtk_css_chunk_token_source_get_location (GtkCssTokenSource *source)
+{
+  return NULL;
+}
+
 const GtkCssTokenSourceClass GTK_CSS_CHUNK_TOKEN_SOURCE = {
   gtk_css_chunk_token_source_finalize,
   gtk_css_chunk_token_source_consume_token,
   gtk_css_chunk_token_source_get_token,
   gtk_css_chunk_token_source_error,
+  gtk_css_chunk_token_source_get_location,
 };
 
 static GtkCssTokenSource *

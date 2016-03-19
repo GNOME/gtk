@@ -20,7 +20,7 @@
 #ifndef __GTK_CSS_TOKEN_SOURCE_PRIVATE_H__
 #define __GTK_CSS_TOKEN_SOURCE_PRIVATE_H__
 
-#include <glib-object.h>
+#include <gio/gio.h>
 #include "gtk/gtkcsstokenizerprivate.h"
 
 G_BEGIN_DECLS
@@ -44,9 +44,11 @@ struct _GtkCssTokenSourceClass
   const GtkCssToken *   (* peek_token)                          (GtkCssTokenSource      *source);
   void                  (* error)                               (GtkCssTokenSource      *source,
                                                                  const GError           *error);
+  GFile *               (* get_location)                        (GtkCssTokenSource      *source);
 };
 
-GtkCssTokenSource *     gtk_css_token_source_new_for_tokenizer  (GtkCssTokenizer        *tokenizer);
+GtkCssTokenSource *     gtk_css_token_source_new_for_tokenizer  (GtkCssTokenizer        *tokenizer,
+                                                                 GFile                  *location);
 GtkCssTokenSource *     gtk_css_token_source_new_for_part       (GtkCssTokenSource      *source,
                                                                  GtkCssTokenType         end_type);
 
@@ -75,6 +77,9 @@ gboolean                gtk_css_token_source_consume_function   (GtkCssTokenSour
                                                                  gpointer                data);
 gboolean                gtk_css_token_source_consume_number     (GtkCssTokenSource      *source,
                                                                  double                 *number);
+GFile *                 gtk_css_token_source_resolve_url        (GtkCssTokenSource      *source,
+                                                                 const char             *url);
+GFile *                 gtk_css_token_source_consume_url        (GtkCssTokenSource      *source);
 
 void                    gtk_css_token_source_emit_error         (GtkCssTokenSource      *source,
                                                                  const GError           *error);
@@ -88,6 +93,7 @@ void                    gtk_css_token_source_deprecated         (GtkCssTokenSour
                                                                  const char             *format,
                                                                  ...) G_GNUC_PRINTF(2, 3);
 
+GFile *                 gtk_css_token_source_get_location       (GtkCssTokenSource      *source);
 GObject *               gtk_css_token_source_get_consumer       (GtkCssTokenSource      *source);
 void                    gtk_css_token_source_set_consumer       (GtkCssTokenSource      *source,
                                                                  GObject                *consumer);

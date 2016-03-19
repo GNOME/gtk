@@ -93,11 +93,20 @@ gtk_css_token_source_at_error (GtkCssTokenSource *source,
   gtk_css_token_source_emit_error (at->source, error);
 }
 
+static GFile *
+gtk_css_token_source_at_get_location (GtkCssTokenSource *source)
+{
+  GtkCssTokenSourceAt *at = (GtkCssTokenSourceAt *) source;
+
+  return gtk_css_token_source_get_location (at->source);
+}
+
 static const GtkCssTokenSourceClass GTK_CSS_TOKEN_SOURCE_AT = {
   gtk_css_token_source_at_finalize,
   gtk_css_token_source_at_consume_token,
   gtk_css_token_source_at_peek_token,
-  gtk_css_token_source_at_error
+  gtk_css_token_source_at_error,
+  gtk_css_token_source_at_get_location,
 };
 
 static GtkCssTokenSource *

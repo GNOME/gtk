@@ -163,6 +163,19 @@ gtk_css_image_url_parse (GtkCssImage  *image,
   return TRUE;
 }
 
+static gboolean
+gtk_css_image_url_token_parse (GtkCssImage       *image,
+                               GtkCssTokenSource *source)
+{
+  GtkCssImageUrl *url = GTK_CSS_IMAGE_URL (image);
+
+  url->file = gtk_css_token_source_consume_url (source);
+  if (url->file == NULL)
+    return FALSE;
+
+  return TRUE;
+}
+
 static void
 gtk_css_image_url_print (GtkCssImage *image,
                          GString     *string)
@@ -195,6 +208,7 @@ _gtk_css_image_url_class_init (GtkCssImageUrlClass *klass)
   image_class->compute = gtk_css_image_url_compute;
   image_class->draw = gtk_css_image_url_draw;
   image_class->parse = gtk_css_image_url_parse;
+  image_class->token_parse = gtk_css_image_url_token_parse;
   image_class->print = gtk_css_image_url_print;
 
   object_class->dispose = gtk_css_image_url_dispose;
