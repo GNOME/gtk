@@ -4,7 +4,7 @@
 
 $ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 $asset_suffix: if($variant=='dark', '-dark', '');
-$backdrop_transition: 400ms linear;
+$backdrop_transition: 200ms ease-out;
 
 * {
   padding: 0;
@@ -279,7 +279,11 @@ entry {
 
     &:disabled { @include entry(insensitive); }
 
-    &:backdrop { @include entry(backdrop); }
+    &:backdrop {
+      @include entry(backdrop);
+
+      transition: $backdrop_transition;
+    }
 
     &:backdrop:disabled { @include entry(backdrop-insensitive); }
 
@@ -466,6 +470,7 @@ button {
       &.flat, & {
         @include button(backdrop);
 
+        transition: $backdrop_transition;
         -gtk-icon-effect: none;
 
         &:active,
@@ -1037,6 +1042,7 @@ spinbutton {
         color: mix($backdrop_fg_color, $backdrop_base_color, 90%);
         background-color: transparent;
         border-color: transparentize($backdrop_borders_color, 0.7);
+        transition: $backdrop_transition;
       }
 
       &:backdrop:disabled {
@@ -1288,6 +1294,7 @@ searchbar,
     border-color: $backdrop_borders_color;
     background-color: $backdrop_dark_fill;
     box-shadow: none;
+    transition: $backdrop_transition;
   }
 }
 
@@ -1311,6 +1318,8 @@ headerbar {
     background-color: $bg_color;
     background-image: none;
     box-shadow: inset 0 1px $top_hilight;
+
+    transition: $backdrop_transition;
   }
 
   .title {
@@ -2221,6 +2230,7 @@ scrollbar {
   &:backdrop {
     background-color: $backdrop_scrollbar_bg_color;
     border-color: $backdrop_borders_color;
+    transition: $backdrop_transition;
   }
 
   // slider
@@ -2415,6 +2425,7 @@ switch {
     background-image: linear-gradient(to bottom, $backdrop_dark_fill);
     box-shadow: none;
     text-shadow: none;
+    transition: $backdrop_transition;
 
     &:active {
       @if $variant == 'light' { color: $backdrop_bg_color; }
@@ -2524,6 +2535,8 @@ radio {
   &:disabled { @include button(insensitive); }
   &:backdrop {
     @include button(backdrop);
+
+    transition: $backdrop_transition;
 
     &:disabled { @include button(backdrop-insensitive); }
   }
@@ -2652,6 +2665,7 @@ treeview.view radio:selected { &:focus, & { @extend %radio; }} // This is a work
     background-color: $backdrop_dark_fill;
     border-color: $backdrop_borders_color;
     box-shadow: none;
+    transition: $backdrop_transition;
 
     &:disabled { background-color: $insensitive_bg_color; }
   }
@@ -3110,7 +3124,10 @@ progressbar {
   font-size: smaller;
   color: transparentize($fg_color, 0.6);
 
-  &:backdrop { box-shadow: none; }
+  &:backdrop {
+    box-shadow: none;
+    transition: $backdrop_transition;
+  }
 
   trough { @extend %scale_trough; }
 
@@ -3177,6 +3194,8 @@ levelbar {
     min-width: 1px;
     min-height: 32px;
   }
+
+  &:backdrop { transition: $backdrop_transition; }
 
   trough {
     border: 1px solid;
@@ -3339,6 +3358,7 @@ scrolledwindow {
     &:backdrop {
       border-image-source: linear-gradient(to bottom, $backdrop_borders_color 1px, transparent 1px);
       background-color: $backdrop_scrollbar_bg_color;
+      transition: $backdrop_transition;
     }
   }
 }
@@ -3371,6 +3391,8 @@ row {
   transition: all 150ms $ease-out-quad;
 
   &:hover { transition: none; }
+
+  &:backdrop { transition: $backdrop_transition; }
 
   &.activatable {
     &.has-open-popup, // this is for indicathing which row generated a popover see https://bugzilla.gnome.org/show_bug.cgi?id=754411
@@ -3409,7 +3431,10 @@ row {
                                                transparent 2px);
   background-clip: padding-box;
 
-  &:backdrop { background-image: none; }
+  &:backdrop {
+    background-image: none;
+    transition: $backdrop_transition;
+  }
 
   button { @extend %osd_button; }
 
@@ -3578,6 +3603,7 @@ filechooserbutton:drop(active) {
   &:backdrop {
     background-color: $backdrop_sidebar_bg_color;
     border-color: $backdrop_borders_color;
+    transition: $backdrop_transition;
   }
 
   :selected { // FIXME: what this is supposed to select
@@ -3987,7 +4013,6 @@ colorchooser .popover.osd { border-radius: 5px; }
 }
 
 .scale-popup {
-
   .osd & { @extend %osd; }
 
   .osd & button.flat {  //FIXME: quick hack, redo properly
@@ -4036,6 +4061,7 @@ decoration {
     box-shadow: 0 3px 9px 1px transparent,
                 0 2px 6px 2px transparentize(black, 0.8),
                 0 0 0 1px $_wm_border_backdrop;
+    transition: $backdrop_transition;
   }
 
   .fullscreen &,
@@ -4176,6 +4202,7 @@ button.circular { // FIXME: aggregate to buttons
   &:backdrop {
     background-color: $backdrop_base_color;
     color: $backdrop_fg_color;
+    transition: $backdrop_transition;
   }
 }
 

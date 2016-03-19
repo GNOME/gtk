@@ -222,7 +222,8 @@ entry {
     color: #d5d5d5;
     border-color: #1f2222;
     background-image: linear-gradient(to bottom, #2c2c2c);
-    box-shadow: none; }
+    box-shadow: none;
+    transition: 200ms ease-out; }
   spinbutton:backdrop:disabled:not(.vertical),
   entry:backdrop:disabled {
     color: #5d6767;
@@ -454,6 +455,7 @@ notebook > header > tabs > arrow, headerbar button.titlebutton,
     text-shadow: none;
     -gtk-icon-shadow: none;
     box-shadow: inset 0 1px rgba(255, 255, 255, 0);
+    transition: 200ms ease-out;
     -gtk-icon-effect: none; }
     notebook > header > tabs > arrow:backdrop label, button.sidebar-button:backdrop label, headerbar button.titlebutton:backdrop label,
     .titlebar button.titlebutton:backdrop label, notebook > header > tabs > arrow:backdrop, button.sidebar-button:backdrop, headerbar button.titlebutton:backdrop,
@@ -1277,7 +1279,8 @@ spinbutton:not(.vertical) {
     spinbutton:not(.vertical) button:backdrop {
       color: #8a8c8b;
       background-color: transparent;
-      border-color: rgba(31, 34, 34, 0.3); }
+      border-color: rgba(31, 34, 34, 0.3);
+      transition: 200ms ease-out; }
     spinbutton:not(.vertical) button:backdrop:disabled {
       color: rgba(93, 103, 103, 0.3);
       background-image: none;
@@ -1471,7 +1474,8 @@ searchbar,
   .location-bar:backdrop {
     border-color: #1f2222;
     background-color: #303535;
-    box-shadow: none; }
+    box-shadow: none;
+    transition: 200ms ease-out; }
 
 /***************
  * Header bars *
@@ -1492,7 +1496,8 @@ headerbar {
     border-color: #1f2222;
     background-color: #393f3f;
     background-image: none;
-    box-shadow: inset 0 1px rgba(238, 238, 236, 0.07); }
+    box-shadow: inset 0 1px rgba(238, 238, 236, 0.07);
+    transition: 200ms ease-out; }
   .titlebar:not(headerbar) .title,
   headerbar .title {
     font-weight: bold;
@@ -2255,7 +2260,8 @@ scrollbar {
     border-left: 1px solid #1c1f1f; }
   scrollbar:backdrop {
     background-color: #323737;
-    border-color: #1f2222; }
+    border-color: #1f2222;
+    transition: 200ms ease-out; }
   scrollbar slider {
     min-width: 6px;
     min-height: 6px;
@@ -2414,7 +2420,8 @@ switch {
     border-color: #1f2222;
     background-image: linear-gradient(to bottom, #303535);
     box-shadow: none;
-    text-shadow: none; }
+    text-shadow: none;
+    transition: 200ms ease-out; }
     switch:backdrop:active {
       border-color: #0f2b48;
       background-image: linear-gradient(to bottom, #215d9c);
@@ -2573,7 +2580,8 @@ radio {
     background-image: linear-gradient(to bottom, #393f3f);
     text-shadow: none;
     -gtk-icon-shadow: none;
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0);
+    transition: 200ms ease-out; }
     check:backdrop label, check:backdrop,
     radio:backdrop label,
     radio:backdrop {
@@ -2730,7 +2738,8 @@ scale trough, scale fill, progressbar trough {
   scale trough:backdrop, scale fill:backdrop, progressbar trough:backdrop, progressbar:backdrop trough {
     background-color: #303535;
     border-color: #1f2222;
-    box-shadow: none; }
+    box-shadow: none;
+    transition: 200ms ease-out; }
     scale trough:backdrop:disabled, scale fill:backdrop:disabled, progressbar trough:backdrop:disabled, progressbar:backdrop trough:disabled {
       background-color: #333636; }
   row:selected scale trough, scale row:selected trough, row:selected scale fill, scale row:selected fill, row:selected progressbar trough, progressbar row:selected trough {
@@ -3363,7 +3372,8 @@ progressbar {
   progressbar.vertical progress {
     margin: -1px 0; }
   progressbar:backdrop {
-    box-shadow: none; }
+    box-shadow: none;
+    transition: 200ms ease-out; }
   progressbar progress {
     border-radius: 1.5px; }
     progressbar progress.left {
@@ -3400,6 +3410,8 @@ levelbar block {
 levelbar.vertical block {
   min-width: 1px;
   min-height: 32px; }
+levelbar:backdrop {
+  transition: 200ms ease-out; }
 levelbar trough {
   border: 1px solid;
   padding: 2px;
@@ -3600,7 +3612,8 @@ scrolledwindow junction {
     border-image-slice: 0 1 0 0; }
   scrolledwindow junction:backdrop {
     border-image-source: linear-gradient(to bottom, #1f2222 1px, transparent 1px);
-    background-color: #323737; }
+    background-color: #323737;
+    transition: 200ms ease-out; }
 
 separator {
   background: rgba(0, 0, 0, 0.1);
@@ -3624,6 +3637,8 @@ row {
   transition: all 150ms cubic-bezier(0.25, 0.46, 0.45, 0.94); }
   row:hover {
     transition: none; }
+  row:backdrop {
+    transition: 200ms ease-out; }
   row.activatable.has-open-popup, row.activatable:hover {
     background-color: rgba(238, 238, 236, 0.05); }
   row.activatable:active {
@@ -3649,7 +3664,8 @@ row {
   background-clip: padding-box; }
   .app-notification:backdrop,
   .app-notification.frame:backdrop {
-    background-image: none; }
+    background-image: none;
+    transition: 200ms ease-out; }
   .app-notification border,
   .app-notification.frame border {
     border: none; }
@@ -3752,7 +3768,8 @@ filechooserbutton:drop(active) {
     border-right-style: none; }
   .sidebar:backdrop {
     background-color: #333636;
-    border-color: #1f2222; }
+    border-color: #1f2222;
+    transition: 200ms ease-out; }
   .sidebar list {
     background-color: transparent; }
   paned .sidebar.left, paned .sidebar.right, paned .sidebar.left:dir(rtl), paned .sidebar:dir(rtl), paned .sidebar:dir(ltr), paned .sidebar {
@@ -4124,7 +4141,8 @@ decoration {
   box-shadow: 0 3px 9px 1px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(28, 31, 31, 0.9);
   margin: 10px; }
   decoration:backdrop {
-    box-shadow: 0 3px 9px 1px transparent, 0 2px 6px 2px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(28, 31, 31, 0.9); }
+    box-shadow: 0 3px 9px 1px transparent, 0 2px 6px 2px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(28, 31, 31, 0.9);
+    transition: 200ms ease-out; }
   .fullscreen decoration, .tiled decoration {
     border-radius: 0; }
   .popup decoration {
@@ -4271,7 +4289,8 @@ button.circular {
   font-size: smaller; }
   .keycap:backdrop {
     background-color: #2c2c2c;
-    color: #949796; }
+    color: #949796;
+    transition: 200ms ease-out; }
 
 *:drop(active):focus,
 *:drop(active) {
