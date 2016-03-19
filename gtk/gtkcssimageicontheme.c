@@ -117,6 +117,45 @@ gtk_css_image_icon_theme_parse (GtkCssImage  *image,
   return TRUE;
 }
 
+static gboolean
+token_parse_arg (GtkCssTokenSource *source,
+                 guint              arg,
+                 gpointer           data)
+{
+  GtkCssImageIconTheme *icon_theme = data;
+  const GtkCssToken *token;
+
+  token = gtk_css_token_source_get_token (source);
+  if (!gtk_css_token_is (token, GTK_CSS_TOKEN_STRING))
+    {
+      gtk_css_token_source_error (source, "Expected a string for the icon name");
+      gtk_css_token_source_consume_all (source);
+      return FALSE;
+    }
+
+  icon_theme->name = g_strdup (token->string.string);
+
+  gtk_css_token_source_consume_token (source);
+  return TRUE;
+}
+
+static gboolean
+gtk_css_image_icon_theme_token_parse (GtkCssImage       *image,
+                                      GtkCssTokenSource *source)
+{
+  const GtkCssToken *token;
+
+  token = gtk_css_token_source_get_token (source);
+  if (!gtk_css_token_is_function (token, "-gtk-icontheme"))
+    {
+      gtk_css_token_source_error (source, "Expected '-gtk-icontheme('");
+      gtk_css_token_source_consume_all (source);
+      return FALSE;
+    }
+
+  return gtk_css_token_source_consume_function (source, 1, 1, token_parse_arg, image);
+}
+
 static void
 gtk_css_image_icon_theme_print (GtkCssImage *image,
                                 GString     *string)
@@ -177,6 +216,7 @@ _gtk_css_image_icon_theme_class_init (GtkCssImageIconThemeClass *klass)
   image_class->get_aspect_ratio = gtk_css_image_icon_theme_get_aspect_ratio;
   image_class->draw = gtk_css_image_icon_theme_draw;
   image_class->parse = gtk_css_image_icon_theme_parse;
+  image_class->token_parse = gtk_css_image_icon_theme_token_parse;
   image_class->print = gtk_css_image_icon_theme_print;
   image_class->compute = gtk_css_image_icon_theme_compute;
   image_class->equal = gtk_css_image_icon_theme_equal;
