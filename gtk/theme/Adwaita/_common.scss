@@ -4030,15 +4030,16 @@ decoration {
 
   // FIXME rationalize shadows
 
-  /* this is used for the resize cursor area */
+  // this is used for the resize cursor area
   margin: 10px;
 
   &:backdrop {
-    /* the transparent shadow here is to enforce that the shadow extents don't
-     * change when we go to backdrop, to prevent jumping windows
-     */
-    box-shadow: 0 2px 6px 2px transparentize(black, 0.8),
-                0 3px 9px 1px transparent,
+    // the transparent shadow here is to enforce that the shadow extents don't
+    // change when we go to backdrop, to prevent jumping windows.
+    // The biggest shadow should be in the same order then in the active state
+    // or the jumping will happen during the transition.
+    box-shadow: 0 3px 9px 1px transparent,
+                0 2px 6px 2px transparentize(black, 0.8),
                 0 0 0 1px $_wm_border_backdrop;
   }
 
