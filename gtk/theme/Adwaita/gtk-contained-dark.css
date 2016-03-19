@@ -1215,7 +1215,9 @@ spinbutton:not(.vertical) {
     min-width: 28px;
     margin: 0;
     background: none;
+    background-color: transparent;
     border: none;
+    border-radius: 0;
     box-shadow: none; }
   spinbutton:not(.vertical) button {
     min-height: 16px;

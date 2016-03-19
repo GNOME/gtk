@@ -987,9 +987,12 @@ spinbutton {
 
     entry {
       min-width: 28px;
+      // reset all the other props since the spinbutton node is styled here
       margin: 0;
       background: none;
+      background-color: transparent;
       border: none;
+      border-radius: 0;
       box-shadow: none;
     }
 
