@@ -4,6 +4,7 @@
 
 $ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 $asset_suffix: if($variant=='dark', '-dark', '');
+$backdrop_transition: 400ms linear;
 
 * {
   padding: 0;
@@ -188,13 +189,6 @@ textview { // This will get overridden by .view, needed by gedit line numbers
   background-color: mix($bg_color, $base_color, 50%);
 
   &:backdrop { background-color: mix($backdrop_bg_color, $backdrop_base_color, 50%); }
-
-  // &:drop(active) {
-  //   &, & > text { box-shadow: none; }
-  //
-  //   > text { background-color: transparentize($drop_target_color, 0.9); }
-  // }
-
 }
 
 %osd, .osd {
