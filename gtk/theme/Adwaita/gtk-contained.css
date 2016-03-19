@@ -3827,6 +3827,12 @@ placessidebar row {
       padding-right: 8px; }
     placessidebar row image.sidebar-icon:dir(rtl) {
       padding-left: 8px; }
+    placessidebar row image.sidebar-icon:disabled {
+      color: #8b8e8f; }
+    placessidebar row image.sidebar-icon:backdrop {
+      color: #8b8e8f; }
+      placessidebar row image.sidebar-icon:backdrop:insensitivie {
+        color: #c3c3c0; }
   placessidebar row label.sidebar-label:dir(ltr) {
     padding-right: 2px; }
   placessidebar row label.sidebar-label:dir(rtl) {
@@ -4217,45 +4223,58 @@ textview text:selected:focus,
 iconview text:selected,
 textview text:selected, .view text selection:focus, iconview text selection:focus, .view text selection, iconview text selection,
 textview text selection:focus,
-textview text selection, flowbox flowboxchild:selected, row:selected label, label:selected, spinbutton:not(.vertical) selection:focus, spinbutton:not(.vertical) selection,
+textview text selection, flowbox flowboxchild:selected, spinbutton:not(.vertical) selection:focus, spinbutton:not(.vertical) selection,
 entry selection:focus,
 entry selection, modelbutton.flat:selected, popover.background checkbutton:selected,
 popover.background radiobutton:selected,
 .menuitem.button.flat:selected, treeview.view:selected:focus, treeview.view:selected, row:selected, calendar:selected, .sidebar :selected {
-  background-color: #4a90d9;
-  color: #ffffff;
-  outline-color: rgba(255, 255, 255, 0.3); }
-  iconview:disabled:selected:focus, .view:disabled:selected, iconview:disabled:selected,
-  iconview text:disabled:selected:focus,
-  textview text:disabled:selected:focus,
-  .view text:disabled:selected,
-  iconview text:disabled:selected,
-  textview text:disabled:selected, iconview text selection:disabled:focus, .view text selection:disabled, iconview text selection:disabled,
-  textview text selection:disabled, flowbox flowboxchild:disabled:selected, row:selected label:disabled, label:disabled:selected, label:disabled selection, spinbutton:not(.vertical) selection:disabled,
-  entry selection:disabled, modelbutton.flat:disabled:selected, popover.background checkbutton:disabled:selected,
-  popover.background radiobutton:disabled:selected,
-  .menuitem.button.flat:disabled:selected, row:disabled:selected, calendar:disabled:selected, .sidebar :disabled:selected {
-    color: #a5c8ec; }
-  iconview:backdrop:selected:focus, .view:backdrop:selected, iconview:backdrop:selected,
-  iconview text:backdrop:selected:focus,
-  textview text:backdrop:selected:focus,
-  .view text:backdrop:selected,
-  iconview text:backdrop:selected,
-  textview text:backdrop:selected, iconview text selection:backdrop:focus, .view text selection:backdrop, iconview text selection:backdrop,
-  textview text selection:backdrop, flowbox flowboxchild:backdrop:selected, row:selected label:backdrop, label:backdrop:selected, label:backdrop selection, spinbutton:not(.vertical) selection:backdrop,
-  entry selection:backdrop, modelbutton.flat:backdrop:selected, popover.background checkbutton:backdrop:selected,
-  popover.background radiobutton:backdrop:selected,
-  .menuitem.button.flat:backdrop:selected, row:backdrop:selected, calendar:backdrop:selected, .sidebar :backdrop:selected {
-    color: #ffffff; }
-    .view:backdrop:disabled:selected, iconview:backdrop:disabled:selected,
-    .view text:backdrop:disabled:selected,
-    iconview text:backdrop:disabled:selected,
-    textview text:backdrop:disabled:selected, .view text selection:backdrop:disabled, iconview text selection:backdrop:disabled,
-    textview text selection:backdrop:disabled, flowbox flowboxchild:backdrop:disabled:selected, row:selected label:backdrop:disabled, label:backdrop:disabled:selected, label:disabled selection:backdrop, label:backdrop selection:disabled, spinbutton:not(.vertical) selection:backdrop:disabled,
-    entry selection:backdrop:disabled, modelbutton.flat:backdrop:disabled:selected, popover.background checkbutton:backdrop:disabled:selected,
-    popover.background radiobutton:backdrop:disabled:selected,
-    .menuitem.button.flat:backdrop:disabled:selected, row:backdrop:disabled:selected, calendar:backdrop:disabled:selected, .sidebar :backdrop:disabled:selected {
-      color: #80b1e4; }
+  background-color: #4a90d9; }
+  row:selected label, label:selected, placessidebar row:selected image.sidebar-icon, .view:selected:focus, iconview:selected:focus, .view:selected, iconview:selected,
+  .view text:selected:focus,
+  iconview text:selected:focus,
+  textview text:selected:focus,
+  .view text:selected,
+  iconview text:selected,
+  textview text:selected, .view text selection:focus, iconview text selection:focus, .view text selection, iconview text selection,
+  textview text selection:focus,
+  textview text selection, flowbox flowboxchild:selected, spinbutton:not(.vertical) selection:focus, spinbutton:not(.vertical) selection,
+  entry selection:focus,
+  entry selection, modelbutton.flat:selected, popover.background checkbutton:selected,
+  popover.background radiobutton:selected,
+  .menuitem.button.flat:selected, treeview.view:selected:focus, treeview.view:selected, row:selected, calendar:selected, .sidebar :selected {
+    color: #ffffff;
+    outline-color: rgba(255, 255, 255, 0.3); }
+    row:selected label:disabled, label:disabled:selected, placessidebar row:selected image.sidebar-icon:disabled, iconview:disabled:selected:focus, .view:disabled:selected, iconview:disabled:selected,
+    iconview text:disabled:selected:focus,
+    textview text:disabled:selected:focus,
+    .view text:disabled:selected,
+    iconview text:disabled:selected,
+    textview text:disabled:selected, iconview text selection:disabled:focus, .view text selection:disabled, iconview text selection:disabled,
+    textview text selection:disabled, flowbox flowboxchild:disabled:selected, label:disabled selection, spinbutton:not(.vertical) selection:disabled,
+    entry selection:disabled, modelbutton.flat:disabled:selected, popover.background checkbutton:disabled:selected,
+    popover.background radiobutton:disabled:selected,
+    .menuitem.button.flat:disabled:selected, row:disabled:selected, calendar:disabled:selected, .sidebar :disabled:selected {
+      color: #a5c8ec; }
+    row:selected label:backdrop, label:backdrop:selected, placessidebar row:selected image.sidebar-icon:backdrop, iconview:backdrop:selected:focus, .view:backdrop:selected, iconview:backdrop:selected,
+    iconview text:backdrop:selected:focus,
+    textview text:backdrop:selected:focus,
+    .view text:backdrop:selected,
+    iconview text:backdrop:selected,
+    textview text:backdrop:selected, iconview text selection:backdrop:focus, .view text selection:backdrop, iconview text selection:backdrop,
+    textview text selection:backdrop, flowbox flowboxchild:backdrop:selected, label:backdrop selection, spinbutton:not(.vertical) selection:backdrop,
+    entry selection:backdrop, modelbutton.flat:backdrop:selected, popover.background checkbutton:backdrop:selected,
+    popover.background radiobutton:backdrop:selected,
+    .menuitem.button.flat:backdrop:selected, row:backdrop:selected, calendar:backdrop:selected, .sidebar :backdrop:selected {
+      color: #ffffff; }
+      row:selected label:backdrop:disabled, label:backdrop:disabled:selected, placessidebar row:selected image.sidebar-icon:backdrop:disabled, .view:backdrop:disabled:selected, iconview:backdrop:disabled:selected,
+      .view text:backdrop:disabled:selected,
+      iconview text:backdrop:disabled:selected,
+      textview text:backdrop:disabled:selected, .view text selection:backdrop:disabled, iconview text selection:backdrop:disabled,
+      textview text selection:backdrop:disabled, flowbox flowboxchild:backdrop:disabled:selected, label:disabled selection:backdrop, label:backdrop selection:disabled, spinbutton:not(.vertical) selection:backdrop:disabled,
+      entry selection:backdrop:disabled, modelbutton.flat:backdrop:disabled:selected, popover.background checkbutton:backdrop:disabled:selected,
+      popover.background radiobutton:backdrop:disabled:selected,
+      .menuitem.button.flat:backdrop:disabled:selected, row:backdrop:disabled:selected, calendar:backdrop:disabled:selected, .sidebar :backdrop:disabled:selected {
+        color: #80b1e4; }
 
 .monospace {
   font: Monospace; }
