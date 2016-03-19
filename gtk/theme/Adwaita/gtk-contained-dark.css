@@ -2442,6 +2442,8 @@ checkbutton.text-button, radiobutton.text-button {
     margin-left: 4px; }
   checkbutton.text-button label:not(:only-child):last-child, radiobutton.text-button label:not(:only-child):last-child {
     margin-right: 4px; }
+  checkbutton.text-button:backdrop, radiobutton.text-button:backdrop {
+    color: #949796; }
   checkbutton.text-button:disabled:active, checkbutton.text-button:disabled:indeterminate, checkbutton.text-button:disabled, radiobutton.text-button:disabled:active, radiobutton.text-button:disabled:indeterminate, radiobutton.text-button:disabled {
     color: #949796; }
     checkbutton.text-button:disabled:active:backdrop, checkbutton.text-button:disabled:indeterminate:backdrop, checkbutton.text-button:disabled:backdrop, radiobutton.text-button:disabled:active:backdrop, radiobutton.text-button:disabled:indeterminate:backdrop, radiobutton.text-button:disabled:backdrop {

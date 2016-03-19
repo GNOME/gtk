@@ -2497,6 +2497,8 @@ checkbutton.text-button, radiobutton.text-button {
     &:last-child { margin-right: 4px; }
   }
 
+  &:backdrop { color: $backdrop_fg_color; }
+
   &:disabled {
     &:active, &:indeterminate, & {
       // set insensitive color, which is overriden otherwise
