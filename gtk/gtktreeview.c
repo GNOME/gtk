@@ -4965,8 +4965,6 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
   GdkRectangle cell_area;
   GdkRectangle clip;
   guint flags;
-  gint highlight_x;
-  gint expander_cell_width;
   gint bin_window_width;
   gint bin_window_height;
   GtkTreePath *drag_dest_path;
@@ -5093,8 +5091,6 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
       max_height = gtk_tree_view_get_row_height (tree_view, node);
 
       cell_offset = 0;
-      highlight_x = 0; /* should match x coord of first cell */
-      expander_cell_width = 0;
 
       background_area.y = y_offset + clip.y;
       background_area.height = max_height;
@@ -5255,13 +5251,6 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
 		  cell_area.width -= depth * expander_size;
 		}
 
-              /* If we have an expander column, the highlight underline
-               * starts with that column, so that it indicates which
-               * level of the tree we're dropping at.
-               */
-              highlight_x = cell_area.x;
-	      expander_cell_width = cell_area.width;
-
 	      if (is_separator)
                 {
                   gtk_style_context_save (context);
@@ -5415,48 +5404,34 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
         {
           /* Draw indicator for the drop
            */
-          gint highlight_y = -1;
 	  GtkRBTree *drag_tree = NULL;
 	  GtkRBNode *drag_node = NULL;
 
           gtk_style_context_save (context);
-          gtk_style_context_add_class (context, GTK_STYLE_CLASS_DND);
+          gtk_style_context_set_state (context, gtk_style_context_get_state (context) | GTK_STATE_FLAG_DROP_ACTIVE);
 
           switch (tree_view->priv->drag_dest_pos)
             {
             case GTK_TREE_VIEW_DROP_BEFORE:
-              highlight_y = background_area.y - 1;
-	      if (highlight_y < 0)
-		      highlight_y = 0;
+              gtk_style_context_add_class (context, "before");
               break;
 
             case GTK_TREE_VIEW_DROP_AFTER:
-              highlight_y = background_area.y + background_area.height - 1;
+              gtk_style_context_add_class (context, "after");
               break;
 
             case GTK_TREE_VIEW_DROP_INTO_OR_BEFORE:
             case GTK_TREE_VIEW_DROP_INTO_OR_AFTER:
-	      _gtk_tree_view_find_node (tree_view, drag_dest_path, &drag_tree, &drag_node);
-
-	      if (drag_tree == NULL)
-		break;
-
-              gtk_render_frame (context, cr,
-                                0, gtk_tree_view_get_row_y_offset (tree_view, drag_tree, drag_node),
-                                gdk_window_get_width (tree_view->priv->bin_window),
-                                gtk_tree_view_get_row_height (tree_view, drag_node));
+              gtk_style_context_add_class (context, "into");
               break;
             }
 
-          if (highlight_y >= 0)
-            {
-              gtk_tree_view_draw_line (tree_view, cr,
-                                       GTK_TREE_VIEW_FOREGROUND_LINE,
-                                       rtl ? highlight_x + expander_cell_width : highlight_x,
-                                       highlight_y,
-                                       rtl ? 0 : bin_window_width,
-                                       highlight_y);
-            }
+          _gtk_tree_view_find_node (tree_view, drag_dest_path, &drag_tree, &drag_node);
+          if (drag_tree != NULL)
+             gtk_render_frame (context, cr,
+                               0, gtk_tree_view_get_row_y_offset (tree_view, drag_tree, drag_node),
+                               gdk_window_get_width (tree_view->priv->bin_window),
+                               gtk_tree_view_get_row_height (tree_view, drag_node));
 
           gtk_style_context_restore (context);
         }
