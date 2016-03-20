@@ -705,8 +705,7 @@ add_volume (GtkPlacesView *view,
   name = g_volume_get_name (volume);
   path = !is_network ? g_volume_get_identifier (volume, G_VOLUME_IDENTIFIER_KIND_UNIX_DEVICE) : NULL;
 
-  if (!mount ||
-      (mount && !g_mount_is_shadowed (mount)))
+  if (!mount || !g_mount_is_shadowed (mount))
     {
       GtkWidget *row;
 
