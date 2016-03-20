@@ -1836,7 +1836,7 @@ treeview.view {
     treeview.view:disabled:selected {
       color: #92bce8; }
       treeview.view:disabled:selected:backdrop {
-        color: #80b1e4; }
+        color: #7fb0e4; }
     treeview.view:disabled:backdrop {
       color: #c3c3c0; }
   treeview.view.separator {
@@ -1863,7 +1863,7 @@ treeview.view {
       treeview.view.expander:selected:hover {
         color: #ffffff; }
       treeview.view.expander:selected:backdrop {
-        color: #c9def4; }
+        color: #c7dcf2; }
     treeview.view.expander:checked {
       -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); }
     treeview.view.expander:backdrop {
@@ -3835,7 +3835,7 @@ placessidebar row {
   placessidebar row:backdrop {
     color: #8b8e8f; }
     placessidebar row:backdrop:selected {
-      color: #ffffff; }
+      color: #fcfcfc; }
     placessidebar row:backdrop:disabled {
       color: #c3c3c0; }
   placessidebar row image.sidebar-icon {
@@ -4102,7 +4102,7 @@ colorswatch.dark overlay {
   colorswatch.dark overlay:hover {
     border-color: rgba(0, 0, 0, 0.8); }
   colorswatch.dark overlay:backdrop {
-    color: #ffffff; }
+    color: #fcfcfc; }
 colorswatch.light overlay {
   color: black; }
   colorswatch.light overlay:hover {
@@ -4276,7 +4276,7 @@ popover.background radiobutton:selected,
     entry selection:backdrop, modelbutton.flat:backdrop:selected, popover.background checkbutton:backdrop:selected,
     popover.background radiobutton:backdrop:selected,
     .menuitem.button.flat:backdrop:selected, row:backdrop:selected, calendar:backdrop:selected {
-      color: #ffffff; }
+      color: #fcfcfc; }
       row:selected label:backdrop:disabled, label:backdrop:disabled:selected, .view:backdrop:disabled:selected, iconview:backdrop:disabled:selected,
       .view text:backdrop:disabled:selected,
       iconview text:backdrop:disabled:selected,
@@ -4285,7 +4285,7 @@ popover.background radiobutton:selected,
       entry selection:backdrop:disabled, modelbutton.flat:backdrop:disabled:selected, popover.background checkbutton:backdrop:disabled:selected,
       popover.background radiobutton:backdrop:disabled:selected,
       .menuitem.button.flat:backdrop:disabled:selected, row:backdrop:disabled:selected, calendar:backdrop:disabled:selected {
-        color: #80b1e4; }
+        color: #7fb0e4; }
 
 .monospace {
   font: Monospace; }
