@@ -577,14 +577,14 @@ parse_input (BroadwayInput *input)
       is_mask = buf[1] & 0x80;
       data = buf + 2;
 
-      if (payload_len > 125)
+      if (payload_len == 126)
         {
           if (len < 4)
             return;
           payload_len = GUINT16_FROM_BE( *(guint16 *) data );
           data += 2;
         }
-      else if (payload_len > 126)
+      else if (payload_len == 127)
         {
           if (len < 10)
             return;
