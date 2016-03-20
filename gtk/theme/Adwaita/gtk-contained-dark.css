@@ -3803,7 +3803,7 @@ placessidebar row {
       color: #949796; }
     placessidebar row image.sidebar-icon:backdrop {
       color: #949796; }
-      placessidebar row image.sidebar-icon:backdrop:insensitivie {
+      placessidebar row image.sidebar-icon:backdrop:disabled {
         color: #5d6767; }
   placessidebar row label.sidebar-label:dir(ltr) {
     padding-right: 2px; }
