@@ -3616,10 +3616,6 @@ filechooserbutton:drop(active) {
     transition: $backdrop_transition;
   }
 
-  :selected { // FIXME: what this is supposed to select
-    @extend %selected_items;
-  }
-
   list { background-color: transparent; }
 
   paned & { &.left, &.right, &.left:dir(rtl), &:dir(rtl), &:dir(ltr), & { border-style: none; }}
@@ -3667,14 +3663,16 @@ placessidebar {
 
     // Using margins/padding directly in the SidebarRow
     // will make the animation of the new bookmark row jump
-    > revealer {
-      padding: 0 14px;
-    }
+    > revealer { padding: 0 14px; }
+
+    &:selected { color: $selected_fg_color; }
 
     &:disabled { color: $insensitive_fg_color; }
 
     &:backdrop {
       color: $backdrop_fg_color;
+
+      &:selected { color: $backdrop_selected_fg_color; }
 
       &:disabled { color: $backdrop_insensitive_color; }
     }
@@ -3685,8 +3683,6 @@ placessidebar {
       &:dir(ltr) { padding-right: 8px; }
       &:dir(rtl) { padding-left: 8px; }
     }
-
-    &:selected image.sidebar-icon { @extend %nobg_selected_items; }
 
     label.sidebar-label {
       &:dir(ltr) { padding-right: 2px; }
