@@ -1418,13 +1418,13 @@ spinbutton.vertical button.down {
     box-shadow: none;
     text-shadow: none;
     -gtk-icon-shadow: none; }
-treeview spinbutton entry,
-treeview spinbutton entry:focus {
-  padding: 1px;
-  border-width: 1px 0;
-  border-color: #4a90d9;
-  border-radius: 0;
-  box-shadow: none; }
+treeview spinbutton:not(.vertical) {
+  min-height: 0;
+  border-style: none;
+  border-radius: 0; }
+  treeview spinbutton:not(.vertical) entry {
+    min-height: 0;
+    padding: 1px 2px; }
 
 /**************
  * ComboBoxes *

@@ -1171,14 +1171,14 @@ spinbutton {
   }
 
   // Misc
-  treeview & {
-    entry,
-    entry:focus {
-      padding: 1px;
-      border-width: 1px 0;
-      border-color: $selected_bg_color;
-      border-radius: 0;
-      box-shadow: none;
+  treeview &:not(.vertical) {
+    min-height: 0;
+    border-style: none;
+    border-radius: 0;
+
+    entry {
+      min-height: 0;
+      padding: 1px 2px;
     }
   }
 }
