@@ -21,6 +21,7 @@
 
 #include "gtkcssruleprivate.h"
 
+#include "gtkcssdefinecolorruleprivate.h"
 #include "gtkcssimportruleprivate.h"
 #include "gtkcssstylesheetprivate.h"
 
@@ -180,6 +181,10 @@ gtk_css_rule_new_from_at_rule (GtkCssTokenSource *source,
   if (g_ascii_strcasecmp (token->string.string, "import") == 0)
     {
       rule = gtk_css_import_rule_new_parse (at_source, parent_rule, parent_style_sheet);
+    }
+  else if (g_ascii_strcasecmp (token->string.string, "define-color") == 0)
+    {
+      rule = gtk_css_define_color_rule_new_parse (at_source, parent_rule, parent_style_sheet);
     }
   else
     {

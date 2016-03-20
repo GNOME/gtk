@@ -398,6 +398,7 @@ gtk_private_h_sources =		\
 	gtkcsscustomgadgetprivate.h	\
 	gtkcsscustompropertyprivate.h 	\
 	gtkcssdeclarationprivate.h	\
+	gtkcssdefinecolorruleprivate.h	\
 	gtkcssdimensionvalueprivate.h	\
 	gtkcsseasevalueprivate.h	\
 	gtkcssenginevalueprivate.h	\
@@ -676,6 +677,7 @@ gtk_base_c_sources = 		\
 	gtkcsscustomgadget.c	\
 	gtkcsscustomproperty.c	\
 	gtkcssdeclaration.c	\
+	gtkcssdefinecolorrule.c	\
 	gtkcssdimensionvalue.c	\
 	gtkcsseasevalue.c	\
 	gtkcssenumvalue.c	\
