@@ -3800,18 +3800,18 @@ placessidebar row {
   padding: 0px; }
   placessidebar row > revealer {
     padding: 0 14px; }
+  placessidebar row:disabled {
+    color: #949796; }
+  placessidebar row:backdrop {
+    color: #949796; }
+    placessidebar row:backdrop:disabled {
+      color: #5d6767; }
   placessidebar row image.sidebar-icon {
     opacity: 0.7; }
     placessidebar row image.sidebar-icon:dir(ltr) {
       padding-right: 8px; }
     placessidebar row image.sidebar-icon:dir(rtl) {
       padding-left: 8px; }
-    placessidebar row image.sidebar-icon:disabled {
-      color: #949796; }
-    placessidebar row image.sidebar-icon:backdrop {
-      color: #949796; }
-      placessidebar row image.sidebar-icon:backdrop:disabled {
-        color: #5d6767; }
   placessidebar row label.sidebar-label:dir(ltr) {
     padding-right: 2px; }
   placessidebar row label.sidebar-label:dir(rtl) {
