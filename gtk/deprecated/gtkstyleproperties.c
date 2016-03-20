@@ -881,7 +881,7 @@ gtk_style_properties_merge (GtkStyleProperties       *props,
     {
       PropertyData *prop_to_merge = val;
       PropertyData *prop;
-      guint i;
+      guint i, j;
 
       prop = g_hash_table_lookup (priv->properties, key);
 
@@ -932,8 +932,8 @@ gtk_style_properties_merge (GtkStyleProperties       *props,
               array = g_value_get_boxed (_gtk_css_typed_value_get (value->value));
               array_to_merge = g_value_get_boxed (_gtk_css_typed_value_get (data->value));
 
-              for (i = 0; i < array_to_merge->len; i++)
-                g_ptr_array_add (array, g_ptr_array_index (array_to_merge, i));
+              for (i = 0; j < array_to_merge->len; j++)
+                g_ptr_array_add (array, g_ptr_array_index (array_to_merge, j));
             }
           else if (replace || value->value == NULL)
             {
