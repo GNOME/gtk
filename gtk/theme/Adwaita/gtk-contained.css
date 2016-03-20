@@ -2457,6 +2457,7 @@ switch {
     min-height: 27px;
     border: 1px solid;
     border-radius: 3px;
+    transition: all 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
     color: #2e3436;
     outline-color: rgba(46, 52, 54, 0.3);
     border-color: #9d9d99;
@@ -2481,6 +2482,7 @@ switch {
     switch:disabled slider label, switch:disabled slider {
       color: #8b8e8f; }
   switch:backdrop slider {
+    transition: 200ms ease-out;
     border-color: #a5a5a1;
     background-image: linear-gradient(to bottom, #e8e8e7);
     text-shadow: none;

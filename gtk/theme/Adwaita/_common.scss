@@ -5,6 +5,7 @@
 $ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 $asset_suffix: if($variant=='dark', '-dark', '');
 $backdrop_transition: 200ms ease-out;
+$button_transition: all 200ms $ease-out-quad;
 
 * {
   padding: 0;
@@ -437,14 +438,13 @@ $_dot_color: if($variant=='light', $selected_bg_color,
 
 button {
   @at-root %button_basic, & {
-    $_button_transition: all 200ms $ease-out-quad;
 
     min-height: 24px;
     min-width: 16px;
     padding: 4px 8px;
     border: 1px solid;
     border-radius: 3px;
-    transition: $_button_transition;
+    transition: $button_transition;
 
     @include button(normal);
 
@@ -457,10 +457,10 @@ button {
       transition: none;
 
       &:hover {
-        transition: $_button_transition;
+        transition: $button_transition;
         transition-duration: 500ms;
 
-        &:active { transition: $_button_transition; }
+        &:active { transition: $button_transition; }
       }
     }
 
@@ -2459,6 +2459,8 @@ switch {
     min-height: 27px;
     border: 1px solid;
     border-radius: 3px;
+    transition: $button_transition;
+
     @include button(normal-alt, $edge: $shadow_color);
   }
 
@@ -2469,7 +2471,11 @@ switch {
   &:disabled slider { @include button(insensitive); }
 
   &:backdrop {
-    slider { @include button(backdrop); }
+    slider {
+      transition: $backdrop_transition;
+
+      @include button(backdrop);
+    }
 
     &:active slider { border-color: if($variant == 'light', $selected_bg_color, $selected_borders_color); }
 
