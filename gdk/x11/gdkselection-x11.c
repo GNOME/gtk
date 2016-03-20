@@ -738,8 +738,7 @@ gdk_x11_display_utf8_to_compound_text (GdkDisplay  *display,
 
       if (!locale_str)
         {
-          if (!(error->domain = G_CONVERT_ERROR &&
-                error->code == G_CONVERT_ERROR_ILLEGAL_SEQUENCE))
+          if (!g_error_matches (error, G_CONVERT_ERROR, G_CONVERT_ERROR_ILLEGAL_SEQUENCE))
             {
               g_warning ("Error converting from UTF-8 to '%s': %s",
                          charset, error->message);
