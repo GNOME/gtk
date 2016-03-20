@@ -185,8 +185,10 @@ selection_get (GtkWidget *widget,
     case COMPOUND_TEXT:
     case TEXT:
       type = seltypes[COMPOUND_TEXT];
+      break;
     case STRING:
       type = seltypes[STRING];
+      break;
     }
   
   gtk_selection_data_set (selection_data, type, 8, buffer, len);
