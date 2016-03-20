@@ -682,7 +682,7 @@ draw_shadow_corner (const GtkCssValue   *shadow,
       x2 = ceil (box->box.x + box->corner[corner].horizontal + clip_radius);
       x = x1;
       sx = 1;
-      max_other = MAX(box->corner[GTK_CSS_TOP_RIGHT].horizontal, box->corner[GTK_CSS_TOP_RIGHT].horizontal);
+      max_other = MAX(box->corner[GTK_CSS_TOP_RIGHT].horizontal, box->corner[GTK_CSS_BOTTOM_RIGHT].horizontal);
       x3 = floor (box->box.x + box->box.width - max_other - clip_radius);
       if (x2 > x3)
         overlapped = TRUE;
@@ -693,7 +693,7 @@ draw_shadow_corner (const GtkCssValue   *shadow,
       x2 = ceil (box->box.x + box->box.width + clip_radius);
       x = x2;
       sx = -1;
-      max_other = MAX(box->corner[GTK_CSS_TOP_LEFT].horizontal, box->corner[GTK_CSS_TOP_LEFT].horizontal);
+      max_other = MAX(box->corner[GTK_CSS_TOP_LEFT].horizontal, box->corner[GTK_CSS_BOTTOM_LEFT].horizontal);
       x3 = ceil (box->box.x + max_other + clip_radius);
       if (x3 > x1)
         overlapped = TRUE;
