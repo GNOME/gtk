@@ -32,8 +32,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-19 03:43+0100\n"
-"PO-Revision-Date: 2016-03-19 03:42+0100\n"
+"POT-Creation-Date: 2016-03-20 23:26+0100\n"
+"PO-Revision-Date: 2016-03-20 21:46+0100\n"
 "Last-Translator: Ask Hjorth Larsen <asklarsen@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "Language: da\n"
@@ -2259,7 +2259,7 @@ msgstr "_Navn"
 
 #. Open item is always present
 #: ../gtk/gtkfilechoosernative.c:371 ../gtk/gtkfilechoosernative.c:456
-#: ../gtk/gtkplacessidebar.c:3413 ../gtk/gtkplacesview.c:1578
+#: ../gtk/gtkplacessidebar.c:3413 ../gtk/gtkplacesview.c:1577
 msgid "_Open"
 msgstr "_Åbn"
 
@@ -3088,11 +3088,11 @@ msgstr "Kan ikke skubbe %s ud"
 msgid "Unable to poll “%s” for media changes"
 msgstr "Kan ikke forespørge \"%s\" om medieændringer"
 
-#: ../gtk/gtkplacessidebar.c:3416 ../gtk/gtkplacesview.c:1588
+#: ../gtk/gtkplacessidebar.c:3416 ../gtk/gtkplacesview.c:1587
 msgid "Open in New _Tab"
 msgstr "Åbn i nyt _faneblad"
 
-#: ../gtk/gtkplacessidebar.c:3419 ../gtk/gtkplacesview.c:1599
+#: ../gtk/gtkplacessidebar.c:3419 ../gtk/gtkplacesview.c:1598
 msgid "Open in New _Window"
 msgstr "Åbn i nyt _vindue"
 
@@ -3108,11 +3108,11 @@ msgstr "_Fjern"
 msgid "Rename…"
 msgstr "Omdøb…"
 
-#: ../gtk/gtkplacessidebar.c:3429 ../gtk/gtkplacesview.c:1633
+#: ../gtk/gtkplacessidebar.c:3429 ../gtk/gtkplacesview.c:1632
 msgid "_Mount"
 msgstr "_Montér"
 
-#: ../gtk/gtkplacessidebar.c:3430 ../gtk/gtkplacesview.c:1623
+#: ../gtk/gtkplacessidebar.c:3430 ../gtk/gtkplacesview.c:1622
 msgid "_Unmount"
 msgstr "_Afmontér"
 
@@ -3124,58 +3124,58 @@ msgstr "_Skub ud"
 msgid "_Detect Media"
 msgstr "_Søg efter medie"
 
-#: ../gtk/gtkplacessidebar.c:3878 ../gtk/gtkplacesview.c:1053
+#: ../gtk/gtkplacessidebar.c:3878 ../gtk/gtkplacesview.c:1052
 msgid "Computer"
 msgstr "Computer"
 
-#: ../gtk/gtkplacesview.c:881
+#: ../gtk/gtkplacesview.c:880
 msgid "Searching for network locations"
 msgstr "Søger efter netværkssteder"
 
-#: ../gtk/gtkplacesview.c:888
+#: ../gtk/gtkplacesview.c:887
 msgid "No network locations found"
 msgstr "Ingen netværkssteder fundet"
 
 # scootergrisen: Kan ikke tilgå sted/placering
 #. if it wasn't cancelled show a dialog
-#: ../gtk/gtkplacesview.c:1163 ../gtk/gtkplacesview.c:1236
+#: ../gtk/gtkplacesview.c:1162 ../gtk/gtkplacesview.c:1235
 msgid "Unable to access location"
 msgstr "Kan ikke tilgå sted"
 
 #. Restore from Cancel to Connect
-#: ../gtk/gtkplacesview.c:1180
+#: ../gtk/gtkplacesview.c:1179
 msgid "Con_nect"
 msgstr "_Tilslut"
 
 # end -> afbryd jf. gnome-system-monitor
 #. if it wasn't cancelled show a dialog
-#: ../gtk/gtkplacesview.c:1299
+#: ../gtk/gtkplacesview.c:1298
 msgid "Unable to unmount volume"
 msgstr "Kan ikke afmontere diskenhed"
 
 #. Allow to cancel the operation
-#: ../gtk/gtkplacesview.c:1381
+#: ../gtk/gtkplacesview.c:1380
 msgid "Cance_l"
 msgstr "_Annullér"
 
-#: ../gtk/gtkplacesview.c:1623
+#: ../gtk/gtkplacesview.c:1622
 msgid "_Disconnect"
 msgstr "_Afbryd"
 
-#: ../gtk/gtkplacesview.c:1633
+#: ../gtk/gtkplacesview.c:1632
 msgid "_Connect"
 msgstr "_Tilslut"
 
 # scootergrisen: Kan ikke hente sted/placering på fjernserver
-#: ../gtk/gtkplacesview.c:1798
+#: ../gtk/gtkplacesview.c:1797
 msgid "Unable to get remote server location"
 msgstr "Kan ikke hente sted for fjernserver"
 
-#: ../gtk/gtkplacesview.c:1935 ../gtk/gtkplacesview.c:1944
+#: ../gtk/gtkplacesview.c:1934 ../gtk/gtkplacesview.c:1943
 msgid "Networks"
 msgstr "Netværk"
 
-#: ../gtk/gtkplacesview.c:1935 ../gtk/gtkplacesview.c:1944
+#: ../gtk/gtkplacesview.c:1934 ../gtk/gtkplacesview.c:1943
 msgid "On This Computer"
 msgstr "På denne computer"
 
@@ -5871,10 +5871,8 @@ msgstr "Udskriv til testprinter"
 #~ msgid "Clip area"
 #~ msgstr "Klippeområde"
 
-#, fuzzy
-#~| msgid "Frame count"
 #~ msgid "Frame Clock"
-#~ msgstr "Antal billeder"
+#~ msgstr "Billedur"
 
 #~ msgid "Tick callback"
 #~ msgstr "Tilbagekald for tik"
@@ -5946,10 +5944,8 @@ msgstr "Udskriv til testprinter"
 #~ msgid "Selector"
 #~ msgstr "Vælger"
 
-#, fuzzy
-#~| msgid "Signals"
 #~ msgid "Signal"
-#~ msgstr "Signaler"
+#~ msgstr "Signal"
 
 #~ msgid "Connected"
 #~ msgstr "Tilsluttet"
@@ -6027,6 +6023,9 @@ msgstr "Udskriv til testprinter"
 #~ msgid "Show Baselines"
 #~ msgstr "Vis grundlinjer"
 
+#~ msgid "Show Layout Borders"
+#~ msgstr "Vis layoutgrænser"
+
 #~ msgid "Show Pixel Cache"
 #~ msgstr "Vis pixel-lager"
 
@@ -6090,10 +6089,8 @@ msgstr "Udskriv til testprinter"
 #~ msgid "Class Hierarchy"
 #~ msgstr "Klassehierarki"
 
-#, fuzzy
-#~| msgid "Selector"
 #~ msgid "CSS Selector"
-#~ msgstr "Vælger"
+#~ msgstr "CSS-vælger"
 
 # scootergrisen: CSS-punkter
 #~ msgid "CSS nodes"
@@ -6431,7 +6428,7 @@ msgstr "Udskriv til testprinter"
 #~ msgstr "Avanceret"
 
 #~ msgid "Some of the settings in the dialog conflict"
-#~ msgstr "Nogle af dialogvinduets indstillinger er i modstrid"
+#~ msgstr "Nogle af dialogens indstillinger er i modstrid"
 
 #~ msgid "Select which type of documents are shown"
 #~ msgstr "Vælg hvilken type dokumenter der skal vises"
