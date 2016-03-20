@@ -126,6 +126,7 @@ struct _GtkCssTokenSourcePart {
   GtkCssTokenSource parent;
   GtkCssTokenSource *source;
   GtkCssTokenType end_type;
+  GSList *blocks; /* of GPOINTER_TO_UINT(GtkCssTokenType) */
 };
 
 static void
@@ -134,6 +135,7 @@ gtk_css_token_source_part_finalize (GtkCssTokenSource *source)
   GtkCssTokenSourcePart *part = (GtkCssTokenSourcePart *) source;
 
   gtk_css_token_source_unref (part->source);
+  g_slist_free (part->blocks);
 }
 
 static void
@@ -143,11 +145,32 @@ gtk_css_token_source_part_consume_token (GtkCssTokenSource *source,
   GtkCssTokenSourcePart *part = (GtkCssTokenSourcePart *) source;
   const GtkCssToken *token;
 
-  if (!gtk_css_token_get_pending_block (source))
+  token = gtk_css_token_source_peek_token (part->source);
+
+  if (part->blocks)
     {
-      token = gtk_css_token_source_peek_token (part->source);
-      if (gtk_css_token_is (token, part->end_type))
-        return;
+      if (token->type == GPOINTER_TO_UINT (part->blocks->data))
+        part->blocks = g_slist_remove (part->blocks, part->blocks->data);
+    }
+  else if (gtk_css_token_is (token, part->end_type))
+    {
+      return;
+    }
+
+  switch (token->type)
+    {
+    case GTK_CSS_TOKEN_FUNCTION:
+    case GTK_CSS_TOKEN_OPEN_PARENS:
+      part->blocks = g_slist_prepend (part->blocks, GUINT_TO_POINTER (GTK_CSS_TOKEN_CLOSE_PARENS));
+      break;
+    case GTK_CSS_TOKEN_OPEN_SQUARE:
+      part->blocks = g_slist_prepend (part->blocks, GUINT_TO_POINTER (GTK_CSS_TOKEN_CLOSE_SQUARE));
+      break;
+    case GTK_CSS_TOKEN_OPEN_CURLY:
+      part->blocks = g_slist_prepend (part->blocks, GUINT_TO_POINTER (GTK_CSS_TOKEN_CLOSE_CURLY));
+      break;
+    default:
+      break;
     }
 
   gtk_css_token_source_consume_token_as (part->source, consumer);
@@ -161,7 +184,7 @@ gtk_css_token_source_part_peek_token (GtkCssTokenSource *source)
   const GtkCssToken *token;
 
   token = gtk_css_token_source_peek_token (part->source);
-  if (!gtk_css_token_get_pending_block (source) &&
+  if (part->blocks == NULL &&
       gtk_css_token_is (token, part->end_type))
     return &eof_token;
 
@@ -257,41 +280,7 @@ void
 gtk_css_token_source_consume_token_as (GtkCssTokenSource *source,
                                        GObject           *consumer)
 {
-  const GtkCssToken *token;
-  
-  if (source->blocks)
-    {
-      token = gtk_css_token_source_peek_token (source);
-      if (gtk_css_token_is (token, GPOINTER_TO_UINT (source->blocks->data)))
-        source->blocks = g_slist_remove (source->blocks, source->blocks->data);
-    }
-
   source->klass->consume_token (source, consumer);
-
-  token = gtk_css_token_source_peek_token (source);
-  switch (token->type)
-    {
-    case GTK_CSS_TOKEN_FUNCTION:
-    case GTK_CSS_TOKEN_OPEN_PARENS:
-      source->blocks = g_slist_prepend (source->blocks, GUINT_TO_POINTER (GTK_CSS_TOKEN_CLOSE_PARENS));
-      break;
-    case GTK_CSS_TOKEN_OPEN_SQUARE:
-      source->blocks = g_slist_prepend (source->blocks, GUINT_TO_POINTER (GTK_CSS_TOKEN_CLOSE_SQUARE));
-      break;
-    case GTK_CSS_TOKEN_OPEN_CURLY:
-      source->blocks = g_slist_prepend (source->blocks, GUINT_TO_POINTER (GTK_CSS_TOKEN_CLOSE_CURLY));
-      break;
-    default:
-      break;
-    }
-
-  source->klass->consume_token (source, consumer);
-
-  if (source->blocks)
-    {
-      if (token_type == GPOINTER_TO_UINT (source->blocks->data))
-        source->blocks = g_slist_remove (source->blocks, source->blocks->data);
-    }
 }
 
 const GtkCssToken *
@@ -519,15 +508,6 @@ gtk_css_token_source_consume_url (GtkCssTokenSource *source)
       gtk_css_token_source_consume_all (source);
       return NULL;
     }
-}
-
-GtkCssTokenType
-gtk_css_token_get_pending_block (GtkCssTokenSource *source)
-{
-  if (!source->blocks)
-    return GTK_CSS_TOKEN_EOF;
-
-  return GPOINTER_TO_UINT(source->blocks->data);
 }
 
 void

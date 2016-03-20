@@ -33,7 +33,7 @@ typedef struct _GtkCssTokenSourceAt GtkCssTokenSourceAt;
 struct _GtkCssTokenSourceAt {
   GtkCssTokenSource parent;
   GtkCssTokenSource *source;
-  guint inside_curly_block :1;
+  GSList *blocks;
   guint done :1;
 };
 
@@ -41,6 +41,8 @@ static void
 gtk_css_token_source_at_finalize (GtkCssTokenSource *source)
 {
   GtkCssTokenSourceAt *at = (GtkCssTokenSourceAt *) source;
+
+  g_slist_free (at->blocks);
 
   gtk_css_token_source_unref (at->source);
 }
@@ -55,19 +57,36 @@ gtk_css_token_source_at_consume_token (GtkCssTokenSource *source,
   if (at->done)
     return;
 
-  if (gtk_css_token_get_pending_block (source))
-    {
-      gtk_css_token_source_consume_token_as (at->source, consumer);
-      return;
-    }
-
   token = gtk_css_token_source_peek_token (at->source);
-  if (gtk_css_token_is (token, GTK_CSS_TOKEN_SEMICOLON))
-    at->done = TRUE;
-  else if (at->inside_curly_block && gtk_css_token_is (token, GTK_CSS_TOKEN_CLOSE_CURLY))
-    at->done = TRUE;
-  else if (gtk_css_token_is (token, GTK_CSS_TOKEN_OPEN_CURLY))
-    at->inside_curly_block = TRUE;
+  switch (token->type)
+    {
+    case GTK_CSS_TOKEN_FUNCTION:
+    case GTK_CSS_TOKEN_OPEN_PARENS:
+      at->blocks = g_slist_prepend (at->blocks, GUINT_TO_POINTER (GTK_CSS_TOKEN_CLOSE_PARENS));
+      break;
+    case GTK_CSS_TOKEN_OPEN_SQUARE:
+      at->blocks = g_slist_prepend (at->blocks, GUINT_TO_POINTER (GTK_CSS_TOKEN_CLOSE_SQUARE));
+      break;
+    case GTK_CSS_TOKEN_OPEN_CURLY:
+      at->blocks = g_slist_prepend (at->blocks, GUINT_TO_POINTER (GTK_CSS_TOKEN_CLOSE_CURLY));
+      break;
+    case GTK_CSS_TOKEN_CLOSE_PARENS:
+    case GTK_CSS_TOKEN_CLOSE_SQUARE:
+    case GTK_CSS_TOKEN_CLOSE_CURLY:
+      if (at->blocks && GPOINTER_TO_UINT (at->blocks->data) == token->type)
+        {
+          at->blocks = g_slist_remove (at->blocks, at->blocks->data);
+          if (token->type == GTK_CSS_TOKEN_CLOSE_CURLY && at->blocks == NULL)
+            at->done = TRUE;
+        }
+      break;
+    case GTK_CSS_TOKEN_SEMICOLON:
+      if (at->blocks == NULL)
+        at->done = TRUE;
+      break;
+    default:
+      break;
+    }
 
   gtk_css_token_source_consume_token_as (at->source, consumer);
 }

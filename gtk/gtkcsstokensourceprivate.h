@@ -33,7 +33,6 @@ struct _GtkCssTokenSource
   const GtkCssTokenSourceClass *klass;
   gint ref_count;
   GObject *consumer;
-  GSList *blocks; /* of GPOINTER_TO_UINT(GtkCssTokenType) */
 };
 
 struct _GtkCssTokenSourceClass
@@ -64,8 +63,6 @@ void                    gtk_css_token_source_consume_token_as   (GtkCssTokenSour
                                                                  GObject                *consumer);
 const GtkCssToken *     gtk_css_token_source_peek_token         (GtkCssTokenSource      *source);
 const GtkCssToken *     gtk_css_token_source_get_token          (GtkCssTokenSource      *source);
-
-GtkCssTokenType         gtk_css_token_get_pending_block         (GtkCssTokenSource      *source);
 
 void                    gtk_css_token_source_consume_all        (GtkCssTokenSource      *source);
 char *                  gtk_css_token_source_consume_to_string  (GtkCssTokenSource      *source);
