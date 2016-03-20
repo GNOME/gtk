@@ -272,8 +272,7 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
 							     0,
 							     G_MAXINT,
                                                              0,
-                                                             GTK_PARAM_READABLE |
-                                                             G_PARAM_DEPRECATED|G_PARAM_DEPRECATED));
+                                                             GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   gtk_container_class_handle_border_width (container_class);
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_MENU_BAR);
