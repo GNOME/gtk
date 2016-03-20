@@ -21,6 +21,7 @@
 
 #include "gtkcssruleprivate.h"
 
+#include "gtkcssimportruleprivate.h"
 #include "gtkcssstylesheetprivate.h"
 
 typedef struct _GtkCssRulePrivate GtkCssRulePrivate;
@@ -159,6 +160,7 @@ gtk_css_rule_new_from_at_rule (GtkCssTokenSource *source,
 {
   GtkCssTokenSource *at_source;
   const GtkCssToken *token;
+  GtkCssRule *rule;
 
   g_return_val_if_fail (source != NULL, NULL);
   g_return_val_if_fail (parent_rule == NULL || GTK_IS_CSS_RULE (parent_rule), NULL);
@@ -170,27 +172,33 @@ gtk_css_rule_new_from_at_rule (GtkCssTokenSource *source,
   if (token->type != GTK_CSS_TOKEN_AT_KEYWORD)
     {
       gtk_css_token_source_error (at_source, "Expected an '@'");
+      gtk_css_token_source_consume_all (at_source);
       gtk_css_token_source_unref (at_source);
       return NULL;
     }
+
+  if (g_ascii_strcasecmp (token->string.string, "import") == 0)
+    {
+      rule = gtk_css_import_rule_new_parse (at_source, parent_rule, parent_style_sheet);
+    }
   else
     {
-      const char *name = token->string.string;
-
-      if (g_ascii_strcasecmp (name, "import") == 0)
-        {
-          gtk_css_token_source_error (source, "Add code to parse @import here");
-        }
-      else
-        {
-          gtk_css_token_source_unknown (source, "Unknown rule @%s", name);
-        }
+      gtk_css_token_source_unknown (at_source, "Unknown rule @%s", token->string.string);
+      gtk_css_token_source_consume_all (at_source);
+      rule = NULL;
     }
 
-  gtk_css_token_source_consume_all (at_source);
+  token = gtk_css_token_source_get_token (at_source);
+  if (rule != NULL && !gtk_css_token_is (token, GTK_CSS_TOKEN_EOF))
+    {
+      gtk_css_token_source_unknown (at_source, "Junk at end of @-rule");
+      gtk_css_token_source_consume_all (at_source);
+      g_object_unref (rule);
+      rule = NULL;
+    }
   gtk_css_token_source_unref (at_source);
 
-  return NULL;
+  return rule;
 }
 
 void
