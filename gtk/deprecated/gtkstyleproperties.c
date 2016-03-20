@@ -932,7 +932,7 @@ gtk_style_properties_merge (GtkStyleProperties       *props,
               array = g_value_get_boxed (_gtk_css_typed_value_get (value->value));
               array_to_merge = g_value_get_boxed (_gtk_css_typed_value_get (data->value));
 
-              for (i = 0; j < array_to_merge->len; j++)
+              for (j = 0; j < array_to_merge->len; j++)
                 g_ptr_array_add (array, g_ptr_array_index (array_to_merge, j));
             }
           else if (replace || value->value == NULL)
