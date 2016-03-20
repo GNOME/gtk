@@ -50,8 +50,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-20 23:24+0100\n"
-"PO-Revision-Date: 2016-03-20 22:52+0100\n"
+"POT-Creation-Date: 2016-03-20 23:57+0100\n"
+"PO-Revision-Date: 2016-03-20 23:54+0100\n"
 "Last-Translator: Ask Hjorth Larsen <asklarsen@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "Language: da\n"
@@ -1340,18 +1340,16 @@ msgid "The widget referenced by this accessible."
 msgstr "Kontrolleren, der refereres af denne tilgængelige enhed."
 
 #: ../gtk/gtkactionable.c:71
-#, fuzzy
 msgid "Action name"
-msgstr "handlingsnavn"
+msgstr "Handlingsnavn"
 
 #: ../gtk/gtkactionable.c:72
 msgid "The name of the associated action, like 'app.quit'"
 msgstr "Navnet på den tilknyttede handling, såsom \"app.quit\""
 
 #: ../gtk/gtkactionable.c:76
-#, fuzzy
 msgid "Action target value"
-msgstr "handlingsmålværdi"
+msgstr "Handlingsmålværdi"
 
 #: ../gtk/gtkactionable.c:77
 msgid "The parameter for action invocations"
@@ -3244,12 +3242,11 @@ msgstr "Kan bruges til at tilføje et nyt underelement til beholderen"
 
 #: ../gtk/gtkcssnode.c:616
 msgid "Style Classes"
-msgstr ""
+msgstr "Stilklasser"
 
 #: ../gtk/gtkcssnode.c:616
-#, fuzzy
 msgid "List of classes"
-msgstr "Liste af ikonnavne"
+msgstr "Liste af klasser"
 
 #: ../gtk/gtkcssnode.c:621 ../gtk/gtkcssstyleproperty.c:223
 msgid "ID"
@@ -3257,30 +3254,28 @@ msgstr "Id"
 
 #: ../gtk/gtkcssnode.c:621
 msgid "Unique ID"
-msgstr ""
+msgstr "Unikt id"
 
 #: ../gtk/gtkcssnode.c:631 ../gtk/gtkswitch.c:910
 msgid "State"
 msgstr "Tilstand"
 
 #: ../gtk/gtkcssnode.c:631
-#, fuzzy
 msgid "State flags"
-msgstr "Tilstandsbesked"
+msgstr "Tilstandsflag"
 
+# XXX Tænk over node
 #: ../gtk/gtkcssnode.c:637
 msgid "If other nodes can see this node"
-msgstr ""
+msgstr "Om andre nodes kan se denne node"
 
 #: ../gtk/gtkcssnode.c:642
-#, fuzzy
 msgid "Widget type"
-msgstr "Kontrolnavn"
+msgstr "Kontroltype"
 
 #: ../gtk/gtkcssnode.c:642
-#, fuzzy
 msgid "GType of the widget"
-msgstr "Navnet på kontrollen"
+msgstr "GType for kontrollen"
 
 #: ../gtk/gtkcssshorthandproperty.c:170
 msgid "Subproperties"
