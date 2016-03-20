@@ -400,6 +400,16 @@ entry {
   }
 }
 
+treeview entry {
+  &.flat, & {
+    border-radius: 0;
+    background-image: none;
+    background-color: $base_color;
+
+    &:focus { border-color: $selected_bg_color; }
+  }
+}
+
 
 /***********
  * Buttons *

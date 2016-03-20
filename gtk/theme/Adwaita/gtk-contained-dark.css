@@ -387,6 +387,13 @@ entry:drop(active):not(:only-child) + button,
 entry:drop(active):not(:only-child) + combobox > box > button.combo {
   border-top-color: #4e9a06; }
 
+treeview entry.flat, treeview entry {
+  border-radius: 0;
+  background-image: none;
+  background-color: #292929; }
+  treeview entry.flat:focus, treeview entry:focus {
+    border-color: #215d9c; }
+
 /***********
  * Buttons *
  ***********/
