@@ -345,7 +345,7 @@ gtk_mirror_bin_get_preferred_height (GtkWidget *widget,
 
   gtk_mirror_bin_size_request (widget, &requisition);
 
-  *minimum = *natural = requisition.width;
+  *minimum = *natural = requisition.height;
 }
 
 static void
