@@ -1606,7 +1606,17 @@ treeview.view {
     border-top: $backdrop_bg_color;
   }
 
-  &.dnd {
+  &.before:drop(active) {
+    border-style: solid none none none;
+    border-width: 1px;
+    border-color: mix($fg_color, $selected_bg_color, 50%);
+  }
+  &.after:drop(active) {
+    border-style: none none solid none;
+    border-width: 1px;
+    border-color: mix($fg_color, $selected_bg_color, 50%);
+  }
+  &:drop(active) {
     border-style: solid none;
     border-width: 1px;
     border-color: mix($fg_color, $selected_bg_color, 50%);

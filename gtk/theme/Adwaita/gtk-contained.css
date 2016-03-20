@@ -1998,7 +1998,15 @@ treeview.view {
   treeview.view:backdrop {
     border-left-color: #babbbb;
     border-top: #e8e8e7; }
-  treeview.view.dnd {
+  treeview.view.before:drop(active) {
+    border-style: solid none none none;
+    border-width: 1px;
+    border-color: #3c6288; }
+  treeview.view.after:drop(active) {
+    border-style: none none solid none;
+    border-width: 1px;
+    border-color: #3c6288; }
+  treeview.view:drop(active) {
     border-style: solid none;
     border-width: 1px;
     border-color: #3c6288; }
