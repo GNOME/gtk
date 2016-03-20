@@ -10,17 +10,18 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-11 00:18+0000\n"
-"PO-Revision-Date: 2016-03-11 03:16+0200\n"
-"Last-Translator: Мирослав Николић <miroslavnikolic@rocketmail.com>\n"
+"POT-Creation-Date: 2016-03-11 12:19+0000\n"
+"PO-Revision-Date: 2016-03-11 18:35+0100\n"
+"Last-Translator: Марко М. Костић <marko.m.kostic@gmail.com>\n"
 "Language-Team: Serbian <(gnom@prevod.org)>\n"
 "Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=n==1? 3 : n%10==1 && n%100!=11 ? 0 : "
-"n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=4; plural=n==1? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Project-Style: gnome\n"
+"X-Generator: Poedit 1.8.6\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
 #, c-format
@@ -76,7 +77,7 @@ msgstr "ГДК опције за уклањање грешака за поста
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:239 gdk/gdk.c:242 gtk/gtkmain.c:462 gtk/gtkmain.c:465
+#: gdk/gdk.c:239 gdk/gdk.c:242 gtk/gtkmain.c:463 gtk/gtkmain.c:466
 msgid "FLAGS"
 msgstr "ОПЦИЈЕ"
 
@@ -2725,40 +2726,40 @@ msgstr ""
 
 # допунски додаци? „добар фазон“... црни Данило
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:455
+#: gtk/gtkmain.c:456
 msgid "Load additional GTK+ modules"
 msgstr "Учитава допунске Гтк+ додатке"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:456
+#: gtk/gtkmain.c:457
 msgid "MODULES"
 msgstr "ДОДАЦИ"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:458
+#: gtk/gtkmain.c:459
 msgid "Make all warnings fatal"
 msgstr "Чини сва упозорења кобним"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:461
+#: gtk/gtkmain.c:462
 msgid "GTK+ debugging flags to set"
 msgstr "Гтк+ опције за уклањање грешака за укључивање"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:464
+#: gtk/gtkmain.c:465
 msgid "GTK+ debugging flags to unset"
 msgstr "Гтк+ опције за уклањање грешака за искључивање"
 
-#: gtk/gtkmain.c:788
+#: gtk/gtkmain.c:790
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Не могу да приступим екрану: %s"
 
-#: gtk/gtkmain.c:865
+#: gtk/gtkmain.c:885
 msgid "GTK+ Options"
 msgstr "Гтк+ опције"
 
-#: gtk/gtkmain.c:865
+#: gtk/gtkmain.c:885
 msgid "Show GTK+ Options"
 msgstr "Приказује Гтк+ опције"
 
@@ -2767,7 +2768,7 @@ msgstr "Приказује Гтк+ опције"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:1193
+#: gtk/gtkmain.c:1213
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -4249,19 +4250,19 @@ msgstr "Збирно"
 msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
 msgstr "Омогући статистику уз GOBJECT_DEBUG=instance-count"
 
-#: gtk/inspector/visual.c:293 gtk/inspector/visual.c:308
+#: gtk/inspector/visual.c:310 gtk/inspector/visual.c:325
 msgid "Theme is hardcoded by GTK_THEME"
 msgstr "Тема је стриктно кодирана са „GTK_THEME“"
 
-#: gtk/inspector/visual.c:503
+#: gtk/inspector/visual.c:520
 msgid "Backend does not support window scaling"
 msgstr "Позадинац не подржава сразмеравање прозора"
 
-#: gtk/inspector/visual.c:542
+#: gtk/inspector/visual.c:559
 msgid "Setting is hardcoded by GTK_TEST_TOUCHSCREEN"
 msgstr "Подешавање је стриктно кодирано са „GTK_TEST_TOUCHSCREEN“"
 
-#: gtk/inspector/visual.c:607
+#: gtk/inspector/visual.c:624
 msgid ""
 "Not settable at runtime.\n"
 "Use GDK_GL=always or GDK_GL=disable instead"
@@ -4269,8 +4270,8 @@ msgstr ""
 "Не може се изабрати приликом покретања.\n"
 "Користите GDK_GL=always (увек) или GDK_GL=disable (онемогући)"
 
-#: gtk/inspector/visual.c:621 gtk/inspector/visual.c:622
-#: gtk/inspector/visual.c:623
+#: gtk/inspector/visual.c:638 gtk/inspector/visual.c:639
+#: gtk/inspector/visual.c:640
 msgid "GL rendering is disabled"
 msgstr "Цртање помоћу ГЛ-а је онемогућено"
 
@@ -4343,42 +4344,46 @@ msgid "Show Baselines"
 msgstr "Прикажи основице"
 
 #: gtk/inspector/visual.ui:476
+msgid "Show Layout Borders"
+msgstr "Прикажи границе распореда"
+
+#: gtk/inspector/visual.ui:510
 msgid "Show Pixel Cache"
 msgstr "Прикажи оставу тачкице"
 
-#: gtk/inspector/visual.ui:510
+#: gtk/inspector/visual.ui:544
 msgid "Show Widget Resizes"
 msgstr "Прикажи промене величина елемената"
 
-#: gtk/inspector/visual.ui:544
+#: gtk/inspector/visual.ui:578
 msgid "Simulate touchscreen"
 msgstr "Опонашај екран на додир"
 
-#: gtk/inspector/visual.ui:589
+#: gtk/inspector/visual.ui:623
 msgid "GL Rendering"
 msgstr "ГЛ исцртавање"
 
-#: gtk/inspector/visual.ui:601
+#: gtk/inspector/visual.ui:635
 msgid "When needed"
 msgstr "По потреби"
 
-#: gtk/inspector/visual.ui:602
+#: gtk/inspector/visual.ui:636
 msgid "Always"
 msgstr "Увек"
 
-#: gtk/inspector/visual.ui:603
+#: gtk/inspector/visual.ui:637
 msgid "Disabled"
 msgstr "Онемогући"
 
-#: gtk/inspector/visual.ui:627
+#: gtk/inspector/visual.ui:661
 msgid "Software GL"
 msgstr "Софтверски ГЛ"
 
-#: gtk/inspector/visual.ui:661
+#: gtk/inspector/visual.ui:695
 msgid "Software Surfaces"
 msgstr "Софтверске површине"
 
-#: gtk/inspector/visual.ui:695
+#: gtk/inspector/visual.ui:729
 msgid "Texture Rectangle Extension"
 msgstr "Проширење за квадратне текстуре"
 
