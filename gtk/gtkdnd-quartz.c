@@ -337,42 +337,6 @@ gtk_drag_get_source_widget (GdkDragContext *context)
   return info->source_widget;
 }
 
-/*************************************************************
- * gtk_drag_highlight_draw:
- *     Callback for expose_event for highlighted widgets.
- *   arguments:
- *     widget:
- *     event:
- *     data:
- *   results:
- *************************************************************/
-
-static gboolean
-gtk_drag_highlight_draw (GtkWidget *widget,
-                         cairo_t   *cr,
-			 gpointer   data)
-{
-  int width = gtk_widget_get_allocated_width (widget);
-  int height = gtk_widget_get_allocated_height (widget);
-  GtkStyleContext *context = gtk_widget_get_style_context (widget);
-
-  gtk_style_context_save (context);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_DND);
-
-  gtk_render_frame (context, cr, 0, 0, width, height);
-
-  gtk_style_context_restore (context);
-
-  cairo_set_source_rgb (cr, 0.0, 0.0, 0.0); /* black */
-  cairo_set_line_width (cr, 1.0);
-  cairo_rectangle (cr,
-                   0.5, 0.5,
-                   width - 1, height - 1);
-  cairo_stroke (cr);
- 
-  return FALSE;
-}
-
 /**
  * gtk_drag_highlight: (method)
  * @widget: a widget to highlight
@@ -382,11 +346,7 @@ gtk_drag_highlight (GtkWidget  *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  g_signal_connect_after (widget, "draw",
-			  G_CALLBACK (gtk_drag_highlight_draw),
-			  NULL);
-
-  gtk_widget_queue_draw (widget);
+  gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_DROP_ACTIVE, FALSE);
 }
 
 /**
@@ -398,11 +358,7 @@ gtk_drag_unhighlight (GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  g_signal_handlers_disconnect_by_func (widget,
-					gtk_drag_highlight_draw,
-					NULL);
-  
-  gtk_widget_queue_draw (widget);
+  gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_DROP_ACTIVE);
 }
 
 static NSWindow *
