@@ -4510,7 +4510,7 @@ gdk_x11_window_get_decorations(GdkWindow       *window,
 
 static void
 gdk_x11_window_set_functions (GdkWindow    *window,
-			  GdkWMFunction functions)
+                              GdkWMFunction functions)
 {
   MotifWmHints hints;
   
@@ -5763,7 +5763,6 @@ gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
   impl_class->set_group = gdk_x11_window_set_group;
   impl_class->set_decorations = gdk_x11_window_set_decorations;
   impl_class->get_decorations = gdk_x11_window_get_decorations;
-  impl_class->set_functions = gdk_x11_window_set_functions;
   impl_class->set_functions = gdk_x11_window_set_functions;
   impl_class->begin_resize_drag = gdk_x11_window_begin_resize_drag;
   impl_class->begin_move_drag = gdk_x11_window_begin_move_drag;
