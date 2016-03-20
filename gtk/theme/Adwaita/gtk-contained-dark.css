@@ -2831,7 +2831,8 @@ scale {
     background-image: linear-gradient(to bottom, #323737 20%, #2a2f2f 90%);
     box-shadow: inset 0 1px rgba(255, 255, 255, 0.05), inset 0 -2px #2f3434, inset 0 -1px #232727, 0 1px rgba(0, 0, 0, 0.1);
     border: 1px solid #151717;
-    border-radius: 100%; }
+    border-radius: 100%;
+    transition: all 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94); }
     scale slider:hover {
       color: #eeeeec;
       outline-color: rgba(238, 238, 236, 0.3);
@@ -2849,6 +2850,7 @@ scale {
       scale slider:disabled label, scale slider:disabled {
         color: #949796; }
     scale slider:backdrop {
+      transition: 200ms ease-out;
       border-color: #1f2222;
       background-image: linear-gradient(to bottom, #393f3f);
       text-shadow: none;

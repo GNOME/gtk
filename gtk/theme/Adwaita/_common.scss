@@ -2826,6 +2826,7 @@ scale {
 
     border: 1px solid darken($borders_color, 3%);
     border-radius: 100%;
+    transition: $button_transition;
 
     &:hover { @include button(hover-alt, $edge: $shadow_color); }
 
@@ -2834,7 +2835,10 @@ scale {
     &:disabled { @include button (insensitive); }
 
     &:backdrop {
+      transition: $backdrop_transition;
+
       @include button(backdrop);
+
       &:disabled { @include button(backdrop-insensitive); }
     }
 
