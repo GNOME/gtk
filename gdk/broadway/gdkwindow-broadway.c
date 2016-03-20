@@ -1611,7 +1611,6 @@ gdk_window_impl_broadway_class_init (GdkWindowImplBroadwayClass *klass)
   impl_class->set_decorations = gdk_broadway_window_set_decorations;
   impl_class->get_decorations = gdk_broadway_window_get_decorations;
   impl_class->set_functions = gdk_broadway_window_set_functions;
-  impl_class->set_functions = gdk_broadway_window_set_functions;
   impl_class->begin_resize_drag = gdk_broadway_window_begin_resize_drag;
   impl_class->begin_move_drag = gdk_broadway_window_begin_move_drag;
   impl_class->set_opacity = gdk_broadway_window_set_opacity;
