@@ -25,6 +25,8 @@
 
 #include "css-editor.h"
 
+#include "cssruleview.h"
+
 #include "gtkcssdeclarationprivate.h"
 #include "gtkcssprovider.h"
 #include "gtkcssrbtreeprivate.h"
@@ -76,6 +78,7 @@ struct _GtkCssChunkTokenSource
 struct _GtkInspectorCssEditorPrivate
 {
   GtkWidget *view;
+  GtkWidget *ruleview;
   GtkTextBuffer *text;
   GtkCssRbTree *tokens;
   GtkCssProvider *provider;
@@ -475,6 +478,9 @@ update_style_sheet (GtkInspectorCssEditor *ce)
   gtk_css_style_sheet_parse (priv->style_sheet, source);
 
   gtk_css_token_source_unref (source);
+
+  gtk_inspector_css_rule_view_set_style_sheet (GTK_INSPECTOR_CSS_RULE_VIEW (ce->priv->ruleview),
+                                               ce->priv->style_sheet);
 }
 
 static gboolean
@@ -757,6 +763,9 @@ gtk_inspector_css_editor_init (GtkInspectorCssEditor *ce)
                                           gtk_css_chunk_augment,
                                           gtk_css_chunk_clear,
                                           NULL);
+
+  gtk_inspector_css_rule_view_set_style_sheet (GTK_INSPECTOR_CSS_RULE_VIEW (ce->priv->ruleview),
+                                               ce->priv->style_sheet);
 }
 
 static void
@@ -802,6 +811,7 @@ gtk_inspector_css_editor_class_init (GtkInspectorCssEditorClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/css-editor.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssEditor, text);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssEditor, view);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssEditor, ruleview);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssEditor, disable_button);
   gtk_widget_class_bind_template_callback (widget_class, disable_toggled);
   gtk_widget_class_bind_template_callback (widget_class, save_clicked);

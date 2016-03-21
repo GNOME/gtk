@@ -107,22 +107,36 @@
       </object>
     </child>
     <child>
-      <object class="GtkScrolledWindow">
+      <object class="GtkPaned">
         <property name="visible">True</property>
-        <property name="hscrollbar-policy">automatic</property>
-        <property name="vscrollbar-policy">automatic</property>
-        <property name="expand">True</property>
+        <property name="orientation">horizontal</property>
         <child>
-          <object class="GtkTextView" id="view">
+          <object class="GtkScrolledWindow">
             <property name="visible">True</property>
-            <property name="buffer">text</property>
-            <property name="wrap-mode">word</property>
-            <property name="monospace">True</property>
-            <property name="has-focus">True</property>
-            <property name="left-margin">6</property>
-            <property name="right-margin">6</property>
-            <property name="has-tooltip">True</property>
-            <signal name="query-tooltip" handler="query_tooltip_cb"/>
+            <property name="hscrollbar-policy">automatic</property>
+            <property name="vscrollbar-policy">automatic</property>
+            <property name="expand">True</property>
+            <child>
+              <object class="GtkTextView" id="view">
+                <property name="visible">True</property>
+                <property name="buffer">text</property>
+                <property name="wrap-mode">word</property>
+                <property name="monospace">True</property>
+                <property name="has-focus">True</property>
+                <property name="left-margin">6</property>
+                <property name="right-margin">6</property>
+                <property name="has-tooltip">True</property>
+                <signal name="query-tooltip" handler="query_tooltip_cb"/>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="resize">True</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkInspectorCssRuleView" id="ruleview">
+            <property name="visible">True</property>
           </object>
         </child>
       </object>

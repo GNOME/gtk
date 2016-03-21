@@ -4,6 +4,8 @@ inspector_c_sources = 			\
 	inspector/cellrenderergraph.c	\
 	inspector/css-editor.c		\
 	inspector/css-node-tree.c	\
+	inspector/cssruleview.c	        \
+	inspector/cssruleviewrow.c	\
 	inspector/data-list.c		\
 	inspector/general.c		\
 	inspector/gestures.c		\
@@ -35,6 +37,8 @@ inspector_h_sources = 			\
 	inspector/cellrenderergraph.h	\
 	inspector/css-editor.h		\
 	inspector/css-node-tree.h	\
+	inspector/cssruleview.h	        \
+	inspector/cssruleviewrow.h	\
 	inspector/data-list.h		\
 	inspector/general.h		\
 	inspector/gestures.h		\
@@ -63,6 +67,8 @@ inspector_templates =			\
 	inspector/actions.ui 		\
 	inspector/css-editor.ui 	\
 	inspector/css-node-tree.ui	\
+	inspector/cssruleview.ui        \
+	inspector/cssruleviewrow.ui	\
 	inspector/data-list.ui 		\
 	inspector/general.ui 		\
 	inspector/magnifier.ui		\
