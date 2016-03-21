@@ -57,6 +57,8 @@ void                   gtk_css_style_sheet_parse                        (GtkCssS
 /* StyleSheet interface */
 GtkCssStyleSheet *     gtk_css_style_sheet_get_parent_style_sheet       (GtkCssStyleSheet       *style_sheet);
 
+GFile *                gtk_css_style_sheet_get_file                     (GtkCssStyleSheet       *style_sheet);
+
 /* CSSStyleSheet interface */
 GtkCssRule *           gtk_css_style_sheet_get_parent_rule              (GtkCssStyleSheet       *style_sheet);
 GtkCssRuleList *       gtk_css_style_sheet_get_css_rules                (GtkCssStyleSheet       *style_sheet);

@@ -25,6 +25,8 @@ typedef struct _GtkCssStyleSheetPrivate GtkCssStyleSheetPrivate;
 struct _GtkCssStyleSheetPrivate {
   GtkCssRule *parent_rule;
   GtkCssRuleList *css_rules;
+
+  GFile *file;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkCssStyleSheet, gtk_css_style_sheet, G_TYPE_OBJECT)
@@ -36,6 +38,8 @@ gtk_css_style_sheet_finalize (GObject *object)
   GtkCssStyleSheetPrivate *priv = gtk_css_style_sheet_get_instance_private (style_sheet);
 
   g_object_unref (priv->css_rules);
+  if (priv->file)
+    g_object_unref (priv->file);
 
   G_OBJECT_CLASS (gtk_css_style_sheet_parent_class)->finalize (object);
 }
@@ -62,6 +66,23 @@ gtk_css_style_sheet_new (void)
   return g_object_new (GTK_TYPE_CSS_STYLE_SHEET, NULL);
 }
 
+static void
+gtk_css_style_sheet_set_file (GtkCssStyleSheet *style_sheet,
+                              GFile            *file)
+{
+  GtkCssStyleSheetPrivate *priv = gtk_css_style_sheet_get_instance_private (style_sheet);
+
+  if (priv->file == file)
+    return;
+
+  if (priv->file)
+    g_object_unref (priv->file);
+
+  priv->file = file;
+  if (file)
+    g_object_ref (file);
+}
+
 void
 gtk_css_style_sheet_parse (GtkCssStyleSheet  *style_sheet,
                            GtkCssTokenSource *source)
@@ -72,8 +93,21 @@ gtk_css_style_sheet_parse (GtkCssStyleSheet  *style_sheet,
   g_return_if_fail (source != NULL);
 
   priv = gtk_css_style_sheet_get_instance_private (style_sheet);
+  gtk_css_style_sheet_set_file (style_sheet, gtk_css_token_source_get_location (source));
 
   gtk_css_rule_list_parse (priv->css_rules, source, NULL, style_sheet);
+}
+
+GFile *
+gtk_css_style_sheet_get_file (GtkCssStyleSheet *style_sheet)
+{
+  GtkCssStyleSheetPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_CSS_STYLE_SHEET (style_sheet), NULL);
+
+  priv = gtk_css_style_sheet_get_instance_private (style_sheet);
+
+  return priv->file;
 }
 
 GtkCssStyleSheet *
