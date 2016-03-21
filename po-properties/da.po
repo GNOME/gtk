@@ -50,8 +50,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-20 23:57+0100\n"
-"PO-Revision-Date: 2016-03-20 23:54+0100\n"
+"POT-Creation-Date: 2016-03-21 22:19+0100\n"
+"PO-Revision-Date: 2016-03-21 22:19+0100\n"
 "Last-Translator: Ask Hjorth Larsen <asklarsen@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "Language: da\n"
@@ -6891,7 +6891,7 @@ msgstr "Om Xft-skrifttyper skal udjævnes; 0 = nej, 1 = ja, -1 = standard"
 
 #: ../gtk/gtksettings.c:567
 msgid "Xft Hinting"
-msgstr "Xft-knibning"
+msgstr "Xft-hinting"
 
 #: ../gtk/gtksettings.c:568
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
@@ -6905,7 +6905,7 @@ msgstr "Xft-hintgrad"
 msgid ""
 "What degree of hinting to use; hintnone, hintslight, hintmedium, or hintfull"
 msgstr ""
-"Graden af knibning der skal benyttes; hintnone, hintslight, hintmedium eller "
+"Graden af hinting, der skal benyttes; hintnone, hintslight, hintmedium eller "
 "hintfull"
 
 #: ../gtk/gtksettings.c:587
@@ -7540,7 +7540,7 @@ msgstr "Ikonsæt"
 
 #: ../gtk/gtkshortcutsshortcut.c:517
 msgid "Whether an icon has been set"
-msgstr "Om der er blevet givet et ikon"
+msgstr "Om der er angivet et ikon"
 
 #: ../gtk/gtkshortcutsshortcut.c:530
 msgid "A short description for the shortcut"
@@ -7561,7 +7561,7 @@ msgstr "Om der er angivet en undertitel"
 
 #: ../gtk/gtkshortcutsshortcut.c:600
 msgid "Text direction for which this shortcut is active"
-msgstr "Tekstretningen, som denne genvej er gælder for"
+msgstr "Tekstretningen, som denne genvej gælder for"
 
 #: ../gtk/gtkshortcutsshortcut.c:612
 msgid "Shortcut Type"
@@ -9005,7 +9005,7 @@ msgstr "Fokus ved klik"
 # evt. indfange fokus ~ fokuseres
 #: ../gtk/gtkwidget.c:1212
 msgid "Whether the widget should grab focus when it is clicked with the mouse"
-msgstr "Om kontrollen indfange fokus når den klikkes på med musen"
+msgstr "Om kontrollen skal indfange fokus når den klikkes på med musen"
 
 #: ../gtk/gtkwidget.c:1218
 msgid "Can default"
