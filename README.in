@@ -72,48 +72,48 @@ and attach the patch to that bug report.
 Patches should be in unified diff form. (The -up option to GNU diff)
 Even better are git-formatted patches. (Use git format-patch)
 
+
 Release notes for 3.20
 ======================
 
-* The way theming works in GTK+ has been reworked pretty fundamentally
-  in this release, to be able to implement many more CSS features and
-  generally give themes more power. As a result, custom CSS that is
-  shipped with applications and third-party themes will need adjustments.
-  Widgets now use element names much more than style classes; type
-  names are no longer used in style matching. Every widget now documents
-  the element names it has and the style classes it uses. The GTK+
-  inspector can also be helpful in finding this information.
+* The way theming works in GTK+ has been reworked fundamentally, to
+  implement many more CSS features and make themes more expressive.
+  As a result, custom CSS that is shipped with applications and third-
+  party themes will need adjustments. Widgets now use element names much
+  more than style classes; type names are no longer used in style matching.
+  Every widget now documents the element names it has and the style classes
+  it uses. The GTK+ inspector can also help with finding this information.
 
 * GTK+ now uses internal subobjects (also known as gadgets) for allocating
-  and drawing widget parts. Applications that subclass GTK+ widgets may
-  see warnings if they override size_allocate and don't chain up. The
-  proper way to subclass is to chain up in size_allocate. If you don't
-  want to do that for some reason, you have to override draw as well.
+  and drawing widget parts. Applications that subclass GTK+ widgets may see
+  warnings if they override the size_allocate vfunc and don't chain up.
+  The proper way to subclass is to chain up in size_allocate. If you do not
+  want to do that for some reason, you have to override the draw vfunc as
+  well.
 
-* Several fixes for window sizing and placement with client-side
-  decorations may affect applications that are saving and restoring
-  window sizes. The recommended best practice for this which is known
-  to work with client-side and server-side decorations and with older
-  and newer versions of GTK+ is to use gtk_window_get_size() to save
-  and gtk_window_set_default_size() to restore the window size. See
-  https://wiki.gnome.org/HowDoI/SaveWindowState for a detailed example.
+* Several fixes for window sizing and window placement with client-side
+  decorations may affect applications that are saving and restoring window
+  sizes. The recommended best practice for this which is known to work with
+  client-side and server-side decorations and with older and newer versions
+  of GTK+ is to use gtk_window_get_size() to save window sizes and
+  gtk_window_set_default_size() to restore it.
+  See https://wiki.gnome.org/HowDoI/SaveWindowState for a detailed example.
 
 * GtkDrawingArea used to implicitly render the theme background before
   calling the ::draw handler. This is no longer the case. If you rely
   on having a theme-provided background, call gtk_render_background()
   from your ::draw handler.
 
-* The GtkFileChooser interface pre-requisite changed from GtkWidget
+* The GtkFileChooser interface prerequisite changed from GtkWidget
   to GObject, allowing non-widget implementations of this interface.
-  This is a minor change in ABI, as apps are no longer guaranteed
-  that a GtkFileChooser interface also supports all GtkWidget methods.
-  However, all previously existing objects still derive from GtkWidget,
-  so no existing code should break.
+  This is a minor change in ABI, as applications are no longer guaranteed
+  that a GtkFileChooser also supports all GtkWidget methods. However, all
+  previously existing implementations still derive from GtkWidget, so no
+  existing code should break.
 
-* The way in which GtkLevelBar determines the offset to apply was
-  a bit inconsistent in the past; this has been fixed. Applications
-  that are using custom offsets should double-check that their
-  levels look as expected.
+* The way in which GtkLevelBar determines the offset to apply was a bit
+  inconsistent in the past; this has been fixed. Applications that are using
+  custom offsets should double-check that their levels look as expected.
 
 Release notes for 3.18
 ======================
