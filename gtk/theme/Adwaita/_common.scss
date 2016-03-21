@@ -1605,21 +1605,14 @@ treeview.view {
     border-left-color: mix($backdrop_fg_color, $backdrop_bg_color, 50%);
     border-top: $backdrop_bg_color;
   }
-
-  &.before:drop(active) {
-    border-style: solid none none none;
-    border-width: 1px;
-    border-color: mix($fg_color, $selected_bg_color, 50%);
-  }
-  &.after:drop(active) {
-    border-style: none none solid none;
-    border-width: 1px;
-    border-color: mix($fg_color, $selected_bg_color, 50%);
-  }
   &:drop(active) {
     border-style: solid none;
     border-width: 1px;
-    border-color: mix($fg_color, $selected_bg_color, 50%);
+    border-color: $selected_borders_color;
+
+    &.after { border-top-style: none; }
+
+    &.before { border-bottom-style: none; }
   }
 
   &.expander {

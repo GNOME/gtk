@@ -1998,18 +1998,14 @@ treeview.view {
   treeview.view:backdrop {
     border-left-color: #babbbb;
     border-top: #e8e8e7; }
-  treeview.view.before:drop(active) {
-    border-style: solid none none none;
-    border-width: 1px;
-    border-color: #3c6288; }
-  treeview.view.after:drop(active) {
-    border-style: none none solid none;
-    border-width: 1px;
-    border-color: #3c6288; }
   treeview.view:drop(active) {
     border-style: solid none;
     border-width: 1px;
-    border-color: #3c6288; }
+    border-color: #184472; }
+    treeview.view:drop(active).after {
+      border-top-style: none; }
+    treeview.view:drop(active).before {
+      border-bottom-style: none; }
   treeview.view.expander {
     -gtk-icon-source: -gtk-icontheme("pan-end-symbolic");
     color: #6d7172; }
