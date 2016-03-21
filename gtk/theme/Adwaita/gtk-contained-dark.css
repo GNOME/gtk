@@ -4235,6 +4235,14 @@ colorswatch.light overlay {
     border-color: #1c1f1f; }
   colorswatch.light overlay:backdrop {
     color: #d5d5d5; }
+colorswatch:drop(active) {
+  box-shadow: none; }
+  colorswatch:drop(active).light overlay {
+    border-color: #4e9a06;
+    box-shadow: inset 0 0 0 2px #1c1f1f, inset 0 0 0 1px #4e9a06; }
+  colorswatch:drop(active).dark overlay {
+    border-color: #4e9a06;
+    box-shadow: inset 0 0 0 2px #1c1f1f, inset 0 0 0 1px #4e9a06; }
 colorswatch overlay {
   box-shadow: inset 0 3px 2px -2px rgba(0, 0, 0, 0.5);
   border: 1px solid #1c1f1f; }
