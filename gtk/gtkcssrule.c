@@ -24,6 +24,16 @@
 #include "gtkcssdefinecolorruleprivate.h"
 #include "gtkcssimportruleprivate.h"
 #include "gtkcssstylesheetprivate.h"
+#include "gtkintl.h"
+#include "gtkprivate.h"
+
+enum {
+  PROP_0,
+  PROP_CSS_TEXT,
+  PROP_PARENT_RULE,
+  PROP_PARENT_STYLESHEET,
+  NUM_PROPERTIES
+};
 
 typedef struct _GtkCssRulePrivate GtkCssRulePrivate;
 struct _GtkCssRulePrivate {
@@ -38,6 +48,10 @@ struct _GtkCssTokenSourceAt {
   GSList *blocks;
   guint done :1;
 };
+
+static GParamSpec *rule_props[NUM_PROPERTIES] = { NULL, };
+
+G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GtkCssRule, gtk_css_rule, G_TYPE_OBJECT)
 
 static void
 gtk_css_token_source_at_finalize (GtkCssTokenSource *source)
@@ -142,11 +156,88 @@ gtk_css_token_source_new_at (GtkCssTokenSource *source)
   return &at->parent;
 }
 
-G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GtkCssRule, gtk_css_rule, G_TYPE_OBJECT)
+static void
+gtk_css_rule_set_property (GObject      *gobject,
+                           guint         prop_id,
+                           const GValue *value,
+                           GParamSpec   *pspec)
+{
+  GtkCssRule *rule = GTK_CSS_RULE (gobject);
+  GtkCssRulePrivate *priv = gtk_css_rule_get_instance_private (rule);
+
+  switch (prop_id)
+    {
+    case PROP_PARENT_RULE:
+      priv->parent_rule = g_value_dup_object (value);
+      break;
+
+    case PROP_PARENT_STYLESHEET:
+      priv->parent_style_sheet = g_value_dup_object (value);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_css_rule_get_property (GObject    *gobject,
+                           guint       prop_id,
+                           GValue     *value,
+                           GParamSpec *pspec)
+{
+  GtkCssRule *rule = GTK_CSS_RULE (gobject);
+  GtkCssRulePrivate *priv = gtk_css_rule_get_instance_private (rule);
+
+  switch (prop_id)
+    {
+    case PROP_CSS_TEXT:
+      g_value_take_string (value, gtk_css_rule_get_css_text (rule));
+      break;
+
+    case PROP_PARENT_RULE:
+      g_value_set_object (value, priv->parent_rule);
+      break;
+
+    case PROP_PARENT_STYLESHEET:
+      g_value_set_object (value, priv->parent_style_sheet);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
+    }
+}
 
 static void
 gtk_css_rule_class_init (GtkCssRuleClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->set_property = gtk_css_rule_set_property;
+  object_class->get_property = gtk_css_rule_get_property;
+
+  rule_props[PROP_CSS_TEXT] =
+      g_param_spec_string ("css-text",
+                           P_("CSS text"),
+                           P_("Conversion this rule to text"),
+                           NULL,
+                           GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY);
+  rule_props[PROP_PARENT_RULE] =
+      g_param_spec_object ("parent-rule",
+                           P_("parent rule"),
+                           P_("The parent CSS rule if it exists"),
+                           GTK_TYPE_CSS_RULE,
+                           GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_EXPLICIT_NOTIFY);
+  rule_props[PROP_PARENT_STYLESHEET] =
+      g_param_spec_object ("parent-stylesheet",
+                           P_("parent style sheet"),
+                           P_("The parent style sheet that contains this rule"),
+                           GTK_TYPE_CSS_STYLE_SHEET,
+                           GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (object_class, NUM_PROPERTIES, rule_props);
+
 }
 
 static void

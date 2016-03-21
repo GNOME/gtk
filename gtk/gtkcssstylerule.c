@@ -65,7 +65,10 @@ static GtkCssRule *
 gtk_css_style_rule_new (GtkCssRule       *parent_rule,
                         GtkCssStyleSheet *parent_style_sheet)
 {
-  return g_object_new (GTK_TYPE_CSS_STYLE_RULE, NULL);
+  return g_object_new (GTK_TYPE_CSS_STYLE_RULE,
+                       "parent-rule", parent_rule,
+                       "parent-stylesheet", parent_style_sheet,
+                       NULL);
 }
 
 static gboolean

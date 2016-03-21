@@ -64,7 +64,10 @@ gtk_css_define_color_rule_new (GtkCssRule       *parent_rule,
                                const char       *name,
                                GtkCssValue      *color)
 {
-  return g_object_new (GTK_TYPE_CSS_DEFINE_COLOR_RULE, NULL);
+  return g_object_new (GTK_TYPE_CSS_DEFINE_COLOR_RULE,
+                       "parent-rule", parent_rule,
+                       "parent-stylesheet", parent_style_sheet,
+                       NULL);
 }
 
 GtkCssRule *

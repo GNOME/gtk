@@ -64,7 +64,10 @@ gtk_css_import_rule_new (GtkCssRule       *parent_rule,
                          GtkCssStyleSheet *parent_style_sheet,
                          GFile            *file)
 {
-  return g_object_new (GTK_TYPE_CSS_IMPORT_RULE, NULL);
+  return g_object_new (GTK_TYPE_CSS_IMPORT_RULE,
+                       "parent-rule", parent_rule,
+                       "parent-stylesheet", parent_style_sheet,
+                       NULL);
 }
 
 GtkCssRule *
