@@ -32,8 +32,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-20 23:26+0100\n"
-"PO-Revision-Date: 2016-03-20 21:46+0100\n"
+"POT-Creation-Date: 2016-03-21 04:41+0100\n"
+"PO-Revision-Date: 2016-03-21 04:42+0100\n"
 "Last-Translator: Ask Hjorth Larsen <asklarsen@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "Language: da\n"
@@ -682,14 +682,17 @@ msgid "_Close"
 msgstr "_Luk"
 
 #: ../gtk/a11y/gtkimageaccessible.c:59 ../gtk/gtkheaderbar.c:406
+#: ../gtk/gtkwindow.c:9001
 msgid "Minimize"
 msgstr "Minimér"
 
 #: ../gtk/a11y/gtkimageaccessible.c:60 ../gtk/gtkheaderbar.c:429
+#: ../gtk/gtkwindow.c:9010
 msgid "Maximize"
 msgstr "Maksimér"
 
 #: ../gtk/a11y/gtkimageaccessible.c:61 ../gtk/gtkheaderbar.c:429
+#: ../gtk/gtkwindow.c:8967
 msgid "Restore"
 msgstr "Gendan"
 
@@ -1243,7 +1246,7 @@ msgstr ""
 #: ../gtk/gtkmessagedialog.c:965 ../gtk/gtkmountoperation.c:545
 #: ../gtk/gtkpagesetupunixdialog.c:196 ../gtk/gtkprintbackend.c:763
 #: ../gtk/gtkprinteroptionwidget.c:545 ../gtk/gtkprintunixdialog.c:673
-#: ../gtk/gtkprintunixdialog.c:746 ../gtk/gtkwindow.c:12320
+#: ../gtk/gtkprintunixdialog.c:746 ../gtk/gtkwindow.c:12497
 #: ../gtk/inspector/css-editor.c:208
 msgid "_Cancel"
 msgstr "_Annullér"
@@ -1291,7 +1294,7 @@ msgstr "_Anvend"
 
 #: ../gtk/deprecated/gtkfontsel.c:1698 ../gtk/gtkmessagedialog.c:944
 #: ../gtk/gtkmessagedialog.c:966 ../gtk/gtkprintbackend.c:764
-#: ../gtk/gtkwindow.c:12321
+#: ../gtk/gtkwindow.c:12498
 msgid "_OK"
 msgstr "_OK"
 
@@ -2592,7 +2595,7 @@ msgstr "Kunne ikke oprette OpenGL-kontekst"
 msgid "Application menu"
 msgstr "Programmenu"
 
-#: ../gtk/gtkheaderbar.c:447 ../gtk/gtkwindow.c:8860
+#: ../gtk/gtkheaderbar.c:447 ../gtk/gtkwindow.c:9037
 msgid "Close"
 msgstr "Luk"
 
@@ -3809,11 +3812,23 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:12308
+#: ../gtk/gtkwindow.c:8985
+msgid "Move"
+msgstr "Flyt"
+
+#: ../gtk/gtkwindow.c:8993
+msgid "Resize"
+msgstr "Ændr størrelse"
+
+#: ../gtk/gtkwindow.c:9024
+msgid "Always on Top"
+msgstr "Altid øverst"
+
+#: ../gtk/gtkwindow.c:12485
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Vil du bruge GTK+-inspektøren?"
 
-#: ../gtk/gtkwindow.c:12310
+#: ../gtk/gtkwindow.c:12487
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
 "the internals of any GTK+ application. Using it may cause the application to "
@@ -3823,7 +3838,7 @@ msgstr ""
 "bestanddelene af ethvert GTK+-program. Dens brug kan forårsage fejl eller "
 "nedbrud af programmet."
 
-#: ../gtk/gtkwindow.c:12315
+#: ../gtk/gtkwindow.c:12492
 msgid "Don't show this message again"
 msgstr "Vis ikke denne meddelelse igen"
 
@@ -6041,9 +6056,6 @@ msgstr "Udskriv til testprinter"
 #~ msgid "When needed"
 #~ msgstr "Når nødvendigt"
 
-#~ msgid "Always"
-#~ msgstr "Altid"
-
 #~ msgid "Disabled"
 #~ msgstr "Slået fra"
 
@@ -6702,12 +6714,6 @@ msgstr "Udskriv til testprinter"
 
 #~ msgid "Unmaximize"
 #~ msgstr "Afmaksimér"
-
-#~ msgid "Move"
-#~ msgstr "Flyt"
-
-#~ msgid "Resize"
-#~ msgstr "Ændr størrelse"
 
 #~ msgid "Only on This Workspace"
 #~ msgstr "Kun dette arbejdsområde"
