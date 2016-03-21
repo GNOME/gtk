@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-13 12:19+0000\n"
-"PO-Revision-Date: 2016-03-13 16:46+0200\n"
+"POT-Creation-Date: 2016-03-21 02:50+0000\n"
+"PO-Revision-Date: 2016-03-21 13:27+0200\n"
 "Last-Translator: Jiri Grönroos <jiri.gronroos+l10n@iki.fi>\n"
 "Language-Team: suomi <gnome-fi-laatu@lists.sourceforge.net>\n"
 "Language: fi\n"
@@ -665,15 +665,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Sulje"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:406
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:406 gtk/gtkwindow.c:9001
 msgid "Minimize"
 msgstr "Pienennä"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:429
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:429 gtk/gtkwindow.c:9010
 msgid "Maximize"
 msgstr "Suurenna"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:429
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:429 gtk/gtkwindow.c:8967
 msgid "Restore"
 msgstr ""
 
@@ -1244,7 +1244,7 @@ msgstr ""
 #: gtk/gtkmountoperation.c:545 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:673 gtk/gtkprintunixdialog.c:746
-#: gtk/gtkwindow.c:12315 gtk/inspector/css-editor.c:208
+#: gtk/gtkwindow.c:12497 gtk/inspector/css-editor.c:208
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -1293,7 +1293,7 @@ msgid "_Apply"
 msgstr "_Toteuta"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944
-#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12316
+#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12498
 msgid "_OK"
 msgstr "_OK"
 
@@ -2247,7 +2247,7 @@ msgstr "_Nimi"
 
 #. Open item is always present
 #: gtk/gtkfilechoosernative.c:371 gtk/gtkfilechoosernative.c:456
-#: gtk/gtkplacessidebar.c:3413 gtk/gtkplacesview.c:1578
+#: gtk/gtkplacessidebar.c:3413 gtk/gtkplacesview.c:1577
 msgid "_Open"
 msgstr "_Avaa"
 
@@ -2593,7 +2593,7 @@ msgstr "Tulostimen tietojen nouto epäonnistui"
 msgid "Application menu"
 msgstr "Sovellusvalikko"
 
-#: gtk/gtkheaderbar.c:447 gtk/gtkwindow.c:8857
+#: gtk/gtkheaderbar.c:447 gtk/gtkwindow.c:9037
 msgid "Close"
 msgstr "Sulje"
 
@@ -2886,7 +2886,7 @@ msgid "Cannot end process with PID %d: %s"
 msgstr "Ei voi päättää prosessia, jonka prosessitunniste on %d: %s"
 
 # , c-format
-#: gtk/gtknotebook.c:5081 gtk/gtknotebook.c:7347
+#: gtk/gtknotebook.c:5111 gtk/gtknotebook.c:7377
 #, c-format
 msgid "Page %u"
 msgstr "Sivu %u"
@@ -2928,7 +2928,7 @@ msgstr "Hallitse omia kokoja..."
 msgid "Page Setup"
 msgstr "Sivun asetukset"
 
-#: gtk/gtkpathbar.c:1478
+#: gtk/gtkpathbar.c:1497
 msgid "File System Root"
 msgstr "Tiedostojärjestelmän juuri"
 
@@ -3088,11 +3088,11 @@ msgstr "Ei voitu päättää prosessia"
 msgid "Unable to poll “%s” for media changes"
 msgstr ""
 
-#: gtk/gtkplacessidebar.c:3416 gtk/gtkplacesview.c:1588
+#: gtk/gtkplacessidebar.c:3416 gtk/gtkplacesview.c:1587
 msgid "Open in New _Tab"
 msgstr "Avaa _uudessa välilehdessä"
 
-#: gtk/gtkplacessidebar.c:3419 gtk/gtkplacesview.c:1599
+#: gtk/gtkplacessidebar.c:3419 gtk/gtkplacesview.c:1598
 msgid "Open in New _Window"
 msgstr "Avaa uudessa _ikkunassa"
 
@@ -3108,11 +3108,11 @@ msgstr "_Poista"
 msgid "Rename…"
 msgstr "Nimeä uudelleen…"
 
-#: gtk/gtkplacessidebar.c:3429 gtk/gtkplacesview.c:1633
+#: gtk/gtkplacessidebar.c:3429 gtk/gtkplacesview.c:1632
 msgid "_Mount"
 msgstr "_Liitä"
 
-#: gtk/gtkplacessidebar.c:3430 gtk/gtkplacesview.c:1623
+#: gtk/gtkplacessidebar.c:3430 gtk/gtkplacesview.c:1622
 msgid "_Unmount"
 msgstr "_Poista liitos"
 
@@ -3124,59 +3124,59 @@ msgstr "_Irrota"
 msgid "_Detect Media"
 msgstr "_Havaitse media"
 
-#: gtk/gtkplacessidebar.c:3878 gtk/gtkplacesview.c:1053
+#: gtk/gtkplacessidebar.c:3878 gtk/gtkplacesview.c:1052
 msgid "Computer"
 msgstr "Tietokone"
 
-#: gtk/gtkplacesview.c:881
+#: gtk/gtkplacesview.c:880
 msgid "Searching for network locations"
 msgstr "Etsitään verkkosijainteja"
 
-#: gtk/gtkplacesview.c:888
+#: gtk/gtkplacesview.c:887
 msgid "No network locations found"
 msgstr "Verkkosijainteja ei löytynyt."
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1163 gtk/gtkplacesview.c:1236
+#: gtk/gtkplacesview.c:1162 gtk/gtkplacesview.c:1235
 #, fuzzy
 #| msgid "Unable to access “%s”"
 msgid "Unable to access location"
 msgstr "Kohteen \"%s\" käyttäminen ei onnistunut"
 
 #. Restore from Cancel to Connect
-#: gtk/gtkplacesview.c:1180 gtk/ui/gtkplacesview.ui:224
+#: gtk/gtkplacesview.c:1179 gtk/ui/gtkplacesview.ui:224
 msgid "Con_nect"
 msgstr "_Yhdistä"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1299
+#: gtk/gtkplacesview.c:1298
 #, fuzzy
 #| msgid "Unable to unmount %s"
 msgid "Unable to unmount volume"
 msgstr "Kohteen %s liitoksen irrottaminen ei onnistunut"
 
 #. Allow to cancel the operation
-#: gtk/gtkplacesview.c:1381
+#: gtk/gtkplacesview.c:1380
 msgid "Cance_l"
 msgstr "_Peru"
 
-#: gtk/gtkplacesview.c:1623
+#: gtk/gtkplacesview.c:1622
 msgid "_Disconnect"
 msgstr "_Katkaise yhteys"
 
-#: gtk/gtkplacesview.c:1633
+#: gtk/gtkplacesview.c:1632
 msgid "_Connect"
 msgstr "_Yhdistä"
 
-#: gtk/gtkplacesview.c:1798
+#: gtk/gtkplacesview.c:1797
 msgid "Unable to get remote server location"
 msgstr ""
 
-#: gtk/gtkplacesview.c:1935 gtk/gtkplacesview.c:1944
+#: gtk/gtkplacesview.c:1934 gtk/gtkplacesview.c:1943
 msgid "Networks"
 msgstr "Verkot"
 
-#: gtk/gtkplacesview.c:1935 gtk/gtkplacesview.c:1944
+#: gtk/gtkplacesview.c:1934 gtk/gtkplacesview.c:1943
 msgid "On This Computer"
 msgstr "Tällä tietokoneella"
 
@@ -3806,12 +3806,25 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:12303
+#: gtk/gtkwindow.c:8985
+msgid "Move"
+msgstr "Siirrä"
+
+#: gtk/gtkwindow.c:8993
+msgid "Resize"
+msgstr "Muuta kokoa"
+
+#: gtk/gtkwindow.c:9024
+#| msgid "Always"
+msgid "Always on Top"
+msgstr "Aina päällimmäisenä"
+
+#: gtk/gtkwindow.c:12485
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Haluatko käyttää GTK+ Inspectoria?"
 
-#: gtk/gtkwindow.c:12305
+#: gtk/gtkwindow.c:12487
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3819,19 +3832,16 @@ msgid ""
 "break or crash."
 msgstr ""
 
-#: gtk/gtkwindow.c:12310
+#: gtk/gtkwindow.c:12492
 msgid "Don't show this message again"
 msgstr "Älä näytä tätä viestiä uudestaan"
 
 #: gtk/inspector/action-editor.c:281
-#| msgctxt "Action name"
-#| msgid "Activate"
 msgid "Activate"
 msgstr "Aktivoi"
 
 #: gtk/inspector/action-editor.c:302 gtk/inspector/actions.ui:82
 #: gtk/inspector/css-node-tree.ui:78 gtk/inspector/misc-info.ui:102
-#| msgid "Status"
 msgid "State"
 msgstr "Tila"
 
@@ -3840,8 +3850,6 @@ msgid "Prefix"
 msgstr "Etuliite"
 
 #: gtk/inspector/actions.ui:56
-#| msgctxt "Accelerator"
-#| msgid "Disabled"
 msgid "Enabled"
 msgstr "Käytössä"
 
@@ -3889,7 +3897,6 @@ msgid "Style Classes"
 msgstr "CSS-luokat"
 
 #: gtk/inspector/css-node-tree.ui:110
-#| msgid "Property"
 msgid "CSS Property"
 msgstr "CSS-ominaisuus"
 
@@ -3922,7 +3929,7 @@ msgstr "GTK+-versio"
 
 #: gtk/inspector/general.ui:68
 msgid "GDK Backend"
-msgstr ""
+msgstr "GDK-taustaosa"
 
 #: gtk/inspector/general.ui:373
 #, fuzzy
@@ -5439,14 +5446,11 @@ msgid "juuro-ku-kai"
 msgstr "juuro-ku-kai"
 
 #: gtk/paper_names_offsets.c:166
-#| msgctxt "paper size"
-#| msgid "Small Photo"
 msgctxt "paper size"
 msgid "Large Photo"
 msgstr "Suuri valokuva"
 
 #: gtk/paper_names_offsets.c:167
-#| msgid "Medium"
 msgctxt "paper size"
 msgid "Medium Photo"
 msgstr "Keskikokoinen valokuva"
@@ -5467,8 +5471,6 @@ msgid "Small Photo"
 msgstr "Pieni valokuva"
 
 #: gtk/paper_names_offsets.c:171
-#| msgctxt "paper size"
-#| msgid "Wide Format"
 msgctxt "paper size"
 msgid "Wide Photo"
 msgstr "Leveä valokuva"
@@ -6386,26 +6388,22 @@ msgstr "; "
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:4255
 #: modules/printbackends/cups/gtkprintbackendcups.c:4322
-#| msgid "Two Sided"
 msgctxt "printing option"
 msgid "Two Sided"
 msgstr "Kaksipuolinen"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:4256
-#| msgid "Paper Type"
 msgctxt "printing option"
 msgid "Paper Type"
 msgstr "Paperin tyyppi"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:4257
-#| msgid "Paper Source"
 msgctxt "printing option"
 msgid "Paper Source"
 msgstr "Paperin lähde"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:4258
 #: modules/printbackends/cups/gtkprintbackendcups.c:4323
-#| msgid "Output Tray"
 msgctxt "printing option"
 msgid "Output Tray"
 msgstr "Tulostuskaukalo"
@@ -6425,21 +6423,18 @@ msgid "GhostScript pre-filtering"
 msgstr "GhostScript-esisuodatus"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:4269
-#| msgid "One Sided"
 msgctxt "printing option value"
 msgid "One Sided"
 msgstr "Yksipuolinen"
 
 #. Translators: this is an option of "Two Sided"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4271
-#| msgid "Long Edge (Standard)"
 msgctxt "printing option value"
 msgid "Long Edge (Standard)"
 msgstr "Pitkä reuna (tavallinen)"
 
 #. Translators: this is an option of "Two Sided"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4273
-#| msgid "Short Edge (Flip)"
 msgctxt "printing option value"
 msgid "Short Edge (Flip)"
 msgstr "Lyhyt reuna (käännetty)"
@@ -6448,7 +6443,6 @@ msgstr "Lyhyt reuna (käännetty)"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4275
 #: modules/printbackends/cups/gtkprintbackendcups.c:4277
 #: modules/printbackends/cups/gtkprintbackendcups.c:4285
-#| msgid "Auto Select"
 msgctxt "printing option value"
 msgid "Auto Select"
 msgstr "Valitse automaattisesti"
@@ -6459,7 +6453,6 @@ msgstr "Valitse automaattisesti"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4281
 #: modules/printbackends/cups/gtkprintbackendcups.c:4283
 #: modules/printbackends/cups/gtkprintbackendcups.c:4287
-#| msgid "Printer Default"
 msgctxt "printing option value"
 msgid "Printer Default"
 msgstr "Tulostimen oletus"
@@ -6679,13 +6672,11 @@ msgid "Classified"
 msgstr "Luokiteltu"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:5341
-#| msgid "Confidential"
 msgctxt "cover page"
 msgid "Confidential"
 msgstr "Luottamuksellinen"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:5342
-#| msgid "Secret"
 msgctxt "cover page"
 msgid "Secret"
 msgstr "Salainen"
@@ -6698,7 +6689,6 @@ msgid "Standard"
 msgstr "Normaali"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:5344
-#| msgid "Top Secret"
 msgctxt "cover page"
 msgid "Top Secret"
 msgstr "Erittäin salainen"
@@ -6714,7 +6704,6 @@ msgstr "Luokittelematon"
 #. * in the print dialog
 #.
 #: modules/printbackends/cups/gtkprintbackendcups.c:5357
-#| msgid "Pages per Sheet"
 msgctxt "printer option"
 msgid "Pages per Sheet"
 msgstr "Sivuja arkkia kohti"
@@ -6723,7 +6712,6 @@ msgstr "Sivuja arkkia kohti"
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: modules/printbackends/cups/gtkprintbackendcups.c:5374
-#| msgid "Page Ordering"
 msgctxt "printer option"
 msgid "Page Ordering"
 msgstr "Sivun järjestys"
@@ -6753,7 +6741,6 @@ msgstr "Jälkeen"
 #. * or 'on hold'
 #.
 #: modules/printbackends/cups/gtkprintbackendcups.c:5451
-#| msgid "Print at"
 msgctxt "printer option"
 msgid "Print at"
 msgstr "Tulostusaika"
@@ -6762,7 +6749,6 @@ msgstr "Tulostusaika"
 #. * to specify a time when a print job will be printed.
 #.
 #: modules/printbackends/cups/gtkprintbackendcups.c:5462
-#| msgid "Print at time"
 msgctxt "printer option"
 msgid "Print at time"
 msgstr "Tulosta ajankohtana"
@@ -6778,14 +6764,12 @@ msgid "Custom %s×%s"
 msgstr "Omavalintainen %s×%s"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:5613
-#| msgid "Printer Profile"
 msgctxt "printer option"
 msgid "Printer Profile"
 msgstr "Tulostinprofiili"
 
 #. TRANSLATORS: this is when color profile information is unavailable
 #: modules/printbackends/cups/gtkprintbackendcups.c:5620
-#| msgid "Unavailable"
 msgctxt "printer option value"
 msgid "Unavailable"
 msgstr "Ei saatavilla"
@@ -7113,12 +7097,6 @@ msgstr "Tulosta testitulostimelle"
 
 #~ msgid "Unmaximize"
 #~ msgstr "Palauta koko"
-
-#~ msgid "Move"
-#~ msgstr "Siirrä"
-
-#~ msgid "Resize"
-#~ msgstr "Muuta kokoa"
 
 #~ msgid "Always on Visible Workspace"
 #~ msgstr "Aina näkyvissä olevassa työtilassa"
