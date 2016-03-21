@@ -33,7 +33,7 @@
  * @See_also: #GdkDisplay, #GdkDevice
  *
  * The #GdkSeat object represents a collection of input devices
- * that belong to an user.
+ * that belong to a user.
  */
 
 typedef struct _GdkSeatPrivate GdkSeatPrivate;
@@ -208,8 +208,9 @@ gdk_seat_get_capabilities (GdkSeat *seat)
  *          elsewhere.
  * @event: (nullable): the event that is triggering the grab, or %NULL if none
  *         is available.
- * @prepare_func: (nullable) (scope call) (closure prepare_func_data): function to prepare the window to be
- *                grabbed, it can be %NULL if @window is visible before this call.
+ * @prepare_func: (nullable) (scope call) (closure prepare_func_data): function to
+ *                prepare the window to be grabbed, it can be %NULL if @window is
+ *                visible before this call.
  * @prepare_func_data: user data to pass to @prepare_func
  *
  * Grabs the seat so that all events corresponding to the given @capabilities
@@ -230,8 +231,8 @@ gdk_seat_get_capabilities (GdkSeat *seat)
  * Note that if the event mask of a #GdkWindow has selected both button press
  * and button release events, or touch begin and touch end, then a press event
  * will cause an automatic grab until the button is released, equivalent to a
- * grab on the window with @owner_events set to %TRUE. This performed as most
- * applications expect to receive presses and releases in pairs.
+ * grab on the window with @owner_events set to %TRUE. This is done because most
+ * applications expect to receive paired press and release events.
  *
  * If you set up anything at the time you take the grab that needs to be
  * cleaned up when the grab ends, you should handle the #GdkEventGrabBroken
@@ -291,8 +292,8 @@ gdk_seat_ungrab (GdkSeat *seat)
  *
  * Returns the slave devices that match the given capabilities.
  *
- * Returns: (transfer container) (element-type GdkDevice): A list of #GdkDevices. The list
- *          must be freed with g_list_free(), the elements are owned
+ * Returns: (transfer container) (element-type GdkDevice): A list of #GdkDevices.
+ *          The list must be freed with g_list_free(), the elements are owned
  *          by GDK and must not be freed.
  *
  * Since: 3.20
@@ -316,8 +317,7 @@ gdk_seat_get_slaves (GdkSeat             *seat,
  * Returns the master device that routes pointer events.
  *
  * Returns: (transfer none) (nullable): a master #GdkDevice with pointer
- *          capabilities. This object is owned by GTK+ and must not be
- *          freed.
+ *          capabilities. This object is owned by GTK+ and must not be freed.
  *
  * Since: 3.20
  **/
@@ -339,8 +339,7 @@ gdk_seat_get_pointer (GdkSeat *seat)
  * Returns the master device that routes keyboard events.
  *
  * Returns: (transfer none) (nullable): a master #GdkDevice with keyboard
- *          capabilities. This object is owned by GTK+ and must not be
- *          freed.
+ *          capabilities. This object is owned by GTK+ and must not be freed.
  *
  * Since: 3.20
  **/
@@ -377,8 +376,8 @@ gdk_seat_device_removed (GdkSeat   *seat,
  *
  * Returns the #GdkDisplay this seat belongs to.
  *
- * Returns: (transfer none): a #GdkDisplay. This memory is owned by GTK+ and
- *          must not be freed.
+ * Returns: (transfer none): a #GdkDisplay. This object is owned by GTK+
+ *          and must not be freed.
  **/
 GdkDisplay *
 gdk_seat_get_display (GdkSeat *seat)
