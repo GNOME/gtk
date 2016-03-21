@@ -436,6 +436,7 @@ $_dot_color: if($variant=='light', $selected_bg_color,
   }
 }
 
+%button,
 button {
   @at-root %button_basic, & {
 
@@ -4125,13 +4126,18 @@ decoration {
 }
 
 // Window Close button
-headerbar button.titlebutton,
-.titlebar button.titlebutton {
+button.titlebutton {
   @extend %button_basic;
 
   @extend %button_basic.flat;
 
   @include _button_text_shadow;
+
+  .selection-mode & {
+    @extend %button.flat.suggested-action;
+
+    @extend %nobg_selected_items;
+  }
 
   &:backdrop { -gtk-icon-shadow: none; }
 }
