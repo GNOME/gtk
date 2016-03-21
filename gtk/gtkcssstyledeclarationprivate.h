@@ -53,6 +53,9 @@ GtkCssStyleDeclaration *gtk_css_style_declaration_new                   (GtkCssR
 void                    gtk_css_style_declaration_parse                 (GtkCssStyleDeclaration *style,
                                                                          GtkCssTokenSource      *source);
 
+GtkCssDeclaration *     gtk_css_style_declaration_get_declaration       (GtkCssStyleDeclaration *declaration,
+                                                                         gssize                  id);
+
 /* GtkCssStyleDeclaration DOM */
 void                    gtk_css_style_declaration_print_css_text        (GtkCssStyleDeclaration *declaration,
                                                                          GString                *string);

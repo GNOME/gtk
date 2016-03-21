@@ -103,3 +103,30 @@ gtk_css_style_declaration_parse (GtkCssStyleDeclaration *style,
         }
     }
 }
+
+GtkCssDeclaration *
+gtk_css_style_declaration_get_declaration (GtkCssStyleDeclaration *declaration,
+                                           gssize                  id)
+{
+  GtkCssStyleDeclarationPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_CSS_STYLE_DECLARATION (declaration), NULL);
+
+  priv = gtk_css_style_declaration_get_instance_private (declaration);
+  g_return_val_if_fail (id < priv->declarations->len, NULL);
+
+  return g_ptr_array_index (priv->declarations, id);
+}
+
+gsize
+gtk_css_style_declaration_get_length (GtkCssStyleDeclaration *declaration)
+{
+  GtkCssStyleDeclarationPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_CSS_STYLE_DECLARATION (declaration), 0);
+
+  priv = gtk_css_style_declaration_get_instance_private (declaration);
+
+  return priv->declarations->len;
+}
+
