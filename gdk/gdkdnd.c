@@ -686,6 +686,8 @@ gdk_drag_drop_done (GdkDragContext *context,
  *   cancelled through other means.
  *
  * Returns: #TRUE if the drag and drop operation is managed.
+ *
+ * Since: 3.20
  **/
 gboolean
 gdk_drag_context_manage_dnd (GdkDragContext *context,
@@ -696,8 +698,7 @@ gdk_drag_context_manage_dnd (GdkDragContext *context,
   g_return_val_if_fail (GDK_IS_WINDOW (ipc_window), FALSE);
 
   if (GDK_DRAG_CONTEXT_GET_CLASS (context)->manage_dnd)
-    return GDK_DRAG_CONTEXT_GET_CLASS (context)->manage_dnd (context, ipc_window,
-                                                             actions);
+    return GDK_DRAG_CONTEXT_GET_CLASS (context)->manage_dnd (context, ipc_window, actions);
 
   return FALSE;
 }
