@@ -1,3 +1,47 @@
+Overview of Changes in GTK+ 3.20.0
+==================================
+
+* Themes:
+ - The HighContrast theme has been brought back up to par with Adwaita
+ - Adwaita has received detail fixes for many widgets
+ - Adwaita now transitions to backdrop
+
+* Some recently publicized static analysis findings have been fixed
+
+* Bugs fixed:
+ 746490 [HighContrast] insensitive ToggleButtons are rendered similarly ac...
+ 763609 [HighContrast] model-generated menu-like popovers are unthemed
+ 763610 [HighContrast] GtkSearchEntry’s “search” icon needs left&right pad...
+ 763612 [HighContrast] “:selected .circular” should be visible
+ 763613 [HighContrast] GtkScale is unreadable
+ 763696 [HighContrast] spinbuttons broken
+ 763706 [HighContrast] linked horizontal dropboxes broken
+ 763707 [HighContrast] active and hover states for radios and checkboxes b...
+ 763774 [HighContrast] GtkPlacesSidebar row need more top&bottom padding
+ 763775 [HighContrast] the “enter server adress” entry in GtkPlacesView ha...
+ 763777 [HighContrast] GtkMenuBar needs a bottom box-shadow
+ 763781 [HighContrast] .app-notification border { border:none; }
+ 763797 [HighContrast] scrollbars invisible (whity on white)
+ 763823 [HighContrast] dnd on a vertical spinbutton does a weird resizing
+ 763846 [HighContrast] spinbuttons in osd look bad
+ 763955 treeview: inline editing shows old text as background
+ 763796 excessive Gtk-WARNING **: State 0 for EMailShellSidebar doesn't ma...
+ 763835 W32: Layered windows don't become minimized
+ 763749 Nautilus desktop window is too small with gtk 3.19
+
+* Translation updates
+ Brazilian Portuguese
+ Danish
+ Italian
+ Kazakh
+ Korean
+ Latvian
+ Serbian
+ Serbian Latin
+ Swedish
+ Ukrainian
+
+
 Overview of Changes in GTK+ 3.19.12
 ===================================
 
