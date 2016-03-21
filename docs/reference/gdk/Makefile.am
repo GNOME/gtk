@@ -26,12 +26,27 @@ IGNORE_HFILES= 			\
 	gdkkeysyms.h		\
 	gdkinternals.h		\
 	gdkprivate.h		\
-	gdk*private.h		\
+	gdk-private.h		\
+	gdkapplaunchcontextprivate.h \
+	gdkcursorprivate.h	\
+	gdkdevicemanagerprivate.h \
+	gdkdeviceprivate.h	\
+	gdkdisplaymanagerprivate.h \
+	gdkdisplayprivate.h	\
+	gdkdndprivate.h		\
+	gdkframeclockprivate.h	\
+	gdkglcontextprivate.h	\
+	gdkkeysprivate.h	\
+	gdkscreenprivate.h	\
+	gdkseatdefaultprivate.h	\
+	gdkseatprivate.h	\
+	gdkvisualprivate.h	\
 	keyname-table.h		\
-	wayland/xdg-shell-client-protocol.h \
 	win32			\
 	x11			\
-	quartz
+	quartz			\
+	broadway		\
+	wayland
 
 # Extra files to add when scanning
 EXTRA_HFILES=			\
