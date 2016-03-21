@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-18 00:20+0000\n"
-"PO-Revision-Date: 2016-03-18 09:27+0100\n"
+"POT-Creation-Date: 2016-03-21 02:50+0000\n"
+"PO-Revision-Date: 2016-03-21 09:54+0100\n"
 "Last-Translator: Milo Casagrande <milo@milo.name>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -685,15 +685,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Chiudi"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:406
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:406 gtk/gtkwindow.c:9001
 msgid "Minimize"
 msgstr "Minimizza"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:429
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:429 gtk/gtkwindow.c:9010
 msgid "Maximize"
 msgstr "Massimizza"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:429
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:429 gtk/gtkwindow.c:8967
 msgid "Restore"
 msgstr "Ripristina"
 
@@ -1250,7 +1250,7 @@ msgstr ""
 #: gtk/gtkmountoperation.c:545 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:673 gtk/gtkprintunixdialog.c:746
-#: gtk/gtkwindow.c:12318 gtk/inspector/css-editor.c:208
+#: gtk/gtkwindow.c:12497 gtk/inspector/css-editor.c:208
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -1305,7 +1305,7 @@ msgid "_Apply"
 msgstr "A_pplica"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944
-#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12319
+#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12498
 msgid "_OK"
 msgstr "_OK"
 
@@ -2272,7 +2272,7 @@ msgstr "No_me"
 
 #. Open item is always present
 #: gtk/gtkfilechoosernative.c:371 gtk/gtkfilechoosernative.c:456
-#: gtk/gtkplacessidebar.c:3413 gtk/gtkplacesview.c:1578
+#: gtk/gtkplacessidebar.c:3413 gtk/gtkplacesview.c:1577
 msgid "_Open"
 msgstr "_Apri"
 
@@ -2619,7 +2619,7 @@ msgstr "Creazione contesto OpenGL non riuscita"
 msgid "Application menu"
 msgstr "Menù applicazione"
 
-#: gtk/gtkheaderbar.c:447 gtk/gtkwindow.c:8860
+#: gtk/gtkheaderbar.c:447 gtk/gtkwindow.c:9037
 msgid "Close"
 msgstr "Chiudi"
 
@@ -3113,11 +3113,11 @@ msgstr "Impossibile espellere %s"
 msgid "Unable to poll “%s” for media changes"
 msgstr "Impossibile interrogare «%s» per cambiamenti ai supporti"
 
-#: gtk/gtkplacessidebar.c:3416 gtk/gtkplacesview.c:1588
+#: gtk/gtkplacessidebar.c:3416 gtk/gtkplacesview.c:1587
 msgid "Open in New _Tab"
 msgstr "Apri in nuova sc_heda"
 
-#: gtk/gtkplacessidebar.c:3419 gtk/gtkplacesview.c:1599
+#: gtk/gtkplacessidebar.c:3419 gtk/gtkplacesview.c:1598
 msgid "Open in New _Window"
 msgstr "Apri in nuova _finestra"
 
@@ -3133,11 +3133,11 @@ msgstr "_Rimuovi"
 msgid "Rename…"
 msgstr "Rinomina…"
 
-#: gtk/gtkplacessidebar.c:3429 gtk/gtkplacesview.c:1633
+#: gtk/gtkplacessidebar.c:3429 gtk/gtkplacesview.c:1632
 msgid "_Mount"
 msgstr "_Monta"
 
-#: gtk/gtkplacessidebar.c:3430 gtk/gtkplacesview.c:1623
+#: gtk/gtkplacessidebar.c:3430 gtk/gtkplacesview.c:1622
 msgid "_Unmount"
 msgstr "_Smonta"
 
@@ -3149,55 +3149,55 @@ msgstr "_Espelli"
 msgid "_Detect Media"
 msgstr "_Rileva supporto"
 
-#: gtk/gtkplacessidebar.c:3878 gtk/gtkplacesview.c:1053
+#: gtk/gtkplacessidebar.c:3878 gtk/gtkplacesview.c:1052
 msgid "Computer"
 msgstr "Computer"
 
-#: gtk/gtkplacesview.c:881
+#: gtk/gtkplacesview.c:880
 msgid "Searching for network locations"
 msgstr "Ricerca posizioni di rete in corso"
 
-#: gtk/gtkplacesview.c:888
+#: gtk/gtkplacesview.c:887
 msgid "No network locations found"
 msgstr "Non è stata trovata alcuna posizione di rete"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1163 gtk/gtkplacesview.c:1236
+#: gtk/gtkplacesview.c:1162 gtk/gtkplacesview.c:1235
 msgid "Unable to access location"
 msgstr "Impossibile accedere alla posizione"
 
 #. Restore from Cancel to Connect
-#: gtk/gtkplacesview.c:1180 gtk/ui/gtkplacesview.ui:224
+#: gtk/gtkplacesview.c:1179 gtk/ui/gtkplacesview.ui:224
 msgid "Con_nect"
 msgstr "C_onnetti"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1299
+#: gtk/gtkplacesview.c:1298
 msgid "Unable to unmount volume"
 msgstr "Impossibile smontare il volume"
 
 #. Allow to cancel the operation
-#: gtk/gtkplacesview.c:1381
+#: gtk/gtkplacesview.c:1380
 msgid "Cance_l"
 msgstr "A_nnulla"
 
-#: gtk/gtkplacesview.c:1623
+#: gtk/gtkplacesview.c:1622
 msgid "_Disconnect"
 msgstr "_Disconnetti"
 
-#: gtk/gtkplacesview.c:1633
+#: gtk/gtkplacesview.c:1632
 msgid "_Connect"
 msgstr "C_onnetti"
 
-#: gtk/gtkplacesview.c:1798
+#: gtk/gtkplacesview.c:1797
 msgid "Unable to get remote server location"
 msgstr "Impossibile recuperare la posizione del server"
 
-#: gtk/gtkplacesview.c:1935 gtk/gtkplacesview.c:1944
+#: gtk/gtkplacesview.c:1934 gtk/gtkplacesview.c:1943
 msgid "Networks"
 msgstr "Reti"
 
-#: gtk/gtkplacesview.c:1935 gtk/gtkplacesview.c:1944
+#: gtk/gtkplacesview.c:1934 gtk/gtkplacesview.c:1943
 msgid "On This Computer"
 msgstr "Su questo computer"
 
@@ -3845,12 +3845,24 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:12306
+#: gtk/gtkwindow.c:8985
+msgid "Move"
+msgstr "Sposta"
+
+#: gtk/gtkwindow.c:8993
+msgid "Resize"
+msgstr "Ridimensiona"
+
+#: gtk/gtkwindow.c:9024
+msgid "Always on Top"
+msgstr "Sempre in primo piano"
+
+#: gtk/gtkwindow.c:12485
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Usare GTK+ Inspector?"
 
-#: gtk/gtkwindow.c:12308
+#: gtk/gtkwindow.c:12487
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3861,7 +3873,7 @@ msgstr ""
 "modificare qualsiasi applicazione GTK+. L'utilizzo di questo strumento "
 "potrebbe causare la chiusura inaspettata dell'applicazione."
 
-#: gtk/gtkwindow.c:12313
+#: gtk/gtkwindow.c:12492
 msgid "Don't show this message again"
 msgstr "Non mostrare più questo messaggio"
 
