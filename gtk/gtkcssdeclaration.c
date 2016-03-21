@@ -116,3 +116,28 @@ gtk_css_declaration_new_parse (GtkCssStyleDeclaration *style,
 
   return decl;
 }
+
+const char *
+gtk_css_declaration_get_name (GtkCssDeclaration *decl)
+{
+  GtkCssDeclarationPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_CSS_DECLARATION (decl), NULL);
+
+  priv = gtk_css_declaration_get_instance_private (decl);
+
+  return _gtk_style_property_get_name (priv->prop);
+}
+
+GtkCssValue *
+gtk_css_declaration_get_value (GtkCssDeclaration *decl)
+{
+  GtkCssDeclarationPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_CSS_DECLARATION (decl), NULL);
+
+  priv = gtk_css_declaration_get_instance_private (decl);
+
+  return priv->value;
+}
+

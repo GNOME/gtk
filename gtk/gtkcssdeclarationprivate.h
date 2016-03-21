@@ -22,6 +22,8 @@
 
 #include "gtk/gtkcssstyledeclarationprivate.h"
 
+#include "gtk/gtkcssvalueprivate.h"
+
 G_BEGIN_DECLS
 
 #define GTK_TYPE_CSS_DECLARATION           (gtk_css_declaration_get_type ())
@@ -31,7 +33,7 @@ G_BEGIN_DECLS
 #define GTK_IS_CSS_DECLARATION_CLASS(obj)  (G_TYPE_CHECK_CLASS_TYPE (obj, GTK_TYPE_CSS_DECLARATION))
 #define GTK_CSS_DECLARATION_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_CSS_DECLARATION, GtkCssDeclarationClass))
 
-typedef struct _GtkCssDeclaration           GtkCssDeclaration;
+/* typedef struct _GtkCssDeclaration           GtkCssDeclaration; */
 typedef struct _GtkCssDeclarationClass      GtkCssDeclarationClass;
 
 struct _GtkCssDeclaration
@@ -48,6 +50,9 @@ GType                   gtk_css_declaration_get_type            (void) G_GNUC_CO
   
 GtkCssDeclaration *     gtk_css_declaration_new_parse           (GtkCssStyleDeclaration *style,
                                                                  GtkCssTokenSource      *source);
+
+const char *            gtk_css_declaration_get_name            (GtkCssDeclaration      *decl);
+GtkCssValue *           gtk_css_declaration_get_value           (GtkCssDeclaration      *decl);
 
 
 G_END_DECLS

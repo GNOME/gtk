@@ -31,6 +31,8 @@ G_BEGIN_DECLS
 #define GTK_IS_CSS_STYLE_DECLARATION_CLASS(obj)  (G_TYPE_CHECK_CLASS_TYPE (obj, GTK_TYPE_CSS_STYLE_DECLARATION))
 #define GTK_CSS_STYLE_DECLARATION_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_CSS_STYLE_DECLARATION, GtkCssStyleDeclarationClass))
 
+typedef struct _GtkCssDeclaration                GtkCssDeclaration;
+
 typedef struct _GtkCssStyleDeclaration           GtkCssStyleDeclaration;
 typedef struct _GtkCssStyleDeclarationClass      GtkCssStyleDeclarationClass;
 
