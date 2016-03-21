@@ -134,10 +134,11 @@ _gdk_win32_windowing_init (void)
 
 void
 _gdk_win32_api_failed (const gchar *where,
-		      const gchar *api)
+                       const gchar *api)
 {
-  gchar *msg = g_win32_error_message (GetLastError ());
-  g_warning ("%s: %s failed: %s", where, api, msg);
+  DWORD error_code = GetLastError ();
+  gchar *msg = g_win32_error_message (error_code);
+  g_warning ("%s: %s failed with code %lu: %s", where, api, error_code, msg);
   g_free (msg);
 }
 
