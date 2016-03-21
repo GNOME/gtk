@@ -3209,6 +3209,16 @@ gdk_wayland_seat_set_primary (GdkSeat                             *seat,
     }
 }
 
+/**
+ * gdk_wayland_seat_get_wl_seat:
+ * @device: (type GdkWaylandDevice): a #GdkDevice
+ *
+ * Returns the Wayland wl_seat of a #GdkSeat.
+ *
+ * Returns: (transfer none): a Wayland wl_seat
+ *
+ * Since: 3.20
+ */
 struct wl_seat *
 gdk_wayland_seat_get_wl_seat (GdkSeat *seat)
 {
