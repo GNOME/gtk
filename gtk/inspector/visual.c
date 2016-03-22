@@ -262,6 +262,7 @@ init_theme (GtkInspectorVisual *vis)
   gchar **builtin_themes;
   GList *list, *l;
   guint i;
+  const gchar * const *dirs;
 
   t = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
   /* Builtin themes */
@@ -284,6 +285,14 @@ init_theme (GtkInspectorVisual *vis)
   path = g_build_filename (g_get_home_dir (), ".themes", NULL);
   fill_gtk (path, t);
   g_free (path);
+
+  dirs = g_get_system_data_dirs ();
+  for (i = 0; dirs[i]; i++)
+    {
+      path = g_build_filename (dirs[i], "themes", NULL);
+      fill_gtk (path, t);
+      g_free (path);
+    }
 
   list = NULL;
   g_hash_table_iter_init (&iter, t);
