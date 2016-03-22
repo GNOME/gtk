@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-11 12:19+0000\n"
-"PO-Revision-Date: 2016-03-11 18:08+0100\n"
+"POT-Creation-Date: 2016-03-22 00:33+0000\n"
+"PO-Revision-Date: 2016-03-22 07:34+0100\n"
 "Last-Translator: Dušan Kazik <prescott66@gmail.com>\n"
 "Language-Team: slovenčina <>\n"
 "Language: sk\n"
@@ -656,15 +656,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "Za_vrieť"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:406
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:406 gtk/gtkwindow.c:9001
 msgid "Minimize"
 msgstr "Minimalizovať"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:429
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:429 gtk/gtkwindow.c:9010
 msgid "Maximize"
 msgstr "Maximalizovať"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:429
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:429 gtk/gtkwindow.c:8967
 msgid "Restore"
 msgstr "Obnoviť"
 
@@ -1215,7 +1215,7 @@ msgstr ""
 #: gtk/gtkmountoperation.c:545 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:673 gtk/gtkprintunixdialog.c:746
-#: gtk/gtkwindow.c:12315 gtk/inspector/css-editor.c:208
+#: gtk/gtkwindow.c:12497 gtk/inspector/css-editor.c:208
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -1265,7 +1265,7 @@ msgid "_Apply"
 msgstr "Po_užiť"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944
-#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12316
+#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12498
 msgid "_OK"
 msgstr "_Ok"
 
@@ -1814,7 +1814,7 @@ msgstr "2000"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1893 gtk/gtkcalendar.c:2571
+#: gtk/gtkcalendar.c:1893 gtk/gtkcalendar.c:2589
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -1830,7 +1830,7 @@ msgstr "%d"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1925 gtk/gtkcalendar.c:2437
+#: gtk/gtkcalendar.c:1925 gtk/gtkcalendar.c:2455
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -1846,7 +1846,7 @@ msgstr "%d"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:2216
+#: gtk/gtkcalendar.c:2222
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -2108,12 +2108,12 @@ msgstr "Vlastná farba č. %d: %s"
 msgid "Color Plane"
 msgstr "Farebná rovina"
 
-#: gtk/gtkcolorscale.c:325
+#: gtk/gtkcolorscale.c:211
 msgctxt "Color channel"
 msgid "Hue"
 msgstr "Odtieň"
 
-#: gtk/gtkcolorscale.c:327
+#: gtk/gtkcolorscale.c:213
 msgctxt "Color channel"
 msgid "Alpha"
 msgstr "Alfa"
@@ -2186,44 +2186,44 @@ msgstr "_Pravý:"
 msgid "Paper Margins"
 msgstr "Okraje papiera"
 
-#: gtk/gtkentry.c:9486 gtk/gtklabel.c:6688 gtk/gtktextview.c:9488
+#: gtk/gtkentry.c:9490 gtk/gtklabel.c:6688 gtk/gtktextview.c:9496
 msgid "Cu_t"
 msgstr "Vystri_hnúť"
 
-#: gtk/gtkentry.c:9490 gtk/gtklabel.c:6689 gtk/gtktextview.c:9492
+#: gtk/gtkentry.c:9494 gtk/gtklabel.c:6689 gtk/gtktextview.c:9500
 msgid "_Copy"
 msgstr "_Kopírovať"
 
-#: gtk/gtkentry.c:9494 gtk/gtklabel.c:6690 gtk/gtktextview.c:9494
+#: gtk/gtkentry.c:9498 gtk/gtklabel.c:6690 gtk/gtktextview.c:9502
 msgid "_Paste"
 msgstr "_Vložiť"
 
-#: gtk/gtkentry.c:9497 gtk/gtkfilechooserwidget.c:1465
-#: gtk/gtkfilechooserwidget.c:2263 gtk/gtklabel.c:6692 gtk/gtktextview.c:9497
+#: gtk/gtkentry.c:9501 gtk/gtkfilechooserwidget.c:1465
+#: gtk/gtkfilechooserwidget.c:2263 gtk/gtklabel.c:6692 gtk/gtktextview.c:9505
 msgid "_Delete"
 msgstr "O_dstrániť"
 
-#: gtk/gtkentry.c:9508 gtk/gtklabel.c:6701 gtk/gtktextview.c:9511
+#: gtk/gtkentry.c:9512 gtk/gtklabel.c:6701 gtk/gtktextview.c:9519
 msgid "Select _All"
 msgstr "Vybr_ať všetko"
 
-#: gtk/gtkentry.c:9686 gtk/gtktextview.c:9721
+#: gtk/gtkentry.c:9690 gtk/gtktextview.c:9729
 msgid "Select all"
 msgstr "Vybrať všetko"
 
-#: gtk/gtkentry.c:9689 gtk/gtktextview.c:9724
+#: gtk/gtkentry.c:9693 gtk/gtktextview.c:9732
 msgid "Cut"
 msgstr "Vystrihnúť"
 
-#: gtk/gtkentry.c:9692 gtk/gtktextview.c:9727
+#: gtk/gtkentry.c:9696 gtk/gtktextview.c:9735
 msgid "Copy"
 msgstr "Kopírovať"
 
-#: gtk/gtkentry.c:9695 gtk/gtktextview.c:9730
+#: gtk/gtkentry.c:9699 gtk/gtktextview.c:9738
 msgid "Paste"
 msgstr "Vložiť"
 
-#: gtk/gtkentry.c:10756
+#: gtk/gtkentry.c:10760
 msgid "Caps Lock is on"
 msgstr "Caps Lock je zapnutý"
 
@@ -2240,7 +2240,7 @@ msgid "(None)"
 msgstr "(žiaden)"
 
 # priečinok
-#: gtk/gtkfilechooserbutton.c:2125
+#: gtk/gtkfilechooserbutton.c:2151
 msgid "Other…"
 msgstr "Iný…"
 
@@ -2250,7 +2250,7 @@ msgstr "_Názov"
 
 #. Open item is always present
 #: gtk/gtkfilechoosernative.c:371 gtk/gtkfilechoosernative.c:456
-#: gtk/gtkplacessidebar.c:3413 gtk/gtkplacesview.c:1578
+#: gtk/gtkplacessidebar.c:3413 gtk/gtkplacesview.c:1577
 msgid "_Open"
 msgstr "_Otvoriť"
 
@@ -2595,7 +2595,7 @@ msgstr "Vytvárania kontextu OpenGL zlyhalo"
 msgid "Application menu"
 msgstr "Ponuka aplikácie"
 
-#: gtk/gtkheaderbar.c:447 gtk/gtkwindow.c:8857
+#: gtk/gtkheaderbar.c:447 gtk/gtkwindow.c:9037
 msgid "Close"
 msgstr "Zavrieť"
 
@@ -2897,7 +2897,7 @@ msgstr "Z shell"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Nedá sa ukončiť proces s PID %d: %s"
 
-#: gtk/gtknotebook.c:5081 gtk/gtknotebook.c:7347
+#: gtk/gtknotebook.c:5111 gtk/gtknotebook.c:7377
 #, c-format
 msgid "Page %u"
 msgstr "Stránka č. %u"
@@ -2938,7 +2938,7 @@ msgstr "Správa vlastných veľkostí…"
 msgid "Page Setup"
 msgstr "Nastavenie strany"
 
-#: gtk/gtkpathbar.c:1478
+#: gtk/gtkpathbar.c:1497
 msgid "File System Root"
 msgstr "Koreň súborového systému"
 
@@ -3105,11 +3105,11 @@ msgstr "Nepodarilo sa vysunúť %s"
 msgid "Unable to poll “%s” for media changes"
 msgstr "Nepodarilo sa skontrolovať „%s“ na zmenu nosiča"
 
-#: gtk/gtkplacessidebar.c:3416 gtk/gtkplacesview.c:1588
+#: gtk/gtkplacessidebar.c:3416 gtk/gtkplacesview.c:1587
 msgid "Open in New _Tab"
 msgstr "Otvoriť na novej _karte"
 
-#: gtk/gtkplacessidebar.c:3419 gtk/gtkplacesview.c:1599
+#: gtk/gtkplacessidebar.c:3419 gtk/gtkplacesview.c:1598
 msgid "Open in New _Window"
 msgstr "Otvoriť v novom _okne"
 
@@ -3125,11 +3125,11 @@ msgstr "O_dstrániť"
 msgid "Rename…"
 msgstr "Premenovať…"
 
-#: gtk/gtkplacessidebar.c:3429 gtk/gtkplacesview.c:1633
+#: gtk/gtkplacessidebar.c:3429 gtk/gtkplacesview.c:1632
 msgid "_Mount"
 msgstr "_Pripojiť"
 
-#: gtk/gtkplacessidebar.c:3430 gtk/gtkplacesview.c:1623
+#: gtk/gtkplacessidebar.c:3430 gtk/gtkplacesview.c:1622
 msgid "_Unmount"
 msgstr "_Odpojiť"
 
@@ -3141,56 +3141,56 @@ msgstr "_Vysunúť"
 msgid "_Detect Media"
 msgstr "_Zistiť nosič"
 
-#: gtk/gtkplacessidebar.c:3878 gtk/gtkplacesview.c:1053
+#: gtk/gtkplacessidebar.c:3878 gtk/gtkplacesview.c:1052
 msgid "Computer"
 msgstr "Počítač"
 
-#: gtk/gtkplacesview.c:881
+#: gtk/gtkplacesview.c:880
 msgid "Searching for network locations"
 msgstr "Vyhľadávajú sa sieťové umiestnenia"
 
-#: gtk/gtkplacesview.c:888
+#: gtk/gtkplacesview.c:887
 msgid "No network locations found"
 msgstr "Nenašli sa žiadne sieťové umiestnenia"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1163 gtk/gtkplacesview.c:1236
+#: gtk/gtkplacesview.c:1162 gtk/gtkplacesview.c:1235
 msgid "Unable to access location"
 msgstr "Nepodarilo sa pristúpiť k umiestneniu"
 
 #. Restore from Cancel to Connect
-#: gtk/gtkplacesview.c:1180 gtk/ui/gtkplacesview.ui:224
+#: gtk/gtkplacesview.c:1179 gtk/ui/gtkplacesview.ui:224
 msgid "Con_nect"
 msgstr "Prip_ojiť"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1299
+#: gtk/gtkplacesview.c:1298
 msgid "Unable to unmount volume"
 msgstr "Nepodarilo sa odpojiť zväzok"
 
 #. Allow to cancel the operation
-#: gtk/gtkplacesview.c:1381
+#: gtk/gtkplacesview.c:1380
 msgid "Cance_l"
 msgstr "_Zrušiť"
 
-#: gtk/gtkplacesview.c:1623
+#: gtk/gtkplacesview.c:1622
 msgid "_Disconnect"
 msgstr "O_dpojiť"
 
-#: gtk/gtkplacesview.c:1633
+#: gtk/gtkplacesview.c:1632
 msgid "_Connect"
 msgstr "_Pripojiť"
 
-#: gtk/gtkplacesview.c:1798
+#: gtk/gtkplacesview.c:1797
 msgid "Unable to get remote server location"
 msgstr "Nie je možné získať umiestnenie vzdialeného servera"
 
 #  heading
-#: gtk/gtkplacesview.c:1935 gtk/gtkplacesview.c:1944
+#: gtk/gtkplacesview.c:1934 gtk/gtkplacesview.c:1943
 msgid "Networks"
 msgstr "Siete"
 
-#: gtk/gtkplacesview.c:1935 gtk/gtkplacesview.c:1944
+#: gtk/gtkplacesview.c:1934 gtk/gtkplacesview.c:1943
 msgid "On This Computer"
 msgstr "Na tomto počítači"
 
@@ -3610,23 +3610,23 @@ msgstr "Potiahnutie dvoma prstami doľava"
 msgid "Two finger swipe right"
 msgstr "Potiahnutie dvoma prstami doprava"
 
-#: gtk/gtkshortcutswindow.c:859
+#: gtk/gtkshortcutswindow.c:860
 msgid "Shortcuts"
 msgstr "Klávesové skratky"
 
-#: gtk/gtkshortcutswindow.c:864
+#: gtk/gtkshortcutswindow.c:865
 msgid "Search Results"
 msgstr "Výsledky vyhľadávania"
 
-#: gtk/gtkshortcutswindow.c:918
+#: gtk/gtkshortcutswindow.c:919
 msgid "Search Shortcuts"
 msgstr "Vyhľadajte klávesové skratky"
 
-#: gtk/gtkshortcutswindow.c:983 gtk/ui/gtkfilechooserwidget.ui:310
+#: gtk/gtkshortcutswindow.c:984 gtk/ui/gtkfilechooserwidget.ui:310
 msgid "No Results Found"
 msgstr "Nenašli sa žiadne výsledky"
 
-#: gtk/gtkshortcutswindow.c:990 gtk/ui/gtkfilechooserwidget.ui:324
+#: gtk/gtkshortcutswindow.c:991 gtk/ui/gtkfilechooserwidget.ui:324
 #: gtk/ui/gtkplacesview.ui:181
 msgid "Try a different search"
 msgstr "Skúste vyhľadať niečo iné"
@@ -3835,12 +3835,24 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:12303
+#: gtk/gtkwindow.c:8985
+msgid "Move"
+msgstr "Presunúť"
+
+#: gtk/gtkwindow.c:8993
+msgid "Resize"
+msgstr "Zmeniť veľkosť"
+
+#: gtk/gtkwindow.c:9024
+msgid "Always on Top"
+msgstr "Vždy navrchu"
+
+#: gtk/gtkwindow.c:12485
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Chcete použiť nástroj Inšpektor GTK+?"
 
-#: gtk/gtkwindow.c:12305
+#: gtk/gtkwindow.c:12487
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3851,7 +3863,7 @@ msgstr ""
 "preskúmať a meniť interné vlastnosti ľubovolnej aplikácie GTK+. Jeho "
 "používaním môžete spôsobiť neočakávanie chovanie alebo pád."
 
-#: gtk/gtkwindow.c:12310
+#: gtk/gtkwindow.c:12492
 msgid "Don't show this message again"
 msgstr "Nezobrazovať túto správu znovu"
 
@@ -3918,7 +3930,7 @@ msgid "CSS Property"
 msgstr "Vlastnosť CSS"
 
 #: gtk/inspector/css-node-tree.ui:125 gtk/inspector/prop-list.ui:50
-#: gtk/ui/gtkcoloreditor.ui:293
+#: gtk/ui/gtkcoloreditor.ui:295
 msgid "Value"
 msgstr "Hodnota"
 
@@ -5525,35 +5537,35 @@ msgstr "Výber farby"
 msgid "Color Name"
 msgstr "Názov farby"
 
-#: gtk/ui/gtkcoloreditor.ui:153
+#: gtk/ui/gtkcoloreditor.ui:155
 msgctxt "Color channel"
 msgid "A"
 msgstr "A"
 
-#: gtk/ui/gtkcoloreditor.ui:169
+#: gtk/ui/gtkcoloreditor.ui:171
 msgid "Alpha"
 msgstr "Alfa"
 
-#: gtk/ui/gtkcoloreditor.ui:200
+#: gtk/ui/gtkcoloreditor.ui:202
 msgctxt "Color channel"
 msgid "H"
 msgstr "H"
 
-#: gtk/ui/gtkcoloreditor.ui:216
+#: gtk/ui/gtkcoloreditor.ui:218
 msgid "Hue"
 msgstr "Odtieň"
 
-#: gtk/ui/gtkcoloreditor.ui:248
+#: gtk/ui/gtkcoloreditor.ui:250
 msgctxt "Color Channel"
 msgid "S"
 msgstr "S"
 
-#: gtk/ui/gtkcoloreditor.ui:258
+#: gtk/ui/gtkcoloreditor.ui:260
 msgctxt "Color Channel"
 msgid "V"
 msgstr "V"
 
-#: gtk/ui/gtkcoloreditor.ui:274
+#: gtk/ui/gtkcoloreditor.ui:276
 msgid "Saturation"
 msgstr "Sýtosť"
 
