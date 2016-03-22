@@ -467,6 +467,8 @@ gtk_css_animated_style_new_advance (GtkCssAnimatedStyle *source,
   if (timestamp == 0)
     return g_object_ref (source->style);
 
+  gtk_internal_return_val_if_fail (timestamp > source->current_time, NULL);
+
   animations = NULL;
   for (l = source->animations; l; l = l->next)
     {
