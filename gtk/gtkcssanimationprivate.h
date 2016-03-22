@@ -68,8 +68,9 @@ GtkStyleAnimation *     _gtk_css_animation_new             (const char         *
                                                             GtkCssFillMode      fill_mode,
                                                             double              iteration_count);
 
-GtkStyleAnimation *     _gtk_css_animation_copy            (GtkCssAnimation   *animation,
-                                                            GtkCssPlayState    play_state);
+GtkStyleAnimation *     _gtk_css_animation_advance_with_play_state (GtkCssAnimation   *animation,
+                                                                    gint64             timestamp,
+                                                                    GtkCssPlayState    play_state);
 
 const char *            _gtk_css_animation_get_name        (GtkCssAnimation   *animation);
 

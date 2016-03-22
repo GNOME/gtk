@@ -26,19 +26,37 @@
 
 G_DEFINE_TYPE (GtkCssTransition, _gtk_css_transition, GTK_TYPE_STYLE_ANIMATION)
 
-static void
-gtk_css_transition_set_values (GtkStyleAnimation   *animation,
-                               gint64               for_time_us,
-                               GtkCssAnimatedStyle *style)
+static GtkStyleAnimation *
+gtk_css_transition_advance (GtkStyleAnimation    *style_animation,
+                           gint64                timestamp)
 {
-  GtkCssTransition *transition = GTK_CSS_TRANSITION (animation);
+  GtkCssTransition *source = GTK_CSS_TRANSITION (style_animation);
+
+  GtkCssTransition *transition;
+
+  transition = g_object_new (GTK_TYPE_CSS_TRANSITION, NULL);
+
+  transition->property = source->property;
+  transition->start = _gtk_css_value_ref (source->start);
+  transition->ease = _gtk_css_value_ref (source->ease);
+
+  gtk_progress_tracker_init_copy (&source->tracker, &transition->tracker);
+  gtk_progress_tracker_advance_frame (&transition->tracker, timestamp);
+
+  return GTK_STYLE_ANIMATION (transition);
+}
+
+static void
+gtk_css_transition_apply_values (GtkStyleAnimation   *style_animation,
+                                 GtkCssAnimatedStyle *style)
+{
+  GtkCssTransition *transition = GTK_CSS_TRANSITION (style_animation);
   GtkCssValue *value, *end;
   double progress;
   GtkProgressState state;
 
   end = gtk_css_animated_style_get_intrinsic_value (style, transition->property);
 
-  gtk_progress_tracker_advance_frame (&transition->tracker, for_time_us);
   state = gtk_progress_tracker_get_state (&transition->tracker);
 
   if (state == GTK_PROGRESS_STATE_BEFORE)
@@ -64,8 +82,7 @@ gtk_css_transition_set_values (GtkStyleAnimation   *animation,
 }
 
 static gboolean
-gtk_css_transition_is_finished (GtkStyleAnimation *animation,
-                                gint64             at_time_us)
+gtk_css_transition_is_finished (GtkStyleAnimation *animation)
 {
   GtkCssTransition *transition = GTK_CSS_TRANSITION (animation);
 
@@ -73,8 +90,7 @@ gtk_css_transition_is_finished (GtkStyleAnimation *animation,
 }
 
 static gboolean
-gtk_css_transition_is_static (GtkStyleAnimation *animation,
-                              gint64             at_time_us)
+gtk_css_transition_is_static (GtkStyleAnimation *animation)
 {
   GtkCssTransition *transition = GTK_CSS_TRANSITION (animation);
 
@@ -100,7 +116,8 @@ _gtk_css_transition_class_init (GtkCssTransitionClass *klass)
 
   object_class->finalize = gtk_css_transition_finalize;
 
-  animation_class->set_values = gtk_css_transition_set_values;
+  animation_class->advance = gtk_css_transition_advance;
+  animation_class->apply_values = gtk_css_transition_apply_values;
   animation_class->is_finished = gtk_css_transition_is_finished;
   animation_class->is_static = gtk_css_transition_is_static;
 }

@@ -71,7 +71,7 @@ gtk_css_animated_style_is_static (GtkCssStyle *style)
 
   for (list = animated->animations; list; list = list->next)
     {
-      if (!_gtk_style_animation_is_static (list->data, animated->current_time))
+      if (!_gtk_style_animation_is_static (list->data))
         return FALSE;
     }
 
@@ -288,7 +288,10 @@ gtk_css_animated_style_create_css_transitions (GSList              *animations,
             {
               animation = gtk_css_animated_style_find_transition (GTK_CSS_ANIMATED_STYLE (source), i);
               if (animation)
-                animations = g_slist_prepend (animations, g_object_ref (animation));
+                {
+                  animation = _gtk_style_animation_advance (animation, timestamp);
+                  animations = g_slist_prepend (animations, animation);
+                }
 
               continue;
             }
@@ -368,8 +371,9 @@ gtk_css_animated_style_create_css_animations (GSList                  *animation
 
       if (animation)
         {
-          animation = _gtk_css_animation_copy (GTK_CSS_ANIMATION (animation),
-                                               _gtk_css_play_state_value_get (_gtk_css_array_value_get_nth (play_states, i)));
+          animation = _gtk_css_animation_advance_with_play_state (GTK_CSS_ANIMATION (animation),
+                                                                  timestamp,
+                                                                  _gtk_css_play_state_value_get (_gtk_css_array_value_get_nth (play_states, i)));
         }
       else
         {
@@ -400,8 +404,7 @@ gtk_css_animated_style_create_css_animations (GSList                  *animation
 /* PUBLIC API */
 
 static void
-gtk_css_animated_style_apply_animations (GtkCssAnimatedStyle *style,
-                                         gint64               timestamp)
+gtk_css_animated_style_apply_animations (GtkCssAnimatedStyle *style)
 {
   GSList *l;
 
@@ -409,9 +412,8 @@ gtk_css_animated_style_apply_animations (GtkCssAnimatedStyle *style,
     {
       GtkStyleAnimation *animation = l->data;
       
-      _gtk_style_animation_set_values (animation,
-                                       timestamp,
-                                       GTK_CSS_ANIMATED_STYLE (style));
+      _gtk_style_animation_apply_values (animation,
+                                         GTK_CSS_ANIMATED_STYLE (style));
     }
 }
 
@@ -448,7 +450,7 @@ gtk_css_animated_style_new (GtkCssStyle             *base_style,
   result->current_time = timestamp;
   result->animations = animations;
 
-  gtk_css_animated_style_apply_animations (result, timestamp);
+  gtk_css_animated_style_apply_animations (result);
 
   return GTK_CSS_STYLE (result);
 }
@@ -474,10 +476,11 @@ gtk_css_animated_style_new_advance (GtkCssAnimatedStyle *source,
     {
       GtkStyleAnimation *animation = l->data;
       
-      if (_gtk_style_animation_is_finished (animation, timestamp))
+      if (_gtk_style_animation_is_finished (animation))
         continue;
 
-      animations = g_slist_prepend (animations, g_object_ref (animation));
+      animation = _gtk_style_animation_advance (animation, timestamp);
+      animations = g_slist_prepend (animations, animation);
     }
   animations = g_slist_reverse (animations);
 
@@ -490,7 +493,7 @@ gtk_css_animated_style_new_advance (GtkCssAnimatedStyle *source,
   result->current_time = timestamp;
   result->animations = animations;
 
-  gtk_css_animated_style_apply_animations (result, timestamp);
+  gtk_css_animated_style_apply_animations (result);
 
   return GTK_CSS_STYLE (result);
 }
