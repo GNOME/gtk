@@ -23,6 +23,7 @@
 
 #include "gtkcssdefinecolorruleprivate.h"
 #include "gtkcssimportruleprivate.h"
+#include "gtkcsskeyframesruleprivate.h"
 #include "gtkcssstylesheetprivate.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
@@ -276,6 +277,10 @@ gtk_css_rule_new_from_at_rule (GtkCssTokenSource *source,
   else if (g_ascii_strcasecmp (token->string.string, "define-color") == 0)
     {
       rule = gtk_css_define_color_rule_new_parse (at_source, parent_rule, parent_style_sheet);
+    }
+  else if (g_ascii_strcasecmp (token->string.string, "keyframes") == 0)
+    {
+      rule = gtk_css_keyframes_rule_new_parse (at_source, parent_rule, parent_style_sheet);
     }
   else
     {

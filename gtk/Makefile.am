@@ -422,7 +422,9 @@ gtk_private_h_sources =		\
 	gtkcssimportruleprivate.h	\
 	gtkcssinheritvalueprivate.h	\
 	gtkcssinitialvalueprivate.h	\
+	gtkcsskeyframeruleprivate.h	\
 	gtkcsskeyframesprivate.h	\
+	gtkcsskeyframesruleprivate.h	\
 	gtkcsslookupprivate.h	\
 	gtkcssmatcherprivate.h	\
 	gtkcssnodeprivate.h		\
@@ -701,7 +703,9 @@ gtk_base_c_sources = 		\
 	gtkcssimportrule.c	\
 	gtkcssinheritvalue.c	\
 	gtkcssinitialvalue.c	\
+	gtkcsskeyframerule.c	\
 	gtkcsskeyframes.c	\
+	gtkcsskeyframesrule.c	\
 	gtkcsslookup.c		\
 	gtkcssmatcher.c		\
 	gtkcssnode.c		\
