@@ -25,6 +25,7 @@ LDADD = \
 TESTS_ENVIRONMENT = 			\
 	GIO_USE_VOLUME_MONITOR=unix 	\
 	GSETTINGS_BACKEND=memory	\
+	GTK_CSD=1			\
 	G_ENABLE_DIAGNOSTIC=0
 
 TEST_PROGS += accessibility-dump
