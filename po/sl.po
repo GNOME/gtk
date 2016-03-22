@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-12 19:39+0100\n"
-"PO-Revision-Date: 2016-03-12 19:46+0100\n"
+"POT-Creation-Date: 2016-03-22 20:34+0100\n"
+"PO-Revision-Date: 2016-03-22 20:39+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -6174,87 +6174,76 @@ msgstr "Kratka stranica (zrcaljeno)"
 
 #. Translators: Top output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4338
-#, fuzzy
 msgctxt "output-bin"
 msgid "Top Bin"
-msgstr "Dvojiški %i"
+msgstr "Vsebnik na vrhu"
 
 #. Translators: Middle output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4340
-#, fuzzy
 msgctxt "output-bin"
 msgid "Middle Bin"
-msgstr "na sredini"
+msgstr "Vsebnik na sredini"
 
 #. Translators: Bottom output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4342
-#, fuzzy
 msgctxt "output-bin"
 msgid "Bottom Bin"
-msgstr "Pokaži &dvojiško"
+msgstr "Vsebnik na dnu"
 
 #. Translators: Side output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4344
-#, fuzzy
 msgctxt "output-bin"
 msgid "Side Bin"
-msgstr "Dvojiški %i"
+msgstr "Vsebnik na robu"
 
 #. Translators: Left output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4346
-#, fuzzy
 msgctxt "output-bin"
 msgid "Left Bin"
-msgstr "Dvojiški %i"
+msgstr "Vsebnik na levi"
 
 #. Translators: Right output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4348
-#, fuzzy
 msgctxt "output-bin"
 msgid "Right Bin"
-msgstr "Pokaži &dvojiško"
+msgstr "Vsebnik na desni"
 
 #. Translators: Center output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4350
-#, fuzzy
 msgctxt "output-bin"
 msgid "Center Bin"
-msgstr "Pokaži &dvojiško"
+msgstr "Vsebnik na sredini"
 
 #. Translators: Rear output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4352
-#, fuzzy
 msgctxt "output-bin"
 msgid "Rear Bin"
-msgstr "Zadaj"
+msgstr "Vsebnik zadaj"
 
 #. Translators: Output bin where one sided output is oriented in the face-up position
 #: modules/printbackends/cups/gtkprintbackendcups.c:4354
-#, fuzzy
 msgctxt "output-bin"
 msgid "Face Up Bin"
-msgstr "Pokaži &dvojiško"
+msgstr "Vsebnik obrnjen navzgor"
 
 #. Translators: Output bin where one sided output is oriented in the face-down position
 #: modules/printbackends/cups/gtkprintbackendcups.c:4356
-#, fuzzy
 msgctxt "output-bin"
 msgid "Face Down Bin"
-msgstr "neznana karta"
+msgstr "Vsebnik obrnjen navzdol"
 
 #. Translators: Large capacity output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4358
-#, fuzzy
 msgctxt "output-bin"
 msgid "Large Capacity Bin"
-msgstr "Zmogljivost"
+msgstr "Obsežni zmogljivi vsebnik"
 
 #. Translators: Output stacker number %d
 #: modules/printbackends/cups/gtkprintbackendcups.c:4360
-#, fuzzy, c-format
+#, c-format
 msgctxt "output-bin"
 msgid "Stacker %d"
-msgstr " (%'d"
+msgstr "Skladalnik %d"
 
 #. Translators: Output mailbox number %d
 #: modules/printbackends/cups/gtkprintbackendcups.c:4362
