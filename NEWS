@@ -651,7 +651,8 @@ Overview of Changes in GTK+ 3.19.3
  758407 Could not send the search request \ GDBus.Error:org.freedesktop.Tr...
  758442 gtk_style_context_save() destroys style information
 
-* Translation updates:
+
+Overview of Changes in GTK+ 3.19.2
 ==================================
 
 * Most widgets have been ported to CSS nodes. The element names and
