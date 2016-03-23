@@ -51,6 +51,9 @@ GtkCssRule *            gtk_css_define_color_rule_new_parse     (GtkCssTokenSour
                                                                  GtkCssRule             *parent_rule,
                                                                  GtkCssStyleSheet       *parent_style_sheet);
 
+const char *            gtk_css_define_color_rule_get_name      (GtkCssDefineColorRule  *rule);
+GtkCssValue *           gtk_css_define_color_rule_get_value     (GtkCssDefineColorRule  *rule);
+
 
 G_END_DECLS
 

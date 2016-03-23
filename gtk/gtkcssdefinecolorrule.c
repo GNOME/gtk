@@ -60,9 +60,7 @@ gtk_css_define_color_rule_init (GtkCssDefineColorRule *define_color_rule)
 
 static GtkCssRule *
 gtk_css_define_color_rule_new (GtkCssRule       *parent_rule,
-                               GtkCssStyleSheet *parent_style_sheet,
-                               const char       *name,
-                               GtkCssValue      *color)
+                               GtkCssStyleSheet *parent_style_sheet)
 {
   return g_object_new (GTK_TYPE_CSS_DEFINE_COLOR_RULE,
                        "parent-rule", parent_rule,
@@ -75,14 +73,17 @@ gtk_css_define_color_rule_new_parse (GtkCssTokenSource *source,
                                      GtkCssRule        *parent_rule,
                                      GtkCssStyleSheet  *parent_style_sheet)
 {
+  GtkCssDefineColorRulePrivate *priv;
   const GtkCssToken *token;
   GtkCssRule *result;
-  GtkCssValue *color;
-  char *name;
 
   g_return_val_if_fail (source != NULL, NULL);
   g_return_val_if_fail (parent_rule == NULL || GTK_IS_CSS_RULE (parent_rule), NULL);
   g_return_val_if_fail (GTK_IS_CSS_STYLE_SHEET (parent_style_sheet), NULL);
+
+  result = gtk_css_define_color_rule_new (parent_rule, parent_style_sheet);
+  priv = gtk_css_define_color_rule_get_instance_private (GTK_CSS_DEFINE_COLOR_RULE (result));
+  gtk_css_token_source_set_consumer (source, G_OBJECT (result));
 
   token = gtk_css_token_source_get_token (source);
   if (token->type != GTK_CSS_TOKEN_AT_KEYWORD ||
@@ -90,6 +91,7 @@ gtk_css_define_color_rule_new_parse (GtkCssTokenSource *source,
     {
       gtk_css_token_source_error (source, "Expected '@define-color'");
       gtk_css_token_source_consume_all (source);
+      g_object_unref (result);
       return NULL;
     }
   gtk_css_token_source_consume_token (source);
@@ -99,15 +101,16 @@ gtk_css_define_color_rule_new_parse (GtkCssTokenSource *source,
     {
       gtk_css_token_source_error (source, "Expected name of color");
       gtk_css_token_source_consume_all (source);
+      g_object_unref (result);
       return NULL;
     }
-  name = g_strdup (token->string.string);
+  priv->name = g_strdup (token->string.string);
   gtk_css_token_source_consume_token (source);
 
-  color = gtk_css_color_value_token_parse (source);
-  if (color == NULL)
+  priv->color = gtk_css_color_value_token_parse (source);
+  if (priv->color == NULL)
     {
-      g_free (name);
+      g_object_unref (result);
       return NULL;
     }
 
@@ -116,15 +119,34 @@ gtk_css_define_color_rule_new_parse (GtkCssTokenSource *source,
     {
       gtk_css_token_source_error (source, "Expected ';' at end of @define-color");
       gtk_css_token_source_consume_all (source);
-      g_free (name);
-      _gtk_css_value_unref (color);
+      g_object_unref (result);
       return NULL;
     }
   gtk_css_token_source_consume_token (source);
 
-  result = gtk_css_define_color_rule_new (parent_rule, parent_style_sheet, name, color);
-  g_free (name);
-  _gtk_css_value_unref (color);
   return result;
 }
 
+const char *
+gtk_css_define_color_rule_get_name (GtkCssDefineColorRule *rule)
+{
+  GtkCssDefineColorRulePrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_CSS_DEFINE_COLOR_RULE (rule), NULL);
+
+  priv = gtk_css_define_color_rule_get_instance_private (rule);
+
+  return priv->name;
+}
+
+GtkCssValue *
+gtk_css_define_color_rule_get_value (GtkCssDefineColorRule *rule)
+{
+  GtkCssDefineColorRulePrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_CSS_DEFINE_COLOR_RULE (rule), NULL);
+
+  priv = gtk_css_define_color_rule_get_instance_private (rule);
+
+  return priv->color;
+}
