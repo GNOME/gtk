@@ -2414,7 +2414,7 @@ switch {
   background-image: linear-gradient(to bottom, mix($bg_color, $borders_color, 60%));
   text-shadow: 0 1px transparentize(black, 0.9);
 
-  &:active {
+  &:checked {
     color: white;
     border-color: $selected_borders_color;
     background-color: $selected_bg_color;
@@ -2441,7 +2441,7 @@ switch {
     text-shadow: none;
     transition: $backdrop_transition;
 
-    &:active {
+    &:checked {
       @if $variant == 'light' { color: $backdrop_bg_color; }
       border-color: if($variant == 'light', $selected_bg_color,
                                             $selected_borders_color);
@@ -2470,7 +2470,7 @@ switch {
 
   &:hover slider { @include button(hover-alt, $edge: $shadow_color); }
 
-  &:active slider { border: 1px solid $selected_borders_color; }
+  &:checked slider { border: 1px solid $selected_borders_color; }
 
   &:disabled slider { @include button(insensitive); }
 
@@ -2481,7 +2481,7 @@ switch {
       @include button(backdrop);
     }
 
-    &:active slider { border-color: if($variant == 'light', $selected_bg_color, $selected_borders_color); }
+    &:checked slider { border-color: if($variant == 'light', $selected_bg_color, $selected_borders_color); }
 
     &:disabled slider { @include button(backdrop-insensitive); }
   }
@@ -2496,7 +2496,7 @@ switch {
       &.slider:dir(rtl) { border-left-color: $borders_color; }
       &.slider:dir(ltr) { border-right-color: $borders_color; }
 
-      &.slider { &:active, & { border-color: $selected_borders_color; } }
+      &.slider { &:checked, & { border-color: $selected_borders_color; } }
     }
   }
 }

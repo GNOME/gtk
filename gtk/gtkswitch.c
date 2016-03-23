@@ -1197,9 +1197,9 @@ gtk_switch_set_state (GtkSwitch *sw,
   gtk_switch_set_active (sw, state);
 
   if (state)
-    gtk_widget_set_state_flags (GTK_WIDGET (sw), GTK_STATE_FLAG_ACTIVE, FALSE);
+    gtk_widget_set_state_flags (GTK_WIDGET (sw), GTK_STATE_FLAG_CHECKED, FALSE);
   else
-    gtk_widget_unset_state_flags (GTK_WIDGET (sw), GTK_STATE_FLAG_ACTIVE);
+    gtk_widget_unset_state_flags (GTK_WIDGET (sw), GTK_STATE_FLAG_CHECKED);
 
   g_object_notify (G_OBJECT (sw), "state");
 }

@@ -1221,7 +1221,7 @@ switch:hover slider {
     background-image: -gtk-win32-theme-part(button, 1, 2);
 }
 
-switch:active slider {
+switch:checked slider {
     background-image: -gtk-win32-theme-part(button, 1, 3);
 }
 

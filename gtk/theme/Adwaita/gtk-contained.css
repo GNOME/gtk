@@ -2575,7 +2575,7 @@ switch {
   color: #2e3436;
   background-image: linear-gradient(to bottom, #cacac8);
   text-shadow: 0 1px rgba(0, 0, 0, 0.1); }
-  switch:active {
+  switch:checked {
     color: white;
     border-color: #184472;
     background-color: #4a90d9;
@@ -2596,7 +2596,7 @@ switch {
     box-shadow: none;
     text-shadow: none;
     transition: 200ms ease-out; }
-    switch:backdrop:active {
+    switch:backdrop:checked {
       color: #e8e8e7;
       border-color: #4a90d9;
       background-image: linear-gradient(to bottom, #4a90d9);
@@ -2626,7 +2626,7 @@ switch {
     border-color: #9d9d99;
     background-image: linear-gradient(to bottom, #fefefe 10%, #f2f2f1 90%);
     box-shadow: inset 0 1px white, inset 0 -2px #f4f4f4, inset 0 -1px #cfcfcd, 0 1px rgba(0, 0, 0, 0.1); }
-  switch:active slider {
+  switch:checked slider {
     border: 1px solid #184472; }
   switch:disabled slider {
     border-color: #9d9d99;
@@ -2645,7 +2645,7 @@ switch {
     box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
     switch:backdrop slider label, switch:backdrop slider {
       color: #8b8e8f; }
-  switch:backdrop:active slider {
+  switch:backdrop:checked slider {
     border-color: #4a90d9; }
   switch:backdrop:disabled slider {
     border-color: #a5a5a1;
@@ -2664,7 +2664,7 @@ switch {
       border-left-color: #9d9d99; }
     row:selected switch.slider:dir(ltr) {
       border-right-color: #9d9d99; }
-    row:selected switch.slider:active, row:selected switch.slider {
+    row:selected switch.slider:checked, row:selected switch.slider {
       border-color: #184472; }
 
 /*************************

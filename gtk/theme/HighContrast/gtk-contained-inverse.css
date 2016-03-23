@@ -2027,7 +2027,7 @@ switch {
   box-shadow: inset 0 1px rgba(0, 0, 0, 0.1);
   /*outset not working*/
   text-shadow: 0 1px rgba(0, 0, 0, 0.1); }
-  switch:active {
+  switch:checked {
     color: white;
     border-color: #aaa;
     background-color: #aaa;
@@ -2043,12 +2043,12 @@ switch {
     background-color: #000;
     box-shadow: none;
     text-shadow: none; }
-    switch:backdrop:active {
+    switch:backdrop:checked {
       color: #fff;
       border-color: #737373;
       background-color: #737373;
       box-shadow: none; }
-    switch:backdrop:disabled, switch:backdrop:disabled:active {
+    switch:backdrop:disabled, switch:backdrop:disabled:checked {
       background-color: #070707;
       color: gray;
       border-color: gray; }
@@ -2071,7 +2071,7 @@ switch {
     background-color: #000;
     border-color: gray;
     background-image: none; }
-  switch:active slider {
+  switch:checked slider {
     border: 2px solid #aaa; }
   switch:disabled slider {
     border-width: 2px;
@@ -2087,7 +2087,7 @@ switch {
     background-color: #000;
     border-color: #737373;
     background-image: none; }
-  switch:backdrop:active slider {
+  switch:backdrop:checked slider {
     border-color: #aaa; }
   switch:backdrop:disabled slider {
     border-width: 2px;
