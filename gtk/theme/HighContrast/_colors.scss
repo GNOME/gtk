@@ -6,8 +6,8 @@ $base_color: if($variant == 'light', #fff, #111);
 $bg_color: if($variant == 'light', #fff, #000);
 $fg_color: if($variant == 'light', #000, #fff);
 
-$selected_fg_color: #fff;
-$selected_bg_color: if($variant == 'light', #000, #aaa); //#4a90d9;
+$selected_fg_color: if($variant == 'light', #fff, #000);
+$selected_bg_color: if($variant == 'light', #000, #ddd); //#4a90d9;
 $selected_borders_color: if($variant == 'light', #000, #aaa);
 $popover_bg_color: $bg_color;
 $popover_hover_color: lighten($bg_color, 5%);
