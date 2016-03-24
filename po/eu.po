@@ -1,7 +1,6 @@
 # Basque translation of gtk+.
 # Copyright (C) 1999 - 2011 Free Software Foundation, Inc.
 #
-#
 # Joseba Bidaurrazaga van Dierdonck <gcpbivaj@lg.ehu.es>, 1999-2000.
 # Hizkuntza Politikarako Sailburuordetza <hizpol@ej-gv.es>, 2004.
 # Iñaki Larrañaga Murgoitio <dooteo@zundan.com>, 2004 - 2015, 2016.
@@ -9,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-24 20:14+0100\n"
+"POT-Creation-Date: 2016-03-24 20:17+0100\n"
 "PO-Revision-Date: 2016-03-24 19:59+0100\n"
 "Last-Translator: dooteo <dooteo@zundan.com>\n"
 "Language-Team: Basque <librezale@librezale.org>\n"
