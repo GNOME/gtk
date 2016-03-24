@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-22 00:33+0000\n"
-"PO-Revision-Date: 2016-03-22 07:34+0100\n"
+"POT-Creation-Date: 2016-03-24 00:38+0000\n"
+"PO-Revision-Date: 2016-03-24 07:50+0100\n"
 "Last-Translator: Dušan Kazik <prescott66@gmail.com>\n"
 "Language-Team: slovenčina <>\n"
 "Language: sk\n"
@@ -4320,19 +4320,19 @@ msgstr "Kumulatívne"
 msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
 msgstr "Povoliť štatistiky s GOBJECT_DEBUG=instance-count"
 
-#: gtk/inspector/visual.c:310 gtk/inspector/visual.c:325
+#: gtk/inspector/visual.c:319 gtk/inspector/visual.c:334
 msgid "Theme is hardcoded by GTK_THEME"
 msgstr "Téma je vynútená podľa premennej prostredia GTK_THEME"
 
-#: gtk/inspector/visual.c:520
+#: gtk/inspector/visual.c:529
 msgid "Backend does not support window scaling"
 msgstr "Obslužný program nepodporuje škálovanie okna"
 
-#: gtk/inspector/visual.c:559
+#: gtk/inspector/visual.c:568
 msgid "Setting is hardcoded by GTK_TEST_TOUCHSCREEN"
 msgstr "Nastavenie je vynútené z premennej prostredia GTK_TEST_TOUCHSCREEN"
 
-#: gtk/inspector/visual.c:624
+#: gtk/inspector/visual.c:633
 msgid ""
 "Not settable at runtime.\n"
 "Use GDK_GL=always or GDK_GL=disable instead"
@@ -4340,8 +4340,8 @@ msgstr ""
 "Nie je možné nastaviť v relácii.\n"
 "Použite namiesto toho GDK_GL=always alebo GDK_GL=disable"
 
-#: gtk/inspector/visual.c:638 gtk/inspector/visual.c:639
-#: gtk/inspector/visual.c:640
+#: gtk/inspector/visual.c:647 gtk/inspector/visual.c:648
+#: gtk/inspector/visual.c:649
 msgid "GL rendering is disabled"
 msgstr "Vykresľovanie GL je zakázané"
 
