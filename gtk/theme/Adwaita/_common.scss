@@ -1844,7 +1844,7 @@ menu,
       background-color: transparent;
     }
 
-    //submenu indicators
+    // submenu indicators
     arrow {
       min-height: 16px;
       min-width: 16px;
@@ -1861,25 +1861,31 @@ menu,
     }
   }
 
-  arrow { // overlow buttons
-    @extend %undecorated_button;
+  // overflow arrows
+  > arrow {
+    @include button(undecorated);
 
-    border-style: none;
-    border-radius: 0;
     min-height: 16px;
     min-width: 16px;
+    padding: 4px;
+    background-color: $menu_color;
+    border-radius: 0;
 
     &.top {
-      -gtk-icon-source: -gtk-icontheme('pan-up-symbolic');
+      margin-top: -6px;
       border-bottom: 1px solid mix($fg_color, $base_color, 10%);
+      -gtk-icon-source: -gtk-icontheme('pan-up-symbolic');
     }
 
     &.bottom {
-      -gtk-icon-source: -gtk-icontheme('pan-down-symbolic');
+      margin-bottom: -6px;
       border-top: 1px solid mix($fg_color, $base_color, 10%);
+      -gtk-icon-source: -gtk-icontheme('pan-down-symbolic');
     }
 
     &:hover { background-color: mix($fg_color, $base_color, 10%); }
+
+    &:backdrop { background-color: $backdrop_menu_color; }
 
     &:disabled {
       color: transparent;
