@@ -3011,7 +3011,19 @@ gtk_menu_draw (GtkWidget *widget,
         gtk_css_gadget_draw (priv->bottom_arrow_gadget, cr);
     }
 
-  GTK_WIDGET_CLASS (gtk_menu_parent_class)->draw (widget, cr);
+  if (gtk_cairo_should_draw_window (cr, priv->bin_window))
+    {
+      int x, y;
+
+      gdk_window_get_position (priv->view_window, &x, &y);
+      cairo_rectangle (cr,
+                       x, y,
+                       gdk_window_get_width (priv->view_window),
+                       gdk_window_get_height (priv->view_window));
+      cairo_clip (cr);
+
+      GTK_WIDGET_CLASS (gtk_menu_parent_class)->draw (widget, cr);
+    }
 
   return FALSE;
 }
