@@ -1971,11 +1971,11 @@ switch {
     border-style: solid;
     border-radius: 3px;
     border-color: $borders_color;
-    background-color: mix($bg_color,$borders_color,60%);
+    background-color: $dark_fill;
     box-shadow: inset 0 1px transparentize(black, 0.9); /*outset not working*/
     text-shadow: 0 1px transparentize(black, 0.9);
-    &:checked {
-        color: white;
+    &:active {
+        color: $selected_fg_color;
         border-color: $selected_borders_color;
         background-color: $selected_bg_color;
         text-shadow: 0 0 2px white;

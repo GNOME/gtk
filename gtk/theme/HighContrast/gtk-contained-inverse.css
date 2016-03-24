@@ -2023,12 +2023,12 @@ switch {
   border-style: solid;
   border-radius: 3px;
   border-color: gray;
-  background-color: #333333;
+  background-color: #1a1a1a;
   box-shadow: inset 0 1px rgba(0, 0, 0, 0.1);
   /*outset not working*/
   text-shadow: 0 1px rgba(0, 0, 0, 0.1); }
-  switch:checked {
-    color: white;
+  switch:active {
+    color: #000;
     border-color: #aaa;
     background-color: #ddd;
     text-shadow: 0 0 2px white; }
