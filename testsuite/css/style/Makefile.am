@@ -32,6 +32,7 @@ test_data = \
 	adjacent-states.ui 	adjacent-states.css	adjacent-states.nodes 	\
 	colornames.ui		colornames.css		colornames.nodes	\
         currentcolor.ui 	currentcolor.css        currentcolor.nodes      \
+	font.ui			font.css		font.nodes		\
         gradient.ui    	 	gradient.css            gradient.nodes          \
         inherit.ui      	inherit.css             inherit.nodes           \
 	label.ui		label.css	        label.nodes             \
