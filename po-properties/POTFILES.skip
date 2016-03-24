@@ -179,6 +179,7 @@ testsuite/css/nodes/notebook.top.ui
 testsuite/css/nodes/notebook.ui
 testsuite/css/style/adjacent-states.ui
 testsuite/css/style/currentcolor.ui
+testsuite/css/style/font.ui
 testsuite/css/style/inherit.ui
 testsuite/css/style/label.ui
 testsuite/css/style/nth-child.ui
