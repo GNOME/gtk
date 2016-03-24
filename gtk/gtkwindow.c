@@ -7623,7 +7623,7 @@ gtk_window_restack_popovers (GtkWindow *window)
       GtkWindowPopover *popover = link->data;
       link = link->next;
 
-      if (popover->window && gdk_window_is_visible (popover->window))
+      if (popover->window)
         gdk_window_raise (popover->window);
     }
 }
@@ -12398,6 +12398,7 @@ _gtk_window_raise_popover (GtkWindow *window,
       g_list_free (link);
       break;
     }
+  gtk_window_restack_popovers (window);
 }
 
 static GtkWidget *inspector_window = NULL;
