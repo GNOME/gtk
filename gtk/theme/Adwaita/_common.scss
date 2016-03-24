@@ -2837,6 +2837,7 @@ scale {
     border: 1px solid darken($borders_color, 3%);
     border-radius: 100%;
     transition: $button_transition;
+    transition-property: background, border, box-shadow;
 
     &:hover { @include button(hover-alt, $edge: $shadow_color); }
 
