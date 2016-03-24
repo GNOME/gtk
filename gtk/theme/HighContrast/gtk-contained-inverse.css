@@ -2293,7 +2293,7 @@ treeview.view radio:selected:disabled {
 scale trough, scale fill {
   border: 2px solid gray;
   border-radius: 4px;
-  background-color: gray;
+  background-color: #1a1a1a;
   box-shadow: none; }
   scale trough:disabled, scale fill:disabled {
     border-color: #494949;

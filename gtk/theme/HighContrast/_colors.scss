@@ -26,7 +26,7 @@ $warning_color: #f57900;
 $error_color: #cc0000;
 $success_color: #73d216;
 $destructive_color: #ef2929;
-$dark_fill: mix($fg_color, $bg_color, 50%);
+$dark_fill: if($variant == 'light', mix($fg_color, $bg_color, 50%), mix($fg_color, $bg_color, 10%));
 
 $osd_fg_color: #fff;
 $osd_bg_color: transparentize(#000,0.2);
