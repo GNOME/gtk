@@ -4052,6 +4052,9 @@ placesview .server-list-button:checked > image {
   -gtk-icon-transform: rotate(-0.5turn); }
 placesview row.activatable:hover {
   background-color: transparent; }
+placesview > actionbar > revealer > box > label {
+  padding-left: 8px;
+  padding-right: 8px; }
 
 /*********
  * Paned *
