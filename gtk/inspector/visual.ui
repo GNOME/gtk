@@ -6,6 +6,12 @@
     <property name="step-increment">1</property>
     <property name="page-increment">1</property>
   </object>
+  <object class="GtkAdjustment" id="font_scale_adjustment">
+    <property name="lower">0.5</property>
+    <property name="upper">2</property>
+    <property name="step-increment">0.01</property>
+    <property name="page-increment">0.01</property>
+  </object>
   <object class="GtkAdjustment" id="cursor_size_adjustment">
     <property name="lower">24</property>
     <property name="upper">64</property>
@@ -226,6 +232,41 @@
                             <property name="visible">True</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                          </packing>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkListBoxRow">
+                    <property name="visible">True</property>
+                    <property name="activatable">False</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="orientation">horizontal</property>
+                        <property name="margin">10</property>
+                        <property name="spacing">40</property>
+                        <child>
+                          <object class="GtkLabel" id="font_scale_label">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">Font Scale</property>
+                            <property name="halign">start</property>
+                            <property name="valign">baseline</property>
+                            <property name="xalign">0.0</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkScale" id="font_scale_scale">
+                            <property name="visible">True</property>
+                            <property name="halign">end</property>
+                            <property name="valign">baseline</property>
+                            <property name="digits">2</property>
+                            <property name="adjustment">font_scale_adjustment</property>
                           </object>
                           <packing>
                             <property name="expand">True</property>
@@ -785,6 +826,7 @@
       <widget name="icon_combo"/>
       <widget name="cursor_combo"/>
       <widget name="font_button"/>
+      <widget name="font_scale_scale"/>
       <widget name="direction_combo"/>
       <widget name="rendering_mode_combo"/>
       <widget name="gl_combo"/>

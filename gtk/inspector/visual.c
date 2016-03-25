@@ -27,6 +27,7 @@
 #include "gtkprivate.h"
 #include "gtksettings.h"
 #include "gtkswitch.h"
+#include "gtkscale.h"
 #include "gtkwindow.h"
 #include "gtkcssproviderprivate.h"
 
@@ -48,8 +49,10 @@ struct _GtkInspectorVisualPrivate
   GtkWidget *font_button;
   GtkWidget *hidpi_spin;
   GtkWidget *animation_switch;
+  GtkWidget *font_scale_scale;
   GtkAdjustment *scale_adjustment;
   GtkAdjustment *cursor_size_adjustment;
+  GtkAdjustment *font_scale_adjustment;
 
   GtkWidget *debug_box;
   GtkWidget *rendering_mode_combo;
@@ -128,6 +131,16 @@ redraw_everything (void)
   toplevels = gtk_window_list_toplevels ();
   g_list_foreach (toplevels, (GFunc) gtk_widget_queue_draw, NULL);
   g_list_free (toplevels);
+}
+
+static void
+font_scale_changed (GtkAdjustment *adjustment)
+{
+  gdouble factor;
+
+  factor = gtk_adjustment_get_value (adjustment);
+  g_object_set (gtk_settings_get_default (), "gtk-xft-dpi",
+                (gint)(factor * 96 * 1024), NULL);
 }
 
 static void
@@ -491,6 +504,16 @@ init_font (GtkInspectorVisual *vis)
                           G_BINDING_BIDIRECTIONAL|G_BINDING_SYNC_CREATE);
 }
 
+static void
+init_font_scale (GtkInspectorVisual *vis)
+{
+  gtk_scale_add_mark (GTK_SCALE (vis->priv->font_scale_scale), 1.0, GTK_POS_TOP, NULL);
+  /* There is no backend agnostic way to get the default value, so use 1.0 */
+  gtk_adjustment_set_value (vis->priv->font_scale_adjustment, 1.0);
+  g_signal_connect (vis->priv->font_scale_adjustment, "value-changed",
+                    G_CALLBACK (font_scale_changed), NULL);
+}
+
 #if defined (GDK_WINDOWING_X11)
 static void
 scale_changed (GtkAdjustment *adjustment, GtkInspectorVisual *vis)
@@ -715,6 +738,7 @@ gtk_inspector_visual_init (GtkInspectorVisual *vis)
   init_cursors (vis);
   init_cursor_size (vis);
   init_font (vis);
+  init_font_scale (vis);
   init_scale (vis);
   init_rendering_mode (vis);
   init_updates (vis);
@@ -771,6 +795,8 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, software_gl_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, software_surface_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, texture_rectangle_switch);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, font_scale_scale);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, font_scale_adjustment);
 
   gtk_widget_class_bind_template_callback (widget_class, updates_activate);
   gtk_widget_class_bind_template_callback (widget_class, direction_changed);
