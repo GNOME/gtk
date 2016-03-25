@@ -12,7 +12,7 @@
     radiobutton.text-button:dir(ltr)
       radio:dir(ltr)
       label:dir(ltr)
-    switch:active:dir(ltr)
+    switch:dir(ltr):checked
       slider.slider
     switch:dir(ltr)
       slider.slider
