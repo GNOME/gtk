@@ -34,8 +34,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-14 23:11+0000\n"
-"PO-Revision-Date: 2016-03-17 21:02+0100\n"
+"POT-Creation-Date: 2016-03-25 03:34+0000\n"
+"PO-Revision-Date: 2016-03-25 11:57+0100\n"
 "Last-Translator: Milo Casagrande <milo@milo.name>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -3959,7 +3959,7 @@ msgid "The current filter for selecting which files are displayed"
 msgstr "Il filtro attualmente usato per selezionare i file da visualizzare"
 
 #: gtk/gtkfilechooser.c:388 gtk/gtkplacessidebar.c:4484
-#: gtk/gtkplacesview.c:2179
+#: gtk/gtkplacesview.c:2178
 msgid "Local Only"
 msgstr "Solo locale"
 
@@ -5074,7 +5074,7 @@ msgstr "Spazio aggiuntivo al di sopra e al di sotto del menù"
 
 #: gtk/gtkmenu.c:734
 msgid "Vertical Offset"
-msgstr "Offset verticale"
+msgstr "Spostamento verticale"
 
 #: gtk/gtkmenu.c:735
 msgid ""
@@ -5652,11 +5652,11 @@ msgstr "Posizione da selezionare"
 msgid "The location to highlight in the sidebar"
 msgstr "La posizione da evidenziare nel riquadro laterale"
 
-#: gtk/gtkplacessidebar.c:4453 gtk/gtkplacesview.c:2200
+#: gtk/gtkplacessidebar.c:4453 gtk/gtkplacesview.c:2199
 msgid "Open Flags"
 msgstr "Flag apertura"
 
-#: gtk/gtkplacessidebar.c:4454 gtk/gtkplacesview.c:2201
+#: gtk/gtkplacessidebar.c:4454 gtk/gtkplacesview.c:2200
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
@@ -5706,7 +5706,7 @@ msgstr ""
 "Indica se il riquadro laterale contiene una scorciatoia per inserire una "
 "posizione"
 
-#: gtk/gtkplacessidebar.c:4485 gtk/gtkplacesview.c:2180
+#: gtk/gtkplacessidebar.c:4485 gtk/gtkplacesview.c:2179
 msgid "Whether the sidebar only includes local files"
 msgstr "Indica se il riquadro laterale contiene solo i file locali"
 
@@ -5732,19 +5732,19 @@ msgstr ""
 msgid "Whether to emit ::populate-popup for popups that are not menus"
 msgstr "Indica se emettere ::populate-popup per pop-up che non sono menù"
 
-#: gtk/gtkplacesview.c:2186
+#: gtk/gtkplacesview.c:2185
 msgid "Loading"
 msgstr "Caricamento"
 
-#: gtk/gtkplacesview.c:2187
+#: gtk/gtkplacesview.c:2186
 msgid "Whether the view is loading locations"
 msgstr "Indica se la view sta caricando le posizioni"
 
-#: gtk/gtkplacesview.c:2193
+#: gtk/gtkplacesview.c:2192
 msgid "Fetching networks"
 msgstr "Recupero reti"
 
-#: gtk/gtkplacesview.c:2194
+#: gtk/gtkplacesview.c:2193
 msgid "Whether the view is fetching networks"
 msgstr "Indica se la view sta recuperando le reti"
 
