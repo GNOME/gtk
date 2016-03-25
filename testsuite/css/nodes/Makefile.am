@@ -54,6 +54,7 @@ test_data = \
 	paned.ltr.ui		paned.ltr.nodes			\
 	paned.rtl.ui		paned.rtl.nodes			\
 	progressbar.ui 		progressbar.nodes 		\
+	scale.ui		scale.nodes			\
 	$(NULL)
 
 EXTRA_DIST += $(test_in_files) $(test_data)
