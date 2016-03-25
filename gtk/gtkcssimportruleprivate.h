@@ -50,6 +50,7 @@ GtkCssRule *            gtk_css_import_rule_new_parse           (GtkCssTokenSour
                                                                  GtkCssRule             *parent_rule,
                                                                  GtkCssStyleSheet       *parent_style_sheet);
 
+GtkCssStyleSheet *      gtk_css_import_rule_get_style_sheet     (GtkCssImportRule       *rule);
 
 G_END_DECLS
 

@@ -28,6 +28,7 @@
 #include "cssruleviewrow.h"
 
 #include "gtkcssrulelistprivate.h"
+#include "gtkcssimportruleprivate.h"
 #include "gtkcssstyleruleprivate.h"
 
 typedef struct _GtkInspectorCssRuleViewPrivate GtkInspectorCssRuleViewPrivate;
@@ -86,6 +87,39 @@ gtk_inspector_css_rule_view_init (GtkInspectorCssRuleView *ruleview)
                               NULL);
 }
 
+static void
+gtk_inspector_css_rule_view_add_rules (GtkInspectorCssRuleView *ruleview,
+                                       GtkCssStyleSheet        *style_sheet)
+{
+  GtkInspectorCssRuleViewPrivate *priv = gtk_inspector_css_rule_view_get_instance_private (ruleview);
+  GtkCssRuleList *rule_list;
+  GtkCssRule *rule;
+  guint i, j;
+
+  rule_list = gtk_css_style_sheet_get_css_rules (style_sheet);
+
+  for (i = 0; i < gtk_css_rule_list_get_length (rule_list); i++)
+    {
+      rule = gtk_css_rule_list_get_item (rule_list, i);
+
+      if (GTK_IS_CSS_STYLE_RULE (rule))
+        {
+          for (j = 0; j < gtk_css_style_rule_get_n_selectors (GTK_CSS_STYLE_RULE (rule)); j++)
+            {
+              GtkWidget *row = gtk_inspector_css_rule_view_row_new (GTK_CSS_STYLE_RULE (rule), j);
+
+              gtk_widget_show (row);
+              gtk_container_add (GTK_CONTAINER (priv->list_widget), row);
+            }
+        }
+      else if (GTK_IS_CSS_IMPORT_RULE (rule))
+        {
+          gtk_inspector_css_rule_view_add_rules (ruleview,
+                                                 gtk_css_import_rule_get_style_sheet (GTK_CSS_IMPORT_RULE (rule)));
+        }
+    }
+}
+
 void
 gtk_inspector_css_rule_view_set_style_sheet (GtkInspectorCssRuleView *ruleview,
                                              GtkCssStyleSheet        *style_sheet)
@@ -118,29 +152,9 @@ gtk_inspector_css_rule_view_set_style_sheet (GtkInspectorCssRuleView *ruleview,
 
   if (style_sheet)
     {
-      GtkCssRuleList *rule_list;
-      GtkCssRule *rule;
-      guint i, j;
-
       g_object_ref (style_sheet);
 
-      rule_list = gtk_css_style_sheet_get_css_rules (style_sheet);
-
-      for (i = 0; i < gtk_css_rule_list_get_length (rule_list); i++)
-        {
-          rule = gtk_css_rule_list_get_item (rule_list, i);
-
-          if (!GTK_IS_CSS_STYLE_RULE (rule))
-            continue;
-
-          for (j = 0; j < gtk_css_style_rule_get_n_selectors (GTK_CSS_STYLE_RULE (rule)); j++)
-            {
-              GtkWidget *row = gtk_inspector_css_rule_view_row_new (GTK_CSS_STYLE_RULE (rule), j);
-
-              gtk_widget_show (row);
-              gtk_container_add (GTK_CONTAINER (priv->list_widget), row);
-            }
-        }
+      gtk_inspector_css_rule_view_add_rules (ruleview, style_sheet);
     }
 }
 
