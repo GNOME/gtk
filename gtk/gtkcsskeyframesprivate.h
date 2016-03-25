@@ -21,6 +21,7 @@
 #define __GTK_CSS_KEYFRAMES_PRIVATE_H__
 
 #include "gtkcssparserprivate.h"
+#include "gtkcsskeyframesruleprivate.h"
 #include "gtkcssvalueprivate.h"
 #include "gtktypes.h"
 
@@ -29,6 +30,7 @@ G_BEGIN_DECLS
 typedef struct _GtkCssKeyframes GtkCssKeyframes;
 
 GtkCssKeyframes *   _gtk_css_keyframes_parse                  (GtkCssParser           *parser);
+GtkCssKeyframes *   gtk_css_keyframes_new_from_rule           (GtkCssKeyframesRule    *rule);
 
 GtkCssKeyframes *   _gtk_css_keyframes_ref                    (GtkCssKeyframes        *keyframes);
 void                _gtk_css_keyframes_unref                  (GtkCssKeyframes        *keyframes);

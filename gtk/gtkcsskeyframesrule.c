@@ -262,3 +262,26 @@ gtk_css_keyframes_rule_new_parse (GtkCssTokenSource *source,
   return rule;
 }
 
+const char *
+gtk_css_keyframes_rule_get_name (GtkCssKeyframesRule *rule)
+{
+  GtkCssKeyframesRulePrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_CSS_KEYFRAMES_RULE (rule), NULL);
+
+  priv = gtk_css_keyframes_rule_get_instance_private (rule);
+
+  return priv->name;
+}
+
+GtkCssRuleList *
+gtk_css_keyframes_rule_get_css_rules (GtkCssKeyframesRule *rule)
+{
+  GtkCssKeyframesRulePrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_CSS_KEYFRAMES_RULE (rule), NULL);
+
+  priv = gtk_css_keyframes_rule_get_instance_private (rule);
+
+  return priv->rules;
+}

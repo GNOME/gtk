@@ -137,3 +137,40 @@ gtk_css_keyframe_rule_new_parse (GtkCssTokenSource *source,
   return rule;
 }
 
+gsize
+gtk_css_keyframe_rule_get_n_offsets (GtkCssKeyframeRule *rule)
+{
+  GtkCssKeyframeRulePrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_CSS_KEYFRAME_RULE (rule), 0);
+
+  priv = gtk_css_keyframe_rule_get_instance_private (rule);
+
+  return priv->n_offsets;
+}
+
+double
+gtk_css_keyframe_rule_get_offset (GtkCssKeyframeRule *rule,
+                                  gsize               id)
+{
+  GtkCssKeyframeRulePrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_CSS_KEYFRAME_RULE (rule), 0.0);
+
+  priv = gtk_css_keyframe_rule_get_instance_private (rule);
+  g_return_val_if_fail (id < priv->n_offsets, 0.0);
+
+  return priv->offsets[id];
+}
+
+GtkCssStyleDeclaration *
+gtk_css_keyframe_rule_get_style (GtkCssKeyframeRule *rule)
+{
+  GtkCssKeyframeRulePrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_CSS_KEYFRAME_RULE (rule), 0);
+
+  priv = gtk_css_keyframe_rule_get_instance_private (rule);
+
+  return priv->style;
+}

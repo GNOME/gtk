@@ -51,6 +51,12 @@ GtkCssRule *            gtk_css_keyframe_rule_new_parse         (GtkCssTokenSour
                                                                  GtkCssRule             *parent_rule,
                                                                  GtkCssStyleSheet       *parent_style_sheet);
 
+gsize                   gtk_css_keyframe_rule_get_n_offsets     (GtkCssKeyframeRule     *rule);
+double                  gtk_css_keyframe_rule_get_offset        (GtkCssKeyframeRule     *rule,
+                                                                 gsize                   id);
+
+GtkCssStyleDeclaration *gtk_css_keyframe_rule_get_style         (GtkCssKeyframeRule     *rule);
+
 
 G_END_DECLS
 

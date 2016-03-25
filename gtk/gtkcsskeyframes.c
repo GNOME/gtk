@@ -20,6 +20,8 @@
 #include "gtkcsskeyframesprivate.h"
 
 #include "gtkcssarrayvalueprivate.h"
+#include "gtkcssdeclarationprivate.h"
+#include "gtkcsskeyframeruleprivate.h"
 #include "gtkcssshorthandpropertyprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkstylepropertyprivate.h"
@@ -364,6 +366,74 @@ _gtk_css_keyframes_parse (GtkCssParser *parser)
         {
           _gtk_css_keyframes_unref (keyframes);
           return NULL;
+        }
+    }
+
+  return keyframes;
+}
+
+GtkCssKeyframes *
+gtk_css_keyframes_new_from_rule (GtkCssKeyframesRule *rule)
+{
+  GtkCssKeyframes *keyframes;
+  GtkCssRuleList *rules;
+  guint i, j, k, l;
+
+  keyframes = gtk_css_keyframes_new ();
+
+  rules = gtk_css_keyframes_rule_get_css_rules (rule);
+  for (i = 0; i < gtk_css_rule_list_get_length (rules); i++)
+    {
+      /* Don't do GTK_CSS_KEYFRAME_RULE() cast here. */
+      GtkCssKeyframeRule *keyframe = (GtkCssKeyframeRule *) gtk_css_rule_list_get_item (rules, i);
+
+      if (!GTK_IS_CSS_KEYFRAME_RULE (keyframe))
+        continue;
+
+      for (j = 0; j < gtk_css_keyframe_rule_get_n_offsets (keyframe); j++)
+        {
+          double offset = gtk_css_keyframe_rule_get_offset (keyframe, j) / 100;
+          GtkCssStyleDeclaration *style;
+          guint offset_idx;
+
+          if (offset < 0 || offset > 1)
+            continue;
+
+          offset_idx = gtk_css_keyframes_add_keyframe (keyframes, offset);
+          style = gtk_css_keyframe_rule_get_style (keyframe);
+
+          for (k = 0; k < gtk_css_style_declaration_get_length (style); k++)
+            {
+              GtkCssDeclaration *decl = gtk_css_style_declaration_get_declaration (style, k);
+              GtkStyleProperty *property;
+              GtkCssValue *value;
+
+              property = _gtk_style_property_lookup (gtk_css_declaration_get_name (decl));
+              if (property == NULL)
+                continue;
+
+              value = gtk_css_declaration_get_value (decl);
+              if (GTK_IS_CSS_SHORTHAND_PROPERTY (property))
+                {
+                  GtkCssShorthandProperty *shorthand = GTK_CSS_SHORTHAND_PROPERTY (property);
+
+                  for (l = 0; l < _gtk_css_shorthand_property_get_n_subproperties (shorthand); l++)
+                    {
+                      GtkCssStyleProperty *child = _gtk_css_shorthand_property_get_subproperty (shorthand, l);
+                      GtkCssValue *sub = _gtk_css_array_value_get_nth (value, l);
+
+                      keyframes_set_value (keyframes, offset_idx, child, _gtk_css_value_ref (sub));
+                    }
+                }
+              else if (GTK_IS_CSS_STYLE_PROPERTY (property))
+                {
+                  keyframes_set_value (keyframes, offset_idx, GTK_CSS_STYLE_PROPERTY (property), _gtk_css_value_ref (value));
+                }
+              else
+                {
+                  g_assert_not_reached ();
+                }
+            }
         }
     }
 
