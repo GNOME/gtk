@@ -473,9 +473,9 @@ update_style_sheet (GtkInspectorCssEditor *ce)
   GtkCssTokenSource *source;
 
   source = gtk_css_chunk_token_source_new (priv->tokens);
-  g_object_unref (priv->style_sheet);
-  priv->style_sheet = gtk_css_style_sheet_new ();
-  gtk_css_style_sheet_parse (priv->style_sheet, source);
+  if (priv->style_sheet)
+    g_object_unref (priv->style_sheet);
+  priv->style_sheet = gtk_css_style_sheet_new (source);
 
   gtk_css_token_source_unref (source);
 
@@ -757,15 +757,11 @@ gtk_inspector_css_editor_init (GtkInspectorCssEditor *ce)
 {
   ce->priv = gtk_inspector_css_editor_get_instance_private (ce);
   gtk_widget_init_template (GTK_WIDGET (ce));
-  ce->priv->style_sheet = gtk_css_style_sheet_new ();
   ce->priv->tokens = gtk_css_rb_tree_new (GtkCssChunk,
                                           GtkCssChunkSize,
                                           gtk_css_chunk_augment,
                                           gtk_css_chunk_clear,
                                           NULL);
-
-  gtk_inspector_css_rule_view_set_style_sheet (GTK_INSPECTOR_CSS_RULE_VIEW (ce->priv->ruleview),
-                                               ce->priv->style_sheet);
 }
 
 static void
@@ -792,7 +788,8 @@ finalize (GObject *object)
 
   gtk_inspector_css_editor_set_node (ce, NULL);
 
-  g_object_unref (ce->priv->style_sheet);
+  if (ce->priv->style_sheet)
+    g_object_unref (ce->priv->style_sheet);
 
   destroy_provider (ce);
 

@@ -47,21 +47,20 @@ struct _GtkCssStyleSheetClass
   GObjectClass parent_class;
 };
 
-GType                  gtk_css_style_sheet_get_type                     (void) G_GNUC_CONST;
+GType                   gtk_css_style_sheet_get_type                    (void) G_GNUC_CONST;
 
-GtkCssStyleSheet *     gtk_css_style_sheet_new                          (void);
-
-void                   gtk_css_style_sheet_parse                        (GtkCssStyleSheet       *style_sheet,
-                                                                         GtkCssTokenSource      *source);
+GtkCssStyleSheet *      gtk_css_style_sheet_new                         (GtkCssTokenSource      *source);
+GtkCssStyleSheet *      gtk_css_style_sheet_new_import                  (GtkCssTokenSource      *source,
+                                                                         GtkCssRule             *owner_rule);
 
 /* StyleSheet interface */
-GtkCssStyleSheet *     gtk_css_style_sheet_get_parent_style_sheet       (GtkCssStyleSheet       *style_sheet);
+GtkCssStyleSheet *      gtk_css_style_sheet_get_parent_style_sheet      (GtkCssStyleSheet       *style_sheet);
 
-GFile *                gtk_css_style_sheet_get_file                     (GtkCssStyleSheet       *style_sheet);
+GFile *                 gtk_css_style_sheet_get_file                    (GtkCssStyleSheet       *style_sheet);
 
 /* CSSStyleSheet interface */
-GtkCssRule *           gtk_css_style_sheet_get_parent_rule              (GtkCssStyleSheet       *style_sheet);
-GtkCssRuleList *       gtk_css_style_sheet_get_css_rules                (GtkCssStyleSheet       *style_sheet);
+GtkCssRule *            gtk_css_style_sheet_get_owner_rule              (GtkCssStyleSheet       *style_sheet);
+GtkCssRuleList *        gtk_css_style_sheet_get_css_rules               (GtkCssStyleSheet       *style_sheet);
 
 
 G_END_DECLS
