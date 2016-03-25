@@ -14,7 +14,7 @@
 # Hendrik Richter <hendrikr@gnome.org>, 2004-2009.
 # Hendrik Brandt <heb@gnome-de.org>, 2005.
 # Mario Blättermann <mario.blaettermann@gmail.com>, 2010-2013.
-# Wolfgang Stöggl <c72578@yahoo.de>, 2011-2012, 2014-2015.
+# Wolfgang Stöggl <c72578@yahoo.de>, 2011-2012, 2014-2016.
 # Hendrik Knackstedt <hendrik.knackstedt@t-online.de>, 2011.
 # Christian Kirbach <christian.kirbach@gmail.com>, 2009, 2010, 2011, 2012, 2013.
 # Benjamin Steinwender <b@stbe.at>, 2014.
@@ -23,16 +23,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-20 12:26+0000\n"
-"PO-Revision-Date: 2016-03-20 15:13+0100\n"
-"Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
+"POT-Creation-Date: 2016-03-25 12:54+0000\n"
+"PO-Revision-Date: 2016-03-25 16:42+0100\n"
+"Last-Translator: Wolfgang Stoeggl <c72578@yahoo.de>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Generator: Poedit 1.8.7\n"
 
 #: gdk/gdkapplaunchcontext.c:127 gdk/gdkcursor.c:139 gdk/gdkdevicemanager.c:181
 #: gdk/gdkglcontext.c:265 gdk/gdkseat.c:158 gdk/gdkseat.c:159
@@ -124,10 +124,8 @@ msgid "Seat"
 msgstr "Platz"
 
 #: gdk/gdkdevice.c:302 gdk/gdkdevice.c:303
-#, fuzzy
-#| msgid "Number of columns"
 msgid "Number of concurrent touches"
-msgstr "Spaltenanzahl"
+msgstr "Anzahl gleichzeitiger Berührungen"
 
 #: gdk/gdkdevicemanager.c:182
 msgid "Display for the device manager"
@@ -3751,7 +3749,7 @@ msgstr "Auto-Vervollständigung"
 
 #: gtk/gtkentrycompletion.c:388
 msgid "Whether the common prefix should be inserted automatically"
-msgstr "Soll der übliche Präfix automatisch eingefügt werden?"
+msgstr "Soll das übliche Präfix automatisch eingefügt werden?"
 
 #: gtk/gtkentrycompletion.c:402
 msgid "Popup completion"
@@ -7506,10 +7504,8 @@ msgid "Whether to show cursor in text"
 msgstr "Soll eine Eingabemarke im Text dargestellt werden?"
 
 #: gtk/gtkshortcutlabel.c:427 gtk/gtkshortcutsshortcut.c:490
-#, fuzzy
-#| msgid "Accelerator key"
 msgid "Accelerator"
-msgstr "Tastaturkürzel"
+msgstr "Kürzel"
 
 #: gtk/gtkshortcutsgroup.c:303
 msgid "View"
@@ -7517,15 +7513,13 @@ msgstr "Ansicht"
 
 #: gtk/gtkshortcutsgroup.c:316 gtk/gtkshortcutsgroup.c:317
 #: gtk/gtkshortcutsshortcut.c:571 gtk/gtkshortcutsshortcut.c:572
-#, fuzzy
-#| msgid "Accelerator Group"
 msgid "Accelerator Size Group"
-msgstr "Tastenkürzelgruppe"
+msgstr "Kürzelgrößen-Gruppe"
 
 #: gtk/gtkshortcutsgroup.c:330 gtk/gtkshortcutsgroup.c:331
 #: gtk/gtkshortcutsshortcut.c:585 gtk/gtkshortcutsshortcut.c:586
 msgid "Title Size Group"
-msgstr ""
+msgstr "Titelgrößen-Gruppe"
 
 #: gtk/gtkshortcutssection.c:349 gtk/gtkshortcutswindow.c:718
 msgid "Section Name"
@@ -7541,7 +7535,7 @@ msgstr "Maximale Höhe"
 
 #: gtk/gtkshortcutsshortcut.c:491
 msgid "The accelerator keys for shortcuts of type 'Accelerator'"
-msgstr "DDie Zugriffstasten für Kürzel des Typs »Accelerator«"
+msgstr "Die Zugriffstasten für Kürzel des Typs »Accelerator«"
 
 # Bin mir nicht sicher, ob man »Other Gesture« hier übersetzen darf.
 #: gtk/gtkshortcutsshortcut.c:505
