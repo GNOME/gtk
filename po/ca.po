@@ -146,12 +146,12 @@ msgstr "Pausa"
 #: gdk/keyname-table.h:6847
 msgctxt "keyboard label"
 msgid "Scroll_Lock"
-msgstr "Bloc_Despl"
+msgstr "Bloc Despl"
 
 #: gdk/keyname-table.h:6848
 msgctxt "keyboard label"
 msgid "Sys_Req"
-msgstr "Pet_Sis"
+msgstr "Pet Sis"
 
 #: gdk/keyname-table.h:6849
 msgctxt "keyboard label"
@@ -161,7 +161,7 @@ msgstr "Esc"
 #: gdk/keyname-table.h:6850
 msgctxt "keyboard label"
 msgid "Multi_key"
-msgstr "Tecla_multi"
+msgstr "Tecla multi"
 
 #: gdk/keyname-table.h:6851
 msgctxt "keyboard label"
@@ -191,12 +191,12 @@ msgstr "Avall"
 #: gdk/keyname-table.h:6856 gtk/gtkshortcutlabel.c:195
 msgctxt "keyboard label"
 msgid "Page_Up"
-msgstr "Re_Pàg"
+msgstr "Re Pàg"
 
 #: gdk/keyname-table.h:6857 gtk/gtkshortcutlabel.c:198
 msgctxt "keyboard label"
 msgid "Page_Down"
-msgstr "Av_Pàg"
+msgstr "Av Pàg"
 
 #: gdk/keyname-table.h:6858
 msgctxt "keyboard label"
@@ -213,17 +213,17 @@ msgstr "Inici"
 #: gdk/keyname-table.h:6860
 msgctxt "keyboard label"
 msgid "Print"
-msgstr "Impr_Pant"
+msgstr "Impr Pant"
 
 #: gdk/keyname-table.h:6861
 msgctxt "keyboard label"
 msgid "Insert"
-msgstr "Insert"
+msgstr "Inser"
 
 #: gdk/keyname-table.h:6862
 msgctxt "keyboard label"
 msgid "Num_Lock"
-msgstr "Bloc_Núm"
+msgstr "Bloq Núm"
 
 #. Translators: KP_ means 'key pad' here
 #: gdk/keyname-table.h:6864
