@@ -25,6 +25,7 @@
 #include <gdk/gdk.h>
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
+#include "gtkprogresstrackerprivate.h"
 #include "gtkintl.h"
 
 #include "fallback-c89.c"
@@ -85,8 +86,7 @@ typedef struct {
   gdouble target_pos;
 
   guint tick_id;
-  gint64 start_time;
-  gint64 end_time;
+  GtkProgressTracker tracker;
 } GtkRevealerPrivate;
 
 static GParamSpec *props[LAST_PROP] = { NULL, };
@@ -568,33 +568,6 @@ gtk_revealer_set_position (GtkRevealer *revealer,
     g_object_notify_by_pspec (G_OBJECT (revealer), props[PROP_CHILD_REVEALED]);
 }
 
-/* From clutter-easing.c, based on Robert Penner's
- * infamous easing equations, MIT license.
- */
-static double
-ease_out_cubic (double t)
-{
-  double p = t - 1;
-  return p * p * p + 1;
-}
-
-static void
-gtk_revealer_animate_step (GtkRevealer *revealer,
-                           gint64       now)
-{
-  GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
-  gdouble t;
-
-  if (now < priv->end_time)
-    t = (now - priv->start_time) / (gdouble) (priv->end_time - priv->start_time);
-  else
-    t = 1.0;
-  t = ease_out_cubic (t);
-
-  gtk_revealer_set_position (revealer,
-                            priv->source_pos + (t * (priv->target_pos - priv->source_pos)));
-}
-
 static gboolean
 gtk_revealer_animate_cb (GtkWidget     *widget,
                          GdkFrameClock *frame_clock,
@@ -602,11 +575,15 @@ gtk_revealer_animate_cb (GtkWidget     *widget,
 {
   GtkRevealer *revealer = GTK_REVEALER (widget);
   GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
-  gint64 now;
+  gdouble ease;
 
-  now = gdk_frame_clock_get_frame_time (frame_clock);
-  gtk_revealer_animate_step (revealer, now);
-  if (priv->current_pos == priv->target_pos)
+  gtk_progress_tracker_advance_frame (&priv->tracker,
+                                      gdk_frame_clock_get_frame_time (frame_clock));
+  ease = gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE);
+  gtk_revealer_set_position (revealer,
+                             priv->source_pos + (ease * (priv->target_pos - priv->source_pos)));
+
+  if (gtk_progress_tracker_get_state (&priv->tracker) == GTK_PROGRESS_STATE_AFTER)
     {
       priv->tick_id = 0;
       return FALSE;
@@ -641,12 +618,13 @@ gtk_revealer_start_animation (GtkRevealer *revealer,
       animations_enabled)
     {
       priv->source_pos = priv->current_pos;
-      priv->start_time = gdk_frame_clock_get_frame_time (gtk_widget_get_frame_clock (widget));
-      priv->end_time = priv->start_time + (priv->transition_duration * 1000);
       if (priv->tick_id == 0)
         priv->tick_id =
           gtk_widget_add_tick_callback (widget, gtk_revealer_animate_cb, revealer, NULL);
-      gtk_revealer_animate_step (revealer, priv->start_time);
+      gtk_progress_tracker_start (&priv->tracker,
+                                  priv->transition_duration * 1000,
+                                  0,
+                                  1.0);
     }
   else
     {
