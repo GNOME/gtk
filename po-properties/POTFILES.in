@@ -131,6 +131,7 @@ gtk/gtkcustompaperunixdialog.c
 gtk/gtkdialog.c
 gtk/gtkdnd.c
 gtk/gtkdnd-quartz.c
+gtk/gtkdragdest.c
 gtk/gtkdragsource.c
 gtk/gtkdrawingarea.c
 gtk/gtkeditable.c
