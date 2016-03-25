@@ -369,7 +369,6 @@ gtk_css_animated_style_create_css_animations (GSList                  *animation
       if (animation)
         {
           animation = _gtk_css_animation_copy (GTK_CSS_ANIMATION (animation),
-                                               timestamp,
                                                _gtk_css_play_state_value_get (_gtk_css_array_value_get_nth (play_states, i)));
         }
       else
