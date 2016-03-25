@@ -22,6 +22,7 @@
 #include "gtkradiobutton.h"
 #include "gtklabel.h"
 #include "gtkdnd.h"
+#include "gtkdragdest.h"
 #include "gtkorientable.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
