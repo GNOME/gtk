@@ -1,3 +1,37 @@
+Overview of Changes in GTK+ 3.20.1
+==================================
+
+* Active GtkSwitch widgets now use the :checked state, to match GtkToggleButton
+
+* Bugs fixed:
+ 641354 Look for themes in XDG folders
+ 763350 drawing performance worse than X
+ 763604 The search button of a GtkShortcutsWindow should have the image-button...
+ 763659 DND Drop on root with Pixbuf leaves image behind
+ 763731 Return GTK_PRINT_OPERATION_RESULT_ERROR even if error == NULL
+ 763741 Wavy/squiggly underline not properly removed
+ 763758 Do not use fixed values for widgets size in foreign drawing demo
+ 763779 [PATCH] quartz: fix pixelated image surfaces in retina/hidpi mode
+ 763802 [HighContrastInverse] the “ON” text of a GtkSwitch should be black (on...
+ 763804 [HighContrastInverse] menuitem:hover colors
+ 763808 .dnd styleclass still used
+ 763859 gdkdevice-wayland.c cleanups
+ 763900 stack: fix warnings during GtkStack size_allocate
+ 764118 Glitches in menu scroll arrow rendering
+
+* Translation updates:
+ Basque
+ Bulgarian
+ Danish
+ Galician
+ Greek
+ Russian
+ Slovak
+ Slovenian
+ Spanish
+ Swedish
+
+
 Overview of Changes in GTK+ 3.20.0
 ==================================
 
