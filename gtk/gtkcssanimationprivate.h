@@ -23,6 +23,7 @@
 #include "gtkstyleanimationprivate.h"
 
 #include "gtkcsskeyframesprivate.h"
+#include "gtkprogresstrackerprivate.h"
 
 G_BEGIN_DECLS
 
@@ -43,12 +44,10 @@ struct _GtkCssAnimation
   char            *name;
   GtkCssKeyframes *keyframes;
   GtkCssValue     *ease;
-  gint64           timestamp;           /* elapsed time when paused, start time when playing (can be negative) */
-  gint64           duration;            /* duration of 1 cycle */
-  double           iteration_count;
   GtkCssDirection  direction;
   GtkCssPlayState  play_state;
   GtkCssFillMode   fill_mode;
+  GtkProgressTracker tracker;
 };
 
 struct _GtkCssAnimationClass
@@ -70,7 +69,6 @@ GtkStyleAnimation *     _gtk_css_animation_new             (const char         *
                                                             double              iteration_count);
 
 GtkStyleAnimation *     _gtk_css_animation_copy            (GtkCssAnimation   *animation,
-                                                            gint64             at_time_us,
                                                             GtkCssPlayState    play_state);
 
 const char *            _gtk_css_animation_get_name        (GtkCssAnimation   *animation);
