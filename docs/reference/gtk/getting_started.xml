@@ -44,7 +44,7 @@
 
     <informalexample>
       <para>Create a new file with the following content named <filename>example-0.c.</filename></para>
-      <programlisting><xi:include href="../../../../examples/window-default.c" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
+      <programlisting><xi:include href="../../../../examples/window-default.c" parse="text"><xi:fallback>MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
     </informalexample>
 
     <para>
@@ -154,7 +154,7 @@
       <title>Hello World in GTK+</title>
       <para>Create a new file with the following content named example-1.c.</para>
       <programlisting><xi:include href="../../../../examples/hello-world.c" parse="text">
-          <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
+          <xi:fallback>MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
     </example>
 
     <para>
@@ -233,7 +233,7 @@
     <example id="gtk-getting-started-grid-packing">
       <title>Packing buttons</title>
       <para>Create a new file with the following content named example-2.c.</para>
-      <programlisting><xi:include href="../../../../examples/grid-packing.c" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
+      <programlisting><xi:include href="../../../../examples/grid-packing.c" parse="text"><xi:fallback>MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
     </example>
     <para>
       You can compile the program above with GCC using:
@@ -257,9 +257,9 @@
     <example>
       <title>Packing buttons with GtkBuilder</title>
       <para>Create a new file with the following content named example-4.c.</para>
-      <programlisting><xi:include href="../../../../examples/builder.c" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
+      <programlisting><xi:include href="../../../../examples/builder.c" parse="text"><xi:fallback>MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
       <para>Create a new file with the following content named builder.ui.</para>
-      <programlisting><xi:include href="../../../../examples/builder.ui" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
+      <programlisting><xi:include href="../../../../examples/builder.ui" parse="text"><xi:fallback>MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
     </example>
     <para>
       You can compile the program above with GCC using:
@@ -346,7 +346,7 @@
       of our application class.</para>
 
       <informalexample>
-        <programlisting><xi:include href="../../../../examples/application1/main.c" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
+        <programlisting><xi:include href="../../../../examples/application1/main.c" parse="text"><xi:fallback>MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
       </informalexample>
 
       <para>All the application logic is in the application class, which
@@ -364,7 +364,7 @@
       GIO <ulink url="https://developer.gnome.org/gio/2.36/GApplication.html#GApplication.description">documentation</ulink>.</para>
 
       <informalexample>
-        <programlisting><xi:include href="../../../../examples/application1/exampleapp.c" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
+        <programlisting><xi:include href="../../../../examples/application1/exampleapp.c" parse="text"><xi:fallback>MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
       </informalexample>
 
       <para>Another important class that is part of the application support
@@ -373,7 +373,7 @@
       window.</para>
 
       <informalexample>
-        <programlisting><xi:include href="../../../../examples/application1/exampleappwin.c" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
+        <programlisting><xi:include href="../../../../examples/application1/exampleappwin.c" parse="text"><xi:fallback>MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
       </informalexample>
 
       <para>As part of the initial setup of our application, we also
@@ -388,7 +388,7 @@
       </informalfigure>
 
       <informalexample>
-        <programlisting><xi:include href="../../../../examples/application1/exampleapp.desktop" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
+        <programlisting><xi:include href="../../../../examples/application1/exampleapp.desktop" parse="text"><xi:fallback>MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
       </informalexample>
 
       <para>Note that <replaceable>@<!-- -->bindir@</replaceable> needs to be replaced
@@ -420,7 +420,7 @@
       </para>
 
       <informalexample>
-        <programlisting><xi:include href="../../../../examples/application2/window.ui" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
+        <programlisting><xi:include href="../../../../examples/application2/window.ui" parse="text"><xi:fallback>MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
       </informalexample>
 
       <para>To make use of this file in our application, we revisit
@@ -460,7 +460,7 @@ example_app_window_class_init (ExampleAppWindowClass *class)
       </para>
 
       <informalexample>
-        <programlisting><xi:include href="../../../../examples/application2/exampleapp.gresource.xml" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
+        <programlisting><xi:include href="../../../../examples/application2/exampleapp.gresource.xml" parse="text"><xi:fallback>MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
       </informalexample>
 
       <para>This file has to be converted into a C source file that will be
@@ -598,7 +598,7 @@ example_app_window_open (ExampleAppWindow *win,
       in a ui file, and add it as a resource to our binary.</para>
 
       <informalexample>
-        <programlisting><xi:include href="../../../../examples/application4/app-menu.ui" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
+        <programlisting><xi:include href="../../../../examples/application4/app-menu.ui" parse="text"><xi:fallback>MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
       </informalexample>
 
       <para>To associate the app menu with the application, we have to call
@@ -697,7 +697,7 @@ example_app_class_init (ExampleAppClass *class)
       GSettings requires a schema that describes our settings:</para>
 
       <informalexample>
-        <programlisting><xi:include href="../../../../examples/application5/org.gtk.exampleapp.gschema.xml" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
+        <programlisting><xi:include href="../../../../examples/application5/org.gtk.exampleapp.gschema.xml" parse="text"><xi:fallback>MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
       </informalexample>
 
       <para>Before we can make use of this schema in our application,
@@ -749,13 +749,13 @@ example_app_window_init (ExampleAppWindow *win)
       <para>Lets start with the template.</para>
 
       <informalexample>
-        <programlisting><xi:include href="../../../../examples/application6/prefs.ui" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
+        <programlisting><xi:include href="../../../../examples/application6/prefs.ui" parse="text"><xi:fallback>MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
       </informalexample>
 
       <para>Next comes the dialog subclass.</para>
 
       <informalexample>
-        <programlisting><xi:include href="../../../../examples/application6/exampleappprefs.c" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
+        <programlisting><xi:include href="../../../../examples/application6/exampleappprefs.c" parse="text"><xi:fallback>MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
       </informalexample>
 
       <para>Now we revisit the <literal>preferences_activated(<!-- -->)</literal> function in our
@@ -807,7 +807,7 @@ preferences_activated (GSimpleAction *action,
       to slide out the search bar below the header bar.</para>
 
       <informalexample>
-        <programlisting><xi:include href="../../../../examples/application7/window.ui" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
+        <programlisting><xi:include href="../../../../examples/application7/window.ui" parse="text"><xi:fallback>MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
       </informalexample>
 
       <para>Implementing the search needs quite a few code changes that
@@ -887,7 +887,7 @@ example_app_window_init (ExampleAppWindow *win)
       which demonstrates #GtkMenuButton, #GtkRevealer and #GtkListBox.</para>
 
       <informalexample>
-        <programlisting><xi:include href="../../../../examples/application8/window.ui" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
+        <programlisting><xi:include href="../../../../examples/application8/window.ui" parse="text"><xi:fallback>MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
       </informalexample>
 
       <para>The code to populate the sidebar with buttons for the words
@@ -898,7 +898,7 @@ example_app_window_init (ExampleAppWindow *win)
       ui file.</para>
 
       <informalexample>
-        <programlisting><xi:include href="../../../../examples/application8/gears-menu.ui" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
+        <programlisting><xi:include href="../../../../examples/application8/gears-menu.ui" parse="text"><xi:fallback>MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
       </informalexample>
 
       <para>To connect the menuitem to the show-words setting, we use
@@ -957,7 +957,7 @@ example_app_window_init (ExampleAppWindow *win)
       triggers the show-lines action:</para>
 
       <informalexample>
-        <programlisting><xi:include href="../../../../examples/application9/gears-menu.ui" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
+        <programlisting><xi:include href="../../../../examples/application9/gears-menu.ui" parse="text"><xi:fallback>MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
       </informalexample>
 
       <para>To make this menu item do something, we create a property
@@ -1017,7 +1017,7 @@ example_app_window_init (ExampleAppWindow *win)
       be a direct child of the window, and set its type to be titlebar.</para>
 
       <informalexample>
-        <programlisting><xi:include href="../../../../examples/application10/window.ui" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
+        <programlisting><xi:include href="../../../../examples/application10/window.ui" parse="text"><xi:fallback>MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
       </informalexample>
 
       <para>A small extra bonus of using a header bar is that we get
@@ -1073,7 +1073,7 @@ example_app_window_init (ExampleAppWindow *win)
     <example id="gtk-getting-started-drawing">
       <title>Drawing in response to input</title>
       <para>Create a new file with the following content named example-3.c.</para>
-      <programlisting><xi:include href="../../../../examples/drawing.c" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
+      <programlisting><xi:include href="../../../../examples/drawing.c" parse="text"><xi:fallback>MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
     </example>
     <para>
       You can compile the program above with GCC using:
