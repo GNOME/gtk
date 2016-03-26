@@ -115,7 +115,7 @@ GDK_AVAILABLE_IN_ALL
 GdkVisualType gdk_visual_get_visual_type         (GdkVisual *visual);
 GDK_AVAILABLE_IN_ALL
 gint          gdk_visual_get_depth               (GdkVisual *visual);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_22
 GdkByteOrder  gdk_visual_get_byte_order          (GdkVisual *visual);
 GDK_AVAILABLE_IN_ALL
 gint          gdk_visual_get_colormap_size       (GdkVisual *visual);

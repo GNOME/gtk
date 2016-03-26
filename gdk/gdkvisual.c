@@ -302,10 +302,15 @@ gdk_visual_get_depth (GdkVisual *visual)
  * @visual: A #GdkVisual.
  *
  * Returns the byte order of this visual.
+ * The information returned by this function is only relevant
+ * when working with XImages, and not all backends return
+ * meaningful information for this.
  *
  * Returns: A #GdkByteOrder stating the byte order of @visual.
  *
  * Since: 2.22
+ *
+ * Deprecated: 3.22: This information is not useful
  */
 GdkByteOrder
 gdk_visual_get_byte_order (GdkVisual *visual)
@@ -344,7 +349,8 @@ gdk_visual_get_colormap_size (GdkVisual *visual)
  *
  * Since: 2.22
  *
- * Deprecated: 3.22. Use gdk_visual_get_red_pixel_details() and its variants
+ * Deprecated: 3.22. Use gdk_visual_get_red_pixel_details() and its variants to
+ *     learn about the pixel layout of TrueColor and DirectColor visuals
  */
 gint
 gdk_visual_get_bits_per_rgb (GdkVisual *visual)
