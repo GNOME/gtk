@@ -230,6 +230,97 @@ postpone_on_globals_closure (GdkWaylandDisplay *display_wayland,
     g_list_append (display_wayland->on_has_globals_closures, closure);
 }
 
+#ifdef G_ENABLE_DEBUG
+
+static const char *
+get_format_name (enum wl_shm_format format)
+{
+  int i;
+#define FORMAT(s) { WL_SHM_FORMAT_ ## s, #s }
+  struct { int format; const char *name; } formats[] = {
+    FORMAT(ARGB8888),
+    FORMAT(XRGB8888),
+    FORMAT(C8),
+    FORMAT(RGB332),
+    FORMAT(BGR233),
+    FORMAT(XRGB4444),
+    FORMAT(XBGR4444),
+    FORMAT(RGBX4444),
+    FORMAT(BGRX4444),
+    FORMAT(ARGB4444),
+    FORMAT(ABGR4444),
+    FORMAT(RGBA4444),
+    FORMAT(BGRA4444),
+    FORMAT(XRGB1555),
+    FORMAT(XBGR1555),
+    FORMAT(RGBX5551),
+    FORMAT(BGRX5551),
+    FORMAT(ARGB1555),
+    FORMAT(ABGR1555),
+    FORMAT(RGBA5551),
+    FORMAT(BGRA5551),
+    FORMAT(RGB565),
+    FORMAT(BGR565),
+    FORMAT(RGB888),
+    FORMAT(BGR888),
+    FORMAT(XBGR8888),
+    FORMAT(RGBX8888),
+    FORMAT(BGRX8888),
+    FORMAT(ABGR8888),
+    FORMAT(RGBA8888),
+    FORMAT(BGRA8888),
+    FORMAT(XRGB2101010),
+    FORMAT(XBGR2101010),
+    FORMAT(RGBX1010102),
+    FORMAT(BGRX1010102),
+    FORMAT(ARGB2101010),
+    FORMAT(ABGR2101010),
+    FORMAT(RGBA1010102),
+    FORMAT(BGRA1010102),
+    FORMAT(YUYV),
+    FORMAT(YVYU),
+    FORMAT(UYVY),
+    FORMAT(VYUY),
+    FORMAT(AYUV),
+    FORMAT(NV12),
+    FORMAT(NV21),
+    FORMAT(NV16),
+    FORMAT(NV61),
+    FORMAT(YUV410),
+    FORMAT(YVU410),
+    FORMAT(YUV411),
+    FORMAT(YVU411),
+    FORMAT(YUV420),
+    FORMAT(YVU420),
+    FORMAT(YUV422),
+    FORMAT(YVU422),
+    FORMAT(YUV444),
+    FORMAT(YVU444),
+    { 0xffffffff, NULL }
+  };
+#undef FORMAT
+
+  for (i = 0; formats[i].name; i++)
+    {
+      if (formats[i].format == format)
+        return formats[i].name;
+    }
+  return NULL;
+}
+#endif
+
+static void
+wl_shm_format (void          *data,
+               struct wl_shm *wl_shm,
+               uint32_t       format)
+{
+  GDK_NOTE (MISC, g_message ("supported pixel format %s", get_format_name (format)));
+}
+
+static const struct wl_shm_listener wl_shm_listener = {
+  wl_shm_format
+};
+
 static void
 gdk_registry_handle_global (void               *data,
                             struct wl_registry *registry,
@@ -254,6 +345,7 @@ gdk_registry_handle_global (void               *data,
     {
       display_wayland->shm =
         wl_registry_bind (display_wayland->wl_registry, id, &wl_shm_interface, 1);
+      wl_shm_add_listener (display_wayland->shm, &wl_shm_listener, display_wayland);
     }
   else if (strcmp (interface, "xdg_shell") == 0)
     {
