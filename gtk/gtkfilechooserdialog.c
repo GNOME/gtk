@@ -352,25 +352,6 @@ file_chooser_widget_file_activated (GtkFileChooser       *chooser,
     gtk_widget_activate (widget);
 }
 
-#if 0
-/* FIXME: to see why this function is ifdef-ed out, see the comment below in
- * file_chooser_widget_default_size_changed().
- */
-static void
-load_position (int *out_xpos, int *out_ypos)
-{
-  GtkFileChooserSettings *settings;
-  int x, y, width, height;
-
-  settings = _gtk_file_chooser_settings_new ();
-  _gtk_file_chooser_settings_get_geometry (settings, &x, &y, &width, &height);
-  g_object_unref (settings);
-
-  *out_xpos = x;
-  *out_ypos = y;
-}
-#endif
-
 static void
 file_chooser_widget_default_size_changed (GtkWidget            *widget,
                                           GtkFileChooserDialog *dialog)
