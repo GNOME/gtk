@@ -338,10 +338,13 @@ gdk_visual_get_colormap_size (GdkVisual *visual)
  * @visual: a #GdkVisual
  *
  * Returns the number of significant bits per red, green and blue value.
+ * Not all GDK backend provide a meaningful value for this function.
  *
  * Returns: The number of significant bits per color value for @visual.
  *
  * Since: 2.22
+ *
+ * Deprecated: 3.22. Use gdk_visual_get_red_pixel_details() and its variants
  */
 gint
 gdk_visual_get_bits_per_rgb (GdkVisual *visual)
