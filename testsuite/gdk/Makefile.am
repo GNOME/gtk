@@ -23,6 +23,7 @@ TEST_PROGS += 				\
 	encoding			\
 	keysyms				\
 	rgba				\
+	visual				\
 	$(NULL)
 
 CLEANFILES = 			\
