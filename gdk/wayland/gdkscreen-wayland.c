@@ -864,14 +864,20 @@ static GdkVisual*
 gdk_wayland_screen_visual_get_best_with_depth (GdkScreen *screen,
 					       gint       depth)
 {
-  return GDK_WAYLAND_SCREEN (screen)->visual;
+  if (depth == 32)
+    return GDK_WAYLAND_SCREEN (screen)->visual;
+  else
+    return NULL;
 }
 
 static GdkVisual*
 gdk_wayland_screen_visual_get_best_with_type (GdkScreen     *screen,
 					      GdkVisualType  visual_type)
 {
-  return GDK_WAYLAND_SCREEN (screen)->visual;
+  if (visual_type == GDK_VISUAL_TRUE_COLOR)
+    return GDK_WAYLAND_SCREEN (screen)->visual;
+  else
+    return NULL;
 }
 
 static GdkVisual*
@@ -879,7 +885,10 @@ gdk_wayland_screen_visual_get_best_with_both (GdkScreen     *screen,
 					      gint           depth,
 					      GdkVisualType  visual_type)
 {
-  return GDK_WAYLAND_SCREEN (screen)->visual;
+  if (depth == 32 && visual_type == GDK_VISUAL_TRUE_COLOR)
+    return GDK_WAYLAND_SCREEN (screen)->visual;
+  else
+    return NULL;
 }
 
 static void
