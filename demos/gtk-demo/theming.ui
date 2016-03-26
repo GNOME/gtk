@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <object class="GtkGrid" id="grid">
-    <property name="row-spacing">6</property>
+    <property name="row-spacing">10</property>
     <property name="orientation">vertical</property>
     <child>
       <object class="GtkToolbar">
@@ -268,6 +268,41 @@
           <packing>
             <property name="homogeneous">1</property>
           </packing>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">1</property>
+        <property name="spacing">10</property>
+        <property name="orientation">horizontal</property>
+        <child>
+          <object class="GtkButton">
+            <property name="visible">1</property>
+            <property name="label">Plain</property>
+            <property name="halign">end</property>
+          </object>
+          <packing>
+            <property name="expand">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton">
+            <property name="visible">1</property>
+            <property name="label">Destructive</property>
+            <style>
+              <class name="destructive-action"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton">
+            <property name="visible">1</property>
+            <property name="label">Suggested</property>
+            <style>
+              <class name="suggested-action"/>
+            </style>
+          </object>
         </child>
       </object>
     </child>
