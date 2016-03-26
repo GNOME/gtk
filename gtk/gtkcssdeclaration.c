@@ -24,17 +24,92 @@
 #include "gtkcsslonghanddeclarationprivate.h"
 #include "gtkcssshorthanddeclarationprivate.h"
 #include "gtkstylepropertyprivate.h"
+#include "gtkintl.h"
+#include "gtkprivate.h"
+
+enum {
+  PROP_0,
+  PROP_NAME,
+  PROP_PARENT_STYLE,
+  NUM_PROPERTIES
+};
 
 typedef struct _GtkCssDeclarationPrivate GtkCssDeclarationPrivate;
 struct _GtkCssDeclarationPrivate {
-  GtkCssStyleDeclaration *style;
+  GtkCssStyleDeclaration *parent_style;
 };
+
+static GParamSpec *declaration_props[NUM_PROPERTIES] = { NULL, };
 
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GtkCssDeclaration, gtk_css_declaration, G_TYPE_OBJECT)
 
 static void
+gtk_css_declaration_set_property (GObject      *gobject,
+                                  guint         prop_id,
+                                  const GValue *value,
+                                  GParamSpec   *pspec)
+{
+  GtkCssDeclaration *declaration = GTK_CSS_DECLARATION (gobject);
+  GtkCssDeclarationPrivate *priv = gtk_css_declaration_get_instance_private (declaration);
+
+  switch (prop_id)
+    {
+    case PROP_PARENT_STYLE:
+      priv->parent_style = g_value_dup_object (value);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_css_declaration_get_property (GObject    *gobject,
+                                  guint       prop_id,
+                                  GValue     *value,
+                                  GParamSpec *pspec)
+{
+  GtkCssDeclaration *declaration = GTK_CSS_DECLARATION (gobject);
+  GtkCssDeclarationPrivate *priv = gtk_css_declaration_get_instance_private (declaration);
+
+  switch (prop_id)
+    {
+    case PROP_NAME:
+      g_value_set_string (value, gtk_css_declaration_get_name (declaration));
+      break;
+
+    case PROP_PARENT_STYLE:
+      g_value_set_object (value, priv->parent_style);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
+    }
+}
+
+static void
 gtk_css_declaration_class_init (GtkCssDeclarationClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->set_property = gtk_css_declaration_set_property;
+  object_class->get_property = gtk_css_declaration_get_property;
+
+  declaration_props[PROP_NAME] =
+      g_param_spec_string ("name",
+                           P_("name"),
+                           P_("Name this declaration defines a value for"),
+                           NULL,
+                           GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY);
+  declaration_props[PROP_PARENT_STYLE] =
+      g_param_spec_object ("parent-style",
+                           P_("parent style"),
+                           P_("The parent style"),
+                           GTK_TYPE_CSS_STYLE_DECLARATION,
+                           GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (object_class, NUM_PROPERTIES, declaration_props);
 }
 
 static void
@@ -73,7 +148,7 @@ gtk_css_declaration_new_parse (GtkCssStyleDeclaration *style,
 }
 
 GtkCssStyleDeclaration *
-gtk_css_declaration_get_style (GtkCssDeclaration *decl)
+gtk_css_declaration_get_parent_style (GtkCssDeclaration *decl)
 {
   GtkCssDeclarationPrivate *priv;
 
@@ -81,7 +156,7 @@ gtk_css_declaration_get_style (GtkCssDeclaration *decl)
 
   priv = gtk_css_declaration_get_instance_private (decl);
 
-  return priv->style;
+  return priv->parent_style;
 }
 
 const char *

@@ -56,7 +56,7 @@ GtkCssDeclaration *     gtk_css_declaration_new_parse           (GtkCssStyleDecl
                                                                  GtkCssTokenSource      *source);
 
 const char *            gtk_css_declaration_get_name            (GtkCssDeclaration      *decl);
-GtkCssStyleDeclaration *gtk_css_declaration_get_style           (GtkCssDeclaration      *decl);
+GtkCssStyleDeclaration *gtk_css_declaration_get_parent_style    (GtkCssDeclaration      *decl);
 
 void                    gtk_css_declaration_print_value         (GtkCssDeclaration      *decl,
                                                                  GString                *string);

@@ -89,6 +89,7 @@ gtk_css_longhand_declaration_new_parse (GtkCssStyleDeclaration *style,
   char *name;
 
   decl = g_object_new (GTK_TYPE_CSS_LONGHAND_DECLARATION,
+                       "parent-style", style,
                        NULL);
   priv = gtk_css_longhand_declaration_get_instance_private (decl);
 

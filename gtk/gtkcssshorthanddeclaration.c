@@ -105,7 +105,9 @@ gtk_css_shorthand_declaration_new_parse (GtkCssStyleDeclaration *style,
   guint i;
   char *name;
 
-  decl = g_object_new (GTK_TYPE_CSS_SHORTHAND_DECLARATION, NULL);
+  decl = g_object_new (GTK_TYPE_CSS_SHORTHAND_DECLARATION,
+                       "parent-style", style,
+                       NULL);
   priv = gtk_css_shorthand_declaration_get_instance_private (decl);
 
   gtk_css_token_source_set_consumer (source, G_OBJECT (decl));
