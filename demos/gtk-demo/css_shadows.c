@@ -1,4 +1,4 @@
-/* CSS Theming/Shadows
+/* Theming/Shadows
  *
  * This demo shows how to use CSS shadows.
  */
