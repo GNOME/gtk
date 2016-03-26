@@ -1511,7 +1511,7 @@ bin_PROGRAMS = \
 	gtk-query-settings \
 	gtk-launch
 
-gtk_query_immodules_3_0_SOURCES = queryimmodules.c
+gtk_query_immodules_3_0_SOURCES = queryimmodules.c gtkutils.c
 gtk_query_immodules_3_0_LDADD = 		\
 	libgtk-3.la				\
 	$(top_builddir)/gdk/libgdk-3.la		\

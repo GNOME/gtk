@@ -26,6 +26,7 @@
 #include "gtkprivate.h"
 #include "gtkmodulesprivate.h"
 #include "gtkintl.h"
+#include "gtkutilsprivate.h"
 
 #include <gmodule.h>
 
@@ -77,9 +78,7 @@ get_module_path (void)
 
   g_free (default_dir);
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  result = pango_split_file_list (module_path);
-G_GNUC_END_IGNORE_DEPRECATIONS
+  result = gtk_split_file_list (module_path);
   g_free (module_path);
 
   return result;
@@ -419,10 +418,8 @@ load_modules (const char *module_str)
 
   GTK_NOTE (MODULES, g_message ("Loading module list: %s", module_str));
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  module_names = pango_split_file_list (module_str);
-G_GNUC_END_IGNORE_DEPRECATIONS
-  for (i = 0; module_names[i]; i++) 
+  module_names = gtk_split_file_list (module_str);
+  for (i = 0; module_names[i]; i++)
     module_list = load_module (module_list, module_names[i]);
 
   module_list = g_slist_reverse (module_list);
