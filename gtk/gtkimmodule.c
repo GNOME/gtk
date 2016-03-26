@@ -35,6 +35,7 @@
 #include "gtkimcontextsimple.h"
 #include "gtksettings.h"
 #include "gtkprivate.h"
+#include "gtkutilsprivate.h"
 #include "gtkintl.h"
 
 #ifdef GDK_WINDOWING_X11
@@ -331,147 +332,6 @@ add_builtin_module (const gchar             *module_name,
   return module;
 }
 
-static gboolean
-scan_string (const char **pos, GString *out)
-{
-  const char *p = *pos, *q = *pos;
-  char *tmp, *tmp2;
-  gboolean quoted;
-
-  while (g_ascii_isspace (*p))
-    p++;
-
-  if (!*p)
-    return FALSE;
-  else if (*p == '"')
-    {
-      p++;
-      quoted = FALSE;
-      for (q = p; (*q != '"') || quoted; q++)
-        {
-          if (!*q)
-            return FALSE;
-          quoted = (*q == '\\') && !quoted;
-        }
-
-      tmp = g_strndup (p, q - p);
-      tmp2 = g_strcompress (tmp);
-      g_string_truncate (out, 0);
-      g_string_append (out, tmp2);
-      g_free (tmp);
-      g_free (tmp2);
-    }
-
-  q++;
-  *pos = q;
-
-  return TRUE;
-}
-
-static gboolean
-skip_space (const char **pos)
-{
-  const char *p = *pos;
-
-  while (g_ascii_isspace (*p))
-    p++;
-
-  *pos = p;
-
-  return !(*p == '\0');
-}
-
-static gint
-read_line (FILE *stream, GString *str)
-{
-  gboolean quoted = FALSE;
-  gboolean comment = FALSE;
-  int n_read = 0;
-  int lines = 1;
-
-  flockfile (stream);
-
-  g_string_truncate (str, 0);
-
-  while (1)
-    {
-      int c;
-
-      c = getc_unlocked (stream);
-
-      if (c == EOF)
-        {
-          if (quoted)
-            g_string_append_c (str, '\\');
-
-          goto done;
-        }
-      else
-        n_read++;
-
-      if (quoted)
-        {
-          quoted = FALSE;
-
-          switch (c)
-            {
-            case '#':
-              g_string_append_c (str, '#');
-              break;
-            case '\r':
-            case '\n':
-              {
-                int next_c = getc_unlocked (stream);
-
-                if (!(next_c == EOF ||
-                      (c == '\r' && next_c == '\n') ||
-                      (c == '\n' && next_c == '\r')))
-                  ungetc (next_c, stream);
-
-                lines++;
-
-                break;
-              }
-            default:
-              g_string_append_c (str, '\\');
-              g_string_append_c (str, c);
-            }
-        }
-      else
-        {
-          switch (c)
-            {
-            case '#':
-              comment = TRUE;
-              break;
-            case '\\':
-              if (!comment)
-                quoted = TRUE;
-              break;
-            case '\n':
-              {
-                int next_c = getc_unlocked (stream);
-
-                if (!(c == EOF ||
-                      (c == '\r' && next_c == '\n') ||
-                      (c == '\n' && next_c == '\r')))
-                  ungetc (next_c, stream);
-
-                goto done;
-              }
-            default:
-              if (!comment)
-               g_string_append_c (str, c);
-            }
-        }
-    }
-
- done:
-  funlockfile (stream);
-
-  return (n_read > 0) ? lines : 0;
-}
-
 static void
 gtk_im_module_initialize (void)
 {
@@ -558,13 +418,13 @@ gtk_im_module_initialize (void)
       return;
     }
 
-  while (!have_error && read_line (file, line_buf))
+  while (!have_error && gtk_read_line (file, line_buf))
     {
       const char *p;
 
       p = line_buf->str;
 
-      if (!skip_space (&p))
+      if (!gtk_skip_space (&p))
 	{
 	  /* Blank line marking the end of a module
 	   */
@@ -584,7 +444,7 @@ gtk_im_module_initialize (void)
 	   */
 	  module = g_object_new (GTK_TYPE_IM_MODULE, NULL);
 
-	  if (!scan_string (&p, tmp_buf) || skip_space (&p))
+	  if (!gtk_scan_string (&p, tmp_buf) || gtk_skip_space (&p))
 	    {
 	      g_warning ("Error parsing context info in '%s'\n  %s", filename, line_buf->str);
 	      have_error = TRUE;
@@ -602,19 +462,19 @@ gtk_im_module_initialize (void)
 
 	  /* Read information about a context type
 	   */
-	  if (!scan_string (&p, tmp_buf))
+	  if (!gtk_scan_string (&p, tmp_buf))
 	    goto context_error;
 	  info->context_id = g_strdup (tmp_buf->str);
 
-	  if (!scan_string (&p, tmp_buf))
+	  if (!gtk_scan_string (&p, tmp_buf))
 	    goto context_error;
 	  info->context_name = g_strdup (tmp_buf->str);
 
-	  if (!scan_string (&p, tmp_buf))
+	  if (!gtk_scan_string (&p, tmp_buf))
 	    goto context_error;
 	  info->domain = g_strdup (tmp_buf->str);
 
-	  if (!scan_string (&p, tmp_buf))
+	  if (!gtk_scan_string (&p, tmp_buf))
 	    goto context_error;
 
 	  info->domain_dirname = g_strdup (tmp_buf->str);
@@ -622,11 +482,11 @@ gtk_im_module_initialize (void)
 	  correct_localedir_prefix ((char **) &info->domain_dirname);
 #endif
 
-	  if (!scan_string (&p, tmp_buf))
+	  if (!gtk_scan_string (&p, tmp_buf))
 	    goto context_error;
 	  info->default_locales = g_strdup (tmp_buf->str);
 
-	  if (skip_space (&p))
+	  if (gtk_skip_space (&p))
 	    goto context_error;
 
 	  infos = g_slist_prepend (infos, info);
