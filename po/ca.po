@@ -3590,11 +3590,11 @@ msgstr "Gira en sentit antihorari"
 
 #: gtk/gtkshortcutsshortcut.c:149
 msgid "Two finger swipe left"
-msgstr "Llisca a l'esquerra amb dots dits"
+msgstr "Llisca a l'esquerra amb dos dits"
 
 #: gtk/gtkshortcutsshortcut.c:153
 msgid "Two finger swipe right"
-msgstr "Llisca a la dreta amb dots dits"
+msgstr "Llisca a la dreta amb dos dits"
 
 #: gtk/gtkshortcutswindow.c:859
 msgid "Shortcuts"
