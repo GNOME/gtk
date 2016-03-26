@@ -68,6 +68,25 @@ gtk_css_import_rule_new (GtkCssRule       *parent_rule,
                        NULL);
 }
 
+static gboolean
+gtk_css_import_rule_would_recurse (GtkCssImportRule *rule)
+{
+  GtkCssImportRulePrivate *priv = gtk_css_import_rule_get_instance_private (GTK_CSS_IMPORT_RULE (rule));
+  GtkCssStyleSheet *sheet;
+
+  for (sheet = gtk_css_rule_get_parent_style_sheet (GTK_CSS_RULE (rule));
+       sheet != NULL;
+       sheet = gtk_css_style_sheet_get_parent_style_sheet (sheet))
+    {
+      GFile *sheet_file = gtk_css_style_sheet_get_file (sheet);
+
+      if (sheet_file && g_file_equal (sheet_file, priv->file))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
 GtkCssRule *
 gtk_css_import_rule_new_parse (GtkCssTokenSource *source,
                                GtkCssRule        *parent_rule,
@@ -126,9 +145,19 @@ gtk_css_import_rule_new_parse (GtkCssTokenSource *source,
       return NULL;
     }
 
-  if (g_file_load_contents (priv->file, NULL,
-                            &data, &size,
-                            NULL, &load_error))
+  if (gtk_css_import_rule_would_recurse (GTK_CSS_IMPORT_RULE (result)))
+    {
+      char *path = g_file_get_path (priv->file);
+      gtk_css_token_source_error (source,
+                                  "Loading '%s' would recurse",
+                                  path);
+      g_object_unref (result);
+      g_free (path);
+      bytes = g_bytes_new (NULL, 0);
+    }
+  else if (g_file_load_contents (priv->file, NULL,
+                                 &data, &size,
+                                 NULL, &load_error))
     {
       bytes = g_bytes_new_take (data, size);
     }
