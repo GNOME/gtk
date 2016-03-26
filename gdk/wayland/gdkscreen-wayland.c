@@ -921,6 +921,8 @@ gdk_wayland_screen_list_visuals (GdkScreen *screen)
 #define GDK_TYPE_WAYLAND_VISUAL              (_gdk_wayland_visual_get_type ())
 #define GDK_WAYLAND_VISUAL(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WAYLAND_VISUAL, GdkWaylandVisual))
 
+/* Currently, the Wayland backend only ever uses ARGB8888.
+ */
 static GdkVisual *
 gdk_wayland_visual_new (GdkScreen *screen)
 {
@@ -930,6 +932,9 @@ gdk_wayland_visual_new (GdkScreen *screen)
   visual->screen = GDK_SCREEN (screen);
   visual->type = GDK_VISUAL_TRUE_COLOR;
   visual->depth = 32;
+  visual->red_mask = 0xff0000;
+  visual->green_mask = 0x00ff00;
+  visual->blue_mask = 0x0000ff;
   visual->bits_per_rgb = 8;
 
   return visual;
