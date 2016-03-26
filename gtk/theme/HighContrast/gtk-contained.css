@@ -602,7 +602,7 @@ popover.background.touch-selection button, popover.background.magnifier button, 
 button.suggested-action {
   border-width: 2px;
   border-style: solid;
-  color: white;
+  color: #fff;
   background-image: none;
   background-color: #000;
   border-color: black; }
@@ -617,7 +617,7 @@ button.suggested-action {
   button.suggested-action:hover {
     border-width: 2px;
     border-style: solid;
-    color: white;
+    color: #fff;
     background-color: #000;
     border-color: black;
     background-image: none; }
@@ -631,7 +631,7 @@ button.suggested-action {
   button.suggested-action:backdrop, button.suggested-action.flat:backdrop {
     border-width: 2px;
     border-style: solid;
-    color: white;
+    color: #fff;
     background-color: #000;
     border-color: #000;
     background-image: none; }
