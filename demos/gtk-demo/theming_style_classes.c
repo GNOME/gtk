@@ -24,6 +24,7 @@ do_theming_style_classes (GtkWidget *do_widget)
       gtk_window_set_screen (GTK_WINDOW (window),
                              gtk_widget_get_screen (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Style Classes");
+      gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
       gtk_container_set_border_width (GTK_CONTAINER (window), 12);
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
