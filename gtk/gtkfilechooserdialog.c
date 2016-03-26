@@ -397,23 +397,6 @@ file_chooser_widget_default_size_changed (GtkWidget            *widget,
                                             &default_width, &default_height);
 
   gtk_window_resize (GTK_WINDOW (dialog), default_width, default_height);
-
-  if (!gtk_widget_get_mapped (GTK_WIDGET (dialog)))
-    {
-#if 0
-      /* FIXME: the code to restore the position does not work yet.  It is not
-       * clear whether it is actually desirable --- if enabled, applications
-       * would not be able to say "center the file chooser on top of my toplevel
-       * window".  So, we don't use this code at all.
-       */
-      load_position (&xpos, &ypos);
-      if (xpos >= 0 && ypos >= 0)
-        {
-          gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_NONE);
-          gtk_window_move (GTK_WINDOW (dialog), xpos, ypos);
-        }
-#endif
-    }
 }
 
 static void
