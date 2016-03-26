@@ -465,7 +465,8 @@ gtk_css_win32_size_value_token_parse (GtkCssTokenSource      *source,
             }
           gtk_css_token_source_consume_token (source);
         }
-      else if (gtk_css_token_is (token, GTK_CSS_TOKEN_INTEGER))
+      else if (gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_INTEGER) ||
+               gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_INTEGER))
         {
           result->val.size.id = token->number.number;
           gtk_css_token_source_consume_token (source);
@@ -486,7 +487,8 @@ gtk_css_win32_size_value_token_parse (GtkCssTokenSource      *source,
     case GTK_WIN32_PART_BORDER_BOTTOM:
     case GTK_WIN32_PART_BORDER_LEFT:
       token = gtk_css_token_source_get_token (source);
-      if (!gtk_css_token_is (token, GTK_CSS_TOKEN_INTEGER))
+      if (!gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_INTEGER) &&
+          !gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_INTEGER))
         {
           _gtk_css_value_unref (result);
           gtk_css_token_source_error (source, "Expected an integer part ID");
@@ -507,7 +509,8 @@ gtk_css_win32_size_value_token_parse (GtkCssTokenSource      *source,
       gtk_css_token_source_consume_token (source);
 
       token = gtk_css_token_source_get_token (source);
-      if (!gtk_css_token_is (token, GTK_CSS_TOKEN_INTEGER))
+      if (!gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_INTEGER) &&
+          !gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_INTEGER))
         {
           _gtk_css_value_unref (result);
           gtk_css_token_source_error (source, "Expected an integer state ID");

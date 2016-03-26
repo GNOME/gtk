@@ -1109,7 +1109,8 @@ gtk_css_color_value_token_parse (GtkCssTokenSource *source)
                 }
               gtk_css_token_source_consume_token (source);
             }
-          else if (gtk_css_token_is (token, GTK_CSS_TOKEN_INTEGER))
+          else if (gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_INTEGER) ||
+                   gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_INTEGER))
             {
               id = token->number.number;
               gtk_css_token_source_consume_token (source);

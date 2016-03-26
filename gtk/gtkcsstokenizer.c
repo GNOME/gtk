@@ -59,7 +59,8 @@ gtk_css_token_clear (GtkCssToken *token)
       g_free (token->string.string);
       break;
 
-    case GTK_CSS_TOKEN_INTEGER_DIMENSION:
+    case GTK_CSS_TOKEN_SIGNED_INTEGER_DIMENSION:
+    case GTK_CSS_TOKEN_SIGNLESS_INTEGER_DIMENSION:
     case GTK_CSS_TOKEN_DIMENSION:
       g_free (token->dimension.dimension);
       break;
@@ -80,8 +81,10 @@ gtk_css_token_clear (GtkCssToken *token)
     case GTK_CSS_TOKEN_CDC:
     case GTK_CSS_TOKEN_CDO:
     case GTK_CSS_TOKEN_DELIM:
-    case GTK_CSS_TOKEN_INTEGER:
-    case GTK_CSS_TOKEN_NUMBER:
+    case GTK_CSS_TOKEN_SIGNED_INTEGER:
+    case GTK_CSS_TOKEN_SIGNLESS_INTEGER:
+    case GTK_CSS_TOKEN_SIGNED_NUMBER:
+    case GTK_CSS_TOKEN_SIGNLESS_NUMBER:
     case GTK_CSS_TOKEN_PERCENTAGE:
     case GTK_CSS_TOKEN_INCLUDE_MATCH:
     case GTK_CSS_TOKEN_DASH_MATCH:
@@ -121,13 +124,16 @@ gtk_css_token_initv (GtkCssToken     *token,
       token->delim.delim = va_arg (args, gunichar);
       break;
 
-    case GTK_CSS_TOKEN_INTEGER:
-    case GTK_CSS_TOKEN_NUMBER:
+    case GTK_CSS_TOKEN_SIGNED_INTEGER:
+    case GTK_CSS_TOKEN_SIGNLESS_INTEGER:
+    case GTK_CSS_TOKEN_SIGNED_NUMBER:
+    case GTK_CSS_TOKEN_SIGNLESS_NUMBER:
     case GTK_CSS_TOKEN_PERCENTAGE:
       token->number.number = va_arg (args, double);
       break;
 
-    case GTK_CSS_TOKEN_INTEGER_DIMENSION:
+    case GTK_CSS_TOKEN_SIGNED_INTEGER_DIMENSION:
+    case GTK_CSS_TOKEN_SIGNLESS_INTEGER_DIMENSION:
     case GTK_CSS_TOKEN_DIMENSION:
       token->dimension.value = va_arg (args, double);
       token->dimension.dimension = va_arg (args, char *);
@@ -228,11 +234,14 @@ gtk_css_token_is_finite (const GtkCssToken *token)
     case GTK_CSS_TOKEN_HASH_UNRESTRICTED:
     case GTK_CSS_TOKEN_HASH_ID:
     case GTK_CSS_TOKEN_DELIM:
-    case GTK_CSS_TOKEN_INTEGER:
-    case GTK_CSS_TOKEN_NUMBER:
+    case GTK_CSS_TOKEN_SIGNED_INTEGER:
+    case GTK_CSS_TOKEN_SIGNLESS_INTEGER:
+    case GTK_CSS_TOKEN_SIGNED_NUMBER:
+    case GTK_CSS_TOKEN_SIGNLESS_NUMBER:
     case GTK_CSS_TOKEN_BAD_STRING:
     case GTK_CSS_TOKEN_BAD_URL:
-    case GTK_CSS_TOKEN_INTEGER_DIMENSION:
+    case GTK_CSS_TOKEN_SIGNED_INTEGER_DIMENSION:
+    case GTK_CSS_TOKEN_SIGNLESS_INTEGER_DIMENSION:
     case GTK_CSS_TOKEN_DIMENSION:
       return FALSE;
     }
@@ -304,8 +313,13 @@ gtk_css_token_print (const GtkCssToken *token,
       g_string_append_unichar (string, token->delim.delim);
       break;
 
-    case GTK_CSS_TOKEN_INTEGER:
-    case GTK_CSS_TOKEN_NUMBER:
+    case GTK_CSS_TOKEN_SIGNED_INTEGER:
+    case GTK_CSS_TOKEN_SIGNED_NUMBER:
+      if (token->number.number >= 0)
+        g_string_append_c (string, '+');
+      /* fall through */
+    case GTK_CSS_TOKEN_SIGNLESS_INTEGER:
+    case GTK_CSS_TOKEN_SIGNLESS_NUMBER:
       g_ascii_dtostr (buf, G_ASCII_DTOSTR_BUF_SIZE, token->number.number);
       g_string_append (string, buf);
       break;
@@ -316,7 +330,11 @@ gtk_css_token_print (const GtkCssToken *token,
       g_string_append_c (string, '%');
       break;
 
-    case GTK_CSS_TOKEN_INTEGER_DIMENSION:
+    case GTK_CSS_TOKEN_SIGNED_INTEGER_DIMENSION:
+      if (token->dimension.value >= 0)
+        g_string_append_c (string, '+');
+      /* fall through */
+    case GTK_CSS_TOKEN_SIGNLESS_INTEGER_DIMENSION:
     case GTK_CSS_TOKEN_DIMENSION:
       g_ascii_dtostr (buf, G_ASCII_DTOSTR_BUF_SIZE, token->dimension.value);
       g_string_append (string, buf);
@@ -942,16 +960,18 @@ gtk_css_tokenizer_read_numeric (GtkCssTokenizer *tokenizer,
 {
   int sign = 1, exponent_sign = 1;
   gint64 integer, fractional = 0, fractional_length = 1, exponent = 0;
-  gboolean is_int = TRUE;
+  gboolean is_int = TRUE, has_sign = FALSE;
   const char *data = tokenizer->data;
 
   if (*data == '-')
     {
+      has_sign = TRUE;
       sign = -1;
       data++;
     }
   else if (*data == '+')
     {
+      has_sign = TRUE;
       data++;
     }
 
@@ -1011,7 +1031,8 @@ gtk_css_tokenizer_read_numeric (GtkCssTokenizer *tokenizer,
   if (gtk_css_tokenizer_has_identifier (tokenizer))
     {
       gtk_css_token_init (token,
-                          is_int ? GTK_CSS_TOKEN_INTEGER_DIMENSION : GTK_CSS_TOKEN_DIMENSION,
+                          is_int ? (has_sign ? GTK_CSS_TOKEN_SIGNED_INTEGER_DIMENSION : GTK_CSS_TOKEN_SIGNLESS_INTEGER_DIMENSION)
+                                 : GTK_CSS_TOKEN_DIMENSION,
                           sign * (integer + ((double) fractional / fractional_length)) * pow (10, exponent_sign * exponent),
                           gtk_css_tokenizer_read_name (tokenizer));
     }
@@ -1025,7 +1046,8 @@ gtk_css_tokenizer_read_numeric (GtkCssTokenizer *tokenizer,
   else
     {
       gtk_css_token_init (token,
-                          is_int ? GTK_CSS_TOKEN_INTEGER : GTK_CSS_TOKEN_NUMBER,
+                          is_int ? (has_sign ? GTK_CSS_TOKEN_SIGNED_INTEGER : GTK_CSS_TOKEN_SIGNLESS_INTEGER)
+                                 : (has_sign ? GTK_CSS_TOKEN_SIGNED_NUMBER : GTK_CSS_TOKEN_SIGNLESS_NUMBER),
                           sign * (integer + ((double) fractional / fractional_length)) * pow (10, exponent_sign * exponent));
     }
 }

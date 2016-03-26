@@ -161,10 +161,13 @@ _gtk_css_number_value_parse (GtkCssParser           *parser,
 gboolean
 gtk_css_number_value_check_token (const GtkCssToken *token)
 {
-  return gtk_css_token_is (token, GTK_CSS_TOKEN_INTEGER)
-      || gtk_css_token_is (token, GTK_CSS_TOKEN_NUMBER)
+  return gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_INTEGER)
+      || gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_INTEGER)
+      || gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_NUMBER)
+      || gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_NUMBER)
       || gtk_css_token_is (token, GTK_CSS_TOKEN_DIMENSION)
-      || gtk_css_token_is (token, GTK_CSS_TOKEN_INTEGER_DIMENSION)
+      || gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_INTEGER_DIMENSION)
+      || gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_INTEGER_DIMENSION)
       || gtk_css_token_is (token, GTK_CSS_TOKEN_PERCENTAGE)
       || gtk_css_token_is_function (token, "calc")
       || gtk_css_token_is_function (token, "-gtk-win32-size")

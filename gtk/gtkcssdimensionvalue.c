@@ -331,8 +331,10 @@ gtk_css_dimension_value_token_parse (GtkCssTokenSource      *source,
   double d;
   GtkCssUnit unit;
 
-  if ((gtk_css_token_is (token, GTK_CSS_TOKEN_INTEGER) ||
-       gtk_css_token_is (token, GTK_CSS_TOKEN_NUMBER)) &&
+  if ((gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_INTEGER) ||
+       gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_INTEGER) ||
+       gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_NUMBER) ||
+       gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_NUMBER)) &&
       ((flags & (GTK_CSS_PARSE_NUMBER | GTK_CSS_NUMBER_AS_PIXELS)) ||
        (token->number.number == 0.0 && (flags & (GTK_CSS_PARSE_LENGTH | GTK_CSS_PARSE_ANGLE)))))
     {
@@ -359,7 +361,8 @@ gtk_css_dimension_value_token_parse (GtkCssTokenSource      *source,
       d = token->number.number;
       unit = GTK_CSS_PERCENT;
     }
-  else if (gtk_css_token_is (token, GTK_CSS_TOKEN_INTEGER_DIMENSION) ||
+  else if (gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_INTEGER_DIMENSION) ||
+           gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_INTEGER_DIMENSION) ||
            gtk_css_token_is (token, GTK_CSS_TOKEN_DIMENSION))
     {
       static const struct {

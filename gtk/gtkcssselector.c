@@ -1341,6 +1341,25 @@ token_parse_selector_class (GtkCssTokenSource *source,
 }
 
 static gboolean
+string_has_number (const char *string,
+                   const char *prefix,
+                   int        *number)
+{
+  gsize len = strlen (prefix);
+  char *end;
+
+  if (g_ascii_strncasecmp (string, prefix, len) != 0)
+    return FALSE;
+
+  errno = 0;
+  *number = strtoul (string + len, &end, 10);
+  if (*end != '\0' || errno != 0)
+    return FALSE;
+
+  return TRUE;
+}
+
+static gboolean
 parse_plus_b (GtkCssTokenSource *source,
               gboolean           negate,
               gint              *b)
@@ -1370,15 +1389,24 @@ parse_plus_b (GtkCssTokenSource *source,
     }
 
   token = gtk_css_token_source_get_token (source);
-  if (gtk_css_token_is (token, GTK_CSS_TOKEN_INTEGER))
+  if (!has_seen_sign && gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_INTEGER))
     {
-      if (has_seen_sign && token->number.number >= 0)
-        {
-          *b = token->number.number;
-          if (negate)
-            *b = - *b;
-          return TRUE;
-        }
+      *b = token->number.number;
+      gtk_css_token_source_consume_token (source);
+      return TRUE;
+    }
+  else if (has_seen_sign && gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_INTEGER))
+    {
+      *b = token->number.number;
+      if (negate)
+        *b = - *b;
+      gtk_css_token_source_consume_token (source);
+      return TRUE;
+    }
+  else if (!has_seen_sign)
+    {
+      *b = 0;
+      return TRUE;
     }
   
   gtk_css_token_source_error (source, "Not a valid an+b type");
@@ -1386,7 +1414,49 @@ parse_plus_b (GtkCssTokenSource *source,
 }
 
 gboolean
+parse_n_plus_b (GtkCssTokenSource *source,
+                gint               before,
+                gint              *a,
+                gint              *b)
+{
+  const GtkCssToken *token;
+
+  token = gtk_css_token_source_get_token (source);
+
+  if (gtk_css_token_is_ident (token, "n"))
+    {
+      *a = before;
+      gtk_css_token_source_consume_token (source);
+      return parse_plus_b (source, FALSE, b);
+    }
+  else if (gtk_css_token_is_ident (token, "n-"))
+    {
+      *a = before;
+      gtk_css_token_source_consume_token (source);
+      return parse_plus_b (source, TRUE, b);
+    }
+  else if (gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT) &&
+           string_has_number (token->string.string, "n-", b))
+    {
+      *a = before;
+      *b = -*b;
+      gtk_css_token_source_consume_token (source);
+      return TRUE;
+    }
+  else
+    {
+      *b = before;
+      *a = 0;
+      return TRUE;
+    }
+  
+  gtk_css_token_source_error (source, "Not a valid an+b type");
+  return FALSE;
+}
+                
+gboolean
 parse_a_n_plus_b (GtkCssTokenSource *source,
+                  gint               seen_sign,
                   gint              *a,
                   gint              *b)
 {
@@ -1394,65 +1464,104 @@ parse_a_n_plus_b (GtkCssTokenSource *source,
 
   token = gtk_css_token_source_get_token (source);
 
-  if (gtk_css_token_is_ident (token, "even"))
+  if (!seen_sign && gtk_css_token_is_ident (token, "even"))
     {
       *a = 2;
       *b = 0;
       gtk_css_token_source_consume_token (source);
       return TRUE;
     }
-  else if (gtk_css_token_is_ident (token, "odd"))
+  else if (!seen_sign && gtk_css_token_is_ident (token, "odd"))
     {
       *a = 2;
       *b = 1;
       gtk_css_token_source_consume_token (source);
       return TRUE;
     }
-  else if (gtk_css_token_is (token, GTK_CSS_TOKEN_INTEGER))
+  else if (!seen_sign && gtk_css_token_is_delim (token, '+'))
     {
-      *a = 0;
-      *b = token->number.number;
+      gtk_css_token_source_consume_token (source);
+      return parse_a_n_plus_b (source, 1, a, b);
+    }
+  else if (!seen_sign && gtk_css_token_is_delim (token, '-'))
+    {
+      gtk_css_token_source_consume_token (source);
+      return parse_a_n_plus_b (source, -1, a, b);
+    }
+  else if ((!seen_sign && gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_INTEGER)) ||
+           gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_INTEGER))
+    {
+      int x = token->number.number * (seen_sign ? seen_sign : 1);
+      gtk_css_token_source_consume_token (source);
+
+      return parse_n_plus_b (source, x , a, b);
+    }
+  else if (((!seen_sign && gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_INTEGER_DIMENSION)) ||
+            gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_INTEGER_DIMENSION)) &&
+           g_ascii_strcasecmp (token->dimension.dimension, "n") == 0)
+    {
+      *a = token->dimension.value * (seen_sign ? seen_sign : 1);
+      gtk_css_token_source_consume_token (source);
+      return parse_plus_b (source, FALSE, b);
+    }
+  else if (((!seen_sign && gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_INTEGER_DIMENSION)) ||
+            gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_INTEGER_DIMENSION)) &&
+           g_ascii_strcasecmp (token->dimension.dimension, "n-") == 0)
+    {
+      *a = token->dimension.value * (seen_sign ? seen_sign : 1);
+      gtk_css_token_source_consume_token (source);
+      return parse_plus_b (source, TRUE, b);
+    }
+  else if (((!seen_sign && gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_INTEGER_DIMENSION)) ||
+            gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_INTEGER_DIMENSION)) &&
+           string_has_number (token->dimension.dimension, "n-", b))
+    {
+      *a = token->dimension.value * (seen_sign ? seen_sign : 1);
+      *b = -*b;
       gtk_css_token_source_consume_token (source);
       return TRUE;
     }
-  else if (gtk_css_token_is (token, GTK_CSS_TOKEN_INTEGER_DIMENSION) &&
-           g_ascii_strcasecmp (token->dimension.dimension, "n") == 0)
-    {
-      *a = token->dimension.value;
-      gtk_css_token_source_consume_token (source);
-      return parse_plus_b (source, FALSE, b);
-    }
-  else if (gtk_css_token_is (token, GTK_CSS_TOKEN_INTEGER_DIMENSION) &&
-           g_ascii_strcasecmp (token->dimension.dimension, "n-") == 0)
-    {
-      *a = token->dimension.value;
-      gtk_css_token_source_consume_token (source);
-      return parse_plus_b (source, TRUE, b);
-    }
-  else if (gtk_css_token_is (token, GTK_CSS_TOKEN_INTEGER_DIMENSION) &&
-           g_ascii_strncasecmp (token->dimension.dimension, "n-", 2) == 0)
-    {
-      char *end;
-      *a = token->dimension.value;
-      errno = 0;
-      *b = strtoul (token->dimension.dimension + 2, &end, 10);
-      if (*end == '\0' && errno == 0)
-        {
-          gtk_css_token_source_consume_token (source);
-          return TRUE;
-        }
-    }
-  else if (gtk_css_token_is_ident (token, "-n"))
+  else if (!seen_sign && gtk_css_token_is_ident (token, "-n"))
     {
       *a = -1;
       gtk_css_token_source_consume_token (source);
       return parse_plus_b (source, FALSE, b);
     }
-  else if (gtk_css_token_is_ident (token, "-n-"))
+  else if (!seen_sign && gtk_css_token_is_ident (token, "-n-"))
     {
       *a = -1;
       gtk_css_token_source_consume_token (source);
       return parse_plus_b (source, TRUE, b);
+    }
+  else if (!seen_sign &&
+           gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT) &&
+           string_has_number (token->string.string, "-n-", b))
+    {
+      *a = -1;
+      *b = -*b;
+      gtk_css_token_source_consume_token (source);
+      return TRUE;
+    }
+  else if (gtk_css_token_is_ident (token, "n") ||
+           gtk_css_token_is_ident (token, "n-"))
+    {
+      return parse_n_plus_b (source, seen_sign ? seen_sign : 1, a, b);
+    }
+  else if (gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT) &&
+           string_has_number (token->string.string, "n-", b))
+    {
+      *a = seen_sign ? seen_sign : 1;
+      *b = -*b;
+      gtk_css_token_source_consume_token (source);
+      return TRUE;
+    }
+  else if (!seen_sign && gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT) &&
+           string_has_number (token->string.string, "-n-", b))
+    {
+      *a = -1;
+      *b = -*b;
+      gtk_css_token_source_consume_token (source);
+      return TRUE;
     }
   
   gtk_css_token_source_error (source, "Not a valid an+b type");
@@ -1527,7 +1636,7 @@ token_parse_selector_pseudo_class (GtkCssTokenSource *source,
       if (gtk_css_token_is_function (token, "nth-child"))
         {
           gtk_css_token_source_consume_token (source);
-          if (parse_a_n_plus_b (source, &a, &b))
+          if (parse_a_n_plus_b (source, 0, &a, &b))
             {
               selector = gtk_css_selector_new (negate ? &GTK_CSS_SELECTOR_NOT_PSEUDOCLASS_POSITION
                                                       : &GTK_CSS_SELECTOR_PSEUDOCLASS_POSITION,
@@ -1555,7 +1664,7 @@ token_parse_selector_pseudo_class (GtkCssTokenSource *source,
       else if (gtk_css_token_is_function (token, "nth-last-child"))
         {
           gtk_css_token_source_consume_token (source);
-          if (parse_a_n_plus_b (source, &a, &b))
+          if (parse_a_n_plus_b (source, 0, &a, &b))
             {
               selector = gtk_css_selector_new (negate ? &GTK_CSS_SELECTOR_NOT_PSEUDOCLASS_POSITION
                                                       : &GTK_CSS_SELECTOR_PSEUDOCLASS_POSITION,

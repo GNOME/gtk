@@ -415,8 +415,10 @@ gtk_css_token_source_consume_number (GtkCssTokenSource *source,
   GtkCssValue *value;
 
   token = gtk_css_token_source_get_token (source);
-  if (gtk_css_token_is (token, GTK_CSS_TOKEN_NUMBER) ||
-      gtk_css_token_is (token, GTK_CSS_TOKEN_INTEGER))
+  if (gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_NUMBER) ||
+      gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_NUMBER) ||
+      gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_INTEGER) ||
+      gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_INTEGER))
     {
       *number = token->number.number;
       gtk_css_token_source_consume_token (source);

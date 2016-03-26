@@ -359,7 +359,7 @@ token_parse_steps (GtkCssTokenSource *source,
   token = gtk_css_token_source_get_token (source);
   if (nth_argument == 0)
     {
-      if (!gtk_css_token_is (token, GTK_CSS_TOKEN_INTEGER))
+      if (!gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_INTEGER))
         {
           gtk_css_token_source_error (source, "Expected a positive integer for number of steps");
           gtk_css_token_source_consume_all (source);
