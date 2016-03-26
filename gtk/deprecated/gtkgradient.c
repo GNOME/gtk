@@ -397,7 +397,7 @@ gtk_gradient_to_string (GtkGradient *gradient)
 
   g_return_val_if_fail (gradient != NULL, NULL);
 
-  str = g_string_new ("-gtk-gradient (");
+  str = g_string_new ("-gtk-gradient(");
 
   if (gradient->radius0 == 0 && gradient->radius1 == 0)
     {
