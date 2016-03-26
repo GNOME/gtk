@@ -6092,6 +6092,7 @@ gtk_window_show (GtkWidget *widget)
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = window->priv;
   GtkContainer *container = GTK_CONTAINER (window);
+  gboolean need_resize;
   gboolean is_plug;
 
   if (!_gtk_widget_is_toplevel (GTK_WIDGET (widget)))
@@ -6102,10 +6103,62 @@ gtk_window_show (GtkWidget *widget)
 
   _gtk_widget_set_visible_flag (widget, TRUE);
 
+  need_resize = _gtk_widget_get_alloc_needed (widget) || !_gtk_widget_get_realized (widget);
+
   gtk_css_node_validate (gtk_widget_get_css_node (widget));
 
-  gtk_widget_realize (widget);
+  if (need_resize)
+    {
+      GtkWindowGeometryInfo *info = gtk_window_get_geometry_info (window, TRUE);
+      GtkAllocation allocation = { 0, 0 };
+      GdkRectangle configure_request;
+      GdkGeometry new_geometry;
+      guint new_flags;
+      gboolean was_realized;
 
+      /* We are going to go ahead and perform this configure request
+       * and then emulate a configure notify by going ahead and
+       * doing a size allocate. Sort of a synchronous
+       * mini-copy of gtk_window_move_resize() here.
+       */
+      gtk_window_compute_configure_request (window,
+                                            &configure_request,
+                                            &new_geometry,
+                                            &new_flags);
+      
+      /* We update this because we are going to go ahead
+       * and gdk_window_resize() below, rather than
+       * queuing it.
+       */
+      info->last.configure_request = configure_request;
+      
+      /* and allocate the window - this is normally done
+       * in move_resize in response to configure notify
+       */
+      allocation.width  = configure_request.width;
+      allocation.height = configure_request.height;
+      gtk_widget_size_allocate (widget, &allocation);
+
+      /* Then we guarantee we have a realize */
+      was_realized = FALSE;
+      if (!_gtk_widget_get_realized (widget))
+	{
+	  gtk_widget_realize (widget);
+	  was_realized = TRUE;
+	}
+
+      /* We only send configure request if we didn't just finish
+       * creating the window; if we just created the window
+       * then we created it with widget->allocation anyhow.
+       */
+      if (!was_realized)
+        gdk_window_move_resize (_gtk_widget_get_window (widget),
+				configure_request.x,
+				configure_request.y,
+				configure_request.width,
+				configure_request.height);
+    }
+  
   gtk_container_check_resize (container);
 
   gtk_widget_map (widget);
