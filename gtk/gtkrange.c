@@ -2006,8 +2006,6 @@ gtk_range_allocate_trough (GtkCssGadget        *gadget,
     {
       GtkAllocation highlight_alloc, highlight_clip;
 
-      if (gtk_css_gadget_get_visible (priv->slider_gadget))
-        gtk_css_gadget_get_content_allocation (priv->slider_gadget, &slider_alloc, NULL);
       highlight_alloc = *allocation;
 
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
