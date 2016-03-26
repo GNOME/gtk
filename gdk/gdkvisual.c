@@ -302,6 +302,7 @@ gdk_visual_get_depth (GdkVisual *visual)
  * @visual: A #GdkVisual.
  *
  * Returns the byte order of this visual.
+ *
  * The information returned by this function is only relevant
  * when working with XImages, and not all backends return
  * meaningful information for this.
@@ -326,9 +327,14 @@ gdk_visual_get_byte_order (GdkVisual *visual)
  *
  * Returns the size of a colormap for this visual.
  *
+ * You have to use platform-specific APIs to manipulate colormaps.
+ *
  * Returns: The size of a colormap that is suitable for @visual.
  *
  * Since: 2.22
+ *
+ * Deprecated: 3.22: This information is not useful, since GDK does not
+ *     provide APIs to operate on colormaps.
  */
 gint
 gdk_visual_get_colormap_size (GdkVisual *visual)
@@ -343,6 +349,7 @@ gdk_visual_get_colormap_size (GdkVisual *visual)
  * @visual: a #GdkVisual
  *
  * Returns the number of significant bits per red, green and blue value.
+ *
  * Not all GDK backend provide a meaningful value for this function.
  *
  * Returns: The number of significant bits per color value for @visual.
