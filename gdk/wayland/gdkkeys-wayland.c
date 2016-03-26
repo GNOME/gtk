@@ -133,10 +133,13 @@ gdk_wayland_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
   struct xkb_keymap *xkb_keymap = GDK_WAYLAND_KEYMAP (keymap)->xkb_keymap;
   GArray *retval;
   guint keycode;
+  xkb_keycode_t min_keycode, max_keycode;
 
   retval = g_array_new (FALSE, FALSE, sizeof (GdkKeymapKey));
 
-  for (keycode = 8; keycode < 255; keycode++) /* FIXME: min/max keycode */
+  min_keycode = xkb_keymap_min_keycode (xkb_keymap);
+  max_keycode = xkb_keymap_max_keycode (xkb_keymap);
+  for (keycode = min_keycode; keycode < max_keycode; keycode++)
     {
       gint num_layouts, layout;
       num_layouts = xkb_keymap_num_layouts_for_key (xkb_keymap, keycode);
