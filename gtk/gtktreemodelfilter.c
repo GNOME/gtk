@@ -526,22 +526,19 @@ gtk_tree_model_filter_class_init (GtkTreeModelFilterClass *filter_class)
   filter_class->visible = gtk_tree_model_filter_real_visible;
   filter_class->modify  = gtk_tree_model_filter_real_modify;
 
-  /* Properties -- FIXME: disabled translations for now, until I can come up with a
-   * better description
-   */
   g_object_class_install_property (object_class,
                                    PROP_CHILD_MODEL,
                                    g_param_spec_object ("child-model",
-                                                        ("The child model"),
-                                                        ("The model for the filtermodel to filter"),
+                                                        P_("The child model"),
+                                                        P_("The model for the filtermodel to filter"),
                                                         GTK_TYPE_TREE_MODEL,
                                                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
   g_object_class_install_property (object_class,
                                    PROP_VIRTUAL_ROOT,
                                    g_param_spec_boxed ("virtual-root",
-                                                       ("The virtual root"),
-                                                       ("The virtual root (relative to the child model) for this filtermodel"),
+                                                       P_("The virtual root"),
+                                                       P_("The virtual root (relative to the child model) for this filtermodel"),
                                                        GTK_TYPE_TREE_PATH,
                                                        GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 }
