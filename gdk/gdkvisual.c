@@ -371,7 +371,6 @@ gdk_visual_get_pixel_details (GdkVisual *visual,
           m >>= 1;
         }
 
-      m = pixel_mask;
       while (m & 0x1)
         {
           p++;
