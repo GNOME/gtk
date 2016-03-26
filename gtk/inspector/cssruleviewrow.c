@@ -127,7 +127,7 @@ update_style_label (GtkInspectorCssRuleViewRow *row)
         g_string_append (string, "\n");
       g_string_append (string, gtk_css_declaration_get_name (decl));
       g_string_append (string, ": ");
-      _gtk_css_value_print (gtk_css_declaration_get_value (decl), string);
+      gtk_css_declaration_print_value (decl, string);
       g_string_append (string, ";");
     }
   gtk_label_set_text (GTK_LABEL (priv->style_label), string->str);

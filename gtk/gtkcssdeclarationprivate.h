@@ -44,6 +44,10 @@ struct _GtkCssDeclaration
 struct _GtkCssDeclarationClass
 {
   GObjectClass parent_class;
+
+  const char *          (* get_name)                            (GtkCssDeclaration      *decl);
+  void                  (* print_value)                         (GtkCssDeclaration      *decl,
+                                                                 GString                *string);
 };
 
 GType                   gtk_css_declaration_get_type            (void) G_GNUC_CONST;
@@ -52,7 +56,11 @@ GtkCssDeclaration *     gtk_css_declaration_new_parse           (GtkCssStyleDecl
                                                                  GtkCssTokenSource      *source);
 
 const char *            gtk_css_declaration_get_name            (GtkCssDeclaration      *decl);
-GtkCssValue *           gtk_css_declaration_get_value           (GtkCssDeclaration      *decl);
+GtkCssStyleDeclaration *gtk_css_declaration_get_style           (GtkCssDeclaration      *decl);
+
+void                    gtk_css_declaration_print_value         (GtkCssDeclaration      *decl,
+                                                                 GString                *string);
+char *                  gtk_css_declaration_get_value_string    (GtkCssDeclaration      *decl);
 
 
 G_END_DECLS

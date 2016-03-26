@@ -425,6 +425,7 @@ gtk_private_h_sources =		\
 	gtkcsskeyframeruleprivate.h	\
 	gtkcsskeyframesprivate.h	\
 	gtkcsskeyframesruleprivate.h	\
+	gtkcsslonghanddeclarationprivate.h	\
 	gtkcsslookupprivate.h	\
 	gtkcssmatcherprivate.h	\
 	gtkcssnodeprivate.h		\
@@ -445,6 +446,7 @@ gtk_private_h_sources =		\
 	gtkcssselectorprivate.h	\
 	gtkcssshadowsvalueprivate.h	\
 	gtkcssshadowvalueprivate.h      \
+	gtkcssshorthanddeclarationprivate.h	\
 	gtkcssshorthandpropertyprivate.h \
 	gtkcssstaticstyleprivate.h	\
 	gtkcssstringvalueprivate.h	\
@@ -706,6 +708,7 @@ gtk_base_c_sources = 		\
 	gtkcsskeyframerule.c	\
 	gtkcsskeyframes.c	\
 	gtkcsskeyframesrule.c	\
+	gtkcsslonghanddeclaration.c \
 	gtkcsslookup.c		\
 	gtkcssmatcher.c		\
 	gtkcssnode.c		\
@@ -725,18 +728,19 @@ gtk_base_c_sources = 		\
 	gtkcsssection.c 	\
 	gtkcssselector.c	\
 	gtkcssstringvalue.c	\
-	gtkcssstyle.c		\
-	gtkcssstylechange.c 	\
-	gtkcssstyledeclaration.c \
-	gtkcssstylerule.c	\
 	gtkcssshadowsvalue.c	\
 	gtkcssshadowvalue.c	\
+	gtkcssshorthanddeclaration.c \
 	gtkcssshorthandproperty.c \
 	gtkcssshorthandpropertyimpl.c \
 	gtkcssstaticstyle.c	\
+	gtkcssstyle.c		\
+	gtkcssstylechange.c 	\
+	gtkcssstyledeclaration.c \
 	gtkcssstylefuncs.c	\
 	gtkcssstyleproperty.c	\
 	gtkcssstylepropertyimpl.c \
+	gtkcssstylerule.c	\
 	gtkcssstylesheet.c	\
 	gtkcsstokenizer.c	\
 	gtkcsstokensource.c	\

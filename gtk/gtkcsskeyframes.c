@@ -20,10 +20,10 @@
 #include "gtkcsskeyframesprivate.h"
 
 #include "gtkcssarrayvalueprivate.h"
-#include "gtkcssdeclarationprivate.h"
 #include "gtkcsskeyframeruleprivate.h"
+#include "gtkcsslonghanddeclarationprivate.h"
+#include "gtkcssshorthanddeclarationprivate.h"
 #include "gtkcssshorthandpropertyprivate.h"
-#include "gtkcssstylepropertyprivate.h"
 #include "gtkstylepropertyprivate.h"
 
 #include <stdlib.h>
@@ -405,33 +405,26 @@ gtk_css_keyframes_new_from_rule (GtkCssKeyframesRule *rule)
           for (k = 0; k < gtk_css_style_declaration_get_length (style); k++)
             {
               GtkCssDeclaration *decl = gtk_css_style_declaration_get_declaration (style, k);
-              GtkStyleProperty *property;
-              GtkCssValue *value;
 
-              property = _gtk_style_property_lookup (gtk_css_declaration_get_name (decl));
-              if (property == NULL)
-                continue;
-
-              value = gtk_css_declaration_get_value (decl);
-              if (GTK_IS_CSS_SHORTHAND_PROPERTY (property))
+              if (GTK_IS_CSS_LONGHAND_DECLARATION (decl))
                 {
-                  GtkCssShorthandProperty *shorthand = GTK_CSS_SHORTHAND_PROPERTY (property);
+                  GtkCssLonghandDeclaration *longhand = GTK_CSS_LONGHAND_DECLARATION (decl);
+                  keyframes_set_value (keyframes,
+                                       offset_idx,
+                                       gtk_css_longhand_declaration_get_property (longhand),
+                                       _gtk_css_value_ref (gtk_css_longhand_declaration_get_value (longhand)));
+                }
+              else if (GTK_IS_CSS_SHORTHAND_DECLARATION (decl))
+                {
+                  GtkCssShorthandDeclaration *shorthand = GTK_CSS_SHORTHAND_DECLARATION (decl);
 
-                  for (l = 0; l < _gtk_css_shorthand_property_get_n_subproperties (shorthand); l++)
+                  for (l = 0; l < gtk_css_shorthand_declaration_get_length (shorthand); l++)
                     {
-                      GtkCssStyleProperty *child = _gtk_css_shorthand_property_get_subproperty (shorthand, l);
-                      GtkCssValue *sub = _gtk_css_array_value_get_nth (value, l);
-
-                      keyframes_set_value (keyframes, offset_idx, child, _gtk_css_value_ref (sub));
+                      keyframes_set_value (keyframes,
+                                           offset_idx,
+                                           gtk_css_shorthand_declaration_get_subproperty (shorthand, l),
+                                           _gtk_css_value_ref (gtk_css_shorthand_declaration_get_value (shorthand, l)));
                     }
-                }
-              else if (GTK_IS_CSS_STYLE_PROPERTY (property))
-                {
-                  keyframes_set_value (keyframes, offset_idx, GTK_CSS_STYLE_PROPERTY (property), _gtk_css_value_ref (value));
-                }
-              else
-                {
-                  g_assert_not_reached ();
                 }
             }
         }
