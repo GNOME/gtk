@@ -23,6 +23,7 @@
 
 #include "gtkcsslonghanddeclarationprivate.h"
 #include "gtkcssshorthanddeclarationprivate.h"
+#include "gtkcsswidgetstyledeclarationprivate.h"
 #include "gtkstylepropertyprivate.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
@@ -139,9 +140,13 @@ gtk_css_declaration_new_parse (GtkCssStyleDeclaration *style,
     return gtk_css_longhand_declaration_new_parse (style, source);
   else if (GTK_IS_CSS_SHORTHAND_PROPERTY (prop))
     return gtk_css_shorthand_declaration_new_parse (style, source);
+  else if (gtk_css_widget_style_declaration_accepts_name (token->string.string))
+    return gtk_css_widget_style_declaration_new_parse (style, source);
   else
     {
-      gtk_css_token_source_error (source, "Property name does not define a valid property");
+      gtk_css_token_source_unknown (source,
+                                    "Property name \"%s\" does not define a valid property",
+                                    token->string.string);
       gtk_css_token_source_consume_all (source);
       return NULL;
     }
