@@ -894,8 +894,13 @@ static void
 update_trash_icon (GtkPlacesSidebar *sidebar)
 {
   if (sidebar->trash_row)
-    gtk_sidebar_row_set_icon (GTK_SIDEBAR_ROW (sidebar->trash_row),
-                              _gtk_trash_monitor_get_icon (sidebar->trash_monitor));
+    {
+      GIcon *icon;
+
+      icon = _gtk_trash_monitor_get_icon (sidebar->trash_monitor);
+      gtk_sidebar_row_set_icon (GTK_SIDEBAR_ROW (sidebar->trash_row), icon);
+      g_object_unref (icon);
+    }
 }
 
 static void
