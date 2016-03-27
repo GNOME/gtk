@@ -6,6 +6,11 @@
   @return 0 1px $c;
 }
 
+@function _solid($c) {
+// solid color image
+  @return linear-gradient(to bottom, $c);
+}
+
 @mixin _shadows($shadow1, $shadow2:none, $shadow3:none, $shadow4:none) {
 //
 // Helper function to stack up to 4 box-shadows;
@@ -64,17 +69,17 @@
   @if $t==insensitive {
     color: $insensitive_fg_color;
     border-color: $borders_color;
-    background-image: linear-gradient(to bottom, $insensitive_bg_color);
+    background-image: _solid($insensitive_bg_color);
     @include _shadows($_entry_edge);
   }
   @if $t==backdrop {
     color: $backdrop_fg_color;
-    background-image: linear-gradient(to bottom, $backdrop_base_color);
+    background-image: _solid($backdrop_base_color);
     box-shadow: 0 1px transparentize(white,1);
   }
   @if $t==backdrop-insensitive {
     color: $insensitive_fg_color;
-    background-image: linear-gradient(to bottom, $backdrop_bg_color);
+    background-image: _solid($backdrop_bg_color);
     box-shadow: 0 1px transparentize(white,1);
   }
 }

@@ -363,11 +363,11 @@ entry {
     &:not(:disabled) + entry:not(:disabled),
     &:not(:disabled) + %entry:not(:disabled) {
       border-top-color: mix($borders_color, $base_color, 30%);
-      background-image: linear-gradient(to bottom, $base_color);
+      background-image: _solid($base_color);
 
       &:backdrop {
         border-top-color: mix($backdrop_borders_color, $backdrop_base_color, 30%);
-        background-image: linear-gradient(to bottom, $backdrop_base_color);
+        background-image: _solid($backdrop_base_color);
       }
     }
 
@@ -1451,7 +1451,7 @@ headerbar {
     .selection-menu {
       &:backdrop, & {
         border-color: transparentize($selected_bg_color, 1);
-        background-image: linear-gradient(to bottom, transparentize($selected_bg_color, 1));
+        background-image: _solid(transparentize($selected_bg_color, 1));
         box-shadow: none;
         padding-left: 10px;
         padding-right: 10px;
@@ -2411,7 +2411,7 @@ switch {
   border: 1px solid $borders_color;
   border-radius: 3px;
   color: $fg_color;
-  background-image: linear-gradient(to bottom, mix($bg_color, $borders_color, 60%));
+  background-image: _solid(mix($bg_color, $borders_color, 60%));
   text-shadow: 0 1px transparentize(black, 0.9);
 
   &:checked {
@@ -2436,7 +2436,7 @@ switch {
   &:backdrop {
     color: $backdrop_fg_color;
     border-color: $backdrop_borders_color;
-    background-image: linear-gradient(to bottom, $backdrop_dark_fill);
+    background-image: _solid($backdrop_dark_fill);
     box-shadow: none;
     text-shadow: none;
     transition: $backdrop_transition;
@@ -2445,7 +2445,7 @@ switch {
       @if $variant == 'light' { color: $backdrop_bg_color; }
       border-color: if($variant == 'light', $selected_bg_color,
                                             $selected_borders_color);
-      background-image: linear-gradient(to bottom, $selected_bg_color);
+      background-image: _solid($selected_bg_color);
       box-shadow: none;
     }
   }
@@ -3004,7 +3004,7 @@ scale {
     min-width: 0;
 
     trough {
-      background-image: linear-gradient(to top, $borders_color);
+      background-image: _solid($borders_color);
       background-repeat: no-repeat;
     }
 
@@ -3726,7 +3726,7 @@ placessidebar {
     &.sidebar-placeholder-row {
       padding: 0 8px;
       min-height: 2px;
-      background-image: image($drop_target_color);
+      background-image: _solid($drop_target_color);
       background-clip: content-box;
     }
 
@@ -3771,24 +3771,24 @@ paned {
     border-style: none; // just to be sure
     background-color: transparent;
     // workaround, using background istead of a border since the border will get rendered twice (?)
-    background-image: image($borders_color);
+    background-image: _solid($borders_color);
     background-size: 1px 1px;
 
-    &:selected { background-image: image($selected_bg_color); } // FIXME is this needed?
+    &:selected { background-image: _solid($selected_bg_color); } // FIXME is this needed?
 
-    &:backdrop { background-image: image($backdrop_borders_color); }
+    &:backdrop { background-image: _solid($backdrop_borders_color); }
 
     &.wide {
       min-width: 5px;
       min-height: 5px;
       background-color: $bg_color;
-      background-image: image($borders_color), image($borders_color);
+      background-image: _solid($borders_color), _solid($borders_color);
       background-size: 1px 1px, 1px 1px;
 
       &:backdrop {
         background-color: $backdrop_bg_color;
-        background-image: image($backdrop_borders_color),
-                          image($backdrop_borders_color);
+        background-image: _solid($backdrop_borders_color),
+                          _solid($backdrop_borders_color);
       }
     }
   }

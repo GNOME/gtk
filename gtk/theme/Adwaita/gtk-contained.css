@@ -3492,7 +3492,7 @@ scale {
     min-height: 0;
     min-width: 0; }
     scale.color trough {
-      background-image: linear-gradient(to top, #9d9d99);
+      background-image: linear-gradient(to bottom, #9d9d99);
       background-repeat: no-repeat; }
     scale.color.horizontal {
       padding: 0 0 15px 0; }
@@ -4022,7 +4022,7 @@ placessidebar row {
   placessidebar row.sidebar-placeholder-row {
     padding: 0 8px;
     min-height: 2px;
-    background-image: image(#4e9a06);
+    background-image: linear-gradient(to bottom, #4e9a06);
     background-clip: content-box; }
   placessidebar row.sidebar-new-bookmark-row {
     color: #4a90d9; }
@@ -4051,21 +4051,21 @@ paned > separator {
   -gtk-icon-source: none;
   border-style: none;
   background-color: transparent;
-  background-image: image(#9d9d99);
+  background-image: linear-gradient(to bottom, #9d9d99);
   background-size: 1px 1px; }
   paned > separator:selected {
-    background-image: image(#4a90d9); }
+    background-image: linear-gradient(to bottom, #4a90d9); }
   paned > separator:backdrop {
-    background-image: image(#a5a5a1); }
+    background-image: linear-gradient(to bottom, #a5a5a1); }
   paned > separator.wide {
     min-width: 5px;
     min-height: 5px;
     background-color: #e8e8e7;
-    background-image: image(#9d9d99), image(#9d9d99);
+    background-image: linear-gradient(to bottom, #9d9d99), linear-gradient(to bottom, #9d9d99);
     background-size: 1px 1px, 1px 1px; }
     paned > separator.wide:backdrop {
       background-color: #e8e8e7;
-      background-image: image(#a5a5a1), image(#a5a5a1); }
+      background-image: linear-gradient(to bottom, #a5a5a1), linear-gradient(to bottom, #a5a5a1); }
 paned.horizontal > separator {
   background-repeat: repeat-y; }
   paned.horizontal > separator:dir(ltr) {

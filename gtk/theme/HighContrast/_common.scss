@@ -297,11 +297,11 @@ entry {
     &:not(:disabled) + entry:not(:disabled),
     &:not(:disabled) + %entry:not(:disabled) {
       border-top-color: mix($borders_color, $base_color, 30%);
-      background-image: linear-gradient(to bottom, $base_color);
+      background-image: _solid($base_color);
 
       &:backdrop {
         border-top-color: mix($backdrop_borders_color, $backdrop_base_color, 30%);
-        background-image: linear-gradient(to bottom, $backdrop_base_color);
+        background-image: _solid($backdrop_base_color);
       }
     }
 
@@ -2781,7 +2781,7 @@ calendar {
                                 darken($bg_color,2%));
     border-bottom-color: mix($borders_color,$bg_color,50%);
     &:backdrop {
-      background-image: linear-gradient(to bottom, $backdrop_bg_color);
+      background-image: _solid($backdrop_bg_color);
       border-bottom-color: mix($backdrop_borders_color,$backdrop_bg_color,50%);
     }
   }
@@ -2980,7 +2980,7 @@ placessidebar {
     &.sidebar-placeholder-row {
       padding: 0 8px;
       min-height: 2px;
-      background-image: image($fg_color);
+      background-image: _solid($fg_color);
       background-clip: content-box;
     }
 
@@ -3023,9 +3023,9 @@ paned {
   separator {
     min-width: 1px;
     min-height: 1px;
-    background-image: linear-gradient(to bottom, $borders_color);
+    background-image: _solid($borders_color);
     &:backdrop {
-      background-image: linear-gradient(to bottom, $backdrop_borders_color);
+      background-image: _solid($backdrop_borders_color);
     }
   }
    &:dir(ltr).horizontal separator {

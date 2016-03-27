@@ -8,6 +8,11 @@
   @else { @return 0 1px $c; }
 }
 
+@function _solid($c) {
+// solid color image
+  @return linear-gradient(to bottom, $c);
+}
+
 @mixin _shadows($shadow1, $shadow2:none, $shadow3:none, $shadow4:none) {
 //
 // Helper function to stack up to 4 box-shadows;
@@ -68,25 +73,25 @@
   @if $t==insensitive {
     color: $insensitive_fg_color;
     border-color: $borders_color;
-    background-image: linear-gradient(to bottom, $insensitive_bg_color);
+    background-image: _solid($insensitive_bg_color);
     box-shadow: $_entry_edge;
   }
   @if $t==backdrop {
     color: $backdrop_text_color;
     border-color: $backdrop_borders_color;
-    background-image: linear-gradient(to bottom, $backdrop_base_color);
+    background-image: _solid($backdrop_base_color);
     box-shadow: $_blank_edge;
   }
   @if $t==backdrop-insensitive {
     color: $backdrop_insensitive_color;
     border-color: $backdrop_borders_color;
-    background-image: linear-gradient(to bottom, $insensitive_bg_color);
+    background-image: _solid($insensitive_bg_color);
     box-shadow: $_blank_edge;
   }
   @if $t==osd {
     color: $osd_text_color;
     border-color: $osd_borders_color;
-    background-image: linear-gradient(to bottom, transparentize(opacify($osd_borders_color, 1), 0.5));
+    background-image: _solid(transparentize(opacify($osd_borders_color, 1), 0.5));
     background-clip: padding-box;
     box-shadow: none;
     text-shadow: 0 1px black;
@@ -95,7 +100,7 @@
   @if $t==osd-focus {
     color: $osd_text_color;
     border-color: $selected_bg_color;
-    background-image: linear-gradient(to bottom, transparentize(opacify($osd_borders_color, 1), 0.5));
+    background-image: _solid(transparentize(opacify($osd_borders_color, 1), 0.5));
     background-clip: padding-box;
     box-shadow: entry_focus_shadow($fc);
     text-shadow: 0 1px black;
@@ -104,7 +109,7 @@
   @if $t==osd-insensitive {
     color: $osd_insensitive_fg_color;
     border-color: $osd_borders_color;
-    background-image: linear-gradient(to bottom, $osd_insensitive_bg_color);
+    background-image: _solid($osd_insensitive_bg_color);
     background-clip: padding-box;
     box-shadow: none;
     text-shadow: none;
@@ -113,7 +118,7 @@
   @if $t==osd-backdrop {
     color: $osd_text_color;
     border-color: $osd_borders_color;
-    background-image: linear-gradient(to bottom, transparentize(opacify($osd_borders_color, 1), 0.5));
+    background-image: _solid(transparentize(opacify($osd_borders_color, 1), 0.5));
     background-clip: padding-box;
     box-shadow: none;
     text-shadow: none;
@@ -297,7 +302,7 @@
 
     border-color: if($c!=$bg_color, _border_color($c),
                                     $insensitive_borders_color);
-    background-image: linear-gradient(to bottom, $_bg);
+    background-image: _solid($_bg);
     text-shadow: none;
     -gtk-icon-shadow: none;
     // white with 0 alpha to avoid an ugly transition, since no color means
@@ -331,7 +336,7 @@
     label, & { color: if($tc!=$fg_color,mix($tc, $_bg, 80%), $backdrop_fg_color); }
 
     border-color: if($c!=$bg_color, $_bc, $backdrop_borders_color);
-    background-image: linear-gradient(to bottom, $_bg);
+    background-image: _solid($_bg);
     text-shadow: none;
     -gtk-icon-shadow: none;
     @include _shadows(inset 0 1px transparentize(white, 1),
@@ -348,7 +353,7 @@
     label, & { color: if($tc!=$fg_color, mix($tc, $_bg, 80%), $backdrop_fg_color); }
 
     border-color: if($c!=$bg_color, $_bc, $backdrop_borders_color);
-    background-image: linear-gradient(to bottom, $_bg);
+    background-image: _solid($_bg);
     @include _shadows(inset 0 1px transparentize(white, 1),
                       $_blank_edge);
   }
@@ -364,7 +369,7 @@
     label, & { color: if($c!=$bg_color, mix($tc, $_bg, 35%), $backdrop_insensitive_color); }
 
     border-color: if($c!=$bg_color, $_bc, $backdrop_borders_color);
-    background-image: linear-gradient(to bottom, $_bg);
+    background-image: _solid($_bg);
     text-shadow: none;
     -gtk-icon-shadow: none;
     // white with 0 alpha to avoid an ugly transition, since no color means
@@ -385,7 +390,7 @@
     label { color: if($c!=$bg_color, mix($tc, $_bg, 35%), $backdrop_insensitive_color); }
 
     border-color: if($c!=$bg_color, $_bc, $backdrop_borders_color);
-    background-image: linear-gradient(to bottom, $_bg);
+    background-image: _solid($_bg);
     @include _shadows(inset 0 1px transparentize(white, 1),
                       $_blank_edge);
   }
@@ -399,7 +404,7 @@
 
     color: $osd_fg_color;
     border-color: $osd_borders_color;
-    background-image: linear-gradient(to bottom, $_bg);
+    background-image: _solid($_bg);
     background-clip: padding-box;
     box-shadow: inset 0 1px transparentize(white, 0.9);
     text-shadow: 0 1px black;
@@ -415,7 +420,7 @@
 
     color: white;
     border-color: $osd_borders_color;
-    background-image: linear-gradient(to bottom, $_bg);
+    background-image: _solid($_bg);
     background-clip: padding-box;
     box-shadow: inset 0 1px transparentize(white, 0.9);
     text-shadow: 0 1px black;
@@ -430,7 +435,7 @@
 
     color: white;
     border-color: $osd_borders_color;
-    background-image: linear-gradient(to bottom, $_bg);
+    background-image: _solid($_bg);
     background-clip: padding-box;
     box-shadow: none;
     text-shadow: none;
@@ -443,7 +448,7 @@
   //
     color: $osd_insensitive_fg_color;
     border-color: $osd_borders_color;
-    background-image: linear-gradient(to bottom, $osd_insensitive_bg_color);
+    background-image: _solid($osd_insensitive_bg_color);
     background-clip: padding-box;
     box-shadow: none;
     text-shadow: none;
@@ -458,7 +463,7 @@
 
     color: $osd_fg_color;
     border-color: $osd_borders_color;
-    background-image: linear-gradient(to bottom, $_bg);
+    background-image: _solid($_bg);
     background-clip: padding-box;
     box-shadow: none;
     text-shadow: none;
@@ -482,7 +487,7 @@
 
 @mixin trough($flat:false, $c:$bg_color, $tc:$fg_color, $noedge:true) {
   color: mix($tc, $bg_color, 80%);
-  @if $flat { background-image: linear-gradient(to bottom, $c); }
+  @if $flat { background-image: _solid($c); }
   @else {
     background-image: linear-gradient(to bottom,
                                       mix(black,$c,15%) 5%,
