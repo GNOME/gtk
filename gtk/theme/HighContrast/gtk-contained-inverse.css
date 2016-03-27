@@ -202,7 +202,7 @@ entry {
     background-image: linear-gradient(to bottom, #090909, #111 90%);
     color: gray;
     border-color: gray;
-    background-image: linear-gradient(to bottom, #070707);
+    background-image: linear-gradient(to bottom, #070707, #070707);
     box-shadow: none; }
   spinbutton:backdrop:not(.vertical),
   entry:backdrop {
@@ -210,7 +210,7 @@ entry {
     border-style: solid;
     background-image: linear-gradient(to bottom, #090909, #111 90%);
     color: #fff;
-    background-image: linear-gradient(to bottom, #111);
+    background-image: linear-gradient(to bottom, #111, #111);
     box-shadow: 0 1px rgba(255, 255, 255, 0); }
   spinbutton:backdrop:disabled:not(.vertical),
   entry:backdrop:disabled {
@@ -218,7 +218,7 @@ entry {
     border-style: solid;
     background-image: linear-gradient(to bottom, #090909, #111 90%);
     color: gray;
-    background-image: linear-gradient(to bottom, #000);
+    background-image: linear-gradient(to bottom, #000, #000);
     box-shadow: 0 1px rgba(255, 255, 255, 0); }
   spinbutton.error:not(.vertical),
   entry.error {
@@ -320,12 +320,12 @@ entry {
 entry:not(:disabled) + entry:not(:disabled), .linked.vertical >
 entry:not(:disabled) + spinbutton:not(:disabled):not(.vertical) {
   border-top-color: #323232;
-  background-image: linear-gradient(to bottom, #111); }
+  background-image: linear-gradient(to bottom, #111, #111); }
   .linked.vertical > spinbutton:not(:disabled):not(.vertical) + entry:not(:disabled):backdrop, .linked.vertical > spinbutton:not(:disabled):not(.vertical) + spinbutton:not(:disabled):backdrop:not(.vertical), .linked.vertical >
   entry:not(:disabled) + entry:not(:disabled):backdrop, .linked.vertical >
   entry:not(:disabled) + spinbutton:not(:disabled):backdrop:not(.vertical) {
     border-top-color: #2e2e2e;
-    background-image: linear-gradient(to bottom, #111); }
+    background-image: linear-gradient(to bottom, #111, #111); }
 .linked.vertical > spinbutton:disabled:not(.vertical) + spinbutton:disabled:not(.vertical), .linked.vertical > spinbutton:disabled:not(.vertical) + entry:disabled, .linked.vertical >
 entry:disabled + spinbutton:disabled:not(.vertical), .linked.vertical >
 entry:disabled + entry:disabled {
@@ -2548,7 +2548,7 @@ levelbar trough {
     border-style: solid;
     background-image: linear-gradient(to bottom, #090909, #111 90%);
     color: #fff;
-    background-image: linear-gradient(to bottom, #111);
+    background-image: linear-gradient(to bottom, #111, #111);
     box-shadow: 0 1px rgba(255, 255, 255, 0); }
 levelbar block {
   min-width: 32px;
@@ -2871,7 +2871,7 @@ calendar {
     background: linear-gradient(to bottom, #050505, black);
     border-bottom-color: #404040; }
     calendar.header:backdrop {
-      background-image: linear-gradient(to bottom, #000);
+      background-image: linear-gradient(to bottom, #000, #000);
       border-bottom-color: #3a3a3a; }
   calendar:indeterminate, calendar:indeterminate:backdrop {
     color: alpha(currentColor,0.55); }
@@ -3120,9 +3120,9 @@ placesview row.activatable:hover {
 paned separator {
   min-width: 1px;
   min-height: 1px;
-  background-image: linear-gradient(to bottom, gray); }
+  background-image: linear-gradient(to bottom, gray, gray); }
   paned separator:backdrop {
-    background-image: linear-gradient(to bottom, #737373); }
+    background-image: linear-gradient(to bottom, #737373, #737373); }
 paned:dir(ltr).horizontal separator {
   margin: 0 -8px 0 0;
   padding: 0 8px 0 0; }
