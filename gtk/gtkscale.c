@@ -2075,7 +2075,9 @@ gtk_scale_add_mark (GtkScale        *scale,
                                        NULL, NULL);
           gtk_css_node_insert_after (widget_node,
                                      gtk_css_gadget_get_node (priv->top_marks_gadget),
-                                     priv->value_gadget ? gtk_css_gadget_get_node (priv->value_gadget) : NULL);
+                                     (priv->value_gadget &&
+                                      (priv->value_pos == GTK_POS_TOP || priv->value_pos == GTK_POS_LEFT)) ?
+                                     gtk_css_gadget_get_node (priv->value_gadget) : NULL);
           gtk_css_gadget_add_class (priv->top_marks_gadget, GTK_STYLE_CLASS_TOP);
           gtk_css_gadget_set_state (priv->top_marks_gadget, gtk_css_node_get_state (widget_node));
         }
@@ -2094,7 +2096,9 @@ gtk_scale_add_mark (GtkScale        *scale,
                                        NULL, NULL);
           gtk_css_node_insert_before (widget_node,
                                       gtk_css_gadget_get_node (priv->bottom_marks_gadget),
-                                      priv->value_gadget ? gtk_css_gadget_get_node (priv->value_gadget) : NULL);
+                                      (priv->value_gadget &&
+                                       (priv->value_pos == GTK_POS_BOTTOM || priv->value_pos == GTK_POS_RIGHT)) ?
+                                      gtk_css_gadget_get_node (priv->value_gadget) : NULL);
           gtk_css_gadget_add_class (priv->bottom_marks_gadget, GTK_STYLE_CLASS_BOTTOM);
           gtk_css_gadget_set_state (priv->bottom_marks_gadget, gtk_css_node_get_state (widget_node));
         }
