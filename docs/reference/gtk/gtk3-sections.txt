@@ -6625,6 +6625,7 @@ gtk_clipboard_wait_for_targets
 gtk_clipboard_wait_is_target_available
 gtk_clipboard_set_can_store
 gtk_clipboard_store
+gtk_clipboard_get_selection
 <SUBSECTION Standard>
 GTK_CLIPBOARD
 GTK_TYPE_CLIPBOARD
