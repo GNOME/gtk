@@ -2213,7 +2213,7 @@ _gtk_clipboard_store_all (void)
  * gtk_clipboard_get_selection:
  * @clipboard: a #GtkClipboard
  *
- * Gets the sleection that this clipboard is for.
+ * Gets the selection that this clipboard is for.
  *
  * Returns: the selection
  *
