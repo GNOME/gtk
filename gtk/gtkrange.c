@@ -73,24 +73,13 @@
 
 typedef struct _GtkRangeStepTimer GtkRangeStepTimer;
 
-typedef enum {
-  MOUSE_OUTSIDE,
-  MOUSE_STEPPER_A,
-  MOUSE_STEPPER_B,
-  MOUSE_STEPPER_C,
-  MOUSE_STEPPER_D,
-  MOUSE_TROUGH,
-  MOUSE_SLIDER,
-  MOUSE_WIDGET /* inside widget but not in any of the above GUI elements */
-} MouseLocation;
-
 struct _GtkRangePrivate
 {
-  MouseLocation      mouse_location;
+  GtkCssGadget *mouse_location;
   /* last mouse coords we got, or G_MININT if mouse is outside the range */
   gint  mouse_x;
   gint  mouse_y;
-  MouseLocation      grab_location;   /* "grabbed" mouse location, OUTSIDE for no grab */
+  GtkCssGadget *grab_location;   /* "grabbed" mouse location, NULL for no grab */
 
   GtkRangeStepTimer *timer;
 
@@ -180,13 +169,6 @@ enum {
   LAST_SIGNAL
 };
 
-typedef enum {
-  STEPPER_A = MOUSE_STEPPER_A,
-  STEPPER_B = MOUSE_STEPPER_B,
-  STEPPER_C = MOUSE_STEPPER_C,
-  STEPPER_D = MOUSE_STEPPER_D
-} Stepper;
-
 static void gtk_range_set_property   (GObject          *object,
                                       guint             prop_id,
                                       const GValue     *value,
@@ -270,8 +252,6 @@ static void          gtk_range_adjustment_changed       (GtkAdjustment *adjustme
 static void          gtk_range_add_step_timer           (GtkRange      *range,
                                                          GtkScrollType  step);
 static void          gtk_range_remove_step_timer        (GtkRange      *range);
-static void          gtk_range_queue_allocate_location  (GtkRange      *range,
-                                                         MouseLocation  location);
 static gboolean      gtk_range_real_change_value        (GtkRange      *range,
                                                          GtkScrollType  scroll,
                                                          gdouble        value);
@@ -811,10 +791,8 @@ gtk_range_init (GtkRange *range)
   priv->flippable = FALSE;
   priv->min_slider_size = 1;
   priv->round_digits = -1;
-  priv->mouse_location = MOUSE_OUTSIDE;
   priv->mouse_x = G_MININT;
   priv->mouse_y = G_MININT;
-  priv->grab_location = MOUSE_OUTSIDE;
   priv->lower_sensitivity = GTK_SENSITIVITY_AUTO;
   priv->upper_sensitivity = GTK_SENSITIVITY_AUTO;
   priv->lower_sensitive = TRUE;
@@ -1021,7 +999,6 @@ update_fill_position (GtkRange *range)
 
 static void
 update_stepper_state (GtkRange     *range,
-                      Stepper       stepper,
                       GtkCssGadget *gadget)
 {
   GtkRangePrivate *priv = range->priv;
@@ -1030,10 +1007,10 @@ update_stepper_state (GtkRange     *range,
 
   state = gtk_widget_get_state_flags (GTK_WIDGET (range));
 
-  if ((!priv->inverted && (stepper == STEPPER_A ||
-                           stepper == STEPPER_C)) ||
-      (priv->inverted && (stepper == STEPPER_B ||
-                          stepper == STEPPER_D)))
+  if ((!priv->inverted &&
+       (gadget == priv->stepper_a_gadget || gadget == priv->stepper_c_gadget)) ||
+      (priv->inverted &&
+       (gadget == priv->stepper_b_gadget || gadget == priv->stepper_d_gadget)))
     arrow_sensitive = priv->lower_sensitive;
   else
     arrow_sensitive = priv->upper_sensitive;
@@ -1046,9 +1023,9 @@ update_stepper_state (GtkRange     *range,
     }
   else
     {
-      if (priv->grab_location == (MouseLocation)stepper)
+      if (priv->grab_location == gadget)
         state |= GTK_STATE_FLAG_ACTIVE;
-      if (priv->mouse_location == (MouseLocation)stepper)
+      if (priv->mouse_location == gadget)
         state |= GTK_STATE_FLAG_PRELIGHT;
     }
 
@@ -1061,13 +1038,13 @@ update_steppers_state (GtkRange *range)
   GtkRangePrivate *priv = range->priv;
 
   if (priv->stepper_a_gadget)
-    update_stepper_state (range, STEPPER_A, priv->stepper_a_gadget);
+    update_stepper_state (range, priv->stepper_a_gadget);
   if (priv->stepper_b_gadget)
-    update_stepper_state (range, STEPPER_B, priv->stepper_b_gadget);
+    update_stepper_state (range, priv->stepper_b_gadget);
   if (priv->stepper_c_gadget)
-    update_stepper_state (range, STEPPER_C, priv->stepper_c_gadget);
+    update_stepper_state (range, priv->stepper_c_gadget);
   if (priv->stepper_d_gadget)
-    update_stepper_state (range, STEPPER_D, priv->stepper_d_gadget);
+    update_stepper_state (range, priv->stepper_d_gadget);
 }
 
 /**
@@ -2281,10 +2258,11 @@ update_slider_state (GtkRange *range)
 
   state &= ~(GTK_STATE_FLAG_PRELIGHT | GTK_STATE_FLAG_ACTIVE);
 
-  if (priv->mouse_location == MOUSE_SLIDER && !(state & GTK_STATE_FLAG_INSENSITIVE))
+  if (priv->mouse_location == priv->slider_gadget &&
+      !(state & GTK_STATE_FLAG_INSENSITIVE))
     state |= GTK_STATE_FLAG_PRELIGHT;
 
-  if (priv->grab_location == MOUSE_SLIDER)
+  if (priv->grab_location == priv->slider_gadget)
     state |= GTK_STATE_FLAG_ACTIVE;
 
   gtk_css_gadget_set_state (priv->slider_gadget, state);
@@ -2302,10 +2280,11 @@ update_trough_state (GtkRange *range)
 
   gtk_css_gadget_set_state (priv->contents_gadget, state);
 
-  if (priv->mouse_location == MOUSE_TROUGH && !(state & GTK_STATE_FLAG_INSENSITIVE))
+  if (priv->mouse_location == priv->trough_gadget &&
+      !(state & GTK_STATE_FLAG_INSENSITIVE))
     state |= GTK_STATE_FLAG_PRELIGHT;
 
-  if (priv->grab_location == MOUSE_TROUGH)
+  if (priv->grab_location == priv->trough_gadget)
     state |= GTK_STATE_FLAG_ACTIVE;
 
   gtk_css_gadget_set_state (priv->trough_gadget, state);
@@ -2405,7 +2384,7 @@ gtk_range_draw (GtkWidget *widget,
 
 static void
 range_grab_add (GtkRange      *range,
-                MouseLocation  location)
+                GtkCssGadget  *location)
 {
   GtkRangePrivate *priv = range->priv;
   GtkStyleContext *context;
@@ -2418,7 +2397,7 @@ range_grab_add (GtkRange      *range,
    * is the only widget receiving the pointer events.
    */
   priv->grab_location = location;
-  gtk_range_queue_allocate_location (range, location);
+  gtk_css_gadget_queue_allocate (location);
 
   update_trough_state (range);
   update_slider_state (range);
@@ -2449,10 +2428,13 @@ range_grab_remove (GtkRange *range)
   GtkRangePrivate *priv = range->priv;
   GtkStyleContext *context;
 
+  if (!priv->grab_location)
+    return;
+
   context = gtk_widget_get_style_context (GTK_WIDGET (range));
 
-  gtk_range_queue_allocate_location (range, priv->grab_location);
-  priv->grab_location = MOUSE_OUTSIDE;
+  gtk_css_gadget_queue_allocate (priv->grab_location);
+  priv->grab_location = NULL;
 
   gtk_range_update_mouse_location (range);
 
@@ -2473,11 +2455,13 @@ range_get_scroll_for_grab (GtkRange *range)
   invert = should_invert (range);
   grab_button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (range->priv->multipress_gesture));
 
-  switch (priv->grab_location)
+  if (!priv->grab_location)
+    return GTK_SCROLL_NONE;
+
+  /* Backward stepper */
+  if (priv->grab_location == priv->stepper_a_gadget ||
+      priv->grab_location == priv->stepper_c_gadget)
     {
-      /* Backward stepper */
-    case MOUSE_STEPPER_A:
-    case MOUSE_STEPPER_C:
       switch (grab_button)
         {
         case GDK_BUTTON_PRIMARY:
@@ -2489,12 +2473,15 @@ range_get_scroll_for_grab (GtkRange *range)
         case GDK_BUTTON_MIDDLE:
           return invert ? GTK_SCROLL_END : GTK_SCROLL_START;
           break;
+        default:
+          return GTK_SCROLL_NONE;
         }
-      break;
+    }
 
-      /* Forward stepper */
-    case MOUSE_STEPPER_B:
-    case MOUSE_STEPPER_D:
+  /* Forward stepper */
+  if (priv->grab_location == priv->stepper_b_gadget ||
+      priv->grab_location == priv->stepper_d_gadget)
+    {
       switch (grab_button)
         {
         case GDK_BUTTON_PRIMARY:
@@ -2506,23 +2493,18 @@ range_get_scroll_for_grab (GtkRange *range)
         case GDK_BUTTON_MIDDLE:
           return invert ? GTK_SCROLL_START : GTK_SCROLL_END;
           break;
-       }
-      break;
+        default:
+          return GTK_SCROLL_NONE;
+        }
+    }
 
-      /* In the trough */
-    case MOUSE_TROUGH:
-      {
-        if (priv->trough_click_forward)
-	  return GTK_SCROLL_PAGE_FORWARD;
-        else
-	  return GTK_SCROLL_PAGE_BACKWARD;
-      }
-      break;
-
-    case MOUSE_OUTSIDE:
-    case MOUSE_SLIDER:
-    case MOUSE_WIDGET:
-      break;
+  /* In the trough */
+  if (priv->grab_location == priv->trough_gadget)
+    {
+      if (priv->trough_click_forward)
+        return GTK_SCROLL_PAGE_FORWARD;
+      else
+        return GTK_SCROLL_PAGE_BACKWARD;
     }
 
   return GTK_SCROLL_NONE;
@@ -2585,7 +2567,7 @@ gtk_range_key_press (GtkWidget   *widget,
   if (gtk_gesture_is_active (priv->drag_gesture) &&
       device == gtk_gesture_get_device (priv->drag_gesture) &&
       event->keyval == GDK_KEY_Escape &&
-      priv->grab_location != MOUSE_OUTSIDE)
+      priv->grab_location != NULL)
     {
       stop_scrolling (range);
 
@@ -2641,7 +2623,7 @@ gtk_range_long_press_gesture_pressed (GtkGestureLongPress *gesture,
 
   gtk_range_update_mouse_location (range);
 
-  if (priv->mouse_location == MOUSE_SLIDER && !priv->zoom)
+  if (priv->mouse_location == priv->slider_gadget && !priv->zoom)
     {
       GtkAllocation slider_alloc;
 
@@ -2692,7 +2674,7 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
                 "gtk-primary-button-warps-slider", &primary_warps,
                 NULL);
 
-  if (priv->mouse_location == MOUSE_SLIDER &&
+  if (priv->mouse_location == priv->slider_gadget &&
       gdk_event_triggers_context_menu ((GdkEvent *)event))
     {
       gboolean handled;
@@ -2702,21 +2684,21 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
       return;
     }
 
-  if (priv->mouse_location == MOUSE_SLIDER)
+  if (priv->mouse_location == priv->slider_gadget)
     {
       /* Shift-click in the slider = fine adjustment */
       if (shift_pressed)
         update_zoom_state (range, TRUE);
 
       update_initial_slider_position (range, x, y, &slider_alloc);
-      range_grab_add (range, MOUSE_SLIDER);
+      range_grab_add (range, priv->slider_gadget);
 
       gtk_widget_queue_draw (widget);
     }
-  else if (priv->mouse_location == MOUSE_STEPPER_A ||
-           priv->mouse_location == MOUSE_STEPPER_B ||
-           priv->mouse_location == MOUSE_STEPPER_C ||
-           priv->mouse_location == MOUSE_STEPPER_D)
+  else if (priv->mouse_location == priv->stepper_a_gadget ||
+           priv->mouse_location == priv->stepper_b_gadget ||
+           priv->mouse_location == priv->stepper_c_gadget ||
+           priv->mouse_location == priv->stepper_d_gadget)
     {
       GtkScrollType scroll;
 
@@ -2732,7 +2714,7 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
           add_autoscroll (range);
         }
     }
-  else if (priv->mouse_location == MOUSE_TROUGH &&
+  else if (priv->mouse_location == priv->trough_gadget &&
            (source == GDK_SOURCE_TOUCHSCREEN ||
             (button == GDK_BUTTON_PRIMARY &&
              ((primary_warps && !shift_pressed) ||
@@ -2758,13 +2740,13 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
       gtk_range_compute_slider_position (range, new_value, &slider);
       update_initial_slider_position (range, x, y, &slider);
 
-      range_grab_add (range, MOUSE_SLIDER);
+      range_grab_add (range, priv->slider_gadget);
 
       gtk_widget_queue_draw (widget);
 
       update_slider_position (range, x, y);
     }
-  else if (priv->mouse_location == MOUSE_TROUGH &&
+  else if (priv->mouse_location == priv->trough_gadget &&
            button == GDK_BUTTON_PRIMARY &&
            ((primary_warps && shift_pressed) ||
             (!primary_warps && !shift_pressed)))
@@ -2778,12 +2760,12 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
                                     y : x);
 
       priv->trough_click_forward = click_value > gtk_adjustment_get_value (priv->adjustment);
-      range_grab_add (range, MOUSE_TROUGH);
+      range_grab_add (range, priv->trough_gadget);
 
       scroll = range_get_scroll_for_grab (range);
       gtk_range_add_step_timer (range, scroll);
     }
-  else if (priv->mouse_location == MOUSE_TROUGH &&
+  else if (priv->mouse_location == priv->trough_gadget &&
            button == GDK_BUTTON_SECONDARY)
     {
       /* autoscroll */
@@ -2794,16 +2776,16 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
                                     y : x);
 
       priv->trough_click_forward = click_value > gtk_adjustment_get_value (priv->adjustment);
-      range_grab_add (range, MOUSE_TROUGH);
+      range_grab_add (range, priv->trough_gadget);
 
       remove_autoscroll (range);
       range->priv->autoscroll_mode = priv->trough_click_forward ? GTK_SCROLL_END : GTK_SCROLL_START;
       add_autoscroll (range);
     }
 
-  if (priv->grab_location == MOUSE_SLIDER);
+  if (priv->grab_location == priv->slider_gadget);
     /* leave it to ::drag-begin to claim the sequence */
-  else if (priv->grab_location != MOUSE_OUTSIDE)
+  else if (priv->grab_location != NULL)
     gtk_gesture_set_state (priv->multipress_gesture, GTK_EVENT_SEQUENCE_CLAIMED);
 }
 
@@ -3133,7 +3115,7 @@ gtk_range_drag_gesture_update (GtkGestureDrag *gesture,
   GtkRangePrivate *priv = range->priv;
   gdouble start_x, start_y;
 
-  if (range->priv->grab_location == MOUSE_SLIDER)
+  if (priv->grab_location == priv->slider_gadget)
     {
       gtk_gesture_drag_get_start_point (gesture, &start_x, &start_y);
       priv->mouse_x = start_x + offset_x;
@@ -3152,8 +3134,10 @@ gtk_range_drag_gesture_begin (GtkGestureDrag *gesture,
                               gdouble         offset_y,
                               GtkRange       *range)
 {
-  if (range->priv->grab_location == MOUSE_SLIDER)
-    gtk_gesture_set_state (range->priv->drag_gesture, GTK_EVENT_SEQUENCE_CLAIMED);
+  GtkRangePrivate *priv = range->priv;
+
+  if (priv->grab_location == priv->slider_gadget)
+    gtk_gesture_set_state (priv->drag_gesture, GTK_EVENT_SEQUENCE_CLAIMED);
 }
 
 static gboolean
@@ -3444,11 +3428,11 @@ gtk_range_update_mouse_location (GtkRange *range)
 {
   GtkRangePrivate *priv = range->priv;
   gint x, y;
-  MouseLocation old;
+  GtkCssGadget *old_location;
   GtkWidget *widget = GTK_WIDGET (range);
   GdkRectangle trough_alloc, slider_alloc, slider_trace;
 
-  old = priv->mouse_location;
+  old_location = priv->mouse_location;
 
   x = priv->mouse_x;
   y = priv->mouse_y;
@@ -3457,38 +3441,43 @@ gtk_range_update_mouse_location (GtkRange *range)
   gtk_css_gadget_get_border_box (priv->slider_gadget, &slider_alloc);
   gdk_rectangle_union (&slider_alloc, &trough_alloc, &slider_trace);
 
-  if (priv->grab_location != MOUSE_OUTSIDE)
+  if (priv->grab_location != NULL)
     priv->mouse_location = priv->grab_location;
   else if (priv->stepper_a_gadget &&
            gtk_css_gadget_border_box_contains_point (priv->stepper_a_gadget, x, y))
-    priv->mouse_location = MOUSE_STEPPER_A;
+    priv->mouse_location = priv->stepper_a_gadget;
   else if (priv->stepper_b_gadget &&
            gtk_css_gadget_border_box_contains_point (priv->stepper_b_gadget, x, y))
-    priv->mouse_location = MOUSE_STEPPER_B;
+    priv->mouse_location = priv->stepper_b_gadget;
   else if (priv->stepper_c_gadget &&
            gtk_css_gadget_border_box_contains_point (priv->stepper_c_gadget, x, y))
-    priv->mouse_location = MOUSE_STEPPER_C;
+    priv->mouse_location = priv->stepper_c_gadget;
   else if (priv->stepper_d_gadget &&
            gtk_css_gadget_border_box_contains_point (priv->stepper_d_gadget, x, y))
-    priv->mouse_location = MOUSE_STEPPER_D;
+    priv->mouse_location = priv->stepper_d_gadget;
   else if (gtk_css_gadget_border_box_contains_point (priv->slider_gadget, x, y))
-    priv->mouse_location = MOUSE_SLIDER;
+    priv->mouse_location = priv->slider_gadget;
   else if (rectangle_contains_point (&slider_trace, x, y))
-    priv->mouse_location = MOUSE_TROUGH;
+    priv->mouse_location = priv->trough_gadget;
   else if (gtk_css_gadget_margin_box_contains_point (priv->gadget, x, y))
-    priv->mouse_location = MOUSE_WIDGET;
+    priv->mouse_location = priv->gadget;
   else
-    priv->mouse_location = MOUSE_OUTSIDE;
+    priv->mouse_location = NULL;
 
-  if (old != priv->mouse_location)
+  if (old_location != priv->mouse_location)
     {
-      gtk_range_queue_allocate_location (range, old);
-      gtk_range_queue_allocate_location (range, priv->mouse_location);
+      if (old_location != NULL)
+        gtk_css_gadget_queue_allocate (old_location);
 
-      if (priv->mouse_location == MOUSE_OUTSIDE)
-        gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_PRELIGHT);
+      if (priv->mouse_location != NULL)
+        {
+          gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_PRELIGHT, FALSE);
+          gtk_css_gadget_queue_allocate (priv->mouse_location);
+        }
       else
-        gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_PRELIGHT, FALSE);
+        {
+          gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_PRELIGHT);
+        }
 
       update_trough_state (range);
       update_slider_state (range);
@@ -3634,10 +3623,10 @@ gtk_range_calc_slider (GtkRange *range)
 
   gtk_css_gadget_set_visible (priv->slider_gadget, visible);
 
-  gtk_range_queue_allocate_location (range, MOUSE_SLIDER);
+  gtk_css_gadget_queue_allocate (priv->slider_gadget);
 
   if (priv->has_origin)
-    gtk_range_queue_allocate_location (range, MOUSE_TROUGH);
+    gtk_css_gadget_queue_allocate (priv->trough_gadget);
 
   gtk_range_update_mouse_location (range);
 }
@@ -3691,51 +3680,15 @@ gtk_range_calc_stepper_sensitivity (GtkRange *range)
     {
       update_steppers_state (range);
 
-      gtk_range_queue_allocate_location (range, MOUSE_STEPPER_A);
-      gtk_range_queue_allocate_location (range, MOUSE_STEPPER_B);
-      gtk_range_queue_allocate_location (range, MOUSE_STEPPER_C);
-      gtk_range_queue_allocate_location (range, MOUSE_STEPPER_D);
+      if (priv->stepper_a_gadget)
+        gtk_css_gadget_queue_allocate (priv->stepper_a_gadget);
+      if (priv->stepper_b_gadget)
+        gtk_css_gadget_queue_allocate (priv->stepper_b_gadget);
+      if (priv->stepper_c_gadget)
+        gtk_css_gadget_queue_allocate (priv->stepper_c_gadget);
+      if (priv->stepper_d_gadget)
+        gtk_css_gadget_queue_allocate (priv->stepper_d_gadget);
     }
-}
-
-static void
-gtk_range_queue_allocate_location (GtkRange      *range,
-                                   MouseLocation  location)
-{
-  GtkRangePrivate *priv = range->priv;
-  GtkCssGadget *gadget;
-
-  switch (location)
-    {
-    case MOUSE_STEPPER_A:
-      gadget = priv->stepper_a_gadget;
-      break;
-    case MOUSE_STEPPER_B:
-      gadget = priv->stepper_b_gadget;
-      break;
-    case MOUSE_STEPPER_C:
-      gadget = priv->stepper_c_gadget;
-      break;
-    case MOUSE_STEPPER_D:
-      gadget = priv->stepper_d_gadget;
-      break;
-    case MOUSE_TROUGH:
-      gadget = priv->trough_gadget;
-      break;
-    case MOUSE_SLIDER:
-      gadget = priv->slider_gadget;
-      break;
-    case MOUSE_WIDGET:
-    case MOUSE_OUTSIDE:
-      return;
-    default:
-      g_assert_not_reached ();
-      return;
-    }
-
-  /* FIXME: should we queue draw instead in some cases? */
-  if (gadget)
-    gtk_css_gadget_queue_allocate (gadget);
 }
 
 static void
