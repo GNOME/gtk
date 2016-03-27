@@ -1539,26 +1539,22 @@ gtk_scale_measure_mark_label (GtkCssGadget   *gadget,
 {
   GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
   GtkScaleMark *mark = user_data;
+  PangoRectangle logical_rect;
 
   *minimum = *natural = 0;
 
-  if (mark->markup)
+  if (!mark->layout)
     {
-      PangoRectangle logical_rect;
-
-      if (!mark->layout)
-        {
-          mark->layout = gtk_widget_create_pango_layout (widget, NULL);
-          pango_layout_set_markup (mark->layout, mark->markup, -1);
-        }
-
-      pango_layout_get_pixel_extents (mark->layout, NULL, &logical_rect);
-
-      if (orientation == GTK_ORIENTATION_HORIZONTAL)
-        *minimum = *natural = logical_rect.width;
-      else
-        *minimum = *natural = logical_rect.height;
+      mark->layout = gtk_widget_create_pango_layout (widget, NULL);
+      pango_layout_set_markup (mark->layout, mark->markup, -1);
     }
+
+  pango_layout_get_pixel_extents (mark->layout, NULL, &logical_rect);
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    *minimum = *natural = logical_rect.width;
+  else
+    *minimum = *natural = logical_rect.height;
 }
 
 static void
