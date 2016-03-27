@@ -83,6 +83,10 @@ struct _GtkClipboardClass
   void          (* owner_change)                (GtkClipboard                   *clipboard,
                                                  GdkEventOwnerChange            *event);
 };
+void     _gtk_clipboard_handle_event    (GdkEventOwnerChange *event);
+
+void     _gtk_clipboard_store_all       (void);
+
 
 G_END_DECLS
 

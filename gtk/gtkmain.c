@@ -113,7 +113,7 @@
 
 #include "gtkaccelmapprivate.h"
 #include "gtkbox.h"
-#include "gtkclipboard.h"
+#include "gtkclipboardprivate.h"
 #include "gtkdebug.h"
 #include "gtkdndprivate.h"
 #include "gtkmain.h"

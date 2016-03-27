@@ -31,7 +31,7 @@
 #include <string.h>
 
 #include "gtkapplicationprivate.h"
-#include "gtkclipboard.h"
+#include "gtkclipboardprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkmain.h"
 #include "gtkrecentmanager.h"
