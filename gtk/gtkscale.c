@@ -149,6 +149,7 @@ struct _GtkScaleMark
   gdouble          value;
   int              stop_position;
   gchar           *markup;
+  PangoLayout     *layout;
   GtkCssGadget    *gadget;
   GtkCssGadget    *indicator_gadget;
   GtkCssGadget    *label_gadget;
@@ -1543,19 +1544,20 @@ gtk_scale_measure_mark_label (GtkCssGadget   *gadget,
 
   if (mark->markup)
     {
-      PangoLayout *layout;
       PangoRectangle logical_rect;
 
-      layout = gtk_widget_create_pango_layout (widget, NULL);
-      pango_layout_set_markup (layout, mark->markup, -1);
-      pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
+      if (!mark->layout)
+        {
+          mark->layout = gtk_widget_create_pango_layout (widget, NULL);
+          pango_layout_set_markup (mark->layout, mark->markup, -1);
+        }
+
+      pango_layout_get_pixel_extents (mark->layout, NULL, &logical_rect);
 
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
         *minimum = *natural = logical_rect.width;
       else
         *minimum = *natural = logical_rect.height;
-
-      g_object_unref (layout);
     }
 }
 
@@ -1741,18 +1743,13 @@ gtk_scale_render_mark_label (GtkCssGadget *gadget,
   GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
   GtkScaleMark *mark = user_data;
   GtkStyleContext *context;
-  PangoLayout *layout;
 
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_save_to_node (context, gtk_css_gadget_get_node (gadget));
 
-  layout = gtk_widget_create_pango_layout (widget, NULL);
-  pango_layout_set_markup (layout, mark->markup, -1);
-
-  gtk_render_layout (context, cr, x, y, layout);
+  gtk_render_layout (context, cr, x, y, mark->layout);
 
   gtk_style_context_restore (context);
-  g_object_unref (layout);
 
   return FALSE;
 }
@@ -1975,6 +1972,7 @@ gtk_scale_mark_free (gpointer data)
   g_object_unref (mark->indicator_gadget);
   gtk_css_node_set_parent (gtk_css_gadget_get_node (mark->gadget), NULL);
   g_object_unref (mark->gadget);
+  g_clear_object (&mark->layout);
   g_free (mark->markup);
   g_free (mark);
 }
