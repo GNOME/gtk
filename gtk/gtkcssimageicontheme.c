@@ -117,7 +117,7 @@ gtk_css_image_icon_theme_parse (GtkCssImage  *image,
   return TRUE;
 }
 
-static gboolean
+static guint
 token_parse_arg (GtkCssTokenSource *source,
                  guint              arg,
                  gpointer           data)
@@ -130,13 +130,13 @@ token_parse_arg (GtkCssTokenSource *source,
     {
       gtk_css_token_source_error (source, "Expected a string for the icon name");
       gtk_css_token_source_consume_all (source);
-      return FALSE;
+      return 0;
     }
 
   icon_theme->name = g_strdup (token->string.string);
 
   gtk_css_token_source_consume_token (source);
-  return TRUE;
+  return 1;
 }
 
 static gboolean

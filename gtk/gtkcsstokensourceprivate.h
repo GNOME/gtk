@@ -70,7 +70,7 @@ char *                  gtk_css_token_source_consume_to_string  (GtkCssTokenSour
 gboolean                gtk_css_token_source_consume_function   (GtkCssTokenSource      *source,
                                                                  guint                   min_args,
                                                                  guint                   max_args,
-                                                                 gboolean (* parse_func) (GtkCssTokenSource *, guint, gpointer),
+                                                                 guint (* parse_func) (GtkCssTokenSource *, guint, gpointer),
                                                                  gpointer                data);
 gboolean                gtk_css_token_source_consume_number     (GtkCssTokenSource      *source,
                                                                  double                 *number);

@@ -1015,7 +1015,7 @@ _gtk_css_transform_value_parse (GtkCssParser *parser)
   return value;
 }
 
-static gboolean
+static guint
 token_parse_matrix (GtkCssTokenSource *source,
                     guint              n,
                     gpointer           data)
@@ -1025,24 +1025,24 @@ token_parse_matrix (GtkCssTokenSource *source,
   switch (n)
     {
     case 0:
-      return gtk_css_token_source_consume_number (source, &transform->matrix.matrix.xx);
+      return gtk_css_token_source_consume_number (source, &transform->matrix.matrix.xx) ? 1 : 0;
     case 1:
-      return gtk_css_token_source_consume_number (source, &transform->matrix.matrix.xy);
+      return gtk_css_token_source_consume_number (source, &transform->matrix.matrix.xy) ? 1 : 0;
     case 2:
-      return gtk_css_token_source_consume_number (source, &transform->matrix.matrix.x0);
+      return gtk_css_token_source_consume_number (source, &transform->matrix.matrix.x0) ? 1 : 0;
     case 3:
-      return gtk_css_token_source_consume_number (source, &transform->matrix.matrix.yx);
+      return gtk_css_token_source_consume_number (source, &transform->matrix.matrix.yx) ? 1 : 0;
     case 4:
-      return gtk_css_token_source_consume_number (source, &transform->matrix.matrix.yy);
+      return gtk_css_token_source_consume_number (source, &transform->matrix.matrix.yy) ? 1 : 0;
     case 5:
-      return gtk_css_token_source_consume_number (source, &transform->matrix.matrix.y0);
+      return gtk_css_token_source_consume_number (source, &transform->matrix.matrix.y0) ? 1 : 0;
     default:
       g_assert_not_reached ();
-      return FALSE;
+      return 0;
     }
 }
 
-static gboolean
+static guint
 token_parse_translate (GtkCssTokenSource *source,
                        guint              n,
                        gpointer           data)
@@ -1053,7 +1053,7 @@ token_parse_translate (GtkCssTokenSource *source,
     {
       transform->translate.x = gtk_css_number_value_token_parse (source, GTK_CSS_PARSE_LENGTH);
       if (transform->translate.x == NULL)
-        return FALSE;
+        return 0;
       transform->translate.y = _gtk_css_number_value_new (0, GTK_CSS_PX);
     }
   else if (n == 1)
@@ -1061,16 +1061,16 @@ token_parse_translate (GtkCssTokenSource *source,
       _gtk_css_value_unref (transform->translate.y);
       transform->translate.y = gtk_css_number_value_token_parse (source, GTK_CSS_PARSE_LENGTH);
       if (transform->translate.y == NULL)
-        return FALSE;
+        return 0;
     }
   else
     {
       g_assert_not_reached ();
     }
-  return TRUE;
+  return 1;
 }
 
-static gboolean
+static guint
 token_parse_length (GtkCssTokenSource *source,
                     guint              n,
                     gpointer           data)
@@ -1078,10 +1078,13 @@ token_parse_length (GtkCssTokenSource *source,
   GtkCssValue **value = data;
 
   *value = gtk_css_number_value_token_parse (source, GTK_CSS_PARSE_LENGTH);
-  return *value != NULL;
+  if (*value == NULL)
+    return 0;
+
+  return 1;
 }
 
-static gboolean
+static guint
 token_parse_scale (GtkCssTokenSource *source,
                    guint              n,
                    gpointer           data)
@@ -1092,7 +1095,7 @@ token_parse_scale (GtkCssTokenSource *source,
     {
       transform->scale.x = gtk_css_number_value_token_parse (source, GTK_CSS_PARSE_NUMBER);
       if (transform->scale.x == NULL)
-        return FALSE;
+        return 0;
       transform->scale.y = _gtk_css_value_ref (transform->scale.x);
     }
   else if (n == 1)
@@ -1100,16 +1103,16 @@ token_parse_scale (GtkCssTokenSource *source,
       _gtk_css_value_unref (transform->scale.y);
       transform->scale.y = gtk_css_number_value_token_parse (source, GTK_CSS_PARSE_NUMBER);
       if (transform->scale.y == NULL)
-        return FALSE;
+        return 0;
     }
   else
     {
       g_assert_not_reached ();
     }
-  return TRUE;
+  return 1;
 }
 
-static gboolean
+static guint
 token_parse_number (GtkCssTokenSource *source,
                     guint              n,
                     gpointer           data)
@@ -1117,10 +1120,13 @@ token_parse_number (GtkCssTokenSource *source,
   GtkCssValue **value = data;
 
   *value = gtk_css_number_value_token_parse (source, GTK_CSS_PARSE_NUMBER);
-  return *value != NULL;
+  if (*value == NULL)
+    return 0;
+
+  return 1;
 }
 
-static gboolean
+static guint
 token_parse_angle (GtkCssTokenSource *source,
                    guint              n,
                    gpointer           data)
@@ -1128,10 +1134,13 @@ token_parse_angle (GtkCssTokenSource *source,
   GtkCssValue **value = data;
 
   *value = gtk_css_number_value_token_parse (source, GTK_CSS_PARSE_ANGLE);
-  return *value != NULL;
+  if (*value == NULL)
+    return 0;
+
+  return 1;
 }
 
-static gboolean
+static guint
 token_parse_skew (GtkCssTokenSource *source,
                   guint              n,
                   gpointer           data)
@@ -1142,7 +1151,7 @@ token_parse_skew (GtkCssTokenSource *source,
     {
       transform->skew.x = gtk_css_number_value_token_parse (source, GTK_CSS_PARSE_ANGLE);
       if (transform->skew.x == NULL)
-        return FALSE;
+        return 0;
       transform->skew.y = _gtk_css_number_value_new (0, GTK_CSS_PX);
     }
   else if (n == 1)
@@ -1150,13 +1159,13 @@ token_parse_skew (GtkCssTokenSource *source,
       _gtk_css_value_unref (transform->skew.y);
       transform->skew.y = gtk_css_number_value_token_parse (source, GTK_CSS_PARSE_ANGLE);
       if (transform->skew.y == NULL)
-        return FALSE;
+        return 0;
     }
   else
     {
       g_assert_not_reached ();
     }
-  return TRUE;
+  return 1;
 }
 
 GtkCssValue *

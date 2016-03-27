@@ -327,7 +327,7 @@ _gtk_css_ease_value_parse (GtkCssParser *parser)
   return NULL;
 }
 
-static gboolean
+static guint
 token_parse_cubic_bezier (GtkCssTokenSource *source,
                           guint              n,
                           gpointer           data)
@@ -342,13 +342,13 @@ token_parse_cubic_bezier (GtkCssTokenSource *source,
       (numbers[n] < 0 || numbers[n] > 1.0))
     {
       gtk_css_token_source_error (source, "Value %g out of range. Must be from 0.0 to 1.0", numbers[n]);
-      return FALSE;
+      return 0;
     }
 
-  return TRUE;
+  return 1;
 }
 
-static gboolean
+static guint
 token_parse_steps (GtkCssTokenSource *source,
                    guint              nth_argument,
                    gpointer           data)
@@ -363,17 +363,17 @@ token_parse_steps (GtkCssTokenSource *source,
         {
           gtk_css_token_source_error (source, "Expected a positive integer for number of steps");
           gtk_css_token_source_consume_all (source);
-          return FALSE;
+          return 0;
         }
       else if (token->number.number <= 0)
         {
           gtk_css_token_source_error (source, "Number of steps must be greater than 0");
           gtk_css_token_source_consume_all (source);
-          return FALSE;
+          return 0;
         }
       value->u.steps.steps = token->number.number;
       gtk_css_token_source_consume_token (source);
-      return TRUE;
+      return 1;
     }
   else
     {
@@ -385,10 +385,10 @@ token_parse_steps (GtkCssTokenSource *source,
         {
           gtk_css_token_source_error (source, "Only allowed values are 'start' and 'end'");
           gtk_css_token_source_consume_all (source);
-          return FALSE;
+          return 0;
         }
       gtk_css_token_source_consume_token (source);
-      return TRUE;
+      return 1;
     }
 }
 

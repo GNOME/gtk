@@ -361,6 +361,130 @@ gtk_css_image_linear_parse (GtkCssImage  *image,
   return TRUE;
 }
 
+static guint
+gtk_css_image_linear_token_parse_argument (GtkCssTokenSource *source,
+                                           guint              arg,
+                                           gpointer           data)
+{
+  GtkCssImageLinear *linear = data;
+  GtkCssImageLinearColorStop stop;
+  const GtkCssToken *token;
+
+  if (arg == 0)
+    {
+      token = gtk_css_token_source_get_token (source);
+      
+      if (gtk_css_token_is_ident (token, "to"))
+        {
+          static const struct {
+            const char *name;
+            guint value;
+            guint optional_index[2];
+          } sides[] = {
+            { "top",    1 << GTK_CSS_TOP,    { 2, 3 } },
+            { "bottom", 1 << GTK_CSS_BOTTOM, { 2, 3 } },
+            { "left",   1 << GTK_CSS_LEFT,   { 0, 1 } },
+            { "right",  1 << GTK_CSS_RIGHT,  { 0, 1 } }
+          };
+          guint i, j;
+          gtk_css_token_source_consume_token (source);
+
+          token = gtk_css_token_source_get_token (source);
+          for (i = 0; i < G_N_ELEMENTS (sides); i++)
+            {
+              if (!gtk_css_token_is_ident (token, sides[i].name))
+                continue;
+
+              linear->side = sides[i].value;
+              gtk_css_token_source_consume_token (source);
+
+              token = gtk_css_token_source_get_token (source);
+              for (j = 0; j < G_N_ELEMENTS (sides[i].optional_index); j++)
+                {
+                  guint idx = sides[i].optional_index[j];
+                  if (!gtk_css_token_is_ident (token, sides[idx].name))
+                    continue;
+
+                  linear->side = sides[idx].value;
+                  gtk_css_token_source_consume_token (source);
+                  break;
+                }
+
+              return 1;
+            }
+
+          gtk_css_token_source_error (source, "Expected a direction");
+          gtk_css_token_source_consume_all (source);
+          return 0;
+        }
+      else if (!gtk_css_color_value_check_token (token))
+        {
+          /* We check for !color here so the error message is "expected angle"
+           * for nonsense values */
+          linear->angle = gtk_css_number_value_token_parse (source, GTK_CSS_PARSE_ANGLE);
+          if (linear->angle == NULL)
+            return 0;
+          return 1;
+        }
+
+      linear->side = 1 << GTK_CSS_BOTTOM;
+    }
+
+  stop.color = gtk_css_color_value_token_parse (source);
+  if (stop.color == NULL)
+    return 0;
+
+  token = gtk_css_token_source_get_token (source);
+  if (gtk_css_number_value_check_token (token))
+    {
+      stop.offset = gtk_css_number_value_token_parse (source,
+                                                      GTK_CSS_PARSE_PERCENT
+                                                      | GTK_CSS_PARSE_LENGTH);
+      if (stop.offset == NULL)
+        {
+          _gtk_css_value_unref (stop.color);
+          return FALSE;
+        }
+    }
+  else
+    {
+      stop.offset = NULL;
+    }
+
+  g_array_append_val (linear->stops, stop);
+  /* We consume the optional side argument here, too. */
+  return arg == 0 ? 2 : 1;
+}
+
+static gboolean
+gtk_css_image_linear_token_parse (GtkCssImage       *image,
+                                  GtkCssTokenSource *source)
+{
+  GtkCssImageLinear *linear = GTK_CSS_IMAGE_LINEAR (image);
+  const GtkCssToken *token;
+
+  token = gtk_css_token_source_get_token (source);
+  if (gtk_css_token_is_function (token, "linear-gradient"))
+    {
+      /* nothing to do here */
+    }
+  else if (gtk_css_token_is_function (token, "repeating-linear-gradient"))
+    {
+      linear->repeating = TRUE;
+    }
+  else
+    {
+      gtk_css_token_source_error (source, "Expected 'linear-gradient('");
+      gtk_css_token_source_consume_all (source);
+      return FALSE;
+    }
+
+  return gtk_css_token_source_consume_function (source,
+                                                3, G_MAXUINT,
+                                                gtk_css_image_linear_token_parse_argument,
+                                                image);
+}
+
 static void
 gtk_css_image_linear_print (GtkCssImage *image,
                             GString     *string)
@@ -598,6 +722,7 @@ _gtk_css_image_linear_class_init (GtkCssImageLinearClass *klass)
 
   image_class->draw = gtk_css_image_linear_draw;
   image_class->parse = gtk_css_image_linear_parse;
+  image_class->token_parse = gtk_css_image_linear_token_parse;
   image_class->print = gtk_css_image_linear_print;
   image_class->compute = gtk_css_image_linear_compute;
   image_class->equal = gtk_css_image_linear_equal;

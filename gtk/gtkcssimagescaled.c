@@ -180,7 +180,7 @@ gtk_css_image_scaled_parse (GtkCssImage  *image,
   return TRUE;
 }
 
-static gboolean
+static guint
 token_parse_arg (GtkCssTokenSource *source,
                  guint              arg,
                  gpointer           data)
@@ -190,11 +190,11 @@ token_parse_arg (GtkCssTokenSource *source,
 
   image = gtk_css_image_new_token_parse (source);
   if (image == NULL)
-    return FALSE;
+    return 0;
 
   g_ptr_array_add (images, image);
 
-  return TRUE;
+  return 1;
 }
 
 static gboolean

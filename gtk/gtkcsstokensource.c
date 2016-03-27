@@ -343,7 +343,7 @@ gboolean
 gtk_css_token_source_consume_function (GtkCssTokenSource      *source,
                                        guint                   min_args,
                                        guint                   max_args,
-                                       gboolean (* parse_func) (GtkCssTokenSource *, guint, gpointer),
+                                       guint (* parse_func) (GtkCssTokenSource *, guint, gpointer),
                                        gpointer                data)
 {
   const GtkCssToken *token;
@@ -358,17 +358,20 @@ gtk_css_token_source_consume_function (GtkCssTokenSource      *source,
   gtk_css_token_source_consume_token (source);
   func_source = gtk_css_token_source_new_for_part (source, GTK_CSS_TOKEN_CLOSE_PARENS);
 
-  for (arg = 0; arg < max_args; arg++)
+  arg = 0;
+  while (arg < max_args)
     {
-      if (!parse_func (func_source, arg, data))
+      guint parse_args = parse_func (func_source, arg, data);
+      if (parse_args == 0)
         {
           gtk_css_token_source_consume_all (func_source);
           break;
         }
+      arg += parse_args;
       token = gtk_css_token_source_get_token (func_source);
       if (gtk_css_token_is (token, GTK_CSS_TOKEN_EOF))
         {
-          if (arg + 1 < min_args)
+          if (arg < min_args)
             {
               gtk_css_token_source_error (source, "%s() requires at least %u arguments", function_name, min_args);
               gtk_css_token_source_consume_all (source);
