@@ -3101,7 +3101,7 @@ placessidebar row {
   placessidebar row.sidebar-placeholder-row {
     padding: 0 8px;
     min-height: 2px;
-    background-image: image(#000);
+    background-image: linear-gradient(to bottom, #000);
     background-clip: content-box; }
   placessidebar row.sidebar-new-bookmark-row {
     color: #000; }

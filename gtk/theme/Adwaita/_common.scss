@@ -123,7 +123,7 @@ textview {
 
 textview border {
   background-color: mix($bg_color, $base_color, 50%);
-  background-image: image(transparentize(black, 0.8)); // HACK: the border node just draws background so,
+  background-image: _solid(transparentize(black, 0.8)); // HACK: the border node just draws background so,
   background-repeat: no-repeat;                        // using a background-image to draw the border
 
   &:backdrop { background-color: mix($backdrop_bg_color, $backdrop_base_color, 50%); }
@@ -1479,7 +1479,7 @@ headerbar {
     .selection-menu {
       &:backdrop, & {
         border-color: transparentize($selected_bg_color, 1);
-        background-image: linear-gradient(to bottom, transparentize($selected_bg_color, 1));
+        background-image: _solid(transparentize($selected_bg_color, 1));
         box-shadow: none;
         padding-left: 10px;
         padding-right: 10px;
@@ -3024,7 +3024,7 @@ scale {
     min-width: 0;
 
     trough {
-      background-image: linear-gradient(to top, $borders_color);
+      background-image: _solid($borders_color);
       background-repeat: no-repeat;
     }
 
@@ -3746,7 +3746,7 @@ placessidebar {
     &.sidebar-placeholder-row {
       padding: 0 8px;
       min-height: 2px;
-      background-image: image($drop_target_color);
+      background-image: _solid($drop_target_color);
       background-clip: content-box;
     }
 
@@ -3797,24 +3797,24 @@ paned {
     border-style: none; // just to be sure
     background-color: transparent;
     // workaround, using background istead of a border since the border will get rendered twice (?)
-    background-image: image($borders_color);
+    background-image: _solid($borders_color);
     background-size: 1px 1px;
 
-    &:selected { background-image: image($selected_bg_color); } // FIXME is this needed?
+    &:selected { background-image: _solid($selected_bg_color); } // FIXME is this needed?
 
-    &:backdrop { background-image: image($backdrop_borders_color); }
+    &:backdrop { background-image: _solid($backdrop_borders_color); }
 
     &.wide {
       min-width: 5px;
       min-height: 5px;
       background-color: $bg_color;
-      background-image: image($borders_color), image($borders_color);
+      background-image: _solid($borders_color), _solid($borders_color);
       background-size: 1px 1px, 1px 1px;
 
       &:backdrop {
         background-color: $backdrop_bg_color;
-        background-image: image($backdrop_borders_color),
-                          image($backdrop_borders_color);
+        background-image: _solid($backdrop_borders_color),
+                          _solid($backdrop_borders_color);
       }
     }
   }

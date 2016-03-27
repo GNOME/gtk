@@ -77,7 +77,7 @@ textview text {
 
 textview border {
   background-color: #f4f4f3;
-  background-image: image(rgba(0, 0, 0, 0.2));
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.2));
   background-repeat: no-repeat; }
   textview border:backdrop {
     background-color: #f2f2f2; }
@@ -469,7 +469,7 @@ button {
     color: #2e3436;
     outline-color: rgba(46, 52, 54, 0.3);
     border-color: #b6b6b3;
-    background-image: image(#d4d4d2);
+    background-image: linear-gradient(to bottom, #d4d4d2);
     box-shadow: inset 0 1px rgba(255, 255, 255, 0);
     text-shadow: none;
     -gtk-icon-shadow: none;
@@ -798,7 +798,7 @@ button.suggested-action {
     color: white;
     outline-color: rgba(255, 255, 255, 0.3);
     border-color: #215d9c;
-    background-image: image(#2b7bcf);
+    background-image: linear-gradient(to bottom, #2b7bcf);
     box-shadow: inset 0 1px rgba(255, 255, 255, 0);
     text-shadow: none;
     -gtk-icon-shadow: none; }
@@ -975,7 +975,7 @@ button.destructive-action {
     color: white;
     outline-color: rgba(255, 255, 255, 0.3);
     border-color: #a60c0c;
-    background-image: image(#df1111);
+    background-image: linear-gradient(to bottom, #df1111);
     box-shadow: inset 0 1px rgba(255, 255, 255, 0);
     text-shadow: none;
     -gtk-icon-shadow: none; }
@@ -1193,7 +1193,7 @@ button.needs-attention > image, stacksidebar row.needs-attention > label {
     color: #2e3436;
     outline-color: rgba(46, 52, 54, 0.3);
     border-color: #b6b6b3;
-    background-image: image(#d4d4d2);
+    background-image: linear-gradient(to bottom, #d4d4d2);
     box-shadow: inset 0 1px rgba(255, 255, 255, 0);
     text-shadow: none;
     -gtk-icon-shadow: none; }
@@ -1744,7 +1744,7 @@ headerbar {
         color: #ffffff;
         outline-color: rgba(255, 255, 255, 0.3);
         border-color: #215d9c;
-        background-image: image(#2b7bcf);
+        background-image: linear-gradient(to bottom, #2b7bcf);
         box-shadow: inset 0 1px rgba(255, 255, 255, 0);
         text-shadow: none;
         -gtk-icon-shadow: none; }
@@ -1873,7 +1873,7 @@ headerbar {
           color: #2e3436;
           outline-color: rgba(46, 52, 54, 0.3);
           border-color: #b6b6b3;
-          background-image: image(#d4d4d2);
+          background-image: linear-gradient(to bottom, #d4d4d2);
           box-shadow: inset 0 1px rgba(255, 255, 255, 0);
           text-shadow: none;
           -gtk-icon-shadow: none;
@@ -2790,7 +2790,7 @@ radio {
     color: #2e3436;
     outline-color: rgba(46, 52, 54, 0.3);
     border-color: #b6b6b3;
-    background-image: image(#d4d4d2);
+    background-image: linear-gradient(to bottom, #d4d4d2);
     box-shadow: inset 0 1px rgba(255, 255, 255, 0);
     text-shadow: none;
     -gtk-icon-shadow: none; }
@@ -3529,7 +3529,7 @@ scale {
     min-height: 0;
     min-width: 0; }
     scale.color trough {
-      background-image: linear-gradient(to top, #b6b6b3);
+      background-image: linear-gradient(to bottom, #b6b6b3);
       background-repeat: no-repeat; }
     scale.color.horizontal {
       padding: 0 0 15px 0; }
@@ -4059,7 +4059,7 @@ placessidebar row {
   placessidebar row.sidebar-placeholder-row {
     padding: 0 8px;
     min-height: 2px;
-    background-image: image(#4e9a06);
+    background-image: linear-gradient(to bottom, #4e9a06);
     background-clip: content-box; }
   placessidebar row.sidebar-new-bookmark-row {
     color: #4a90d9; }
@@ -4091,21 +4091,21 @@ paned > separator {
   -gtk-icon-source: none;
   border-style: none;
   background-color: transparent;
-  background-image: image(#b6b6b3);
+  background-image: linear-gradient(to bottom, #b6b6b3);
   background-size: 1px 1px; }
   paned > separator:selected {
-    background-image: image(#4a90d9); }
+    background-image: linear-gradient(to bottom, #4a90d9); }
   paned > separator:backdrop {
-    background-image: image(#c0c0bd); }
+    background-image: linear-gradient(to bottom, #c0c0bd); }
   paned > separator.wide {
     min-width: 5px;
     min-height: 5px;
     background-color: #e8e8e7;
-    background-image: image(#b6b6b3), image(#b6b6b3);
+    background-image: linear-gradient(to bottom, #b6b6b3), linear-gradient(to bottom, #b6b6b3);
     background-size: 1px 1px, 1px 1px; }
     paned > separator.wide:backdrop {
       background-color: #e8e8e7;
-      background-image: image(#c0c0bd), image(#c0c0bd); }
+      background-image: linear-gradient(to bottom, #c0c0bd), linear-gradient(to bottom, #c0c0bd); }
 paned.horizontal > separator {
   background-repeat: repeat-y; }
   paned.horizontal > separator:dir(ltr) {
@@ -4180,7 +4180,7 @@ infobar {
       color: #ffffff;
       outline-color: rgba(255, 255, 255, 0.3);
       border-color: #215d9c;
-      background-image: image(#2b7bcf);
+      background-image: linear-gradient(to bottom, #2b7bcf);
       box-shadow: inset 0 1px rgba(255, 255, 255, 0);
       text-shadow: none;
       -gtk-icon-shadow: none; }
