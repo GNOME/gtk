@@ -28,12 +28,20 @@
 #include "gtkbitmaskprivate.h"
 #include "gtkcssarrayvalueprivate.h"
 #include "gtkcsscolorvalueprivate.h"
+#include "gtkcssdefinecolorruleprivate.h"
+#include "gtkcssdeclarationprivate.h"
+#include "gtkcssimportruleprivate.h"
 #include "gtkcsskeyframesprivate.h"
+#include "gtkcsskeyframesruleprivate.h"
+#include "gtkcsslonghanddeclarationprivate.h"
 #include "gtkcssparserprivate.h"
 #include "gtkcsssectionprivate.h"
 #include "gtkcssselectorprivate.h"
-#include "gtkcssshorthandpropertyprivate.h"
+#include "gtkcssshorthanddeclarationprivate.h"
 #include "gtkcssstylefuncsprivate.h"
+#include "gtkcssstylepropertyprivate.h"
+#include "gtkcssstyleruleprivate.h"
+#include "gtkcsswidgetstyledeclarationprivate.h"
 #include "gtksettingsprivate.h"
 #include "gtkstyleprovider.h"
 #include "gtkstylecontextprivate.h"
@@ -296,7 +304,7 @@ widget_property_value_new (char *name, GtkCssSection *section)
   value = g_slice_new0 (WidgetPropertyValue);
 
   value->name = name;
-  if (gtk_keep_css_sections)
+  if (gtk_keep_css_sections && section)
     value->section = gtk_css_section_ref (section);
 
   return value;
@@ -395,7 +403,7 @@ gtk_css_ruleset_add (GtkCssRuleset       *ruleset,
     }
 
   ruleset->styles[i].value = value;
-  if (gtk_keep_css_sections)
+  if (gtk_keep_css_sections && section)
     ruleset->styles[i].section = gtk_css_section_ref (section);
   else
     ruleset->styles[i].section = NULL;
@@ -1713,6 +1721,114 @@ gtk_css_provider_postprocess (GtkCssProvider *css_provider)
       ruleset->selector = NULL;
     }
 #endif
+}
+
+static void
+gtk_css_provider_load_rules (GtkCssProvider *provider,
+                             GtkCssRuleList *list)
+{
+  GtkCssRule *rule;
+  gsize i;
+
+  for (i = 0; i < gtk_css_rule_list_get_length (list); i++)
+    {
+      rule = gtk_css_rule_list_get_item (list, i);
+
+      if (GTK_IS_CSS_DEFINE_COLOR_RULE (rule))
+        {
+          GtkCssDefineColorRule *color_rule = GTK_CSS_DEFINE_COLOR_RULE (rule);
+
+          g_hash_table_insert (provider->priv->symbolic_colors,
+                               g_strdup (gtk_css_define_color_rule_get_name (color_rule)),
+                               _gtk_css_value_ref (gtk_css_define_color_rule_get_value (color_rule)));
+        }
+      else if (GTK_IS_CSS_IMPORT_RULE (rule))
+        {
+          GtkCssStyleSheet *style_sheet = gtk_css_import_rule_get_style_sheet (GTK_CSS_IMPORT_RULE (rule));
+          gtk_css_provider_load_rules (provider, gtk_css_style_sheet_get_css_rules (style_sheet));
+        }
+      else if (GTK_IS_CSS_KEYFRAMES_RULE (rule))
+        {
+          g_hash_table_insert (provider->priv->keyframes,
+                               g_strdup (gtk_css_keyframes_rule_get_name (GTK_CSS_KEYFRAMES_RULE (rule))),
+                               gtk_css_keyframes_new_from_rule (GTK_CSS_KEYFRAMES_RULE (rule)));
+        }
+      else if (GTK_IS_CSS_STYLE_RULE (rule))
+        {
+          GtkCssStyleDeclaration *style = gtk_css_style_rule_get_style (GTK_CSS_STYLE_RULE (rule));
+          GtkCssRuleset ruleset = { 0, };
+          guint j;
+
+          for (j = 0; j < gtk_css_style_declaration_get_length (style); j++)
+            {
+              GtkCssDeclaration *decl = gtk_css_style_declaration_get_declaration (style, j);
+
+              if (GTK_IS_CSS_LONGHAND_DECLARATION (decl))
+                {
+                  GtkCssLonghandDeclaration *longhand = GTK_CSS_LONGHAND_DECLARATION (decl);
+                  gtk_css_ruleset_add (&ruleset,
+                                       gtk_css_longhand_declaration_get_property (longhand),
+                                       _gtk_css_value_ref (gtk_css_longhand_declaration_get_value (longhand)),
+                                       NULL);
+                }
+              else if (GTK_IS_CSS_SHORTHAND_DECLARATION (decl))
+                {
+                  GtkCssShorthandDeclaration *shorthand = GTK_CSS_SHORTHAND_DECLARATION (decl);
+                  guint k;
+
+                  for (k = 0; k < gtk_css_shorthand_declaration_get_length (shorthand); k++)
+                    {
+                      gtk_css_ruleset_add (&ruleset,
+                                           gtk_css_shorthand_declaration_get_subproperty (shorthand, k),
+                                           _gtk_css_value_ref (gtk_css_shorthand_declaration_get_value (shorthand, k)),
+                                           NULL);
+                    }
+                }
+              else if (GTK_IS_CSS_WIDGET_STYLE_DECLARATION (decl))
+                {
+                  WidgetPropertyValue *val;
+
+                  val = widget_property_value_new (g_strdup (gtk_css_declaration_get_name (decl)), NULL);
+                  val->value = gtk_css_declaration_get_value_string (decl);
+
+                  gtk_css_ruleset_add_style (&ruleset, val->name, val);
+                }
+            }
+
+          if (ruleset.styles != NULL || ruleset.widget_style != NULL)
+            {
+              for (j = 0; j < gtk_css_style_rule_get_n_selectors (GTK_CSS_STYLE_RULE (rule)); j++)
+                {
+                  GtkCssRuleset new;
+
+                  gtk_css_ruleset_init_copy (&new,
+                                             &ruleset,
+                                             gtk_css_style_rule_get_selector (GTK_CSS_STYLE_RULE (rule), j));
+
+                  g_array_append_val (provider->priv->rulesets, new);
+                }
+            }
+
+          gtk_css_ruleset_clear (&ruleset);
+        }
+      else
+        {
+          g_warning ("No code to deal with %s", G_OBJECT_TYPE_NAME (rule));
+        }
+    }
+}
+
+void
+gtk_css_provider_load_style_sheet (GtkCssProvider   *provider,
+                                   GtkCssStyleSheet *style_sheet)
+{
+  gtk_css_provider_reset (provider);
+
+  gtk_css_provider_load_rules (provider, gtk_css_style_sheet_get_css_rules (style_sheet));
+
+  gtk_css_provider_postprocess (provider);
+
+  _gtk_style_provider_private_changed (GTK_STYLE_PROVIDER_PRIVATE (provider));
 }
 
 static gboolean

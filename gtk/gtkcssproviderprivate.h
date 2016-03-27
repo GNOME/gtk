@@ -20,6 +20,8 @@
 
 #include "gtkcssprovider.h"
 
+#include "gtkcssstylesheetprivate.h"
+
 G_BEGIN_DECLS
 
 gchar *_gtk_get_theme_dir (void);
@@ -29,6 +31,9 @@ const gchar *_gtk_css_provider_get_theme_dir (GtkCssProvider *provider);
 void   _gtk_css_provider_load_named    (GtkCssProvider *provider,
                                         const gchar    *name,
                                         const gchar    *variant);
+
+void   gtk_css_provider_load_style_sheet (GtkCssProvider   *provider,
+                                          GtkCssStyleSheet *style_sheet);
 
 void   gtk_css_provider_set_keep_css_sections (void);
 

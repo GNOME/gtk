@@ -29,6 +29,7 @@
 
 #include "gtkcssdeclarationprivate.h"
 #include "gtkcssprovider.h"
+#include "gtkcssproviderprivate.h"
 #include "gtkcssrbtreeprivate.h"
 #include "gtkcssstyleruleprivate.h"
 #include "gtkcssstylesheetprivate.h"
@@ -479,6 +480,8 @@ update_style_sheet (GtkInspectorCssEditor *ce)
 
   gtk_css_token_source_unref (source);
 
+  gtk_css_provider_load_style_sheet (ce->priv->provider, ce->priv->style_sheet);
+
   gtk_inspector_css_rule_view_set_style_sheet (GTK_INSPECTOR_CSS_RULE_VIEW (ce->priv->ruleview),
                                                ce->priv->style_sheet);
 }
@@ -690,16 +693,6 @@ update_tokenize (GtkInspectorCssEditor *ce)
 }
 
 static void
-update_style (GtkInspectorCssEditor *ce)
-{
-  gchar *text;
-
-  text = get_current_text (ce->priv->text);
-  gtk_css_provider_load_from_data (ce->priv->provider, text, -1, NULL);
-  g_free (text);
-}
-
-static void
 clear_all_tags (GtkInspectorCssEditor *ce)
 {
   GtkTextIter start, end;
@@ -717,7 +710,6 @@ update_timeout (gpointer data)
   ce->priv->timeout = 0;
 
   clear_all_tags (ce);
-  update_style (ce);
   update_tokenize (ce);
   update_style_sheet (ce);
   update_token_tags (ce, gtk_css_rb_tree_get_first (ce->priv->tokens), NULL);
