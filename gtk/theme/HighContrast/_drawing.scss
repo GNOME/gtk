@@ -8,7 +8,7 @@
 
 @function _solid($c) {
 // solid color image
-  @return linear-gradient(to bottom, $c);
+  @return linear-gradient(to bottom, $c, $c);
 }
 
 @mixin _shadows($shadow1, $shadow2:none, $shadow3:none, $shadow4:none) {
