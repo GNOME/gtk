@@ -22,16 +22,6 @@
 #include "gtkcssparserprivate.h"
 #include "gtkprivate.h"
 
-/**
- * GtkCssSection:
- *
- * Defines a part of a CSS document. Because sections are nested into
- * one another, you can use gtk_css_section_get_parent() to get the
- * containing region.
- *
- * Since: 3.2
- */
-
 struct _GtkCssSection
 {
   gint                ref_count;

@@ -69,8 +69,11 @@ typedef enum
 /**
  * GtkCssSection:
  *
- * GtkCssSection is an auxiliary object containing information about
- * the results of parsing a CSS style sheet.
+ * Defines a part of a CSS document. Because sections are nested into
+ * one another, you can use gtk_css_section_get_parent() to get the
+ * containing region.
+ *
+ * Since: 3.2
  */
 typedef struct _GtkCssSection GtkCssSection;
 
