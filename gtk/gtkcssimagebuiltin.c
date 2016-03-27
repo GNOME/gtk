@@ -794,6 +794,24 @@ gtk_css_image_builtin_parse (GtkCssImage  *image,
   return TRUE;
 }
 
+static gboolean
+gtk_css_image_builtin_token_parse (GtkCssImage       *image,
+                                   GtkCssTokenSource *source)
+{
+  const GtkCssToken *token;
+
+  token = gtk_css_token_source_get_token (source);
+
+  if (!gtk_css_token_is_ident (token, "builtin"))
+    {
+      gtk_css_token_source_error (source, "Expected 'builtin'");
+      gtk_css_token_source_consume_all (source);
+      return FALSE;
+    }
+
+  gtk_css_token_source_consume_token (source);
+  return TRUE;
+}
 static void
 gtk_css_image_builtin_print (GtkCssImage *image,
                              GString     *string)
@@ -864,6 +882,7 @@ gtk_css_image_builtin_class_init (GtkCssImageBuiltinClass *klass)
 
   image_class->draw = gtk_css_image_builtin_real_draw;
   image_class->parse = gtk_css_image_builtin_parse;
+  image_class->token_parse = gtk_css_image_builtin_token_parse;
   image_class->print = gtk_css_image_builtin_print;
   image_class->compute = gtk_css_image_builtin_compute;
   image_class->equal = gtk_css_image_builtin_equal;
