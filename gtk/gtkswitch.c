@@ -67,6 +67,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkcssshadowsvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
+#include "gtkprogresstrackerprivate.h"
 
 #include "fallback-c89.c"
 
@@ -86,9 +87,8 @@ struct _GtkSwitchPrivate
   GtkCssGadget *slider_gadget;
 
   double handle_pos;
-  gint64 start_time;
-  gint64 end_time;
   guint tick_id;
+  GtkProgressTracker tracker;
 
   guint state                 : 1;
   guint is_active             : 1;
@@ -131,17 +131,6 @@ G_DEFINE_TYPE_WITH_CODE (GtkSwitch, gtk_switch, GTK_TYPE_WIDGET,
                                                 gtk_switch_activatable_interface_init));
 G_GNUC_END_IGNORE_DEPRECATIONS;
 
-/* From clutter-easing.c, based on Robert Penner's
- * infamous easing equations, MIT license.
- */
-static gdouble
-ease_out_cubic (gdouble t)
-{
-  gdouble p = t - 1;
-
-  return p * p * p + 1;
-}
-
 static void
 gtk_switch_end_toggle_animation (GtkSwitch *sw)
 {
@@ -161,20 +150,16 @@ gtk_switch_on_frame_clock_update (GtkWidget     *widget,
 {
   GtkSwitch *sw = GTK_SWITCH (widget);
   GtkSwitchPrivate *priv = sw->priv;
-  gint64 now;
 
-  now = gdk_frame_clock_get_frame_time (clock);
+  gtk_progress_tracker_advance_frame (&priv->tracker,
+                                      gdk_frame_clock_get_frame_time (clock));
 
-  if (now < priv->end_time)
+  if (gtk_progress_tracker_get_state (&priv->tracker) != GTK_PROGRESS_STATE_AFTER)
     {
-      gdouble t;
-
-      t = (now - priv->start_time) / (gdouble) (priv->end_time - priv->start_time);
-      t = ease_out_cubic (t);
       if (priv->is_active)
-        priv->handle_pos = 1.0 - t;
+        priv->handle_pos = 1.0 - gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE);
       else
-        priv->handle_pos = t;
+        priv->handle_pos = gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE);
     }
   else
     {
@@ -200,9 +185,7 @@ gtk_switch_begin_toggle_animation (GtkSwitch *sw)
 
   if (animate)
     {
-      GdkFrameClock *clock = gtk_widget_get_frame_clock (GTK_WIDGET (sw));
-      priv->start_time = gdk_frame_clock_get_frame_time (clock);
-      priv->end_time = priv->start_time + 1000 * ANIMATION_DURATION;
+      gtk_progress_tracker_start (&priv->tracker, 1000 * ANIMATION_DURATION, 0, 1.0);
       if (priv->tick_id == 0)
         priv->tick_id = gtk_widget_add_tick_callback (GTK_WIDGET (sw),
                                                       gtk_switch_on_frame_clock_update,
