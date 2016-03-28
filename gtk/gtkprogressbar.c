@@ -38,6 +38,7 @@
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkcsscustomgadgetprivate.h"
 #include "gtkcssnumbervalueprivate.h"
+#include "gtkprogresstrackerprivate.h"
 
 #include "a11y/gtkprogressbaraccessible.h"
 
@@ -92,6 +93,7 @@
 #define MIN_VERTICAL_BAR_WIDTH     7
 #define MIN_VERTICAL_BAR_HEIGHT    80
 
+#define DEFAULT_PULSE_DURATION     250000000
 
 struct _GtkProgressBarPrivate
 {
@@ -110,10 +112,11 @@ struct _GtkProgressBarPrivate
 
   GtkOrientation orientation;
 
-  guint          tick_id;
-  gint64         pulse1;
-  gint64         pulse2;
-  gint64         frame1;
+  guint              tick_id;
+  GtkProgressTracker tracker;
+  gint64             pulse1;
+  gint64             pulse2;
+  gdouble            last_iteration;
 
   guint          activity_dir  : 1;
   guint          activity_mode : 1;
@@ -1142,31 +1145,30 @@ tick_cb (GtkWidget     *widget,
 {
   GtkProgressBar *pbar = GTK_PROGRESS_BAR (widget);
   GtkProgressBarPrivate *priv = pbar->priv;
-  gint64 frame2;
-  gdouble fraction;
+  gint64 frame_time;
+  gdouble iteration, pulse_iterations, current_iterations, fraction;
 
-  frame2 = gdk_frame_clock_get_frame_time (frame_clock);
-  if (priv->frame1 == 0)
-    priv->frame1 = frame2 - 16667;
-  if (priv->pulse1 == 0)
-    priv->pulse1 = priv->pulse2 - 250 * 1000000;
+  if (priv->pulse2 == 0 && priv->pulse1 == 0)
+    return G_SOURCE_CONTINUE;
+
+  frame_time = gdk_frame_clock_get_frame_time (frame_clock);
+  gtk_progress_tracker_advance_frame (&priv->tracker, frame_time);
 
   g_assert (priv->pulse2 > priv->pulse1);
-  g_assert (frame2 > priv->frame1);
 
-  if (frame2 - priv->pulse2 > 3 * (priv->pulse2 - priv->pulse1))
-    {
-      priv->pulse1 = 0;
-      return G_SOURCE_CONTINUE;
-    }
+  pulse_iterations = (priv->pulse2 - priv->pulse1) / (gdouble) G_USEC_PER_SEC;
+  current_iterations = (frame_time - priv->pulse1) / (gdouble) G_USEC_PER_SEC;
 
+  iteration = gtk_progress_tracker_get_iteration (&priv->tracker);
   /* Determine the fraction to move the block from one frame
    * to the next when pulse_fraction is how far the block should
    * move between two calls to gtk_progress_bar_pulse().
    */
-  fraction = priv->pulse_fraction * (frame2 - priv->frame1) / MAX (frame2 - priv->pulse2, priv->pulse2 - priv->pulse1);
+  fraction = priv->pulse_fraction * (iteration - priv->last_iteration) / MAX (pulse_iterations, current_iterations);
+  priv->last_iteration = iteration;
 
-  priv->frame1 = frame2;
+  if (current_iterations > 3 * pulse_iterations)
+    return G_SOURCE_CONTINUE;
 
   /* advance the block */
   if (priv->activity_dir == 0)
@@ -1243,10 +1245,13 @@ gtk_progress_bar_act_mode_enter (GtkProgressBar *pbar)
     }
 
   update_node_classes (pbar);
+  /* No fixed schedule for pulses, will adapt after calls to update_pulse. Just
+   * start the tracker to repeat forever with iterations every second.*/
+  gtk_progress_tracker_start (&priv->tracker, G_USEC_PER_SEC, 0, INFINITY);
   priv->tick_id = gtk_widget_add_tick_callback (widget, tick_cb, NULL, NULL);
   priv->pulse2 = 0;
   priv->pulse1 = 0;
-  priv->frame1 = 0;
+  priv->last_iteration = 0;
 }
 
 static void
@@ -1406,9 +1411,13 @@ static void
 gtk_progress_bar_update_pulse (GtkProgressBar *pbar)
 {
   GtkProgressBarPrivate *priv = pbar->priv;
+  gint64 pulse_time = g_get_monotonic_time ();
+
+  if (priv->pulse2 == pulse_time)
+    return;
 
   priv->pulse1 = priv->pulse2;
-  priv->pulse2 = g_get_monotonic_time ();
+  priv->pulse2 = pulse_time;
 }
 
 /**
