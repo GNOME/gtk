@@ -45,6 +45,7 @@
 #include "gtkkineticscrolling.h"
 #include "a11y/gtkscrolledwindowaccessible.h"
 #include "gtkstylecontextprivate.h"
+#include "gtkprogresstrackerprivate.h"
 
 #include <math.h>
 
@@ -193,8 +194,7 @@ typedef struct
   gdouble    current_pos;
   gdouble    source_pos;
   gdouble    target_pos;
-  gint64     start_time;
-  gint64     end_time;
+  GtkProgressTracker tracker;
   guint      tick_id;
   guint      over_timeout_id;
 } Indicator;
@@ -4002,40 +4002,22 @@ indicator_set_fade (Indicator *indicator,
     }
 }
 
-static double
-ease_out_cubic (double t)
-{
-  double p = t - 1;
-  return p * p * p + 1;
-}
-
-static void
-indicator_fade_step (Indicator *indicator,
-                     gint64     now)
-{
-  gdouble t;
-
-  if (now < indicator->end_time)
-    t = (now - indicator->start_time) / (gdouble) (indicator->end_time - indicator->start_time);
-  else
-    t = 1.0;
-  t = ease_out_cubic (t);
-
-  indicator_set_fade (indicator,
-                      indicator->source_pos + (t * (indicator->target_pos - indicator->source_pos)));
-}
-
 static gboolean
 indicator_fade_cb (GtkWidget     *widget,
                    GdkFrameClock *frame_clock,
                    gpointer       user_data)
 {
   Indicator *indicator = user_data;
-  gint64 now;
+  gdouble t;
 
-  now = gdk_frame_clock_get_frame_time (frame_clock);
-  indicator_fade_step (indicator, now);
-  if (indicator->current_pos == indicator->target_pos)
+  gtk_progress_tracker_advance_frame (&indicator->tracker,
+                                      gdk_frame_clock_get_frame_time (frame_clock));
+  t = gtk_progress_tracker_get_ease_out_cubic (&indicator->tracker, FALSE);
+
+  indicator_set_fade (indicator,
+                      indicator->source_pos + (t * (indicator->target_pos - indicator->source_pos)));
+
+  if (gtk_progress_tracker_get_state (&indicator->tracker) == GTK_PROGRESS_STATE_AFTER)
     {
       indicator->tick_id = 0;
       return FALSE;
@@ -4065,12 +4047,9 @@ indicator_start_fade (Indicator *indicator,
   if (gtk_widget_get_mapped (indicator->scrollbar) && animations_enabled)
     {
       indicator->source_pos = indicator->current_pos;
-      indicator->start_time = gdk_frame_clock_get_frame_time (gtk_widget_get_frame_clock (indicator->scrollbar));
-      indicator->end_time = indicator->start_time + INDICATOR_FADE_OUT_DURATION * 1000;
+      gtk_progress_tracker_start (&indicator->tracker, INDICATOR_FADE_OUT_DURATION * 1000, 0, 1.0);
       if (indicator->tick_id == 0)
         indicator->tick_id = gtk_widget_add_tick_callback (indicator->scrollbar, indicator_fade_cb, indicator, NULL);
-
-      indicator_fade_step (indicator, indicator->start_time);
     }
   else
     indicator_set_fade (indicator, target);
@@ -4093,8 +4072,9 @@ indicator_stop_fade (Indicator *indicator)
     }
 
   gdk_window_hide (indicator->window);
+  gtk_progress_tracker_finish (&indicator->tracker);
   indicator->current_pos = indicator->source_pos = indicator->target_pos = 0;
-  indicator->start_time = indicator->end_time = indicator->last_scroll_time = 0;
+  indicator->last_scroll_time = 0;
 }
 
 static gboolean
@@ -4297,8 +4277,9 @@ indicator_reset (Indicator *indicator)
 
   indicator->scrollbar = NULL;
   indicator->over = FALSE;
+  gtk_progress_tracker_finish (&indicator->tracker);
   indicator->current_pos = indicator->source_pos = indicator->target_pos = 0;
-  indicator->start_time = indicator->end_time = indicator->last_scroll_time = 0;
+  indicator->last_scroll_time = 0;
 }
 
 static void
