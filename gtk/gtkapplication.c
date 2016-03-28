@@ -1402,7 +1402,8 @@ gtk_application_set_app_menu (GtkApplication *application,
  * Returns the menu model that has been set with
  * gtk_application_set_app_menu().
  *
- * Returns: (transfer none): the application menu of @application
+ * Returns: (transfer none) (nullable): the application menu of @application
+ *   or %NULL if no application menu has been set.
  *
  * Since: 3.4
  */
