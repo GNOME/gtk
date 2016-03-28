@@ -80,6 +80,21 @@ if OS_UNIX
 #TEST_PROGS			+= defaultvalue
 endif
 
+if HAVE_CXX
+
+AM_CXXFLAGS = $(AM_CPPFLAGS)
+
+TEST_PROGS += autotestkeywords
+
+autotestkeywords_SOURCES = autotestkeywords.cc
+autotestkeywords_CPPFLAGS = -I$(srcdir)/dummy-headers
+
+if HAVE_OBJC
+autotestkeywords_CPPFLAGS += -DHAVE_OBJC=1 -x objective-c++
+endif
+
+endif
+
 treemodel_SOURCES = 		\
 	treemodel.h 		\
 	treemodel.c 		\

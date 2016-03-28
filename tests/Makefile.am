@@ -178,22 +178,6 @@ if USE_X11
 noinst_PROGRAMS += testerrors
 endif
 
-if HAVE_CXX
-
-AM_CXXFLAGS = $(AM_CPPFLAGS)
-
-noinst_PROGRAMS += autotestkeywords
-TESTS = autotestkeywords
-
-autotestkeywords_SOURCES = autotestkeywords.cc
-autotestkeywords_CPPFLAGS = -I$(srcdir)/dummy-headers
-
-if HAVE_OBJC
-autotestkeywords_CPPFLAGS += -DHAVE_OBJC=1 -x objective-c++
-endif
-
-endif
-
 animated_resizing_DEPENDENCIES = $(TEST_DEPS)
 animated_revealing_DEPENDENCIES = $(TEST_DEPS)
 flicker_DEPENDENCIES = $(TEST_DEPS)
@@ -581,10 +565,5 @@ EXTRA_DIST += 			\
 	mydialog2.ui		\
 	popover.ui		\
 	selectionmode.ui
-
-CLEANFILES = 			\
-	autotestkeywords.log	\
-	autotestkeywords.trs	\
-	test-suite.log
 
 -include $(top_srcdir)/git.mk
