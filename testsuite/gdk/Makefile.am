@@ -22,6 +22,7 @@ TEST_PROGS += 				\
 	display				\
 	encoding			\
 	keysyms				\
+	rectangle			\
 	rgba				\
 	seat				\
 	visual				\
