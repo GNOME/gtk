@@ -110,6 +110,7 @@
 #include "gtkmenusectionbox.h"
 #include "gtkroundedboxprivate.h"
 #include "gtkstylecontextprivate.h"
+#include "gtkprogresstrackerprivate.h"
 
 #ifdef GDK_WINDOWING_WAYLAND
 #include "wayland/gdkwayland.h"
@@ -156,6 +157,7 @@ struct _GtkPopoverPrivate
   GtkAdjustment *hadj;
   GdkRectangle pointing_to;
   GtkPopoverConstraint constraint;
+  GtkProgressTracker tracker;
   guint prev_focus_unmap_id;
   guint hierarchy_changed_id;
   guint size_allocate_id;
@@ -173,7 +175,6 @@ struct _GtkPopoverPrivate
   guint transitions_enabled : 1;
   guint state               : 2;
   guint visible             : 1;
-  gint64 start_time;
   gint transition_diff;
   guint tick_id;
 
@@ -510,17 +511,6 @@ gtk_popover_apply_modality (GtkPopover *popover,
     }
 }
 
-/* From clutter-easing.c, based on Robert Penner's
- * infamous easing equations, MIT license.
- */
-static double
-ease_out_cubic (double t)
-{
-  double p = t - 1;
-
-  return p * p * p + 1;
-}
-
 static gboolean
 show_animate_cb (GtkWidget     *widget,
                  GdkFrameClock *frame_clock,
@@ -528,15 +518,11 @@ show_animate_cb (GtkWidget     *widget,
 {
   GtkPopover *popover = GTK_POPOVER (widget);
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-  gint64 now = gdk_frame_clock_get_frame_time (frame_clock);
   gdouble t;
 
-  if (now < (priv->start_time + TRANSITION_DURATION))
-    t = (now - priv->start_time) / (gdouble) (TRANSITION_DURATION);
-  else
-    t = 1.0;
-
-  t = ease_out_cubic (t);
+  gtk_progress_tracker_advance_frame (&priv->tracker,
+                                      gdk_frame_clock_get_frame_time (frame_clock));
+  t = gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE);
 
   if (priv->state == STATE_SHOWING)
     {
@@ -551,7 +537,7 @@ show_animate_cb (GtkWidget     *widget,
 
   gtk_popover_update_position (popover);
 
-  if (t >= 1.0)
+  if (gtk_progress_tracker_get_state (&priv->tracker) == GTK_PROGRESS_STATE_AFTER)
     {
       if (priv->state == STATE_SHOWING)
         {
@@ -573,13 +559,11 @@ static void
 gtk_popover_start_transition (GtkPopover *popover)
 {
   GtkPopoverPrivate *priv = popover->priv;
-  GdkFrameClock *clock;
 
   if (priv->tick_id != 0)
     return;
 
-  clock = gtk_widget_get_frame_clock (GTK_WIDGET (popover));
-  priv->start_time = gdk_frame_clock_get_frame_time (clock);
+  gtk_progress_tracker_start (&priv->tracker, TRANSITION_DURATION, 0, 1.0);
   priv->tick_id = gtk_widget_add_tick_callback (GTK_WIDGET (popover),
                                                 show_animate_cb,
                                                 popover, NULL);
