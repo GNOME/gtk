@@ -75,6 +75,9 @@ test_list_visuals (void)
         found_system = TRUE;
       if (visual == rgba_visual)
         found_rgba = TRUE;
+      g_assert_true (GDK_IS_VISUAL (visual));
+
+      g_assert_true (gdk_visual_get_screen (visual) == screen);
     }
   g_list_free (list);
 
