@@ -23,6 +23,7 @@ TEST_PROGS += 				\
 	encoding			\
 	keysyms				\
 	rgba				\
+	seat				\
 	visual				\
 	$(NULL)
 
