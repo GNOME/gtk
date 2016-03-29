@@ -3996,7 +3996,7 @@ gtk_window_get_geometry_info (GtkWindow *window,
  * gtk_window_set_geometry_hints:
  * @window: a #GtkWindow
  * @geometry_widget: (allow-none): widget the geometry hints used to be applied to
- *   or %NULL. Since 3.18 this argument is ignored and GTK behaves as if %NULL was
+ *   or %NULL. Since 3.20 this argument is ignored and GTK behaves as if %NULL was
  *   set.
  * @geometry: (allow-none): struct containing geometry information or %NULL
  * @geom_mask: mask indicating which struct fields should be paid attention to
