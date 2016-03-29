@@ -11415,7 +11415,7 @@ gtk_XParseGeometry (const char   *string,
  *   gtk_widget_show_all (vbox);
  *
  *   gtk_window_set_geometry_hints (GTK_WINDOW (window),
- * 	  			    window,
+ * 	  			    NULL,
  * 				    &size_hints,
  * 				    GDK_HINT_MIN_SIZE |
  * 				    GDK_HINT_BASE_SIZE |
