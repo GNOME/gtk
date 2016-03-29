@@ -4277,6 +4277,7 @@ button.circular { // FIXME: aggregate to buttons
 *:drop(active) { // FIXME needs to be done widget by widget, this wildcard should really die
   border-color: $drop_target_color;
   box-shadow: inset 0 0 0 1px $drop_target_color;
+  caret-color: $drop_target_color;
 }
 
 stackswitcher button.text-button { min-width: 100px; } // FIXME aggregate with buttons
