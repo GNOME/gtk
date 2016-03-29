@@ -303,7 +303,7 @@ entry {
       }
     }
 
-    & image { // entry icons colors
+    image { // entry icons colors
       color: mix($fg_color, $base_color, 80%);
 
       &:hover { color: $fg_color; }
