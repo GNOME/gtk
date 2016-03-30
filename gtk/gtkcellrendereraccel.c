@@ -739,6 +739,8 @@ gtk_cell_editable_event_box_class_init (GtkCellEditableEventBoxClass *class)
   g_object_class_install_property (object_class, PROP_PATH,
       g_param_spec_string ("path", NULL, NULL,
                            NULL, GTK_PARAM_READWRITE));
+
+  gtk_widget_class_set_css_name (widget_class, "acceleditor");
 }
 
 static void
