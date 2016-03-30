@@ -5959,8 +5959,11 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
   gtk_widget_push_verify_invariants (widget);
 
 #ifdef G_ENABLE_DEBUG
-  priv->highlight_resize = TRUE;
-  gtk_widget_queue_draw (widget);
+  if (GTK_DEBUG_CHECK (RESIZE))
+    {
+      priv->highlight_resize = TRUE;
+      gtk_widget_queue_draw (widget);
+    }
 
   if (gtk_widget_get_resize_needed (widget))
     {
@@ -7005,8 +7008,7 @@ gtk_widget_draw_internal (GtkWidget *widget,
 	      cairo_restore (cr);
 	    }
 	}
-      if (GTK_DISPLAY_DEBUG_CHECK (gtk_widget_get_display (widget), RESIZE) &&
-          widget->priv->highlight_resize)
+      if (widget->priv->highlight_resize)
         {
           GtkAllocation alloc;
           gtk_widget_get_allocation (widget, &alloc);
@@ -7018,7 +7020,6 @@ gtk_widget_draw_internal (GtkWidget *widget,
           gtk_widget_queue_draw (widget);
 
           widget->priv->highlight_resize = FALSE;
-
         }
 #endif
 
