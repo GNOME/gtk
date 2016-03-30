@@ -227,6 +227,55 @@ gtk_css_image_recolor_parse (GtkCssImage  *image,
   return TRUE;
 }
 
+static guint
+gtk_css_image_recolor_token_parse_argument (GtkCssTokenSource *source,
+                                            guint              arg,
+                                            gpointer           data)
+{
+  GtkCssImageRecolor *recolor = GTK_CSS_IMAGE_RECOLOR (data);
+  GtkCssImageUrl *url = GTK_CSS_IMAGE_URL (data);
+
+  if (arg == 0)
+    {
+      url->file = gtk_css_token_source_consume_url (source);
+      if (url->file == NULL)
+        return 0;
+    }
+  else if (arg == 1)
+    {
+      recolor->palette = gtk_css_palette_value_token_parse (source);
+      if (recolor->palette == NULL)
+        return 0;
+    }
+  else
+    {
+      g_assert_not_reached ();
+      return 0;
+    }
+
+  return 1;
+}
+
+static gboolean
+gtk_css_image_recolor_token_parse (GtkCssImage       *image,
+                                   GtkCssTokenSource *source)
+{
+  const GtkCssToken *token;
+
+  token = gtk_css_token_source_get_token (source);
+  if (!gtk_css_token_is_function (token, "-gtk-recolor"))
+    {
+      gtk_css_token_source_error (source, "Expected '-gtk-recolor('");
+      gtk_css_token_source_consume_all (source);
+      return FALSE;
+    }
+
+  return gtk_css_token_source_consume_function (source, 
+                                                1, 2,
+                                                gtk_css_image_recolor_token_parse_argument,
+                                                image);
+}
+
 static void
 _gtk_css_image_recolor_class_init (GtkCssImageRecolorClass *klass)
 {
@@ -234,6 +283,7 @@ _gtk_css_image_recolor_class_init (GtkCssImageRecolorClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   image_class->parse = gtk_css_image_recolor_parse;
+  image_class->token_parse = gtk_css_image_recolor_token_parse;
   image_class->compute = gtk_css_image_recolor_compute;
   image_class->print = gtk_css_image_recolor_print;
 
