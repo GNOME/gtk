@@ -401,6 +401,10 @@ entry {
   }
 }
 
+treeview acceleditor > label {
+    background-color: $selected_bg_color;
+}
+
 treeview entry {
   &.flat, & {
     border-radius: 0;

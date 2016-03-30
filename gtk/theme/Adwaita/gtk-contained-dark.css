@@ -387,6 +387,9 @@ entry:drop(active):not(:only-child) + button,
 entry:drop(active):not(:only-child) + combobox > box > button.combo {
   border-top-color: #4e9a06; }
 
+treeview acceleditor > label {
+  background-color: #215d9c; }
+
 treeview entry.flat, treeview entry {
   border-radius: 0;
   background-image: none;
