@@ -386,6 +386,210 @@ gtk_css_image_radial_parse (GtkCssImage  *image,
   return TRUE;
 }
 
+static gboolean
+gtk_css_image_radial_token_parse_size (GtkCssImageRadial *radial,
+                                       GtkCssTokenSource *source,
+                                       gboolean          *shape_is_known,
+                                       gboolean          *has_size)
+{
+  static const struct {
+    const char *name;
+    guint       value;
+  } names[] = {
+    { "closest-side", GTK_CSS_CLOSEST_SIDE },
+    { "farthest-side", GTK_CSS_FARTHEST_SIDE },
+    { "closest-corner", GTK_CSS_CLOSEST_CORNER },
+    { "farthest-corner", GTK_CSS_FARTHEST_CORNER }
+  };
+  const GtkCssToken *token;
+  guint i;
+
+  token = gtk_css_token_source_get_token (source);
+  for (i = 0; i < G_N_ELEMENTS (names); i++)
+    {
+      if (gtk_css_token_is_ident (token, names[i].name))
+        {
+          radial->size = names[i].value;
+          gtk_css_token_source_consume_token (source);
+          *has_size = TRUE;
+          return TRUE;
+        }
+    }
+
+  if (!gtk_css_number_value_check_token (token))
+    {
+      radial->size = GTK_CSS_FARTHEST_CORNER;
+      return TRUE;
+    }
+
+  *has_size = TRUE;
+  radial->sizes[0] = gtk_css_number_value_token_parse (source,
+                                                       GTK_CSS_PARSE_LENGTH |
+                                                       (!*shape_is_known || !radial->circle ? GTK_CSS_PARSE_PERCENT : 0));
+  if (radial->sizes[0] == NULL)
+    return FALSE;
+  if (gtk_css_number_value_has_percent (radial->sizes[0]))
+    {
+      *shape_is_known = TRUE;
+      radial->circle = FALSE;
+    }
+  if (!*shape_is_known)
+    {
+      *shape_is_known = TRUE;
+      token = gtk_css_token_source_get_token (source);
+      radial->circle = !gtk_css_number_value_check_token (token);
+    }
+
+  if (radial->circle)
+    return TRUE;
+
+  radial->sizes[1] = gtk_css_number_value_token_parse (source,
+                                                       GTK_CSS_PARSE_LENGTH | GTK_CSS_PARSE_PERCENT);
+  if (radial->sizes[1] == NULL)
+    return FALSE;
+
+  return TRUE;
+}
+
+static guint
+gtk_css_image_radial_token_parse_argument (GtkCssTokenSource *source,
+                                           guint              arg,
+                                           gpointer           data)
+{
+  GtkCssImageRadial *radial = data;
+  GtkCssImageRadialColorStop stop;
+  const GtkCssToken *token;
+
+  if (arg == 0)
+    {
+      gboolean has_shape = FALSE, shape_is_known = FALSE, has_size = FALSE;
+
+      token = gtk_css_token_source_get_token (source);
+      if (gtk_css_token_is_ident (token, "ellipse"))
+        {
+          shape_is_known = has_shape = TRUE;
+          gtk_css_token_source_consume_token (source);
+        }
+      else if (gtk_css_token_is_ident (token, "circle"))
+        {
+          radial->circle = TRUE;
+          shape_is_known = has_shape = TRUE;
+          gtk_css_token_source_consume_token (source);
+        }
+
+      if (!gtk_css_image_radial_token_parse_size (radial, source, &shape_is_known, &has_size))
+        return 0;
+
+      if (!has_shape)
+        {
+          token = gtk_css_token_source_get_token (source);
+          if (gtk_css_token_is_ident (token, "ellipse"))
+            {
+              if (shape_is_known && radial->circle)
+                {
+                  gtk_css_token_source_error (source, "Specified size not allowed for ellipse");
+                  gtk_css_token_source_consume_all (source);
+                  return 0;
+                }
+              shape_is_known = TRUE;
+              has_shape = TRUE;
+              gtk_css_token_source_consume_token (source);
+            }
+          else if (gtk_css_token_is_ident (token, "circle"))
+            {
+              if (shape_is_known && !radial->circle)
+                {
+                  gtk_css_token_source_error (source, "Specified size not allowed for circle");
+                  gtk_css_token_source_consume_all (source);
+                  return 0;
+                }
+              radial->circle = TRUE;
+              shape_is_known = TRUE;
+              has_shape = TRUE;
+              gtk_css_token_source_consume_token (source);
+            }
+        }
+      if (!shape_is_known)
+        {
+          g_assert (radial->size != GTK_CSS_EXPLICIT_SIZE);
+          radial->circle = TRUE;
+        }
+
+      token = gtk_css_token_source_get_token (source);
+      if (gtk_css_token_is_ident (token, "at"))
+        {
+          gtk_css_token_source_consume_token (source);
+
+          radial->position = gtk_css_position_value_token_parse (source);
+          if (radial->position == NULL)
+            return 0;
+          return 1;
+        }
+      else
+        {
+          radial->position = _gtk_css_position_value_new (_gtk_css_number_value_new (50, GTK_CSS_PERCENT),
+                                                          _gtk_css_number_value_new (50, GTK_CSS_PERCENT));
+        }
+      
+      if (has_shape || has_size)
+        return 1;
+    }
+
+  stop.color = gtk_css_color_value_token_parse (source);
+  if (stop.color == NULL)
+    return 0;
+
+  token = gtk_css_token_source_get_token (source);
+  if (gtk_css_number_value_check_token (token))
+    {
+      stop.offset = gtk_css_number_value_token_parse (source,
+                                                      GTK_CSS_PARSE_PERCENT
+                                                      | GTK_CSS_PARSE_LENGTH);
+      if (stop.offset == NULL)
+        {
+          _gtk_css_value_unref (stop.color);
+          return FALSE;
+        }
+    }
+  else
+    {
+      stop.offset = NULL;
+    }
+
+  g_array_append_val (radial->stops, stop);
+  /* We consume the optional side argument here, too. */
+  return arg == 0 ? 2 : 1;
+}
+
+static gboolean
+gtk_css_image_radial_token_parse (GtkCssImage       *image,
+                                  GtkCssTokenSource *source)
+{
+  GtkCssImageRadial *radial = GTK_CSS_IMAGE_RADIAL (image);
+  const GtkCssToken *token;
+
+  token = gtk_css_token_source_get_token (source);
+  if (gtk_css_token_is_function (token, "radial-gradient"))
+    {
+      /* nothing to do here */
+    }
+  else if (gtk_css_token_is_function (token, "repeating-radial-gradient"))
+    {
+      radial->repeating = TRUE;
+    }
+  else
+    {
+      gtk_css_token_source_error (source, "Expected 'radial-gradient('");
+      gtk_css_token_source_consume_all (source);
+      return FALSE;
+    }
+
+  return gtk_css_token_source_consume_function (source,
+                                                3, G_MAXUINT,
+                                                gtk_css_image_radial_token_parse_argument,
+                                                image);
+}
+
 static void
 gtk_css_image_radial_print (GtkCssImage *image,
                             GString     *string)
@@ -662,6 +866,7 @@ _gtk_css_image_radial_class_init (GtkCssImageRadialClass *klass)
 
   image_class->draw = gtk_css_image_radial_draw;
   image_class->parse = gtk_css_image_radial_parse;
+  image_class->token_parse = gtk_css_image_radial_token_parse;
   image_class->print = gtk_css_image_radial_print;
   image_class->compute = gtk_css_image_radial_compute;
   image_class->transition = gtk_css_image_radial_transition;
