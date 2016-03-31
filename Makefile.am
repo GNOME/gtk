@@ -95,7 +95,7 @@ ChangeLog:
 uninstall-local:
 	rm -f $(DESTDIR)$(pkgconfigdir)/gtk+-3.0.pc
 
-DISTCHECK_CONFIGURE_FLAGS =		\
+AM_DISTCHECK_CONFIGURE_FLAGS =		\
 	--enable-gtk-doc 		\
 	--disable-doc-cross-references  \
 	--enable-man 			\
