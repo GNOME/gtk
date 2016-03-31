@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-02-21 00:19+0000\n"
-"PO-Revision-Date: 2016-02-23 14:37+0700\n"
+"PO-Revision-Date: 2016-03-31 09:11+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <theppitak@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "Language: th\n"
@@ -3096,7 +3096,7 @@ msgstr "_ยกเลิก"
 
 #: gtk/gtkplacesview.c:1645
 msgid "_Disconnect"
-msgstr "_ตัดการเชื่อมต่อ"
+msgstr "เ_ลิกเชื่อมต่อ"
 
 #: gtk/gtkplacesview.c:1655
 msgid "_Connect"
@@ -3920,27 +3920,23 @@ msgstr ""
 
 #: gtk/inspector/menu.c:93
 msgid "Unnamed section"
-msgstr ""
+msgstr "หัวข้อไม่มีชื่อ"
 
 #: gtk/inspector/menu.ui:35 gtk/inspector/object-tree.ui:124
-#, fuzzy
-#| msgid "label"
 msgid "Label"
 msgstr "ฉลาก"
 
 #: gtk/inspector/menu.ui:48 gtk/inspector/prop-editor.c:1385
-#, fuzzy
-#| msgid "Location"
 msgid "Action"
-msgstr "ตำแหน่ง"
+msgstr "การกระทำ"
 
 #: gtk/inspector/menu.ui:61
 msgid "Target"
-msgstr ""
+msgstr "ปลายทาง"
 
 #: gtk/inspector/menu.ui:74
 msgid "Icon"
-msgstr ""
+msgstr "ไอคอน"
 
 #: gtk/inspector/misc-info.ui:42
 #, fuzzy
@@ -4577,7 +4573,7 @@ msgstr "asme_f"
 #: gtk/paper_names_offsets.c:5
 msgctxt "paper size"
 msgid "A0×2"
-msgstr ""
+msgstr "A0×2"
 
 #: gtk/paper_names_offsets.c:6
 msgctxt "paper size"
@@ -4587,7 +4583,7 @@ msgstr "A0"
 #: gtk/paper_names_offsets.c:7
 msgctxt "paper size"
 msgid "A0×3"
-msgstr ""
+msgstr "A0×3"
 
 #: gtk/paper_names_offsets.c:8
 msgctxt "paper size"
@@ -4602,12 +4598,12 @@ msgstr "A10"
 #: gtk/paper_names_offsets.c:10
 msgctxt "paper size"
 msgid "A1×3"
-msgstr ""
+msgstr "A1×3"
 
 #: gtk/paper_names_offsets.c:11
 msgctxt "paper size"
 msgid "A1×4"
-msgstr ""
+msgstr "A1×4"
 
 #: gtk/paper_names_offsets.c:12
 msgctxt "paper size"
@@ -4617,17 +4613,17 @@ msgstr "A2"
 #: gtk/paper_names_offsets.c:13
 msgctxt "paper size"
 msgid "A2×3"
-msgstr ""
+msgstr "A2×3"
 
 #: gtk/paper_names_offsets.c:14
 msgctxt "paper size"
 msgid "A2×4"
-msgstr ""
+msgstr "A2×4"
 
 #: gtk/paper_names_offsets.c:15
 msgctxt "paper size"
 msgid "A2×5"
-msgstr ""
+msgstr "A2×5"
 
 #: gtk/paper_names_offsets.c:16
 msgctxt "paper size"
@@ -4642,27 +4638,27 @@ msgstr "A3 พิเศษ"
 #: gtk/paper_names_offsets.c:18
 msgctxt "paper size"
 msgid "A3×3"
-msgstr ""
+msgstr "A3×3"
 
 #: gtk/paper_names_offsets.c:19
 msgctxt "paper size"
 msgid "A3×4"
-msgstr ""
+msgstr "A3×4"
 
 #: gtk/paper_names_offsets.c:20
 msgctxt "paper size"
 msgid "A3×5"
-msgstr ""
+msgstr "A3×5"
 
 #: gtk/paper_names_offsets.c:21
 msgctxt "paper size"
 msgid "A3×6"
-msgstr ""
+msgstr "A3×6"
 
 #: gtk/paper_names_offsets.c:22
 msgctxt "paper size"
 msgid "A3×7"
-msgstr ""
+msgstr "A3×7"
 
 #: gtk/paper_names_offsets.c:23
 msgctxt "paper size"
@@ -4682,37 +4678,37 @@ msgstr "A4 Tab"
 #: gtk/paper_names_offsets.c:26
 msgctxt "paper size"
 msgid "A4×3"
-msgstr ""
+msgstr "A4×3"
 
 #: gtk/paper_names_offsets.c:27
 msgctxt "paper size"
 msgid "A4×4"
-msgstr ""
+msgstr "A4×4"
 
 #: gtk/paper_names_offsets.c:28
 msgctxt "paper size"
 msgid "A4×5"
-msgstr ""
+msgstr "A4×5"
 
 #: gtk/paper_names_offsets.c:29
 msgctxt "paper size"
 msgid "A4×6"
-msgstr ""
+msgstr "A4×6"
 
 #: gtk/paper_names_offsets.c:30
 msgctxt "paper size"
 msgid "A4×7"
-msgstr ""
+msgstr "A4×7"
 
 #: gtk/paper_names_offsets.c:31
 msgctxt "paper size"
 msgid "A4×8"
-msgstr ""
+msgstr "A4×8"
 
 #: gtk/paper_names_offsets.c:32
 msgctxt "paper size"
 msgid "A4×9"
-msgstr ""
+msgstr "A4×9"
 
 #: gtk/paper_names_offsets.c:33
 msgctxt "paper size"
@@ -4895,20 +4891,14 @@ msgid "RA2"
 msgstr "RA2"
 
 #: gtk/paper_names_offsets.c:69
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "A3"
 msgctxt "paper size"
 msgid "RA3"
-msgstr "A3"
+msgstr "RA3"
 
 #: gtk/paper_names_offsets.c:70
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "A4"
 msgctxt "paper size"
 msgid "RA4"
-msgstr "A4"
+msgstr "RA4"
 
 #: gtk/paper_names_offsets.c:71
 msgctxt "paper size"
@@ -4928,12 +4918,12 @@ msgstr "SRA2"
 #: gtk/paper_names_offsets.c:74
 msgctxt "paper size"
 msgid "SRA3"
-msgstr ""
+msgstr "SRA3"
 
 #: gtk/paper_names_offsets.c:75
 msgctxt "paper size"
 msgid "SRA4"
-msgstr ""
+msgstr "SRA4"
 
 #: gtk/paper_names_offsets.c:76
 msgctxt "paper size"
@@ -5011,12 +5001,9 @@ msgid "Choukei 4 Envelope"
 msgstr "ซอง Choukei 4"
 
 #: gtk/paper_names_offsets.c:91
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "Choukei 4 Envelope"
 msgctxt "paper size"
 msgid "Choukei 40 Envelope"
-msgstr "ซอง Choukei 4"
+msgstr "ซอง Choukei 40"
 
 #: gtk/paper_names_offsets.c:92
 msgctxt "paper size"
@@ -5031,47 +5018,32 @@ msgstr "ซอง kahu"
 #: gtk/paper_names_offsets.c:94
 msgctxt "paper size"
 msgid "kaku2 Envelope"
-msgstr "ซอง kahu2"
+msgstr "ซอง kaku2"
 
 #: gtk/paper_names_offsets.c:95
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "kaku2 Envelope"
 msgctxt "paper size"
 msgid "kaku3 Envelope"
-msgstr "ซอง kahu2"
+msgstr "ซอง kaku3"
 
 #: gtk/paper_names_offsets.c:96
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "kaku2 Envelope"
 msgctxt "paper size"
 msgid "kaku4 Envelope"
-msgstr "ซอง kahu2"
+msgstr "ซอง kaku4"
 
 #: gtk/paper_names_offsets.c:97
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "kaku2 Envelope"
 msgctxt "paper size"
 msgid "kaku5 Envelope"
-msgstr "ซอง kahu2"
+msgstr "ซอง kaku5"
 
 #: gtk/paper_names_offsets.c:98
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "kaku2 Envelope"
 msgctxt "paper size"
 msgid "kaku7 Envelope"
-msgstr "ซอง kahu2"
+msgstr "ซอง kaku7"
 
 #: gtk/paper_names_offsets.c:99
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "kaku2 Envelope"
 msgctxt "paper size"
 msgid "kaku8 Envelope"
-msgstr "ซอง kahu2"
+msgstr "ซอง kaku8"
 
 #: gtk/paper_names_offsets.c:100
 msgctxt "paper size"
@@ -5084,92 +5056,74 @@ msgid "you4 Envelope"
 msgstr "ซอง you4"
 
 #: gtk/paper_names_offsets.c:102
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "you4 Envelope"
 msgctxt "paper size"
 msgid "you6 Envelope"
-msgstr "ซอง you4"
+msgstr "ซอง you6"
 
 #: gtk/paper_names_offsets.c:103
 msgctxt "paper size"
 msgid "10×11"
-msgstr ""
+msgstr "10×11"
 
 #: gtk/paper_names_offsets.c:104
 msgctxt "paper size"
 msgid "10×13"
-msgstr ""
+msgstr "10×13"
 
 #: gtk/paper_names_offsets.c:105
 msgctxt "paper size"
 msgid "10×14"
-msgstr ""
+msgstr "10×14"
 
 #: gtk/paper_names_offsets.c:106
 msgctxt "paper size"
 msgid "10×15"
-msgstr ""
+msgstr "10×15"
 
 #: gtk/paper_names_offsets.c:107
 msgctxt "paper size"
 msgid "11×12"
-msgstr ""
+msgstr "11×12"
 
 #: gtk/paper_names_offsets.c:108
 msgctxt "paper size"
 msgid "11×15"
-msgstr ""
+msgstr "11×15"
 
 #: gtk/paper_names_offsets.c:109
 msgctxt "paper size"
 msgid "12×19"
-msgstr ""
+msgstr "12×19"
 
 #: gtk/paper_names_offsets.c:110
 msgctxt "paper size"
 msgid "5×7"
-msgstr ""
+msgstr "5×7"
 
 #: gtk/paper_names_offsets.c:111
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "6x9 Envelope"
 msgctxt "paper size"
 msgid "6×9 Envelope"
-msgstr "ซอง 6x9"
+msgstr "ซอง 6×9"
 
 #: gtk/paper_names_offsets.c:112
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "7x9 Envelope"
 msgctxt "paper size"
 msgid "7×9 Envelope"
-msgstr "ซอง 7x9"
+msgstr "ซอง 7×9"
 
 #: gtk/paper_names_offsets.c:113
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "#10 Envelope"
 msgctxt "paper size"
 msgid "8×10 Envelope"
-msgstr "ซอง #10"
+msgstr "ซอง 8×10"
 
 #: gtk/paper_names_offsets.c:114
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "9x11 Envelope"
 msgctxt "paper size"
 msgid "9×11 Envelope"
-msgstr "ซอง 9x11"
+msgstr "ซอง 9×11"
 
 #: gtk/paper_names_offsets.c:115
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "#12 Envelope"
 msgctxt "paper size"
 msgid "9×12 Envelope"
-msgstr "ซอง #12"
+msgstr "ซอง 9×12"
 
 #: gtk/paper_names_offsets.c:116
 msgctxt "paper size"
@@ -5247,28 +5201,19 @@ msgid "f"
 msgstr "f"
 
 #: gtk/paper_names_offsets.c:131
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "FanFold European"
 msgctxt "paper size"
 msgid "Fan-Fold European"
-msgstr "FanFold ยุโรป"
+msgstr "Fan-Fold ยุโรป"
 
 #: gtk/paper_names_offsets.c:132
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "FanFold US"
 msgctxt "paper size"
 msgid "Fan-Fold US"
-msgstr "FanFold อเมริกัน"
+msgstr "Fan-Fold อเมริกัน"
 
 #: gtk/paper_names_offsets.c:133
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "FanFold German Legal"
 msgctxt "paper size"
 msgid "Fan-Fold German Legal"
-msgstr "FanFold เยอรมัน Legal"
+msgstr "Fan-Fold เยอรมัน Legal"
 
 #: gtk/paper_names_offsets.c:134
 msgctxt "paper size"
@@ -5281,36 +5226,24 @@ msgid "Government Letter"
 msgstr "Government Letter"
 
 #: gtk/paper_names_offsets.c:136
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "Index 3x5"
 msgctxt "paper size"
 msgid "Index 3×5"
-msgstr "ดัชนี 3x5"
+msgstr "ดัชนี 3×5"
 
 #: gtk/paper_names_offsets.c:137
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "Index 4x6 (postcard)"
 msgctxt "paper size"
 msgid "Index 4×6 (postcard)"
-msgstr "ดัชนี 4x6 (ไปรษณียบัตร)"
+msgstr "ดัชนี 4×6 (ไปรษณียบัตร)"
 
 #: gtk/paper_names_offsets.c:138
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "Index 4x6 ext"
 msgctxt "paper size"
 msgid "Index 4×6 ext"
-msgstr "ดัชนี 4x6 ext"
+msgstr "ดัชนี 4×6 ext"
 
 #: gtk/paper_names_offsets.c:139
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "Index 5x8"
 msgctxt "paper size"
 msgid "Index 5×8"
-msgstr "ดัชนี 5x8"
+msgstr "ดัชนี 5×8"
 
 #: gtk/paper_names_offsets.c:140
 msgctxt "paper size"
@@ -5380,7 +5313,7 @@ msgstr "ซอง #9"
 #: gtk/paper_names_offsets.c:153
 msgctxt "paper size"
 msgid "Oficio"
-msgstr ""
+msgstr "Oficio"
 
 #: gtk/paper_names_offsets.c:154
 msgctxt "paper size"
@@ -5410,7 +5343,7 @@ msgstr "Wide Format"
 #: gtk/paper_names_offsets.c:159
 msgctxt "paper size"
 msgid "Photo L"
-msgstr ""
+msgstr "ภาพถ่าย L"
 
 #: gtk/paper_names_offsets.c:160
 msgctxt "paper size"
@@ -5443,19 +5376,14 @@ msgid "juuro-ku-kai"
 msgstr "juuro-ku-kai"
 
 #: gtk/paper_names_offsets.c:166
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "Small Photo"
 msgctxt "paper size"
 msgid "Large Photo"
-msgstr "Small Photo"
+msgstr "ภาพถ่ายใหญ่"
 
 #: gtk/paper_names_offsets.c:167
-#, fuzzy
-#| msgid "Medium"
 msgctxt "paper size"
 msgid "Medium Photo"
-msgstr "ปานกลาง"
+msgstr "ภาพถ่ายกลาง"
 
 #: gtk/paper_names_offsets.c:168
 msgctxt "paper size"
@@ -5470,15 +5398,12 @@ msgstr "ซอง Postfix"
 #: gtk/paper_names_offsets.c:170
 msgctxt "paper size"
 msgid "Small Photo"
-msgstr "Small Photo"
+msgstr "ภาพถ่ายเล็ก"
 
 #: gtk/paper_names_offsets.c:171
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "Wide Format"
 msgctxt "paper size"
 msgid "Wide Photo"
-msgstr "Wide Format"
+msgstr "ภาพถ่ายกว้าง"
 
 #: gtk/paper_names_offsets.c:172
 msgctxt "paper size"
@@ -5653,10 +5578,8 @@ msgid "Saturation"
 msgstr "ความสด"
 
 #: gtk/ui/gtkfilechooserwidget.ui:69
-#, fuzzy
-#| msgid "Create Fo_lder"
 msgid "Create Folder"
-msgstr "สร้างโฟ_ลเดอร์"
+msgstr "สร้างโฟลเดอร์"
 
 #: gtk/ui/gtkfilechooserwidget.ui:168
 msgid "Files"
@@ -5664,23 +5587,19 @@ msgstr "แฟ้ม"
 
 #: gtk/ui/gtkfilechooserwidget.ui:261
 msgid "Remote location — only searching the current folder"
-msgstr ""
+msgstr "ตำแหน่งในเครือข่าย — ค้นเฉพาะโฟลเดอร์ปัจจุบันเท่านั้น"
 
 #: gtk/ui/gtkfilechooserwidget.ui:392
 msgid "Select which types of files are shown"
 msgstr "เลือกชนิดของแฟ้มที่จะแสดง"
 
 #: gtk/ui/gtkfilechooserwidget.ui:433
-#, fuzzy
-#| msgid "_Folder name:"
 msgid "Folder Name"
-msgstr "_ชื่อโฟลเดอร์"
+msgstr "ชื่อโฟลเดอร์"
 
 #: gtk/ui/gtkfilechooserwidget.ui:460
-#, fuzzy
-#| msgid "Created by"
 msgid "_Create"
-msgstr "สร้างโดย"
+msgstr "_สร้าง"
 
 #: gtk/ui/gtkfontchooserdialog.ui:6
 msgid "Select Font"
@@ -5695,16 +5614,12 @@ msgid "Font Family"
 msgstr "ตระกูลแบบอักษร"
 
 #: gtk/ui/gtkfontchooserwidget.ui:119
-#, fuzzy
-#| msgid "Pre_view"
 msgid "Preview text"
-msgstr "ตัว_อย่าง"
+msgstr "ตัวอย่างข้อความ"
 
 #: gtk/ui/gtkfontchooserwidget.ui:186
-#, fuzzy
-#| msgid "No items found"
 msgid "No Fonts Found"
-msgstr "ไม่พบรายการ"
+msgstr "ไม่พบแบบอักษร"
 
 #: gtk/ui/gtkpagesetupunixdialog.ui:47
 msgid "_Format for:"
@@ -5744,34 +5659,24 @@ msgstr "เดินขึ้นในพาธ"
 
 #. Translators: Server as any successfully connected network address
 #: gtk/ui/gtkplacesview.ui:42
-#, fuzzy
-#| msgid "No printer found"
 msgid "No recent servers found"
-msgstr "ไม่พบเครื่องพิมพ์"
+msgstr "ไม่พบเซิร์ฟเวอร์ล่าสุด"
 
 #: gtk/ui/gtkplacesview.ui:65
-#, fuzzy
-#| msgid "Recent files"
 msgid "Recent Servers"
-msgstr "เอกสารล่าสุด"
+msgstr "เซิร์ฟเวอร์ล่าสุด"
 
 #: gtk/ui/gtkplacesview.ui:168
-#, fuzzy
-#| msgid "No items found"
 msgid "No results found"
 msgstr "ไม่พบรายการ"
 
 #: gtk/ui/gtkplacesview.ui:214
-#, fuzzy
-#| msgid "Connect to Server"
 msgid "Connect to _Server"
-msgstr "เชื่อมต่อไปยังเซิร์ฟเวอร์"
+msgstr "เชื่อมต่อไปยังเซิร์_ฟเวอร์"
 
 #: gtk/ui/gtkplacesview.ui:247
-#, fuzzy
-#| msgid "Connect to a network server address"
 msgid "Enter server address…"
-msgstr "เชื่อมต่อไปยังที่อยู่ของเซิร์ฟเวอร์ในเครือข่าย"
+msgstr "ป้อนที่อยู่ของเซิร์ฟเวอร์…"
 
 #: gtk/ui/gtkprintunixdialog.ui:112
 msgid "Printer"
@@ -5804,16 +5709,12 @@ msgstr "_หน้า:"
 
 #: gtk/ui/gtkprintunixdialog.ui:252 gtk/ui/gtkprintunixdialog.ui:270
 #: gtk/ui/gtkprintunixdialog.ui:277
-#, fuzzy
-#| msgid ""
-#| "Specify one or more page ranges,\n"
-#| " e.g. 1-3,7,11"
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1–3, 7, 11"
 msgstr ""
 "ระบุช่วงของหน้าตั้งแต่หนึ่งช่วงขึ้นไป\n"
-" เช่น 1-3,7,11"
+" เช่น 1-3, 7, 11"
 
 #: gtk/ui/gtkprintunixdialog.ui:276
 msgid "Pages"
@@ -5921,10 +5822,6 @@ msgstr "เ_วลา:"
 #: gtk/ui/gtkprintunixdialog.ui:1005 gtk/ui/gtkprintunixdialog.ui:1007
 #: gtk/ui/gtkprintunixdialog.ui:1026 gtk/ui/gtkprintunixdialog.ui:1028
 #: gtk/ui/gtkprintunixdialog.ui:1035
-#, fuzzy
-#| msgid ""
-#| "Specify the time of print,\n"
-#| " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
@@ -6082,10 +5979,8 @@ msgid "Don't include image data in the cache"
 msgstr "ไม่ต้องเก็บข้อมูลรูปภาพในแคช"
 
 #: gtk/updateiconcache.c:1659
-#, fuzzy
-#| msgid "Don't include image data in the cache"
 msgid "Include image data in the cache"
-msgstr "ไม่ต้องเก็บข้อมูลรูปภาพในแคช"
+msgstr "เก็บข้อมูลรูปภาพในแคชด้วย"
 
 #: gtk/updateiconcache.c:1660
 msgid "Output a C header file"
@@ -6125,8 +6020,6 @@ msgstr ""
 
 #. ID
 #: modules/input/imam-et.c:452
-#, fuzzy
-#| msgid "Amharic (EZ+)"
 msgctxt "input method menu"
 msgid "Amharic (EZ+)"
 msgstr "อัมฮาริก (EZ+)"
@@ -6135,51 +6028,39 @@ msgstr "อัมฮาริก (EZ+)"
 #: modules/input/imbroadway.c:51
 msgctxt "input method menu"
 msgid "Broadway"
-msgstr ""
+msgstr "บรอดเวย์"
 
 #. ID
 #: modules/input/imcedilla.c:90
-#, fuzzy
-#| msgid "Cedilla"
 msgctxt "input method menu"
 msgid "Cedilla"
-msgstr "Cedilla"
+msgstr "ซีดิลลา"
 
 #. ID
 #: modules/input/imcyrillic-translit.c:215
-#, fuzzy
-#| msgid "Cyrillic (Transliterated)"
 msgctxt "input menthod menu"
 msgid "Cyrillic (Transliterated)"
-msgstr "ซีริลลิก (ถอดเสียง)"
+msgstr "ซีริลลิก (ถ่ายเสียง)"
 
 #: modules/input/imime.c:30
-#, fuzzy
-#| msgid "Window"
 msgctxt "input method menu"
 msgid "Windows IME"
-msgstr "หน้าต่าง"
+msgstr "IME ของวินโดวส์"
 
 #. ID
 #: modules/input/iminuktitut.c:125
-#, fuzzy
-#| msgid "Inuktitut (Transliterated)"
 msgctxt "input method menu"
 msgid "Inuktitut (Transliterated)"
-msgstr "อินุกทิทุต (ถอดเสียง)"
+msgstr "อินุกทิทุต (ถ่ายเสียง)"
 
 #. ID
 #: modules/input/imipa.c:143
-#, fuzzy
-#| msgid "IPA"
 msgctxt "input method menu"
 msgid "IPA"
 msgstr "IPA"
 
 #. ID
 #: modules/input/immultipress.c:30
-#, fuzzy
-#| msgid "Multipress"
 msgctxt "input method menu"
 msgid "Multipress"
 msgstr "กดซ้ำ"
@@ -6187,44 +6068,34 @@ msgstr "กดซ้ำ"
 #: modules/input/imquartz.c:58
 msgctxt "input method menu"
 msgid "Mac OS X Quartz"
-msgstr ""
+msgstr "Quartz ของ Mac OS X"
 
 #. ID
 #: modules/input/imthai.c:33
-#, fuzzy
-#| msgid "Thai-Lao"
 msgctxt "input method menu"
 msgid "Thai-Lao"
 msgstr "ไทย-ลาว"
 
 #. ID
 #: modules/input/imti-er.c:451
-#, fuzzy
-#| msgid "Tigrigna-Eritrean (EZ+)"
 msgctxt "input method menu"
 msgid "Tigrigna-Eritrean (EZ+)"
-msgstr "Tigrigna-Eritrean (EZ+)"
+msgstr "ทิกริญญา-เอริเทรีย (EZ+)"
 
 #. ID
 #: modules/input/imti-et.c:451
-#, fuzzy
-#| msgid "Tigrigna-Ethiopian (EZ+)"
 msgctxt "input method menu"
 msgid "Tigrigna-Ethiopian (EZ+)"
-msgstr "Tigrigna-Ethiopian (EZ+)"
+msgstr "ทิกริญญา-เอธิโอเปีย (EZ+)"
 
 #. ID
 #: modules/input/imviqr.c:242
-#, fuzzy
-#| msgid "Vietnamese (VIQR)"
 msgctxt "input method menu"
 msgid "Vietnamese (VIQR)"
 msgstr "เวียดนาม (VIQR)"
 
 #. ID
 #: modules/input/imxim.c:26
-#, fuzzy
-#| msgid "X Input Method"
 msgctxt "input method menu"
 msgid "X Input Method"
 msgstr "X Input Method"
@@ -6266,10 +6137,9 @@ msgstr "รหัสผ่าน:"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1130
 #: modules/printbackends/cups/gtkprintbackendcups.c:1421
-#, fuzzy, c-format
-#| msgid "Authentication is required to print document '%s' on printer %s"
+#, c-format
 msgid "Authentication is required to print document “%s” on printer %s"
-msgstr "ต้องมีการยืนยันตัวบุคคลเพื่อจะพิมพ์เอกสาร '%s' ที่เครื่องพิมพ์ %s"
+msgstr "ต้องมีการยืนยันตัวบุคคลเพื่อจะพิมพ์เอกสาร “%s” ที่เครื่องพิมพ์ %s"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1132
 #, c-format
@@ -6277,10 +6147,9 @@ msgid "Authentication is required to print a document on %s"
 msgstr "ต้องมีการยืนยันตัวบุคคลเพื่อจะพิมพ์เอกสารที่ %s"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1136
-#, fuzzy, c-format
-#| msgid "Authentication is required to get attributes of job '%s'"
+#, c-format
 msgid "Authentication is required to get attributes of job “%s”"
-msgstr "ต้องมีการยืนยันตัวบุคคลเพื่อจะอ่านข้อมูลเกี่ยวกับงานพิมพ์ '%s'"
+msgstr "ต้องมีการยืนยันตัวบุคคลเพื่อจะอ่านข้อมูลเกี่ยวกับงานพิมพ์ “%s”"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1138
 msgid "Authentication is required to get attributes of a job"
@@ -6320,10 +6189,9 @@ msgid "Domain:"
 msgstr "โดเมน:"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1423
-#, fuzzy, c-format
-#| msgid "Authentication is required to print document '%s'"
+#, c-format
 msgid "Authentication is required to print document “%s”"
-msgstr "ต้องมีการยืนยันตัวบุคคลเพื่อจะพิมพ์เอกสาร '%s'"
+msgstr "ต้องมีการยืนยันตัวบุคคลเพื่อจะพิมพ์เอกสาร “%s”"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1428
 #, c-format
@@ -6335,80 +6203,68 @@ msgid "Authentication is required to print this document"
 msgstr "ต้องมีการยืนยันตัวบุคคลเพื่อจะพิมพ์เอกสารนี้"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1867
-#, fuzzy, c-format
-#| msgid "Printer '%s' is low on toner."
+#, c-format
 msgid "Printer “%s” is low on toner."
-msgstr "เครื่องพิมพ์ '%s' หมึกเหลือน้อย"
+msgstr "เครื่องพิมพ์ “%s” หมึกเหลือน้อย"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1868
-#, fuzzy, c-format
-#| msgid "Printer '%s' has no toner left."
+#, c-format
 msgid "Printer “%s” has no toner left."
-msgstr "เครื่องพิมพ์ '%s' หมึกหมด"
+msgstr "เครื่องพิมพ์ “%s” หมึกหมด"
 
 #. Translators: "Developer" like on photo development context
 #: modules/printbackends/cups/gtkprintbackendcups.c:1870
-#, fuzzy, c-format
-#| msgid "Printer '%s' is low on developer."
+#, c-format
 msgid "Printer “%s” is low on developer."
-msgstr "เครื่องพิมพ์ '%s' ตัว develop เหลือน้อย"
+msgstr "เครื่องพิมพ์ “%s” ตัว develop เหลือน้อย"
 
 #. Translators: "Developer" like on photo development context
 #: modules/printbackends/cups/gtkprintbackendcups.c:1872
-#, fuzzy, c-format
-#| msgid "Printer '%s' is out of developer."
+#, c-format
 msgid "Printer “%s” is out of developer."
-msgstr "เครื่องพิมพ์ '%s' ตัว develop หมด"
+msgstr "เครื่องพิมพ์ “%s” ตัว develop หมด"
 
 #. Translators: "marker" is one color bin of the printer
 #: modules/printbackends/cups/gtkprintbackendcups.c:1874
-#, fuzzy, c-format
-#| msgid "Printer '%s' is low on at least one marker supply."
+#, c-format
 msgid "Printer “%s” is low on at least one marker supply."
-msgstr "เครื่องพิมพ์ '%s' วัสดุพิมพ์บางอย่างเหลือน้อย"
+msgstr "เครื่องพิมพ์ “%s” วัสดุพิมพ์บางอย่างเหลือน้อย"
 
 #. Translators: "marker" is one color bin of the printer
 #: modules/printbackends/cups/gtkprintbackendcups.c:1876
-#, fuzzy, c-format
-#| msgid "Printer '%s' is out of at least one marker supply."
+#, c-format
 msgid "Printer “%s” is out of at least one marker supply."
-msgstr "เครื่องพิมพ์ '%s' วัสดุพิมพ์บางอย่างหมด"
+msgstr "เครื่องพิมพ์ “%s” วัสดุพิมพ์บางอย่างหมด"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1877
-#, fuzzy, c-format
-#| msgid "The cover is open on printer '%s'."
+#, c-format
 msgid "The cover is open on printer “%s”."
-msgstr "ฝาเครื่องเปิดอยู่ที่เครื่องพิมพ์ '%s'"
+msgstr "ฝาเครื่องเปิดอยู่ที่เครื่องพิมพ์ “%s”"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1878
-#, fuzzy, c-format
-#| msgid "The door is open on printer '%s'."
+#, c-format
 msgid "The door is open on printer “%s”."
-msgstr "ประตูเปิดอยู่ที่เครื่องพิมพ์ '%s'"
+msgstr "ประตูเปิดอยู่ที่เครื่องพิมพ์ “%s”"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1879
-#, fuzzy, c-format
-#| msgid "Printer '%s' is low on paper."
+#, c-format
 msgid "Printer “%s” is low on paper."
-msgstr "เครื่องพิมพ์ '%s' เหลือกระดาษน้อย"
+msgstr "เครื่องพิมพ์ “%s” เหลือกระดาษน้อย"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1880
-#, fuzzy, c-format
-#| msgid "Printer '%s' is out of paper."
+#, c-format
 msgid "Printer “%s” is out of paper."
-msgstr "เครื่องพิมพ์ '%s' กระดาษหมด"
+msgstr "เครื่องพิมพ์ “%s” กระดาษหมด"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1881
-#, fuzzy, c-format
-#| msgid "Printer '%s' is currently offline."
+#, c-format
 msgid "Printer “%s” is currently offline."
-msgstr "เครื่องพิมพ์ '%s' ออฟไลน์อยู่"
+msgstr "เครื่องพิมพ์ “%s” ออฟไลน์อยู่"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1882
-#, fuzzy, c-format
-#| msgid "There is a problem on printer '%s'."
+#, c-format
 msgid "There is a problem on printer “%s”."
-msgstr "มีปัญหากับเครื่องพิมพ์ '%s'"
+msgstr "มีปัญหากับเครื่องพิมพ์ “%s”"
 
 #. Translators: this is a printer status.
 #: modules/printbackends/cups/gtkprintbackendcups.c:2521
@@ -6427,67 +6283,49 @@ msgstr "; "
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:4255
 #: modules/printbackends/cups/gtkprintbackendcups.c:4322
-#, fuzzy
-#| msgid "Two Sided"
 msgctxt "printing option"
 msgid "Two Sided"
 msgstr "สองหน้า"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:4256
-#, fuzzy
-#| msgid "Paper Type"
 msgctxt "printing option"
 msgid "Paper Type"
 msgstr "ชนิดกระดาษ"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:4257
-#, fuzzy
-#| msgid "Paper Source"
 msgctxt "printing option"
 msgid "Paper Source"
 msgstr "แหล่งป้อนกระดาษ"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:4258
 #: modules/printbackends/cups/gtkprintbackendcups.c:4323
-#, fuzzy
-#| msgid "Output Tray"
 msgctxt "printing option"
 msgid "Output Tray"
 msgstr "ถาดกระดาษออก"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:4259
-#, fuzzy
-#| msgid "Resolution"
 msgctxt "printing option"
 msgid "Resolution"
 msgstr "ความละเอียด"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:4260
-#, fuzzy
-#| msgid "GhostScript pre-filtering"
 msgctxt "printing option"
 msgid "GhostScript pre-filtering"
 msgstr "การกรองเบื้องต้นด้วย GhostScript"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:4269
-#, fuzzy
-#| msgid "One Sided"
 msgctxt "printing option value"
 msgid "One Sided"
 msgstr "หน้าเดียว"
 
 #. Translators: this is an option of "Two Sided"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4271
-#, fuzzy
-#| msgid "Long Edge (Standard)"
 msgctxt "printing option value"
 msgid "Long Edge (Standard)"
 msgstr "ขอบด้านยาว (มาตรฐาน)"
 
 #. Translators: this is an option of "Two Sided"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4273
-#, fuzzy
-#| msgid "Short Edge (Flip)"
 msgctxt "printing option value"
 msgid "Short Edge (Flip)"
 msgstr "ขอบด้านสั้น (พลิก)"
@@ -6496,8 +6334,6 @@ msgstr "ขอบด้านสั้น (พลิก)"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4275
 #: modules/printbackends/cups/gtkprintbackendcups.c:4277
 #: modules/printbackends/cups/gtkprintbackendcups.c:4285
-#, fuzzy
-#| msgid "Auto Select"
 msgctxt "printing option value"
 msgid "Auto Select"
 msgstr "เลือกโดยอัตโนมัติ"
@@ -6508,40 +6344,30 @@ msgstr "เลือกโดยอัตโนมัติ"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4281
 #: modules/printbackends/cups/gtkprintbackendcups.c:4283
 #: modules/printbackends/cups/gtkprintbackendcups.c:4287
-#, fuzzy
-#| msgid "Printer Default"
 msgctxt "printing option value"
 msgid "Printer Default"
 msgstr "ค่าปริยายเครื่องพิมพ์"
 
 #. Translators: this is an option of "GhostScript"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4289
-#, fuzzy
-#| msgid "Embed GhostScript fonts only"
 msgctxt "printing option value"
 msgid "Embed GhostScript fonts only"
 msgstr "ฝังแบบอักษร GhostScript เท่านั้น"
 
 #. Translators: this is an option of "GhostScript"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4291
-#, fuzzy
-#| msgid "Convert to PS level 1"
 msgctxt "printing option value"
 msgid "Convert to PS level 1"
 msgstr "แปลงเป็น PS ระดับ 1"
 
 #. Translators: this is an option of "GhostScript"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4293
-#, fuzzy
-#| msgid "Convert to PS level 2"
 msgctxt "printing option value"
 msgid "Convert to PS level 2"
 msgstr "แปลงเป็น PS ระดับ 2"
 
 #. Translators: this is an option of "GhostScript"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4295
-#, fuzzy
-#| msgid "No pre-filtering"
 msgctxt "printing option value"
 msgid "No pre-filtering"
 msgstr "ไม่ต้องกรองเบื้องต้น"
@@ -6549,31 +6375,23 @@ msgstr "ไม่ต้องกรองเบื้องต้น"
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
 #: modules/printbackends/cups/gtkprintbackendcups.c:4304
-#, fuzzy
-#| msgid "Miscellaneous"
 msgctxt "printing option group"
 msgid "Miscellaneous"
 msgstr "จิปาถะ"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:4331
-#, fuzzy
-#| msgid "One Sided"
 msgctxt "sides"
 msgid "One Sided"
 msgstr "หน้าเดียว"
 
 #. Translators: this is an option of "Two Sided"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4333
-#, fuzzy
-#| msgid "Long Edge (Standard)"
 msgctxt "sides"
 msgid "Long Edge (Standard)"
 msgstr "ขอบด้านยาว (มาตรฐาน)"
 
 #. Translators: this is an option of "Two Sided"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4335
-#, fuzzy
-#| msgid "Short Edge (Flip)"
 msgctxt "sides"
 msgid "Short Edge (Flip)"
 msgstr "ขอบด้านสั้น (พลิก)"
@@ -6582,106 +6400,94 @@ msgstr "ขอบด้านสั้น (พลิก)"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4338
 msgctxt "output-bin"
 msgid "Top Bin"
-msgstr ""
+msgstr "ถาดบน"
 
 #. Translators: Middle output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4340
 msgctxt "output-bin"
 msgid "Middle Bin"
-msgstr ""
+msgstr "ถาดกลาง"
 
 #. Translators: Bottom output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4342
-#, fuzzy
-#| msgctxt "Stock label, navigation"
-#| msgid "_Bottom"
 msgctxt "output-bin"
 msgid "Bottom Bin"
-msgstr "ล่า_งสุด"
+msgstr "ถาดล่าง"
 
 #. Translators: Side output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4344
 msgctxt "output-bin"
 msgid "Side Bin"
-msgstr ""
+msgstr "ถาดข้าง"
 
 #. Translators: Left output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4346
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "Left"
 msgctxt "output-bin"
 msgid "Left Bin"
-msgstr "Left"
+msgstr "ถาดซ้าย"
 
 #. Translators: Right output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4348
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "Right"
 msgctxt "output-bin"
 msgid "Right Bin"
-msgstr "Right"
+msgstr "ถาดขวา"
 
 #. Translators: Center output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4350
-#, fuzzy
-#| msgctxt "Stock label"
-#| msgid "_Center"
 msgctxt "output-bin"
 msgid "Center Bin"
-msgstr "_กึ่งกลาง"
+msgstr "ถาดกลาง"
 
 #. Translators: Rear output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4352
 msgctxt "output-bin"
 msgid "Rear Bin"
-msgstr ""
+msgstr "ถาดหลัง"
 
 #. Translators: Output bin where one sided output is oriented in the face-up position
 #: modules/printbackends/cups/gtkprintbackendcups.c:4354
 msgctxt "output-bin"
 msgid "Face Up Bin"
-msgstr ""
+msgstr "ถาดหงายกระดาษขึ้น"
 
 #. Translators: Output bin where one sided output is oriented in the face-down position
 #: modules/printbackends/cups/gtkprintbackendcups.c:4356
 msgctxt "output-bin"
 msgid "Face Down Bin"
-msgstr ""
+msgstr "ถาดคว่ำกระดาษลง"
 
 #. Translators: Large capacity output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4358
 msgctxt "output-bin"
 msgid "Large Capacity Bin"
-msgstr ""
+msgstr "ถาดใหญ่"
 
 #. Translators: Output stacker number %d
 #: modules/printbackends/cups/gtkprintbackendcups.c:4360
 #, c-format
 msgctxt "output-bin"
 msgid "Stacker %d"
-msgstr ""
+msgstr "กองซ้อนที่ %d"
 
 #. Translators: Output mailbox number %d
 #: modules/printbackends/cups/gtkprintbackendcups.c:4362
 #, c-format
 msgctxt "output-bin"
 msgid "Mailbox %d"
-msgstr ""
+msgstr "กล่องจดหมายที่ %d"
 
 #. Translators: Private mailbox
 #: modules/printbackends/cups/gtkprintbackendcups.c:4364
 msgctxt "output-bin"
 msgid "My Mailbox"
-msgstr ""
+msgstr "กล่องจดหมายของฉัน"
 
 #. Translators: Output tray number %d
 #: modules/printbackends/cups/gtkprintbackendcups.c:4366
 #, c-format
 msgctxt "output-bin"
 msgid "Tray %d"
-msgstr ""
+msgstr "ถาดที่ %d"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:4830
 msgid "Printer Default"
@@ -6721,50 +6527,36 @@ msgid "Billing Info"
 msgstr "ข้อมูลสรุป"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:5339
-#, fuzzy
-#| msgid "None"
 msgctxt "cover page"
 msgid "None"
 msgstr "ไม่มี"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:5340
-#, fuzzy
-#| msgid "Classified"
 msgctxt "cover page"
 msgid "Classified"
 msgstr "คัดแยกแล้ว"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:5341
-#, fuzzy
-#| msgid "Confidential"
 msgctxt "cover page"
 msgid "Confidential"
 msgstr "ปกปิด"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:5342
-#, fuzzy
-#| msgid "Secret"
 msgctxt "cover page"
 msgid "Secret"
 msgstr "ลับ"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:5343
-#, fuzzy
-#| msgid "Standard"
 msgctxt "cover page"
 msgid "Standard"
 msgstr "มาตรฐาน"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:5344
-#, fuzzy
-#| msgid "Top Secret"
 msgctxt "cover page"
 msgid "Top Secret"
 msgstr "ลับสุดยอด"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:5345
-#, fuzzy
-#| msgid "Unclassified"
 msgctxt "cover page"
 msgid "Unclassified"
 msgstr "ยังไม่คัดแยก"
@@ -6773,8 +6565,6 @@ msgstr "ยังไม่คัดแยก"
 #. * in the print dialog
 #.
 #: modules/printbackends/cups/gtkprintbackendcups.c:5357
-#, fuzzy
-#| msgid "Pages per Sheet"
 msgctxt "printer option"
 msgid "Pages per Sheet"
 msgstr "จำนวนหน้าต่อแผ่น"
@@ -6783,8 +6573,6 @@ msgstr "จำนวนหน้าต่อแผ่น"
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: modules/printbackends/cups/gtkprintbackendcups.c:5374
-#, fuzzy
-#| msgid "Page Ordering"
 msgctxt "printer option"
 msgid "Page Ordering"
 msgstr "การเรียงหน้า"
@@ -6793,8 +6581,6 @@ msgstr "การเรียงหน้า"
 #. * dialog that controls the front cover page.
 #.
 #: modules/printbackends/cups/gtkprintbackendcups.c:5416
-#, fuzzy
-#| msgid "Before"
 msgctxt "printer option"
 msgid "Before"
 msgstr "ปกหน้า"
@@ -6803,8 +6589,6 @@ msgstr "ปกหน้า"
 #. * dialog that controls the back cover page.
 #.
 #: modules/printbackends/cups/gtkprintbackendcups.c:5431
-#, fuzzy
-#| msgid "After"
 msgctxt "printer option"
 msgid "After"
 msgstr "ปกหลัง"
@@ -6814,21 +6598,17 @@ msgstr "ปกหลัง"
 #. * or 'on hold'
 #.
 #: modules/printbackends/cups/gtkprintbackendcups.c:5451
-#, fuzzy
-#| msgid "Print at"
 msgctxt "printer option"
 msgid "Print at"
-msgstr "พิมพ์เมื่อ"
+msgstr "เวลาที่พิมพ์"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
 #: modules/printbackends/cups/gtkprintbackendcups.c:5462
-#, fuzzy
-#| msgid "Print at time"
 msgctxt "printer option"
 msgid "Print at time"
-msgstr "พิมพ์เมื่อเวลา"
+msgstr "ตั้งเวลาพิมพ์"
 
 #. Translators: this format is used to display a custom
 #. * paper size. The two placeholders are replaced with
@@ -6836,22 +6616,17 @@ msgstr "พิมพ์เมื่อเวลา"
 #. * 230.4x142.9"
 #.
 #: modules/printbackends/cups/gtkprintbackendcups.c:5504
-#, fuzzy, c-format
-#| msgid "Custom %sx%s"
+#, c-format
 msgid "Custom %s×%s"
-msgstr "กำหนดเอง %sx%s"
+msgstr "กำหนดเอง %s×%s"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:5613
-#, fuzzy
-#| msgid "Printer Profile"
 msgctxt "printer option"
 msgid "Printer Profile"
 msgstr "โพรไฟล์เครื่องพิมพ์"
 
 #. TRANSLATORS: this is when color profile information is unavailable
 #: modules/printbackends/cups/gtkprintbackendcups.c:5620
-#, fuzzy
-#| msgid "Unavailable"
 msgctxt "printer option value"
 msgid "Unavailable"
 msgstr "ไม่มี"
