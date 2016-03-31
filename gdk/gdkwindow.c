@@ -4078,44 +4078,77 @@ gdk_window_invalidate_maybe_recurse_full (GdkWindow            *window,
                                           GdkWindowChildFunc    child_func,
 					  gpointer              user_data);
 
+/* Returns true if window is a decendant of parent, but stops looking
+ * at the first native window. Also ensures that all parents match
+ * child_func if non-null..
+ *
+ * This is useful in combination with
+ * window->impl_window->native_children as it lets you find all native
+ * decendants in an efficient way (assuming few children are native).
+ */
+static gboolean
+has_visible_ancestor_in_impl (GdkWindow *window,
+                              GdkWindow *ancestor,
+                              GdkWindowChildFunc child_func,
+                              gpointer user_data)
+{
+  GdkWindow *p;
+  GdkWindow *stop_at;
+
+  p = window->parent;
+  stop_at = p->impl_window;
+  while (p != NULL)
+    {
+      if (!p->viewable)
+        return FALSE;
+      if (child_func &&
+          !(*child_func) ((GdkWindow *)p, user_data))
+        return FALSE;
+      if (p == ancestor)
+        return TRUE;
+      if (p == stop_at)
+        return FALSE;
+      p = p->parent;
+    }
+  return FALSE;
+}
+
 static void
 invalidate_impl_subwindows (GdkWindow            *window,
 			    const cairo_region_t *region,
 			    GdkWindowChildFunc    child_func,
-			    gpointer              user_data,
-			    int dx, int dy)
+			    gpointer              user_data)
 {
-  GList *tmp_list;
+  GList *l;
 
-  tmp_list = window->children;
-
-  while (tmp_list)
+  /* Iterate over all native children of the native window
+     that window is in. */
+  for (l = window->impl_window->native_children;
+       l != NULL;
+       l = l->next)
     {
-      GdkWindow *child = tmp_list->data;
-      tmp_list = tmp_list->next;
+      GdkWindow *native_child = l->data;
+      cairo_region_t *tmp;
+      int dx, dy;
 
-      if (child->input_only ||
-	  !window->viewable)
+      if (native_child->input_only)
 	continue;
 
-      if (child_func && (*child_func) ((GdkWindow *)child, user_data))
-	{
-	  if (gdk_window_has_impl (child))
-	    {
-	      cairo_region_t *tmp = cairo_region_copy (region);
-	      cairo_region_translate (tmp, -dx - child->x, -dy - child->y);
-	      gdk_window_invalidate_maybe_recurse_full (child,
-							tmp, child_func, user_data);
-	      cairo_region_destroy (tmp);
-	    }
-	  else
-	    {
-	      invalidate_impl_subwindows (child,
-					  region,
-					  child_func, user_data,
-					  dx + child->x, dy + child->y);
-	    }
-	}
+      /* Then skip any that does not have window as an ancestor,
+       * also checking that the ancestors are visible and pass child_func
+       * This is fast if we assume native children are rare */
+      if (!has_visible_ancestor_in_impl (native_child, window,
+                                         child_func, user_data))
+        continue;
+
+      dx = native_child->parent->abs_x + native_child->x - window->abs_x;
+      dy = native_child->parent->abs_y + native_child->y - window->abs_y;
+
+      tmp = cairo_region_copy (region);
+      cairo_region_translate (tmp, -dx, -dy);
+      gdk_window_invalidate_maybe_recurse_full (native_child,
+                                                tmp, child_func, user_data);
+      cairo_region_destroy (tmp);
     }
 }
 
@@ -4145,7 +4178,8 @@ gdk_window_invalidate_maybe_recurse_full (GdkWindow            *window,
 
   visible_region = cairo_region_copy (region);
 
-  invalidate_impl_subwindows (window, region, child_func, user_data, 0, 0);
+  if (child_func)
+    invalidate_impl_subwindows (window, region, child_func, user_data);
 
   display = gdk_window_get_display (window);
   if (gdk_display_get_debug_updates (display))
