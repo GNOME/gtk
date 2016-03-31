@@ -1640,6 +1640,9 @@ gtk_tree_model_iter_nth_child (GtkTreeModel *tree_model,
  * @child will remain a valid node after this function has been
  * called.
  *
+ * @iter will be initialized before the lookup is performed, so @child
+ * and @iter cannot point to the same memory location.
+ *
  * Returns: %TRUE, if @iter is set to the parent of @child
  */
 gboolean
