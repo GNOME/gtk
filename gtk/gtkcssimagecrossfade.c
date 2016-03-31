@@ -203,6 +203,101 @@ gtk_css_image_cross_fade_parse (GtkCssImage  *image,
   return TRUE;
 }
 
+static gboolean
+gtk_css_image_cross_fade_parse_progress (GtkCssTokenSource *source,
+                                         gboolean          *parsed_something,
+                                         double            *progress)
+{
+  const GtkCssToken *token;
+  GtkCssValue *value;
+
+  token = gtk_css_token_source_get_token (source);
+  if (!gtk_css_number_value_check_token (token))
+    {
+      *parsed_something = FALSE;
+      return TRUE;
+    }
+
+  *parsed_something = TRUE;
+
+  value = gtk_css_number_value_token_parse (source, GTK_CSS_PARSE_PERCENT | GTK_CSS_POSITIVE_ONLY);
+  if (value == NULL)
+    return FALSE;
+
+  *progress = _gtk_css_number_value_get (value, 1.0);
+  _gtk_css_value_unref (value);
+  if (*progress < 0.0 || *progress > 1.0)
+    {
+      gtk_css_token_source_error (source, "Percentage must be between 0%% and 100%%");
+      gtk_css_token_source_consume_all (source);
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
+static guint
+gtk_css_image_cross_fade_token_parse_argument (GtkCssTokenSource *source,
+                                               guint              arg,
+                                               gpointer           data)
+{
+  GtkCssImageCrossFade *cross_fade = data;
+
+  if (arg == 0)
+    {
+      gboolean has_percentage = FALSE;
+      
+      if (!gtk_css_image_cross_fade_parse_progress (source, &has_percentage, &cross_fade->progress))
+        return 0;
+      
+      cross_fade->end = gtk_css_image_new_token_parse (source);
+      if (cross_fade->end == NULL)
+        return 0;
+
+      if (!has_percentage &&
+          !gtk_css_image_cross_fade_parse_progress (source, &has_percentage, &cross_fade->progress))
+        return 0;
+      if (!has_percentage)
+        cross_fade->progress = 0.5;
+
+      return 1;
+    }
+  else if (arg == 1)
+    {
+      /* XXX: allow parsing colors here */
+      cross_fade->start = gtk_css_image_new_token_parse (source);
+      if (cross_fade->start == NULL)
+        return 0;
+
+      return 1;
+    }
+  else
+    {
+      g_assert_not_reached ();
+      return 0;
+    }
+}
+
+static gboolean
+gtk_css_image_cross_fade_token_parse (GtkCssImage       *image,
+                                      GtkCssTokenSource *source)
+{
+  const GtkCssToken *token;
+
+  token = gtk_css_token_source_get_token (source);
+  if (!gtk_css_token_is_function (token, "cross-fade"))
+    {
+      gtk_css_token_source_error (source, "Expected 'cross-fade('");
+      gtk_css_token_source_consume_all (source);
+      return FALSE;
+    }
+
+  return gtk_css_token_source_consume_function (source,
+                                                2, 2,
+                                                gtk_css_image_cross_fade_token_parse_argument,
+                                                image);
+}
+
 static void
 gtk_css_image_cross_fade_print (GtkCssImage *image,
                                 GString     *string)
@@ -249,6 +344,7 @@ _gtk_css_image_cross_fade_class_init (GtkCssImageCrossFadeClass *klass)
   image_class->equal = gtk_css_image_cross_fade_equal;
   image_class->draw = gtk_css_image_cross_fade_draw;
   image_class->parse = gtk_css_image_cross_fade_parse;
+  image_class->token_parse = gtk_css_image_cross_fade_token_parse;
   image_class->print = gtk_css_image_cross_fade_print;
 
   object_class->dispose = gtk_css_image_cross_fade_dispose;
