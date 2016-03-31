@@ -1,3 +1,29 @@
+Overview of Changes in GTK+ 3.20.2
+==================================
+
+* Fix blue background in Emacs windows
+
+* Fix a performance issue with excessive redraws
+
+* Bugs fixed:
+ 763627 menu-traditional puts popover beneath the text editor widget
+ 763783 GDK W32: Erase hidden layered windows before showing them
+ 763851 GDK W32: show_window_menu() is not implemented
+ 764022 Negative content width -200 (allocation -200, extents 0x0) while...
+ 764170 [HighContrastInverse] “suqqested-action” is white on lightgrey
+ 764210 Strange Background Color on Emacs
+ 764321 window: Fix gtk_window_set_geometry_hints documentation
+ 764376 UI glitch when entering keyboard shortcut
+
+* Translation updates:
+ Dutch
+ German
+ Italian
+ Lithuanian
+ Serbian
+ Thai
+
+
 Overview of Changes in GTK+ 3.20.1
 ==================================
 
