@@ -9983,14 +9983,16 @@ gtk_window_update_fixed_size (GtkWindow   *window,
 
       if (info->default_width > -1)
         {
-          new_geometry->min_width = MAX (default_width_csd, new_width);
-          new_geometry->max_width = new_geometry->min_width;
+          gint w = MAX (MAX (default_width_csd, new_width), new_geometry->min_width);
+          new_geometry->min_width = w;
+          new_geometry->max_width = w;
         }
 
       if (info->default_height > -1)
         {
-          new_geometry->min_height = MAX (default_height_csd, new_height);
-          new_geometry->max_height = new_geometry->min_height;
+          gint h = MAX (MAX (default_height_csd, new_height), new_geometry->min_height);
+          new_geometry->min_height = h;
+          new_geometry->max_height = h;
         }
     }
 }
