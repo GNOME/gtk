@@ -71,6 +71,8 @@ enum {
   CLOSED,
   SEAT_ADDED,
   SEAT_REMOVED,
+  MONITOR_ADDED,
+  MONITOR_REMOVED,
   LAST_SIGNAL
 };
 
@@ -227,6 +229,42 @@ gdk_display_class_init (GdkDisplayClass *class)
 		  0, NULL, NULL,
                   g_cclosure_marshal_VOID__OBJECT,
 		  G_TYPE_NONE, 1, GDK_TYPE_SEAT);
+
+  /**
+   * GdkDisplay::monitor-added:
+   * @display: the objedct on which the signal is emitted
+   * @monitor: the monitor that was just added
+   *
+   * The ::monitor-added signal is emitted whenever a monitor is
+   * added.
+   *
+   * Since: 3.22
+   */
+  signals[MONITOR_ADDED] =
+    g_signal_new (g_intern_static_string ("monitor-added"),
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_LAST,
+		  0, NULL, NULL,
+                  g_cclosure_marshal_VOID__OBJECT,
+		  G_TYPE_NONE, 1, GDK_TYPE_MONITOR);
+
+  /**
+   * GdkDisplay::monitor-removed:
+   * @display: the object on which the signal is emitted
+   * @monitor: the monitor that was just removed
+   *
+   * The ::monitor-removed signal is emitted whenever a monitor is
+   * removed.
+   *
+   * Since: 3.22
+   */
+  signals[MONITOR_REMOVED] =
+    g_signal_new (g_intern_static_string ("monitor-removed"),
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_LAST,
+		  0, NULL, NULL,
+                  g_cclosure_marshal_VOID__OBJECT,
+		  G_TYPE_NONE, 1, GDK_TYPE_MONITOR);
 }
 
 static void
@@ -2463,4 +2501,198 @@ gdk_display_list_seats (GdkDisplay *display)
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
   return g_list_copy (display->seats);
+}
+
+/**
+ * gdk_display_get_n_monitors:
+ * @display: a #GdkDisplay
+ *
+ * Gets the number of monitors that belong to @display.
+ *
+ * The returned number is valid until the next emission of the
+ * #GdkDisplay::monitor-added or #GdkDisplay::monitor-removed signal.
+ *
+ * Returns: the number of monitors
+ * Since: 3.22
+ */
+int
+gdk_display_get_n_monitors (GdkDisplay *display)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), 0);
+
+  return GDK_DISPLAY_GET_CLASS (display)->get_n_monitors (display);
+}
+
+/**
+ * gdk_display_get_monitor:
+ * @display: a #GdkDisplay
+ * @monitor_num: number of the monitor
+ *
+ * Gets a monitor associated with this display.
+ *
+ * Returns: (transfer none): the #GdkMonitor, or %NULL if
+ *    @monitor_num is not a valid monitor number
+ * Since: 3.22
+ */
+GdkMonitor *
+gdk_display_get_monitor (GdkDisplay *display,
+                         gint        monitor_num)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+
+  return GDK_DISPLAY_GET_CLASS (display)->get_monitor (display, monitor_num);
+}
+
+/**
+ * gdk_display_get_primary_monitor:
+ * @display: a #GdkDisplay
+ *
+ * Gets the primary monitor for the display.
+ *
+ * The primary monitor is considered the monitor where the “main desktop”
+ * lives. While normal application windows typically allow the window
+ * manager to place the windows, specialized desktop applications
+ * such as panels should place themselves on the primary monitor.
+ *
+ * Returns: (transfer none): the primary monitor, or %NULL if no primary
+ *     monitor is configured by the user
+ * Since: 3.22
+ */
+GdkMonitor *
+gdk_display_get_primary_monitor (GdkDisplay *display)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+
+  if (GDK_DISPLAY_GET_CLASS (display)->get_primary_monitor)
+    return GDK_DISPLAY_GET_CLASS (display)->get_primary_monitor (display);
+
+  return NULL;
+}
+
+/**
+ * gdk_display_get_monitor_at_point:
+ * @display: a #GdkDisplay
+ * @x: the x coordinate of the point
+ * @y: the y coordinate of the point
+ *
+ * Gets the monitor in which the point (@x, @y) is located,
+ * or a nearby monitor if the point is not in any monitor.
+ *
+ * Returns: (transfer none): the monitor containing the point
+ * Since: 3.22
+ */
+GdkMonitor *
+gdk_display_get_monitor_at_point (GdkDisplay *display,
+                                  int         x,
+                                  int         y)
+{
+  GdkMonitor *nearest;
+  int nearest_dist = G_MAXINT;
+  int n_monitors, i;
+
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+
+  n_monitors = gdk_display_get_n_monitors (display);
+  for (i = 0; i < n_monitors; i++)
+    {
+      GdkMonitor *monitor;
+      GdkRectangle geometry;
+      int dist_x, dist_y, dist;
+
+      monitor = gdk_display_get_monitor (display, i);
+      gdk_monitor_get_geometry (monitor, &geometry);
+
+      if (x < geometry.x)
+        dist_x = geometry.x - x;
+      else if (geometry.x + geometry.width <= x)
+        dist_x = x - (geometry.x + geometry.width) + 1;
+      else
+        dist_x = 0;
+
+      if (y < geometry.y)
+        dist_y = geometry.y - y;
+      else if (geometry.y + geometry.height <= y)
+        dist_y = y - (geometry.y + geometry.height) + 1;
+      else
+        dist_y = 0;
+
+      dist = dist_x + dist_y;
+      if (dist < nearest_dist)
+        {
+          nearest_dist = dist;
+          nearest = monitor;
+        }
+
+      if (nearest_dist == 0)
+        break;
+    }
+
+  return nearest;
+}
+
+/**
+ * gdk_display_get_monitor_at_window:
+ * @display: a #GdkDisplay
+ * @window: a #GdkWindow
+ *
+ * Gets the monitor in which the largest area of @window
+ * resides, or a monitor close to @window if it is outside
+ * of all monitors.
+ *
+ * Returns: (transfer none): the monitor with the largest overlap with @window
+ * Since: 3.22
+ */
+GdkMonitor *
+gdk_display_get_monitor_at_window (GdkDisplay *display,
+                                   GdkWindow  *window)
+{
+  GdkRectangle win;
+  int n_monitors, i;
+  int area = 0;
+  GdkMonitor *best = NULL;
+
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+
+  gdk_window_get_geometry (window, &win.x, &win.y, &win.width, &win.height);
+  gdk_window_get_origin (window, &win.x, &win.y);
+
+  n_monitors = gdk_display_get_n_monitors (display);
+  for (i = 0; i < n_monitors; i++)
+    {
+      GdkMonitor *monitor;
+      GdkRectangle mon, intersect;
+      int overlap;
+
+      monitor = gdk_display_get_monitor (display, i);
+      gdk_monitor_get_geometry (monitor, &mon);
+      gdk_rectangle_intersect (&win, &mon, &intersect);
+      overlap = intersect.width *intersect.height;
+      if (overlap > area)
+        {
+          area = overlap;
+          best = monitor;
+        }
+    }
+
+  if (best)
+    return best;
+
+  return gdk_display_get_monitor_at_point (display,
+                                           win.x + win.width / 2,
+                                           win.y + win.height / 2);
+}
+
+void
+gdk_display_monitor_added (GdkDisplay *display,
+                           GdkMonitor *monitor)
+{
+  g_signal_emit (display, signals[MONITOR_ADDED], 0, monitor);
+}
+
+void
+gdk_display_monitor_removed (GdkDisplay *display,
+                             GdkMonitor *monitor)
+{
+  g_signal_emit (display, signals[MONITOR_REMOVED], 0, monitor);
+  gdk_monitor_invalidate (monitor);
 }
