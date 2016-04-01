@@ -2893,11 +2893,11 @@ gdk_wayland_seat_get_slaves (GdkSeat             *seat,
   GdkWaylandSeat *wayland_seat = GDK_WAYLAND_SEAT (seat);
   GList *slaves = NULL;
 
-  if (capabilities & GDK_SEAT_CAPABILITY_POINTER)
+  if (wayland_seat->pointer && (capabilities & GDK_SEAT_CAPABILITY_POINTER))
     slaves = g_list_prepend (slaves, wayland_seat->pointer);
-  if (capabilities & GDK_SEAT_CAPABILITY_KEYBOARD)
+  if (wayland_seat->keyboard && (capabilities & GDK_SEAT_CAPABILITY_KEYBOARD))
     slaves = g_list_prepend (slaves, wayland_seat->keyboard);
-  if (capabilities & GDK_SEAT_CAPABILITY_TOUCH)
+  if (wayland_seat->touch && (capabilities & GDK_SEAT_CAPABILITY_TOUCH))
     slaves = g_list_prepend (slaves, wayland_seat->touch);
 
   return slaves;
