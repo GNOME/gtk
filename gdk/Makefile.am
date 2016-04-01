@@ -77,6 +77,7 @@ gdk_public_h_sources = 				\
 	gdkkeysyms.h				\
 	gdkkeysyms-compat.h			\
 	gdkmain.h				\
+	gdkmonitor.h				\
 	gdkpango.h				\
 	gdkframeclock.h				\
 	gdkpixbuf.h				\
@@ -144,6 +145,7 @@ gdk_c_sources = 				\
 	gdkglobals.c				\
 	gdkkeys.c				\
 	gdkkeyuni.c				\
+	gdkmonitor.c				\
 	gdkoffscreenwindow.c			\
 	gdkframeclock.c				\
 	gdkframeclockidle.c			\
