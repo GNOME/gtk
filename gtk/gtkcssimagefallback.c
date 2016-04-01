@@ -231,6 +231,64 @@ gtk_css_image_fallback_parse (GtkCssImage  *image,
   return TRUE;
 }
 
+static guint
+gtk_css_image_fallback_token_parse_argument (GtkCssTokenSource *source,
+                                             guint              arg,
+                                             gpointer           data)
+{
+  GtkCssImageFallback *fallback = GTK_CSS_IMAGE_FALLBACK (data);
+  const GtkCssToken *token;
+
+  if (fallback->color)
+    {
+      gtk_css_token_source_error (source, "Color argument must be last argument");
+      return 0;
+    }
+
+  token = gtk_css_token_source_get_token (source);
+  if (gtk_css_color_value_check_token (token))
+    {
+      fallback->color = gtk_css_color_value_token_parse (source);
+      if (fallback->color == NULL)
+        return 0;
+
+      return 1;
+    }
+  else
+    {
+      GtkCssImage *image;
+
+      image = gtk_css_image_new_token_parse (source);
+      if (image == NULL)
+        return 0;
+
+      fallback->images = g_realloc (fallback->images, (fallback->n_images + 1) * sizeof (GtkCssImage *));
+      fallback->images[fallback->n_images] = image;
+      fallback->n_images++;
+      return 1;
+    }
+}
+
+static gboolean
+gtk_css_image_fallback_token_parse (GtkCssImage       *image,
+                                    GtkCssTokenSource *source)
+{
+  const GtkCssToken *token;
+
+  token = gtk_css_token_source_get_token (source);
+  if (!gtk_css_token_is_function (token, "image"))
+    {
+      gtk_css_token_source_error (source, "Expected 'image('");
+      gtk_css_token_source_consume_all (source);
+      return FALSE;
+    }
+
+  return gtk_css_token_source_consume_function (source, 
+                                                1, G_MAXUINT,
+                                                gtk_css_image_fallback_token_parse_argument,
+                                                image);
+}
+
 static void
 _gtk_css_image_fallback_class_init (GtkCssImageFallbackClass *klass)
 {
@@ -242,6 +300,7 @@ _gtk_css_image_fallback_class_init (GtkCssImageFallbackClass *klass)
   image_class->get_aspect_ratio = gtk_css_image_fallback_get_aspect_ratio;
   image_class->draw = gtk_css_image_fallback_draw;
   image_class->parse = gtk_css_image_fallback_parse;
+  image_class->token_parse = gtk_css_image_fallback_token_parse;
   image_class->compute = gtk_css_image_fallback_compute;
   image_class->print = gtk_css_image_fallback_print;
 
