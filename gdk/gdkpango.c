@@ -320,7 +320,7 @@ gdk_pango_layout_get_clip_region (PangoLayout *layout,
 PangoContext *
 gdk_pango_context_get (void)
 {
-  return gdk_pango_context_get_for_screen (gdk_screen_get_default ());
+  return gdk_pango_context_get_for_display (gdk_display_get_default ());
 }
 
 /**
@@ -365,4 +365,12 @@ gdk_pango_context_get_for_screen (GdkScreen *screen)
   pango_cairo_context_set_resolution (context, dpi);
 
   return context;
+}
+
+PangoContext *
+gdk_pango_context_get_for_display (GdkDisplay *display)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+
+  return gdk_pango_context_get_for_screen (gdk_display_get_default_screen (display));
 }
