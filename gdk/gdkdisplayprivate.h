@@ -21,6 +21,7 @@
 #include "gdkdisplay.h"
 #include "gdkwindow.h"
 #include "gdkcursor.h"
+#include "gdkmonitor.h"
 #include "gdkinternals.h"
 
 G_BEGIN_DECLS
@@ -128,6 +129,7 @@ struct _GdkDisplay
   GdkRenderingMode rendering_mode;
 
   GList *seats;
+  GList *monitors;
 };
 
 struct _GdkDisplayClass
@@ -328,6 +330,10 @@ void                gdk_display_add_seat              (GdkDisplay       *display
                                                        GdkSeat          *seat);
 void                gdk_display_remove_seat           (GdkDisplay       *display,
                                                        GdkSeat          *seat);
+void                gdk_display_add_monitor           (GdkDisplay       *display,
+                                                       GdkMonitor       *monitor);
+void                gdk_display_remove_monitor        (GdkDisplay       *display,
+                                                       GdkMonitor       *monitor);
 
 G_END_DECLS
 

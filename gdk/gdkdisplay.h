@@ -178,6 +178,9 @@ GdkSeat * gdk_display_get_default_seat (GdkDisplay *display);
 GDK_AVAILABLE_IN_3_20
 GList   * gdk_display_list_seats       (GdkDisplay *display);
 
+GDK_AVAILABLE_IN_3_22
+GList   * gdk_display_list_monitors    (GdkDisplay *display);
+
 G_END_DECLS
 
 #endif  /* __GDK_DISPLAY_H__ */

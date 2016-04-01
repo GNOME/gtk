@@ -71,6 +71,8 @@ enum {
   CLOSED,
   SEAT_ADDED,
   SEAT_REMOVED,
+  MONITOR_ADDED,
+  MONITOR_REMOVED,
   LAST_SIGNAL
 };
 
@@ -227,6 +229,21 @@ gdk_display_class_init (GdkDisplayClass *class)
 		  0, NULL, NULL,
                   g_cclosure_marshal_VOID__OBJECT,
 		  G_TYPE_NONE, 1, GDK_TYPE_SEAT);
+
+  signals[MONITOR_ADDED] =
+    g_signal_new (g_intern_static_string ("monitor-added"),
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_LAST,
+		  0, NULL, NULL,
+                  g_cclosure_marshal_VOID__OBJECT,
+		  G_TYPE_NONE, 1, GDK_TYPE_MONITOR);
+  signals[MONITOR_REMOVED] =
+    g_signal_new (g_intern_static_string ("monitor-removed"),
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_LAST,
+		  0, NULL, NULL,
+                  g_cclosure_marshal_VOID__OBJECT,
+		  G_TYPE_NONE, 1, GDK_TYPE_MONITOR);
 }
 
 static void
@@ -2463,4 +2480,43 @@ gdk_display_list_seats (GdkDisplay *display)
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
   return g_list_copy (display->seats);
+}
+
+GList *
+gdk_display_list_monitors (GdkDisplay *display)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+
+  return g_list_copy (display->monitors);
+}
+
+void
+gdk_display_add_monitor (GdkDisplay *display,
+                         GdkMonitor *monitor)
+{
+  g_return_if_fail (GDK_IS_DISPLAY (display));
+  g_return_if_fail (GDK_IS_MONITOR (monitor));
+
+  display->monitors = g_list_append (display->monitors, g_object_ref (monitor));
+  g_signal_emit (display, signals[MONITOR_ADDED], 0, monitor);
+}
+
+void
+gdk_display_remove_monitor (GdkDisplay *display,
+                            GdkMonitor *monitor)
+{
+  GList *link;
+
+  g_return_if_fail (GDK_IS_DISPLAY (display));
+  g_return_if_fail (GDK_IS_MONITOR (monitor));
+
+  link = g_list_find (display->monitors, monitor);
+
+  if (link)
+    {
+      display->monitors = g_list_remove_link (display->monitors, link);
+      g_signal_emit (display, signals[MONITOR_REMOVED], 0, monitor);
+      g_object_unref (link->data);
+      g_list_free (link);
+    }
 }
