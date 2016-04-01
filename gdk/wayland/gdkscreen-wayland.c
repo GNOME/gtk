@@ -1075,6 +1075,56 @@ update_screen_size (GdkWaylandScreen *screen_wayland)
     g_signal_emit_by_name (screen_wayland, "size-changed");
 }
 
+#ifdef G_ENABLE_DEBUG
+
+static const char *
+subpixel_to_string (int layout)
+{
+  int i;
+  struct { int layout; const char *name; } layouts[] = {
+    { WL_OUTPUT_SUBPIXEL_UNKNOWN, "unknown" },
+    { WL_OUTPUT_SUBPIXEL_NONE, "none" },
+    { WL_OUTPUT_SUBPIXEL_HORIZONTAL_RGB, "rgb" },
+    { WL_OUTPUT_SUBPIXEL_HORIZONTAL_BGR, "bgr" },
+    { WL_OUTPUT_SUBPIXEL_VERTICAL_RGB, "vrgb" },
+    { WL_OUTPUT_SUBPIXEL_VERTICAL_BGR, "vbgr" },
+    { 0xffffffff, NULL }
+  };
+
+  for (i = 0; layouts[i].name; i++)
+    {
+      if (layouts[i].layout == layout)
+        return layouts[i].name;
+    }
+  return NULL;
+}
+
+static const char *
+transform_to_string (int transform)
+{
+  int i;
+  struct { int transform; const char *name; } transforms[] = {
+    { WL_OUTPUT_TRANSFORM_NORMAL, "normal" },
+    { WL_OUTPUT_TRANSFORM_90, "90" },
+    { WL_OUTPUT_TRANSFORM_180, "180" },
+    { WL_OUTPUT_TRANSFORM_270, "270" },
+    { WL_OUTPUT_TRANSFORM_FLIPPED, "flipped" },
+    { WL_OUTPUT_TRANSFORM_FLIPPED_90, "flipped 90" },
+    { WL_OUTPUT_TRANSFORM_FLIPPED_180, "flipped 180" },
+    { WL_OUTPUT_TRANSFORM_FLIPPED_270, "flipped 270" },
+    { 0xffffffff, NULL }
+  };
+
+  for (i = 0; transforms[i].name; i++)
+    {
+      if (transforms[i].transform == transform)
+        return transforms[i].name;
+    }
+  return NULL;
+}
+
+#endif
+
 static void
 output_handle_geometry (void             *data,
                         struct wl_output *wl_output,
@@ -1090,8 +1140,8 @@ output_handle_geometry (void             *data,
   GdkWaylandMonitor *monitor = (GdkWaylandMonitor *)data;
 
   GDK_NOTE (MISC,
-            g_message ("handle geometry output %d, position %d %d, phys. size %d %d, manufacturer %s, model %s",
-                       monitor->id, x, y, physical_width, physical_height, make, model));
+            g_message ("handle geometry output %d, position %d %d, phys. size %d %d, subpixel layout %s, manufacturer %s, model %s, transform %s",
+                       monitor->id, x, y, physical_width, physical_height, subpixel_to_string (subpixel), make, model, transform_to_string (transform)));
 
   monitor->geometry.x = x;
   monitor->geometry.y = y;
