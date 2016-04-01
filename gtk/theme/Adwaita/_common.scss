@@ -39,6 +39,8 @@ $button_transition: all 200ms $ease-out-quad;
   outline-offset: -3px;
   outline-width: 1px;
   -gtk-outline-radius: 2px;
+
+  -gtk-secondary-caret-color: $selected_bg_color
 }
 
 

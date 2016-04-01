@@ -14,7 +14,8 @@
   outline-style: dashed;
   outline-offset: -3px;
   outline-width: 1px;
-  -gtk-outline-radius: 2px; }
+  -gtk-outline-radius: 2px;
+  -gtk-secondary-caret-color: #4a90d9; }
 
 /***************
  * Base States *
