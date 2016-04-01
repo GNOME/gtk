@@ -10459,22 +10459,13 @@ gtk_widget_get_font_map (GtkWidget *widget)
 PangoContext *
 gtk_widget_create_pango_context (GtkWidget *widget)
 {
-  GdkScreen *screen;
+  GdkDisplay *display;
   PangoContext *context;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  screen = gtk_widget_get_screen_unchecked (widget);
-  if (!screen)
-    {
-      GTK_NOTE (MULTIHEAD,
-                g_warning ("gtk_widget_create_pango_context () called without screen"));
-
-      screen = gdk_screen_get_default ();
-    }
-
-  context = gdk_pango_context_get_for_screen (screen);
-
+  display = gtk_widget_get_display (widget);
+  context = gdk_pango_context_get_for_display (display);
   update_pango_context (widget, context);
   pango_context_set_language (context, gtk_get_default_language ());
 
