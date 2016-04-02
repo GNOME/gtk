@@ -23,6 +23,16 @@
 
 #include "gdkmonitorprivate.h"
 
+/*
+ * TODO:
+ * - rename physical sizes
+ * - primary
+ * - workarea
+ * - monitor type (laptop, projector, ...)
+ * - refresh rate
+ * - subpixel layout
+ * - consider vfuncs instead of baseclass storage
+ */
 enum {
   PROP_0,
   PROP_DISPLAY,
