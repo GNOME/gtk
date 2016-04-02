@@ -59,7 +59,6 @@ struct _GdkWaylandMonitor {
   guint32 id;
   guint32 version;
   struct wl_output *output;
-  int refresh_rate;
   gboolean added;
 };
 
@@ -1153,7 +1152,7 @@ output_handle_mode (void             *data,
     return;
 
   gdk_monitor_set_size (GDK_MONITOR (monitor), width, height);
-  monitor->refresh_rate = refresh;
+  gdk_monitor_set_refresh_rate (GDK_MONITOR (monitor), refresh);
 
   if (width != 0 && monitor->version < OUTPUT_VERSION_WITH_DONE)
     {
@@ -1285,7 +1284,7 @@ _gdk_wayland_screen_get_output_refresh_rate (GdkScreen        *screen,
 
   monitor = get_monitor_for_output (screen, output);
   if (monitor != NULL)
-    return monitor->refresh_rate;
+    return gdk_monitor_get_refresh_rate (GDK_MONITOR (monitor));
 
   return 0;
 }

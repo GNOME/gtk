@@ -34,6 +34,7 @@ struct _GdkMonitor {
   int width_mm;
   int height_mm;
   int scale_factor;
+  int refresh_rate;
 };
 
 struct _GdkMonitorClass {

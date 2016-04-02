@@ -58,6 +58,8 @@ GDK_AVAILABLE_IN_3_22
 const char * gdk_monitor_get_model            (GdkMonitor   *monitor);
 GDK_AVAILABLE_IN_3_22
 int          gdk_monitor_get_scale_factor     (GdkMonitor   *monitor);
+GDK_AVAILABLE_IN_3_22
+int          gdk_monitor_get_refresh_rate     (GdkMonitor   *monitor);
 
 G_END_DECLS
 

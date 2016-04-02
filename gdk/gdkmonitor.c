@@ -28,7 +28,6 @@
  * - primary
  * - workarea
  * - monitor type (laptop, projector, ...)
- * - refresh rate
  * - subpixel layout
  * - consider vfuncs instead of baseclass storage
  * - consider array instead of list
@@ -43,6 +42,11 @@ enum {
   PROP_GEOMETRY,
   PROP_WIDTH_MM,
   PROP_HEIGHT_MM,
+<<<<<<< HEAD
+=======
+  PROP_PRIMARY,
+  PROP_REFRESH_RATE,
+>>>>>>> 3b15fdf... Add refresh rate
   LAST_PROP
 };
 
@@ -94,6 +98,17 @@ gdk_monitor_get_property (GObject    *object,
       g_value_set_int (value, monitor->height_mm);
       break;
 
+<<<<<<< HEAD
+=======
+    case PROP_PRIMARY:
+      g_value_set_boolean (value, monitor->primary);
+      break;
+
+    case PROP_REFRESH_RATE:
+      g_value_set_boolean (value, monitor->refresh_rate);
+      break;
+
+>>>>>>> 3b15fdf... Add refresh rate
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -183,6 +198,13 @@ gdk_monitor_class_init (GdkMonitorClass *class)
                       0, G_MAXINT,
                       0,
                       G_PARAM_READABLE);
+  props[PROP_REFRESH_RATE] =
+    g_param_spec_int ("refresh-rate",
+                      "Refresh rate",
+                      "The refresh rate, in millihertz",
+                      0, G_MAXINT,
+                      0,
+                      G_PARAM_READABLE);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
 }
@@ -238,6 +260,14 @@ gdk_monitor_get_scale_factor (GdkMonitor *monitor)
   g_return_val_if_fail (GDK_IS_MONITOR (monitor), 0);
 
   return monitor->scale_factor;
+}
+
+int
+gdk_monitor_get_refresh_rate (GdkMonitor *monitor)
+{
+  g_return_val_if_fail (GDK_IS_MONITOR (monitor), 0);
+
+  return monitor->refresh_rate;
 }
 
 GdkMonitor *
@@ -345,3 +375,30 @@ gdk_monitor_set_scale_factor (GdkMonitor *monitor,
 
   g_object_notify (G_OBJECT (monitor), "scale-factor");
 }
+<<<<<<< HEAD
+=======
+
+void
+gdk_monitor_set_primary (GdkMonitor *monitor,
+                         gboolean    primary)
+{
+  if (monitor->primary == primary)
+    return;
+
+  monitor->primary = primary;
+
+  g_object_notify (G_OBJECT (monitor), "primary");
+}
+
+void
+gdk_monitor_set_refresh_rate (GdkMonitor *monitor,
+                              int         refresh_rate)
+{
+  if (monitor->refresh_rate == refresh_rate)
+    return;
+
+  monitor->refresh_rate = refresh_rate;
+
+  g_object_notify (G_OBJECT (monitor), "refresh-rate");
+}
+>>>>>>> 3b15fdf... Add refresh rate
