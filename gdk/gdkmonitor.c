@@ -32,6 +32,8 @@
  * - refresh rate
  * - subpixel layout
  * - consider vfuncs instead of baseclass storage
+ * - consider array instead of list
+ * - provide a persistent id (if the backend allows)
  */
 enum {
   PROP_0,
