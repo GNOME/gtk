@@ -317,6 +317,9 @@ populate_display (GdkScreen *screen, GtkInspectorGeneral *gen)
   gint i;
   GList *children, *l;
   GtkWidget *child;
+  GdkDisplay *display;
+  GdkMonitor **monitors;
+  int n_monitors;
 
   children = gtk_container_get_children (GTK_CONTAINER (gen->priv->x_box));
   for (l = children; l; l = l->next)
@@ -341,20 +344,18 @@ populate_display (GdkScreen *screen, GtkInspectorGeneral *gen)
   if (gdk_screen_is_composited (screen))
     gtk_widget_show (gen->priv->x_composited);
 
-  for (i = 0; i < gdk_screen_get_n_monitors (screen); i++)
+  display = gdk_screen_get_display (screen);
+  monitors = gdk_display_get_monitors (display, &n_monitors);
+  for (i = 0; i < n_monitors; i++)
     {
       gchar *name;
       gchar *value;
-      gchar *plug_name;
       GdkRectangle rect;
       gint w, h, wmm, hmm, scale;
 
-      plug_name = gdk_screen_get_monitor_plug_name (screen, i);
-      if (plug_name)
-        name = g_strdup_printf ("Monitor %s", plug_name);
-      else
-        name = g_strdup_printf ("Monitor %d", i);
-      g_free (plug_name);
+      name = g_strdup_printf ("Monitor %s %s",
+                              gdk_monitor_get_manufacturer (monitors[i]),
+                              gdk_monitor_get_model (monitors[i]));
 
       gdk_screen_get_monitor_geometry (screen, i, &rect);
       w = rect.width;
