@@ -1080,11 +1080,8 @@ output_handle_geometry (void             *data,
             g_message ("handle geometry output %d, position %d %d, phys. size %d %d, subpixel layout %s, manufacturer %s, model %s, transform %s",
                        monitor->id, x, y, physical_width, physical_height, subpixel_to_string (subpixel), make, model, transform_to_string (transform)));
 
-  gdk_monitor_set_geometry (GDK_MONITOR (monitor),
-                            x, y,
-                            GDK_MONITOR (monitor)->geometry.width,
-                            GDK_MONITOR (monitor)->geometry.height);
-  gdk_monitor_set_size (GDK_MONITOR (monitor), physical_width, physical_height);
+  gdk_monitor_set_position (GDK_MONITOR (monitor), x, y);
+  gdk_monitor_set_physical_size (GDK_MONITOR (monitor), physical_width, physical_height);
   gdk_monitor_set_manufacturer (GDK_MONITOR (monitor), make);
   gdk_monitor_set_model (GDK_MONITOR (monitor), model);
 
@@ -1147,7 +1144,6 @@ output_handle_mode (void             *data,
                     int               refresh)
 {
   GdkWaylandMonitor *monitor = (GdkWaylandMonitor *)data;
-  GdkRectangle geometry;
 
   GDK_NOTE (MISC,
             g_message ("handle mode output %d, size %d %d, rate %d",
@@ -1156,10 +1152,7 @@ output_handle_mode (void             *data,
   if ((flags & WL_OUTPUT_MODE_CURRENT) == 0)
     return;
 
-  gdk_monitor_get_geometry (GDK_MONITOR (monitor), &geometry);
-  gdk_monitor_set_geometry (GDK_MONITOR (monitor),
-                            geometry.x, geometry.y,
-                            width, height);
+  gdk_monitor_set_size (GDK_MONITOR (monitor), width, height);
   monitor->refresh_rate = refresh;
 
   if (width != 0 && monitor->version < OUTPUT_VERSION_WITH_DONE)

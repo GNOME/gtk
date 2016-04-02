@@ -28,11 +28,11 @@ struct _GdkMonitor {
   GObject parent;
 
   GdkDisplay *display;
+  char *manufacturer;
+  char *model;
   GdkRectangle geometry;
   int width_mm;
   int height_mm;
-  char *manufacturer;
-  char *model;
   int scale_factor;
 };
 
@@ -48,16 +48,19 @@ void            gdk_monitor_set_manufacturer    (GdkMonitor *monitor,
                                                  const char *manufacturer);
 void            gdk_monitor_set_model           (GdkMonitor *monitor,
                                                  const char *model);
-void            gdk_monitor_set_geometry        (GdkMonitor *monitor,
+void            gdk_monitor_set_position        (GdkMonitor *monitor,
                                                  int         x,
-                                                 int         y,
+                                                 int         y);
+void            gdk_monitor_set_size            (GdkMonitor *monitor,
                                                  int         width,
                                                  int         height);
-void            gdk_monitor_set_size            (GdkMonitor *monitor,
+void            gdk_monitor_set_physical_size   (GdkMonitor *monitor,
                                                  int         width_mm,
                                                  int         height_mm);
 void            gdk_monitor_set_scale_factor    (GdkMonitor *monitor,
                                                  int         scale);
+void            gdk_monitor_set_refresh_rate    (GdkMonitor *monitor,
+                                                 int         refresh_rate);
 
 G_END_DECLS
 

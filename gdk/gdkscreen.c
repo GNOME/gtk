@@ -771,7 +771,7 @@ gdk_screen_real_get_monitor_width_mm (GdkScreen *screen,
   int width_mm, height_mm;
 
   monitor = get_monitor (screen, monitor_num);
-  gdk_monitor_get_size (monitor, &width_mm, &height_mm);
+  gdk_monitor_get_physical_size (monitor, &width_mm, &height_mm);
 
   return width_mm;
 }
@@ -784,7 +784,7 @@ gdk_screen_real_get_monitor_height_mm (GdkScreen *screen,
   int width_mm, height_mm;
 
   monitor = get_monitor (screen, monitor_num);
-  gdk_monitor_get_size (monitor, &width_mm, &height_mm);
+  gdk_monitor_get_physical_size (monitor, &width_mm, &height_mm);
 
   return height_mm;
 }

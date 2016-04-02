@@ -49,7 +49,7 @@ GDK_AVAILABLE_IN_3_22
 void         gdk_monitor_get_geometry         (GdkMonitor   *monitor,
                                                GdkRectangle *geometry);
 GDK_AVAILABLE_IN_3_22
-void          gdk_monitor_get_size            (GdkMonitor   *monitor,
+void          gdk_monitor_get_physical_size   (GdkMonitor   *monitor,
                                                int          *width_mm,
                                                int          *height_mm);
 GDK_AVAILABLE_IN_3_22

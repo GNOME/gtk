@@ -206,9 +206,9 @@ gdk_monitor_get_geometry (GdkMonitor   *monitor,
 }
 
 void
-gdk_monitor_get_size (GdkMonitor *monitor,
-                      int        *width_mm,
-                      int        *height_mm)
+gdk_monitor_get_physical_size (GdkMonitor *monitor,
+                               int        *width_mm,
+                               int        *height_mm)
 {
   g_return_if_fail (GDK_IS_MONITOR (monitor));
 
@@ -269,24 +269,53 @@ gdk_monitor_set_model (GdkMonitor *monitor,
 }
 
 void
-gdk_monitor_set_geometry (GdkMonitor *monitor,
+gdk_monitor_set_position (GdkMonitor *monitor,
                           int         x,
-                          int         y,
-                          int         width,
-                          int         height)
+                          int         y)
 {
-  monitor->geometry.x = x;
-  monitor->geometry.y = y;
-  monitor->geometry.height = height;
-  monitor->geometry.width = width;
+  g_object_freeze_notify (G_OBJECT (monitor));
 
-  g_object_notify (G_OBJECT (monitor), "geometry");
+  if (monitor->geometry.x != x)
+    {
+      monitor->geometry.x = x;
+      g_object_notify (G_OBJECT (monitor), "geometry");
+    }
+
+  if (monitor->geometry.y != y)
+    {
+      monitor->geometry.y = y;
+      g_object_notify (G_OBJECT (monitor), "geometry");
+    }
+
+  g_object_thaw_notify (G_OBJECT (monitor));
 }
 
 void
 gdk_monitor_set_size (GdkMonitor *monitor,
-                      int         width_mm,
-                      int         height_mm)
+                      int         width,
+                      int         height)
+{
+  g_object_freeze_notify (G_OBJECT (monitor));
+
+  if (monitor->geometry.width != width)
+    {
+      monitor->geometry.width = width;
+      g_object_notify (G_OBJECT (monitor), "geometry");
+    }
+
+  if (monitor->geometry.height != height)
+    {
+      monitor->geometry.height = height;
+      g_object_notify (G_OBJECT (monitor), "geometry");
+    }
+
+  g_object_thaw_notify (G_OBJECT (monitor));
+}
+
+void
+gdk_monitor_set_physical_size (GdkMonitor *monitor,
+                               int         width_mm,
+                               int         height_mm)
 {
   g_object_freeze_notify (G_OBJECT (monitor));
 
