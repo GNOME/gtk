@@ -40,6 +40,15 @@ G_BEGIN_DECLS
 typedef struct _GdkMonitor      GdkMonitor;
 typedef struct _GdkMonitorClass GdkMonitorClass;
 
+typedef enum {
+  GDK_SUBPIXEL_LAYOUT_UNKNOWN,
+  GDK_SUBPIXEL_LAYOUT_NONE,
+  GDK_SUBPIXEL_LAYOUT_HORIZONTAL_RGB,
+  GDK_SUBPIXEL_LAYOUT_HORIZONTAL_BGR,
+  GDK_SUBPIXEL_LAYOUT_VERTICAL_RGB,
+  GDK_SUBPIXEL_LAYOUT_VERTICAL_BGR
+} GdkSubpixelLayout;
+
 GDK_AVAILABLE_IN_3_22
 GType        gdk_monitor_get_type             (void) G_GNUC_CONST;
 
@@ -60,6 +69,8 @@ GDK_AVAILABLE_IN_3_22
 int          gdk_monitor_get_scale_factor     (GdkMonitor   *monitor);
 GDK_AVAILABLE_IN_3_22
 int          gdk_monitor_get_refresh_rate     (GdkMonitor   *monitor);
+GDK_AVAILABLE_IN_3_22
+GdkSubpixelLayout gdk_monitor_get_subpixel_layout (GdkMonitor   *monitor);
 
 G_END_DECLS
 

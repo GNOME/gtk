@@ -35,6 +35,7 @@ struct _GdkMonitor {
   int height_mm;
   int scale_factor;
   int refresh_rate;
+  GdkSubpixelLayout subpixel_layout;
 };
 
 struct _GdkMonitorClass {
@@ -62,6 +63,8 @@ void            gdk_monitor_set_scale_factor    (GdkMonitor *monitor,
                                                  int         scale);
 void            gdk_monitor_set_refresh_rate    (GdkMonitor *monitor,
                                                  int         refresh_rate);
+void            gdk_monitor_set_subpixel_layout (GdkMonitor        *monitor,
+                                                 GdkSubpixelLayout  subpixel);
 
 G_END_DECLS
 

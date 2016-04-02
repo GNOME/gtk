@@ -1081,6 +1081,7 @@ output_handle_geometry (void             *data,
 
   gdk_monitor_set_position (GDK_MONITOR (monitor), x, y);
   gdk_monitor_set_physical_size (GDK_MONITOR (monitor), physical_width, physical_height);
+  gdk_monitor_set_subpixel_layout (GDK_MONITOR (monitor), subpixel);
   gdk_monitor_set_manufacturer (GDK_MONITOR (monitor), make);
   gdk_monitor_set_model (GDK_MONITOR (monitor), model);
 
