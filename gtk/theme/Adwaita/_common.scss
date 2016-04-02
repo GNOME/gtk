@@ -121,6 +121,37 @@ textview {
   }
 }
 
+textview border {
+  background-color: mix($bg_color, $base_color, 50%);
+  background-image: image($bg_color); // HACK: the border node just draws background so, using a background-image to draw the border
+  background-repeat: no-repeat;
+
+  &:backdrop {
+    background-color: mix($backdrop_bg_color, $backdrop_base_color, 50%);
+    background-image: image($backdrop_bg_color);
+  }
+
+  &.bottom {
+    background-size: 100% 1px;
+    background-position: top;
+  }
+
+  &.top {
+    background-size: 100% 1px;
+    background-position: bottom;
+  }
+
+  &.left {
+    background-size: 1px 100%;
+    background-position: right;
+  }
+
+  &.right {
+    background-size: 1px 100%;
+    background-position: left;
+  }
+}
+
 iconview { @extend .view; }
 
 .rubberband,
@@ -197,12 +228,6 @@ assistant {
   .sidebar label { padding: 6px 12px; }
 
   .sidebar label.highlight { background-color: mix($bg_color, $fg_color, 80%); }
-}
-
-textview { // This will get overridden by .view, needed by gedit line numbers
-  background-color: mix($bg_color, $base_color, 50%);
-
-  &:backdrop { background-color: mix($backdrop_bg_color, $backdrop_base_color, 50%); }
 }
 
 %osd, .osd {

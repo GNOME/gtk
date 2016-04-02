@@ -75,6 +75,26 @@ textview text {
   textview text:selected {
     border-radius: 3px; }
 
+textview border {
+  background-color: #313434;
+  background-image: image(#393f3f);
+  background-repeat: no-repeat; }
+  textview border:backdrop {
+    background-color: #333636;
+    background-image: image(#393f3f); }
+  textview border.bottom {
+    background-size: 100% 1px;
+    background-position: top; }
+  textview border.top {
+    background-size: 100% 1px;
+    background-position: bottom; }
+  textview border.left {
+    background-size: 1px 100%;
+    background-position: right; }
+  textview border.right {
+    background-size: 1px 100%;
+    background-position: left; }
+
 .rubberband,
 rubberband,
 flowbox rubberband,
@@ -120,11 +140,6 @@ assistant .sidebar label {
   padding: 6px 12px; }
 assistant .sidebar label.highlight {
   background-color: #5d6262; }
-
-textview {
-  background-color: #313434; }
-  textview:backdrop {
-    background-color: #333636; }
 
 .csd popover.background.touch-selection, .csd popover.background.magnifier, popover.background.touch-selection, popover.background.magnifier, .csd popover.background.osd, popover.background.osd, .app-notification,
 .app-notification.frame, .osd .scale-popup, .osd {
