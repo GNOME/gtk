@@ -84,7 +84,7 @@ gdk_screen_class_init (GdkScreenClass *klass)
   object_class->finalize = gdk_screen_finalize;
   object_class->set_property = gdk_screen_set_property;
   object_class->get_property = gdk_screen_get_property;
-  
+
   g_object_class_install_property (object_class,
 				   PROP_FONT_OPTIONS,
 				   g_param_spec_pointer ("font-options",
@@ -194,52 +194,20 @@ _gdk_screen_close (GdkScreen *screen)
     }
 }
 
-/* Fallback used when the monitor "at" a point or window
- * doesn’t exist.
- */
-static gint
-get_nearest_monitor (GdkScreen *screen,
-		     gint       x,
-		     gint       y)
+static int
+get_monitor_num (GdkMonitor *monitor)
 {
-  gint num_monitors, i;
-  gint nearest_dist = G_MAXINT;
-  gint nearest_monitor = 0;
+  GdkDisplay *display;
+  int n_monitors, i;
 
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), -1);
-
-  num_monitors = gdk_screen_get_n_monitors (screen);
-  
-  for (i = 0; i < num_monitors; i++)
+  display = gdk_monitor_get_display (monitor);
+  n_monitors = gdk_display_get_n_monitors (display);
+  for (i = 0; i < n_monitors; i++)
     {
-      GdkRectangle monitor;
-      gint dist_x, dist_y, dist;
-      
-      gdk_screen_get_monitor_geometry (screen, i, &monitor);
-
-      if (x < monitor.x)
-	dist_x = monitor.x - x;
-      else if (x >= monitor.x + monitor.width)
-	dist_x = x - (monitor.x + monitor.width) + 1;
-      else
-	dist_x = 0;
-
-      if (y < monitor.y)
-	dist_y = monitor.y - y;
-      else if (y >= monitor.y + monitor.height)
-	dist_y = y - (monitor.y + monitor.height) + 1;
-      else
-	dist_y = 0;
-
-      dist = dist_x + dist_y;
-      if (dist < nearest_dist)
-	{
-	  nearest_dist = dist;
-	  nearest_monitor = i;
-	}
+      if (gdk_display_get_monitor (display, i) == monitor)
+        return i;
     }
-
-  return nearest_monitor;
+  return -1;
 }
 
 /**
@@ -255,31 +223,19 @@ get_nearest_monitor (GdkScreen *screen,
  *
  * Since: 2.2
  **/
-gint 
+gint
 gdk_screen_get_monitor_at_point (GdkScreen *screen,
 				 gint       x,
 				 gint       y)
 {
-  gint num_monitors, i;
-  
+  GdkDisplay *display;
+  GdkMonitor *monitor;
+
   g_return_val_if_fail (GDK_IS_SCREEN (screen), -1);
 
-  num_monitors = gdk_screen_get_n_monitors (screen);
-  
-  for (i=0;i<num_monitors;i++)
-    {
-      GdkRectangle monitor;
-      
-      gdk_screen_get_monitor_geometry (screen, i, &monitor);
-
-      if (x >= monitor.x &&
-          x < monitor.x + monitor.width &&
-          y >= monitor.y &&
-          y < (monitor.y + monitor.height))
-        return i;
-    }
-
-  return get_nearest_monitor (screen, x, y);
+  display = gdk_screen_get_display (screen);
+  monitor = gdk_display_get_monitor_at_point (display, x, y);
+  return get_monitor_num (monitor);
 }
 
 /**
@@ -296,39 +252,19 @@ gdk_screen_get_monitor_at_point (GdkScreen *screen,
  *
  * Since: 2.2
  **/
-gint 
-gdk_screen_get_monitor_at_window (GdkScreen      *screen,
-				  GdkWindow	 *window)
+gint
+gdk_screen_get_monitor_at_window (GdkScreen *screen,
+                                  GdkWindow *window)
 {
-  gint num_monitors, i, area = 0, screen_num = -1;
-  GdkRectangle win_rect;
+  GdkDisplay *display;
+  GdkMonitor *monitor;
 
   g_return_val_if_fail (GDK_IS_SCREEN (screen), -1);
+  g_return_val_if_fail (GDK_IS_WINDOW (window), -1);
 
-  gdk_window_get_geometry (window, &win_rect.x, &win_rect.y, &win_rect.width,
-			   &win_rect.height);
-  gdk_window_get_origin (window, &win_rect.x, &win_rect.y);
-  num_monitors = gdk_screen_get_n_monitors (screen);
-  
-  for (i=0;i<num_monitors;i++)
-    {
-      GdkRectangle tmp_monitor, intersect;
-      
-      gdk_screen_get_monitor_geometry (screen, i, &tmp_monitor);
-      gdk_rectangle_intersect (&win_rect, &tmp_monitor, &intersect);
-      
-      if (intersect.width * intersect.height > area)
-	{ 
-	  area = intersect.width * intersect.height;
-	  screen_num = i;
-	}
-    }
-  if (screen_num >= 0)
-    return screen_num;
-  else
-    return get_nearest_monitor (screen,
-				win_rect.x + win_rect.width / 2,
-				win_rect.y + win_rect.height / 2);
+  display = gdk_screen_get_display (screen);
+  monitor = gdk_display_get_monitor_at_window (display, window);
+  return get_monitor_num (monitor);
 }
 
 /**
@@ -703,6 +639,16 @@ gdk_screen_get_root_window (GdkScreen *screen)
   return GDK_SCREEN_GET_CLASS (screen)->get_root_window (screen);
 }
 
+static GdkMonitor *
+get_monitor (GdkScreen *screen,
+             gint       n)
+{
+  GdkDisplay *display;
+
+  display = gdk_screen_get_display (screen);
+  return gdk_display_get_monitor (display, n);
+}
+
 /**
  * gdk_screen_get_n_monitors:
  * @screen: a #GdkScreen
@@ -716,9 +662,12 @@ gdk_screen_get_root_window (GdkScreen *screen)
 gint
 gdk_screen_get_n_monitors (GdkScreen *screen)
 {
+  GdkDisplay *display;
+
   g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
 
-  return GDK_SCREEN_GET_CLASS (screen)->get_n_monitors (screen);
+  display = gdk_screen_get_display (screen);
+  return gdk_display_get_n_monitors (display);
 }
 
 /**
@@ -741,9 +690,17 @@ gdk_screen_get_n_monitors (GdkScreen *screen)
 gint
 gdk_screen_get_primary_monitor (GdkScreen *screen)
 {
+  GdkDisplay *display;
+  GdkMonitor *primary;
+
   g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
 
-  return GDK_SCREEN_GET_CLASS (screen)->get_primary_monitor (screen);
+  display = gdk_screen_get_display (screen);
+  primary = gdk_display_get_primary_monitor (display);
+  if (primary)
+    return get_monitor_num (primary);
+
+  return 0;
 }
 
 /**
@@ -761,11 +718,15 @@ gint
 gdk_screen_get_monitor_width_mm	(GdkScreen *screen,
 				 gint       monitor_num)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), -1);
-  g_return_val_if_fail (monitor_num >= 0, -1);
-  g_return_val_if_fail (monitor_num < gdk_screen_get_n_monitors (screen), -1);
+  GdkMonitor *monitor;
 
-  return GDK_SCREEN_GET_CLASS (screen)->get_monitor_width_mm (screen, monitor_num);
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), -1);
+
+  monitor = get_monitor (screen, monitor_num);
+
+  g_return_val_if_fail (monitor != NULL, -1);
+
+  return gdk_monitor_get_width_mm (monitor);
 }
 
 /**
@@ -783,11 +744,15 @@ gint
 gdk_screen_get_monitor_height_mm (GdkScreen *screen,
                                   gint       monitor_num)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), -1);
-  g_return_val_if_fail (monitor_num >= 0, -1);
-  g_return_val_if_fail (monitor_num < gdk_screen_get_n_monitors (screen), -1);
+  GdkMonitor *monitor;
 
-  return GDK_SCREEN_GET_CLASS (screen)->get_monitor_height_mm (screen, monitor_num);
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), -1);
+
+  monitor = get_monitor (screen, monitor_num);
+
+  g_return_val_if_fail (monitor != NULL, -1);
+
+  return gdk_monitor_get_height_mm (monitor);
 }
 
 /**
@@ -808,11 +773,15 @@ gchar *
 gdk_screen_get_monitor_plug_name (GdkScreen *screen,
 				  gint       monitor_num)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-  g_return_val_if_fail (monitor_num >= 0, NULL);
-  g_return_val_if_fail (monitor_num < gdk_screen_get_n_monitors (screen), NULL);
+  GdkMonitor *monitor;
 
-  return GDK_SCREEN_GET_CLASS (screen)->get_monitor_plug_name (screen, monitor_num);
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+
+  monitor = get_monitor (screen, monitor_num);
+
+  g_return_val_if_fail (monitor != NULL, NULL);
+
+  return g_strdup (gdk_monitor_get_model (monitor));
 }
 
 /**
@@ -840,11 +809,15 @@ gdk_screen_get_monitor_geometry (GdkScreen    *screen,
 				 gint          monitor_num,
 				 GdkRectangle *dest)
 {
-  g_return_if_fail (GDK_IS_SCREEN (screen));
-  g_return_if_fail (monitor_num >= 0);
-  g_return_if_fail (monitor_num < gdk_screen_get_n_monitors (screen));
+  GdkMonitor *monitor;
 
-  GDK_SCREEN_GET_CLASS(screen)->get_monitor_geometry (screen, monitor_num, dest);
+  g_return_if_fail (GDK_IS_SCREEN (screen));
+
+  monitor = get_monitor (screen, monitor_num);
+
+  g_return_if_fail (monitor != NULL);
+
+  gdk_monitor_get_geometry (monitor, dest);
 }
 
 /**
@@ -877,11 +850,16 @@ gdk_screen_get_monitor_workarea (GdkScreen    *screen,
                                  gint          monitor_num,
                                  GdkRectangle *dest)
 {
-  g_return_if_fail (GDK_IS_SCREEN (screen));
-  g_return_if_fail (monitor_num >= 0);
-  g_return_if_fail (monitor_num < gdk_screen_get_n_monitors (screen));
+  GdkMonitor *monitor;
 
-  GDK_SCREEN_GET_CLASS (screen)->get_monitor_workarea (screen, monitor_num, dest);
+  g_return_if_fail (GDK_IS_SCREEN (screen));
+
+  monitor = get_monitor (screen, monitor_num);
+
+  g_return_if_fail (monitor != NULL);
+
+  /* FIXME */
+  gdk_monitor_get_geometry (monitor, dest);
 }
 
 /**
