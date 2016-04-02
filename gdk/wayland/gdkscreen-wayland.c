@@ -102,7 +102,6 @@ struct _GdkWaylandScreen
 
   /* Xinerama/RandR 1.2 */
   GPtrArray *monitors;
-  gint       primary_monitor;
 
   GHashTable *settings;
   GsdXftSettings xft_settings;
@@ -151,7 +150,6 @@ init_multihead (GdkScreen *screen)
   GdkWaylandScreen *screen_wayland = GDK_WAYLAND_SCREEN (screen);
 
   screen_wayland->monitors = g_ptr_array_new_with_free_func (free_monitor);
-  screen_wayland->primary_monitor = 0;
 }
 
 static void
