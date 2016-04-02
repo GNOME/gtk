@@ -646,7 +646,12 @@ gtk_header_bar_get_size (GtkWidget      *widget,
   center_min = center_nat = 0;
   if (priv->label_box != NULL)
     {
-      if (add_child_size (priv->label_sizing_box, orientation, &center_min, &center_nat))
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+        add_child_size (priv->label_box, orientation, &center_min, &center_nat);
+      else
+        add_child_size (priv->label_sizing_box, orientation, &center_min, &center_nat);
+
+      if (_gtk_widget_get_visible (priv->label_sizing_box))
         nvis_children += 1;
     }
 
