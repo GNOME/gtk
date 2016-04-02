@@ -57,6 +57,21 @@ static void gdk_screen_get_property (GObject        *object,
 				     GValue         *value,
 				     GParamSpec     *pspec);
 
+static gint gdk_screen_real_get_n_monitors (GdkScreen *screen);
+static gint gdk_screen_real_get_primary_monitor (GdkScreen *screen);
+static gint gdk_screen_real_get_monitor_width_mm (GdkScreen *screen,
+                                                  gint       monitor_num);
+static gint gdk_screen_real_get_monitor_height_mm (GdkScreen *screen,
+                                                  gint       monitor_num);
+static gchar * gdk_screen_real_get_monitor_plug_name (GdkScreen *screen,
+                                                      gint       monitor_num);
+static void gdk_screen_real_get_monitor_geometry (GdkScreen    *screen,
+                                                  gint          monitor_num,
+                                                  GdkRectangle *dest);
+static void gdk_screen_real_get_monitor_workarea (GdkScreen    *screen,
+                                                  gint          monitor_num,
+                                                  GdkRectangle *dest);
+
 enum
 {
   PROP_0,
@@ -84,7 +99,15 @@ gdk_screen_class_init (GdkScreenClass *klass)
   object_class->finalize = gdk_screen_finalize;
   object_class->set_property = gdk_screen_set_property;
   object_class->get_property = gdk_screen_get_property;
-  
+
+  klass->get_n_monitors = gdk_screen_real_get_n_monitors;
+  klass->get_primary_monitor = gdk_screen_real_get_primary_monitor;
+  klass->get_monitor_width_mm = gdk_screen_real_get_monitor_width_mm;
+  klass->get_monitor_height_mm = gdk_screen_real_get_monitor_height_mm;
+  klass->get_monitor_plug_name = gdk_screen_real_get_monitor_plug_name;
+  klass->get_monitor_geometry = gdk_screen_real_get_monitor_geometry;
+  klass->get_monitor_workarea = gdk_screen_real_get_monitor_workarea;
+
   g_object_class_install_property (object_class,
 				   PROP_FONT_OPTIONS,
 				   g_param_spec_pointer ("font-options",
@@ -701,6 +724,102 @@ gdk_screen_get_root_window (GdkScreen *screen)
   g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
 
   return GDK_SCREEN_GET_CLASS (screen)->get_root_window (screen);
+}
+
+static GdkMonitor *
+get_monitor (GdkScreen *screen,
+             gint       n)
+{
+  GdkDisplay *display;
+  GdkMonitor *monitor;
+  GList *list;
+
+  display = gdk_screen_get_display (screen);
+  list = gdk_display_list_monitors (display);
+  monitor = g_list_nth_data (list, n);
+  g_list_free (list);
+
+  return monitor;
+}
+
+static gint
+gdk_screen_real_get_n_monitors (GdkScreen *screen)
+{
+  GdkDisplay *display;
+  GList *list;
+  gint length;
+
+  display = gdk_screen_get_display (screen);
+  list = gdk_display_list_monitors (display);
+  length = g_list_length (list);
+  g_list_free (list);
+  return length;
+}
+
+static gint
+gdk_screen_real_get_primary_monitor (GdkScreen *screen)
+{
+  /* FIXME */
+  return 0;
+}
+
+static gint
+gdk_screen_real_get_monitor_width_mm (GdkScreen *screen,
+                                      gint       monitor_num)
+{
+  GdkMonitor *monitor;
+  int width_mm, height_mm;
+
+  monitor = get_monitor (screen, monitor_num);
+  gdk_monitor_get_size (monitor, &width_mm, &height_mm);
+
+  return width_mm;
+}
+
+static gint
+gdk_screen_real_get_monitor_height_mm (GdkScreen *screen,
+                                       gint       monitor_num)
+{
+  GdkMonitor *monitor;
+  int width_mm, height_mm;
+
+  monitor = get_monitor (screen, monitor_num);
+  gdk_monitor_get_size (monitor, &width_mm, &height_mm);
+
+  return height_mm;
+}
+
+static gchar *
+gdk_screen_real_get_monitor_plug_name (GdkScreen *screen,
+                                       gint       monitor_num)
+{
+  GdkMonitor *monitor;
+
+  monitor = get_monitor (screen, monitor_num);
+  return g_strdup (gdk_monitor_get_model (monitor));
+}
+
+static void
+gdk_screen_real_get_monitor_geometry (GdkScreen    *screen,
+                                      gint          monitor_num,
+                                      GdkRectangle *dest)
+{
+  GdkMonitor *monitor;
+
+  monitor = get_monitor (screen, monitor_num);
+  gdk_monitor_get_geometry (monitor, dest);
+}
+
+static void
+gdk_screen_real_get_monitor_workarea (GdkScreen    *screen,
+                                      gint          monitor_num,
+                                      GdkRectangle *dest)
+{
+  GdkMonitor *monitor;
+
+  monitor = get_monitor (screen, monitor_num);
+  /* FIXME */
+  gdk_monitor_get_geometry (monitor, dest);
 }
 
 /**
