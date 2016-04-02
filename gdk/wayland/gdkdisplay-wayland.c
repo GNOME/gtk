@@ -598,6 +598,8 @@ gdk_wayland_display_finalize (GObject *object)
 
   g_free (display_wayland->startup_notification_id);
 
+  g_ptr_array_free (display_wayland->monitors, TRUE);
+
   G_OBJECT_CLASS (gdk_wayland_display_parent_class)->finalize (object);
 }
 
@@ -812,6 +814,26 @@ gdk_wayland_display_pop_error_trap (GdkDisplay *display,
   return 0;
 }
 
+static int
+gdk_wayland_display_get_n_monitors (GdkDisplay *display)
+{
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+
+  return display_wayland->monitors->len;
+}
+
+static GdkMonitor *
+gdk_wayland_display_get_monitor (GdkDisplay *display,
+                                 int         monitor_num)
+{
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+
+  if (monitor_num < 0 || monitor_num >= display_wayland->monitors->len)
+    return NULL;
+
+  return (GdkMonitor *)display_wayland->monitors->pdata[monitor_num];
+}
+
 static void
 gdk_wayland_display_class_init (GdkWaylandDisplayClass *class)
 {
@@ -863,12 +885,17 @@ gdk_wayland_display_class_init (GdkWaylandDisplayClass *class)
   display_class->utf8_to_string_target = _gdk_wayland_display_utf8_to_string_target;
 
   display_class->make_gl_context_current = gdk_wayland_display_make_gl_context_current;
+
+  display_class->get_n_monitors = gdk_wayland_display_get_n_monitors;
+  display_class->get_monitor = gdk_wayland_display_get_monitor;
 }
 
 static void
 gdk_wayland_display_init (GdkWaylandDisplay *display)
 {
   display->xkb_context = xkb_context_new (0);
+
+  display->monitors = g_ptr_array_new_with_free_func (g_object_unref);
 }
 
 void

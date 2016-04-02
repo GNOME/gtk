@@ -103,6 +103,8 @@ struct _GdkWaylandDisplay
 
   GdkWaylandSelection *selection;
 
+  GPtrArray *monitors;
+
   /* egl info */
   EGLDisplay egl_display;
   int egl_major_version;
