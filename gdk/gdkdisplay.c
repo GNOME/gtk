@@ -2482,12 +2482,24 @@ gdk_display_list_seats (GdkDisplay *display)
   return g_list_copy (display->seats);
 }
 
-GList *
-gdk_display_list_monitors (GdkDisplay *display)
+GdkMonitor **
+gdk_display_get_monitors (GdkDisplay *display,
+                          gint       *n_monitors)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
-  return g_list_copy (display->monitors);
+  return GDK_DISPLAY_GET_CLASS (display)->get_monitors (display, n_monitors);
+}
+
+GdkMonitor *
+gdk_display_get_primary_monitor (GdkDisplay *display)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+
+  if (GDK_DISPLAY_GET_CLASS (display)->get_primary_monitor)
+    return GDK_DISPLAY_GET_CLASS (display)->get_primary_monitor (display);
+
+  return NULL;
 }
 
 void

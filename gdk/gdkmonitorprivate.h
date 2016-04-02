@@ -24,6 +24,8 @@
 
 #include "gdkmonitor.h"
 
+G_BEGIN_DECLS
+
 struct _GdkMonitor {
   GObject parent;
 
@@ -41,8 +43,6 @@ struct _GdkMonitor {
 struct _GdkMonitorClass {
   GObjectClass parent_class;
 };
-
-G_BEGIN_DECLS
 
 GdkMonitor *    gdk_monitor_new                 (GdkDisplay *display);
 

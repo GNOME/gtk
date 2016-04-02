@@ -28,7 +28,6 @@
 
 #include <gdk/gdkversionmacros.h>
 #include <gdk/gdkrectangle.h>
-#include <gdk/gdkdisplay.h>
 #include <gdk/gdktypes.h>
 
 G_BEGIN_DECLS

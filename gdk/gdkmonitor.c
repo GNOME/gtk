@@ -22,6 +22,7 @@
 #include "config.h"
 
 #include "gdkmonitorprivate.h"
+#include "gdkdisplay.h"
 #include "gdkenumtypes.h"
 
 /*

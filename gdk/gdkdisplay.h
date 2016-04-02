@@ -31,6 +31,7 @@
 #include <gdk/gdkevents.h>
 #include <gdk/gdkdevicemanager.h>
 #include <gdk/gdkseat.h>
+#include <gdk/gdkmonitor.h>
 
 G_BEGIN_DECLS
 
@@ -179,7 +180,10 @@ GDK_AVAILABLE_IN_3_20
 GList   * gdk_display_list_seats       (GdkDisplay *display);
 
 GDK_AVAILABLE_IN_3_22
-GList   * gdk_display_list_monitors    (GdkDisplay *display);
+GdkMonitor ** gdk_display_get_monitors  (GdkDisplay *display,
+                                         int        *n_monitors);
+GDK_AVAILABLE_IN_3_22
+GdkMonitor *  gdk_display_get_primary_monitor (GdkDisplay *display);
 
 G_END_DECLS
 

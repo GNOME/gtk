@@ -272,4 +272,7 @@ EGLSurface gdk_wayland_window_get_dummy_egl_surface (GdkWindow *window,
 void gdk_wayland_seat_set_global_cursor (GdkSeat   *seat,
                                          GdkCursor *cursor);
 
+GdkMonitor **gdk_wayland_screen_get_monitors (GdkScreen *screen,
+                                              int       *n_monitors);
+
 #endif /* __GDK_PRIVATE_WAYLAND_H__ */

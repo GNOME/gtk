@@ -805,6 +805,14 @@ gdk_wayland_display_pop_error_trap (GdkDisplay *display,
   return 0;
 }
 
+static GdkMonitor **
+gdk_wayland_display_get_monitors (GdkDisplay *display,
+                                  int        *n_monitors)
+{
+  return gdk_wayland_screen_get_monitors (GDK_WAYLAND_DISPLAY (display)->screen,
+                                          n_monitors);
+}
+
 static void
 gdk_wayland_display_class_init (GdkWaylandDisplayClass *class)
 {
@@ -856,6 +864,8 @@ gdk_wayland_display_class_init (GdkWaylandDisplayClass *class)
   display_class->utf8_to_string_target = _gdk_wayland_display_utf8_to_string_target;
 
   display_class->make_gl_context_current = gdk_wayland_display_make_gl_context_current;
+
+  display_class->get_monitors = gdk_wayland_display_get_monitors;
 }
 
 static void
