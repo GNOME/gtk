@@ -33,7 +33,7 @@ struct _GdkMonitor {
   int height;
   char *manufacturer;
   char *model;
-  int scale;
+  int scale_factor;
 };
 
 struct _GdkMonitorClass {
@@ -42,22 +42,22 @@ struct _GdkMonitorClass {
 
 G_BEGIN_DECLS
 
-GdkMonitor *	gdk_monitor_new 		(GdkDisplay *display);
+GdkMonitor *    gdk_monitor_new                 (GdkDisplay *display);
 
 void            gdk_monitor_set_manufacturer    (GdkMonitor *monitor,
                                                  const char *manufacturer);
 void            gdk_monitor_set_model           (GdkMonitor *monitor,
                                                  const char *model);
-void 		gdk_monitor_set_geometry 	(GdkMonitor *monitor,
-                         			 int         x,
-                         			 int         y,
-                         			 int         width,
-                         			 int         height);
-void 		gdk_monitor_set_size 		(GdkMonitor *monitor,
-                     				 int         width_mm,
-                     				 int         height_mm);
-void 		gdk_monitor_set_scale 		(GdkMonitor *monitor,
-                       				 int         scale);
+void            gdk_monitor_set_geometry        (GdkMonitor *monitor,
+                                                 int         x,
+                                                 int         y,
+                                                 int         width,
+                                                 int         height);
+void            gdk_monitor_set_size            (GdkMonitor *monitor,
+                                                 int         width_mm,
+                                                 int         height_mm);
+void            gdk_monitor_set_scale_factor    (GdkMonitor *monitor,
+                                                 int         scale);
 
 G_END_DECLS
 

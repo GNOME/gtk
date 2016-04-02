@@ -1130,7 +1130,7 @@ output_handle_scale (void             *data,
   GDK_NOTE (MISC,
             g_message ("handle scale output %d, scale %d", monitor->id, scale));
 
-  gdk_monitor_set_scale (GDK_MONITOR (monitor), scale);
+  gdk_monitor_set_scale_factor (GDK_MONITOR (monitor), scale);
 
   if (GDK_MONITOR (monitor)->geometry.width != 0 && monitor->version < OUTPUT_VERSION_WITH_DONE)
     {
@@ -1307,7 +1307,7 @@ _gdk_wayland_screen_get_output_scale (GdkScreen        *screen,
 
   monitor = get_monitor_for_output (screen, output);
   if (monitor != NULL)
-    return gdk_monitor_get_scale (GDK_MONITOR (monitor));
+    return gdk_monitor_get_scale_factor (GDK_MONITOR (monitor));
 
   return 0;
 }

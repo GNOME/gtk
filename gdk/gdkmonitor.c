@@ -40,7 +40,7 @@ enum {
   PROP_DISPLAY,
   PROP_MANUFACTURER,
   PROP_MODEL,
-  PROP_SCALE,
+  PROP_SCALE_FACTOR,
   PROP_GEOMETRY,
   PROP_WIDTH,
   PROP_HEIGHT,
@@ -54,7 +54,7 @@ G_DEFINE_TYPE (GdkMonitor, gdk_monitor, G_TYPE_OBJECT)
 static void
 gdk_monitor_init (GdkMonitor *monitor)
 {
-  monitor->scale = 1;
+  monitor->scale_factor = 1;
 }
 
 static void
@@ -79,8 +79,8 @@ gdk_monitor_get_property (GObject    *object,
       g_value_set_string (value, monitor->model);
       break;
 
-    case PROP_SCALE:
-      g_value_set_int (value, monitor->scale);
+    case PROP_SCALE_FACTOR:
+      g_value_set_int (value, monitor->scale_factor);
       break;
 
     case PROP_GEOMETRY:
@@ -157,9 +157,9 @@ gdk_monitor_class_init (GdkMonitorClass *class)
                          "The model name",
                          NULL,
                          G_PARAM_READABLE);
-  props[PROP_SCALE] =
-    g_param_spec_int ("scale",
-                      "Scale",
+  props[PROP_SCALE_FACTOR] =
+    g_param_spec_int ("scale-factor",
+                      "Scale factor",
                       "The scale factor",
                       0, G_MAXINT,
                       1,
@@ -234,11 +234,11 @@ gdk_monitor_get_model (GdkMonitor *monitor)
 }
 
 int
-gdk_monitor_get_scale (GdkMonitor *monitor)
+gdk_monitor_get_scale_factor (GdkMonitor *monitor)
 {
   g_return_val_if_fail (GDK_IS_MONITOR (monitor), 0);
 
-  return monitor->scale;
+  return monitor->scale_factor;
 }
 
 GdkMonitor *
@@ -297,10 +297,13 @@ gdk_monitor_set_size (GdkMonitor *monitor,
 }
 
 void
-gdk_monitor_set_scale (GdkMonitor *monitor,
-                       int         scale)
+gdk_monitor_set_scale_factor (GdkMonitor *monitor,
+                              int         scale_factor)
 {
-  monitor->scale = scale;
+  if (monitor->scale_factor == scale_factor)
+    return;
 
-  g_object_notify (G_OBJECT (monitor), "scale");
+  monitor->scale_factor = scale_factor;
+
+  g_object_notify (G_OBJECT (monitor), "scale-factor");
 }
