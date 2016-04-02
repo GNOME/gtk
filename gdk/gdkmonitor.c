@@ -25,7 +25,6 @@
 
 /*
  * TODO:
- * - rename physical sizes
  * - primary
  * - workarea
  * - monitor type (laptop, projector, ...)
@@ -42,8 +41,8 @@ enum {
   PROP_MODEL,
   PROP_SCALE_FACTOR,
   PROP_GEOMETRY,
-  PROP_WIDTH,
-  PROP_HEIGHT,
+  PROP_WIDTH_MM,
+  PROP_HEIGHT_MM,
   LAST_PROP
 };
 
@@ -87,12 +86,12 @@ gdk_monitor_get_property (GObject    *object,
       g_value_set_boxed (value, &monitor->geometry);
       break;
 
-    case PROP_WIDTH:
-      g_value_set_int (value, monitor->width);
+    case PROP_WIDTH_MM:
+      g_value_set_int (value, monitor->width_mm);
       break;
 
-    case PROP_HEIGHT:
-      g_value_set_int (value, monitor->height);
+    case PROP_HEIGHT_MM:
+      g_value_set_int (value, monitor->height_mm);
       break;
 
     default:
@@ -170,16 +169,16 @@ gdk_monitor_class_init (GdkMonitorClass *class)
                         "The geometry of the monitor",
                         GDK_TYPE_RECTANGLE,
                         G_PARAM_READABLE);
-  props[PROP_WIDTH] =
-    g_param_spec_int ("width",
-                      "Width",
+  props[PROP_WIDTH_MM] =
+    g_param_spec_int ("width-mm",
+                      "Physical width",
                       "The width of the monitor, in millimeters",
                       0, G_MAXINT,
                       0,
                       G_PARAM_READABLE);
-  props[PROP_HEIGHT] =
-    g_param_spec_int ("height",
-                      "Height",
+  props[PROP_HEIGHT_MM] =
+    g_param_spec_int ("height-mm",
+                      "Physical height",
                       "The height of the monitor, in millimeters",
                       0, G_MAXINT,
                       0,
@@ -213,8 +212,8 @@ gdk_monitor_get_size (GdkMonitor *monitor,
 {
   g_return_if_fail (GDK_IS_MONITOR (monitor));
 
-  *width_mm = monitor->width;
-  *height_mm = monitor->height;
+  *width_mm = monitor->width_mm;
+  *height_mm = monitor->height_mm;
 }
 
 const char *
@@ -289,11 +288,21 @@ gdk_monitor_set_size (GdkMonitor *monitor,
                       int         width_mm,
                       int         height_mm)
 {
-  monitor->width = width_mm;
-  monitor->height = height_mm;
+  g_object_freeze_notify (G_OBJECT (monitor));
 
-  g_object_notify (G_OBJECT (monitor), "width");
-  g_object_notify (G_OBJECT (monitor), "height");
+  if (monitor->width_mm != width_mm)
+    {
+      monitor->width_mm = width_mm;
+      g_object_notify (G_OBJECT (monitor), "width-mm");
+    }
+
+  if (monitor->height_mm != height_mm)
+    {
+      monitor->height_mm = height_mm;
+      g_object_notify (G_OBJECT (monitor), "height-mm");
+    }
+
+  g_object_thaw_notify (G_OBJECT (monitor));
 }
 
 void

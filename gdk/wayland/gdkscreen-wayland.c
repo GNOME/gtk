@@ -980,14 +980,14 @@ update_screen_size (GdkWaylandScreen *screen_wayland)
        * are contiguous and never overlap.
        */
       if (monitor->geometry.x > 0)
-        width_mm += monitor->width;
+        width_mm += monitor->width_mm;
       else
-        width_mm = MAX (width_mm, monitor->width);
+        width_mm = MAX (width_mm, monitor->width_mm);
 
       if (monitor->geometry.y > 0)
-        height_mm += monitor->height;
+        height_mm += monitor->height_mm;
       else
-        height_mm = MAX (height_mm, monitor->height);
+        height_mm = MAX (height_mm, monitor->height_mm);
 
       width = MAX (width, monitor->geometry.x + monitor->geometry.width);
       height = MAX (height, monitor->geometry.y + monitor->geometry.height);

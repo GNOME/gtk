@@ -29,8 +29,8 @@ struct _GdkMonitor {
 
   GdkDisplay *display;
   GdkRectangle geometry;
-  int width;
-  int height;
+  int width_mm;
+  int height_mm;
   char *manufacturer;
   char *model;
   int scale_factor;
