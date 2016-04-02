@@ -228,15 +228,20 @@ gdk_monitor_get_geometry (GdkMonitor   *monitor,
   *geometry = monitor->geometry;
 }
 
-void
-gdk_monitor_get_physical_size (GdkMonitor *monitor,
-                               int        *width_mm,
-                               int        *height_mm)
+int
+gdk_monitor_get_width_mm (GdkMonitor *monitor)
 {
-  g_return_if_fail (GDK_IS_MONITOR (monitor));
+  g_return_val_if_fail (GDK_IS_MONITOR (monitor), 0);
 
-  *width_mm = monitor->width_mm;
-  *height_mm = monitor->height_mm;
+  return monitor->width_mm;
+}
+
+int
+gdk_monitor_get_height_mm (GdkMonitor *monitor)
+{
+  g_return_val_if_fail (GDK_IS_MONITOR (monitor), 0);
+
+  return monitor->height_mm;
 }
 
 const char *

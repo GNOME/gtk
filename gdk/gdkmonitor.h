@@ -58,9 +58,9 @@ GDK_AVAILABLE_IN_3_22
 void         gdk_monitor_get_geometry         (GdkMonitor   *monitor,
                                                GdkRectangle *geometry);
 GDK_AVAILABLE_IN_3_22
-void          gdk_monitor_get_physical_size   (GdkMonitor   *monitor,
-                                               int          *width_mm,
-                                               int          *height_mm);
+int          gdk_monitor_get_width_mm         (GdkMonitor   *monitor);
+GDK_AVAILABLE_IN_3_22
+int          gdk_monitor_get_height_mm        (GdkMonitor   *monitor);
 GDK_AVAILABLE_IN_3_22
 const char * gdk_monitor_get_manufacturer     (GdkMonitor   *monitor);
 GDK_AVAILABLE_IN_3_22
