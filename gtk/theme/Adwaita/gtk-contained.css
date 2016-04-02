@@ -126,7 +126,7 @@ textview {
   textview:backdrop {
     background-color: #f2f2f2; }
 
-popover.background.touch-selection, popover.background.magnifier, .csd popover.background.touch-selection, .csd popover.background.magnifier, popover.background.osd, .csd popover.background.osd, .app-notification,
+.csd popover.background.touch-selection, .csd popover.background.magnifier, popover.background.touch-selection, popover.background.magnifier, .csd popover.background.osd, popover.background.osd, .app-notification,
 .app-notification.frame, .osd .scale-popup, .osd {
   color: #eeeeec;
   border: none;
@@ -645,7 +645,7 @@ button.osd {
     text-shadow: none;
     -gtk-icon-shadow: none;
     border: none; }
-popover.background.touch-selection button, popover.background.magnifier button, .csd popover.background.touch-selection button, .csd popover.background.magnifier button, .app-notification button,
+.csd popover.background.touch-selection button, .csd popover.background.magnifier button, popover.background.touch-selection button, popover.background.magnifier button, .app-notification button,
 .app-notification.frame button, .osd
 button {
   color: #eeeeec;
@@ -2230,7 +2230,7 @@ popover.background {
   border-radius: 5px;
   background-color: #e8e8e7;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); }
-  popover.background, .csd popover.background {
+  .csd popover.background, popover.background {
     border: 1px solid #9d9d99; }
   popover.background:backdrop {
     background-color: #e8e8e7;
@@ -2241,7 +2241,7 @@ popover.background {
   popover.background > toolbar {
     border-style: none;
     background-color: transparent; }
-  popover.background.touch-selection, popover.background.magnifier, .csd popover.background.touch-selection, .csd popover.background.magnifier {
+  .csd popover.background.touch-selection, .csd popover.background.magnifier, popover.background.touch-selection, popover.background.magnifier {
     border: 1px solid rgba(255, 255, 255, 0.1); }
   popover.background separator {
     margin: 3px; }
@@ -2973,7 +2973,7 @@ scale highlight, progressbar progress {
     scale highlight:backdrop:disabled, progressbar progress:backdrop:disabled, progressbar:backdrop progress:disabled {
       background-color: transparent;
       border-color: transparent; }
-  row:selected scale highlight, scale row:selected highlight, row:selected progressbar progress, progressbar row:selected progress, row:selected scale highlight:disabled, scale row:selected highlight:disabled, row:selected progressbar progress:disabled, progressbar row:selected progress:disabled {
+  row:selected scale highlight:disabled, scale row:selected highlight:disabled, row:selected progressbar progress:disabled, progressbar row:selected progress:disabled, row:selected scale highlight, scale row:selected highlight, row:selected progressbar progress, progressbar row:selected progress {
     border-color: #184472; }
   .osd scale highlight, scale .osd highlight, .osd progressbar progress, progressbar .osd progress {
     border-color: rgba(0, 0, 0, 0.7); }
