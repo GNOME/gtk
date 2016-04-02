@@ -57,7 +57,7 @@ struct _GtkInspectorGeneralPrivate
 {
   GtkWidget *version_box;
   GtkWidget *env_box;
-  GtkWidget *x_box;
+  GtkWidget *display_box;
   GtkWidget *gl_box;
   GtkWidget *device_box;
   GtkWidget *gtk_version;
@@ -71,9 +71,9 @@ struct _GtkInspectorGeneralPrivate
   GtkWidget *gtk_exe_prefix;
   GtkWidget *gtk_data_prefix;
   GtkWidget *gsettings_schema_dir;
-  GtkWidget *x_display;
-  GtkWidget *x_rgba;
-  GtkWidget *x_composited;
+  GtkWidget *display_name;
+  GtkWidget *display_rgba;
+  GtkWidget *display_composited;
   GtkSizeGroup *labels;
   GtkAdjustment *focus_adjustment;
 };
@@ -321,13 +321,13 @@ populate_display (GdkScreen *screen, GtkInspectorGeneral *gen)
   GdkMonitor **monitors;
   int n_monitors;
 
-  children = gtk_container_get_children (GTK_CONTAINER (gen->priv->x_box));
+  children = gtk_container_get_children (GTK_CONTAINER (gen->priv->display_box));
   for (l = children; l; l = l->next)
     {
       child = l->data;
-      if (gtk_widget_is_ancestor (gen->priv->x_display, child) ||
-          gtk_widget_is_ancestor (gen->priv->x_rgba, child) ||
-          gtk_widget_is_ancestor (gen->priv->x_composited, child))
+      if (gtk_widget_is_ancestor (gen->priv->display_name, child) ||
+          gtk_widget_is_ancestor (gen->priv->display_rgba, child) ||
+          gtk_widget_is_ancestor (gen->priv->display_composited, child))
         continue;
 
       gtk_widget_destroy (child);
@@ -335,14 +335,14 @@ populate_display (GdkScreen *screen, GtkInspectorGeneral *gen)
   g_list_free (children);
 
   name = gdk_screen_make_display_name (screen);
-  gtk_label_set_label (GTK_LABEL (gen->priv->x_display), name);
+  gtk_label_set_label (GTK_LABEL (gen->priv->display_name), name);
   g_free (name);
 
   if (gdk_screen_get_rgba_visual (screen) != NULL)
-    gtk_widget_show (gen->priv->x_rgba);
+    gtk_widget_show (gen->priv->display_rgba);
 
   if (gdk_screen_is_composited (screen))
-    gtk_widget_show (gen->priv->x_composited);
+    gtk_widget_show (gen->priv->display_composited);
 
   display = gdk_screen_get_display (screen);
   monitors = gdk_display_get_monitors (display, &n_monitors);
@@ -367,7 +367,7 @@ populate_display (GdkScreen *screen, GtkInspectorGeneral *gen)
                                w, h, scale == 2 ? " @ 2" : "",
                                wmm, hmm);
 
-      add_label_row (GTK_LIST_BOX (gen->priv->x_box), name, value, 0);
+      add_label_row (GTK_LIST_BOX (gen->priv->display_box), name, value, 0);
 
       g_free (name);
       g_free (value);
@@ -597,16 +597,16 @@ keynav_failed (GtkWidget *widget, GtkDirectionType direction, GtkInspectorGenera
   if (direction == GTK_DIR_DOWN && widget == gen->priv->version_box)
     next = gen->priv->env_box;
   else if (direction == GTK_DIR_DOWN && widget == gen->priv->env_box)
-    next = gen->priv->x_box;
-  else if (direction == GTK_DIR_DOWN && widget == gen->priv->x_box)
+    next = gen->priv->display_box;
+  else if (direction == GTK_DIR_DOWN && widget == gen->priv->display_box)
     next = gen->priv->gl_box;
   else if (direction == GTK_DIR_DOWN && widget == gen->priv->gl_box)
     next = gen->priv->device_box;
   else if (direction == GTK_DIR_UP && widget == gen->priv->device_box)
     next = gen->priv->gl_box;
   else if (direction == GTK_DIR_UP && widget == gen->priv->gl_box)
-    next = gen->priv->x_box;
-  else if (direction == GTK_DIR_UP && widget == gen->priv->x_box)
+    next = gen->priv->display_box;
+  else if (direction == GTK_DIR_UP && widget == gen->priv->display_box)
     next = gen->priv->env_box;
   else if (direction == GTK_DIR_UP && widget == gen->priv->env_box)
     next = gen->priv->version_box;
@@ -651,7 +651,7 @@ gtk_inspector_general_constructed (GObject *object)
 
    g_signal_connect (gen->priv->version_box, "keynav-failed", G_CALLBACK (keynav_failed), gen);
    g_signal_connect (gen->priv->env_box, "keynav-failed", G_CALLBACK (keynav_failed), gen);
-   g_signal_connect (gen->priv->x_box, "keynav-failed", G_CALLBACK (keynav_failed), gen);
+   g_signal_connect (gen->priv->display_box, "keynav-failed", G_CALLBACK (keynav_failed), gen);
    g_signal_connect (gen->priv->gl_box, "keynav-failed", G_CALLBACK (keynav_failed), gen);
    g_signal_connect (gen->priv->device_box, "keynav-failed", G_CALLBACK (keynav_failed), gen);
 }
@@ -667,7 +667,7 @@ gtk_inspector_general_class_init (GtkInspectorGeneralClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/general.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, version_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, env_box);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, x_box);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, display_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gl_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gtk_version);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gdk_backend);
@@ -681,9 +681,9 @@ gtk_inspector_general_class_init (GtkInspectorGeneralClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gtk_data_prefix);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gsettings_schema_dir);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, labels);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, x_display);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, x_composited);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, x_rgba);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, display_name);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, display_composited);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, display_rgba);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, device_box);
 }
 
