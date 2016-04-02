@@ -27,11 +27,9 @@
 
 /*
  * TODO:
- * - primary
  * - workarea
  * - monitor type (laptop, projector, ...)
  * - consider vfuncs instead of baseclass storage
- * - consider array instead of list
  * - provide a persistent id (if the backend allows)
  */
 enum {
@@ -283,6 +281,14 @@ gdk_monitor_get_subpixel_layout (GdkMonitor *monitor)
   g_return_val_if_fail (GDK_IS_MONITOR (monitor), GDK_SUBPIXEL_LAYOUT_UNKNOWN);
 
   return monitor->subpixel_layout;
+}
+
+gboolean
+gdk_monitor_is_primary (GdkMonitor *monitor)
+{
+  g_return_val_if_fail (GDK_IS_MONITOR (monitor), FALSE);
+
+  return monitor == gdk_display_get_primary_monitor (monitor->display);
 }
 
 GdkMonitor *

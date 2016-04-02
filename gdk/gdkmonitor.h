@@ -49,27 +49,29 @@ typedef enum {
 } GdkSubpixelLayout;
 
 GDK_AVAILABLE_IN_3_22
-GType        gdk_monitor_get_type             (void) G_GNUC_CONST;
+GType             gdk_monitor_get_type            (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_3_22
-GdkDisplay  *gdk_monitor_get_display          (GdkMonitor  *monitor);
+GdkDisplay  *     gdk_monitor_get_display         (GdkMonitor   *monitor);
 GDK_AVAILABLE_IN_3_22
-void         gdk_monitor_get_geometry         (GdkMonitor   *monitor,
-                                               GdkRectangle *geometry);
+void              gdk_monitor_get_geometry        (GdkMonitor   *monitor,
+                                                   GdkRectangle *geometry);
 GDK_AVAILABLE_IN_3_22
-int          gdk_monitor_get_width_mm         (GdkMonitor   *monitor);
+int               gdk_monitor_get_width_mm        (GdkMonitor   *monitor);
 GDK_AVAILABLE_IN_3_22
-int          gdk_monitor_get_height_mm        (GdkMonitor   *monitor);
+int               gdk_monitor_get_height_mm       (GdkMonitor   *monitor);
 GDK_AVAILABLE_IN_3_22
-const char * gdk_monitor_get_manufacturer     (GdkMonitor   *monitor);
+const char *      gdk_monitor_get_manufacturer    (GdkMonitor   *monitor);
 GDK_AVAILABLE_IN_3_22
-const char * gdk_monitor_get_model            (GdkMonitor   *monitor);
+const char *      gdk_monitor_get_model           (GdkMonitor   *monitor);
 GDK_AVAILABLE_IN_3_22
-int          gdk_monitor_get_scale_factor     (GdkMonitor   *monitor);
+int               gdk_monitor_get_scale_factor    (GdkMonitor   *monitor);
 GDK_AVAILABLE_IN_3_22
-int          gdk_monitor_get_refresh_rate     (GdkMonitor   *monitor);
+int               gdk_monitor_get_refresh_rate    (GdkMonitor   *monitor);
 GDK_AVAILABLE_IN_3_22
 GdkSubpixelLayout gdk_monitor_get_subpixel_layout (GdkMonitor   *monitor);
+GDK_AVAILABLE_IN_3_22
+gboolean          gdk_monitor_is_primary          (GdkMonitor   *monitor);
 
 G_END_DECLS
 
