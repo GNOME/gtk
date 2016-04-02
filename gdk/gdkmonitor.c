@@ -143,7 +143,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
                          "Display",
                          "The display of the monitor",
                          GDK_TYPE_DISPLAY,
-                         G_PARAM_READABLE|G_PARAM_CONSTRUCT_ONLY);
+                         G_PARAM_READWRITE|G_PARAM_CONSTRUCT_ONLY);
   props[PROP_MANUFACTURER] =
     g_param_spec_string ("manufacturer",
                          "Manufacturer",
