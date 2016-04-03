@@ -120,29 +120,78 @@ init_version (GtkInspectorGeneral *gen)
 }
 
 static G_GNUC_UNUSED void
-append_extension_row (GtkInspectorGeneral *gen,
-                      const gchar         *ext,
-                      gboolean             have_ext)
+add_check_row (GtkInspectorGeneral *gen,
+               GtkListBox          *list,
+               const gchar         *name,
+               gboolean             value,
+               gint                 indent)
 {
   GtkWidget *row, *box, *label, *check;
 
-  row = gtk_list_box_row_new ();
-  gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 40);
-  g_object_set (box, "margin", 10, NULL);
-  gtk_container_add (GTK_CONTAINER (row), box);
-  label = gtk_label_new (ext);
+  g_object_set (box,
+                "margin", 10,
+                "margin-start", 10 + indent,
+                NULL);
+
+  label = gtk_label_new (name);
   gtk_widget_set_halign (label, GTK_ALIGN_START);
   gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
   gtk_label_set_xalign (GTK_LABEL (label), 0.0);
   gtk_box_pack_start (GTK_BOX (box), label, FALSE, FALSE, 0);
+
   check = gtk_image_new_from_icon_name ("object-select-symbolic", GTK_ICON_SIZE_MENU);
   gtk_widget_set_halign (check, GTK_ALIGN_END);
   gtk_widget_set_valign (check, GTK_ALIGN_BASELINE);
-  gtk_widget_set_opacity (check, have_ext ? 1.0 : 0.0);
+  gtk_widget_set_opacity (check, value ? 1.0 : 0.0);
   gtk_box_pack_start (GTK_BOX (box), check, TRUE, TRUE, 0);
+
+  row = gtk_list_box_row_new ();
+  gtk_container_add (GTK_CONTAINER (row), box);
+  gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
   gtk_widget_show_all (row);
-  gtk_list_box_insert (GTK_LIST_BOX (gen->priv->gl_box), row, -1);
+
+  gtk_list_box_insert (list, row, -1);
+
+  gtk_size_group_add_widget (GTK_SIZE_GROUP (gen->priv->labels), label);
+}
+
+static void
+add_label_row (GtkInspectorGeneral *gen,
+               GtkListBox          *list,
+               const char          *name,
+               const char          *value,
+               gint                 indent)
+{
+  GtkWidget *box;
+  GtkWidget *label;
+  GtkWidget *row;
+
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 40);
+  g_object_set (box,
+                "margin", 10,
+                "margin-start", 10 + indent,
+                NULL);
+
+  label = gtk_label_new (name);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
+  gtk_label_set_xalign (GTK_LABEL (label), 0.0);
+  gtk_box_pack_start (GTK_BOX (box), label, FALSE, FALSE, 0);
+
+  label = gtk_label_new (value);
+  gtk_label_set_selectable (GTK_LABEL (label), TRUE);
+  gtk_widget_set_halign (label, GTK_ALIGN_END);
+  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
+  gtk_label_set_xalign (GTK_LABEL (label), 1.0);
+  gtk_box_pack_start (GTK_BOX (box), label, TRUE, TRUE, 0);
+
+  row = gtk_list_box_row_new ();
+  gtk_container_add (GTK_CONTAINER (row), box);
+  gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
+  gtk_widget_show_all (row);
+
+  gtk_list_box_insert (GTK_LIST_BOX (list), row, -1);
 
   gtk_size_group_add_widget (GTK_SIZE_GROUP (gen->priv->labels), label);
 }
@@ -153,7 +202,7 @@ append_glx_extension_row (GtkInspectorGeneral *gen,
                           Display             *dpy,
                           const gchar         *ext)
 {
-  append_extension_row (gen, ext, epoxy_has_glx_extension (dpy, 0, ext));
+  add_check_row (gen, GTK_LIST_BOX (gen->priv->gl_box), ext, epoxy_has_glx_extension (dpy, 0, ext), 0);
 }
 #endif
 
@@ -163,7 +212,7 @@ append_egl_extension_row (GtkInspectorGeneral *gen,
                           EGLDisplay          *dpy,
                           const gchar         *ext)
 {
-  append_extension_row (gen, ext, epoxy_has_egl_extension (dpy, ext));
+  add_check_row (gen, GTK_LIST_BOX (gen->priv->gl_box), ext, epoxy_has_egl_extension (dpy, ext), 0);
 }
 #endif
 
@@ -273,43 +322,6 @@ init_env (GtkInspectorGeneral *gen)
   set_path_label (gen->priv->gsettings_schema_dir, "GSETTINGS_SCHEMA_DIR");
 }
 
-static void
-add_label_row (GtkListBox *list,
-               const char *name,
-               const char *value,
-               gint        indent)
-{
-  GtkWidget *box;
-  GtkWidget *label;
-  GtkWidget *row;
-
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 40);
-  g_object_set (box,
-                "margin", 10,
-                "margin-start", 10 + indent,
-                NULL);
-
-  label = gtk_label_new (name);
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
-  gtk_label_set_xalign (GTK_LABEL (label), 0.0);
-  gtk_box_pack_start (GTK_BOX (box), label, FALSE, FALSE, 0);
-
-  label = gtk_label_new (value);
-  gtk_label_set_selectable (GTK_LABEL (label), TRUE);
-  gtk_widget_set_halign (label, GTK_ALIGN_END);
-  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
-  gtk_label_set_xalign (GTK_LABEL (label), 1.0);
-  gtk_box_pack_start (GTK_BOX (box), label, TRUE, TRUE, 0);
-
-  row = gtk_list_box_row_new ();
-  gtk_container_add (GTK_CONTAINER (row), box);
-  gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
-  gtk_widget_show_all (row);
-
-  gtk_list_box_insert (GTK_LIST_BOX (list), row, -1);
-}
-
 static const char *
 translate_subpixel_layout (GdkSubpixelLayout subpixel)
 {
@@ -335,8 +347,10 @@ populate_display (GdkScreen *screen, GtkInspectorGeneral *gen)
   GdkDisplay *display;
   GdkMonitor **monitors;
   int n_monitors;
+  GtkListBox *list;
 
-  children = gtk_container_get_children (GTK_CONTAINER (gen->priv->display_box));
+  list = GTK_LIST_BOX (gen->priv->display_box);
+  children = gtk_container_get_children (GTK_CONTAINER (list));
   for (l = children; l; l = l->next)
     {
       child = l->data;
@@ -377,7 +391,7 @@ populate_display (GdkScreen *screen, GtkInspectorGeneral *gen)
                                manufacturer ? manufacturer : "",
                                manufacturer || model ? " " : "",
                                model ? model : "");
-      add_label_row (GTK_LIST_BOX (gen->priv->display_box), name, value, 0);
+      add_label_row (gen, list, name, value, 0);
       g_free (name);
       g_free (value);
 
@@ -388,24 +402,25 @@ populate_display (GdkScreen *screen, GtkInspectorGeneral *gen)
                                rect.width, rect.height,
                                scale == 2 ? " @ 2" : "",
                                rect.x, rect.y);
-      add_label_row (GTK_LIST_BOX (gen->priv->display_box), "Geometry", value, 10);
+      add_label_row (gen, list, "Geometry", value, 10);
       g_free (value);
 
       value = g_strdup_printf ("%d × %d mm²",
                                gdk_monitor_get_width_mm (monitors[i]),
                                gdk_monitor_get_height_mm (monitors[i]));
-      add_label_row (GTK_LIST_BOX (gen->priv->display_box), "Size", value, 10);
+      add_label_row (gen, list, "Size", value, 10);
+      g_free (value);
 
       if (gdk_monitor_get_refresh_rate (monitors[i]) != 0)
         value = g_strdup_printf ("%.2f mHz",
                                  0.001 * gdk_monitor_get_refresh_rate (monitors[i]));
       else
         value = g_strdup ("unknown");
-      add_label_row (GTK_LIST_BOX (gen->priv->display_box), "Refresh rate", value, 10);
+      add_label_row (gen, list, "Refresh rate", value, 10);
       g_free (value);
 
       value = g_strdup (translate_subpixel_layout (gdk_monitor_get_subpixel_layout (monitors[i])));
-      add_label_row (GTK_LIST_BOX (gen->priv->display_box), "Subpixel layout", value, 10);
+      add_label_row (gen, list, "Subpixel layout", value, 10);
       g_free (value);
     }
 }
@@ -466,7 +481,7 @@ add_device (GtkInspectorGeneral *gen,
       break;
     }
 
-  add_label_row (GTK_LIST_BOX (gen->priv->device_box), name, value, 10);
+  add_label_row (gen, GTK_LIST_BOX (gen->priv->device_box), name, value, 10);
 
   str = g_string_new ("");
 
@@ -514,7 +529,7 @@ add_device (GtkInspectorGeneral *gen,
     }
 
   if (str->len > 0)
-    add_label_row (GTK_LIST_BOX (gen->priv->device_box), "Axes", str->str, 20);
+    add_label_row (gen, GTK_LIST_BOX (gen->priv->device_box), "Axes", str->str, 20);
 
   g_string_free (str, TRUE);
 
@@ -522,7 +537,7 @@ add_device (GtkInspectorGeneral *gen,
   if (n_touches > 0)
     {
       text = g_strdup_printf ("%d", n_touches);
-      add_label_row (GTK_LIST_BOX (gen->priv->device_box), "Touches", text, 20);
+      add_label_row (gen, GTK_LIST_BOX (gen->priv->device_box), "Touches", text, 20);
       g_free (text);
     }
 }
@@ -569,7 +584,7 @@ add_seat (GtkInspectorGeneral *gen,
         }
     }
 
-  add_label_row (GTK_LIST_BOX (gen->priv->device_box), text, str->str, 0);
+  add_label_row (gen, GTK_LIST_BOX (gen->priv->device_box), text, str->str, 0);
   g_free (text);
   g_string_free (str, FALSE);
 
