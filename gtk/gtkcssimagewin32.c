@@ -22,6 +22,7 @@
 #include "gtkcssimagewin32private.h"
 
 #include "gtkcssprovider.h"
+#include "gtkcssnumbervalueprivate.h"
 
 G_DEFINE_TYPE (GtkCssImageWin32, _gtk_css_image_win32, GTK_TYPE_CSS_IMAGE)
 
@@ -212,6 +213,134 @@ gtk_css_image_win32_parse (GtkCssImage  *image,
   return TRUE;
 }
 
+static guint
+gtk_css_image_win32_token_parse_over_argument (GtkCssTokenSource *source,
+                                               guint              arg,
+                                               gpointer           data)
+{
+  GtkCssImageWin32 *wimage = GTK_CSS_IMAGE_WIN32 (data);
+
+  if (arg == 0)
+    {
+      if (!gtk_css_token_source_consume_integer (source, &wimage->part2))
+        return 0;
+      return 1;
+    }
+  else if (arg == 1)
+    {
+      if (!gtk_css_token_source_consume_integer (source, &wimage->state2))
+        return 0;
+      return 1;
+    }
+  else if (arg == 2)
+    {
+      if (!gtk_css_token_source_consume_number (source, &wimage->over_alpha))
+        return 0;
+      return 1;
+    }
+  else
+    {
+      g_assert_not_reached ();
+      return 0;
+    }
+}
+
+static guint
+gtk_css_image_win32_token_parse_margins_argument (GtkCssTokenSource *source,
+                                                  guint              arg,
+                                                  gpointer           data)
+{
+  GtkCssImageWin32 *wimage = GTK_CSS_IMAGE_WIN32 (data);
+  guint i;
+
+  for (i = 0; i < 4; i++)
+    {
+      if (i > 0 && !gtk_css_number_value_check_token (gtk_css_token_source_get_token (source)))
+        break;
+
+      if (!gtk_css_token_source_consume_integer (source, &wimage->margins[i]))
+        return 0;
+    }
+
+  for (; i < 4; i++)
+    wimage->margins[i] = wimage->margins[i - 1];
+
+  return 1;
+}
+
+static guint
+gtk_css_image_win32_token_parse_argument (GtkCssTokenSource *source,
+                                          guint              arg,
+                                          gpointer           data)
+{
+  GtkCssImageWin32 *wimage = GTK_CSS_IMAGE_WIN32 (data);
+
+  if (arg == 0)
+    {
+      wimage->theme = gtk_win32_theme_token_parse (source);
+      if (wimage->theme == NULL)
+        return 0;
+      return 1;
+    }
+  else if (arg == 1)
+    {
+      if (!gtk_css_token_source_consume_integer (source, &wimage->part))
+        return 0;
+      return 1;
+    }
+  else if (arg == 2)
+    {
+      if (!gtk_css_token_source_consume_integer (source, &wimage->state))
+        return 0;
+      return 1;
+    }
+  else
+    {
+      const GtkCssToken *token;
+
+      token = gtk_css_token_source_get_token (source);
+      if (gtk_css_token_is_function (token, "over"))
+        {
+          return gtk_css_token_source_consume_function (source, 
+                                                        2, 3,
+                                                        gtk_css_image_win32_token_parse_over_argument,
+                                                        wimage) ? 1 : 0;
+        }
+      else if (gtk_css_token_is_function (token, "margins"))
+        {
+          return gtk_css_token_source_consume_function (source, 
+                                                        1, 1,
+                                                        gtk_css_image_win32_token_parse_margins_argument,
+                                                        wimage) ? 1 : 0;
+        }
+      else
+        {
+          gtk_css_token_source_error (source, "Expected over() or margins()");
+          return 0;
+        }
+    }
+}
+
+static gboolean
+gtk_css_image_win32_token_parse (GtkCssImage       *image,
+                                 GtkCssTokenSource *source)
+{
+  const GtkCssToken *token;
+
+  token = gtk_css_token_source_get_token (source);
+  if (!gtk_css_token_is_function (token, "-gtk-win32-theme-part"))
+    {
+      gtk_css_token_source_error (source, "Expected '-gtk-win32-theme-part('");
+      gtk_css_token_source_consume_all (source);
+      return FALSE;
+    }
+
+  return gtk_css_token_source_consume_function (source, 
+                                                3, G_MAXUINT,
+                                                gtk_css_image_win32_token_parse_argument,
+                                                image);
+}
+
 static void
 gtk_css_image_win32_print (GtkCssImage *image,
                            GString     *string)
@@ -244,6 +373,7 @@ _gtk_css_image_win32_class_init (GtkCssImageWin32Class *klass)
 
   image_class->draw = gtk_css_image_win32_draw;
   image_class->parse = gtk_css_image_win32_parse;
+  image_class->token_parse = gtk_css_image_win32_token_parse;
   image_class->print = gtk_css_image_win32_print;
 }
 
