@@ -316,7 +316,7 @@ gtk_scrollable_set_vscroll_policy (GtkScrollable       *scrollable,
 /**
  * gtk_scrollable_get_border:
  * @scrollable: a #GtkScrollable
- * @border: return location for the results
+ * @border: (out caller-allocates): return location for the results
  *
  * Returns the size of a non-scrolling border around the
  * outside of the scrollable. An example for this would
