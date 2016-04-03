@@ -4215,8 +4215,9 @@ gdk_x11_window_apply_fullscreen_mode (GdkWindow *window)
 	  /* Translate all 4 monitors from the GDK set into XINERAMA indices */
 	  for (i = 0; i < 4; ++i)
 	    {
-	      xclient.data.l[i] = _gdk_x11_screen_get_xinerama_index (GDK_WINDOW_SCREEN (window),
-								      gdk_monitors[i]);
+              /* FIXME
+               xclient.data.l[i] = _gdk_x11_screen_ge_xinerama_index (GDK_WINDOW_SCREEN (window), gdk_monitors[i]); */
+	      xclient.data.l[i] = 0;
 	      /* Sanity check, if XINERAMA is not available, we could have invalid
 	       * negative values for the XINERAMA indices.
 	       */
