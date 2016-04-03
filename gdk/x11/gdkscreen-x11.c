@@ -34,6 +34,10 @@
 
 #include <X11/Xatom.h>
 
+#ifdef HAVE_XFREE_XINERAMA
+#include <X11/extensions/Xinerama.h>
+#endif
+
 #ifdef HAVE_RANDR
 #include <X11/extensions/Xrandr.h>
 #endif
@@ -71,7 +75,6 @@ struct _GdkX11Monitor
   XID output;
   guint add     : 1;
   guint remove  : 1;
-  guint changed : 1;
 };
 
 typedef struct _GdkX11Monitor GdkX11Monitor;
@@ -530,10 +533,15 @@ init_randr15 (GdkScreen *screen, gboolean *changed)
         }
 
       gdk_monitor_get_geometry (GDK_MONITOR (monitor), &geometry);
-      if (rr_monitors[i].x != geometry.x || rr_monitors[i].y != geometry.y ||
-          rr_monitors[i].width != geometry.width || rr_monitors[i].height != geometry.height ||
-          gdk_monitor_get_width_mm (GDK_MONITOR (monitor)) != rr_monitors[i].mwidth ||
-          gdk_monitor_get_height_mm (GDK_MONITOR (monitor)) != rr_monitors[i].mheight)
+      name = g_strndup (output_info->name, output_info->nameLen);
+
+      if (rr_monitors[i].x != geometry.x ||
+          rr_monitors[i].y != geometry.y ||
+          rr_monitors[i].width != geometry.width ||
+          rr_monitors[i].height != geometry.height ||
+          rr_monitors[i].mwidth != gdk_monitor_get_width_mm (GDK_MONITOR (monitor)) ||
+          rr_monitors[i].mheight != gdk_monitor_get_height_mm (GDK_MONITOR (monitor)) ||
+          g_strcmp0 (name, gdk_monitor_get_model (GDK_MONITOR (monitor))))
         *changed = TRUE;
 
       gdk_monitor_set_position (GDK_MONITOR (monitor),
@@ -547,11 +555,6 @@ init_randr15 (GdkScreen *screen, gboolean *changed)
                                      rr_monitors[i].mheight);
       gdk_monitor_set_subpixel_layout (GDK_MONITOR (monitor),
                                        translate_subpixel_order (output_info->subpixel_order));
-
-      name = g_strndup (output_info->name, output_info->nameLen);
-      if (g_strcmp0 (name, gdk_monitor_get_model (GDK_MONITOR (monitor))) != 0)
-        *changed = TRUE;
-
       gdk_monitor_set_model (GDK_MONITOR (monitor), name);
       g_free (name);
 
@@ -693,10 +696,14 @@ init_randr13 (GdkScreen *screen, gboolean *changed)
             }
 
           gdk_monitor_get_geometry (GDK_MONITOR (monitor), &geometry);
-          if (crtc->x != geometry.x || crtc->y != geometry.y ||
-              crtc->width != geometry.width || crtc->height != geometry.height ||
-              gdk_monitor_get_width_mm (GDK_MONITOR (monitor)) != output_info->mm_width ||
-              gdk_monitor_get_height_mm (GDK_MONITOR (monitor)) != output_info->mm_height)
+          name = g_strndup (output_info->name, output_info->nameLen);
+          if (crtc->x != geometry.x ||
+              crtc->y != geometry.y ||
+              crtc->width != geometry.width ||
+              crtc->height != geometry.height ||
+              output_info->mm_width != gdk_monitor_get_width_mm (GDK_MONITOR (monitor)) ||
+              output_info->mm_height != gdk_monitor_get_height_mm (GDK_MONITOR (monitor)) ||
+              g_strcmp0 (name, gdk_monitor_get_model (GDK_MONITOR (monitor))) != 0)
             *changed = TRUE;
 
           gdk_monitor_set_position (GDK_MONITOR (monitor),
@@ -708,12 +715,8 @@ init_randr13 (GdkScreen *screen, gboolean *changed)
                                          output_info->mm_height);
           gdk_monitor_set_subpixel_layout (GDK_MONITOR (monitor),
                                            translate_subpixel_order (output_info->subpixel_order));
-
-          name = g_strndup (output_info->name, output_info->nameLen);
-          if (g_strcmp0 (name, gdk_monitor_get_model (GDK_MONITOR (monitor))) != 0)
-            *changed = TRUE;
-
           gdk_monitor_set_model (GDK_MONITOR (monitor), name);
+
           g_free (name);
 
           XRRFreeCrtcInfo (crtc);
@@ -823,11 +826,14 @@ init_no_multihead (GdkScreen *screen, gboolean *changed)
     }
 
   gdk_monitor_get_geometry (GDK_MONITOR (monitor), &geometry);
-  if (0 != geometry.x || 0 != geometry.y ||
-      WidthOfScreen (x11_screen->xscreen) != geometry.width || HeightOfScreen (x11_screen->xscreen) != geometry.height ||
-      gdk_monitor_get_width_mm (GDK_MONITOR (monitor)) != WidthMMOfScreen (x11_screen->xscreen) ||
-      gdk_monitor_get_height_mm (GDK_MONITOR (monitor)) != HeightMMOfScreen (x11_screen->xscreen))
+  if (0 != geometry.x ||
+      0 != geometry.y ||
+      WidthOfScreen (x11_screen->xscreen) != geometry.width ||
+      HeightOfScreen (x11_screen->xscreen) != geometry.height ||
+      WidthMMOfScreen (x11_screen->xscreen) != gdk_monitor_get_width_mm (GDK_MONITOR (monitor)) ||
+      HeightMMOfScreen (x11_screen->xscreen) != gdk_monitor_get_height_mm (GDK_MONITOR (monitor)))
     *changed = TRUE;
+
   gdk_monitor_set_position (GDK_MONITOR (monitor), 0, 0);
   gdk_monitor_set_size (GDK_MONITOR (monitor),
                         WidthOfScreen (x11_screen->xscreen),
@@ -1074,35 +1080,52 @@ _gdk_x11_screen_get_edge_monitors (GdkScreen *screen,
   gint          bottom_most_pos = 0;
   gint          right_most_pos = 0;
   gint          i;
+#ifdef HAVE_XFREE_XINERAMA
+  XineramaScreenInfo *x_monitors;
+  int x_n_monitors;
+#endif
 
-  for (i = 0; i < x11_screen->monitors->len; i++)
+  *top = *bottom = *left = *right = -1;
+
+#ifdef HAVE_XFREE_XINERAMA
+  if (!XineramaIsActive (x11_screen->xdisplay))
+    return;
+
+  x_monitors = XineramaQueryScreens (x11_screen->xdisplay, &x_n_monitors);
+  if (x_n_monitors <= 0 || x_monitors == NULL)
     {
-      GdkMonitor *monitor = x11_screen->monitors->pdata[i];
-      GdkRectangle geometry;
+      if (x_monitors)
+        XFree (x_monitors);
 
-      gdk_monitor_get_geometry (monitor, &geometry);
+      return;
+    }
 
-      if (left && left_most_pos > geometry.x)
+  for (i = 0; i < x_n_monitors; i++)
+    {
+      if (left && left_most_pos > x_monitors[i].x_org)
 	{
-	  left_most_pos = geometry.x;
+	  left_most_pos = x_monitors[i].x_org;
 	  *left = i;
 	}
-      if (right && right_most_pos < geometry.x + geometry.width)
+      if (right && right_most_pos < x_monitors[i].x_org + x_monitors[i].width)
 	{
-	  right_most_pos = geometry.x + geometry.width;
+	  right_most_pos = x_monitors[i].x_org + x_monitors[i].width;
 	  *right = i;
 	}
-      if (top && top_most_pos > geometry.y)
+      if (top && top_most_pos > x_monitors[i].y_org)
 	{
-	  top_most_pos = geometry.y;
+	  top_most_pos = x_monitors[i].y_org;
 	  *top = i;
 	}
-      if (bottom && bottom_most_pos < geometry.y + geometry.height)
+      if (bottom && bottom_most_pos < x_monitors[i].y_org + x_monitors[i].height)
 	{
-	  bottom_most_pos = geometry.y + geometry.height;
+	  bottom_most_pos = x_monitors[i].y_org + x_monitors[i].height;
 	  *bottom = i;
 	}
     }
+
+  XFree (x_monitors);
+#endif
 }
 
 void
