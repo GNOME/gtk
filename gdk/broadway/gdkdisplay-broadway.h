@@ -30,6 +30,7 @@
 #include "gdkinternals.h"
 #include "gdkmain.h"
 #include "gdkbroadway-server.h"
+#include "gdkmonitorprivate.h"
 
 G_BEGIN_DECLS
 
@@ -56,6 +57,8 @@ struct _GdkBroadwayDisplay
   GdkBroadwayServer *server;
 
   gpointer move_resize_data;
+
+  GdkMonitor *monitor;
 };
 
 struct _GdkBroadwayDisplayClass
