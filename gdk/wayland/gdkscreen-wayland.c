@@ -76,8 +76,6 @@ struct _GdkWaylandScreen
 struct _GdkWaylandScreenClass
 {
   GdkScreenClass parent_class;
-
-  void (* window_manager_changed) (GdkWaylandScreen *screen_wayland);
 };
 
 #define OUTPUT_VERSION_WITH_DONE 2
