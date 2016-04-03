@@ -55,6 +55,10 @@ static void
 gdk_broadway_display_init (GdkBroadwayDisplay *display)
 {
   display->id_ht = g_hash_table_new (NULL, NULL);
+
+  display->monitor = g_object_new (gdk_monitor_get_type (), "display", display, NULL);
+  gdk_monitor_set_manufacturer (display->monitor, "browser");
+  gdk_monitor_set_model (display->monitor, "0");
 }
 
 static void
@@ -200,6 +204,8 @@ gdk_broadway_display_finalize (GObject *object)
   g_object_unref (broadway_display->screens[0]);
   g_free (broadway_display->screens);
 
+  g_object_unref (broadway_display->monitor);
+
   G_OBJECT_CLASS (gdk_broadway_display_parent_class)->finalize (object);
 }
 
@@ -281,6 +287,24 @@ gdk_broadway_display_hide_keyboard (GdkBroadwayDisplay *display)
   _gdk_broadway_server_set_show_keyboard (display->server, FALSE);
 }
 
+static GdkMonitor **
+gdk_broadway_display_get_monitors (GdkDisplay *display,
+                                   int        *n_monitors)
+{
+  GdkBroadwayDisplay *broadway_display = GDK_BROADWAY_DISPLAY (display);
+
+  *n_monitors = 1;
+  return &broadway_display->monitor;
+}
+
+static GdkMonitor *
+gdk_broadway_display_get_primary_monitor (GdkDisplay *display)
+{
+  GdkBroadwayDisplay *broadway_display = GDK_BROADWAY_DISPLAY (display);
+
+  return broadway_display->monitor;
+}
+
 static void
 gdk_broadway_display_class_init (GdkBroadwayDisplayClass * class)
 {
@@ -328,5 +352,8 @@ gdk_broadway_display_class_init (GdkBroadwayDisplayClass * class)
   display_class->convert_selection = _gdk_broadway_display_convert_selection;
   display_class->text_property_to_utf8_list = _gdk_broadway_display_text_property_to_utf8_list;
   display_class->utf8_to_string_target = _gdk_broadway_display_utf8_to_string_target;
+
+  display_class->get_monitors = gdk_broadway_display_get_monitors;
+  display_class->get_primary_monitor = gdk_broadway_display_get_primary_monitor;
 }
 
