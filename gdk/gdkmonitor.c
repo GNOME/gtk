@@ -31,6 +31,10 @@
  * - monitor type (laptop, projector, ...)
  * - consider vfuncs instead of baseclass storage
  * - provide a persistent id (if the backend allows)
+ * - x11: refresh rate
+ * - x11: hidpi scaling
+ * - convert win32
+ * - convert quartz
  */
 enum {
   PROP_0,
@@ -39,6 +43,7 @@ enum {
   PROP_MODEL,
   PROP_SCALE_FACTOR,
   PROP_GEOMETRY,
+  PROP_WORKAREA,
   PROP_WIDTH_MM,
   PROP_HEIGHT_MM,
   PROP_REFRESH_RATE,
@@ -84,6 +89,14 @@ gdk_monitor_get_property (GObject    *object,
 
     case PROP_GEOMETRY:
       g_value_set_boxed (value, &monitor->geometry);
+      break;
+
+    case PROP_WORKAREA:
+      {
+        GdkRectangle workarea;
+        gdk_monitor_get_workarea (monitor, &workarea);
+        g_value_set_boxed (value, &workarea);
+      }
       break;
 
     case PROP_WIDTH_MM:
@@ -177,6 +190,12 @@ gdk_monitor_class_init (GdkMonitorClass *class)
                         "The geometry of the monitor",
                         GDK_TYPE_RECTANGLE,
                         G_PARAM_READABLE);
+  props[PROP_WORKAREA] =
+    g_param_spec_boxed ("workarea",
+                        "Workarea",
+                        "The workarea of the monitor",
+                        GDK_TYPE_RECTANGLE,
+                        G_PARAM_READABLE);
   props[PROP_WIDTH_MM] =
     g_param_spec_int ("width-mm",
                       "Physical width",
@@ -225,6 +244,19 @@ gdk_monitor_get_geometry (GdkMonitor   *monitor,
   g_return_if_fail (geometry != NULL);
 
   *geometry = monitor->geometry;
+}
+
+void
+gdk_monitor_get_workarea (GdkMonitor   *monitor,
+                          GdkRectangle *workarea)
+{
+  g_return_if_fail (GDK_IS_MONITOR (monitor));
+  g_return_if_fail (workarea != NULL);
+
+  if (GDK_MONITOR_GET_CLASS (monitor)->get_workarea)
+    GDK_MONITOR_GET_CLASS (monitor)->get_workarea (monitor, workarea);
+  else
+    *workarea = monitor->geometry;
 }
 
 int
