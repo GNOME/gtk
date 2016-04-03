@@ -33,13 +33,6 @@
 
 #include <X11/Xatom.h>
 
-#ifdef HAVE_SOLARIS_XINERAMA
-#include <X11/extensions/xinerama.h>
-#endif
-#ifdef HAVE_XFREE_XINERAMA
-#include <X11/extensions/Xinerama.h>
-#endif
-
 #ifdef HAVE_RANDR
 #include <X11/extensions/Xrandr.h>
 #endif
@@ -517,60 +510,6 @@ init_monitor_geometry (GdkX11Monitor *monitor,
   monitor->manufacturer = NULL;
 }
 
-static gboolean
-init_fake_xinerama (GdkScreen *screen)
-{
-#ifdef G_ENABLE_DEBUG
-  GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
-  XSetWindowAttributes atts;
-  Window win;
-  gint w, h;
-
-  if (!GDK_DEBUG_CHECK (XINERAMA))
-    return FALSE;
-  
-  /* Fake Xinerama mode by splitting the screen into 4 monitors.
-   * Also draw a little cross to make the monitor boundaries visible.
-   */
-  w = WidthOfScreen (x11_screen->xscreen);
-  h = HeightOfScreen (x11_screen->xscreen);
-
-  x11_screen->n_monitors = 4;
-  x11_screen->monitors = g_new0 (GdkX11Monitor, 4);
-  init_monitor_geometry (&x11_screen->monitors[0], 0, 0, w / 2, h / 2);
-  init_monitor_geometry (&x11_screen->monitors[1], w / 2, 0, w / 2, h / 2);
-  init_monitor_geometry (&x11_screen->monitors[2], 0, h / 2, w / 2, h / 2);
-  init_monitor_geometry (&x11_screen->monitors[3], w / 2, h / 2, w / 2, h / 2);
-  
-  atts.override_redirect = 1;
-  atts.background_pixel = WhitePixel(GDK_SCREEN_XDISPLAY (screen), 
-				     x11_screen->screen_num);
-  win = XCreateWindow(GDK_SCREEN_XDISPLAY (screen), 
-		      x11_screen->xroot_window, 0, h / 2, w, 1, 0, 
-		      DefaultDepth(GDK_SCREEN_XDISPLAY (screen), 
-				   x11_screen->screen_num),
-		      InputOutput, 
-		      DefaultVisual(GDK_SCREEN_XDISPLAY (screen), 
-				    x11_screen->screen_num),
-		      CWOverrideRedirect|CWBackPixel, 
-		      &atts);
-  XMapRaised(GDK_SCREEN_XDISPLAY (screen), win); 
-  win = XCreateWindow(GDK_SCREEN_XDISPLAY (screen), 
-		      x11_screen->xroot_window, w/2 , 0, 1, h, 0, 
-		      DefaultDepth(GDK_SCREEN_XDISPLAY (screen), 
-				   x11_screen->screen_num),
-		      InputOutput, 
-		      DefaultVisual(GDK_SCREEN_XDISPLAY (screen), 
-				    x11_screen->screen_num),
-		      CWOverrideRedirect|CWBackPixel, 
-		      &atts);
-  XMapRaised(GDK_SCREEN_XDISPLAY (screen), win);
-  return TRUE;
-#endif
-  
-  return FALSE;
-}
-
 static void
 free_monitors (GdkX11Monitor *monitors,
                gint           n_monitors)
@@ -846,230 +785,6 @@ init_randr13 (GdkScreen *screen)
   return FALSE;
 }
 
-static gboolean
-init_solaris_xinerama (GdkScreen *screen)
-{
-#ifdef HAVE_SOLARIS_XINERAMA
-  Display *dpy = GDK_SCREEN_XDISPLAY (screen);
-  int screen_no = gdk_screen_get_number (screen);
-  GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
-  XRectangle monitors[MAXFRAMEBUFFERS];
-  unsigned char hints[16];
-  gint result;
-  int n_monitors;
-  int i;
-  int opcode, firstevent, firsterror;
-
-  if (!XQueryExtension (GDK_SCREEN_XDISPLAY (screen), "XINERAMA",
-                        &opcode, &firstevent, &firsterror))
-    return FALSE;
-
-  if (!XineramaGetState (dpy, screen_no))
-    return FALSE;
-
-  result = XineramaGetInfo (dpy, screen_no, monitors, hints, &n_monitors);
-
-  /* Yes I know it should be Success but the current implementation 
-   * returns the num of monitor
-   */
-  if (result == 0)
-    {
-      return FALSE;
-    }
-
-  x11_screen->monitors = g_new0 (GdkX11Monitor, n_monitors);
-  x11_screen->n_monitors = n_monitors;
-
-  for (i = 0; i < n_monitors; i++)
-    {
-      init_monitor_geometry (&x11_screen->monitors[i],
-			     monitors[i].x, monitors[i].y,
-			     monitors[i].width, monitors[i].height);
-    }
-
-  x11_screen->primary_monitor = 0;
-
-  return TRUE;
-#endif /* HAVE_SOLARIS_XINERAMA */
-
-  return FALSE;
-}
-
-static gboolean
-init_xfree_xinerama (GdkScreen *screen)
-{
-#ifdef HAVE_XFREE_XINERAMA
-  Display *dpy = GDK_SCREEN_XDISPLAY (screen);
-  GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
-  XineramaScreenInfo *monitors;
-  int i, n_monitors;
-  int opcode, firstevent, firsterror;
-
-  if (!XQueryExtension (GDK_SCREEN_XDISPLAY (screen), "XINERAMA",
-                        &opcode, &firstevent, &firsterror))
-    return FALSE;
-
-  if (!XineramaIsActive (dpy))
-    return FALSE;
-
-  monitors = XineramaQueryScreens (dpy, &n_monitors);
-  
-  if (n_monitors <= 0 || monitors == NULL)
-    {
-      /* If Xinerama doesn't think we have any monitors, try acting as
-       * though we had no Xinerama. If the "no monitors" condition
-       * is because XRandR 1.2 is currently switching between CRTCs,
-       * we'll be notified again when we have our monitor back,
-       * and can go back into Xinerama-ish mode at that point.
-       */
-      if (monitors)
-	XFree (monitors);
-      
-      return FALSE;
-    }
-
-  x11_screen->n_monitors = n_monitors;
-  x11_screen->monitors = g_new0 (GdkX11Monitor, n_monitors);
-  
-  for (i = 0; i < n_monitors; ++i)
-    {
-      init_monitor_geometry (&x11_screen->monitors[i],
-			     monitors[i].x_org, monitors[i].y_org,
-			     monitors[i].width, monitors[i].height);
-    }
-  
-  XFree (monitors);
-  
-  x11_screen->primary_monitor = 0;
-
-  return TRUE;
-#endif /* HAVE_XFREE_XINERAMA */
-  
-  return FALSE;
-}
-
-static gboolean
-init_solaris_xinerama_indices (GdkX11Screen *x11_screen)
-{
-#ifdef HAVE_SOLARIS_XINERAMA
-  XRectangle    x_monitors[MAXFRAMEBUFFERS];
-  unsigned char hints[16];
-  gint          result;
-  gint          monitor_num;
-  gint          x_n_monitors;
-  gint          i;
-
-  if (!XineramaGetState (x11_screen->xdisplay, x11_screen->screen_num))
-    return FALSE;
-
-  result = XineramaGetInfo (x11_screen->xdisplay, x11_screen->screen_num,
-                            x_monitors, hints, &x_n_monitors);
-
-  if (result == 0)
-    return FALSE;
-
-
-  for (monitor_num = 0; monitor_num < x11_screen->n_monitors; ++monitor_num)
-    {
-      for (i = 0; i < x_n_monitors; ++i)
-        {
-          if (x11_screen->monitors[monitor_num].geometry.x == x_monitors[i].x &&
-	      x11_screen->monitors[monitor_num].geometry.y == x_monitors[i].y &&
-	      x11_screen->monitors[monitor_num].geometry.width == x_monitors[i].width &&
-	      x11_screen->monitors[monitor_num].geometry.height == x_monitors[i].height)
-	    {
-	      g_hash_table_insert (x11_screen->xinerama_matches,
-				   GINT_TO_POINTER (monitor_num),
-				   GINT_TO_POINTER (i));
-	    }
-        }
-    }
-  return TRUE;
-#endif /* HAVE_SOLARIS_XINERAMA */
-
-  return FALSE;
-}
-
-static gboolean
-init_xfree_xinerama_indices (GdkX11Screen *x11_screen)
-{
-#ifdef HAVE_XFREE_XINERAMA
-  XineramaScreenInfo *x_monitors;
-  gint                monitor_num;
-  gint                x_n_monitors;
-  gint                i;
-
-  if (!XineramaIsActive (x11_screen->xdisplay))
-    return FALSE;
-
-  x_monitors = XineramaQueryScreens (x11_screen->xdisplay, &x_n_monitors);
-  if (x_n_monitors <= 0 || x_monitors == NULL)
-    {
-      if (x_monitors)
-	XFree (x_monitors);
-
-      return FALSE;
-    }
-
-  for (monitor_num = 0; monitor_num < x11_screen->n_monitors; ++monitor_num)
-    {
-      for (i = 0; i < x_n_monitors; ++i)
-        {
-          if (x11_screen->monitors[monitor_num].geometry.x == x_monitors[i].x_org &&
-	      x11_screen->monitors[monitor_num].geometry.y == x_monitors[i].y_org &&
-	      x11_screen->monitors[monitor_num].geometry.width == x_monitors[i].width &&
-	      x11_screen->monitors[monitor_num].geometry.height == x_monitors[i].height)
-	    {
-	      g_hash_table_insert (x11_screen->xinerama_matches,
-				   GINT_TO_POINTER (monitor_num),
-				   GINT_TO_POINTER (i));
-	    }
-        }
-    }
-  XFree (x_monitors);
-  return TRUE;
-#endif /* HAVE_XFREE_XINERAMA */
-
-  return FALSE;
-}
-
-static void
-init_xinerama_indices (GdkX11Screen *x11_screen)
-{
-  int opcode, firstevent, firsterror;
-
-  x11_screen->xinerama_matches = g_hash_table_new (g_direct_hash, g_direct_equal);
-  if (XQueryExtension (x11_screen->xdisplay, "XINERAMA",
-		       &opcode, &firstevent, &firsterror))
-    {
-      x11_screen->xinerama_matches = g_hash_table_new (g_direct_hash, g_direct_equal);
-
-      /* Solaris Xinerama first, then XFree/Xorg Xinerama
-       * to match the order in init_multihead()
-       */
-      if (init_solaris_xinerama_indices (x11_screen) == FALSE)
-        init_xfree_xinerama_indices (x11_screen);
-    }
-}
-
-gint
-_gdk_x11_screen_get_xinerama_index (GdkScreen *screen,
-				    gint       monitor_num)
-{
-  GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
-  gpointer val;
-
-  g_return_val_if_fail (monitor_num < x11_screen->n_monitors, -1);
-
-  if (x11_screen->xinerama_matches == NULL)
-    init_xinerama_indices (x11_screen);
-
-  if (g_hash_table_lookup_extended (x11_screen->xinerama_matches, GINT_TO_POINTER (monitor_num), NULL, &val))
-    return (GPOINTER_TO_INT(val));
-
-  return -1;
-}
-
 void
 _gdk_x11_screen_get_edge_monitors (GdkScreen *screen,
                                    gint      *top,
@@ -1120,7 +835,6 @@ deinit_multihead (GdkScreen *screen)
   GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
 
   free_monitors (x11_screen->monitors, x11_screen->n_monitors);
-  g_clear_pointer (&x11_screen->xinerama_matches, g_hash_table_destroy);
 
   x11_screen->n_monitors = 0;
   x11_screen->monitors = NULL;
@@ -1184,19 +898,10 @@ init_no_multihead (GdkScreen *screen)
 static void
 init_multihead (GdkScreen *screen)
 {
-  if (init_fake_xinerama (screen))
-    return;
-
   if (init_randr15 (screen))
     return;
 
   if (init_randr13 (screen))
-    return;
-
-  if (init_solaris_xinerama (screen))
-    return;
-
-  if (init_xfree_xinerama (screen))
     return;
 
   init_no_multihead (screen);

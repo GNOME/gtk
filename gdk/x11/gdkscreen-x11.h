@@ -96,9 +96,6 @@ struct _GdkX11Screen
 
   /* cache for window->translate vfunc */
   GC subwindow_gcs[32];
-
-  /* cache for Xinerama monitor indices */
-  GHashTable *xinerama_matches;
 };
 
 struct _GdkX11ScreenClass
