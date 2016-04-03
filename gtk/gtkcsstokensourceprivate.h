@@ -74,6 +74,8 @@ gboolean                gtk_css_token_source_consume_function   (GtkCssTokenSour
                                                                  gpointer                data);
 gboolean                gtk_css_token_source_consume_number     (GtkCssTokenSource      *source,
                                                                  double                 *number);
+gboolean                gtk_css_token_source_consume_integer    (GtkCssTokenSource      *source,
+                                                                 int                    *number);
 GFile *                 gtk_css_token_source_resolve_url        (GtkCssTokenSource      *source,
                                                                  const char             *url);
 GFile *                 gtk_css_token_source_consume_url        (GtkCssTokenSource      *source);

@@ -1109,16 +1109,8 @@ gtk_css_color_value_token_parse (GtkCssTokenSource *source)
                 }
               gtk_css_token_source_consume_token (source);
             }
-          else if (gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_INTEGER) ||
-                   gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_INTEGER))
+          else if (!gtk_css_token_source_consume_integer (source, &id))
             {
-              id = token->number.number;
-              gtk_css_token_source_consume_token (source);
-            }
-          else
-            {
-              gtk_css_token_source_error (source, "Expected a valid integer value");
-              gtk_css_token_source_consume_all (source);
               gtk_win32_theme_unref (theme);
               return NULL;
             }

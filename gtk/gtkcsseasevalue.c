@@ -37,7 +37,7 @@ struct _GtkCssValue {
       double y2;
     } cubic;
     struct {
-      guint steps;
+      int steps;
       gboolean start;
     } steps;
   } u;
@@ -125,7 +125,7 @@ gtk_css_value_ease_print (const GtkCssValue *ease,
         }
       else
         {
-          g_string_append_printf (string, "steps(%u%s)", ease->u.steps.steps, ease->u.steps.start ? ",start" : "");
+          g_string_append_printf (string, "steps(%d%s)", ease->u.steps.steps, ease->u.steps.start ? ",start" : "");
         }
       break;
     default:
@@ -167,7 +167,7 @@ _gtk_css_ease_value_new_cubic_bezier (double x1,
 }
 
 static GtkCssValue *
-_gtk_css_ease_value_new_steps (guint n_steps,
+_gtk_css_ease_value_new_steps (gint     n_steps,
                                gboolean start)
 {
   GtkCssValue *value;
@@ -359,20 +359,15 @@ token_parse_steps (GtkCssTokenSource *source,
   token = gtk_css_token_source_get_token (source);
   if (nth_argument == 0)
     {
-      if (!gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_INTEGER))
-        {
-          gtk_css_token_source_error (source, "Expected a positive integer for number of steps");
-          gtk_css_token_source_consume_all (source);
-          return 0;
-        }
-      else if (token->number.number <= 0)
+      if (!gtk_css_token_source_consume_integer (source, &value->u.steps.steps))
+        return 0;
+
+      if (value->u.steps.steps <= 0)
         {
           gtk_css_token_source_error (source, "Number of steps must be greater than 0");
           gtk_css_token_source_consume_all (source);
           return 0;
         }
-      value->u.steps.steps = token->number.number;
-      gtk_css_token_source_consume_token (source);
       return 1;
     }
   else

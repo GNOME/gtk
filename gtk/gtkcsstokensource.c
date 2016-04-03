@@ -438,6 +438,27 @@ gtk_css_token_source_consume_number (GtkCssTokenSource *source,
   return TRUE;
 }
 
+gboolean
+gtk_css_token_source_consume_integer (GtkCssTokenSource *source,
+                                      int               *number)
+{
+  const GtkCssToken *token;
+
+  token = gtk_css_token_source_get_token (source);
+  if (gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_INTEGER) ||
+      gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_INTEGER))
+    {
+      *number = token->number.number;
+      gtk_css_token_source_consume_token (source);
+      return TRUE;
+    }
+
+  /* XXX: parse calc() */
+  gtk_css_token_source_error (source, "Expected an integer");
+  gtk_css_token_source_consume_all (source);
+  return FALSE;
+}
+
 GFile *
 gtk_css_token_source_resolve_url (GtkCssTokenSource *source,
                                   const char        *url)
