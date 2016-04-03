@@ -2,14 +2,14 @@
 @define-color text_color -gtk-win32-color(button, btntext);
 @define-color selected_bg_color -gtk-win32-color(button, highlight);
 @define-color selected_fg_color -gtk-win32-color(button, highlighttext);
-@define-color info_fg_color rgb (181, 171, 156);
-@define-color info_bg_color rgb (252, 252, 189);
-@define-color warning_fg_color rgb (173, 120, 41);
-@define-color warning_bg_color rgb (250, 173, 61);
-@define-color question_fg_color rgb (97, 122, 214);
-@define-color question_bg_color rgb (138, 173, 212);
-@define-color error_fg_color rgb (166, 38, 38);
-@define-color error_bg_color rgb (237, 54, 54);
+@define-color info_fg_color rgb(181, 171, 156);
+@define-color info_bg_color rgb(252, 252, 189);
+@define-color warning_fg_color rgb(173, 120, 41);
+@define-color warning_bg_color rgb(250, 173, 61);
+@define-color question_fg_color rgb(97, 122, 214);
+@define-color question_bg_color rgb(138, 173, 212);
+@define-color error_fg_color rgb(166, 38, 38);
+@define-color error_bg_color rgb(237, 54, 54);
 
 @define-color app_notification_a #aeaea4;
 @define-color app_notification_b #d1d1cb;
@@ -97,7 +97,7 @@ scrolledwindow.frame {
 }
 
 .view:selected {
-  background-color: shade (-gtk-win32-color(edit, window), 0.9);
+  background-color: shade(-gtk-win32-color(edit, window), 0.9);
   color: @fg_color;
 }
 
@@ -625,25 +625,25 @@ scrollbar button.right:disabled {
 
 scrollbar trough {
     border-width: 0;
-    background-image: -gtk-win32-theme-part(scrollbar, 2, 1, over (4, 1));
+    background-image: -gtk-win32-theme-part(scrollbar, 2, 1, over(4, 1));
 }
 
 scrollbar trough.vertical {
     border-width: 0;
-    background-image: -gtk-win32-theme-part(scrollbar, 2, 1, over (6, 1));
+    background-image: -gtk-win32-theme-part(scrollbar, 2, 1, over(6, 1));
 }
 
 scrollbar slider {
     border-width: 0;
-    background-image: -gtk-win32-theme-part(scrollbar, 2, 1, over (8, 1));
+    background-image: -gtk-win32-theme-part(scrollbar, 2, 1, over(8, 1));
 }
 
 scrollbar slider:hover {
-    background-image: -gtk-win32-theme-part(scrollbar, 2, 2, over (8, 2));
+    background-image: -gtk-win32-theme-part(scrollbar, 2, 2, over(8, 2));
 }
 
 scrollbar slider:active {
-    background-image: -gtk-win32-theme-part(scrollbar, 2, 3, over (8, 3));
+    background-image: -gtk-win32-theme-part(scrollbar, 2, 3, over(8, 3));
 }
 
 scrollbar slider:disabled {
@@ -655,15 +655,15 @@ scrollbar slider:disabled {
 }
 
 scrollbar.vertical slider {
-    background-image: -gtk-win32-theme-part(scrollbar, 3, 1, over (9, 1));
+    background-image: -gtk-win32-theme-part(scrollbar, 3, 1, over(9, 1));
 }
 
 scrollbar.vertical slider:hover {
-    background-image: -gtk-win32-theme-part(scrollbar, 3, 2, over (9, 2));
+    background-image: -gtk-win32-theme-part(scrollbar, 3, 2, over(9, 2));
 }
 
 scrollbar.vertical slider:active {
-    background-image: -gtk-win32-theme-part(scrollbar, 3, 3, over (9, 3));
+    background-image: -gtk-win32-theme-part(scrollbar, 3, 3, over(9, 3));
 }
 
 scrollbar.vertical slider:disabled {
@@ -1233,7 +1233,7 @@ switch:disabled slider {
 
 menu {
     background-color: -gtk-win32-color(button, menu);
-    border-color: shade (-gtk-win32-color(button, menu), 0.6);
+    border-color: shade(-gtk-win32-color(button, menu), 0.6);
     border-style: solid;
     border-width: 1px;
     padding: 2px;
@@ -1244,7 +1244,7 @@ menuitem {
 }
 
 menubar menuitem *:backdrop {
-    color: mix (-gtk-win32-color(button, menutext), white, 0.5);
+    color: mix(-gtk-win32-color(button, menutext), white, 0.5);
 }
 
 menubar > menuitem {
@@ -1279,18 +1279,18 @@ colorswatch {
 }
 
 colorswatch:hover {
-    border-color: shade (@bg_color, 0.2);
+    border-color: shade(@bg_color, 0.2);
 }
 
 separator,
 separator:hover {
-    color: shade (@bg_color, 0.6);
+    color: shade(@bg_color, 0.6);
 }
 
 statusbar > frame {
     border-width: 1px 1px 1px 1px;
     border-style: solid;
-    border-image:  -gtk-win32-theme-part(status, 0, 0, margins (-1 0 0 0))  2 1 1 1 stretch;
+    border-image:  -gtk-win32-theme-part(status, 0, 0, margins(-1 0 0 0))  2 1 1 1 stretch;
     background-image: none;
 }
 
@@ -1402,7 +1402,7 @@ modelbutton radio:disabled {
 modelbutton radio:active:focus,
 modelbutton radio:active,
 modelbutton radio:active:hover {
-    background-image: -gtk-win32-theme-part(menu, 12, 2, over (11, 3));
+    background-image: -gtk-win32-theme-part(menu, 12, 2, over(11, 3));
     border-width: 0;
 }
 
@@ -1419,7 +1419,7 @@ modelbutton radio:indeterminate:active:hover {
 modelbutton radio:disabled:active:focus,
 modelbutton radio:disabled:active,
 modelbutton radio:disabled:active:hover {
-    background-image: -gtk-win32-theme-part(menu, 12, 1, over (11, 4));
+    background-image: -gtk-win32-theme-part(menu, 12, 1, over(11, 4));
     border-width: 0;
 }
 
@@ -1438,7 +1438,7 @@ modelbutton check:active:focus,
 modelbutton check:active, 
 modelbutton check:active:hover:focus,
 modelbutton check:active:hover {
-    background-image: -gtk-win32-theme-part(menu, 12, 2, over (11, 1));
+    background-image: -gtk-win32-theme-part(menu, 12, 2, over(11, 1));
     border-width: 0;
 }
 
@@ -1460,7 +1460,7 @@ modelbutton check:disabled:active:focus,
 modelbutton check:disabled:active,
 modelbutton check:disabled:active:hover:focus,
 modelbutton check:disabled:active:hover {
-    background-image: -gtk-win32-theme-part(menu, 12, 1, over (11, 2));
+    background-image: -gtk-win32-theme-part(menu, 12, 1, over(11, 2));
     border-width: 0;
 }
 
