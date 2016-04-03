@@ -310,6 +310,21 @@ add_label_row (GtkListBox *list,
   gtk_list_box_insert (GTK_LIST_BOX (list), row, -1);
 }
 
+static const char *
+translate_subpixel_layout (GdkSubpixelLayout subpixel)
+{
+  switch (subpixel)
+    {
+    case GDK_SUBPIXEL_LAYOUT_NONE: return "none";
+    case GDK_SUBPIXEL_LAYOUT_UNKNOWN: return "unknown";
+    case GDK_SUBPIXEL_LAYOUT_HORIZONTAL_RGB: return "horizontal rgb";
+    case GDK_SUBPIXEL_LAYOUT_HORIZONTAL_BGR: return "horizontal bgr";
+    case GDK_SUBPIXEL_LAYOUT_VERTICAL_RGB: return "vertical rgb";
+    case GDK_SUBPIXEL_LAYOUT_VERTICAL_BGR: return "vertical bgr";
+    default: g_assert_not_reached ();
+    }
+}
+
 static void
 populate_display (GdkScreen *screen, GtkInspectorGeneral *gen)
 {
@@ -351,25 +366,46 @@ populate_display (GdkScreen *screen, GtkInspectorGeneral *gen)
       gchar *name;
       gchar *value;
       GdkRectangle rect;
-      gint w, h, wmm, hmm, scale;
+      gint scale;
+      const char *manufacturer;
+      const char *model;
 
-      name = g_strdup_printf ("Monitor %s %s",
-                              gdk_monitor_get_manufacturer (monitors[i]),
-                              gdk_monitor_get_model (monitors[i]));
-
-      gdk_screen_get_monitor_geometry (screen, i, &rect);
-      w = rect.width;
-      h = rect.height;
-      wmm = gdk_screen_get_monitor_width_mm (screen, i);
-      hmm = gdk_screen_get_monitor_height_mm (screen, i);
-      scale = gdk_screen_get_monitor_scale_factor (screen, i);
-      value = g_strdup_printf ("%d × %d%s, %d × %d mm²",
-                               w, h, scale == 2 ? " @ 2" : "",
-                               wmm, hmm);
-
+      name = g_strdup_printf ("Monitor %d", i);
+      manufacturer = gdk_monitor_get_manufacturer (monitors[i]);
+      model = gdk_monitor_get_model (monitors[i]);
+      value = g_strdup_printf ("%s%s%s",
+                               manufacturer ? manufacturer : "",
+                               manufacturer || model ? " " : "",
+                               model ? model : "");
       add_label_row (GTK_LIST_BOX (gen->priv->display_box), name, value, 0);
-
       g_free (name);
+      g_free (value);
+
+      gdk_monitor_get_geometry (monitors[i], &rect);
+      scale = gdk_monitor_get_scale_factor (monitors[i]);
+
+      value = g_strdup_printf ("%d × %d%s at %d, %d",
+                               rect.width, rect.height,
+                               scale == 2 ? " @ 2" : "",
+                               rect.x, rect.y);
+      add_label_row (GTK_LIST_BOX (gen->priv->display_box), "Geometry", value, 10);
+      g_free (value);
+
+      value = g_strdup_printf ("%d × %d mm²",
+                               gdk_monitor_get_width_mm (monitors[i]),
+                               gdk_monitor_get_height_mm (monitors[i]));
+      add_label_row (GTK_LIST_BOX (gen->priv->display_box), "Size", value, 10);
+
+      if (gdk_monitor_get_refresh_rate (monitors[i]) != 0)
+        value = g_strdup_printf ("%.2f mHz",
+                                 0.001 * gdk_monitor_get_refresh_rate (monitors[i]));
+      else
+        value = g_strdup ("unknown");
+      add_label_row (GTK_LIST_BOX (gen->priv->display_box), "Refresh rate", value, 10);
+      g_free (value);
+
+      value = g_strdup (translate_subpixel_layout (gdk_monitor_get_subpixel_layout (monitors[i])));
+      add_label_row (GTK_LIST_BOX (gen->priv->display_box), "Subpixel layout", value, 10);
       g_free (value);
     }
 }
