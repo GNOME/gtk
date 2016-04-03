@@ -1076,7 +1076,7 @@ output_handle_done (void             *data,
     {
       monitor->added = TRUE;
       g_ptr_array_add (screen_wayland->monitors, monitor);
-      gdk_display_add_monitor (display, GDK_MONITOR (monitor));
+      gdk_display_monitor_added (display, GDK_MONITOR (monitor));
     }
 
   g_signal_emit_by_name (screen_wayland, "monitors-changed");
@@ -1158,7 +1158,7 @@ _gdk_wayland_screen_add_output (GdkScreen        *screen,
   if (monitor->version < OUTPUT_VERSION_WITH_DONE)
     {
       g_ptr_array_add (GDK_WAYLAND_SCREEN (screen)->monitors, monitor);
-      gdk_display_add_monitor (display, GDK_MONITOR (monitor));
+      gdk_display_monitor_added (display, GDK_MONITOR (monitor));
     }
 
   wl_output_add_listener (output, &output_listener, monitor);
@@ -1223,7 +1223,7 @@ _gdk_wayland_screen_remove_output (GdkScreen *screen,
     {
       g_object_ref (monitor);
       g_ptr_array_remove (screen_wayland->monitors, monitor);
-      gdk_display_remove_monitor (display, GDK_MONITOR (monitor));
+      gdk_display_monitor_removed (display, GDK_MONITOR (monitor));
       g_object_unref (monitor);
       g_signal_emit_by_name (screen_wayland, "monitors-changed");
       update_screen_size (screen_wayland);

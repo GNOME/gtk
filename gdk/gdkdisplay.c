@@ -2503,32 +2503,15 @@ gdk_display_get_primary_monitor (GdkDisplay *display)
 }
 
 void
-gdk_display_add_monitor (GdkDisplay *display,
-                         GdkMonitor *monitor)
+gdk_display_monitor_added (GdkDisplay *display,
+                           GdkMonitor *monitor)
 {
-  g_return_if_fail (GDK_IS_DISPLAY (display));
-  g_return_if_fail (GDK_IS_MONITOR (monitor));
-
-  display->monitors = g_list_append (display->monitors, g_object_ref (monitor));
   g_signal_emit (display, signals[MONITOR_ADDED], 0, monitor);
 }
 
 void
-gdk_display_remove_monitor (GdkDisplay *display,
-                            GdkMonitor *monitor)
+gdk_display_monitor_removed (GdkDisplay *display,
+                             GdkMonitor *monitor)
 {
-  GList *link;
-
-  g_return_if_fail (GDK_IS_DISPLAY (display));
-  g_return_if_fail (GDK_IS_MONITOR (monitor));
-
-  link = g_list_find (display->monitors, monitor);
-
-  if (link)
-    {
-      display->monitors = g_list_remove_link (display->monitors, link);
-      g_signal_emit (display, signals[MONITOR_REMOVED], 0, monitor);
-      g_object_unref (link->data);
-      g_list_free (link);
-    }
+  g_signal_emit (display, signals[MONITOR_REMOVED], 0, monitor);
 }

@@ -129,7 +129,6 @@ struct _GdkDisplay
   GdkRenderingMode rendering_mode;
 
   GList *seats;
-  GList *monitors;
 };
 
 struct _GdkDisplayClass
@@ -334,9 +333,9 @@ void                gdk_display_add_seat              (GdkDisplay       *display
                                                        GdkSeat          *seat);
 void                gdk_display_remove_seat           (GdkDisplay       *display,
                                                        GdkSeat          *seat);
-void                gdk_display_add_monitor           (GdkDisplay       *display,
+void                gdk_display_monitor_added         (GdkDisplay       *display,
                                                        GdkMonitor       *monitor);
-void                gdk_display_remove_monitor        (GdkDisplay       *display,
+void                gdk_display_monitor_removed       (GdkDisplay       *display,
                                                        GdkMonitor       *monitor);
 
 G_END_DECLS
