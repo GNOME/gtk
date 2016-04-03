@@ -263,6 +263,17 @@ gtk_css_image_gradient_parse (GtkCssImage  *image,
   return gradient->gradient != NULL;
 }
 
+static gboolean
+gtk_css_image_gradient_token_parse (GtkCssImage       *image,
+                                    GtkCssTokenSource *source)
+{
+  GtkCssImageGradient *gradient = GTK_CSS_IMAGE_GRADIENT (image);
+
+  gradient->gradient = gtk_gradient_token_parse (source);
+
+  return gradient->gradient != NULL;
+}
+
 static void
 gtk_css_image_gradient_print (GtkCssImage *image,
                               GString     *string)
@@ -304,6 +315,7 @@ _gtk_css_image_gradient_class_init (GtkCssImageGradientClass *klass)
   image_class->transition = gtk_css_image_gradient_transition;
   image_class->draw = gtk_css_image_gradient_draw;
   image_class->parse = gtk_css_image_gradient_parse;
+  image_class->token_parse = gtk_css_image_gradient_token_parse;
   image_class->print = gtk_css_image_gradient_print;
 
   object_class->dispose = gtk_css_image_gradient_dispose;
@@ -505,3 +517,32 @@ _gtk_gradient_parse (GtkCssParser *parser)
 
   return gradient;
 }
+
+static void
+forward_error_to_source (GtkCssParser *parser,
+                         const GError *error,
+                         gpointer      source)
+{
+  /* XXX: This is bad because it doesn't emit the error on the right token */
+  gtk_css_token_source_emit_error (source, error);
+}
+
+GtkGradient *
+gtk_gradient_token_parse (GtkCssTokenSource *source)
+{
+  GtkCssParser *parser;
+  GtkGradient *gradient;
+  char *str;
+
+  str = gtk_css_token_source_consume_to_string (source);
+  parser = _gtk_css_parser_new (str,
+                                NULL,
+                                forward_error_to_source,
+                                source);
+  gradient = _gtk_gradient_parse (parser);
+  _gtk_css_parser_free (parser);
+  g_free (str);
+
+  return gradient;
+}
+

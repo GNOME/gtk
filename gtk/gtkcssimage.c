@@ -97,37 +97,6 @@ gtk_css_image_real_transition (GtkCssImage *start,
 }
 
 static void
-forward_error_to_source (GtkCssParser *parser,
-                         const GError *error,
-                         gpointer      source)
-{
-  /* XXX: This is bad because it doesn't emit the error on the right token */
-  gtk_css_token_source_emit_error (source, error);
-}
-
-static gboolean
-gtk_css_image_real_token_parse (GtkCssImage       *image,
-                                GtkCssTokenSource *source)
-{
-  GtkCssImageClass *klass;
-  GtkCssParser *parser;
-  char *str;
-  gboolean success;
-
-  str = gtk_css_token_source_consume_to_string (source);
-  parser = _gtk_css_parser_new (str,
-                                NULL,
-                                forward_error_to_source,
-                                source);
-  klass = GTK_CSS_IMAGE_GET_CLASS (image);
-  success = klass->parse (image, parser);
-  _gtk_css_parser_free (parser);
-  g_free (str);
-
-  return success;
-}
-
-static void
 _gtk_css_image_class_init (GtkCssImageClass *klass)
 {
   klass->get_width = gtk_css_image_real_get_width;
@@ -136,7 +105,6 @@ _gtk_css_image_class_init (GtkCssImageClass *klass)
   klass->compute = gtk_css_image_real_compute;
   klass->equal = gtk_css_image_real_equal;
   klass->transition = gtk_css_image_real_transition;
-  klass->token_parse = gtk_css_image_real_token_parse;
 }
 
 static void
