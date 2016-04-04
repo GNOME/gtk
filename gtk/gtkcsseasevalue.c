@@ -452,6 +452,12 @@ cubic (double a, double b, double c, double t)
   return ((a * t + b) * t + c) * t;
 }
 
+static inline double
+cubic_deriv (double a, double b, double c, double t)
+{
+  return (3 * a * t + 2 * b) * t + c;
+}
+
 double
 _gtk_css_ease_value_transform (const GtkCssValue *ease,
                                double             progress)
@@ -471,6 +477,7 @@ _gtk_css_ease_value_transform (const GtkCssValue *ease,
         double ax, bx, cx;
         double ay, by, cy;
         double tmin, t, tmax;
+        guint i;
 
         cx = 3.0 * ease->u.cubic.x1;
         bx = 3.0 * (ease->u.cubic.x2 - ease->u.cubic.x1) - cx;
@@ -479,6 +486,24 @@ _gtk_css_ease_value_transform (const GtkCssValue *ease,
         by = 3.0 * (ease->u.cubic.y2 - ease->u.cubic.y1) - cy;
         ay = 1.0 - cy - by;
 
+        /* Try with Newton's method first */
+        t = progress;
+        for (i = 0; i < 8; i++)
+          {
+            double sample, deriv;
+
+            sample = cubic (ax, bx, cx, t);
+            if (fabs (sample - t) < epsilon)
+              return cubic (ay, by, cy, t);
+
+            deriv = cubic_deriv (ax, bx, cx, t);
+            if (deriv < epsilon)
+              return cubic (ay, by, cy, t);
+
+            t = t - (sample - t) / deriv;
+          }
+
+        /* Fallback if Newton doesn't converge */
         tmin = 0.0;
         tmax = 1.0;
         t = progress;
