@@ -597,6 +597,7 @@ init_randr15 (GdkScreen *screen, gboolean *changed)
 
       gdk_monitor_set_position (GDK_MONITOR (monitor), newgeo.x, newgeo.y);
       gdk_monitor_set_size (GDK_MONITOR (monitor), newgeo.width, newgeo.height);
+      g_object_notify (G_OBJECT (monitor), "workarea");
       gdk_monitor_set_physical_size (GDK_MONITOR (monitor),
                                      rr_monitors[i].mwidth,
                                      rr_monitors[i].mheight);
@@ -775,6 +776,7 @@ init_randr13 (GdkScreen *screen, gboolean *changed)
 
           gdk_monitor_set_position (GDK_MONITOR (monitor), newgeo.x, newgeo.y);
           gdk_monitor_set_size (GDK_MONITOR (monitor), newgeo.width, newgeo.height);
+          g_object_notify (G_OBJECT (monitor), "workarea");
           gdk_monitor_set_physical_size (GDK_MONITOR (monitor),
                                          output_info->mm_width,
                                          output_info->mm_height);
@@ -905,6 +907,7 @@ init_no_multihead (GdkScreen *screen, gboolean *changed)
   gdk_monitor_set_size (GDK_MONITOR (monitor),
                         gdk_screen_get_width (screen),
                         gdk_screen_get_height (screen));
+  g_object_notify (G_OBJECT (monitor), "workarea");
   gdk_monitor_set_physical_size (GDK_MONITOR (monitor),
                                  gdk_screen_get_height_mm (screen),
                                  gdk_screen_get_height_mm (screen));
