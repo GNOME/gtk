@@ -30,7 +30,6 @@
  * - monitor type (laptop, projector, ...)
  * - consider vfuncs instead of baseclass storage
  * - provide a persistent id (if the backend allows)
- * - x11: hidpi scaling
  * - convert win32
  * - convert quartz
  */

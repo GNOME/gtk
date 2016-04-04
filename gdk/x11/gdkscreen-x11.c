@@ -524,6 +524,7 @@ init_randr15 (GdkScreen *screen, gboolean *changed)
       XRROutputInfo *output_info;
       GdkX11Monitor *monitor;
       GdkRectangle geometry;
+      GdkRectangle newgeo;
       char *name;
       int refresh_rate = 0;
 
@@ -581,27 +582,28 @@ init_randr15 (GdkScreen *screen, gboolean *changed)
       gdk_monitor_get_geometry (GDK_MONITOR (monitor), &geometry);
       name = g_strndup (output_info->name, output_info->nameLen);
 
-      if (rr_monitors[i].x != geometry.x ||
-          rr_monitors[i].y != geometry.y ||
-          rr_monitors[i].width != geometry.width ||
-          rr_monitors[i].height != geometry.height ||
+      newgeo.x = rr_monitors[i].x / x11_screen->window_scale;
+      newgeo.y = rr_monitors[i].y / x11_screen->window_scale;
+      newgeo.width = rr_monitors[i].width / x11_screen->window_scale;
+      newgeo.height = rr_monitors[i].height / x11_screen->window_scale;
+      if (newgeo.x != geometry.x ||
+          newgeo.y != geometry.y ||
+          newgeo.width != geometry.width ||
+          newgeo.height != geometry.height ||
           rr_monitors[i].mwidth != gdk_monitor_get_width_mm (GDK_MONITOR (monitor)) ||
           rr_monitors[i].mheight != gdk_monitor_get_height_mm (GDK_MONITOR (monitor)) ||
           g_strcmp0 (name, gdk_monitor_get_model (GDK_MONITOR (monitor))))
         *changed = TRUE;
 
-      gdk_monitor_set_position (GDK_MONITOR (monitor),
-                                rr_monitors[i].x,
-                                rr_monitors[i].y);
-      gdk_monitor_set_size (GDK_MONITOR (monitor),
-                            rr_monitors[i].width,
-                            rr_monitors[i].height);
+      gdk_monitor_set_position (GDK_MONITOR (monitor), newgeo.x, newgeo.y);
+      gdk_monitor_set_size (GDK_MONITOR (monitor), newgeo.width, newgeo.height);
       gdk_monitor_set_physical_size (GDK_MONITOR (monitor),
                                      rr_monitors[i].mwidth,
                                      rr_monitors[i].mheight);
       gdk_monitor_set_subpixel_layout (GDK_MONITOR (monitor),
                                        translate_subpixel_order (output_info->subpixel_order));
       gdk_monitor_set_refresh_rate (GDK_MONITOR (monitor), refresh_rate);
+      gdk_monitor_set_scale_factor (GDK_MONITOR (monitor), x11_screen->window_scale);
       gdk_monitor_set_model (GDK_MONITOR (monitor), name);
       g_free (name);
 
@@ -728,6 +730,7 @@ init_randr13 (GdkScreen *screen, gboolean *changed)
 	  XRRCrtcInfo *crtc = XRRGetCrtcInfo (x11_screen->xdisplay, resources, output_info->crtc);
           char *name;
           GdkRectangle geometry;
+          GdkRectangle newgeo;
           int j;
           int refresh_rate = 0;
 
@@ -756,25 +759,29 @@ init_randr13 (GdkScreen *screen, gboolean *changed)
 
           gdk_monitor_get_geometry (GDK_MONITOR (monitor), &geometry);
           name = g_strndup (output_info->name, output_info->nameLen);
-          if (crtc->x != geometry.x ||
-              crtc->y != geometry.y ||
-              crtc->width != geometry.width ||
-              crtc->height != geometry.height ||
+
+          newgeo.x = crtc->x / x11_screen->window_scale;
+          newgeo.y = crtc->y / x11_screen->window_scale;
+          newgeo.width = crtc->width / x11_screen->window_scale;
+          newgeo.height = crtc->height / x11_screen->window_scale;
+          if (newgeo.x != geometry.x ||
+              newgeo.y != geometry.y ||
+              newgeo.width != geometry.width ||
+              newgeo.height != geometry.height ||
               output_info->mm_width != gdk_monitor_get_width_mm (GDK_MONITOR (monitor)) ||
               output_info->mm_height != gdk_monitor_get_height_mm (GDK_MONITOR (monitor)) ||
               g_strcmp0 (name, gdk_monitor_get_model (GDK_MONITOR (monitor))) != 0)
             *changed = TRUE;
 
-          gdk_monitor_set_position (GDK_MONITOR (monitor),
-                                    crtc->x, crtc->y);
-          gdk_monitor_set_size (GDK_MONITOR (monitor),
-                                crtc->width, crtc->height);
+          gdk_monitor_set_position (GDK_MONITOR (monitor), newgeo.x, newgeo.y);
+          gdk_monitor_set_size (GDK_MONITOR (monitor), newgeo.width, newgeo.height);
           gdk_monitor_set_physical_size (GDK_MONITOR (monitor),
                                          output_info->mm_width,
                                          output_info->mm_height);
           gdk_monitor_set_subpixel_layout (GDK_MONITOR (monitor),
                                            translate_subpixel_order (output_info->subpixel_order));
           gdk_monitor_set_refresh_rate (GDK_MONITOR (monitor), refresh_rate);
+          gdk_monitor_set_scale_factor (GDK_MONITOR (monitor), x11_screen->window_scale);
           gdk_monitor_set_model (GDK_MONITOR (monitor), name);
 
           g_free (name);
@@ -888,19 +895,20 @@ init_no_multihead (GdkScreen *screen, gboolean *changed)
   gdk_monitor_get_geometry (GDK_MONITOR (monitor), &geometry);
   if (0 != geometry.x ||
       0 != geometry.y ||
-      WidthOfScreen (x11_screen->xscreen) != geometry.width ||
-      HeightOfScreen (x11_screen->xscreen) != geometry.height ||
-      WidthMMOfScreen (x11_screen->xscreen) != gdk_monitor_get_width_mm (GDK_MONITOR (monitor)) ||
-      HeightMMOfScreen (x11_screen->xscreen) != gdk_monitor_get_height_mm (GDK_MONITOR (monitor)))
+      gdk_screen_get_width (screen) != geometry.width ||
+      gdk_screen_get_height (screen) != geometry.height ||
+      gdk_screen_get_width_mm (screen) != gdk_monitor_get_width_mm (GDK_MONITOR (monitor)) ||
+      gdk_screen_get_height_mm (screen) != gdk_monitor_get_height_mm (GDK_MONITOR (monitor)))
     *changed = TRUE;
 
   gdk_monitor_set_position (GDK_MONITOR (monitor), 0, 0);
   gdk_monitor_set_size (GDK_MONITOR (monitor),
-                        WidthOfScreen (x11_screen->xscreen),
-                        HeightOfScreen (x11_screen->xscreen));
+                        gdk_screen_get_width (screen),
+                        gdk_screen_get_height (screen));
   gdk_monitor_set_physical_size (GDK_MONITOR (monitor),
-                                 WidthMMOfScreen (x11_screen->xscreen),
-                                 HeightMMOfScreen (x11_screen->xscreen));
+                                 gdk_screen_get_height_mm (screen),
+                                 gdk_screen_get_height_mm (screen));
+  gdk_monitor_set_scale_factor (GDK_MONITOR (monitor), x11_screen->window_scale);
 
   if (x11_screen->primary_monitor != 0)
     *changed = TRUE;
@@ -1012,6 +1020,7 @@ _gdk_x11_screen_set_window_scale (GdkX11Screen *x11_screen,
 {
   GList *toplevels, *l;
   GdkWindow *root;
+  int i;
 
   if (x11_screen->window_scale == scale)
     return;
@@ -1028,6 +1037,13 @@ _gdk_x11_screen_set_window_scale (GdkX11Screen *x11_screen,
       GdkWindow *window = l->data;
 
       _gdk_x11_window_set_window_scale (window, scale);
+    }
+
+  for (i = 0; i < x11_screen->monitors->len; i++)
+    {
+      GdkMonitor *monitor = GDK_MONITOR (x11_screen->monitors->pdata[i]);
+
+      gdk_monitor_set_scale_factor (monitor, scale);
     }
 
   g_signal_emit_by_name (GDK_SCREEN (x11_screen), "monitors-changed");
