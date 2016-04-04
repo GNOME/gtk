@@ -39,6 +39,20 @@ G_BEGIN_DECLS
 typedef struct _GdkMonitor      GdkMonitor;
 typedef struct _GdkMonitorClass GdkMonitorClass;
 
+/**
+ * GdkSubpixelLayout:
+ * @GDK_SUBPIXEL_LAYOUT_UNKNOWN: The layout is not known
+ * @GDK_SUBPIXEL_LAYOUT_NONE: Not organized in this way
+ * @GDK_SUBPIXEL_LAYOUT_HORIZONTAL_RGB: The layout is horizontal, the order is RGB
+ * @GDK_SUBPIXEL_LAYOUT_HORIZONTAL_BGR: The layout is horizontal, the order is BGR
+ * @GDK_SUBPIXEL_LAYOUT_VERTICAL_RGB: The layout is vertical, the order is RGB
+ * @GDK_SUBPIXEL_LAYOUT_VERTICAL_BGR: The layout is vertical, the order is BGR
+ *
+ * This enumeration describes how the red, green and blue components
+ * of physical pixels on an output device are laid out.
+ *
+ * Since: 3.22
+ */
 typedef enum {
   GDK_SUBPIXEL_LAYOUT_UNKNOWN,
   GDK_SUBPIXEL_LAYOUT_NONE,

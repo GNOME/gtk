@@ -230,6 +230,16 @@ gdk_display_class_init (GdkDisplayClass *class)
                   g_cclosure_marshal_VOID__OBJECT,
 		  G_TYPE_NONE, 1, GDK_TYPE_SEAT);
 
+  /**
+   * GdkDisplay::monitor-added:
+   * @display: the objedct on which the signal is emitted
+   * @monitor: the monitor that was just added
+   *
+   * The ::monitor-added signal is emitted whenever a monitor is
+   * added.
+   *
+   * Since: 3.22
+   */
   signals[MONITOR_ADDED] =
     g_signal_new (g_intern_static_string ("monitor-added"),
 		  G_OBJECT_CLASS_TYPE (object_class),
@@ -237,6 +247,17 @@ gdk_display_class_init (GdkDisplayClass *class)
 		  0, NULL, NULL,
                   g_cclosure_marshal_VOID__OBJECT,
 		  G_TYPE_NONE, 1, GDK_TYPE_MONITOR);
+
+  /**
+   * GdkDisplay::monitor-removed:
+   * @display: the object on which the signal is emitted
+   * @monitor: the monitor that was just removed
+   *
+   * The ::monitor-removed signal is emitted whenever a monitor is
+   * removed.
+   *
+   * Since: 3.22
+   */
   signals[MONITOR_REMOVED] =
     g_signal_new (g_intern_static_string ("monitor-removed"),
 		  G_OBJECT_CLASS_TYPE (object_class),
@@ -2482,6 +2503,19 @@ gdk_display_list_seats (GdkDisplay *display)
   return g_list_copy (display->seats);
 }
 
+/**
+ * gdk_display_get_monitors:
+ * @display: a #GdkDisplay
+ * @n_monitors: (out): Return location for the length of the returned array
+ *
+ * Gets the monitors associated with this display. The array will only be
+ * valid until the next emission of the #GdkDisplay::monitor-added or
+ * #GdkDisplay::monitor-removed signal.
+ *
+ * Returns: (transfer none) (element-type GdkMonitor): an array of #GdkMonitor
+ *     objects
+ * Since: 3.22
+ */
 GdkMonitor **
 gdk_display_get_monitors (GdkDisplay *display,
                           gint       *n_monitors)
@@ -2491,6 +2525,21 @@ gdk_display_get_monitors (GdkDisplay *display,
   return GDK_DISPLAY_GET_CLASS (display)->get_monitors (display, n_monitors);
 }
 
+/**
+ * gdk_display_get_primary_monitor:
+ * @display: a #GdkDisplay
+ *
+ * Gets the primary monitor for the display.
+ *
+ * The primary monitor is considered the monitor where the “main desktop”
+ * lives. While normal application windows typically allow the window
+ * manager to place the windows, specialized desktop applications
+ * such as panels should place themselves on the primary monitor.
+ *
+ * Returns: (transfer none): the primary monitor, or %NULL if no primary
+ *     monitor is configured by the user
+ * Since: 3.22
+ */
 GdkMonitor *
 gdk_display_get_primary_monitor (GdkDisplay *display)
 {
@@ -2502,6 +2551,18 @@ gdk_display_get_primary_monitor (GdkDisplay *display)
   return NULL;
 }
 
+/**
+ * gdk_display_get_monitor_at_point:
+ * @display: a #GdkDisplay
+ * @x: the x coordinate of the point
+ * @y: the y coordinate of the point
+ *
+ * Gets the monitor in which the point (@x, @y) is located,
+ * or a nearby monitor if the point is not in any monitor.
+ *
+ * Returns: (transfer none): the monitor containing the point
+ * Since: 3.22
+ */
 GdkMonitor *
 gdk_display_get_monitor_at_point (GdkDisplay *display,
                                   int         x,
@@ -2550,6 +2611,18 @@ gdk_display_get_monitor_at_point (GdkDisplay *display,
   return nearest;
 }
 
+/**
+ * gdk_display_get_monitor_at_window:
+ * @display: a #GdkDisplay
+ * @window: a #GdkWindow
+ *
+ * Gets the monitor in which the largest area of @window
+ * resides, or a monitor close to @window if it is outside
+ * of all monitors.
+ *
+ * Returns: (transfer none): the monitor with the largest overlap with @window
+ * Since: 3.22
+ */
 GdkMonitor *
 gdk_display_get_monitor_at_window (GdkDisplay *display,
                                    GdkWindow  *window)

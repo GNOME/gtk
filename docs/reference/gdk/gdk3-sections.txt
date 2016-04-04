@@ -158,6 +158,10 @@ gdk_display_get_app_launch_context
 gdk_display_notify_startup_complete
 gdk_display_get_default_seat
 gdk_display_list_seats
+gdk_display_get_monitors
+gdk_display_get_primary_monitor
+gdk_display_get_monitor_at_point
+gdk_display_get_monitor_at_window
 
 <SUBSECTION Standard>
 GDK_DISPLAY
@@ -1365,4 +1369,27 @@ gdk_gl_error_quark
 GDK_GL_ERROR
 GDK_TYPE_GL_ERROR
 GDK_TYPE_GL_PROFILE
+</SECTION>
+
+<SECTION>
+<FILE>gdkmonitor</FILE>
+GdkMonitor
+gdk_monitor_get_display
+gdk_monitor_get_geometry
+gdk_monitor_get_workarea
+gdk_monitor_get_width_mm
+gdk_monitor_get_height_mm
+gdk_monitor_get_manufacturer
+gdk_monitor_get_model
+gdk_monitor_get_scale_factor
+gdk_monitor_get_refresh_rate
+gdk_monitor_get_subpixel_layout
+gdk_monitor_is_primary
+
+<SUBSECTION Standard>
+gdk_monitor_get_type
+GdkMonitorClass
+GDK_TYPE_MONITOR
+GDK_MONITOR
+GDK_IS_MONITOR
 </SECTION>
