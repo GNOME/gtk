@@ -168,10 +168,10 @@ struct _GdkWindowImplWaylandClass
   GdkWindowImplClass parent_class;
 };
 
-static void gdk_wayland_window_configure (GdkWindow *window,
-                                          int        width,
-                                          int        height,
-                                          int        scale);
+static void gdk_wayland_window_maybe_configure (GdkWindow *window,
+                                                int        width,
+                                                int        height,
+                                                int        scale);
 
 static void maybe_set_gtk_surface_dbus_properties (GdkWindow *window);
 static void maybe_set_gtk_surface_modal (GdkWindow *window);
@@ -571,7 +571,7 @@ window_update_scale (GdkWindow *window)
     }
 
   /* Notify app that scale changed */
-  gdk_wayland_window_configure (window, window->width, window->height, scale);
+  gdk_wayland_window_maybe_configure (window, window->width, window->height, scale);
 }
 
 static void
@@ -924,6 +924,22 @@ gdk_wayland_window_configure (GdkWindow *window,
 
   display = gdk_window_get_display (window);
   _gdk_wayland_display_deliver_event (display, event);
+}
+
+static void
+gdk_wayland_window_maybe_configure (GdkWindow *window,
+                                    int        width,
+                                    int        height,
+                                    int        scale)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  if (window->width == width &&
+      window->height == height &&
+      impl->scale == scale)
+    return;
+
+  gdk_wayland_window_configure (window, width, height, scale);
 }
 
 static void
@@ -1936,7 +1952,7 @@ gdk_window_wayland_move_resize (GdkWindow *window,
    * just move the window - don't update its size
    */
   if (width > 0 && height > 0)
-    gdk_wayland_window_configure (window, width, height, impl->scale);
+    gdk_wayland_window_maybe_configure (window, width, height, impl->scale);
 }
 
 static void
@@ -2744,7 +2760,7 @@ gdk_wayland_window_set_shadow_width (GdkWindow *window,
     (impl->margin_left + impl->margin_right) + (left + right);
   new_height = window->height -
     (impl->margin_top + impl->margin_bottom) + (top + bottom);
-  gdk_wayland_window_configure (window, new_width, new_height, impl->scale);
+  gdk_wayland_window_maybe_configure (window, new_width, new_height, impl->scale);
 
   impl->margin_left = left;
   impl->margin_right = right;
