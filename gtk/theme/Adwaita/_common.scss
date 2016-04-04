@@ -123,13 +123,10 @@ textview {
 
 textview border {
   background-color: mix($bg_color, $base_color, 50%);
-  background-image: image($bg_color); // HACK: the border node just draws background so, using a background-image to draw the border
-  background-repeat: no-repeat;
+  background-image: image(transparentize(black, 0.8)); // HACK: the border node just draws background so,
+  background-repeat: no-repeat;                        // using a background-image to draw the border
 
-  &:backdrop {
-    background-color: mix($backdrop_bg_color, $backdrop_base_color, 50%);
-    background-image: image($backdrop_bg_color);
-  }
+  &:backdrop { background-color: mix($backdrop_bg_color, $backdrop_base_color, 50%); }
 
   &.bottom {
     background-size: 100% 1px;

@@ -77,11 +77,10 @@ textview text {
 
 textview border {
   background-color: #313434;
-  background-image: image(#393f3f);
+  background-image: image(rgba(0, 0, 0, 0.2));
   background-repeat: no-repeat; }
   textview border:backdrop {
-    background-color: #333636;
-    background-image: image(#393f3f); }
+    background-color: #333636; }
   textview border.bottom {
     background-size: 100% 1px;
     background-position: top; }
