@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.20.1.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-14 15:17+0000\n"
-"PO-Revision-Date: 2016-03-14 22:23+0200\n"
+"POT-Creation-Date: 2016-04-03 23:25+0000\n"
+"PO-Revision-Date: 2016-04-04 12:27+0300\n"
 "Last-Translator: Tom Tryfonidis <tomtryf@gmail.com>\n"
 "Language-Team: www.gnome.gr\n"
 "Language: el\n"
@@ -27,7 +27,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.7\n"
+"X-Generator: Poedit 1.8.7.1\n"
 "X-Project-Style: gnome\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
@@ -666,15 +666,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Κλείσιμο"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:406
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:406 gtk/gtkwindow.c:9054
 msgid "Minimize"
 msgstr "Ελαχιστοποίηση"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:429
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:429 gtk/gtkwindow.c:9063
 msgid "Maximize"
 msgstr "Μεγιστοποίηση"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:429
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:429 gtk/gtkwindow.c:9020
 msgid "Restore"
 msgstr "Επαναφορά"
 
@@ -1225,7 +1225,7 @@ msgstr ""
 #: gtk/gtkmountoperation.c:545 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:673 gtk/gtkprintunixdialog.c:746
-#: gtk/gtkwindow.c:12324 gtk/inspector/css-editor.c:208
+#: gtk/gtkwindow.c:12553 gtk/inspector/css-editor.c:208
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -1274,7 +1274,7 @@ msgid "_Apply"
 msgstr "_Εφαρμογή"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944
-#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12325
+#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12554
 msgid "_OK"
 msgstr "_Εντάξει"
 
@@ -2220,7 +2220,7 @@ msgstr "Είναι πατημένο το Caps Lock"
 msgid "Select a File"
 msgstr "Επιλέξτε ένα αρχείο"
 
-#: gtk/gtkfilechooserbutton.c:107 gtk/gtkplacessidebar.c:975
+#: gtk/gtkfilechooserbutton.c:107 gtk/gtkplacessidebar.c:980
 msgid "Desktop"
 msgstr "Επιφάνεια εργασίας"
 
@@ -2238,7 +2238,7 @@ msgstr "Όν_ομα"
 
 #. Open item is always present
 #: gtk/gtkfilechoosernative.c:371 gtk/gtkfilechoosernative.c:456
-#: gtk/gtkplacessidebar.c:3413 gtk/gtkplacesview.c:1578
+#: gtk/gtkplacessidebar.c:3418 gtk/gtkplacesview.c:1577
 msgid "_Open"
 msgstr "Άν_οιγμα"
 
@@ -2405,7 +2405,7 @@ msgstr "Αντιγραφή _τοποθεσίας"
 msgid "_Add to Bookmarks"
 msgstr "Προσ_θήκη στους σελιδοδείκτες"
 
-#: gtk/gtkfilechooserwidget.c:2262 gtk/gtkplacessidebar.c:2528
+#: gtk/gtkfilechooserwidget.c:2262 gtk/gtkplacessidebar.c:2533
 #: gtk/ui/gtkfilechooserwidget.ui:525
 msgid "_Rename"
 msgstr "_Μετονομασία"
@@ -2499,7 +2499,7 @@ msgstr "%-e %b %Y"
 msgid "Unknown"
 msgstr "Άγνωστο"
 
-#: gtk/gtkfilechooserwidget.c:5070 gtk/gtkplacessidebar.c:960
+#: gtk/gtkfilechooserwidget.c:5070 gtk/gtkplacessidebar.c:965
 msgid "Home"
 msgstr "Προσωπικός φάκελος"
 
@@ -2578,16 +2578,16 @@ msgstr "Αποτυχία δημιουργίας περιεχομένου OpenGL"
 msgid "Application menu"
 msgstr "Μενού εφαρμογής"
 
-#: gtk/gtkheaderbar.c:447 gtk/gtkwindow.c:8866
+#: gtk/gtkheaderbar.c:447 gtk/gtkwindow.c:9090
 msgid "Close"
 msgstr "Κλείσιμο"
 
-#: gtk/gtkicontheme.c:2326 gtk/gtkicontheme.c:2390
+#: gtk/gtkicontheme.c:2341 gtk/gtkicontheme.c:2405
 #, c-format
 msgid "Icon '%s' not present in theme %s"
 msgstr "Το εικονίδιο '%s' δεν περιέχεται στο θέμα %s"
 
-#: gtk/gtkicontheme.c:4039 gtk/gtkicontheme.c:4406
+#: gtk/gtkicontheme.c:4054 gtk/gtkicontheme.c:4421
 msgid "Failed to load icon"
 msgstr "Αποτυχία φόρτωσης εικονιδίου"
 
@@ -2918,245 +2918,245 @@ msgstr "Διαμόρφωση σελίδας"
 msgid "File System Root"
 msgstr "Ρίζα συστήματος αρχείων"
 
-#: gtk/gtkplacessidebar.c:949
+#: gtk/gtkplacessidebar.c:954
 msgid "Recent"
 msgstr "Πρόσφατα"
 
-#: gtk/gtkplacessidebar.c:951
+#: gtk/gtkplacessidebar.c:956
 msgid "Recent files"
 msgstr "Πρόσφατα αρχεία"
 
-#: gtk/gtkplacessidebar.c:962
+#: gtk/gtkplacessidebar.c:967
 msgid "Open your personal folder"
 msgstr "Άνοιγμα του προσωπικού σας φακέλου"
 
-#: gtk/gtkplacessidebar.c:977
+#: gtk/gtkplacessidebar.c:982
 msgid "Open the contents of your desktop in a folder"
 msgstr "Άνοιγμα του περιεχομένου της επιφάνειας εργασίας σας σε ένα φάκελο"
 
-#: gtk/gtkplacessidebar.c:991
+#: gtk/gtkplacessidebar.c:996
 msgid "Enter Location"
 msgstr "Εισαγωγή τοποθεσίας"
 
-#: gtk/gtkplacessidebar.c:993
+#: gtk/gtkplacessidebar.c:998
 msgid "Manually enter a location"
 msgstr "Χειροκίνητη εισαγωγή τοποθεσίας"
 
-#: gtk/gtkplacessidebar.c:1004
+#: gtk/gtkplacessidebar.c:1009
 msgid "Trash"
 msgstr "Απορρίμματα"
 
-#: gtk/gtkplacessidebar.c:1006
+#: gtk/gtkplacessidebar.c:1011
 msgid "Open the trash"
 msgstr "Άνοιγμα των απορριμμάτων"
 
-#: gtk/gtkplacessidebar.c:1077 gtk/gtkplacessidebar.c:1105
-#: gtk/gtkplacessidebar.c:1312
+#: gtk/gtkplacessidebar.c:1082 gtk/gtkplacessidebar.c:1110
+#: gtk/gtkplacessidebar.c:1317
 #, c-format
 msgid "Mount and open “%s”"
 msgstr "Προσάρτηση και άνοιγμα του “%s”"
 
-#: gtk/gtkplacessidebar.c:1192
+#: gtk/gtkplacessidebar.c:1197
 msgid "Open the contents of the file system"
 msgstr "Άνοιγμα των περιεχομένων του συστήματος αρχείων"
 
-#: gtk/gtkplacessidebar.c:1276
+#: gtk/gtkplacessidebar.c:1281
 msgid "New bookmark"
 msgstr "Νέος σελιδοδείκτης"
 
-#: gtk/gtkplacessidebar.c:1278
+#: gtk/gtkplacessidebar.c:1283
 msgid "Add a new bookmark"
 msgstr "Προσθήκη νέου σελιδοδείκτη"
 
-#: gtk/gtkplacessidebar.c:1291
+#: gtk/gtkplacessidebar.c:1296
 msgid "Connect to Server"
 msgstr "Σύνδεση σε διακομιστή"
 
-#: gtk/gtkplacessidebar.c:1293
+#: gtk/gtkplacessidebar.c:1298
 msgid "Connect to a network server address"
 msgstr "Σύνδεση σε μια διεύθυνση δικτυακού διακομιστή"
 
-#: gtk/gtkplacessidebar.c:1355
+#: gtk/gtkplacessidebar.c:1360
 msgid "Other Locations"
 msgstr "Άλλες τοποθεσίες"
 
-#: gtk/gtkplacessidebar.c:1356
+#: gtk/gtkplacessidebar.c:1361
 msgid "Show other locations"
 msgstr "Εμφάνιση άλλων τοποθεσιών"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: gtk/gtkplacessidebar.c:2146 gtk/gtkplacessidebar.c:3433
+#: gtk/gtkplacessidebar.c:2151 gtk/gtkplacessidebar.c:3438
 msgid "_Start"
 msgstr "_Εκκίνηση"
 
-#: gtk/gtkplacessidebar.c:2147 gtk/gtkplacessidebar.c:3434
+#: gtk/gtkplacessidebar.c:2152 gtk/gtkplacessidebar.c:3439
 msgid "_Stop"
 msgstr "_Διακοπή"
 
 #. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
-#: gtk/gtkplacessidebar.c:2154
+#: gtk/gtkplacessidebar.c:2159
 msgid "_Power On"
 msgstr "_Ενεργοποίηση"
 
-#: gtk/gtkplacessidebar.c:2155
+#: gtk/gtkplacessidebar.c:2160
 msgid "_Safely Remove Drive"
 msgstr "Ασφα_λής αφαίρεση συσκευής"
 
-#: gtk/gtkplacessidebar.c:2159
+#: gtk/gtkplacessidebar.c:2164
 msgid "_Connect Drive"
 msgstr "Σύν_δεση συσκευής"
 
-#: gtk/gtkplacessidebar.c:2160
+#: gtk/gtkplacessidebar.c:2165
 msgid "_Disconnect Drive"
 msgstr "_Αποσύνδεση συσκευής"
 
-#: gtk/gtkplacessidebar.c:2164
+#: gtk/gtkplacessidebar.c:2169
 msgid "_Start Multi-disk Device"
 msgstr "Ε_κκίνηση συσκευής πολλαπλών δίσκων"
 
-#: gtk/gtkplacessidebar.c:2165
+#: gtk/gtkplacessidebar.c:2170
 msgid "_Stop Multi-disk Device"
 msgstr "_Διακοπή συσκευής πολλαπλών δίσκων"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
-#: gtk/gtkplacessidebar.c:2170
+#: gtk/gtkplacessidebar.c:2175
 msgid "_Unlock Device"
 msgstr "_Ξεκλείδωμα συσκευής"
 
-#: gtk/gtkplacessidebar.c:2171
+#: gtk/gtkplacessidebar.c:2176
 msgid "_Lock Device"
 msgstr "Κλείδ_ωμα συσκευής"
 
-#: gtk/gtkplacessidebar.c:2209 gtk/gtkplacessidebar.c:3181
+#: gtk/gtkplacessidebar.c:2214 gtk/gtkplacessidebar.c:3186
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "Αδύνατη η εκκίνηση του “%s”"
 
-#: gtk/gtkplacessidebar.c:2239
+#: gtk/gtkplacessidebar.c:2244
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "Αδυναμία πρόσβασης στο “%s”"
 
-#: gtk/gtkplacessidebar.c:2453
+#: gtk/gtkplacessidebar.c:2458
 msgid "This name is already taken"
 msgstr "Αυτό το όνομα χρησιμοποιείται ήδη."
 
-#: gtk/gtkplacessidebar.c:2522 gtk/inspector/actions.ui:43
+#: gtk/gtkplacessidebar.c:2527 gtk/inspector/actions.ui:43
 #: gtk/inspector/css-node-tree.ui:39 gtk/inspector/object-tree.ui:110
 #: gtk/ui/gtkfilechooserwidget.ui:189 gtk/ui/gtkfilechooserwidget.ui:499
 msgid "Name"
 msgstr "Όνομα"
 
-#: gtk/gtkplacessidebar.c:2722
+#: gtk/gtkplacessidebar.c:2727
 #, c-format
 msgid "Unable to unmount “%s”"
 msgstr "Αδύνατη η αποπροσάρτηση του “%s”"
 
-#: gtk/gtkplacessidebar.c:2898
+#: gtk/gtkplacessidebar.c:2903
 #, c-format
 msgid "Unable to stop “%s”"
 msgstr "Αδύνατη η διακοπή του “%s”"
 
-#: gtk/gtkplacessidebar.c:2927
+#: gtk/gtkplacessidebar.c:2932
 #, c-format
 msgid "Unable to eject “%s”"
 msgstr "Αδύνατη η εξαγωγή του “%s”"
 
-#: gtk/gtkplacessidebar.c:2956 gtk/gtkplacessidebar.c:2985
+#: gtk/gtkplacessidebar.c:2961 gtk/gtkplacessidebar.c:2990
 #, c-format
 msgid "Unable to eject %s"
 msgstr "Αδυναμία εξαγωγής του %s"
 
-#: gtk/gtkplacessidebar.c:3133
+#: gtk/gtkplacessidebar.c:3138
 #, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr "Αδύνατη η ερώτηση του “%s” για αλλαγές μέσων"
 
-#: gtk/gtkplacessidebar.c:3416 gtk/gtkplacesview.c:1588
+#: gtk/gtkplacessidebar.c:3421 gtk/gtkplacesview.c:1587
 msgid "Open in New _Tab"
 msgstr "Άνοιγμα σε νέα _καρτέλα"
 
-#: gtk/gtkplacessidebar.c:3419 gtk/gtkplacesview.c:1599
+#: gtk/gtkplacessidebar.c:3424 gtk/gtkplacesview.c:1598
 msgid "Open in New _Window"
 msgstr "Άνοιγμα σε νέο _παράθυρο"
 
-#: gtk/gtkplacessidebar.c:3423
+#: gtk/gtkplacessidebar.c:3428
 msgid "_Add Bookmark"
 msgstr "_Προσθήκη σελιδοδείκτη"
 
-#: gtk/gtkplacessidebar.c:3424
+#: gtk/gtkplacessidebar.c:3429
 msgid "_Remove"
 msgstr "Α_φαίρεση"
 
-#: gtk/gtkplacessidebar.c:3425
+#: gtk/gtkplacessidebar.c:3430
 msgid "Rename…"
 msgstr "Μετονομασία…"
 
-#: gtk/gtkplacessidebar.c:3429 gtk/gtkplacesview.c:1633
+#: gtk/gtkplacessidebar.c:3434 gtk/gtkplacesview.c:1632
 msgid "_Mount"
 msgstr "_Προσάρτηση"
 
-#: gtk/gtkplacessidebar.c:3430 gtk/gtkplacesview.c:1623
+#: gtk/gtkplacessidebar.c:3435 gtk/gtkplacesview.c:1622
 msgid "_Unmount"
 msgstr "Α_ποπροσάρτηση"
 
-#: gtk/gtkplacessidebar.c:3431
+#: gtk/gtkplacessidebar.c:3436
 msgid "_Eject"
 msgstr "Ε_ξαγωγή"
 
-#: gtk/gtkplacessidebar.c:3432
+#: gtk/gtkplacessidebar.c:3437
 msgid "_Detect Media"
 msgstr "Εντοπισμός _μέσων"
 
-#: gtk/gtkplacessidebar.c:3878 gtk/gtkplacesview.c:1053
+#: gtk/gtkplacessidebar.c:3883 gtk/gtkplacesview.c:1052
 msgid "Computer"
 msgstr "Υπολογιστής"
 
-#: gtk/gtkplacesview.c:881
+#: gtk/gtkplacesview.c:880
 msgid "Searching for network locations"
 msgstr "Αναζήτηση για τοποθεσίες δικτύου"
 
-#: gtk/gtkplacesview.c:888
+#: gtk/gtkplacesview.c:887
 msgid "No network locations found"
 msgstr "Δεν βρέθηκαν τοποθεσίες δικτύων"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1163 gtk/gtkplacesview.c:1236
+#: gtk/gtkplacesview.c:1162 gtk/gtkplacesview.c:1235
 msgid "Unable to access location"
 msgstr "Αδυναμία πρόσβασης στη θέση"
 
 #. Restore from Cancel to Connect
-#: gtk/gtkplacesview.c:1180 gtk/ui/gtkplacesview.ui:224
+#: gtk/gtkplacesview.c:1179 gtk/ui/gtkplacesview.ui:224
 msgid "Con_nect"
 msgstr "_Σύνδεση"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1299
+#: gtk/gtkplacesview.c:1298
 msgid "Unable to unmount volume"
 msgstr "Αδύνατη η αποπροσάρτηση τόμου"
 
 #. Allow to cancel the operation
-#: gtk/gtkplacesview.c:1381
+#: gtk/gtkplacesview.c:1380
 msgid "Cance_l"
 msgstr "Α_κύρωση"
 
-#: gtk/gtkplacesview.c:1623
+#: gtk/gtkplacesview.c:1622
 msgid "_Disconnect"
 msgstr "Απο_σύνδεση"
 
-#: gtk/gtkplacesview.c:1633
+#: gtk/gtkplacesview.c:1632
 msgid "_Connect"
 msgstr "_Σύνδεση"
 
-#: gtk/gtkplacesview.c:1798
+#: gtk/gtkplacesview.c:1797
 msgid "Unable to get remote server location"
 msgstr "Αδύνατη η λήψη της θέσης του απομακρυσμένου διακομιστή"
 
-#: gtk/gtkplacesview.c:1935 gtk/gtkplacesview.c:1944
+#: gtk/gtkplacesview.c:1934 gtk/gtkplacesview.c:1943
 msgid "Networks"
 msgstr "Δίκτυα"
 
-#: gtk/gtkplacesview.c:1935 gtk/gtkplacesview.c:1944
+#: gtk/gtkplacesview.c:1934 gtk/gtkplacesview.c:1943
 msgid "On This Computer"
 msgstr "Σε αυτό τον υπολογιστή"
 
@@ -3568,23 +3568,23 @@ msgstr "Πέρασμα με δύο δάχτυλα αριστερά"
 msgid "Two finger swipe right"
 msgstr "Πέρασμα με δύο δάχτυλα δεξιά"
 
-#: gtk/gtkshortcutswindow.c:859
+#: gtk/gtkshortcutswindow.c:860
 msgid "Shortcuts"
 msgstr "Συντομεύσεις"
 
-#: gtk/gtkshortcutswindow.c:864
+#: gtk/gtkshortcutswindow.c:865
 msgid "Search Results"
 msgstr "Αποτελέσματα αναζήτησης"
 
-#: gtk/gtkshortcutswindow.c:918
+#: gtk/gtkshortcutswindow.c:919
 msgid "Search Shortcuts"
 msgstr "Συντομεύσεις αναζήτησης"
 
-#: gtk/gtkshortcutswindow.c:983 gtk/ui/gtkfilechooserwidget.ui:310
+#: gtk/gtkshortcutswindow.c:984 gtk/ui/gtkfilechooserwidget.ui:310
 msgid "No Results Found"
 msgstr "Δε βρέθηκαν αποτελέσματα"
 
-#: gtk/gtkshortcutswindow.c:990 gtk/ui/gtkfilechooserwidget.ui:324
+#: gtk/gtkshortcutswindow.c:991 gtk/ui/gtkfilechooserwidget.ui:324
 #: gtk/ui/gtkplacesview.ui:181
 msgid "Try a different search"
 msgstr "Δοκιμάστε μια διαφορετική αναζήτηση"
@@ -3792,12 +3792,24 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:12312
+#: gtk/gtkwindow.c:9038
+msgid "Move"
+msgstr "Μετακίνηση"
+
+#: gtk/gtkwindow.c:9046
+msgid "Resize"
+msgstr "Αλλαγή μεγέθους"
+
+#: gtk/gtkwindow.c:9077
+msgid "Always on Top"
+msgstr "Πάντα στην κορυφή"
+
+#: gtk/gtkwindow.c:12541
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Θέλετε να χρησιμοποιήσετε τον επόπτη GTK+;"
 
-#: gtk/gtkwindow.c:12314
+#: gtk/gtkwindow.c:12543
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3808,7 +3820,7 @@ msgstr ""
 "εξερευνήσετε και να τροποποιήσετε κάθε εφαρμογή GTK+. Χρησιμοποιώντας το "
 "μπορεί να προκαλέσετε την κατάρρευση της εφαρμογής."
 
-#: gtk/gtkwindow.c:12319
+#: gtk/gtkwindow.c:12548
 msgid "Don't show this message again"
 msgstr "Να μην εμφανιστεί αυτό το μήνυμα ξανά"
 
@@ -3928,19 +3940,16 @@ msgid "None"
 msgstr "Kανένα"
 
 #: gtk/inspector/gestures.c:130
-#, fuzzy
 msgctxt "event phase"
 msgid "Capture"
 msgstr "Λήψη"
 
 #: gtk/inspector/gestures.c:131
-#, fuzzy
 msgctxt "event phase"
 msgid "Bubble"
 msgstr "Bubble"
 
 #: gtk/inspector/gestures.c:132
-#, fuzzy
 msgctxt "event phase"
 msgid "Target"
 msgstr "Στόχος"
@@ -4013,10 +4022,8 @@ msgid "Clip area"
 msgstr "Περιοχή αποσπάσματος"
 
 #: gtk/inspector/misc-info.ui:430
-#, fuzzy
-#| msgid "Frame count"
 msgid "Frame Clock"
-msgstr "Πλήθος καρέ"
+msgstr "Λεπτομέρειες καρέ"
 
 #: gtk/inspector/misc-info.ui:475
 msgid "Tick callback"
@@ -4261,19 +4268,19 @@ msgstr "Άθροισμα"
 msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
 msgstr "Ενεργοποίηση στατιστικών με GOBJECT_DEBUG=instance-count"
 
-#: gtk/inspector/visual.c:310 gtk/inspector/visual.c:325
+#: gtk/inspector/visual.c:319 gtk/inspector/visual.c:334
 msgid "Theme is hardcoded by GTK_THEME"
 msgstr "Το θέμα είναι προκαθορισμένο από το GTK_THEME"
 
-#: gtk/inspector/visual.c:520
+#: gtk/inspector/visual.c:529
 msgid "Backend does not support window scaling"
 msgstr "Το σύστημα υποστήριξης δεν υποστηρίζει εστίαση παραθύρου"
 
-#: gtk/inspector/visual.c:559
+#: gtk/inspector/visual.c:568
 msgid "Setting is hardcoded by GTK_TEST_TOUCHSCREEN"
 msgstr "Η ρύθμιση είναι προκαθορισμένη από το GTK_TEST_TOUCHSCREEN"
 
-#: gtk/inspector/visual.c:624
+#: gtk/inspector/visual.c:633
 msgid ""
 "Not settable at runtime.\n"
 "Use GDK_GL=always or GDK_GL=disable instead"
@@ -4281,8 +4288,8 @@ msgstr ""
 "Δεν μπορεί να οριστεί στο περιβάλλον εκτέλεσης.\n"
 "Χρησιμοποιήστε GDK_GL=always ή GDK_GL=disable"
 
-#: gtk/inspector/visual.c:638 gtk/inspector/visual.c:639
-#: gtk/inspector/visual.c:640
+#: gtk/inspector/visual.c:647 gtk/inspector/visual.c:648
+#: gtk/inspector/visual.c:649
 msgid "GL rendering is disabled"
 msgstr "Η απεικόνιση GL είναι απενεργοποιημένη"
 
@@ -7056,12 +7063,6 @@ msgstr "Εκτύπωση σε δοκιμαστικό εκτυπωτή"
 
 #~ msgid "Unmaximize"
 #~ msgstr "Aπομεγιστοποίηση"
-
-#~ msgid "Move"
-#~ msgstr "Μετακίνηση"
-
-#~ msgid "Resize"
-#~ msgstr "Αλλαγή μεγέθους"
 
 #~ msgid "Always on Visible Workspace"
 #~ msgstr "Πάντοτε σε ορατό χώρο εργασίας"
