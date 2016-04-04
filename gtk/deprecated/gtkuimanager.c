@@ -3199,44 +3199,6 @@ mark_node_dirty (GNode *node)
     NODE_INFO (p)->dirty = TRUE;  
 }
 
-static const gchar *
-open_tag_format (NodeType type)
-{
-  switch (type)
-    {
-    case NODE_TYPE_UNDECIDED: return "%*s<UNDECIDED"; 
-    case NODE_TYPE_ROOT: return "%*s<ui"; 
-    case NODE_TYPE_MENUBAR: return "%*s<menubar";
-    case NODE_TYPE_MENU: return "%*s<menu";
-    case NODE_TYPE_TOOLBAR: return "%*s<toolbar";
-    case NODE_TYPE_MENU_PLACEHOLDER:
-    case NODE_TYPE_TOOLBAR_PLACEHOLDER: return "%*s<placeholder";
-    case NODE_TYPE_POPUP: return "%*s<popup";
-    case NODE_TYPE_MENUITEM: return "%*s<menuitem";
-    case NODE_TYPE_TOOLITEM: return "%*s<toolitem";
-    case NODE_TYPE_SEPARATOR: return "%*s<separator";
-    case NODE_TYPE_ACCELERATOR: return "%*s<accelerator";
-    default: return NULL;
-    }
-}
-
-static const gchar *
-close_tag_format (NodeType type)
-{
-  switch (type)
-    {
-    case NODE_TYPE_UNDECIDED: return "%*s</UNDECIDED>\n";
-    case NODE_TYPE_ROOT: return "%*s</ui>\n";
-    case NODE_TYPE_MENUBAR: return "%*s</menubar>\n";
-    case NODE_TYPE_MENU: return "%*s</menu>\n";
-    case NODE_TYPE_TOOLBAR: return "%*s</toolbar>\n";
-    case NODE_TYPE_MENU_PLACEHOLDER:
-    case NODE_TYPE_TOOLBAR_PLACEHOLDER: return "%*s</placeholder>\n";
-    case NODE_TYPE_POPUP: return "%*s</popup>\n";
-    default: return NULL;
-    }
-}
-
 static void
 print_node (GtkUIManager *manager,
 	    GNode        *node,
@@ -3245,15 +3207,48 @@ print_node (GtkUIManager *manager,
 {
   Node  *mnode;
   GNode *child;
-  const gchar *open_fmt;
-  const gchar *close_fmt;
 
   mnode = node->data;
 
-  open_fmt = open_tag_format (mnode->type);
-  close_fmt = close_tag_format (mnode->type);
-
-  g_string_append_printf (buffer, open_fmt, indent_level, "");
+  switch (mnode->type)
+    {
+    case NODE_TYPE_UNDECIDED:
+      g_string_append_printf (buffer, "%*s<UNDECIDED", indent_level, "");
+      break;
+    case NODE_TYPE_ROOT:
+      g_string_append_printf (buffer, "%*s<ui", indent_level, "");
+      break;
+    case NODE_TYPE_MENUBAR:
+      g_string_append_printf (buffer, "%*s<menubar", indent_level, "");
+      break;
+    case NODE_TYPE_MENU:
+      g_string_append_printf (buffer, "%*s<menu", indent_level, "");
+      break;
+    case NODE_TYPE_TOOLBAR:
+      g_string_append_printf (buffer, "%*s<toolbar", indent_level, "");
+      break;
+    case NODE_TYPE_MENU_PLACEHOLDER:
+    case NODE_TYPE_TOOLBAR_PLACEHOLDER:
+      g_string_append_printf (buffer, "%*s<placeholder", indent_level, "");
+      break;
+    case NODE_TYPE_POPUP:
+      g_string_append_printf (buffer, "%*s<popup", indent_level, "");
+      break;
+    case NODE_TYPE_MENUITEM:
+      g_string_append_printf (buffer, "%*s<menuitem", indent_level, "");
+      break;
+    case NODE_TYPE_TOOLITEM:
+      g_string_append_printf (buffer, "%*s<toolitem", indent_level, "");
+      break;
+    case NODE_TYPE_SEPARATOR:
+      g_string_append_printf (buffer, "%*s<separator", indent_level, "");
+      break;
+    case NODE_TYPE_ACCELERATOR:
+      g_string_append_printf (buffer, "%*s<accelerator", indent_level, "");
+      break;
+    default:
+      ;; /* Nothing */
+    }
 
   if (mnode->type != NODE_TYPE_ROOT)
     {
@@ -3265,13 +3260,53 @@ print_node (GtkUIManager *manager,
 				g_quark_to_string (mnode->action_name));
     }
 
-  g_string_append (buffer, close_fmt ? ">\n" : "/>\n");
+  switch (mnode->type)
+    {
+    case NODE_TYPE_UNDECIDED:
+    case NODE_TYPE_ROOT:
+    case NODE_TYPE_MENUBAR:
+    case NODE_TYPE_MENU:
+    case NODE_TYPE_TOOLBAR:
+    case NODE_TYPE_MENU_PLACEHOLDER:
+    case NODE_TYPE_TOOLBAR_PLACEHOLDER:
+    case NODE_TYPE_POPUP:
+      g_string_append (buffer, ">\n");
+      break;
+    default:
+      g_string_append (buffer, "/>\n");
+      break;
+    }
 
   for (child = node->children; child != NULL; child = child->next)
     print_node (manager, child, indent_level + 2, buffer);
 
-  if (close_fmt)
-    g_string_append_printf (buffer, close_fmt, indent_level, "");
+  switch (mnode->type)
+    {
+    case NODE_TYPE_UNDECIDED:
+      g_string_append_printf (buffer, "%*s</UNDECIDED>\n", indent_level, "");
+      break;
+    case NODE_TYPE_ROOT:
+      g_string_append_printf (buffer, "%*s</ui>\n", indent_level, "");
+      break;
+    case NODE_TYPE_MENUBAR:
+      g_string_append_printf (buffer, "%*s</menubar>\n", indent_level, "");
+      break;
+    case NODE_TYPE_MENU:
+      g_string_append_printf (buffer, "%*s</menu>\n", indent_level, "");
+      break;
+    case NODE_TYPE_TOOLBAR:
+      g_string_append_printf (buffer, "%*s</toolbar>\n", indent_level, "");
+      break;
+    case NODE_TYPE_MENU_PLACEHOLDER:
+    case NODE_TYPE_TOOLBAR_PLACEHOLDER:
+      g_string_append_printf (buffer, "%*s</placeholder>\n", indent_level, "");
+      break;
+    case NODE_TYPE_POPUP:
+      g_string_append_printf (buffer, "%*s</popup>\n", indent_level, "");
+      break;
+    default:
+      ;; /* Nothing */
+    }
 }
 
 static gboolean
