@@ -1861,26 +1861,6 @@ static const char * const printer_messages[] =
     "offline",
     "other"
   };
-/* Our translatable versions of the printer messages */
-static const char * printer_strings[] =
-  {
-    N_("Printer “%s” is low on toner."),
-    N_("Printer “%s” has no toner left."),
-    /* Translators: "Developer" like on photo development context */
-    N_("Printer “%s” is low on developer."),
-    /* Translators: "Developer" like on photo development context */
-    N_("Printer “%s” is out of developer."),
-    /* Translators: "marker" is one color bin of the printer */
-    N_("Printer “%s” is low on at least one marker supply."),
-    /* Translators: "marker" is one color bin of the printer */
-    N_("Printer “%s” is out of at least one marker supply."),
-    N_("The cover is open on printer “%s”."),
-    N_("The door is open on printer “%s”."),
-    N_("Printer “%s” is low on paper."),
-    N_("Printer “%s” is out of paper."),
-    N_("Printer “%s” is currently offline."),
-    N_("There is a problem on printer “%s”.")
-  };
 
 /* Attributes we're interested in for printers */
 static const char * const printer_attrs[] =
@@ -2508,6 +2488,73 @@ set_printer_icon_name_from_info (GtkPrinter       *printer,
     gtk_printer_set_icon_name (printer, "printer");
 }
 
+static gchar *
+get_reason_msg_desc (guint i,
+                     const gchar *printer_name)
+{
+  gchar *reason_msg_desc;
+
+  switch (i)
+    {
+      case 0:
+        reason_msg_desc = g_strdup_printf (_("Printer “%s” is low on toner."),
+                                           printer_name);
+        break;
+      case 1:
+        reason_msg_desc = g_strdup_printf (_("Printer “%s” has no toner left."),
+                                           printer_name);
+        break;
+      case 2:
+        /* Translators: "Developer" like on photo development context */
+        reason_msg_desc = g_strdup_printf (_("Printer “%s” is low on developer."),
+                                           printer_name);
+        break;
+      case 3:
+        /* Translators: "Developer" like on photo development context */
+        reason_msg_desc = g_strdup_printf (_("Printer “%s” is low on developer."),
+                                           printer_name);
+        break;
+      case 4:
+        /* Translators: "marker" is one color bin of the printer */
+        reason_msg_desc = g_strdup_printf (_("Printer “%s” is low on at least one marker supply."),
+                                           printer_name);
+        break;
+      case 5:
+        /* Translators: "marker" is one color bin of the printer */
+        reason_msg_desc = g_strdup_printf (_("Printer “%s” is out of at least one marker supply."),
+                                           printer_name);
+        break;
+      case 6:
+        reason_msg_desc = g_strdup_printf (_("The cover is open on printer “%s”."),
+                                           printer_name);
+        break;
+      case 7:
+        reason_msg_desc = g_strdup_printf (_("The door is open on printer “%s”."),
+                                           printer_name);
+        break;
+      case 8:
+        reason_msg_desc = g_strdup_printf (_("Printer “%s” is low on paper."),
+                                           printer_name);
+        break;
+      case 9:
+        reason_msg_desc = g_strdup_printf (_("Printer “%s” is out of paper."),
+                                           printer_name);
+        break;
+      case 10:
+        reason_msg_desc = g_strdup_printf (_("Printer “%s” is currently offline."),
+                                           printer_name);
+        break;
+      case 11:
+        reason_msg_desc = g_strdup_printf (_("There is a problem on printer “%s”."),
+                                           printer_name);
+        break;
+      default:
+        g_assert_not_reached ();
+    }
+
+  return reason_msg_desc;
+}
+
 static void
 set_info_state_message (PrinterSetupInfo *info)
 {
@@ -2544,8 +2591,7 @@ set_info_state_message (PrinterSetupInfo *info)
           if (strncmp (info->reason_msg, printer_messages[i],
                        strlen (printer_messages[i])) == 0)
             {
-              reason_msg_desc = g_strdup_printf (printer_strings[i],
-                                                 info->printer_name);
+              reason_msg_desc = get_reason_msg_desc (i, info->printer_name);
               found = TRUE;
               break;
             }
