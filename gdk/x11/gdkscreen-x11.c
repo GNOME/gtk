@@ -525,6 +525,7 @@ init_randr15 (GdkScreen *screen, gboolean *changed)
       GdkX11Monitor *monitor;
       GdkRectangle geometry;
       char *name;
+      int refresh_rate = 0;
 
       gdk_x11_display_error_trap_push (display);
       output_info = XRRGetOutputInfo (x11_screen->xdisplay, resources, output);
@@ -545,6 +546,24 @@ init_randr15 (GdkScreen *screen, gboolean *changed)
 
       if (first_output == None)
         first_output = output;
+
+      if (output_info->crtc)
+        {
+          XRRCrtcInfo *crtc = XRRGetCrtcInfo (x11_screen->xdisplay, resources, output_info->crtc);
+          int j;
+
+          for (j = 0; j < resources->nmode; j++)
+            {
+              XRRModeInfo *xmode = &resources->modes[j];
+              if (xmode->id == crtc->mode)
+                {
+                  refresh_rate = (1000 * xmode->dotClock) / (xmode->hTotal *xmode->vTotal);
+                  break;
+                }
+            }
+
+          XRRFreeCrtcInfo (crtc);
+        }
 
       monitor = find_monitor_by_output (x11_screen, output);
       if (monitor)
@@ -582,6 +601,7 @@ init_randr15 (GdkScreen *screen, gboolean *changed)
                                      rr_monitors[i].mheight);
       gdk_monitor_set_subpixel_layout (GDK_MONITOR (monitor),
                                        translate_subpixel_order (output_info->subpixel_order));
+      gdk_monitor_set_refresh_rate (GDK_MONITOR (monitor), refresh_rate);
       gdk_monitor_set_model (GDK_MONITOR (monitor), name);
       g_free (name);
 
@@ -708,6 +728,18 @@ init_randr13 (GdkScreen *screen, gboolean *changed)
 	  XRRCrtcInfo *crtc = XRRGetCrtcInfo (x11_screen->xdisplay, resources, output_info->crtc);
           char *name;
           GdkRectangle geometry;
+          int j;
+          int refresh_rate = 0;
+
+          for (j = 0; j < resources->nmode; j++)
+            {
+              XRRModeInfo *xmode = &resources->modes[j];
+              if (xmode->id == crtc->mode)
+                {
+                  refresh_rate = (1000 * xmode->dotClock) / (xmode->hTotal *xmode->vTotal);
+                  break;
+                }
+            }
 
           monitor = find_monitor_by_output (x11_screen, output);
           if (monitor)
@@ -742,6 +774,7 @@ init_randr13 (GdkScreen *screen, gboolean *changed)
                                          output_info->mm_height);
           gdk_monitor_set_subpixel_layout (GDK_MONITOR (monitor),
                                            translate_subpixel_order (output_info->subpixel_order));
+          gdk_monitor_set_refresh_rate (GDK_MONITOR (monitor), refresh_rate);
           gdk_monitor_set_model (GDK_MONITOR (monitor), name);
 
           g_free (name);
