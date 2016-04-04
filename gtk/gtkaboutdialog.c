@@ -108,11 +108,6 @@ typedef struct
   const gchar *url;
 } LicenseInfo;
 
-/* Translators: this is the license preamble; the string at the end
- * contains the name of the license as link text.
- */
-static const gchar *gtk_license_preamble = N_("This program comes with absolutely no warranty.\nSee the <a href=\"%s\">%s</a> for details.");
-
 /* LicenseInfo for each GtkLicense type; keep in the same order as the enumeration */
 static const LicenseInfo gtk_license_info [] = {
   { N_("License"), NULL },
@@ -2488,7 +2483,10 @@ gtk_about_dialog_set_license_type (GtkAboutDialog *about,
             url = priv->website_url;
 
           str = g_string_sized_new (256);
-          g_string_append_printf (str, _(gtk_license_preamble), url, name);
+          /* Translators: this is the license preamble; the string at the end
+           * contains the name of the license as link text.
+           */
+          g_string_append_printf (str, _("This program comes with absolutely no warranty.\nSee the <a href=\"%s\">%s</a> for details."), url, name);
 
           g_free (priv->license);
           priv->license = g_string_free (str, FALSE);
