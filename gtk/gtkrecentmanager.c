@@ -230,16 +230,6 @@ static GtkRecentManager *recent_manager_singleton = NULL;
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkRecentManager, gtk_recent_manager, G_TYPE_OBJECT)
 
-static void
-filename_warning (const gchar *format,
-                  const gchar *filename,
-                  const gchar *message)
-{
-  gchar *utf8 = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
-  g_warning (format, utf8 ? utf8 : "(invalid filename)", message);
-  g_free (utf8);
-}
-
 /* Test of haystack has the needle prefix, comparing case
  * insensitive. haystack may be UTF-8, but needle must
  * contain only lowercase ascii.
@@ -501,17 +491,21 @@ gtk_recent_manager_real_changed (GtkRecentManager *manager)
           g_bookmark_file_to_file (priv->recent_items, priv->filename, &write_error);
           if (write_error)
             {
-              filename_warning ("Attempting to store changes into '%s', but failed: %s",
-                                priv->filename,
-                                write_error->message);
+              gchar *utf8 = g_filename_to_utf8 (priv->filename, -1, NULL, NULL, NULL);
+              g_warning ("Attempting to store changes into '%s', but failed: %s",
+                         utf8 ? utf8 : "(invalid filename)",
+                         write_error->message);
+              g_free (utf8);
               g_error_free (write_error);
             }
 
           if (g_chmod (priv->filename, 0600) < 0)
             {
-              filename_warning ("Attempting to set the permissions of '%s', but failed: %s",
-                                priv->filename,
-                                g_strerror (errno));
+              gchar *utf8 = g_filename_to_utf8 (priv->filename, -1, NULL, NULL, NULL);
+              g_warning ("Attempting to set the permissions of '%s', but failed: %s",
+                         utf8 ? utf8 : "(invalid filename)",
+                         g_strerror (errno));
+              g_free (utf8);
             }
         }
 
@@ -629,11 +623,13 @@ gtk_recent_manager_set_filename (GtkRecentManager *manager,
       priv->monitor = g_file_monitor_file (file, G_FILE_MONITOR_NONE, NULL, &error);
       if (error)
         {
-          filename_warning ("Unable to monitor '%s': %s\n"
-                            "The GtkRecentManager will not update its contents "
-                            "if the file is changed from other instances",
-                            priv->filename,
-                            error->message);
+          gchar *utf8 = g_filename_to_utf8 (priv->filename, -1, NULL, NULL, NULL);
+          g_warning ("Unable to monitor '%s': %s\n"
+                     "The GtkRecentManager will not update its contents "
+                     "if the file is changed from other instances",
+                     utf8 ? utf8 : "(invalid filename)",
+                     error->message);
+          g_free (utf8);
           g_error_free (error);
         }
       else
@@ -682,10 +678,14 @@ build_recent_items_list (GtkRecentManager *manager)
            */
           if (read_error->domain == G_FILE_ERROR &&
             read_error->code != G_FILE_ERROR_NOENT)
-            filename_warning ("Attempting to read the recently used resources "
-                              "file at '%s', but the parser failed: %s.",
-                              priv->filename,
-                              read_error->message);
+            {
+              gchar *utf8 = g_filename_to_utf8 (priv->filename, -1, NULL, NULL, NULL);
+              g_warning ("Attempting to read the recently used resources "
+                         "file at '%s', but the parser failed: %s.",
+                         utf8 ? utf8 : "(invalid filename)",
+                         read_error->message);
+              g_free (utf8);
+            }
 
           g_bookmark_file_free (priv->recent_items);
           priv->recent_items = NULL;
