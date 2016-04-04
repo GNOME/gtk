@@ -446,6 +446,12 @@ gtk_css_ease_value_token_parse (GtkCssTokenSource *source)
     }
 }
 
+static inline double
+cubic (double a, double b, double c, double t)
+{
+  return ((a * t + b) * t + c) * t;
+}
+
 double
 _gtk_css_ease_value_transform (const GtkCssValue *ease,
                                double             progress)
@@ -462,7 +468,16 @@ _gtk_css_ease_value_transform (const GtkCssValue *ease,
     case GTK_CSS_EASE_CUBIC_BEZIER:
       {
         static const double epsilon = 0.00001;
+        double ax, bx, cx;
+        double ay, by, cy;
         double tmin, t, tmax;
+
+        cx = 3.0 * ease->u.cubic.x1;
+        bx = 3.0 * (ease->u.cubic.x2 - ease->u.cubic.x1) - cx;
+        ax = 1.0 - cx - bx;
+        cy = 3.0 * ease->u.cubic.y1;
+        by = 3.0 * (ease->u.cubic.y2 - ease->u.cubic.y1) - cy;
+        ay = 1.0 - cy - by;
 
         tmin = 0.0;
         tmax = 1.0;
@@ -471,9 +486,7 @@ _gtk_css_ease_value_transform (const GtkCssValue *ease,
         while (tmin < tmax)
           {
              double sample;
-             sample = (((1.0 + 3 * ease->u.cubic.x1 - 3 * ease->u.cubic.x2) * t
-                       +      -6 * ease->u.cubic.x1 + 3 * ease->u.cubic.x2) * t
-                       +       3 * ease->u.cubic.x1                       ) * t;
+             sample = cubic (ax, bx, cx, t);
              if (fabs(sample - progress) < epsilon)
                break;
 
@@ -484,9 +497,7 @@ _gtk_css_ease_value_transform (const GtkCssValue *ease,
              t = (tmax + tmin) * .5;
           }
 
-        return (((1.0 + 3 * ease->u.cubic.y1 - 3 * ease->u.cubic.y2) * t
-                +      -6 * ease->u.cubic.y1 + 3 * ease->u.cubic.y2) * t
-                +       3 * ease->u.cubic.y1                       ) * t;
+        return cubic (ay, by, cy, t);
       }
     case GTK_CSS_EASE_STEPS:
       progress *= ease->u.steps.steps;
