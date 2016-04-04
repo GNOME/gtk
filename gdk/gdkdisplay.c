@@ -2502,6 +2502,93 @@ gdk_display_get_primary_monitor (GdkDisplay *display)
   return NULL;
 }
 
+GdkMonitor *
+gdk_display_get_monitor_at_point (GdkDisplay *display,
+                                  int         x,
+                                  int         y)
+{
+  GdkMonitor **monitors;
+  GdkMonitor *nearest;
+  int nearest_dist = G_MAXINT;
+  int n_monitors, i;
+
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+
+  monitors = gdk_display_get_monitors (display, &n_monitors);
+  for (i = 0; i < n_monitors; i++)
+    {
+      GdkRectangle geometry;
+      int dist_x, dist_y, dist;
+
+      gdk_monitor_get_geometry (monitors[i], &geometry);
+
+      if (x < geometry.x)
+        dist_x = geometry.x - x;
+      else if (geometry.x + geometry.width <= x)
+        dist_x = x - (geometry.x + geometry.width) + 1;
+      else
+        dist_x = 0;
+
+      if (y < geometry.y)
+        dist_y = geometry.y - y;
+      else if (geometry.y + geometry.height <= y)
+        dist_y = y - (geometry.y + geometry.height) + 1;
+      else
+        dist_y = 0;
+
+      dist = dist_x + dist_y;
+      if (dist < nearest_dist)
+        {
+          nearest_dist = dist;
+          nearest = monitors[i];
+        }
+
+      if (nearest_dist == 0)
+        break;
+    }
+
+  return nearest;
+}
+
+GdkMonitor *
+gdk_display_get_monitor_at_window (GdkDisplay *display,
+                                   GdkWindow  *window)
+{
+  GdkRectangle win;
+  GdkMonitor **monitors;
+  int n_monitors, i;
+  int area = 0;
+  GdkMonitor *best = NULL;
+
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+
+  gdk_window_get_geometry (window, &win.x, &win.y, &win.width, &win.height);
+  gdk_window_get_origin (window, &win.x, &win.y);
+
+  monitors = gdk_display_get_monitors (display, &n_monitors);
+  for (i = 0; i < n_monitors; i++)
+    {
+      GdkRectangle mon, intersect;
+      int overlap;
+
+      gdk_monitor_get_geometry (monitors[i], &mon);
+      gdk_rectangle_intersect (&win, &mon, &intersect);
+      overlap = intersect.width *intersect.height;
+      if (overlap > area)
+        {
+          area = overlap;
+          best = monitors[i];
+        }
+    }
+
+  if (best)
+    return best;
+
+  return gdk_display_get_monitor_at_point (display,
+                                           win.x + win.width / 2,
+                                           win.y + win.height / 2);
+}
+
 void
 gdk_display_monitor_added (GdkDisplay *display,
                            GdkMonitor *monitor)
