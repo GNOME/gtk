@@ -27,7 +27,6 @@
 
 /*
  * TODO:
- * - workarea
  * - monitor type (laptop, projector, ...)
  * - consider vfuncs instead of baseclass storage
  * - provide a persistent id (if the backend allows)
