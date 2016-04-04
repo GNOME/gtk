@@ -751,20 +751,11 @@ error_message (GtkFileChooserWidget *impl,
 static void
 error_dialog (GtkFileChooserWidget *impl,
               const char            *msg,
-              GFile                 *file,
               GError                *error)
 {
   if (error)
     {
-      char *uri = NULL;
-      char *text;
-
-      if (file)
-        uri = g_file_get_uri (file);
-      text = g_strdup_printf (msg, uri);
-      error_message (impl, text, error->message);
-      g_free (text);
-      g_free (uri);
+      error_message (impl, msg, error->message);
       g_error_free (error);
     }
 }
@@ -777,7 +768,7 @@ error_creating_folder_dialog (GtkFileChooserWidget *impl,
 {
   error_dialog (impl, 
                 _("The folder could not be created"), 
-                file, error);
+                error);
 }
 
 /* Shows an error about not being able to create a folder because a file with
@@ -792,7 +783,7 @@ error_creating_folder_over_existing_file_dialog (GtkFileChooserWidget *impl,
                 _("The folder could not be created, as a file with the same "
                   "name already exists.  Try using a different name for the "
                   "folder, or rename the file first."),
-                file, error);
+                error);
 }
 
 static void
@@ -800,14 +791,17 @@ error_with_file_under_nonfolder (GtkFileChooserWidget *impl,
                                  GFile *parent_file)
 {
   GError *error;
+  char *uri, *msg;
 
   error = NULL;
   g_set_error_literal (&error, G_IO_ERROR, G_IO_ERROR_NOT_DIRECTORY,
                        _("You need to choose a valid filename."));
 
-  error_dialog (impl,
-                _("Cannot create a file under %s as it is not a folder"),
-                parent_file, error);
+  uri = g_file_get_uri (parent_file);
+  msg = g_strdup_printf (_("Cannot create a file under %s as it is not a folder"), uri);
+  g_free (uri);
+  error_dialog (impl, msg, error);
+  g_free (msg);
 }
 
 static void
@@ -834,8 +828,7 @@ static void
 error_building_filename_dialog (GtkFileChooserWidget *impl,
                                 GError                *error)
 {
-  error_dialog (impl, _("Invalid file name"), 
-                NULL, error);
+  error_dialog (impl, _("Invalid file name"), error);
 }
 
 /* Shows an error dialog when we cannot switch to a folder */
@@ -844,8 +837,7 @@ error_changing_folder_dialog (GtkFileChooserWidget *impl,
                               GFile                 *file,
                               GError                *error)
 {
-  error_dialog (impl, _("The folder contents could not be displayed"),
-                file, error);
+  error_dialog (impl, _("The folder contents could not be displayed"), error);
 }
 
 static void
@@ -853,7 +845,7 @@ error_deleting_file (GtkFileChooserWidget *impl,
                      GFile                *file,
                      GError               *error)
 {
-  error_dialog (impl, _("The file could not be deleted"), file, error);
+  error_dialog (impl, _("The file could not be deleted"), error);
 }
 
 static void
@@ -861,7 +853,7 @@ error_trashing_file (GtkFileChooserWidget *impl,
                      GFile                *file,
                      GError               *error)
 {
-  error_dialog (impl, _("The file could not be moved to the Trash"), file, error);
+  error_dialog (impl, _("The file could not be moved to the Trash"), error);
 }
 
 /* Changes folders, displaying an error dialog if this fails */
@@ -1595,7 +1587,7 @@ rename_file_rename_clicked (GtkButton            *button,
         {
           if (!g_file_move (priv->rename_file_source_file, child, G_FILE_COPY_NONE,
                             NULL, NULL, NULL, &error))
-            error_dialog (impl, _("The file could not be renamed"), child, error);
+            error_dialog (impl, _("The file could not be renamed"), error);
 
           g_object_unref (child);
         }
@@ -1908,7 +1900,7 @@ error_selecting_dragged_file_dialog (GtkFileChooserWidget *impl,
 {
   error_dialog (impl,
                 _("Could not select file"),
-                file, error);
+                error);
 }
 
 static void
