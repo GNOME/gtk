@@ -10,6 +10,7 @@ gdk_drag_context_get_type
 gdk_frame_clock_get_type
 gdk_gl_context_get_type
 gdk_keymap_get_type
+gdk_monitor_get_type
 gdk_screen_get_type
 gdk_seat_get_type
 gdk_visual_get_type
