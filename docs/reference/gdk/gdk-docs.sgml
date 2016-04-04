@@ -106,6 +106,10 @@
     <title>Index of new symbols in 3.20</title>
     <xi:include href="xml/api-index-3.20.xml"><xi:fallback /></xi:include>
   </index>
+  <index id="api-index-3-22" role="3.22">
+    <title>Index of new symbols in 3.22</title>
+    <xi:include href="xml/api-index-3.22.xml"><xi:fallback /></xi:include>
+  </index>
 
   <xi:include href="xml/annotation-glossary.xml"><xi:fallback /></xi:include>
 
