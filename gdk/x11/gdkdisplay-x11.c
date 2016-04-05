@@ -180,6 +180,7 @@ G_DEFINE_TYPE_WITH_CODE (GdkX11Display, gdk_x11_display, GDK_TYPE_DISPLAY,
 static void
 gdk_x11_display_init (GdkX11Display *display)
 {
+  display->monitors = g_ptr_array_new_with_free_func (g_object_unref);
 }
 
 static void
@@ -1903,6 +1904,8 @@ gdk_x11_display_finalize (GObject *object)
   g_object_unref (display_x11->screen);
   g_list_free_full (display_x11->screens, g_object_unref);
 
+  g_ptr_array_free (display_x11->monitors, TRUE);
+
   g_free (display_x11->startup_notification_id);
 
   /* X ID hashtable */
@@ -2903,26 +2906,34 @@ gdk_x11_display_get_default_seat (GdkDisplay *display)
   return NULL;
 }
 
-static GdkMonitor **
-gdk_x11_display_get_monitors (GdkDisplay *display,
-                              int        *n_monitors)
+static int
+gdk_x11_display_get_n_monitors (GdkDisplay *display)
 {
-  GdkX11Screen *screen;
+  GdkX11Display *x11_display = GDK_X11_DISPLAY (display);
 
-  screen = GDK_X11_SCREEN (GDK_X11_DISPLAY (display)->screen);
-  *n_monitors = screen->monitors->len;
+  return x11_display->monitors->len;
+}
 
-  return (GdkMonitor **)screen->monitors->pdata;
+
+static GdkMonitor *
+gdk_x11_display_get_monitor (GdkDisplay *display,
+                             int         monitor_num)
+{
+  GdkX11Display *x11_display = GDK_X11_DISPLAY (display);
+
+  if (0 <= monitor_num || monitor_num < x11_display->monitors->len)
+    return (GdkMonitor *)x11_display->monitors->pdata[monitor_num];
+
+  return NULL;
 }
 
 static GdkMonitor *
 gdk_x11_display_get_primary_monitor (GdkDisplay *display)
 {
-  GdkX11Screen *screen;
+  GdkX11Display *x11_display = GDK_X11_DISPLAY (display);
 
-  screen = GDK_X11_SCREEN (GDK_X11_DISPLAY (display)->screen);
-  if (0 <= screen->primary_monitor && screen->primary_monitor < screen->monitors->len)
-    return screen->monitors->pdata[screen->primary_monitor];
+  if (0 <= x11_display->primary_monitor && x11_display->primary_monitor < x11_display->monitors->len)
+    return x11_display->monitors->pdata[x11_display->primary_monitor];
 
   return NULL;
 }
@@ -2983,7 +2994,8 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
 
   display_class->get_default_seat = gdk_x11_display_get_default_seat;
 
-  display_class->get_monitors = gdk_x11_display_get_monitors;
+  display_class->get_n_monitors = gdk_x11_display_get_n_monitors;
+  display_class->get_monitor = gdk_x11_display_get_monitor;
   display_class->get_primary_monitor = gdk_x11_display_get_primary_monitor;
 
   _gdk_x11_windowing_init ();

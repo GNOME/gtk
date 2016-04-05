@@ -42,8 +42,6 @@ struct _GdkX11Screen
   Window xroot_window;
   GdkWindow *root_window;
   gint screen_num;
-  GPtrArray *monitors;
-  gint primary_monitor;
 
   gint width;
   gint height;

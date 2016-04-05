@@ -100,6 +100,9 @@ struct _GdkX11Display
   /* input GdkWindow list */
   GList *input_windows;
 
+  GPtrArray *monitors;
+  int primary_monitor;
+
   /* Startup notification */
   gchar *startup_notification_id;
 

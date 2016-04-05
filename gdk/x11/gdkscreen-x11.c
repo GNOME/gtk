@@ -192,8 +192,6 @@ gdk_x11_screen_finalize (GObject *object)
 
   g_free (x11_screen->window_manager_name);
 
-  g_ptr_array_free (x11_screen->monitors, TRUE);
-  
   G_OBJECT_CLASS (gdk_x11_screen_parent_class)->finalize (object);
 }
 
@@ -215,13 +213,14 @@ gdk_x11_screen_get_monitor_output (GdkScreen *screen,
                                    gint       monitor_num)
 {
   GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
+  GdkX11Display *x11_display = GDK_X11_DISPLAY (x11_screen->display);
   GdkX11Monitor *monitor;
 
   g_return_val_if_fail (GDK_IS_SCREEN (screen), None);
   g_return_val_if_fail (monitor_num >= 0, None);
-  g_return_val_if_fail (monitor_num < x11_screen->monitors->len, None);
+  g_return_val_if_fail (monitor_num < x11_display->monitors->len, None);
 
-  monitor = x11_screen->monitors->pdata[monitor_num];
+  monitor = x11_display->monitors->pdata[monitor_num];
   return monitor->output;
 }
 
@@ -452,13 +451,13 @@ check_is_composited (GdkDisplay *display,
 }
 
 static GdkX11Monitor *
-find_monitor_by_output (GdkX11Screen *screen, RROutput output)
+find_monitor_by_output (GdkX11Display *x11_display, RROutput output)
 {
   int i;
 
-  for (i = 0; i < screen->monitors->len; i++)
+  for (i = 0; i < x11_display->monitors->len; i++)
     {
-      GdkX11Monitor *monitor = screen->monitors->pdata[i];
+      GdkX11Monitor *monitor = x11_display->monitors->pdata[i];
       if (monitor->output == output)
         return monitor;
     }
@@ -485,7 +484,7 @@ init_randr15 (GdkScreen *screen, gboolean *changed)
 {
 #ifdef HAVE_RANDR15
   GdkDisplay *display = gdk_screen_get_display (screen);
-  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
+  GdkX11Display *x11_display = GDK_X11_DISPLAY (display);
   GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
   XRRScreenResources *resources;
   RROutput primary_output = None;
@@ -496,7 +495,7 @@ init_randr15 (GdkScreen *screen, gboolean *changed)
   int num_rr_monitors;
   int old_primary;
 
-  if (!display_x11->have_randr15)
+  if (!x11_display->have_randr15)
     return FALSE;
 
   resources = XRRGetScreenResourcesCurrent (x11_screen->xdisplay,
@@ -511,9 +510,9 @@ init_randr15 (GdkScreen *screen, gboolean *changed)
   if (!rr_monitors)
     return FALSE;
 
-  for (i = 0; i < x11_screen->monitors->len; i++)
+  for (i = 0; i < x11_display->monitors->len; i++)
     {
-      GdkX11Monitor *monitor = x11_screen->monitors->pdata[i];
+      GdkX11Monitor *monitor = x11_display->monitors->pdata[i];
       monitor->add = FALSE;
       monitor->remove = TRUE;
     }
@@ -566,7 +565,7 @@ init_randr15 (GdkScreen *screen, gboolean *changed)
           XRRFreeCrtcInfo (crtc);
         }
 
-      monitor = find_monitor_by_output (x11_screen, output);
+      monitor = find_monitor_by_output (x11_display, output);
       if (monitor)
         monitor->remove = FALSE;
       else
@@ -576,7 +575,7 @@ init_randr15 (GdkScreen *screen, gboolean *changed)
                                   NULL);
           monitor->output = output;
           monitor->add = TRUE;
-          g_ptr_array_add (x11_screen->monitors, monitor);
+          g_ptr_array_add (x11_display->monitors, monitor);
         }
 
       gdk_monitor_get_geometry (GDK_MONITOR (monitor), &geometry);
@@ -620,19 +619,19 @@ init_randr15 (GdkScreen *screen, gboolean *changed)
   /* non RandR 1.2+ X driver doesn't return any usable multihead data */
   if (randr12_compat)
     {
-      for (i = 0; i < x11_screen->monitors->len; i++)
+      for (i = 0; i < x11_display->monitors->len; i++)
         {
-          GdkX11Monitor *monitor = x11_screen->monitors->pdata[i];
+          GdkX11Monitor *monitor = x11_display->monitors->pdata[i];
           if (monitor->remove)
             gdk_display_monitor_removed (display, GDK_MONITOR (monitor));
         }
-      g_ptr_array_remove_range (x11_screen->monitors, 0, x11_screen->monitors->len);
+      g_ptr_array_remove_range (x11_display->monitors, 0, x11_display->monitors->len);
       return FALSE;
     }
 
-  for (i = x11_screen->monitors->len - 1; i >= 0; i--)
+  for (i = x11_display->monitors->len - 1; i >= 0; i--)
     {
-      GdkX11Monitor *monitor = x11_screen->monitors->pdata[i];
+      GdkX11Monitor *monitor = x11_display->monitors->pdata[i];
       if (monitor->add)
         {
           gdk_display_monitor_added (display, GDK_MONITOR (monitor));
@@ -641,21 +640,21 @@ init_randr15 (GdkScreen *screen, gboolean *changed)
       else if (monitor->remove)
         {
           g_object_ref (monitor);
-          g_ptr_array_remove (x11_screen->monitors, monitor);
+          g_ptr_array_remove (x11_display->monitors, monitor);
           gdk_display_monitor_removed (display, GDK_MONITOR (monitor));
           g_object_unref (monitor);
           *changed = TRUE;
         }
     }
 
-  old_primary = x11_screen->primary_monitor;
-  x11_screen->primary_monitor = 0;
-  for (i = 0; i < x11_screen->monitors->len; ++i)
+  old_primary = x11_display->primary_monitor;
+  x11_display->primary_monitor = 0;
+  for (i = 0; i < x11_display->monitors->len; ++i)
     {
-      GdkX11Monitor *monitor = x11_screen->monitors->pdata[i];
+      GdkX11Monitor *monitor = x11_display->monitors->pdata[i];
       if (monitor->output == primary_output)
         {
-          x11_screen->primary_monitor = i;
+          x11_display->primary_monitor = i;
           break;
         }
 
@@ -663,19 +662,19 @@ init_randr15 (GdkScreen *screen, gboolean *changed)
       if (primary_output == None &&
           g_ascii_strncasecmp (gdk_monitor_get_model (GDK_MONITOR (monitor)), "LVDS", 4) == 0)
         {
-          x11_screen->primary_monitor = i;
+          x11_display->primary_monitor = i;
           break;
         }
 
       /* No primary specified and no LVDS found */
       if (monitor->output == first_output)
-        x11_screen->primary_monitor = i;
+        x11_display->primary_monitor = i;
     }
 
-  if (x11_screen->primary_monitor != old_primary)
+  if (x11_display->primary_monitor != old_primary)
     *changed = TRUE;
 
-  return x11_screen->monitors->len > 0;
+  return x11_display->monitors->len > 0;
 #endif
 
   return FALSE;
@@ -686,7 +685,7 @@ init_randr13 (GdkScreen *screen, gboolean *changed)
 {
 #ifdef HAVE_RANDR
   GdkDisplay *display = gdk_screen_get_display (screen);
-  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
+  GdkX11Display *x11_display = GDK_X11_DISPLAY (display);
   GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
   XRRScreenResources *resources;
   RROutput primary_output = None;
@@ -695,7 +694,7 @@ init_randr13 (GdkScreen *screen, gboolean *changed)
   gboolean randr12_compat = FALSE;
   int old_primary;
 
-  if (!display_x11->have_randr13)
+  if (!x11_display->have_randr13)
       return FALSE;
 
   resources = XRRGetScreenResourcesCurrent (x11_screen->xdisplay,
@@ -703,9 +702,9 @@ init_randr13 (GdkScreen *screen, gboolean *changed)
   if (!resources)
     return FALSE;
 
-  for (i = 0; i < x11_screen->monitors->len; i++)
+  for (i = 0; i < x11_display->monitors->len; i++)
     {
-      GdkX11Monitor *monitor = x11_screen->monitors->pdata[i];
+      GdkX11Monitor *monitor = x11_display->monitors->pdata[i];
       monitor->add = FALSE;
       monitor->remove = TRUE;
     }
@@ -745,7 +744,7 @@ init_randr13 (GdkScreen *screen, gboolean *changed)
                 }
             }
 
-          monitor = find_monitor_by_output (x11_screen, output);
+          monitor = find_monitor_by_output (x11_display, output);
           if (monitor)
             monitor->remove = FALSE;
           else
@@ -755,7 +754,7 @@ init_randr13 (GdkScreen *screen, gboolean *changed)
                                       NULL);
               monitor->output = output;
               monitor->add = TRUE;
-              g_ptr_array_add (x11_screen->monitors, monitor);
+              g_ptr_array_add (x11_display->monitors, monitor);
             }
 
           gdk_monitor_get_geometry (GDK_MONITOR (monitor), &geometry);
@@ -801,19 +800,19 @@ init_randr13 (GdkScreen *screen, gboolean *changed)
 
   if (randr12_compat)
     {
-      for (i = 0; i < x11_screen->monitors->len; i++)
+      for (i = 0; i < x11_display->monitors->len; i++)
         {
-          GdkX11Monitor *monitor = x11_screen->monitors->pdata[i];
+          GdkX11Monitor *monitor = x11_display->monitors->pdata[i];
           if (monitor->remove)
             gdk_display_monitor_removed (display, GDK_MONITOR (monitor));
         }
-      g_ptr_array_remove_range (x11_screen->monitors, 0, x11_screen->monitors->len);
+      g_ptr_array_remove_range (x11_display->monitors, 0, x11_display->monitors->len);
       return FALSE;
     }
 
-  for (i = x11_screen->monitors->len - 1; i >= 0; i--)
+  for (i = x11_display->monitors->len - 1; i >= 0; i--)
     {
-      GdkX11Monitor *monitor = x11_screen->monitors->pdata[i];
+      GdkX11Monitor *monitor = x11_display->monitors->pdata[i];
       if (monitor->add)
         {
           gdk_display_monitor_added (display, GDK_MONITOR (monitor));
@@ -822,24 +821,24 @@ init_randr13 (GdkScreen *screen, gboolean *changed)
       else if (monitor->remove)
         {
           g_object_ref (monitor);
-          g_ptr_array_remove (x11_screen->monitors, monitor);
+          g_ptr_array_remove (x11_display->monitors, monitor);
           gdk_display_monitor_removed (display, GDK_MONITOR (monitor));
           g_object_unref (monitor);
           *changed = TRUE;
         }
     }
 
-  old_primary = x11_screen->primary_monitor;
-  x11_screen->primary_monitor = 0;
+  old_primary = x11_display->primary_monitor;
+  x11_display->primary_monitor = 0;
   primary_output = XRRGetOutputPrimary (x11_screen->xdisplay,
                                         x11_screen->xroot_window);
 
-  for (i = 0; i < x11_screen->monitors->len; ++i)
+  for (i = 0; i < x11_display->monitors->len; ++i)
     {
-      GdkX11Monitor *monitor = x11_screen->monitors->pdata[i];
+      GdkX11Monitor *monitor = x11_display->monitors->pdata[i];
       if (monitor->output == primary_output)
         {
-          x11_screen->primary_monitor = i;
+          x11_display->primary_monitor = i;
           break;
         }
 
@@ -847,19 +846,19 @@ init_randr13 (GdkScreen *screen, gboolean *changed)
       if (primary_output == None &&
           g_ascii_strncasecmp (gdk_monitor_get_model (GDK_MONITOR (monitor)), "LVDS", 4) == 0)
         {
-          x11_screen->primary_monitor = i;
+          x11_display->primary_monitor = i;
           break;
         }
 
       /* No primary specified and no LVDS found */
       if (monitor->output == first_output)
-        x11_screen->primary_monitor = i;
+        x11_display->primary_monitor = i;
     }
 
-  if (x11_screen->primary_monitor != old_primary)
+  if (x11_display->primary_monitor != old_primary)
     *changed = TRUE;
 
-  return x11_screen->monitors->len > 0;
+  return x11_display->monitors->len > 0;
 #endif
 
   return FALSE;
@@ -869,29 +868,29 @@ static void
 init_no_multihead (GdkScreen *screen, gboolean *changed)
 {
   GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
-  GdkDisplay *display = gdk_screen_get_display (screen);
+  GdkX11Display *x11_display = GDK_X11_DISPLAY (x11_screen->display);
   GdkX11Monitor *monitor;
   GdkRectangle geometry;
   int i;
 
-  for (i = 0; i < x11_screen->monitors->len; i++)
+  for (i = 0; i < x11_display->monitors->len; i++)
     {
-      GdkX11Monitor *monitor = x11_screen->monitors->pdata[i];
+      GdkX11Monitor *monitor = x11_display->monitors->pdata[i];
       monitor->add = FALSE;
       monitor->remove = TRUE;
     }
 
-  monitor = find_monitor_by_output (x11_screen, 0);
+  monitor = find_monitor_by_output (x11_display, 0);
   if (monitor)
     monitor->remove = FALSE;
   else
     {
       monitor = g_object_new (gdk_x11_monitor_get_type (),
-                              "display", display,
+                              "display", x11_display,
                               NULL);
       monitor->output = 0;
       monitor->add = TRUE;
-      g_ptr_array_add (x11_screen->monitors, monitor);
+      g_ptr_array_add (x11_display->monitors, monitor);
     }
 
   gdk_monitor_get_geometry (GDK_MONITOR (monitor), &geometry);
@@ -913,23 +912,23 @@ init_no_multihead (GdkScreen *screen, gboolean *changed)
                                  gdk_screen_get_height_mm (screen));
   gdk_monitor_set_scale_factor (GDK_MONITOR (monitor), x11_screen->window_scale);
 
-  if (x11_screen->primary_monitor != 0)
+  if (x11_display->primary_monitor != 0)
     *changed = TRUE;
-  x11_screen->primary_monitor = 0;
+  x11_display->primary_monitor = 0;
 
-  for (i = x11_screen->monitors->len - 1; i >= 0; i--)
+  for (i = x11_display->monitors->len - 1; i >= 0; i--)
     {
-      GdkX11Monitor *monitor = x11_screen->monitors->pdata[i];
+      GdkX11Monitor *monitor = x11_display->monitors->pdata[i];
       if (monitor->add)
         {
-          gdk_display_monitor_added (display, GDK_MONITOR (monitor));
+          gdk_display_monitor_added (GDK_DISPLAY (x11_display), GDK_MONITOR (monitor));
           *changed = TRUE;
         }
       else if (monitor->remove)
         {
           g_object_ref (monitor);
-          g_ptr_array_remove (x11_screen->monitors, monitor);
-          gdk_display_monitor_removed (display, GDK_MONITOR (monitor));
+          g_ptr_array_remove (x11_display->monitors, monitor);
+          gdk_display_monitor_removed (GDK_DISPLAY (x11_display), GDK_MONITOR (monitor));
           g_object_unref (monitor);
           *changed = TRUE;
         }
@@ -952,14 +951,15 @@ static void
 update_bounding_box (GdkScreen *screen)
 {
   GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
+  GdkX11Display *x11_display = GDK_X11_DISPLAY (x11_screen->display);
   gint i, x1, y1, x2, y2;
 
   x1 = y1 = G_MAXINT;
   x2 = y2 = G_MININT;
 
-  for (i = 0; i < x11_screen->monitors->len; i++)
+  for (i = 0; i < x11_display->monitors->len; i++)
     {
-      GdkX11Monitor *monitor = x11_screen->monitors->pdata[i];
+      GdkX11Monitor *monitor = x11_display->monitors->pdata[i];
       GdkRectangle geometry;
 
       gdk_monitor_get_geometry (GDK_MONITOR (monitor), &geometry);
@@ -1005,8 +1005,6 @@ _gdk_x11_screen_new (GdkDisplay *display,
   else
     x11_screen->window_scale = 1;
 
-  x11_screen->monitors = g_ptr_array_new_with_free_func (g_object_unref);
-
   init_randr_support (screen);
   init_multihead (screen);
 
@@ -1021,6 +1019,7 @@ void
 _gdk_x11_screen_set_window_scale (GdkX11Screen *x11_screen,
 				  gint          scale)
 {
+  GdkX11Display *x11_display = GDK_X11_DISPLAY (x11_screen->display);
   GList *toplevels, *l;
   GdkWindow *root;
   int i;
@@ -1042,9 +1041,9 @@ _gdk_x11_screen_set_window_scale (GdkX11Screen *x11_screen,
       _gdk_x11_window_set_window_scale (window, scale);
     }
 
-  for (i = 0; i < x11_screen->monitors->len; i++)
+  for (i = 0; i < x11_display->monitors->len; i++)
     {
-      GdkMonitor *monitor = GDK_MONITOR (x11_screen->monitors->pdata[i]);
+      GdkMonitor *monitor = GDK_MONITOR (x11_display->monitors->pdata[i]);
 
       gdk_monitor_set_scale_factor (monitor, scale);
     }
