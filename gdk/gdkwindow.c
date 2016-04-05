@@ -9039,6 +9039,7 @@ proxy_pointer_event (GdkDisplay                 *display,
       gdk_event_set_device (event, gdk_event_get_device (source_event));
       gdk_event_set_source_device (event, source_device);
       gdk_event_set_seat (event, gdk_device_get_seat (device));
+      gdk_event_set_device_tool (event, gdk_event_get_device_tool (source_event));
 
       if (event_type == GDK_TOUCH_UPDATE)
 	{
@@ -9280,6 +9281,7 @@ proxy_button_event (GdkEvent *source_event,
       gdk_event_set_device (event, gdk_event_get_device (source_event));
       gdk_event_set_source_device (event, source_device);
       gdk_event_set_seat (event, gdk_device_get_seat (device));
+      gdk_event_set_device_tool (event, gdk_event_get_device_tool (source_event));
 
       if (is_touch_type (source_event->type))
         {
