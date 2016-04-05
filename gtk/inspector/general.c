@@ -345,7 +345,6 @@ populate_display (GdkScreen *screen, GtkInspectorGeneral *gen)
   GList *children, *l;
   GtkWidget *child;
   GdkDisplay *display;
-  GdkMonitor **monitors;
   int n_monitors;
   GtkListBox *list;
 
@@ -374,9 +373,10 @@ populate_display (GdkScreen *screen, GtkInspectorGeneral *gen)
     gtk_widget_show (gen->priv->display_composited);
 
   display = gdk_screen_get_display (screen);
-  monitors = gdk_display_get_monitors (display, &n_monitors);
+  n_monitors = gdk_display_get_n_monitors (display);
   for (i = 0; i < n_monitors; i++)
     {
+      GdkMonitor *monitor;
       gchar *name;
       gchar *value;
       GdkRectangle rect;
@@ -384,9 +384,11 @@ populate_display (GdkScreen *screen, GtkInspectorGeneral *gen)
       const char *manufacturer;
       const char *model;
 
+      monitor = gdk_display_get_monitor (display, i);
+
       name = g_strdup_printf ("Monitor %d", i);
-      manufacturer = gdk_monitor_get_manufacturer (monitors[i]);
-      model = gdk_monitor_get_model (monitors[i]);
+      manufacturer = gdk_monitor_get_manufacturer (monitor);
+      model = gdk_monitor_get_model (monitor);
       value = g_strdup_printf ("%s%s%s",
                                manufacturer ? manufacturer : "",
                                manufacturer || model ? " " : "",
@@ -395,8 +397,8 @@ populate_display (GdkScreen *screen, GtkInspectorGeneral *gen)
       g_free (name);
       g_free (value);
 
-      gdk_monitor_get_geometry (monitors[i], &rect);
-      scale = gdk_monitor_get_scale_factor (monitors[i]);
+      gdk_monitor_get_geometry (monitor, &rect);
+      scale = gdk_monitor_get_scale_factor (monitor);
 
       value = g_strdup_printf ("%d × %d%s at %d, %d",
                                rect.width, rect.height,
@@ -406,22 +408,22 @@ populate_display (GdkScreen *screen, GtkInspectorGeneral *gen)
       g_free (value);
 
       value = g_strdup_printf ("%d × %d mm²",
-                               gdk_monitor_get_width_mm (monitors[i]),
-                               gdk_monitor_get_height_mm (monitors[i]));
+                               gdk_monitor_get_width_mm (monitor),
+                               gdk_monitor_get_height_mm (monitor));
       add_label_row (gen, list, "Size", value, 10);
       g_free (value);
 
-      add_check_row (gen, list, "Primary", gdk_monitor_is_primary (monitors[i]), 10);
+      add_check_row (gen, list, "Primary", gdk_monitor_is_primary (monitor), 10);
 
-      if (gdk_monitor_get_refresh_rate (monitors[i]) != 0)
+      if (gdk_monitor_get_refresh_rate (monitor) != 0)
         value = g_strdup_printf ("%.2f mHz",
-                                 0.001 * gdk_monitor_get_refresh_rate (monitors[i]));
+                                 0.001 * gdk_monitor_get_refresh_rate (monitor));
       else
         value = g_strdup ("unknown");
       add_label_row (gen, list, "Refresh rate", value, 10);
       g_free (value);
 
-      value = g_strdup (translate_subpixel_layout (gdk_monitor_get_subpixel_layout (monitors[i])));
+      value = g_strdup (translate_subpixel_layout (gdk_monitor_get_subpixel_layout (monitor)));
       add_label_row (gen, list, "Subpixel layout", value, 10);
       g_free (value);
     }
