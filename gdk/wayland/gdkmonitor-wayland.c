@@ -19,13 +19,11 @@
 
 #include <glib.h>
 #include <gio/gio.h>
-#include "gdkwaylandmonitor.h"
-#include "gdkmonitorprivate.h"
 #include "gdkprivate-wayland.h"
 
 #include "gdkmonitor-wayland.h"
 
-G_DEFINE_TYPE (GdkWaylandMonitor, gdk_wayland_monitor, GDK_TYPE_MONITOR);
+G_DEFINE_TYPE (GdkWaylandMonitor, gdk_wayland_monitor, GDK_TYPE_MONITOR)
 
 static void
 gdk_wayland_monitor_init (GdkWaylandMonitor *monitor)

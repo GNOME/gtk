@@ -24,7 +24,6 @@
 #include <gio/gio.h>
 #include "gdkscreenprivate.h"
 #include "gdkvisualprivate.h"
-#include "gdkmonitorprivate.h"
 #include "gdkdisplay.h"
 #include "gdkdisplay-wayland.h"
 #include "gdkmonitor-wayland.h"
