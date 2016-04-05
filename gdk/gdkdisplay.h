@@ -180,17 +180,19 @@ GDK_AVAILABLE_IN_3_20
 GList   * gdk_display_list_seats       (GdkDisplay *display);
 
 GDK_AVAILABLE_IN_3_22
-GdkMonitor ** gdk_display_get_monitors  (GdkDisplay *display,
-                                         int        *n_monitors);
+int          gdk_display_get_n_monitors        (GdkDisplay *display);
 GDK_AVAILABLE_IN_3_22
-GdkMonitor *  gdk_display_get_primary_monitor (GdkDisplay *display);
+GdkMonitor * gdk_display_get_monitor           (GdkDisplay *display,
+                                                int         monitor_num);
 GDK_AVAILABLE_IN_3_22
-GdkMonitor *  gdk_display_get_monitor_at_point (GdkDisplay *display,
+GdkMonitor * gdk_display_get_primary_monitor   (GdkDisplay *display);
+GDK_AVAILABLE_IN_3_22
+GdkMonitor * gdk_display_get_monitor_at_point  (GdkDisplay *display,
                                                 int         x,
                                                 int         y);
 GDK_AVAILABLE_IN_3_22
-GdkMonitor *  gdk_display_get_monitor_at_window (GdkDisplay *dsplay,
-                                                 GdkWindow  *window);
+GdkMonitor * gdk_display_get_monitor_at_window (GdkDisplay *dsplay,
+                                                GdkWindow  *window);
 
 
 G_END_DECLS

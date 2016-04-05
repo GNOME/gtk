@@ -198,14 +198,13 @@ static int
 get_monitor_num (GdkMonitor *monitor)
 {
   GdkDisplay *display;
-  GdkMonitor **monitors;
   int n_monitors, i;
 
   display = gdk_monitor_get_display (monitor);
-  monitors = gdk_display_get_monitors (display, &n_monitors);
+  n_monitors = gdk_display_get_n_monitors (display);
   for (i = 0; i < n_monitors; i++)
     {
-      if (monitors[i] == monitor)
+      if (gdk_display_get_monitor (display, i) == monitor)
         return i;
     }
   return -1;
@@ -645,16 +644,9 @@ get_monitor (GdkScreen *screen,
              gint       n)
 {
   GdkDisplay *display;
-  GdkMonitor **monitors;
-  gint n_monitors;
 
   display = gdk_screen_get_display (screen);
-  monitors = gdk_display_get_monitors (display, &n_monitors);
-
-  if (0 <= n && n < n_monitors)
-    return monitors[n];
-
-  return NULL;
+  return gdk_display_get_monitor (display, n);
 }
 
 /**
@@ -671,14 +663,11 @@ gint
 gdk_screen_get_n_monitors (GdkScreen *screen)
 {
   GdkDisplay *display;
-  int n_monitors;
 
   g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
 
   display = gdk_screen_get_display (screen);
-  gdk_display_get_monitors (display, &n_monitors);
-
-  return n_monitors;
+  return gdk_display_get_n_monitors (display);
 }
 
 /**
@@ -702,19 +691,14 @@ gint
 gdk_screen_get_primary_monitor (GdkScreen *screen)
 {
   GdkDisplay *display;
-  GdkMonitor **monitors, *primary;
-  int n_monitors, i;
+  GdkMonitor *primary;
 
   g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
 
   display = gdk_screen_get_display (screen);
-  monitors = gdk_display_get_monitors (display, &n_monitors);
   primary = gdk_display_get_primary_monitor (display);
-  for (i = 0; i < n_monitors; i++)
-    {
-      if (monitors[i] == primary)
-        return i;
-    }
+  if (primary)
+    return get_monitor_num (primary);
 
   return 0;
 }

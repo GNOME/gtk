@@ -2504,25 +2504,43 @@ gdk_display_list_seats (GdkDisplay *display)
 }
 
 /**
- * gdk_display_get_monitors:
+ * gdk_display_get_n_monitors:
  * @display: a #GdkDisplay
- * @n_monitors: (out): Return location for the length of the returned array
  *
- * Gets the monitors associated with this display. The array will only be
- * valid until the next emission of the #GdkDisplay::monitor-added or
- * #GdkDisplay::monitor-removed signal.
+ * Gets the number of monitors that belong to @display.
  *
- * Returns: (transfer none) (element-type GdkMonitor): an array of #GdkMonitor
- *     objects
+ * The returned number is valid until the next emission of the
+ * #GdkDisplay::monitor-added or #GdkDisplay::monitor-removed signal.
+ *
+ * Returns: the number of monitors
  * Since: 3.22
  */
-GdkMonitor **
-gdk_display_get_monitors (GdkDisplay *display,
-                          gint       *n_monitors)
+int
+gdk_display_get_n_monitors (GdkDisplay *display)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), 0);
+
+  return GDK_DISPLAY_GET_CLASS (display)->get_n_monitors (display);
+}
+
+/**
+ * gdk_display_get_monitor:
+ * @display: a #GdkDisplay
+ * @monitor_num: number of the monitor
+ *
+ * Gets a monitor associated with this display.
+ *
+ * Returns: (transfer none): the #GdkMonitor, or %NULL if
+ *    @monitor_num is not a valid monitor number
+ * Since: 3.22
+ */
+GdkMonitor *
+gdk_display_get_monitor (GdkDisplay *display,
+                         gint        monitor_num)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
-  return GDK_DISPLAY_GET_CLASS (display)->get_monitors (display, n_monitors);
+  return GDK_DISPLAY_GET_CLASS (display)->get_monitor (display, monitor_num);
 }
 
 /**
@@ -2568,20 +2586,21 @@ gdk_display_get_monitor_at_point (GdkDisplay *display,
                                   int         x,
                                   int         y)
 {
-  GdkMonitor **monitors;
   GdkMonitor *nearest;
   int nearest_dist = G_MAXINT;
   int n_monitors, i;
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
-  monitors = gdk_display_get_monitors (display, &n_monitors);
+  n_monitors = gdk_display_get_n_monitors (display);
   for (i = 0; i < n_monitors; i++)
     {
+      GdkMonitor *monitor;
       GdkRectangle geometry;
       int dist_x, dist_y, dist;
 
-      gdk_monitor_get_geometry (monitors[i], &geometry);
+      monitor = gdk_display_get_monitor (display, i);
+      gdk_monitor_get_geometry (monitor, &geometry);
 
       if (x < geometry.x)
         dist_x = geometry.x - x;
@@ -2601,7 +2620,7 @@ gdk_display_get_monitor_at_point (GdkDisplay *display,
       if (dist < nearest_dist)
         {
           nearest_dist = dist;
-          nearest = monitors[i];
+          nearest = monitor;
         }
 
       if (nearest_dist == 0)
@@ -2628,7 +2647,6 @@ gdk_display_get_monitor_at_window (GdkDisplay *display,
                                    GdkWindow  *window)
 {
   GdkRectangle win;
-  GdkMonitor **monitors;
   int n_monitors, i;
   int area = 0;
   GdkMonitor *best = NULL;
@@ -2638,19 +2656,21 @@ gdk_display_get_monitor_at_window (GdkDisplay *display,
   gdk_window_get_geometry (window, &win.x, &win.y, &win.width, &win.height);
   gdk_window_get_origin (window, &win.x, &win.y);
 
-  monitors = gdk_display_get_monitors (display, &n_monitors);
+  n_monitors = gdk_display_get_n_monitors (display);
   for (i = 0; i < n_monitors; i++)
     {
+      GdkMonitor *monitor;
       GdkRectangle mon, intersect;
       int overlap;
 
-      gdk_monitor_get_geometry (monitors[i], &mon);
+      monitor = gdk_display_get_monitor (display, i);
+      gdk_monitor_get_geometry (monitor, &mon);
       gdk_rectangle_intersect (&win, &mon, &intersect);
       overlap = intersect.width *intersect.height;
       if (overlap > area)
         {
           area = overlap;
-          best = monitors[i];
+          best = monitor;
         }
     }
 

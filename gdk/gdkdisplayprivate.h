@@ -242,8 +242,9 @@ struct _GdkDisplayClass
 
   GdkSeat *              (*get_default_seat)           (GdkDisplay     *display);
 
-  GdkMonitor **          (*get_monitors)               (GdkDisplay     *display,
-                                                        int            *n_monitors);
+  int                    (*get_n_monitors)             (GdkDisplay     *display);
+  GdkMonitor *           (*get_monitor)                (GdkDisplay     *display,
+                                                        int             index);
   GdkMonitor *           (*get_primary_monitor)        (GdkDisplay     *display);
 
   /* Signals */
