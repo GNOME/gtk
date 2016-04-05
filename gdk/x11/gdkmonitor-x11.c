@@ -91,3 +91,12 @@ gdk_x11_monitor_class_init (GdkX11MonitorClass *class)
 {
   GDK_MONITOR_CLASS (class)->get_workarea = gdk_x11_monitor_get_workarea;
 }
+
+XID
+gdk_x11_monitor_get_output (GdkMonitor *monitor)
+{
+  g_return_val_if_fail (GDK_IS_X11_MONITOR (monitor), 0);
+
+  return GDK_X11_MONITOR (monitor)->output;
+}
+

@@ -40,7 +40,9 @@ typedef struct _GdkX11MonitorClass GdkX11MonitorClass;
 GDK_AVAILABLE_IN_3_22
 GType             gdk_x11_monitor_get_type            (void) G_GNUC_CONST;
 
+GDK_AVAILABLE_IN_3_22
+XID               gdk_x11_monitor_get_output          (GdkMonitor *monitor);
+
 G_END_DECLS
 
 #endif  /* __GDK_X11_MONITOR_H__ */
-
