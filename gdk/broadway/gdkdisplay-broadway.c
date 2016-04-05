@@ -28,6 +28,7 @@
 #include "gdkeventsource.h"
 #include "gdkscreen.h"
 #include "gdkscreen-broadway.h"
+#include "gdkmonitor-broadway.h"
 #include "gdkinternals.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdevicemanager-broadway.h"
@@ -56,7 +57,9 @@ gdk_broadway_display_init (GdkBroadwayDisplay *display)
 {
   display->id_ht = g_hash_table_new (NULL, NULL);
 
-  display->monitor = g_object_new (gdk_monitor_get_type (), "display", display, NULL);
+  display->monitor = g_object_new (GDK_TYPE_BROADWAY_MONITOR,
+                                   "display", display,
+                                   NULL);
   gdk_monitor_set_manufacturer (display->monitor, "browser");
   gdk_monitor_set_model (display->monitor, "0");
 }
