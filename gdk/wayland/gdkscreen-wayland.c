@@ -27,6 +27,7 @@
 #include "gdkmonitorprivate.h"
 #include "gdkdisplay.h"
 #include "gdkdisplay-wayland.h"
+#include "gdkmonitor-wayland.h"
 #include "gdkwayland.h"
 #include "gdkprivate-wayland.h"
 
@@ -50,40 +51,6 @@ typedef struct {
         const gchar *hintstyle;
 } GsdXftSettings;
 
-typedef struct _GdkWaylandMonitor GdkWaylandMonitor;
-typedef GdkMonitorClass GdkWaylandMonitorClass;
-
-struct _GdkWaylandMonitor {
-  GdkMonitor parent;
-
-  guint32 id;
-  guint32 version;
-  struct wl_output *output;
-  gboolean added;
-};
-
-G_DEFINE_TYPE (GdkWaylandMonitor, gdk_wayland_monitor, GDK_TYPE_MONITOR);
-
-static void
-gdk_wayland_monitor_init (GdkWaylandMonitor *monitor)
-{
-}
-
-static void
-gdk_wayland_monitor_finalize (GObject *object)
-{
-  GdkWaylandMonitor *monitor = (GdkWaylandMonitor *)object;
-
-  wl_output_destroy (monitor->output);
-
-  G_OBJECT_CLASS (gdk_wayland_monitor_parent_class)->finalize (object);
-}
-
-static void
-gdk_wayland_monitor_class_init (GdkWaylandMonitorClass *class)
-{
-  G_OBJECT_CLASS (class)->finalize = gdk_wayland_monitor_finalize;
-}
 
 struct _GdkWaylandScreen
 {
@@ -1141,7 +1108,7 @@ _gdk_wayland_screen_add_output (GdkScreen        *screen,
   GdkDisplay *display = gdk_screen_get_display (screen);
   GdkWaylandMonitor *monitor;
 
-  monitor = g_object_new (gdk_wayland_monitor_get_type (),
+  monitor = g_object_new (GDK_TYPE_WAYLAND_MONITOR,
                           "display", display,
                           NULL);
 
