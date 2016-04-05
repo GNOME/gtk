@@ -25,6 +25,17 @@
 #include <math.h>
 #include <string.h>
 
+typedef struct _GtkCssLocation GtkCssLocation;
+
+struct _GtkCssLocation
+{
+  gsize                  bytes;
+  gsize                  chars;
+  gsize                  lines;
+  gsize                  line_bytes;
+  gsize                  line_chars;
+};
+
 struct _GtkCssTokenizer
 {
   gint                   ref_count;
@@ -36,13 +47,36 @@ struct _GtkCssTokenizer
   const gchar           *data;
   const gchar           *end;
 
-  /* position in stream */
-  gsize                  bytes_before;
-  gsize                  characters_before;
-  gsize                  lines;
-  gsize                  bytes_after;
-  gsize                  characters_after;
+  GtkCssLocation         position;
 };
+
+static void
+gtk_css_location_init (GtkCssLocation *location)
+{
+  memset (location, 0, sizeof (GtkCssLocation));
+}
+
+static void
+gtk_css_location_advance (GtkCssLocation *location,
+                          gsize           bytes,
+                          gsize           chars)
+{
+  location->bytes += bytes;
+  location->chars += chars;
+  location->line_bytes += bytes;
+  location->line_chars += chars;
+}
+
+static void
+gtk_css_location_advance_newline (GtkCssLocation *location,
+                                  gboolean        is_windows)
+{
+  gtk_css_location_advance (location, is_windows ? 2 : 1, is_windows ? 2 : 1);
+
+  location->lines++;
+  location->line_bytes = 0;
+  location->line_chars = 0;
+}
 
 void
 gtk_css_token_clear (GtkCssToken *token)
@@ -474,6 +508,8 @@ gtk_css_tokenizer_new (GBytes                   *bytes,
   tokenizer->data = g_bytes_get_data (bytes, NULL);
   tokenizer->end = tokenizer->data + g_bytes_get_size (bytes);
 
+  gtk_css_location_init (&tokenizer->position);
+
   return tokenizer;
 }
 
@@ -502,31 +538,31 @@ gtk_css_tokenizer_unref (GtkCssTokenizer *tokenizer)
 gsize
 gtk_css_tokenizer_get_byte (GtkCssTokenizer *tokenizer)
 {
-  return tokenizer->bytes_before + tokenizer->bytes_after;
+  return tokenizer->position.bytes;
 }
 
 gsize
 gtk_css_tokenizer_get_char (GtkCssTokenizer *tokenizer)
 {
-  return tokenizer->characters_before + tokenizer->characters_after;
+  return tokenizer->position.chars;
 }
 
 gsize
 gtk_css_tokenizer_get_line (GtkCssTokenizer *tokenizer)
 {
-  return tokenizer->lines + 1;
+  return tokenizer->position.lines + 1;
 }
 
 gsize
 gtk_css_tokenizer_get_line_byte (GtkCssTokenizer *tokenizer)
 {
-  return tokenizer->bytes_after;
+  return tokenizer->position.line_bytes;
 }
 
 gsize
 gtk_css_tokenizer_get_line_char (GtkCssTokenizer *tokenizer)
 {
-  return tokenizer->characters_after;
+  return tokenizer->position.line_chars;
 }
 
 static void
@@ -702,11 +738,7 @@ gtk_css_tokenizer_consume_newline (GtkCssTokenizer *tokenizer)
     n = 1;
   
   tokenizer->data += n;
-  tokenizer->bytes_before += tokenizer->bytes_after + n;
-  tokenizer->characters_before += tokenizer->characters_after + n;
-  tokenizer->lines += 1;
-  tokenizer->bytes_after = 0;
-  tokenizer->characters_after = 0;
+  gtk_css_location_advance_newline (&tokenizer->position, n == 2 ? TRUE : FALSE);
 }
 
 static inline void
@@ -717,8 +749,7 @@ gtk_css_tokenizer_consume (GtkCssTokenizer *tokenizer,
   /* NB: must not contain newlines! */
   tokenizer->data += n_bytes;
 
-  tokenizer->bytes_after += n_bytes;
-  tokenizer->characters_after += n_characters;
+  gtk_css_location_advance (&tokenizer->position, n_bytes, n_characters);
 }
 
 static inline void
