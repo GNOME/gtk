@@ -70,6 +70,7 @@
 #include "gtkmagnifierprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkcsscustomgadgetprivate.h"
+#include "gtkprogresstrackerprivate.h"
 
 #include "a11y/gtkentryaccessible.h"
 
@@ -196,10 +197,11 @@ struct _GtkEntryPrivate
   gdouble       progress_pulse_fraction;
   gdouble       progress_pulse_current;
 
-  guint         tick_id;
-  gint64        pulse1;
-  gint64        pulse2;
-  gint64        frame1;
+  guint              tick_id;
+  GtkProgressTracker tracker;
+  gint64             pulse1;
+  gint64             pulse2;
+  gdouble            last_iteration;
 
   gchar        *placeholder_text;
 
@@ -10394,31 +10396,30 @@ tick_cb (GtkWidget     *widget,
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = entry->priv;
-  gint64 frame2;
-  gdouble fraction;
+  gint64 frame_time;
+  gdouble iteration, pulse_iterations, current_iterations, fraction;
 
-  frame2 = gdk_frame_clock_get_frame_time (frame_clock);
-  if (priv->frame1 == 0)
-    priv->frame1 = frame2 - 16667;
-  if (priv->pulse1 == 0)
-    priv->pulse1 = priv->pulse2 - 250 * 1000000;
+  if (priv->pulse2 == 0 && priv->pulse1 == 0)
+    return G_SOURCE_CONTINUE;
+
+  frame_time = gdk_frame_clock_get_frame_time (frame_clock);
+  gtk_progress_tracker_advance_frame (&priv->tracker, frame_time);
 
   g_assert (priv->pulse2 > priv->pulse1);
-  g_assert (frame2 > priv->frame1);
 
-  if (frame2 - priv->pulse2 > 3 * (priv->pulse2 - priv->pulse1))
-    {
-      priv->pulse1 = 0;
-      return G_SOURCE_CONTINUE;
-    }
+  pulse_iterations = (priv->pulse2 - priv->pulse1) / (gdouble) G_USEC_PER_SEC;
+  current_iterations = (frame_time - priv->pulse1) / (gdouble) G_USEC_PER_SEC;
 
+  iteration = gtk_progress_tracker_get_iteration (&priv->tracker);
   /* Determine the fraction to move the block from one frame
    * to the next when pulse_fraction is how far the block should
    * move between two calls to gtk_entry_progress_pulse().
    */
-  fraction = priv->progress_pulse_fraction * (frame2 - priv->frame1) / MAX (frame2 - priv->pulse2, priv->pulse2 - priv->pulse1);
+  fraction = priv->progress_pulse_fraction * (iteration - priv->last_iteration) / MAX (pulse_iterations, current_iterations);
+  priv->last_iteration = iteration;
 
-  priv->frame1 = frame2;
+  if (current_iterations > 3 * pulse_iterations)
+    return G_SOURCE_CONTINUE;
 
   /* advance the block */
   if (priv->progress_pulse_way_back)
@@ -10483,6 +10484,9 @@ gtk_entry_start_pulse_mode (GtkEntry *entry)
   gtk_css_gadget_add_class (priv->progress_gadget, GTK_STYLE_CLASS_PULSE);
 
   priv->progress_pulse_mode = TRUE;
+  /* How long each pulse should last depends on calls to gtk_entry_progress_pulse.
+   * Just start the tracker to repeat forever with iterations every second. */
+  gtk_progress_tracker_start (&priv->tracker, G_USEC_PER_SEC, 0, INFINITY);
   priv->tick_id = gtk_widget_add_tick_callback (GTK_WIDGET (entry), tick_cb, NULL, NULL);
 
   priv->progress_fraction = 0.0;
@@ -10491,7 +10495,7 @@ gtk_entry_start_pulse_mode (GtkEntry *entry)
 
   priv->pulse2 = 0;
   priv->pulse1 = 0;
-  priv->frame1 = 0;
+  priv->last_iteration = 0;
 }
 
 static void
@@ -10514,9 +10518,13 @@ static void
 gtk_entry_update_pulse (GtkEntry *entry)
 {
   GtkEntryPrivate *priv = entry->priv;
+  gint64 pulse_time = g_get_monotonic_time ();
+
+  if (priv->pulse2 == pulse_time)
+    return;
 
   priv->pulse1 = priv->pulse2;
-  priv->pulse2 = g_get_monotonic_time ();
+  priv->pulse2 = pulse_time;
 }
 
 /**
