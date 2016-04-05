@@ -1098,6 +1098,9 @@ gdk_wayland_window_sync_margin (GdkWindow *window)
     return;
 
   gdk_wayland_window_get_window_geometry (window, &geometry);
+  gdk_window_set_geometry_hints (window,
+                                 &impl->geometry_hints,
+                                 impl->geometry_mask);
   zxdg_surface_v6_set_window_geometry (impl->display_server.xdg_surface,
                                        geometry.x,
                                        geometry.y,
@@ -2801,6 +2804,9 @@ gdk_wayland_window_init_gtk_surface (GdkWindow *window)
   impl->display_server.gtk_surface =
     gtk_shell1_get_gtk_surface (display->gtk_shell,
                                 impl->display_server.wl_surface);
+  gdk_window_set_geometry_hints (window,
+                                 &impl->geometry_hints,
+                                 impl->geometry_mask);
   gtk_surface1_add_listener (impl->display_server.gtk_surface,
                              &gtk_surface_listener,
                              window);
@@ -2854,6 +2860,7 @@ gdk_wayland_window_set_geometry_hints (GdkWindow         *window,
                                        GdkWindowHints     geom_mask)
 {
   GdkWindowImplWayland *impl;
+  int width, height;
 
   if (GDK_WINDOW_DESTROYED (window) ||
       !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
@@ -2863,6 +2870,35 @@ gdk_wayland_window_set_geometry_hints (GdkWindow         *window,
 
   impl->geometry_hints = *geometry;
   impl->geometry_mask = geom_mask;
+
+  if (!impl->display_server.xdg_toplevel)
+    return;
+
+  if (geom_mask & GDK_HINT_MIN_SIZE)
+    {
+      width = geometry->min_width - (impl->margin_left + impl->margin_right);
+      height = geometry->min_height - (impl->margin_top + impl->margin_bottom);
+    }
+  else
+    {
+      width = 0;
+      height = 0;
+    }
+
+  zxdg_toplevel_v6_set_min_size (impl->display_server.xdg_toplevel, width, height);
+
+  if (geom_mask & GDK_HINT_MAX_SIZE)
+    {
+      width = geometry->max_width - (impl->margin_left + impl->margin_right);
+      height = geometry->max_height - (impl->margin_top + impl->margin_bottom);
+    }
+  else
+    {
+      width = 0;
+      height = 0;
+    }
+
+  zxdg_toplevel_v6_set_max_size (impl->display_server.xdg_toplevel, width, height);
 }
 
 static void
