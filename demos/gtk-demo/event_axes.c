@@ -24,6 +24,7 @@
 
 typedef struct {
   GdkDevice *last_source;
+  GdkDeviceTool *last_tool;
   gdouble *axes;
   GdkRGBA color;
   gdouble x;
@@ -99,12 +100,14 @@ update_axes_from_event (GdkEvent  *event,
 {
   GdkDevice *device, *source_device;
   GdkEventSequence *sequence;
+  GdkDeviceTool *tool;
   gdouble x, y;
   AxesInfo *info;
 
   device = gdk_event_get_device (event);
   source_device = gdk_event_get_source_device (event);
   sequence = gdk_event_get_event_sequence (event);
+  tool = gdk_event_get_device_tool (event);
 
   if (event->type == GDK_TOUCH_END ||
       event->type == GDK_TOUCH_CANCEL)
@@ -141,6 +144,9 @@ update_axes_from_event (GdkEvent  *event,
 
   if (info->last_source != source_device)
     info->last_source = source_device;
+
+  if (info->last_tool != tool)
+    info->last_tool = tool;
 
   if (event->type == GDK_TOUCH_BEGIN ||
       event->type == GDK_TOUCH_UPDATE ||
@@ -292,6 +298,31 @@ draw_axes_info (cairo_t       *cr,
   cairo_restore (cr);
 }
 
+static const gchar *
+tool_type_to_string (GdkDeviceToolType tool_type)
+{
+  switch (tool_type)
+    {
+    case GDK_DEVICE_TOOL_TYPE_PEN:
+      return "Pen";
+    case GDK_DEVICE_TOOL_TYPE_ERASER:
+      return "Eraser";
+    case GDK_DEVICE_TOOL_TYPE_BRUSH:
+      return "Brush";
+    case GDK_DEVICE_TOOL_TYPE_PENCIL:
+      return "Pencil";
+    case GDK_DEVICE_TOOL_TYPE_AIRBRUSH:
+      return "Airbrush";
+    case GDK_DEVICE_TOOL_TYPE_MOUSE:
+      return "Mouse";
+    case GDK_DEVICE_TOOL_TYPE_LENS:
+      return "Lens cursor";
+    case GDK_DEVICE_TOOL_TYPE_UNKNOWN:
+    default:
+      return "Unknown";
+    }
+}
+
 static void
 draw_device_info (GtkWidget        *widget,
                   cairo_t          *cr,
@@ -312,6 +343,19 @@ draw_device_info (GtkWidget        *widget,
   if (sequence)
     g_string_append_printf (string, "\nSequence: %d",
                             GPOINTER_TO_UINT (sequence));
+
+  if (info->last_tool)
+    {
+      const gchar *tool_type;
+      guint64 serial;
+
+      tool_type = tool_type_to_string (gdk_device_tool_get_tool_type (info->last_tool));
+      serial = gdk_device_tool_get_serial (info->last_tool);
+      g_string_append_printf (string, "\nTool: %s", tool_type);
+
+      if (serial != 0)
+        g_string_append_printf (string, ", Serial: %lx", serial);
+    }
 
   cairo_move_to (cr, 10, *y);
   layout = gtk_widget_create_pango_layout (widget, string->str);
