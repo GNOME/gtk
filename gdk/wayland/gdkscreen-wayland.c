@@ -98,9 +98,6 @@ struct _GdkWaylandScreen
   /* Visual Part */
   GdkVisual *visual;
 
-  /* Xinerama/RandR 1.2 */
-  GPtrArray *monitors;
-
   GHashTable *settings;
   GsdXftSettings xft_settings;
 
@@ -141,8 +138,6 @@ gdk_wayland_screen_finalize (GObject *object)
     g_object_unref (screen_wayland->root_window);
 
   g_object_unref (screen_wayland->visual);
-
-  g_ptr_array_free (screen_wayland->monitors, TRUE);
 
   g_hash_table_destroy (screen_wayland->settings);
 
@@ -875,8 +870,6 @@ _gdk_wayland_screen_new (GdkDisplay *display)
 
   screen_wayland->visual = gdk_wayland_visual_new (screen);
 
-  screen_wayland->monitors = g_ptr_array_new_with_free_func (g_object_unref);
-
   screen_wayland->root_window =
     _gdk_wayland_screen_create_root_window (screen,
                                             screen_wayland->width,
@@ -930,6 +923,7 @@ _gdk_wayland_screen_init (GdkWaylandScreen *screen_wayland)
 static void
 update_screen_size (GdkWaylandScreen *screen_wayland)
 {
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (screen_wayland->display);
   gboolean emit_changed = FALSE;
   gint width, height;
   gint width_mm, height_mm;
@@ -937,9 +931,9 @@ update_screen_size (GdkWaylandScreen *screen_wayland)
 
   width = height = 0;
   width_mm = height_mm = 0;
-  for (i = 0; i < screen_wayland->monitors->len; i++)
+  for (i = 0; i < display_wayland->monitors->len; i++)
     {
-      GdkMonitor *monitor = screen_wayland->monitors->pdata[i];
+      GdkMonitor *monitor = display_wayland->monitors->pdata[i];
 
       /* XXX: Largely assuming here that monitor areas
        * are contiguous and never overlap.
@@ -1075,7 +1069,7 @@ output_handle_done (void             *data,
   if (!monitor->added)
     {
       monitor->added = TRUE;
-      g_ptr_array_add (screen_wayland->monitors, monitor);
+      g_ptr_array_add (GDK_WAYLAND_DISPLAY (display)->monitors, monitor);
       gdk_display_monitor_added (display, GDK_MONITOR (monitor));
     }
 
@@ -1157,7 +1151,7 @@ _gdk_wayland_screen_add_output (GdkScreen        *screen,
 
   if (monitor->version < OUTPUT_VERSION_WITH_DONE)
     {
-      g_ptr_array_add (GDK_WAYLAND_SCREEN (screen)->monitors, monitor);
+      g_ptr_array_add (GDK_WAYLAND_DISPLAY (display)->monitors, monitor);
       gdk_display_monitor_added (display, GDK_MONITOR (monitor));
     }
 
@@ -1168,10 +1162,10 @@ struct wl_output *
 _gdk_wayland_screen_get_wl_output (GdkScreen *screen,
                                    gint monitor_num)
 {
-  GdkWaylandScreen *screen_wayland = GDK_WAYLAND_SCREEN (screen);
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (GDK_WAYLAND_SCREEN (screen)->display);
   GdkWaylandMonitor *monitor;
 
-  monitor = screen_wayland->monitors->pdata[monitor_num];
+  monitor = display_wayland->monitors->pdata[monitor_num];
 
   return monitor->output;
 }
@@ -1180,11 +1174,12 @@ static GdkWaylandMonitor *
 get_monitor_for_id (GdkWaylandScreen *screen_wayland,
                     guint32           id)
 {
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (screen_wayland->display);
   int i;
 
-  for (i = 0; i < screen_wayland->monitors->len; i++)
+  for (i = 0; i < display_wayland->monitors->len; i++)
     {
-      GdkWaylandMonitor *monitor = screen_wayland->monitors->pdata[i];
+      GdkWaylandMonitor *monitor = display_wayland->monitors->pdata[i];
 
       if (monitor->id == id)
         return monitor;
@@ -1197,11 +1192,12 @@ static GdkWaylandMonitor *
 get_monitor_for_output (GdkWaylandScreen *screen_wayland,
                         struct wl_output *output)
 {
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (screen_wayland->display);
   int i;
 
-  for (i = 0; i < screen_wayland->monitors->len; i++)
+  for (i = 0; i < display_wayland->monitors->len; i++)
     {
-      GdkWaylandMonitor *monitor = screen_wayland->monitors->pdata[i];
+      GdkWaylandMonitor *monitor = display_wayland->monitors->pdata[i];
 
       if (monitor->output == output)
         return monitor;
@@ -1215,15 +1211,15 @@ _gdk_wayland_screen_remove_output (GdkScreen *screen,
                                    guint32    id)
 {
   GdkWaylandScreen *screen_wayland = GDK_WAYLAND_SCREEN (screen);
-  GdkDisplay *display = gdk_screen_get_display (screen);
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (screen_wayland->display);
   GdkWaylandMonitor *monitor;
 
   monitor = get_monitor_for_id (screen_wayland, id);
   if (monitor != NULL)
     {
       g_object_ref (monitor);
-      g_ptr_array_remove (screen_wayland->monitors, monitor);
-      gdk_display_monitor_removed (display, GDK_MONITOR (monitor));
+      g_ptr_array_remove (display_wayland->monitors, monitor);
+      gdk_display_monitor_removed (GDK_DISPLAY (display_wayland), GDK_MONITOR (monitor));
       g_object_unref (monitor);
       g_signal_emit_by_name (screen_wayland, "monitors-changed");
       update_screen_size (screen_wayland);
@@ -1256,15 +1252,4 @@ _gdk_wayland_screen_get_output_scale (GdkScreen        *screen,
     return gdk_monitor_get_scale_factor (GDK_MONITOR (monitor));
 
   return 0;
-}
-
-GdkMonitor **
-gdk_wayland_screen_get_monitors (GdkScreen *screen,
-                                 int       *n_monitors)
-{
-  GdkWaylandScreen *screen_wayland = GDK_WAYLAND_SCREEN (screen);
-
-  *n_monitors = screen_wayland->monitors->len;
-
-  return (GdkMonitor **)screen_wayland->monitors->pdata;
 }
