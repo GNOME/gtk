@@ -47,3 +47,20 @@ gdk_wayland_monitor_class_init (GdkWaylandMonitorClass *class)
 {
   G_OBJECT_CLASS (class)->finalize = gdk_wayland_monitor_finalize;
 }
+
+/**
+ * gdk_wayland_monitor_get_wl_output:
+ * @monitor: (type GdkWaylandMonitor): a #GdkMonitor
+ *
+ * Returns the Wayland wl_output of a #GdkMonitor.
+ *
+ * Returns: (transfer none): a Wayland wl_output
+ * Since: 3.22
+ */
+struct wl_output *
+gdk_wayland_monitor_get_wl_output (GdkMonitor *monitor)
+{
+  g_return_val_if_fail (GDK_IS_WAYLAND_MONITOR (monitor), NULL);
+
+  return GDK_WAYLAND_MONITOR (monitor)->output;
+}
