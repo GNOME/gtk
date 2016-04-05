@@ -25,7 +25,7 @@
 #include "gdkdisplay-x11.h"
 #include "gdkprivate-x11.h"
 #include "xsettings-client.h"
-#include "gdkmonitorprivate.h"
+#include "gdkmonitor-x11.h"
 
 #include <glib.h>
 
@@ -50,9 +50,6 @@ static void         gdk_x11_screen_dispose     (GObject		  *object);
 static void         gdk_x11_screen_finalize    (GObject		  *object);
 static void	    init_randr_support	       (GdkScreen	  *screen);
 
-static void         gdk_x11_monitor_get_workarea (GdkMonitor   *monitor,
-                                                  GdkRectangle *workarea);
-
 enum
 {
   WINDOW_MANAGER_CHANGED,
@@ -70,31 +67,6 @@ struct _NetWmSupportedAtoms
   Atom *atoms;
   gulong n_atoms;
 };
-
-struct _GdkX11Monitor
-{
-  GdkMonitor parent;
-
-  XID output;
-  guint add     : 1;
-  guint remove  : 1;
-};
-
-typedef struct _GdkX11Monitor GdkX11Monitor;
-typedef GdkMonitorClass GdkX11MonitorClass;
-
-G_DEFINE_TYPE (GdkX11Monitor, gdk_x11_monitor, GDK_TYPE_MONITOR);
-
-static void
-gdk_x11_monitor_init (GdkX11Monitor *monitor)
-{
-}
-
-static void
-gdk_x11_monitor_class_init (GdkX11MonitorClass *class)
-{
-  GDK_MONITOR_CLASS (class)->get_workarea = gdk_x11_monitor_get_workarea;
-}
 
 static void
 gdk_x11_screen_init (GdkX11Screen *screen)
@@ -261,9 +233,9 @@ get_current_desktop (GdkScreen *screen)
   return workspace;
 }
 
-static void
-get_work_area (GdkScreen    *screen,
-               GdkRectangle *area)
+void
+gdk_x11_screen_get_work_area (GdkScreen    *screen,
+                              GdkRectangle *area)
 {
   GdkX11Screen   *x11_screen = GDK_X11_SCREEN (screen);
   Atom            workarea;
@@ -335,61 +307,6 @@ get_work_area (GdkScreen    *screen,
 out:
   if (ret_workarea)
     XFree (ret_workarea);
-}
-
-static gboolean
-gdk_monitor_has_fullscreen_window (GdkMonitor *monitor)
-{
-  GdkScreen *screen = gdk_display_get_default_screen (monitor->display);
-  GList *toplevels, *l;
-  GdkWindow *window;
-  gboolean has_fullscreen;
-
-  toplevels = gdk_screen_get_toplevel_windows (screen);
-
-  has_fullscreen = FALSE;
-  for (l = toplevels; l; l = l->next)
-    {
-      window = l->data;
-
-      if ((gdk_window_get_state (window) & GDK_WINDOW_STATE_FULLSCREEN) == 0)
-        continue;
-
-      if (gdk_window_get_fullscreen_mode (window) == GDK_FULLSCREEN_ON_ALL_MONITORS ||
-          gdk_display_get_monitor_at_window (monitor->display, window) == monitor)
-        {
-          has_fullscreen = TRUE;
-          break;
-        }
-    }
-
-  g_list_free (toplevels);
-
-  return has_fullscreen;
-}
-
-static void
-gdk_x11_monitor_get_workarea (GdkMonitor   *monitor,
-                              GdkRectangle *dest)
-{
-  GdkScreen *screen = gdk_display_get_default_screen (monitor->display);
-  GdkRectangle workarea;
-
-  gdk_monitor_get_geometry (monitor, dest);
-
-  /* The EWMH constrains workarea to be a rectangle, so it
-   * can't adequately deal with L-shaped monitor arrangements.
-   * As a workaround, we ignore the workarea for anything
-   * but the primary monitor. Since that is where the 'desktop
-   * chrome' usually lives, this works ok in practice.
-   */
-  if (gdk_monitor_is_primary (monitor) &&
-      !gdk_monitor_has_fullscreen_window (monitor))
-    {
-      get_work_area (screen, &workarea);
-      if (gdk_rectangle_intersect (dest, &workarea, &workarea))
-        *dest = workarea;
-    }
 }
 
 static GdkVisual *
@@ -570,7 +487,7 @@ init_randr15 (GdkScreen *screen, gboolean *changed)
         monitor->remove = FALSE;
       else
         {
-          monitor = g_object_new (gdk_x11_monitor_get_type (),
+          monitor = g_object_new (GDK_TYPE_X11_MONITOR,
                                   "display", display,
                                   NULL);
           monitor->output = output;

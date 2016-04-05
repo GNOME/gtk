@@ -43,6 +43,8 @@ libgdk_x11_la_SOURCES = 	\
 	gdkglcontext-x11.h	\
 	gdkkeys-x11.c		\
 	gdkmain-x11.c		\
+	gdkmonitor-x11.c	\
+	gdkmonitor-x11.h	\
 	gdkproperty-x11.c	\
 	gdkscreen-x11.c		\
 	gdkscreen-x11.h		\
@@ -76,6 +78,7 @@ libgdkx11include_HEADERS = 	\
 	gdkx11dnd.h		\
 	gdkx11glcontext.h	\
 	gdkx11keys.h		\
+	gdkx11monitor.h		\
 	gdkx11property.h	\
 	gdkx11screen.h		\
 	gdkx11selection.h	\
