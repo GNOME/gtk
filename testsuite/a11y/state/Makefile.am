@@ -47,7 +47,6 @@ a11ystate.test: Makefile
 testfiles = a11ystate.test
 
 DISTCLEANFILES = \
-	$(testdata) \
 	$(testfiles)
 
 testmetadir = $(datadir)/installed-tests/$(PACKAGE)
