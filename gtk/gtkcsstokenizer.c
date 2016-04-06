@@ -25,17 +25,6 @@
 #include <math.h>
 #include <string.h>
 
-typedef struct _GtkCssLocation GtkCssLocation;
-
-struct _GtkCssLocation
-{
-  gsize                  bytes;
-  gsize                  chars;
-  gsize                  lines;
-  gsize                  line_bytes;
-  gsize                  line_chars;
-};
-
 struct _GtkCssTokenizer
 {
   gint                   ref_count;
@@ -535,34 +524,10 @@ gtk_css_tokenizer_unref (GtkCssTokenizer *tokenizer)
   g_slice_free (GtkCssTokenizer, tokenizer);
 }
 
-gsize
-gtk_css_tokenizer_get_byte (GtkCssTokenizer *tokenizer)
+const GtkCssLocation *
+gtk_css_tokenizer_get_location (GtkCssTokenizer *tokenizer)
 {
-  return tokenizer->position.bytes;
-}
-
-gsize
-gtk_css_tokenizer_get_char (GtkCssTokenizer *tokenizer)
-{
-  return tokenizer->position.chars;
-}
-
-gsize
-gtk_css_tokenizer_get_line (GtkCssTokenizer *tokenizer)
-{
-  return tokenizer->position.lines + 1;
-}
-
-gsize
-gtk_css_tokenizer_get_line_byte (GtkCssTokenizer *tokenizer)
-{
-  return tokenizer->position.line_bytes;
-}
-
-gsize
-gtk_css_tokenizer_get_line_char (GtkCssTokenizer *tokenizer)
-{
-  return tokenizer->position.line_chars;
+  return &tokenizer->position;
 }
 
 static void

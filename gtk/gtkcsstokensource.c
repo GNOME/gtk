@@ -80,11 +80,11 @@ gtk_css_token_source_tokenizer_error (GtkCssTokenSource *source,
                                       const GError      *error)
 {
   GtkCssTokenSourceTokenizer *tok = (GtkCssTokenSourceTokenizer *) source;
+  const GtkCssLocation *pos = gtk_css_tokenizer_get_location (tok->tokenizer);
 
   /* XXX */
   g_print ("ERROR: %zu:%zu: %s\n",
-           gtk_css_tokenizer_get_line (tok->tokenizer),
-           gtk_css_tokenizer_get_line_char (tok->tokenizer),
+           pos->lines, pos->line_chars,
            error->message);
 }
 

@@ -70,6 +70,7 @@ typedef enum {
 
 typedef union _GtkCssToken GtkCssToken;
 typedef struct _GtkCssTokenizer GtkCssTokenizer;
+typedef struct _GtkCssLocation GtkCssLocation;
 
 typedef struct _GtkCssStringToken GtkCssStringToken;
 typedef struct _GtkCssDelimToken GtkCssDelimToken;
@@ -110,6 +111,15 @@ union _GtkCssToken {
   GtkCssDimensionToken dimension;
 };
 
+struct _GtkCssLocation
+{
+  gsize                  bytes;
+  gsize                  chars;
+  gsize                  lines;
+  gsize                  line_bytes;
+  gsize                  line_chars;
+};
+
 void                    gtk_css_token_clear                     (GtkCssToken            *token);
 
 gboolean                gtk_css_token_is_finite                 (const GtkCssToken      *token);
@@ -133,11 +143,7 @@ GtkCssTokenizer *       gtk_css_tokenizer_new                   (GBytes         
 GtkCssTokenizer *       gtk_css_tokenizer_ref                   (GtkCssTokenizer        *tokenizer);
 void                    gtk_css_tokenizer_unref                 (GtkCssTokenizer        *tokenizer);
 
-gsize                   gtk_css_tokenizer_get_byte              (GtkCssTokenizer        *tokenizer);
-gsize                   gtk_css_tokenizer_get_char              (GtkCssTokenizer        *tokenizer);
-gsize                   gtk_css_tokenizer_get_line              (GtkCssTokenizer        *tokenizer);
-gsize                   gtk_css_tokenizer_get_line_byte         (GtkCssTokenizer        *tokenizer);
-gsize                   gtk_css_tokenizer_get_line_char         (GtkCssTokenizer        *tokenizer);
+const GtkCssLocation *  gtk_css_tokenizer_get_location          (GtkCssTokenizer        *tokenizer);
 
 void                    gtk_css_tokenizer_read_token            (GtkCssTokenizer        *tokenizer,
                                                                  GtkCssToken            *token);

@@ -47,24 +47,14 @@
 
 
 typedef struct _GtkCssChunk GtkCssChunk;
-typedef struct _GtkCssChunkSize GtkCssChunkSize;
 typedef struct _GtkCssChunkTokenSource GtkCssChunkTokenSource;
-
-struct _GtkCssChunkSize
-{
-  gsize              bytes;
-  gsize              chars;
-  gsize              line_breaks;
-  gsize              line_bytes;
-  gsize              line_chars;
-};
 
 struct _GtkCssChunk
 {
   /* must be first element so we can cast between them */
   GtkCssToken        token;
 
-  GtkCssChunkSize    size;
+  GtkCssLocation     size;
   GObject           *consumer;
   GError            *error;
 };
@@ -100,23 +90,23 @@ gtk_css_chunk_clear (gpointer data)
 }
 
 static void
-gtk_css_chunk_size_clear (GtkCssChunkSize *size)
+gtk_css_location_clear (GtkCssLocation *size)
 {
   size->bytes = 0;
   size->chars = 0;
-  size->line_breaks = 0;
+  size->lines = 0;
   size->line_bytes = 0;
   size->line_chars = 0;
 }
 
 static void
-gtk_css_chunk_size_add (GtkCssChunkSize *size,
-                        GtkCssChunkSize *add)
+gtk_css_location_add (GtkCssLocation *size,
+                      GtkCssLocation *add)
 {
   size->bytes += add->bytes;
   size->chars += add->chars;
-  size->line_breaks += add->line_breaks;
-  if (add->line_breaks)
+  size->lines += add->lines;
+  if (add->lines)
     {
       size->line_bytes = add->line_bytes;
       size->line_chars = add->line_chars;
@@ -135,16 +125,16 @@ gtk_css_chunk_augment (GtkCssRbTree *tree,
                        gpointer      lnode,
                        gpointer      rnode)
 {
-  GtkCssChunkSize *size = aug;
+  GtkCssLocation *size = aug;
   GtkCssChunk *chunk = node;
 
-  gtk_css_chunk_size_clear (size);
+  gtk_css_location_clear (size);
 
   if (lnode)
-    gtk_css_chunk_size_add (size, gtk_css_rb_tree_get_augment (tree, lnode));
-  gtk_css_chunk_size_add (size, &chunk->size);
+    gtk_css_location_add (size, gtk_css_rb_tree_get_augment (tree, lnode));
+  gtk_css_location_add (size, &chunk->size);
   if (rnode)
-    gtk_css_chunk_size_add (size, gtk_css_rb_tree_get_augment (tree, rnode));
+    gtk_css_location_add (size, gtk_css_rb_tree_get_augment (tree, rnode));
 }
  
 static void
@@ -237,7 +227,7 @@ compare_chunk_to_offset (GtkCssRbTree *tree,
   left = gtk_css_rb_tree_get_left (tree, chunk);
   if (left)
     {
-      GtkCssChunkSize *left_size = gtk_css_rb_tree_get_augment (tree, left);
+      GtkCssLocation *left_size = gtk_css_rb_tree_get_augment (tree, left);
       if (*offset < left_size->chars)
         return 1;
       *offset -= left_size->chars;
@@ -438,7 +428,7 @@ gtk_css_chunk_get_iters (GtkInspectorCssEditor *ce,
   l = gtk_css_rb_tree_get_left (priv->tokens, chunk);
   if (l)
     {
-      GtkCssChunkSize *size = gtk_css_rb_tree_get_augment (priv->tokens, l);
+      GtkCssLocation *size = gtk_css_rb_tree_get_augment (priv->tokens, l);
       offset = size->chars;
     }
   else
@@ -454,7 +444,7 @@ gtk_css_chunk_get_iters (GtkInspectorCssEditor *ce,
 
       if (l != prev)
         {
-          GtkCssChunkSize *size = gtk_css_rb_tree_get_augment (priv->tokens, l);
+          GtkCssLocation *size = gtk_css_rb_tree_get_augment (priv->tokens, l);
           offset += size->chars;
           offset += c->size.chars;
         }
@@ -648,12 +638,12 @@ update_tokenize (GtkInspectorCssEditor *ce)
   char *text;
   gsize bytes = 0;
   gsize chars = 0;
-  gsize lines = 1;
+  gsize lines = 0;
 
   if (priv->tokens)
     gtk_css_rb_tree_unref (priv->tokens);
   priv->tokens = gtk_css_rb_tree_new (GtkCssChunk,
-                                      GtkCssChunkSize,
+                                      GtkCssLocation,
                                       gtk_css_chunk_augment,
                                       gtk_css_chunk_clear,
                                       NULL);
@@ -667,16 +657,17 @@ update_tokenize (GtkInspectorCssEditor *ce)
        chunk->token.type != GTK_CSS_TOKEN_EOF;
        gtk_css_tokenizer_read_token (tokenizer, &chunk->token))
     {
-      chunk->size.bytes = gtk_css_tokenizer_get_byte (tokenizer) - bytes;
+      const GtkCssLocation *location = gtk_css_tokenizer_get_location (tokenizer);
+      chunk->size.bytes = location->bytes - bytes;
       bytes += chunk->size.bytes;
-      chunk->size.chars = gtk_css_tokenizer_get_char (tokenizer) - chars;
+      chunk->size.chars = location->chars - chars;
       chars += chunk->size.chars;
-      chunk->size.line_breaks = gtk_css_tokenizer_get_line (tokenizer) - lines;
-      lines += chunk->size.line_breaks;
-      if (chunk->size.line_breaks)
+      chunk->size.lines = location->lines - lines;
+      lines += chunk->size.lines;
+      if (chunk->size.lines)
         {
-          chunk->size.line_bytes = gtk_css_tokenizer_get_line_byte (tokenizer);
-          chunk->size.line_chars = gtk_css_tokenizer_get_line_char (tokenizer);
+          chunk->size.line_bytes = location->line_bytes;
+          chunk->size.line_chars = location->line_chars;
         }
       else
         {
@@ -750,7 +741,7 @@ gtk_inspector_css_editor_init (GtkInspectorCssEditor *ce)
   ce->priv = gtk_inspector_css_editor_get_instance_private (ce);
   gtk_widget_init_template (GTK_WIDGET (ce));
   ce->priv->tokens = gtk_css_rb_tree_new (GtkCssChunk,
-                                          GtkCssChunkSize,
+                                          GtkCssLocation,
                                           gtk_css_chunk_augment,
                                           gtk_css_chunk_clear,
                                           NULL);
