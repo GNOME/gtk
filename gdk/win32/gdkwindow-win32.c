@@ -2846,7 +2846,7 @@ _gdk_win32_window_update_style_bits (GdkWindow *window)
     }
 
   SetWindowPos (GDK_WINDOW_HWND (window), insert_after,
-		0, 0,
+		rect.left, rect.top,
 		rect.right - rect.left, rect.bottom - rect.top,
 		flags);
 }
