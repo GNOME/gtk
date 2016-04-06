@@ -3974,11 +3974,14 @@ _gdk_wayland_device_manager_add_seat (GdkDeviceManager *device_manager,
 
   init_devices (seat);
 
-  seat->wp_tablet_seat =
-    zwp_tablet_manager_v1_get_tablet_seat (display_wayland->tablet_manager,
-                                           wl_seat);
-  zwp_tablet_seat_v1_add_listener (seat->wp_tablet_seat, &tablet_seat_listener,
-                                   seat);
+  if (display_wayland->tablet_manager)
+    {
+      seat->wp_tablet_seat =
+        zwp_tablet_manager_v1_get_tablet_seat (display_wayland->tablet_manager,
+                                               wl_seat);
+      zwp_tablet_seat_v1_add_listener (seat->wp_tablet_seat, &tablet_seat_listener,
+                                       seat);
+    }
 
   gdk_display_add_seat (display, GDK_SEAT (seat));
 }
