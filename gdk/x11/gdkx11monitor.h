@@ -22,8 +22,8 @@
 #ifndef __GDK_X11_MONITOR_H__
 #define __GDK_X11_MONITOR_H__
 
-#if !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
-#error "Only <gdk/gdk.h> can be included directly."
+#if !defined (__GDKX_H_INSIDE__) && !defined (GDK_COMPILATION)
+#error "Only <gdk/gdkx.h> can be included directly."
 #endif
 
 #include <gdk/gdkmonitor.h>
