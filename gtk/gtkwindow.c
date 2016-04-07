@@ -7104,13 +7104,15 @@ update_realized_window_properties (GtkWindow     *window,
 {
   GtkWindowPrivate *priv = window->priv;
 
+  if (!_gtk_widget_is_toplevel (GTK_WIDGET (window)))
+    return;
+
   if (priv->client_decorated && priv->use_client_shadow)
     update_shadow_width (window, window_border);
 
   update_opaque_region (window, window_border, child_allocation);
 
-  if (_gtk_widget_is_toplevel (GTK_WIDGET (window)))
-    update_border_windows (window);
+  update_border_windows (window);
 }
 
 static void
