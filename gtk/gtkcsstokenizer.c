@@ -25,6 +25,15 @@
 #include <math.h>
 #include <string.h>
 
+typedef struct _GtkCssTokenReader GtkCssTokenReader;
+
+struct _GtkCssTokenReader {
+  const char *           data;
+  const char *           end;
+
+  GtkCssLocation         position;
+};
+
 struct _GtkCssTokenizer
 {
   gint                   ref_count;
@@ -33,10 +42,7 @@ struct _GtkCssTokenizer
   gpointer               user_data;
   GDestroyNotify         user_destroy;
 
-  const gchar           *data;
-  const gchar           *end;
-
-  GtkCssLocation         position;
+  GtkCssTokenReader      reader;
 };
 
 static void
@@ -479,6 +485,23 @@ gtk_css_token_init (GtkCssToken     *token,
   va_end (args);
 }
 
+static void
+gtk_css_token_reader_init (GtkCssTokenReader *reader,
+                           GBytes            *bytes)
+{
+  reader->data = g_bytes_get_data (bytes, NULL);
+  reader->end = reader->data + g_bytes_get_size (bytes);
+
+  gtk_css_location_init (&reader->position);
+}
+
+static void
+gtk_css_token_reader_init_copy (GtkCssTokenReader       *reader,
+                                const GtkCssTokenReader *source)
+{
+  *reader = *source;
+}
+
 GtkCssTokenizer *
 gtk_css_tokenizer_new (GBytes                   *bytes,
                        GtkCssTokenizerErrorFunc  func,
@@ -494,10 +517,7 @@ gtk_css_tokenizer_new (GBytes                   *bytes,
   tokenizer->user_data = user_data;
   tokenizer->user_destroy = user_destroy;
 
-  tokenizer->data = g_bytes_get_data (bytes, NULL);
-  tokenizer->end = tokenizer->data + g_bytes_get_size (bytes);
-
-  gtk_css_location_init (&tokenizer->position);
+  gtk_css_token_reader_init (&tokenizer->reader, bytes);
 
   return tokenizer;
 }
@@ -527,7 +547,7 @@ gtk_css_tokenizer_unref (GtkCssTokenizer *tokenizer)
 const GtkCssLocation *
 gtk_css_tokenizer_get_location (GtkCssTokenizer *tokenizer)
 {
-  return &tokenizer->position;
+  return &tokenizer->reader.position;
 }
 
 static void
@@ -614,37 +634,37 @@ is_non_printable (char c)
 }
 
 static inline gsize
-gtk_css_tokenizer_remaining (GtkCssTokenizer *tokenizer)
+gtk_css_token_reader_remaining (const GtkCssTokenReader *reader)
 {
-  return tokenizer->end - tokenizer->data;
+  return reader->end - reader->data;
 }
 
 static gboolean
-gtk_css_tokenizer_has_valid_escape (GtkCssTokenizer *tokenizer)
+gtk_css_token_reader_has_valid_escape (const GtkCssTokenReader *reader)
 {
-  switch (gtk_css_tokenizer_remaining (tokenizer))
+  switch (gtk_css_token_reader_remaining (reader))
     {
       case 0:
         return FALSE;
       case 1:
-        return *tokenizer->data == '\\';
+        return *reader->data == '\\';
       default:
-        return is_valid_escape (tokenizer->data[0], tokenizer->data[1]);
+        return is_valid_escape (reader->data[0], reader->data[1]);
     }
 }
 
 static gboolean
-gtk_css_tokenizer_has_identifier (GtkCssTokenizer *tokenizer)
+gtk_css_token_reader_has_identifier (const GtkCssTokenReader *reader)
 {
-  const char *data = tokenizer->data;
+  const char *data = reader->data;
 
-  if (data == tokenizer->end)
+  if (data == reader->end)
     return FALSE;
 
   if (*data == '-')
     {
       data++;
-      if (data == tokenizer->end)
+      if (data == reader->end)
         return FALSE;
       if (*data == '-')
         return TRUE;
@@ -656,7 +676,7 @@ gtk_css_tokenizer_has_identifier (GtkCssTokenizer *tokenizer)
   if (*data == '\\')
     {
       data++;
-      if (data == tokenizer->end)
+      if (data == reader->end)
         return TRUE; /* really? */
       if (is_newline (*data))
         return FALSE;
@@ -667,24 +687,24 @@ gtk_css_tokenizer_has_identifier (GtkCssTokenizer *tokenizer)
 }
 
 static gboolean
-gtk_css_tokenizer_has_number (GtkCssTokenizer *tokenizer)
+gtk_css_token_reader_has_number (const GtkCssTokenReader *reader)
 {
-  const char *data = tokenizer->data;
+  const char *data = reader->data;
 
-  if (data == tokenizer->end)
+  if (data == reader->end)
     return FALSE;
 
   if (*data == '-' || *data == '+')
     {
       data++;
-      if (data == tokenizer->end)
+      if (data == reader->end)
         return FALSE;
     }
 
   if (*data == '.')
     {
       data++;
-      if (data == tokenizer->end)
+      if (data == reader->end)
         return FALSE;
     }
 
@@ -692,106 +712,109 @@ gtk_css_tokenizer_has_number (GtkCssTokenizer *tokenizer)
 }
 
 static void
-gtk_css_tokenizer_consume_newline (GtkCssTokenizer *tokenizer)
+gtk_css_token_reader_consume_newline (GtkCssTokenReader *reader)
 {
   gsize n;
 
-  if (gtk_css_tokenizer_remaining (tokenizer) > 1 &&
-      tokenizer->data[0] == '\r' && tokenizer->data[1] == '\n')
+  if (gtk_css_token_reader_remaining (reader) > 1 &&
+      reader->data[0] == '\r' && reader->data[1] == '\n')
     n = 2;
   else
     n = 1;
   
-  tokenizer->data += n;
-  gtk_css_location_advance_newline (&tokenizer->position, n == 2 ? TRUE : FALSE);
+  reader->data += n;
+  gtk_css_location_advance_newline (&reader->position, n == 2 ? TRUE : FALSE);
 }
 
 static inline void
-gtk_css_tokenizer_consume (GtkCssTokenizer *tokenizer,
-                           gsize            n_bytes,
-                           gsize            n_characters)
+gtk_css_token_reader_consume (GtkCssTokenReader *reader,
+                              gsize              n_bytes,
+                              gsize              n_characters)
 {
   /* NB: must not contain newlines! */
-  tokenizer->data += n_bytes;
+  reader->data += n_bytes;
 
-  gtk_css_location_advance (&tokenizer->position, n_bytes, n_characters);
+  gtk_css_location_advance (&reader->position, n_bytes, n_characters);
 }
 
 static inline void
-gtk_css_tokenizer_consume_ascii (GtkCssTokenizer *tokenizer)
+gtk_css_token_reader_consume_ascii (GtkCssTokenReader *reader)
 {
   /* NB: must not contain newlines! */
-  gtk_css_tokenizer_consume (tokenizer, 1, 1);
+  gtk_css_token_reader_consume (reader, 1, 1);
 }
 
 static inline void
-gtk_css_tokenizer_consume_whitespace (GtkCssTokenizer *tokenizer)
+gtk_css_token_reader_consume_whitespace (GtkCssTokenReader *reader)
 {
-  if (is_newline (*tokenizer->data))
-    gtk_css_tokenizer_consume_newline (tokenizer);
+  if (is_newline (*reader->data))
+    gtk_css_token_reader_consume_newline (reader);
   else
-    gtk_css_tokenizer_consume_ascii (tokenizer);
+    gtk_css_token_reader_consume_ascii (reader);
 }
 
 static inline void
-gtk_css_tokenizer_consume_char (GtkCssTokenizer *tokenizer,
-                                GString         *string)
+gtk_css_token_reader_consume_char (GtkCssTokenReader *reader,
+                                   GString           *string)
 {
-  if (is_newline (*tokenizer->data))
-    gtk_css_tokenizer_consume_newline (tokenizer);
+  if (is_newline (*reader->data))
+    gtk_css_token_reader_consume_newline (reader);
   else
     {
-      gsize char_size = g_utf8_next_char (tokenizer->data) - tokenizer->data;
+      gsize char_size = g_utf8_next_char (reader->data) - reader->data;
 
       if (string)
-        g_string_append_len (string, tokenizer->data, char_size);
-      gtk_css_tokenizer_consume (tokenizer, char_size, 1);
+        g_string_append_len (string, reader->data, char_size);
+      gtk_css_token_reader_consume (reader, char_size, 1);
     }
 }
 
 static void
-gtk_css_tokenizer_read_whitespace (GtkCssTokenizer *tokenizer,
-                                   GtkCssToken     *token)
+gtk_css_token_reader_read_whitespace (GtkCssTokenReader *reader,
+                                      GtkCssToken       *token)
 {
   do {
-    gtk_css_tokenizer_consume_whitespace (tokenizer);
-  } while (tokenizer->data != tokenizer->end &&
-           is_whitespace (*tokenizer->data));
+    gtk_css_token_reader_consume_whitespace (reader);
+  } while (reader->data != reader->end &&
+           is_whitespace (*reader->data));
 
   gtk_css_token_init (token, GTK_CSS_TOKEN_WHITESPACE);
 }
 
 static gunichar 
-gtk_css_tokenizer_read_escape (GtkCssTokenizer *tokenizer)
+gtk_css_token_reader_read_escape (GtkCssTokenReader *reader)
 {
   gunichar value = 0;
   guint i;
 
-  gtk_css_tokenizer_consume (tokenizer, 1, 1);
+  gtk_css_token_reader_consume (reader, 1, 1);
 
-  for (i = 0; i < 6 && tokenizer->data < tokenizer->end && g_ascii_isxdigit (*tokenizer->data); i++)
+  for (i = 0; i < 6 && reader->data < reader->end && g_ascii_isxdigit (*reader->data); i++)
     {
-      value = value * 16 + g_ascii_xdigit_value (*tokenizer->data);
-      gtk_css_tokenizer_consume (tokenizer, 1, 1);
+      value = value * 16 + g_ascii_xdigit_value (*reader->data);
+      gtk_css_token_reader_consume (reader, 1, 1);
     }
 
   if (i == 0)
     return 0xFFFD;
 
+  if (reader->data < reader->end && is_whitespace (*reader->data))
+    gtk_css_token_reader_consume_whitespace (reader);
+
   return value;
 }
 
 static char *
-gtk_css_tokenizer_read_name (GtkCssTokenizer *tokenizer)
+gtk_css_token_reader_read_name (GtkCssTokenReader *reader)
 {
   GString *string = g_string_new (NULL);
 
   do {
-      if (*tokenizer->data == '\\')
+      if (*reader->data == '\\')
         {
-          if (gtk_css_tokenizer_has_valid_escape (tokenizer))
+          if (gtk_css_token_reader_has_valid_escape (reader))
             {
-              gunichar value = gtk_css_tokenizer_read_escape (tokenizer);
+              gunichar value = gtk_css_token_reader_read_escape (reader);
 
               if (value > 0 ||
                   (value >= 0xD800 && value <= 0xDFFF) ||
@@ -802,117 +825,118 @@ gtk_css_tokenizer_read_name (GtkCssTokenizer *tokenizer)
             }
           else
             {
-              gtk_css_tokenizer_consume_ascii (tokenizer);
+              gtk_css_token_reader_consume_ascii (reader);
 
-              if (tokenizer->data == tokenizer->end)
+              if (reader->data == reader->end)
                 {
                   g_string_append_unichar (string, 0xFFFD);
                   break;
                 }
               
-              gtk_css_tokenizer_consume_char (tokenizer, string);
+              gtk_css_token_reader_consume_char (reader, string);
             }
         }
-      else if (is_name (*tokenizer->data))
+      else if (is_name (*reader->data))
         {
-          gtk_css_tokenizer_consume_char (tokenizer, string);
+          gtk_css_token_reader_consume_char (reader, string);
         }
       else
         {
           break;
         }
     }
-  while (tokenizer->data != tokenizer->end);
+  while (reader->data != reader->end);
 
   return g_string_free (string, FALSE);
 }
 
 static void
-gtk_css_tokenizer_read_bad_url (GtkCssTokenizer  *tokenizer,
-                                GtkCssToken      *token)
+gtk_css_token_reader_read_bad_url (GtkCssTokenReader *reader,
+                                   GtkCssToken       *token)
 {
-  while (tokenizer->data < tokenizer->end && *tokenizer->data != ')')
+  while (reader->data < reader->end && *reader->data != ')')
     {
-      if (gtk_css_tokenizer_has_valid_escape (tokenizer))
-        gtk_css_tokenizer_read_escape (tokenizer);
+      if (gtk_css_token_reader_has_valid_escape (reader))
+        gtk_css_token_reader_read_escape (reader);
       else
-        gtk_css_tokenizer_consume_char (tokenizer, NULL);
+        gtk_css_token_reader_consume_char (reader, NULL);
     }
   
-  if (tokenizer->data < tokenizer->end)
-    gtk_css_tokenizer_consume_ascii (tokenizer);
+  if (reader->data < reader->end)
+    gtk_css_token_reader_consume_ascii (reader);
 
   gtk_css_token_init (token, GTK_CSS_TOKEN_BAD_URL);
 }
 
 static void
-gtk_css_tokenizer_read_url (GtkCssTokenizer  *tokenizer,
-                            GtkCssToken      *token)
+gtk_css_token_reader_read_url (GtkCssTokenizer   *tokenizer,
+                               GtkCssTokenReader *reader,
+                               GtkCssToken       *token)
 {
   GString *url = g_string_new (NULL);
 
-  while (tokenizer->data < tokenizer->end && is_whitespace (*tokenizer->data))
-    gtk_css_tokenizer_consume_whitespace (tokenizer);
+  while (reader->data < reader->end && is_whitespace (*reader->data))
+    gtk_css_token_reader_consume_whitespace (reader);
 
-  while (tokenizer->data < tokenizer->end)
+  while (reader->data < reader->end)
     {
-      if (*tokenizer->data == ')')
+      if (*reader->data == ')')
         {
-          gtk_css_tokenizer_consume_ascii (tokenizer);
+          gtk_css_token_reader_consume_ascii (reader);
           break;
         }
-      else if (is_whitespace (*tokenizer->data))
+      else if (is_whitespace (*reader->data))
         {
           do
-            gtk_css_tokenizer_consume_whitespace (tokenizer);
-          while (tokenizer->data < tokenizer->end && is_whitespace (*tokenizer->data));
+            gtk_css_token_reader_consume_whitespace (reader);
+          while (reader->data < reader->end && is_whitespace (*reader->data));
           
-          if (*tokenizer->data == ')')
+          if (*reader->data == ')')
             {
-              gtk_css_tokenizer_consume_ascii (tokenizer);
+              gtk_css_token_reader_consume_ascii (reader);
               break;
             }
-          else if (tokenizer->data >= tokenizer->end)
+          else if (reader->data >= reader->end)
             {
               break;
             }
           else
             {
-              gtk_css_tokenizer_read_bad_url (tokenizer, token);
+              gtk_css_token_reader_read_bad_url (reader, token);
               gtk_css_tokenizer_parse_error (tokenizer, token, "Whitespace only allowed at start and end of url");
               return;
             }
         }
-      else if (is_non_printable (*tokenizer->data))
+      else if (is_non_printable (*reader->data))
         {
-          gtk_css_tokenizer_read_bad_url (tokenizer, token);
+          gtk_css_token_reader_read_bad_url (reader, token);
           g_string_free (url, TRUE);
-          gtk_css_tokenizer_parse_error (tokenizer, token, "Nonprintable character 0x%02X in url", *tokenizer->data);
+          gtk_css_tokenizer_parse_error (tokenizer, token, "Nonprintable character 0x%02X in url", *reader->data);
           return;
         }
-      else if (*tokenizer->data == '"' ||
-               *tokenizer->data == '\'' ||
-               *tokenizer->data == '(')
+      else if (*reader->data == '"' ||
+               *reader->data == '\'' ||
+               *reader->data == '(')
         {
-          gtk_css_tokenizer_read_bad_url (tokenizer, token);
-          gtk_css_tokenizer_parse_error (tokenizer, token, "Invalid character %c in url", *tokenizer->data);
+          gtk_css_token_reader_read_bad_url (reader, token);
+          gtk_css_tokenizer_parse_error (tokenizer, token, "Invalid character %c in url", *reader->data);
           g_string_free (url, TRUE);
           return;
         }
-      else if (gtk_css_tokenizer_has_valid_escape (tokenizer))
+      else if (gtk_css_token_reader_has_valid_escape (reader))
         {
-          g_string_append_unichar (url, gtk_css_tokenizer_read_escape (tokenizer));
+          g_string_append_unichar (url, gtk_css_token_reader_read_escape (reader));
         }
-      else if (*tokenizer->data == '\\')
+      else if (*reader->data == '\\')
         {
-          gtk_css_tokenizer_read_bad_url (tokenizer, token);
+          gtk_css_token_reader_read_bad_url (reader, token);
           gtk_css_tokenizer_parse_error (tokenizer, token, "Newline may not follow '\' escape character");
           g_string_free (url, TRUE);
           return;
         }
       else
         {
-          gtk_css_tokenizer_consume_char (tokenizer, url);
+          gtk_css_token_reader_consume_char (reader, url);
         }
     }
 
@@ -920,24 +944,26 @@ gtk_css_tokenizer_read_url (GtkCssTokenizer  *tokenizer,
 }
 
 static void
-gtk_css_tokenizer_read_ident_like (GtkCssTokenizer  *tokenizer,
-                                   GtkCssToken      *token)
+gtk_css_token_reader_read_ident_like (GtkCssTokenizer   *tokenizer,
+                                      GtkCssTokenReader *reader,
+                                      GtkCssToken       *token)
 {
-  char *name = gtk_css_tokenizer_read_name (tokenizer);
+  char *name = gtk_css_token_reader_read_name (reader);
 
-  if (*tokenizer->data == '(')
+  if (reader->data < reader->end &&
+      *reader->data == '(')
     {
-      gtk_css_tokenizer_consume_ascii (tokenizer);
+      gtk_css_token_reader_consume_ascii (reader);
       if (g_ascii_strcasecmp (name, "url") == 0)
         {
-          const char *data = tokenizer->data;
+          const char *data = reader->data;
 
           while (is_whitespace (*data))
             data++;
 
           if (*data != '"' && *data != '\'')
             {
-              gtk_css_tokenizer_read_url (tokenizer, token);
+              gtk_css_token_reader_read_url (tokenizer, reader, token);
               return;
             }
         }
@@ -951,13 +977,13 @@ gtk_css_tokenizer_read_ident_like (GtkCssTokenizer  *tokenizer,
 }
 
 static void
-gtk_css_tokenizer_read_numeric (GtkCssTokenizer *tokenizer,
-                                GtkCssToken     *token)
+gtk_css_token_reader_read_numeric (GtkCssTokenReader *reader,
+                                   GtkCssToken     *token)
 {
   int sign = 1, exponent_sign = 1;
   gint64 integer, fractional = 0, fractional_length = 1, exponent = 0;
   gboolean is_int = TRUE, has_sign = FALSE;
-  const char *data = tokenizer->data;
+  const char *data = reader->data;
 
   if (*data == '-')
     {
@@ -971,13 +997,13 @@ gtk_css_tokenizer_read_numeric (GtkCssTokenizer *tokenizer,
       data++;
     }
 
-  for (integer = 0; data < tokenizer->end && g_ascii_isdigit (*data); data++)
+  for (integer = 0; data < reader->end && g_ascii_isdigit (*data); data++)
     {
       /* check for overflow here? */
       integer = 10 * integer + g_ascii_digit_value (*data);
     }
 
-  if (data + 1 < tokenizer->end && *data == '.' && g_ascii_isdigit (data[1]))
+  if (data + 1 < reader->end && *data == '.' && g_ascii_isdigit (data[1]))
     {
       is_int = FALSE;
       data++;
@@ -986,7 +1012,7 @@ gtk_css_tokenizer_read_numeric (GtkCssTokenizer *tokenizer,
       fractional_length = 10;
       data++;
 
-      while (data < tokenizer->end && g_ascii_isdigit (*data))
+      while (data < reader->end && g_ascii_isdigit (*data))
         {
           if (fractional_length < G_MAXINT64 / 10)
             {
@@ -997,9 +1023,9 @@ gtk_css_tokenizer_read_numeric (GtkCssTokenizer *tokenizer,
         }
     }
 
-  if (data + 1 < tokenizer->end && (*data == 'e' || *data == 'E') && 
+  if (data + 1 < reader->end && (*data == 'e' || *data == 'E') && 
       (g_ascii_isdigit (data[1]) || 
-       (data + 2 < tokenizer->end && (data[1] == '+' || data[2] == '-') && g_ascii_isdigit (data[2]))))
+       (data + 2 < reader->end && (data[1] == '+' || data[2] == '-') && g_ascii_isdigit (data[2]))))
     {
       is_int = FALSE;
       data++;
@@ -1015,29 +1041,29 @@ gtk_css_tokenizer_read_numeric (GtkCssTokenizer *tokenizer,
           data++;
         }
 
-      while (data < tokenizer->end && g_ascii_isdigit (*data))
+      while (data < reader->end && g_ascii_isdigit (*data))
         {
           exponent = 10 * exponent + g_ascii_digit_value (*data);
           data++;
         }
     }
 
-  gtk_css_tokenizer_consume (tokenizer, data - tokenizer->data, data - tokenizer->data);
+  gtk_css_token_reader_consume (reader, data - reader->data, data - reader->data);
 
-  if (gtk_css_tokenizer_has_identifier (tokenizer))
+  if (gtk_css_token_reader_has_identifier (reader))
     {
       gtk_css_token_init (token,
                           is_int ? (has_sign ? GTK_CSS_TOKEN_SIGNED_INTEGER_DIMENSION : GTK_CSS_TOKEN_SIGNLESS_INTEGER_DIMENSION)
                                  : GTK_CSS_TOKEN_DIMENSION,
                           sign * (integer + ((double) fractional / fractional_length)) * pow (10, exponent_sign * exponent),
-                          gtk_css_tokenizer_read_name (tokenizer));
+                          gtk_css_token_reader_read_name (reader));
     }
-  else if (gtk_css_tokenizer_remaining (tokenizer) > 0 && *tokenizer->data == '%')
+  else if (gtk_css_token_reader_remaining (reader) > 0 && *reader->data == '%')
     {
       gtk_css_token_init (token,
                           GTK_CSS_TOKEN_PERCENTAGE,
                           sign * (integer + ((double) fractional / fractional_length)) * pow (10, exponent_sign * exponent));
-      gtk_css_tokenizer_consume_ascii (tokenizer);
+      gtk_css_token_reader_consume_ascii (reader);
     }
   else
     {
@@ -1049,76 +1075,78 @@ gtk_css_tokenizer_read_numeric (GtkCssTokenizer *tokenizer,
 }
 
 static void
-gtk_css_tokenizer_read_delim (GtkCssTokenizer *tokenizer,
-                              GtkCssToken     *token)
+gtk_css_token_reader_read_delim (GtkCssTokenReader *reader,
+                                 GtkCssToken       *token)
 {
-  gtk_css_token_init (token, GTK_CSS_TOKEN_DELIM, g_utf8_get_char (tokenizer->data));
-  gtk_css_tokenizer_consume_char (tokenizer, NULL);
+  gtk_css_token_init (token, GTK_CSS_TOKEN_DELIM, g_utf8_get_char (reader->data));
+  gtk_css_token_reader_consume_char (reader, NULL);
 }
 
 static void
-gtk_css_tokenizer_read_dash (GtkCssTokenizer  *tokenizer,
-                             GtkCssToken      *token)
+gtk_css_token_reader_read_dash (GtkCssTokenizer   *tokenizer,
+                                GtkCssTokenReader *reader,
+                                GtkCssToken       *token)
 {
-  if (gtk_css_tokenizer_remaining (tokenizer) == 1)
+  if (gtk_css_token_reader_remaining (reader) == 1)
     {
-      gtk_css_tokenizer_read_delim (tokenizer, token);
+      gtk_css_token_reader_read_delim (reader, token);
     }
-  else if (gtk_css_tokenizer_has_number (tokenizer))
+  else if (gtk_css_token_reader_has_number (reader))
     {
-      gtk_css_tokenizer_read_numeric (tokenizer, token);
+      gtk_css_token_reader_read_numeric (reader, token);
     }
-  else if (gtk_css_tokenizer_remaining (tokenizer) >= 3 &&
-           tokenizer->data[1] == '-' &&
-           tokenizer->data[2] == '>')
+  else if (gtk_css_token_reader_remaining (reader) >= 3 &&
+           reader->data[1] == '-' &&
+           reader->data[2] == '>')
     {
       gtk_css_token_init (token, GTK_CSS_TOKEN_CDC);
-      gtk_css_tokenizer_consume (tokenizer, 3, 3);
+      gtk_css_token_reader_consume (reader, 3, 3);
     }
-  else if (gtk_css_tokenizer_has_identifier (tokenizer))
+  else if (gtk_css_token_reader_has_identifier (reader))
     {
-      gtk_css_tokenizer_read_ident_like (tokenizer, token);
+      gtk_css_token_reader_read_ident_like (tokenizer, reader, token);
     }
   else
     {
-      gtk_css_tokenizer_read_delim (tokenizer, token);
+      gtk_css_token_reader_read_delim (reader, token);
     }
 }
 
 static void
-gtk_css_tokenizer_read_string (GtkCssTokenizer *tokenizer,
-                               GtkCssToken     *token)
+gtk_css_token_reader_read_string (GtkCssTokenizer   *tokenizer,
+                                  GtkCssTokenReader *reader,
+                                  GtkCssToken       *token)
 {
   GString *string = g_string_new (NULL);
-  char end = *tokenizer->data;
+  char end = *reader->data;
 
-  gtk_css_tokenizer_consume_ascii (tokenizer);
+  gtk_css_token_reader_consume_ascii (reader);
 
-  while (tokenizer->data < tokenizer->end)
+  while (reader->data < reader->end)
     {
-      if (*tokenizer->data == end)
+      if (*reader->data == end)
         {
-          gtk_css_tokenizer_consume_ascii (tokenizer);
+          gtk_css_token_reader_consume_ascii (reader);
           break;
         }
-      else if (*tokenizer->data == '\\')
+      else if (*reader->data == '\\')
         {
-          if (gtk_css_tokenizer_remaining (tokenizer) == 1)
+          if (gtk_css_token_reader_remaining (reader) == 1)
             {
-              gtk_css_tokenizer_consume_ascii (tokenizer);
+              gtk_css_token_reader_consume_ascii (reader);
               break;
             }
-          else if (is_newline (tokenizer->data[1]))
+          else if (is_newline (reader->data[1]))
             {
-              gtk_css_tokenizer_consume_ascii (tokenizer);
-              gtk_css_tokenizer_consume_newline (tokenizer);
+              gtk_css_token_reader_consume_ascii (reader);
+              gtk_css_token_reader_consume_newline (reader);
             }
           else
             {
-              g_string_append_unichar (string, gtk_css_tokenizer_read_escape (tokenizer));
+              g_string_append_unichar (string, gtk_css_token_reader_read_escape (reader));
             }
         }
-      else if (is_newline (*tokenizer->data))
+      else if (is_newline (*reader->data))
         {
           g_string_free (string, TRUE);
           gtk_css_token_init (token, GTK_CSS_TOKEN_BAD_STRING);
@@ -1127,7 +1155,7 @@ gtk_css_tokenizer_read_string (GtkCssTokenizer *tokenizer,
         }
       else
         {
-          gtk_css_tokenizer_consume_char (tokenizer, string);
+          gtk_css_token_reader_consume_char (reader, string);
         }
     }
   
@@ -1135,21 +1163,22 @@ gtk_css_tokenizer_read_string (GtkCssTokenizer *tokenizer,
 }
 
 static void
-gtk_css_tokenizer_read_comment (GtkCssTokenizer *tokenizer,
-                                GtkCssToken     *token)
+gtk_css_token_reader_read_comment (GtkCssTokenizer   *tokenizer,
+                                   GtkCssTokenReader *reader,
+                                   GtkCssToken       *token)
 {
-  gtk_css_tokenizer_consume (tokenizer, 2, 2);
+  gtk_css_token_reader_consume (reader, 2, 2);
 
-  while (tokenizer->data < tokenizer->end)
+  while (reader->data < reader->end)
     {
-      if (gtk_css_tokenizer_remaining (tokenizer) > 1 &&
-          tokenizer->data[0] == '*' && tokenizer->data[1] == '/')
+      if (gtk_css_token_reader_remaining (reader) > 1 &&
+          reader->data[0] == '*' && reader->data[1] == '/')
         {
-          gtk_css_tokenizer_consume (tokenizer, 2, 2);
+          gtk_css_token_reader_consume (reader, 2, 2);
           gtk_css_token_init (token, GTK_CSS_TOKEN_COMMENT);
           return;
         }
-      gtk_css_tokenizer_consume_char (tokenizer, NULL);
+      gtk_css_token_reader_consume_char (reader, NULL);
     }
 
   gtk_css_token_init (token, GTK_CSS_TOKEN_COMMENT);
@@ -1157,18 +1186,18 @@ gtk_css_tokenizer_read_comment (GtkCssTokenizer *tokenizer,
 }
 
 static void
-gtk_css_tokenizer_read_match (GtkCssTokenizer *tokenizer,
-                              GtkCssToken     *token,
-                              GtkCssTokenType  type)
+gtk_css_token_reader_read_match (GtkCssTokenReader *reader,
+                                 GtkCssToken     *token,
+                                 GtkCssTokenType  type)
 {
-  if (gtk_css_tokenizer_remaining (tokenizer) > 1 && tokenizer->data[1] == '=')
+  if (gtk_css_token_reader_remaining (reader) > 1 && reader->data[1] == '=')
     {
       gtk_css_token_init (token, type);
-      gtk_css_tokenizer_consume (tokenizer, 2, 2);
+      gtk_css_token_reader_consume (reader, 2, 2);
     }
   else
     {
-      gtk_css_tokenizer_read_delim (tokenizer, token);
+      gtk_css_token_reader_read_delim (reader, token);
     }
 }
 
@@ -1176,47 +1205,51 @@ void
 gtk_css_tokenizer_read_token (GtkCssTokenizer  *tokenizer,
                               GtkCssToken      *token)
 {
-  if (tokenizer->data == tokenizer->end)
+  GtkCssTokenReader reader;
+
+  if (tokenizer->reader.data == tokenizer->reader.end)
     {
       gtk_css_token_init (token, GTK_CSS_TOKEN_EOF);
       return;
     }
 
-  if (tokenizer->data[0] == '/' && gtk_css_tokenizer_remaining (tokenizer) > 1 &&
-      tokenizer->data[1] == '*')
+  gtk_css_token_reader_init_copy (&reader, &tokenizer->reader);
+
+  if (reader.data[0] == '/' && gtk_css_token_reader_remaining (&reader) > 1 &&
+      reader.data[1] == '*')
     {
-      gtk_css_tokenizer_read_comment (tokenizer, token);
-      return;
+      gtk_css_token_reader_read_comment (tokenizer, &reader, token);
+      goto out;
     }
 
-  switch (*tokenizer->data)
+  switch (*reader.data)
     {
     case '\n':
     case '\r':
     case '\t':
     case '\f':
     case ' ':
-      gtk_css_tokenizer_read_whitespace (tokenizer, token);
+      gtk_css_token_reader_read_whitespace (&reader, token);
       break;
 
     case '"':
-      gtk_css_tokenizer_read_string (tokenizer, token);
+      gtk_css_token_reader_read_string (tokenizer, &reader, token);
       break;
 
     case '#':
-      gtk_css_tokenizer_consume_ascii (tokenizer);
-      if (is_name (*tokenizer->data) || gtk_css_tokenizer_has_valid_escape (tokenizer))
+      gtk_css_token_reader_consume_ascii (&reader);
+      if (is_name (*reader.data) || gtk_css_token_reader_has_valid_escape (&reader))
         {
           GtkCssTokenType type;
 
-          if (gtk_css_tokenizer_has_identifier (tokenizer))
+          if (gtk_css_token_reader_has_identifier (&reader))
             type = GTK_CSS_TOKEN_HASH_ID;
           else
             type = GTK_CSS_TOKEN_HASH_UNRESTRICTED;
 
           gtk_css_token_init (token,
                               type,
-                              gtk_css_tokenizer_read_name (tokenizer));
+                              gtk_css_token_reader_read_name (&reader));
         }
       else
         {
@@ -1225,82 +1258,82 @@ gtk_css_tokenizer_read_token (GtkCssTokenizer  *tokenizer,
       break;
 
     case '$':
-      gtk_css_tokenizer_read_match (tokenizer, token, GTK_CSS_TOKEN_SUFFIX_MATCH);
+      gtk_css_token_reader_read_match (&reader, token, GTK_CSS_TOKEN_SUFFIX_MATCH);
       break;
 
     case '\'':
-      gtk_css_tokenizer_read_string (tokenizer, token);
+      gtk_css_token_reader_read_string (tokenizer, &reader, token);
       break;
 
     case '(':
       gtk_css_token_init (token, GTK_CSS_TOKEN_OPEN_PARENS);
-      gtk_css_tokenizer_consume_ascii (tokenizer);
+      gtk_css_token_reader_consume_ascii (&reader);
       break;
 
     case ')':
       gtk_css_token_init (token, GTK_CSS_TOKEN_CLOSE_PARENS);
-      gtk_css_tokenizer_consume_ascii (tokenizer);
+      gtk_css_token_reader_consume_ascii (&reader);
       break;
 
     case '*':
-      gtk_css_tokenizer_read_match (tokenizer, token, GTK_CSS_TOKEN_SUBSTRING_MATCH);
+      gtk_css_token_reader_read_match (&reader, token, GTK_CSS_TOKEN_SUBSTRING_MATCH);
       break;
 
     case '+':
-      if (gtk_css_tokenizer_has_number (tokenizer))
-        gtk_css_tokenizer_read_numeric (tokenizer, token);
+      if (gtk_css_token_reader_has_number (&reader))
+        gtk_css_token_reader_read_numeric (&reader, token);
       else
-        gtk_css_tokenizer_read_delim (tokenizer, token);
+        gtk_css_token_reader_read_delim (&reader, token);
       break;
 
     case ',':
       gtk_css_token_init (token, GTK_CSS_TOKEN_COMMA);
-      gtk_css_tokenizer_consume_ascii (tokenizer);
+      gtk_css_token_reader_consume_ascii (&reader);
       break;
 
     case '-':
-      gtk_css_tokenizer_read_dash (tokenizer, token);
+      gtk_css_token_reader_read_dash (tokenizer, &reader, token);
       break;
 
     case '.':
-      if (gtk_css_tokenizer_has_number (tokenizer))
-        gtk_css_tokenizer_read_numeric (tokenizer, token);
+      if (gtk_css_token_reader_has_number (&reader))
+        gtk_css_token_reader_read_numeric (&reader, token);
       else
-        gtk_css_tokenizer_read_delim (tokenizer, token);
+        gtk_css_token_reader_read_delim (&reader, token);
       break;
 
     case ':':
       gtk_css_token_init (token, GTK_CSS_TOKEN_COLON);
-      gtk_css_tokenizer_consume_ascii (tokenizer);
+      gtk_css_token_reader_consume_ascii (&reader);
       break;
 
     case ';':
       gtk_css_token_init (token, GTK_CSS_TOKEN_SEMICOLON);
-      gtk_css_tokenizer_consume_ascii (tokenizer);
+      gtk_css_token_reader_consume_ascii (&reader);
       break;
 
     case '<':
-      if (gtk_css_tokenizer_remaining (tokenizer) >= 4 &&
-          tokenizer->data[1] == '!' &&
-          tokenizer->data[2] == '-' &&
-          tokenizer->data[3] == '-')
+      if (gtk_css_token_reader_remaining (&reader) >= 4 &&
+          reader.data[1] == '!' &&
+          reader.data[2] == '-' &&
+          reader.data[3] == '-')
         {
           gtk_css_token_init (token, GTK_CSS_TOKEN_CDO);
-          gtk_css_tokenizer_consume (tokenizer, 3, 3);
+          gtk_css_token_reader_consume (&reader, 3, 3);
         }
       else
         {
-          gtk_css_tokenizer_read_delim (tokenizer, token);
+          gtk_css_token_reader_read_delim (&reader, token);
         }
       break;
 
     case '@':
-      gtk_css_tokenizer_consume_ascii (tokenizer);
-      if (gtk_css_tokenizer_has_identifier (tokenizer))
+      gtk_css_token_reader_consume_ascii (&reader);
+      if (gtk_css_token_reader_has_identifier (&reader))
         {
           gtk_css_token_init (token,
                               GTK_CSS_TOKEN_AT_KEYWORD,
-                              gtk_css_tokenizer_read_name (tokenizer));
+                              gtk_css_token_reader_read_name (&reader));
         }
       else
         {
@@ -1310,13 +1343,13 @@ gtk_css_tokenizer_read_token (GtkCssTokenizer  *tokenizer,
 
     case '[':
       gtk_css_token_init (token, GTK_CSS_TOKEN_OPEN_SQUARE);
-      gtk_css_tokenizer_consume_ascii (tokenizer);
+      gtk_css_token_reader_consume_ascii (&reader);
       break;
 
     case '\\':
-      if (gtk_css_tokenizer_has_valid_escape (tokenizer))
+      if (gtk_css_token_reader_has_valid_escape (&reader))
         {
-          gtk_css_tokenizer_read_ident_like (tokenizer, token);
+          gtk_css_token_reader_read_ident_like (tokenizer, &reader, token);
         }
       else
         {
@@ -1327,51 +1360,54 @@ gtk_css_tokenizer_read_token (GtkCssTokenizer  *tokenizer,
 
     case ']':
       gtk_css_token_init (token, GTK_CSS_TOKEN_CLOSE_SQUARE);
-      gtk_css_tokenizer_consume_ascii (tokenizer);
+      gtk_css_token_reader_consume_ascii (&reader);
       break;
 
     case '^':
-      gtk_css_tokenizer_read_match (tokenizer, token, GTK_CSS_TOKEN_PREFIX_MATCH);
+      gtk_css_token_reader_read_match (&reader, token, GTK_CSS_TOKEN_PREFIX_MATCH);
       break;
 
     case '{':
       gtk_css_token_init (token, GTK_CSS_TOKEN_OPEN_CURLY);
-      gtk_css_tokenizer_consume_ascii (tokenizer);
+      gtk_css_token_reader_consume_ascii (&reader);
       break;
 
     case '}':
       gtk_css_token_init (token, GTK_CSS_TOKEN_CLOSE_CURLY);
-      gtk_css_tokenizer_consume_ascii (tokenizer);
+      gtk_css_token_reader_consume_ascii (&reader);
       break;
 
     case '|':
-      if (gtk_css_tokenizer_remaining (tokenizer) > 1 && tokenizer->data[1] == '|')
+      if (gtk_css_token_reader_remaining (&reader) > 1 && reader.data[1] == '|')
         {
           gtk_css_token_init (token, GTK_CSS_TOKEN_COLUMN);
-          gtk_css_tokenizer_consume (tokenizer, 2, 2);
+          gtk_css_token_reader_consume (&reader, 2, 2);
         }
       else
         {
-          gtk_css_tokenizer_read_match (tokenizer, token, GTK_CSS_TOKEN_DASH_MATCH);
+          gtk_css_token_reader_read_match (&reader, token, GTK_CSS_TOKEN_DASH_MATCH);
         }
       break;
 
     case '~':
-      gtk_css_tokenizer_read_match (tokenizer, token, GTK_CSS_TOKEN_INCLUDE_MATCH);
+      gtk_css_token_reader_read_match (&reader, token, GTK_CSS_TOKEN_INCLUDE_MATCH);
       break;
 
     default:
-      if (g_ascii_isdigit (*tokenizer->data))
+      if (g_ascii_isdigit (*reader.data))
         {
-          gtk_css_tokenizer_read_numeric (tokenizer, token);
+          gtk_css_token_reader_read_numeric (&reader, token);
         }
-      else if (is_name_start (*tokenizer->data))
+      else if (is_name_start (*reader.data))
         {
-          gtk_css_tokenizer_read_ident_like (tokenizer, token);
+          gtk_css_token_reader_read_ident_like (tokenizer, &reader, token);
         }
       else
-        gtk_css_tokenizer_read_delim (tokenizer, token);
+        gtk_css_token_reader_read_delim (&reader, token);
       break;
     }
+
+out:
+  gtk_css_token_reader_init_copy (&tokenizer->reader, &reader);
 }
 
