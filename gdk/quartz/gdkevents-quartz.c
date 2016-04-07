@@ -906,7 +906,7 @@ fill_crossing_event (GdkWindow       *toplevel,
    such that PINCH(STARTED), PINCH(UPDATE).... will not show a second
    PINCH(STARTED) event.
 */
-#ifdef AVAILABLE_MAC_OS_X_VERSION_10_7_AND_LATER
+#ifdef AVAILABLE_MAC_OS_X_VERSION_10_8_AND_LATER
 static void
 fill_pinch_event (GdkWindow *window,
                   GdkEvent  *event,
@@ -1002,7 +1002,7 @@ fill_pinch_event (GdkWindow *window,
     }
   event->touchpad_pinch.scale = last_scale;
 }
-#endif /* OSX Version >= 10.7 */
+#endif /* OSX Version >= 10.8 */
 
 static void
 fill_button_event (GdkWindow *window,
@@ -1647,11 +1647,12 @@ gdk_event_translate (GdkEvent *event,
           }
       }
       break;
-#ifdef AVAILABLE_MAC_OS_X_VERSION_10_7_AND_LATER
+#ifdef AVAILABLE_MAC_OS_X_VERSION_10_8_AND_LATER
     case NSEventTypeMagnify:
     case NSEventTypeRotate:
       /* Event handling requires [NSEvent phase] which was introduced in 10.7 */
-      if (gdk_quartz_osx_version () >= GDK_OSX_LION)
+      /* However - Tests on 10.7 showed that phase property does not work     */
+      if (gdk_quartz_osx_version () >= GDK_OSX_MOUNTAIN_LION)
         fill_pinch_event (window, event, nsevent, x, y, x_root, y_root);
       else
         return_val = FALSE;
