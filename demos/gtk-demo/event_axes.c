@@ -206,7 +206,7 @@ draw_axes_info (cairo_t       *cr,
                 AxesInfo      *info,
                 GtkAllocation *allocation)
 {
-  gdouble pressure, tilt_x, tilt_y, distance, wheel;
+  gdouble pressure, tilt_x, tilt_y, distance, wheel, rotation, slider;
   GdkAxisFlags axes = gdk_device_get_axes (info->last_source);
 
   cairo_save (cr);
@@ -297,6 +297,60 @@ draw_axes_info (cairo_t       *cr,
       cairo_new_sub_path (cr);
       cairo_arc (cr, 0, 0, 100, 0, wheel * 2 * G_PI);
       cairo_stroke (cr);
+      cairo_restore (cr);
+    }
+
+  if (axes & GDK_AXIS_FLAG_ROTATION)
+    {
+      gdk_device_get_axis (info->last_source, info->axes, GDK_AXIS_ROTATION,
+                           &rotation);
+      rotation *= 2 * G_PI;
+
+      cairo_save (cr);
+      cairo_rotate (cr, - G_PI / 2);
+      cairo_set_line_cap (cr, CAIRO_LINE_CAP_ROUND);
+      cairo_set_line_width (cr, 5);
+
+      cairo_new_sub_path (cr);
+      cairo_arc (cr, 0, 0, 100, 0, rotation);
+      cairo_stroke (cr);
+      cairo_restore (cr);
+    }
+
+  if (axes & GDK_AXIS_FLAG_SLIDER)
+    {
+      cairo_pattern_t *pattern, *mask;
+
+      gdk_device_get_axis (info->last_source, info->axes, GDK_AXIS_SLIDER,
+                           &slider);
+
+      cairo_save (cr);
+
+      cairo_move_to (cr, 0, -10);
+      cairo_rel_line_to (cr, 0, -50);
+      cairo_rel_line_to (cr, 10, 0);
+      cairo_rel_line_to (cr, -5, 50);
+      cairo_close_path (cr);
+
+      cairo_clip_preserve (cr);
+
+      pattern = cairo_pattern_create_linear (0, -10, 0, -60);
+      cairo_pattern_add_color_stop_rgb (pattern, 0, 0, 1, 0);
+      cairo_pattern_add_color_stop_rgb (pattern, 1, 1, 0, 0);
+      cairo_set_source (cr, pattern);
+      cairo_pattern_destroy (pattern);
+
+      mask = cairo_pattern_create_linear (0, -10, 0, -60);
+      cairo_pattern_add_color_stop_rgba (mask, 0, 0, 0, 0, 1);
+      cairo_pattern_add_color_stop_rgba (mask, slider, 0, 0, 0, 1);
+      cairo_pattern_add_color_stop_rgba (mask, slider, 0, 0, 0, 0);
+      cairo_pattern_add_color_stop_rgba (mask, 1, 0, 0, 0, 0);
+      cairo_mask (cr, mask);
+      cairo_pattern_destroy (mask);
+
+      cairo_set_source_rgb (cr, 0, 0, 0);
+      cairo_stroke (cr);
+
       cairo_restore (cr);
     }
 
