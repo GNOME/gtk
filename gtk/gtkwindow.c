@@ -1097,7 +1097,7 @@ gtk_window_class_init (GtkWindowClass *klass)
    *
    * Normally, the connection between the application and the window
    * will remain until the window is destroyed, but you can explicitly
-   * remove it by setting the ::application property to %NULL.
+   * remove it by setting the :application property to %NULL.
    *
    * Since: 3.0
    */

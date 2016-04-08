@@ -103,8 +103,8 @@
  * defines a #GtkShortcutsWindow with ID "help_overlay" then GtkApplication
  * associates an instance of this shortcuts window with each
  * #GtkApplicationWindow and sets up keyboard accelerators (Control-F1
- * and Control-?) to open it. To create an menu item that displays the
- * shortcuts window associate the item with the action win.show-help-overlay.
+ * and Control-?) to open it. To create a menu item that displays the
+ * shortcuts window, associate the item with the action win.show-help-overlay.
  *
  * ## A simple application ## {#gtkapplication}
  *
@@ -1518,7 +1518,7 @@ gtk_application_get_menubar (GtkApplication *application)
  * types of actions that may be blocked are specified by the @flags
  * parameter. When the application completes the operation it should
  * call gtk_application_uninhibit() to remove the inhibitor. Note that
- * an application can have multiple inhibitors, and all of the must
+ * an application can have multiple inhibitors, and all of them must
  * be individually removed. Inhibitors are also cleared when the
  * application exits.
  *
