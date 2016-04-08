@@ -2893,6 +2893,12 @@ tablet_tool_handle_capability (void                      *data,
     case ZWP_TABLET_TOOL_V1_CAPABILITY_DISTANCE:
       tool->axes |= GDK_AXIS_FLAG_DISTANCE;
       break;
+    case ZWP_TABLET_TOOL_V1_CAPABILITY_ROTATION:
+      tool->axes |= GDK_AXIS_FLAG_ROTATION;
+      break;
+    case ZWP_TABLET_TOOL_V1_CAPABILITY_SLIDER:
+      tool->axes |= GDK_AXIS_FLAG_SLIDER;
+      break;
     }
 }
 
