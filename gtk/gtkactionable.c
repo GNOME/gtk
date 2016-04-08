@@ -40,7 +40,7 @@
  * The action will be looked up in action groups that are found among
  * the widgets ancestors. Most commonly, these will be the actions with
  * the “win.” or “app.” prefix that are associated with the #GtkApplicationWindow
- * or "GtkApplication, but other action groups that are added with
+ * or #GtkApplication, but other action groups that are added with
  * gtk_widget_insert_action_group() will be consulted as well.
  *
  * Since: 3.4
