@@ -615,10 +615,11 @@ update_token_tags (GtkInspectorCssEditor *ce,
 }
 
 static void
-tokenizer_error (GtkCssTokenizer   *tokenizer,
-                 const GtkCssToken *token,
-                 const GError      *error,
-                 gpointer           unused)
+tokenizer_error (GtkCssTokenizer      *tokenizer,
+                 const GtkCssLocation *location,
+                 const GtkCssToken    *token,
+                 const GError         *error,
+                 gpointer              unused)
 {
   GtkCssChunk *chunk = (GtkCssChunk *) token;
 

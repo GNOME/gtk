@@ -588,7 +588,7 @@ gtk_css_tokenizer_emit_error (GtkCssTokenizer      *tokenizer,
                               const GError         *error)
 {
   if (tokenizer->error_func)
-    tokenizer->error_func (tokenizer, token, error, tokenizer->user_data);
+    tokenizer->error_func (tokenizer, location, token, error, tokenizer->user_data);
   else
     g_warning ("Unhandled CSS error: %zu:%zu: %s", location->lines + 1, location->line_chars + 1, error->message);
 }

@@ -77,10 +77,11 @@ typedef struct _GtkCssDelimToken GtkCssDelimToken;
 typedef struct _GtkCssNumberToken GtkCssNumberToken;
 typedef struct _GtkCssDimensionToken GtkCssDimensionToken;
 
-typedef void (* GtkCssTokenizerErrorFunc) (GtkCssTokenizer   *parser,
-                                           const GtkCssToken *token,
-                                           const GError      *error,
-                                           gpointer           user_data);
+typedef void (* GtkCssTokenizerErrorFunc) (GtkCssTokenizer      *parser,
+                                           const GtkCssLocation *location,
+                                           const GtkCssToken    *token,
+                                           const GError         *error,
+                                           gpointer              user_data);
 
 struct _GtkCssStringToken {
   GtkCssTokenType  type;
