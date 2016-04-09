@@ -425,6 +425,9 @@
                             <property name="adjustment">slowdown_adjustment</property>
                             <property name="valign">baseline</property>
                             <property name="draw_value">0</property>
+                            <marks>
+                              <mark value="0.0" position="top"/>
+                            </marks>
                           </object>
                           <packing>
                             <property name="expand">True</property>
