@@ -22,6 +22,7 @@
 
 #include "gdkdevicemanagerprivate-core.h"
 #include "gdkdeviceprivate.h"
+#include "gdkdevicetoolprivate.h"
 #include "gdkdisplayprivate.h"
 #include "gdkeventtranslator.h"
 #include "gdkprivate-x11.h"

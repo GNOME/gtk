@@ -529,6 +529,68 @@ typedef enum
   GDK_WINDOW_TYPE_HINT_DND
 } GdkWindowTypeHint;
 
+/**
+ * GdkAxisUse:
+ * @GDK_AXIS_IGNORE: the axis is ignored.
+ * @GDK_AXIS_X: the axis is used as the x axis.
+ * @GDK_AXIS_Y: the axis is used as the y axis.
+ * @GDK_AXIS_PRESSURE: the axis is used for pressure information.
+ * @GDK_AXIS_XTILT: the axis is used for x tilt information.
+ * @GDK_AXIS_YTILT: the axis is used for y tilt information.
+ * @GDK_AXIS_WHEEL: the axis is used for wheel information.
+ * @GDK_AXIS_DISTANCE: the axis is used for pen/tablet distance information. (Since: 3.22)
+ * @GDK_AXIS_ROTATION: the axis is used for pen rotation information. (Since: 3.22)
+ * @GDK_AXIS_SLIDER: the axis is used for pen slider information. (Since: 3.22)
+ * @GDK_AXIS_LAST: a constant equal to the numerically highest axis value.
+ *
+ * An enumeration describing the way in which a device
+ * axis (valuator) maps onto the predefined valuator
+ * types that GTK+ understands.
+ */
+typedef enum
+{
+  GDK_AXIS_IGNORE,
+  GDK_AXIS_X,
+  GDK_AXIS_Y,
+  GDK_AXIS_PRESSURE,
+  GDK_AXIS_XTILT,
+  GDK_AXIS_YTILT,
+  GDK_AXIS_WHEEL,
+  GDK_AXIS_DISTANCE,
+  GDK_AXIS_ROTATION,
+  GDK_AXIS_SLIDER,
+  GDK_AXIS_LAST
+} GdkAxisUse;
+
+/**
+ * GdkAxisFlags:
+ * @GDK_AXIS_FLAG_X: X axis is present
+ * @GDK_AXIS_FLAG_Y: Y axis is present
+ * @GDK_AXIS_FLAG_PRESSURE: Pressure axis is present
+ * @GDK_AXIS_FLAG_XTILT: X tilt axis is present
+ * @GDK_AXIS_FLAG_YTILT: Y tilt axis is present
+ * @GDK_AXIS_FLAG_WHEEL: Wheel axis is present
+ * @GDK_AXIS_FLAG_DISTANCE: Distance axis is present
+ * @GDK_AXIS_FLAG_ROTATION: Z-axis rotation is present
+ * @GDK_AXIS_FLAG_SLIDER: Slider axis is present
+ *
+ * Flags describing the current capabilities of a device/tool.
+ *
+ * Since: 3.22
+ */
+typedef enum
+{
+  GDK_AXIS_FLAG_X        = 1 << GDK_AXIS_X,
+  GDK_AXIS_FLAG_Y        = 1 << GDK_AXIS_Y,
+  GDK_AXIS_FLAG_PRESSURE = 1 << GDK_AXIS_PRESSURE,
+  GDK_AXIS_FLAG_XTILT    = 1 << GDK_AXIS_XTILT,
+  GDK_AXIS_FLAG_YTILT    = 1 << GDK_AXIS_YTILT,
+  GDK_AXIS_FLAG_WHEEL    = 1 << GDK_AXIS_WHEEL,
+  GDK_AXIS_FLAG_DISTANCE = 1 << GDK_AXIS_DISTANCE,
+  GDK_AXIS_FLAG_ROTATION = 1 << GDK_AXIS_ROTATION,
+  GDK_AXIS_FLAG_SLIDER   = 1 << GDK_AXIS_SLIDER,
+} GdkAxisFlags;
+
 G_END_DECLS
 
 #endif /* __GDK_TYPES_H__ */

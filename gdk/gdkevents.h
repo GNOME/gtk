@@ -33,6 +33,7 @@
 #include <gdk/gdktypes.h>
 #include <gdk/gdkdnd.h>
 #include <gdk/gdkdevice.h>
+#include <gdk/gdkdevicetool.h>
 
 G_BEGIN_DECLS
 

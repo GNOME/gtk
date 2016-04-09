@@ -29,6 +29,7 @@
 #include "gdkwayland.h"
 #include "gdkkeysyms.h"
 #include "gdkdeviceprivate.h"
+#include "gdkdevicetoolprivate.h"
 #include "gdkdevicemanagerprivate.h"
 #include "gdkseatprivate.h"
 #include "pointer-gestures-unstable-v1-client-protocol.h"

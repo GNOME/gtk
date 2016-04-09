@@ -19,6 +19,7 @@
 #define __GDK_DEVICE_PRIVATE_H__
 
 #include "gdkdevice.h"
+#include "gdkdevicetool.h"
 #include "gdkdevicemanager.h"
 #include "gdkevents.h"
 #include "gdkseat.h"
@@ -30,21 +31,7 @@ G_BEGIN_DECLS
 #define GDK_DEVICE_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GDK_TYPE_DEVICE, GdkDeviceClass))
 
 typedef struct _GdkDeviceClass GdkDeviceClass;
-typedef struct _GdkDeviceToolClass GdkDeviceToolClass;
 typedef struct _GdkDeviceKey GdkDeviceKey;
-
-struct _GdkDeviceTool
-{
-  GObject parent_instance;
-  guint64 serial;
-  GdkDeviceToolType type;
-  GdkAxisFlags tool_axes;
-};
-
-struct _GdkDeviceToolClass
-{
-  GObjectClass parent_class;
-};
 
 struct _GdkDeviceKey
 {
@@ -199,10 +186,6 @@ GdkWindow * _gdk_device_window_at_position    (GdkDevice        *device,
 void  gdk_device_set_seat  (GdkDevice *device,
                             GdkSeat   *seat);
 
-/* Device tools */
-GdkDeviceTool *gdk_device_tool_new    (guint64            serial,
-                                       GdkDeviceToolType  type,
-                                       GdkAxisFlags       tool_axes);
 void           gdk_device_update_tool (GdkDevice     *device,
                                        GdkDeviceTool *tool);
 
