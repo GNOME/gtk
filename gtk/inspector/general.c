@@ -411,37 +411,18 @@ add_device (GtkInspectorGeneral *gen,
     "Rotation",
     "Slider"
   };
+  const char *source_name[] = {
+    "Mouse",
+    "Pen",
+    "Eraser",
+    "Cursor",
+    "Keyboard",
+    "Touchscreen",
+    "Touchpad"
+  };
 
   name = gdk_device_get_name (device);
-
-  switch (gdk_device_get_source (device))
-    {
-    case GDK_SOURCE_MOUSE:
-      value = "Mouse";
-      break;
-    case GDK_SOURCE_PEN:
-      value = "Pen";
-      break;
-    case GDK_SOURCE_ERASER:
-      value = "Eraser";
-      break;
-    case GDK_SOURCE_CURSOR:
-      value = "Cursor";
-      break;
-    case GDK_SOURCE_KEYBOARD:
-      value = "Keyboard";
-      break;
-    case GDK_SOURCE_TOUCHSCREEN:
-      value = "Touchscreen";
-      break;
-    case GDK_SOURCE_TOUCHPAD:
-      value = "Touchpad";
-      break;
-    default:
-      value = "Unknown";
-      break;
-    }
-
+  value = source_name[gdk_device_get_source (device)];
   add_label_row (GTK_LIST_BOX (gen->priv->device_box), name, value, 10);
 
   str = g_string_new ("");
