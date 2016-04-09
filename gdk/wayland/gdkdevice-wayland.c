@@ -2716,6 +2716,7 @@ seat_handle_capabilities (void                    *data,
                                      "device-manager", seat->device_manager,
                                      "seat", seat,
                                      NULL);
+      _gdk_device_reset_axes (seat->keyboard);
       _gdk_device_set_associated_device (seat->keyboard, seat->master_keyboard);
 
       device_manager->devices =
@@ -3478,6 +3479,7 @@ init_devices (GdkWaylandSeat *seat)
                                        "device-manager", device_manager,
                                        "seat", seat,
                                        NULL);
+
   GDK_WAYLAND_DEVICE (seat->master_pointer)->pointer = &seat->pointer_info;
 
   device_manager->devices =
@@ -3495,6 +3497,7 @@ init_devices (GdkWaylandSeat *seat)
                                         "device-manager", device_manager,
                                         "seat", seat,
                                         NULL);
+  _gdk_device_reset_axes (seat->master_keyboard);
 
   device_manager->devices =
     g_list_prepend (device_manager->devices, seat->master_keyboard);
