@@ -99,6 +99,11 @@ Release notes for 3.20
   gtk_window_set_default_size() to restore it.
   See https://wiki.gnome.org/HowDoI/SaveWindowState for a detailed example.
 
+* Geometry handling in GtkWindow has been removed. If you are using the
+  functions gtk_window_resize_to_geometry, gtk_window_set_default_geometry,
+  gtk_window_parse_geometry or gtk_window_set_geometry_hints, you may need
+  to make some changes to your code.
+
 * GtkDrawingArea used to implicitly render the theme background before
   calling the ::draw handler. This is no longer the case. If you rely
   on having a theme-provided background, call gtk_render_background()
