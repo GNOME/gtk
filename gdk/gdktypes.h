@@ -546,6 +546,10 @@ typedef enum
  * An enumeration describing the way in which a device
  * axis (valuator) maps onto the predefined valuator
  * types that GTK+ understands.
+ *
+ * Note that the X and Y axes are not really needed; pointer devices
+ * report their location via the x/y members of events regardless. Whether
+ * X and Y are present as axes depends on the GDK backend.
  */
 typedef enum
 {
