@@ -1702,6 +1702,9 @@ normalise_detailed_name (const gchar *detailed_action_name)
  * To remove all accelerators for an action, use an empty, zero-terminated
  * array for @accels.
  *
+ * For the @detailed_action_name, see g_action_parse_detailed_name() and
+ * g_action_print_detailed_name().
+ *
  * Since: 3.12
  */
 void
