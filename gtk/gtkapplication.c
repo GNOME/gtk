@@ -1250,17 +1250,15 @@ gtk_application_add_accelerator (GtkApplication *application,
                                  GVariant       *parameter)
 {
   const gchar *accelerators[2] = { accelerator, NULL };
-  gchar *action_and_target;
+  gchar *detailed_action_name;
 
   g_return_if_fail (GTK_IS_APPLICATION (application));
   g_return_if_fail (action_name != NULL);
   g_return_if_fail (accelerator != NULL);
 
-  action_and_target = gtk_print_action_and_target (NULL, action_name, parameter);
-  accels_set_accels_for_action (&application->priv->accels, action_and_target, accelerators);
-  gtk_action_muxer_set_primary_accel (application->priv->muxer, action_and_target, accelerator);
-  gtk_application_update_accels (application);
-  g_free (action_and_target);
+  detailed_action_name = g_action_print_detailed_name (action_name, parameter);
+  gtk_application_set_accels_for_action (application, detailed_action_name, accelerators);
+  g_free (detailed_action_name);
 }
 
 /**
@@ -1282,16 +1280,15 @@ gtk_application_remove_accelerator (GtkApplication *application,
                                     const gchar    *action_name,
                                     GVariant       *parameter)
 {
-  gchar *action_and_target;
+  const gchar *accelerators[1] = { NULL };
+  gchar *detailed_action_name;
 
   g_return_if_fail (GTK_IS_APPLICATION (application));
   g_return_if_fail (action_name != NULL);
 
-  action_and_target = gtk_print_action_and_target (NULL, action_name, parameter);
-  accels_set_accels_for_action (&application->priv->accels, action_and_target, NULL);
-  gtk_action_muxer_set_primary_accel (application->priv->muxer, action_and_target, NULL);
-  gtk_application_update_accels (application);
-  g_free (action_and_target);
+  detailed_action_name = g_action_print_detailed_name (action_name, parameter);
+  gtk_application_set_accels_for_action (application, detailed_action_name, accelerators);
+  g_free (detailed_action_name);
 }
 
 /**
