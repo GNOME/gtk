@@ -398,6 +398,19 @@ add_device (GtkInspectorGeneral *gen,
   int i;
   guint n_touches;
   gchar *text;
+  GdkAxisFlags axes;
+  const char *axis_name[] = {
+    "Ignore",
+    "X",
+    "Y",
+    "Pressure",
+    "X Tilt",
+    "Y Tilt",
+    "Wheel",
+    "Distance",
+    "Rotation",
+    "Slider"
+  };
 
   name = gdk_device_get_name (device);
 
@@ -433,46 +446,14 @@ add_device (GtkInspectorGeneral *gen,
 
   str = g_string_new ("");
 
-  if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD &&
-      gdk_device_get_n_axes (device) > 0)
+  axes = gdk_device_get_axes (device);
+  for (i = GDK_AXIS_X; i < GDK_AXIS_LAST; i++)
     {
-      for (i = 0; i < gdk_device_get_n_axes (device); i++)
+      if ((axes & (1 << i)) != 0)
         {
-          switch (gdk_device_get_axis_use (device, i))
-            {
-            case GDK_AXIS_X:
-              if (str->len > 0)
-                g_string_append (str, ", ");
-              g_string_append (str, "X");
-              break;
-            case GDK_AXIS_Y:
-              if (str->len > 0)
-                g_string_append (str, ", ");
-              g_string_append (str, "Y");
-              break;
-            case GDK_AXIS_PRESSURE:
-              if (str->len > 0)
-                g_string_append (str, ", ");
-              g_string_append (str, "Pressure");
-              break;
-            case GDK_AXIS_XTILT:
-              if (str->len > 0)
-                g_string_append (str, ", ");
-              g_string_append (str, "X Tilt");
-              break;
-            case GDK_AXIS_YTILT:
-              if (str->len > 0)
-                g_string_append (str, ", ");
-              g_string_append (str, "Y Tilt");
-              break;
-            case GDK_AXIS_WHEEL:
-              if (str->len > 0)
-                g_string_append (str, ", ");
-              g_string_append (str, "Wheel");
-              break;
-            default:
-              break;
-            }
+          if (str->len > 0)
+            g_string_append (str, ", ");
+          g_string_append (str, axis_name[i]);
         }
     }
 
