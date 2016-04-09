@@ -53,12 +53,12 @@ struct _GtkInspectorVisualPrivate
   GtkWidget *font_button;
   GtkWidget *hidpi_spin;
   GtkWidget *animation_switch;
-  GtkWidget *font_scale_scale;
+  GtkWidget *font_scale_entry;
+  GtkAdjustment *font_scale_adjustment;
   GtkAdjustment *scale_adjustment;
   GtkAdjustment *slowdown_adjustment;
   GtkWidget *slowdown_entry;
   GtkAdjustment *cursor_size_adjustment;
-  GtkAdjustment *font_scale_adjustment;
 
   GtkWidget *debug_box;
   GtkWidget *rendering_mode_combo;
@@ -140,13 +140,46 @@ redraw_everything (void)
 }
 
 static void
-font_scale_changed (GtkAdjustment *adjustment)
+update_font_scale (GtkInspectorVisual *vis,
+                   gdouble             factor,
+                   gboolean            update_adjustment,
+                   gboolean            update_entry)
+{
+  g_object_set (gtk_settings_get_default (), "gtk-xft-dpi",
+                (gint)(factor * 96 * 1024), NULL);
+
+  if (update_adjustment)
+    gtk_adjustment_set_value (vis->priv->font_scale_adjustment, factor);
+
+  if (update_entry)
+    {
+      gchar *str = g_strdup_printf ("%0.2f", factor);
+
+      gtk_entry_set_text (GTK_ENTRY (vis->priv->font_scale_entry), str);
+      g_free (str);
+    }
+}
+
+static void
+font_scale_adjustment_changed (GtkAdjustment      *adjustment,
+                               GtkInspectorVisual *vis)
 {
   gdouble factor;
 
   factor = gtk_adjustment_get_value (adjustment);
-  g_object_set (gtk_settings_get_default (), "gtk-xft-dpi",
-                (gint)(factor * 96 * 1024), NULL);
+  update_font_scale (vis, factor, FALSE, TRUE);
+}
+
+static void
+font_scale_entry_activated (GtkEntry           *entry,
+                            GtkInspectorVisual *vis)
+{
+  gdouble factor;
+  gchar *err = NULL;
+
+  factor = g_strtod (gtk_entry_get_text (entry), &err);
+  if (err != NULL)
+    update_font_scale (vis, factor, TRUE, FALSE);
 }
 
 static void
@@ -513,11 +546,12 @@ init_font (GtkInspectorVisual *vis)
 static void
 init_font_scale (GtkInspectorVisual *vis)
 {
-  gtk_scale_add_mark (GTK_SCALE (vis->priv->font_scale_scale), 1.0, GTK_POS_TOP, NULL);
   /* There is no backend agnostic way to get the default value, so use 1.0 */
-  gtk_adjustment_set_value (vis->priv->font_scale_adjustment, 1.0);
+  update_font_scale (vis, 1.0, TRUE, TRUE);
   g_signal_connect (vis->priv->font_scale_adjustment, "value-changed",
-                    G_CALLBACK (font_scale_changed), NULL);
+                    G_CALLBACK (font_scale_adjustment_changed), vis);
+  g_signal_connect (vis->priv->font_scale_entry, "activate",
+                    G_CALLBACK (font_scale_entry_activated), vis);
 }
 
 #if defined (GDK_WINDOWING_X11)
@@ -860,7 +894,7 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, software_gl_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, software_surface_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, texture_rectangle_switch);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, font_scale_scale);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, font_scale_entry);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, font_scale_adjustment);
 
   gtk_widget_class_bind_template_callback (widget_class, updates_activate);

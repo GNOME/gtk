@@ -256,7 +256,7 @@
                         <property name="visible">True</property>
                         <property name="orientation">horizontal</property>
                         <property name="margin">10</property>
-                        <property name="spacing">40</property>
+                        <property name="spacing">20</property>
                         <child>
                           <object class="GtkLabel" id="font_scale_label">
                             <property name="visible">True</property>
@@ -269,14 +269,25 @@
                         <child>
                           <object class="GtkScale" id="font_scale_scale">
                             <property name="visible">True</property>
-                            <property name="halign">end</property>
                             <property name="valign">baseline</property>
-                            <property name="digits">2</property>
                             <property name="adjustment">font_scale_adjustment</property>
+                            <property name="draw_value">0</property>
+                            <marks>
+                              <mark value="1.0" position="top"/>
+                            </marks>
                           </object>
                           <packing>
                             <property name="expand">True</property>
                           </packing>
+                        </child>
+                        <child>
+                          <object class="GtkEntry" id="font_scale_entry">
+                            <property name="visible">True</property>
+                            <property name="halign">end</property>
+                            <property name="valign">baseline</property>
+                            <property name="width-chars">4</property>
+                            <property name="input-purpose">number</property>
+                          </object>
                         </child>
                       </object>
                     </child>
@@ -876,7 +887,6 @@
       <widget name="icon_combo"/>
       <widget name="cursor_combo"/>
       <widget name="font_button"/>
-      <widget name="font_scale_scale"/>
       <widget name="direction_combo"/>
       <widget name="rendering_mode_combo"/>
       <widget name="gl_combo"/>
