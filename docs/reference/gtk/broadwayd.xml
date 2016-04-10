@@ -45,14 +45,14 @@ windows in the same web browser, by connecting to broadwayd.
 </para>
 <para>
 When using broadwayd, specify the display number to use, prefixed
-with a colon, similar to X. The default display number is 1.
+with a colon, similar to X. The default display number is 0.
 <programlisting>
 broadwayd :5
 </programlisting>
-Then point your web browser at <literal>http://127.0.0.1:8084</literal>.
+Then point your web browser at <literal>http://127.0.0.1:8085</literal>.
 Start your applications like this:
 <programlisting>
-BROADWAY_DISPLAY=:5 gtk3-demo
+GDK_BACKEND=broadway BROADWAY_DISPLAY=:5 gtk3-demo
 </programlisting>
 
 You can add password protection for your session by creating a file in

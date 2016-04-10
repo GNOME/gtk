@@ -43,10 +43,10 @@ To use broadwayd, start it like this:
 <programlisting>
 broadwayd :5
 </programlisting>
-Then point your web browser at <literal>http://127.0.0.1:8084</literal>.
+Then point your web browser at <literal>http://127.0.0.1:8085</literal>.
 Start your applications like this:
 <programlisting>
-BROADWAY_DISPLAY=:5 gtk3-demo
+GDK_BACKEND=broadway BROADWAY_DISPLAY=:5 gtk3-demo
 </programlisting>
 </para>
 
@@ -58,11 +58,11 @@ BROADWAY_DISPLAY=:5 gtk3-demo
     <title><envar>BROADWAY_DISPLAY</envar></title>
 
     <para>
-      Specifies the Broadway display number. The default display is 1.
+      Specifies the Broadway display number. The default display is 0.
       The display number determines the port to use when connecting
       to a Broadway application via the following formula:
       <programlisting>
-        <replaceable>port</replaceable> = 8080 + (<replaceable>display</replaceable> - 1)
+        <replaceable>port</replaceable> = 8080 + <replaceable>display</replaceable>
       </programlisting>
     </para>
   </formalpara>
