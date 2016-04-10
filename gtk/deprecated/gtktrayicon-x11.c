@@ -551,6 +551,7 @@ gtk_tray_icon_get_colors_property (GtkTrayIcon *icon)
     {
       GdkRGBA color;
 
+      color.alpha = 1.0;
       g_object_freeze_notify (G_OBJECT (icon));
 
       color.red = prop.prop[0] / 65535.0;
