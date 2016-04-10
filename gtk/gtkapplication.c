@@ -829,19 +829,19 @@ extract_accels_from_menu (GMenuModel     *model,
                           GtkApplication *app)
 {
   gint i;
-  GMenuLinkIter *iter;
-  const gchar *key;
-  GMenuModel *m;
 
   for (i = 0; i < g_menu_model_get_n_items (model); i++)
     {
+      GMenuLinkIter *iter;
+      GMenuModel *sub_model;
+
       extract_accel_from_menu_item (model, i, app);
 
       iter = g_menu_model_iterate_item_links (model, i);
-      while (g_menu_link_iter_get_next (iter, &key, &m))
+      while (g_menu_link_iter_get_next (iter, NULL, &sub_model))
         {
-          extract_accels_from_menu (m, app);
-          g_object_unref (m);
+          extract_accels_from_menu (sub_model, app);
+          g_object_unref (sub_model);
         }
       g_object_unref (iter);
     }
