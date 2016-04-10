@@ -1091,6 +1091,7 @@ gtk_application_add_window (GtkApplication *application,
                             GtkWindow      *window)
 {
   g_return_if_fail (GTK_IS_APPLICATION (application));
+  g_return_if_fail (GTK_IS_WINDOW (window));
 
   if (!g_application_get_is_registered (G_APPLICATION (application)))
     {
@@ -1125,6 +1126,7 @@ gtk_application_remove_window (GtkApplication *application,
                                GtkWindow      *window)
 {
   g_return_if_fail (GTK_IS_APPLICATION (application));
+  g_return_if_fail (GTK_IS_WINDOW (window));
 
   if (g_list_find (application->priv->windows, window))
     g_signal_emit (application,
@@ -1261,8 +1263,8 @@ gtk_application_add_accelerator (GtkApplication *application,
   gchar *detailed_action_name;
 
   g_return_if_fail (GTK_IS_APPLICATION (application));
-  g_return_if_fail (action_name != NULL);
   g_return_if_fail (accelerator != NULL);
+  g_return_if_fail (action_name != NULL);
 
   detailed_action_name = g_action_print_detailed_name (action_name, parameter);
   gtk_application_set_accels_for_action (application, detailed_action_name, accelerators);
@@ -1345,6 +1347,7 @@ gtk_application_remove_accelerator (GtkApplication *application,
 gboolean
 gtk_application_prefers_app_menu (GtkApplication *application)
 {
+  g_return_val_if_fail (GTK_IS_APPLICATION (application), FALSE);
   g_return_val_if_fail (application->priv->impl != NULL, FALSE);
 
   return gtk_application_impl_prefers_app_menu (application->priv->impl);
@@ -1382,6 +1385,7 @@ gtk_application_set_app_menu (GtkApplication *application,
   g_return_if_fail (GTK_IS_APPLICATION (application));
   g_return_if_fail (g_application_get_is_registered (G_APPLICATION (application)));
   g_return_if_fail (!g_application_get_is_remote (G_APPLICATION (application)));
+  g_return_if_fail (app_menu == NULL || G_IS_MENU_MODEL (app_menu));
 
   if (g_set_object (&application->priv->app_menu, app_menu))
     {
@@ -1447,6 +1451,7 @@ gtk_application_set_menubar (GtkApplication *application,
   g_return_if_fail (GTK_IS_APPLICATION (application));
   g_return_if_fail (g_application_get_is_registered (G_APPLICATION (application)));
   g_return_if_fail (!g_application_get_is_remote (G_APPLICATION (application)));
+  g_return_if_fail (menubar == NULL || G_IS_MENU_MODEL (menubar));
 
   if (g_set_object (&application->priv->menubar, menubar))
     {
@@ -1538,6 +1543,7 @@ gtk_application_inhibit (GtkApplication             *application,
 {
   g_return_val_if_fail (GTK_IS_APPLICATION (application), 0);
   g_return_val_if_fail (!g_application_get_is_remote (G_APPLICATION (application)), 0);
+  g_return_val_if_fail (window == NULL || GTK_IS_WINDOW (window), 0);
 
   return gtk_application_impl_inhibit (application->priv->impl, window, flags, reason);
 }
@@ -1636,6 +1642,8 @@ gtk_application_list_action_descriptions (GtkApplication *application)
   gint n, i = 0;
   gpointer key;
 
+  g_return_val_if_fail (GTK_IS_APPLICATION (application), NULL);
+
   n = g_hash_table_size (application->priv->accels.action_to_accels);
   result = g_new (gchar *, n + 1);
 
@@ -1708,6 +1716,7 @@ gtk_application_set_accels_for_action (GtkApplication      *application,
 
   g_return_if_fail (GTK_IS_APPLICATION (application));
   g_return_if_fail (detailed_action_name != NULL);
+  g_return_if_fail (accels != NULL);
 
   action_and_target = normalise_detailed_name (detailed_action_name);
   accels_set_accels_for_action (&application->priv->accels, action_and_target, accels);
@@ -1866,6 +1875,9 @@ gtk_application_get_menu_by_id (GtkApplication *application,
                                 const gchar    *id)
 {
   GObject *object;
+
+  g_return_val_if_fail (GTK_IS_APPLICATION (application), NULL);
+  g_return_val_if_fail (id != NULL, NULL);
 
   if (!application->priv->menus_builder)
     return NULL;
