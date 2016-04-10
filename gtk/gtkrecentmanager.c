@@ -537,12 +537,10 @@ gtk_recent_manager_monitor_changed (GFileMonitor      *monitor,
     {
     case G_FILE_MONITOR_EVENT_CHANGED:
     case G_FILE_MONITOR_EVENT_CREATED:
+    case G_FILE_MONITOR_EVENT_DELETED:
       gdk_threads_enter ();
       gtk_recent_manager_changed (manager);
       gdk_threads_leave ();
-      break;
-
-    case G_FILE_MONITOR_EVENT_DELETED:
       break;
 
     default:
