@@ -464,7 +464,7 @@ set_recent_manager (GtkRecentAction  *action,
   GtkRecentActionPrivate *priv = action->priv;
 
   if (manager)
-    priv->manager = NULL;
+    priv->manager = manager;
   else
     priv->manager = gtk_recent_manager_get_default ();
 }
@@ -475,8 +475,6 @@ gtk_recent_action_finalize (GObject *gobject)
   GtkRecentAction *action = GTK_RECENT_ACTION (gobject);
   GtkRecentActionPrivate *priv = action->priv;
 
-  priv->manager = NULL;
-  
   if (priv->data_destroy)
     {
       priv->data_destroy (priv->sort_data);
@@ -503,6 +501,8 @@ gtk_recent_action_dispose (GObject *gobject)
       priv->current_filter = NULL;
     }
 
+  priv->manager = NULL;
+  
   G_OBJECT_CLASS (gtk_recent_action_parent_class)->dispose (gobject);
 }
 
