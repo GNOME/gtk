@@ -480,6 +480,7 @@ gtk_recent_manager_real_changed (GtkRecentManager *manager)
             {
               g_bookmark_file_free (priv->recent_items);
               priv->recent_items = g_bookmark_file_new ();
+              priv->size = 0;
             }
           else if (age > 0)
             gtk_recent_manager_clamp_to_age (manager, age);
