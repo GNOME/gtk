@@ -810,10 +810,15 @@ extract_accel_from_menu_item (GMenuModel     *model,
     }
   g_object_unref (iter);
 
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (accel && action)
-    gtk_application_add_accelerator (app, accel, action, target);
-  G_GNUC_END_IGNORE_DEPRECATIONS
+    {
+      const gchar *accels[2] = { accel, NULL };
+      gchar *detailed_action_name;
+
+      detailed_action_name = g_action_print_detailed_name (action, target);
+      gtk_application_set_accels_for_action (app, detailed_action_name, accels);
+      g_free (detailed_action_name);
+    }
 
   if (target)
     g_variant_unref (target);
