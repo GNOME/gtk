@@ -1272,9 +1272,9 @@ gtk_recent_manager_move_item (GtkRecentManager  *recent_manager,
       g_error_free (move_error);
 
       g_set_error (error, GTK_RECENT_MANAGER_ERROR,
-                   GTK_RECENT_MANAGER_ERROR_NOT_FOUND,
-                   _("Unable to find an item with URI '%s'"),
-                   uri);
+                   GTK_RECENT_MANAGER_ERROR_UNKNOWN,
+                   _("Unable to move the item with URI '%s' to '%s'"),
+                   uri, new_uri);
       return FALSE;
     }
 
