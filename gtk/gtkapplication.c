@@ -1383,16 +1383,8 @@ gtk_application_set_app_menu (GtkApplication *application,
   g_return_if_fail (g_application_get_is_registered (G_APPLICATION (application)));
   g_return_if_fail (!g_application_get_is_remote (G_APPLICATION (application)));
 
-  if (app_menu != application->priv->app_menu)
+  if (g_set_object (&application->priv->app_menu, app_menu))
     {
-      if (application->priv->app_menu != NULL)
-        g_object_unref (application->priv->app_menu);
-
-      application->priv->app_menu = app_menu;
-
-      if (application->priv->app_menu != NULL)
-        g_object_ref (application->priv->app_menu);
-
       if (app_menu)
         extract_accels_from_menu (app_menu, application);
 
@@ -1455,16 +1447,8 @@ gtk_application_set_menubar (GtkApplication *application,
   g_return_if_fail (g_application_get_is_registered (G_APPLICATION (application)));
   g_return_if_fail (!g_application_get_is_remote (G_APPLICATION (application)));
 
-  if (menubar != application->priv->menubar)
+  if (g_set_object (&application->priv->menubar, menubar))
     {
-      if (application->priv->menubar != NULL)
-        g_object_unref (application->priv->menubar);
-
-      application->priv->menubar = menubar;
-
-      if (application->priv->menubar != NULL)
-        g_object_ref (application->priv->menubar);
-
       if (menubar)
         extract_accels_from_menu (menubar, application);
 
