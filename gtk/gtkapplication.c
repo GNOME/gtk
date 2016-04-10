@@ -525,7 +525,7 @@ gtk_application_focus_in_event_cb (GtkWindow      *window,
 
   g_object_notify_by_pspec (G_OBJECT (application), gtk_application_props[PROP_ACTIVE_WINDOW]);
 
-  return FALSE;
+  return GDK_EVENT_PROPAGATE;
 }
 
 static void
@@ -630,7 +630,7 @@ gtk_application_startup (GApplication *g_application)
 
   gtk_action_muxer_insert (application->priv->muxer, "app", G_ACTION_GROUP (application));
 
-  gtk_init (0, 0);
+  gtk_init (NULL, NULL);
 
   application->priv->impl = gtk_application_impl_new (application, gdk_display_get_default ());
   gtk_application_impl_startup (application->priv->impl, application->priv->register_session);
