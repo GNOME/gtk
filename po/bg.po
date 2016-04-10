@@ -12,10 +12,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ master\n"
+"Project-Id-Version: gtk+ gtk-3-20\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-04-09 23:29+0000\n"
-"PO-Revision-Date: 2016-03-22 07:18+0200\n"
+"PO-Revision-Date: 2016-04-10 16:50+0300\n"
 "Last-Translator: Zahari Yurukov <zahari.yurukov@gmail.com>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
 "Language: bg\n"
