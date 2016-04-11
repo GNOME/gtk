@@ -346,11 +346,11 @@ popup_position_func (GtkMenu  *menu,
   GtkLinkButtonPrivate *priv = link_button->priv;
   GtkAllocation allocation;
   GtkWidget *widget = GTK_WIDGET (link_button);
-  GdkScreen *screen = gtk_widget_get_screen (widget);
+  GdkDisplay *display;
+  GdkMonitor *monitor;
   GtkRequisition req;
-  gint monitor_num;
-  GdkRectangle monitor;
-  
+  GdkRectangle area;
+
   g_return_if_fail (gtk_widget_get_realized (widget));
 
   gdk_window_get_origin (gtk_widget_get_window (widget), x, y);
@@ -361,12 +361,13 @@ popup_position_func (GtkMenu  *menu,
   *x += allocation.width / 2;
   *y += allocation.height;
 
-  monitor_num = gdk_screen_get_monitor_at_point (screen, *x, *y);
-  gtk_menu_set_monitor (menu, monitor_num);
-  gdk_screen_get_monitor_workarea (screen, monitor_num, &monitor);
+  display = gtk_widget_get_display (widget);
+  monitor = gdk_display_get_monitor_at_point (display, *x, *y);
+  gtk_menu_place_on_monitor (menu, monitor);
+  gdk_monitor_get_workarea (monitor, &area);
 
-  *x = CLAMP (*x, monitor.x, monitor.x + MAX (0, monitor.width - req.width));
-  *y = CLAMP (*y, monitor.y, monitor.y + MAX (0, monitor.height - req.height));
+  *x = CLAMP (*x, area.x, area.x + MAX (0, area.width - req.width));
+  *y = CLAMP (*y, area.y, area.y + MAX (0, area.height - req.height));
 
   *push_in = FALSE;
 }

@@ -873,10 +873,10 @@ set_default_size (GtkRecentChooserDefault *impl)
   GtkWidget *widget;
   gint width, height;
   double font_size;
-  GdkScreen *screen;
-  gint monitor_num;
+  GdkDisplay *display;
+  GdkMonitor *monitor;
   GtkRequisition req;
-  GdkRectangle monitor;
+  GdkRectangle workarea;
   GtkStyleContext *context;
 
   widget = GTK_WIDGET (impl);
@@ -894,14 +894,12 @@ set_default_size (GtkRecentChooserDefault *impl)
   height = MAX (height, req.height);
 
   /* ... but no larger than the monitor */
-  screen = gtk_widget_get_screen (widget);
-  monitor_num = gdk_screen_get_monitor_at_window (screen,
-                                                  gtk_widget_get_window (widget));
+  display = gtk_widget_get_display (widget);
+  monitor = gdk_display_get_monitor_at_window (display, gtk_widget_get_window (widget));
+  gdk_monitor_get_workarea (monitor, &workarea);
 
-  gdk_screen_get_monitor_workarea (screen, monitor_num, &monitor);
-
-  width = MIN (width, monitor.width * 3 / 4);
-  height = MIN (height, monitor.height * 3 / 4);
+  width = MIN (width, workarea.width * 3 / 4);
+  height = MIN (height, workarea.height * 3 / 4);
 
   /* Set size */
   scrollw = GTK_SCROLLED_WINDOW (gtk_widget_get_parent (impl->priv->recent_view));
@@ -1739,30 +1737,29 @@ popup_position_func (GtkMenu   *menu,
 {
   GtkAllocation allocation;
   GtkWidget *widget = GTK_WIDGET (user_data);
-  GdkScreen *screen = gtk_widget_get_screen (widget);
   GtkRequisition req;
-  gint monitor_num;
-  GdkRectangle monitor;
+  GdkDisplay *display;
+  GdkMonitor *monitor;
+  GdkRectangle workarea;
 
   if (G_UNLIKELY (!gtk_widget_get_realized (widget)))
     return;
 
-  gdk_window_get_origin (gtk_widget_get_window (widget),
-                         x, y);
+  gdk_window_get_origin (gtk_widget_get_window (widget), x, y);
 
-  gtk_widget_get_preferred_size (GTK_WIDGET (menu),
-                                 &req, NULL);
+  gtk_widget_get_preferred_size (GTK_WIDGET (menu), &req, NULL);
 
   gtk_widget_get_allocation (widget, &allocation);
   *x += (allocation.width - req.width) / 2;
   *y += (allocation.height - req.height) / 2;
 
-  monitor_num = gdk_screen_get_monitor_at_point (screen, *x, *y);
-  gtk_menu_set_monitor (menu, monitor_num);
-  gdk_screen_get_monitor_workarea (screen, monitor_num, &monitor);
+  display = gtk_widget_get_display (widget);
+  monitor = gdk_display_get_monitor_at_point (display, *x, *y);
+  gtk_menu_place_on_monitor (menu, monitor);
+  gdk_monitor_get_workarea (monitor, &workarea);
 
-  *x = CLAMP (*x, monitor.x, monitor.x + MAX (0, monitor.width - req.width));
-  *y = CLAMP (*y, monitor.y, monitor.y + MAX (0, monitor.height - req.height));
+  *x = CLAMP (*x, workarea.x, workarea.x + MAX (0, workarea.width - req.width));
+  *y = CLAMP (*y, workarea.y, workarea.y + MAX (0, workarea.height - req.height));
 
   *push_in = FALSE;
 }

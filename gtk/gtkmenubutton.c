@@ -251,9 +251,9 @@ menu_position_up_down_func (GtkMenu       *menu,
   GtkWidget *widget = GTK_WIDGET (menu_button);
   GtkWidget *toplevel;
   GtkTextDirection direction;
-  GdkRectangle monitor;
-  gint monitor_num;
-  GdkScreen *screen;
+  GdkRectangle workarea;
+  GdkDisplay *display;
+  GdkMonitor *monitor;
   GdkWindow *window;
   GtkAllocation menu_allocation, allocation, arrow_allocation;
   GtkAlign align;
@@ -272,11 +272,9 @@ menu_position_up_down_func (GtkMenu       *menu,
   direction = gtk_widget_get_direction (widget);
   window = gtk_widget_get_window (priv->align_widget ? priv->align_widget : widget);
 
-  screen = gtk_widget_get_screen (GTK_WIDGET (menu));
-  monitor_num = gdk_screen_get_monitor_at_window (screen, window);
-  if (monitor_num < 0)
-    monitor_num = 0;
-  gdk_screen_get_monitor_workarea (screen, monitor_num, &monitor);
+  display = gtk_widget_get_display (GTK_WIDGET (menu));
+  monitor = gdk_display_get_monitor_at_window (display, window);
+  gdk_monitor_get_workarea (monitor, &workarea);
 
   gtk_widget_get_allocation (priv->align_widget ? priv->align_widget : widget, &allocation);
   gtk_widget_get_allocation (widget, &arrow_allocation);
@@ -298,17 +296,17 @@ menu_position_up_down_func (GtkMenu       *menu,
   else if (menu_allocation.width > allocation.width)
     *x -= menu_allocation.width - allocation.width;
 
-  if (priv->arrow_type == GTK_ARROW_UP && *y - menu_allocation.height >= monitor.y)
+  if (priv->arrow_type == GTK_ARROW_UP && *y - menu_allocation.height >= workarea.y)
     {
       *y -= menu_allocation.height;
     }
   else
     {
-      if ((*y + arrow_allocation.height + menu_allocation.height) <= monitor.y + monitor.height)
+      if ((*y + arrow_allocation.height + menu_allocation.height) <= workarea.y + workarea.height)
         *y += arrow_allocation.height;
-      else if ((*y - menu_allocation.height) >= monitor.y)
+      else if ((*y - menu_allocation.height) >= workarea.y)
         *y -= menu_allocation.height;
-      else if (monitor.y + monitor.height - (*y + arrow_allocation.height) > *y)
+      else if (workarea.y + workarea.height - (*y + arrow_allocation.height) > *y)
         *y += arrow_allocation.height;
       else
         *y -= menu_allocation.height;
@@ -328,9 +326,9 @@ menu_position_side_func (GtkMenu       *menu,
   GtkAllocation allocation;
   GtkAllocation menu_allocation;
   GtkWidget *widget = GTK_WIDGET (menu_button);
-  GdkRectangle monitor;
-  gint monitor_num;
-  GdkScreen *screen;
+  GdkDisplay *display;
+  GdkMonitor *monitor;
+  GdkRectangle workarea;
   GdkWindow *window;
   GtkAlign align;
   GtkTextDirection direction;
@@ -339,11 +337,9 @@ menu_position_side_func (GtkMenu       *menu,
 
   direction = gtk_widget_get_direction (widget);
   align = gtk_widget_get_valign (GTK_WIDGET (menu));
-  screen = gtk_widget_get_screen (GTK_WIDGET (menu));
-  monitor_num = gdk_screen_get_monitor_at_window (screen, window);
-  if (monitor_num < 0)
-    monitor_num = 0;
-  gdk_screen_get_monitor_workarea (screen, monitor_num, &monitor);
+  display = gtk_widget_get_display (GTK_WIDGET (menu));
+  monitor = gdk_display_get_monitor_at_window (display, window);
+  gdk_monitor_get_workarea (monitor, &workarea);
 
   gdk_window_get_origin (gtk_button_get_event_window (GTK_BUTTON (menu_button)), x, y);
 
@@ -354,14 +350,14 @@ menu_position_side_func (GtkMenu       *menu,
       (priv->arrow_type == GTK_ARROW_LEFT && direction == GTK_TEXT_DIR_RTL))
 
     {
-      if (*x + allocation.width + menu_allocation.width <= monitor.x + monitor.width)
+      if (*x + allocation.width + menu_allocation.width <= workarea.x + workarea.width)
         *x += allocation.width;
       else
         *x -= menu_allocation.width;
     }
   else
     {
-      if (*x - menu_allocation.width >= monitor.x)
+      if (*x - menu_allocation.width >= workarea.x)
         *x -= menu_allocation.width;
       else
         *x += allocation.width;

@@ -1494,10 +1494,10 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   GtkAllocation allocation;
   gint x, y;
   gint matches, actions, items, height;
-  GdkScreen *screen;
-  gint monitor_num;
+  GdkDisplay *display;
+  GdkMonitor *monitor;
   gint vertical_separator;
-  GdkRectangle monitor;
+  GdkRectangle area;
   GdkWindow *window;
   GtkRequisition popup_req;
   GtkRequisition entry_req;
@@ -1546,16 +1546,16 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
 
   gtk_widget_realize (completion->priv->tree_view);
 
-  screen = gtk_widget_get_screen (GTK_WIDGET (completion->priv->entry));
-  monitor_num = gdk_screen_get_monitor_at_window (screen, window);
-  gdk_screen_get_monitor_workarea (screen, monitor_num, &monitor);
+  display = gtk_widget_get_display (GTK_WIDGET (completion->priv->entry));
+  monitor = gdk_display_get_monitor_at_window (display, window);
+  gdk_monitor_get_workarea (monitor, &area);
 
   if (height == 0)
     items = 0;
-  else if (y > monitor.height / 2)
-    items = MIN (matches, (((monitor.y + y) - (actions * action_height)) / height) - 1);
+  else if (y > area.height / 2)
+    items = MIN (matches, (((area.y + y) - (actions * action_height)) / height) - 1);
   else
-    items = MIN (matches, (((monitor.height - y) - (actions * action_height)) / height) - 1);
+    items = MIN (matches, (((area.height - y) - (actions * action_height)) / height) - 1);
 
   if (items <= 0)
     gtk_widget_hide (completion->priv->scrolled_window);
@@ -1563,7 +1563,7 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
     gtk_widget_show (completion->priv->scrolled_window);
 
   if (completion->priv->popup_set_width)
-    width = MIN (allocation.width, monitor.width);
+    width = MIN (allocation.width, area.width);
   else
     width = -1;
 
@@ -1580,13 +1580,13 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   gtk_widget_get_preferred_size (completion->priv->popup_window,
                                  &popup_req, NULL);
 
-  if (x < monitor.x)
-    x = monitor.x;
-  else if (x + popup_req.width > monitor.x + monitor.width)
-    x = monitor.x + monitor.width - popup_req.width;
+  if (x < area.x)
+    x = area.x;
+  else if (x + popup_req.width > area.x + area.width)
+    x = area.x + area.width - popup_req.width;
 
-  if (y + entry_req.height + popup_req.height <= monitor.y + monitor.height ||
-      y - monitor.y < (monitor.y + monitor.height) - (y + entry_req.height))
+  if (y + entry_req.height + popup_req.height <= area.y + area.height ||
+      y - area.y < (area.y + area.height) - (y + entry_req.height))
     {
       y += entry_req.height;
       above = FALSE;

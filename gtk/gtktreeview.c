@@ -15066,14 +15066,9 @@ gtk_tree_view_search_position_func (GtkTreeView *tree_view,
   gint x, y;
   gint tree_x, tree_y;
   gint tree_width, tree_height;
+  GdkScreen *screen = gtk_widget_get_screen (GTK_WIDGET (tree_view));
   GdkWindow *tree_window = gtk_widget_get_window (GTK_WIDGET (tree_view));
-  GdkScreen *screen = gdk_window_get_screen (tree_window);
   GtkRequisition requisition;
-  gint monitor_num;
-  GdkRectangle monitor;
-
-  monitor_num = gdk_screen_get_monitor_at_window (screen, tree_window);
-  gdk_screen_get_monitor_workarea (screen, monitor_num, &monitor);
 
   gtk_widget_realize (search_window);
 

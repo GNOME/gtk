@@ -895,9 +895,8 @@ gtk_tooltip_position (GtkTooltip *tooltip,
 		      GtkWidget  *new_tooltip_widget)
 {
   gint x, y, width, height;
-  GdkScreen *screen;
-  gint monitor_num;
-  GdkRectangle monitor;
+  GdkMonitor *monitor;
+  GdkRectangle workarea;
   guint cursor_size;
   GdkRectangle bounds;
   GtkBorder border;
@@ -909,17 +908,13 @@ gtk_tooltip_position (GtkTooltip *tooltip,
 
   tooltip->tooltip_widget = new_tooltip_widget;
 
-  screen = gtk_widget_get_screen (new_tooltip_widget);
-
   _gtk_window_get_shadow_width (GTK_WINDOW (tooltip->current_window), &border);
 
   width = gtk_widget_get_allocated_width (GTK_WIDGET (tooltip->current_window)) - border.left - border.right;
   height = gtk_widget_get_allocated_height (GTK_WIDGET (tooltip->current_window)) - border.top - border.bottom;
 
-  monitor_num = gdk_screen_get_monitor_at_point (screen,
-                                                 tooltip->last_x,
-                                                 tooltip->last_y);
-  gdk_screen_get_monitor_workarea (screen, monitor_num, &monitor);
+  monitor = gdk_display_get_monitor_at_point (display, tooltip->last_x, tooltip->last_y);
+  gdk_monitor_get_workarea (monitor, &workarea);
 
   get_bounding_box (new_tooltip_widget, &bounds);
 
@@ -931,7 +926,7 @@ gtk_tooltip_position (GtkTooltip *tooltip,
   x = bounds.x + bounds.width / 2 - width / 2;
   y = bounds.y + bounds.height + 4;
 
-  if (y + height <= monitor.y + monitor.height)
+  if (y + height <= workarea.y + workarea.height)
     {
       if (tooltip->keyboard_mode_enabled)
         goto found;
@@ -951,7 +946,7 @@ gtk_tooltip_position (GtkTooltip *tooltip,
   x = bounds.x + bounds.width / 2 - width / 2;
   y = bounds.y - height - 4;
 
-  if (y >= monitor.y)
+  if (y >= workarea.y)
     {
       if (tooltip->keyboard_mode_enabled)
         goto found;
@@ -971,7 +966,7 @@ gtk_tooltip_position (GtkTooltip *tooltip,
   x = bounds.x + bounds.width + 4;
   y = bounds.y + bounds.height / 2 - height / 2;
 
-  if (x + width <= monitor.x + monitor.width)
+  if (x + width <= workarea.x + workarea.width)
     {
       if (tooltip->keyboard_mode_enabled)
         goto found;
@@ -991,7 +986,7 @@ gtk_tooltip_position (GtkTooltip *tooltip,
   x = bounds.x - width - 4;
   y = bounds.y + bounds.height / 2 - height / 2;
 
-  if (x >= monitor.x)
+  if (x >= workarea.x)
     {
       if (tooltip->keyboard_mode_enabled)
         goto found;
@@ -1022,15 +1017,15 @@ gtk_tooltip_position (GtkTooltip *tooltip,
 
 found:
   /* Show it */
-  if (x + width > monitor.x + monitor.width)
-    x -= x - (monitor.x + monitor.width) + width;
-  else if (x < monitor.x)
-    x = monitor.x;
+  if (x + width > workarea.x + workarea.width)
+    x -= x - (workarea.x + workarea.width) + width;
+  else if (x < workarea.x)
+    x = workarea.x;
 
-  if (y + height > monitor.y + monitor.height)
-    y -= y - (monitor.y + monitor.height) + height;
-  else if (y < monitor.y)
-    y = monitor.y;
+  if (y + height > workarea.y + workarea.height)
+    y -= y - (workarea.y + workarea.height) + height;
+  else if (y < workarea.y)
+    y = workarea.y;
 
   if (!tooltip->keyboard_mode_enabled)
     {

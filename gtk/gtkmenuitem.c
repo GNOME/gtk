@@ -2102,12 +2102,12 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
   GtkWidget *widget;
   GtkMenuItem *parent_menu_item;
   GtkWidget *parent;
-  GdkScreen *screen;
+  GdkDisplay *display;
   gint twidth, theight;
   gint tx, ty;
   GtkTextDirection direction;
-  GdkRectangle monitor;
-  gint monitor_num;
+  GdkMonitor *monitor;
+  GdkRectangle workarea;
   gint horizontal_offset;
   gint vertical_offset;
   gint available_left, available_right;
@@ -2128,11 +2128,9 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
   twidth = gtk_widget_get_allocated_width (GTK_WIDGET (menu));
   theight = gtk_widget_get_allocated_height (GTK_WIDGET (menu));
 
-  screen = gtk_widget_get_screen (GTK_WIDGET (menu));
-  monitor_num = gdk_screen_get_monitor_at_window (screen, priv->event_window);
-  if (monitor_num < 0)
-    monitor_num = 0;
-  gdk_screen_get_monitor_workarea (screen, monitor_num, &monitor);
+  display = gtk_widget_get_display (GTK_WIDGET (menu));
+  monitor = gdk_display_get_monitor_at_window (display, priv->event_window);
+  gdk_monitor_get_workarea (monitor, &workarea);
 
   if (!gdk_window_get_origin (gtk_widget_get_window (widget), &tx, &ty))
     {
@@ -2147,8 +2145,8 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
 
   get_offsets (menu, &horizontal_offset, &vertical_offset);
 
-  available_left = tx - monitor.x;
-  available_right = monitor.x + monitor.width - (tx + allocation.width);
+  available_left = tx - workarea.x;
+  available_right = workarea.x + workarea.width - (tx + allocation.width);
 
   parent = gtk_widget_get_parent (widget);
   priv->from_menubar = GTK_IS_MENU_BAR (parent);
@@ -2163,11 +2161,11 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
           priv->submenu_direction = GTK_DIRECTION_LEFT;
           tx += allocation.width - twidth;
         }
-      if ((ty + allocation.height + theight) <= monitor.y + monitor.height)
+      if ((ty + allocation.height + theight) <= workarea.y + workarea.height)
         ty += allocation.height;
-      else if ((ty - theight) >= monitor.y)
+      else if ((ty - theight) >= workarea.y)
         ty -= theight;
-      else if (monitor.y + monitor.height - (ty + allocation.height) > ty)
+      else if (workarea.y + workarea.height - (ty + allocation.height) > ty)
         ty += allocation.height;
       else
         ty -= theight;
@@ -2197,7 +2195,7 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
       switch (priv->submenu_direction)
         {
         case GTK_DIRECTION_LEFT:
-          if (tx - twidth - parent_padding.left - horizontal_offset >= monitor.x ||
+          if (tx - twidth - parent_padding.left - horizontal_offset >= workarea.x ||
               available_left >= available_right)
             tx -= twidth + parent_padding.left + horizontal_offset;
           else
@@ -2208,7 +2206,7 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
           break;
 
         case GTK_DIRECTION_RIGHT:
-          if (tx + allocation.width + parent_padding.right + horizontal_offset + twidth <= monitor.x + monitor.width ||
+          if (tx + allocation.width + parent_padding.right + horizontal_offset + twidth <= workarea.x + workarea.width ||
               available_right >= available_left)
             tx += allocation.width + parent_padding.right + horizontal_offset;
           else
@@ -2222,17 +2220,17 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
       ty += vertical_offset;
 
       /* If the height of the menu doesn't fit we move it upward. */
-      ty = CLAMP (ty, monitor.y, MAX (monitor.y, monitor.y + monitor.height - theight));
+      ty = CLAMP (ty, workarea.y, MAX (workarea.y, workarea.y + workarea.height - theight));
       break;
     }
 
   /* If we have negative, tx, here it is because we can't get
    * the menu all the way on screen. Favor the left portion.
    */
-  *x = CLAMP (tx, monitor.x, MAX (monitor.x, monitor.x + monitor.width - twidth));
+  *x = CLAMP (tx, workarea.x, MAX (workarea.x, workarea.x + workarea.width - twidth));
   *y = ty;
 
-  gtk_menu_set_monitor (menu, monitor_num);
+  gtk_menu_place_on_monitor (menu, monitor);
 
   if (!gtk_widget_get_visible (menu->priv->toplevel))
     {

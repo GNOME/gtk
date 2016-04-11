@@ -183,6 +183,7 @@ struct _GtkWindowPrivate
   GtkWindowGeometryInfo *geometry_info;
   GtkWindowGroup        *group;
   GdkScreen             *screen;
+  GdkDisplay            *display;
   GtkApplication        *application;
 
   GList                 *popovers;
@@ -6402,28 +6403,22 @@ gtk_window_guess_default_size (GtkWindow *window,
                                gint      *height)
 {
   GtkWidget *widget;
-  GdkScreen *screen;
+  GdkDisplay *display;
   GdkWindow *gdkwindow;
+  GdkMonitor *monitor;
   GdkRectangle workarea;
   int minimum, natural;
 
   widget = GTK_WIDGET (window);
-  screen = _gtk_window_get_screen (window);
+  display = gdk_screen_get_display (_gtk_window_get_screen (window));
   gdkwindow = _gtk_widget_get_window (widget);
 
   if (gdkwindow)
-    {
-      gdk_screen_get_monitor_workarea (screen,
-                                       gdk_screen_get_monitor_at_window (screen, gdkwindow),
-                                       &workarea);
-    }
+    monitor = gdk_display_get_monitor_at_window (display, gdkwindow);
   else
-    {
-      /* XXX: Figure out what screen we appear on */
-      gdk_screen_get_monitor_workarea (screen,
-                                       0,
-                                       &workarea);
-    }
+    monitor = gdk_display_get_monitor (display, 0);
+
+  gdk_monitor_get_workarea (monitor, &workarea);
 
   *width = workarea.width;
   *height = workarea.height;
@@ -9200,40 +9195,31 @@ get_effective_position (GtkWindow *window)
   return pos;
 }
 
-static int
+static GdkMonitor *
 get_center_monitor_of_window (GtkWindow *window)
 {
+  GdkDisplay *display;
+
   /* We could try to sort out the relative positions of the monitors and
    * stuff, or we could just be losers and assume you have a row
    * or column of monitors.
    */
-  return gdk_screen_get_n_monitors (gtk_window_check_screen (window)) / 2;
+  display = gdk_screen_get_display (gtk_window_check_screen (window));
+  return gdk_display_get_monitor (display, gdk_display_get_n_monitors (display) / 2);
 }
 
-static int
+static GdkMonitor *
 get_monitor_containing_pointer (GtkWindow *window)
 {
   gint px, py;
-  gint monitor_num;
-  GdkScreen *window_screen;
-  GdkScreen *pointer_screen;
   GdkDisplay *display;
   GdkDevice *pointer;
 
-  window_screen = gtk_window_check_screen (window);
-  display = gdk_screen_get_display (window_screen);
+  display = gdk_screen_get_display (gtk_window_check_screen (window));
   pointer = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
+  gdk_device_get_position (pointer, NULL, &px, &py);
 
-  gdk_device_get_position (pointer,
-                           &pointer_screen,
-                           &px, &py);
-
-  if (pointer_screen == window_screen)
-    monitor_num = gdk_screen_get_monitor_at_point (pointer_screen, px, py);
-  else
-    monitor_num = -1;
-
-  return monitor_num;
+  return gdk_display_get_monitor_at_point (display, px, py);
 }
 
 static void
@@ -9243,27 +9229,26 @@ center_window_on_monitor (GtkWindow *window,
                           gint      *x,
                           gint      *y)
 {
-  GdkRectangle monitor;
-  int monitor_num;
+  GdkRectangle area;
+  GdkMonitor *monitor;
 
-  monitor_num = get_monitor_containing_pointer (window);
+  monitor = get_monitor_containing_pointer (window);
 
-  if (monitor_num == -1)
-    monitor_num = get_center_monitor_of_window (window);
+  if (monitor == NULL)
+    monitor = get_center_monitor_of_window (window);
 
-  gdk_screen_get_monitor_workarea (gtk_window_check_screen (window),
-                                    monitor_num, &monitor);
+ gdk_monitor_get_workarea (monitor, &area);
 
-  *x = (monitor.width - w) / 2 + monitor.x;
-  *y = (monitor.height - h) / 2 + monitor.y;
+  *x = (area.width - w) / 2 + area.x;
+  *y = (area.height - h) / 2 + area.y;
 
   /* Be sure we aren't off the monitor, ignoring _NET_WM_STRUT
    * and WM decorations.
    */
-  if (*x < monitor.x)
-    *x = monitor.x;
-  if (*y < monitor.y)
-    *y = monitor.y;
+  if (*x < area.x)
+    *x = area.x;
+  if (*y < area.y)
+    *y = area.y;
 }
 
 static void
@@ -9364,24 +9349,20 @@ gtk_window_compute_configure_request (GtkWindow    *window,
 
         case GTK_WIN_POS_CENTER_ON_PARENT:
           {
+            GdkDisplay *display;
             GtkAllocation allocation;
             GdkWindow *gdk_window;
-            gint monitor_num;
-            GdkRectangle monitor;
+            GdkMonitor *monitor;
+            GdkRectangle area;
             gint ox, oy;
 
             g_assert (_gtk_widget_get_mapped (parent_widget)); /* established earlier */
 
+            display = gdk_screen_get_display (screen);
             gdk_window = _gtk_widget_get_window (parent_widget);
+            monitor = gdk_display_get_monitor_at_window (display, gdk_window);
 
-            if (gdk_window != NULL)
-              monitor_num = gdk_screen_get_monitor_at_window (screen,
-                                                              gdk_window);
-            else
-              monitor_num = -1;
-
-            gdk_window_get_origin (gdk_window,
-                                   &ox, &oy);
+            gdk_window_get_origin (gdk_window, &ox, &oy);
 
             _gtk_widget_get_allocation (parent_widget, &allocation);
             x = ox + (allocation.width - w) / 2;
@@ -9391,10 +9372,10 @@ gtk_window_compute_configure_request (GtkWindow    *window,
              * WM decorations. If parent wasn't on a monitor, just
              * give up.
              */
-            if (monitor_num >= 0)
+            if (monitor != NULL)
               {
-                gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
-                clamp_window_to_rectangle (&x, &y, w, h, &monitor);
+                gdk_monitor_get_geometry (monitor, &area);
+                clamp_window_to_rectangle (&x, &y, w, h, &area);
               }
           }
           break;
@@ -9403,24 +9384,17 @@ gtk_window_compute_configure_request (GtkWindow    *window,
           {
             gint screen_width = gdk_screen_get_width (screen);
             gint screen_height = gdk_screen_get_height (screen);
-            gint monitor_num;
-            GdkRectangle monitor;
+            GdkRectangle area;
             GdkDisplay *display;
             GdkDevice *pointer;
-            GdkScreen *pointer_screen;
+            GdkMonitor *monitor;
             gint px, py;
 
             display = gdk_screen_get_display (screen);
             pointer = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
 
-            gdk_device_get_position (pointer,
-                                     &pointer_screen,
-                                     &px, &py);
-
-            if (pointer_screen == screen)
-              monitor_num = gdk_screen_get_monitor_at_point (screen, px, py);
-            else
-              monitor_num = -1;
+            gdk_device_get_position (pointer, NULL, &px, &py);
+            monitor = gdk_display_get_monitor_at_point (display, px, py);
 
             x = px - w / 2;
             y = py - h / 2;
@@ -9431,10 +9405,10 @@ gtk_window_compute_configure_request (GtkWindow    *window,
              * WM decorations. Don't try to figure out what's going
              * on if the mouse wasn't inside a monitor.
              */
-            if (monitor_num >= 0)
+            if (monitor != NULL)
               {
-                gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
-                clamp_window_to_rectangle (&x, &y, w, h, &monitor);
+                gdk_monitor_get_geometry (monitor, &area);
+                clamp_window_to_rectangle (&x, &y, w, h, &area);
               }
           }
           break;
@@ -10538,12 +10512,11 @@ gtk_window_fullscreen_on_monitor (GtkWindow *window,
   GtkWindowPrivate *priv;
   GtkWidget *widget;
   GdkWindow *toplevel;
-  
+
   g_return_if_fail (GTK_IS_WINDOW (window));
   g_return_if_fail (GDK_IS_SCREEN (screen));
-  g_return_if_fail (monitor >= 0);
-  g_return_if_fail (monitor < gdk_screen_get_n_monitors (screen));
-  
+  g_return_if_fail (gdk_display_get_monitor (gdk_screen_get_display (screen), monitor) != NULL);
+
   priv = window->priv;
   widget = GTK_WIDGET (window);
 
