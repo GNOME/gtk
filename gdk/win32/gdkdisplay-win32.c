@@ -655,23 +655,27 @@ gdk_win32_display_after_process_all_updates (GdkDisplay  *display)
 {
   /* nothing */
 }
+
 static void
 gdk_win32_display_notify_startup_complete (GdkDisplay  *display,
                                            const gchar *startup_id)
 {
   /* nothing */
 }
+
 static void
 gdk_win32_display_push_error_trap (GdkDisplay *display)
 {
   /* nothing */
 }
+
 static gint
 gdk_win32_display_pop_error_trap (GdkDisplay *display,
 				  gboolean    ignored)
 {
   return 0;
 }
+
 static void
 gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
 {
