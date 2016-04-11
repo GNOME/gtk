@@ -3203,24 +3203,27 @@ gtk_menu_get_preferred_height_for_width (GtkWidget *widget,
 
   if (priv->have_position)
     {
-      GdkScreen *screen = gtk_widget_get_screen (priv->toplevel);
-      GdkRectangle monitor;
+      GdkDisplay *display;
+      GdkMonitor *monitor;
+      GdkRectangle workarea;
       GtkBorder border;
 
-      gdk_screen_get_monitor_workarea (screen, priv->monitor_num, &monitor);
+      display = gtk_widget_get_display (priv->toplevel);
+      monitor = gdk_display_get_monitor (display, priv->monitor_num);
+      gdk_monitor_get_workarea (monitor, &workarea);
 
-      if (priv->position_y + min_height > monitor.y + monitor.height)
-        min_height = monitor.y + monitor.height - priv->position_y;
+      if (priv->position_y + min_height > workarea.y + workarea.height)
+        min_height = workarea.y + workarea.height - priv->position_y;
 
-      if (priv->position_y + nat_height > monitor.y + monitor.height)
-        nat_height = monitor.y + monitor.height - priv->position_y;
+      if (priv->position_y + nat_height > workarea.y + workarea.height)
+        nat_height = workarea.y + workarea.height - priv->position_y;
 
       _gtk_window_get_shadow_width (GTK_WINDOW (priv->toplevel), &border);
 
-      if (priv->position_y + border.top < monitor.y)
+      if (priv->position_y + border.top < workarea.y)
         {
-          min_height -= monitor.y - (priv->position_y + border.top);
-          nat_height -= monitor.y - (priv->position_y + border.top);
+          min_height -= workarea.y - (priv->position_y + border.top);
+          nat_height -= workarea.y - (priv->position_y + border.top);
         }
     }
 
@@ -4270,17 +4273,19 @@ gtk_menu_position (GtkMenu  *menu,
   GtkRequisition requisition;
   gint x, y;
   gint scroll_offset;
-  GdkScreen *screen;
-  GdkScreen *pointer_screen;
-  GdkRectangle monitor;
+  GdkDisplay *display;
+  GdkMonitor *monitor;
+  GdkRectangle workarea;
+  gint monitor_num;
   GdkDevice *pointer;
   GtkBorder border;
+  gint i;
 
   widget = GTK_WIDGET (menu);
 
-  screen = gtk_widget_get_screen (widget);
+  display = gtk_widget_get_display (widget);
   pointer = _gtk_menu_shell_get_grab_device (GTK_MENU_SHELL (menu));
-  gdk_device_get_position (pointer, &pointer_screen, &x, &y);
+  gdk_device_get_position (pointer, NULL, &x, &y);
 
   /* Realize so we have the proper width and height to figure out
    * the right place to popup the menu.
@@ -4292,18 +4297,22 @@ gtk_menu_position (GtkMenu  *menu,
   requisition.width = gtk_widget_get_allocated_width (widget);
   requisition.height = gtk_widget_get_allocated_height (widget);
 
-  if (pointer_screen != screen)
+  monitor = gdk_display_get_monitor_at_point (display, x, y);
+  monitor_num = 0;
+  for (i = 0; ; i++)
     {
-      /* Pointer is on a different screen; roughly center the
-       * menu on the screen. If someone was using multiscreen
-       * + Xinerama together they'd probably want something
-       * fancier; but that is likely to be vanishingly rare.
-       */
-      x = MAX (0, (gdk_screen_get_width (screen) - requisition.width) / 2);
-      y = MAX (0, (gdk_screen_get_height (screen) - requisition.height) / 2);
+      GdkMonitor *m = gdk_display_get_monitor (display, i);
+
+      if (m == monitor)
+        {
+          monitor_num = i;
+          break;
+        }
+      if (m == NULL)
+        break;
     }
 
-  priv->monitor_num = gdk_screen_get_monitor_at_point (screen, x, y);
+  priv->monitor_num = monitor_num;
   priv->initially_pushed_in = FALSE;
 
   /* Set the type hint here to allow custom position functions
@@ -4318,9 +4327,10 @@ gtk_menu_position (GtkMenu  *menu,
                                priv->position_func_data);
 
       if (priv->monitor_num < 0)
-        priv->monitor_num = gdk_screen_get_monitor_at_point (screen, x, y);
+        priv->monitor_num = monitor_num;
 
-      gdk_screen_get_monitor_workarea (screen, priv->monitor_num, &monitor);
+      monitor = gdk_display_get_monitor (display, priv->monitor_num);
+      gdk_monitor_get_workarea (monitor, &workarea);
     }
   else
     {
@@ -4352,12 +4362,13 @@ gtk_menu_position (GtkMenu  *menu,
        * Positioning in the vertical direction is similar: first try below
        * mouse cursor, then above.
        */
-      gdk_screen_get_monitor_workarea (screen, priv->monitor_num, &monitor);
+      monitor = gdk_display_get_monitor (display, priv->monitor_num);
+      gdk_monitor_get_workarea (monitor, &workarea);
 
-      space_left = x - monitor.x;
-      space_right = monitor.x + monitor.width - x - 1;
-      space_above = y - monitor.y;
-      space_below = monitor.y + monitor.height - y - 1;
+      space_left = x - workarea.x;
+      space_right = workarea.x + workarea.width - x - 1;
+      space_above = y - workarea.y;
+      space_below = workarea.y + workarea.height - y - 1;
 
       /* Position horizontally. */
 
@@ -4383,7 +4394,7 @@ gtk_menu_position (GtkMenu  *menu,
 
           /* x is clamped on-screen further down */
         }
-      else if (requisition.width <= monitor.width)
+      else if (requisition.width <= workarea.width)
         {
           /* the menu is too big to fit on either side of the mouse
            * cursor, but smaller than the monitor. Position it on
@@ -4392,12 +4403,12 @@ gtk_menu_position (GtkMenu  *menu,
           if (space_left > space_right)
             {
               /* left justify */
-              x = monitor.x;
+              x = workarea.x;
             }
           else
             {
               /* right justify */
-              x = monitor.x + monitor.width - requisition.width;
+              x = workarea.x + workarea.width - requisition.width;
             }
         }
       else /* menu is simply too big for the monitor */
@@ -4405,12 +4416,12 @@ gtk_menu_position (GtkMenu  *menu,
           if (rtl)
             {
               /* right justify */
-              x = monitor.x + monitor.width - requisition.width;
+              x = workarea.x + workarea.width - requisition.width;
             }
           else
             {
               /* left justify */
-              x = monitor.x;
+              x = workarea.x;
             }
         }
 
@@ -4428,39 +4439,39 @@ gtk_menu_position (GtkMenu  *menu,
           else
             y = y - margin.bottom + padding.bottom - requisition.height + 1;
 
-          y = CLAMP (y, monitor.y,
-                     monitor.y + monitor.height - requisition.height);
+          y = CLAMP (y, workarea.y,
+                     workarea.y + workarea.height - requisition.height);
         }
       else if (needed_height > space_below && needed_height > space_above)
         {
           if (space_below >= space_above)
-            y = monitor.y + monitor.height - requisition.height;
+            y = workarea.y + workarea.height - requisition.height;
           else
-            y = monitor.y;
+            y = workarea.y;
         }
       else
         {
-          y = monitor.y;
+          y = workarea.y;
         }
     }
 
   scroll_offset = 0;
 
-  if (y + requisition.height > monitor.y + monitor.height)
+  if (y + requisition.height > workarea.y + workarea.height)
     {
       if (priv->initially_pushed_in)
-        scroll_offset += (monitor.y + monitor.height) - requisition.height - y;
-      y = (monitor.y + monitor.height) - requisition.height;
+        scroll_offset += (workarea.y + workarea.height) - requisition.height - y;
+      y = (workarea.y + workarea.height) - requisition.height;
     }
 
-  if (y < monitor.y)
+  if (y < workarea.y)
     {
       if (priv->initially_pushed_in)
-        scroll_offset += monitor.y - y;
-      y = monitor.y;
+        scroll_offset += workarea.y - y;
+      y = workarea.y;
     }
 
-  x = CLAMP (x, monitor.x, MAX (monitor.x, monitor.x + monitor.width - requisition.width));
+  x = CLAMP (x, workarea.x, MAX (workarea.x, workarea.x + workarea.width - requisition.width));
 
   x -= border.left;
   y -= border.top;
@@ -5279,7 +5290,7 @@ gtk_menu_real_move_scroll (GtkMenu       *menu,
  *    be popped up
  *
  * Informs GTK+ on which monitor a menu should be popped up.
- * See gdk_screen_get_monitor_geometry().
+ * See gdk_monitor_get_geometry().
  *
  * This function should be called from a #GtkMenuPositionFunc
  * if the menu should not appear on the same monitor as the pointer.
@@ -5322,6 +5333,32 @@ gtk_menu_get_monitor (GtkMenu *menu)
   g_return_val_if_fail (GTK_IS_MENU (menu), -1);
 
   return menu->priv->monitor_num;
+}
+
+void
+gtk_menu_place_on_monitor (GtkMenu    *menu,
+                           GdkMonitor *monitor)
+{
+  GdkDisplay *display;
+  gint i, monitor_num;
+
+  g_return_if_fail (GTK_IS_MENU (menu));
+
+  display = gtk_widget_get_display (GTK_WIDGET (menu));
+  monitor_num = 0;
+  for (i = 0; ; i++)
+    {
+      GdkMonitor *m = gdk_display_get_monitor (display, i);
+      if (m == monitor)
+        {
+          monitor_num = i;
+          break;
+        }
+      if (m == NULL)
+        break;
+    }
+
+  gtk_menu_set_monitor (menu, monitor_num);
 }
 
 /**
