@@ -1,3 +1,27 @@
+Overview of Changes in GTK+ 3.20.3
+==================================
+
+* Bugs fixed:
+ 764174 Configuration dialog is too small
+ 764203 Default background color for the 'textview border' node
+ 764204 Primary and secondary carets/cursors not distinguishable by default
+ 764261 gtkplacesviewrow: untranslated "%s / %s available"
+ 764374 Busy loop while "Displays" page is active
+ 764378 gtk3-demo won't run without hicolor-icon-theme
+ 764540 gtk_scrollable_get_border is missing annotations
+ 764585 Fix "format not a string literal" errors
+ 764686 build failure after "make distclean"
+ 764710 GtkListBox row CSS nodes do not reflect visual order
+ 764835 broadway: fix documentation, correct display port details
+ 764664 Segfault when initializing WINTAB pressure-sensitive tablets
+
+* Translation updates:
+ Bulgarian
+ Esperanto
+ Greek
+ Persian
+
+
 Overview of Changes in GTK+ 3.20.2
 ==================================
 
