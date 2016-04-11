@@ -9382,8 +9382,6 @@ gtk_window_compute_configure_request (GtkWindow    *window,
 
         case GTK_WIN_POS_MOUSE:
           {
-            gint screen_width = gdk_screen_get_width (screen);
-            gint screen_height = gdk_screen_get_height (screen);
             GdkRectangle area;
             GdkDisplay *display;
             GdkDevice *pointer;
@@ -9398,18 +9396,12 @@ gtk_window_compute_configure_request (GtkWindow    *window,
 
             x = px - w / 2;
             y = py - h / 2;
-            x = CLAMP (x, 0, screen_width - w);
-            y = CLAMP (y, 0, screen_height - h);
 
             /* Clamp onto current monitor, ignoring _NET_WM_STRUT and
-             * WM decorations. Don't try to figure out what's going
-             * on if the mouse wasn't inside a monitor.
+             * WM decorations.
              */
-            if (monitor != NULL)
-              {
-                gdk_monitor_get_geometry (monitor, &area);
-                clamp_window_to_rectangle (&x, &y, w, h, &area);
-              }
+            gdk_monitor_get_geometry (monitor, &area);
+            clamp_window_to_rectangle (&x, &y, w, h, &area);
           }
           break;
 
