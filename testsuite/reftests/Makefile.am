@@ -194,6 +194,9 @@ testdata = \
 	color-transition.css \
 	color-transition.ref.ui \
 	color-transition.ui \
+	css-em-label-size.css \
+	css-em-label-size.ui \
+	css-em-label-size.ref.ui \
 	css-currentcolor-alpha.css \
 	css-currentcolor-alpha.ui \
 	css-currentcolor-alpha.ref.ui \
