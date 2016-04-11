@@ -1662,8 +1662,6 @@ gdk_win32_window_reparent (GdkWindow *window,
 			   gint       y)
 {
   GdkScreen *screen;
-  GdkWindow *parent;
-  GdkWindow *old_parent;
   GdkWindowImplWin32 *impl;
   gboolean new_parent_is_root;
   gboolean was_toplevel;
@@ -1679,8 +1677,6 @@ gdk_win32_window_reparent (GdkWindow *window,
   else
      new_parent_is_root = (gdk_screen_get_root_window (screen) == new_parent);
 
-  old_parent = window->parent;
-  parent = new_parent;
   impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
 
   GDK_NOTE (MISC, g_print ("gdk_win32_window_reparent: %p: %p\n",
@@ -1744,11 +1740,6 @@ gdk_win32_window_reparent (GdkWindow *window,
 	  GDK_WINDOW_TYPE (window) = GDK_WINDOW_CHILD;
 	}
     }
-
-  if (old_parent)
-    old_parent->children = g_list_remove_link (old_parent->children, &window->children_list_node);
-
-  parent->children = g_list_concat (&window->children_list_node, parent->children);
 
   return FALSE;
 }
