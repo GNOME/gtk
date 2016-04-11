@@ -1934,9 +1934,9 @@ gtk_combo_box_menu_position_below (GtkMenu  *menu,
   gint sx, sy;
   GtkWidget *child;
   GtkRequisition req;
-  GdkScreen *screen;
-  gint monitor_num;
-  GdkRectangle monitor;
+  GdkDisplay *display;
+  GdkMonitor *monitor;
+  GdkRectangle area;
 
   /* FIXME: is using the size request here broken? */
   child = gtk_bin_get_child (GTK_BIN (combo_box));
@@ -1953,8 +1953,7 @@ gtk_combo_box_menu_position_below (GtkMenu  *menu,
       sy += child_allocation.y;
     }
 
-  gdk_window_get_root_coords (gtk_widget_get_window (child),
-                              sx, sy, &sx, &sy);
+  gdk_window_get_root_coords (gtk_widget_get_window (child), sx, sy, &sx, &sy);
 
   if (gtk_widget_get_direction (GTK_WIDGET (combo_box)) == GTK_TEXT_DIR_RTL)
     sx += (content_allocation.x - border_allocation.x);
@@ -1972,21 +1971,20 @@ gtk_combo_box_menu_position_below (GtkMenu  *menu,
     *x = sx + child_allocation.width - req.width;
   *y = sy;
 
-  screen = gtk_widget_get_screen (GTK_WIDGET (combo_box));
-  monitor_num = gdk_screen_get_monitor_at_window (screen,
-                                                  gtk_widget_get_window (GTK_WIDGET (combo_box)));
-  gdk_screen_get_monitor_workarea (screen, monitor_num, &monitor);
+  display = gtk_widget_get_display (GTK_WIDGET (combo_box));
+  monitor = gdk_display_get_monitor_at_window (display, gtk_widget_get_window (GTK_WIDGET (combo_box)));
+  gdk_monitor_get_workarea (monitor, &area);
 
-  if (*x < monitor.x)
-    *x = monitor.x;
-  else if (*x + req.width > monitor.x + monitor.width)
-    *x = monitor.x + monitor.width - req.width;
+  if (*x < area.x)
+    *x = area.x;
+  else if (*x + req.width > area.x + area.width)
+    *x = area.x + area.width - req.width;
 
-  if (monitor.y + monitor.height - *y - child_allocation.height >= req.height)
+  if (area.y + area.height - *y - child_allocation.height >= req.height)
     *y += child_allocation.height;
-  else if (*y - monitor.y >= req.height)
+  else if (*y - area.y >= req.height)
     *y -= req.height;
-  else if (monitor.y + monitor.height - *y - child_allocation.height > *y - monitor.y)
+  else if (area.y + area.height - *y - child_allocation.height > *y - area.y)
     *y += child_allocation.height;
   else
     *y -= req.height;
@@ -2109,9 +2107,9 @@ gtk_combo_box_list_position (GtkComboBox *combo_box,
 {
   GtkComboBoxPrivate *priv = combo_box->priv;
   GtkAllocation content_allocation;
-  GdkScreen *screen;
-  gint monitor_num;
-  GdkRectangle monitor;
+  GdkDisplay *display;
+  GdkMonitor *monitor;
+  GdkRectangle area;
   GtkRequisition popup_req;
   GtkPolicyType hpolicy, vpolicy;
   GdkWindow *window;
@@ -2162,31 +2160,31 @@ gtk_combo_box_list_position (GtkComboBox *combo_box,
 
   *height = popup_req.height;
 
-  screen = gtk_widget_get_screen (widget);
-  monitor_num = gdk_screen_get_monitor_at_window (screen, window);
-  gdk_screen_get_monitor_workarea (screen, monitor_num, &monitor);
+  display = gtk_widget_get_display (widget);
+  monitor = gdk_display_get_monitor_at_window (display, window);
+  gdk_monitor_get_workarea (monitor, &area);
 
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
     *x = *x + content_allocation.width - *width;
 
-  if (*x < monitor.x)
-    *x = monitor.x;
-  else if (*x + *width > monitor.x + monitor.width)
-    *x = monitor.x + monitor.width - *width;
+  if (*x < area.x)
+    *x = area.x;
+  else if (*x + *width > area.x + area.width)
+    *x = area.x + area.width - *width;
 
-  if (*y + content_allocation.height + *height <= monitor.y + monitor.height)
+  if (*y + content_allocation.height + *height <= area.y + area.height)
     *y += content_allocation.height;
-  else if (*y - *height >= monitor.y)
+  else if (*y - *height >= area.y)
     *y -= *height;
-  else if (monitor.y + monitor.height - (*y + content_allocation.height) > *y - monitor.y)
+  else if (area.y + area.height - (*y + content_allocation.height) > *y - area.y)
     {
       *y += content_allocation.height;
-      *height = monitor.y + monitor.height - *y;
+      *height = area.y + area.height - *y;
     }
   else
     {
-      *height = *y - monitor.y;
-      *y = monitor.y;
+      *height = *y - area.y;
+      *y = area.y;
     }
 
   if (popup_req.height > *height)

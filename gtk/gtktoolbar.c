@@ -2629,50 +2629,48 @@ menu_position_func (GtkMenu  *menu,
   GtkToolbarPrivate *priv = toolbar->priv;
   GtkRequisition req;
   GtkRequisition menu_req;
-  GdkRectangle monitor;
-  gint monitor_num;
-  GdkScreen *screen;
+  GdkRectangle workarea;
+  GdkMonitor *monitor;
+  GdkDisplay *display;
 
   gtk_widget_get_preferred_size (priv->arrow_button,
                                  &req, NULL);
   gtk_widget_get_preferred_size (GTK_WIDGET (menu),
                                  &menu_req, NULL);
 
-  screen = gtk_widget_get_screen (GTK_WIDGET (menu));
-  monitor_num = gdk_screen_get_monitor_at_window (screen,
-                                                  gtk_widget_get_window (priv->arrow_button));
-  if (monitor_num < 0)
-    monitor_num = 0;
-  gdk_screen_get_monitor_workarea (screen, monitor_num, &monitor);
+  display = gtk_widget_get_display (GTK_WIDGET (menu));
+  monitor = gdk_display_get_monitor_at_window (display,
+                                               gtk_widget_get_window (priv->arrow_button));
+  gdk_monitor_get_workarea (monitor, &workarea);
 
   gtk_widget_get_allocation (priv->arrow_button, &allocation);
 
   gdk_window_get_origin (gtk_button_get_event_window (GTK_BUTTON (priv->arrow_button)), x, y);
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      if (gtk_widget_get_direction (GTK_WIDGET (toolbar)) == GTK_TEXT_DIR_LTR) 
+      if (gtk_widget_get_direction (GTK_WIDGET (toolbar)) == GTK_TEXT_DIR_LTR)
 	*x += allocation.width - req.width;
-      else 
+      else
 	*x += req.width - menu_req.width;
 
-      if ((*y + allocation.height + menu_req.height) <= monitor.y + monitor.height)
+      if ((*y + allocation.height + menu_req.height) <= workarea.y + workarea.height)
 	*y += allocation.height;
-      else if ((*y - menu_req.height) >= monitor.y)
+      else if ((*y - menu_req.height) >= workarea.y)
 	*y -= menu_req.height;
-      else if (monitor.y + monitor.height - (*y + allocation.height) > *y)
+      else if (workarea.y + workarea.height - (*y + allocation.height) > *y)
 	*y += allocation.height;
       else
 	*y -= menu_req.height;
     }
-  else 
+  else
     {
-      if (gtk_widget_get_direction (GTK_WIDGET (toolbar)) == GTK_TEXT_DIR_LTR) 
+      if (gtk_widget_get_direction (GTK_WIDGET (toolbar)) == GTK_TEXT_DIR_LTR)
 	*x += allocation.width;
-      else 
+      else
 	*x -= menu_req.width;
 
-      if (*y + menu_req.height > monitor.y + monitor.height &&
-	  *y + allocation.height - monitor.y > monitor.y + monitor.height - *y)
+      if (*y + menu_req.height > workarea.y + workarea.height &&
+	  *y + allocation.height - workarea.y > workarea.y + workarea.height - *y)
 	*y += allocation.height - menu_req.height;
     }
 

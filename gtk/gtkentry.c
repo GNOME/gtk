@@ -9415,24 +9415,21 @@ popup_position_func (GtkMenu   *menu,
   GtkEntry *entry = GTK_ENTRY (user_data);
   GtkEntryPrivate *priv = entry->priv;
   GtkWidget *widget = GTK_WIDGET (entry);
-  GdkScreen *screen;
+  GdkDisplay *display;
   GtkRequisition menu_req;
-  GdkRectangle monitor;
-  gint monitor_num, strong_x, height;
- 
+  GdkMonitor *monitor;
+  GdkRectangle area;
+  gint strong_x, height;
+
   g_return_if_fail (gtk_widget_get_realized (widget));
 
   gdk_window_get_origin (priv->text_area, x, y);
 
-  screen = gtk_widget_get_screen (widget);
-  monitor_num = gdk_screen_get_monitor_at_window (screen, priv->text_area);
-  if (monitor_num < 0)
-    monitor_num = 0;
-  gtk_menu_set_monitor (menu, monitor_num);
-
-  gdk_screen_get_monitor_workarea (screen, monitor_num, &monitor);
-  gtk_widget_get_preferred_size (priv->popup_menu,
-                                 &menu_req, NULL);
+  display = gtk_widget_get_display (widget);
+  monitor = gdk_display_get_monitor_at_window (display, priv->text_area);
+  gtk_menu_place_on_monitor (menu, monitor);
+  gdk_monitor_get_workarea (monitor, &area);
+  gtk_widget_get_preferred_size (priv->popup_menu, &menu_req, NULL);
   height = gdk_window_get_height (priv->text_area);
   gtk_entry_get_cursor_locations (entry, CURSOR_STANDARD, &strong_x, NULL);
 
@@ -9440,11 +9437,11 @@ popup_position_func (GtkMenu   *menu,
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
     *x -= menu_req.width;
 
-  if ((*y + height + menu_req.height) <= monitor.y + monitor.height)
+  if ((*y + height + menu_req.height) <= area.y + area.height)
     *y += height;
-  else if ((*y - menu_req.height) >= monitor.y)
+  else if ((*y - menu_req.height) >= area.y)
     *y -= menu_req.height;
-  else if (monitor.y + monitor.height - (*y + height) > *y)
+  else if (area.y + area.height - (*y + height) > *y)
     *y += height;
   else
     *y -= menu_req.height;

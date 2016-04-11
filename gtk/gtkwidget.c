@@ -10838,7 +10838,8 @@ gint
 gtk_widget_get_scale_factor (GtkWidget *widget)
 {
   GtkWidget *toplevel;
-  GdkScreen *screen;
+  GdkDisplay *display;
+  GdkMonitor *monitor;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 1);
 
@@ -10852,11 +10853,10 @@ gtk_widget_get_scale_factor (GtkWidget *widget)
   /* else fall back to something that is more likely to be right than
    * just returning 1:
    */
-  screen = gtk_widget_get_screen (widget);
-  if (screen)
-    return gdk_screen_get_monitor_scale_factor (screen, 0);
+  display = gtk_widget_get_display (widget);
+  monitor = gdk_display_get_monitor (display, 0);
 
-  return 1;
+  return gdk_monitor_get_scale_factor (monitor);
 }
 
 /**

@@ -9356,17 +9356,17 @@ popup_position_func (GtkMenu   *menu,
   GdkRectangle onscreen_rect;
   gint root_x, root_y;
   GtkTextIter iter;
-  GtkRequisition req;      
-  GdkScreen *screen;
-  gint monitor_num;
-  GdkRectangle monitor;
-      
+  GtkRequisition req;
+  GdkDisplay *display;
+  GdkMonitor *monitor;
+  GdkRectangle workarea;
+
   text_view = GTK_TEXT_VIEW (user_data);
   widget = GTK_WIDGET (text_view);
-  
+
   g_return_if_fail (gtk_widget_get_realized (widget));
-  
-  screen = gtk_widget_get_screen (widget);
+
+  display = gtk_widget_get_display (widget);
 
   gdk_window_get_origin (gtk_widget_get_window (widget),
                          &root_x, &root_y);
@@ -9391,7 +9391,7 @@ popup_position_func (GtkMenu   *menu,
       cursor_rect.x < onscreen_rect.x + onscreen_rect.width &&
       cursor_rect.y >= onscreen_rect.y &&
       cursor_rect.y < onscreen_rect.y + onscreen_rect.height)
-    {    
+    {
       gtk_text_view_buffer_to_window_coords (text_view,
                                              GTK_TEXT_WINDOW_WIDGET,
                                              cursor_rect.x, cursor_rect.y,
@@ -9411,12 +9411,12 @@ popup_position_func (GtkMenu   *menu,
   *x = CLAMP (*x, root_x, (root_x + allocation.width));
   *y = CLAMP (*y, root_y, (root_y + allocation.height));
 
-  monitor_num = gdk_screen_get_monitor_at_point (screen, *x, *y);
-  gtk_menu_set_monitor (menu, monitor_num);
-  gdk_screen_get_monitor_workarea (screen, monitor_num, &monitor);
+  monitor = gdk_display_get_monitor_at_point (display, *x, *y);
+  gtk_menu_place_on_monitor (menu, monitor);
+  gdk_monitor_get_workarea (monitor, &workarea);
 
-  *x = CLAMP (*x, monitor.x, monitor.x + MAX (0, monitor.width - req.width));
-  *y = CLAMP (*y, monitor.y, monitor.y + MAX (0, monitor.height - req.height));
+  *x = CLAMP (*x, workarea.x, workarea.x + MAX (0, workarea.width - req.width));
+  *y = CLAMP (*y, workarea.y, workarea.y + MAX (0, workarea.height - req.height));
 
   *push_in = FALSE;
 }
