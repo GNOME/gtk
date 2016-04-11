@@ -6571,31 +6571,35 @@ popup_position_func (GtkMenu   *menu,
   GtkWidget *widget;
   GtkAllocation allocation;
   GtkRequisition req;
-  GdkScreen *screen;
+  GdkDisplay *display;
+  GdkMonitor *monitor;
+  GdkRectangle workarea;
 
   label = GTK_LABEL (user_data);
   widget = GTK_WIDGET (label);
 
   g_return_if_fail (gtk_widget_get_realized (widget));
 
-  screen = gtk_widget_get_screen (widget);
-  gdk_window_get_origin (gtk_widget_get_window (widget), x, y);
+  display = gtk_widget_get_display (widget);
+  monitor = gdk_display_get_monitor_at_window (display,
+                                               gtk_widget_get_window (widget));
+  gdk_monitor_get_workarea (monitor, &workarea);
 
+  gdk_window_get_origin (gtk_widget_get_window (widget), x, y);
   gtk_widget_get_allocation (widget, &allocation);
 
   *x += allocation.x;
   *y += allocation.y;
 
-  gtk_widget_get_preferred_size (GTK_WIDGET (menu),
-                                 &req, NULL);
+  gtk_widget_get_preferred_size (GTK_WIDGET (menu), &req, NULL);
 
   gtk_widget_get_allocation (widget, &allocation);
 
   *x += allocation.width / 2;
   *y += allocation.height;
 
-  *x = CLAMP (*x, 0, MAX (0, gdk_screen_get_width (screen) - req.width));
-  *y = CLAMP (*y, 0, MAX (0, gdk_screen_get_height (screen) - req.height));
+  *x = CLAMP (*x, 0, MAX (0, workarea.width - req.width));
+  *y = CLAMP (*y, 0, MAX (0, workarea.height - req.height));
 }
 
 static void
