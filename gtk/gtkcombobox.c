@@ -2007,10 +2007,12 @@ gtk_combo_box_menu_position_over (GtkMenu  *menu,
   GtkAllocation       content_allocation;
   GtkAllocation       child_allocation;
   GList              *children;
-  gint                screen_width;
   gint                menu_xpos;
   gint                menu_ypos;
   gint                menu_width;
+  GdkDisplay *display;
+  GdkMonitor *monitor;
+  GdkRectangle workarea;
 
   active = gtk_menu_get_active (GTK_MENU (priv->popup_widget));
 
@@ -2056,12 +2058,14 @@ gtk_combo_box_menu_position_over (GtkMenu  *menu,
                               &menu_xpos, &menu_ypos);
 
   /* Clamp the position on screen */
-  screen_width = gdk_screen_get_width (gtk_widget_get_screen (widget));
-  
-  if (menu_xpos < 0)
-    menu_xpos = 0;
-  else if ((menu_xpos + menu_width) > screen_width)
-    menu_xpos -= ((menu_xpos + menu_width) - screen_width);
+  display = gtk_widget_get_display (widget);
+  monitor = gdk_display_get_monitor_at_window (display, gtk_widget_get_window (widget));
+  gdk_monitor_get_workarea (monitor, &workarea);
+
+  if (menu_xpos < workarea.x)
+    menu_xpos = workarea.x;
+  else if ((menu_xpos + menu_width) > workarea.x + workarea.width)
+    menu_xpos -= (menu_xpos + menu_width) - (workarea.x + workarea.width);
 
   *x = menu_xpos;
   *y = menu_ypos;
