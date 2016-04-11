@@ -15038,28 +15038,34 @@ gtk_tree_view_search_position_func (GtkTreeView *tree_view,
   gint x, y;
   gint tree_x, tree_y;
   gint tree_width, tree_height;
-  GdkScreen *screen = gtk_widget_get_screen (GTK_WIDGET (tree_view));
+  GdkDisplay *display;
+  GdkMonitor *monitor;
+  GdkRectangle workarea;
   GdkWindow *tree_window = gtk_widget_get_window (GTK_WIDGET (tree_view));
   GtkRequisition requisition;
 
   gtk_widget_realize (search_window);
+
+  display = gtk_widget_get_display (GTK_WIDGET (tree_view));
+  monitor = gdk_display_get_monitor_at_window (display, tree_window);
+  gdk_monitor_get_workarea (monitor, &workarea);
 
   gdk_window_get_origin (tree_window, &tree_x, &tree_y);
   tree_width = gdk_window_get_width (tree_window);
   tree_height = gdk_window_get_height (tree_window);
   gtk_widget_get_preferred_size (search_window, &requisition, NULL);
 
-  if (tree_x + tree_width > gdk_screen_get_width (screen))
-    x = gdk_screen_get_width (screen) - requisition.width;
-  else if (tree_x + tree_width - requisition.width < 0)
-    x = 0;
+  if (tree_x + tree_width > workarea.x + workarea.width)
+    x = workarea.x + workarea.width - requisition.width;
+  else if (tree_x + tree_width - requisition.width < workarea.x)
+    x = workarea.x;
   else
     x = tree_x + tree_width - requisition.width;
 
-  if (tree_y + tree_height + requisition.height > gdk_screen_get_height (screen))
-    y = gdk_screen_get_height (screen) - requisition.height;
-  else if (tree_y + tree_height < 0) /* isn't really possible ... */
-    y = 0;
+  if (tree_y + tree_height + requisition.height > workarea.y + workarea.height)
+    y = workarea.y + workarea.height - requisition.height;
+  else if (tree_y + tree_height < workarea.y) /* isn't really possible ... */
+    y = workarea.y;
   else
     y = tree_y + tree_height;
 
