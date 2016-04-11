@@ -6188,7 +6188,7 @@ gtk_window_map (GtkWidget *widget)
   GtkWindowPrivate *priv = window->priv;
   GdkWindow *gdk_window;
   GList *link;
-  GdkScreen *screen;
+  GdkDisplay *display;
 
   if (!_gtk_widget_is_toplevel (widget))
     {
@@ -6196,10 +6196,10 @@ gtk_window_map (GtkWidget *widget)
       return;
     }
 
-  screen = _gtk_window_get_screen (window);
-  if (priv->initial_fullscreen_monitor > gdk_screen_get_n_monitors (screen))
+  display = gtk_widget_get_display (widget);
+  if (priv->initial_fullscreen_monitor > gdk_display_get_n_monitors (display))
     priv->initial_fullscreen_monitor = -1;
-    
+
   gtk_widget_set_mapped (widget, TRUE);
 
   child = gtk_bin_get_child (&(window->bin));
@@ -6410,7 +6410,7 @@ gtk_window_guess_default_size (GtkWindow *window,
   int minimum, natural;
 
   widget = GTK_WIDGET (window);
-  display = gdk_screen_get_display (_gtk_window_get_screen (window));
+  display = gtk_widget_get_display (widget);
   gdkwindow = _gtk_widget_get_window (widget);
 
   if (gdkwindow)
