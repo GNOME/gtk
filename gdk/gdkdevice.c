@@ -95,6 +95,7 @@ enum {
   PROP_SEAT,
   PROP_NUM_TOUCHES,
   PROP_AXES,
+  PROP_TOOL,
   LAST_PROP
 };
 
@@ -322,6 +323,13 @@ gdk_device_class_init (GdkDeviceClass *klass)
                         GDK_TYPE_AXIS_FLAGS, 0,
                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
+  device_props[PROP_TOOL] =
+    g_param_spec_object ("tool",
+                         P_("Tool"),
+                         P_("The tool that is currently used with this device"),
+                         GDK_TYPE_DEVICE_TOOL,
+                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
   g_object_class_install_properties (object_class, LAST_PROP, device_props);
 
   /**
@@ -515,6 +523,9 @@ gdk_device_get_property (GObject    *object,
       break;
     case PROP_AXES:
       g_value_set_flags (value, device->axis_flags);
+      break;
+    case PROP_TOOL:
+      g_value_set_object (value, device->last_tool);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -2034,5 +2045,8 @@ gdk_device_update_tool (GdkDevice     *device,
   g_return_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_MASTER);
 
   if (g_set_object (&device->last_tool, tool))
-    g_signal_emit (device, signals[TOOL_CHANGED], 0, tool);
+    {
+      g_object_notify (G_OBJECT (device), "tool");
+      g_signal_emit (device, signals[TOOL_CHANGED], 0, tool);
+    }
 }
