@@ -643,7 +643,7 @@ _gdk_win32_display_create_window_impl (GdkDisplay    *display,
   /* check consistency of redundant information */
   guint remaining_mask = attributes_mask;
 
-  g_return_if_fail (display == gdk_display_get_default ());
+  g_return_if_fail (display == _gdk_display);
 
   GDK_NOTE (MISC,
 	    g_print ("_gdk_window_impl_new: %s %s\n",
