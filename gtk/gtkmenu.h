@@ -240,6 +240,11 @@ void       gtk_menu_set_monitor           (GtkMenu             *menu,
                                            gint                 monitor_num);
 GDK_AVAILABLE_IN_ALL
 gint       gtk_menu_get_monitor           (GtkMenu             *menu);
+
+GDK_AVAILABLE_IN_3_22
+void       gtk_menu_place_on_monitor      (GtkMenu             *menu,
+                                           GdkMonitor          *monitor);
+
 GDK_AVAILABLE_IN_ALL
 GList*     gtk_menu_get_for_attach_widget (GtkWidget           *widget); 
 
