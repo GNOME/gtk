@@ -366,6 +366,7 @@ gtk_private_h_sources =		\
 	gtkactionobserver.h	\
 	gtkactionobservable.h	\
 	gtkadjustmentprivate.h	\
+	gtkapplicationaccelsprivate.h	\
 	gtkapplicationprivate.h	\
 	gtkaccelgroupprivate.h	\
 	gtkaccelmapprivate.h	\
@@ -616,6 +617,7 @@ gtk_base_c_sources = 		\
 	gtkappchooserbutton.c	\
 	gtkappchooserdialog.c	\
 	gtkapplication.c	\
+	gtkapplicationaccels.c	\
 	gtkapplicationimpl.c	\
 	gtkapplicationwindow.c	\
 	gtkaspectframe.c	\

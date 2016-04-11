@@ -27,6 +27,7 @@ IGNORE_HFILES = \
 	gtkadjustmentprivate.h		\
 	gtkallocatedbitmaskprivate.h	\
 	gtkappchooserprivate.h		\
+	gtkapplicationaccelsprivate.h	\
 	gtkapplicationprivate.h		\
 	gtkbindingsprivate.h		\
 	gtkbitmaskprivate.h		\
