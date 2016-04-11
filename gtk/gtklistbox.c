@@ -2814,17 +2814,18 @@ gtk_list_box_insert_css_node (GtkListBox    *box,
                               GSequenceIter *iter)
 {
   GSequenceIter *prev_iter;
-  GtkWidget *sibling;
+  GtkCssNode *sibling;
 
   prev_iter = g_sequence_iter_prev (iter);
 
   if (prev_iter != iter)
-    {
-      sibling = g_sequence_get (prev_iter);
-      gtk_css_node_insert_after (gtk_widget_get_css_node (GTK_WIDGET (box)),
-                                 gtk_widget_get_css_node (child),
-                                 gtk_widget_get_css_node (sibling));
-    }
+    sibling = gtk_widget_get_css_node (g_sequence_get (prev_iter));
+  else
+    sibling = NULL;
+
+  gtk_css_node_insert_after (gtk_widget_get_css_node (GTK_WIDGET (box)),
+                             gtk_widget_get_css_node (child),
+                             sibling);
 }
 
 /**
