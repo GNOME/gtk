@@ -2919,21 +2919,17 @@ static void
 settings_update_double_click (GtkSettings *settings)
 {
   GtkSettingsPrivate *priv = settings->priv;
+  GdkDisplay *display = gdk_screen_get_display (priv->screen);
+  gint double_click_time;
+  gint double_click_distance;
 
-  if (gdk_screen_get_number (priv->screen) == 0)
-    {
-      GdkDisplay *display = gdk_screen_get_display (priv->screen);
-      gint double_click_time;
-      gint double_click_distance;
+  g_object_get (settings,
+                "gtk-double-click-time", &double_click_time,
+                "gtk-double-click-distance", &double_click_distance,
+                NULL);
 
-      g_object_get (settings,
-                    "gtk-double-click-time", &double_click_time,
-                    "gtk-double-click-distance", &double_click_distance,
-                    NULL);
-
-      gdk_display_set_double_click_time (display, double_click_time);
-      gdk_display_set_double_click_distance (display, double_click_distance);
-    }
+  gdk_display_set_double_click_time (display, double_click_time);
+  gdk_display_set_double_click_distance (display, double_click_distance);
 }
 
 static void
