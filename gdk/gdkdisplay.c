@@ -2694,4 +2694,5 @@ gdk_display_monitor_removed (GdkDisplay *display,
                              GdkMonitor *monitor)
 {
   g_signal_emit (display, signals[MONITOR_REMOVED], 0, monitor);
+  gdk_monitor_invalidate (monitor);
 }
