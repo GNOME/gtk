@@ -2001,7 +2001,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    * cairo_copy_clip_rectangle_list().
    *
    * Returns: %TRUE to stop other handlers from being invoked for the event.
-   % %FALSE to propagate the event further.
+   * %FALSE to propagate the event further.
    *
    * Since: 3.0
    */
@@ -3284,7 +3284,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    *     been emitted, relative to @widget's left side
    * @y: the y coordinate of the cursor position where the request has
    *     been emitted, relative to @widget's top
-   * @keyboard_mode: %TRUE if the tooltip was trigged using the keyboard
+   * @keyboard_mode: %TRUE if the tooltip was triggered using the keyboard
    * @tooltip: a #GtkTooltip
    *
    * Emitted when #GtkWidget:has-tooltip is %TRUE and the hover timeout
