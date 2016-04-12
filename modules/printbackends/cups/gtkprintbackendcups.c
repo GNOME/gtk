@@ -4402,15 +4402,51 @@ static const struct {
   { "output-bin", "face-down", NC_("output-bin", "Face Down Bin") },
   /* Translators: Large capacity output bin */
   { "output-bin", "large-capacity", NC_("output-bin", "Large Capacity Bin") },
-  /* Translators: Output stacker number %d */
-  { "output-bin", "stacker-N", NC_("output-bin", "Stacker %d") },
-  /* Translators: Output mailbox number %d */
-  { "output-bin", "mailbox-N", NC_("output-bin", "Mailbox %d") },
-  /* Translators: Private mailbox */
-  { "output-bin", "my-mailbox", NC_("output-bin", "My Mailbox") },
-  /* Translators: Output tray number %d */
-  { "output-bin", "tray-N", NC_("output-bin", "Tray %d") }
+  { NULL, NULL, NULL }
 };
+
+/*
+ * Handles "format not a string literal" error
+ * https://mail.gnome.org/archives/desktop-devel-list/2016-March/msg00075.html
+ */
+static const gchar *
+get_ipp_choice_translation_string (gint  index,
+				   guint i)
+{
+  const gchar *translation;
+  gchar       *string;
+
+  if (i < G_N_ELEMENTS (ipp_choice_translations))
+    translation = ipp_choice_translations[i].translation;
+  else
+    {
+      switch (i)
+        {
+          case 14:
+            /* Translators: Output stacker number %d */
+            string = g_strdup_printf ("Stacker %d", index);
+            break;
+          case 15:
+            /* Translators: Output mailbox number %d */
+            string = g_strdup_printf ("Mailbox %d", index);
+            break;
+          case 16:
+            /* Translators: Private mailbox */
+            string = g_strdup ("My Mailbox");
+            break;
+          case 17:
+            /* Translators: Output tray number %d */
+            string = g_strdup_printf ("Tray %d", index);
+            break;
+          default:
+            g_assert_not_reached ();
+        }
+
+        translation = NC_("output-bin", string);
+    }
+
+  return translation;
+}
 
 static const struct {
   const char *lpoption;
@@ -5143,7 +5179,7 @@ get_ipp_choice_translation (const gchar  *ipp_option_name,
   gchar       *endptr;
   gint         i;
 
-  for (i = 0; i < G_N_ELEMENTS (ipp_choice_translations); i++)
+  for (i = 0; ipp_choice_translations[i].ipp_option_name != NULL; i++)
     {
       if (g_strcmp0 (ipp_choice_translations[i].ipp_option_name, ipp_option_name) == 0)
         {
@@ -5170,10 +5206,9 @@ get_ipp_choice_translation (const gchar  *ipp_option_name,
 
               if (index != 0 || endptr != nptr)
                 {
-                  translation = g_strdup_printf (g_dpgettext2 (GETTEXT_PACKAGE,
-                                                               ipp_option_name,
-                                                               ipp_choice_translations[i].translation),
-                                                 index);
+                  translation = g_strdup (g_dpgettext2 (GETTEXT_PACKAGE,
+                                                        ipp_option_name,
+                                                        get_ipp_choice_translation_string (index, i)));
                   break;
                 }
             }
