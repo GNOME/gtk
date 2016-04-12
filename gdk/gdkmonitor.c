@@ -47,6 +47,7 @@
  * - provide a persistent id (if the backend allows)
  * - convert win32
  * - convert quartz
+ * - convert mir
  */
 enum {
   PROP_0,
@@ -64,6 +65,13 @@ enum {
 };
 
 static GParamSpec *props[LAST_PROP] = { NULL, };
+
+enum {
+  INVALIDATE,
+  LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE (GdkMonitor, gdk_monitor, G_TYPE_OBJECT)
 
@@ -238,6 +246,14 @@ gdk_monitor_class_init (GdkMonitorClass *class)
                        G_PARAM_READABLE);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
+
+  signals[INVALIDATE] = g_signal_new ("invalidate",
+                                      G_TYPE_FROM_CLASS (object_class),
+                                      G_SIGNAL_RUN_FIRST,
+                                      0,
+                                      NULL, NULL,
+                                      g_cclosure_marshal_VOID__VOID,
+                                      G_TYPE_NONE, 0);
 }
 
 /**
@@ -586,4 +602,10 @@ gdk_monitor_set_subpixel_layout (GdkMonitor        *monitor,
   monitor->subpixel_layout = subpixel_layout;
 
   g_object_notify (G_OBJECT (monitor), "subpixel-layout");
+}
+
+void
+gdk_monitor_invalidate (GdkMonitor *monitor)
+{
+  g_signal_emit (monitor, signals[INVALIDATE], 0);
 }

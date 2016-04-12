@@ -72,6 +72,7 @@ void            gdk_monitor_set_refresh_rate    (GdkMonitor *monitor,
                                                  int         refresh_rate);
 void            gdk_monitor_set_subpixel_layout (GdkMonitor        *monitor,
                                                  GdkSubpixelLayout  subpixel);
+void            gdk_monitor_invalidate          (GdkMonitor *monitor);
 
 G_END_DECLS
 
