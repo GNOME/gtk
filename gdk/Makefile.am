@@ -192,12 +192,14 @@ libgdk_win32_2_0_la_LDFLAGS = -Wl,win32/rc/gdk-win32-res.o -export-symbols $(src
 
 if HAVE_INTROSPECTION
 
-introspection_files = 		\
+base_introspection_files = 		\
 	$(filter-out gdkkeysyms-compat.h, $(gdk_public_h_sources))	\
 	$(gdk_c_sources)	\
 	gdkkeynames.c		\
         gdkenumtypes.c		\
         gdkenumtypes.h
+
+introspection_files = $(base_introspection_files)
 
 Gdk-2.0.gir: $(gdktargetlib) Makefile
 Gdk_2_0_gir_SCANNERFLAGS = --c-include="gdk/gdk.h"
@@ -384,7 +386,36 @@ gdk_HEADERS_EXCLUDES = gdkdummy
 
 include $(top_srcdir)/build/Makefile.msvcproj
 
-dist-hook: $(top_builddir)/build/win32/vs9/gdk.vcproj $(top_builddir)/build/win32/vs9/gdk.headers
+if HAVE_INTROSPECTION
+# Introspection Items for MSVC
+MSVC_INTROSPECT_GIRS = Gdk-2.0.gir
+
+BASE_MSVC_GIR_CFLAGS =			\
+	-DG_LOG_DOMAIN=\"Gdk\"		\
+	-DGDK_COMPILATION		\
+	-I../.. -I../../gdk -I.../../gdk/win32
+
+INTROSPECTION_INTERMEDIATE_ITEMS = \
+	$(top_builddir)/build/win32/Gdk-2.0.gir.msvc.introspect	\
+	$(top_builddir)/build/win32/Gdk_2_0_gir_list
+
+Gdk_2_0_gir_MSVC_FILES = $(filter-out gdkmedialib.c, $(base_introspection_files))
+Gdk_2_0_gir_MSVC_EXPORT_PACKAGES = $(Gdk_2_0_gir_EXPORT_PACKAGES)
+Gdk_2_0_gir_MSVC_INCLUDE_GIRS = $(Gdk_2_0_gir_INCLUDES)
+Gdk_2_0_gir_MSVC_LIBS = gdk-win32-2.0
+Gdk_2_0_gir_MSVC_CFLAGS = $(BASE_MSVC_GIR_CFLAGS)
+Gdk_2_0_gir_MSVC_SCANNERFLAGS = $(Gdk_2_0_gir_SCANNERFLAGS)
+
+include $(top_srcdir)/build/Makefile.msvc-introspection
+
+else
+INTROSPECTION_INTERMEDIATE_ITEMS =
+endif
+
+dist-hook:	\
+	$(top_builddir)/build/win32/vs9/gdk.vcproj	\
+	$(top_builddir)/build/win32/vs9/gdk.headers	\
+	$(INTROSPECTION_INTERMEDIATE_ITEMS)
 
 DISTCLEANFILES = gdkconfig.h stamp-gc-h
 

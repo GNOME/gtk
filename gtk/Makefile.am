@@ -33,25 +33,31 @@ endif
 endif
 endif
 
-INCLUDES =						\
+GTK_BASE_CFLAGS_DEFINES =				\
 	-DG_LOG_DOMAIN=\"Gtk\"				\
+	-DGTK_VERSION=\"$(GTK_VERSION)\"		\
+	-DGTK_BINARY_VERSION=\"$(GTK_BINARY_VERSION)\"	\
+	-DGTK_COMPILATION				\
+	-DGTK_DISABLE_DEPRECATED			\
+	-DGTK_FILE_SYSTEM_ENABLE_UNSUPPORTED		\
+	-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED
+
+GTK_PLAT_CFLAGS_DEFINES =				\
 	-DGTK_LIBDIR=\"$(libdir)\"			\
 	-DGTK_DATADIR=\"$(datadir)\"			\
 	-DGTK_DATA_PREFIX=\"$(prefix)\"			\
 	-DGTK_SYSCONFDIR=\"$(sysconfdir)\"		\
-	-DGTK_VERSION=\"$(GTK_VERSION)\"		\
-	-DGTK_BINARY_VERSION=\"$(GTK_BINARY_VERSION)\"	\
 	-DGTK_HOST=\"$(host)\"				\
-	-DGTK_COMPILATION				\
 	-DGTK_PRINT_BACKENDS=\"$(GTK_PRINT_BACKENDS)\"	\
-	-DGTK_PRINT_PREVIEW_COMMAND=\"$(GTK_PRINT_PREVIEW_COMMAND)\"	\
+	-DGTK_PRINT_PREVIEW_COMMAND=\"$(GTK_PRINT_PREVIEW_COMMAND)\"
+
+INCLUDES =						\
+	$(GTK_BASE_CFLAGS_DEFINES)			\
+	$(GTK_PLAT_CFLAGS_DEFINES)			\
 	-I$(top_builddir)				\
 	-I$(top_builddir)/gtk				\
 	-I$(top_srcdir) -I../gdk			\
 	-I$(top_srcdir)/gdk				\
-	-DGTK_DISABLE_DEPRECATED			\
-	-DGTK_FILE_SYSTEM_ENABLE_UNSUPPORTED		\
-	-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED		\
 	$(GMODULE_CFLAGS)				\
 	$(GTK_DEBUG_FLAGS)				\
 	$(GTK_DEP_CFLAGS)				\
@@ -957,7 +963,63 @@ gtk_HEADERS_EXCLUDES = gtkdummy
 
 include $(top_srcdir)/build/Makefile.msvcproj
 
-dist-hook: $(top_builddir)/build/win32/vs9/gtk.vcproj $(top_builddir)/build/win32/vs9/gtk.headers
+if HAVE_INTROSPECTION
+# Introspection Items for MSVC
+MSVC_INTROSPECT_GIRS = Gtk-2.0.gir
+
+GTK_MSVC_GIR_CFLAGS =				\
+	$(GTK_BASE_CFLAGS_DEFINES)				\
+	-DGTK_LIBDIR=\\\"/dummy/lib\\\"				\
+	-DGTK_DATADIR=\\\"/dummy/share\\\"			\
+	-DGTK_DATA_PREFIX=\\\"/dummy\\\"			\
+	-DGTK_SYSCONFDIR=\\\"/dummy/etc\\\"			\
+	-DGTK_HOST=\\\"'$$$$(AT_PLAT)'-pc-vs'$$$$(VSVER)'\\\"	\
+	-DGTK_PRINT_BACKENDS=\\\"file\\\"			\
+	-DINCLUDE_IM_am_et			\
+	-DINCLUDE_IM_cedilla			\
+	-DINCLUDE_IM_cyrillic_translit		\
+	-DINCLUDE_IM_ime			\
+	-DINCLUDE_IM_inuktitu			\
+	-DINCLUDE_IM_ipa			\
+	-DINCLUDE_IM_multipress			\
+	-DINCLUDE_IM_thai			\
+	-DINCLUDE_IM_ti_er			\
+	-DINCLUDE_IM_ti_et			\
+	-DINCLUDE_IM_viqr			\
+	-UGDK_DISABLE_DEPRECATED		\
+	-UGTK_DISABLE_DEPRECATED		\
+	-DGTK_TEXT_USE_INTERNAL_UNSUPPORTED_API	\
+	-I../.. -I../../gtk -I../../gdk
+
+INTROSPECTION_INTERMEDIATE_ITEMS = \
+	$(top_builddir)/build/win32/Gtk-2.0.gir.msvc.introspect		\
+	$(top_builddir)/build/win32/Gtk_2_0_gir_list
+
+Gtk_2_0_gir_MSVC_FILES =		\
+	$(gtkinclude_HEADERS)		\
+	$(gtk_base_c_sources)		\
+	$(gtk_os_win32_c_sources)	\
+	$(gtk_use_win32_c_sources)	\
+	gtktypebuiltins.h		\
+	gtktypebuiltins.c
+
+Gtk_2_0_gir_MSVC_EXPORT_PACKAGES = $(Gtk_2_0_gir_EXPORT_PACKAGES)
+Gtk_2_0_gir_MSVC_INCLUDE_GIRS = Atk-1.0
+Gtk_2_0_gir_MSVC_LIBS = gtk-win32-2.0 gdk-win32-2.0
+Gtk_2_0_gir_MSVC_CFLAGS = $(GTK_MSVC_GIR_CFLAGS)
+Gtk_2_0_gir_MSVC_SCANNERFLAGS = --warn-all --add-include-path=. --include-uninstalled=./Gdk-2.0.gir
+
+include $(top_srcdir)/build/Makefile.msvc-introspection
+
+else
+INTROSPECTION_INTERMEDIATE_ITEMS =
+
+endif
+
+dist-hook:	\
+	$(top_builddir)/build/win32/vs9/gtk.vcproj	\
+	$(top_builddir)/build/win32/vs9/gtk.headers	\
+	$(INTROSPECTION_INTERMEDIATE_ITEMS)
 
 # Install a RC file for the default GTK+ theme, and key themes
 install-data-local: install-ms-lib install-def-file install-mac-key-theme
