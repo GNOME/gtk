@@ -107,7 +107,7 @@ struct _GtkFlowBoxChildClass
  * Called for flow boxes that are bound to a #GListModel with
  * gtk_flow_box_bind_model() for each item that gets added to the model.
  *
- * Returns: a #GtkWidget that represents @item
+ * Returns: (transfer full): a #GtkWidget that represents @item
  *
  * Since: 3.18
  */
