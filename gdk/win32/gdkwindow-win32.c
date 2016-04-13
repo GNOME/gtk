@@ -683,8 +683,8 @@ _gdk_window_impl_new (GdkWindow     *window,
     {
       rect.left = private->x;
       rect.top = private->y;
-      rect.right = private->width;
-      rect.bottom = private->height;
+      rect.right = private->width + private->x;
+      rect.bottom = private->height + private->y;
 
       AdjustWindowRectEx (&rect, dwStyle, FALSE, dwExStyle);
 
