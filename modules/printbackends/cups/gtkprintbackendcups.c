@@ -4442,7 +4442,7 @@ get_ipp_choice_translation_string (gint  index,
             g_assert_not_reached ();
         }
 
-        translation = NC_("output-bin", string);
+        translation = g_dpgettext2 (GETTEXT_PACKAGE, "output-bin", string);
     }
 
   return translation;
