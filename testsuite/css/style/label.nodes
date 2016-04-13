@@ -1,7 +1,7 @@
 [window.background:dir(ltr)]
   decoration:dir(ltr)
   box.horizontal:dir(ltr)
-    font-size: 10px; /* label.css:2:20 */
+    font-size: 10px; /* label.css:3:17 */
     font-family: "\"Comic Sans\""; /* label.css:2:20 */
     font-style: normal; /* label.css:2:20 */
     font-variant: normal; /* label.css:2:20 */
