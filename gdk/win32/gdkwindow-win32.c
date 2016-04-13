@@ -817,8 +817,8 @@ _gdk_win32_display_create_window_impl (GdkDisplay    *display,
     {
       rect.left = window->x;
       rect.top = window->y;
-      rect.right = window->width;
-      rect.bottom = window->height;
+      rect.right = window->width + window->x;
+      rect.bottom = window->height + window->y;
 
       AdjustWindowRectEx (&rect, dwStyle, FALSE, dwExStyle);
 
