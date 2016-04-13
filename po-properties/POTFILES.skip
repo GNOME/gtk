@@ -219,6 +219,8 @@ testsuite/reftests/box-shadow-spread.ref.ui
 testsuite/reftests/box-shadow-spread.ui
 testsuite/reftests/button-wrapping.ref.ui
 testsuite/reftests/button-wrapping.ui
+testsuite/reftests/css-em-label-size.ref.ui
+testsuite/reftests/css-em-label-size.ui
 testsuite/reftests/css-match-import.ref.ui
 testsuite/reftests/css-match-import.ui
 testsuite/reftests/css-match-inherit-different-state.ref.ui
@@ -235,6 +237,8 @@ testsuite/reftests/css-match-style-property-order.ref.ui
 testsuite/reftests/css-match-style-property-order.ui
 testsuite/reftests/css-multi-state.ref.ui
 testsuite/reftests/css-multi-state.ui
+testsuite/reftests/css-rem-label-size.ref.ui
+testsuite/reftests/css-rem-label-size.ui
 testsuite/reftests/entry-progress-coloring.ref.ui
 testsuite/reftests/entry-progress-coloring.ui
 testsuite/reftests/fixed-widget-stacking.ref.ui
