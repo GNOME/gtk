@@ -103,6 +103,8 @@ _gtk_icon_helper_clear (GtkIconHelper *self)
   self->priv->def = gtk_image_definition_new_empty ();
 
   self->priv->icon_size = GTK_ICON_SIZE_INVALID;
+
+  gtk_icon_helper_invalidate (self);
 }
 
 static void
