@@ -12291,7 +12291,8 @@ _gtk_window_set_popover_position (GtkWindow                   *window,
   data->rect = *rect;
   data->pos = pos;
 
-  if (gtk_widget_is_visible (popover) && !data->window)
+  if (gtk_widget_is_visible (popover) && !data->window &&
+      gtk_widget_get_realized (GTK_WIDGET (window)))
     {
       popover_realize (popover, data, window);
       popover_map (popover, data);
