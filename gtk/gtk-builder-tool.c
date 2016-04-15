@@ -21,6 +21,7 @@
 #include <string.h>
 
 #include <glib/gi18n.h>
+#include <glib/gprintf.h>
 #include <gtk/gtk.h>
 #include "gtkbuilderprivate.h"
 
@@ -206,7 +207,7 @@ maybe_start_packing (MyParserData *data)
     {
       if (!data->packing_started)
         {
-          g_print ("%*s<packing>\n", data->indent, "");
+          g_printf ("%*s<packing>\n", data->indent, "");
           data->indent += 2;
           data->packing_started = TRUE;
         }
@@ -220,7 +221,7 @@ maybe_start_cell_packing (MyParserData *data)
     {
       if (!data->cell_packing_started)
         {
-          g_print ("%*s<cell-packing>\n", data->indent, "");
+          g_printf ("%*s<cell-packing>\n", data->indent, "");
           data->indent += 2;
           data->cell_packing_started = TRUE;
         }
@@ -234,7 +235,7 @@ maybe_start_child (MyParserData *data)
     {
       if (data->child_started < data->in_child)
         {
-          g_print ("%*s<child>\n", data->indent, "");
+          g_printf ("%*s<child>\n", data->indent, "");
           data->indent += 2;
           data->child_started += 1;
         }
@@ -289,7 +290,7 @@ maybe_emit_property (MyParserData *data)
   maybe_start_packing (data);
   maybe_start_cell_packing (data);
 
-  g_print ("%*s<property", data->indent, "");
+  g_printf ("%*s<property", data->indent, "");
   for (i = 0; data->attribute_names[i]; i++)
     {
       if (!translatable &&
@@ -298,28 +299,28 @@ maybe_emit_property (MyParserData *data)
         continue;
 
       escaped = g_markup_escape_text (data->attribute_values[i], -1);
-      g_print (" %s=\"%s\"", data->attribute_names[i], escaped);
+      g_printf (" %s=\"%s\"", data->attribute_names[i], escaped);
       g_free (escaped);
     }
 
   if (bound)
     {
-      g_print ("/>\n");
+      g_printf ("/>\n");
     }
   else
     {
-      g_print (">");
+      g_printf (">");
       if (property_is_boolean (data, class_name, property_name))
         {
-          g_print ("%s", canonical_boolean_value (data, value_string));
+          g_printf ("%s", canonical_boolean_value (data, value_string));
         }
       else
         {
           escaped = g_markup_escape_text (value_string, -1);
-          g_print ("%s", escaped);
+          g_printf ("%s", escaped);
           g_free (escaped);
         }
-      g_print ("</property>\n");
+      g_printf ("</property>\n");
     }
 }
 
@@ -328,7 +329,7 @@ maybe_close_starttag (MyParserData *data)
 {
   if (data->unclosed_starttag)
     {
-      g_print (">\n");
+      g_printf (">\n");
       data->unclosed_starttag = FALSE;
     }
 }
@@ -455,11 +456,11 @@ start_element (GMarkupParseContext  *context,
         }
     }
 
-  g_print ("%*s<%s", data->indent, "", element_name);
+  g_printf ("%*s<%s", data->indent, "", element_name);
   for (i = 0; attribute_names[i]; i++)
     {
       escaped = g_markup_escape_text (attribute_values[i], -1);
-      g_print (" %s=\"%s\"", attribute_names[i], escaped);
+      g_printf (" %s=\"%s\"", attribute_names[i], escaped);
       g_free (escaped);
     }
   data->unclosed_starttag = TRUE;
@@ -519,10 +520,10 @@ end_element (GMarkupParseContext  *context,
       gchar *escaped;
 
       if (data->unclosed_starttag)
-        g_print (">");
+        g_printf (">");
 
       escaped = g_markup_escape_text (data->value->str, -1);
-      g_print ("%s</%s>\n", escaped, element_name);
+      g_printf ("%s</%s>\n", escaped, element_name);
       g_free (escaped);
 
       g_string_free (data->value, TRUE);
@@ -531,9 +532,9 @@ end_element (GMarkupParseContext  *context,
   else
     {
       if (data->unclosed_starttag)
-        g_print ("/>\n");
+        g_printf ("/>\n");
       else
-        g_print ("%*s</%s>\n", data->indent - 2, "", element_name);
+        g_printf ("%*s</%s>\n", data->indent - 2, "", element_name);
     }
 
   data->indent -= 2;
@@ -567,7 +568,7 @@ passthrough (GMarkupParseContext  *context,
 
   maybe_close_starttag (data);
 
-  g_print ("%*s%s\n", data->indent, "", text);
+  g_printf ("%*s%s\n", data->indent, "", text);
 }
 
 GMarkupParser parser = {
@@ -770,7 +771,7 @@ do_enumerate (const gchar *filename)
       if (g_str_has_prefix (name, "___") && g_str_has_suffix (name, "___"))
         continue;
 
-      g_print ("%s (%s)\n", name, g_type_name_from_instance ((GTypeInstance*)object));
+      g_printf ("%s (%s)\n", name, g_type_name_from_instance ((GTypeInstance*)object));
     }
   g_slist_free (list);
 
