@@ -1929,9 +1929,11 @@ headerbar {
       min-width: 26px;
       margin: 0;
       padding: 0; }
-  .solid-csd .titlebar:backdrop:not(headerbar), .solid-csd .titlebar:not(headerbar), .solid-csd
-  headerbar:backdrop, .solid-csd
-  headerbar {
+  .solid-csd .titlebar:backdrop:dir(rtl):not(headerbar), .solid-csd .titlebar:backdrop:dir(ltr):not(headerbar), .solid-csd .titlebar:dir(rtl):not(headerbar), .solid-csd .titlebar:dir(ltr):not(headerbar), .solid-csd
+  headerbar:backdrop:dir(rtl), .solid-csd
+  headerbar:backdrop:dir(ltr), .solid-csd
+  headerbar:dir(rtl), .solid-csd
+  headerbar:dir(ltr) {
     margin-left: -1px;
     margin-right: -1px;
     margin-top: -1px;

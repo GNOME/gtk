@@ -1512,11 +1512,13 @@ headerbar {
 
   .solid-csd & {
     &:backdrop, & {
-      margin-left: -1px;
-      margin-right: -1px;
-      margin-top: -1px;
-      border-radius: 0;
-      box-shadow: none;
+      &:dir(rtl), &:dir(ltr) { // specificity bump
+        margin-left: -1px;
+        margin-right: -1px;
+        margin-top: -1px;
+        border-radius: 0;
+        box-shadow: none;
+      }
     }
   }
 }
