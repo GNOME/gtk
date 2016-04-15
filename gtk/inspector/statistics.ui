@@ -159,7 +159,7 @@
             <property name="halign">center</property>
             <property name="valign">center</property>
             <child>
-              <object class="GtkLabel">
+              <object class="GtkLabel" id="excuse">
                 <property name="visible">True</property>
                 <property name="selectable">True</property>
                 <property name="label" translatable="yes">Enable statistics with GOBJECT_DEBUG=instance-count</property>

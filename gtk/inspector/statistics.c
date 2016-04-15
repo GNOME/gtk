@@ -26,6 +26,7 @@
 #include "gtkcellrenderertext.h"
 #include "gtkcelllayout.h"
 #include "gtksearchbar.h"
+#include "gtklabel.h"
 
 enum
 {
@@ -36,6 +37,7 @@ enum
 struct _GtkInspectorStatisticsPrivate
 {
   GtkWidget *stack;
+  GtkWidget *excuse;
   GtkTreeModel *model;
   GtkTreeView  *view;
   GtkWidget *button;
@@ -168,6 +170,12 @@ toggle_record (GtkToggleButton        *button,
 
 static gboolean
 has_instance_counts (void)
+{
+  return g_type_get_instance_count (GTK_TYPE_LABEL) > 0;
+}
+
+static gboolean
+instance_counts_enabled (void)
 {
   const gchar *string;
   guint flags = 0;
@@ -365,6 +373,8 @@ constructed (GObject *object)
     update_type_counts (sl);
   else
     {
+      if (instance_counts_enabled ())
+        gtk_label_set_text (GTK_LABEL (sl->priv->excuse), _("GLib must be configured with --enable-debug"));
       gtk_stack_set_visible_child_name (GTK_STACK (sl->priv->stack), "excuse");
       gtk_widget_set_sensitive (sl->priv->button, FALSE);
     }
@@ -452,6 +462,7 @@ gtk_inspector_statistics_class_init (GtkInspectorStatisticsClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorStatistics, renderer_cumulative2);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorStatistics, search_entry);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorStatistics, search_bar);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorStatistics, excuse);
 
 }
 
