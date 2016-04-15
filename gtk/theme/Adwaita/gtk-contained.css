@@ -1936,7 +1936,8 @@ headerbar {
       min-width: 26px;
       margin: 0;
       padding: 0; }
-  .solid-csd .titlebar:not(headerbar), .solid-csd
+  .solid-csd .titlebar:backdrop:not(headerbar), .solid-csd .titlebar:not(headerbar), .solid-csd
+  headerbar:backdrop, .solid-csd
   headerbar {
     margin-left: -1px;
     margin-right: -1px;

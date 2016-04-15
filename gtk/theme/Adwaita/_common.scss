@@ -1511,11 +1511,13 @@ headerbar {
   }
 
   .solid-csd & {
-    margin-left: -1px;
-    margin-right: -1px;
-    margin-top: -1px;
-    border-radius: 0;
-    box-shadow: none;
+    &:backdrop, & {
+      margin-left: -1px;
+      margin-right: -1px;
+      margin-top: -1px;
+      border-radius: 0;
+      box-shadow: none;
+    }
   }
 }
 
