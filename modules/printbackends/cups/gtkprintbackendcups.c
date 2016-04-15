@@ -4409,40 +4409,37 @@ static const struct {
  * Handles "format not a string literal" error
  * https://mail.gnome.org/archives/desktop-devel-list/2016-March/msg00075.html
  */
-static const gchar *
+static gchar *
 get_ipp_choice_translation_string (gint  index,
 				   guint i)
 {
-  const gchar *translation;
-  gchar       *string;
+  gchar *translation;
 
   if (i < G_N_ELEMENTS (ipp_choice_translations))
-    translation = ipp_choice_translations[i].translation;
+    translation = g_strdup (_(ipp_choice_translations[i].translation));
   else
     {
       switch (i)
         {
           case 14:
             /* Translators: Output stacker number %d */
-            string = g_strdup_printf ("Stacker %d", index);
+            translation = g_strdup_printf (C_("output-bin", "Stacker %d"), index);
             break;
           case 15:
             /* Translators: Output mailbox number %d */
-            string = g_strdup_printf ("Mailbox %d", index);
+            translation = g_strdup_printf (C_("output-bin", "Mailbox %d"), index);
             break;
           case 16:
             /* Translators: Private mailbox */
-            string = g_strdup ("My Mailbox");
+            translation = g_strdup (C_("output-bin", "My Mailbox"));
             break;
           case 17:
             /* Translators: Output tray number %d */
-            string = g_strdup_printf ("Tray %d", index);
+            translation = g_strdup_printf (C_("output-bin", "Tray %d"), index);
             break;
           default:
             g_assert_not_reached ();
         }
-
-        translation = g_dpgettext2 (GETTEXT_PACKAGE, "output-bin", string);
     }
 
   return translation;
@@ -5206,9 +5203,7 @@ get_ipp_choice_translation (const gchar  *ipp_option_name,
 
               if (index != 0 || endptr != nptr)
                 {
-                  translation = g_strdup (g_dpgettext2 (GETTEXT_PACKAGE,
-                                                        ipp_option_name,
-                                                        get_ipp_choice_translation_string (index, i)));
+                  translation = get_ipp_choice_translation_string (index, i);
                   break;
                 }
             }
