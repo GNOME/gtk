@@ -1706,9 +1706,6 @@ gdk_win32_window_reparent (GdkWindow *window,
   API_CALL (SetParent, (GDK_WINDOW_HWND (window),
 			GDK_WINDOW_HWND (new_parent)));
 
-  API_CALL (MoveWindow, (GDK_WINDOW_HWND (window),
-			 x, y, window->width, window->height, TRUE));
-
   /* From here on, we treat parents of type GDK_WINDOW_FOREIGN like
    * the root window
    */
@@ -1740,6 +1737,9 @@ gdk_win32_window_reparent (GdkWindow *window,
 	  GDK_WINDOW_TYPE (window) = GDK_WINDOW_CHILD;
 	}
     }
+
+  /* Move window into desired position while keeping the same client area */
+  gdk_win32_window_move_resize (window, TRUE, x, y, window->width, window->height);
 
   return FALSE;
 }
