@@ -2593,41 +2593,33 @@ switch {
   font-weight: bold;
   font-size: smaller;
   outline-offset: -4px;
-  box-shadow: inset 0 1px rgba(0, 0, 0, 0.1), 0 1px transparent;
   border: 1px solid #1c1f1f;
   border-radius: 3px;
   color: #eeeeec;
-  background-image: linear-gradient(to bottom, #2d3232);
+  background-color: #2f3434;
   text-shadow: 0 1px rgba(0, 0, 0, 0.1); }
   switch:checked {
-    color: white;
+    color: #ffffff;
     border-color: #0f2b48;
     background-color: #215d9c;
-    background-image: none;
-    box-shadow: 0 1px transparent;
     text-shadow: 0 1px rgba(15, 43, 72, 0.5), 0 0 2px rgba(255, 255, 255, 0.6); }
   switch:disabled {
     color: #949796;
     border-color: #1c1f1f;
-    background-image: none;
     background-color: #333636;
-    box-shadow: 0 1px transparent;
     text-shadow: none; }
   switch:backdrop {
     color: #949796;
     border-color: #1f2222;
-    background-image: linear-gradient(to bottom, #303535);
-    box-shadow: none;
+    background-color: #303535;
     text-shadow: none;
     transition: 200ms ease-out; }
     switch:backdrop:checked {
       border-color: #0f2b48;
-      background-image: linear-gradient(to bottom, #215d9c);
-      box-shadow: none; }
+      background-color: #215d9c; }
   switch:disabled {
     color: #5d6767;
     border-color: #1f2222;
-    background-image: none;
     background-color: #333636; }
   switch slider {
     margin: -1px;

@@ -2606,42 +2606,34 @@ switch {
   font-weight: bold;
   font-size: smaller;
   outline-offset: -4px;
-  box-shadow: inset 0 1px rgba(0, 0, 0, 0.1), 0 1px transparent;
   border: 1px solid #9d9d99;
   border-radius: 3px;
   color: #2e3436;
-  background-image: linear-gradient(to bottom, #cacac8);
+  background-color: #cececc;
   text-shadow: 0 1px rgba(0, 0, 0, 0.1); }
   switch:checked {
-    color: white;
+    color: #ffffff;
     border-color: #184472;
     background-color: #4a90d9;
-    background-image: none;
-    box-shadow: 0 1px transparent;
     text-shadow: 0 1px rgba(24, 68, 114, 0.5), 0 0 2px rgba(255, 255, 255, 0.6); }
   switch:disabled {
     color: #8b8e8f;
     border-color: #9d9d99;
-    background-image: none;
     background-color: #f1f1f1;
-    box-shadow: 0 1px transparent;
     text-shadow: none; }
   switch:backdrop {
     color: #8b8e8f;
     border-color: #a5a5a1;
-    background-image: linear-gradient(to bottom, #d1d1cf);
-    box-shadow: none;
+    background-color: #d1d1cf;
     text-shadow: none;
     transition: 200ms ease-out; }
     switch:backdrop:checked {
       color: #e8e8e7;
       border-color: #4a90d9;
-      background-image: linear-gradient(to bottom, #4a90d9);
-      box-shadow: none; }
+      background-color: #4a90d9; }
   switch:disabled {
     color: #c3c3c0;
     border-color: #a5a5a1;
-    background-image: none;
     background-color: #f1f1f1; }
   switch slider {
     margin: -1px;
