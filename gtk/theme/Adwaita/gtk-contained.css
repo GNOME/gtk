@@ -2961,26 +2961,20 @@ treeview.view radio:backdrop {
 scale trough, scale fill, progressbar trough {
   border: 1px solid #9d9d99;
   border-radius: 3px;
-  background-color: #cececc;
-  box-shadow: inset 1px 1px rgba(0, 0, 0, 0.1); }
+  background-color: #cececc; }
   scale trough:disabled, scale fill:disabled, progressbar trough:disabled {
-    background-color: #f1f1f1;
-    box-shadow: none; }
+    background-color: #f1f1f1; }
   scale trough:backdrop, scale fill:backdrop, progressbar trough:backdrop, progressbar:backdrop trough {
     background-color: #d1d1cf;
     border-color: #a5a5a1;
-    box-shadow: none;
     transition: 200ms ease-out; }
     scale trough:backdrop:disabled, scale fill:backdrop:disabled, progressbar trough:backdrop:disabled, progressbar:backdrop trough:disabled {
       background-color: #f1f1f1; }
-  row:selected scale trough, scale row:selected trough, row:selected scale fill, scale row:selected fill, row:selected progressbar trough, progressbar row:selected trough {
-    box-shadow: none; }
-    row:selected scale trough, scale row:selected trough, row:selected scale fill, scale row:selected fill, row:selected progressbar trough, progressbar row:selected trough, row:selected scale trough:disabled, scale row:selected trough:disabled, row:selected scale fill:disabled, scale row:selected fill:disabled, row:selected progressbar trough:disabled, progressbar row:selected trough:disabled {
-      border-color: #184472; }
+  row:selected scale trough:disabled, scale row:selected trough:disabled, row:selected scale fill:disabled, scale row:selected fill:disabled, row:selected progressbar trough:disabled, progressbar row:selected trough:disabled, row:selected scale trough, scale row:selected trough, row:selected scale fill, scale row:selected fill, row:selected progressbar trough, progressbar row:selected trough {
+    border-color: #184472; }
   .osd scale trough, scale .osd trough, .osd scale fill, scale .osd fill, .osd progressbar trough, progressbar .osd trough {
     border-color: rgba(0, 0, 0, 0.7);
     background-color: rgba(0, 0, 0, 0.5);
-    box-shadow: none;
     outline-color: rgba(238, 238, 236, 0.2); }
     .osd scale trough:disabled, scale .osd trough:disabled, .osd scale fill:disabled, scale .osd fill:disabled, .osd progressbar trough:disabled, progressbar .osd trough:disabled {
       background-color: rgba(53, 57, 58, 0.5); }
@@ -3033,15 +3027,14 @@ scale {
   scale trough {
     outline-offset: 2px;
     -gtk-outline-radius: 5px; }
-  scale fill, scale fill:backdrop {
-    background-color: #9d9d99;
-    box-shadow: none; }
-  scale fill:disabled, scale fill:disabled:backdrop {
+  scale fill:backdrop, scale fill {
+    background-color: #9d9d99; }
+  scale fill:disabled:backdrop, scale fill:disabled {
     border-color: transparent;
     background-color: transparent; }
   .osd scale fill {
     background-color: rgba(91, 91, 90, 0.775); }
-    .osd scale fill:disabled, .osd scale fill:disabled:backdrop {
+    .osd scale fill:disabled:backdrop, .osd scale fill:disabled {
       border-color: transparent;
       background-color: transparent; }
   scale slider {
@@ -3089,7 +3082,7 @@ scale {
         box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
         scale slider:backdrop:disabled label, scale slider:backdrop:disabled {
           color: #c3c3c0; }
-    row:selected scale slider, row:selected scale slider:disabled {
+    row:selected scale slider:disabled, row:selected scale slider {
       border-color: #184472; }
     .osd scale slider {
       color: #eeeeec;

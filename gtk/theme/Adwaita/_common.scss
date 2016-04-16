@@ -2720,34 +2720,24 @@ treeview.view radio:selected { &:focus, & { @extend %radio; }} // This is a work
   border: 1px solid $borders_color;
   border-radius: 3px;
   background-color: $dark_fill;
-  box-shadow: inset 1px 1px transparentize(black, 0.9);
 
-  &:disabled {
-    background-color: $insensitive_bg_color;
-    box-shadow: none;
-  }
+  &:disabled { background-color: $insensitive_bg_color; }
 
   &:backdrop {
     background-color: $backdrop_dark_fill;
     border-color: $backdrop_borders_color;
-    box-shadow: none;
     transition: $backdrop_transition;
 
     &:disabled { background-color: $insensitive_bg_color; }
   }
 
   // ...on selected list rows
-  row:selected & {
-    box-shadow: none;
-
-    &, &:disabled { border-color: $selected_borders_color; }
-  }
+  row:selected & { &:disabled, & { border-color: $selected_borders_color; }}
 
   // OSD
   .osd & {
     border-color: $osd_borders_color;
     background-color: transparentize($osd_borders_color, 0.2);
-    box-shadow: none;
     outline-color: transparentize($osd_fg_color, 0.8);
 
     &:disabled { background-color: $osd_insensitive_bg_color; }
@@ -2774,7 +2764,7 @@ treeview.view radio:selected { &:focus, & { @extend %radio; }} // This is a work
   }
 
   // ...on selected list rows
-  row:selected & { &:disabled, & { border-color: $selected_borders_color; } }
+  row:selected & { &:disabled, & { border-color: $selected_borders_color; }}
 
   // OSD
   .osd & {
@@ -2846,13 +2836,10 @@ scale {
   fill {
     @extend %scale_trough;
 
-    &, &:backdrop {
-      background-color: $borders_color;
-      box-shadow: none;
-    }
+    &:backdrop, & { background-color: $borders_color; }
 
     &:disabled {
-      &, &:backdrop {
+      &:backdrop, & {
         border-color: transparent;
         background-color: transparent;
       }
@@ -2863,7 +2850,7 @@ scale {
       background-color: mix($osd_fg_color, $osd_borders_color, 25%);
 
       &:disabled {
-        &, &:backdrop {
+        &:backdrop, & {
           border-color: transparent;
           background-color: transparent;
         }
@@ -2894,7 +2881,7 @@ scale {
     }
 
     // ...on selected list rows
-    row:selected & { &, &:disabled { border-color: $selected_borders_color; } }
+    row:selected & { &:disabled, & { border-color: $selected_borders_color; } }
 
     // OSD
     .osd & {
