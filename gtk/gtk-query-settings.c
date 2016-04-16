@@ -26,7 +26,7 @@ main (int argc, char **argv)
   GtkSettings  *settings;
   GParamSpec  **props;
   guint         n_properties;
-  int           i;
+  guint         i;
   int           max_prop_name_length = 0;
   gchar        *pattern = NULL;
 
