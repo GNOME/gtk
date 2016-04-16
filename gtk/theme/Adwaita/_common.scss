@@ -1343,7 +1343,7 @@ headerbar {
   min-height: 46px;
   border-width: 0 0 1px;
   border-style: solid;
-  border-color: $borders_color;
+  border-color: $alt_borders_color;
   border-radius: 0;
 
   @include headerbar_fill;

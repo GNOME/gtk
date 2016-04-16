@@ -223,7 +223,7 @@
   //
     color: $tc;
     outline-color: transparentize($tc, 0.7);
-    border-color: if($c!=$bg_color, _border_color($c), $borders_color);
+    border-color: if($c!=$bg_color, _border_color($c), $alt_borders_color);
     @include _button_text_shadow($tc, $c);
     @if $variant == 'light' {
       background-image: linear-gradient(to bottom, lighten($c, 5%) 20%, $c 90%);
@@ -247,7 +247,7 @@
   //
     color: $tc;
     outline-color: transparentize($tc, 0.7);
-    border-color: if($c!=$bg_color, _border_color($c), $borders_color);
+    border-color: if($c!=$bg_color, _border_color($c), $alt_borders_color);
     @if $variant == 'light' {
       background-image: linear-gradient(to bottom, lighten($c, 9%) 10%, lighten($c, 4%) 90%);
       box-shadow: inset 0 1px _button_hilight_color(lighten($c, 6%)),
