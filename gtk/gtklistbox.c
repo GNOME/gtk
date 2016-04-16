@@ -3805,7 +3805,7 @@ gtk_list_box_bound_model_changed (GListModel *list,
 {
   GtkListBox *box = user_data;
   GtkListBoxPrivate *priv = BOX_PRIV (user_data);
-  gint i;
+  guint i;
 
   while (removed--)
     {
