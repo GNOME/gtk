@@ -1522,8 +1522,8 @@ headerbar {
   }
 }
 
-window:not(.tiled):not(.maximized) .titlebar {
-  &, &:backdrop {
+.background:not(.tiled):not(.maximized) .titlebar {
+  &:backdrop, & {
     border-top-left-radius: 7px;
     border-top-right-radius: 7px;
   }

@@ -1937,7 +1937,7 @@ headerbar button {
   margin-top: 6px;
   margin-bottom: 6px; }
 
-window:not(.tiled):not(.maximized) .titlebar, window:not(.tiled):not(.maximized) .titlebar:backdrop {
+.background:not(.tiled):not(.maximized) .titlebar:backdrop, .background:not(.tiled):not(.maximized) .titlebar {
   border-top-left-radius: 7px;
   border-top-right-radius: 7px; }
 
