@@ -1534,7 +1534,7 @@ headerbar {
   }
 }
 
-.titlebar {
+window:not(.tiled):not(.maximized) .titlebar {
   &, &:backdrop {
     border-top-left-radius: 7px;
     border-top-right-radius: 7px;
@@ -1542,10 +1542,10 @@ headerbar {
 }
 
 headerbar {
-  separator:first-child + &, // tackles the paned container case
-  &:first-child { &, &:backdrop { border-top-left-radius: 7px; }}
+  window:not(.tiled):not(.maximized) separator:first-child + &, // tackles the paned container case
+  window:not(.tiled):not(.maximized) &:first-child { &:backdrop, & { border-top-left-radius: 7px; }}
 
-  &:last-child { &, &:backdrop { border-top-right-radius: 7px; }}
+  window:not(.tiled):not(.maximized) &:last-child { &:backdrop, & { border-top-right-radius: 7px; }}
 }
 
 .titlebar:not(headerbar) {
@@ -4163,6 +4163,7 @@ decoration {
     transition: $backdrop_transition;
   }
 
+  .maximized &,
   .fullscreen &,
   .tiled & { border-radius: 0; }
 

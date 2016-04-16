@@ -1947,13 +1947,13 @@ headerbar button {
   margin-top: 6px;
   margin-bottom: 6px; }
 
-.titlebar, .titlebar:backdrop {
+window:not(.tiled):not(.maximized) .titlebar, window:not(.tiled):not(.maximized) .titlebar:backdrop {
   border-top-left-radius: 7px;
   border-top-right-radius: 7px; }
 
-separator:first-child + headerbar, separator:first-child + headerbar:backdrop, headerbar:first-child, headerbar:first-child:backdrop {
+window:not(.tiled):not(.maximized) separator:first-child + headerbar:backdrop, window:not(.tiled):not(.maximized) separator:first-child + headerbar, window:not(.tiled):not(.maximized) headerbar:first-child:backdrop, window:not(.tiled):not(.maximized) headerbar:first-child {
   border-top-left-radius: 7px; }
-headerbar:last-child, headerbar:last-child:backdrop {
+window:not(.tiled):not(.maximized) headerbar:last-child:backdrop, window:not(.tiled):not(.maximized) headerbar:last-child {
   border-top-right-radius: 7px; }
 
 window.csd > .titlebar:not(headerbar) {
@@ -4369,7 +4369,7 @@ decoration {
   decoration:backdrop {
     box-shadow: 0 3px 9px 1px transparent, 0 2px 6px 2px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(28, 31, 31, 0.9);
     transition: 200ms ease-out; }
-  .fullscreen decoration, .tiled decoration {
+  .maximized decoration, .fullscreen decoration, .tiled decoration {
     border-radius: 0; }
   .popup decoration {
     box-shadow: none; }
