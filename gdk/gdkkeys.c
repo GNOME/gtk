@@ -613,7 +613,7 @@ gdk_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
  * This function is useful when matching key events against
  * accelerators.
  *
- * Returns: %TRUE if no virtual modifiers were mapped to the
+ * Returns: %FALSE if two virtual modifiers were mapped to the
  *     same non-virtual modifier. Note that %FALSE is also returned
  *     if a virtual modifier is mapped to a non-virtual modifier that
  *     was already set in @state.
