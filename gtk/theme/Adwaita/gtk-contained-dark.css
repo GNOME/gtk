@@ -1658,7 +1658,7 @@ headerbar {
   min-height: 46px;
   border-width: 0 0 1px;
   border-style: solid;
-  border-color: #1c1f1f;
+  border-color: #151717;
   border-radius: 0;
   background-image: linear-gradient(to top, #2a2f2f, #2f3434 2px, #323737 3px);
   background-color: #323737;
@@ -2630,7 +2630,7 @@ switch {
     transition: all 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
     color: #eeeeec;
     outline-color: rgba(238, 238, 236, 0.3);
-    border-color: #1c1f1f;
+    border-color: #151717;
     text-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
     -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
     background-image: linear-gradient(to bottom, #323737 20%, #2a2f2f 90%);
@@ -2638,7 +2638,7 @@ switch {
   switch:hover slider {
     color: #eeeeec;
     outline-color: rgba(238, 238, 236, 0.3);
-    border-color: #1c1f1f;
+    border-color: #151717;
     background-image: linear-gradient(to bottom, #393f3f 20%, #2f3434 90%);
     box-shadow: inset 0 1px rgba(255, 255, 255, 0.05), inset 0 -2px #323737, inset 0 -1px #2a2f2f, 0 1px rgba(0, 0, 0, 0.1); }
   switch:checked slider {
@@ -2731,7 +2731,7 @@ radio {
   -gtk-icon-source: none;
   color: #eeeeec;
   outline-color: rgba(238, 238, 236, 0.3);
-  border-color: #1c1f1f;
+  border-color: #151717;
   text-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
   -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
   background-image: linear-gradient(to bottom, #323737 20%, #2a2f2f 90%);
@@ -2743,7 +2743,7 @@ radio {
   radio:hover {
     color: #eeeeec;
     outline-color: rgba(238, 238, 236, 0.3);
-    border-color: #1c1f1f;
+    border-color: #151717;
     background-image: linear-gradient(to bottom, #393f3f 20%, #2f3434 90%);
     box-shadow: inset 0 1px rgba(255, 255, 255, 0.05), inset 0 -2px #323737, inset 0 -1px #2a2f2f, 0 1px rgba(0, 0, 0, 0.1); }
   check:active,
@@ -3001,7 +3001,7 @@ scale {
   scale slider {
     color: #eeeeec;
     outline-color: rgba(238, 238, 236, 0.3);
-    border-color: #1c1f1f;
+    border-color: #151717;
     text-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
     -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
     background-image: linear-gradient(to bottom, #323737 20%, #2a2f2f 90%);
@@ -3013,7 +3013,7 @@ scale {
     scale slider:hover {
       color: #eeeeec;
       outline-color: rgba(238, 238, 236, 0.3);
-      border-color: #1c1f1f;
+      border-color: #151717;
       background-image: linear-gradient(to bottom, #393f3f 20%, #2f3434 90%);
       box-shadow: inset 0 1px rgba(255, 255, 255, 0.05), inset 0 -2px #323737, inset 0 -1px #2a2f2f, 0 1px rgba(0, 0, 0, 0.1); }
     scale slider:active {
