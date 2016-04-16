@@ -29,15 +29,6 @@
   @return inset 0 0 0 1px $fc;
 }
 
-@function entry_gradient($c) {
-  @if $variant=='light' { @return linear-gradient(to bottom, mix($borders_color, $c, 45%),
-                                                             mix($borders_color, $c, 3%) 2px,
-                                                             $c 90%); }
-  @else { @return linear-gradient(to bottom, mix($borders_color, $c, 95%),
-                                             mix($borders_color, $c, 40%) 3px,
-                                             $c 90%); }
-}
-
 @mixin entry($t, $fc:$selected_bg_color, $edge: none) {
 //
 // Entries drawing function
@@ -57,7 +48,7 @@
   @if $t==normal {
     color: $text_color;
     border-color: $borders_color;
-    background-image: entry_gradient($base_color);
+    background-color: $base_color;
     @include _shadows(entry_focus_shadow(transparentize($fc, 1)), $_entry_edge);
     // for the transition to work the number of shadows in different states needs to match, hence the transparent shadow here.
   }
@@ -68,25 +59,25 @@
   @if $t==insensitive {
     color: $insensitive_fg_color;
     border-color: $borders_color;
-    background-image: linear-gradient(to bottom, $insensitive_bg_color);
+    background-color: $insensitive_bg_color;
     box-shadow: $_entry_edge;
   }
   @if $t==backdrop {
     color: $backdrop_text_color;
     border-color: $backdrop_borders_color;
-    background-image: linear-gradient(to bottom, $backdrop_base_color);
+    background-color: $backdrop_base_color;
     box-shadow: $_blank_edge;
   }
   @if $t==backdrop-insensitive {
     color: $backdrop_insensitive_color;
     border-color: $backdrop_borders_color;
-    background-image: linear-gradient(to bottom, $insensitive_bg_color);
+    background-color: $insensitive_bg_color;
     box-shadow: $_blank_edge;
   }
   @if $t==osd {
     color: $osd_text_color;
     border-color: $osd_borders_color;
-    background-image: linear-gradient(to bottom, transparentize(opacify($osd_borders_color, 1), 0.5));
+    background-color: transparentize(opacify($osd_borders_color, 1), 0.5);
     background-clip: padding-box;
     box-shadow: none;
     text-shadow: 0 1px black;
@@ -95,7 +86,7 @@
   @if $t==osd-focus {
     color: $osd_text_color;
     border-color: $selected_bg_color;
-    background-image: linear-gradient(to bottom, transparentize(opacify($osd_borders_color, 1), 0.5));
+    background-color: transparentize(opacify($osd_borders_color, 1), 0.5);
     background-clip: padding-box;
     box-shadow: entry_focus_shadow($fc);
     text-shadow: 0 1px black;
@@ -104,7 +95,7 @@
   @if $t==osd-insensitive {
     color: $osd_insensitive_fg_color;
     border-color: $osd_borders_color;
-    background-image: linear-gradient(to bottom, $osd_insensitive_bg_color);
+    background-color: $osd_insensitive_bg_color;
     background-clip: padding-box;
     box-shadow: none;
     text-shadow: none;
@@ -113,7 +104,7 @@
   @if $t==osd-backdrop {
     color: $osd_text_color;
     border-color: $osd_borders_color;
-    background-image: linear-gradient(to bottom, transparentize(opacify($osd_borders_color, 1), 0.5));
+    background-color: transparentize(opacify($osd_borders_color, 1), 0.5);
     background-clip: padding-box;
     box-shadow: none;
     text-shadow: none;

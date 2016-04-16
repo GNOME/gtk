@@ -294,7 +294,7 @@ entry {
       &:focus, & {
         min-height: 0;
         padding: 2px;
-        background-image: none;
+        background-color: transparent;
         border-color: transparent;
         border-radius: 0;
       }
@@ -387,19 +387,15 @@ entry {
     &:not(:disabled) + entry:not(:disabled),
     &:not(:disabled) + %entry:not(:disabled) {
       border-top-color: mix($borders_color, $base_color, 30%);
-      background-image: linear-gradient(to bottom, $base_color);
 
-      &:backdrop {
-        border-top-color: mix($backdrop_borders_color, $backdrop_base_color, 30%);
-        background-image: linear-gradient(to bottom, $backdrop_base_color);
-      }
+      &:backdrop { border-top-color: mix($backdrop_borders_color, $backdrop_base_color, 30%); }
     }
 
     // brighter border between linked insensitive entries
     &:disabled + %entry:disabled,
     &:disabled + entry:disabled { border-top-color: mix($borders_color, $base_color, 30%); }
 
-    // color back the top border of a linked focused entry following another entry and add back the focus shadow.
+    // color back the top border of a linked focused entry following another entry.
     // :not(:only-child) is a specificity bump hack.
     + %entry:focus:not(:only-child),
     + entry:focus:not(:only-child) { border-top-color: entry_focus_border(); }

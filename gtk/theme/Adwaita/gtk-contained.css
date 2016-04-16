@@ -182,7 +182,7 @@ entry {
   transition: all 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
   color: black;
   border-color: #9d9d99;
-  background-image: linear-gradient(to bottom, #d3d3d1, #fcfcfc 2px, #ffffff 90%);
+  background-color: #ffffff;
   box-shadow: inset 0 0 0 1px rgba(74, 144, 217, 0); }
   spinbutton:not(.vertical) image.left,
   entry image.left {
@@ -219,7 +219,7 @@ entry {
   entry.flat {
     min-height: 0;
     padding: 2px;
-    background-image: none;
+    background-color: transparent;
     border-color: transparent;
     border-radius: 0; }
   spinbutton:focus:not(.vertical),
@@ -230,20 +230,20 @@ entry {
   entry:disabled {
     color: #8b8e8f;
     border-color: #9d9d99;
-    background-image: linear-gradient(to bottom, #f1f1f1);
+    background-color: #f1f1f1;
     box-shadow: none; }
   spinbutton:backdrop:not(.vertical),
   entry:backdrop {
     color: #323232;
     border-color: #a5a5a1;
-    background-image: linear-gradient(to bottom, #fcfcfc);
+    background-color: #fcfcfc;
     box-shadow: none;
     transition: 200ms ease-out; }
   spinbutton:backdrop:disabled:not(.vertical),
   entry:backdrop:disabled {
     color: #c3c3c0;
     border-color: #a5a5a1;
-    background-image: linear-gradient(to bottom, #f1f1f1);
+    background-color: #f1f1f1;
     box-shadow: none; }
   spinbutton.error:not(.vertical),
   entry.error {
@@ -290,7 +290,7 @@ entry {
   entry {
     color: white;
     border-color: rgba(0, 0, 0, 0.7);
-    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.5));
+    background-color: rgba(0, 0, 0, 0.5);
     background-clip: padding-box;
     box-shadow: none;
     text-shadow: 0 1px black;
@@ -299,7 +299,7 @@ entry {
     entry:focus {
       color: white;
       border-color: #4a90d9;
-      background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.5));
+      background-color: rgba(0, 0, 0, 0.5);
       background-clip: padding-box;
       box-shadow: inset 0 0 0 1px #4a90d9;
       text-shadow: 0 1px black;
@@ -308,7 +308,7 @@ entry {
     entry:backdrop {
       color: white;
       border-color: rgba(0, 0, 0, 0.7);
-      background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.5));
+      background-color: rgba(0, 0, 0, 0.5);
       background-clip: padding-box;
       box-shadow: none;
       text-shadow: none;
@@ -317,7 +317,7 @@ entry {
     entry:disabled {
       color: #878a89;
       border-color: rgba(0, 0, 0, 0.7);
-      background-image: linear-gradient(to bottom, rgba(53, 57, 58, 0.5));
+      background-color: rgba(53, 57, 58, 0.5);
       background-clip: padding-box;
       box-shadow: none;
       text-shadow: none;
@@ -354,13 +354,11 @@ entry {
 .linked.vertical > spinbutton:not(:disabled):not(.vertical) + entry:not(:disabled), .linked.vertical > spinbutton:not(:disabled):not(.vertical) + spinbutton:not(:disabled):not(.vertical), .linked.vertical >
 entry:not(:disabled) + entry:not(:disabled), .linked.vertical >
 entry:not(:disabled) + spinbutton:not(:disabled):not(.vertical) {
-  border-top-color: #e2e2e0;
-  background-image: linear-gradient(to bottom, #ffffff); }
+  border-top-color: #e2e2e0; }
   .linked.vertical > spinbutton:not(:disabled):not(.vertical) + entry:not(:disabled):backdrop, .linked.vertical > spinbutton:not(:disabled):not(.vertical) + spinbutton:not(:disabled):backdrop:not(.vertical), .linked.vertical >
   entry:not(:disabled) + entry:not(:disabled):backdrop, .linked.vertical >
   entry:not(:disabled) + spinbutton:not(:disabled):backdrop:not(.vertical) {
-    border-top-color: #e2e2e1;
-    background-image: linear-gradient(to bottom, #fcfcfc); }
+    border-top-color: #e2e2e1; }
 .linked.vertical > spinbutton:disabled:not(.vertical) + spinbutton:disabled:not(.vertical), .linked.vertical > spinbutton:disabled:not(.vertical) + entry:disabled, .linked.vertical >
 entry:disabled + spinbutton:disabled:not(.vertical), .linked.vertical >
 entry:disabled + entry:disabled {
@@ -3645,12 +3643,12 @@ levelbar trough {
   border-radius: 3px;
   color: black;
   border-color: #9d9d99;
-  background-image: linear-gradient(to bottom, #d3d3d1, #fcfcfc 2px, #ffffff 90%);
+  background-color: #ffffff;
   box-shadow: inset 0 0 0 1px rgba(74, 144, 217, 0); }
   levelbar trough:backdrop {
     color: #323232;
     border-color: #a5a5a1;
-    background-image: linear-gradient(to bottom, #fcfcfc);
+    background-color: #fcfcfc;
     box-shadow: none; }
 levelbar.horizontal.discrete block {
   margin: 0 1px; }
