@@ -2511,7 +2511,7 @@ get_reason_msg_desc (guint i,
         break;
       case 3:
         /* Translators: "Developer" like on photo development context */
-        reason_msg_desc = g_strdup_printf (_("Printer “%s” is low on developer."),
+        reason_msg_desc = g_strdup_printf (_("Printer “%s” is out of developer."),
                                            printer_name);
         break;
       case 4:
