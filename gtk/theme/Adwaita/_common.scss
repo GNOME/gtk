@@ -2848,7 +2848,7 @@ scale {
   slider {
     @include button(normal-alt, $edge: $shadow_color);
 
-    border: 1px solid darken($borders_color, 3%);
+    border: 1px solid darken($alt_borders_color, 3%);
     border-radius: 100%;
     transition: $button_transition;
     transition-property: background, border, box-shadow;
@@ -2857,7 +2857,7 @@ scale {
 
     &:active { border-color: $selected_borders_color; }
 
-    &:disabled { @include button (insensitive); }
+    &:disabled { @include button(insensitive); }
 
     &:backdrop {
       transition: $backdrop_transition;
