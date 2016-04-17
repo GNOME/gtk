@@ -398,7 +398,7 @@ gdk_wayland_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
 
       xkb_state_update_mask (xkb_state, 1 << idx, 0, 0, 0, 0, 0);
       real = xkb_state_serialize_mods (xkb_state, XKB_STATE_MODS_EFFECTIVE);
-      real &= 0xff;
+      real &= 0xf0; /* ignore mapping to Lock, Shift, Control, Mod1 */
       if (mods & real)
         *state |= vmods[i].mask;
       xkb_state_update_mask (xkb_state, 0, 0, 0, 0, 0, 0);
