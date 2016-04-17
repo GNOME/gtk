@@ -4286,7 +4286,7 @@ tooltip {
 /*****************
  * Color Chooser *
  *****************/
-colorswatch, colorswatch:drop(active) {
+colorswatch:drop(active), colorswatch {
   border-style: none; }
 colorswatch.top {
   border-top-left-radius: 5.5px;
@@ -4333,10 +4333,9 @@ colorswatch:drop(active) {
     border-color: #4e9a06;
     box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.3), inset 0 0 0 1px #4e9a06; }
 colorswatch overlay {
-  box-shadow: inset 0 2px 2px -3px rgba(0, 0, 0, 0.7);
   border: 1px solid rgba(0, 0, 0, 0.3); }
   colorswatch overlay:hover {
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0.3); }
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.4), inset 0 -1px rgba(0, 0, 0, 0.2); }
   colorswatch overlay:backdrop, colorswatch overlay:backdrop:hover {
     border-color: rgba(0, 0, 0, 0.3);
     box-shadow: none; }

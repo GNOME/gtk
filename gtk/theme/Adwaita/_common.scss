@@ -3939,11 +3939,9 @@ colorswatch {
   // is colorswatch overlay {}, colorswatch has the programmatically set background, so most of the style is
   // applied to the overlay box.
 
-  &, &:drop(active) { border-style: none; } // FIXME: implement a proper drop(active) state
+  &:drop(active), & { border-style: none; } // FIXME: implement a proper drop(active) state
 
   $_colorswatch_radius: 5px;
-  $_colorswatch_overlay_shadow: if($variant == 'light', inset 0 2px 2px -3px transparentize(black, 0.3),
-                                                        inset 0 3px 2px -2px transparentize(black, 0.5));
 
   // base color corners rounding
   // to avoid the artifacts caused by rounded corner anti-aliasing the base color
@@ -4025,10 +4023,12 @@ colorswatch {
   }
 
   overlay {
-    box-shadow: $_colorswatch_overlay_shadow;
     border: 1px solid if($variant == 'light', transparentize(black, 0.7), $borders_color);
 
-    &:hover { box-shadow: inset 0 1px transparentize(white, 0.7); }
+    &:hover {
+      box-shadow: inset 0 1px transparentize(white, 0.6),
+                  inset 0 -1px transparentize(black, 0.8);
+    }
 
     &:backdrop, &:backdrop:hover {
       border-color: if($variant == 'light', transparentize(black, 0.7), $borders_color);
