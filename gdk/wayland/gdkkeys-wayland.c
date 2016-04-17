@@ -417,7 +417,7 @@ gdk_wayland_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
   mods = get_xkb_modifiers (xkb_keymap, *state);
 
   xkb_state = xkb_state_new (xkb_keymap);
-  xkb_state_update_mask (xkb_state, mods, 0, 0, 0, 0, 0);
+  xkb_state_update_mask (xkb_state, mods & ~0xff, 0, 0, 0, 0, 0);
   mapped = xkb_state_serialize_mods (xkb_state, XKB_STATE_MODS_EFFECTIVE);
   if ((mapped & mods & 0xff) != 0)
     ret = FALSE;
