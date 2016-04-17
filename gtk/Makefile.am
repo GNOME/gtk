@@ -540,6 +540,8 @@ gtk_private_h_sources =		\
 	gtkselectionprivate.h	\
 	gtksettingsprivate.h	\
 	gtkshortcutlabelprivate.h	\
+	gtkshortcutswindowprivate.h	\
+	gtkshortcutsshortcutprivate.h	\
 	gtksidebarrowprivate.h	\
 	gtksizegroup-private.h	\
 	gtksizerequestcacheprivate.h	\

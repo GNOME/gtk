@@ -22,7 +22,7 @@
 #include "gtkscrolledwindow.h"
 #include "gtkshortcutssection.h"
 #include "gtkshortcutsgroup.h"
-#include "gtkshortcutsshortcut.h"
+#include "gtkshortcutsshortcutprivate.h"
 #include "gtksearchbar.h"
 #include "gtksearchentry.h"
 #include "gtkwidgetprivate.h"
@@ -98,6 +98,9 @@ typedef struct
   GtkListBox     *list_box;
   GtkBox         *search_gestures;
   GtkBox         *search_shortcuts;
+
+  GtkWindow      *window;
+  gulong          keys_changed_id;
 } GtkShortcutsWindowPrivate;
 
 typedef struct
@@ -187,6 +190,7 @@ gtk_shortcuts_window_add_search_item (GtkWidget *child, gpointer data)
   gboolean subtitle_set = FALSE;
   GtkTextDirection direction;
   GtkShortcutType shortcut_type;
+  gchar *action_name = NULL;
   gchar *subtitle;
   gchar *str;
   gchar *keywords;
@@ -200,6 +204,7 @@ gtk_shortcuts_window_add_search_item (GtkWidget *child, gpointer data)
                     "icon-set", &icon_set,
                     "subtitle-set", &subtitle_set,
                     "shortcut-type", &shortcut_type,
+                    "action-name", &action_name,
                     NULL);
 
       hash_key = g_strdup_printf ("%s-%s", title, accelerator);
@@ -220,6 +225,7 @@ gtk_shortcuts_window_add_search_item (GtkWidget *child, gpointer data)
                            "shortcut-type", shortcut_type,
                            "accel-size-group", priv->search_image_group,
                            "title-size-group", priv->search_text_group,
+                           "action-name", action_name,
                            NULL);
       if (icon_set)
         {
@@ -245,6 +251,7 @@ gtk_shortcuts_window_add_search_item (GtkWidget *child, gpointer data)
       g_free (title);
       g_free (accelerator);
       g_free (str);
+      g_free (action_name);
     }
   else if (GTK_IS_CONTAINER (child))
     {
@@ -435,6 +442,57 @@ gtk_shortcuts_window_set_section_name (GtkShortcutsWindow *self,
 }
 
 static void
+update_accels_cb (GtkWidget *widget,
+                  gpointer   data)
+{
+  GtkShortcutsWindow *self = data;
+  GtkShortcutsWindowPrivate *priv = gtk_shortcuts_window_get_instance_private (self);
+
+  if (GTK_IS_SHORTCUTS_SHORTCUT (widget))
+    gtk_shortcuts_shortcut_update_accel (GTK_SHORTCUTS_SHORTCUT (widget), priv->window);
+  else if (GTK_IS_CONTAINER (widget))
+    gtk_container_foreach (GTK_CONTAINER (widget), update_accels_cb, self);
+}
+
+static void
+update_accels_for_actions (GtkShortcutsWindow *self)
+{
+  GtkShortcutsWindowPrivate *priv = gtk_shortcuts_window_get_instance_private (self);
+
+  if (priv->window)
+    gtk_container_forall (GTK_CONTAINER (self), update_accels_cb, self);
+}
+
+static void
+keys_changed_handler (GtkWindow          *window,
+                      GtkShortcutsWindow *self)
+{
+  update_accels_for_actions (self);
+}
+
+void
+gtk_shortcuts_window_set_window (GtkShortcutsWindow *self,
+                                 GtkWindow          *window)
+{
+  GtkShortcutsWindowPrivate *priv = gtk_shortcuts_window_get_instance_private (self);
+
+  if (priv->keys_changed_id)
+    {
+      g_signal_handler_disconnect (priv->window, priv->keys_changed_id);
+      priv->keys_changed_id = 0;
+    }
+
+  priv->window = window;
+
+  if (priv->window)
+    priv->keys_changed_id = g_signal_connect (window, "keys-changed",
+                                              G_CALLBACK (keys_changed_handler),
+                                              self);
+
+  update_accels_for_actions (self);
+}
+
+static void
 gtk_shortcuts_window__list_box__row_activated (GtkShortcutsWindow *self,
                                                GtkListBoxRow      *row,
                                                GtkListBox         *list_box)
@@ -588,6 +646,8 @@ gtk_shortcuts_window_dispose (GObject *object)
   GtkShortcutsWindowPrivate *priv = gtk_shortcuts_window_get_instance_private (self);
 
   g_signal_handlers_disconnect_by_func (priv->stack, G_CALLBACK (update_title_stack), self);
+
+  gtk_shortcuts_window_set_window (self, NULL);
 
   if (priv->header_bar)
     {

@@ -21,6 +21,7 @@
 #include "gtkshortcutsshortcut.h"
 
 #include "gtkshortcutlabelprivate.h"
+#include "gtkshortcutswindowprivate.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
@@ -49,6 +50,7 @@ struct _GtkShortcutsShortcut
   gboolean subtitle_set;
   gboolean icon_set;
   GtkTextDirection direction;
+  gchar *action_name;
   GtkShortcutType  shortcut_type;
 };
 
@@ -71,6 +73,7 @@ enum {
   PROP_TITLE_SIZE_GROUP,
   PROP_DIRECTION,
   PROP_SHORTCUT_TYPE,
+  PROP_ACTION_NAME,
   LAST_PROP
 };
 
@@ -313,6 +316,16 @@ gtk_shortcuts_shortcut_set_type (GtkShortcutsShortcut *self,
 }
 
 static void
+gtk_shortcuts_shortcut_set_action_name (GtkShortcutsShortcut *self,
+                                        const gchar          *action_name)
+{
+  g_free (self->action_name);
+  self->action_name = g_strdup (action_name);
+
+  g_object_notify (G_OBJECT (self), "action-name");
+}
+
+static void
 gtk_shortcuts_shortcut_get_property (GObject    *object,
                                      guint       prop_id,
                                      GValue     *value,
@@ -357,6 +370,10 @@ gtk_shortcuts_shortcut_get_property (GObject    *object,
 
     case PROP_SHORTCUT_TYPE:
       g_value_set_enum (value, self->shortcut_type);
+      break;
+
+    case PROP_ACTION_NAME:
+      g_value_set_string (value, self->action_name);
       break;
 
     default:
@@ -414,6 +431,10 @@ gtk_shortcuts_shortcut_set_property (GObject      *object,
       gtk_shortcuts_shortcut_set_type (self, g_value_get_enum (value));
       break;
 
+    case PROP_ACTION_NAME:
+      gtk_shortcuts_shortcut_set_action_name (self, g_value_get_string (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -427,6 +448,7 @@ gtk_shortcuts_shortcut_finalize (GObject *object)
 
   g_clear_object (&self->accel_size_group);
   g_clear_object (&self->title_size_group);
+  g_free (self->action_name);
 
   G_OBJECT_CLASS (gtk_shortcuts_shortcut_parent_class)->finalize (object);
 }
@@ -442,6 +464,30 @@ static GType
 gtk_shortcuts_shortcut_child_type (GtkContainer *container)
 {
   return G_TYPE_NONE;
+}
+
+void
+gtk_shortcuts_shortcut_update_accel (GtkShortcutsShortcut *self,
+                                     GtkWindow            *window)
+{
+  GtkApplication *app;
+  gchar **accels;
+  gchar *str;
+
+  if (self->action_name == NULL)
+    return;
+
+  app = gtk_window_get_application (window);
+  if (app == NULL)
+    return;
+
+  accels = gtk_application_get_accels_for_action (app, self->action_name);
+  str = g_strjoinv (" ", accels);
+
+  gtk_shortcuts_shortcut_set_accelerator (self, str);
+
+  g_free (str);
+  g_strfreev (accels);
 }
 
 static void
@@ -614,6 +660,24 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
                        GTK_TYPE_SHORTCUT_TYPE,
                        GTK_SHORTCUT_ACCELERATOR,
                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY));
+
+  /**
+   * GtkShortcutsShortcut:action-name:
+   *
+   * A detailed action name. If this is set for a shortcut
+   * of type %GTK_SHORTCUT_ACCELERATOR, then GTK+ will use
+   * the accelerators that are associated with the action
+   * via gtk_application_set_accels_for_action(), and setting
+   * #GtkShortcutsShortcut::accelerator is not necessary.
+   *
+   * Since: 3.22
+   */
+  properties[PROP_ACTION_NAME] =
+    g_param_spec_string ("action-name",
+                         P_("Action Name"),
+                         P_("The name of the action"),
+                         NULL,
+                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
   gtk_widget_class_set_css_name (widget_class, "shortcut");

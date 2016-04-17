@@ -28,6 +28,7 @@
 #include "gtkmenubar.h"
 #include "gtkintl.h"
 #include "gtksettings.h"
+#include "gtkshortcutswindowprivate.h"
 
 #ifdef HAVE_GIO_UNIX
 #include <gio/gdesktopappinfo.h>
@@ -1001,6 +1002,8 @@ gtk_application_window_set_help_overlay (GtkApplicationWindow *window,
 
   gtk_window_set_modal (GTK_WINDOW (help_overlay), TRUE);
   gtk_window_set_transient_for (GTK_WINDOW (help_overlay), GTK_WINDOW (window));
+  gtk_shortcuts_window_set_window (help_overlay, GTK_WINDOW (window));
+
   g_signal_connect (help_overlay, "delete-event",
                     G_CALLBACK (gtk_widget_hide_on_delete), NULL);
 
