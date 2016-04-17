@@ -2890,10 +2890,10 @@ scale {
     }
   }
 
-  value { color: gtkalpha(currentColor, 0.4); }
+  value { color: gtkalpha(currentColor, 0.55); }
 
   marks {
-    color: gtkalpha(currentColor, 0.4);
+    color: gtkalpha(currentColor, 0.55);
 
     @each $marks_class, $marks_pos, $marks_margin in (top, top, bottom),
                                                      (bottom, bottom, top),
