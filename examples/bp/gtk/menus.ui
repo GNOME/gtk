@@ -60,6 +60,12 @@
           <attribute name='action'>app.edit-accels</attribute>
         </item>
       </section>
+      <section>
+        <item>
+          <attribute name='label' translatable='yes'>Shortcuts...</attribute>
+          <attribute name='action'>win.show-help-overlay</attribute>
+        </item>
+      </section>
     </submenu>
     <submenu>
       <attribute name='label' translatable='yes'>_View</attribute>
