@@ -468,9 +468,7 @@ button {
     outline-color: rgba(238, 238, 236, 0.3);
     border-color: #212424;
     background-image: image(#2a2f2f);
-    text-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
-    -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
-    box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0);
     text-shadow: none;
     -gtk-icon-shadow: none;
     transition-duration: 50ms; }
@@ -796,9 +794,7 @@ button.suggested-action {
     outline-color: rgba(255, 255, 255, 0.3);
     border-color: #0f2b48;
     background-image: image(#1b4e83);
-    text-shadow: 0 -1px rgba(0, 0, 0, 0.78353);
-    -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.78353);
-    box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0);
     text-shadow: none;
     -gtk-icon-shadow: none; }
   .selection-mode button.titlebutton:backdrop,
@@ -975,9 +971,7 @@ button.destructive-action {
     outline-color: rgba(255, 255, 255, 0.3);
     border-color: #760909;
     background-image: image(#b90e0e);
-    text-shadow: 0 -1px rgba(0, 0, 0, 0.72078);
-    -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.72078);
-    box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0);
     text-shadow: none;
     -gtk-icon-shadow: none; }
   button.destructive-action:backdrop,
@@ -1195,9 +1189,7 @@ button.needs-attention > image, stacksidebar row.needs-attention > label {
     outline-color: rgba(238, 238, 236, 0.3);
     border-color: #212424;
     background-image: image(#2a2f2f);
-    text-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
-    -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
-    box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0);
     text-shadow: none;
     -gtk-icon-shadow: none; }
   .inline-toolbar toolbutton > button:disabled {
@@ -1744,9 +1736,7 @@ headerbar {
         outline-color: rgba(255, 255, 255, 0.3);
         border-color: #0f2b48;
         background-image: image(#1b4e83);
-        text-shadow: 0 -1px rgba(0, 0, 0, 0.78353);
-        -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.78353);
-        box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6);
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0);
         text-shadow: none;
         -gtk-icon-shadow: none; }
       .selection-mode.titlebar:not(headerbar) button:backdrop.flat, .selection-mode.titlebar:not(headerbar) button:backdrop,
@@ -1875,9 +1865,7 @@ headerbar {
           outline-color: rgba(238, 238, 236, 0.3);
           border-color: #212424;
           background-image: image(#2a2f2f);
-          text-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
-          -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
-          box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6);
+          box-shadow: inset 0 1px rgba(255, 255, 255, 0);
           text-shadow: none;
           -gtk-icon-shadow: none;
           border-color: #0f2b48; }
@@ -2776,9 +2764,7 @@ radio {
     outline-color: rgba(238, 238, 236, 0.3);
     border-color: #212424;
     background-image: image(#2a2f2f);
-    text-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
-    -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.89176);
-    box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0);
     text-shadow: none;
     -gtk-icon-shadow: none; }
   check:disabled,
@@ -4164,9 +4150,7 @@ infobar {
       outline-color: rgba(255, 255, 255, 0.3);
       border-color: #0f2b48;
       background-image: image(#1b4e83);
-      text-shadow: 0 -1px rgba(0, 0, 0, 0.78353);
-      -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.78353);
-      box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6);
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0);
       text-shadow: none;
       -gtk-icon-shadow: none; }
     .info button:disabled,

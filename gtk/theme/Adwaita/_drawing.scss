@@ -277,9 +277,9 @@
     border-color: if($c!=$bg_color, _border_color($c), $borders_color);
     @if $variant == 'light' { background-image: image(darken($c, 8%)); }
     @else { background-image: image(darken($c, 6%)); }
-    @include _button_text_shadow($tc, darken($c,10%));
-    @include _shadows(inset 0 2px 1px -2px transparentize(black,0.4),
+    @include _shadows(inset 0 1px transparentize($_hilight_color, 1),
                       $_button_edge);
+
     text-shadow: none;
     -gtk-icon-shadow: none;
   }
