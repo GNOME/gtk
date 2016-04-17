@@ -467,10 +467,12 @@ button {
     color: #2e3436;
     outline-color: rgba(46, 52, 54, 0.3);
     border-color: #b1b1ae;
-    background-image: linear-gradient(to bottom, #c8c8c5, #dcdcda);
+    background-image: image(#d4d4d2);
     text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
     -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
     box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6);
+    text-shadow: none;
+    -gtk-icon-shadow: none;
     transition-duration: 50ms; }
   notebook > header > tabs > arrow:backdrop, button.sidebar-button:backdrop, button.titlebutton:backdrop, notebook > header > tabs > arrow:backdrop, button.titlebutton:backdrop,
   button:backdrop.flat,
@@ -796,10 +798,12 @@ button.suggested-action {
     color: white;
     outline-color: rgba(255, 255, 255, 0.3);
     border-color: #215d9c;
-    background-image: linear-gradient(to bottom, #276fba, #3583d5);
+    background-image: image(#2b7bcf);
     text-shadow: 0 -1px rgba(0, 0, 0, 0.62353);
     -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.62353);
-    box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
+    box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6);
+    text-shadow: none;
+    -gtk-icon-shadow: none; }
   .selection-mode button.titlebutton:backdrop,
   button.suggested-action:backdrop,
   button.suggested-action.flat:backdrop {
@@ -973,10 +977,12 @@ button.destructive-action {
     color: white;
     outline-color: rgba(255, 255, 255, 0.3);
     border-color: #a60c0c;
-    background-image: linear-gradient(to bottom, #c70f0f, #ed1212);
+    background-image: image(#df1111);
     text-shadow: 0 -1px rgba(0, 0, 0, 0.64078);
     -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.64078);
-    box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
+    box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6);
+    text-shadow: none;
+    -gtk-icon-shadow: none; }
   button.destructive-action:backdrop,
   button.destructive-action.flat:backdrop {
     border-color: #ef2929;
@@ -1191,10 +1197,12 @@ button.needs-attention > image, stacksidebar row.needs-attention > label {
     color: #2e3436;
     outline-color: rgba(46, 52, 54, 0.3);
     border-color: #b1b1ae;
-    background-image: linear-gradient(to bottom, #c8c8c5, #dcdcda);
+    background-image: image(#d4d4d2);
     text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
     -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-    box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
+    box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6);
+    text-shadow: none;
+    -gtk-icon-shadow: none; }
   .inline-toolbar toolbutton > button:disabled {
     border-color: #b1b1ae;
     background-image: linear-gradient(to bottom, #f1f1f1);
@@ -1742,10 +1750,12 @@ headerbar {
         color: #ffffff;
         outline-color: rgba(255, 255, 255, 0.3);
         border-color: #215d9c;
-        background-image: linear-gradient(to bottom, #276fba, #3583d5);
+        background-image: image(#2b7bcf);
         text-shadow: 0 -1px rgba(0, 0, 0, 0.62353);
         -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.62353);
-        box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
+        box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6);
+        text-shadow: none;
+        -gtk-icon-shadow: none; }
       .selection-mode.titlebar:not(headerbar) button:backdrop.flat, .selection-mode.titlebar:not(headerbar) button:backdrop,
       headerbar.selection-mode button:backdrop.flat,
       headerbar.selection-mode button:backdrop {
@@ -1871,10 +1881,12 @@ headerbar {
           color: #2e3436;
           outline-color: rgba(46, 52, 54, 0.3);
           border-color: #b1b1ae;
-          background-image: linear-gradient(to bottom, #c8c8c5, #dcdcda);
+          background-image: image(#d4d4d2);
           text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
           -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
           box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6);
+          text-shadow: none;
+          -gtk-icon-shadow: none;
           border-color: #184472; }
         .selection-mode.titlebar:not(headerbar) button.suggested-action:disabled,
         headerbar.selection-mode button.suggested-action:disabled {
@@ -2788,10 +2800,12 @@ radio {
     color: #2e3436;
     outline-color: rgba(46, 52, 54, 0.3);
     border-color: #b1b1ae;
-    background-image: linear-gradient(to bottom, #c8c8c5, #dcdcda);
+    background-image: image(#d4d4d2);
     text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
     -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-    box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
+    box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6);
+    text-shadow: none;
+    -gtk-icon-shadow: none; }
   check:disabled,
   radio:disabled {
     border-color: #b1b1ae;
@@ -4178,10 +4192,12 @@ infobar {
       color: #ffffff;
       outline-color: rgba(255, 255, 255, 0.3);
       border-color: #215d9c;
-      background-image: linear-gradient(to bottom, #276fba, #3583d5);
+      background-image: image(#2b7bcf);
       text-shadow: 0 -1px rgba(0, 0, 0, 0.62353);
       -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.62353);
-      box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
+      box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6);
+      text-shadow: none;
+      -gtk-icon-shadow: none; }
     .info button:disabled,
     .question button:disabled,
     .warning button:disabled,

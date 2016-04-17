@@ -275,11 +275,13 @@
     color: $tc;
     outline-color: transparentize($tc, 0.7);
     border-color: if($c!=$bg_color, _border_color($c), $borders_color);
-    @if $variant == 'light' { background-image: linear-gradient(to bottom, darken($c, 13%), darken($c, 5%)); }
-    @else { background-image: linear-gradient(to bottom, darken($c, 9%), darken($c, 5%)); }
+    @if $variant == 'light' { background-image: image(darken($c, 8%)); }
+    @else { background-image: image(darken($c, 6%)); }
     @include _button_text_shadow($tc, darken($c,10%));
     @include _shadows(inset 0 2px 1px -2px transparentize(black,0.4),
                       $_button_edge);
+    text-shadow: none;
+    -gtk-icon-shadow: none;
   }
   @else if $t==insensitive {
   //
