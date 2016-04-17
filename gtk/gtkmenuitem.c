@@ -1528,7 +1528,10 @@ gtk_menu_item_set_submenu (GtkMenuItem *menu_item,
   if (priv->submenu != submenu)
     {
       if (priv->submenu)
-        gtk_menu_detach (GTK_MENU (priv->submenu));
+        {
+          gtk_menu_detach (GTK_MENU (priv->submenu));
+          priv->submenu = NULL;
+        }
 
       if (submenu)
         {
@@ -1536,9 +1539,9 @@ gtk_menu_item_set_submenu (GtkMenuItem *menu_item,
           gtk_menu_attach_to_widget (GTK_MENU (submenu),
                                      widget,
                                      gtk_menu_item_detacher);
-
-          update_arrow_gadget (menu_item);
         }
+
+      update_arrow_gadget (menu_item);
 
       if (gtk_widget_get_parent (widget))
         gtk_widget_queue_resize (widget);
@@ -2347,6 +2350,8 @@ gtk_menu_item_parent_set (GtkWidget *widget,
                                        menu->priv->accel_path,
                                        menu->priv->accel_group,
                                        TRUE);
+
+  update_arrow_gadget (menu_item);
 
   if (GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->parent_set)
     GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->parent_set (widget, previous_parent);
