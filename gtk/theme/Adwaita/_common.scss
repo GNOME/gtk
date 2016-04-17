@@ -227,7 +227,8 @@ assistant {
   .sidebar label.highlight { background-color: mix($bg_color, $fg_color, 80%); }
 }
 
-%osd, .osd {
+%osd,
+.osd {
   color: $osd_fg_color;
   border: none;
   background-color: $osd_bg_color;
@@ -915,7 +916,7 @@ toolbar.inline-toolbar toolbutton:backdrop {
   background-color: transparent;
   background-image: none;
   border-color: transparent;
-  box-shadow: inset 0 1px transparentize(white,1),
+  box-shadow: inset 0 1px transparentize(white, 1),
               0 1px transparentize(white, 1);
   text-shadow: none;
   -gtk-icon-shadow: none;
@@ -1149,6 +1150,7 @@ spinbutton {
     // FIXME: this should not be set at all, but otherwise it gets the wrong
     // color
     &:disabled { color: $insensitive_fg_color; }
+
     &:backdrop:disabled { color: $backdrop_insensitive_color; }
 
     &:drop(active) {
@@ -1360,9 +1362,9 @@ headerbar {
   }
 
   .title {
-    font-weight: bold;
     padding-left: 12px;
     padding-right: 12px;
+    font-weight: bold;
   }
 
   .subtitle {
@@ -1377,8 +1379,8 @@ headerbar {
     $_hc: mix($top_hilight,$selected_bg_color, 50%); // hilight color
 
     color: $selected_fg_color;
-    text-shadow: 0 -1px transparentize(black, 0.5);
     border-color: $selected_borders_color;
+    text-shadow: 0 -1px transparentize(black, 0.5);
 
     @include headerbar_fill($selected_bg_color, $_hc);
 
@@ -1497,8 +1499,8 @@ headerbar {
   .maximized & { &:backdrop, & { border-radius: 0; }} // squared corners when the window is maximized or tiled
 
   &.default-decoration {
-    padding: 4px;
     min-height: 28px;
+    padding: 4px;
 
     button.titlebutton {
       min-height: 26px;
@@ -1557,7 +1559,7 @@ headerbar {
     box-shadow: none;
   }
 
-  > separator { background-color: $borders_color; }
+  > separator { background-color: $borders_color; }  // FIXME: use darker border?
 
   @extend %titlebar;
 }
@@ -1683,11 +1685,9 @@ treeview.view {
     background-color: $selected_bg_color;
     background-image: linear-gradient(to bottom,
                                       $selected_bg_color,
-                                      darken($selected_bg_color,10%));
-    box-shadow: inset 0 1px if($variant=='light', transparentize(white,0.7),
-                                                  transparentize(white,0.85)),
-                      0 1px if($variant=='light', transparentize(black, 0.8),
-                                                  transparentize(black,0.9));
+                                      darken($selected_bg_color, 10%));
+    box-shadow: inset 0 1px if($variant=='light', transparentize(white, 0.7), transparentize(white, 0.85)),
+                      0 1px if($variant=='light', transparentize(black, 0.8), transparentize(black, 0.9));
 
     &:selected {
       &:focus, & {
@@ -1700,9 +1700,7 @@ treeview.view {
 
         @else { box-shadow: inset 0 1px transparentize(white, 0.95); }
 
-        background-image: linear-gradient(to bottom,
-                                          $base_color,
-                                          darken($base_color,10%));
+        background-image: linear-gradient(to bottom, $base_color, darken($base_color,10%));
 
         &:backdrop {
           @if $variant == 'light' {
@@ -1782,25 +1780,25 @@ treeview.view {
   header.button.dnd { // for treeview-like derive widgets
     &:active, &:selected, &:hover, & {
       padding: 0 6px;
-      transition: none;
+      color: $base_color;
       background-image: none;
       background-color: $selected_bg_color;
-      color: $base_color;
-      border-radius: 0;
       border-style: none;
+      border-radius: 0;
       box-shadow: inset 0 0 0 1px $base_color;
       text-shadow: none;
+      transition: none;
     }
   }
 }
 
 %column_header_button {
   padding: 0 6px;
-  border-radius: 0;
   background-image: none;
-  text-shadow: none;
   border-style: none solid solid none;
   border-color: $bg_color;
+  border-radius: 0;
+  text-shadow: none;
 
   &:disabled {
     border-color: $bg_color;
@@ -1808,9 +1806,9 @@ treeview.view {
   }
 
   &:backdrop {
+    color: mix($backdrop_fg_color, $backdrop_bg_color, 50%);
     border-color: $backdrop_bg_color;
     border-style: none solid solid none;
-    color: mix($backdrop_fg_color, $backdrop_bg_color, 50%);
     background-image: none;
     background-color: $backdrop_base_color;
 
@@ -2555,8 +2553,7 @@ switch {
                   (':backdrop:checked', '-checked-backdrop-selectionmode') {
   .view.content-view.check#{$s}:not(list) {
     -gtk-icon-shadow: none;
-    -gtk-icon-source: -gtk-scaled(url("assets/checkbox#{$as}.png"),
-                                  url("assets/checkbox#{$as}@2.png"));
+    -gtk-icon-source: -gtk-scaled(url("assets/checkbox#{$as}.png"), url("assets/checkbox#{$as}@2.png"));
     background-color: transparent;
   }
 }
