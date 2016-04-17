@@ -20,7 +20,7 @@
 static void
 test_one_accel (const char *accel,
 		const char *exp_label,
-		gboolean has_keysym)
+		gboolean    has_keysym)
 {
   guint accel_key;
   GdkModifierType mods;
@@ -99,6 +99,24 @@ accel5 (void)
 }
 
 static void
+accel6 (void)
+{
+  test_one_accel ("<Hyper>x", "Hyper+X", TRUE);
+}
+
+static void
+accel7 (void)
+{
+  test_one_accel ("<Super>x", "Super+X", TRUE);
+}
+
+static void
+accel8 (void)
+{
+  test_one_accel ("<Meta>x", "Meta+X", TRUE);
+}
+
+static void
 keysyms (void)
 {
   g_assert (gdk_keyval_from_name ("KP_7") == GDK_KEY_KP_7);
@@ -119,5 +137,9 @@ main (int   argc,
   g_test_add_func ("/accel3", accel3);
   g_test_add_func ("/accel4", accel4);
   g_test_add_func ("/accel5", accel5);
+  g_test_add_func ("/accel6", accel6);
+  g_test_add_func ("/accel7", accel7);
+  g_test_add_func ("/accel8", accel8);
+
   return g_test_run();
 }
