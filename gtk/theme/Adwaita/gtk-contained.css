@@ -1368,8 +1368,8 @@ button.color {
     box-shadow: 0 1px rgba(255, 255, 255, 0.76923); }
     button.color colorswatch:only-child, button.color colorswatch:only-child overlay {
       border-radius: 0; }
-    button.color colorswatch:only-child:disabled, button.color colorswatch:only-child:backdrop {
-      box-shadow: none; }
+  button.color:disabled colorswatch:only-child, button.color:backdrop colorswatch:only-child, button.color:active colorswatch:only-child, button.color:checked colorswatch:only-child {
+    box-shadow: none; }
 
 /*********
  * Links *
