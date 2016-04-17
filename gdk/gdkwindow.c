@@ -7663,6 +7663,7 @@ is_button_type (GdkEventType type)
 	 type == GDK_BUTTON_RELEASE ||
          type == GDK_TOUCH_BEGIN ||
          type == GDK_TOUCH_END ||
+         type == GDK_TOUCH_CANCEL ||
 	 type == GDK_SCROLL;
 }
 
@@ -9286,6 +9287,7 @@ proxy_button_event (GdkEvent *source_event,
 
     case GDK_TOUCH_BEGIN:
     case GDK_TOUCH_END:
+    case GDK_TOUCH_CANCEL:
       convert_toplevel_coords_to_window (event_win,
                                          toplevel_x, toplevel_y,
                                          &event->button.x, &event->button.y);
@@ -9301,7 +9303,7 @@ proxy_button_event (GdkEvent *source_event,
 
       gdk_event_set_source_device (event, source_device);
 
-      if ((type == GDK_TOUCH_END &&
+      if (((type == GDK_TOUCH_END || type == GDK_TOUCH_CANCEL) &&
            _gdk_event_get_pointer_emulated (source_event)) &&
            pointer_window == pointer_info->window_under_pointer &&
            gdk_device_get_source (source_device) == GDK_SOURCE_TOUCHSCREEN)
