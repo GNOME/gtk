@@ -334,6 +334,7 @@ gtk/inspector/selector.ui
 gtk/inspector/signals-list.c
 gtk/inspector/signals-list.ui
 gtk/inspector/size-groups.c
+gtk/inspector/statistics.c
 gtk/inspector/statistics.ui
 gtk/inspector/visual.c
 gtk/inspector/visual.ui
