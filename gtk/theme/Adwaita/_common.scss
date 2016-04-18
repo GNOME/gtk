@@ -3881,10 +3881,15 @@ infobar { border-style: none; }
 .question,
 .warning,
 .error {
-  background-color: $selected_bg_color;
-  color: $selected_fg_color;
+  &:backdrop, & {
+    label, & { color: $selected_fg_color; }
+    background-color: $selected_bg_color;
+    border-color: darken($selected_bg_color, 10%);
+  }
+
   text-shadow: 0 1px darken($selected_bg_color, 10%);
-  border-color: darken($selected_bg_color, 10%);
+
+  &:backdrop { text-shadow: none; }
 
   button {
     // FIXME: extend selection mode buttons
