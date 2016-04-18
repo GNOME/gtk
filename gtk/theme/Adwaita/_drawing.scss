@@ -13,26 +13,26 @@
   @return linear-gradient(to bottom, $c, $c);
 }
 
-@mixin _shadows($shadow1, $shadow2:none, $shadow3:none, $shadow4:none) {
+@mixin _shadows($list...) {
 //
-// Helper function to stack up to 4 box-shadows;
+// Helper mixin to stack up to box-shadows;
 //
-  @if $shadow4!=none { box-shadow: $shadow1, $shadow2, $shadow3, $shadow4; }
-  @else if $shadow3!=none { box-shadow: $shadow1, $shadow2, $shadow3; }
-  @else if $shadow2!=none { box-shadow: $shadow1, $shadow2; }
-  @else { box-shadow: $shadow1; }
+  $shadows: none;
+
+  @each $shadow in $list {
+    @if $shadow!=none { $shadows: $shadows, $shadow; }
+  }
+
+  box-shadow: $shadows;
 }
 
 // entries
-
 @function entry_focus_border($fc:$selected_bg_color) {
   @if $variant == 'light' { @return $fc; }
   @else { @return if($fc==$selected_bg_color, $selected_borders_color, darken($fc, 35%)); }
 }
 
-@function entry_focus_shadow($fc:$selected_bg_color) {
-  @return inset 0 0 0 1px $fc;
-}
+@function entry_focus_shadow($fc:$selected_bg_color) { @return inset 0 0 0 1px $fc; }
 
 @mixin entry($t, $fc:$selected_bg_color, $edge: none) {
 //
