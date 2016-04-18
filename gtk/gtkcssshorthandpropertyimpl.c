@@ -503,7 +503,7 @@ parse_font (GtkCssShorthandProperty  *shorthand,
 
       if (values[4] == NULL)
         {
-          values[4] = _gtk_css_font_weight_value_try_parse (parser);
+          values[4] = _gtk_css_font_stretch_value_try_parse (parser);
           parsed_one = parsed_one || values[4] != NULL;
         }
     }
