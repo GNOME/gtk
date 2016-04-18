@@ -1287,7 +1287,7 @@ headerbar {
     box-shadow: none; }
   .titlebar .title,
   headerbar .title {
-    font: Bold;
+    font-weight: bold;
     padding: 0px 12px; }
   .titlebar .subtitle,
   headerbar .subtitle {
