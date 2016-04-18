@@ -1142,26 +1142,31 @@ flush_scroll_event (GdkWaylandSeat             *seat,
         direction = GDK_SCROLL_DOWN;
 
       flush_discrete_scroll_event (seat, direction);
+      pointer_frame->discrete_x = 0;
+      pointer_frame->discrete_y = 0;
     }
 
-  /* Axes can stop independently, if we stop on one axis but have a
-   * delta on the other, we don't count it as a stop event.
-   */
-  if (pointer_frame->is_scroll_stop &&
-      pointer_frame->delta_x == 0 &&
-      pointer_frame->delta_y == 0)
-    is_stop = TRUE;
+  if (pointer_frame->is_scroll_stop ||
+      pointer_frame->delta_x != 0 ||
+      pointer_frame->delta_y != 0)
+    {
+      /* Axes can stop independently, if we stop on one axis but have a
+       * delta on the other, we don't count it as a stop event.
+       */
+      if (pointer_frame->is_scroll_stop &&
+          pointer_frame->delta_x == 0 &&
+          pointer_frame->delta_y == 0)
+        is_stop = TRUE;
 
-  flush_smooth_scroll_event (seat,
-                             pointer_frame->delta_x,
-                             pointer_frame->delta_y,
-                             is_stop);
+      flush_smooth_scroll_event (seat,
+                                 pointer_frame->delta_x,
+                                 pointer_frame->delta_y,
+                                 is_stop);
 
-  pointer_frame->delta_x = 0;
-  pointer_frame->delta_y = 0;
-  pointer_frame->discrete_x = 0;
-  pointer_frame->discrete_y = 0;
-  pointer_frame->is_scroll_stop = FALSE;
+      pointer_frame->delta_x = 0;
+      pointer_frame->delta_y = 0;
+      pointer_frame->is_scroll_stop = FALSE;
+    }
 }
 
 static void
