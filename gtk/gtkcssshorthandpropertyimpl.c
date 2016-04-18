@@ -429,47 +429,42 @@ parse_font (GtkCssShorthandProperty  *shorthand,
             GtkCssValue             **values,
             GtkCssParser             *parser)
 {
-  PangoFontDescription *desc;
-  guint mask;
-  char *str;
+  gboolean parsed_one;
 
-  str = _gtk_css_parser_read_value (parser);
-  if (str == NULL)
-    return FALSE;
+  do
+    {
+      parsed_one = FALSE;
 
-  desc = pango_font_description_from_string (str);
-  g_free (str);
+      if (values[1] == NULL)
+        {
+          values[1] = _gtk_css_font_style_value_try_parse (parser);
+          parsed_one = parsed_one || values[1] != NULL;
+        }
 
-  mask = pango_font_description_get_set_fields (desc);
+      if (values[2] == NULL)
+        {
+          values[2] = _gtk_css_font_variant_value_try_parse (parser);
+          parsed_one = parsed_one || values[2] != NULL;
+        }
 
-  if (mask & PANGO_FONT_MASK_FAMILY)
-    {
-      values[0] = _gtk_css_array_value_new (_gtk_css_string_value_new (pango_font_description_get_family (desc)));
-    }
-  if (mask & PANGO_FONT_MASK_STYLE)
-    {
-      values[1] = _gtk_css_font_style_value_new (pango_font_description_get_style (desc));
-    }
-  if (mask & PANGO_FONT_MASK_VARIANT)
-    {
-      values[2] = _gtk_css_font_variant_value_new (pango_font_description_get_variant (desc));
-    }
-  if (mask & PANGO_FONT_MASK_WEIGHT)
-    {
-      values[3] = _gtk_css_font_weight_value_new (pango_font_description_get_weight (desc));
-    }
-  if (mask & PANGO_FONT_MASK_STRETCH)
-    {
-      values[4] = _gtk_css_font_stretch_value_new (pango_font_description_get_stretch (desc));
-    }
-  if (mask & PANGO_FONT_MASK_SIZE)
-    {
-      values[5] = _gtk_css_number_value_new ((double) pango_font_description_get_size (desc) / PANGO_SCALE, GTK_CSS_PX);
-    }
+      if (values[3] == NULL)
+        {
+          values[3] = _gtk_css_font_weight_value_try_parse (parser);
+          parsed_one = parsed_one || values[3] != NULL;
+        }
 
-  pango_font_description_free (desc);
+      if (values[4] == NULL)
+        {
+          values[4] = _gtk_css_font_weight_value_try_parse (parser);
+          parsed_one = parsed_one || values[4] != NULL;
+        }
+    }
+  while (parsed_one && !value_is_done_parsing (parser));
 
-  return TRUE;
+  values[5] = gtk_css_font_size_value_parse (parser);
+  values[0] = gtk_css_font_family_value_parse (parser);
+
+  return values[0] != NULL && values[5] != NULL;
 }
 
 static gboolean
