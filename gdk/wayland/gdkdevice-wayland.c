@@ -1467,9 +1467,6 @@ pointer_handle_frame (void              *data,
 {
   GdkWaylandSeat *seat = data;
 
-  if (!seat->pointer_info.focus)
-    return;
-
   GDK_NOTE (EVENTS,
             g_message ("frame, seat %p", seat));
 
