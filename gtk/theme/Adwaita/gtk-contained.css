@@ -4142,10 +4142,35 @@ infobar {
 .question,
 .warning,
 .error {
-  background-color: #4a90d9;
-  color: #ffffff;
-  text-shadow: 0 1px #2a76c6;
-  border-color: #2a76c6; }
+  text-shadow: 0 1px #2a76c6; }
+  .info:backdrop, .info,
+  .question:backdrop,
+  .question,
+  .warning:backdrop,
+  .warning,
+  .error:backdrop,
+  .error {
+    background-color: #4a90d9;
+    border-color: #2a76c6; }
+    .info:backdrop label, .info:backdrop, .info label, .info,
+    .question:backdrop label,
+    .question:backdrop,
+    .question label,
+    .question,
+    .warning:backdrop label,
+    .warning:backdrop,
+    .warning label,
+    .warning,
+    .error:backdrop label,
+    .error:backdrop,
+    .error label,
+    .error {
+      color: #ffffff; }
+  .info:backdrop,
+  .question:backdrop,
+  .warning:backdrop,
+  .error:backdrop {
+    text-shadow: none; }
   .info button,
   .question button,
   .warning button,
