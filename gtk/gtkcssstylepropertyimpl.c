@@ -224,11 +224,17 @@ font_family_parse_one (GtkCssParser *parser)
   return _gtk_css_string_value_new_take (name);
 }
 
+GtkCssValue *
+gtk_css_font_family_value_parse (GtkCssParser *parser)
+{
+  return _gtk_css_array_value_parse (parser, font_family_parse_one);
+}
+
 static GtkCssValue *
 font_family_parse (GtkCssStyleProperty *property,
                    GtkCssParser        *parser)
 {
-  return _gtk_css_array_value_parse (parser, font_family_parse_one);
+  return gtk_css_font_family_value_parse (parser);
 }
 
 static void
@@ -785,9 +791,8 @@ dpi_parse (GtkCssStyleProperty *property,
   return _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER);
 }
 
-static GtkCssValue *
-font_size_parse (GtkCssStyleProperty *property,
-                 GtkCssParser        *parser)
+GtkCssValue *
+gtk_css_font_size_value_parse (GtkCssParser *parser)
 {
   GtkCssValue *value;
 
@@ -800,6 +805,13 @@ font_size_parse (GtkCssStyleProperty *property,
                                       | GTK_CSS_PARSE_PERCENT
                                       | GTK_CSS_POSITIVE_ONLY
                                       | GTK_CSS_NUMBER_AS_PIXELS);
+}
+
+static GtkCssValue *
+font_size_parse (GtkCssStyleProperty *property,
+                 GtkCssParser        *parser)
+{
+  return gtk_css_font_size_value_parse (parser);
 }
 
 static GtkCssValue *
