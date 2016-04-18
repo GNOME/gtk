@@ -141,7 +141,8 @@ assistant .sidebar label.highlight {
   background-color: #c3c4c4; }
 
 .csd popover.background.touch-selection, .csd popover.background.magnifier, popover.background.touch-selection, popover.background.magnifier, .csd popover.background.osd, popover.background.osd, .app-notification,
-.app-notification.frame, .osd .scale-popup, .osd {
+.app-notification.frame, .osd .scale-popup,
+.osd {
   color: #eeeeec;
   border: none;
   background-color: rgba(32, 37, 38, 0.8);
@@ -149,7 +150,8 @@ assistant .sidebar label.highlight {
   outline-color: rgba(238, 238, 236, 0.3);
   text-shadow: 0 1px black;
   -gtk-icon-shadow: 0 1px black; }
-  popover.background.touch-selection:backdrop, popover.background.magnifier:backdrop, popover.background.osd:backdrop, .app-notification:backdrop, .osd .scale-popup:backdrop, .osd:backdrop {
+  popover.background.touch-selection:backdrop, popover.background.magnifier:backdrop, popover.background.osd:backdrop, .app-notification:backdrop, .osd .scale-popup:backdrop,
+  .osd:backdrop {
     text-shadow: none;
     -gtk-icon-shadow: none; }
 
@@ -1687,9 +1689,9 @@ headerbar {
     transition: 200ms ease-out; }
   .titlebar:not(headerbar) .title,
   headerbar .title {
-    font-weight: bold;
     padding-left: 12px;
-    padding-right: 12px; }
+    padding-right: 12px;
+    font-weight: bold; }
   .titlebar:not(headerbar) .subtitle,
   headerbar .subtitle {
     font-size: smaller;
@@ -1698,8 +1700,8 @@ headerbar {
   .selection-mode.titlebar:not(headerbar),
   headerbar.selection-mode {
     color: #ffffff;
-    text-shadow: 0 -1px rgba(0, 0, 0, 0.5);
     border-color: #184472;
+    text-shadow: 0 -1px rgba(0, 0, 0, 0.5);
     background-image: linear-gradient(to top, #276fba, #428bd7 2px, #4a90d9 3px);
     background-color: #4a90d9;
     box-shadow: inset 0 1px rgba(146, 188, 232, 0.9); }
@@ -1938,8 +1940,8 @@ headerbar {
     border-radius: 0; }
   .default-decoration.titlebar:not(headerbar),
   headerbar.default-decoration {
-    padding: 4px;
-    min-height: 28px; }
+    min-height: 28px;
+    padding: 4px; }
     .default-decoration.titlebar:not(headerbar) button.titlebutton,
     headerbar.default-decoration button.titlebutton {
       min-height: 26px;
@@ -2110,29 +2112,29 @@ treeview.view {
   treeview.view header.button.dnd:hover,
   treeview.view header.button.dnd {
     padding: 0 6px;
-    transition: none;
+    color: #ffffff;
     background-image: none;
     background-color: #4a90d9;
-    color: #ffffff;
-    border-radius: 0;
     border-style: none;
+    border-radius: 0;
     box-shadow: inset 0 0 0 1px #ffffff;
-    text-shadow: none; }
+    text-shadow: none;
+    transition: none; }
 
 treeview.view header button, treeview.view header button:hover, treeview.view header button:active {
   padding: 0 6px;
-  border-radius: 0;
   background-image: none;
-  text-shadow: none;
   border-style: none solid solid none;
-  border-color: #e8e8e7; }
+  border-color: #e8e8e7;
+  border-radius: 0;
+  text-shadow: none; }
   treeview.view header button:disabled {
     border-color: #e8e8e7;
     background-image: none; }
   treeview.view header button:backdrop {
+    color: #babbbb;
     border-color: #e8e8e7;
     border-style: none solid solid none;
-    color: #babbbb;
     background-image: none;
     background-color: #fcfcfc; }
     treeview.view header button:backdrop:disabled {
@@ -4497,7 +4499,7 @@ popover.background radiobutton:selected,
         color: #7fb0e4; }
 
 .monospace {
-  font: Monospace; }
+  font-family: monospace; }
 
 /**********************
  * Touch Copy & Paste *
