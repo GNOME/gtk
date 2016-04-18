@@ -104,6 +104,7 @@ typedef struct {
   guint debug_enabled : 1;
   guint forward_compatible : 1;
   guint is_legacy : 1;
+  guint use_es : 1;
 
   GdkGLContextPaintData *paint_data;
 } GdkGLContextPrivate;
@@ -496,8 +497,8 @@ gdk_gl_context_set_required_version (GdkGLContext *context,
                                      int           major,
                                      int           minor)
 {
-  int version;
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+  int version, min_ver;
 
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
   g_return_if_fail (!priv->realized);
@@ -512,10 +513,16 @@ gdk_gl_context_set_required_version (GdkGLContext *context,
 
   /* Enforce a minimum context version number of 3.2 */
   version = (major * 100) + minor;
-  if (version < 302)
+
+  if (!priv->use_es)
+    min_ver = 302;
+  else
+    min_ver = 200;
+
+  if (version < min_ver)
     {
       g_warning ("gdk_gl_context_set_required_version - GL context versions less than 3.2 are not supported.");
-      version = 302;
+      version = min_ver;
     }
   priv->major = version / 100;
   priv->minor = version % 100;
@@ -538,19 +545,31 @@ gdk_gl_context_get_required_version (GdkGLContext *context,
                                      int          *minor)
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+  int default_major, default_minor;
   int maj, min;
 
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
 
+  if (!priv->use_es)
+    {
+      default_major = 3;
+      default_minor = 2;
+    }
+  else
+    {
+      default_major = 2;
+      default_minor = 0;
+    }
+
   if (priv->major > 0)
     maj = priv->major;
   else
-    maj = 3;
+    maj = default_major;
 
   if (priv->minor > 0)
     min = priv->minor;
   else
-    min = 2;
+    min = default_minor;
 
   if (major != NULL)
     *major = maj;
@@ -601,6 +620,23 @@ gdk_gl_context_set_is_legacy (GdkGLContext *context,
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
 
   priv->is_legacy = !!is_legacy;
+}
+
+void
+gdk_gl_context_set_use_es (GdkGLContext *context,
+                           gboolean      use_es)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+
+  priv->use_es = !!use_es;
+}
+
+gboolean
+gdk_gl_context_get_use_es (GdkGLContext *context)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+
+  return priv->use_es;
 }
 
 /**
