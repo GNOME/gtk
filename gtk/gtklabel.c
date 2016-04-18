@@ -4976,7 +4976,7 @@ gtk_label_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
   info->in_drag = FALSE;
   info->select_words = FALSE;
 
-  if (gdk_event_triggers_context_menu ((GdkEvent *) event))
+  if (gdk_event_triggers_context_menu (event))
     gtk_label_do_popup (label, (GdkEventButton*) event);
   else if (button == GDK_BUTTON_PRIMARY)
     {

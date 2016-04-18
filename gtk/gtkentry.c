@@ -4376,7 +4376,7 @@ gtk_entry_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
 
   tmp_pos = gtk_entry_find_position (entry, x);
 
-  if (gdk_event_triggers_context_menu ((GdkEvent *) event))
+  if (gdk_event_triggers_context_menu (event))
     {
       gtk_entry_do_popup (entry, event);
     }
