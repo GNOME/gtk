@@ -10,6 +10,35 @@
         <child>
           <object class="GtkLabel">
             <property name="visible">True</property>
+            <property name="name">label1</property>
+            <property name="label" translatable="yes">Hello World!</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="name">label2</property>
+            <property name="label" translatable="yes">Hello World!</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="name">label3</property>
+            <property name="label" translatable="yes">Hello World!</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="name">label4</property>
+            <property name="label" translatable="yes">Hello World!</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="name">label5</property>
             <property name="label" translatable="yes">Hello World!</property>
           </object>
         </child>

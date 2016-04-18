@@ -2,6 +2,22 @@ box {
   font: 10px "Comic Sans";
 }
 
-label {
+#label1 {
   font-size: smaller;
+}
+
+#label2 {
+  font: 10pt Cantarell, sans-serif;
+}
+
+#label3 {
+  font: bold italic 80% monospace;
+}
+
+#label4 {
+  font: expanded oblique xx-small serif;
+}
+
+#label5 {
+  font: 20mm '21st Century';
 }
