@@ -85,6 +85,11 @@ GType gtk_gl_area_get_type (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_3_16
 GtkWidget *     gtk_gl_area_new                         (void);
 
+GDK_AVAILABLE_IN_3_22
+void            gtk_gl_area_set_use_es                  (GtkGLArea    *area,
+                                                         gboolean      use_es);
+GDK_AVAILABLE_IN_3_22
+gboolean        gtk_gl_area_get_use_es                  (GtkGLArea    *area);
 GDK_AVAILABLE_IN_3_16
 void            gtk_gl_area_set_required_version        (GtkGLArea    *area,
                                                          gint          major,

@@ -157,6 +157,7 @@ typedef struct {
   gboolean needs_resize;
   gboolean needs_render;
   gboolean auto_render;
+  gboolean use_es;
 } GtkGLAreaPrivate;
 
 enum {
@@ -166,6 +167,7 @@ enum {
   PROP_HAS_ALPHA,
   PROP_HAS_DEPTH_BUFFER,
   PROP_HAS_STENCIL_BUFFER,
+  PROP_USE_ES,
 
   PROP_AUTO_RENDER,
 
@@ -225,6 +227,10 @@ gtk_gl_area_set_property (GObject      *gobject,
       gtk_gl_area_set_has_stencil_buffer (self, g_value_get_boolean (value));
       break;
 
+    case PROP_USE_ES:
+      gtk_gl_area_set_use_es (self, g_value_get_boolean (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
     }
@@ -258,6 +264,10 @@ gtk_gl_area_get_property (GObject    *gobject,
 
     case PROP_CONTEXT:
       g_value_set_object (value, priv->context);
+      break;
+
+    case PROP_USE_ES:
+      g_value_set_boolean (value, priv->use_es);
       break;
 
     default:
@@ -338,6 +348,7 @@ gtk_gl_area_real_create_context (GtkGLArea *area)
       return NULL;
     }
 
+  gdk_gl_context_set_use_es (context, priv->use_es);
   gdk_gl_context_set_required_version (context,
                                        priv->required_gl_version / 10,
                                        priv->required_gl_version % 10);
@@ -850,6 +861,25 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
                           G_PARAM_STATIC_STRINGS |
                           G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkGLArea:use-es:
+   *
+   * If set to %TRUE the widget will try to create a #GdkGLContext using
+   * OpenGL ES instead of OpenGL.
+   *
+   * See also: gdk_gl_context_set_use_es()
+   *
+   * Since: 3.22
+   */
+  obj_props[PROP_USE_ES] =
+    g_param_spec_boolean ("use-es",
+                          P_("Use OpenGL ES"),
+                          P_("Whether the context uses OpenGL or OpenGL ES"),
+                          FALSE,
+                          GTK_PARAM_READWRITE |
+                          G_PARAM_STATIC_STRINGS |
+                          G_PARAM_EXPLICIT_NOTIFY);
+
   gobject_class->set_property = gtk_gl_area_set_property;
   gobject_class->get_property = gtk_gl_area_get_property;
   gobject_class->dispose = gtk_gl_area_dispose;
@@ -1010,6 +1040,58 @@ gtk_gl_area_get_error (GtkGLArea *area)
   g_return_val_if_fail (GTK_IS_GL_AREA (area), NULL);
 
   return priv->error;
+}
+
+/**
+ * gtk_gl_area_set_use_es:
+ * @area: a #GtkGLArea
+ * @use_es: whether to use OpenGL or OpenGL ES
+ *
+ * Sets whether the @area should create an OpenGL or an OpenGL ES context.
+ *
+ * You should check the capabilities of the #GdkGLContext before drawing
+ * with either API.
+ *
+ * Since: 3.22
+ */
+void
+gtk_gl_area_set_use_es (GtkGLArea *area,
+                        gboolean   use_es)
+{
+  GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
+
+  g_return_if_fail (GTK_IS_GL_AREA (area));
+  g_return_if_fail (!gtk_widget_get_realized (GTK_WIDGET (area)));
+
+  use_es = !!use_es;
+
+  if (priv->use_es != use_es)
+    {
+      priv->use_es = use_es;
+
+      g_object_notify_by_pspec (G_OBJECT (area), obj_props[PROP_USE_ES]);
+    }
+}
+
+/**
+ * gtk_gl_area_get_use_es:
+ * @area: a #GtkGLArea
+ *
+ * Retrieves the value set by gtk_gl_area_set_use_es().
+ *
+ * Returns: %TRUE if the #GtkGLArea should create an OpenGL ES context
+ *   and %FALSE otherwise
+ *
+ * Since: 3.22
+ */
+gboolean
+gtk_gl_area_get_use_es (GtkGLArea *area)
+{
+  GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
+
+  g_return_val_if_fail (GTK_IS_GL_AREA (area), FALSE);
+
+  return priv->use_es;
 }
 
 /**
