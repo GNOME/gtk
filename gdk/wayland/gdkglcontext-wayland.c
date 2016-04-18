@@ -114,7 +114,7 @@ gdk_wayland_gl_context_realize (GdkGLContext *context,
   EGLContext ctx;
   EGLint context_attribs[N_EGL_ATTRS];
   int major, minor, flags;
-  gboolean debug_bit, forward_bit, legacy_bit;
+  gboolean debug_bit, forward_bit, legacy_bit, use_es;
   int i = 0;
 
   gdk_gl_context_get_required_version (context, &major, &minor);
@@ -122,6 +122,7 @@ gdk_wayland_gl_context_realize (GdkGLContext *context,
   forward_bit = gdk_gl_context_get_forward_compatible (context);
   legacy_bit = (_gdk_gl_flags & GDK_GL_LEGACY) != 0 ||
                (share != NULL && gdk_gl_context_is_legacy (share));
+  use_es = gdk_gl_context_get_use_es (context);
 
   flags = 0;
 
@@ -130,17 +131,28 @@ gdk_wayland_gl_context_realize (GdkGLContext *context,
   if (forward_bit)
     flags |= EGL_CONTEXT_OPENGL_FORWARD_COMPATIBLE_BIT_KHR;
 
-  /* We want a core profile, unless in legacy mode */
-  context_attribs[i++] = EGL_CONTEXT_OPENGL_PROFILE_MASK_KHR;
-  context_attribs[i++] = legacy_bit
-                       ? EGL_CONTEXT_OPENGL_COMPATIBILITY_PROFILE_BIT_KHR
-                       : EGL_CONTEXT_OPENGL_CORE_PROFILE_BIT_KHR;
+  if (!use_es)
+    {
+      /* We want a core profile, unless in legacy mode */
+      context_attribs[i++] = EGL_CONTEXT_OPENGL_PROFILE_MASK_KHR;
+      context_attribs[i++] = legacy_bit
+                           ? EGL_CONTEXT_OPENGL_COMPATIBILITY_PROFILE_BIT_KHR
+                           : EGL_CONTEXT_OPENGL_CORE_PROFILE_BIT_KHR;
 
-  /* Specify the version */
-  context_attribs[i++] = EGL_CONTEXT_MAJOR_VERSION_KHR;
-  context_attribs[i++] = legacy_bit ? 3 : major;
-  context_attribs[i++] = EGL_CONTEXT_MINOR_VERSION_KHR;
-  context_attribs[i++] = legacy_bit ? 0 : minor;
+      /* Specify the version */
+      context_attribs[i++] = EGL_CONTEXT_MAJOR_VERSION_KHR;
+      context_attribs[i++] = legacy_bit ? 3 : major;
+      context_attribs[i++] = EGL_CONTEXT_MINOR_VERSION_KHR;
+      context_attribs[i++] = legacy_bit ? 0 : minor;
+    }
+  else
+    {
+      context_attribs[i++] = EGL_CONTEXT_CLIENT_VERSION;
+      if (major == 3)
+        context_attribs[i++] = 3;
+      else
+        context_attribs[i++] = 2;
+    }
 
   /* Specify the flags */
   context_attribs[i++] = EGL_CONTEXT_FLAGS_KHR;
