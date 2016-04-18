@@ -377,6 +377,14 @@ gtk_css_image_radial_parse (GtkCssImage  *image,
 
   } while (_gtk_css_parser_try (parser, ",", TRUE));
 
+  if (radial->stops->len < 2)
+    {
+      _gtk_css_parser_error_full (parser,
+                                  GTK_CSS_PROVIDER_ERROR_DEPRECATED,
+                                  "Using one color stop with %s() is deprecated.",
+                                  radial->repeating ? "repeating-radial-gradient" : "radial-gradient");
+    }
+
   if (!_gtk_css_parser_try (parser, ")", TRUE))
     {
       _gtk_css_parser_error (parser, "Missing closing bracket at end of radial gradient");
