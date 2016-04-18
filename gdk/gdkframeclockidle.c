@@ -307,7 +307,7 @@ gdk_frame_clock_flush_idle (void *data)
   priv->phase = GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS;
   priv->requested &= ~GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS;
 
-  g_signal_emit_by_name (G_OBJECT (clock), "flush-events");
+  _gdk_frame_clock_emit_flush_events (clock);
 
   if ((priv->requested & ~GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS) != 0 ||
       priv->updating_count > 0)
@@ -366,7 +366,7 @@ gdk_frame_clock_paint_idle (void *data)
                * in them.
                */
               priv->requested &= ~GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT;
-              g_signal_emit_by_name (G_OBJECT (clock), "before-paint");
+              _gdk_frame_clock_emit_before_paint (clock);
               priv->phase = GDK_FRAME_CLOCK_PHASE_UPDATE;
             }
           /* fallthrough */
@@ -377,7 +377,7 @@ gdk_frame_clock_paint_idle (void *data)
                   priv->updating_count > 0)
                 {
                   priv->requested &= ~GDK_FRAME_CLOCK_PHASE_UPDATE;
-                  g_signal_emit_by_name (G_OBJECT (clock), "update");
+                  _gdk_frame_clock_emit_update (clock);
                 }
             }
           /* fallthrough */
@@ -405,7 +405,7 @@ gdk_frame_clock_paint_idle (void *data)
 		     priv->freeze_count == 0 && iter++ < 4)
                 {
                   priv->requested &= ~GDK_FRAME_CLOCK_PHASE_LAYOUT;
-                  g_signal_emit_by_name (G_OBJECT (clock), "layout");
+                  _gdk_frame_clock_emit_layout (clock);
                 }
 	      if (iter == 5)
 		g_warning ("gdk-frame-clock: layout continuously requested, giving up after 4 tries");
@@ -427,7 +427,7 @@ gdk_frame_clock_paint_idle (void *data)
               if (priv->requested & GDK_FRAME_CLOCK_PHASE_PAINT)
                 {
                   priv->requested &= ~GDK_FRAME_CLOCK_PHASE_PAINT;
-                  g_signal_emit_by_name (G_OBJECT (clock), "paint");
+                  _gdk_frame_clock_emit_paint (clock);
                 }
             }
           /* fallthrough */
@@ -435,7 +435,7 @@ gdk_frame_clock_paint_idle (void *data)
           if (priv->freeze_count == 0)
             {
               priv->requested &= ~GDK_FRAME_CLOCK_PHASE_AFTER_PAINT;
-              g_signal_emit_by_name (G_OBJECT (clock), "after-paint");
+              _gdk_frame_clock_emit_after_paint (clock);
               /* the ::after-paint phase doesn't get repeated on freeze/thaw,
                */
               priv->phase = GDK_FRAME_CLOCK_PHASE_NONE;
@@ -462,7 +462,7 @@ gdk_frame_clock_paint_idle (void *data)
   if (priv->requested & GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS)
     {
       priv->requested &= ~GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS;
-      g_signal_emit_by_name (G_OBJECT (clock), "resume-events");
+      _gdk_frame_clock_emit_resume_events (clock);
     }
 
   if (priv->freeze_count == 0)
