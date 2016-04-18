@@ -603,3 +603,45 @@ gdk_frame_clock_get_refresh_info (GdkFrameClock *frame_clock,
       frame_counter--;
     }
 }
+
+void
+_gdk_frame_clock_emit_flush_events (GdkFrameClock *frame_clock)
+{
+  g_signal_emit (frame_clock, signals[FLUSH_EVENTS], 0);
+}
+
+void
+_gdk_frame_clock_emit_before_paint (GdkFrameClock *frame_clock)
+{
+  g_signal_emit (frame_clock, signals[BEFORE_PAINT], 0);
+}
+
+void
+_gdk_frame_clock_emit_update (GdkFrameClock *frame_clock)
+{
+  g_signal_emit (frame_clock, signals[UPDATE], 0);
+}
+
+void
+_gdk_frame_clock_emit_layout (GdkFrameClock *frame_clock)
+{
+  g_signal_emit (frame_clock, signals[LAYOUT], 0);
+}
+
+void
+_gdk_frame_clock_emit_paint (GdkFrameClock *frame_clock)
+{
+  g_signal_emit (frame_clock, signals[PAINT], 0);
+}
+
+void
+_gdk_frame_clock_emit_after_paint (GdkFrameClock *frame_clock)
+{
+  g_signal_emit (frame_clock, signals[AFTER_PAINT], 0);
+}
+
+void
+_gdk_frame_clock_emit_resume_events (GdkFrameClock *frame_clock)
+{
+  g_signal_emit (frame_clock, signals[RESUME_EVENTS], 0);
+}
