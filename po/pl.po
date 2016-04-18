@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-03-21 02:50+0000\n"
-"PO-Revision-Date: 2016-03-21 04:02+0100\n"
+"PO-Revision-Date: 2016-04-18 02:35+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -3106,7 +3106,7 @@ msgstr "Wyszukiwanie położeń sieciowych"
 
 #: gtk/gtkplacesview.c:887
 msgid "No network locations found"
-msgstr "Nie odnaleziono położeń sieciowych"
+msgstr "Brak położeń sieciowych"
 
 #. if it wasn't cancelled show a dialog
 #: gtk/gtkplacesview.c:1162 gtk/gtkplacesview.c:1235
@@ -5415,7 +5415,7 @@ msgstr "_Znajdź nowe programy"
 
 #: gtk/ui/gtkappchooserwidget.ui:117
 msgid "No applications found."
-msgstr "Nie odnaleziono programów."
+msgstr "Brak programów."
 
 #. used for the application menu on MacOS
 #: gtk/ui/gtkapplication-quartz.ui:15
@@ -5541,7 +5541,7 @@ msgstr "Tekst podglądu"
 
 #: gtk/ui/gtkfontchooserwidget.ui:186
 msgid "No Fonts Found"
-msgstr "Nie odnaleziono czcionek"
+msgstr "Brak czcionek"
 
 #: gtk/ui/gtkpagesetupunixdialog.ui:47
 msgid "_Format for:"
@@ -5582,7 +5582,7 @@ msgstr "W górę ścieżki"
 #. Translators: Server as any successfully connected network address
 #: gtk/ui/gtkplacesview.ui:42
 msgid "No recent servers found"
-msgstr "Nie odnaleziono ostatnio używanych serwerów"
+msgstr "Brak ostatnio używanych serwerów"
 
 #: gtk/ui/gtkplacesview.ui:65
 msgid "Recent Servers"
