@@ -274,8 +274,8 @@ font_family_assign (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
-parse_pango_style (GtkCssStyleProperty *property,
-                   GtkCssParser        *parser)
+font_style_parse (GtkCssStyleProperty *property,
+                  GtkCssParser        *parser)
 {
   GtkCssValue *value = _gtk_css_font_style_value_try_parse (parser);
   
@@ -286,24 +286,24 @@ parse_pango_style (GtkCssStyleProperty *property,
 }
 
 static void
-query_pango_style (GtkCssStyleProperty *property,
-                    const GtkCssValue   *css_value,
-                    GValue              *value)
+font_style_query (GtkCssStyleProperty *property,
+                  const GtkCssValue   *css_value,
+                  GValue              *value)
 {
   g_value_init (value, PANGO_TYPE_STYLE);
   g_value_set_enum (value, _gtk_css_font_style_value_get (css_value));
 }
 
 static GtkCssValue *
-assign_pango_style (GtkCssStyleProperty *property,
-                    const GValue        *value)
+font_style_assign (GtkCssStyleProperty *property,
+                   const GValue        *value)
 {
   return _gtk_css_font_style_value_new (g_value_get_enum (value));
 }
 
 static GtkCssValue *
-parse_pango_weight (GtkCssStyleProperty *property,
-                    GtkCssParser        *parser)
+font_weight_parse (GtkCssStyleProperty *property,
+                   GtkCssParser        *parser)
 {
   GtkCssValue *value = _gtk_css_font_weight_value_try_parse (parser);
   
@@ -314,24 +314,24 @@ parse_pango_weight (GtkCssStyleProperty *property,
 }
 
 static void
-query_pango_weight (GtkCssStyleProperty *property,
-                    const GtkCssValue   *css_value,
-                    GValue              *value)
+font_weight_query (GtkCssStyleProperty *property,
+                   const GtkCssValue   *css_value,
+                   GValue              *value)
 {
   g_value_init (value, PANGO_TYPE_WEIGHT);
   g_value_set_enum (value, _gtk_css_font_weight_value_get (css_value));
 }
 
 static GtkCssValue *
-assign_pango_weight (GtkCssStyleProperty *property,
-                     const GValue        *value)
+font_weight_assign (GtkCssStyleProperty *property,
+                    const GValue        *value)
 {
   return _gtk_css_font_weight_value_new (g_value_get_enum (value));
 }
 
 static GtkCssValue *
-parse_pango_variant (GtkCssStyleProperty *property,
-                     GtkCssParser        *parser)
+font_variant_parse (GtkCssStyleProperty *property,
+                    GtkCssParser        *parser)
 {
   GtkCssValue *value = _gtk_css_font_variant_value_try_parse (parser);
   
@@ -342,8 +342,8 @@ parse_pango_variant (GtkCssStyleProperty *property,
 }
 
 static void
-query_pango_variant (GtkCssStyleProperty *property,
-                     const GtkCssValue   *css_value,
+font_variant_query (GtkCssStyleProperty *property,
+                    const GtkCssValue   *css_value,
                      GValue              *value)
 {
   g_value_init (value, PANGO_TYPE_VARIANT);
@@ -351,15 +351,15 @@ query_pango_variant (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
-assign_pango_variant (GtkCssStyleProperty *property,
-                      const GValue        *value)
+font_variant_assign (GtkCssStyleProperty *property,
+                     const GValue        *value)
 {
   return _gtk_css_font_variant_value_new (g_value_get_enum (value));
 }
 
 static GtkCssValue *
-parse_pango_stretch (GtkCssStyleProperty *property,
-                     GtkCssParser        *parser)
+font_stretch_parse (GtkCssStyleProperty *property,
+                    GtkCssParser        *parser)
 {
   GtkCssValue *value = _gtk_css_font_stretch_value_try_parse (parser);
 
@@ -370,17 +370,17 @@ parse_pango_stretch (GtkCssStyleProperty *property,
 }
 
 static void
-query_pango_stretch (GtkCssStyleProperty *property,
-                     const GtkCssValue   *css_value,
-                     GValue              *value)
+font_stretch_query (GtkCssStyleProperty *property,
+                    const GtkCssValue   *css_value,
+                    GValue              *value)
 {
   g_value_init (value, PANGO_TYPE_STRETCH);
   g_value_set_enum (value, _gtk_css_font_stretch_value_get (css_value));
 }
 
 static GtkCssValue *
-assign_pango_stretch (GtkCssStyleProperty *property,
-                      const GValue        *value)
+font_stretch_assign (GtkCssStyleProperty *property,
+                     const GValue        *value)
 {
   return _gtk_css_font_stretch_value_new (g_value_get_enum (value));
 }
@@ -1097,36 +1097,36 @@ _gtk_css_style_property_init_properties (void)
                                           PANGO_TYPE_STYLE,
                                           GTK_STYLE_PROPERTY_INHERIT,
                                           GTK_CSS_AFFECTS_FONT | GTK_CSS_AFFECTS_TEXT,
-                                          parse_pango_style,
-                                          query_pango_style,
-                                          assign_pango_style,
+                                          font_style_parse,
+                                          font_style_query,
+                                          font_style_assign,
                                           _gtk_css_font_style_value_new (PANGO_STYLE_NORMAL));
   gtk_css_style_property_register        ("font-variant",
                                           GTK_CSS_PROPERTY_FONT_VARIANT,
                                           PANGO_TYPE_VARIANT,
                                           GTK_STYLE_PROPERTY_INHERIT,
                                           GTK_CSS_AFFECTS_FONT | GTK_CSS_AFFECTS_TEXT,
-                                          parse_pango_variant,
-                                          query_pango_variant,
-                                          assign_pango_variant,
+                                          font_variant_parse,
+                                          font_variant_query,
+                                          font_variant_assign,
                                           _gtk_css_font_variant_value_new (PANGO_VARIANT_NORMAL));
   gtk_css_style_property_register        ("font-weight",
                                           GTK_CSS_PROPERTY_FONT_WEIGHT,
                                           PANGO_TYPE_WEIGHT,
                                           GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_FONT | GTK_CSS_AFFECTS_TEXT,
-                                          parse_pango_weight,
-                                          query_pango_weight,
-                                          assign_pango_weight,
+                                          font_weight_parse,
+                                          font_weight_query,
+                                          font_weight_assign,
                                           _gtk_css_font_weight_value_new (PANGO_WEIGHT_NORMAL));
   gtk_css_style_property_register        ("font-stretch",
                                           GTK_CSS_PROPERTY_FONT_STRETCH,
                                           PANGO_TYPE_STRETCH,
                                           GTK_STYLE_PROPERTY_INHERIT,
                                           GTK_CSS_AFFECTS_FONT | GTK_CSS_AFFECTS_TEXT,
-                                          parse_pango_stretch,
-                                          query_pango_stretch,
-                                          assign_pango_stretch,
+                                          font_stretch_parse,
+                                          font_stretch_query,
+                                          font_stretch_assign,
                                           _gtk_css_font_stretch_value_new (PANGO_STRETCH_NORMAL));
 
   gtk_css_style_property_register        ("letter-spacing",
