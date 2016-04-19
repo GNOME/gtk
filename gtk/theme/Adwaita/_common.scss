@@ -2937,6 +2937,7 @@ scale {
       }
     }
   }
+
   &.horizontal {
     indicator {
       min-height: $_marks_lenght;
@@ -2945,6 +2946,7 @@ scale {
 
     &.fine-tune indicator { min-height: ($_marks_lenght - 3px); }
   }
+
   &.vertical {
     indicator {
       min-height: 1px;
@@ -2953,6 +2955,7 @@ scale {
 
     &.fine-tune indicator { min-width: ($_marks_lenght - 3px); }
   }
+
   // *WARNING* scale with marks madness following
 
   // FIXME: OSD and selected list rows missing, I don't feel like adding the other 144 assets needed for those...
@@ -2979,6 +2982,7 @@ scale {
               border-style: none;
               border-radius: 0;
 
+              background-color: transparent;
               background-image: -gtk-scaled(url('#{$_scale_asset}.png'), url('#{$_scale_asset}@2.png'));
 
               $_scale_slider_bg_pos: bottom;
