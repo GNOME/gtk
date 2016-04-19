@@ -2990,12 +2990,11 @@ gtk_list_box_move_cursor (GtkListBox      *box,
   gboolean modify;
   gboolean extend;
   GtkListBoxRow *row;
-  GtkListBoxRow *prev;
-  GtkListBoxRow *next;
   gint page_size;
   GSequenceIter *iter;
   gint start_y;
   gint end_y;
+  int height;
 
   row = NULL;
   switch (step)
@@ -3036,47 +3035,29 @@ gtk_list_box_move_cursor (GtkListBox      *box,
       if (priv->cursor_row != NULL)
         {
           start_y = ROW_PRIV (priv->cursor_row)->y;
-          end_y = start_y;
-          iter = ROW_PRIV (priv->cursor_row)->iter;
+          height = gtk_widget_get_allocated_height (GTK_WIDGET (box));
+          end_y = CLAMP (start_y + page_size * count, 0, height - 1);
+          row = gtk_list_box_get_row_at_y (box, end_y);
+          iter = ROW_PRIV (row)->iter;
 
-          row = priv->cursor_row;
-          if (count < 0)
+          if (row == priv->cursor_row)
             {
-              /* Up */
-              while (iter != NULL && !g_sequence_iter_is_begin (iter))
+              /* Move at least one row. This is important when the cursor_row's height is
+               * greater than page_size */
+              if (count < 0)
+                iter = g_sequence_iter_prev (iter);
+              else
+                iter = g_sequence_iter_next (iter);
+
+              if (!g_sequence_iter_is_begin (iter) && !g_sequence_iter_is_end (iter))
                 {
-                  iter = gtk_list_box_get_previous_visible (box, iter);
-                  if (iter == NULL)
-                    break;
-
-                  prev = g_sequence_get (iter);
-                  if (ROW_PRIV (prev)->y < start_y - page_size)
-                    break;
-
-                  row = prev;
+                  row = g_sequence_get (iter);
+                  end_y = ROW_PRIV (row)->y;
                 }
             }
-          else
-            {
-              /* Down */
-              while (iter != NULL && !g_sequence_iter_is_end (iter))
-                {
-                  iter = gtk_list_box_get_next_visible (box, iter);
-                  if (g_sequence_iter_is_end (iter))
-                    break;
 
-                  next = g_sequence_get (iter);
-                  if (ROW_PRIV (next)->y > start_y + page_size)
-                    break;
-
-                  row = next;
-                }
-            }
-          end_y = ROW_PRIV (row)->y;
           if (end_y != start_y && priv->adjustment != NULL)
-            gtk_adjustment_animate_to_value (priv->adjustment,
-                                             gtk_adjustment_get_value (priv->adjustment) +
-                                             end_y - start_y);
+            gtk_adjustment_animate_to_value (priv->adjustment, end_y);
         }
       break;
     default:
