@@ -17,7 +17,7 @@
 //
 // Helper mixin to stack up to box-shadows;
 //
-  $shadows: none;
+  $shadows: null;
 
   @each $shadow in $list {
     @if $shadow!=none { $shadows: $shadows, $shadow; }
