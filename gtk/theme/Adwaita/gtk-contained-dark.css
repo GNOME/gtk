@@ -2694,10 +2694,10 @@ switch {
     switch:backdrop:checked {
       border-color: #0f2b48;
       background-color: #215d9c; }
-  switch:disabled {
-    color: #5d6767;
-    border-color: #262929;
-    background-color: #333636; }
+    switch:backdrop:disabled {
+      color: #5d6767;
+      border-color: #262929;
+      background-color: #333636; }
   switch slider {
     margin: -1px;
     min-width: 45px;

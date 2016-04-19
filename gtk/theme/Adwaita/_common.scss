@@ -2483,12 +2483,12 @@ switch {
                                             $selected_borders_color);
       background-color: $selected_bg_color;
     }
-  }
 
-  &:disabled {
-    color: $backdrop_insensitive_color;
-    border-color: $backdrop_borders_color;
-    background-color: $insensitive_bg_color;
+    &:disabled {
+      color: $backdrop_insensitive_color;
+      border-color: $backdrop_borders_color;
+      background-color: $insensitive_bg_color;
+    }
   }
 
   slider {
