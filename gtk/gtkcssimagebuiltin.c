@@ -95,6 +95,7 @@ gtk_css_image_builtin_draw_check (GtkCssImage *image,
     {
       if (checked)
         {
+          cairo_save (cr);
           cairo_translate (cr,
                            x + pad, y + pad);
 
@@ -123,6 +124,7 @@ gtk_css_image_builtin_draw_check (GtkCssImage *image,
                           7.0, 0.0);
 
           cairo_fill (cr);
+          cairo_restore (cr);
         }
     }
 }
