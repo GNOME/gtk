@@ -479,8 +479,8 @@ button {
   button:backdrop.flat,
   button:backdrop {
     border-color: #c0c0bd;
-    background-color: #e8e8e7;
-    background-image: none;
+    background-color: transparent;
+    background-image: image(#e8e8e7);
     text-shadow: none;
     -gtk-icon-shadow: none;
     box-shadow: inset 0 1px rgba(255, 255, 255, 0);
@@ -826,8 +826,8 @@ button.suggested-action {
   button.suggested-action:backdrop,
   button.suggested-action.flat:backdrop {
     border-color: #4a90d9;
-    background-color: #4a90d9;
-    background-image: none;
+    background-color: transparent;
+    background-image: image(#4a90d9);
     text-shadow: none;
     -gtk-icon-shadow: none;
     box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
@@ -1013,8 +1013,8 @@ button.destructive-action {
   button.destructive-action:backdrop,
   button.destructive-action.flat:backdrop {
     border-color: #ef2929;
-    background-color: #ef2929;
-    background-image: none;
+    background-color: transparent;
+    background-image: image(#ef2929);
     text-shadow: none;
     -gtk-icon-shadow: none;
     box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
@@ -1256,8 +1256,8 @@ button.needs-attention > image, stacksidebar row.needs-attention > label {
         color: #8b8e8f; }
   .inline-toolbar toolbutton > button:backdrop {
     border-color: #c0c0bd;
-    background-color: #e8e8e7;
-    background-image: none;
+    background-color: transparent;
+    background-image: image(#e8e8e7);
     text-shadow: none;
     -gtk-icon-shadow: none;
     box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
@@ -1847,8 +1847,8 @@ headerbar {
       headerbar.selection-mode button:backdrop.flat,
       headerbar.selection-mode button:backdrop {
         border-color: #4a90d9;
-        background-color: #4a90d9;
-        background-image: none;
+        background-color: transparent;
+        background-image: image(#4a90d9);
         text-shadow: none;
         -gtk-icon-shadow: none;
         box-shadow: inset 0 1px rgba(255, 255, 255, 0);
@@ -1995,8 +1995,8 @@ headerbar {
         .selection-mode.titlebar:not(headerbar) button.suggested-action:backdrop,
         headerbar.selection-mode button.suggested-action:backdrop {
           border-color: #c0c0bd;
-          background-color: #e8e8e7;
-          background-image: none;
+          background-color: transparent;
+          background-image: image(#e8e8e7);
           text-shadow: none;
           -gtk-icon-shadow: none;
           box-shadow: inset 0 1px rgba(255, 255, 255, 0);
@@ -2788,8 +2788,8 @@ switch {
   switch:backdrop slider {
     transition: 200ms ease-out;
     border-color: #c0c0bd;
-    background-color: #e8e8e7;
-    background-image: none;
+    background-color: transparent;
+    background-image: image(#e8e8e7);
     text-shadow: none;
     -gtk-icon-shadow: none;
     box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
@@ -2918,8 +2918,8 @@ radio {
   check:backdrop,
   radio:backdrop {
     border-color: #c0c0bd;
-    background-color: #e8e8e7;
-    background-image: none;
+    background-color: transparent;
+    background-image: image(#e8e8e7);
     text-shadow: none;
     -gtk-icon-shadow: none;
     box-shadow: inset 0 1px rgba(255, 255, 255, 0);
@@ -3190,8 +3190,8 @@ scale {
     scale slider:backdrop {
       transition: 200ms ease-out;
       border-color: #c0c0bd;
-      background-color: #e8e8e7;
-      background-image: none;
+      background-color: transparent;
+      background-image: image(#e8e8e7);
       text-shadow: none;
       -gtk-icon-shadow: none;
       box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
@@ -4388,8 +4388,8 @@ infobar {
     .warning button:backdrop,
     .error button:backdrop {
       border-color: #4a90d9;
-      background-color: #4a90d9;
-      background-image: none;
+      background-color: transparent;
+      background-image: image(#4a90d9);
       text-shadow: none;
       -gtk-icon-shadow: none;
       box-shadow: inset 0 1px rgba(255, 255, 255, 0);
@@ -4533,8 +4533,8 @@ colorswatch#add-color-button {
       box-shadow: inset 0 1px white; }
     colorswatch#add-color-button overlay:backdrop {
       border-color: #c0c0bd;
-      background-color: #e8e8e7;
-      background-image: none;
+      background-color: transparent;
+      background-image: image(#e8e8e7);
       text-shadow: none;
       -gtk-icon-shadow: none;
       box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
