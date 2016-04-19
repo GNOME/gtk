@@ -8,11 +8,6 @@
   @else { @return 0 1px $c; }
 }
 
-@function _solid($c) {
-// solid color image
-  @return linear-gradient(to bottom, $c, $c);
-}
-
 @mixin _shadows($list...) {
 //
 // Helper mixin to stack up to box-shadows;
@@ -280,8 +275,9 @@
     color: $tc;
     outline-color: transparentize($tc, 0.7);
     border-color: if($c!=$bg_color, _border_color($c), $borders_color);
-    @if $variant == 'light' { background-image: _solid(darken($c, 8%)); }
-    @else { background-image: _solid(darken($c, 6%)); }
+    background-image: none;
+    @if $variant == 'light' { background-color: darken($c, 8%); }
+    @else { background-color: darken($c, 6%); }
     @include _shadows(inset 0 1px transparentize($_hilight_color, 1),
                       $_button_edge);
 
@@ -298,7 +294,8 @@
 
     border-color: if($c!=$bg_color, _border_color($c),
                                     $insensitive_borders_color);
-    background-image: _solid($_bg);
+    background-color: $_bg;
+    background-image: none;
     text-shadow: none;
     -gtk-icon-shadow: none;
     // white with 0 alpha to avoid an ugly transition, since no color means
@@ -332,7 +329,8 @@
     label, & { color: if($tc!=$fg_color,mix($tc, $_bg, 80%), $backdrop_fg_color); }
 
     border-color: if($c!=$bg_color, $_bc, $backdrop_borders_color);
-    background-image: _solid($_bg);
+    background-color: $_bg;
+    background-image: none;
     text-shadow: none;
     -gtk-icon-shadow: none;
     @include _shadows(inset 0 1px transparentize(white, 1),
@@ -349,7 +347,8 @@
     label, & { color: if($tc!=$fg_color, mix($tc, $_bg, 80%), $backdrop_fg_color); }
 
     border-color: if($c!=$bg_color, $_bc, $backdrop_borders_color);
-    background-image: _solid($_bg);
+    background-color: $_bg;
+    background-image: none;
     @include _shadows(inset 0 1px transparentize(white, 1),
                       $_blank_edge);
   }
@@ -365,7 +364,8 @@
     label, & { color: if($c!=$bg_color, mix($tc, $_bg, 35%), $backdrop_insensitive_color); }
 
     border-color: if($c!=$bg_color, $_bc, $backdrop_borders_color);
-    background-image: _solid($_bg);
+    background-color: $_bg;
+    background-image: none;
     text-shadow: none;
     -gtk-icon-shadow: none;
     // white with 0 alpha to avoid an ugly transition, since no color means
@@ -386,7 +386,8 @@
     label { color: if($c!=$bg_color, mix($tc, $_bg, 35%), $backdrop_insensitive_color); }
 
     border-color: if($c!=$bg_color, $_bc, $backdrop_borders_color);
-    background-image: _solid($_bg);
+    background-color: $_bg;
+    background-image: none;
     @include _shadows(inset 0 1px transparentize(white, 1),
                       $_blank_edge);
   }
@@ -400,7 +401,8 @@
 
     color: $osd_fg_color;
     border-color: $osd_borders_color;
-    background-image: _solid($_bg);
+    background-color: transparent;
+    background-image: image($_bg);
     background-clip: padding-box;
     box-shadow: inset 0 1px transparentize(white, 0.9);
     text-shadow: 0 1px black;
@@ -416,7 +418,8 @@
 
     color: white;
     border-color: $osd_borders_color;
-    background-image: _solid($_bg);
+    background-color: transparent;
+    background-image: image($_bg);
     background-clip: padding-box;
     box-shadow: inset 0 1px transparentize(white, 0.9);
     text-shadow: 0 1px black;
@@ -431,7 +434,8 @@
 
     color: white;
     border-color: $osd_borders_color;
-    background-image: _solid($_bg);
+    background-color: transparent;
+    background-image: image($_bg);
     background-clip: padding-box;
     box-shadow: none;
     text-shadow: none;
@@ -444,7 +448,8 @@
   //
     color: $osd_insensitive_fg_color;
     border-color: $osd_borders_color;
-    background-image: _solid($osd_insensitive_bg_color);
+    background-color: transparent;
+    background-image: image($osd_insensitive_bg_color);
     background-clip: padding-box;
     box-shadow: none;
     text-shadow: none;
@@ -459,7 +464,8 @@
 
     color: $osd_fg_color;
     border-color: $osd_borders_color;
-    background-image: _solid($_bg);
+    background-color: transparent;
+    background-image: image($_bg);
     background-clip: padding-box;
     box-shadow: none;
     text-shadow: none;
