@@ -2494,6 +2494,7 @@ get_reason_msg_desc (guint i,
 {
   gchar *reason_msg_desc;
 
+  /* The numbers must match the indices in the printer_messages array */
   switch (i)
     {
       case 0:
