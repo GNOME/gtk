@@ -979,6 +979,8 @@ button.color {
 /*********
  * Links *
  *********/
+
+%link,
 *:link {
   color: $link_color;
 
@@ -1023,7 +1025,11 @@ button:visited {
     text-shadow: none;
   }
 
-  > label { text-decoration-line: underline; }
+  > label {
+    @extend %link;
+
+    text-decoration-line: underline;
+  }
 }
 
 
