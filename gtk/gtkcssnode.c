@@ -593,6 +593,10 @@ gtk_css_node_class_init (GtkCssNodeClass *klass)
 		  _gtk_marshal_VOID__OBJECT_OBJECT,
 		  G_TYPE_NONE, 2,
 		  GTK_TYPE_CSS_NODE, GTK_TYPE_CSS_NODE);
+  g_signal_set_va_marshaller (cssnode_signals[NODE_ADDED],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_VOID__OBJECT_OBJECTv);
+
   cssnode_signals[NODE_REMOVED] =
     g_signal_new (I_("node-removed"),
 		  G_TYPE_FROM_CLASS (object_class),
@@ -602,6 +606,10 @@ gtk_css_node_class_init (GtkCssNodeClass *klass)
 		  _gtk_marshal_VOID__OBJECT_OBJECT,
 		  G_TYPE_NONE, 2,
 		  GTK_TYPE_CSS_NODE, GTK_TYPE_CSS_NODE);
+  g_signal_set_va_marshaller (cssnode_signals[NODE_REMOVED],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_VOID__OBJECT_OBJECTv);
+
   cssnode_signals[STYLE_CHANGED] =
     g_signal_new (I_("style-changed"),
 		  G_TYPE_FROM_CLASS (object_class),
@@ -611,6 +619,9 @@ gtk_css_node_class_init (GtkCssNodeClass *klass)
 		  _gtk_marshal_VOID__POINTER,
 		  G_TYPE_NONE, 1,
 		  G_TYPE_POINTER);
+  g_signal_set_va_marshaller (cssnode_signals[STYLE_CHANGED],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_VOID__POINTERv);
 
   cssnode_properties[PROP_CLASSES] =
     g_param_spec_boxed ("classes", P_("Style Classes"), P_("List of classes"),
