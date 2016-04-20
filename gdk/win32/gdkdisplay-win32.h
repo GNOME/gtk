@@ -42,6 +42,8 @@ struct _GdkWin32Display
   HDC gl_hdc;
   HWND gl_hwnd;
 
+  GPtrArray *monitors;
+
   guint hasWglARBCreateContext : 1;
   guint hasWglEXTSwapControl : 1;
   guint hasWglOMLSyncControl : 1;
@@ -51,5 +53,9 @@ struct _GdkWin32DisplayClass
 {
   GdkDisplayClass display_class;
 };
+
+gboolean   _gdk_win32_display_init_monitors    (GdkWin32Display *display);
+
+GPtrArray *_gdk_win32_display_get_monitor_list (GdkWin32Display *display);
 
 #endif /* __GDK_DISPLAY__WIN32_H__ */
