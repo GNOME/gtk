@@ -29,7 +29,6 @@
 #endif
 
 #include "gtkapplicationprivate.h"
-#include "gtkapplicationaccelsprivate.h"
 #include "gtkclipboardprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkmain.h"
@@ -1264,28 +1263,10 @@ gtk_application_get_parent_muxer_for_window (GtkWindow *window)
   return application->priv->muxer;
 }
 
-gboolean
-gtk_application_activate_accel (GtkApplication  *application,
-                                GActionGroup    *action_group,
-                                guint            key,
-                                GdkModifierType  modifier)
+GtkApplicationAccels *
+gtk_application_get_application_accels (GtkApplication *application)
 {
-  return gtk_application_accels_activate (application->priv->accels,
-                                          action_group,
-                                          key,
-                                          modifier);
-}
-
-void
-gtk_application_foreach_accel_keys (GtkApplication           *application,
-                                    GtkWindow                *window,
-                                    GtkWindowKeysForeachFunc  callback,
-                                    gpointer                  user_data)
-{
-  gtk_application_accels_foreach_key (application->priv->accels,
-                                      window,
-                                      callback,
-                                      user_data);
+  return application->priv->accels;
 }
 
 /**

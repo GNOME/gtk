@@ -25,6 +25,7 @@
 #include "gtkwindowprivate.h"
 
 #include "gtkactionmuxer.h"
+#include "gtkapplicationaccelsprivate.h"
 
 G_BEGIN_DECLS
 
@@ -37,20 +38,12 @@ void                    gtk_application_handle_window_map               (GtkAppl
                                                                          GtkWindow                *window);
 GtkActionMuxer *        gtk_application_get_parent_muxer_for_window     (GtkWindow                *window);
 
-gboolean                gtk_application_activate_accel                  (GtkApplication           *application,
-                                                                         GActionGroup             *action_group,
-                                                                         guint                     key,
-                                                                         GdkModifierType           modifier);
-
-void                    gtk_application_foreach_accel_keys              (GtkApplication           *application,
-                                                                         GtkWindow                *window,
-                                                                         GtkWindowKeysForeachFunc  callback,
-                                                                         gpointer                  user_data);
 GtkActionMuxer *        gtk_application_get_action_muxer                (GtkApplication           *application);
 void                    gtk_application_insert_action_group             (GtkApplication           *application,
                                                                          const gchar              *name,
                                                                          GActionGroup             *action_group);
 
+GtkApplicationAccels *  gtk_application_get_application_accels          (GtkApplication           *application);
 
 #define GTK_TYPE_APPLICATION_IMPL                           (gtk_application_impl_get_type ())
 #define GTK_APPLICATION_IMPL_CLASS(class)                   (G_TYPE_CHECK_CLASS_CAST ((class),                     \

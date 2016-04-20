@@ -11611,7 +11611,12 @@ _gtk_window_keys_foreach (GtkWindow                *window,
     }
 
   if (window->priv->application)
-    gtk_application_foreach_accel_keys (window->priv->application, window, func, func_data);
+    {
+      GtkApplicationAccels *app_accels;
+
+      app_accels = gtk_application_get_application_accels (window->priv->application);
+      gtk_application_accels_foreach_key (app_accels, window, func, func_data);
+    }
 }
 
 static void
@@ -11777,6 +11782,7 @@ gtk_window_activate_key (GtkWindow   *window,
                 {
                   GtkWidget *focused_widget;
                   GtkActionMuxer *muxer;
+                  GtkApplicationAccels *app_accels;
 
                   focused_widget = gtk_window_get_focus (window);
 
@@ -11788,9 +11794,10 @@ gtk_window_activate_key (GtkWindow   *window,
                   if (muxer == NULL)
                     return FALSE;
 
-                  return gtk_application_activate_accel (window->priv->application,
-                                                         G_ACTION_GROUP (muxer),
-                                                         found_entry->keyval, found_entry->modifiers);
+                  app_accels = gtk_application_get_application_accels (window->priv->application);
+                  return gtk_application_accels_activate (app_accels,
+                                                          G_ACTION_GROUP (muxer),
+                                                          found_entry->keyval, found_entry->modifiers);
                 }
             }
         }
