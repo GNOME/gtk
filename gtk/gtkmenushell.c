@@ -361,6 +361,9 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
                   NULL, NULL,
                   _gtk_marshal_VOID__OBJECT_INT,
                   G_TYPE_NONE, 2, GTK_TYPE_WIDGET, G_TYPE_INT);
+  g_signal_set_va_marshaller (menu_shell_signals[INSERT],
+                              G_OBJECT_CLASS_TYPE (object_class),
+                              _gtk_marshal_VOID__OBJECT_INTv);
 
 
   binding_set = gtk_binding_set_by_class (klass);
