@@ -927,7 +927,7 @@ gtk_css_gadget_draw (GtkCssGadget *gadget,
               }
             cairo_save (cr);
             cairo_new_path (cr);
-            cairo_move_to (cr, x + margin.left, priv->allocated_baseline + 0.5);
+            cairo_move_to (cr, x + margin.left, baseline + 0.5);
             cairo_rel_line_to (cr, width - margin.left - margin.right, 0);
             cairo_set_line_width (cr, 1.0);
             cairo_set_source_rgba (cr, 1.0, 0, 0.25, 0.25);
