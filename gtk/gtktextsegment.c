@@ -103,7 +103,7 @@ gtk_text_line_segment_split (const GtkTextIter *iter)
 
   count = gtk_text_iter_get_line_index (iter);
 
-  if (gtk_get_debug_flags () & GTK_DEBUG_TEXT)
+  if (GTK_DEBUG_CHECK (TEXT))
     _gtk_text_iter_check (iter);
   
   prev = NULL;
@@ -203,7 +203,7 @@ _gtk_char_segment_new (const gchar *text, guint len)
 
   seg->char_count = g_utf8_strlen (seg->body.chars, seg->byte_count);
 
-  if (gtk_get_debug_flags () & GTK_DEBUG_TEXT)
+  if (GTK_DEBUG_CHECK (TEXT))
     char_segment_self_check (seg);
 
   return seg;
@@ -232,7 +232,7 @@ _gtk_char_segment_new_from_two_strings (const gchar *text1,
 
   seg->char_count = chars1 + chars2;
 
-  if (gtk_get_debug_flags () & GTK_DEBUG_TEXT)
+  if (GTK_DEBUG_CHECK (TEXT))
     char_segment_self_check (seg);
 
   return seg;
@@ -274,7 +274,7 @@ char_segment_split_func (GtkTextLineSegment *seg, int index)
 
   g_assert (index < seg->byte_count);
 
-  if (gtk_get_debug_flags () & GTK_DEBUG_TEXT)
+  if (GTK_DEBUG_CHECK (TEXT))
     {
       char_segment_self_check (seg);
     }
@@ -290,7 +290,7 @@ char_segment_split_func (GtkTextLineSegment *seg, int index)
   new1->next = new2;
   new2->next = seg->next;
 
-  if (gtk_get_debug_flags () & GTK_DEBUG_TEXT)
+  if (GTK_DEBUG_CHECK (TEXT))
     {
       char_segment_self_check (new1);
       char_segment_self_check (new2);
@@ -329,7 +329,7 @@ char_segment_cleanup_func (GtkTextLineSegment *segPtr, GtkTextLine *line)
 {
   GtkTextLineSegment *segPtr2, *newPtr;
 
-  if (gtk_get_debug_flags () & GTK_DEBUG_TEXT)
+  if (GTK_DEBUG_CHECK (TEXT))
     char_segment_self_check (segPtr);
 
   segPtr2 = segPtr->next;
@@ -348,7 +348,7 @@ char_segment_cleanup_func (GtkTextLineSegment *segPtr, GtkTextLine *line)
 
   newPtr->next = segPtr2->next;
 
-  if (gtk_get_debug_flags () & GTK_DEBUG_TEXT)
+  if (GTK_DEBUG_CHECK (TEXT))
     char_segment_self_check (newPtr);
 
   _gtk_char_segment_free (segPtr);
