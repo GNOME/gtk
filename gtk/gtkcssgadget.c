@@ -890,7 +890,8 @@ gtk_css_gadget_draw (GtkCssGadget *gadget,
 #if G_ENABLE_DEBUG
   {
     GdkDisplay *display = gtk_widget_get_display (gtk_css_gadget_get_owner (gadget));
-    if (GTK_DISPLAY_DEBUG_CHECK (display, LAYOUT))
+    GtkDebugFlag flags = gtk_get_display_debug_flags (display);
+    if G_UNLIKELY (flags & GTK_DEBUG_LAYOUT)
       {
         cairo_save (cr);
         cairo_new_path (cr);
@@ -912,7 +913,7 @@ gtk_css_gadget_draw (GtkCssGadget *gadget,
         cairo_stroke (cr);
         cairo_restore (cr);
       }
-    if (GTK_DISPLAY_DEBUG_CHECK (display, BASELINES))
+    if G_UNLIKELY (flags & GTK_DEBUG_BASELINES)
       {
         int baseline = priv->allocated_baseline;
 
