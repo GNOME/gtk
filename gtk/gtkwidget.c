@@ -5959,7 +5959,7 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
   gtk_widget_push_verify_invariants (widget);
 
 #ifdef G_ENABLE_DEBUG
-  if (GTK_DEBUG_CHECK (RESIZE))
+  if (GTK_DISPLAY_DEBUG_CHECK (gtk_widget_get_display (widget), RESIZE))
     {
       priv->highlight_resize = TRUE;
       gtk_widget_queue_draw (widget);
