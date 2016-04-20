@@ -158,6 +158,7 @@ static GSList *main_loops = NULL;      /* stack of currently executing main loop
 static GSList *key_snoopers = NULL;
 
 static guint debug_flags = 0;              /* Global GTK debug flag */
+static GQuark quark_debug_flags = 0;
 
 #ifdef G_ENABLE_DEBUG
 static const GDebugKey gtk_debug_keys[] = {
@@ -730,6 +731,8 @@ do_post_parse_initialization (int    *argc,
 
   _gtk_accel_map_init ();
 
+  quark_debug_flags = g_quark_from_static_string ("gtk-debug-flags");
+
   gtk_initialized = TRUE;
 
   if (gtk_modules_string)
@@ -801,7 +804,7 @@ guint
 gtk_get_display_debug_flags (GdkDisplay *display)
 {
   if (display)
-    return GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (display), "gtk-debug-flags"));
+    return GPOINTER_TO_UINT (g_object_get_qdata (G_OBJECT (display), quark_debug_flags));
   else
     return debug_flags;
 }
@@ -811,7 +814,7 @@ gtk_set_display_debug_flags (GdkDisplay *display,
                              guint       flags)
 {
   if (display)
-    g_object_set_data (G_OBJECT (display), "gtk-debug-flags", GUINT_TO_POINTER (flags));
+    g_object_set_qdata (G_OBJECT (display), quark_debug_flags, GUINT_TO_POINTER (flags));
   else
     debug_flags = flags;
 }
