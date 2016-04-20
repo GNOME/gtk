@@ -400,14 +400,14 @@ populate_display (GdkScreen *screen, GtkInspectorGeneral *gen)
       gdk_monitor_get_geometry (monitor, &rect);
       scale = gdk_monitor_get_scale_factor (monitor);
 
-      value = g_strdup_printf ("%d × %d%s at %d, %d",
+      value = g_strdup_printf ("%d × %d%s at %d, %d",
                                rect.width, rect.height,
                                scale == 2 ? " @ 2" : "",
                                rect.x, rect.y);
       add_label_row (gen, list, "Geometry", value, 10);
       g_free (value);
 
-      value = g_strdup_printf ("%d × %d mm²",
+      value = g_strdup_printf ("%d × %d mm²",
                                gdk_monitor_get_width_mm (monitor),
                                gdk_monitor_get_height_mm (monitor));
       add_label_row (gen, list, "Size", value, 10);
@@ -416,7 +416,7 @@ populate_display (GdkScreen *screen, GtkInspectorGeneral *gen)
       add_check_row (gen, list, "Primary", gdk_monitor_is_primary (monitor), 10);
 
       if (gdk_monitor_get_refresh_rate (monitor) != 0)
-        value = g_strdup_printf ("%.2f mHz",
+        value = g_strdup_printf ("%.2f Hz",
                                  0.001 * gdk_monitor_get_refresh_rate (monitor));
       else
         value = g_strdup ("unknown");
