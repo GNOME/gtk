@@ -880,6 +880,9 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                   G_TYPE_OBJECT,
                   GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE,
                   GTK_TYPE_TEXT_ITER);
+  g_signal_set_va_marshaller (signals[EVENT],
+                              G_OBJECT_CLASS_TYPE (object_class),
+                              _gtk_marshal_BOOLEAN__OBJECT_BOXED_BOXEDv);
 }
 
 static void
