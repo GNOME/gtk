@@ -1308,27 +1308,6 @@ gtk_application_list_action_descriptions (GtkApplication *application)
   return gtk_application_accels_list_action_descriptions (application->priv->accels);
 }
 
-static gchar *
-normalise_detailed_name (const gchar *detailed_action_name)
-{
-  GError *error = NULL;
-  gchar *action_and_target;
-  gchar *action_name;
-  GVariant *target;
-
-  g_action_parse_detailed_name (detailed_action_name, &action_name, &target, &error);
-  g_assert_no_error (error);
-
-  action_and_target = gtk_print_action_and_target (NULL, action_name, target);
-
-  if (target)
-    g_variant_unref (target);
-
-  g_free (action_name);
-
-  return action_and_target;
-}
-
 /**
  * gtk_application_set_accels_for_action:
  * @application: a #GtkApplication
@@ -1364,7 +1343,7 @@ gtk_application_set_accels_for_action (GtkApplication      *application,
                                                 detailed_action_name,
                                                 accels);
 
-  action_and_target = normalise_detailed_name (detailed_action_name);
+  action_and_target = gtk_normalise_detailed_action_name (detailed_action_name);
   gtk_action_muxer_set_primary_accel (application->priv->muxer, action_and_target, accels[0]);
   g_free (action_and_target);
 

@@ -930,3 +930,23 @@ gtk_print_action_and_target (const gchar *action_namespace,
   return g_string_free (result, FALSE);
 }
 
+gchar *
+gtk_normalise_detailed_action_name (const gchar *detailed_action_name)
+{
+  GError *error = NULL;
+  gchar *action_and_target;
+  gchar *action_name;
+  GVariant *target;
+
+  g_action_parse_detailed_name (detailed_action_name, &action_name, &target, &error);
+  g_assert_no_error (error);
+
+  action_and_target = gtk_print_action_and_target (NULL, action_name, target);
+
+  if (target)
+    g_variant_unref (target);
+
+  g_free (action_name);
+
+  return action_and_target;
+}
