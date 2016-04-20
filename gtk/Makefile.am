@@ -26,6 +26,8 @@ AM_CPPFLAGS =						\
 	-I$(top_builddir)/gtk				\
 	-I$(top_srcdir) 				\
 	-I$(top_srcdir)/gdk				\
+	-I$(top_srcdir) 				\
+	-I$(top_srcdir)/gsk				\
 	$(GMODULE_CFLAGS)				\
 	$(GTK_DEBUG_FLAGS)				\
 	$(GDK_HIDDEN_VISIBILITY_CFLAGS)			\
@@ -79,10 +81,12 @@ endif
 
 libadd = 				\
 	$(top_builddir)/gdk/libgdk-3.la	\
+	$(top_builddir)/gsk/libgsk-3.la	\
 	$(GMODULE_LIBS) 		\
 	$(GTK_DEP_LIBS)
 deps = 					\
-	$(top_builddir)/gdk/libgdk-3.la
+	$(top_builddir)/gdk/libgdk-3.la \
+	$(top_builddir)/gsk/libgsk-3.la
 
 # libtool stuff: set version and export symbols for resolving
 # since automake doesn't support conditionalized libsomething_la_LDFLAGS
@@ -1553,7 +1557,7 @@ Gtk_3_0_gir_CFLAGS = \
 		$(AM_CPPFLAGS) \
 		-DGTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
 Gtk_3_0_gir_FILES = $(introspection_files)
-Gtk_3_0_gir_LIBS = libgtk-3.la $(top_builddir)/gdk/libgdk-3.la
+Gtk_3_0_gir_LIBS = libgtk-3.la $(top_builddir)/gdk/libgdk-3.la $(top_builddir)/gsk/libgsk-3.la
 Gtk_3_0_gir_EXPORT_PACKAGES = gtk+-3.0
 INTROSPECTION_GIRS = Gtk-3.0.gir
 
@@ -1581,6 +1585,7 @@ gtk_query_immodules_3_0_SOURCES = queryimmodules.c gtkutils.c
 gtk_query_immodules_3_0_LDADD = 		\
 	libgtk-3.la				\
 	$(top_builddir)/gdk/libgdk-3.la		\
+	$(top_builddir)/gsk/libgsk-3.la		\
 	$(GMODULE_LIBS)				\
 	$(GTK_DEP_LIBS)
 
@@ -1591,24 +1596,28 @@ gtk_encode_symbolic_svg_SOURCES = encodesymbolic.c
 gtk_encode_symbolic_svg_LDADD =			\
 	$(GDK_PIXBUF_LIBS)			\
 	$(top_builddir)/gdk/libgdk-3.la		\
+	$(top_builddir)/gsk/libgsk-3.la		\
 	$(GTK_DEP_LIBS)
 
 gtk_builder_tool_SOURCES = gtk-builder-tool.c
 gtk_builder_tool_LDADD =			\
 	libgtk-3.la				\
 	$(top_builddir)/gdk/libgdk-3.la		\
+	$(top_builddir)/gsk/libgsk-3.la		\
 	$(GTK_DEP_LIBS)
 
 gtk_query_settings_SOURCES = gtk-query-settings.c
 gtk_query_settings_LDADD= 			\
 	libgtk-3.la				\
 	$(top_builddir)/gdk/libgdk-3.la		\
+	$(top_builddir)/gsk/libgsk-3.la		\
 	$(GTK_DEP_LIBS)
 
 gtk_launch_SOURCES = gtk-launch.c
 gtk_launch_LDADD =				\
 	libgtk-3.la				\
 	$(top_builddir)/gdk/libgdk-3.la		\
+	$(top_builddir)/gsk/libgsk-3.la		\
 	$(GTK_DEP_LIBS)
 
 if OS_WIN32
