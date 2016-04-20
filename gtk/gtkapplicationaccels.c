@@ -100,9 +100,9 @@ accel_key_equal (gconstpointer a,
 }
 
 static void
-accels_add_entry (GtkApplicationAccels *accels,
-                  AccelKey             *key,
-                  const gchar          *action_and_target)
+add_entry (GtkApplicationAccels *accels,
+           AccelKey             *key,
+           const gchar          *action_and_target)
 {
   const gchar **old;
   const gchar **new;
@@ -124,9 +124,9 @@ accels_add_entry (GtkApplicationAccels *accels,
 }
 
 static void
-accels_remove_entry (GtkApplicationAccels *accels,
-                     AccelKey             *key,
-                     const gchar          *action_and_target)
+remove_entry (GtkApplicationAccels *accels,
+              AccelKey             *key,
+              const gchar          *action_and_target)
 {
   const gchar **old;
   const gchar **new;
@@ -235,7 +235,7 @@ gtk_application_accels_set_accels_for_action (GtkApplicationAccels *accels,
     {
       /* We need to remove accel entries from existing keys */
       for (i = 0; old_keys[i].key; i++)
-        accels_remove_entry (accels, &old_keys[i], action_and_target);
+        remove_entry (accels, &old_keys[i], action_and_target);
     }
 
   if (keys)
@@ -243,7 +243,7 @@ gtk_application_accels_set_accels_for_action (GtkApplicationAccels *accels,
       g_hash_table_replace (accels->action_to_accels, action_and_target, keys);
 
       for (i = 0; i < n; i++)
-        accels_add_entry (accels, &keys[i], action_and_target);
+        add_entry (accels, &keys[i], action_and_target);
     }
   else
     {
