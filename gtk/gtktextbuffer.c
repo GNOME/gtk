@@ -344,6 +344,9 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   2,
                   GTK_TYPE_TEXT_ITER | G_SIGNAL_TYPE_STATIC_SCOPE,
                   GDK_TYPE_PIXBUF);
+  g_signal_set_va_marshaller (signals[INSERT_PIXBUF],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_VOID__BOXED_OBJECTv);
 
 
   /**
@@ -374,6 +377,9 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   2,
                   GTK_TYPE_TEXT_ITER | G_SIGNAL_TYPE_STATIC_SCOPE,
                   GTK_TYPE_TEXT_CHILD_ANCHOR);
+  g_signal_set_va_marshaller (signals[INSERT_CHILD_ANCHOR],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_VOID__BOXED_OBJECTv);
   
   /**
    * GtkTextBuffer::delete-range:
@@ -404,6 +410,9 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   2,
                   GTK_TYPE_TEXT_ITER | G_SIGNAL_TYPE_STATIC_SCOPE,
                   GTK_TYPE_TEXT_ITER | G_SIGNAL_TYPE_STATIC_SCOPE);
+  g_signal_set_va_marshaller (signals[DELETE_RANGE],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_VOID__BOXED_BOXEDv);
 
   /**
    * GtkTextBuffer::changed:
@@ -458,7 +467,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
   signals[MARK_SET] =
     g_signal_new (I_("mark-set"),
                   G_OBJECT_CLASS_TYPE (object_class),
-                  G_SIGNAL_RUN_LAST,                   
+                  G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTextBufferClass, mark_set),
                   NULL, NULL,
                   _gtk_marshal_VOID__BOXED_OBJECT,
@@ -466,6 +475,9 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   2,
                   GTK_TYPE_TEXT_ITER,
                   GTK_TYPE_TEXT_MARK);
+  g_signal_set_va_marshaller (signals[MARK_SET],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_VOID__BOXED_OBJECTv);
 
   /**
    * GtkTextBuffer::mark-deleted:
@@ -520,6 +532,9 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   GTK_TYPE_TEXT_TAG,
                   GTK_TYPE_TEXT_ITER,
                   GTK_TYPE_TEXT_ITER);
+  g_signal_set_va_marshaller (signals[APPLY_TAG],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_VOID__OBJECT_BOXED_BOXEDv);
 
 
    /**
@@ -551,6 +566,9 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   GTK_TYPE_TEXT_TAG,
                   GTK_TYPE_TEXT_ITER,
                   GTK_TYPE_TEXT_ITER);
+  g_signal_set_va_marshaller (signals[REMOVE_TAG],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_VOID__OBJECT_BOXED_BOXEDv);
 
    /**
    * GtkTextBuffer::begin-user-action:
