@@ -47,6 +47,8 @@ libgdk_win32_la_SOURCES = \
 	gdkglobals-win32.c \
 	gdkkeys-win32.c \
 	gdkmain-win32.c \
+	gdkmonitor-win32.c \
+	gdkmonitor-win32.h \
 	gdkprivate-win32.h \
 	gdkproperty-win32.c \
 	gdkscreen-win32.c \
@@ -56,10 +58,11 @@ libgdk_win32_la_SOURCES = \
 	gdkwin32display.h \
 	gdkwin32displaymanager.h \
 	gdkwin32dnd.h \
-	gdkwin32glcontext.h		\
+	gdkwin32glcontext.h \
 	gdkwin32.h \
 	gdkwin32id.c \
 	gdkwin32keys.h \
+	gdkwin32monitor.h \
 	gdkwin32screen.h \
 	gdkwin32window.h \
 	gdkwindow-win32.c \
@@ -76,9 +79,10 @@ libgdkwin32include_HEADERS =	\
 	gdkwin32display.h	\
 	gdkwin32displaymanager.h\
 	gdkwin32dnd.h		\
-	gdkwin32glcontext.h		\
+	gdkwin32glcontext.h	\
 	gdkwin32keys.h		\
 	gdkwin32misc.h		\
+	gdkwin32monitor.h	\
 	gdkwin32screen.h	\
 	gdkwin32window.h
 

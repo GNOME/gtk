@@ -385,7 +385,7 @@ if test "$enable_win32_backend" = "yes"; then
   backend_immodules="$backend_immodules,ime"
   GDK_WINDOWING="$GDK_WINDOWING
 #define GDK_WINDOWING_WIN32"
-  GDK_EXTRA_LIBS="$GDK_EXTRA_LIBS -lgdi32 -limm32 -lshell32 -lole32 -Wl,-luuid -lwinmm -ldwmapi"
+  GDK_EXTRA_LIBS="$GDK_EXTRA_LIBS -lgdi32 -limm32 -lshell32 -lole32 -Wl,-luuid -lwinmm -ldwmapi -lsetupapi -lcfgmgr32"
   AM_CONDITIONAL(USE_WIN32, true)
   PANGO_PACKAGES="pangowin32 pangocairo"
 else
@@ -755,6 +755,54 @@ case $host in
     AC_MSG_RESULT(no)
   ;;
 esac
+
+AS_CASE([$host_os],
+  [mingw*],
+  [
+    AC_CHECK_SIZEOF(
+      [DISPLAYCONFIG_VIDEO_OUTPUT_TECHNOLOGY],
+      [],
+      [
+#define _WIN32_WINNT 0x601
+#include <windows.h>
+      ]
+    )
+    AS_IF(
+      [test x$ac_cv_sizeof_DISPLAYCONFIG_VIDEO_OUTPUT_TECHNOLOGY = x4],
+      [AC_MSG_RESULT([DISPLAYCONFIG_VIDEO_OUTPUT_TECHNOLOGY is OK])],
+      [test x$ac_cv_sizeof_DISPLAYCONFIG_VIDEO_OUTPUT_TECHNOLOGY = x0],
+      [AC_MSG_ERROR([DISPLAYCONFIG_VIDEO_OUTPUT_TECHNOLOGY is unavailable])],
+      [AC_MSG_RESULT([DISPLAYCONFIG_VIDEO_OUTPUT_TECHNOLOGY is not OK])]
+    )
+    AC_MSG_CHECKING([for SetupDiGetDevicePropertyW])
+    gtk_save_LIBS="$LIBS"
+    LIBS="-lsetupapi $LIBS"
+    AC_TRY_LINK(
+      [
+#define _WIN32_WINNT 0x0600
+#include <windows.h>
+#include <devpropdef.h>
+#include <setupapi.h>
+      ],
+      [return SetupDiGetDevicePropertyW(NULL, NULL, NULL, NULL, NULL, 0, NULL, 0);],
+      [have_SetupDiGetDevicePropertyW=yes],
+      [have_SetupDiGetDevicePropertyW=no]
+    )
+    AS_IF(
+      [test x$have_SetupDiGetDevicePropertyW = xyes],
+      [
+       AC_DEFINE(
+         [HAVE_SETUP_DI_GET_DEVICE_PROPERTY_W],
+         [1],
+         [Define to 1 if SetupDiGetDevicePropertyW() is available]
+       )
+      ]
+    )
+    AC_MSG_RESULT([$have_SetupDiGetDevicePropertyW])
+    LIBS="$gtk_save_LIBS"
+  ],
+  []
+)
 
 AC_SUBST(MATH_LIB)
 #
