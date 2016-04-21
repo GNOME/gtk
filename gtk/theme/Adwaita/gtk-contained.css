@@ -1528,6 +1528,8 @@ spinbutton:not(.vertical) {
     border: none;
     border-radius: 0;
     box-shadow: none; }
+    spinbutton:not(.vertical) entry:backdrop:disabled {
+      background-color: transparent; }
   spinbutton:not(.vertical) button {
     min-height: 16px;
     margin: 0;
@@ -1557,7 +1559,7 @@ spinbutton:not(.vertical) {
       transition: 200ms ease-out; }
     spinbutton:not(.vertical) button:backdrop:disabled {
       color: rgba(195, 195, 192, 0.3);
-      background-image: none;
+      background-color: transparent;
       border-style: none none none solid; }
       spinbutton:not(.vertical) button:backdrop:disabled:dir(rtl) {
         border-style: none solid none none; }
