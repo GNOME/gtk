@@ -498,7 +498,7 @@ button {
     button:backdrop:active,
     button:backdrop:checked {
       border-color: #262929;
-      background-color: #323737;
+      background-color: #2d3131;
       background-image: none;
       box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
       notebook > header > tabs > arrow:backdrop:active label, button.sidebar-button:backdrop:active label, button.titlebutton:backdrop:active label, notebook > header > tabs > arrow:backdrop:active, button.sidebar-button:backdrop:active, button.titlebutton:backdrop:active, notebook > header > tabs > arrow:backdrop:checked label, button.sidebar-button:backdrop:checked label, button.titlebutton:backdrop:checked label, notebook > header > tabs > arrow:backdrop:checked, button.sidebar-button:backdrop:checked, button.titlebutton:backdrop:checked, notebook > header > tabs > arrow:backdrop:active label, button.titlebutton:backdrop:active label, notebook > header > tabs > arrow:backdrop:active, button.titlebutton:backdrop:active, notebook > header > tabs > arrow:backdrop:checked label, button.titlebutton:backdrop:checked label, notebook > header > tabs > arrow:backdrop:checked, button.titlebutton:backdrop:checked,
@@ -532,7 +532,7 @@ button {
       button:backdrop:disabled:active,
       button:backdrop:disabled:checked {
         border-color: #262929;
-        background-color: #282c2c;
+        background-color: #2d3131;
         background-image: none;
         box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
         notebook > header > tabs > arrow:backdrop:disabled:active label, button.sidebar-button:backdrop:disabled:active label, button.titlebutton:backdrop:disabled:active label, notebook > header > tabs > arrow:backdrop:disabled:checked label, button.sidebar-button:backdrop:disabled:checked label, button.titlebutton:backdrop:disabled:checked label, notebook > header > tabs > arrow:backdrop:disabled:active label, button.titlebutton:backdrop:disabled:active label, notebook > header > tabs > arrow:backdrop:disabled:checked label, button.titlebutton:backdrop:disabled:checked label,
@@ -841,7 +841,7 @@ button.suggested-action {
     button.suggested-action.flat:backdrop:active,
     button.suggested-action.flat:backdrop:checked {
       border-color: #0f2b48;
-      background-color: #184472;
+      background-color: #1e4b7b;
       background-image: none;
       box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
       .selection-mode button.titlebutton:backdrop:active label, .selection-mode button.titlebutton:backdrop:active, .selection-mode button.titlebutton:backdrop:checked label, .selection-mode button.titlebutton:backdrop:checked,
@@ -853,7 +853,7 @@ button.suggested-action {
       button.suggested-action.flat:backdrop:active,
       button.suggested-action.flat:backdrop:checked label,
       button.suggested-action.flat:backdrop:checked {
-        color: #d1dae3; }
+        color: #d2dbe5; }
     .selection-mode button.titlebutton:backdrop:disabled,
     button.suggested-action:backdrop:disabled,
     button.suggested-action.flat:backdrop:disabled {
@@ -875,7 +875,7 @@ button.suggested-action {
       button.suggested-action.flat:backdrop:disabled:active,
       button.suggested-action.flat:backdrop:disabled:checked {
         border-color: #0f2b48;
-        background-color: #1c4672;
+        background-color: #1e4b7b;
         background-image: none;
         box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
         .selection-mode button.titlebutton:backdrop:disabled:active label, .selection-mode button.titlebutton:backdrop:disabled:checked label,
@@ -883,7 +883,7 @@ button.suggested-action {
         button.suggested-action:backdrop:disabled:checked label,
         button.suggested-action.flat:backdrop:disabled:active label,
         button.suggested-action.flat:backdrop:disabled:checked label {
-          color: #6b87a3; }
+          color: #6d8aa9; }
   .selection-mode button.titlebutton:backdrop, .selection-mode button.titlebutton:disabled, .selection-mode button.titlebutton:backdrop:disabled,
   button.suggested-action.flat:backdrop,
   button.suggested-action.flat:disabled,
@@ -1027,7 +1027,7 @@ button.destructive-action {
     button.destructive-action.flat:backdrop:active,
     button.destructive-action.flat:backdrop:checked {
       border-color: #760909;
-      background-color: #a60c0c;
+      background-color: #a91212;
       background-image: none;
       box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
       button.destructive-action:backdrop:active label,
@@ -1038,7 +1038,7 @@ button.destructive-action {
       button.destructive-action.flat:backdrop:active,
       button.destructive-action.flat:backdrop:checked label,
       button.destructive-action.flat:backdrop:checked {
-        color: #edcece; }
+        color: #eed0d0; }
     button.destructive-action:backdrop:disabled,
     button.destructive-action.flat:backdrop:disabled {
       border-color: #262929;
@@ -1057,14 +1057,14 @@ button.destructive-action {
       button.destructive-action.flat:backdrop:disabled:active,
       button.destructive-action.flat:backdrop:disabled:checked {
         border-color: #760909;
-        background-color: #9f1111;
+        background-color: #a91212;
         background-image: none;
         box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
         button.destructive-action:backdrop:disabled:active label,
         button.destructive-action:backdrop:disabled:checked label,
         button.destructive-action.flat:backdrop:disabled:active label,
         button.destructive-action.flat:backdrop:disabled:checked label {
-          color: #c16464; }
+          color: #c76565; }
   button.destructive-action.flat:backdrop,
   button.destructive-action.flat:disabled,
   button.destructive-action.flat:backdrop:disabled {
@@ -1266,7 +1266,7 @@ button.needs-attention > image, stacksidebar row.needs-attention > label {
       color: #949796; }
     .inline-toolbar toolbutton > button:backdrop:active, .inline-toolbar toolbutton > button:backdrop:checked {
       border-color: #262929;
-      background-color: #323737;
+      background-color: #2d3131;
       background-image: none;
       box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
       .inline-toolbar toolbutton > button:backdrop:active label, .inline-toolbar toolbutton > button:backdrop:active, .inline-toolbar toolbutton > button:backdrop:checked label, .inline-toolbar toolbutton > button:backdrop:checked {
@@ -1282,7 +1282,7 @@ button.needs-attention > image, stacksidebar row.needs-attention > label {
         color: #5d6767; }
       .inline-toolbar toolbutton > button:backdrop:disabled:active, .inline-toolbar toolbutton > button:backdrop:disabled:checked {
         border-color: #262929;
-        background-color: #282c2c;
+        background-color: #2d3131;
         background-image: none;
         box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
         .inline-toolbar toolbutton > button:backdrop:disabled:active label, .inline-toolbar toolbutton > button:backdrop:disabled:checked label {
@@ -1865,7 +1865,7 @@ headerbar {
         headerbar.selection-mode button:backdrop:active,
         headerbar.selection-mode button:backdrop:checked {
           border-color: #0f2b48;
-          background-color: #184472;
+          background-color: #1e4b7b;
           background-image: none;
           box-shadow: inset 0 1px rgba(255, 255, 255, 0);
           border-color: #0f2b48; }
@@ -1878,7 +1878,7 @@ headerbar {
           headerbar.selection-mode button:backdrop:active,
           headerbar.selection-mode button:backdrop:checked label,
           headerbar.selection-mode button:backdrop:checked {
-            color: #d1dae3; }
+            color: #d2dbe5; }
         .selection-mode.titlebar:not(headerbar) button:backdrop.flat:disabled, .selection-mode.titlebar:not(headerbar) button:backdrop:disabled,
         headerbar.selection-mode button:backdrop.flat:disabled,
         headerbar.selection-mode button:backdrop:disabled {
@@ -1901,7 +1901,7 @@ headerbar {
           headerbar.selection-mode button:backdrop:disabled:active,
           headerbar.selection-mode button:backdrop:disabled:checked {
             border-color: #0f2b48;
-            background-color: #1c4672;
+            background-color: #1e4b7b;
             background-image: none;
             box-shadow: inset 0 1px rgba(255, 255, 255, 0);
             border-color: #0f2b48; }
@@ -1910,7 +1910,7 @@ headerbar {
             headerbar.selection-mode button:backdrop.flat:disabled:checked label,
             headerbar.selection-mode button:backdrop:disabled:active label,
             headerbar.selection-mode button:backdrop:disabled:checked label {
-              color: #6b87a3; }
+              color: #6d8aa9; }
       .selection-mode.titlebar:not(headerbar) button.flat:backdrop, .selection-mode.titlebar:not(headerbar) button.flat:disabled, .selection-mode.titlebar:not(headerbar) button.flat:backdrop:disabled,
       headerbar.selection-mode button.flat:backdrop,
       headerbar.selection-mode button.flat:disabled,
