@@ -133,6 +133,7 @@ generate_key_event (GdkWindow *window, GdkEventType type, guint state, guint key
   event->key.state = state;
   event->key.keyval = keyval;
   event->key.hardware_keycode = keycode + 8;
+  _gdk_event_set_scancode (event, keycode + 8);
   event->key.is_modifier = is_modifier;
   event->key.time = event_time;
   set_key_event_string (&event->key);

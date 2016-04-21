@@ -295,6 +295,7 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
 	event->key.keyval = message->key.key;
 	event->key.state = message->key.state;
 	event->key.hardware_keycode = message->key.key;
+        _gdk_event_set_scancode (event, message->key.key);
 	event->key.length = 0;
 	gdk_event_set_device (event, device_manager->core_keyboard);
 	gdk_event_set_seat (event, gdk_device_get_seat (device_manager->core_keyboard));

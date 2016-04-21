@@ -1469,6 +1469,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         event->key.group = xev->group.effective;
 
         event->key.hardware_keycode = xev->detail;
+        _gdk_event_set_scancode (event, xev->detail);
         event->key.is_modifier = gdk_x11_keymap_key_is_modifier (keymap, event->key.hardware_keycode);
 
         device = g_hash_table_lookup (device_manager->id_table,

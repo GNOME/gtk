@@ -1134,6 +1134,7 @@ fill_key_event (GdkWindow    *window,
   event->key.time = get_time_from_ns_event (nsevent);
   event->key.state = get_keyboard_modifiers_from_ns_event (nsevent);
   event->key.hardware_keycode = [nsevent keyCode];
+  _gdk_event_set_scancode (event, [nsevent keyCode]);
   event->key.group = ([nsevent modifierFlags] & NSAlternateKeyMask) ? 1 : 0;
   event->key.keyval = GDK_KEY_VoidSymbol;
 

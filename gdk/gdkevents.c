@@ -2464,3 +2464,37 @@ gdk_event_set_device_tool (GdkEvent      *event,
   private = (GdkEventPrivate *) event;
   private->tool = tool;
 }
+
+void
+_gdk_event_set_scancode (GdkEvent *event,
+                         guint16 scancode)
+{
+  GdkEventPrivate *private = (GdkEventPrivate *) event;
+
+  private->key_scancode = scancode;
+}
+
+/**
+ * gdk_event_get_scancode:
+ * @event: a #GdkEvent
+ *
+ * Gets the keyboard low-level scancode.
+ * This is usually hardware_keycode.
+ * On Windows this is the high word of WM_KEY{DOWN,UP} lParam
+ * which contains the scancode and some extended flags.
+ *
+ * Returns: The associated keyboard scancode or 0
+ *
+ * Since: 3.22
+ **/
+int
+gdk_event_get_scancode (GdkEvent *event)
+{
+  GdkEventPrivate *private;
+
+  if (!gdk_event_is_allocated (event))
+    return 0;
+
+  private = (GdkEventPrivate *) event;
+  return private->key_scancode;
+}

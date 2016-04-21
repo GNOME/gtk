@@ -1451,6 +1451,9 @@ GDK_AVAILABLE_IN_3_22
 void           gdk_event_set_device_tool (GdkEvent       *event,
                                           GdkDeviceTool  *tool);
 
+GDK_AVAILABLE_IN_3_22
+int            gdk_event_get_scancode    (GdkEvent *event);
+
 G_END_DECLS
 
 #endif /* __GDK_EVENTS_H__ */
