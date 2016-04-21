@@ -57,19 +57,40 @@ gtk_css_value_shadows_compute (GtkCssValue             *value,
                                GtkCssStyle             *style,
                                GtkCssStyle             *parent_style)
 {
-  GtkCssValue *result;
-  guint i;
+  GtkCssValue *result, *tmp;
+  guint i, j;
 
   if (value->len == 0)
     return _gtk_css_value_ref (value);
 
-  result = gtk_css_shadows_value_new (value->values, value->len);
+  result = NULL;
   for (i = 0; i < value->len; i++)
     {
-      result->values[i] = _gtk_css_value_compute (value->values[i], property_id, provider, style, parent_style);
+      tmp = _gtk_css_value_compute (value->values[i], property_id, provider, style, parent_style);
+
+      if (result)
+        {
+          result->values[i] = tmp;
+        }
+      else if (tmp != value->values[i])
+        {
+          result = gtk_css_shadows_value_new (value->values, value->len);
+          for (j = 0; j < i; j++)
+            {
+              _gtk_css_value_ref (result->values[j]);
+            }
+          result->values[i] = tmp;
+        }
+      else
+        {
+          _gtk_css_value_unref (tmp);
+        }
     }
 
-  return result;
+  if (result != NULL)
+    return result;
+  else
+    return _gtk_css_value_ref (value);
 }
 
 static gboolean
