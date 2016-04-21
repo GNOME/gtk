@@ -331,6 +331,38 @@ test_forward_to_tag_toggle (void)
 }
 
 static void
+check_forward_line_end (const gchar *buffer_text,
+                        gint         initial_offset,
+                        gint         result_offset,
+                        gboolean     ret)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter iter;
+
+  buffer = gtk_text_buffer_new (NULL);
+  gtk_text_buffer_set_text (buffer, buffer_text, -1);
+
+  gtk_text_buffer_get_iter_at_offset (buffer, &iter, initial_offset);
+
+  g_assert_cmpint (ret, ==, gtk_text_iter_forward_to_line_end (&iter));
+  g_assert_cmpint (result_offset, ==, gtk_text_iter_get_offset (&iter));
+
+  g_object_unref (buffer);
+}
+
+static void
+test_forward_to_line_end (void)
+{
+  check_forward_line_end("a", 0, 1, FALSE);
+  check_forward_line_end("a\n", 0, 1, TRUE);
+  check_forward_line_end("a\r\n", 0, 1, TRUE);
+  check_forward_line_end("a\na\n", 1, 3, TRUE);
+  check_forward_line_end("a\na\n\n", 1, 3, TRUE);
+  check_forward_line_end("a\r\na\n", 1, 4, TRUE);
+  check_forward_line_end("a\r\na\r\n\r\n", 1, 4, TRUE);
+}
+
+static void
 check_word_boundaries (const gchar *buffer_text,
                        gint         offset,
                        gboolean     starts_word,
@@ -721,6 +753,7 @@ main (int argc, char** argv)
   g_test_add_func ("/TextIter/Search", test_search);
   g_test_add_func ("/TextIter/Search Caseless", test_search_caseless);
   g_test_add_func ("/TextIter/Forward To Tag Toggle", test_forward_to_tag_toggle);
+  g_test_add_func ("/TextIter/Forward To Line End", test_forward_to_line_end);
   g_test_add_func ("/TextIter/Word Boundaries", test_word_boundaries);
   g_test_add_func ("/TextIter/Visible Word Boundaries", test_visible_word_boundaries);
   g_test_add_func ("/TextIter/Cursor Positions", test_cursor_positions);
