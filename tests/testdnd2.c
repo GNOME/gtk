@@ -71,6 +71,36 @@ image_drag_begin (GtkWidget      *widget,
 }
 
 static void
+window_drag_end (GtkWidget *ebox, GdkDragContext *context, gpointer data)
+{
+  GtkWidget *window = data;
+
+  gtk_widget_destroy (window);
+}
+
+static void
+window_drag_begin (GtkWidget      *widget,
+                   GdkDragContext *context,
+                   gpointer        data)
+{
+  GdkPixbuf *pixbuf;
+  GtkWidget *window;
+  GtkWidget *image;
+
+  pixbuf = get_image_pixbuf (GTK_IMAGE (data));
+
+  window = gtk_window_new (GTK_WINDOW_POPUP);
+  image = gtk_image_new_from_pixbuf (pixbuf);
+  gtk_widget_show (image);
+  gtk_container_add (GTK_CONTAINER (window), image);
+
+  gtk_drag_set_icon_widget (context, window, 0, 0);
+  g_object_unref (pixbuf);
+
+  g_signal_connect (widget, "drag-end", G_CALLBACK (window_drag_end), window);
+}
+
+static void
 update_source_target_list (GtkWidget *ebox, GtkWidget *image)
 {
   GtkTargetList *target_list;
@@ -120,7 +150,10 @@ image_drag_data_get (GtkWidget        *widget,
       g_object_unref (pixbuf);
       break;
     case TARGET_TEXT:
-      gtk_image_get_icon_name (GTK_IMAGE (data), &name, NULL);
+      if (gtk_image_get_storage_type (GTK_IMAGE (data)) == GTK_IMAGE_ICON_NAME)
+        gtk_image_get_icon_name (GTK_IMAGE (data), &name, NULL);
+      else
+        name = "Boo!";
       gtk_selection_data_set_text (selection_data, name, -1);
       break;
     default:
@@ -176,6 +209,31 @@ make_image (const gchar *icon_name, int hotspot)
   g_object_set_data  (G_OBJECT (image), "hotspot", GINT_TO_POINTER (hotspot));
 
   g_signal_connect (ebox, "drag-begin", G_CALLBACK (image_drag_begin), image);
+  g_signal_connect (ebox, "drag-data-get", G_CALLBACK (image_drag_data_get), image);
+
+  gtk_drag_dest_set (ebox, GTK_DEST_DEFAULT_ALL, NULL, 0, GDK_ACTION_COPY);
+  g_signal_connect (ebox, "drag-data-received", G_CALLBACK (image_drag_data_received), image);
+  update_dest_target_list (ebox);
+
+  gtk_container_add (GTK_CONTAINER (ebox), image);
+
+  return ebox;
+}
+
+GtkWidget *
+make_image2 (const gchar *icon_name, int hotspot)
+{
+  GtkWidget *image, *ebox;
+
+  image = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_DIALOG);
+  ebox = gtk_event_box_new ();
+
+  gtk_drag_source_set (ebox, GDK_BUTTON1_MASK, NULL, 0, GDK_ACTION_COPY);
+  update_source_target_list (ebox, image);
+
+  g_object_set_data  (G_OBJECT (image), "hotspot", GINT_TO_POINTER (hotspot));
+
+  g_signal_connect (ebox, "drag-begin", G_CALLBACK (window_drag_begin), image);
   g_signal_connect (ebox, "drag-data-get", G_CALLBACK (image_drag_data_get), image);
 
   gtk_drag_dest_set (ebox, GTK_DEST_DEFAULT_ALL, NULL, 0, GDK_ACTION_COPY);
@@ -294,6 +352,8 @@ main (int argc, char *Argv[])
 
   gtk_grid_attach (GTK_GRID (grid), make_spinner (), 0, 2, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), make_image ("weather-clear", CENTER), 1, 2, 1, 1);
+
+  gtk_grid_attach (GTK_GRID (grid), make_image ("dialog-question", TOP_LEFT), 0, 3, 1, 1);
 
   gtk_widget_show_all (window);
   gtk_main ();
