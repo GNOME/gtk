@@ -77,6 +77,21 @@ gtk_css_value_shadow_compute (GtkCssValue             *shadow,
   spread = _gtk_css_value_compute (shadow->spread, property_id, provider, style, parent_style),
   color = _gtk_css_value_compute (shadow->color, property_id, provider, style, parent_style);
 
+  if (hoffset == shadow->hoffset &&
+      voffset == shadow->voffset &&
+      radius == shadow->radius &&
+      spread == shadow->spread &&
+      color == shadow->color)
+    {
+      _gtk_css_value_unref (hoffset);
+      _gtk_css_value_unref (voffset);
+      _gtk_css_value_unref (radius);
+      _gtk_css_value_unref (spread);
+      _gtk_css_value_unref (color);
+
+      return _gtk_css_value_ref (shadow);
+    }
+
   return gtk_css_shadow_value_new (hoffset, voffset, radius, spread, shadow->inset, color);
 }
 
