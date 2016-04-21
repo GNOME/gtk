@@ -48,27 +48,32 @@ gtk_css_value_border_compute (GtkCssValue             *value,
                               GtkCssStyle             *style,
                               GtkCssStyle             *parent_style)
 {
+  GtkCssValue *values[4];
   GtkCssValue *computed;
   gboolean changed = FALSE;
   guint i;
-
-  computed = _gtk_css_border_value_new (NULL, NULL, NULL, NULL);
-  computed->fill = value->fill;
 
   for (i = 0; i < 4; i++)
     {
       if (value->values[i])
         {
-          computed->values[i] = _gtk_css_value_compute (value->values[i], property_id, provider, style, parent_style);
-          changed |= (computed->values[i] != value->values[i]);
+          values[i] = _gtk_css_value_compute (value->values[i], property_id, provider, style, parent_style);
+          changed |= (values[i] != value->values[i]);
         }
     }
 
   if (!changed)
     {
-      _gtk_css_value_unref (computed);
+      for (i = 0; i < 4; i++)
+        {
+          if (values[i] != NULL)
+            _gtk_css_value_unref (values[i]);
+        }
       return _gtk_css_value_ref (value);
     }
+
+  computed = _gtk_css_border_value_new (values[0], values[1], values[2], values[3]);
+  computed->fill = value->fill;
 
   return computed;
 }
