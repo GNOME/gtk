@@ -616,6 +616,7 @@ static gboolean
 gdk_x11_gl_context_realize (GdkGLContext  *context,
                             GError       **error)
 {
+  GdkX11Display *display_x11;
   GdkDisplay *display;
   GdkX11GLContext *context_x11;
   GLXWindow drawable;
@@ -624,13 +625,14 @@ gdk_x11_gl_context_realize (GdkGLContext  *context,
   DrawableInfo *info;
   GdkGLContext *share;
   GdkWindow *window;
-  gboolean debug_bit, compat_bit, legacy_bit;
+  gboolean debug_bit, compat_bit, legacy_bit, es_bit;
   int major, minor, flags;
 
   window = gdk_gl_context_get_window (context);
   display = gdk_window_get_display (window);
   dpy = gdk_x11_display_get_xdisplay (display);
   context_x11 = GDK_X11_GL_CONTEXT (context);
+  display_x11 = GDK_X11_DISPLAY (display);
   share = gdk_gl_context_get_shared_context (context);
 
   gdk_gl_context_get_required_version (context, &major, &minor);
@@ -638,8 +640,12 @@ gdk_x11_gl_context_realize (GdkGLContext  *context,
   compat_bit = gdk_gl_context_get_forward_compatible (context);
 
   /* If there is no glXCreateContextAttribsARB() then we default to legacy */
-  legacy_bit = !GDK_X11_DISPLAY (display)->has_glx_create_context ||
+  legacy_bit = !display_x11->has_glx_create_context ||
                (_gdk_gl_flags & GDK_GL_LEGACY) != 0;
+
+  es_bit = ((_gdk_gl_flags & GDK_GL_GLES) != 0 ||
+            (share != NULL && gdk_gl_context_get_use_es (share))) &&
+           (display_x11->has_glx_create_context && display_x11->has_glx_create_es2_context);
 
   /* We cannot share legacy contexts with core profile ones, so the
    * shared context is the one that decides if we're going to create
@@ -655,11 +661,12 @@ gdk_x11_gl_context_realize (GdkGLContext  *context,
     flags |= GLX_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB;
 
   GDK_NOTE (OPENGL,
-            g_message ("Creating core GLX context (version:%d.%d, debug:%s, forward:%s, legacy:%s)",
+            g_message ("Creating GLX context (version:%d.%d, debug:%s, forward:%s, legacy:%s, es:%s)",
                        major, minor,
                        debug_bit ? "yes" : "no",
                        compat_bit ? "yes" : "no",
-                       legacy_bit ? "yes" : "no"));
+                       legacy_bit ? "yes" : "no",
+                       es_bit ? "yes" : "no"));
 
   /* If we have access to GLX_ARB_create_context_profile then we can ask for
    * a compatibility profile; if we don't, then we have to fall back to the
@@ -672,8 +679,13 @@ gdk_x11_gl_context_realize (GdkGLContext  *context,
     }
   else
     {
-      int profile = legacy_bit ? GLX_CONTEXT_COMPATIBILITY_PROFILE_BIT_ARB
-                               : GLX_CONTEXT_CORE_PROFILE_BIT_ARB;
+      int profile;
+
+      if (es_bit)
+        profile = GLX_CONTEXT_ES2_PROFILE_BIT_EXT;
+      else
+        profile = legacy_bit ? GLX_CONTEXT_COMPATIBILITY_PROFILE_BIT_ARB
+                             : GLX_CONTEXT_CORE_PROFILE_BIT_ARB;
 
       /* We need to tweak the version, otherwise we may end up requesting
        * a compatibility context with a minimum version of 3.2, which is
@@ -697,6 +709,7 @@ gdk_x11_gl_context_realize (GdkGLContext  *context,
           GDK_NOTE (OPENGL, g_message ("Creating fallback legacy context"));
           context_x11->glx_context = create_legacy_context (display, context_x11->glx_config, share);
           legacy_bit = TRUE;
+          es_bit = FALSE;
         }
     }
 
@@ -710,6 +723,9 @@ gdk_x11_gl_context_realize (GdkGLContext  *context,
 
   /* Ensure that any other context is created with a legacy bit set */
   gdk_gl_context_set_is_legacy (context, legacy_bit);
+
+  /* Ensure that any other context is created with a ES bit set */
+  gdk_gl_context_set_use_es (context, es_bit);
 
   xvisinfo = find_xvisinfo_for_fbconfig (display, context_x11->glx_config);
 
@@ -853,6 +869,8 @@ gdk_x11_screen_init_gl (GdkScreen *screen)
 
   display_x11->has_glx_create_context =
     epoxy_has_glx_extension (dpy, screen_num, "GLX_ARB_create_context_profile");
+  display_x11->has_glx_create_es2_context =
+    epoxy_has_glx_extension (dpy, screen_num, "GLX_EXT_create_context_es2_profile");
   display_x11->has_glx_swap_interval =
     epoxy_has_glx_extension (dpy, screen_num, "GLX_SGI_swap_control");
   display_x11->has_glx_texture_from_pixmap =
@@ -873,6 +891,7 @@ gdk_x11_screen_init_gl (GdkScreen *screen)
                        " - Vendor: %s\n"
                        " - Checked extensions:\n"
                        "\t* GLX_ARB_create_context_profile: %s\n"
+                       "\t* GLX_EXT_create_context_es2_profile: %s\n"
                        "\t* GLX_SGI_swap_control: %s\n"
                        "\t* GLX_EXT_texture_from_pixmap: %s\n"
                        "\t* GLX_SGI_video_sync: %s\n"
@@ -882,6 +901,7 @@ gdk_x11_screen_init_gl (GdkScreen *screen)
                      display_x11->glx_version % 10,
                      glXGetClientString (dpy, GLX_VENDOR),
                      display_x11->has_glx_create_context ? "yes" : "no",
+                     display_x11->has_glx_create_es2_context ? "yes" : "no",
                      display_x11->has_glx_swap_interval ? "yes" : "no",
                      display_x11->has_glx_texture_from_pixmap ? "yes" : "no",
                      display_x11->has_glx_video_sync ? "yes" : "no",

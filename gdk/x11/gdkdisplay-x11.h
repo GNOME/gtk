@@ -145,6 +145,7 @@ struct _GdkX11Display
   guint has_glx_sync_control : 1;
   guint has_glx_multisample : 1;
   guint has_glx_visual_rating : 1;
+  guint has_glx_create_es2_context : 1;
 };
 
 struct _GdkX11DisplayClass
