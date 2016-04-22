@@ -162,6 +162,13 @@ gdk_wayland_gl_context_realize (GdkGLContext *context,
   context_attribs[i++] = EGL_NONE;
   g_assert (i < N_EGL_ATTRS);
 
+  GDK_NOTE (OPENGL, g_message ("Creating EGL context version %d.%d (debug:%s, forward:%s, legacy:%s, es:%s)",
+                               major, minor,
+                               debug_bit ? "yes" : "no",
+                               forward_bit ? "yes" : "no",
+                               legacy_bit ? "yes" : "no",
+                               use_es ? "yes" : "no"));
+
   ctx = eglCreateContext (display_wayland->egl_display,
                           context_wayland->egl_config,
                           share != NULL ? GDK_WAYLAND_GL_CONTEXT (share)->egl_context
@@ -178,7 +185,9 @@ gdk_wayland_gl_context_realize (GdkGLContext *context,
       context_attribs[5] = 0;
 
       legacy_bit = TRUE;
+      use_es = FALSE;
 
+      GDK_NOTE (OPENGL, g_message ("eglCreateContext failed, switching to legacy"));
       ctx = eglCreateContext (display_wayland->egl_display,
                               context_wayland->egl_config,
                               share != NULL ? GDK_WAYLAND_GL_CONTEXT (share)->egl_context
