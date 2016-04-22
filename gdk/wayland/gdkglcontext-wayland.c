@@ -122,7 +122,8 @@ gdk_wayland_gl_context_realize (GdkGLContext *context,
   forward_bit = gdk_gl_context_get_forward_compatible (context);
   legacy_bit = (_gdk_gl_flags & GDK_GL_LEGACY) != 0 ||
                (share != NULL && gdk_gl_context_is_legacy (share));
-  use_es = gdk_gl_context_get_use_es (context);
+  use_es = (_gdk_gl_flags & GDK_GL_GLES) != 0 ||
+           (share != NULL && gdk_gl_context_get_use_es (share));
 
   flags = 0;
 
@@ -198,6 +199,7 @@ gdk_wayland_gl_context_realize (GdkGLContext *context,
   context_wayland->egl_context = ctx;
 
   gdk_gl_context_set_is_legacy (context, legacy_bit);
+  gdk_gl_context_set_use_es (context, use_es);
 
   return TRUE;
 }
