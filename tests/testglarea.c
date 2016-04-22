@@ -80,6 +80,20 @@ create_shader (int type, const char *src)
   return shader;
 }
 
+static const char *vertex_shader_code_gles =
+"attribute vec4 position;\n" \
+"uniform mat4 mvp;\n" \
+"void main() {\n" \
+"  gl_Position = mvp * position;\n" \
+"}";
+
+static const char *fragment_shader_code_gles =
+"precision mediump float;\n" \
+"void main() {\n" \
+"  float lerpVal = gl_FragCoord.y / 400.0;\n" \
+"  gl_FragColor = mix(vec4(1.0, 0.85, 0.35, 1.0), vec4(0.2, 0.2, 0.2, 1.0), lerpVal);\n" \
+"}";
+
 static const char *vertex_shader_code_330 =
 "#version 330\n" \
 "\n" \
@@ -243,15 +257,23 @@ realize (GtkWidget *widget)
     return;
 
   context = gtk_gl_area_get_context (GTK_GL_AREA (widget));
-  if (!gdk_gl_context_is_legacy (context))
+  if (gdk_gl_context_get_use_es (context))
     {
-      vertex = vertex_shader_code_330;
-      fragment = fragment_shader_code_330;
+      vertex = vertex_shader_code_gles;
+      fragment = fragment_shader_code_gles;
     }
   else
     {
-      vertex = vertex_shader_code_legacy;
-      fragment = fragment_shader_code_legacy;
+      if (!gdk_gl_context_is_legacy (context))
+        {
+          vertex = vertex_shader_code_330;
+          fragment = fragment_shader_code_330;
+        }
+      else
+        {
+          vertex = vertex_shader_code_legacy;
+          fragment = fragment_shader_code_legacy;
+        }
     }
 
   init_buffers (&position_buffer, NULL);
