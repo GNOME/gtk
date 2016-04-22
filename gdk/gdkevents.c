@@ -2478,10 +2478,11 @@ _gdk_event_set_scancode (GdkEvent *event,
  * gdk_event_get_scancode:
  * @event: a #GdkEvent
  *
- * Gets the keyboard low-level scancode.
- * This is usually hardware_keycode.
- * On Windows this is the high word of WM_KEY{DOWN,UP} lParam
- * which contains the scancode and some extended flags.
+ * Gets the keyboard low-level scancode of a key event.
+ *
+ * This is usually hardware_keycode. On Windows this is the high
+ * word of WM_KEY{DOWN,UP} lParam which contains the scancode and
+ * some extended flags.
  *
  * Returns: The associated keyboard scancode or 0
  *
