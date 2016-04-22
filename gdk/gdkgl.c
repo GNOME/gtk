@@ -370,7 +370,10 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
     {
       glBindTexture (GL_TEXTURE_2D, source);
 
-      glGetTexLevelParameteriv (GL_TEXTURE_2D, 0, GL_TEXTURE_ALPHA_SIZE,  &alpha_size);
+      if (gdk_gl_context_get_use_es (paint_context))
+        alpha_size = 1;
+      else
+        glGetTexLevelParameteriv (GL_TEXTURE_2D, 0, GL_TEXTURE_ALPHA_SIZE,  &alpha_size);
     }
   else
     {
@@ -419,7 +422,22 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
       glEnable (GL_SCISSOR_TEST);
 
       gdk_window_get_unscaled_size (impl_window, NULL, &unscaled_window_height);
-      glDrawBuffer (GL_BACK);
+
+      if (!gdk_gl_context_get_use_es (paint_context))
+        glDrawBuffer (GL_BACK);
+      else
+        {
+          int maj, min;
+
+          gdk_gl_context_get_version (paint_context, &maj, &min);
+
+          if ((maj * 100 + min) >= 300)
+            {
+              static const GLenum buffers[] = { GL_BACK };
+
+              glDrawBuffers (G_N_ELEMENTS (buffers), buffers);
+            }
+        }
 
 #define FLIP_Y(_y) (unscaled_window_height - (_y))
 
@@ -518,8 +536,16 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
 
       glBindTexture (GL_TEXTURE_2D, source);
 
-      glGetTexLevelParameteriv (GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH,  &texture_width);
-      glGetTexLevelParameteriv (GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT,  &texture_height);
+      if (gdk_gl_context_get_use_es (paint_context))
+        {
+          texture_width = width;
+          texture_height = height;
+        }
+      else
+        {
+          glGetTexLevelParameteriv (GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &texture_width);
+          glGetTexLevelParameteriv (GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &texture_height);
+        }
 
       glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
       glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
