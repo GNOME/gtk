@@ -30,6 +30,8 @@
 #include "gdkinternals.h"
 #include "gdkintl.h"
 
+#include "gdkresources.h"
+
 #include "gdk-private.h"
 
 #ifndef HAVE_XCONVERTCASE
@@ -273,6 +275,8 @@ gdk_pre_parse (void)
   const gchar *gl_string;
 
   gdk_initialized = TRUE;
+
+  _gdk_register_resource ();
 
   /* We set the fallback program class here, rather than lazily in
    * gdk_get_program_class, since we don't want -name to override it.

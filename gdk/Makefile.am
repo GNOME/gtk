@@ -172,6 +172,8 @@ gdk_built_sources = 				\
 	gdkenumtypes.c				\
 	gdkmarshalers.h 			\
 	gdkmarshalers.c				\
+	gdkresources.h				\
+	gdkresources.c				\
 	gdkversionmacros.h
 
 #
@@ -179,8 +181,8 @@ gdk_built_sources = 				\
 #
 
 gdkincludedir = $(includedir)/gtk-3.0/gdk
-gdkinclude_HEADERS = $(gdk_public_h_sources) gdkenumtypes.h gdkversionmacros.h
-nodist_gdkinclude_HEADERS = gdkconfig.h
+gdkinclude_HEADERS = $(gdk_public_h_sources)
+nodist_gdkinclude_HEADERS = gdkconfig.h gdkenumtypes.h gdkversionmacros.h
 
 deprecatedincludedir = $(includedir)/gtk-3.0/gdk/deprecated
 deprecatedinclude_HEADERS = $(deprecated_h_sources)
@@ -190,7 +192,9 @@ common_sources = 		\
 	$(gdk_c_sources)	\
 	gdkenumtypes.c		\
 	gdkmarshalers.c		\
-	gdkmarshalers.h
+	gdkmarshalers.h		\
+	gdkresources.h		\
+	gdkresources.c
 
 libgdk_3_la_SOURCES = $(common_sources)
 libgdk_3_la_CFLAGS = $(AM_CFLAGS) $(GDK_HIDDEN_VISIBILITY_CFLAGS)
@@ -441,6 +445,42 @@ gdkconfig.h: stamp-gc-h
 stamp-gc-h: $(top_builddir)/config.status
 	$(AM_V_at) cd $(top_builddir) && $(SHELL) ./config.status gdk/gdkconfig.h \
 	&& echo timestamp > gdk/$(@F)
+
+#
+# Resources
+#
+gdk.gresource.xml: Makefile.am
+	$(AM_V_GEN) echo "<?xml version='1.0' encoding='UTF-8'?>" > $@; \
+	echo "<gresources>" >> $@; \
+	echo "  <gresource prefix='/org/gtk/libgdk'>" >> $@; \
+	for f in $(srcdir)/resources/glsl/*.glsl; do \
+	  n=`basename $$f`; \
+	  echo "    <file alias='glsl/$$n'>resources/glsl/$$n</file>" >> $@; \
+	done; \
+	echo "  </gresource>" >> $@; \
+	echo "</gresources>" >> $@;
+
+glsl_sources = \
+	resources/glsl/gl3-texture-2d.fs.glsl \
+	resources/glsl/gl3-texture-2d.vs.glsl \
+	resources/glsl/gl3-texture-rect.fs.glsl \
+	resources/glsl/gl3-texture-rect.vs.glsl \
+	resources/glsl/gl2-texture-2d.fs.glsl \
+	resources/glsl/gl2-texture-2d.fs.glsl \
+	resources/glsl/gl2-texture-rect.vs.glsl \
+	resources/glsl/gl2-texture-rect.vs.glsl
+
+EXTRA_DIST += $(glsl_sources)
+CLEANFILES += gdk.gresource.xml
+
+resource_files = $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir) --generate-dependencies $(builddir)/gdk.gresource.xml)
+
+gdkresources.h: gdk.gresource.xml
+	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) $< --target=$@ \
+		--sourcedir=$(srcdir) --c-name _gdk --generate-header --manual-register
+gdkresources.c: gdk.gresource.xml $(resource_files)
+	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) $< --target=$@ \
+		--sourcedir=$(srcdir) --c-name _gdk --generate-source --manual-register
 
 # ------------------- MSVC Build Items ----------------
 MSVCPROJS = gdk-3
