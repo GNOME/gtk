@@ -152,6 +152,21 @@ bind_vao (GdkGLContextPaintData *paint_data)
 }
 
 static void
+use_texture_gles_program (GdkGLContextPaintData *paint_data)
+{
+  if (paint_data->texture_2d_quad_program.program == 0)
+    make_program (&paint_data->texture_2d_quad_program,
+                  "/org/gtk/libgdk/glsl/gles2-texture.vs.glsl",
+                  "/org/gtk/libgdk/glsl/gles2-texture.fs.glsl");
+
+  if (paint_data->current_program != &paint_data->texture_2d_quad_program)
+    {
+      paint_data->current_program = &paint_data->texture_2d_quad_program;
+      glUseProgram (paint_data->current_program->program);
+    }
+}
+
+static void
 use_texture_2d_program (GdkGLContextPaintData *paint_data)
 {
   const char *vertex_shader_path = paint_data->is_legacy
@@ -213,10 +228,15 @@ gdk_gl_texture_quads (GdkGLContext *paint_context,
   if (paint_data->tmp_vertex_buffer == 0)
     glGenBuffers(1, &paint_data->tmp_vertex_buffer);
 
-  if (texture_target == GL_TEXTURE_RECTANGLE_ARB)
-    use_texture_rect_program (paint_data);
+  if (paint_data->use_es)
+    use_texture_gles_program (paint_data);
   else
-    use_texture_2d_program (paint_data);
+    {
+      if (texture_target == GL_TEXTURE_RECTANGLE_ARB)
+        use_texture_rect_program (paint_data);
+      else
+        use_texture_2d_program (paint_data);
+    }
 
   program = paint_data->current_program;
 

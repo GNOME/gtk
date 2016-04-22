@@ -468,7 +468,9 @@ glsl_sources = \
 	resources/glsl/gl2-texture-2d.fs.glsl \
 	resources/glsl/gl2-texture-2d.fs.glsl \
 	resources/glsl/gl2-texture-rect.vs.glsl \
-	resources/glsl/gl2-texture-rect.vs.glsl
+	resources/glsl/gl2-texture-rect.vs.glsl \
+	resources/glsl/gles2-texture.fs.glsl \
+	resources/glsl/gles2-texture.vs.glsl
 
 EXTRA_DIST += $(glsl_sources)
 CLEANFILES += gdk.gresource.xml
