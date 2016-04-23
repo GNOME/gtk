@@ -53,24 +53,25 @@ struct _GtkHidingBox
   GtkContainer parent_instance;
 };
 
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_3_22
 GType             gtk_hiding_box_get_type                (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_3_22
 GtkWidget        *gtk_hiding_box_new                     (void);
-GDK_AVAILABLE_IN_3_20
+
+GDK_AVAILABLE_IN_3_22
 void              gtk_hiding_box_set_spacing             (GtkHidingBox      *box,
                                                           gint               spacing);
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_3_22
 gint              gtk_hiding_box_get_spacing             (GtkHidingBox      *box);
 
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_3_22
 void              gtk_hiding_box_set_inverted            (GtkHidingBox      *box,
                                                           gboolean           inverted);
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_3_22
 gboolean          gtk_hiding_box_get_inverted            (GtkHidingBox      *box);
 
-GDK_AVAILABLE_IN_3_20
+GDK_AVAILABLE_IN_3_22
 GList             *gtk_hiding_box_get_overflow_children  (GtkHidingBox      *box);
 G_END_DECLS
 

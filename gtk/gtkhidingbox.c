@@ -24,7 +24,7 @@
 
 #include "config.h"
 
-#include "gtkhidingboxprivate.h"
+#include "gtkhidingbox.h"
 #include "gtkwidgetprivate.h"
 #include "gtkintl.h"
 #include "gtksizerequest.h"
