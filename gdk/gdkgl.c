@@ -423,6 +423,9 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
 
       gdk_window_get_unscaled_size (impl_window, NULL, &unscaled_window_height);
 
+      /* We can use glDrawBuffer on OpenGL only; on GLES 2.0 we are already
+       * double buffered so we don't need it...
+       */
       if (!gdk_gl_context_get_use_es (paint_context))
         glDrawBuffer (GL_BACK);
       else
@@ -431,6 +434,9 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
 
           gdk_gl_context_get_version (paint_context, &maj, &min);
 
+          /* ... but on GLES 3.0 we can use the vectorized glDrawBuffers
+           * call.
+           */
           if ((maj * 100 + min) >= 300)
             {
               static const GLenum buffers[] = { GL_BACK };
@@ -626,6 +632,17 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
   else
     {
       /* Software fallback */
+      int major, minor, version;
+
+      gdk_gl_context_get_version (paint_context, &major, &minor);
+      version = major * 100 + minor;
+
+      /* TODO: Use glTexSubImage2D() and do a row-by-row copy to replace
+       * the GL_UNPACK_ROW_LENGTH support
+       */
+      if (gdk_gl_context_get_use_es (paint_context) &&
+          !(version >= 300 || gdk_gl_context_has_unpack_subimage (paint_context)))
+        goto out;
 
       /* TODO: avoid reading back non-required data due to dest clip */
       image = cairo_surface_create_similar_image (cairo_get_target (cr),
@@ -653,8 +670,13 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
       glPixelStorei (GL_PACK_ALIGNMENT, 4);
       glPixelStorei (GL_PACK_ROW_LENGTH, cairo_image_surface_get_stride (image) / 4);
 
-      glReadPixels (x, y, width, height, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV,
-                    cairo_image_surface_get_data (image));
+      /* The implicit format conversion is going to make this path slower */
+      if (!gdk_gl_context_get_use_es (paint_context))
+        glReadPixels (x, y, width, height, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV,
+                      cairo_image_surface_get_data (image));
+      else
+        glReadPixels (x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE,
+                      cairo_image_surface_get_data (image));
 
       glPixelStorei (GL_PACK_ROW_LENGTH, 0);
 
@@ -673,6 +695,7 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
       cairo_surface_destroy (image);
     }
 
+out:
   if (clip_region)
     cairo_region_destroy (clip_region);
 
