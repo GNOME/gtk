@@ -248,12 +248,20 @@ gdk_gl_context_upload_texture (GdkGLContext    *context,
   /* GL_UNPACK_ROW_LENGTH is available on desktop GL, OpenGL ES >= 3.0, or if
    * the GL_EXT_unpack_subimage extension for OpenGL ES 2.0 is available
    */
-  if (epoxy_is_desktop_gl () || priv->gl_version >= 30 || priv->has_unpack_subimage)
+  if (!gdk_gl_context_get_use_es (context) ||
+      (gdk_gl_context_get_use_es (context) &&
+       (priv->gl_version >= 30 || priv->has_unpack_subimage)))
     {
       glPixelStorei (GL_UNPACK_ALIGNMENT, 4);
       glPixelStorei (GL_UNPACK_ROW_LENGTH, cairo_image_surface_get_stride (image_surface) / 4);
-      glTexImage2D (texture_target, 0, GL_RGBA, width, height, 0, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV,
-                    cairo_image_surface_get_data (image_surface));
+
+      if (gdk_gl_context_get_use_es (context))
+        glTexImage2D (texture_target, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                      cairo_image_surface_get_data (image_surface));
+      else
+        glTexImage2D (texture_target, 0, GL_RGBA, width, height, 0, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV,
+                      cairo_image_surface_get_data (image_surface));
+
       glPixelStorei (GL_UNPACK_ROW_LENGTH, 0);
     }
   else
