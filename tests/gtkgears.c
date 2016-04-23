@@ -652,7 +652,7 @@ gtk_gears_render (GtkGLArea    *area,
   return TRUE;
 }
 
-static const char vertex_shader[] =
+static const char vertex_shader_gl[] =
 "#version 150\n"
 "\n"
 "in vec3 position;\n"
@@ -682,10 +682,47 @@ static const char vertex_shader[] =
 "    gl_Position = ModelViewProjectionMatrix * vec4(position, 1.0);\n"
 "}";
 
-static const char fragment_shader[] =
+static const char fragment_shader_gl[] =
 "#version 150\n"
 "\n"
 "smooth in vec4 Color;\n"
+"\n"
+"void main(void)\n"
+"{\n"
+"    gl_FragColor = Color;\n"
+"}";
+
+static const char vertex_shader_gles[] =
+"attribute vec3 position;\n"
+"attribute vec3 normal;\n"
+"\n"
+"uniform mat4 ModelViewProjectionMatrix;\n"
+"uniform mat4 NormalMatrix;\n"
+"uniform vec4 LightSourcePosition;\n"
+"uniform vec4 MaterialColor;\n"
+"\n"
+"varying vec4 Color;\n"
+"\n"
+"void main(void)\n"
+"{\n"
+"    // Transform the normal to eye coordinates\n"
+"    vec3 N = normalize(vec3(NormalMatrix * vec4(normal, 1.0)));\n"
+"\n"
+"    // The LightSourcePosition is actually its direction for directional light\n"
+"    vec3 L = normalize(LightSourcePosition.xyz);\n"
+"\n"
+"    // Multiply the diffuse value by the vertex color (which is fixed in this case)\n"
+"    // to get the actual color that we will use to draw this vertex with\n"
+"    float diffuse = max(dot(N, L), 0.0);\n"
+"    Color = diffuse * MaterialColor;\n"
+"\n"
+"    // Transform the position to clip coordinates\n"
+"    gl_Position = ModelViewProjectionMatrix * vec4(position, 1.0);\n"
+"}";
+
+static const char fragment_shader_gles[] =
+"precision mediump float;\n"
+"varying vec4 Color;\n"
 "\n"
 "void main(void)\n"
 "{\n"
@@ -698,6 +735,7 @@ gtk_gears_realize (GtkWidget *widget)
   GtkGLArea *glarea = GTK_GL_AREA (widget);
   GtkGears *gears = GTK_GEARS (widget);
   GtkGearsPrivate *priv = gtk_gears_get_instance_private (gears);
+  GdkGLContext *context;
   GLuint vao, v, f, program;
   const char *p;
   char msg[512];
@@ -708,6 +746,8 @@ gtk_gears_realize (GtkWidget *widget)
   if (gtk_gl_area_get_error (glarea) != NULL)
     return;
 
+  context = gtk_gl_area_get_context (glarea);
+
   glEnable (GL_CULL_FACE);
   glEnable (GL_DEPTH_TEST);
 
@@ -717,7 +757,10 @@ gtk_gears_realize (GtkWidget *widget)
   priv->vao = vao;
 
   /* Compile the vertex shader */
-  p = vertex_shader;
+  if (gdk_gl_context_get_use_es (context))
+    p = vertex_shader_gles;
+  else
+    p = vertex_shader_gl;
   v = glCreateShader(GL_VERTEX_SHADER);
   glShaderSource(v, 1, &p, NULL);
   glCompileShader(v);
@@ -725,7 +768,10 @@ gtk_gears_realize (GtkWidget *widget)
   g_print ("vertex shader info: %s\n", msg);
 
   /* Compile the fragment shader */
-  p = fragment_shader;
+  if (gdk_gl_context_get_use_es (context))
+    p = fragment_shader_gles;
+  else
+    p = fragment_shader_gl;
   f = glCreateShader(GL_FRAGMENT_SHADER);
   glShaderSource(f, 1, &p, NULL);
   glCompileShader(f);
