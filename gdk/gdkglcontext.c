@@ -673,13 +673,14 @@ gdk_gl_context_set_is_legacy (GdkGLContext *context,
  * @context: a #GdkGLContext:
  * @use_es: whether the context should use OpenGL ES instead of OpenGL
  *
- * Requests that GDK create a OpenGL ES context instead of an OpenGL one.
+ * Requests that GDK create a OpenGL ES context instead of an OpenGL one,
+ * if the platform and windowing system allows it.
  *
  * The @context must not have been realized.
  *
- * You should check the return value of gdk_gl_context_get_use_es() to
- * decide whether to use the OpenGL or OpenGL ES API, extensions, or
- * shaders.
+ * You should check the return value of gdk_gl_context_get_use_es() after
+ * calling gdk_gl_context_realize() to decide whether to use the OpenGL or
+ * OpenGL ES API, extensions, or shaders.
  *
  * Since: 3.22
  */
