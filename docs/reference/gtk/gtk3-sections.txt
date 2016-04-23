@@ -8475,6 +8475,8 @@ gtk_gl_area_set_auto_render
 gtk_gl_area_get_auto_render
 gtk_gl_area_get_required_version
 gtk_gl_area_set_required_version
+gtk_gl_area_set_use_es
+gtk_gl_area_get_use_es
 <SUBSECTION Standard>
 GTK_TYPE_GL_AREA
 GTK_GL_AREA
