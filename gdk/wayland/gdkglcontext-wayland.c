@@ -134,6 +134,8 @@ gdk_wayland_gl_context_realize (GdkGLContext *context,
 
   if (!use_es)
     {
+      eglBindAPI (EGL_OPENGL_API);
+
       /* We want a core profile, unless in legacy mode */
       context_attribs[i++] = EGL_CONTEXT_OPENGL_PROFILE_MASK_KHR;
       context_attribs[i++] = legacy_bit
@@ -148,6 +150,8 @@ gdk_wayland_gl_context_realize (GdkGLContext *context,
     }
   else
     {
+      eglBindAPI (EGL_OPENGL_ES_API);
+
       context_attribs[i++] = EGL_CONTEXT_CLIENT_VERSION;
       if (major == 3)
         context_attribs[i++] = 3;
@@ -183,6 +187,8 @@ gdk_wayland_gl_context_realize (GdkGLContext *context,
       context_attribs[1] = EGL_CONTEXT_OPENGL_COMPATIBILITY_PROFILE_BIT_KHR;
       context_attribs[3] = 3;
       context_attribs[5] = 0;
+
+      eglBindAPI (EGL_OPENGL_API);
 
       legacy_bit = TRUE;
       use_es = FALSE;
