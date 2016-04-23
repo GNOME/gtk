@@ -199,8 +199,10 @@
     <file>popover.ui</file>
   </gresource>
   <gresource prefix="/glarea">
-    <file>glarea-fragment.glsl</file>
-    <file>glarea-vertex.glsl</file>
+    <file>glarea-gl.fs.glsl</file>
+    <file>glarea-gl.vs.glsl</file>
+    <file>glarea-gles.fs.glsl</file>
+    <file>glarea-gles.vs.glsl</file>
   </gresource>
   <gresource prefix="/font_features">
     <file>font-features.ui</file>
