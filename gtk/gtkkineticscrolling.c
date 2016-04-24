@@ -152,6 +152,8 @@ gtk_kinetic_scrolling_tick (GtkKineticScrolling *data,
     {
     case GTK_KINETIC_SCROLLING_PHASE_DECELERATING:
       {
+        gdouble last_position = data->position;
+        gdouble last_time = data->t;
         gdouble exp_part;
 
         data->t += time_delta;
@@ -168,7 +170,8 @@ gtk_kinetic_scrolling_tick (GtkKineticScrolling *data,
           {
             gtk_kinetic_scrolling_init_overshoot(data, data->upper, data->position, data->velocity);
           }
-        else if (fabs(data->velocity) < 1)
+        else if (fabs(data->velocity) < 1 ||
+                 (last_time != 0.0 && fabs(data->position - last_position) < 1))
           {
             data->phase = GTK_KINETIC_SCROLLING_PHASE_FINISHED;
             data->position = round(data->position);
