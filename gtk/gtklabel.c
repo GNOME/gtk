@@ -3288,14 +3288,9 @@ gtk_label_finalize (GObject *object)
   g_free (priv->label);
   g_free (priv->text);
 
-  if (priv->layout)
-    g_object_unref (priv->layout);
-
-  if (priv->attrs)
-    pango_attr_list_unref (priv->attrs);
-
-  if (priv->markup_attrs)
-    pango_attr_list_unref (priv->markup_attrs);
+  g_clear_object (&priv->layout);
+  g_clear_pointer (&priv->attrs, pango_attr_list_unref);
+  g_clear_pointer (&priv->markup_attrs, pango_attr_list_unref);
 
   if (priv->select_info)
     {
@@ -3314,13 +3309,7 @@ gtk_label_finalize (GObject *object)
 static void
 gtk_label_clear_layout (GtkLabel *label)
 {
-  GtkLabelPrivate *priv = label->priv;
-
-  if (priv->layout)
-    {
-      g_object_unref (priv->layout);
-      priv->layout = NULL;
-    }
+  g_clear_object (&label->priv->layout);
 }
 
 /**
