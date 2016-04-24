@@ -490,12 +490,9 @@ add_device (GtkInspectorGeneral *gen,
     }
 }
 
-static void
-add_seat (GtkInspectorGeneral *gen,
-          GdkSeat             *seat,
-          int                  num)
+static char *
+get_seat_capabilities (GdkSeat *seat)
 {
-  GdkSeatCapabilities capabilities;
   struct {
     GdkSeatCapabilities cap;
     const char *name;
@@ -507,18 +504,8 @@ add_seat (GtkInspectorGeneral *gen,
     { 0, NULL }
   };
   GString *str;
-  char *text;
+  GdkSeatCapabilities capabilities;
   int i;
-  GList *list, *l;
-
-  if (!g_object_get_data (G_OBJECT (seat), "inspector-connected"))
-    {
-      g_object_set_data (G_OBJECT (seat), "inspector-connected", GINT_TO_POINTER (1));
-      g_signal_connect_swapped (seat, "device-added", G_CALLBACK (populate_seats), gen);
-      g_signal_connect_swapped (seat, "device-removed", G_CALLBACK (populate_seats), gen);
-    }
-
-  text = g_strdup_printf ("Seat %d", num);
 
   str = g_string_new ("");
   capabilities = gdk_seat_get_capabilities (seat);
@@ -532,9 +519,31 @@ add_seat (GtkInspectorGeneral *gen,
         }
     }
 
-  add_label_row (GTK_LIST_BOX (gen->priv->device_box), text, str->str, 0);
+  return g_string_free (str, FALSE);
+}
+
+static void
+add_seat (GtkInspectorGeneral *gen,
+          GdkSeat             *seat,
+          int                  num)
+{
+  char *text;
+  char *caps;
+  GList *list, *l;
+
+  if (!g_object_get_data (G_OBJECT (seat), "inspector-connected"))
+    {
+      g_object_set_data (G_OBJECT (seat), "inspector-connected", GINT_TO_POINTER (1));
+      g_signal_connect_swapped (seat, "device-added", G_CALLBACK (populate_seats), gen);
+      g_signal_connect_swapped (seat, "device-removed", G_CALLBACK (populate_seats), gen);
+    }
+
+  text = g_strdup_printf ("Seat %d", num);
+  caps = get_seat_capabilities (seat);
+
+  add_label_row (GTK_LIST_BOX (gen->priv->device_box), text, caps, 0);
   g_free (text);
-  g_string_free (str, FALSE);
+  g_free (caps);
 
   list = gdk_seat_get_slaves (seat, GDK_SEAT_CAPABILITY_ALL);
 
