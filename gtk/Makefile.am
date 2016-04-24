@@ -737,7 +737,6 @@ gtk_base_c_sources = 		\
 	gtkcsswidgetnode.c	\
         gtkcsswin32sizevalue.c  \
 	gtkdialog.c		\
-	gtkdragdest.c		\
 	gtkdragsource.c		\
 	gtkdrawingarea.c	\
 	gtkeditable.c		\
@@ -959,7 +958,8 @@ gtk_base_c_sources += 		\
 else
 gtk_base_c_sources += 		\
 	gtkclipboard.c 		\
-	gtkdnd.c
+	gtkdnd.c		\
+	gtkdragdest.c
 endif
 
 nodist_gtk_c_sources =

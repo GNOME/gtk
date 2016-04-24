@@ -46,7 +46,6 @@
 #include "gtkiconhelperprivate.h"
 
 typedef struct _GtkDragSourceInfo GtkDragSourceInfo;
-typedef struct _GtkDragDestSite GtkDragDestSite;
 typedef struct _GtkDragDestInfo GtkDragDestInfo;
 typedef struct _GtkDragFindData GtkDragFindData;
 
@@ -80,15 +79,6 @@ struct _GtkDragSourceInfo
   cairo_surface_t   *icon_surface;
   gboolean           success;
   gboolean           delete;
-};
-
-struct _GtkDragDestSite 
-{
-  GtkDestDefaults    flags;
-  GtkTargetList     *target_list;
-  GdkDragAction      actions;
-  guint              have_drag : 1;
-  guint              track_motion : 1;
 };
 
 struct _GtkDragDestInfo 
