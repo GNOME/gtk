@@ -7048,19 +7048,13 @@ _gtk_label_get_link_uri (GtkLabel *label,
                          gint      idx)
 {
   GtkLabelPrivate *priv = label->priv;
-  gint i;
-  GList *l;
-  GtkLabelLink *link;
 
   if (priv->select_info)
-    for (l = priv->select_info->links, i = 0; l; l = l->next, i++)
-      {
-        if (i == idx)
-          {
-            link = l->data;
-            return link->uri;
-          }
-      }
+    {
+      GtkLabelLink *link = g_list_nth_data (priv->select_info->links, idx);
+      if (link)
+        return link->uri;
+    }
 
   return NULL;
 }
@@ -7113,24 +7107,18 @@ _gtk_label_get_link_at (GtkLabel *label,
 }
 
 void
-_gtk_label_activate_link (GtkLabel *label, 
+_gtk_label_activate_link (GtkLabel *label,
                           gint      idx)
 {
   GtkLabelPrivate *priv = label->priv;
-  gint i;
-  GList *l;
-  GtkLabelLink *link;
 
   if (priv->select_info)
-    for (l = priv->select_info->links, i = 0; l; l = l->next, i++)
-      {
-        if (i == idx)
-          {
-            link = l->data;
-            emit_activate_link (label, link);
-            return;
-          }
-      }
+    {
+      GtkLabelLink *link = g_list_nth_data (priv->select_info->links, idx);
+
+      if (link)
+        emit_activate_link (label, link);
+    }
 }
 
 gboolean
@@ -7138,19 +7126,12 @@ _gtk_label_get_link_visited (GtkLabel *label,
                              gint      idx)
 {
   GtkLabelPrivate *priv = label->priv;
-  gint i;
-  GList *l;
-  GtkLabelLink *link;
 
   if (priv->select_info)
-    for (l = priv->select_info->links, i = 0; l; l = l->next, i++)
-      {
-        if (i == idx)
-          {
-            link = l->data;
-            return link->visited;
-          }
-      }
+    {
+      GtkLabelLink *link = g_list_nth_data (priv->select_info->links, idx);
+      return link ? link->visited : FALSE;
+    }
 
   return FALSE;
 }
