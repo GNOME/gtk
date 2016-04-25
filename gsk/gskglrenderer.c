@@ -160,7 +160,11 @@ gsk_gl_renderer_allocate_buffers (GskGLRenderer *self,
       glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
       glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
       glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-      glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
+
+      if (gdk_gl_context_get_use_es (self->context))
+        glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+      else
+        glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
     }
 
   if (self->render_buffer != 0)
@@ -302,8 +306,16 @@ gsk_gl_renderer_create_program (GskGLRenderer *self)
   GBytes *source;
   int status;
 
-  vs_path = "/org/gtk/libgsk/glsl/gl3-base.vs.glsl";
-  fs_path = "/org/gtk/libgsk/glsl/gl3-base.fs.glsl";
+  if (gdk_gl_context_get_use_es (self->context))
+    {
+      vs_path = "/org/gtk/libgsk/glsl/gles-base.vs.glsl";
+      fs_path = "/org/gtk/libgsk/glsl/gles-base.fs.glsl";
+    }
+  else
+    {
+      vs_path = "/org/gtk/libgsk/glsl/gl3-base.vs.glsl";
+      fs_path = "/org/gtk/libgsk/glsl/gl3-base.fs.glsl";
+    }
 
   GSK_NOTE (OPENGL, g_print ("Compiling vertex shader\n"));
   source = g_resources_lookup_data (vs_path, 0, NULL);
