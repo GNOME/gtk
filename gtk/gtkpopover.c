@@ -439,17 +439,23 @@ window_set_focus (GtkWindow  *window,
 {
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
 
-  if (priv->modal && widget &&
-      gtk_widget_is_drawable (GTK_WIDGET (popover)) &&
-      !gtk_widget_is_ancestor (widget, GTK_WIDGET (popover)))
+  if (!priv->modal || !widget || !gtk_widget_is_drawable (GTK_WIDGET (popover)))
+    return;
+
+  widget = gtk_widget_get_ancestor (widget, GTK_TYPE_POPOVER);
+  while (widget != NULL)
     {
-      GtkWidget *grab_widget;
+      if (widget == GTK_WIDGET (popover))
+        return;
 
-      grab_widget = gtk_grab_get_current ();
-
-      if (!grab_widget || !GTK_IS_POPOVER (grab_widget))
-        gtk_widget_hide (GTK_WIDGET (popover));
+      widget = gtk_popover_get_relative_to (GTK_POPOVER (widget));
+      if (widget == NULL)
+        break;
+      widget = gtk_widget_get_ancestor (widget, GTK_TYPE_POPOVER);
     }
+
+  popover_unset_prev_focus (popover);
+  gtk_widget_hide (GTK_WIDGET (popover));
 }
 
 static void
