@@ -56,6 +56,7 @@ typedef struct {
   guint position_location;
   guint uv_location;
   guint map_location;
+  guint flip_location;
 } GdkGLContextProgram;
 
 typedef struct {

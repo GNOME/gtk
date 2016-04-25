@@ -138,6 +138,7 @@ make_program (GdkGLContextProgram *program,
   program->position_location = glGetAttribLocation (program->program, "position");
   program->uv_location = glGetAttribLocation (program->program, "uv");
   program->map_location = glGetUniformLocation (program->program, "map");
+  program->flip_location = glGetUniformLocation (program->program, "flipColors");
 }
 
 static void
@@ -212,7 +213,8 @@ void
 gdk_gl_texture_quads (GdkGLContext *paint_context,
                       guint texture_target,
                       int n_quads,
-                      GdkTexturedQuad *quads)
+                      GdkTexturedQuad *quads,
+                      gboolean flip_colors)
 {
   GdkGLContextPaintData *paint_data  = gdk_gl_context_get_paint_data (paint_context);
   GdkGLContextProgram *program;
@@ -240,8 +242,13 @@ gdk_gl_texture_quads (GdkGLContext *paint_context,
 
   program = paint_data->current_program;
 
+  /* Use texture unit 0 */
   glActiveTexture (GL_TEXTURE0);
-  glUniform1i(program->map_location, 0); /* Use texture unit 0 */
+  glUniform1i(program->map_location, 0);
+
+  /* Flip 'R' and 'B' colors on GLES, if necessary */
+  if (gdk_gl_context_get_use_es (paint_context))
+    glUniform1i (program->flip_location, flip_colors ? 1 : 0);
 
   glEnableVertexAttribArray (program->position_location);
   glEnableVertexAttribArray (program->uv_location);
@@ -619,7 +626,7 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
         }
 
       if (n_quads > 0)
-        gdk_gl_texture_quads (paint_context, GL_TEXTURE_2D, n_quads, quads);
+        gdk_gl_texture_quads (paint_context, GL_TEXTURE_2D, n_quads, quads, FALSE);
 
       g_free (quads);
 
@@ -798,7 +805,7 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
 
         /* We don't want to combine the quads here, because they have different textures.
          * And we don't want to upload the unused source areas to make it one texture. */
-        gdk_gl_texture_quads (paint_context, target, 1, &quad);
+        gdk_gl_texture_quads (paint_context, target, 1, &quad, TRUE);
       }
     }
 

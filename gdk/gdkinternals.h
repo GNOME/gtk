@@ -443,7 +443,8 @@ typedef struct {
 void           gdk_gl_texture_quads               (GdkGLContext *paint_context,
                                                    guint texture_target,
                                                    int n_quads,
-                                                   GdkTexturedQuad *quads);
+                                                   GdkTexturedQuad *quads,
+                                                   gboolean flip_colors);
 
 void            gdk_cairo_surface_mark_as_direct (cairo_surface_t *surface,
                                                   GdkWindow       *window);

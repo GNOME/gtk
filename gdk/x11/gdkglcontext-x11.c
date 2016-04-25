@@ -455,15 +455,15 @@ gdk_x11_gl_context_texture_from_surface (GdkGLContext *paint_context,
   if (glx_pixmap == NULL)
     return FALSE;
 
+  GDK_NOTE (OPENGL, g_message ("Using GLX_EXT_texture_from_pixmap to draw surface"));
+
   window = gdk_gl_context_get_window (paint_context)->impl_window;
   window_scale = gdk_window_get_scale_factor (window);
   gdk_window_get_unscaled_size (window, NULL, &unscaled_window_height);
 
   sx = sy = 1;
   cairo_surface_get_device_scale (window->current_paint.surface, &sx, &sy);
-
-  cairo_surface_get_device_offset (surface,
-				   &device_x_offset, &device_y_offset);
+  cairo_surface_get_device_offset (surface, &device_x_offset, &device_y_offset);
 
   /* Ensure all the X stuff are synced before we read it back via texture-from-pixmap */
   glXWaitX();
@@ -526,7 +526,7 @@ gdk_x11_gl_context_texture_from_surface (GdkGLContext *paint_context,
 
 #undef FLIP_Y
 
-  gdk_gl_texture_quads (paint_context, target, n_rects, quads);
+  gdk_gl_texture_quads (paint_context, target, n_rects, quads, FALSE);
   g_free (quads);
 
   glDisable (GL_SCISSOR_TEST);
