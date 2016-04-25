@@ -814,3 +814,51 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
   glDisable (GL_SCISSOR_TEST);
   glDeleteTextures (1, &texture_id);
 }
+
+/**
+ * gdk_cairo_surface_upload_to_gl:
+ * @surface: a Cairo surface
+ * @target: a GL texture target
+ * @width: the width of the texture @target
+ * @height: the height of the texture @target
+ * @context: (nullable): a #GdkGLContext, or %NULL to use the currently
+ *   bound context
+ *
+ * Uploads the contents of a Cairo @surface to a GL texture @target.
+ *
+ * Since: 3.22
+ */
+void
+gdk_cairo_surface_upload_to_gl (cairo_surface_t *surface,
+                                int              target,
+                                int              width,
+                                int              height,
+                                GdkGLContext    *context)
+{
+  cairo_rectangle_int_t rect;
+  cairo_surface_t *tmp;
+  double sx, sy;
+  double device_x_offset, device_y_offset;
+
+  g_return_if_fail (surface != NULL);
+  g_return_if_fail (context == NULL || GDK_IS_GL_CONTEXT (context));
+
+  if (context == NULL)
+    context = gdk_gl_context_get_current ();
+
+  cairo_surface_flush (surface);
+
+  sx = sy = 1;
+  cairo_surface_get_device_scale (surface, &sx, &sy);
+  cairo_surface_get_device_offset (surface, &device_x_offset, &device_y_offset);
+
+  rect.x = (int) device_x_offset;
+  rect.y = (int) device_y_offset;
+  rect.width = width * sx;
+  rect.height = height * sx;
+  tmp = cairo_surface_map_to_image (surface, &rect);
+
+  gdk_gl_context_upload_texture (context, tmp, rect.width, rect.height, target);
+
+  cairo_surface_unmap_image (surface, tmp);
+}
