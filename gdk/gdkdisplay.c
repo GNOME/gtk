@@ -33,6 +33,7 @@
 #include "gdkinternals.h"
 #include "gdkmarshalers.h"
 #include "gdkscreen.h"
+#include "gdkmonitorprivate.h"
 
 #include <math.h>
 #include <glib.h>
@@ -2520,7 +2521,36 @@ gdk_display_get_n_monitors (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), 0);
 
+  if (GDK_DISPLAY_GET_CLASS (display)->get_n_monitors == NULL)
+    return 1;
+
   return GDK_DISPLAY_GET_CLASS (display)->get_n_monitors (display);
+}
+
+static GdkMonitor *
+get_fallback_monitor (GdkDisplay *display)
+{
+  static GdkMonitor *monitor = NULL;
+  GdkScreen *screen;
+
+  if (monitor == NULL)
+    {
+      g_warning ("%s does not implement the monitor vfuncs", G_OBJECT_TYPE_NAME (display));
+      monitor = gdk_monitor_new (display);
+      gdk_monitor_set_manufacturer (monitor, "fallback");
+      gdk_monitor_set_position (monitor, 0, 0);
+      gdk_monitor_set_scale_factor (monitor, 1);
+    }
+
+  screen = gdk_display_get_default_screen (display);
+  gdk_monitor_set_size (monitor,
+                        gdk_screen_get_width (screen),
+                        gdk_screen_get_height (screen));
+  gdk_monitor_set_physical_size (monitor,
+                                 gdk_screen_get_width_mm (screen),
+                                 gdk_screen_get_height_mm (screen));
+
+  return monitor;
 }
 
 /**
@@ -2539,6 +2569,9 @@ gdk_display_get_monitor (GdkDisplay *display,
                          gint        monitor_num)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+
+  if (GDK_DISPLAY_GET_CLASS (display)->get_monitor == NULL)
+    return get_fallback_monitor (display);
 
   return GDK_DISPLAY_GET_CLASS (display)->get_monitor (display, monitor_num);
 }
