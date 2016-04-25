@@ -83,6 +83,13 @@ void       gdk_cairo_draw_from_gl (cairo_t              *cr,
 GDK_AVAILABLE_IN_3_22
 GdkDrawingContext *     gdk_cairo_get_drawing_context   (cairo_t *cr);
 
+GDK_AVAILABLE_IN_3_22
+void      gdk_cairo_surface_upload_to_gl (cairo_surface_t *surface,
+                                          int              target,
+                                          int              width,
+                                          int              height,
+                                          GdkGLContext    *context);
+
 G_END_DECLS
 
 #endif /* __GDK_CAIRO_H__ */
