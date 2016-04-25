@@ -584,22 +584,13 @@ surface_to_texture (cairo_surface_t *surface,
                     int              mag_filter,
                     guint           *texture_out)
 {
-  cairo_surface_t *tmp;
   guint texture_id;
-
-  cairo_surface_flush (surface);
-
-  tmp = cairo_surface_map_to_image (surface, &(cairo_rectangle_int_t) {
-                                               0, 0,
-                                               clip->size.width,
-                                               clip->size.height
-                                             });
 
   glGenTextures (1, &texture_id);
   glBindTexture (GL_TEXTURE_2D, texture_id);
 
-  GSK_NOTE (OPENGL, g_print ("Uploading px@[%p] { w:%g, h:%g } to texid:%d\n",
-                             cairo_image_surface_get_data (tmp),
+  GSK_NOTE (OPENGL, g_print ("Uploading surface[%p] { w:%g, h:%g } to texid:%d\n",
+                             surface,
                              clip->size.width,
                              clip->size.height,
                              texture_id));
@@ -609,21 +600,12 @@ surface_to_texture (cairo_surface_t *surface,
   glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, min_filter);
   glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mag_filter);
 
-  glPixelStorei (GL_UNPACK_ALIGNMENT, 4);
-  glPixelStorei (GL_UNPACK_ROW_LENGTH, cairo_image_surface_get_stride (tmp) / 4);
-  glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA,
-                clip->size.width,
-                clip->size.height,
-                0, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV,
-                cairo_image_surface_get_data (tmp));
-  glPixelStorei (GL_UNPACK_ROW_LENGTH, 0);
+  gdk_cairo_surface_upload_to_gl (surface, GL_TEXTURE_2D, clip->size.width, clip->size.height, NULL);
 
   if (min_filter != GL_NEAREST)
     glGenerateMipmap (GL_TEXTURE_2D);
 
   GSK_NOTE (OPENGL, g_print ("New texture id %d from surface %p\n", texture_id, surface));
-
-  cairo_surface_unmap_image (surface, tmp);
 
   *texture_out = texture_id;
 }
