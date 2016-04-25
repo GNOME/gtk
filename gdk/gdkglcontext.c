@@ -248,14 +248,13 @@ gdk_gl_context_upload_texture (GdkGLContext    *context,
   /* GL_UNPACK_ROW_LENGTH is available on desktop GL, OpenGL ES >= 3.0, or if
    * the GL_EXT_unpack_subimage extension for OpenGL ES 2.0 is available
    */
-  if (!gdk_gl_context_get_use_es (context) ||
-      (gdk_gl_context_get_use_es (context) &&
-       (priv->gl_version >= 30 || priv->has_unpack_subimage)))
+  if (!priv->use_es ||
+      (priv->use_es && (priv->gl_version >= 30 || priv->has_unpack_subimage)))
     {
       glPixelStorei (GL_UNPACK_ALIGNMENT, 4);
       glPixelStorei (GL_UNPACK_ROW_LENGTH, cairo_image_surface_get_stride (image_surface) / 4);
 
-      if (gdk_gl_context_get_use_es (context))
+      if (priv->use_es)
         glTexImage2D (texture_target, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE,
                       cairo_image_surface_get_data (image_surface));
       else
@@ -265,7 +264,26 @@ gdk_gl_context_upload_texture (GdkGLContext    *context,
       glPixelStorei (GL_UNPACK_ROW_LENGTH, 0);
     }
   else
-    g_critical ("Unable to upload the contents of the image surface");
+    {
+      GLvoid *data = cairo_image_surface_get_data (image_surface);
+      int stride = cairo_image_surface_get_stride (image_surface);
+      int i;
+
+      if (priv->use_es)
+        {
+          glTexImage2D (texture_target, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+
+          for (i = 0; i < height; i++)
+            glTexSubImage2D (texture_target, 0, 0, i, width, 1, GL_RGBA, GL_UNSIGNED_BYTE, data + (i * stride));
+        }
+      else
+        {
+          glTexImage2D (texture_target, 0, GL_RGBA, width, height, 0, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, NULL);
+
+          for (i = 0; i < height; i++)
+            glTexSubImage2D (texture_target, 0, 0, i, width, 1, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, data + (i * stride));
+        }
+    }
 }
 
 static void
