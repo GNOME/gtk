@@ -47,6 +47,8 @@ typedef struct _GtkBuiltinIconPrivate GtkBuiltinIconPrivate;
 struct _GtkBuiltinIconPrivate {
   GtkCssImageBuiltinType        image_type;
   int                           default_size;
+  int                           strikethrough;
+  gboolean                      strikethrough_valid;
   char *                        default_size_property;
 };
 
@@ -63,10 +65,6 @@ gtk_builtin_icon_get_preferred_size (GtkCssGadget   *gadget,
                                      gint           *natural_baseline)
 {
   GtkBuiltinIconPrivate *priv = gtk_builtin_icon_get_instance_private (GTK_BUILTIN_ICON (gadget));
-  GtkWidget *widget;
-  PangoContext *pango_context;
-  PangoFontMetrics *metrics;
-  int strikethrough;
   double min_size;
   guint property;
 
@@ -98,21 +96,33 @@ gtk_builtin_icon_get_preferred_size (GtkCssGadget   *gadget,
       *minimum = *natural = priv->default_size;
     }
 
-  widget = gtk_css_gadget_get_owner (gadget);
-
-  pango_context = gtk_widget_get_pango_context (widget);
-  metrics = pango_context_get_metrics (pango_context,
-                                       pango_context_get_font_description (pango_context),
-                                       pango_context_get_language (pango_context));
-
-  strikethrough = pango_font_metrics_get_strikethrough_position (metrics);
-
   if (minimum_baseline)
-    *minimum_baseline = *minimum * 0.5 + PANGO_PIXELS (strikethrough);
+    {
+      if (!priv->strikethrough_valid)
+        {
+          GtkWidget *widget;
+          PangoContext *pango_context;
+          const PangoFontDescription *font_desc;
+          PangoFontMetrics *metrics;
+
+          widget = gtk_css_gadget_get_owner (gadget);
+          pango_context = gtk_widget_get_pango_context (widget);
+          font_desc = pango_context_get_font_description (pango_context);
+
+          metrics = pango_context_get_metrics (pango_context,
+                                               font_desc,
+                                               pango_context_get_language (pango_context));
+          priv->strikethrough = pango_font_metrics_get_strikethrough_position (metrics);
+          priv->strikethrough_valid = TRUE;
+
+          pango_font_metrics_unref (metrics);
+        }
+
+      *minimum_baseline = *minimum * 0.5 + PANGO_PIXELS (priv->strikethrough);
+    }
+
   if (natural_baseline)
     *natural_baseline = *minimum_baseline;
-
-  pango_font_metrics_unref (metrics);
 }
 
 static void
@@ -152,6 +162,18 @@ gtk_builtin_icon_draw (GtkCssGadget *gadget,
 }
 
 static void
+gtk_builtin_icon_style_changed (GtkCssGadget      *gadget,
+                                GtkCssStyleChange *change)
+{
+  GtkBuiltinIconPrivate *priv = gtk_builtin_icon_get_instance_private (GTK_BUILTIN_ICON (gadget));
+
+  if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_FONT))
+    priv->strikethrough_valid = FALSE;
+
+  GTK_CSS_GADGET_CLASS (gtk_builtin_icon_parent_class)->style_changed (gadget, change);
+}
+
+static void
 gtk_builtin_icon_finalize (GObject *object)
 {
   GtkBuiltinIconPrivate *priv = gtk_builtin_icon_get_instance_private (GTK_BUILTIN_ICON (object));
@@ -172,6 +194,7 @@ gtk_builtin_icon_class_init (GtkBuiltinIconClass *klass)
   gadget_class->get_preferred_size = gtk_builtin_icon_get_preferred_size;
   gadget_class->allocate = gtk_builtin_icon_allocate;
   gadget_class->draw = gtk_builtin_icon_draw;
+  gadget_class->style_changed = gtk_builtin_icon_style_changed;
 }
 
 static void
