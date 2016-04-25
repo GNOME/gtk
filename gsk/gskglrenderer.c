@@ -298,18 +298,22 @@ static void
 gsk_gl_renderer_create_program (GskGLRenderer *self)
 {
   guint vertex_shader = 0, fragment_shader = 0;
+  const char *fs_path, *vs_path;
   GBytes *source;
   int status;
 
+  vs_path = "/org/gtk/libgsk/glsl/gl3-base.vs.glsl";
+  fs_path = "/org/gtk/libgsk/glsl/gl3-base.fs.glsl";
+
   GSK_NOTE (OPENGL, g_print ("Compiling vertex shader\n"));
-  source = g_resources_lookup_data ("/org/gtk/libgsk/glsl/base-renderer-vertex.glsl", 0, NULL);
+  source = g_resources_lookup_data (vs_path, 0, NULL);
   vertex_shader = create_shader (GL_VERTEX_SHADER, g_bytes_get_data (source, NULL));
   g_bytes_unref (source);
   if (vertex_shader == 0)
     goto out;
 
   GSK_NOTE (OPENGL, g_print ("Compiling fragment shader\n"));
-  source = g_resources_lookup_data ("/org/gtk/libgsk/glsl/base-renderer-fragment.glsl", 0, NULL);
+  source = g_resources_lookup_data (fs_path, 0, NULL);
   fragment_shader = create_shader (GL_FRAGMENT_SHADER, g_bytes_get_data (source, NULL));
   g_bytes_unref (source);
   if (fragment_shader == 0)
