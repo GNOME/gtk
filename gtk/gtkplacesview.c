@@ -69,6 +69,7 @@ struct _GtkPlacesViewPrivate
   GtkWidget                     *recent_servers_popover;
   GtkWidget                     *recent_servers_stack;
   GtkWidget                     *stack;
+  GtkWidget                     *server_adresses_popover;
   GtkWidget                     *network_placeholder;
   GtkWidget                     *network_placeholder_label;
 
@@ -1812,15 +1813,6 @@ on_address_entry_text_changed (GtkPlacesView *view)
   address = g_strdup (gtk_entry_get_text (GTK_ENTRY (priv->address_entry)));
   scheme = g_uri_parse_scheme (address);
 
-  if (strlen (address) > 0)
-    gtk_entry_set_icon_from_icon_name (GTK_ENTRY (priv->address_entry),
-                                       GTK_ENTRY_ICON_SECONDARY,
-                                       "edit-clear-symbolic");
-  else
-    gtk_entry_set_icon_from_icon_name (GTK_ENTRY (priv->address_entry),
-                                       GTK_ENTRY_ICON_SECONDARY,
-                                       NULL);
-
   if (!supported_protocols)
     goto out;
 
@@ -1842,7 +1834,18 @@ on_address_entry_clear_pressed (GtkPlacesView        *view,
                                 GdkEvent             *event,
                                 GtkEntry             *entry)
 {
-  gtk_entry_set_text (entry, "");
+  GtkPlacesViewPrivate *priv;
+  GdkRectangle rect;
+
+  priv = gtk_places_view_get_instance_private (view);
+
+  /* Setup the auxiliary popover's rectangle */
+  gtk_entry_get_icon_area (GTK_ENTRY (priv->address_entry),
+                           GTK_ENTRY_ICON_SECONDARY,
+                           &rect);
+
+  gtk_popover_set_pointing_to (GTK_POPOVER (priv->server_adresses_popover), &rect);
+  gtk_widget_set_visible (priv->server_adresses_popover, TRUE);
 }
 
 static void
@@ -2217,6 +2220,7 @@ gtk_places_view_class_init (GtkPlacesViewClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkPlacesView, recent_servers_popover);
   gtk_widget_class_bind_template_child_private (widget_class, GtkPlacesView, recent_servers_stack);
   gtk_widget_class_bind_template_child_private (widget_class, GtkPlacesView, stack);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkPlacesView, server_adresses_popover);
 
   gtk_widget_class_bind_template_callback (widget_class, on_address_entry_text_changed);
   gtk_widget_class_bind_template_callback (widget_class, on_address_entry_clear_pressed);
