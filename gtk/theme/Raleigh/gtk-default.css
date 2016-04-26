@@ -788,11 +788,12 @@ GtkCalendar.button:hover {
 }
 
 .titlebar .title {
-  font: Bold 10;
+  font-weight: bold;
+  font-size: 10pt;
 }
 
 .titlebar .subtitle {
-  font: 9;
+  font-size: 9pt;
 }
 
 .titlebar:backdrop {
