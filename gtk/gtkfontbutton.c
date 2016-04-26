@@ -490,7 +490,7 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
                                    g_param_spec_string ("font-name",
                                                         P_("Font name"),
                                                         P_("The name of the selected font"),
-                                                        P_("Sans 12"),
+                                                        _("Sans 12"),
                                                         GTK_PARAM_READWRITE));
 
   /**
