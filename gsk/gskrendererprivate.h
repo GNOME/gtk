@@ -46,11 +46,16 @@ struct _GskRendererClass
                    const graphene_matrix_t *projection);
   void (* validate_tree) (GskRenderer *renderer,
                           GskRenderNode *root);
+  void (* clear_tree) (GskRenderer *renderer,
+                       GskRenderNode *old_root);
   void (* clear) (GskRenderer *renderer);
   void (* render) (GskRenderer *renderer);
 };
 
 gboolean gsk_renderer_is_realized (GskRenderer *renderer);
+
+void gsk_renderer_clear_tree (GskRenderer *renderer,
+                              GskRenderNode *old_root);
 
 void gsk_renderer_maybe_resize_viewport (GskRenderer *renderer);
 void gsk_renderer_maybe_update (GskRenderer *renderer);
