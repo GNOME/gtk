@@ -215,7 +215,7 @@ struct _GtkStyleContextClass
 /**
  * GTK_STYLE_CLASS_LIST_ROW:
  *
- * A CSS class to match list rowss.
+ * A CSS class to match list rows.
  *
  * Refer to individual widget documentation for used style classes.
  */
