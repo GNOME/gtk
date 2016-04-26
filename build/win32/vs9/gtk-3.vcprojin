@@ -180,14 +180,14 @@
 				<FileConfiguration Name="Debug|x64">
 					<Tool Name="VCCustomBuildTool"
 						Description="Generating GTK+ DBus Sources..."
-						CommandLine="$(GenerateGtkDbusBuiltSources)"
+						CommandLine="$(GenerateGtkDbusBuiltSourcesX64)"
 						Outputs="..\..\..\gtk\gtkdbusgenerated.c;..\..\..\gtk\gtkdbusgenerated.h"
 					/>
 				</FileConfiguration>
 				<FileConfiguration Name="Release|x64">
 					<Tool Name="VCCustomBuildTool"
 						Description="Generating GTK+ DBus Sources..."
-						CommandLine="$(GenerateGtkDbusBuiltSources)"
+						CommandLine="$(GenerateGtkDbusBuiltSourcesX64)"
 						Outputs="..\..\..\gtk\gtkdbusgenerated.c;..\..\..\gtk\gtkdbusgenerated.h"
 					/>
 				</FileConfiguration>

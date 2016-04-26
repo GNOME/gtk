@@ -38,6 +38,8 @@ EXTRA_DIST +=	\
 	introspection-msvc.mak		\
 	gtk-introspection-msvc.mak	\
 	replace.py			\
+	pc_base.py			\
+	gtkpc.py			\
 	$(GENERATED_ITEMS)
 
 -include $(top_srcdir)/git.mk

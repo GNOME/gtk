@@ -4,6 +4,7 @@ EXTRA_DIST +=	\
 	README.txt	\
 	gtk+.sln	\
 	gtk3-prebuild.vcxproj	\
+	gtk3-prebuild.vcxproj.filters	\
 	gdk3-win32.vcxproj	\
 	gdk3-win32.vcxproj.filters	\
 	gdk-3.vcxproj	\
@@ -27,6 +28,7 @@ EXTRA_DIST +=	\
 	gailutil-3.vcxproj	\
 	gailutil-3.vcxproj.filters	\
 	gtk3-install.vcxproj	\
+	gtk3-install.vcxproj.filters	\
 	broadwayd.vcxproj	\
 	broadwayd.vcxproj.filters	\
 	gdk3-broadway.vcxproj	\

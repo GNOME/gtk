@@ -55,12 +55,16 @@ echo $(ConfigurationName) &gt; ..\..\..\MSVC_$(ConfigurationName)_Broadway&#x0D;
 		      "
 	/>
 	<UserMacro
+		Name="GDbusCodeGenCmd"
+		Value="$(GlibEtcInstallRoot)\bin\gdbus-codegen --interface-prefix org.Gtk. --c-namespace _Gtk --generate-c-code gtkdbusgenerated ./gtkdbusinterfaces.xml"
+	/>
+	<UserMacro
 		Name="GenerateGtkDbusBuiltSources"
-		Value="
-cd ..\..\..\gtk&#x0D;&#x0A;
-$(PythonPath)\python $(GlibEtcInstallRoot)\bin\gdbus-codegen --interface-prefix org.Gtk. --c-namespace _Gtk --generate-c-code gtkdbusgenerated ./gtkdbusinterfaces.xml&#x0D;&#x0A;
-cd $(SolutionDir)&#x0D;&#x0A;
-		      "
+		Value="cd ..\..\..\gtk &amp; $(PythonPath)\python $(GDbusCodeGenCmd) &amp; cd $(SolutionDir)"
+	/>
+	<UserMacro
+		Name="GenerateGtkDbusBuiltSourcesX64"
+		Value="cd ..\..\..\gtk &amp; $(PythonPathX64)\python $(GDbusCodeGenCmd) &amp; cd $(SolutionDir)"
 	/>
 	<UserMacro
 		Name="CopyGtkWin32RC"

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioPropertySheet
- ProjectType="Visual C++"
- Version="8.00"
- Name="gtkinstallprops"
- InheritedPropertySheets=".\gtk3-build-defines.vsprops"
- >
- <UserMacro
-  Name="GtkDoInstallBin"
-  Value="
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="gtkinstallprops"
+	InheritedPropertySheets=".\gtk3-build-defines.vsprops"
+	>
+	<UserMacro
+		Name="GtkDoInstallBin"
+		Value="
 mkdir $(CopyDir)\bin&#x0D;&#x0A;
-mkdir $(CopyDir)\lib&#x0D;&#x0A;
+mkdir $(CopyDir)\lib\pkgconfig&#x0D;&#x0A;
 
 copy $(ConfigurationName)\$(PlatformName)\bin\$(GtkDllPrefix)gdk-3$(GtkDllSuffix).dll $(CopyDir)\bin&#x0D;&#x0A;
 copy $(ConfigurationName)\$(PlatformName)\bin\$(GtkDllPrefix)gdk-3$(GtkDllSuffix).pdb $(CopyDir)\bin&#x0D;&#x0A;
@@ -90,11 +90,15 @@ copy .\Debug\$(PlatformName)\bin\gtk-query-settings.pdb $(CopyDir)\bin&#x0D;&#x0
 copy .\Debug\$(PlatformName)\bin\gtk-builder-tool.exe $(CopyDir)\bin&#x0D;&#x0A;
 copy .\Debug\$(PlatformName)\bin\gtk-builder-tool.pdb $(CopyDir)\bin&#x0D;&#x0A;
 :DONE_BIN&#x0D;&#x0A;
-                       "
- />
- <UserMacro
-  Name="GtkDoInstall"
-  Value="
+
+copy ..\gdk-3.0.pc $(CopyDir)\lib\pkgconfig&#x0D;&#x0A;
+copy &quot;..\gtk+-3.0.pc&quot; $(CopyDir)\lib\pkgconfig&#x0D;&#x0A;
+copy ..\gail-3.0.pc $(CopyDir)\lib\pkgconfig&#x0D;&#x0A;
+			  "
+	/>
+	<UserMacro
+		Name="GtkDoInstall"
+		Value="
 echo off&#x0D;&#x0A;
 mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gdk\win32&#x0D;&#x0A;
 mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gdk\deprecated&#x0D;&#x0A;
@@ -135,13 +139,21 @@ $(GlibEtcInstallRoot)\bin\glib-compile-schemas.exe $(CopyDir)\share\glib-2.0\sch
 echo &quot;Generating icon cache...&quot;&#x0D;&#x0A;
 $(CopyDir)\bin\gtk-update-icon-cache.exe --ignore-theme-index --force &quot;$(CopyDir)\share\icons\hicolor&quot;
 "
- />
- <UserMacro
-  Name="GtkDoInstallBroadwayHeaders"
-  Value="
+	/>
+	<UserMacro
+		Name="GtkDoInstallBroadwayHeaders"
+		Value="
 copy ..\..\..\gdk\broadway\gdkbroadway.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk&#x0D;&#x0A;
 mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gdk\broadway&#x0D;&#x0A;
 #include "gdk3-broadway.headers"
         "
- />
+	/>
+	<UserMacro
+		Name="GenerateGtkPC"
+		Value="$(PythonPath)\python ..\gtkpc.py --prefix=$(CopyDir) --version=$(GtkVersion) --host=i686-pc-vs$(VSVer)"
+	/>
+	<UserMacro
+		Name="GenerateGtkPCX64"
+		Value="$(PythonPathX64)\python ..\gtkpc.py --prefix=$(CopyDir) --version=$(GtkVersion) --host=x86_64-pc-vs$(VSVer)"
+	/>
 </VisualStudioPropertySheet>

@@ -28,7 +28,7 @@
 			DeleteExtensionsOnClean=""
 			>
 			<Tool
-				Name="VCPreBuildEventTool"
+				Name="VCPostBuildEventTool"
 				CommandLine="$(GtkDoInstallBin)$(GtkDoInstall)"
 			/>
 		</Configuration>
@@ -41,7 +41,7 @@
 			DeleteExtensionsOnClean=""
 			>
 			<Tool
-				Name="VCPreBuildEventTool"
+				Name="VCPostBuildEventTool"
 				CommandLine="$(GtkDoInstallBin)$(GtkDoInstall)"
 			/>
 		</Configuration>
@@ -55,7 +55,7 @@
 			DeleteExtensionsOnClean=""
 			>
 			<Tool
-				Name="VCPreBuildEventTool"
+				Name="VCPostBuildEventTool"
 				CommandLine="$(GtkDoInstallBin)$(GtkDoInstall)$(GtkDoInstallBroadwayHeaders)"
 			/>
 		</Configuration>
@@ -68,7 +68,7 @@
 			DeleteExtensionsOnClean=""
 			>
 			<Tool
-				Name="VCPreBuildEventTool"
+				Name="VCPostBuildEventTool"
 				CommandLine="$(GtkDoInstallBin)$(GtkDoInstall)$(GtkDoInstallBroadwayHeaders)"
 			/>
 		</Configuration>
@@ -83,7 +83,7 @@
 			WholeProgramOptimization="1"
 			>
 			<Tool
-				Name="VCPreBuildEventTool"
+				Name="VCPostBuildEventTool"
 				CommandLine="$(GtkDoInstallBin)$(GtkDoInstall)"
 			/>
 		</Configuration>
@@ -97,7 +97,7 @@
 			WholeProgramOptimization="1"
 			>
 			<Tool
-				Name="VCPreBuildEventTool"
+				Name="VCPostBuildEventTool"
 				CommandLine="$(GtkDoInstallBin)$(GtkDoInstall)"
 			/>
 		</Configuration>
@@ -112,7 +112,7 @@
 			WholeProgramOptimization="1"
 			>
 			<Tool
-				Name="VCPreBuildEventTool"
+				Name="VCPostBuildEventTool"
 				CommandLine="$(GtkDoInstallBin)$(GtkDoInstall)$(GtkDoInstallBroadwayHeaders)"
 			/>
 		</Configuration>
@@ -126,7 +126,7 @@
 			WholeProgramOptimization="1"
 			>
 			<Tool
-				Name="VCPreBuildEventTool"
+				Name="VCPostBuildEventTool"
 				CommandLine="$(GtkDoInstallBin)$(GtkDoInstall)$(GtkDoInstallBroadwayHeaders)"
 			/>
 		</Configuration>
@@ -134,6 +134,70 @@
 	<References>
 	</References>
 	<Files>
+		<Filter
+			Name="Resource Files"
+			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx"
+			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
+			>
+			<File RelativePath="..\..\..\gtkpc.py">
+				<FileConfiguration Name="Debug|Win32">
+					<Tool Name="VCCustomBuildTool"
+						Description="Generating .pc files..."
+						CommandLine="$(GenerateGtkPC)"
+						Outputs="..\gdk-3.0.pc;..\gtk+-3.0.pc;..\gail-3.0.pc"
+					/>
+				</FileConfiguration>
+				<FileConfiguration Name="Release|Win32">
+					<Tool Name="VCCustomBuildTool"
+						Description="Generating .pc files..."
+						CommandLine="$(GenerateGtkPC)"
+						Outputs="..\gdk-3.0.pc;..\gtk+-3.0.pc;..\gail-3.0.pc"
+					/>
+				</FileConfiguration>
+				<FileConfiguration Name="Debug|x64">
+					<Tool Name="VCCustomBuildTool"
+						Description="Generating .pc files..."
+						CommandLine="$(GenerateGtkPCX64)"
+						Outputs="..\gdk-3.0.pc;..\gtk+-3.0.pc;..\gail-3.0.pc"
+					/>
+				</FileConfiguration>
+				<FileConfiguration Name="Release|x64">
+					<Tool Name="VCCustomBuildTool"
+						Description="Generating .pc files..."
+						CommandLine="$(GenerateGtkPCX64)"
+						Outputs="..\gdk-3.0.pc;..\gtk+-3.0.pc;..\gail-3.0.pc"
+					/>
+				</FileConfiguration>
+				<FileConfiguration Name="Debug_Broadway|Win32">
+					<Tool Name="VCCustomBuildTool"
+						Description="Generating .pc files..."
+						CommandLine="$(GenerateGtkPC) --broadway"
+						Outputs="..\gdk-3.0.pc;..\gtk+-3.0.pc;..\gail-3.0.pc"
+					/>
+				</FileConfiguration>
+				<FileConfiguration Name="Release_Broadway|Win32">
+					<Tool Name="VCCustomBuildTool"
+						Description="Generating .pc files..."
+						CommandLine="$(GenerateGtkPC) --broadway"
+						Outputs="..\gdk-3.0.pc;..\gtk+-3.0.pc;..\gail-3.0.pc"
+					/>
+				</FileConfiguration>
+				<FileConfiguration Name="Debug_Broadway|x64">
+					<Tool Name="VCCustomBuildTool"
+						Description="Generating .pc files..."
+						CommandLine="$(GenerateGtkPCX64) --broadway"
+						Outputs="..\gdk-3.0.pc;..\gtk+-3.0.pc;..\gail-3.0.pc"
+					/>
+				</FileConfiguration>
+				<FileConfiguration Name="Release_Broadway|x64">
+					<Tool Name="VCCustomBuildTool"
+						Description="Generating .pc files..."
+						CommandLine="$(GenerateGtkPCX64) --broadway"
+						Outputs="..\gdk-3.0.pc;..\gtk+-3.0.pc;..\gail-3.0.pc"
+					/>
+				</FileConfiguration>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>

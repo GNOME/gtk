@@ -21,12 +21,19 @@ valid_actions = ['remove-prefix',
                  'replace-str',
                  'remove-str']
 
-def replace(src, dest, instring, outstring):
+def replace_multi(src, dest, replace_items):
     with open(src, 'r') as s:
         with open(dest, 'w') as d:
             for line in s:
-                i = line.replace(instring, outstring)
-                d.write(i)
+                replace_dict = dict((re.escape(key), value) \
+                               for key, value in replace_items.items())
+                replace_pattern = re.compile("|".join(replace_dict.keys()))
+                d.write(replace_pattern.sub(lambda m: \
+                        replace_dict[re.escape(m.group(0))], line))
+
+def replace(src, dest, instring, outstring):
+    replace_item = {instring: outstring}
+    replace_multi(src, dest, replace_item)
 
 def check_required_args(args, params):
     for param in params:

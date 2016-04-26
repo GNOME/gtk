@@ -5,12 +5,9 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros">
     <BinDir>$(SolutionDir)$(Configuration)\$(Platform)\bin</BinDir>
-    <InstalledDlls>$(BinDir)\$(GtkDllPrefix)gdk(GtkDllSuffix).dll;$(BinDir)\$(GtkDllPrefix)gtk(GtkDllSuffix).dll;$(BinDir)\$(GtkDllPrefix)gailutil(GtkDllSuffix).dll</InstalledDlls>
-    <InstalledBins>$(BinDir)\gtk3-demo.exe;$(BinDir)\gtk3-demo-application.exe;$(BinDir)\gtk3-icon-browser.exe;$(BinDir)\gtk-encode-symbolic-svg.exe</InstalledBins>
-    <InstalledBroadwayBins>$(BinDir)\broadwayd.exe</InstalledBroadwayBins>
     <GtkDoInstallBin>
 mkdir $(CopyDir)\bin
-mkdir $(CopyDir)\lib
+mkdir $(CopyDir)\lib\pkgconfig
 
 copy "$(BinDir)\$(GtkDllPrefix)gdk-3$(GtkDllSuffix).dll" $(CopyDir)\bin
 copy "$(BinDir)\$(GtkDllPrefix)gdk-3$(GtkDllSuffix).pdb" $(CopyDir)\bin
@@ -93,6 +90,10 @@ copy .\Debug\$(Platform)\bin\gtk-builder-tool.exe $(CopyDir)\bin
 copy .\Debug\$(Platform)\bin\gtk-builder-tool.pdb $(CopyDir)\bin
 
 :DONE_BIN
+
+copy ..\gdk-3.0.pc $(CopyDir)\lib\pkgconfig
+copy "..\gtk+-3.0.pc" $(CopyDir)\lib\pkgconfig
+copy ..\gail-3.0.pc $(CopyDir)\lib\pkgconfig
     </GtkDoInstallBin>
     <GtkDoInstall>
 echo off
@@ -138,6 +139,9 @@ copy ..\..\..\gdk\broadway\gdkbroadway.h $(CopyDir)\include\gtk-$(ApiVersion)\gd
 mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gdk\broadway
 #include "gdk3-broadway.vs10.headers"
     </GtkDoInstallBroadwayHeaders>
+    <GenerateGtkPC>$(PythonPath)\python ..\gtkpc.py --prefix=$(CopyDir) --version=$(GtkVersion) --host=i686-pc-vs$(VSVer)</GenerateGtkPC>
+    <GenerateGtkPCX64>$(PythonPathX64)\python ..\gtkpc.py --prefix=$(CopyDir) --version=$(GtkVersion) --host=x86_64-pc-vs$(VSVer)</GenerateGtkPCX64>
+    <GtkPCFiles>..\gdk-3.0.pc;..\gtk+-3.0.pc;..\gail-3.0.pc</GtkPCFiles>
   </PropertyGroup>
   <PropertyGroup>
     <_PropertySheetDisplayName>gtk3installsprops</_PropertySheetDisplayName>
@@ -163,6 +167,15 @@ mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gdk\broadway
     </BuildMacro>
     <BuildMacro Include="GtkDoInstallBroadwayHeaders">
       <Value>$(GtkDoInstallBroadwayHeaders)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GenerateGtkPC">
+      <Value>$(GenerateGtkPC)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GenerateGtkPCX64">
+      <Value>$(GenerateGtkPCX64)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GtkPCFiles">
+      <Value>$(GtkPCFiles)</Value>
     </BuildMacro>
   </ItemGroup>
 </Project>
