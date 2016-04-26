@@ -76,6 +76,7 @@ window_drag_end (GtkWidget *ebox, GdkDragContext *context, gpointer data)
   GtkWidget *window = data;
 
   gtk_widget_destroy (window);
+  g_object_set_data (G_OBJECT (ebox), "drag window", NULL);
 }
 
 static void
@@ -86,18 +87,27 @@ window_drag_begin (GtkWidget      *widget,
   GdkPixbuf *pixbuf;
   GtkWidget *window;
   GtkWidget *image;
+  int hotspot;
+
+  hotspot = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (data), "hotspot"));
 
   pixbuf = get_image_pixbuf (GTK_IMAGE (data));
 
-  window = gtk_window_new (GTK_WINDOW_POPUP);
-  image = gtk_image_new_from_pixbuf (pixbuf);
-  gtk_widget_show (image);
-  gtk_container_add (GTK_CONTAINER (window), image);
+  window = g_object_get_data (G_OBJECT (widget), "drag window");
+  if (window == NULL)
+    {
+      window = gtk_window_new (GTK_WINDOW_POPUP);
+      image = gtk_image_new_from_pixbuf (pixbuf);
+      gtk_widget_show (image);
+      gtk_container_add (GTK_CONTAINER (window), image);
+      g_object_set_data (G_OBJECT (widget), "drag window", window);
+    }
 
   gtk_drag_set_icon_widget (context, window, 0, 0);
   g_object_unref (pixbuf);
 
-  g_signal_connect (widget, "drag-end", G_CALLBACK (window_drag_end), window);
+  if (hotspot == CENTER)
+    g_signal_connect (widget, "drag-end", G_CALLBACK (window_drag_end), window);
 }
 
 static void
@@ -354,6 +364,8 @@ main (int argc, char *Argv[])
   gtk_grid_attach (GTK_GRID (grid), make_image ("weather-clear", CENTER), 1, 2, 1, 1);
 
   gtk_grid_attach (GTK_GRID (grid), make_image ("dialog-question", TOP_LEFT), 0, 3, 1, 1);
+
+  gtk_grid_attach (GTK_GRID (grid), make_image ("dialog-information", CENTER), 1, 3, 1, 1);
 
   gtk_widget_show_all (window);
   gtk_main ();
