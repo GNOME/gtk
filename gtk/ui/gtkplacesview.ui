@@ -178,7 +178,7 @@ smb://foo.example.com, ssh://192.168.0.1</property>
               <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">afp://</property>
+                <property name="label">afp://</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -190,7 +190,7 @@ smb://foo.example.com, ssh://192.168.0.1</property>
               <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">ftp://</property>
+                <property name="label">ftp://</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -202,7 +202,7 @@ smb://foo.example.com, ssh://192.168.0.1</property>
               <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">smb://</property>
+                <property name="label">smb://</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -214,7 +214,7 @@ smb://foo.example.com, ssh://192.168.0.1</property>
               <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">sftp://</property>
+                <property name="label">sftp://</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -226,7 +226,7 @@ smb://foo.example.com, ssh://192.168.0.1</property>
               <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">ssh://</property>
+                <property name="label">ssh://</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -238,7 +238,7 @@ smb://foo.example.com, ssh://192.168.0.1</property>
               <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">http:// or https://</property>
+                <property name="label" translatable="yes" comments="Translators: do not translate http:// and https://">http:// or https://</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -490,7 +490,7 @@ smb://foo.example.com, ssh://192.168.0.1</property>
                 <property name="completion">address_entry_completion</property>
                 <signal name="notify::text" handler="on_address_entry_text_changed" object="GtkPlacesView" swapped="yes"/>
                 <signal name="activate" handler="on_connect_button_clicked" object="GtkPlacesView" swapped="yes"/>
-                <signal name="icon-press" handler="on_address_entry_clear_pressed" object="GtkPlacesView" swapped="yes"/>
+                <signal name="icon-press" handler="on_address_entry_show_help_pressed" object="GtkPlacesView" swapped="yes"/>
               </object>
             </child>
             <child>
