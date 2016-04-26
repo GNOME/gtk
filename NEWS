@@ -1,3 +1,108 @@
+Overview of Changes in GTK+ 3.21.1
+==================================
+
+* The GNU Affero General Public License has been added to the list of
+  predefined licenses in GtkAboutDialog
+
+* GtkShortcutWindow can now follow changes to accelerators
+
+* GdkSeat and GdkDevice gained API for device tools, to support drawing tablets
+
+* GtkInspector can now slow down (or speed up) animations. This functionality
+  is also available via the GTK_SLOWDOWN environment variable
+
+* GdkGLContext can now be instructed to use GLES
+
+* CSS:
+ - Inconsistencies in font size handling have been fixed
+ - The font shorthand is now parsed according to the CSS spec
+
+* Windows:
+ - Clipboard handling has been optimized
+ - The CSD implementation has been improved
+
+* Wayland:
+ - We print more debug information about pixel formats, outputs, etc
+ - The unstable tablet protocol is now supported
+ - Virtual modifier handling has been improved
+
+* Bugs fixed:
+ 573380 gtk_tree_model_iter_parent() fails if the same iterator is used...
+ 620065 Several problems related to recent files
+ 693077 GtkRecentManager doesn't send "changed" when file is deleted
+ 730821 RFE: add gtk_clipboard_get_selection()
+ 743746 Add GLES 2.0 (and/or 3.0) profile
+ 749405 GtkMenuSectionBox doesn't remove submenus when parent item is r...
+ 761651 glade previewer is resizing windows until it crashes gnome-shell
+ 763013 GDK W32: AeroSnap doesn't work on CSD windows
+ 763600 trashmonitor: change trash monitoring process
+ 763627 menu-traditional puts popover beneath the text editor widget
+ 763768 Wrong margin used for the sidebar separator
+ 763783 GDK W32: Erase hidden layered windows before showing them
+ 763850 Add License GTK_LICENSE_AGPL_3_0 to GtkLicense enum
+ 763851 GDK W32: show_window_menu() is not implemented
+ 763907 GDK W32: Clipboard handling is not tight enough
+ 763913 GDK W32: Not all relevant debug info is printed for events
+ 764022 (totem:4131): Gtk-WARNING **: Negative content width -200 (alloc...
+ 764060 opening a second nautilus while a delete operation is in progres...
+ 764170 [HighContrastInverse] “suqqested-action” is white on lightgrey
+ 764174 Configuration dialog is too small
+ 764203 Default background color for the 'textview border' node
+ 764204 Primary and secondary carets/cursors not distinguishable by default
+ 764210 Strange Background Color on Emacs
+ 764261 gtkplacesviewrow: untranslated "%s / %s available"
+ 764321 window: Fix gtk_window_set_geometry_hints documentation
+ 764374 Busy loop while "Displays" page is active
+ 764376 UI glitch when entering keyboard shortcut
+ 764378 gtk3-demo won't run without hicolor-icon-theme
+ 764424 `Super` keybindings trigger without Super, on Wayland
+ 764585 Fix "format not a string literal" errors
+ 764664 Segfault when initializing WINTAB pressure-sensitive tablets (Wa...
+ 764686 build failure after "make distclean"
+ 764710 GtkListBox row CSS nodes do not reflect visual order
+ 764712 Build failure for Quartz backend in master branch due to gtkdnd-...
+ 764835 broadway: fix documentation, correct display port details
+ 764845 GDK: gdk_window_reparent creates circular reference in 'children...
+ 764846 Code improvements in GtkApplication
+ 764863 GtkTrayIcon: fix uninitialised variable
+ 764879 Extract GtkApplicationAccels private class from GtkApplication
+ 764925 Fix trivial typo in GtkWidget
+ 764975 GTKShortcutWindow runtime changes to accelerator not reflected i...
+ 764996 GDK: Incorrect window size when creating window with position sp...
+ 765038 Adwaita & decorations
+ 765065 Wayland: Hover state stuck after mouse leaving the toplevel
+ 765066 GtkColorChooser looks like it can select multiple colors
+ 765100 GDK: gdk_window_reparent does not position/size a reparented win...
+ 765118 W32: gtk-builder-tool botches output encoding
+ 765122 Duplicate/missing string in gtkprintbackendcups
+ 765195 Visual Studio builds: Update how introspection is done
+ 765213 info bars nearly unreadable in backdrop state because of gray fo...
+ 765238 gtktexthandle should avoid connecting to GtkWidget::draw
+ 765259 Save Windows scancode inside GdkEvent
+ 765261 listbox: Page up/Down don't do anything with large rows
+ 765270 wayland: Leave existing mods on map_virtual_modifiers
+ 765284 debug: reduce runtime overhead in debug builds
+ 765486 builtinicon: avoid calculating font-metrics in vast majority of ...
+ 765493 kineticscrolling: avoid stutter at tail of kinetic deceleration
+ 765496 Clean up gtklabel.c a bit
+ 765567 wayland: avoid jitter in keyboard repeat
+
+* Translation updates:
+ Bulgarian
+ Catalan
+ Esperanto
+ German
+ Greek
+ Hungarian
+ Italian
+ Lithuanian
+ Persian
+ Polish
+ Scottish Gaelic
+ Thai
+ Traditional Chinese
+
+
 Overview of Changes in GTK+ 3.20.1
 ==================================
 
