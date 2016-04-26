@@ -1,7 +1,3 @@
-fount font weight: bold
-fount font style: italic
-fount font stretch: expanded
-fount font style: oblique
 [window.background:dir(ltr)]
   decoration:dir(ltr)
   box.horizontal:dir(ltr)
