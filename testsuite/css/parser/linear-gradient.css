@@ -1,71 +1,71 @@
 a {
-  background-image: linear-gradient(red);
-  border-image-source: repeating-linear-gradient(red);
+  background-image: linear-gradient(red, blue);
+  border-image-source: repeating-linear-gradient(red, blue);
 }
 
 b {
-  background-image: linear-gradient(to top, red);
-  border-image-source: repeating-linear-gradient(to top, red);
+  background-image: linear-gradient(to top, red, blue);
+  border-image-source: repeating-linear-gradient(to top, red, blue);
 }
 
 c {
-  background-image: linear-gradient(to bottom, red);
-  border-image-source: repeating-linear-gradient(to bottom, red);
+  background-image: linear-gradient(to bottom, red, blue);
+  border-image-source: repeating-linear-gradient(to bottom, red, blue);
 }
 
 d {
-  background-image: linear-gradient(to left, red);
-  border-image-source: repeating-linear-gradient(to left, red);
+  background-image: linear-gradient(to left, red, blue);
+  border-image-source: repeating-linear-gradient(to left, red, blue);
 }
 
 e {
-  background-image: linear-gradient(to right, red);
-  border-image-source: repeating-linear-gradient(to right, red);
+  background-image: linear-gradient(to right, red, blue);
+  border-image-source: repeating-linear-gradient(to right, red, blue);
 }
 
 f {
-  background-image: linear-gradient(to bottom left, red);
-  border-image-source: repeating-linear-gradient(to bottom left, red);
+  background-image: linear-gradient(to bottom left, red, blue);
+  border-image-source: repeating-linear-gradient(to bottom left, red, blue);
 }
 
 g {
-  background-image: linear-gradient(to right bottom, red);
-  border-image-source: repeating-linear-gradient(to right bottom, red);
+  background-image: linear-gradient(to right bottom, red, blue);
+  border-image-source: repeating-linear-gradient(to right bottom, red, blue);
 }
 
 h {
-  background-image: linear-gradient(to top right, red);
-  border-image-source: repeating-linear-gradient(to top right, red);
+  background-image: linear-gradient(to top right, red, blue);
+  border-image-source: repeating-linear-gradient(to top right, red, blue);
 }
 
 i {
-  background-image: linear-gradient(to left bottom, red);
-  border-image-source: repeating-linear-gradient(to left bottom, red);
+  background-image: linear-gradient(to left bottom, red, blue);
+  border-image-source: repeating-linear-gradient(to left bottom, red, blue);
 }
 
 j {
-  background-image: linear-gradient(1turn, red);
-  border-image-source: repeating-linear-gradient(1turn, red);
+  background-image: linear-gradient(1turn, red, blue);
+  border-image-source: repeating-linear-gradient(1turn, red, blue);
 }
 
 k {
-  background-image: linear-gradient(-0.25turn, red);
-  border-image-source: repeating-linear-gradient(-0.25turn, red);
+  background-image: linear-gradient(-0.25turn, red, blue);
+  border-image-source: repeating-linear-gradient(-0.25turn, red, blue);
 }
 
 l {
-  background-image: linear-gradient(3.125deg, red);
-  border-image-source: repeating-linear-gradient(3.125deg, red);
+  background-image: linear-gradient(3.125deg, red, blue);
+  border-image-source: repeating-linear-gradient(3.125deg, red, blue);
 }
 
 m {
-  background-image: linear-gradient(90.0rad, red);
-  border-image-source: repeating-linear-gradient(90.0rad, red);
+  background-image: linear-gradient(90.0rad, red, blue);
+  border-image-source: repeating-linear-gradient(90.0rad, red, blue);
 }
 
 n {
-  background-image: linear-gradient(-100grad, red);
-  border-image-source: repeating-linear-gradient(-100grad, red);
+  background-image: linear-gradient(-100grad, red, blue);
+  border-image-source: repeating-linear-gradient(-100grad, red, blue);
 }
 
 o {
