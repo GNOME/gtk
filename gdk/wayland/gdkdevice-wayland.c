@@ -177,6 +177,7 @@ struct _GdkWaylandSeat
   guint32 repeat_timer;
   guint32 repeat_key;
   guint32 repeat_count;
+  gint64 repeat_deadline;
   GSettings *keyboard_settings;
   uint32_t keyboard_time;
 
@@ -1815,6 +1816,9 @@ deliver_key_event (GdkWaylandSeat *seat,
   GdkKeymap *keymap;
   xkb_keysym_t sym;
   guint delay, interval, timeout;
+  gint64 begin_time, now;
+
+  begin_time = g_get_monotonic_time ();
 
   stop_key_repeat (seat);
 
@@ -1862,10 +1866,20 @@ deliver_key_event (GdkWaylandSeat *seat,
   seat->repeat_count++;
   seat->repeat_key = key;
 
+  interval *= 1000L;
+  delay *= 1000L;
+
+  now = g_get_monotonic_time ();
+
   if (seat->repeat_count == 1)
-    timeout = delay;
+    seat->repeat_deadline = begin_time + delay;
+  else if (seat->repeat_deadline + interval > now)
+    seat->repeat_deadline += interval;
   else
-    timeout = interval;
+    /* frame delay caused us to miss repeat deadline */
+    seat->repeat_deadline = now;
+
+  timeout = (seat->repeat_deadline - now) / 1000L;
 
   seat->repeat_timer =
     gdk_threads_add_timeout (timeout, keyboard_repeat, seat);
