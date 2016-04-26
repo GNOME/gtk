@@ -99,7 +99,8 @@ gtk_css_image_fallback_print (GtkCssImage *image,
     }
   if (fallback->color)
     {
-      g_string_append (string, ",");
+      if (fallback->n_images > 0)
+        g_string_append (string, ",");
       _gtk_css_value_print (fallback->color, string);
     }
 
