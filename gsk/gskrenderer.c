@@ -136,6 +136,12 @@ gsk_renderer_real_validate_tree (GskRenderer *self,
 }
 
 static void
+gsk_renderer_real_clear_tree (GskRenderer *self,
+                              GskRenderNode *old_root)
+{
+}
+
+static void
 gsk_renderer_dispose (GObject *gobject)
 {
   GskRenderer *self = GSK_RENDERER (gobject);
@@ -294,6 +300,7 @@ gsk_renderer_class_init (GskRendererClass *klass)
   klass->resize_viewport = gsk_renderer_real_resize_viewport;
   klass->update = gsk_renderer_real_update;
   klass->validate_tree = gsk_renderer_real_validate_tree;
+  klass->clear_tree = gsk_renderer_real_clear_tree;
   klass->render = gsk_renderer_real_render;
 
   gobject_class->constructed = gsk_renderer_constructed;
@@ -727,6 +734,7 @@ gsk_renderer_set_root_node (GskRenderer   *renderer,
       if (old_root != NULL)
         {
           gsk_render_node_set_invalidate_func (old_root, NULL, NULL, NULL);
+          gsk_renderer_clear_tree (renderer, old_root);
           g_object_unref (old_root);
         }
 
@@ -1133,6 +1141,13 @@ gsk_renderer_maybe_update (GskRenderer *renderer)
       priv->needs_modelview_update = FALSE;
       priv->needs_projection_update = FALSE;
     }
+}
+
+void
+gsk_renderer_clear_tree (GskRenderer   *renderer,
+                         GskRenderNode *old_root)
+{
+  GSK_RENDERER_GET_CLASS (renderer)->clear_tree (renderer, old_root);
 }
 
 /*< private >
