@@ -664,9 +664,10 @@ struct gtk_shell1_listener gdk_screen_gtk_shell_listener = {
 void
 _gdk_wayland_screen_set_has_gtk_shell (GdkScreen *screen)
 {
-  GdkWaylandDisplay *wayland_display = GDK_WAYLAND_DISPLAY (GDK_WAYLAND_SCREEN (screen)->display);
+  GdkWaylandDisplay *display_wayland =
+    GDK_WAYLAND_DISPLAY (GDK_WAYLAND_SCREEN (screen)->display);
 
-  gtk_shell1_add_listener (wayland_display->gtk_shell,
+  gtk_shell1_add_listener (display_wayland->gtk_shell,
                            &gdk_screen_gtk_shell_listener,
                            screen);
 }

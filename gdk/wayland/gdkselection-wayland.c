@@ -1453,7 +1453,7 @@ gboolean
 gdk_wayland_selection_set_current_offer_actions (GdkDisplay *display,
                                                  uint32_t    action)
 {
-  GdkWaylandDisplay *wayland_display = GDK_WAYLAND_DISPLAY (display);
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   struct wl_data_offer *offer;
   uint32_t all_actions = 0;
 
@@ -1467,7 +1467,7 @@ gdk_wayland_selection_set_current_offer_actions (GdkDisplay *display,
       WL_DATA_DEVICE_MANAGER_DND_ACTION_MOVE |
       WL_DATA_DEVICE_MANAGER_DND_ACTION_ASK;
 
-  if (wayland_display->data_device_manager_version >=
+  if (display_wayland->data_device_manager_version >=
       WL_DATA_OFFER_SET_ACTIONS_SINCE_VERSION)
     wl_data_offer_set_actions (offer, all_actions, action);
   return TRUE;

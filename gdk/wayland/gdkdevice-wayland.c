@@ -1205,7 +1205,7 @@ pointer_handle_enter (void              *data,
 {
   GdkWaylandSeat *seat = data;
   GdkEvent *event;
-  GdkWaylandDisplay *wayland_display =
+  GdkWaylandDisplay *display_wayland =
     GDK_WAYLAND_DISPLAY (seat->display);
 
   if (!surface)
@@ -1214,7 +1214,7 @@ pointer_handle_enter (void              *data,
   if (!GDK_IS_WINDOW (wl_surface_get_user_data (surface)))
     return;
 
-  _gdk_wayland_display_update_serial (wayland_display, serial);
+  _gdk_wayland_display_update_serial (display_wayland, serial);
 
   seat->pointer_info.focus = wl_surface_get_user_data(surface);
   g_object_ref(seat->pointer_info.focus);
@@ -1249,7 +1249,7 @@ pointer_handle_enter (void              *data,
             g_message ("enter, seat %p surface %p",
                        seat, seat->pointer_info.focus));
 
-  if (wayland_display->seat_version < WL_POINTER_HAS_FRAME)
+  if (display_wayland->seat_version < WL_POINTER_HAS_FRAME)
     gdk_wayland_seat_flush_frame_event (seat);
 }
 
@@ -1261,7 +1261,7 @@ pointer_handle_leave (void              *data,
 {
   GdkWaylandSeat *seat = data;
   GdkEvent *event;
-  GdkWaylandDisplay *wayland_display = GDK_WAYLAND_DISPLAY (seat->display);
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (seat->display);
 
   if (!surface)
     return;
@@ -1272,7 +1272,7 @@ pointer_handle_leave (void              *data,
   if (!seat->pointer_info.focus)
     return;
 
-  _gdk_wayland_display_update_serial (wayland_display, serial);
+  _gdk_wayland_display_update_serial (display_wayland, serial);
 
   event = gdk_wayland_seat_get_frame_event (seat, GDK_LEAVE_NOTIFY);
   event->crossing.window = g_object_ref (seat->pointer_info.focus);
@@ -1305,7 +1305,7 @@ pointer_handle_leave (void              *data,
 
   seat->pointer_info.focus = NULL;
 
-  if (wayland_display->seat_version < WL_POINTER_HAS_FRAME)
+  if (display_wayland->seat_version < WL_POINTER_HAS_FRAME)
     gdk_wayland_seat_flush_frame_event (seat);
 }
 
@@ -2653,7 +2653,7 @@ seat_handle_capabilities (void                    *data,
 {
   GdkWaylandSeat *seat = data;
   GdkWaylandDeviceManager *device_manager = GDK_WAYLAND_DEVICE_MANAGER (seat->device_manager);
-  GdkWaylandDisplay *wayland_display = GDK_WAYLAND_DISPLAY (seat->display);
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (seat->display);
 
   GDK_NOTE (MISC,
             g_message ("seat %p with %s%s%s", wl_seat,
@@ -2682,10 +2682,10 @@ seat_handle_capabilities (void                    *data,
       device_manager->devices =
         g_list_prepend (device_manager->devices, seat->pointer);
 
-      if (wayland_display->pointer_gestures)
+      if (display_wayland->pointer_gestures)
         {
           seat->wp_pointer_gesture_swipe =
-            zwp_pointer_gestures_v1_get_swipe_gesture (wayland_display->pointer_gestures,
+            zwp_pointer_gestures_v1_get_swipe_gesture (display_wayland->pointer_gestures,
                                                        seat->wl_pointer);
           zwp_pointer_gesture_swipe_v1_set_user_data (seat->wp_pointer_gesture_swipe,
                                                       seat);
@@ -2693,7 +2693,7 @@ seat_handle_capabilities (void                    *data,
                                                      &gesture_swipe_listener, seat);
 
           seat->wp_pointer_gesture_pinch =
-            zwp_pointer_gestures_v1_get_pinch_gesture (wayland_display->pointer_gestures,
+            zwp_pointer_gestures_v1_get_pinch_gesture (display_wayland->pointer_gestures,
                                                        seat->wl_pointer);
           zwp_pointer_gesture_pinch_v1_set_user_data (seat->wp_pointer_gesture_pinch,
                                                       seat);
@@ -3096,7 +3096,7 @@ tablet_tool_handle_proximity_in (void                      *data,
   GdkWaylandTabletToolData *tool = data;
   GdkWaylandTabletData *tablet = zwp_tablet_v1_get_user_data (wp_tablet);
   GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (tablet->seat);
-  GdkWaylandDisplay *wayland_display = GDK_WAYLAND_DISPLAY (seat->display);
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (seat->display);
   GdkWindow *window = wl_surface_get_user_data (surface);
   GdkEvent *event;
 
@@ -3108,7 +3108,7 @@ tablet_tool_handle_proximity_in (void                      *data,
   tool->current_tablet = tablet;
   tablet->current_tool = tool;
 
-  _gdk_wayland_display_update_serial (wayland_display, serial);
+  _gdk_wayland_display_update_serial (display_wayland, serial);
   tablet->pointer_info.enter_serial = serial;
 
   tablet->pointer_info.focus = g_object_ref (window);
@@ -3165,7 +3165,7 @@ tablet_create_button_event_frame (GdkWaylandTabletData *tablet,
                                   guint                 button)
 {
   GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (tablet->seat);
-  GdkWaylandDisplay *wayland_display = GDK_WAYLAND_DISPLAY (seat->display);
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (seat->display);
   GdkEvent *event;
 
   event = gdk_wayland_tablet_get_frame_event (tablet, evtype);
@@ -3176,7 +3176,7 @@ tablet_create_button_event_frame (GdkWaylandTabletData *tablet,
   event->button.time = tablet->pointer_info.time;
   event->button.state = device_get_modifiers (tablet->master);
   event->button.button = button;
-  gdk_event_set_screen (event, wayland_display->screen);
+  gdk_event_set_screen (event, display_wayland->screen);
 
   get_coordinates (tablet->master,
                    &event->button.x,
@@ -3193,12 +3193,12 @@ tablet_tool_handle_down (void                      *data,
   GdkWaylandTabletToolData *tool = data;
   GdkWaylandTabletData *tablet = tool->current_tablet;
   GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (tool->seat);
-  GdkWaylandDisplay *wayland_display = GDK_WAYLAND_DISPLAY (seat->display);
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (seat->display);
 
   if (!tablet->pointer_info.focus)
     return;
 
-  _gdk_wayland_display_update_serial (wayland_display, serial);
+  _gdk_wayland_display_update_serial (display_wayland, serial);
   tablet->pointer_info.press_serial = serial;
 
   tablet_create_button_event_frame (tablet, GDK_BUTTON_PRESS, GDK_BUTTON_PRIMARY);
@@ -3441,14 +3441,14 @@ tablet_seat_handle_tablet_added (void                      *data,
                                  struct zwp_tablet_v1      *wp_tablet)
 {
   GdkWaylandSeat *seat = data;
-  GdkWaylandDisplay *wayland_display = GDK_WAYLAND_DISPLAY (seat->display);
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (seat->display);
   GdkWaylandTabletData *tablet;
 
   tablet = g_new0 (GdkWaylandTabletData, 1);
   tablet->seat = GDK_SEAT (seat);
   tablet->pointer_info.current_output_scale = 1;
   tablet->pointer_info.pointer_surface =
-    wl_compositor_create_surface (wayland_display->compositor);
+    wl_compositor_create_surface (display_wayland->compositor);
   tablet->wp_tablet = wp_tablet;
 
   seat->tablets = g_list_prepend (seat->tablets, tablet);
@@ -3530,11 +3530,11 @@ pointer_surface_update_scale (GdkDevice *device)
 {
   GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (gdk_device_get_seat (device));
   GdkWaylandPointerData *pointer = GDK_WAYLAND_DEVICE (device)->pointer;
-  GdkWaylandDisplay *wayland_display = GDK_WAYLAND_DISPLAY (seat->display);
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (seat->display);
   guint32 scale;
   GSList *l;
 
-  if (wayland_display->compositor_version < WL_SURFACE_HAS_BUFFER_SCALE)
+  if (display_wayland->compositor_version < WL_SURFACE_HAS_BUFFER_SCALE)
     {
       /* We can't set the scale on this surface */
       return;
@@ -3544,7 +3544,7 @@ pointer_surface_update_scale (GdkDevice *device)
   for (l = pointer->pointer_surface_outputs; l != NULL; l = l->next)
     {
       guint32 output_scale =
-        _gdk_wayland_screen_get_output_scale (wayland_display->screen,
+        _gdk_wayland_screen_get_output_scale (display_wayland->screen,
                                               l->data);
       scale = MAX (scale, output_scale);
     }

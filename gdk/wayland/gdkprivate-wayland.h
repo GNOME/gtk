@@ -60,7 +60,7 @@ void       _gdk_wayland_display_init_cursors (GdkWaylandDisplay *display);
 void       _gdk_wayland_display_finalize_cursors (GdkWaylandDisplay *display);
 void       _gdk_wayland_display_update_cursors (GdkWaylandDisplay *display);
 
-struct wl_cursor_theme * _gdk_wayland_display_get_scaled_cursor_theme (GdkWaylandDisplay *wayland_display,
+struct wl_cursor_theme * _gdk_wayland_display_get_scaled_cursor_theme (GdkWaylandDisplay *display_wayland,
                                                                        guint              scale);
 
 GdkCursor *_gdk_wayland_display_get_cursor_for_type (GdkDisplay    *display,
@@ -226,8 +226,9 @@ void _gdk_wayland_screen_set_has_gtk_shell (GdkScreen       *screen);
 void _gdk_wayland_window_set_grab_seat (GdkWindow      *window,
                                         GdkSeat        *seat);
 
-guint32 _gdk_wayland_display_get_serial (GdkWaylandDisplay *wayland_display);
-void _gdk_wayland_display_update_serial (GdkWaylandDisplay *wayland_display, guint32 serial);
+guint32 _gdk_wayland_display_get_serial (GdkWaylandDisplay *display_wayland);
+void _gdk_wayland_display_update_serial (GdkWaylandDisplay *display_wayland,
+                                         guint32            serial);
 
 cairo_surface_t * _gdk_wayland_display_create_shm_surface (GdkWaylandDisplay *display,
                                                            int                width,

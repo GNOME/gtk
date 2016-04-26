@@ -291,12 +291,12 @@ _gdk_wayland_screen_create_root_window (GdkScreen *screen,
                                         int        width,
                                         int        height)
 {
-  GdkWaylandDisplay *wayland_display =
+  GdkWaylandDisplay *display_wayland =
     GDK_WAYLAND_DISPLAY (gdk_screen_get_display (screen));
   GdkWindow *window;
   GdkWindowImplWayland *impl;
 
-  window = _gdk_display_create_window (GDK_DISPLAY (wayland_display));
+  window = _gdk_display_create_window (GDK_DISPLAY (display_wayland));
   window->impl = g_object_new (GDK_TYPE_WINDOW_IMPL_WAYLAND, NULL);
   window->impl_window = window;
   window->visual = gdk_screen_get_system_visual (screen);
@@ -304,7 +304,7 @@ _gdk_wayland_screen_create_root_window (GdkScreen *screen,
   impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
   impl->wrapper = GDK_WINDOW (window);
-  if (wayland_display->compositor_version >= WL_SURFACE_HAS_BUFFER_SCALE &&
+  if (display_wayland->compositor_version >= WL_SURFACE_HAS_BUFFER_SCALE &&
       gdk_screen_get_n_monitors (screen) > 0)
     impl->scale = gdk_screen_get_monitor_scale_factor (screen, 0);
 
@@ -428,7 +428,8 @@ frame_callback (void               *data,
 {
   GdkWindow *window = data;
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-  GdkWaylandDisplay *wayland_display = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
+  GdkWaylandDisplay *display_wayland =
+    GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
   GdkFrameClock *clock = gdk_window_get_frame_clock (window);
   GdkFrameTimings *timings;
 
@@ -457,8 +458,9 @@ frame_callback (void               *data,
     {
       /* We pick a random output out of the outputs that the window touches
        * The rate here is in milli-hertz */
-      int refresh_rate = _gdk_wayland_screen_get_output_refresh_rate (wayland_display->screen,
-                                                                      impl->display_server.outputs->data);
+      int refresh_rate =
+        _gdk_wayland_screen_get_output_refresh_rate (display_wayland->screen,
+                                                     impl->display_server.outputs->data);
       if (refresh_rate != 0)
         timings->refresh_interval = G_GINT64_CONSTANT(1000000000) / refresh_rate;
     }
@@ -552,11 +554,12 @@ static void
 window_update_scale (GdkWindow *window)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-  GdkWaylandDisplay *wayland_display = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
+  GdkWaylandDisplay *display_wayland =
+    GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
   guint32 scale;
   GSList *l;
 
-  if (wayland_display->compositor_version < WL_SURFACE_HAS_BUFFER_SCALE)
+  if (display_wayland->compositor_version < WL_SURFACE_HAS_BUFFER_SCALE)
     {
       /* We can't set the scale on this surface */
       return;
@@ -566,7 +569,7 @@ window_update_scale (GdkWindow *window)
   for (l = impl->display_server.outputs; l != NULL; l = l->next)
     {
       guint32 output_scale =
-        _gdk_wayland_screen_get_output_scale (wayland_display->screen, l->data);
+        _gdk_wayland_screen_get_output_scale (display_wayland->screen, l->data);
       scale = MAX (scale, output_scale);
     }
 
@@ -593,7 +596,7 @@ _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
                                          GdkWindowAttr *attributes,
                                          gint           attributes_mask)
 {
-  GdkWaylandDisplay *wayland_display = GDK_WAYLAND_DISPLAY (display);
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   GdkWindowImplWayland *impl;
   GdkFrameClock *frame_clock;
   const char *title;
@@ -616,7 +619,7 @@ _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
   g_object_ref (window);
 
   /* More likely to be right than just assuming 1 */
-  if (wayland_display->compositor_version >= WL_SURFACE_HAS_BUFFER_SCALE &&
+  if (display_wayland->compositor_version >= WL_SURFACE_HAS_BUFFER_SCALE &&
       gdk_screen_get_n_monitors (screen) > 0)
     impl->scale = gdk_screen_get_monitor_scale_factor (screen, 0);
 

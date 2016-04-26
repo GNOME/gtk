@@ -304,7 +304,7 @@ gdk_wayland_drag_context_drop_finish (GdkDragContext *context,
 				      guint32         time)
 {
   GdkDisplay *display = gdk_device_get_display (gdk_drag_context_get_device (context));
-  GdkWaylandDisplay *wayland_display = GDK_WAYLAND_DISPLAY (display);
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   GdkWaylandDragContext *wayland_context;
   struct wl_data_offer *wl_offer;
   GdkAtom selection;
@@ -318,7 +318,7 @@ gdk_wayland_drag_context_drop_finish (GdkDragContext *context,
     {
       gdk_wayland_drag_context_commit_status (context);
 
-      if (wayland_display->data_device_manager_version >=
+      if (display_wayland->data_device_manager_version >=
           WL_DATA_OFFER_FINISH_SINCE_VERSION)
         wl_data_offer_finish (wl_offer);
     }

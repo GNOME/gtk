@@ -73,7 +73,7 @@
  * ]|
  */
 
-static void _gdk_wayland_display_load_cursor_theme (GdkWaylandDisplay *wayland_display);
+static void _gdk_wayland_display_load_cursor_theme (GdkWaylandDisplay *display_wayland);
 
 G_DEFINE_TYPE (GdkWaylandDisplay, gdk_wayland_display, GDK_TYPE_DISPLAY)
 
@@ -111,9 +111,9 @@ xdg_shell_ping (void             *data,
                 struct xdg_shell *xdg_shell,
                 uint32_t          serial)
 {
-  GdkWaylandDisplay *wayland_display = data;
+  GdkWaylandDisplay *display_wayland = data;
 
-  _gdk_wayland_display_update_serial (wayland_display, serial);
+  _gdk_wayland_display_update_serial (display_wayland, serial);
 
   GDK_NOTE (EVENTS,
             g_message ("ping, shell %p, serial %u\n", xdg_shell, serial));
@@ -876,18 +876,18 @@ gdk_wayland_display_set_cursor_theme (GdkDisplay  *display,
                                       const gchar *name,
                                       gint         size)
 {
-  GdkWaylandDisplay *wayland_display = GDK_WAYLAND_DISPLAY(display);
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY(display);
   struct wl_cursor_theme *theme;
   int i;
 
-  g_assert (wayland_display);
-  g_assert (wayland_display->shm);
+  g_assert (display_wayland);
+  g_assert (display_wayland->shm);
 
-  if (g_strcmp0 (name, wayland_display->cursor_theme_name) == 0 &&
-      wayland_display->cursor_theme_size == size)
+  if (g_strcmp0 (name, display_wayland->cursor_theme_name) == 0 &&
+      display_wayland->cursor_theme_size == size)
     return;
 
-  theme = wl_cursor_theme_load (name, size, wayland_display->shm);
+  theme = wl_cursor_theme_load (name, size, display_wayland->shm);
   if (theme == NULL)
     {
       g_warning ("Failed to load cursor theme %s", name);
@@ -896,87 +896,87 @@ gdk_wayland_display_set_cursor_theme (GdkDisplay  *display,
 
   for (i = 0; i < GDK_WAYLAND_THEME_SCALES_COUNT; i++)
     {
-      if (wayland_display->scaled_cursor_themes[i])
+      if (display_wayland->scaled_cursor_themes[i])
         {
-          wl_cursor_theme_destroy (wayland_display->scaled_cursor_themes[i]);
-          wayland_display->scaled_cursor_themes[i] = NULL;
+          wl_cursor_theme_destroy (display_wayland->scaled_cursor_themes[i]);
+          display_wayland->scaled_cursor_themes[i] = NULL;
         }
     }
-  wayland_display->scaled_cursor_themes[0] = theme;
-  if (wayland_display->cursor_theme_name != NULL)
-    g_free (wayland_display->cursor_theme_name);
-  wayland_display->cursor_theme_name = g_strdup (name);
-  wayland_display->cursor_theme_size = size;
+  display_wayland->scaled_cursor_themes[0] = theme;
+  if (display_wayland->cursor_theme_name != NULL)
+    g_free (display_wayland->cursor_theme_name);
+  display_wayland->cursor_theme_name = g_strdup (name);
+  display_wayland->cursor_theme_size = size;
 
-  _gdk_wayland_display_update_cursors (wayland_display);
+  _gdk_wayland_display_update_cursors (display_wayland);
 }
 
 struct wl_cursor_theme *
-_gdk_wayland_display_get_scaled_cursor_theme (GdkWaylandDisplay *wayland_display,
+_gdk_wayland_display_get_scaled_cursor_theme (GdkWaylandDisplay *display_wayland,
                                               guint              scale)
 {
   struct wl_cursor_theme *theme;
 
-  g_assert (wayland_display->cursor_theme_name);
+  g_assert (display_wayland->cursor_theme_name);
   g_assert (scale <= GDK_WAYLAND_MAX_THEME_SCALE);
   g_assert (scale >= 1);
 
-  theme = wayland_display->scaled_cursor_themes[scale - 1];
+  theme = display_wayland->scaled_cursor_themes[scale - 1];
   if (!theme)
     {
-      theme = wl_cursor_theme_load (wayland_display->cursor_theme_name,
-                                    wayland_display->cursor_theme_size * scale,
-                                    wayland_display->shm);
+      theme = wl_cursor_theme_load (display_wayland->cursor_theme_name,
+                                    display_wayland->cursor_theme_size * scale,
+                                    display_wayland->shm);
       if (theme == NULL)
         {
           g_warning ("Failed to load cursor theme %s with scale %u",
-                     wayland_display->cursor_theme_name, scale);
+                     display_wayland->cursor_theme_name, scale);
           return NULL;
         }
-      wayland_display->scaled_cursor_themes[scale - 1] = theme;
+      display_wayland->scaled_cursor_themes[scale - 1] = theme;
     }
 
   return theme;
 }
 
 static void
-_gdk_wayland_display_load_cursor_theme (GdkWaylandDisplay *wayland_display)
+_gdk_wayland_display_load_cursor_theme (GdkWaylandDisplay *display_wayland)
 {
   guint size;
   const gchar *name;
   GValue v = G_VALUE_INIT;
 
-  g_assert (wayland_display);
-  g_assert (wayland_display->shm);
+  g_assert (display_wayland);
+  g_assert (display_wayland->shm);
 
   g_value_init (&v, G_TYPE_INT);
-  if (gdk_screen_get_setting (wayland_display->screen, "gtk-cursor-theme-size", &v))
+  if (gdk_screen_get_setting (display_wayland->screen, "gtk-cursor-theme-size", &v))
     size = g_value_get_int (&v);
   else
     size = 32;
   g_value_unset (&v);
 
   g_value_init (&v, G_TYPE_STRING);
-  if (gdk_screen_get_setting (wayland_display->screen, "gtk-cursor-theme-name", &v))
+  if (gdk_screen_get_setting (display_wayland->screen, "gtk-cursor-theme-name", &v))
     name = g_value_get_string (&v);
   else
     name = "default";
 
-  gdk_wayland_display_set_cursor_theme (GDK_DISPLAY (wayland_display), name, size);
+  gdk_wayland_display_set_cursor_theme (GDK_DISPLAY (display_wayland), name, size);
   g_value_unset (&v);
 }
 
 guint32
-_gdk_wayland_display_get_serial (GdkWaylandDisplay *wayland_display)
+_gdk_wayland_display_get_serial (GdkWaylandDisplay *display_wayland)
 {
-  return wayland_display->serial;
+  return display_wayland->serial;
 }
 
 void
-_gdk_wayland_display_update_serial (GdkWaylandDisplay *wayland_display,
+_gdk_wayland_display_update_serial (GdkWaylandDisplay *display_wayland,
                                     guint32            serial)
 {
-  wayland_display->serial = serial;
+  display_wayland->serial = serial;
 }
 
 /**
@@ -1170,7 +1170,7 @@ _gdk_wayland_is_shm_surface (cairo_surface_t *surface)
 GdkWaylandSelection *
 gdk_wayland_display_get_selection (GdkDisplay *display)
 {
-  GdkWaylandDisplay *wayland_display = GDK_WAYLAND_DISPLAY (display);
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
 
-  return wayland_display->selection;
+  return display_wayland->selection;
 }

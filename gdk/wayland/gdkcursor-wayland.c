@@ -139,7 +139,7 @@ name_fallback (const gchar *name)
 }
 
 static gboolean
-_gdk_wayland_cursor_update (GdkWaylandDisplay *wayland_display,
+_gdk_wayland_cursor_update (GdkWaylandDisplay *display_wayland,
                             GdkWaylandCursor  *cursor)
 {
   struct wl_cursor *c;
@@ -149,7 +149,7 @@ _gdk_wayland_cursor_update (GdkWaylandDisplay *wayland_display,
   if (cursor->name == NULL)
     return FALSE;
 
-  theme = _gdk_wayland_display_get_scaled_cursor_theme (wayland_display,
+  theme = _gdk_wayland_display_get_scaled_cursor_theme (display_wayland,
                                                         cursor->scale);
   c = wl_cursor_theme_get_cursor (theme, cursor->name);
   if (!c)
@@ -293,7 +293,7 @@ void
 _gdk_wayland_cursor_set_scale (GdkCursor *cursor,
                                guint      scale)
 {
-  GdkWaylandDisplay *wayland_display =
+  GdkWaylandDisplay *display_wayland =
     GDK_WAYLAND_DISPLAY (gdk_cursor_get_display (cursor));
   GdkWaylandCursor *wayland_cursor = GDK_WAYLAND_CURSOR (cursor);
 
@@ -308,7 +308,7 @@ _gdk_wayland_cursor_set_scale (GdkCursor *cursor,
 
   wayland_cursor->scale = scale;
 
-  _gdk_wayland_cursor_update (wayland_display, wayland_cursor);
+  _gdk_wayland_cursor_update (display_wayland, wayland_cursor);
 }
 
 static void
@@ -333,11 +333,11 @@ _gdk_wayland_display_get_cursor_for_name_with_scale (GdkDisplay  *display,
                                                      guint        scale)
 {
   GdkWaylandCursor *private;
-  GdkWaylandDisplay *wayland_display = GDK_WAYLAND_DISPLAY (display);
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
-  private = g_hash_table_lookup (wayland_display->cursor_cache, name);
+  private = g_hash_table_lookup (display_wayland->cursor_cache, name);
   if (private)
     return GDK_CURSOR (g_object_ref (private));
 
@@ -352,11 +352,13 @@ _gdk_wayland_display_get_cursor_for_name_with_scale (GdkDisplay  *display,
   if (!name || g_str_equal (name, "none") || g_str_equal (name, "blank_cursor"))
     return GDK_CURSOR (private);
 
-  if (!_gdk_wayland_cursor_update (wayland_display, private))
+  if (!_gdk_wayland_cursor_update (display_wayland, private))
     return GDK_CURSOR (private);
 
   /* Insert into cache. */
-  g_hash_table_insert (wayland_display->cursor_cache, private->name, g_object_ref (private));
+  g_hash_table_insert (display_wayland->cursor_cache,
+                       private->name,
+                       g_object_ref (private));
   return GDK_CURSOR (private);
 }
 
@@ -421,13 +423,13 @@ _gdk_wayland_display_get_cursor_for_surface (GdkDisplay *display,
 					     gdouble     y)
 {
   GdkWaylandCursor *cursor;
-  GdkWaylandDisplay *wayland_display = GDK_WAYLAND_DISPLAY (display);
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   struct wl_buffer *buffer;
   cairo_t *cr;
 
   cursor = g_object_new (GDK_TYPE_WAYLAND_CURSOR,
 			 "cursor-type", GDK_CURSOR_IS_PIXMAP,
-			 "display", wayland_display,
+			 "display", display_wayland,
 			 NULL);
   cursor->name = NULL;
   cursor->surface.hotspot_x = x;
@@ -449,10 +451,11 @@ _gdk_wayland_display_get_cursor_for_surface (GdkDisplay *display,
       cursor->surface.height = 1;
     }
 
-  cursor->surface.cairo_surface = _gdk_wayland_display_create_shm_surface (wayland_display,
-                                                                           cursor->surface.width,
-                                                                           cursor->surface.height,
-                                                                           cursor->surface.scale);
+  cursor->surface.cairo_surface =
+    _gdk_wayland_display_create_shm_surface (display_wayland,
+                                             cursor->surface.width,
+                                             cursor->surface.height,
+                                             cursor->surface.scale);
 
   buffer = _gdk_wayland_shm_surface_get_wl_buffer (cursor->surface.cairo_surface);
   wl_buffer_add_listener (buffer, &buffer_listener, cursor->surface.cairo_surface);
