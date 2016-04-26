@@ -82,6 +82,9 @@ struct _GdkWaylandDisplay
   GHashTable *known_globals;
   GList *on_has_globals_closures;
 
+  /* Keep a list of orphaned dialogs (i.e. without parent) */
+  GList *orphan_dialogs;
+
   struct wl_cursor_theme *scaled_cursor_themes[GDK_WAYLAND_THEME_SCALES_COUNT];
   gchar *cursor_theme_name;
   int cursor_theme_size;

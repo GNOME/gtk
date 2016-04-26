@@ -191,14 +191,15 @@ _gdk_window_impl_wayland_init (GdkWindowImplWayland *impl)
   impl->saved_height = -1;
 }
 
-/* Keep a list of orphaned dialogs (i.e. without parent) */
-static GList *orphan_dialogs;
-
 static void
 _gdk_wayland_screen_add_orphan_dialog (GdkWindow *window)
 {
-  if (!g_list_find (orphan_dialogs, window))
-    orphan_dialogs = g_list_prepend (orphan_dialogs, window);
+  GdkWaylandDisplay *display_wayland =
+    GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
+
+  if (!g_list_find (display_wayland->orphan_dialogs, window))
+    display_wayland->orphan_dialogs =
+      g_list_prepend (display_wayland->orphan_dialogs, window);
 }
 
 static void
@@ -950,6 +951,9 @@ gdk_wayland_window_sync_parent (GdkWindow *window,
   GdkWindowImplWayland *impl_parent = NULL;
   struct xdg_surface *parent_surface;
 
+  g_assert (parent == NULL ||
+            gdk_window_get_display (window) == gdk_window_get_display (parent));
+
   if (!impl->display_server.xdg_surface)
     return;
 
@@ -975,12 +979,14 @@ gdk_wayland_window_sync_parent (GdkWindow *window,
 static void
 gdk_wayland_window_update_dialogs (GdkWindow *window)
 {
+  GdkWaylandDisplay *display_wayland =
+    GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
   GList *l;
 
-  if (!orphan_dialogs)
+  if (!display_wayland->orphan_dialogs)
     return;
 
-  for (l = orphan_dialogs; l; l = l->next)
+  for (l = display_wayland->orphan_dialogs; l; l = l->next)
     {
       GdkWindow *w = l->data;
       GdkWindowImplWayland *impl;
@@ -1827,7 +1833,8 @@ gdk_wayland_window_hide_surface (GdkWindow *window)
       impl->display_server.outputs = NULL;
 
       if (impl->hint == GDK_WINDOW_TYPE_HINT_DIALOG && !impl->transient_for)
-        orphan_dialogs = g_list_remove (orphan_dialogs, window);
+        display_wayland->orphan_dialogs =
+          g_list_remove (display_wayland->orphan_dialogs, window);
     }
 
   _gdk_wayland_window_clear_saved_size (window);
@@ -2288,7 +2295,12 @@ gdk_wayland_window_set_transient_for (GdkWindow *window,
                                       GdkWindow *parent)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkWaylandDisplay *display_wayland =
+    GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
   GdkWindow *previous_parent;
+
+  g_assert (parent == NULL ||
+            gdk_window_get_display (window) == gdk_window_get_display (parent));
 
   if (check_transient_for_loop (window, parent))
     {
@@ -2307,7 +2319,8 @@ gdk_wayland_window_set_transient_for (GdkWindow *window,
       if (!parent)
         _gdk_wayland_screen_add_orphan_dialog (window);
       else if (!previous_parent)
-        orphan_dialogs = g_list_remove (orphan_dialogs, window);
+        display_wayland->orphan_dialogs =
+          g_list_remove (display_wayland->orphan_dialogs, window);
     }
   gdk_wayland_window_sync_parent (window, NULL);
   if (should_map_as_subsurface (window) &&
