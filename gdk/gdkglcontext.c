@@ -274,14 +274,14 @@ gdk_gl_context_upload_texture (GdkGLContext    *context,
           glTexImage2D (texture_target, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 
           for (i = 0; i < height; i++)
-            glTexSubImage2D (texture_target, 0, 0, i, width, 1, GL_RGBA, GL_UNSIGNED_BYTE, data + (i * stride));
+            glTexSubImage2D (texture_target, 0, 0, i, width, 1, GL_RGBA, GL_UNSIGNED_BYTE, (unsigned char*) data + (i * stride));
         }
       else
         {
           glTexImage2D (texture_target, 0, GL_RGBA, width, height, 0, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, NULL);
 
           for (i = 0; i < height; i++)
-            glTexSubImage2D (texture_target, 0, 0, i, width, 1, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, data + (i * stride));
+            glTexSubImage2D (texture_target, 0, 0, i, width, 1, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, (unsigned char*) data + (i * stride));
         }
     }
 }
