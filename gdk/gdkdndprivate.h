@@ -94,6 +94,8 @@ struct _GdkDragContext {
   /*< private >*/
   GdkDragProtocol protocol;
 
+  GdkDisplay *display;
+
   gboolean is_source;
   GdkWindow *source_window;
   GdkWindow *dest_window;
@@ -119,7 +121,8 @@ void     gdk_drag_context_cancel              (GdkDragContext      *context,
                                                GdkDragCancelReason  reason);
 gboolean gdk_drag_context_handle_source_event (GdkEvent *event);
 gboolean gdk_drag_context_handle_dest_event   (GdkEvent *event);
-GdkCursor * gdk_drag_get_cursor (GdkDragAction action);
+GdkCursor * gdk_drag_get_cursor               (GdkDragContext *context,
+                                               GdkDragAction   action);
 
 G_END_DECLS
 

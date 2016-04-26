@@ -587,6 +587,8 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
 
   window = [[self contentView] gdkWindow];
 
+  current_context->display = gdk_window_get_display (window);
+
   device_manager = gdk_display_get_device_manager (gdk_display_get_default ());
   gdk_drag_context_set_device (current_context,
                                gdk_device_manager_get_client_pointer (device_manager));

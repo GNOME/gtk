@@ -1705,6 +1705,7 @@ xdnd_enter_filter (GdkXEvent *xev,
   context_x11 = (GdkX11DragContext *)g_object_new (GDK_TYPE_X11_DRAG_CONTEXT, NULL);
   context = (GdkDragContext *)context_x11;
 
+  context->display = display;
   context->protocol = GDK_DRAG_PROTO_XDND;
   context_x11->version = version;
 
@@ -2020,6 +2021,7 @@ _gdk_x11_window_drag_begin (GdkWindow *window,
 
   context = (GdkDragContext *) g_object_new (GDK_TYPE_X11_DRAG_CONTEXT, NULL);
 
+  context->display = gdk_window_get_display (window);
   context->is_source = TRUE;
   context->source_window = window;
   g_object_ref (window);
@@ -3132,6 +3134,6 @@ gdk_x11_drag_context_action_changed (GdkDragContext *context,
 {
   GdkCursor *cursor;
 
-  cursor = gdk_drag_get_cursor (action);
+  cursor = gdk_drag_get_cursor (context, action);
   gdk_drag_context_set_cursor (context, cursor);
 }

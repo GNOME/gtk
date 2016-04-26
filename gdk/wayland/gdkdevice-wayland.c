@@ -2983,7 +2983,8 @@ _gdk_wayland_device_manager_add_seat (GdkDeviceManager *device_manager,
   seat->data_device =
     wl_data_device_manager_get_data_device (display_wayland->data_device_manager,
                                             seat->wl_seat);
-  seat->drop_context = _gdk_wayland_drop_context_new (seat->data_device);
+  seat->drop_context = _gdk_wayland_drop_context_new (display,
+                                                      seat->data_device);
   wl_data_device_add_listener (seat->data_device,
                                &data_device_listener, seat);
 

@@ -427,7 +427,7 @@ gdk_wayland_drag_context_action_changed (GdkDragContext *context,
 {
   GdkCursor *cursor;
 
-  cursor = gdk_drag_get_cursor (action);
+  cursor = gdk_drag_get_cursor (context, action);
   gdk_drag_context_set_cursor (context, cursor);
 }
 
@@ -528,6 +528,7 @@ _gdk_wayland_window_drag_begin (GdkWindow *window,
 
   context_wayland = g_object_new (GDK_TYPE_WAYLAND_DRAG_CONTEXT, NULL);
   context = GDK_DRAG_CONTEXT (context_wayland);
+  context->display = gdk_window_get_display (window);
   context->source_window = g_object_ref (window);
   context->is_source = TRUE;
   context->targets = g_list_copy (targets);
@@ -552,13 +553,15 @@ _gdk_wayland_window_drag_begin (GdkWindow *window,
 }
 
 GdkDragContext *
-_gdk_wayland_drop_context_new (struct wl_data_device *data_device)
+_gdk_wayland_drop_context_new (GdkDisplay            *display,
+                               struct wl_data_device *data_device)
 {
   GdkWaylandDragContext *context_wayland;
   GdkDragContext *context;
 
   context_wayland = g_object_new (GDK_TYPE_WAYLAND_DRAG_CONTEXT, NULL);
   context = GDK_DRAG_CONTEXT (context_wayland);
+  context->display = display;
   context->is_source = FALSE;
 
   return context;
