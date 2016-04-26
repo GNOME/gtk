@@ -269,6 +269,22 @@ gdk_add_option_entries_libgtk_only (GOptionGroup *group)
   gdk_add_option_entries (group);
 }
 
+static gpointer
+register_resources (gpointer dummy G_GNUC_UNUSED)
+{
+  _gdk_register_resource ();
+
+  return NULL;
+}
+
+static void
+gdk_ensure_resources (void)
+{
+  static GOnce register_resources_once = G_ONCE_INIT;
+
+  g_once (&register_resources_once, register_resources, NULL);
+}
+
 void
 gdk_pre_parse (void)
 {
@@ -277,7 +293,7 @@ gdk_pre_parse (void)
 
   gdk_initialized = TRUE;
 
-  _gdk_register_resource ();
+  gdk_ensure_resources ();
 
   /* We set the fallback program class here, rather than lazily in
    * gdk_get_program_class, since we don't want -name to override it.
