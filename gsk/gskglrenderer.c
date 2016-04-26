@@ -953,6 +953,30 @@ out:
 }
 
 static void
+gsk_gl_renderer_clear_tree (GskRenderer *renderer,
+                            GskRenderNode *root_node)
+{
+  GskGLRenderer *self = GSK_GL_RENDERER (renderer);
+
+  if (self->context == NULL)
+    return;
+
+  gdk_gl_context_make_current (self->context);
+
+  g_clear_pointer (&self->opaque_render_items, g_array_unref);
+  g_clear_pointer (&self->transparent_render_items, g_array_unref);
+
+  if (gsk_renderer_is_realized (renderer))
+    {
+      self->opaque_render_items = g_array_sized_new (FALSE, FALSE, sizeof (RenderItem), 16);
+      g_array_set_clear_func (self->opaque_render_items, render_item_clear);
+
+      self->transparent_render_items = g_array_sized_new (FALSE, FALSE, sizeof (RenderItem), 16);
+      g_array_set_clear_func (self->opaque_render_items, render_item_clear);
+    }
+}
+
+static void
 gsk_gl_renderer_clear (GskRenderer *renderer)
 {
 }
@@ -1051,6 +1075,7 @@ gsk_gl_renderer_class_init (GskGLRendererClass *klass)
   renderer_class->update = gsk_gl_renderer_update;
   renderer_class->clear = gsk_gl_renderer_clear;
   renderer_class->validate_tree = gsk_gl_renderer_validate_tree;
+  renderer_class->clear_tree = gsk_gl_renderer_clear_tree;
   renderer_class->render = gsk_gl_renderer_render;
 }
 
