@@ -273,6 +273,7 @@ gdk_drag_context_class_init (GdkDragContextClass *klass)
   /**
    * GdkDragContext::cancel:
    * @context: The object on which the signal is emitted
+   * @reason: The reason the context was cancelled
    *
    * The drag and drop operation was cancelled.
    *
