@@ -2980,7 +2980,9 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
       GdkRectangle child_rect;
       int min_x, max_x, min_y, max_y;
       int size;
+      GtkTextDirection direction;
 
+      direction = gtk_widget_get_direction (child->widget);
       path = _gtk_tree_path_new_from_rbtree (child->tree, child->node);
       gtk_tree_view_get_cell_area (tree_view, path, child->column, &child_rect);
       child_rect.x += child->border.left;
@@ -2989,9 +2991,16 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
       child_rect.height -= child->border.top + child->border.bottom;
 
       gtk_widget_get_preferred_width (GTK_WIDGET (child->widget), &size, NULL);
+
       if (size > child_rect.width)
         {
-          child_rect.x -= (size - child_rect.width) / 2;
+          /* Enlarge the child, extending it to the left (RTL) */
+          if (direction == GTK_TEXT_DIR_RTL)
+            child_rect.x -= (size - child_rect.width);
+          /* or to the right (LTR) */
+          else
+            child_rect.x += 0;
+
           child_rect.width = size;
         }
 
@@ -3000,17 +3009,36 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
                                                  &size, NULL);
       if (size > child_rect.height)
         {
+          /* Enlarge the child, extending in both directions equally */
           child_rect.y -= (size - child_rect.height) / 2;
           child_rect.height = size;
         }
 
-      /* push the rect back in the visible area if needed, preferring the top left corner */
+      /* push the rect back in the visible area if needed,
+       * preferring the top left corner (for RTL)
+       * or top right corner (for LTR)
+       */
       min_x = gtk_adjustment_get_value (tree_view->priv->hadjustment);
       max_x = min_x + allocation->width - child_rect.width;
       min_y = 0;
       max_y = min_y + allocation->height - gtk_tree_view_get_effective_header_height (tree_view) - child_rect.height;
-      child_rect.x = MAX (min_x, MIN (child_rect.x, max_x));
-      child_rect.y = MAX (min_y, MIN (child_rect.y, max_y));
+
+      if (direction == GTK_TEXT_DIR_LTR)
+        /* Ensure that child's right edge is not sticking to the right
+         * (if (child_rect.x > max_x) child_rect.x = max_x),
+         * then ensure that child's left edge is visible and is not sticking to the left
+         * (if (child_rect.x < min_x) child_rect.x = min_x).
+         */
+        child_rect.x = MAX (min_x, MIN (max_x, child_rect.x));
+      else
+        /* Ensure that child's left edge is not sticking to the left
+         * (if (child_rect.x < min_x) child_rect.x = min_x),
+         * then ensure that child's right edge is visible and is not sticking to the right
+         * (if (child_rect.x > max_x) child_rect.x = max_x).
+         */
+        child_rect.x = MIN (max_x, MAX (min_x, child_rect.x));
+
+      child_rect.y = MAX (min_y, MIN (max_y, child_rect.y));
 
       gtk_tree_path_free (path);
       gtk_widget_size_allocate (child->widget, &child_rect);
