@@ -753,7 +753,8 @@ gdk_drag_context_handle_source_event (GdkEvent *event)
 }
 
 GdkCursor *
-gdk_drag_get_cursor (GdkDragAction action)
+gdk_drag_get_cursor (GdkDragContext *context,
+                     GdkDragAction   action)
 {
   gint i;
 
@@ -762,7 +763,7 @@ gdk_drag_get_cursor (GdkDragAction action)
       break;
 
   if (drag_cursors[i].cursor == NULL)
-    drag_cursors[i].cursor = gdk_cursor_new_from_name (gdk_display_get_default (),
+    drag_cursors[i].cursor = gdk_cursor_new_from_name (context->display,
                                                        drag_cursors[i].name);
   return drag_cursors[i].cursor;
 }
