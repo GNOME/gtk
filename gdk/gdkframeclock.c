@@ -416,12 +416,18 @@ _gdk_frame_clock_begin_frame (GdkFrameClock *frame_clock)
   priv->frame_counter++;
   priv->current = (priv->current + 1) % FRAME_HISTORY_MAX_LENGTH;
 
+  /* Try to steal the previous frame timing instead of discarding
+   * and allocating a new one.
+   */
+  if G_LIKELY (priv->n_timings == FRAME_HISTORY_MAX_LENGTH &&
+               _gdk_frame_timings_steal (priv->timings[priv->current],
+                                         priv->frame_counter))
+    return;
+
   if (priv->n_timings < FRAME_HISTORY_MAX_LENGTH)
     priv->n_timings++;
   else
-    {
-      gdk_frame_timings_unref(priv->timings[priv->current]);
-    }
+    gdk_frame_timings_unref(priv->timings[priv->current]);
 
   priv->timings[priv->current] = _gdk_frame_timings_new (priv->frame_counter);
 }

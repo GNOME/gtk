@@ -111,7 +111,9 @@ void _gdk_frame_clock_begin_frame         (GdkFrameClock   *clock);
 void _gdk_frame_clock_debug_print_timings (GdkFrameClock   *clock,
                                            GdkFrameTimings *timings);
 
-GdkFrameTimings *_gdk_frame_timings_new (gint64 frame_counter);
+GdkFrameTimings *_gdk_frame_timings_new   (gint64           frame_counter);
+gboolean         _gdk_frame_timings_steal (GdkFrameTimings *timings,
+                                           gint64           frame_counter);
 
 void _gdk_frame_clock_emit_flush_events  (GdkFrameClock *frame_clock);
 void _gdk_frame_clock_emit_before_paint  (GdkFrameClock *frame_clock);
