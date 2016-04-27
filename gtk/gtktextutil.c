@@ -297,75 +297,74 @@ _gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
   GtkTextIter        iter;
   cairo_t           *cr;
 
-   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-   g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), NULL);
-   g_return_val_if_fail (start != NULL, NULL);
-   g_return_val_if_fail (end != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+  g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), NULL);
+  g_return_val_if_fail (start != NULL, NULL);
+  g_return_val_if_fail (end != NULL, NULL);
 
-   new_buffer = gtk_text_buffer_new (gtk_text_buffer_get_tag_table (buffer));
-   gtk_text_buffer_get_start_iter (new_buffer, &iter);
+  new_buffer = gtk_text_buffer_new (gtk_text_buffer_get_tag_table (buffer));
+  gtk_text_buffer_get_start_iter (new_buffer, &iter);
 
-   gtk_text_buffer_insert_range (new_buffer, &iter, start, end);
+  gtk_text_buffer_insert_range (new_buffer, &iter, start, end);
 
-   gtk_text_buffer_get_start_iter (new_buffer, &iter);
+  gtk_text_buffer_get_start_iter (new_buffer, &iter);
 
-   layout = gtk_text_layout_new ();
+  layout = gtk_text_layout_new ();
 
-   ltr_context = gtk_widget_create_pango_context (widget);
-   pango_context_set_base_dir (ltr_context, PANGO_DIRECTION_LTR);
-   rtl_context = gtk_widget_create_pango_context (widget);
-   pango_context_set_base_dir (rtl_context, PANGO_DIRECTION_RTL);
+  ltr_context = gtk_widget_create_pango_context (widget);
+  pango_context_set_base_dir (ltr_context, PANGO_DIRECTION_LTR);
+  rtl_context = gtk_widget_create_pango_context (widget);
+  pango_context_set_base_dir (rtl_context, PANGO_DIRECTION_RTL);
 
-   gtk_text_layout_set_contexts (layout, ltr_context, rtl_context);
+  gtk_text_layout_set_contexts (layout, ltr_context, rtl_context);
 
-   g_object_unref (ltr_context);
-   g_object_unref (rtl_context);
+  g_object_unref (ltr_context);
+  g_object_unref (rtl_context);
 
-   style = gtk_text_attributes_new ();
+  style = gtk_text_attributes_new ();
 
-   gtk_widget_get_allocation (widget, &allocation);
-   layout_width = allocation.width;
+  gtk_widget_get_allocation (widget, &allocation);
+  layout_width = allocation.width;
 
-   set_attributes_from_style (gtk_widget_get_style_context (widget), style);
+  set_attributes_from_style (gtk_widget_get_style_context (widget), style);
 
-   if (GTK_IS_TEXT_VIEW (widget))
-     {
-       layout_width = layout_width
-         - gtk_text_view_get_border_window_size (GTK_TEXT_VIEW (widget), GTK_TEXT_WINDOW_LEFT)
-         - gtk_text_view_get_border_window_size (GTK_TEXT_VIEW (widget), GTK_TEXT_WINDOW_RIGHT);
-     }
+  if (GTK_IS_TEXT_VIEW (widget))
+    {
+      layout_width = layout_width
+        - gtk_text_view_get_border_window_size (GTK_TEXT_VIEW (widget), GTK_TEXT_WINDOW_LEFT)
+        - gtk_text_view_get_border_window_size (GTK_TEXT_VIEW (widget), GTK_TEXT_WINDOW_RIGHT);
+    }
 
-   style->direction = gtk_widget_get_direction (widget);
-   style->wrap_mode = GTK_WRAP_WORD_CHAR;
+  style->direction = gtk_widget_get_direction (widget);
+  style->wrap_mode = GTK_WRAP_WORD_CHAR;
 
-   gtk_text_layout_set_default_style (layout, style);
-   gtk_text_attributes_unref (style);
+  gtk_text_layout_set_default_style (layout, style);
+  gtk_text_attributes_unref (style);
 
-   gtk_text_layout_set_buffer (layout, new_buffer);
-   gtk_text_layout_set_cursor_visible (layout, FALSE);
-   gtk_text_layout_set_screen_width (layout, layout_width);
+  gtk_text_layout_set_buffer (layout, new_buffer);
+  gtk_text_layout_set_cursor_visible (layout, FALSE);
+  gtk_text_layout_set_screen_width (layout, layout_width);
 
-   gtk_text_layout_validate (layout, DRAG_ICON_MAX_HEIGHT);
-   gtk_text_layout_get_size (layout, &layout_width, &layout_height);
+  gtk_text_layout_validate (layout, DRAG_ICON_MAX_HEIGHT);
+  gtk_text_layout_get_size (layout, &layout_width, &layout_height);
 
-   layout_width = MIN (layout_width, DRAG_ICON_MAX_WIDTH);
-   layout_height = MIN (layout_height, DRAG_ICON_MAX_HEIGHT);
+  layout_width = MIN (layout_width, DRAG_ICON_MAX_WIDTH);
+  layout_height = MIN (layout_height, DRAG_ICON_MAX_HEIGHT);
 
-   surface = gdk_window_create_similar_surface (gtk_widget_get_window (widget),
-                                                CAIRO_CONTENT_COLOR_ALPHA,
-                                                layout_width, layout_height);
+  surface = gdk_window_create_similar_surface (gtk_widget_get_window (widget),
+                                               CAIRO_CONTENT_COLOR_ALPHA,
+                                               layout_width, layout_height);
 
-   cr = cairo_create (surface);
+  cr = cairo_create (surface);
 
-   gtk_text_layout_draw (layout, widget, cr, NULL);
+  gtk_text_layout_draw (layout, widget, cr, NULL);
 
-   cairo_destroy (cr);
-   g_object_unref (layout);
-   g_object_unref (new_buffer);
+  cairo_destroy (cr);
+  g_object_unref (layout);
+  g_object_unref (new_buffer);
 
-   return surface;
+  return surface;
 }
-
 
 static gint
 layout_get_char_width (PangoLayout *layout)
