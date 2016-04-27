@@ -71,12 +71,22 @@ image_drag_begin (GtkWidget      *widget,
 }
 
 static void
+window_destroyed (GtkWidget *window, gpointer data)
+{
+  GtkWidget *widget = data;
+
+  g_print ("drag widget destroyed\n");
+  g_object_unref (window);
+  g_object_set_data (G_OBJECT (widget), "drag window", NULL);
+}
+
+static void
 window_drag_end (GtkWidget *ebox, GdkDragContext *context, gpointer data)
 {
   GtkWidget *window = data;
 
   gtk_widget_destroy (window);
-  g_object_set_data (G_OBJECT (ebox), "drag window", NULL);
+  g_signal_handlers_disconnect_by_func (ebox, window_drag_end, data);
 }
 
 static void
@@ -91,20 +101,24 @@ window_drag_begin (GtkWidget      *widget,
 
   hotspot = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (data), "hotspot"));
 
-  pixbuf = get_image_pixbuf (GTK_IMAGE (data));
-
   window = g_object_get_data (G_OBJECT (widget), "drag window");
   if (window == NULL)
     {
       window = gtk_window_new (GTK_WINDOW_POPUP);
+      g_print ("creating new drag widget\n");
+      pixbuf = get_image_pixbuf (GTK_IMAGE (data));
       image = gtk_image_new_from_pixbuf (pixbuf);
+      g_object_unref (pixbuf);
       gtk_widget_show (image);
       gtk_container_add (GTK_CONTAINER (window), image);
+      g_object_ref (window);
       g_object_set_data (G_OBJECT (widget), "drag window", window);
+      g_signal_connect (window, "destroy", G_CALLBACK (window_destroyed), widget);
     }
+  else
+    g_print ("reusing drag widget\n");
 
   gtk_drag_set_icon_widget (context, window, 0, 0);
-  g_object_unref (pixbuf);
 
   if (hotspot == CENTER)
     g_signal_connect (widget, "drag-end", G_CALLBACK (window_drag_end), window);
@@ -363,9 +377,9 @@ main (int argc, char *Argv[])
   gtk_grid_attach (GTK_GRID (grid), make_spinner (), 0, 2, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), make_image ("weather-clear", CENTER), 1, 2, 1, 1);
 
-  gtk_grid_attach (GTK_GRID (grid), make_image ("dialog-question", TOP_LEFT), 0, 3, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), make_image2 ("dialog-question", TOP_LEFT), 0, 3, 1, 1);
 
-  gtk_grid_attach (GTK_GRID (grid), make_image ("dialog-information", CENTER), 1, 3, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), make_image2 ("dialog-information", CENTER), 1, 3, 1, 1);
 
   gtk_widget_show_all (window);
   gtk_main ();
