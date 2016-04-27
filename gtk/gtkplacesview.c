@@ -2223,7 +2223,7 @@ gtk_places_view_class_init (GtkPlacesViewClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkPlacesView, server_adresses_popover);
 
   gtk_widget_class_bind_template_callback (widget_class, on_address_entry_text_changed);
-  gtk_widget_class_bind_template_callback (widget_class, on_address_entry_clear_pressed);
+  gtk_widget_class_bind_template_callback (widget_class, on_address_entry_show_help_pressed);
   gtk_widget_class_bind_template_callback (widget_class, on_connect_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_key_press_event);
   gtk_widget_class_bind_template_callback (widget_class, on_listbox_row_activated);
