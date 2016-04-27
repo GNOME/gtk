@@ -405,6 +405,9 @@ entry:drop(active):not(:only-child) + combobox > box > button.combo {
 treeview acceleditor > label {
   background-color: #4a90d9; }
 
+treeview entry:focus:dir(rtl), treeview entry:focus:dir(ltr) {
+  background-color: #ffffff;
+  transition-property: color, background; }
 treeview entry.flat, treeview entry {
   border-radius: 0;
   background-image: none;
