@@ -2056,9 +2056,11 @@ gtk_drag_set_icon_widget_internal (GdkDragContext *context,
     {
       GdkScreen *screen;
       GdkVisual *visual;
+      gboolean has_rgba;
 
       screen = gdk_window_get_screen (gdk_drag_context_get_source_window (context));
       visual = gdk_screen_get_rgba_visual (screen);
+      has_rgba = visual != NULL && gdk_screen_is_composited (screen);
 
       info->icon_window = gtk_window_new (GTK_WINDOW_POPUP);
       gtk_window_set_type_hint (GTK_WINDOW (info->icon_window), GDK_WINDOW_TYPE_HINT_DND);
@@ -2067,7 +2069,10 @@ gtk_drag_set_icon_widget_internal (GdkDragContext *context,
       if (visual)
         gtk_widget_set_visual (info->icon_window, visual);
       gtk_widget_set_events (info->icon_window, GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
-      gtk_widget_set_app_paintable (info->icon_window, TRUE);
+
+      if (has_rgba)
+        gtk_widget_set_app_paintable (info->icon_window, TRUE);
+
       gtk_window_set_hardcoded_window (GTK_WINDOW (info->icon_window),
                                        gdk_drag_context_get_drag_window (context));
       gtk_widget_show (info->icon_window);
@@ -2119,6 +2124,25 @@ gtk_drag_draw_icon_pattern (GtkWidget *window,
                             cairo_t   *cr,
                             gpointer   pattern)
 {
+  cairo_set_source (cr, pattern);
+  cairo_paint (cr);
+}
+
+static void
+gtk_drag_draw_icon_pattern_and_background (GtkWidget *window,
+                                           cairo_t   *cr,
+                                           gpointer   pattern)
+{
+  GtkStyleContext *context;
+  int width, height;
+
+  context = gtk_widget_get_style_context (window);
+  width = gtk_widget_get_allocated_width (window);
+  height = gtk_widget_get_allocated_height (window);
+
+  gtk_render_background (context, cr, 0, 0, width, height);
+  gtk_render_frame (context, cr, 0, 0, width, height);
+
   cairo_set_source (cr, pattern);
   cairo_paint (cr);
 }
@@ -2260,7 +2284,7 @@ _gtk_cairo_surface_extents (cairo_surface_t *surface,
  * cursor will be positioned at the (0,0) coordinate of the
  * surface.
  */
-void 
+void
 gtk_drag_set_icon_surface (GdkDragContext  *context,
                            cairo_surface_t *surface)
 {
@@ -2270,20 +2294,18 @@ gtk_drag_set_icon_surface (GdkDragContext  *context,
   cairo_pattern_t *pattern;
   GdkVisual *rgba_visual;
   gboolean has_rgba;
-      
+  cairo_matrix_t matrix;
+
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
   g_return_if_fail (surface != NULL);
 
   _gtk_cairo_surface_extents (surface, &extents);
 
-
   screen = gdk_window_get_screen (gdk_drag_context_get_source_window (context));
   rgba_visual = gdk_screen_get_rgba_visual (screen);
 
   window = gtk_window_new (GTK_WINDOW_POPUP);
-  has_rgba =
-    rgba_visual != NULL &&
-    gdk_screen_is_composited (screen);
+  has_rgba = rgba_visual != NULL && gdk_screen_is_composited (screen);
 
   gtk_window_set_screen (GTK_WINDOW (window), screen);
 
@@ -2298,53 +2320,14 @@ gtk_drag_set_icon_surface (GdkDragContext  *context,
   gtk_widget_set_size_request (window, extents.width, extents.height);
   gtk_widget_realize (window);
 
-  if (cairo_surface_get_content (surface) != CAIRO_CONTENT_COLOR &&
-      !has_rgba)
-    {
-      cairo_surface_t *saturated;
-      cairo_region_t *region;
-      cairo_t *cr;
-
-      region = gdk_cairo_region_create_from_surface (surface);
-      cairo_region_translate (region, -extents.x, -extents.y);
-
-      gtk_widget_shape_combine_region (window, region);
-      cairo_region_destroy (region);
-
-      /* Need to saturate the colors, so it doesn't look like semi-transparent
-       * pixels were painted on black.
-       */
-      saturated = gdk_window_create_similar_surface (gtk_widget_get_window (window),
-                                                     CAIRO_CONTENT_COLOR,
-                                                     extents.width,
-                                                     extents.height);
-      
-      cr = cairo_create (saturated);
-      cairo_push_group_with_content (cr, CAIRO_CONTENT_COLOR_ALPHA);
-      cairo_set_source_surface (cr, surface, -extents.x, -extents.y);
-      cairo_paint (cr);
-      cairo_set_operator (cr, CAIRO_OPERATOR_SATURATE);
-      cairo_paint (cr);
-      cairo_pop_group_to_source (cr);
-      cairo_paint (cr);
-      cairo_destroy (cr);
-    
-      pattern = cairo_pattern_create_for_surface (saturated);
-
-      cairo_surface_destroy (saturated);
-    }
-  else
-    {
-      cairo_matrix_t matrix;
-
-      pattern = cairo_pattern_create_for_surface (surface);
-      cairo_matrix_init_translate (&matrix, extents.x, extents.y);
-      cairo_pattern_set_matrix (pattern, &matrix);
-    }
+  pattern = cairo_pattern_create_for_surface (surface);
+  cairo_matrix_init_translate (&matrix, extents.x, extents.y);
+  cairo_pattern_set_matrix (pattern, &matrix);
 
   g_signal_connect_data (window,
                          "draw",
-                         G_CALLBACK (gtk_drag_draw_icon_pattern),
+                         has_rgba ? G_CALLBACK (gtk_drag_draw_icon_pattern)
+                                  : G_CALLBACK (gtk_drag_draw_icon_pattern_and_background),
                          pattern,
                          (GClosureNotify) cairo_pattern_destroy,
                          G_CONNECT_AFTER);
