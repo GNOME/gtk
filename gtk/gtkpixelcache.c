@@ -48,7 +48,7 @@ struct _GtkPixelCache {
   /* may be null if not dirty */
   cairo_region_t *surface_dirty;
 
-  guint timeout_tag;
+  GSource *timeout_source;
 
   guint extra_width;
   guint extra_height;
@@ -75,22 +75,17 @@ _gtk_pixel_cache_free (GtkPixelCache *cache)
   if (cache == NULL)
     return;
 
-  if (cache->timeout_tag ||
+  if (cache->timeout_source ||
       cache->surface ||
       cache->surface_dirty)
     {
       g_warning ("pixel cache freed that wasn't unmapped: tag %u surface %p dirty %p",
-                 cache->timeout_tag, cache->surface, cache->surface_dirty);
+                 g_source_get_id (cache->timeout_source), cache->surface, cache->surface_dirty);
     }
 
-  if (cache->timeout_tag)
-    g_source_remove (cache->timeout_tag);
-
-  if (cache->surface != NULL)
-    cairo_surface_destroy (cache->surface);
-
-  if (cache->surface_dirty != NULL)
-    cairo_region_destroy (cache->surface_dirty);
+  g_clear_pointer (&cache->timeout_source, g_source_destroy);
+  g_clear_pointer (&cache->surface, cairo_surface_destroy);
+  g_clear_pointer (&cache->surface_dirty, cairo_region_destroy);
 
   g_free (cache);
 }
@@ -390,20 +385,9 @@ _gtk_pixel_cache_repaint (GtkPixelCache         *cache,
 static void
 gtk_pixel_cache_blow_cache (GtkPixelCache *cache)
 {
-  if (cache->timeout_tag)
-    {
-      g_source_remove (cache->timeout_tag);
-      cache->timeout_tag = 0;
-    }
-
-  if (cache->surface)
-    {
-      cairo_surface_destroy (cache->surface);
-      cache->surface = NULL;
-      if (cache->surface_dirty)
-        cairo_region_destroy (cache->surface_dirty);
-      cache->surface_dirty = NULL;
-    }
+  g_clear_pointer (&cache->timeout_source, g_source_destroy);
+  g_clear_pointer (&cache->surface, cairo_surface_destroy);
+  g_clear_pointer (&cache->surface_dirty, cairo_region_destroy);
 }
 
 static gboolean
@@ -411,7 +395,7 @@ blow_cache_cb  (gpointer user_data)
 {
   GtkPixelCache *cache = user_data;
 
-  cache->timeout_tag = 0;
+  cache->timeout_source = NULL;
 
   gtk_pixel_cache_blow_cache (cache);
 
@@ -441,12 +425,21 @@ _gtk_pixel_cache_draw (GtkPixelCache         *cache,
                        GtkPixelCacheDrawFunc  draw,
                        gpointer               user_data)
 {
-  if (cache->timeout_tag)
-    g_source_remove (cache->timeout_tag);
+  if (cache->timeout_source)
+    {
+      gint64 deadline;
 
-  cache->timeout_tag = g_timeout_add_seconds (BLOW_CACHE_TIMEOUT_SEC,
-                                              blow_cache_cb, cache);
-  g_source_set_name_by_id (cache->timeout_tag, "[gtk+] blow_cache_cb");
+      deadline = g_get_monotonic_time () + (BLOW_CACHE_TIMEOUT_SEC * G_USEC_PER_SEC);
+      g_source_set_ready_time (cache->timeout_source, deadline);
+    }
+  else
+    {
+      guint tag;
+
+      tag = g_timeout_add_seconds (BLOW_CACHE_TIMEOUT_SEC, blow_cache_cb, cache);
+      cache->timeout_source = g_main_context_find_source_by_id (NULL, tag);
+      g_source_set_name (cache->timeout_source, "[gtk+] blow_cache_cb");
+    }
 
   _gtk_pixel_cache_create_surface_if_needed (cache, window,
                                              view_rect, canvas_rect);
