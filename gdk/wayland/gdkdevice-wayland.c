@@ -2738,7 +2738,7 @@ gdk_wayland_seat_grab (GdkSeat                *seat,
   if (native == NULL || GDK_WINDOW_DESTROYED (native))
     return GDK_GRAB_NOT_VIEWABLE;
 
-  gdk_wayland_seat_set_grab_window (wayland_seat, window);
+  gdk_wayland_seat_set_grab_window (wayland_seat, native);
   wayland_seat->pointer_grab_time = evtime;
 
   if (prepare_func)
@@ -2757,9 +2757,9 @@ gdk_wayland_seat_grab (GdkSeat                *seat,
     {
       GdkWindow *prev_focus = gdk_wayland_device_get_focus (wayland_seat->master_pointer);
 
-      if (prev_focus != window)
+      if (prev_focus != native)
         device_emit_grab_crossing (wayland_seat->master_pointer, prev_focus,
-                                   window, GDK_CROSSING_GRAB, evtime);
+                                   native, GDK_CROSSING_GRAB, evtime);
 
       _gdk_display_add_device_grab (display,
                                     wayland_seat->master_pointer,
@@ -2782,9 +2782,9 @@ gdk_wayland_seat_grab (GdkSeat                *seat,
     {
       GdkWindow *prev_focus = gdk_wayland_device_get_focus (wayland_seat->touch_master);
 
-      if (prev_focus != window)
+      if (prev_focus != native)
         device_emit_grab_crossing (wayland_seat->touch_master, prev_focus,
-                                   window, GDK_CROSSING_GRAB, evtime);
+                                   native, GDK_CROSSING_GRAB, evtime);
 
       _gdk_display_add_device_grab (display,
                                     wayland_seat->touch_master,
@@ -2803,9 +2803,9 @@ gdk_wayland_seat_grab (GdkSeat                *seat,
     {
       GdkWindow *prev_focus = gdk_wayland_device_get_focus (wayland_seat->master_keyboard);
 
-      if (prev_focus != window)
+      if (prev_focus != native)
         device_emit_grab_crossing (wayland_seat->master_keyboard, prev_focus,
-                                   window, GDK_CROSSING_GRAB, evtime);
+                                   native, GDK_CROSSING_GRAB, evtime);
 
       _gdk_display_add_device_grab (display,
                                     wayland_seat->master_keyboard,
