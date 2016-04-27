@@ -2012,6 +2012,13 @@ gtk_drag_begin (GtkWidget     *widget,
 }
 
 static void
+icon_widget_destroyed (GtkWidget         *widget,
+                       GtkDragSourceInfo *info)
+{
+  g_clear_object (&info->icon_widget);
+}
+
+static void
 gtk_drag_set_icon_widget_internal (GdkDragContext *context,
                                    GtkWidget      *widget,
                                    gint            hot_x,
@@ -2040,6 +2047,8 @@ gtk_drag_set_icon_widget_internal (GdkDragContext *context,
 
   if (!widget)
     goto out;
+
+  g_signal_connect (widget, "destroy", G_CALLBACK (icon_widget_destroyed), info);
 
   gdk_drag_context_set_hotspot (context, hot_x, hot_y);
 
@@ -2715,11 +2724,15 @@ gtk_drag_remove_icon (GtkDragSourceInfo *info)
       widget = info->icon_widget;
       info->icon_widget = NULL;
 
+      g_signal_handlers_disconnect_by_func (widget, icon_widget_destroyed, info);
+
       gtk_widget_hide (widget);
       gtk_widget_set_opacity (widget, 1.0);
 
       if (info->destroy_icon)
         gtk_widget_destroy (widget);
+      else
+        gtk_container_remove (GTK_CONTAINER (info->icon_window), widget);
 
       g_object_unref (widget);
     }
