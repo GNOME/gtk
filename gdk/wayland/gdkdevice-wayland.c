@@ -1735,6 +1735,9 @@ deliver_key_event (GdkWaylandSeat *seat,
 
   sym = xkb_state_key_get_one_sym (xkb_state, key);
 
+  if (sym == XKB_KEY_NoSymbol)
+    return;
+
   seat->time = time_;
   seat->key_modifiers = gdk_keymap_get_modifier_state (keymap);
 

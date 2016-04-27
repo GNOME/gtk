@@ -351,7 +351,7 @@ gdk_wayland_keymap_translate_keyboard_state (GdkKeymap       *keymap,
   if (consumed_modifiers)
     *consumed_modifiers = get_gdk_modifiers (xkb_keymap, consumed);
 
-  return TRUE;
+  return (sym != XKB_KEY_NoSymbol);
 }
 
 static guint
