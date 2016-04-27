@@ -808,7 +808,7 @@ gtk_progress_bar_measure_text (GtkCssGadget   *gadget,
       else
         *minimum = logical_rect.width;
 
-      *natural = logical_rect.width;
+      *natural = MAX (*minimum, logical_rect.width);
     }
   else
     *minimum = *natural = logical_rect.height;
