@@ -254,14 +254,12 @@ _gtk_text_util_create_drag_icon (GtkWidget *widget,
 }
 
 static void
-gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
-                                         GtkTextAttributes  *values)
+set_attributes_from_style (GtkStyleContext   *context,
+                           GtkTextAttributes *values)
 {
-  GtkStyleContext *context;
   GdkRGBA bg_color, fg_color;
   GtkStateFlags state;
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (text_view));
   state = gtk_style_context_get_state (context);
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
@@ -328,10 +326,10 @@ _gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
    gtk_widget_get_allocation (widget, &allocation);
    layout_width = allocation.width;
 
+   set_attributes_from_style (gtk_widget_get_style_context (widget), style);
+
    if (GTK_IS_TEXT_VIEW (widget))
      {
-       gtk_text_view_set_attributes_from_style (GTK_TEXT_VIEW (widget), style);
-
        layout_width = layout_width
          - gtk_text_view_get_border_window_size (GTK_TEXT_VIEW (widget), GTK_TEXT_WINDOW_LEFT)
          - gtk_text_view_get_border_window_size (GTK_TEXT_VIEW (widget), GTK_TEXT_WINDOW_RIGHT);
