@@ -25,6 +25,8 @@ Overview of Changes in GTK+ 3.21.1
  - We print more debug information about pixel formats, outputs, etc
  - The unstable tablet protocol is now supported
  - Virtual modifier handling has been improved
+ - Reduce jitter in keyboard repeat
+ - Fix problems with multiple display connections
 
 * Bugs fixed:
  573380 gtk_tree_model_iter_parent() fails if the same iterator is used...
@@ -86,6 +88,14 @@ Overview of Changes in GTK+ 3.21.1
  765493 kineticscrolling: avoid stutter at tail of kinetic deceleration
  765496 Clean up gtklabel.c a bit
  765567 wayland: avoid jitter in keyboard repeat
+ 756570 gtkplacesview no longer provides guidance on address formats
+ 765474 Wayland: Dialogs without transient parent crash the inspector
+ 765565 Wayland: Inspector GtkLabel drag'n'drop crashes client
+ 765576 gtk+ leaks and hangs
+ 765577 gdk/dnd: Add missing signal parameter documentation
+ 765632 typo in GTK_STYLE_CLASS_LIST_ROW docs
+ 765640 pixelcache: reuse existing timeout source when possible
+ 765644 Widget sizing problems with GtkProgressBar
 
 * Translation updates:
  Bulgarian
@@ -99,6 +109,7 @@ Overview of Changes in GTK+ 3.21.1
  Persian
  Polish
  Scottish Gaelic
+ Spanish
  Thai
  Traditional Chinese
 
