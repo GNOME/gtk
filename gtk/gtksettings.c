@@ -249,8 +249,11 @@ static void    settings_update_cursor_theme      (GtkSettings           *setting
 static void    settings_update_resolution        (GtkSettings           *settings);
 static void    settings_update_font_options      (GtkSettings           *settings);
 static gboolean settings_update_fontconfig       (GtkSettings           *settings);
-static void    settings_update_theme             (GtkSettings *settings);
-static void    settings_update_key_theme         (GtkSettings *settings);
+static void    settings_update_theme             (GtkSettings           *settings);
+static void    settings_update_key_theme         (GtkSettings           *settings);
+static gboolean settings_update_xsetting         (GtkSettings           *settings,
+                                                  GParamSpec            *pspec,
+                                                  gboolean               force);
 
 static void gtk_settings_load_from_key_file      (GtkSettings           *settings,
                                                   const gchar           *path,
@@ -1946,85 +1949,6 @@ gtk_settings_set_property (GObject      *object,
 }
 
 static void
-gtk_settings_get_property (GObject     *object,
-                           guint        property_id,
-                           GValue      *value,
-                           GParamSpec  *pspec)
-{
-  GtkSettings *settings = GTK_SETTINGS (object);
-  GtkSettingsPrivate *priv = settings->priv;
-  GType value_type = G_VALUE_TYPE (value);
-  GType fundamental_type = G_TYPE_FUNDAMENTAL (value_type);
-
-  /* handle internal properties */
-  switch (property_id)
-    {
-    case PROP_COLOR_HASH:
-      g_value_take_boxed (value, g_hash_table_new (g_str_hash, g_str_equal));
-      return;
-    default: ;
-    }
-
-  /* For enums and strings, we need to get the value as a string,
-   * not as an int, since we support using names/nicks as the setting
-   * value.
-   */
-  if ((g_value_type_transformable (G_TYPE_INT, value_type) &&
-       !(fundamental_type == G_TYPE_ENUM || fundamental_type == G_TYPE_FLAGS)) ||
-      g_value_type_transformable (G_TYPE_STRING, value_type) ||
-      g_value_type_transformable (GDK_TYPE_RGBA, value_type))
-    {
-      if (priv->property_values[property_id - 1].source == GTK_SETTINGS_SOURCE_APPLICATION ||
-          !gdk_screen_get_setting (priv->screen, pspec->name, value))
-        g_value_copy (&priv->property_values[property_id - 1].value, value);
-      else
-        g_param_value_validate (pspec, value);
-    }
-  else
-    {
-      GValue val = G_VALUE_INIT;
-
-      /* Try to get xsetting as a string and parse it. */
-
-      g_value_init (&val, G_TYPE_STRING);
-
-      if (priv->property_values[property_id - 1].source == GTK_SETTINGS_SOURCE_APPLICATION ||
-          !gdk_screen_get_setting (priv->screen, pspec->name, &val))
-        {
-          g_value_copy (&priv->property_values[property_id - 1].value, value);
-        }
-      else
-        {
-          GValue tmp_value = G_VALUE_INIT;
-          GValue gstring_value = G_VALUE_INIT;
-          GtkRcPropertyParser parser = (GtkRcPropertyParser) g_param_spec_get_qdata (pspec, quark_property_parser);
-
-          g_value_init (&gstring_value, G_TYPE_GSTRING);
-          g_value_take_boxed (&gstring_value,
-                              g_string_new (g_value_get_string (&val)));
-
-          g_value_init (&tmp_value, G_PARAM_SPEC_VALUE_TYPE (pspec));
-
-          if (parser && _gtk_settings_parse_convert (parser, &gstring_value,
-                                                     pspec, &tmp_value))
-            {
-              g_value_copy (&tmp_value, value);
-              g_param_value_validate (pspec, value);
-            }
-          else
-            {
-              g_value_copy (&priv->property_values[property_id - 1].value, value);
-            }
-
-          g_value_unset (&gstring_value);
-          g_value_unset (&tmp_value);
-        }
-
-      g_value_unset (&val);
-    }
-}
-
-static void
 settings_invalidate_style (GtkSettings *settings)
 {
   _gtk_style_provider_private_changed (GTK_STYLE_PROVIDER_PRIVATE (settings));
@@ -2856,7 +2780,10 @@ _gtk_settings_handle_event (GdkEventSetting *event)
   settings = gtk_settings_get_for_screen (screen);
   pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (settings), event->name);
 
-  if (pspec)
+  if (!pspec)
+    return;
+
+  if (settings_update_xsetting (settings, pspec, TRUE))
     g_object_notify_by_pspec (G_OBJECT (settings), pspec);
 }
 
@@ -3400,33 +3327,114 @@ gtk_settings_load_from_key_file (GtkSettings       *settings,
   g_key_file_free (keyfile);
 }
 
+static gboolean
+settings_update_xsetting (GtkSettings *settings,
+                          GParamSpec  *pspec,
+                          gboolean     force)
+{
+  GtkSettingsPrivate *priv = settings->priv;
+  GType value_type;
+  GType fundamental_type;
+  gboolean retval = FALSE;
+
+  if (priv->property_values[pspec->param_id - 1].source == GTK_SETTINGS_SOURCE_APPLICATION)
+    return FALSE;
+
+  if (priv->property_values[pspec->param_id - 1].source == GTK_SETTINGS_SOURCE_XSETTING && !force)
+    return FALSE;
+
+  value_type = G_PARAM_SPEC_VALUE_TYPE (pspec);
+  fundamental_type = G_TYPE_FUNDAMENTAL (value_type);
+
+  if ((g_value_type_transformable (G_TYPE_INT, value_type) &&
+       !(fundamental_type == G_TYPE_ENUM || fundamental_type == G_TYPE_FLAGS)) ||
+      g_value_type_transformable (G_TYPE_STRING, value_type) ||
+      g_value_type_transformable (GDK_TYPE_RGBA, value_type))
+    {
+      GValue val = G_VALUE_INIT;
+
+      g_value_init (&val, value_type);
+
+      if (!gdk_screen_get_setting (priv->screen, pspec->name, &val))
+        return FALSE;
+
+      g_param_value_validate (pspec, &val);
+      g_value_copy (&val, &priv->property_values[pspec->param_id - 1].value);
+      priv->property_values[pspec->param_id - 1].source = GTK_SETTINGS_SOURCE_XSETTING;
+
+      g_value_unset (&val);
+
+      retval = TRUE;
+    }
+  else
+    {
+      GValue tmp_value = G_VALUE_INIT;
+      GValue gstring_value = G_VALUE_INIT;
+      GValue val = G_VALUE_INIT;
+      GtkRcPropertyParser parser = (GtkRcPropertyParser) g_param_spec_get_qdata (pspec, quark_property_parser);
+
+      g_value_init (&val, G_TYPE_STRING);
+
+      if (!gdk_screen_get_setting (priv->screen, pspec->name, &val))
+        return FALSE;
+
+      g_value_init (&gstring_value, G_TYPE_GSTRING);
+      g_value_take_boxed (&gstring_value, g_string_new (g_value_get_string (&val)));
+
+      g_value_init (&tmp_value, value_type);
+      if (parser && _gtk_settings_parse_convert (parser, &gstring_value,
+                                                 pspec, &tmp_value))
+        {
+          g_param_value_validate (pspec, &tmp_value);
+          g_value_copy (&tmp_value, &priv->property_values[pspec->param_id - 1].value);
+          priv->property_values[pspec->param_id - 1].source = GTK_SETTINGS_SOURCE_XSETTING;
+          retval = TRUE;
+        }
+
+      g_value_unset (&gstring_value);
+      g_value_unset (&tmp_value);
+
+      g_value_unset (&val);
+    }
+
+  return retval;
+}
+
+static void
+gtk_settings_get_property (GObject     *object,
+                           guint        property_id,
+                           GValue      *value,
+                           GParamSpec  *pspec)
+{
+  GtkSettings *settings = GTK_SETTINGS (object);
+  GtkSettingsPrivate *priv = settings->priv;
+
+  /* handle internal properties */
+  switch (property_id)
+    {
+    case PROP_COLOR_HASH:
+      g_value_take_boxed (value, g_hash_table_new (g_str_hash, g_str_equal));
+      return;
+    default: ;
+    }
+
+  settings_update_xsetting (settings, pspec, FALSE);
+
+  g_value_copy (&priv->property_values[property_id - 1].value, value);
+}
+
 GtkSettingsSource
 _gtk_settings_get_setting_source (GtkSettings *settings,
                                   const gchar *name)
 {
   GtkSettingsPrivate *priv = settings->priv;
   GParamSpec *pspec;
-  GValue val = G_VALUE_INIT;
 
   pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (settings), name);
   if (!pspec)
     return GTK_SETTINGS_SOURCE_DEFAULT;
 
-  if (priv->property_values[pspec->param_id - 1].source == GTK_SETTINGS_SOURCE_APPLICATION)
-    return GTK_SETTINGS_SOURCE_APPLICATION;
-
-  /* We never actually store GTK_SETTINGS_SOURCE_XSETTING as a source
-   * value in the property_values array - we just try to load the xsetting,
-   * and use it when available. Do the same here.
-   */
-  g_value_init (&val, G_TYPE_STRING);
-  if (gdk_screen_get_setting (priv->screen, pspec->name, &val))
-    {
-      g_value_unset (&val);
-      return GTK_SETTINGS_SOURCE_XSETTING; 
-    }
-
-  return priv->property_values[pspec->param_id - 1].source;  
+  return priv->property_values[pspec->param_id - 1].source;
 }
 
 /**
