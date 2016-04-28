@@ -3825,37 +3825,29 @@ levelbar.horizontal.discrete block {
   margin: 0 1px; }
 levelbar.vertical.discrete block {
   margin: 1px 0; }
-levelbar block:not(.empty) {
-  border: 1px solid #2a76c6;
-  background-color: #4a90d9;
-  box-shadow: 0 1px rgba(0, 0, 0, 0.1);
+levelbar block {
+  border: 1px solid;
   border-radius: 1px; }
-  levelbar block:not(.empty):backdrop {
-    border-color: #4a90d9;
-    box-shadow: none; }
-levelbar block.low {
-  border-color: #c26000;
-  background-color: #f57900; }
-  levelbar block.low:backdrop {
-    border-color: #f57900; }
-levelbar block.high {
-  border-color: #2a76c6;
-  background-color: #4a90d9; }
-  levelbar block.high:backdrop {
-    border-color: #4a90d9; }
-levelbar block.full {
-  border-color: #5aa411;
-  background-color: #73d216; }
-  levelbar block.full:backdrop {
-    border-color: #73d216; }
-levelbar block.empty {
-  border: 1px solid #2a76c6;
-  border-radius: 1px;
-  background-color: transparent;
-  border-color: rgba(46, 52, 54, 0.2);
-  box-shadow: none; }
-  levelbar block.empty:backdrop {
-    border-color: rgba(139, 142, 143, 0.15); }
+  levelbar block.low {
+    border-color: #8f4700;
+    background-color: #f57900; }
+    levelbar block.low:backdrop {
+      border-color: #f57900; }
+  levelbar block.high, levelbar block:not(.empty) {
+    border-color: #215d9c;
+    background-color: #4a90d9; }
+    levelbar block.high:backdrop, levelbar block:not(.empty):backdrop {
+      border-color: #4a90d9; }
+  levelbar block.full {
+    border-color: #40760c;
+    background-color: #73d216; }
+    levelbar block.full:backdrop {
+      border-color: #73d216; }
+  levelbar block.empty {
+    background-color: transparent;
+    border-color: rgba(46, 52, 54, 0.2); }
+    levelbar block.empty:backdrop {
+      border-color: rgba(139, 142, 143, 0.15); }
 
 /****************
  * Print dialog *
