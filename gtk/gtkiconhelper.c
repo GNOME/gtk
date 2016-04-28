@@ -892,15 +892,21 @@ _gtk_icon_helper_draw (GtkIconHelper *self,
                        gdouble x,
                        gdouble y)
 {
+  GtkCssStyle *style;
+
   gtk_icon_helper_ensure_surface (self);
 
+  /*
+   * Get the style first as the rendered surface maybe cleared if the style
+   * must be recomputed
+   */
+  style = gtk_css_node_get_style (gtk_css_gadget_get_node (GTK_CSS_GADGET (self)));
+
   if (self->priv->rendered_surface != NULL)
-    {
-      gtk_css_style_render_icon_surface (gtk_css_node_get_style (gtk_css_gadget_get_node (GTK_CSS_GADGET (self))),
-                                         cr,
-                                         self->priv->rendered_surface,
-                                         x, y);
-    }
+    gtk_css_style_render_icon_surface (style,
+                                       cr,
+                                       self->priv->rendered_surface,
+                                       x, y);
 }
 
 gboolean
