@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-26 00:01+0000\n"
-"PO-Revision-Date: 2016-04-26 10:16+0200\n"
+"POT-Creation-Date: 2016-04-28 00:03+0000\n"
+"PO-Revision-Date: 2016-04-28 08:55+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -1494,7 +1494,6 @@ msgid "GNU Lesser General Public License, version 3 only"
 msgstr "Licencia Pública General Reducida de GNU, sólo versión 3"
 
 #: gtk/gtkaboutdialog.c:126
-#| msgid "GNU General Public License, version 3 or later"
 msgid "GNU Affero General Public License, version 3 or later"
 msgstr "Licencia Pública General Affero de GNU, versión 3 o posterior"
 
@@ -2186,24 +2185,24 @@ msgstr "_Derecho:"
 msgid "Paper Margins"
 msgstr "Márgenes del papel"
 
-#: gtk/gtkentry.c:9492 gtk/gtklabel.c:6688 gtk/gtktextview.c:9496
+#: gtk/gtkentry.c:9492 gtk/gtklabel.c:6677 gtk/gtktextview.c:9496
 msgid "Cu_t"
 msgstr "Cor_tar"
 
-#: gtk/gtkentry.c:9496 gtk/gtklabel.c:6689 gtk/gtktextview.c:9500
+#: gtk/gtkentry.c:9496 gtk/gtklabel.c:6678 gtk/gtktextview.c:9500
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: gtk/gtkentry.c:9500 gtk/gtklabel.c:6690 gtk/gtktextview.c:9502
+#: gtk/gtkentry.c:9500 gtk/gtklabel.c:6679 gtk/gtktextview.c:9502
 msgid "_Paste"
 msgstr "_Pegar"
 
 #: gtk/gtkentry.c:9503 gtk/gtkfilechooserwidget.c:1458
-#: gtk/gtkfilechooserwidget.c:2256 gtk/gtklabel.c:6692 gtk/gtktextview.c:9505
+#: gtk/gtkfilechooserwidget.c:2256 gtk/gtklabel.c:6681 gtk/gtktextview.c:9505
 msgid "_Delete"
 msgstr "_Eliminar"
 
-#: gtk/gtkentry.c:9514 gtk/gtklabel.c:6701 gtk/gtktextview.c:9519
+#: gtk/gtkentry.c:9514 gtk/gtklabel.c:6690 gtk/gtktextview.c:9519
 msgid "Select _All"
 msgstr "Seleccionar _todo"
 
@@ -2250,7 +2249,7 @@ msgstr "_Nombre"
 
 #. Open item is always present
 #: gtk/gtkfilechoosernative.c:371 gtk/gtkfilechoosernative.c:456
-#: gtk/gtkplacessidebar.c:3417 gtk/gtkplacesview.c:1577
+#: gtk/gtkplacessidebar.c:3417 gtk/gtkplacesview.c:1578
 msgid "_Open"
 msgstr "_Abrir"
 
@@ -2567,7 +2566,7 @@ msgstr "Accedido"
 msgid "File System"
 msgstr "Sistema de archivos"
 
-#: gtk/gtkfontbutton.c:365
+#: gtk/gtkfontbutton.c:365 gtk/gtkfontbutton.c:493
 msgid "Sans 12"
 msgstr "Sans 12"
 
@@ -2641,12 +2640,12 @@ msgid "Error"
 msgstr "Error"
 
 #. Open Link
-#: gtk/gtklabel.c:6669
+#: gtk/gtklabel.c:6658
 msgid "_Open Link"
 msgstr "_Abrir enlace"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6678
+#: gtk/gtklabel.c:6667
 msgid "Copy _Link Address"
 msgstr "Copiar la dirección del _enlace"
 
@@ -3080,11 +3079,11 @@ msgstr "No se pudo expulsar %s"
 msgid "Unable to poll “%s” for media changes"
 msgstr "No se puede consultar a «%s» si hay cambios en el medio"
 
-#: gtk/gtkplacessidebar.c:3420 gtk/gtkplacesview.c:1587
+#: gtk/gtkplacessidebar.c:3420 gtk/gtkplacesview.c:1588
 msgid "Open in New _Tab"
 msgstr "Abrir en una _pestaña nueva"
 
-#: gtk/gtkplacessidebar.c:3423 gtk/gtkplacesview.c:1598
+#: gtk/gtkplacessidebar.c:3423 gtk/gtkplacesview.c:1599
 msgid "Open in New _Window"
 msgstr "Abrir en una _ventana nueva"
 
@@ -3100,11 +3099,11 @@ msgstr "_Quitar"
 msgid "Rename…"
 msgstr "Renombrar…"
 
-#: gtk/gtkplacessidebar.c:3433 gtk/gtkplacesview.c:1632
+#: gtk/gtkplacessidebar.c:3433 gtk/gtkplacesview.c:1633
 msgid "_Mount"
 msgstr "_Montar"
 
-#: gtk/gtkplacessidebar.c:3434 gtk/gtkplacesview.c:1622
+#: gtk/gtkplacessidebar.c:3434 gtk/gtkplacesview.c:1623
 msgid "_Unmount"
 msgstr "_Desmontar"
 
@@ -3116,55 +3115,55 @@ msgstr "_Expulsar"
 msgid "_Detect Media"
 msgstr "_Detectar medio"
 
-#: gtk/gtkplacessidebar.c:3882 gtk/gtkplacesview.c:1052
+#: gtk/gtkplacessidebar.c:3882 gtk/gtkplacesview.c:1053
 msgid "Computer"
 msgstr "Equipo"
 
-#: gtk/gtkplacesview.c:880
+#: gtk/gtkplacesview.c:881
 msgid "Searching for network locations"
 msgstr "Buscando ubicaciones de red"
 
-#: gtk/gtkplacesview.c:887
+#: gtk/gtkplacesview.c:888
 msgid "No network locations found"
 msgstr "No se han encontrado ubicaciones de red"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1162 gtk/gtkplacesview.c:1235
+#: gtk/gtkplacesview.c:1163 gtk/gtkplacesview.c:1236
 msgid "Unable to access location"
 msgstr "No se puede acceder a la ubicación"
 
 #. Restore from Cancel to Connect
-#: gtk/gtkplacesview.c:1179 gtk/ui/gtkplacesview.ui:224
+#: gtk/gtkplacesview.c:1180 gtk/ui/gtkplacesview.ui:465
 msgid "Con_nect"
 msgstr "Co_nectar"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1298
+#: gtk/gtkplacesview.c:1299
 msgid "Unable to unmount volume"
 msgstr "No se puede desmontar del volumen"
 
 #. Allow to cancel the operation
-#: gtk/gtkplacesview.c:1380
+#: gtk/gtkplacesview.c:1381
 msgid "Cance_l"
 msgstr "Cance_lar"
 
-#: gtk/gtkplacesview.c:1622
+#: gtk/gtkplacesview.c:1623
 msgid "_Disconnect"
 msgstr "_Desconectar"
 
-#: gtk/gtkplacesview.c:1632
+#: gtk/gtkplacesview.c:1633
 msgid "_Connect"
 msgstr "_Conectar"
 
-#: gtk/gtkplacesview.c:1797
+#: gtk/gtkplacesview.c:1798
 msgid "Unable to get remote server location"
 msgstr "No se pudo obtener la ubicación del servidor remoto"
 
-#: gtk/gtkplacesview.c:1934 gtk/gtkplacesview.c:1943
+#: gtk/gtkplacesview.c:1937 gtk/gtkplacesview.c:1946
 msgid "Networks"
 msgstr "Redes"
 
-#: gtk/gtkplacesview.c:1934 gtk/gtkplacesview.c:1943
+#: gtk/gtkplacesview.c:1937 gtk/gtkplacesview.c:1946
 msgid "On This Computer"
 msgstr "En este equipo"
 
@@ -3519,7 +3518,6 @@ msgstr "No se ha podido encontrar un elemento con el URI «%s»"
 
 #: gtk/gtkrecentmanager.c:1277
 #, c-format
-#| msgid "Unable to find an item with URI '%s'"
 msgid "Unable to move the item with URI '%s' to '%s'"
 msgstr "No se puede mover el elemento con URI «%s» a «%s»"
 
@@ -3599,7 +3597,7 @@ msgid "No Results Found"
 msgstr "No se han encontrado resultados"
 
 #: gtk/gtkshortcutswindow.c:1051 gtk/ui/gtkfilechooserwidget.ui:324
-#: gtk/ui/gtkplacesview.ui:181
+#: gtk/ui/gtkplacesview.ui:422
 msgid "Try a different search"
 msgstr "Pruebe una búsqueda diferente"
 
@@ -3843,6 +3841,7 @@ msgid "State"
 msgstr "Estado"
 
 #: gtk/inspector/actions.ui:30 gtk/inspector/general.ui:115
+#: gtk/ui/gtkplacesview.ui:166
 msgid "Prefix"
 msgstr "Prefijo"
 
@@ -4336,7 +4335,6 @@ msgid "Font"
 msgstr "Tipografía"
 
 #: gtk/inspector/visual.ui:263
-#| msgid "Font Selection"
 msgid "Font Scale"
 msgstr "Escalado de tipografías"
 
@@ -5621,26 +5619,80 @@ msgstr "Ruta inferior"
 msgid "Up Path"
 msgstr "Ruta superior"
 
+#: gtk/ui/gtkplacesview.ui:33
+#| msgid "Enter server address…"
+msgid "Server Addresses"
+msgstr "Direcciones del servidor"
+
+#: gtk/ui/gtkplacesview.ui:52
+msgid ""
+"Server addresses are made up of a protocol prefix and an address. Examples:\n"
+"\n"
+"smb://foo.example.com, ssh://192.168.0.1"
+msgstr ""
+"Las direcciones del servidor se componen de un prefijo del protocolo y una "
+"dirección. Ejemplos:\n"
+"\n"
+"smb://foo.ejemplo.com, ssh://192.168.0.1"
+
+#: gtk/ui/gtkplacesview.ui:79
+msgid "Available Protocols"
+msgstr "Protocolos disponibles"
+
+#: gtk/ui/gtkplacesview.ui:94
+msgid "AppleTalk"
+msgstr "AppleTalk"
+
+#: gtk/ui/gtkplacesview.ui:106
+msgid "File Transfer Protocol"
+msgstr "Protocolo de transferencia de archivos"
+
+#: gtk/ui/gtkplacesview.ui:118
+msgid "Samba"
+msgstr "Samba"
+
+#: gtk/ui/gtkplacesview.ui:130
+msgid "Secure File Transfer Protocol"
+msgstr "Protocolo de transferencia de archivos seguro"
+
+#: gtk/ui/gtkplacesview.ui:142
+#| msgid "Bourne Shell"
+msgid "Secure Shell"
+msgstr "Shell segura"
+
+#: gtk/ui/gtkplacesview.ui:154
+msgid "WebDav"
+msgstr "WebDav"
+
+#. Translators: do not translate http:// and https://
+#: gtk/ui/gtkplacesview.ui:241
+msgid "http:// or https://"
+msgstr "http:// o https://"
+
 #. Translators: Server as any successfully connected network address
-#: gtk/ui/gtkplacesview.ui:42
+#: gtk/ui/gtkplacesview.ui:283
 msgid "No recent servers found"
 msgstr "No se han encontrado servidores recientes"
 
-#: gtk/ui/gtkplacesview.ui:65
+#: gtk/ui/gtkplacesview.ui:306
 msgid "Recent Servers"
 msgstr "Servidores recientes"
 
-#: gtk/ui/gtkplacesview.ui:168
+#: gtk/ui/gtkplacesview.ui:409
 msgid "No results found"
 msgstr "No se han encontrado resultados"
 
-#: gtk/ui/gtkplacesview.ui:214
+#: gtk/ui/gtkplacesview.ui:455
 msgid "Connect to _Server"
 msgstr "Conectar al _servidor"
 
-#: gtk/ui/gtkplacesview.ui:247
+#: gtk/ui/gtkplacesview.ui:488
 msgid "Enter server address…"
 msgstr "Introduzca la dirección del servidor…"
+
+#: gtk/ui/gtkplacesview.ui:489
+msgid "dialog-question-symbolic"
+msgstr "dialog-question-symbolic"
 
 #: gtk/ui/gtkprintunixdialog.ui:112
 msgid "Printer"
