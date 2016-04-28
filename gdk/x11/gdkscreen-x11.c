@@ -34,6 +34,10 @@
 
 #include <X11/Xatom.h>
 
+#ifdef HAVE_XFREE_XINERAMA
+#include <X11/extensions/Xinerama.h>
+#endif
+
 #ifdef HAVE_RANDR
 #include <X11/extensions/Xrandr.h>
 #endif
@@ -1071,35 +1075,52 @@ _gdk_x11_screen_get_edge_monitors (GdkScreen *screen,
   gint          bottom_most_pos = 0;
   gint          right_most_pos = 0;
   gint          i;
+#ifdef HAVE_XFREE_XINERAMA
+  XineramaScreenInfo *x_monitors;
+  int x_n_monitors;
+#endif
 
-  for (i = 0; i < x11_screen->monitors->len; i++)
+  *top = *bottom = *left = *right = -1;
+
+#ifdef HAVE_XFREE_XINERAMA
+  if (!XineramaIsActive (x11_screen->xdisplay))
+    return;
+
+  x_monitors = XineramaQueryScreens (x11_screen->xdisplay, &x_n_monitors);
+  if (x_n_monitors <= 0 || x_monitors == NULL)
     {
-      GdkMonitor *monitor = x11_screen->monitors->pdata[i];
-      GdkRectangle geometry;
+      if (x_monitors)
+        XFree (x_monitors);
 
-      gdk_monitor_get_geometry (monitor, &geometry);
+      return;
+    }
 
-      if (left && left_most_pos > geometry.x)
+  for (i = 0; i < x_n_monitors; i++)
+    {
+      if (left && left_most_pos > x_monitors[i].x_org)
 	{
-	  left_most_pos = geometry.x;
+	  left_most_pos = x_monitors[i].x_org;
 	  *left = i;
 	}
-      if (right && right_most_pos < geometry.x + geometry.width)
+      if (right && right_most_pos < x_monitors[i].x_org + x_monitors[i].width)
 	{
-	  right_most_pos = geometry.x + geometry.width;
+	  right_most_pos = x_monitors[i].x_org + x_monitors[i].width;
 	  *right = i;
 	}
-      if (top && top_most_pos > geometry.y)
+      if (top && top_most_pos > x_monitors[i].y_org)
 	{
-	  top_most_pos = geometry.y;
+	  top_most_pos = x_monitors[i].y_org;
 	  *top = i;
 	}
-      if (bottom && bottom_most_pos < geometry.y + geometry.height)
+      if (bottom && bottom_most_pos < x_monitors[i].y_org + x_monitors[i].height)
 	{
-	  bottom_most_pos = geometry.y + geometry.height;
+	  bottom_most_pos = x_monitors[i].y_org + x_monitors[i].height;
 	  *bottom = i;
 	}
     }
+
+  XFree (x_monitors);
+#endif
 }
 
 void

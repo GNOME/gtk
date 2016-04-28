@@ -4167,7 +4167,7 @@ gdk_x11_window_apply_fullscreen_mode (GdkWindow *window)
   if (GDK_WINDOW_IS_MAPPED (window))
     {
       XClientMessageEvent xclient;
-      gint                gdk_monitors[4];
+      gint                monitors[4];
       gint                i;
 
       memset (&xclient, 0, sizeof (xclient));
@@ -4208,16 +4208,14 @@ gdk_x11_window_apply_fullscreen_mode (GdkWindow *window)
 	case GDK_FULLSCREEN_ON_ALL_MONITORS:
 
 	  _gdk_x11_screen_get_edge_monitors (GDK_WINDOW_SCREEN (window),
-					     &gdk_monitors[0],
-					     &gdk_monitors[1],
-					     &gdk_monitors[2],
-					     &gdk_monitors[3]);
+					     &monitors[0],
+					     &monitors[1],
+					     &monitors[2],
+					     &monitors[3]);
 	  /* Translate all 4 monitors from the GDK set into XINERAMA indices */
 	  for (i = 0; i < 4; ++i)
 	    {
-              /* FIXME
-               xclient.data.l[i] = _gdk_x11_screen_ge_xinerama_index (GDK_WINDOW_SCREEN (window), gdk_monitors[i]); */
-	      xclient.data.l[i] = 0;
+	      xclient.data.l[i] = monitors[i];
 	      /* Sanity check, if XINERAMA is not available, we could have invalid
 	       * negative values for the XINERAMA indices.
 	       */
