@@ -580,7 +580,7 @@ PKG_CHECK_MODULES(BASE_DEPENDENCIES,
 
 PKG_CHECK_MODULES(CAIRO_BACKEND, [$cairo_backends])
 
-# Remove this check once cairo_required_version reaches at least 1.14.4
+# Remove this check once cairo_required_version reaches at least 1.16.0
 case $host_os in
   mingw*)
     PKG_CHECK_MODULES(CAIRO, [cairo >= cairo_required_version])
@@ -588,7 +588,7 @@ case $host_os in
       [AC_MSG_RESULT([found])],
       [AC_MSG_ERROR(
 [cairo_win32_surface_create_with_format is not found in cairo library
-You need cairo version newer than 2015-04-14])])
+You need a cairo snapshot 1.15.x or 1.16.x release or newer])])
     ;;
   *)
     ;;
