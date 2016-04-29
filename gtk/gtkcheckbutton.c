@@ -156,6 +156,8 @@ gtk_check_button_direction_changed (GtkWidget        *widget,
   gtk_box_gadget_reverse_children (GTK_BOX_GADGET (priv->gadget));
   gtk_box_gadget_set_allocate_reverse (GTK_BOX_GADGET (priv->gadget),
                                        gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
+  gtk_box_gadget_set_align_reverse (GTK_BOX_GADGET (priv->gadget),
+                                    gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
 
   GTK_WIDGET_CLASS (gtk_check_button_parent_class)->direction_changed (widget, previous_direction);
 }
