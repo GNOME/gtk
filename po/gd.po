@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-22 00:11+0000\n"
-"PO-Revision-Date: 2016-04-22 12:58+0100\n"
+"POT-Creation-Date: 2016-04-29 07:12+0000\n"
+"PO-Revision-Date: 2016-04-29 09:40+0100\n"
 "Last-Translator: GunChleoc <fios@foramnagaidhlig.net>\n"
 "Language-Team: Fòram na Gàidhlig\n"
 "Language: gd\n"
@@ -26,48 +26,48 @@ msgstr ""
 msgid "Broadway display type not supported: %s"
 msgstr "Cha chuirear taic ris an t-seòrsa sgrìn broadway: \"%s\""
 
-#: gdk/gdk.c:179
+#: gdk/gdk.c:182
 #, c-format
 msgid "Error parsing option --gdk-debug"
 msgstr "Mearachd a’ parsadh roghainn --gdk-debug"
 
-#: gdk/gdk.c:199
+#: gdk/gdk.c:202
 #, c-format
 msgid "Error parsing option --gdk-no-debug"
 msgstr "Mearachd a’ parsadh roghainn --gdk-no-debug"
 
 #. Description of --class=CLASS in --help output
-#: gdk/gdk.c:228
+#: gdk/gdk.c:231
 msgid "Program class as used by the window manager"
 msgstr "Clas a' phrògraim mar a chleachdas manaidsear nan uinneagan e"
 
 #. Placeholder in --class=CLASS in --help output
-#: gdk/gdk.c:229
+#: gdk/gdk.c:232
 msgid "CLASS"
 msgstr "CLASS"
 
 #. Description of --name=NAME in --help output
-#: gdk/gdk.c:231
+#: gdk/gdk.c:234
 msgid "Program name as used by the window manager"
 msgstr "Ainm a' phrògraim mar a chleachdas manaidsear nan uinneagan e"
 
 #. Placeholder in --name=NAME in --help output
-#: gdk/gdk.c:232
+#: gdk/gdk.c:235
 msgid "NAME"
 msgstr "NAME"
 
 #. Description of --display=DISPLAY in --help output
-#: gdk/gdk.c:234
+#: gdk/gdk.c:237
 msgid "X display to use"
 msgstr "An X display a thèid a chleachdadh"
 
 #. Placeholder in --display=DISPLAY in --help output
-#: gdk/gdk.c:235
+#: gdk/gdk.c:238
 msgid "DISPLAY"
 msgstr "DISPLAY"
 
 #. Description of --gdk-debug=FLAGS in --help output
-#: gdk/gdk.c:238
+#: gdk/gdk.c:241
 msgid "GDK debugging flags to set"
 msgstr "Brataichean dì-bhugachadh GDK a tha ri shuidheachadh"
 
@@ -75,12 +75,12 @@ msgstr "Brataichean dì-bhugachadh GDK a tha ri shuidheachadh"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:239 gdk/gdk.c:242 gtk/gtkmain.c:464 gtk/gtkmain.c:467
+#: gdk/gdk.c:242 gdk/gdk.c:245 gtk/gtkmain.c:464 gtk/gtkmain.c:467
 msgid "FLAGS"
 msgstr "FLAGS"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:241
+#: gdk/gdk.c:244
 msgid "GDK debugging flags to unset"
 msgstr "Brataichean dì-bhugachadh GDK a tha ri dhì-shuidheachadh"
 
@@ -431,21 +431,21 @@ msgid "Suspend"
 msgstr "'Na dhàil"
 
 #: gdk/mir/gdkmirglcontext.c:48 gdk/mir/gdkmirwindowimpl.c:1358
-#: gdk/wayland/gdkglcontext-wayland.c:393 gdk/win32/gdkglcontext-win32.c:556
-#: gdk/x11/gdkglcontext-x11.c:1254
+#: gdk/wayland/gdkglcontext-wayland.c:422 gdk/win32/gdkglcontext-win32.c:556
+#: gdk/x11/gdkglcontext-x11.c:1274
 msgid "No GL implementation is available"
 msgstr "Chan eil toirt gu buil GL ri fhaighinn"
 
-#: gdk/mir/gdkmirglcontext.c:89 gdk/wayland/gdkglcontext-wayland.c:180
-#: gdk/win32/gdkglcontext-win32.c:510 gdk/x11/gdkglcontext-x11.c:707
-#: gdk/x11/gdkglcontext-x11.c:754
+#: gdk/mir/gdkmirglcontext.c:89 gdk/wayland/gdkglcontext-wayland.c:208
+#: gdk/win32/gdkglcontext-win32.c:510 gdk/x11/gdkglcontext-x11.c:720
+#: gdk/x11/gdkglcontext-x11.c:770
 msgid "Unable to create a GL context"
 msgstr "Cha deach leinn co-theacs GL a chruthachadh"
 
 #: gdk/mir/gdkmirwindowimpl.c:1320 gdk/mir/gdkmirwindowimpl.c:1330
-#: gdk/wayland/gdkglcontext-wayland.c:354
-#: gdk/wayland/gdkglcontext-wayland.c:364 gdk/win32/gdkglcontext-win32.c:482
-#: gdk/x11/gdkglcontext-x11.c:948
+#: gdk/wayland/gdkglcontext-wayland.c:383
+#: gdk/wayland/gdkglcontext-wayland.c:393 gdk/win32/gdkglcontext-win32.c:482
+#: gdk/x11/gdkglcontext-x11.c:968
 msgid "No available configurations for the given pixel format"
 msgstr ""
 "Chan eil rèiteachaidhean airson an fòrmait phiogsailean seo ri fhaighinn"
@@ -458,7 +458,7 @@ msgstr "Chan eil pròifil eitein GL 3.2 ri fhaighinn air toirt gu buil EGL"
 msgid "Not implemented on OS X"
 msgstr "Cha deach seo a thoirt gu bhil air OS X"
 
-#: gdk/wayland/gdkglcontext-wayland.c:401
+#: gdk/wayland/gdkglcontext-wayland.c:430
 msgid "Core GL is not available on EGL implementation"
 msgstr "Chan eil eitean GL ri fhaighinn air toirt gu buil EGL"
 
@@ -519,7 +519,7 @@ msgstr[1] "A' fosgladh %d nì"
 msgstr[2] "A' fosgladh %d nithean"
 msgstr[3] "A' fosgladh %d nì"
 
-#: gdk/x11/gdkglcontext-x11.c:976
+#: gdk/x11/gdkglcontext-x11.c:996
 #, c-format
 msgid "No available configurations for the given RGBA pixel format"
 msgstr ""
@@ -656,15 +656,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Dùin"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:406 gtk/gtkwindow.c:9003
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:406 gtk/gtkwindow.c:8998
 msgid "Minimize"
 msgstr "Fìor-lùghdaich"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:429 gtk/gtkwindow.c:9012
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:429 gtk/gtkwindow.c:9007
 msgid "Maximize"
 msgstr "Làn-mheudaich"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:429 gtk/gtkwindow.c:8969
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:429 gtk/gtkwindow.c:8964
 msgid "Restore"
 msgstr "Aisig"
 
@@ -1217,7 +1217,7 @@ msgstr ""
 #: gtk/gtkmountoperation.c:545 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:673 gtk/gtkprintunixdialog.c:746
-#: gtk/gtkwindow.c:12503 gtk/inspector/css-editor.c:208
+#: gtk/gtkwindow.c:12475 gtk/inspector/css-editor.c:208
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -1266,7 +1266,7 @@ msgid "_Apply"
 msgstr "Cuir _an sàs"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944
-#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12504
+#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12476
 msgid "_OK"
 msgstr "_Ceart ma-tha"
 
@@ -1484,7 +1484,6 @@ msgid "GNU Lesser General Public License, version 3 only"
 msgstr "GNU Lesser General Public License, tionndadh 3 a-mhàin"
 
 #: gtk/gtkaboutdialog.c:126
-#| msgid "GNU General Public License, version 3 or later"
 msgid "GNU Affero General Public License, version 3 or later"
 msgstr "GNU Affero General Public License, tionndadh 3 no as ùire"
 
@@ -1732,16 +1731,6 @@ msgstr "Chan urrainn dhuinn am faidhle a pharsadh: %s\n"
 
 #: gtk/gtk-builder-tool.c:956
 #, c-format
-#| msgid ""
-#| "Usage:\n"
-#| "  gtk-builder-tool [COMMAND] FILE\n"
-#| "\n"
-#| "Commands:\n"
-#| "  validate    Validate the file\n"
-#| "  simplify    Simplify the file\n"
-#| "  enumerate   List all named objects\n"
-#| "\n"
-#| "Perform various tasks on GtkBuilder .ui files.\n"
 msgid ""
 "Usage:\n"
 "  gtk-builder-tool [COMMAND] FILE\n"
@@ -2181,44 +2170,44 @@ msgstr "_Deas:"
 msgid "Paper Margins"
 msgstr "Marghain a' phàipeir"
 
-#: gtk/gtkentry.c:9492 gtk/gtklabel.c:6688 gtk/gtktextview.c:9496
+#: gtk/gtkentry.c:9489 gtk/gtklabel.c:6681 gtk/gtktextview.c:9496
 msgid "Cu_t"
 msgstr "_Gearr"
 
-#: gtk/gtkentry.c:9496 gtk/gtklabel.c:6689 gtk/gtktextview.c:9500
+#: gtk/gtkentry.c:9493 gtk/gtklabel.c:6682 gtk/gtktextview.c:9500
 msgid "_Copy"
 msgstr "Dèan _lethbhreac"
 
-#: gtk/gtkentry.c:9500 gtk/gtklabel.c:6690 gtk/gtktextview.c:9502
+#: gtk/gtkentry.c:9497 gtk/gtklabel.c:6683 gtk/gtktextview.c:9502
 msgid "_Paste"
 msgstr "_Cuir ann"
 
-#: gtk/gtkentry.c:9503 gtk/gtkfilechooserwidget.c:1458
-#: gtk/gtkfilechooserwidget.c:2256 gtk/gtklabel.c:6692 gtk/gtktextview.c:9505
+#: gtk/gtkentry.c:9500 gtk/gtkfilechooserwidget.c:1458
+#: gtk/gtkfilechooserwidget.c:2256 gtk/gtklabel.c:6685 gtk/gtktextview.c:9505
 msgid "_Delete"
 msgstr "_Sguab às"
 
-#: gtk/gtkentry.c:9514 gtk/gtklabel.c:6701 gtk/gtktextview.c:9519
+#: gtk/gtkentry.c:9511 gtk/gtklabel.c:6694 gtk/gtktextview.c:9519
 msgid "Select _All"
 msgstr "Tagh a _h-uile"
 
-#: gtk/gtkentry.c:9692 gtk/gtktextview.c:9729
+#: gtk/gtkentry.c:9689 gtk/gtktextview.c:9729
 msgid "Select all"
 msgstr "Tagh na h-uile"
 
-#: gtk/gtkentry.c:9695 gtk/gtktextview.c:9732
+#: gtk/gtkentry.c:9692 gtk/gtktextview.c:9732
 msgid "Cut"
 msgstr "Gearr"
 
-#: gtk/gtkentry.c:9698 gtk/gtktextview.c:9735
+#: gtk/gtkentry.c:9695 gtk/gtktextview.c:9735
 msgid "Copy"
 msgstr "Dèan lethbhreac"
 
-#: gtk/gtkentry.c:9701 gtk/gtktextview.c:9738
+#: gtk/gtkentry.c:9698 gtk/gtktextview.c:9738
 msgid "Paste"
 msgstr "Cuir ann"
 
-#: gtk/gtkentry.c:10768
+#: gtk/gtkentry.c:10765
 msgid "Caps Lock is on"
 msgstr "Tha CapsLock air"
 
@@ -2244,7 +2233,7 @@ msgstr "_Ainm"
 
 #. Open item is always present
 #: gtk/gtkfilechoosernative.c:371 gtk/gtkfilechoosernative.c:456
-#: gtk/gtkplacessidebar.c:3417 gtk/gtkplacesview.c:1577
+#: gtk/gtkplacessidebar.c:3417 gtk/gtkplacesview.c:1578
 msgid "_Open"
 msgstr "F_osgail"
 
@@ -2569,7 +2558,7 @@ msgstr "Air inntrigeadh"
 msgid "File System"
 msgstr "Siostam-fhaidhlichean"
 
-#: gtk/gtkfontbutton.c:365
+#: gtk/gtkfontbutton.c:365 gtk/gtkfontbutton.c:493
 msgid "Sans 12"
 msgstr "Sans 12"
 
@@ -2578,12 +2567,11 @@ msgid "Pick a Font"
 msgstr "Tagh cruth-clò"
 
 #: gtk/gtkfontbutton.c:1341
-#| msgid "None"
 msgctxt "font"
 msgid "None"
 msgstr "Chan eil gin"
 
-#: gtk/gtkglarea.c:303
+#: gtk/gtkglarea.c:313
 msgid "OpenGL context creation failed"
 msgstr "Cha b' urrainn dhuinn co-theacs OpenGL a chruthachadh"
 
@@ -2591,7 +2579,7 @@ msgstr "Cha b' urrainn dhuinn co-theacs OpenGL a chruthachadh"
 msgid "Application menu"
 msgstr "Clàr-taice na h-aplacaid"
 
-#: gtk/gtkheaderbar.c:447 gtk/gtkwindow.c:9039
+#: gtk/gtkheaderbar.c:447 gtk/gtkwindow.c:9034
 msgid "Close"
 msgstr "Dùin"
 
@@ -2642,26 +2630,22 @@ msgid "Error"
 msgstr "Mearachd"
 
 #. Open Link
-#: gtk/gtklabel.c:6669
+#: gtk/gtklabel.c:6662
 msgid "_Open Link"
 msgstr "_Fosgail an ceangal"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6678
+#: gtk/gtklabel.c:6671
 msgid "Copy _Link Address"
 msgstr "Dèan lethbhreac de sheòladh a' _cheangail"
 
 #: gtk/gtk-launch.c:74
-#| msgid "APPLICATION [URI...] - launch an APPLICATION with URI."
 msgid "APPLICATION [URI...] — launch an APPLICATION"
 msgstr "APLACAID [URI...] — cuir air bhog an APLACAID"
 
 #. Translators: this message will appear after the usage string
 #. and before the list of options.
 #: gtk/gtk-launch.c:78
-#| msgid ""
-#| "Launch specified application by its desktop file info\n"
-#| "optionally passing list of URIs as arguments."
 msgid ""
 "Launch an application (specified by its desktop file name),\n"
 "optionally passing one or more URIs as arguments."
@@ -2707,11 +2691,11 @@ msgstr "%s: chan eil aplacaid mar sin (%s) ann"
 msgid "%s: error launching application: %s\n"
 msgstr "%s: mearachd a' cur na h-aplacaid air bhog: %s\n"
 
-#: gtk/gtklinkbutton.c:419
+#: gtk/gtklinkbutton.c:420
 msgid "Copy URL"
 msgstr "Dèan lethbhreac dhen URL"
 
-#: gtk/gtklinkbutton.c:582
+#: gtk/gtklinkbutton.c:583
 msgid "Invalid URI"
 msgstr "URI mì-dhligheach"
 
@@ -3088,11 +3072,11 @@ msgstr "Cha ghabh %s a ghluasad a-mach"
 msgid "Unable to poll “%s” for media changes"
 msgstr "Cha ghabh “%s” a phòladh airson atharrachadh a' mheadhain"
 
-#: gtk/gtkplacessidebar.c:3420 gtk/gtkplacesview.c:1587
+#: gtk/gtkplacessidebar.c:3420 gtk/gtkplacesview.c:1588
 msgid "Open in New _Tab"
 msgstr "Fosgail ann an _taba ùr"
 
-#: gtk/gtkplacessidebar.c:3423 gtk/gtkplacesview.c:1598
+#: gtk/gtkplacessidebar.c:3423 gtk/gtkplacesview.c:1599
 msgid "Open in New _Window"
 msgstr "Fosgail ann an _uinneag ùr"
 
@@ -3108,11 +3092,11 @@ msgstr "Thoi_r air falbh"
 msgid "Rename…"
 msgstr "Thoir ainm ùr air..."
 
-#: gtk/gtkplacessidebar.c:3433 gtk/gtkplacesview.c:1632
+#: gtk/gtkplacessidebar.c:3433 gtk/gtkplacesview.c:1633
 msgid "_Mount"
 msgstr "_Munntaich"
 
-#: gtk/gtkplacessidebar.c:3434 gtk/gtkplacesview.c:1622
+#: gtk/gtkplacessidebar.c:3434 gtk/gtkplacesview.c:1623
 msgid "_Unmount"
 msgstr "Dì-mhu_nntaich"
 
@@ -3124,55 +3108,55 @@ msgstr "_Gluais a-mach"
 msgid "_Detect Media"
 msgstr "_Aithnich meadhanan"
 
-#: gtk/gtkplacessidebar.c:3882 gtk/gtkplacesview.c:1052
+#: gtk/gtkplacessidebar.c:3882 gtk/gtkplacesview.c:1053
 msgid "Computer"
 msgstr "Coimpiutair"
 
-#: gtk/gtkplacesview.c:880
+#: gtk/gtkplacesview.c:881
 msgid "Searching for network locations"
 msgstr "A' lorg ionadan lìonraidh"
 
-#: gtk/gtkplacesview.c:887
+#: gtk/gtkplacesview.c:888
 msgid "No network locations found"
 msgstr "Cha deach ionad lìonraidh a lorg"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1162 gtk/gtkplacesview.c:1235
+#: gtk/gtkplacesview.c:1163 gtk/gtkplacesview.c:1236
 msgid "Unable to access location"
 msgstr "Cha ghabh an t-ionad inntrigeadh"
 
 #. Restore from Cancel to Connect
-#: gtk/gtkplacesview.c:1179 gtk/ui/gtkplacesview.ui:224
+#: gtk/gtkplacesview.c:1180 gtk/ui/gtkplacesview.ui:465
 msgid "Con_nect"
 msgstr "C_eangail"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1298
+#: gtk/gtkplacesview.c:1299
 msgid "Unable to unmount volume"
 msgstr "Cha ghabh an draibh a dì-mhunntachadh"
 
 #. Allow to cancel the operation
-#: gtk/gtkplacesview.c:1380
+#: gtk/gtkplacesview.c:1381
 msgid "Cance_l"
 msgstr "_Sguir dheth"
 
-#: gtk/gtkplacesview.c:1622
+#: gtk/gtkplacesview.c:1623
 msgid "_Disconnect"
 msgstr "_Dì-cheangail"
 
-#: gtk/gtkplacesview.c:1632
+#: gtk/gtkplacesview.c:1633
 msgid "_Connect"
 msgstr "_Ceangail"
 
-#: gtk/gtkplacesview.c:1797
+#: gtk/gtkplacesview.c:1798
 msgid "Unable to get remote server location"
 msgstr "Cha deach leinn ionad cèin an fhrithealaiche fhaighinn"
 
-#: gtk/gtkplacesview.c:1934 gtk/gtkplacesview.c:1943
+#: gtk/gtkplacesview.c:1937 gtk/gtkplacesview.c:1946
 msgid "Networks"
 msgstr "Lìonraidhean"
 
-#: gtk/gtkplacesview.c:1934 gtk/gtkplacesview.c:1943
+#: gtk/gtkplacesview.c:1937 gtk/gtkplacesview.c:1946
 msgid "On This Computer"
 msgstr "Air a' choimpiutair seo"
 
@@ -3182,7 +3166,6 @@ msgstr "Air a' choimpiutair seo"
 #.
 #: gtk/gtkplacesviewrow.c:132
 #, c-format
-#| msgid "Not available"
 msgid "%s / %s available"
 msgid_plural "%s / %s available"
 msgstr[0] "%s / %s ri fhaighinn"
@@ -3442,36 +3425,36 @@ msgctxt "progress bar label"
 msgid "%.0f %%"
 msgstr "%.0f %%"
 
-#: gtk/gtkrecentchooserdefault.c:1077 gtk/gtkrecentchooserdefault.c:1114
+#: gtk/gtkrecentchooserdefault.c:1075 gtk/gtkrecentchooserdefault.c:1112
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "Cha deach dad a lorg airson an URI \"%s\""
 
-#: gtk/gtkrecentchooserdefault.c:1241
+#: gtk/gtkrecentchooserdefault.c:1239
 msgid "Untitled filter"
 msgstr "Criathrag gun tiotal"
 
-#: gtk/gtkrecentchooserdefault.c:1563
+#: gtk/gtkrecentchooserdefault.c:1561
 msgid "Could not remove item"
 msgstr "Cha b' urrainn dhuinn an nì a thoirt air falbh"
 
-#: gtk/gtkrecentchooserdefault.c:1607
+#: gtk/gtkrecentchooserdefault.c:1605
 msgid "Could not clear list"
 msgstr "Cha b' urrainn dhuinn an liosta fhalamhadh"
 
-#: gtk/gtkrecentchooserdefault.c:1691
+#: gtk/gtkrecentchooserdefault.c:1689
 msgid "Copy _Location"
 msgstr "Dèan lethbhreac dhen _ionad"
 
-#: gtk/gtkrecentchooserdefault.c:1702
+#: gtk/gtkrecentchooserdefault.c:1700
 msgid "_Remove From List"
 msgstr "_Thoir air falbh on liosta"
 
-#: gtk/gtkrecentchooserdefault.c:1709
+#: gtk/gtkrecentchooserdefault.c:1707
 msgid "_Clear List"
 msgstr "_Falamhaich an liosta"
 
-#: gtk/gtkrecentchooserdefault.c:1721
+#: gtk/gtkrecentchooserdefault.c:1719
 msgid "Show _Private Resources"
 msgstr "Seall na goireasan _prìobhaideach"
 
@@ -3534,7 +3517,6 @@ msgstr "Chan urrainn dhuinn nì aig a bheil an URI \"%s\" a lorg"
 
 #: gtk/gtkrecentmanager.c:1277
 #, c-format
-#| msgid "Unable to find an item with URI '%s'"
 msgid "Unable to move the item with URI '%s' to '%s'"
 msgstr "Chan urrainn dhuinn nì aig a bheil an URI \"%s\" a ghluasad gu \"%s\""
 
@@ -3614,7 +3596,7 @@ msgid "No Results Found"
 msgstr "Cha deach toradh a lorg"
 
 #: gtk/gtkshortcutswindow.c:1051 gtk/ui/gtkfilechooserwidget.ui:324
-#: gtk/ui/gtkplacesview.ui:181
+#: gtk/ui/gtkplacesview.ui:422
 msgid "Try a different search"
 msgstr "Feuch lorg eile"
 
@@ -3821,25 +3803,24 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:8987
+#: gtk/gtkwindow.c:8982
 msgid "Move"
 msgstr "Gluais"
 
-#: gtk/gtkwindow.c:8995
+#: gtk/gtkwindow.c:8990
 msgid "Resize"
 msgstr "Atharraich am meud"
 
-#: gtk/gtkwindow.c:9026
-#| msgid "Always"
+#: gtk/gtkwindow.c:9021
 msgid "Always on Top"
 msgstr "Air a' bharr an-còmhnaidh"
 
-#: gtk/gtkwindow.c:12491
+#: gtk/gtkwindow.c:12463
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "A bheil thu airson Sgrùdaire GTK+ a chleachdadh?"
 
-#: gtk/gtkwindow.c:12493
+#: gtk/gtkwindow.c:12465
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3850,7 +3831,7 @@ msgstr ""
 "leigeas leat na tha am broinn aplacaid GTK+ sam bith a rùrachadh 's "
 "atharrachadh. Dh'fhaoidte gun tuislich no gum bris thu an aplacaid leis."
 
-#: gtk/gtkwindow.c:12498
+#: gtk/gtkwindow.c:12470
 msgid "Don't show this message again"
 msgstr "Na seall an teachdaireachd seo a-rithist"
 
@@ -3864,6 +3845,7 @@ msgid "State"
 msgstr "Staid"
 
 #: gtk/inspector/actions.ui:30 gtk/inspector/general.ui:115
+#: gtk/ui/gtkplacesview.ui:166
 msgid "Prefix"
 msgstr "Ro-leasachan"
 
@@ -3915,7 +3897,6 @@ msgid "Style Classes"
 msgstr "Clasaichean stoidhle"
 
 #: gtk/inspector/css-node-tree.ui:110
-#| msgid "Property"
 msgid "CSS Property"
 msgstr "Roghainn CSS"
 
@@ -3928,14 +3909,12 @@ msgstr "Luach"
 msgid "Show data"
 msgstr "Seall an dàta"
 
-#: gtk/inspector/general.c:226
-#| msgid "None"
+#: gtk/inspector/general.c:275
 msgctxt "GL version"
 msgid "None"
 msgstr "Chan eil gin"
 
-#: gtk/inspector/general.c:227
-#| msgid "None"
+#: gtk/inspector/general.c:276
 msgctxt "GL vendor"
 msgid "None"
 msgstr "Chan eil gin"
@@ -3969,25 +3948,21 @@ msgid "GL Vendor"
 msgstr "Reiceadair GL"
 
 #: gtk/inspector/gestures.c:129
-#| msgid "None"
 msgctxt "event phase"
 msgid "None"
 msgstr "Chan eil gin"
 
 #: gtk/inspector/gestures.c:130
-#| msgid "Capture"
 msgctxt "event phase"
 msgid "Capture"
 msgstr "Glacadh"
 
 #: gtk/inspector/gestures.c:131
-#| msgid "Bubble"
 msgctxt "event phase"
 msgid "Bubble"
 msgstr "Builgean"
 
 #: gtk/inspector/gestures.c:132
-#| msgid "Target"
 msgctxt "event phase"
 msgid "Target"
 msgstr "Amas"
@@ -4048,12 +4023,10 @@ msgid "Request mode"
 msgstr "Modh iarraidh"
 
 #: gtk/inspector/misc-info.ui:328
-#| msgid "Location"
 msgid "Allocation"
 msgstr "Riarachadh"
 
 #: gtk/inspector/misc-info.ui:362
-#| msgid "Show Baselines"
 msgid "Baseline"
 msgstr "Bun-loidhne"
 
@@ -4062,7 +4035,6 @@ msgid "Clip area"
 msgstr "Raon bearraidh"
 
 #: gtk/inspector/misc-info.ui:430
-#| msgid "Frame count"
 msgid "Frame Clock"
 msgstr "Cleoc nam frèam"
 
@@ -4148,7 +4120,6 @@ msgid "Column:"
 msgstr "Colbh:"
 
 #: gtk/inspector/prop-editor.c:1285
-#| msgid "None"
 msgctxt "property name"
 msgid "None"
 msgstr "Chan eil gin"
@@ -4247,7 +4218,6 @@ msgid "Yes"
 msgstr "Tha"
 
 #: gtk/inspector/signals-list.ui:36
-#| msgid "Signals"
 msgid "Signal"
 msgstr "Siognail"
 
@@ -4264,25 +4234,21 @@ msgid "Mode"
 msgstr "Modh"
 
 #: gtk/inspector/size-groups.c:252
-#| msgid "None"
 msgctxt "sizegroup mode"
 msgid "None"
 msgstr "Chan eil gin"
 
 #: gtk/inspector/size-groups.c:253
-#| msgid "Horizontal"
 msgctxt "sizegroup mode"
 msgid "Horizontal"
 msgstr "Còmhnard"
 
 #: gtk/inspector/size-groups.c:254
-#| msgid "Vertical"
 msgctxt "sizegroup mode"
 msgid "Vertical"
 msgstr "Inghearach"
 
 #: gtk/inspector/size-groups.c:255
-#| msgid "Both"
 msgctxt "sizegroup mode"
 msgid "Both"
 msgstr "An dà chuid"
@@ -4369,7 +4335,6 @@ msgid "Font"
 msgstr "Cruth-clò"
 
 #: gtk/inspector/visual.ui:263
-#| msgid "Font Selection"
 msgid "Font Scale"
 msgstr "Sgèile a' chrutha-chlò"
 
@@ -4430,7 +4395,6 @@ msgid "Show Pixel Cache"
 msgstr "Seall tasgadan nam piogsailean"
 
 #: gtk/inspector/visual.ui:649
-#| msgid "Show _Hidden Files"
 msgid "Show Widget Resizes"
 msgstr "Seall ath-mheudachadh nan widgets"
 
@@ -4511,7 +4475,6 @@ msgid "Class Hierarchy"
 msgstr "Rangachd clas"
 
 #: gtk/inspector/window.ui:422
-#| msgid "Selector"
 msgid "CSS Selector"
 msgstr "Roghnaichear CSS"
 
@@ -5655,26 +5618,80 @@ msgstr "An t-slighe sìos"
 msgid "Up Path"
 msgstr "An t-slighe suas"
 
+#: gtk/ui/gtkplacesview.ui:33
+#| msgid "Enter server address…"
+msgid "Server Addresses"
+msgstr "Seòlaidhean fhrithealaichean"
+
+#: gtk/ui/gtkplacesview.ui:52
+msgid ""
+"Server addresses are made up of a protocol prefix and an address. Examples:\n"
+"\n"
+"smb://foo.example.com, ssh://192.168.0.1"
+msgstr ""
+"Cuiridh tu ro-leasachan pròtacail agus seòladh ri chèile gus seòladh "
+"frithealaiche a chruthachadh. Buill-eisimpleir:\n"
+"\n"
+"smb://badeigin.example.com, ssh://192.168.0.1"
+
+#: gtk/ui/gtkplacesview.ui:79
+msgid "Available Protocols"
+msgstr "Pròtacalan ri am faighinn"
+
+#: gtk/ui/gtkplacesview.ui:94
+msgid "AppleTalk"
+msgstr "AppleTalk"
+
+#: gtk/ui/gtkplacesview.ui:106
+msgid "File Transfer Protocol"
+msgstr "File Transfer Protocol"
+
+#: gtk/ui/gtkplacesview.ui:118
+msgid "Samba"
+msgstr "Samba"
+
+#: gtk/ui/gtkplacesview.ui:130
+msgid "Secure File Transfer Protocol"
+msgstr "Secure File Transfer Protocol"
+
+#: gtk/ui/gtkplacesview.ui:142
+#| msgid "Bourne Shell"
+msgid "Secure Shell"
+msgstr "Secure Shell"
+
+#: gtk/ui/gtkplacesview.ui:154
+msgid "WebDav"
+msgstr "WebDav"
+
+#. Translators: do not translate http:// and https://
+#: gtk/ui/gtkplacesview.ui:241
+msgid "http:// or https://"
+msgstr "http:// no https://"
+
 #. Translators: Server as any successfully connected network address
-#: gtk/ui/gtkplacesview.ui:42
+#: gtk/ui/gtkplacesview.ui:283
 msgid "No recent servers found"
 msgstr "Cha deach frithealaiche o chionn goirid a lorg"
 
-#: gtk/ui/gtkplacesview.ui:65
+#: gtk/ui/gtkplacesview.ui:306
 msgid "Recent Servers"
 msgstr "Frithealaichean o chionn goirid"
 
-#: gtk/ui/gtkplacesview.ui:168
+#: gtk/ui/gtkplacesview.ui:409
 msgid "No results found"
 msgstr "Cha deach toradh a lorg"
 
-#: gtk/ui/gtkplacesview.ui:214
+#: gtk/ui/gtkplacesview.ui:455
 msgid "Connect to _Server"
 msgstr "Ceangail ri _frithealaiche"
 
-#: gtk/ui/gtkplacesview.ui:247
+#: gtk/ui/gtkplacesview.ui:488
 msgid "Enter server address…"
 msgstr "Cuir a-steach seòladh an fhrithealaiche…"
+
+#: gtk/ui/gtkplacesview.ui:489
+msgid "dialog-question-symbolic"
+msgstr "còmhradh-ceist-samhlachail"
 
 #: gtk/ui/gtkprintunixdialog.ui:112
 msgid "Printer"
@@ -6302,58 +6319,49 @@ msgstr "; "
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:4302
 #: modules/printbackends/cups/gtkprintbackendcups.c:4369
-#| msgid "Two Sided"
 msgctxt "printing option"
 msgid "Two Sided"
 msgstr "Dà-thaobhach"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:4303
-#| msgid "Paper Type"
 msgctxt "printing option"
 msgid "Paper Type"
 msgstr "Seòrsa a' phàipeir"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:4304
-#| msgid "Paper Source"
 msgctxt "printing option"
 msgid "Paper Source"
 msgstr "Tùs a' phàipeir"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:4305
 #: modules/printbackends/cups/gtkprintbackendcups.c:4370
-#| msgid "Output Tray"
 msgctxt "printing option"
 msgid "Output Tray"
 msgstr "Treidhe às-chuir"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:4306
-#| msgid "Resolution"
 msgctxt "printing option"
 msgid "Resolution"
 msgstr "Dùmhlachd-bhreacaidh"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:4307
-#| msgid "GhostScript pre-filtering"
 msgctxt "printing option"
 msgid "GhostScript pre-filtering"
 msgstr "Ro-chriathradh GhostScript"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:4316
-#| msgid "One Sided"
 msgctxt "printing option value"
 msgid "One Sided"
 msgstr "Aon-taobhach"
 
 #. Translators: this is an option of "Two Sided"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4318
-#| msgid "Long Edge (Standard)"
 msgctxt "printing option value"
 msgid "Long Edge (Standard)"
 msgstr "Oir fhada (stannardach)"
 
 #. Translators: this is an option of "Two Sided"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4320
-#| msgid "Short Edge (Flip)"
 msgctxt "printing option value"
 msgid "Short Edge (Flip)"
 msgstr "Oir ghoirid (Flip)"
@@ -6362,7 +6370,6 @@ msgstr "Oir ghoirid (Flip)"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4322
 #: modules/printbackends/cups/gtkprintbackendcups.c:4324
 #: modules/printbackends/cups/gtkprintbackendcups.c:4332
-#| msgid "Auto Select"
 msgctxt "printing option value"
 msgid "Auto Select"
 msgstr "Taghadh fèin-obrachail"
@@ -6373,35 +6380,30 @@ msgstr "Taghadh fèin-obrachail"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4328
 #: modules/printbackends/cups/gtkprintbackendcups.c:4330
 #: modules/printbackends/cups/gtkprintbackendcups.c:4334
-#| msgid "Printer Default"
 msgctxt "printing option value"
 msgid "Printer Default"
 msgstr "Bun-roghainnean a' chlò-bhualadair"
 
 #. Translators: this is an option of "GhostScript"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4336
-#| msgid "Embed GhostScript fonts only"
 msgctxt "printing option value"
 msgid "Embed GhostScript fonts only"
 msgstr "Na leabaich ach cruthan-clò GhostScript"
 
 #. Translators: this is an option of "GhostScript"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4338
-#| msgid "Convert to PS level 1"
 msgctxt "printing option value"
 msgid "Convert to PS level 1"
 msgstr "Iompaich 'na PS leibheil 1"
 
 #. Translators: this is an option of "GhostScript"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4340
-#| msgid "Convert to PS level 2"
 msgctxt "printing option value"
 msgid "Convert to PS level 2"
 msgstr "Iompaich 'na PS leibheil 2"
 
 #. Translators: this is an option of "GhostScript"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4342
-#| msgid "No pre-filtering"
 msgctxt "printing option value"
 msgid "No pre-filtering"
 msgstr "Gun ro-chriathradh"
@@ -6409,7 +6411,6 @@ msgstr "Gun ro-chriathradh"
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
 #: modules/printbackends/cups/gtkprintbackendcups.c:4351
-#| msgid "Miscellaneous"
 msgctxt "printing option group"
 msgid "Miscellaneous"
 msgstr "Eile"
@@ -6562,43 +6563,36 @@ msgid "Billing Info"
 msgstr "Am fiosrachadh bileachaidh"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:5416
-#| msgid "None"
 msgctxt "cover page"
 msgid "None"
 msgstr "Chan eil gin"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:5417
-#| msgid "Classified"
 msgctxt "cover page"
 msgid "Classified"
 msgstr "Dìomhair"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:5418
-#| msgid "Confidential"
 msgctxt "cover page"
 msgid "Confidential"
 msgstr "Fo rùn"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:5419
-#| msgid "Secret"
 msgctxt "cover page"
 msgid "Secret"
 msgstr "Fo rùn"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:5420
-#| msgid "Standard"
 msgctxt "cover page"
 msgid "Standard"
 msgstr "Stannardach"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:5421
-#| msgid "Top Secret"
 msgctxt "cover page"
 msgid "Top Secret"
 msgstr "Fìor-dhìomhair"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:5422
-#| msgid "Unclassified"
 msgctxt "cover page"
 msgid "Unclassified"
 msgstr "Chan ann dìomhair"
@@ -6607,7 +6601,6 @@ msgstr "Chan ann dìomhair"
 #. * in the print dialog
 #.
 #: modules/printbackends/cups/gtkprintbackendcups.c:5434
-#| msgid "Pages per Sheet"
 msgctxt "printer option"
 msgid "Pages per Sheet"
 msgstr "Duilleagan gach siota"
@@ -6616,7 +6609,6 @@ msgstr "Duilleagan gach siota"
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: modules/printbackends/cups/gtkprintbackendcups.c:5451
-#| msgid "Page Ordering"
 msgctxt "printer option"
 msgid "Page Ordering"
 msgstr "Òrdugh nan duilleagan"
@@ -6625,7 +6617,6 @@ msgstr "Òrdugh nan duilleagan"
 #. * dialog that controls the front cover page.
 #.
 #: modules/printbackends/cups/gtkprintbackendcups.c:5493
-#| msgid "Before"
 msgctxt "printer option"
 msgid "Before"
 msgstr "Roimhe"
@@ -6634,7 +6625,6 @@ msgstr "Roimhe"
 #. * dialog that controls the back cover page.
 #.
 #: modules/printbackends/cups/gtkprintbackendcups.c:5508
-#| msgid "After"
 msgctxt "printer option"
 msgid "After"
 msgstr "As a dhèidh"
@@ -6644,7 +6634,6 @@ msgstr "As a dhèidh"
 #. * or 'on hold'
 #.
 #: modules/printbackends/cups/gtkprintbackendcups.c:5528
-#| msgid "Print at"
 msgctxt "printer option"
 msgid "Print at"
 msgstr "Clò-bhuail"
@@ -6653,7 +6642,6 @@ msgstr "Clò-bhuail"
 #. * to specify a time when a print job will be printed.
 #.
 #: modules/printbackends/cups/gtkprintbackendcups.c:5539
-#| msgid "Print at time"
 msgctxt "printer option"
 msgid "Print at time"
 msgstr "Clò-bhuail aig àm sònraichte"
@@ -6669,14 +6657,12 @@ msgid "Custom %s×%s"
 msgstr "Meud gnàthaichte %s×%s"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:5690
-#| msgid "Printer Profile"
 msgctxt "printer option"
 msgid "Printer Profile"
 msgstr "Pròifil a' chlò-bhualadair"
 
 #. TRANSLATORS: this is when color profile information is unavailable
 #: modules/printbackends/cups/gtkprintbackendcups.c:5697
-#| msgid "Unavailable"
 msgctxt "printer option value"
 msgid "Unavailable"
 msgstr "Chan eil seo ri fhaighinn"
