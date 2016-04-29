@@ -1321,7 +1321,7 @@ gtk_notebook_init (GtkNotebook *notebook)
                                                   NULL,
                                                   NULL);
   gtk_css_gadget_set_state (priv->stack_gadget, gtk_css_node_get_state (widget_node));
-  gtk_box_gadget_insert_gadget (GTK_BOX_GADGET (priv->gadget), -1, priv->stack_gadget, TRUE, TRUE, GTK_ALIGN_FILL);
+  gtk_box_gadget_insert_gadget (GTK_BOX_GADGET (priv->gadget), -1, priv->stack_gadget, TRUE, GTK_ALIGN_FILL);
 
   priv->header_gadget = gtk_box_gadget_new ("header",
                                             GTK_WIDGET (notebook),
@@ -1330,7 +1330,7 @@ gtk_notebook_init (GtkNotebook *notebook)
   gtk_css_gadget_add_class (priv->header_gadget, GTK_STYLE_CLASS_TOP);
   gtk_css_gadget_set_state (priv->header_gadget, gtk_css_node_get_state (widget_node));
   gtk_css_gadget_set_visible (priv->header_gadget, FALSE);
-  gtk_box_gadget_insert_gadget (GTK_BOX_GADGET (priv->gadget), 0, priv->header_gadget, FALSE, FALSE, GTK_ALIGN_FILL);
+  gtk_box_gadget_insert_gadget (GTK_BOX_GADGET (priv->gadget), 0, priv->header_gadget, FALSE, GTK_ALIGN_FILL);
 
   priv->tabs_gadget = gtk_css_custom_gadget_new ("tabs",
                                                  GTK_WIDGET (notebook),
@@ -1342,7 +1342,7 @@ gtk_notebook_init (GtkNotebook *notebook)
                                                  NULL,
                                                  NULL);
   gtk_css_gadget_set_state (priv->tabs_gadget, gtk_css_node_get_state (widget_node));
-  gtk_box_gadget_insert_gadget (GTK_BOX_GADGET (priv->header_gadget), 0, priv->tabs_gadget, TRUE, TRUE, GTK_ALIGN_FILL);
+  gtk_box_gadget_insert_gadget (GTK_BOX_GADGET (priv->header_gadget), 0, priv->tabs_gadget, TRUE, GTK_ALIGN_FILL);
 }
 
 static void
@@ -7032,7 +7032,7 @@ gtk_notebook_update_tab_pos (GtkNotebook *notebook)
     {
     case GTK_POS_TOP:
       if (priv->show_tabs)
-        gtk_box_gadget_insert_gadget (GTK_BOX_GADGET (priv->gadget), 0, priv->header_gadget, FALSE, FALSE, GTK_ALIGN_FILL);
+        gtk_box_gadget_insert_gadget (GTK_BOX_GADGET (priv->gadget), 0, priv->header_gadget, FALSE, GTK_ALIGN_FILL);
       gtk_box_gadget_set_draw_reverse (GTK_BOX_GADGET (priv->gadget), TRUE);
       gtk_box_gadget_set_orientation (GTK_BOX_GADGET (priv->gadget), GTK_ORIENTATION_VERTICAL);
       gtk_box_gadget_set_orientation (GTK_BOX_GADGET (priv->header_gadget), GTK_ORIENTATION_HORIZONTAL);
@@ -7040,7 +7040,7 @@ gtk_notebook_update_tab_pos (GtkNotebook *notebook)
 
     case GTK_POS_BOTTOM:
       if (priv->show_tabs)
-        gtk_box_gadget_insert_gadget (GTK_BOX_GADGET (priv->gadget), 1, priv->header_gadget, FALSE, FALSE, GTK_ALIGN_FILL);
+        gtk_box_gadget_insert_gadget (GTK_BOX_GADGET (priv->gadget), 1, priv->header_gadget, FALSE, GTK_ALIGN_FILL);
       gtk_box_gadget_set_draw_reverse (GTK_BOX_GADGET (priv->gadget), FALSE);
       gtk_box_gadget_set_orientation (GTK_BOX_GADGET (priv->gadget), GTK_ORIENTATION_VERTICAL);
       gtk_box_gadget_set_orientation (GTK_BOX_GADGET (priv->header_gadget), GTK_ORIENTATION_HORIZONTAL);
@@ -7048,7 +7048,7 @@ gtk_notebook_update_tab_pos (GtkNotebook *notebook)
 
     case GTK_POS_LEFT:
       if (priv->show_tabs)
-        gtk_box_gadget_insert_gadget (GTK_BOX_GADGET (priv->gadget), 0, priv->header_gadget, FALSE, FALSE, GTK_ALIGN_FILL);
+        gtk_box_gadget_insert_gadget (GTK_BOX_GADGET (priv->gadget), 0, priv->header_gadget, FALSE, GTK_ALIGN_FILL);
       gtk_box_gadget_set_draw_reverse (GTK_BOX_GADGET (priv->gadget), TRUE);
       gtk_box_gadget_set_orientation (GTK_BOX_GADGET (priv->gadget), GTK_ORIENTATION_HORIZONTAL);
       gtk_box_gadget_set_orientation (GTK_BOX_GADGET (priv->header_gadget), GTK_ORIENTATION_VERTICAL);
@@ -7056,7 +7056,7 @@ gtk_notebook_update_tab_pos (GtkNotebook *notebook)
 
     case GTK_POS_RIGHT:
       if (priv->show_tabs)
-        gtk_box_gadget_insert_gadget (GTK_BOX_GADGET (priv->gadget), 1, priv->header_gadget, FALSE, FALSE, GTK_ALIGN_FILL);
+        gtk_box_gadget_insert_gadget (GTK_BOX_GADGET (priv->gadget), 1, priv->header_gadget, FALSE, GTK_ALIGN_FILL);
       gtk_box_gadget_set_draw_reverse (GTK_BOX_GADGET (priv->gadget), FALSE);
       gtk_box_gadget_set_orientation (GTK_BOX_GADGET (priv->gadget), GTK_ORIENTATION_HORIZONTAL);
       gtk_box_gadget_set_orientation (GTK_BOX_GADGET (priv->header_gadget), GTK_ORIENTATION_VERTICAL);

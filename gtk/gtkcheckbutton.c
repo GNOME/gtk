@@ -184,6 +184,7 @@ gtk_check_button_add (GtkContainer *container,
 
   pos = gtk_widget_get_direction (GTK_WIDGET (container)) == GTK_TEXT_DIR_RTL ? 0 : 1;
   gtk_box_gadget_insert_widget (GTK_BOX_GADGET (priv->gadget), pos, widget);
+  gtk_box_gadget_set_gadget_expand (GTK_BOX_GADGET (priv->gadget), G_OBJECT (widget), TRUE);
 }
 
 static void
@@ -324,7 +325,7 @@ gtk_check_button_init (GtkCheckButton *check_button)
                                                  priv->gadget,
                                                  NULL);
   gtk_builtin_icon_set_default_size_property (GTK_BUILTIN_ICON (priv->indicator_gadget), "indicator-size");
-  gtk_box_gadget_insert_gadget (GTK_BOX_GADGET (priv->gadget), 0, priv->indicator_gadget, FALSE, FALSE, GTK_ALIGN_BASELINE);
+  gtk_box_gadget_insert_gadget (GTK_BOX_GADGET (priv->gadget), 0, priv->indicator_gadget, FALSE, GTK_ALIGN_BASELINE);
 
   gtk_check_button_update_node_state (GTK_WIDGET (check_button));
 }

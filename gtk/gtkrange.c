@@ -671,13 +671,6 @@ gtk_range_sync_orientation (GtkRange *range)
   orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (range));
   _gtk_orientable_set_style_classes (GTK_ORIENTABLE (range));
   gtk_box_gadget_set_orientation (GTK_BOX_GADGET (priv->contents_gadget), orientation);
-
-  if (orientation == GTK_ORIENTATION_VERTICAL)
-    gtk_box_gadget_set_gadget_expand (GTK_BOX_GADGET (priv->contents_gadget),
-                                      priv->trough_gadget, FALSE, TRUE);
-  else
-    gtk_box_gadget_set_gadget_expand (GTK_BOX_GADGET (priv->contents_gadget),
-                                      priv->trough_gadget, TRUE, FALSE);
 }
 
 static void
@@ -825,7 +818,7 @@ gtk_range_init (GtkRange *range)
   gtk_css_gadget_set_state (priv->trough_gadget,
                             gtk_css_node_get_state (widget_node));
   gtk_box_gadget_insert_gadget (GTK_BOX_GADGET (priv->contents_gadget), -1, priv->trough_gadget,
-                                TRUE, FALSE, GTK_ALIGN_CENTER);
+                                TRUE, GTK_ALIGN_CENTER);
 
   priv->slider_gadget = gtk_builtin_icon_new ("slider",
                                               GTK_WIDGET (range),
@@ -3964,7 +3957,7 @@ sync_stepper_gadget (GtkRange                *range,
   gtk_css_gadget_set_state (gadget, gtk_css_node_get_state (widget_node));
 
   gtk_box_gadget_insert_gadget_after (GTK_BOX_GADGET (priv->contents_gadget), prev_sibling,
-                                      gadget, FALSE, FALSE, GTK_ALIGN_FILL);
+                                      gadget, FALSE, GTK_ALIGN_FILL);
   *gadget_ptr = gadget;
 }
 
