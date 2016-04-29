@@ -38,9 +38,10 @@ struct _GtkBoxGadgetPrivate {
   GtkOrientation orientation;
   GArray *children;
 
-  guint draw_focus : 1;
-  guint draw_reverse : 1;
+  guint draw_focus       : 1;
+  guint draw_reverse     : 1;
   guint allocate_reverse : 1;
+  guint align_reverse    : 1;
 };
 
 typedef gboolean (* ComputeExpandFunc) (GObject *object, GtkOrientation orientation);
@@ -82,6 +83,21 @@ gtk_box_gadget_child_get_align (GtkBoxGadget      *gadget,
     align = child->align;
 
   return align;
+}
+
+static GtkAlign
+effective_align (GtkAlign align,
+                 gboolean reverse)
+{
+  switch (align)
+    {
+    case GTK_ALIGN_START:
+      return reverse ? GTK_ALIGN_END : GTK_ALIGN_START;
+    case GTK_ALIGN_END:
+      return reverse ? GTK_ALIGN_START : GTK_ALIGN_END;
+    default:
+      return align;
+    }
 }
 
 static void
@@ -304,6 +320,7 @@ gtk_box_gadget_allocate_child (GObject        *child,
                                              allocation->width,
                                              &minimum, &natural,
                                              &minimum_baseline, &natural_baseline);
+
           switch (child_align)
             {
             case GTK_ALIGN_FILL:
@@ -407,7 +424,7 @@ gtk_box_gadget_allocate (GtkCssGadget        *gadget,
           child_align = gtk_box_gadget_child_get_align (GTK_BOX_GADGET (gadget), child);
           gtk_box_gadget_allocate_child (child->object,
                                          priv->orientation,
-                                         child_align,
+                                         effective_align (child_align, priv->align_reverse),
                                          &child_allocation,
                                          baseline,
                                          &child_clip);
@@ -441,7 +458,7 @@ gtk_box_gadget_allocate (GtkCssGadget        *gadget,
           child_align = gtk_box_gadget_child_get_align (GTK_BOX_GADGET (gadget), child);
           gtk_box_gadget_allocate_child (child->object,
                                          priv->orientation,
-                                         child_align,
+                                         effective_align (child_align, priv->align_reverse),
                                          &child_allocation,
                                          -1,
                                          &child_clip);
@@ -593,6 +610,15 @@ gtk_box_gadget_set_allocate_reverse (GtkBoxGadget *gadget,
   GtkBoxGadgetPrivate *priv = gtk_box_gadget_get_instance_private (gadget);
 
   priv->allocate_reverse = allocate_reverse;
+}
+
+void
+gtk_box_gadget_set_align_reverse (GtkBoxGadget *gadget,
+                                  gboolean      align_reverse)
+{
+  GtkBoxGadgetPrivate *priv = gtk_box_gadget_get_instance_private (gadget);
+
+  priv->align_reverse = align_reverse;
 }
 
 static GtkCssNode *
