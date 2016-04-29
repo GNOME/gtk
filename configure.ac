@@ -581,18 +581,21 @@ PKG_CHECK_MODULES(BASE_DEPENDENCIES,
 PKG_CHECK_MODULES(CAIRO_BACKEND, [$cairo_backends])
 
 # Remove this check once cairo_required_version reaches at least 1.16.0
-case $host_os in
-  mingw*)
+AS_CASE([$host_os],
+  [mingw*],
+  [
     PKG_CHECK_MODULES(CAIRO, [cairo >= cairo_required_version])
+    gtk_save_LIBS="$LIBS"
+    LIBS="$CAIRO_LIBS $LIBS"
     AC_CHECK_LIB([cairo], [cairo_win32_surface_create_with_format],
       [AC_MSG_RESULT([found])],
       [AC_MSG_ERROR(
 [cairo_win32_surface_create_with_format is not found in cairo library
 You need a cairo snapshot 1.15.x or 1.16.x release or newer])])
-    ;;
-  *)
-    ;;
-esac
+    LIBS="$gtk_save_LIBS"
+  ],
+  []
+)
 
 
 PKG_CHECK_MODULES(GMODULE, [gmodule-2.0])
