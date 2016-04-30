@@ -516,6 +516,10 @@ _gtk_css_shadow_value_paint_layout (const GtkCssValue *shadow,
 {
   g_return_if_fail (shadow->class == &GTK_CSS_VALUE_SHADOW);
 
+  /* We don't need to draw invisible shadows */
+  if (gtk_rgba_is_clear (_gtk_css_rgba_value_get_rgba (shadow->color)))
+    return;
+
   if (!cairo_has_current_point (cr))
     cairo_move_to (cr, 0, 0);
 
@@ -557,6 +561,10 @@ _gtk_css_shadow_value_paint_icon (const GtkCssValue *shadow,
   cairo_pattern_t *pattern;
 
   g_return_if_fail (shadow->class == &GTK_CSS_VALUE_SHADOW);
+
+  /* We don't need to draw invisible shadows */
+  if (gtk_rgba_is_clear (_gtk_css_rgba_value_get_rgba (shadow->color)))
+    return;
 
   cairo_save (cr);
   pattern = cairo_pattern_reference (cairo_get_source (cr));
@@ -874,6 +882,10 @@ _gtk_css_shadow_value_paint_box (const GtkCssValue   *shadow,
   double x1c, y1c, x2c, y2c;
 
   g_return_if_fail (shadow->class == &GTK_CSS_VALUE_SHADOW);
+
+  /* We don't need to draw invisible shadows */
+  if (gtk_rgba_is_clear (_gtk_css_rgba_value_get_rgba (shadow->color)))
+    return;
 
   cairo_clip_extents (cr, &x1c, &y1c, &x2c, &y2c);
   if ((shadow->inset && !_gtk_rounded_box_intersects_rectangle (padding_box, x1c, y1c, x2c, y2c)) ||
