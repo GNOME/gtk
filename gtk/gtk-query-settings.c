@@ -52,13 +52,15 @@ main (int argc, char **argv)
       GValue      value = {0};
       GParamSpec *prop = props[i];
       gchar      *value_str;
-      int         spacing = max_prop_name_length - strlen (prop->name);
+      int         spacing = max_prop_name_length - strlen (prop->name) + 1;
+      gboolean    deprecated;
 
       if (pattern && !g_strrstr (prop->name, pattern))
         continue;
 
       g_value_init (&value, prop->value_type);
       g_object_get_property (G_OBJECT (settings), prop->name, &value);
+      deprecated = prop->flags & G_PARAM_DEPRECATED;
 
       if (G_VALUE_HOLDS_ENUM (&value))
         {
@@ -70,6 +72,12 @@ main (int argc, char **argv)
       else
         {
           value_str = g_strdup_value_contents (&value);
+        }
+
+      if (deprecated)
+        {
+          printf ("!");
+          spacing --;
         }
 
       for (; spacing >= 0; spacing --)
