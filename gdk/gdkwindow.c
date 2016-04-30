@@ -3866,15 +3866,12 @@ enum {
   PROCESS_UPDATES_WITH_SAME_CLOCK_CHILDREN
 };
 
-static GList *
-find_impl_windows_to_update (GList      *list,
+static void
+find_impl_windows_to_update (GPtrArray  *list,
                              GdkWindow  *window,
                              gint        recurse_mode)
 {
   GList *node;
-
-  if (GDK_WINDOW_DESTROYED (window))
-    return list;
 
   /* Recurse first, so that we process updates in reverse stacking
    * order so composition or painting over achieves the desired effect
@@ -3886,42 +3883,41 @@ find_impl_windows_to_update (GList      *list,
         {
           GdkWindow *child = node->data;
 
-          if (recurse_mode == PROCESS_UPDATES_WITH_ALL_CHILDREN ||
+          if (!GDK_WINDOW_DESTROYED (child) &&
+              (recurse_mode == PROCESS_UPDATES_WITH_ALL_CHILDREN ||
               (recurse_mode == PROCESS_UPDATES_WITH_SAME_CLOCK_CHILDREN &&
-               child->frame_clock == NULL))
+               child->frame_clock == NULL)))
             {
-              list = find_impl_windows_to_update (list, child, recurse_mode);
+              find_impl_windows_to_update (list, child, recurse_mode);
             }
         }
     }
 
   /* add reference count so the window cannot be deleted in a callback */
   if (window->impl_window == window)
-    list = g_list_prepend (list, g_object_ref (window));
-
-  return list;
+    g_ptr_array_add (list, g_object_ref (window));
 }
 
 static void
 gdk_window_process_updates_with_mode (GdkWindow     *window,
                                       int            recurse_mode)
 {
-  GList *list = NULL;
-  GList *node;
+  GPtrArray *list = g_ptr_array_new_with_free_func (g_object_unref);
+  int i;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  list = find_impl_windows_to_update (list, window, recurse_mode);
+  find_impl_windows_to_update (list, window, recurse_mode);
 
   if (window->impl_window != window)
-    list = g_list_prepend (list, g_object_ref (window->impl_window));
+    g_ptr_array_add (list, g_object_ref (window->impl_window));
 
-  for (node = list; node; node = node->next)
+  for (i = (int)list->len - 1; i >= 0; i --)
     {
-      GdkWindow *impl_window = node->data;
+      GdkWindow *impl_window = g_ptr_array_index (list, i);
 
       if (impl_window->update_area &&
           !impl_window->update_freeze_count &&
@@ -3936,7 +3932,7 @@ gdk_window_process_updates_with_mode (GdkWindow     *window,
         }
     }
 
-  g_list_free_full (list, g_object_unref);
+  g_ptr_array_free (list, TRUE);
 }
 
 /**
