@@ -3702,13 +3702,15 @@ gdk_window_process_updates_internal (GdkWindow *window)
 
 	  expose_region = cairo_region_copy (window->active_update_area);
 
+	  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+
           /* Sometimes we can't just paint only the new area, as the windowing system
            * requires more to be repainted. For instance, with OpenGL you typically
            * repaint all of each frame each time and then swap the buffer, although
            * there are extensions that allow us to reuse part of an old frame.
            */
-          if (GDK_WINDOW_IMPL_GET_CLASS (window->impl)->invalidate_for_new_frame)
-            GDK_WINDOW_IMPL_GET_CLASS (window->impl)->invalidate_for_new_frame (window, expose_region);
+          if (impl_class->invalidate_for_new_frame)
+            impl_class->invalidate_for_new_frame (window, expose_region);
 
 	  /* Clip to part visible in impl window */
 	  cairo_region_intersect (expose_region, window->clip_region);
@@ -3724,8 +3726,6 @@ gdk_window_process_updates_internal (GdkWindow *window)
 	      gdk_display_sync (gdk_window_get_display (window));
 	      g_usleep (70000);
 	    }
-
-	  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
 
           if (impl_class->queue_antiexpose)
             impl_class->queue_antiexpose (window, expose_region);
