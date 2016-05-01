@@ -25,6 +25,7 @@
 #include <gdk/gdk.h>
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
+#include "gtksettingsprivate.h"
 #include "gtkprogresstrackerprivate.h"
 #include "gtkintl.h"
 
@@ -599,7 +600,6 @@ gtk_revealer_start_animation (GtkRevealer *revealer,
   GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
   GtkWidget *widget = GTK_WIDGET (revealer);
   GtkRevealerTransitionType transition;
-  gboolean animations_enabled;
 
   if (priv->target_pos == target)
     return;
@@ -607,15 +607,11 @@ gtk_revealer_start_animation (GtkRevealer *revealer,
   priv->target_pos = target;
   g_object_notify_by_pspec (G_OBJECT (revealer), props[PROP_REVEAL_CHILD]);
 
-  g_object_get (gtk_widget_get_settings (GTK_WIDGET (revealer)),
-                "gtk-enable-animations", &animations_enabled,
-                NULL);
-
   transition = effective_transition (revealer);
   if (gtk_widget_get_mapped (widget) &&
       priv->transition_duration != 0 &&
       transition != GTK_REVEALER_TRANSITION_TYPE_NONE &&
-      animations_enabled)
+      gtk_settings_get_enable_animations (gtk_widget_get_settings (widget)))
     {
       priv->source_pos = priv->current_pos;
       if (priv->tick_id == 0)
