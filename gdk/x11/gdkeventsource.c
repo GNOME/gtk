@@ -51,8 +51,6 @@ static GSourceFuncs event_funcs = {
   gdk_event_source_finalize
 };
 
-static GList *event_sources = NULL;
-
 static gint
 gdk_event_apply_filters (XEvent    *xevent,
 			 GdkEvent  *event,
@@ -383,8 +381,6 @@ gdk_event_source_finalize (GSource *source)
 
   g_list_free (event_source->translators);
   event_source->translators = NULL;
-
-  event_sources = g_list_remove (event_sources, source);
 }
 
 GSource *
@@ -414,8 +410,6 @@ gdk_x11_event_source_new (GdkDisplay *display)
   g_source_set_priority (source, GDK_PRIORITY_EVENTS);
   g_source_set_can_recurse (source, TRUE);
   g_source_attach (source, NULL);
-
-  event_sources = g_list_prepend (event_sources, source);
 
   return source;
 }
