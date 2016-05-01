@@ -52,6 +52,9 @@ typedef enum
 GtkSettingsSource  _gtk_settings_get_setting_source (GtkSettings *settings,
                                                      const gchar *name);
 
+gboolean gtk_settings_get_enable_animations  (GtkSettings *settings);
+gint     gtk_settings_get_dnd_drag_threshold (GtkSettings *settings);
+
 G_END_DECLS
 
 #endif /* __GTK_SETTINGS_PRIVATE_H__ */

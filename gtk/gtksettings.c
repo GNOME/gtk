@@ -3475,3 +3475,37 @@ gtk_settings_reset_property (GtkSettings *settings,
   priv->property_values[pspec->param_id - 1].source = GTK_SETTINGS_SOURCE_DEFAULT;
   g_object_notify_by_pspec (G_OBJECT (settings), pspec);
 }
+
+gboolean
+gtk_settings_get_enable_animations (GtkSettings *settings)
+{
+  GtkSettingsPrivate *priv = settings->priv;
+  GtkSettingsPropertyValue *svalue = &priv->property_values[PROP_ENABLE_ANIMATIONS - 1];
+
+  if (svalue->source < GTK_SETTINGS_SOURCE_XSETTING)
+    {
+      GParamSpec *pspec;
+
+      pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (settings), "gtk-enable-animations");
+      settings_update_xsetting (settings, pspec, FALSE);
+    }
+
+  return g_value_get_boolean (&svalue->value);
+}
+
+gint
+gtk_settings_get_dnd_drag_threshold (GtkSettings *settings)
+{
+  GtkSettingsPrivate *priv = settings->priv;
+  GtkSettingsPropertyValue *svalue = &priv->property_values[PROP_DND_DRAG_THRESHOLD - 1];
+
+  if (svalue->source < GTK_SETTINGS_SOURCE_XSETTING)
+    {
+      GParamSpec *pspec;
+
+      pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (settings), "gtk-dnd-drag-threshold");
+      settings_update_xsetting (settings, pspec, FALSE);
+    }
+
+  return g_value_get_int (&svalue->value);
+}
