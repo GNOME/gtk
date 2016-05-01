@@ -28,6 +28,7 @@
 #include "gtkcsscustomgadgetprivate.h"
 #include "gtkcontainerprivate.h"
 #include "gtkprogresstrackerprivate.h"
+#include "gtksettingsprivate.h"
 #include "gtkwidgetprivate.h"
 #include <math.h>
 #include <string.h>
@@ -1008,14 +1009,9 @@ gtk_stack_start_transition (GtkStack               *stack,
 {
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
   GtkWidget *widget = GTK_WIDGET (stack);
-  gboolean animations_enabled;
-
-  g_object_get (gtk_widget_get_settings (widget),
-                "gtk-enable-animations", &animations_enabled,
-                NULL);
 
   if (gtk_widget_get_mapped (widget) &&
-      animations_enabled &&
+      gtk_settings_get_enable_animations (gtk_widget_get_settings (widget)) &&
       transition_type != GTK_STACK_TRANSITION_TYPE_NONE &&
       transition_duration != 0 &&
       priv->last_visible_child != NULL)
