@@ -2788,6 +2788,9 @@ gtk_drag_source_info_destroy (GtkDragSourceInfo *info)
 
   gtk_drag_clear_source_info (info->context);
   g_object_unref (info->context);
+
+  if (info->last_event)
+    gdk_event_free (info->last_event);
 }
 
 static gboolean
