@@ -79,6 +79,8 @@ enum {
 
 static void gdk_display_dispose     (GObject         *object);
 static void gdk_display_finalize    (GObject         *object);
+static void gdk_display_put_event_nocopy (GdkDisplay *display,
+                                          GdkEvent   *event);
 
 
 static GdkAppLaunchContext *gdk_display_real_get_app_launch_context (GdkDisplay *display);
@@ -467,6 +469,15 @@ gdk_display_peek_event (GdkDisplay *display)
     return NULL;
 }
 
+static void
+gdk_display_put_event_nocopy (GdkDisplay *display,
+                              GdkEvent   *event)
+{
+  _gdk_event_queue_append (display, event);
+  /* If the main loop is blocking in a different thread, wake it up */
+  g_main_context_wakeup (NULL);
+}
+
 /**
  * gdk_display_put_event:
  * @display: a #GdkDisplay
@@ -484,9 +495,7 @@ gdk_display_put_event (GdkDisplay     *display,
   g_return_if_fail (GDK_IS_DISPLAY (display));
   g_return_if_fail (event != NULL);
 
-  _gdk_event_queue_append (display, gdk_event_copy (event));
-  /* If the main loop is blocking in a different thread, wake it up */
-  g_main_context_wakeup (NULL); 
+  gdk_display_put_event_nocopy (display, gdk_event_copy (event));
 }
 
 /**
@@ -712,10 +721,11 @@ gdk_display_get_window_at_pointer (GdkDisplay *display,
 }
 
 static void
-generate_grab_broken_event (GdkWindow *window,
-                            GdkDevice *device,
-			    gboolean   implicit,
-			    GdkWindow *grab_window)
+generate_grab_broken_event (GdkDisplay *display,
+                            GdkWindow  *window,
+                            GdkDevice  *device,
+			    gboolean    implicit,
+			    GdkWindow  *grab_window)
 {
   g_return_if_fail (window != NULL);
 
@@ -731,8 +741,7 @@ generate_grab_broken_event (GdkWindow *window,
       gdk_event_set_device (event, device);
       event->grab_broken.keyboard = (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD) ? TRUE : FALSE;
 
-      gdk_event_put (event);
-      gdk_event_free (event);
+      gdk_display_put_event_nocopy (display, event);
     }
 }
 
@@ -831,7 +840,7 @@ _gdk_display_break_touch_grabs (GdkDisplay *display,
                              GdkTouchGrabInfo, i);
 
       if (info->device == device && info->window != new_grab_window)
-        generate_grab_broken_event (GDK_WINDOW (info->window),
+        generate_grab_broken_event (display, GDK_WINDOW (info->window),
                                     device, TRUE, new_grab_window);
     }
 }
@@ -1177,7 +1186,7 @@ _gdk_display_device_grab_update (GdkDisplay *display,
 
       if ((next_grab == NULL && current_grab->implicit_ungrab) ||
           (next_grab != NULL && current_grab->window != next_grab->window))
-        generate_grab_broken_event (GDK_WINDOW (current_grab->window),
+        generate_grab_broken_event (display, GDK_WINDOW (current_grab->window),
                                     device,
                                     current_grab->implicit,
                                     next_grab? next_grab->window : NULL);
