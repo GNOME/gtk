@@ -228,10 +228,25 @@ typedef struct {
   gboolean negative;
 } Arc;
 
+static inline guint
+mem_hash (gconstpointer v, gint len)
+{
+  const signed char *p;
+  const signed char *end;
+  guint32 h = 5381;
+
+  p = v;
+  end = p + len;
+  for (;  p < end; p++)
+    h = (h << 5) + h + *p;
+
+  return h;
+}
+
 static guint
 arc_path_hash (Arc *arc)
 {
-  return g_double_hash (&arc->angle1) ^ g_double_hash (&arc->angle2) ^ arc->negative;
+  return mem_hash ((gconstpointer)arc, sizeof (Arc));
 }
 
 static gboolean
