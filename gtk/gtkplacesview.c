@@ -19,6 +19,7 @@
 #include "config.h"
 
 #include <gio/gio.h>
+#include <gio/gvfs.h>
 #include <gtk/gtk.h>
 
 #include "gtkintl.h"
@@ -1003,8 +1004,19 @@ fetch_networks (GtkPlacesView *view)
 {
   GtkPlacesViewPrivate *priv;
   GFile *network_file;
+  const gchar * const *supported_uris;
+  gboolean found;
 
   priv = gtk_places_view_get_instance_private (view);
+  supported_uris = g_vfs_get_supported_uri_schemes (g_vfs_get_default ());
+
+  for (found = FALSE; !found && supported_uris && supported_uris[0]; supported_uris++)
+    if (g_strcmp0 (supported_uris[0], "network") == 0)
+      found = TRUE;
+
+  if (!found)
+    return;
+
   network_file = g_file_new_for_uri ("network:///");
 
   g_cancellable_cancel (priv->networks_fetching_cancellable);
