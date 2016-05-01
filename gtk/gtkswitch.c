@@ -68,6 +68,7 @@
 #include "gtkcssshadowsvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkprogresstrackerprivate.h"
+#include "gtksettingsprivate.h"
 
 #include "fallback-c89.c"
 
@@ -177,13 +178,8 @@ static void
 gtk_switch_begin_toggle_animation (GtkSwitch *sw)
 {
   GtkSwitchPrivate *priv = sw->priv;
-  gboolean animate;
 
-  g_object_get (gtk_widget_get_settings (GTK_WIDGET (sw)),
-                "gtk-enable-animations", &animate,
-                NULL);
-
-  if (animate)
+  if (gtk_settings_get_enable_animations (gtk_widget_get_settings (GTK_WIDGET (sw))))
     {
       gtk_progress_tracker_start (&priv->tracker, 1000 * ANIMATION_DURATION, 0, 1.0);
       if (priv->tick_id == 0)
