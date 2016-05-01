@@ -257,15 +257,11 @@ static GdkFrameClock *
 gtk_css_widget_node_get_frame_clock (GtkCssNode *node)
 {
   GtkCssWidgetNode *widget_node = GTK_CSS_WIDGET_NODE (node);
-  gboolean animate;
 
   if (widget_node->widget == NULL)
     return NULL;
 
-  g_object_get (gtk_widget_get_settings (widget_node->widget),
-                "gtk-enable-animations", &animate,
-                NULL);
-  if (animate == FALSE)
+  if (!gtk_settings_get_enable_animations (gtk_widget_get_settings (widget_node->widget)))
     return NULL;
 
   return gtk_widget_get_frame_clock (widget_node->widget);
