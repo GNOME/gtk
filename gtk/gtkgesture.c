@@ -994,13 +994,24 @@ gtk_gesture_class_init (GtkGestureClass *klass)
 }
 
 static void
+free_point_data (gpointer data)
+{
+  PointData *point = data;
+
+  if (point->event)
+    gdk_event_free (point->event);
+
+  g_free (point);
+}
+
+static void
 gtk_gesture_init (GtkGesture *gesture)
 {
   GtkGesturePrivate *priv;
 
   priv = gtk_gesture_get_instance_private (gesture);
   priv->points = g_hash_table_new_full (NULL, NULL, NULL,
-                                        (GDestroyNotify) g_free);
+                                        (GDestroyNotify) free_point_data);
   gtk_event_controller_set_event_mask (GTK_EVENT_CONTROLLER (gesture),
                                        GDK_TOUCH_MASK |
                                        GDK_TOUCHPAD_GESTURE_MASK);
