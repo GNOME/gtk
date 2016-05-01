@@ -295,6 +295,7 @@ _gdk_event_queue_handle_motion_compression (GdkDisplay *display)
   while (pending_motions && pending_motions->next != NULL)
     {
       GList *next = pending_motions->next;
+      gdk_event_free (pending_motions->data);
       display->queued_events = g_list_delete_link (display->queued_events,
                                                    pending_motions);
       pending_motions = next;
