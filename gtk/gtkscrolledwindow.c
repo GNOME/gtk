@@ -46,6 +46,7 @@
 #include "a11y/gtkscrolledwindowaccessible.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkprogresstrackerprivate.h"
+#include "gtksettingsprivate.h"
 
 #include <math.h>
 
@@ -342,7 +343,7 @@ static void     gtk_scrolled_window_adjustment_changed (GtkAdjustment     *adjus
                                                         gpointer           data);
 static void     gtk_scrolled_window_adjustment_value_changed (GtkAdjustment     *adjustment,
                                                               gpointer           data);
-static gboolean gtk_scrolled_window_should_animate     (GtkScrolledWindow   *sw);
+static gboolean gtk_widget_should_animate              (GtkWidget           *widget);
 
 static void  gtk_scrolled_window_get_preferred_width   (GtkWidget           *widget,
 							gint                *minimum_size,
@@ -2202,7 +2203,7 @@ gtk_scrolled_window_set_hadjustment (GtkScrolledWindow *scrolled_window,
   if (GTK_IS_SCROLLABLE (child))
     gtk_scrollable_set_hadjustment (GTK_SCROLLABLE (child), hadjustment);
 
-  if (gtk_scrolled_window_should_animate (scrolled_window))
+  if (gtk_widget_should_animate (GTK_WIDGET (scrolled_window)))
     gtk_adjustment_enable_animation (hadjustment, gtk_widget_get_frame_clock (GTK_WIDGET (scrolled_window)), ANIMATION_DURATION);
   g_object_notify_by_pspec (G_OBJECT (scrolled_window), properties[PROP_HADJUSTMENT]);
 }
@@ -2270,7 +2271,7 @@ gtk_scrolled_window_set_vadjustment (GtkScrolledWindow *scrolled_window,
   if (GTK_IS_SCROLLABLE (child))
     gtk_scrollable_set_vadjustment (GTK_SCROLLABLE (child), vadjustment);
 
-  if (gtk_scrolled_window_should_animate (scrolled_window))
+  if (gtk_widget_should_animate (GTK_WIDGET (scrolled_window)))
     gtk_adjustment_enable_animation (vadjustment, gtk_widget_get_frame_clock (GTK_WIDGET (scrolled_window)), ANIMATION_DURATION);
 
   g_object_notify_by_pspec (G_OBJECT (scrolled_window), properties[PROP_VADJUSTMENT]);
@@ -3879,18 +3880,12 @@ gtk_scrolled_window_get_preferred_width_for_height (GtkWidget *widget,
 }
 
 static gboolean
-gtk_scrolled_window_should_animate (GtkScrolledWindow *sw)
+gtk_widget_should_animate (GtkWidget *widget)
 {
-  gboolean animate;
-
-  if (!gtk_widget_get_mapped (GTK_WIDGET (sw)))
+  if (!gtk_widget_get_mapped (widget))
     return FALSE;
 
-  g_object_get (gtk_widget_get_settings (GTK_WIDGET (sw)),
-                "gtk-enable-animations", &animate,
-                NULL);
- 
-  return animate;
+  return gtk_settings_get_enable_animations (gtk_widget_get_settings (widget));
 }
 
 static void
@@ -3900,7 +3895,7 @@ gtk_scrolled_window_update_animating (GtkScrolledWindow *sw)
   GdkFrameClock *clock = NULL;
   guint duration = 0;
 
-  if (gtk_scrolled_window_should_animate (sw))
+  if (gtk_widget_should_animate (GTK_WIDGET (sw)))
     {
       clock = gtk_widget_get_frame_clock (GTK_WIDGET (sw)),
       duration = ANIMATION_DURATION;
@@ -4030,21 +4025,15 @@ static void
 indicator_start_fade (Indicator *indicator,
                       gdouble    target)
 {
-  gboolean animations_enabled;
-
   if (indicator->target_pos == target)
     return;
 
   indicator->target_pos = target;
 
-  g_object_get (gtk_widget_get_settings (indicator->scrollbar),
-                "gtk-enable-animations", &animations_enabled,
-                NULL);
-
   if (target != 0.0)
     indicator->last_scroll_time = g_get_monotonic_time ();
 
-  if (gtk_widget_get_mapped (indicator->scrollbar) && animations_enabled)
+  if (gtk_widget_should_animate (indicator->scrollbar))
     {
       indicator->source_pos = indicator->current_pos;
       gtk_progress_tracker_start (&indicator->tracker, INDICATOR_FADE_OUT_DURATION * 1000, 0, 1.0);
