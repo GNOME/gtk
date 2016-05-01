@@ -52,7 +52,7 @@
 #include "gtkcssrgbavalueprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkmain.h"
-#include "gtksettings.h"
+#include "gtksettingsprivate.h"
 #include "gtkwidgetpath.h"
 #include "gtkpixelcacheprivate.h"
 #include "a11y/gtktreeviewaccessibleprivate.h"
@@ -12776,9 +12776,7 @@ gtk_tree_view_real_expand_row (GtkTreeView *tree_view,
   gboolean expand;
 
   if (animate)
-    g_object_get (gtk_widget_get_settings (GTK_WIDGET (tree_view)),
-                  "gtk-enable-animations", &animate,
-                  NULL);
+    animate = gtk_settings_get_enable_animations (gtk_widget_get_settings (GTK_WIDGET (tree_view)));
 
   remove_auto_expand_timeout (tree_view);
 
@@ -12908,9 +12906,7 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
   gboolean selection_changed, cursor_changed;
 
   if (animate)
-    g_object_get (gtk_widget_get_settings (GTK_WIDGET (tree_view)),
-                  "gtk-enable-animations", &animate,
-                  NULL);
+    animate = gtk_settings_get_enable_animations (gtk_widget_get_settings (GTK_WIDGET (tree_view)));
 
   remove_auto_expand_timeout (tree_view);
 
