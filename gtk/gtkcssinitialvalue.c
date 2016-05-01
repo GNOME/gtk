@@ -62,29 +62,8 @@ gtk_css_value_initial_compute (GtkCssValue             *value,
 
     case GTK_CSS_PROPERTY_FONT_FAMILY:
       settings = _gtk_style_provider_private_get_settings (provider);
-      if (settings)
-        {
-          PangoFontDescription *description;
-          char *font_name;
-
-          g_object_get (settings, "gtk-font-name", &font_name, NULL);
-          description = pango_font_description_from_string (font_name);
-          g_free (font_name);
-          if (description == NULL)
-            break;
-
-          if (pango_font_description_get_set_fields (description) & PANGO_FONT_MASK_FAMILY)
-            {
-              GtkCssValue *val;
-
-              val = _gtk_css_array_value_new (_gtk_css_string_value_new (pango_font_description_get_family (description)));
-              pango_font_description_free (description);
-
-              return val;
-            }
- 
-          pango_font_description_free (description);
-        }
+      if (settings && gtk_settings_get_font_family (settings) != NULL)
+        return _gtk_css_array_value_new (_gtk_css_string_value_new (gtk_settings_get_font_family (settings)));
       break;
 
     default:

@@ -144,30 +144,19 @@ gtk_css_font_size_get_default_px (GtkStyleProviderPrivate *provider,
 {
   GtkSettings *settings;
   PangoFontDescription *description;
-  char *font_name;
-  double font_size;
+  int font_size;
 
   settings = _gtk_style_provider_private_get_settings (provider);
   if (settings == NULL)
     return DEFAULT_FONT_SIZE_PT * get_dpi (style) / 72.0;
-  
-  g_object_get (settings, "gtk-font-name", &font_name, NULL);
-  description = pango_font_description_from_string (font_name);
-  g_free (font_name);
-  if (description == NULL)
+
+  font_size = gtk_settings_get_font_size (settings);
+  if (font_size == 0)
     return DEFAULT_FONT_SIZE_PT * get_dpi (style) / 72.0;
-
-  if (pango_font_description_get_set_fields (description) & PANGO_FONT_MASK_SIZE)
-    {
-      font_size = (double) pango_font_description_get_size (description) / PANGO_SCALE;
-      if (!pango_font_description_get_size_is_absolute (description))
-        font_size = font_size * get_dpi (style) / 72.0;
-    }
+  else if (gtk_settings_get_font_size_is_absolute (settings))
+    return (double) font_size / PANGO_SCALE;
   else
-    font_size = DEFAULT_FONT_SIZE_PT * get_dpi (style) / 72.0;
-
-  pango_font_description_free (description);
-  return font_size;
+    return ((double) font_size / PANGO_SCALE) * get_dpi (style) / 72.0;
 }
 
 static GtkCssValue *
