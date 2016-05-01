@@ -131,7 +131,8 @@ _gdk_wayland_display_event_source_new (GdkDisplay *display)
 
   source = g_source_new (&wl_glib_source_funcs,
 			 sizeof (GdkWaylandEventSource));
-  name = g_strdup_printf ("GDK Wayland Event source (%s)", "display name");
+  name = g_strdup_printf ("GDK Wayland Event source (%s)",
+                          gdk_display_get_name (display));
   g_source_set_name (source, name);
   g_free (name);
   wl_source = (GdkWaylandEventSource *) source;
