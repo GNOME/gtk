@@ -427,7 +427,7 @@ _gdk_frame_clock_begin_frame (GdkFrameClock *frame_clock)
   if (priv->n_timings < FRAME_HISTORY_MAX_LENGTH)
     priv->n_timings++;
   else
-    gdk_frame_timings_unref(priv->timings[priv->current]);
+    gdk_frame_timings_unref (priv->timings[priv->current]);
 
   priv->timings[priv->current] = _gdk_frame_timings_new (priv->frame_counter);
 }
