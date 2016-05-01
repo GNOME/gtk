@@ -123,6 +123,9 @@ struct _GtkSettingsPrivate
   GSList *style_cascades;
   GtkCssProvider *theme_provider;
   GtkCssProvider *key_theme_provider;
+  gint font_size;
+  gboolean font_size_absolute;
+  gchar *font_family;
 };
 
 struct _GtkSettingsValuePrivate
@@ -1783,6 +1786,8 @@ gtk_settings_finalize (GObject *object)
   settings_update_provider (priv->screen, &priv->key_theme_provider, NULL);
   g_slist_free_full (priv->style_cascades, g_object_unref);
 
+  g_free (priv->font_family);
+
   G_OBJECT_CLASS (gtk_settings_parent_class)->finalize (object);
 }
 
@@ -1955,6 +1960,35 @@ settings_invalidate_style (GtkSettings *settings)
 }
 
 static void
+settings_update_font_values (GtkSettings *settings)
+{
+  GtkSettingsPrivate *priv = settings->priv;
+  PangoFontDescription *desc;
+  const gchar *font_name;
+
+  priv->font_size = 0;
+  priv->font_size_absolute = FALSE;
+  priv->font_family = NULL;
+
+  font_name = g_value_get_string (&priv->property_values[PROP_FONT_NAME - 1].value);
+  desc = pango_font_description_from_string (font_name);
+
+  if (desc == NULL)
+    return;
+
+  if (pango_font_description_get_set_fields (desc) & PANGO_FONT_MASK_SIZE)
+    {
+      priv->font_size = pango_font_description_get_size (desc);
+      priv->font_size_absolute = pango_font_description_get_size_is_absolute (desc);
+    }
+
+  if (pango_font_description_get_set_fields (desc) & PANGO_FONT_MASK_FAMILY)
+    priv->font_family = g_strdup (pango_font_description_get_family (desc));
+
+  pango_font_description_free (desc);
+}
+
+static void
 gtk_settings_notify (GObject    *object,
                      GParamSpec *pspec)
 {
@@ -1975,6 +2009,7 @@ gtk_settings_notify (GObject    *object,
       settings_update_double_click (settings);
       break;
     case PROP_FONT_NAME:
+      settings_update_font_values (settings);
       settings_invalidate_style (settings);
       gtk_style_context_reset_widgets (priv->screen);
       break;
@@ -3508,4 +3543,22 @@ gtk_settings_get_dnd_drag_threshold (GtkSettings *settings)
     }
 
   return g_value_get_int (&svalue->value);
+}
+
+const gchar *
+gtk_settings_get_font_family (GtkSettings *settings)
+{
+  return settings->priv->font_family;
+}
+
+gint
+gtk_settings_get_font_size (GtkSettings *settings)
+{
+  return settings->priv->font_size;
+}
+
+gboolean
+gtk_settings_get_font_size_is_absolute (GtkSettings *settings)
+{
+  return settings->priv->font_size_absolute;
 }
