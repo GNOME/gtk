@@ -30,8 +30,6 @@ typedef struct _GdkWaylandEventSource {
   GdkDisplay *display;
 } GdkWaylandEventSource;
 
-static GList *event_sources = NULL;
-
 static gboolean
 gdk_event_source_prepare (GSource *base,
                           gint    *timeout)
@@ -46,7 +44,8 @@ gdk_event_source_prepare (GSource *base,
 
   /* We have to add/remove the GPollFD if we want to update our
    * poll event mask dynamically.  Instead, let's just flush all
-   * write on idle instead, which is what this amounts to. */
+   * write on idle instead, which is what this amounts to.
+   */
 
   if (_gdk_event_queue_find_first (source->display) != NULL)
     return TRUE;
@@ -100,7 +99,6 @@ gdk_event_source_dispatch (GSource     *base,
 static void
 gdk_event_source_finalize (GSource *source)
 {
-  event_sources = g_list_remove (event_sources, source);
 }
 
 static GSourceFuncs wl_glib_source_funcs = {
@@ -146,8 +144,6 @@ _gdk_wayland_display_event_source_new (GdkDisplay *display)
   g_source_set_priority (source, GDK_PRIORITY_EVENTS);
   g_source_set_can_recurse (source, TRUE);
   g_source_attach (source, NULL);
-
-  event_sources = g_list_prepend (event_sources, source);
 
   return source;
 }
