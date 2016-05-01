@@ -2050,3 +2050,9 @@ gdk_device_update_tool (GdkDevice     *device,
       g_signal_emit (device, signals[TOOL_CHANGED], 0, tool);
     }
 }
+
+GdkInputMode
+gdk_device_get_input_mode (GdkDevice *device)
+{
+  return device->mode;
+}
