@@ -1297,6 +1297,8 @@ gdk_event_get_keyval (const GdkEvent *event,
  *
  * Extracts the hardware keycode from an event.
  *
+ * Also see gdk_event_get_scancode().
+ *
  * Returns: %TRUE if the event delivered a hardware keycode
  *
  * Since: 3.2
