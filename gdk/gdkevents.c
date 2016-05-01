@@ -2066,12 +2066,6 @@ gdk_get_show_events (void)
   return (_gdk_debug_flags & GDK_DEBUG_EVENTS) != 0;
 }
 
-/* What do we do with G_IO_NVAL?
- */
-#define READ_CONDITION (G_IO_IN | G_IO_HUP | G_IO_ERR)
-#define WRITE_CONDITION (G_IO_OUT | G_IO_ERR)
-#define EXCEPTION_CONDITION (G_IO_PRI)
-
 static void
 gdk_synthesize_click (GdkDisplay *display,
                       GdkEvent   *event,
