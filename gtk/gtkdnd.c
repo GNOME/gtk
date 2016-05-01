@@ -26,6 +26,7 @@
 
 #include "gtkdnd.h"
 #include "gtkdndprivate.h"
+#include "gtksettingsprivate.h"
 
 #include <math.h>
 #include <stdlib.h>
@@ -3259,10 +3260,8 @@ gtk_drag_check_threshold (GtkWidget *widget,
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  g_object_get (gtk_widget_get_settings (widget),
-                "gtk-dnd-drag-threshold", &drag_threshold,
-                NULL);
-  
+  drag_threshold = gtk_settings_get_dnd_drag_threshold (gtk_widget_get_settings (widget));
+
   return (ABS (current_x - start_x) > drag_threshold ||
           ABS (current_y - start_y) > drag_threshold);
 }
