@@ -505,7 +505,13 @@ gdk_wayland_display_finalize (GObject *object)
 static const gchar *
 gdk_wayland_display_get_name (GdkDisplay *display)
 {
-  return "Wayland";
+  const gchar *name;
+
+  name = g_getenv ("WAYLAND_DISPLAY");
+  if (name == NULL)
+    name = "wayland-0";
+
+  return name;
 }
 
 static GdkScreen *

@@ -301,13 +301,7 @@ gdk_wayland_screen_is_composited (GdkScreen *screen)
 static gchar *
 gdk_wayland_screen_make_display_name (GdkScreen *screen)
 {
-  const gchar *name;
-
-  name = g_getenv ("WAYLAND_DISPLAY");
-  if (name == NULL)
-    name = "wayland-0";
-
-  return g_strdup (name);
+  return g_strdup (gdk_display_get_name (GDK_WAYLAND_SCREEN (screen)->display));
 }
 
 static GdkWindow *
