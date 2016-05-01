@@ -111,6 +111,7 @@
 #include "gtkroundedboxprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkprogresstrackerprivate.h"
+#include "gtksettingsprivate.h"
 
 #ifdef GDK_WINDOWING_WAYLAND
 #include "wayland/gdkwayland.h"
@@ -289,13 +290,9 @@ static gboolean
 transitions_enabled (GtkPopover *popover)
 {
   GtkPopoverPrivate *priv = popover->priv;
-  gboolean animations_enabled;
 
-  g_object_get (gtk_widget_get_settings (GTK_WIDGET (popover)),
-                "gtk-enable-animations", &animations_enabled,
-                NULL);
-
-  return animations_enabled && priv->transitions_enabled;
+  return gtk_settings_get_enable_animations (gtk_widget_get_settings (GTK_WIDGET (popover))) &&
+         priv->transitions_enabled;
 }
 
 static void
