@@ -9559,8 +9559,6 @@ _gdk_windowing_got_event (GdkDisplay *display,
 
   if (device)
     {
-      GdkInputMode mode;
-
       if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD)
         {
           pointer_info = _gdk_display_get_pointer_info (display, device);
@@ -9572,10 +9570,9 @@ _gdk_windowing_got_event (GdkDisplay *display,
             source_device = pointer_info->last_slave;
         }
 
-      g_object_get (device, "input-mode", &mode, NULL);
       _gdk_display_device_grab_update (display, device, source_device, serial);
 
-      if (mode == GDK_MODE_DISABLED ||
+      if (gdk_device_get_input_mode (device) == GDK_MODE_DISABLED ||
           !_gdk_display_check_grab_ownership (display, device, serial))
         {
           /* Device events are blocked by another
