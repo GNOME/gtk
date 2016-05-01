@@ -22,6 +22,7 @@
 #include "gtkcssstyleprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkstyleproviderprivate.h"
+#include "gtksettingsprivate.h"
 
 /* repeated API */
 
@@ -143,7 +144,6 @@ gtk_css_font_size_get_default_px (GtkStyleProviderPrivate *provider,
                                   GtkCssStyle             *style)
 {
   GtkSettings *settings;
-  PangoFontDescription *description;
   int font_size;
 
   settings = _gtk_style_provider_private_get_settings (provider);
