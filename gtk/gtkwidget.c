@@ -12345,9 +12345,6 @@ gtk_widget_real_unrealize (GtkWidget *widget)
 
   g_assert (!widget->priv->mapped);
 
-  /* printf ("unrealizing %s\n", g_type_name (G_TYPE_FROM_INSTANCE (widget)));
-   */
-
    /* We must do unrealize child widget BEFORE container widget.
     * gdk_window_destroy() destroys specified xwindow and its sub-xwindows.
     * So, unrealizing container widget before its children causes the problem
