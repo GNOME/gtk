@@ -124,7 +124,7 @@
  * # CSS nodes
  *
  * GtkInfoBar has a single CSS node with name infobar. The node may get
- * one of the style classes .info, warning, .error or .question, depending
+ * one of the style classes .info, .warning, .error or .question, depending
  * on the message type.
  */
 
