@@ -41,8 +41,6 @@ struct _GtkCssImageBuiltin
 
   GdkRGBA       fg_color;
   GdkRGBA       bg_color;
-  GdkRGBA       border_color;
-  int           border_width;
 };
 
 struct _GtkCssImageBuiltinClass
