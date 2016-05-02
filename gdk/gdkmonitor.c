@@ -119,7 +119,7 @@ gdk_monitor_get_property (GObject    *object,
       break;
 
     case PROP_REFRESH_RATE:
-      g_value_set_boolean (value, monitor->refresh_rate);
+      g_value_set_int (value, monitor->refresh_rate);
       break;
 
     case PROP_SUBPIXEL_LAYOUT:
