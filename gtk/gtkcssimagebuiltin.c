@@ -778,27 +778,11 @@ gtk_css_image_builtin_compute (GtkCssImage             *image,
                                GtkCssStyle             *parent_style)
 {
   GtkCssImageBuiltin *result;
-  GtkBorderStyle border_style;
 
   result = g_object_new (GTK_TYPE_CSS_IMAGE_BUILTIN, NULL);
 
-  border_style = _gtk_css_border_style_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_STYLE));
-  if (border_style == GTK_BORDER_STYLE_SOLID)
-    {
-      GtkBorder border;
-
-      border.top = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100);
-      border.right = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100);
-      border.bottom = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 100);
-      border.left = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100);
-
-      result->border_width = MIN (MIN (border.top, border.bottom),
-                                  MIN (border.left, border.right));
-    }
-
   result->fg_color = *_gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_COLOR));
   result->bg_color = *_gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
-  result->border_color = *_gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_COLOR));
 
   return GTK_CSS_IMAGE (result);
 }
@@ -811,9 +795,7 @@ gtk_css_image_builtin_equal (GtkCssImage *image1,
   GtkCssImageBuiltin *builtin2 = GTK_CSS_IMAGE_BUILTIN (image2);
 
   return gdk_rgba_equal (&builtin1->fg_color, &builtin2->fg_color)
-      && gdk_rgba_equal (&builtin1->bg_color, &builtin2->bg_color)
-      && gdk_rgba_equal (&builtin1->border_color, &builtin2->border_color)
-      && builtin1->border_width == builtin2->border_width;
+      && gdk_rgba_equal (&builtin1->bg_color, &builtin2->bg_color);
 }
 
 static void
