@@ -151,6 +151,11 @@ test_type (gconstpointer data)
 	  (strcmp (pspec->name, "default-display") == 0))
 	continue;
 
+      if (g_type_is_a (type, GDK_TYPE_MONITOR) &&
+          (strcmp (pspec->name, "geometry") == 0 ||
+           strcmp (pspec->name, "workarea") == 0))
+        continue;
+
       if (g_type_is_a (type, GTK_TYPE_ABOUT_DIALOG) &&
 	  (strcmp (pspec->name, "program-name") == 0))
 	continue;
