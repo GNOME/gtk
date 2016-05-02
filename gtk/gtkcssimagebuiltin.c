@@ -66,18 +66,6 @@ gtk_css_image_builtin_draw_check (GtkCssImage *image,
   x = - (1 + exterior_size - (gint) width) / 2;
   y = - (1 + exterior_size - (gint) height) / 2;
 
-  if (builtin->border_width > 0)
-    {
-      cairo_set_line_width (cr, builtin->border_width);
-
-      cairo_rectangle (cr, x + 0.5, y + 0.5, exterior_size - 1, exterior_size - 1);
-      gdk_cairo_set_source_rgba (cr, &builtin->bg_color);
-      cairo_fill_preserve (cr);
-
-      gdk_cairo_set_source_rgba (cr, &builtin->border_color);
-      cairo_stroke (cr);
-    }
-
   gdk_cairo_set_source_rgba (cr, &builtin->fg_color);
 
   if (inconsistent)
@@ -147,24 +135,6 @@ gtk_css_image_builtin_draw_option (GtkCssImage *image,
 
   x = - (1 + exterior_size - width) / 2;
   y = - (1 + exterior_size - height) / 2;
-
-  if (builtin->border_width > 0)
-    {
-      cairo_set_line_width (cr, builtin->border_width);
-
-      cairo_new_sub_path (cr);
-      cairo_arc (cr,
-                 x + exterior_size / 2.,
-                 y + exterior_size / 2.,
-                 (exterior_size - 1) / 2.,
-                 0, 2 * G_PI);
-
-      gdk_cairo_set_source_rgba (cr, &builtin->bg_color);
-      cairo_fill_preserve (cr);
-
-      gdk_cairo_set_source_rgba (cr, &builtin->border_color);
-      cairo_stroke (cr);
-    }
 
   gdk_cairo_set_source_rgba (cr, &builtin->fg_color);
 
@@ -355,10 +325,7 @@ gtk_css_image_builtin_draw_expander (GtkCssImage *image,
 
   gdk_cairo_set_source_rgba (cr, &builtin->fg_color);
 
-  cairo_fill_preserve (cr);
-
-  gdk_cairo_set_source_rgba (cr, &builtin->border_color);
-  cairo_stroke (cr);
+  cairo_fill (cr);
 }
 
 static void
