@@ -2747,8 +2747,6 @@ gtk_notebook_button_press (GtkWidget      *widget,
   if (event->button != GDK_BUTTON_PRIMARY)
     return FALSE;
 
-  priv->pressed_button = event->button;
-
   if ((tab = get_tab_at_pos (notebook, x, y)) != NULL)
     {
       GtkAllocation allocation;
@@ -2767,6 +2765,8 @@ gtk_notebook_button_press (GtkWidget      *widget,
       /* save press to possibly begin a drag */
       if (page->reorderable || page->detachable)
         {
+          priv->pressed_button = event->button;
+
           priv->mouse_x = x;
           priv->mouse_y = y;
 
