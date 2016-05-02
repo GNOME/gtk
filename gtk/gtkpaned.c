@@ -2355,17 +2355,13 @@ gtk_paned_set_position (GtkPaned *paned,
 			gint      position)
 {
   GtkPanedPrivate *priv;
-  GObject *object;
 
   g_return_if_fail (GTK_IS_PANED (paned));
 
   priv = paned->priv;
 
-  if (priv->child1_size == position)
-    return;
+  g_object_freeze_notify (G_OBJECT (paned));
 
-  object = G_OBJECT (paned);
-  
   if (position >= 0)
     {
       /* We don't clamp here - the assumption is that
@@ -2375,20 +2371,27 @@ gtk_paned_set_position (GtkPaned *paned,
        * then clamping will occur in gtk_paned_calc_position()
        */
 
+      if (!priv->position_set)
+        g_object_notify (G_OBJECT (paned), "position-set");
+
+      if (priv->child1_size != position)
+        {
+          g_object_notify (G_OBJECT (paned), "position");
+          gtk_widget_queue_resize_no_redraw (GTK_WIDGET (paned));
+        }
+
       priv->child1_size = position;
       priv->position_set = TRUE;
     }
   else
     {
+      if (priv->position_set)
+        g_object_notify (G_OBJECT (paned), "position-set");
+
       priv->position_set = FALSE;
     }
 
-  g_object_freeze_notify (object);
-  g_object_notify (object, "position");
-  g_object_notify (object, "position-set");
-  g_object_thaw_notify (object);
-
-  gtk_widget_queue_resize_no_redraw (GTK_WIDGET (paned));
+  g_object_thaw_notify (G_OBJECT (paned));
 
 #ifdef G_OS_WIN32
   /* Hacky work-around for bug #144269 */
