@@ -213,6 +213,55 @@ create_notebook (gchar           **labels,
 }
 
 static GtkWidget*
+create_notebook_non_dragable_content (gchar           **labels,
+                                      const gchar      *group,
+                                      GtkPositionType   pos)
+{
+  GtkWidget *notebook, *title, *page, *action_widget;
+
+  notebook = gtk_notebook_new ();
+  gtk_widget_set_vexpand (notebook, TRUE);
+  gtk_widget_set_hexpand (notebook, TRUE);
+
+  action_widget = gtk_button_new_from_icon_name ("list-add-symbolic", GTK_ICON_SIZE_BUTTON);
+  g_signal_connect (action_widget, "clicked", G_CALLBACK (action_clicked_cb), notebook);
+  gtk_widget_show (action_widget);
+  gtk_notebook_set_action_widget (GTK_NOTEBOOK (notebook), action_widget, GTK_PACK_END);
+
+  g_signal_connect (notebook, "create-window",
+                    G_CALLBACK (window_creation_function), NULL);
+
+  gtk_notebook_set_tab_pos (GTK_NOTEBOOK (notebook), pos);
+  gtk_notebook_set_scrollable (GTK_NOTEBOOK (notebook), TRUE);
+  gtk_container_set_border_width (GTK_CONTAINER (notebook), 6);
+  gtk_notebook_set_group_name (GTK_NOTEBOOK (notebook), group);
+
+  while (*labels)
+    {
+      GtkWidget *button;
+      button = gtk_button_new_with_label (*labels);
+      /* Use GtkListBox since it bubbles up motion notify event, which can
+       * experience more issues than GtkBox. */
+      page = gtk_list_box_new ();
+      gtk_container_add (GTK_CONTAINER (page), button);
+
+      title = gtk_label_new (*labels);
+
+      gtk_notebook_append_page (GTK_NOTEBOOK (notebook), page, title);
+      gtk_notebook_set_tab_reorderable (GTK_NOTEBOOK (notebook), page, TRUE);
+      gtk_notebook_set_tab_detachable (GTK_NOTEBOOK (notebook), page, TRUE);
+
+      labels++;
+    }
+
+  g_signal_connect (GTK_NOTEBOOK (notebook), "page-reordered",
+                    G_CALLBACK (on_page_reordered), NULL);
+  g_signal_connect_after (G_OBJECT (notebook), "drag-begin",
+                          G_CALLBACK (on_notebook_drag_begin), NULL);
+  return notebook;
+}
+
+static GtkWidget*
 create_notebook_with_notebooks (gchar           **labels,
                                 const gchar      *group,
                                 GtkPositionType   pos)
@@ -280,7 +329,7 @@ main (gint argc, gchar *argv[])
   grid = gtk_grid_new ();
 
   gtk_grid_attach (GTK_GRID (grid),
-                   create_notebook (tabs1, GROUP_A, GTK_POS_TOP),
+                   create_notebook_non_dragable_content (tabs1, GROUP_A, GTK_POS_TOP),
                    0, 0, 1, 1);
 
   gtk_grid_attach (GTK_GRID (grid),
