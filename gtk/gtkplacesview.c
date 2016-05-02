@@ -1009,7 +1009,7 @@ fetch_networks (GtkPlacesView *view)
   gboolean found;
 
   priv = gtk_places_view_get_instance_private (view);
-  supported_uris = g_vfs_get_supported_uri_schemes (g_vfs_get_local ());
+  supported_uris = g_vfs_get_supported_uri_schemes (g_vfs_get_default ());
 
   for (found = FALSE; !found && supported_uris && supported_uris[0]; supported_uris++)
     if (g_strcmp0 (supported_uris[0], "network") == 0)
