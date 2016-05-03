@@ -1365,7 +1365,7 @@ gtk_label_init (GtkLabel *label)
 
   priv->width_chars = -1;
   priv->max_width_chars = -1;
-  priv->label = NULL;
+  priv->label = g_strdup ("");
   priv->lines = -1;
 
   priv->xalign = 0.5;
@@ -1390,8 +1390,6 @@ gtk_label_init (GtkLabel *label)
   priv->mnemonic_window = NULL;
 
   priv->mnemonics_visible = TRUE;
-
-  gtk_label_set_text (label, "");
 
   priv->gadget = gtk_css_custom_gadget_new_for_node (gtk_widget_get_css_node (GTK_WIDGET (label)),
                                                      GTK_WIDGET (label),
