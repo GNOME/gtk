@@ -105,6 +105,8 @@
 
 #include  <gobject/gvaluecollector.h>
 
+#include <gdk/gdkprivate.h> /* for _gdk_event_get_pointer_emulated() */
+
 #include "gtkaccellabel.h"
 #include "gtkaccelmap.h"
 #include "gtkadjustment.h"
@@ -3554,6 +3556,9 @@ gtk_menu_scroll (GtkWidget      *widget,
 {
   GtkMenu *menu = GTK_MENU (widget);
 
+  if (_gdk_event_get_pointer_emulated ((GdkEvent *) event))
+    return FALSE;
+
   switch (event->direction)
     {
     case GDK_SCROLL_RIGHT:
@@ -3565,7 +3570,7 @@ gtk_menu_scroll (GtkWidget      *widget,
       gtk_menu_scroll_by (menu, - MENU_SCROLL_STEP2);
       break;
     case GDK_SCROLL_SMOOTH:
-      gtk_menu_scroll_by (menu, event->delta_y);
+      gtk_menu_scroll_by (menu, event->delta_y * MENU_SCROLL_STEP2);
       break;
     }
 
