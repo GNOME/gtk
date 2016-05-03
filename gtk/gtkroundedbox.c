@@ -278,6 +278,7 @@ append_arc (cairo_t *cr, double angle1, double angle2, gboolean negative)
   Arc key;
   cairo_path_t *arc;
 
+  memset (&key, 0, sizeof (Arc));
   key.angle1 = angle1;
   key.angle2 = angle2;
   key.negative = negative;
