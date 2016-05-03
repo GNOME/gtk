@@ -1138,9 +1138,9 @@ flush_scroll_event (GdkWaylandSeat             *seat,
       else if (pointer_frame->discrete_x < 0)
         direction = GDK_SCROLL_RIGHT;
       else if (pointer_frame->discrete_y > 0)
-        direction = GDK_SCROLL_UP;
-      else
         direction = GDK_SCROLL_DOWN;
+      else
+        direction = GDK_SCROLL_UP;
 
       flush_discrete_scroll_event (seat, direction);
       pointer_frame->discrete_x = 0;
