@@ -863,19 +863,17 @@ gtk_css_image_builtin_draw (GtkCssImage            *image,
   case GTK_CSS_IMAGE_BUILTIN_NONE:
     break;
   case GTK_CSS_IMAGE_BUILTIN_CHECK:
-  case GTK_CSS_IMAGE_BUILTIN_CHECK_CHECKED:
   case GTK_CSS_IMAGE_BUILTIN_CHECK_INCONSISTENT:
     gtk_css_image_builtin_draw_check (image, cr,
                                       width, height,
-                                      image_type == GTK_CSS_IMAGE_BUILTIN_CHECK_CHECKED,
+                                      image_type == GTK_CSS_IMAGE_BUILTIN_CHECK,
                                       image_type == GTK_CSS_IMAGE_BUILTIN_CHECK_INCONSISTENT);
     break;
   case GTK_CSS_IMAGE_BUILTIN_OPTION:
-  case GTK_CSS_IMAGE_BUILTIN_OPTION_CHECKED:
   case GTK_CSS_IMAGE_BUILTIN_OPTION_INCONSISTENT:
     gtk_css_image_builtin_draw_option (image, cr,
                                        width, height,
-                                       image_type == GTK_CSS_IMAGE_BUILTIN_OPTION_CHECKED,
+                                       image_type == GTK_CSS_IMAGE_BUILTIN_OPTION,
                                        image_type == GTK_CSS_IMAGE_BUILTIN_OPTION_INCONSISTENT);
     break;
   case GTK_CSS_IMAGE_BUILTIN_ARROW_UP:
