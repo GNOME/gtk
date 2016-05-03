@@ -32,6 +32,13 @@
 
 #include "glib.h"
 
+typedef enum {
+  ANIMATION_PHASE_NONE,
+  ANIMATION_PHASE_OUT,
+  ANIMATION_PHASE_MOVE,
+  ANIMATION_PHASE_IN
+} HidingBoxAnimationPhase;
+
 struct _GtkHidingBoxPrivate
 {
   GList *children;
@@ -45,13 +52,6 @@ struct _GtkHidingBoxPrivate
   gint current_height;
   guint needs_update :1;
 };
-
-typedef enum {
-  ANIMATION_PHASE_NONE,
-  ANIMATION_PHASE_OUT,
-  ANIMATION_PHASE_MOVE,
-  ANIMATION_PHASE_IN
-} HidingBoxAnimationPhase;
 
 static void update_children_visibility (GtkHidingBox *self);
 
@@ -204,8 +204,10 @@ clear_animation_state (GtkHidingBox *self)
   GtkHidingBoxPrivate *priv = gtk_hiding_box_get_instance_private (self);
 
   priv->animation_phase = ANIMATION_PHASE_NONE;
-  g_list_remove_all (priv->widgets_to_hide);
-  g_list_remove_all (priv->widgets_to_show);
+  g_list_free (priv->widgets_to_show);
+  priv->widgets_to_show = NULL;
+  g_list_free (priv->widgets_to_hide);
+  priv->widgets_to_hide = NULL;
 }
 
 static gboolean
@@ -222,10 +224,13 @@ update_children_visibility (GtkHidingBox     *box,
   GtkRequestedSize *sizes_temp;
   gint i;
   GList *children;
+  GList *temp_widgets_to_show = NULL;
   gboolean allocate_more_children = TRUE;
-
   gint n_visible_children = 0;
-  g_list_remove_all (priv->widgets_to_show);
+
+  g_list_free (priv->widgets_to_show);
+  priv->widgets_to_show = NULL;
+
   *n_visible_children_expanding = 0;
   *children_size = -priv->spacing;
   children = g_list_copy (priv->children);
@@ -240,7 +245,7 @@ update_children_visibility (GtkHidingBox     *box,
       if (!gtk_widget_get_visible (child_widget) || !allocate_more_children)
         {
           if (update)
-            g_list_append (priv->widget_to_show, child_widget);
+            priv->widgets_to_show = g_list_append (priv->widgets_to_show, child_widget);
           continue;
         }
 
@@ -292,8 +297,8 @@ update_children_visibility (GtkHidingBox     *box,
 }
 
 static gboolean
-update_children_visibility_meh (GtkHidingBox  *box,
-                            GtkAllocation *allocation)
+needs_update (GtkHidingBox  *box,
+              GtkAllocation *allocation)
 {
   GtkHidingBoxPrivate *priv = gtk_hiding_box_get_instance_private (box);
   GtkWidget *child_widget;
@@ -301,25 +306,40 @@ update_children_visibility_meh (GtkHidingBox  *box,
   GtkRequestedSize *sizes_temp;
   gint i;
   GList *children;
-  GList *new_to_show = NULL;
+  GList *widget_shown;
+  GList *widgets_to_show = NULL;
   gboolean needs_update = FALSE;
   gboolean allocate_more_children = TRUE;
-
   gint children_size = -priv->spacing;
+
   children = g_list_copy (priv->children);
-  g_list_remove_all (priv->widgets_to_show);
   sizes_temp = g_newa (GtkRequestedSize, g_list_length (priv->children));
   if (priv->inverted)
     children = g_list_reverse (children);
 
+  widget_shown = priv->widgets_shown;
   /* Retrieve desired size for visible children. */
   for (i = 0, child = children; child != NULL; i++, child = child->next)
     {
       child_widget = GTK_WIDGET (child->data);
       if (!gtk_widget_get_visible (child_widget) || !allocate_more_children)
         {
-          g_list_append (priv->widgets_to_show, child_widget);
+          needs_update = child->data != widget_shown->data;
+          widgets_to_show = g_list_prepend (widgets_to_show, child->data);
+          widget_shown = widget_shown->next;
+          if (needs_update)
+            {
+              break;
+            }
           continue;
+        }
+      else
+        {
+          needs_update = child->data == widget_shown->data;
+          if (needs_update)
+            {
+              break;
+            }
         }
 
       gtk_widget_get_preferred_width_for_height (child_widget,
@@ -344,11 +364,14 @@ update_children_visibility_meh (GtkHidingBox  *box,
       if (children_size > allocation->width)
         {
           allocate_more_children = FALSE;
-          continue;
         }
     }
 
+  needs_update = needs_update || widget_shown != NULL;
+
   g_list_free (children);
+
+  return needs_update;
 }
 
 static void
@@ -378,6 +401,7 @@ gtk_hiding_box_size_allocate (GtkWidget     *widget,
     {
       clear_animation_state (box);
     }
+
   if (priv->needs_update)
     {
       update_children_visibility (box, allocation, sizes, TRUE, &children_size,
