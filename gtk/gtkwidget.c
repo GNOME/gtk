@@ -15596,7 +15596,7 @@ _gtk_widget_set_simple_clip (GtkWidget     *widget,
 /**
  * gtk_widget_get_allocated_size:
  * @widget: a #GtkWidget
- * @allocation: (out) (allow-none): a pointer to a #GtkAllocation to copy to
+ * @allocation: (out): a pointer to a #GtkAllocation to copy to
  * @baseline: (out) (allow-none): a pointer to an integer to copy to
  *
  * Retrieves the widget’s allocated size.
@@ -15623,8 +15623,8 @@ gtk_widget_get_allocated_size (GtkWidget     *widget,
 
   priv = widget->priv;
 
-  if (allocation)
-    *allocation = priv->allocated_size;
+  *allocation = priv->allocated_size;
+
   if (baseline)
     *baseline = priv->allocated_size_baseline;
 }
