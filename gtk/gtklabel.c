@@ -3641,11 +3641,8 @@ get_size_for_allocation (GtkLabel *label,
 
   pango_layout_get_pixel_size (layout, NULL, &text_height);
 
-  if (minimum_size)
-    *minimum_size = text_height;
-
-  if (natural_size)
-    *natural_size = text_height;
+  *minimum_size = text_height;
+  *natural_size = text_height;
 
   if (minimum_baseline || natural_baseline)
     {
