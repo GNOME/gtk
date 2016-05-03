@@ -52,9 +52,9 @@ gtk_do_render_check (GtkStyleContext *context,
   if (state & GTK_STATE_FLAG_INCONSISTENT)
     image_type = GTK_CSS_IMAGE_BUILTIN_CHECK_INCONSISTENT;
   else if (state & GTK_STATE_FLAG_CHECKED)
-    image_type = GTK_CSS_IMAGE_BUILTIN_CHECK_CHECKED;
-  else
     image_type = GTK_CSS_IMAGE_BUILTIN_CHECK;
+  else
+    image_type = GTK_CSS_IMAGE_BUILTIN_NONE;
 
   gtk_css_style_render_icon (gtk_style_context_lookup_style (context), cr, x, y, width, height, image_type);
 }
@@ -117,9 +117,9 @@ gtk_do_render_option (GtkStyleContext *context,
   if (state & GTK_STATE_FLAG_INCONSISTENT)
     image_type = GTK_CSS_IMAGE_BUILTIN_OPTION_INCONSISTENT;
   else if (state & GTK_STATE_FLAG_CHECKED)
-    image_type = GTK_CSS_IMAGE_BUILTIN_OPTION_CHECKED;
-  else
     image_type = GTK_CSS_IMAGE_BUILTIN_OPTION;
+  else
+    image_type = GTK_CSS_IMAGE_BUILTIN_NONE;
 
   gtk_css_style_render_icon (gtk_style_context_lookup_style (context), cr, x, y, width, height, image_type);
 }
