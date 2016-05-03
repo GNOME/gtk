@@ -396,7 +396,6 @@ void _gdk_event_filter_unref        (GdkWindow      *window,
 
 void     _gdk_event_set_pointer_emulated (GdkEvent *event,
                                           gboolean  emulated);
-gboolean _gdk_event_get_pointer_emulated (GdkEvent *event);
 
 void     _gdk_event_set_scancode         (GdkEvent *event,
                                           guint16 scancode);

@@ -38,6 +38,8 @@ GDK_AVAILABLE_IN_ALL
 void gdk_synthesize_window_state (GdkWindow     *window,
                                   GdkWindowState unset_flags,
                                   GdkWindowState set_flags);
+GDK_AVAILABLE_IN_3_22
+gboolean _gdk_event_get_pointer_emulated (GdkEvent *event);
 
 G_END_DECLS
 
