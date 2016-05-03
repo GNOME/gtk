@@ -3767,12 +3767,6 @@ gtk_label_get_preferred_size (GtkWidget      *widget,
     gtk_misc_get_padding (GTK_MISC (label), &xpad, &ypad);
   G_GNUC_END_IGNORE_DEPRECATIONS
 
-  if (minimum_baseline)
-    *minimum_baseline = -1;
-
-  if (natural_baseline)
-    *natural_baseline = -1;
-
   gtk_label_get_preferred_layout_size (label, &smallest_rect, &widest_rect);
 
   /* Now that we have minimum and natural sizes in pango extents, apply a possible transform */
@@ -3837,6 +3831,12 @@ gtk_label_get_preferred_size (GtkWidget      *widget,
 
       *minimum_size += xpad * 2;
       *natural_size += xpad * 2;
+
+      if (minimum_baseline)
+        *minimum_baseline = -1;
+
+      if (natural_baseline)
+        *natural_baseline = -1;
     }
   else /* GTK_ORIENTATION_VERTICAL */
     {
