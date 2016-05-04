@@ -462,22 +462,22 @@ static void
 update_direction (GdkWaylandKeymap *keymap)
 {
   gint num_layouts;
+  gint i;
   gint *rtl;
+  xkb_keycode_t min_keycode, max_keycode;
   guint key;
   gboolean have_rtl, have_ltr;
-  gint i;
 
   num_layouts = xkb_keymap_num_layouts (keymap->xkb_keymap);
 
-  g_free (keymap->direction);
-  keymap->direction = g_new0 (PangoDirection, num_layouts);
+  keymap->direction = g_renew (PangoDirection, keymap->direction, num_layouts);
+  rtl = g_newa (gint, num_layouts);
 
-  rtl = g_new0 (gint, num_layouts);
-
-  for (key = 8; key < 255; key++) /* FIXME: min/max keycode */
+  min_keycode = xkb_keymap_min_keycode (keymap->xkb_keymap);
+  max_keycode = xkb_keymap_max_keycode (keymap->xkb_keymap);
+  for (key = min_keycode; key < max_keycode; key++)
     {
-       gint layouts;
-       gint layout;
+       gint layouts, layout;
 
        layouts = xkb_keymap_num_layouts_for_key (keymap->xkb_keymap, key);
        for (layout = 0; layout < layouts; layout++)
@@ -490,6 +490,7 @@ update_direction (GdkWaylandKeymap *keymap)
            for (sym = 0; sym < num_syms; sym++)
              {
                PangoDirection dir;
+
                dir = pango_unichar_direction (xkb_keysym_to_utf32 (syms[sym]));
                switch (dir)
                  {
@@ -523,8 +524,6 @@ update_direction (GdkWaylandKeymap *keymap)
 
   if (have_rtl && have_ltr)
     keymap->bidi = TRUE;
-
-  g_free (rtl);
 }
 
 GdkKeymap *
