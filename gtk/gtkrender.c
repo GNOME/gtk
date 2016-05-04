@@ -94,12 +94,7 @@ gtk_render_check (GtkStyleContext *context,
   if (width <= 0 || height <= 0)
     return;
 
-  cairo_save (cr);
-  cairo_new_path (cr);
-
   gtk_do_render_check (context, cr, x, y, width, height);
-
-  cairo_restore (cr);
 }
 
 static void
@@ -157,12 +152,7 @@ gtk_render_option (GtkStyleContext *context,
   if (width <= 0 || height <= 0)
     return;
 
-  cairo_save (cr);
-  cairo_new_path (cr);
-
   gtk_do_render_option (context, cr, x, y, width, height);
-
-  cairo_restore (cr);
 }
 
 static void
@@ -232,12 +222,7 @@ gtk_render_arrow (GtkStyleContext *context,
   if (size <= 0)
     return;
 
-  cairo_save (cr);
-  cairo_new_path (cr);
-
   gtk_do_render_arrow (context, cr, angle, x, y, size);
-
-  cairo_restore (cr);
 }
 
 /**
@@ -272,14 +257,9 @@ gtk_render_background (GtkStyleContext *context,
   if (width <= 0 || height <= 0)
     return;
 
-  cairo_save (cr);
-  cairo_new_path (cr);
-
   gtk_css_style_render_background (gtk_style_context_lookup_style (context),
                                    cr, x, y, width, height,
                                    gtk_style_context_get_junction_sides (context));
-
-  cairo_restore (cr);
 }
 
 /**
@@ -347,17 +327,11 @@ gtk_render_frame (GtkStyleContext *context,
   if (width <= 0 || height <= 0)
     return;
 
-  cairo_save (cr);
-  cairo_new_path (cr);
-
   gtk_css_style_render_border (gtk_style_context_lookup_style (context),
                                cr,
                                x, y, width, height,
                                0,
                                gtk_style_context_get_junction_sides (context));
-
-
-  cairo_restore (cr);
 }
 
 static void
@@ -431,12 +405,7 @@ gtk_render_expander (GtkStyleContext *context,
   if (width <= 0 || height <= 0)
     return;
 
-  cairo_save (cr);
-  cairo_new_path (cr);
-
   gtk_do_render_expander (context, cr, x, y, width, height);
-
-  cairo_restore (cr);
 }
 
 /**
@@ -470,14 +439,9 @@ gtk_render_focus (GtkStyleContext *context,
   if (width <= 0 || height <= 0)
     return;
 
-  cairo_save (cr);
-  cairo_new_path (cr);
-
   gtk_css_style_render_outline (gtk_style_context_lookup_style (context),
                                 cr,
                                 x, y, width, height);
-
-  cairo_restore (cr);
 }
 
 static void
@@ -551,12 +515,7 @@ gtk_render_layout (GtkStyleContext *context,
   g_return_if_fail (PANGO_IS_LAYOUT (layout));
   g_return_if_fail (cr != NULL);
 
-  cairo_save (cr);
-  cairo_new_path (cr);
-
   gtk_do_render_layout (context, cr, x, y, layout);
-
-  cairo_restore (cr);
 }
 
 static void
@@ -609,12 +568,7 @@ gtk_render_line (GtkStyleContext *context,
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
 
-  cairo_save (cr);
-  cairo_new_path (cr);
-
   gtk_do_render_line (context, cr, x0, y0, x1, y1);
-
-  cairo_restore (cr);
 }
 
 static void
@@ -678,12 +632,7 @@ gtk_render_slider (GtkStyleContext *context,
   if (width <= 0 || height <= 0)
     return;
 
-  cairo_save (cr);
-  cairo_new_path (cr);
-
   gtk_do_render_slider (context, cr, x, y, width, height, orientation);
-
-  cairo_restore (cr);
 }
 
 static void
@@ -834,17 +783,11 @@ gtk_render_frame_gap (GtkStyleContext *context,
   else
     g_return_if_fail (xy1_gap <= width);
 
-  cairo_save (cr);
-  cairo_new_path (cr);
-
   gtk_css_style_render_frame_gap (gtk_style_context_lookup_style (context),
                                   cr,
                                   x, y, width, height, gap_side,
                                   xy0_gap, xy1_gap,
                                   gtk_style_context_get_junction_sides (context));
-
-
-  cairo_restore (cr);
 }
 
 static void
@@ -925,15 +868,10 @@ gtk_render_extension (GtkStyleContext *context,
   if (width <= 0 || height <= 0)
     return;
 
-  cairo_save (cr);
-  cairo_new_path (cr);
-
   gtk_css_style_render_extension (gtk_style_context_lookup_style (context),
                                   cr,
                                   x, y, width, height,
                                   gap_side);
-
-  cairo_restore (cr);
 }
 
 static void
@@ -1018,12 +956,7 @@ gtk_render_handle (GtkStyleContext *context,
   if (width <= 0 || height <= 0)
     return;
 
-  cairo_save (cr);
-  cairo_new_path (cr);
-
   gtk_do_render_handle (context, cr, x, y, width, height);
-
-  cairo_restore (cr);
 }
 
 /**
@@ -1055,12 +988,7 @@ gtk_render_activity (GtkStyleContext *context,
   if (width <= 0 || height <= 0)
     return;
 
-  cairo_save (cr);
-  cairo_new_path (cr);
-
   gtk_css_style_render_icon (gtk_style_context_lookup_style (context), cr, x, y, width, height, GTK_CSS_IMAGE_BUILTIN_SPINNER);
-
-  cairo_restore (cr);
 }
 
 static GdkPixbuf *
@@ -1193,9 +1121,6 @@ gtk_render_icon (GtkStyleContext *context,
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
 
-  cairo_save (cr);
-  cairo_new_path (cr);
-
   surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, 1, NULL);
 
   gtk_css_style_render_icon_surface (gtk_style_context_lookup_style (context),
@@ -1204,8 +1129,6 @@ gtk_render_icon (GtkStyleContext *context,
                                      x, y);
 
   cairo_surface_destroy (surface);
-
-  cairo_restore (cr);
 }
 
 /**
@@ -1230,15 +1153,10 @@ gtk_render_icon_surface (GtkStyleContext *context,
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
 
-  cairo_save (cr);
-  cairo_new_path (cr);
-
   gtk_css_style_render_icon_surface (gtk_style_context_lookup_style (context),
                                      cr,
                                      surface,
                                      x, y);
-
-  cairo_restore (cr);
 }
 
 /*
