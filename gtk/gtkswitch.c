@@ -84,6 +84,8 @@ struct _GtkSwitchPrivate
 
   GtkCssGadget *gadget;
   GtkCssGadget *slider_gadget;
+  PangoLayout  *off_layout;
+  PangoLayout  *on_layout;
 
   double handle_pos;
   gint64 start_time;
@@ -312,6 +314,51 @@ gtk_switch_pan_gesture_drag_end (GtkGestureDrag *gesture,
   gtk_widget_queue_allocate (GTK_WIDGET (sw));
 }
 
+static void
+gtk_switch_create_pango_layouts (GtkSwitch *self)
+{
+  GtkSwitchPrivate *priv = self->priv;
+
+  g_clear_object (&priv->on_layout);
+  /* Translators: if the "on" state label requires more than three
+   * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
+   * the state
+   */
+  priv->on_layout = gtk_widget_create_pango_layout (GTK_WIDGET (self), C_("switch", "ON"));
+
+
+  g_clear_object (&priv->off_layout);
+  /* Translators: if the "off" state label requires more than three
+   * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
+   */
+  priv->off_layout = gtk_widget_create_pango_layout (GTK_WIDGET (self), C_("switch", "OFF"));
+}
+
+static void
+gtk_switch_screen_changed (GtkWidget *widget,
+                           GdkScreen *prev_screen)
+{
+  gtk_switch_create_pango_layouts (GTK_SWITCH (widget));
+}
+
+static void
+gtk_switch_style_updated (GtkWidget *widget)
+{
+  GtkSwitch *self = GTK_SWITCH (widget);
+  GtkStyleContext *context;
+  GtkCssStyleChange *change;
+
+  GTK_WIDGET_CLASS (gtk_switch_parent_class)->style_updated (widget);
+
+  context = gtk_widget_get_style_context (widget);
+  change = gtk_style_context_get_change (context);
+
+  if (change == NULL || gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_FONT))
+    gtk_switch_create_pango_layouts (self);
+}
+
+
+
 static gboolean
 gtk_switch_enter (GtkWidget        *widget,
                   GdkEventCrossing *event)
@@ -397,7 +444,6 @@ gtk_switch_get_content_size (GtkCssGadget   *gadget,
   GtkSwitch *self;
   GtkSwitchPrivate *priv;
   gint slider_minimum, slider_natural;
-  PangoLayout *layout;
   PangoRectangle on_rect, off_rect;
 
   widget = gtk_css_gadget_get_owner (gadget);
@@ -410,20 +456,8 @@ gtk_switch_get_content_size (GtkCssGadget   *gadget,
                                      &slider_minimum, &slider_natural,
                                      NULL, NULL);
 
-  /* Translators: if the "on" state label requires more than three
-   * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
-   * the state
-   */
-  layout = gtk_widget_create_pango_layout (widget, C_("switch", "ON"));
-  pango_layout_get_pixel_extents (layout, NULL, &on_rect);
-
-  /* Translators: if the "off" state label requires more than three
-   * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
-   */
-  pango_layout_set_text (layout, C_("switch", "OFF"), -1);
-  pango_layout_get_pixel_extents (layout, NULL, &off_rect);
-
-  g_object_unref (layout);
+  pango_layout_get_pixel_extents (priv->on_layout, NULL, &on_rect);
+  pango_layout_get_pixel_extents (priv->off_layout, NULL, &off_rect);
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
@@ -610,38 +644,22 @@ gtk_switch_render_trough (GtkCssGadget *gadget,
   GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
   GtkSwitchPrivate *priv = GTK_SWITCH (widget)->priv;
   GtkStyleContext *context = gtk_widget_get_style_context (widget);
-  PangoLayout *layout;
   PangoRectangle rect;
   gint label_x, label_y;
 
-  /* Translators: if the "on" state label requires more than three
-   * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
-   * the state
-   */
-  layout = gtk_widget_create_pango_layout (widget, C_("switch", "ON"));
-
-  pango_layout_get_pixel_extents (layout, NULL, &rect);
+  pango_layout_get_pixel_extents (priv->on_layout, NULL, &rect);
 
   label_x = x + ((width / 2) - rect.width) / 2;
   label_y = y + (height - rect.height) / 2;
 
-  gtk_render_layout (context, cr, label_x, label_y, layout);
+  gtk_render_layout (context, cr, label_x, label_y, priv->on_layout);
 
-  g_object_unref (layout);
-
-  /* Translators: if the "off" state label requires more than three
-   * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
-   */
-  layout = gtk_widget_create_pango_layout (widget, C_("switch", "OFF"));
-
-  pango_layout_get_pixel_extents (layout, NULL, &rect);
+  pango_layout_get_pixel_extents (priv->off_layout, NULL, &rect);
 
   label_x = x + (width / 2) + ((width / 2) - rect.width) / 2;
   label_y = y + (height - rect.height) / 2;
 
-  gtk_render_layout (context, cr, label_x, label_y, layout);
-
-  g_object_unref (layout);
+  gtk_render_layout (context, cr, label_x, label_y, priv->off_layout);
 
   gtk_css_gadget_draw (priv->slider_gadget, cr);
 
@@ -837,6 +855,9 @@ gtk_switch_dispose (GObject *object)
   g_clear_object (&priv->pan_gesture);
   g_clear_object (&priv->multipress_gesture);
 
+  g_clear_object (&priv->on_layout);
+  g_clear_object (&priv->off_layout);
+
   G_OBJECT_CLASS (gtk_switch_parent_class)->dispose (object);
 }
 
@@ -929,6 +950,8 @@ gtk_switch_class_init (GtkSwitchClass *klass)
   widget_class->draw = gtk_switch_draw;
   widget_class->enter_notify_event = gtk_switch_enter;
   widget_class->leave_notify_event = gtk_switch_leave;
+  widget_class->screen_changed = gtk_switch_screen_changed;
+  widget_class->style_updated = gtk_switch_style_updated;
 
   klass->activate = gtk_switch_activate;
   klass->state_set = state_set;
@@ -1081,6 +1104,8 @@ gtk_switch_init (GtkSwitch *self)
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
                                               GTK_PHASE_BUBBLE);
   priv->pan_gesture = gesture;
+
+  gtk_switch_create_pango_layouts (self);
 }
 
 /**
