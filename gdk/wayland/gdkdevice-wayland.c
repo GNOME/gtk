@@ -1568,12 +1568,17 @@ keyboard_handle_keymap (void               *data,
                         uint32_t            size)
 {
   GdkWaylandSeat *seat = data;
+  PangoDirection direction;
+
+  direction = gdk_keymap_get_direction (seat->keymap);
 
   _gdk_wayland_keymap_update_from_fd (seat->keymap, format, fd, size);
 
   g_signal_emit_by_name (seat->keymap, "keys-changed");
   g_signal_emit_by_name (seat->keymap, "state-changed");
-  g_signal_emit_by_name (seat->keymap, "direction-changed");
+
+  if (direction != gdk_keymap_get_direction (seat->keymap))
+    g_signal_emit_by_name (seat->keymap, "direction-changed");
 }
 
 static void
