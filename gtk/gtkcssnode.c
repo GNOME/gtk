@@ -1110,7 +1110,6 @@ gtk_css_node_set_name (GtkCssNode              *cssnode,
     {
       gtk_css_node_invalidate (cssnode, GTK_CSS_CHANGE_NAME);
       g_object_notify_by_pspec (G_OBJECT (cssnode), cssnode_properties[PROP_NAME]);
-      g_object_notify_by_pspec (G_OBJECT (cssnode), cssnode_properties[PROP_WIDGET_TYPE]);
     }
 }
 
@@ -1127,7 +1126,6 @@ gtk_css_node_set_widget_type (GtkCssNode *cssnode,
   if (gtk_css_node_declaration_set_type (&cssnode->decl, widget_type))
     {
       gtk_css_node_invalidate (cssnode, GTK_CSS_CHANGE_NAME);
-      g_object_notify_by_pspec (G_OBJECT (cssnode), cssnode_properties[PROP_NAME]);
       g_object_notify_by_pspec (G_OBJECT (cssnode), cssnode_properties[PROP_WIDGET_TYPE]);
     }
 }
