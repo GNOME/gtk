@@ -257,6 +257,7 @@ static void    settings_update_key_theme         (GtkSettings           *setting
 static gboolean settings_update_xsetting         (GtkSettings           *settings,
                                                   GParamSpec            *pspec,
                                                   gboolean               force);
+static void     settings_update_font_values      (GtkSettings           *settings);
 
 static void gtk_settings_load_from_key_file      (GtkSettings           *settings,
                                                   const gchar           *path,
@@ -356,6 +357,10 @@ gtk_settings_init (GtkSettings *settings)
   g_free (path);
 
   g_object_thaw_notify (G_OBJECT (settings));
+
+  /* ensure that derived fields are initialized */
+  if (priv->font_size == 0)
+    settings_update_font_values (settings);
 }
 
 static void
@@ -1966,15 +1971,18 @@ settings_update_font_values (GtkSettings *settings)
   PangoFontDescription *desc;
   const gchar *font_name;
 
-  priv->font_size = 0;
-  priv->font_size_absolute = FALSE;
-  priv->font_family = NULL;
+  g_free (priv->font_family);
 
   font_name = g_value_get_string (&priv->property_values[PROP_FONT_NAME - 1].value);
   desc = pango_font_description_from_string (font_name);
 
   if (desc == NULL)
-    return;
+    {
+      priv->font_size = 10 * PANGO_SCALE;
+      priv->font_size_absolute = FALSE;
+      priv->font_family = g_strdup ("Sans");
+      return;
+    }
 
   if (pango_font_description_get_set_fields (desc) & PANGO_FONT_MASK_SIZE)
     {
