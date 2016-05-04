@@ -1971,29 +1971,35 @@ settings_update_font_values (GtkSettings *settings)
   PangoFontDescription *desc;
   const gchar *font_name;
 
-  g_free (priv->font_family);
-
   font_name = g_value_get_string (&priv->property_values[PROP_FONT_NAME - 1].value);
   desc = pango_font_description_from_string (font_name);
 
-  if (desc == NULL)
-    {
-      priv->font_size = 10 * PANGO_SCALE;
-      priv->font_size_absolute = FALSE;
-      priv->font_family = g_strdup ("Sans");
-      return;
-    }
-
-  if (pango_font_description_get_set_fields (desc) & PANGO_FONT_MASK_SIZE)
+  if (desc != NULL &&
+      (pango_font_description_get_set_fields (desc) & PANGO_FONT_MASK_SIZE) != 0)
     {
       priv->font_size = pango_font_description_get_size (desc);
       priv->font_size_absolute = pango_font_description_get_size_is_absolute (desc);
     }
+  else
+    {
+      priv->font_size = 10 * PANGO_SCALE;
+      priv->font_size_absolute = FALSE;
+    }
 
-  if (pango_font_description_get_set_fields (desc) & PANGO_FONT_MASK_FAMILY)
-    priv->font_family = g_strdup (pango_font_description_get_family (desc));
+  g_free (priv->font_family);
 
-  pango_font_description_free (desc);
+  if (desc != NULL &&
+      (pango_font_description_get_set_fields (desc) & PANGO_FONT_MASK_FAMILY) != 0)
+    {
+      priv->font_family = g_strdup (pango_font_description_get_family (desc));
+    }
+  else
+    {
+      priv->font_family = g_strdup ("Sans");
+    }
+
+  if (desc)
+    pango_font_description_free (desc);
 }
 
 static void
@@ -3530,7 +3536,8 @@ gtk_settings_get_enable_animations (GtkSettings *settings)
       GParamSpec *pspec;
 
       pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (settings), "gtk-enable-animations");
-      settings_update_xsetting (settings, pspec, FALSE);
+      if (settings_update_xsetting (settings, pspec, FALSE))
+        g_object_notify_by_pspec (G_OBJECT (settings), pspec);
     }
 
   return g_value_get_boolean (&svalue->value);
@@ -3547,26 +3554,49 @@ gtk_settings_get_dnd_drag_threshold (GtkSettings *settings)
       GParamSpec *pspec;
 
       pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (settings), "gtk-dnd-drag-threshold");
-      settings_update_xsetting (settings, pspec, FALSE);
+      if (settings_update_xsetting (settings, pspec, FALSE))
+        g_object_notify_by_pspec (G_OBJECT (settings), pspec);
     }
 
   return g_value_get_int (&svalue->value);
 }
 
+static void
+update_font_name (GtkSettings *settings)
+{
+  GtkSettingsPrivate *priv = settings->priv;
+  GtkSettingsPropertyValue *svalue = &priv->property_values[PROP_FONT_NAME - 1];
+
+  if (svalue->source < GTK_SETTINGS_SOURCE_XSETTING)
+    {
+      GParamSpec *pspec;
+
+      pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (settings), "gtk-font-name");
+      if (settings_update_xsetting (settings, pspec, FALSE))
+        g_object_notify_by_pspec (G_OBJECT (settings), pspec);
+    }
+}
+
 const gchar *
 gtk_settings_get_font_family (GtkSettings *settings)
 {
+  update_font_name (settings);
+
   return settings->priv->font_family;
 }
 
 gint
 gtk_settings_get_font_size (GtkSettings *settings)
 {
+  update_font_name (settings);
+
   return settings->priv->font_size;
 }
 
 gboolean
 gtk_settings_get_font_size_is_absolute (GtkSettings *settings)
 {
+  update_font_name (settings);
+
   return settings->priv->font_size_absolute;
 }
