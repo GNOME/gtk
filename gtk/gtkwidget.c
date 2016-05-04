@@ -16361,7 +16361,7 @@ gtk_widget_path_append_for_widget (GtkWidgetPath *path,
   g_return_val_if_fail (path != NULL, 0);
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
 
-  pos = gtk_widget_path_append_type (path, G_OBJECT_TYPE (widget));
+  pos = gtk_widget_path_append_type (path, gtk_css_node_get_widget_type (widget->priv->cssnode));
   gtk_widget_path_iter_set_object_name (path, pos, gtk_css_node_get_name (widget->priv->cssnode));
 
   if (widget->priv->name)
