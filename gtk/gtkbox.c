@@ -1542,10 +1542,14 @@ gtk_box_pack (GtkBox      *box,
 
   gtk_widget_set_parent (child, GTK_WIDGET (box));
 
-  gtk_container_child_notify_by_pspec (container, child, child_props[CHILD_PROP_EXPAND]);
-  gtk_container_child_notify_by_pspec (container, child, child_props[CHILD_PROP_FILL]);
-  gtk_container_child_notify_by_pspec (container, child, child_props[CHILD_PROP_PADDING]);
-  gtk_container_child_notify_by_pspec (container, child, child_props[CHILD_PROP_PACK_TYPE]);
+  if (expand)
+    gtk_container_child_notify_by_pspec (container, child, child_props[CHILD_PROP_EXPAND]);
+  if (!fill)
+    gtk_container_child_notify_by_pspec (container, child, child_props[CHILD_PROP_FILL]);
+  if (padding != 0)
+    gtk_container_child_notify_by_pspec (container, child, child_props[CHILD_PROP_PADDING]);
+  if (pack_type != GTK_PACK_START)
+    gtk_container_child_notify_by_pspec (container, child, child_props[CHILD_PROP_PACK_TYPE]);
   gtk_container_child_notify_by_pspec (container, child, child_props[CHILD_PROP_POSITION]);
 
   gtk_widget_thaw_child_notify (child);
@@ -2550,10 +2554,20 @@ gtk_box_set_child_packing (GtkBox      *box,
           gtk_container_child_notify_by_pspec (GTK_CONTAINER (box), child, child_props[CHILD_PROP_EXPAND]);
         }
 
-      child_info->fill = fill != FALSE;
-      gtk_container_child_notify_by_pspec (GTK_CONTAINER (box), child, child_props[CHILD_PROP_FILL]);
-      child_info->padding = padding;
-      gtk_container_child_notify_by_pspec (GTK_CONTAINER (box), child, child_props[CHILD_PROP_PADDING]);
+      fill = fill != FALSE;
+
+      if (child_info->fill != fill)
+        {
+          child_info->fill = fill;
+          gtk_container_child_notify_by_pspec (GTK_CONTAINER (box), child, child_props[CHILD_PROP_FILL]);
+        }
+
+      if (child_info->padding != padding)
+        {
+          child_info->padding = padding;
+          gtk_container_child_notify_by_pspec (GTK_CONTAINER (box), child, child_props[CHILD_PROP_PADDING]);
+        }
+
       if (pack_type != GTK_PACK_END)
         pack_type = GTK_PACK_START;
       if (child_info->pack != pack_type)
