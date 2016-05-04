@@ -228,19 +228,24 @@ static void
 sparql_append_string_literal (GString     *sparql,
                               const gchar *str,
                               gboolean     glob,
-                              gboolean     is_dir_uri)
+                              gboolean     is_dir_uri,
+                              gboolean     quoted)
 {
   gchar *s;
 
   s = sparql_escape_string (str);
 
   g_string_append_c (sparql, '"');
+  if (quoted)
+    g_string_append (sparql, "\\\"");
   g_string_append (sparql, s);
 
   if (is_dir_uri)
     g_string_append_c (sparql, '/');
   if (glob)
     g_string_append_c (sparql, '*');
+  if (quoted)
+    g_string_append (sparql, "\\\"");
   g_string_append_c (sparql, '"');
 
   g_free (s);
@@ -253,7 +258,7 @@ sparql_append_string_literal_lower_case (GString     *sparql,
   gchar *s;
 
   s = g_utf8_strdown (str, -1);
-  sparql_append_string_literal (sparql, s, FALSE, FALSE);
+  sparql_append_string_literal (sparql, s, FALSE, FALSE, FALSE);
   g_free (s);
 }
 
@@ -355,7 +360,7 @@ gtk_search_engine_tracker_start (GtkSearchEngine *engine)
 #ifdef FTS_MATCHING
   /* Using FTS: */
   g_string_append (sparql, "fts:match ");
-  sparql_append_string_literal (sparql, search_text, TRUE, FALSE);
+  sparql_append_string_literal (sparql, search_text, TRUE, FALSE, TRUE);
 #endif
 
   g_string_append (sparql, ". FILTER (BOUND(nie:url(?urn)) && ");
@@ -371,13 +376,13 @@ gtk_search_engine_tracker_start (GtkSearchEngine *engine)
       if (recursive)
         {
           g_string_append (sparql, "fn:starts-with(nie:url(?urn),");
-          sparql_append_string_literal (sparql, location_uri, FALSE, TRUE);
+          sparql_append_string_literal (sparql, location_uri, FALSE, TRUE, FALSE);
           g_string_append (sparql, ")");
         }
       else
         {
           g_string_append (sparql, "nie:url(?parent) = ");
-          sparql_append_string_literal (sparql, location_uri, FALSE, FALSE);
+          sparql_append_string_literal (sparql, location_uri, FALSE, FALSE, FALSE);
         }
       g_free (location_uri);
     }
