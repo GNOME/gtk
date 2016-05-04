@@ -632,8 +632,11 @@ static void
 gtk_revealer_stop_animation (GtkRevealer *revealer)
 {
   GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
-
-  priv->current_pos = priv->target_pos;
+  if (priv->current_pos != priv->target_pos)
+    {
+      priv->current_pos = priv->target_pos;
+      g_object_notify_by_pspec (G_OBJECT (revealer), props[PROP_CHILD_REVEALED]);
+    }
   if (priv->tick_id != 0)
     {
       gtk_widget_remove_tick_callback (GTK_WIDGET (revealer), priv->tick_id);
