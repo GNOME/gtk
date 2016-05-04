@@ -1216,8 +1216,8 @@ pointer_handle_enter (void              *data,
 
   _gdk_wayland_display_update_serial (display_wayland, serial);
 
-  seat->pointer_info.focus = wl_surface_get_user_data(surface);
-  g_object_ref(seat->pointer_info.focus);
+  seat->pointer_info.focus = wl_surface_get_user_data (surface);
+  g_object_ref (seat->pointer_info.focus);
 
   seat->pointer_info.button_modifiers = 0;
 
@@ -1639,7 +1639,6 @@ keyboard_handle_leave (void               *data,
    * seat->keyboard_focus here, which would happen if we destroyed the
    * window before loosing keyboard focus.
    */
-
   stop_key_repeat (seat);
 
   _gdk_wayland_display_update_serial (display, serial);
@@ -3055,7 +3054,7 @@ gdk_wayland_device_tablet_clone_tool_axes (GdkWaylandTabletData *tablet,
     }
 
   if (tablet->axes)
-    g_free(tablet->axes);
+    g_free (tablet->axes);
 
   tablet->axes =
     g_new0 (gdouble, gdk_device_get_n_axes (tablet->current_device));
