@@ -1059,7 +1059,6 @@ gtk_switch_init (GtkSwitch *self)
                                                    gtk_switch_render_slider,
                                                    NULL,
                                                    NULL);
-  gtk_css_gadget_add_class (priv->slider_gadget, GTK_STYLE_CLASS_SLIDER);
 
   gesture = gtk_gesture_multi_press_new (GTK_WIDGET (self));
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture), FALSE);
