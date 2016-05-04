@@ -4417,7 +4417,7 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   _gtk_size_request_cache_init (&priv->requests);
 
   priv->cssnode = gtk_css_widget_node_new (widget);
-  gtk_css_node_set_state (priv->cssnode, GTK_STATE_FLAG_DIR_LTR);
+  gtk_css_node_set_state (priv->cssnode, priv->state_flags);
   /* need to set correct type here, and only class has the correct type here */
   gtk_css_node_set_widget_type (priv->cssnode, G_TYPE_FROM_CLASS (g_class));
   gtk_css_node_set_name (priv->cssnode, GTK_WIDGET_CLASS (g_class)->priv->css_name);
