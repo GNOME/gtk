@@ -11031,7 +11031,7 @@ gtk_widget_error_bell (GtkWidget *widget)
 
   settings = gtk_widget_get_settings (widget);
   if (!settings)
-  return;
+    return;
 
   g_object_get (settings,
                 "gtk-error-bell", &beep,
