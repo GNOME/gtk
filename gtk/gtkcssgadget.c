@@ -940,29 +940,6 @@ gtk_css_gadget_draw (GtkCssGadget *gadget,
 }
 
 void
-gtk_css_node_style_changed_for_widget (GtkCssNode  *node,
-                                       GtkCssStyle *old_style,
-                                       GtkCssStyle *new_style,
-                                       GtkWidget    *widget)
-{
-  static GtkBitmask *affects_size = NULL;
-  GtkBitmask *changes;
-  
-  changes = _gtk_bitmask_new ();
-  changes = gtk_css_style_add_difference (changes, old_style, new_style);
-
-  if (G_UNLIKELY (affects_size == NULL))
-    affects_size = _gtk_css_style_property_get_mask_affecting (GTK_CSS_AFFECTS_SIZE | GTK_CSS_AFFECTS_CLIP);
-
-  if (_gtk_bitmask_intersects (changes, affects_size))
-    gtk_widget_queue_resize (widget);
-  else
-    gtk_widget_queue_draw (widget);
-
-  _gtk_bitmask_free (changes);
-}
-
-void
 gtk_css_gadget_queue_resize (GtkCssGadget *gadget)
 {
   g_return_if_fail (GTK_IS_CSS_GADGET (gadget));
