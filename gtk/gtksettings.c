@@ -252,13 +252,13 @@ static void    settings_update_cursor_theme      (GtkSettings           *setting
 static void    settings_update_resolution        (GtkSettings           *settings);
 static void    settings_update_font_options      (GtkSettings           *settings);
 static void    settings_update_font_values       (GtkSettings           *settings);
-static void    settings_update_font_name         (GtkSettings           *settings);
 static gboolean settings_update_fontconfig       (GtkSettings           *settings);
 static void    settings_update_theme             (GtkSettings           *settings);
 static void    settings_update_key_theme         (GtkSettings           *settings);
 static gboolean settings_update_xsetting         (GtkSettings           *settings,
                                                   GParamSpec            *pspec,
                                                   gboolean               force);
+static void    settings_update_xsettings         (GtkSettings           *settings);
 
 static void gtk_settings_load_from_key_file      (GtkSettings           *settings,
                                                   const gchar           *path,
@@ -1916,12 +1916,12 @@ gtk_settings_get_for_screen (GdkScreen *screen)
                                g_object_unref);
 
       settings_init_style (settings);
+      settings_update_xsettings (settings);
       settings_update_modules (settings);
       settings_update_double_click (settings);
       settings_update_cursor_theme (settings);
       settings_update_resolution (settings);
       settings_update_font_options (settings);
-      settings_update_font_name (settings);
     }
 
   return settings;
@@ -3449,6 +3449,18 @@ settings_update_xsetting (GtkSettings *settings,
     }
 
   return retval;
+}
+
+static void
+settings_update_xsettings (GtkSettings *settings)
+{
+  GParamSpec **pspecs;
+  gint i;
+
+  pspecs = g_object_class_list_properties (G_OBJECT_GET_CLASS (settings), NULL);
+  for (i = 0; pspecs[i]; i++)
+    settings_update_xsetting (settings, pspecs[i], FALSE);
+  g_free (pspecs);
 }
 
 static void
