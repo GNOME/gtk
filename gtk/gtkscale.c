@@ -480,8 +480,12 @@ gtk_scale_allocate_marks (GtkCssGadget        *gadget,
 
   orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (scale));
   _gtk_range_get_stop_positions (GTK_RANGE (scale), &marks);
-  min_pos_before = min_pos_after = 0;
   gtk_widget_get_allocation (widget, &widget_alloc);
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    min_pos_before = min_pos_after = widget_alloc.x;
+  else
+    min_pos_before = min_pos_after = widget_alloc.y;
 
   for (m = priv->marks, i = 0; m; m = m->next, i++)
     {
