@@ -1797,7 +1797,7 @@ gtk_main_do_event (GdkEvent *event)
             {
               /* We handle exposes only on native windows, relying on the
                * draw() handler to propagate down to non-native windows.
-               * This is ok now that we child windows always are considered
+               * This is ok now that child windows are always considered
                * (semi)transparent.
                */
               if (gdk_window_has_native (event->expose.window))
