@@ -127,6 +127,7 @@
         <child><object class="GtkLabel"><property name="name">plum</property><property name="visible">1</property></object></child>
         <child><object class="GtkLabel"><property name="name">powderblue</property><property name="visible">1</property></object></child>
         <child><object class="GtkLabel"><property name="name">purple</property><property name="visible">1</property></object></child>
+        <child><object class="GtkLabel"><property name="name">rebeccapurple</property><property name="visible">1</property></object></child>
         <child><object class="GtkLabel"><property name="name">red</property><property name="visible">1</property></object></child>
         <child><object class="GtkLabel"><property name="name">rosybrown</property><property name="visible">1</property></object></child>
         <child><object class="GtkLabel"><property name="name">royalblue</property><property name="visible">1</property></object></child>
