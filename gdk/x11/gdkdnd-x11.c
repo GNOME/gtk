@@ -2656,6 +2656,7 @@ drag_context_grab (GdkDragContext *context)
 {
   GdkX11DragContext *x11_context = GDK_X11_DRAG_CONTEXT (context);
   GdkDevice *device = gdk_drag_context_get_device (context);
+  GdkSeatCapabilities capabilities;
   GdkWindow *root;
   GdkSeat *seat;
   gint keycode, i;
@@ -2666,8 +2667,15 @@ drag_context_grab (GdkDragContext *context)
   root = gdk_screen_get_root_window (gdk_window_get_screen (x11_context->ipc_window));
   seat = gdk_device_get_seat (gdk_drag_context_get_device (context));
 
+#ifdef XINPUT_2
+  if (GDK_IS_X11_DEVICE_XI2 (device))
+    capabilities = GDK_SEAT_CAPABILITY_ALL_POINTING;
+  else
+#endif
+    capabilities = GDK_SEAT_CAPABILITY_ALL;
+
   if (gdk_seat_grab (seat, x11_context->ipc_window,
-                     GDK_SEAT_CAPABILITY_ALL, FALSE,
+                     capabilities, FALSE,
                      x11_context->cursor, NULL, NULL, NULL) != GDK_GRAB_SUCCESS)
     return FALSE;
 
