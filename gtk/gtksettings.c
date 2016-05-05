@@ -251,13 +251,14 @@ static void    settings_update_modules           (GtkSettings           *setting
 static void    settings_update_cursor_theme      (GtkSettings           *settings);
 static void    settings_update_resolution        (GtkSettings           *settings);
 static void    settings_update_font_options      (GtkSettings           *settings);
+static void    settings_update_font_values       (GtkSettings           *settings);
+static void    settings_update_font_name         (GtkSettings           *settings);
 static gboolean settings_update_fontconfig       (GtkSettings           *settings);
 static void    settings_update_theme             (GtkSettings           *settings);
 static void    settings_update_key_theme         (GtkSettings           *settings);
 static gboolean settings_update_xsetting         (GtkSettings           *settings,
                                                   GParamSpec            *pspec,
                                                   gboolean               force);
-static void     settings_update_font_values      (GtkSettings           *settings);
 
 static void gtk_settings_load_from_key_file      (GtkSettings           *settings,
                                                   const gchar           *path,
@@ -1920,6 +1921,7 @@ gtk_settings_get_for_screen (GdkScreen *screen)
       settings_update_cursor_theme (settings);
       settings_update_resolution (settings);
       settings_update_font_options (settings);
+      settings_update_font_name (settings);
     }
 
   return settings;
@@ -3562,7 +3564,7 @@ gtk_settings_get_dnd_drag_threshold (GtkSettings *settings)
 }
 
 static void
-update_font_name (GtkSettings *settings)
+settings_update_font_name (GtkSettings *settings)
 {
   GtkSettingsPrivate *priv = settings->priv;
   GtkSettingsPropertyValue *svalue = &priv->property_values[PROP_FONT_NAME - 1];
@@ -3580,7 +3582,7 @@ update_font_name (GtkSettings *settings)
 const gchar *
 gtk_settings_get_font_family (GtkSettings *settings)
 {
-  update_font_name (settings);
+  settings_update_font_name (settings);
 
   return settings->priv->font_family;
 }
@@ -3588,7 +3590,7 @@ gtk_settings_get_font_family (GtkSettings *settings)
 gint
 gtk_settings_get_font_size (GtkSettings *settings)
 {
-  update_font_name (settings);
+  settings_update_font_name (settings);
 
   return settings->priv->font_size;
 }
@@ -3596,7 +3598,7 @@ gtk_settings_get_font_size (GtkSettings *settings)
 gboolean
 gtk_settings_get_font_size_is_absolute (GtkSettings *settings)
 {
-  update_font_name (settings);
+  settings_update_font_name (settings);
 
   return settings->priv->font_size_absolute;
 }
