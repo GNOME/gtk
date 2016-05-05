@@ -1383,7 +1383,7 @@ gtk_label_init (GtkLabel *label)
 
   priv->mnemonic_keyval = GDK_KEY_VoidSymbol;
   priv->layout = NULL;
-  priv->text = NULL;
+  priv->text = g_strdup ("");
   priv->attrs = NULL;
 
   priv->mnemonic_widget = NULL;
