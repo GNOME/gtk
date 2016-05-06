@@ -14020,9 +14020,16 @@ gtk_widget_buildable_parser_finished (GtkBuildable *buildable,
   GSList *atk_relations;
 
   if (g_object_get_qdata (G_OBJECT (buildable), quark_builder_has_default))
-    gtk_widget_grab_default (GTK_WIDGET (buildable));
+    {
+      gtk_widget_grab_default (GTK_WIDGET (buildable));
+      g_object_steal_qdata (G_OBJECT (buildable), quark_builder_has_default);
+    }
+
   if (g_object_get_qdata (G_OBJECT (buildable), quark_builder_has_focus))
-    gtk_widget_grab_focus (GTK_WIDGET (buildable));
+    {
+      gtk_widget_grab_focus (GTK_WIDGET (buildable));
+      g_object_steal_qdata (G_OBJECT (buildable), quark_builder_has_focus);
+    }
 
   atk_relations = g_object_get_qdata (G_OBJECT (buildable),
 				      quark_builder_atk_relations);
@@ -14052,7 +14059,7 @@ gtk_widget_buildable_parser_finished (GtkBuildable *buildable,
       g_object_unref (relation_set);
 
       g_slist_free_full (atk_relations, (GDestroyNotify) free_relation);
-      g_object_set_qdata (G_OBJECT (buildable), quark_builder_atk_relations, NULL);
+      g_object_steal_qdata (G_OBJECT (buildable), quark_builder_atk_relations);
     }
 }
 
