@@ -2150,11 +2150,11 @@ treeview.view {
       border-bottom-style: none; }
   treeview.view.expander {
     -gtk-icon-source: -gtk-icontheme("pan-end-symbolic");
-    color: #b1b2b2; }
+    color: #bdbebf; }
     treeview.view.expander:dir(rtl) {
       -gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl"); }
     treeview.view.expander:hover {
-      color: #eeeeec; }
+      color: white; }
     treeview.view.expander:selected {
       color: #bccee1; }
       treeview.view.expander:selected:hover {
