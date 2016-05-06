@@ -2,8 +2,8 @@
 <interface domain="gtk30">
   <!-- interface-requires gtk+ 3.10 -->
   <template class="GtkFontButton" parent="GtkButton">
-    <property name="can_focus">1</property>
-    <property name="receives_default">1</property>
+    <property name="can-focus">1</property>
+    <property name="receives-default">1</property>
     <child>
       <object class="GtkBox" id="box1">
         <property name="visible">1</property>
@@ -20,7 +20,7 @@
         <child>
           <object class="GtkBox" id="font_size_box">
             <property name="visible">1</property>
-            <property name="no_show_all">1</property>
+            <property name="no-show-all">1</property>
             <child>
               <object class="GtkSeparator" id="separator">
                 <property name="visible">1</property>

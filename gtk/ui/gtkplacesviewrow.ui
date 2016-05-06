@@ -2,24 +2,24 @@
 <interface domain="gtk30">
   <requires lib="gtk+" version="3.16"/>
   <template class="GtkPlacesViewRow" parent="GtkListBoxRow">
-    <property name="width_request">100</property>
+    <property name="width-request">100</property>
     <property name="visible">True</property>
-    <property name="can_focus">True</property>
+    <property name="can-focus">True</property>
     <child>
       <object class="GtkEventBox" id="event_box">
         <property name="visible">1</property>
         <child>
           <object class="GtkBox" id="box">
             <property name="visible">1</property>
-            <property name="margin_start">12</property>
-            <property name="margin_end">12</property>
-            <property name="margin_top">6</property>
-            <property name="margin_bottom">6</property>
+            <property name="margin-start">12</property>
+            <property name="margin-end">12</property>
+            <property name="margin-top">6</property>
+            <property name="margin-bottom">6</property>
             <property name="spacing">18</property>
             <child>
               <object class="GtkImage" id="icon_image">
                 <property name="visible">1</property>
-                <property name="pixel_size">32</property>
+                <property name="pixel-size">32</property>
               </object>
             </child>
             <child>
@@ -35,10 +35,9 @@
             </child>
             <child>
               <object class="GtkLabel" id="available_space_label">
-                <property name="visible">False</property>
                 <property name="xalign">1</property>
                 <style>
-                  <class name="dim-label" />
+                  <class name="dim-label"/>
                 </style>
               </object>
               <packing>
@@ -51,7 +50,7 @@
                 <property name="justify">right</property>
                 <property name="ellipsize">middle</property>
                 <property name="xalign">0</property>
-                <property name="max_width_chars">15</property>
+                <property name="max-width-chars">15</property>
                 <style>
                   <class name="dim-label"/>
                 </style>
@@ -62,15 +61,15 @@
             </child>
             <child>
               <object class="GtkButton" id="eject_button">
-                <property name="visible">True</property>
+                <property name="visible">1</property>
                 <property name="halign">end</property>
                 <property name="valign">center</property>
                 <property name="tooltip-text" translatable="yes">Unmount</property>
                 <child>
                   <object class="GtkImage" id="eject_icon">
                     <property name="visible">1</property>
-                    <property name="icon_name">media-eject-symbolic</property>
-                    <property name="icon_size">1</property>
+                    <property name="icon-name">media-eject-symbolic</property>
+                    <property name="icon-size">1</property>
                   </object>
                 </child>
                 <style>

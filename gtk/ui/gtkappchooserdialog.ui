@@ -3,7 +3,7 @@
   <!-- interface-requires gtk+ 3.10 -->
   <template class="GtkAppChooserDialog" parent="GtkDialog">
     <property name="title" translatable="yes">Select Application</property>
-    <property name="type_hint">dialog</property>
+    <property name="type-hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="orientation">vertical</property>
@@ -22,10 +22,10 @@
         </child>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
-            <property name="layout_style">end</property>
+            <property name="layout-style">end</property>
           </object>
           <packing>
-            <property name="pack_type">end</property>
+            <property name="pack-type">end</property>
             <property name="position">1</property>
           </packing>
         </child>
@@ -57,7 +57,7 @@
     <child type="action">
       <object class="GtkButton" id="cancel_button">
         <property name="visible">1</property>
-        <property name="use_underline">1</property>
+        <property name="use-underline">1</property>
         <property name="label" translatable="yes">_Cancel</property>
       </object>
     </child>
@@ -65,8 +65,8 @@
       <object class="GtkButton" id="ok_button">
         <property name="visible">1</property>
         <property name="label" translatable="yes">_Select</property>
-        <property name="use_underline">1</property>
-        <property name="can_default">1</property>
+        <property name="use-underline">1</property>
+        <property name="can-default">1</property>
       </object>
     </child>
     <action-widgets>
@@ -77,17 +77,17 @@
   <object class="GtkButton" id="show_more_button">
     <property name="label" translatable="yes">_View All Applications</property>
     <property name="visible">1</property>
-    <property name="use_underline">1</property>
-    <property name="can_focus">1</property>
-    <property name="receives_default">1</property>
+    <property name="use-underline">1</property>
+    <property name="can-focus">1</property>
+    <property name="receives-default">1</property>
     <signal name="clicked" handler="show_more_button_clicked_cb" swapped="no"/>
   </object>
   <object class="GtkButton" id="software_button">
     <property name="label" translatable="yes">_Find New Applications</property>
     <property name="visible">1</property>
-    <property name="use_underline">1</property>
-    <property name="can_focus">1</property>
-    <property name="receives_default">1</property>
+    <property name="use-underline">1</property>
+    <property name="can-focus">1</property>
+    <property name="receives-default">1</property>
     <signal name="clicked" handler="software_button_clicked_cb" swapped="no"/>
   </object>
   <object class="GtkSizeGroup" id="buttons">

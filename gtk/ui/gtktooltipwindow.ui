@@ -3,32 +3,27 @@
   <!-- interface-requires gtk+ 3.10 -->
   <template class="GtkTooltipWindow" parent="GtkWindow">
     <property name="resizable">0</property>
-    <property name="type_hint">tooltip</property>
+    <property name="type-hint">tooltip</property>
     <child>
       <object class="GtkBox" id="box">
-        <property name="orientation">horizontal</property>
         <property name="visible">1</property>
         <property name="spacing">6</property>
-        <property name="margin_top">6</property>
-        <property name="margin_bottom">6</property>
-        <property name="margin_start">6</property>
-        <property name="margin_end">6</property>
+        <property name="margin-top">6</property>
+        <property name="margin-bottom">6</property>
+        <property name="margin-start">6</property>
+        <property name="margin-end">6</property>
         <child>
           <object class="GtkImage" id="image">
-            <property name="visible">0</property>
-            <property name="icon_name">image-missing</property>
+            <property name="icon-name">image-missing</property>
           </object>
           <packing>
             <property name="fill">0</property>
-            <property name="position">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label">
-            <property name="visible">0</property>
             <property name="wrap">1</property>
-            <property name="max_width_chars">70</property>
-            <property name="label"></property>
+            <property name="max-width-chars">70</property>
           </object>
           <packing>
             <property name="fill">0</property>

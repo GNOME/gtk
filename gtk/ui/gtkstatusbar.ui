@@ -3,14 +3,14 @@
   <!-- interface-requires gtk+ 3.10 -->
   <template class="GtkStatusbar" parent="GtkBox">
     <property name="spacing">2</property>
-    <property name="margin_start">10</property>
-    <property name="margin_end">10</property>
-    <property name="margin_top">6</property>
-    <property name="margin_bottom">6</property>
+    <property name="margin-start">10</property>
+    <property name="margin-end">10</property>
+    <property name="margin-top">6</property>
+    <property name="margin-bottom">6</property>
     <child>
       <object class="GtkFrame" id="frame">
         <property name="visible">1</property>
-        <property name="shadow_type">none</property>
+        <property name="shadow-type">none</property>
         <child>
           <object class="GtkBox" id="message_area">
             <property name="visible">1</property>
@@ -22,7 +22,7 @@
                 <property name="halign">start</property>
                 <property name="valign">center</property>
                 <property name="ellipsize">end</property>
-                <property name="single_line_mode">1</property>
+                <property name="single-line-mode">1</property>
               </object>
             </child>
           </object>

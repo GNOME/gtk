@@ -3,22 +3,22 @@
   <!-- interface-requires gtk+ 3.10 -->
   <!-- interface-requires gtkprivate 3.10 -->
   <template class="GtkScaleButton" parent="GtkButton">
-    <property name="can_focus">1</property>
-    <property name="receives_default">1</property>
+    <property name="can-focus">1</property>
+    <property name="receives-default">1</property>
     <property name="relief">none</property>
-    <property name="focus_on_click">0</property>
+    <property name="focus-on-click">0</property>
     <child>
       <object class="GtkImage" id="image">
         <property name="visible">1</property>
-        <property name="icon_name">image-missing</property>
+        <property name="icon-name">image-missing</property>
         <property name="use-fallback">1</property>
       </object>
     </child>
   </template>
   <object class="GtkAdjustment" id="adjustment">
     <property name="upper">100</property>
-    <property name="step_increment">2</property>
-    <property name="page_increment">20</property>
+    <property name="step-increment">2</property>
+    <property name="page-increment">20</property>
   </object>
   <object class="GtkPopover" id="dock">
     <signal name="map" handler="cb_popup_mapped" swapped="no"/>
@@ -34,8 +34,8 @@
         <child>
           <object class="GtkButton" id="plus_button">
             <property name="visible">1</property>
-            <property name="can_focus">1</property>
-            <property name="receives_default">1</property>
+            <property name="can-focus">1</property>
+            <property name="receives-default">1</property>
             <property name="relief">none</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
@@ -59,14 +59,14 @@
         </child>
         <child>
           <object class="GtkScale" id="scale">
-            <property name="height_request">100</property>
+            <property name="height-request">100</property>
             <property name="visible">1</property>
-            <property name="can_focus">1</property>
+            <property name="can-focus">1</property>
             <property name="orientation">vertical</property>
             <property name="adjustment">adjustment</property>
             <property name="inverted">1</property>
-            <property name="round_digits">1</property>
-            <property name="draw_value">0</property>
+            <property name="round-digits">1</property>
+            <property name="draw-value">0</property>
             <signal name="value-changed" handler="cb_scale_value_changed" swapped="no"/>
           </object>
           <packing>
@@ -76,8 +76,8 @@
         <child>
           <object class="GtkButton" id="minus_button">
             <property name="visible">1</property>
-            <property name="can_focus">1</property>
-            <property name="receives_default">1</property>
+            <property name="can-focus">1</property>
+            <property name="receives-default">1</property>
             <property name="relief">none</property>
             <property name="halign">center</property>
             <property name="valign">center</property>

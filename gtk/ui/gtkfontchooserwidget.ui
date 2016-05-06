@@ -14,46 +14,46 @@
     </columns>
   </object>
   <object class="GtkTreeModelFilter" id="filter_model">
-    <property name="child_model">model</property>
+    <property name="child-model">model</property>
     <signal name="row-deleted" handler="row_deleted_cb" swapped="no"/>
     <signal name="row-inserted" handler="row_inserted_cb" swapped="no"/>
   </object>
   <object class="GtkAdjustment" id="slider_adjustment">
     <property name="upper">100</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
     <signal name="value-changed" handler="size_change_cb" swapped="no"/>
   </object>
   <object class="GtkAdjustment" id="spin_adjustment">
     <property name="upper">100</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
     <signal name="value-changed" handler="size_change_cb" swapped="no"/>
   </object>
   <template class="GtkFontChooserWidget" parent="GtkBox">
     <child>
       <object class="GtkGrid" id="grid1">
         <property name="visible">1</property>
-        <property name="row_spacing">6</property>
-        <property name="column_spacing">6</property>
+        <property name="row-spacing">6</property>
+        <property name="column-spacing">6</property>
         <child>
           <object class="GtkSearchEntry" id="search_entry">
             <property name="visible">1</property>
-            <property name="can_focus">1</property>
+            <property name="can-focus">1</property>
             <property name="hexpand">1</property>
-            <property name="activates_default">1</property>
-            <property name="primary_icon_name">edit-find-symbolic</property>
-            <property name="primary_icon_activatable">0</property>
-            <property name="secondary_icon_activatable">0</property>
-            <property name="primary_icon_sensitive">0</property>
-            <property name="secondary_icon_sensitive">0</property>
-            <property name="placeholder_text" translatable="yes">Search font name</property>
+            <property name="activates-default">1</property>
+            <property name="primary-icon-name">edit-find-symbolic</property>
+            <property name="primary-icon-activatable">0</property>
+            <property name="secondary-icon-activatable">0</property>
+            <property name="primary-icon-sensitive">0</property>
+            <property name="secondary-icon-sensitive">0</property>
+            <property name="placeholder-text" translatable="yes">Search font name</property>
             <signal name="search-changed" handler="text_changed_cb" swapped="no"/>
             <signal name="stop-search" handler="stop_search_cb" swapped="no"/>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">0</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
             <property name="width">2</property>
           </packing>
         </child>
@@ -63,26 +63,26 @@
             <child>
               <object class="GtkGrid">
                 <property name="visible">1</property>
-                <property name="row_spacing">6</property>
-                <property name="column_spacing">6</property>
+                <property name="row-spacing">6</property>
+                <property name="column-spacing">6</property>
                 <child>
                   <object class="GtkScrolledWindow" id="list_scrolled_window">
-                    <property name="width_request">400</property>
-                    <property name="height_request">300</property>
+                    <property name="width-request">400</property>
+                    <property name="height-request">300</property>
                     <property name="visible">1</property>
-                    <property name="can_focus">1</property>
+                    <property name="can-focus">1</property>
                     <property name="hexpand">1</property>
                     <property name="vexpand">1</property>
-                    <property name="hscrollbar_policy">never</property>
-                    <property name="shadow_type">etched-in</property>
+                    <property name="hscrollbar-policy">never</property>
+                    <property name="shadow-type">etched-in</property>
                     <child>
                       <object class="GtkTreeView" id="family_face_list">
                         <property name="visible">1</property>
-                        <property name="can_focus">1</property>
+                        <property name="can-focus">1</property>
                         <property name="model">filter_model</property>
-                        <property name="headers_visible">0</property>
-                        <property name="enable_search">0</property>
-                        <property name="fixed_height_mode">1</property>
+                        <property name="headers-visible">0</property>
+                        <property name="enable-search">0</property>
+                        <property name="fixed-height-mode">1</property>
                         <signal name="cursor-changed" handler="cursor_changed_cb" swapped="no"/>
                         <signal name="row-activated" handler="row_activated_cb" swapped="no"/>
                         <signal name="style-updated" handler="gtk_font_chooser_widget_set_cell_size" object="GtkFontChooserWidget" after="yes" swapped="yes"/>
@@ -106,51 +106,51 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">1</property>
                     <property name="width">2</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkEntry" id="preview">
                     <property name="visible">1</property>
-                    <property name="can_focus">1</property>
-                    <property name="invisible_char">•</property>
+                    <property name="can-focus">1</property>
+                    <property name="invisible-char">•</property>
                     <property name="placeholder-text" translatable="yes">Preview text</property>
                     <signal name="scroll-event" handler="resize_by_scroll_cb" swapped="no"/>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">2</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">2</property>
                     <property name="width">2</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkScale" id="size_slider">
                     <property name="visible">1</property>
-                    <property name="can_focus">1</property>
+                    <property name="can-focus">1</property>
                     <property name="hexpand">1</property>
                     <property name="adjustment">slider_adjustment</property>
-                    <property name="draw_value">0</property>
+                    <property name="draw-value">0</property>
                     <property name="round-digits">0</property>
                     <signal name="scroll-event" handler="resize_by_scroll_cb" swapped="no"/>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">3</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">3</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkSpinButton" id="size_spin">
                     <property name="visible">1</property>
-                    <property name="can_focus">1</property>
-                    <property name="invisible_char">•</property>
+                    <property name="can-focus">1</property>
+                    <property name="invisible-char">•</property>
                     <property name="adjustment">spin_adjustment</property>
                     <signal name="output" handler="output_cb"/>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">3</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">3</property>
                   </packing>
                 </child>
               </object>
@@ -161,7 +161,7 @@
             <child>
               <object class="GtkGrid">
                 <property name="visible">1</property>
-                <property name="row_spacing">12</property>
+                <property name="row-spacing">12</property>
                 <property name="hexpand">1</property>
                 <property name="vexpand">1</property>
                 <property name="halign">center</property>
@@ -176,8 +176,8 @@
                     <property name="pixel-size">64</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
@@ -190,8 +190,8 @@
                     </attributes>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">1</property>
                   </packing>
                 </child>
               </object>
@@ -201,8 +201,8 @@
             </child>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">1</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">1</property>
             <property name="width">2</property>
           </packing>
         </child>

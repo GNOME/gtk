@@ -12,22 +12,22 @@
     </columns>
   </object>
   <template class="GtkRecentChooserDefault" parent="GtkBox">
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="orientation">vertical</property>
     <property name="spacing">6</property>
     <child>
       <object class="GtkScrolledWindow" id="scrolledwindow">
         <property name="visible">1</property>
-        <property name="can_focus">1</property>
-        <property name="hscrollbar_policy">never</property>
-        <property name="shadow_type">in</property>
+        <property name="can-focus">1</property>
+        <property name="hscrollbar-policy">never</property>
+        <property name="shadow-type">in</property>
         <property name="vexpand">1</property>
         <child>
           <object class="GtkTreeView" id="recent_view">
             <property name="visible">1</property>
-            <property name="can_focus">1</property>
-            <property name="has_tooltip">1</property>
-            <property name="headers_visible">0</property>
+            <property name="can-focus">1</property>
+            <property name="has-tooltip">1</property>
+            <property name="headers-visible">0</property>
             <signal name="button-press-event" handler="recent_view_button_press_cb" swapped="no"/>
             <signal name="drag-begin" handler="recent_view_drag_begin_cb" swapped="no"/>
             <signal name="drag-data-get" handler="recent_view_drag_data_get_cb" swapped="no"/>
@@ -44,7 +44,7 @@
                 <property name="title">icon</property>
                 <child>
                   <object class="GtkCellRendererPixbuf" id="icon_renderer">
-                    <property name="stock_size">4</property>
+                    <property name="stock-size">4</property>
                   </object>
                 </child>
               </object>
@@ -75,15 +75,15 @@
         <child>
           <object class="GtkComboBoxText" id="filter_combo">
             <property name="visible">1</property>
-            <property name="tooltip_text" translatable="yes">Select which type of documents are shown</property>
-            <property name="focus_on_click">0</property>
-            <property name="entry_text_column">0</property>
-            <property name="id_column">1</property>
+            <property name="tooltip-text" translatable="yes">Select which type of documents are shown</property>
+            <property name="focus-on-click">0</property>
+            <property name="entry-text-column">0</property>
+            <property name="id-column">1</property>
             <signal name="changed" handler="filter_combo_changed_cb" swapped="no"/>
           </object>
           <packing>
             <property name="fill">0</property>
-            <property name="pack_type">end</property>
+            <property name="pack-type">end</property>
           </packing>
         </child>
       </object>

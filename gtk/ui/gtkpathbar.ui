@@ -3,9 +3,9 @@
   <!-- interface-requires gtk+ 3.10 -->
   <object class="GtkButton" id="down_slider_button">
     <property name="visible">1</property>
-    <property name="can_focus">1</property>
-    <property name="receives_default">1</property>
-    <property name="focus_on_click">0</property>
+    <property name="can-focus">1</property>
+    <property name="receives-default">1</property>
+    <property name="focus-on-click">0</property>
     <child internal-child="accessible">
       <object class="AtkObject" id="down_slider_button-atkobject">
         <property name="AtkObject::accessible-name" translatable="yes">Down Path</property>
@@ -28,9 +28,9 @@
   </object>
   <object class="GtkButton" id="up_slider_button">
     <property name="visible">1</property>
-    <property name="can_focus">1</property>
-    <property name="receives_default">1</property>
-    <property name="focus_on_click">0</property>
+    <property name="can-focus">1</property>
+    <property name="receives-default">1</property>
+    <property name="focus-on-click">0</property>
     <child internal-child="accessible">
       <object class="AtkObject" id="up_slider_button-atkobject">
         <property name="AtkObject::accessible-name" translatable="yes">Up Path</property>

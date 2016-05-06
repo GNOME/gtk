@@ -3,16 +3,16 @@
   <!-- interface-requires gtk+ 3.6 -->
   <object class="GtkAdjustment" id="adjustment">
     <property name="upper">1</property>
-    <property name="step_increment">0.02</property>
-    <property name="page_increment">0.2</property>
+    <property name="step-increment">0.02</property>
+    <property name="page-increment">0.2</property>
   </object>
   <template class="GtkVolumeButton" parent="GtkScaleButton">
     <property name="visible">1</property>
-    <property name="can_focus">1</property>
-    <property name="receives_default">1</property>
-    <property name="has_tooltip">1</property>
+    <property name="can-focus">1</property>
+    <property name="receives-default">1</property>
+    <property name="has-tooltip">1</property>
     <property name="relief">none</property>
-    <property name="focus_on_click">0</property>
+    <property name="focus-on-click">0</property>
     <property name="orientation">vertical</property>
     <property name="adjustment">adjustment</property>
     <property name="icons">audio-volume-muted

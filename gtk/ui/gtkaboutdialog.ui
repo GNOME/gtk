@@ -3,12 +3,12 @@
   <!-- interface-requires gtk+ 3.10 -->
   <object class="GtkImage" id="image1">
     <property name="visible">1</property>
-    <property name="icon_name">help-about</property>
+    <property name="icon-name">help-about</property>
   </object>
   <template class="GtkAboutDialog" parent="GtkDialog">
-    <property name="border_width">5</property>
+    <property name="border-width">5</property>
     <property name="resizable">0</property>
-    <property name="type_hint">dialog</property>
+    <property name="type-hint">dialog</property>
     <child internal-child="headerbar">
       <object class="GtkHeaderBar" id="headerbar1">
         <property name="visible">1</property>
@@ -28,13 +28,13 @@
         <child>
           <object class="GtkBox" id="box">
             <property name="visible">1</property>
-            <property name="border_width">5</property>
+            <property name="border-width">5</property>
             <property name="orientation">vertical</property>
             <property name="spacing">12</property>
             <child>
               <object class="GtkImage" id="logo_image">
                 <property name="visible">1</property>
-                <property name="icon_name">image-missing</property>
+                <property name="icon-name">image-missing</property>
               </object>
               <packing>
                 <property name="fill">0</property>
@@ -54,8 +54,8 @@
             </child>
             <child>
               <object class="GtkStack" id="stack">
-                <property name="width_request">400</property>
-                <property name="height_request">100</property>
+                <property name="width-request">400</property>
+                <property name="height-request">100</property>
                 <property name="visible">1</property>
                 <property name="transition-type">over-up-down</property>
                 <property name="transition-duration">600</property>
@@ -96,7 +96,7 @@
                         <property name="homogeneous">1</property>
                         <child>
                           <object class="GtkLabel" id="website_label">
-                            <property name="no_show_all">1</property>
+                            <property name="no-show-all">1</property>
                             <property name="label">http://website.com</property>
                             <property name="selectable">1</property>
                             <signal name="activate-link" handler="emit_activate_link" object="GtkAboutDialog" swapped="yes"/>
@@ -114,16 +114,16 @@
                     <child>
                       <object class="GtkLabel" id="license_label">
                         <property name="label">license</property>
-                        <property name="use_markup">1</property>
+                        <property name="use-markup">1</property>
                         <property name="justify">center</property>
                         <property name="wrap">1</property>
                         <property name="selectable">1</property>
-                        <property name="no_show_all">1</property>
+                        <property name="no-show-all">1</property>
                         <property name="max-width-chars">60</property>
                       </object>
                       <packing>
                         <property name="fill">0</property>
-                        <property name="pack_type">end</property>
+                        <property name="pack-type">end</property>
                         <property name="position">3</property>
                       </packing>
                     </child>
@@ -138,7 +138,7 @@
                       </object>
                       <packing>
                         <property name="fill">0</property>
-                        <property name="pack_type">end</property>
+                        <property name="pack-type">end</property>
                         <property name="position">4</property>
                       </packing>
                     </child>
@@ -156,8 +156,8 @@
                     <child>
                       <object class="GtkScrolledWindow" id="scrolledwindow1">
                         <property name="visible">1</property>
-                        <property name="hscrollbar_policy">never</property>
-                        <property name="shadow_type">in</property>
+                        <property name="hscrollbar-policy">never</property>
+                        <property name="shadow-type">in</property>
                         <child>
                           <object class="GtkViewport" id="viewport1">
                             <property name="visible">1</property>
@@ -169,10 +169,10 @@
                                 <property name="visible">1</property>
                                 <property name="halign">center</property>
                                 <property name="valign">start</property>
-                                <property name="border_width">5</property>
+                                <property name="border-width">5</property>
                                 <property name="orientation">vertical</property>
-                                <property name="row_spacing">2</property>
-                                <property name="column_spacing">8</property>
+                                <property name="row-spacing">2</property>
+                                <property name="column-spacing">8</property>
                               </object>
                             </child>
                           </object>
@@ -196,15 +196,15 @@
                     <child>
                       <object class="GtkScrolledWindow" id="scrolledwindow2">
                         <property name="visible">1</property>
-                        <property name="hscrollbar_policy">never</property>
-                        <property name="shadow_type">in</property>
+                        <property name="hscrollbar-policy">never</property>
+                        <property name="shadow-type">in</property>
                         <child>
                           <object class="GtkTextView" id="license_view">
                             <property name="visible">1</property>
                             <property name="editable">0</property>
-                            <property name="left_margin">8</property>
-                            <property name="right_margin">8</property>
-                            <property name="cursor_visible">0</property>
+                            <property name="left-margin">8</property>
+                            <property name="right-margin">8</property>
+                            <property name="cursor-visible">0</property>
                             <signal name="event-after" handler="text_view_event_after" swapped="no"/>
                             <signal name="key-press-event" handler="text_view_key_press_event" swapped="no"/>
                             <signal name="motion-notify-event" handler="text_view_motion_notify_event" swapped="no"/>

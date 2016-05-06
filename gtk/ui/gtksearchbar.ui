@@ -2,7 +2,7 @@
 <interface domain="gtk30">
   <!-- interface-requires gtk+ 3.10 -->
   <template class="GtkSearchBar" parent="GtkBin">
-    <property name="app_paintable">1</property>
+    <property name="app-paintable">1</property>
     <child>
       <object class="GtkRevealer" id="revealer">
         <property name="visible">1</property>
@@ -10,7 +10,7 @@
         <child>
           <object class="GtkBox" id="tool_box">
             <property name="visible">1</property>
-            <property name="border_width">6</property>
+            <property name="border-width">6</property>
             <property name="spacing">6</property>
             <child>
               <object class="GtkBox" id="box_left">
@@ -42,8 +42,8 @@
                 <child>
                   <object class="GtkButton" id="close_button">
                     <property name="visible">1</property>
-                    <property name="can_focus">1</property>
-                    <property name="receives_default">1</property>
+                    <property name="can-focus">1</property>
+                    <property name="receives-default">1</property>
                     <property name="relief">none</property>
                     <style>
                       <class name="raised"/>
@@ -52,8 +52,8 @@
                     <child>
                       <object class="GtkImage" id="close_image">
                         <property name="visible">1</property>
-                        <property name="icon_size">1</property>
-                        <property name="icon_name">window-close-symbolic</property>
+                        <property name="icon-size">1</property>
+                        <property name="icon-name">window-close-symbolic</property>
                       </object>
                     </child>
                   </object>

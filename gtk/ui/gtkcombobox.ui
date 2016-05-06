@@ -18,17 +18,17 @@
                 <child>
                   <object class="GtkIcon" id="arrow">
                     <property name="visible">1</property>
-                    <property name="css_name">arrow</property>
+                    <property name="css-name">arrow</property>
                   </object>
                   <packing>
-                    <property name="pack_type">end</property>
+                    <property name="pack-type">end</property>
                   </packing>
                 </child>
               </object>
             </child>
           </object>
           <packing>
-            <property name="pack_type">end</property>
+            <property name="pack-type">end</property>
           </packing>
         </child>
       </object>

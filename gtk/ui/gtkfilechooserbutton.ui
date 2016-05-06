@@ -5,8 +5,8 @@
     <child>
       <object class="GtkButton" id="button">
         <property name="visible">1</property>
-        <property name="can_focus">1</property>
-        <property name="receives_default">1</property>
+        <property name="can-focus">1</property>
+        <property name="receives-default">1</property>
         <signal name="clicked" handler="button_clicked_cb" swapped="no"/>
         <style>
           <class name="file"/>
@@ -18,7 +18,7 @@
             <child>
               <object class="GtkImage" id="image">
                 <property name="visible">1</property>
-                <property name="icon_name">image-missing</property>
+                <property name="icon-name">image-missing</property>
               </object>
               <packing>
                 <property name="fill">0</property>
@@ -51,9 +51,9 @@
             <child>
               <object class="GtkImage" id="open_file_icon">
                 <property name="visible">1</property>
-                <property name="icon_name">document-open-symbolic</property>
-                <property name="icon_size">1</property>
-                <property name="use_fallback">1</property>
+                <property name="icon-name">document-open-symbolic</property>
+                <property name="icon-size">1</property>
+                <property name="use-fallback">1</property>
                 <property name="valign">baseline</property>
               </object>
               <packing>

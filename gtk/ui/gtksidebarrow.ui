@@ -49,8 +49,8 @@
                     <child>
                       <object class="GtkImage">
                         <property name="visible">1</property>
-                        <property name="icon_name">media-eject-symbolic</property>
-                        <property name="icon_size">1</property>
+                        <property name="icon-name">media-eject-symbolic</property>
+                        <property name="icon-size">1</property>
                       </object>
                     </child>
                     <style>

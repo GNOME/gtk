@@ -2,7 +2,7 @@
 <interface domain="gtk30">
   <!-- interface-requires gtk+ 3.10 -->
   <template class="GtkInfoBar" parent="GtkBox">
-    <property name="app_paintable">1</property>
+    <property name="app-paintable">1</property>
     <child>
       <object class="GtkRevealer" id="revealer">
         <property name="visible">1</property>
@@ -12,7 +12,7 @@
             <child>
               <object class="GtkBox" id="content_area">
                 <property name="visible">1</property>
-                <property name="border_width">8</property>
+                <property name="border-width">8</property>
                 <property name="spacing">16</property>
                 <property name="hexpand">1</property>
               </object>
@@ -23,9 +23,9 @@
             <child>
               <object class="GtkButtonBox" id="action_area">
                 <property name="visible">1</property>
-                <property name="border_width">6</property>
+                <property name="border-width">6</property>
                 <property name="spacing">6</property>
-                <property name="layout_style">end</property>
+                <property name="layout-style">end</property>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -33,8 +33,8 @@
             </child>
             <child>
               <object class="GtkButton" id="close_button">
-                <property name="can_focus">1</property>
-                <property name="border_width">6</property>
+                <property name="can-focus">1</property>
+                <property name="border-width">6</property>
                 <property name="relief">none</property>
                 <property name="valign">center</property>
                 <style>
@@ -44,7 +44,7 @@
                 <child>
                   <object class="GtkImage" id="close_image">
                     <property name="visible">1</property>
-                    <property name="icon_name">window-close-symbolic</property>
+                    <property name="icon-name">window-close-symbolic</property>
                   </object>
                 </child>
               </object>

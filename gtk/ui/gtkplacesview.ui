@@ -11,25 +11,22 @@
   </object>
   <object class="GtkEntryCompletion" id="address_entry_completion">
     <property name="model">completion_store</property>
-    <property name="text_column">1</property>
-    <property name="inline_completion">1</property>
-    <property name="popup_completion">0</property>
+    <property name="text-column">1</property>
+    <property name="inline-completion">1</property>
+    <property name="popup-completion">0</property>
   </object>
   <object class="GtkPopover" id="server_adresses_popover">
-    <property name="can_focus">False</property>
-    <property name="relative_to">address_entry</property>
+    <property name="relative-to">address_entry</property>
     <child>
       <object class="GtkBox">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="border_width">12</property>
+        <property name="visible">1</property>
+        <property name="border-width">12</property>
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child>
           <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="hexpand">True</property>
+            <property name="visible">1</property>
+            <property name="hexpand">1</property>
             <property name="label" translatable="yes">Server Addresses</property>
             <attributes>
               <attribute name="weight" value="bold"/>
@@ -38,44 +35,34 @@
               <class name="dim-label"/>
             </style>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="hexpand">True</property>
+            <property name="visible">1</property>
+            <property name="hexpand">1</property>
             <property name="label" translatable="yes">Server addresses are made up of a protocol prefix and an address. Examples:
 
 smb://foo.example.com, ssh://192.168.0.1</property>
-            <property name="wrap">True</property>
-            <property name="width_chars">40</property>
-            <property name="max_width_chars">40</property>
+            <property name="wrap">1</property>
+            <property name="width-chars">40</property>
+            <property name="max-width-chars">40</property>
             <property name="xalign">0</property>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkGrid">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="margin_top">6</property>
-            <property name="hexpand">True</property>
-            <property name="row_spacing">6</property>
-            <property name="column_spacing">12</property>
+            <property name="visible">1</property>
+            <property name="margin-top">6</property>
+            <property name="hexpand">1</property>
+            <property name="row-spacing">6</property>
+            <property name="column-spacing">12</property>
             <child>
               <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="hexpand">True</property>
+                <property name="visible">1</property>
+                <property name="hexpand">1</property>
                 <property name="label" translatable="yes">Available Protocols</property>
                 <property name="xalign">0</property>
                 <attributes>
@@ -83,86 +70,79 @@ smb://foo.example.com, ssh://192.168.0.1</property>
                 </attributes>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="visible">1</property>
                 <property name="label" translatable="yes">AppleTalk</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="visible">1</property>
                 <property name="label" translatable="yes">File Transfer Protocol</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">2</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">2</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="visible">1</property>
                 <property name="label" translatable="yes">Samba</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">3</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">3</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="visible">1</property>
                 <property name="label" translatable="yes">Secure File Transfer Protocol</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">4</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">4</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="visible">1</property>
                 <property name="label" translatable="yes">Secure Shell</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">5</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">5</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="visible">1</property>
                 <property name="label" translatable="yes">WebDav</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">6</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">6</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="visible">1</property>
                 <property name="label" translatable="yes">Prefix</property>
                 <property name="xalign">0</property>
                 <attributes>
@@ -170,86 +150,78 @@ smb://foo.example.com, ssh://192.168.0.1</property>
                 </attributes>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="visible">1</property>
                 <property name="label">afp://</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">1</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="visible">1</property>
                 <property name="label">ftp://</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">2</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">2</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="visible">1</property>
                 <property name="label">smb://</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">3</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">3</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="visible">1</property>
                 <property name="label">sftp://</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">4</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">4</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="visible">1</property>
                 <property name="label">ssh://</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">5</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">5</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="visible">1</property>
                 <property name="label" translatable="yes" comments="Translators: do not translate http:// and https://">http:// or https://</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">6</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">6</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="position">2</property>
           </packing>
         </child>
@@ -271,7 +243,7 @@ smb://foo.example.com, ssh://192.168.0.1</property>
               <object class="GtkImage">
                 <property name="visible">1</property>
                 <property name="pixel-size">48</property>
-                <property name="icon_name">network-server-symbolic</property>
+                <property name="icon-name">network-server-symbolic</property>
                 <style>
                   <class name="dim-label"/>
                 </style>
@@ -297,7 +269,7 @@ smb://foo.example.com, ssh://192.168.0.1</property>
         <child>
           <object class="GtkBox">
             <property name="visible">1</property>
-            <property name="border_width">12</property>
+            <property name="border-width">12</property>
             <property name="orientation">vertical</property>
             <property name="spacing">12</property>
             <child>
@@ -312,20 +284,20 @@ smb://foo.example.com, ssh://192.168.0.1</property>
             <child>
               <object class="GtkScrolledWindow">
                 <property name="visible">1</property>
-                <property name="can_focus">1</property>
+                <property name="can-focus">1</property>
                 <property name="vexpand">1</property>
-                <property name="shadow_type">in</property>
-                <property name="min_content_width">250</property>
-                <property name="min_content_height">200</property>
+                <property name="shadow-type">in</property>
+                <property name="min-content-width">250</property>
+                <property name="min-content-height">200</property>
                 <child>
                   <object class="GtkViewport">
                     <property name="visible">1</property>
-                    <property name="shadow_type">none</property>
+                    <property name="shadow-type">none</property>
                     <child>
                       <object class="GtkListBox" id="recent_servers_listbox">
                         <property name="visible">1</property>
-                        <property name="can_focus">1</property>
-                        <property name="selection_mode">none</property>
+                        <property name="can-focus">1</property>
+                        <property name="selection-mode">none</property>
                         <signal name="row-activated" handler="on_recent_servers_listbox_row_activated" object="GtkPlacesView" swapped="yes"/>
                       </object>
                     </child>
@@ -346,18 +318,18 @@ smb://foo.example.com, ssh://192.168.0.1</property>
   </object>
   <template class="GtkPlacesView" parent="GtkBox">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="orientation">vertical</property>
     <signal name="key-press-event" handler="on_key_press_event" object="GtkPlacesView" swapped="no"/>
     <child>
       <object class="GtkStack" id="stack">
         <property name="visible">1</property>
         <property name="vhomogeneous">0</property>
-        <property name="transition_type">crossfade</property>
+        <property name="transition-type">crossfade</property>
         <child>
           <object class="GtkFrame">
             <property name="visible">1</property>
-            <property name="shadow_type">none</property>
+            <property name="shadow-type">none</property>
             <child>
               <object class="GtkScrolledWindow">
                 <property name="visible">1</property>
@@ -366,12 +338,12 @@ smb://foo.example.com, ssh://192.168.0.1</property>
                 <child>
                   <object class="GtkViewport">
                     <property name="visible">1</property>
-                    <property name="shadow_type">none</property>
+                    <property name="shadow-type">none</property>
                     <child>
                       <object class="GtkListBox" id="listbox">
                         <property name="visible">1</property>
-                        <property name="can_focus">1</property>
-                        <property name="selection_mode">none</property>
+                        <property name="can-focus">1</property>
+                        <property name="selection-mode">none</property>
                         <signal name="row-activated" handler="on_listbox_row_activated" object="GtkPlacesView" swapped="yes"/>
                       </object>
                     </child>
@@ -396,8 +368,8 @@ smb://foo.example.com, ssh://192.168.0.1</property>
             <child>
               <object class="GtkImage">
                 <property name="visible">1</property>
-                <property name="pixel_size">72</property>
-                <property name="icon_name">edit-find-symbolic</property>
+                <property name="pixel-size">72</property>
+                <property name="icon-name">edit-find-symbolic</property>
                 <style>
                   <class name="dim-label"/>
                 </style>
@@ -453,8 +425,8 @@ smb://foo.example.com, ssh://192.168.0.1</property>
             <property name="hexpand">1</property>
             <property name="xalign">0</property>
             <property name="label" translatable="yes">Connect to _Server</property>
-            <property name="mnemonic_widget">address_entry</property>
-            <property name="use_underline">1</property>
+            <property name="mnemonic-widget">address_entry</property>
+            <property name="use-underline">1</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -463,16 +435,16 @@ smb://foo.example.com, ssh://192.168.0.1</property>
         <child>
           <object class="GtkButton" id="connect_button">
             <property name="label" translatable="yes">Con_nect</property>
-            <property name="use_underline">1</property>
+            <property name="use-underline">1</property>
             <property name="visible">1</property>
-            <property name="can_focus">1</property>
+            <property name="can-focus">1</property>
             <property name="sensitive">0</property>
-            <property name="receives_default">1</property>
+            <property name="receives-default">1</property>
             <property name="valign">center</property>
             <signal name="clicked" handler="on_connect_button_clicked" object="GtkPlacesView" swapped="yes"/>
           </object>
           <packing>
-            <property name="pack_type">end</property>
+            <property name="pack-type">end</property>
           </packing>
         </child>
         <child>
@@ -482,11 +454,11 @@ smb://foo.example.com, ssh://192.168.0.1</property>
             <child>
               <object class="GtkEntry" id="address_entry">
                 <property name="visible">1</property>
-                <property name="can_focus">1</property>
+                <property name="can-focus">1</property>
                 <property name="hexpand">1</property>
-                <property name="width_chars">20</property>
-                <property name="placeholder_text" translatable="yes">Enter server address…</property>
-                <property name="secondary_icon_name" translatable="yes">dialog-question-symbolic</property>
+                <property name="width-chars">20</property>
+                <property name="placeholder-text" translatable="yes">Enter server address…</property>
+                <property name="secondary-icon-name" translatable="yes">dialog-question-symbolic</property>
                 <property name="completion">address_entry_completion</property>
                 <signal name="notify::text" handler="on_address_entry_text_changed" object="GtkPlacesView" swapped="yes"/>
                 <signal name="activate" handler="on_connect_button_clicked" object="GtkPlacesView" swapped="yes"/>
@@ -496,8 +468,8 @@ smb://foo.example.com, ssh://192.168.0.1</property>
             <child>
               <object class="GtkMenuButton" id="server_list_button">
                 <property name="visible">1</property>
-                <property name="can_focus">1</property>
-                <property name="receives_default">1</property>
+                <property name="can-focus">1</property>
+                <property name="receives-default">1</property>
                 <property name="direction">up</property>
                 <property name="popover">recent_servers_popover</property>
                 <style>
@@ -506,7 +478,7 @@ smb://foo.example.com, ssh://192.168.0.1</property>
                 <child>
                   <object class="GtkImage">
                     <property name="visible">1</property>
-                    <property name="icon_name">pan-down-symbolic</property>
+                    <property name="icon-name">pan-down-symbolic</property>
                   </object>
                 </child>
               </object>
@@ -516,7 +488,7 @@ smb://foo.example.com, ssh://192.168.0.1</property>
             </style>
           </object>
           <packing>
-            <property name="pack_type">end</property>
+            <property name="pack-type">end</property>
           </packing>
         </child>
       </object>
