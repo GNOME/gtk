@@ -4154,8 +4154,6 @@ gtk_widget_ensure_style (GtkWidget *widget)
     {
       g_object_unref (style);
       _gtk_widget_set_style (widget, NULL);
-
-      g_signal_emit_by_name (widget, "style-set", 0, NULL);
     }
 }
 
