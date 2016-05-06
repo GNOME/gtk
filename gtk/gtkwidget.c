@@ -842,7 +842,6 @@ static GQuark		quark_parent_window = 0;
 static GQuark		quark_shape_info = 0;
 static GQuark		quark_input_shape_info = 0;
 static GQuark		quark_pango_context = 0;
-static GQuark		quark_accessible_object = 0;
 static GQuark		quark_mnemonic_labels = 0;
 static GQuark		quark_tooltip_markup = 0;
 static GQuark		quark_has_tooltip = 0;
@@ -1013,7 +1012,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   quark_shape_info = g_quark_from_static_string ("gtk-shape-info");
   quark_input_shape_info = g_quark_from_static_string ("gtk-input-shape-info");
   quark_pango_context = g_quark_from_static_string ("gtk-pango-context");
-  quark_accessible_object = g_quark_from_static_string ("gtk-accessible-object");
   quark_mnemonic_labels = g_quark_from_static_string ("gtk-mnemonic-labels");
   quark_tooltip_markup = g_quark_from_static_string ("gtk-tooltip-markup");
   quark_has_tooltip = g_quark_from_static_string ("gtk-has-tooltip");
@@ -12184,15 +12182,11 @@ gtk_widget_real_destroy (GtkWidget *object)
 	}
     }
 
-  if (GTK_WIDGET_GET_CLASS (widget)->priv->accessible_type != GTK_TYPE_ACCESSIBLE)
+  if (priv->accessible)
     {
-      GtkAccessible *accessible = g_object_steal_qdata (G_OBJECT (widget), quark_accessible_object);
-      
-      if (accessible)
-        {
-          gtk_accessible_set_widget (accessible, NULL);
-          g_object_unref (accessible);
-        }
+      gtk_accessible_set_widget (GTK_ACCESSIBLE (priv->accessible), NULL);
+      g_object_unref (priv->accessible);
+      priv->accessible = NULL;
     }
 
   /* wipe accelerator closures (keep order) */
@@ -12219,7 +12213,6 @@ gtk_widget_finalize (GObject *object)
 {
   GtkWidget *widget = GTK_WIDGET (object);
   GtkWidgetPrivate *priv = widget->priv;
-  GtkAccessible *accessible;
   GList *l;
 
   gtk_grab_remove (widget);
@@ -12228,9 +12221,8 @@ gtk_widget_finalize (GObject *object)
 
   g_free (priv->name);
 
-  accessible = g_object_get_qdata (G_OBJECT (widget), quark_accessible_object);
-  if (accessible)
-    g_object_unref (accessible);
+  if (priv->accessible)
+    g_object_unref (priv->accessible);
 
   gtk_widget_clear_path (widget);
 
@@ -13354,8 +13346,7 @@ gtk_widget_class_set_accessible_role (GtkWidgetClass *widget_class,
 AtkObject *
 _gtk_widget_peek_accessible (GtkWidget *widget)
 {
-  return g_object_get_qdata (G_OBJECT (widget),
-                             quark_accessible_object);
+  return widget->priv->accessible;
 }
 
 /**
@@ -13380,15 +13371,9 @@ _gtk_widget_peek_accessible (GtkWidget *widget)
 AtkObject*
 gtk_widget_get_accessible (GtkWidget *widget)
 {
-  GtkWidgetClass *klass;
-
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  klass = GTK_WIDGET_GET_CLASS (widget);
-
-  g_return_val_if_fail (klass->get_accessible != NULL, NULL);
-
-  return klass->get_accessible (widget);
+  return GTK_WIDGET_GET_CLASS (widget)->get_accessible (widget);
 }
 
 static AtkObject*
@@ -13396,56 +13381,49 @@ gtk_widget_real_get_accessible (GtkWidget *widget)
 {
   AtkObject* accessible;
 
-  accessible = g_object_get_qdata (G_OBJECT (widget),
-                                   quark_accessible_object);
+  accessible = widget->priv->accessible;
+
   if (!accessible)
-  {
-    GtkWidgetClass *widget_class;
-    GtkWidgetClassPrivate *priv;
-    AtkObjectFactory *factory;
-    AtkRegistry *default_registry;
+    {
+      GtkWidgetClass *widget_class;
+      GtkWidgetClassPrivate *priv;
+      AtkObjectFactory *factory;
+      AtkRegistry *default_registry;
 
-    widget_class = GTK_WIDGET_GET_CLASS (widget);
-    priv = widget_class->priv;
+      widget_class = GTK_WIDGET_GET_CLASS (widget);
+      priv = widget_class->priv;
 
-    if (priv->accessible_type == GTK_TYPE_ACCESSIBLE)
-      {
-        default_registry = atk_get_default_registry ();
-        factory = atk_registry_get_factory (default_registry,
-                                            G_TYPE_FROM_INSTANCE (widget));
-        accessible =
-          atk_object_factory_create_accessible (factory,
-                                                G_OBJECT (widget));
+      if (priv->accessible_type == GTK_TYPE_ACCESSIBLE)
+        {
+          default_registry = atk_get_default_registry ();
+          factory = atk_registry_get_factory (default_registry,
+                                              G_TYPE_FROM_INSTANCE (widget));
+          accessible = atk_object_factory_create_accessible (factory, G_OBJECT (widget));
 
-        if (priv->accessible_role != ATK_ROLE_INVALID)
-          atk_object_set_role (accessible, priv->accessible_role);
+          if (priv->accessible_role != ATK_ROLE_INVALID)
+            atk_object_set_role (accessible, priv->accessible_role);
+        }
+      else
+        {
+          accessible = g_object_new (priv->accessible_type,
+                                     "widget", widget,
+                                     NULL);
+          if (priv->accessible_role != ATK_ROLE_INVALID)
+            atk_object_set_role (accessible, priv->accessible_role);
 
-        g_object_set_qdata (G_OBJECT (widget),
-                            quark_accessible_object,
-                            accessible);
-      }
-    else
-      {
-        accessible = g_object_new (priv->accessible_type,
-                                   "widget", widget,
-                                   NULL);
-        if (priv->accessible_role != ATK_ROLE_INVALID)
-          atk_object_set_role (accessible, priv->accessible_role);
+          atk_object_initialize (accessible, widget);
 
-        g_object_set_qdata (G_OBJECT (widget),
-                            quark_accessible_object,
-                            accessible);
+          /* Set the role again, since we don't want a role set
+           * in some parent initialize() function to override
+           * our own.
+           */
+          if (priv->accessible_role != ATK_ROLE_INVALID)
+            atk_object_set_role (accessible, priv->accessible_role);
+        }
 
-        atk_object_initialize (accessible, widget);
+      widget->priv->accessible = accessible;
+    }
 
-        /* Set the role again, since we don't want a role set
-         * in some parent initialize() function to override
-         * our own.
-         */
-        if (priv->accessible_role != ATK_ROLE_INVALID)
-          atk_object_set_role (accessible, priv->accessible_role);
-      }
-  }
   return accessible;
 }
 

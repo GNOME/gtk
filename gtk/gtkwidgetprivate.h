@@ -157,6 +157,8 @@ struct _GtkWidgetPrivate
   GtkWidget *parent;
 
   GList *event_controllers;
+
+  AtkObject *accessible;
 };
 
 GtkCssNode *  gtk_widget_get_css_node       (GtkWidget *widget);
