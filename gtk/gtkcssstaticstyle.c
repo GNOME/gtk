@@ -140,27 +140,35 @@ gtk_css_static_style_set_value (GtkCssStaticStyle *style,
     }
 }
 
+static GtkCssStyle *default_style;
+
+static void
+clear_default_style (gpointer data)
+{
+  g_set_object (&default_style, NULL);
+}
+
 GtkCssStyle *
 gtk_css_static_style_get_default (void)
 {
-  static GQuark style_quark = 0;
-  GtkSettings *settings;
-  GtkCssStyle *result;
+  /* FIXME: This really depends on the screen, but we don't have
+   * a screen at hand when we call this function, and in practice,
+   * the default style is always replaced by something else
+   * before we use it.
+   */
+  if (default_style == NULL)
+    {
+      GtkSettings *settings;
 
-  if (style_quark == 0)
-    style_quark = g_quark_from_static_string ("gtk-default-style");
+      settings = gtk_settings_get_default ();
+      default_style = gtk_css_static_style_new_compute (GTK_STYLE_PROVIDER_PRIVATE (settings),
+                                                        NULL,
+                                                        NULL);
+      g_object_set_data_full (G_OBJECT (settings), "gtk-default-style",
+                              default_style, clear_default_style);
+    }
 
-  settings = gtk_settings_get_for_screen (gdk_screen_get_default ());
-  result = g_object_get_qdata (G_OBJECT (settings), style_quark);
-  if (result)
-    return result;
-
-  result = gtk_css_static_style_new_compute (GTK_STYLE_PROVIDER_PRIVATE (settings),
-                                             NULL,
-                                             NULL);
-  g_object_set_qdata_full (G_OBJECT (settings), style_quark, result, g_object_unref);
-
-  return result;
+  return default_style;
 }
 
 GtkCssStyle *
@@ -184,7 +192,7 @@ gtk_css_static_style_new_compute (GtkStyleProviderPrivate *provider,
 
   result->change = change;
 
-  _gtk_css_lookup_resolve (lookup, 
+  _gtk_css_lookup_resolve (lookup,
                            provider,
                            result,
                            parent);
