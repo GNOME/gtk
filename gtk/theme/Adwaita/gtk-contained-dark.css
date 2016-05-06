@@ -400,9 +400,6 @@ entry:drop(active):not(:only-child) + button,
 entry:drop(active):not(:only-child) + combobox > box > button.combo {
   border-top-color: #4e9a06; }
 
-treeview acceleditor > label {
-  background-color: #215d9c; }
-
 treeview entry:focus:dir(rtl), treeview entry:focus:dir(ltr) {
   background-color: #292929;
   transition-property: color, background; }
@@ -2086,6 +2083,8 @@ treeview.view {
     border-style: none;
     box-shadow: inset 0 0 0 1px #292929;
     text-shadow: none; }
+  treeview.view acceleditor > label {
+    background-color: #215d9c; }
 
 treeview.view header button, treeview.view header button:hover, treeview.view header button:active {
   padding: 0 6px;
