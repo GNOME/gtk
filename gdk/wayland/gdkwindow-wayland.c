@@ -161,6 +161,8 @@ struct _GdkWindowImplWayland
 
   int saved_width;
   int saved_height;
+
+  gulong parent_surface_committed_handler;
 };
 
 struct _GdkWindowImplWaylandClass
@@ -1144,9 +1146,9 @@ on_parent_surface_committed (GdkWindowImplWayland *parent_impl,
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
-  g_signal_handlers_disconnect_by_func (parent_impl,
-                                        (gpointer) on_parent_surface_committed,
-                                        window);
+  g_signal_handler_disconnect (parent_impl,
+                               impl->parent_surface_committed_handler);
+  impl->parent_surface_committed_handler = 0;
 
   wl_subsurface_set_desync (impl->display_server.wl_subsurface);
 }
@@ -1180,9 +1182,10 @@ gdk_wayland_window_create_subsurface (GdkWindow *window)
        * content, wait with making the subsurface desynchronized until after
        * the parent was committed.
        */
-      g_signal_connect_object (parent_impl, "committed",
-                               G_CALLBACK (on_parent_surface_committed),
-                               window, 0);
+      impl->parent_surface_committed_handler =
+        g_signal_connect_object (parent_impl, "committed",
+                                 G_CALLBACK (on_parent_surface_committed),
+                                 window, 0);
       gdk_window_request_transient_parent_commit (window);
     }
 }
@@ -1761,9 +1764,12 @@ unmap_subsurface (GdkWindow *window)
 
   parent_impl = GDK_WINDOW_IMPL_WAYLAND (impl->transient_for->impl);
   wl_subsurface_destroy (impl->display_server.wl_subsurface);
-  g_signal_handlers_disconnect_by_func (parent_impl,
-                                        (gpointer) on_parent_surface_committed,
-                                        window);
+  if (impl->parent_surface_committed_handler)
+    {
+      g_signal_handler_disconnect (parent_impl,
+                                   impl->parent_surface_committed_handler);
+      impl->parent_surface_committed_handler = 0;
+    }
   impl->display_server.wl_subsurface = NULL;
 }
 
