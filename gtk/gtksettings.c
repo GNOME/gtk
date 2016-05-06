@@ -278,6 +278,13 @@ static GQuark            quark_gtk_settings = 0;
 static GSList           *object_list = NULL;
 static guint             class_n_properties = 0;
 
+typedef struct {
+  GdkDisplay *display;
+  GtkSettings *settings;
+} DisplaySettings;
+
+static GArray *display_settings;
+
 
 G_DEFINE_TYPE_EXTENDED (GtkSettings, gtk_settings, G_TYPE_OBJECT, 0,
                         G_ADD_PRIVATE (GtkSettings)
@@ -1868,6 +1875,66 @@ settings_init_style (GtkSettings *settings)
   settings_update_key_theme (settings);
 }
 
+static GtkSettings *
+gtk_settings_create_for_display (GdkDisplay *display)
+{
+  GtkSettings *settings;
+  DisplaySettings v;
+
+#ifdef GDK_WINDOWING_QUARTZ
+  if (GDK_IS_QUARTZ_DISPLAY (display))
+    settings = g_object_new (GTK_TYPE_SETTINGS,
+                             "gtk-key-theme-name", "Mac",
+                             "gtk-shell-shows-app-menu", TRUE,
+                             "gtk-shell-shows-menubar", TRUE,
+                             NULL);
+  else
+#endif
+#ifdef GDK_WINDOWING_BROADWAY
+    if (GDK_IS_BROADWAY_DISPLAY (display))
+      settings = g_object_new (GTK_TYPE_SETTINGS,
+                               "gtk-im-module", "broadway",
+                               NULL);
+  else
+#endif
+    settings = g_object_new (GTK_TYPE_SETTINGS, NULL);
+
+  settings->priv->screen = gdk_display_get_default_screen (display);
+
+  v.display = display;
+  v.settings = settings;
+  g_array_append_val (display_settings, v);
+
+  settings_init_style (settings);
+  settings_update_xsettings (settings);
+  settings_update_modules (settings);
+  settings_update_double_click (settings);
+  settings_update_cursor_theme (settings);
+  settings_update_resolution (settings);
+  settings_update_font_options (settings);
+
+  return settings;
+}
+
+static GtkSettings *
+gtk_settings_get_for_display (GdkDisplay *display)
+{
+  DisplaySettings *ds;
+  int i;
+
+  if G_UNLIKELY (display_settings == NULL)
+    display_settings = g_array_new (FALSE, TRUE, sizeof (DisplaySettings));
+
+  ds = (DisplaySettings *)display_settings->data;
+  for (i = 0; i < display_settings->len; i++)
+    {
+      if (ds[i].display == display)
+        return ds[i].settings;
+    }
+
+  return gtk_settings_create_for_display (display);
+}
+
 /**
  * gtk_settings_get_for_screen:
  * @screen: a #GdkScreen.
@@ -1878,53 +1945,12 @@ settings_init_style (GtkSettings *settings)
  *
  * Since: 2.2
  */
-GtkSettings*
+GtkSettings *
 gtk_settings_get_for_screen (GdkScreen *screen)
 {
-  GtkSettings *settings;
-
   g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
 
-  settings = g_object_get_qdata (G_OBJECT (screen), quark_gtk_settings);
-  if (!settings)
-    {
-#ifdef GDK_WINDOWING_QUARTZ
-      if (GDK_IS_QUARTZ_SCREEN (screen))
-        {
-          settings = g_object_new (GTK_TYPE_SETTINGS,
-                                   "gtk-key-theme-name", "Mac",
-                                   "gtk-shell-shows-app-menu", TRUE,
-                                   "gtk-shell-shows-menubar", TRUE,
-                                   NULL);
-        }
-      else
-#endif
-#ifdef GDK_WINDOWING_BROADWAY
-      if (GDK_IS_BROADWAY_DISPLAY (gdk_screen_get_display (screen)))
-        {
-          settings = g_object_new (GTK_TYPE_SETTINGS,
-                                   "gtk-im-module", "broadway",
-                                   NULL);
-        }
-      else
-#endif
-        settings = g_object_new (GTK_TYPE_SETTINGS, NULL);
-      settings->priv->screen = screen;
-      g_object_set_qdata_full (G_OBJECT (screen),
-                               quark_gtk_settings,
-                               settings,
-                               g_object_unref);
-
-      settings_init_style (settings);
-      settings_update_xsettings (settings);
-      settings_update_modules (settings);
-      settings_update_double_click (settings);
-      settings_update_cursor_theme (settings);
-      settings_update_resolution (settings);
-      settings_update_font_options (settings);
-    }
-
-  return settings;
+  return gtk_settings_get_for_display (gdk_screen_get_display (screen));
 }
 
 /**
@@ -1939,10 +1965,10 @@ gtk_settings_get_for_screen (GdkScreen *screen)
 GtkSettings*
 gtk_settings_get_default (void)
 {
-  GdkScreen *screen = gdk_screen_get_default ();
+  GdkDisplay *display = gdk_display_get_default ();
 
-  if (screen)
-    return gtk_settings_get_for_screen (screen);
+  if (display)
+    return gtk_settings_get_for_display (display);
   else
     return NULL;
 }
