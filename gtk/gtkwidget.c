@@ -844,7 +844,6 @@ static GQuark		quark_input_shape_info = 0;
 static GQuark		quark_pango_context = 0;
 static GQuark		quark_mnemonic_labels = 0;
 static GQuark		quark_tooltip_markup = 0;
-static GQuark		quark_has_tooltip = 0;
 static GQuark		quark_tooltip_window = 0;
 static GQuark		quark_visual = 0;
 static GQuark           quark_modifier_style = 0;
@@ -1014,7 +1013,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   quark_pango_context = g_quark_from_static_string ("gtk-pango-context");
   quark_mnemonic_labels = g_quark_from_static_string ("gtk-mnemonic-labels");
   quark_tooltip_markup = g_quark_from_static_string ("gtk-tooltip-markup");
-  quark_has_tooltip = g_quark_from_static_string ("gtk-has-tooltip");
   quark_tooltip_window = g_quark_from_static_string ("gtk-tooltip-window");
   quark_visual = g_quark_from_static_string ("gtk-widget-visual");
   quark_modifier_style = g_quark_from_static_string ("gtk-widget-modifier-style");
@@ -3957,7 +3955,7 @@ gtk_widget_get_property (GObject         *object,
       g_value_set_boolean (value, gtk_widget_get_no_show_all (widget));
       break;
     case PROP_HAS_TOOLTIP:
-      g_value_set_boolean (value, GPOINTER_TO_UINT (g_object_get_qdata (object, quark_has_tooltip)));
+      g_value_set_boolean (value, gtk_widget_get_has_tooltip (widget));
       break;
     case PROP_TOOLTIP_TEXT:
       {
@@ -5450,9 +5448,7 @@ gtk_widget_realize (GtkWidget *widget)
 
       g_signal_emit (widget, widget_signals[REALIZE], 0);
 
-      gtk_widget_real_set_has_tooltip (widget,
-				       GPOINTER_TO_UINT (g_object_get_qdata (G_OBJECT (widget), quark_has_tooltip)),
-				       TRUE);
+      gtk_widget_real_set_has_tooltip (widget, gtk_widget_get_has_tooltip (widget), TRUE);
 
       if (priv->has_shape_mask)
 	{
@@ -8086,7 +8082,7 @@ gtk_widget_real_query_tooltip (GtkWidget  *widget,
   gboolean has_tooltip;
 
   tooltip_markup = g_object_get_qdata (G_OBJECT (widget), quark_tooltip_markup);
-  has_tooltip = GPOINTER_TO_UINT (g_object_get_qdata (G_OBJECT (widget), quark_has_tooltip));
+  has_tooltip = gtk_widget_get_has_tooltip (widget);
 
   if (has_tooltip && tooltip_markup)
     {
@@ -15132,16 +15128,12 @@ gtk_widget_real_set_has_tooltip (GtkWidget *widget,
 			         gboolean   force)
 {
   GtkWidgetPrivate *priv = widget->priv;
-  gboolean priv_has_tooltip;
 
-  priv_has_tooltip = GPOINTER_TO_UINT (g_object_get_qdata (G_OBJECT (widget),
-				       quark_has_tooltip));
-
-  if (priv_has_tooltip != has_tooltip || force)
+  if (priv->has_tooltip != has_tooltip || force)
     {
-      priv_has_tooltip = has_tooltip;
+      priv->has_tooltip = has_tooltip;
 
-      if (priv_has_tooltip)
+      if (priv->has_tooltip)
         {
 	  if (_gtk_widget_get_realized (widget) && !_gtk_widget_get_has_window (widget))
 	    gdk_window_set_events (priv->window,
@@ -15154,9 +15146,6 @@ gtk_widget_real_set_has_tooltip (GtkWidget *widget,
 				     GDK_LEAVE_NOTIFY_MASK |
 				     GDK_POINTER_MOTION_MASK);
 	}
-
-      g_object_set_qdata (G_OBJECT (widget), quark_has_tooltip,
-			  GUINT_TO_POINTER (priv_has_tooltip));
 
       g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_HAS_TOOLTIP]);
     }
@@ -15380,7 +15369,7 @@ gtk_widget_set_has_tooltip (GtkWidget *widget,
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  g_object_set (G_OBJECT (widget), "has-tooltip", has_tooltip, NULL);
+  gtk_widget_real_set_has_tooltip (widget, has_tooltip, FALSE);
 }
 
 /**
@@ -15397,13 +15386,9 @@ gtk_widget_set_has_tooltip (GtkWidget *widget,
 gboolean
 gtk_widget_get_has_tooltip (GtkWidget *widget)
 {
-  gboolean has_tooltip = FALSE;
-
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  g_object_get (G_OBJECT (widget), "has-tooltip", &has_tooltip, NULL);
-
-  return has_tooltip;
+  return widget->priv->has_tooltip;
 }
 
 /**

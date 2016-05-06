@@ -821,9 +821,7 @@ gtk_tooltip_run_requery (GtkWidget  **widget,
 
   do
     {
-      g_object_get (*widget,
-		    "has-tooltip", &has_tooltip,
-		    NULL);
+      has_tooltip = gtk_widget_get_has_tooltip (*widget);
 
       if (has_tooltip)
 	g_signal_emit_by_name (*widget,
