@@ -29,6 +29,7 @@
 #include "gtkintl.h"
 #include "gtksizerequest.h"
 #include "gtkbuildable.h"
+#include "gtkrevealer.h"
 
 #include "glib.h"
 
@@ -46,14 +47,13 @@ struct _GtkHidingBoxPrivate
   gint inverted :1;
   GList *widgets_to_hide;
   GList *widgets_to_show;
+  GList *widgets_to_remove;
   GList *widgets_shown;
   HidingBoxAnimationPhase animation_phase;
   gint current_width;
   gint current_height;
   guint needs_update :1;
 };
-
-static void update_children_visibility (GtkHidingBox *self);
 
 static void
 gtk_hiding_box_buildable_add_child (GtkBuildable *buildable,
@@ -148,13 +148,14 @@ gtk_hiding_box_add (GtkContainer *container,
 
   revealer = gtk_revealer_new ();
   gtk_container_add (GTK_CONTAINER (revealer), widget);
+  gtk_revealer_set_reveal_child (GTK_REVEALER (revealer), FALSE);
   priv->children = g_list_append (priv->children, revealer);
   gtk_widget_set_parent (revealer, GTK_WIDGET (box));
 }
 
 static void
-gtk_hiding_box_remove (GtkContainer *container,
-                       GtkWidget    *widget)
+really_remove_child (GtkContainer *container,
+                     GtkWidget    *widget)
 {
   GList *child;
   GtkHidingBox *box = GTK_HIDING_BOX (container);
@@ -176,6 +177,20 @@ gtk_hiding_box_remove (GtkContainer *container,
           break;
         }
     }
+
+}
+
+static void
+gtk_hiding_box_remove (GtkContainer *container,
+                       GtkWidget    *widget)
+{
+  GList *child;
+  GtkHidingBox *box = GTK_HIDING_BOX (container);
+  GtkHidingBoxPrivate *priv = gtk_hiding_box_get_instance_private (box);
+
+  priv->widgets_to_remove = g_list_append (priv->widgets_to_remove, gtk_widget_get_parent (widget));
+  priv->needs_update = TRUE;
+  gtk_widget_queue_resize (GTK_WIDGET (container));
 }
 
 static void
@@ -230,6 +245,8 @@ update_children_visibility (GtkHidingBox     *box,
 
   g_list_free (priv->widgets_to_show);
   priv->widgets_to_show = NULL;
+  g_list_free (priv->widgets_to_hide);
+  priv->widgets_to_hide = NULL;
 
   *n_visible_children_expanding = 0;
   *children_size = -priv->spacing;
@@ -244,8 +261,7 @@ update_children_visibility (GtkHidingBox     *box,
       child_widget = GTK_WIDGET (child->data);
       if (!gtk_widget_get_visible (child_widget) || !allocate_more_children)
         {
-          if (update)
-            priv->widgets_to_show = g_list_append (priv->widgets_to_show, child_widget);
+          priv->widgets_to_hide = g_list_append (priv->widgets_to_hide, child_widget);
           continue;
         }
 
@@ -271,12 +287,14 @@ update_children_visibility (GtkHidingBox     *box,
       if (*children_size > allocation->width)
         {
           allocate_more_children = FALSE;
+          priv->widgets_to_hide = g_list_append (priv->widgets_to_hide, child_widget);
           continue;
         }
 
       if (gtk_widget_get_hexpand (child_widget))
         (n_visible_children_expanding)++;
       (n_visible_children)++;
+      priv->widgets_to_show = g_list_append (priv->widgets_to_show, child_widget);
     }
 
   for (i = 0; i < n_visible_children; i++)
@@ -311,6 +329,13 @@ needs_update (GtkHidingBox  *box,
   gboolean needs_update = FALSE;
   gboolean allocate_more_children = TRUE;
   gint children_size = -priv->spacing;
+
+  if (priv->needs_update)
+    return TRUE;
+
+  if (allocation->width != priv->current_width ||
+      allocation->height != priv->current_height)
+    return TRUE;
 
   children = g_list_copy (priv->children);
   sizes_temp = g_newa (GtkRequestedSize, g_list_length (priv->children));
@@ -375,6 +400,29 @@ needs_update (GtkHidingBox  *box,
 }
 
 static void
+idle_update_revealers (GtkHidingBox *box)
+{
+  GtkHidingBoxPrivate *priv = gtk_hiding_box_get_instance_private (box);
+  GList *children;
+  GList *l;
+
+  for (l = priv->widgets_to_show; l != NULL; l = l->next)
+    {
+      gtk_revealer_set_reveal_child (GTK_REVEALER (l->data), TRUE);
+    }
+
+  for (l = priv->widgets_to_hide; l != NULL; l = l->next)
+    {
+      gtk_revealer_set_reveal_child (GTK_REVEALER (l->data), FALSE);
+    }
+
+  for (l = priv->widgets_to_remove; l != NULL; l = l->next)
+    {
+      gtk_revealer_set_reveal_child (GTK_REVEALER (l->data), FALSE);
+    }
+}
+
+static void
 gtk_hiding_box_size_allocate (GtkWidget     *widget,
                               GtkAllocation *allocation)
 {
@@ -396,22 +444,28 @@ gtk_hiding_box_size_allocate (GtkWidget     *widget,
   gtk_widget_set_allocation (widget, allocation);
   sizes = g_newa (GtkRequestedSize, g_list_length (priv->children));
 
-  if (allocation->width != priv->current_width ||
-      allocation->height != current_height)
+  /*
+  if (needs_update (box, allocation))
     {
       clear_animation_state (box);
-    }
+      g_list_free (priv->widgets_shown);
+      priv->widgets_shown = NULL;
 
-  if (priv->needs_update)
-    {
       update_children_visibility (box, allocation, sizes, TRUE, &children_size,
                                   &n_visible_children_expanding);
+      if (priv->animation_phase != ANIMATION_PHASE_NONE)
+        {
+          priv->animation_phase = ANIMATION_PHASE_NONE;
+        }
     }
   else
+    */
     {
 
       update_children_visibility (box, allocation, sizes, FALSE, &children_size,
                                   &n_visible_children_expanding);
+
+      idle_update_revealers (box);
     }
 
 
@@ -434,9 +488,14 @@ gtk_hiding_box_size_allocate (GtkWidget     *widget,
     {
 
       child_widget = GTK_WIDGET (child->data);
-      if (!gtk_widget_get_child_visible (child_widget))
-        continue;
+      if (!gtk_revealer_get_reveal_child (GTK_REVEALER (child_widget)) &&
+          !gtk_revealer_get_child_revealed (GTK_REVEALER (child_widget)))
+        {
+          gtk_widget_set_child_visible (child_widget, FALSE);
+          continue;
+        }
 
+      gtk_widget_set_child_visible (child_widget, TRUE);
       child_allocation.x = x;
       child_allocation.y = allocation->y;
       if (gtk_widget_get_hexpand (child_widget))
@@ -543,6 +602,7 @@ gtk_hiding_box_init (GtkHidingBox *box)
   priv->inverted = FALSE;
   priv->widgets_to_hide = NULL;
   priv->widgets_to_show = NULL;
+  priv->widgets_to_remove = NULL;
   priv->widgets_shown = NULL;
   priv->animation_phase = ANIMATION_PHASE_NONE;
   priv->current_width = 0;
