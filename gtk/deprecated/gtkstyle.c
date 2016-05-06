@@ -509,8 +509,6 @@ gtk_style_class_init (GtkStyleClass *klass)
 				   NULL, NULL,
 				   _gtk_marshal_VOID__VOID,
 				   G_TYPE_NONE, 0);
-
-  quark_default_style = g_quark_from_static_string ("gtk-legacy-default-style");
 }
 
 static void
@@ -4018,6 +4016,9 @@ static GtkStyle *
 gtk_widget_get_default_style_for_screen (GdkScreen *screen)
 {
   GtkStyle *default_style;
+
+  if G_UNLIKELY (quark_default_style == 0)
+    quark_default_style = g_quark_from_static_string ("gtk-legacy-default-style");
 
   default_style = g_object_get_qdata (G_OBJECT (screen), quark_default_style);
   if (default_style == NULL)
