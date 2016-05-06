@@ -42,6 +42,27 @@ typedef struct {
   gint indent;
 } MyParserData;
 
+static void
+canonicalize_key (gchar *key)
+{
+  gchar *p;
+
+  for (p = key; *p != 0; p++)
+    {
+      gchar c = *p;
+
+      /* We may meet something like AtkObject::accessible-name */
+      if (c == ':' && ((p > key && p[-1] == ':') || p[1] == ':'))
+        continue;
+
+      if (c != '-' &&
+          (c < '0' || c > '9') &&
+          (c < 'A' || c > 'Z') &&
+          (c < 'a' || c > 'z'))
+        *p = '-';
+    }
+}
+
 static GParamSpec *
 get_property_pspec (MyParserData *data,
                     const gchar  *class_name,
@@ -58,7 +79,7 @@ get_property_pspec (MyParserData *data,
 
   class = g_type_class_ref (type);
   canonical_name = g_strdup (property_name);
-  g_strdelimit (canonical_name, "_", '-');
+  canonicalize_key (canonical_name);
   if (data->packing)
     pspec = gtk_container_class_find_child_property (class, canonical_name);
   else if (data->cell_packing)
@@ -299,6 +320,10 @@ maybe_emit_property (MyParserData *data)
         continue;
 
       escaped = g_markup_escape_text (data->attribute_values[i], -1);
+
+      if (strcmp (data->attribute_names[i], "name") == 0)
+        canonicalize_key (escaped);
+
       g_printf (" %s=\"%s\"", data->attribute_names[i], escaped);
       g_free (escaped);
     }
