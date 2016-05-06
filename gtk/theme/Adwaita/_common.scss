@@ -420,10 +420,6 @@ entry {
   }
 }
 
-treeview acceleditor > label {
-    background-color: $selected_bg_color;
-}
-
 treeview entry {
   &:focus {
     &:dir(rtl), &:dir(ltr) { // specificity bump hack
@@ -1814,6 +1810,8 @@ treeview.view {
       transition: none;
     }
   }
+
+  acceleditor > label { background-color: $selected_bg_color; } // see tests/testaccel to test
 }
 
 %column_header_button {
