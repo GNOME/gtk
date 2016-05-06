@@ -824,12 +824,7 @@ gtk_tooltip_run_requery (GtkWidget  **widget,
       has_tooltip = gtk_widget_get_has_tooltip (*widget);
 
       if (has_tooltip)
-	g_signal_emit_by_name (*widget,
-			       "query-tooltip",
-			       *x, *y,
-			       tooltip->keyboard_mode_enabled,
-			       tooltip,
-			       &return_value);
+        return_value = gtk_widget_query_tooltip (widget, *x, *y, tooltip->keyboard_mode_enabled, tooltip);
 
       if (!return_value)
         {

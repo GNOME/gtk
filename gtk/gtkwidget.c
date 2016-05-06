@@ -8093,6 +8093,25 @@ gtk_widget_real_query_tooltip (GtkWidget  *widget,
   return FALSE;
 }
 
+gboolean
+gtk_widget_query_tooltip (GtkWidget  *widget,
+                          gint        x,
+                          gint        y,
+                          gboolean    keyboard_mode,
+                          GtkTooltip *tooltip)
+{
+  gboolean retval = FALSE;
+
+  g_signal_emit (widget,
+                 widget_signals[QUERY_TOOLTIP],
+                 x, y,
+                 keyboard_mode,
+                 tooltip,
+                 &retval);
+
+  return retval;
+}
+
 static void
 gtk_widget_real_state_flags_changed (GtkWidget     *widget,
                                      GtkStateFlags  old_state)

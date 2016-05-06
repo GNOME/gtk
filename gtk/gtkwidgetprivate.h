@@ -297,6 +297,12 @@ gboolean          gtk_widget_has_size_request              (GtkWidget *widget);
 
 void              gtk_widget_reset_controllers             (GtkWidget *widget);
 
+gboolean          gtk_widget_query_tooltip                 (GtkWidget  *widget,
+                                                            gint        x,
+                                                            gint        y,
+                                                            gboolean    keyboard_mode,
+                                                            GtkTooltip *tooltip);
+
 /* inline getters */
 
 static inline gboolean
