@@ -148,7 +148,16 @@ static void       gtk_tooltip_display_closed       (GdkDisplay      *display,
 static void       gtk_tooltip_set_last_window      (GtkTooltip      *tooltip,
 						    GdkWindow       *window);
 
-static GQuark quark_current_tooltip;
+static inline GQuark tooltip_quark (void)
+{
+  static GQuark quark;
+
+  if G_UNLIKELY (quark == 0)
+    quark = g_quark_from_static_string ("gdk-display-current-tooltip");
+  return quark;
+}
+
+#define quark_current_tooltip tooltip_quark()
 
 G_DEFINE_TYPE (GtkTooltip, gtk_tooltip, G_TYPE_OBJECT);
 
@@ -160,8 +169,6 @@ gtk_tooltip_class_init (GtkTooltipClass *klass)
   object_class = G_OBJECT_CLASS (klass);
 
   object_class->dispose = gtk_tooltip_dispose;
-
-  quark_current_tooltip = g_quark_from_static_string ("gdk-display-current-tooltip");
 }
 
 static void
