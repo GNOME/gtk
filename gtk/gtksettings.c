@@ -1912,6 +1912,7 @@ gtk_settings_create_for_display (GdkDisplay *display)
   settings_update_cursor_theme (settings);
   settings_update_resolution (settings);
   settings_update_font_options (settings);
+  settings_update_font_values (settings);
 
   return settings;
 }
