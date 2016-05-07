@@ -8104,6 +8104,7 @@ gtk_widget_query_tooltip (GtkWidget  *widget,
 
   g_signal_emit (widget,
                  widget_signals[QUERY_TOOLTIP],
+                 0,
                  x, y,
                  keyboard_mode,
                  tooltip,
