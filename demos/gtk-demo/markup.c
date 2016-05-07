@@ -28,7 +28,8 @@ source_toggled (GtkToggleButton *button)
       markup = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
 
       buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
-      gtk_text_buffer_get_start_iter (buffer, &start);
+      gtk_text_buffer_get_bounds (buffer, &start, &end);
+      gtk_text_buffer_delete (buffer, &start, &end);
       gtk_text_buffer_insert_markup (buffer, &start, markup, -1);
       g_free (markup);
 
