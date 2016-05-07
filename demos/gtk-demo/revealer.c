@@ -12,10 +12,13 @@ static guint timeout = 0;
 static void
 change_direction (GtkRevealer *revealer)
 {
-  gboolean revealed;
+  if (gtk_widget_get_mapped (GTK_WIDGET (revealer)))
+    {
+      gboolean revealed;
 
-  revealed = gtk_revealer_get_child_revealed (revealer);
-  gtk_revealer_set_reveal_child (revealer, !revealed);
+      revealed = gtk_revealer_get_child_revealed (revealer);
+      gtk_revealer_set_reveal_child (revealer, !revealed);
+    }
 }
 
 static gboolean
