@@ -191,7 +191,7 @@ GdkMonitor * gdk_display_get_monitor_at_point  (GdkDisplay *display,
                                                 int         x,
                                                 int         y);
 GDK_AVAILABLE_IN_3_22
-GdkMonitor * gdk_display_get_monitor_at_window (GdkDisplay *dsplay,
+GdkMonitor * gdk_display_get_monitor_at_window (GdkDisplay *display,
                                                 GdkWindow  *window);
 
 
