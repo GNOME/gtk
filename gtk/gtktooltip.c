@@ -36,6 +36,7 @@
 #include "gtkstylecontext.h"
 #include "gtktooltipwindowprivate.h"
 #include "gtkwindowprivate.h"
+#include "gtkwidgetprivate.h"
 #include "gtkaccessible.h"
 
 #ifdef GDK_WINDOWING_WAYLAND
