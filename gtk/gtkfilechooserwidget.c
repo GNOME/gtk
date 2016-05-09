@@ -5667,6 +5667,9 @@ gtk_file_chooser_widget_select_file (GtkFileChooser  *chooser,
       files.data = (gpointer) file;
       files.next = NULL;
 
+      /* Prevent the file chooser from loading a different folder when it is mapped */
+      priv->reload_state = RELOAD_HAS_FOLDER;
+
       result = show_and_select_files (impl, &files);
       g_object_unref (parent_file);
       return result;
