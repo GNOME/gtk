@@ -45,23 +45,18 @@ gtk_css_image_builtin_draw_check (GtkCssImage *image,
                                   gboolean     inconsistent)
 {
   GtkCssImageBuiltin *builtin = GTK_CSS_IMAGE_BUILTIN (image);
-  gint x, y, exterior_size, interior_size, thickness, pad;
+  gint x, y, exterior_size, interior_size, pad;
 
   exterior_size = MIN (width, height);
 
   if (exterior_size % 2 == 0) /* Ensure odd */
     exterior_size -= 1;
 
-  /* FIXME: thickness */
-  thickness = 1;
-  pad = thickness + MAX (1, (exterior_size - 2 * thickness) / 9);
+  pad = 1 + MAX (1, (exterior_size - 2) / 9);
   interior_size = MAX (1, exterior_size - 2 * pad);
 
   if (interior_size < 7)
-    {
-      interior_size = 7;
-      pad = MAX (0, (exterior_size - interior_size) / 2);
-    }
+    pad = MAX (0, (exterior_size - interior_size) / 2);
 
   x = - (1 + exterior_size - (gint) width) / 2;
   y = - (1 + exterior_size - (gint) height) / 2;
@@ -126,7 +121,7 @@ gtk_css_image_builtin_draw_option (GtkCssImage *image,
                                    gboolean     inconsistent)
 {
   GtkCssImageBuiltin *builtin = GTK_CSS_IMAGE_BUILTIN (image);
-  gint x, y, exterior_size, interior_size, thickness, pad;
+  gint x, y, exterior_size, interior_size, pad;
 
   exterior_size = MIN (width, height);
 
@@ -138,21 +133,15 @@ gtk_css_image_builtin_draw_option (GtkCssImage *image,
 
   gdk_cairo_set_source_rgba (cr, &builtin->fg_color);
 
-  /* FIXME: thickness */
-  thickness = 1;
+  pad = 1 + MAX (1, 2 * (exterior_size - 2) / 9);
+  interior_size = MAX (1, exterior_size - 2 * pad);
+
+  if (interior_size < 7)
+    pad = MAX (0, (exterior_size - interior_size) / 2);
 
   if (inconsistent)
     {
       gint line_thickness;
-
-      pad = thickness + MAX (1, (exterior_size - 2 * thickness) / 9);
-      interior_size = MAX (1, exterior_size - 2 * pad);
-
-      if (interior_size < 7)
-        {
-          interior_size = 7;
-          pad = MAX (0, (exterior_size - interior_size) / 2);
-        }
 
       line_thickness = MAX (1, (3 + interior_size * 2) / 7);
 
@@ -163,17 +152,8 @@ gtk_css_image_builtin_draw_option (GtkCssImage *image,
                        line_thickness);
       cairo_fill (cr);
     }
-  if (checked)
+  else if (checked)
     {
-      pad = thickness + MAX (1, 2 * (exterior_size - 2 * thickness) / 9);
-      interior_size = MAX (1, exterior_size - 2 * pad);
-
-      if (interior_size < 5)
-        {
-          interior_size = 7;
-          pad = MAX (0, (exterior_size - interior_size) / 2);
-        }
-
       cairo_new_sub_path (cr);
       cairo_arc (cr,
                  x + pad + interior_size / 2.,
