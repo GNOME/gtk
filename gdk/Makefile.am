@@ -119,6 +119,7 @@ gdk_private_headers = 				\
 	gdkframeclockidle.h			\
 	gdkframeclockprivate.h			\
 	gdkglcontextprivate.h			\
+	gdkmonitorprivate.h			\
 	gdkscreenprivate.h			\
 	gdkseatprivate.h			\
 	gdkseatdefaultprivate.h			\
