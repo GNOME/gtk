@@ -69,13 +69,14 @@
  * movement occurs in 3-character steps), the following binding can be
  * used:
  *
- * |[
+ * |[ <!-- language="CSS" -->
  * @binding-set MoveCursor3
  * {
  *   bind "<Control>Right" { "move-cursor" (visual-positions, 3, 0) };
  *   bind "<Control>Left" { "move-cursor" (visual-positions, -3, 0) };
  * }
- * GtkEntry
+ *
+ * entry
  * {
  *   -gtk-key-bindings: MoveCursor3;
  * }
@@ -91,13 +92,14 @@
  * works as expected. The same mechanism can not be used to “unbind”
  * existing bindings, however.
  *
- * |[
+ * |[ <!-- language="CSS" -->
  * @binding-set MoveCursor3
  * {
  *   bind "<Control>Right" {  };
  *   bind "<Control>Left" {  };
  * }
- * GtkEntry
+ *
+ * entry
  * {
  *   -gtk-key-bindings: MoveCursor3;
  * }
@@ -114,13 +116,14 @@
  * from activating its default bindings, the “unbind” keyword can be used
  * like this:
  *
- * |[
+ * |[ <!-- language="CSS" -->
  * @binding-set MoveCursor3
  * {
  *   unbind "<Control>Right";
  *   unbind "<Control>Left";
  * }
- * GtkEntry
+ *
+ * entry
  * {
  *   -gtk-key-bindings: MoveCursor3;
  * }
