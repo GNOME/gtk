@@ -89,7 +89,7 @@ typedef struct fixedDISPLAYCONFIG_PATH_TARGET_INFO {
   DISPLAYCONFIG_SCALING                      scaling;
   DISPLAYCONFIG_RATIONAL                     refreshRate;
   DISPLAYCONFIG_SCANLINE_ORDERING            scanLineOrdering;
-  WINBOOL                                    targetAvailable;
+  BOOL                                       targetAvailable;
   UINT32                                     statusFlags;
 } fixedDISPLAYCONFIG_PATH_TARGET_INFO;
 
@@ -122,21 +122,21 @@ typedef struct fixedDISPLAYCONFIG_TARGET_DEVICE_NAME
  * to load them manually anyway (otherwise GTK apps won't even start
  * on Vista).
  */
-typedef LONG WINAPI
-(* funcGetDisplayConfigBufferSizes) (UINT32 flags,
-                                     UINT32* numPathArrayElements,
-                                     UINT32* numModeInfoArrayElements);
+typedef LONG
+(WINAPI *funcGetDisplayConfigBufferSizes) (UINT32 flags,
+                                           UINT32* numPathArrayElements,
+                                           UINT32* numModeInfoArrayElements);
 
-typedef LONG WINAPI
-(* funcQueryDisplayConfig) (UINT32 flags,
-                            UINT32* numPathArrayElements,
-                            fixedDISPLAYCONFIG_PATH_INFO* pathArray,
-                            UINT32* numModeInfoArrayElements,
-                            DISPLAYCONFIG_MODE_INFO* modeInfoArray,
-                            DISPLAYCONFIG_TOPOLOGY_ID* currentTopologyId);
+typedef LONG
+(WINAPI *funcQueryDisplayConfig) (UINT32 flags,
+                                  UINT32* numPathArrayElements,
+                                  fixedDISPLAYCONFIG_PATH_INFO* pathArray,
+                                  UINT32* numModeInfoArrayElements,
+                                  DISPLAYCONFIG_MODE_INFO* modeInfoArray,
+                                  DISPLAYCONFIG_TOPOLOGY_ID* currentTopologyId);
 
-typedef LONG WINAPI
-(* funcDisplayConfigGetDeviceInfo) (DISPLAYCONFIG_DEVICE_INFO_HEADER* requestPacket);
+typedef LONG
+(WINAPI *funcDisplayConfigGetDeviceInfo) (DISPLAYCONFIG_DEVICE_INFO_HEADER* requestPacket);
 
 #ifndef MONITORINFOF_PRIMARY
 #define MONITORINFOF_PRIMARY 1
