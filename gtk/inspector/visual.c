@@ -31,7 +31,7 @@
 #include "gtkwindow.h"
 #include "gtkcssproviderprivate.h"
 
-#include <math.h>
+#include "fallback-c89.c"
 
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"

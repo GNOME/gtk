@@ -50,6 +50,11 @@
 /* Define to 1 if you have the <dlfcn.h> header file. */
 /* #undef HAVE_DLFCN_H */
 
+/* Define to 1 if you have the `exp2' function. */
+#if !defined (_MSC_VER) || (_MSC_VER >= 1800)
+#define HAVE_EXP2 1
+#endif
+
 /* Define to 1 if you have the `flockfile' function. */
 #undef HAVE_FLOCKFILE
 
@@ -104,6 +109,11 @@
 
 /* Define to 1 if you have the `localtime_r' function. */
 /* #undef HAVE_LOCALTIME_R */
+
+/* Define to 1 if you have the `log2' function. */
+#if !defined (_MSC_VER) || (_MSC_VER >= 1800)
+#define HAVE_LOG2 1
+#endif
 
 /* Define to 1 if you have the `lstat' function. */
 /* #undef HAVE_LSTAT */

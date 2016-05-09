@@ -897,7 +897,7 @@ AC_TYPE_UID_T
 
 # Check for round(), rint(), isnan(), isinf() and nearbyint()
 AC_CHECK_LIB(m,round,,)
-AC_CHECK_FUNCS(round rint nearbyint sincos)
+AC_CHECK_FUNCS(round rint nearbyint sincos exp2 log2)
 AC_CHECK_DECLS([isnan, isinf], [], [], [[#include <math.h>]])
 
 # Checks for gdkspawn

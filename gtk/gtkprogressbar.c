@@ -25,7 +25,6 @@
 #include "config.h"
 
 #include <string.h>
-#include <math.h>
 
 #include "gtkprogressbar.h"
 #include "gtkorientableprivate.h"
@@ -41,6 +40,8 @@
 #include "gtkprogresstrackerprivate.h"
 
 #include "a11y/gtkprogressbaraccessible.h"
+
+#include "fallback-c89.c"
 
 /**
  * SECTION:gtkprogressbar

@@ -77,3 +77,30 @@ isinf (double x)
   return (!_finite (x) && !_isnan (x));
 }
 #endif
+
+#ifndef INFINITY
+/* define INFINITY for compilers that lack support for it */
+# ifdef HUGE_VALF
+#  define INFINITY HUGE_VALF
+# else
+#  define INFINITY (float)HUGE_VAL
+# endif
+#endif
+
+#ifndef HAVE_LOG2
+/* Use a simple implementation for log2() for compilers that lack it */
+static inline double
+log2 (double x)
+{
+  return log (x) / log (2.0);
+}
+#endif
+
+#ifndef HAVE_EXP2
+/* Use a simple implementation for exp2() for compilers that lack it */
+static inline double
+exp2 (double x)
+{
+  return pow (2.0, x);
+}
+#endif
