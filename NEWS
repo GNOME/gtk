@@ -1,3 +1,52 @@
+Overview of Changes in GTK+ 3.20.4
+==================================
+
+* Bugs fixed:
+ 573380 gtk_tree_model_iter_parent() fails if the same iterator is used for...
+ 620065 Several problems related to recent files
+ 693077 GtkRecentManager doesn't send "changed" when file is deleted
+ 749405 GtkMenuSectionBox doesn't remove submenus when parent item is removed
+ 761651 [Wayland] glade previewer is resizing windows until it crashes gnom...
+ 762756 keyboard focus problem on dismiss of menus under wayland
+ 763768 Wrong margin used for the sidebar separator
+ 764395 nautilus crashed on double clicking 'other locations'
+ 764424 `Super` keybindings trigger without Super, on Wayland
+ 764585 Fix "format not a string literal" errors
+ 764825 [WAYLAND] Fn key resets scrolling
+ 764846 Code improvements in GtkApplication
+ 765038 Adwaita & decorations
+ 765065 Wayland: Hover state stuck after mouse leaving the toplevel
+ 765066 GtkColorChooser looks like it can select multiple colors
+ 765122 Duplicate/missing string in gtkprintbackendcups
+ 765213 info bars nearly unreadable in backdrop state because of gray font ...
+ 765238 gtktexthandle should avoid connecting to GtkWidget::draw
+ 765261 listbox: Page up/Down don't do anything with large rows
+ 765270 wayland: Leave existing mods on map_virtual_modifiers
+ 765284 debug: reduce runtime overhead in debug builds
+ 765471 CellRendererText shows edit entry in a wrong position for small cells
+ 765474 Wayland: Dialogs without transient parent crash the inspector
+ 765486 builtinicon: avoid calculating font-metrics in vast majority of cases
+ 765493 kineticscrolling: avoid stutter at tail of kinetic deceleration
+ 765496 Clean up gtklabel.c a bit
+ 765565 Wayland: Inspector GtkLabel drag'n'drop crashes client
+ 765567 wayland: avoid jitter in keyboard repeat
+ 765592 frametimings: reuse previous frame timing in common case
+ 765640 pixelcache: reuse existing timeout source when possible
+ 765644 Widget sizing problems with GtkProgressBar
+ 765742 GtkRedioButton and GtkCheckButton doesn't aligned right to left lan...
+ 765790 W32: configure does not tell which cairo version to use
+ 765907 [Wayland] Reversed scrolling GDK_SCROLL_UP/GDK_SCROLL_DOWN in Wayland
+ 765922 GtkScale labels extend past edge of widget and overlap neighboring ...
+ 765981 fts warning from tracker when searching for files with "-" in name
+ 766166 key bindings in gtk.css are ignored
+
+* Translation uypdates:
+ Brazilian Portuguese
+ Latvian
+ Polish
+ Traditional Chinese
+
+
 Overview of Changes in GTK+ 3.20.3
 ==================================
 
@@ -19,6 +68,7 @@ Overview of Changes in GTK+ 3.20.3
  Bulgarian
  Esperanto
  Greek
+ Norwegian bokmål
  Persian
 
 
