@@ -132,13 +132,17 @@ copy ..\..\..\gtk\org.gtk.Settings.FileChooser.gschema.xml $(CopyDir)\share\glib
 copy ..\..\..\gtk\org.gtk.Settings.ColorChooser.gschema.xml $(CopyDir)\share\glib-2.0\schemas&#x0D;&#x0A;
 copy ..\..\..\gtk\org.gtk.Settings.Debug.gschema.xml $(CopyDir)\share\glib-2.0\schemas&#x0D;&#x0A;
 copy ..\..\..\demos\gtk-demo\org.gtk.Demo.gschema.xml $(CopyDir)\share\glib-2.0\schemas&#x0D;&#x0A;
-
+		      "
+	/>
+	<UserMacro
+		Name="GtkPostInstall"
+		Value="
 echo &quot;Compiling gsettings XML Files...&quot;&#x0D;&#x0A;
 $(GlibEtcInstallRoot)\bin\glib-compile-schemas.exe $(CopyDir)\share\glib-2.0\schemas&#x0D;&#x0A;
 
 echo &quot;Generating icon cache...&quot;&#x0D;&#x0A;
 $(CopyDir)\bin\gtk-update-icon-cache.exe --ignore-theme-index --force &quot;$(CopyDir)\share\icons\hicolor&quot;
-"
+		      "
 	/>
 	<UserMacro
 		Name="GtkDoInstallBroadwayHeaders"
