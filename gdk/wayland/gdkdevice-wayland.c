@@ -1083,7 +1083,7 @@ create_scroll_event (GdkWaylandSeat *seat,
   event->scroll.state = device_get_modifiers (seat->master_pointer);
   gdk_event_set_screen (event, display->screen);
 
-  _gdk_event_set_pointer_emulated (event, emulated);
+  gdk_event_set_pointer_emulated (event, emulated);
 
   get_coordinates (seat->master_pointer,
                    &event->scroll.x,
@@ -1846,7 +1846,7 @@ deliver_key_event (GdkWaylandSeat *seat,
   event->key.state = device_get_modifiers (seat->master_pointer);
   event->key.group = 0;
   event->key.hardware_keycode = key;
-  _gdk_event_set_scancode (event, key);
+  gdk_event_set_scancode (event, key);
   event->key.keyval = sym;
   event->key.is_modifier = _gdk_wayland_keymap_key_is_modifier (keymap, key);
 
@@ -2042,7 +2042,7 @@ _create_touch_event (GdkWaylandSeat       *seat,
 
   if (touch->initial_touch)
     {
-      _gdk_event_set_pointer_emulated (event, TRUE);
+      gdk_event_set_pointer_emulated (event, TRUE);
       event->touch.emulating_pointer = TRUE;
     }
 

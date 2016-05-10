@@ -1134,7 +1134,7 @@ fill_key_event (GdkWindow    *window,
   event->key.time = get_time_from_ns_event (nsevent);
   event->key.state = get_keyboard_modifiers_from_ns_event (nsevent);
   event->key.hardware_keycode = [nsevent keyCode];
-  _gdk_event_set_scancode (event, [nsevent keyCode]);
+  gdk_event_set_scancode (event, [nsevent keyCode]);
   event->key.group = ([nsevent modifierFlags] & NSAlternateKeyMask) ? 1 : 0;
   event->key.keyval = GDK_KEY_VoidSymbol;
 
@@ -1634,7 +1634,7 @@ gdk_event_translate (GdkEvent *event,
                 GdkEvent *emulated_event;
 
                 emulated_event = gdk_event_new (GDK_SCROLL);
-                _gdk_event_set_pointer_emulated (emulated_event, TRUE);
+                gdk_event_set_pointer_emulated (emulated_event, TRUE);
                 fill_scroll_event (window, emulated_event, nsevent,
                                    x, y, x_root, y_root,
                                    dx, dy, direction);

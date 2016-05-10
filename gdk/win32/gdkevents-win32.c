@@ -2340,7 +2340,7 @@ gdk_event_translate (MSG  *msg,
       event->key.length = 0;
       event->key.hardware_keycode = msg->wParam;
       /* save original scancode */
-      _gdk_event_set_scancode (event, msg->lParam >> 16);
+      gdk_event_set_scancode (event, msg->lParam >> 16);
       gdk_event_set_device (event, device_manager_win32->core_keyboard);
       gdk_event_set_source_device (event, device_manager_win32->system_keyboard);
       gdk_event_set_seat (event, gdk_device_get_seat (device_manager_win32->core_keyboard));

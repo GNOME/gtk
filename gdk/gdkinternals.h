@@ -394,11 +394,11 @@ GdkEvent* _gdk_event_unqueue (GdkDisplay *display);
 void _gdk_event_filter_unref        (GdkWindow      *window,
 				     GdkEventFilter *filter);
 
-void     _gdk_event_set_pointer_emulated (GdkEvent *event,
-                                          gboolean  emulated);
+void     gdk_event_set_pointer_emulated (GdkEvent *event,
+                                         gboolean  emulated);
 
-void     _gdk_event_set_scancode         (GdkEvent *event,
-                                          guint16 scancode);
+void     gdk_event_set_scancode        (GdkEvent *event,
+                                        guint16 scancode);
 
 void     gdk_event_set_seat              (GdkEvent *event,
                                           GdkSeat  *seat);

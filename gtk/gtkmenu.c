@@ -105,8 +105,6 @@
 
 #include  <gobject/gvaluecollector.h>
 
-#include <gdk/gdkprivate.h> /* for _gdk_event_get_pointer_emulated() */
-
 #include "gtkaccellabel.h"
 #include "gtkaccelmap.h"
 #include "gtkadjustment.h"
@@ -3556,7 +3554,7 @@ gtk_menu_scroll (GtkWidget      *widget,
 {
   GtkMenu *menu = GTK_MENU (widget);
 
-  if (_gdk_event_get_pointer_emulated ((GdkEvent *) event))
+  if (gdk_event_get_pointer_emulated ((GdkEvent *) event))
     return GDK_EVENT_PROPAGATE;
 
   switch (event->direction)

@@ -1454,6 +1454,9 @@ void           gdk_event_set_device_tool (GdkEvent       *event,
 GDK_AVAILABLE_IN_3_22
 int            gdk_event_get_scancode    (GdkEvent *event);
 
+GDK_AVAILABLE_IN_3_22
+gboolean       gdk_event_get_pointer_emulated (GdkEvent *event);
+
 G_END_DECLS
 
 #endif /* __GDK_EVENTS_H__ */

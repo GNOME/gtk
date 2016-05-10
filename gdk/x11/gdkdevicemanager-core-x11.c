@@ -160,7 +160,7 @@ translate_key_event (GdkDisplay              *display,
   event->key.state = (GdkModifierType) xevent->xkey.state;
   event->key.group = gdk_x11_keymap_get_group_for_state (keymap, xevent->xkey.state);
   event->key.hardware_keycode = xevent->xkey.keycode;
-  _gdk_event_set_scancode (event, xevent->xkey.keycode);
+  gdk_event_set_scancode (event, xevent->xkey.keycode);
 
   event->key.keyval = GDK_KEY_VoidSymbol;
 

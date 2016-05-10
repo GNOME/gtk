@@ -1469,7 +1469,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         event->key.group = xev->group.effective;
 
         event->key.hardware_keycode = xev->detail;
-        _gdk_event_set_scancode (event, xev->detail);
+        gdk_event_set_scancode (event, xev->detail);
         event->key.is_modifier = gdk_x11_keymap_key_is_modifier (keymap, event->key.hardware_keycode);
 
         device = g_hash_table_lookup (device_manager->id_table,
@@ -1563,7 +1563,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
 
 #ifdef XINPUT_2_2
             if (xev->flags & XIPointerEmulated)
-              _gdk_event_set_pointer_emulated (event, TRUE);
+              gdk_event_set_pointer_emulated (event, TRUE);
 #endif
           }
         else
@@ -1609,7 +1609,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
 
 #ifdef XINPUT_2_2
         if (xev->flags & XIPointerEmulated)
-          _gdk_event_set_pointer_emulated (event, TRUE);
+          gdk_event_set_pointer_emulated (event, TRUE);
 #endif
 
         if (return_val == FALSE)
@@ -1700,7 +1700,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
 
 #ifdef XINPUT_2_2
         if (xev->flags & XIPointerEmulated)
-          _gdk_event_set_pointer_emulated (event, TRUE);
+          gdk_event_set_pointer_emulated (event, TRUE);
 #endif
 
         /* There doesn't seem to be motion hints in XI */
@@ -1780,7 +1780,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         if (xev->flags & XITouchEmulatingPointer)
           {
             event->touch.emulating_pointer = TRUE;
-            _gdk_event_set_pointer_emulated (event, TRUE);
+            gdk_event_set_pointer_emulated (event, TRUE);
           }
 
         if (return_val == FALSE)
@@ -1832,7 +1832,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         if (xev->flags & XITouchEmulatingPointer)
           {
             event->touch.emulating_pointer = TRUE;
-            _gdk_event_set_pointer_emulated (event, TRUE);
+            gdk_event_set_pointer_emulated (event, TRUE);
           }
 
         event->touch.axes = translate_axes (event->touch.device,

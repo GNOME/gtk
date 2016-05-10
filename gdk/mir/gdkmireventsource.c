@@ -133,7 +133,7 @@ generate_key_event (GdkWindow *window, GdkEventType type, guint state, guint key
   event->key.state = state;
   event->key.keyval = keyval;
   event->key.hardware_keycode = keycode + 8;
-  _gdk_event_set_scancode (event, keycode + 8);
+  gdk_event_set_scancode (event, keycode + 8);
   event->key.is_modifier = is_modifier;
   event->key.time = event_time;
   set_key_event_string (&event->key);
@@ -347,7 +347,7 @@ handle_touch_event (GdkWindow           *window,
       gdk_event->touch.x_root = mir_touch_event_axis_value (mir_touch_event, i, mir_touch_axis_x);
       gdk_event->touch.y_root = mir_touch_event_axis_value (mir_touch_event, i, mir_touch_axis_y);
       gdk_event->touch.emulating_pointer = TRUE;
-      _gdk_event_set_pointer_emulated (gdk_event, TRUE);
+      gdk_event_set_pointer_emulated (gdk_event, TRUE);
 
       send_event (window, get_pointer (window), gdk_event);
     }

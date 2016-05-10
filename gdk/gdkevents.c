@@ -595,8 +595,8 @@ gdk_event_is_allocated (const GdkEvent *event)
 }
 
 void
-_gdk_event_set_pointer_emulated (GdkEvent *event,
-                                 gboolean  emulated)
+gdk_event_set_pointer_emulated (GdkEvent *event,
+                                gboolean  emulated)
 {
   if (gdk_event_is_allocated (event))
     {
@@ -610,7 +610,7 @@ _gdk_event_set_pointer_emulated (GdkEvent *event,
 }
 
 gboolean
-_gdk_event_get_pointer_emulated (GdkEvent *event)
+gdk_event_get_pointer_emulated (GdkEvent *event)
 {
   if (gdk_event_is_allocated (event))
     return (((GdkEventPrivate *) event)->flags & GDK_EVENT_POINTER_EMULATED) != 0;

@@ -8836,7 +8836,7 @@ proxy_pointer_event (GdkDisplay                 *display,
   if (pointer_info->need_touch_press_enter &&
       gdk_device_get_source (pointer_info->last_slave) != GDK_SOURCE_TOUCHSCREEN &&
       (source_event->type != GDK_TOUCH_UPDATE ||
-       _gdk_event_get_pointer_emulated (source_event)))
+       gdk_event_get_pointer_emulated (source_event)))
     {
       pointer_info->need_touch_press_enter = FALSE;
       need_synthetic_enter = TRUE;
@@ -8930,7 +8930,7 @@ proxy_pointer_event (GdkDisplay                 *display,
     }
 
   if ((source_event->type != GDK_TOUCH_UPDATE ||
-       _gdk_event_get_pointer_emulated (source_event)) &&
+       gdk_event_get_pointer_emulated (source_event)) &&
       pointer_info->window_under_pointer != pointer_window)
     {
       /* Either a toplevel crossing notify that ended up inside a child window,
@@ -8965,12 +8965,12 @@ proxy_pointer_event (GdkDisplay                 *display,
                                     source_event->type,
                                     state,
                                     &evmask,
-                                    _gdk_event_get_pointer_emulated (source_event),
+                                    gdk_event_get_pointer_emulated (source_event),
                                     serial);
 
       if (event_type == GDK_TOUCH_UPDATE)
         {
-          if (_gdk_event_get_pointer_emulated (source_event))
+          if (gdk_event_get_pointer_emulated (source_event))
             {
               /* Touch events emulating pointer events are transformed back
                * to pointer events if:
@@ -9138,7 +9138,7 @@ proxy_button_event (GdkEvent *source_event,
       !source_event->any.send_event &&
       (!pointer_grab ||
        (type == GDK_TOUCH_BEGIN && pointer_grab->implicit &&
-        !_gdk_event_get_pointer_emulated (source_event))))
+        !gdk_event_get_pointer_emulated (source_event))))
     {
       pointer_window =
 	_gdk_window_find_descendant_at (toplevel_window,
@@ -9153,7 +9153,7 @@ proxy_button_event (GdkEvent *source_event,
 	{
 	  if (w->event_mask & GDK_BUTTON_PRESS_MASK &&
               (type == GDK_BUTTON_PRESS ||
-               _gdk_event_get_pointer_emulated (source_event)))
+               gdk_event_get_pointer_emulated (source_event)))
 	    break;
 
           if (type == GDK_TOUCH_BEGIN &&
@@ -9175,7 +9175,7 @@ proxy_button_event (GdkEvent *source_event,
                                            serial, time_);
             }
           else if (type == GDK_BUTTON_PRESS ||
-                   _gdk_event_get_pointer_emulated (source_event))
+                   gdk_event_get_pointer_emulated (source_event))
             {
               _gdk_display_add_device_grab  (display,
                                              device,
@@ -9203,12 +9203,12 @@ proxy_button_event (GdkEvent *source_event,
                                 pointer_window,
                                 type, state,
                                 &evmask,
-                                _gdk_event_get_pointer_emulated (source_event),
+                                gdk_event_get_pointer_emulated (source_event),
                                 serial);
 
   if (type == GDK_TOUCH_BEGIN || type == GDK_TOUCH_END)
     {
-      if (_gdk_event_get_pointer_emulated (source_event))
+      if (gdk_event_get_pointer_emulated (source_event))
         {
           if ((evmask & GDK_TOUCH_MASK) == 0 ||
               !_gdk_display_has_touch_grab (display, device, sequence, serial))
@@ -9235,7 +9235,7 @@ proxy_button_event (GdkEvent *source_event,
 
   if ((type == GDK_BUTTON_PRESS ||
        (type == GDK_TOUCH_BEGIN &&
-        _gdk_event_get_pointer_emulated (source_event))) &&
+        gdk_event_get_pointer_emulated (source_event))) &&
       pointer_info->need_touch_press_enter)
     {
       GdkCrossingMode mode;
@@ -9263,7 +9263,7 @@ proxy_button_event (GdkEvent *source_event,
              source_event->scroll.direction == GDK_SCROLL_SMOOTH) ||
             ((evmask & GDK_SMOOTH_SCROLL_MASK) != 0 &&
              source_event->scroll.direction != GDK_SCROLL_SMOOTH &&
-             _gdk_event_get_pointer_emulated (source_event))))
+             gdk_event_get_pointer_emulated (source_event))))
     return FALSE;
 
   event = _gdk_make_event (event_win, type, source_event, FALSE);
@@ -9303,7 +9303,7 @@ proxy_button_event (GdkEvent *source_event,
         _gdk_event_button_generate (display, event);
       else if ((type == GDK_BUTTON_RELEASE ||
                 (type == GDK_TOUCH_END &&
-                 _gdk_event_get_pointer_emulated (source_event))) &&
+                 gdk_event_get_pointer_emulated (source_event))) &&
                pointer_window == pointer_info->window_under_pointer &&
                gdk_device_get_source (source_device) == GDK_SOURCE_TOUCHSCREEN)
         {
@@ -9340,7 +9340,7 @@ proxy_button_event (GdkEvent *source_event,
       gdk_event_set_source_device (event, source_device);
 
       if (((type == GDK_TOUCH_END || type == GDK_TOUCH_CANCEL) &&
-           _gdk_event_get_pointer_emulated (source_event)) &&
+           gdk_event_get_pointer_emulated (source_event)) &&
            pointer_window == pointer_info->window_under_pointer &&
            gdk_device_get_source (source_device) == GDK_SOURCE_TOUCHSCREEN)
         {
@@ -9674,7 +9674,7 @@ _gdk_windowing_got_event (GdkDisplay *display,
 
   if (pointer_info &&
       (!is_touch_type (event->type) ||
-       _gdk_event_get_pointer_emulated (event)))
+       gdk_event_get_pointer_emulated (event)))
     {
       guint old_state, old_button;
 
@@ -9722,7 +9722,7 @@ _gdk_windowing_got_event (GdkDisplay *display,
         }
 
       if (event->type == GDK_BUTTON_RELEASE ||
-          _gdk_event_get_pointer_emulated (event))
+          gdk_event_get_pointer_emulated (event))
         {
           button_release_grab =
             _gdk_display_has_device_grab (display, device, serial);
