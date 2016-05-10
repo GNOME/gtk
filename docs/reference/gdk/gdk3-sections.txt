@@ -883,6 +883,7 @@ gdk_events_get_distance
 gdk_event_triggers_context_menu
 gdk_event_get_seat
 gdk_event_get_scancode
+gdk_event_get_pointer_emulated
 
 <SUBSECTION>
 gdk_event_handler_set

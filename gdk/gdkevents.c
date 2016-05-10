@@ -609,6 +609,17 @@ gdk_event_set_pointer_emulated (GdkEvent *event,
     }
 }
 
+/**
+ * gdk_event_get_pointer_emulated:
+ * #event: a #GdkEvent
+ *
+ * Returns whether this event is an 'emulated' pointer event (typically
+ * from a touch event), as opposed to a real one.
+ *
+ * Returns: %TRUE if this event is emulated
+ *
+ * Since: 3.22
+ */
 gboolean
 gdk_event_get_pointer_emulated (GdkEvent *event)
 {
