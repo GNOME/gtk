@@ -5649,6 +5649,8 @@ gtk_widget_set_alloc_needed (GtkWidget *widget);
  * reposition its contents.
  *
  * An example user of this function is gtk_widget_set_halign().
+ *
+ * Since: 3.20
  */
 void
 gtk_widget_queue_allocate (GtkWidget *widget)
