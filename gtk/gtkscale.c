@@ -1910,8 +1910,23 @@ gtk_scale_get_layout (GtkScale *scale)
 
   if (!priv->layout)
     {
+      int min_layout_width;
+
       if (priv->draw_value)
-	priv->layout = gtk_widget_create_pango_layout (GTK_WIDGET (scale), NULL);
+        priv->layout = gtk_widget_create_pango_layout (GTK_WIDGET (scale), NULL);
+
+      gtk_css_gadget_get_preferred_size (priv->value_gadget,
+                                         GTK_ORIENTATION_HORIZONTAL, -1,
+                                         &min_layout_width, NULL,
+                                         NULL, NULL);
+      pango_layout_set_width (priv->layout, min_layout_width * PANGO_SCALE);
+
+      if (priv->value_pos == GTK_POS_LEFT)
+        pango_layout_set_alignment (priv->layout, PANGO_ALIGN_RIGHT);
+      else if (priv->value_pos == GTK_POS_RIGHT)
+        pango_layout_set_alignment (priv->layout, PANGO_ALIGN_LEFT);
+      else
+        pango_layout_set_alignment (priv->layout, PANGO_ALIGN_CENTER);
     }
 
   if (priv->draw_value)
