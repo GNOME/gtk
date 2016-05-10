@@ -5,9 +5,6 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros">
     <BinDir>$(SolutionDir)$(Configuration)\$(Platform)\bin</BinDir>
-    <InstalledDlls>$(BinDir)\$(GtkDllPrefix)gdk(GtkDllSuffix).dll;$(BinDir)\$(GtkDllPrefix)gtk(GtkDllSuffix).dll;$(BinDir)\$(GtkDllPrefix)gailutil(GtkDllSuffix).dll</InstalledDlls>
-    <InstalledBins>$(BinDir)\gtk3-demo.exe;$(BinDir)\gtk3-demo-application.exe;$(BinDir)\gtk3-icon-browser.exe;$(BinDir)\gtk-encode-symbolic-svg.exe</InstalledBins>
-    <InstalledBroadwayBins>$(BinDir)\broadwayd.exe</InstalledBroadwayBins>
     <GtkDoInstallBin>
 mkdir $(CopyDir)\bin
 mkdir $(CopyDir)\lib
@@ -126,18 +123,19 @@ copy ..\..\..\gtk\org.gtk.Settings.FileChooser.gschema.xml $(CopyDir)\share\glib
 copy ..\..\..\gtk\org.gtk.Settings.ColorChooser.gschema.xml $(CopyDir)\share\glib-2.0\schemas
 copy ..\..\..\gtk\org.gtk.Settings.Debug.gschema.xml $(CopyDir)\share\glib-2.0\schemas
 copy ..\..\..\demos\gtk-demo\org.gtk.Demo.gschema.xml $(CopyDir)\share\glib-2.0\schemas
-
-echo "Compiling gsettings XML Files..."
-$(GlibEtcInstallRoot)\bin\glib-compile-schemas.exe $(CopyDir)\share\glib-2.0\schemas
-
-echo "Generating icon cache......"
-$(CopyDir)\bin\gtk-update-icon-cache.exe --ignore-theme-index --force "$(CopyDir)\share\icons\hicolor"
     </GtkDoInstall>
     <GtkDoInstallBroadwayHeaders>
 copy ..\..\..\gdk\broadway\gdkbroadway.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
 mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gdk\broadway
 #include "gdk3-broadway.vs10.headers"
     </GtkDoInstallBroadwayHeaders>
+    <GtkPostInstall>
+echo "Compiling gsettings XML Files..."
+$(GlibEtcInstallRoot)\bin\glib-compile-schemas.exe $(CopyDir)\share\glib-2.0\schemas
+
+echo "Generating icon cache......"
+$(CopyDir)\bin\gtk-update-icon-cache.exe --ignore-theme-index --force "$(CopyDir)\share\icons\hicolor"
+    </GtkPostInstall>
   </PropertyGroup>
   <PropertyGroup>
     <_PropertySheetDisplayName>gtk3installsprops</_PropertySheetDisplayName>
@@ -145,15 +143,6 @@ mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gdk\broadway
   <ItemGroup>
     <BuildMacro Include="BinDir">
       <Value>$(BinDir)</Value>
-    </BuildMacro>
-    <BuildMacro Include="InstalledDlls">
-      <Value>$(InstalledDlls)</Value>
-    </BuildMacro>
-    <BuildMacro Include="InstalledBins">
-      <Value>$(InstalledBins)</Value>
-    </BuildMacro>
-    <BuildMacro Include="InstalledBroadwayBins">
-      <Value>$(InstalledBroadwayBins)</Value>
     </BuildMacro>
     <BuildMacro Include="GtkDoInstallBin">
       <Value>$(GtkDoInstallBin)</Value>
@@ -163,6 +152,9 @@ mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gdk\broadway
     </BuildMacro>
     <BuildMacro Include="GtkDoInstallBroadwayHeaders">
       <Value>$(GtkDoInstallBroadwayHeaders)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GtkPostInstall">
+      <Value>$(GtkPostInstall)</Value>
     </BuildMacro>
   </ItemGroup>
 </Project>
