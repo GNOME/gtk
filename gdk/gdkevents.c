@@ -2474,8 +2474,8 @@ gdk_event_set_device_tool (GdkEvent      *event,
 }
 
 void
-_gdk_event_set_scancode (GdkEvent *event,
-                         guint16 scancode)
+gdk_event_set_scancode (GdkEvent *event,
+                        guint16 scancode)
 {
   GdkEventPrivate *private = (GdkEventPrivate *) event;
 
