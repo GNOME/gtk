@@ -1625,6 +1625,12 @@ reset_icon_size (GtkWidget *iv)
   gtk_widget_queue_resize (iv);
 }
 
+static gchar *
+scale_format_value (GtkScale *scale, gdouble value)
+{
+  return g_strdup (" ");
+}
+
 static void
 activate (GApplication *app)
 {
@@ -1690,6 +1696,7 @@ activate (GApplication *app)
   gtk_builder_add_callback_symbol (builder, "increase_icon_size", (GCallback)increase_icon_size);
   gtk_builder_add_callback_symbol (builder, "decrease_icon_size", (GCallback)decrease_icon_size);
   gtk_builder_add_callback_symbol (builder, "reset_icon_size", (GCallback)reset_icon_size);
+  gtk_builder_add_callback_symbol (builder, "scale_format_value", (GCallback)scale_format_value);
 
   gtk_builder_connect_signals (builder, NULL);
 
