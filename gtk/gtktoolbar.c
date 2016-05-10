@@ -2789,7 +2789,9 @@ gtk_toolbar_insert (GtkToolbar  *toolbar,
 {
   g_return_if_fail (GTK_IS_TOOLBAR (toolbar));
   g_return_if_fail (GTK_IS_TOOL_ITEM (item));
-  
+
+  pos = MIN (pos, (int)g_list_length (toolbar->priv->content));
+
   if (pos >= 0)
     pos = logical_to_physical (toolbar, pos);
 
