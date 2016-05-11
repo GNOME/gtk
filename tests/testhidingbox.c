@@ -1,9 +1,26 @@
 #include "config.h"
 #include "glib.h"
 #include <gtk/gtk.h>
-#include <gtk/gtkhidingboxprivate.h>
+
+#define N_BUTTONS 10
 
 static GtkWidget *hiding_box;
+static char *lorem_ipsum = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+
+static char*
+get_lorem_ipsum ()
+{
+  static char **lorem_ipsum_split;
+  static int n_lorem_ipsum_words;
+
+  if (!lorem_ipsum_split)
+    {
+      lorem_ipsum_split = g_strsplit (lorem_ipsum, " ", -1);
+      n_lorem_ipsum_words = g_strv_length (lorem_ipsum_split);
+    }
+
+  return lorem_ipsum_split [g_random_int_range (0, n_lorem_ipsum_words)];
+}
 
 static void
 on_path_selected (GtkPathBar *path_bar,
@@ -17,6 +34,7 @@ static void
 on_button_clicked (GtkWidget *button,
                    gpointer   user_data)
 {
+  g_print ("button clicked\n");
   gtk_container_remove (GTK_CONTAINER (user_data), button);
 }
 
@@ -25,14 +43,46 @@ on_reset_button_clicked (GtkButton *reset_button)
 {
   GtkWidget *button;
 
-  gtk_container_foreach (GTK_CONTAINER (hiding_box), gtk_widget_destroy);
+  gtk_container_foreach (GTK_CONTAINER (hiding_box), (GtkCallback) gtk_widget_destroy, NULL);
 
-  button = gtk_button_new_with_label ("test1");
-  g_signal_connect (button, "clicked", on_button_clicked, hiding_box);
-  gtk_container_add (GTK_CONTAINER (hiding_box), );
-  gtk_container_add (GTK_CONTAINER (hiding_box), gtk_button_new_with_label ("test2"));
-  gtk_container_add (GTK_CONTAINER (hiding_box), gtk_button_new_with_label ("test3"));
-  gtk_container_add (GTK_CONTAINER (hiding_box), gtk_button_new_with_label ("test4"));
+  for (int i = 0; i < N_BUTTONS; i++)
+    {
+      button = gtk_button_new_with_label (get_lorem_ipsum ());
+      g_signal_connect (button, "clicked", (GCallback) on_button_clicked, hiding_box);
+      gtk_container_add (GTK_CONTAINER (hiding_box), button);
+    }
+
+  gtk_widget_show_all (hiding_box);
+}
+
+static void
+on_add_button (gint line)
+{
+  GtkWidget *button;
+
+  button = gtk_button_new_with_label (get_lorem_ipsum ());
+  gtk_widget_show (button);
+  g_signal_connect (button, "clicked", (GCallback) on_button_clicked, hiding_box);
+  gtk_container_add (GTK_CONTAINER (hiding_box), button);
+}
+
+static void
+on_remove_button (gint line)
+{
+  GList *children;
+  GList *last;
+
+  children = gtk_container_get_children (hiding_box);
+  last = g_list_last (children);
+  if (last)
+    gtk_container_remove (hiding_box, GTK_WIDGET (last->data));
+}
+
+static void
+on_invert_button (gint line)
+{
+  gtk_hiding_box_set_inverted (GTK_HIDING_BOX (hiding_box),
+                               !gtk_hiding_box_get_inverted (GTK_HIDING_BOX (hiding_box)));
 }
 
 int
@@ -41,6 +91,9 @@ main (int argc, char *argv[])
   GtkWidget *window;
   GtkWidget *grid;
   GtkWidget *reset_button;
+  GtkWidget *add_button;
+  GtkWidget *remove_button;
+  GtkWidget *invert_button;
   GtkWidget *label;
   GFile *file = NULL;
   GIcon *icon;
@@ -63,8 +116,25 @@ main (int argc, char *argv[])
   gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 2, 1);
 
   /* ----------------------------------------------------------------------- */
-  hiding_box = gtk_hiding_box ();
+  hiding_box = gtk_hiding_box_new ();
   gtk_grid_attach (GTK_GRID (grid), hiding_box, 0, 1, 1, 1);
+  gtk_widget_show_all (hiding_box);
+  /* Add/Remove buttons */
+  add_button = gtk_button_new_with_label ("Add");
+  gtk_widget_set_halign (add_button, GTK_ALIGN_END);
+  remove_button = gtk_button_new_with_label ("Remove");
+  gtk_widget_set_halign (remove_button, GTK_ALIGN_END);
+  gtk_grid_attach_next_to (GTK_GRID (grid), add_button, hiding_box, GTK_POS_RIGHT, 1, 1);
+  g_signal_connect_swapped (add_button, "clicked", (GCallback) on_add_button, GINT_TO_POINTER (0));
+  gtk_grid_attach_next_to (GTK_GRID (grid), remove_button, add_button, GTK_POS_RIGHT, 1, 1);
+  g_signal_connect_swapped (remove_button, "clicked", (GCallback) on_remove_button, GINT_TO_POINTER (0));
+  gtk_widget_show (add_button);
+  gtk_widget_show (remove_button);
+  /* Inverted button */
+  invert_button = gtk_button_new_with_label ("Invert");
+  gtk_widget_set_halign (invert_button, GTK_ALIGN_END);
+  gtk_grid_attach_next_to (GTK_GRID (grid), invert_button, remove_button, GTK_POS_RIGHT, 1, 1);
+  g_signal_connect_swapped (invert_button, "clicked", (GCallback) on_invert_button, GINT_TO_POINTER (0));
 
   /* Reset button */
   reset_button = gtk_button_new_with_label ("Reset State");

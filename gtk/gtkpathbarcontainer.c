@@ -25,7 +25,7 @@
 #include "gtkwidget.h"
 #include "gtkmenubutton.h"
 #include "gtksizerequest.h"
-#include "gtkhidingboxprivate.h"
+#include "gtkhidingbox.h"
 #include "gtkwidgetprivate.h"
 #include "glib-object.h"
 

@@ -86,6 +86,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testgtk				\
 	testheaderbar			\
 	testheightforwidth		\
+	testhidingbox			\
 	testiconview			\
 	testiconview-keynav		\
 	testicontheme			\
@@ -293,6 +294,7 @@ testpixbuf_save_DEPENDENCIES = $(TEST_DEPS)
 testpixbuf_color_DEPENDENCIES = $(TEST_DEPS)
 testpixbuf_scale_DEPENDENCIES = $(TEST_DEPS)
 testpathbar_DEPENDENCIES = $(TEST_DEPS)
+testhidingbox_DEPENDENCIES = $(TEST_DEPS)
 testgmenu_DEPENDENCIES = $(TEST_DEPS)
 testlogout_DEPENDENCIES = $(TEST_DEPS)
 teststack_DEPENDENCIES = $(TEST_DEPS)
@@ -395,6 +397,9 @@ testmenubutton_SOURCES =	\
 
 testpathbar_SOURCES =    	\
 	testpathbar.c
+
+testhidingbox_SOURCES =    	\
+	testhidingbox.c
 
 testprint_SOURCES =    	\
 	testprint.c		\

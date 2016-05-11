@@ -121,6 +121,7 @@
 #include <gtk/gtkglarea.h>
 #include <gtk/gtkgrid.h>
 #include <gtk/gtkheaderbar.h>
+#include <gtk/gtkhidingbox.h>
 #include <gtk/gtkicontheme.h>
 #include <gtk/gtkiconview.h>
 #include <gtk/gtkimage.h>
