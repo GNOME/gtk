@@ -2878,10 +2878,14 @@ gdk_x11_display_get_default_seat (GdkDisplay *display)
 {
   GList *seats, *l;
   int device_id;
+  gboolean result = FALSE;
 
   seats = gdk_display_list_seats (display);
-  XIGetClientPointer (GDK_DISPLAY_XDISPLAY (display),
-                      None, &device_id);
+
+  gdk_x11_display_error_trap_push (display);
+  result = XIGetClientPointer (GDK_DISPLAY_XDISPLAY (display),
+                               None, &device_id);
+  gdk_x11_display_error_trap_pop_ignored (display);
 
   for (l = seats; l; l = l->next)
     {
@@ -2889,7 +2893,7 @@ gdk_x11_display_get_default_seat (GdkDisplay *display)
 
       pointer = gdk_seat_get_pointer (l->data);
 
-      if (gdk_x11_device_get_id (pointer) == device_id)
+      if (gdk_x11_device_get_id (pointer) == device_id || !result)
         {
           GdkSeat *seat = l->data;
           g_list_free (seats);
