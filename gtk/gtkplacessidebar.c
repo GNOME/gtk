@@ -453,7 +453,6 @@ add_place (GtkPlacesSidebar            *sidebar,
 {
   gboolean show_eject, show_unmount;
   gboolean show_eject_button;
-  gchar *tooltip_escaped;
   GtkWidget *row;
   GtkWidget *eject_button;
   GtkWidget *event_box;
@@ -466,12 +465,11 @@ add_place (GtkPlacesSidebar            *sidebar,
 
   show_eject_button = (show_unmount || show_eject);
 
-  tooltip_escaped = g_markup_escape_text (tooltip, -1);
   row = g_object_new (GTK_TYPE_SIDEBAR_ROW,
                       "sidebar", sidebar,
                       "icon", icon,
                       "label", name,
-                      "tooltip", tooltip_escaped,
+                      "tooltip", tooltip,
                       "ejectable", show_eject_button,
                       "order-index", index,
                       "section-type", section_type,
@@ -482,7 +480,6 @@ add_place (GtkPlacesSidebar            *sidebar,
                       "mount", mount,
                       NULL);
 
-  g_free (tooltip_escaped);
   eject_button = gtk_sidebar_row_get_eject_button (GTK_SIDEBAR_ROW (row));
   event_box = gtk_sidebar_row_get_event_box (GTK_SIDEBAR_ROW (row));
 
