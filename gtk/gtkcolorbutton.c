@@ -103,10 +103,6 @@ static void gtk_color_button_get_property  (GObject          *object,
                                             GValue           *value,
                                             GParamSpec       *pspec);
 
-/* gtkwidget signals */
-static void gtk_color_button_state_changed (GtkWidget        *widget,
-                                            GtkStateType      previous_state);
-
 /* gtkbutton signals */
 static void gtk_color_button_clicked       (GtkButton        *button);
 
@@ -147,17 +143,14 @@ static void
 gtk_color_button_class_init (GtkColorButtonClass *klass)
 {
   GObjectClass *gobject_class;
-  GtkWidgetClass *widget_class;
   GtkButtonClass *button_class;
 
   gobject_class = G_OBJECT_CLASS (klass);
-  widget_class = GTK_WIDGET_CLASS (klass);
   button_class = GTK_BUTTON_CLASS (klass);
 
   gobject_class->get_property = gtk_color_button_get_property;
   gobject_class->set_property = gtk_color_button_set_property;
   gobject_class->finalize = gtk_color_button_finalize;
-  widget_class->state_changed = gtk_color_button_state_changed;
   button_class->clicked = gtk_color_button_clicked;
   klass->color_set = NULL;
 
@@ -282,13 +275,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                                                          P_("Whether to show the color editor right away"),
                                                          FALSE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-}
-
-static void
-gtk_color_button_state_changed (GtkWidget   *widget,
-                                GtkStateType previous_state)
-{
-  gtk_widget_queue_draw (widget);
 }
 
 static void
