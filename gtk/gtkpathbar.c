@@ -37,7 +37,7 @@
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtktypebuiltins.h"
-#include "gtkhidingboxprivate.h"
+#include "gtkhidingbox.h"
 
 /**
  * SECTION:gtkpathbar

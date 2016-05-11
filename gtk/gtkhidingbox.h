@@ -18,8 +18,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef __GTK_HIDING_BOX_PRIVATE_H__
-#define __GTK_HIDING_BOX_PRIVATE_H__
+#ifndef __GTK_HIDING_BOX_H__
+#define __GTK_HIDING_BOX_H__
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
@@ -74,4 +74,4 @@ GDK_AVAILABLE_IN_3_20
 GList             *gtk_hiding_box_get_overflow_children  (GtkHidingBox      *box);
 G_END_DECLS
 
-#endif /* GTK_HIDING_BOX_PRIVATE_H_ */
+#endif /* GTK_HIDING_BOX_H_ */

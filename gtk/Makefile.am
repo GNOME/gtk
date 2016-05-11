@@ -489,7 +489,7 @@ gtk_private_h_sources =		\
 	gtkgestureswipeprivate.h	\
 	gtkgesturezoomprivate.h	\
 	gtkheaderbarprivate.h	\
-	gtkhidingboxprivate.h	\
+	gtkhidingbox.h	\
 	gtkhslaprivate.h	\
 	gtkiconcache.h		\
 	gtkiconhelperprivate.h  \

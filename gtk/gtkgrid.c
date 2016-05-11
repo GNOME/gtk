@@ -29,6 +29,7 @@
 #include "gtkcontainerprivate.h"
 #include "gtkcsscustomgadgetprivate.h"
 #include "gtkprivate.h"
+#include "gtkrevealer.h"
 #include "gtkintl.h"
 
 
@@ -1000,7 +1001,12 @@ gtk_grid_request_compute_expand (GtkGridRequest *request,
       line = &lines->lines[attach->pos - lines->min];
       line->empty = FALSE;
       if (gtk_widget_compute_expand (child->widget, orientation))
+        {
+
+              if (GTK_IS_REVEALER (child->widget))
+                g_print ("########################## IT IS\n");
         line->expand = TRUE;
+        }
     }
 
   for (list = priv->children; list; list = list->next)
@@ -1030,6 +1036,8 @@ gtk_grid_request_compute_expand (GtkGridRequest *request,
 
       if (!has_expand && gtk_widget_compute_expand (child->widget, orientation))
         {
+              if (GTK_IS_REVEALER (child->widget))
+                g_print ("########################## IT IS\n");
           for (i = 0; i < attach->span; i++)
             {
 	      if (attach->pos + i >= max || attach->pos + 1 < min)

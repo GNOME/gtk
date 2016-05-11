@@ -2116,6 +2116,17 @@ path-bar button.flat, .path-bar-overflow-popover button.flat {
     border-color: transparent;
     background-image: none; }
 
+.pathbar-initial-opacity {
+  opacity: 0; }
+
+.pathbar-opacity-on {
+  opacity: 1;
+  transition-duration: 250ms; }
+
+.pathbar-opacity-off {
+  opacity: 0;
+  transition-duration: 250ms; }
+
 /**************
  * Tree Views *
  **************/

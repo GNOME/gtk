@@ -24,14 +24,22 @@
 
 #include "config.h"
 
-#include "gtkhidingboxprivate.h"
+#include "gtkhidingbox.h"
 #include "gtkwidgetprivate.h"
 #include "gtkintl.h"
 #include "gtksizerequest.h"
 #include "gtkbuildable.h"
 #include "gtkrevealer.h"
+#include "gtkadjustment.h"
+#include "gtkscrolledwindow.h"
+#include "gtkbox.h"
+
+//TODO remove
+#include "gtkbutton.h"
 
 #include "glib.h"
+
+#define INVERT_ANIMATION_TIME 500 //ms
 
 typedef enum {
   ANIMATION_PHASE_NONE,
@@ -53,7 +61,24 @@ struct _GtkHidingBoxPrivate
   gint current_width;
   gint current_height;
   guint needs_update :1;
+
+  gboolean invert_animation;
+
+  GtkWidget *scrolled_window;
+  GtkWidget *box;
+  GtkAdjustment *hadjustment;
+
+  guint tick_id;
+  guint64 initial_time;
 };
+
+static void
+gtk_hiding_box_buildable_init (GtkBuildableIface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (GtkHidingBox, gtk_hiding_box, GTK_TYPE_CONTAINER,
+                         G_ADD_PRIVATE (GtkHidingBox)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, gtk_hiding_box_buildable_init))
+
 
 static void
 gtk_hiding_box_buildable_add_child (GtkBuildable *buildable,
@@ -61,7 +86,7 @@ gtk_hiding_box_buildable_add_child (GtkBuildable *buildable,
                                     GObject      *child,
                                     const gchar  *type)
 {
-  GtkHidingBoxPrivate *priv = gtk_hiding_box_get_instance_private (box);
+  GtkHidingBoxPrivate *priv = gtk_hiding_box_get_instance_private (buildable);
 
   if (!type)
     {
@@ -79,10 +104,6 @@ gtk_hiding_box_buildable_init (GtkBuildableIface *iface)
 {
   iface->add_child = gtk_hiding_box_buildable_add_child;
 }
-
-G_DEFINE_TYPE_WITH_CODE (GtkHidingBox, gtk_hiding_box, GTK_TYPE_CONTAINER,
-                         G_ADD_PRIVATE (GtkHidingBox)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, gtk_hiding_box_buildable_init))
 
 enum {
   PROP_0,
@@ -145,39 +166,62 @@ gtk_hiding_box_add (GtkContainer *container,
   GtkHidingBox *box = GTK_HIDING_BOX (container);
   GtkWidget *revealer;
   GtkHidingBoxPrivate *priv = gtk_hiding_box_get_instance_private (box);
+  GtkStyleContext *style_context;
 
   revealer = gtk_revealer_new ();
+  style_context = gtk_widget_get_style_context (revealer);
+  gtk_style_context_add_class (style_context, "pathbar-initial-opacity");
+  gtk_revealer_set_transition_type (GTK_REVEALER (revealer),
+                                    GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT);
   gtk_container_add (GTK_CONTAINER (revealer), widget);
-  gtk_revealer_set_reveal_child (GTK_REVEALER (revealer), FALSE);
-  priv->children = g_list_append (priv->children, revealer);
-  gtk_widget_set_parent (revealer, GTK_WIDGET (box));
+  g_print ("box fine? %s \n", G_OBJECT_TYPE_NAME (priv->box));
+  gtk_container_add (GTK_CONTAINER (priv->box), revealer);
+  priv->children = g_list_append (priv->children, widget);
+  gtk_widget_show (revealer);
+
+  g_print ("add\n");
 }
 
 static void
-really_remove_child (GtkContainer *container,
+really_remove_child (GtkHidingBox *self,
                      GtkWidget    *widget)
 {
   GList *child;
-  GtkHidingBox *box = GTK_HIDING_BOX (container);
-  GtkHidingBoxPrivate *priv = gtk_hiding_box_get_instance_private (box);
+  GtkHidingBoxPrivate *priv = gtk_hiding_box_get_instance_private (self);
 
-  for (child = priv->children; child != NULL; child = child->next)
+  g_print ("really remove child %p %s\n", widget, gtk_button_get_label (GTK_BUTTON (widget)));
+  for (child = priv->widgets_to_remove; child != NULL; child = child->next)
     {
-      if (child->data == widget)
-        {
-          gboolean was_visible = gtk_widget_get_visible (widget) &&
-                                 gtk_widget_get_child_visible (widget);
+      GtkWidget *revealer;
 
-          gtk_widget_unparent (widget);
-          priv->children = g_list_delete_link (priv->children, child);
+      revealer = gtk_widget_get_parent (child->data);
+      g_print ("aver %p\n", child->data);
+      if (child->data == widget && !gtk_revealer_get_child_revealed (GTK_REVEALER (revealer)))
+        {
+          g_print ("############################## INSIDE\n");
+          gboolean was_visible = gtk_widget_get_visible (widget);
+
+          priv->widgets_to_remove = g_list_remove (priv->widgets_to_remove,
+                                                   child->data);
+          gtk_container_remove (GTK_CONTAINER (priv->box), revealer);
 
           if (was_visible)
-            gtk_widget_queue_resize (GTK_WIDGET (container));
+            gtk_widget_queue_resize (GTK_WIDGET (self));
 
           break;
         }
     }
+}
 
+static void
+unrevealed_really_remove_child (GObject    *widget,
+                                GParamSpec *pspec,
+                                gpointer    user_data)
+{
+  GtkHidingBox *self = GTK_HIDING_BOX (user_data);
+
+  g_print ("unrevelaed really remove child %p %s\n", widget, G_OBJECT_TYPE_NAME (widget));
+  really_remove_child (self, gtk_bin_get_child (GTK_BIN (widget)));
 }
 
 static void
@@ -187,8 +231,16 @@ gtk_hiding_box_remove (GtkContainer *container,
   GList *child;
   GtkHidingBox *box = GTK_HIDING_BOX (container);
   GtkHidingBoxPrivate *priv = gtk_hiding_box_get_instance_private (box);
+  GtkWidget *to_remove;
 
-  priv->widgets_to_remove = g_list_append (priv->widgets_to_remove, gtk_widget_get_parent (widget));
+  g_print ("remove %p %s\n", widget, G_OBJECT_TYPE_NAME (widget));
+  if (GTK_IS_REVEALER (widget) && gtk_widget_get_parent (widget) == priv->box)
+    to_remove = gtk_bin_get_child (widget);
+  else
+    to_remove = widget;
+
+  priv->widgets_to_remove = g_list_append (priv->widgets_to_remove, to_remove);
+  priv->children = g_list_remove (priv->children, to_remove);
   priv->needs_update = TRUE;
   gtk_widget_queue_resize (GTK_WIDGET (container));
 }
@@ -201,16 +253,18 @@ gtk_hiding_box_forall (GtkContainer *container,
 {
   GtkHidingBox *box = GTK_HIDING_BOX (container);
   GtkHidingBoxPrivate *priv = gtk_hiding_box_get_instance_private (box);
-  GtkWidget *child;
-  GList *children;
+  GList *child;
 
-  children = priv->children;
-  while (children)
-    {
-      child = children->data;
-      children = children->next;
-      (* callback) (child, callback_data);
-    }
+  for (child = priv->children; child != NULL; child = child->next)
+    (* callback) (child->data, callback_data);
+
+  if (include_internals)
+  {
+    (* callback) (priv->scrolled_window, callback_data);
+
+    for (child = priv->widgets_to_remove; child != NULL; child = child->next)
+      (* callback) (child->data, callback_data);
+  }
 }
 
 static void
@@ -259,11 +313,6 @@ update_children_visibility (GtkHidingBox     *box,
   for (i = 0, child = children; child != NULL; i++, child = child->next)
     {
       child_widget = GTK_WIDGET (child->data);
-      if (!gtk_widget_get_visible (child_widget) || !allocate_more_children)
-        {
-          priv->widgets_to_hide = g_list_append (priv->widgets_to_hide, child_widget);
-          continue;
-        }
 
       gtk_widget_get_preferred_width_for_height (child_widget,
                                                  allocation->height,
@@ -284,17 +333,21 @@ update_children_visibility (GtkHidingBox     *box,
       *children_size += sizes_temp[i].minimum_size + priv->spacing;
       sizes_temp[i].data = child_widget;
 
-      if (*children_size > allocation->width)
+      if (!allocate_more_children || *children_size > allocation->width)
         {
           allocate_more_children = FALSE;
-          priv->widgets_to_hide = g_list_append (priv->widgets_to_hide, child_widget);
+          if (gtk_revealer_get_child_revealed (GTK_REVEALER (gtk_widget_get_parent (child_widget))))
+            priv->widgets_to_hide = g_list_append (priv->widgets_to_hide, child_widget);
+
           continue;
         }
 
       if (gtk_widget_get_hexpand (child_widget))
         (n_visible_children_expanding)++;
       (n_visible_children)++;
-      priv->widgets_to_show = g_list_append (priv->widgets_to_show, child_widget);
+
+      if (!g_list_find (priv->widgets_to_remove, child_widget))
+        priv->widgets_to_show = g_list_append (priv->widgets_to_show, child_widget);
     }
 
   for (i = 0; i < n_visible_children; i++)
@@ -400,26 +453,102 @@ needs_update (GtkHidingBox  *box,
 }
 
 static void
+opacity_on (GObject    *widget,
+            GParamSpec *pspec,
+            gpointer    user_data)
+{
+  GtkHidingBoxPrivate *priv = gtk_hiding_box_get_instance_private (GTK_HIDING_BOX (user_data));
+
+  g_print ("############opacity on!!!!!\n");
+  g_signal_handlers_disconnect_by_func (widget, opacity_on, user_data);
+  priv->widgets_to_show = g_list_remove (priv->widgets_to_show,
+                                         gtk_bin_get_child (GTK_BIN (widget)));
+}
+
+static void
+opacity_off (GObject    *widget,
+             GParamSpec *pspec,
+             gpointer    user_data)
+{
+  GtkHidingBoxPrivate *priv = gtk_hiding_box_get_instance_private (GTK_HIDING_BOX (user_data));
+
+  g_print ("############opacity off!!!!!\n");
+  g_signal_handlers_disconnect_by_func (widget, opacity_off, user_data);
+  priv->widgets_to_hide = g_list_remove (priv->widgets_to_hide,
+                                         gtk_bin_get_child (GTK_BIN (widget)));
+}
+
+static void
 idle_update_revealers (GtkHidingBox *box)
 {
   GtkHidingBoxPrivate *priv = gtk_hiding_box_get_instance_private (box);
-  GList *children;
   GList *l;
-
-  for (l = priv->widgets_to_show; l != NULL; l = l->next)
-    {
-      gtk_revealer_set_reveal_child (GTK_REVEALER (l->data), TRUE);
-    }
 
   for (l = priv->widgets_to_hide; l != NULL; l = l->next)
     {
-      gtk_revealer_set_reveal_child (GTK_REVEALER (l->data), FALSE);
+      GtkRevealer *revealer;
+
+      g_print ("update revealer hide %s\n", gtk_button_get_label (GTK_BUTTON (l->data)));
+      revealer = GTK_REVEALER (gtk_widget_get_parent (l->data));
+      if (gtk_revealer_get_reveal_child (revealer))
+        {
+          GtkStyleContext *style_context;
+
+          style_context = gtk_widget_get_style_context (GTK_WIDGET (revealer));
+          gtk_style_context_remove_class (style_context, "pathbar-initial-opacity");
+          gtk_style_context_remove_class (style_context, "pathbar-opacity-on");
+          gtk_style_context_add_class (style_context, "pathbar-opacity-off");
+          g_signal_connect (revealer, "notify::child-revealed", (GCallback) opacity_off, box);
+          gtk_revealer_set_reveal_child (revealer, FALSE);
+        }
     }
 
   for (l = priv->widgets_to_remove; l != NULL; l = l->next)
     {
-      gtk_revealer_set_reveal_child (GTK_REVEALER (l->data), FALSE);
+      GtkRevealer *revealer;
+
+      g_print ("update revealer remove %s\n", gtk_button_get_label (GTK_BUTTON (l->data)));
+      revealer = GTK_REVEALER (gtk_widget_get_parent (l->data));
+      if (gtk_revealer_get_child_revealed (revealer))
+        {
+          GtkStyleContext *style_context;
+
+          style_context = gtk_widget_get_style_context (GTK_WIDGET (revealer));
+          gtk_style_context_remove_class (style_context, "pathbar-initial-opacity");
+          gtk_style_context_remove_class (style_context, "pathbar-opacity-on");
+          gtk_style_context_add_class (style_context, "pathbar-opacity-off");
+          g_signal_connect (revealer, "notify::child-revealed",
+                            (GCallback) unrevealed_really_remove_child, box);
+          gtk_revealer_set_reveal_child (revealer, FALSE);
+        }
+      else
+        {
+          g_print ("widget to remove NOT revealed %p\n", l->data);
+          really_remove_child (box, l->data);
+        }
     }
+
+  if (priv->widgets_to_remove || priv->widgets_to_hide)
+    return;
+
+  for (l = priv->widgets_to_show; l != NULL; l = l->next)
+    {
+      GtkRevealer *revealer;
+
+      revealer = GTK_REVEALER (gtk_widget_get_parent (l->data));
+      if (!gtk_revealer_get_reveal_child (revealer))
+        {
+          GtkStyleContext *style_context;
+
+          style_context = gtk_widget_get_style_context (GTK_WIDGET (revealer));
+          gtk_style_context_remove_class (style_context, "pathbar-opacity-off");
+          gtk_style_context_remove_class (style_context, "pathbar-initial-opacity");
+          gtk_style_context_add_class (style_context, "pathbar-opacity-on");
+          gtk_revealer_set_reveal_child (revealer, TRUE);
+          g_signal_connect (revealer, "notify::child-revealed", (GCallback) opacity_on, box);
+        }
+    }
+
 }
 
 static void
@@ -428,92 +557,105 @@ gtk_hiding_box_size_allocate (GtkWidget     *widget,
 {
   GtkHidingBox *box = GTK_HIDING_BOX (widget);
   GtkHidingBoxPrivate *priv = gtk_hiding_box_get_instance_private (box);
-  GtkTextDirection direction;
   GtkAllocation child_allocation;
   GtkRequestedSize *sizes;
-  gint extra_space = 0;
-  gint x = 0;
-  gint i;
-  GList *child;
-  GtkWidget *child_widget;
-  gint spacing = priv->spacing;
-  gint n_visible_children = 0;
   gint n_visible_children_expanding = 0;
   gint children_size = 0;
 
   gtk_widget_set_allocation (widget, allocation);
+
   sizes = g_newa (GtkRequestedSize, g_list_length (priv->children));
+  update_children_visibility (box, allocation, sizes, FALSE, &children_size,
+                              &n_visible_children_expanding);
 
-  /*
-  if (needs_update (box, allocation))
-    {
-      clear_animation_state (box);
-      g_list_free (priv->widgets_shown);
-      priv->widgets_shown = NULL;
+  idle_update_revealers (box);
 
-      update_children_visibility (box, allocation, sizes, TRUE, &children_size,
-                                  &n_visible_children_expanding);
-      if (priv->animation_phase != ANIMATION_PHASE_NONE)
-        {
-          priv->animation_phase = ANIMATION_PHASE_NONE;
-        }
-    }
-  else
-    */
-    {
-
-      update_children_visibility (box, allocation, sizes, FALSE, &children_size,
-                                  &n_visible_children_expanding);
-
-      idle_update_revealers (box);
-    }
-
-
-  /* If there is no visible child, simply return. */
-  if (n_visible_children == 0)
-    return;
-
-  direction = gtk_widget_get_direction (widget);
-
-  /* Bring children up to allocation width first */
-  extra_space = allocation->width - (n_visible_children - 1) * spacing - children_size;
-  extra_space = gtk_distribute_natural_allocation (MAX (0, extra_space), n_visible_children, sizes);
-
-  /* Distribute extra space on the expanding children */
-  if (n_visible_children > 1)
-    extra_space = extra_space / MAX (1, n_visible_children_expanding);
-
-  x = allocation->x;
-  for (i = 0, child = priv->children; child != NULL; child = child->next)
-    {
-
-      child_widget = GTK_WIDGET (child->data);
-      if (!gtk_revealer_get_reveal_child (GTK_REVEALER (child_widget)) &&
-          !gtk_revealer_get_child_revealed (GTK_REVEALER (child_widget)))
-        {
-          gtk_widget_set_child_visible (child_widget, FALSE);
-          continue;
-        }
-
-      gtk_widget_set_child_visible (child_widget, TRUE);
-      child_allocation.x = x;
-      child_allocation.y = allocation->y;
-      if (gtk_widget_get_hexpand (child_widget))
-        child_allocation.width = sizes[i].minimum_size + extra_space;
-      else
-        child_allocation.width = sizes[i].minimum_size;
-
-      child_allocation.height = allocation->height;
-      if (direction == GTK_TEXT_DIR_RTL)
-        child_allocation.x = allocation->x + allocation->width - (child_allocation.x - allocation->x) - child_allocation.width;
-
-      /* Let this child be visible */
-      gtk_widget_size_allocate (child_widget, &child_allocation);
-      x += child_allocation.width + spacing;
-      ++i;
-    }
+  child_allocation.x = allocation->x;
+  child_allocation.y = allocation->y;
+  child_allocation.width = allocation->width;
+  child_allocation.height = allocation->height;
+  gtk_widget_size_allocate (priv->scrolled_window, &child_allocation);
 
   _gtk_widget_set_simple_clip (widget, NULL);
+}
+
+static void
+finish_invert_animation (GtkHidingBox *self)
+{
+  GtkHidingBoxPrivate *priv = gtk_hiding_box_get_instance_private (self);
+
+  priv->invert_animation = FALSE;
+}
+
+
+static void
+invert_animation_on_tick (GtkWidget     *widget,
+                          GdkFrameClock *frame_clock,
+                          gpointer       user_data)
+{
+  GtkHidingBox *self = GTK_HIDING_BOX (user_data);
+  GtkHidingBoxPrivate *priv = gtk_hiding_box_get_instance_private (self);
+  guint64 elapsed;
+  gfloat progress;
+  gdouble adjustment_value;
+
+  if (!priv->initial_time)
+    priv->initial_time = gdk_frame_clock_get_frame_time (frame_clock);
+
+  elapsed = gdk_frame_clock_get_frame_time (frame_clock) - priv->initial_time;
+  progress = elapsed / INVERT_ANIMATION_TIME;
+
+  if (progress >= 1)
+    {
+      finish_invert_animation (self);
+
+      return;
+    }
+
+  if (priv->inverted)
+    adjustment_value = 1 / (progress * (gtk_adjustment_get_lower (priv->hadjustment) - gtk_adjustment_get_upper (priv->hadjustment)));
+  else
+    adjustment_value = progress * (gtk_adjustment_get_lower (priv->hadjustment) - gtk_adjustment_get_upper (priv->hadjustment));
+
+  gtk_adjustment_set_value (priv->hadjustment, adjustment_value);
+}
+
+static void
+start_invert_animation (GtkHidingBox *self)
+{
+  GtkHidingBoxPrivate *priv = gtk_hiding_box_get_instance_private (self);
+  GList *child;
+
+  priv->invert_animation = TRUE;
+
+  for (child = priv->children; child != NULL; child = child->next)
+    {
+      GtkWidget *revealer;
+
+      revealer = gtk_widget_get_parent (GTK_WIDGET (child->data));
+      gtk_revealer_set_transition_duration (GTK_REVEALER (revealer), 0);
+      gtk_revealer_set_reveal_child (GTK_REVEALER (revealer), TRUE);
+    }
+
+  priv->tick_id = gtk_widget_add_tick_callback (priv->scrolled_window,
+                                                (GtkTickCallback) invert_animation_on_tick,
+                                                self, NULL);
+}
+
+static void
+hadjustment_on_changed (GtkAdjustment *hadjustment,
+                        gpointer       user_data)
+{
+  GtkHidingBox *box = GTK_HIDING_BOX (user_data);
+  GtkHidingBoxPrivate *priv = gtk_hiding_box_get_instance_private (box);
+
+  if (priv->invert_animation)
+    return;
+
+  if (priv->inverted)
+    gtk_adjustment_set_value (hadjustment, gtk_adjustment_get_upper (hadjustment));
+  else
+    gtk_adjustment_set_value (hadjustment, gtk_adjustment_get_lower (hadjustment));
 }
 
 static void
@@ -593,11 +735,31 @@ gtk_hiding_box_get_request_mode (GtkWidget *self)
 }
 
 static void
+on_what (gpointer  data,
+         GObject  *where_the_object_was)
+{
+  G_BREAKPOINT ();
+}
+
+static void
 gtk_hiding_box_init (GtkHidingBox *box)
 {
   GtkHidingBoxPrivate *priv = gtk_hiding_box_get_instance_private (box);
+  GtkAdjustment *hadjustment;
+  GtkWidget *hscrollbar;
 
   gtk_widget_set_has_window (GTK_WIDGET (box), FALSE);
+  priv->scrolled_window = gtk_scrolled_window_new (NULL, NULL);
+  priv->hadjustment = gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW (priv->scrolled_window));
+  g_signal_connect (priv->hadjustment, "changed", (GCallback) hadjustment_on_changed, box);
+  hscrollbar = gtk_scrolled_window_get_hscrollbar (GTK_SCROLLED_WINDOW (priv->scrolled_window));
+  gtk_widget_hide (hscrollbar);
+  priv->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  g_object_weak_ref (G_OBJECT (priv->box), on_what, NULL);
+  gtk_container_add (GTK_CONTAINER (priv->scrolled_window), priv->box);
+  gtk_widget_set_parent (priv->scrolled_window, GTK_WIDGET (box));
+
+  priv->invert_animation = FALSE;
   priv->spacing = 0;
   priv->inverted = FALSE;
   priv->widgets_to_hide = NULL;
@@ -605,8 +767,8 @@ gtk_hiding_box_init (GtkHidingBox *box)
   priv->widgets_to_remove = NULL;
   priv->widgets_shown = NULL;
   priv->animation_phase = ANIMATION_PHASE_NONE;
-  priv->current_width = 0;
-  priv->current_height = 0;
+
+  gtk_widget_show_all (priv->scrolled_window);
 }
 
 static void
