@@ -1274,6 +1274,10 @@ gtk_gesture_get_last_updated_sequence (GtkGesture *gesture)
  *
  * Returns the last event that was processed for @sequence.
  *
+ * Note that the returned pointer is only valid as long as the @sequence
+ * is still interpreted by the @gesture. If in doubt, you should make
+ * a copy of the event.
+ *
  * Returns: (transfer none) (nullable): The last event from @sequence
  **/
 const GdkEvent *
