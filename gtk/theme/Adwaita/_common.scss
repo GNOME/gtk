@@ -763,9 +763,12 @@ button {
       }
     }
   }
+
   // hide separators
   &.font,
   &.file { separator { background-color: transparent; }}
+
+  &.font { > box > box > label { font-weight: bold; }}
 
   // inline-toolbar buttons
   .inline-toolbar &, .inline-toolbar &:backdrop {

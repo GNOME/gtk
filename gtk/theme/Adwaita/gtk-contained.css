@@ -1187,6 +1187,8 @@ button {
 button.font separator,
 button.file separator {
   background-color: transparent; }
+button.font > box > box > label {
+  font-weight: bold; }
 .inline-toolbar
 button, .inline-toolbar
 button:backdrop {
