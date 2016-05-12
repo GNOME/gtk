@@ -276,7 +276,7 @@
     outline-color: transparentize($tc, 0.7);
     border-color: if($c != $bg_color, _border_color($c), $borders_color);
     background-image: none;
-    background-color: if($variant == 'light', darken($c, 8%), darken($c, 6%));
+    background-color: darken($c, 6%);
     @include _shadows(inset 0 1px transparentize($_hilight_color, 1), $_button_edge);
 
     text-shadow: none;
