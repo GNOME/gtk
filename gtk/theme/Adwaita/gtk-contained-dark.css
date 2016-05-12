@@ -1181,6 +1181,9 @@ button {
   button.needs-attention:checked > image {
     animation: none;
     background-image: none; }
+button.font separator,
+button.file separator {
+  background-color: transparent; }
 .inline-toolbar
 button, .inline-toolbar
 button:backdrop {

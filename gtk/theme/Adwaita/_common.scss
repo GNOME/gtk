@@ -763,8 +763,11 @@ button {
       }
     }
   }
+  // hide separators
+  &.font,
+  &.file { separator { background-color: transparent; }}
 
-  //inline-toolbar buttons
+  // inline-toolbar buttons
   .inline-toolbar &, .inline-toolbar &:backdrop {
     border-radius: 2px;
     border-width: 1px;
