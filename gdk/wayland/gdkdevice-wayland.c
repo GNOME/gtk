@@ -2072,6 +2072,33 @@ mimic_pointer_emulating_touch_info (GdkDevice           *device,
 }
 
 static void
+touch_handle_master_pointer_crossing (GdkWaylandSeat      *seat,
+                                      GdkWaylandTouchData *touch,
+                                      uint32_t             time)
+{
+  GdkWaylandPointerData *pointer;
+
+  pointer = GDK_WAYLAND_DEVICE (seat->touch_master)->pointer;
+
+  if (pointer->focus == touch->window)
+    return;
+
+  if (pointer->focus)
+    {
+      emulate_touch_crossing (pointer->focus, NULL,
+                              seat->touch_master, seat->touch, touch,
+                              GDK_LEAVE_NOTIFY, GDK_CROSSING_NORMAL, time);
+    }
+
+  if (touch->window)
+    {
+      emulate_touch_crossing (touch->window, NULL,
+                              seat->touch_master, seat->touch, touch,
+                              GDK_ENTER_NOTIFY, GDK_CROSSING_NORMAL, time);
+    }
+}
+
+static void
 touch_handle_down (void              *data,
                    struct wl_touch   *wl_touch,
                    uint32_t           serial,
@@ -2097,9 +2124,7 @@ touch_handle_down (void              *data,
 
   if (touch->initial_touch)
     {
-      emulate_touch_crossing (touch->window, NULL,
-                              seat->touch_master, seat->touch, touch,
-                              GDK_ENTER_NOTIFY, GDK_CROSSING_NORMAL, time);
+      touch_handle_master_pointer_crossing (seat, touch, time);
       GDK_WAYLAND_DEVICE(seat->touch_master)->emulating_touch = touch;
       mimic_pointer_emulating_touch_info (seat->touch_master, touch);
     }
@@ -2133,16 +2158,7 @@ touch_handle_up (void            *data,
   _gdk_wayland_display_deliver_event (seat->display, event);
 
   if (touch->initial_touch)
-    {
-      GdkWaylandPointerData *pointer_info;
-
-      emulate_touch_crossing (touch->window, NULL,
-                              seat->touch_master, seat->touch, touch,
-                              GDK_LEAVE_NOTIFY, GDK_CROSSING_NORMAL, time);
-      GDK_WAYLAND_DEVICE(seat->touch_master)->emulating_touch = NULL;
-      pointer_info = GDK_WAYLAND_DEVICE (seat->touch_master)->pointer;
-      g_clear_object (&pointer_info->focus);
-    }
+    GDK_WAYLAND_DEVICE(seat->touch_master)->emulating_touch = NULL;
 
   gdk_wayland_seat_remove_touch (seat, id);
 }
@@ -2193,10 +2209,6 @@ touch_handle_cancel (void            *data,
     {
       touch = GDK_WAYLAND_DEVICE (wayland_seat->touch_master)->emulating_touch;
       GDK_WAYLAND_DEVICE (wayland_seat->touch_master)->emulating_touch = NULL;
-      emulate_touch_crossing (touch->window, NULL,
-                              wayland_seat->touch_master, wayland_seat->touch,
-                              touch, GDK_LEAVE_NOTIFY, GDK_CROSSING_NORMAL,
-                              GDK_CURRENT_TIME);
     }
 
   g_hash_table_iter_init (&iter, wayland_seat->touches);
