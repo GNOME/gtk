@@ -22,7 +22,11 @@
 #include <errno.h>
 #include <unistd.h>
 #include <fcntl.h>
+
+#ifdef HAVE_LINUX_MEMFD_H
 #include <linux/memfd.h>
+#endif
+
 #include <sys/mman.h>
 #include <sys/syscall.h>
 
@@ -1107,16 +1111,47 @@ typedef struct _GdkWaylandCairoSurfaceData {
 static int
 open_shared_memory (void)
 {
-  int ret;
+  static gboolean force_shm_open = FALSE;
+  int ret = -1;
+
+#if !defined (__NR_memfd_create)
+  force_shm_open = TRUE;
+#endif
 
   do
     {
-      ret = syscall (__NR_memfd_create, "gdk-wayland", MFD_CLOEXEC);
+#if defined (__NR_memfd_create)
+      if (!force_shm_open)
+        {
+          ret = syscall (__NR_memfd_create, "gdk-wayland", MFD_CLOEXEC);
+
+          /* fall back to shm_open until debian stops shipping 3.16 kernel
+           * See bug 766341
+           */
+          if (ret < 0 && errno == ENOSYS)
+            force_shm_open = TRUE;
+        }
+#endif
+
+      if (force_shm_open)
+        {
+          char name[NAME_MAX - 1] = "";
+
+          sprintf (name, "/gdk-wayland-%x", g_random_int ());
+
+          ret = shm_open (name, O_CREAT | O_EXCL | O_RDWR | O_CLOEXEC, 0600);
+
+          if (ret >= 0)
+            shm_unlink (name);
+          else if (errno == EEXIST)
+            continue;
+        }
     }
   while (ret < 0 && errno == EINTR);
 
   if (ret < 0)
-    g_critical (G_STRLOC ": creating shared memory file failed: %m");
+    g_critical (G_STRLOC ": creating shared memory file (using %s) failed: %m",
+                force_shm_open? "shm_open" : "memfd_create");
 
   return ret;
 }
