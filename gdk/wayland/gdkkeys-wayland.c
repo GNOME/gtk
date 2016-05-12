@@ -472,6 +472,8 @@ update_direction (GdkWaylandKeymap *keymap)
 
   keymap->direction = g_renew (PangoDirection, keymap->direction, num_layouts);
   rtl = g_newa (gint, num_layouts);
+  for (i = 0; i < num_layouts; i++)
+    rtl[i] = 0;
 
   min_keycode = xkb_keymap_min_keycode (keymap->xkb_keymap);
   max_keycode = xkb_keymap_max_keycode (keymap->xkb_keymap);
