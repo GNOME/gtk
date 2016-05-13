@@ -1029,8 +1029,9 @@ gtk_stack_start_transition (GtkStack               *stack,
       gtk_stack_unschedule_ticks (stack);
       priv->active_transition_type = GTK_STACK_TRANSITION_TYPE_NONE;
       gtk_progress_tracker_finish (&priv->tracker);
-      gtk_stack_progress_updated (GTK_STACK (widget));
     }
+
+  gtk_stack_progress_updated (GTK_STACK (widget));
 }
 
 static void
