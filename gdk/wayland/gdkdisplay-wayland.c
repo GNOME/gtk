@@ -43,7 +43,7 @@
 #include "gdkglcontext-wayland.h"
 #include "gdkwaylandmonitor.h"
 #include "pointer-gestures-unstable-v1-client-protocol.h"
-#include "tablet-unstable-v1-client-protocol.h"
+#include "tablet-unstable-v2-client-protocol.h"
 
 /**
  * SECTION:wayland_interaction
@@ -424,11 +424,11 @@ gdk_registry_handle_global (void               *data,
         wl_registry_bind(display_wayland->wl_registry, id,
                          &gtk_primary_selection_device_manager_interface, 1);
     }
-  else if (strcmp (interface, "zwp_tablet_manager_v1") == 0)
+  else if (strcmp (interface, "zwp_tablet_manager_v2") == 0)
     {
       display_wayland->tablet_manager =
         wl_registry_bind(display_wayland->wl_registry, id,
-                         &zwp_tablet_manager_v1_interface, 1);
+                         &zwp_tablet_manager_v2_interface, 1);
     }
   else
     handled = FALSE;

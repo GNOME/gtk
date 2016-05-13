@@ -73,7 +73,7 @@ struct _GdkWaylandDisplay
   struct wl_subcompositor *subcompositor;
   struct zwp_pointer_gestures_v1 *pointer_gestures;
   struct gtk_primary_selection_device_manager *primary_selection_manager;
-  struct zwp_tablet_manager_v1 *tablet_manager;
+  struct zwp_tablet_manager_v2 *tablet_manager;
 
   GList *async_roundtrips;
 
