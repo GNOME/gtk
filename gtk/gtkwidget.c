@@ -5443,9 +5443,6 @@ gtk_widget_realize (GtkWidget *widget)
       gtk_widget_ensure_style (widget);
       G_GNUC_END_IGNORE_DEPRECATIONS
 
-      if (priv->style_update_pending)
-        g_signal_emit (widget, widget_signals[STYLE_UPDATED], 0);
-
       g_signal_emit (widget, widget_signals[REALIZE], 0);
 
       gtk_widget_real_set_has_tooltip (widget, gtk_widget_get_has_tooltip (widget), TRUE);
@@ -16495,15 +16492,7 @@ gtk_widget_class_get_css_name (GtkWidgetClass *widget_class)
 void
 _gtk_widget_style_context_invalidated (GtkWidget *widget)
 {
-  if (_gtk_widget_get_realized (widget))
-    g_signal_emit (widget, widget_signals[STYLE_UPDATED], 0);
-  else
-    {
-      /* Compress all style updates so it
-       * is only emitted once pre-realize.
-       */
-      widget->priv->style_update_pending = TRUE;
-    }
+  g_signal_emit (widget, widget_signals[STYLE_UPDATED], 0);
 }
 
 GtkCssNode *
