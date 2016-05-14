@@ -2677,7 +2677,7 @@ gtk_scrolled_window_destroy (GtkWidget *widget)
 
   child = gtk_bin_get_child (GTK_BIN (widget));
   if (child)
-    gtk_container_remove (GTK_CONTAINER (widget), child);
+    gtk_widget_destroy (child);
 
   remove_indicator (scrolled_window, &priv->hindicator);
   remove_indicator (scrolled_window, &priv->vindicator);
