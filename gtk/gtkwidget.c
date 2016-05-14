@@ -13417,6 +13417,8 @@ gtk_widget_real_get_accessible (GtkWidget *widget)
 
           if (priv->accessible_role != ATK_ROLE_INVALID)
             atk_object_set_role (accessible, priv->accessible_role);
+
+          widget->priv->accessible = accessible;
         }
       else
         {
@@ -13425,6 +13427,8 @@ gtk_widget_real_get_accessible (GtkWidget *widget)
                                      NULL);
           if (priv->accessible_role != ATK_ROLE_INVALID)
             atk_object_set_role (accessible, priv->accessible_role);
+
+          widget->priv->accessible = accessible;
 
           atk_object_initialize (accessible, widget);
 
@@ -13436,7 +13440,6 @@ gtk_widget_real_get_accessible (GtkWidget *widget)
             atk_object_set_role (accessible, priv->accessible_role);
         }
 
-      widget->priv->accessible = accessible;
     }
 
   return accessible;
