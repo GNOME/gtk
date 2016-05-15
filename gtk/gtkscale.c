@@ -1901,12 +1901,11 @@ gtk_scale_get_layout (GtkScale *scale)
 
   priv = scale->priv;
 
-  if (!priv->layout)
+  if (!priv->layout && priv->draw_value)
     {
       int min_layout_width;
 
-      if (priv->draw_value)
-        priv->layout = gtk_widget_create_pango_layout (GTK_WIDGET (scale), NULL);
+      priv->layout = gtk_widget_create_pango_layout (GTK_WIDGET (scale), NULL);
 
       gtk_css_gadget_get_preferred_size (priv->value_gadget,
                                          GTK_ORIENTATION_HORIZONTAL, -1,
