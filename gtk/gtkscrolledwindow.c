@@ -1757,8 +1757,8 @@ gtk_scrolled_window_measure (GtkCssGadget   *gadget,
 	    {
 	      if (priv->min_content_width >= 0)
 		{
-		  minimum_req.width = MAX (minimum_req.width, priv->min_content_width);
-		  natural_req.width = MAX (natural_req.width, priv->min_content_width);
+		  minimum_req.width += priv->min_content_width;
+		  natural_req.width += priv->min_content_width;
 		  extra_width = -1;
 		}
 	      else if (policy_may_be_visible (priv->vscrollbar_policy) && !priv->use_indicators)
@@ -1783,8 +1783,8 @@ gtk_scrolled_window_measure (GtkCssGadget   *gadget,
 	    {
 	      if (priv->min_content_height >= 0)
 		{
-		  minimum_req.height = MAX (minimum_req.height, priv->min_content_height);
-		  natural_req.height = MAX (natural_req.height, priv->min_content_height);
+		  minimum_req.height += priv->min_content_height;
+		  natural_req.height += priv->min_content_height;
 		  extra_height = -1;
 		}
 	      else if (policy_may_be_visible (priv->hscrollbar_policy) && !priv->use_indicators)
