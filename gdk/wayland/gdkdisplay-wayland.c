@@ -1104,6 +1104,23 @@ typedef struct _GdkWaylandCairoSurfaceData {
   uint32_t scale;
 } GdkWaylandCairoSurfaceData;
 
+static int
+open_shared_memory (void)
+{
+  int ret;
+
+  do
+    {
+      ret = syscall (__NR_memfd_create, "gdk-wayland", MFD_CLOEXEC);
+    }
+  while (ret < 0 && errno == EINTR);
+
+  if (ret < 0)
+    g_critical (G_STRLOC ": creating shared memory file failed: %m");
+
+  return ret;
+}
+
 static struct wl_shm_pool *
 create_shm_pool (struct wl_shm  *shm,
                  int             size,
@@ -1111,19 +1128,13 @@ create_shm_pool (struct wl_shm  *shm,
                  void          **data_out)
 {
   struct wl_shm_pool *pool;
-  int ret, fd;
+  int fd;
   void *data;
 
-  ret = syscall (__NR_memfd_create, "gdk-wayland", MFD_CLOEXEC);
+  fd = open_shared_memory ();
 
-  if (ret < 0)
-    {
-      g_critical (G_STRLOC ": creating shared memory file failed: %s",
-                  g_strerror (-ret));
-      return NULL;
-    }
-
-  fd = ret;
+  if (fd < 0)
+    return NULL;
 
   if (ftruncate (fd, size) < 0)
     {
