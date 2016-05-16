@@ -1786,10 +1786,10 @@ gtk_scrolled_window_measure (GtkCssGadget   *gadget,
 		  natural_req.height = MAX (natural_req.height, priv->min_content_height);
 		  extra_height = -1;
 		}
-	      else if (policy_may_be_visible (priv->vscrollbar_policy) && !priv->use_indicators)
+	      else if (policy_may_be_visible (priv->hscrollbar_policy) && !priv->use_indicators)
 		{
-		  minimum_req.height += vscrollbar_requisition.height;
-		  natural_req.height += vscrollbar_requisition.height;
+		  minimum_req.height += hscrollbar_requisition.height;
+		  natural_req.height += hscrollbar_requisition.height;
 		}
 	    }
 	}
