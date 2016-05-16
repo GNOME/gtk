@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-28 00:03+0000\n"
-"PO-Revision-Date: 2016-04-28 08:55+0200\n"
+"POT-Creation-Date: 2016-05-10 09:14+0000\n"
+"PO-Revision-Date: 2016-05-12 09:31+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -83,7 +83,7 @@ msgstr "Opciones de depuración GTK+ que establecer"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:242 gdk/gdk.c:245 gtk/gtkmain.c:464 gtk/gtkmain.c:467
+#: gdk/gdk.c:242 gdk/gdk.c:245 gtk/gtkmain.c:470 gtk/gtkmain.c:473
 msgid "FLAGS"
 msgstr "OPCIONES"
 
@@ -662,17 +662,17 @@ msgid "_Close"
 msgstr "_Cerrar"
 
 #: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:406
-#: gtk/gtkwindow.c:9003
+#: gtk/gtkwindow.c:8998
 msgid "Minimize"
 msgstr "Minimizar"
 
 #: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:429
-#: gtk/gtkwindow.c:9012
+#: gtk/gtkwindow.c:9007
 msgid "Maximize"
 msgstr "Maximizar"
 
 #: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:429
-#: gtk/gtkwindow.c:8969
+#: gtk/gtkwindow.c:8964
 msgid "Restore"
 msgstr "Restaurar"
 
@@ -1226,7 +1226,7 @@ msgstr ""
 #: gtk/gtkmountoperation.c:545 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:673 gtk/gtkprintunixdialog.c:746
-#: gtk/gtkwindow.c:12510 gtk/inspector/css-editor.c:208
+#: gtk/gtkwindow.c:12475 gtk/inspector/css-editor.c:208
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -1277,7 +1277,7 @@ msgid "_Apply"
 msgstr "_Aplicar"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944
-#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12511
+#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12476
 msgid "_OK"
 msgstr "_Aceptar"
 
@@ -1426,7 +1426,7 @@ msgstr "Salida a esta carpeta en lugar de a cwd"
 msgid "Invalid size %s\n"
 msgstr "Tamaño %s no válido\n"
 
-#: gtk/encodesymbolic.c:279 gtk/gtk-builder-tool.c:592
+#: gtk/encodesymbolic.c:279 gtk/gtk-builder-tool.c:617
 #, c-format
 msgid "Can't load file: %s\n"
 msgstr "No se puede cargar el archivo: %s\n"
@@ -1718,32 +1718,32 @@ msgstr "No se permite el elemento <%s> en el nivel superior"
 msgid "Text may not appear inside <%s>"
 msgstr "El texto no debe aparecer dentro de <%s>"
 
-#: gtk/gtk-builder-tool.c:98
+#: gtk/gtk-builder-tool.c:119
 #, c-format
 msgid "Packing property %s::%s not found\n"
 msgstr "Propiedad de empaquetado %s::%s no encontrada\n"
 
-#: gtk/gtk-builder-tool.c:100
+#: gtk/gtk-builder-tool.c:121
 #, c-format
 msgid "Cell property %s::%s not found\n"
 msgstr "Propiedad de celda %s:%s no encontrada\n"
 
-#: gtk/gtk-builder-tool.c:102
+#: gtk/gtk-builder-tool.c:123
 #, c-format
 msgid "Property %s::%s not found\n"
 msgstr "Propiedad %s::%s no encontrada\n"
 
-#: gtk/gtk-builder-tool.c:110
+#: gtk/gtk-builder-tool.c:131
 #, c-format
 msgid "Couldn't parse value for %s::%s: %s\n"
 msgstr "No se pudo analizar el valor para %s::%s: %s\n"
 
-#: gtk/gtk-builder-tool.c:613
+#: gtk/gtk-builder-tool.c:638
 #, c-format
 msgid "Can't parse file: %s\n"
 msgstr "No se puede analizar el archivo: %s\n"
 
-#: gtk/gtk-builder-tool.c:956
+#: gtk/gtk-builder-tool.c:981
 #, c-format
 msgid ""
 "Usage:\n"
@@ -2185,44 +2185,44 @@ msgstr "_Derecho:"
 msgid "Paper Margins"
 msgstr "Márgenes del papel"
 
-#: gtk/gtkentry.c:9492 gtk/gtklabel.c:6677 gtk/gtktextview.c:9496
+#: gtk/gtkentry.c:9489 gtk/gtklabel.c:6676 gtk/gtktextview.c:9496
 msgid "Cu_t"
 msgstr "Cor_tar"
 
-#: gtk/gtkentry.c:9496 gtk/gtklabel.c:6678 gtk/gtktextview.c:9500
+#: gtk/gtkentry.c:9493 gtk/gtklabel.c:6677 gtk/gtktextview.c:9500
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: gtk/gtkentry.c:9500 gtk/gtklabel.c:6679 gtk/gtktextview.c:9502
+#: gtk/gtkentry.c:9497 gtk/gtklabel.c:6678 gtk/gtktextview.c:9502
 msgid "_Paste"
 msgstr "_Pegar"
 
-#: gtk/gtkentry.c:9503 gtk/gtkfilechooserwidget.c:1458
-#: gtk/gtkfilechooserwidget.c:2256 gtk/gtklabel.c:6681 gtk/gtktextview.c:9505
+#: gtk/gtkentry.c:9500 gtk/gtkfilechooserwidget.c:1458
+#: gtk/gtkfilechooserwidget.c:2256 gtk/gtklabel.c:6680 gtk/gtktextview.c:9505
 msgid "_Delete"
 msgstr "_Eliminar"
 
-#: gtk/gtkentry.c:9514 gtk/gtklabel.c:6690 gtk/gtktextview.c:9519
+#: gtk/gtkentry.c:9511 gtk/gtklabel.c:6689 gtk/gtktextview.c:9519
 msgid "Select _All"
 msgstr "Seleccionar _todo"
 
-#: gtk/gtkentry.c:9692 gtk/gtktextview.c:9729
+#: gtk/gtkentry.c:9689 gtk/gtktextview.c:9729
 msgid "Select all"
 msgstr "Seleccionar todo"
 
-#: gtk/gtkentry.c:9695 gtk/gtktextview.c:9732
+#: gtk/gtkentry.c:9692 gtk/gtktextview.c:9732
 msgid "Cut"
 msgstr "Cortar"
 
-#: gtk/gtkentry.c:9698 gtk/gtktextview.c:9735
+#: gtk/gtkentry.c:9695 gtk/gtktextview.c:9735
 msgid "Copy"
 msgstr "Copiar"
 
-#: gtk/gtkentry.c:9701 gtk/gtktextview.c:9738
+#: gtk/gtkentry.c:9698 gtk/gtktextview.c:9738
 msgid "Paste"
 msgstr "Pegar"
 
-#: gtk/gtkentry.c:10768
+#: gtk/gtkentry.c:10765
 msgid "Caps Lock is on"
 msgstr "Bloq Mayús está activado"
 
@@ -2249,7 +2249,7 @@ msgstr "_Nombre"
 
 #. Open item is always present
 #: gtk/gtkfilechoosernative.c:371 gtk/gtkfilechoosernative.c:456
-#: gtk/gtkplacessidebar.c:3417 gtk/gtkplacesview.c:1578
+#: gtk/gtkplacessidebar.c:3417 gtk/gtkplacesview.c:1590
 msgid "_Open"
 msgstr "_Abrir"
 
@@ -2588,7 +2588,7 @@ msgstr "Falló al crear el contexto de OpenGL"
 msgid "Application menu"
 msgstr "Menú de la aplicación"
 
-#: gtk/gtkheaderbar.c:447 gtk/gtkwindow.c:9039
+#: gtk/gtkheaderbar.c:447 gtk/gtkwindow.c:9034
 msgid "Close"
 msgstr "Cerrar"
 
@@ -2640,12 +2640,12 @@ msgid "Error"
 msgstr "Error"
 
 #. Open Link
-#: gtk/gtklabel.c:6658
+#: gtk/gtklabel.c:6657
 msgid "_Open Link"
 msgstr "_Abrir enlace"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6667
+#: gtk/gtklabel.c:6666
 msgid "Copy _Link Address"
 msgstr "Copiar la dirección del _enlace"
 
@@ -2699,11 +2699,11 @@ msgstr "%s:no existe la aplicación %s"
 msgid "%s: error launching application: %s\n"
 msgstr "%s: error al lanzar la aplicación: %s\n"
 
-#: gtk/gtklinkbutton.c:419
+#: gtk/gtklinkbutton.c:420
 msgid "Copy URL"
 msgstr "Copiar URL"
 
-#: gtk/gtklinkbutton.c:582
+#: gtk/gtklinkbutton.c:583
 msgid "Invalid URI"
 msgstr "URI no válida"
 
@@ -2740,40 +2740,40 @@ msgstr ""
 "Contacte con el administrador de su sistema"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:457
+#: gtk/gtkmain.c:463
 msgid "Load additional GTK+ modules"
 msgstr "Cargar módulos adicionales GTK+"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:458
+#: gtk/gtkmain.c:464
 msgid "MODULES"
 msgstr "MÓDULOS"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:460
+#: gtk/gtkmain.c:466
 msgid "Make all warnings fatal"
 msgstr "Hacer todas las advertencias fatales"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:463
+#: gtk/gtkmain.c:469
 msgid "GTK+ debugging flags to set"
 msgstr "Opciones de depuración GTK+ a poner"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:466
+#: gtk/gtkmain.c:472
 msgid "GTK+ debugging flags to unset"
 msgstr "Opciones de depuración GTK+ a quitar"
 
-#: gtk/gtkmain.c:801
+#: gtk/gtkmain.c:805
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "No se puede abrir el visor: %s"
 
-#: gtk/gtkmain.c:896
+#: gtk/gtkmain.c:914
 msgid "GTK+ Options"
 msgstr "Opciones GTK+"
 
-#: gtk/gtkmain.c:896
+#: gtk/gtkmain.c:914
 msgid "Show GTK+ Options"
 msgstr "Mostrar opciones GTK+"
 
@@ -2782,7 +2782,7 @@ msgstr "Mostrar opciones GTK+"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:1224
+#: gtk/gtkmain.c:1242
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -3079,11 +3079,11 @@ msgstr "No se pudo expulsar %s"
 msgid "Unable to poll “%s” for media changes"
 msgstr "No se puede consultar a «%s» si hay cambios en el medio"
 
-#: gtk/gtkplacessidebar.c:3420 gtk/gtkplacesview.c:1588
+#: gtk/gtkplacessidebar.c:3420 gtk/gtkplacesview.c:1600
 msgid "Open in New _Tab"
 msgstr "Abrir en una _pestaña nueva"
 
-#: gtk/gtkplacessidebar.c:3423 gtk/gtkplacesview.c:1599
+#: gtk/gtkplacessidebar.c:3423 gtk/gtkplacesview.c:1611
 msgid "Open in New _Window"
 msgstr "Abrir en una _ventana nueva"
 
@@ -3099,11 +3099,11 @@ msgstr "_Quitar"
 msgid "Rename…"
 msgstr "Renombrar…"
 
-#: gtk/gtkplacessidebar.c:3433 gtk/gtkplacesview.c:1633
+#: gtk/gtkplacessidebar.c:3433 gtk/gtkplacesview.c:1645
 msgid "_Mount"
 msgstr "_Montar"
 
-#: gtk/gtkplacessidebar.c:3434 gtk/gtkplacesview.c:1623
+#: gtk/gtkplacessidebar.c:3434 gtk/gtkplacesview.c:1635
 msgid "_Unmount"
 msgstr "_Desmontar"
 
@@ -3115,55 +3115,55 @@ msgstr "_Expulsar"
 msgid "_Detect Media"
 msgstr "_Detectar medio"
 
-#: gtk/gtkplacessidebar.c:3882 gtk/gtkplacesview.c:1053
+#: gtk/gtkplacessidebar.c:3882 gtk/gtkplacesview.c:1065
 msgid "Computer"
 msgstr "Equipo"
 
-#: gtk/gtkplacesview.c:881
+#: gtk/gtkplacesview.c:882
 msgid "Searching for network locations"
 msgstr "Buscando ubicaciones de red"
 
-#: gtk/gtkplacesview.c:888
+#: gtk/gtkplacesview.c:889
 msgid "No network locations found"
 msgstr "No se han encontrado ubicaciones de red"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1163 gtk/gtkplacesview.c:1236
+#: gtk/gtkplacesview.c:1175 gtk/gtkplacesview.c:1248
 msgid "Unable to access location"
 msgstr "No se puede acceder a la ubicación"
 
 #. Restore from Cancel to Connect
-#: gtk/gtkplacesview.c:1180 gtk/ui/gtkplacesview.ui:465
+#: gtk/gtkplacesview.c:1192 gtk/ui/gtkplacesview.ui:449
 msgid "Con_nect"
 msgstr "Co_nectar"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1299
+#: gtk/gtkplacesview.c:1311
 msgid "Unable to unmount volume"
 msgstr "No se puede desmontar del volumen"
 
 #. Allow to cancel the operation
-#: gtk/gtkplacesview.c:1381
+#: gtk/gtkplacesview.c:1393
 msgid "Cance_l"
 msgstr "Cance_lar"
 
-#: gtk/gtkplacesview.c:1623
+#: gtk/gtkplacesview.c:1635
 msgid "_Disconnect"
 msgstr "_Desconectar"
 
-#: gtk/gtkplacesview.c:1633
+#: gtk/gtkplacesview.c:1645
 msgid "_Connect"
 msgstr "_Conectar"
 
-#: gtk/gtkplacesview.c:1798
+#: gtk/gtkplacesview.c:1810
 msgid "Unable to get remote server location"
 msgstr "No se pudo obtener la ubicación del servidor remoto"
 
-#: gtk/gtkplacesview.c:1937 gtk/gtkplacesview.c:1946
+#: gtk/gtkplacesview.c:1949 gtk/gtkplacesview.c:1958
 msgid "Networks"
 msgstr "Redes"
 
-#: gtk/gtkplacesview.c:1937 gtk/gtkplacesview.c:1946
+#: gtk/gtkplacesview.c:1949 gtk/gtkplacesview.c:1958
 msgid "On This Computer"
 msgstr "En este equipo"
 
@@ -3182,7 +3182,7 @@ msgstr[1] "%s / %s disponibles"
 msgid "Disconnect"
 msgstr "Desconectar"
 
-#: gtk/gtkplacesviewrow.c:470 gtk/ui/gtkplacesviewrow.ui:68
+#: gtk/gtkplacesviewrow.c:470 gtk/ui/gtkplacesviewrow.ui:67
 msgid "Unmount"
 msgstr "Desmontar"
 
@@ -3422,42 +3422,42 @@ msgstr "De abajo a arriba"
 msgid "Print"
 msgstr "Imprimir"
 
-#: gtk/gtkprogressbar.c:697
+#: gtk/gtkprogressbar.c:698
 #, c-format
 msgctxt "progress bar label"
 msgid "%.0f %%"
 msgstr "%.0f %%"
 
-#: gtk/gtkrecentchooserdefault.c:1077 gtk/gtkrecentchooserdefault.c:1114
+#: gtk/gtkrecentchooserdefault.c:1075 gtk/gtkrecentchooserdefault.c:1112
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "No se encontró ningún elementos para la URI «%s»"
 
-#: gtk/gtkrecentchooserdefault.c:1241
+#: gtk/gtkrecentchooserdefault.c:1239
 msgid "Untitled filter"
 msgstr "Filtro sin título"
 
-#: gtk/gtkrecentchooserdefault.c:1563
+#: gtk/gtkrecentchooserdefault.c:1561
 msgid "Could not remove item"
 msgstr "No se pudo quitar el elemento"
 
-#: gtk/gtkrecentchooserdefault.c:1607
+#: gtk/gtkrecentchooserdefault.c:1605
 msgid "Could not clear list"
 msgstr "No se pudo limpiar la lista"
 
-#: gtk/gtkrecentchooserdefault.c:1691
+#: gtk/gtkrecentchooserdefault.c:1689
 msgid "Copy _Location"
 msgstr "Copiar _lugar"
 
-#: gtk/gtkrecentchooserdefault.c:1702
+#: gtk/gtkrecentchooserdefault.c:1700
 msgid "_Remove From List"
 msgstr "_Quitar de la lista"
 
-#: gtk/gtkrecentchooserdefault.c:1709
+#: gtk/gtkrecentchooserdefault.c:1707
 msgid "_Clear List"
 msgstr "_Limpiar lista"
 
-#: gtk/gtkrecentchooserdefault.c:1721
+#: gtk/gtkrecentchooserdefault.c:1719
 msgid "Show _Private Resources"
 msgstr "Mostrar recursos _privados"
 
@@ -3597,7 +3597,7 @@ msgid "No Results Found"
 msgstr "No se han encontrado resultados"
 
 #: gtk/gtkshortcutswindow.c:1051 gtk/ui/gtkfilechooserwidget.ui:324
-#: gtk/ui/gtkplacesview.ui:422
+#: gtk/ui/gtkplacesview.ui:406
 msgid "Try a different search"
 msgstr "Pruebe una búsqueda diferente"
 
@@ -3605,7 +3605,7 @@ msgstr "Pruebe una búsqueda diferente"
 #. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
 #. * the state
 #.
-#: gtk/gtkswitch.c:400 gtk/gtkswitch.c:604
+#: gtk/gtkswitch.c:306
 msgctxt "switch"
 msgid "ON"
 msgstr "❙"
@@ -3613,7 +3613,7 @@ msgstr "❙"
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
 #.
-#: gtk/gtkswitch.c:406 gtk/gtkswitch.c:618
+#: gtk/gtkswitch.c:313
 msgctxt "switch"
 msgid "OFF"
 msgstr "○"
@@ -3799,24 +3799,24 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:8987
+#: gtk/gtkwindow.c:8982
 msgid "Move"
 msgstr "Mover"
 
-#: gtk/gtkwindow.c:8995
+#: gtk/gtkwindow.c:8990
 msgid "Resize"
 msgstr "Redimensionar"
 
-#: gtk/gtkwindow.c:9026
+#: gtk/gtkwindow.c:9021
 msgid "Always on Top"
 msgstr "Siempre encima"
 
-#: gtk/gtkwindow.c:12498
+#: gtk/gtkwindow.c:12463
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "¿Quiere usar el inspector de GTK+?"
 
-#: gtk/gtkwindow.c:12500
+#: gtk/gtkwindow.c:12465
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3827,7 +3827,7 @@ msgstr ""
 "modificar los aspectos internos de cualquier aplicación de GTK+. Al usarlo "
 "puede hacer que la aplicación falle o se cierre."
 
-#: gtk/gtkwindow.c:12505
+#: gtk/gtkwindow.c:12470
 msgid "Don't show this message again"
 msgstr "No mostrar este mensaje de nuevo"
 
@@ -3841,7 +3841,7 @@ msgid "State"
 msgstr "Estado"
 
 #: gtk/inspector/actions.ui:30 gtk/inspector/general.ui:115
-#: gtk/ui/gtkplacesview.ui:166
+#: gtk/ui/gtkplacesview.ui:158
 msgid "Prefix"
 msgstr "Prefijo"
 
@@ -3905,13 +3905,13 @@ msgid "Show data"
 msgstr "Mostrar los datos"
 
 # src/file-manager/fm-icon-text-window.c:85
-#: gtk/inspector/general.c:226
+#: gtk/inspector/general.c:275
 msgctxt "GL version"
 msgid "None"
 msgstr "Ninguna"
 
 # src/file-manager/fm-icon-text-window.c:85
-#: gtk/inspector/general.c:227
+#: gtk/inspector/general.c:276
 msgctxt "GL vendor"
 msgid "None"
 msgstr "Ninguno"
@@ -5619,78 +5619,94 @@ msgstr "Ruta inferior"
 msgid "Up Path"
 msgstr "Ruta superior"
 
-#: gtk/ui/gtkplacesview.ui:33
-#| msgid "Enter server address…"
+#: gtk/ui/gtkplacesview.ui:30
 msgid "Server Addresses"
 msgstr "Direcciones del servidor"
 
-#: gtk/ui/gtkplacesview.ui:52
+#: gtk/ui/gtkplacesview.ui:43
+#| msgid ""
+#| "Server addresses are made up of a protocol prefix and an address. "
+#| "Examples:\n"
+#| "\n"
+#| "smb://foo.example.com, ssh://192.168.0.1"
 msgid ""
-"Server addresses are made up of a protocol prefix and an address. Examples:\n"
-"\n"
-"smb://foo.example.com, ssh://192.168.0.1"
+"Server addresses are made up of a protocol prefix and an address. Examples:"
 msgstr ""
 "Las direcciones del servidor se componen de un prefijo del protocolo y una "
-"dirección. Ejemplos:\n"
-"\n"
-"smb://foo.ejemplo.com, ssh://192.168.0.1"
+"dirección. Ejemplos:"
 
-#: gtk/ui/gtkplacesview.ui:79
+#: gtk/ui/gtkplacesview.ui:57
+msgid "smb://foo.example.com, ssh://192.168.0.1"
+msgstr "smb://foo.ejemplo.com, ssh://192.168.0.1"
+
+#: gtk/ui/gtkplacesview.ui:78
 msgid "Available Protocols"
 msgstr "Protocolos disponibles"
 
-#: gtk/ui/gtkplacesview.ui:94
+#: gtk/ui/gtkplacesview.ui:92
 msgid "AppleTalk"
 msgstr "AppleTalk"
 
-#: gtk/ui/gtkplacesview.ui:106
+#: gtk/ui/gtkplacesview.ui:103
 msgid "File Transfer Protocol"
 msgstr "Protocolo de transferencia de archivos"
 
-#: gtk/ui/gtkplacesview.ui:118
+#: gtk/ui/gtkplacesview.ui:114
+#| msgid "File System"
+msgid "Network File System"
+msgstr "Sistema de archivos en red"
+
+#: gtk/ui/gtkplacesview.ui:125
 msgid "Samba"
 msgstr "Samba"
 
-#: gtk/ui/gtkplacesview.ui:130
-msgid "Secure File Transfer Protocol"
-msgstr "Protocolo de transferencia de archivos seguro"
+#: gtk/ui/gtkplacesview.ui:136
+#| msgid "File Transfer Protocol"
+msgid "SSH File Transfer Protocol"
+msgstr "Protocolo de transferencia de archivos por SSH"
 
-#: gtk/ui/gtkplacesview.ui:142
-#| msgid "Bourne Shell"
-msgid "Secure Shell"
-msgstr "Shell segura"
-
-#: gtk/ui/gtkplacesview.ui:154
+#: gtk/ui/gtkplacesview.ui:147
 msgid "WebDav"
 msgstr "WebDav"
 
-#. Translators: do not translate http:// and https://
-#: gtk/ui/gtkplacesview.ui:241
-msgid "http:// or https://"
-msgstr "http:// o https://"
+#. Translators: do not translate ftp:// and ftps://
+#: gtk/ui/gtkplacesview.ui:183
+#| msgid "http:// or https://"
+msgid "ftp:// or ftps://"
+msgstr "ftp:// o ftps://"
+
+#: gtk/ui/gtkplacesview.ui:205
+msgid "smb://"
+msgstr "smb://"
+
+#. Translators: do not translate dav:// and davs://
+#: gtk/ui/gtkplacesview.ui:227
+#| msgid "http:// or https://"
+msgid "dav:// or davs://"
+msgstr "dav:// o davs://"
 
 #. Translators: Server as any successfully connected network address
-#: gtk/ui/gtkplacesview.ui:283
+#: gtk/ui/gtkplacesview.ui:267
 msgid "No recent servers found"
 msgstr "No se han encontrado servidores recientes"
 
-#: gtk/ui/gtkplacesview.ui:306
+#: gtk/ui/gtkplacesview.ui:290
 msgid "Recent Servers"
 msgstr "Servidores recientes"
 
-#: gtk/ui/gtkplacesview.ui:409
+#: gtk/ui/gtkplacesview.ui:393
 msgid "No results found"
 msgstr "No se han encontrado resultados"
 
-#: gtk/ui/gtkplacesview.ui:455
+#: gtk/ui/gtkplacesview.ui:439
 msgid "Connect to _Server"
 msgstr "Conectar al _servidor"
 
-#: gtk/ui/gtkplacesview.ui:488
+#: gtk/ui/gtkplacesview.ui:472
 msgid "Enter server address…"
 msgstr "Introduzca la dirección del servidor…"
 
-#: gtk/ui/gtkplacesview.ui:489
+#: gtk/ui/gtkplacesview.ui:473
 msgid "dialog-question-symbolic"
 msgstr "dialog-question-symbolic"
 
@@ -6743,6 +6759,13 @@ msgstr "salida-de-prueba.%s"
 #: modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
 msgstr "Imprimir en la impresora de prueba"
+
+#~ msgid "Secure File Transfer Protocol"
+#~ msgstr "Protocolo de transferencia de archivos seguro"
+
+#~| msgid "Bourne Shell"
+#~ msgid "Secure Shell"
+#~ msgstr "Shell segura"
 
 #~ msgid "Change name"
 #~ msgstr "Cambiar nombre"
