@@ -3042,6 +3042,10 @@ gdk_dnd_handle_grab_broken_event (GdkDragContext           *context,
       event->grab_window == x11_context->ipc_window)
     return FALSE;
 
+  if (gdk_event_get_device ((GdkEvent *) event) !=
+      gdk_drag_context_get_device (context))
+    return FALSE;
+
   gdk_drag_context_cancel (context, GDK_DRAG_CANCEL_ERROR);
   return TRUE;
 }
