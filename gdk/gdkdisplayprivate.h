@@ -246,6 +246,8 @@ struct _GdkDisplayClass
   GdkMonitor *           (*get_monitor)                (GdkDisplay     *display,
                                                         int             index);
   GdkMonitor *           (*get_primary_monitor)        (GdkDisplay     *display);
+  GdkMonitor *           (*get_monitor_at_window)      (GdkDisplay     *display,
+                                                        GdkWindow      *window);
 
   /* Signals */
   void                   (*opened)                     (GdkDisplay     *display);
