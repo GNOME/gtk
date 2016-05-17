@@ -162,6 +162,7 @@ HTML_IMAGES = 				\
 	images/grabbing_cursor.png	\
 	images/grab_cursor.png		\
 	images/hand_cursor.png		\
+	images/context_menu_cursor.png	\
 	images/help_cursor.png		\
 	images/move_cursor.png		\
 	images/ne_resize_cursor.png	\
