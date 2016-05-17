@@ -37,6 +37,7 @@
 #include "gdkkeysprivate.h"
 #include "gdkprivate-wayland.h"
 #include "gdkglcontext-wayland.h"
+#include "gdkwaylandmonitor.h"
 #include "pointer-gestures-unstable-v1-client-protocol.h"
 #include "tablet-unstable-v1-client-protocol.h"
 
@@ -840,6 +841,31 @@ gdk_wayland_display_get_monitor (GdkDisplay *display,
   return (GdkMonitor *)display_wayland->monitors->pdata[monitor_num];
 }
 
+static GdkMonitor *
+gdk_wayland_display_get_monitor_at_window (GdkDisplay *display,
+                                           GdkWindow  *window)
+{
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+  struct wl_output *output;
+  int i;
+
+  g_return_val_if_fail (GDK_IS_WAYLAND_WINDOW (window), NULL);
+
+  output = gdk_wayland_window_get_wl_output (window);
+  if (output == NULL)
+    return NULL;
+
+  for (i = 0; i < display_wayland->monitors->len; i++)
+    {
+      GdkMonitor *monitor = display_wayland->monitors->pdata[i];
+
+      if (gdk_wayland_monitor_get_wl_output (monitor) == output)
+        return monitor;
+    }
+
+  return NULL;
+}
+
 static void
 gdk_wayland_display_class_init (GdkWaylandDisplayClass *class)
 {
@@ -894,6 +920,7 @@ gdk_wayland_display_class_init (GdkWaylandDisplayClass *class)
 
   display_class->get_n_monitors = gdk_wayland_display_get_n_monitors;
   display_class->get_monitor = gdk_wayland_display_get_monitor;
+  display_class->get_monitor_at_window = gdk_wayland_display_get_monitor_at_window;
 }
 
 static void
