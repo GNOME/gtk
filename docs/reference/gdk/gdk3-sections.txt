@@ -1245,6 +1245,7 @@ gdk_wayland_display_get_wl_display
 gdk_wayland_display_get_xdg_shell
 gdk_wayland_window_get_wl_surface
 gdk_wayland_window_set_use_custom_surface
+gdk_wayland_window_get_wl_output
 
 <SUBSECTION Standard>
 GDK_TYPE_WAYLAND_DEVICE

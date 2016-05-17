@@ -2954,6 +2954,32 @@ gdk_wayland_window_get_wl_surface (GdkWindow *window)
   return GDK_WINDOW_IMPL_WAYLAND (window->impl)->display_server.wl_surface;
 }
 
+/**
+ * gdk_wayland_window_get_wl_output:
+ * @window: (type GdkWaylandWindow): a #GdkWindow
+ *
+ * Returns the Wayland output a #GdkWindow has last entered.
+ *
+ * Returns: (transfer none): a Wayland wl_output or NULL if the #GdkWindow
+ * is not associated with any Wayland wl_output.
+ *
+ * Since: 3.22
+ */
+struct wl_output *
+gdk_wayland_window_get_wl_output (GdkWindow *window)
+{
+  GdkWindowImplWayland *impl;
+
+  g_return_val_if_fail (GDK_IS_WAYLAND_WINDOW (window), NULL);
+
+  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  /* We pick the head of the list as this is the last entered output */
+  if (impl->display_server.outputs)
+    return (struct wl_output *) impl->display_server.outputs->data;
+
+  return NULL;
+}
+
 static struct wl_egl_window *
 gdk_wayland_window_get_wl_egl_window (GdkWindow *window)
 {
