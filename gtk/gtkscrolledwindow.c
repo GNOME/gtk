@@ -1711,8 +1711,6 @@ gtk_scrolled_window_measure (GtkCssGadget   *gadget,
   GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
   GtkBin *bin = GTK_BIN (scrolled_window);
-  GtkScrollablePolicy scrollable_hpolicy = GTK_SCROLL_MINIMUM;
-  GtkScrollablePolicy scrollable_vpolicy = GTK_SCROLL_MINIMUM;
   gint extra_width;
   gint extra_height;
   gint scrollbar_spacing;
@@ -1740,11 +1738,7 @@ gtk_scrolled_window_measure (GtkCssGadget   *gadget,
   child = gtk_bin_get_child (bin);
 
   if (GTK_IS_SCROLLABLE (child))
-    {
-      gtk_scrollable_get_border (GTK_SCROLLABLE (child), &border);
-      scrollable_hpolicy = gtk_scrollable_get_hscroll_policy (GTK_SCROLLABLE (child));
-      scrollable_vpolicy = gtk_scrollable_get_vscroll_policy (GTK_SCROLLABLE (child));
-    }
+    gtk_scrollable_get_border (GTK_SCROLLABLE (child), &border);
 
   if (child && gtk_widget_get_visible (child))
     {
@@ -1767,11 +1761,6 @@ gtk_scrolled_window_measure (GtkCssGadget   *gadget,
 		  natural_req.width += priv->min_content_width;
 		  extra_width = -1;
 		}
-              else if (scrollable_hpolicy == GTK_SCROLL_NATURAL)
-                {
-		  minimum_req.width += min_child_size;
-		  natural_req.width += nat_child_size;
-                }
 	      else if (policy_may_be_visible (priv->vscrollbar_policy) && !priv->use_indicators)
 		{
 		  minimum_req.width += vscrollbar_requisition.width;
@@ -1798,11 +1787,6 @@ gtk_scrolled_window_measure (GtkCssGadget   *gadget,
 		  natural_req.height += priv->min_content_height;
 		  extra_height = -1;
 		}
-              else if (scrollable_vpolicy == GTK_SCROLL_NATURAL)
-                {
-		  minimum_req.height += min_child_size;
-		  natural_req.height += nat_child_size;
-                }
 	      else if (policy_may_be_visible (priv->hscrollbar_policy) && !priv->use_indicators)
 		{
 		  minimum_req.height += hscrollbar_requisition.height;
