@@ -76,13 +76,14 @@
  * # CSS nodes
  *
  * |[<!-- language="plain" -->
- * scale[.fine-tune]
+ * scale[.fine-tune][.scale-has-marks-above][.scale-has-marks-below]
  * ├── marks.top
  * │   ├── mark
  * │   ┊    ├── [label]
  * │   ┊    ╰── indicator
  * ┊   ┊
  * │   ╰── mark
+ * ├── [value]
  * ├── contents
  * │   ╰── trough
  * │       ├── slider
@@ -117,6 +118,12 @@
  * has a subnode named label. When the mark is either above or left of the
  * scale, the label subnode is the first when present. Otherwise, the indicator
  * subnode is the first.
+ *
+ * The main CSS node gets the 'scale-has-marks-above' and/or 'scale-has-marks-below'
+ * style classes added depending on what marks are present.
+ *
+ * If the scale is displaying the value (see #GtkScale:draw-value), there is
+ * subnode with name value.
  */
 
 
@@ -1989,6 +1996,7 @@ void
 gtk_scale_clear_marks (GtkScale *scale)
 {
   GtkScalePrivate *priv;
+  GtkStyleContext *context;
 
   g_return_if_fail (GTK_IS_SCALE (scale));
 
@@ -2003,6 +2011,10 @@ gtk_scale_clear_marks (GtkScale *scale)
   if (priv->bottom_marks_gadget)
     gtk_css_node_set_parent (gtk_css_gadget_get_node (priv->bottom_marks_gadget), NULL);
   g_clear_object (&priv->bottom_marks_gadget);
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (scale));
+  gtk_style_context_remove_class (context, GTK_STYLE_CLASS_SCALE_HAS_MARKS_BELOW);
+  gtk_style_context_remove_class (context, GTK_STYLE_CLASS_SCALE_HAS_MARKS_ABOVE);
 
   _gtk_range_set_stop_values (GTK_RANGE (scale), NULL, 0);
 
@@ -2046,6 +2058,7 @@ gtk_scale_add_mark (GtkScale        *scale,
   gdouble *values;
   gint n, i;
   GtkCssNode *widget_node, *marks_node;
+  GtkStyleContext *context;
 
   g_return_if_fail (GTK_IS_SCALE (scale));
 
@@ -2169,6 +2182,12 @@ gtk_scale_add_mark (GtkScale        *scale,
   _gtk_range_set_stop_values (GTK_RANGE (scale), values, n);
 
   g_free (values);
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (scale));
+  if (priv->top_marks_gadget)
+    gtk_style_context_add_class (context, GTK_STYLE_CLASS_SCALE_HAS_MARKS_ABOVE);
+  if (priv->bottom_marks_gadget)
+    gtk_style_context_add_class (context, GTK_STYLE_CLASS_SCALE_HAS_MARKS_BELOW);
 
   gtk_widget_queue_resize (widget);
 }
