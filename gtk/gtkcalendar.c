@@ -128,12 +128,6 @@ week_of_year (guint year, guint mm, guint dd)
   return week;
 }
 
-/* Spacing around day/week headers and main area, inside those windows */
-#define CALENDAR_MARGIN          0
-
-#define DAY_XSEP                 0 /* not really good for small calendar */
-#define DAY_YSEP                 0 /* not really good for small calendar */
-
 #define SCROLL_DELAY_FACTOR      5
 
 enum {
@@ -1068,10 +1062,12 @@ static gint
 calendar_row_height (GtkCalendar *calendar)
 {
   GtkCalendarPrivate *priv = calendar->priv;
+  gint height = priv->main_h;
 
-  return (priv->main_h - CALENDAR_MARGIN
-          - ((priv->display_flags & GTK_CALENDAR_SHOW_DAY_NAMES)
-             ? calendar_get_ysep (calendar) : CALENDAR_MARGIN)) / 6;
+  if (priv->display_flags & GTK_CALENDAR_SHOW_DAY_NAMES)
+    height -= calendar_get_ysep (calendar);
+
+  return height / 6;
 }
 
 static void
@@ -1143,9 +1139,9 @@ calendar_left_x_for_column (GtkCalendar *calendar,
 
   width = calendar->priv->day_width;
   if (priv->display_flags & GTK_CALENDAR_SHOW_WEEK_NUMBERS)
-    x_left = week_width + calendar_xsep + (width + DAY_XSEP) * column;
+    x_left = week_width + calendar_xsep + width * column;
   else
-    x_left = week_width + CALENDAR_MARGIN + (width + DAY_XSEP) * column;
+    x_left = week_width + width * column;
 
   return x_left;
 }
@@ -1824,7 +1820,7 @@ gtk_calendar_size_request (GtkWidget      *widget,
 
   gint height;
   gint i, r, c;
-  gint calendar_margin = CALENDAR_MARGIN;
+  gint calendar_margin = 0;
   gint header_width, main_width;
   gint max_header_height = 0;
   gint max_detail_height;
@@ -2007,10 +2003,8 @@ gtk_calendar_size_request (GtkWidget      *widget,
   /* We add one to max_day_char_width to be able to make the marked day "bold" */
   priv->max_day_char_width = priv->min_day_width / 2 + 1;
 
-  main_width = (7 * (priv->min_day_width) + (DAY_XSEP * 6) + CALENDAR_MARGIN * 2
-                + (show_week_numbers
-                   ? priv->max_week_char_width * 2 + calendar_xsep * 2
-                   : 0));
+  main_width = (7 * priv->min_day_width
+                + (show_week_numbers ? priv->max_week_char_width * 2 + calendar_xsep * 2 : 0));
 
   requisition->width = MAX (header_width, main_width + inner_border * 2) + padding.left + padding.right;
 
@@ -2040,12 +2034,10 @@ gtk_calendar_size_request (GtkWidget      *widget,
       priv->day_name_h = 0;
     }
 
-  priv->main_h = (CALENDAR_MARGIN + calendar_margin
-                          + 6 * (priv->max_day_char_ascent
-                                 + priv->max_day_char_descent
-                                 + max_detail_height
-                                 + day_padding.top + day_padding.bottom)
-                          + DAY_YSEP * 5);
+  priv->main_h = (calendar_margin + 6 * (priv->max_day_char_ascent
+                                         + priv->max_day_char_descent
+                                         + max_detail_height
+                                         + day_padding.top + day_padding.bottom));
 
   height = priv->header_h + priv->day_name_h + priv->main_h;
 
@@ -2095,20 +2087,14 @@ gtk_calendar_size_allocate (GtkWidget     *widget,
   if (priv->display_flags & GTK_CALENDAR_SHOW_WEEK_NUMBERS)
     {
       priv->day_width = (priv->min_day_width
-                         * ((allocation->width - (inner_border * 2) - padding.left - padding.right
-                             - (CALENDAR_MARGIN * 2) -  (DAY_XSEP * 6) - calendar_xsep * 2))
+                         * (allocation->width - (inner_border * 2) - padding.left - padding.right - calendar_xsep * 2)
                          / (7 * priv->min_day_width + priv->max_week_char_width * 2));
-      priv->week_width = ((allocation->width - (inner_border * 2) - padding.left - padding.right
-                           - (CALENDAR_MARGIN * 2) - (DAY_XSEP * 6) - calendar_xsep * 2 )
-                          - priv->day_width * 7 + CALENDAR_MARGIN + calendar_xsep);
+      priv->week_width = ((allocation->width - (inner_border * 2) - padding.left - padding.right - calendar_xsep * 2)
+                          - priv->day_width * 7 + calendar_xsep);
     }
   else
     {
-      priv->day_width = (allocation->width
-                         - (inner_border * 2)
-                         - padding.left - padding.right
-                         - (CALENDAR_MARGIN * 2)
-                         - (DAY_XSEP * 6))/7;
+      priv->day_width = (allocation->width - inner_border * 2 - padding.left - padding.right) / 7;
       priv->week_width = 0;
     }
 
@@ -2285,7 +2271,6 @@ calendar_paint_day_names (GtkCalendar *calendar,
   char buffer[255];
   int day,i;
   int day_width, cal_width;
-  int day_wid_sep;
   PangoLayout *layout;
   PangoRectangle logical_rect;
   gint calendar_ysep = calendar_get_ysep (calendar);
@@ -2305,7 +2290,6 @@ calendar_paint_day_names (GtkCalendar *calendar,
 
   day_width = priv->day_width;
   cal_width = allocation.width - (inner_border * 2) - padding.left - padding.right;
-  day_wid_sep = day_width + DAY_XSEP;
 
   /*
    * Draw rectangles as inverted background for the labels.
@@ -2320,15 +2304,15 @@ calendar_paint_day_names (GtkCalendar *calendar,
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_HIGHLIGHT);
 
   gtk_render_background (context, cr,
-                         CALENDAR_MARGIN, CALENDAR_MARGIN,
-                         cal_width - CALENDAR_MARGIN * 2,
-                         priv->day_name_h - CALENDAR_MARGIN);
+                         0, 0,
+                         cal_width,
+                         priv->day_name_h);
 
   if (priv->display_flags & GTK_CALENDAR_SHOW_WEEK_NUMBERS)
     gtk_render_background (context, cr,
-                           CALENDAR_MARGIN,
+                           0,
                            priv->day_name_h - calendar_ysep,
-                           priv->week_width - calendar_ysep - CALENDAR_MARGIN,
+                           priv->week_width - calendar_ysep,
                            calendar_ysep);
 
   /*
@@ -2349,13 +2333,12 @@ calendar_paint_day_names (GtkCalendar *calendar,
       pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
 
       gtk_render_layout (context, cr,
-                         (CALENDAR_MARGIN +
-                          + (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR ?
+                         ((gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR ?
                              (priv->week_width + (priv->week_width ? calendar_xsep : 0))
                              : 0)
-                          + day_wid_sep * i
+                          + day_width * i
                           + (day_width - logical_rect.width)/2),
-                         CALENDAR_MARGIN + day_name_padding.top + logical_rect.y,
+                         day_name_padding.top + logical_rect.y,
                          layout);
     }
 
@@ -2402,17 +2385,11 @@ calendar_paint_week_numbers (GtkCalendar *calendar,
   gtk_style_context_set_state (context, state);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_HIGHLIGHT);
 
-  if (priv->display_flags & GTK_CALENDAR_SHOW_DAY_NAMES)
-    gtk_render_background (context, cr,
-                           x + CALENDAR_MARGIN, y,
-                           priv->week_width - CALENDAR_MARGIN,
-                           priv->main_h - CALENDAR_MARGIN);
-  else
-    gtk_render_background (context, cr,
-                           x + CALENDAR_MARGIN,
-                           y + CALENDAR_MARGIN,
-                           priv->week_width - CALENDAR_MARGIN,
-                           priv->main_h - 2 * CALENDAR_MARGIN);
+  gtk_render_background (context, cr,
+                         x,
+                         y,
+                         priv->week_width,
+                         priv->main_h);
 
   /*
    * Write the labels
