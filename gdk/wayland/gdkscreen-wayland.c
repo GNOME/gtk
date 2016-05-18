@@ -490,6 +490,8 @@ init_settings (GdkScreen *screen)
   screen_wayland->settings = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, g_object_unref);
 
   source = g_settings_schema_source_get_default ();
+  if (source == NULL)
+    return;
 
   for (i = 0; i < G_N_ELEMENTS (translations); i++)
     {
