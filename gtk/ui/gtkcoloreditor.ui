@@ -97,7 +97,7 @@
                 <property name="scale-type">1</property>
                 <property name="has-origin">False</property>
                 <style>
-                  <class name="scale-has-marks-above"/>
+                  <class name="marks-before"/>
                 </style>
                 <signal name="popup-menu" handler="popup_edit" swapped="no"/>
               </object>
