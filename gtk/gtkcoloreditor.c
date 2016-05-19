@@ -373,10 +373,10 @@ gtk_color_editor_init (GtkColorEditor *editor)
 
   if (gtk_widget_get_direction (editor->priv->h_slider) == GTK_TEXT_DIR_RTL)
     gtk_style_context_add_class (gtk_widget_get_style_context (editor->priv->h_slider),
-                                 GTK_STYLE_CLASS_SCALE_HAS_MARKS_ABOVE);
+                                 "marks-before");
   else
     gtk_style_context_add_class (gtk_widget_get_style_context (editor->priv->h_slider),
-                                 GTK_STYLE_CLASS_SCALE_HAS_MARKS_BELOW);
+                                 "marks-after");
 
   /* Create the scaled popup adjustments manually here because connecting user data is not
    * supported by template GtkBuilder xml (it would be possible to set this up in the xml
