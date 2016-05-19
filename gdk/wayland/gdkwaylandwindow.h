@@ -59,8 +59,6 @@ void                     gdk_wayland_window_set_dbus_properties_libgtk_only (Gdk
 									     const char *window_object_path,
 									     const char *application_object_path,
 									     const char *unique_bus_name);
-GDK_AVAILABLE_IN_3_22
-struct wl_output        *gdk_wayland_window_get_wl_output       (GdkWindow *window);
 
 
 G_END_DECLS

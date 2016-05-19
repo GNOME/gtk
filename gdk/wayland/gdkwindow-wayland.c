@@ -2954,17 +2954,6 @@ gdk_wayland_window_get_wl_surface (GdkWindow *window)
   return GDK_WINDOW_IMPL_WAYLAND (window->impl)->display_server.wl_surface;
 }
 
-/**
- * gdk_wayland_window_get_wl_output:
- * @window: (type GdkWaylandWindow): a #GdkWindow
- *
- * Returns the Wayland output a #GdkWindow has last entered.
- *
- * Returns: (transfer none): a Wayland wl_output or NULL if the #GdkWindow
- * is not associated with any Wayland wl_output.
- *
- * Since: 3.22
- */
 struct wl_output *
 gdk_wayland_window_get_wl_output (GdkWindow *window)
 {

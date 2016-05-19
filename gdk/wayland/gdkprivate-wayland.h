@@ -274,4 +274,6 @@ EGLSurface gdk_wayland_window_get_dummy_egl_surface (GdkWindow *window,
 void gdk_wayland_seat_set_global_cursor (GdkSeat   *seat,
                                          GdkCursor *cursor);
 
+struct wl_output *gdk_wayland_window_get_wl_output (GdkWindow *window);
+
 #endif /* __GDK_PRIVATE_WAYLAND_H__ */
