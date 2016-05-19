@@ -52,7 +52,7 @@ struct _GtkTargetList
   /*< private >*/
   GList *list;
   guint ref_count;
- };
+};
 
 gboolean _gtk_selection_clear           (GtkWidget         *widget,
                                          GdkEventSelection *event);
