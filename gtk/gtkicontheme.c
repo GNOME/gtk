@@ -3951,7 +3951,30 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo *icon_info)
     }
 
   if (!source_pixbuf)
-    return FALSE;
+    {
+      static gboolean warn_about_load_failure = TRUE;
+
+      if (warn_about_load_failure)
+        {
+          gchar *path;
+
+          if (icon_info->is_resource)
+            path = g_strdup (icon_info->filename);
+          else if (G_IS_FILE (icon_info->loadable))
+            path = g_file_get_path (G_FILE (icon_info->loadable));
+          else
+            path = g_strdup ("icon theme");
+
+          g_warning ("Could not load a pixbuf from %s.\n"
+                     "This may indicate that pixbuf loaders or the mime database could not be found.",
+                     path);
+          g_free (path);
+
+          warn_about_load_failure = FALSE;
+        }
+
+      return FALSE;
+    }
 
   /* Do scale calculations that depend on the image size
    */
