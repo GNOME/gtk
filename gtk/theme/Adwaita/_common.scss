@@ -2789,7 +2789,6 @@ treeview.view radio:selected { &:focus, & { @extend %radio; }} // This is a work
 
 scale {
   // sizing
-
   $_marks_lenght: 6px;
   $_marks_distance: 6px;
 
@@ -2802,6 +2801,7 @@ scale {
   highlight { margin: -1px; }
 
   // the slider is inside the trough, so to have make it bigger there's a negative margin
+
   slider {
     min-height: 18px;
     min-width: 18px;
@@ -2982,17 +2982,17 @@ scale {
 
   @each $dir_class, $dir_infix in ('horizontal', 'horz'),
                                   ('vertical', 'vert') {
-    @each $marks_infix, $nth_child in ('scale-has-marks-above', ':last-child:not(:only-child)'),
-                                      ('scale-has-marks-below', ':first-child:not(:only-child)') {
+    @each $marks_infix, $marks_class in ('scale-has-marks-above', 'marks-before:not(.marks-after)'),
+                                        ('scale-has-marks-below', 'marks-after:not(.marks-before)') {
       @each $state, $state_infix in ('', ''),
-                               (':hover', '-hover'),
-                               (':active', '-active'),
-                               (':disabled', '-insensitive'),
-                               (':backdrop', '-backdrop'),
-                               (':backdrop:disabled', '-backdrop-insensitive') {
-        &.#{$dir_class} {
-          %#{$marks_infix}-#{$dir_infix},
-          contents#{$nth_child} > trough > slider {
+                                    (':hover', '-hover'),
+                                    (':active', '-active'),
+                                    (':disabled', '-insensitive'),
+                                    (':backdrop', '-backdrop'),
+                                    (':backdrop:disabled', '-backdrop-insensitive') {
+        &.#{$dir_class}.#{$marks_class} {
+
+          slider {
             &#{$state} {
               // an asymmetric slider asset is used here, so the margins are uneven, the smaller
               // margin is set on the point side.
@@ -3005,6 +3005,7 @@ scale {
               background-image: -gtk-scaled(url('#{$_scale_asset}.png'), url('#{$_scale_asset}@2.png'));
 
               $_scale_slider_bg_pos: bottom;
+
               @if $dir_class == 'horizontal' {
                 min-height: 26px;
                 min-width: 22px;
@@ -3041,8 +3042,7 @@ scale {
             }
           }
 
-          @at-root %#{$marks_infix}-#{$dir_infix}-fine-tune,
-          &.fine-tune contents#{$nth_child} > trough > slider {
+          &.fine-tune slider {
             // bigger negative margins to make the trough grow here as well
             margin: -7px;
 
@@ -3083,11 +3083,11 @@ scale {
       }
 
       slider {
-        &:hover, &:backdrop, &:disabled, &:backdrop:disabled, & {
-          @extend %scale-has-marks-above-horz;
-
-          margin-bottom: -15px;
-          margin-top: 6px;
+        &:dir(ltr), &:dir(rtl) { // specificity bumb
+          &:hover, &:backdrop, &:disabled, &:backdrop:disabled, & {
+            margin-bottom: -15px;
+            margin-top: 6px;
+          }
         }
       }
     }
@@ -3105,8 +3105,6 @@ scale {
 
         slider {
           &:hover, &:backdrop, &:disabled, &:backdrop:disabled, & {
-            @extend %scale-has-marks-below-vert;
-
             margin-left: -15px;
             margin-right: 6px;
           }
@@ -3125,8 +3123,6 @@ scale {
 
         slider {
           &:hover, &:backdrop, &:disabled, &:backdrop:disabled, & {
-            @extend %scale-has-marks-above-vert;
-
             margin-right: -15px;
             margin-left: 6px;
           }
@@ -3136,18 +3132,18 @@ scale {
 
     &.fine-tune {
       &.horizontal {
-        padding: 0 0 12px 0;
+        &:dir(ltr), &:dir(rtl) { // specificity bump
+          padding: 0 0 12px 0;
 
-        trough {
-          padding-bottom: 7px;
-          background-position: 0 -6px;
-        }
+          trough {
+            padding-bottom: 7px;
+            background-position: 0 -6px;
+          }
 
-        slider {
-          @extend %scale-has-marks-above-horz-fine-tune;
-
-          margin-bottom: -15px;
-          margin-top: 6px;
+          slider {
+            margin-bottom: -15px;
+            margin-top: 6px;
+          }
         }
       }
 
@@ -3161,8 +3157,6 @@ scale {
           }
 
           slider {
-            @extend %scale-has-marks-below-vert-fine-tune;
-
             margin-left: -15px;
             margin-right: 6px;
           }
@@ -3177,8 +3171,6 @@ scale {
           }
 
           slider {
-            @extend %scale-has-marks-above-vert-fine-tune;
-
             margin-right: -15px;
             margin-left: 6px;
           }
