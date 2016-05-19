@@ -24,7 +24,7 @@
         trough:dir(ltr)
           slider:dir(ltr)
           highlight.bottom:dir(ltr)
-    scale.horizontal:dir(ltr)
+    scale.horizontal.marks-before:dir(ltr)
       marks.top:dir(ltr)
         mark:dir(ltr)
           indicator
@@ -36,7 +36,7 @@
         trough:dir(ltr)
           slider:dir(ltr)
           highlight.top:dir(ltr)
-    scale.horizontal:dir(ltr)
+    scale.horizontal.marks-before.marks-after:dir(ltr)
       marks.top:dir(ltr)
         mark:dir(ltr)
           indicator
@@ -49,7 +49,7 @@
         mark:dir(ltr)
           label
           indicator
-    scale.horizontal:dir(ltr)
+    scale.horizontal.marks-after:dir(ltr)
       contents
         trough:dir(ltr)
           slider:dir(ltr)
