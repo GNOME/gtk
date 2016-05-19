@@ -4381,24 +4381,30 @@ gtk_tree_view_stop_rubber_band (GtkTreeView *tree_view)
       gtk_widget_queue_draw (GTK_WIDGET (tree_view));
 
       /* The anchor path should be set to the start path */
-      tmp_path = _gtk_tree_path_new_from_rbtree (tree_view->priv->rubber_band_start_tree,
-					         tree_view->priv->rubber_band_start_node);
+      if (tree_view->priv->rubber_band_start_node)
+        {
+          tmp_path = _gtk_tree_path_new_from_rbtree (tree_view->priv->rubber_band_start_tree,
+                                                     tree_view->priv->rubber_band_start_node);
 
-      if (tree_view->priv->anchor)
-	gtk_tree_row_reference_free (tree_view->priv->anchor);
+          if (tree_view->priv->anchor)
+            gtk_tree_row_reference_free (tree_view->priv->anchor);
 
-      tree_view->priv->anchor =
-	gtk_tree_row_reference_new_proxy (G_OBJECT (tree_view),
-					  tree_view->priv->model,
-					  tmp_path);
+          tree_view->priv->anchor =
+            gtk_tree_row_reference_new_proxy (G_OBJECT (tree_view),
+                                              tree_view->priv->model,
+                                              tmp_path);
 
-      gtk_tree_path_free (tmp_path);
+          gtk_tree_path_free (tmp_path);
+        }
 
       /* ... and the cursor to the end path */
-      tmp_path = _gtk_tree_path_new_from_rbtree (tree_view->priv->rubber_band_end_tree,
-                                                 tree_view->priv->rubber_band_end_node);
-      gtk_tree_view_real_set_cursor (GTK_TREE_VIEW (tree_view), tmp_path, 0);
-      gtk_tree_path_free (tmp_path);
+      if (tree_view->priv->rubber_band_end_node)
+        {
+          tmp_path = _gtk_tree_path_new_from_rbtree (tree_view->priv->rubber_band_end_tree,
+                                                     tree_view->priv->rubber_band_end_node);
+          gtk_tree_view_real_set_cursor (GTK_TREE_VIEW (tree_view), tmp_path, 0);
+          gtk_tree_path_free (tmp_path);
+        }
 
       _gtk_tree_selection_emit_changed (tree_view->priv->selection);
 
@@ -4535,7 +4541,28 @@ gtk_tree_view_update_rubber_band_selection (GtkTreeView *tree_view)
   _gtk_rbtree_find_offset (tree_view->priv->tree, MAX (tree_view->priv->press_start_y, bin_y), &end_tree, &end_node);
 
   /* Handle the start area first */
-  if (!tree_view->priv->rubber_band_start_node)
+  if (!start_node && !end_node)
+    {
+      if (tree_view->priv->rubber_band_start_node)
+        {
+          GtkRBNode *node = tree_view->priv->rubber_band_start_node;
+          GtkRBTree *tree = tree_view->priv->rubber_band_start_tree;
+
+	  if (tree_view->priv->rubber_band_modify)
+	    {
+	      /* Toggle the selection state */
+	      if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED))
+		GTK_RBNODE_UNSET_FLAG (node, GTK_RBNODE_IS_SELECTED);
+	      else
+		GTK_RBNODE_SET_FLAG (node, GTK_RBNODE_IS_SELECTED);
+	    }
+          else
+            GTK_RBNODE_UNSET_FLAG (node, GTK_RBNODE_IS_SELECTED);
+
+          _gtk_tree_view_queue_draw_node (tree_view, tree, node, NULL);
+        }
+    }
+  if (!tree_view->priv->rubber_band_start_node || !start_node)
     {
       gtk_tree_view_update_rubber_band_selection_range (tree_view,
 						       start_tree,
