@@ -1,3 +1,18 @@
+Overview of Changes in GTK+ 3.20.5
+==================================
+
+* Bugs fixed:
+ 763852 gdk/wayland: event source is not multi-thread aware
+ 765973 GtkRevealer need to always send "child-revealed" signal...
+ 766175 Translation of quotes may misinterpreted by GTK sidebar
+ 766233 Crash when server does not support XI2
+ 766440 Scale slider button has stopped discerning & rendering...
+ 766442 Broken drag & drop between windows
+
+* Translation updates:
+ Kazakh
+ Portuguese
+
 Overview of Changes in GTK+ 3.20.4
 ==================================
 
