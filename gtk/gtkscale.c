@@ -76,7 +76,7 @@
  * # CSS nodes
  *
  * |[<!-- language="plain" -->
- * scale[.fine-tune][.scale-has-marks-above][.scale-has-marks-below]
+ * scale[.fine-tune][.marks-before][.marks-after]
  * ├── marks.top
  * │   ├── mark
  * │   ┊    ├── [label]
@@ -119,8 +119,8 @@
  * scale, the label subnode is the first when present. Otherwise, the indicator
  * subnode is the first.
  *
- * The main CSS node gets the 'scale-has-marks-above' and/or 'scale-has-marks-below'
- * style classes added depending on what marks are present.
+ * The main CSS node gets the 'marks-before' and/or 'marks-after' style classes
+ * added depending on what marks are present.
  *
  * If the scale is displaying the value (see #GtkScale:draw-value), there is
  * subnode with name value.
@@ -2013,8 +2013,8 @@ gtk_scale_clear_marks (GtkScale *scale)
   g_clear_object (&priv->bottom_marks_gadget);
 
   context = gtk_widget_get_style_context (GTK_WIDGET (scale));
-  gtk_style_context_remove_class (context, GTK_STYLE_CLASS_SCALE_HAS_MARKS_BELOW);
-  gtk_style_context_remove_class (context, GTK_STYLE_CLASS_SCALE_HAS_MARKS_ABOVE);
+  gtk_style_context_remove_class (context, "marks-before");
+  gtk_style_context_remove_class (context, "marks-after");
 
   _gtk_range_set_stop_values (GTK_RANGE (scale), NULL, 0);
 
@@ -2185,9 +2185,9 @@ gtk_scale_add_mark (GtkScale        *scale,
 
   context = gtk_widget_get_style_context (GTK_WIDGET (scale));
   if (priv->top_marks_gadget)
-    gtk_style_context_add_class (context, GTK_STYLE_CLASS_SCALE_HAS_MARKS_ABOVE);
+    gtk_style_context_add_class (context, "marks-before");
   if (priv->bottom_marks_gadget)
-    gtk_style_context_add_class (context, GTK_STYLE_CLASS_SCALE_HAS_MARKS_BELOW);
+    gtk_style_context_add_class (context, "marks-after");
 
   gtk_widget_queue_resize (widget);
 }
