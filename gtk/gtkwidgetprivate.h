@@ -302,6 +302,11 @@ gboolean          gtk_widget_query_tooltip                 (GtkWidget  *widget,
                                                             gboolean    keyboard_mode,
                                                             GtkTooltip *tooltip);
 
+void              gtk_widget_render                        (GtkWidget            *widget,
+                                                            GdkWindow            *window,
+                                                            const cairo_region_t *region);
+
+
 /* inline getters */
 
 static inline gboolean
