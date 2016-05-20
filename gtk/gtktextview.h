@@ -164,7 +164,7 @@ struct _GtkTextViewClass
 {
   GtkContainerClass parent_class;
 
-  /*< public */
+  /*< public >*/
 
   void (* populate_popup)        (GtkTextView      *text_view,
                                   GtkWidget        *popup);
