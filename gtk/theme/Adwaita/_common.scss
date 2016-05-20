@@ -1512,13 +1512,17 @@ headerbar {
 }
 
 headerbar {
-  // add vertical margins to headerbar entries, buttons and separators to avoid them spanning the whole height
+  // add vertical margins to common widget on the headerbar to avoid them spanning the whole height
   entry,
   spinbutton,
   separator,
   button {
     margin-top: 6px;
     margin-bottom: 6px;
+  }
+  switch {
+    margin-top: 9px;
+    margin-bottom: 9px;
   }
 }
 

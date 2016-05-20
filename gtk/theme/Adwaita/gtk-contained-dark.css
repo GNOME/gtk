@@ -1932,6 +1932,9 @@ headerbar separator,
 headerbar button {
   margin-top: 6px;
   margin-bottom: 6px; }
+headerbar switch {
+  margin-top: 9px;
+  margin-bottom: 9px; }
 
 .background:not(.tiled):not(.maximized) .titlebar:backdrop, .background:not(.tiled):not(.maximized) .titlebar {
   border-top-left-radius: 7px;
