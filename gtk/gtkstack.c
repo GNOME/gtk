@@ -1283,6 +1283,7 @@ gtk_stack_add (GtkContainer *container,
 
   priv->children = g_list_append (priv->children, child_info);
 
+  gtk_widget_set_child_visible (child, FALSE);
   gtk_widget_set_parent_window (child, priv->bin_window);
   gtk_widget_set_parent (child, GTK_WIDGET (stack));
 
@@ -1299,8 +1300,6 @@ gtk_stack_add (GtkContainer *container,
   if (priv->visible_child == NULL &&
       gtk_widget_get_visible (child))
     set_visible_child (stack, child_info, priv->transition_type, priv->transition_duration);
-  else
-    gtk_widget_set_child_visible (child, FALSE);
 
   if (priv->hhomogeneous || priv->vhomogeneous || priv->visible_child == child_info)
     gtk_widget_queue_resize (GTK_WIDGET (stack));
