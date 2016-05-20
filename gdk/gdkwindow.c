@@ -2841,77 +2841,9 @@ gdk_window_create_gl_context (GdkWindow    *window,
                                                                       error);
 }
 
-/**
- * gdk_window_begin_paint_rect:
- * @window: a #GdkWindow
- * @rectangle: rectangle you intend to draw to
- *
- * A convenience wrapper around gdk_window_begin_paint_region() which
- * creates a rectangular region for you. See
- * gdk_window_begin_paint_region() for details.
- *
- **/
-void
-gdk_window_begin_paint_rect (GdkWindow          *window,
-			     const GdkRectangle *rectangle)
-{
-  cairo_region_t *region;
-
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
-  region = cairo_region_create_rectangle (rectangle);
-  gdk_window_begin_paint_region (window, region);
-  cairo_region_destroy (region);
-}
-
-/**
- * gdk_window_begin_paint_region:
- * @window: a #GdkWindow
- * @region: region you intend to draw to
- *
- * Indicates that you are beginning the process of redrawing @region.
- * A backing store (offscreen buffer) large enough to contain @region
- * will be created. The backing store will be initialized with the
- * background color or background surface for @window. Then, all
- * drawing operations performed on @window will be diverted to the
- * backing store.  When you call gdk_window_end_paint(), the backing
- * store will be copied to @window, making it visible onscreen. Only
- * the part of @window contained in @region will be modified; that is,
- * drawing operations are clipped to @region.
- *
- * The net result of all this is to remove flicker, because the user
- * sees the finished product appear all at once when you call
- * gdk_window_end_paint(). If you draw to @window directly without
- * calling gdk_window_begin_paint_region(), the user may see flicker
- * as individual drawing operations are performed in sequence.  The
- * clipping and background-initializing features of
- * gdk_window_begin_paint_region() are conveniences for the
- * programmer, so you can avoid doing that work yourself.
- *
- * When using GTK+, the widget system automatically places calls to
- * gdk_window_begin_paint_region() and gdk_window_end_paint() around
- * emissions of the expose_event signal. That is, if you’re writing an
- * expose event handler, you can assume that the exposed area in
- * #GdkEventExpose has already been cleared to the window background,
- * is already set as the clip region, and already has a backing store.
- * Therefore in most cases, application code need not call
- * gdk_window_begin_paint_region(). (You can disable the automatic
- * calls around expose events on a widget-by-widget basis by calling
- * gtk_widget_set_double_buffered().)
- *
- * If you call this function multiple times before calling the
- * matching gdk_window_end_paint(), the backing stores are pushed onto
- * a stack. gdk_window_end_paint() copies the topmost backing store
- * onscreen, subtracts the topmost region from all other regions in
- * the stack, and pops the stack. All drawing operations affect only
- * the topmost backing store in the stack. One matching call to
- * gdk_window_end_paint() is required for each call to
- * gdk_window_begin_paint_region().
- *
- **/
-void
-gdk_window_begin_paint_region (GdkWindow       *window,
-			       const cairo_region_t *region)
+static void
+gdk_window_begin_paint_internal (GdkWindow            *window,
+			         const cairo_region_t *region)
 {
   GdkRectangle clip_box;
   GdkWindowImplClass *impl_class;
@@ -2919,16 +2851,14 @@ gdk_window_begin_paint_region (GdkWindow       *window,
   gboolean needs_surface;
   cairo_content_t surface_content;
 
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
   if (GDK_WINDOW_DESTROYED (window) ||
       !gdk_window_has_impl (window))
     return;
 
   if (window->current_paint.surface != NULL)
     {
-      g_warning ("gdk_window_begin_paint_region called while a paint was "
-                 "alredy in progress. This is not allowed.");
+      g_warning ("A paint operation on the window is alredy in progress. "
+                 "This is not allowed.");
       return;
     }
 
@@ -3004,98 +2934,13 @@ gdk_window_begin_paint_region (GdkWindow       *window,
     gdk_window_clear_backing_region (window);
 }
 
-/**
- * gdk_window_mark_paint_from_clip:
- * @window: a #GdkWindow
- * @cr: a #cairo_t
- *
- * If you call this during a paint (e.g. between gdk_window_begin_paint_region()
- * and gdk_window_end_paint() then GDK will mark the current clip region of the
- * window as being drawn. This is required when mixing GL rendering via
- * gdk_cairo_draw_from_gl() and cairo rendering, as otherwise GDK has no way
- * of knowing when something paints over the GL-drawn regions.
- *
- * This is typically called automatically by GTK+ and you don't need
- * to care about this.
- *
- * Since: 3.16
- **/
-void
-gdk_window_mark_paint_from_clip (GdkWindow          *window,
-                                 cairo_t            *cr)
-{
-  cairo_region_t *clip_region;
-  GdkWindow *impl_window = window->impl_window;
-
-  if (impl_window->current_paint.surface == NULL ||
-      cairo_get_target (cr) != impl_window->current_paint.surface)
-    return;
-
-  if (cairo_region_is_empty (impl_window->current_paint.flushed_region))
-    return;
-
-  /* This here seems a bit weird, but basically, we're taking the current
-     clip and applying also the flushed region, and the result is that the
-     new clip is the intersection of these. This is the area where the newly
-     drawn region overlaps a previosly flushed area, which is an area of the
-     double buffer surface that need to be blended OVER the back buffer rather
-     than SRCed. */
-  cairo_save (cr);
-  /* We set the identity matrix here so we get and apply regions in native
-     window coordinates. */
-  cairo_identity_matrix (cr);
-  gdk_cairo_region (cr, impl_window->current_paint.flushed_region);
-  cairo_clip (cr);
-
-  clip_region = gdk_cairo_region_from_clip (cr);
-  if (clip_region == NULL)
-    {
-      /* Failed to represent clip as region, mark all as requiring
-         blend */
-      cairo_region_union (impl_window->current_paint.need_blend_region,
-                          impl_window->current_paint.flushed_region);
-      cairo_region_destroy (impl_window->current_paint.flushed_region);
-      impl_window->current_paint.flushed_region = cairo_region_create ();
-    }
-  else
-    {
-      cairo_region_subtract (impl_window->current_paint.flushed_region, clip_region);
-      cairo_region_union (impl_window->current_paint.need_blend_region, clip_region);
-    }
-  cairo_region_destroy (clip_region);
-
-  /* Clear the area on the double buffer surface to transparent so we
-     can start drawing from scratch the area "above" the flushed
-     region */
-  cairo_set_source_rgba (cr, 0, 0, 0, 0);
-  cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
-  cairo_paint (cr);
-
-  cairo_restore (cr);
-}
-
-/**
- * gdk_window_end_paint:
- * @window: a #GdkWindow
- *
- * Indicates that the backing store created by the most recent call
- * to gdk_window_begin_paint_region() should be copied onscreen and
- * deleted, leaving the next-most-recent backing store or no backing
- * store at all as the active paint region. See
- * gdk_window_begin_paint_region() for full details.
- *
- * It is an error to call this function without a matching
- * gdk_window_begin_paint_region() first.
- **/
-void
-gdk_window_end_paint (GdkWindow *window)
+static void
+gdk_window_end_paint_internal (GdkWindow *window)
 {
   GdkWindow *composited;
   GdkWindowImplClass *impl_class;
   GdkRectangle clip_box = { 0, };
   cairo_t *cr;
-
-  g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (GDK_WINDOW_DESTROYED (window) ||
       !gdk_window_has_impl (window))
@@ -3186,6 +3031,285 @@ gdk_window_end_paint (GdkWindow *window)
 	  break;
 	}
     }
+}
+
+/**
+ * gdk_window_begin_paint_rect:
+ * @window: a #GdkWindow
+ * @rectangle: rectangle you intend to draw to
+ *
+ * A convenience wrapper around gdk_window_begin_paint_region() which
+ * creates a rectangular region for you. See
+ * gdk_window_begin_paint_region() for details.
+ *
+ **/
+void
+gdk_window_begin_paint_rect (GdkWindow          *window,
+			     const GdkRectangle *rectangle)
+{
+  cairo_region_t *region;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  region = cairo_region_create_rectangle (rectangle);
+  gdk_window_begin_paint_internal (window, region);
+  cairo_region_destroy (region);
+}
+
+/**
+ * gdk_window_begin_paint_region:
+ * @window: a #GdkWindow
+ * @region: region you intend to draw to
+ *
+ * Indicates that you are beginning the process of redrawing @region.
+ * A backing store (offscreen buffer) large enough to contain @region
+ * will be created. The backing store will be initialized with the
+ * background color or background surface for @window. Then, all
+ * drawing operations performed on @window will be diverted to the
+ * backing store.  When you call gdk_window_end_paint(), the backing
+ * store will be copied to @window, making it visible onscreen. Only
+ * the part of @window contained in @region will be modified; that is,
+ * drawing operations are clipped to @region.
+ *
+ * The net result of all this is to remove flicker, because the user
+ * sees the finished product appear all at once when you call
+ * gdk_window_end_paint(). If you draw to @window directly without
+ * calling gdk_window_begin_paint_region(), the user may see flicker
+ * as individual drawing operations are performed in sequence.  The
+ * clipping and background-initializing features of
+ * gdk_window_begin_paint_region() are conveniences for the
+ * programmer, so you can avoid doing that work yourself.
+ *
+ * When using GTK+, the widget system automatically places calls to
+ * gdk_window_begin_paint_region() and gdk_window_end_paint() around
+ * emissions of the expose_event signal. That is, if you’re writing an
+ * expose event handler, you can assume that the exposed area in
+ * #GdkEventExpose has already been cleared to the window background,
+ * is already set as the clip region, and already has a backing store.
+ * Therefore in most cases, application code need not call
+ * gdk_window_begin_paint_region(). (You can disable the automatic
+ * calls around expose events on a widget-by-widget basis by calling
+ * gtk_widget_set_double_buffered().)
+ *
+ * If you call this function multiple times before calling the
+ * matching gdk_window_end_paint(), the backing stores are pushed onto
+ * a stack. gdk_window_end_paint() copies the topmost backing store
+ * onscreen, subtracts the topmost region from all other regions in
+ * the stack, and pops the stack. All drawing operations affect only
+ * the topmost backing store in the stack. One matching call to
+ * gdk_window_end_paint() is required for each call to
+ * gdk_window_begin_paint_region().
+ *
+ **/
+void
+gdk_window_begin_paint_region (GdkWindow            *window,
+			       const cairo_region_t *region)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  gdk_window_begin_paint_internal (window, region);
+}
+
+static const cairo_user_data_key_t draw_context_window_key;
+
+static void
+gdk_cairo_set_window (cairo_t *cr,
+                      GdkWindow *window)
+{
+  cairo_set_user_data (cr, &draw_context_window_key, window, NULL);
+}
+
+/**
+ * gdk_cairo_get_window:
+ * @cr: a Cairo context created by gdk_window_begin_draw_frame()
+ *
+ * Retrieves the #GdkWindow that created the Cairo context @cr.
+ *
+ * Returns: (nullable) (transfer none): a #GdkWindow
+ *
+ * Since: 3.22
+ */
+GdkWindow *
+gdk_cairo_get_window (cairo_t *cr)
+{
+  g_return_val_if_fail (cr != NULL, NULL);
+
+  return cairo_get_user_data (cr, &draw_context_window_key);
+}
+
+/**
+ * gdk_window_begin_draw_frame:
+ * @window: a #GdkWindow
+ * @region: a Cairo region
+ *
+ * Indicates that you are beginning the process of redrawing @region
+ * on @window, and provides you with a Cairo context for drawing.
+ *
+ * If @window is a top level #GdkWindow, backed by a native window
+ * implementation, a backing store (offscreen buffer) large enough to
+ * contain @region will be created. The backing store will be initialized
+ * with the background color or background surface for @window. Then, all
+ * drawing operations performed on @window will be diverted to the
+ * backing store. When you call gdk_window_end_frame(), the contents of
+ * the backing store will be copied to @window, making it visible
+ * on screen. Only the part of @window contained in @region will be
+ * modified; that is, drawing operations are clipped to @region.
+ *
+ * The net result of all this is to remove flicker, because the user
+ * sees the finished product appear all at once when you call
+ * gdk_window_end_draw_frame(). If you draw to @window directly without
+ * calling gdk_window_begin_draw_frame(), the user may see flicker
+ * as individual drawing operations are performed in sequence.
+ *
+ * When using GTK+, the widget system automatically places calls to
+ * gdk_window_begin_draw_frame() and gdk_window_end_draw_frame() around
+ * emissions of the `GtkWidget::draw` signal. That is, if you’re
+ * drawing the contents of the widget yourself, you can assume that the
+ * widget has a cleared background, is already set as the clip region,
+ * and already has a backing store. Therefore in most cases, application
+ * code in GTK does not need to call gdk_window_begin_draw_frame()
+ * explicitly.
+ *
+ * Returns: (transfer none): a Cairo context that should be used to
+ *   draw the contents of the window; the returned context is owned
+ *   by GDK and should not be destroyed directly
+ *
+ * Since: 3.22
+ */
+cairo_t *
+gdk_window_begin_draw_frame (GdkWindow            *window,
+                             const cairo_region_t *region)
+{
+  cairo_t *retval;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+
+  if (gdk_window_has_native (window) && gdk_window_is_toplevel (window))
+    gdk_window_begin_paint_internal (window, region);
+
+  retval = gdk_cairo_create (window);
+
+  gdk_cairo_region (retval, region);
+  cairo_clip (retval);
+
+  return retval;
+}
+
+/**
+ * gdk_window_end_draw_frame:
+ * @window: a #GdkWindow
+ * @cr: the Cairo context created by gdk_window_begin_draw_frame()
+ *
+ * Indicates that the drawing of the contents of @window started with
+ * gdk_window_begin_frame() has been completed.
+ *
+ * This function will take care of destroying the Cairo context.
+ *
+ * It is an error to call this function without a matching
+ * gdk_window_begin_frame() first.
+ *
+ * Since: 3.22
+ */
+void
+gdk_window_end_draw_frame (GdkWindow *window,
+                           cairo_t   *cr)
+{
+  if (gdk_window_has_native (window) && gdk_window_is_toplevel (window))
+    gdk_window_end_paint_internal (window);
+
+  gdk_cairo_set_window (cr, NULL);
+  cairo_destroy (cr);
+}
+
+/**
+ * gdk_window_mark_paint_from_clip:
+ * @window: a #GdkWindow
+ * @cr: a #cairo_t
+ *
+ * If you call this during a paint (e.g. between gdk_window_begin_paint_region()
+ * and gdk_window_end_paint() then GDK will mark the current clip region of the
+ * window as being drawn. This is required when mixing GL rendering via
+ * gdk_cairo_draw_from_gl() and cairo rendering, as otherwise GDK has no way
+ * of knowing when something paints over the GL-drawn regions.
+ *
+ * This is typically called automatically by GTK+ and you don't need
+ * to care about this.
+ *
+ * Since: 3.16
+ **/
+void
+gdk_window_mark_paint_from_clip (GdkWindow *window,
+                                 cairo_t   *cr)
+{
+  cairo_region_t *clip_region;
+  GdkWindow *impl_window = window->impl_window;
+
+  if (impl_window->current_paint.surface == NULL ||
+      cairo_get_target (cr) != impl_window->current_paint.surface)
+    return;
+
+  if (cairo_region_is_empty (impl_window->current_paint.flushed_region))
+    return;
+
+  /* This here seems a bit weird, but basically, we're taking the current
+     clip and applying also the flushed region, and the result is that the
+     new clip is the intersection of these. This is the area where the newly
+     drawn region overlaps a previosly flushed area, which is an area of the
+     double buffer surface that need to be blended OVER the back buffer rather
+     than SRCed. */
+  cairo_save (cr);
+  /* We set the identity matrix here so we get and apply regions in native
+     window coordinates. */
+  cairo_identity_matrix (cr);
+  gdk_cairo_region (cr, impl_window->current_paint.flushed_region);
+  cairo_clip (cr);
+
+  clip_region = gdk_cairo_region_from_clip (cr);
+  if (clip_region == NULL)
+    {
+      /* Failed to represent clip as region, mark all as requiring
+         blend */
+      cairo_region_union (impl_window->current_paint.need_blend_region,
+                          impl_window->current_paint.flushed_region);
+      cairo_region_destroy (impl_window->current_paint.flushed_region);
+      impl_window->current_paint.flushed_region = cairo_region_create ();
+    }
+  else
+    {
+      cairo_region_subtract (impl_window->current_paint.flushed_region, clip_region);
+      cairo_region_union (impl_window->current_paint.need_blend_region, clip_region);
+    }
+  cairo_region_destroy (clip_region);
+
+  /* Clear the area on the double buffer surface to transparent so we
+     can start drawing from scratch the area "above" the flushed
+     region */
+  cairo_set_source_rgba (cr, 0, 0, 0, 0);
+  cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+  cairo_paint (cr);
+
+  cairo_restore (cr);
+}
+
+/**
+ * gdk_window_end_paint:
+ * @window: a #GdkWindow
+ *
+ * Indicates that the backing store created by the most recent call
+ * to gdk_window_begin_paint_region() should be copied onscreen and
+ * deleted, leaving the next-most-recent backing store or no backing
+ * store at all as the active paint region. See
+ * gdk_window_begin_paint_region() for full details.
+ *
+ * It is an error to call this function without a matching
+ * gdk_window_begin_paint_region() first.
+ **/
+void
+gdk_window_end_paint (GdkWindow *window)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  gdk_window_end_paint_internal (window);
 }
 
 /**
@@ -3357,6 +3481,8 @@ gdk_cairo_create (GdkWindow *window)
   surface = _gdk_window_ref_cairo_surface (window);
 
   cr = cairo_create (surface);
+
+  gdk_cairo_set_window (cr, window);
 
   if (window->impl_window->current_paint.region != NULL)
     {

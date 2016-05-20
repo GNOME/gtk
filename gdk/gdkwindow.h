@@ -704,6 +704,14 @@ void	      gdk_window_begin_paint_region (GdkWindow          *window,
 					     const cairo_region_t    *region);
 GDK_AVAILABLE_IN_ALL
 void	      gdk_window_end_paint          (GdkWindow          *window);
+
+GDK_AVAILABLE_IN_3_22
+cairo_t *     gdk_window_begin_draw_frame  (GdkWindow            *window,
+                                            const cairo_region_t *region);
+GDK_AVAILABLE_IN_3_22
+void          gdk_window_end_draw_frame    (GdkWindow            *window,
+                                            cairo_t              *cr);
+
 GDK_DEPRECATED_IN_3_14
 void	      gdk_window_flush             (GdkWindow          *window);
 
