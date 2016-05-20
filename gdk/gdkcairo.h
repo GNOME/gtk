@@ -32,6 +32,8 @@ G_BEGIN_DECLS
 
 GDK_AVAILABLE_IN_ALL
 cairo_t  * gdk_cairo_create             (GdkWindow          *window);
+GDK_AVAILABLE_IN_3_22
+GdkWindow * gdk_cairo_get_window        (cairo_t            *cr);
 GDK_AVAILABLE_IN_ALL
 gboolean   gdk_cairo_get_clip_rectangle (cairo_t            *cr,
                                          GdkRectangle       *rect);
