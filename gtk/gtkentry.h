@@ -315,7 +315,13 @@ void           gtk_entry_set_placeholder_text    (GtkEntry             *entry,
 GDK_AVAILABLE_IN_ALL
 void           gtk_entry_set_icon_from_pixbuf            (GtkEntry             *entry,
 							  GtkEntryIconPosition  icon_pos,
-							  GdkPixbuf            *pixbuf);
+							  GdkPixbuf            *pixbuf );
+                                                          
+void           gtk_entry_set_icon_from_pixbuf_at_size  (GtkEntry              *entry,
+							GtkEntryIconPosition  icon_pos,
+							GdkPixbuf             *pixbuf ,
+                                                        GtkIconSize           icon_size);
+
 GDK_DEPRECATED_IN_3_10_FOR(gtk_entry_set_icon_from_icon_name)
 void           gtk_entry_set_icon_from_stock             (GtkEntry             *entry,
 							  GtkEntryIconPosition  icon_pos,
