@@ -1,5 +1,97 @@
 #include <gtk/gtk.h>
 
+typedef struct {
+  GtkTab parent_instance;
+  GtkWidget *label;
+  GtkWidget *popover;
+} MyTab;
+
+typedef struct {
+  GtkTabClass parent_class;
+} MyTabClass;
+
+G_DEFINE_TYPE (MyTab, my_tab, GTK_TYPE_TAB)
+
+static void
+close_tab (MyTab *tab)
+{
+  GtkWidget *widget;
+  GtkWidget *stack;
+
+  widget = gtk_tab_get_widget (GTK_TAB (tab));
+  stack = gtk_widget_get_parent (widget);
+  gtk_container_remove (GTK_CONTAINER (stack), widget);
+}
+
+static void
+my_tab_init (MyTab *tab)
+{
+  GtkWidget *button;
+
+  tab->label = gtk_label_new ("");
+  gtk_widget_show (tab->label);
+  gtk_widget_set_halign (tab->label, GTK_ALIGN_CENTER);
+
+  gtk_tab_set_child (GTK_TAB (tab), tab->label);
+
+  g_object_bind_property (tab, "title", tab->label, "label", G_BINDING_DEFAULT);
+
+  tab->popover = gtk_popover_new (tab->label);
+  button = g_object_new (GTK_TYPE_MODEL_BUTTON,
+                         "text", "Close",
+                         "visible", TRUE,
+                         "margin", 10,
+                         NULL);
+  g_signal_connect_swapped (button, "clicked", G_CALLBACK (close_tab), tab);
+  gtk_container_add (GTK_CONTAINER (tab->popover), button);
+}
+
+static gboolean
+my_tab_button_press (GtkWidget      *widget,
+                     GdkEventButton *event)
+{
+  MyTab *tab = (MyTab *)widget;
+
+  if (event->button == GDK_BUTTON_SECONDARY)
+    {
+      gtk_widget_show (tab->popover);
+      return TRUE;
+    }
+
+  return GTK_WIDGET_CLASS (my_tab_parent_class)->button_press_event (widget, event);
+}
+
+static void
+my_tab_destroy (GtkWidget *widget)
+{
+  MyTab *tab = (MyTab *)widget;
+
+  if (tab->popover)
+    {
+      gtk_widget_destroy (tab->popover);
+      tab->popover = NULL;
+    }
+
+  GTK_WIDGET_CLASS (my_tab_parent_class)->destroy (widget);
+}
+
+static void
+my_tab_class_init (MyTabClass *class)
+{
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
+
+  widget_class->button_press_event = my_tab_button_press;
+  widget_class->destroy = my_tab_destroy;
+}
+
+static GtkTab *
+create_tab (GtkTabStrip *strip,
+            GtkWidget   *widget,
+            gpointer     data)
+{
+  return g_object_new (my_tab_get_type (), "widget", widget, NULL);
+}
+
 static void
 add_stack_child (GtkWidget *stack)
 {
@@ -51,6 +143,7 @@ main (int argc, char *argv[])
   gtk_tab_strip_set_closable (GTK_TAB_STRIP (tabs), TRUE);
   gtk_tab_strip_set_scrollable (GTK_TAB_STRIP (tabs), TRUE);
   gtk_tab_strip_set_stack (GTK_TAB_STRIP (tabs), GTK_STACK (stack));
+  g_signal_connect (tabs, "create-tab", G_CALLBACK (create_tab), NULL);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_box_pack_start (GTK_BOX (box), tabs, TRUE, TRUE, 0);
