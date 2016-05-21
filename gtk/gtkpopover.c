@@ -1774,13 +1774,13 @@ _gtk_popover_parent_hierarchy_changed (GtkWidget  *widget,
   if (priv->window)
     _gtk_window_remove_popover (priv->window, GTK_WIDGET (popover));
 
-  if (new_window)
-    _gtk_window_add_popover (new_window, GTK_WIDGET (popover), priv->widget, TRUE);
-
   priv->window = new_window;
 
   if (new_window)
-    gtk_popover_update_position (popover);
+    {
+      _gtk_window_add_popover (new_window, GTK_WIDGET (popover), priv->widget, TRUE);
+      gtk_popover_update_position (popover);
+    }
 
   if (gtk_widget_is_visible (GTK_WIDGET (popover)))
     gtk_widget_queue_resize (GTK_WIDGET (popover));
