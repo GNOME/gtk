@@ -49,6 +49,7 @@ main (int argc, char *argv[])
 
   tabs = gtk_tab_strip_new ();
   gtk_tab_strip_set_closable (GTK_TAB_STRIP (tabs), TRUE);
+  gtk_tab_strip_set_scrollable (GTK_TAB_STRIP (tabs), TRUE);
   gtk_tab_strip_set_stack (GTK_TAB_STRIP (tabs), GTK_STACK (stack));
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);

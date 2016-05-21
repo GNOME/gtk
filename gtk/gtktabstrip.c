@@ -25,11 +25,13 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkorientable.h"
+#include "gtkscrolledwindow.h"
+#include "gtkbutton.h"
+#include "gtkadjustmentprivate.h"
 
 /*
  * TODO:
  * - custom tabs
- * - scrolling
  * - reordering
  * - dnd
  * - other edges
@@ -39,8 +41,14 @@ typedef struct
 {
   GtkStack        *stack;
   gboolean         closable;
+  gboolean         scrollable;
   gboolean         in_child_changed;
-  GdkWindow       *event_window;
+  GtkWidget       *scrolledwindow;
+  GtkWidget       *tabs;
+  GtkWidget       *start_scroll;
+  GtkWidget       *end_scroll;
+  GtkScrollType    autoscroll_mode;
+  guint            autoscroll_id;
 } GtkTabStripPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkTabStrip, gtk_tab_strip, GTK_TYPE_BOX)
@@ -49,6 +57,7 @@ enum {
   PROP_0,
   PROP_STACK,
   PROP_CLOSABLE,
+  PROP_SCROLLABLE,
   N_PROPS
 };
 
@@ -92,6 +101,10 @@ gtk_tab_strip_get_property (GObject    *object,
       g_value_set_boolean (value, gtk_tab_strip_get_closable (self));
       break;
 
+    case PROP_SCROLLABLE:
+      g_value_set_boolean (value, gtk_tab_strip_get_scrollable (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -115,191 +128,12 @@ gtk_tab_strip_set_property (GObject      *object,
       gtk_tab_strip_set_closable (self, g_value_get_boolean (value));
       break;
 
+    case PROP_SCROLLABLE:
+      gtk_tab_strip_set_scrollable (self, g_value_get_boolean (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static gboolean
-get_widget_coordinates (GtkWidget *widget,
-                        GdkEvent  *event,
-                        gdouble   *x,
-                        gdouble   *y)
-{
-  GdkWindow *window = ((GdkEventAny *)event)->window;
-  gdouble tx, ty;
-
-  if (!gdk_event_get_coords (event, &tx, &ty))
-    return FALSE;
-
-  while (window && window != gtk_widget_get_window (widget))
-    {
-      gint window_x, window_y;
-
-      gdk_window_get_position (window, &window_x, &window_y);
-      tx += window_x;
-      ty += window_y;
-
-      window = gdk_window_get_parent (window);
-    }
-
-  if (window)
-    {
-      *x = tx;
-      *y = ty;
-
-      return TRUE;
-    }
-  else
-    return FALSE;
-}
-
-static GtkTab *
-get_tab_at_pos (GtkTabStrip *self,
-                gdouble      x,
-                gdouble      y)
-{
-  GtkAllocation allocation;
-  GList *children, *l;
-  GtkTab *tab;
-
-  children = gtk_container_get_children (GTK_CONTAINER (self));
-
-  tab = NULL;
-  for (l = children; l; l = l->next)
-    {
-      gtk_widget_get_allocation (GTK_WIDGET (l->data), &allocation);
-      if ((x >= allocation.x) &&
-          (y >= allocation.y) &&
-          (x <= (allocation.x + allocation.width)) &&
-          (y <= (allocation.y + allocation.height)))
-        {
-          tab = l->data;
-          break;
-        }
-    }
-
-  g_list_free (children);
-
-  return tab;
-}
-
-static gboolean
-gtk_tab_strip_button_press (GtkWidget      *widget,
-                            GdkEventButton *event)
-{
-  GtkTabStrip *self = GTK_TAB_STRIP (widget);
-  GtkTabStripPrivate *priv = gtk_tab_strip_get_instance_private (self);
-  GtkTab *tab;
-  GtkWidget *child;
-  gdouble x, y;
-
-  if (!get_widget_coordinates (widget, (GdkEvent *)event, &x, &y))
-    return FALSE;
-
-  if (event->button != GDK_BUTTON_PRIMARY)
-    return FALSE;
-
-  tab = get_tab_at_pos (self, x, y);
-
-  if (tab == NULL)
-    return FALSE;
-
-  child = gtk_tab_get_widget (tab);
-  if (child == NULL)
-    return FALSE;
-
-  gtk_stack_set_visible_child (priv->stack, child);
-
-  return TRUE;
-}
-
-static void
-gtk_tab_strip_map (GtkWidget *widget)
-{
-  GtkTabStrip *self = GTK_TAB_STRIP (widget);
-  GtkTabStripPrivate *priv = gtk_tab_strip_get_instance_private (self);
-
-  GTK_WIDGET_CLASS (gtk_tab_strip_parent_class)->map (widget);
-
-  gdk_window_show_unraised (priv->event_window);
-}
-
-static void
-gtk_tab_strip_unmap (GtkWidget *widget)
-{
-  GtkTabStrip *self = GTK_TAB_STRIP (widget);
-  GtkTabStripPrivate *priv = gtk_tab_strip_get_instance_private (self);
-
-  gdk_window_hide (priv->event_window);
-
-  GTK_WIDGET_CLASS (gtk_tab_strip_parent_class)->unmap (widget);
-}
-
-static void
-gtk_tab_strip_realize (GtkWidget *widget)
-{
-  GtkTabStrip *self = GTK_TAB_STRIP (widget);
-  GtkTabStripPrivate *priv = gtk_tab_strip_get_instance_private (self);
-  GdkWindow *window;
-  GdkWindowAttr attributes;
-  gint attributes_mask;
-  GtkAllocation allocation;
-
-  gtk_widget_set_realized (widget, TRUE);
-
-  gtk_widget_get_allocation (widget, &allocation);
-
-  window = gtk_widget_get_parent_window (widget);
-  gtk_widget_set_window (widget, window);
-  g_object_ref (window);
-
-  attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.x = allocation.x;
-  attributes.y = allocation.y;
-  attributes.width = allocation.width;
-  attributes.height = allocation.height;
-  attributes.wclass = GDK_INPUT_ONLY;
-  attributes.event_mask = gtk_widget_get_events (widget);
-  attributes.event_mask |= (GDK_BUTTON_PRESS_MASK |
-                            GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK |
-                            GDK_POINTER_MOTION_MASK | GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK);
-  attributes_mask = GDK_WA_X | GDK_WA_Y;
-
-  priv->event_window = gdk_window_new (gtk_widget_get_parent_window (widget),
-                                       &attributes, attributes_mask);
-  gtk_widget_register_window (widget, priv->event_window);
-}
-
-static void
-gtk_tab_strip_unrealize (GtkWidget *widget)
-{
-  GtkTabStrip *self = GTK_TAB_STRIP (widget);
-  GtkTabStripPrivate *priv = gtk_tab_strip_get_instance_private (self);
-
-  gtk_widget_unregister_window (widget, priv->event_window);
-  gdk_window_destroy (priv->event_window);
-  priv->event_window = NULL;
-
-  GTK_WIDGET_CLASS (gtk_tab_strip_parent_class)->unrealize (widget);
-}
-
-static void
-gtk_tab_strip_size_allocate (GtkWidget     *widget,
-                             GtkAllocation *allocation)
-{
-  GtkTabStrip *self = GTK_TAB_STRIP (widget);
-  GtkTabStripPrivate *priv = gtk_tab_strip_get_instance_private (self);
-
-  GTK_WIDGET_CLASS (gtk_tab_strip_parent_class)->size_allocate (widget, allocation);
-
-  if (gtk_widget_get_realized (widget))
-    {
-      gdk_window_move_resize (priv->event_window,
-                              allocation->x, allocation->y,
-                              allocation->width, allocation->height);
-      if (gtk_widget_get_mapped (widget))
-        gdk_window_show_unraised (priv->event_window);
     }
 }
 
@@ -314,12 +148,6 @@ gtk_tab_strip_class_init (GtkTabStripClass *klass)
   object_class->set_property = gtk_tab_strip_set_property;
 
   widget_class->destroy = gtk_tab_strip_destroy;
-  widget_class->map = gtk_tab_strip_map;
-  widget_class->unmap = gtk_tab_strip_unmap;
-  widget_class->realize = gtk_tab_strip_realize;
-  widget_class->unrealize = gtk_tab_strip_unrealize;
-  widget_class->size_allocate = gtk_tab_strip_size_allocate;
-  widget_class->button_press_event = gtk_tab_strip_button_press;
 
   container_class->add = gtk_tab_strip_add;
 
@@ -333,14 +161,165 @@ gtk_tab_strip_class_init (GtkTabStripClass *klass)
                           FALSE,
                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
+  properties[PROP_SCROLLABLE] =
+    g_param_spec_boolean ("scrollable", P_("Scrollable"), P_("Whether tabs can be scrolled"),
+                          FALSE,
+                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
   gtk_widget_class_set_css_name (widget_class, "tabs");
 }
 
+static gboolean
+autoscroll_cb (GtkWidget     *widget,
+               GdkFrameClock *frame_clock,
+               gpointer       data)
+{
+  GtkTabStrip *self = data;
+  GtkTabStripPrivate *priv = gtk_tab_strip_get_instance_private (self);
+  GtkAdjustment *adj;
+  gdouble value;
+
+  adj = gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW (priv->scrolledwindow));
+
+  value = gtk_adjustment_get_value (adj);
+  if (priv->autoscroll_mode == GTK_SCROLL_STEP_FORWARD)
+    value += 5;
+  else
+    value -= 5;
+
+  gtk_adjustment_set_value (adj, value);
+
+  return G_SOURCE_CONTINUE;
+}
+
+static void
+add_autoscroll (GtkTabStrip *self,
+                GtkWidget   *button)
+{
+  GtkTabStripPrivate *priv = gtk_tab_strip_get_instance_private (self);
+
+  if (priv->autoscroll_id != 0)
+    return;
+
+  if (button == priv->start_scroll)
+    priv->autoscroll_mode = GTK_SCROLL_STEP_BACKWARD;
+  else
+    priv->autoscroll_mode = GTK_SCROLL_STEP_FORWARD;
+
+  priv->autoscroll_id = gtk_widget_add_tick_callback (GTK_WIDGET (self),
+                                                      autoscroll_cb, self, NULL);
+}
+
+static void
+remove_autoscroll (GtkTabStrip *self)
+{
+  GtkTabStripPrivate *priv = gtk_tab_strip_get_instance_private (self);
+
+  if (priv->autoscroll_id)
+    {
+      gtk_widget_remove_tick_callback (GTK_WIDGET (self), priv->autoscroll_id);
+      priv->autoscroll_id = 0;
+    }
+}
+
+static gboolean
+scroll_button_event (GtkWidget      *button,
+                     GdkEventButton *event,
+                     GtkTabStrip    *self)
+{
+  remove_autoscroll (self);
+
+  if (event->type == GDK_BUTTON_PRESS)
+    add_autoscroll (self, button);
+
+  return FALSE;
+}
+
+static void
+scroll_button_activate (GtkWidget   *button,
+                        GtkTabStrip *self)
+{
+  GtkTabStripPrivate *priv = gtk_tab_strip_get_instance_private (self);
+  GtkAdjustment *adj;
+  gdouble value;
+
+  adj = gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW (priv->scrolledwindow));
+  value = gtk_adjustment_get_value (adj);
+
+  if (priv->start_scroll == button)
+    value -= 20;
+  else
+    value += 20;
+
+  gtk_adjustment_animate_to_value (adj, value);
+}
+
+static void
+adjustment_changed (GtkAdjustment *adj,
+                    GtkTabStrip   *self)
+{
+  GtkTabStripPrivate *priv = gtk_tab_strip_get_instance_private (self);
+  gdouble value;
+  gboolean at_lower, at_upper;
+
+  value = gtk_adjustment_get_value (adj);
+
+  at_lower = value <= gtk_adjustment_get_lower (adj);
+  at_upper = value >= gtk_adjustment_get_upper (adj) - gtk_adjustment_get_page_size (adj);
+
+  gtk_widget_set_visible (priv->start_scroll, !(at_lower && at_upper));
+  gtk_widget_set_visible (priv->end_scroll, !(at_lower && at_upper));
+  gtk_widget_set_sensitive (priv->start_scroll, !at_lower);
+  gtk_widget_set_sensitive (priv->end_scroll, !at_upper);
+}
+
 static void
 gtk_tab_strip_init (GtkTabStrip *self)
 {
+  GtkTabStripPrivate *priv = gtk_tab_strip_get_instance_private (self);
+  GtkAdjustment *adj;
+
+  priv->start_scroll = gtk_button_new_from_icon_name ("pan-start-symbolic", GTK_ICON_SIZE_MENU);
+  gtk_button_set_relief (GTK_BUTTON (priv->start_scroll), GTK_RELIEF_NONE);
+  gtk_widget_show (priv->start_scroll);
+  gtk_widget_set_no_show_all (priv->start_scroll, TRUE);
+  gtk_widget_set_focus_on_click (priv->start_scroll, FALSE);
+  gtk_box_pack_start (GTK_BOX (self), priv->start_scroll, FALSE, FALSE, 0);
+  g_signal_connect (priv->start_scroll, "button-press-event",
+                    G_CALLBACK (scroll_button_event), self);
+  g_signal_connect (priv->start_scroll, "button-release-event",
+                    G_CALLBACK (scroll_button_event), self);
+  g_signal_connect (priv->start_scroll, "activate",
+                    G_CALLBACK (scroll_button_activate), self);
+
+  priv->scrolledwindow = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (priv->scrolledwindow),
+                                  GTK_POLICY_NEVER,
+                                  GTK_POLICY_NEVER);
+  gtk_widget_show (priv->scrolledwindow);
+  gtk_box_pack_start (GTK_BOX (self), priv->scrolledwindow, TRUE, TRUE, 0);
+
+  priv->end_scroll = gtk_button_new_from_icon_name ("pan-end-symbolic", GTK_ICON_SIZE_MENU);
+  gtk_button_set_relief (GTK_BUTTON (priv->end_scroll), GTK_RELIEF_NONE);
+  gtk_widget_show (priv->end_scroll);
+  gtk_widget_set_no_show_all (priv->end_scroll, TRUE);
+  gtk_widget_set_focus_on_click (priv->end_scroll, FALSE);
+  gtk_box_pack_start (GTK_BOX (self), priv->end_scroll, FALSE, FALSE, 0);
+  g_signal_connect (priv->end_scroll, "button-press-event",
+                    G_CALLBACK (scroll_button_event), self);
+  g_signal_connect (priv->end_scroll, "button-release-event",
+                    G_CALLBACK (scroll_button_event), self);
+  g_signal_connect (priv->end_scroll, "activate",
+                    G_CALLBACK (scroll_button_activate), self);
+
+  adj = gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW (priv->scrolledwindow));
+  g_signal_connect (adj, "changed", G_CALLBACK (adjustment_changed), self);
+  g_signal_connect (adj, "value-changed", G_CALLBACK (adjustment_changed), self);
+
+  priv->tabs = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_widget_show (priv->tabs);
+  gtk_container_add (GTK_CONTAINER (priv->scrolledwindow), priv->tabs);
 }
 
 static void
@@ -348,6 +327,7 @@ gtk_tab_strip_child_position_changed (GtkTabStrip *self,
                                       GParamSpec  *pspec,
                                       GtkWidget   *child)
 {
+  GtkTabStripPrivate *priv = gtk_tab_strip_get_instance_private (self);
   GtkWidget *parent;
   GtkTab *tab;
   guint position;
@@ -363,7 +343,7 @@ gtk_tab_strip_child_position_changed (GtkTabStrip *self,
                            "position", &position,
                            NULL);
 
-  gtk_container_child_set (GTK_CONTAINER (self), GTK_WIDGET (tab),
+  gtk_container_child_set (GTK_CONTAINER (priv->tabs), GTK_WIDGET (tab),
                            "position", position,
                            NULL);
 }
@@ -463,7 +443,7 @@ gtk_tab_strip_stack_add (GtkTabStrip *self,
                            G_CALLBACK (gtk_tab_strip_child_title_changed), self,
                            G_CONNECT_SWAPPED);
 
-  gtk_box_pack_start (GTK_BOX (self), GTK_WIDGET (tab), TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (priv->tabs), GTK_WIDGET (tab), TRUE, TRUE, 0);
 
   g_object_bind_property (widget, "visible", tab, "visible", G_BINDING_SYNC_CREATE);
 
@@ -595,4 +575,34 @@ gtk_tab_strip_get_closable (GtkTabStrip *self)
   g_return_val_if_fail (GTK_IS_TAB_STRIP (self), FALSE);
 
   return priv->closable;
+}
+
+void
+gtk_tab_strip_set_scrollable (GtkTabStrip *self,
+                              gboolean     scrollable)
+{
+  GtkTabStripPrivate *priv = gtk_tab_strip_get_instance_private (self);
+
+  g_return_if_fail (GTK_IS_TAB_STRIP (self));
+
+  if (priv->scrollable == scrollable)
+    return;
+
+  priv->scrollable = scrollable;
+
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (priv->scrolledwindow),
+                                  scrollable ? GTK_POLICY_EXTERNAL : GTK_POLICY_NEVER,
+                                  GTK_POLICY_NEVER);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SCROLLABLE]);
+}
+
+gboolean
+gtk_tab_strip_get_scrollable (GtkTabStrip *self)
+{
+  GtkTabStripPrivate *priv = gtk_tab_strip_get_instance_private (self);
+
+  g_return_val_if_fail (GTK_IS_TAB_STRIP (self), FALSE);
+
+  return priv->scrollable;
 }

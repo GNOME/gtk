@@ -64,6 +64,11 @@ gboolean         gtk_tab_strip_get_closable    (GtkTabStrip     *self);
 GDK_AVAILABLE_IN_3_22
 void             gtk_tab_strip_set_closable    (GtkTabStrip     *self,
                                                 gboolean         closable);
+GDK_AVAILABLE_IN_3_22
+gboolean         gtk_tab_strip_get_scrollable  (GtkTabStrip     *self);
+GDK_AVAILABLE_IN_3_22
+void             gtk_tab_strip_set_scrollable  (GtkTabStrip     *self,
+                                                gboolean         scrollable);
 
 G_END_DECLS
 
