@@ -302,6 +302,8 @@ gtk_public_h_sources = 		\
 	gtkstylecontext.h	\
 	gtkstyleprovider.h	\
 	gtkswitch.h		\
+	gtktab.h		\
+	gtktabstrip.h		\
 	gtktestutils.h		\
 	gtktextattributes.h	\
 	gtktextbuffer.h		\
@@ -900,6 +902,8 @@ gtk_base_c_sources = 		\
 	gtkstyleprovider.c	\
 	gtkstyleproviderprivate.c	\
 	gtkswitch.c		\
+	gtktab.c		\
+	gtktabstrip.c		\
 	gtktestutils.c		\
 	gtktextattributes.c	\
 	gtktextbtree.c		\
