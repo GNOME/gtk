@@ -172,6 +172,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	gdkgears			\
 	listmodel			\
 	testpopup			\
+	testtabstrip			\
 	$(NULL)
 
 if USE_X11
