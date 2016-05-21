@@ -5615,7 +5615,7 @@ msgstr "WebDav"
 #. Translators: do not translate ftp:// and ftps://
 #: gtk/ui/gtkplacesview.ui:183
 msgid "ftp:// or ftps://"
-msgstr "‏‪ftp://‬ أو ‬‪ftps://"
+msgstr "‏‪ftp://‬ أو ‪ftps://‬"
 
 #: gtk/ui/gtkplacesview.ui:205
 msgid "smb://"
@@ -5624,7 +5624,7 @@ msgstr "smb://"
 #. Translators: do not translate dav:// and davs://
 #: gtk/ui/gtkplacesview.ui:227
 msgid "dav:// or davs://"
-msgstr "‏‪dav://‬ أو ‬‪davs://"
+msgstr "‏‪dav://‬ أو ‪davs://‬"
 
 #. Translators: Server as any successfully connected network address
 #: gtk/ui/gtkplacesview.ui:267
