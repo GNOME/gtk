@@ -25,6 +25,7 @@
 
 #include <gtk/gtkbox.h>
 #include <gtk/gtkstack.h>
+#include <gtk/gtktab.h>
 #include <gtk/gtktypebuiltins.h>
 
 G_BEGIN_DECLS
@@ -47,6 +48,17 @@ struct _GtkTabStrip
 struct _GtkTabStripClass
 {
   GtkBoxClass parent_class;
+
+  GtkTab * (* create_tab) (GtkTabStrip *self,
+                           GtkWidget   *child);
+
+  /* Padding for future expansion */
+  void (*_gtk_reserved1) (void);
+  void (*_gtk_reserved2) (void);
+  void (*_gtk_reserved3) (void);
+  void (*_gtk_reserved4) (void);
+  void (*_gtk_reserved5) (void);
+  void (*_gtk_reserved6) (void);
 };
 
 GDK_AVAILABLE_IN_3_22

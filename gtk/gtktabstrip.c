@@ -31,7 +31,6 @@
 
 /*
  * TODO:
- * - custom tabs
  * - reordering
  * - dnd
  * - other edges
@@ -62,6 +61,13 @@ enum {
 };
 
 static GParamSpec *properties[N_PROPS];
+
+enum {
+  CREATE_TAB,
+  LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL];
 
 static void
 gtk_tab_strip_add (GtkContainer *container,
@@ -137,6 +143,9 @@ gtk_tab_strip_set_property (GObject      *object,
     }
 }
 
+static GtkTab *gtk_tab_strip_real_create_tab (GtkTabStrip *self,
+                                              GtkWidget   *widget);
+
 static void
 gtk_tab_strip_class_init (GtkTabStripClass *klass)
 {
@@ -150,6 +159,18 @@ gtk_tab_strip_class_init (GtkTabStripClass *klass)
   widget_class->destroy = gtk_tab_strip_destroy;
 
   container_class->add = gtk_tab_strip_add;
+
+  klass->create_tab = gtk_tab_strip_real_create_tab;
+
+  signals[CREATE_TAB] =
+    g_signal_new (I_("create-tab"),
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkTabStripClass, create_tab),
+                  gtk_object_handled_accumulator, NULL,
+                  NULL,
+                  GTK_TYPE_TAB, 1,
+                  GTK_TYPE_WIDGET);
 
   properties[PROP_STACK] =
     g_param_spec_object ("stack", P_("Stack"), P_("The stack of items to manage"),
@@ -413,6 +434,17 @@ tab_activated (GtkTab      *tab,
     gtk_stack_set_visible_child (priv->stack, widget);
 }
 
+static GtkTab *
+gtk_tab_strip_real_create_tab (GtkTabStrip *self,
+                               GtkWidget   *widget)
+{
+  GtkTabStripPrivate *priv = gtk_tab_strip_get_instance_private (self);
+
+  return g_object_new (priv->closable ? GTK_TYPE_CLOSABLE_TAB : GTK_TYPE_SIMPLE_TAB,
+                       "widget", widget,
+                       NULL);
+}
+
 static void
 gtk_tab_strip_stack_add (GtkTabStrip *self,
                          GtkWidget   *widget,
@@ -426,9 +458,7 @@ gtk_tab_strip_stack_add (GtkTabStrip *self,
                            "position", &position,
                            NULL);
 
-  tab = g_object_new (priv->closable ? GTK_TYPE_CLOSABLE_TAB : GTK_TYPE_SIMPLE_TAB,
-                      "widget", widget,
-                      NULL);
+  g_signal_emit (self, signals[CREATE_TAB], 0, widget, &tab);
 
   g_object_set_data (G_OBJECT (widget), "GTK_TAB", tab);
 
