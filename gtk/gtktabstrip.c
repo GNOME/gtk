@@ -21,13 +21,24 @@
 #include "gtktabstrip.h"
 #include "gtktab.h"
 #include "gtksimpletab.h"
+#include "gtkclosabletab.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkorientable.h"
 
+/*
+ * TODO:
+ * - custom tabs
+ * - scrolling
+ * - reordering
+ * - dnd
+ * - other edges
+ */
+
 typedef struct
 {
   GtkStack        *stack;
+  gboolean         closable;
   gboolean         in_child_changed;
   GdkWindow       *event_window;
 } GtkTabStripPrivate;
@@ -37,6 +48,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkTabStrip, gtk_tab_strip, GTK_TYPE_BOX)
 enum {
   PROP_0,
   PROP_STACK,
+  PROP_CLOSABLE,
   N_PROPS
 };
 
@@ -76,6 +88,10 @@ gtk_tab_strip_get_property (GObject    *object,
       g_value_set_object (value, gtk_tab_strip_get_stack (self));
       break;
 
+    case PROP_CLOSABLE:
+      g_value_set_boolean (value, gtk_tab_strip_get_closable (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -93,6 +109,10 @@ gtk_tab_strip_set_property (GObject      *object,
     {
     case PROP_STACK:
       gtk_tab_strip_set_stack (self, g_value_get_object (value));
+      break;
+
+    case PROP_CLOSABLE:
+      gtk_tab_strip_set_closable (self, g_value_get_boolean (value));
       break;
 
     default:
@@ -308,6 +328,11 @@ gtk_tab_strip_class_init (GtkTabStripClass *klass)
                          GTK_TYPE_STACK,
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
+  properties[PROP_CLOSABLE] =
+    g_param_spec_boolean ("closable", P_("Closable"), P_("Whether tabs can be closed"),
+                          FALSE,
+                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
   gtk_widget_class_set_css_name (widget_class, "tabs");
@@ -413,6 +438,7 @@ gtk_tab_strip_stack_add (GtkTabStrip *self,
                          GtkWidget   *widget,
                          GtkStack    *stack)
 {
+  GtkTabStripPrivate *priv = gtk_tab_strip_get_instance_private (self);
   GtkTab *tab;
   gint position = 0;
 
@@ -420,7 +446,7 @@ gtk_tab_strip_stack_add (GtkTabStrip *self,
                            "position", &position,
                            NULL);
 
-  tab = g_object_new (GTK_TYPE_SIMPLE_TAB,
+  tab = g_object_new (priv->closable ? GTK_TYPE_CLOSABLE_TAB : GTK_TYPE_SIMPLE_TAB,
                       "widget", widget,
                       NULL);
 
@@ -543,4 +569,30 @@ gtk_tab_strip_set_stack (GtkTabStrip *self,
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_STACK]);
+}
+
+void
+gtk_tab_strip_set_closable (GtkTabStrip *self,
+                            gboolean     closable)
+{
+  GtkTabStripPrivate *priv = gtk_tab_strip_get_instance_private (self);
+
+  g_return_if_fail (GTK_IS_TAB_STRIP (self));
+
+  if (priv->closable == closable)
+    return;
+
+  priv->closable = closable;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_CLOSABLE]);
+}
+
+gboolean
+gtk_tab_strip_get_closable (GtkTabStrip *self)
+{
+  GtkTabStripPrivate *priv = gtk_tab_strip_get_instance_private (self);
+
+  g_return_val_if_fail (GTK_IS_TAB_STRIP (self), FALSE);
+
+  return priv->closable;
 }

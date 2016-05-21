@@ -59,6 +59,11 @@ GtkStack        *gtk_tab_strip_get_stack       (GtkTabStrip     *self);
 GDK_AVAILABLE_IN_3_22
 void             gtk_tab_strip_set_stack       (GtkTabStrip     *self,
                                                 GtkStack        *stack);
+GDK_AVAILABLE_IN_3_22
+gboolean         gtk_tab_strip_get_closable    (GtkTabStrip     *self);
+GDK_AVAILABLE_IN_3_22
+void             gtk_tab_strip_set_closable    (GtkTabStrip     *self,
+                                                gboolean         closable);
 
 G_END_DECLS
 
