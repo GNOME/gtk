@@ -304,6 +304,7 @@ gtk_public_h_sources = 		\
 	gtkswitch.h		\
 	gtktab.h		\
 	gtksimpletab.h		\
+	gtkclosabletab.h	\
 	gtktabstrip.h		\
 	gtktestutils.h		\
 	gtktextattributes.h	\
@@ -905,6 +906,7 @@ gtk_base_c_sources = 		\
 	gtkswitch.c		\
 	gtktab.c		\
 	gtksimpletab.c		\
+	gtkclosabletab.c	\
 	gtktabstrip.c		\
 	gtktestutils.c		\
 	gtktextattributes.c	\

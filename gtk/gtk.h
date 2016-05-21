@@ -205,6 +205,7 @@
 #include <gtk/gtkswitch.h>
 #include <gtk/gtktab.h>
 #include <gtk/gtksimpletab.h>
+#include <gtk/gtkclosabletab.h>
 #include <gtk/gtktabstrip.h>
 #include <gtk/gtktextattributes.h>
 #include <gtk/gtktextbuffer.h>
