@@ -73,6 +73,11 @@ gboolean _gtk_single_string_accumulator   (GSignalInvocationHint *ihint,
                                            const GValue          *handler_return,
                                            gpointer               dummy);
 
+gboolean gtk_object_handled_accumulator   (GSignalInvocationHint *ihint,
+                                           GValue                *return_accu,
+                                           const GValue          *handler_return,
+                                           gpointer               dummy);
+
 GdkModifierType _gtk_replace_virtual_modifiers (GdkKeymap       *keymap,
                                                 GdkModifierType  modifiers);
 GdkModifierType _gtk_get_primary_accel_mod     (void);

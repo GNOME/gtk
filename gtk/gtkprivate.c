@@ -158,6 +158,22 @@ _gtk_single_string_accumulator (GSignalInvocationHint *ihint,
   return continue_emission;
 }
 
+gboolean
+gtk_object_handled_accumulator (GSignalInvocationHint *ihint,
+                                GValue                *return_accu,
+                                const GValue          *handler_return,
+                                gpointer               dummy)
+{
+  gboolean continue_emission;
+  GObject *object;
+
+  object = g_value_get_object (handler_return);
+  g_value_set_object (return_accu, object);
+  continue_emission = !object;
+
+  return continue_emission;
+}
+
 GdkModifierType
 _gtk_replace_virtual_modifiers (GdkKeymap       *keymap,
                                 GdkModifierType  modifiers)

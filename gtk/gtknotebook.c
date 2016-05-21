@@ -644,22 +644,6 @@ add_reorder_bindings (GtkBindingSet    *binding_set,
                                 G_TYPE_BOOLEAN, move_to_last);
 }
 
-static gboolean
-gtk_object_handled_accumulator (GSignalInvocationHint *ihint,
-                                GValue                *return_accu,
-                                const GValue          *handler_return,
-                                gpointer               dummy)
-{
-  gboolean continue_emission;
-  GObject *object;
-
-  object = g_value_get_object (handler_return);
-  g_value_set_object (return_accu, object);
-  continue_emission = !object;
-
-  return continue_emission;
-}
-
 static void
 gtk_notebook_compute_expand (GtkWidget *widget,
                              gboolean  *hexpand_p,
