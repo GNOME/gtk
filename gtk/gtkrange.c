@@ -1990,7 +1990,7 @@ gtk_range_allocate_trough (GtkCssGadget        *gadget,
               highlight_alloc.x = slider_alloc.x + slider_alloc.width / 2;
               highlight_alloc.width = allocation->x + allocation->width - highlight_alloc.x;
             }
-    }
+        }
       else
         {
           if (!should_invert (range))
