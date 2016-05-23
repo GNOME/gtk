@@ -286,10 +286,22 @@ gdk_gl_context_upload_texture (GdkGLContext    *context,
     }
 }
 
+static gboolean
+gdk_gl_context_real_realize (GdkGLContext  *self,
+                             GError       **error)
+{
+  g_set_error_literal (error, GDK_GL_ERROR, GDK_GL_ERROR_NOT_AVAILABLE,
+                       "The current backend does not support OpenGL");
+
+  return FALSE;
+}
+
 static void
 gdk_gl_context_class_init (GdkGLContextClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  klass->realize = gdk_gl_context_real_realize;
 
   /**
    * GdkGLContext:display:
