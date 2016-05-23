@@ -1118,8 +1118,8 @@ gtk_info_bar_buildable_custom_finished (GtkBuildable *buildable,
  * @message_type: a #GtkMessageType
  *
  * Sets the message type of the message area.
- * GTK+ uses this type to determine what color to use
- * when drawing the message area.
+ *
+ * GTK+ uses this type to determine how the message is displayed.
  *
  * Since: 2.18
  */
