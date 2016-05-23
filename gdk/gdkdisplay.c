@@ -2692,7 +2692,6 @@ gdk_display_get_monitor_at_window (GdkDisplay *display,
   int n_monitors, i;
   int area = 0;
   GdkMonitor *best = NULL;
-  GdkWindowImplClass *impl_class;
   GdkDisplayClass *class;
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
