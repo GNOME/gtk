@@ -1,3 +1,16 @@
+Overview of Changes in GTK+ 3.20.6
+==================================
+
+* Bugs fixed:
+ 766694 crash on save as in any gtk3 application starting 3.20.5...
+ 766323 GTKPopover gives warnings if visible when reparented
+ 766336 Crash when selecting rows with rubberbanding
+ 766737 stack: Only map children when necessary
+
+* Translation updates:
+ Arabic
+
+
 Overview of Changes in GTK+ 3.20.5
 ==================================
 
