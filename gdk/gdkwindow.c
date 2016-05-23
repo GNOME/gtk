@@ -2769,11 +2769,20 @@ gdk_window_get_paint_gl_context (GdkWindow  *window,
 
   if (window->impl_window->gl_paint_context == NULL)
     {
+      GdkWindowImplClass *impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+
+      if (impl_class->create_gl_context == NULL)
+        {
+          g_set_error_literal (error, GDK_GL_ERROR, GDK_GL_ERROR_NOT_AVAILABLE,
+                               _("The current backend does not support OpenGL"));
+          return NULL;
+        }
+
       window->impl_window->gl_paint_context =
-        GDK_WINDOW_IMPL_GET_CLASS (window->impl)->create_gl_context (window->impl_window,
-                                                                     TRUE,
-                                                                     NULL,
-                                                                     &internal_error);
+        impl_class->create_gl_context (window->impl_window,
+                                       TRUE,
+                                       NULL,
+                                       &internal_error);
     }
 
   if (internal_error != NULL)
