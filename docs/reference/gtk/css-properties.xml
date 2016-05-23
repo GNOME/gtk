@@ -41,12 +41,13 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
 
     <para>
       GTK+ supports CSS properties and shorthands as far as they can be applied
-      in the context of widgets, and only adds its own properties only when needed.
+      in the context of widgets, and adds its own properties only when needed.
       All GTK+-specific properties have a -gtk prefix.
     </para>
 
     <para>
-      All properties support the following keywords: inherit, initial, unset.
+      All properties support the following keywords: inherit, initial, unset, with
+      the same meaning as in <ulink url="https://www.w3.org/TR/css3-cascade/#defaulting-keywords">CSS</ulink>.
     </para>
 
     <para>
@@ -104,16 +105,16 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
       follows:
       <variablelist>
         <varlistentry>
-          <term>4 values:</term><listitem>top right bottom left</listitem>
+          <term>4 values: </term><listitem>top right bottom left</listitem>
         </varlistentry>
         <varlistentry>
-          <term>3 values:</term><listitem>top horizontal left</listitem>
+          <term>3 values: </term><listitem>top horizontal left</listitem>
         </varlistentry>
         <varlistentry>
-          <term>2 values:</term><listitem>vertical horizontal</listitem>
+          <term>2 values: </term><listitem>vertical horizontal</listitem>
         </varlistentry>
         <varlistentry>
-          <term>1 value:</term><listitem>all</listitem>
+          <term>1 value: </term><listitem>all</listitem>
         </varlistentry>
       </variablelist>
     </para>
@@ -1028,6 +1029,10 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
         </tgroup>
       </table>
 
+      <para>
+        GTK+ uses the CSS outline properties to render the 'focus rectangle'.
+      </para>
+
       <table pgwide="1">
         <title>Background properties</title>
         <tgroup cols="7">
@@ -1142,6 +1147,10 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
 <code>〈box shadow〉 = inset? &amp;&amp; 〈length〉{2,4}? &amp;&amp; 〈color〉?</code>
 </literallayout>
 
+      <para>
+        As in CSS, the background color is rendered underneath all the background image layers, so it will only be visible if
+        background images are absent or have transparency.
+      </para>
 
       <table pgwide="1">
         <title>Transition properties</title>
