@@ -2306,10 +2306,11 @@ tabs {
   tab {
     min-width: 6em;
     padding: 13px; // keeping width when paging buttons show up
-    border-right: 1px solid $borders_color;
-    &:last-child {}
+    border-right: 1px solid transparentize($borders_color,0.5);
+    &:first-child { border-left: 1px solid transparentize($borders_color,0.5); }
     &:checked { //FIXME not really working
       border-bottom: 2px solid $selected_bg_color;
+      padding-bottom: 11px;
     }
   }
 }
