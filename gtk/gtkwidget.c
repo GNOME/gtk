@@ -1243,6 +1243,13 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
+  /**
+   * GtkWidget:style:
+   *
+   * The style of the widget, which contains information about how it will look (colors, etc).
+   *
+   * Deprecated: Use #GtkStyleContext instead
+   */
   widget_props[PROP_STYLE] =
       g_param_spec_object ("style",
                            P_("Style"),
