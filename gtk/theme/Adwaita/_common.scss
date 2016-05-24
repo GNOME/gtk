@@ -2293,11 +2293,15 @@ notebook {
  ************/
 
 tabs {
-  button {
+  button.flat.image-button {
     @include button(undecorated);
     border-radius: 50%;
     margin: 10px;
     padding: 0;
+    &:hover {
+      @include button(hover);
+      -gtk-icon-effect: highlight;
+    }
   }
   tab {
     min-width: 6em;

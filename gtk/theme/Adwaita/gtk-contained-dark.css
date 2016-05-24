@@ -2573,7 +2573,7 @@ notebook > stack:not(:only-child) {
 /************
  * Tabstrip *
  ************/
-tabs button {
+tabs button.flat.image-button {
   border-color: transparent;
   background-color: transparent;
   background-image: none;
@@ -2583,6 +2583,16 @@ tabs button {
   border-radius: 50%;
   margin: 10px;
   padding: 0; }
+  tabs button.flat.image-button:hover {
+    color: #eeeeec;
+    outline-color: rgba(238, 238, 236, 0.3);
+    border-color: #1b1f20;
+    border-bottom-color: #0b0c0c;
+    background-image: linear-gradient(to bottom, #353c3e, #2e3436 60%, #2a2e30);
+    text-shadow: 0 -1px rgba(0, 0, 0, 0.77945);
+    -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.77945);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.05);
+    -gtk-icon-effect: highlight; }
 tabs tab {
   min-width: 6em;
   padding: 13px;
