@@ -2288,6 +2288,28 @@ notebook {
   }
 }
 
+/************
+ * Tabstrip *
+ ************/
+
+tabs {
+  button {
+    @include button(undecorated);
+    border-radius: 50%;
+    margin: 10px;
+    padding: 0;
+  }
+  tab {
+    min-width: 6em;
+    padding: 13px; // keeping width when paging buttons show up
+    border-right: 1px solid $borders_color;
+    &:last-child {}
+    &:checked { //FIXME not really working
+      border-bottom: 2px solid $selected_bg_color;
+    }
+  }
+}
+
 
 /**************
  * Scrollbars *
