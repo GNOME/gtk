@@ -6351,7 +6351,11 @@ gtk_window_unmap (GtkWidget *widget)
   gtk_widget_set_mapped (widget, FALSE);
   gdk_window_withdraw (gdk_window);
 
-  priv->configure_request_count = 0;
+  while (priv->configure_request_count > 0)
+    {
+      priv->configure_request_count--;
+      GDK_PRIVATE_CALL (gdk_window_thaw_toplevel_updates) (_gtk_widget_get_window (widget));
+    }
   priv->configure_notify_received = FALSE;
 
   /* on unmap, we reset the default positioning of the window,
