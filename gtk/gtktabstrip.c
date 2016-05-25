@@ -33,6 +33,8 @@
  * TODO:
  * - reordering
  * - dnd
+ * - use a box gadget instead of GtkBox for tabs
+ * - improve scrolling: scroll by tabs for click/activation
  */
 
 typedef struct
