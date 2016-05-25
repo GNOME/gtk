@@ -1205,6 +1205,12 @@ gtk_arrow_draw (GtkWidget *widget,
      have disappeared, and instead there are now
      gtk_window_set_has_resize_grip() and gtk_window_get_has_resize_grip().
     </para>
+    <para>
+     In more recent versions of GTK+ 3, the resize grip functionality has
+     been removed entirely, in favor of invisible resize borders around the
+     window. When updating to newer versions of GTK+ 3, you should simply
+     remove all code dealing with resize grips.
+    </para>
   </section>
 
   <section>
