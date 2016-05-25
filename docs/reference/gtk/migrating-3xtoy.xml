@@ -392,4 +392,16 @@
       custom offsets should double-check that their levels look as expected.
     </para>
   </section>
+
+  <section>
+    <title>Changes in GTK+ 3.22</title>
+
+    <para>
+      The CSS parser has gotten a bit more selective in what it accepts as
+      valid values for the font: shorthand. Following the CSS specification,
+      at least a size and a family name are required now. If you want to
+      change an individual facet of the font, like the weight, use the
+      individual CSS properties: font-weight, font-size, font-family, etc.
+    </para>
+  </section>
 </chapter>
