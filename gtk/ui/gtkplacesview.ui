@@ -470,7 +470,7 @@
                 <property name="hexpand">1</property>
                 <property name="width-chars">20</property>
                 <property name="placeholder-text" translatable="yes">Enter server address…</property>
-                <property name="secondary-icon-name" translatable="yes">dialog-question-symbolic</property>
+                <property name="secondary-icon-name">dialog-question-symbolic</property>
                 <property name="completion">address_entry_completion</property>
                 <signal name="notify::text" handler="on_address_entry_text_changed" object="GtkPlacesView" swapped="yes"/>
                 <signal name="activate" handler="on_connect_button_clicked" object="GtkPlacesView" swapped="yes"/>
