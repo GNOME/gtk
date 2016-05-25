@@ -45,6 +45,13 @@ enum {
 
 static guint signals[LAST_SIGNAL];
 
+/*
+ * Define GNOME additional states to xdg-shell
+ * The current reserved range for GNOME is 0x1000 - 0x1FFF
+ */
+
+#define XDG_SURFACE_STATE_GNOME_TILED 0x1000
+
 #define WINDOW_IS_TOPLEVEL_OR_FOREIGN(window) \
   (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&   \
    GDK_WINDOW_TYPE (window) != GDK_WINDOW_OFFSCREEN)
@@ -1233,6 +1240,10 @@ xdg_surface_configure (void               *data,
           break;
         case XDG_SURFACE_STATE_RESIZING:
           break;
+        /* GNOME additional states to xdg-shell */
+        case XDG_SURFACE_STATE_GNOME_TILED:
+          new_state |= GDK_WINDOW_STATE_TILED;
+          break;
         default:
           /* Unknown state */
           break;
@@ -1278,11 +1289,12 @@ xdg_surface_configure (void               *data,
     }
 
   GDK_NOTE (EVENTS,
-            g_message ("configure, window %p %dx%d,%s%s%s",
+            g_message ("configure, window %p %dx%d,%s%s%s%s",
                        window, width, height,
                        (new_state & GDK_WINDOW_STATE_FULLSCREEN) ? " fullscreen" : "",
                        (new_state & GDK_WINDOW_STATE_MAXIMIZED) ? " maximized" : "",
-                       (new_state & GDK_WINDOW_STATE_FOCUSED) ? " focused" : ""));
+                       (new_state & GDK_WINDOW_STATE_FOCUSED) ? " focused" : "",
+                       (new_state & GDK_WINDOW_STATE_TILED) ? " tiled" : ""));
 
   _gdk_set_window_state (window, new_state);
   gdk_wayland_window_sync_margin (window);
