@@ -404,6 +404,7 @@
     <xi:include href="xml/migrating-smclient-GtkApplication.xml" />
     <xi:include href="xml/migrating-GtkGrid.xml" />
     <xi:include href="xml/migrating-checklist.sgml" />
+    <xi:include href="xml/migrating-3xtoy.xml" />
   </part>
 
   <part>

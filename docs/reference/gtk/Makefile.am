@@ -303,6 +303,7 @@ content_files =					\
 	gtk-update-icon-cache.xml		\
 	input-handling.xml			\
 	migrating-2to3.xml			\
+	migrating-3xtoy.xml			\
 	migrating-checklist.sgml		\
 	migrating-GtkGrid.xml			\
 	migrating-GtkStyleContext.xml		\
@@ -329,6 +330,7 @@ expand_content_files = 				\
 	glossary.xml				\
 	input-handling.xml			\
 	migrating-2to3.xml			\
+	migrating-3xtoy.xml			\
 	migrating-checklist.sgml		\
 	migrating-GtkGrid.xml			\
 	migrating-GtkStyleContext.xml		\
