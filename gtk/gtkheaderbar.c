@@ -385,7 +385,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                     atk_object_set_name (accessible, _("Application menu"));
                   priv->titlebar_icon = image;
                   if (!_gtk_header_bar_update_window_icon (bar, window))
-                    gtk_image_set_from_icon_name (GTK_IMAGE (priv->titlebar_icon), "process-stop-symbolic", GTK_ICON_SIZE_MENU);
+                    gtk_image_set_from_icon_name (GTK_IMAGE (priv->titlebar_icon), "application-menu-symbolic", GTK_ICON_SIZE_MENU);
                 }
               else if (strcmp (t[j], "minimize") == 0 &&
                        type_hint == GDK_WINDOW_TYPE_HINT_NORMAL)
