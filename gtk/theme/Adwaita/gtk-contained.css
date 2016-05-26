@@ -2612,8 +2612,11 @@ tabs tab {
   border-right: 1px solid rgba(182, 182, 179, 0.5); }
   tabs tab:first-child {
     border-left: 1px solid rgba(182, 182, 179, 0.5); }
-  tabs tab:checked {
+  tabs tab:checked, tabs tab:checked:hover {
     border-bottom: 2px solid #4a90d9;
+    padding-bottom: 11px; }
+  tabs tab:hover {
+    border-bottom: 2px solid #b6b6b3;
     padding-bottom: 11px; }
 
 /**************
