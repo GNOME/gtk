@@ -2628,7 +2628,7 @@ gdk_display_get_monitor_at_point (GdkDisplay *display,
                                   int         x,
                                   int         y)
 {
-  GdkMonitor *nearest;
+  GdkMonitor *nearest = NULL;
   int nearest_dist = G_MAXINT;
   int n_monitors, i;
 
