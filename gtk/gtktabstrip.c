@@ -46,7 +46,6 @@ typedef struct
   GtkPositionType  edge;
   gboolean         closable;
   gboolean         scrollable;
-  gboolean         in_child_changed;
   gboolean         reversed;
   GtkWidget       *scrolledwindow;
   GtkWidget       *tabs;
@@ -674,9 +673,7 @@ gtk_tab_strip_stack_notify_visible_child (GtkTabStrip *self,
 
   visible_child = gtk_stack_get_visible_child (stack);
 
-  priv->in_child_changed = TRUE;
   gtk_container_foreach (GTK_CONTAINER (priv->tabs), update_visible_child, visible_child);
-  priv->in_child_changed = FALSE;
 }
 
 static void
