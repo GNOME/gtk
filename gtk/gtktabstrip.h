@@ -23,7 +23,7 @@
 #ifndef __GTK_TAB_STRIP_H__
 #define __GTK_TAB_STRIP_H__
 
-#include <gtk/gtkbox.h>
+#include <gtk/gtkcontainer.h>
 #include <gtk/gtkstack.h>
 #include <gtk/gtktab.h>
 #include <gtk/gtktypebuiltins.h>
@@ -42,12 +42,12 @@ typedef struct _GtkTabStripClass GtkTabStripClass;
 
 struct _GtkTabStrip
 {
-  GtkBox parent;
+  GtkContainer parent;
 };
 
 struct _GtkTabStripClass
 {
-  GtkBoxClass parent_class;
+  GtkContainerClass parent_class;
 
   GtkTab * (* create_tab) (GtkTabStrip *self,
                            GtkWidget   *child);
