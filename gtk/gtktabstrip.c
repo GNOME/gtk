@@ -47,6 +47,7 @@ typedef struct
   gboolean         closable;
   gboolean         scrollable;
   gboolean         in_child_changed;
+  gboolean         reversed;
   GtkWidget       *scrolledwindow;
   GtkWidget       *tabs;
   GtkWidget       *start_scroll;
@@ -217,6 +218,43 @@ gtk_tab_strip_draw (GtkWidget *widget,
   return FALSE;
 }
 
+static gboolean
+gtk_tab_strip_get_orientation (GtkTabStrip *self)
+{
+  GtkTabStripPrivate *priv = gtk_tab_strip_get_instance_private (self);
+
+  if (priv->edge == GTK_POS_TOP || priv->edge == GTK_POS_BOTTOM)
+    return GTK_ORIENTATION_HORIZONTAL;
+  else
+    return GTK_ORIENTATION_VERTICAL;
+}
+
+static void
+update_node_ordering (GtkTabStrip *self)
+{
+  GtkTabStripPrivate *priv = gtk_tab_strip_get_instance_private (self);
+  gboolean reverse;
+
+  reverse = gtk_tab_strip_get_orientation (self) == GTK_ORIENTATION_HORIZONTAL &&
+            gtk_widget_get_direction (GTK_WIDGET (self)) == GTK_TEXT_DIR_RTL;
+
+  if ((reverse && !priv->reversed) ||
+      (!reverse && priv->reversed))
+    {
+      gtk_box_gadget_reverse_children (GTK_BOX_GADGET (priv->gadget));
+      priv->reversed = reverse;
+    }
+}
+
+static void
+gtk_tab_strip_direction_changed (GtkWidget        *widget,
+                                 GtkTextDirection  previous_direction)
+{
+  update_node_ordering (GTK_TAB_STRIP (widget));
+
+  GTK_WIDGET_CLASS (gtk_tab_strip_parent_class)->direction_changed (widget, previous_direction);
+}
+
 static void
 gtk_tab_strip_get_property (GObject    *object,
                             guint       prop_id,
@@ -311,6 +349,7 @@ gtk_tab_strip_class_init (GtkTabStripClass *klass)
   widget_class->get_preferred_height_for_width = gtk_tab_strip_get_preferred_height_for_width;
   widget_class->size_allocate = gtk_tab_strip_size_allocate;
   widget_class->draw = gtk_tab_strip_draw;
+  widget_class->direction_changed = gtk_tab_strip_direction_changed;
 
   container_class->add = gtk_tab_strip_add;
   container_class->remove = gtk_tab_strip_remove;
@@ -352,17 +391,6 @@ gtk_tab_strip_class_init (GtkTabStripClass *klass)
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
   gtk_widget_class_set_css_name (widget_class, "tabs");
-}
-
-static gboolean
-gtk_tab_strip_get_orientation (GtkTabStrip *self)
-{
-  GtkTabStripPrivate *priv = gtk_tab_strip_get_instance_private (self);
-
-  if (priv->edge == GTK_POS_TOP || priv->edge == GTK_POS_BOTTOM)
-    return GTK_ORIENTATION_HORIZONTAL;
-  else
-    return GTK_ORIENTATION_VERTICAL;
 }
 
 static void
@@ -419,7 +447,8 @@ add_autoscroll (GtkTabStrip *self,
   if (priv->autoscroll_id != 0)
     return;
 
-  if (button == priv->start_scroll)
+  if ((button == priv->start_scroll && !priv->reversed) ||
+      (button == priv->end_scroll && priv->reversed))
     priv->autoscroll_mode = GTK_SCROLL_STEP_BACKWARD;
   else
     priv->autoscroll_mode = GTK_SCROLL_STEP_FORWARD;
@@ -492,11 +521,18 @@ adjustment_changed (GtkTabStrip *self)
 
   at_lower = value <= gtk_adjustment_get_lower (adj);
   at_upper = value >= gtk_adjustment_get_upper (adj) - gtk_adjustment_get_page_size (adj);
-
   gtk_widget_set_visible (priv->start_scroll, !(at_lower && at_upper));
   gtk_widget_set_visible (priv->end_scroll, !(at_lower && at_upper));
-  gtk_widget_set_sensitive (priv->start_scroll, !at_lower);
-  gtk_widget_set_sensitive (priv->end_scroll, !at_upper);
+  if (priv->reversed)
+    {
+      gtk_widget_set_sensitive (priv->start_scroll, !at_upper);
+      gtk_widget_set_sensitive (priv->end_scroll, !at_lower);
+    }
+  else
+    {
+      gtk_widget_set_sensitive (priv->start_scroll, !at_lower);
+      gtk_widget_set_sensitive (priv->end_scroll, !at_upper);
+    }
 }
 
 static void
@@ -880,6 +916,8 @@ gtk_tab_strip_set_edge (GtkTabStrip     *self,
   adjustment_changed (self);
 
   gtk_container_foreach (GTK_CONTAINER (priv->tabs), update_edge, self);
+
+  update_node_ordering (self);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_EDGE]);
 }
