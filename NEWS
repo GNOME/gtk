@@ -1,3 +1,72 @@
+Overview of Changes in GTK+ 3.21.2
+==================================
+
+* GTK+ is now using upstream gettext instead of the GLib wrappers.
+  This adds a requirement for the fairly recent gettext 0.19.7 release
+
+* GDK has a new GdkMonitor api that offers richer information about
+  connected outputs
+
+* Bugs fixed:
+ 373745 Do not use AM_GLIB_DEFINE_LOCALEDIR(GTK_LOCALEDIR) and use gettext...
+ 682080 Gtk:ERROR:gtktoolbar.c:2271:logical_to_physical: assertion failed:...
+ 747206 gtktextview: note on how to get line spacing between two paragraphs
+ 756570 gtkplacesview no longer provides guidance on address formats
+ 759037 GtkInfoBar: documentation not updated wrt background colors and me...
+ 763852 gdk/wayland: event source is not multi-thread aware
+ 764395 nautilus crashed on double clicking 'other locations'
+ 765471 CellRendererText shows edit entry in a wrong position for small cells
+ 765579 wayland: cache frequently accessed GtkSettings in wayland screen
+ 765676 gtk_paned_set_position doesn't work as advertised
+ 765700 GtkPaned use causes "How does the code know the size to allocate?"
+ 765742 GtkRedioButton and GtkCheckButton doesn't aligned right to left la...
+ 765790 W32: configure does not tell which cairo version to use
+ 765793 configure script failure (cairo_win32_surface_create_with_format i...
+ 765858 file chooser generates a warning about a network path
+ 765907 [Wayland] Reversed scrolling GDK_SCROLL_UP/GDK_SCROLL_DOWN in Wayl...
+ 765922 GtkScale labels extend past edge of widget and overlap neighboring...
+ 765924 Improve external drives detection
+ 765939 [Wayland] very slow scrolling in GtkMenu using the touchpad
+ 765966 settings: fix initial value for gtk-font-name
+ 765973 GtkRevealer need to always send "child-revealed" signal at end of ...
+ 765981 fts warning from tracker when searching for files with "-" in name
+ 766049 wayland: use g_signal_handler_disconnect()
+ 766120 Scale draw_value() align changed from centre/right (H/V) to left, ...
+ 766166 key bindings in gtk.css are ignored
+ 766175 Translation of quotes may misinterpreted by GTK sidebar
+ 766207 Fix build on pre-C99 compilers
+ 766233 Crash when server does not support XI2
+ 766314 Spurious leave-notify event after touch up
+ 766323 GTKPopover gives warnings if visible when reparented
+ 766336 Crash when selecting rows with rubberbanding
+ 766405 Stack shows incorrect frame in widget factory on wayland
+ 766440 Scale slider button has stopped discerning & rendering appropriate...
+ 766442 Broken drag & drop between windows
+ 766458 widget: fix GtkLabelAccessible NULL links.
+ 766530 scrolledwindow: Fix typo in get_preferred_height calculation
+ 766566 Wayland: gdk_screen_get_monitor_at_window() unreliable under Wayland
+ 766569 Better size requisition for GTK_SCROLL_NATURAL children
+ 766642 Switches in HeaderBars Are Badly Integrated
+ 766643 Frozen windows when unmapped with pending configure event
+ 766737 stack: Only map children when necessary
+ 766782 OpenGL in broadway leads to segmentation fault
+
+* Translation updates:
+ Arabic
+ Brazilian Portuguese
+ German
+ Hungarian
+ Kazakh
+ Lithuanian
+ Norwegian bokmål
+ Occitan
+ Portuguese
+ Scottish Gaelic
+ Slovak
+ Spanish
+ Swedish
+
+
 Overview of Changes in GTK+ 3.21.1
 ==================================
 
