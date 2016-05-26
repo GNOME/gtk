@@ -36,7 +36,6 @@
  * TODO:
  * - reordering
  * - dnd
- * - improve scrolling: scroll by tabs for click/activation
  */
 
 typedef struct
@@ -53,6 +52,8 @@ typedef struct
   GtkWidget       *end_scroll;
   GtkScrollType    autoscroll_mode;
   guint            autoscroll_id;
+  gboolean         autoscroll_goal_set;
+  gdouble          autoscroll_goal;
 } GtkTabStripPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkTabStrip, gtk_tab_strip, GTK_TYPE_CONTAINER)
@@ -411,6 +412,17 @@ update_scrolling (GtkTabStrip *self)
                                   hscroll, vscroll);
 }
 
+static GtkAdjustment *
+gtk_tab_strip_get_scroll_adjustment (GtkTabStrip *self)
+{
+  GtkTabStripPrivate *priv = gtk_tab_strip_get_instance_private (self);
+
+  if (gtk_tab_strip_get_orientation (self) == GTK_ORIENTATION_HORIZONTAL)
+    return gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW (priv->scrolledwindow));
+  else
+    return gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (priv->scrolledwindow));
+}
+
 static gboolean
 autoscroll_cb (GtkWidget     *widget,
                GdkFrameClock *frame_clock,
@@ -421,20 +433,41 @@ autoscroll_cb (GtkWidget     *widget,
   GtkAdjustment *adj;
   gdouble value;
 
-  if (gtk_tab_strip_get_orientation (self) == GTK_ORIENTATION_HORIZONTAL)
-    adj = gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW (priv->scrolledwindow));
-  else
-    adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (priv->scrolledwindow));
+  adj = gtk_tab_strip_get_scroll_adjustment (self);
 
   value = gtk_adjustment_get_value (adj);
-  if (priv->autoscroll_mode == GTK_SCROLL_STEP_FORWARD)
+
+  if (priv->autoscroll_goal_set && ABS (value - priv->autoscroll_goal) < 5)
+    value = priv->autoscroll_goal;
+  else if (priv->autoscroll_mode == GTK_SCROLL_STEP_FORWARD)
     value += 5;
   else
     value -= 5;
 
   gtk_adjustment_set_value (adj, value);
 
-  return G_SOURCE_CONTINUE;
+  if (priv->autoscroll_goal_set && value == priv->autoscroll_goal)
+    {
+      priv->autoscroll_id = 0;
+      return G_SOURCE_REMOVE;
+    }
+  else
+    {
+      return G_SOURCE_CONTINUE;
+    }
+}
+
+static GtkScrollType
+autoscroll_mode_for_button (GtkTabStrip *self,
+                            GtkWidget   *button)
+{
+  GtkTabStripPrivate *priv = gtk_tab_strip_get_instance_private (self);
+
+  if ((button == priv->start_scroll && !priv->reversed) ||
+      (button == priv->end_scroll && priv->reversed))
+    return GTK_SCROLL_STEP_BACKWARD;
+  else
+    return GTK_SCROLL_STEP_FORWARD;
 }
 
 static void
@@ -446,12 +479,8 @@ add_autoscroll (GtkTabStrip *self,
   if (priv->autoscroll_id != 0)
     return;
 
-  if ((button == priv->start_scroll && !priv->reversed) ||
-      (button == priv->end_scroll && priv->reversed))
-    priv->autoscroll_mode = GTK_SCROLL_STEP_BACKWARD;
-  else
-    priv->autoscroll_mode = GTK_SCROLL_STEP_FORWARD;
-
+  priv->autoscroll_mode = autoscroll_mode_for_button (self, button);
+  priv->autoscroll_goal_set = FALSE;
   priv->autoscroll_id = gtk_widget_add_tick_callback (GTK_WIDGET (self),
                                                       autoscroll_cb, self, NULL);
 }
@@ -461,11 +490,87 @@ remove_autoscroll (GtkTabStrip *self)
 {
   GtkTabStripPrivate *priv = gtk_tab_strip_get_instance_private (self);
 
-  if (priv->autoscroll_id)
+  if (priv->autoscroll_id == 0)
+    return;
+
+  gtk_widget_remove_tick_callback (GTK_WIDGET (self), priv->autoscroll_id);
+  priv->autoscroll_id = 0;
+}
+
+static gdouble
+find_autoscroll_goal (GtkTabStrip   *self,
+                      gboolean       force_step,
+                      GtkScrollType  mode)
+{
+  GtkTabStripPrivate *priv = gtk_tab_strip_get_instance_private (self);
+  GtkAdjustment *adj;
+  gdouble value;
+  gdouble goal;
+  GList *children, *l;
+
+  adj = gtk_tab_strip_get_scroll_adjustment (self);
+
+  if (mode == GTK_SCROLL_STEP_FORWARD)
+    value = gtk_adjustment_get_value (adj) + gtk_adjustment_get_page_size (adj);
+  else
+    value = gtk_adjustment_get_value (adj);
+
+  if (force_step)
     {
-      gtk_widget_remove_tick_callback (GTK_WIDGET (self), priv->autoscroll_id);
-      priv->autoscroll_id = 0;
+      if (mode == GTK_SCROLL_STEP_FORWARD)
+        value += 5;
+      else
+        value -= 5;
+      value = CLAMP (value, gtk_adjustment_get_lower (adj), gtk_adjustment_get_upper (adj));
     }
+
+  goal = 0;
+  children = gtk_container_get_children (GTK_CONTAINER (priv->tabs));
+  for (l = children; l; l = l->next)
+    {
+      GtkWidget *child = l->data;
+      GtkAllocation alloc;
+      gint start, end;
+
+      gtk_widget_get_allocation (child, &alloc);
+      if (gtk_tab_strip_get_orientation (self) == GTK_ORIENTATION_HORIZONTAL)
+        {
+          start = alloc.x;
+          end = alloc.x + alloc.width;
+        }
+      else
+        {
+          start = alloc.y;
+          end = alloc.y + alloc.height;
+        }
+
+      if (start <= value && value <= end)
+        {
+          if (mode == GTK_SCROLL_STEP_FORWARD)
+            goal = end - gtk_adjustment_get_page_size (adj);
+          else
+            goal = start;
+          break;
+        }
+    }
+  g_list_free (children);
+
+  return goal;
+}
+
+static void
+finish_autoscroll (GtkTabStrip *self)
+{
+  GtkTabStripPrivate *priv = gtk_tab_strip_get_instance_private (self);
+  gdouble goal;
+
+  if (priv->autoscroll_id == 0 || priv->autoscroll_goal_set)
+    return;
+
+  goal = find_autoscroll_goal (self, FALSE, priv->autoscroll_mode);
+
+  priv->autoscroll_goal = goal;
+  priv->autoscroll_goal_set = TRUE;
 }
 
 static gboolean
@@ -473,10 +578,13 @@ scroll_button_event (GtkWidget      *button,
                      GdkEventButton *event,
                      GtkTabStrip    *self)
 {
-  remove_autoscroll (self);
-
   if (event->type == GDK_BUTTON_PRESS)
-    add_autoscroll (self, button);
+    {
+      remove_autoscroll (self);
+      add_autoscroll (self, button);
+    }
+  else if (event->type == GDK_BUTTON_RELEASE)
+    finish_autoscroll (self);
 
   return FALSE;
 }
@@ -485,22 +593,15 @@ static void
 scroll_button_activate (GtkWidget   *button,
                         GtkTabStrip *self)
 {
-  GtkTabStripPrivate *priv = gtk_tab_strip_get_instance_private (self);
   GtkAdjustment *adj;
-  gdouble value;
+  gdouble goal;
+  GtkScrollType mode;
 
-  if (gtk_tab_strip_get_orientation (self) == GTK_ORIENTATION_HORIZONTAL)
-    adj = gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW (priv->scrolledwindow));
-  else
-    adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (priv->scrolledwindow));
-  value = gtk_adjustment_get_value (adj);
+  mode = autoscroll_mode_for_button (self, button);
+  goal = find_autoscroll_goal (self, TRUE, mode);
 
-  if (priv->start_scroll == button)
-    value -= 20;
-  else
-    value += 20;
-
-  gtk_adjustment_animate_to_value (adj, value);
+  adj = gtk_tab_strip_get_scroll_adjustment (self);
+  gtk_adjustment_animate_to_value (adj, goal);
 }
 
 static void
@@ -511,11 +612,7 @@ adjustment_changed (GtkTabStrip *self)
   gdouble value;
   gboolean at_lower, at_upper;
 
-  if (gtk_tab_strip_get_orientation (self) == GTK_ORIENTATION_HORIZONTAL)
-    adj = gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW (priv->scrolledwindow));
-  else
-    adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (priv->scrolledwindow));
-
+  adj = gtk_tab_strip_get_scroll_adjustment (self);
   value = gtk_adjustment_get_value (adj);
 
   at_lower = value <= gtk_adjustment_get_lower (adj);
