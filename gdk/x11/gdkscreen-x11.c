@@ -368,7 +368,7 @@ check_is_composited (GdkDisplay *display,
 }
 
 static GdkX11Monitor *
-find_monitor_by_output (GdkX11Display *x11_display, RROutput output)
+find_monitor_by_output (GdkX11Display *x11_display, XID output)
 {
   int i;
 
