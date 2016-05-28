@@ -146,7 +146,7 @@ msgstr "Pausa"
 #: gdk/keyname-table.h:6847
 msgctxt "keyboard label"
 msgid "Scroll_Lock"
-msgstr "Bloc Despl"
+msgstr "Bloq Despl"
 
 #: gdk/keyname-table.h:6848
 msgctxt "keyboard label"
@@ -1573,7 +1573,7 @@ msgstr "Art per"
 #: gtk/gtkaccellabel.c:179 gtk/gtkshortcutlabel.c:90 gtk/gtkshortcutlabel.c:126
 msgctxt "keyboard label"
 msgid "Shift"
-msgstr "Majús"
+msgstr "Maj"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the control key. If the text on this key isn't typically
