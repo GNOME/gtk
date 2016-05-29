@@ -30,6 +30,8 @@
 #include "gtkprogresstrackerprivate.h"
 #include "gtksettingsprivate.h"
 #include "gtkwidgetprivate.h"
+#include "a11y/gtkstackaccessible.h"
+#include "a11y/gtkstackaccessibleprivate.h"
 #include <math.h>
 #include <string.h>
 
@@ -557,6 +559,7 @@ gtk_stack_class_init (GtkStackClass *klass)
 
   gtk_container_class_install_child_properties (container_class, LAST_CHILD_PROP, stack_child_props);
 
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_STACK_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, "stack");
 }
 
@@ -1115,6 +1118,10 @@ set_visible_child (GtkStack               *stack,
           gtk_widget_set_child_visible (priv->visible_child->widget, FALSE);
         }
     }
+
+  gtk_stack_accessible_update_visible_child (stack,
+                                             priv->visible_child ? priv->visible_child->widget : NULL,
+                                             child_info ? child_info->widget : NULL);
 
   priv->visible_child = child_info;
 

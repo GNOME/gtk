@@ -42,6 +42,8 @@ a11y_h_sources =				\
 	a11y/gtkspinbuttonaccessible.h		\
 	a11y/gtkspinneraccessible.h		\
 	a11y/gtkstatusbaraccessible.h		\
+	a11y/gtkstackaccessible.h 		\
+	a11y/gtkstackaccessibleprivate.h 	\
 	a11y/gtkswitchaccessible.h		\
 	a11y/gtktextcellaccessible.h		\
 	a11y/gtktextviewaccessible.h		\
@@ -114,6 +116,7 @@ a11y_c_sources =				\
 	a11y/gtkspinbuttonaccessible.c		\
 	a11y/gtkspinneraccessible.c		\
 	a11y/gtkstatusbaraccessible.c		\
+	a11y/gtkstackaccessible.c		\
 	a11y/gtkswitchaccessible.c		\
 	a11y/gtktextcellaccessible.c		\
 	a11y/gtktextviewaccessible.c		\
