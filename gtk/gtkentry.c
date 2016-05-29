@@ -3892,8 +3892,10 @@ gtk_entry_draw_undershoot (GtkEntry *entry,
   gint min_offset, max_offset;
   GtkAllocation allocation;
   GdkRectangle rect;
+  gboolean rtl;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (entry));
+  rtl = gtk_widget_get_direction (GTK_WIDGET (entry)) == GTK_TEXT_DIR_RTL;
 
   gtk_entry_get_scroll_limits (entry, &min_offset, &max_offset);
 
@@ -3904,17 +3906,38 @@ gtk_entry_draw_undershoot (GtkEntry *entry,
 
   if (priv->scroll_offset > min_offset)
     {
+      int icon_width = 0;
+      int icon_idx = rtl ? 1 : 0;
+      if (priv->icons[icon_idx] != NULL)
+        {
+           gtk_css_gadget_get_preferred_size (priv->icons[icon_idx]->gadget,
+                                              GTK_ORIENTATION_HORIZONTAL,
+                                              -1,
+                                              &icon_width, NULL,
+                                              NULL, NULL);
+        }
+
       gtk_style_context_save_to_node (context, priv->undershoot_node[0]);
-      gtk_render_background (context, cr, rect.x, rect.y, UNDERSHOOT_SIZE, rect.height);
-      gtk_render_frame (context, cr, rect.x, rect.y, UNDERSHOOT_SIZE, rect.height);
+      gtk_render_background (context, cr, rect.x + icon_width - 1, rect.y, UNDERSHOOT_SIZE, rect.height);
+      gtk_render_frame (context, cr, rect.x + icon_width - 1, rect.y, UNDERSHOOT_SIZE, rect.height);
       gtk_style_context_restore (context);
     }
 
   if (priv->scroll_offset < max_offset)
     {
+      int icon_width = 0;
+      int icon_idx = rtl ? 0 : 1;
+      if (priv->icons[icon_idx] != NULL)
+        {
+           gtk_css_gadget_get_preferred_size (priv->icons[icon_idx]->gadget,
+                                              GTK_ORIENTATION_HORIZONTAL,
+                                              -1,
+                                              &icon_width, NULL,
+                                              NULL, NULL);
+        }
       gtk_style_context_save_to_node (context, priv->undershoot_node[1]);
-      gtk_render_background (context, cr, rect.x + rect.width - UNDERSHOOT_SIZE, rect.y, UNDERSHOOT_SIZE, rect.height);
-      gtk_render_frame (context, cr, rect.x + rect.width - UNDERSHOOT_SIZE, rect.y, UNDERSHOOT_SIZE, rect.height);
+      gtk_render_background (context, cr, rect.x + rect.width - UNDERSHOOT_SIZE - icon_width + 1, rect.y, UNDERSHOOT_SIZE, rect.height);
+      gtk_render_frame (context, cr, rect.x + rect.width - UNDERSHOOT_SIZE - icon_width + 1, rect.y, UNDERSHOOT_SIZE, rect.height);
       gtk_style_context_restore (context);
     }
 }
