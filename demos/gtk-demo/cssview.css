@@ -1,7 +1,7 @@
 /* Make the text editor has a nice style */
 .view {
   color: #2e3436;
-  font: Monospace;
+  font-family: Monospace;
   background-color: alpha(white, 0.30);
 }
 

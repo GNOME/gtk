@@ -4,7 +4,7 @@
     transition-property: color, background-color, border-color, background-image, padding, border-width;
     transition-duration: 1s;
 
-    font: Cantarell 20px;
+    font: 20px Cantarell;
 }
 
 window {
