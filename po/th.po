@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-05-27 02:05+0000\n"
-"PO-Revision-Date: 2016-05-27 15:47+0700\n"
+"PO-Revision-Date: 2016-05-30 12:21+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <theppitak@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "Language: th\n"
@@ -3834,7 +3834,7 @@ msgstr "ID"
 
 #: gtk/inspector/css-node-tree.ui:65 gtk/inspector/object-tree.ui:142
 msgid "Style Classes"
-msgstr ""
+msgstr "คลาสของสไตล์"
 
 #: gtk/inspector/css-node-tree.ui:110
 msgid "CSS Property"
@@ -3873,7 +3873,7 @@ msgstr "ดิสเพลย์"
 
 #: gtk/inspector/general.ui:408
 msgid "RGBA visual"
-msgstr ""
+msgstr "แสดงภาพด้วย RGBA"
 
 #: gtk/inspector/general.ui:442
 msgid "Composited"
@@ -3888,8 +3888,6 @@ msgid "GL Vendor"
 msgstr "ผู้จำหน่าย GL"
 
 #: gtk/inspector/gestures.c:129
-#, fuzzy
-#| msgid "None"
 msgctxt "event phase"
 msgid "None"
 msgstr "ไม่มี"
@@ -3897,17 +3895,17 @@ msgstr "ไม่มี"
 #: gtk/inspector/gestures.c:130
 msgctxt "event phase"
 msgid "Capture"
-msgstr ""
+msgstr "บนลงล่าง (Capture)"
 
 #: gtk/inspector/gestures.c:131
 msgctxt "event phase"
 msgid "Bubble"
-msgstr ""
+msgstr "ล่างขึ้นบน (Bubble)"
 
 #: gtk/inspector/gestures.c:132
 msgctxt "event phase"
 msgid "Target"
-msgstr ""
+msgstr "ปลายทาง (Target)"
 
 #: gtk/inspector/menu.c:92
 msgid "Unnamed section"
@@ -3930,125 +3928,106 @@ msgid "Icon"
 msgstr "ไอคอน"
 
 #: gtk/inspector/misc-info.ui:34
-#, fuzzy
-#| msgctxt "Action name"
-#| msgid "Press"
 msgid "Address"
-msgstr "กด"
+msgstr "แอดเดรส"
 
 #: gtk/inspector/misc-info.ui:68
-#, fuzzy
-#| msgid "Preferences"
 msgid "Reference count"
-msgstr "ปรับแต่ง"
+msgstr "จำนวนการอ้าง"
 
 #: gtk/inspector/misc-info.ui:136
 msgid "Buildable ID"
-msgstr ""
+msgstr "ID ที่ใช้สร้าง"
 
 #: gtk/inspector/misc-info.ui:170
-#, fuzzy
-#| msgid "Default"
 msgid "Default Widget"
-msgstr "ปริยาย"
+msgstr "วิดเจ็ตปริยาย"
 
 #: gtk/inspector/misc-info.ui:192 gtk/inspector/misc-info.ui:237
 #: gtk/inspector/misc-info.ui:453 gtk/inspector/prop-editor.c:1071
 #: gtk/inspector/prop-editor.c:1268 gtk/inspector/prop-editor.c:1393
 #: gtk/inspector/prop-editor.c:1504 gtk/inspector/window.ui:382
-#, fuzzy
-#| msgctxt "Stock label"
-#| msgid "_Properties"
 msgid "Properties"
-msgstr "คุณ_สมบัติ"
+msgstr "คุณสมบัติ"
 
 #: gtk/inspector/misc-info.ui:214
 msgid "Focus Widget"
-msgstr ""
+msgstr "วิดเจ็ตที่โฟกัสอยู่"
 
 #: gtk/inspector/misc-info.ui:259
 msgid "Mnemonic Label"
-msgstr ""
+msgstr "ฉลากพร้อมรหัส"
 
 #: gtk/inspector/misc-info.ui:294
 msgid "Request mode"
-msgstr ""
+msgstr "โหมดการร้องขอ"
 
 #: gtk/inspector/misc-info.ui:328
-#, fuzzy
-#| msgid "Location"
 msgid "Allocation"
-msgstr "ตำแหน่ง"
+msgstr "การจองพื้นที่"
 
 #: gtk/inspector/misc-info.ui:362
 msgid "Baseline"
-msgstr ""
+msgstr "เส้นบรรทัด"
 
 #: gtk/inspector/misc-info.ui:396
 msgid "Clip area"
-msgstr ""
+msgstr "บริเวณขริบ"
 
 #: gtk/inspector/misc-info.ui:430
 msgid "Frame Clock"
-msgstr ""
+msgstr "นาฬิกากรอบภาพ"
 
 #: gtk/inspector/misc-info.ui:475
 msgid "Tick callback"
-msgstr ""
+msgstr "ฟังก์ชันเรียกกลับตามสัญญาณนาฬิกาเดิน"
 
 #: gtk/inspector/misc-info.ui:511
 msgid "Frame count"
-msgstr ""
+msgstr "จำนวนกรอบภาพ"
 
 #: gtk/inspector/misc-info.ui:545
 msgid "Frame rate"
-msgstr ""
+msgstr "อัตรากรอบภาพ"
 
 #: gtk/inspector/misc-info.ui:579
 msgid "Accessible role"
-msgstr ""
+msgstr "บทบาทสำหรับสิ่งอำนวยความสะดวก"
 
 #: gtk/inspector/misc-info.ui:613
-#, fuzzy
-#| msgid "File name"
 msgid "Accessible name"
-msgstr "ชื่อแฟ้ม"
+msgstr "ชื่อสำหรับสิ่งอำนวยความสะดวก"
 
 #: gtk/inspector/misc-info.ui:649
 msgid "Accessible description"
-msgstr ""
+msgstr "คำบรรยายสำหรับสิ่งอำนวยความสะดวก"
 
 #: gtk/inspector/misc-info.ui:683
 msgid "Mapped"
-msgstr ""
+msgstr "แสดงบนหน้าจอแล้ว (Mapped)"
 
 #: gtk/inspector/misc-info.ui:719
 msgid "Realized"
-msgstr ""
+msgstr "เตรียมทรัพยากรระบบแล้ว (Realized)"
 
 #: gtk/inspector/misc-info.ui:755
 msgid "Is Toplevel"
-msgstr ""
+msgstr "อยู่ระดับบนสุด"
 
 #: gtk/inspector/misc-info.ui:791
 msgid "Child Visible"
-msgstr ""
+msgstr "วิดเจ็ตลูกปรากฏเห็น"
 
 #: gtk/inspector/object-tree.ui:95
-#, fuzzy
-#| msgid "_Eject"
 msgid "Object"
-msgstr "เ_อาสื่อออก"
+msgstr "ออบเจกต์"
 
 #: gtk/inspector/prop-editor.c:679
-#, fuzzy, c-format
-#| msgid "Printer"
+#, c-format
 msgid "Pointer: %p"
-msgstr "เครื่องพิมพ์"
+msgstr "พอยน์เตอร์: %p"
 
 #: gtk/inspector/prop-editor.c:694
-#, fuzzy
-#| msgid "Unknown"
 msgctxt "type name"
 msgid "Unknown"
 msgstr "ไม่ทราบ"
@@ -4056,38 +4035,31 @@ msgstr "ไม่ทราบ"
 #: gtk/inspector/prop-editor.c:695
 #, c-format
 msgid "Object: %p (%s)"
-msgstr ""
+msgstr "ออบเจกต์: %p (%s)"
 
 #: gtk/inspector/prop-editor.c:1141
-#, fuzzy, c-format
-#| msgid "Unable to stop %s"
+#, c-format
 msgid "Uneditable property type: %s"
-msgstr "ไม่สามารถหยุดทำงาน %s ได้"
+msgstr "ชนิดของคุณสมบัติซึ่งไม่สามารถแก้ไขได้: %s"
 
 #: gtk/inspector/prop-editor.c:1259
 msgid "Attribute mapping"
-msgstr ""
+msgstr "การจับคู่แอตทริบิวต์"
 
 #: gtk/inspector/prop-editor.c:1264
-#, fuzzy
-#| msgid "_Mode:"
 msgid "Model:"
-msgstr "โ_หมด:"
+msgstr "แบบช้อมูล:"
 
 #: gtk/inspector/prop-editor.c:1265
 #, c-format
 msgid "%p (%s)"
-msgstr ""
+msgstr "%p (%s)"
 
 #: gtk/inspector/prop-editor.c:1275
-#, fuzzy
-#| msgid "Volume"
 msgid "Column:"
-msgstr "ความดัง"
+msgstr "คอลัมน์:"
 
 #: gtk/inspector/prop-editor.c:1285
-#, fuzzy
-#| msgid "None"
 msgctxt "property name"
 msgid "None"
 msgstr "ไม่มี"
@@ -4095,144 +4067,113 @@ msgstr "ไม่มี"
 #: gtk/inspector/prop-editor.c:1389
 #, c-format
 msgid "Defined at: %p (%s)"
-msgstr ""
+msgstr "กำหนดไว้ที่: %p (%s)"
 
 #: gtk/inspector/prop-editor.c:1453 gtk/inspector/prop-editor.c:1469
-#, fuzzy
-#| msgctxt "Stock label"
-#| msgid "_Convert"
 msgid "inverted"
-msgstr "แปล_ง"
+msgstr "กลับทิศ"
 
 #: gtk/inspector/prop-editor.c:1485
 msgid "bidirectional, inverted"
-msgstr ""
+msgstr "สองทิศทาง, กลับทิศ"
 
 #: gtk/inspector/prop-editor.c:1490 gtk/inspector/prop-editor.c:1604
 msgid "bidirectional"
-msgstr ""
+msgstr "สองทิศทาง"
 
 #: gtk/inspector/prop-editor.c:1495
 msgid "Binding:"
-msgstr ""
+msgstr "การผูกโยง:"
 
 #: gtk/inspector/prop-editor.c:1623
-#, fuzzy
-#| msgid "Starting %s"
 msgid "Setting:"
-msgstr "กำลังเริ่ม %s"
+msgstr "ค่าตั้ง:"
 
 #: gtk/inspector/prop-editor.c:1663
-#, fuzzy
-#| msgid "Paper Source"
 msgid "Source:"
-msgstr "แหล่งป้อนกระดาษ"
+msgstr "แหล่งที่มา:"
 
 #: gtk/inspector/prop-editor.c:1665
 msgid "Reset"
-msgstr ""
+msgstr "คืนค่าเดิม"
 
 #: gtk/inspector/prop-editor.c:1676
 msgid "Default"
-msgstr "ปริยาย"
+msgstr "ค่าปริยาย"
 
 #: gtk/inspector/prop-editor.c:1679
 msgid "Theme"
-msgstr ""
+msgstr "ชุดตกแต่ง"
 
 #: gtk/inspector/prop-editor.c:1682
-#, fuzzy
-#| msgid "Starting %s"
 msgid "XSettings"
-msgstr "กำลังเริ่ม %s"
+msgstr "XSettings"
 
 #: gtk/inspector/prop-list.ui:34
-#, fuzzy
-#| msgctxt "Stock label"
-#| msgid "_Properties"
 msgid "Property"
-msgstr "คุณ_สมบัติ"
+msgstr "คุณสมบัติ"
 
 #: gtk/inspector/prop-list.ui:68 gtk/inspector/statistics.ui:53
 msgid "Type"
-msgstr ""
+msgstr "ชนิด"
 
 #: gtk/inspector/prop-list.ui:86
 msgid "Attribute"
-msgstr ""
+msgstr "แอตทริบิวต์"
 
 #: gtk/inspector/prop-list.ui:102 gtk/inspector/signals-list.ui:73
 msgid "Defined At"
-msgstr ""
+msgstr "กำหนดไว้ที่"
 
 #: gtk/inspector/resource-list.ui:100
-#, fuzzy
-#| msgid "Up Path"
 msgid "Path"
-msgstr "เดินขึ้นในพาธ"
+msgstr "พาธ"
 
 #: gtk/inspector/resource-list.ui:118 gtk/inspector/signals-list.ui:63
-#, fuzzy
-#| msgid "_Mount"
 msgid "Count"
-msgstr "เ_มานท์"
+msgstr "จำนวน"
 
 #: gtk/inspector/resource-list.ui:130 gtk/ui/gtkfilechooserwidget.ui:223
 msgid "Size"
 msgstr "ขนาด"
 
 #: gtk/inspector/resource-list.ui:163
-#, fuzzy
-#| msgid "_Name:"
 msgid "Name:"
-msgstr "_ชื่อ:"
+msgstr "ชื่อ:"
 
 #: gtk/inspector/resource-list.ui:187
 msgid "Type:"
-msgstr ""
+msgstr "ชนิด:"
 
 #: gtk/inspector/resource-list.ui:210
-#, fuzzy
-#| msgid "Size"
 msgid "Size:"
-msgstr "ขนาด"
+msgstr "ขนาด:"
 
 #: gtk/inspector/selector.ui:31
-#, fuzzy
-#| msgctxt "Action name"
-#| msgid "Select"
 msgid "Selector"
-msgstr "เลือก"
+msgstr "ตัวหยิบ"
 
 #: gtk/inspector/signals-list.c:117
-#, fuzzy
-#| msgid "_Yes"
 msgid "Yes"
-msgstr "ใ_ช่"
+msgstr "ใช่"
 
 #: gtk/inspector/signals-list.ui:36
 msgid "Signal"
-msgstr ""
+msgstr "สัญญาณ"
 
 #: gtk/inspector/signals-list.ui:50
-#, fuzzy
-#| msgid "Co_nnect"
 msgid "Connected"
-msgstr "เ_ชื่อมต่อ"
+msgstr "เชื่อมต่อ"
 
 #: gtk/inspector/size-groups.c:224
 msgid "Ignore hidden"
-msgstr ""
+msgstr "ข้ามรายการที่ซ่อน"
 
 #: gtk/inspector/size-groups.c:242
-#, fuzzy
-#| msgid "_Mode:"
 msgid "Mode"
-msgstr "โ_หมด:"
+msgstr "โหมด"
 
 #: gtk/inspector/size-groups.c:252
-#, fuzzy
-#| msgid "None"
 msgctxt "sizegroup mode"
 msgid "None"
 msgstr "ไม่มี"
@@ -4240,258 +4181,222 @@ msgstr "ไม่มี"
 #: gtk/inspector/size-groups.c:253
 msgctxt "sizegroup mode"
 msgid "Horizontal"
-msgstr ""
+msgstr "แนวนอน"
 
 #: gtk/inspector/size-groups.c:254
 msgctxt "sizegroup mode"
 msgid "Vertical"
-msgstr ""
+msgstr "แนวดิ่ง"
 
 #: gtk/inspector/size-groups.c:255
 msgctxt "sizegroup mode"
 msgid "Both"
-msgstr ""
+msgstr "ทั้งสองแนว"
 
 #: gtk/inspector/statistics.c:377
 msgid "GLib must be configured with --enable-debug"
-msgstr ""
+msgstr "GLib ต้องตั้งค่าคอมไพล์ด้วย --enable-debug"
 
 #: gtk/inspector/statistics.ui:68
 msgid "Self 1"
-msgstr ""
+msgstr "ตัวตน 1"
 
 #: gtk/inspector/statistics.ui:80
 msgid "Cumulative 1"
-msgstr ""
+msgstr "จำนวนสะสม 1"
 
 #: gtk/inspector/statistics.ui:92
 msgid "Self 2"
-msgstr ""
+msgstr "ตัวตน 2"
 
 #: gtk/inspector/statistics.ui:104
 msgid "Cumulative 2"
-msgstr ""
+msgstr "จำนวนสะสม 2"
 
 #: gtk/inspector/statistics.ui:116
 msgid "Self"
-msgstr ""
+msgstr "ตัวตน"
 
 #: gtk/inspector/statistics.ui:133
 msgid "Cumulative"
-msgstr ""
+msgstr "จำนวนสะสม"
 
 #: gtk/inspector/statistics.ui:165
 msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
-msgstr ""
+msgstr "เปิดใช้สถิติได้โดยใช้ GOBJECT_DEBUG=instance-count"
 
 #: gtk/inspector/visual.c:371 gtk/inspector/visual.c:386
 msgid "Theme is hardcoded by GTK_THEME"
-msgstr ""
+msgstr "ชุดตกแต่งถูกกำหนดค่าตายดัวด้วย GTK_THEME"
 
 #: gtk/inspector/visual.c:592
 msgid "Backend does not support window scaling"
-msgstr ""
+msgstr "แบกเอนด์ไม่รองรับการย่อ-ขยายหน้าต่าง"
 
 #: gtk/inspector/visual.c:687
 msgid "Setting is hardcoded by GTK_TEST_TOUCHSCREEN"
-msgstr ""
+msgstr "ค่าตั้งถูกกำหนดตายตัวด้วย GTK_TEST_TOUCHSCREEN"
 
 #: gtk/inspector/visual.c:752
 msgid ""
 "Not settable at runtime.\n"
 "Use GDK_GL=always or GDK_GL=disable instead"
 msgstr ""
+"ไม่สามารถกำหนดค่าระหว่างทำงานได้\n"
+"กรุณาใช้ GDK_GL=always หรือ GDK_GL=disable แทน"
 
 #: gtk/inspector/visual.c:766 gtk/inspector/visual.c:767
 #: gtk/inspector/visual.c:768
 msgid "GL rendering is disabled"
-msgstr ""
+msgstr "การวาดด้วย GL ถูกปิดไว้"
 
 #: gtk/inspector/visual.ui:61
 msgid "GTK+ Theme"
-msgstr ""
+msgstr "ชุดตกแต่งสำหรับ GTK+"
 
 #: gtk/inspector/visual.ui:94
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Dark Orange"
 msgid "Dark Variant"
-msgstr "ส้มแก่"
+msgstr "สีมืด"
 
 #: gtk/inspector/visual.ui:127
 msgid "Cursor Theme"
-msgstr ""
+msgstr "ชุดตกแต่งตัวชี้เมาส์"
 
 #: gtk/inspector/visual.ui:160
-#, fuzzy
-#| msgid "Custom Size %d"
 msgid "Cursor Size"
-msgstr "ขนาดกำหนดเองชุดที่ %d"
+msgstr "ขนาดของตัวชี้เมาส์"
 
 #: gtk/inspector/visual.ui:197
 msgid "Icon Theme"
-msgstr ""
+msgstr "ชุดไอคอน"
 
 #: gtk/inspector/visual.ui:230 gtk/ui/gtkfontbutton.ui:13
 msgid "Font"
 msgstr "แบบอักษร"
 
 #: gtk/inspector/visual.ui:263
-#, fuzzy
-#| msgid "Font Selection"
 msgid "Font Scale"
-msgstr "เลือกแบบอักษร"
+msgstr "ขนาดตัวอักษร"
 
 #: gtk/inspector/visual.ui:309
 msgid "Text Direction"
-msgstr ""
+msgstr "ทิศทางของข้อความ"
 
 #: gtk/inspector/visual.ui:322
-#, fuzzy
-#| msgid "Left to right"
 msgid "Left-to-Right"
 msgstr "ซ้ายไปขวา"
 
 #: gtk/inspector/visual.ui:323
-#, fuzzy
-#| msgid "Right to left"
 msgid "Right-to-Left"
 msgstr "ขวามาซ้าย"
 
 #: gtk/inspector/visual.ui:347
-#, fuzzy
-#| msgid "Window"
 msgid "Window scaling"
-msgstr "หน้าต่าง"
+msgstr "อัตราขยายขนาดหน้าต่าง"
 
 #: gtk/inspector/visual.ui:382
-#, fuzzy
-#| msgid "Information"
 msgid "Animations"
-msgstr "ข้อมูล"
+msgstr "ภาพเคลื่อนไหว"
 
 #: gtk/inspector/visual.ui:415
 msgid "Slowdown"
-msgstr ""
+msgstr "ช้าลง"
 
 #: gtk/inspector/visual.ui:474
-#, fuzzy
-#| msgctxt "print operation status"
-#| msgid "Generating data"
 msgid "Rendering Mode"
-msgstr "กำลังสร้างข้อมูล"
+msgstr "โหมดการวาด"
 
 #: gtk/inspector/visual.ui:487
 msgid "Similar"
-msgstr ""
+msgstr "คล้าย"
 
 #: gtk/inspector/visual.ui:488
 msgid "Image"
-msgstr ""
+msgstr "บัฟเฟอร์ภาพ"
 
 #: gtk/inspector/visual.ui:489
-#, fuzzy
-#| msgctxt "Stock label, media"
-#| msgid "_Record"
 msgid "Recording"
-msgstr "_อัด"
+msgstr "อัดบันทึก"
 
 #: gtk/inspector/visual.ui:513
 msgid "Show Graphic Updates"
-msgstr ""
+msgstr "แสดงการปรับแสดงกราฟิกส์"
 
 #: gtk/inspector/visual.ui:547
 msgid "Show Baselines"
-msgstr ""
+msgstr "แสดงเส้นบรรทัด"
 
 #: gtk/inspector/visual.ui:581
 msgid "Show Layout Borders"
-msgstr ""
+msgstr "แสดงเส้นขอบของผังวาง"
 
 #: gtk/inspector/visual.ui:615
 msgid "Show Pixel Cache"
-msgstr ""
+msgstr "แสดงแคชของพิกเซล"
 
 #: gtk/inspector/visual.ui:649
-#, fuzzy
-#| msgid "Show _Hidden Files"
 msgid "Show Widget Resizes"
-msgstr "แสดงแฟ้มซ่อ_น"
+msgstr "แสดงการปรับขนาดวิดเจ็ต"
 
 #: gtk/inspector/visual.ui:683
 msgid "Simulate touchscreen"
-msgstr ""
+msgstr "จำลองทัชสกรีน"
 
 #: gtk/inspector/visual.ui:728
 msgid "GL Rendering"
-msgstr ""
+msgstr "การวาดด้วย GL"
 
 #: gtk/inspector/visual.ui:740
 msgid "When needed"
-msgstr ""
+msgstr "ใช้เมื่อจำเป็น"
 
 #: gtk/inspector/visual.ui:741
-#, fuzzy
-#| msgid "Always on Top"
 msgid "Always"
-msgstr "อยู่บนสุด"
+msgstr "ใช้เสมอ"
 
 #: gtk/inspector/visual.ui:742
 msgid "Disabled"
 msgstr "ไม่ใช้"
 
 #: gtk/inspector/visual.ui:766
-#, fuzzy
-#| msgid "Software"
 msgid "Software GL"
-msgstr "ซอฟต์แวร์"
+msgstr "GL แบบซอฟต์แวร์"
 
 #: gtk/inspector/visual.ui:800
-#, fuzzy
-#| msgid "Software"
 msgid "Software Surfaces"
-msgstr "ซอฟต์แวร์"
+msgstr "พื้นผิวแบบซอฟต์แวร์"
 
 #: gtk/inspector/visual.ui:834
 msgid "Texture Rectangle Extension"
-msgstr ""
+msgstr "ส่วนขยายกรอบสี่เหลี่ยมของพื้นผิว"
 
 #: gtk/inspector/window.ui:31
-#, fuzzy
-#| msgid "Select a File"
 msgid "Select an Object"
-msgstr "เลือกแฟ้ม"
+msgstr "เลือกออบเจกต์"
 
 #: gtk/inspector/window.ui:54 gtk/inspector/window.ui:134
-#, fuzzy
-#| msgid "Job Details"
 msgid "Show Details"
-msgstr "รายละเอียดงานพิมพ์"
+msgstr "แสดงรายละเอียด"
 
 #: gtk/inspector/window.ui:77
 msgid "Show all Objects"
-msgstr ""
+msgstr "แสดงออบเจกต์ทั้งหมด"
 
 #: gtk/inspector/window.ui:107
 msgid "Collect Statistics"
-msgstr ""
+msgstr "เก็บข้อมูลสถิติ"
 
 #: gtk/inspector/window.ui:156
-#, fuzzy
-#| msgid "Show _Private Resources"
 msgid "Show all Resources"
-msgstr "แสดงทรัพยากร_ส่วนบุคคล"
+msgstr "แสดงทรัพยากรทั้งหมด"
 
 #: gtk/inspector/window.ui:267
 msgid "Trace signal emissions on this object"
-msgstr ""
+msgstr "แกะรอยการส่งสัญญาณของออบเจกต์นี้"
 
 #: gtk/inspector/window.ui:284
-#, fuzzy
-#| msgctxt "Stock label"
-#| msgid "_Clear"
 msgid "Clear log"
-msgstr "_ล้าง"
+msgstr "ล้างปูม"
 
 #: gtk/inspector/window.ui:370
 msgid "Miscellaneous"
@@ -4499,81 +4404,63 @@ msgstr "จิปาถะ"
 
 #: gtk/inspector/window.ui:393
 msgid "Signals"
-msgstr ""
+msgstr "สัญญาณ"
 
 #: gtk/inspector/window.ui:404
-#, fuzzy
-#| msgctxt "Stock label"
-#| msgid "_Properties"
 msgid "Child Properties"
-msgstr "คุณ_สมบัติ"
+msgstr "คุณสมบัติออบเจกต์ลูก"
 
 #: gtk/inspector/window.ui:413
 msgid "Class Hierarchy"
-msgstr ""
+msgstr "ลำดับชั้นของคลาส"
 
 #: gtk/inspector/window.ui:422
-#, fuzzy
-#| msgctxt "Action name"
-#| msgid "Select"
 msgid "CSS Selector"
-msgstr "เลือก"
+msgstr "ตัวหยิบ CSS"
 
 #: gtk/inspector/window.ui:431
 msgid "CSS nodes"
-msgstr ""
+msgstr "โหนด CSS"
 
 #: gtk/inspector/window.ui:438
-#, fuzzy
-#| msgid "Group"
 msgid "Size Groups"
-msgstr "กลุ่ม"
+msgstr "กลุ่มขนาด"
 
 #: gtk/inspector/window.ui:445
 msgid "Data"
-msgstr ""
+msgstr "ข้อมูล"
 
 #: gtk/inspector/window.ui:452
-#, fuzzy
-#| msgid "Application"
 msgid "Actions"
-msgstr "โปรแกรม"
+msgstr "การกระทำ"
 
 #: gtk/inspector/window.ui:468
 msgid "Gestures"
-msgstr ""
+msgstr "ท่าขยับ"
 
 #: gtk/inspector/window.ui:477
 msgid "Magnifier"
-msgstr ""
+msgstr "แว่นขยาย"
 
 #: gtk/inspector/window.ui:490
-#, fuzzy
-#| msgid "_Eject"
 msgid "Objects"
-msgstr "เ_อาสื่อออก"
+msgstr "ออบเจกต์"
 
 #: gtk/inspector/window.ui:500
-#, fuzzy
-#| msgid "Status"
 msgid "Statistics"
-msgstr "สถานะ"
+msgstr "สถิติ"
 
 #: gtk/inspector/window.ui:510
-#, fuzzy
-#| msgid "Paper _source:"
 msgid "Resources"
-msgstr "แหล่ง_ป้อนกระดาษ:"
+msgstr "ทรัพยากร"
 
 #: gtk/inspector/window.ui:519
-#, fuzzy
-#| msgid "CLASS"
 msgid "CSS"
-msgstr "CLASS"
+msgstr "CSS"
 
 #: gtk/inspector/window.ui:528
 msgid "Visual"
-msgstr ""
+msgstr "รูปปรากฏ"
 
 #: gtk/inspector/window.ui:537 gtk/ui/gtkprintunixdialog.ui:426
 msgid "General"
@@ -6817,11 +6704,6 @@ msgstr "พิมพ์ออกยังเครื่องพิมพ์ท
 
 #~ msgid "Node:"
 #~ msgstr "โหนด:"
-
-#, fuzzy
-#~| msgid "Search"
-#~ msgid "Hierarchy"
-#~ msgstr "ค้นหา"
 
 #~ msgid "The license of the program"
 #~ msgstr "สัญญาอนุญาตใช้งานของโปรแกรม"
