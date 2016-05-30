@@ -3899,7 +3899,7 @@ infobar { border-style: none; }
     }
   }
 
-  label:selected { &:focus, &:hover, & { background-color: darken($selected_bg_color, 10%); }}
+  selection { background-color: darken($selected_bg_color, 10%); }
 
   *:link { @extend %link_selected; }
 }

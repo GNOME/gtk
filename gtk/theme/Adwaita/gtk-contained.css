@@ -4394,16 +4394,10 @@ infobar {
         .error button:backdrop:disabled label,
         .error button:backdrop:disabled {
           color: #9bc2ea; }
-  .info label:selected:focus, .info label:selected:hover, .info label:selected,
-  .question label:selected:focus,
-  .question label:selected:hover,
-  .question label:selected,
-  .warning label:selected:focus,
-  .warning label:selected:hover,
-  .warning label:selected,
-  .error label:selected:focus,
-  .error label:selected:hover,
-  .error label:selected {
+  .info selection,
+  .question selection,
+  .warning selection,
+  .error selection {
     background-color: #2a76c6; }
 
 /************
