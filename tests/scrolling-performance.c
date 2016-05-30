@@ -5,6 +5,28 @@
 
 #include "frame-stats.h"
 
+
+/* Stub definition of MyTextView which is used in the
+ * widget-factory.ui file. We just need this so the
+ * test keeps working
+ */
+typedef struct
+{
+  GtkTextView tv;
+} MyTextView;
+
+typedef GtkTextViewClass MyTextViewClass;
+
+G_DEFINE_TYPE (MyTextView, my_text_view, GTK_TYPE_TEXT_VIEW)
+
+static void
+my_text_view_init (MyTextView *tv) {}
+
+static void
+my_text_view_class_init (MyTextViewClass *tv_class) {}
+
+
+
 GtkWidget *
 create_widget_factory_content (void)
 {
@@ -12,6 +34,7 @@ create_widget_factory_content (void)
   GtkBuilder *builder;
   GtkWidget *result;
 
+  g_type_ensure (my_text_view_get_type ());
   builder = gtk_builder_new ();
   gtk_builder_add_from_file (builder,
                              "../demos/widget-factory/widget-factory.ui",
