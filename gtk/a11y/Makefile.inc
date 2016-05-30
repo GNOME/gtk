@@ -43,7 +43,6 @@ a11y_h_sources =				\
 	a11y/gtkspinneraccessible.h		\
 	a11y/gtkstatusbaraccessible.h		\
 	a11y/gtkstackaccessible.h 		\
-	a11y/gtkstackaccessibleprivate.h 	\
 	a11y/gtkswitchaccessible.h		\
 	a11y/gtktextcellaccessible.h		\
 	a11y/gtktextviewaccessible.h		\
@@ -65,6 +64,7 @@ a11y_private_h_sources =			\
 	a11y/gtkflowboxaccessibleprivate.h	\
 	a11y/gtklistboxaccessibleprivate.h	\
 	a11y/gtklockbuttonaccessibleprivate.h	\
+	a11y/gtkstackaccessibleprivate.h 	\
 	a11y/gtktextviewaccessibleprivate.h	\
 	a11y/gtktreeviewaccessibleprivate.h	\
 	a11y/gtkwidgetaccessibleprivate.h
