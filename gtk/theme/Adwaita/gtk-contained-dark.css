@@ -90,19 +90,21 @@ flowbox flowboxchild {
   flowbox flowboxchild:selected {
     outline-offset: -2px; }
 
-label.separator {
-  color: #eeeeec; }
-  label.separator:backdrop {
+label {
+  caret-color: currentColor; }
+  label.separator {
+    color: #eeeeec; }
+    label.separator:backdrop {
+      color: #919494; }
+  label selection {
+    background-color: #215d9c;
+    color: #ffffff; }
+  label:disabled {
     color: #919494; }
-label selection {
-  background-color: #215d9c;
-  color: #ffffff; }
-label:disabled {
-  color: #919494; }
-  label:disabled:backdrop {
-    color: #566164; }
-label:backdrop {
-  color: #919494; }
+    label:disabled:backdrop {
+      color: #566164; }
+  label:backdrop {
+    color: #919494; }
 
 .dim-label, label.separator, .titlebar:not(headerbar) .subtitle,
 headerbar .subtitle {
