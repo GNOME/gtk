@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-10 09:14+0000\n"
-"PO-Revision-Date: 2016-05-12 09:31+0200\n"
+"POT-Creation-Date: 2016-05-23 16:56+0000\n"
+"PO-Revision-Date: 2016-05-26 14:58+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -95,6 +95,11 @@ msgstr "Opciones de depuración GTK+ que quitar"
 #: gdk/gdkwindow.c:2766
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "Soporte de GL desactivado mediante GDK_DEBUG"
+
+#: gdk/gdkwindow.c:2777
+#| msgid "Backend does not support window scaling"
+msgid "The current backend does not support OpenGL"
+msgstr "El «backend» actual no soporta OpenGL"
 
 #.
 #. * Translators, the strings in the “keyboard label” context are
@@ -1885,7 +1890,7 @@ msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkcolorbutton.c:192 gtk/gtkcolorbutton.c:412
+#: gtk/gtkcolorbutton.c:185 gtk/gtkcolorbutton.c:398
 msgid "Pick a Color"
 msgstr "Escoja un color"
 
@@ -2230,7 +2235,7 @@ msgstr "Bloq Mayús está activado"
 msgid "Select a File"
 msgstr "Seleccionar un archivo"
 
-#: gtk/gtkfilechooserbutton.c:108 gtk/gtkplacessidebar.c:981
+#: gtk/gtkfilechooserbutton.c:108 gtk/gtkplacessidebar.c:976
 msgid "Desktop"
 msgstr "Escritorio"
 
@@ -2249,7 +2254,7 @@ msgstr "_Nombre"
 
 #. Open item is always present
 #: gtk/gtkfilechoosernative.c:371 gtk/gtkfilechoosernative.c:456
-#: gtk/gtkplacessidebar.c:3417 gtk/gtkplacesview.c:1590
+#: gtk/gtkplacessidebar.c:3412 gtk/gtkplacesview.c:1588
 msgid "_Open"
 msgstr "_Abrir"
 
@@ -2415,7 +2420,7 @@ msgstr "Copiar _ubicación"
 msgid "_Add to Bookmarks"
 msgstr "_Añadir a los marcadores"
 
-#: gtk/gtkfilechooserwidget.c:2255 gtk/gtkplacessidebar.c:2534
+#: gtk/gtkfilechooserwidget.c:2255 gtk/gtkplacessidebar.c:2529
 #: gtk/ui/gtkfilechooserwidget.ui:525
 msgid "_Rename"
 msgstr "_Renombrar"
@@ -2509,7 +2514,7 @@ msgstr "%-e %b %Y"
 msgid "Unknown"
 msgstr "Desconocido"
 
-#: gtk/gtkfilechooserwidget.c:5063 gtk/gtkplacessidebar.c:966
+#: gtk/gtkfilechooserwidget.c:5063 gtk/gtkplacessidebar.c:961
 msgid "Home"
 msgstr "Carpeta personal"
 
@@ -2597,7 +2602,7 @@ msgstr "Cerrar"
 msgid "Icon '%s' not present in theme %s"
 msgstr "El icono «%s» no está presente en el tema %s"
 
-#: gtk/gtkicontheme.c:4054 gtk/gtkicontheme.c:4421
+#: gtk/gtkicontheme.c:4077 gtk/gtkicontheme.c:4444
 msgid "Failed to load icon"
 msgstr "No se pudo cargar el icono"
 
@@ -2925,245 +2930,245 @@ msgstr "Configuración de página"
 msgid "File System Root"
 msgstr "Sistema de archivos raíz"
 
-#: gtk/gtkplacessidebar.c:955
+#: gtk/gtkplacessidebar.c:950
 msgid "Recent"
 msgstr "Recientes"
 
-#: gtk/gtkplacessidebar.c:957
+#: gtk/gtkplacessidebar.c:952
 msgid "Recent files"
 msgstr "Archivos recientes"
 
-#: gtk/gtkplacessidebar.c:968
+#: gtk/gtkplacessidebar.c:963
 msgid "Open your personal folder"
 msgstr "Abrir su carpeta personal"
 
-#: gtk/gtkplacessidebar.c:983
+#: gtk/gtkplacessidebar.c:978
 msgid "Open the contents of your desktop in a folder"
 msgstr "Abrir el contenido de su escritorio en una carpeta"
 
-#: gtk/gtkplacessidebar.c:997
+#: gtk/gtkplacessidebar.c:992
 msgid "Enter Location"
 msgstr "Introducir ubicación"
 
-#: gtk/gtkplacessidebar.c:999
+#: gtk/gtkplacessidebar.c:994
 msgid "Manually enter a location"
 msgstr "Introducir manualmente una ubicación"
 
-#: gtk/gtkplacessidebar.c:1010
+#: gtk/gtkplacessidebar.c:1005
 msgid "Trash"
 msgstr "Papelera"
 
-#: gtk/gtkplacessidebar.c:1012
+#: gtk/gtkplacessidebar.c:1007
 msgid "Open the trash"
 msgstr "Abrir la papelera"
 
-#: gtk/gtkplacessidebar.c:1083 gtk/gtkplacessidebar.c:1111
-#: gtk/gtkplacessidebar.c:1318
+#: gtk/gtkplacessidebar.c:1078 gtk/gtkplacessidebar.c:1106
+#: gtk/gtkplacessidebar.c:1313
 #, c-format
 msgid "Mount and open “%s”"
 msgstr "Montar y abrir «%s»"
 
-#: gtk/gtkplacessidebar.c:1198
+#: gtk/gtkplacessidebar.c:1193
 msgid "Open the contents of the file system"
 msgstr "Abrir el contenido del sistema de archivos"
 
-#: gtk/gtkplacessidebar.c:1282
+#: gtk/gtkplacessidebar.c:1277
 msgid "New bookmark"
 msgstr "Marcado nuevo"
 
-#: gtk/gtkplacessidebar.c:1284
+#: gtk/gtkplacessidebar.c:1279
 msgid "Add a new bookmark"
 msgstr "Añadir un marcador nuevo"
 
-#: gtk/gtkplacessidebar.c:1297
+#: gtk/gtkplacessidebar.c:1292
 msgid "Connect to Server"
 msgstr "Conectar al servidor"
 
-#: gtk/gtkplacessidebar.c:1299
+#: gtk/gtkplacessidebar.c:1294
 msgid "Connect to a network server address"
 msgstr "Conectar a una dirección de servidor en red"
 
-#: gtk/gtkplacessidebar.c:1361
+#: gtk/gtkplacessidebar.c:1356
 msgid "Other Locations"
 msgstr "Otras ubicaciones"
 
-#: gtk/gtkplacessidebar.c:1362
+#: gtk/gtkplacessidebar.c:1357
 msgid "Show other locations"
 msgstr "Mostrar otras ubicaciones"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: gtk/gtkplacessidebar.c:2152 gtk/gtkplacessidebar.c:3437
+#: gtk/gtkplacessidebar.c:2147 gtk/gtkplacessidebar.c:3432
 msgid "_Start"
 msgstr "_Iniciar"
 
-#: gtk/gtkplacessidebar.c:2153 gtk/gtkplacessidebar.c:3438
+#: gtk/gtkplacessidebar.c:2148 gtk/gtkplacessidebar.c:3433
 msgid "_Stop"
 msgstr "_Detener"
 
 #. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
-#: gtk/gtkplacessidebar.c:2160
+#: gtk/gtkplacessidebar.c:2155
 msgid "_Power On"
 msgstr "_Encender"
 
-#: gtk/gtkplacessidebar.c:2161
+#: gtk/gtkplacessidebar.c:2156
 msgid "_Safely Remove Drive"
 msgstr "_Quitar unidad con seguridad"
 
-#: gtk/gtkplacessidebar.c:2165
+#: gtk/gtkplacessidebar.c:2160
 msgid "_Connect Drive"
 msgstr "_Conectar unidad"
 
-#: gtk/gtkplacessidebar.c:2166
+#: gtk/gtkplacessidebar.c:2161
 msgid "_Disconnect Drive"
 msgstr "_Desconectar unidad"
 
-#: gtk/gtkplacessidebar.c:2170
+#: gtk/gtkplacessidebar.c:2165
 msgid "_Start Multi-disk Device"
 msgstr "_Iniciar dispositivo multidisco"
 
-#: gtk/gtkplacessidebar.c:2171
+#: gtk/gtkplacessidebar.c:2166
 msgid "_Stop Multi-disk Device"
 msgstr "_Detener dispositivo multidisco"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
-#: gtk/gtkplacessidebar.c:2176
+#: gtk/gtkplacessidebar.c:2171
 msgid "_Unlock Device"
 msgstr "_Desbloquear dispositivo"
 
-#: gtk/gtkplacessidebar.c:2177
+#: gtk/gtkplacessidebar.c:2172
 msgid "_Lock Device"
 msgstr "_Bloquear dispositivo"
 
-#: gtk/gtkplacessidebar.c:2215 gtk/gtkplacessidebar.c:3187
+#: gtk/gtkplacessidebar.c:2210 gtk/gtkplacessidebar.c:3182
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "No se pudo iniciar «%s»"
 
-#: gtk/gtkplacessidebar.c:2245
+#: gtk/gtkplacessidebar.c:2240
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "No se puede acceder a «%s»"
 
-#: gtk/gtkplacessidebar.c:2459
+#: gtk/gtkplacessidebar.c:2454
 msgid "This name is already taken"
 msgstr "Este nombre ya está en uso"
 
-#: gtk/gtkplacessidebar.c:2528 gtk/inspector/actions.ui:43
+#: gtk/gtkplacessidebar.c:2523 gtk/inspector/actions.ui:43
 #: gtk/inspector/css-node-tree.ui:39 gtk/inspector/object-tree.ui:110
 #: gtk/ui/gtkfilechooserwidget.ui:189 gtk/ui/gtkfilechooserwidget.ui:499
 msgid "Name"
 msgstr "Nombre"
 
-#: gtk/gtkplacessidebar.c:2728
+#: gtk/gtkplacessidebar.c:2723
 #, c-format
 msgid "Unable to unmount “%s”"
 msgstr "No se puede desmontar «%s»"
 
-#: gtk/gtkplacessidebar.c:2904
+#: gtk/gtkplacessidebar.c:2899
 #, c-format
 msgid "Unable to stop “%s”"
 msgstr "No se pudo detener «%s»"
 
-#: gtk/gtkplacessidebar.c:2933
+#: gtk/gtkplacessidebar.c:2928
 #, c-format
 msgid "Unable to eject “%s”"
 msgstr "No se pudo expulsar «%s»"
 
-#: gtk/gtkplacessidebar.c:2962 gtk/gtkplacessidebar.c:2991
+#: gtk/gtkplacessidebar.c:2957 gtk/gtkplacessidebar.c:2986
 #, c-format
 msgid "Unable to eject %s"
 msgstr "No se pudo expulsar %s"
 
-#: gtk/gtkplacessidebar.c:3139
+#: gtk/gtkplacessidebar.c:3134
 #, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr "No se puede consultar a «%s» si hay cambios en el medio"
 
-#: gtk/gtkplacessidebar.c:3420 gtk/gtkplacesview.c:1600
+#: gtk/gtkplacessidebar.c:3415 gtk/gtkplacesview.c:1598
 msgid "Open in New _Tab"
 msgstr "Abrir en una _pestaña nueva"
 
-#: gtk/gtkplacessidebar.c:3423 gtk/gtkplacesview.c:1611
+#: gtk/gtkplacessidebar.c:3418 gtk/gtkplacesview.c:1609
 msgid "Open in New _Window"
 msgstr "Abrir en una _ventana nueva"
 
-#: gtk/gtkplacessidebar.c:3427
+#: gtk/gtkplacessidebar.c:3422
 msgid "_Add Bookmark"
 msgstr "_Añadir marcador"
 
-#: gtk/gtkplacessidebar.c:3428
+#: gtk/gtkplacessidebar.c:3423
 msgid "_Remove"
 msgstr "_Quitar"
 
-#: gtk/gtkplacessidebar.c:3429
+#: gtk/gtkplacessidebar.c:3424
 msgid "Rename…"
 msgstr "Renombrar…"
 
-#: gtk/gtkplacessidebar.c:3433 gtk/gtkplacesview.c:1645
+#: gtk/gtkplacessidebar.c:3428 gtk/gtkplacesview.c:1643
 msgid "_Mount"
 msgstr "_Montar"
 
-#: gtk/gtkplacessidebar.c:3434 gtk/gtkplacesview.c:1635
+#: gtk/gtkplacessidebar.c:3429 gtk/gtkplacesview.c:1633
 msgid "_Unmount"
 msgstr "_Desmontar"
 
-#: gtk/gtkplacessidebar.c:3435
+#: gtk/gtkplacessidebar.c:3430
 msgid "_Eject"
 msgstr "_Expulsar"
 
-#: gtk/gtkplacessidebar.c:3436
+#: gtk/gtkplacessidebar.c:3431
 msgid "_Detect Media"
 msgstr "_Detectar medio"
 
-#: gtk/gtkplacessidebar.c:3882 gtk/gtkplacesview.c:1065
+#: gtk/gtkplacessidebar.c:3877 gtk/gtkplacesview.c:1063
 msgid "Computer"
 msgstr "Equipo"
 
-#: gtk/gtkplacesview.c:882
+#: gtk/gtkplacesview.c:880
 msgid "Searching for network locations"
 msgstr "Buscando ubicaciones de red"
 
-#: gtk/gtkplacesview.c:889
+#: gtk/gtkplacesview.c:887
 msgid "No network locations found"
 msgstr "No se han encontrado ubicaciones de red"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1175 gtk/gtkplacesview.c:1248
+#: gtk/gtkplacesview.c:1173 gtk/gtkplacesview.c:1246
 msgid "Unable to access location"
 msgstr "No se puede acceder a la ubicación"
 
 #. Restore from Cancel to Connect
-#: gtk/gtkplacesview.c:1192 gtk/ui/gtkplacesview.ui:449
+#: gtk/gtkplacesview.c:1190 gtk/ui/gtkplacesview.ui:449
 msgid "Con_nect"
 msgstr "Co_nectar"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1311
+#: gtk/gtkplacesview.c:1309
 msgid "Unable to unmount volume"
 msgstr "No se puede desmontar del volumen"
 
 #. Allow to cancel the operation
-#: gtk/gtkplacesview.c:1393
+#: gtk/gtkplacesview.c:1391
 msgid "Cance_l"
 msgstr "Cance_lar"
 
-#: gtk/gtkplacesview.c:1635
+#: gtk/gtkplacesview.c:1633
 msgid "_Disconnect"
 msgstr "_Desconectar"
 
-#: gtk/gtkplacesview.c:1645
+#: gtk/gtkplacesview.c:1643
 msgid "_Connect"
 msgstr "_Conectar"
 
-#: gtk/gtkplacesview.c:1810
+#: gtk/gtkplacesview.c:1808
 msgid "Unable to get remote server location"
 msgstr "No se pudo obtener la ubicación del servidor remoto"
 
-#: gtk/gtkplacesview.c:1949 gtk/gtkplacesview.c:1958
+#: gtk/gtkplacesview.c:1947 gtk/gtkplacesview.c:1956
 msgid "Networks"
 msgstr "Redes"
 
-#: gtk/gtkplacesview.c:1949 gtk/gtkplacesview.c:1958
+#: gtk/gtkplacesview.c:1947 gtk/gtkplacesview.c:1956
 msgid "On This Computer"
 msgstr "En este equipo"
 
@@ -5624,11 +5629,6 @@ msgid "Server Addresses"
 msgstr "Direcciones del servidor"
 
 #: gtk/ui/gtkplacesview.ui:43
-#| msgid ""
-#| "Server addresses are made up of a protocol prefix and an address. "
-#| "Examples:\n"
-#| "\n"
-#| "smb://foo.example.com, ssh://192.168.0.1"
 msgid ""
 "Server addresses are made up of a protocol prefix and an address. Examples:"
 msgstr ""
@@ -5652,7 +5652,6 @@ msgid "File Transfer Protocol"
 msgstr "Protocolo de transferencia de archivos"
 
 #: gtk/ui/gtkplacesview.ui:114
-#| msgid "File System"
 msgid "Network File System"
 msgstr "Sistema de archivos en red"
 
@@ -5661,7 +5660,6 @@ msgid "Samba"
 msgstr "Samba"
 
 #: gtk/ui/gtkplacesview.ui:136
-#| msgid "File Transfer Protocol"
 msgid "SSH File Transfer Protocol"
 msgstr "Protocolo de transferencia de archivos por SSH"
 
@@ -5671,7 +5669,6 @@ msgstr "WebDav"
 
 #. Translators: do not translate ftp:// and ftps://
 #: gtk/ui/gtkplacesview.ui:183
-#| msgid "http:// or https://"
 msgid "ftp:// or ftps://"
 msgstr "ftp:// o ftps://"
 
@@ -5681,7 +5678,6 @@ msgstr "smb://"
 
 #. Translators: do not translate dav:// and davs://
 #: gtk/ui/gtkplacesview.ui:227
-#| msgid "http:// or https://"
 msgid "dav:// or davs://"
 msgstr "dav:// o davs://"
 
