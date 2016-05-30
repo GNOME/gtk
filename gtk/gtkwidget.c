@@ -17441,6 +17441,7 @@ gtk_widget_render (GtkWidget            *widget,
                    const cairo_region_t *region)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GdkDrawingContext *context;
   gboolean do_clip;
   cairo_t *cr;
   int x, y;
@@ -17452,12 +17453,13 @@ gtk_widget_render (GtkWidget            *widget,
         return;
     }
 
-  cr = gdk_window_begin_draw_frame (window, region);
+  context = gdk_window_begin_draw_frame (window, region);
+  cr = gdk_drawing_context_get_cairo_context (context);
 
   do_clip = _gtk_widget_get_translation_to_window (widget, window, &x, &y);
   cairo_translate (cr, -x, -y);
 
   gtk_widget_draw_internal (widget, cr, do_clip);
 
-  gdk_window_end_draw_frame (window, cr);
+  gdk_window_end_draw_frame (window, context);
 }

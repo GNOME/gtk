@@ -40,6 +40,7 @@
 #include "gdkframeclockidle.h"
 #include "gdkwindowimpl.h"
 #include "gdkglcontextprivate.h"
+#include "gdkdrawingcontextprivate.h"
 #include "gdk-private.h"
 
 #include <math.h>
@@ -3143,7 +3144,7 @@ gdk_cairo_get_window (cairo_t *cr)
  * @region: a Cairo region
  *
  * Indicates that you are beginning the process of redrawing @region
- * on @window, and provides you with a Cairo context for drawing.
+ * on @window, and provides you with a #GdkDrawingContext.
  *
  * If @window is a top level #GdkWindow, backed by a native window
  * implementation, a backing store (offscreen buffer) large enough to
@@ -3170,40 +3171,60 @@ gdk_cairo_get_window (cairo_t *cr)
  * code in GTK does not need to call gdk_window_begin_draw_frame()
  * explicitly.
  *
- * Returns: (transfer none): a Cairo context that should be used to
- *   draw the contents of the window; the returned context is owned
- *   by GDK and should not be destroyed directly
+ * Returns: (transfer none): a #GdkDrawingContext context that should be
+ *   used to draw the contents of the window; the returned context is owned
+ *   by GDK.
  *
  * Since: 3.22
  */
-cairo_t *
+GdkDrawingContext *
 gdk_window_begin_draw_frame (GdkWindow            *window,
                              const cairo_region_t *region)
 {
-  cairo_t *retval;
+  GdkDrawingContext *context;
+  GdkWindowImplClass *impl_class;
 
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+
+  if (window->drawing_context != NULL)
+    {
+      g_critical ("The window %p already has a drawing context. You cannot "
+                  "call gdk_window_begin_draw_frame() without calling "
+                  "gdk_window_end_draw_frame() first.", window);
+      return NULL;
+    }
 
   if (gdk_window_has_native (window) && gdk_window_is_toplevel (window))
     gdk_window_begin_paint_internal (window, region);
 
-  retval = gdk_cairo_create (window);
+  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+  if (impl_class->create_draw_context != NULL)
+    {
+      context = impl_class->create_draw_context (window, region);
+    }
+  else
+    {
+      context = g_object_new (GDK_TYPE_DRAWING_CONTEXT,
+                              "window", window,
+                              "clip", region,
+                              NULL);
+    }
 
-  gdk_cairo_region (retval, region);
-  cairo_clip (retval);
+  /* Do not take a reference, to avoid creating cycles */
+  window->drawing_context = context;
 
-  return retval;
+  return context;
 }
 
 /**
  * gdk_window_end_draw_frame:
  * @window: a #GdkWindow
- * @cr: the Cairo context created by gdk_window_begin_draw_frame()
+ * @context: the #GdkDrawingContext created by gdk_window_begin_draw_frame()
  *
  * Indicates that the drawing of the contents of @window started with
  * gdk_window_begin_frame() has been completed.
  *
- * This function will take care of destroying the Cairo context.
+ * This function will take care of destroying the #GdkDrawingContext.
  *
  * It is an error to call this function without a matching
  * gdk_window_begin_frame() first.
@@ -3211,14 +3232,52 @@ gdk_window_begin_draw_frame (GdkWindow            *window,
  * Since: 3.22
  */
 void
-gdk_window_end_draw_frame (GdkWindow *window,
-                           cairo_t   *cr)
+gdk_window_end_draw_frame (GdkWindow         *window,
+                           GdkDrawingContext *context)
 {
+  GdkWindowImplClass *impl_class;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_DRAWING_CONTEXT (context));
+
+  if (window->drawing_context == NULL)
+    {
+      g_critical ("The window %p has no drawing context. You must call "
+                  "gdk_window_begin_draw_frame() before calling "
+                  "gdk_window_end_draw_frame().", window);
+      return;
+    }
+
   if (gdk_window_has_native (window) && gdk_window_is_toplevel (window))
     gdk_window_end_paint_internal (window);
 
-  gdk_cairo_set_window (cr, NULL);
-  cairo_destroy (cr);
+  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+  if (impl_class->destroy_draw_context != NULL)
+    impl_class->destroy_draw_context (window, context);
+  else
+    g_object_unref (context);
+
+  window->drawing_context = NULL;
+}
+
+/*< private >
+ * gdk_window_get_drawing_context:
+ * @window: a #GdkWindow
+ *
+ * Retrieves the #GdkDrawingContext associated to @window by
+ * gdk_window_begin_draw_frame().
+ *
+ * Returns: (transfer none) (nullable): a #GdkDrawingContext, if any is set
+ */
+GdkDrawingContext *
+gdk_window_get_drawing_context (GdkWindow *window)
+{
+  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return NULL;
+
+  return window->drawing_context;
 }
 
 /**

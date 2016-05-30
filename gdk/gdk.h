@@ -38,6 +38,7 @@
 #include <gdk/gdkdisplay.h>
 #include <gdk/gdkdisplaymanager.h>
 #include <gdk/gdkdnd.h>
+#include <gdk/gdkdrawingcontext.h>
 #include <gdk/gdkenumtypes.h>
 #include <gdk/gdkevents.h>
 #include <gdk/gdkframeclock.h>

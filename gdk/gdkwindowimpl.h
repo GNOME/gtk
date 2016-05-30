@@ -303,6 +303,11 @@ struct _GdkWindowImplClass
                                            GError        **error);
   void         (*invalidate_for_new_frame)(GdkWindow      *window,
                                            cairo_region_t *update_area);
+
+  GdkDrawingContext *(* create_draw_context)  (GdkWindow            *window,
+                                               const cairo_region_t *region);
+  void               (* destroy_draw_context) (GdkWindow            *window,
+                                               GdkDrawingContext    *context);
 };
 
 /* Interface Functions */

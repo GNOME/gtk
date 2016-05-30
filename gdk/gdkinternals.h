@@ -379,6 +379,8 @@ struct _GdkWindow
 
   GdkFrameClock *frame_clock; /* NULL to use from parent or default */
   GdkWindowInvalidateHandlerFunc invalidate_handler;
+
+  GdkDrawingContext *drawing_context;
 };
 
 #define GDK_WINDOW_TYPE(d) ((((GdkWindow *)(d)))->window_type)
@@ -467,6 +469,8 @@ GdkGLContext * gdk_window_get_paint_gl_context (GdkWindow *window,
 void gdk_window_get_unscaled_size (GdkWindow *window,
                                    int *unscaled_width,
                                    int *unscaled_height);
+
+GdkDrawingContext *gdk_window_get_drawing_context (GdkWindow *window);
 
 void       _gdk_window_process_updates_recurse (GdkWindow *window,
                                                 cairo_region_t *expose_region);
