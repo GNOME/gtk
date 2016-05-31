@@ -29,7 +29,6 @@ G_BEGIN_DECLS
 
 typedef struct _GtkClosableTab      GtkClosableTab;
 
-GDK_AVAILABLE_IN_3_22
 GType            gtk_closable_tab_get_type   (void) G_GNUC_CONST;
 
 G_END_DECLS

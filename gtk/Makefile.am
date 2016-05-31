@@ -302,9 +302,6 @@ gtk_public_h_sources = 		\
 	gtkstylecontext.h	\
 	gtkstyleprovider.h	\
 	gtkswitch.h		\
-	gtktab.h		\
-	gtksimpletab.h		\
-	gtkclosabletab.h	\
 	gtktabstrip.h		\
 	gtktestutils.h		\
 	gtktextattributes.h	\
@@ -563,6 +560,9 @@ gtk_private_h_sources =		\
 	gtkstylecontextprivate.h \
 	gtkstylepropertyprivate.h \
 	gtkstyleproviderprivate.h \
+	gtktab.h		\
+	gtksimpletab.h		\
+	gtkclosabletab.h	\
 	gtktextattributesprivate.h \
 	gtktextbtree.h		\
 	gtktextbufferprivate.h \

@@ -53,20 +53,14 @@ struct _GtkTabClass
   void (*_gtk_reserved6) (void);
 };
 
-GDK_AVAILABLE_IN_3_22
 GType            gtk_tab_get_type   (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_3_22
 const gchar     *gtk_tab_get_title  (GtkTab          *self);
-GDK_AVAILABLE_IN_3_22
 void             gtk_tab_set_title  (GtkTab          *self,
                                      const gchar     *title);
-GDK_AVAILABLE_IN_3_22
 GtkWidget       *gtk_tab_get_widget (GtkTab          *self);
-GDK_AVAILABLE_IN_3_22
 void             gtk_tab_set_widget (GtkTab          *self,
                                      GtkWidget       *widget);
-GDK_AVAILABLE_IN_3_22
 void             gtk_tab_set_child  (GtkTab          *self,
                                      GtkWidget       *child);
 
