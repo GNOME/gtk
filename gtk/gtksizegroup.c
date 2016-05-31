@@ -235,10 +235,17 @@ gtk_size_group_class_init (GtkSizeGroupClass *klass)
   /**
    * GtkSizeGroup:ignore-hidden:
    *
-   * If %TRUE, unmapped widgets are ignored when determining 
+   * If %TRUE, unmapped widgets are ignored when determining
    * the size of the group.
    *
    * Since: 2.8
+   *
+   * Deprecated: 3.22: Measuring the size of hidden widgets has not worked
+   *     reliably for a long time. In most cases, they will report a size
+   *     of 0 nowadays, and thus, their size will not affect the other
+   *     size group members. In effect, size groups will always operate
+   *     as if this property was %TRUE. Use a #GtkStack instead to hide
+   *     widgets while still having their size taken into account.
    */
   g_object_class_install_property (gobject_class,
                                    PROP_IGNORE_HIDDEN,
@@ -247,7 +254,7 @@ gtk_size_group_class_init (GtkSizeGroupClass *klass)
                                                          P_("If TRUE, unmapped widgets are ignored "
                                                             "when determining the size of the group"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED));
 }
 
 static void
@@ -389,11 +396,18 @@ gtk_size_group_get_mode (GtkSizeGroup *size_group)
  * @size_group: a #GtkSizeGroup
  * @ignore_hidden: whether unmapped widgets should be ignored
  *   when calculating the size
- * 
+ *
  * Sets whether unmapped widgets should be ignored when
  * calculating the size.
  *
- * Since: 2.8 
+ * Since: 2.8
+ *
+ * Deprecated: 3.22: Measuring the size of hidden widgets has not worked
+ *     reliably for a long time. In most cases, they will report a size
+ *     of 0 nowadays, and thus, their size will not affect the other
+ *     size group members. In effect, size groups will always operate
+ *     as if this property was %TRUE. Use a #GtkStack instead to hide
+ *     widgets while still having their size taken into account.
  */
 void
 gtk_size_group_set_ignore_hidden (GtkSizeGroup *size_group,
@@ -424,6 +438,13 @@ gtk_size_group_set_ignore_hidden (GtkSizeGroup *size_group,
  * Returns: %TRUE if invisible widgets are ignored.
  *
  * Since: 2.8
+ *
+ * Deprecated: 3.22: Measuring the size of hidden widgets has not worked
+ *     reliably for a long time. In most cases, they will report a size
+ *     of 0 nowadays, and thus, their size will not affect the other
+ *     size group members. In effect, size groups will always operate
+ *     as if this property was %TRUE. Use a #GtkStack instead to hide
+ *     widgets while still having their size taken into account.
  */
 gboolean
 gtk_size_group_get_ignore_hidden (GtkSizeGroup *size_group)
