@@ -45,11 +45,6 @@ struct _GtkClosableTabClass
 G_DEFINE_TYPE (GtkClosableTab, gtk_closable_tab, GTK_TYPE_TAB)
 
 static void
-gtk_closable_tab_class_init (GtkClosableTabClass *klass)
-{
-}
-
-static void
 close_tab (GtkClosableTab *tab)
 {
   GtkWidget *widget;
@@ -74,8 +69,28 @@ gtk_closable_tab_init (GtkClosableTab *self)
 
   self->button = gtk_button_new_from_icon_name ("window-close-symbolic", GTK_ICON_SIZE_MENU);
   gtk_button_set_relief (GTK_BUTTON (self->button), GTK_RELIEF_NONE);
-  gtk_widget_show (self->button);
   gtk_box_pack_end (GTK_BOX (self->box), self->button, FALSE, FALSE, 0);
 
   g_signal_connect_swapped (self->button, "clicked", G_CALLBACK (close_tab), self);
 }
+
+static void
+gtk_closable_tab_state_flags_changed (GtkWidget     *widget,
+                                      GtkStateFlags  old_state)
+{
+  GtkClosableTab *tab = GTK_CLOSABLE_TAB (widget);
+  gboolean checked;
+
+  checked = (gtk_widget_get_state_flags (widget) & GTK_STATE_FLAG_CHECKED) != 0;
+
+  gtk_widget_set_visible (tab->button, checked);
+}
+
+static void
+gtk_closable_tab_class_init (GtkClosableTabClass *klass)
+{
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  widget_class->state_flags_changed = gtk_closable_tab_state_flags_changed;
+}
+
