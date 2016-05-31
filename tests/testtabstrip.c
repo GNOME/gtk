@@ -19,6 +19,7 @@ add_child (GtkWidget  *stack,
   gtk_widget_show_all (sw);
 
   gtk_stack_add_titled (GTK_STACK (stack), sw, name, title);
+  gtk_stack_set_visible_child (GTK_STACK (stack), sw);
 
   g_free (name);
 }
