@@ -3059,6 +3059,8 @@ gtk_window_set_modal (GtkWindow *window,
 	gtk_grab_remove (widget);
     }
 
+  update_window_buttons (window);
+
   g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_MODAL]);
 }
 
@@ -3311,6 +3313,8 @@ gtk_window_set_transient_for  (GtkWindow *window,
 	  priv->transient_parent_group = TRUE;
 	}
     }
+
+  update_window_buttons (window);
 }
 
 /**

@@ -274,7 +274,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
   gint i, j;
   GMenuModel *menu;
   gboolean shown_by_shell;
-  GdkWindowTypeHint type_hint;
+  gboolean is_sovereign_window;
 
   toplevel = gtk_widget_get_toplevel (widget);
   if (!gtk_widget_is_toplevel (toplevel))
@@ -318,7 +318,9 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
   else
     menu = NULL;
 
-  type_hint = gtk_window_get_type_hint (window);
+  is_sovereign_window = (!gtk_window_get_modal (window) &&
+                          gtk_window_get_transient_for (window) == NULL &&
+                          gtk_window_get_type_hint (window) == GDK_WINDOW_TYPE_HINT_NORMAL);
 
   tokens = g_strsplit (layout_desc, ":", 2);
   if (tokens)
@@ -352,7 +354,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
               AtkObject *accessible;
 
               if (strcmp (t[j], "icon") == 0 &&
-                  type_hint == GDK_WINDOW_TYPE_HINT_NORMAL)
+                  is_sovereign_window)
                 {
                   button = gtk_image_new ();
                   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
@@ -369,7 +371,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                 }
               else if (strcmp (t[j], "menu") == 0 &&
                        menu != NULL &&
-                       type_hint == GDK_WINDOW_TYPE_HINT_NORMAL)
+                       is_sovereign_window)
                 {
                   button = gtk_menu_button_new ();
                   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
@@ -388,7 +390,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                     gtk_image_set_from_icon_name (GTK_IMAGE (priv->titlebar_icon), "process-stop-symbolic", GTK_ICON_SIZE_MENU);
                 }
               else if (strcmp (t[j], "minimize") == 0 &&
-                       type_hint == GDK_WINDOW_TYPE_HINT_NORMAL)
+                       is_sovereign_window)
                 {
                   button = gtk_button_new ();
                   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
@@ -407,7 +409,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                 }
               else if (strcmp (t[j], "maximize") == 0 &&
                        gtk_window_get_resizable (window) &&
-                       type_hint == GDK_WINDOW_TYPE_HINT_NORMAL)
+                       is_sovereign_window)
                 {
                   const gchar *icon_name;
                   gboolean maximized = gtk_window_is_maximized (window);
