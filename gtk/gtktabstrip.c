@@ -43,7 +43,6 @@ typedef struct
   GtkCssGadget    *gadget;
   GtkStack        *stack;
   gboolean         closable;
-  gboolean         scrollable;
   gboolean         reversed;
   GtkWidget       *scrolledwindow;
   GtkWidget       *tabs;
@@ -61,7 +60,6 @@ enum {
   PROP_0,
   PROP_STACK,
   PROP_CLOSABLE,
-  PROP_SCROLLABLE,
   N_PROPS
 };
 
@@ -252,10 +250,6 @@ gtk_tab_strip_get_property (GObject    *object,
       g_value_set_boolean (value, gtk_tab_strip_get_closable (self));
       break;
 
-    case PROP_SCROLLABLE:
-      g_value_set_boolean (value, gtk_tab_strip_get_scrollable (self));
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -277,10 +271,6 @@ gtk_tab_strip_set_property (GObject      *object,
 
     case PROP_CLOSABLE:
       gtk_tab_strip_set_closable (self, g_value_get_boolean (value));
-      break;
-
-    case PROP_SCROLLABLE:
-      gtk_tab_strip_set_scrollable (self, g_value_get_boolean (value));
       break;
 
     default:
@@ -334,10 +324,6 @@ gtk_tab_strip_class_init (GtkTabStripClass *klass)
                           FALSE,
                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
-  properties[PROP_SCROLLABLE] =
-    g_param_spec_boolean ("scrollable", P_("Scrollable"), P_("Whether tabs can be scrolled"),
-                          FALSE,
-                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
   gtk_widget_class_set_css_name (widget_class, "tabs");
@@ -347,11 +333,10 @@ static void
 update_scrolling (GtkTabStrip *self)
 {
   GtkTabStripPrivate *priv = gtk_tab_strip_get_instance_private (self);
-  GtkPolicyType hscroll = GTK_POLICY_NEVER;
-  GtkPolicyType vscroll = GTK_POLICY_NEVER;
+  GtkPolicyType hscroll, vscroll;
 
-  if (priv->scrollable)
-    hscroll = GTK_POLICY_EXTERNAL;
+  hscroll = GTK_POLICY_EXTERNAL;
+  vscroll = GTK_POLICY_NEVER;
 
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (priv->scrolledwindow),
                                   hscroll, vscroll);
@@ -574,7 +559,6 @@ gtk_tab_strip_init (GtkTabStrip *self)
 
   gtk_widget_set_has_window (GTK_WIDGET (self), FALSE);
 
-  priv->scrollable = FALSE;
   priv->closable = FALSE;
 
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (self));
@@ -880,32 +864,4 @@ gtk_tab_strip_get_closable (GtkTabStrip *self)
   g_return_val_if_fail (GTK_IS_TAB_STRIP (self), FALSE);
 
   return priv->closable;
-}
-
-void
-gtk_tab_strip_set_scrollable (GtkTabStrip *self,
-                              gboolean     scrollable)
-{
-  GtkTabStripPrivate *priv = gtk_tab_strip_get_instance_private (self);
-
-  g_return_if_fail (GTK_IS_TAB_STRIP (self));
-
-  if (priv->scrollable == scrollable)
-    return;
-
-  priv->scrollable = scrollable;
-
-  update_scrolling (self);
-
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SCROLLABLE]);
-}
-
-gboolean
-gtk_tab_strip_get_scrollable (GtkTabStrip *self)
-{
-  GtkTabStripPrivate *priv = gtk_tab_strip_get_instance_private (self);
-
-  g_return_val_if_fail (GTK_IS_TAB_STRIP (self), FALSE);
-
-  return priv->scrollable;
 }
