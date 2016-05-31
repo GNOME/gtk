@@ -63,8 +63,12 @@ gtk_closable_tab_init (GtkClosableTab *self)
   gtk_tab_set_child (GTK_TAB (self), self->box);
 
   self->label = gtk_label_new ("");
+  gtk_widget_set_halign (self->label, GTK_ALIGN_START);
+  gtk_label_set_width_chars (GTK_LABEL (self->label), 10);
+  gtk_label_set_max_width_chars (GTK_LABEL (self->label), 25);
+  gtk_label_set_ellipsize (GTK_LABEL (self->label), PANGO_ELLIPSIZE_END);
   gtk_widget_show (self->label);
-  gtk_box_set_center_widget (GTK_BOX (self->box), self->label);
+  gtk_box_pack_start (GTK_BOX (self->box), self->label, TRUE, TRUE, 0);
   g_object_bind_property (self, "title", self->label, "label", G_BINDING_DEFAULT);
 
   self->button = gtk_button_new_from_icon_name ("window-close-symbolic", GTK_ICON_SIZE_MENU);

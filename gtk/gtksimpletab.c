@@ -49,6 +49,10 @@ static void
 gtk_simple_tab_init (GtkSimpleTab *self)
 {
   self->label = gtk_label_new ("");
+  gtk_widget_set_halign (self->label, GTK_ALIGN_START);
+  gtk_label_set_width_chars (GTK_LABEL (self->label), 10);
+  gtk_label_set_max_width_chars (GTK_LABEL (self->label), 25);
+  gtk_label_set_ellipsize (GTK_LABEL (self->label), PANGO_ELLIPSIZE_END);
   gtk_widget_show (self->label);
   gtk_widget_set_halign (self->label, GTK_ALIGN_CENTER);
 
