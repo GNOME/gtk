@@ -488,12 +488,13 @@ gtk_tab_strip_stack_remove (GtkTabStrip *self,
                             GtkWidget   *widget,
                             GtkStack    *stack)
 {
+  GtkTabStripPrivate *priv = gtk_tab_strip_get_instance_private (self);
   GtkTab *tab;
 
   tab = g_object_get_data (G_OBJECT (widget), "GTK_TAB");
 
   if (GTK_IS_TAB (tab))
-    gtk_container_remove (GTK_CONTAINER (self), GTK_WIDGET (tab));
+    gtk_container_remove (GTK_CONTAINER (priv->tabs), GTK_WIDGET (tab));
 }
 
 GtkWidget *
