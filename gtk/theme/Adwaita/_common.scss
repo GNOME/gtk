@@ -2295,27 +2295,28 @@ notebook {
 tabs {
   button.flat.image-button {
     @include button(undecorated);
-    border-radius: 50%;
     margin: 10px;
     padding: 0;
     &:hover {
       @include button(hover);
+      color: currentColor;
       -gtk-icon-effect: highlight;
     }
+    &, &:backdrop { color: gtkalpha(currentColor, 0.3); }
   }
   tab {
     min-width: 6em;
-    padding: 13px; // keeping width when paging buttons show up
+    padding: 3px; // keeping width when paging buttons show up
     border-right: 1px solid transparentize($borders_color,0.5);
     &:first-child { border-left: 1px solid transparentize($borders_color,0.5); }
     &:checked,
     &:checked:hover { //FIXME not really working
       border-bottom: 2px solid $selected_bg_color;
-      padding-bottom: 11px;
+      padding-bottom: 1px;
     }
     &:hover {
       border-bottom: 2px solid $borders_color;
-      padding-bottom: 11px;
+      padding-bottom: 1px;
     }
   }
 }

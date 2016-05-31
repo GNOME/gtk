@@ -2593,7 +2593,6 @@ tabs button.flat.image-button {
   box-shadow: inset 0 1px rgba(255, 255, 255, 0);
   text-shadow: none;
   -gtk-icon-shadow: none;
-  border-radius: 50%;
   margin: 10px;
   padding: 0; }
   tabs button.flat.image-button:hover {
@@ -2605,19 +2604,22 @@ tabs button.flat.image-button {
     text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
     -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
     box-shadow: inset 0 1px white;
+    color: currentColor;
     -gtk-icon-effect: highlight; }
+  tabs button.flat.image-button, tabs button.flat.image-button:backdrop {
+    color: alpha(currentColor,0.3); }
 tabs tab {
   min-width: 6em;
-  padding: 13px;
+  padding: 3px;
   border-right: 1px solid rgba(182, 182, 179, 0.5); }
   tabs tab:first-child {
     border-left: 1px solid rgba(182, 182, 179, 0.5); }
   tabs tab:checked, tabs tab:checked:hover {
     border-bottom: 2px solid #4a90d9;
-    padding-bottom: 11px; }
+    padding-bottom: 1px; }
   tabs tab:hover {
     border-bottom: 2px solid #b6b6b3;
-    padding-bottom: 11px; }
+    padding-bottom: 1px; }
 
 /**************
  * Scrollbars *
