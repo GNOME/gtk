@@ -62,11 +62,6 @@ GDK_AVAILABLE_IN_3_22
 void             gtk_tab_set_title  (GtkTab          *self,
                                      const gchar     *title);
 GDK_AVAILABLE_IN_3_22
-GtkPositionType  gtk_tab_get_edge   (GtkTab          *self);
-GDK_AVAILABLE_IN_3_22
-void             gtk_tab_set_edge   (GtkTab          *self,
-                                     GtkPositionType  edge);
-GDK_AVAILABLE_IN_3_22
 GtkWidget       *gtk_tab_get_widget (GtkTab          *self);
 GDK_AVAILABLE_IN_3_22
 void             gtk_tab_set_widget (GtkTab          *self,

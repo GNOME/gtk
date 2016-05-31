@@ -42,7 +42,6 @@ typedef struct
 {
   GtkCssGadget    *gadget;
   GtkStack        *stack;
-  GtkPositionType  edge;
   gboolean         closable;
   gboolean         scrollable;
   gboolean         reversed;
@@ -61,7 +60,6 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkTabStrip, gtk_tab_strip, GTK_TYPE_CONTAINER)
 enum {
   PROP_0,
   PROP_STACK,
-  PROP_EDGE,
   PROP_CLOSABLE,
   PROP_SCROLLABLE,
   N_PROPS
@@ -218,25 +216,13 @@ gtk_tab_strip_draw (GtkWidget *widget,
   return FALSE;
 }
 
-static gboolean
-gtk_tab_strip_get_orientation (GtkTabStrip *self)
-{
-  GtkTabStripPrivate *priv = gtk_tab_strip_get_instance_private (self);
-
-  if (priv->edge == GTK_POS_TOP || priv->edge == GTK_POS_BOTTOM)
-    return GTK_ORIENTATION_HORIZONTAL;
-  else
-    return GTK_ORIENTATION_VERTICAL;
-}
-
 static void
 update_node_ordering (GtkTabStrip *self)
 {
   GtkTabStripPrivate *priv = gtk_tab_strip_get_instance_private (self);
   gboolean reverse;
 
-  reverse = gtk_tab_strip_get_orientation (self) == GTK_ORIENTATION_HORIZONTAL &&
-            gtk_widget_get_direction (GTK_WIDGET (self)) == GTK_TEXT_DIR_RTL;
+  reverse = gtk_widget_get_direction (GTK_WIDGET (self)) == GTK_TEXT_DIR_RTL;
 
   if ((reverse && !priv->reversed) ||
       (!reverse && priv->reversed))
@@ -269,10 +255,6 @@ gtk_tab_strip_get_property (GObject    *object,
       g_value_set_object (value, gtk_tab_strip_get_stack (self));
       break;
 
-    case PROP_EDGE:
-      g_value_set_enum (value, gtk_tab_strip_get_edge (self));
-      break;
-
     case PROP_CLOSABLE:
       g_value_set_boolean (value, gtk_tab_strip_get_closable (self));
       break;
@@ -298,10 +280,6 @@ gtk_tab_strip_set_property (GObject      *object,
     {
     case PROP_STACK:
       gtk_tab_strip_set_stack (self, g_value_get_object (value));
-      break;
-
-    case PROP_EDGE:
-      gtk_tab_strip_set_edge (self, g_value_get_enum (value));
       break;
 
     case PROP_CLOSABLE:
@@ -373,12 +351,6 @@ gtk_tab_strip_class_init (GtkTabStripClass *klass)
                          GTK_TYPE_STACK,
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
-  properties[PROP_EDGE] =
-    g_param_spec_enum ("edge", P_("Edge"), P_("The edge for the tab-strip"),
-                       GTK_TYPE_POSITION_TYPE,
-                       GTK_POS_TOP,
-                       GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
-
   properties[PROP_CLOSABLE] =
     g_param_spec_boolean ("closable", P_("Closable"), P_("Whether tabs can be closed"),
                           FALSE,
@@ -401,12 +373,7 @@ update_scrolling (GtkTabStrip *self)
   GtkPolicyType vscroll = GTK_POLICY_NEVER;
 
   if (priv->scrollable)
-    {
-      if (gtk_tab_strip_get_orientation (self) == GTK_ORIENTATION_HORIZONTAL)
-        hscroll = GTK_POLICY_EXTERNAL;
-      else
-        vscroll = GTK_POLICY_EXTERNAL;
-    }
+    hscroll = GTK_POLICY_EXTERNAL;
 
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (priv->scrolledwindow),
                                   hscroll, vscroll);
@@ -417,10 +384,7 @@ gtk_tab_strip_get_scroll_adjustment (GtkTabStrip *self)
 {
   GtkTabStripPrivate *priv = gtk_tab_strip_get_instance_private (self);
 
-  if (gtk_tab_strip_get_orientation (self) == GTK_ORIENTATION_HORIZONTAL)
-    return gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW (priv->scrolledwindow));
-  else
-    return gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (priv->scrolledwindow));
+  return gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW (priv->scrolledwindow));
 }
 
 static gboolean
@@ -533,16 +497,8 @@ find_autoscroll_goal (GtkTabStrip   *self,
       gint start, end;
 
       gtk_widget_get_allocation (child, &alloc);
-      if (gtk_tab_strip_get_orientation (self) == GTK_ORIENTATION_HORIZONTAL)
-        {
-          start = alloc.x;
-          end = alloc.x + alloc.width;
-        }
-      else
-        {
-          start = alloc.y;
-          end = alloc.y + alloc.height;
-        }
+      start = alloc.x;
+      end = alloc.x + alloc.width;
 
       if (start <= value && value <= end)
         {
@@ -640,7 +596,6 @@ gtk_tab_strip_init (GtkTabStrip *self)
 
   gtk_widget_set_has_window (GTK_WIDGET (self), FALSE);
 
-  priv->edge = GTK_POS_TOP;
   priv->scrollable = FALSE;
   priv->closable = FALSE;
 
@@ -811,8 +766,6 @@ gtk_tab_strip_stack_add (GtkTabStrip *self,
 
   g_signal_emit (self, signals[CREATE_TAB], 0, widget, &tab);
 
-  gtk_tab_set_edge (tab, priv->edge);
-
   g_object_set_data (G_OBJECT (widget), "GTK_TAB", tab);
 
   g_signal_connect (tab, "activate",
@@ -932,88 +885,6 @@ gtk_tab_strip_set_stack (GtkTabStrip *self,
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_STACK]);
-}
-
-GtkPositionType
-gtk_tab_strip_get_edge (GtkTabStrip *self)
-{
-  GtkTabStripPrivate *priv = gtk_tab_strip_get_instance_private (self);
-
-  g_return_val_if_fail (GTK_IS_TAB_STRIP (self), GTK_POS_TOP);
-
-  return priv->edge;
-}
-
-static void
-update_edge (GtkWidget *widget,
-             gpointer   data)
-{
-  GtkTabStrip *self = data;
-  GtkTabStripPrivate *priv = gtk_tab_strip_get_instance_private (self);
-
-  if (GTK_IS_TAB (widget))
-    gtk_tab_set_edge (GTK_TAB (widget), priv->edge);
-}
-
-void
-gtk_tab_strip_set_edge (GtkTabStrip     *self,
-                        GtkPositionType  edge)
-{
-  GtkTabStripPrivate *priv = gtk_tab_strip_get_instance_private (self);
-  GtkStyleContext *context;
-  GtkOrientation orientation;
-  GtkWidget *image;
-  const char *classes[] = {
-    "left",
-    "right",
-    "top",
-    "bottom"
-  };
-  GtkOrientation orientations[] = {
-    GTK_ORIENTATION_VERTICAL,
-    GTK_ORIENTATION_VERTICAL,
-    GTK_ORIENTATION_HORIZONTAL,
-    GTK_ORIENTATION_HORIZONTAL
-  };
-  const char *start_icon[] = {
-    "pan-start-symbolic",
-    "pan-up-symbolic"
-  };
-  const char *end_icon[] = {
-    "pan-end-symbolic",
-    "pan-down-symbolic"
-  };
-
-  g_return_if_fail (GTK_IS_TAB_STRIP (self));
-
-  if (priv->edge == edge)
-    return;
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (self));
-  gtk_style_context_remove_class (context, classes[priv->edge]);
-
-  priv->edge = edge;
-
-  gtk_style_context_add_class (context, classes[priv->edge]);
-
-  orientation = orientations[priv->edge];
-  gtk_box_gadget_set_orientation (GTK_BOX_GADGET (priv->gadget), orientation);
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (priv->tabs), orientation);
-
-  image = gtk_button_get_image (GTK_BUTTON (priv->start_scroll));
-  gtk_image_set_from_icon_name (GTK_IMAGE (image), start_icon[orientation], GTK_ICON_SIZE_MENU);
-
-  image = gtk_button_get_image (GTK_BUTTON (priv->end_scroll));
-  gtk_image_set_from_icon_name (GTK_IMAGE (image), end_icon[orientation], GTK_ICON_SIZE_MENU);
-
-  update_scrolling (self);
-  adjustment_changed (self);
-
-  gtk_container_foreach (GTK_CONTAINER (priv->tabs), update_edge, self);
-
-  update_node_ordering (self);
-
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_EDGE]);
 }
 
 void

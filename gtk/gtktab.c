@@ -32,7 +32,6 @@ struct _GtkTabPrivate
 {
   gchar           *title;
   GtkWidget       *widget;
-  GtkPositionType  edge;
 
   GtkWidget       *child;
   GtkCssGadget    *gadget;
@@ -45,7 +44,6 @@ enum {
   PROP_0,
   PROP_TITLE,
   PROP_WIDGET,
-  PROP_EDGE,
   N_PROPS
 };
 
@@ -76,10 +74,6 @@ gtk_tab_get_property (GObject    *object,
       g_value_set_object (value, gtk_tab_get_widget (self));
       break;
 
-    case PROP_EDGE:
-      g_value_set_enum (value, gtk_tab_get_edge (self));
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -101,10 +95,6 @@ gtk_tab_set_property (GObject      *object,
 
     case PROP_WIDGET:
       gtk_tab_set_widget (self, g_value_get_object (value));
-      break;
-
-    case PROP_EDGE:
-      gtk_tab_set_edge (self, g_value_get_enum (value));
       break;
 
     default:
@@ -433,12 +423,6 @@ gtk_tab_class_init (GtkTabClass *klass)
                          GTK_TYPE_WIDGET,
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
-  properties [PROP_EDGE] =
-    g_param_spec_enum ("edge", P_("Edge"), P_("The edge for the tab-strip"),
-                       GTK_TYPE_POSITION_TYPE,
-                       GTK_POS_TOP,
-                       GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
-
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
   signals[ACTIVATE] =
@@ -466,8 +450,6 @@ gtk_tab_init (GtkTab *self)
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (self));
   priv->gadget = gtk_box_gadget_new_for_node (widget_node, GTK_WIDGET (self));
   gtk_box_gadget_set_draw_focus (GTK_BOX_GADGET (priv->gadget), TRUE);
-
-  priv->edge = GTK_POS_TOP;
 }
 
 const gchar *
@@ -534,29 +516,4 @@ gtk_tab_set_child (GtkTab    *self,
   g_return_if_fail (GTK_IS_WIDGET (child));
 
   gtk_tab_add (GTK_CONTAINER (self), child);
-}
-
-GtkPositionType
-gtk_tab_get_edge (GtkTab *self)
-{
-  GtkTabPrivate *priv = gtk_tab_get_instance_private (self);
-
-  g_return_val_if_fail (GTK_IS_TAB (self), GTK_POS_TOP);
-
-  return priv->edge;
-}
-
-void
-gtk_tab_set_edge (GtkTab          *self,
-                  GtkPositionType  edge)
-{
-  GtkTabPrivate *priv = gtk_tab_get_instance_private (self);
-
-  g_return_if_fail (GTK_IS_TAB (self));
-
-  if (priv->edge == edge)
-    return;
-
-  priv->edge = edge;
-  g_object_notify (G_OBJECT (self), "edge");
 }
