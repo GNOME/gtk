@@ -403,5 +403,13 @@
       change an individual facet of the font, like the weight, use the
       individual CSS properties: font-weight, font-size, font-family, etc.
     </para>
+
+    <para>
+      The #GtkSizeGroup:ignore-hidden property has not been working properly
+      for a long time, and we've not documented it as broken and deprecated.
+      The recommended alternative for reserving space of widgets that are not
+      currently shown in the UI is to use a #GtkStack (with some 'filler'
+      widget, e.g. an empty #GtkBox, in another page).
+    </para>
   </section>
 </chapter>
