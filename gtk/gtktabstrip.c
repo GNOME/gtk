@@ -406,6 +406,46 @@ gtk_tab_strip_child_title_changed (GtkTabStrip *self,
 }
 
 static void
+scroll_to_tab (GtkTabStrip *self,
+               GtkWidget   *tab)
+{
+  GtkTabStripPrivate *priv = gtk_tab_strip_get_instance_private (self);
+  GtkAllocation tab_alloc;
+  GtkAdjustment *adj;
+  gdouble value, page_size;
+
+  gtk_widget_get_allocation (tab, &tab_alloc);
+
+  adj = gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW (priv->scrolledwindow));
+  value = gtk_adjustment_get_value (adj);
+  page_size = gtk_adjustment_get_page_size (adj);
+
+  if (tab_alloc.x < value)
+    gtk_adjustment_animate_to_value (adj, tab_alloc.x);
+  else if (tab_alloc.x + tab_alloc.width >= value + page_size)
+    gtk_adjustment_animate_to_value (adj, tab_alloc.x + tab_alloc.width - page_size);
+}
+
+static gboolean
+scroll_to_visible_tab (gpointer data)
+{
+  GtkTabStrip *self = data;
+  GtkTabStripPrivate *priv = gtk_tab_strip_get_instance_private (self);
+  GtkWidget *child;
+
+  child = gtk_stack_get_visible_child (GTK_STACK (priv->stack));
+  if (child)
+    {
+      GtkWidget *tab;
+
+      tab = (GtkWidget *)g_object_get_data (G_OBJECT (child), "GTK_TAB");
+      scroll_to_tab (self, tab);
+    }
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
 update_visible_child (GtkWidget *tab,
                       gpointer   user_data)
 {
@@ -426,11 +466,11 @@ gtk_tab_strip_stack_notify_visible_child (GtkTabStrip *self,
                                           GtkStack    *stack)
 {
   GtkTabStripPrivate *priv = gtk_tab_strip_get_instance_private (self);
-  GtkWidget *visible_child;
+  GtkWidget *child;
 
-  visible_child = gtk_stack_get_visible_child (stack);
-
-  gtk_container_foreach (GTK_CONTAINER (priv->tabs), update_visible_child, visible_child);
+  child = gtk_stack_get_visible_child (stack);
+  gtk_container_foreach (GTK_CONTAINER (priv->tabs), update_visible_child, child);
+  g_idle_add (scroll_to_visible_tab, self);
 }
 
 static void
@@ -439,9 +479,16 @@ tab_activated (GtkTab      *tab,
 {
   GtkTabStripPrivate *priv = gtk_tab_strip_get_instance_private (self);
   GtkWidget *widget;
+  GtkWidget *visible_child;
 
   widget = gtk_tab_get_widget (tab);
-  if (widget)
+  if (widget == NULL)
+    return;
+
+  visible_child = gtk_stack_get_visible_child (GTK_STACK (priv->stack));
+  if (widget == visible_child)
+    scroll_to_tab (self, GTK_WIDGET (tab));
+  else
     gtk_stack_set_visible_child (priv->stack, widget);
 }
 
