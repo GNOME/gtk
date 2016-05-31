@@ -32,12 +32,6 @@
 #include "gtkboxgadgetprivate.h"
 #include "gtkwidgetprivate.h"
 
-/*
- * TODO:
- * - reordering
- * - dnd
- */
-
 typedef struct
 {
   GtkCssGadget    *gadget;
