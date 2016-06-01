@@ -1,7 +1,7 @@
 [window.background:dir(rtl)]
-  decoration:dir(ltr)
+  decoration:dir(rtl)
   expander:dir(rtl)
     title
-      label:dir(ltr)
+      label:dir(rtl)
       arrow.horizontal
     box.horizontal:dir(rtl)

@@ -1,5 +1,5 @@
 [window.background:dir(rtl)]
-  decoration:dir(ltr)
+  decoration:dir(rtl)
   box.vertical:dir(rtl)
     levelbar.horizontal.continuous:dir(rtl)
       trough:dir(rtl)
