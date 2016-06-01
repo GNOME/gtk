@@ -1429,6 +1429,24 @@ pointer_handle_button (void              *data,
     gdk_wayland_seat_flush_frame_event (seat);
 }
 
+#ifdef G_ENABLE_DEBUG
+
+const char *
+get_axis_name (uint32_t axis)
+{
+  switch (axis)
+    {
+    case WL_POINTER_AXIS_VERTICAL_SCROLL:
+      return "horizontal";
+    case WL_POINTER_AXIS_HORIZONTAL_SCROLL:
+      return "vertical";
+    default:
+      return "unknown";
+    }
+}
+
+#endif
+
 static void
 pointer_handle_axis (void              *data,
                      struct wl_pointer *pointer,
@@ -1459,8 +1477,8 @@ pointer_handle_axis (void              *data,
   seat->pointer_info.time = time;
 
   GDK_NOTE (EVENTS,
-            g_message ("scroll, axis %d, value %f, seat %p",
-                       axis, wl_fixed_to_double (value) / 10.0,
+            g_message ("scroll, axis %s, value %f, seat %p",
+                       get_axis_name (axis), wl_fixed_to_double (value) / 10.0,
                        seat));
 
   if (display->seat_version < WL_POINTER_HAS_FRAME)
@@ -1479,6 +1497,26 @@ pointer_handle_frame (void              *data,
   gdk_wayland_seat_flush_frame_event (seat);
 }
 
+#ifdef G_ENABLE_DEBUG
+
+static const char *
+get_axis_source_name (enum wl_pointer_axis_source source)
+{
+  switch (source)
+    {
+    case WL_POINTER_AXIS_SOURCE_WHEEL:
+      return "wheel";
+    case WL_POINTER_AXIS_SOURCE_FINGER:
+      return "finger";
+    case WL_POINTER_AXIS_SOURCE_CONTINUOUS:
+      return "continuous";
+    default:
+      return "unknown";
+    }
+}
+
+#endif
+
 static void
 pointer_handle_axis_source (void                        *data,
                             struct wl_pointer           *pointer,
@@ -1492,11 +1530,11 @@ pointer_handle_axis_source (void                        *data,
   /* We don't need to handle the scroll source right now. It only has real
    * meaning for 'finger' (to trigger kinetic scrolling). The axis_stop
    * event will generate the zero delta required to trigger kinetic
-   * scrolling, so explicity handling the source is not required.
+   * scrolling, so explicitly handling the source is not required.
    */
 
   GDK_NOTE (EVENTS,
-            g_message ("axis source %d, seat %p", source, seat));
+            g_message ("axis source %s, seat %p", get_axis_source_name (source), seat));
 }
 
 static void
@@ -1528,7 +1566,7 @@ pointer_handle_axis_stop (void              *data,
   pointer_frame->is_scroll_stop = TRUE;
 
   GDK_NOTE (EVENTS,
-            g_message ("axis stop, seat %p", seat));
+            g_message ("axis %s stop, seat %p", get_axis_name (axis), seat));
 }
 
 static void
@@ -1556,8 +1594,8 @@ pointer_handle_axis_discrete (void              *data,
     }
 
   GDK_NOTE (EVENTS,
-            g_message ("discrete scroll, axis %d, value %d, seat %p",
-                       axis, value, seat));
+            g_message ("discrete scroll, axis %s, value %d, seat %p",
+                       get_axis_name (axis), value, seat));
 }
 
 static void
