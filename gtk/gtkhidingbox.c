@@ -40,8 +40,7 @@
 #include "glib.h"
 
 #define REVEALER_ANIMATION_TIME 250 //ms
-#define INVERT_ANIMATION_TIME 750 //ms
-#define REVEALER_INVERT_ANIMATION_TIME INVERT_ANIMATION_TIME / 4 //ms
+#define INVERT_ANIMATION_SPEED 0.1 //px/ms
 
 struct _GtkHidingBoxPrivate
 {
@@ -62,8 +61,11 @@ struct _GtkHidingBoxPrivate
   GtkAdjustment *hadjustment;
 
   guint invert_animation_tick_id;
-  float invert_animation_progress;
+  double invert_animation_progress;
   guint64 invert_animation_initial_time;
+  gint allocated_children_width;
+  gint total_children_width;
+  gint previous_child_width;
 };
 
 static void
@@ -261,98 +263,6 @@ gtk_hiding_box_forall (GtkContainer *container,
 }
 
 static void
-update_children_visibility_invert_animation (GtkHidingBox  *box,
-                                             GtkAllocation *allocation)
-{
-  GtkHidingBoxPrivate *priv = gtk_hiding_box_get_instance_private (box);
-  GtkWidget *child_widget;
-  GList *child;
-  GtkRequestedSize *sizes_temp;
-  gint i;
-  GList *children;
-  gboolean allocate_more_children = TRUE;
-  gint invert_animation_start_x;
-  gint total_children_size = 0;
-  gint inverted_animation_first_child;
-  GList *inverted_animation_first_child_list;
-  gint to_allocate_children_size = 0;
-  gint current_children_size = 0;
-
-  g_list_free (priv->widgets_to_show);
-  priv->widgets_to_show = NULL;
-  g_list_free (priv->widgets_to_hide);
-  priv->widgets_to_hide = NULL;
-  children = g_list_copy (priv->children);
-  sizes_temp = g_newa (GtkRequestedSize, g_list_length (priv->children));
-
-  // It's more convenient to go in the oposite direction than normal for that
-  // inverted state
-  if (!priv->inverted)
-    children = g_list_reverse (children);
-
-  for (i = 0, child = children; child != NULL; i++, child = child->next)
-    {
-      child_widget = GTK_WIDGET (child->data);
-
-      gtk_widget_get_preferred_width_for_height (child_widget,
-                                                 allocation->height,
-                                                 &sizes_temp[i].minimum_size,
-                                                 &sizes_temp[i].natural_size);
-      total_children_size += sizes_temp[i].minimum_size;
-    }
-
-  if (priv->inverted)
-    invert_animation_start_x = priv->invert_animation_progress *
-                               (total_children_size - allocation->width);
-  else
-    invert_animation_start_x = (1 - priv->invert_animation_progress) *
-                               (total_children_size - allocation->width);
-
-  inverted_animation_first_child = 0;
-  inverted_animation_first_child_list = children;
-  /* Retrieve desired size for visible children. */
-  for (i = 0, child = children; child != NULL; i++, child = child->next)
-    {
-      child_widget = GTK_WIDGET (child->data);
-
-      gtk_widget_get_preferred_width_for_height (child_widget,
-                                                 allocation->height,
-                                                 &sizes_temp[i].minimum_size,
-                                                 &sizes_temp[i].natural_size);
-
-      current_children_size += sizes_temp[i].minimum_size;
-
-      if (priv->invert_animation)
-        {
-          if (current_children_size - sizes_temp[i].minimum_size >= invert_animation_start_x)
-            {
-              to_allocate_children_size += sizes_temp[i].minimum_size;
-            }
-          else
-            {
-              if (gtk_revealer_get_child_revealed (GTK_REVEALER (gtk_widget_get_parent (child_widget))))
-                priv->widgets_to_hide = g_list_append (priv->widgets_to_hide, child_widget);
-                continue;
-            }
-        }
-
-      if (!allocate_more_children || to_allocate_children_size > allocation->width)
-        {
-          allocate_more_children = FALSE;
-          if (gtk_revealer_get_child_revealed (GTK_REVEALER (gtk_widget_get_parent (child_widget))))
-            priv->widgets_to_hide = g_list_append (priv->widgets_to_hide, child_widget);
-
-          continue;
-        }
-
-      if (!g_list_find (priv->widgets_to_remove, child_widget))
-        priv->widgets_to_show = g_list_append (priv->widgets_to_show, child_widget);
-    }
-
-  g_list_free (children);
-}
-
-static void
 update_children_visibility (GtkHidingBox  *box,
                             GtkAllocation *allocation)
 {
@@ -363,7 +273,7 @@ update_children_visibility (GtkHidingBox  *box,
   gint i;
   GList *children;
   gboolean allocate_more_children = TRUE;
-  gint current_children_size = 0;
+  gint current_children_width = 0;
 
   g_list_free (priv->widgets_to_show);
   priv->widgets_to_show = NULL;
@@ -384,11 +294,14 @@ update_children_visibility (GtkHidingBox  *box,
                                                  &sizes_temp[i].minimum_size,
                                                  &sizes_temp[i].natural_size);
 
-      current_children_size += sizes_temp[i].minimum_size;
+      current_children_width += sizes_temp[i].minimum_size;
 
-      if (!allocate_more_children || current_children_size > allocation->width)
+      if (!allocate_more_children || current_children_width > allocation->width)
         {
+          if (allocate_more_children)
+            priv->allocated_children_width = current_children_width - sizes_temp[i].minimum_size;
           allocate_more_children = FALSE;
+          priv->previous_child_width = sizes_temp[i].minimum_size;
           if (gtk_revealer_get_child_revealed (GTK_REVEALER (gtk_widget_get_parent (child_widget))))
             priv->widgets_to_hide = g_list_append (priv->widgets_to_hide, child_widget);
 
@@ -399,6 +312,7 @@ update_children_visibility (GtkHidingBox  *box,
         priv->widgets_to_show = g_list_append (priv->widgets_to_show, child_widget);
     }
 
+  priv->total_children_width = current_children_width;
   g_list_free (children);
 }
 
@@ -470,12 +384,23 @@ idle_update_revealers (GtkHidingBox *box)
       if (gtk_revealer_get_reveal_child (GTK_REVEALER (revealer)))
         {
           remove_all_opacity_classes (revealer);
-          g_print ("to hide %f\n", ABS (priv->invert_animation_progress * INVERT_ANIMATION_TIME - INVERT_ANIMATION_TIME));
-          if (priv->invert_animation)
+          if (priv->invert_animation && priv->invert_animation_progress >= 1)
             {
+              gdouble velocity = INVERT_ANIMATION_SPEED; // px / ms
+              gint revealer_animation_time;
+              gdouble max_real_adjustment;
+
+              max_real_adjustment = gtk_adjustment_get_upper (priv->hadjustment) -
+                                    gtk_widget_get_allocated_width (priv->scrolled_window);
+
+              g_print ("animation velocity %f %f\n", max_real_adjustment, velocity);
+              revealer_animation_time = (gtk_widget_get_allocated_width (priv->scrolled_window) -
+                                         priv->allocated_children_width) /
+                                         velocity;
+              g_print ("animation time %d %d %d\n", priv->allocated_children_width, gtk_widget_get_allocated_width (priv->scrolled_window), revealer_animation_time);
               add_opacity_class (revealer, "pathbar-invert-animation-opacity-off");
               g_signal_connect (revealer, "notify::child-revealed", (GCallback) opacity_off, box);
-              gtk_revealer_set_transition_duration (GTK_REVEALER (revealer), REVEALER_ANIMATION_TIME);
+              gtk_revealer_set_transition_duration (GTK_REVEALER (revealer), revealer_animation_time);
 
               gtk_revealer_set_reveal_child (GTK_REVEALER (revealer), FALSE);
             }
@@ -486,6 +411,15 @@ idle_update_revealers (GtkHidingBox *box)
               gtk_revealer_set_transition_duration (GTK_REVEALER (revealer), REVEALER_ANIMATION_TIME);
               gtk_revealer_set_reveal_child (GTK_REVEALER (revealer), FALSE);
             }
+#if 0
+          if (!priv->invert_animation)
+            {
+              add_opacity_class (revealer, "pathbar-opacity-off");
+              g_signal_connect (revealer, "notify::child-revealed", (GCallback) opacity_off, box);
+              gtk_revealer_set_transition_duration (GTK_REVEALER (revealer), REVEALER_ANIMATION_TIME);
+              gtk_revealer_set_reveal_child (GTK_REVEALER (revealer), FALSE);
+            }
+#endif
         }
     }
 
@@ -511,7 +445,7 @@ idle_update_revealers (GtkHidingBox *box)
         }
     }
 
-  if ((priv->widgets_to_remove || priv->widgets_to_hide) && !priv->invert_animation)
+  if (priv->widgets_to_remove || priv->widgets_to_hide)
     return;
 
   for (l = priv->widgets_to_show; l != NULL; l = l->next)
@@ -546,10 +480,7 @@ gtk_hiding_box_size_allocate (GtkWidget     *widget,
   gtk_widget_set_allocation (widget, allocation);
 
   sizes = g_newa (GtkRequestedSize, g_list_length (priv->children));
-  if (priv->invert_animation)
-    update_children_visibility_invert_animation (box, allocation);
-  else
-    update_children_visibility (box, allocation);
+  update_children_visibility (box, allocation);
 
   idle_update_revealers (box);
 
@@ -569,15 +500,15 @@ update_hadjustment (GtkHidingBox  *self)
   gdouble adjustment_value;
   gdouble max_real_adjustment;
 
-return;
-  g_print ("aligment changed %d\n", priv->invert_animation);
   max_real_adjustment = gtk_adjustment_get_upper (priv->hadjustment) -
                         gtk_widget_get_allocated_width (priv->scrolled_window);
+
+  g_print ("aligment changed %f %f %d %f\n", max_real_adjustment, gtk_adjustment_get_upper (priv->hadjustment), gtk_widget_get_allocated_width (priv->scrolled_window), gtk_adjustment_get_lower (priv->hadjustment));
   if (priv->invert_animation)
     {
       if (priv->inverted)
         {
-          adjustment_value = priv->invert_animation_progress *
+          adjustment_value = (priv->invert_animation_progress) *
                              (max_real_adjustment -
                               gtk_adjustment_get_lower (priv->hadjustment));
         }
@@ -608,6 +539,7 @@ finish_invert_animation (GtkHidingBox *self)
   GtkHidingBoxPrivate *priv = gtk_hiding_box_get_instance_private (self);
 
   g_print ("\n\n\n\n\n\n\n\n##################ss#######finish invert animation\n\n\n\n\n\n\n");
+  idle_update_revealers (self);
   priv->invert_animation = FALSE;
   priv->invert_animation_initial_time = 0;
   gtk_widget_remove_tick_callback (priv->scrolled_window,
@@ -624,16 +556,18 @@ invert_animation_on_tick (GtkWidget     *widget,
   GtkHidingBox *self = GTK_HIDING_BOX (user_data);
   GtkHidingBoxPrivate *priv = gtk_hiding_box_get_instance_private (self);
   guint64 elapsed;
+  gdouble max_real_adjustment;
+
+  max_real_adjustment = gtk_adjustment_get_upper (priv->hadjustment) -
+                        (gdouble) gtk_widget_get_allocated_width (priv->scrolled_window);
 
   if (priv->invert_animation_initial_time == 0)
     priv->invert_animation_initial_time = gdk_frame_clock_get_frame_time (frame_clock);
 
   elapsed = gdk_frame_clock_get_frame_time (frame_clock) - priv->invert_animation_initial_time;
-  priv->invert_animation_progress = elapsed / (1000. * INVERT_ANIMATION_TIME);
-  g_print ("################animation progres %lu %f\n", elapsed, priv->invert_animation_progress);
+  priv->invert_animation_progress = elapsed * INVERT_ANIMATION_SPEED / (1000. * max_real_adjustment);
+  g_print ("################animation progres %d %f %f %f\n", gtk_widget_get_allocated_width (priv->scrolled_window), max_real_adjustment, elapsed / 1000., priv->invert_animation_progress);
   update_hadjustment (self);
-
-  gtk_widget_queue_resize (GTK_WIDGET (self));
 
   if (priv->invert_animation_progress >= 1)
     {
@@ -654,7 +588,6 @@ start_invert_animation (GtkHidingBox *self)
   priv->invert_animation = TRUE;
   priv->invert_animation_progress = 0;
 
-/*
   for (child = priv->children; child != NULL; child = child->next)
     {
       GtkWidget *revealer;
@@ -668,7 +601,6 @@ start_invert_animation (GtkHidingBox *self)
                                             0);
       gtk_revealer_set_reveal_child (GTK_REVEALER (revealer), TRUE);
     }
-*/
 
   priv->invert_animation_tick_id = gtk_widget_add_tick_callback (priv->scrolled_window,
                                                                  (GtkTickCallback) invert_animation_on_tick,
