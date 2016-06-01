@@ -440,6 +440,9 @@ create_device (GdkDeviceManager *device_manager,
                !strstr (tmp_name, "virtualbox usb tablet") &&
                has_abs_axes (display, dev->classes, dev->num_classes))
         input_source = GDK_SOURCE_TOUCHSCREEN;
+      else if (strstr (tmp_name, "trackpoint") ||
+               strstr (tmp_name, "dualpoint stick"))
+        input_source = GDK_SOURCE_TRACKPOINT;
       else
         input_source = GDK_SOURCE_MOUSE;
 
