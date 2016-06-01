@@ -86,19 +86,3 @@ window1
         <AtkAction>
         action 0 name: click
         action 0 description: Clicks the button
-      page2
-        "push button"
-        parent: stack1
-        index: 1
-        name: No
-        state: enabled focusable sensitive visible
-        toolkit: gtk
-        <AtkComponent>
-        layer: widget
-        alpha: 1
-        <AtkImage>
-        image size: -1 x -1
-        image description: (null)
-        <AtkAction>
-        action 0 name: click
-        action 0 description: Clicks the button
