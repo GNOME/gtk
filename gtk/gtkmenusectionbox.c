@@ -481,7 +481,6 @@ gtk_menu_section_box_new_section (GtkMenuTrackerItem *item,
                                   GtkMenuSectionBox  *parent)
 {
   GtkMenuSectionBox *box;
-  GtkWidget *separator;
   const gchar *label;
   const gchar *hint;
 
@@ -489,7 +488,6 @@ gtk_menu_section_box_new_section (GtkMenuTrackerItem *item,
   box->toplevel = parent->toplevel;
   box->depth = parent->depth + 1;
 
-  separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
   label = gtk_menu_tracker_item_get_label (item);
   hint = gtk_menu_tracker_item_get_display_hint (item);
 
@@ -502,23 +500,31 @@ gtk_menu_section_box_new_section (GtkMenuTrackerItem *item,
 
   if (label != NULL)
     {
+      GtkWidget *separator;
       GtkWidget *title;
+
+      box->separator = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
+      g_object_ref_sink (box->separator);
+
+      separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
+      gtk_widget_set_valign (separator, GTK_ALIGN_CENTER);
+      gtk_box_pack_start (GTK_BOX (box->separator), separator, TRUE, TRUE, 0);
 
       title = gtk_label_new (label);
       g_object_bind_property (item, "label", title, "label", G_BINDING_SYNC_CREATE);
       gtk_style_context_add_class (gtk_widget_get_style_context (title), GTK_STYLE_CLASS_SEPARATOR);
       gtk_widget_set_halign (title, GTK_ALIGN_START);
+      gtk_box_pack_start (GTK_BOX (box->separator), title, FALSE, FALSE, 0);
 
-      box->separator = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      g_object_ref_sink (box->separator);
+      separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
+      gtk_widget_set_valign (separator, GTK_ALIGN_CENTER);
+      gtk_box_pack_start (GTK_BOX (box->separator), separator, TRUE, TRUE, 0);
 
-      gtk_container_add (GTK_CONTAINER (box->separator), title);
-      gtk_container_add (GTK_CONTAINER (box->separator), separator);
       gtk_widget_show_all (box->separator);
     }
   else
     {
-      box->separator = separator;
+      box->separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
       g_object_ref_sink (box->separator);
 
       gtk_widget_show (box->separator);
