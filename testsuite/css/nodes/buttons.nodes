@@ -13,9 +13,9 @@
       radio:dir(ltr)
       label:dir(ltr)
     switch:dir(ltr):checked
-      slider.slider
+      slider
     switch:dir(ltr)
-      slider.slider
+      slider
     button.text-button:dir(ltr)
       label:dir(ltr)
     button.image-button:dir(ltr)
