@@ -66,6 +66,9 @@ static const gchar menu_markup[] =
   "      <attribute name='label' translatable='yes'>Bold</attribute>\n"
   "      <attribute name='action'>actions.bold</attribute>\n"
   "    </item>\n"
+  "    <section id=\"size-placeholder\">\n"
+  "      <attribute name=\"label\">Size</attribute>"
+  "    </section>\n"
   "    <submenu>\n"
   "      <attribute name='label' translatable='yes'>Language</attribute>\n"
   "      <item>\n"
@@ -93,14 +96,31 @@ get_model (void)
 {
   GError *error = NULL;
   GtkBuilder *builder;
-  GMenuModel *menu;
+  GMenuModel *menu, *section;
+  float i;
 
   builder = gtk_builder_new ();
   gtk_builder_add_from_string (builder, menu_markup, -1, &error);
   g_assert_no_error (error);
 
   menu = g_object_ref (gtk_builder_get_object (builder, "edit-menu"));
+
+  section = g_object_ref (gtk_builder_get_object (builder, "size-placeholder"));
   g_object_unref (builder);
+
+  for (i = 0.5; i <= 2.0; i += 0.5)
+    {
+      GMenuItem *item;
+      char *target;
+      char *label;
+
+      target = g_strdup_printf ("actions.size::%.1f", i);
+      label = g_strdup_printf ("x %.1f", i);
+      item = g_menu_item_new (label, target);
+      g_menu_append_item (G_MENU (section), item);
+      g_free (label);
+      g_free (target);
+    }
 
   return menu;
 }
@@ -659,7 +679,7 @@ main (int argc, char *argv[])
     {
       button = gtk_menu_button_new ();
       gtk_button_set_label (GTK_BUTTON (button), "Click here");
-      gtk_menu_button_set_use_popover (GTK_MENU_BUTTON (button), FALSE);
+      gtk_menu_button_set_use_popover (GTK_MENU_BUTTON (button), TRUE);
       gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (button), model);
       gtk_widget_insert_action_group (button, "actions", group);
       gtk_container_add (GTK_CONTAINER (box), button);
