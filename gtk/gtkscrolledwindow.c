@@ -1365,8 +1365,7 @@ captured_event_cb (GtkWidget *widget,
         }
       else if (input_source == GDK_SOURCE_PEN ||
                input_source == GDK_SOURCE_ERASER ||
-               (device_name != NULL && strstr (device_name, "TrackPoint")) ||
-               (device_name != NULL && strstr (device_name, "DualPoint Stick")))
+               input_source == GDK_SOURCE_TRACKPOINT)
         {
           indicator_set_over (&priv->hindicator, TRUE);
           indicator_set_over (&priv->vindicator, TRUE);
