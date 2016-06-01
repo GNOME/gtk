@@ -291,7 +291,9 @@ gtk_size_group_set_property (GObject      *object,
       gtk_size_group_set_mode (size_group, g_value_get_enum (value));
       break;
     case PROP_IGNORE_HIDDEN:
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gtk_size_group_set_ignore_hidden (size_group, g_value_get_boolean (value));
+G_GNUC_END_IGNORE_DEPRECATIONS
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
