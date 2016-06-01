@@ -69,6 +69,7 @@ struct _GdkWaylandPointerFrameData
   gdouble delta_x, delta_y;
   int32_t discrete_x, discrete_y;
   gint8 is_scroll_stop;
+  enum wl_pointer_axis_source source;
 };
 
 struct _GdkWaylandPointerData {
@@ -151,6 +152,9 @@ struct _GdkWaylandSeat
   GdkDevice *master_pointer;
   GdkDevice *master_keyboard;
   GdkDevice *pointer;
+  GdkDevice *wheel_scrolling;
+  GdkDevice *finger_scrolling;
+  GdkDevice *continuous_scrolling;
   GdkDevice *keyboard;
   GdkDevice *touch_master;
   GdkDevice *touch;
@@ -1068,6 +1072,9 @@ static const struct gtk_primary_selection_device_listener primary_selection_devi
   primary_selection_selection,
 };
 
+static GdkDevice * get_scroll_device (GdkWaylandSeat              *seat,
+                                      enum wl_pointer_axis_source  source);
+
 static GdkEvent *
 create_scroll_event (GdkWaylandSeat *seat,
                      gboolean        emulated)
@@ -1078,7 +1085,7 @@ create_scroll_event (GdkWaylandSeat *seat,
   event = gdk_event_new (GDK_SCROLL);
   event->scroll.window = g_object_ref (seat->pointer_info.focus);
   gdk_event_set_device (event, seat->master_pointer);
-  gdk_event_set_source_device (event, seat->pointer);
+  gdk_event_set_source_device (event, get_scroll_device (seat, seat->pointer_info.frame.source));
   event->scroll.time = seat->pointer_info.time;
   event->scroll.state = device_get_modifiers (seat->master_pointer);
   gdk_event_set_screen (event, display->screen);
@@ -1180,7 +1187,10 @@ gdk_wayland_seat_flush_frame_event (GdkWaylandSeat *seat)
       seat->pointer_info.frame.event = NULL;
     }
   else
-    flush_scroll_event (seat, &seat->pointer_info.frame);
+    {
+      flush_scroll_event (seat, &seat->pointer_info.frame);
+      seat->pointer_info.frame.source = 0;
+    }
 }
 
 static GdkEvent *
@@ -1523,15 +1533,12 @@ pointer_handle_axis_source (void                        *data,
                             enum wl_pointer_axis_source  source)
 {
   GdkWaylandSeat *seat = data;
+  GdkWaylandPointerFrameData *pointer_frame = &seat->pointer_info.frame;
 
   if (!seat->pointer_info.focus)
     return;
 
-  /* We don't need to handle the scroll source right now. It only has real
-   * meaning for 'finger' (to trigger kinetic scrolling). The axis_stop
-   * event will generate the zero delta required to trigger kinetic
-   * scrolling, so explicitly handling the source is not required.
-   */
+  pointer_frame->source = source;
 
   GDK_NOTE (EVENTS,
             g_message ("axis source %s, seat %p", get_axis_source_name (source), seat));
@@ -2769,8 +2776,40 @@ seat_handle_capabilities (void                    *data,
         g_list_remove (device_manager->devices, seat->pointer);
 
       g_signal_emit_by_name (device_manager, "device-removed", seat->pointer);
-      g_object_unref (seat->pointer);
-      seat->pointer = NULL;
+      g_clear_object (&seat->pointer);
+
+      if (seat->wheel_scrolling)
+        {
+          _gdk_device_set_associated_device (seat->wheel_scrolling, NULL);
+
+          device_manager->devices =
+            g_list_remove (device_manager->devices, seat->wheel_scrolling);
+
+          g_signal_emit_by_name (device_manager, "device-removed", seat->wheel_scrolling);
+          g_clear_object (&seat->wheel_scrolling);
+        }
+
+      if (seat->finger_scrolling)
+        {
+          _gdk_device_set_associated_device (seat->finger_scrolling, NULL);
+
+          device_manager->devices =
+            g_list_remove (device_manager->devices, seat->finger_scrolling);
+
+          g_signal_emit_by_name (device_manager, "device-removed", seat->finger_scrolling);
+          g_clear_object (&seat->finger_scrolling);
+        }
+
+      if (seat->continuous_scrolling)
+        {
+          _gdk_device_set_associated_device (seat->continuous_scrolling, NULL);
+
+          device_manager->devices =
+            g_list_remove (device_manager->devices, seat->continuous_scrolling);
+
+          g_signal_emit_by_name (device_manager, "device-removed", seat->continuous_scrolling);
+          g_clear_object (&seat->continuous_scrolling);
+        }
     }
 
   if ((caps & WL_SEAT_CAPABILITY_KEYBOARD) && !seat->wl_keyboard)
@@ -2807,8 +2846,7 @@ seat_handle_capabilities (void                    *data,
         g_list_remove (device_manager->devices, seat->keyboard);
 
       g_signal_emit_by_name (device_manager, "device-removed", seat->keyboard);
-      g_object_unref (seat->keyboard);
-      seat->keyboard = NULL;
+      g_clear_object (&seat->keyboard);
     }
 
   if ((caps & WL_SEAT_CAPABILITY_TOUCH) && !seat->wl_touch)
@@ -2865,16 +2903,96 @@ seat_handle_capabilities (void                    *data,
 
       g_signal_emit_by_name (device_manager, "device-removed", seat->touch_master);
       g_signal_emit_by_name (device_manager, "device-removed", seat->touch);
-      g_object_unref (seat->touch_master);
-      g_object_unref (seat->touch);
-      seat->touch_master = NULL;
-      seat->touch = NULL;
+      g_clear_object (&seat->touch_master);
+      g_clear_object (&seat->touch);
     }
 
   if (seat->master_pointer)
     gdk_drag_context_set_device (seat->drop_context, seat->master_pointer);
   else if (seat->touch_master)
     gdk_drag_context_set_device (seat->drop_context, seat->touch_master);
+}
+
+static GdkDevice *
+get_scroll_device (GdkWaylandSeat              *seat,
+                   enum wl_pointer_axis_source  source)
+{
+  GdkWaylandDeviceManager *device_manager = GDK_WAYLAND_DEVICE_MANAGER (seat->device_manager);
+
+  if (!seat->pointer)
+    return NULL;
+
+  switch (source)
+    {
+    case WL_POINTER_AXIS_SOURCE_WHEEL:
+      if (seat->wheel_scrolling == NULL)
+        {
+          seat->wheel_scrolling = g_object_new (GDK_TYPE_WAYLAND_DEVICE,
+                                                "name", "Wayland Wheel Scrolling",
+                                                "type", GDK_DEVICE_TYPE_SLAVE,
+                                                "input-source", GDK_SOURCE_MOUSE,
+                                                "input-mode", GDK_MODE_SCREEN,
+                                                "has-cursor", TRUE,
+                                                "display", seat->display,
+                                                "device-manager", seat->device_manager,
+                                                "seat", seat,
+                                                NULL);
+          _gdk_device_set_associated_device (seat->wheel_scrolling, seat->master_pointer);
+
+          device_manager->devices =
+            g_list_append (device_manager->devices, seat->wheel_scrolling);
+
+          g_signal_emit_by_name (device_manager, "device-added", seat->wheel_scrolling);
+        }
+      return seat->wheel_scrolling;
+
+    case WL_POINTER_AXIS_SOURCE_FINGER:
+      if (seat->finger_scrolling == NULL)
+        {
+          seat->finger_scrolling = g_object_new (GDK_TYPE_WAYLAND_DEVICE,
+                                                 "name", "Wayland Finger Scrolling",
+                                                 "type", GDK_DEVICE_TYPE_SLAVE,
+                                                 "input-source", GDK_SOURCE_TOUCHPAD,
+                                                 "input-mode", GDK_MODE_SCREEN,
+                                                 "has-cursor", TRUE,
+                                                 "display", seat->display,
+                                                 "device-manager", seat->device_manager,
+                                                 "seat", seat,
+                                                 NULL);
+          _gdk_device_set_associated_device (seat->finger_scrolling, seat->master_pointer);
+
+          device_manager->devices =
+            g_list_append (device_manager->devices, seat->finger_scrolling);
+
+          g_signal_emit_by_name (device_manager, "device-added", seat->finger_scrolling);
+        }
+      return seat->finger_scrolling;
+
+    case WL_POINTER_AXIS_SOURCE_CONTINUOUS:
+      if (seat->continuous_scrolling == NULL)
+        {
+          seat->continuous_scrolling = g_object_new (GDK_TYPE_WAYLAND_DEVICE,
+                                                     "name", "Wayland Continuous Scrolling",
+                                                     "type", GDK_DEVICE_TYPE_SLAVE,
+                                                     "input-source", GDK_SOURCE_TRACKPOINT,
+                                                     "input-mode", GDK_MODE_SCREEN,
+                                                     "has-cursor", TRUE,
+                                                     "display", seat->display,
+                                                     "device-manager", seat->device_manager,
+                                                     "seat", seat,
+                                                     NULL);
+          _gdk_device_set_associated_device (seat->continuous_scrolling, seat->master_pointer);
+
+          device_manager->devices =
+            g_list_append (device_manager->devices, seat->continuous_scrolling);
+
+          g_signal_emit_by_name (device_manager, "device-added", seat->continuous_scrolling);
+        }
+      return seat->continuous_scrolling;
+
+    default:
+      return seat->pointer;
+    }
 }
 
 static void
@@ -3973,6 +4091,12 @@ gdk_wayland_seat_get_slaves (GdkSeat             *seat,
   GdkWaylandSeat *wayland_seat = GDK_WAYLAND_SEAT (seat);
   GList *slaves = NULL;
 
+  if (wayland_seat->finger_scrolling && (capabilities & GDK_SEAT_CAPABILITY_POINTER))
+    slaves = g_list_prepend (slaves, wayland_seat->finger_scrolling);
+  if (wayland_seat->continuous_scrolling && (capabilities & GDK_SEAT_CAPABILITY_POINTER))
+    slaves = g_list_prepend (slaves, wayland_seat->continuous_scrolling);
+  if (wayland_seat->wheel_scrolling && (capabilities & GDK_SEAT_CAPABILITY_POINTER))
+    slaves = g_list_prepend (slaves, wayland_seat->wheel_scrolling);
   if (wayland_seat->pointer && (capabilities & GDK_SEAT_CAPABILITY_POINTER))
     slaves = g_list_prepend (slaves, wayland_seat->pointer);
   if (wayland_seat->keyboard && (capabilities & GDK_SEAT_CAPABILITY_KEYBOARD))
