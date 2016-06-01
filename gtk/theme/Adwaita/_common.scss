@@ -1611,6 +1611,16 @@ path-bar button.flat, .path-bar-overflow-popover button.flat {
     transition-duration: 250ms;
 }
 
+.pathbar-invert-animation-opacity-on {
+    opacity: 1;
+    transition-duration: 60ms;
+}
+
+.pathbar-invert-animation-opacity-off {
+    opacity: 0;
+    transition-duration: 60ms;
+}
+
 /**************
  * Tree Views *
  **************/
