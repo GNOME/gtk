@@ -241,6 +241,8 @@ struct _GtkScrolledWindowPrivate
 
   GArray *scroll_history;
   GdkDevice *scroll_device;
+  GdkWindow *scroll_window;
+  GdkCursor *scroll_cursor;
 
   /* These two gestures are mutually exclusive */
   GtkGesture *drag_gesture;
@@ -1319,7 +1321,6 @@ captured_event_cb (GtkWidget *widget,
   GdkDevice *source_device;
   GtkWidget *event_widget;
   gboolean on_scrollbar;
-  const gchar *device_name;
 
   sw = GTK_SCROLLED_WINDOW (widget);
   priv = sw->priv;
@@ -1339,7 +1340,6 @@ captured_event_cb (GtkWidget *widget,
     return GDK_EVENT_PROPAGATE;
 
   input_source = gdk_device_get_source (source_device);
-  device_name = gdk_device_get_name (source_device);
 
   if (input_source == GDK_SOURCE_KEYBOARD ||
       input_source == GDK_SOURCE_TOUCHSCREEN)
@@ -3243,6 +3243,41 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
   gtk_widget_set_clip (widget, &clip);
 }
 
+static void
+install_scroll_cursor (GtkScrolledWindow *scrolled_window,
+                       GdkWindow         *window)
+{
+  GtkScrolledWindowPrivate *priv = scrolled_window->priv;
+  GdkDisplay *display;
+  GdkCursor *cursor;
+
+  if (priv->scroll_window)
+    return;
+
+  priv->scroll_window = window;
+  priv->scroll_cursor = gdk_window_get_cursor (priv->scroll_window);
+  if (priv->scroll_cursor)
+    g_object_ref (priv->scroll_cursor);
+
+  display = gdk_window_get_display (priv->scroll_window);
+  cursor = gdk_cursor_new_from_name (display, "all-scroll");
+  gdk_window_set_cursor (priv->scroll_window, cursor);
+  g_object_unref (cursor);
+}
+
+static void
+uninstall_scroll_cursor (GtkScrolledWindow *scrolled_window)
+{
+  GtkScrolledWindowPrivate *priv = scrolled_window->priv;
+
+  if (priv->scroll_window)
+    {
+      gdk_window_set_cursor (priv->scroll_window, priv->scroll_cursor);
+      priv->scroll_window = NULL;
+      g_clear_object (&priv->scroll_cursor);
+    }
+}
+
 static gboolean
 start_scroll_deceleration_cb (gpointer user_data)
 {
@@ -3252,7 +3287,10 @@ start_scroll_deceleration_cb (gpointer user_data)
   priv->scroll_events_overshoot_id = 0;
 
   if (!priv->deceleration_id)
-    gtk_scrolled_window_start_deceleration (scrolled_window);
+    {
+      uninstall_scroll_cursor (scrolled_window);
+      gtk_scrolled_window_start_deceleration (scrolled_window);
+    }
 
   return FALSE;
 }
@@ -3270,6 +3308,7 @@ gtk_scrolled_window_scroll_event (GtkWidget      *widget,
   GdkScrollDirection direction;
   gboolean shifted, start_deceleration = FALSE;
   GdkDevice *source_device;
+  GdkInputSource input_source;
 
   shifted = (event->state & GDK_SHIFT_MASK) != 0;
 
@@ -3278,6 +3317,7 @@ gtk_scrolled_window_scroll_event (GtkWidget      *widget,
 
   gtk_scrolled_window_invalidate_overshoot (scrolled_window);
   source_device = gdk_event_get_source_device ((GdkEvent *) event);
+  input_source = gdk_device_get_source (source_device);
 
   if (gdk_event_get_scroll_deltas ((GdkEvent *) event, &delta_x, &delta_y))
     {
@@ -3288,6 +3328,10 @@ gtk_scrolled_window_scroll_event (GtkWidget      *widget,
         }
 
       scroll_history_push (scrolled_window, event);
+
+      if (input_source == GDK_SOURCE_TRACKPOINT ||
+          input_source == GDK_SOURCE_TOUCHPAD)
+        install_scroll_cursor (scrolled_window, gdk_event_get_window ((GdkEvent *)event));
 
       if (shifted)
         {
@@ -3390,7 +3434,10 @@ gtk_scrolled_window_scroll_event (GtkWidget      *widget,
 
       if (start_deceleration &&
           scroll_history_finish (scrolled_window, &vel_x, &vel_y))
-        gtk_scrolled_window_decelerate (scrolled_window, vel_x, vel_y);
+        {
+          uninstall_scroll_cursor (scrolled_window);
+          gtk_scrolled_window_decelerate (scrolled_window, vel_x, vel_y);
+        }
       else if (_gtk_scrolled_window_get_overshoot (scrolled_window, NULL, NULL))
         {
           priv->scroll_events_overshoot_id =
