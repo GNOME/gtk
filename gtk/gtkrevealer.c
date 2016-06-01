@@ -456,7 +456,6 @@ gtk_revealer_real_size_allocate (GtkWidget     *widget,
 
   g_return_if_fail (allocation != NULL);
 
-  g_print ("revealer allocation %d %d %d %d\n", allocation->height, allocation->width, allocation->x, allocation->y);
   gtk_widget_set_allocation (widget, allocation);
   gtk_revealer_get_child_allocation (revealer, allocation, &child_allocation);
 
