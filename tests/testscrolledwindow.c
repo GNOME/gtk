@@ -64,10 +64,38 @@ kinetic_scrolling_changed (GtkToggleButton *toggle_button,
 }
 
 static void
+add_row (GtkButton  *button,
+         GtkListBox *listbox)
+{
+  GtkWidget *row;
+
+  row = g_object_new (GTK_TYPE_LIST_BOX_ROW, "border-width", 12, NULL);
+  gtk_container_add (GTK_CONTAINER (row), gtk_label_new ("test"));
+  gtk_container_add (GTK_CONTAINER (listbox), row);
+
+  gtk_widget_show_all (row);
+}
+
+static void
+remove_row (GtkButton  *button,
+            GtkListBox *listbox)
+{
+  GList *children, *last;
+
+  children = gtk_container_get_children (GTK_CONTAINER (listbox));
+  last = g_list_last (children);
+
+  if (last)
+    gtk_container_remove (GTK_CONTAINER (listbox), last->data);
+
+  g_list_free (children);
+}
+
+static void
 scrollable_policy (void)
 {
-  GtkWidget *window, *swindow, *hbox, *vbox, *frame, *cntl;
-  GtkWidget *viewport, *label, *expander, *widget;
+  GtkWidget *window, *swindow, *hbox, *vbox, *frame, *cntl, *listbox;
+  GtkWidget *viewport, *label, *expander, *widget, *popover;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   hbox   = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
@@ -217,6 +245,121 @@ scrollable_policy (void)
                     G_CALLBACK (kinetic_scrolling_changed), swindow);
 
   gtk_widget_show (window);
+
+  /* Popover */
+  popover = gtk_popover_new (NULL);
+
+  widget = gtk_menu_button_new ();
+  gtk_menu_button_set_popover (GTK_MENU_BUTTON (widget), popover);
+  gtk_container_add (GTK_CONTAINER (widget), gtk_label_new ("Popover"));
+  gtk_box_pack_start (GTK_BOX (cntl), widget, FALSE, FALSE, 0);
+  gtk_widget_show_all (widget);
+
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
+  gtk_container_add (GTK_CONTAINER (popover), vbox);
+  gtk_widget_show (vbox);
+
+  /* Popover's scrolled window */
+  swindow = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (swindow),
+                                  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+
+  gtk_box_pack_end (GTK_BOX (vbox), swindow, FALSE, FALSE, 0);
+  gtk_widget_show (swindow);
+  gtk_widget_show (hbox);
+
+  /* Listbox */
+  listbox = gtk_list_box_new ();
+  gtk_container_add (GTK_CONTAINER (swindow), listbox);
+  gtk_widget_show (listbox);
+
+  /* Min content */
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
+
+  widget = gtk_label_new ("min-content-width");
+  gtk_widget_show (widget);
+  gtk_box_pack_start (GTK_BOX (hbox), widget, TRUE, TRUE, 0);
+
+  widget = gtk_spin_button_new_with_range (0.0, 150.0, 10.0);
+  gtk_box_pack_start (GTK_BOX (hbox), widget, TRUE, TRUE, 0);
+  gtk_widget_show (widget);
+  gtk_widget_show (hbox);
+
+  g_object_bind_property (gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (widget)),
+                          "value",
+                          swindow,
+                          "min-content-width",
+                          G_BINDING_DEFAULT | G_BINDING_SYNC_CREATE);
+
+  widget = gtk_label_new ("min-content-height");
+  gtk_widget_show (widget);
+  gtk_box_pack_start (GTK_BOX (hbox), widget, TRUE, TRUE, 0);
+
+
+  widget = gtk_spin_button_new_with_range (0.0, 150.0, 10.0);
+  gtk_box_pack_start (GTK_BOX (hbox), widget, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
+  gtk_widget_show (widget);
+  gtk_widget_show (hbox);
+
+  g_object_bind_property (gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (widget)),
+                          "value",
+                          swindow,
+                          "min-content-height",
+                          G_BINDING_DEFAULT | G_BINDING_SYNC_CREATE);
+
+  /* Max content */
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
+
+  widget = gtk_label_new ("max-content-width");
+  gtk_widget_show (widget);
+  gtk_box_pack_start (GTK_BOX (hbox), widget, TRUE, TRUE, 0);
+
+  widget = gtk_spin_button_new_with_range (250.0, 1000.0, 10.0);
+  gtk_box_pack_start (GTK_BOX (hbox), widget, TRUE, TRUE, 0);
+  gtk_widget_show (widget);
+  gtk_widget_show (hbox);
+
+  g_object_bind_property (gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (widget)),
+                          "value",
+                          swindow,
+                          "max-content-width",
+                          G_BINDING_DEFAULT | G_BINDING_SYNC_CREATE);
+
+  widget = gtk_label_new ("max-content-height");
+  gtk_widget_show (widget);
+  gtk_box_pack_start (GTK_BOX (hbox), widget, TRUE, TRUE, 0);
+
+  widget = gtk_spin_button_new_with_range (250.0, 1000.0, 10.0);
+  gtk_box_pack_start (GTK_BOX (hbox), widget, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
+  gtk_widget_show (widget);
+  gtk_widget_show (hbox);
+
+  g_object_bind_property (gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (widget)),
+                          "value",
+                          swindow,
+                          "max-content-height",
+                          G_BINDING_DEFAULT | G_BINDING_SYNC_CREATE);
+
+  /* Add and Remove buttons */
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
+
+  widget = gtk_button_new_with_label ("Remove");
+  gtk_widget_show (widget);
+  gtk_box_pack_start (GTK_BOX (hbox), widget, TRUE, TRUE, 0);
+
+  g_signal_connect (widget, "clicked",
+                    G_CALLBACK (remove_row), listbox);
+
+  widget = gtk_button_new_with_label ("Add");
+  gtk_box_pack_start (GTK_BOX (hbox), widget, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
+  gtk_widget_show (widget);
+  gtk_widget_show (hbox);
+
+  g_signal_connect (widget, "clicked",
+                    G_CALLBACK (add_row), listbox);
 }
 
 
