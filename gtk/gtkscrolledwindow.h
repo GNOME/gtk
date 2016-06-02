@@ -214,6 +214,17 @@ void           gtk_scrolled_window_set_overlay_scrolling  (GtkScrolledWindow *sc
 GDK_AVAILABLE_IN_3_16
 gboolean       gtk_scrolled_window_get_overlay_scrolling (GtkScrolledWindow   *scrolled_window);
 
+GDK_AVAILABLE_IN_3_22
+void           gtk_scrolled_window_set_max_content_width  (GtkScrolledWindow *scrolled_window,
+                                                           gint               width);
+GDK_AVAILABLE_IN_3_22
+gint           gtk_scrolled_window_get_max_content_width  (GtkScrolledWindow *scrolled_window);
+
+GDK_AVAILABLE_IN_3_22
+void           gtk_scrolled_window_set_max_content_height (GtkScrolledWindow *scrolled_window,
+                                                           gint               height);
+GDK_AVAILABLE_IN_3_22
+gint           gtk_scrolled_window_get_max_content_height (GtkScrolledWindow *scrolled_window);
 
 G_END_DECLS
 

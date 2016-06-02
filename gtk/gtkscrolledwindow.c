@@ -232,6 +232,8 @@ struct _GtkScrolledWindowPrivate
 
   gint     min_content_width;
   gint     min_content_height;
+  gint     max_content_width;
+  gint     max_content_height;
 
   guint scroll_events_overshoot_id;
 
@@ -287,6 +289,8 @@ enum {
   PROP_MIN_CONTENT_HEIGHT,
   PROP_KINETIC_SCROLLING,
   PROP_OVERLAY_SCROLLING,
+  PROP_MAX_CONTENT_WIDTH,
+  PROP_MAX_CONTENT_HEIGHT,
   NUM_PROPERTIES
 };
 
@@ -691,6 +695,34 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
                             P_("Overlay scrolling mode"),
                             TRUE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkScrolledWindow:max-content-width:
+   *
+   * The maximum content width of @scrolled_window, or -1 if not set.
+   *
+   * Since: 3.22
+   */
+  properties[PROP_MAX_CONTENT_WIDTH] =
+      g_param_spec_int ("max-content-width",
+                        P_("Maximum Content Width"),
+                        P_("The maximum width that the scrolled window will allocate to its content"),
+                        -1, G_MAXINT, -1,
+                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkScrolledWindow:max-content-height:
+   *
+   * The maximum content height of @scrolled_window, or -1 if not set.
+   *
+   * Since: 3.22
+   */
+  properties[PROP_MAX_CONTENT_HEIGHT] =
+      g_param_spec_int ("max-content-height",
+                        P_("Maximum Content Height"),
+                        P_("The maximum height that the scrolled window will allocate to its content"),
+                        -1, G_MAXINT, -1,
+                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, properties);
 
@@ -1765,6 +1797,20 @@ gtk_scrolled_window_measure (GtkCssGadget   *gadget,
 		  minimum_req.width += vscrollbar_requisition.width;
 		  natural_req.width += vscrollbar_requisition.width;
 		}
+
+              if (priv->max_content_width > -1 &&
+                  priv->max_content_width > natural_req.width &&
+                  nat_child_size > natural_req.width)
+                {
+                  gint width = MIN (priv->max_content_width, min_child_size);
+
+                  /* The maximum content width must respect the minimum content width.
+                   * It'll grow at least until min_content_width, and at most until
+                   * max_content_width.
+                  */
+                  minimum_req.width = MAX (minimum_req.width, width);
+                  natural_req.width = MAX (natural_req.width, width);
+                }
 	    }
 	}
       else /* GTK_ORIENTATION_VERTICAL */
@@ -1791,6 +1837,20 @@ gtk_scrolled_window_measure (GtkCssGadget   *gadget,
 		  minimum_req.height += hscrollbar_requisition.height;
 		  natural_req.height += hscrollbar_requisition.height;
 		}
+
+              if (priv->max_content_height > -1 &&
+                  priv->max_content_height > natural_req.height &&
+                  nat_child_size > natural_req.height)
+                {
+                  gint height = MIN (priv->max_content_height, min_child_size);
+
+                  /* The maximum content height must respect the minimum content height.
+                   * It'll grow at least until min_content_height, and at most until
+                   * max_content_height.
+                   */
+                  minimum_req.height = MAX (minimum_req.height, height);
+                  natural_req.height = MAX (natural_req.height, height);
+                }
 	    }
 	}
     }
@@ -2038,6 +2098,8 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
   priv->window_placement = GTK_CORNER_TOP_LEFT;
   priv->min_content_width = -1;
   priv->min_content_height = -1;
+  priv->max_content_width = -1;
+  priv->max_content_height = -1;
 
   priv->overlay_scrolling = TRUE;
 
@@ -2779,6 +2841,14 @@ gtk_scrolled_window_set_property (GObject      *object,
       gtk_scrolled_window_set_overlay_scrolling (scrolled_window,
                                                  g_value_get_boolean (value));
       break;
+    case PROP_MAX_CONTENT_WIDTH:
+      gtk_scrolled_window_set_max_content_width (scrolled_window,
+                                                 g_value_get_int (value));
+      break;
+    case PROP_MAX_CONTENT_HEIGHT:
+      gtk_scrolled_window_set_max_content_height (scrolled_window,
+                                                  g_value_get_int (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -2830,6 +2900,12 @@ gtk_scrolled_window_get_property (GObject    *object,
       break;
     case PROP_OVERLAY_SCROLLING:
       g_value_set_boolean (value, priv->overlay_scrolling);
+      break;
+    case PROP_MAX_CONTENT_WIDTH:
+      g_value_set_int (value, priv->max_content_width);
+      break;
+    case PROP_MAX_CONTENT_HEIGHT:
+      g_value_set_int (value, priv->max_content_height);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -4384,6 +4460,9 @@ gtk_scrolled_window_get_min_content_width (GtkScrolledWindow *scrolled_window)
  * Note that this can and (usually will) be smaller than the minimum
  * size of the content.
  *
+ * It is a programming error to set the minimum content width to a
+ * value smaller than #GtkScrolledWindow:max-content-width.
+ *
  * Since: 3.0
  */
 void
@@ -4395,6 +4474,8 @@ gtk_scrolled_window_set_min_content_width (GtkScrolledWindow *scrolled_window,
   g_return_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window));
 
   priv = scrolled_window->priv;
+
+  g_return_if_fail (priv->max_content_width == -1 || width <= priv->max_content_width);
 
   if (priv->min_content_width != width)
     {
@@ -4433,6 +4514,9 @@ gtk_scrolled_window_get_min_content_height (GtkScrolledWindow *scrolled_window)
  * Note that this can and (usually will) be smaller than the minimum
  * size of the content.
  *
+ * It is a programming error to set the minimum content height to a
+ * value smaller than #GtkScrolledWindow:max-content-height.
+ *
  * Since: 3.0
  */
 void
@@ -4444,6 +4528,8 @@ gtk_scrolled_window_set_min_content_height (GtkScrolledWindow *scrolled_window,
   g_return_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window));
 
   priv = scrolled_window->priv;
+
+  g_return_if_fail (priv->max_content_height == -1 || height <= priv->max_content_height);
 
   if (priv->min_content_height != height)
     {
@@ -4501,4 +4587,108 @@ gtk_scrolled_window_get_overlay_scrolling (GtkScrolledWindow *scrolled_window)
   g_return_val_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window), TRUE);
 
   return scrolled_window->priv->overlay_scrolling;
+}
+
+/**
+ * gtk_scrolled_window_set_max_content_width:
+ * @scrolled_window: a #GtkScrolledWindow
+ * @width: the maximum content width
+ *
+ * Sets the maximum width that @scrolled_window should keep visible. The
+ * @scrolled_window will grow up to this width before it starts scrolling
+ * the content.
+ *
+ * It is a programming error to set the maximum content width to a value
+ * smaller than #GtkScrolledWindow:min-content-width.
+ *
+ * Since: 3.22
+ */
+void
+gtk_scrolled_window_set_max_content_width (GtkScrolledWindow *scrolled_window,
+                                           gint               width)
+{
+  GtkScrolledWindowPrivate *priv;
+
+  g_return_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window));
+
+  priv = scrolled_window->priv;
+
+  g_return_if_fail (priv->min_content_width == -1 || width >= priv->min_content_width);
+
+  if (width != priv->max_content_width)
+    {
+      priv->max_content_width = width;
+      g_object_notify_by_pspec (G_OBJECT (scrolled_window), properties [PROP_MAX_CONTENT_WIDTH]);
+      gtk_widget_queue_resize (GTK_WIDGET (scrolled_window));
+    }
+}
+
+/**
+ * gtk_scrolled_window_get_max_content_width:
+ * @scrolled_window: a #GtkScrolledWindow
+ *
+ * Returns the maximum content width set.
+ *
+ * Returns: the maximum content width, or -1
+ *
+ * Since: 3.22
+ */
+gint
+gtk_scrolled_window_get_max_content_width (GtkScrolledWindow *scrolled_window)
+{
+  g_return_val_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window), -1);
+
+  return scrolled_window->priv->max_content_width;
+}
+
+/**
+ * gtk_scrolled_window_set_max_content_height:
+ * @scrolled_window: a #GtkScrolledWindow
+ * @height: the maximum content height
+ *
+ * Sets the maximum height that @scrolled_window should keep visible. The
+ * @scrolled_window will grow up to this width before it starts scrolling
+ * the content.
+ *
+ * It is a programming error to set the maximum content height to a value
+ * smaller than #GtkScrolledWindow:min-content-height.
+ *
+ * Since: 3.22
+ */
+void
+gtk_scrolled_window_set_max_content_height (GtkScrolledWindow *scrolled_window,
+                                            gint               height)
+{
+  GtkScrolledWindowPrivate *priv;
+
+  g_return_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window));
+
+  priv = scrolled_window->priv;
+
+  g_return_if_fail (priv->min_content_height == -1 || height >= priv->min_content_height);
+
+  if (height != priv->max_content_height)
+    {
+      priv->max_content_height = height;
+      g_object_notify_by_pspec (G_OBJECT (scrolled_window), properties [PROP_MAX_CONTENT_HEIGHT]);
+      gtk_widget_queue_resize (GTK_WIDGET (scrolled_window));
+    }
+}
+
+/**
+ * gtk_scrolled_window_get_max_content_height:
+ * @scrolled_window: a #GtkScrolledWindow
+ *
+ * Returns the maximum content height set.
+ *
+ * Returns: the maximum content height, or -1
+ *
+ * Since: 3.22
+ */
+gint
+gtk_scrolled_window_get_max_content_height (GtkScrolledWindow *scrolled_window)
+{
+  g_return_val_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window), -1);
+
+  return scrolled_window->priv->max_content_height;
 }
