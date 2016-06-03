@@ -264,3 +264,22 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
 
   return attrs;
 }
+
+static GtkCssValue *
+query_func (guint    id,
+            gpointer values)
+{
+  return gtk_css_style_get_value (values, id);
+}
+
+PangoFontDescription *
+gtk_css_style_get_pango_font (GtkCssStyle *style)
+{
+  GtkStyleProperty *prop;
+  GValue value = { 0, };
+
+  prop = _gtk_style_property_lookup ("font");
+  _gtk_style_property_query (prop, &value, query_func, style);
+
+  return (PangoFontDescription *)g_value_get_boxed (&value);
+}

@@ -76,6 +76,7 @@ gboolean                gtk_css_style_print                     (GtkCssStyle    
                                                                  gboolean                skip_initial);
 PangoAttrList *         gtk_css_style_get_pango_attributes      (GtkCssStyle            *style);
 
+PangoFontDescription *  gtk_css_style_get_pango_font            (GtkCssStyle            *style);
 
 G_END_DECLS
 
