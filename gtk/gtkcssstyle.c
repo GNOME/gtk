@@ -28,6 +28,7 @@
 #include "gtkcssinheritvalueprivate.h"
 #include "gtkcssinitialvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
+#include "gtkcssrgbavalueprivate.h"
 #include "gtkcsssectionprivate.h"
 #include "gtkcssshorthandpropertyprivate.h"
 #include "gtkcssstringvalueprivate.h"
@@ -188,3 +189,78 @@ gtk_css_style_to_string (GtkCssStyle *style)
   return g_string_free (string, FALSE);
 }
 
+static PangoUnderline
+get_pango_underline_from_style (GtkTextDecorationStyle style)
+{
+  switch (style)
+    {
+    case GTK_CSS_TEXT_DECORATION_STYLE_DOUBLE:
+      return PANGO_UNDERLINE_DOUBLE;
+    case GTK_CSS_TEXT_DECORATION_STYLE_WAVY:
+      return PANGO_UNDERLINE_ERROR;
+    case GTK_CSS_TEXT_DECORATION_STYLE_SOLID:
+    default:
+      return PANGO_UNDERLINE_SINGLE;
+    }
+
+  g_return_val_if_reached (PANGO_UNDERLINE_SINGLE);
+}
+
+static PangoAttrList *
+add_pango_attr (PangoAttrList  *attrs,
+                PangoAttribute *attr)
+{
+  if (attrs == NULL)
+    attrs = pango_attr_list_new ();
+
+  pango_attr_list_insert (attrs, attr);
+
+  return attrs;
+}
+
+PangoAttrList *
+gtk_css_style_get_pango_attributes (GtkCssStyle *style)
+{
+  PangoAttrList *attrs = NULL;
+  GtkTextDecorationLine decoration_line;
+  GtkTextDecorationStyle decoration_style;
+  const GdkRGBA *color;
+  const GdkRGBA *decoration_color;
+  gint letter_spacing;
+
+  /* text-decoration */
+  decoration_line = _gtk_css_text_decoration_line_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_TEXT_DECORATION_LINE));
+  decoration_style = _gtk_css_text_decoration_style_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_TEXT_DECORATION_STYLE));
+  color = _gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_COLOR));
+  decoration_color = _gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_TEXT_DECORATION_COLOR));
+
+  switch (decoration_line)
+    {
+    case GTK_CSS_TEXT_DECORATION_LINE_UNDERLINE:
+      attrs = add_pango_attr (attrs, pango_attr_underline_new (get_pango_underline_from_style (decoration_style)));
+      if (!gdk_rgba_equal (color, decoration_color))
+        attrs = add_pango_attr (attrs, pango_attr_underline_color_new (decoration_color->red * 65535. + 0.5,
+                                                                       decoration_color->green * 65535. + 0.5,
+                                                                       decoration_color->blue * 65535. + 0.5));
+      break;
+    case GTK_CSS_TEXT_DECORATION_LINE_LINE_THROUGH:
+      attrs = add_pango_attr (attrs, pango_attr_strikethrough_new (TRUE));
+      if (!gdk_rgba_equal (color, decoration_color))
+        attrs = add_pango_attr (attrs, pango_attr_strikethrough_color_new (decoration_color->red * 65535. + 0.5,
+                                                                           decoration_color->green * 65535. + 0.5,
+                                                                           decoration_color->blue * 65535. + 0.5));
+      break;
+    case GTK_CSS_TEXT_DECORATION_LINE_NONE:
+    default:
+      break;
+    }
+
+  /* letter-spacing */
+  letter_spacing = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_LETTER_SPACING), 100);
+  if (letter_spacing != 0)
+    {
+      attrs = add_pango_attr (attrs, pango_attr_letter_spacing_new (letter_spacing * PANGO_SCALE));
+    }
+
+  return attrs;
+}

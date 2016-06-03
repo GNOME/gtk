@@ -74,6 +74,8 @@ gboolean                gtk_css_style_print                     (GtkCssStyle    
                                                                  GString                *string,
                                                                  guint                   indent,
                                                                  gboolean                skip_initial);
+PangoAttrList *         gtk_css_style_get_pango_attributes      (GtkCssStyle            *style);
+
 
 G_END_DECLS
 
