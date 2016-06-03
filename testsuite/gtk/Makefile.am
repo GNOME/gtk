@@ -63,6 +63,7 @@ TEST_PROGS += 			\
 	rbtree			\
 	recentmanager		\
 	regression-tests	\
+	scrolledwindow		\
 	spinbutton		\
 	stylecontext		\
 	templates		\
