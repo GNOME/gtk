@@ -761,6 +761,35 @@ gtk_progress_bar_measure (GtkCssGadget   *gadget,
     }
 }
 
+static PangoLayout *
+gtk_progress_bar_get_layout (GtkProgressBar *pbar)
+{
+  PangoLayout *layout;
+  gchar *buf;
+  GtkCssStyle *style;
+  PangoAttrList *attrs;
+  PangoFontDescription *desc;
+
+  buf = get_current_text (pbar);
+  layout = gtk_widget_create_pango_layout (GTK_WIDGET (pbar), buf);
+
+  style = gtk_css_node_get_style (gtk_css_gadget_get_node (pbar->priv->text_gadget));
+
+  attrs = gtk_css_style_get_pango_attributes (style);
+  desc = gtk_css_style_get_pango_font (style);
+
+  pango_layout_set_attributes (layout, attrs);
+  pango_layout_set_font_description (layout, desc);
+
+  if (attrs)
+    pango_attr_list_unref (attrs);
+  pango_font_description_free (desc);
+
+  g_free (buf);
+
+  return layout;
+}
+
 static void
 gtk_progress_bar_measure_text (GtkCssGadget   *gadget,
                                GtkOrientation  orientation,
@@ -774,7 +803,6 @@ gtk_progress_bar_measure_text (GtkCssGadget   *gadget,
   GtkWidget *widget;
   GtkProgressBar *pbar;
   GtkProgressBarPrivate *priv;
-  gchar *buf;
   PangoLayout *layout;
   PangoRectangle logical_rect;
 
@@ -782,8 +810,7 @@ gtk_progress_bar_measure_text (GtkCssGadget   *gadget,
   pbar = GTK_PROGRESS_BAR (widget);
   priv = pbar->priv;
 
-  buf = get_current_text (pbar);
-  layout = gtk_widget_create_pango_layout (widget, buf);
+  layout = gtk_progress_bar_get_layout (pbar);
 
   pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
 
@@ -798,7 +825,7 @@ gtk_progress_bar_measure_text (GtkCssGadget   *gadget,
           /* The minimum size for ellipsized text is ~ 3 chars */
           context = pango_layout_get_context (layout);
           metrics = pango_context_get_metrics (context,
-                                               pango_context_get_font_description (context),
+                                               pango_layout_get_font_description (layout),
                                                pango_context_get_language (context));
 
           char_width = pango_font_metrics_get_approximate_char_width (metrics);
@@ -815,7 +842,6 @@ gtk_progress_bar_measure_text (GtkCssGadget   *gadget,
     *minimum = *natural = logical_rect.height;
 
   g_object_unref (layout);
-  g_free (buf);
 }
 
 static gint
@@ -1281,7 +1307,6 @@ gtk_progress_bar_render_text (GtkCssGadget *gadget,
   GtkProgressBar *pbar;
   GtkProgressBarPrivate *priv;
   GtkStyleContext *context;
-  gchar *buf;
   PangoLayout *layout;
 
   widget = gtk_css_gadget_get_owner (gadget);
@@ -1291,8 +1316,7 @@ gtk_progress_bar_render_text (GtkCssGadget *gadget,
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_save_to_node (context, gtk_css_gadget_get_node (gadget));
 
-  buf = get_current_text (pbar);
-  layout = gtk_widget_create_pango_layout (widget, buf);
+  layout = gtk_progress_bar_get_layout (pbar);
   pango_layout_set_ellipsize (layout, priv->ellipsize);
   if (priv->ellipsize)
     pango_layout_set_width (layout, width * PANGO_SCALE);
@@ -1300,7 +1324,6 @@ gtk_progress_bar_render_text (GtkCssGadget *gadget,
   gtk_render_layout (context, cr, x, y, layout);
 
   g_object_unref (layout);
-  g_free (buf);
 
   gtk_style_context_restore (context);
 
@@ -1478,6 +1501,19 @@ gtk_progress_bar_set_text (GtkProgressBar *pbar,
   g_object_notify_by_pspec (G_OBJECT (pbar), progress_props[PROP_TEXT]);
 }
 
+static void
+gtk_progress_bar_text_style_changed (GtkCssNode        *node,
+                                     GtkCssStyleChange *change,
+                                     GtkProgressBar    *pbar)
+{
+  if (change == NULL ||
+      gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT_ATTRS) ||
+      gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_FONT))
+    {
+      gtk_widget_queue_resize (GTK_WIDGET (pbar));
+    }
+}
+
 /**
  * gtk_progress_bar_set_show_text:
  * @pbar: a #GtkProgressBar
@@ -1522,6 +1558,9 @@ gtk_progress_bar_set_show_text (GtkProgressBar *pbar,
                                                      gtk_progress_bar_render_text,
                                                      NULL,
                                                      NULL);
+      g_signal_connect (gtk_css_gadget_get_node (priv->text_gadget), "style-changed",
+                        G_CALLBACK (gtk_progress_bar_text_style_changed), pbar);
+
       update_node_state (pbar);
     }
   else
