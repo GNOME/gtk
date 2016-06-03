@@ -42,6 +42,7 @@
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkstylecontextprivate.h"
+#include "gtkstylepropertyprivate.h"
 #include "gtkwidgetprivate.h"
 
 #include "a11y/gtkscaleaccessible.h"
@@ -194,10 +195,12 @@ static void     gtk_scale_get_preferred_width     (GtkWidget      *widget,
 static void     gtk_scale_get_preferred_height    (GtkWidget      *widget,
                                                    gint           *minimum,
                                                    gint           *natural);
-static void     gtk_scale_style_updated           (GtkWidget      *widget);
 static void     gtk_scale_get_range_border        (GtkRange       *range,
                                                    GtkBorder      *border);
 static void     gtk_scale_finalize                (GObject        *object);
+static void     gtk_scale_value_style_changed     (GtkCssNode        *node,
+                                                   GtkCssStyleChange *change,
+                                                   GtkScale          *scale);
 static void     gtk_scale_screen_changed          (GtkWidget      *widget,
                                                    GdkScreen      *old_screen);
 static gboolean gtk_scale_draw                    (GtkWidget      *widget,
@@ -217,7 +220,8 @@ static void     gtk_scale_buildable_custom_finished  (GtkBuildable  *buildable,
                                                       GObject       *child,
                                                       const gchar   *tagname,
                                                       gpointer       user_data);
-static void     gtk_scale_clear_layout               (GtkScale      *scale);
+static void     gtk_scale_clear_value_layout         (GtkScale      *scale);
+static void     gtk_scale_clear_mark_layouts         (GtkScale      *scale);
 static gchar  * gtk_scale_format_value               (GtkScale      *scale,
                                                       gdouble        value);
 
@@ -706,7 +710,6 @@ gtk_scale_class_init (GtkScaleClass *class)
   gobject_class->notify = gtk_scale_notify;
   gobject_class->finalize = gtk_scale_finalize;
 
-  widget_class->style_updated = gtk_scale_style_updated;
   widget_class->screen_changed = gtk_scale_screen_changed;
   widget_class->draw = gtk_scale_draw;
   widget_class->size_allocate = gtk_scale_size_allocate;
@@ -1128,7 +1131,7 @@ gtk_scale_set_digits (GtkScale *scale,
       if (priv->draw_value)
         gtk_range_set_round_digits (range, digits);
 
-      gtk_scale_clear_layout (scale);
+      gtk_scale_clear_value_layout (scale);
       gtk_widget_queue_resize (GTK_WIDGET (scale));
 
       g_object_notify_by_pspec (G_OBJECT (scale), properties[PROP_DIGITS]);
@@ -1177,6 +1180,27 @@ gtk_scale_render_value (GtkCssGadget *gadget,
 }
 
 static void
+gtk_css_node_update_layout_attributes (GtkCssNode  *node,
+                                       PangoLayout *layout)
+{
+  GtkCssStyle *style;
+  PangoAttrList *attrs;
+  PangoFontDescription *desc;
+
+  style = gtk_css_node_get_style (node);
+
+  attrs = gtk_css_style_get_pango_attributes (style);
+  desc = gtk_css_style_get_pango_font (style);
+
+  pango_layout_set_attributes (layout, attrs);
+  pango_layout_set_font_description (layout, desc);
+
+  if (attrs)
+    pango_attr_list_unref (attrs);
+  pango_font_description_free (desc);
+}
+
+static void
 gtk_scale_measure_value (GtkCssGadget   *gadget,
                          GtkOrientation  orientation,
                          gint            for_size,
@@ -1201,6 +1225,8 @@ gtk_scale_measure_value (GtkCssGadget   *gadget,
       gchar *txt;
 
       layout = gtk_widget_create_pango_layout (widget, NULL);
+      gtk_css_node_update_layout_attributes (gtk_css_gadget_get_node (priv->value_gadget), layout);
+
       adjustment = gtk_range_get_adjustment (GTK_RANGE (scale));
 
       txt = gtk_scale_format_value (scale, gtk_adjustment_get_lower (adjustment));
@@ -1286,6 +1312,8 @@ gtk_scale_set_draw_value (GtkScale *scale,
                                                           NULL,
                                                           gtk_scale_render_value,
                                                           NULL, NULL);
+          g_signal_connect (gtk_css_gadget_get_node (priv->value_gadget), "style-changed",
+                            G_CALLBACK (gtk_scale_value_style_changed), scale);
 
           if (priv->value_pos == GTK_POS_TOP || priv->value_pos == GTK_POS_LEFT)
             gtk_css_node_insert_after (widget_node, gtk_css_gadget_get_node (priv->value_gadget), NULL);
@@ -1304,7 +1332,7 @@ gtk_scale_set_draw_value (GtkScale *scale,
           gtk_range_set_round_digits (GTK_RANGE (scale), -1);
         }
 
-      gtk_scale_clear_layout (scale);
+      gtk_scale_clear_value_layout (scale);
 
       gtk_widget_queue_resize (widget);
 
@@ -1400,7 +1428,7 @@ gtk_scale_set_value_pos (GtkScale        *scale,
       priv->value_pos = pos;
       widget = GTK_WIDGET (scale);
 
-      gtk_scale_clear_layout (scale);
+      gtk_scale_clear_value_layout (scale);
       update_value_position (scale);
 
       if (gtk_widget_get_visible (widget) && gtk_widget_get_mapped (widget))
@@ -1524,18 +1552,33 @@ gtk_scale_get_range_border (GtkRange  *range,
 }
 
 static void
-gtk_scale_style_updated (GtkWidget *widget)
+gtk_scale_value_style_changed (GtkCssNode        *node,
+                               GtkCssStyleChange *change,
+                               GtkScale          *scale)
 {
-  gtk_scale_clear_layout (GTK_SCALE (widget));
+  if (change == NULL ||
+      gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT_ATTRS) ||
+      gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_FONT))
+    gtk_scale_clear_value_layout (scale);
+}
 
-  GTK_WIDGET_CLASS (gtk_scale_parent_class)->style_updated (widget);
+static void
+gtk_scale_mark_style_changed (GtkCssNode        *node,
+                              GtkCssStyleChange *change,
+                              GtkScaleMark      *mark)
+{
+  if (change == NULL ||
+      gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT_ATTRS) ||
+      gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_FONT))
+    g_clear_object (&mark->layout);
 }
 
 static void
 gtk_scale_screen_changed (GtkWidget *widget,
                           GdkScreen *old_screen)
 {
-  gtk_scale_clear_layout (GTK_SCALE (widget));
+  gtk_scale_clear_value_layout (GTK_SCALE (widget));
+  gtk_scale_clear_mark_layouts (GTK_SCALE (widget));
 }
 
 static void
@@ -1558,6 +1601,7 @@ gtk_scale_measure_mark_label (GtkCssGadget   *gadget,
     {
       mark->layout = gtk_widget_create_pango_layout (widget, NULL);
       pango_layout_set_markup (mark->layout, mark->markup, -1);
+      gtk_css_node_update_layout_attributes (gtk_css_gadget_get_node (gadget), mark->layout);
     }
 
   pango_layout_get_pixel_extents (mark->layout, NULL, &logical_rect);
@@ -1753,6 +1797,7 @@ gtk_scale_render_mark_label (GtkCssGadget *gadget,
 
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_save_to_node (context, gtk_css_gadget_get_node (gadget));
+  gtk_css_node_update_layout_attributes (gtk_css_gadget_get_node (gadget), mark->layout);
 
   gtk_render_layout (context, cr, x, y, mark->layout);
 
@@ -1875,7 +1920,7 @@ gtk_scale_finalize (GObject *object)
   GtkScale *scale = GTK_SCALE (object);
   GtkScalePrivate *priv = scale->priv;
 
-  gtk_scale_clear_layout (scale);
+  gtk_scale_clear_value_layout (scale);
   gtk_scale_clear_marks (scale);
 
   if (priv->value_gadget)
@@ -1913,6 +1958,7 @@ gtk_scale_get_layout (GtkScale *scale)
       int min_layout_width;
 
       priv->layout = gtk_widget_create_pango_layout (GTK_WIDGET (scale), NULL);
+      gtk_css_node_update_layout_attributes (gtk_css_gadget_get_node (priv->value_gadget), priv->layout);
 
       gtk_css_gadget_get_preferred_size (priv->value_gadget,
                                          GTK_ORIENTATION_HORIZONTAL, -1,
@@ -1976,7 +2022,7 @@ gtk_scale_get_layout_offsets (GtkScale *scale,
 }
 
 static void
-gtk_scale_clear_layout (GtkScale *scale)
+gtk_scale_clear_value_layout (GtkScale *scale)
 {
   g_set_object (&scale->priv->layout, NULL);
 }
@@ -1996,6 +2042,18 @@ gtk_scale_mark_free (gpointer data)
   g_clear_object (&mark->layout);
   g_free (mark->markup);
   g_free (mark);
+}
+
+static void
+gtk_scale_clear_mark_layouts (GtkScale *scale)
+{
+  GSList *m;
+
+  for (m = scale->priv->marks; m; m = m->next)
+    {
+      GtkScaleMark *mark = m->data;
+      g_clear_object (&mark->layout);
+    }
 }
 
 /**
@@ -2153,15 +2211,19 @@ gtk_scale_add_mark (GtkScale        *scale,
                                gtk_scale_render_mark_indicator,
                                mark, NULL);
   if (mark->markup && *mark->markup)
-    mark->label_gadget =
-      gtk_css_custom_gadget_new ("label",
-                                 widget, mark->gadget,
-                                 mark->position == GTK_POS_TOP ?
-                                 NULL : mark->indicator_gadget,
-                                 gtk_scale_measure_mark_label,
-                                 NULL,
-                                 gtk_scale_render_mark_label,
-                                 mark, NULL);
+    {
+      mark->label_gadget =
+        gtk_css_custom_gadget_new ("label",
+                                   widget, mark->gadget,
+                                   mark->position == GTK_POS_TOP ?
+                                   NULL : mark->indicator_gadget,
+                                   gtk_scale_measure_mark_label,
+                                   NULL,
+                                   gtk_scale_render_mark_label,
+                                   mark, NULL);
+      g_signal_connect (gtk_css_gadget_get_node (mark->label_gadget), "style-changed",
+                        G_CALLBACK (gtk_scale_mark_style_changed), mark);
+    }
 
   m = g_slist_find (priv->marks, mark);
   m = m->next;
