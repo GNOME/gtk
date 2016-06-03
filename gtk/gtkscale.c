@@ -44,6 +44,7 @@
 #include "gtkstylecontextprivate.h"
 #include "gtkstylepropertyprivate.h"
 #include "gtkwidgetprivate.h"
+#include "gtkcsswidgetnodeprivate.h"
 
 #include "a11y/gtkscaleaccessible.h"
 
@@ -1559,7 +1560,10 @@ gtk_scale_value_style_changed (GtkCssNode        *node,
   if (change == NULL ||
       gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT_ATTRS) ||
       gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_FONT))
-    gtk_scale_clear_value_layout (scale);
+    {
+      gtk_scale_clear_value_layout (scale);
+      gtk_widget_queue_resize (GTK_WIDGET (scale));
+    }
 }
 
 static void
@@ -1570,7 +1574,16 @@ gtk_scale_mark_style_changed (GtkCssNode        *node,
   if (change == NULL ||
       gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT_ATTRS) ||
       gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_FONT))
-    g_clear_object (&mark->layout);
+    {
+      GtkCssNode *widget_node;
+      GtkWidget *scale;
+
+      g_clear_object (&mark->layout);
+
+      widget_node = gtk_css_node_get_parent (gtk_css_node_get_parent (gtk_css_node_get_parent (node)));
+      scale = gtk_css_widget_node_get_widget (GTK_CSS_WIDGET_NODE (widget_node));
+      gtk_widget_queue_resize (GTK_WIDGET (scale));
+    }
 }
 
 static void
