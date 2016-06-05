@@ -4646,11 +4646,6 @@ setup_drag_move_resize_context (GdkWindow                   *window,
                      context->op, context->edge, context->device,
                      context->button, context->start_root_x,
                      context->start_root_y, context->timestamp));
-
-  if (context->current_snap != GDK_WIN32_AEROSNAP_STATE_UNDETERMINED)
-    apply_snap (window, context->current_snap);
-
-  context->current_snap = GDK_WIN32_AEROSNAP_STATE_UNDETERMINED;
 }
 
 void
@@ -4701,6 +4696,11 @@ gdk_win32_window_end_move_resize_drag (GdkWindow *window)
                      context->op, context->edge, context->device,
                      context->button, context->start_root_x,
                      context->start_root_y, context->timestamp));
+
+  if (context->current_snap != GDK_WIN32_AEROSNAP_STATE_UNDETERMINED)
+    apply_snap (window, context->current_snap);
+
+  context->current_snap = GDK_WIN32_AEROSNAP_STATE_UNDETERMINED;
 }
 
 void
