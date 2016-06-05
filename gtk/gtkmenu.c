@@ -214,6 +214,7 @@ static void     gtk_menu_get_property      (GObject          *object,
                                             guint             prop_id,
                                             GValue           *value,
                                             GParamSpec       *pspec);
+static void     gtk_menu_finalize          (GObject          *object);
 static void     gtk_menu_set_child_property(GtkContainer     *container,
                                             GtkWidget        *child,
                                             guint             property_id,
@@ -511,6 +512,7 @@ gtk_menu_class_init (GtkMenuClass *class)
   
   gobject_class->set_property = gtk_menu_set_property;
   gobject_class->get_property = gtk_menu_get_property;
+  gobject_class->finalize = gtk_menu_finalize;
 
   widget_class->destroy = gtk_menu_destroy;
   widget_class->realize = gtk_menu_realize;
@@ -1208,10 +1210,19 @@ gtk_menu_destroy (GtkWidget *widget)
       priv->position_func_data_destroy = NULL;
     }
 
+  GTK_WIDGET_CLASS (gtk_menu_parent_class)->destroy (widget);
+}
+
+static void
+gtk_menu_finalize (GObject *object)
+{
+  GtkMenu *menu = GTK_MENU (object);
+  GtkMenuPrivate *priv = menu->priv;
+
   g_clear_object (&priv->top_arrow_gadget);
   g_clear_object (&priv->bottom_arrow_gadget);
 
-  GTK_WIDGET_CLASS (gtk_menu_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (gtk_menu_parent_class)->finalize (object);
 }
 
 static void
