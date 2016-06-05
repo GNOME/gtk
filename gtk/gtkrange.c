@@ -177,6 +177,7 @@ static void gtk_range_get_property   (GObject          *object,
                                       guint             prop_id,
                                       GValue           *value,
                                       GParamSpec       *pspec);
+static void gtk_range_finalize       (GObject          *object);
 static void gtk_range_destroy        (GtkWidget        *widget);
 static void gtk_range_get_preferred_width
                                      (GtkWidget        *widget,
@@ -321,6 +322,7 @@ gtk_range_class_init (GtkRangeClass *class)
 
   gobject_class->set_property = gtk_range_set_property;
   gobject_class->get_property = gtk_range_get_property;
+  gobject_class->finalize = gtk_range_finalize;
 
   widget_class->destroy = gtk_range_destroy;
   widget_class->get_preferred_width = gtk_range_get_preferred_width;
@@ -1753,21 +1755,6 @@ gtk_range_destroy (GtkWidget *widget)
 
   gtk_range_remove_step_timer (range);
 
-  g_clear_object (&priv->drag_gesture);
-  g_clear_object (&priv->multipress_gesture);
-  g_clear_object (&priv->long_press_gesture);
-
-  g_clear_object (&priv->gadget);
-  g_clear_object (&priv->contents_gadget);
-  g_clear_object (&priv->trough_gadget);
-  g_clear_object (&priv->fill_gadget);
-  g_clear_object (&priv->highlight_gadget);
-  g_clear_object (&priv->slider_gadget);
-  g_clear_object (&priv->stepper_a_gadget);
-  g_clear_object (&priv->stepper_b_gadget);
-  g_clear_object (&priv->stepper_c_gadget);
-  g_clear_object (&priv->stepper_d_gadget);
-
   if (priv->adjustment)
     {
       g_signal_handlers_disconnect_by_func (priv->adjustment,
@@ -1790,6 +1777,30 @@ gtk_range_destroy (GtkWidget *widget)
     }
 
   GTK_WIDGET_CLASS (gtk_range_parent_class)->destroy (widget);
+}
+
+static void
+gtk_range_finalize (GObject *object)
+{
+  GtkRange *range = GTK_RANGE (object);
+  GtkRangePrivate *priv = range->priv;
+
+  g_clear_object (&priv->drag_gesture);
+  g_clear_object (&priv->multipress_gesture);
+  g_clear_object (&priv->long_press_gesture);
+
+  g_clear_object (&priv->gadget);
+  g_clear_object (&priv->contents_gadget);
+  g_clear_object (&priv->trough_gadget);
+  g_clear_object (&priv->fill_gadget);
+  g_clear_object (&priv->highlight_gadget);
+  g_clear_object (&priv->slider_gadget);
+  g_clear_object (&priv->stepper_a_gadget);
+  g_clear_object (&priv->stepper_b_gadget);
+  g_clear_object (&priv->stepper_c_gadget);
+  g_clear_object (&priv->stepper_d_gadget);
+
+  G_OBJECT_CLASS (gtk_range_parent_class)->finalize (object);
 }
 
 static void
