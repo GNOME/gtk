@@ -103,6 +103,7 @@ static void gtk_viewport_get_property             (GObject         *object,
 						   guint            prop_id,
 						   GValue          *value,
 						   GParamSpec      *pspec);
+static void gtk_viewport_finalize                 (GObject         *object);
 static void gtk_viewport_destroy                  (GtkWidget        *widget);
 static void gtk_viewport_realize                  (GtkWidget        *widget);
 static void gtk_viewport_unrealize                (GtkWidget        *widget);
@@ -374,6 +375,7 @@ gtk_viewport_class_init (GtkViewportClass *class)
 
   gobject_class->set_property = gtk_viewport_set_property;
   gobject_class->get_property = gtk_viewport_get_property;
+  gobject_class->finalize = gtk_viewport_finalize;
 
   widget_class->destroy = gtk_viewport_destroy;
   widget_class->realize = gtk_viewport_realize;
@@ -575,11 +577,20 @@ gtk_viewport_destroy (GtkWidget *widget)
   viewport_disconnect_adjustment (viewport, GTK_ORIENTATION_HORIZONTAL);
   viewport_disconnect_adjustment (viewport, GTK_ORIENTATION_VERTICAL);
 
-  g_clear_object (&priv->gadget);
-
   GTK_WIDGET_CLASS (gtk_viewport_parent_class)->destroy (widget);
 
   g_clear_pointer (&priv->pixel_cache, _gtk_pixel_cache_free);
+}
+
+static void
+gtk_viewport_finalize (GObject *object)
+{
+  GtkViewport *viewport = GTK_VIEWPORT (object);
+  GtkViewportPrivate *priv = viewport->priv;
+
+  g_clear_object (&priv->gadget);
+
+  G_OBJECT_CLASS (gtk_viewport_parent_class)->finalize (object);
 }
 
 /**
