@@ -353,6 +353,7 @@ static void gtk_notebook_get_property        (GObject         *object,
                                               guint            prop_id,
                                               GValue          *value,
                                               GParamSpec      *pspec);
+static void gtk_notebook_finalize            (GObject         *object);
 
 /*** GtkWidget Methods ***/
 static void gtk_notebook_destroy             (GtkWidget        *widget);
@@ -703,6 +704,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 
   gobject_class->set_property = gtk_notebook_set_property;
   gobject_class->get_property = gtk_notebook_get_property;
+  gobject_class->finalize = gtk_notebook_finalize;
 
   widget_class->destroy = gtk_notebook_destroy;
   widget_class->map = gtk_notebook_map;
@@ -1830,11 +1832,20 @@ gtk_notebook_destroy (GtkWidget *widget)
   remove_switch_tab_timer (notebook);
 
   GTK_WIDGET_CLASS (gtk_notebook_parent_class)->destroy (widget);
+}
+
+static void
+gtk_notebook_finalize (GObject *object)
+{
+  GtkNotebook *notebook = GTK_NOTEBOOK (object);
+  GtkNotebookPrivate *priv = notebook->priv;
 
   g_clear_object (&priv->gadget);
   g_clear_object (&priv->header_gadget);
   g_clear_object (&priv->tabs_gadget);
   g_clear_object (&priv->stack_gadget);
+
+  G_OBJECT_CLASS (gtk_notebook_parent_class)->finalize (object);
 }
 
 static void
