@@ -305,6 +305,7 @@ static void     gtk_scrolled_window_get_property       (GObject           *objec
                                                         guint              prop_id,
                                                         GValue            *value,
                                                         GParamSpec        *pspec);
+static void     gtk_scrolled_window_finalize           (GObject           *object);
 
 static void     gtk_scrolled_window_destroy            (GtkWidget         *widget);
 static gboolean gtk_scrolled_window_draw               (GtkWidget         *widget,
@@ -512,6 +513,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
 
   gobject_class->set_property = gtk_scrolled_window_set_property;
   gobject_class->get_property = gtk_scrolled_window_get_property;
+  gobject_class->finalize = gtk_scrolled_window_finalize;
 
   widget_class->destroy = gtk_scrolled_window_destroy;
   widget_class->draw = gtk_scrolled_window_draw;
@@ -1760,7 +1762,8 @@ gtk_scrolled_window_measure (GtkCssGadget   *gadget,
 		  natural_req.width = MAX (natural_req.width, priv->min_content_width);
 		  extra_width = -1;
 		}
-	      else if (policy_may_be_visible (priv->vscrollbar_policy) && !priv->use_indicators)
+
+	      if (policy_may_be_visible (priv->vscrollbar_policy) && !priv->use_indicators)
 		{
 		  minimum_req.width += vscrollbar_requisition.width;
 		  natural_req.width += vscrollbar_requisition.width;
@@ -1786,7 +1789,8 @@ gtk_scrolled_window_measure (GtkCssGadget   *gadget,
 		  natural_req.height = MAX (natural_req.height, priv->min_content_height);
 		  extra_height = -1;
 		}
-	      else if (policy_may_be_visible (priv->hscrollbar_policy) && !priv->use_indicators)
+
+	      if (policy_may_be_visible (priv->hscrollbar_policy) && !priv->use_indicators)
 		{
 		  minimum_req.height += hscrollbar_requisition.height;
 		  natural_req.height += hscrollbar_requisition.height;
@@ -2709,13 +2713,22 @@ gtk_scrolled_window_destroy (GtkWidget *widget)
       priv->scroll_events_overshoot_id = 0;
     }
 
+  GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->destroy (widget);
+}
+
+static void
+gtk_scrolled_window_finalize (GObject *object)
+{
+  GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (object);
+  GtkScrolledWindowPrivate *priv = scrolled_window->priv;
+
   g_clear_object (&priv->drag_gesture);
   g_clear_object (&priv->swipe_gesture);
   g_clear_object (&priv->long_press_gesture);
   g_clear_object (&priv->gadget);
   g_clear_pointer (&priv->scroll_history, (GDestroyNotify) g_array_unref);
 
-  GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (gtk_scrolled_window_parent_class)->finalize (object);
 }
 
 static void
