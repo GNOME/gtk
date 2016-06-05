@@ -115,7 +115,7 @@ enum {
 };
 
 
-static void gtk_button_destroy        (GtkWidget          *widget);
+static void gtk_button_finalize       (GObject            *object);
 static void gtk_button_dispose        (GObject            *object);
 static void gtk_button_set_property   (GObject            *object,
                                        guint               prop_id,
@@ -241,6 +241,7 @@ gtk_button_class_init (GtkButtonClass *klass)
   
   gobject_class->constructed  = gtk_button_constructed;
   gobject_class->dispose      = gtk_button_dispose;
+  gobject_class->finalize     = gtk_button_finalize;
   gobject_class->set_property = gtk_button_set_property;
   gobject_class->get_property = gtk_button_get_property;
 
@@ -249,7 +250,6 @@ gtk_button_class_init (GtkButtonClass *klass)
   widget_class->get_preferred_width_for_height = gtk_button_get_preferred_width_for_height;
   widget_class->get_preferred_height_for_width = gtk_button_get_preferred_height_for_width;
   widget_class->get_preferred_height_and_baseline_for_width = gtk_button_get_preferred_height_and_baseline_for_width;
-  widget_class->destroy = gtk_button_destroy;
   widget_class->screen_changed = gtk_button_screen_changed;
   widget_class->realize = gtk_button_realize;
   widget_class->unrealize = gtk_button_unrealize;
@@ -755,16 +755,16 @@ gtk_button_init (GtkButton *button)
 }
 
 static void
-gtk_button_destroy (GtkWidget *widget)
+gtk_button_finalize (GObject *object)
 {
-  GtkButton *button = GTK_BUTTON (widget);
+  GtkButton *button = GTK_BUTTON (object);
   GtkButtonPrivate *priv = button->priv;
 
   g_clear_pointer (&priv->label_text, g_free);
   g_clear_object (&priv->gesture);
   g_clear_object (&priv->gadget);
 
-  GTK_WIDGET_CLASS (gtk_button_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (gtk_button_parent_class)->finalize (object);
 }
 
 static void
