@@ -149,6 +149,8 @@ static void       gtk_tooltip_display_closed       (GdkDisplay      *display,
 static void       gtk_tooltip_set_last_window      (GtkTooltip      *tooltip,
 						    GdkWindow       *window);
 
+static void       gtk_tooltip_handle_event_internal (GdkEvent        *event);
+
 static inline GQuark tooltip_quark (void)
 {
   static GQuark quark;
@@ -460,7 +462,7 @@ gtk_tooltip_trigger_tooltip_query (GdkDisplay *display)
   event.motion.x_root = x;
   event.motion.y_root = y;
 
-  _gtk_tooltip_handle_event (&event);
+  gtk_tooltip_handle_event_internal (&event);
 }
 
 /* private functions */
@@ -1405,14 +1407,20 @@ tooltips_enabled (GdkEvent *event)
 void
 _gtk_tooltip_handle_event (GdkEvent *event)
 {
+  if (!tooltips_enabled (event))
+    return;
+
+  gtk_tooltip_handle_event_internal (event);
+}
+
+static void
+gtk_tooltip_handle_event_internal (GdkEvent *event)
+{
   gint x, y;
   gboolean return_value = FALSE;
   GtkWidget *has_tooltip_widget = NULL;
   GdkDisplay *display;
   GtkTooltip *current_tooltip;
-
-  if (!tooltips_enabled (event))
-    return;
 
   /* Returns coordinates relative to has_tooltip_widget's allocation. */
   has_tooltip_widget = find_topmost_widget_coords_from_event (event, &x, &y);
