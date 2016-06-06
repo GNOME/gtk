@@ -1223,7 +1223,7 @@ xdg_surface_configure (void               *data,
   GdkWindow *window = GDK_WINDOW (data);
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   GdkWindowState new_state = 0;
-  gboolean maximized_or_fullscreen;
+  gboolean fixed_size;
   uint32_t *p;
 
   wl_array_for_each (p, states)
@@ -1252,8 +1252,8 @@ xdg_surface_configure (void               *data,
         }
     }
 
-   maximized_or_fullscreen =
-       new_state & (GDK_WINDOW_STATE_MAXIMIZED | GDK_WINDOW_STATE_FULLSCREEN);
+   fixed_size =
+       new_state & (GDK_WINDOW_STATE_MAXIMIZED | GDK_WINDOW_STATE_FULLSCREEN | GDK_WINDOW_STATE_TILED);
 
     /* According to xdg_shell, an xdg_surface.configure with size 0x0
      * should be interpreted as that it is up to the client to set a
@@ -1263,7 +1263,7 @@ xdg_surface_configure (void               *data,
      * the client should configure its size back to what it was before
      * being maximize or fullscreen.
      */
-   if (width == 0 && height == 0 && !maximized_or_fullscreen)
+   if (width == 0 && height == 0 && !fixed_size)
     {
       width = impl->saved_width;
       height = impl->saved_height;
@@ -1274,7 +1274,7 @@ xdg_surface_configure (void               *data,
       GdkWindowHints geometry_mask = impl->geometry_mask;
 
       /* Ignore size increments for maximized/fullscreen windows */
-      if (maximized_or_fullscreen)
+      if (fixed_size)
         geometry_mask &= ~GDK_HINT_RESIZE_INC;
 
       gdk_window_constrain_size (&impl->geometry_hints,
