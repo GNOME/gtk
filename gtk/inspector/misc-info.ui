@@ -660,6 +660,8 @@
                             <property name="visible">true</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
+                            <property name="ellipsize">end</property>
+                            <property name="max-width-chars">50</property>
                           </object>
                         </child>
                       </object>
