@@ -1413,3 +1413,19 @@ GDK_TYPE_MONITOR
 GDK_MONITOR
 GDK_IS_MONITOR
 </SECTION>
+
+<SECTION>
+<FILE>gdkdrawingcontext</FILE>
+GdkDrawingContext
+gdk_drawing_context_get_window
+gdk_drawing_context_get_clip
+gdk_drawing_context_get_cairo_context
+gdk_drawing_context_is_valid
+
+<SUBSECTION Standard>
+gdk_drawing_context_get_type
+GdkDrawingContextClass
+GDK_TYPE_DRAWING_CONTEXT
+GDK_DRAWING_CONTEXT
+GDK_IS_DRAWING_CONTEXT
+</SECTION>
