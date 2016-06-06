@@ -13564,7 +13564,7 @@ gtk_tree_view_get_path_at_pos (GtkTreeView        *tree_view,
 
 	  last_column = tmp_column;
           width = gtk_tree_view_column_get_width (tmp_column);
-	  if (remaining_x <= width)
+	  if (remaining_x < width)
 	    {
               found = TRUE;
 
