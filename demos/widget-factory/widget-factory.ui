@@ -4127,8 +4127,10 @@ bad things might happen.</property>
             <property name="valign">start</property>
             <property name="visible">1</property>
             <property name="shadow-type">in</property>
-            <property name="hscrollbar-policy">never</property>
             <property name="min-content-height">70</property>
+            <property name="max-content-height">120</property>
+            <property name="min-content-width">100</property>
+            <property name="max-content-width">100</property>
             <child>
               <object class="GtkTextView" id="open_popover_textview">
                 <property name="visible">1</property>
