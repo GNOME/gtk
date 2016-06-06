@@ -242,10 +242,10 @@ sparql_append_string_literal (GString     *sparql,
 
   if (is_dir_uri)
     g_string_append_c (sparql, '/');
-  if (glob)
-    g_string_append_c (sparql, '*');
   if (quoted)
     g_string_append (sparql, "\\\"");
+  if (glob)
+    g_string_append_c (sparql, '*');
   g_string_append_c (sparql, '"');
 
   g_free (s);
