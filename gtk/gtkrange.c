@@ -3648,7 +3648,7 @@ gtk_range_calc_slider (GtkRange *range)
 
   gtk_css_gadget_set_visible (priv->slider_gadget, visible);
 
-  gtk_css_gadget_queue_allocate (priv->slider_gadget);
+  gtk_css_gadget_queue_resize (priv->slider_gadget);
 
   if (priv->has_origin)
     gtk_css_gadget_queue_allocate (priv->trough_gadget);
