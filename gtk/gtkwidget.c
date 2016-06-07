@@ -9294,10 +9294,10 @@ gtk_widget_get_app_paintable (GtkWidget *widget)
  *
  * Widgets are double buffered by default; you can use this function
  * to turn off the buffering. “Double buffered” simply means that
- * gdk_window_begin_paint_region() and gdk_window_end_paint() are called
+ * gdk_window_begin_draw_frame() and gdk_window_end_draw_frame() are called
  * automatically around expose events sent to the
- * widget. gdk_window_begin_paint_region() diverts all drawing to a widget's
- * window to an offscreen buffer, and gdk_window_end_paint() draws the
+ * widget. gdk_window_begin_draw_frame() diverts all drawing to a widget's
+ * window to an offscreen buffer, and gdk_window_end_draw_frame() draws the
  * buffer to the screen. The result is that users see the window
  * update in one smooth step, and don’t see individual graphics
  * primitives being rendered.
@@ -9309,7 +9309,7 @@ gtk_widget_get_app_paintable (GtkWidget *widget)
  * Note: if you turn off double-buffering, you have to handle
  * expose events, since even the clearing to the background color or
  * pixmap will not happen automatically (as it is done in
- * gdk_window_begin_paint_region()).
+ * gdk_window_begin_draw_frame()).
  *
  * In 3.10 GTK and GDK have been restructured for translucent drawing. Since
  * then expose events for double-buffered widgets are culled into a single
