@@ -231,12 +231,21 @@ gdk_drawing_context_get_cairo_context (GdkDrawingContext *context)
 
   if (context->cr == NULL)
     {
-      context->cr = gdk_cairo_create (context->window);
+      cairo_region_t *region;
+      cairo_surface_t *surface;
+
+      surface = _gdk_window_ref_cairo_surface (context->window);
+      context->cr = cairo_create (surface);
 
       gdk_cairo_set_drawing_context (context->cr, context);
 
-      gdk_cairo_region (context->cr, context->clip);
+      region = gdk_window_get_current_paint_region (context->window);
+      cairo_region_union (region, context->clip);
+      gdk_cairo_region (context->cr, region);
       cairo_clip (context->cr);
+
+      cairo_region_destroy (region);
+      cairo_surface_destroy (surface);
     }
 
   return context->cr;
