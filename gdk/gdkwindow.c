@@ -2949,7 +2949,7 @@ gdk_window_end_paint_internal (GdkWindow *window)
 
   if (window->current_paint.surface == NULL)
     {
-      g_warning (G_STRLOC": no preceding call to gdk_window_begin_paint_region(), see documentation");
+      g_warning (G_STRLOC": no preceding call to gdk_window_begin_draw_frame(), see documentation");
       return;
     }
 
@@ -3043,7 +3043,8 @@ gdk_window_end_paint_internal (GdkWindow *window)
  * creates a rectangular region for you. See
  * gdk_window_begin_paint_region() for details.
  *
- **/
+ * Deprecated: 3.22: Use gdk_window_begin_draw_frame() instead
+ */
 void
 gdk_window_begin_paint_rect (GdkWindow          *window,
 			     const GdkRectangle *rectangle)
@@ -3101,7 +3102,8 @@ gdk_window_begin_paint_rect (GdkWindow          *window,
  * gdk_window_end_paint() is required for each call to
  * gdk_window_begin_paint_region().
  *
- **/
+ * Deprecated: 3.22: Use gdk_window_begin_draw_frame() instead
+ */
 void
 gdk_window_begin_paint_region (GdkWindow            *window,
 			       const cairo_region_t *region)
