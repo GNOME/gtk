@@ -16361,6 +16361,8 @@ gint
 gtk_widget_path_append_for_widget (GtkWidgetPath *path,
                                    GtkWidget     *widget)
 {
+  const GQuark *classes;
+  guint n_classes, i;
   gint pos;
 
   g_return_val_if_fail (path != NULL, 0);
@@ -16374,19 +16376,10 @@ gtk_widget_path_append_for_widget (GtkWidgetPath *path,
 
   gtk_widget_path_iter_set_state (path, pos, widget->priv->state_flags);
 
-  if (widget->priv->context)
-    {
-      const GQuark *classes;
-      guint n_classes, i;
+  classes = gtk_css_node_list_classes (widget->priv->cssnode, &n_classes);
 
-      /* Also add any persistent classes in
-       * the style context the widget path
-       */
-      classes = gtk_css_node_list_classes (widget->priv->cssnode, &n_classes);
-
-      for (i = n_classes; i-- > 0;)
-        gtk_widget_path_iter_add_qclass (path, pos, classes[i]);
-    }
+  for (i = n_classes; i-- > 0;)
+    gtk_widget_path_iter_add_qclass (path, pos, classes[i]);
 
   return pos;
 }
