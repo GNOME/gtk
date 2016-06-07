@@ -1756,20 +1756,16 @@ gtk_scrolled_window_measure (GtkCssGadget   *gadget,
   GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
   GtkBin *bin = GTK_BIN (scrolled_window);
-  gint extra_width;
-  gint extra_height;
   gint scrollbar_spacing;
   GtkRequisition hscrollbar_requisition;
   GtkRequisition vscrollbar_requisition;
   GtkRequisition minimum_req, natural_req;
   GtkWidget *child;
   gint min_child_size, nat_child_size;
-  GtkBorder border = { 0 };
+  GtkBorder sborder = { 0 };
 
   scrollbar_spacing = _gtk_scrolled_window_get_scrollbar_spacing (scrolled_window);
 
-  extra_width = 0;
-  extra_height = 0;
   minimum_req.width = 0;
   minimum_req.height = 0;
   natural_req.width = 0;
@@ -1783,8 +1779,11 @@ gtk_scrolled_window_measure (GtkCssGadget   *gadget,
   child = gtk_bin_get_child (bin);
 
   if (GTK_IS_SCROLLABLE (child))
-    gtk_scrollable_get_border (GTK_SCROLLABLE (child), &border);
+    gtk_scrollable_get_border (GTK_SCROLLABLE (child), &sborder);
 
+  /*
+   * First collect the child requisition
+   */
   if (child && gtk_widget_get_visible (child))
     {
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
@@ -1793,39 +1792,19 @@ gtk_scrolled_window_measure (GtkCssGadget   *gadget,
                                           &min_child_size,
                                           &nat_child_size);
 
+	  natural_req.width += nat_child_size;
+
 	  if (priv->hscrollbar_policy == GTK_POLICY_NEVER)
 	    {
 	      minimum_req.width += min_child_size;
-	      natural_req.width += nat_child_size;
 	    }
 	  else
 	    {
-	      if (priv->min_content_width >= 0)
-		{
-		  minimum_req.width += priv->min_content_width;
-		  natural_req.width += priv->min_content_width;
-		  extra_width = -1;
-		}
+	      gint min = priv->min_content_width >= 0 ? priv->min_content_width : 0;
+	      gint max = priv->max_content_width >= 0 ? priv->max_content_width : G_MAXINT;
 
-              if (priv->max_content_width > -1 &&
-                  priv->max_content_width > natural_req.width &&
-                  nat_child_size > natural_req.width)
-                {
-                  gint width = MIN (priv->max_content_width, min_child_size);
-
-                  /* The maximum content width must respect the minimum content width.
-                   * It'll grow at least until min_content_width, and at most until
-                   * max_content_width.
-                  */
-                  minimum_req.width = MAX (minimum_req.width, width);
-                  natural_req.width = MAX (natural_req.width, width);
-                }
-
-	      if (policy_may_be_visible (priv->vscrollbar_policy) && !priv->use_indicators)
-		{
-		  minimum_req.width += vscrollbar_requisition.width;
-		  natural_req.width += vscrollbar_requisition.width;
-		}
+	      minimum_req.width = CLAMP (minimum_req.width, min, max);
+	      natural_req.width = CLAMP (natural_req.width, min, max);
 	    }
 	}
       else /* GTK_ORIENTATION_VERTICAL */
@@ -1834,65 +1813,50 @@ gtk_scrolled_window_measure (GtkCssGadget   *gadget,
                                            &min_child_size,
                                            &nat_child_size);
 
+	  natural_req.height += nat_child_size;
+
 	  if (priv->vscrollbar_policy == GTK_POLICY_NEVER)
 	    {
 	      minimum_req.height += min_child_size;
-	      natural_req.height += nat_child_size;
 	    }
 	  else
 	    {
-	      if (priv->min_content_height >= 0)
-		{
-		  minimum_req.height += priv->min_content_height;
-		  natural_req.height += priv->min_content_height;
-		  extra_height = -1;
-		}
+	      gint min = priv->min_content_height >= 0 ? priv->min_content_height : 0;
+	      gint max = priv->max_content_height >= 0 ? priv->max_content_height : G_MAXINT;
 
-              if (priv->max_content_height > -1 &&
-                  priv->max_content_height > natural_req.height &&
-                  nat_child_size > natural_req.height)
-                {
-                  gint height = MIN (priv->max_content_height, min_child_size);
-
-                  /* The maximum content height must respect the minimum content height.
-                   * It'll grow at least until min_content_height, and at most until
-                   * max_content_height.
-                   */
-                  minimum_req.height = MAX (minimum_req.height, height);
-                  natural_req.height = MAX (natural_req.height, height);
-                }
-
-	      if (policy_may_be_visible (priv->hscrollbar_policy) && !priv->use_indicators)
-		{
-		  minimum_req.height += hscrollbar_requisition.height;
-		  natural_req.height += hscrollbar_requisition.height;
-		}
+	      minimum_req.height = CLAMP (minimum_req.height, min, max);
+	      natural_req.height = CLAMP (natural_req.height, min, max);
 	    }
 	}
     }
 
+  /*
+   * Now add to the requisition any additional space for surrounding scrollbars
+   * and the special scrollable border.
+   */
   if (policy_may_be_visible (priv->hscrollbar_policy))
     {
-      minimum_req.width = MAX (minimum_req.width, hscrollbar_requisition.width + border.left + border.right);
-      natural_req.width = MAX (natural_req.width, hscrollbar_requisition.width + border.left + border.right);
-      if (!priv->use_indicators &&
-          (!extra_height || priv->hscrollbar_policy == GTK_POLICY_ALWAYS))
-	extra_height = scrollbar_spacing + hscrollbar_requisition.height;
+      minimum_req.width = MAX (minimum_req.width, hscrollbar_requisition.width + sborder.left + sborder.right);
+      natural_req.width = MAX (natural_req.width, hscrollbar_requisition.width + sborder.left + sborder.right);
+
+      if (!priv->use_indicators)
+	{
+	  minimum_req.height += scrollbar_spacing + hscrollbar_requisition.height;
+	  natural_req.height += scrollbar_spacing + hscrollbar_requisition.height;
+	}
     }
 
   if (policy_may_be_visible (priv->vscrollbar_policy))
     {
-      minimum_req.height = MAX (minimum_req.height, vscrollbar_requisition.height + border.top + border.bottom);
-      natural_req.height = MAX (natural_req.height, vscrollbar_requisition.height + border.top + border.bottom);
-      if (!priv->use_indicators &&
-          (!extra_width || priv->vscrollbar_policy == GTK_POLICY_ALWAYS))
-	extra_width = scrollbar_spacing + vscrollbar_requisition.width;
-    }
+      minimum_req.height = MAX (minimum_req.height, vscrollbar_requisition.height + sborder.top + sborder.bottom);
+      natural_req.height = MAX (natural_req.height, vscrollbar_requisition.height + sborder.top + sborder.bottom);
 
-  minimum_req.width  += MAX (0, extra_width);
-  minimum_req.height += MAX (0, extra_height);
-  natural_req.width  += MAX (0, extra_width);
-  natural_req.height += MAX (0, extra_height);
+      if (!priv->use_indicators)
+	{
+	  minimum_req.width += scrollbar_spacing + vscrollbar_requisition.width;
+	  natural_req.width += scrollbar_spacing + vscrollbar_requisition.width;
+	}
+    }
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
