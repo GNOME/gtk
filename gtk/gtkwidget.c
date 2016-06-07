@@ -6925,6 +6925,7 @@ gboolean
 gtk_cairo_should_draw_window (cairo_t   *cr,
                               GdkWindow *window)
 {
+  GdkDrawingContext *context;
   GdkWindow *tmp;
 
   g_return_val_if_fail (cr != NULL, FALSE);
@@ -6933,8 +6934,11 @@ gtk_cairo_should_draw_window (cairo_t   *cr,
   if (gtk_cairo_is_marked_for_draw (cr))
     return TRUE;
 
-  tmp = gdk_cairo_get_window (cr);
+  context = gdk_cairo_get_drawing_context (cr);
+  if (context == NULL)
+    return TRUE;
 
+  tmp = gdk_drawing_context_get_window (context);
   if (tmp == NULL)
     return TRUE;
 
@@ -6964,22 +6968,25 @@ gtk_widget_draw_internal (GtkWidget *widget,
 
   if (gdk_cairo_get_clip_rectangle (cr, NULL))
     {
-      GdkWindow *event_window;
+      GdkWindow *event_window = NULL;
       gboolean result;
       gboolean push_group;
 
       /* If this was a cairo_t passed via gtk_widget_draw() then we don't
-       * require a window
+       * require a window; otherwise we check for the window associated
+       * to the drawing context and mark it using the clip region of the
+       * Cairo context.
        */
-      if (gtk_cairo_is_marked_for_draw (cr))
+      if (!gtk_cairo_is_marked_for_draw (cr))
         {
-          event_window = NULL;
-        }
-      else
-        {
-          event_window = gdk_cairo_get_window (cr);
-          if (event_window != NULL)
-            gdk_window_mark_paint_from_clip (event_window, cr);
+          GdkDrawingContext *context = gdk_cairo_get_drawing_context (cr);
+
+          if (context != NULL)
+            {
+              event_window = gdk_drawing_context_get_window (context);
+              if (event_window != NULL)
+                gdk_window_mark_paint_from_clip (event_window, cr);
+            }
         }
 
       push_group =

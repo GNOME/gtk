@@ -3111,33 +3111,6 @@ gdk_window_begin_paint_region (GdkWindow            *window,
   gdk_window_begin_paint_internal (window, region);
 }
 
-static const cairo_user_data_key_t draw_context_window_key;
-
-static void
-gdk_cairo_set_window (cairo_t *cr,
-                      GdkWindow *window)
-{
-  cairo_set_user_data (cr, &draw_context_window_key, window, NULL);
-}
-
-/**
- * gdk_cairo_get_window:
- * @cr: a Cairo context created by gdk_window_begin_draw_frame()
- *
- * Retrieves the #GdkWindow that created the Cairo context @cr.
- *
- * Returns: (nullable) (transfer none): a #GdkWindow
- *
- * Since: 3.22
- */
-GdkWindow *
-gdk_cairo_get_window (cairo_t *cr)
-{
-  g_return_val_if_fail (cr != NULL, NULL);
-
-  return cairo_get_user_data (cr, &draw_context_window_key);
-}
-
 /**
  * gdk_window_begin_draw_frame:
  * @window: a #GdkWindow
@@ -3540,8 +3513,6 @@ gdk_cairo_create (GdkWindow *window)
   surface = _gdk_window_ref_cairo_surface (window);
 
   cr = cairo_create (surface);
-
-  gdk_cairo_set_window (cr, window);
 
   if (window->impl_window->current_paint.region != NULL)
     {

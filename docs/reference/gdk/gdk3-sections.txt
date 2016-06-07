@@ -625,7 +625,7 @@ gdk_window_create_similar_surface
 gdk_window_create_similar_image_surface
 gdk_cairo_create
 gdk_cairo_get_clip_rectangle
-gdk_cairo_get_window
+gdk_cairo_get_drawing_context
 gdk_cairo_set_source_color
 gdk_cairo_set_source_rgba
 gdk_cairo_set_source_pixbuf

@@ -178,6 +178,34 @@ gdk_drawing_context_init (GdkDrawingContext *self)
 {
 }
 
+static const cairo_user_data_key_t draw_context_key;
+
+static void
+gdk_cairo_set_drawing_context (cairo_t           *cr,
+                               GdkDrawingContext *context)
+{
+  cairo_set_user_data (cr, &draw_context_key, context, NULL);
+}
+
+/**
+ * gdk_cairo_get_drawing_context:
+ * @cr: a Cairo context
+ *
+ * Retrieves the #GdkDrawingContext that created the Cairo
+ * context @cr.
+ *
+ * Returns: (transfer none) (nullable): a #GdkDrawingContext, if any is set
+ *
+ * Since: 3.22
+ */
+GdkDrawingContext *
+gdk_cairo_get_drawing_context (cairo_t *cr)
+{
+  g_return_val_if_fail (cr != NULL, NULL);
+
+  return cairo_get_user_data (cr, &draw_context_key);
+}
+
 /**
  * gdk_drawing_context_get_cairo_context:
  * @context:
@@ -204,6 +232,9 @@ gdk_drawing_context_get_cairo_context (GdkDrawingContext *context)
   if (context->cr == NULL)
     {
       context->cr = gdk_cairo_create (context->window);
+
+      gdk_cairo_set_drawing_context (context->cr, context);
+
       gdk_cairo_region (context->cr, context->clip);
       cairo_clip (context->cr);
     }
