@@ -46,11 +46,11 @@ test_size (GtkOrientation orientation,
            * Here, the content is purposely bigger than the scrolled window,
            * so it should grow up to max-content-width.
            */
-          gtk_widget_get_preferred_width (scrolledwindow, &size, NULL);
+          gtk_widget_get_preferred_width (scrolledwindow, NULL, &size);
           gtk_widget_get_preferred_width (box, &child_size, NULL);
 
           g_assert_cmpint (child_size, ==, BOX_SIZE);
-          g_assert_cmpint (size, >=, MAX_SIZE);
+          g_assert_cmpint (size, ==, MAX_SIZE);
         }
     }
   /* Testing the content-height property */
@@ -74,11 +74,11 @@ test_size (GtkOrientation orientation,
            * Here, the content is purposely bigger than the scrolled window,
            * so it should grow up to max-content-height.
            */
-          gtk_widget_get_preferred_height (scrolledwindow, &size, NULL);
+          gtk_widget_get_preferred_height (scrolledwindow, NULL, &size);
           gtk_widget_get_preferred_height (box, &child_size, NULL);
 
           g_assert_cmpint (child_size, ==, BOX_SIZE);
-          g_assert_cmpint (size, >=, MAX_SIZE);
+          g_assert_cmpint (size, ==, MAX_SIZE);
         }
     }
 }
