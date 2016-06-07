@@ -52,7 +52,9 @@ update_cursor (GtkWidget *widget,  gdouble x, gdouble y)
 
   if (surface != NULL)
     {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       cairo_t *cr = gdk_cairo_create (gtk_widget_get_window (widget));
+G_GNUC_END_IGNORE_DEPRECATIONS
 
       if (cursor_present && (cursor_present != state ||
 			     x != cursor_x || y != cursor_y))

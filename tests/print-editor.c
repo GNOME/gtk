@@ -423,7 +423,9 @@ preview_got_page_size (GtkPrintOperationPreview *preview,
   w = gtk_paper_size_get_width (paper_size, GTK_UNIT_INCH);
   h = gtk_paper_size_get_height (paper_size, GTK_UNIT_INCH);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   cr = gdk_cairo_create (gtk_widget_get_window (pop->area));
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   gtk_widget_get_allocation (pop->area, &allocation);
   dpi_x = allocation.width/w;
@@ -500,7 +502,10 @@ preview_cb (GtkPrintOperation        *op,
 
   gtk_widget_realize (da);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   cr = gdk_cairo_create (gtk_widget_get_window (da));
+G_GNUC_END_IGNORE_DEPRECATIONS
+
   /* TODO: What dpi to use here? This will be used for pagination.. */
   gtk_print_context_set_cairo_context (context, cr, 72, 72);
   cairo_destroy (cr);
