@@ -472,6 +472,8 @@ void gdk_window_get_unscaled_size (GdkWindow *window,
 
 GdkDrawingContext *gdk_window_get_drawing_context (GdkWindow *window);
 
+cairo_region_t *gdk_window_get_current_paint_region (GdkWindow *window);
+
 void       _gdk_window_process_updates_recurse (GdkWindow *window,
                                                 cairo_region_t *expose_region);
 

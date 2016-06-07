@@ -3236,6 +3236,32 @@ gdk_window_end_draw_frame (GdkWindow         *window,
 }
 
 /*< private >
+ * gdk_window_get_current_paint_region:
+ * @window: a #GdkWindow
+ *
+ * Retrieves a copy of the current paint region.
+ *
+ * Returns: (transfer full): a Cairo region
+ */
+cairo_region_t *
+gdk_window_get_current_paint_region (GdkWindow *window)
+{
+  cairo_region_t *region;
+
+  if (window->impl_window->current_paint.region != NULL)
+    {
+      region = cairo_region_copy (window->impl_window->current_paint.region);
+      cairo_region_translate (region, -window->abs_x, -window->abs_y);
+    }
+  else
+    {
+      region = cairo_region_copy (window->clip_region);
+    }
+
+  return region;
+}
+
+/*< private >
  * gdk_window_get_drawing_context:
  * @window: a #GdkWindow
  *
