@@ -400,6 +400,7 @@ static gboolean _gtk_scrolled_window_get_overshoot (GtkScrolledWindow *scrolled_
 static void     gtk_scrolled_window_start_deceleration (GtkScrolledWindow *scrolled_window);
 static gint     _gtk_scrolled_window_get_scrollbar_spacing (GtkScrolledWindow *scrolled_window);
 
+static void     gtk_scrolled_window_update_use_indicators (GtkScrolledWindow *scrolled_window);
 static void     remove_indicator     (GtkScrolledWindow *sw,
                                       Indicator         *indicator);
 static void     indicator_stop_fade  (Indicator         *indicator);
@@ -2146,6 +2147,8 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
       gtk_css_node_set_state (priv->undershoot_node[i], gtk_css_node_get_state (widget_node));
       g_object_unref (priv->undershoot_node[i]);
     }
+
+  gtk_scrolled_window_update_use_indicators (scrolled_window);
 }
 
 /**
@@ -4317,6 +4320,23 @@ remove_indicator (GtkScrolledWindow *scrolled_window,
 }
 
 static void
+gtk_scrolled_window_sync_use_indicators (GtkScrolledWindow *scrolled_window)
+{
+  GtkScrolledWindowPrivate *priv = scrolled_window->priv;
+
+  if (priv->use_indicators)
+    {
+      setup_indicator (scrolled_window, &priv->hindicator, priv->hscrollbar);
+      setup_indicator (scrolled_window, &priv->vindicator, priv->vscrollbar);
+    }
+  else
+    {
+      remove_indicator (scrolled_window, &priv->hindicator);
+      remove_indicator (scrolled_window, &priv->vindicator);
+    }
+}
+
+static void
 gtk_scrolled_window_update_use_indicators (GtkScrolledWindow *scrolled_window)
 {
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
@@ -4331,16 +4351,8 @@ gtk_scrolled_window_update_use_indicators (GtkScrolledWindow *scrolled_window)
     {
       priv->use_indicators = use_indicators;
 
-      if (priv->use_indicators)
-        {
-          setup_indicator (scrolled_window, &priv->hindicator, priv->hscrollbar);
-          setup_indicator (scrolled_window, &priv->vindicator, priv->vscrollbar);
-        }
-      else
-        {
-          remove_indicator (scrolled_window, &priv->hindicator);
-          remove_indicator (scrolled_window, &priv->vindicator);
-        }
+      if (gtk_widget_get_realized (GTK_WIDGET (scrolled_window)))
+        gtk_scrolled_window_sync_use_indicators (scrolled_window);
 
       gtk_widget_queue_resize (GTK_WIDGET (scrolled_window));
     }
@@ -4383,7 +4395,7 @@ gtk_scrolled_window_realize (GtkWidget *widget)
   priv->hindicator.scrollbar = priv->hscrollbar;
   priv->vindicator.scrollbar = priv->vscrollbar;
 
-  gtk_scrolled_window_update_use_indicators (scrolled_window);
+  gtk_scrolled_window_sync_use_indicators (scrolled_window);
 }
 
 static void
@@ -4587,8 +4599,7 @@ gtk_scrolled_window_set_overlay_scrolling (GtkScrolledWindow *scrolled_window,
     {
       priv->overlay_scrolling = overlay_scrolling;
 
-      if (gtk_widget_get_realized (GTK_WIDGET (scrolled_window)))
-        gtk_scrolled_window_update_use_indicators (scrolled_window);
+      gtk_scrolled_window_update_use_indicators (scrolled_window);
 
       g_object_notify_by_pspec (G_OBJECT (scrolled_window), properties[PROP_OVERLAY_SCROLLING]);
     }
