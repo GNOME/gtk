@@ -1116,13 +1116,26 @@ measure_string_width (PangoLayout *layout,
 }
 
 static gchar *
+weed_out_neg_zero (gchar *str, gint digits)
+{
+  if (str[0] == '-')
+    {
+      gchar neg_zero[8];
+      snprintf (neg_zero, 8, "%0.*f", digits, -0.0);
+      if (strcmp (neg_zero, str) == 0)
+        memmove (str, str + 1, strlen (str) - 1);
+    }
+  return str;
+}
+
+static gchar *
 gtk_spin_button_format_for_value (GtkSpinButton *spin_button,
                                   gdouble        value)
 {
   GtkSpinButtonPrivate *priv = spin_button->priv;
   gchar *buf = g_strdup_printf ("%0.*f", priv->digits, value);
 
-  return buf;
+  return weed_out_neg_zero (buf, priv->digits);
 }
 
 gint
