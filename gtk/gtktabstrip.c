@@ -31,6 +31,7 @@
 #include "gtkadjustmentprivate.h"
 #include "gtkboxgadgetprivate.h"
 #include "gtkwidgetprivate.h"
+#include "gtkcssnodeprivate.h"
 
 typedef struct
 {
@@ -331,10 +332,70 @@ update_scrolling (GtkTabStrip *self)
 }
 
 static void
+update_needs_attention_overflow (GtkTabStrip *self)
+{
+  GtkTabStripPrivate *priv = gtk_tab_strip_get_instance_private (self);
+  GtkAdjustment *adj;
+  gdouble value, page_size;
+  GList *tabs, *l;
+  GtkCssNode *scroll_node, *node;
+  gboolean needs_attention_below = FALSE;
+  gboolean needs_attention_above = FALSE;
+
+  adj = gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW (priv->scrolledwindow));
+  value = gtk_adjustment_get_value (adj);
+  page_size = gtk_adjustment_get_page_size (adj);
+
+  tabs = gtk_container_get_children (GTK_CONTAINER (priv->tabs));
+  for (l = tabs; l; l = l->next)
+    {
+      GtkWidget *tab = l->data;
+      GtkStyleContext *context;
+      GtkAllocation tab_alloc;
+
+      context = gtk_widget_get_style_context (tab);
+      if (!gtk_style_context_has_class (context, GTK_STYLE_CLASS_NEEDS_ATTENTION))
+        continue;
+
+      gtk_widget_get_allocation (tab, &tab_alloc);
+      if (tab_alloc.x + tab_alloc.width < value)
+        needs_attention_below = TRUE;
+      else if (tab_alloc.x >= value + page_size)
+        needs_attention_above = TRUE;
+    }
+  g_list_free (tabs);
+
+  scroll_node = gtk_widget_get_css_node (priv->scrolledwindow);
+  for (node = gtk_css_node_get_first_child (scroll_node);
+       node;
+       node = gtk_css_node_get_next_sibling (node))
+    {
+      if (strcmp (gtk_css_node_get_name (node), "undershoot") != 0)
+        continue;
+
+       if (gtk_css_node_has_class (node, g_quark_from_static_string ("left")))
+         {
+           if (needs_attention_below)
+             gtk_css_node_add_class (node, g_quark_from_static_string (GTK_STYLE_CLASS_NEEDS_ATTENTION));
+           else
+             gtk_css_node_remove_class (node, g_quark_from_static_string (GTK_STYLE_CLASS_NEEDS_ATTENTION));
+         }
+       else if (gtk_css_node_has_class (node, g_quark_from_static_string ("right")))
+         {
+           if (needs_attention_above)
+             gtk_css_node_add_class (node, g_quark_from_static_string (GTK_STYLE_CLASS_NEEDS_ATTENTION));
+           else
+             gtk_css_node_remove_class (node, g_quark_from_static_string (GTK_STYLE_CLASS_NEEDS_ATTENTION));
+         }
+    }
+}
+
+static void
 gtk_tab_strip_init (GtkTabStrip *self)
 {
   GtkTabStripPrivate *priv = gtk_tab_strip_get_instance_private (self);
   GtkCssNode *widget_node;
+  GtkAdjustment *adj;
 
   gtk_widget_set_has_window (GTK_WIDGET (self), FALSE);
 
@@ -354,6 +415,10 @@ gtk_tab_strip_init (GtkTabStrip *self)
   priv->tabs = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_show (priv->tabs);
   gtk_container_add (GTK_CONTAINER (priv->scrolledwindow), priv->tabs);
+
+  adj = gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW (priv->scrolledwindow));
+  g_signal_connect_swapped (adj, "changed", G_CALLBACK (update_needs_attention_overflow), self);
+  g_signal_connect_swapped (adj, "value-changed", G_CALLBACK (update_needs_attention_overflow), self);
 }
 
 static void
@@ -408,6 +473,8 @@ gtk_tab_strip_child_needs_attention_changed (GtkTabStrip *self,
     gtk_style_context_add_class (context, GTK_STYLE_CLASS_NEEDS_ATTENTION);
   else
     gtk_style_context_remove_class (context, GTK_STYLE_CLASS_NEEDS_ATTENTION);
+
+  update_needs_attention_overflow (self);
 }
 
 static void
