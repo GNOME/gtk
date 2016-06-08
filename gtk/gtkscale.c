@@ -1933,6 +1933,19 @@ gtk_scale_real_get_layout_offsets (GtkScale *scale,
   *y = value_alloc.y;
 }
 
+static gchar *
+weed_out_neg_zero (gchar *str, gint digits)
+{
+  if (str[0] == '-')
+    {
+      gchar neg_zero[8];
+      snprintf (neg_zero, 8, "%0.*f", digits, -0.0);
+      if (strcmp (neg_zero, str) == 0)
+        memmove (str, str + 1, strlen (str) - 1);
+    }
+  return str;
+}
+
 /*
  * Emits #GtkScale::format-value signal to format the value,
  * if no user signal handlers, falls back to a default format.
@@ -1950,7 +1963,10 @@ gtk_scale_format_value (GtkScale *scale,
   if (fmt)
     return fmt;
   else
-    return g_strdup_printf ("%0.*f", scale->priv->digits, value);
+    {
+      fmt = g_strdup_printf ("%0.*f", scale->priv->digits, value);
+      return weed_out_neg_zero (fmt, scale->priv->digits);
+    }
 }
 
 static void
