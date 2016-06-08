@@ -674,6 +674,12 @@ test_type (gconstpointer data)
 	  g_str_equal (pspec->name, "font-name"))
 	continue;
 
+      /* these depend on the min-content- properties in a way that breaks our test */
+      if (g_type_is_a (type, GTK_TYPE_SCROLLED_WINDOW) &&
+	  (g_str_equal (pspec->name, "max-content-width") ||)
+	   g_str_equal (pspec->name, "max-content-height"))
+	continue;
+
       if (g_test_verbose ())
         g_print ("Property %s.%s\n", g_type_name (pspec->owner_type), pspec->name);
 
