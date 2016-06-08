@@ -31,7 +31,7 @@ $button_transition: all 200ms $ease-out-quad;
   // to the adwaita engine: using real CSS properties is faster,
   // and we don't use any outlines for now.
 
-  outline-color: transparentize($fg_color, 0.7);
+  outline-color: gtkalpha(currentColor, 0.3);
   outline-style: dashed;
   outline-offset: -3px;
   outline-width: 1px;
@@ -206,7 +206,6 @@ assistant {
   border: none;
   background-color: $osd_bg_color;
   background-clip: padding-box;
-  outline-color: transparentize($osd_fg_color, 0.7);
   text-shadow: 0 1px black;
   -gtk-icon-shadow: 0 1px black;
 
@@ -557,7 +556,6 @@ button {
 
     color: $osd_fg_color;
     border-radius: 5px;
-    outline-color: transparentize($osd_fg_color, 0.7);  //FIXME: define a color var?
 
     @include button(osd);
 
@@ -2736,7 +2734,6 @@ treeview.view radio:selected { &:focus, & { @extend %radio; }} // This is a work
   .osd & {
     border-color: $osd_borders_color;
     background-color: transparentize($osd_borders_color, 0.2);
-    outline-color: transparentize($osd_fg_color, 0.8);
 
     &:disabled { background-color: $osd_insensitive_bg_color; }
   }
@@ -4218,8 +4215,6 @@ headerbar.selection-mode button.titlebutton,
 
   @at-root %nobg_selected_items, & {
     color: $selected_fg_color;
-
-    @if $variant == 'light' { outline-color: transparentize($selected_fg_color, 0.7); }
 
     &:disabled { color: mix($selected_fg_color, $selected_bg_color, 50%); }
 
