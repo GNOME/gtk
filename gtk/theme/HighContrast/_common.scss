@@ -28,10 +28,10 @@ $ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   // to the adwaita engine: using real CSS properties is faster,
   // and we don't use any outlines for now.
 
-  outline-color: transparentize($fg_color, 0.7);
+  outline-color: currentColor;
   outline-style: dashed;
-  outline-offset: -3px;
-  outline-width: 1px;
+  outline-offset: -4px;
+  outline-width: 2px;
   -gtk-outline-radius: 2px;
 
 }
@@ -147,7 +147,6 @@ label {
   border: none;
   background-color: $osd_bg_color;
   background-clip: padding-box;
-  outline-color: transparentize($osd_fg_color, 0.7);
   //text-shadow: 0 1px black;
   //-gtk-icon-shadow: 0 1px black;
 
@@ -480,7 +479,6 @@ button {
 
     color: $osd_fg_color;
     border-radius: 5px;
-    outline-color: transparentize($osd_fg_color, 0.7);  //FIXME: define a color var?
 
     @include button(osd);
 
@@ -2234,7 +2232,6 @@ treeview.view radio {
     border-color: $osd_borders_color;
     background-color: transparentize($osd_borders_color, 0.2);
     box-shadow: none;
-    outline-color: transparentize($osd_fg_color, 0.8);
 
     &:disabled { background-color: $insensitive_bg_color; }
   }
@@ -2568,7 +2565,6 @@ levelbar {
 %selected_items {
   background-color: $selected_bg_color;
   color: $selected_fg_color;
-  outline-color: transparentize($selected_fg_color, 0.7);
   &:backdrop { background-color: $borders_color; color: $selected_fg_color; }
 }
 
@@ -3188,14 +3184,12 @@ colorswatch {
   // indicator and keynav outline colors, color-dark is a color with luminosity lower then 50%
   &.dark {
     color: white;
-    outline-color: transparentize(black, 0.7);
     border: 1px solid transparentize(black, 0.7);
     &:hover { border-color: transparentize(black, 0.5); }
     &:backdrop { color: transparentize(white, 0.7); }
   }
   &.light {
     color: black;
-    outline-color: transparentize(white, 0.5);
     border: 1px solid transparentize(black, 0.7);
     &:hover { border-color: transparentize(black, 0.5); }
     &:backdrop { color: transparentize(black, 0.7); }
@@ -3314,7 +3308,6 @@ cursor-handle {
   border: none;
   background-color: opacify($osd_bg_color,0.2);
   background-clip: padding-box;
-  outline-color: transparentize($osd_fg_color, 0.7);
   box-shadow: none;
   text-shadow: 0 1px black;
   -gtk-icon-shadow: 0 1px black;

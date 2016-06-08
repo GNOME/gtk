@@ -41,10 +41,10 @@
   -GtkTreeView-horizontal-separator: 4;
   -GtkDialog-button-spacing: 4;
   -GtkDialog-action-area-border: 0;
-  outline-color: rgba(255, 255, 255, 0.3);
+  outline-color: currentColor;
   outline-style: dashed;
   outline-offset: -3px;
-  outline-width: 1px;
+  outline-width: 2px;
   -gtk-outline-radius: 2px; }
 
 /***************
@@ -112,8 +112,7 @@ popover.background.touch-selection, popover.background.magnifier, .csd popover.b
   color: #fff;
   border: none;
   background-color: rgba(0, 0, 0, 0.8);
-  background-clip: padding-box;
-  outline-color: rgba(255, 255, 255, 0.3); }
+  background-clip: padding-box; }
   popover.background.touch-selection:backdrop, popover.background.magnifier:backdrop, popover.background.osd:backdrop, .osd:backdrop {
     text-shadow: none;
     -gtk-icon-shadow: none; }
@@ -492,7 +491,6 @@ row:selected button.sidebar-button:not(:active):not(:checked):not(:hover):not(di
 button.osd {
   color: #fff;
   border-radius: 5px;
-  outline-color: rgba(255, 255, 255, 0.3);
   border-width: 2px;
   border-style: solid;
   color: #fff;
@@ -2309,8 +2307,7 @@ scale trough, scale fill {
   .osd scale trough, scale .osd trough, .osd scale fill, scale .osd fill {
     border-color: rgba(255, 255, 255, 0.2);
     background-color: rgba(255, 255, 255, 0);
-    box-shadow: none;
-    outline-color: rgba(255, 255, 255, 0.2); }
+    box-shadow: none; }
     .osd scale trough:disabled, scale .osd trough:disabled, .osd scale fill:disabled, scale .osd fill:disabled {
       background-color: #070707; }
 
@@ -2598,8 +2595,7 @@ entry selection, modelbutton.flat:selected, popover.background checkbutton:selec
 popover.background radiobutton:selected,
 .menuitem.button.flat:selected, treeview.view:selected, row.activatable:selected, .sidebar:selected {
   background-color: #ddd;
-  color: #000;
-  outline-color: rgba(0, 0, 0, 0.3); }
+  color: #000; }
   .view:backdrop:selected, textview text:backdrop:selected, iconview:backdrop:selected, calendar:backdrop:selected, textview text:backdrop:selected:focus, iconview:backdrop:selected:focus, calendar:backdrop:focus:selected, textview text:backdrop:selected:hover, iconview:backdrop:selected:hover, calendar:backdrop:hover:selected, textview text selection:backdrop, flowbox flowboxchild:backdrop:selected, label selection:backdrop, spinbutton:not(.vertical) selection:backdrop,
   entry selection:backdrop, modelbutton.flat:backdrop:selected, popover.background checkbutton:backdrop:selected,
   popover.background radiobutton:backdrop:selected,
@@ -3094,7 +3090,7 @@ placessidebar row {
   placessidebar row.sidebar-placeholder-row {
     padding: 0 8px;
     min-height: 2px;
-    background-image: linear-gradient(to bottom, #fff);
+    background-image: linear-gradient(to bottom, #fff, #fff);
     background-clip: content-box; }
   placessidebar row.sidebar-new-bookmark-row {
     color: #ddd; }
@@ -3294,7 +3290,6 @@ colorswatch {
     box-shadow: none; }
   colorswatch.dark {
     color: white;
-    outline-color: rgba(0, 0, 0, 0.3);
     border: 1px solid rgba(0, 0, 0, 0.3); }
     colorswatch.dark:hover {
       border-color: rgba(0, 0, 0, 0.5); }
@@ -3302,7 +3297,6 @@ colorswatch {
       color: rgba(255, 255, 255, 0.3); }
   colorswatch.light {
     color: black;
-    outline-color: rgba(255, 255, 255, 0.5);
     border: 1px solid rgba(0, 0, 0, 0.3); }
     colorswatch.light:hover {
       border-color: rgba(0, 0, 0, 0.5); }
@@ -3408,7 +3402,6 @@ cursor-handle {
   border: none;
   background-color: black;
   background-clip: padding-box;
-  outline-color: rgba(255, 255, 255, 0.3);
   box-shadow: none;
   text-shadow: 0 1px black;
   -gtk-icon-shadow: 0 1px black; }
