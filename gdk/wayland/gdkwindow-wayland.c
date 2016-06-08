@@ -61,6 +61,8 @@ static guint signals[LAST_SIGNAL];
    GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN && \
    GDK_WINDOW_TYPE (window) != GDK_WINDOW_OFFSCREEN)
 
+#define MAX_WL_BUFFER_SIZE (4083) /* 4096 minus header, string argument length and NUL byte */
+
 typedef struct _GdkWaylandWindow GdkWaylandWindow;
 typedef struct _GdkWaylandWindowClass GdkWaylandWindowClass;
 
@@ -2267,6 +2269,7 @@ gdk_wayland_window_set_title (GdkWindow   *window,
                               const gchar *title)
 {
   GdkWindowImplWayland *impl;
+  const char *end;
   g_return_if_fail (title != NULL);
 
   if (GDK_WINDOW_DESTROYED (window))
@@ -2275,7 +2278,11 @@ gdk_wayland_window_set_title (GdkWindow   *window,
   impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
   g_free (impl->title);
-  impl->title = g_strdup (title);
+
+  g_utf8_validate (title, MAX_WL_BUFFER_SIZE, &end);
+  impl->title = g_malloc (end - title + 1);
+  memcpy (impl->title, title, end - title);
+  impl->title[end - title] = '\0';
 
   gdk_wayland_window_sync_title (window);
 }
