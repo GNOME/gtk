@@ -383,6 +383,34 @@ gtk_tab_strip_child_position_changed (GtkTabStrip *self,
 }
 
 static void
+gtk_tab_strip_child_needs_attention_changed (GtkTabStrip *self,
+                                             GParamSpec  *pspec,
+                                             GtkWidget   *child)
+{
+  GtkWidget *parent;
+  GtkWidget *tab;
+  gboolean needs_attention;
+  GtkStyleContext *context;
+
+  tab = g_object_get_data (G_OBJECT (child), "GTK_TAB");
+
+  if (!tab || !GTK_IS_TAB (tab))
+    return;
+
+  parent = gtk_widget_get_parent (child);
+
+  gtk_container_child_get (GTK_CONTAINER (parent), GTK_WIDGET (child),
+                           "needs-attention", &needs_attention,
+                           NULL);
+
+  context = gtk_widget_get_style_context (tab);
+  if (needs_attention)
+    gtk_style_context_add_class (context, GTK_STYLE_CLASS_NEEDS_ATTENTION);
+  else
+    gtk_style_context_remove_class (context, GTK_STYLE_CLASS_NEEDS_ATTENTION);
+}
+
+static void
 gtk_tab_strip_child_title_changed (GtkTabStrip *self,
                                    GParamSpec  *pspec,
                                    GtkWidget   *child)
@@ -520,6 +548,10 @@ gtk_tab_strip_stack_add (GtkTabStrip *self,
 
   g_signal_connect_object (widget, "child-notify::title",
                            G_CALLBACK (gtk_tab_strip_child_title_changed), self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (widget, "child-notify::needs-attention",
+                           G_CALLBACK (gtk_tab_strip_child_needs_attention_changed), self,
                            G_CONNECT_SWAPPED);
 
   gtk_box_pack_start (GTK_BOX (priv->tabs), GTK_WIDGET (tab), TRUE, TRUE, 0);
