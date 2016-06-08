@@ -1006,7 +1006,7 @@ gtk_label_class_init (GtkLabelClass *class)
    * The angle that the baseline of the label makes with the horizontal,
    * in degrees, measured counterclockwise. An angle of 90 reads from
    * from bottom to top, an angle of 270, from top to bottom. Ignored
-   * if the label is selectable, wrapped, or ellipsized.
+   * if the label is selectable.
    *
    * Since: 2.6
    **/
