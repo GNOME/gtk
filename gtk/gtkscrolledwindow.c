@@ -78,6 +78,17 @@
  * widgets that don’t implement #GtkScrollable natively, so you can
  * ignore the presence of the viewport.
  *
+ * If gtk_container_add() has added a #GtkViewport for you, you can remove
+ * both your added child widget from the #GtkViewport and the #GtkViewport
+ * from the GtkScrolledWindow with either of the calls
+ * |[<!-- language="C" -->
+ * gtk_container_remove (GTK_CONTAINER (scrolled_window),
+ *                       child_widget);
+ * // or
+ * gtk_container_remove (GTK_CONTAINER (scrolled_window),
+ *                       gtk_bin_get_child (GTK_BIN (scrolled_window)));
+ * ]|
+ *
  * The position of the scrollbars is controlled by the scroll adjustments.
  * See #GtkAdjustment for the fields in an adjustment — for
  * #GtkScrollbar, used by GtkScrolledWindow, the “value” field
@@ -229,6 +240,7 @@ struct _GtkScrolledWindowPrivate
   guint    focus_out              : 1; /* used by ::move-focus-out implementation */
   guint    overlay_scrolling      : 1;
   guint    use_indicators         : 1;
+  guint    auto_added_viewport    : 1;
 
   gint     min_content_width;
   gint     min_content_height;
@@ -2099,6 +2111,7 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
   priv->hscrollbar_visible = FALSE;
   priv->vscrollbar_visible = FALSE;
   priv->focus_out = FALSE;
+  priv->auto_added_viewport = FALSE;
   priv->window_placement = GTK_CORNER_TOP_LEFT;
   priv->min_content_width = -1;
   priv->min_content_height = -1;
@@ -3897,6 +3910,7 @@ gtk_scrolled_window_add (GtkContainer *container,
       gtk_container_set_focus_vadjustment (GTK_CONTAINER (scrollable_child),
                                            gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (scrolled_window)));
       gtk_container_add (GTK_CONTAINER (scrollable_child), child);
+      priv->auto_added_viewport = TRUE;
     }
 
   _gtk_bin_set_child (bin, scrollable_child);
@@ -3909,9 +3923,41 @@ static void
 gtk_scrolled_window_remove (GtkContainer *container,
 			    GtkWidget    *child)
 {
-  g_object_set (child, "hadjustment", NULL, "vadjustment", NULL, NULL);
+  GtkScrolledWindowPrivate *priv;
+  GtkScrolledWindow *scrolled_window;
+  GtkWidget *scrollable_child;
 
-  GTK_CONTAINER_CLASS (gtk_scrolled_window_parent_class)->remove (container, child);
+  scrolled_window = GTK_SCROLLED_WINDOW (container);
+  priv = scrolled_window->priv;
+
+  if (!priv->auto_added_viewport)
+    {
+      scrollable_child = child;
+    }
+  else
+    {
+      scrollable_child = gtk_bin_get_child (GTK_BIN (container));
+      if (scrollable_child == child)
+        {
+          /* @child is the automatically added viewport. */
+          GtkWidget *grandchild = gtk_bin_get_child (GTK_BIN (child));
+
+          /* Remove the viewport's child, if any. */
+          if (grandchild)
+            gtk_container_remove (GTK_CONTAINER (child), grandchild);
+        }
+      else
+        {
+          /* @child is (assumed to be) the viewport's child. */
+          gtk_container_remove (GTK_CONTAINER (scrollable_child), child);
+        }
+    }
+
+  g_object_set (scrollable_child, "hadjustment", NULL, "vadjustment", NULL, NULL);
+
+  GTK_CONTAINER_CLASS (gtk_scrolled_window_parent_class)->remove (container, scrollable_child);
+
+  priv->auto_added_viewport = FALSE;
 }
 
 /**
