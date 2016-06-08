@@ -198,6 +198,10 @@ static void     gtk_scale_get_preferred_height    (GtkWidget      *widget,
                                                    gint           *natural);
 static void     gtk_scale_get_range_border        (GtkRange       *range,
                                                    GtkBorder      *border);
+static void     gtk_scale_get_range_size_request  (GtkRange       *range,
+                                                   GtkOrientation  orientation,
+                                                   gint           *minimum,
+                                                   gint           *natural);
 static void     gtk_scale_finalize                (GObject        *object);
 static void     gtk_scale_value_style_changed     (GtkCssNode        *node,
                                                    GtkCssStyleChange *change,
@@ -718,6 +722,7 @@ gtk_scale_class_init (GtkScaleClass *class)
   widget_class->get_preferred_height = gtk_scale_get_preferred_height;
 
   range_class->get_range_border = gtk_scale_get_range_border;
+  range_class->get_range_size_request = gtk_scale_get_range_size_request;
 
   class->get_layout_offsets = gtk_scale_real_get_layout_offsets;
 
@@ -1549,6 +1554,27 @@ gtk_scale_get_range_border (GtkRange  *range,
           if (width > 0)
             border->right += width;
         }
+    }
+}
+
+static void
+gtk_scale_get_range_size_request (GtkRange       *range,
+                                  GtkOrientation  orientation,
+                                  gint           *minimum,
+                                  gint           *natural)
+{
+  GtkScalePrivate *priv = GTK_SCALE (range)->priv;
+
+  /* Ensure the range requests enough size for our value */
+  if (priv->value_gadget)
+    gtk_css_gadget_get_preferred_size (priv->value_gadget,
+                                       orientation, -1,
+                                       minimum, natural,
+                                       NULL, NULL);
+  else
+    {
+      *minimum = 0;
+      *natural = 0;
     }
 }
 

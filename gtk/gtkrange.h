@@ -78,11 +78,15 @@ struct _GtkRangeClass
                              GtkScrollType scroll,
                              gdouble       new_value);
 
+   void (* get_range_size_request) (GtkRange       *range,
+                                    GtkOrientation  orientation,
+                                    gint           *minimum,
+                                    gint           *natural);
+
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
   void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
 };
 
 

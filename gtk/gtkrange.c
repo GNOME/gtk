@@ -1894,6 +1894,17 @@ gtk_range_size_request (GtkWidget      *widget,
   gtk_css_gadget_get_preferred_size (priv->gadget, orientation, -1,
                                      minimum, natural,
                                      NULL, NULL);
+
+  if (GTK_RANGE_GET_CLASS (range)->get_range_size_request)
+    {
+      gint min, nat;
+
+      GTK_RANGE_GET_CLASS (range)->get_range_size_request (range, orientation,
+                                                           &min, &nat);
+
+      *minimum = MAX (*minimum, min);
+      *natural = MAX (*natural, nat);
+    }
 }
 
 static void
