@@ -405,6 +405,12 @@
     </para>
 
     <para>
+      The CSS parser now warns about some more constructs that are not according
+      to the CSS spec, such as gradients with a single color stop. Instead,
+      you can just use image(&lt;color&gt;).
+    </para>
+
+    <para>
       The #GtkSizeGroup:ignore-hidden property has not been working properly
       for a long time, and we've not documented it as broken and deprecated.
       The recommended alternative for reserving space of widgets that are not
