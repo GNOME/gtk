@@ -1432,7 +1432,7 @@ gtk_button_new_with_label (const gchar *label)
  * Returns: a new #GtkButton displaying the themed icon
  *
  * Since: 3.10
- **/
+ */
 GtkWidget*
 gtk_button_new_from_icon_name (const gchar *icon_name,
 			       GtkIconSize  size)
@@ -1462,7 +1462,7 @@ gtk_button_new_from_icon_name (const gchar *icon_name,
  * Returns: a new #GtkButton
  *
  * Deprecated: 3.10: Use gtk_button_new_with_label() instead.
- **/
+ */
 GtkWidget*
 gtk_button_new_from_stock (const gchar *stock_id)
 {
@@ -1486,7 +1486,7 @@ gtk_button_new_from_stock (const gchar *stock_id)
  * Pressing Alt and that key activates the button.
  *
  * Returns: a new #GtkButton
- **/
+ */
 GtkWidget*
 gtk_button_new_with_mnemonic (const gchar *label)
 {
@@ -2161,7 +2161,7 @@ gtk_button_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
  * is used.
  *
  * This will also clear any previously set labels.
- **/
+ */
 void
 gtk_button_set_label (GtkButton   *button,
 		      const gchar *label)
@@ -2194,7 +2194,7 @@ gtk_button_set_label (GtkButton   *button,
  *
  * Returns: The text of the label widget. This string is owned
  * by the widget and must not be modified or freed.
- **/
+ */
 const gchar *
 gtk_button_get_label (GtkButton *button)
 {
@@ -2242,7 +2242,7 @@ gtk_button_set_use_underline (GtkButton *button,
  *
  * Returns: %TRUE if an embedded underline in the button label
  *               indicates the mnemonic accelerator keys.
- **/
+ */
 gboolean
 gtk_button_get_use_underline (GtkButton *button)
 {
@@ -2316,7 +2316,7 @@ gtk_button_get_use_stock (GtkButton *button)
  * Since: 2.4
  *
  * Deprecated: 3.20: Use gtk_widget_set_focus_on_click() instead
- **/
+ */
 void
 gtk_button_set_focus_on_click (GtkButton *button,
 			       gboolean   focus_on_click)
@@ -2337,7 +2337,9 @@ gtk_button_set_focus_on_click (GtkButton *button,
  *               the mouse.
  *
  * Since: 2.4
- **/
+ *
+ * Deprecated: 3.20: Use gtk_widget_get_focus_on_click() instead
+ */
 gboolean
 gtk_button_get_focus_on_click (GtkButton *button)
 {

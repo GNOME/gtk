@@ -5012,6 +5012,8 @@ gtk_combo_box_get_entry_text_column (GtkComboBox *combo_box)
  * the main area of the application.
  *
  * Since: 2.6
+ *
+ * Deprecated: 3.20: Use gtk_widget_set_focus_on_click() instead
  */
 void
 gtk_combo_box_set_focus_on_click (GtkComboBox *combo_box,
@@ -5033,6 +5035,8 @@ gtk_combo_box_set_focus_on_click (GtkComboBox *combo_box,
  *     clicked with the mouse.
  *
  * Since: 2.6
+ *
+ * Deprecated: 3.20: Use gtk_widget_get_focus_on_click() instead
  */
 gboolean
 gtk_combo_box_get_focus_on_click (GtkComboBox *combo_box)

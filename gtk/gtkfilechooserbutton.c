@@ -1830,7 +1830,7 @@ model_add_special (GtkFileChooserButton *button)
 
   /* "To disable a directory, point it to the homedir."
    * See http://freedesktop.org/wiki/Software/xdg-user-dirs
-   **/
+   */
   if (g_strcmp0 (desktopdir, g_get_home_dir ()) != 0)
     {
       GtkTreePath *tree_path;
@@ -2997,7 +2997,7 @@ native_response_cb (GtkFileChooserNative *native,
  * Returns: a new button widget.
  *
  * Since: 2.6
- **/
+ */
 GtkWidget *
 gtk_file_chooser_button_new (const gchar          *title,
 			     GtkFileChooserAction  action)
@@ -3029,7 +3029,7 @@ gtk_file_chooser_button_new (const gchar          *title,
  * Returns: a new button widget.
  *
  * Since: 2.6
- **/
+ */
 GtkWidget *
 gtk_file_chooser_button_new_with_dialog (GtkWidget *dialog)
 {
@@ -3048,7 +3048,7 @@ gtk_file_chooser_button_new_with_dialog (GtkWidget *dialog)
  * Modifies the @title of the browse dialog used by @button.
  *
  * Since: 2.6
- **/
+ */
 void
 gtk_file_chooser_button_set_title (GtkFileChooserButton *button,
 				   const gchar          *title)
@@ -3072,7 +3072,7 @@ gtk_file_chooser_button_set_title (GtkFileChooserButton *button,
  * Returns: a pointer to the browse dialog’s title.
  *
  * Since: 2.6
- **/
+ */
 const gchar *
 gtk_file_chooser_button_get_title (GtkFileChooserButton *button)
 {
@@ -3093,7 +3093,7 @@ gtk_file_chooser_button_get_title (GtkFileChooserButton *button)
  * Returns: an integer width (in characters) that the button will use to size itself.
  *
  * Since: 2.6
- **/
+ */
 gint
 gtk_file_chooser_button_get_width_chars (GtkFileChooserButton *button)
 {
@@ -3110,7 +3110,7 @@ gtk_file_chooser_button_get_width_chars (GtkFileChooserButton *button)
  * Sets the width (in characters) that @button will use to @n_chars.
  *
  * Since: 2.6
- **/
+ */
 void
 gtk_file_chooser_button_set_width_chars (GtkFileChooserButton *button,
 					 gint                  n_chars)
@@ -3132,7 +3132,9 @@ gtk_file_chooser_button_set_width_chars (GtkFileChooserButton *button,
  * application.
  *
  * Since: 2.10
- **/
+ *
+ * Deprecated: 3.20: Use gtk_widget_set_focus_on_click() instead
+ */
 void
 gtk_file_chooser_button_set_focus_on_click (GtkFileChooserButton *button,
 					    gboolean              focus_on_click)
@@ -3153,7 +3155,9 @@ gtk_file_chooser_button_set_focus_on_click (GtkFileChooserButton *button,
  *               the mouse.
  *
  * Since: 2.10
- **/
+ *
+ * Deprecated: 3.20: Use gtk_widget_get_focus_on_click() instead
+ */
 gboolean
 gtk_file_chooser_button_get_focus_on_click (GtkFileChooserButton *button)
 {
