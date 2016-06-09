@@ -4246,12 +4246,16 @@ draw_ugly_color (GdkWindow       *window,
 {
   cairo_t *cr;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   cr = gdk_cairo_create (window);
+G_GNUC_END_IGNORE_DEPRECATIONS
+
   /* Draw ugly color all over the newly-invalid region */
   if (color == 0)
     cairo_set_source_rgb (cr, 50000/65535., 10000/65535., 10000/65535.);
   else
     cairo_set_source_rgb (cr, 10000/65535., 50000/65535., 10000/65535.);
+
   gdk_cairo_region (cr, region);
   cairo_fill (cr);
 
