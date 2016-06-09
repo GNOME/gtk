@@ -2314,6 +2314,8 @@ gtk_button_get_use_stock (GtkButton *button)
  * application.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.20: Use gtk_widget_set_focus_on_click() instead
  **/
 void
 gtk_button_set_focus_on_click (GtkButton *button,
