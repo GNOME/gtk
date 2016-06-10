@@ -741,7 +741,7 @@ gboolean   gtk_widget_mnemonic_activate   (GtkWidget           *widget,
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_widget_event		  (GtkWidget	       *widget,
 					   GdkEvent	       *event);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_22
 gint       gtk_widget_send_expose         (GtkWidget           *widget,
 					   GdkEvent            *event);
 GDK_AVAILABLE_IN_ALL

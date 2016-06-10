@@ -7522,8 +7522,13 @@ gtk_cairo_transform_to_window (cairo_t   *cr,
  * with a call to gdk_window_process_updates().
  *
  * Returns: return from the event signal emission (%TRUE if
- *               the event was handled)
- **/
+ *   the event was handled)
+ *
+ * Deprecated: 3.22: Application and widget code should not handle
+ *   expose events directly; invalidation should use the #GtkWidget
+ *   API, and drawing should only happen inside #GtkWidget::draw
+ *   implementations
+ */
 gint
 gtk_widget_send_expose (GtkWidget *widget,
 			GdkEvent  *event)
