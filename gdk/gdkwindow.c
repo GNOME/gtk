@@ -3553,19 +3553,16 @@ gdk_cairo_create (GdkWindow *window)
 
   cr = cairo_create (surface);
 
-  if (window->impl_window->current_paint.region != NULL)
-    {
-      region = cairo_region_copy (window->impl_window->current_paint.region);
-      cairo_region_translate (region, -window->abs_x, -window->abs_y);
-    }
-  else
-    {
-      region = cairo_region_copy (window->clip_region);
-    }
-
+  region = gdk_window_get_current_paint_region (window);
   gdk_cairo_region (cr, region);
   cairo_region_destroy (region);
   cairo_clip (cr);
+
+  /* Assign a drawing context, if one is set; if gdk_cairo_create()
+   * is called outside of a frame drawing then this is going to be
+   * NULL.
+   */
+  gdk_cairo_set_drawing_context (cr, window->drawing_context);
 
   cairo_surface_destroy (surface);
 

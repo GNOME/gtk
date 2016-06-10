@@ -451,6 +451,8 @@ void            gdk_cairo_surface_mark_as_direct (cairo_surface_t *surface,
                                                   GdkWindow       *window);
 cairo_region_t *gdk_cairo_region_from_clip       (cairo_t         *cr);
 
+void            gdk_cairo_set_drawing_context    (cairo_t           *cr,
+                                                  GdkDrawingContext *context);
 
 /*************************************
  * Interfaces used by windowing code *

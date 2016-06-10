@@ -180,7 +180,7 @@ gdk_drawing_context_init (GdkDrawingContext *self)
 
 static const cairo_user_data_key_t draw_context_key;
 
-static void
+void
 gdk_cairo_set_drawing_context (cairo_t           *cr,
                                GdkDrawingContext *context)
 {
