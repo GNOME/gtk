@@ -1710,11 +1710,12 @@ gtk_scrolled_window_allocate (GtkCssGadget        *gadget,
                                               &child_allocation);
       if (priv->use_indicators)
         {
-          gdk_window_move_resize (priv->hindicator.window,
-                                  child_allocation.x,
-                                  child_allocation.y,
-                                  child_allocation.width,
-                                  child_allocation.height);
+	  if (gtk_widget_get_realized (widget))
+	    gdk_window_move_resize (priv->hindicator.window,
+				    child_allocation.x,
+				    child_allocation.y,
+				    child_allocation.width,
+				    child_allocation.height);
           child_allocation.x = 0;
           child_allocation.y = 0;
         }
@@ -1729,11 +1730,12 @@ gtk_scrolled_window_allocate (GtkCssGadget        *gadget,
                                               &child_allocation);
       if (priv->use_indicators)
         {
-          gdk_window_move_resize (priv->vindicator.window,
-                                  child_allocation.x,
-                                  child_allocation.y,
-                                  child_allocation.width,
-                                  child_allocation.height);
+	  if (gtk_widget_get_realized (widget))
+	    gdk_window_move_resize (priv->vindicator.window,
+				    child_allocation.x,
+				    child_allocation.y,
+				    child_allocation.width,
+				    child_allocation.height);
           child_allocation.x = 0;
           child_allocation.y = 0;
         }
