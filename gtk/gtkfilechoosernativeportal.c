@@ -300,10 +300,6 @@ gtk_file_chooser_native_portal_show (GtkFileChooserNative *self)
   if (connection == NULL)
     return FALSE;
 
-  data = g_new0 (FilechooserPortalData, 1);
-  data->self = g_object_ref (self);
-  data->connection = connection;
-
   action = gtk_file_chooser_get_action (GTK_FILE_CHOOSER (self));
   multiple = gtk_file_chooser_get_select_multiple (GTK_FILE_CHOOSER (self));
 
@@ -326,7 +322,14 @@ gtk_file_chooser_native_portal_show (GtkFileChooserNative *self)
       signal_callback = one_file_response;
     }
   else
-    g_assert_not_reached ();
+    {
+      g_warning ("GTK_FILE_CHOOSER_ACTION_%s is not supported by GtkFileChooserNativePortal", action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ? "SELECT_FOLDER" : "CREATE_FOLDER");
+      return FALSE;
+    }
+
+  data = g_new0 (FilechooserPortalData, 1);
+  data->self = g_object_ref (self);
+  data->connection = connection;
 
   message = g_dbus_message_new_method_call ("org.freedesktop.portal.Desktop",
                                             "/org/freedesktop/portal/desktop",
