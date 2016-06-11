@@ -235,6 +235,24 @@ open_file_msg_cb (GObject *source_object,
     }
 }
 
+static GVariant *
+get_filters (GtkFileChooser *self)
+{
+  GSList *list, *l;
+  GVariantBuilder builder;
+
+  g_variant_builder_init (&builder, G_VARIANT_TYPE ("a(sa(us))"));
+  list = gtk_file_chooser_list_filters (self);
+  for (l = list; l; l = l->next)
+    {
+      GtkFileFilter *filter = l->data;
+      g_variant_builder_add (&builder, "@(sa(us))", gtk_file_filter_to_gvariant (filter));
+    }
+  g_slist_free (list);
+
+  return g_variant_builder_end (&builder);
+}
+
 gboolean
 gtk_file_chooser_native_portal_show (GtkFileChooserNative *self)
 {
@@ -327,6 +345,7 @@ gtk_file_chooser_native_portal_show (GtkFileChooserNative *self)
                            g_variant_new_string (self->cancel_label));
   g_variant_builder_add (&opt_builder, "{sv}", "modal",
                          g_variant_new_boolean (data->modal));
+  g_variant_builder_add (&opt_builder, "{sv}", "filters", get_filters (GTK_FILE_CHOOSER (self)));
 
   g_dbus_message_set_body (message,
                            g_variant_new ("(ss@a{sv})",
