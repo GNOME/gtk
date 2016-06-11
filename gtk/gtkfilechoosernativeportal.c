@@ -277,14 +277,7 @@ gtk_file_chooser_native_portal_show (GtkFileChooserNative *self)
   const char *signal_name;
   GDBusSignalCallback signal_callback;
 
-  if (g_getenv ("GTK_USE_PORTAL") == NULL)
-    return FALSE;
-
-  if (gtk_file_chooser_get_extra_widget (GTK_FILE_CHOOSER (self)) != NULL)
-    return FALSE;
-
-  update_preview_signal = g_signal_lookup ("update-preview", GTK_TYPE_FILE_CHOOSER);
-  if (g_signal_has_handler_pending (self, update_preview_signal, 0, TRUE))
+  if (!gtk_should_use_portal ())
     return FALSE;
 
   connection = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
