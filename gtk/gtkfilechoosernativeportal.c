@@ -357,6 +357,27 @@ gtk_file_chooser_native_portal_show (GtkFileChooserNative *self)
   g_variant_builder_add (&opt_builder, "{sv}", "modal",
                          g_variant_new_boolean (data->modal));
   g_variant_builder_add (&opt_builder, "{sv}", "filters", get_filters (GTK_FILE_CHOOSER (self)));
+  if (GTK_FILE_CHOOSER_NATIVE (self)->current_name)
+    g_variant_builder_add (&opt_builder, "{sv}", "current_name",
+                           g_variant_new_string (GTK_FILE_CHOOSER_NATIVE (self)->current_name));
+  if (GTK_FILE_CHOOSER_NATIVE (self)->current_folder)
+    {
+      gchar *path;
+
+      path = g_file_get_path (GTK_FILE_CHOOSER_NATIVE (self)->current_folder);
+      g_variant_builder_add (&opt_builder, "{sv}", "current_folder",
+                             g_variant_new_bytestring (path));
+      g_free (path);
+    }
+  if (GTK_FILE_CHOOSER_NATIVE (self)->current_file)
+    {
+      gchar *path;
+
+      path = g_file_get_path (GTK_FILE_CHOOSER_NATIVE (self)->current_file);
+      g_variant_builder_add (&opt_builder, "{sv}", "current_file",
+                             g_variant_new_bytestring (path));
+      g_free (path);
+    }
 
   g_dbus_message_set_body (message,
                            g_variant_new ("(ss@a{sv})",
