@@ -122,6 +122,11 @@ GDK_AVAILABLE_IN_ALL
 gboolean           gtk_file_filter_filter     (GtkFileFilter           *filter,
 					       const GtkFileFilterInfo *filter_info);
 
+GDK_AVAILABLE_IN_3_22
+GVariant      *gtk_file_filter_to_gvariant       (GtkFileFilter *filter);
+GDK_AVAILABLE_IN_3_22
+GtkFileFilter *gtk_file_filter_new_from_gvariant (GVariant      *variant);
+
 G_END_DECLS
 
 #endif /* __GTK_FILE_FILTER_H__ */
