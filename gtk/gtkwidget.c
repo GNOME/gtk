@@ -7432,7 +7432,7 @@ _gtk_widget_captured_event (GtkWidget *widget,
 }
 
 /* Returns TRUE if a translation should be done */
-gboolean
+static gboolean
 _gtk_widget_get_translation_to_window (GtkWidget      *widget,
 				       GdkWindow      *window,
 				       int            *x,

@@ -209,11 +209,6 @@ void _gtk_widget_get_preferred_size_and_baseline(GtkWidget        *widget,
                                                 gint              *natural_baseline);
 gboolean _gtk_widget_has_baseline_support (GtkWidget *widget);
 
-gboolean _gtk_widget_get_translation_to_window (GtkWidget      *widget,
-                                                GdkWindow      *window,
-                                                int            *x,
-                                                int            *y);
-
 const gchar*      _gtk_widget_get_accel_path               (GtkWidget *widget,
                                                             gboolean  *locked);
 
