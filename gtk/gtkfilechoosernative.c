@@ -51,7 +51,10 @@
  * for use with “File/Open” or “File/Save as” commands. By default, this
  * just uses a #GtkFileChooserDialog to implement the actual dialog.
  * However, on certain platforms, such as Windows, the native platform
- * file chooser is uses instead.
+ * file chooser is uses instead. When the application is running in a
+ * sandboxed environment without direct filesystem access (such as Flatpak),
+ * #GtkFileChooserNative may call the proper APIs (portals) to let the user
+ * choose a file and make it available to the application.
  *
  * While the API of #GtkFileChooserNative closely mirrors #GtkFileChooserDialog, the main
  * difference is that there is no access to any #GtkWindow or #GtkWidget for the dialog.
@@ -170,6 +173,20 @@
  *
  * If any of these features are used the regular #GtkFileChooserDialog
  * will be used in place of the native one.
+ *
+ * ## Portal details ## {#gtkfilechooserdialognative-portal}
+ *
+ * When the org.freedesktop.portal.FileChooser portal is available on the
+ * session bus, it is used to bring up an out-of-process file chooser. Depending
+ * on the kind of session the application is running in, this may or may not
+ * be a GTK+ file chooser. In this situation, the following things are not
+ * supported and will be silently ignored:
+ *
+ * * Extra widgets added with gtk_file_chooser_set_extra_widget().
+ *
+ * * Use of custom previews by connecting to #GtkFileChooser::update-preview.
+ *
+ * * Any #GtkFileFilter added with a custom filter.
  */
 
 enum {
