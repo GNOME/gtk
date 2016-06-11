@@ -494,6 +494,13 @@ hide_dialog (GtkFileChooserNative *self)
   gtk_widget_hide (self->dialog);
 }
 
+void
+gtk_file_chooser_native_show_fallback (GtkFileChooserNative *self)
+{
+  self->mode = MODE_FALLBACK;
+  show_dialog (self);
+}
+
 static gboolean
 gtk_file_chooser_native_set_current_folder (GtkFileChooser    *chooser,
                                             GFile             *file,

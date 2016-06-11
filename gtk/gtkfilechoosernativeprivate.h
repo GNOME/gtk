@@ -51,6 +51,8 @@ void gtk_file_chooser_native_win32_hide (GtkFileChooserNative *self);
 gboolean gtk_file_chooser_native_portal_show (GtkFileChooserNative *self);
 void gtk_file_chooser_native_portal_hide (GtkFileChooserNative *self);
 
+void gtk_file_chooser_native_show_fallback (GtkFileChooserNative *self);
+
 G_END_DECLS
 
 #endif /* __GTK_FILE_CHOOSER_NATIVE_PRIVATE_H__ */
