@@ -277,16 +277,24 @@ gtk_file_chooser_native_portal_show (GtkFileChooserNative *self)
   const char *method_name;
   const char *signal_name;
   GDBusSignalCallback signal_callback;
+  const char *use_portal;
 
-  if (g_getenv ("GTK_USE_PORTAL") == NULL)
+  use_portal = g_getenv ("GTK_USE_PORTAL");
+  if (!use_portal)
+    use_portal = "";
+
+  if (g_str_equal (use_portal, "0"))
     return FALSE;
 
-  if (gtk_file_chooser_get_extra_widget (GTK_FILE_CHOOSER (self)) != NULL)
-    return FALSE;
+  if (!g_str_equal (use_portal, "1"))
+    {
+      if (gtk_file_chooser_get_extra_widget (GTK_FILE_CHOOSER (self)) != NULL)
+        return FALSE;
 
-  update_preview_signal = g_signal_lookup ("update-preview", GTK_TYPE_FILE_CHOOSER);
-  if (g_signal_has_handler_pending (self, update_preview_signal, 0, TRUE))
-    return FALSE;
+      update_preview_signal = g_signal_lookup ("update-preview", GTK_TYPE_FILE_CHOOSER);
+      if (g_signal_has_handler_pending (self, update_preview_signal, 0, TRUE))
+        return FALSE;
+    }
 
   connection = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
   if (connection == NULL)
