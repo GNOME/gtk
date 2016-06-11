@@ -25,6 +25,8 @@ G_BEGIN_DECLS
 
 char ** _gtk_file_filter_get_as_patterns (GtkFileFilter      *filter);
 
+GVariant      *gtk_file_filter_to_gvariant   (GtkFileFilter *filter);
+GtkFileFilter *gtk_file_filter_from_gvariant (GVariant      *variant);
 G_END_DECLS
 
 #endif /* __GTK_FILE_FILTER_PRIVATE_H__ */
