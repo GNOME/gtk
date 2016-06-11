@@ -214,6 +214,10 @@ open_file_msg_cb (GObject *source_object,
   GError *error = NULL;
 
   reply = g_dbus_connection_send_message_with_reply_finish (data->connection, res, &error);
+
+  if (reply && g_dbus_message_to_gerror (reply, &error))
+    g_clear_object (&reply);
+
   if (reply == NULL)
     {
       if (!data->hidden)
@@ -231,8 +235,9 @@ open_file_msg_cb (GObject *source_object,
       /* The dialog was hidden before we got the handle, close it now */
       send_close (data);
       filechooser_portal_data_free (data);
-      return;
     }
+
+  g_object_unref (reply);
 }
 
 static GVariant *
