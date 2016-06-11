@@ -356,7 +356,7 @@ gtk_file_chooser_native_portal_show (GtkFileChooserNative *self)
       path = g_file_get_path (GTK_FILE_CHOOSER_NATIVE (self)->current_folder);
       g_variant_builder_add (&opt_builder, "{sv}", "current_folder",
                              g_variant_new_bytestring (path));
-      g_free (path;
+      g_free (path);
     }
   if (GTK_FILE_CHOOSER_NATIVE (self)->current_file)
     {
