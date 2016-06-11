@@ -718,3 +718,103 @@ gtk_file_filter_filter (GtkFileFilter           *filter,
 
   return FALSE;
 }
+
+/**
+ * gtk_file_filter_to_gvariant:
+ * @settings: a #GtkFileFilter
+ *
+ * Serialize a file filter to an a{sv} variant.
+ *
+ * Returns: (transfer none): a new, floating, #GVariant
+ *
+ * Since: 3.22
+ */
+GVariant *
+gtk_file_filter_to_gvariant (GtkFileFilter *filter)
+{
+  GVariantBuilder builder;
+  GSList *l;
+
+  g_variant_builder_init (&builder, G_VARIANT_TYPE ("a(us)"));
+  for (l = filter->rules; l; l = l->next)
+    {
+      FilterRule *rule = l->data;
+
+      switch (rule->type)
+        {
+        case FILTER_RULE_PATTERN:
+          g_variant_builder_add (&builder, "(us)", 0, rule->u.mime_type);
+          break;
+        case FILTER_RULE_MIME_TYPE:
+          g_variant_builder_add (&builder, "(us)", 1, rule->u.mime_type);
+          break;
+        case FILTER_RULE_PIXBUF_FORMATS:
+          {
+	    GSList *f;
+
+	    for (f = rule->u.pixbuf_formats; f; f = f->next)
+	      {
+                GdkPixbufFormat *fmt = f->data;
+                gchar **mime_types;
+                int i;
+
+                mime_types = gdk_pixbuf_format_get_mime_types (fmt);
+                for (i = 0; mime_types[i]; i++)
+                  g_variant_builder_add (&builder, "(us)", 1, mime_types[i]);
+                g_strfreev (mime_types);
+              }
+          }
+          break;
+        case FILTER_RULE_CUSTOM:
+        default:
+          break;
+        }
+    }
+
+  return g_variant_new ("(s@a(us))", filter->name, g_variant_builder_end (&builder));
+}
+
+/**
+ * gtk_file_filter_new_from_gvariant:
+ * @variant: an a{sv} #GVariant
+ *
+ * Deserialize a file filter from an a{sv} variant in
+ * the format produced by gtk_file_filter_to_gvariant().
+ *
+ * Returns: (transfer full): a new #GtkFileFilter object
+ *
+ * Since: 3.22
+ */
+GtkFileFilter *
+gtk_file_filter_new_from_gvariant (GVariant *variant)
+{
+  GtkFileFilter *filter;
+  GVariantIter *iter;
+  const char *name;
+  int type;
+  char *tmp;
+
+  filter = gtk_file_filter_new ();
+
+  g_variant_get (variant, "(&sa(us))", &name, &iter);
+
+  gtk_file_filter_set_name (filter, name);
+
+  while (g_variant_iter_next (iter, "(u&s)", &type, &tmp))
+    {
+      switch (type)
+        {
+        case 0:
+          gtk_file_filter_add_pattern (filter, tmp);
+          break;
+        case 1:
+          gtk_file_filter_add_mime_type (filter, tmp);
+          break;
+        default:
+          break;
+       }
+    }
+  g_variant_iter_free (iter);
+
+  return filter;
+}

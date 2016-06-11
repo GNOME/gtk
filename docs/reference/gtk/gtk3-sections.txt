@@ -1528,6 +1528,11 @@ gtk_file_filter_add_pixbuf_formats
 gtk_file_filter_add_custom
 gtk_file_filter_get_needed
 gtk_file_filter_filter
+
+<SUBSECTION Serialization>
+gtk_file_filter_new_from_gvariant
+gtk_file_filter_to_gvariant
+
 <SUBSECTION Standard>
 GTK_FILE_FILTER
 GTK_IS_FILE_FILTER
