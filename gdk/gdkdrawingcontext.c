@@ -64,6 +64,12 @@ gdk_drawing_context_dispose (GObject *gobject)
 {
   GdkDrawingContext *self = GDK_DRAWING_CONTEXT (gobject);
 
+  /* Unset the drawing context, in case somebody is holding
+   * onto the Cairo context
+   */
+  if (self->cr != NULL)
+    gdk_cairo_set_drawing_context (self->cr, NULL);
+
   g_clear_object (&self->window);
   g_clear_pointer (&self->clip, cairo_region_destroy);
   g_clear_pointer (&self->cr, cairo_destroy);
