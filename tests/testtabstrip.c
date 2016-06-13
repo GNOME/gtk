@@ -48,6 +48,25 @@ populate (GtkWidget *stack)
   add_child (stack, "Enigma machine - Wikipedia, the free ecyclopedia");
 }
 
+static void
+attention (GtkButton *button, GtkStack *stack)
+{
+  GList *children;
+  children = gtk_container_get_children (GTK_CONTAINER (stack));
+  gtk_container_child_set (GTK_CONTAINER (stack), children->data,
+                           "needs-attention", TRUE,
+                           NULL);
+  gtk_container_child_set (GTK_CONTAINER (stack), g_list_last (children)->data,
+                           "needs-attention", TRUE,
+                           NULL);
+  g_list_free (children);
+}
+
+static const char css[] =
+  "tab.needs-attention { border-bottom: solid 4px red; }"
+  "scrolledwindow undershoot.left.needs-attention { background: none; border-left: solid 4px red; }"
+  "scrolledwindow undershoot.right.needs-attention { background: none; border-right: solid 4px red; }";
+
 int
 main (int argc, char *argv[])
 {
@@ -57,8 +76,14 @@ main (int argc, char *argv[])
   GtkWidget *tabs;
   GtkWidget *stack;
   GtkWidget *button;
+  GtkWidget *hbox;
+  GtkCssProvider *provider;
 
   gtk_init (NULL, NULL);
+
+  provider = gtk_css_provider_new ();
+  gtk_css_provider_load_from_data (provider, css, -1, NULL);
+  gtk_style_context_add_provider_for_screen (gdk_screen_get_default (), provider, 800);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_default_size (GTK_WINDOW (window), 600, 800);
@@ -87,6 +112,12 @@ main (int argc, char *argv[])
 
   gtk_box_pack_start (GTK_BOX (vbox), tabs, FALSE, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox), stack, TRUE, TRUE, 0);
+
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  button = gtk_button_new_with_label ("Attention");
+  g_signal_connect (button, "clicked", G_CALLBACK (attention), stack);
+  gtk_container_add (GTK_CONTAINER (hbox), button);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
 
   populate  (stack);
 
