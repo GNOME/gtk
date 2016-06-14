@@ -278,10 +278,18 @@ gtk_file_chooser_native_portal_show (GtkFileChooserNative *self)
   const char *signal_name;
   GDBusSignalCallback signal_callback;
   const char *use_portal;
+  gchar *path;
 
-  use_portal = g_getenv ("GTK_USE_PORTAL");
-  if (!use_portal)
-    use_portal = "";
+  path = g_strdup_printf ("/run/user/%d/flatpak-info", getuid());
+  if (g_file_test (path, G_FILE_TEST_EXISTS))
+    use_portal = "1";
+  else
+    {
+      use_portal = g_getenv ("GTK_USE_PORTAL");
+      if (!use_portal)
+        use_portal = "";
+    }
+  g_free (path);
 
   if (g_str_equal (use_portal, "0"))
     return FALSE;
